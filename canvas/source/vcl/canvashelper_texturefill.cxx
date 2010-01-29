@@ -892,9 +892,9 @@ namespace vclcanvas
             }
             else if( textures[0].Bitmap.is() )
             {
-                OSL_ENSURE( textures[0].RepeatModeX == rendering::TexturingMode::REPEAT &&
-                            textures[0].RepeatModeY == rendering::TexturingMode::REPEAT,
-                            "CanvasHelper::fillTexturedPolyPolygon(): VCL canvas cannot currently clamp textures." );
+//                OSL_ENSURE( textures[0].RepeatModeX == rendering::TexturingMode::REPEAT &&
+//                            textures[0].RepeatModeY == rendering::TexturingMode::REPEAT,
+//                            "CanvasHelper::fillTexturedPolyPolygon(): VCL canvas cannot currently clamp textures." );
 
                 const geometry::IntegerSize2D aBmpSize( textures[0].Bitmap->getSize() );
 
@@ -969,6 +969,23 @@ namespace vclcanvas
                                            viewState,
                                            aLocalState );
                     }
+                }
+                else if ( textures[0].RepeatModeX == rendering::TexturingMode::CLAMP &&
+                          textures[0].RepeatModeY == rendering::TexturingMode::CLAMP )
+                {
+                    rendering::RenderState aLocalState( renderState );
+                    ::canvas::tools::appendToRenderState(aLocalState,
+                                                         aTextureTransform);
+                    ::basegfx::B2DHomMatrix aScaleCorrection;
+                    aScaleCorrection.scale( 1.0/aBmpSize.Width,
+                                            1.0/aBmpSize.Height );
+                    ::canvas::tools::appendToRenderState(aLocalState,
+                                                         aScaleCorrection);
+
+                    return drawBitmap( pCanvas, 
+                                       textures[0].Bitmap,
+                                       viewState,
+                                       aLocalState );
                 }
                 else
                 {

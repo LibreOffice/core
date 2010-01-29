@@ -37,6 +37,9 @@
  ************************************************************************/
 
 #include <osl/diagnose.h>
+#include <vcl/sysdata.hxx>
+#include <vcl/bitmap.hxx>
+#include <vcl/virdev.hxx>
 
 #include "cairo_cairo.hxx"
 

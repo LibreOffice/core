@@ -36,7 +36,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "prex.h"
+#include <tools/prex.h>
 #include <X11/Xatom.h>
 #include <X11/keysym.h>
 #include "FWS.hxx"
@@ -44,7 +44,7 @@
 #ifndef SOLARIS
 #include <X11/extensions/dpms.h>
 #endif
-#include "postx.h"
+#include <tools/postx.h>
 
 #include "salunx.h"
 #include "saldata.hxx"
@@ -72,6 +72,7 @@
 #include "tools/debug.hxx"
 
 #include "sal/alloca.h"
+#include <com/sun/star/uno/Exception.hpp>
 
 #include <algorithm>
 
@@ -425,15 +426,26 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, int nScreen, SystemParentData* pPa
         if( IsOverrideRedirect() )
             Attributes.override_redirect = True;
         // default icon
-        if( (nStyle_ & SAL_FRAME_STYLE_INTRO) == 0 &&
-            SelectAppIconPixmap( pDisplay_, m_nScreen,
-                                 mnIconID != 1 ? mnIconID :
-                                 (mpParent ? mpParent->mnIconID : 1), 32,
-                                 Hints.icon_pixmap, Hints.icon_mask ))
+        if( (nStyle_ & SAL_FRAME_STYLE_INTRO) == 0 )
         {
-            Hints.flags     |= IconPixmapHint;
-            if( Hints.icon_mask )
-                Hints.flags |= IconMaskHint;
+            bool bOk=false;
+            try
+            {
+                bOk=SelectAppIconPixmap( pDisplay_, m_nScreen,
+                                         mnIconID != 1 ? mnIconID :
+                                         (mpParent ? mpParent->mnIconID : 1), 32,
+                                         Hints.icon_pixmap, Hints.icon_mask );
+            }
+            catch( com::sun::star::uno::Exception& )
+            {
+                // can happen - no ucb during early startup
+            }
+            if( bOk )
+            {
+                Hints.flags     |= IconPixmapHint;
+                if( Hints.icon_mask )
+                    Hints.flags |= IconMaskHint;
+            }
         }
 
         // find the top level frame of the transience hierarchy
@@ -2799,6 +2811,11 @@ static USHORT sal_GetCode( int state )
     if( state & Mod1Mask )
         nCode |= KEY_MOD2;
 
+        // Map Meta/Super modifier to MOD3 on all Unix systems
+        // except Mac OS X
+        if( (state & Mod3Mask) )
+            nCode |= KEY_MOD3;
+
     return nCode;
 }
 
@@ -3167,7 +3184,8 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
     if(     nKeySym == XK_Shift_L   || nKeySym == XK_Shift_R
         ||  nKeySym == XK_Control_L || nKeySym == XK_Control_R
         ||  nKeySym == XK_Alt_L     || nKeySym == XK_Alt_R
-        ||  nKeySym == XK_Meta_L    || nKeySym == XK_Meta_R )
+        ||  nKeySym == XK_Meta_L    || nKeySym == XK_Meta_R
+                ||      nKeySym == XK_Super_L   || nKeySym == XK_Super_R )
     {
         SalKeyModEvent aModEvt;
         aModEvt.mnModKeyCode = 0;
@@ -3210,6 +3228,18 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
             case XK_Shift_R:
                 nExtModMask = MODKEY_RSHIFT;
                 nModMask = KEY_SHIFT;
+                break;
+            // Map Meta/Super keys to MOD3 modifier on all Unix systems
+            // except Mac OS X
+            case XK_Meta_L:
+            case XK_Super_L:
+                nExtModMask = MODKEY_LMOD3;
+                nModMask = KEY_MOD3;
+                break;
+            case XK_Meta_R:
+            case XK_Super_R:
+                nExtModMask = MODKEY_RMOD3;
+                nModMask = KEY_MOD3;
                 break;
         }
         if( pEvent->type == KeyRelease )

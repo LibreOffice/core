@@ -108,6 +108,7 @@
 -(void)sendMouseEventToFrame:(NSEvent*)pEvent button:(USHORT)nButton eventtype:(USHORT)nEvent;
 -(MacOSBOOL)sendKeyInputAndReleaseToFrame: (USHORT)nKeyCode character: (sal_Unicode)aChar;
 -(MacOSBOOL)sendKeyInputAndReleaseToFrame: (USHORT)nKeyCode character: (sal_Unicode)aChar modifiers: (unsigned int)nMod;
+-(MacOSBOOL)sendKeyToFrameDirect: (USHORT)nKeyCode character: (sal_Unicode)aChar modifiers: (unsigned int)nMod;
 -(MacOSBOOL)sendSingleCharacter:(NSEvent*)pEvent;
 -(MacOSBOOL)handleKeyDownException:(NSEvent*)pEvent;
 /*

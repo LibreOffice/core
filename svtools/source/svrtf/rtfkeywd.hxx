@@ -31,1144 +31,1114 @@
 #ifndef _RTFKEYWD_HXX
 #define _RTFKEYWD_HXX
 
-#include "svtools/svtdllapi.h"
-#include "sal/types.h"
+#include "sal/config.h"
 
-#ifndef SVTOOLS_CONSTASCII_DECL
-#define SVTOOLS_CONSTASCII_DECL( n, s ) n[sizeof(s)]
-#endif
-#ifndef SVTOOLS_CONSTASCII_DEF
-#define SVTOOLS_CONSTASCII_DEF( n, s ) n[sizeof(s)] = s
-#endif
-
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_HEXCHAR, "\\'" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_IGNORE, "\\*" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OPTHYPH, "\\-" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SUBENTRY, "\\:" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ABSH, "\\absh" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ABSW, "\\absw" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ALT, "\\alt" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ANNOTATION, "\\annotation" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ANSI, "\\ansi" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ATNID, "\\atnid" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AUTHOR, "\\author" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_B, "\\b" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BGBDIAG, "\\bgbdiag" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BGCROSS, "\\bgcross" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BGDCROSS, "\\bgdcross" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BGDKBDIAG, "\\bgdkbdiag" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BGDKCROSS, "\\bgdkcross" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BGDKDCROSS, "\\bgdkdcross" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BGDKFDIAG, "\\bgdkfdiag" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BGDKHORIZ, "\\bgdkhoriz" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BGDKVERT, "\\bgdkvert" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BGFDIAG, "\\bgfdiag" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BGHORIZ, "\\bghoriz" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BGVERT, "\\bgvert" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BIN, "\\bin" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BINFSXN, "\\binfsxn" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BINSXN, "\\binsxn" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BKMKCOLF, "\\bkmkcolf" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BKMKCOLL, "\\bkmkcoll" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BKMKEND, "\\bkmkend" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BKMKSTART, "\\bkmkstart" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BLUE, "\\blue" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BOX, "\\box" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDRB, "\\brdrb" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDRBAR, "\\brdrbar" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDRBTW, "\\brdrbtw" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDRCF, "\\brdrcf" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDRDB, "\\brdrdb" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDRDOT, "\\brdrdot" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDRHAIR, "\\brdrhair" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDRL, "\\brdrl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDRR, "\\brdrr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDRS, "\\brdrs" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDRSH, "\\brdrsh" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDRT, "\\brdrt" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDRTH, "\\brdrth" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDRW, "\\brdrw" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRSP, "\\brsp" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BULLET, "\\bullet" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BUPTIM, "\\buptim" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BXE, "\\bxe" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CAPS, "\\caps" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CB, "\\cb" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CBPAT, "\\cbpat" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CELL, "\\cell" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CELLX, "\\cellx" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CF, "\\cf" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CFPAT, "\\cfpat" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CHATN, "\\chatn" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CHDATE, "\\chdate" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CHDPA, "\\chdpa" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CHDPL, "\\chdpl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CHFTN, "\\chftn" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CHFTNSEP, "\\chftnsep" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CHFTNSEPC, "\\chftnsepc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CHPGN, "\\chpgn" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CHTIME, "\\chtime" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLBGBDIAG, "\\clbgbdiag" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLBGCROSS, "\\clbgcross" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLBGDCROSS, "\\clbgdcross" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLBGDKBDIAG, "\\clbgdkbdiag" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLBGDKCROSS, "\\clbgdkcross" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLBGDKDCROSS, "\\clbgdkdcross" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLBGDKFDIAG, "\\clbgdkfdiag" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLBGDKHOR, "\\clbgdkhor" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLBGDKVERT, "\\clbgdkvert" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLBGFDIAG, "\\clbgfdiag" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLBGHORIZ, "\\clbghoriz" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLBGVERT, "\\clbgvert" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLBRDRB, "\\clbrdrb" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLBRDRL, "\\clbrdrl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLBRDRR, "\\clbrdrr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLBRDRT, "\\clbrdrt" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLCBPAT, "\\clcbpat" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLCFPAT, "\\clcfpat" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLMGF, "\\clmgf" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLMRG, "\\clmrg" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLSHDNG, "\\clshdng" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_COLNO, "\\colno" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_COLORTBL, "\\colortbl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_COLS, "\\cols" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_COLSR, "\\colsr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_COLSX, "\\colsx" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_COLUMN, "\\column" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_COLW, "\\colw" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_COMMENT, "\\comment" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CREATIM, "\\creatim" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CTRL, "\\ctrl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DEFF, "\\deff" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DEFFORMAT, "\\defformat" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DEFLANG, "\\deflang" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DEFTAB, "\\deftab" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DELETED, "\\deleted" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DFRMTXTX, "\\dfrmtxtx" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DFRMTXTY, "\\dfrmtxty" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DIBITMAP, "\\dibitmap" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DN, "\\dn" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DOCCOMM, "\\doccomm" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DOCTEMP, "\\doctemp" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DROPCAPLI, "\\dropcapli" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DROPCAPT, "\\dropcapt" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ABSNOOVRLP, "\\absnoovrlp" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DXFRTEXT, "\\dxfrtext" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DY, "\\dy" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_EDMINS, "\\edmins" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_EMDASH, "\\emdash" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ENDASH, "\\endash" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ENDDOC, "\\enddoc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ENDNHERE, "\\endnhere" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ENDNOTES, "\\endnotes" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_EXPND, "\\expnd" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_EXPNDTW, "\\expndtw" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_F, "\\f" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FACINGP, "\\facingp" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FACPGSXN, "\\facpgsxn" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FALT, "\\falt" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FCHARSET, "\\fcharset" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FDECOR, "\\fdecor" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FI, "\\fi" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FIELD, "\\field" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FLDDIRTY, "\\flddirty" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FLDEDIT, "\\fldedit" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FLDINST, "\\fldinst" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FLDLOCK, "\\fldlock" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FLDPRIV, "\\fldpriv" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FLDRSLT, "\\fldrslt" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FMODERN, "\\fmodern" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FN, "\\fn" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FNIL, "\\fnil" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FONTTBL, "\\fonttbl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FOOTER, "\\footer" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FOOTERF, "\\footerf" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FOOTERL, "\\footerl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FOOTERR, "\\footerr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FOOTERY, "\\footery" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FOOTNOTE, "\\footnote" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FPRQ, "\\fprq" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FRACWIDTH, "\\fracwidth" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FROMAN, "\\froman" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FS, "\\fs" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FSCRIPT, "\\fscript" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FSWISS, "\\fswiss" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FTECH, "\\ftech" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FTNBJ, "\\ftnbj" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FTNCN, "\\ftncn" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FTNRESTART, "\\ftnrestart" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FTNSEP, "\\ftnsep" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FTNSEPC, "\\ftnsepc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FTNSTART, "\\ftnstart" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FTNTJ, "\\ftntj" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_GREEN, "\\green" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_GUTTER, "\\gutter" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_GUTTERSXN, "\\guttersxn" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_HEADER, "\\header" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_HEADERF, "\\headerf" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_HEADERL, "\\headerl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_HEADERR, "\\headerr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_HEADERY, "\\headery" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_HR, "\\hr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_HYPHHOTZ, "\\hyphhotz" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_I, "\\i" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ID, "\\id" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_INFO, "\\info" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_INTBL, "\\intbl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_IXE, "\\ixe" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_KEEP, "\\keep" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_KEEPN, "\\keepn" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_KERNING, "\\kerning" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_KEYCODE, "\\keycode" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_KEYWORDS, "\\keywords" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LANDSCAPE, "\\landscape" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LANG, "\\lang" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LDBLQUOTE, "\\ldblquote" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LEVEL, "\\level" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LI, "\\li" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LIN, "\\lin" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LINE, "\\line" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LINEBETCOL, "\\linebetcol" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LINECONT, "\\linecont" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LINEMOD, "\\linemod" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LINEPPAGE, "\\lineppage" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LINERESTART, "\\linerestart" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LINESTART, "\\linestart" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LINESTARTS, "\\linestarts" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LINEX, "\\linex" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LNDSCPSXN, "\\lndscpsxn" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LQUOTE, "\\lquote" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_MAC, "\\mac" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_MACPICT, "\\macpict" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_MAKEBACKUP, "\\makebackup" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_MARGB, "\\margb" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_MARGBSXN, "\\margbsxn" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_MARGL, "\\margl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_MARGLSXN, "\\marglsxn" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_MARGMIRROR, "\\margmirror" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_MARGR, "\\margr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_MARGRSXN, "\\margrsxn" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_MARGT, "\\margt" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_MARGTSXN, "\\margtsxn" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_MIN, "\\min" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_MO, "\\mo" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_NEXTCSET, "\\nextcset" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_NEXTFILE, "\\nextfile" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_NOFCHARS, "\\nofchars" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_NOFPAGES, "\\nofpages" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_NOFWORDS, "\\nofwords" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_NOLINE, "\\noline" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_NOSUPERSUB, "\\nosupersub" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_NOWRAP, "\\nowrap" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OPERATOR, "\\operator" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OUTL, "\\outl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PAGE, "\\page" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PAGEBB, "\\pagebb" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PAPERH, "\\paperh" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PAPERW, "\\paperw" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PAR, "\\par" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PARD, "\\pard" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PC, "\\pc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PCA, "\\pca" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGHSXN, "\\pghsxn" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGNCONT, "\\pgncont" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGNDEC, "\\pgndec" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGNLCLTR, "\\pgnlcltr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGNLCRM, "\\pgnlcrm" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGNRESTART, "\\pgnrestart" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGNSTART, "\\pgnstart" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGNSTARTS, "\\pgnstarts" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGNUCLTR, "\\pgnucltr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGNUCRM, "\\pgnucrm" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGNX, "\\pgnx" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGNY, "\\pgny" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGWSXN, "\\pgwsxn" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PHCOL, "\\phcol" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PHMRG, "\\phmrg" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PHPG, "\\phpg" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PICCROPB, "\\piccropb" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PICCROPL, "\\piccropl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PICCROPR, "\\piccropr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PICCROPT, "\\piccropt" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PICH, "\\pich" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PICHGOAL, "\\pichgoal" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PICSCALED, "\\picscaled" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PICSCALEX, "\\picscalex" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PICSCALEY, "\\picscaley" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PICT, "\\pict" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PICW, "\\picw" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PICWGOAL, "\\picwgoal" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PLAIN, "\\plain" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PMMETAFILE, "\\pmmetafile" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_POSNEGX, "\\posnegx" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_POSNEGY, "\\posnegy" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_POSX, "\\posx" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_POSXC, "\\posxc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_POSXI, "\\posxi" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_POSXL, "\\posxl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_POSXO, "\\posxo" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_POSXR, "\\posxr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_POSY, "\\posy" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_POSYB, "\\posyb" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_POSYC, "\\posyc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_POSYIL, "\\posyil" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_POSYT, "\\posyt" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PRINTIM, "\\printim" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PSOVER, "\\psover" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PVMRG, "\\pvmrg" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PVPARA, "\\pvpara" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PVPG, "\\pvpg" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_QC, "\\qc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_QJ, "\\qj" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_QL, "\\ql" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_QR, "\\qr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_RDBLQUOTE, "\\rdblquote" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_RED, "\\red" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_REVBAR, "\\revbar" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_REVISED, "\\revised" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_REVISIONS, "\\revisions" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_REVPROP, "\\revprop" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_REVTIM, "\\revtim" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_RI, "\\ri" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_RIN, "\\rin" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ROW, "\\row" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_RQUOTE, "\\rquote" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_RTF, "\\rtf" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_RXE, "\\rxe" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_S, "\\s" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SA, "\\sa" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SB, "\\sb" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SBASEDON, "\\sbasedon" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SBKCOL, "\\sbkcol" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SBKEVEN, "\\sbkeven" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SBKNONE, "\\sbknone" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SBKODD, "\\sbkodd" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SBKPAGE, "\\sbkpage" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SBYS, "\\sbys" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SCAPS, "\\scaps" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SECT, "\\sect" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SECTD, "\\sectd" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHAD, "\\shad" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHADING, "\\shading" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHIFT, "\\shift" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SL, "\\sl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SNEXT, "\\snext" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_STRIKE, "\\strike" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_STYLESHEET, "\\stylesheet" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SUB, "\\sub" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SUBJECT, "\\subject" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SUPER, "\\super" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TAB, "\\tab" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TB, "\\tb" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TC, "\\tc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TCF, "\\tcf" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TCL, "\\tcl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TEMPLATE, "\\template" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TITLE, "\\title" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TITLEPG, "\\titlepg" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TLDOT, "\\tldot" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TLEQ, "\\tleq" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TLHYPH, "\\tlhyph" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TLTH, "\\tlth" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TLUL, "\\tlul" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TQC, "\\tqc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TQDEC, "\\tqdec" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TQR, "\\tqr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TQL, "\\tql" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TRGAPH, "\\trgaph" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TRLEFT, "\\trleft" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TROWD, "\\trowd" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TRQC, "\\trqc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TRQL, "\\trql" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TRQR, "\\trqr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TRRH, "\\trrh" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TX, "\\tx" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TXE, "\\txe" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_UL, "\\ul" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ULD, "\\uld" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ULDB, "\\uldb" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ULNONE, "\\ulnone" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ULW, "\\ulw" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_UP, "\\up" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_V, "\\v" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_VERN, "\\vern" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_VERSION, "\\version" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_VERTALB, "\\vertalb" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_VERTALC, "\\vertalc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_VERTALJ, "\\vertalj" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_VERTALT, "\\vertalt" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_WBITMAP, "\\wbitmap" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_WBMBITSPIXEL, "\\wbmbitspixel" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_WBMPLANES, "\\wbmplanes" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_WBMWIDTHBYTES, "\\wbmwidthbytes" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_WIDOWCTRL, "\\widowctrl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_WMETAFILE, "\\wmetafile" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_XE, "\\xe" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_YR, "\\yr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_NOBRKHYPH, "\\_" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FORMULA, "\\|" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_NOBREAK, "\\~" );
-
-
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AB, "\\ab" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ACAPS, "\\acaps" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ACF, "\\acf" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ADDITIVE, "\\additive" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ADN, "\\adn" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AENDDOC, "\\aenddoc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AENDNOTES, "\\aendnotes" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AEXPND, "\\aexpnd" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AF, "\\af" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AFS, "\\afs" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AFTNBJ, "\\aftnbj" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AFTNCN, "\\aftncn" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AFTNNALC, "\\aftnnalc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AFTNNAR, "\\aftnnar" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AFTNNAUC, "\\aftnnauc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AFTNNCHI, "\\aftnnchi" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AFTNNRLC, "\\aftnnrlc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AFTNNRUC, "\\aftnnruc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AFTNRESTART, "\\aftnrestart" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AFTNRSTCONT, "\\aftnrstcont" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AFTNSEP, "\\aftnsep" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AFTNSEPC, "\\aftnsepc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AFTNSTART, "\\aftnstart" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AFTNTJ, "\\aftntj" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AI, "\\ai" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ALANG, "\\alang" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ALLPROT, "\\allprot" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ANNOTPROT, "\\annotprot" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AOUTL, "\\aoutl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ASCAPS, "\\ascaps" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ASHAD, "\\ashad" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ASTRIKE, "\\astrike" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ATNAUTHOR, "\\atnauthor" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ATNICN, "\\atnicn" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ATNREF, "\\atnref" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ATNTIME, "\\atntime" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ATRFEND, "\\atrfend" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ATRFSTART, "\\atrfstart" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AUL, "\\aul" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AULD, "\\auld" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AULDB, "\\auldb" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AULNONE, "\\aulnone" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AULW, "\\aulw" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AUP, "\\aup" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BKMKPUB, "\\bkmkpub" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDRDASH, "\\brdrdash" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRKFRM, "\\brkfrm" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CCHS, "\\cchs" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CPG, "\\cpg" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CS, "\\cs" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CVMME, "\\cvmme" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DATAFIELD, "\\datafield" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DO, "\\do" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DOBXCOLUMN, "\\dobxcolumn" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DOBXMARGIN, "\\dobxmargin" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DOBXPAGE, "\\dobxpage" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DOBYMARGIN, "\\dobymargin" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DOBYPAGE, "\\dobypage" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DOBYPARA, "\\dobypara" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DODHGT, "\\dodhgt" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DOLOCK, "\\dolock" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPAENDHOL, "\\dpaendhol" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPAENDL, "\\dpaendl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPAENDSOL, "\\dpaendsol" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPAENDW, "\\dpaendw" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPARC, "\\dparc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPARCFLIPX, "\\dparcflipx" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPARCFLIPY, "\\dparcflipy" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPASTARTHOL, "\\dpastarthol" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPASTARTL, "\\dpastartl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPASTARTSOL, "\\dpastartsol" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPASTARTW, "\\dpastartw" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPCALLOUT, "\\dpcallout" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPCOA, "\\dpcoa" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPCOACCENT, "\\dpcoaccent" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPCOBESTFIT, "\\dpcobestfit" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPCOBORDER, "\\dpcoborder" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPCODABS, "\\dpcodabs" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPCODBOTTOM, "\\dpcodbottom" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPCODCENTER, "\\dpcodcenter" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPCODTOP, "\\dpcodtop" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPCOLENGTH, "\\dpcolength" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPCOMINUSX, "\\dpcominusx" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPCOMINUSY, "\\dpcominusy" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPCOOFFSET, "\\dpcooffset" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPCOSMARTA, "\\dpcosmarta" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPCOTDOUBLE, "\\dpcotdouble" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPCOTRIGHT, "\\dpcotright" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPCOTSINGLE, "\\dpcotsingle" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPCOTTRIPLE, "\\dpcottriple" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPCOUNT, "\\dpcount" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPELLIPSE, "\\dpellipse" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPENDGROUP, "\\dpendgroup" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPFILLBGCB, "\\dpfillbgcb" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPFILLBGCG, "\\dpfillbgcg" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPFILLBGCR, "\\dpfillbgcr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPFILLBGGRAY, "\\dpfillbggray" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPFILLBGPAL, "\\dpfillbgpal" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPFILLFGCB, "\\dpfillfgcb" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPFILLFGCG, "\\dpfillfgcg" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPFILLFGCR, "\\dpfillfgcr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPFILLFGGRAY, "\\dpfillfggray" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPFILLFGPAL, "\\dpfillfgpal" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPFILLPAT, "\\dpfillpat" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPGROUP, "\\dpgroup" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPLINE, "\\dpline" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPLINECOB, "\\dplinecob" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPLINECOG, "\\dplinecog" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPLINECOR, "\\dplinecor" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPLINEDADO, "\\dplinedado" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPLINEDADODO, "\\dplinedadodo" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPLINEDASH, "\\dplinedash" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPLINEDOT, "\\dplinedot" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPLINEGRAY, "\\dplinegray" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPLINEHOLLOW, "\\dplinehollow" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPLINEPAL, "\\dplinepal" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPLINESOLID, "\\dplinesolid" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPLINEW, "\\dplinew" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPPOLYCOUNT, "\\dppolycount" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPPOLYGON, "\\dppolygon" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPPOLYLINE, "\\dppolyline" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPPTX, "\\dpptx" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPPTY, "\\dppty" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPRECT, "\\dprect" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPROUNDR, "\\dproundr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPSHADOW, "\\dpshadow" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPSHADX, "\\dpshadx" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPSHADY, "\\dpshady" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPTXBX, "\\dptxbx" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPTXBXMAR, "\\dptxbxmar" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPTXBXTEXT, "\\dptxbxtext" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPX, "\\dpx" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPXSIZE, "\\dpxsize" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPY, "\\dpy" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPYSIZE, "\\dpysize" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DS, "\\ds" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_EMSPACE, "\\emspace" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ENSPACE, "\\enspace" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FBIDI, "\\fbidi" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FET, "\\fet" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FID, "\\fid" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FILE, "\\file" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FILETBL, "\\filetbl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FLDALT, "\\fldalt" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FNETWORK, "\\fnetwork" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FONTEMB, "\\fontemb" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FONTFILE, "\\fontfile" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FORMDISP, "\\formdisp" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FORMPROT, "\\formprot" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FORMSHADE, "\\formshade" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FOSNUM, "\\fosnum" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FRELATIVE, "\\frelative" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FTNALT, "\\ftnalt" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FTNIL, "\\ftnil" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FTNNALC, "\\ftnnalc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FTNNAR, "\\ftnnar" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FTNNAUC, "\\ftnnauc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FTNNCHI, "\\ftnnchi" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FTNNRLC, "\\ftnnrlc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FTNNRUC, "\\ftnnruc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FTNRSTCONT, "\\ftnrstcont" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FTNRSTPG, "\\ftnrstpg" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FTTRUETYPE, "\\fttruetype" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FVALIDDOS, "\\fvaliddos" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FVALIDHPFS, "\\fvalidhpfs" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FVALIDMAC, "\\fvalidmac" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FVALIDNTFS, "\\fvalidntfs" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_HYPHAUTO, "\\hyphauto" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_HYPHCAPS, "\\hyphcaps" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_HYPHCONSEC, "\\hyphconsec" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_HYPHPAR, "\\hyphpar" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LINKSELF, "\\linkself" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LINKSTYLES, "\\linkstyles" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LTRCH, "\\ltrch" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LTRDOC, "\\ltrdoc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LTRMARK, "\\ltrmark" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LTRPAR, "\\ltrpar" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LTRROW, "\\ltrrow" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LTRSECT, "\\ltrsect" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_NOCOLBAL, "\\nocolbal" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_NOEXTRASPRL, "\\noextrasprl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_NOTABIND, "\\notabind" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_NOWIDCTLPAR, "\\nowidctlpar" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OBJALIAS, "\\objalias" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OBJALIGN, "\\objalign" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OBJAUTLINK, "\\objautlink" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OBJCLASS, "\\objclass" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OBJCROPB, "\\objcropb" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OBJCROPL, "\\objcropl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OBJCROPR, "\\objcropr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OBJCROPT, "\\objcropt" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OBJDATA, "\\objdata" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OBJECT, "\\object" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OBJEMB, "\\objemb" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OBJH, "\\objh" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OBJICEMB, "\\objicemb" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OBJLINK, "\\objlink" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OBJLOCK, "\\objlock" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OBJNAME, "\\objname" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OBJPUB, "\\objpub" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OBJSCALEX, "\\objscalex" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OBJSCALEY, "\\objscaley" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OBJSECT, "\\objsect" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OBJSETSIZE, "\\objsetsize" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OBJSUB, "\\objsub" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OBJTIME, "\\objtime" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OBJTRANSY, "\\objtransy" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OBJUPDATE, "\\objupdate" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OBJW, "\\objw" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OTBLRUL, "\\otblrul" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGNHN, "\\pgnhn" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGNHNSC, "\\pgnhnsc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGNHNSH, "\\pgnhnsh" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGNHNSM, "\\pgnhnsm" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGNHNSN, "\\pgnhnsn" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGNHNSP, "\\pgnhnsp" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PICBMP, "\\picbmp" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PICBPP, "\\picbpp" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PN, "\\pn" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNACROSS, "\\pnacross" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNB, "\\pnb" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNCAPS, "\\pncaps" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNCARD, "\\pncard" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNCF, "\\pncf" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNDEC, "\\pndec" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNF, "\\pnf" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNFS, "\\pnfs" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNHANG, "\\pnhang" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNI, "\\pni" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNINDENT, "\\pnindent" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNLCLTR, "\\pnlcltr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNLCRM, "\\pnlcrm" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNLVL, "\\pnlvl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNLVLBLT, "\\pnlvlblt" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNLVLBODY, "\\pnlvlbody" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNLVLCONT, "\\pnlvlcont" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNNUMONCE, "\\pnnumonce" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNORD, "\\pnord" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNORDT, "\\pnordt" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNPREV, "\\pnprev" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNQC, "\\pnqc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNQL, "\\pnql" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNQR, "\\pnqr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNRESTART, "\\pnrestart" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNSCAPS, "\\pnscaps" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNSECLVL, "\\pnseclvl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNSP, "\\pnsp" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNSTART, "\\pnstart" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNSTRIKE, "\\pnstrike" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNTEXT, "\\pntext" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNTXTA, "\\pntxta" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNTXTB, "\\pntxtb" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNUCLTR, "\\pnucltr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNUCRM, "\\pnucrm" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNUL, "\\pnul" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNULD, "\\pnuld" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNULDB, "\\pnuldb" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNULNONE, "\\pnulnone" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNULW, "\\pnulw" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PRCOLBL, "\\prcolbl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PRINTDATA, "\\printdata" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PSZ, "\\psz" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PUBAUTO, "\\pubauto" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_RESULT, "\\result" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_REVAUTH, "\\revauth" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_REVDTTM, "\\revdttm" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_REVPROT, "\\revprot" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_REVTBL, "\\revtbl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_RSLTBMP, "\\rsltbmp" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_RSLTMERGE, "\\rsltmerge" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_RSLTPICT, "\\rsltpict" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_RSLTRTF, "\\rsltrtf" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_RSLTTXT, "\\rslttxt" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_RTLCH, "\\rtlch" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_RTLDOC, "\\rtldoc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_RTLMARK, "\\rtlmark" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_RTLPAR, "\\rtlpar" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_RTLROW, "\\rtlrow" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_RTLSECT, "\\rtlsect" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SEC, "\\sec" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SECTNUM, "\\sectnum" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SECTUNLOCKED, "\\sectunlocked" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SLMULT, "\\slmult" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SOFTCOL, "\\softcol" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SOFTLHEIGHT, "\\softlheight" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SOFTLINE, "\\softline" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SOFTPAGE, "\\softpage" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SPRSSPBF, "\\sprsspbf" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SPRSTSP, "\\sprstsp" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SUBDOCUMENT, "\\subdocument" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SWPBDR, "\\swpbdr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TCN, "\\tcn" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TRANSMF, "\\transmf" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TRBRDRB, "\\trbrdrb" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TRBRDRH, "\\trbrdrh" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TRBRDRL, "\\trbrdrl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TRBRDRR, "\\trbrdrr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TRBRDRT, "\\trbrdrt" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TRBRDRV, "\\trbrdrv" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TRHDR, "\\trhdr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TRKEEP, "\\trkeep" );
-
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TRPADDB, "\\trpaddb" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TRPADDL, "\\trpaddl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TRPADDR, "\\trpaddr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TRPADDT, "\\trpaddt" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TRPADDFB, "\\trpaddfb" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TRPADDFL, "\\trpaddfl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TRPADDFR, "\\trpaddfr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TRPADDFT, "\\trpaddft" );
-
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_WRAPTRSP, "\\wraptrsp" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_XEF, "\\xef" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ZWJ, "\\zwj" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ZWNJ, "\\zwnj" );
+#define OOO_STRING_SVTOOLS_RTF_HEXCHAR "\\'"
+#define OOO_STRING_SVTOOLS_RTF_IGNORE "\\*"
+#define OOO_STRING_SVTOOLS_RTF_OPTHYPH "\\-"
+#define OOO_STRING_SVTOOLS_RTF_SUBENTRY "\\:"
+#define OOO_STRING_SVTOOLS_RTF_ABSH "\\absh"
+#define OOO_STRING_SVTOOLS_RTF_ABSW "\\absw"
+#define OOO_STRING_SVTOOLS_RTF_ALT "\\alt"
+#define OOO_STRING_SVTOOLS_RTF_ANNOTATION "\\annotation"
+#define OOO_STRING_SVTOOLS_RTF_ANSI "\\ansi"
+#define OOO_STRING_SVTOOLS_RTF_ATNID "\\atnid"
+#define OOO_STRING_SVTOOLS_RTF_AUTHOR "\\author"
+#define OOO_STRING_SVTOOLS_RTF_B "\\b"
+#define OOO_STRING_SVTOOLS_RTF_BGBDIAG "\\bgbdiag"
+#define OOO_STRING_SVTOOLS_RTF_BGCROSS "\\bgcross"
+#define OOO_STRING_SVTOOLS_RTF_BGDCROSS "\\bgdcross"
+#define OOO_STRING_SVTOOLS_RTF_BGDKBDIAG "\\bgdkbdiag"
+#define OOO_STRING_SVTOOLS_RTF_BGDKCROSS "\\bgdkcross"
+#define OOO_STRING_SVTOOLS_RTF_BGDKDCROSS "\\bgdkdcross"
+#define OOO_STRING_SVTOOLS_RTF_BGDKFDIAG "\\bgdkfdiag"
+#define OOO_STRING_SVTOOLS_RTF_BGDKHORIZ "\\bgdkhoriz"
+#define OOO_STRING_SVTOOLS_RTF_BGDKVERT "\\bgdkvert"
+#define OOO_STRING_SVTOOLS_RTF_BGFDIAG "\\bgfdiag"
+#define OOO_STRING_SVTOOLS_RTF_BGHORIZ "\\bghoriz"
+#define OOO_STRING_SVTOOLS_RTF_BGVERT "\\bgvert"
+#define OOO_STRING_SVTOOLS_RTF_BIN "\\bin"
+#define OOO_STRING_SVTOOLS_RTF_BINFSXN "\\binfsxn"
+#define OOO_STRING_SVTOOLS_RTF_BINSXN "\\binsxn"
+#define OOO_STRING_SVTOOLS_RTF_BKMKCOLF "\\bkmkcolf"
+#define OOO_STRING_SVTOOLS_RTF_BKMKCOLL "\\bkmkcoll"
+#define OOO_STRING_SVTOOLS_RTF_BKMKEND "\\bkmkend"
+#define OOO_STRING_SVTOOLS_RTF_BKMKSTART "\\bkmkstart"
+#define OOO_STRING_SVTOOLS_RTF_BLUE "\\blue"
+#define OOO_STRING_SVTOOLS_RTF_BOX "\\box"
+#define OOO_STRING_SVTOOLS_RTF_BRDRB "\\brdrb"
+#define OOO_STRING_SVTOOLS_RTF_BRDRBAR "\\brdrbar"
+#define OOO_STRING_SVTOOLS_RTF_BRDRBTW "\\brdrbtw"
+#define OOO_STRING_SVTOOLS_RTF_BRDRCF "\\brdrcf"
+#define OOO_STRING_SVTOOLS_RTF_BRDRDB "\\brdrdb"
+#define OOO_STRING_SVTOOLS_RTF_BRDRDOT "\\brdrdot"
+#define OOO_STRING_SVTOOLS_RTF_BRDRHAIR "\\brdrhair"
+#define OOO_STRING_SVTOOLS_RTF_BRDRL "\\brdrl"
+#define OOO_STRING_SVTOOLS_RTF_BRDRR "\\brdrr"
+#define OOO_STRING_SVTOOLS_RTF_BRDRS "\\brdrs"
+#define OOO_STRING_SVTOOLS_RTF_BRDRSH "\\brdrsh"
+#define OOO_STRING_SVTOOLS_RTF_BRDRT "\\brdrt"
+#define OOO_STRING_SVTOOLS_RTF_BRDRTH "\\brdrth"
+#define OOO_STRING_SVTOOLS_RTF_BRDRW "\\brdrw"
+#define OOO_STRING_SVTOOLS_RTF_BRSP "\\brsp"
+#define OOO_STRING_SVTOOLS_RTF_BULLET "\\bullet"
+#define OOO_STRING_SVTOOLS_RTF_BUPTIM "\\buptim"
+#define OOO_STRING_SVTOOLS_RTF_BXE "\\bxe"
+#define OOO_STRING_SVTOOLS_RTF_CAPS "\\caps"
+#define OOO_STRING_SVTOOLS_RTF_CB "\\cb"
+#define OOO_STRING_SVTOOLS_RTF_CBPAT "\\cbpat"
+#define OOO_STRING_SVTOOLS_RTF_CELL "\\cell"
+#define OOO_STRING_SVTOOLS_RTF_CELLX "\\cellx"
+#define OOO_STRING_SVTOOLS_RTF_CF "\\cf"
+#define OOO_STRING_SVTOOLS_RTF_CFPAT "\\cfpat"
+#define OOO_STRING_SVTOOLS_RTF_CHATN "\\chatn"
+#define OOO_STRING_SVTOOLS_RTF_CHDATE "\\chdate"
+#define OOO_STRING_SVTOOLS_RTF_CHDPA "\\chdpa"
+#define OOO_STRING_SVTOOLS_RTF_CHDPL "\\chdpl"
+#define OOO_STRING_SVTOOLS_RTF_CHFTN "\\chftn"
+#define OOO_STRING_SVTOOLS_RTF_CHFTNSEP "\\chftnsep"
+#define OOO_STRING_SVTOOLS_RTF_CHFTNSEPC "\\chftnsepc"
+#define OOO_STRING_SVTOOLS_RTF_CHPGN "\\chpgn"
+#define OOO_STRING_SVTOOLS_RTF_CHTIME "\\chtime"
+#define OOO_STRING_SVTOOLS_RTF_CLBGBDIAG "\\clbgbdiag"
+#define OOO_STRING_SVTOOLS_RTF_CLBGCROSS "\\clbgcross"
+#define OOO_STRING_SVTOOLS_RTF_CLBGDCROSS "\\clbgdcross"
+#define OOO_STRING_SVTOOLS_RTF_CLBGDKBDIAG "\\clbgdkbdiag"
+#define OOO_STRING_SVTOOLS_RTF_CLBGDKCROSS "\\clbgdkcross"
+#define OOO_STRING_SVTOOLS_RTF_CLBGDKDCROSS "\\clbgdkdcross"
+#define OOO_STRING_SVTOOLS_RTF_CLBGDKFDIAG "\\clbgdkfdiag"
+#define OOO_STRING_SVTOOLS_RTF_CLBGDKHOR "\\clbgdkhor"
+#define OOO_STRING_SVTOOLS_RTF_CLBGDKVERT "\\clbgdkvert"
+#define OOO_STRING_SVTOOLS_RTF_CLBGFDIAG "\\clbgfdiag"
+#define OOO_STRING_SVTOOLS_RTF_CLBGHORIZ "\\clbghoriz"
+#define OOO_STRING_SVTOOLS_RTF_CLBGVERT "\\clbgvert"
+#define OOO_STRING_SVTOOLS_RTF_CLBRDRB "\\clbrdrb"
+#define OOO_STRING_SVTOOLS_RTF_CLBRDRL "\\clbrdrl"
+#define OOO_STRING_SVTOOLS_RTF_CLBRDRR "\\clbrdrr"
+#define OOO_STRING_SVTOOLS_RTF_CLBRDRT "\\clbrdrt"
+#define OOO_STRING_SVTOOLS_RTF_CLCBPAT "\\clcbpat"
+#define OOO_STRING_SVTOOLS_RTF_CLCFPAT "\\clcfpat"
+#define OOO_STRING_SVTOOLS_RTF_CLMGF "\\clmgf"
+#define OOO_STRING_SVTOOLS_RTF_CLMRG "\\clmrg"
+#define OOO_STRING_SVTOOLS_RTF_CLSHDNG "\\clshdng"
+#define OOO_STRING_SVTOOLS_RTF_COLNO "\\colno"
+#define OOO_STRING_SVTOOLS_RTF_COLORTBL "\\colortbl"
+#define OOO_STRING_SVTOOLS_RTF_COLS "\\cols"
+#define OOO_STRING_SVTOOLS_RTF_COLSR "\\colsr"
+#define OOO_STRING_SVTOOLS_RTF_COLSX "\\colsx"
+#define OOO_STRING_SVTOOLS_RTF_COLUMN "\\column"
+#define OOO_STRING_SVTOOLS_RTF_COLW "\\colw"
+#define OOO_STRING_SVTOOLS_RTF_COMMENT "\\comment"
+#define OOO_STRING_SVTOOLS_RTF_CREATIM "\\creatim"
+#define OOO_STRING_SVTOOLS_RTF_CTRL "\\ctrl"
+#define OOO_STRING_SVTOOLS_RTF_DEFF "\\deff"
+#define OOO_STRING_SVTOOLS_RTF_DEFFORMAT "\\defformat"
+#define OOO_STRING_SVTOOLS_RTF_DEFLANG "\\deflang"
+#define OOO_STRING_SVTOOLS_RTF_DEFTAB "\\deftab"
+#define OOO_STRING_SVTOOLS_RTF_DELETED "\\deleted"
+#define OOO_STRING_SVTOOLS_RTF_DFRMTXTX "\\dfrmtxtx"
+#define OOO_STRING_SVTOOLS_RTF_DFRMTXTY "\\dfrmtxty"
+#define OOO_STRING_SVTOOLS_RTF_DIBITMAP "\\dibitmap"
+#define OOO_STRING_SVTOOLS_RTF_DN "\\dn"
+#define OOO_STRING_SVTOOLS_RTF_DOCCOMM "\\doccomm"
+#define OOO_STRING_SVTOOLS_RTF_DOCTEMP "\\doctemp"
+#define OOO_STRING_SVTOOLS_RTF_DROPCAPLI "\\dropcapli"
+#define OOO_STRING_SVTOOLS_RTF_DROPCAPT "\\dropcapt"
+#define OOO_STRING_SVTOOLS_RTF_ABSNOOVRLP "\\absnoovrlp"
+#define OOO_STRING_SVTOOLS_RTF_DXFRTEXT "\\dxfrtext"
+#define OOO_STRING_SVTOOLS_RTF_DY "\\dy"
+#define OOO_STRING_SVTOOLS_RTF_EDMINS "\\edmins"
+#define OOO_STRING_SVTOOLS_RTF_EMDASH "\\emdash"
+#define OOO_STRING_SVTOOLS_RTF_ENDASH "\\endash"
+#define OOO_STRING_SVTOOLS_RTF_ENDDOC "\\enddoc"
+#define OOO_STRING_SVTOOLS_RTF_ENDNHERE "\\endnhere"
+#define OOO_STRING_SVTOOLS_RTF_ENDNOTES "\\endnotes"
+#define OOO_STRING_SVTOOLS_RTF_EXPND "\\expnd"
+#define OOO_STRING_SVTOOLS_RTF_EXPNDTW "\\expndtw"
+#define OOO_STRING_SVTOOLS_RTF_F "\\f"
+#define OOO_STRING_SVTOOLS_RTF_FACINGP "\\facingp"
+#define OOO_STRING_SVTOOLS_RTF_FACPGSXN "\\facpgsxn"
+#define OOO_STRING_SVTOOLS_RTF_FALT "\\falt"
+#define OOO_STRING_SVTOOLS_RTF_FCHARSET "\\fcharset"
+#define OOO_STRING_SVTOOLS_RTF_FDECOR "\\fdecor"
+#define OOO_STRING_SVTOOLS_RTF_FI "\\fi"
+#define OOO_STRING_SVTOOLS_RTF_FIELD "\\field"
+#define OOO_STRING_SVTOOLS_RTF_FLDDIRTY "\\flddirty"
+#define OOO_STRING_SVTOOLS_RTF_FLDEDIT "\\fldedit"
+#define OOO_STRING_SVTOOLS_RTF_FLDINST "\\fldinst"
+#define OOO_STRING_SVTOOLS_RTF_FLDLOCK "\\fldlock"
+#define OOO_STRING_SVTOOLS_RTF_FLDPRIV "\\fldpriv"
+#define OOO_STRING_SVTOOLS_RTF_FLDRSLT "\\fldrslt"
+#define OOO_STRING_SVTOOLS_RTF_FMODERN "\\fmodern"
+#define OOO_STRING_SVTOOLS_RTF_FN "\\fn"
+#define OOO_STRING_SVTOOLS_RTF_FNIL "\\fnil"
+#define OOO_STRING_SVTOOLS_RTF_FONTTBL "\\fonttbl"
+#define OOO_STRING_SVTOOLS_RTF_FOOTER "\\footer"
+#define OOO_STRING_SVTOOLS_RTF_FOOTERF "\\footerf"
+#define OOO_STRING_SVTOOLS_RTF_FOOTERL "\\footerl"
+#define OOO_STRING_SVTOOLS_RTF_FOOTERR "\\footerr"
+#define OOO_STRING_SVTOOLS_RTF_FOOTERY "\\footery"
+#define OOO_STRING_SVTOOLS_RTF_FOOTNOTE "\\footnote"
+#define OOO_STRING_SVTOOLS_RTF_FPRQ "\\fprq"
+#define OOO_STRING_SVTOOLS_RTF_FRACWIDTH "\\fracwidth"
+#define OOO_STRING_SVTOOLS_RTF_FROMAN "\\froman"
+#define OOO_STRING_SVTOOLS_RTF_FS "\\fs"
+#define OOO_STRING_SVTOOLS_RTF_FSCRIPT "\\fscript"
+#define OOO_STRING_SVTOOLS_RTF_FSWISS "\\fswiss"
+#define OOO_STRING_SVTOOLS_RTF_FTECH "\\ftech"
+#define OOO_STRING_SVTOOLS_RTF_FTNBJ "\\ftnbj"
+#define OOO_STRING_SVTOOLS_RTF_FTNCN "\\ftncn"
+#define OOO_STRING_SVTOOLS_RTF_FTNRESTART "\\ftnrestart"
+#define OOO_STRING_SVTOOLS_RTF_FTNSEP "\\ftnsep"
+#define OOO_STRING_SVTOOLS_RTF_FTNSEPC "\\ftnsepc"
+#define OOO_STRING_SVTOOLS_RTF_FTNSTART "\\ftnstart"
+#define OOO_STRING_SVTOOLS_RTF_FTNTJ "\\ftntj"
+#define OOO_STRING_SVTOOLS_RTF_GREEN "\\green"
+#define OOO_STRING_SVTOOLS_RTF_GUTTER "\\gutter"
+#define OOO_STRING_SVTOOLS_RTF_GUTTERSXN "\\guttersxn"
+#define OOO_STRING_SVTOOLS_RTF_HEADER "\\header"
+#define OOO_STRING_SVTOOLS_RTF_HEADERF "\\headerf"
+#define OOO_STRING_SVTOOLS_RTF_HEADERL "\\headerl"
+#define OOO_STRING_SVTOOLS_RTF_HEADERR "\\headerr"
+#define OOO_STRING_SVTOOLS_RTF_HEADERY "\\headery"
+#define OOO_STRING_SVTOOLS_RTF_HR "\\hr"
+#define OOO_STRING_SVTOOLS_RTF_HYPHHOTZ "\\hyphhotz"
+#define OOO_STRING_SVTOOLS_RTF_I "\\i"
+#define OOO_STRING_SVTOOLS_RTF_ID "\\id"
+#define OOO_STRING_SVTOOLS_RTF_INFO "\\info"
+#define OOO_STRING_SVTOOLS_RTF_INTBL "\\intbl"
+#define OOO_STRING_SVTOOLS_RTF_IXE "\\ixe"
+#define OOO_STRING_SVTOOLS_RTF_KEEP "\\keep"
+#define OOO_STRING_SVTOOLS_RTF_KEEPN "\\keepn"
+#define OOO_STRING_SVTOOLS_RTF_KERNING "\\kerning"
+#define OOO_STRING_SVTOOLS_RTF_KEYCODE "\\keycode"
+#define OOO_STRING_SVTOOLS_RTF_KEYWORDS "\\keywords"
+#define OOO_STRING_SVTOOLS_RTF_LANDSCAPE "\\landscape"
+#define OOO_STRING_SVTOOLS_RTF_LANG "\\lang"
+#define OOO_STRING_SVTOOLS_RTF_LDBLQUOTE "\\ldblquote"
+#define OOO_STRING_SVTOOLS_RTF_LEVEL "\\level"
+#define OOO_STRING_SVTOOLS_RTF_LI "\\li"
+#define OOO_STRING_SVTOOLS_RTF_LIN "\\lin"
+#define OOO_STRING_SVTOOLS_RTF_LINE "\\line"
+#define OOO_STRING_SVTOOLS_RTF_LINEBETCOL "\\linebetcol"
+#define OOO_STRING_SVTOOLS_RTF_LINECONT "\\linecont"
+#define OOO_STRING_SVTOOLS_RTF_LINEMOD "\\linemod"
+#define OOO_STRING_SVTOOLS_RTF_LINEPPAGE "\\lineppage"
+#define OOO_STRING_SVTOOLS_RTF_LINERESTART "\\linerestart"
+#define OOO_STRING_SVTOOLS_RTF_LINESTART "\\linestart"
+#define OOO_STRING_SVTOOLS_RTF_LINESTARTS "\\linestarts"
+#define OOO_STRING_SVTOOLS_RTF_LINEX "\\linex"
+#define OOO_STRING_SVTOOLS_RTF_LNDSCPSXN "\\lndscpsxn"
+#define OOO_STRING_SVTOOLS_RTF_LQUOTE "\\lquote"
+#define OOO_STRING_SVTOOLS_RTF_MAC "\\mac"
+#define OOO_STRING_SVTOOLS_RTF_MACPICT "\\macpict"
+#define OOO_STRING_SVTOOLS_RTF_MAKEBACKUP "\\makebackup"
+#define OOO_STRING_SVTOOLS_RTF_MARGB "\\margb"
+#define OOO_STRING_SVTOOLS_RTF_MARGBSXN "\\margbsxn"
+#define OOO_STRING_SVTOOLS_RTF_MARGL "\\margl"
+#define OOO_STRING_SVTOOLS_RTF_MARGLSXN "\\marglsxn"
+#define OOO_STRING_SVTOOLS_RTF_MARGMIRROR "\\margmirror"
+#define OOO_STRING_SVTOOLS_RTF_MARGR "\\margr"
+#define OOO_STRING_SVTOOLS_RTF_MARGRSXN "\\margrsxn"
+#define OOO_STRING_SVTOOLS_RTF_MARGT "\\margt"
+#define OOO_STRING_SVTOOLS_RTF_MARGTSXN "\\margtsxn"
+#define OOO_STRING_SVTOOLS_RTF_MIN "\\min"
+#define OOO_STRING_SVTOOLS_RTF_MO "\\mo"
+#define OOO_STRING_SVTOOLS_RTF_NEXTCSET "\\nextcset"
+#define OOO_STRING_SVTOOLS_RTF_NEXTFILE "\\nextfile"
+#define OOO_STRING_SVTOOLS_RTF_NOFCHARS "\\nofchars"
+#define OOO_STRING_SVTOOLS_RTF_NOFPAGES "\\nofpages"
+#define OOO_STRING_SVTOOLS_RTF_NOFWORDS "\\nofwords"
+#define OOO_STRING_SVTOOLS_RTF_NOLINE "\\noline"
+#define OOO_STRING_SVTOOLS_RTF_NOSUPERSUB "\\nosupersub"
+#define OOO_STRING_SVTOOLS_RTF_NOWRAP "\\nowrap"
+#define OOO_STRING_SVTOOLS_RTF_OPERATOR "\\operator"
+#define OOO_STRING_SVTOOLS_RTF_OUTL "\\outl"
+#define OOO_STRING_SVTOOLS_RTF_PAGE "\\page"
+#define OOO_STRING_SVTOOLS_RTF_PAGEBB "\\pagebb"
+#define OOO_STRING_SVTOOLS_RTF_PAPERH "\\paperh"
+#define OOO_STRING_SVTOOLS_RTF_PAPERW "\\paperw"
+#define OOO_STRING_SVTOOLS_RTF_PAR "\\par"
+#define OOO_STRING_SVTOOLS_RTF_PARD "\\pard"
+#define OOO_STRING_SVTOOLS_RTF_PC "\\pc"
+#define OOO_STRING_SVTOOLS_RTF_PCA "\\pca"
+#define OOO_STRING_SVTOOLS_RTF_PGHSXN "\\pghsxn"
+#define OOO_STRING_SVTOOLS_RTF_PGNCONT "\\pgncont"
+#define OOO_STRING_SVTOOLS_RTF_PGNDEC "\\pgndec"
+#define OOO_STRING_SVTOOLS_RTF_PGNLCLTR "\\pgnlcltr"
+#define OOO_STRING_SVTOOLS_RTF_PGNLCRM "\\pgnlcrm"
+#define OOO_STRING_SVTOOLS_RTF_PGNRESTART "\\pgnrestart"
+#define OOO_STRING_SVTOOLS_RTF_PGNSTART "\\pgnstart"
+#define OOO_STRING_SVTOOLS_RTF_PGNSTARTS "\\pgnstarts"
+#define OOO_STRING_SVTOOLS_RTF_PGNUCLTR "\\pgnucltr"
+#define OOO_STRING_SVTOOLS_RTF_PGNUCRM "\\pgnucrm"
+#define OOO_STRING_SVTOOLS_RTF_PGNX "\\pgnx"
+#define OOO_STRING_SVTOOLS_RTF_PGNY "\\pgny"
+#define OOO_STRING_SVTOOLS_RTF_PGWSXN "\\pgwsxn"
+#define OOO_STRING_SVTOOLS_RTF_PHCOL "\\phcol"
+#define OOO_STRING_SVTOOLS_RTF_PHMRG "\\phmrg"
+#define OOO_STRING_SVTOOLS_RTF_PHPG "\\phpg"
+#define OOO_STRING_SVTOOLS_RTF_PICCROPB "\\piccropb"
+#define OOO_STRING_SVTOOLS_RTF_PICCROPL "\\piccropl"
+#define OOO_STRING_SVTOOLS_RTF_PICCROPR "\\piccropr"
+#define OOO_STRING_SVTOOLS_RTF_PICCROPT "\\piccropt"
+#define OOO_STRING_SVTOOLS_RTF_PICH "\\pich"
+#define OOO_STRING_SVTOOLS_RTF_PICHGOAL "\\pichgoal"
+#define OOO_STRING_SVTOOLS_RTF_PICSCALED "\\picscaled"
+#define OOO_STRING_SVTOOLS_RTF_PICSCALEX "\\picscalex"
+#define OOO_STRING_SVTOOLS_RTF_PICSCALEY "\\picscaley"
+#define OOO_STRING_SVTOOLS_RTF_PICT "\\pict"
+#define OOO_STRING_SVTOOLS_RTF_PICW "\\picw"
+#define OOO_STRING_SVTOOLS_RTF_PICWGOAL "\\picwgoal"
+#define OOO_STRING_SVTOOLS_RTF_PLAIN "\\plain"
+#define OOO_STRING_SVTOOLS_RTF_PMMETAFILE "\\pmmetafile"
+#define OOO_STRING_SVTOOLS_RTF_POSNEGX "\\posnegx"
+#define OOO_STRING_SVTOOLS_RTF_POSNEGY "\\posnegy"
+#define OOO_STRING_SVTOOLS_RTF_POSX "\\posx"
+#define OOO_STRING_SVTOOLS_RTF_POSXC "\\posxc"
+#define OOO_STRING_SVTOOLS_RTF_POSXI "\\posxi"
+#define OOO_STRING_SVTOOLS_RTF_POSXL "\\posxl"
+#define OOO_STRING_SVTOOLS_RTF_POSXO "\\posxo"
+#define OOO_STRING_SVTOOLS_RTF_POSXR "\\posxr"
+#define OOO_STRING_SVTOOLS_RTF_POSY "\\posy"
+#define OOO_STRING_SVTOOLS_RTF_POSYB "\\posyb"
+#define OOO_STRING_SVTOOLS_RTF_POSYC "\\posyc"
+#define OOO_STRING_SVTOOLS_RTF_POSYIL "\\posyil"
+#define OOO_STRING_SVTOOLS_RTF_POSYT "\\posyt"
+#define OOO_STRING_SVTOOLS_RTF_PRINTIM "\\printim"
+#define OOO_STRING_SVTOOLS_RTF_PSOVER "\\psover"
+#define OOO_STRING_SVTOOLS_RTF_PVMRG "\\pvmrg"
+#define OOO_STRING_SVTOOLS_RTF_PVPARA "\\pvpara"
+#define OOO_STRING_SVTOOLS_RTF_PVPG "\\pvpg"
+#define OOO_STRING_SVTOOLS_RTF_QC "\\qc"
+#define OOO_STRING_SVTOOLS_RTF_QJ "\\qj"
+#define OOO_STRING_SVTOOLS_RTF_QL "\\ql"
+#define OOO_STRING_SVTOOLS_RTF_QR "\\qr"
+#define OOO_STRING_SVTOOLS_RTF_RDBLQUOTE "\\rdblquote"
+#define OOO_STRING_SVTOOLS_RTF_RED "\\red"
+#define OOO_STRING_SVTOOLS_RTF_REVBAR "\\revbar"
+#define OOO_STRING_SVTOOLS_RTF_REVISED "\\revised"
+#define OOO_STRING_SVTOOLS_RTF_REVISIONS "\\revisions"
+#define OOO_STRING_SVTOOLS_RTF_REVPROP "\\revprop"
+#define OOO_STRING_SVTOOLS_RTF_REVTIM "\\revtim"
+#define OOO_STRING_SVTOOLS_RTF_RI "\\ri"
+#define OOO_STRING_SVTOOLS_RTF_RIN "\\rin"
+#define OOO_STRING_SVTOOLS_RTF_ROW "\\row"
+#define OOO_STRING_SVTOOLS_RTF_RQUOTE "\\rquote"
+#define OOO_STRING_SVTOOLS_RTF_RTF "\\rtf"
+#define OOO_STRING_SVTOOLS_RTF_RXE "\\rxe"
+#define OOO_STRING_SVTOOLS_RTF_S "\\s"
+#define OOO_STRING_SVTOOLS_RTF_SA "\\sa"
+#define OOO_STRING_SVTOOLS_RTF_SB "\\sb"
+#define OOO_STRING_SVTOOLS_RTF_SBASEDON "\\sbasedon"
+#define OOO_STRING_SVTOOLS_RTF_SBKCOL "\\sbkcol"
+#define OOO_STRING_SVTOOLS_RTF_SBKEVEN "\\sbkeven"
+#define OOO_STRING_SVTOOLS_RTF_SBKNONE "\\sbknone"
+#define OOO_STRING_SVTOOLS_RTF_SBKODD "\\sbkodd"
+#define OOO_STRING_SVTOOLS_RTF_SBKPAGE "\\sbkpage"
+#define OOO_STRING_SVTOOLS_RTF_SBYS "\\sbys"
+#define OOO_STRING_SVTOOLS_RTF_SCAPS "\\scaps"
+#define OOO_STRING_SVTOOLS_RTF_SECT "\\sect"
+#define OOO_STRING_SVTOOLS_RTF_SECTD "\\sectd"
+#define OOO_STRING_SVTOOLS_RTF_SHAD "\\shad"
+#define OOO_STRING_SVTOOLS_RTF_SHADING "\\shading"
+#define OOO_STRING_SVTOOLS_RTF_SHIFT "\\shift"
+#define OOO_STRING_SVTOOLS_RTF_SL "\\sl"
+#define OOO_STRING_SVTOOLS_RTF_SNEXT "\\snext"
+#define OOO_STRING_SVTOOLS_RTF_STRIKE "\\strike"
+#define OOO_STRING_SVTOOLS_RTF_STYLESHEET "\\stylesheet"
+#define OOO_STRING_SVTOOLS_RTF_SUB "\\sub"
+#define OOO_STRING_SVTOOLS_RTF_SUBJECT "\\subject"
+#define OOO_STRING_SVTOOLS_RTF_SUPER "\\super"
+#define OOO_STRING_SVTOOLS_RTF_TAB "\\tab"
+#define OOO_STRING_SVTOOLS_RTF_TB "\\tb"
+#define OOO_STRING_SVTOOLS_RTF_TC "\\tc"
+#define OOO_STRING_SVTOOLS_RTF_TCF "\\tcf"
+#define OOO_STRING_SVTOOLS_RTF_TCL "\\tcl"
+#define OOO_STRING_SVTOOLS_RTF_TEMPLATE "\\template"
+#define OOO_STRING_SVTOOLS_RTF_TITLE "\\title"
+#define OOO_STRING_SVTOOLS_RTF_TITLEPG "\\titlepg"
+#define OOO_STRING_SVTOOLS_RTF_TLDOT "\\tldot"
+#define OOO_STRING_SVTOOLS_RTF_TLEQ "\\tleq"
+#define OOO_STRING_SVTOOLS_RTF_TLHYPH "\\tlhyph"
+#define OOO_STRING_SVTOOLS_RTF_TLTH "\\tlth"
+#define OOO_STRING_SVTOOLS_RTF_TLUL "\\tlul"
+#define OOO_STRING_SVTOOLS_RTF_TQC "\\tqc"
+#define OOO_STRING_SVTOOLS_RTF_TQDEC "\\tqdec"
+#define OOO_STRING_SVTOOLS_RTF_TQR "\\tqr"
+#define OOO_STRING_SVTOOLS_RTF_TQL "\\tql"
+#define OOO_STRING_SVTOOLS_RTF_TRGAPH "\\trgaph"
+#define OOO_STRING_SVTOOLS_RTF_TRLEFT "\\trleft"
+#define OOO_STRING_SVTOOLS_RTF_TROWD "\\trowd"
+#define OOO_STRING_SVTOOLS_RTF_TRQC "\\trqc"
+#define OOO_STRING_SVTOOLS_RTF_TRQL "\\trql"
+#define OOO_STRING_SVTOOLS_RTF_TRQR "\\trqr"
+#define OOO_STRING_SVTOOLS_RTF_TRRH "\\trrh"
+#define OOO_STRING_SVTOOLS_RTF_TX "\\tx"
+#define OOO_STRING_SVTOOLS_RTF_TXE "\\txe"
+#define OOO_STRING_SVTOOLS_RTF_UL "\\ul"
+#define OOO_STRING_SVTOOLS_RTF_ULD "\\uld"
+#define OOO_STRING_SVTOOLS_RTF_ULDB "\\uldb"
+#define OOO_STRING_SVTOOLS_RTF_ULNONE "\\ulnone"
+#define OOO_STRING_SVTOOLS_RTF_ULW "\\ulw"
+#define OOO_STRING_SVTOOLS_RTF_UP "\\up"
+#define OOO_STRING_SVTOOLS_RTF_V "\\v"
+#define OOO_STRING_SVTOOLS_RTF_VERN "\\vern"
+#define OOO_STRING_SVTOOLS_RTF_VERSION "\\version"
+#define OOO_STRING_SVTOOLS_RTF_VERTALB "\\vertalb"
+#define OOO_STRING_SVTOOLS_RTF_VERTALC "\\vertalc"
+#define OOO_STRING_SVTOOLS_RTF_VERTALJ "\\vertalj"
+#define OOO_STRING_SVTOOLS_RTF_VERTALT "\\vertalt"
+#define OOO_STRING_SVTOOLS_RTF_WBITMAP "\\wbitmap"
+#define OOO_STRING_SVTOOLS_RTF_WBMBITSPIXEL "\\wbmbitspixel"
+#define OOO_STRING_SVTOOLS_RTF_WBMPLANES "\\wbmplanes"
+#define OOO_STRING_SVTOOLS_RTF_WBMWIDTHBYTES "\\wbmwidthbytes"
+#define OOO_STRING_SVTOOLS_RTF_WIDOWCTRL "\\widowctrl"
+#define OOO_STRING_SVTOOLS_RTF_WMETAFILE "\\wmetafile"
+#define OOO_STRING_SVTOOLS_RTF_XE "\\xe"
+#define OOO_STRING_SVTOOLS_RTF_YR "\\yr"
+#define OOO_STRING_SVTOOLS_RTF_NOBRKHYPH "\\_"
+#define OOO_STRING_SVTOOLS_RTF_FORMULA "\\|"
+#define OOO_STRING_SVTOOLS_RTF_NOBREAK "\\~"
+#define OOO_STRING_SVTOOLS_RTF_AB "\\ab"
+#define OOO_STRING_SVTOOLS_RTF_ACAPS "\\acaps"
+#define OOO_STRING_SVTOOLS_RTF_ACF "\\acf"
+#define OOO_STRING_SVTOOLS_RTF_ADDITIVE "\\additive"
+#define OOO_STRING_SVTOOLS_RTF_ADN "\\adn"
+#define OOO_STRING_SVTOOLS_RTF_AENDDOC "\\aenddoc"
+#define OOO_STRING_SVTOOLS_RTF_AENDNOTES "\\aendnotes"
+#define OOO_STRING_SVTOOLS_RTF_AEXPND "\\aexpnd"
+#define OOO_STRING_SVTOOLS_RTF_AF "\\af"
+#define OOO_STRING_SVTOOLS_RTF_AFS "\\afs"
+#define OOO_STRING_SVTOOLS_RTF_AFTNBJ "\\aftnbj"
+#define OOO_STRING_SVTOOLS_RTF_AFTNCN "\\aftncn"
+#define OOO_STRING_SVTOOLS_RTF_AFTNNALC "\\aftnnalc"
+#define OOO_STRING_SVTOOLS_RTF_AFTNNAR "\\aftnnar"
+#define OOO_STRING_SVTOOLS_RTF_AFTNNAUC "\\aftnnauc"
+#define OOO_STRING_SVTOOLS_RTF_AFTNNCHI "\\aftnnchi"
+#define OOO_STRING_SVTOOLS_RTF_AFTNNRLC "\\aftnnrlc"
+#define OOO_STRING_SVTOOLS_RTF_AFTNNRUC "\\aftnnruc"
+#define OOO_STRING_SVTOOLS_RTF_AFTNRESTART "\\aftnrestart"
+#define OOO_STRING_SVTOOLS_RTF_AFTNRSTCONT "\\aftnrstcont"
+#define OOO_STRING_SVTOOLS_RTF_AFTNSEP "\\aftnsep"
+#define OOO_STRING_SVTOOLS_RTF_AFTNSEPC "\\aftnsepc"
+#define OOO_STRING_SVTOOLS_RTF_AFTNSTART "\\aftnstart"
+#define OOO_STRING_SVTOOLS_RTF_AFTNTJ "\\aftntj"
+#define OOO_STRING_SVTOOLS_RTF_AI "\\ai"
+#define OOO_STRING_SVTOOLS_RTF_ALANG "\\alang"
+#define OOO_STRING_SVTOOLS_RTF_ALLPROT "\\allprot"
+#define OOO_STRING_SVTOOLS_RTF_ANNOTPROT "\\annotprot"
+#define OOO_STRING_SVTOOLS_RTF_AOUTL "\\aoutl"
+#define OOO_STRING_SVTOOLS_RTF_ASCAPS "\\ascaps"
+#define OOO_STRING_SVTOOLS_RTF_ASHAD "\\ashad"
+#define OOO_STRING_SVTOOLS_RTF_ASTRIKE "\\astrike"
+#define OOO_STRING_SVTOOLS_RTF_ATNAUTHOR "\\atnauthor"
+#define OOO_STRING_SVTOOLS_RTF_ATNICN "\\atnicn"
+#define OOO_STRING_SVTOOLS_RTF_ATNREF "\\atnref"
+#define OOO_STRING_SVTOOLS_RTF_ATNTIME "\\atntime"
+#define OOO_STRING_SVTOOLS_RTF_ATRFEND "\\atrfend"
+#define OOO_STRING_SVTOOLS_RTF_ATRFSTART "\\atrfstart"
+#define OOO_STRING_SVTOOLS_RTF_AUL "\\aul"
+#define OOO_STRING_SVTOOLS_RTF_AULD "\\auld"
+#define OOO_STRING_SVTOOLS_RTF_AULDB "\\auldb"
+#define OOO_STRING_SVTOOLS_RTF_AULNONE "\\aulnone"
+#define OOO_STRING_SVTOOLS_RTF_AULW "\\aulw"
+#define OOO_STRING_SVTOOLS_RTF_AUP "\\aup"
+#define OOO_STRING_SVTOOLS_RTF_BKMKPUB "\\bkmkpub"
+#define OOO_STRING_SVTOOLS_RTF_BRDRDASH "\\brdrdash"
+#define OOO_STRING_SVTOOLS_RTF_BRKFRM "\\brkfrm"
+#define OOO_STRING_SVTOOLS_RTF_CCHS "\\cchs"
+#define OOO_STRING_SVTOOLS_RTF_CPG "\\cpg"
+#define OOO_STRING_SVTOOLS_RTF_CS "\\cs"
+#define OOO_STRING_SVTOOLS_RTF_CVMME "\\cvmme"
+#define OOO_STRING_SVTOOLS_RTF_DATAFIELD "\\datafield"
+#define OOO_STRING_SVTOOLS_RTF_DO "\\do"
+#define OOO_STRING_SVTOOLS_RTF_DOBXCOLUMN "\\dobxcolumn"
+#define OOO_STRING_SVTOOLS_RTF_DOBXMARGIN "\\dobxmargin"
+#define OOO_STRING_SVTOOLS_RTF_DOBXPAGE "\\dobxpage"
+#define OOO_STRING_SVTOOLS_RTF_DOBYMARGIN "\\dobymargin"
+#define OOO_STRING_SVTOOLS_RTF_DOBYPAGE "\\dobypage"
+#define OOO_STRING_SVTOOLS_RTF_DOBYPARA "\\dobypara"
+#define OOO_STRING_SVTOOLS_RTF_DODHGT "\\dodhgt"
+#define OOO_STRING_SVTOOLS_RTF_DOLOCK "\\dolock"
+#define OOO_STRING_SVTOOLS_RTF_DPAENDHOL "\\dpaendhol"
+#define OOO_STRING_SVTOOLS_RTF_DPAENDL "\\dpaendl"
+#define OOO_STRING_SVTOOLS_RTF_DPAENDSOL "\\dpaendsol"
+#define OOO_STRING_SVTOOLS_RTF_DPAENDW "\\dpaendw"
+#define OOO_STRING_SVTOOLS_RTF_DPARC "\\dparc"
+#define OOO_STRING_SVTOOLS_RTF_DPARCFLIPX "\\dparcflipx"
+#define OOO_STRING_SVTOOLS_RTF_DPARCFLIPY "\\dparcflipy"
+#define OOO_STRING_SVTOOLS_RTF_DPASTARTHOL "\\dpastarthol"
+#define OOO_STRING_SVTOOLS_RTF_DPASTARTL "\\dpastartl"
+#define OOO_STRING_SVTOOLS_RTF_DPASTARTSOL "\\dpastartsol"
+#define OOO_STRING_SVTOOLS_RTF_DPASTARTW "\\dpastartw"
+#define OOO_STRING_SVTOOLS_RTF_DPCALLOUT "\\dpcallout"
+#define OOO_STRING_SVTOOLS_RTF_DPCOA "\\dpcoa"
+#define OOO_STRING_SVTOOLS_RTF_DPCOACCENT "\\dpcoaccent"
+#define OOO_STRING_SVTOOLS_RTF_DPCOBESTFIT "\\dpcobestfit"
+#define OOO_STRING_SVTOOLS_RTF_DPCOBORDER "\\dpcoborder"
+#define OOO_STRING_SVTOOLS_RTF_DPCODABS "\\dpcodabs"
+#define OOO_STRING_SVTOOLS_RTF_DPCODBOTTOM "\\dpcodbottom"
+#define OOO_STRING_SVTOOLS_RTF_DPCODCENTER "\\dpcodcenter"
+#define OOO_STRING_SVTOOLS_RTF_DPCODTOP "\\dpcodtop"
+#define OOO_STRING_SVTOOLS_RTF_DPCOLENGTH "\\dpcolength"
+#define OOO_STRING_SVTOOLS_RTF_DPCOMINUSX "\\dpcominusx"
+#define OOO_STRING_SVTOOLS_RTF_DPCOMINUSY "\\dpcominusy"
+#define OOO_STRING_SVTOOLS_RTF_DPCOOFFSET "\\dpcooffset"
+#define OOO_STRING_SVTOOLS_RTF_DPCOSMARTA "\\dpcosmarta"
+#define OOO_STRING_SVTOOLS_RTF_DPCOTDOUBLE "\\dpcotdouble"
+#define OOO_STRING_SVTOOLS_RTF_DPCOTRIGHT "\\dpcotright"
+#define OOO_STRING_SVTOOLS_RTF_DPCOTSINGLE "\\dpcotsingle"
+#define OOO_STRING_SVTOOLS_RTF_DPCOTTRIPLE "\\dpcottriple"
+#define OOO_STRING_SVTOOLS_RTF_DPCOUNT "\\dpcount"
+#define OOO_STRING_SVTOOLS_RTF_DPELLIPSE "\\dpellipse"
+#define OOO_STRING_SVTOOLS_RTF_DPENDGROUP "\\dpendgroup"
+#define OOO_STRING_SVTOOLS_RTF_DPFILLBGCB "\\dpfillbgcb"
+#define OOO_STRING_SVTOOLS_RTF_DPFILLBGCG "\\dpfillbgcg"
+#define OOO_STRING_SVTOOLS_RTF_DPFILLBGCR "\\dpfillbgcr"
+#define OOO_STRING_SVTOOLS_RTF_DPFILLBGGRAY "\\dpfillbggray"
+#define OOO_STRING_SVTOOLS_RTF_DPFILLBGPAL "\\dpfillbgpal"
+#define OOO_STRING_SVTOOLS_RTF_DPFILLFGCB "\\dpfillfgcb"
+#define OOO_STRING_SVTOOLS_RTF_DPFILLFGCG "\\dpfillfgcg"
+#define OOO_STRING_SVTOOLS_RTF_DPFILLFGCR "\\dpfillfgcr"
+#define OOO_STRING_SVTOOLS_RTF_DPFILLFGGRAY "\\dpfillfggray"
+#define OOO_STRING_SVTOOLS_RTF_DPFILLFGPAL "\\dpfillfgpal"
+#define OOO_STRING_SVTOOLS_RTF_DPFILLPAT "\\dpfillpat"
+#define OOO_STRING_SVTOOLS_RTF_DPGROUP "\\dpgroup"
+#define OOO_STRING_SVTOOLS_RTF_DPLINE "\\dpline"
+#define OOO_STRING_SVTOOLS_RTF_DPLINECOB "\\dplinecob"
+#define OOO_STRING_SVTOOLS_RTF_DPLINECOG "\\dplinecog"
+#define OOO_STRING_SVTOOLS_RTF_DPLINECOR "\\dplinecor"
+#define OOO_STRING_SVTOOLS_RTF_DPLINEDADO "\\dplinedado"
+#define OOO_STRING_SVTOOLS_RTF_DPLINEDADODO "\\dplinedadodo"
+#define OOO_STRING_SVTOOLS_RTF_DPLINEDASH "\\dplinedash"
+#define OOO_STRING_SVTOOLS_RTF_DPLINEDOT "\\dplinedot"
+#define OOO_STRING_SVTOOLS_RTF_DPLINEGRAY "\\dplinegray"
+#define OOO_STRING_SVTOOLS_RTF_DPLINEHOLLOW "\\dplinehollow"
+#define OOO_STRING_SVTOOLS_RTF_DPLINEPAL "\\dplinepal"
+#define OOO_STRING_SVTOOLS_RTF_DPLINESOLID "\\dplinesolid"
+#define OOO_STRING_SVTOOLS_RTF_DPLINEW "\\dplinew"
+#define OOO_STRING_SVTOOLS_RTF_DPPOLYCOUNT "\\dppolycount"
+#define OOO_STRING_SVTOOLS_RTF_DPPOLYGON "\\dppolygon"
+#define OOO_STRING_SVTOOLS_RTF_DPPOLYLINE "\\dppolyline"
+#define OOO_STRING_SVTOOLS_RTF_DPPTX "\\dpptx"
+#define OOO_STRING_SVTOOLS_RTF_DPPTY "\\dppty"
+#define OOO_STRING_SVTOOLS_RTF_DPRECT "\\dprect"
+#define OOO_STRING_SVTOOLS_RTF_DPROUNDR "\\dproundr"
+#define OOO_STRING_SVTOOLS_RTF_DPSHADOW "\\dpshadow"
+#define OOO_STRING_SVTOOLS_RTF_DPSHADX "\\dpshadx"
+#define OOO_STRING_SVTOOLS_RTF_DPSHADY "\\dpshady"
+#define OOO_STRING_SVTOOLS_RTF_DPTXBX "\\dptxbx"
+#define OOO_STRING_SVTOOLS_RTF_DPTXBXMAR "\\dptxbxmar"
+#define OOO_STRING_SVTOOLS_RTF_DPTXBXTEXT "\\dptxbxtext"
+#define OOO_STRING_SVTOOLS_RTF_DPX "\\dpx"
+#define OOO_STRING_SVTOOLS_RTF_DPXSIZE "\\dpxsize"
+#define OOO_STRING_SVTOOLS_RTF_DPY "\\dpy"
+#define OOO_STRING_SVTOOLS_RTF_DPYSIZE "\\dpysize"
+#define OOO_STRING_SVTOOLS_RTF_DS "\\ds"
+#define OOO_STRING_SVTOOLS_RTF_EMSPACE "\\emspace"
+#define OOO_STRING_SVTOOLS_RTF_ENSPACE "\\enspace"
+#define OOO_STRING_SVTOOLS_RTF_FBIDI "\\fbidi"
+#define OOO_STRING_SVTOOLS_RTF_FET "\\fet"
+#define OOO_STRING_SVTOOLS_RTF_FID "\\fid"
+#define OOO_STRING_SVTOOLS_RTF_FILE "\\file"
+#define OOO_STRING_SVTOOLS_RTF_FILETBL "\\filetbl"
+#define OOO_STRING_SVTOOLS_RTF_FLDALT "\\fldalt"
+#define OOO_STRING_SVTOOLS_RTF_FNETWORK "\\fnetwork"
+#define OOO_STRING_SVTOOLS_RTF_FONTEMB "\\fontemb"
+#define OOO_STRING_SVTOOLS_RTF_FONTFILE "\\fontfile"
+#define OOO_STRING_SVTOOLS_RTF_FORMDISP "\\formdisp"
+#define OOO_STRING_SVTOOLS_RTF_FORMPROT "\\formprot"
+#define OOO_STRING_SVTOOLS_RTF_FORMSHADE "\\formshade"
+#define OOO_STRING_SVTOOLS_RTF_FOSNUM "\\fosnum"
+#define OOO_STRING_SVTOOLS_RTF_FRELATIVE "\\frelative"
+#define OOO_STRING_SVTOOLS_RTF_FTNALT "\\ftnalt"
+#define OOO_STRING_SVTOOLS_RTF_FTNIL "\\ftnil"
+#define OOO_STRING_SVTOOLS_RTF_FTNNALC "\\ftnnalc"
+#define OOO_STRING_SVTOOLS_RTF_FTNNAR "\\ftnnar"
+#define OOO_STRING_SVTOOLS_RTF_FTNNAUC "\\ftnnauc"
+#define OOO_STRING_SVTOOLS_RTF_FTNNCHI "\\ftnnchi"
+#define OOO_STRING_SVTOOLS_RTF_FTNNRLC "\\ftnnrlc"
+#define OOO_STRING_SVTOOLS_RTF_FTNNRUC "\\ftnnruc"
+#define OOO_STRING_SVTOOLS_RTF_FTNRSTCONT "\\ftnrstcont"
+#define OOO_STRING_SVTOOLS_RTF_FTNRSTPG "\\ftnrstpg"
+#define OOO_STRING_SVTOOLS_RTF_FTTRUETYPE "\\fttruetype"
+#define OOO_STRING_SVTOOLS_RTF_FVALIDDOS "\\fvaliddos"
+#define OOO_STRING_SVTOOLS_RTF_FVALIDHPFS "\\fvalidhpfs"
+#define OOO_STRING_SVTOOLS_RTF_FVALIDMAC "\\fvalidmac"
+#define OOO_STRING_SVTOOLS_RTF_FVALIDNTFS "\\fvalidntfs"
+#define OOO_STRING_SVTOOLS_RTF_HYPHAUTO "\\hyphauto"
+#define OOO_STRING_SVTOOLS_RTF_HYPHCAPS "\\hyphcaps"
+#define OOO_STRING_SVTOOLS_RTF_HYPHCONSEC "\\hyphconsec"
+#define OOO_STRING_SVTOOLS_RTF_HYPHPAR "\\hyphpar"
+#define OOO_STRING_SVTOOLS_RTF_LINKSELF "\\linkself"
+#define OOO_STRING_SVTOOLS_RTF_LINKSTYLES "\\linkstyles"
+#define OOO_STRING_SVTOOLS_RTF_LTRCH "\\ltrch"
+#define OOO_STRING_SVTOOLS_RTF_LTRDOC "\\ltrdoc"
+#define OOO_STRING_SVTOOLS_RTF_LTRMARK "\\ltrmark"
+#define OOO_STRING_SVTOOLS_RTF_LTRPAR "\\ltrpar"
+#define OOO_STRING_SVTOOLS_RTF_LTRROW "\\ltrrow"
+#define OOO_STRING_SVTOOLS_RTF_LTRSECT "\\ltrsect"
+#define OOO_STRING_SVTOOLS_RTF_NOCOLBAL "\\nocolbal"
+#define OOO_STRING_SVTOOLS_RTF_NOEXTRASPRL "\\noextrasprl"
+#define OOO_STRING_SVTOOLS_RTF_NOTABIND "\\notabind"
+#define OOO_STRING_SVTOOLS_RTF_NOWIDCTLPAR "\\nowidctlpar"
+#define OOO_STRING_SVTOOLS_RTF_OBJALIAS "\\objalias"
+#define OOO_STRING_SVTOOLS_RTF_OBJALIGN "\\objalign"
+#define OOO_STRING_SVTOOLS_RTF_OBJAUTLINK "\\objautlink"
+#define OOO_STRING_SVTOOLS_RTF_OBJCLASS "\\objclass"
+#define OOO_STRING_SVTOOLS_RTF_OBJCROPB "\\objcropb"
+#define OOO_STRING_SVTOOLS_RTF_OBJCROPL "\\objcropl"
+#define OOO_STRING_SVTOOLS_RTF_OBJCROPR "\\objcropr"
+#define OOO_STRING_SVTOOLS_RTF_OBJCROPT "\\objcropt"
+#define OOO_STRING_SVTOOLS_RTF_OBJDATA "\\objdata"
+#define OOO_STRING_SVTOOLS_RTF_OBJECT "\\object"
+#define OOO_STRING_SVTOOLS_RTF_OBJEMB "\\objemb"
+#define OOO_STRING_SVTOOLS_RTF_OBJH "\\objh"
+#define OOO_STRING_SVTOOLS_RTF_OBJICEMB "\\objicemb"
+#define OOO_STRING_SVTOOLS_RTF_OBJLINK "\\objlink"
+#define OOO_STRING_SVTOOLS_RTF_OBJLOCK "\\objlock"
+#define OOO_STRING_SVTOOLS_RTF_OBJNAME "\\objname"
+#define OOO_STRING_SVTOOLS_RTF_OBJPUB "\\objpub"
+#define OOO_STRING_SVTOOLS_RTF_OBJSCALEX "\\objscalex"
+#define OOO_STRING_SVTOOLS_RTF_OBJSCALEY "\\objscaley"
+#define OOO_STRING_SVTOOLS_RTF_OBJSECT "\\objsect"
+#define OOO_STRING_SVTOOLS_RTF_OBJSETSIZE "\\objsetsize"
+#define OOO_STRING_SVTOOLS_RTF_OBJSUB "\\objsub"
+#define OOO_STRING_SVTOOLS_RTF_OBJTIME "\\objtime"
+#define OOO_STRING_SVTOOLS_RTF_OBJTRANSY "\\objtransy"
+#define OOO_STRING_SVTOOLS_RTF_OBJUPDATE "\\objupdate"
+#define OOO_STRING_SVTOOLS_RTF_OBJW "\\objw"
+#define OOO_STRING_SVTOOLS_RTF_OTBLRUL "\\otblrul"
+#define OOO_STRING_SVTOOLS_RTF_PGNHN "\\pgnhn"
+#define OOO_STRING_SVTOOLS_RTF_PGNHNSC "\\pgnhnsc"
+#define OOO_STRING_SVTOOLS_RTF_PGNHNSH "\\pgnhnsh"
+#define OOO_STRING_SVTOOLS_RTF_PGNHNSM "\\pgnhnsm"
+#define OOO_STRING_SVTOOLS_RTF_PGNHNSN "\\pgnhnsn"
+#define OOO_STRING_SVTOOLS_RTF_PGNHNSP "\\pgnhnsp"
+#define OOO_STRING_SVTOOLS_RTF_PICBMP "\\picbmp"
+#define OOO_STRING_SVTOOLS_RTF_PICBPP "\\picbpp"
+#define OOO_STRING_SVTOOLS_RTF_PN "\\pn"
+#define OOO_STRING_SVTOOLS_RTF_PNACROSS "\\pnacross"
+#define OOO_STRING_SVTOOLS_RTF_PNB "\\pnb"
+#define OOO_STRING_SVTOOLS_RTF_PNCAPS "\\pncaps"
+#define OOO_STRING_SVTOOLS_RTF_PNCARD "\\pncard"
+#define OOO_STRING_SVTOOLS_RTF_PNCF "\\pncf"
+#define OOO_STRING_SVTOOLS_RTF_PNDEC "\\pndec"
+#define OOO_STRING_SVTOOLS_RTF_PNF "\\pnf"
+#define OOO_STRING_SVTOOLS_RTF_PNFS "\\pnfs"
+#define OOO_STRING_SVTOOLS_RTF_PNHANG "\\pnhang"
+#define OOO_STRING_SVTOOLS_RTF_PNI "\\pni"
+#define OOO_STRING_SVTOOLS_RTF_PNINDENT "\\pnindent"
+#define OOO_STRING_SVTOOLS_RTF_PNLCLTR "\\pnlcltr"
+#define OOO_STRING_SVTOOLS_RTF_PNLCRM "\\pnlcrm"
+#define OOO_STRING_SVTOOLS_RTF_PNLVL "\\pnlvl"
+#define OOO_STRING_SVTOOLS_RTF_PNLVLBLT "\\pnlvlblt"
+#define OOO_STRING_SVTOOLS_RTF_PNLVLBODY "\\pnlvlbody"
+#define OOO_STRING_SVTOOLS_RTF_PNLVLCONT "\\pnlvlcont"
+#define OOO_STRING_SVTOOLS_RTF_PNNUMONCE "\\pnnumonce"
+#define OOO_STRING_SVTOOLS_RTF_PNORD "\\pnord"
+#define OOO_STRING_SVTOOLS_RTF_PNORDT "\\pnordt"
+#define OOO_STRING_SVTOOLS_RTF_PNPREV "\\pnprev"
+#define OOO_STRING_SVTOOLS_RTF_PNQC "\\pnqc"
+#define OOO_STRING_SVTOOLS_RTF_PNQL "\\pnql"
+#define OOO_STRING_SVTOOLS_RTF_PNQR "\\pnqr"
+#define OOO_STRING_SVTOOLS_RTF_PNRESTART "\\pnrestart"
+#define OOO_STRING_SVTOOLS_RTF_PNSCAPS "\\pnscaps"
+#define OOO_STRING_SVTOOLS_RTF_PNSECLVL "\\pnseclvl"
+#define OOO_STRING_SVTOOLS_RTF_PNSP "\\pnsp"
+#define OOO_STRING_SVTOOLS_RTF_PNSTART "\\pnstart"
+#define OOO_STRING_SVTOOLS_RTF_PNSTRIKE "\\pnstrike"
+#define OOO_STRING_SVTOOLS_RTF_PNTEXT "\\pntext"
+#define OOO_STRING_SVTOOLS_RTF_PNTXTA "\\pntxta"
+#define OOO_STRING_SVTOOLS_RTF_PNTXTB "\\pntxtb"
+#define OOO_STRING_SVTOOLS_RTF_PNUCLTR "\\pnucltr"
+#define OOO_STRING_SVTOOLS_RTF_PNUCRM "\\pnucrm"
+#define OOO_STRING_SVTOOLS_RTF_PNUL "\\pnul"
+#define OOO_STRING_SVTOOLS_RTF_PNULD "\\pnuld"
+#define OOO_STRING_SVTOOLS_RTF_PNULDB "\\pnuldb"
+#define OOO_STRING_SVTOOLS_RTF_PNULNONE "\\pnulnone"
+#define OOO_STRING_SVTOOLS_RTF_PNULW "\\pnulw"
+#define OOO_STRING_SVTOOLS_RTF_PRCOLBL "\\prcolbl"
+#define OOO_STRING_SVTOOLS_RTF_PRINTDATA "\\printdata"
+#define OOO_STRING_SVTOOLS_RTF_PSZ "\\psz"
+#define OOO_STRING_SVTOOLS_RTF_PUBAUTO "\\pubauto"
+#define OOO_STRING_SVTOOLS_RTF_RESULT "\\result"
+#define OOO_STRING_SVTOOLS_RTF_REVAUTH "\\revauth"
+#define OOO_STRING_SVTOOLS_RTF_REVDTTM "\\revdttm"
+#define OOO_STRING_SVTOOLS_RTF_REVPROT "\\revprot"
+#define OOO_STRING_SVTOOLS_RTF_REVTBL "\\revtbl"
+#define OOO_STRING_SVTOOLS_RTF_RSLTBMP "\\rsltbmp"
+#define OOO_STRING_SVTOOLS_RTF_RSLTMERGE "\\rsltmerge"
+#define OOO_STRING_SVTOOLS_RTF_RSLTPICT "\\rsltpict"
+#define OOO_STRING_SVTOOLS_RTF_RSLTRTF "\\rsltrtf"
+#define OOO_STRING_SVTOOLS_RTF_RSLTTXT "\\rslttxt"
+#define OOO_STRING_SVTOOLS_RTF_RTLCH "\\rtlch"
+#define OOO_STRING_SVTOOLS_RTF_RTLDOC "\\rtldoc"
+#define OOO_STRING_SVTOOLS_RTF_RTLMARK "\\rtlmark"
+#define OOO_STRING_SVTOOLS_RTF_RTLPAR "\\rtlpar"
+#define OOO_STRING_SVTOOLS_RTF_RTLROW "\\rtlrow"
+#define OOO_STRING_SVTOOLS_RTF_RTLSECT "\\rtlsect"
+#define OOO_STRING_SVTOOLS_RTF_SEC "\\sec"
+#define OOO_STRING_SVTOOLS_RTF_SECTNUM "\\sectnum"
+#define OOO_STRING_SVTOOLS_RTF_SECTUNLOCKED "\\sectunlocked"
+#define OOO_STRING_SVTOOLS_RTF_SLMULT "\\slmult"
+#define OOO_STRING_SVTOOLS_RTF_SOFTCOL "\\softcol"
+#define OOO_STRING_SVTOOLS_RTF_SOFTLHEIGHT "\\softlheight"
+#define OOO_STRING_SVTOOLS_RTF_SOFTLINE "\\softline"
+#define OOO_STRING_SVTOOLS_RTF_SOFTPAGE "\\softpage"
+#define OOO_STRING_SVTOOLS_RTF_SPRSSPBF "\\sprsspbf"
+#define OOO_STRING_SVTOOLS_RTF_SPRSTSP "\\sprstsp"
+#define OOO_STRING_SVTOOLS_RTF_SUBDOCUMENT "\\subdocument"
+#define OOO_STRING_SVTOOLS_RTF_SWPBDR "\\swpbdr"
+#define OOO_STRING_SVTOOLS_RTF_TCN "\\tcn"
+#define OOO_STRING_SVTOOLS_RTF_TRANSMF "\\transmf"
+#define OOO_STRING_SVTOOLS_RTF_TRBRDRB "\\trbrdrb"
+#define OOO_STRING_SVTOOLS_RTF_TRBRDRH "\\trbrdrh"
+#define OOO_STRING_SVTOOLS_RTF_TRBRDRL "\\trbrdrl"
+#define OOO_STRING_SVTOOLS_RTF_TRBRDRR "\\trbrdrr"
+#define OOO_STRING_SVTOOLS_RTF_TRBRDRT "\\trbrdrt"
+#define OOO_STRING_SVTOOLS_RTF_TRBRDRV "\\trbrdrv"
+#define OOO_STRING_SVTOOLS_RTF_TRHDR "\\trhdr"
+#define OOO_STRING_SVTOOLS_RTF_TRKEEP "\\trkeep"
+#define OOO_STRING_SVTOOLS_RTF_TRPADDB "\\trpaddb"
+#define OOO_STRING_SVTOOLS_RTF_TRPADDL "\\trpaddl"
+#define OOO_STRING_SVTOOLS_RTF_TRPADDR "\\trpaddr"
+#define OOO_STRING_SVTOOLS_RTF_TRPADDT "\\trpaddt"
+#define OOO_STRING_SVTOOLS_RTF_TRPADDFB "\\trpaddfb"
+#define OOO_STRING_SVTOOLS_RTF_TRPADDFL "\\trpaddfl"
+#define OOO_STRING_SVTOOLS_RTF_TRPADDFR "\\trpaddfr"
+#define OOO_STRING_SVTOOLS_RTF_TRPADDFT "\\trpaddft"
+#define OOO_STRING_SVTOOLS_RTF_WRAPTRSP "\\wraptrsp"
+#define OOO_STRING_SVTOOLS_RTF_XEF "\\xef"
+#define OOO_STRING_SVTOOLS_RTF_ZWJ "\\zwj"
+#define OOO_STRING_SVTOOLS_RTF_ZWNJ "\\zwnj"
 
 // neue Tokens zur 1.5
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ABSLOCK, "\\abslock" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ADJUSTRIGHT, "\\adjustright" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AFTNNCHOSUNG, "\\aftnnchosung" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AFTNNCNUM, "\\aftnncnum" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AFTNNDBAR, "\\aftnndbar" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AFTNNDBNUM, "\\aftnndbnum" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AFTNNDBNUMD, "\\aftnndbnumd" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AFTNNDBNUMK, "\\aftnndbnumk" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AFTNNDBNUMT, "\\aftnndbnumt" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AFTNNGANADA, "\\aftnnganada" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AFTNNGBNUM, "\\aftnngbnum" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AFTNNGBNUMD, "\\aftnngbnumd" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AFTNNGBNUMK, "\\aftnngbnumk" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AFTNNGBNUML, "\\aftnngbnuml" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AFTNNZODIAC, "\\aftnnzodiac" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AFTNNZODIACD, "\\aftnnzodiacd" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_AFTNNZODIACL, "\\aftnnzodiacl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ANIMTEXT, "\\animtext" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ANSICPG, "\\ansicpg" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BACKGROUND, "\\background" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BDBFHDR, "\\bdbfhdr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BLIPTAG, "\\bliptag" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BLIPUID, "\\blipuid" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BLIPUPI, "\\blipupi" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDRART, "\\brdrart" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDRDASHD, "\\brdrdashd" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDRDASHDD, "\\brdrdashdd" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDRDASHDOTSTR, "\\brdrdashdotstr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDRDASHSM, "\\brdrdashsm" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDREMBOSS, "\\brdremboss" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDRENGRAVE, "\\brdrengrave" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDRFRAME, "\\brdrframe" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDRTHTNLG, "\\brdrthtnlg" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDRTHTNMG, "\\brdrthtnmg" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDRTHTNSG, "\\brdrthtnsg" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDRTNTHLG, "\\brdrtnthlg" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDRTNTHMG, "\\brdrtnthmg" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDRTNTHSG, "\\brdrtnthsg" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDRTNTHTNLG, "\\brdrtnthtnlg" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDRTNTHTNMG, "\\brdrtnthtnmg" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDRTNTHTNSG, "\\brdrtnthtnsg" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDRTRIPLE, "\\brdrtriple" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDRWAVY, "\\brdrwavy" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDRWAVYDB, "\\brdrwavydb" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CATEGORY, "\\category" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CGRID, "\\cgrid" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CHARSCALEX, "\\charscalex" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CHBGBDIAG, "\\chbgbdiag" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CHBGCROSS, "\\chbgcross" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CHBGDCROSS, "\\chbgdcross" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CHBGDKBDIAG, "\\chbgdkbdiag" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CHBGDKCROSS, "\\chbgdkcross" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CHBGDKDCROSS, "\\chbgdkdcross" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CHBGDKFDIAG, "\\chbgdkfdiag" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CHBGDKHORIZ, "\\chbgdkhoriz" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CHBGDKVERT, "\\chbgdkvert" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CHBGFDIAG, "\\chbgfdiag" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CHBGHORIZ, "\\chbghoriz" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CHBGVERT, "\\chbgvert" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CHBRDR, "\\chbrdr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CHCBPAT, "\\chcbpat" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CHCFPAT, "\\chcfpat" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CHSHDNG, "\\chshdng" );
-
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLPADL, "\\clpadl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLPADT, "\\clpadt" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLPADB, "\\clpadb" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLPADR, "\\clpadr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLPADFL, "\\clpadfl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLPADFT, "\\clpadft" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLPADFB, "\\clpadfb" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLPADFR, "\\clpadfr" );
-
-
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLTXLRTB, "\\cltxlrtb" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLTXTBRL, "\\cltxtbrl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLVERTALB, "\\clvertalb" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLVERTALC, "\\clvertalc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLVERTALT, "\\clvertalt" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLVMGF, "\\clvmgf" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLVMRG, "\\clvmrg" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLTXTBRLV, "\\cltxtbrlv" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLTXBTLR, "\\cltxbtlr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CLTXLRTBV, "\\cltxlrtbv" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_COMPANY, "\\company" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CRAUTH, "\\crauth" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_CRDATE, "\\crdate" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DATE, "\\date" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DEFLANGFE, "\\deflangfe" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DFRAUTH, "\\dfrauth" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DFRDATE, "\\dfrdate" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DFRSTART, "\\dfrstart" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DFRSTOP, "\\dfrstop" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DFRXST, "\\dfrxst" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DGMARGIN, "\\dgmargin" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DNTBLNSBDB, "\\dntblnsbdb" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DOCTYPE, "\\doctype" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DOCVAR, "\\docvar" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DPCODESCENT, "\\dpcodescent" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_EMBO, "\\embo" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_EMFBLIP, "\\emfblip" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_EXPSHRTN, "\\expshrtn" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FAAUTO, "\\faauto" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FBIAS, "\\fbias" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FFDEFRES, "\\ffdefres" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FFDEFTEXT, "\\ffdeftext" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FFENTRYMCR, "\\ffentrymcr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FFEXITMCR, "\\ffexitmcr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FFFORMAT, "\\ffformat" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FFHASLISTBOX, "\\ffhaslistbox" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FFHELPTEXT, "\\ffhelptext" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FFHPS, "\\ffhps" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FFL, "\\ffl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FFMAXLEN, "\\ffmaxlen" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FFNAME, "\\ffname" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FFOWNHELP, "\\ffownhelp" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FFOWNSTAT, "\\ffownstat" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FFPROT, "\\ffprot" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FFRECALC, "\\ffrecalc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FFRES, "\\ffres" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FFSIZE, "\\ffsize" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FFSTATTEXT, "\\ffstattext" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FFTYPE, "\\fftype" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FFTYPETXT, "\\fftypetxt" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FLDTYPE, "\\fldtype" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FNAME, "\\fname" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FORMFIELD, "\\formfield" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FROMTEXT, "\\fromtext" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FTNNCHOSUNG, "\\ftnnchosung" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FTNNCNUM, "\\ftnncnum" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FTNNDBAR, "\\ftnndbar" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FTNNDBNUM, "\\ftnndbnum" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FTNNDBNUMD, "\\ftnndbnumd" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FTNNDBNUMK, "\\ftnndbnumk" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FTNNDBNUMT, "\\ftnndbnumt" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FTNNGANADA, "\\ftnnganada" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FTNNGBNUM, "\\ftnngbnum" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FTNNGBNUMD, "\\ftnngbnumd" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FTNNGBNUMK, "\\ftnngbnumk" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FTNNGBNUML, "\\ftnngbnuml" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FTNNZODIAC, "\\ftnnzodiac" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FTNNZODIACD, "\\ftnnzodiacd" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FTNNZODIACL, "\\ftnnzodiacl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_G, "\\g" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_GCW, "\\gcw" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_GRIDTBL, "\\gridtbl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_HIGHLIGHT, "\\highlight" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_HLFR, "\\hlfr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_HLINKBASE, "\\hlinkbase" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_HLLOC, "\\hlloc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_HLSRC, "\\hlsrc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ILVL, "\\ilvl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_IMPR, "\\impr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_JPEGBLIP, "\\jpegblip" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LEVELFOLLOW, "\\levelfollow" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LEVELINDENT, "\\levelindent" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LEVELJC, "\\leveljc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LEVELLEGAL, "\\levellegal" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LEVELNFC, "\\levelnfc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LEVELNORESTART, "\\levelnorestart" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LEVELNUMBERS, "\\levelnumbers" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LEVELOLD, "\\levelold" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LEVELPREV, "\\levelprev" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LEVELPREVSPACE, "\\levelprevspace" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LEVELSPACE, "\\levelspace" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LEVELSTARTAT, "\\levelstartat" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LEVELTEXT, "\\leveltext" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LINKVAL, "\\linkval" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LIST, "\\list" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LISTID, "\\listid" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LISTLEVEL, "\\listlevel" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LISTNAME, "\\listname" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LISTOVERRIDE, "\\listoverride" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LISTOVERRIDECOUNT, "\\listoverridecount" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LISTOVERRIDEFORMAT, "\\listoverrideformat" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LISTOVERRIDESTART, "\\listoverridestart" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LISTOVERRIDETABLE, "\\listoverridetable" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LISTRESTARTHDN, "\\listrestarthdn" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LISTSIMPLE, "\\listsimple" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LISTTABLE, "\\listtable" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LISTTEMPLATEID, "\\listtemplateid" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LISTTEXT, "\\listtext" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LS, "\\ls" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LYTEXCTTP, "\\lytexcttp" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LYTPRTMET, "\\lytprtmet" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_MANAGER, "\\manager" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_MSMCAP, "\\msmcap" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_NOFCHARSWS, "\\nofcharsws" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_NOLEAD, "\\nolead" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_NONSHPPICT, "\\nonshppict" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_NOSECTEXPAND, "\\nosectexpand" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_NOSNAPLINEGRID, "\\nosnaplinegrid" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_NOSPACEFORUL, "\\nospaceforul" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_NOULTRLSPC, "\\noultrlspc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_NOXLATTOYEN, "\\noxlattoyen" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OBJATTPH, "\\objattph" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OBJHTML, "\\objhtml" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OBJOCX, "\\objocx" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLDLINEWRAP, "\\oldlinewrap" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OUTLINELEVEL, "\\outlinelevel" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OVERLAY, "\\overlay" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PANOSE, "\\panose" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGBRDRB, "\\pgbrdrb" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGBRDRFOOT, "\\pgbrdrfoot" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGBRDRHEAD, "\\pgbrdrhead" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGBRDRL, "\\pgbrdrl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGBRDROPT, "\\pgbrdropt" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGBRDRR, "\\pgbrdrr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGBRDRSNAP, "\\pgbrdrsnap" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGBRDRT, "\\pgbrdrt" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGNCHOSUNG, "\\pgnchosung" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGNCNUM, "\\pgncnum" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGNDBNUMK, "\\pgndbnumk" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGNDBNUMT, "\\pgndbnumt" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGNGANADA, "\\pgnganada" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGNGBNUM, "\\pgngbnum" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGNGBNUMD, "\\pgngbnumd" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGNGBNUMK, "\\pgngbnumk" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGNGBNUML, "\\pgngbnuml" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGNZODIAC, "\\pgnzodiac" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGNZODIACD, "\\pgnzodiacd" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGNZODIACL, "\\pgnzodiacl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PICPROP, "\\picprop" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNAIUEO, "\\pnaiueo" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNAIUEOD, "\\pnaiueod" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNCHOSUNG, "\\pnchosung" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNDBNUMD, "\\pndbnumd" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNDBNUMK, "\\pndbnumk" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNDBNUML, "\\pndbnuml" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNDBNUMT, "\\pndbnumt" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNGANADA, "\\pnganada" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNGBLIP, "\\pngblip" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNGBNUM, "\\pngbnum" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNGBNUMD, "\\pngbnumd" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNGBNUMK, "\\pngbnumk" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNGBNUML, "\\pngbnuml" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNRAUTH, "\\pnrauth" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNRDATE, "\\pnrdate" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNRNFC, "\\pnrnfc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNRNOT, "\\pnrnot" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNRPNBR, "\\pnrpnbr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNRRGB, "\\pnrrgb" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNRSTART, "\\pnrstart" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNRSTOP, "\\pnrstop" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNRXST, "\\pnrxst" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNZODIAC, "\\pnzodiac" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNZODIACD, "\\pnzodiacd" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PNZODIACL, "\\pnzodiacl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LFOLEVEL, "\\lfolevel" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_POSYIN, "\\posyin" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_POSYOUT, "\\posyout" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PRIVATE, "\\private" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PROPNAME, "\\propname" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PROPTYPE, "\\proptype" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_REVAUTHDEL, "\\revauthdel" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_REVDTTMDEL, "\\revdttmdel" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SAUTOUPD, "\\sautoupd" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SECTDEFAULTCL, "\\sectdefaultcl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SECTEXPAND, "\\sectexpand" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SECTLINEGRID, "\\sectlinegrid" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SECTSPECIFYCL, "\\sectspecifycl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SECTSPECIFYL, "\\sectspecifyl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHIDDEN, "\\shidden" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHPBOTTOM, "\\shpbottom" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHPBXCOLUMN, "\\shpbxcolumn" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHPBXMARGIN, "\\shpbxmargin" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHPBXPAGE, "\\shpbxpage" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHPBYMARGIN, "\\shpbymargin" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHPBYPAGE, "\\shpbypage" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHPBYPARA, "\\shpbypara" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHPFBLWTXT, "\\shpfblwtxt" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHPFHDR, "\\shpfhdr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHPGRP, "\\shpgrp" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHPLEFT, "\\shpleft" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHPLID, "\\shplid" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHPLOCKANCHOR, "\\shplockanchor" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHPPICT, "\\shppict" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHPRIGHT, "\\shpright" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHPRSLT, "\\shprslt" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHPTOP, "\\shptop" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHPTXT, "\\shptxt" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHPWRK, "\\shpwrk" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHPWR, "\\shpwr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHPZ, "\\shpz" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SPRSBSP, "\\sprsbsp" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SPRSLNSP, "\\sprslnsp" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SPRSTSM, "\\sprstsm" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_STATICVAL, "\\staticval" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_STEXTFLOW, "\\stextflow" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_STRIKED, "\\striked" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SUBFONTBYSIZE, "\\subfontbysize" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TCELLD, "\\tcelld" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TIME, "\\time" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TRUNCATEFONTHEIGHT, "\\truncatefontheight" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_UC, "\\uc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_UD, "\\ud" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ULDASH, "\\uldash" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ULDASHD, "\\uldashd" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ULDASHDD, "\\uldashdd" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ULTH, "\\ulth" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ULWAVE, "\\ulwave" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ULC, "\\ulc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_U, "\\u" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_UPR, "\\upr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_USERPROPS, "\\userprops" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_VIEWKIND, "\\viewkind" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_VIEWSCALE, "\\viewscale" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_VIEWZK, "\\viewzk" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_WIDCTLPAR, "\\widctlpar" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_WINDOWCAPTION, "\\windowcaption" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_WPEQN, "\\wpeqn" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_WPJST, "\\wpjst" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_WPSP, "\\wpsp" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_YXE, "\\yxe" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FRMTXLRTB, "\\frmtxlrtb" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FRMTXTBRL, "\\frmtxtbrl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FRMTXBTLR, "\\frmtxbtlr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FRMTXLRTBV, "\\frmtxlrtbv" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FRMTXTBRLV, "\\frmtxtbrlv" );
-
+#define OOO_STRING_SVTOOLS_RTF_ABSLOCK "\\abslock"
+#define OOO_STRING_SVTOOLS_RTF_ADJUSTRIGHT "\\adjustright"
+#define OOO_STRING_SVTOOLS_RTF_AFTNNCHOSUNG "\\aftnnchosung"
+#define OOO_STRING_SVTOOLS_RTF_AFTNNCNUM "\\aftnncnum"
+#define OOO_STRING_SVTOOLS_RTF_AFTNNDBAR "\\aftnndbar"
+#define OOO_STRING_SVTOOLS_RTF_AFTNNDBNUM "\\aftnndbnum"
+#define OOO_STRING_SVTOOLS_RTF_AFTNNDBNUMD "\\aftnndbnumd"
+#define OOO_STRING_SVTOOLS_RTF_AFTNNDBNUMK "\\aftnndbnumk"
+#define OOO_STRING_SVTOOLS_RTF_AFTNNDBNUMT "\\aftnndbnumt"
+#define OOO_STRING_SVTOOLS_RTF_AFTNNGANADA "\\aftnnganada"
+#define OOO_STRING_SVTOOLS_RTF_AFTNNGBNUM "\\aftnngbnum"
+#define OOO_STRING_SVTOOLS_RTF_AFTNNGBNUMD "\\aftnngbnumd"
+#define OOO_STRING_SVTOOLS_RTF_AFTNNGBNUMK "\\aftnngbnumk"
+#define OOO_STRING_SVTOOLS_RTF_AFTNNGBNUML "\\aftnngbnuml"
+#define OOO_STRING_SVTOOLS_RTF_AFTNNZODIAC "\\aftnnzodiac"
+#define OOO_STRING_SVTOOLS_RTF_AFTNNZODIACD "\\aftnnzodiacd"
+#define OOO_STRING_SVTOOLS_RTF_AFTNNZODIACL "\\aftnnzodiacl"
+#define OOO_STRING_SVTOOLS_RTF_ANIMTEXT "\\animtext"
+#define OOO_STRING_SVTOOLS_RTF_ANSICPG "\\ansicpg"
+#define OOO_STRING_SVTOOLS_RTF_BACKGROUND "\\background"
+#define OOO_STRING_SVTOOLS_RTF_BDBFHDR "\\bdbfhdr"
+#define OOO_STRING_SVTOOLS_RTF_BLIPTAG "\\bliptag"
+#define OOO_STRING_SVTOOLS_RTF_BLIPUID "\\blipuid"
+#define OOO_STRING_SVTOOLS_RTF_BLIPUPI "\\blipupi"
+#define OOO_STRING_SVTOOLS_RTF_BRDRART "\\brdrart"
+#define OOO_STRING_SVTOOLS_RTF_BRDRDASHD "\\brdrdashd"
+#define OOO_STRING_SVTOOLS_RTF_BRDRDASHDD "\\brdrdashdd"
+#define OOO_STRING_SVTOOLS_RTF_BRDRDASHDOTSTR "\\brdrdashdotstr"
+#define OOO_STRING_SVTOOLS_RTF_BRDRDASHSM "\\brdrdashsm"
+#define OOO_STRING_SVTOOLS_RTF_BRDREMBOSS "\\brdremboss"
+#define OOO_STRING_SVTOOLS_RTF_BRDRENGRAVE "\\brdrengrave"
+#define OOO_STRING_SVTOOLS_RTF_BRDRFRAME "\\brdrframe"
+#define OOO_STRING_SVTOOLS_RTF_BRDRTHTNLG "\\brdrthtnlg"
+#define OOO_STRING_SVTOOLS_RTF_BRDRTHTNMG "\\brdrthtnmg"
+#define OOO_STRING_SVTOOLS_RTF_BRDRTHTNSG "\\brdrthtnsg"
+#define OOO_STRING_SVTOOLS_RTF_BRDRTNTHLG "\\brdrtnthlg"
+#define OOO_STRING_SVTOOLS_RTF_BRDRTNTHMG "\\brdrtnthmg"
+#define OOO_STRING_SVTOOLS_RTF_BRDRTNTHSG "\\brdrtnthsg"
+#define OOO_STRING_SVTOOLS_RTF_BRDRTNTHTNLG "\\brdrtnthtnlg"
+#define OOO_STRING_SVTOOLS_RTF_BRDRTNTHTNMG "\\brdrtnthtnmg"
+#define OOO_STRING_SVTOOLS_RTF_BRDRTNTHTNSG "\\brdrtnthtnsg"
+#define OOO_STRING_SVTOOLS_RTF_BRDRTRIPLE "\\brdrtriple"
+#define OOO_STRING_SVTOOLS_RTF_BRDRWAVY "\\brdrwavy"
+#define OOO_STRING_SVTOOLS_RTF_BRDRWAVYDB "\\brdrwavydb"
+#define OOO_STRING_SVTOOLS_RTF_CATEGORY "\\category"
+#define OOO_STRING_SVTOOLS_RTF_CGRID "\\cgrid"
+#define OOO_STRING_SVTOOLS_RTF_CHARSCALEX "\\charscalex"
+#define OOO_STRING_SVTOOLS_RTF_CHBGBDIAG "\\chbgbdiag"
+#define OOO_STRING_SVTOOLS_RTF_CHBGCROSS "\\chbgcross"
+#define OOO_STRING_SVTOOLS_RTF_CHBGDCROSS "\\chbgdcross"
+#define OOO_STRING_SVTOOLS_RTF_CHBGDKBDIAG "\\chbgdkbdiag"
+#define OOO_STRING_SVTOOLS_RTF_CHBGDKCROSS "\\chbgdkcross"
+#define OOO_STRING_SVTOOLS_RTF_CHBGDKDCROSS "\\chbgdkdcross"
+#define OOO_STRING_SVTOOLS_RTF_CHBGDKFDIAG "\\chbgdkfdiag"
+#define OOO_STRING_SVTOOLS_RTF_CHBGDKHORIZ "\\chbgdkhoriz"
+#define OOO_STRING_SVTOOLS_RTF_CHBGDKVERT "\\chbgdkvert"
+#define OOO_STRING_SVTOOLS_RTF_CHBGFDIAG "\\chbgfdiag"
+#define OOO_STRING_SVTOOLS_RTF_CHBGHORIZ "\\chbghoriz"
+#define OOO_STRING_SVTOOLS_RTF_CHBGVERT "\\chbgvert"
+#define OOO_STRING_SVTOOLS_RTF_CHBRDR "\\chbrdr"
+#define OOO_STRING_SVTOOLS_RTF_CHCBPAT "\\chcbpat"
+#define OOO_STRING_SVTOOLS_RTF_CHCFPAT "\\chcfpat"
+#define OOO_STRING_SVTOOLS_RTF_CHSHDNG "\\chshdng"
+#define OOO_STRING_SVTOOLS_RTF_CLPADL "\\clpadl"
+#define OOO_STRING_SVTOOLS_RTF_CLPADT "\\clpadt"
+#define OOO_STRING_SVTOOLS_RTF_CLPADB "\\clpadb"
+#define OOO_STRING_SVTOOLS_RTF_CLPADR "\\clpadr"
+#define OOO_STRING_SVTOOLS_RTF_CLPADFL "\\clpadfl"
+#define OOO_STRING_SVTOOLS_RTF_CLPADFT "\\clpadft"
+#define OOO_STRING_SVTOOLS_RTF_CLPADFB "\\clpadfb"
+#define OOO_STRING_SVTOOLS_RTF_CLPADFR "\\clpadfr"
+#define OOO_STRING_SVTOOLS_RTF_CLTXLRTB "\\cltxlrtb"
+#define OOO_STRING_SVTOOLS_RTF_CLTXTBRL "\\cltxtbrl"
+#define OOO_STRING_SVTOOLS_RTF_CLVERTALB "\\clvertalb"
+#define OOO_STRING_SVTOOLS_RTF_CLVERTALC "\\clvertalc"
+#define OOO_STRING_SVTOOLS_RTF_CLVERTALT "\\clvertalt"
+#define OOO_STRING_SVTOOLS_RTF_CLVMGF "\\clvmgf"
+#define OOO_STRING_SVTOOLS_RTF_CLVMRG "\\clvmrg"
+#define OOO_STRING_SVTOOLS_RTF_CLTXTBRLV "\\cltxtbrlv"
+#define OOO_STRING_SVTOOLS_RTF_CLTXBTLR "\\cltxbtlr"
+#define OOO_STRING_SVTOOLS_RTF_CLTXLRTBV "\\cltxlrtbv"
+#define OOO_STRING_SVTOOLS_RTF_COMPANY "\\company"
+#define OOO_STRING_SVTOOLS_RTF_CRAUTH "\\crauth"
+#define OOO_STRING_SVTOOLS_RTF_CRDATE "\\crdate"
+#define OOO_STRING_SVTOOLS_RTF_DATE "\\date"
+#define OOO_STRING_SVTOOLS_RTF_DEFLANGFE "\\deflangfe"
+#define OOO_STRING_SVTOOLS_RTF_DFRAUTH "\\dfrauth"
+#define OOO_STRING_SVTOOLS_RTF_DFRDATE "\\dfrdate"
+#define OOO_STRING_SVTOOLS_RTF_DFRSTART "\\dfrstart"
+#define OOO_STRING_SVTOOLS_RTF_DFRSTOP "\\dfrstop"
+#define OOO_STRING_SVTOOLS_RTF_DFRXST "\\dfrxst"
+#define OOO_STRING_SVTOOLS_RTF_DGMARGIN "\\dgmargin"
+#define OOO_STRING_SVTOOLS_RTF_DNTBLNSBDB "\\dntblnsbdb"
+#define OOO_STRING_SVTOOLS_RTF_DOCTYPE "\\doctype"
+#define OOO_STRING_SVTOOLS_RTF_DOCVAR "\\docvar"
+#define OOO_STRING_SVTOOLS_RTF_DPCODESCENT "\\dpcodescent"
+#define OOO_STRING_SVTOOLS_RTF_EMBO "\\embo"
+#define OOO_STRING_SVTOOLS_RTF_EMFBLIP "\\emfblip"
+#define OOO_STRING_SVTOOLS_RTF_EXPSHRTN "\\expshrtn"
+#define OOO_STRING_SVTOOLS_RTF_FAAUTO "\\faauto"
+#define OOO_STRING_SVTOOLS_RTF_FBIAS "\\fbias"
+#define OOO_STRING_SVTOOLS_RTF_FFDEFRES "\\ffdefres"
+#define OOO_STRING_SVTOOLS_RTF_FFDEFTEXT "\\ffdeftext"
+#define OOO_STRING_SVTOOLS_RTF_FFENTRYMCR "\\ffentrymcr"
+#define OOO_STRING_SVTOOLS_RTF_FFEXITMCR "\\ffexitmcr"
+#define OOO_STRING_SVTOOLS_RTF_FFFORMAT "\\ffformat"
+#define OOO_STRING_SVTOOLS_RTF_FFHASLISTBOX "\\ffhaslistbox"
+#define OOO_STRING_SVTOOLS_RTF_FFHELPTEXT "\\ffhelptext"
+#define OOO_STRING_SVTOOLS_RTF_FFHPS "\\ffhps"
+#define OOO_STRING_SVTOOLS_RTF_FFL "\\ffl"
+#define OOO_STRING_SVTOOLS_RTF_FFMAXLEN "\\ffmaxlen"
+#define OOO_STRING_SVTOOLS_RTF_FFNAME "\\ffname"
+#define OOO_STRING_SVTOOLS_RTF_FFOWNHELP "\\ffownhelp"
+#define OOO_STRING_SVTOOLS_RTF_FFOWNSTAT "\\ffownstat"
+#define OOO_STRING_SVTOOLS_RTF_FFPROT "\\ffprot"
+#define OOO_STRING_SVTOOLS_RTF_FFRECALC "\\ffrecalc"
+#define OOO_STRING_SVTOOLS_RTF_FFRES "\\ffres"
+#define OOO_STRING_SVTOOLS_RTF_FFSIZE "\\ffsize"
+#define OOO_STRING_SVTOOLS_RTF_FFSTATTEXT "\\ffstattext"
+#define OOO_STRING_SVTOOLS_RTF_FFTYPE "\\fftype"
+#define OOO_STRING_SVTOOLS_RTF_FFTYPETXT "\\fftypetxt"
+#define OOO_STRING_SVTOOLS_RTF_FLDTYPE "\\fldtype"
+#define OOO_STRING_SVTOOLS_RTF_FNAME "\\fname"
+#define OOO_STRING_SVTOOLS_RTF_FORMFIELD "\\formfield"
+#define OOO_STRING_SVTOOLS_RTF_FROMTEXT "\\fromtext"
+#define OOO_STRING_SVTOOLS_RTF_FTNNCHOSUNG "\\ftnnchosung"
+#define OOO_STRING_SVTOOLS_RTF_FTNNCNUM "\\ftnncnum"
+#define OOO_STRING_SVTOOLS_RTF_FTNNDBAR "\\ftnndbar"
+#define OOO_STRING_SVTOOLS_RTF_FTNNDBNUM "\\ftnndbnum"
+#define OOO_STRING_SVTOOLS_RTF_FTNNDBNUMD "\\ftnndbnumd"
+#define OOO_STRING_SVTOOLS_RTF_FTNNDBNUMK "\\ftnndbnumk"
+#define OOO_STRING_SVTOOLS_RTF_FTNNDBNUMT "\\ftnndbnumt"
+#define OOO_STRING_SVTOOLS_RTF_FTNNGANADA "\\ftnnganada"
+#define OOO_STRING_SVTOOLS_RTF_FTNNGBNUM "\\ftnngbnum"
+#define OOO_STRING_SVTOOLS_RTF_FTNNGBNUMD "\\ftnngbnumd"
+#define OOO_STRING_SVTOOLS_RTF_FTNNGBNUMK "\\ftnngbnumk"
+#define OOO_STRING_SVTOOLS_RTF_FTNNGBNUML "\\ftnngbnuml"
+#define OOO_STRING_SVTOOLS_RTF_FTNNZODIAC "\\ftnnzodiac"
+#define OOO_STRING_SVTOOLS_RTF_FTNNZODIACD "\\ftnnzodiacd"
+#define OOO_STRING_SVTOOLS_RTF_FTNNZODIACL "\\ftnnzodiacl"
+#define OOO_STRING_SVTOOLS_RTF_G "\\g"
+#define OOO_STRING_SVTOOLS_RTF_GCW "\\gcw"
+#define OOO_STRING_SVTOOLS_RTF_GRIDTBL "\\gridtbl"
+#define OOO_STRING_SVTOOLS_RTF_HIGHLIGHT "\\highlight"
+#define OOO_STRING_SVTOOLS_RTF_HLFR "\\hlfr"
+#define OOO_STRING_SVTOOLS_RTF_HLINKBASE "\\hlinkbase"
+#define OOO_STRING_SVTOOLS_RTF_HLLOC "\\hlloc"
+#define OOO_STRING_SVTOOLS_RTF_HLSRC "\\hlsrc"
+#define OOO_STRING_SVTOOLS_RTF_ILVL "\\ilvl"
+#define OOO_STRING_SVTOOLS_RTF_IMPR "\\impr"
+#define OOO_STRING_SVTOOLS_RTF_JPEGBLIP "\\jpegblip"
+#define OOO_STRING_SVTOOLS_RTF_LEVELFOLLOW "\\levelfollow"
+#define OOO_STRING_SVTOOLS_RTF_LEVELINDENT "\\levelindent"
+#define OOO_STRING_SVTOOLS_RTF_LEVELJC "\\leveljc"
+#define OOO_STRING_SVTOOLS_RTF_LEVELLEGAL "\\levellegal"
+#define OOO_STRING_SVTOOLS_RTF_LEVELNFC "\\levelnfc"
+#define OOO_STRING_SVTOOLS_RTF_LEVELNORESTART "\\levelnorestart"
+#define OOO_STRING_SVTOOLS_RTF_LEVELNUMBERS "\\levelnumbers"
+#define OOO_STRING_SVTOOLS_RTF_LEVELOLD "\\levelold"
+#define OOO_STRING_SVTOOLS_RTF_LEVELPREV "\\levelprev"
+#define OOO_STRING_SVTOOLS_RTF_LEVELPREVSPACE "\\levelprevspace"
+#define OOO_STRING_SVTOOLS_RTF_LEVELSPACE "\\levelspace"
+#define OOO_STRING_SVTOOLS_RTF_LEVELSTARTAT "\\levelstartat"
+#define OOO_STRING_SVTOOLS_RTF_LEVELTEXT "\\leveltext"
+#define OOO_STRING_SVTOOLS_RTF_LINKVAL "\\linkval"
+#define OOO_STRING_SVTOOLS_RTF_LIST "\\list"
+#define OOO_STRING_SVTOOLS_RTF_LISTID "\\listid"
+#define OOO_STRING_SVTOOLS_RTF_LISTLEVEL "\\listlevel"
+#define OOO_STRING_SVTOOLS_RTF_LISTNAME "\\listname"
+#define OOO_STRING_SVTOOLS_RTF_LISTOVERRIDE "\\listoverride"
+#define OOO_STRING_SVTOOLS_RTF_LISTOVERRIDECOUNT "\\listoverridecount"
+#define OOO_STRING_SVTOOLS_RTF_LISTOVERRIDEFORMAT "\\listoverrideformat"
+#define OOO_STRING_SVTOOLS_RTF_LISTOVERRIDESTART "\\listoverridestart"
+#define OOO_STRING_SVTOOLS_RTF_LISTOVERRIDETABLE "\\listoverridetable"
+#define OOO_STRING_SVTOOLS_RTF_LISTRESTARTHDN "\\listrestarthdn"
+#define OOO_STRING_SVTOOLS_RTF_LISTSIMPLE "\\listsimple"
+#define OOO_STRING_SVTOOLS_RTF_LISTTABLE "\\listtable"
+#define OOO_STRING_SVTOOLS_RTF_LISTTEMPLATEID "\\listtemplateid"
+#define OOO_STRING_SVTOOLS_RTF_LISTTEXT "\\listtext"
+#define OOO_STRING_SVTOOLS_RTF_LS "\\ls"
+#define OOO_STRING_SVTOOLS_RTF_LYTEXCTTP "\\lytexcttp"
+#define OOO_STRING_SVTOOLS_RTF_LYTPRTMET "\\lytprtmet"
+#define OOO_STRING_SVTOOLS_RTF_MANAGER "\\manager"
+#define OOO_STRING_SVTOOLS_RTF_MSMCAP "\\msmcap"
+#define OOO_STRING_SVTOOLS_RTF_NOFCHARSWS "\\nofcharsws"
+#define OOO_STRING_SVTOOLS_RTF_NOLEAD "\\nolead"
+#define OOO_STRING_SVTOOLS_RTF_NONSHPPICT "\\nonshppict"
+#define OOO_STRING_SVTOOLS_RTF_NOSECTEXPAND "\\nosectexpand"
+#define OOO_STRING_SVTOOLS_RTF_NOSNAPLINEGRID "\\nosnaplinegrid"
+#define OOO_STRING_SVTOOLS_RTF_NOSPACEFORUL "\\nospaceforul"
+#define OOO_STRING_SVTOOLS_RTF_NOULTRLSPC "\\noultrlspc"
+#define OOO_STRING_SVTOOLS_RTF_NOXLATTOYEN "\\noxlattoyen"
+#define OOO_STRING_SVTOOLS_RTF_OBJATTPH "\\objattph"
+#define OOO_STRING_SVTOOLS_RTF_OBJHTML "\\objhtml"
+#define OOO_STRING_SVTOOLS_RTF_OBJOCX "\\objocx"
+#define OOO_STRING_SVTOOLS_RTF_OLDLINEWRAP "\\oldlinewrap"
+#define OOO_STRING_SVTOOLS_RTF_OUTLINELEVEL "\\outlinelevel"
+#define OOO_STRING_SVTOOLS_RTF_OVERLAY "\\overlay"
+#define OOO_STRING_SVTOOLS_RTF_PANOSE "\\panose"
+#define OOO_STRING_SVTOOLS_RTF_PGBRDRB "\\pgbrdrb"
+#define OOO_STRING_SVTOOLS_RTF_PGBRDRFOOT "\\pgbrdrfoot"
+#define OOO_STRING_SVTOOLS_RTF_PGBRDRHEAD "\\pgbrdrhead"
+#define OOO_STRING_SVTOOLS_RTF_PGBRDRL "\\pgbrdrl"
+#define OOO_STRING_SVTOOLS_RTF_PGBRDROPT "\\pgbrdropt"
+#define OOO_STRING_SVTOOLS_RTF_PGBRDRR "\\pgbrdrr"
+#define OOO_STRING_SVTOOLS_RTF_PGBRDRSNAP "\\pgbrdrsnap"
+#define OOO_STRING_SVTOOLS_RTF_PGBRDRT "\\pgbrdrt"
+#define OOO_STRING_SVTOOLS_RTF_PGNCHOSUNG "\\pgnchosung"
+#define OOO_STRING_SVTOOLS_RTF_PGNCNUM "\\pgncnum"
+#define OOO_STRING_SVTOOLS_RTF_PGNDBNUMK "\\pgndbnumk"
+#define OOO_STRING_SVTOOLS_RTF_PGNDBNUMT "\\pgndbnumt"
+#define OOO_STRING_SVTOOLS_RTF_PGNGANADA "\\pgnganada"
+#define OOO_STRING_SVTOOLS_RTF_PGNGBNUM "\\pgngbnum"
+#define OOO_STRING_SVTOOLS_RTF_PGNGBNUMD "\\pgngbnumd"
+#define OOO_STRING_SVTOOLS_RTF_PGNGBNUMK "\\pgngbnumk"
+#define OOO_STRING_SVTOOLS_RTF_PGNGBNUML "\\pgngbnuml"
+#define OOO_STRING_SVTOOLS_RTF_PGNZODIAC "\\pgnzodiac"
+#define OOO_STRING_SVTOOLS_RTF_PGNZODIACD "\\pgnzodiacd"
+#define OOO_STRING_SVTOOLS_RTF_PGNZODIACL "\\pgnzodiacl"
+#define OOO_STRING_SVTOOLS_RTF_PICPROP "\\picprop"
+#define OOO_STRING_SVTOOLS_RTF_PNAIUEO "\\pnaiueo"
+#define OOO_STRING_SVTOOLS_RTF_PNAIUEOD "\\pnaiueod"
+#define OOO_STRING_SVTOOLS_RTF_PNCHOSUNG "\\pnchosung"
+#define OOO_STRING_SVTOOLS_RTF_PNDBNUMD "\\pndbnumd"
+#define OOO_STRING_SVTOOLS_RTF_PNDBNUMK "\\pndbnumk"
+#define OOO_STRING_SVTOOLS_RTF_PNDBNUML "\\pndbnuml"
+#define OOO_STRING_SVTOOLS_RTF_PNDBNUMT "\\pndbnumt"
+#define OOO_STRING_SVTOOLS_RTF_PNGANADA "\\pnganada"
+#define OOO_STRING_SVTOOLS_RTF_PNGBLIP "\\pngblip"
+#define OOO_STRING_SVTOOLS_RTF_PNGBNUM "\\pngbnum"
+#define OOO_STRING_SVTOOLS_RTF_PNGBNUMD "\\pngbnumd"
+#define OOO_STRING_SVTOOLS_RTF_PNGBNUMK "\\pngbnumk"
+#define OOO_STRING_SVTOOLS_RTF_PNGBNUML "\\pngbnuml"
+#define OOO_STRING_SVTOOLS_RTF_PNRAUTH "\\pnrauth"
+#define OOO_STRING_SVTOOLS_RTF_PNRDATE "\\pnrdate"
+#define OOO_STRING_SVTOOLS_RTF_PNRNFC "\\pnrnfc"
+#define OOO_STRING_SVTOOLS_RTF_PNRNOT "\\pnrnot"
+#define OOO_STRING_SVTOOLS_RTF_PNRPNBR "\\pnrpnbr"
+#define OOO_STRING_SVTOOLS_RTF_PNRRGB "\\pnrrgb"
+#define OOO_STRING_SVTOOLS_RTF_PNRSTART "\\pnrstart"
+#define OOO_STRING_SVTOOLS_RTF_PNRSTOP "\\pnrstop"
+#define OOO_STRING_SVTOOLS_RTF_PNRXST "\\pnrxst"
+#define OOO_STRING_SVTOOLS_RTF_PNZODIAC "\\pnzodiac"
+#define OOO_STRING_SVTOOLS_RTF_PNZODIACD "\\pnzodiacd"
+#define OOO_STRING_SVTOOLS_RTF_PNZODIACL "\\pnzodiacl"
+#define OOO_STRING_SVTOOLS_RTF_LFOLEVEL "\\lfolevel"
+#define OOO_STRING_SVTOOLS_RTF_POSYIN "\\posyin"
+#define OOO_STRING_SVTOOLS_RTF_POSYOUT "\\posyout"
+#define OOO_STRING_SVTOOLS_RTF_PRIVATE "\\private"
+#define OOO_STRING_SVTOOLS_RTF_PROPNAME "\\propname"
+#define OOO_STRING_SVTOOLS_RTF_PROPTYPE "\\proptype"
+#define OOO_STRING_SVTOOLS_RTF_REVAUTHDEL "\\revauthdel"
+#define OOO_STRING_SVTOOLS_RTF_REVDTTMDEL "\\revdttmdel"
+#define OOO_STRING_SVTOOLS_RTF_SAUTOUPD "\\sautoupd"
+#define OOO_STRING_SVTOOLS_RTF_SECTDEFAULTCL "\\sectdefaultcl"
+#define OOO_STRING_SVTOOLS_RTF_SECTEXPAND "\\sectexpand"
+#define OOO_STRING_SVTOOLS_RTF_SECTLINEGRID "\\sectlinegrid"
+#define OOO_STRING_SVTOOLS_RTF_SECTSPECIFYCL "\\sectspecifycl"
+#define OOO_STRING_SVTOOLS_RTF_SECTSPECIFYL "\\sectspecifyl"
+#define OOO_STRING_SVTOOLS_RTF_SHIDDEN "\\shidden"
+#define OOO_STRING_SVTOOLS_RTF_SHPBOTTOM "\\shpbottom"
+#define OOO_STRING_SVTOOLS_RTF_SHPBXCOLUMN "\\shpbxcolumn"
+#define OOO_STRING_SVTOOLS_RTF_SHPBXMARGIN "\\shpbxmargin"
+#define OOO_STRING_SVTOOLS_RTF_SHPBXPAGE "\\shpbxpage"
+#define OOO_STRING_SVTOOLS_RTF_SHPBYMARGIN "\\shpbymargin"
+#define OOO_STRING_SVTOOLS_RTF_SHPBYPAGE "\\shpbypage"
+#define OOO_STRING_SVTOOLS_RTF_SHPBYPARA "\\shpbypara"
+#define OOO_STRING_SVTOOLS_RTF_SHPFBLWTXT "\\shpfblwtxt"
+#define OOO_STRING_SVTOOLS_RTF_SHPFHDR "\\shpfhdr"
+#define OOO_STRING_SVTOOLS_RTF_SHPGRP "\\shpgrp"
+#define OOO_STRING_SVTOOLS_RTF_SHPLEFT "\\shpleft"
+#define OOO_STRING_SVTOOLS_RTF_SHPLID "\\shplid"
+#define OOO_STRING_SVTOOLS_RTF_SHPLOCKANCHOR "\\shplockanchor"
+#define OOO_STRING_SVTOOLS_RTF_SHPPICT "\\shppict"
+#define OOO_STRING_SVTOOLS_RTF_SHPRIGHT "\\shpright"
+#define OOO_STRING_SVTOOLS_RTF_SHPRSLT "\\shprslt"
+#define OOO_STRING_SVTOOLS_RTF_SHPTOP "\\shptop"
+#define OOO_STRING_SVTOOLS_RTF_SHPTXT "\\shptxt"
+#define OOO_STRING_SVTOOLS_RTF_SHPWRK "\\shpwrk"
+#define OOO_STRING_SVTOOLS_RTF_SHPWR "\\shpwr"
+#define OOO_STRING_SVTOOLS_RTF_SHPZ "\\shpz"
+#define OOO_STRING_SVTOOLS_RTF_SPRSBSP "\\sprsbsp"
+#define OOO_STRING_SVTOOLS_RTF_SPRSLNSP "\\sprslnsp"
+#define OOO_STRING_SVTOOLS_RTF_SPRSTSM "\\sprstsm"
+#define OOO_STRING_SVTOOLS_RTF_STATICVAL "\\staticval"
+#define OOO_STRING_SVTOOLS_RTF_STEXTFLOW "\\stextflow"
+#define OOO_STRING_SVTOOLS_RTF_STRIKED "\\striked"
+#define OOO_STRING_SVTOOLS_RTF_SUBFONTBYSIZE "\\subfontbysize"
+#define OOO_STRING_SVTOOLS_RTF_TCELLD "\\tcelld"
+#define OOO_STRING_SVTOOLS_RTF_TIME "\\time"
+#define OOO_STRING_SVTOOLS_RTF_TRUNCATEFONTHEIGHT "\\truncatefontheight"
+#define OOO_STRING_SVTOOLS_RTF_UC "\\uc"
+#define OOO_STRING_SVTOOLS_RTF_UD "\\ud"
+#define OOO_STRING_SVTOOLS_RTF_ULDASH "\\uldash"
+#define OOO_STRING_SVTOOLS_RTF_ULDASHD "\\uldashd"
+#define OOO_STRING_SVTOOLS_RTF_ULDASHDD "\\uldashdd"
+#define OOO_STRING_SVTOOLS_RTF_ULTH "\\ulth"
+#define OOO_STRING_SVTOOLS_RTF_ULWAVE "\\ulwave"
+#define OOO_STRING_SVTOOLS_RTF_ULC "\\ulc"
+#define OOO_STRING_SVTOOLS_RTF_U "\\u"
+#define OOO_STRING_SVTOOLS_RTF_UPR "\\upr"
+#define OOO_STRING_SVTOOLS_RTF_USERPROPS "\\userprops"
+#define OOO_STRING_SVTOOLS_RTF_VIEWKIND "\\viewkind"
+#define OOO_STRING_SVTOOLS_RTF_VIEWSCALE "\\viewscale"
+#define OOO_STRING_SVTOOLS_RTF_VIEWZK "\\viewzk"
+#define OOO_STRING_SVTOOLS_RTF_WIDCTLPAR "\\widctlpar"
+#define OOO_STRING_SVTOOLS_RTF_WINDOWCAPTION "\\windowcaption"
+#define OOO_STRING_SVTOOLS_RTF_WPEQN "\\wpeqn"
+#define OOO_STRING_SVTOOLS_RTF_WPJST "\\wpjst"
+#define OOO_STRING_SVTOOLS_RTF_WPSP "\\wpsp"
+#define OOO_STRING_SVTOOLS_RTF_YXE "\\yxe"
+#define OOO_STRING_SVTOOLS_RTF_FRMTXLRTB "\\frmtxlrtb"
+#define OOO_STRING_SVTOOLS_RTF_FRMTXTBRL "\\frmtxtbrl"
+#define OOO_STRING_SVTOOLS_RTF_FRMTXBTLR "\\frmtxbtlr"
+#define OOO_STRING_SVTOOLS_RTF_FRMTXLRTBV "\\frmtxlrtbv"
+#define OOO_STRING_SVTOOLS_RTF_FRMTXTBRLV "\\frmtxtbrlv"
 
 // MS-2000 Tokens
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ULTHD, "\\ulthd" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ULTHDASH, "\\ulthdash" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ULLDASH, "\\ulldash" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ULTHLDASH, "\\ulthldash" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ULTHDASHD, "\\ulthdashd" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ULTHDASHDD, "\\ulthdashdd" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ULHWAVE, "\\ulhwave" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ULULDBWAVE, "\\ululdbwave" );
-
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LOCH,     "\\loch" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_HICH,     "\\hich" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DBCH,     "\\dbch" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_LANGFE,    "\\langfe" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ADEFLANG, "\\adeflang" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ADEFF,        "\\adeff" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ACCNONE,  "\\accnone" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ACCDOT,   "\\accdot" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ACCCOMMA, "\\acccomma" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TWOINONE, "\\twoinone" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_HORZVERT, "\\horzvert" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FAHANG,   "\\fahang" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FAVAR,    "\\favar" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FACENTER,     "\\facenter" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FAROMAN,  "\\faroman" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FAFIXED,  "\\fafixed" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_NOCWRAP,  "\\nocwrap" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_NOOVERFLOW,"\\nooverflow" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_ASPALPHA,     "\\aspalpha" );
+#define OOO_STRING_SVTOOLS_RTF_ULTHD "\\ulthd"
+#define OOO_STRING_SVTOOLS_RTF_ULTHDASH "\\ulthdash"
+#define OOO_STRING_SVTOOLS_RTF_ULLDASH "\\ulldash"
+#define OOO_STRING_SVTOOLS_RTF_ULTHLDASH "\\ulthldash"
+#define OOO_STRING_SVTOOLS_RTF_ULTHDASHD "\\ulthdashd"
+#define OOO_STRING_SVTOOLS_RTF_ULTHDASHDD "\\ulthdashdd"
+#define OOO_STRING_SVTOOLS_RTF_ULHWAVE "\\ulhwave"
+#define OOO_STRING_SVTOOLS_RTF_ULULDBWAVE "\\ululdbwave"
+#define OOO_STRING_SVTOOLS_RTF_LOCH "\\loch"
+#define OOO_STRING_SVTOOLS_RTF_HICH "\\hich"
+#define OOO_STRING_SVTOOLS_RTF_DBCH "\\dbch"
+#define OOO_STRING_SVTOOLS_RTF_LANGFE "\\langfe"
+#define OOO_STRING_SVTOOLS_RTF_ADEFLANG "\\adeflang"
+#define OOO_STRING_SVTOOLS_RTF_ADEFF "\\adeff"
+#define OOO_STRING_SVTOOLS_RTF_ACCNONE "\\accnone"
+#define OOO_STRING_SVTOOLS_RTF_ACCDOT "\\accdot"
+#define OOO_STRING_SVTOOLS_RTF_ACCCOMMA "\\acccomma"
+#define OOO_STRING_SVTOOLS_RTF_TWOINONE "\\twoinone"
+#define OOO_STRING_SVTOOLS_RTF_HORZVERT "\\horzvert"
+#define OOO_STRING_SVTOOLS_RTF_FAHANG "\\fahang"
+#define OOO_STRING_SVTOOLS_RTF_FAVAR "\\favar"
+#define OOO_STRING_SVTOOLS_RTF_FACENTER "\\facenter"
+#define OOO_STRING_SVTOOLS_RTF_FAROMAN "\\faroman"
+#define OOO_STRING_SVTOOLS_RTF_FAFIXED "\\fafixed"
+#define OOO_STRING_SVTOOLS_RTF_NOCWRAP "\\nocwrap"
+#define OOO_STRING_SVTOOLS_RTF_NOOVERFLOW "\\nooverflow"
+#define OOO_STRING_SVTOOLS_RTF_ASPALPHA "\\aspalpha"
 
 // SWG spezifische Attribute
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_GRFALIGNV, "\\grfalignv" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_GRFALIGNH, "\\grfalignh" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_GRFMIRROR, "\\grfmirror" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_HEADERYB, "\\headeryb" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_HEADERXL, "\\headerxl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_HEADERXR, "\\headerxr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FOOTERYT, "\\footeryt" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FOOTERXL, "\\footerxl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FOOTERXR, "\\footerxr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_HEADERYH, "\\headeryh" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FOOTERYH, "\\footeryh" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BALANCEDCOLUMN, "\\swcolmnblnc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_UPDNPROP, "\\updnprop" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PRTDATA, "\\prtdata" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BKMKKEY, "\\bkmkkey" );
+#define OOO_STRING_SVTOOLS_RTF_GRFALIGNV "\\grfalignv"
+#define OOO_STRING_SVTOOLS_RTF_GRFALIGNH "\\grfalignh"
+#define OOO_STRING_SVTOOLS_RTF_GRFMIRROR "\\grfmirror"
+#define OOO_STRING_SVTOOLS_RTF_HEADERYB "\\headeryb"
+#define OOO_STRING_SVTOOLS_RTF_HEADERXL "\\headerxl"
+#define OOO_STRING_SVTOOLS_RTF_HEADERXR "\\headerxr"
+#define OOO_STRING_SVTOOLS_RTF_FOOTERYT "\\footeryt"
+#define OOO_STRING_SVTOOLS_RTF_FOOTERXL "\\footerxl"
+#define OOO_STRING_SVTOOLS_RTF_FOOTERXR "\\footerxr"
+#define OOO_STRING_SVTOOLS_RTF_HEADERYH "\\headeryh"
+#define OOO_STRING_SVTOOLS_RTF_FOOTERYH "\\footeryh"
+#define OOO_STRING_SVTOOLS_RTF_BALANCEDCOLUMN "\\swcolmnblnc"
+#define OOO_STRING_SVTOOLS_RTF_UPDNPROP "\\updnprop"
+#define OOO_STRING_SVTOOLS_RTF_PRTDATA "\\prtdata"
+#define OOO_STRING_SVTOOLS_RTF_BKMKKEY "\\bkmkkey"
 
 // Attribute fuer die freifliegenden Rahmen
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FLYPRINT, "\\flyprint" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FLYOPAQUE, "\\flyopaque" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FLYPRTCTD, "\\flyprtctd" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FLYMAINCNT, "\\flymaincnt" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FLYVERT, "\\flyvert" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FLYHORZ, "\\flyhorz" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DFRMTXTL, "\\dfrmtxtl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DFRMTXTR, "\\dfrmtxtr" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DFRMTXTU, "\\dfrmtxtu" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_DFRMTXTW, "\\dfrmtxtw" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FLYANCHOR, "\\flyanchor" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FLYCNTNT, "\\flycntnt" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FLYCOLUMN, "\\flycolumn" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FLYPAGE, "\\flypage" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_FLYINPARA, "\\flyinpara" );
-
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDBOX, "\\brdbox" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDLNCOL, "\\brdlncol" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDLNIN, "\\brdlnin" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDLNOUT, "\\brdlnout" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_BRDLNDIST, "\\brdlndist" );
-
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHADOW, "\\shadow" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHDWDIST, "\\shdwdist" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHDWSTYLE, "\\shdwstyle" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHDWCOL, "\\shdwcol" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHDWFCOL, "\\shdwfcol" );
-
-
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGDSCTBL, "\\pgdsctbl" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGDSC, "\\pgdsc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGDSCUSE, "\\pgdscuse" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGDSCNXT, "\\pgdscnxt" );
-
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_HYPHEN, "\\hyphen" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_HYPHLEAD, "\\hyphlead" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_HYPHTRAIL, "\\hyphtrail" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_HYPHMAX, "\\hyphmax" );
-
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_TLSWG, "\\tlswg" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGBRK, "\\pgbrk" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_PGDSCNO, "\\pgdscno" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SOUTLVL, "\\soutlvl" );
-
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHP, "\\shp" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SN, "\\sn" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SV, "\\sv" );
-/*
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHPLEFT, "\\shpleft" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHPTOP, "\\shptop" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHPBOTTOM, "\\shpbottom" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_SHPRIGHT, "\\shpright" );
-*/
+#define OOO_STRING_SVTOOLS_RTF_FLYPRINT "\\flyprint"
+#define OOO_STRING_SVTOOLS_RTF_FLYOPAQUE "\\flyopaque"
+#define OOO_STRING_SVTOOLS_RTF_FLYPRTCTD "\\flyprtctd"
+#define OOO_STRING_SVTOOLS_RTF_FLYMAINCNT "\\flymaincnt"
+#define OOO_STRING_SVTOOLS_RTF_FLYVERT "\\flyvert"
+#define OOO_STRING_SVTOOLS_RTF_FLYHORZ "\\flyhorz"
+#define OOO_STRING_SVTOOLS_RTF_DFRMTXTL "\\dfrmtxtl"
+#define OOO_STRING_SVTOOLS_RTF_DFRMTXTR "\\dfrmtxtr"
+#define OOO_STRING_SVTOOLS_RTF_DFRMTXTU "\\dfrmtxtu"
+#define OOO_STRING_SVTOOLS_RTF_DFRMTXTW "\\dfrmtxtw"
+#define OOO_STRING_SVTOOLS_RTF_FLYANCHOR "\\flyanchor"
+#define OOO_STRING_SVTOOLS_RTF_FLYCNTNT "\\flycntnt"
+#define OOO_STRING_SVTOOLS_RTF_FLYCOLUMN "\\flycolumn"
+#define OOO_STRING_SVTOOLS_RTF_FLYPAGE "\\flypage"
+#define OOO_STRING_SVTOOLS_RTF_FLYINPARA "\\flyinpara"
+#define OOO_STRING_SVTOOLS_RTF_BRDBOX "\\brdbox"
+#define OOO_STRING_SVTOOLS_RTF_BRDLNCOL "\\brdlncol"
+#define OOO_STRING_SVTOOLS_RTF_BRDLNIN "\\brdlnin"
+#define OOO_STRING_SVTOOLS_RTF_BRDLNOUT "\\brdlnout"
+#define OOO_STRING_SVTOOLS_RTF_BRDLNDIST "\\brdlndist"
+#define OOO_STRING_SVTOOLS_RTF_SHADOW "\\shadow"
+#define OOO_STRING_SVTOOLS_RTF_SHDWDIST "\\shdwdist"
+#define OOO_STRING_SVTOOLS_RTF_SHDWSTYLE "\\shdwstyle"
+#define OOO_STRING_SVTOOLS_RTF_SHDWCOL "\\shdwcol"
+#define OOO_STRING_SVTOOLS_RTF_SHDWFCOL "\\shdwfcol"
+#define OOO_STRING_SVTOOLS_RTF_PGDSCTBL "\\pgdsctbl"
+#define OOO_STRING_SVTOOLS_RTF_PGDSC "\\pgdsc"
+#define OOO_STRING_SVTOOLS_RTF_PGDSCUSE "\\pgdscuse"
+#define OOO_STRING_SVTOOLS_RTF_PGDSCNXT "\\pgdscnxt"
+#define OOO_STRING_SVTOOLS_RTF_HYPHEN "\\hyphen"
+#define OOO_STRING_SVTOOLS_RTF_HYPHLEAD "\\hyphlead"
+#define OOO_STRING_SVTOOLS_RTF_HYPHTRAIL "\\hyphtrail"
+#define OOO_STRING_SVTOOLS_RTF_HYPHMAX "\\hyphmax"
+#define OOO_STRING_SVTOOLS_RTF_TLSWG "\\tlswg"
+#define OOO_STRING_SVTOOLS_RTF_PGBRK "\\pgbrk"
+#define OOO_STRING_SVTOOLS_RTF_PGDSCNO "\\pgdscno"
+#define OOO_STRING_SVTOOLS_RTF_SOUTLVL "\\soutlvl"
+#define OOO_STRING_SVTOOLS_RTF_SHP "\\shp"
+#define OOO_STRING_SVTOOLS_RTF_SN "\\sn"
+#define OOO_STRING_SVTOOLS_RTF_SV "\\sv"
 
 // Support for overline attributes
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OL, "\\ol" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLD, "\\old" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLDB, "\\oldb" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLNONE, "\\olnone" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLW, "\\olw" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLDASH, "\\oldash" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLDASHD, "\\oldashd" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLDASHDD, "\\oldashdd" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLTH, "\\olth" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLWAVE, "\\olwave" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLC, "\\olc" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLTHD, "\\olthd" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLTHDASH, "\\olthdash" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLLDASH, "\\olldash" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLTHLDASH, "\\olthldash" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLTHDASHD, "\\olthdashd" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLTHDASHDD, "\\olthdashdd" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLHWAVE, "\\olhwave" );
-extern SVT_DLLPUBLIC sal_Char const SVTOOLS_CONSTASCII_DECL( sRTF_OLOLDBWAVE, "\\ololdbwave" );
+#define OOO_STRING_SVTOOLS_RTF_OL "\\ol"
+#define OOO_STRING_SVTOOLS_RTF_OLD "\\old"
+#define OOO_STRING_SVTOOLS_RTF_OLDB "\\oldb"
+#define OOO_STRING_SVTOOLS_RTF_OLNONE "\\olnone"
+#define OOO_STRING_SVTOOLS_RTF_OLW "\\olw"
+#define OOO_STRING_SVTOOLS_RTF_OLDASH "\\oldash"
+#define OOO_STRING_SVTOOLS_RTF_OLDASHD "\\oldashd"
+#define OOO_STRING_SVTOOLS_RTF_OLDASHDD "\\oldashdd"
+#define OOO_STRING_SVTOOLS_RTF_OLTH "\\olth"
+#define OOO_STRING_SVTOOLS_RTF_OLWAVE "\\olwave"
+#define OOO_STRING_SVTOOLS_RTF_OLC "\\olc"
+#define OOO_STRING_SVTOOLS_RTF_OLTHD "\\olthd"
+#define OOO_STRING_SVTOOLS_RTF_OLTHDASH "\\olthdash"
+#define OOO_STRING_SVTOOLS_RTF_OLLDASH "\\olldash"
+#define OOO_STRING_SVTOOLS_RTF_OLTHLDASH "\\olthldash"
+#define OOO_STRING_SVTOOLS_RTF_OLTHDASHD "\\olthdashd"
+#define OOO_STRING_SVTOOLS_RTF_OLTHDASHDD "\\olthdashdd"
+#define OOO_STRING_SVTOOLS_RTF_OLHWAVE "\\olhwave"
+#define OOO_STRING_SVTOOLS_RTF_OLOLDBWAVE "\\ololdbwave"
 
 #endif // _RTFKEYWD_HXX

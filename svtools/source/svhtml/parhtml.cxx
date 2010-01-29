@@ -43,9 +43,20 @@
 #include <svtools/svstdarr.hxx>
 #endif
 
+#include <tools/tenccvt.hxx>
+#include <tools/datetime.hxx>
+#include <svtools/inettype.hxx>
+#include <comphelper/string.hxx>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
+
 #include <svtools/parhtml.hxx>
 #include "htmltokn.h"
 #include "htmlkywd.hxx"
+
+
+using namespace ::com::sun::star;
+
 
 const sal_Int32 MAX_LEN( 1024L );
 //static sal_Unicode sTmpBuffer[ MAX_LEN+1 ];
@@ -60,44 +71,44 @@ const sal_Int32 MAX_ENTITY_LEN( 8L );
 // <INPUT TYPE=xxx>
 static HTMLOptionEnum __READONLY_DATA aInputTypeOptEnums[] =
 {
-    { sHTML_IT_text,        HTML_IT_TEXT        },
-    { sHTML_IT_password,    HTML_IT_PASSWORD    },
-    { sHTML_IT_checkbox,    HTML_IT_CHECKBOX    },
-    { sHTML_IT_radio,       HTML_IT_RADIO       },
-    { sHTML_IT_range,       HTML_IT_RANGE       },
-    { sHTML_IT_scribble,    HTML_IT_SCRIBBLE    },
-    { sHTML_IT_file,        HTML_IT_FILE        },
-    { sHTML_IT_hidden,      HTML_IT_HIDDEN      },
-    { sHTML_IT_submit,      HTML_IT_SUBMIT      },
-    { sHTML_IT_image,       HTML_IT_IMAGE       },
-    { sHTML_IT_reset,       HTML_IT_RESET       },
-    { sHTML_IT_button,      HTML_IT_BUTTON      },
+    { OOO_STRING_SVTOOLS_HTML_IT_text,      HTML_IT_TEXT        },
+    { OOO_STRING_SVTOOLS_HTML_IT_password,  HTML_IT_PASSWORD    },
+    { OOO_STRING_SVTOOLS_HTML_IT_checkbox,  HTML_IT_CHECKBOX    },
+    { OOO_STRING_SVTOOLS_HTML_IT_radio,     HTML_IT_RADIO       },
+    { OOO_STRING_SVTOOLS_HTML_IT_range,     HTML_IT_RANGE       },
+    { OOO_STRING_SVTOOLS_HTML_IT_scribble,  HTML_IT_SCRIBBLE    },
+    { OOO_STRING_SVTOOLS_HTML_IT_file,      HTML_IT_FILE        },
+    { OOO_STRING_SVTOOLS_HTML_IT_hidden,    HTML_IT_HIDDEN      },
+    { OOO_STRING_SVTOOLS_HTML_IT_submit,    HTML_IT_SUBMIT      },
+    { OOO_STRING_SVTOOLS_HTML_IT_image,     HTML_IT_IMAGE       },
+    { OOO_STRING_SVTOOLS_HTML_IT_reset,     HTML_IT_RESET       },
+    { OOO_STRING_SVTOOLS_HTML_IT_button,    HTML_IT_BUTTON      },
     { 0,                    0                   }
 };
 
 // <TABLE FRAME=xxx>
 static HTMLOptionEnum __READONLY_DATA aTableFrameOptEnums[] =
 {
-    { sHTML_TF_void,    HTML_TF_VOID    },
-    { sHTML_TF_above,   HTML_TF_ABOVE   },
-    { sHTML_TF_below,   HTML_TF_BELOW   },
-    { sHTML_TF_hsides,  HTML_TF_HSIDES  },
-    { sHTML_TF_lhs,     HTML_TF_LHS     },
-    { sHTML_TF_rhs,     HTML_TF_RHS     },
-    { sHTML_TF_vsides,  HTML_TF_VSIDES  },
-    { sHTML_TF_box,     HTML_TF_BOX     },
-    { sHTML_TF_border,  HTML_TF_BOX     },
+    { OOO_STRING_SVTOOLS_HTML_TF_void,  HTML_TF_VOID    },
+    { OOO_STRING_SVTOOLS_HTML_TF_above, HTML_TF_ABOVE   },
+    { OOO_STRING_SVTOOLS_HTML_TF_below, HTML_TF_BELOW   },
+    { OOO_STRING_SVTOOLS_HTML_TF_hsides,    HTML_TF_HSIDES  },
+    { OOO_STRING_SVTOOLS_HTML_TF_lhs,       HTML_TF_LHS     },
+    { OOO_STRING_SVTOOLS_HTML_TF_rhs,       HTML_TF_RHS     },
+    { OOO_STRING_SVTOOLS_HTML_TF_vsides,    HTML_TF_VSIDES  },
+    { OOO_STRING_SVTOOLS_HTML_TF_box,       HTML_TF_BOX     },
+    { OOO_STRING_SVTOOLS_HTML_TF_border,    HTML_TF_BOX     },
     { 0,                0               }
 };
 
 // <TABLE RULES=xxx>
 static HTMLOptionEnum __READONLY_DATA aTableRulesOptEnums[] =
 {
-    { sHTML_TR_none,    HTML_TR_NONE    },
-    { sHTML_TR_groups,  HTML_TR_GROUPS  },
-    { sHTML_TR_rows,    HTML_TR_ROWS    },
-    { sHTML_TR_cols,    HTML_TR_COLS    },
-    { sHTML_TR_all,     HTML_TR_ALL     },
+    { OOO_STRING_SVTOOLS_HTML_TR_none,  HTML_TR_NONE    },
+    { OOO_STRING_SVTOOLS_HTML_TR_groups,    HTML_TR_GROUPS  },
+    { OOO_STRING_SVTOOLS_HTML_TR_rows,  HTML_TR_ROWS    },
+    { OOO_STRING_SVTOOLS_HTML_TR_cols,  HTML_TR_COLS    },
+    { OOO_STRING_SVTOOLS_HTML_TR_all,       HTML_TR_ALL     },
     { 0,                0               }
 };
 
@@ -930,7 +941,7 @@ int HTMLParser::_GetNextRawToken()
                 {
                     if( !bReadComment )
                     {
-                        if( aTok.CompareToAscii( sHTML_comment, 3 )
+                        if( aTok.CompareToAscii( OOO_STRING_SVTOOLS_HTML_comment, 3 )
                                 == COMPARE_EQUAL )
                         {
                             bReadComment = TRUE;
@@ -942,7 +953,7 @@ int HTMLParser::_GetNextRawToken()
                             // erstmal nicht so genau nehmen
                             bDone = bOffState && // '>'==nNextCh &&
                             COMPARE_EQUAL == ( bReadScript
-                                ? aTok.CompareToAscii(sHTML_script)
+                                ? aTok.CompareToAscii(OOO_STRING_SVTOOLS_HTML_script)
                                 : aTok.CompareTo(aEndToken) );
                         }
                     }
@@ -958,13 +969,13 @@ int HTMLParser::_GetNextRawToken()
                     // ein Style-Sheet kann mit </STYLE>, </HEAD> oder
                     // <BODY> aughoehren
                     if( bOffState )
-                        bDone = aTok.CompareToAscii(sHTML_style)
+                        bDone = aTok.CompareToAscii(OOO_STRING_SVTOOLS_HTML_style)
                                     == COMPARE_EQUAL ||
-                                aTok.CompareToAscii(sHTML_head)
+                                aTok.CompareToAscii(OOO_STRING_SVTOOLS_HTML_head)
                                     == COMPARE_EQUAL;
                     else
                         bDone =
-                            aTok.CompareToAscii(sHTML_body) == COMPARE_EQUAL;
+                            aTok.CompareToAscii(OOO_STRING_SVTOOLS_HTML_body) == COMPARE_EQUAL;
                 }
 
                 if( bDone )
@@ -2002,7 +2013,7 @@ FASTBOOL HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
         return TRUE;
 
     // oder wir finden irgendwo ein <HTML> in den ersten 80 Zeichen
-    nStart = sCmp.Search( sHTML_html );
+    nStart = sCmp.Search( OOO_STRING_SVTOOLS_HTML_html );
     if( nStart!=STRING_NOTFOUND &&
         nStart>0 && '<'==sCmp.GetChar(nStart-1) &&
         nStart+4 < sCmp.Len() && '>'==sCmp.GetChar(nStart+4) )
@@ -2015,71 +2026,70 @@ FASTBOOL HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
 BOOL HTMLParser::InternalImgToPrivateURL( String& rURL )
 {
     if( rURL.Len() < 19 || 'i' != rURL.GetChar(0) ||
-        rURL.CompareToAscii( sHTML_internal_gopher, 9 ) != COMPARE_EQUAL )
+        rURL.CompareToAscii( OOO_STRING_SVTOOLS_HTML_internal_gopher, 9 ) != COMPARE_EQUAL )
         return FALSE;
 
     BOOL bFound = FALSE;
 
-    if( rURL.CompareToAscii( sHTML_internal_gopher,16) == COMPARE_EQUAL )
+    if( rURL.CompareToAscii( OOO_STRING_SVTOOLS_HTML_internal_gopher,16) == COMPARE_EQUAL )
     {
         String aName( rURL.Copy(16) );
         switch( aName.GetChar(0) )
         {
         case 'b':
-            bFound = aName.EqualsAscii( sHTML_INT_GOPHER_binary );
+            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_GOPHER_binary );
             break;
         case 'i':
-            bFound = aName.EqualsAscii( sHTML_INT_GOPHER_image ) ||
-                     aName.EqualsAscii( sHTML_INT_GOPHER_index );
+            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_GOPHER_image ) ||
+                     aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_GOPHER_index );
             break;
         case 'm':
-            bFound = aName.EqualsAscii( sHTML_INT_GOPHER_menu ) ||
-                     aName.EqualsAscii( sHTML_INT_GOPHER_movie );
+            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_GOPHER_menu ) ||
+                     aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_GOPHER_movie );
             break;
         case 's':
-            bFound = aName.EqualsAscii( sHTML_INT_GOPHER_sound );
+            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_GOPHER_sound );
             break;
         case 't':
-            bFound = aName.EqualsAscii( sHTML_INT_GOPHER_telnet ) ||
-                     aName.EqualsAscii( sHTML_INT_GOPHER_text );
+            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_GOPHER_telnet ) ||
+                     aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_GOPHER_text );
             break;
         case 'u':
-            bFound = aName.EqualsAscii( sHTML_INT_GOPHER_unknown );
+            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_GOPHER_unknown );
             break;
         }
     }
-    else if( rURL.CompareToAscii( sHTML_internal_icon,14) == COMPARE_EQUAL )
+    else if( rURL.CompareToAscii( OOO_STRING_SVTOOLS_HTML_internal_icon,14) == COMPARE_EQUAL )
     {
         String aName( rURL.Copy(14) );
         switch( aName.GetChar(0) )
         {
         case 'b':
-            bFound = aName.EqualsAscii( sHTML_INT_ICON_baddata );
+            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_ICON_baddata );
             break;
         case 'd':
-            bFound = aName.EqualsAscii( sHTML_INT_ICON_delayed );
+            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_ICON_delayed );
             break;
         case 'e':
-            bFound = aName.EqualsAscii( sHTML_INT_ICON_embed );
+            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_ICON_embed );
             break;
         case 'i':
-            bFound = aName.EqualsAscii( sHTML_INT_ICON_insecure );
+            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_ICON_insecure );
             break;
         case 'n':
-            bFound = aName.EqualsAscii( sHTML_INT_ICON_notfound );
+            bFound = aName.EqualsAscii( OOO_STRING_SVTOOLS_HTML_INT_ICON_notfound );
             break;
         }
     }
     if( bFound )
     {
         String sTmp ( rURL );
-        rURL.AssignAscii( sHTML_private_image );
+        rURL.AssignAscii( OOO_STRING_SVTOOLS_HTML_private_image );
         rURL.Append( sTmp );
     }
 
     return bFound;
 }
-
 
 #ifdef USED
 void HTMLParser::SaveState( int nToken )
@@ -2092,4 +2102,242 @@ void HTMLParser::RestoreState()
     SvParser::RestoreState();
 }
 #endif
+
+
+enum eHtmlMetas {
+    HTML_META_NONE = 0,
+    HTML_META_AUTHOR,
+    HTML_META_DESCRIPTION,
+    HTML_META_KEYWORDS,
+    HTML_META_REFRESH,
+    HTML_META_CLASSIFICATION,
+    HTML_META_CREATED,
+    HTML_META_CHANGEDBY,
+    HTML_META_CHANGED,
+    HTML_META_GENERATOR,
+    HTML_META_SDFOOTNOTE,
+    HTML_META_SDENDNOTE,
+    HTML_META_CONTENT_TYPE
+};
+
+// <META NAME=xxx>
+#ifdef __MINGW32__ // for runtime pseudo reloc
+static HTMLOptionEnum aHTMLMetaNameTable[] =
+#else
+static HTMLOptionEnum __READONLY_DATA aHTMLMetaNameTable[] =
+#endif
+{
+    { OOO_STRING_SVTOOLS_HTML_META_author,        HTML_META_AUTHOR        },
+    { OOO_STRING_SVTOOLS_HTML_META_changed,       HTML_META_CHANGED       },
+    { OOO_STRING_SVTOOLS_HTML_META_changedby,     HTML_META_CHANGEDBY     },
+    { OOO_STRING_SVTOOLS_HTML_META_classification,HTML_META_CLASSIFICATION},
+    { OOO_STRING_SVTOOLS_HTML_META_content_type,  HTML_META_CONTENT_TYPE  },
+    { OOO_STRING_SVTOOLS_HTML_META_created,       HTML_META_CREATED       },
+    { OOO_STRING_SVTOOLS_HTML_META_description,   HTML_META_DESCRIPTION   },
+    { OOO_STRING_SVTOOLS_HTML_META_keywords,      HTML_META_KEYWORDS      },
+    { OOO_STRING_SVTOOLS_HTML_META_generator,     HTML_META_GENERATOR     },
+    { OOO_STRING_SVTOOLS_HTML_META_refresh,       HTML_META_REFRESH       },
+    { OOO_STRING_SVTOOLS_HTML_META_sdendnote,     HTML_META_SDENDNOTE     },
+    { OOO_STRING_SVTOOLS_HTML_META_sdfootnote,    HTML_META_SDFOOTNOTE    },
+    { 0,                                          0                       }
+};
+
+
+void HTMLParser::AddMetaUserDefined( ::rtl::OUString const & )
+{
+}
+
+bool HTMLParser::ParseMetaOptionsImpl(
+        const uno::Reference<document::XDocumentProperties> & i_xDocProps,
+        SvKeyValueIterator *i_pHTTPHeader,
+        const HTMLOptions *i_pOptions,
+        rtl_TextEncoding& o_rEnc )
+{
+    String aName, aContent;
+    USHORT nAction = HTML_META_NONE;
+    bool bHTTPEquiv = false, bChanged = false;
+
+    for ( USHORT i = i_pOptions->Count(); i; )
+    {
+        const HTMLOption *pOption = (*i_pOptions)[ --i ];
+        switch ( pOption->GetToken() )
+        {
+            case HTML_O_NAME:
+                aName = pOption->GetString();
+                if ( HTML_META_NONE==nAction )
+                {
+                    pOption->GetEnum( nAction, aHTMLMetaNameTable );
+                }
+                break;
+            case HTML_O_HTTPEQUIV:
+                aName = pOption->GetString();
+                pOption->GetEnum( nAction, aHTMLMetaNameTable );
+                bHTTPEquiv = true;
+                break;
+            case HTML_O_CONTENT:
+                aContent = pOption->GetString();
+                break;
+        }
+    }
+
+    if ( bHTTPEquiv || HTML_META_DESCRIPTION != nAction )
+    {
+        // if it is not a Description, remove CRs and LFs from CONTENT
+        aContent.EraseAllChars( _CR );
+        aContent.EraseAllChars( _LF );
+    }
+    else
+    {
+        // convert line endings for Description
+        aContent.ConvertLineEnd();
+    }
+
+
+    if ( bHTTPEquiv && i_pHTTPHeader )
+    {
+        // #57232#: Netscape seems to just ignore a closing ", so we do too
+        if ( aContent.Len() && '"' == aContent.GetChar( aContent.Len()-1 ) )
+        {
+            aContent.Erase( aContent.Len() - 1 );
+        }
+        SvKeyValue aKeyValue( aName, aContent );
+        i_pHTTPHeader->Append( aKeyValue );
+    }
+
+    switch ( nAction )
+    {
+        case HTML_META_AUTHOR:
+            if (i_xDocProps.is()) {
+                i_xDocProps->setAuthor( aContent );
+                bChanged = true;
+            }
+            break;
+        case HTML_META_DESCRIPTION:
+            if (i_xDocProps.is()) {
+                i_xDocProps->setDescription( aContent );
+                bChanged = true;
+            }
+            break;
+        case HTML_META_KEYWORDS:
+            if (i_xDocProps.is()) {
+                i_xDocProps->setKeywords(
+                    ::comphelper::string::convertCommaSeparated(aContent));
+                bChanged = true;
+            }
+            break;
+        case HTML_META_CLASSIFICATION:
+            if (i_xDocProps.is()) {
+                i_xDocProps->setSubject( aContent );
+                bChanged = true;
+            }
+            break;
+
+        case HTML_META_CHANGEDBY:
+            if (i_xDocProps.is()) {
+                i_xDocProps->setModifiedBy( aContent );
+            }
+            break;
+
+        case HTML_META_CREATED:
+        case HTML_META_CHANGED:
+            if ( i_xDocProps.is() && aContent.Len() &&
+                 aContent.GetTokenCount() == 2 )
+            {
+                Date aDate( (ULONG)aContent.GetToken(0).ToInt32() );
+                Time aTime( (ULONG)aContent.GetToken(1).ToInt32() );
+                DateTime aDateTime( aDate, aTime );
+                ::util::DateTime uDT(aDateTime.Get100Sec(),
+                    aDateTime.GetSec(), aDateTime.GetMin(),
+                    aDateTime.GetHour(), aDateTime.GetDay(),
+                    aDateTime.GetMonth(), aDateTime.GetYear());
+                if ( HTML_META_CREATED==nAction )
+                    i_xDocProps->setCreationDate( uDT );
+                else
+                    i_xDocProps->setModificationDate( uDT );
+                bChanged = true;
+            }
+            break;
+
+        case HTML_META_REFRESH:
+            DBG_ASSERT( !bHTTPEquiv || i_pHTTPHeader,
+        "Reload-URL aufgrund unterlassener MUSS-Aenderung verlorengegangen" );
+            break;
+
+        case HTML_META_CONTENT_TYPE:
+            if ( aContent.Len() )
+            {
+                o_rEnc = GetEncodingByMIME( aContent );
+            }
+            break;
+
+        case HTML_META_NONE:
+            if ( !bHTTPEquiv )
+            {
+                if (i_xDocProps.is())
+                {
+                    uno::Reference<beans::XPropertyContainer> xUDProps
+                        = i_xDocProps->getUserDefinedProperties();
+                    try {
+                        xUDProps->addProperty(aName,
+                            beans::PropertyAttribute::REMOVEABLE,
+                            uno::makeAny(::rtl::OUString(aContent)));
+                        AddMetaUserDefined(aName);
+                        bChanged = true;
+                    } catch (uno::Exception &) {
+                        // ignore
+                    }
+                }
+            }
+            break;
+        default:
+            break;
+    }
+
+    return bChanged;
+}
+
+bool HTMLParser::ParseMetaOptions(
+        const uno::Reference<document::XDocumentProperties> & i_xDocProps,
+        SvKeyValueIterator *i_pHeader )
+{
+    USHORT nContentOption = HTML_O_CONTENT;
+    rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
+
+    bool bRet = ParseMetaOptionsImpl( i_xDocProps, i_pHeader,
+                      GetOptions(&nContentOption),
+                      eEnc );
+
+    // If the encoding is set by a META tag, it may only overwrite the
+    // current encoding if both, the current and the new encoding, are 1-BYTE
+    // encodings. Everything else cannot lead to reasonable results.
+    if (RTL_TEXTENCODING_DONTKNOW != eEnc &&
+        rtl_isOctetTextEncoding( eEnc ) &&
+        rtl_isOctetTextEncoding( GetSrcEncoding() ) )
+    {
+        eEnc = GetExtendedCompatibilityTextEncoding( eEnc ); // #89973#
+        SetSrcEncoding( eEnc );
+    }
+
+    return bRet;
+}
+
+rtl_TextEncoding HTMLParser::GetEncodingByMIME( const String& rMime )
+{
+    ByteString sType;
+    ByteString sSubType;
+    INetContentTypeParameterList aParameters;
+    ByteString sMime( rMime, RTL_TEXTENCODING_ASCII_US );
+    if (INetContentTypes::parse(sMime, sType, sSubType, &aParameters))
+    {
+        const INetContentTypeParameter * pCharset
+            = aParameters.find("charset");
+        if (pCharset != 0)
+        {
+            ByteString sValue( pCharset->m_sValue, RTL_TEXTENCODING_ASCII_US );
+            return GetExtendedCompatibilityTextEncoding(
+                    rtl_getTextEncodingFromMimeCharset( sValue.GetBuffer() ) );
+        }
+    }
+    return RTL_TEXTENCODING_DONTKNOW;
+}
 

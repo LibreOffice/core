@@ -929,6 +929,85 @@ namespace basegfx
             }
         }
 
+        B2DPolyPolygon mergeToSinglePolyPolygon(const std::vector< basegfx::B2DPolyPolygon >& rInput)
+        {
+            std::vector< basegfx::B2DPolyPolygon > aInput(rInput);
+
+            // first step: prepareForPolygonOperation and simple merge of non-overlapping
+            // PolyPolygons for speedup; this is possible for the wanted OR-operation
+            if(aInput.size())
+            {
+                std::vector< basegfx::B2DPolyPolygon > aResult;
+                aResult.reserve(aInput.size());
+
+                for(sal_uInt32 a(0); a < aInput.size(); a++)
+                {
+                    const basegfx::B2DPolyPolygon aCandidate(prepareForPolygonOperation(aInput[a]));
+
+                    if(aResult.size())
+                    {
+                        const B2DRange aCandidateRange(aCandidate.getB2DRange());
+                        bool bCouldMergeSimple(false);
+
+                        for(sal_uInt32 b(0); !bCouldMergeSimple && b < aResult.size(); b++)
+                        {
+                            basegfx::B2DPolyPolygon aTarget(aResult[b]);
+                            const B2DRange aTargetRange(aTarget.getB2DRange());
+
+                            if(!aCandidateRange.overlaps(aTargetRange))
+                            {
+                                aTarget.append(aCandidate);
+                                aResult[b] = aTarget;
+                                bCouldMergeSimple = true;
+                            }
+                        }
+
+                        if(!bCouldMergeSimple)
+                        {
+                            aResult.push_back(aCandidate);
+                        }
+                    }
+                    else
+                    {
+                        aResult.push_back(aCandidate);
+                    }
+                }
+
+                aInput = aResult;
+            }
+
+            // second step: melt pairwise to a single PolyPolygon
+            while(aInput.size() > 1)
+            {
+                std::vector< basegfx::B2DPolyPolygon > aResult;
+                aResult.reserve((aInput.size() / 2) + 1);
+
+                for(sal_uInt32 a(0); a < aInput.size(); a += 2)
+                {
+                    if(a + 1 < aInput.size())
+                    {
+                        // a pair for processing
+                        aResult.push_back(solvePolygonOperationOr(aInput[a], aInput[a + 1]));
+                    }
+                    else
+                    {
+                        // last single PolyPolygon; copy to target to not lose it
+                        aResult.push_back(aInput[a]);
+                    }
+                }
+
+                aInput = aResult;
+            }
+
+            // third step: get result
+            if(1 == aInput.size())
+            {
+                return aInput[0];
+            }
+
+            return B2DPolyPolygon();
+        }
+
         //////////////////////////////////////////////////////////////////////////////
 
     } // end of namespace tools

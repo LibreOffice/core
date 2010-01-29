@@ -1,4 +1,4 @@
-go      goodies :       svtools NULL
+go      goodies :    l10n svtools NULL
 go	goodies									usr1	-	all	g_mkout NULL
 go	goodies\inc								nmake	-	all	g_inc NULL
 go	goodies\prj								get		-	all	g_prj NULL

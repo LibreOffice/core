@@ -32,13 +32,13 @@
 #ifndef _LAYOUT_UNO_HXX
 #define _LAYOUT_UNO_HXX
 
-#include <stdio.h>
+#include <cstdio>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include "root.hxx"
-#include "factory.hxx"
+#include <layout/core/root.hxx>
+#include <layout/core/factory.hxx>
 
 #if LAYOUT_WEAK
 #include <cppuhelper/implbase1.hxx>

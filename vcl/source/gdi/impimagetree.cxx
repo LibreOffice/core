@@ -102,8 +102,11 @@ void loadFromStream(
     rtl::OUString const & path, BitmapEx & bitmap)
 {
     std::auto_ptr< SvStream > s(wrapStream(stream));
-    if (path.endsWithAsciiL(RTL_CONSTASCII_STRINGPARAM(".png"))) {
-        bitmap = vcl::PNGReader(*s).Read();
+    if (path.endsWithAsciiL(RTL_CONSTASCII_STRINGPARAM(".png")))
+    {
+        vcl::PNGReader aPNGReader( *s );
+        aPNGReader.SetIgnoreGammaChunk( sal_True );
+        bitmap = aPNGReader.Read();
     } else {
         *s >> bitmap;
     }

@@ -34,7 +34,7 @@
 
 #include <com/sun/star/awt/XSimpleTabController.hpp>
 #include <comphelper/uno3.hxx>
-#include <layout/box-base.hxx>
+#include <layout/core/box-base.hxx>
 #include <map>
 #include <toolkit/awt/vclxwindow.hxx>
 
@@ -50,8 +50,13 @@ class VCLXTabControl :public VCLXWindow
                      ,public VCLXTabControl_Base
                      ,public Box_Base
 {
+    int mTabId;
+    bool bRealized;
+
 public:
     VCLXTabControl();
+
+    void AddChild (css::uno::Reference <css::awt::XLayoutConstrains> const &);
 
 protected:
     ~VCLXTabControl();
@@ -65,7 +70,7 @@ protected:
     // XComponent
     void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
 
-    virtual void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) throw        (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) throw (::com::sun::star::uno::RuntimeException);
 
     // XSimpleTabController
     virtual ::sal_Int32 SAL_CALL insertTab() throw (::com::sun::star::uno::RuntimeException);
@@ -107,10 +112,6 @@ protected:
 
     // VCLXWindow
     void ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent );
-
-
-    // Each tab page needs an unique id.
-    int mnNextTabId;
 
 public:
     // Maps page ids to child references

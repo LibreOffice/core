@@ -78,8 +78,8 @@ VCLXSplitter::createChildProps( Box_Base::ChildData *pData )
 DBG_NAME( VCLXSplitter );
 
 VCLXSplitter::VCLXSplitter( bool bHorizontal )
-  : VCLXWindow()
-  , Box_Base()
+    : VCLXWindow()
+    , Box_Base()
 {
     DBG_CTOR( VCLXSplitter, NULL );
     mnHandleRatio = 0.5;

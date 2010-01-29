@@ -235,10 +235,6 @@ APP2STDLIBS+= -lsvl$(DLLPOSTFIX)
 APP2STDLIBS+=	$(VCLLIB)		\
                 $(TOOLSLIB)		\
                 $(VOSLIB) 		\
-                $(TKLIB) $(SOTLIB) $(UNOTOOLSLIB) $(I18NISOLANGLIB) $(I18NUTILLIB) \
-                                $(UCBHELPERLIB) $(COMPHELPERLIB) $(CPPUHELPERLIB) $(CPPULIB) $(ICUUCLIB) \
-                                $(JVMFWKLIB) $(BASEGFXLIB) $(ICUDATALIB) $(JVMACCESSLIB) \
-                                $(SALHELPERLIB) $(ICULELIB) \
                 $(SALLIB)
 
 # --- Targets ------------------------------------------------------

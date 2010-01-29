@@ -30,6 +30,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_comphelper.hxx"
+
+#include "comphelper_module.hxx"
+
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -205,14 +208,14 @@ void SAL_CALL OInstanceLocker::initialize( const uno::Sequence< uno::Any >& aArg
 ::rtl::OUString SAL_CALL OInstanceLocker::getImplementationName(  )
     throw (uno::RuntimeException)
 {
-    return impl_staticGetImplementationName();
+    return getImplementationName_static();
 }
 
 // --------------------------------------------------------
 ::sal_Bool SAL_CALL OInstanceLocker::supportsService( const ::rtl::OUString& ServiceName )
     throw (uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aSeq = impl_staticGetSupportedServiceNames();
+    uno::Sequence< ::rtl::OUString > aSeq = getSupportedServiceNames();
 
     for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
         if ( ServiceName.compareTo( aSeq[nInd] ) == 0 )
@@ -225,25 +228,25 @@ void SAL_CALL OInstanceLocker::initialize( const uno::Sequence< uno::Any >& aArg
 uno::Sequence< ::rtl::OUString > SAL_CALL OInstanceLocker::getSupportedServiceNames()
     throw (uno::RuntimeException)
 {
-    return impl_staticGetSupportedServiceNames();
+    return getSupportedServiceNames_static();
 }
 
 // Static methods
 // --------------------------------------------------------
-uno::Sequence< ::rtl::OUString > SAL_CALL OInstanceLocker::impl_staticGetSupportedServiceNames()
+uno::Sequence< ::rtl::OUString > SAL_CALL OInstanceLocker::getSupportedServiceNames_static()
 {
     const rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.InstanceLocker" ) );
     return uno::Sequence< rtl::OUString >( &aServiceName, 1 );
 }
 
 // --------------------------------------------------------
-::rtl::OUString SAL_CALL OInstanceLocker::impl_staticGetImplementationName()
+::rtl::OUString SAL_CALL OInstanceLocker::getImplementationName_static()
 {
     return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.embed.InstanceLocker" ) );
 }
 
 // --------------------------------------------------------
-uno::Reference< uno::XInterface > SAL_CALL OInstanceLocker::impl_staticCreateSelfInstance(
+uno::Reference< uno::XInterface > SAL_CALL OInstanceLocker::Create(
                                 const uno::Reference< uno::XComponentContext >& rxContext )
 {
     return static_cast< cppu::OWeakObject * >( new OInstanceLocker( rxContext ) );
@@ -506,3 +509,7 @@ sal_Bool OLockListener::Init()
     return sal_True;
 }
 
+void createRegistryInfo_OInstanceLocker()
+{
+    static ::comphelper::module::OAutoRegistration< OInstanceLocker > aAutoRegistration;
+}

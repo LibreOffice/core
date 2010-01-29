@@ -292,11 +292,17 @@ void UnoWrapper::WindowDestroyed( Window* pWindow )
     if ( pParent && pParent->GetWindowPeer() )
         pParent->GetWindowPeer()->notifyWindowRemoved( *pWindow );
 
-    if ( pWindow && pWindow->GetWindowPeer() )
+    VCLXWindow* pWindowPeer = pWindow->GetWindowPeer();
+    uno::Reference< lang::XComponent > xWindowPeerComp( pWindow->GetComponentInterface( FALSE ), uno::UNO_QUERY );
+    OSL_ENSURE( ( pWindowPeer != NULL ) == ( xWindowPeerComp.is() == sal_True ),
+        "UnoWrapper::WindowDestroyed: inconsistency in the window's peers!" );
+    if ( pWindowPeer )
     {
-        pWindow->GetWindowPeer()->SetWindow( NULL );
+        pWindowPeer->SetWindow( NULL );
         pWindow->SetWindowPeer( NULL, NULL );
     }
+    if ( xWindowPeerComp.is() )
+        xWindowPeerComp->dispose();
 
     // #102132# Iterate over frames after setting Window peer to NULL,
     // because while destroying other frames, we get get into the method again and try

@@ -79,10 +79,19 @@ COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XI
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rArgs
     ) SAL_THROW( ( ::com::sun::star::uno::RuntimeException ) );
 
+/**
+ * This function gets the process service factory's default component context.
+ * If no service factory is set the function returns a null interface.
+ */
+COMPHELPER_DLLPUBLIC
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+getProcessComponentContext();
+
 }
 
+
 extern "C" {
-/// @internal
+/// @internal ATTENTION returns ACQUIRED pointer! release it explicitly!
 COMPHELPER_DLLPUBLIC
 ::com::sun::star::uno::XComponentContext *
 comphelper_getProcessComponentContext();

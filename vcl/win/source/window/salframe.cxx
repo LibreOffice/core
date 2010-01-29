@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: salframe.cxx,v $
- * $Revision: 1.157.20.2 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -355,19 +352,13 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
         {
             OUString aLibraryName( RTL_CONSTASCII_USTRINGPARAM( "user32" ) );
             oslModule pLib = osl_loadModule( aLibraryName.pData, SAL_LOADMODULE_DEFAULT );
-            void *pFunc = NULL;
+            oslGenericFunction pFunc = NULL;
             if( pLib )
-            {
-                OUString queryFuncName( RTL_CONSTASCII_USTRINGPARAM( "SetLayeredWindowAttributes" ) );
-                pFunc = osl_getSymbol( pLib, queryFuncName.pData );
-            }
+                pFunc = osl_getAsciiFunctionSymbol( pLib, "SetLayeredWindowAttributes" );
 
             lpfnSetLayeredWindowAttributes = ( SetLayeredWindowAttributes_Proc_T ) pFunc;
 
-            if ( pFunc )
-                bLayeredAPI = 1;
-            else
-                bLayeredAPI = 0;
+            bLayeredAPI = pFunc ? 1 : 0;
         }
     }
     static const char* pEnvTransparentFloats = getenv("SAL_TRANSPARENT_FLOATS" );
@@ -2113,8 +2104,7 @@ void WinSalFrame::StartPresentation( BOOL bStart )
                 {
                     OUString aLibraryName( OUString::createFromAscii( aOS.szPathName ) );
                     oslModule mhSageInst = osl_loadModule( aLibraryName.pData, SAL_LOADMODULE_DEFAULT );
-                    OUString queryFuncName( RTL_CONSTASCII_USTRINGPARAM( "System_Agent_Enable" ) );
-                    pSalData->mpSageEnableProc = (SysAgt_Enable_PROC) osl_getSymbol( mhSageInst, queryFuncName.pData );
+                    pSalData->mpSageEnableProc = (SysAgt_Enable_PROC)osl_getAsciiFunctionSymbol( mhSageInst, "System_Agent_Enable" );
                 }
                 else
                     pSalData->mnSageStatus = DISABLE_AGENT;
@@ -3160,7 +3150,8 @@ void WinSalFrame::Beep( SoundType eSoundType )
         MB_ICONQUESTION                 // SOUND_QUERY
     };
 
-    MessageBeep( aImplSoundTab[eSoundType] );
+    if( eSoundType != SOUND_DISABLE ) // don't beep on disable
+        MessageBeep( aImplSoundTab[eSoundType] );
 }
 
 // -----------------------------------------------------------------------
@@ -3703,10 +3694,17 @@ BOOL WinSalFrame::MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangT
             BYTE vkeycode   = LOBYTE(scan);
             BYTE shiftstate = HIBYTE(scan);
 
+            // Last argument is set to FALSE, because there's no decission made
+            // yet which key should be assigned to MOD3 modifier on Windows.
+            // Windows key - user's can be confused, because it should display
+            //               Windows menu (applies to both left/right key)
+            // Menu key    - this key is used to display context menu
+            // AltGr key   - probably it has no sense
             rKeyCode = KeyCode( ImplSalGetKeyCode( vkeycode ),
                 (shiftstate & 0x01) ? TRUE : FALSE,     // shift
                 (shiftstate & 0x02) ? TRUE : FALSE,     // ctrl
-                (shiftstate & 0x04) ? TRUE : FALSE );   // alt
+                (shiftstate & 0x04) ? TRUE : FALSE,     // alt
+                FALSE );
             bRet = TRUE;
         }
     }

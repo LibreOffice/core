@@ -443,21 +443,32 @@ namespace basegfx
                 bool bAIsTrivial(aVecA.equalZero());
                 bool bBIsTrivial(aVecB.equalZero());
 
+                // #i102241# prepare inverse edge length to normalize cross values;
+                // else the small compare value used in fTools::equalZero
+                // will be length dependent and this detection will work as less
+                // precise as longer the edge is. In principle, the length of the control
+                // vector would need to be used too, but to be trivial it is assumed to
+                // be of roughly equal length to the edge, so edge length can be used
+                // for both. Only needed when one of both is not trivial per se.
+                const double fInverseEdgeLength(bAIsTrivial && bBIsTrivial
+                    ? 1.0
+                    : 1.0 / aEdge.getLength());
+
                 // if A is not zero, check if it could be
                 if(!bAIsTrivial)
                 {
-                    // parallel to edge? Check aVecA, aEdge
-                    // B2DVector::areParallel is too correct, uses differences in the e15 region,
-                    // thus do own test here
-                    const double fValA(aVecA.getX() * aEdge.getY());
-                    const double fValB(aVecA.getY() * aEdge.getX());
+                    // #i102241# parallel to edge? Check aVecA, aEdge. Use cross() which does what
+                    // we need here with the precision we need
+                    const double fCross(aVecA.cross(aEdge) * fInverseEdgeLength);
 
-                    if(fTools::equalZero(fabs(fValA) - fabs(fValB)))
+                    if(fTools::equalZero(fCross))
                     {
                         // get scale to edge. Use bigger distance for numeric quality
-                        const double fScale(fabs(aEdge.getX()) > fabs(aEdge.getY()) ? aVecA.getX() / aEdge.getX() : aVecA.getY() / aEdge.getY());
+                        const double fScale(fabs(aEdge.getX()) > fabs(aEdge.getY())
+                            ? aVecA.getX() / aEdge.getX()
+                            : aVecA.getY() / aEdge.getY());
 
-                        // end point of vector in edge range?
+                        // relative end point of vector in edge range?
                         if(fTools::moreOrEqual(fScale, 0.0) && fTools::lessOrEqual(fScale, 1.0))
                         {
                             bAIsTrivial = true;
@@ -470,13 +481,14 @@ namespace basegfx
                 if(bAIsTrivial && !bBIsTrivial)
                 {
                     // parallel to edge? Check aVecB, aEdge
-                    const double fValA(aVecB.getX() * aEdge.getY());
-                    const double fValB(aVecB.getY() * aEdge.getX());
+                    const double fCross(aVecB.cross(aEdge) * fInverseEdgeLength);
 
-                    if(fTools::equalZero(fabs(fValA) - fabs(fValB)))
+                    if(fTools::equalZero(fCross))
                     {
                         // get scale to edge. Use bigger distance for numeric quality
-                        const double fScale(fabs(aEdge.getX()) > fabs(aEdge.getY()) ? aVecB.getX() / aEdge.getX() : aVecB.getY() / aEdge.getY());
+                        const double fScale(fabs(aEdge.getX()) > fabs(aEdge.getY())
+                            ? aVecB.getX() / aEdge.getX()
+                            : aVecB.getY() / aEdge.getY());
 
                         // end point of vector in edge range? Caution: controlB is directed AGAINST edge
                         if(fTools::lessOrEqual(fScale, 0.0) && fTools::moreOrEqual(fScale, -1.0))

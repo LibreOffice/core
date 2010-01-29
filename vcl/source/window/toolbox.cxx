@@ -1703,6 +1703,8 @@ void ToolBox::ImplInitSettings( BOOL bFont,
                 SetBackground( aColor );
                 SetPaintTransparent( FALSE );
                 SetParentClipMode( 0 );
+
+                ImplUpdateImageList();
             }
         }
     }
@@ -3376,7 +3378,7 @@ static void ImplDrawButton( ToolBox* pThis, const Rectangle &rRect, USHORT highl
     }
 
     if( !bNativeOk )
-        pThis->DrawSelectionBackground( rRect, bIsWindow ? 3 : highlight, bChecked, TRUE, bIsWindow );
+        pThis->DrawSelectionBackground( rRect, bIsWindow ? 3 : highlight, bChecked, TRUE, bIsWindow, 2, NULL, NULL );
 }
 
 void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLayout )
@@ -5053,7 +5055,7 @@ void ToolBox::StateChanged( StateChangedType nType )
     }
     else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
     {
-        ImplInitSettings( FALSE, FALSE, TRUE );
+        ImplInitSettings( FALSE, FALSE, TRUE ); // font, foreground, background
         Invalidate();
     }
 }

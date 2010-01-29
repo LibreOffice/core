@@ -28,7 +28,7 @@
         <fixedline cnt:padding="1" id="FL_BOTTOM"/>
         <hbox border="5">
         <flow homogeneous="true"/>
-        <okbutton id="PB_OK" cnt:expand="false" default="true"/>
+        <okbutton id="PB_OK" cnt:expand="false" defbutton="true"/>
         <helpbutton id="PB_HELP" cnt:expand="false"/>
         </hbox>
     </vbox>

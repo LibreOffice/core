@@ -33,7 +33,7 @@
 #define LAYOUT_AWT_VCLXSCROLLER_HXX
 
 #include <comphelper/uno3.hxx>
-#include <layout/bin.hxx>
+#include <layout/core/bin.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 
 class ScrollBar;

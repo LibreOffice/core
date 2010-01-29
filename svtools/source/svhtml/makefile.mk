@@ -34,6 +34,8 @@ PRJ=..$/..
 PRJNAME=svtools
 TARGET=svhtml
 
+ENABLE_EXCEPTIONS=TRUE
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -42,7 +44,6 @@ TARGET=svhtml
 # --- Files --------------------------------------------------------
 
 SLOFILES=\
-    $(SLO)$/htmlkey2.obj	\
     $(SLO)$/htmlkywd.obj	\
     $(SLO)$/htmlsupp.obj	\
     $(SLO)$/htmlout.obj		\

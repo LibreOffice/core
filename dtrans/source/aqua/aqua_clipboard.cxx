@@ -323,8 +323,13 @@ void AquaClipboard::fireLostClipboardOwnershipEvent(Reference<XClipboardOwner> o
 void AquaClipboard::provideDataForType(NSPasteboard* sender, NSString* type)
 {
   DataProviderPtr_t dp = mpDataFlavorMapper->getDataProvider(type, mXClipboardContent);
-  NSData* pBoardData = (NSData*)dp->getSystemData();
-  [sender setData: pBoardData forType: type];
+  NSData* pBoardData = NULL;
+
+  if (dp.get() != NULL)
+  {
+      pBoardData = (NSData*)dp->getSystemData();
+      [sender setData: pBoardData forType: type];
+  }
 }
 
 

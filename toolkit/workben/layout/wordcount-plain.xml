@@ -22,7 +22,7 @@
         </hbox>
         <fixedline height="8" id="FL_BOTTOM" width="158" x="6" y="77"/>
         <hbox>
-            <okbutton def-button="true" height="14" id="PB_OK" width="50" x="61" y="88"/>
+            <okbutton defbutton="true" height="14" id="PB_OK" width="50" x="61" y="88"/>
             <helpbutton height="14" id="PB_HELP" width="50" x="114" y="88"/>
         </hbox>
     </vbox>

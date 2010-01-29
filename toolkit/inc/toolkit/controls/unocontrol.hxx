@@ -124,7 +124,7 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >          getParentPeer() const;
     void                                                                        updateFromModel();
     void                                                                        peerCreated();
-    bool                                                                        ImplMapPlaceHolder( ::rtl::OUString& rPlaceHolder );
+    bool                                                                        ImplCheckLocalize( ::rtl::OUString& _rPossiblyLocalizable );
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >      ImplGetCompatiblePeer( sal_Bool bAcceptExistingPeer );
     virtual void                                                                ImplSetPeerProperty( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any& rVal );
     virtual void                                                                PrepareWindowDescriptor( ::com::sun::star::awt::WindowDescriptor& rDesc );

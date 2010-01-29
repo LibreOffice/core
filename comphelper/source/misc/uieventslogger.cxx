@@ -375,9 +375,10 @@ namespace comphelper
         }
         else
             logdata[2] = UNKNOWN_ORIGIN;
-        logdata[3] = url.Complete;
         if(url.Complete.match(URL_FILE))
             logdata[3] = URL_FILE;
+        else
+            logdata[3] = url.Main;
         m_Logger->log(LogLevel::INFO, m_Formatter->formatMultiColumn(logdata));
         m_SessionLogEventCount++;
     }

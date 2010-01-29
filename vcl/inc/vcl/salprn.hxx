@@ -68,7 +68,7 @@ struct VCL_DLLPUBLIC SalPrinterQueueInfo
 class VCL_DLLPUBLIC SalInfoPrinter
 {
 public:
-    std::vector< vcl::PaperInfo  >      m_aPaperFormats;    // all printer supported formats
+    std::vector< PaperInfo  >           m_aPaperFormats;    // all printer supported formats
     bool                                m_bPapersInit;      // set to true after InitPaperFormats
     bool                                m_bCompatMetrics;
 

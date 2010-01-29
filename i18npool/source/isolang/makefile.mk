@@ -60,7 +60,6 @@ LIB1TARGET=	$(SLB)$/$(SHL1TARGET).lib
 LIB1OBJFILES=$(SHL1OBJS)
 
 SHL1STDLIBS= \
-        $(CPPULIB) \
         $(SALLIB)
 
 # --- Targets ------------------------------------------------------

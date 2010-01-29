@@ -48,9 +48,6 @@
 
 namespace comphelper {
 
-sal_Bool COMPHELPER_DLLPUBLIC IsValidZipEntryFileName(
-    const sal_Unicode *pChar, sal_Int32 nLength, sal_Bool bSlashAllowed );
-
 class COMPHELPER_DLLPUBLIC OStorageHelper
 {
 public:

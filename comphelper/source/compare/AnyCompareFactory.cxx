@@ -31,6 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_comphelper.hxx"
 
+#include "comphelper_module.hxx"
 
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <com/sun/star/i18n/XCollator.hpp>
@@ -44,9 +45,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <comphelper/stl_types.hxx>
-#ifndef __SGI_STL_MAP
 #include <map>
-#endif
 
 
 using namespace com::sun::star::uno;
@@ -81,11 +80,6 @@ public:
 
 //=============================================================================
 
-Sequence< rtl::OUString > SAL_CALL AnyCompareFactory_getSupportedServiceNames() throw();
-rtl::OUString SAL_CALL AnyCompareFactory_getImplementationName() throw();
-Reference< XInterface > SAL_CALL AnyCompareFactory_createInstance(
-                const Reference< XComponentContext >& rxContext ) throw( Exception );
-
 class AnyCompareFactory : public cppu::WeakImplHelper3< XAnyCompareFactory, XInitialization, XServiceInfo >
 {
     Reference< XAnyCompare >            m_rAnyCompare;
@@ -107,6 +101,11 @@ public:
     virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException);
+
+    // XServiceInfo - static versions (used for component registration)
+    static ::rtl::OUString SAL_CALL getImplementationName_static();
+    static Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames_static();
+    static Reference< XInterface > SAL_CALL Create( const Reference< XComponentContext >& );
 };
 
 //===========================================================================================
@@ -157,7 +156,12 @@ void SAL_CALL AnyCompareFactory::initialize( const Sequence< Any >& aArguments )
 
 OUString SAL_CALL AnyCompareFactory::getImplementationName(  ) throw( RuntimeException )
 {
-    return AnyCompareFactory_getImplementationName();
+    return getImplementationName_static();
+}
+
+OUString SAL_CALL AnyCompareFactory::getImplementationName_static(  )
+{
+    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AnyCompareFactory" ) );
 }
 
 sal_Bool SAL_CALL AnyCompareFactory::supportsService( const OUString& ServiceName ) throw(RuntimeException)
@@ -168,24 +172,23 @@ sal_Bool SAL_CALL AnyCompareFactory::supportsService( const OUString& ServiceNam
 
 Sequence< OUString > SAL_CALL AnyCompareFactory::getSupportedServiceNames(  ) throw(RuntimeException)
 {
-    return AnyCompareFactory_getSupportedServiceNames();
+    return getSupportedServiceNames_static();
 }
 
-
-Sequence< rtl::OUString > SAL_CALL AnyCompareFactory_getSupportedServiceNames() throw()
+Sequence< OUString > SAL_CALL AnyCompareFactory::getSupportedServiceNames_static(  )
 {
     const rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.AnyCompareFactory" ) );
     const Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
 
-rtl::OUString SAL_CALL AnyCompareFactory_getImplementationName() throw()
-{
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AnyCompareFactory" ) );
-}
-
-Reference< XInterface > SAL_CALL AnyCompareFactory_createInstance(
-                const Reference< XComponentContext >& rxContext ) throw( Exception )
+Reference< XInterface > SAL_CALL AnyCompareFactory::Create(
+                const Reference< XComponentContext >& rxContext )
 {
     return (cppu::OWeakObject*)new AnyCompareFactory( rxContext );
+}
+
+void createRegistryInfo_AnyCompareFactory()
+{
+    static ::comphelper::module::OAutoRegistration< AnyCompareFactory > aAutoRegistration;
 }

@@ -275,7 +275,7 @@ ModalDialog DLG_DOCTEMPLATE
     HelpId = HID_TEMPLATEDLG_DIALOG ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT( 320, 245 );
+    Size = MAP_APPFONT( 320, 250 );
     Text [ en-US ] = "Templates and Documents" ;
     Moveable = TRUE ;
     FixedText FT_DOCTEMPLATE_LINK
@@ -288,35 +288,35 @@ ModalDialog DLG_DOCTEMPLATE
     FixedLine FL_DOCTEMPLATE
     {
         Pos = MAP_APPFONT( 0, 219 );
-        Size = MAP_APPFONT( 320, 1 );
+        Size = MAP_APPFONT( 320, 8 );
     };
     PushButton BTN_DOCTEMPLATE_MANAGE
     {
-        Pos = MAP_APPFONT( 3, 225 );
+        Pos = MAP_APPFONT( 6, 230 );
         Size = MAP_APPFONT( 50, 14 );
         Text [ en-US ] = "Organi~ze...";
     };
     PushButton BTN_DOCTEMPLATE_EDIT
     {
-        Pos = MAP_APPFONT( 56, 225 );
+        Pos = MAP_APPFONT( 59, 230 );
         Size = MAP_APPFONT( 50, 14 );
         Text [ en-US ] = "~Edit";
     };
     OKButton BTN_DOCTEMPLATE_OPEN
     {
-        Pos = MAP_APPFONT( 158, 225 );
+        Pos = MAP_APPFONT( 155, 230 );
         Size = MAP_APPFONT( 50, 14 );
         DefButton = TRUE;
         Text [ en-US ] = "~Open";
     };
     CancelButton BTN_DOCTEMPLATE_CANCEL
     {
-        Pos = MAP_APPFONT( 211, 225 );
+        Pos = MAP_APPFONT( 208, 230 );
         Size = MAP_APPFONT( 50, 14 );
     };
     HelpButton BTN_DOCTEMPLATE_HELP
     {
-        Pos = MAP_APPFONT( 267, 225 );
+        Pos = MAP_APPFONT( 264, 230 );
         Size = MAP_APPFONT( 50, 14 );
     };
 };

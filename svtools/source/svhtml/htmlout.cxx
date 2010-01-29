@@ -132,216 +132,216 @@ const sal_Char *lcl_svhtml_GetEntityForChar( sal_Unicode c,
 
     switch( c )
     {
-//      case '\x0a':   return HTMLOutFuncs::Out_Tag( rStream, sHTML_linebreak );
+//      case '\x0a':   return HTMLOutFuncs::Out_Tag( rStream, OOO_STRING_SVTOOLS_HTML_linebreak );
 
-    case '<':       pStr = sHTML_C_lt;      break;
-    case '>':       pStr = sHTML_C_gt;      break;
-    case '&':       pStr = sHTML_C_amp;     break;
-    case '"':       pStr = sHTML_C_quot;    break;
+    case '<':       pStr = OOO_STRING_SVTOOLS_HTML_C_lt;        break;
+    case '>':       pStr = OOO_STRING_SVTOOLS_HTML_C_gt;        break;
+    case '&':       pStr = OOO_STRING_SVTOOLS_HTML_C_amp;       break;
+    case '"':       pStr = OOO_STRING_SVTOOLS_HTML_C_quot;  break;
 
-    case 161:       pStr = sHTML_S_iexcl;   break;
-    case 162:       pStr = sHTML_S_cent;    break;
-    case 163:       pStr = sHTML_S_pound;   break;
-    case 164:       pStr = sHTML_S_curren;  break;
-    case 165:       pStr = sHTML_S_yen;     break;
-    case 166:       pStr = sHTML_S_brvbar;  break;
-    case 167:       pStr = sHTML_S_sect;    break;
-    case 168:       pStr = sHTML_S_uml;     break;
-    case 169:       pStr = sHTML_S_copy;    break;
-    case 170:       pStr = sHTML_S_ordf;    break;
-    case 171:       pStr = sHTML_S_laquo;   break;
-    case 172:       pStr = sHTML_S_not;     break;
-    case 174:       pStr = sHTML_S_reg;     break;
-    case 175:       pStr = sHTML_S_macr;    break;
-    case 176:       pStr = sHTML_S_deg;     break;
-    case 177:       pStr = sHTML_S_plusmn;  break;
-    case 178:       pStr = sHTML_S_sup2;    break;
-    case 179:       pStr = sHTML_S_sup3;    break;
-    case 180:       pStr = sHTML_S_acute;   break;
-    case 181:       pStr = sHTML_S_micro;   break;
-    case 182:       pStr = sHTML_S_para;    break;
-    case 183:       pStr = sHTML_S_middot;  break;
-    case 184:       pStr = sHTML_S_cedil;   break;
-    case 185:       pStr = sHTML_S_sup1;    break;
-    case 186:       pStr = sHTML_S_ordm;    break;
-    case 187:       pStr = sHTML_S_raquo;   break;
-    case 188:       pStr = sHTML_S_frac14;  break;
-    case 189:       pStr = sHTML_S_frac12;  break;
-    case 190:       pStr = sHTML_S_frac34;  break;
-    case 191:       pStr = sHTML_S_iquest;  break;
+    case 161:       pStr = OOO_STRING_SVTOOLS_HTML_S_iexcl; break;
+    case 162:       pStr = OOO_STRING_SVTOOLS_HTML_S_cent;  break;
+    case 163:       pStr = OOO_STRING_SVTOOLS_HTML_S_pound; break;
+    case 164:       pStr = OOO_STRING_SVTOOLS_HTML_S_curren;    break;
+    case 165:       pStr = OOO_STRING_SVTOOLS_HTML_S_yen;       break;
+    case 166:       pStr = OOO_STRING_SVTOOLS_HTML_S_brvbar;    break;
+    case 167:       pStr = OOO_STRING_SVTOOLS_HTML_S_sect;  break;
+    case 168:       pStr = OOO_STRING_SVTOOLS_HTML_S_uml;       break;
+    case 169:       pStr = OOO_STRING_SVTOOLS_HTML_S_copy;  break;
+    case 170:       pStr = OOO_STRING_SVTOOLS_HTML_S_ordf;  break;
+    case 171:       pStr = OOO_STRING_SVTOOLS_HTML_S_laquo; break;
+    case 172:       pStr = OOO_STRING_SVTOOLS_HTML_S_not;       break;
+    case 174:       pStr = OOO_STRING_SVTOOLS_HTML_S_reg;       break;
+    case 175:       pStr = OOO_STRING_SVTOOLS_HTML_S_macr;  break;
+    case 176:       pStr = OOO_STRING_SVTOOLS_HTML_S_deg;       break;
+    case 177:       pStr = OOO_STRING_SVTOOLS_HTML_S_plusmn;    break;
+    case 178:       pStr = OOO_STRING_SVTOOLS_HTML_S_sup2;  break;
+    case 179:       pStr = OOO_STRING_SVTOOLS_HTML_S_sup3;  break;
+    case 180:       pStr = OOO_STRING_SVTOOLS_HTML_S_acute; break;
+    case 181:       pStr = OOO_STRING_SVTOOLS_HTML_S_micro; break;
+    case 182:       pStr = OOO_STRING_SVTOOLS_HTML_S_para;  break;
+    case 183:       pStr = OOO_STRING_SVTOOLS_HTML_S_middot;    break;
+    case 184:       pStr = OOO_STRING_SVTOOLS_HTML_S_cedil; break;
+    case 185:       pStr = OOO_STRING_SVTOOLS_HTML_S_sup1;  break;
+    case 186:       pStr = OOO_STRING_SVTOOLS_HTML_S_ordm;  break;
+    case 187:       pStr = OOO_STRING_SVTOOLS_HTML_S_raquo; break;
+    case 188:       pStr = OOO_STRING_SVTOOLS_HTML_S_frac14;    break;
+    case 189:       pStr = OOO_STRING_SVTOOLS_HTML_S_frac12;    break;
+    case 190:       pStr = OOO_STRING_SVTOOLS_HTML_S_frac34;    break;
+    case 191:       pStr = OOO_STRING_SVTOOLS_HTML_S_iquest;    break;
 
-    case 192:       pStr = sHTML_C_Agrave;  break;
-    case 193:       pStr = sHTML_C_Aacute;  break;
-    case 194:       pStr = sHTML_C_Acirc;   break;
-    case 195:       pStr = sHTML_C_Atilde;  break;
-    case 196:       pStr = sHTML_C_Auml;    break;
-    case 197:       pStr = sHTML_C_Aring;   break;
-    case 198:       pStr = sHTML_C_AElig;   break;
-    case 199:       pStr = sHTML_C_Ccedil;  break;
-    case 200:       pStr = sHTML_C_Egrave;  break;
-    case 201:       pStr = sHTML_C_Eacute;  break;
-    case 202:       pStr = sHTML_C_Ecirc;   break;
-    case 203:       pStr = sHTML_C_Euml;    break;
-    case 204:       pStr = sHTML_C_Igrave;  break;
-    case 205:       pStr = sHTML_C_Iacute;  break;
-    case 206:       pStr = sHTML_C_Icirc;   break;
-    case 207:       pStr = sHTML_C_Iuml;    break;
-    case 208:       pStr = sHTML_C_ETH;     break;
-    case 209:       pStr = sHTML_C_Ntilde;  break;
-    case 210:       pStr = sHTML_C_Ograve;  break;
-    case 211:       pStr = sHTML_C_Oacute;  break;
-    case 212:       pStr = sHTML_C_Ocirc;   break;
-    case 213:       pStr = sHTML_C_Otilde;  break;
-    case 214:       pStr = sHTML_C_Ouml;    break;
-    case 215:       pStr = sHTML_S_times;   break;
-    case 216:       pStr = sHTML_C_Oslash;  break;
-    case 217:       pStr = sHTML_C_Ugrave;  break;
-    case 218:       pStr = sHTML_C_Uacute;  break;
-    case 219:       pStr = sHTML_C_Ucirc;   break;
-    case 220:       pStr = sHTML_C_Uuml;    break;
-    case 221:       pStr = sHTML_C_Yacute;  break;
+    case 192:       pStr = OOO_STRING_SVTOOLS_HTML_C_Agrave;    break;
+    case 193:       pStr = OOO_STRING_SVTOOLS_HTML_C_Aacute;    break;
+    case 194:       pStr = OOO_STRING_SVTOOLS_HTML_C_Acirc; break;
+    case 195:       pStr = OOO_STRING_SVTOOLS_HTML_C_Atilde;    break;
+    case 196:       pStr = OOO_STRING_SVTOOLS_HTML_C_Auml;  break;
+    case 197:       pStr = OOO_STRING_SVTOOLS_HTML_C_Aring; break;
+    case 198:       pStr = OOO_STRING_SVTOOLS_HTML_C_AElig; break;
+    case 199:       pStr = OOO_STRING_SVTOOLS_HTML_C_Ccedil;    break;
+    case 200:       pStr = OOO_STRING_SVTOOLS_HTML_C_Egrave;    break;
+    case 201:       pStr = OOO_STRING_SVTOOLS_HTML_C_Eacute;    break;
+    case 202:       pStr = OOO_STRING_SVTOOLS_HTML_C_Ecirc; break;
+    case 203:       pStr = OOO_STRING_SVTOOLS_HTML_C_Euml;  break;
+    case 204:       pStr = OOO_STRING_SVTOOLS_HTML_C_Igrave;    break;
+    case 205:       pStr = OOO_STRING_SVTOOLS_HTML_C_Iacute;    break;
+    case 206:       pStr = OOO_STRING_SVTOOLS_HTML_C_Icirc; break;
+    case 207:       pStr = OOO_STRING_SVTOOLS_HTML_C_Iuml;  break;
+    case 208:       pStr = OOO_STRING_SVTOOLS_HTML_C_ETH;       break;
+    case 209:       pStr = OOO_STRING_SVTOOLS_HTML_C_Ntilde;    break;
+    case 210:       pStr = OOO_STRING_SVTOOLS_HTML_C_Ograve;    break;
+    case 211:       pStr = OOO_STRING_SVTOOLS_HTML_C_Oacute;    break;
+    case 212:       pStr = OOO_STRING_SVTOOLS_HTML_C_Ocirc; break;
+    case 213:       pStr = OOO_STRING_SVTOOLS_HTML_C_Otilde;    break;
+    case 214:       pStr = OOO_STRING_SVTOOLS_HTML_C_Ouml;  break;
+    case 215:       pStr = OOO_STRING_SVTOOLS_HTML_S_times; break;
+    case 216:       pStr = OOO_STRING_SVTOOLS_HTML_C_Oslash;    break;
+    case 217:       pStr = OOO_STRING_SVTOOLS_HTML_C_Ugrave;    break;
+    case 218:       pStr = OOO_STRING_SVTOOLS_HTML_C_Uacute;    break;
+    case 219:       pStr = OOO_STRING_SVTOOLS_HTML_C_Ucirc; break;
+    case 220:       pStr = OOO_STRING_SVTOOLS_HTML_C_Uuml;  break;
+    case 221:       pStr = OOO_STRING_SVTOOLS_HTML_C_Yacute;    break;
 
-    case 222:       pStr = sHTML_C_THORN;   break;
-    case 223:       pStr = sHTML_C_szlig;   break;
+    case 222:       pStr = OOO_STRING_SVTOOLS_HTML_C_THORN; break;
+    case 223:       pStr = OOO_STRING_SVTOOLS_HTML_C_szlig; break;
 
-    case 224:       pStr = sHTML_S_agrave;  break;
-    case 225:       pStr = sHTML_S_aacute;  break;
-    case 226:       pStr = sHTML_S_acirc;   break;
-    case 227:       pStr = sHTML_S_atilde;  break;
-    case 228:       pStr = sHTML_S_auml;    break;
-    case 229:       pStr = sHTML_S_aring;   break;
-    case 230:       pStr = sHTML_S_aelig;   break;
-    case 231:       pStr = sHTML_S_ccedil;  break;
-    case 232:       pStr = sHTML_S_egrave;  break;
-    case 233:       pStr = sHTML_S_eacute;  break;
-    case 234:       pStr = sHTML_S_ecirc;   break;
-    case 235:       pStr = sHTML_S_euml;    break;
-    case 236:       pStr = sHTML_S_igrave;  break;
-    case 237:       pStr = sHTML_S_iacute;  break;
-    case 238:       pStr = sHTML_S_icirc;   break;
-    case 239:       pStr = sHTML_S_iuml;    break;
-    case 240:       pStr = sHTML_S_eth;     break;
-    case 241:       pStr = sHTML_S_ntilde;  break;
-    case 242:       pStr = sHTML_S_ograve;  break;
-    case 243:       pStr = sHTML_S_oacute;  break;
-    case 244:       pStr = sHTML_S_ocirc;   break;
-    case 245:       pStr = sHTML_S_otilde;  break;
-    case 246:       pStr = sHTML_S_ouml;    break;
-    case 247:       pStr = sHTML_S_divide;  break;
-    case 248:       pStr = sHTML_S_oslash;  break;
-    case 249:       pStr = sHTML_S_ugrave;  break;
-    case 250:       pStr = sHTML_S_uacute;  break;
-    case 251:       pStr = sHTML_S_ucirc;   break;
-    case 252:       pStr = sHTML_S_uuml;    break;
-    case 253:       pStr = sHTML_S_yacute;  break;
-    case 254:       pStr = sHTML_S_thorn;   break;
-    case 255:       pStr = sHTML_S_yuml;    break;
+    case 224:       pStr = OOO_STRING_SVTOOLS_HTML_S_agrave;    break;
+    case 225:       pStr = OOO_STRING_SVTOOLS_HTML_S_aacute;    break;
+    case 226:       pStr = OOO_STRING_SVTOOLS_HTML_S_acirc; break;
+    case 227:       pStr = OOO_STRING_SVTOOLS_HTML_S_atilde;    break;
+    case 228:       pStr = OOO_STRING_SVTOOLS_HTML_S_auml;  break;
+    case 229:       pStr = OOO_STRING_SVTOOLS_HTML_S_aring; break;
+    case 230:       pStr = OOO_STRING_SVTOOLS_HTML_S_aelig; break;
+    case 231:       pStr = OOO_STRING_SVTOOLS_HTML_S_ccedil;    break;
+    case 232:       pStr = OOO_STRING_SVTOOLS_HTML_S_egrave;    break;
+    case 233:       pStr = OOO_STRING_SVTOOLS_HTML_S_eacute;    break;
+    case 234:       pStr = OOO_STRING_SVTOOLS_HTML_S_ecirc; break;
+    case 235:       pStr = OOO_STRING_SVTOOLS_HTML_S_euml;  break;
+    case 236:       pStr = OOO_STRING_SVTOOLS_HTML_S_igrave;    break;
+    case 237:       pStr = OOO_STRING_SVTOOLS_HTML_S_iacute;    break;
+    case 238:       pStr = OOO_STRING_SVTOOLS_HTML_S_icirc; break;
+    case 239:       pStr = OOO_STRING_SVTOOLS_HTML_S_iuml;  break;
+    case 240:       pStr = OOO_STRING_SVTOOLS_HTML_S_eth;       break;
+    case 241:       pStr = OOO_STRING_SVTOOLS_HTML_S_ntilde;    break;
+    case 242:       pStr = OOO_STRING_SVTOOLS_HTML_S_ograve;    break;
+    case 243:       pStr = OOO_STRING_SVTOOLS_HTML_S_oacute;    break;
+    case 244:       pStr = OOO_STRING_SVTOOLS_HTML_S_ocirc; break;
+    case 245:       pStr = OOO_STRING_SVTOOLS_HTML_S_otilde;    break;
+    case 246:       pStr = OOO_STRING_SVTOOLS_HTML_S_ouml;  break;
+    case 247:       pStr = OOO_STRING_SVTOOLS_HTML_S_divide;    break;
+    case 248:       pStr = OOO_STRING_SVTOOLS_HTML_S_oslash;    break;
+    case 249:       pStr = OOO_STRING_SVTOOLS_HTML_S_ugrave;    break;
+    case 250:       pStr = OOO_STRING_SVTOOLS_HTML_S_uacute;    break;
+    case 251:       pStr = OOO_STRING_SVTOOLS_HTML_S_ucirc; break;
+    case 252:       pStr = OOO_STRING_SVTOOLS_HTML_S_uuml;  break;
+    case 253:       pStr = OOO_STRING_SVTOOLS_HTML_S_yacute;    break;
+    case 254:       pStr = OOO_STRING_SVTOOLS_HTML_S_thorn; break;
+    case 255:       pStr = OOO_STRING_SVTOOLS_HTML_S_yuml;  break;
 
-    case 338:       pStr = sHTML_S_OElig;   break;
-    case 339:       pStr = sHTML_S_oelig;   break;
-    case 352:       pStr = sHTML_S_Scaron;  break;
-    case 353:       pStr = sHTML_S_scaron;  break;
-    case 376:       pStr = sHTML_S_Yuml;    break;
-    case 402:       pStr = sHTML_S_fnof;    break;
-    case 710:       pStr = sHTML_S_circ;    break;
-    case 732:       pStr = sHTML_S_tilde;   break;
+    case 338:       pStr = OOO_STRING_SVTOOLS_HTML_S_OElig; break;
+    case 339:       pStr = OOO_STRING_SVTOOLS_HTML_S_oelig; break;
+    case 352:       pStr = OOO_STRING_SVTOOLS_HTML_S_Scaron;    break;
+    case 353:       pStr = OOO_STRING_SVTOOLS_HTML_S_scaron;    break;
+    case 376:       pStr = OOO_STRING_SVTOOLS_HTML_S_Yuml;  break;
+    case 402:       pStr = OOO_STRING_SVTOOLS_HTML_S_fnof;  break;
+    case 710:       pStr = OOO_STRING_SVTOOLS_HTML_S_circ;  break;
+    case 732:       pStr = OOO_STRING_SVTOOLS_HTML_S_tilde; break;
 
     // Greek chars are handled later,
     // since they should *not* be transformed to entities
     // when generating Greek text (== using Greek encoding)
 
-    case 8194:      pStr = sHTML_S_ensp;    break;
-    case 8195:      pStr = sHTML_S_emsp;    break;
-    case 8201:      pStr = sHTML_S_thinsp;  break;
-    case 8204:      pStr = sHTML_S_zwnj;    break;
-    case 8205:      pStr = sHTML_S_zwj;     break;
-    case 8206:      pStr = sHTML_S_lrm;     break;
-    case 8207:      pStr = sHTML_S_rlm;     break;
-    case 8211:      pStr = sHTML_S_ndash;   break;
-    case 8212:      pStr = sHTML_S_mdash;   break;
-    case 8216:      pStr = sHTML_S_lsquo;   break;
-    case 8217:      pStr = sHTML_S_rsquo;   break;
-    case 8218:      pStr = sHTML_S_sbquo;   break;
-    case 8220:      pStr = sHTML_S_ldquo;   break;
-    case 8221:      pStr = sHTML_S_rdquo;   break;
-    case 8222:      pStr = sHTML_S_bdquo;   break;
-    case 8224:      pStr = sHTML_S_dagger;  break;
-    case 8225:      pStr = sHTML_S_Dagger;  break;
-    case 8226:      pStr = sHTML_S_bull;    break;
-    case 8230:      pStr = sHTML_S_hellip;  break;
-    case 8240:      pStr = sHTML_S_permil;  break;
-    case 8242:      pStr = sHTML_S_prime;   break;
-    case 8243:      pStr = sHTML_S_Prime;   break;
-    case 8249:      pStr = sHTML_S_lsaquo;  break;
-    case 8250:      pStr = sHTML_S_rsaquo;  break;
-    case 8254:      pStr = sHTML_S_oline;   break;
-    case 8260:      pStr = sHTML_S_frasl;   break;
-    case 8364:      pStr = sHTML_S_euro;    break;
-    case 8465:      pStr = sHTML_S_image;   break;
-    case 8472:      pStr = sHTML_S_weierp;  break;
-    case 8476:      pStr = sHTML_S_real;    break;
-    case 8482:      pStr = sHTML_S_trade;   break;
-    case 8501:      pStr = sHTML_S_alefsym; break;
-    case 8592:      pStr = sHTML_S_larr;    break;
-    case 8593:      pStr = sHTML_S_uarr;    break;
-    case 8594:      pStr = sHTML_S_rarr;    break;
-    case 8595:      pStr = sHTML_S_darr;    break;
-    case 8596:      pStr = sHTML_S_harr;    break;
-    case 8629:      pStr = sHTML_S_crarr;   break;
-    case 8656:      pStr = sHTML_S_lArr;    break;
-    case 8657:      pStr = sHTML_S_uArr;    break;
-    case 8658:      pStr = sHTML_S_rArr;    break;
-    case 8659:      pStr = sHTML_S_dArr;    break;
-    case 8660:      pStr = sHTML_S_hArr;    break;
-    case 8704:      pStr = sHTML_S_forall;  break;
-    case 8706:      pStr = sHTML_S_part;    break;
-    case 8707:      pStr = sHTML_S_exist;   break;
-    case 8709:      pStr = sHTML_S_empty;   break;
-    case 8711:      pStr = sHTML_S_nabla;   break;
-    case 8712:      pStr = sHTML_S_isin;    break;
-    case 8713:      pStr = sHTML_S_notin;   break;
-    case 8715:      pStr = sHTML_S_ni;      break;
-    case 8719:      pStr = sHTML_S_prod;    break;
-    case 8721:      pStr = sHTML_S_sum;     break;
-    case 8722:      pStr = sHTML_S_minus;   break;
-    case 8727:      pStr = sHTML_S_lowast;  break;
-    case 8730:      pStr = sHTML_S_radic;   break;
-    case 8733:      pStr = sHTML_S_prop;    break;
-    case 8734:      pStr = sHTML_S_infin;   break;
-    case 8736:      pStr = sHTML_S_ang;     break;
-    case 8743:      pStr = sHTML_S_and;     break;
-    case 8744:      pStr = sHTML_S_or;      break;
-    case 8745:      pStr = sHTML_S_cap;     break;
-    case 8746:      pStr = sHTML_S_cup;     break;
-    case 8747:      pStr = sHTML_S_int;     break;
-    case 8756:      pStr = sHTML_S_there4;  break;
-    case 8764:      pStr = sHTML_S_sim;     break;
-    case 8773:      pStr = sHTML_S_cong;    break;
-    case 8776:      pStr = sHTML_S_asymp;   break;
-    case 8800:      pStr = sHTML_S_ne;      break;
-    case 8801:      pStr = sHTML_S_equiv;   break;
-    case 8804:      pStr = sHTML_S_le;      break;
-    case 8805:      pStr = sHTML_S_ge;      break;
-    case 8834:      pStr = sHTML_S_sub;     break;
-    case 8835:      pStr = sHTML_S_sup;     break;
-    case 8836:      pStr = sHTML_S_nsub;    break;
-    case 8838:      pStr = sHTML_S_sube;    break;
-    case 8839:      pStr = sHTML_S_supe;    break;
-    case 8853:      pStr = sHTML_S_oplus;   break;
-    case 8855:      pStr = sHTML_S_otimes;  break;
-    case 8869:      pStr = sHTML_S_perp;    break;
-    case 8901:      pStr = sHTML_S_sdot;    break;
-    case 8968:      pStr = sHTML_S_lceil;   break;
-    case 8969:      pStr = sHTML_S_rceil;   break;
-    case 8970:      pStr = sHTML_S_lfloor;  break;
-    case 8971:      pStr = sHTML_S_rfloor;  break;
-    case 9001:      pStr = sHTML_S_lang;    break;
-    case 9002:      pStr = sHTML_S_rang;    break;
-    case 9674:      pStr = sHTML_S_loz;     break;
-    case 9824:      pStr = sHTML_S_spades;  break;
-    case 9827:      pStr = sHTML_S_clubs;   break;
-    case 9829:      pStr = sHTML_S_hearts;  break;
-    case 9830:      pStr = sHTML_S_diams;   break;
+    case 8194:      pStr = OOO_STRING_SVTOOLS_HTML_S_ensp;  break;
+    case 8195:      pStr = OOO_STRING_SVTOOLS_HTML_S_emsp;  break;
+    case 8201:      pStr = OOO_STRING_SVTOOLS_HTML_S_thinsp;    break;
+    case 8204:      pStr = OOO_STRING_SVTOOLS_HTML_S_zwnj;  break;
+    case 8205:      pStr = OOO_STRING_SVTOOLS_HTML_S_zwj;       break;
+    case 8206:      pStr = OOO_STRING_SVTOOLS_HTML_S_lrm;       break;
+    case 8207:      pStr = OOO_STRING_SVTOOLS_HTML_S_rlm;       break;
+    case 8211:      pStr = OOO_STRING_SVTOOLS_HTML_S_ndash; break;
+    case 8212:      pStr = OOO_STRING_SVTOOLS_HTML_S_mdash; break;
+    case 8216:      pStr = OOO_STRING_SVTOOLS_HTML_S_lsquo; break;
+    case 8217:      pStr = OOO_STRING_SVTOOLS_HTML_S_rsquo; break;
+    case 8218:      pStr = OOO_STRING_SVTOOLS_HTML_S_sbquo; break;
+    case 8220:      pStr = OOO_STRING_SVTOOLS_HTML_S_ldquo; break;
+    case 8221:      pStr = OOO_STRING_SVTOOLS_HTML_S_rdquo; break;
+    case 8222:      pStr = OOO_STRING_SVTOOLS_HTML_S_bdquo; break;
+    case 8224:      pStr = OOO_STRING_SVTOOLS_HTML_S_dagger;    break;
+    case 8225:      pStr = OOO_STRING_SVTOOLS_HTML_S_Dagger;    break;
+    case 8226:      pStr = OOO_STRING_SVTOOLS_HTML_S_bull;  break;
+    case 8230:      pStr = OOO_STRING_SVTOOLS_HTML_S_hellip;    break;
+    case 8240:      pStr = OOO_STRING_SVTOOLS_HTML_S_permil;    break;
+    case 8242:      pStr = OOO_STRING_SVTOOLS_HTML_S_prime; break;
+    case 8243:      pStr = OOO_STRING_SVTOOLS_HTML_S_Prime; break;
+    case 8249:      pStr = OOO_STRING_SVTOOLS_HTML_S_lsaquo;    break;
+    case 8250:      pStr = OOO_STRING_SVTOOLS_HTML_S_rsaquo;    break;
+    case 8254:      pStr = OOO_STRING_SVTOOLS_HTML_S_oline; break;
+    case 8260:      pStr = OOO_STRING_SVTOOLS_HTML_S_frasl; break;
+    case 8364:      pStr = OOO_STRING_SVTOOLS_HTML_S_euro;  break;
+    case 8465:      pStr = OOO_STRING_SVTOOLS_HTML_S_image; break;
+    case 8472:      pStr = OOO_STRING_SVTOOLS_HTML_S_weierp;    break;
+    case 8476:      pStr = OOO_STRING_SVTOOLS_HTML_S_real;  break;
+    case 8482:      pStr = OOO_STRING_SVTOOLS_HTML_S_trade; break;
+    case 8501:      pStr = OOO_STRING_SVTOOLS_HTML_S_alefsym;   break;
+    case 8592:      pStr = OOO_STRING_SVTOOLS_HTML_S_larr;  break;
+    case 8593:      pStr = OOO_STRING_SVTOOLS_HTML_S_uarr;  break;
+    case 8594:      pStr = OOO_STRING_SVTOOLS_HTML_S_rarr;  break;
+    case 8595:      pStr = OOO_STRING_SVTOOLS_HTML_S_darr;  break;
+    case 8596:      pStr = OOO_STRING_SVTOOLS_HTML_S_harr;  break;
+    case 8629:      pStr = OOO_STRING_SVTOOLS_HTML_S_crarr; break;
+    case 8656:      pStr = OOO_STRING_SVTOOLS_HTML_S_lArr;  break;
+    case 8657:      pStr = OOO_STRING_SVTOOLS_HTML_S_uArr;  break;
+    case 8658:      pStr = OOO_STRING_SVTOOLS_HTML_S_rArr;  break;
+    case 8659:      pStr = OOO_STRING_SVTOOLS_HTML_S_dArr;  break;
+    case 8660:      pStr = OOO_STRING_SVTOOLS_HTML_S_hArr;  break;
+    case 8704:      pStr = OOO_STRING_SVTOOLS_HTML_S_forall;    break;
+    case 8706:      pStr = OOO_STRING_SVTOOLS_HTML_S_part;  break;
+    case 8707:      pStr = OOO_STRING_SVTOOLS_HTML_S_exist; break;
+    case 8709:      pStr = OOO_STRING_SVTOOLS_HTML_S_empty; break;
+    case 8711:      pStr = OOO_STRING_SVTOOLS_HTML_S_nabla; break;
+    case 8712:      pStr = OOO_STRING_SVTOOLS_HTML_S_isin;  break;
+    case 8713:      pStr = OOO_STRING_SVTOOLS_HTML_S_notin; break;
+    case 8715:      pStr = OOO_STRING_SVTOOLS_HTML_S_ni;        break;
+    case 8719:      pStr = OOO_STRING_SVTOOLS_HTML_S_prod;  break;
+    case 8721:      pStr = OOO_STRING_SVTOOLS_HTML_S_sum;       break;
+    case 8722:      pStr = OOO_STRING_SVTOOLS_HTML_S_minus; break;
+    case 8727:      pStr = OOO_STRING_SVTOOLS_HTML_S_lowast;    break;
+    case 8730:      pStr = OOO_STRING_SVTOOLS_HTML_S_radic; break;
+    case 8733:      pStr = OOO_STRING_SVTOOLS_HTML_S_prop;  break;
+    case 8734:      pStr = OOO_STRING_SVTOOLS_HTML_S_infin; break;
+    case 8736:      pStr = OOO_STRING_SVTOOLS_HTML_S_ang;       break;
+    case 8743:      pStr = OOO_STRING_SVTOOLS_HTML_S_and;       break;
+    case 8744:      pStr = OOO_STRING_SVTOOLS_HTML_S_or;        break;
+    case 8745:      pStr = OOO_STRING_SVTOOLS_HTML_S_cap;       break;
+    case 8746:      pStr = OOO_STRING_SVTOOLS_HTML_S_cup;       break;
+    case 8747:      pStr = OOO_STRING_SVTOOLS_HTML_S_int;       break;
+    case 8756:      pStr = OOO_STRING_SVTOOLS_HTML_S_there4;    break;
+    case 8764:      pStr = OOO_STRING_SVTOOLS_HTML_S_sim;       break;
+    case 8773:      pStr = OOO_STRING_SVTOOLS_HTML_S_cong;  break;
+    case 8776:      pStr = OOO_STRING_SVTOOLS_HTML_S_asymp; break;
+    case 8800:      pStr = OOO_STRING_SVTOOLS_HTML_S_ne;        break;
+    case 8801:      pStr = OOO_STRING_SVTOOLS_HTML_S_equiv; break;
+    case 8804:      pStr = OOO_STRING_SVTOOLS_HTML_S_le;        break;
+    case 8805:      pStr = OOO_STRING_SVTOOLS_HTML_S_ge;        break;
+    case 8834:      pStr = OOO_STRING_SVTOOLS_HTML_S_sub;       break;
+    case 8835:      pStr = OOO_STRING_SVTOOLS_HTML_S_sup;       break;
+    case 8836:      pStr = OOO_STRING_SVTOOLS_HTML_S_nsub;  break;
+    case 8838:      pStr = OOO_STRING_SVTOOLS_HTML_S_sube;  break;
+    case 8839:      pStr = OOO_STRING_SVTOOLS_HTML_S_supe;  break;
+    case 8853:      pStr = OOO_STRING_SVTOOLS_HTML_S_oplus; break;
+    case 8855:      pStr = OOO_STRING_SVTOOLS_HTML_S_otimes;    break;
+    case 8869:      pStr = OOO_STRING_SVTOOLS_HTML_S_perp;  break;
+    case 8901:      pStr = OOO_STRING_SVTOOLS_HTML_S_sdot;  break;
+    case 8968:      pStr = OOO_STRING_SVTOOLS_HTML_S_lceil; break;
+    case 8969:      pStr = OOO_STRING_SVTOOLS_HTML_S_rceil; break;
+    case 8970:      pStr = OOO_STRING_SVTOOLS_HTML_S_lfloor;    break;
+    case 8971:      pStr = OOO_STRING_SVTOOLS_HTML_S_rfloor;    break;
+    case 9001:      pStr = OOO_STRING_SVTOOLS_HTML_S_lang;  break;
+    case 9002:      pStr = OOO_STRING_SVTOOLS_HTML_S_rang;  break;
+    case 9674:      pStr = OOO_STRING_SVTOOLS_HTML_S_loz;       break;
+    case 9824:      pStr = OOO_STRING_SVTOOLS_HTML_S_spades;    break;
+    case 9827:      pStr = OOO_STRING_SVTOOLS_HTML_S_clubs; break;
+    case 9829:      pStr = OOO_STRING_SVTOOLS_HTML_S_hearts;    break;
+    case 9830:      pStr = OOO_STRING_SVTOOLS_HTML_S_diams; break;
     }
 
     // Greek chars: if we do not produce a Greek encoding,
@@ -352,58 +352,58 @@ const sal_Char *lcl_svhtml_GetEntityForChar( sal_Unicode c,
     {
         switch( c )
         {
-        case 913:       pStr = sHTML_S_Alpha;   break;
-        case 914:       pStr = sHTML_S_Beta;    break;
-        case 915:       pStr = sHTML_S_Gamma;   break;
-        case 916:       pStr = sHTML_S_Delta;   break;
-        case 917:       pStr = sHTML_S_Epsilon; break;
-        case 918:       pStr = sHTML_S_Zeta;    break;
-        case 919:       pStr = sHTML_S_Eta;     break;
-        case 920:       pStr = sHTML_S_Theta;   break;
-        case 921:       pStr = sHTML_S_Iota;    break;
-        case 922:       pStr = sHTML_S_Kappa;   break;
-        case 923:       pStr = sHTML_S_Lambda;  break;
-        case 924:       pStr = sHTML_S_Mu;      break;
-        case 925:       pStr = sHTML_S_Nu;      break;
-        case 926:       pStr = sHTML_S_Xi;      break;
-        case 927:       pStr = sHTML_S_Omicron; break;
-        case 928:       pStr = sHTML_S_Pi;      break;
-        case 929:       pStr = sHTML_S_Rho;     break;
-        case 931:       pStr = sHTML_S_Sigma;   break;
-        case 932:       pStr = sHTML_S_Tau;     break;
-        case 933:       pStr = sHTML_S_Upsilon; break;
-        case 934:       pStr = sHTML_S_Phi;     break;
-        case 935:       pStr = sHTML_S_Chi;     break;
-        case 936:       pStr = sHTML_S_Psi;     break;
-        case 937:       pStr = sHTML_S_Omega;   break;
-        case 945:       pStr = sHTML_S_alpha;   break;
-        case 946:       pStr = sHTML_S_beta;    break;
-        case 947:       pStr = sHTML_S_gamma;   break;
-        case 948:       pStr = sHTML_S_delta;   break;
-        case 949:       pStr = sHTML_S_epsilon; break;
-        case 950:       pStr = sHTML_S_zeta;    break;
-        case 951:       pStr = sHTML_S_eta;     break;
-        case 952:       pStr = sHTML_S_theta;   break;
-        case 953:       pStr = sHTML_S_iota;    break;
-        case 954:       pStr = sHTML_S_kappa;   break;
-        case 955:       pStr = sHTML_S_lambda;  break;
-        case 956:       pStr = sHTML_S_mu;      break;
-        case 957:       pStr = sHTML_S_nu;      break;
-        case 958:       pStr = sHTML_S_xi;      break;
-        case 959:       pStr = sHTML_S_omicron; break;
-        case 960:       pStr = sHTML_S_pi;      break;
-        case 961:       pStr = sHTML_S_rho;     break;
-        case 962:       pStr = sHTML_S_sigmaf;  break;
-        case 963:       pStr = sHTML_S_sigma;   break;
-        case 964:       pStr = sHTML_S_tau;     break;
-        case 965:       pStr = sHTML_S_upsilon; break;
-        case 966:       pStr = sHTML_S_phi;     break;
-        case 967:       pStr = sHTML_S_chi;     break;
-        case 968:       pStr = sHTML_S_psi;     break;
-        case 969:       pStr = sHTML_S_omega;   break;
-        case 977:       pStr = sHTML_S_thetasym;break;
-        case 978:       pStr = sHTML_S_upsih;   break;
-        case 982:       pStr = sHTML_S_piv;     break;
+        case 913:       pStr = OOO_STRING_SVTOOLS_HTML_S_Alpha; break;
+        case 914:       pStr = OOO_STRING_SVTOOLS_HTML_S_Beta;  break;
+        case 915:       pStr = OOO_STRING_SVTOOLS_HTML_S_Gamma; break;
+        case 916:       pStr = OOO_STRING_SVTOOLS_HTML_S_Delta; break;
+        case 917:       pStr = OOO_STRING_SVTOOLS_HTML_S_Epsilon;   break;
+        case 918:       pStr = OOO_STRING_SVTOOLS_HTML_S_Zeta;  break;
+        case 919:       pStr = OOO_STRING_SVTOOLS_HTML_S_Eta;       break;
+        case 920:       pStr = OOO_STRING_SVTOOLS_HTML_S_Theta; break;
+        case 921:       pStr = OOO_STRING_SVTOOLS_HTML_S_Iota;  break;
+        case 922:       pStr = OOO_STRING_SVTOOLS_HTML_S_Kappa; break;
+        case 923:       pStr = OOO_STRING_SVTOOLS_HTML_S_Lambda;    break;
+        case 924:       pStr = OOO_STRING_SVTOOLS_HTML_S_Mu;        break;
+        case 925:       pStr = OOO_STRING_SVTOOLS_HTML_S_Nu;        break;
+        case 926:       pStr = OOO_STRING_SVTOOLS_HTML_S_Xi;        break;
+        case 927:       pStr = OOO_STRING_SVTOOLS_HTML_S_Omicron;   break;
+        case 928:       pStr = OOO_STRING_SVTOOLS_HTML_S_Pi;        break;
+        case 929:       pStr = OOO_STRING_SVTOOLS_HTML_S_Rho;       break;
+        case 931:       pStr = OOO_STRING_SVTOOLS_HTML_S_Sigma; break;
+        case 932:       pStr = OOO_STRING_SVTOOLS_HTML_S_Tau;       break;
+        case 933:       pStr = OOO_STRING_SVTOOLS_HTML_S_Upsilon;   break;
+        case 934:       pStr = OOO_STRING_SVTOOLS_HTML_S_Phi;       break;
+        case 935:       pStr = OOO_STRING_SVTOOLS_HTML_S_Chi;       break;
+        case 936:       pStr = OOO_STRING_SVTOOLS_HTML_S_Psi;       break;
+        case 937:       pStr = OOO_STRING_SVTOOLS_HTML_S_Omega; break;
+        case 945:       pStr = OOO_STRING_SVTOOLS_HTML_S_alpha; break;
+        case 946:       pStr = OOO_STRING_SVTOOLS_HTML_S_beta;  break;
+        case 947:       pStr = OOO_STRING_SVTOOLS_HTML_S_gamma; break;
+        case 948:       pStr = OOO_STRING_SVTOOLS_HTML_S_delta; break;
+        case 949:       pStr = OOO_STRING_SVTOOLS_HTML_S_epsilon;   break;
+        case 950:       pStr = OOO_STRING_SVTOOLS_HTML_S_zeta;  break;
+        case 951:       pStr = OOO_STRING_SVTOOLS_HTML_S_eta;       break;
+        case 952:       pStr = OOO_STRING_SVTOOLS_HTML_S_theta; break;
+        case 953:       pStr = OOO_STRING_SVTOOLS_HTML_S_iota;  break;
+        case 954:       pStr = OOO_STRING_SVTOOLS_HTML_S_kappa; break;
+        case 955:       pStr = OOO_STRING_SVTOOLS_HTML_S_lambda;    break;
+        case 956:       pStr = OOO_STRING_SVTOOLS_HTML_S_mu;        break;
+        case 957:       pStr = OOO_STRING_SVTOOLS_HTML_S_nu;        break;
+        case 958:       pStr = OOO_STRING_SVTOOLS_HTML_S_xi;        break;
+        case 959:       pStr = OOO_STRING_SVTOOLS_HTML_S_omicron;   break;
+        case 960:       pStr = OOO_STRING_SVTOOLS_HTML_S_pi;        break;
+        case 961:       pStr = OOO_STRING_SVTOOLS_HTML_S_rho;       break;
+        case 962:       pStr = OOO_STRING_SVTOOLS_HTML_S_sigmaf;    break;
+        case 963:       pStr = OOO_STRING_SVTOOLS_HTML_S_sigma; break;
+        case 964:       pStr = OOO_STRING_SVTOOLS_HTML_S_tau;       break;
+        case 965:       pStr = OOO_STRING_SVTOOLS_HTML_S_upsilon;   break;
+        case 966:       pStr = OOO_STRING_SVTOOLS_HTML_S_phi;       break;
+        case 967:       pStr = OOO_STRING_SVTOOLS_HTML_S_chi;       break;
+        case 968:       pStr = OOO_STRING_SVTOOLS_HTML_S_psi;       break;
+        case 969:       pStr = OOO_STRING_SVTOOLS_HTML_S_omega; break;
+        case 977:       pStr = OOO_STRING_SVTOOLS_HTML_S_thetasym;break;
+        case 978:       pStr = OOO_STRING_SVTOOLS_HTML_S_upsih; break;
+        case 982:       pStr = OOO_STRING_SVTOOLS_HTML_S_piv;       break;
         }
     }
 
@@ -423,10 +423,10 @@ void lcl_ConvertCharToHTML( sal_Unicode c, ByteString& rDest,
 //!! the TextConverter has a problem with this character - so change it to
 // a hard space - that's the same as our 5.2
     case 0x2011:    // is a hard hyphen
-        pStr = sHTML_S_nbsp;
+        pStr = OOO_STRING_SVTOOLS_HTML_S_nbsp;
         break;
     case 0xAD:      // is a soft hyphen
-        pStr = sHTML_S_shy;
+        pStr = OOO_STRING_SVTOOLS_HTML_S_shy;
         break;
     default:
         // There may be an entity for the character.
@@ -634,9 +634,9 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
         return rStream;
 
     ByteString sOut( '<' );
-    sOut.Append( RTL_CONSTASCII_STRINGPARAM(sHTML_map ) );
+    sOut.Append( RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_map ) );
     sOut.Append( ' ' );
-    sOut.Append( RTL_CONSTASCII_STRINGPARAM(sHTML_O_name) );
+    sOut.Append( RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_O_name) );
     sOut.Append( RTL_CONSTASCII_STRINGPARAM("=\"") );
     rStream << sOut.GetBuffer();
     sOut.Erase();
@@ -658,7 +658,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                 {
                     const IMapRectangleObject* pRectObj =
                         (const IMapRectangleObject *)pObj;
-                    pShape = sHTML_SH_rect;
+                    pShape = OOO_STRING_SVTOOLS_HTML_SH_rect;
                     Rectangle aRect( pRectObj->GetRectangle() );
                     ((((((aCoords =
                         ByteString::CreateFromInt32(aRect.Left())) += ',')
@@ -671,7 +671,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                 {
                     const IMapCircleObject* pCirc =
                         (const IMapCircleObject *)pObj;
-                    pShape= sHTML_SH_circ;
+                    pShape= OOO_STRING_SVTOOLS_HTML_SH_circ;
                     Point aCenter( pCirc->GetCenter() );
                     long nOff = pCirc->GetRadius();
                     ((((aCoords =
@@ -684,7 +684,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                 {
                     const IMapPolygonObject* pPolyObj =
                         (const IMapPolygonObject *)pObj;
-                    pShape= sHTML_SH_poly;
+                    pShape= OOO_STRING_SVTOOLS_HTML_SH_poly;
                     Polygon aPoly( pPolyObj->GetPolygon() );
                     USHORT nCount = aPoly.GetSize();
                     if( nCount>0 )
@@ -715,9 +715,9 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                 if( pIndentArea )
                     rStream << pIndentArea;
 
-                ((((((((((sOut = '<') += sHTML_area) += ' ')
-                    += sHTML_O_shape) += '=') += pShape) += ' ')
-                    += sHTML_O_coords) += "=\"") += aCoords) += "\" ";
+                ((((((((((sOut = '<') += OOO_STRING_SVTOOLS_HTML_area) += ' ')
+                    += OOO_STRING_SVTOOLS_HTML_O_shape) += '=') += pShape) += ' ')
+                    += OOO_STRING_SVTOOLS_HTML_O_coords) += "=\"") += aCoords) += "\" ";
                 rStream << sOut.GetBuffer();
 
                 String aURL( pObj->GetURL() );
@@ -725,17 +725,17 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                 {
                     aURL = URIHelper::simpleNormalizedMakeRelative(
                         rBaseURL, aURL );
-                    (sOut = sHTML_O_href) += "=\"";
+                    (sOut = OOO_STRING_SVTOOLS_HTML_O_href) += "=\"";
                     rStream << sOut.GetBuffer();
                     Out_String( rStream, aURL, eDestEnc, pNonConvertableChars ) << '\"';
                 }
                 else
-                    rStream << sHTML_O_nohref;
+                    rStream << OOO_STRING_SVTOOLS_HTML_O_nohref;
 
                 const String& rObjName = pObj->GetName();
                 if( rObjName.Len() )
                 {
-                    ((sOut = ' ') += sHTML_O_name) += "=\"";
+                    ((sOut = ' ') += OOO_STRING_SVTOOLS_HTML_O_name) += "=\"";
                     rStream << sOut.GetBuffer();
                     Out_String( rStream, rObjName, eDestEnc, pNonConvertableChars ) << '\"';
                 }
@@ -743,7 +743,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                 const String& rTarget = pObj->GetTarget();
                 if( rTarget.Len() && pObj->IsActive() )
                 {
-                    ((sOut = ' ') += sHTML_O_target) += "=\"";
+                    ((sOut = ' ') += OOO_STRING_SVTOOLS_HTML_O_target) += "=\"";
                     rStream << sOut.GetBuffer();
                     Out_String( rStream, rTarget, eDestEnc, pNonConvertableChars ) << '\"';
                 }
@@ -754,7 +754,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
 
                 if( rDesc.Len() )
                 {
-                    ((sOut = ' ') += sHTML_O_alt) += "=\"";
+                    ((sOut = ' ') += OOO_STRING_SVTOOLS_HTML_O_alt) += "=\"";
                     rStream << sOut.GetBuffer();
                     Out_String( rStream, rDesc, eDestEnc, pNonConvertableChars ) << '\"';
                 }
@@ -774,7 +774,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
         rStream << pDelim;
     if( pIndentMap )
         rStream << pIndentMap;
-    Out_AsciiTag( rStream, sHTML_map, FALSE );
+    Out_AsciiTag( rStream, OOO_STRING_SVTOOLS_HTML_map, FALSE );
 
     return rStream;
 }
@@ -795,12 +795,12 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
 
     // Script wird komplett nicht eingerueckt!
     ByteString sOut( '<' );
-    sOut.Append( RTL_CONSTASCII_STRINGPARAM(sHTML_script) );
+    sOut.Append( RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_script) );
 
     if( rLanguage.Len() )
     {
         sOut.Append( ' ' );
-        sOut.Append( RTL_CONSTASCII_STRINGPARAM(sHTML_O_language) );
+        sOut.Append( RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_O_language) );
         sOut.Append( RTL_CONSTASCII_STRINGPARAM("=\"") );
         rStrm << sOut.GetBuffer();
         Out_String( rStrm, rLanguage, eDestEnc, pNonConvertableChars );
@@ -809,7 +809,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
 
     if( rSrc.Len() )
     {
-        ((sOut += ' ') += sHTML_O_src) += "=\"";
+        ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_src) += "=\"";
         rStrm << sOut.GetBuffer();
         Out_String( rStrm, URIHelper::simpleNormalizedMakeRelative(rBaseURL, rSrc), eDestEnc, pNonConvertableChars );
         sOut = '\"';
@@ -817,7 +817,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
 
     if( STARBASIC != eScriptType && pSBLibrary )
     {
-        ((sOut += ' ') += sHTML_O_sdlibrary) += "=\"";
+        ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_sdlibrary) += "=\"";
         rStrm << sOut.GetBuffer();
         Out_String( rStrm, *pSBLibrary, eDestEnc, pNonConvertableChars );
         sOut = '\"';
@@ -825,7 +825,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
 
     if( STARBASIC != eScriptType && pSBModule )
     {
-        ((sOut += ' ') += sHTML_O_sdmodule) += "=\"";
+        ((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_sdmodule) += "=\"";
         rStrm << sOut.GetBuffer();
         Out_String( rStrm, *pSBModule, eDestEnc, pNonConvertableChars );
         sOut = '\"';
@@ -850,7 +850,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
             if( pSBLibrary )
             {
                 sOut.Assign( RTL_CONSTASCII_STRINGPARAM("' ") );
-                sOut.Append( RTL_CONSTASCII_STRINGPARAM(sHTML_SB_library) );
+                sOut.Append( RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_SB_library) );
                 sOut.Append( ' ' );
                 ByteString sTmp( *pSBLibrary, eDestEnc );
                 sOut.Append( sTmp );
@@ -860,7 +860,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
             if( pSBModule )
             {
                 sOut.Assign( RTL_CONSTASCII_STRINGPARAM("' ") );
-                sOut.Append( RTL_CONSTASCII_STRINGPARAM(sHTML_SB_module) );
+                sOut.Append( RTL_CONSTASCII_STRINGPARAM(OOO_STRING_SVTOOLS_HTML_SB_module) );
                 sOut.Append( ' ' );
                 ByteString sTmp( *pSBModule, eDestEnc );
                 sOut.Append( sTmp );
@@ -888,7 +888,7 @@ SvStream& HTMLOutFuncs::OutScript( SvStream& rStrm,
         }
     }
 
-    HTMLOutFuncs::Out_AsciiTag( rStrm, sHTML_script, FALSE );
+    HTMLOutFuncs::Out_AsciiTag( rStrm, OOO_STRING_SVTOOLS_HTML_script, FALSE );
 
     return rStrm;
 }
@@ -940,11 +940,11 @@ ByteString& HTMLOutFuncs::CreateTableDataOptionsValNum( ByteString& aStrTD,
         String aValStr;
         rFormatter.GetInputLineString( fVal, 0, aValStr );
         ByteString sTmp( aValStr, eDestEnc );
-        ((((aStrTD += ' ') += sHTML_O_SDval) += "=\"") += sTmp) += '\"';
+        ((((aStrTD += ' ') += OOO_STRING_SVTOOLS_HTML_O_SDval) += "=\"") += sTmp) += '\"';
     }
     if ( bValue || nFormat )
     {
-        ((aStrTD += ' ') += sHTML_O_SDnum) += "=\"";
+        ((aStrTD += ' ') += OOO_STRING_SVTOOLS_HTML_O_SDnum) += "=\"";
         (aStrTD += ByteString::CreateFromInt32(
                                 Application::GetSettings().GetLanguage() ))
             += ';'; // Language fuer Format 0
@@ -971,7 +971,7 @@ ByteString& HTMLOutFuncs::CreateTableDataOptionsValNum( ByteString& aStrTD,
 BOOL HTMLOutFuncs::PrivateURLToInternalImg( String& rURL )
 {
     if( rURL.Len() > 14UL &&
-        rURL.CompareToAscii( sHTML_private_image, 14UL ) == COMPARE_EQUAL )
+        rURL.CompareToAscii( OOO_STRING_SVTOOLS_HTML_private_image, 14UL ) == COMPARE_EQUAL )
     {
         rURL.Erase( 0UL, 14UL );
         return TRUE;

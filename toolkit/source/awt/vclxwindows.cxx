@@ -386,6 +386,7 @@ void VCLXButton::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_DEFAULTBUTTON,
                      BASEPROPERTY_DEFAULTCONTROL,
                      BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_ENABLEVISIBLE,
                      BASEPROPERTY_FONTDESCRIPTOR,
                      BASEPROPERTY_GRAPHIC,
                      BASEPROPERTY_HELPTEXT,
@@ -415,6 +416,13 @@ VCLXButton::VCLXButton()
     :maActionListeners( *this )
     ,maItemListeners( *this )
 {
+}
+
+VCLXButton::~VCLXButton()
+{
+#ifndef __SUNPRO_CC
+    OSL_TRACE ("%s", __FUNCTION__);
+#endif
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXButton::CreateAccessibleContext()
@@ -661,6 +669,7 @@ void VCLXImageControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_BORDERCOLOR,
                      BASEPROPERTY_DEFAULTCONTROL,
                      BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_ENABLEVISIBLE,
                      BASEPROPERTY_GRAPHIC,
                      BASEPROPERTY_HELPTEXT,
                      BASEPROPERTY_HELPURL,
@@ -789,6 +798,7 @@ void VCLXCheckBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
     PushPropertyIds( rIds,
                      BASEPROPERTY_DEFAULTCONTROL,
                      BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_ENABLEVISIBLE,
                      BASEPROPERTY_FONTDESCRIPTOR,
                      BASEPROPERTY_GRAPHIC,
                      BASEPROPERTY_HELPTEXT,
@@ -1088,6 +1098,7 @@ void VCLXRadioButton::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
     PushPropertyIds( rIds,
                      BASEPROPERTY_DEFAULTCONTROL,
                      BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_ENABLEVISIBLE,
                      BASEPROPERTY_FONTDESCRIPTOR,
                      BASEPROPERTY_GRAPHIC,
                      BASEPROPERTY_HELPTEXT,
@@ -1361,11 +1372,21 @@ void VCLXRadioButton::ImplClickedOrToggled( BOOL bToggled )
     }
 }
 
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > VCLXRadioButton::getFirstActionListener ()
+{
+    if (!maItemListeners.getLength ())
+        return ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > ();
+    return maActionListeners.getElements()[0];
+}
+
 //  ----------------------------------------------------
 //  class VCLXSpinField
 //  ----------------------------------------------------
 void VCLXSpinField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
+    PushPropertyIds( rIds,
+                     BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR,
+                     0 );
     VCLXEdit::ImplGetPropertyIds( rIds );
 }
 
@@ -1505,6 +1526,7 @@ void VCLXListBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_DEFAULTCONTROL,
                      BASEPROPERTY_DROPDOWN,
                      BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_ENABLEVISIBLE,
                      BASEPROPERTY_FONTDESCRIPTOR,
                      BASEPROPERTY_HELPTEXT,
                      BASEPROPERTY_HELPURL,
@@ -1518,6 +1540,7 @@ void VCLXListBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_ALIGN,
                      BASEPROPERTY_WRITING_MODE,
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
+                     BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR,
                      0);
     VCLXWindow::ImplGetPropertyIds( rIds );
 }
@@ -2175,6 +2198,9 @@ VCLXDialog::VCLXDialog()
 
 VCLXDialog::~VCLXDialog()
 {
+#ifndef __SUNPRO_CC
+    OSL_TRACE ("%s", __FUNCTION__);
+#endif
 }
 
 // ::com::sun::star::uno::XInterface
@@ -2692,6 +2718,7 @@ void VCLXFixedHyperlink::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_BORDERCOLOR,
                      BASEPROPERTY_DEFAULTCONTROL,
                      BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_ENABLEVISIBLE,
                      BASEPROPERTY_FONTDESCRIPTOR,
                      BASEPROPERTY_HELPTEXT,
                      BASEPROPERTY_HELPURL,
@@ -2720,6 +2747,7 @@ void VCLXFixedText::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_BORDERCOLOR,
                      BASEPROPERTY_DEFAULTCONTROL,
                      BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_ENABLEVISIBLE,
                      BASEPROPERTY_FONTDESCRIPTOR,
                      BASEPROPERTY_HELPTEXT,
                      BASEPROPERTY_HELPURL,
@@ -2862,6 +2890,7 @@ void VCLXScrollBar::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_BORDERCOLOR,
                      BASEPROPERTY_DEFAULTCONTROL,
                      BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_ENABLEVISIBLE,
                      BASEPROPERTY_HELPTEXT,
                      BASEPROPERTY_HELPURL,
                      BASEPROPERTY_LINEINCREMENT,
@@ -3341,6 +3370,7 @@ void VCLXEdit::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_DEFAULTCONTROL,
                      BASEPROPERTY_ECHOCHAR,
                      BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_ENABLEVISIBLE,
                      BASEPROPERTY_FONTDESCRIPTOR,
                      BASEPROPERTY_HARDLINEBREAKS,
                      BASEPROPERTY_HELPTEXT,
@@ -3717,6 +3747,7 @@ void VCLXComboBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_DEFAULTCONTROL,
                      BASEPROPERTY_DROPDOWN,
                      BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_ENABLEVISIBLE,
                      BASEPROPERTY_FONTDESCRIPTOR,
                      BASEPROPERTY_HELPTEXT,
                      BASEPROPERTY_HELPURL,
@@ -3731,6 +3762,7 @@ void VCLXComboBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_ALIGN,
                      BASEPROPERTY_WRITING_MODE,
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
+                     BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR,
                      0);
     // no, don't call VCLXEdit here - it has properties which we do *not* want to have at at combo box
     // #i92690# / 2008-08-12 / frank.schoenheit@sun.com
@@ -3741,6 +3773,13 @@ void VCLXComboBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 VCLXComboBox::VCLXComboBox()
     : maActionListeners( *this ), maItemListeners( *this )
 {
+}
+
+VCLXComboBox::~VCLXComboBox()
+{
+#ifndef __SUNPRO_CC
+    OSL_TRACE ("%s", __FUNCTION__);
+#endif
 }
 
 // ::com::sun::star::uno::XInterface
@@ -4226,6 +4265,7 @@ void VCLXDateField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_DEFAULTCONTROL,
                      BASEPROPERTY_DROPDOWN,
                      BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_ENABLEVISIBLE,
                      BASEPROPERTY_EXTDATEFORMAT,
                      BASEPROPERTY_FONTDESCRIPTOR,
                      BASEPROPERTY_HELPTEXT,
@@ -4242,6 +4282,7 @@ void VCLXDateField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_HIDEINACTIVESELECTION,
                      BASEPROPERTY_WRITING_MODE,
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
+                     BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR,
                      0);
     VCLXFormattedSpinField::ImplGetPropertyIds( rIds );
 }
@@ -4562,6 +4603,7 @@ void VCLXTimeField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_BORDERCOLOR,
                      BASEPROPERTY_DEFAULTCONTROL,
                      BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_ENABLEVISIBLE,
                      BASEPROPERTY_EXTTIMEFORMAT,
                      BASEPROPERTY_FONTDESCRIPTOR,
                      BASEPROPERTY_HELPTEXT,
@@ -4581,6 +4623,7 @@ void VCLXTimeField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_HIDEINACTIVESELECTION,
                      BASEPROPERTY_WRITING_MODE,
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
+                     BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR,
                      0);
     VCLXFormattedSpinField::ImplGetPropertyIds( rIds );
 }
@@ -4863,6 +4906,7 @@ void VCLXNumericField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_DECIMALACCURACY,
                      BASEPROPERTY_DEFAULTCONTROL,
                      BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_ENABLEVISIBLE,
                      BASEPROPERTY_FONTDESCRIPTOR,
                      BASEPROPERTY_HELPTEXT,
                      BASEPROPERTY_HELPURL,
@@ -4882,6 +4926,7 @@ void VCLXNumericField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_HIDEINACTIVESELECTION,
                      BASEPROPERTY_WRITING_MODE,
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
+                     BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR,
                      0);
     VCLXFormattedSpinField::ImplGetPropertyIds( rIds );
 }
@@ -5203,6 +5248,7 @@ void VCLXMetricField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_DECIMALACCURACY,
                      BASEPROPERTY_DEFAULTCONTROL,
                      BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_ENABLEVISIBLE,
                      BASEPROPERTY_FONTDESCRIPTOR,
                      BASEPROPERTY_HELPTEXT,
                      BASEPROPERTY_HELPURL,
@@ -5220,6 +5266,7 @@ void VCLXMetricField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_CUSTOMUNITTEXT,
                      BASEPROPERTY_WRITING_MODE,
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
+                     BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR,
                      0);
     VCLXFormattedSpinField::ImplGetPropertyIds( rIds );
 }
@@ -5453,6 +5500,7 @@ void VCLXCurrencyField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_DECIMALACCURACY,
                      BASEPROPERTY_DEFAULTCONTROL,
                      BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_ENABLEVISIBLE,
                      BASEPROPERTY_FONTDESCRIPTOR,
                      BASEPROPERTY_HELPTEXT,
                      BASEPROPERTY_HELPURL,
@@ -5472,6 +5520,7 @@ void VCLXCurrencyField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_HIDEINACTIVESELECTION,
                      BASEPROPERTY_WRITING_MODE,
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
+                     BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR,
                      0);
     VCLXFormattedSpinField::ImplGetPropertyIds( rIds );
 }
@@ -5804,6 +5853,7 @@ void VCLXPatternField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_DEFAULTCONTROL,
                      BASEPROPERTY_EDITMASK,
                      BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_ENABLEVISIBLE,
                      BASEPROPERTY_FONTDESCRIPTOR,
                      BASEPROPERTY_HELPTEXT,
                      BASEPROPERTY_HELPURL,
@@ -5817,6 +5867,7 @@ void VCLXPatternField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_HIDEINACTIVESELECTION,
                      BASEPROPERTY_WRITING_MODE,
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
+                     BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR,
                      0);
     VCLXFormattedSpinField::ImplGetPropertyIds( rIds );
 }

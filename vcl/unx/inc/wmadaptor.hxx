@@ -37,9 +37,9 @@
 #include <tools/gen.hxx>
 #include <vcl/dllapi.h>
 #ifndef _PREX_H
-#include <prex.h>
+#include <tools/prex.h>
 #include <X11/Xlib.h>
-#include <postx.h>
+#include <tools/postx.h>
 #endif
 #include <vector>
 

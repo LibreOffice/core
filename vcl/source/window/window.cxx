@@ -497,24 +497,6 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
         }
     }
 
-    // Detect if images in menus are allowed or not
-    {
-        sal_Bool bTmp = sal_False, bUseImagesInMenus = sal_True;
-        utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
-            vcl::unohelper::GetMultiServiceFactory(),
-            OUString::createFromAscii( "org.openoffice.Office.Common/View/Menu" ) );    // note: case sensisitive !
-        if ( aNode.isValid() )
-        {
-            ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString::createFromAscii( "ShowIconsInMenues" ) );
-            if( aValue >>= bTmp )
-                bUseImagesInMenus = bTmp;
-        }
-
-        aStyleSettings = rSettings.GetStyleSettings();
-        aStyleSettings.SetUseImagesInMenus( bUseImagesInMenus );
-        rSettings.SetStyleSettings( aStyleSettings );
-    }
-
 #ifdef DBG_UTIL
     // Evt. AppFont auf Fett schalten, damit man feststellen kann,
     // ob fuer die Texte auf anderen Systemen genuegend Platz
@@ -2541,12 +2523,15 @@ void Window::ImplInvalidateFrameRegion( const Region* pRegion, USHORT nFlags )
     if ( !ImplIsOverlapWindow() )
     {
         Window* pTempWindow = this;
+        USHORT nTranspPaint = IsPaintTransparent() ? IMPL_PAINT_PAINT : 0;
         do
         {
             pTempWindow = pTempWindow->ImplGetParent();
             if ( pTempWindow->mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTCHILDS )
                 break;
-            pTempWindow->mpWindowImpl->mnPaintFlags |= IMPL_PAINT_PAINTCHILDS;
+            pTempWindow->mpWindowImpl->mnPaintFlags |= IMPL_PAINT_PAINTCHILDS | nTranspPaint;
+            if( ! pTempWindow->IsPaintTransparent() )
+                nTranspPaint = 0;
         }
         while ( !pTempWindow->ImplIsOverlapWindow() );
     }
@@ -5859,18 +5844,15 @@ void Window::UpdateSettings( const AllSettings& rSettings, BOOL bChild )
     ImplInitResolutionSettings();
 
     /* #i73785#
-    *  do not overwrite a NoWheelActionWithoutFocus with false
-    *  this looks kind of a hack, but NoWheelActionWithoutFocus
+    *  do not overwrite a WheelBehavior with false
+    *  this looks kind of a hack, but WheelBehavior
     *  is always a local change, not a system property,
-    *  so we can spare all our users the hassel of reacting on
+    *  so we can spare all our users the hassle of reacting on
     *  this in their respective DataChanged.
     */
-    if( aOldSettings.GetMouseSettings().GetNoWheelActionWithoutFocus() )
-    {
-        MouseSettings aSet( maSettings.GetMouseSettings() );
-        aSet.SetNoWheelActionWithoutFocus( TRUE );
-        maSettings.SetMouseSettings( aSet );
-    }
+    MouseSettings aSet( maSettings.GetMouseSettings() );
+    aSet.SetWheelBehavior( aOldSettings.GetMouseSettings().GetWheelBehavior() );
+    maSettings.SetMouseSettings( aSet );
 
     if( (nChangeFlags & SETTINGS_STYLE) && IsBackground() )
     {
@@ -6239,6 +6221,15 @@ void Window::SetParent( Window* pNewParent )
             pSysWin->GetTaskPaneList()->RemoveWindow( this );
         }
     }
+    // remove ownerdraw decorated windows from list in the top-most frame window
+    if( (GetStyle() & WB_OWNERDRAWDECORATION) && mpWindowImpl->mbFrame )
+    {
+        ::std::vector< Window* >& rList = ImplGetOwnerDrawList();
+        ::std::vector< Window* >::iterator p;
+        p = ::std::find( rList.begin(), rList.end(), this );
+        if( p != rList.end() )
+            rList.erase( p );
+    }
 
     ImplSetFrameParent( pNewParent );
 
@@ -6367,6 +6358,9 @@ void Window::SetParent( Window* pNewParent )
 
     if( bChangeTaskPaneList )
         pNewSysWin->GetTaskPaneList()->AddWindow( this );
+
+    if( (GetStyle() & WB_OWNERDRAWDECORATION) && mpWindowImpl->mbFrame )
+        ImplGetOwnerDrawList().push_back( this );
 
     if ( bVisible )
         Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
@@ -6526,7 +6520,10 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
 
             if ( !mpWindowImpl->mbFrame )
             {
-                ImplInvalidate( NULL, INVALIDATE_NOTRANSPARENT | INVALIDATE_CHILDREN );
+                USHORT nInvalidateFlags = INVALIDATE_CHILDREN;
+                if( ! IsPaintTransparent() )
+                    nInvalidateFlags |= INVALIDATE_NOTRANSPARENT;
+                ImplInvalidate( NULL, nInvalidateFlags );
                 ImplGenerateMouseMove();
             }
         }
@@ -9252,19 +9249,34 @@ BOOL Window::ImplGetCurrentBackgroundColor( Color& rCol )
 
 void Window::DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, BOOL bChecked, BOOL bDrawBorder, BOOL bDrawExtBorderOnly )
 {
-    DrawSelectionBackground( rRect, highlight, bChecked, bDrawBorder, bDrawExtBorderOnly, NULL );
+    DrawSelectionBackground( rRect, highlight, bChecked, bDrawBorder, bDrawExtBorderOnly, 0, NULL, NULL );
 }
 
 void Window::DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, BOOL bChecked, BOOL bDrawBorder, BOOL bDrawExtBorderOnly, Color* pSelectionTextColor )
 {
+    DrawSelectionBackground( rRect, highlight, bChecked, bDrawBorder, bDrawExtBorderOnly, 0, pSelectionTextColor, NULL );
+}
+
+void Window::DrawSelectionBackground( const Rectangle& rRect,
+                                      USHORT highlight,
+                                      BOOL bChecked,
+                                      BOOL bDrawBorder,
+                                      BOOL bDrawExtBorderOnly,
+                                      long nCornerRadius,
+                                      Color* pSelectionTextColor,
+                                      Color* pPaintColor
+                                      )
+{
     if( rRect.IsEmpty() )
         return;
+
+    bool bRoundEdges = nCornerRadius > 0;
 
     const StyleSettings& rStyles = GetSettings().GetStyleSettings();
 
 
     // colors used for item highlighting
-    Color aSelectionBorderCol( rStyles.GetHighlightColor() );
+    Color aSelectionBorderCol( pPaintColor ? *pPaintColor : rStyles.GetHighlightColor() );
     Color aSelectionFillCol( aSelectionBorderCol );
 
     BOOL bDark = rStyles.GetFaceColor().IsDark();
@@ -9273,7 +9285,7 @@ void Window::DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, 
     int c1 = aSelectionBorderCol.GetLuminance();
     int c2 = GetDisplayBackground().GetColor().GetLuminance();
 
-    if( !bDark && !bBright && abs( c2-c1 ) < 75 )
+    if( !bDark && !bBright && abs( c2-c1 ) < (pPaintColor ? 40 : 75) )
     {
         // constrast too low
         USHORT h,s,b;
@@ -9282,6 +9294,14 @@ void Window::DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, 
         else            b += 40;
         aSelectionFillCol.SetColor( Color::HSBtoRGB( h, s, b ) );
         aSelectionBorderCol = aSelectionFillCol;
+    }
+
+    if( bRoundEdges )
+    {
+        if( aSelectionBorderCol.IsDark() )
+            aSelectionBorderCol.IncreaseLuminance( 128 );
+        else
+            aSelectionBorderCol.DecreaseLuminance( 128 );
     }
 
     Rectangle aRect( rRect );
@@ -9306,7 +9326,7 @@ void Window::DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, 
         if( bDark )
             aSelectionFillCol = COL_BLACK;
         else
-            nPercent = 80;              // just checked (light)
+            nPercent = bRoundEdges ? 90 : 80;  // just checked (light)
     }
     else
     {
@@ -9321,7 +9341,7 @@ void Window::DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, 
                 nPercent = 0;
             }
             else
-                nPercent = 20;          // selected, pressed or checked ( very dark )
+                nPercent = bRoundEdges ? 50 : 20;          // selected, pressed or checked ( very dark )
         }
         else if( bChecked || highlight == 1 )
         {
@@ -9334,7 +9354,7 @@ void Window::DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, 
                 nPercent = 0;
             }
             else
-                nPercent = 35;          // selected, pressed or checked ( very dark )
+                nPercent = bRoundEdges ? 70 : 35;          // selected, pressed or checked ( very dark )
         }
         else
         {
@@ -9350,7 +9370,7 @@ void Window::DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, 
                     nPercent = 0;
             }
             else
-                nPercent = 70;          // selected ( dark )
+                nPercent = bRoundEdges ? 80 : 70;          // selected ( dark )
         }
     }
 
@@ -9380,9 +9400,18 @@ void Window::DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, 
     }
     else
     {
-        Polygon aPoly( aRect );
-        PolyPolygon aPolyPoly( aPoly );
-        DrawTransparent( aPolyPoly, nPercent );
+        if( bRoundEdges )
+        {
+            Polygon aPoly( aRect, nCornerRadius, nCornerRadius );
+            PolyPolygon aPolyPoly( aPoly );
+            DrawTransparent( aPolyPoly, nPercent );
+        }
+        else
+        {
+            Polygon aPoly( aRect );
+            PolyPolygon aPolyPoly( aPoly );
+            DrawTransparent( aPolyPoly, nPercent );
+        }
     }
 
     SetFillColor( oldFillCol );

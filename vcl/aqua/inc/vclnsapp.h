@@ -59,7 +59,6 @@
 -(void)scrollbarSettingsChanged: (NSNotification*) pNotification;
 -(void)addFallbackMenuItem: (NSMenuItem*)pNewItem;
 -(void)removeFallbackMenuItem: (NSMenuItem*)pOldItem;
--(void)getSystemVersionMajor:(unsigned *)major minor:(unsigned *)minor bugFix:(unsigned *)bugFix;
 -(void)addDockMenuItem: (NSMenuItem*)pNewItem;
 -(void)applicationWillBecomeActive: (NSNotification *)pNotification;
 -(void)applicationWillResignActive: (NSNotification *)pNotification;

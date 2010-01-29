@@ -34,83 +34,78 @@
 
 #if ENABLE_LAYOUT
 
-//#if !LAYOUT
-//#define LAYOUT 1
-//#endif
-//#define LAYOUT_NS layout
-
-// TWBN, but find that SfxModalDialog and FixedLine are already defined, eg compiling
-// dlgfact.cxx
-//typedef layout::Dialog SfxModalDialog;
-//typedef layout::FixedLine FixedLine;
+///* Allow re-inclusion for next hxx file. */
+#undef _LAYOUT_POST_HXX
 
 #define AdvancedButton layout::AdvancedButton
+#define ApplyButton layout::ApplyButton
 #define Box layout::Box
 #define Button layout::Button
 #define CancelButton layout::CancelButton
 #define CheckBox layout::CheckBox
+#define ComboBox layout::ComboBox
 #define Container layout::Container
+#define Control layout::Control
+#define Dialog layout::Dialog
+#define Edit layout::Edit
+#define ErrorBox layout::ErrorBox
 #define FixedImage layout::FixedImage
 #define FixedInfo layout::FixedInfo
 #define FixedLine layout::FixedLine
 #define FixedText layout::FixedText
 #define HBox layout::HBox
 #define HelpButton layout::HelpButton
+#define IgnoreButton layout::IgnoreButton
+#define ImageButton layout::ImageButton
+#define InfoBox layout::InfoBox
+#define LocalizedString layout::LocalizedString
+#define ListBox layout::ListBox
+#define MessBox layout::MessBox
+#define MessageBox layout::MessageBox
 #define MetricField layout::MetricField
+#define MetricFormatter layout::MetricFormatter
 #define MoreButton layout::MoreButton
 #define MultiLineEdit layout::MultiLineEdit
+#define MultiListBox layout::MultiListBox
+#define NoButton layout::NoButton
+#define NumericField layout::NumericField
+#define NumericFormatter layout::NumericFormatter
 #define OKButton layout::OKButton
+#define Plugin layout::Plugin
 #define ProgressBar layout::ProgressBar
 #define PushButton layout::PushButton
+#define QueryBox layout::QueryBox
 #define RadioButton layout::RadioButton
-#define SfxModalDialog layout::Dialog
+#define ResetButton layout::ResetButton
+#define RetryButton layout::RetryButton
+#define SfxTabDialog layout::SfxTabDialog
+#define SfxTabPage layout::SfxTabPage
+#if ENABLE_LAYOUT
+#define SvxFontListBox layout::SvxFontListBox
+#define SvxLanguageBox layout::SvxLanguageBox
+#endif
+#define SpinField layout::SpinField
+#define TabControl layout::TabControl
+#define TabPage layout::TabPage
 #define Table layout::Table
 #define VBox layout::VBox
+#define WarningBox layout::WarningBox
+#define YesButton layout::YesButton
 
-/* FIXME: why are we defaulting to layout::Window?
-   /home/janneke/vc/ooo-build/build/hack/sw/source/ui/dialog/wordcountdialog.cxx:87: error: no matching function for call to 'layout::Dialog::Dialog(Window*&, const char [14], const char [7])'
-   ../../../../layout/inc/layout/layout.hxx:304: note: candidates are: layout::Dialog::Dialog(layout::Window*, const char*, const char*, sal_uInt32)
-   ../../../../layout/inc/layout/layout.hxx:300: note:                 layout::Dialog::Dialog(const layout::Dialog&)
-*/
+#define ModalDialog Dialog
+#define ModelessDialog Dialog
+#define ScExpandedFixedText FixedText
+#define SfxDialog Dialog
+#define SfxModalDialog Dialog
+#define SfxModelessDialog Dialog
+#define TabDialog Dialog
 
 #define Window ::Window
 
-#undef SVX_RES
-#define SVX_RES(x) #x
-#undef SW_RES
-#define SW_RES(x) #x
+#else
 
-/* Hmm.  This hack makes zoom.cxx, wordcountdialog.cxx diffs smaller
- * but is not scalable. */
-#ifdef _LAYOUT_POST_HXX
+#define LocalizedString String
 
-#ifdef _SVX_RECOVER_CXX
-#undef SfxModalDialog
-// 3rd parameter must match ID in <modaldialog> "RID_SVXDLG_RECOVER", localize.sdf
-#define SfxModalDialog( pParent, SVX_RES_RID ) layout::Dialog( pParent, "recover.xml", "RID_SVXDLG_RECOVER" )
-//#define _SVX_RECOVER_HRC
-#endif /* _SVX_RECOVER_CXX */
-
-#ifdef SW_WORDCOUNTDIALOG_HXX
-#undef SfxModalDialog
-// 3rd parameter must match ID in <modaldialog> "DLG_WORDCOUNT", localize.sdf
-#define SfxModalDialog( pParent, SW_RES_RID ) layout::Dialog( pParent, "wordcount.xml", "DLG_WORDCOUNT" )
-#define SW_WORDCOUNTDIALOG_HRC
-#endif /* SW_WORDCOUNTDIALOG_HXX */
-
-#ifdef _SVX_ZOOM_CXX
-#undef SfxModalDialog
-// 3rd parameter must match ID in <modaldialog> "RID_SVXDLG_ZOOM", localize.sdf
-#define SfxModalDialog( pParent, SVX_RES_RID ) layout::Dialog( pParent, "zoom.xml", "RID_SVXDLG_ZOOM" )
-#define _SVX_ZOOM_HRC
-#endif /* _SVX_ZOOM_CXX */
-
-#endif /* _LAYOUT_POST_HXX */
-
-#else /* !ENABLE_LAYOUT */
-
-#define LAYOUT_PRE_POST
-
-#endif /* !ENABLE_LAYOUT */
+#endif /* ENABLE_LAYOUT */
 
 #endif /* _LAYOUT_PRE_HXX */

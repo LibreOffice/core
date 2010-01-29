@@ -271,10 +271,11 @@ BOOL GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Size& 
 
 // -----------------------------------------------------------------------------
 
-void GraphicManager::ImplRegisterObj( const GraphicObject& rObj, Graphic& rSubstitute, const ByteString* pID )
+void GraphicManager::ImplRegisterObj( const GraphicObject& rObj, Graphic& rSubstitute,
+                                      const ByteString* pID, const GraphicObject* pCopyObj )
 {
     maObjList.Insert( (void*) &rObj, LIST_APPEND );
-    mpCache->AddGraphicObject( rObj, rSubstitute, pID );
+    mpCache->AddGraphicObject( rObj, rSubstitute, pID, pCopyObj );
 }
 
 // -----------------------------------------------------------------------------
@@ -2320,11 +2321,11 @@ void GraphicObject::ImplTransformBitmap( BitmapEx&          rBmpEx,
         rBmpEx.Crop( rCropRect );
 
         // #104115# Negative crop sizes mean: enlarge bitmap and pad
-        if( bEnlarge &&
+        if( bEnlarge && (
             rCropLeftTop.Width() < 0 ||
             rCropLeftTop.Height() < 0 ||
             rCropRightBottom.Width() < 0 ||
-            rCropRightBottom.Height() < 0 )
+            rCropRightBottom.Height() < 0 ) )
         {
             Size aBmpSize( rBmpEx.GetSizePixel() );
             sal_Int32 nPadLeft( rCropLeftTop.Width() < 0 ? -rCropLeftTop.Width() : 0 );

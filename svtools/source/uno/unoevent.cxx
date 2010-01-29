@@ -492,7 +492,7 @@ SvDetachedEventDescriptor::~SvDetachedEventDescriptor()
             delete aMacros[i];
     }
 
-    delete aMacros;
+    delete [] aMacros;
 }
 
 sal_Int16 SvDetachedEventDescriptor::getIndex(const sal_uInt16 nID) const

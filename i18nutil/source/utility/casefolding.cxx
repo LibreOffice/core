@@ -132,7 +132,10 @@ is_ja_voice_sound_mark(sal_Unicode& current, sal_Unicode next)
 sal_Unicode casefolding::getNextChar(const sal_Unicode *str, sal_Int32& idx, sal_Int32 len, MappingElement& e, Locale& aLocale, sal_uInt8 nMappingType, TransliterationModules moduleLoaded) throw (RuntimeException)
 {
         if( idx >= len )
+        {
+            e = MappingElement();
             return 0;
+        }
 
         sal_Unicode c;
 

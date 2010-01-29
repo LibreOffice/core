@@ -3213,7 +3213,9 @@ void SvImpLBox::Command( const CommandEvent& rCEvt )
         if( pPopup )
         {
             // do action for selected entry in popup menu
-            pView->ExcecuteContextMenuAction( pPopup->Execute( pView, aPopupPos ) );
+            USHORT nMenuAction = pPopup->Execute( pView, aPopupPos );
+            if ( nMenuAction )
+                pView->ExcecuteContextMenuAction( nMenuAction );
             lcl_DeleteSubPopups(pPopup);
             delete pPopup;
         }

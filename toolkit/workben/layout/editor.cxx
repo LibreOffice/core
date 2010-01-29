@@ -32,43 +32,41 @@
 #include "editor.hxx"
 
 #undef NDEBUG
+
+/*
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
+*/
 
-#include <vector>
+#include <cassert>
+#include <cstdio>
+#include <cstring>
 #include <list>
+#include <vector>
+
+#include <com/sun/star/awt/WindowAttribute.hpp>
+#include <com/sun/star/awt/XLayoutConstrains.hpp>
+#include <com/sun/star/awt/XLayoutContainer.hpp>
+#include <com/sun/star/awt/XToolkit.hpp>
+#include <com/sun/star/awt/XVclWindowPeer.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/awt/XWindowPeer.hpp>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <toolkit/helper/property.hxx>
+#include <vcl/lstbox.h>
 
 using namespace layout::css;
 
 using rtl::OUString;
 
-#include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/awt/XWindowPeer.hpp>
-#include <com/sun/star/awt/XVclWindowPeer.hpp>
-#include <com/sun/star/awt/XLayoutConstrains.hpp>
-#include <com/sun/star/awt/XLayoutContainer.hpp>
-#include <com/sun/star/awt/WindowAttribute.hpp>
-
-#include <com/sun/star/awt/XToolkit.hpp>
-#include <toolkit/helper/property.hxx>
-
-#include <vcl/lstbox.h>
-
 // FIXME:
 //#define FILEDLG
 
-// somewhat of a hack unfortunately ...
-#include "layout/layoutcore.hxx"
-#include "root.hxx"
-#include "helper.hxx"
-
-//** Utilities
-
-#define OUSTRING_CSTR( str ) \
-    rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US ).getStr()
+#include <layout/core/helper.hxx>
+#include <layout/core/root.hxx>
+#include <layout/core/helper.hxx>
 
 // TODO: automatically generated
 struct WidgetSpec {
@@ -93,19 +91,6 @@ static const WidgetSpec WIDGETS_SPECS[] = {
     { "Scroller",      "scroller"    , NULL,                  true  },
 };
 const int WIDGETS_SPECS_LEN = sizeof (WIDGETS_SPECS) / sizeof (WidgetSpec);
-
-// TEMP: from helper
-namespace layoutimpl {
-
-    typedef std::list< std::pair< rtl::OUString, rtl::OUString > > PropList;
-
-    css::uno::Reference< css::awt::XLayoutConstrains >
-        createWidget( css::uno::Reference< css::awt::XToolkit > xToolkit,
-                      css::uno::Reference< css::uno::XInterface > xParent,
-                      const rtl::OUString &rName, long nProps, bool bToplevel );
-
-    uno::Any anyFromString (const rtl::OUString &value, const uno::Type &type);
-}
 
 using namespace layout;
 using namespace layoutimpl;
@@ -136,9 +121,9 @@ static rtl::OUString anyToString (uno::Any value)
                 bool val = value.get<sal_Bool>();
                 return rtl::OUString( val ? "1" : "0", 1, RTL_TEXTENCODING_ASCII_US );
 /*                if ( val )
-                    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "true" ) );
-                else
-                    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "false" ) );*/
+                  return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "true" ) );
+                  else
+                  return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "false" ) );*/
             }
             default:
                 break;
@@ -155,8 +140,9 @@ static inline double anyToDecimal (uno::Any value)
 
 /* XLayoutContainer/XLayoutConstrains are a bit of a hasle to work with.
    Let's wrap them. */
-class Widget : public layoutimpl::LayoutWidget {
-friend class EditorRoot;
+class Widget : public layoutimpl::LayoutWidget
+{
+    friend class EditorRoot;
 
     Widget *mpParent;
     std::vector< Widget *> maChildren;
@@ -173,7 +159,7 @@ public:
 
     // to be used to wrap the root
     Widget( uno::Reference< awt::XLayoutConstrains > xImport, const char *label )
-    : mpParent( 0 ), mbForeign( true )
+        : mpParent( 0 ), mbForeign( true )
     {
         mxWidget = xImport;
         mxContainer = uno::Reference< awt::XLayoutContainer >( mxWidget, uno::UNO_QUERY );
@@ -197,17 +183,17 @@ public:
     Widget( rtl::OUString id, uno::Reference< awt::XToolkit > xToolkit,
             uno::Reference< awt::XLayoutContainer > xParent,
             rtl::OUString unoName, long nAttrbs )
-    : mpParent( 0 ), mbForeign( false ), mrId( id ),
-      mnOriAttrbs( nAttrbs )
+        : mpParent( 0 ), mbForeign( false ), mrId( id ),
+          mnOriAttrbs( nAttrbs )
     {
-    while ( xParent.is() && !uno::Reference< awt::XWindow >( xParent, uno::UNO_QUERY ).is() )
-    {
-        uno::Reference< awt::XLayoutContainer > xContainer( xParent, uno::UNO_QUERY );
-        assert( xContainer.is() );
-        xParent = uno::Reference< awt::XLayoutContainer >( xContainer->getParent(), uno::UNO_QUERY );
-    }
+        while ( xParent.is() && !uno::Reference< awt::XWindow >( xParent, uno::UNO_QUERY ).is() )
+        {
+            uno::Reference< awt::XLayoutContainer > xContainer( xParent, uno::UNO_QUERY );
+            assert( xContainer.is() );
+            xParent = uno::Reference< awt::XLayoutContainer >( xContainer->getParent(), uno::UNO_QUERY );
+        }
 
-        mxWidget = layoutimpl::createWidget( xToolkit, xParent, unoName, nAttrbs );
+        mxWidget = WidgetFactory::createWidget( xToolkit, xParent, unoName, nAttrbs );
         assert( mxWidget.is() );
         mxContainer = uno::Reference< awt::XLayoutContainer >( mxWidget, uno::UNO_QUERY );
 
@@ -225,14 +211,14 @@ public:
         // TODO: disable editing of text fields, check boxes selected, etc...
 #if 0
         uno::Reference< awt::XVclWindowPeer> xVclPeer( mxWidget, uno::UNO_QUERY )
-        if ( xVclPeer.is() ) // XVclWindowPeer ignores missing / incorrect properties
+            if ( xVclPeer.is() ) // XVclWindowPeer ignores missing / incorrect properties
 
 //FIXME: it looks odd on widgets like NumericField seeing text which is deleted
 // when you interact with it... We can avoid it for those widgets, by doing a getProp
 // of "Text" and check if it is empty or not.
 
-            xVclPeer->setProperty( rtl::OUString::createFromAscii( "Text" ),
-                uno::makeAny( rtl::OUString::createFromAscii( "new widget" ) ) );
+                xVclPeer->setProperty( rtl::OUString::createFromAscii( "Text" ),
+                                       uno::makeAny( rtl::OUString::createFromAscii( "new widget" ) ) );
 #endif
 
         // store original properties
@@ -365,9 +351,14 @@ public:
             {
                 beans::Property prop = it.next();
                 rtl::OUString name( prop.Name );
-                rtl::OUString value( pChild->getProperty( name, CONTAINER_PROPERTY ) );
-                std::pair< rtl::OUString, rtl::OUString > pair( name, value );
-                pChild->maOriChildProps.push_back( pair );
+        try {
+            rtl::OUString value( pChild->getProperty( name, CONTAINER_PROPERTY ) );
+            std::pair< rtl::OUString, rtl::OUString > pair( name, value );
+            pChild->maOriChildProps.push_back( pair );
+        } catch ( beans::UnknownPropertyException &rEx ) {
+            fprintf (stderr, "ERROR: widget reports that it has a property it cannot return: '%s' this normally means that someone screwed up their PROPERTY_SET_INFO macro usage.\n",
+                 rtl::OUStringToOString (rEx.Message, RTL_TEXTENCODING_UTF8).getStr());
+        }
             }
         }
 
@@ -402,7 +393,7 @@ public:
         std::vector< Widget *> aChildChildren = pChild->maChildren;
 
         for ( std::vector< Widget *>::const_iterator it = aChildChildren.begin();
-             it != aChildChildren.end(); it++ )
+              it != aChildChildren.end(); it++ )
             pChild->removeChild( *it );
 
         for ( std::vector< Widget *>::const_iterator it = aChildChildren.begin();
@@ -410,10 +401,10 @@ public:
             if ( !addChild( *it ) )
             {    // failure
                 for ( std::vector< Widget *>::const_iterator jt = aChildChildren.begin();
-                     jt != it; jt++ )
+                      jt != it; jt++ )
                     removeChild( *jt );
                 for ( std::vector< Widget *>::const_iterator jt = aChildChildren.begin();
-                     jt != aChildChildren.end(); jt++ )
+                      jt != aChildChildren.end(); jt++ )
                     pChild->addChild( *jt );
                 return false;
             }
@@ -433,7 +424,7 @@ public:
     {
         int i = 0;
         for ( std::vector< Widget *>::const_iterator it = maChildren.begin();
-             it != maChildren.end(); it++, i++ )
+              it != maChildren.end(); it++, i++ )
             if ( *it == pChild )
                 break;
         return i;
@@ -507,7 +498,7 @@ public:
             case CONTAINER_PROPERTY:
                 if ( mpParent )
                     rValue = anyToString( layoutimpl::prophlp::getProperty(
-                        mpParent->mxContainer->getChildProperties( mxWidget ), rPropName ) );
+                                              mpParent->mxContainer->getChildProperties( mxWidget ), rPropName ) );
                 break;
             case WINBITS_PROPERTY:
                 // TODO
@@ -554,7 +545,7 @@ public:
         int nPropIt;
 
         PropertyIterator( Widget *pWidget, PropertyKind rKind )
-        : mrKind( rKind ), nPropIt( 0 )
+            : mrKind( rKind ), nPropIt( 0 )
         {
             switch ( rKind )
             {
@@ -596,10 +587,10 @@ public:
         beans::Property next()
         {
 /*            rtl::OUString propName, propValue;
-            propName = maProps[ nPropIt ];
-            propValue = getProperty( propName, mrKind, false);
-            nPropIt++;
-            return std::pair< rtl::OUString, rtl::OUString > propPair( propName, propValue );*/
+              propName = maProps[ nPropIt ];
+              propValue = getProperty( propName, mrKind, false);
+              nPropIt++;
+              return std::pair< rtl::OUString, rtl::OUString > propPair( propName, propValue );*/
             return maProps[ nPropIt++ ];
         }
     };
@@ -611,13 +602,13 @@ class EditorRoot : public layoutimpl::LayoutRoot {
 public:
     EditorRoot( const uno::Reference< lang::XMultiServiceFactory >& xFactory,
                 Widget *pParent )
-    : layoutimpl::LayoutRoot( xFactory ), mpParent( pParent )
+        : layoutimpl::LayoutRoot( xFactory ), mpParent( pParent )
     {
     }
 
     // generation
     virtual layoutimpl::LayoutWidget *create( rtl::OUString id, const rtl::OUString unoName,
-        long attrbs, uno::Reference< awt::XLayoutContainer > xParent )
+                                              long attrbs, uno::Reference< awt::XLayoutContainer > xParent )
     {
         if ( unoName.compareToAscii( "dialog" ) == 0 )
             return mpParent;
@@ -637,126 +628,126 @@ public:
 /* Working with the layout in 1D, as if it was a flat list. */
 namespace FlatLayout
 {
-    Widget *next( Widget *pWidget )
-    {
-        Widget *pNext;
-        pNext = pWidget->down();
-        if ( pNext ) return pNext;
-        pNext = pWidget->next();
-        if ( pNext ) return pNext;
-        for ( Widget *pUp = pWidget->up(); pUp != NULL; pUp = pUp->up() )
-            if ( (pNext = pUp->next()) != NULL )
-                return pNext;
-        return NULL;
-    }
+Widget *next( Widget *pWidget )
+{
+    Widget *pNext;
+    pNext = pWidget->down();
+    if ( pNext ) return pNext;
+    pNext = pWidget->next();
+    if ( pNext ) return pNext;
+    for ( Widget *pUp = pWidget->up(); pUp != NULL; pUp = pUp->up() )
+        if ( (pNext = pUp->next()) != NULL )
+            return pNext;
+    return NULL;
+}
 
 /*
-    Widget *prev( Widget *pWidget )
-    {
-        Widget *pPrev;
-        pPrev = pWidget->prev();
-        if ( !pPrev )
-            return pWidget->up();
+  Widget *prev( Widget *pWidget )
+  {
+  Widget *pPrev;
+  pPrev = pWidget->prev();
+  if ( !pPrev )
+  return pWidget->up();
 
-        Widget *pBottom = pPrev->down();
-        if ( pBottom )
-        {
-            while ( pBottom->down() || pBottom->next() )
-            {
-                for ( Widget *pNext = pBottom->next(); pNext; pNext = pNext->next() )
-                    pBottom = pNext;
-                Widget *pDown = pBottom->down();
-                if ( pDown )
-                    pBottom = pDown;
-            }
-            return pBottom;
-        }
-        return pPrev;
-    }
+  Widget *pBottom = pPrev->down();
+  if ( pBottom )
+  {
+  while ( pBottom->down() || pBottom->next() )
+  {
+  for ( Widget *pNext = pBottom->next(); pNext; pNext = pNext->next() )
+  pBottom = pNext;
+  Widget *pDown = pBottom->down();
+  if ( pDown )
+  pBottom = pDown;
+  }
+  return pBottom;
+  }
+  return pPrev;
+  }
 */
 
-    bool moveWidget( Widget *pWidget, bool up /*or down*/ )
+bool moveWidget( Widget *pWidget, bool up /*or down*/ )
+{
+    // Keep child parent&pos for in case of failure
+    Widget *pOriContainer = pWidget->up();
+    unsigned int oriChildPos = pOriContainer->getChildPos( pWidget );
+
+    // Get parent&sibling before removing it, since relations get cut
+    Widget *pSibling = up ? pWidget->prev() : pWidget->next();
+    Widget *pContainer = pWidget->up();
+    if ( !pContainer )
+        return false;
+
+    // try to swap with parent or child
+    // We need to allow for this at least for the root node...
+    if ( !pSibling )
     {
-        // Keep child parent&pos for in case of failure
-        Widget *pOriContainer = pWidget->up();
-        unsigned int oriChildPos = pOriContainer->getChildPos( pWidget );
-
-        // Get parent&sibling before removing it, since relations get cut
-        Widget *pSibling = up ? pWidget->prev() : pWidget->next();
-        Widget *pContainer = pWidget->up();
-        if ( !pContainer )
-            return false;
-
-        // try to swap with parent or child
-        // We need to allow for this at least for the root node...
-        if ( !pSibling )
+        if ( up )
         {
-            if ( up )
-            {
-                if ( pContainer->swapWithChild( pWidget ) )
-                    return true;
-            }
-            else
-            {
-// TODO: this is a nice feature, but we probably want to do it explicitely...
-#if 0
-                if ( pWidget->down() && pWidget->swapWithChild( pWidget->down() ) )
-                    return true;
-#endif
-            }
-        }
-
-        pContainer->removeChild( pWidget );
-
-        // if has up sibling -- append to it, else swap with it
-        if ( pSibling )
-        {
-            if ( pSibling->addChild( pWidget, up ? 0xffff : 0 ) )
+            if ( pContainer->swapWithChild( pWidget ) )
                 return true;
-
-            unsigned int childPos = pContainer->getChildPos( pSibling );
-            if ( pContainer->addChild( pWidget, childPos + (up ? 0 : 1) ) )
-                return true;  // should always be succesful
         }
-        // go through parents -- try to get prepended to them
         else
         {
-            for ( ; pContainer && pContainer->up(); pContainer = pContainer->up() )
-            {
-                unsigned int childPos = pContainer->up()->getChildPos( pContainer );
-                if ( pContainer->up()->addChild( pWidget, childPos + (up ? 0 : 1) ) )
-                    return true;
-            }
+// TODO: this is a nice feature, but we probably want to do it explicitely...
+#if 0
+            if ( pWidget->down() && pWidget->swapWithChild( pWidget->down() ) )
+                return true;
+#endif
         }
+    }
 
-        // failed -- try to get it to its old position
-        if ( !pOriContainer->addChild( pWidget, oriChildPos ) )
-        {
-            // a parent should never reject a child back. but if it ever
-            // happens, just kill it, we don't run an orphanate here ;P
-            delete pWidget;
+    pContainer->removeChild( pWidget );
+
+    // if has up sibling -- append to it, else swap with it
+    if ( pSibling )
+    {
+        if ( pSibling->addChild( pWidget, up ? 0xffff : 0 ) )
             return true;
+
+        unsigned int childPos = pContainer->getChildPos( pSibling );
+        if ( pContainer->addChild( pWidget, childPos + (up ? 0 : 1) ) )
+            return true;  // should always be succesful
+    }
+    // go through parents -- try to get prepended to them
+    else
+    {
+        for ( ; pContainer && pContainer->up(); pContainer = pContainer->up() )
+        {
+            unsigned int childPos = pContainer->up()->getChildPos( pContainer );
+            if ( pContainer->up()->addChild( pWidget, childPos + (up ? 0 : 1) ) )
+                return true;
         }
-        return false;
     }
 
-    // NOTE: root is considered to be number -1
-    Widget *get( Widget *pRoot, int nb )
+    // failed -- try to get it to its old position
+    if ( !pOriContainer->addChild( pWidget, oriChildPos ) )
     {
-        Widget *it;
-        for ( it = pRoot; it != NULL && nb >= 0; it = next( it ) )
-            nb--;
-        return it;
+        // a parent should never reject a child back. but if it ever
+        // happens, just kill it, we don't run an orphanate here ;P
+        delete pWidget;
+        return true;
     }
+    return false;
+}
 
-    int get( Widget *pRoot, Widget *pWidget )
-    {
-        int nRet = -1;
-        Widget *it;
-        for ( it = pRoot; it != NULL && it != pWidget; it = next( it ) )
-            nRet++;
-        return nRet;
-    }
+// NOTE: root is considered to be number -1
+Widget *get( Widget *pRoot, int nb )
+{
+    Widget *it;
+    for ( it = pRoot; it != NULL && nb >= 0; it = next( it ) )
+        nb--;
+    return it;
+}
+
+int get( Widget *pRoot, Widget *pWidget )
+{
+    int nRet = -1;
+    Widget *it;
+    for ( it = pRoot; it != NULL && it != pWidget; it = next( it ) )
+        nRet++;
+    return nRet;
+}
 }
 
 //** PropertiesList widget
@@ -774,7 +765,7 @@ class PropertiesList : public layout::Table
             DECL_LINK( FlagToggledHdl, layout::CheckBox* );
 
             AnyWidget( Widget *pWidget, rtl::OUString aPropName, Widget::PropertyKind aPropKind )
-            : mpWidget( pWidget ), maPropName( aPropName ), maPropKind( aPropKind )
+                : mpWidget( pWidget ), maPropName( aPropName ), maPropKind( aPropKind )
             {
                 mpFlag = 0;
                 mbBlockFlagCallback = false;
@@ -852,7 +843,7 @@ class PropertiesList : public layout::Table
 
             AnyEdit( Widget *pWidget, rtl::OUString aPropName,
                      Widget::PropertyKind aPropKind, layout::Window *pWinParent )
-            : AnyWidget( pWidget, aPropName, aPropKind ), layout::HBox( 0, false ), mpWinParent( pWinParent )
+                : AnyWidget( pWidget, aPropName, aPropKind ), layout::HBox( 0, false ), mpWinParent( pWinParent )
             {
                 mpEdit = NULL;
                 mpExpand = new layout::PushButton( pWinParent, WB_TOGGLE );
@@ -880,7 +871,7 @@ class PropertiesList : public layout::Table
                 if ( mpEdit )
                 {
                     text = mpEdit->GetText();
-printf("Remove mpEdit and expand\n");
+                    printf("Remove mpEdit and expand\n");
                     Remove( mpEdit );
                     Remove( mpExpand );
                     delete mpEdit;
@@ -974,7 +965,7 @@ printf("Remove mpEdit and expand\n");
         {
             AnyInteger( Widget *pWidget, rtl::OUString aPropName,
                         Widget::PropertyKind aPropKind, Window *pWinParent )
-            : AnyWidget( pWidget, aPropName, aPropKind ), NumericField( pWinParent, WB_SPIN|WB_BORDER )
+                : AnyWidget( pWidget, aPropName, aPropKind ), NumericField( pWinParent, WB_SPIN|WB_BORDER )
             {
                 load();
                 SetModifyHdl( LINK( this, AnyInteger, ApplyPropertyHdl ) );
@@ -1003,7 +994,7 @@ printf("Remove mpEdit and expand\n");
         {
             AnyFloat( Widget *pWidget, rtl::OUString aPropName,
                       Widget::PropertyKind aPropKind, Window *pWinParent )
-            : AnyInteger( pWidget, aPropName, aPropKind, pWinParent )
+                : AnyInteger( pWidget, aPropName, aPropKind, pWinParent )
             {}
 
             virtual void store()
@@ -1016,7 +1007,7 @@ printf("Remove mpEdit and expand\n");
         {
             AnyCheckBox( Widget *pWidget, rtl::OUString aPropName,
                          Widget::PropertyKind aPropKind, layout::Window *pWinParent )
-            : AnyWidget( pWidget, aPropName, aPropKind ), layout::CheckBox( pWinParent )
+                : AnyWidget( pWidget, aPropName, aPropKind ), layout::CheckBox( pWinParent )
             {
                 // adding some whitespaces to make the hit area larger
 //                SetText( String::CreateFromAscii( "" ) );
@@ -1060,7 +1051,7 @@ printf("Remove mpEdit and expand\n");
         {
             AnyListBox( Widget *pWidget, rtl::OUString aPropName,
                         Widget::PropertyKind aPropKind, Window *pWinParent )
-            : AnyWidget( pWidget, aPropName, aPropKind ), layout::ListBox( pWinParent, WB_DROPDOWN )
+                : AnyWidget( pWidget, aPropName, aPropKind ), layout::ListBox( pWinParent, WB_DROPDOWN )
             {
                 SetSelectHdl( LINK( this, AnyWidget, ApplyPropertyHdl ) );
             }
@@ -1084,7 +1075,7 @@ printf("Remove mpEdit and expand\n");
         {
             AnyAlign( Widget *pWidget, rtl::OUString aPropName,
                       Widget::PropertyKind aPropKind, Window *pWinParent )
-            : AnyListBox( pWidget, aPropName, aPropKind, pWinParent )
+                : AnyListBox( pWidget, aPropName, aPropKind, pWinParent )
             {
                 InsertEntry( XubString::CreateFromAscii( "Left" ) );
                 InsertEntry( XubString::CreateFromAscii( "Center" ) );
@@ -1100,7 +1091,7 @@ printf("Remove mpEdit and expand\n");
         {
             AnyComboBox( Widget *pWidget, rtl::OUString aPropName,
                          Widget::PropertyKind aPropKind, Window *pWinParent )
-            : AnyWidget( pWidget, aPropName, aPropKind ), layout::ComboBox( pWinParent, WB_DROPDOWN )
+                : AnyWidget( pWidget, aPropName, aPropKind ), layout::ComboBox( pWinParent, WB_DROPDOWN )
             {
                 SetModifyHdl( LINK( this, AnyComboBox, ApplyPropertyHdl ) );
             }
@@ -1124,7 +1115,7 @@ printf("Remove mpEdit and expand\n");
         {
             AnyFontStyle( Widget *pWidget, rtl::OUString aPropName,
                           Widget::PropertyKind aPropKind, Window *pWinParent )
-            : AnyComboBox( pWidget, aPropName, aPropKind, pWinParent )
+                : AnyComboBox( pWidget, aPropName, aPropKind, pWinParent )
             {
                 InsertEntry( XubString::CreateFromAscii( "Bold" ) );
                 InsertEntry( XubString::CreateFromAscii( "Italic" ) );
@@ -1138,71 +1129,71 @@ printf("Remove mpEdit and expand\n");
         layout::CheckBox *mpFlag;
         AnyWidget *mpValue;
 
-        public:
-            PropertyEntry( layout::Window *pWinParent, AnyWidget *pAnyWidget )
+    public:
+        PropertyEntry( layout::Window *pWinParent, AnyWidget *pAnyWidget )
+        {
+            mpLabel = new layout::FixedText( pWinParent );
             {
-                mpLabel = new layout::FixedText( pWinParent );
-                {
-                    // append ':' to aPropName
-                    rtl::OUStringBuffer buf( pAnyWidget->maPropName );
-                    buf.append( sal_Unicode (':') );
-                    mpLabel->SetText( buf.makeStringAndClear() );
-                }
-                mpValue = pAnyWidget;
-                mpFlag = new layout::CheckBox( pWinParent );
-                mpFlag->SetToggleHdl( LINK( mpValue, AnyWidget, FlagToggledHdl ) );
-                mpValue->mpFlag = mpFlag;
+                // append ':' to aPropName
+                rtl::OUStringBuffer buf( pAnyWidget->maPropName );
+                buf.append( sal_Unicode (':') );
+                mpLabel->SetText( buf.makeStringAndClear() );
             }
+            mpValue = pAnyWidget;
+            mpFlag = new layout::CheckBox( pWinParent );
+            mpFlag->SetToggleHdl( LINK( mpValue, AnyWidget, FlagToggledHdl ) );
+            mpValue->mpFlag = mpFlag;
+        }
 
-            ~PropertyEntry()
-            {
+        ~PropertyEntry()
+        {
 #if DEBUG_PRINT
                 fprintf(stderr, "REMOVING label, flag and value\n");
 #endif
-                delete mpLabel;
-                delete mpFlag;
-                delete mpValue;
-            }
+            delete mpLabel;
+            delete mpFlag;
+            delete mpValue;
+        }
 
-            // Use this factory rather than the constructor -- check for NULL
-            static PropertyEntry *construct( Widget *pWidget, rtl::OUString aPropName,
-                                             Widget::PropertyKind aPropKind, sal_uInt16 nType,
-                                             layout::Window *pWinParent )
-            {
-                AnyWidget *pAnyWidget;
-                switch (nType) {
-                    case uno::TypeClass_STRING:
-                        if ( aPropName.compareToAscii( "FontStyleName" ) == 0 )
-                        {
-                            pAnyWidget = new AnyFontStyle( pWidget, aPropName, aPropKind, pWinParent );
-                            break;
-                        }
-                        pAnyWidget = new AnyEdit( pWidget, aPropName, aPropKind, pWinParent );
+        // Use this factory rather than the constructor -- check for NULL
+        static PropertyEntry *construct( Widget *pWidget, rtl::OUString aPropName,
+                                         Widget::PropertyKind aPropKind, sal_uInt16 nType,
+                                         layout::Window *pWinParent )
+        {
+            AnyWidget *pAnyWidget;
+            switch (nType) {
+                case uno::TypeClass_STRING:
+                    if ( aPropName.compareToAscii( "FontStyleName" ) == 0 )
+                    {
+                        pAnyWidget = new AnyFontStyle( pWidget, aPropName, aPropKind, pWinParent );
                         break;
-                    case uno::TypeClass_SHORT:
-                        if ( aPropName.compareToAscii( "Align" ) == 0 )
-                        {
-                            pAnyWidget = new AnyAlign( pWidget, aPropName, aPropKind, pWinParent );
-                            break;
-                        }
-                        // otherwise, treat as any other number...
-                    case uno::TypeClass_LONG:
-                    case uno::TypeClass_UNSIGNED_LONG:
-                        pAnyWidget = new AnyInteger( pWidget, aPropName, aPropKind, pWinParent );
+                    }
+                    pAnyWidget = new AnyEdit( pWidget, aPropName, aPropKind, pWinParent );
+                    break;
+                case uno::TypeClass_SHORT:
+                    if ( aPropName.compareToAscii( "Align" ) == 0 )
+                    {
+                        pAnyWidget = new AnyAlign( pWidget, aPropName, aPropKind, pWinParent );
                         break;
-                    case uno::TypeClass_FLOAT:
-                    case uno::TypeClass_DOUBLE:
-                        pAnyWidget = new AnyFloat( pWidget, aPropName, aPropKind, pWinParent );
-                        break;
-                    case uno::TypeClass_BOOLEAN:
-                        pAnyWidget = new AnyCheckBox( pWidget, aPropName, aPropKind, pWinParent );
-                        break;
-                    default:
-                        return NULL;
-                }
-                return new PropertyEntry( pWinParent, pAnyWidget );
+                    }
+                    // otherwise, treat as any other number...
+                case uno::TypeClass_LONG:
+                case uno::TypeClass_UNSIGNED_LONG:
+                    pAnyWidget = new AnyInteger( pWidget, aPropName, aPropKind, pWinParent );
+                    break;
+                case uno::TypeClass_FLOAT:
+                case uno::TypeClass_DOUBLE:
+                    pAnyWidget = new AnyFloat( pWidget, aPropName, aPropKind, pWinParent );
+                    break;
+                case uno::TypeClass_BOOLEAN:
+                    pAnyWidget = new AnyCheckBox( pWidget, aPropName, aPropKind, pWinParent );
+                    break;
+                default:
+                    return NULL;
             }
-        };
+            return new PropertyEntry( pWinParent, pAnyWidget );
+        }
+    };
 
     layout::Window *mpParentWindow;
 
@@ -1249,12 +1240,12 @@ printf("Remove mpEdit and expand\n");
                 return true;
         } while ( min <= max );
         return false;
-   }
+    }
 
 public:
     PropertiesList( layout::Dialog *dialog )
-    : layout::Table( dialog, "properties-box" )
-    , mpParentWindow( dialog ), mpSeparator( 0 )
+        : layout::Table( dialog, "properties-box" )
+        , mpParentWindow( dialog ), mpSeparator( 0 )
     {
     }
 
@@ -1318,7 +1309,7 @@ public:
         Container::Clear();
 
         for ( std::list< PropertyEntry* >::iterator it = maPropertiesList.begin();
-             it != maPropertiesList.end(); it++)
+              it != maPropertiesList.end(); it++)
             delete *it;
         maPropertiesList.clear();
 
@@ -1378,14 +1369,14 @@ IMPL_LINK( PropertiesList::PropertyEntry::AnyEdit, ExpandEditHdl, layout::PushBu
 class SortListBox
 {        // For a manual sort ListBox; asks for a ListBox and Up/Down/Remove
          // buttons to wrap
-DECL_LINK( ItemSelectedHdl, layout::ListBox* );
-DECL_LINK( UpPressedHdl, layout::Button* );
-DECL_LINK( DownPressedHdl, layout::Button* );
-DECL_LINK( RemovePressedHdl, layout::Button* );
-layout::PushButton *mpUpButton, *mpDownButton, *mpRemoveButton;
+    DECL_LINK( ItemSelectedHdl, layout::ListBox* );
+    DECL_LINK( UpPressedHdl, layout::Button* );
+    DECL_LINK( DownPressedHdl, layout::Button* );
+    DECL_LINK( RemovePressedHdl, layout::Button* );
+    layout::PushButton *mpUpButton, *mpDownButton, *mpRemoveButton;
 
 protected:
-layout::ListBox *mpListBox;
+    layout::ListBox *mpListBox;
 
     virtual void upPressed( USHORT nPos )
     {
@@ -1431,8 +1422,8 @@ layout::ListBox *mpListBox;
 public:
     SortListBox( layout::ListBox *pListBox, layout::PushButton *pUpButton, layout::PushButton *pDownButton,
                  layout::PushButton *pRemoveButton )
-    : mpUpButton( pUpButton), mpDownButton( pDownButton), mpRemoveButton( pRemoveButton ),
-      mpListBox( pListBox )
+        : mpUpButton( pUpButton), mpDownButton( pDownButton), mpRemoveButton( pRemoveButton ),
+          mpListBox( pListBox )
     {
         mpListBox->SetSelectHdl( LINK( this, SortListBox, ItemSelectedHdl ) );
 
@@ -1516,10 +1507,10 @@ public:
     Widget *mpRootWidget;
 
     LayoutTree( layout::Dialog *dialog )
-    : SortListBox( new layout::ListBox( dialog, "layout-tree" ),
-                   new layout::PushButton( dialog, "layout-up-button" ),
-                   new layout::PushButton( dialog, "layout-down-button" ),
-                   new layout::PushButton( dialog, "layout-remove-button" ) )
+        : SortListBox( new layout::ListBox( dialog, "layout-tree" ),
+                       new layout::PushButton( dialog, "layout-up-button" ),
+                       new layout::PushButton( dialog, "layout-down-button" ),
+                       new layout::PushButton( dialog, "layout-remove-button" ) )
     {
         layout::PeerHandle handle = dialog->GetPeerHandle( "preview-box" );
         uno::Reference< awt::XLayoutConstrains > xWidget( handle, uno::UNO_QUERY );
@@ -1617,7 +1608,7 @@ public:
             for ( int kind = 0; kind < 2; kind++ )
             {
                 Widget::PropertyKind wKind = kind == 0 ? Widget::WINDOW_PROPERTY
-                                                          : Widget::CONTAINER_PROPERTY;
+                    : Widget::CONTAINER_PROPERTY;
                 Widget::PropertyIterator it( i, wKind );
                 while ( it.hasNext() )
                 {
@@ -1629,16 +1620,16 @@ public:
                     if ( prop.Type.getTypeClass() == uno::TypeClass_BOOLEAN )
                     {
                         if ( value.compareToAscii( "0" ) )
-                             value = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("false") );
+                            value = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("false") );
                         else
-                             value = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("true") );
+                            value = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("true") );
                     }
 
                     if ( value.getLength() > 0 )
                         printf("%s%s=\"%s\" ",
-                            kind == 0 ? "" : "cnt:",
-                            OUSTRING_CSTR( toXMLNaming( prop.Name ) ), OUSTRING_CSTR( value )
-                        );
+                               kind == 0 ? "" : "cnt:",
+                               OUSTRING_CSTR( toXMLNaming( prop.Name ) ), OUSTRING_CSTR( value )
+                            );
 
                 }
             }
@@ -1719,7 +1710,7 @@ class EditorImpl : public LayoutTree::Listener
 public:
 
     EditorImpl( layout::Dialog *dialog,
-        // we should probable open this channel (or whatever its called) ourselves
+                // we should probable open this channel (or whatever its called) ourselves
                 uno::Reference< lang::XMultiServiceFactory > xMSF );
     virtual ~EditorImpl();
 
@@ -1754,7 +1745,7 @@ EditorImpl::EditorImpl( layout::Dialog *dialog,
     mpLayoutTree->setListener( this );
 
 /*    if ( xImport.is() )
-    mpLayoutTree->getWidget( -1 )->addChild( new Widget( xImport, "import" ) );*/
+      mpLayoutTree->getWidget( -1 )->addChild( new Widget( xImport, "import" ) );*/
 
     // create buttons
     layout::Container aWidgets( dialog, "create-widget" );
@@ -1797,7 +1788,7 @@ EditorImpl::~EditorImpl()
     delete mpPropertiesList;
     delete mpLayoutTree;
     for ( std::list< layout::PushButton * >::const_iterator i = maCreateButtons.begin();
-         i != maCreateButtons.end(); i++)
+          i != maCreateButtons.end(); i++)
         delete *i;
     delete pImportButton;
     delete pExportButton;
@@ -1808,14 +1799,14 @@ EditorImpl::~EditorImpl()
 
 void EditorImpl::loadFile( const rtl::OUString &aTestFile )
 {
-fprintf( stderr, "TEST: layout instance\n" );
+    fprintf( stderr, "TEST: layout instance\n" );
     uno::Reference< awt::XLayoutRoot > xRoot
         ( new EditorRoot( mxFactory, mpLayoutTree->mpRootWidget ) );
 
 /*
-mxMSF->createInstance
-                ( ::rtl::OUString::createFromAscii( "com.sun.star.awt.Layout" ) ),
-          uno::UNO_QUERY );
+  mxMSF->createInstance
+  ( ::rtl::OUString::createFromAscii( "com.sun.star.awt.Layout" ) ),
+  uno::UNO_QUERY );
 */
     if ( !xRoot.is() )
     {
@@ -1877,13 +1868,13 @@ void EditorImpl::widgetSelected( Widget *pWidget )
     if ( !pWidget || pWidget->isContainer() )
     {
         for ( std::list< layout::PushButton *>::const_iterator it = maCreateButtons.begin();
-             it != maCreateButtons.end(); it++)
+              it != maCreateButtons.end(); it++)
             (*it)->Enable();
     }
     else
     {
         for ( std::list< layout::PushButton *>::const_iterator it = maCreateButtons.begin();
-             it != maCreateButtons.end(); it++)
+              it != maCreateButtons.end(); it++)
             (*it)->Disable();
     }
 
@@ -1894,7 +1885,7 @@ IMPL_LINK( EditorImpl, CreateWidgetHdl, layout::Button *, pBtn )
 {
     int i = 0;
     for ( std::list< layout::PushButton *>::const_iterator it = maCreateButtons.begin();
-         it != maCreateButtons.end(); it++, i++ )
+          it != maCreateButtons.end(); it++, i++ )
     {
         if ( pBtn == *it )
             break;

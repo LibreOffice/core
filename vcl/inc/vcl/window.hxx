@@ -983,6 +983,8 @@ public:
     void                DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, BOOL bChecked, BOOL bDrawBorder, BOOL bDrawExtBorderOnly );
     // the same, but fills a passed Color with a text color complementing the selection background
     void                DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, BOOL bChecked, BOOL bDrawBorder, BOOL bDrawExtBorderOnly, Color* pSelectionTextColor );
+    // support rounded edges in the selection rect
+    void                DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, BOOL bChecked, BOOL bDrawBorder, BOOL bDrawExtBorderOnly, long nCornerRadius, Color* pSelectionTextColor, Color* pPaintColor );
 
     void                ShowTracking( const Rectangle& rRect,
                                       USHORT nFlags = SHOWTRACK_SMALL );

@@ -176,9 +176,12 @@
 #define MODKEY_RMOD1     0x0008
 #define MODKEY_LMOD2     0x0010
 #define MODKEY_RMOD2     0x0020
+#define MODKEY_LMOD3     0x0040
+#define MODKEY_RMOD3     0x0080
 #define MODKEY_SHIFT     (MODKEY_LSHIFT|MODKEY_RSHIFT)
 #define MODKEY_MOD1      (MODKEY_LMOD1|MODKEY_RMOD1)
 #define MODKEY_MOD2      (MODKEY_LMOD2|MODKEY_RMOD2)
+#define MODKEY_MOD3      (MODKEY_LMOD3|MODKEY_RMOD3)
 
 // ---------------
 // - Mouse-Types -

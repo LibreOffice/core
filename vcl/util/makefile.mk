@@ -170,8 +170,9 @@ SHL1STDLIBS+=\
             $(SOTLIB)           \
             $(UNOTOOLSLIB)      \
             $(TOOLSLIB)         \
+            $(I18NPAPERLIB)     \
             $(I18NISOLANGLIB)   \
-            $(I18NUTILLIB)   \
+            $(I18NUTILLIB)      \
             $(COMPHELPERLIB)	\
             $(UCBHELPERLIB)     \
             $(CPPUHELPERLIB)    \
@@ -264,13 +265,8 @@ SHL2DEPN=$(SHL1IMPLIBN) $(SHL1TARGETN)
 # libs for generic plugin
 SHL2STDLIBS=\
             $(VCLLIB)\
-            $(SOTLIB)           \
-            $(UNOTOOLSLIB)      \
+            $(I18NPAPERLIB)     \
             $(TOOLSLIB)         \
-            $(COMPHELPERLIB)	\
-            $(UCBHELPERLIB)     \
-            $(CPPUHELPERLIB)    \
-            $(CPPULIB)          \
             $(VOSLIB)           \
             $(BASEGFXLIB)	\
             $(SALLIB)
@@ -344,11 +340,7 @@ SHL4NOCHECK=TRUE
 SHL4STDLIBS+=-l$(SHL2TARGET)
 SHL4STDLIBS+=\
             $(VCLLIB)		\
-            $(SOTLIB)           \
-            $(UNOTOOLSLIB)      \
             $(TOOLSLIB)         \
-            $(COMPHELPERLIB)	\
-            $(UCBHELPERLIB)     \
             $(CPPUHELPERLIB)    \
             $(CPPULIB)          \
             $(VOSLIB)           \

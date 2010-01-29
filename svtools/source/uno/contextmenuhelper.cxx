@@ -610,7 +610,7 @@ ContextMenuHelper::completeMenuProperties(
     // Retrieve some settings necessary to display complete context
     // menu correctly.
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    bool  bShowMenuImages( SvtMenuOptions().IsMenuIconsEnabled() );
+    bool  bShowMenuImages( rSettings.GetUseImagesInMenus() );
     bool  bIsHiContrast( rSettings.GetMenuColor().IsDark() );
 
     if ( pMenu )

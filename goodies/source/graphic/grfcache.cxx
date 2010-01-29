@@ -583,54 +583,79 @@ GraphicCache::~GraphicCache()
 
 // -----------------------------------------------------------------------------
 
-void GraphicCache::AddGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute, const ByteString* pID )
+void GraphicCache::AddGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute,
+                                     const ByteString* pID, const GraphicObject* pCopyObj )
 {
     BOOL bInserted = FALSE;
 
-    if( !rObj.IsSwappedOut() && ( ( rObj.GetType() != GRAPHIC_NONE ) || pID ) )
+    if( !rObj.IsSwappedOut() &&
+        ( pID || ( pCopyObj && ( pCopyObj->GetType() != GRAPHIC_NONE ) ) || ( rObj.GetType() != GRAPHIC_NONE ) ) )
     {
-        GraphicCacheEntry*  pEntry = (GraphicCacheEntry*) maGraphicCache.First();
-        const GraphicID     aID( rObj );
-
-        while( !bInserted && pEntry )
+        if( pCopyObj )
         {
-            const GraphicID& rEntryID = pEntry->GetID();
+            GraphicCacheEntry* pEntry = static_cast< GraphicCacheEntry* >( maGraphicCache.First() );
 
-            if( pID )
+            while( !bInserted && pEntry )
             {
-                if( rEntryID.GetIDString() == *pID )
+                if( pEntry->HasGraphicObjectReference( *pCopyObj ) )
                 {
-                    pEntry->TryToSwapIn();
+                    pEntry->AddGraphicObjectReference( rObj, rSubstitute );
+                    bInserted = TRUE;
+                }
+                else
+                {
+                    pEntry = static_cast< GraphicCacheEntry* >( maGraphicCache.Next() );
+                }
+            }
+        }
 
-                    // since pEntry->TryToSwapIn can modify our current list, we have to
-                    // iterate from beginning to add a reference to the appropriate
-                    // CacheEntry object; after this, quickly jump out of the outer iteration
-                    for( pEntry = (GraphicCacheEntry*) maGraphicCache.First(); !bInserted && pEntry; pEntry = (GraphicCacheEntry*) maGraphicCache.Next() )
+        if( !bInserted )
+        {
+            GraphicCacheEntry* pEntry = static_cast< GraphicCacheEntry* >( maGraphicCache.First() );
+            const GraphicID aID( rObj );
+
+            while( !bInserted && pEntry )
+            {
+                const GraphicID& rEntryID = pEntry->GetID();
+
+                if( pID )
+                {
+                    if( rEntryID.GetIDString() == *pID )
                     {
-                        const GraphicID& rID = pEntry->GetID();
+                        pEntry->TryToSwapIn();
 
-                        if( rID.GetIDString() == *pID )
+                        // since pEntry->TryToSwapIn can modify our current list, we have to
+                        // iterate from beginning to add a reference to the appropriate
+                        // CacheEntry object; after this, quickly jump out of the outer iteration
+                        for( pEntry = static_cast< GraphicCacheEntry* >( maGraphicCache.First() );
+                             !bInserted && pEntry;
+                             pEntry = static_cast< GraphicCacheEntry* >( maGraphicCache.Next() ) )
                         {
-                            pEntry->AddGraphicObjectReference( rObj, rSubstitute );
+                            const GraphicID& rID = pEntry->GetID();
+
+                            if( rID.GetIDString() == *pID )
+                            {
+                                pEntry->AddGraphicObjectReference( rObj, rSubstitute );
+                                bInserted = TRUE;
+                            }
+                        }
+
+                        if( !bInserted )
+                        {
+                            maGraphicCache.Insert( new GraphicCacheEntry( rObj ), LIST_APPEND );
                             bInserted = TRUE;
                         }
                     }
-
-                    if( !bInserted )
-                    {
-                        maGraphicCache.Insert( new GraphicCacheEntry( rObj ), LIST_APPEND );
-                        bInserted = TRUE;
-                    }
                 }
-            }
-            else if( rEntryID == aID )
-            {
-                pEntry->AddGraphicObjectReference( rObj, rSubstitute );
-                bInserted = TRUE;
-            }
+                else if( rEntryID == aID )
+                {
+                    pEntry->AddGraphicObjectReference( rObj, rSubstitute );
+                    bInserted = TRUE;
+                }
 
-            if( !bInserted )
-                pEntry = (GraphicCacheEntry*) maGraphicCache.Next();
+                if( !bInserted )
+                    pEntry = static_cast< GraphicCacheEntry* >( maGraphicCache.Next() );
+            }
         }
     }
 
@@ -718,7 +743,7 @@ void GraphicCache::GraphicObjectWasSwappedIn( const GraphicObject& rObj )
         if( pEntry->GetID().IsEmpty() )
         {
             ReleaseGraphicObject( rObj );
-            AddGraphicObject( rObj, (Graphic&) rObj.GetGraphic(), NULL );
+            AddGraphicObject( rObj, (Graphic&) rObj.GetGraphic(), NULL, NULL );
         }
         else
             pEntry->GraphicObjectWasSwappedIn( rObj );

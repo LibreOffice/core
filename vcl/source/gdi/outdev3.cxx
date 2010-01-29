@@ -7,7 +7,6 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: outdev3.cxx,v $
- * $Revision: 1.240.14.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,6 +62,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/fontcfg.hxx>
+#include <vcl/sysdata.hxx>
 #ifndef _OSL_FILE_H
 #include <osl/file.h>
 #endif
@@ -6483,7 +6483,7 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
             nRTLOffset = nPixelWidth;
         else
             nRTLOffset = pSalLayout->GetTextWidth() / pSalLayout->GetUnitsPerPixel();
-        pSalLayout->DrawOffset().X() = -nRTLOffset;
+        pSalLayout->DrawOffset().X() = 1 - nRTLOffset;
     }
 
     return pSalLayout;
@@ -6918,13 +6918,13 @@ void OutputDevice::ImplDrawText( const Rectangle& rRect,
                 nStyle &= ~TEXT_DRAW_CLIP;
         }
 
-        // Vertikales Alignment
+        // horizontal text alignment
         if ( nStyle & TEXT_DRAW_RIGHT )
             aPos.X() += nWidth-nTextWidth;
         else if ( nStyle & TEXT_DRAW_CENTER )
             aPos.X() += (nWidth-nTextWidth)/2;
 
-        // Font Alignment
+        // vertical font alignment
         if ( eAlign == ALIGN_BOTTOM )
             aPos.Y() += nTextHeight;
         else if ( eAlign == ALIGN_BASELINE )
@@ -7700,6 +7700,97 @@ FontMetric OutputDevice::GetFontMetric( const Font& rFont ) const
 
 // -----------------------------------------------------------------------
 
+/** OutputDevice::GetSysFontData
+ *
+ * @param nFallbacklevel Fallback font level (0 = best matching font)
+ *
+ * Retrieve detailed font information in platform independent structure
+ *
+ * @return SystemFontData
+ **/
+SystemFontData OutputDevice::GetSysFontData(int nFallbacklevel) const
+{
+    SystemFontData aSysFontData;
+    aSysFontData.nSize = sizeof(aSysFontData);
+
+    if (!mpGraphics) ImplGetGraphics();
+    if (mpGraphics) aSysFontData = mpGraphics->GetSysFontData(nFallbacklevel);
+
+    return aSysFontData;
+}
+
+
+// -----------------------------------------------------------------------
+
+/** OutputDevice::GetSysTextLayoutData
+ *
+ * @param rStartPt Start point of the text
+ * @param rStr Text string that will be transformed into layout of glyphs
+ * @param nIndex Position in the string from where layout will be done
+ * @param nLen Length of the string
+ * @param pDXAry Custom layout adjustment data
+ *
+ * Export finalized glyph layout data as platform independent SystemTextLayoutData
+ * (see vcl/inc/vcl/sysdata.hxx)
+ *
+ * Only parameters rStartPt and rStr are mandatory, the rest is optional
+ * (default values will be used)
+ *
+ * @return SystemTextLayoutData
+ **/
+SystemTextLayoutData OutputDevice::GetSysTextLayoutData(const Point& rStartPt, const XubString& rStr, xub_StrLen nIndex, xub_StrLen nLen,
+                                                        const sal_Int32* pDXAry) const
+{
+    DBG_TRACE( "OutputDevice::GetSysTextLayoutData()" );
+    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
+
+    SystemTextLayoutData aSysLayoutData;
+    aSysLayoutData.nSize = sizeof(aSysLayoutData);
+    aSysLayoutData.rGlyphData.reserve( 256 );
+
+    if ( mpMetaFile ) {
+        if (pDXAry)
+            mpMetaFile->AddAction( new MetaTextArrayAction( rStartPt, rStr, pDXAry, nIndex, nLen ) );
+        else
+            mpMetaFile->AddAction( new MetaTextAction( rStartPt, rStr, nIndex, nLen ) );
+    }
+
+    if ( !IsDeviceOutputNecessary() ) return aSysLayoutData;
+
+    SalLayout* rLayout = ImplLayout( rStr, nIndex, nLen, rStartPt, 0, pDXAry, true );
+
+    // setup glyphs
+    Point aPos;
+    sal_GlyphId aGlyphId;
+    int nFallbacklevel = 0;
+    for( int nStart = 0; rLayout->GetNextGlyphs( 1, &aGlyphId, aPos, nStart ); )
+    {
+        // NOTE: Windows backend is producing unicode chars (ucs4), so on windows,
+        //       ETO_GLYPH_INDEX is unusable, unless extra glyph conversion is made.
+
+        SystemGlyphData aGlyph;
+        aGlyph.index = static_cast<unsigned long> (aGlyphId & GF_IDXMASK);
+        aGlyph.x = aPos.X();
+        aGlyph.y = aPos.Y();
+        aSysLayoutData.rGlyphData.push_back(aGlyph);
+
+        int nLevel = (aGlyphId & GF_FONTMASK) >> GF_FONTSHIFT;
+        if (nLevel > nFallbacklevel && nLevel < MAX_FALLBACK)
+            nFallbacklevel = nLevel;
+    }
+
+    // Get font data
+    aSysLayoutData.aSysFontData = GetSysFontData(nFallbacklevel);
+    aSysLayoutData.orientation = rLayout->GetOrientation();
+
+    rLayout->Release();
+
+    return aSysLayoutData;
+}
+
+// -----------------------------------------------------------------------
+
+
 long OutputDevice::GetMinKashida() const
 {
     DBG_TRACE( "OutputDevice::GetMinKashida()" );
@@ -7827,8 +7918,8 @@ BOOL OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const String& rStr,
 // -----------------------------------------------------------------------
 
 BOOL OutputDevice::GetTextBoundRect( Rectangle& rRect,
-    const String& rStr, xub_StrLen nBase, xub_StrLen nIndex,
-    xub_StrLen nLen ) const
+    const String& rStr, xub_StrLen nBase, xub_StrLen nIndex, xub_StrLen nLen,
+    ULONG nLayoutWidth, const sal_Int32* pDXAry ) const
 {
     DBG_TRACE( "OutputDevice::GetTextBoundRect()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
@@ -7837,13 +7928,14 @@ BOOL OutputDevice::GetTextBoundRect( Rectangle& rRect,
     rRect.SetEmpty();
 
     SalLayout* pSalLayout = NULL;
+    const Point aPoint;
     // calculate offset when nBase!=nIndex
     long nXOffset = 0;
     if( nBase != nIndex )
     {
         xub_StrLen nStart = Min( nBase, nIndex );
         xub_StrLen nOfsLen = Max( nBase, nIndex ) - nStart;
-        pSalLayout = ImplLayout( rStr, nStart, nOfsLen );
+        pSalLayout = ImplLayout( rStr, nStart, nOfsLen, aPoint, nLayoutWidth, pDXAry );
         if( pSalLayout )
         {
             nXOffset = pSalLayout->GetTextWidth();
@@ -7855,7 +7947,7 @@ BOOL OutputDevice::GetTextBoundRect( Rectangle& rRect,
         }
     }
 
-    pSalLayout = ImplLayout( rStr, nIndex, nLen );
+    pSalLayout = ImplLayout( rStr, nIndex, nLen, aPoint, nLayoutWidth, pDXAry );
     Rectangle aPixelRect;
     if( pSalLayout )
     {
@@ -7905,7 +7997,7 @@ BOOL OutputDevice::GetTextBoundRect( Rectangle& rRect,
     aVDev.SetTextAlign( ALIGN_TOP );
 
     // layout the text on the virtual device
-    pSalLayout = aVDev.ImplLayout( rStr, nIndex, nLen );
+    pSalLayout = aVDev.ImplLayout( rStr, nIndex, nLen, aPoint, nLayoutWidth, pDXAry );
     if( !pSalLayout )
         return false;
 
@@ -8005,7 +8097,7 @@ BOOL OutputDevice::GetTextBoundRect( Rectangle& rRect,
 
 BOOL OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
     const String& rStr, xub_StrLen nBase, xub_StrLen nIndex, xub_StrLen nLen,
-    BOOL bOptimize, const ULONG nTWidth, const sal_Int32* pDXArray ) const
+    BOOL bOptimize, ULONG nTWidth, const sal_Int32* pDXArray ) const
 {
     // the fonts need to be initialized
     if( mbNewFont )
@@ -8234,7 +8326,7 @@ BOOL OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
 
 BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
     const String& rStr, xub_StrLen nBase, xub_StrLen nIndex,
-    xub_StrLen nLen, BOOL bOptimize, const ULONG nTWidth, const sal_Int32* pDXArray ) const
+    xub_StrLen nLen, BOOL bOptimize, ULONG nTWidth, const sal_Int32* pDXArray ) const
 {
     rResultVector.clear();
 
@@ -8257,7 +8349,7 @@ BOOL OutputDevice::GetTextOutlines( PolyPolyVector& rResultVector,
 
 BOOL OutputDevice::GetTextOutline( PolyPolygon& rPolyPoly,
     const String& rStr, xub_StrLen nBase, xub_StrLen nIndex, xub_StrLen nLen,
-    BOOL bOptimize, const ULONG nTWidth, const sal_Int32* pDXArray ) const
+    BOOL bOptimize, ULONG nTWidth, const sal_Int32* pDXArray ) const
 {
     rPolyPoly.Clear();
 

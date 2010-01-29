@@ -109,7 +109,7 @@ namespace vclcanvas
         if( !mpBackBuffer )
             return geometry::IntegerSize2D();
 
-        return ::vcl::unotools::integerSize2DFromSize( mpBackBuffer->getBitmapReference().GetSizePixel() );
+        return ::vcl::unotools::integerSize2DFromSize( mpBackBuffer->getBitmapSizePixel() );
     }
 
     void CanvasBitmapHelper::clear()
