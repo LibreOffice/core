@@ -58,6 +58,8 @@ typedef std::vector<PropertyMapPtr>     PropertyMapVector1;
 typedef std::vector<PropertyMapVector1> PropertyMapVector2;
 
 class DomainMapper_Impl;
+class TableStyleSheetEntry;
+struct TableInfo;
 class DomainMapperTableHandler : public TableDataHandler<Handle_t , TablePropertyMapPtr >
 {
     TextReference_t         m_xText;
@@ -75,6 +77,10 @@ class DomainMapperTableHandler : public TableDataHandler<Handle_t , TablePropert
 
     sal_Int32 m_nCellIndex;
     sal_Int32 m_nRowIndex;
+
+    TableStyleSheetEntry * endTableGetTableStyle(TableInfo & rInfo);
+    CellPropertyValuesSeq_t endTableGetCellProperties(TableInfo & rInfo);
+    RowPropertyValuesSeq_t DomainMapperTableHandler::endTableGetRowProperties();
 
 public:
     typedef boost::shared_ptr<DomainMapperTableHandler> Pointer_t;
