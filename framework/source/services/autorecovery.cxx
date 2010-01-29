@@ -2054,6 +2054,33 @@ AutoRecovery::TDocumentList::iterator AutoRecovery::impl_searchDocument(      Au
 }
 
 //-----------------------------------------------
+namespace
+{
+    void lcl_changeVisibility( const css::uno::Reference< css::frame::XFramesSupplier >& i_rFrames, sal_Bool i_bVisible )
+    {
+        css::uno::Reference< css::container::XIndexAccess > xFramesContainer( i_rFrames->getFrames(), css::uno::UNO_QUERY );
+        const sal_Int32 count = xFramesContainer->getCount();
+
+        Any aElement;
+        for ( sal_Int32 i=0; i < count; ++i )
+        {
+            aElement = xFramesContainer->getByIndex(i);
+            // check for sub frames
+            css::uno::Reference< css::frame::XFramesSupplier > xFramesSupp( aElement, css::uno::UNO_QUERY );
+            if ( xFramesSupp.is() )
+                lcl_changeVisibility( xFramesSupp, i_bVisible );
+
+            css::uno::Reference< css::frame::XFrame > xFrame( aElement, css::uno::UNO_QUERY );
+            if ( !xFrame.is() )
+                continue;
+
+            css::uno::Reference< css::awt::XWindow > xWindow( xFrame->getContainerWindow(), UNO_SET_THROW );
+            xWindow->setVisible( i_bVisible );
+        }
+    }
+}
+
+//-----------------------------------------------
 void AutoRecovery::implts_changeAllDocVisibility(sal_Bool bVisible)
 {
     // SAFE -> ----------------------------------
@@ -2062,22 +2089,8 @@ void AutoRecovery::implts_changeAllDocVisibility(sal_Bool bVisible)
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
-    css::uno::Reference< css::frame::XFramesSupplier >  xDesktop  (xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY);
-    css::uno::Reference< css::container::XIndexAccess > xContainer(xDesktop->getFrames()                     , css::uno::UNO_QUERY);
-    sal_Int32 c = xContainer->getCount();
-    sal_Int32 i = 0;
-
-    for (i=0; i<c; ++i)
-    {
-        css::uno::Reference< css::frame::XFrame > xTask;
-
-        xContainer->getByIndex(i) >>= xTask;
-        if (!xTask.is())
-            continue;
-
-        css::uno::Reference< css::awt::XWindow > xWindow = xTask->getContainerWindow();
-        xWindow->setVisible(bVisible);
-    }
+    css::uno::Reference< css::frame::XFramesSupplier > xDesktop(xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY);
+    lcl_changeVisibility( xDesktop, bVisible );
 
     aReadLock.unlock();
     // <- SAFE ----------------------------------
