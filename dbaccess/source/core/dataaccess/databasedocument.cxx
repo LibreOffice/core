@@ -614,7 +614,7 @@ namespace
 }
 
 // -----------------------------------------------------------------------------
-void SAL_CALL ODatabaseDocument::saveToRecoveryFile( const ::rtl::OUString& i_TargetLocation, const Sequence< PropertyValue >& i_MediaDescriptor ) throw ( RuntimeException, IOException, WrappedTargetException )
+void SAL_CALL ODatabaseDocument::storeToRecoveryFile( const ::rtl::OUString& i_TargetLocation, const Sequence< PropertyValue >& i_MediaDescriptor ) throw ( RuntimeException, IOException, WrappedTargetException )
 {
     DocumentGuard aGuard( *this );
     ModifyLock aLock( *this );
