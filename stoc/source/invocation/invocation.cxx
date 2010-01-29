@@ -64,13 +64,9 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
+#include <boost/scoped_array.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
-
-#include <stdlib.h>
-#ifndef MACOSX
-#include <search.h>
-#endif
 
 #define SERVICENAME "com.sun.star.script.Invocation"
 #define IMPLNAME     "com.sun.star.comp.stoc.Invocation"
@@ -774,16 +770,6 @@ struct MemberItem
     sal_Int32 nIndex;
 };
 
-// qsort compare function for MemberItem
-//int __cdecl compare(const void *elem1, const void *elem2 )
-extern "C" int SAL_CALL compare(const void *elem1, const void *elem2 )
-{
-    MemberItem* pItem1 = *(MemberItem**)elem1;
-    MemberItem* pItem2 = *(MemberItem**)elem2;
-    return (int)pItem1->aName.compareTo( pItem2->aName );
-}
-
-
 // Implementation of getting name or info
 // String sequence will be filled when pStringSeq != NULL
 // Info sequence will be filled when pInfoSeq != NULL
@@ -823,13 +809,10 @@ void Invocation_Impl::getInfoSequenceImpl
     sal_Int32 nTotalCount = nNameAccessCount + nPropertyCount + nMethodCount;
 
     // Create and fill array of MemberItems
-    MemberItem* pItems = new MemberItem[ nTotalCount ];
+    boost::scoped_array< MemberItem > pItems( new MemberItem[ nTotalCount ] );
     const OUString* pStrings = aNameAccessNames.getConstArray();
     const Property* pProps = aPropertySeq.getConstArray();
     const Reference< XIdlMethod >* pMethods = aMethodSeq.getConstArray();
-
-    // Create array of MemberItem* for sorting
-    MemberItem** ppItems = new MemberItem*[ nTotalCount ];
 
     // Fill array of MemberItems
     sal_Int32 i, iTotal = 0;
@@ -838,7 +821,6 @@ void Invocation_Impl::getInfoSequenceImpl
     for( i = 0 ; i < nNameAccessCount ; i++, iTotal++ )
     {
         MemberItem& rItem = pItems[ iTotal ];
-        ppItems[ iTotal ] = &rItem;
         rItem.aName = pStrings[ i ];
         rItem.eMode = MemberItem::NAMEACCESS;
         rItem.nIndex = i;
@@ -848,7 +830,6 @@ void Invocation_Impl::getInfoSequenceImpl
     for( i = 0 ; i < nPropertyCount ; i++, iTotal++ )
     {
         MemberItem& rItem = pItems[ iTotal ];
-        ppItems[ iTotal ] = &rItem;
         rItem.aName = pProps[ i ].Name;
         rItem.eMode = MemberItem::PROPERTYSET;
         rItem.nIndex = i;
@@ -858,15 +839,11 @@ void Invocation_Impl::getInfoSequenceImpl
     for( i = 0 ; i < nMethodCount ; i++, iTotal++ )
     {
         MemberItem& rItem = pItems[ iTotal ];
-        ppItems[ iTotal ] = &rItem;
         Reference< XIdlMethod > xMethod = pMethods[ i ];
         rItem.aName = xMethod->getName();
         rItem.eMode = MemberItem::METHOD;
         rItem.nIndex = i;
     }
-
-    // Sort pointer array
-    qsort( ppItems, (size_t)nTotalCount, sizeof( MemberItem* ), compare );
 
     // Setting up result sequences
     OUString* pRetStrings = NULL;

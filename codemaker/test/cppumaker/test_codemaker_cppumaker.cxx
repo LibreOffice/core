@@ -382,7 +382,7 @@ class Test: public CppUnit::TestFixture {
 public:
     void testBigStruct();
 
-    void testPolyCharStruct();
+    void testPolyStruct();
 
     void testExceptions();
 
@@ -390,7 +390,7 @@ public:
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testBigStruct);
-    CPPUNIT_TEST(testPolyCharStruct);
+    CPPUNIT_TEST(testPolyStruct);
     CPPUNIT_TEST(testExceptions);
     CPPUNIT_TEST(testConstants);
     CPPUNIT_TEST_SUITE_END();
@@ -444,9 +444,13 @@ void Test::testBigStruct() {
     CPPUNIT_ASSERT_EQUAL(guard.p->m22.getLength(), static_cast< sal_Int32 >(0));
     CPPUNIT_ASSERT_EQUAL(guard.p->m23.getLength(), static_cast< sal_Int32 >(0));
 
-#if defined __GNUC__ && __GNUC__ >= 3
+#if defined __GNUC__ && __GNUC__ >= 3 // see CPPU_GCC3_ALIGN
     CPPUNIT_ASSERT_EQUAL(
+#if defined X86_64
+        static_cast< std::size_t >(24),
+#else
         static_cast< std::size_t >(16),
+#endif
         sizeof (test::codemaker::cppumaker::AlignmentDerivedStruct));
 #endif
 
@@ -464,7 +468,7 @@ void Test::testBigStruct() {
     CPPUNIT_ASSERT_EQUAL(typelib_TypeClass_CHAR, std->aBase.ppTypeRefs[10]->eTypeClass); // char m11;
 }
 
-void Test::testPolyCharStruct() {
+void Test::testPolyStruct() {
     CPPUNIT_ASSERT_EQUAL(
         rtl::OUString(
             RTL_CONSTASCII_USTRINGPARAM(
@@ -472,6 +476,10 @@ void Test::testPolyCharStruct() {
         (com::sun::star::uno::makeAny(
             test::codemaker::cppumaker::Struct< sal_Unicode, sal_Int16 >()).
          getValueType().getTypeName()));
+    CPPUNIT_ASSERT_EQUAL(
+        (test::codemaker::cppumaker::make_Struct< sal_uInt32, sal_Bool >(5, 0).
+         member1),
+        static_cast< sal_uInt32 >(5));
 }
 
 namespace {

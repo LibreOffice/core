@@ -51,7 +51,11 @@ DESTROOT=$(BIN)$/$(PYDIRNAME)
 .IF "$(GUI)" == "UNX"
 PYTHONBINARY=$(BIN)$/python$(EXECPOST).bin
 .ELSE
+.IF "$(COM)" == "GCC"
+PYTHONBINARY=$(DESTROOT)$/bin$/python.bin
+.ELSE
 PYTHONBINARY=$(DESTROOT)$/bin$/python$(EXECPOST)
+.ENDIF
 .ENDIF
 
 FINDLIBFILES_TMP:=$(subst,/,$/ \
@@ -114,7 +118,11 @@ $(BIN)$/python$(EXECPOST).bin : $(SOLARBINDIR)$/python$(EXECPOST)
 .ENDIF
     chmod +x $@
 .ELSE
+.IF "$(COM)" == "GCC"
+$(DESTROOT)$/bin$/python.bin : $(SOLARBINDIR)$/python$(EXECPOST)
+.ELSE
 $(DESTROOT)$/bin$/python$(EXECPOST) : $(SOLARBINDIR)$/python$(EXECPOST)
+.ENDIF
     -$(MKDIRHIER) $(@:d)
     -rm -f $@
     cat $< > $@

@@ -49,8 +49,6 @@ import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.beans.XFastPropertySet;
 import com.sun.star.beans.PropertyVetoException;
 import com.sun.star.beans.XMultiPropertySet;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Iterator;
 import java.util.Collection;
 import java.util.HashMap;

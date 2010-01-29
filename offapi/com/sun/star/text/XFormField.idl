@@ -7,6 +7,8 @@
 
  module com {  module sun {  module star {  module text {
 
+/** @deprecated
+ */
  interface XFormField: com::sun::star::uno::XInterface
  {
      short getType();

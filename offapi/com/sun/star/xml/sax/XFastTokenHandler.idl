@@ -57,7 +57,7 @@ interface XFastTokenHandler: com::sun::star::uno::XInterface
     /** returns a integer token for the given string identifier.
 
         @returns
-            a unique integer token for the given String or <const>FastToken::DONTKNOW</const
+            a unique integer token for the given String or <const>FastToken::DONTKNOW</const>
             if the identifier is not known to this instance.
     */
     long getToken( [in] string Identifier );

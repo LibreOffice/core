@@ -1,0 +1,201 @@
+/*************************************************************************
+* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+*
+* Copyright 2009 by Sun Microsystems, Inc.
+*
+* OpenOffice.org - a multi-platform office productivity suite
+*
+* This file is part of OpenOffice.org.
+*
+* OpenOffice.org is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License version 3
+* only, as published by the Free Software Foundation.
+*
+* OpenOffice.org is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License version 3 for more details
+* (a copy is included in the LICENSE file that accompanied this code).
+*
+* You should have received a copy of the GNU Lesser General Public License
+* version 3 along with OpenOffice.org.  If not, see
+* <http://www.openoffice.org/license.html>
+* for a copy of the LGPLv3 License.
+************************************************************************/
+
+#ifndef __com_sun_star_container_XMap_idl__
+#define __com_sun_star_container_XMap_idl__
+
+#include <com/sun/star/beans/IllegalTypeException.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/container/NoSuchElementException.idl>
+#include <com/sun/star/lang/NoSupportException.idl>
+#include <com/sun/star/container/XElementAccess.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module container {
+
+//=============================================================================
+
+/** describes a map between keys and values.
+
+    <p>Keys in the map are unique, and each key maps to exactly one value.</p>
+
+    <p>Locating elements in the map, both values and keys, requires a notion of equality of two objects.
+    In conformance with the <a href="http://udk.openoffice.org/common/man/typesystem.html">UNO type system</a>,
+    two values are said to be equal if and only if they have the same type, and both denote the same element of this
+    type's value set.</p>
+
+    @see <type>Map</type> for a default implementation of this interface
+*/
+interface XMap
+{
+    interface XElementAccess;
+
+    /** denotes the type of the keys in the map.
+
+        <p>Implementations are free to accept any supertype of <code>KeyType</code> as keys.</p>
+    */
+    [attribute, readonly]   type    KeyType;
+
+    /** denotes the type of the values in the map.
+
+        <p>Implementations are free to accept any supertype of the <code>ValueType</code> as values.</p>
+    */
+    [attribute, readonly]   type    ValueType;
+
+    /** clears the map, removing all key-value pairs from it.
+
+        @throws ::com::sun::star::beans::NoSupportException
+            if the map is not mutable.
+    */
+    void clear()
+        raises( ::com::sun::star::lang::NoSupportException );
+
+    /** determines whether a mapping for he given key exists in the map
+
+        @param Key
+            is the key whose presence in the map is to be tested.
+        @return
+            <TRUE/> if and only if the map contains a mapping for the given key.
+
+        @throws ::com::sun::star::beans::IllegalTypeException
+            if the given key is not of a type which is accepted by the map
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if the given key is not supported to be put into the map. It's up to the service
+            implementing the <code>XMap</code> interface to specify which special values are not
+            supported. For instances, implementations might decide to not allow <VOID/> keys, or
+            to reject <code>Double.NaN</code> (<em>not a number</em>) to due its problematic
+            behavior with respect to equality.
+    */
+    boolean containsKey( [in] any Key )
+        raises( ::com::sun::star::beans::IllegalTypeException,
+                ::com::sun::star::lang::IllegalArgumentException );
+
+    /** determines whether the map contains a mapping to a given value.
+
+        @param Value
+            is the value whose presence in the map is to be tested.
+        @return
+            <TRUE/> if and only one or more keys map to the given value.
+
+        @throws ::com::sun::star::beans::IllegalTypeException
+            if the given value is not of a type which is accepted by the map. It's up to the service
+            implementing the <code>XMap</code> interface to specify which special values are not
+            supported. For instances, implementations might decide to not allow <code>Double.NaN</code>
+            (<em>not a number</em>) to due its problematic behavior with respect to equality.
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if the given value is not supported to be put into the map.
+    */
+    boolean containsValue( [in] any Value )
+        raises( ::com::sun::star::beans::IllegalTypeException,
+                ::com::sun::star::lang::IllegalArgumentException );
+
+    /** gets the value to which a given key maps.
+
+        @param Key
+            they key whose associated value is to be returned.
+        @return
+            the value which is associated with the given key.
+
+        @throws ::com::sun::star::beans::IllegalTypeException
+            if the given key is not of a type which is accepted by the map
+        @throws ::com::sun::star::beans::IllegalArgumentException
+            if the given key is not supported to be put into the map. It's up to the service
+            implementing the <code>XMap</code> interface to specify which special values are not
+            supported. For instances, implementations might decide to not allow <VOID/> keys, or
+            to reject <code>Double.NaN</code> (<em>not a number</em>) to due its problematic
+            behavior with respect to equality.
+        @throws ::com::sun::star::container::NoSuchElementException
+            if there is no value associated with the given key
+    */
+    any     get( [in] any Key )
+        raises( ::com::sun::star::beans::IllegalTypeException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::container::NoSuchElementException );
+
+    /** associates a given key with a given value
+
+        <p>If the map already contains a mapping for the given key, then the old value is replaced by the
+        given new value.</p>
+
+        @param Key
+            is the key which the given value should be associated with
+        @param Value
+            is the value which should be associated with the given key
+        @return
+            the value which was previously associated with the given key, or <VOID/>
+            if there was no such previous association.
+
+        @throws ::com::sun::star::beans::IllegalTypeException
+            if the given key is not of a type which is accepted by the map
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if the given key, or the given value, is not supported to be put into the map. It's up to
+            the service implementing the <code>XMap</code> interface to specify which special values
+            are not supported.<br/>
+            For instances, implementations might decide to not allow <VOID/> keys or values, or to
+            reject <code>Double.NaN</code> (<em>not a number</em>) to due its problematic behavior
+            with respect to equality.
+        @throws ::com::sun::star::beans::NoSupportException
+            if the map does not support putting new mappings into it
+    */
+    any     put( [in] any Key, [in] any Value )
+        raises( ::com::sun::star::lang::NoSupportException,
+                ::com::sun::star::beans::IllegalTypeException,
+                ::com::sun::star::lang::IllegalArgumentException );
+
+    /** removes a key-value mapping, given by key, from the map.
+
+        @param Key
+            is the key whose mapping should be removed from the map
+        @return
+            the value which was associated with the given key before the removal
+
+        @throws ::com::sun::star::beans::IllegalTypeException
+            if the given key is not of a type which is accepted by the map
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if the given key is not supported to be put into the map. It's up to the service
+            implementing the <code>XMap</code> interface to specify which special values are not
+            supported. For instances, implementations might decide to not allow <VOID/> keys, or
+            to reject <code>Double.NaN</code> (<em>not a number</em>) to due its problematic
+            behavior with respect to equality.
+        @throws ::com::sun::star::beans::NoSupportException
+            if the map does not support removing mappings
+        @throws ::com::sun::star::container::NoSuchElementException
+            if there is no value associated with the given key
+    */
+    any     remove( [in] any Key )
+        raises( ::com::sun::star::lang::NoSupportException,
+                ::com::sun::star::beans::IllegalTypeException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::container::NoSuchElementException );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+//=============================================================================
+
+#endif

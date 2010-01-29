@@ -33,9 +33,7 @@ import com.sun.star.uno.XWeak;
 import com.sun.star.uno.XAdapter;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.uno.Type;
-import java.lang.reflect.Field;
 import java.util.Vector;
-import com.sun.star.uno.UnoRuntime;
 import java.util.Map;
 import java.util.Hashtable;
 

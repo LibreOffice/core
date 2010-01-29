@@ -31,12 +31,8 @@
 package com.sun.star.comp.bridgefactory;
 
 import java.math.BigInteger;
-import java.util.Enumeration;
 import java.util.Vector;
 
-
-import com.sun.star.lang.XEventListener;
-import com.sun.star.lang.XComponent;
 
 import com.sun.star.bridge.BridgeExistsException;
 import com.sun.star.bridge.XBridge;

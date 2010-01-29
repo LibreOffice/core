@@ -41,7 +41,7 @@ module com {  module sun {  module star {  module sheet {
     <member>XFormulaOpCodeMapper::getAvailableMappings</member> when
     called for group <const>FormulaMapGroup::SPECIAL</const>.
 
-    The number of constants may grow in future versions!
+    <p>The number of constants may grow in future versions!</p>
  */
 constants FormulaMapGroupSpecialOffset
 {
@@ -56,26 +56,24 @@ constants FormulaMapGroupSpecialOffset
 
         <ul>
         <li>A value of type <atom>double</atom> for literal floating-point
-            constants.</li>
+        constants.</li>
         <li>A <atom>string</atom> for literal text.</li>
-        <li>A sequence of sequence of <atom>any</atom> for a literal array.
-            The contained values shall be of type <atom>double</atom> or
-            <atom>string</atom>. Floating-point values and strings may occur
-            together in an array.</li>
+        <li>A <atom dim="[][]">any</atom> for a literal array. The contained
+        values shall be of type <atom>double</atom> or atom>string</atom>.
+        Floating-point values and strings may occur together in an array.</li>
         <li>A struct of type <type>SingleReference</type> for a reference to a
-            single cell in the own document.</li>
+        single cell in the own document.</li>
         <li>A struct of type <type>ComplexReference</type> for a reference to
-            a range of cells in the own document.</li>
+        a range of cells in the own document.</li>
         <li>A struct of type <type>ExternalReference</type> for a reference to
-            a cell, a range of cells, or a defined name in an external
-            document.</li>
+        a cell, a range of cells, or a defined name in an external document.</li>
         </ul>
      */
-    const long PUSH               = 0;
+    const long PUSH = 0;
 
     // -----------------------------------------------------------------------
 
-    const long CALL               = 1;
+    const long CALL = 1;
 
     // -----------------------------------------------------------------------
 
@@ -86,7 +84,7 @@ constants FormulaMapGroupSpecialOffset
         <p>The <member>FormulaToken::Data</member> member is not used
         and should be empty.</p>
      */
-    const long STOP               = 2;
+    const long STOP = 2;
 
     // -----------------------------------------------------------------------
 
@@ -99,7 +97,7 @@ constants FormulaMapGroupSpecialOffset
         "com.sun.star.sheet.addin.Analysis.getEomonth" for the EOMONTH
         function from the Analsysis add-in.</p>
      */
-    const long EXTERNAL           = 3;
+    const long EXTERNAL = 3;
 
     // -----------------------------------------------------------------------
 
@@ -110,11 +108,11 @@ constants FormulaMapGroupSpecialOffset
         <p>The <member>FormulaToken::Data</member> member shall contain an
         integer value of type <atom>long</atom> specifying the index of the
         defined name. This index can be obtained from the defined name using
-        its <type>NamedRange::TokenIndex</type> property.</p>
+        its <member>NamedRange::TokenIndex</member> property.</p>
 
         @see  NamedRange
      */
-    const long NAME               = 4;
+    const long NAME = 4;
 
     // -----------------------------------------------------------------------
 
@@ -124,20 +122,21 @@ constants FormulaMapGroupSpecialOffset
         <p>The <member>FormulaToken::Data</member> member is not used
         and should be empty.</p>
      */
-    const long NO_NAME            = 5;
+    const long NO_NAME = 5;
 
     // -----------------------------------------------------------------------
 
     /** Formula tokens containing the op-code obtained from this offset
         describe an empty function parameter.
 
-        <p>Example: In the formula =SUM(1;;2) the second parameter is empty
-        and represented by a formula token containing the "empty" op-code.</p>
+        <p>Example: In the formula <code>=SUM(1;;2)</code> the second
+        parameter is empty and represented by a formula token containing the
+        "missing" op-code.</p>
 
         <p>The <member>FormulaToken::Data</member> member is not used
         and should be empty.</p>
      */
-    const long MISSING            = 6;
+    const long MISSING = 6;
 
     // -----------------------------------------------------------------------
 
@@ -147,17 +146,17 @@ constants FormulaMapGroupSpecialOffset
 
         <p>The <member>FormulaToken::Data</member> member shall contain a
         <atom>string</string> with the bad data. This string will be displayed
-        in the formula.</p>
+        literally in the formula.</p>
      */
-    const long BAD                = 7;
+    const long BAD = 7;
 
     // -----------------------------------------------------------------------
 
     /** Formula tokens containing the op-code obtained from this offset
-        describe white-space characters within the string representation of a
+        describe whitespace characters within the string representation of a
         formula.
 
-        <p>White-space characters in formulas are used for readability and do
+        <p>Whitespace characters in formulas are used for readability and do
         not affect the result of the formula.</p>
 
         <p>The <member>FormulaToken::Data</member> member shall contain a
@@ -168,11 +167,11 @@ constants FormulaMapGroupSpecialOffset
         characters than simple space characters (e.g. line feeds, horizontal
         tabulators, non-breakable spaces).</p>
      */
-    const long SPACES             = 8;
+    const long SPACES = 8;
 
     // -----------------------------------------------------------------------
 
-    const long MAT_REF            = 9;
+    const long MAT_REF = 9;
 
     // -----------------------------------------------------------------------
 
@@ -182,7 +181,7 @@ constants FormulaMapGroupSpecialOffset
         <p>The <member>FormulaToken::Data</member> member shall contain an
         integer value of type <atom>long</atom> specifying the index of the
         database range. This index can be obtained from the database range
-        using its <type>DatabaseRange::TokenIndex</type> property.</p>
+        using its <member>DatabaseRange::TokenIndex</member> property.</p>
 
         @see  DatabaseRange
      */

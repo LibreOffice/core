@@ -129,7 +129,9 @@ css::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() {
 
 cppu::ImplementationEntry entries[] = {
     { &create, &getImplementationName, &getSupportedServiceNames,
-      &cppu::createSingleComponentFactory, 0, 0 } };
+      &cppu::createSingleComponentFactory, 0, 0 },
+    { 0, 0, 0, 0, 0, 0 }
+};
 
 }
 

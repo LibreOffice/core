@@ -50,75 +50,113 @@ published struct DataPilotFieldGroupInfo
 {
     //-------------------------------------------------------------------------
 
-    /** specifies whether the start value for the grouping is taken automatically
-        */
+    /** specifies whether the start value for the grouping is taken
+        automatically from the minimum of the item values.
 
-        boolean HasAutoStart;
-
-    //-------------------------------------------------------------------------
-
-    /** specifies whether the end value for the grouping is taken automatically
-        */
-
-        boolean HasAutoEnd;
-
-    //-------------------------------------------------------------------------
-
-    /** specifies whether date values are grouped
-        */
-
-        boolean HasDateValues;
+        <p><ul>
+        <li>If <FALSE/> is set, the value from <member>Start</member> will be
+        used as start value for the grouping.</li>
+        <li>If <TRUE/> is set, the start value for the grouping will be
+        calculated automatically from the minimum of all member values of the
+        DataPilot field.</li>
+        </ul></p>
+     */
+    boolean HasAutoStart;
 
     //-------------------------------------------------------------------------
 
-    /** specifies the start value for the grouping if HasAutoStart is false
-        */
+    /** specifies whether the end value for the grouping is taken
+        automatically from the maximum of the item values.
 
-        double Start;
+        <p><ul>
+        <li>If <FALSE/> is set, the value from <member>End</member> will be
+        used as end value for the grouping.</li>
+        <li>If <TRUE/> is set, the end value for the grouping will be
+        calculated automatically from the maximum of all member values of the
+        DataPilot field.</li>
+        </ul></p>
+     */
+    boolean HasAutoEnd;
 
     //-------------------------------------------------------------------------
 
-    /** specifies the end value for the grouping if HasAutoEnd is false
-        */
+    /** specifies whether date values are grouped by ranges of days.
 
-        double End;
+        <p><ul>
+        <li>If <FALSE/> is set, and <member>GroupBy</member> contains zero,
+        grouping is performed inplace on the item values.</li>
+        <li>If <FALSE/> is set, and <member>GroupBy</member> contains one or
+        more flags from <type>DataPilotFieldGroupBy</type>, grouping is
+        performed on date or time.</li>
+        <li>If <TRUE/> is set, <member>Step</member> contains a value greater
+        than or equal to 1, and <member>GroupBy</member> set to <const>
+        DataPilotFieldGroupBy::DAYS</const>, grouping is performed on ranges
+        of days (see descriptions for <member>
+        XDataPilotFieldGrouping::createDateGroup</member> for more details
+        about day grouping).</li>
+        </ul></p>
+     */
+    boolean HasDateValues;
 
     //-------------------------------------------------------------------------
 
-    /** specifies the steps between the groups
-        */
+    /** specifies the start value for the grouping if <member>HasAutoStart
+        </member> is set to <FALSE/>.
+     */
+    double Start;
 
-        double Step;
+    //-------------------------------------------------------------------------
+
+    /** specifies the end value for the grouping if <member>HasAutoEnd
+        </member> is set to <FALSE/>.
+     */
+    double End;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the size of the ranges for numeric or day grouping.
+
+        <p>Example: With <member>HasAutoStart</member> set to <FALSE/>,
+        <member>Start</member> set to 2, and <member>Step</member> set to 3,
+        the first group will contain all values greater than or equal to 2 and
+        less than 5. The second group will contain all values greater than or
+        equal to 5 and less then 8, and so on.</p>
+     */
+    double Step;
 
     //-------------------------------------------------------------------------
 
     /** specifies the grouping of the date values.
 
-    @see com::sun::star::sheet::DataPilotFieldGroupBy
-
-        */
-
-        long GroupBy;
+        @see DataPilotFieldGroupBy
+     */
+    long GroupBy;
 
     //-------------------------------------------------------------------------
 
-    /** specifies the source field.
+    /** contains the source DataPilot field grouping is based on. Will be
+        <NULL/> if this field is not grouped or contains numeric grouping.
 
-    @see com::sun::star::sheet::DataPilotField
-
-        */
-
-        com::sun::star::sheet::XDataPilotField SourceField;
+        @see DataPilotField
+     */
+    XDataPilotField SourceField;
 
     //-------------------------------------------------------------------------
 
-    /** specifies the groups if there are some
+    /** specifies the named groups in this field if there are some.
 
-    @see com::sun::star::sheet::DataPilotFieldGroups
+        <p>The returned object is an instance of <type>DataPilotFieldGroups
+        </type>. The collection of groups can be modified by inserting,
+        removing, replacing, or renaming single groups or item names in the
+        groups. When writing back this struct containing such a changed
+        collection of groups to the <member>DataPilotField::GroupInfo</member>
+        property, the modified grouping settings are applied at the DataPilot
+        field.</p>
 
-        */
-
-        com::sun::star::container::XNameAccess Groups;
+        @see DataPilotField
+        @see DataPilotFieldGroups
+     */
+    com::sun::star::container::XNameAccess Groups;
 };
 
 //=============================================================================

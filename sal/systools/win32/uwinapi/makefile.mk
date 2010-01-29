@@ -48,7 +48,6 @@ CXXFLAGS+= $(LFS_CFLAGS)
 
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
-CDEFS+=-UWINVER -DWINVER=0x0500
 CFLAGSCXX+=-Wno-unused-parameter -Wno-return-type
 .ENDIF
 

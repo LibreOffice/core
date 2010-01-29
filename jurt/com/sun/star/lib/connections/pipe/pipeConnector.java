@@ -38,9 +38,6 @@ import com.sun.star.connection.XConnector;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.registry.XRegistryKey;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 /**
  * A component that implements the <code>XConnector</code> interface.

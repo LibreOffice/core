@@ -153,6 +153,13 @@ interface XReportEngine
     /** specifies the status indicator which shows the progress of the report generation process.
     */
     [attribute] com::sun::star::task::XStatusIndicator StatusIndicator;
+
+    /** defines the maximum number of rows which should be fetched for the report.
+        If the limit is exceeded, the excess rows are silently dropped.
+        <br/>
+        There is no limitation, if set to zero.
+     */
+    [attribute,bound] long MaxRows;
 };
 
 //=============================================================================

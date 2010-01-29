@@ -107,11 +107,15 @@ $(BIN)$/testacquire-java-server$(SCRIPTEXT):
     $(GIVE_EXEC_RIGHTS) $@
 
 $(BIN)$/testacquire-native-client$(SCRIPTEXT):
-    echo uno -c com.sun.star.test.bridges.testacquire.impl -l $(SHL1TARGETN:f) \
-        -ro $(TARGET).rdb -- $(TEST_JAVAUNO_ACQUIRE_UNO_URL) > $@
+    echo '$(AUGMENT_LIBRARY_PATH)' uno \
+        -c com.sun.star.test.bridges.testacquire.impl \
+        -l ../lib/$(SHL1TARGETN:f) -ro $(TARGET).rdb -- \
+        $(TEST_JAVAUNO_ACQUIRE_UNO_URL) > $@
     $(GIVE_EXEC_RIGHTS) $@
 
 $(BIN)$/testacquire-native-server$(SCRIPTEXT):
-    echo uno -c com.sun.star.test.bridges.testacquire.impl -l $(SHL1TARGETN:f) \
-        -ro $(TARGET).rdb -u $(TEST_JAVAUNO_ACQUIRE_UNO_URL) --singleaccept > $@
+    echo '$(AUGMENT_LIBRARY_PATH)' uno \
+        -c com.sun.star.test.bridges.testacquire.impl \
+        -l ../lib/$(SHL1TARGETN:f) -ro $(TARGET).rdb \
+        -u $(TEST_JAVAUNO_ACQUIRE_UNO_URL) --singleaccept > $@
     $(GIVE_EXEC_RIGHTS) $@

@@ -72,9 +72,9 @@ service DataPilotItem
 
     //=========================================================================
 
-        /** specifies whether the item is hidden.
-        */
-        [property] boolean IsHidden;
+    /** specifies whether the item is hidden.
+    */
+    [property] boolean IsHidden;
 
     //=========================================================================
 
@@ -82,7 +82,7 @@ service DataPilotItem
 
         @since OOo 2.4.0
      */
-    [optional, property] boolean Position;
+    [optional, property] long Position;
 };
 
 //=============================================================================

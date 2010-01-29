@@ -165,7 +165,7 @@ published service Style
         </ul>
 
 
-        @since  OOo 2.0.1.
+        @since  OOo 2.0.1
      */
     [optional, property] sequence< com::sun::star::beans::NamedValue > ParaStyleConditions;
 

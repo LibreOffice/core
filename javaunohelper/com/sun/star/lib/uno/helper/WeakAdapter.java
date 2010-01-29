@@ -32,7 +32,6 @@ package com.sun.star.lib.uno.helper;
 import java.lang.ref.WeakReference;
 import com.sun.star.uno.XAdapter;
 import com.sun.star.uno.XReference;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Collections;
 import java.util.LinkedList;

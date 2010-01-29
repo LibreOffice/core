@@ -53,10 +53,10 @@ interface XFormulaOpCodeMapper
 
     /** OpCode value used for external Add-In functions.
 
-        Needed to be able to identify which of the function names map to
-        an Add-In implementation where this OpCode is used in the
-        returned mapping and the programmatical name is available as
-        additional information.
+        <p>Needed to be able to identify which of the function names map to an
+        Add-In implementation where this OpCode is used in the returned
+        mapping and the programmatical name is available as additional
+        information.</p>
      */
     [attribute, readonly] long OpCodeExternal;
 
@@ -64,8 +64,8 @@ interface XFormulaOpCodeMapper
 
     /** OpCode value used for unknown functions.
 
-        Used to identify which of the function names queried with
-        <member>getMappings</member> are unknown to the implementation.
+        <p>Used to identify which of the function names queried with
+        <member>getMappings</member> are unknown to the implementation.</p>
      */
     [attribute, readonly] long OpCodeUnknown;
 
@@ -80,36 +80,35 @@ interface XFormulaOpCodeMapper
             knows.
 
         @param Language
-            Formula language to be used, one of
-            <type>FormulaLanguage</type> constants. If a constant
-            unknown to the implementation is passed,
-            <type>com::sun::star::lang::IllegalArgumentException</type>
+            Formula language to be used, one of <type>FormulaLanguage</type>
+            constants. If a constant unknown to the implementation is passed,
+            <type scope="com::sun::star::lang">IllegalArgumentException</type>
             is thrown.
 
         @returns
-            Sequence of <type>FormulaToken</type> matching the input
+            a sequence of <type>FormulaToken</type> matching the input
             sequence in order.
 
-        Each string element in <param>Names</param> according to the
-        formula language in <param>Language</param> is mapped to a
-        <type>FormulaToken</type> containing the internal OpCode used by
-        the spreadsheet application in
-        <member>FormulaToken.OpCode</member> and by contract maybe
-        additional information in <member>FormulaToken.Data</member>.
+            <p>Each string element in parameter Names according to the formula
+            language in parameter Language is mapped to a <type>FormulaToken
+            </type> containing the internal OpCode used by the spreadsheet
+            application in <member>FormulaToken::OpCode</member> and by
+            contract maybe additional information in <member>
+            FormulaToken::Data</member>.</p>
 
-        The order of the FormulaToken sequence returned matches the
-        input order of the string sequence.
+            <p>The order of the FormulaToken sequence returned matches the
+            input order of the string sequence.</p>
 
-        An unknown Name string gets the OpCode value of
-        <member>OpCodeUnknown</member assigned.
+            <p>An unknown Name string gets the OpCode value of <member>
+            OpCodeUnknown</member> assigned.</p>
 
-        Additional information in <member>FormulaToken.Data</member> is
-        returned for:
-
-        Add-In names: the programmatical name. The OpCode value used for
-        Add-Ins can be queried with the <member>OpCodeExternal</member>
-        getter method.
-
+            <p>Additional information in <member>FormulaToken::Data</member>
+            is returned for:
+            <ul>
+            <li>Add-in names: the programmatical name. The OpCode value used
+            for add-ins can be queried with the <member>OpCodeExternal</member>
+            getter method.</li>
+            </ul></p>
      */
     sequence< FormulaToken > getMappings(
             [in] sequence< string > Names,
@@ -122,26 +121,24 @@ interface XFormulaOpCodeMapper
         a given formula language.
 
         @param Language
-            Formula language to be used, one of
-            <type>FormulaLanguage</type> constants. If a constant
-            unknown to the implementation is passed,
-            <type>com::sun::star::lang::IllegalArgumentException</type>
+            Formula language to be used, one of <type>FormulaLanguage</type>
+            constants. If a constant unknown to the implementation is passed,
+            <type scope="com::sun::star::lang">IllegalArgumentException</type>
             is thrown.
 
         @param Groups
-            Group of mappings to be returned, a bit mask of
-            <type>FormulaMapGroup</type> constants.
+            Group of mappings to be returned, a bit mask of <type>
+            FormulaMapGroup</type> constants.
 
         @returns
             Sequence of <type>FormulaOpCodeMapEntry</type>.
 
-        Each element of the formula language in <param>Language</param>
-        is mapped to a <type>FormulaToken</type> containing the internal
-        OpCode used by the spreadsheet application in
-        <member>FormulaToken.OpCode</member> and by contract maybe
-        additional information in <member>FormulaToken.Data</member>.
-        See <member>getMappings</member>.
-
+            <p>Each element of the formula language in parameter Language is
+            mapped to a <type>FormulaToken</type> containing the internal
+            OpCode used by the spreadsheet application in <member>
+            FormulaToken::OpCode</member> and by contract maybe additional
+            information in <member>FormulaToken::Data</member>. See <member>
+            getMappings</member> for more details.</p>
      */
     sequence< FormulaOpCodeMapEntry > getAvailableMappings(
             [in] long Language, [in] long Groups )

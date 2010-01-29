@@ -276,7 +276,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( hashCode_WithLength )( const IMPL_RTL_STRCO
 {
     sal_Int32 h = nLen;
 
-    if ( nLen < 16 )
+    if ( nLen < 256 )
     {
         while ( nLen > 0 )
         {

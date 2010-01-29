@@ -106,25 +106,6 @@ namespace osl
  }
 
  /******************************************
-    systemPathIsAbsolutePath
-    Returns true if the given path is an
-    absolute path and so starts with a '/'
-
-    @param pustrPath [in] a system path
-           pustrPath must not be NULL
-
-    @returns sal_True if the given path
-             start's with a separator else
-             sal_False will be returned
-
-  *****************************************/
-
- inline bool systemPathIsAbsolutePath(const rtl::OUString& Path)
- {
-     return osl_systemPathIsAbsolutePath(Path.pData);
- }
-
- /******************************************
     systemPathMakeAbsolutePath
     Append a relative path to a base path
 

@@ -2490,9 +2490,8 @@ sal_Bool StructureType::dumpHxxFile(
     RTFieldAccess   access = RT_ACCESS_INVALID;
     OString         fieldName;
     OString         fieldType;
-    sal_uInt16      i = 0;
 
-    for (i=0; i < fieldCount; i++)
+    for (sal_uInt16 i=0; i < fieldCount; i++)
     {
         access = m_reader.getFieldFlags(i);
 
@@ -2527,7 +2526,7 @@ sal_Bool StructureType::dumpHxxFile(
 
         sal_Bool superHasMember = dumpSuperMember(o, superType, sal_True);
 
-        for (i=0; i < fieldCount; i++)
+        for (sal_uInt16 i=0; i < fieldCount; i++)
         {
             access = m_reader.getFieldFlags(i);
 
@@ -2565,7 +2564,7 @@ sal_Bool StructureType::dumpHxxFile(
             first = sal_False;
         }
 
-        for (i=0; i < fieldCount; i++)
+        for (sal_uInt16 i=0; i < fieldCount; i++)
         {
             access = m_reader.getFieldFlags(i);
 
@@ -2588,6 +2587,54 @@ sal_Bool StructureType::dumpHxxFile(
 
         dec();
         o << "{\n}\n\n";
+    }
+
+    if (isPolymorphic() && fieldCount > 0) {
+        o << indent();
+        dumpTemplateHead(o);
+        o << "\n";
+        o << indent();
+        o << "inline " << m_name;
+        dumpTemplateParameters(o);
+        o << "\n";
+        o << indent();
+        o << "make_" << m_name << "(";
+        for (sal_uInt16 i = 0; i < fieldCount; ++i) {
+            if (i > 0) {
+                o << ", ";
+            }
+            rtl::OString type(
+                rtl::OUStringToOString(
+                    m_reader.getFieldTypeName(i), RTL_TEXTENCODING_UTF8));
+            if ((m_reader.getFieldFlags(i) & RT_ACCESS_PARAMETERIZED_TYPE) != 0)
+            {
+                dumpTypeParameterName(o, type);
+                o << " const &";
+            } else {
+                dumpType(o, type, true, true);
+            }
+            o << " "
+              << rtl::OUStringToOString(
+                  m_reader.getFieldName(i), RTL_TEXTENCODING_UTF8)
+              << "_";
+        }
+        o << ") SAL_THROW(())\n";
+        o << indent() << "{\n";
+        inc();
+        o << indent() << "return " << m_name;
+        dumpTemplateParameters(o);
+        o << "(";
+        for (sal_uInt16 i = 0; i < fieldCount; ++i) {
+            if (i > 0) {
+                o << ", ";
+            }
+            o << rtl::OUStringToOString(
+                  m_reader.getFieldName(i), RTL_TEXTENCODING_UTF8)
+              << "_";
+        }
+        o << ");\n";
+        dec();
+        o << indent() << "}\n\n";
     }
 
     if (codemaker::cppumaker::dumpNamespaceClose(o, m_typeName, false)) {

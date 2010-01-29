@@ -164,29 +164,7 @@ struct MappingsData
 
     Mutex               aNegativeLibsMutex;
     t_OUStringSet       aNegativeLibs;
-    ~MappingsData() SAL_THROW( () );
 };
-//__________________________________________________________________________________________________
-MappingsData::~MappingsData() SAL_THROW( () )
-{
-#if OSL_DEBUG_LEVEL > 1
-    OSL_ENSURE( aName2Entry.empty() && aMapping2Entry.empty(), "### unrevoked mappings!" );
-    t_OUString2Entry::const_iterator iPos( aName2Entry.begin() );
-    while (iPos != aName2Entry.end())
-    {
-        MappingEntry * pEntry = (*iPos).second;
-        OString aName( OUStringToOString( pEntry->aMappingName, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_TRACE( "### unrevoked mapping: %s", aName.getStr() );
-        ++iPos;
-    }
-    OSL_ENSURE( aCallbacks.empty(), "### callbacks left!" );
-    if (aCallbacks.size())
-    {
-        OString aSize( OString::valueOf( (sal_Int32)aCallbacks.size() ) );
-        OSL_TRACE( "### %d unrevoked callbacks", aSize.getStr() );
-    }
-#endif
-}
 //--------------------------------------------------------------------------------------------------
 static MappingsData & getMappingsData() SAL_THROW( () )
 {

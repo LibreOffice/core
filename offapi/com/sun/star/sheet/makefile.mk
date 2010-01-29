@@ -84,9 +84,11 @@ IDLFILES=\
     DataPilotFieldFilter.idl\
     DataPilotFieldGroup.idl\
     DataPilotFieldGroupBy.idl\
+    DataPilotFieldGroupEnumeration.idl\
     DataPilotFieldGroupInfo.idl\
     DataPilotFieldGroupItem.idl\
     DataPilotFieldGroups.idl\
+    DataPilotFieldGroupsEnumeration.idl\
     DataPilotFieldLayoutInfo.idl\
     DataPilotFieldLayoutMode.idl\
     DataPilotFieldOrientation.idl\
@@ -135,7 +137,9 @@ IDLFILES=\
     FillDirection.idl\
     FillMode.idl\
     FilterConnection.idl\
+    FilterFormulaParser.idl\
     FilterOperator.idl\
+    FilterOperator2.idl\
     FormulaLanguage.idl\
     FormulaMapGroup.idl\
     FormulaMapGroupSpecialOffset.idl\
@@ -217,6 +221,7 @@ IDLFILES=\
     TableConditionalEntryEnumeration.idl\
     TableConditionalFormat.idl\
     TableFilterField.idl\
+    TableFilterField2.idl\
     TableOperationMode.idl\
     TablePageBreakData.idl\
     TablePageStyle.idl\
@@ -251,6 +256,7 @@ IDLFILES=\
     XDDELink.idl\
     XDDELinkResults.idl\
     XDDELinks.idl\
+    XDataPilotDataLayoutFieldSupplier.idl\
     XDataPilotDescriptor.idl\
     XDataPilotField.idl\
     XDataPilotFieldGrouping.idl\
@@ -271,6 +277,7 @@ IDLFILES=\
     XExternalSheetCache.idl\
     XExternalSheetName.idl\
     XFillAcrossSheet.idl\
+    XFilterFormulaParser.idl\
     XFormulaOpCodeMapper.idl\
     XFormulaParser.idl\
     XFormulaQuery.idl\
@@ -312,6 +319,7 @@ IDLFILES=\
     XSheetConditionalEntries.idl\
     XSheetConditionalEntry.idl\
     XSheetFilterDescriptor.idl\
+    XSheetFilterDescriptor2.idl\
     XSheetFilterable.idl\
     XSheetFilterableEx.idl\
     XSheetLinkable.idl\

@@ -46,6 +46,7 @@ IDLFILES=\
     AccessibleChartDocumentView.idl\
     AreaDiagram.idl\
     BarDiagram.idl\
+    BubbleDiagram.idl\
     Chart3DBarProperties.idl\
     ChartArea.idl\
     ChartAxis.idl\
