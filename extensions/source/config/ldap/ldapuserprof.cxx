@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 #include "ldapuserprof.hxx"
-
+#include "ldapaccess.hxx"
 namespace extensions { namespace config { namespace ldap {
 //==============================================================================
 
@@ -127,14 +127,14 @@ void LdapUserProfileMap::ldapToUserProfile(LDAP *aConnection,
         for (sal_uInt32 j = 0 ;
                 j < mMapping [i].mLdapAttributes.size() ; ++ j)
         {
-            values = ldap_get_values(aConnection, aEntry,
+            values = (*LdapConnection::s_p_get_values)(aConnection, aEntry,
                                      mMapping [i].mLdapAttributes [j]) ;
 
             if (values != NULL)
             {
                 aProfile.mProfile[i].mValue = rtl::OStringToOUString(
                     *values, RTL_TEXTENCODING_UTF8);
-                ldap_value_free(values);
+                (*LdapConnection::s_p_value_free)(values);
                 break;
             }
         }

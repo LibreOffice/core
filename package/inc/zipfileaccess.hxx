@@ -40,7 +40,8 @@
 
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/implbase5.hxx>
-#include <osl/mutex.hxx>
+
+#include <mutexholder.hxx>
 
 #include <ZipFile.hxx>
 #include <HashMaps.hxx>
@@ -52,7 +53,8 @@ class OZipFileAccess : public ::cppu::WeakImplHelper5<
                         ::com::sun::star::lang::XComponent,
                         ::com::sun::star::lang::XServiceInfo >
 {
-    ::osl::Mutex m_aMutex;
+    SotMutexHolderRef m_aMutexHolder;
+
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > m_xContentStream;

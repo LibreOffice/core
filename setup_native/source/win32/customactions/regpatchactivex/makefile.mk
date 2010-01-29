@@ -55,7 +55,11 @@ INCPRE+=.\Include
 SLOFILES =	$(SLO)$/regpatchactivex.obj
 
 .IF "$(COM)"=="GCC"
-SHL1STDLIBS=	-lmingw32 -lstdc++ -lgcc -lmsvcrt
+SHL1STDLIBS += -lstdc++
+.IF "$(MINGW_GCCLIB_EH)"=="YES"
+SHL1STDLIBS += -lgcc_eh
+.ENDIF
+SHL1STDLIBS += -lgcc -lmingw32 -lmoldname -lmsvcrt
 .ELSE
 SHL1STDLIBS=
 .ENDIF

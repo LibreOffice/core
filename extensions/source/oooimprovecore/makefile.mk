@@ -52,6 +52,9 @@ LIB1FILES= \
         $(SLB)$/$(TARGET).lib \
 
 SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
+.IF "$(GUI)"=="OS2"
+SHL1TARGET=oooimpc$(DLLPOSTFIX)
+.ENDIF
 
 SHL1STDLIBS= \
         $(COMPHELPERLIB) \
@@ -62,6 +65,7 @@ SHL1STDLIBS= \
         $(SVLLIB) \
         $(SVTOOLLIB) \
         $(SFXLIB) \
+        $(SVXCORELIB) \
         $(SVXLIB) \
         $(TOOLSLIB)
 

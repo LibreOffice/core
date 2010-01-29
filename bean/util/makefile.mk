@@ -36,7 +36,7 @@ TARGET  = officebean
 # --- Settings -----------------------------------------------------
 
 .INCLUDE : settings.mk
-
+.IF "$(L10N_framework)"==""
 JARCLASSDIRS    = \
     com$/sun$/star$/comp$/beans \
     com$/sun$/star$/beans
@@ -53,6 +53,7 @@ ZIP1DIR=$(PRJ)
 ZIP1LIST=com -x "*makefile.mk"
 
 # --- Targets ------------------------------------------------------
+.ENDIF # L10N_framework
 
 .INCLUDE : target.mk
 

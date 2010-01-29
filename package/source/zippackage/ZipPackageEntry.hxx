@@ -53,6 +53,7 @@ class ZipPackageEntry : public cppu::WeakImplHelper5
 >
 {
 protected:
+    ::rtl::OUString msName;
     bool mbIsFolder:1;
     bool mbAllowRemoveOnInsert:1;
     // com::sun::star::uno::Reference < com::sun::star::container::XNameContainer > xParent;

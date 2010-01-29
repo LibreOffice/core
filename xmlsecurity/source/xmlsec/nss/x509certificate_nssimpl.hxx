@@ -40,9 +40,6 @@
 #include "com/sun/star/uno/SecurityException.hpp"
 #include <com/sun/star/security/XCertificate.hpp>
 
-#ifdef SYSTEM_MOZILLA
-#include "nssrenam.h"
-#endif
 #include "cert.h"
 
 class X509Certificate_NssImpl : public ::cppu::WeakImplHelper2<

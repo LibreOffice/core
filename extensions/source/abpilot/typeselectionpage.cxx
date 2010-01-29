@@ -116,6 +116,7 @@ namespace abp
 
         bool bFirstVisible = true;
         Link aTypeSelectionHandler = LINK(this, TypeSelectionPage, OnTypeSelected );
+        const Size aSpacing( LogicToPixel( Size( 0, 3 ), MAP_APPFONT ) );
         for ( ::std::vector< ButtonItem >::const_iterator loop = m_aAllTypes.begin();
               loop != m_aAllTypes.end(); ++loop )
         {
@@ -125,7 +126,7 @@ namespace abp
             else
             {
                 aItem.m_pItem->SetPosPixel( aTopLeft );
-                aTopLeft.Y() += aItemSize.Height();
+                aTopLeft.Y() += aItemSize.Height() + aSpacing.Height();
                 aItem.m_pItem->SetClickHdl( aTypeSelectionHandler );
                 aItem.m_pItem->Show();
 
