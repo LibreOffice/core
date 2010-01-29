@@ -54,7 +54,7 @@ SHL1STDLIBS= \
         $(CPPUHELPERLIB)	\
         $(SALLIB)
 
-SHL1VERSIONMAP = inv.map
+SHL1VERSIONMAP = $(SOLARENV)/src/unloadablecomponent.map
 SHL1DEPN=
 SHL1IMPLIB=	i$(TARGET)
 SHL1LIBS=	$(SLB)$/$(TARGET).lib

@@ -58,7 +58,7 @@ SLOFILES= \
         $(SLO)$/interact.obj 
 
 SHL1TARGET= $(TARGET)
-SHL1VERSIONMAP = jen.map
+SHL1VERSIONMAP = $(SOLARENV)/src/component.map
 SHL1STDLIBS= \
         $(CPPUHELPERLIB) 	\
         $(CPPULIB)	    	\

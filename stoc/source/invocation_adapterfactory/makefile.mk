@@ -54,7 +54,7 @@ SHL1STDLIBS=	\
         $(CPPUHELPERLIB)	\
         $(SALLIB)
 
-SHL1VERSIONMAP = invadp.map
+SHL1VERSIONMAP = $(SOLARENV)/src/unloadablecomponent.map
 SHL1RPATH=URELIB
 
 SHL1DEPN=

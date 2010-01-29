@@ -54,7 +54,7 @@ SLOFILES = $(SLO)$/testequals.obj
 SHL1TARGET = testequals.uno
 SHL1OBJS = $(SLOFILES)
 SHL1STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB)
-SHL1VERSIONMAP = testequals.map
+SHL1VERSIONMAP = $(SOLARENV)/src/component.map
 SHL1IMPLIB = itestequals
 
 JAVAFILES = TestEquals.java

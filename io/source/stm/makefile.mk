@@ -57,7 +57,7 @@ SLOFILES = 	$(SLO)$/opipe.obj\
         $(SLO)$/opump.obj
 
 SHL1TARGET= $(TARGET)
-SHL1VERSIONMAP = stm.map
+SHL1VERSIONMAP = $(SOLARENV)/src/unloadablecomponent.map
 
 SHL1STDLIBS= \
         $(SALLIB) 	 \

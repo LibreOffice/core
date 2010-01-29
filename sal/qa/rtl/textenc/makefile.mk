@@ -51,11 +51,7 @@ SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
 DEF1NAME    =$(SHL1TARGET)
-.IF "$(COMNAME)" == "gcc3"
-SHL1VERSIONMAP = gcc3_export.map
-.ELSE
 SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
-.ENDIF
 
 # END --------------------------------------------------------------
 
@@ -67,11 +63,7 @@ SHL2STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
 
 SHL2IMPLIB= i$(SHL2TARGET)
 DEF2NAME    =$(SHL2TARGET)
-.IF "$(COMNAME)" == "gcc3"
-SHL2VERSIONMAP = gcc3_export.map
-.ELSE
 SHL2VERSIONMAP = $(PRJ)$/qa$/export.map
-.ENDIF
 
 # END --------------------------------------------------------------
 

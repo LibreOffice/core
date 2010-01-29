@@ -47,7 +47,7 @@ SLOFILES = $(SLO)$/testacquire.obj
 SHL1TARGET = testacquire.uno
 SHL1OBJS = $(SLOFILES)
 SHL1STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB)
-SHL1VERSIONMAP = testacquire.map
+SHL1VERSIONMAP = $(SOLARENV)/src/component.map
 SHL1IMPLIB = itestacquire
 
 JAVAFILES = TestAcquire.java

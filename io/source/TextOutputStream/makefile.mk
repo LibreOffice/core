@@ -45,7 +45,7 @@ SLOFILES= \
     $(SLO)$/TextOutputStream.obj
 
 SHL1TARGET= $(TARGET)
-SHL1VERSIONMAP = toutstrm.map
+SHL1VERSIONMAP = $(SOLARENV)/src/unloadablecomponent.map
 
 SHL1STDLIBS= \
         $(SALLIB)	\

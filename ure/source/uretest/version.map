@@ -38,6 +38,8 @@ UDK_3_0_0 {
         _ZTI*;
         _ZTS*;
 
+        _ZN4_STL7num_put*; # for STLport
+
     local:
         *;
 };

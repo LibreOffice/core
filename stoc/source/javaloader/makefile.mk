@@ -56,7 +56,7 @@ SHL1STDLIBS=\
         $(SALLIB) \
         $(JVMACCESSLIB)
 
-SHL1VERSIONMAP = javaloader.map
+SHL1VERSIONMAP = $(SOLARENV)/src/component.map
 SHL1DEPN=		
 SHL1IMPLIB=		i$(TARGET)
 SHL1LIBS= 		$(SLB)$/$(TARGET).lib 

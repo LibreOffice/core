@@ -1,4 +1,4 @@
-UDK_3.1 {
+UDK_3_0_0 {
     global:
         Java_test_java_1uno_anytest_TestJni_create_1jni_1transport;
     local:

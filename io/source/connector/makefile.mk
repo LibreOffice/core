@@ -56,7 +56,7 @@ SLOFILES= \
     $(SLO)$/ctr_socket.obj
 
 SHL1TARGET= $(TARGET)
-SHL1VERSIONMAP = connectr.map
+SHL1VERSIONMAP = $(SOLARENV)/src/unloadablecomponent.map
 SHL1RPATH=URELIB
 
 SHL1STDLIBS= \

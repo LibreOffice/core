@@ -59,7 +59,7 @@ NOOPTFILES += $(SLO)$/criface.obj
 .ENDIF
 
 SHL1TARGET=	$(TARGET)
-SHL1VERSIONMAP = corefl.map
+SHL1VERSIONMAP = $(SOLARENV)/src/unloadablecomponent.map
 SHL1STDLIBS= \
         $(CPPULIB)		\
         $(CPPUHELPERLIB)	\
