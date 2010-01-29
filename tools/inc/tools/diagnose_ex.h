@@ -121,11 +121,17 @@
                                           ifc ); }
 
 /** This macro asserts the given condition (in debug mode), and
+    returns the given value afterwards.
+ */
+#define ENSURE_OR_RETURN(c, m, r) if( !(c) ) { \
+                                     OSL_ENSURE(c, m); \
+                                     return r; }
+
+/** This macro asserts the given condition (in debug mode), and
     returns false afterwards.
  */
-#define ENSURE_OR_RETURN(c, m) if( !(c) ) { \
-                                     OSL_ENSURE(c, m); \
-                                     return false; }
+#define ENSURE_OR_RETURN_FALSE(c, m) \
+    ENSURE_OR_RETURN(c, m, false)
 
 
 

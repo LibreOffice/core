@@ -544,7 +544,7 @@ namespace dxcanvas
                         break;
 
                         default:
-                            ENSURE_OR_RETURN(false,
+                            ENSURE_OR_RETURN_FALSE(false,
                                             "DXSurface::update(): Unknown/unimplemented buffer format" );
                             break;
                     }

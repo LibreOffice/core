@@ -2877,7 +2877,7 @@ namespace cppcanvas
                     aSubset.mnSubsetEnd   = ::std::min( aRangeBegin->mpAction->getActionCount(),
                                                         nEndIndex - aRangeBegin->mnOrigIndex );
 
-                    ENSURE_OR_RETURN( aSubset.mnSubsetBegin >= 0 && aSubset.mnSubsetEnd >= 0,
+                    ENSURE_OR_RETURN_FALSE( aSubset.mnSubsetBegin >= 0 && aSubset.mnSubsetEnd >= 0,
                                       "ImplRenderer::forSubsetRange(): Invalid indices" );
 
                     rFunctor( *aRangeBegin, aSubset );
@@ -2893,7 +2893,7 @@ namespace cppcanvas
                                                         nStartIndex - aRangeBegin->mnOrigIndex );
                     aSubset.mnSubsetEnd   = aRangeBegin->mpAction->getActionCount();
 
-                    ENSURE_OR_RETURN( aSubset.mnSubsetBegin >= 0 && aSubset.mnSubsetEnd >= 0,
+                    ENSURE_OR_RETURN_FALSE( aSubset.mnSubsetBegin >= 0 && aSubset.mnSubsetEnd >= 0,
                                       "ImplRenderer::forSubsetRange(): Invalid indices" );
 
                     rFunctor( *aRangeBegin, aSubset );
@@ -2922,7 +2922,7 @@ namespace cppcanvas
                     aSubset.mnSubsetBegin = 0;
                     aSubset.mnSubsetEnd   = nEndIndex - aRangeEnd->mnOrigIndex;
 
-                    ENSURE_OR_RETURN( aSubset.mnSubsetBegin >= 0 && aSubset.mnSubsetEnd >= 0,
+                    ENSURE_OR_RETURN_FALSE( aSubset.mnSubsetBegin >= 0 && aSubset.mnSubsetEnd >= 0,
                                       "ImplRenderer::forSubsetRange(): Invalid indices" );
 
                     rFunctor( *aRangeEnd, aSubset );
@@ -2937,10 +2937,10 @@ namespace cppcanvas
                                              ActionVector::const_iterator&  o_rRangeBegin,
                                              ActionVector::const_iterator&  o_rRangeEnd ) const
         {
-            ENSURE_OR_RETURN( io_rStartIndex<=io_rEndIndex,
+            ENSURE_OR_RETURN_FALSE( io_rStartIndex<=io_rEndIndex,
                               "ImplRenderer::getSubsetIndices(): invalid action range" );
 
-            ENSURE_OR_RETURN( !maActions.empty(),
+            ENSURE_OR_RETURN_FALSE( !maActions.empty(),
                               "ImplRenderer::getSubsetIndices(): no actions to render" );
 
             const sal_Int32 nMinActionIndex( maActions.front().mnOrigIndex );
