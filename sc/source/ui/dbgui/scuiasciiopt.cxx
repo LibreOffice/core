@@ -239,10 +239,11 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
         aCkbAsOnce  ( this, ScResId( CB_ASONCE) ),
         aFlOtherOpt ( this, ScResId( FL_OTHER_OPTIONS ) ),
 
-        aCkbQuotedAsText( this, ScResId(CB_QUOTED_AS_TEXT) ),
-        aCkbDetectNumber( this, ScResId(CB_DETECT_SPECIAL_NUMBER) ),
         aFtTextSep  ( this, ScResId( FT_TEXTSEP ) ),
         aCbTextSep  ( this, ScResId( CB_TEXTSEP ) ),
+
+        aCkbQuotedAsText( this, ScResId(CB_QUOTED_AS_TEXT) ),
+        aCkbDetectNumber( this, ScResId(CB_DETECT_SPECIAL_NUMBER) ),
 
         aFlWidth    ( this, ScResId( FL_WIDTH ) ),
         aFtType     ( this, ScResId( FT_TYPE ) ),

@@ -71,11 +71,11 @@ class ScImportAsciiDlg : public ModalDialog
 
     FixedLine                   aFlOtherOpt;
 
-    CheckBox                    aCkbQuotedAsText;
-    CheckBox                    aCkbDetectNumber;
-
     FixedText                   aFtTextSep;
     ComboBox                    aCbTextSep;
+
+    CheckBox                    aCkbQuotedAsText;
+    CheckBox                    aCkbDetectNumber;
 
     FixedLine                   aFlWidth;
     FixedText                   aFtType;
