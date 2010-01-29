@@ -409,3 +409,21 @@ function wDeleteAutotext(vAutotextName as string) as boolean
     next ik
 
 end function
+
+
+sub wChangeDefaultView()
+
+    ' #i107038: This code forces the writer to display one page only which is
+    ' zoomed to pagewidth, filling the entire - previously maximized - window.
+    ' This is required because the VCL Testtool might eventually draw objects
+    ' outside the document window depending on display size
+
+    Call hNewDocument
+    ViewZoom
+    Kontext "Massstab"
+    Vergroesserung100.check
+    Singlepage.check
+    Massstab.Ok
+    Call hCloseDocument
+
+end sub

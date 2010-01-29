@@ -54,6 +54,7 @@ testcase tUpdtBasicDialogI18n
     
     printlog( "Click Manage Languages on ToolsCollectionBar")
     kontext "ToolsCollectionBar" 
+    sleep(1)
     if ( ToolsCollectionBar.exists() ) then
         ManageLanguage.click()
     else
@@ -106,7 +107,7 @@ testcase tUpdtBasicDialogI18n
         printlog( "Back on Manage UI Languages Dialog, delete selected language")
         kontext "ManageUILanguages"
         Delete.click()
-        
+        sleep(1)
         printlog( "Confirm delete")
         kontext "active"
         if ( Active.exists( 1 ) ) then

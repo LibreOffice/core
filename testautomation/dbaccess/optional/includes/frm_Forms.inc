@@ -530,9 +530,10 @@ testcase tCreateSubForms
      DataSource.setText(gDSName)	
      TabDataForm.TypeKeys("<RETURN>")
      '/// set the table TT_Forms
-     printlog "set the table TT_Forms"              
-	 Content.setText("TT_Forms")
-     TabDataForm.TypeKeys("<RETURN>")
+     printlog "set the table TT_Forms"
+     Content.setText("TT_Forms")
+     sleep(1)
+     Content.TypeKeys("<RETURN>",true)
      sleep(1)
   	Kontext "FormPropertiesDialog"
      sleep(1)
@@ -607,7 +608,11 @@ testcase tCreateSubForms
        '/// set the sql string : select * from TT_Forms where id=:var1"
        printlog "set the sql string : select * from TT_Forms where id=:var1"
        TabDataForm.TypeKeys "<RETURN>" , true
-       TabDataForm.TypeKeys "select * from TT_Forms where id=:var1" , true
+       sleep(1)
+       Content.TypeKeys "select * from TT_Forms where id=:var1" , true
+       sleep(1)
+       TabDataForm.TypeKeys("<RETURN>")
+       sleep(1)
        '/// set link master field
        printlog "set link master field"
        TabDataForm.TypeKeys "<TAB>" , 11 , true

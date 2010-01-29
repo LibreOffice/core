@@ -60,7 +60,6 @@ sub main
     Call tInsertSpreadsheet
     Call tInsertGraphics
     Call tInsertObjectPlugIn               ' Doesn't exist in the VCL
-    Call tInsertObjectApplet
     Call tInsertObjectFormula              ' Is in the VCL in InsertObjectOLEObject
     Call tInsertChart
     Call tdInsertFile
@@ -82,7 +81,6 @@ sub main
     Call tInsertSpreadsheet
     Call tInsertGraphics
     Call tInsertObjectPlugIn               ' Doesn't exist in the VCL
-    Call tInsertObjectApplet
     Call tInsertObjectFormula              ' Is in the VCL in InsertObjectOLEObject
     '    Call tInsertChart
     Call tdInsertFile

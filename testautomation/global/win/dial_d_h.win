@@ -20,9 +20,9 @@ HideItems HID_SC_DPSUBT_HIDE
 Hierarchy sc:ListBox:RID_SCDLG_DPSUBTOTAL_OPT:LB_HIERARCHY
 
 *DateienAuswaehlen HID_FILEDLG_MAILMRGE2
-Hinzufuegen svx:PushButton:RID_SVXDLG_MULTIPATH:BTN_ADD_MULTIPATH
-Loeschen svx:PushButton:RID_SVXDLG_MULTIPATH:BTN_DEL_MULTIPATH
-Pfade svx:ListBox:RID_SVXDLG_MULTIPATH:LB_MULTIPATH
+Hinzufuegen cui:PushButton:RID_SVXDLG_MULTIPATH:BTN_ADD_MULTIPATH
+Loeschen cui:PushButton:RID_SVXDLG_MULTIPATH:BTN_DEL_MULTIPATH
+Pfade cui:ListBox:RID_SVXDLG_MULTIPATH:LB_MULTIPATH
 
 *Datenpilot SID_OPENDLG_PIVOTTABLE
 Zusaetze sc:MoreButton:RID_SCDLG_PIVOT_LAYOUT:BTN_MORE
@@ -214,8 +214,6 @@ AusDruckereinstellung sd:CheckBox:TP_PRINT_OPTIONS:CBX_PAPERBIN
 
 *DruckerZusaetzeWriter HID_OPTPRINT_PAGE
 Grafiken sw:CheckBox:TP_OPTPRINT_PAGE:CB_PGRF
-Tabellen sw:CheckBox:TP_OPTPRINT_PAGE:CB_PTAB
-Zeichnungen sw:CheckBox:TP_OPTPRINT_PAGE:CB_PDRAW
 Kontrollfelder sw:CheckBox:TP_OPTPRINT_PAGE:CB_CTRLFLD
 Hintergrund sw:CheckBox:TP_OPTPRINT_PAGE:CB_BACKGROUND
 HiddenText sw:CheckBox:TP_OPTPRINT_PAGE:CB_HIDDEN_TEXT
@@ -224,7 +222,6 @@ RightToLeft sw:CheckBox:TP_OPTPRINT_PAGE:CB_PROSPECT_RTL
 SchwarzDrucken sw:CheckBox:TP_OPTPRINT_PAGE:CB_BLACK_FONT
 LinkeSeiten sw:CheckBox:TP_OPTPRINT_PAGE:CB_LEFTP
 RechteSeiten sw:CheckBox:TP_OPTPRINT_PAGE:CB_RIGHTP
-Umgekehrt sw:CheckBox:TP_OPTPRINT_PAGE:CB_REVERSE
 Prospekt sw:CheckBox:TP_OPTPRINT_PAGE:CB_PROSPECT
 Keine sw:RadioButton:TP_OPTPRINT_PAGE:RB_NO
 NurNotizen sw:RadioButton:TP_OPTPRINT_PAGE:RB_ONLY
@@ -253,14 +250,14 @@ PopuplisteRechts sfx2:ListBox:DLG_ORGANIZE:LB_RIGHT_TYP
 AddressBook sfx2:PushButton:DLG_ORGANIZE:BTN_ADDRESSTEMPLATE
 
 *EinfuegenSpalten FN_TABLE_INSERT_COL_DLG
-Anzahl svx:NumericField:DLG_INS_ROW_COL:ED_COUNT
-Davor svx:RadioButton:DLG_INS_ROW_COL:CB_POS_BEFORE
-Dahinter svx:RadioButton:DLG_INS_ROW_COL:CB_POS_AFTER
+Anzahl cui:NumericField:DLG_INS_ROW_COL:ED_COUNT
+Davor cui:RadioButton:DLG_INS_ROW_COL:CB_POS_BEFORE
+Dahinter cui:RadioButton:DLG_INS_ROW_COL:CB_POS_AFTER
 
 *EinfuegenZeilen FN_TABLE_INSERT_ROW_DLG
-Anzahl svx:NumericField:DLG_INS_ROW_COL:ED_COUNT
-Davor svx:RadioButton:DLG_INS_ROW_COL:CB_POS_BEFORE
-Dahinter svx:RadioButton:DLG_INS_ROW_COL:CB_POS_AFTER
+Anzahl cui:NumericField:DLG_INS_ROW_COL:ED_COUNT
+Davor cui:RadioButton:DLG_INS_ROW_COL:CB_POS_BEFORE
+Dahinter cui:RadioButton:DLG_INS_ROW_COL:CB_POS_AFTER
 
 *EbeneEinfuegenDlg SID_INSERTLAYER
 EbenenName sd:Edit:DLG_INSERT_LAYER:EDT_NAME
@@ -326,7 +323,7 @@ Kennwort sc:Edit:RID_SCDLG_DAPISERVICE:ED_PASSWD
 
 *ExtrasOptionenDlg HID_OFADLG_OPTIONS_TREE
 Optionsliste HID_OFADLG_TREELISTBOX
-Zurueck svx:PushButton:RID_OFADLG_OPTIONS_TREE:PB_BACK
+Zurueck cui:PushButton:RID_OFADLG_OPTIONS_TREE:PB_BACK
 
 *FeldAuswahl HID_FIELD_SEL_WIN
 Liste HID_FIELD_SEL

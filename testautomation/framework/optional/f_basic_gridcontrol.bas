@@ -1,16 +1,16 @@
 'encoding UTF-8  Do not remove or change this line!
-'**************************************************************************
+'*******************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'*
+'* 
 '* Copyright 2008 by Sun Microsystems, Inc.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
 '*
-'* $RCSfile: g_print.bas,v $
+'* $RCSfile: gridcontrol.bas,v $
 '*
-'* $Revision: 1.1 $
+'* $Revision: 1.3 $
 '*
-'* last change: $Author: jsi $ $Date: 2008-06-16 10:42:37 $
+'* last change: $Author: jsk $ $Date: 2008/06/20 08:07:03 $
 '*
 '* This file is part of OpenOffice.org.
 '*
@@ -29,36 +29,27 @@
 '* <http://www.openoffice.org/license.html>
 '* for a copy of the LGPLv3 License.
 '*
-'/************************************************************************
+'/******************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* owner : thorsten.bosbach@sun.com
 '*
-'* short description : Graphics Function: Print
+'* short description : test availablity of gridcontrol
 '*
-'\******************************************************************
-
-public glLocale (15*20) as string
+'\******************************************************************************
 
 sub main
-    PrintLog "------------------------- g_print test -------------------------"
-    Call hStatusIn ( "Graphics","g_print.bas")
-
-    use "graphics\tools\id_tools.inc"
-    use "graphics\optional\includes\global\g_print.inc"
-
-    PrintLog "-------------------------" + gApplication + "-------------------"
-    call tFilePrint
-
-    gApplication = "DRAW"
-    PrintLog "-------------------------" + gApplication + "-------------------"
-    call tFilePrint
-
-    Call hStatusOut
+    use "framework\optional\includes\basic_gridcontrol.inc"
+    call hStatusIn ("framework", "f_basic_gridcontrol.bas")
+    printlog "Load Document with gridcontrol"
+    call tGridcontrolLoad
+    hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_DEFAULT )
+    call hStatusOut   
 end sub
 
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
-    gApplication = "IMPRESS"
-    Call GetUseFiles
+    gApplication = "WRITER"
+    call GetUseFiles()
 end sub
+
