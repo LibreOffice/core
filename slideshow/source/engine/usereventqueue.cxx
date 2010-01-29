@@ -181,7 +181,7 @@ public:
 
     virtual bool handleAnimationEvent( const AnimationNodeSharedPtr& rNode )
     {
-        ENSURE_OR_RETURN(
+        ENSURE_OR_RETURN_FALSE(
             rNode,
             "AllAnimationEventHandler::handleAnimationEvent(): Invalid node" );
 
