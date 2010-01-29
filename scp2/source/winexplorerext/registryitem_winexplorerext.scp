@@ -190,7 +190,7 @@ End
 
 RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_PropHdl
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Optional_Winexplorerext;
+    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
     ComponentCondition = "VersionNT >= 600";
     Styles = (X64);
     Subkey = "CLSID\{AE424E85-F6DF-4910-A6A9-438797986431}";
@@ -200,7 +200,7 @@ End
 
 RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_InProcServer32
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Optional_Winexplorerext;
+    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
     ComponentCondition = "VersionNT >= 600";
     Styles = (X64);
     Subkey = "CLSID\{AE424E85-F6DF-4910-A6A9-438797986431}\InprocServer32";
@@ -210,7 +210,7 @@ End
 
 RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_InProcServer32_ThreadingModel
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    ModuleID = gid_Module_Optional_Winexplorerext;
+    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
     ComponentCondition = "VersionNT >= 600";
     Styles = (X64);
     Subkey = "CLSID\{AE424E85-F6DF-4910-A6A9-438797986431}\InprocServer32";
@@ -221,12 +221,13 @@ End
 
 RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_Approved
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
-    ModuleID = gid_Module_Optional_Winexplorerext;
+    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
     ComponentCondition = "VersionNT >= 600";
     Styles = (X64);
     Subkey = "SOFTWARE\Microsoft\Windows\CurrentVersion\Shell Extensions\Approved";
     Name = "{AE424E85-F6DF-4910-A6A9-438797986431}";
     Value = "%PRODUCTNAME Property Handler";
+    Val64 = "%PRODUCTNAME Property Handler";
 End
 
 // End registry entries for the Property handler

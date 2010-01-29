@@ -520,10 +520,10 @@ End
 
 // ---------------------------------------
 
-#define REGISTER_PROPERTY_HANDLER_FOR_EXTENSION(extension,modid) \
+#define REGISTER_PROPERTY_HANDLER_FOR_EXTENSION(extension) \
     RegistryItem CONCAT2(gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_,extension) \
         ParentID = PREDEFINED_HKEY_LOCAL_MACHINE; \
-        ModuleID = modid; \
+        ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl; \
         ComponentCondition = "VersionNT >= 600"; \
         Styles = (X64); \
         Subkey = STRING(CONCAT2(SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.,extension)); \
