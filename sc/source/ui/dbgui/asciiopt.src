@@ -214,7 +214,7 @@ ModalDialog RID_SCDLG_ASCII
 
     CheckBox CB_QUOTED_AS_TEXT
     {
-        Pos = MAP_APPFONT ( 20 , 158 ) ;
+        Pos = MAP_APPFONT ( 12 , 158 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Quoted field as text" ;
@@ -222,7 +222,7 @@ ModalDialog RID_SCDLG_ASCII
 
     CheckBox CB_DETECT_SPECIAL_NUMBER
     {
-        Pos = MAP_APPFONT ( 20 , 171 ) ;
+        Pos = MAP_APPFONT ( 12 , 171 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Detect special numbers" ;
