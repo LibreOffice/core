@@ -1,7 +1,7 @@
 --- misc/neon-0.28.2/src/exports.map	2009-09-29 10:28:13.531250000 +0200
 +++ misc/build/neon-0.28.2/src/exports.map	2009-09-21 12:16:53.453125000 +0200
 @@ -0,0 +1,292 @@
-+NEON_0_28_2 {
++UDK_3_0_0 {
 +	global:
 +		ne_sspi_authenticate;
 +		ne_sspi_clear_context;
