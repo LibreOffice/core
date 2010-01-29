@@ -96,6 +96,7 @@ public:
     const ScMyShapeList*        GetShapes() { return &aShapeList; }
     virtual void                SetCellData( ScMyCell& rMyCell );
     virtual void                Sort();
+    void                        SkipTable(SCTAB nSkip);
 };
 
 struct ScMyNoteShape
@@ -124,6 +125,7 @@ public:
     const ScMyNoteShapeList*    GetNotes() { return &aNoteShapeList; }
     virtual void                SetCellData( ScMyCell& rMyCell );
     virtual void                Sort();
+    void                        SkipTable(SCTAB nSkip);
 };
 
 //==============================================================================
@@ -152,6 +154,7 @@ public:
                                 using ScMyIteratorBase::UpdateAddress;
     virtual void                SetCellData( ScMyCell& rMyCell );
     virtual void                Sort(); // + remove doublets
+    void                        SkipTable(SCTAB nSkip);
 };
 
 //==============================================================================
@@ -192,6 +195,7 @@ public:
                                 using ScMyIteratorBase::UpdateAddress;
     virtual void                SetCellData( ScMyCell& rMyCell );
     virtual void                Sort();
+    void                        SkipTable(SCTAB nSkip);
 };
 
 //==============================================================================
@@ -218,6 +222,7 @@ public:
                                 using ScMyIteratorBase::UpdateAddress;
     virtual void                SetCellData( ScMyCell& rMyCell );
     virtual void                Sort();
+    void                        SkipTable(SCTAB nSkip);
 };
 
 //==============================================================================
@@ -254,6 +259,7 @@ public:
                                 using ScMyIteratorBase::UpdateAddress;
     virtual void                SetCellData( ScMyCell& rMyCell );
     virtual void                Sort();
+    void                        SkipTable(SCTAB nSkip);
 };
 
 //==============================================================================
@@ -284,6 +290,7 @@ public:
                                 using ScMyIteratorBase::UpdateAddress;
     virtual void                SetCellData( ScMyCell& rMyCell );
     virtual void                Sort();
+    void                        SkipTable(SCTAB nSkip);
 };
 
 //==============================================================================
@@ -400,6 +407,7 @@ public:
 
     void                        SetCurrentTable(const SCTAB nTable,
                                     com::sun::star::uno::Reference<com::sun::star::sheet::XSpreadsheet>& rxTable);
+    void                        SkipTable(SCTAB nSkip);
 
     sal_Bool                    GetNext(ScMyCell& aCell, ScFormatRangeStyles* pCellStyles);
 };

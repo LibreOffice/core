@@ -384,8 +384,7 @@ BOOL lcl_HasRowOutline( const ScViewData& rViewData )
             bInActivatePart( FALSE ),                                       \
             bInZoomUpdate( FALSE ),                                         \
             bMoveIsShift( FALSE ),                                          \
-            bNewStartIfMarking( FALSE ),                                    \
-            bOldSelection( FALSE )
+            bNewStartIfMarking( FALSE )
 
 
 ScTabView::ScTabView( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell ) :
@@ -398,22 +397,22 @@ ScTabView::ScTabView( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pView
     Init();
 }
 
-ScTabView::ScTabView( Window* pParent, const ScTabView& rScTabView, ScTabViewShell* pViewShell ) :
-            pFrameWin( pParent ),
-            aViewData( rScTabView.aViewData ),
-            TABVIEW_INIT
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScTabView::ScTabView" );
-
-    aViewData.SetViewShell( pViewShell );
-    Init();
-
-    UpdateShow();
-    if ( aViewData.GetActivePart() != SC_SPLIT_BOTTOMLEFT )
-        pGridWin[SC_SPLIT_BOTTOMLEFT]->Show();
-
-    InvalidateSplit();
-}
+//UNUSED2009-05 ScTabView::ScTabView( Window* pParent, const ScTabView& rScTabView, ScTabViewShell* pViewShell ) :
+//UNUSED2009-05             pFrameWin( pParent ),
+//UNUSED2009-05             aViewData( rScTabView.aViewData ),
+//UNUSED2009-05             TABVIEW_INIT
+//UNUSED2009-05 {
+//UNUSED2009-05     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScTabView::ScTabView" );
+//UNUSED2009-05
+//UNUSED2009-05     aViewData.SetViewShell( pViewShell );
+//UNUSED2009-05     Init();
+//UNUSED2009-05
+//UNUSED2009-05     UpdateShow();
+//UNUSED2009-05     if ( aViewData.GetActivePart() != SC_SPLIT_BOTTOMLEFT )
+//UNUSED2009-05         pGridWin[SC_SPLIT_BOTTOMLEFT]->Show();
+//UNUSED2009-05
+//UNUSED2009-05     InvalidateSplit();
+//UNUSED2009-05 }
 
 void ScTabView::InitScrollBar( ScrollBar& rScrollBar, long nMaxVal )
 {

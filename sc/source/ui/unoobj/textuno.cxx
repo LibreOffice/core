@@ -897,6 +897,47 @@ uno::Reference<text::XTextRange> SAL_CALL ScDrawTextCursor::getEnd() throw(uno::
     return xRange;
 }
 
+// XUnoTunnel
+
+sal_Int64 SAL_CALL ScDrawTextCursor::getSomething(
+                const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException)
+{
+    if ( rId.getLength() == 16 &&
+          0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
+                                    rId.getConstArray(), 16 ) )
+    {
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
+    }
+    return SvxUnoTextCursor::getSomething( rId );
+}
+
+// static
+const uno::Sequence<sal_Int8>& ScDrawTextCursor::getUnoTunnelId()
+{
+    static uno::Sequence<sal_Int8> * pSeq = 0;
+    if( !pSeq )
+    {
+        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
+        if( !pSeq )
+        {
+            static uno::Sequence< sal_Int8 > aSeq( 16 );
+            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
+            pSeq = &aSeq;
+        }
+    }
+    return *pSeq;
+}
+
+// static
+ScDrawTextCursor* ScDrawTextCursor::getImplementation( const uno::Reference<uno::XInterface> xObj )
+{
+    ScDrawTextCursor* pRet = NULL;
+    uno::Reference<lang::XUnoTunnel> xUT( xObj, uno::UNO_QUERY );
+    if (xUT.is())
+        pRet = reinterpret_cast<ScDrawTextCursor*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
+    return pRet;
+}
+
 //------------------------------------------------------------------------
 
 ScSimpleEditSourceHelper::ScSimpleEditSourceHelper()

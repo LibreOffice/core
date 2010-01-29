@@ -97,20 +97,6 @@ void lcl_SetBoolProperty( const uno::Reference<beans::XPropertySet>& xProp,
 
 // -----------------------------------------------------------------------
 
-void lcl_SkipExtra( SvStream& rStream )
-{
-    USHORT nExtra;
-    rStream >> nExtra;
-    if ( nExtra )
-    {
-        rStream.SeekRel( nExtra );
-        if ( rStream.GetError() == SVSTREAM_OK )
-            rStream.SetError( SCWARN_IMPORT_INFOLOST );
-    }
-}
-
-// -----------------------------------------------------------------------
-
 ScDPSaveMember::ScDPSaveMember(const String& rName) :
     aName( rName ),
     nVisibleMode( SC_DPSAVEMODE_DONTKNOW ),
@@ -350,17 +336,6 @@ void ScDPSaveDimension::SetName( const String& rNew )
 void ScDPSaveDimension::SetOrientation(USHORT nNew)
 {
     nOrientation = nNew;
-}
-
-void ScDPSaveDimension::SetSubTotals(BOOL bSet)
-{
-    if (bSet)
-    {
-        USHORT nFunc = sheet::GeneralFunction_AUTO;
-        SetSubTotals( 1, &nFunc );
-    }
-    else
-        SetSubTotals( 0, NULL );
 }
 
 void ScDPSaveDimension::SetSubTotals(long nCount, const USHORT* pFuncs)

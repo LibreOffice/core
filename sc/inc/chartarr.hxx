@@ -40,7 +40,6 @@
 class ScAddress;
 class Table;
 class ScDocument;
-class ScMultipleReadHeader;
 
 
 // ScMemChart is a stripped-down SchMemChart from old chart,

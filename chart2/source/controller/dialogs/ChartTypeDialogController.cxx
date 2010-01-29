@@ -1000,6 +1000,10 @@ const tTemplateServiceChartTypeParameterMap& NetChartDialogController::getTempla
     ( C2U( "com.sun.star.chart2.template.NetLine" ),                ChartTypeParameter(3,false,false,GlobalStackMode_NONE,false,true) )
     ( C2U( "com.sun.star.chart2.template.StackedNetLine" ),         ChartTypeParameter(3,false,false,GlobalStackMode_STACK_Y,false,true) )
     ( C2U( "com.sun.star.chart2.template.PercentStackedNetLine" ),  ChartTypeParameter(3,false,false,GlobalStackMode_STACK_Y_PERCENT,false,true) )
+
+    ( C2U( "com.sun.star.chart2.template.FilledNet" ),            ChartTypeParameter(4,false,false,GlobalStackMode_NONE,false,false) )
+    ( C2U( "com.sun.star.chart2.template.StackedFilledNet" ),     ChartTypeParameter(4,false,false,GlobalStackMode_STACK_Y,false,false) )
+    ( C2U( "com.sun.star.chart2.template.PercentStackedFilledNet" ),ChartTypeParameter(4,false,false,GlobalStackMode_STACK_Y_PERCENT,false,false) )
     ;
     return m_aTemplateMap;
 }
@@ -1012,17 +1016,20 @@ void NetChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, bool bIs
         rSubTypeList.InsertItem( 1, SELECT_BITMAP( BMP_NET_SYMB ) );
         rSubTypeList.InsertItem( 2, SELECT_BITMAP( BMP_NET_LINESYMB ) );
         rSubTypeList.InsertItem( 3, SELECT_BITMAP( BMP_NET ) );
+        rSubTypeList.InsertItem( 4, SELECT_BITMAP( BMP_NET_FILL ) );
     }
     else
     {
         rSubTypeList.InsertItem( 1, SELECT_BITMAP( BMP_NET_SYMB_STACK ) );
         rSubTypeList.InsertItem( 2, SELECT_BITMAP( BMP_NET_LINESYMB_STACK ) );
         rSubTypeList.InsertItem( 3, SELECT_BITMAP( BMP_NET_STACK ) );
+        rSubTypeList.InsertItem( 4, SELECT_BITMAP( BMP_NET_FILL_STACK ) );
     }
 
     rSubTypeList.SetItemText( 1, String( SchResId( STR_POINTS_ONLY )) );
     rSubTypeList.SetItemText( 2, String( SchResId( STR_POINTS_AND_LINES )) );
     rSubTypeList.SetItemText( 3, String( SchResId( STR_LINES_ONLY )) );
+    rSubTypeList.SetItemText( 4, String( SchResId( STR_FILLED )) );
 }
 void NetChartDialogController::adjustParameterToSubType( ChartTypeParameter& rParameter )
 {
@@ -1039,6 +1046,10 @@ void NetChartDialogController::adjustParameterToSubType( ChartTypeParameter& rPa
         case 3:
             rParameter.bSymbols = false;
             rParameter.bLines = true;
+            break;
+        case 4:
+            rParameter.bSymbols = false;
+            rParameter.bLines = false;
             break;
         default:
             rParameter.bSymbols = true;

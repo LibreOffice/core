@@ -43,6 +43,7 @@
 #include "docuno.hxx"
 #include "cellsuno.hxx"
 #include "XMLStylesImportHelper.hxx"
+#include "sheetdata.hxx"
 #include "tabprotection.hxx"
 #include <svx/svdpage.hxx>
 
@@ -269,7 +270,12 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
                                     XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
                                         XML_STYLE_FAMILY_TABLE_TABLE, sStyleName, sal_True);
                                     if (pStyle)
+                                    {
                                         pStyle->FillPropertySet(xProperties);
+
+                                        ScSheetSaveData* pSheetData = ScModelObj::getImplementation(rImport.GetModel())->GetSheetSaveData();
+                                        pSheetData->AddTableStyle( sStyleName, ScAddress( 0, 0, (SCTAB)nCurrentSheet ) );
+                                    }
                                 }
                             }
                         }
@@ -609,7 +615,11 @@ void ScMyTables::UpdateRowHeights()
             }
 
             if (aUpdateSheets.GetSelectCount())
+            {
+                pDoc->LockStreamValid( true );      // ignore draw page size (but not formula results)
                 ScModelObj::getImplementation(rImport.GetModel())->UpdateAllRowHeights(&aUpdateSheets);
+                pDoc->LockStreamValid( false );
+            }
         }
 
         rImport.UnlockSolarMutex();

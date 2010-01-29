@@ -217,12 +217,6 @@ bool ScQProReader::recordsLeft()
     return bValue;
 }
 
-bool ScQProReader::IsEndOfFile()
-{
-    bool bValue = ScBiffReader::mbEndOfFile;
-    return bValue;
-}
-
 bool ScQProReader::nextRecord()
 {
     bool bValue = ScBiffReader::nextRecord();

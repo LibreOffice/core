@@ -68,6 +68,9 @@ public:
             ::com::sun::star::uno::XComponentContext > & xContext );
     virtual ~DataSourceDialog();
 
+    // from Dialog (base of TabDialog)
+    virtual short Execute();
+
     // TabPageNotifiable
     virtual void setInvalidPage( TabPage * pTabPage );
     virtual void setValidPage( TabPage * pTabPage );

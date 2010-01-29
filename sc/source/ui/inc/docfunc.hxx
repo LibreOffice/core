@@ -124,7 +124,7 @@ public:
 
     BOOL            SetLayoutRTL( SCTAB nTab, BOOL bRTL, BOOL bApi );
 
-    BOOL            SetGrammar( formula::FormulaGrammar::Grammar eGrammar );
+//UNUSED2009-05 BOOL            SetGrammar( formula::FormulaGrammar::Grammar eGrammar );
 
     SC_DLLPUBLIC BOOL           SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRanges,
                                     SCTAB nTab, ScSizeMode eMode, USHORT nSizeTwips,

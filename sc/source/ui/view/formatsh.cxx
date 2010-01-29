@@ -824,6 +824,11 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                                                 bNumFormatChanged, aOldSet, rNewSet ) )
                                 pDoc->InvalidateTextWidth( NULL, NULL, bNumFormatChanged );
 
+                            SCTAB nTabCount = pDoc->GetTableCount();
+                            for (SCTAB nTab=0; nTab<nTabCount; nTab++)
+                                if (pDoc->IsStreamValid(nTab))
+                                    pDoc->SetStreamValid(nTab, FALSE);
+
                             ULONG nOldFormat = ((const SfxUInt32Item&)aOldSet.
                                                     Get( ATTR_VALUE_FORMAT )).GetValue();
                             ULONG nNewFormat = ((const SfxUInt32Item&)rNewSet.

@@ -59,13 +59,13 @@ ScAddress::Details::Details ( const ScDocument* pDoc,
 {
 }
 
-void ScAddress::Details::SetPos ( const ScDocument* pDoc,
-                                  const ScAddress & rAddr )
-{
-    nRow  = rAddr.Row();
-    nCol  = rAddr.Col();
-    eConv = pDoc->GetAddressConvention();
-}
+//UNUSED2009-05 void ScAddress::Details::SetPos ( const ScDocument* pDoc,
+//UNUSED2009-05                                   const ScAddress & rAddr )
+//UNUSED2009-05 {
+//UNUSED2009-05     nRow  = rAddr.Row();
+//UNUSED2009-05     nCol  = rAddr.Col();
+//UNUSED2009-05     eConv = pDoc->GetAddressConvention();
+//UNUSED2009-05 }
 
 ////////////////////////////////////////////////////////////////////////////
 
@@ -218,18 +218,55 @@ static bool lcl_ScRange_External_TabSpan(
     return true;
 }
 
-// Returns NULL if the string should be a sheet name, but is invalid.
-// Returns a pointer to the first character after the sheet name, if there was
-// any, else pointer to start.
+/** Returns NULL if the string should be a sheet name, but is invalid.
+    Returns a pointer to the first character after the sheet name, if there was
+    any, else pointer to start.
+    @param pMsoxlQuoteStop
+        Starting _within_ a quoted name, but still may be 3D; quoted name stops
+        at pMsoxlQuoteStop
+ */
 static const sal_Unicode *
 lcl_XL_ParseSheetRef( const sal_Unicode* start,
                       String& rExternTabName,
-                      bool allow_3d )
+                      bool allow_3d,
+                      const sal_Unicode* pMsoxlQuoteStop )
 {
     String aTabName;
     const sal_Unicode *p = start;
 
-    if( *p == '\'' ) // XL only seems to use single quotes for sheet names
+    // XL only seems to use single quotes for sheet names.
+    if (pMsoxlQuoteStop)
+    {
+        const sal_Unicode* pCurrentStart = p;
+        while (p < pMsoxlQuoteStop)
+        {
+            if (*p == '\'')
+            {
+                // We pre-analyzed the quoting, no checks needed here.
+                if (*++p == '\'')
+                {
+                    aTabName.Append( pCurrentStart,
+                            sal::static_int_cast<xub_StrLen>( p - pCurrentStart));
+                    pCurrentStart = ++p;
+                }
+            }
+            else if (*p == ':')
+            {
+                break;  // while
+            }
+            else
+                ++p;
+        }
+        if (pCurrentStart < p)
+            aTabName.Append( pCurrentStart, sal::static_int_cast<xub_StrLen>( p - pCurrentStart));
+        if (!aTabName.Len())
+            return NULL;
+        if (p == pMsoxlQuoteStop)
+            ++p;    // position on ! of ...'!...
+        if( *p != '!' && ( !allow_3d || *p != ':' ) )
+            return (!allow_3d && *p == ':') ? p : start;
+    }
+    else if( *p == '\'')
     {
         p = lcl_ParseQuotedName(p, aTabName);
         if (!aTabName.Len())
@@ -290,8 +327,8 @@ lcl_XL_ParseSheetRef( const sal_Unicode* start,
                 break;
         }
 
-        if( *p != '!' &&( !allow_3d || *p != ':' ) )
-            return start;
+        if( *p != '!' && ( !allow_3d || *p != ':' ) )
+            return (!allow_3d && *p == ':') ? p : start;
 
         aTabName.Append( start, sal::static_int_cast<xub_StrLen>( p - start ) );
     }
@@ -318,6 +355,7 @@ const sal_Unicode* ScRange::Parse_XL_Header(
     rStartTabName.Erase();
     rEndTabName.Erase();
     rExternDocName.Erase();
+    const sal_Unicode* pMsoxlQuoteStop = NULL;
     if (*p == '[')
     {
         ++p;
@@ -371,9 +409,47 @@ const sal_Unicode* ScRange::Parse_XL_Header(
         }
         rExternDocName = ScGlobal::GetAbsDocName(rExternDocName, pDoc->GetDocumentShell());
     }
+    else if (*p == '\'')
+    {
+        // Sickness in Excel's ODF msoxl namespace:
+        // 'E:\[EXTDATA8.XLS]Sheet1'!$A$7  or
+        // 'E:\[EXTDATA12B.XLSB]Sheet1:Sheet3'!$A$11
+        // But, 'Sheet1'!B3 would also be a valid!
+        // Excel does not allow [ and ] characters in sheet names though.
+        p = lcl_ParseQuotedName(p, rExternDocName);
+        if (!*p || *p != '!')
+            return start;
+        if (rExternDocName.Len())
+        {
+            xub_StrLen nOpen = rExternDocName.Search( '[');
+            if (nOpen == STRING_NOTFOUND)
+                rExternDocName.Erase();
+            else
+            {
+                xub_StrLen nClose = rExternDocName.Search( ']', nOpen+1);
+                if (nClose == STRING_NOTFOUND)
+                    rExternDocName.Erase();
+                else
+                {
+                    rExternDocName.Erase( nClose);
+                    rExternDocName.Erase( nOpen, 1);
+                    pMsoxlQuoteStop = p - 1;    // the ' quote char
+                    // There may be embedded escaped quotes, just matching the
+                    // doc name's length may not work.
+                    for (p = start; *p != '['; ++p)
+                        ;
+                    for ( ; *p != ']'; ++p)
+                        ;
+                    ++p;
+                }
+            }
+        }
+        if (!rExternDocName.Len())
+            p = start;
+    }
 
     startTabs = p;
-    p = lcl_XL_ParseSheetRef( p, rStartTabName, !bOnlyAcceptSingle );
+    p = lcl_XL_ParseSheetRef( p, rStartTabName, !bOnlyAcceptSingle, pMsoxlQuoteStop);
     if( NULL == p )
         return start;       // invalid tab
     if (bOnlyAcceptSingle && *p == ':')
@@ -383,7 +459,7 @@ const sal_Unicode* ScRange::Parse_XL_Header(
         nFlags |= SCA_VALID_TAB | SCA_TAB_3D | SCA_TAB_ABSOLUTE;
         if( *p == ':' ) // 3d ref
         {
-            p = lcl_XL_ParseSheetRef( p+1, rEndTabName, false );
+            p = lcl_XL_ParseSheetRef( p+1, rEndTabName, false, pMsoxlQuoteStop);
             if( p == NULL )
             {
                 nFlags = nSaveFlags;
@@ -413,7 +489,12 @@ const sal_Unicode* ScRange::Parse_XL_Header(
         // Use the current tab, it needs to be passed in. : aEnd.SetTab( .. );
     }
 
-    if (!rExternDocName.Len())
+    if (rExternDocName.Len())
+    {
+        ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
+        pRefMgr->convertToAbsName( rExternDocName);
+    }
+    else
     {
         // Internal reference.
         if (!rStartTabName.Len())
@@ -594,7 +675,8 @@ lcl_ScRange_Parse_XL_R1C1( ScRange& r,
             if (p && p[0] != 0)
             {
                 // any trailing invalid character must invalidate the whole address.
-                nFlags &= ~(SCA_VALID | SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB);
+                nFlags &= ~(SCA_VALID | SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB |
+                            SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2);
                 return nFlags;
             }
 
@@ -661,7 +743,8 @@ lcl_ScRange_Parse_XL_R1C1( ScRange& r,
         if (p && p[0] != 0)
         {
             // any trailing invalid character must invalidate the whole address.
-            nFlags &= ~(SCA_VALID | SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB);
+            nFlags &= ~(SCA_VALID | SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB |
+                        SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2);
             return nFlags;
         }
 

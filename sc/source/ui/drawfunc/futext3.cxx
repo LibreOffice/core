@@ -110,6 +110,9 @@ void FuText::StopEditMode(BOOL /*bTextDirection*/)
         }
     }
 
+    if( pNote )
+        rDoc.LockStreamValid(true);     // only the affected sheet is invalidated below
+
     /*  SdrObjEditView::SdrEndTextEdit() may try to delete the entire drawing
         object, if it does not contain text and has invisible border and fill.
         This must not happen for note caption objects. They will be removed
@@ -183,6 +186,11 @@ void FuText::StopEditMode(BOOL /*bTextDirection*/)
                     pAction->SetComment( ScGlobal::GetRscString( bNewNote ? STR_UNDO_INSERTNOTE : STR_UNDO_DELETENOTE ) );
             }
         }
+
+        // invalidate stream positions only for the affected sheet
+        rDoc.LockStreamValid(false);
+        if (rDoc.IsStreamValid(aNotePos.Tab()))
+            rDoc.SetStreamValid(aNotePos.Tab(), FALSE);
     }
 }
 

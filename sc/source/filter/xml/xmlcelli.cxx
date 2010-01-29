@@ -44,6 +44,7 @@
 #include "docuno.hxx"
 #include "unonames.hxx"
 #include "postit.hxx"
+#include "sheetdata.hxx"
 
 #include "XMLTableShapeImportHelper.hxx"
 #include "XMLTextPContext.hxx"
@@ -550,6 +551,11 @@ void ScXMLTableRowCellContext::SetContentValidation(com::sun::star::uno::Referen
                 }
             }
             xPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_VALIXML)), uno::makeAny(xPropertySet));
+
+            // For now, any sheet with validity is blocked from stream-copying.
+            // Later, the validation names could be stored along with the style names.
+            ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetImport().GetModel())->GetSheetSaveData();
+            pSheetData->BlockSheet( GetScImport().GetTables().GetCurrentSheet() );
         }
     }
 }
@@ -675,6 +681,18 @@ void ScXMLTableRowCellContext::SetAnnotation(const table::CellAddress& aCellAddr
     {
         uno::Reference< drawing::XShape > xShape;
         rXMLImport.GetShapeImport()->shapeWithZIndexAdded( xShape, xShapesIA->getCount() );
+    }
+
+    // store the style names for stream copying
+    ScSheetSaveData* pSheetData = ScModelObj::getImplementation(rXMLImport.GetModel())->GetSheetSaveData();
+    pSheetData->HandleNoteStyles( mxAnnotationData->maStyleName, mxAnnotationData->maTextStyle, aPos );
+
+    std::vector<ScXMLAnnotationStyleEntry>::const_iterator aIter = mxAnnotationData->maContentStyles.begin();
+    std::vector<ScXMLAnnotationStyleEntry>::const_iterator aEnd = mxAnnotationData->maContentStyles.end();
+    while (aIter != aEnd)
+    {
+        pSheetData->AddNoteContentStyle( aIter->mnFamily, aIter->maName, aPos, aIter->maSelection );
+        ++aIter;
     }
 }
 

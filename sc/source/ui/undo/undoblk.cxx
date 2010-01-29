@@ -64,6 +64,7 @@
 #include "transobj.hxx"
 #include "refundo.hxx"
 #include "undoolk.hxx"
+#include "clipparam.hxx"
 #include "sc.hrc"
 
 
@@ -441,7 +442,7 @@ void ScUndoDeleteCells::DoChange( const BOOL bUndo )
     for( i=0; i<nCount && bUndo; i++ )
     {
         pRefUndoDoc->CopyToDocument( aEffRange.aStart.Col(), aEffRange.aStart.Row(), pTabs[i], aEffRange.aEnd.Col(), aEffRange.aEnd.Row(), pTabs[i]+pScenarios[i],
-            IDF_ALL, FALSE, pDoc );
+            IDF_ALL | IDF_NOCAPTIONS, FALSE, pDoc );
     }
 
     ScRange aWorkRange( aEffRange );
@@ -1316,9 +1317,8 @@ void __EXPORT ScUndoDragDrop::Redo()
         aSourceMark.SelectTable( nTab, TRUE );
 
     // do not clone objects and note captions into clipdoc (see above)
-    pDoc->CopyToClip( aSrcRange.aStart.Col(), aSrcRange.aStart.Row(),
-                      aSrcRange.aEnd.Col(),   aSrcRange.aEnd.Row(),
-                      bCut, pClipDoc, FALSE, &aSourceMark, bKeepScenarioFlags, FALSE, FALSE );
+    ScClipParam aClipParam(aSrcRange, bCut);
+    pDoc->CopyToClip(aClipParam, pClipDoc, &aSourceMark, false, bKeepScenarioFlags, false, false);
 
     if (bCut)
     {
@@ -1729,8 +1729,8 @@ void __EXPORT ScUndoEnterMatrix::Undo()
 
     ScDocument* pDoc = pDocShell->GetDocument();
 
-    pDoc->DeleteAreaTab( aBlockRange, IDF_ALL );
-    pUndoDoc->CopyToDocument( aBlockRange, IDF_ALL, FALSE, pDoc );
+    pDoc->DeleteAreaTab( aBlockRange, IDF_ALL & ~IDF_NOTE );
+    pUndoDoc->CopyToDocument( aBlockRange, IDF_ALL & ~IDF_NOTE, FALSE, pDoc );
     pDocShell->PostPaint( aBlockRange, PAINT_GRID );
     pDocShell->PostDataChanged();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();

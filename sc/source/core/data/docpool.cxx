@@ -741,7 +741,7 @@ SfxItemPresentation lcl_HFPresentation
 
             default:
                 if ( !pIntl )
-                    pIntl = ScGlobal::pScIntlWrapper;
+                    pIntl = ScGlobal::GetScIntlWrapper();
                 pItem->GetPresentation( ePresentation, eCoreMetric, ePresentationMetric, aText, pIntl );
 
         }
@@ -1018,7 +1018,7 @@ SfxItemPresentation __EXPORT ScDocumentPool::GetPresentation(
 
         default:
             if ( !pIntl )
-                pIntl = ScGlobal::pScIntlWrapper;
+                pIntl = ScGlobal::GetScIntlWrapper();
             ePresentation = rItem.GetPresentation( ePresentation, GetMetric( nW ), ePresentationMetric, rText, pIntl );
         break;
     }

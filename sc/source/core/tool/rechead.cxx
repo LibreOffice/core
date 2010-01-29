@@ -44,62 +44,6 @@
 
 // =======================================================================
 
-ScReadHeader::ScReadHeader(SvStream& rNewStream) :
-    rStream( rNewStream )
-{
-    sal_uInt32 nDataSize;
-    rStream >> nDataSize;
-    nDataEnd = rStream.Tell() + nDataSize;
-}
-
-ScReadHeader::~ScReadHeader()
-{
-    ULONG nReadEnd = rStream.Tell();
-    DBG_ASSERT( nReadEnd <= nDataEnd, "zuviele Bytes gelesen" );
-    if ( nReadEnd != nDataEnd )
-    {
-        if ( rStream.GetError() == SVSTREAM_OK )
-            rStream.SetError( SCWARN_IMPORT_INFOLOST );
-        rStream.Seek(nDataEnd);                     // Rest ueberspringen
-    }
-}
-
-ULONG ScReadHeader::BytesLeft() const
-{
-    ULONG nReadEnd = rStream.Tell();
-    if (nReadEnd <= nDataEnd)
-        return nDataEnd-nReadEnd;
-
-    DBG_ERROR("Fehler bei ScReadHeader::BytesLeft");
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-
-ScWriteHeader::ScWriteHeader(SvStream& rNewStream, sal_uInt32 nDefault) :
-    rStream( rNewStream )
-{
-    nDataSize = nDefault;
-    rStream << nDataSize;
-
-    nDataPos = rStream.Tell();
-}
-
-ScWriteHeader::~ScWriteHeader()
-{
-    ULONG nPos = rStream.Tell();
-
-    if ( nPos - nDataPos != nDataSize )             // Default getroffen?
-    {
-        nDataSize = nPos - nDataPos;
-        rStream.Seek(nDataPos - sizeof(sal_uInt32));
-        rStream << nDataSize;                       // Groesse am Anfang eintragen
-        rStream.Seek(nPos);
-    }
-}
-
-// =======================================================================
-
 ScMultipleReadHeader::ScMultipleReadHeader(SvStream& rNewStream) :
     rStream( rNewStream )
 {

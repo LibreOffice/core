@@ -1098,7 +1098,7 @@ bool lcl_IsAtStart( const String& rList, const String& rSearch, sal_Int32& rMatc
             }
         }
 
-        if ( bParsed && ScGlobal::pTransliteration->isEqual( aDequoted, rSearch ) )
+        if ( bParsed && ScGlobal::GetpTransliteration()->isEqual( aDequoted, rSearch ) )
         {
             nMatchList = nQuoteEnd;             // match count in the list string, including quotes
             nMatchSearch = rSearch.Len();
@@ -1107,7 +1107,7 @@ bool lcl_IsAtStart( const String& rList, const String& rSearch, sal_Int32& rMatc
     else
     {
         // otherwise look for search string at the start of rList
-        ScGlobal::pTransliteration->equals( rList, 0, rList.Len(), nMatchList,
+        ScGlobal::GetpTransliteration()->equals( rList, 0, rList.Len(), nMatchList,
                                             rSearch, 0, rSearch.Len(), nMatchSearch );
     }
 
@@ -2122,50 +2122,6 @@ void ScDPObject::ConvertOrientation( ScDPSaveData& rSaveData,
     }
 }
 
-#if OLD_PIVOT_IMPLEMENTATION
-void ScDPObject::InitFromOldPivot( const ScPivot& rOld, ScDocument* pDocP, BOOL bSetSource )
-{
-    ScDPSaveData aSaveData;
-
-    ScPivotParam aParam;
-    ScQueryParam aQuery;
-    ScArea aArea;
-    rOld.GetParam( aParam, aQuery, aArea );
-
-    ConvertOrientation( aSaveData, aParam.aPageArr, aParam.nPageCount,
-                            sheet::DataPilotFieldOrientation_PAGE, pDocP, aArea.nRowStart, aArea.nTab,
-                            uno::Reference<sheet::XDimensionsSupplier>(), TRUE );
-    ConvertOrientation( aSaveData, aParam.aColArr, aParam.nColCount,
-                            sheet::DataPilotFieldOrientation_COLUMN, pDocP, aArea.nRowStart, aArea.nTab,
-                            uno::Reference<sheet::XDimensionsSupplier>(), TRUE );
-    ConvertOrientation( aSaveData, aParam.aRowArr, aParam.nRowCount,
-                            sheet::DataPilotFieldOrientation_ROW, pDocP, aArea.nRowStart, aArea.nTab,
-                            uno::Reference<sheet::XDimensionsSupplier>(), TRUE );
-    ConvertOrientation( aSaveData, aParam.aDataArr, aParam.nDataCount,
-                            sheet::DataPilotFieldOrientation_DATA, pDocP, aArea.nRowStart, aArea.nTab,
-                            uno::Reference<sheet::XDimensionsSupplier>(), TRUE,
-                            aParam.aColArr, aParam.nColCount, aParam.aRowArr, aParam.nRowCount );
-
-    aSaveData.SetIgnoreEmptyRows( rOld.GetIgnoreEmpty() );
-    aSaveData.SetRepeatIfEmpty( rOld.GetDetectCat() );
-    aSaveData.SetColumnGrand( rOld.GetMakeTotalCol() );
-    aSaveData.SetRowGrand( rOld.GetMakeTotalRow() );
-
-    SetSaveData( aSaveData );
-    if (bSetSource)
-    {
-        ScSheetSourceDesc aDesc;
-        aDesc.aSourceRange = rOld.GetSrcArea();
-        rOld.GetQuery( aDesc.aQueryParam );
-        SetSheetDesc( aDesc );
-    }
-    SetOutRange( rOld.GetDestArea() );
-
-    aTableName = rOld.GetName();
-    aTableTag  = rOld.GetTag();
-}
-#endif
-
 // -----------------------------------------------------------------------
 
 //  static
@@ -2505,27 +2461,4 @@ void ScDPCollection::clearCacheCellPool()
     // for correctness' sake, delete the elements after clearing the hash_set
     for_each(ps.begin(), ps.end(), DeleteCacheCells());
 }
-
-//------------------------------------------------------------------------
-//  convert old pivot tables into new datapilot tables
-
-#if OLD_PIVOT_IMPLEMENTATION
-void ScDPCollection::ConvertOldTables( ScPivotCollection& rOldColl )
-{
-    //  convert old pivot tables into new datapilot tables
-
-    USHORT nOldCount = rOldColl.GetCount();
-    for (USHORT i=0; i<nOldCount; i++)
-    {
-        ScDPObject* pNewObj = new ScDPObject(pDoc);
-        pNewObj->InitFromOldPivot( *(rOldColl)[i], pDoc, TRUE );
-        pNewObj->SetAlive( TRUE );
-        Insert( pNewObj );
-    }
-    rOldColl.FreeAll();
-}
-#endif
-
-
-
 

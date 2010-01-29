@@ -52,6 +52,16 @@ class OOO_DLLPUBLIC_CHARTTOOLS LegendHelper
 public:
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XLegend >
+        showLegend( const ::com::sun::star::uno::Reference<
+                       ::com::sun::star::frame::XModel >& xModel
+                  , const ::com::sun::star::uno::Reference<
+                       ::com::sun::star::uno::XComponentContext >& xContext );
+
+    static  void hideLegend( const ::com::sun::star::uno::Reference<
+                       ::com::sun::star::frame::XModel >& xModel );
+
+    static ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XLegend >
         getLegend( const ::com::sun::star::uno::Reference<
                        ::com::sun::star::frame::XModel >& xModel
                  , const ::com::sun::star::uno::Reference<

@@ -111,7 +111,7 @@ void BubbleChart::calculateMaximumLogicBubbleSize()
 
                     double fSize = pSeries->getBubble_Size( nIndex );
                     if( m_bShowNegativeValues )
-                        fSize = abs(fSize);
+                        fSize = fabs(fSize);
                     if( fSize > fMaxSize )
                         fMaxSize = fSize;
                 }
@@ -146,7 +146,7 @@ drawing::Direction3D BubbleChart::transformToScreenBubbleSize( double fLogicSize
         return aRet;
 
     if( m_bShowNegativeValues )
-        fLogicSize = abs(fLogicSize);
+        fLogicSize = fabs(fLogicSize);
 
     double fMaxSize = m_fMaxLogicBubbleSize;
 

@@ -457,6 +457,39 @@ bool RegressionCurveHelper::removeAllExceptMeanValueLine(
     return bRemovedSomething;
 }
 
+void RegressionCurveHelper::removeEquations(
+        uno::Reference< chart2::XRegressionCurveContainer > & xRegCnt )
+{
+    if( xRegCnt.is())
+    {
+        try
+        {
+            uno::Sequence< uno::Reference< chart2::XRegressionCurve > > aCurves(
+                xRegCnt->getRegressionCurves());
+            for( sal_Int32 i = 0; i < aCurves.getLength(); ++i )
+            {
+                if( !isMeanValueLine( aCurves[i] ) )
+                {
+                    uno::Reference< chart2::XRegressionCurve > xRegCurve( aCurves[ i ] );
+                    if( xRegCurve.is() )
+                    {
+                        uno::Reference< beans::XPropertySet > xEqProp( xRegCurve->getEquationProperties() ) ;
+                        if( xEqProp.is())
+                        {
+                            xEqProp->setPropertyValue( C2U("ShowEquation"), uno::makeAny( false ));
+                            xEqProp->setPropertyValue( C2U("ShowCorrelationCoefficient"), uno::makeAny( false ));
+                        }
+                    }
+                }
+            }
+        }
+        catch( uno::Exception & ex )
+        {
+            ASSERT_EXCEPTION( ex );
+        }
+    }
+}
+
 // static
 void RegressionCurveHelper::replaceOrAddCurveAndReduceToOne(
     tRegressionType eType,
@@ -681,6 +714,24 @@ sal_Int32 RegressionCurveHelper::getRegressionCurveIndex(
         }
     }
     return -1;
+}
+
+bool RegressionCurveHelper::hasEquation( const Reference< chart2::XRegressionCurve > & xCurve )
+{
+    bool bHasEquation = false;
+    if( xCurve.is())
+    {
+        uno::Reference< beans::XPropertySet > xEquationProp( xCurve->getEquationProperties());
+        if( xEquationProp.is())
+        {
+            bool bShowEquation = false;
+            bool bShowCoefficient = false;
+            xEquationProp->getPropertyValue( C2U("ShowEquation")) >>= bShowEquation;
+            xEquationProp->getPropertyValue( C2U("ShowCorrelationCoefficient")) >>= bShowCoefficient;
+            bHasEquation = bShowEquation || bShowCoefficient;
+        }
+    }
+    return bHasEquation;
 }
 
 //.............................................................................

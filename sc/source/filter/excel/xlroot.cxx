@@ -35,6 +35,7 @@
 #include <vcl/svapp.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/languageoptions.hxx>
+#include <svtools/useroptions.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/docfile.hxx>
@@ -79,6 +80,7 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     mrMedium( rMedium ),
     mxRootStrg( xRootStrg ),
     mrDoc( rDoc ),
+    maDefPassword( CREATE_STRING( "VelvetSweatshop" ) ),
     meTextEnc( eTextEnc ),
     meSysLang( Application::GetSettings().GetLanguage() ),
     meDocLang( Application::GetSettings().GetLanguage() ),
@@ -94,6 +96,11 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     mnScTab( 0 ),
     mbExport( bExport )
 {
+    // user name
+    maUserName = SvtUserOptions().GetLastName();
+    if( maUserName.Len() == 0 )
+        maUserName = CREATE_STRING( "Calc" );
+
     // default script type, e.g. for empty cells
     switch( ScGlobal::GetDefaultScriptType() )
     {
@@ -196,6 +203,13 @@ void XclRoot::SetCharWidth( const XclFontData& rFontData )
         DBG_ERRORFILE( "XclRoot::SetCharWidth - invalid character width (no printer?)" );
         mrData.mnCharWidth = 11 * rFontData.mnHeight / 20;
     }
+}
+
+String XclRoot::RequestPassword( ::comphelper::IDocPasswordVerifier& rVerifier ) const
+{
+    ::std::vector< OUString > aDefaultPasswords;
+    aDefaultPasswords.push_back( mrData.maDefPassword );
+    return ScfApiHelper::QueryPasswordForMedium( mrData.mrMedium, rVerifier, &aDefaultPasswords );
 }
 
 bool XclRoot::HasVbaStorage() const

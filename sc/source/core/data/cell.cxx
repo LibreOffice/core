@@ -582,23 +582,6 @@ ScNoteCell::~ScNoteCell()
 }
 #endif
 
-ScNoteCell::ScNoteCell( SvStream& rStream, USHORT nVer ) :
-    ScBaseCell( CELLTYPE_NOTE )
-{
-    if( nVer >= SC_DATABYTES2 )
-    {
-        BYTE cData;
-        rStream >> cData;
-        if( cData & 0x0F )
-            rStream.SeekRel( cData & 0x0F );
-    }
-}
-
-void ScNoteCell::Save( SvStream& rStream ) const
-{
-    rStream << (BYTE) 0x00;
-}
-
 // ============================================================================
 
 ScValueCell::ScValueCell() :
@@ -1576,6 +1559,10 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         }
         bRunning = bOldRunning;
 
+        // #i102616# For single-sheet saving consider only content changes, not format type,
+        // because format type isn't set on loading (might be changed later)
+        BOOL bContentChanged = FALSE;
+
         // Do not create a HyperLink() cell if the formula results in an error.
         if( p->GetError() && pCode->IsHyperLink())
             pCode->SetHyperLink(FALSE);
@@ -1614,7 +1601,12 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
 
         // New error code?
         if( p->GetError() != nOldErrCode )
+        {
             bChanged = TRUE;
+            // bContentChanged only has to be set if the file content would be changed
+            if ( aResult.GetCellResultType() != svUnknown )
+                bContentChanged = TRUE;
+        }
         // Different number format?
         if( nFormatType != p->GetRetFormatType() )
         {
@@ -1630,7 +1622,33 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         // In case of changes just obtain the result, no temporary and
         // comparison needed anymore.
         if (bChanged)
+        {
+            // #i102616# Compare anyway if the sheet is still marked unchanged for single-sheet saving
+            // Also handle special cases of initial results after loading.
+
+            if ( !bContentChanged && pDocument->IsStreamValid(aPos.Tab()) )
+            {
+                ScFormulaResult aNewResult( p->GetResultToken());
+                StackVar eOld = aResult.GetCellResultType();
+                StackVar eNew = aNewResult.GetCellResultType();
+                if ( eOld == svUnknown && ( eNew == svError || ( eNew == svDouble && aNewResult.GetDouble() == 0.0 ) ) )
+                {
+                    // ScXMLTableRowCellContext::EndElement doesn't call SetFormulaResultDouble for 0
+                    // -> no change
+                }
+                else
+                {
+                    if ( eOld == svHybridCell )     // string result from SetFormulaResultString?
+                        eOld = svString;            // ScHybridCellToken has a valid GetString method
+
+                    bContentChanged = (eOld != eNew ||
+                            (eNew == svDouble && aResult.GetDouble() != aNewResult.GetDouble()) ||
+                            (eNew == svString && aResult.GetString() != aNewResult.GetString()));
+                }
+            }
+
             aResult.SetToken( p->GetResultToken() );
+        }
         else
         {
             ScFormulaResult aNewResult( p->GetResultToken());
@@ -1639,6 +1657,19 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
             bChanged = (eOld != eNew ||
                     (eNew == svDouble && aResult.GetDouble() != aNewResult.GetDouble()) ||
                     (eNew == svString && aResult.GetString() != aNewResult.GetString()));
+
+            // #i102616# handle special cases of initial results after loading (only if the sheet is still marked unchanged)
+            if ( bChanged && !bContentChanged && pDocument->IsStreamValid(aPos.Tab()) )
+            {
+                if ( ( eOld == svUnknown && ( eNew == svError || ( eNew == svDouble && aNewResult.GetDouble() == 0.0 ) ) ) ||
+                     ( eOld == svHybridCell && eNew == svString && aResult.GetString() == aNewResult.GetString() ) )
+                {
+                    // no change, see above
+                }
+                else
+                    bContentChanged = TRUE;
+            }
+
             aResult.Assign( aNewResult);
         }
 
@@ -1675,12 +1706,18 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
             // Coded double error may occur via filter import.
             USHORT nErr = GetDoubleErrorValue( aResult.GetDouble());
             aResult.SetResultError( nErr);
-            bChanged = true;
+            bChanged = bContentChanged = true;
         }
         if( bChanged )
         {
             SetTextWidth( TEXTWIDTH_DIRTY );
             SetScriptType( SC_SCRIPTTYPE_UNKNOWN );
+        }
+        if (bContentChanged && pDocument->IsStreamValid(aPos.Tab()))
+        {
+            // pass bIgnoreLock=TRUE, because even if called from pending row height update,
+            // a changed result must still reset the stream flag
+            pDocument->SetStreamValid(aPos.Tab(), FALSE, TRUE);
         }
         if ( !pCode->IsRecalcModeAlways() )
             pDocument->RemoveFromFormulaTree( this );
@@ -1806,6 +1843,9 @@ void ScFormulaCell::SetDirty()
                 pDocument->TrackFormulas();
             }
         }
+
+        if (pDocument->IsStreamValid(aPos.Tab()))
+            pDocument->SetStreamValid(aPos.Tab(), FALSE);
     }
 }
 

@@ -32,6 +32,7 @@
 #define _CHART2_OBJECTNAME_PROVIDER_HXX
 
 #include "ObjectIdentifier.hxx"
+#include "TitleHelper.hxx"
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
@@ -57,11 +58,19 @@ public:
     static rtl::OUString getTitleName( const rtl::OUString& rObjectCID
                         , const ::com::sun::star::uno::Reference<
                             ::com::sun::star::frame::XModel >& xChartModel );
+    static rtl::OUString getTitleNameByType( TitleHelper::eTitleType eType );
 
     static rtl::OUString getNameForCID(
         const rtl::OUString& rObjectCID,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartDocument >& xChartDocument );
+
+    static rtl::OUString getName_ObjectForSeries(
+        ObjectType eObjectType,
+        const rtl::OUString& rSeriesCID,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XChartDocument >& xChartDocument );
+    static rtl::OUString getName_ObjectForAllSeries( ObjectType eObjectType );
 
     /** Provides help texts for the various chart elements.
         The parameter rObjectCID has to be a ClassifiedIdentifier - see class ObjectIdentifier.

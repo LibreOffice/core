@@ -350,7 +350,7 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
             // maybe that IsStorage() already created an error!
             if ( bIsStorage )
             {
-                uno::Reference < embed::XStorage > xStorage(aMedium.GetStorage());
+                uno::Reference < embed::XStorage > xStorage(aMedium.GetStorage( sal_False ));
                 if ( aMedium.GetLastStorageCreationState() != ERRCODE_NONE )
                 {
                     // error during storage creation means _here_ that the medium

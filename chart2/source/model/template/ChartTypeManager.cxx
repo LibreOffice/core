@@ -128,6 +128,9 @@ enum TemplateId
     TEMPLATE_PERCENTSTACKEDNET,
     TEMPLATE_PERCENTSTACKEDNETSYMBOL,
     TEMPLATE_PERCENTSTACKEDNETLINE,
+    TEMPLATE_FILLEDNET,
+    TEMPLATE_STACKEDFILLEDNET,
+    TEMPLATE_PERCENTSTACKEDFILLEDNET,
     TEMPLATE_STOCKLOWHIGHCLOSE,
     TEMPLATE_STOCKOPENLOWHIGHCLOSE,
     TEMPLATE_STOCKVOLUMELOWHIGHCLOSE,
@@ -200,6 +203,9 @@ const tTemplateMapType & lcl_DefaultChartTypeMap()
         ( C2U( "com.sun.star.chart2.template.PercentStackedNet" ),              TEMPLATE_PERCENTSTACKEDNET )
         ( C2U( "com.sun.star.chart2.template.PercentStackedNetSymbol" ),        TEMPLATE_PERCENTSTACKEDNETSYMBOL )
         ( C2U( "com.sun.star.chart2.template.PercentStackedNetLine" ),          TEMPLATE_PERCENTSTACKEDNETLINE )
+        ( C2U( "com.sun.star.chart2.template.FilledNet" ),                      TEMPLATE_FILLEDNET )
+        ( C2U( "com.sun.star.chart2.template.StackedFilledNet" ),               TEMPLATE_STACKEDFILLEDNET )
+        ( C2U( "com.sun.star.chart2.template.PercentStackedFilledNet" ),        TEMPLATE_PERCENTSTACKEDFILLEDNET )
         ( C2U( "com.sun.star.chart2.template.StockLowHighClose" ),              TEMPLATE_STOCKLOWHIGHCLOSE )
         ( C2U( "com.sun.star.chart2.template.StockOpenLowHighClose" ),          TEMPLATE_STOCKOPENLOWHIGHCLOSE )
         ( C2U( "com.sun.star.chart2.template.StockVolumeLowHighClose" ),        TEMPLATE_STOCKVOLUMELOWHIGHCLOSE )
@@ -503,6 +509,18 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
                     StackMode_Y_STACKED_PERCENT, false, true ));
                 break;
 
+            case TEMPLATE_FILLEDNET:
+                xTemplate.set( new NetChartTypeTemplate( m_xContext, aServiceSpecifier,
+                    StackMode_NONE, false, false, true ));
+                break;
+            case TEMPLATE_STACKEDFILLEDNET:
+                xTemplate.set( new NetChartTypeTemplate( m_xContext, aServiceSpecifier,
+                    StackMode_Y_STACKED, false, false, true ));
+                break;
+            case TEMPLATE_PERCENTSTACKEDFILLEDNET:
+                xTemplate.set( new NetChartTypeTemplate( m_xContext, aServiceSpecifier,
+                    StackMode_Y_STACKED_PERCENT, false, false, true ));
+                break;
 
             case TEMPLATE_STOCKLOWHIGHCLOSE:
                 xTemplate.set( new StockChartTypeTemplate( m_xContext, aServiceSpecifier,

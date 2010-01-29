@@ -176,11 +176,6 @@ public:
 
     const String* getFieldName(sal_Int32 nIndex) const;
 
-    /** Get the field index (i.e. column ID in the original data source) based
-        on the string value that corresponds with the column title.  It returns
-        -1 if no field matching the string value exists. */
-    sal_Int32 getFieldIndex(const String& rStr) const;
-
     /** Get the unique entries for a field specified by index.  The caller must
         make sure that the table is filled before calling function, or it will
         get an empty collection. */
@@ -194,7 +189,6 @@ public:
                      const ::std::hash_set<sal_Int32>& rRepeatIfEmptyDims);
 
     void clear();
-    void swap(ScDPCacheTable& rOther);
     bool empty() const;
 
 private:

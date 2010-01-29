@@ -61,6 +61,9 @@
 #include "StatisticsHelper.hxx"
 #include "ErrorBarItemConverter.hxx"
 #include "MultipleItemConverter.hxx"
+#include "DataSeriesHelper.hxx"
+#include "ObjectNameProvider.hxx"
+#include "LegendHelper.hxx"
 
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
@@ -80,6 +83,9 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
+using ::rtl::OUString;
 
 //.............................................................................
 
@@ -114,7 +120,7 @@ namespace chart
 {
 //.............................................................................
 
-void SAL_CALL ChartController::executeDispatch_InsertAxis()
+void ChartController::executeDispatch_InsertAxes()
 {
     UndoGuard aUndoGuard(
         ActionDescriptionProvider::createDescription(
@@ -152,7 +158,7 @@ void SAL_CALL ChartController::executeDispatch_InsertAxis()
     }
 }
 
-void SAL_CALL ChartController::executeDispatch_InsertGrid()
+void ChartController::executeDispatch_InsertGrid()
 {
     UndoGuard aUndoGuard(
         ActionDescriptionProvider::createDescription(
@@ -189,7 +195,7 @@ void SAL_CALL ChartController::executeDispatch_InsertGrid()
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-void SAL_CALL ChartController::executeDispatch_InsertTitle()
+void ChartController::executeDispatch_InsertTitles()
 {
     UndoGuard aUndoGuard(
         ActionDescriptionProvider::createDescription(
@@ -220,7 +226,29 @@ void SAL_CALL ChartController::executeDispatch_InsertTitle()
     }
 }
 
-void SAL_CALL ChartController::executeDispatch_InsertLegend()
+void ChartController::executeDispatch_DeleteLegend()
+{
+    UndoGuard aUndoGuard(
+        ActionDescriptionProvider::createDescription(
+            ActionDescriptionProvider::DELETE, ::rtl::OUString( String( SchResId( STR_OBJECT_LEGEND )))),
+        m_xUndoManager, m_aModel->getModel() );
+
+    LegendHelper::hideLegend( m_aModel->getModel() );
+    aUndoGuard.commitAction();
+}
+
+void ChartController::executeDispatch_InsertLegend()
+{
+    UndoGuard aUndoGuard(
+        ActionDescriptionProvider::createDescription(
+            ActionDescriptionProvider::INSERT, ::rtl::OUString( String( SchResId( STR_OBJECT_LEGEND )))),
+        m_xUndoManager, m_aModel->getModel() );
+
+    Reference< chart2::XLegend > xLegend = LegendHelper::showLegend( m_aModel->getModel(), m_xCC );
+    aUndoGuard.commitAction();
+}
+
+void ChartController::executeDispatch_OpenLegendDialog()
 {
     UndoGuard aUndoGuard(
         ActionDescriptionProvider::createDescription(
@@ -251,12 +279,31 @@ void SAL_CALL ChartController::executeDispatch_InsertLegend()
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-void SAL_CALL ChartController::executeDispatch_InsertDataLabel()
+void ChartController::executeDispatch_InsertMenu_DataLabels()
 {
     UndoGuard aUndoGuard(
         ActionDescriptionProvider::createDescription(
             ActionDescriptionProvider::INSERT, ::rtl::OUString( String( SchResId( STR_OBJECT_DATALABELS )))),
         m_xUndoManager, m_aModel->getModel() );
+
+    //if a series is selected insert labels for that series only:
+    uno::Reference< chart2::XDataSeries > xSeries(
+        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), m_aModel->getModel()), uno::UNO_QUERY );
+    if( xSeries.is() )
+    {
+        // add labels
+        DataSeriesHelper::insertDataLabelsToSeriesAndAllPoints( xSeries );
+
+        rtl::OUString aChildParticle( ObjectIdentifier::getStringForType( OBJECTTYPE_DATA_LABELS ) );
+        aChildParticle+=(C2U("="));
+        rtl::OUString aObjectCID = ObjectIdentifier::createClassifiedIdentifierForParticles(
+            ObjectIdentifier::getSeriesParticleFromCID(m_aSelection.getSelectedCID()), aChildParticle );
+
+        bool bSuccess = ChartController::executeDlg_ObjectProperties_withoutUndoGuard( aObjectCID, true );
+        if( bSuccess )
+            aUndoGuard.commitAction();
+        return;
+    }
 
     try
     {
@@ -295,11 +342,21 @@ void SAL_CALL ChartController::executeDispatch_InsertDataLabel()
     }
 }
 
-void SAL_CALL ChartController::executeDispatch_InsertYErrorbars()
+void ChartController::executeDispatch_InsertMenu_YErrorBars()
 {
+    //if a series is selected insert error bars for that series only:
+    uno::Reference< chart2::XDataSeries > xSeries(
+        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), m_aModel->getModel()), uno::UNO_QUERY );
+    if( xSeries.is())
+    {
+        executeDispatch_InsertYErrorBars();
+        return;
+    }
+
+    //if no series is selected insert error bars for all series
     UndoGuard aUndoGuard(
         ActionDescriptionProvider::createDescription(
-            ActionDescriptionProvider::INSERT, ::rtl::OUString( String( SchResId( STR_PAGE_YERROR_BARS )))),
+            ActionDescriptionProvider::INSERT, ObjectNameProvider::getName_ObjectForAllSeries( OBJECTTYPE_DATA_ERRORS ) ),
         m_xUndoManager, m_aModel->getModel() );
 
     try
@@ -335,7 +392,7 @@ void SAL_CALL ChartController::executeDispatch_InsertYErrorbars()
     }
 }
 
-void SAL_CALL ChartController::executeDispatch_InsertMeanValue()
+void ChartController::executeDispatch_InsertMeanValue()
 {
     UndoGuard aUndoGuard(
         ActionDescriptionProvider::createDescription(
@@ -346,23 +403,43 @@ void SAL_CALL ChartController::executeDispatch_InsertMeanValue()
     aUndoGuard.commitAction();
 }
 
-void SAL_CALL ChartController::executeDispatch_InsertMeanValues()
+void ChartController::executeDispatch_InsertMenu_MeanValues()
 {
-    ::std::vector< uno::Reference< chart2::XDataSeries > > aSeries(
-        DiagramHelper::getDataSeriesFromDiagram( ChartModelHelper::findDiagram( m_aModel->getModel())));
     UndoGuard aUndoGuard(
         ActionDescriptionProvider::createDescription(
             ActionDescriptionProvider::INSERT, ::rtl::OUString( String( SchResId( STR_OBJECT_AVERAGE_LINE )))),
         m_xUndoManager, m_aModel->getModel() );
-    ::std::for_each( aSeries.begin(), aSeries.end(), lcl_InsertMeanValueLine( m_xCC ));
+
+    uno::Reference< chart2::XDataSeries > xSeries(
+        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), m_aModel->getModel()), uno::UNO_QUERY );
+    if( xSeries.is() )
+    {
+        //if a series is selected insert mean value only for that series:
+        lcl_InsertMeanValueLine( m_xCC ).operator()(xSeries);
+    }
+    else
+    {
+        ::std::vector< uno::Reference< chart2::XDataSeries > > aSeries(
+            DiagramHelper::getDataSeriesFromDiagram( ChartModelHelper::findDiagram( m_aModel->getModel())));
+        ::std::for_each( aSeries.begin(), aSeries.end(), lcl_InsertMeanValueLine( m_xCC ));
+    }
     aUndoGuard.commitAction();
 }
 
-void SAL_CALL ChartController::executeDispatch_InsertTrendlines()
+void ChartController::executeDispatch_InsertMenu_Trendlines()
 {
+    //if a series is selected insert only for that series:
+    uno::Reference< chart2::XDataSeries > xSeries(
+        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), m_aModel->getModel()), uno::UNO_QUERY );
+    if( xSeries.is())
+    {
+        executeDispatch_InsertTrendline();
+        return;
+    }
+
     UndoGuard aUndoGuard(
         ActionDescriptionProvider::createDescription(
-            ActionDescriptionProvider::INSERT, ::rtl::OUString( String( SchResId( STR_OBJECT_CURVES )))),
+            ActionDescriptionProvider::INSERT, ObjectNameProvider::getName_ObjectForAllSeries( OBJECTTYPE_DATA_CURVE ) ),
         m_xUndoManager, m_aModel->getModel() );
 
     try
@@ -395,7 +472,7 @@ void SAL_CALL ChartController::executeDispatch_InsertTrendlines()
     }
 }
 
-void SAL_CALL ChartController::executeDispatch_InsertTrendline()
+void ChartController::executeDispatch_InsertTrendline()
 {
     uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
         ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), m_aModel->getModel()), uno::UNO_QUERY );
@@ -449,7 +526,7 @@ void SAL_CALL ChartController::executeDispatch_InsertTrendline()
     }
 }
 
-void SAL_CALL ChartController::executeDispatch_InsertYErrorbar()
+void ChartController::executeDispatch_InsertYErrorBars()
 {
     uno::Reference< chart2::XDataSeries > xSeries(
         ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), m_aModel->getModel()), uno::UNO_QUERY );
@@ -457,7 +534,7 @@ void SAL_CALL ChartController::executeDispatch_InsertYErrorbar()
     {
         UndoLiveUpdateGuard aUndoGuard(
             ActionDescriptionProvider::createDescription(
-                ActionDescriptionProvider::INSERT, ::rtl::OUString( String( SchResId( STR_OBJECT_ERROR_INDICATOR )))),
+                ActionDescriptionProvider::INSERT, ::rtl::OUString( String( SchResId( STR_OBJECT_ERROR_BARS )))),
             m_xUndoManager, m_aModel->getModel() );
 
         // add error bars with standard deviation
@@ -499,10 +576,16 @@ void SAL_CALL ChartController::executeDispatch_InsertYErrorbar()
     }
 }
 
-void SAL_CALL ChartController::executeDispatch_InsertTrendlineEquation()
+void ChartController::executeDispatch_InsertTrendlineEquation( bool bInsertR2 )
 {
     uno::Reference< chart2::XRegressionCurve > xRegCurve(
         ObjectIdentifier::getObjectPropertySet( m_aSelection.getSelectedCID(), m_aModel->getModel()), uno::UNO_QUERY );
+    if( !xRegCurve.is() )
+    {
+        uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
+            ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), m_aModel->getModel()), uno::UNO_QUERY );
+        xRegCurve.set( RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCurveCnt ) );
+    }
     if( xRegCurve.is())
     {
         uno::Reference< beans::XPropertySet > xEqProp( xRegCurve->getEquationProperties());
@@ -514,13 +597,43 @@ void SAL_CALL ChartController::executeDispatch_InsertTrendlineEquation()
                     ActionDescriptionProvider::INSERT, ::rtl::OUString( String( SchResId( STR_OBJECT_CURVE_EQUATION )))),
                 m_xUndoManager, m_aModel->getModel() );
             xEqProp->setPropertyValue( C2U("ShowEquation"), uno::makeAny( true ));
-            xEqProp->setPropertyValue( C2U("ShowCorrelationCoefficient"), uno::makeAny( false ));
+            xEqProp->setPropertyValue( C2U("ShowCorrelationCoefficient"), uno::makeAny( bInsertR2 ));
             aUndoGuard.commitAction();
         }
     }
 }
 
-void SAL_CALL ChartController::executeDispatch_DeleteMeanValue()
+void ChartController::executeDispatch_InsertR2Value()
+{
+    uno::Reference< beans::XPropertySet > xEqProp(
+        ObjectIdentifier::getObjectPropertySet( m_aSelection.getSelectedCID(), m_aModel->getModel()), uno::UNO_QUERY );
+    if( xEqProp.is())
+    {
+        UndoGuard aUndoGuard = UndoGuard(
+            ActionDescriptionProvider::createDescription(
+                ActionDescriptionProvider::INSERT, ::rtl::OUString( String( SchResId( STR_OBJECT_CURVE_EQUATION )))),
+            m_xUndoManager, m_aModel->getModel() );
+        xEqProp->setPropertyValue( C2U("ShowCorrelationCoefficient"), uno::makeAny( true ));
+        aUndoGuard.commitAction();
+    }
+}
+
+void ChartController::executeDispatch_DeleteR2Value()
+{
+    uno::Reference< beans::XPropertySet > xEqProp(
+        ObjectIdentifier::getObjectPropertySet( m_aSelection.getSelectedCID(), m_aModel->getModel()), uno::UNO_QUERY );
+    if( xEqProp.is())
+    {
+        UndoGuard aUndoGuard = UndoGuard(
+            ActionDescriptionProvider::createDescription(
+                ActionDescriptionProvider::INSERT, ::rtl::OUString( String( SchResId( STR_OBJECT_CURVE_EQUATION )))),
+            m_xUndoManager, m_aModel->getModel() );
+        xEqProp->setPropertyValue( C2U("ShowCorrelationCoefficient"), uno::makeAny( false ));
+        aUndoGuard.commitAction();
+    }
+}
+
+void ChartController::executeDispatch_DeleteMeanValue()
 {
     uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
         ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), m_aModel->getModel()), uno::UNO_QUERY );
@@ -535,7 +648,7 @@ void SAL_CALL ChartController::executeDispatch_DeleteMeanValue()
     }
 }
 
-void SAL_CALL ChartController::executeDispatch_DeleteTrendline()
+void ChartController::executeDispatch_DeleteTrendline()
 {
     uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
         ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), m_aModel->getModel()), uno::UNO_QUERY );
@@ -550,7 +663,22 @@ void SAL_CALL ChartController::executeDispatch_DeleteTrendline()
     }
 }
 
-void SAL_CALL ChartController::executeDispatch_DeleteYErrorbar()
+void ChartController::executeDispatch_DeleteTrendlineEquation()
+{
+    uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
+        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), m_aModel->getModel()), uno::UNO_QUERY );
+    if( xRegCurveCnt.is())
+    {
+        UndoGuard aUndoGuard(
+            ActionDescriptionProvider::createDescription(
+                ActionDescriptionProvider::DELETE, ::rtl::OUString( String( SchResId( STR_OBJECT_CURVE_EQUATION )))),
+            m_xUndoManager, m_aModel->getModel());
+        RegressionCurveHelper::removeEquations( xRegCurveCnt );
+        aUndoGuard.commitAction();
+    }
+}
+
+void ChartController::executeDispatch_DeleteYErrorBars()
 {
     uno::Reference< chart2::XDataSeries > xDataSeries(
         ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), m_aModel->getModel()));
@@ -565,6 +693,256 @@ void SAL_CALL ChartController::executeDispatch_DeleteYErrorbar()
     }
 }
 
+void ChartController::executeDispatch_InsertDataLabels()
+{
+    uno::Reference< chart2::XDataSeries > xSeries(
+        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), m_aModel->getModel()), uno::UNO_QUERY );
+    if( xSeries.is() )
+    {
+        UndoGuard aUndoGuard = UndoGuard( ActionDescriptionProvider::createDescription( ActionDescriptionProvider::INSERT,
+            ::rtl::OUString( String( SchResId( STR_OBJECT_DATALABELS )))),
+            m_xUndoManager, m_aModel->getModel() );
+        DataSeriesHelper::insertDataLabelsToSeriesAndAllPoints( xSeries );
+        aUndoGuard.commitAction();
+    }
+}
+
+void ChartController::executeDispatch_InsertDataLabel()
+{
+    UndoGuard aUndoGuard = UndoGuard( ActionDescriptionProvider::createDescription( ActionDescriptionProvider::INSERT,
+        ::rtl::OUString( String( SchResId( STR_OBJECT_LABEL )))),
+        m_xUndoManager, m_aModel->getModel() );
+    DataSeriesHelper::insertDataLabelToPoint( ObjectIdentifier::getObjectPropertySet( m_aSelection.getSelectedCID(), m_aModel->getModel() ) );
+    aUndoGuard.commitAction();
+}
+
+void ChartController::executeDispatch_DeleteDataLabels()
+{
+    uno::Reference< chart2::XDataSeries > xSeries(
+        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), m_aModel->getModel()), uno::UNO_QUERY );
+    if( xSeries.is() )
+    {
+        UndoGuard aUndoGuard( ActionDescriptionProvider::createDescription( ActionDescriptionProvider::DELETE,
+            ::rtl::OUString( String( SchResId( STR_OBJECT_DATALABELS )))),
+            m_xUndoManager, m_aModel->getModel());
+        DataSeriesHelper::deleteDataLabelsFromSeriesAndAllPoints( xSeries );
+        aUndoGuard.commitAction();
+    }
+}
+
+void ChartController::executeDispatch_DeleteDataLabel()
+{
+    UndoGuard aUndoGuard( ActionDescriptionProvider::createDescription( ActionDescriptionProvider::DELETE,
+        ::rtl::OUString( String( SchResId( STR_OBJECT_LABEL )))),
+        m_xUndoManager, m_aModel->getModel());
+    DataSeriesHelper::deleteDataLabelsFromPoint( ObjectIdentifier::getObjectPropertySet( m_aSelection.getSelectedCID(), m_aModel->getModel() ) );
+    aUndoGuard.commitAction();
+}
+
+void ChartController::executeDispatch_ResetAllDataPoints()
+{
+    UndoGuard aUndoGuard( ActionDescriptionProvider::createDescription( ActionDescriptionProvider::FORMAT,
+        ::rtl::OUString( String( SchResId( STR_OBJECT_DATAPOINTS )))),
+        m_xUndoManager, m_aModel->getModel());
+    uno::Reference< chart2::XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), m_aModel->getModel()), uno::UNO_QUERY );
+    if( xSeries.is() )
+        xSeries->resetAllDataPoints();
+    aUndoGuard.commitAction();
+}
+void ChartController::executeDispatch_ResetDataPoint()
+{
+    UndoGuard aUndoGuard( ActionDescriptionProvider::createDescription( ActionDescriptionProvider::FORMAT,
+        ::rtl::OUString( String( SchResId( STR_OBJECT_DATAPOINT )))),
+        m_xUndoManager, m_aModel->getModel());
+    uno::Reference< chart2::XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), m_aModel->getModel()), uno::UNO_QUERY );
+    if( xSeries.is() )
+    {
+        sal_Int32 nPointIndex = ObjectIdentifier::getIndexFromParticleOrCID( m_aSelection.getSelectedCID() );
+        xSeries->resetDataPoint( nPointIndex );
+    }
+    aUndoGuard.commitAction();
+}
+
+void ChartController::executeDispatch_InsertAxisTitle()
+{
+    try
+    {
+        uno::Reference< XTitle > xTitle;
+        {
+            UndoGuard aUndoGuard(
+            ActionDescriptionProvider::createDescription(
+                ActionDescriptionProvider::INSERT, ::rtl::OUString( String( SchResId( STR_OBJECT_TITLE )))),
+            m_xUndoManager, m_aModel->getModel() );
+
+            Reference< XAxis > xAxis = ObjectIdentifier::getAxisForCID( m_aSelection.getSelectedCID(), m_aModel->getModel() );
+            sal_Int32 nDimensionIndex = -1;
+            sal_Int32 nCooSysIndex = -1;
+            sal_Int32 nAxisIndex = -1;
+            AxisHelper::getIndicesForAxis( xAxis, ChartModelHelper::findDiagram(m_aModel->getModel()), nCooSysIndex, nDimensionIndex, nAxisIndex );
+
+            TitleHelper::eTitleType eTitleType = TitleHelper::X_AXIS_TITLE;
+            if( nDimensionIndex==0 )
+                eTitleType = nAxisIndex==0 ? TitleHelper::X_AXIS_TITLE : TitleHelper::SECONDARY_X_AXIS_TITLE;
+            else if( nDimensionIndex==1 )
+                eTitleType = nAxisIndex==0 ? TitleHelper::Y_AXIS_TITLE : TitleHelper::SECONDARY_Y_AXIS_TITLE;
+            else
+                eTitleType = TitleHelper::Z_AXIS_TITLE;
+
+            ::std::auto_ptr< ReferenceSizeProvider > apRefSizeProvider( impl_createReferenceSizeProvider());
+            xTitle = TitleHelper::createTitle( eTitleType, ObjectNameProvider::getTitleNameByType(eTitleType), m_aModel->getModel(), m_xCC, apRefSizeProvider.get() );
+            aUndoGuard.commitAction();
+        }
+
+        /*
+        if( xTitle.is() )
+        {
+            OUString aTitleCID = ObjectIdentifier::createClassifiedIdentifierForObject( xTitle, m_aModel->getModel() );
+            select( uno::makeAny(aTitleCID) );
+            executeDispatch_EditText();
+        }
+        */
+    }
+    catch( uno::RuntimeException& e)
+    {
+        ASSERT_EXCEPTION( e );
+    }
+}
+
+void ChartController::executeDispatch_InsertAxis()
+{
+    UndoGuard aUndoGuard(
+        ActionDescriptionProvider::createDescription(
+            ActionDescriptionProvider::INSERT, ::rtl::OUString( String( SchResId( STR_OBJECT_AXIS )))),
+        m_xUndoManager, m_aModel->getModel() );
+
+    try
+    {
+        Reference< XAxis > xAxis = ObjectIdentifier::getAxisForCID( m_aSelection.getSelectedCID(), m_aModel->getModel() );
+        if( xAxis.is() )
+        {
+            AxisHelper::makeAxisVisible( xAxis );
+            aUndoGuard.commitAction();
+        }
+    }
+    catch( uno::RuntimeException& e)
+    {
+        ASSERT_EXCEPTION( e );
+    }
+}
+
+void ChartController::executeDispatch_DeleteAxis()
+{
+    UndoGuard aUndoGuard(
+        ActionDescriptionProvider::createDescription(
+            ActionDescriptionProvider::DELETE, ::rtl::OUString( String( SchResId( STR_OBJECT_AXIS )))),
+        m_xUndoManager, m_aModel->getModel() );
+
+    try
+    {
+        Reference< XAxis > xAxis = ObjectIdentifier::getAxisForCID( m_aSelection.getSelectedCID(), m_aModel->getModel() );
+        if( xAxis.is() )
+        {
+            AxisHelper::makeAxisInvisible( xAxis );
+            aUndoGuard.commitAction();
+        }
+    }
+    catch( uno::RuntimeException& e)
+    {
+        ASSERT_EXCEPTION( e );
+    }
+}
+
+void ChartController::executeDispatch_InsertMajorGrid()
+{
+    UndoGuard aUndoGuard(
+        ActionDescriptionProvider::createDescription(
+            ActionDescriptionProvider::INSERT, ::rtl::OUString( String( SchResId( STR_OBJECT_GRID )))),
+        m_xUndoManager, m_aModel->getModel() );
+
+    try
+    {
+        Reference< XAxis > xAxis = ObjectIdentifier::getAxisForCID( m_aSelection.getSelectedCID(), m_aModel->getModel() );
+        if( xAxis.is() )
+        {
+            AxisHelper::makeGridVisible( xAxis->getGridProperties() );
+            aUndoGuard.commitAction();
+        }
+    }
+    catch( uno::RuntimeException& e)
+    {
+        ASSERT_EXCEPTION( e );
+    }
+}
+
+void ChartController::executeDispatch_DeleteMajorGrid()
+{
+    UndoGuard aUndoGuard(
+        ActionDescriptionProvider::createDescription(
+            ActionDescriptionProvider::DELETE, ::rtl::OUString( String( SchResId( STR_OBJECT_GRID )))),
+        m_xUndoManager, m_aModel->getModel() );
+
+    try
+    {
+        Reference< XAxis > xAxis = ObjectIdentifier::getAxisForCID( m_aSelection.getSelectedCID(), m_aModel->getModel() );
+        if( xAxis.is() )
+        {
+            AxisHelper::makeGridInvisible( xAxis->getGridProperties() );
+            aUndoGuard.commitAction();
+        }
+    }
+    catch( uno::RuntimeException& e)
+    {
+        ASSERT_EXCEPTION( e );
+    }
+}
+
+void ChartController::executeDispatch_InsertMinorGrid()
+{
+    UndoGuard aUndoGuard(
+        ActionDescriptionProvider::createDescription(
+            ActionDescriptionProvider::INSERT, ::rtl::OUString( String( SchResId( STR_OBJECT_GRID )))),
+        m_xUndoManager, m_aModel->getModel() );
+
+    try
+    {
+        Reference< XAxis > xAxis = ObjectIdentifier::getAxisForCID( m_aSelection.getSelectedCID(), m_aModel->getModel() );
+        if( xAxis.is() )
+        {
+            Sequence< Reference< beans::XPropertySet > > aSubGrids( xAxis->getSubGridProperties() );
+            for( sal_Int32 nN=0; nN<aSubGrids.getLength(); nN++)
+                AxisHelper::makeGridVisible( aSubGrids[nN] );
+            aUndoGuard.commitAction();
+        }
+    }
+    catch( uno::RuntimeException& e)
+    {
+        ASSERT_EXCEPTION( e );
+    }
+}
+
+void ChartController::executeDispatch_DeleteMinorGrid()
+{
+    UndoGuard aUndoGuard(
+        ActionDescriptionProvider::createDescription(
+            ActionDescriptionProvider::DELETE, ::rtl::OUString( String( SchResId( STR_OBJECT_GRID )))),
+        m_xUndoManager, m_aModel->getModel() );
+
+    try
+    {
+        Reference< XAxis > xAxis = ObjectIdentifier::getAxisForCID( m_aSelection.getSelectedCID(), m_aModel->getModel() );
+        if( xAxis.is() )
+        {
+            Sequence< Reference< beans::XPropertySet > > aSubGrids( xAxis->getSubGridProperties() );
+            for( sal_Int32 nN=0; nN<aSubGrids.getLength(); nN++)
+                AxisHelper::makeGridInvisible( aSubGrids[nN] );
+            aUndoGuard.commitAction();
+        }
+    }
+    catch( uno::RuntimeException& e)
+    {
+        ASSERT_EXCEPTION( e );
+    }
+}
 
 //.............................................................................
 } //namespace chart

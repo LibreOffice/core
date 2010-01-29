@@ -192,6 +192,7 @@ public:
     void                UpdateRemove( UpdateRefMode eUpdateRefMode,
                                         const ScRange& rRange,
                                         SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+    void                UpdateRemoveArea( ScBroadcastArea* pArea );
     void                UpdateInsert( ScBroadcastArea* pArea );
 };
 

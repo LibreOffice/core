@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: indexmap.hxx,v $
- * $Revision: 1.3 $
+ * $RCSfile: FilledNetChartType.hxx,v $
+ * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,33 +27,40 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#ifndef CHART_FILLEDNETCHARTTYPE_HXX
+#define CHART_FILLEDNETCHARTTYPE_HXX
 
-#ifndef _SC_INDEXMAP_HXX
-#define _SC_INDEXMAP_HXX
+#include "NetChartType.hxx"
+#include "ServiceMacros.hxx"
 
-
-#include <tools/solar.h>
-
-
-class ScIndexMap
+namespace chart
 {
-                                // not implemented
-                                ScIndexMap( const ScIndexMap& );
-            ScIndexMap&         operator=( const ScIndexMap& );
 
-private:
-            USHORT*             pMap;
-            USHORT              nCount;
-
+class FilledNetChartType : public NetChartType_Base
+{
 public:
-                                ScIndexMap( USHORT nEntries );
-                                ~ScIndexMap();
+    FilledNetChartType( ::com::sun::star::uno::Reference<
+                      ::com::sun::star::uno::XComponentContext > const & xContext );
+    virtual ~FilledNetChartType();
 
-            void                SetPair( USHORT nEntry, USHORT nIndex1, USHORT nIndex2 );
-                                /// returns nIndex2 if found, else nIndex1
-            USHORT              Find( USHORT nIndex1 ) const;
+    APPHELPER_XSERVICEINFO_DECL()
+
+    /// establish methods for factory instatiation
+    APPHELPER_SERVICE_FACTORY_HELPER( FilledNetChartType )
+
+protected:
+    explicit FilledNetChartType( const FilledNetChartType & rOther );
+
+    // ____ XChartType ____
+    virtual ::rtl::OUString SAL_CALL getChartType()
+        throw (::com::sun::star::uno::RuntimeException);
+
+    // ____ XCloneable ____
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone()
+        throw (::com::sun::star::uno::RuntimeException);
 };
 
+} //  namespace chart
 
-#endif // _SC_INDEXMAP_HXX
-
+// CHART_FILLEDNETCHARTTYPE_HXX
+#endif

@@ -658,7 +658,7 @@ BOOL ScTable::SearchAndReplace(const SvxSearchItem& rSearchItem,
         {
             //  SearchParam no longer needed - SearchOptions contains all settings
             com::sun::star::util::SearchOptions aSearchOptions = rSearchItem.GetSearchOptions();
-            aSearchOptions.Locale = *ScGlobal::pLocale;
+            aSearchOptions.Locale = *ScGlobal::GetLocale();
 
             //  #107259# reflect UseAsianOptions flag in SearchOptions
             //  (use only ignore case and width if asian options are disabled).

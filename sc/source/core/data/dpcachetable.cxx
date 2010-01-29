@@ -522,23 +522,6 @@ const String* ScDPCacheTable::getFieldName(sal_Int32 nIndex) const
     return mrSharedString.getString(maHeader[nIndex]);
 }
 
-sal_Int32 ScDPCacheTable::getFieldIndex(const String& rStr) const
-{
-    sal_Int32 nStrId = mrSharedString.getStringId(rStr);
-    if (nStrId < 0)
-        // string not found.
-        return nStrId;
-
-    sal_Int32 n = maHeader.size();
-    for (sal_Int32 i = 0; i < n; ++i)
-    {
-        if (maHeader[i] == nStrId)
-            return i;
-    }
-
-    return -1;
-}
-
 const TypedScStrCollection& ScDPCacheTable::getFieldEntries(sal_Int32 nIndex) const
 {
     if (nIndex < 0 || static_cast<size_t>(nIndex) >= maFieldEntries.size())
@@ -636,14 +619,6 @@ void ScDPCacheTable::clear()
     maHeader.clear();
     maFieldEntries.clear();
     maRowsVisible.clear();
-}
-
-void ScDPCacheTable::swap(ScDPCacheTable& rOther)
-{
-    maTable.swap(rOther.maTable);
-    maHeader.swap(rOther.maHeader);
-    maFieldEntries.swap(rOther.maFieldEntries);
-    maRowsVisible.swap(rOther.maRowsVisible);
 }
 
 bool ScDPCacheTable::empty() const

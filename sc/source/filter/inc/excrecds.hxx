@@ -149,7 +149,6 @@ protected:
 
 public:
     inline                  ExcBoolRecord( const BOOL bDefault ) : bVal( bDefault ) {}
-                            ExcBoolRecord( SfxItemSet*, USHORT nWhich, BOOL bDefault );
 
     virtual sal_Size        GetLen( void ) const;
 };
@@ -205,18 +204,6 @@ public:
 class ExcEof : public ExcRecord
 {
 private:
-public:
-    virtual UINT16          GetNum( void ) const;
-    virtual sal_Size        GetLen( void ) const;
-};
-
-
-//----------------------------------------------------- class ExcFngroupcount -
-
-class ExcFngroupcount : public ExcRecord
-{
-private:
-    virtual void            SaveCont( XclExpStream& rStrm );
 public:
     virtual UINT16          GetNum( void ) const;
     virtual sal_Size        GetLen( void ) const;

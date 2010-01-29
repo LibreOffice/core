@@ -45,7 +45,8 @@ public:
         const ::rtl::OUString & rServiceName,
         StackMode eStackMode,
         bool bSymbols,
-        bool bHasLines = true
+        bool bHasLines = true,
+        bool bHasFilledArea = false
         );
     virtual ~NetChartTypeTemplate();
 
@@ -80,6 +81,7 @@ private:
     StackMode  m_eStackMode;
     bool                                 m_bHasSymbols;
     bool                                 m_bHasLines;
+    bool                                 m_bHasFilledArea;
 };
 
 } //  namespace chart

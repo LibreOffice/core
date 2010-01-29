@@ -99,6 +99,8 @@ protected:
     XclImpStream            maStrm;             // input stream
     XclImpStream&           aIn;                // input stream
 
+    ScfUInt32Vec            maSheetOffsets;
+
     NameBuffer*             pExtNameBuff;       // ... externe Namen (Ind.-Basis=1)
     ExcelToSc*              pFormConv;          // Formel-Konverter
 
@@ -119,6 +121,8 @@ protected:
                                                 //  Abschneiden von Zellen fuehrt
 
     // Record-Funktionen
+    void                    ReadFileSharing();
+
     sal_uInt16              ReadXFIndex( bool bBiff2 );
 
     void                    ReadDimensions();

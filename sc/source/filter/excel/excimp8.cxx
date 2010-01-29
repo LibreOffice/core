@@ -165,13 +165,13 @@ void ImportExcel8::Boundsheet( void )
     UINT8           nLen;
     UINT16          nGrbit;
 
-    aIn.Ignore( 4 );
+    aIn.DisableDecryption();
+    maSheetOffsets.push_back( aIn.ReaduInt32() );
+    aIn.EnableDecryption();
     aIn >> nGrbit >> nLen;
 
     String aName( aIn.ReadUniString( nLen ) );
     GetTabInfo().AppendXclTabName( aName, nBdshtTab );
-
-    *pExcRoot->pTabNameBuff << aName;
 
     SCTAB nScTab = static_cast< SCTAB >( nBdshtTab );
     if( nScTab > 0 )

@@ -846,11 +846,11 @@ SCTAB XclExpTabInfo::GetRealScTab( SCTAB nSortedScTab ) const
     return (nSortedScTab < mnScCnt) ? maFromSortedVec[ nSortedScTab ] : SCTAB_INVALID;
 }
 
-SCTAB XclExpTabInfo::GetSortedScTab( SCTAB nScTab ) const
-{
-    DBG_ASSERT( nScTab < mnScCnt, "XclExpTabInfo::GetSortedScTab - sheet out of range" );
-    return (nScTab < mnScCnt) ? maToSortedVec[ nScTab ] : SCTAB_INVALID;
-}
+//UNUSED2009-05 SCTAB XclExpTabInfo::GetSortedScTab( SCTAB nScTab ) const
+//UNUSED2009-05 {
+//UNUSED2009-05     DBG_ASSERT( nScTab < mnScCnt, "XclExpTabInfo::GetSortedScTab - sheet out of range" );
+//UNUSED2009-05     return (nScTab < mnScCnt) ? maToSortedVec[ nScTab ] : SCTAB_INVALID;
+//UNUSED2009-05 }
 
 bool XclExpTabInfo::GetFlag( SCTAB nScTab, sal_uInt8 nFlags ) const
 {
@@ -903,7 +903,7 @@ typedef ::std::vector< XclExpTabName >  XclExpTabNameVec;
 inline bool operator<( const XclExpTabName& rArg1, const XclExpTabName& rArg2 )
 {
     // compare the sheet names only
-    return ScGlobal::pCollator->compareString( rArg1.first, rArg2.first ) == COMPARE_LESS;
+    return ScGlobal::GetCollator()->compareString( rArg1.first, rArg2.first ) == COMPARE_LESS;
 }
 
 void XclExpTabInfo::CalcSortedIndexes()

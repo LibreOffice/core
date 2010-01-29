@@ -1340,8 +1340,8 @@ void __EXPORT ScUndoTabOp::Undo()
     pDocShell->UpdatePaintExt( nExtFlags, aRange );
 
     ScDocument* pDoc = pDocShell->GetDocument();
-    pDoc->DeleteAreaTab( aRange,IDF_ALL );
-    pUndoDoc->CopyToDocument( aRange, IDF_ALL, FALSE, pDoc );
+    pDoc->DeleteAreaTab( aRange,IDF_ALL & ~IDF_NOTE );
+    pUndoDoc->CopyToDocument( aRange, IDF_ALL & ~IDF_NOTE, FALSE, pDoc );
     pDocShell->PostPaint( aRange, PAINT_GRID, nExtFlags );
     pDocShell->PostDataChanged();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
@@ -2023,14 +2023,14 @@ void ScUndoUpdateAreaLink::DoChange( const BOOL bUndo ) const
         if ( bWithInsert )
         {
             pDoc->FitBlock( aNewRange, aOldRange );
-            pDoc->DeleteAreaTab( aOldRange, IDF_ALL );
-            pUndoDoc->UndoToDocument( aOldRange, IDF_ALL, FALSE, pDoc );
+            pDoc->DeleteAreaTab( aOldRange, IDF_ALL & ~IDF_NOTE );
+            pUndoDoc->UndoToDocument( aOldRange, IDF_ALL & ~IDF_NOTE, FALSE, pDoc );
         }
         else
         {
             ScRange aCopyRange( aOldRange.aStart, ScAddress(nEndX,nEndY,nEndZ) );
-            pDoc->DeleteAreaTab( aCopyRange, IDF_ALL );
-            pUndoDoc->CopyToDocument( aCopyRange, IDF_ALL, FALSE, pDoc );
+            pDoc->DeleteAreaTab( aCopyRange, IDF_ALL & ~IDF_NOTE );
+            pUndoDoc->CopyToDocument( aCopyRange, IDF_ALL & ~IDF_NOTE, FALSE, pDoc );
         }
     }
     else
@@ -2038,14 +2038,14 @@ void ScUndoUpdateAreaLink::DoChange( const BOOL bUndo ) const
         if ( bWithInsert )
         {
             pDoc->FitBlock( aOldRange, aNewRange );
-            pDoc->DeleteAreaTab( aNewRange, IDF_ALL );
-            pRedoDoc->CopyToDocument( aNewRange, IDF_ALL, FALSE, pDoc );
+            pDoc->DeleteAreaTab( aNewRange, IDF_ALL & ~IDF_NOTE );
+            pRedoDoc->CopyToDocument( aNewRange, IDF_ALL & ~IDF_NOTE, FALSE, pDoc );
         }
         else
         {
             ScRange aCopyRange( aOldRange.aStart, ScAddress(nEndX,nEndY,nEndZ) );
-            pDoc->DeleteAreaTab( aCopyRange, IDF_ALL );
-            pRedoDoc->CopyToDocument( aCopyRange, IDF_ALL, FALSE, pDoc );
+            pDoc->DeleteAreaTab( aCopyRange, IDF_ALL & ~IDF_NOTE );
+            pRedoDoc->CopyToDocument( aCopyRange, IDF_ALL & ~IDF_NOTE, FALSE, pDoc );
         }
     }
 

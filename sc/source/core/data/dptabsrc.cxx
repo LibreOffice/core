@@ -991,16 +991,16 @@ void ScDPSource::CreateRes_Impl()
     }
 }
 
-void ScDPSource::DumpState( ScDocument* pDoc, const ScAddress& rPos )
-{
-    CreateRes_Impl();
-
-    ScAddress aDocPos( rPos );
-
-    if (pColResRoot->GetChildDimension())
-        pColResRoot->GetChildDimension()->DumpState( NULL, pDoc, aDocPos );
-    pRowResRoot->DumpState( pColResRoot, pDoc, aDocPos );
-}
+//UNUSED2009-05 void ScDPSource::DumpState( ScDocument* pDoc, const ScAddress& rPos )
+//UNUSED2009-05 {
+//UNUSED2009-05     CreateRes_Impl();
+//UNUSED2009-05
+//UNUSED2009-05     ScAddress aDocPos( rPos );
+//UNUSED2009-05
+//UNUSED2009-05     if (pColResRoot->GetChildDimension())
+//UNUSED2009-05         pColResRoot->GetChildDimension()->DumpState( NULL, pDoc, aDocPos );
+//UNUSED2009-05     pRowResRoot->DumpState( pColResRoot, pDoc, aDocPos );
+//UNUSED2009-05 }
 
 void ScDPSource::FillLevelList( USHORT nOrientation, List& rList )
 {
@@ -1497,13 +1497,13 @@ const ScDPItemData& ScDPDimension::GetSelectedData()
     return *pSelectedData;
 }
 
-BOOL ScDPDimension::IsValidPage( const ScDPItemData& rData )
-{
-    if ( bHasSelectedPage )
-        return rData.IsCaseInsEqual( GetSelectedData() );
-
-    return TRUE;        // no selection -> all data
-}
+//UNUSED2009-05 BOOL ScDPDimension::IsValidPage( const ScDPItemData& rData )
+//UNUSED2009-05 {
+//UNUSED2009-05     if ( bHasSelectedPage )
+//UNUSED2009-05         return rData.IsCaseInsEqual( GetSelectedData() );
+//UNUSED2009-05
+//UNUSED2009-05     return TRUE;        // no selection -> all data
+//UNUSED2009-05 }
 
 // XPropertySet
 
@@ -2505,14 +2505,14 @@ ScDPMember* ScDPMembers::getByIndex(long nIndex) const
                 else if ( nHier == SC_DAPI_HIERARCHY_WEEK && nLev == SC_DAPI_LEVEL_WEEKDAY )
                 {
                     nVal = nIndex;              // DayOfWeek is 0-based
-                    aName = ScGlobal::pCalendar->getDisplayName(
+                    aName = ScGlobal::GetCalendar()->getDisplayName(
                         ::com::sun::star::i18n::CalendarDisplayIndex::DAY,
                         sal::static_int_cast<sal_Int16>(nVal), 0 );
                 }
                 else if ( nHier == SC_DAPI_HIERARCHY_QUARTER && nLev == SC_DAPI_LEVEL_MONTH )
                 {
                     nVal = nIndex;              // Month is 0-based
-                    aName = ScGlobal::pCalendar->getDisplayName(
+                    aName = ScGlobal::GetCalendar()->getDisplayName(
                         ::com::sun::star::i18n::CalendarDisplayIndex::MONTH,
                         sal::static_int_cast<sal_Int16>(nVal), 0 );
                 }

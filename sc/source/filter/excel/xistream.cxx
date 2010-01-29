@@ -31,12 +31,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-// ============================================================================
 #include "xistream.hxx"
 #include "xlstring.hxx"
 #include "xiroot.hxx"
 
 #include <vector>
+
+using ::rtl::OString;
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
 
 // ============================================================================
 // Decryption
@@ -50,6 +53,7 @@ XclImpDecrypter::XclImpDecrypter() :
 }
 
 XclImpDecrypter::XclImpDecrypter( const XclImpDecrypter& rSrc ) :
+    ::comphelper::IDocPasswordVerifier(),
     mnError( rSrc.mnError ),
     mnOldPos( STREAM_SEEK_TO_END ),
     mnRecSize( 0 )
@@ -66,6 +70,13 @@ XclImpDecrypterRef XclImpDecrypter::Clone() const
     if( IsValid() )
         xNewDecr.reset( OnClone() );
     return xNewDecr;
+}
+
+::comphelper::DocPasswordVerifierResult XclImpDecrypter::verifyPassword( const OUString& rPassword )
+{
+    bool bValid = OnVerify( rPassword );
+    mnError = bValid ? ERRCODE_NONE : ERRCODE_ABORT;
+    return bValid ? ::comphelper::DocPasswordVerifierResult_OK : ::comphelper::DocPasswordVerifierResult_WRONG_PASSWORD;
 }
 
 void XclImpDecrypter::Update( SvStream& rStrm, sal_uInt16 nRecSize )
@@ -99,47 +110,48 @@ sal_uInt16 XclImpDecrypter::Read( SvStream& rStrm, void* pData, sal_uInt16 nByte
     return nRet;
 }
 
-const String XclImpDecrypter::GetPassword() const
-{
-    return maPass;
-}
-
-void XclImpDecrypter::SetHasValidPassword( bool bValid )
-{
-    mnError = bValid ? ERRCODE_NONE : EXC_ENCR_ERROR_WRONG_PASS;
-}
-
-void XclImpDecrypter::SetPassword( const String& rPass )
-{
-    maPass = rPass;
-}
-
 // ----------------------------------------------------------------------------
 
-XclImpBiff5Decrypter::XclImpBiff5Decrypter( const XclImpRoot& rRoot, sal_uInt16 nKey, sal_uInt16 nHash )
+XclImpBiff5Decrypter::XclImpBiff5Decrypter( sal_uInt16 nKey, sal_uInt16 nHash ) :
+    maPassword( 16 ),
+    mnKey( nKey ),
+    mnHash( nHash )
 {
-    Init( XclCryptoHelper::GetBiff5WbProtPassword(), nKey, nHash );
-    if( !IsValid() )
-    {
-        //! TODO: correct byte string encoding in all cases?
-        ByteString aPass( rRoot.QueryPassword(), RTL_TEXTENCODING_MS_1252 );
-        Init( aPass, nKey, nHash );
-    }
 }
 
 XclImpBiff5Decrypter::XclImpBiff5Decrypter( const XclImpBiff5Decrypter& rSrc ) :
-    XclImpDecrypter( rSrc )
+    XclImpDecrypter( rSrc ),
+    maPassword( rSrc.maPassword ),
+    mnKey( rSrc.mnKey ),
+    mnHash( rSrc.mnHash )
 {
-    if( rSrc.IsValid() )
-    {
-        memcpy( mpnPassw, rSrc.mpnPassw, sizeof( mpnPassw ) );
-        maCodec.InitKey( mpnPassw );
-    }
+    if( IsValid() )
+        maCodec.InitKey( &maPassword.front() );
 }
 
 XclImpBiff5Decrypter* XclImpBiff5Decrypter::OnClone() const
 {
     return new XclImpBiff5Decrypter( *this );
+}
+
+bool XclImpBiff5Decrypter::OnVerify( const OUString& rPassword )
+{
+    /*  Convert password to a byte string. TODO: this needs some finetuning
+        according to the spec... */
+    OString aBytePassword = OUStringToOString( rPassword, osl_getThreadTextEncoding() );
+    sal_Int32 nLen = aBytePassword.getLength();
+    if( (0 < nLen) && (nLen < 16) )
+    {
+        // copy byte string to sal_uInt8 array
+        maPassword.clear();
+        maPassword.resize( 16, 0 );
+        memcpy( &maPassword.front(), aBytePassword.getStr(), static_cast< size_t >( nLen ) );
+
+        // init codec
+        maCodec.InitKey( &maPassword.front() );
+        return maCodec.VerifyKey( mnKey, mnHash );
+    }
+    return false;
 }
 
 void XclImpBiff5Decrypter::OnUpdate( sal_Size /*nOldStrmPos*/, sal_Size nNewStrmPos, sal_uInt16 nRecSize )
@@ -155,53 +167,52 @@ sal_uInt16 XclImpBiff5Decrypter::OnRead( SvStream& rStrm, sal_uInt8* pnData, sal
     return nRet;
 }
 
-void XclImpBiff5Decrypter::Init( const ByteString& rPass, sal_uInt16 nKey, sal_uInt16 nHash )
-{
-    xub_StrLen nLen = rPass.Len();
-    bool bValid = (0 < nLen) && (nLen < 16);
-
-    if( bValid )
-    {
-        // transform ByteString to sal_uInt8 array
-        memset( mpnPassw, 0, sizeof( mpnPassw ) );
-        for( xub_StrLen nChar = 0; nChar < nLen; ++nChar )
-            mpnPassw[ nChar ] = static_cast< sal_uInt8 >( rPass.GetChar( nChar ) );
-        // init codec
-        maCodec.InitKey( mpnPassw );
-        bValid = maCodec.VerifyKey( nKey, nHash );
-
-        String aUniPass( rPass, RTL_TEXTENCODING_MS_1252 );
-        SetPassword( aUniPass );
-    }
-
-    SetHasValidPassword( bValid );
-}
-
 // ----------------------------------------------------------------------------
 
-XclImpBiff8Decrypter::XclImpBiff8Decrypter(
-        const XclImpRoot& rRoot, sal_uInt8 pnDocId[ 16 ],
-        sal_uInt8 pnSaltData[ 16 ], sal_uInt8 pnSaltHash[ 16 ] )
+XclImpBiff8Decrypter::XclImpBiff8Decrypter( sal_uInt8 pnSalt[ 16 ],
+        sal_uInt8 pnVerifier[ 16 ], sal_uInt8 pnVerifierHash[ 16 ] ) :
+    maPassword( 16, 0 ),
+    maSalt( pnSalt, pnSalt + 16 ),
+    maVerifier( pnVerifier, pnVerifier + 16 ),
+    maVerifierHash( pnVerifierHash, pnVerifierHash + 16 )
 {
-    Init( XclCryptoHelper::GetBiff8WbProtPassword(), pnDocId, pnSaltData, pnSaltHash );
-    if( !IsValid() )
-        Init( rRoot.QueryPassword(), pnDocId, pnSaltData, pnSaltHash );
 }
 
 XclImpBiff8Decrypter::XclImpBiff8Decrypter( const XclImpBiff8Decrypter& rSrc ) :
-    XclImpDecrypter( rSrc )
+    XclImpDecrypter( rSrc ),
+    maPassword( rSrc.maPassword ),
+    maSalt( rSrc.maSalt ),
+    maVerifier( rSrc.maVerifier ),
+    maVerifierHash( rSrc.maVerifierHash )
 {
-    if( rSrc.IsValid() )
-    {
-        memcpy( mpnPassw, rSrc.mpnPassw, sizeof( mpnPassw ) );
-        memcpy( mpnDocId, rSrc.mpnDocId, sizeof( mpnDocId ) );
-        maCodec.InitKey( mpnPassw, mpnDocId );
-    }
+    if( IsValid() )
+        maCodec.InitKey( &maPassword.front(), &maSalt.front() );
 }
 
 XclImpBiff8Decrypter* XclImpBiff8Decrypter::OnClone() const
 {
     return new XclImpBiff8Decrypter( *this );
+}
+
+bool XclImpBiff8Decrypter::OnVerify( const OUString& rPassword )
+{
+    sal_Int32 nLen = rPassword.getLength();
+    if( (0 < nLen) && (nLen < 16) )
+    {
+        // copy string to sal_uInt16 array
+        maPassword.clear();
+        maPassword.resize( 16, 0 );
+        const sal_Unicode* pcChar = rPassword.getStr();
+        const sal_Unicode* pcCharEnd = pcChar + nLen;
+        ::std::vector< sal_uInt16 >::iterator aIt = maPassword.begin();
+        for( ; pcChar < pcCharEnd; ++pcChar, ++aIt )
+            *aIt = static_cast< sal_uInt16 >( *pcChar );
+
+        // init codec
+        maCodec.InitKey( &maPassword.front(), &maSalt.front() );
+        return maCodec.VerifyKey( &maVerifier.front(), &maVerifierHash.front() );
+    }
+    return false;
 }
 
 void XclImpBiff8Decrypter::OnUpdate( sal_Size nOldStrmPos, sal_Size nNewStrmPos, sal_uInt16 /*nRecSize*/ )
@@ -250,31 +261,6 @@ sal_uInt16 XclImpBiff8Decrypter::OnRead( SvStream& rStrm, sal_uInt8* pnData, sal
     }
 
     return nRet;
-}
-
-void XclImpBiff8Decrypter::Init(
-        const String& rPass, sal_uInt8 pnDocId[ 16 ],
-        sal_uInt8 pnSaltData[ 16 ], sal_uInt8 pnSaltHash[ 16 ] )
-{
-    xub_StrLen nLen = rPass.Len();
-    bool bValid = (0 < nLen) && (nLen < 16);
-
-    if( bValid )
-    {
-        // transform String to sal_uInt16 array
-        memset( mpnPassw, 0, sizeof( mpnPassw ) );
-        for( xub_StrLen nChar = 0; nChar < nLen; ++nChar )
-            mpnPassw[ nChar ] = static_cast< sal_uInt16 >( rPass.GetChar( nChar ) );
-        // copy document ID
-        memcpy( mpnDocId, pnDocId, sizeof( mpnDocId ) );
-        // init codec
-        maCodec.InitKey( mpnPassw, mpnDocId );
-        bValid = maCodec.VerifyKey( pnSaltData, pnSaltHash );
-
-        SetPassword(rPass);
-    }
-
-    SetHasValidPassword( bValid );
 }
 
 sal_uInt32 XclImpBiff8Decrypter::GetBlock( sal_Size nStrmPos ) const
@@ -426,6 +412,12 @@ bool XclImpStream::StartNextRecord()
     SetupRecord();
 
     return mbValidRec;
+}
+
+bool XclImpStream::StartNextRecord( sal_Size nNextRecPos )
+{
+    mnNextRecPos = nNextRecPos;
+    return StartNextRecord();
 }
 
 void XclImpStream::ResetRecord( bool bContLookup, sal_uInt16 nAltContId )

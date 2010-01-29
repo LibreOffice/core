@@ -103,7 +103,6 @@ SLOFILES =	\
         $(SLO)$/xlpage.obj					\
         $(SLO)$/xlpivot.obj					\
         $(SLO)$/xlroot.obj					\
-        $(SLO)$/xlstream.obj				\
         $(SLO)$/xlstyle.obj					\
         $(SLO)$/xltools.obj					\
         $(SLO)$/xltracer.obj				\
@@ -122,6 +121,7 @@ EXCEPTIONSFILES = \
         $(SLO)$/excimp8.obj					\
         $(SLO)$/excrecds.obj				\
         $(SLO)$/expop2.obj					\
+        $(SLO)$/impop.obj					\
         $(SLO)$/namebuff.obj				\
         $(SLO)$/tokstack.obj				\
         $(SLO)$/xecontent.obj				\
@@ -153,6 +153,7 @@ EXCEPTIONSFILES = \
         $(SLO)$/xlchart.obj					\
         $(SLO)$/xlformula.obj				\
         $(SLO)$/xlpivot.obj					\
+        $(SLO)$/xlroot.obj					\
         $(SLO)$/xlstyle.obj					\
         $(SLO)$/xlview.obj
 

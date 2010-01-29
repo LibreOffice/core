@@ -2045,8 +2045,6 @@ void ScGridWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
                 //  RepeatResize in case scroll bar sizes have changed
                 pView->RepeatResize();
-
-                pView->UpdateSelectionType();
                 pView->UpdateAllOverlays();
 
                 //  invalidate cell attribs in input handler, in case the

@@ -98,15 +98,21 @@ FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument
             CREATE_OUSTRING( "com.sun.star.comp.oox.ExcelBiffFilter" ), aArgs ), uno::UNO_QUERY_THROW );
         xImporter->setTargetDocument( xComponent );
 
-        MediaDescriptor aDescriptor;
-        if( const SfxItemSet* pItemSet = rMedium.GetItemSet() )
+        MediaDescriptor aMediaDesc;
+        SfxItemSet* pItemSet = rMedium.GetItemSet();
+        if( pItemSet )
+        {
             if( const SfxStringItem* pItem = static_cast< const SfxStringItem* >( pItemSet->GetItem( SID_FILE_NAME ) ) )
-                aDescriptor[ MediaDescriptor::PROP_URL() ] <<= ::rtl::OUString( pItem->GetValue() );
-        aDescriptor[ MediaDescriptor::PROP_INPUTSTREAM() ] <<= rMedium.GetInputStream();
+                aMediaDesc[ MediaDescriptor::PROP_URL() ] <<= ::rtl::OUString( pItem->GetValue() );
+            if( const SfxStringItem* pItem = static_cast< const SfxStringItem* >( pItemSet->GetItem( SID_PASSWORD ) ) )
+                aMediaDesc[ MediaDescriptor::PROP_PASSWORD() ] <<= ::rtl::OUString( pItem->GetValue() );
+        }
+        aMediaDesc[ MediaDescriptor::PROP_INPUTSTREAM() ] <<= rMedium.GetInputStream();
+        aMediaDesc[ MediaDescriptor::PROP_INTERACTIONHANDLER() ] <<= rMedium.GetInteractionHandler();
 
         // call the filter
         uno::Reference< document::XFilter > xFilter( xImporter, uno::UNO_QUERY_THROW );
-        bool bResult = xFilter->filter( aDescriptor.getAsConstPropertyValueList() );
+        bool bResult = xFilter->filter( aMediaDesc.getAsConstPropertyValueList() );
 
         // if filter returns false, document is invalid, or dumper has disabled import -> exit here
         if( !bResult )
@@ -141,27 +147,27 @@ FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument
     if( xRootStrg.Is() )
     {
         // try to open the "Book" stream
-        SotStorageStreamRef xBookStrm5 = ScfTools::OpenStorageStreamRead( xRootStrg, EXC_STREAM_BOOK );
-        XclBiff eBookStrm5Biff = xBookStrm5.Is() ?  XclImpStream::DetectBiffVersion( *xBookStrm5 ) : EXC_BIFF_UNKNOWN;
+        SotStorageStreamRef xBookStrm = ScfTools::OpenStorageStreamRead( xRootStrg, EXC_STREAM_BOOK );
+        XclBiff eBookBiff = xBookStrm.Is() ?  XclImpStream::DetectBiffVersion( *xBookStrm ) : EXC_BIFF_UNKNOWN;
 
         // try to open the "Workbook" stream
-        SotStorageStreamRef xBookStrm8 = ScfTools::OpenStorageStreamRead( xRootStrg, EXC_STREAM_WORKBOOK );
-        XclBiff eBookStrm8Biff = xBookStrm8.Is() ?  XclImpStream::DetectBiffVersion( *xBookStrm8 ) : EXC_BIFF_UNKNOWN;
+        SotStorageStreamRef xWorkbookStrm = ScfTools::OpenStorageStreamRead( xRootStrg, EXC_STREAM_WORKBOOK );
+        XclBiff eWorkbookBiff = xWorkbookStrm.Is() ?  XclImpStream::DetectBiffVersion( *xWorkbookStrm ) : EXC_BIFF_UNKNOWN;
 
         // decide which stream to use
-        if( (eBookStrm8Biff != EXC_BIFF_UNKNOWN) && ((eBookStrm5Biff == EXC_BIFF_UNKNOWN) || (eBookStrm8Biff > eBookStrm5Biff)) )
+        if( (eWorkbookBiff != EXC_BIFF_UNKNOWN) && ((eBookBiff == EXC_BIFF_UNKNOWN) || (eWorkbookBiff > eBookBiff)) )
         {
             /*  Only "Workbook" stream exists; or both streams exist,
                 and "Workbook" has higher BIFF version than "Book" stream. */
-            xStrgStrm = xBookStrm8;
-            eBiff = eBookStrm8Biff;
+            xStrgStrm = xWorkbookStrm;
+            eBiff = eWorkbookBiff;
         }
-        else if( eBookStrm5Biff != EXC_BIFF_UNKNOWN )
+        else if( eBookBiff != EXC_BIFF_UNKNOWN )
         {
             /*  Only "Book" stream exists; or both streams exist,
                 and "Book" has higher BIFF version than "Workbook" stream. */
-            xStrgStrm = xBookStrm5;
-            eBiff = eBookStrm5Biff;
+            xStrgStrm = xBookStrm;
+            eBiff = eBookBiff;
         }
 
         pBookStrm = xStrgStrm;

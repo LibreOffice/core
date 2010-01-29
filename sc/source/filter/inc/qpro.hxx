@@ -48,7 +48,6 @@ class ScQProReader : public ScBiffReader
 {
     public:
     bool recordsLeft();
-    bool IsEndOfFile();
     void SetEof( bool bValue ){ mbEndOfFile = bValue; }
     bool nextRecord();
     sal_uInt16 getId() { return mnId; }

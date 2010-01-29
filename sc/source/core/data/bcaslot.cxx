@@ -294,13 +294,13 @@ void ScBroadcastAreaSlot::DelBroadcastAreasInRange( const ScRange& rRange )
         if (rRange.In( rAreaRange))
         {
             ScBroadcastArea* pArea = *aIter;
+            aBroadcastAreaTbl.erase( aIter++);  // erase before modifying
             if (!pArea->DecRef())
             {
                 if (pBASM->IsInBulkBroadcast())
                     pBASM->RemoveBulkArea( pArea);
                 delete pArea;
             }
-            aBroadcastAreaTbl.erase( aIter++);
         }
         else
             ++aIter;
@@ -349,6 +349,21 @@ void ScBroadcastAreaSlot::UpdateRemove( UpdateRefMode eUpdateRefMode,
             else
                 ++aIter;
         }
+    }
+}
+
+
+void ScBroadcastAreaSlot::UpdateRemoveArea( ScBroadcastArea* pArea )
+{
+    ScBroadcastAreas::iterator aIter( aBroadcastAreaTbl.find( pArea));
+    if (aIter == aBroadcastAreaTbl.end())
+        return;
+    if (*aIter != pArea)
+        DBG_ERRORFILE( "UpdateRemoveArea: area pointer mismatch");
+    else
+    {
+        aBroadcastAreaTbl.erase( aIter);
+        pArea->DecRef();
     }
 }
 
@@ -730,6 +745,50 @@ void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
                 }
             }
         }
+    }
+
+    // Updating an area's range will modify the hash key, remove areas from all
+    // affected slots. Will be reinserted later with the updated range.
+    ScBroadcastArea* pChain = pUpdateChain;
+    while (pChain)
+    {
+        ScBroadcastArea* pArea = pChain;
+        pChain = pArea->GetUpdateChainNext();
+        ScRange aRange( pArea->GetRange());
+        // remove from slots
+        for (SCTAB nTab = aRange.aStart.Tab(); nTab <= aRange.aEnd.Tab() && pArea->GetRef(); ++nTab)
+        {
+            TableSlotsMap::iterator iTab( aTableSlotsMap.find( nTab));
+            if (iTab == aTableSlotsMap.end())
+            {
+                DBG_ERRORFILE( "UpdateBroadcastAreas: Where's the TableSlot?!?");
+                continue;   // for
+            }
+            ScBroadcastAreaSlot** ppSlots = (*iTab).second->getSlots();
+            SCSIZE nStart, nEnd, nRowBreak;
+            ComputeAreaPoints( aRange, nStart, nEnd, nRowBreak );
+            SCSIZE nOff = nStart;
+            SCSIZE nBreak = nOff + nRowBreak;
+            ScBroadcastAreaSlot** pp = ppSlots + nOff;
+            while ( nOff <= nEnd && pArea->GetRef() )
+            {
+                if (*pp)
+                    (*pp)->UpdateRemoveArea( pArea);
+                if ( nOff < nBreak )
+                {
+                    ++nOff;
+                    ++pp;
+                }
+                else
+                {
+                    nStart += BCA_SLOTS_ROW;
+                    nOff = nStart;
+                    pp = ppSlots + nOff;
+                    nBreak = nOff + nRowBreak;
+                }
+            }
+        }
+
     }
 
     // shift sheets

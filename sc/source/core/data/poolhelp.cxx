@@ -46,26 +46,16 @@
 // -----------------------------------------------------------------------
 
 ScPoolHelper::ScPoolHelper( ScDocument* pSourceDoc )
+:pFormTable(NULL)
+,pEditPool(NULL)
+,pEnginePool(NULL)
+,m_pSourceDoc(pSourceDoc)
 {
     DBG_ASSERT( pSourceDoc, "ScPoolHelper: no document" );
-
     pDocPool = new ScDocumentPool;
     pDocPool->FreezeIdRanges();
 
     mxStylePool = new ScStyleSheetPool( *pDocPool, pSourceDoc );
-
-    pFormTable = new SvNumberFormatter( pSourceDoc->GetServiceManager(), ScGlobal::eLnge );
-    pFormTable->SetColorLink( LINK( pSourceDoc, ScDocument, GetUserDefinedColor ) );
-    pFormTable->SetEvalDateFormat( NF_EVALDATEFORMAT_INTL_FORMAT );
-
-    pEditPool = EditEngine::CreatePool();
-    pEditPool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );
-    pEditPool->FreezeIdRanges();
-    pEditPool->SetFileFormatVersion( SOFFICE_FILEFORMAT_50 );   // used in ScGlobal::EETextObjEqual
-
-    pEnginePool = EditEngine::CreatePool();
-    pEnginePool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );
-    pEnginePool->FreezeIdRanges();
 }
 
 ScPoolHelper::~ScPoolHelper()
@@ -76,12 +66,64 @@ ScPoolHelper::~ScPoolHelper()
     mxStylePool.clear();
     SfxItemPool::Free(pDocPool);
 }
+SfxItemPool*        ScPoolHelper::GetEditPool() const
+{
+    if ( !pEditPool )
+    {
+        pEditPool = EditEngine::CreatePool();
+        pEditPool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );
+        pEditPool->FreezeIdRanges();
+        pEditPool->SetFileFormatVersion( SOFFICE_FILEFORMAT_50 );   // used in ScGlobal::EETextObjEqual
+    }
+    return pEditPool;
+}
+SfxItemPool*        ScPoolHelper::GetEnginePool() const
+{
+    if ( !pEnginePool )
+    {
+        pEnginePool = EditEngine::CreatePool();
+        pEnginePool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );
+        pEnginePool->FreezeIdRanges();
+    } // ifg ( pEnginePool )
+    return pEnginePool;
+}
+SvNumberFormatter*  ScPoolHelper::GetFormTable() const
+{
+    if ( !pFormTable )
+    {
+        pFormTable = new SvNumberFormatter( m_pSourceDoc->GetServiceManager(), ScGlobal::eLnge );
+        pFormTable->SetColorLink( LINK( m_pSourceDoc, ScDocument, GetUserDefinedColor ) );
+        pFormTable->SetEvalDateFormat( NF_EVALDATEFORMAT_INTL_FORMAT );
+
+        UseDocOptions();        // null date, year2000, std precision
+    }
+    return pFormTable;
+}
+
+void ScPoolHelper::UseDocOptions() const
+{
+    if (pFormTable)
+    {
+        USHORT d,m,y;
+        aOpt.GetDate( d,m,y );
+        pFormTable->ChangeNullDate( d,m,y );
+        pFormTable->ChangeStandardPrec( (USHORT)aOpt.GetStdPrecision() );
+        pFormTable->SetYear2000( aOpt.GetYear2000() );
+    }
+}
+
+void ScPoolHelper::SetFormTableOpt(const ScDocOptions& rOpt)
+{
+    aOpt = rOpt;
+    UseDocOptions();        // #i105512# if the number formatter exists, update its settings
+}
 
 void ScPoolHelper::SourceDocumentGone()
 {
     //  reset all pointers to the source document
     mxStylePool->SetDocument( NULL );
-    pFormTable->SetColorLink( Link() );
+    if ( pFormTable )
+        pFormTable->SetColorLink( Link() );
 }
 
 // -----------------------------------------------------------------------

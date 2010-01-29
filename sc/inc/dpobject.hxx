@@ -55,8 +55,6 @@ class Rectangle;
 class SvStream;
 class ScDPSaveData;
 class ScDPOutput;
-class ScMultipleReadHeader;
-class ScMultipleWriteHeader;
 class ScPivot;
 class ScPivotCollection;
 struct ScPivotParam;
@@ -281,9 +279,7 @@ public:
     virtual ScDataObject*   Clone() const;
 
     ScDPObject* operator[](USHORT nIndex) const {return (ScDPObject*)At(nIndex);}
-#if OLD_PIVOT_IMPLEMENTATION
-    void        ConvertOldTables( ScPivotCollection& rOldColl );
-#endif
+
     void        DeleteOnTab( SCTAB nTab );
     void        UpdateReference( UpdateRefMode eUpdateRefMode,
                                  const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );

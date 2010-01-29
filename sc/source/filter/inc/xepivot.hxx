@@ -198,8 +198,8 @@ public:
     sal_uInt16          GetFieldCount() const;
     /** Returns the specified pivot cache field. */
     const XclExpPCField* GetField( sal_uInt16 nFieldIdx ) const;
-    /** Returns a pivot cache field by its name. */
-    const XclExpPCField* GetField( const String& rFieldName ) const;
+//UNUSED2009-05 /** Returns a pivot cache field by its name. */
+//UNUSED2009-05 const XclExpPCField* GetField( const String& rFieldName ) const;
     /** Returns true, if this pivot cache contains non-standard fields (e.g. grouping fields). */
     bool                HasAddFields() const;
 
@@ -301,8 +301,8 @@ public:
     /** Returns the index of the last inserted data info struct. */
     sal_uInt16          GetLastDataInfoIndex() const;
 
-    /** Returns an item by its name. */
-    const XclExpPTItem* GetItem( const String& rName ) const;
+//UNUSED2009-05 /** Returns an item by its name. */
+//UNUSED2009-05 const XclExpPTItem* GetItem( const String& rName ) const;
     /** Returns the list index of an item by its name.
         @param nDefaultIdx  This value will be returned, if the item could not be found. */
     sal_uInt16          GetItemIndex( const String& rName, sal_uInt16 nDefaultIdx ) const;

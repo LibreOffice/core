@@ -576,6 +576,9 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
         xMBroadcaster->addModifyListener( this );
 #endif
 
+    //select chart area per default:
+    select( uno::makeAny( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, rtl::OUString() ) ) );
+
     uno::Reference< lang::XMultiServiceFactory > xFact( m_aModel->getModel(), uno::UNO_QUERY );
     if( xFact.is())
     {
@@ -974,7 +977,7 @@ namespace
 {
 bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
 {
-    if( aCommand.equals("MainTitle")
+    if(    aCommand.equals("MainTitle")
         || aCommand.equals("SubTitle")
         || aCommand.equals("XTitle")
         || aCommand.equals("YTitle")
@@ -982,7 +985,6 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
         || aCommand.equals("SecondaryXTitle")
         || aCommand.equals("SecondaryYTitle")
         || aCommand.equals("AllTitles")
-        || aCommand.equals("Legend")
         || aCommand.equals("DiagramAxisX")
         || aCommand.equals("DiagramAxisY")
         || aCommand.equals("DiagramAxisZ")
@@ -996,9 +998,31 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
         || aCommand.equals("DiagramGridYHelp")
         || aCommand.equals("DiagramGridZHelp")
         || aCommand.equals("DiagramGridAll")
+
         || aCommand.equals("DiagramWall")
         || aCommand.equals("DiagramFloor")
         || aCommand.equals("DiagramArea")
+        || aCommand.equals("Legend")
+
+        || aCommand.equals("FormatWall")
+        || aCommand.equals("FormatFloor")
+        || aCommand.equals("FormatChartArea")
+        || aCommand.equals("FormatLegend")
+
+        || aCommand.equals("FormatTitle")
+        || aCommand.equals("FormatAxis")
+        || aCommand.equals("FormatDataSeries")
+        || aCommand.equals("FormatDataPoint")
+        || aCommand.equals("FormatDataLabels")
+        || aCommand.equals("FormatDataLabel")
+        || aCommand.equals("FormatYErrorBars")
+        || aCommand.equals("FormatMeanValue")
+        || aCommand.equals("FormatTrendline")
+        || aCommand.equals("FormatTrendlineEquation")
+        || aCommand.equals("FormatStockLoss")
+        || aCommand.equals("FormatStockGain")
+        || aCommand.equals("FormatMajorGrid")
+        || aCommand.equals("FormatMinorGrid")
         )
     return true;
 
@@ -1064,24 +1088,28 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
     else if(aCommand.equals("DiagramData"))
         this->executeDispatch_EditData();
     //insert objects
-    else if( aCommand.equals("InsertTitle"))
-        this->executeDispatch_InsertTitle();
-    else if( aCommand.equals("InsertLegend"))
+    else if( aCommand.equals("InsertTitles")
+        || aCommand.equals("InsertMenuTitles") )
+        this->executeDispatch_InsertTitles();
+    else if( aCommand.equals("InsertMenuLegend") )
+        this->executeDispatch_OpenLegendDialog();
+    else if( aCommand.equals("InsertLegend") )
         this->executeDispatch_InsertLegend();
-    else if( aCommand.equals("InsertDescription"))
-        this->executeDispatch_InsertDataLabel();
-    else if( aCommand.equals("InsertAxis"))
-        this->executeDispatch_InsertAxis();
-    else if( aCommand.equals("InsertGrids"))
+    else if( aCommand.equals("DeleteLegend") )
+        this->executeDispatch_DeleteLegend();
+    else if( aCommand.equals("InsertMenuDataLabels"))
+        this->executeDispatch_InsertMenu_DataLabels();
+    else if( aCommand.equals("InsertMenuAxes")
+        || aCommand.equals("InsertRemoveAxes") )
+        this->executeDispatch_InsertAxes();
+    else if( aCommand.equals("InsertMenuGrids"))
         this->executeDispatch_InsertGrid();
-//     else if( aCommand.equals("InsertStatistics"))
-//         this->executeDispatch_InsertStatistic();
-    else if( aCommand.equals("InsertTrendlines"))
-        this->executeDispatch_InsertTrendlines();
-    else if( aCommand.equals("InsertMeanValues"))
-        this->executeDispatch_InsertMeanValues();
-    else if( aCommand.equals("InsertYErrorbars"))
-        this->executeDispatch_InsertYErrorbars();
+    else if( aCommand.equals("InsertMenuTrendlines"))
+        this->executeDispatch_InsertMenu_Trendlines();
+    else if( aCommand.equals("InsertMenuMeanValues"))
+        this->executeDispatch_InsertMenu_MeanValues();
+    else if( aCommand.equals("InsertMenuYErrorBars"))
+        this->executeDispatch_InsertMenu_YErrorBars();
     else if( aCommand.equals("InsertSymbol"))
          this->executeDispatch_InsertSpecialCharacter();
     else if( aCommand.equals("InsertTrendline"))
@@ -1092,14 +1120,48 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
         this->executeDispatch_InsertMeanValue();
     else if( aCommand.equals("DeleteMeanValue"))
         this->executeDispatch_DeleteMeanValue();
-    else if( aCommand.equals("InsertYErrorbar"))
-        this->executeDispatch_InsertYErrorbar();
-    else if( aCommand.equals("DeleteYErrorbar"))
-        this->executeDispatch_DeleteYErrorbar();
+    else if( aCommand.equals("InsertYErrorBars"))
+        this->executeDispatch_InsertYErrorBars();
+    else if( aCommand.equals("DeleteYErrorBars"))
+        this->executeDispatch_DeleteYErrorBars();
     else if( aCommand.equals("InsertTrendlineEquation"))
          this->executeDispatch_InsertTrendlineEquation();
+    else if( aCommand.equals("DeleteTrendlineEquation"))
+         this->executeDispatch_DeleteTrendlineEquation();
+    else if( aCommand.equals("InsertTrendlineEquationAndR2"))
+         this->executeDispatch_InsertTrendlineEquation( true );
+    else if( aCommand.equals("InsertR2Value"))
+         this->executeDispatch_InsertR2Value();
+    else if( aCommand.equals("DeleteR2Value"))
+         this->executeDispatch_DeleteR2Value();
+    else if( aCommand.equals("InsertDataLabels") )
+        this->executeDispatch_InsertDataLabels();
+    else if( aCommand.equals("InsertDataLabel") )
+        this->executeDispatch_InsertDataLabel();
+    else if( aCommand.equals("DeleteDataLabels") )
+        this->executeDispatch_DeleteDataLabels();
+    else if( aCommand.equals("DeleteDataLabel") )
+        this->executeDispatch_DeleteDataLabel();
+    else if( aCommand.equals("ResetAllDataPoints") )
+        this->executeDispatch_ResetAllDataPoints();
+    else if( aCommand.equals("ResetDataPoint") )
+        this->executeDispatch_ResetDataPoint();
+    else if( aCommand.equals("InsertAxis") )
+        this->executeDispatch_InsertAxis();
+    else if( aCommand.equals("InsertMajorGrid") )
+        this->executeDispatch_InsertMajorGrid();
+    else if( aCommand.equals("InsertMinorGrid") )
+        this->executeDispatch_InsertMinorGrid();
+    else if( aCommand.equals("InsertAxisTitle") )
+        this->executeDispatch_InsertAxisTitle();
+    else if( aCommand.equals("DeleteAxis") )
+        this->executeDispatch_DeleteAxis();
+    else if( aCommand.equals("DeleteMajorGrid") )
+        this->executeDispatch_DeleteMajorGrid();
+    else if( aCommand.equals("DeleteMinorGrid") )
+        this->executeDispatch_DeleteMinorGrid();
     //format objects
-    else if( aCommand.equals("DiagramObjects"))
+    else if( aCommand.equals("FormatSelection") )
         this->executeDispatch_ObjectProperties();
     else if( aCommand.equals("TransformDialog"))
         this->executeDispatch_PositionAndSize();
@@ -1405,15 +1467,23 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
         ( C2U("Cut") )                ( C2U("Copy") )                 ( C2U("Paste") )
         ( C2U("DataRanges") )         ( C2U("DiagramData") )
         // insert objects
-        ( C2U("InsertTitle") )        ( C2U("InsertLegend") )         ( C2U("InsertDescription") )
-        ( C2U("InsertAxis") )         ( C2U("InsertGrids") )          ( C2U("InsertStatistics") )
-        ( C2U("InsertSymbol") )       ( C2U("InsertTrendline") )      ( C2U("InsertTrendlineEquation") )
-        ( C2U("InsertTrendlines") )   ( C2U("InsertMeanValue") )      ( C2U("InsertMeanValues") )
-        ( C2U("InsertYErrorbars") )   ( C2U("InsertYErrorbar") )
-        ( C2U("DeleteTrendline") )    ( C2U("DeleteMeanValue") )      ( C2U("DeleteYErrorbar") )
+        ( C2U("InsertMenuTitles") )   ( C2U("InsertTitles") )
+        ( C2U("InsertMenuLegend") )   ( C2U("InsertLegend") )         ( C2U("DeleteLegend") )
+        ( C2U("InsertMenuDataLabels") )
+        ( C2U("InsertMenuAxes") )     ( C2U("InsertRemoveAxes") )         ( C2U("InsertMenuGrids") )
+        ( C2U("InsertSymbol") )
+        ( C2U("InsertTrendlineEquation") )  ( C2U("InsertTrendlineEquationAndR2") )
+        ( C2U("InsertR2Value") )      ( C2U("DeleteR2Value") )
+        ( C2U("InsertMenuTrendlines") )  ( C2U("InsertTrendline") )
+        ( C2U("InsertMenuMeanValues") ) ( C2U("InsertMeanValue") )
+        ( C2U("InsertMenuYErrorBars") )   ( C2U("InsertYErrorBars") )
+        ( C2U("InsertDataLabels") )   ( C2U("InsertDataLabel") )
+        ( C2U("DeleteTrendline") )    ( C2U("DeleteMeanValue") )      ( C2U("DeleteTrendlineEquation") )
+        ( C2U("DeleteYErrorBars") )
+        ( C2U("DeleteDataLabels") )   ( C2U("DeleteDataLabel") )
         //format objects
 //MENUCHANGE            ( C2U("SelectSourceRanges") )
-        ( C2U("DiagramObjects") )     ( C2U("TransformDialog") )
+        ( C2U("FormatSelection") )     ( C2U("TransformDialog") )
         ( C2U("DiagramType") )        ( C2U("View3D") )
         ( C2U("Forward") )            ( C2U("Backward") )
         ( C2U("MainTitle") )          ( C2U("SubTitle") )
@@ -1426,12 +1496,30 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
         ( C2U("DiagramGridXHelp") )   ( C2U("DiagramGridYHelp") )     ( C2U("DiagramGridZHelp") )
         ( C2U("DiagramGridAll") )
         ( C2U("DiagramWall") )        ( C2U("DiagramFloor") )         ( C2U("DiagramArea") )
+
+        //context menu - format objects entries
+        ( C2U("FormatWall") )        ( C2U("FormatFloor") )         ( C2U("FormatChartArea") )
+        ( C2U("FormatLegend") )
+
+        ( C2U("FormatAxis") )           ( C2U("FormatTitle") )
+        ( C2U("FormatDataSeries") )     ( C2U("FormatDataPoint") )
+        ( C2U("ResetAllDataPoints") )   ( C2U("ResetDataPoint") )
+        ( C2U("FormatDataLabels") )     ( C2U("FormatDataLabel") )
+        ( C2U("FormatMeanValue") )      ( C2U("FormatTrendline") )      ( C2U("FormatTrendlineEquation") )
+        ( C2U("FormatYErrorBars") )
+        ( C2U("FormatStockLoss") )      ( C2U("FormatStockGain") )
+
+        ( C2U("FormatMajorGrid") )      ( C2U("InsertMajorGrid") )      ( C2U("DeleteMajorGrid") )
+        ( C2U("FormatMinorGrid") )      ( C2U("InsertMinorGrid") )      ( C2U("DeleteMinorGrid") )
+        ( C2U("InsertAxis") )           ( C2U("DeleteAxis") )           ( C2U("InsertAxisTitle") )
+
         // toolbar commands
         ( C2U("ToggleGridHorizontal"))( C2U("ToggleLegend") )         ( C2U("ScaleText") )
         ( C2U("NewArrangement") )     ( C2U("Update") )
         ( C2U("DefaultColors") )      ( C2U("BarWidth") )             ( C2U("NumberOfLines") )
         ( C2U("ArrangeRow") )
         ( C2U("StatusBarVisible") )
+        ( C2U("ChartElementSelector") )
         ;
 }
 

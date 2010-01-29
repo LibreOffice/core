@@ -50,6 +50,11 @@
 #include <tools/debug.hxx>
 #include "XMLTableHeaderFooterContext.hxx"
 #include "XMLConverter.hxx"
+#include "XMLTableShapeImportHelper.hxx"
+#include "sheetdata.hxx"
+#include "xmlannoi.hxx"
+#include "textuno.hxx"
+#include "cellsuno.hxx"
 
 #include "docuno.hxx"
 #include "unonames.hxx"
@@ -461,6 +466,7 @@ XMLTableStyleContext::XMLTableStyleContext( ScXMLImport& rImport,
     sNumberFormat(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberFormat"))),
     pStyles(&rStyles),
     nNumberFormat(-1),
+    nLastSheet(-1),
     bConditionalFormatCreated(sal_False),
     bParentSet(sal_False)
 {
@@ -609,15 +615,22 @@ sal_Int32 XMLTableStyleContext::GetNumberFormat()
     }
     return nNumberFormat;
 }
+
 // ----------------------------------------------------------------------------
 
 SvXMLStyleContext *XMLTableStylesContext::CreateStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLStyleContext *pStyle(SvXMLStylesContext::CreateStyleStyleChildContext( nFamily, nPrefix,
-                                                            rLocalName,
-                                                            xAttrList ));
+    SvXMLStyleContext *pStyle;
+    // use own wrapper for text and paragraph, to record style usage
+    if (nFamily == XML_STYLE_FAMILY_TEXT_PARAGRAPH || nFamily == XML_STYLE_FAMILY_TEXT_TEXT)
+        pStyle = new ScCellTextStyleContext( GetImport(), nPrefix, rLocalName,
+                                            xAttrList, *this, nFamily );
+    else
+        pStyle = SvXMLStylesContext::CreateStyleStyleChildContext(
+                    nFamily, nPrefix, rLocalName, xAttrList );
+
     if (!pStyle)
     {
         switch( nFamily )
@@ -1011,5 +1024,58 @@ void ScMasterPageContext::Finish( sal_Bool bOverwrite )
         ClearContent(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_PAGE_RIGHTFTRCON)));
     if (!bContainsRightHeader)
         ClearContent(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_PAGE_RIGHTHDRCON)));
+}
+
+// ---------------------------------------------------------------------------
+
+ScCellTextStyleContext::ScCellTextStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
+            const rtl::OUString& rLName, const uno::Reference<xml::sax::XAttributeList> & xAttrList,
+            SvXMLStylesContext& rStyles, sal_uInt16 nFamily, sal_Bool bDefaultStyle ) :
+    XMLTextStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily, bDefaultStyle ),
+    nLastSheet(-1)
+{
+}
+
+ScCellTextStyleContext::~ScCellTextStyleContext()
+{
+}
+
+void ScCellTextStyleContext::FillPropertySet( const uno::Reference<beans::XPropertySet>& xPropSet )
+{
+    XMLTextStyleContext::FillPropertySet( xPropSet );
+
+    ScXMLImport& rXMLImport = GetScImport();
+
+    ScCellTextCursor* pCellImp = ScCellTextCursor::getImplementation( xPropSet );
+    if (pCellImp)
+    {
+        ScAddress aPos = pCellImp->GetCellObj().GetPosition();
+        if ( static_cast<sal_Int32>(aPos.Tab()) != nLastSheet )
+        {
+            ESelection aSel = pCellImp->GetSelection();
+
+            ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetImport().GetModel())->GetSheetSaveData();
+            pSheetData->AddTextStyle( GetName(), aPos, aSel );
+
+            nLastSheet = static_cast<sal_Int32>(aPos.Tab());
+        }
+    }
+    else if ( rXMLImport.GetTables().GetCurrentSheet() != nLastSheet )
+    {
+        ScDrawTextCursor* pDrawImp = ScDrawTextCursor::getImplementation( xPropSet );
+        if (pDrawImp)
+        {
+            XMLTableShapeImportHelper* pTableShapeImport = (XMLTableShapeImportHelper*)GetScImport().GetShapeImport().get();
+            ScXMLAnnotationContext* pAnnotationContext = pTableShapeImport->GetAnnotationContext();
+            if (pAnnotationContext)
+            {
+                pAnnotationContext->AddContentStyle( GetFamily(), GetName(), pDrawImp->GetSelection() );
+                nLastSheet = rXMLImport.GetTables().GetCurrentSheet();
+            }
+        }
+
+        // if it's a different shape, BlockSheet is called from XMLTableShapeImportHelper::finishShape
+        // formatted text in page headers/footers can be ignored
+    }
 }
 

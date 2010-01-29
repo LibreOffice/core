@@ -66,7 +66,7 @@ struct ScSolverOptionsEntry
 
     bool operator< (const ScSolverOptionsEntry& rOther) const
     {
-        return ( ScGlobal::pCollator->compareString( aDescription, rOther.aDescription ) == COMPARE_LESS );
+        return ( ScGlobal::GetCollator()->compareString( aDescription, rOther.aDescription ) == COMPARE_LESS );
     }
 };
 

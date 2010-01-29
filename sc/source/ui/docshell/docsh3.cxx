@@ -483,6 +483,10 @@ OutputDevice* ScDocShell::GetRefDevice()
 
 USHORT ScDocShell::SetPrinter( SfxPrinter* pNewPrinter, USHORT nDiffFlags )
 {
+    SfxPrinter *pOld = aDocument.GetPrinter( FALSE );
+    if ( pOld && pOld->IsPrinting() )
+        return SFX_PRINTERROR_BUSY;
+
     if (nDiffFlags & SFX_PRINTER_PRINTER)
     {
         if ( aDocument.GetPrinter() != pNewPrinter )
