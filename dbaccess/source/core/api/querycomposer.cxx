@@ -91,6 +91,7 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
 #endif
+#include <com/sun/star/sdb/SQLFilterOperator.hpp>
 #ifndef DBACCESS_CORE_API_QUERYCOMPOSER_HXX
 #include "querycomposer.hxx"
 #endif
@@ -285,7 +286,23 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
 
     m_xComposerHelper->setQuery(getQuery());
     m_xComposerHelper->setFilter(::rtl::OUString());
-    m_xComposerHelper->appendFilterByColumn(column,sal_True);
+    sal_Int32 nOp = SQLFilterOperator::EQUAL;
+    if ( column.is() )
+    {
+        sal_Int32 nType = 0;
+        column->getPropertyValue(PROPERTY_TYPE) >>= nType;
+        switch(nType)
+        {
+            case DataType::VARCHAR:
+            case DataType::CHAR:
+            case DataType::LONGVARCHAR:
+                nOp = SQLFilterOperator::LIKE;
+                break;
+            default:
+                nOp = SQLFilterOperator::EQUAL;
+        }
+    }
+    m_xComposerHelper->appendFilterByColumn(column,sal_True,nOp);
 
     FilterCreator aFilterCreator;
     aFilterCreator.append(getFilter());

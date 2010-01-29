@@ -192,14 +192,16 @@ rtl::OUString OTableColumn::getImplementationName(  ) throw (RuntimeException)
 DBG_NAME( OQueryColumn );
 
 // -------------------------------------------------------------------------
-OQueryColumn::OQueryColumn( const Reference< XPropertySet >& _rxParserColumn, const Reference< XConnection >& _rxConnection,const ::rtl::OUString& _sNewName )
+OQueryColumn::OQueryColumn( const Reference< XPropertySet >& _rxParserColumn, const Reference< XConnection >& _rxConnection,const ::rtl::OUString i_sLabel )
     :OTableColumnDescriptor( false /* do not act as descriptor */ )
+    ,m_sLabel(i_sLabel)
 {
     const sal_Int32 nPropAttr = PropertyAttribute::READONLY;
     registerProperty( PROPERTY_CATALOGNAME, PROPERTY_ID_CATALOGNAME, nPropAttr, &m_sCatalogName, ::getCppuType( &m_sCatalogName ) );
     registerProperty( PROPERTY_SCHEMANAME, PROPERTY_ID_SCHEMANAME, nPropAttr, &m_sSchemaName, ::getCppuType( &m_sSchemaName ) );
     registerProperty( PROPERTY_TABLENAME, PROPERTY_ID_TABLENAME, nPropAttr, &m_sTableName, ::getCppuType( &m_sTableName ) );
     registerProperty( PROPERTY_REALNAME, PROPERTY_ID_REALNAME, nPropAttr, &m_sRealName, ::getCppuType( &m_sRealName ) );
+    registerProperty( PROPERTY_LABEL, PROPERTY_ID_LABEL, nPropAttr, &m_sLabel, ::getCppuType( &m_sLabel ) );
 
     DBG_CTOR( OQueryColumn, NULL );
 
@@ -210,14 +212,8 @@ OQueryColumn::OQueryColumn( const Reference< XPropertySet >& _rxParserColumn, co
     OSL_VERIFY( _rxParserColumn->getPropertyValue( PROPERTY_TYPE ) >>= m_nType );
     OSL_VERIFY( _rxParserColumn->getPropertyValue( PROPERTY_ISAUTOINCREMENT ) >>= m_bAutoIncrement );
     OSL_VERIFY( _rxParserColumn->getPropertyValue( PROPERTY_ISCURRENCY ) >>= m_bCurrency );
-    if ( _sNewName.getLength() )
-    {
-        m_sName = _sNewName;
-    }
-    else
-    {
-        OSL_VERIFY( _rxParserColumn->getPropertyValue( PROPERTY_NAME ) >>= m_sName );
-    }
+    OSL_VERIFY( _rxParserColumn->getPropertyValue( PROPERTY_NAME ) >>= m_sName );
+
     m_bRowVersion = sal_False;
 
     Reference< XPropertySetInfo > xPSI( _rxParserColumn->getPropertySetInfo(), UNO_SET_THROW );

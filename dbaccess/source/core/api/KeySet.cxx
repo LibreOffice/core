@@ -162,6 +162,7 @@ OKeySet::OKeySet(const connectivity::OSQLTable& _xTable,
             :m_aParameterValueForCache(_aParameterValueForCache)
             ,m_pKeyColumnNames(NULL)
             ,m_pColumnNames(NULL)
+            ,m_pParameterNames(NULL)
             ,m_pForeignColumnNames(NULL)
             ,m_xTable(_xTable)
             ,m_xTableKeys(_xTableKeys)
@@ -191,25 +192,39 @@ OKeySet::~OKeySet()
     m_xComposer = NULL;
     delete m_pKeyColumnNames;
     delete m_pColumnNames;
+    delete m_pParameterNames;
     delete m_pForeignColumnNames;
 
     DBG_DTOR(OKeySet,NULL);
 }
 // -----------------------------------------------------------------------------
-void OKeySet::construct(const Reference< XResultSet>& _xDriverSet)
+void OKeySet::construct(const Reference< XResultSet>& _xDriverSet,const ::rtl::OUString& i_sRowSetFilter)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::construct" );
-    OCacheSet::construct(_xDriverSet);
+    OCacheSet::construct(_xDriverSet,i_sRowSetFilter);
 
     Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
     bool bCase = (xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers()) ? true : false;
-    m_pKeyColumnNames = new SelectColumnsMetaData(bCase);
-    m_pColumnNames = new SelectColumnsMetaData(bCase);
-    m_pForeignColumnNames = new SelectColumnsMetaData(bCase);
+    m_pKeyColumnNames       = new SelectColumnsMetaData(bCase);
+    m_pColumnNames          = new SelectColumnsMetaData(bCase);
+    m_pParameterNames       = new SelectColumnsMetaData(bCase);
+    m_pForeignColumnNames   = new SelectColumnsMetaData(bCase);
 
     Reference<XNameAccess> xKeyColumns  = getKeyColumns();
     Reference<XColumnsSupplier> xSup(m_xComposer,UNO_QUERY);
     Reference<XNameAccess> xSourceColumns = m_xTable->getColumns();
+
+    // locate parameter in select columns
+    Reference<XParametersSupplier> xParaSup(m_xComposer,UNO_QUERY);
+    Reference<XIndexAccess> xQueryParameters = xParaSup->getParameters();
+    const sal_Int32 nParaCount = xQueryParameters->getCount();
+    Sequence< ::rtl::OUString> aParameterColumns(nParaCount);
+    for(sal_Int32 i = 0; i< nParaCount;++i)
+    {
+        Reference<XPropertySet> xPara(xQueryParameters->getByIndex(i),UNO_QUERY_THROW);
+        xPara->getPropertyValue(PROPERTY_REALNAME) >>= aParameterColumns[i];
+    }
+
 
     ::rtl::OUString sCatalog,sSchema,sTable;
 
@@ -238,6 +253,8 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet)
 
     ::dbaccess::getColumnPositions(xSup->getColumns(),aBestColumnNames,m_sUpdateTableName,(*m_pKeyColumnNames));
     ::dbaccess::getColumnPositions(xSup->getColumns(),xSourceColumns->getElementNames(),m_sUpdateTableName,(*m_pColumnNames));
+    ::dbaccess::getColumnPositions(xSup->getColumns(),aParameterColumns,m_sUpdateTableName,(*m_pParameterNames));
+
 
     SelectColumnsMetaData::const_iterator aPosIter = (*m_pKeyColumnNames).begin();
     SelectColumnsMetaData::const_iterator aPosEnd = (*m_pKeyColumnNames).end();
@@ -284,9 +301,10 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet)
             aFilter.append(aAnd);
     }
 
+    Reference< XSingleSelectQueryComposer> xSourceComposer(m_xComposer,UNO_QUERY);
     Reference< XMultiServiceFactory >  xFactory(m_xConnection, UNO_QUERY_THROW);
     Reference<XSingleSelectQueryComposer> xAnalyzer(xFactory->createInstance(SERVICE_NAME_SINGLESELECTQUERYCOMPOSER),UNO_QUERY);
-    xAnalyzer->setQuery(m_xComposer->getQuery());
+    xAnalyzer->setElementaryQuery(xSourceComposer->getElementaryQuery());
     Reference<XTablesSupplier> xTabSup(xAnalyzer,uno::UNO_QUERY);
     Reference<XNameAccess> xSelectTables(xTabSup->getTables(),uno::UNO_QUERY);
     const Sequence< ::rtl::OUString> aSeq = xSelectTables->getElementNames();
@@ -323,12 +341,12 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet)
             }
         }
     } // if ( aSeq.getLength() > 1 ) // special handling for join
-    const ::rtl::OUString sOldFilter = xAnalyzer->getFilter();
-    if ( sOldFilter.getLength() )
+    //const ::rtl::OUString sOldFilter = xAnalyzer->getFilter();
+    if ( i_sRowSetFilter.getLength() )
     {
         FilterCreator aFilterCreator;
+        aFilterCreator.append( i_sRowSetFilter );
         aFilterCreator.append( aFilter.makeStringAndClear() );
-        aFilterCreator.append( sOldFilter );
         aFilter = aFilterCreator.getComposedAndClear();
     }
     xAnalyzer->setFilter(aFilter.makeStringAndClear());
@@ -597,6 +615,7 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
         sal_Int32 nPos = aIter->second.nPosition;
         if((_rInsertRow->get())[nPos].isModified())
         {
+            impl_convertValue_throw(_rInsertRow,aIter->second);
             (_rInsertRow->get())[nPos].setSigned((_rOrginalRow->get())[nPos].isSigned());
             setParameter(i++,xParameter,(_rInsertRow->get())[nPos],aIter->second.nType,aIter->second.nScale);
         }
@@ -623,10 +642,10 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
      m_bUpdated = xPrep->executeUpdate() > 0;
     if(m_bUpdated)
     {
-        m_aKeyIter = m_aKeyMap.find(::comphelper::getINT32((_rInsertRow->get())[0].getAny()));
-        OSL_ENSURE(m_aKeyIter != m_aKeyMap.end(),"New inserted row not found!");
+        const sal_Int32 nBookmark = ::comphelper::getINT32((_rInsertRow->get())[0].getAny());
+        m_aKeyIter = m_aKeyMap.find(nBookmark);
         m_aKeyIter->second.second = 2;
-        copyRowValue(_rInsertRow,m_aKeyIter->second.first);
+        copyRowValue(_rInsertRow,m_aKeyIter->second.first,nBookmark);
     }
 }
 // -------------------------------------------------------------------------
@@ -679,6 +698,7 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
                 xParameter->setNull(i++,(_rInsertRow->get())[nPos].getTypeKind());
             else
             {
+                impl_convertValue_throw(_rInsertRow,aIter->second);
                 (_rInsertRow->get())[nPos].setSigned(m_aSignedFlags[nPos-1]);
                 setParameter(i++,xParameter,(_rInsertRow->get())[nPos],aIter->second.nType,aIter->second.nScale);
             }
@@ -786,26 +806,69 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
     }
     if ( m_bInserted )
     {
-        ORowSetRow aKeyRow = new connectivity::ORowVector< ORowSetValue >((*m_pKeyColumnNames).size());
-        copyRowValue(_rInsertRow,aKeyRow);
-
         OKeySetMatrix::iterator aKeyIter = m_aKeyMap.end();
         --aKeyIter;
+        ORowSetRow aKeyRow = new connectivity::ORowVector< ORowSetValue >((*m_pKeyColumnNames).size());
+        copyRowValue(_rInsertRow,aKeyRow,aKeyIter->first + 1);
+
         m_aKeyIter = m_aKeyMap.insert(OKeySetMatrix::value_type(aKeyIter->first + 1,OKeySetValue(aKeyRow,1))).first;
         // now we set the bookmark for this row
         (_rInsertRow->get())[0] = makeAny((sal_Int32)m_aKeyIter->first);
     }
 }
 // -----------------------------------------------------------------------------
-void OKeySet::copyRowValue(const ORowSetRow& _rInsertRow,ORowSetRow& _rKeyRow)
+void OKeySet::copyRowValue(const ORowSetRow& _rInsertRow,ORowSetRow& _rKeyRow,sal_Int32 i_nBookmark)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::copyRowValue" );
     connectivity::ORowVector< ORowSetValue >::Vector::iterator aIter = _rKeyRow->get().begin();
+
+    // check the if the parameter values have been changed
+    OSL_ENSURE((m_aParameterValueForCache.get().size()-1) == m_pParameterNames->size(),"OKeySet::copyRowValue: Parameter values and names differ!");
+    connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aParaValuesIter = m_aParameterValueForCache.get().begin() +1;
+
+    bool bChanged = false;
+    SelectColumnsMetaData::const_iterator aParaIter = (*m_pParameterNames).begin();
+    SelectColumnsMetaData::const_iterator aParaEnd = (*m_pParameterNames).end();
+    for(sal_Int32 i = 1;aParaIter != aParaEnd;++aParaIter,++aParaValuesIter,++i)
+    {
+        ORowSetValue aValue(*aParaValuesIter);
+        aValue.setSigned(m_aSignedFlags[aParaIter->second.nPosition]);
+        if ( (_rInsertRow->get())[aParaIter->second.nPosition] != aValue )
+        {
+            ORowSetValueVector aCopy(m_aParameterValueForCache);
+            (aCopy.get())[i] = (_rInsertRow->get())[aParaIter->second.nPosition];
+            m_aUpdatedParameter[i_nBookmark] = aCopy;
+            bChanged = true;
+        }
+    }
+    if ( !bChanged )
+    {
+        m_aUpdatedParameter.erase(i_nBookmark);
+    }
+
+    // update the key values
     SelectColumnsMetaData::const_iterator aPosIter = (*m_pKeyColumnNames).begin();
     SelectColumnsMetaData::const_iterator aPosEnd = (*m_pKeyColumnNames).end();
     for(;aPosIter != aPosEnd;++aPosIter,++aIter)
     {
-        *aIter = (_rInsertRow->get())[aPosIter->second.nPosition];
+        ORowSetValue aValue((_rInsertRow->get())[aPosIter->second.nPosition]);
+        switch(aPosIter->second.nType)
+        {
+            case DataType::DECIMAL:
+            case DataType::NUMERIC:
+                {
+                    ::rtl::OUString sValue = aValue.getString();
+                    sal_Int32 nIndex = sValue.indexOf('.');
+                    if ( nIndex != -1 )
+                    {
+                        aValue = sValue.copy(0,nIndex + (aPosIter->second.nScale > 0 ? aPosIter->second.nScale + 1 : 0));
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+        *aIter = aValue;
         aIter->setTypeKind(aPosIter->second.nType);
     }
 }
@@ -1150,9 +1213,23 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
     Reference< XParameters > xParameter(m_xStatement,UNO_QUERY);
     OSL_ENSURE(xParameter.is(),"No Parameter interface!");
     xParameter->clearParameters();
+
     sal_Int32 nPos=1;
-    connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aParaIter = m_aParameterValueForCache.get().begin();
-    connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aParaEnd = m_aParameterValueForCache.get().end();
+    connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aParaIter;
+    connectivity::ORowVector< ORowSetValue >::Vector::const_iterator aParaEnd;
+    OUpdatedParameter::iterator aUpdateFind = m_aUpdatedParameter.find(m_aKeyIter->first);
+    if ( aUpdateFind == m_aUpdatedParameter.end() )
+    {
+
+        aParaIter = m_aParameterValueForCache.get().begin();
+        aParaEnd = m_aParameterValueForCache.get().end();
+    }
+    else
+    {
+        aParaIter = aUpdateFind->second.get().begin();
+        aParaEnd = aUpdateFind->second.get().end();
+    }
+
     for(++aParaIter;aParaIter != aParaEnd;++aParaIter,++nPos)
     {
         ::dbtools::setObjectWithInfo( xParameter, nPos, aParaIter->makeAny(), aParaIter->getTypeKind() );
@@ -1463,3 +1540,25 @@ namespace dbaccess
         }
     }
 }
+// -----------------------------------------------------------------------------
+void OKeySet::impl_convertValue_throw(const ORowSetRow& _rInsertRow,const SelectColumnDescription& i_aMetaData)
+{
+    ORowSetValue& aValue((_rInsertRow->get())[i_aMetaData.nPosition]);
+    switch(i_aMetaData.nType)
+    {
+        case DataType::DECIMAL:
+        case DataType::NUMERIC:
+            {
+                ::rtl::OUString sValue = aValue.getString();
+                sal_Int32 nIndex = sValue.indexOf('.');
+                if ( nIndex != -1 )
+                {
+                    aValue = sValue.copy(0,nIndex + (i_aMetaData.nScale > 0 ? i_aMetaData.nScale + 1 : 0));
+                }
+            }
+            break;
+        default:
+            break;
+    }
+}
+// -----------------------------------------------------------------------------
