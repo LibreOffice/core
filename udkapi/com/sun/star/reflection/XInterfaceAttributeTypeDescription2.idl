@@ -38,7 +38,8 @@ module com {  module sun {  module star {  module reflection {
 interface XCompoundTypeDescription;
 
 /**
-   Reflects a singleton, supporting interface-based singletons.
+   Reflects an interface attribute, supporting extended attributes that are
+   bound or raise exceptions.
 
    <p>This type supersedes <type>XInterfaceAttributeTypeDescription</type>,
    which does not support extended attributes.</p>
