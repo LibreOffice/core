@@ -67,6 +67,7 @@ sdbcx::ObjectType OColumns::createObject(const ::rtl::OUString& _rName)
                 sdbcx::OColumn* pRet = new sdbcx::OColumn(_rName,
                                             xRow->getString(6),
                                             xRow->getString(13),
+                                            xRow->getString(12),
                                             xRow->getInt(11),
                                             xRow->getInt(7),
                                             xRow->getInt(9),

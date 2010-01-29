@@ -453,6 +453,7 @@ sal_uInt32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Re
     Reference<XPropertySet> xParaColumn = new connectivity::sdbcx::OColumn(sParameterName
                                                     ,::rtl::OUString()
                                                     ,::rtl::OUString()
+                                                    ,::rtl::OUString()
                                                     ,nNullable
                                                     ,nPrecision
                                                     ,nScale

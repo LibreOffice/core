@@ -177,5 +177,6 @@
 #define FM_PROP_INPUT_REQUIRED               rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InputRequired" ) )
 #define FM_PROP_WRITING_MODE                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "WritingMode" ) )
 #define FM_PROP_MOUSE_WHEEL_BEHAVIOR         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MouseWheelBehavior" ) )
+#define FM_PROP_DESCRIPTION                 rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Description" ) )
 
 #endif // _SVX_FMPROP_HRC

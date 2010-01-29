@@ -1425,7 +1425,10 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
             { OSQLParseNode::datetime_primary, "datetime_primary" },
             { OSQLParseNode::concatenation, "concatenation" },
             { OSQLParseNode::char_factor, "char_factor" },
-            { OSQLParseNode::bit_value_fct, "bit_value_fct" }
+            { OSQLParseNode::bit_value_fct, "bit_value_fct" },
+            { OSQLParseNode::comparison_predicate_part_2, "comparison_predicate_part_2" },
+            { OSQLParseNode::parenthesized_boolean_value_expression, "parenthesized_boolean_value_expression" },
+            { OSQLParseNode::character_string_type, "character_string_type" }
         };
         size_t nRuleMapCount = sizeof( aRuleDescriptions ) / sizeof( aRuleDescriptions[0] );
         OSL_ENSURE( nRuleMapCount == size_t( OSQLParseNode::rule_count ), "OSQLParser::OSQLParser: added a new rule? Adjust this map!" );
@@ -2557,7 +2560,6 @@ sal_Int32 OSQLParser::getFunctionReturnType(const ::rtl::OUString& _sFunctionNam
     else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_BIT_LENGTH,pContext)))           nType = DataType::INTEGER;
     else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_CHAR,pContext)))                 nType = DataType::VARCHAR;
     else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_CHAR_LENGTH,pContext)))          nType = DataType::INTEGER;
-    else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_CHARACTER_LENGTH,pContext)))     nType = DataType::INTEGER;
     else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_CONCAT,pContext)))               nType = DataType::VARCHAR;
     else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_DIFFERENCE,pContext)))           nType = DataType::VARCHAR;
     else if(sFunctionName.equalsIgnoreAsciiCase(TokenIDToStr(SQL_TOKEN_INSERT,pContext)))               nType = DataType::VARCHAR;

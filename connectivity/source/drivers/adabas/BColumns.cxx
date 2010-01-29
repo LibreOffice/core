@@ -99,6 +99,7 @@ sdbcx::ObjectType OColumns::createObject(const ::rtl::OUString& _rName)
                 xRet = new OColumn(_rName,
                                             sTypeName,
                                             xRow->getString(13),
+                                            xRow->getString(12),
                                             xRow->getInt(11),
                                             nPrec,
                                             xRow->getInt(9),

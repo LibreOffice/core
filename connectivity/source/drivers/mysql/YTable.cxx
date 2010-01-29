@@ -223,12 +223,16 @@ void SAL_CALL OMySQLTable::alterColumnByName( const ::rtl::OUString& colName, co
         xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT))      >>= bOldAutoIncrement;
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT)) >>= bAutoIncrement;
         bool bColumnNameChanged = false;
+        ::rtl::OUString sOldDesc,sNewDesc;
+        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_DESCRIPTION))      >>= sOldDesc;
+        descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_DESCRIPTION)) >>= sNewDesc;
 
         if (    nOldType != nNewType
             ||  nOldPrec != nNewPrec
             ||  nOldScale != nNewScale
             ||  nNewNullable != nOldNullable
-            ||  bOldAutoIncrement != bAutoIncrement )
+            ||  bOldAutoIncrement != bAutoIncrement
+            || sOldDesc != sNewDesc )
         {
             // special handling because they change dthe type names to distinguish
             // if a column should be an auto_incmrement one
@@ -284,7 +288,7 @@ void SAL_CALL OMySQLTable::alterColumnByName( const ::rtl::OUString& colName, co
             const ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
             sSql += ::dbtools::quoteName(sQuote,colName);
             sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
-            sSql += OTables::adjustSQL(::dbtools::createStandardColumnPart(descriptor,getConnection(),getTypeCreatePattern()));
+            sSql += OTables::adjustSQL(::dbtools::createStandardColumnPart(descriptor,getConnection(),static_cast<OTables*>(m_pTables),getTypeCreatePattern()));
             executeStatement(sSql);
         }
         m_pColumns->refresh();
@@ -313,7 +317,7 @@ void OMySQLTable::alterColumnType(sal_Int32 nNewType,const ::rtl::OUString& _rCo
     ::comphelper::copyProperties(_xDescriptor,xProp);
     xProp->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE),makeAny(nNewType));
 
-    sSql += OTables::adjustSQL(::dbtools::createStandardColumnPart(xProp,getConnection(),getTypeCreatePattern()));
+    sSql += OTables::adjustSQL(::dbtools::createStandardColumnPart(xProp,getConnection(),static_cast<OTables*>(m_pTables),getTypeCreatePattern()));
     executeStatement(sSql);
 }
 // -----------------------------------------------------------------------------

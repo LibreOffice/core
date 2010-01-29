@@ -129,9 +129,27 @@ using namespace ::com::sun::star::beans;
                 case DataType::TIMESTAMP:
                 {
                     DateTime aDateTime;
+                    bool bOk = false;
+                    if (_rVal.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_DOUBLE)
+                    {
+                        double nValue = 0.0;
+                       _rVal >>= nValue;
+                       aDateTime = DBTypeConversion::toDateTime(nValue);
+                       bOk = true;
+                    }
+                    else if (_rVal.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_STRING)
+                    {
+                        ::rtl::OUString sValue;
+                       _rVal >>= sValue;
+                       aDateTime = DBTypeConversion::toDateTime(sValue);
+                       bOk = true;
+                    }
+                    else
+                        bOk = _rVal >>= aDateTime;
 
+                    OSL_VERIFY_RES( bOk, "DBTypeConversion::toSQLString: _rVal is not datetime!");
                     // check if this is really a timestamp or only a date
-                    if ( _rVal >>= aDateTime )
+                    if ( bOk )
                     {
                         if (bQuote)
                             aRet.appendAscii("{TS '");
@@ -145,7 +163,24 @@ using namespace ::com::sun::star::beans;
                 case DataType::DATE:
                 {
                     Date aDate;
-                    OSL_VERIFY_RES( _rVal >>= aDate, "DBTypeConversion::toSQLString: _rVal is not date!");
+                    bool bOk = false;
+                    if (_rVal.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_DOUBLE)
+                    {
+                        double nValue = 0.0;
+                       _rVal >>= nValue;
+                       aDate = DBTypeConversion::toDate(nValue);
+                       bOk = true;
+                    }
+                    else if (_rVal.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_STRING)
+                    {
+                        ::rtl::OUString sValue;
+                       _rVal >>= sValue;
+                       aDate = DBTypeConversion::toDate(sValue);
+                       bOk = true;
+                    }
+                    else
+                        bOk = _rVal >>= aDate;
+                    OSL_VERIFY_RES( bOk, "DBTypeConversion::toSQLString: _rVal is not date!");
                     if (bQuote)
                         aRet.appendAscii("{D '");
                     aRet.append(DBTypeConversion::toDateString(aDate));
@@ -155,7 +190,24 @@ using namespace ::com::sun::star::beans;
                 case DataType::TIME:
                 {
                     Time aTime;
-                    OSL_VERIFY_RES( _rVal >>= aTime,"DBTypeConversion::toSQLString: _rVal is not time!");
+                    bool bOk = false;
+                    if (_rVal.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_DOUBLE)
+                    {
+                        double nValue = 0.0;
+                       _rVal >>= nValue;
+                       aTime = DBTypeConversion::toTime(nValue);
+                       bOk = true;
+                    }
+                    else if (_rVal.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_STRING)
+                    {
+                        ::rtl::OUString sValue;
+                       _rVal >>= sValue;
+                       aTime = DBTypeConversion::toTime(sValue);
+                       bOk = true;
+                    }
+                    else
+                        bOk = _rVal >>= aTime;
+                    OSL_VERIFY_RES( bOk,"DBTypeConversion::toSQLString: _rVal is not time!");
                     if (bQuote)
                         aRet.appendAscii("{T '");
                     aRet.append(DBTypeConversion::toTimeString(aTime));
