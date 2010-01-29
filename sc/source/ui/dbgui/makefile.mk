@@ -117,8 +117,7 @@ LIB1OBJFILES =  \
     $(SLO)$/csvruler.obj	\
     $(SLO)$/csvgrid.obj		\
     $(SLO)$/csvtablebox.obj	\
-    $(SLO)$/asciiopt.obj \
-    $(SLO)$/textimportoptions.obj
+    $(SLO)$/asciiopt.obj
 
 # --- Tagets -------------------------------------------------------
 

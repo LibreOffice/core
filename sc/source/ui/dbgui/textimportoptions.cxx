@@ -56,6 +56,7 @@ ScTextImportOptionsDlg::ScTextImportOptionsDlg(Window* pParent) :
     maFlOption(this, ScResId(FL_OPTION)),
     maBtnConvertDate(this, ScResId(BTN_CONVERT_DATE))
 {
+    FreeResource();
     init();
 }
 
