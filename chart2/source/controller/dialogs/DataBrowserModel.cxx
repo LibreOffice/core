@@ -740,7 +740,7 @@ OUString DataBrowserModel::getRoleOfColumn( sal_Int32 nColumnIndex ) const
 bool DataBrowserModel::isCategoriesColumn( sal_Int32 nColumnIndex ) const
 {
     bool bIsCategories = false;
-    if( nColumnIndex>=0 && nColumnIndex<m_aColumns.size() )
+    if( nColumnIndex>=0 && nColumnIndex<static_cast< sal_Int32 >(m_aColumns.size()) )
         bIsCategories = !m_aColumns[ nColumnIndex ].m_xDataSeries.is();
     return bIsCategories;
 }

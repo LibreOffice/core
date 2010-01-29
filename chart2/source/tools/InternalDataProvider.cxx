@@ -200,7 +200,7 @@ public:
     uno::Any operator() ( const vector< OUString >& rVector )
     {
         OUString aString;
-        if( m_nLevel < rVector.size() )
+        if( m_nLevel <  static_cast< sal_Int32 >(rVector.size()) )
             aString = rVector[m_nLevel];
         return uno::makeAny( aString );
     }
@@ -219,7 +219,7 @@ public:
     OUString operator() ( const vector< OUString >& rVector )
     {
         OUString aString;
-        if( m_nLevel < rVector.size() )
+        if( m_nLevel < static_cast< sal_Int32 >(rVector.size()) )
             aString = rVector[m_nLevel];
         return aString;
     }
@@ -239,7 +239,7 @@ public:
     vector< OUString > operator() ( const vector< OUString >& rVector, const OUString& rNewText )
     {
         vector< OUString > aRet( rVector );
-        if( m_nLevel >= aRet.size() )
+        if( m_nLevel >= static_cast< sal_Int32 >(aRet.size()) )
             aRet.resize( m_nLevel+1 );
         aRet[ m_nLevel ]=rNewText;
         return aRet;
@@ -258,7 +258,7 @@ public:
 
     void operator() ( vector< OUString >& rVector )
     {
-        if( m_nLevel > rVector.size() )
+        if( m_nLevel > static_cast< sal_Int32 >(rVector.size()) )
             rVector.resize( m_nLevel );
 
         vector< OUString >::iterator aIt( rVector.begin() );
@@ -359,7 +359,7 @@ InternalDataProvider::InternalDataProvider( const Reference< chart2::XChartDocum
                         if( xSeq.is() )
                             aStringSeq = xSeq->getTextualData(); // @todo: be able to deal with XDataSequence, too
                         sal_Int32 nLength = aStringSeq.getLength();
-                        if( aNewCategories.size() < nLength )
+                        if( static_cast< sal_Int32 >(aNewCategories.size()) < nLength )
                             aNewCategories.resize( nLength );
 
                         transform( aNewCategories.begin(), aNewCategories.end(), aStringSeq.getConstArray(),

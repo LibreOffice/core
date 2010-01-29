@@ -524,7 +524,7 @@ void VCartesianAxis::createAllTickInfos( ::std::vector< ::std::vector< TickInfo 
 {
     if( m_aAxisProperties.m_bComplexCategories && m_bUseTextLabels )
     {
-        if( nTextLevel>=0 && nTextLevel < m_aAllTickInfos.size() )
+        if( nTextLevel>=0 && nTextLevel < static_cast< sal_Int32 >(m_aAllTickInfos.size()) )
             return ::std::auto_ptr< TickIter >( new PureTickIter( m_aAllTickInfos[nTextLevel] ) );
     }
     else
@@ -1233,10 +1233,16 @@ void VCartesianAxis::hideIdenticalScreenValues( ::std::vector< ::std::vector< Ti
     {
         sal_Int32 nCount = rTickInfos.size();
         for( sal_Int32 nN=0; nN<nCount; nN++ )
-            lcl_hideIdenticalScreenValues( PureTickIter( rTickInfos[nN] ) );
+        {
+            PureTickIter aTickIter( rTickInfos[nN] );
+            lcl_hideIdenticalScreenValues( aTickIter );
+        }
     }
     else
-        lcl_hideIdenticalScreenValues( EquidistantTickIter( rTickInfos, m_aIncrement, 0, -1 ) );
+    {
+        EquidistantTickIter aTickIter( rTickInfos, m_aIncrement, 0, -1 );
+        lcl_hideIdenticalScreenValues( aTickIter );
+    }
 }
 
 sal_Int32 VCartesianAxis::estimateMaximumAutoMainIncrementCount()

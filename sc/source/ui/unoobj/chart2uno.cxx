@@ -1088,7 +1088,7 @@ ScChart2LabeledDataSequence* lcl_createScChart2DataSequenceFromTokens( auto_ptr<
  * @return true if the corner was added, false otherwise.
  */
 bool lcl_addUpperLeftCornerIfMissing(vector<ScSharedTokenRef>& rRefTokens,
-            sal_uInt32 nCornerRowCount=1, sal_uInt32 nCornerColumnCount=1)
+            SCROW nCornerRowCount=1, SCCOL nCornerColumnCount=1)
 {
     using ::std::max;
     using ::std::min;

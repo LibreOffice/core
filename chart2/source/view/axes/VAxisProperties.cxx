@@ -148,7 +148,7 @@ TickmarkProperties AxisProperties::makeTickmarkProperties(
 }
 
 TickmarkProperties AxisProperties::makeTickmarkPropertiesForComplexCategories(
-    sal_Int32 nTickLength, sal_Int32 nTickStartDistanceToAxis, sal_Int32 nTextLevel ) const
+    sal_Int32 nTickLength, sal_Int32 nTickStartDistanceToAxis, sal_Int32 /*nTextLevel*/ ) const
 {
     sal_Int32 nTickmarkStyle = (m_fLabelDirectionSign==m_fInnerDirectionSign) ? 2/*outside*/ : 1/*inside*/;
 
