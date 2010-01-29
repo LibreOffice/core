@@ -23351,6 +23351,7 @@ else
     { echo "$as_me:$LINENO: result: internal" >&5
 echo "${ECHO_T}internal" >&6; }
     SYSTEM_HYPH=NO
+    BUILD_TYPE="$BUILD_TYPE HYPHEN"
 fi
 
 
