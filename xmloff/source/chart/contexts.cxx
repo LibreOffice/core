@@ -36,6 +36,7 @@
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/xmlstyle.hxx>
 #include "SchXMLImport.hxx"
+#include "SchXMLCalculationSettingsContext.hxx"
 
 //  #ifndef _XMLOFF_XMLCHARTSTYLECONTEXT_HXX_
 //  #include "XMLChartStyleContext.hxx"
@@ -224,6 +225,12 @@ SvXMLImportContext* SchXMLBodyContext::CreateChildContext(
                                                       nPrefix, rLocalName,
                                                       GetImport().GetModel(),
                                                       xAttrList );
+    }
+    else if(nPrefix == XML_NAMESPACE_TABLE &&
+            IsXMLToken( rLocalName, XML_CALCULATION_SETTINGS ))
+    {
+        // i99104 handle null date correctly
+        pContext = new SchXMLCalculationSettingsContext ( GetImport(), nPrefix, rLocalName, xAttrList);
     }
     else
     {

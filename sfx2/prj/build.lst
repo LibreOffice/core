@@ -1,4 +1,4 @@
-sf      sfx2    :       idl basic xmlscript framework shell setup_native sax SYSTRAY_GTK:libegg NULL
+sf      sfx2    :    l10n idl basic xmlscript framework shell setup_native sax SYSTRAY_GTK:libegg LIBXML2:libxml2 NULL
 sf	sfx2									usr1	-	all	sf_mkout NULL
 sf	sfx2\inc								nmake	-	all	sf_inc NULL
 sf	sfx2\prj								get		-	all	sf_prj NULL
@@ -13,10 +13,11 @@ sf	sfx2\source\config						nmake	-	all	sf_cnfg sf_sdi sf_inc NULL
 sf	sfx2\source\control						nmake	-	all	sf_ctrl sf_sdi sf_inc NULL
 sf	sfx2\source\dialog						nmake	-	all	sf_dlg sf_sdi sf_inc NULL
 sf	sfx2\source\doc							nmake	-	all	sf_doc sf_sdi sf_inc NULL
+sf	sfx2\source\layout						nmake	-	all	sf_layout sf_sdi sf_inc NULL
 sf	sfx2\source\menu						nmake	-	all	sf_menu sf_sdi sf_inc NULL
 sf	sfx2\source\notify						nmake	-	all	sf_noti sf_sdi sf_inc NULL
 sf	sfx2\source\statbar						nmake	-	all	sf_sbar sf_sdi sf_inc NULL
 sf	sfx2\source\toolbox						nmake	-	all	sf_tbox sf_sdi sf_inc NULL
 sf	sfx2\source\inet						nmake	-	all	sf_inet sf_sdi sf_inc NULL
 sf	sfx2\source\explorer					nmake	-	all	sf_expl sf_sdi sf_inc NULL
-sf      sfx2\util                                                               nmake   -       all     sf_util sf_appl sf_bast sf_cnfg sf_ctrl sf_dlg sf_doc sf_expl sf_inet sf_menu sf_noti sf_sbar sf_tbox sf_view NULL
+sf      sfx2\util                                                               nmake   -       all     sf_util sf_appl sf_bast sf_cnfg sf_ctrl sf_dlg sf_doc sf_expl sf_inet sf_menu sf_layout sf_noti sf_sbar sf_tbox sf_view NULL

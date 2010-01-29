@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -61,6 +61,10 @@ LIB1FILES=  $(SLB)$/appl.lib		\
             $(SLB)$/bastyp.lib		\
             $(SLB)$/config.lib
 
+.IF "$(ENABLE_LAYOUT)" == "TRUE"
+LIB1FILES += $(SLB)$/layout.lib
+.ENDIF # ENABLE_LAYOUT == TRUE
+
 HELPIDFILES=\
             ..\inc\sfx2\sfxsids.hrc	\
             ..\source\inc\helpid.hrc
@@ -68,6 +72,7 @@ HELPIDFILES=\
 .IF "$(GUI)"!="UNX"
 LIB2TARGET= $(LB)$/$(TARGET).lib
 LIB2FILES=  $(LB)$/isfx.lib
+LIB2DEPN=$(SHL1TARGETN)
 .ENDIF
 
 SHL1TARGET= sfx$(DLLPOSTFIX)
@@ -77,7 +82,6 @@ SHL1USE_EXPORTS=name
 SHL1STDLIBS+=\
         $(FWELIB) \
         $(BASICLIB) \
-        $(XMLSCRIPTLIB) \
         $(SVTOOLLIB) \
         $(TKLIB) \
         $(VCLLIB) \
@@ -94,7 +98,9 @@ SHL1STDLIBS+=\
         $(CPPULIB) \
         $(VOSLIB) \
         $(SALLIB) \
-        $(SJLIB)
+        $(SJLIB) \
+        $(LIBXML2LIB) \
+
 
 .IF "$(GUI)"=="WNT"
 
@@ -129,7 +135,6 @@ SFXSRSLIST=\
         $(SRS)$/sfx.srs \
         $(SRS)$/doc.srs \
         $(SRS)$/view.srs \
-        $(SRS)$/config.srs \
         $(SRS)$/menu.srs \
         $(SRS)$/dialog.srs \
                 $(SRS)$/bastyp.srs

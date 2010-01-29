@@ -583,3 +583,7 @@ String RID_STR_ALREADYEXISTOVERWRITE
 {
     Text [ en-US ] = "The file already exists. Overwrite?" ;
 };
+String RID_STR_OBJECT_LABEL
+{
+    Text [ en-US ] = "#object# label";
+};

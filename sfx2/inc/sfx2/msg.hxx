@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: msg.hxx,v $
- * $Revision: 1.4 $
+ * $Revision: 1.4.82.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -155,11 +155,17 @@ SFX_DECL_TYPE(5);
 SFX_DECL_TYPE(6);
 SFX_DECL_TYPE(7);
 SFX_DECL_TYPE(8);
+SFX_DECL_TYPE(10); // for SfxDocInfoItem
 SFX_DECL_TYPE(11);
 
+SFX_DECL_TYPE(13); // for SwAddPrinterItem, Sd...
 SFX_DECL_TYPE(14);
-SFX_DECL_TYPE(17); // fuer SvxAddressItem, SvxSearchItem
-SFX_DECL_TYPE(18); // fuer SfxDocInfoItem
+SFX_DECL_TYPE(16); // for SwDocDisplayItem
+SFX_DECL_TYPE(17); // for SvxAddressItem
+SFX_DECL_TYPE(18); // for SvxSearchItem
+
+// all SfxTypes must be in this header
+#undef SFX_DECL_TYPE
 
 #define SFX_SLOT_ARG( aShellClass, id, GroupId, ExecMethodPtr, StateMethodPtr, Flags, ItemClass, nArg0, nArgs, Name, Prop ) \
                { id, GroupId, id, Flags | Prop, \

@@ -52,6 +52,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <comphelper/processfactory.hxx>
+#include <svtools/itempool.hxx>
 
 #include <sfx2/app.hxx>
 #include <toolkit/unohlp.hxx>
@@ -69,14 +70,13 @@
 #include <sfx2/srchitem.hxx>
 #include <svx/pageitem.hxx>
 #include "srchctrl.hxx"
-//CHINA001 #include "srchxtra.hxx"
 #include <svx/dialmgr.hxx>
 #include "dlgutil.hxx"
-#include <optjsearch.hxx>
 #include <svx/brshitem.hxx>
-#include "backgrnd.hxx"
 
 #include <svx/svxdlg.hxx> //CHINA001
+
+#include <sfx2/layout-pre.hxx>
 
 using namespace com::sun::star::i18n;
 using namespace com::sun::star;
@@ -110,6 +110,11 @@ SV_IMPL_VARARR(SrchAttrItemList, SearchAttrItem);
 #define GetCheckBoxValue( rBox )                                \
     rBox.IsEnabled() ? rBox.IsChecked() : FALSE
 
+#if ENABLE_LAYOUT
+#undef SVX_RES
+#define SVX_RES(x) #x
+#endif /* ENABLE_LAYOUT */
+
 struct SearchDlg_Impl
 {
     FixedText   aSearchFormats;
@@ -127,7 +132,11 @@ struct SearchDlg_Impl
     util::URL   aCommand1URL;
     util::URL   aCommand2URL;
 
-    SearchDlg_Impl( Window* pParent ) :
+#if ENABLE_LAYOUT
+    SearchDlg_Impl( layout::Context* pParent ) :
+#else /* !ENABLE_LAYOUT */
+        SearchDlg_Impl( Window* pParent ) :
+#endif /* !ENABLE_LAYOUT */
         aSearchFormats  ( pParent, SVX_RES( FT_SEARCH_FORMATS ) ),
         aReplaceFormats ( pParent, SVX_RES( FT_REPLACE_FORMATS ) ),
         bMultiLineEdit  ( FALSE ),
@@ -317,9 +326,18 @@ void SvxJSearchOptionsDialog::SetTransliterationFlags( INT32 nSettings )
     pPage->SetTransliterationFlags( nSettings );
 }
 */ //CHINA001
-#ifdef INI_LIST
+
+#if ENABLE_LAYOUT
+#undef SfxModelessDialog
+#define SfxModelessDialog(bindings, child, parent, id) SfxDialog (parent, "find-and-replace.xml", id, bindings, child)
+#define SVX_RES_PLAIN(x) ResId (x, DIALOG_MGR ())
+#define THIS_SVX_RES(x) this, #x
+#else /* !ENABLE_LAYOUT */
+#define SVX_RES_PLAIN SVX_RES
+#define THIS_SVX_RES SVX_RES
+#endif /* !ENABLE_LAYOUT */
+
 #undef INI_LIST
-#endif
 #define INI_LIST() \
     aSearchText     ( this, SVX_RES( FT_SEARCH ) ),                         \
     aSearchLB       ( this, SVX_RES( ED_SEARCH ) ),                         \
@@ -373,7 +391,7 @@ void SvxJSearchOptionsDialog::SetTransliterationFlags( INT32 nSettings )
     bReadOnly       ( FALSE ),                                              \
     bConstruct      ( TRUE ),                                               \
     nModifyFlag     ( 0 ),                                                  \
-    aCalcStr        ( SVX_RES( STR_WORDCALC ) ),                              \
+    aCalcStr        ( THIS_SVX_RES( STR_WORDCALC ) ),                       \
     pImpl           ( NULL ),                                               \
     pSearchList     ( NULL ),                                               \
     pReplaceList    ( NULL ),                                               \
@@ -410,6 +428,10 @@ SvxSearchDialog::SvxSearchDialog( Window* pParent, SfxChildWindow* pChildWin, Sf
 }
 
 #undef INI_LIST
+#if ENABLE_LAYOUT
+#undef SVX_RES
+#define SVX_RES(x) ResId (x, DIALOG_MGR ())
+#endif
 
 // -----------------------------------------------------------------------
 
@@ -432,7 +454,11 @@ SvxSearchDialog::~SvxSearchDialog()
     delete pMoreBtn;
 }
 
-// -----------------------------------------------------------------------
+#if ENABLE_LAYOUT
+#undef Window
+#define Window layout::Window
+#endif /* ENABLE_LAYOUT */
+
 void lcl_MoveDown( Window& rWindow, sal_Int32 nOffset )
 {
     Point aPos(rWindow.GetPosPixel());
@@ -442,16 +468,22 @@ void lcl_MoveDown( Window& rWindow, sal_Int32 nOffset )
 
 void SvxSearchDialog::Construct_Impl()
 {
+#if ENABLE_LAYOUT
+    SetHelpId (SID_SEARCH_DLG);
+#endif /* ENABLE_LAYOUT */
+
     // temporary to avoid incompatibility
     pImpl = new SearchDlg_Impl( this );
+#if !ENABLE_LAYOUT
     pImpl->aSelectionTimer.SetTimeout( 500 );
     pImpl->aSelectionTimer.SetTimeoutHdl(
         LINK( this, SvxSearchDialog, TimeoutHdl_Impl ) );
-
+#endif /* !ENABLE_LAYOUT */
     EnableControls_Impl( 0 );
 
     // alten Text des aWordBtn's merken
-    ( aCalcStr += sal_Unicode('#') ) += aWordBtn.GetText();
+    aCalcStr += sal_Unicode('#');
+    aCalcStr += aWordBtn.GetText();
 
     aLayoutStr = SVX_RESSTR( RID_SVXSTR_SEARCH_STYLES );
     aStylesStr = aLayoutBtn.GetText();
@@ -719,6 +751,7 @@ void SvxSearchDialog::InitControls_Impl()
     aLink = LINK( this, SvxSearchDialog, LoseFocusHdl_Impl );
     aSearchLB.SetLoseFocusHdl( aLink );
     aReplaceLB.SetLoseFocusHdl( aLink );
+
     aSearchTmplLB.SetLoseFocusHdl( aLink );
     aReplaceTmplLB.SetLoseFocusHdl( aLink );
 
@@ -915,6 +948,11 @@ void SvxSearchDialog::CalculateDelta_Impl()
     pMoreBtn->Show();
     pMoreBtn->Enable();
 }
+
+#if ENABLE_LAYOUT
+#undef Window
+#define Window ::Window
+#endif /* ENABLE_LAYOUT */
 
 // -----------------------------------------------------------------------
 
@@ -1530,7 +1568,7 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            AbstractSvxSearchSimilarityDialog* pDlg = pFact->CreateSvxSearchSimilarityDialog( this,
+            AbstractSvxSearchSimilarityDialog* pDlg = pFact->CreateSvxSearchSimilarityDialog( LAYOUT_THIS_WINDOW (this),
                                                                         pSearchItem->IsLEVRelaxed(),
                                                                         pSearchItem->GetLEVOther(),
                                                                         pSearchItem->GetLEVShorter(),
@@ -1556,7 +1594,7 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            AbstractSvxJSearchOptionsDialog* aDlg = pFact->CreateSvxJSearchOptionsDialog( this, aSet, RID_SVXPAGE_JSEARCH_OPTIONS, pSearchItem->GetTransliterationFlags(), RID_SVXPAGE_JSEARCH_OPTIONS );
+            AbstractSvxJSearchOptionsDialog* aDlg = pFact->CreateSvxJSearchOptionsDialog( LAYOUT_THIS_WINDOW (this), aSet, RID_SVXPAGE_JSEARCH_OPTIONS, pSearchItem->GetTransliterationFlags(), RID_SVXPAGE_JSEARCH_OPTIONS );
             DBG_ASSERT(aDlg, "Dialogdiet fail!");//CHINA001
             int nRet = aDlg->Execute(); //CHINA001 int nRet = aDlg.Execute();
             if (RET_OK == nRet) //! true only if FillItemSet of SvxJSearchOptionsPage returns true
@@ -1575,7 +1613,7 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
         pArgs[0].Name = ::rtl::OUString::createFromAscii("SearchString");
         pArgs[0].Value <<= ::rtl::OUString(aSearchLB.GetText());
         pArgs[1].Name = ::rtl::OUString::createFromAscii("ParentWindow");
-        pArgs[1].Value <<= VCLUnoHelper::GetInterface( this );
+        pArgs[1].Value <<= VCLUnoHelper::GetInterface( LAYOUT_THIS_WINDOW (this) );
         if(pBtn == &aSearchComponent1PB)
         {
             if ( pImpl->xCommand1Dispatch.is() )
@@ -2091,6 +2129,7 @@ IMPL_LINK( SvxSearchDialog, FocusHdl_Impl, Control *, pCtrl )
     aSearchLB.SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
 
     ModifyHdl_Impl( (ComboBox*)pCtrl );
+
     aLayoutBtn.SetText( bFormat && nTxtLen ? aLayoutStr : aStylesStr );
     return 0;
 }
@@ -2164,7 +2203,7 @@ IMPL_LINK( SvxSearchDialog, FormatHdl_Impl, Button *, EMPTYARG )
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        SfxAbstractTabDialog* pDlg = pFact->CreateTabItemDialog( this, aSet, RID_SVXDLG_SEARCHFORMAT );
+        SfxAbstractTabDialog* pDlg = pFact->CreateTabItemDialog( LAYOUT_THIS_WINDOW (this), aSet, RID_SVXDLG_SEARCHFORMAT );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
         aTxt.Insert( pDlg->GetText(), 0 );
         pDlg->SetText( aTxt );
@@ -2241,7 +2280,7 @@ IMPL_LINK( SvxSearchDialog, AttributeHdl_Impl, Button *, EMPTYARG )
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        VclAbstractDialog* pDlg = pFact->CreateSvxSearchAttributeDialog( this, *pSearchList, pImpl->pRanges, RID_SVXDLG_SEARCHATTR );
+        VclAbstractDialog* pDlg = pFact->CreateSvxSearchAttributeDialog( LAYOUT_THIS_WINDOW (this), *pSearchList, pImpl->pRanges, RID_SVXDLG_SEARCHATTR );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
         pDlg->Execute();
         delete pDlg;
@@ -2490,25 +2529,38 @@ void SvxSearchDialog::SaveToModule_Impl()
 
 // class SvxSearchDialogWrapper ------------------------------------------
 
-SFX_IMPL_CHILDWINDOW(SvxSearchDialogWrapper, SID_SEARCH_DLG)
+SFX_IMPL_CHILDWINDOW(SvxSearchDialogWrapper, SID_SEARCH_DLG);
 
 // -----------------------------------------------------------------------
 
 SvxSearchDialogWrapper::SvxSearchDialogWrapper( Window* _pParent, USHORT nId,
                                                 SfxBindings* pBindings,
-                                                SfxChildWinInfo* pInfo ) :
-    SfxChildWindow( _pParent, nId )
-
+                                                SfxChildWinInfo* pInfo )
+    : SfxChildWindow( _pParent, nId )
+    , dialog (new SvxSearchDialog (_pParent, this, *pBindings))
 {
-    pWindow = new SvxSearchDialog( _pParent, this, *pBindings );
-    ( (SvxSearchDialog*)pWindow )->Initialize( pInfo );
+    pWindow = LAYOUT_THIS_WINDOW (dialog);
+    dialog->Initialize( pInfo );
 
     pBindings->Update( SID_SEARCH_ITEM );
     pBindings->Update( SID_SEARCH_OPTIONS );
     pBindings->Update( SID_SEARCH_SEARCHSET );
     pBindings->Update( SID_SEARCH_REPLACESET );
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
-    ( (SvxSearchDialog*)pWindow )->bConstruct = FALSE;
+    dialog->bConstruct = FALSE;
+}
+
+SvxSearchDialogWrapper::~SvxSearchDialogWrapper ()
+{
+#if ENABLE_LAYOUT
+    delete dialog;
+    pWindow = 0;
+#endif /* ENABLE_LAYOUT */
+}
+
+SvxSearchDialog *SvxSearchDialogWrapper::getDialog ()
+{
+    return dialog;
 }
 
 // -----------------------------------------------------------------------

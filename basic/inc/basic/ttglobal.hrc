@@ -32,20 +32,20 @@
 #define _TTGLOBAL_HXX
 
 ///////////////////////////////
-// Fehlermeldungen, die in das Resultfile gelangen.
+// Error message that go to the Resultfile.
 // *********************
-// ***  !!ACHTUNG!!  ***
+// ***  !!ATTENTION!!    ***
 // *********************
-// Die Nummern dürfen sich NIE! ändern,
-// da sie in den Resultfiles gespeichert sind, und bei erneutem Anzeigen
-// statdessen die entsprechenden neuen oder garkeine Strings angzeigt werden.
+// Theses numbers MUST NOT change ever!
+// Because they are stored in the Resultfiles and if you showed them again
+// the appropriate new or no Strings are viewed.
 ///////////////////////////////
 
-// Start der Ressourcen für das Testtool (Eigene Datei)
-// > 256 und > 9100 (Grösste res im TT selbst)
-#define TT_START 20000              // Messages aus /basic/source/testtool
-#define BAS_START 21000             // Messages aus /basic/source/app
-#define SVT_START 22000             // Messages aus /svtools/source/plugapp
+// Start of Ressources for the  Testtool (own file)
+// > 256 and > 9100 (Biggest res in TT itself)
+#define TT_START 20000              // Messages from /basic/source/testtool
+#define BAS_START 21000             // Messages from /basic/source/app
+#define SVT_START 22000             // Messages from /svtools/source/plugapp
 
 
 #endif

@@ -63,18 +63,6 @@ enum SvXMLTokenMapAttrs
     XML_TOK_TABSTOP_END=XML_TOK_UNKNOWN
 };
 
-static __FAR_DATA SvXMLTokenMapEntry aHatchAttrTokenMap[] =
-{
-    { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_IMAGE_NAME },
-    { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_IMAGE_DISPLAY_NAME },
-    { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_IMAGE_URL },
-    { XML_NAMESPACE_XLINK, XML_TYPE, XML_TOK_IMAGE_TYPE },
-    { XML_NAMESPACE_XLINK, XML_SHOW, XML_TOK_IMAGE_SHOW },
-    { XML_NAMESPACE_XLINK, XML_ACTUATE, XML_TOK_IMAGE_ACTUATE },
-    /*{ XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_IMAGE_URL },
-    { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_IMAGE_URL },*/
-    XML_TOKEN_MAP_END
-};
 
 XMLImageStyle::XMLImageStyle()
 {
@@ -165,6 +153,20 @@ sal_Bool XMLImageStyle::ImpImportXML( const uno::Reference< xml::sax::XAttribute
     OUString aStrURL;
     OUString aDisplayName;
 
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aHatchAttrTokenMap[] =
+{
+    { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_IMAGE_NAME },
+    { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_IMAGE_DISPLAY_NAME },
+    { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_IMAGE_URL },
+    { XML_NAMESPACE_XLINK, XML_TYPE, XML_TOK_IMAGE_TYPE },
+    { XML_NAMESPACE_XLINK, XML_SHOW, XML_TOK_IMAGE_SHOW },
+    { XML_NAMESPACE_XLINK, XML_ACTUATE, XML_TOK_IMAGE_ACTUATE },
+    /*{ XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_IMAGE_URL },
+    { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_IMAGE_URL },*/
+    XML_TOKEN_MAP_END
+};
+
     SvXMLTokenMap aTokenMap( aHatchAttrTokenMap );
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -219,6 +221,8 @@ sal_Bool XMLImageStyle::ImpImportXML( const uno::Reference< xml::sax::XAttribute
     }
 
     bRet = bHasName && bHasHRef;
+
+    }
 
     return bRet;
 }

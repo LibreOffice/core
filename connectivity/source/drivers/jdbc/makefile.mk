@@ -42,7 +42,7 @@ VISIBILITY_HIDDEN=TRUE
 ENVCFLAGS+=/FR$(SLO)$/
 .ENDIF
 
-.INCLUDE :	settings.mk
+.INCLUDE : $(PRJ)$/makefile.pmk
 .INCLUDE :  $(PRJ)$/version.mk
 
 
@@ -60,7 +60,6 @@ SLOFILES=\
         $(SLO)$/ConnectionLog.obj                   \
         $(SLO)$/DatabaseMetaData.obj				\
         $(SLO)$/Date.obj							\
-        $(SLO)$/DriverManager.obj					\
         $(SLO)$/DriverPropertyInfo.obj				\
         $(SLO)$/Exception.obj						\
         $(SLO)$/InputStream.obj						\
@@ -111,6 +110,6 @@ DEF1EXPORTFILE=	exports.dxp
 
 # --- Targets ----------------------------------
 
-.INCLUDE : target.mk
+.INCLUDE : $(PRJ)$/target.pmk
 
 

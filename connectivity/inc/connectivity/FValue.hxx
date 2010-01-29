@@ -289,6 +289,10 @@ namespace connectivity
         }
 
         bool operator==(const ORowSetValue& _rRH) const;
+        bool operator!=(const ORowSetValue& _rRH) const
+        {
+            return !( *this == _rRH );
+        }
 
         sal_Bool    isNull() const
         {
@@ -342,6 +346,18 @@ namespace connectivity
         */
         void fill(sal_Int32 _nPos,
                   sal_Int32 _nType,
+                  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>& _xRow);
+
+        /**
+            fetches a single value out of the row
+            @param _nPos    the current column position
+            @param _nType   the type of the current column
+            @param _bNullable   if true then it will be checked if the result could be NULL, otherwise not.
+            @param _xRow    the row where to fetch the data from
+        */
+        void fill(sal_Int32 _nPos,
+                  sal_Int32 _nType,
+                  sal_Bool  _bNullable,
                   const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>& _xRow);
 
         void fill(const ::com::sun::star::uno::Any& _rValue);

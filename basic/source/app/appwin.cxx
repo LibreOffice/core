@@ -47,9 +47,9 @@
 #include "dialogs.hxx"
 #include "basrid.hxx"
 
-String *AppWin::pNoName = NULL;     // enthaelt den "Untitled"-String
-short AppWin::nNumber = 0;          // fortlaufende Nummer
-short AppWin::nCount = 0;           // Anzahl Editfenster
+String *AppWin::pNoName = NULL; // contains the "Untitled"-String
+short AppWin::nNumber = 0;      // consecutive number
+short AppWin::nCount = 0;       // number of edit windows
 
 TYPEINIT0(AppWin);
 AppWin::AppWin( BasicFrame* pParent )
@@ -61,12 +61,12 @@ AppWin::AppWin( BasicFrame* pParent )
 , bFind( TRUE )
 , pDataEdit(NULL)
 {
-    // evtl. den Untitled-String laden:
+    // Load the Untitled string if not yet loaded
     if( !pNoName )
         pNoName = new String( SttResId( IDS_NONAME ) );
     nCount++;
 
-    // Maximized Status von aktuellem Fenster holen
+    // Get maximized state from current window
     USHORT nInitialWinState;
     if ( pFrame->pWork )
     {
@@ -92,7 +92,7 @@ AppWin::~AppWin()
 {
     nCount--;
     pFrame->RemoveWindow( this );
-    pFrame = NULL;      // So daß nach BasicRun nicht mehr versucht wird Fenstertext zu setzen
+    pFrame = NULL; // Set to stop setting window text after BasicRun
 }
 
 void AppWin::SetText( const XubString& rStr )
@@ -175,8 +175,8 @@ void AppWin::Cascade( USHORT nNr )
     }
 
     Size aWinSize = pFrame->GetOutputSizePixel();
-    aWinSize.Width() -= aWinSize.Width() / 5;       // auf 80 % reduzieren
-    aWinSize.Height() -= nTitleHeight * nNr;        // Unten entsprechen kürzen
+    aWinSize.Width() -= aWinSize.Width() / 5;   // reduce to 80 %
+    aWinSize.Height() -= nTitleHeight * nNr;    // snip height to appropriate value
     aWinSize.Height() -= 2;
 
     Point nPos( nTitleHeight * nNr, nTitleHeight * nNr );
@@ -191,14 +191,18 @@ void AppWin::RequestHelp( const HelpEvent& )
 
 void AppWin::Help()
 {
-    String s = pDataEdit->GetSelected();
-    if( s.Len() ) {
-        // Leerstellen davor weg:
-        while( s.GetChar(0) == ' ' ) s.Erase( 0, 1 );
+  String s = pDataEdit->GetSelected();
+  if( s.Len() > 0 )
+  {
+    // Trim leading whitespaces
+    while( s.GetChar(0) == ' ' )
+      s.Erase( 0, 1 );
 //      aBasicApp.pHelp->Start( s );
-    } else {
+  }
+  else
+  {
 //      aBasicApp.pHelp->Start( OOO_HELP_INDEX );
-    }
+  }
 }
 
 void AppWin::Resize()
@@ -213,10 +217,10 @@ void AppWin::Resize()
 void AppWin::GetFocus()
 {
     pFrame->FocusWindow( this );
-    if( pDataEdit )     // Im Destruktor wird GetFocus gerufen, daher diese Abfrage
+    if( pDataEdit ) // GetFocus is called by the destructor, so this check
     {
         pDataEdit->GrabFocus();
-//      InitMenu(GetpApp()->GetAppMenu()->GetPopupMenu( RID_APPEDIT )); // So daß Delete richtig ist
+//      InitMenu(GetpApp()->GetAppMenu()->GetPopupMenu( RID_APPEDIT ));
     }
 }
 
@@ -460,8 +464,7 @@ void AppWin::Reload()
     SkipReload( FALSE );
 }
 
-// Datei laden
-
+// Load file
 BOOL AppWin::Load( const String& aName )
 {
     SkipReload();
@@ -500,8 +503,7 @@ BOOL AppWin::Load( const String& aName )
     return !bErr;
 }
 
-// Datei speichern
-
+// Save file
 USHORT AppWin::ImplSave()
 {
     SkipReload();
@@ -528,8 +530,7 @@ USHORT AppWin::ImplSave()
     return nResult;
 }
 
-// mit neuem Namen speichern
-
+// Save to new file name
 USHORT AppWin::SaveAs()
 {
     SkipReload();
@@ -551,8 +552,7 @@ USHORT AppWin::SaveAs()
     }
 }
 
-// Soll gespeichert werden?
-
+// Should we save the file?
 USHORT AppWin::QuerySave( QueryBits nBits )
 {
     BOOL bQueryDirty = ( nBits & QUERY_DIRTY ) != 0;
@@ -594,7 +594,7 @@ USHORT AppWin::QuerySave( QueryBits nBits )
             nReturn = SAVE_RES_CANCEL;
             break;
         default:
-            DBG_ERROR("switch default where no default should be: Interneal error");
+            DBG_ERROR("switch default where no default should be: Internal error");
             nReturn = SAVE_RES_CANCEL;
     }
     SkipReload( FALSE );
@@ -614,7 +614,7 @@ BOOL AppWin::Close()
         }
 // uncomment to avoid compiler warning
 //  break;
-    case SAVE_RES_ERROR:    // Fehlermeldung schon ausgegeben
+    case SAVE_RES_ERROR:
         return FALSE;
 // uncomment to avoid compiler warning
 //      break;
@@ -628,8 +628,7 @@ BOOL AppWin::Close()
     }
 }
 
-// Text suchen
-
+// Search and find text
 void AppWin::Find()
 {
     SttResId aResId( IDD_FIND_DIALOG );
@@ -640,8 +639,7 @@ void AppWin::Find()
     }
 }
 
-// Text ersetzen
-
+// Replace text
 void AppWin::Replace()
 {
     SttResId aResId( IDD_REPLACE_DIALOG );
@@ -653,8 +651,7 @@ void AppWin::Replace()
     }
 }
 
-// Suchen/ersetzen wiederholen
-
+// Repeat search/replace operation
 void AppWin::Repeat()
 {
     if( (aFind.Len() != 0 ) && ( pDataEdit->Find( aFind ) || (ErrorBox(this,SttResId(IDS_PATTERNNOTFOUND)).Execute() && FALSE) ) && !bFind )

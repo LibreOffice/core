@@ -57,7 +57,7 @@
 #include <set>
 #include <map>
 
-#include <unotools/servicehelper.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <svx/rectenum.hxx>
 #include <svx/AccessibleShapeTreeInfo.hxx>
 #include <svx/IAccessibleViewForwarder.hxx>

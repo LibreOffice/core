@@ -75,7 +75,7 @@ typedef ::std::map< const ::com::sun::star::uno::Reference< com::sun::star::tabl
 class XMLOFF_DLLPUBLIC XMLTableExport : public UniRefBase
 {
 public:
-    XMLTableExport(SvXMLExport& rExp, const rtl::Reference< XMLPropertySetMapper >& xCellPropertySetMapper, const rtl::Reference< XMLPropertyHandlerFactory >& xFactoryRef );
+    XMLTableExport(SvXMLExport& rExp, const rtl::Reference< SvXMLExportPropertyMapper >& xCellExportPropertySetMapper, const rtl::Reference< XMLPropertyHandlerFactory >& xFactoryRef );
     virtual ~XMLTableExport();
 
     // This method collects all automatic styles for the given table

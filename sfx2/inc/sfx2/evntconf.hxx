@@ -33,17 +33,9 @@
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
 #include "sal/types.h"
-
-//#if 0 // _SOLAR__PRIVATE
-
-#ifndef _FIXED_HXX //autogen
+#include <tools/rtti.hxx>
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
-
-//#endif
 
 #define _SVSTDARR_USHORTS
 #include <svtools/svstdarr.hxx>     // SvUShorts
@@ -57,7 +49,6 @@
 #include <svtools/macitem.hxx>
 
 class SfxMacroInfo;
-class SfxMacroTabPage;
 class SfxMacroInfoArr_Impl;
 class SfxEventConfigItem_Impl;
 class SfxEventInfoArr_Impl;
@@ -66,19 +57,56 @@ class SvxMacroTableDtor;
 
 #define SFX_NO_EVENT USHRT_MAX
 
-//#if 0 // _SOLAR__PRIVATE
-struct SfxEvent_Impl
+struct SFX2_DLLPUBLIC SfxEventName
 {
-    String                      aEventName;
-    USHORT                      nEventId;
+    USHORT  mnId;
+    String  maEventName;
+    String  maUIName;
 
-    SfxEvent_Impl(const String& rName, USHORT nId) :
-        aEventName(rName),
-        nEventId(nId)
-    {}
+            SfxEventName( USHORT nId,
+                             const String& rEventName,
+                             const String& rUIName )
+                : mnId( nId )
+                , maEventName( rEventName )
+                , maUIName( rUIName ) {}
 };
 
-SV_DECL_PTRARR(SfxEventArr_Impl, SfxEvent_Impl*, 5, 5)
+DECLARE_LIST( _SfxEventNamesList, SfxEventName* )
+
+class SFX2_DLLPUBLIC SfxEventNamesList : public _SfxEventNamesList
+{
+public:
+    SfxEventNamesList( const USHORT nInitSz = 0, const USHORT nReSz = 1 ): _SfxEventNamesList( nInitSz, nReSz ) {}
+    SfxEventNamesList( const SfxEventNamesList &rCpy ) : _SfxEventNamesList() { *this = rCpy; }
+    ~SfxEventNamesList() { DelDtor(); }
+    SfxEventNamesList& operator=( const SfxEventNamesList &rCpy );
+    void DelDtor();
+};
+
+class SFX2_DLLPUBLIC SfxEventNamesItem : public SfxPoolItem
+{
+    SfxEventNamesList aEventsList;
+
+public:
+    TYPEINFO();
+
+    SfxEventNamesItem ( const USHORT nId ) : SfxPoolItem( nId ) {}
+
+    virtual int             operator==( const SfxPoolItem& ) const;
+    virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
+                                    SfxMapUnit eCoreMetric,
+                                    SfxMapUnit ePresMetric,
+                                    XubString &rText,
+                                    const IntlWrapper * = 0 ) const;
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
+    virtual SvStream&       Store(SvStream &, USHORT nItemVersion ) const;
+    virtual USHORT          GetVersion( USHORT nFileFormatVersion ) const;
+
+    const SfxEventNamesList& GetEvents() const { return aEventsList;}
+    void SetEvents( const SfxEventNamesList& rList ) { aEventsList = rList; }
+    void                    AddEvent( const String&, const String&, USHORT );
+};
 
 // -----------------------------------------------------------------------
 
@@ -88,17 +116,10 @@ SV_DECL_PTRARR(SfxEventArr_Impl, SfxEvent_Impl*, 5, 5)
 #define PROP_MACRO_NAME     "MacroName"
 #define STAR_BASIC          "StarBasic"
 
-// -----------------------------------------------------------------------
-//#else
-//typedef SvPtrarr SfxEventArr_Impl;
-//#endif
-
 class SFX2_DLLPUBLIC SfxEventConfiguration
 {
 friend class SfxEventConfigItem_Impl;
 
-    SfxMacroInfoArr_Impl*   pArr;
-    SfxEventArr_Impl*       pEventArr;
     SvxMacroTableDtor*      pAppTable;
     SvxMacroTableDtor*      pDocTable;
     sal_Bool                bIgnoreConfigure;
@@ -107,34 +128,15 @@ public:
                             SfxEventConfiguration();
                             ~SfxEventConfiguration();
 
-    void                    RegisterEvent(USHORT nId, const String& rName);
-    String                  GetEventName(USHORT nId) const;
-    USHORT                  GetEventId(const String& rName) const;
-    USHORT                  GetEventCount() const
-                            { return pEventArr->Count()-1; }
-  //  const SvxMacro*         GetMacroForEventId( USHORT nEventId, SfxObjectShell *pObjSh );
     void                    ConfigureEvent(USHORT nId, const SvxMacro&,
                                 SfxObjectShell* pObjSh);
     void                    ConfigureEvent(USHORT nId, const String& rMacro,
                                 SfxObjectShell* pObjSh);
 
-    //const SfxMacroInfo*     GetMacroInfo(USHORT nEventId, SfxObjectShell* pObjSh) const;
-
-    // void                    AddEvents( SfxMacroTabPage* ) const;
-    //SvxMacroTableDtor*      GetAppEventTable();
     SvxMacroTableDtor*      GetDocEventTable(SfxObjectShell*);
-    //void                    SetAppEventTable( const SvxMacroTableDtor& );
-    //void                    SetDocEventTable( SfxObjectShell*, const SvxMacroTableDtor& );
 
     static void             RegisterEvent( USHORT nId, const String& rName,
                                            const String& rMacroName );
-
-    //static BOOL             Import( SvStream& rInStream, SvStream* pOutStream, SfxObjectShell* pDoc=NULL );
-    //static BOOL             Export( SvStream* pInStream, SvStream& rOutStream, SfxObjectShell* pDoc=NULL );
-
-//#if 0 // _SOLAR__PRIVATE
-    SAL_DLLPRIVATE const SfxEvent_Impl* GetEvent_Impl(USHORT nPos) const
-                                    { return (*pEventArr)[nPos+1]; }
 
     SAL_DLLPRIVATE BOOL Warn_Impl( SfxObjectShell *pDoc, const SvxMacro* pMacro );
     SAL_DLLPRIVATE void PropagateEvent_Impl( SfxObjectShell *pDoc,
@@ -146,41 +148,6 @@ public:
 
     SAL_DLLPRIVATE static ULONG GetPos_Impl( USHORT nID, sal_Bool &rFound );
     SAL_DLLPRIVATE static ULONG GetPos_Impl( const String& rName, sal_Bool &rFound );
-//#endif
-};
-/*
-//#if 0 // _SOLAR__PRIVATE
-class SfxEventConfigItem_Impl : public SfxConfigItem
-{
-friend class SfxEventConfiguration;
-
-    SvxMacroTableDtor       aMacroTable;
-    SfxEventConfiguration   *pEvConfig;
-    SfxObjectShell          *pObjShell;
-    BOOL                    bWarning;
-    BOOL                    bAlwaysWarning;
-    BOOL                    bInitialized;
-
-    void                    ConstructMacroTable();
-    int                     Load(SvStream&);
-    BOOL                    Store(SvStream&);
-    BOOL                    LoadXML(SvStream&);
-    BOOL                    StoreXML(SvStream&);
-
-public:
-                            SfxEventConfigItem_Impl( USHORT,
-                                SfxEventConfiguration*,
-                                SfxObjectShell* pObjSh = NULL );
-                            ~SfxEventConfigItem_Impl();
-
-    void                    Init( SfxConfigManager* );
-    virtual int             Load(SotStorage&);
-    virtual BOOL            Store(SotStorage&);
-    virtual String          GetStreamName() const;
-    virtual void            UseDefault();
-    void                    ConfigureEvent( USHORT nPos, SvxMacro* );
 };
 
-//#endif
-*/
 #endif

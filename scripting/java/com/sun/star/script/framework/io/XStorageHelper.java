@@ -39,21 +39,13 @@ import com.sun.star.uno.UnoRuntime;
 
 import com.sun.star.lang.XComponent;
 
-import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
-import com.sun.star.uno.XComponentContext;
-
-
 
 import com.sun.star.io.XStream;
 import com.sun.star.io.XInputStream;
 import com.sun.star.io.XOutputStream;
-import com.sun.star.io.XTruncate;
-import com.sun.star.io.XSeekable;
 
 import com.sun.star.embed.XStorage;
-import com.sun.star.embed.ElementModes;
 import com.sun.star.embed.XTransactedObject;
 
 import com.sun.star.document.XDocumentSubStorageSupplier;
@@ -68,7 +60,6 @@ import com.sun.star.script.framework.provider.PathUtils;
 
 import java.util.*;
 import java.io.*;
-import java.util.zip.*;
 
 
 public class XStorageHelper implements XEventListener

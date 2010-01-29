@@ -44,10 +44,14 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/sdb/BooleanComparisonMode.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData2.hpp>
+#include <com/sun/star/sdbcx/XUsersSupplier.hpp>
+#include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
+#include <com/sun/star/sdbc/XDriverAccess.hpp>
 /** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
 #include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/componentcontext.hxx>
 
 #include <boost/optional.hpp>
 
@@ -72,6 +76,9 @@ namespace dbtools
     using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::uno::UNO_QUERY;
+    using ::com::sun::star::sdbcx::XUsersSupplier;
+    using ::com::sun::star::sdbcx::XDataDefinitionSupplier;
+    using ::com::sun::star::sdbc::XDriverAccess;
     using ::com::sun::star::uno::UNO_SET_THROW;
     /** === end UNO using === **/
     namespace BooleanComparisonMode = ::com::sun::star::sdb::BooleanComparisonMode;
@@ -269,7 +276,15 @@ namespace dbtools
             OSL_VERIFY( setting >>= doGenerate );
         return doGenerate;
     }
-
+    //--------------------------------------------------------------------
+    bool DatabaseMetaData::isAutoIncrementPrimaryKey() const
+    {
+        bool doGenerate( true );
+        Any setting;
+        if ( lcl_getConnectionSetting( "AutoIncrementIsPrimaryKey", *m_pImpl, setting ) )
+            OSL_VERIFY( setting >>= doGenerate );
+        return doGenerate;
+    }
     //--------------------------------------------------------------------
     sal_Int32 DatabaseMetaData::getBooleanComparisonMode() const
     {
@@ -290,6 +305,7 @@ namespace dbtools
         }
         catch( const Exception& )
         {
+            DBG_UNHANDLED_EXCEPTION();
         }
         try
         {
@@ -306,6 +322,7 @@ namespace dbtools
         }
         return bSupport;
     }
+
     //--------------------------------------------------------------------
     bool DatabaseMetaData::supportsColumnAliasInOrderBy() const
     {
@@ -314,6 +331,36 @@ namespace dbtools
         if ( lcl_getConnectionSetting( "ColumnAliasInOrderBy", *m_pImpl, setting ) )
             OSL_VERIFY( setting >>= doGenerate );
         return doGenerate;
+    }
+
+    //--------------------------------------------------------------------
+    bool DatabaseMetaData::supportsUserAdministration( const ::comphelper::ComponentContext& _rContext ) const
+    {
+        lcl_checkConnected( *m_pImpl  );
+
+        bool isSupported( false );
+        try
+        {
+            // find the XUsersSupplier interface
+            // - either directly at the connection
+            Reference< XUsersSupplier > xUsersSupp( m_pImpl->xConnection, UNO_QUERY );
+            if ( !xUsersSupp.is() )
+            {
+                // - or at the driver manager
+                Reference< XDriverAccess > xDriverManager(
+                    _rContext.createComponent( "com.sun.star.sdbc.DriverManager" ), UNO_QUERY_THROW );
+                Reference< XDataDefinitionSupplier > xDriver( xDriverManager->getDriverByURL( m_pImpl->xConnectionMetaData->getURL() ), UNO_QUERY );
+                if ( xDriver.is() )
+                    xUsersSupp.set( xDriver->getDataDefinitionByConnection( m_pImpl->xConnection ), UNO_QUERY );
+            }
+
+            isSupported = ( xUsersSupp.is() && xUsersSupp->getUsers().is() );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return isSupported;
     }
 
     //--------------------------------------------------------------------

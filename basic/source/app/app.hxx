@@ -81,8 +81,8 @@ public:
 
 typedef USHORT FileType;
 
-#define FT_NO_FILE          (FileType)0x00      // Ein Fehler ist aufgetreten ...
-#define FT_BASIC_SOURCE     (FileType)0x01
+#define FT_NO_FILE              (FileType)0x00  // An error has occurred ...
+#define FT_BASIC_SOURCE         (FileType)0x01
 #define FT_BASIC_INCLUDE    (FileType)0x02
 #define FT_RESULT_FILE      (FileType)0x04
 #define FT_RESULT_FILE_TXT  (FileType)0x08
@@ -98,10 +98,10 @@ class BasicFrame : public WorkWindow, public SfxBroadcaster, public SfxListener
 using SystemWindow::Notify;
 using Window::Command;
 
-virtual BOOL Close();               // Schliessen
-    BOOL CloseAll();                // Alle Fenster schliessen
-    BOOL CompileAll();              // Alle Texte compilieren
-    AutoTimer aLineNum;             // Zeigt die Zeilennummer an
+virtual BOOL Close();
+    BOOL CloseAll();          // Close all windows
+    BOOL CompileAll();        // Compile all texts
+    AutoTimer aLineNum;       // Show the line numbers
 virtual void Resize();
 virtual void Move();
 virtual void GetFocus();
@@ -116,14 +116,14 @@ virtual void GetFocus();
 
 
 
-    Timer aCheckFiles;      // Prüfen der Dateien auf Änderungen
+    Timer aCheckFiles;      // Checks the files for changes
     BOOL bAutoReload;
     BOOL bAutoSave;
     DECL_LINK( CheckAllFiles, Timer* );
 
     MyBasicRef  pBasic;             // BASIC-Engine
 
-    String aAppName;                // Inhalt der Titelteile der App:
+    String aAppName;                // Title bar content
     String aAppFile;                // AppName AppFile [AppMode]
     String aAppMode;
     void UpdateTitle();
@@ -136,14 +136,14 @@ virtual void GetFocus();
 public:
     BOOL IsAutoRun();
     void SetAutoRun( BOOL bAuto );
-    BOOL bInBreak;                  // TRUE, wenn im Break-Handler
-    StatusLine* pStatus;            // Statuszeile
-    EditList*   pList;              // List der Edit-Fenster
-    AppWin*     pWork;              // aktuelles Edit-Fenster
-    BasicPrinter* pPrn;             // Drucker
+    BOOL bInBreak;                  // TRUE if in Break-Handler
+    StatusLine* pStatus;            // Status line
+    EditList*   pList;              // List of edit windows
+    AppWin*     pWork;              // Current edit window
+    BasicPrinter* pPrn;             // Printer
     BOOL bDisas;                    // TRUE: disassemble
     USHORT nFlags;                  // Debugging-Flags
-    USHORT nMaximizedWindows;       // Anzahl der Fenster, die maximized sind
+    USHORT nMaximizedWindows;       // Number of maximized windows
     void FocusWindow( AppWin *pWin );
     void WinMax_Restore();
     void WinShow_Hide();
@@ -166,10 +166,10 @@ public:
     DECL_LINK( Log, TTLogMsg * );
     DECL_LINK( WinInfo, WinInfoRec * );
     BOOL LoadFile( String aFilename );
-    long Command( short,BOOL=FALSE );// Kommando-Handler
-    virtual void Command( const CommandEvent& rCEvt );      // Kommando-Handler
-    BOOL SaveAll();                 // Alle Fenster speichern
-    BOOL QueryFileName( String& rName, FileType nFileType, BOOL bSave );// Dateinamen ermitteln
+    long Command( short,BOOL=FALSE );  // Command handler
+    virtual void Command( const CommandEvent& rCEvt );      // Command handler
+    BOOL SaveAll();                 // Save all windows
+    BOOL QueryFileName( String& rName, FileType nFileType, BOOL bSave ); // Query for filename
     DECL_LINK( ModuleWinExists, String* );
     DECL_LINK( WriteString, String* );
     AppBasEd* CreateModuleWin( SbModule* pMod );

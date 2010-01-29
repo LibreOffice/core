@@ -725,7 +725,7 @@ vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
     }
 
     // Call centext-filter
-    if( aPropStateArray.size() > 0 )
+    if( !aPropStateArray.empty() )
         ContextFilter( aPropStateArray, xPropSet );
 
     // Have to do if we change from a vector to a list or something like that

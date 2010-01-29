@@ -188,8 +188,13 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustom
 
             // get the text bounds and set at text object
             Rectangle aTextBounds = pCustoObj->GetSnapRect();
-            if( pCustoObj->GetTextBounds( aTextBounds ) )
-                pTextObj->SetSnapRect( aTextBounds );
+            SdrObject* pSdrObjCustomShape( GetSdrObjectFromXShape( mxShape ) );
+            if ( pSdrObjCustomShape )
+            {
+                EnhancedCustomShape2d aCustomShape2d( pSdrObjCustomShape );
+                aTextBounds = aCustomShape2d.GetTextRect();
+            }
+            pTextObj->SetSnapRect( aTextBounds );
 
             // if rotated, copy GeoStat, too.
             const GeoStat& rSourceGeo = pCustoObj->GetGeoStat();
@@ -302,6 +307,19 @@ REF( com::sun::star::drawing::XShape ) SAL_CALL EnhancedCustomShapeEngine::rende
                 pRenderedShape = pRenderedShape3d;
             }
             Rectangle aRect( pSdrObjCustomShape->GetSnapRect() );
+
+            const GeoStat& rGeoStat = ((SdrObjCustomShape*)pSdrObjCustomShape)->GetGeoStat();
+            if ( rGeoStat.nShearWink )
+            {
+                long nShearWink = rGeoStat.nShearWink;
+                double nTan = rGeoStat.nTan;
+                if ((bFlipV&&!bFlipH )||(bFlipH&&!bFlipV))
+                {
+                    nShearWink = -nShearWink;
+                    nTan = -nTan;
+                }
+                pRenderedShape->Shear( pSdrObjCustomShape->GetSnapRect().Center(), nShearWink, nTan, FALSE);
+            }
             if( nRotateAngle )
             {
                 double a = nRotateAngle * F_PI18000;
@@ -369,19 +387,34 @@ com::sun::star::drawing::PolyPolygonBezierCoords SAL_CALL EnhancedCustomShapeEng
         if ( pObj )
         {
             Rectangle aRect( pSdrObjCustomShape->GetSnapRect() );
+            sal_Bool bFlipV = aCustomShape2d.IsFlipVert();
+            sal_Bool bFlipH = aCustomShape2d.IsFlipHorz();
+
+            const GeoStat& rGeoStat = ((SdrObjCustomShape*)pSdrObjCustomShape)->GetGeoStat();
+            if ( rGeoStat.nShearWink )
+            {
+                long nShearWink = rGeoStat.nShearWink;
+                double nTan = rGeoStat.nTan;
+                if ((bFlipV&&!bFlipH )||(bFlipH&&!bFlipV))
+                {
+                    nShearWink = -nShearWink;
+                    nTan = -nTan;
+                }
+                pObj->Shear( aRect.Center(), nShearWink, nTan, FALSE);
+            }
             sal_Int32 nRotateAngle = aCustomShape2d.GetRotateAngle();
             if( nRotateAngle )
             {
                 double a = nRotateAngle * F_PI18000;
                 pObj->NbcRotate( aRect.Center(), nRotateAngle, sin( a ), cos( a ) );
             }
-            if ( aCustomShape2d.IsFlipHorz() )
+            if ( bFlipH )
             {
                 Point aTop( ( aRect.Left() + aRect.Right() ) >> 1, aRect.Top() );
                 Point aBottom( aTop.X(), aTop.Y() + 1000 );
                 pObj->NbcMirror( aTop, aBottom );
             }
-            if ( aCustomShape2d.IsFlipVert() )
+            if ( bFlipV )
             {
                 Point aLeft( aRect.Left(), ( aRect.Top() + aRect.Bottom() ) >> 1 );
                 Point aRight( aLeft.X() + 1000, aLeft.Y() );

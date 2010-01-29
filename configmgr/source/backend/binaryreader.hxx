@@ -30,12 +30,12 @@
 #ifndef CONFIGMGR_BINARYREADER_HXX
 #define CONFIGMGR_BINARYREADER_HXX
 
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/io/XDataInputStream.hpp>
 
 namespace configmgr
 {
@@ -48,18 +48,16 @@ namespace configmgr
         namespace uno  = css::uno;
         namespace lang = css::lang;
         // -----------------------------------------------------------------------------
+        class BinaryReader_Impl;
         class BinaryReader
         {
             rtl::OUString m_sFileURL;
 
-            uno::Reference<io::XDataInputStream> m_xDataInputStream;
+            rtl::Reference<BinaryReader_Impl> m_xDataInputStream;
         public:
-            explicit BinaryReader (rtl::OUString const & _sFileURL)
-            : m_sFileURL(_sFileURL)
-            {}
+            explicit BinaryReader (rtl::OUString const & _sFileURL);
 
-            ~BinaryReader()
-            {}
+            ~BinaryReader();
 
         public:
             bool open()     SAL_THROW( (io::IOException, uno::RuntimeException) );
@@ -75,7 +73,7 @@ namespace configmgr
             void read(uno::Sequence< rtl::OUString > &_aValue)  SAL_THROW( (io::IOException, uno::RuntimeException) );
 
         private:
-            inline uno::Reference<io::XDataInputStream> getDataInputStream();
+            inline BinaryReader_Impl * getDataInputStream();
         };
         // --------------------------------------------------------------------------
 

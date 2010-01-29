@@ -51,46 +51,28 @@ java_sql_Clob::~java_sql_Clob()
     SDBThreadAttach::releaseRef();
 }
 
-jclass java_sql_Clob::getMyClass()
+jclass java_sql_Clob::getMyClass() const
 {
     // die Klasse muss nur einmal geholt werden, daher statisch
-    if( !theClass ){
-        SDBThreadAttach t;
-        if( !t.pEnv ) return (jclass)NULL;
-        jclass tempClass = t.pEnv->FindClass( "java/sql/Clob" );
-        jclass globClass = (jclass)t.pEnv->NewGlobalRef( tempClass );
-        t.pEnv->DeleteLocalRef( tempClass );
-        saveClassRef( globClass );
-    }
+    if( !theClass )
+        theClass = findMyClass("java/sql/Clob");
     return theClass;
-}
-
-void java_sql_Clob::saveClassRef( jclass pClass )
-{
-    if( pClass==NULL  )
-        return;
-    // der uebergebe Klassen-Handle ist schon global, daher einfach speichern
-    theClass = pClass;
 }
 
 sal_Int64 SAL_CALL java_sql_Clob::length(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     jlong out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-    if( t.pEnv )
+
     {
         // temporaere Variable initialisieren
         static const char * cSignature = "()J";
         static const char * cMethodName = "length";
         // Java-Call absetzen
-        static jmethodID mID = NULL;
-        if ( !mID  )
-            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID ){
-            out = t.pEnv->CallLongMethod( object, mID );
-            ThrowSQLException(t.pEnv,*this);
-            // und aufraeumen
-        } //mID
+        static jmethodID mID(NULL);
+        obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
+        out = t.pEnv->CallLongMethod( object, mID );
+        ThrowSQLException(t.pEnv,*this);
     } //t.pEnv
     return (sal_Int64)out;
 }
@@ -99,20 +81,16 @@ sal_Int64 SAL_CALL java_sql_Clob::length(  ) throw(::com::sun::star::sdbc::SQLEx
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     ::rtl::OUString aStr;
-    if( t.pEnv ){
+    {
         // temporaere Variable initialisieren
         static const char * cSignature = "(JI)Ljava/lang/String;";
         static const char * cMethodName = "getSubString";
         // Java-Call absetzen
-        static jmethodID mID = NULL;
-        if ( !mID  )
-            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID ){
-            jstring out = (jstring)t.pEnv->CallObjectMethod( object, mID,pos,subStringLength);
-            ThrowSQLException(t.pEnv,*this);
-            aStr = JavaString2String(t.pEnv,out);
-            // und aufraeumen
-        } //mID
+        static jmethodID mID(NULL);
+        obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
+        jstring out = (jstring)t.pEnv->CallObjectMethod( object, mID,pos,subStringLength);
+        ThrowSQLException(t.pEnv,*this);
+        aStr = JavaString2String(t.pEnv,out);
     } //t.pEnv
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
     return  aStr;
@@ -120,21 +98,10 @@ sal_Int64 SAL_CALL java_sql_Clob::length(  ) throw(::com::sun::star::sdbc::SQLEx
 
 ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL java_sql_Clob::getCharacterStream(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    jobject out(0);
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-    if( t.pEnv ){
-        // temporaere Variable initialisieren
-        static const char * cSignature = "()Ljava/io/Reader;";
-        static const char * cMethodName = "getCharacterStream";
-        // Java-Call absetzen
-        static jmethodID mID = NULL;
-        if ( !mID  )
-            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID ){
-            out = t.pEnv->CallObjectMethod( object, mID);
-            ThrowSQLException(t.pEnv,*this);
-        } //mID
-    } //t.pEnv
+    SDBThreadAttach t;
+    static jmethodID mID(NULL);
+    jobject out = callObjectMethod(t.pEnv,"getCharacterStream","()Ljava/io/Reader;", mID);
+
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
     return out==0 ? 0 : new java_io_Reader( t.pEnv, out );
 }
@@ -143,7 +110,7 @@ sal_Int64 SAL_CALL java_sql_Clob::position( const ::rtl::OUString& searchstr, sa
 {
     jlong out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
-    if( t.pEnv )
+
     {
         jvalue args[1];
         // Parameter konvertieren
@@ -152,15 +119,11 @@ sal_Int64 SAL_CALL java_sql_Clob::position( const ::rtl::OUString& searchstr, sa
         static const char * cSignature = "(Ljava/lang/String;I)J";
         static const char * cMethodName = "position";
         // Java-Call absetzen
-        static jmethodID mID = NULL;
-        if ( !mID  )
-            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID ){
-            out = t.pEnv->CallLongMethod( object, mID, args[0].l,start );
-            ThrowSQLException(t.pEnv,*this);
-            t.pEnv->DeleteLocalRef((jstring)args[0].l);
-            // und aufraeumen
-        } //mID
+        static jmethodID mID(NULL);
+        obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
+        out = t.pEnv->CallLongMethod( object, mID, args[0].l,start );
+        ThrowSQLException(t.pEnv,*this);
+        t.pEnv->DeleteLocalRef((jstring)args[0].l);
     } //t.pEnv
     return (sal_Int64)out;
 }

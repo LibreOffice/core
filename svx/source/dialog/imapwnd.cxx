@@ -35,7 +35,6 @@
 #include <vcl/help.hxx>
 #include <sfx2/sfxsids.hrc>     // SID_ATTR_MACROITEM
 #define _ANIMATION
-#include <sfx2/macropg.hxx>
 #include <svtools/imaprect.hxx>
 #include <svtools/imapcirc.hxx>
 #include <svtools/imappoly.hxx>
@@ -56,6 +55,7 @@
 #include <svtools/urihelper.hxx>
 #include <svx/xfillit.hxx>
 #include <svx/xlineit.hxx>
+#include <sfx2/evntconf.hxx>
 
 #include <sot/formats.hxx>
 
@@ -69,46 +69,6 @@ using ::com::sun::star::uno::Reference;
 
 #define TRANSCOL Color( COL_WHITE )
 
-/*************************************************************************
-|*
-|*  URLDlg
-|*
-\************************************************************************/
-/* move to cui //CHINA001
-URLDlg::URLDlg( Window* pWindow, const String& rURL,
-                const String& rDescription, const String& rTarget,
-                const String& rName, TargetList& rTargetList ) :
-
-    ModalDialog         ( pWindow, SVX_RES( RID_SVXDLG_IMAPURL ) ),
-
-    aFlURL              ( this, ResId( FL_URL ) ),
-    aBtnOk              ( this, ResId( BTN_OK ) ),
-    aBtnCancel          ( this, ResId( BTN_CANCEL1 ) ),
-    aFtURL1             ( this, ResId( FT_URL1 ) ),
-    aEdtURL             ( this, ResId( EDT_URL ) ),
-    aFtURLDescription   ( this, ResId( FT_URLDESCRIPTION ) ),
-    aEdtURLDescription  ( this, ResId( EDT_URLDESCRIPTION ) ),
-    aFtTarget           ( this, ResId( FT_TARGET ) ),
-    aCbbTargets         ( this, ResId( CBB_TARGETS ) ),
-    aFtName             ( this, ResId( FT_NAME ) ),
-    aEdtName            ( this, ResId( EDT_NAME ) )
-
-{
-    FreeResource();
-
-    aEdtURL.SetText( rURL );
-    aEdtURLDescription.SetText( rDescription );
-    aEdtName.SetText( rName );
-
-    for( String* pStr = rTargetList.First(); pStr; pStr = rTargetList.Next() )
-        aCbbTargets.InsertEntry( *pStr );
-
-    if( !rTarget.Len() )
-        aCbbTargets.SetText( String::CreateFromAscii( "_self" ) );
-    else
-        aCbbTargets.SetText( rTarget );
-}
-*/
 /*************************************************************************
 |*
 |*
@@ -756,7 +716,7 @@ void IMapWindow::RequestHelp( const HelpEvent& rHEvt )
 
     if ( Help::IsBalloonHelpEnabled() || Help::IsQuickHelpEnabled() )
     {
-        if ( pView->PickObj( aPos, pSdrObj, pPageView ) )
+        if ( pView->PickObj( aPos, pView->getHitTolLog(), pSdrObj, pPageView ) )
         {
             const IMapObject*   pIMapObj = GetIMapObj( pSdrObj );
             String              aStr;
@@ -859,29 +819,29 @@ void IMapWindow::DoMacroAssign()
 
     if ( pSdrObj )
     {
-        SfxItemSet      aSet( *pIMapPool, SID_ATTR_MACROITEM, SID_ATTR_MACROITEM );
+        SfxItemSet      aSet( *pIMapPool, SID_ATTR_MACROITEM, SID_ATTR_MACROITEM, SID_EVENTCONFIG, SID_EVENTCONFIG );
+
+        SfxEventNamesItem aNamesItem(SID_EVENTCONFIG);
+        aNamesItem.AddEvent( String::CreateFromAscii( "MouseOver" ), String(), SFX_EVENT_MOUSEOVER_OBJECT );
+        aNamesItem.AddEvent( String::CreateFromAscii( "MouseOut" ), String(), SFX_EVENT_MOUSEOUT_OBJECT );
+
         SvxMacroItem    aMacroItem(SID_ATTR_MACROITEM);
         IMapObject*     pIMapObj = GetIMapObj( pSdrObj );
-
         aMacroItem.SetMacroTable( pIMapObj->GetMacroTable() );
         aSet.Put( aMacroItem, SID_ATTR_MACROITEM );
 
-        SfxMacroAssignDlg   aMacroDlg( this, mxDocumentFrame, aSet );
-        SfxMacroTabPage*    pMacroTabPage = (SfxMacroTabPage*) aMacroDlg.GetTabPage();
+        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+        SfxAbstractDialog* pMacroDlg = pFact->CreateSfxDialog( this, aSet, mxDocumentFrame, SID_EVENTCONFIG );
 
-        if ( pMacroTabPage )
+        if ( pMacroDlg && pMacroDlg->Execute() == RET_OK )
         {
-            pMacroTabPage->AddEvent( String::CreateFromAscii( "MouseOver" ), SFX_EVENT_MOUSEOVER_OBJECT );
-            pMacroTabPage->AddEvent( String::CreateFromAscii( "MouseOut" ), SFX_EVENT_MOUSEOUT_OBJECT );
-
-            if ( aMacroDlg.Execute() == RET_OK )
-            {
-                const SfxItemSet* pOutSet = aMacroDlg.GetOutputItemSet();
-                pIMapObj->SetMacroTable( ((const SvxMacroItem& )pOutSet->Get( SID_ATTR_MACROITEM )).GetMacroTable() );
-                pModel->SetChanged( sal_True );
-                UpdateInfo( FALSE );
-            }
+            const SfxItemSet* pOutSet = pMacroDlg->GetOutputItemSet();
+            pIMapObj->SetMacroTable( ((const SvxMacroItem& )pOutSet->Get( SID_ATTR_MACROITEM )).GetMacroTable() );
+            pModel->SetChanged( sal_True );
+            UpdateInfo( FALSE );
         }
+
+        delete pMacroDlg;
     }
 }
 
@@ -902,7 +862,7 @@ void IMapWindow::DoPropertyDialog()
         if(pFact)
         {
             AbstractURLDlg* aDlg = pFact->CreateURLDialog( this, pIMapObj->GetURL(), pIMapObj->GetAltText(), pIMapObj->GetDesc(),
-                                            pIMapObj->GetTarget(), pIMapObj->GetName(), aTargetList, RID_SVXDLG_IMAPURL );
+                                            pIMapObj->GetTarget(), pIMapObj->GetName(), aTargetList );
             DBG_ASSERT(aDlg, "Dialogdiet fail!");
             if ( aDlg->Execute() == RET_OK )
             {

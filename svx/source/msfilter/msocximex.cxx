@@ -623,7 +623,11 @@ class ContainerRecReader
                 pS->SeekRel( 4 );
             // option flags
             if( nContentFlags & 0x00000010 )
-                pS->SeekRel( 4 );
+            {
+                sal_uInt32 nBitFlags = 0;
+                *pS >> nBitFlags;
+                rec.bVisible = ( ( nBitFlags & 0x02 ) == 0x02 );
+            }
             // substream size
             if( nContentFlags & 0x00000020 )
                 *pS >> rec.nSubStreamLen;
@@ -689,8 +693,11 @@ class ContainerRecReader
             sal_uInt32 nTipBufSize = lclGetBufferSize( nTipLen );
             if( nTipBufSize > 0 )
             {
+                std::auto_ptr< sal_Char > pTipName;
+                pTipName.reset( new sal_Char[ nTipBufSize ] );
                 ReadAlign( pS, pS->Tell() - nStartPos, 4 );
-                pS->SeekRel( nTipBufSize );
+                pS->Read( pTipName.get(), nTipBufSize );
+                rec.controlTip = lclCreateOUString( pTipName.get(), nTipLen );
             }
             // control id
             sal_uInt32 nCntrlIdSize = lclGetBufferSize( nCntrlIdLen );
@@ -1200,6 +1207,8 @@ sal_Bool OCX_Control::Import(uno::Reference<container::XNameContainer> &rDialog
     xPropSet->setPropertyValue(WW8_ASCII2STR("Width"), aTmp);
     aTmp <<= sal_Int32((nHeight * 2) / 100);
     xPropSet->setPropertyValue(WW8_ASCII2STR("Height"), aTmp);
+    if ( msToolTip.Len() > 0 )
+        xPropSet->setPropertyValue(WW8_ASCII2STR("HelpText"), uno::Any(OUString(msToolTip)));
 
     if ( mnStep )
     {
@@ -1207,6 +1216,13 @@ sal_Bool OCX_Control::Import(uno::Reference<container::XNameContainer> &rDialog
         xPropSet->setPropertyValue(WW8_ASCII2STR("Step"), aTmp);
     }
 
+    try
+    {
+        xPropSet->setPropertyValue(WW8_ASCII2STR("EnableVisible"), uno::makeAny( mbVisible ) );
+    }
+    catch( uno::Exception& )
+    {
+    }
     return sal_True;
 }
 
@@ -3596,6 +3612,7 @@ void OCX_ContainerControl::ProcessControl(OCX_Control* pControl,SvStorageStream*
         }
 
         pControl->sName = rec.cName;
+        pControl->msToolTip = rec.controlTip;
         // Position of controls is relative to the container
         pControl->mnTop = rec.nTop + mnTop;
         pControl->mnLeft = rec.nLeft + mnLeft;
@@ -3606,6 +3623,7 @@ void OCX_ContainerControl::ProcessControl(OCX_Control* pControl,SvStorageStream*
         // reflect the ms tabbing from orig MS UserForm, see below
         pControl->mnTabPos = rec.nTabPos;
         pControl->SetInDialog(true);
+        pControl->mbVisible = rec.bVisible;
         if ( mnStep )
         {
             // If the container has a step then it should be

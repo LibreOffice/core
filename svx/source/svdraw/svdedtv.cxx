@@ -135,7 +135,10 @@ SdrLayer* SdrEditView::InsertNewLayer(const XubString& rName, USHORT nPos)
     USHORT nMax=rLA.GetLayerCount();
     if (nPos>nMax) nPos=nMax;
     SdrLayer* pNewLayer=rLA.NewLayer(rName,nPos);
-    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewLayer(nPos,rLA,*pMod));
+
+    if( GetModel()->IsUndoEnabled() )
+        AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewLayer(nPos,rLA,*pMod));
+
     pMod->SetChanged();
     return pNewLayer;
 }
@@ -181,19 +184,26 @@ void SdrEditView::ImpDelLayerDelObjs(SdrObjList* pOL, SdrLayerID nDelID)
     // make sure OrdNums are correct
     pOL->GetObj(0)->GetOrdNum();
 
+    const bool bUndo = GetModel()->IsUndoEnabled();
+
     for(sal_uInt32 nObjNum(nObjAnz); nObjNum > 0;)
     {
         nObjNum--;
         SdrObject* pObj = pOL->GetObj(nObjNum);
         SdrObjList* pSubOL = pObj->GetSubList();
 
+
         // #104809# Test explicitely for group objects and 3d scenes
         if(pSubOL && (pObj->ISA(SdrObjGroup) || pObj->ISA(E3dScene)))
         {
             if(ImpDelLayerCheck(pSubOL, nDelID))
             {
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj, true));
+                if( bUndo )
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj, true));
                 pOL->RemoveObject(nObjNum);
+
+                if( !bUndo )
+                    SdrObject::Free( pObj );
             }
             else
             {
@@ -204,8 +214,11 @@ void SdrEditView::ImpDelLayerDelObjs(SdrObjList* pOL, SdrLayerID nDelID)
         {
             if(pObj->GetLayer() == nDelID)
             {
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj, true));
+                if( bUndo )
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj, true));
                 pOL->RemoveObject(nObjNum);
+                if( !bUndo )
+                    SdrObject::Free( pObj );
             }
         }
     }
@@ -219,8 +232,13 @@ void SdrEditView::DeleteLayer(const XubString& rName)
 
     if(SDRLAYER_NOTFOUND != nLayerNum)
     {
+
         SdrLayerID nDelID = pLayer->GetID();
-        BegUndo(ImpGetResStr(STR_UndoDelLayer));
+
+        const bool bUndo = IsUndoEnabled();
+        if( bUndo )
+            BegUndo(ImpGetResStr(STR_UndoDelLayer));
+
         sal_Bool bMaPg(sal_True);
 
         for(sal_uInt16 nPageKind(0); nPageKind < 2; nPageKind++)
@@ -249,8 +267,11 @@ void SdrEditView::DeleteLayer(const XubString& rName)
                     {
                         if(ImpDelLayerCheck(pSubOL, nDelID))
                         {
-                            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj, true));
+                            if( bUndo )
+                                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj, true));
                             pPage->RemoveObject(nObjNum);
+                            if( !bUndo )
+                                SdrObject::Free(pObj);
                         }
                         else
                         {
@@ -261,8 +282,11 @@ void SdrEditView::DeleteLayer(const XubString& rName)
                     {
                         if(pObj->GetLayer() == nDelID)
                         {
-                            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj, true));
+                            if( bUndo )
+                                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj, true));
                             pPage->RemoveObject(nObjNum);
+                            if( !bUndo )
+                                SdrObject::Free(pObj);
                         }
                     }
                 }
@@ -270,9 +294,17 @@ void SdrEditView::DeleteLayer(const XubString& rName)
             bMaPg = sal_False;
         }
 
-        AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteLayer(nLayerNum, rLA, *pMod));
-        rLA.RemoveLayer(nLayerNum);
-        EndUndo();
+        if( bUndo )
+        {
+            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteLayer(nLayerNum, rLA, *pMod));
+            rLA.RemoveLayer(nLayerNum);
+            EndUndo();
+        }
+        else
+        {
+            delete rLA.RemoveLayer(nLayerNum);
+        }
+
         pMod->SetChanged();
     }
 }
@@ -282,8 +314,10 @@ void SdrEditView::MoveLayer(const XubString& rName, USHORT nNewPos)
     SdrLayerAdmin& rLA=pMod->GetLayerAdmin();
     SdrLayer* pLayer=rLA.GetLayer(rName,TRUE);
     USHORT nLayerNum=rLA.GetLayerPos(pLayer);
-    if (nLayerNum!=SDRLAYER_NOTFOUND) {
-        AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoMoveLayer(nLayerNum,rLA,*pMod,nNewPos));
+    if (nLayerNum!=SDRLAYER_NOTFOUND)
+    {
+        if( IsUndoEnabled() )
+            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoMoveLayer(nLayerNum,rLA,*pMod,nNewPos));
         rLA.MoveLayer(nLayerNum,nNewPos);
         pMod->SetChanged();
     }
@@ -328,7 +362,8 @@ void SdrEditView::ImpBroadcastEdgesOfMarkedNodes()
                 && LIST_ENTRY_NOTFOUND == rAllMarkedObjects.GetPos(pObj1)
                 && !pEdge->CheckNodeConnection(sal_False))
             {
-                AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pEdge));
+                if( IsUndoEnabled() )
+                    AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pEdge));
                 pEdge->DisconnectFromNode(sal_False);
             }
 
@@ -336,7 +371,8 @@ void SdrEditView::ImpBroadcastEdgesOfMarkedNodes()
                 && LIST_ENTRY_NOTFOUND == rAllMarkedObjects.GetPos(pObj2)
                 && !pEdge->CheckNodeConnection(sal_True))
             {
-                AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pEdge));
+                if( IsUndoEnabled() )
+                    AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pEdge));
                 pEdge->DisconnectFromNode(sal_True);
             }
         }
@@ -686,9 +722,13 @@ void SdrEditView::ForceMarkedObjToAnotherPage()
 
 void SdrEditView::DeleteMarkedList(const SdrMarkList& rMark)
 {
-    if (rMark.GetMarkCount()!=0) {
+    if (rMark.GetMarkCount()!=0)
+    {
         rMark.ForceSort();
-        BegUndo();
+
+        const bool bUndo = IsUndoEnabled();
+        if( bUndo )
+            BegUndo();
         const sal_uInt32 nMarkAnz(rMark.GetMarkCount());
 
         if(nMarkAnz)
@@ -696,21 +736,26 @@ void SdrEditView::DeleteMarkedList(const SdrMarkList& rMark)
             sal_uInt32 nm(0);
             std::vector< E3DModifySceneSnapRectUpdater* > aUpdaters;
 
-            for(nm = nMarkAnz; nm > 0;)
+            if( bUndo )
             {
-                nm--;
-                SdrMark* pM = rMark.GetMark(nm);
-                SdrObject* pObj = pM->GetMarkedSdrObj();
+                for(nm = nMarkAnz; nm > 0;)
+                {
+                    nm--;
+                    SdrMark* pM = rMark.GetMark(nm);
+                    SdrObject* pObj = pM->GetMarkedSdrObj();
 
-                // extra undo actions for changed connector which now may hold it's layouted path (SJ)
-                std::vector< SdrUndoAction* > vConnectorUndoActions( CreateConnectorUndo( *pObj ) );
-                AddUndoActions( vConnectorUndoActions );
+                    // extra undo actions for changed connector which now may hold it's layouted path (SJ)
+                    std::vector< SdrUndoAction* > vConnectorUndoActions( CreateConnectorUndo( *pObj ) );
+                    AddUndoActions( vConnectorUndoActions );
 
-                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj));
+                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj));
+                }
             }
 
             // Sicherstellen, dass die OrderNums stimmen:
             rMark.GetMark(0)->GetMarkedSdrObj()->GetOrdNum();
+
+            std::vector< SdrObject* > aRemoved3DObjects;
 
             for(nm = nMarkAnz; nm > 0;)
             {
@@ -720,13 +765,22 @@ void SdrEditView::DeleteMarkedList(const SdrMarkList& rMark)
                 SdrObjList*  pOL = pObj->GetObjList(); //#52680#
                 const sal_uInt32 nOrdNum(pObj->GetOrdNumDirect());
 
+                bool bIs3D = dynamic_cast< E3dObject* >(pObj);
                 // set up a scene updater if object is a 3d object
-                if(dynamic_cast< E3dObject* >(pObj))
+                if(bIs3D)
                 {
                     aUpdaters.push_back(new E3DModifySceneSnapRectUpdater(pObj));
                 }
 
                 pOL->RemoveObject(nOrdNum);
+
+                if( !bUndo )
+                {
+                    if( bIs3D )
+                        aRemoved3DObjects.push_back( pObj ); // may be needed later
+                    else
+                        SdrObject::Free(pObj);
+                }
             }
 
             // fire scene updaters
@@ -735,9 +789,20 @@ void SdrEditView::DeleteMarkedList(const SdrMarkList& rMark)
                 delete aUpdaters.back();
                 aUpdaters.pop_back();
             }
+
+            if( !bUndo )
+            {
+                // now delete removed scene objects
+                while(aRemoved3DObjects.size())
+                {
+                    SdrObject::Free( aRemoved3DObjects.back() );
+                    aRemoved3DObjects.pop_back();
+                }
+            }
         }
 
-        EndUndo();
+        if( bUndo )
+            EndUndo();
     }
 }
 
@@ -774,6 +839,8 @@ void SdrEditView::CopyMarkedObj()
     // New mechanism to re-create the connections of cloned connectors
     CloneList aCloneList;
 
+    const bool bUndo = IsUndoEnabled();
+
     GetMarkedObjectListWriteAccess().Clear();
     ULONG nCloneErrCnt=0;
     ULONG nMarkAnz=aSourceObjectsForCopy.GetMarkCount();
@@ -784,7 +851,10 @@ void SdrEditView::CopyMarkedObj()
         if (pO!=NULL) {
             SdrInsertReason aReason(SDRREASON_VIEWCALL);
             pM->GetPageView()->GetObjList()->InsertObject(pO,CONTAINER_APPEND,&aReason);
-            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoCopyObject(*pO));
+
+            if( bUndo )
+                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoCopyObject(*pO));
+
             SdrMark aME(*pM);
             aME.SetMarkedSdrObj(pO);
             aCloneList.AddPair(pM->GetMarkedSdrObj(), pO);
@@ -851,7 +921,9 @@ BOOL SdrEditView::InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, ULONG nO
             rPV.GetObjList()->InsertObject(pObj,CONTAINER_APPEND,&aReason);
         }
     }
-    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pObj));
+    if( IsUndoEnabled() )
+        AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pObj));
+
     if ((nOptions & SDRINSERT_DONTMARK)==0) {
         if ((nOptions & SDRINSERT_ADDMARK)==0) UnmarkAllObj();
         MarkObj(pObj,&rPV);
@@ -862,8 +934,13 @@ BOOL SdrEditView::InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, ULONG nO
 void SdrEditView::ReplaceObjectAtView(SdrObject* pOldObj, SdrPageView& rPV, SdrObject* pNewObj, BOOL bMark)
 {
     SdrObjList* pOL=pOldObj->GetObjList();
-    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoReplaceObject(*pOldObj,*pNewObj));
+    const bool bUndo = IsUndoEnabled();
+    if( bUndo  )
+        AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoReplaceObject(*pOldObj,*pNewObj));
     pOL->ReplaceObject(pNewObj,pOldObj->GetOrdNum());
+    if( !bUndo )
+        SdrObject::Free( pOldObj );
+
     if (bMark) MarkObj(pNewObj,&rPV);
 }
 
@@ -901,10 +978,16 @@ void SdrEditView::SetUndoComment(const String& rComment)
     pMod->SetUndoComment(rComment);
 }
 
+
 void SdrEditView::SetUndoComment(const String& rComment,
                                 const String& rObjDescr)
 {
     pMod->SetUndoComment(rComment,rObjDescr);
 }
 #endif
+
+bool SdrEditView::IsUndoEnabled() const
+{
+    return pMod->IsUndoEnabled();
+}
 

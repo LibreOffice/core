@@ -30,11 +30,11 @@
 #ifndef SVX_QUERYDESIGNCONTEXT_HXX
 #define SVX_QUERYDESIGNCONTEXT_HXX
 
-
+#include "svx/svxdllapi.h"
 #include <connectivity/IParseContext.hxx>
 #include <tools/string.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include "svx/svxdllapi.h"
+
 
 #include <vector>
 

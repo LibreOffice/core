@@ -142,11 +142,10 @@ void BreakpointWindow::InsertBreakpoint( USHORT nLine )
         else
             pBrk = Next();
     }
-    // Keine Einfuegeposition gefunden => LIST_APPEND
+    // No insert position found => LIST_APPEND
     if ( pNewBrk )
         Insert( pNewBrk, LIST_APPEND );
 
-    // vielleicht mal etwas genauer...
     Invalidate();
 
     if ( pModule->SetBP( nLine ) )
@@ -314,16 +313,16 @@ Breakpoint* BreakpointWindow::FindBreakpoint( const Point& rMousePos )
 void BreakpointWindow::ToggleBreakpoint( USHORT nLine )
 {
     Breakpoint* pBrk = FindBreakpoint( nLine );
-    if ( pBrk ) // entfernen
+    if ( pBrk ) // remove
     {
         pModule->ClearBP( nLine );
         delete Remove( pBrk );
     }
-    else // einen erzeugen
+    else // create one
     {
         InsertBreakpoint( nLine );
     }
-    // vielleicht mal etwas genauer...
+
     Invalidate();
 }
 
@@ -366,7 +365,6 @@ void BreakpointWindow::MouseButtonDown( const MouseEvent& rMEvt )
         long nYPos = aMousePos.Y() + nCurYOffset;
         long nLine = nYPos / nLineHeight + 1;
         ToggleBreakpoint( sal::static_int_cast< USHORT >(nLine) );
-        // vielleicht mal etwas genauer...
         Invalidate();
     }
 }
@@ -374,10 +372,10 @@ void BreakpointWindow::MouseButtonDown( const MouseEvent& rMEvt )
 
 void BreakpointWindow::SetMarkerPos( USHORT nLine, BOOL bError )
 {
-    ShowMarker( FALSE );    // Alten wegzeichen...
+    ShowMarker( FALSE );   // Remove old one
     nMarkerPos = nLine;
     bErrorMarker = bError;
-    ShowMarker( TRUE );     // Neuen zeichnen...
+    ShowMarker( TRUE );    // Draw new one
     Update();
 }
 

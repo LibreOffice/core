@@ -776,33 +776,11 @@ EnhancedCustomShape2d::EnhancedCustomShape2d( SdrObject* pAObj ) :
         break;
         case mso_sptCurvedDownArrow :           nFlags |= DFF_CUSTOMSHAPE_EXCH; break;
         case mso_sptRibbon2 :                   nColorData = 0x30dd0000; break;
-        case mso_sptRibbon :
-        {
-            if ( ( seqAdjustmentValues.getLength() > 1 ) && ( seqAdjustmentValues[ 1 ].State == com::sun::star::beans::PropertyState_DIRECT_VALUE ) )
-            {
-                double fValue;
-                seqAdjustmentValues[ 1 ].Value >>= fValue;
-                fValue = 21600 - fValue;
-                seqAdjustmentValues[ 1 ].Value <<= fValue;
-            }
-            nFlags |= DFF_CUSTOMSHAPE_FLIP_V;
-            nColorData = 0x30dd0000;
-        }
-        break;
+        case mso_sptRibbon :                    nColorData = 0x30dd0000; break;
+
         case mso_sptEllipseRibbon2 :            nColorData = 0x30dd0000; break;
-        case mso_sptEllipseRibbon :             // !!!!!!!!!!
-        {
-            if ( ( seqAdjustmentValues.getLength() > 1 ) && ( seqAdjustmentValues[ 1 ].State == com::sun::star::beans::PropertyState_DIRECT_VALUE ) )
-            {
-                double fValue;
-                seqAdjustmentValues[ 1 ].Value >>= fValue;
-                fValue = 21600 - fValue;
-                seqAdjustmentValues[ 1 ].Value <<= fValue;
-            }
-            nFlags |= DFF_CUSTOMSHAPE_FLIP_V;
-            nColorData = 0x30dd0000;
-        }
-        break;
+        case mso_sptEllipseRibbon :             nColorData = 0x30dd0000; break;
+
         case mso_sptVerticalScroll :            nColorData = 0x30dd0000; break;
         case mso_sptHorizontalScroll :          nColorData = 0x30dd0000; break;
         default:
@@ -1174,6 +1152,14 @@ sal_Bool EnhancedCustomShape2d::GetHandlePosition( const sal_uInt32 nIndex, Poin
                 }
                 rReturnPosition = GetPoint( aHandle.aPosition, sal_True, sal_False );
             }
+            const GeoStat aGeoStat( ((SdrObjCustomShape*)pCustomShapeObj)->GetGeoStat() );
+            if ( aGeoStat.nShearWink )
+            {
+                double nTan = aGeoStat.nTan;
+                if ((bFlipV&&!bFlipH )||(bFlipH&&!bFlipV))
+                    nTan = -nTan;
+                ShearPoint( rReturnPosition, Point( aLogicRect.GetWidth() / 2, aLogicRect.GetHeight() / 2 ), nTan );
+            }
             if ( nRotateAngle )
             {
                 double a = nRotateAngle * F_PI18000;
@@ -1215,6 +1201,15 @@ sal_Bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nI
                     double a = -nRotateAngle * F_PI18000;
                     RotatePoint( aP, Point( aLogicRect.GetWidth() / 2, aLogicRect.GetHeight() / 2 ), sin( a ), cos( a ) );
                 }
+                const GeoStat aGeoStat( ((SdrObjCustomShape*)pCustomShapeObj)->GetGeoStat() );
+                if ( aGeoStat.nShearWink )
+                {
+                    double nTan = -aGeoStat.nTan;
+                    if ((bFlipV&&!bFlipH )||(bFlipH&&!bFlipV))
+                        nTan = -nTan;
+                    ShearPoint( aP, Point( aLogicRect.GetWidth() / 2, aLogicRect.GetHeight() / 2 ), nTan );
+                }
+
                 double fPos1 = aP.X();  //( bFlipH ) ? aLogicRect.GetWidth() - aP.X() : aP.X();
                 double fPos2 = aP.Y();  //( bFlipV ) ? aLogicRect.GetHeight() -aP.Y() : aP.Y();
                 fPos1 /= fXScale;
@@ -2084,13 +2079,17 @@ void EnhancedCustomShape2d::ApplyGluePoints( SdrObject* pObj )
         for ( i = 0; i < nCount; i++ )
         {
             SdrGluePoint aGluePoint;
-            const Point& rPoint = GetPoint( seqGluePoints[ i ], sal_True, sal_True );
-            double fXRel = rPoint.X();
-            double fYRel = rPoint.Y();
-            fXRel = aLogicRect.GetWidth() == 0 ? 0.0 : fXRel / aLogicRect.GetWidth() * 10000;
-            fYRel = aLogicRect.GetHeight() == 0 ? 0.0 : fYRel / aLogicRect.GetHeight() * 10000;
-            aGluePoint.SetPos( Point( (sal_Int32)fXRel, (sal_Int32)fYRel ) );
-            aGluePoint.SetPercent( sal_True );
+
+            aGluePoint.SetPos( GetPoint( seqGluePoints[ i ], sal_True, sal_True ) );
+            aGluePoint.SetPercent( sal_False );
+
+//          const Point& rPoint = GetPoint( seqGluePoints[ i ], sal_True, sal_True );
+//          double fXRel = rPoint.X();
+//          double fYRel = rPoint.Y();
+//          fXRel = aLogicRect.GetWidth() == 0 ? 0.0 : fXRel / aLogicRect.GetWidth() * 10000;
+//          fYRel = aLogicRect.GetHeight() == 0 ? 0.0 : fYRel / aLogicRect.GetHeight() * 10000;
+//          aGluePoint.SetPos( Point( (sal_Int32)fXRel, (sal_Int32)fYRel ) );
+//          aGluePoint.SetPercent( sal_True );
             aGluePoint.SetAlign( SDRVERTALIGN_TOP | SDRHORZALIGN_LEFT );
             aGluePoint.SetEscDir( SDRESC_SMART );
             SdrGluePointList* pList = pObj->ForceGluePointList();

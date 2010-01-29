@@ -187,7 +187,6 @@ SHL3STDLIBS=    \
                 $(CPPUHELPERLIB)                    \
                 $(COMPHELPERLIB)                    \
                 $(CPPULIB)                          \
-                $(VOSLIB)                           \
                 $(SALLIB)
 
 SHL3DEF=        $(MISC)$/$(SHL3TARGET).def
@@ -273,6 +272,7 @@ SHL4OBJS=       \
                 $(SLO)$/menubarwrapper.obj          \
                 $(SLO)$/menudispatcher.obj          \
                 $(SLO)$/menumanager.obj             \
+                $(SLO)$/mischelper.obj             \
                 $(SLO)$/moduleacceleratorconfiguration.obj  \
                 $(SLO)$/moduleimagemanager.obj      \
                 $(SLO)$/modulemanager.obj           \
@@ -347,7 +347,6 @@ SHL4STDLIBS=    \
                 $(COMPHELPERLIB)                    \
                 $(CPPUHELPERLIB)                    \
                 $(CPPULIB)                          \
-                $(VOSLIB)                           \
                 $(SALLIB)                           \
                 $(UCBHELPERLIB)                     \
                 $(I18NISOLANGLIB)

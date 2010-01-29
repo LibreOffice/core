@@ -96,7 +96,6 @@ SV_DECL_PTRARR_SORT_VISIBILITY(SvxMSDffShapeTxBxSort,   SvxMSDffShapeOrder_Ptr, 
 #define SVXMSDFF_SETTINGS_CROP_BITMAPS      1
 #define SVXMSDFF_SETTINGS_IMPORT_PPT        2
 #define SVXMSDFF_SETTINGS_IMPORT_EXCEL      4
-#define SVXMSDFF_SETTINGS_IMPORT_IAS        8
 
 #define SP_FGROUP       0x001   // This shape is a group shape
 #define SP_FCHILD       0x002   // Not a top-level shape
@@ -251,10 +250,10 @@ struct SvxMSDffImportData
 
 struct DffObjData
 {
-    Rectangle   aChildAnchor;
-
     const DffRecordHeader&  rSpHd;
-    Rectangle&              rBoundRect;
+
+    Rectangle   aBoundRect;
+    Rectangle   aChildAnchor;
 
     UINT32      nShapeId;
     UINT32      nSpFlags;
@@ -270,10 +269,18 @@ struct DffObjData
     int nCalledByGroup;
 
     DffObjData( const DffRecordHeader& rObjHd,
-                Rectangle&      rBdRect,
-                int             nClByGroup ) :
+                const Rectangle& rBoundRect,
+                int              nClByGroup ) :
         rSpHd( rObjHd ),
-        rBoundRect( rBdRect ),
+        aBoundRect( rBoundRect ),
+        nShapeId( 0 ),
+        nSpFlags( 0 ),
+        eShapeType( mso_sptNil ),
+        bShapeType( FALSE ),
+        bClientAnchor( FALSE ),
+        bClientData( FALSE ),
+        bChildAnchor( FALSE ),
+        bOpt( FALSE ),
         bIsAutoText( FALSE ),
         nCalledByGroup( nClByGroup ){}
 };
@@ -405,7 +412,7 @@ protected :
 
     FASTBOOL ReadGraphic( SvStream& rSt, ULONG nIndex, Graphic& rGraphic ) const;
     SdrObject* ImportFontWork( SvStream&, SfxItemSet&, Rectangle& rBoundRect ) const;
-    SdrObject* ImportGraphic( SvStream&, SfxItemSet&, Rectangle& rBoundRect, const DffObjData& ) const;
+    SdrObject* ImportGraphic( SvStream&, SfxItemSet&, const DffObjData& ) const;
     // --> OD 2004-12-14 #i32596# - pass <nCalledByGroup> to method
     // Needed in the Writer Microsoft Word import to avoid import of OLE objects
     // inside groups. Instead a graphic object is created.

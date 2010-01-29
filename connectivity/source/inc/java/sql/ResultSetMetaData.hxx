@@ -47,14 +47,13 @@ namespace connectivity
     protected:
         java::sql::ConnectionLog    m_aLogger;
         java_sql_Connection*        m_pConnection;
+        sal_Int32                   m_nColumnCount;
 
         // statische Daten fuer die Klasse
         static jclass theClass;
-        // der Destruktor um den Object-Counter zu aktualisieren
-        static void saveClassRef( jclass pClass );
         virtual ~java_sql_ResultSetMetaData();
     public:
-        static jclass getMyClass();
+        virtual jclass getMyClass() const;
 
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         java_sql_ResultSetMetaData( JNIEnv * pEnv, jobject myObj, const java::sql::ConnectionLog& _rResultSetLogger, java_sql_Connection& _rCon  );

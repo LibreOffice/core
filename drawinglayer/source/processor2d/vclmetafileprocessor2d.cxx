@@ -247,8 +247,8 @@ namespace drawinglayer
             if(rB2DPolygon.count() && !mnSvtGraphicStrokeCount)
             {
                 basegfx::BColor aStrokeColor;
-                PolyPolygon aStartPolyPolygon;
-                PolyPolygon aEndPolyPolygon;
+                basegfx::B2DPolyPolygon aStartArrow;
+                basegfx::B2DPolyPolygon aEndArrow;
 
                 if(pColor)
                 {
@@ -271,11 +271,9 @@ namespace drawinglayer
                     {
                         fPolyLength = basegfx::tools::getLength(rB2DPolygon);
 
-                        const basegfx::B2DPolyPolygon aStartArrow(basegfx::tools::createAreaGeometryForLineStartEnd(
+                        aStartArrow = basegfx::tools::createAreaGeometryForLineStartEnd(
                             rB2DPolygon, pStart->getB2DPolyPolygon(), true, pStart->getWidth(),
-                            fPolyLength, pStart->isCentered() ? 0.5 : 0.0, 0));
-
-                        aStartPolyPolygon = PolyPolygon(aStartArrow);
+                            fPolyLength, pStart->isCentered() ? 0.5 : 0.0, 0);
                     }
 
                     if(pEnd && pEnd->isActive())
@@ -285,11 +283,9 @@ namespace drawinglayer
                             fPolyLength = basegfx::tools::getLength(rB2DPolygon);
                         }
 
-                        const basegfx::B2DPolyPolygon aEndArrow(basegfx::tools::createAreaGeometryForLineStartEnd(
+                        aEndArrow = basegfx::tools::createAreaGeometryForLineStartEnd(
                             rB2DPolygon, pEnd->getB2DPolyPolygon(), false, pEnd->getWidth(),
-                            fPolyLength, pEnd->isCentered() ? 0.5 : 0.0, 0));
-
-                        aEndPolyPolygon = PolyPolygon(aEndArrow);
+                            fPolyLength, pEnd->isCentered() ? 0.5 : 0.0, 0);
                     }
                 }
 
@@ -341,10 +337,23 @@ namespace drawinglayer
                     aDashArray = pStrokeAttribute->getDotDashArray();
                 }
 
+                // #i101734# apply current object transformation to created geometry.
+                // This is a partial fix. When a object transformation is used which
+                // e.g. contains a scaleX != scaleY, an unproportional scaling would
+                // have to be applied to the evtl. existing fat line. The current
+                // concept of PDF export and SvtGraphicStroke usage does simply not
+                // allow handling such definitions. The only clean way would be to
+                // add the transformation to SvtGraphicStroke and to handle it there
+                basegfx::B2DPolygon aB2DPolygon(rB2DPolygon);
+
+                aB2DPolygon.transform(maCurrentTransformation);
+                aStartArrow.transform(maCurrentTransformation);
+                aEndArrow.transform(maCurrentTransformation);
+
                 pRetval = new SvtGraphicStroke(
-                    Polygon(rB2DPolygon),
-                    aStartPolyPolygon,
-                    aEndPolyPolygon,
+                    Polygon(aB2DPolygon),
+                    PolyPolygon(aStartArrow),
+                    PolyPolygon(aEndArrow),
                     mfCurrentUnifiedTransparence,
                     fLineWidth,
                     SvtGraphicStroke::capButt,
@@ -912,7 +921,7 @@ namespace drawinglayer
                 {
                     // for supporting TEXT_ MetaFile actions there is more to do here; get the candidate
                     const primitive2d::TextSimplePortionPrimitive2D& rTextCandidate = static_cast< const primitive2d::TextSimplePortionPrimitive2D& >(rCandidate);
-                    const primitive2d::TextDecoratedPortionPrimitive2D* pTextDecoratedCandidate = dynamic_cast< const primitive2d::TextDecoratedPortionPrimitive2D* >(&rCandidate);
+                    // const primitive2d::TextDecoratedPortionPrimitive2D* pTextDecoratedCandidate = dynamic_cast< const primitive2d::TextDecoratedPortionPrimitive2D* >(&rCandidate);
 
                     // Adapt evtl. used special DrawMode
                     const sal_uInt32 nOriginalDrawMode(mpOutputDevice->GetDrawMode());
@@ -924,7 +933,7 @@ namespace drawinglayer
                     // restore DrawMode
                     mpOutputDevice->SetDrawMode(nOriginalDrawMode);
 
-                    if(pTextDecoratedCandidate)
+                    // #i101169# if(pTextDecoratedCandidate)
                     {
                         // support for TEXT_ MetaFile actions only for decorated texts
                         if(!mxBreakIterator.is())
@@ -936,36 +945,37 @@ namespace drawinglayer
                         if(mxBreakIterator.is())
                         {
                             const rtl::OUString& rTxt = rTextCandidate.getText();
-                            const sal_Int32 nTextLength(rTxt.getLength());
+                            const sal_Int32 nTextLength(rTextCandidate.getTextLength()); // rTxt.getLength());
 
                             if(nTextLength)
                             {
                                 const ::com::sun::star::lang::Locale& rLocale = rTextCandidate.getLocale();
+                                const sal_Int32 nTextPosition(rTextCandidate.getTextPosition());
 
                                 sal_Int32 nDone;
-                                sal_Int32 nNextCellBreak(mxBreakIterator->nextCharacters(rTxt, 0, rLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, 0, nDone));
-                                ::com::sun::star::i18n::Boundary nNextWordBoundary(mxBreakIterator->getWordBoundary(rTxt, 0, rLocale, ::com::sun::star::i18n::WordType::ANY_WORD, sal_True));
-                                sal_Int32 nNextSentenceBreak(mxBreakIterator->endOfSentence(rTxt, 0, rLocale));
+                                sal_Int32 nNextCellBreak(mxBreakIterator->nextCharacters(rTxt, nTextPosition, rLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, 0, nDone));
+                                ::com::sun::star::i18n::Boundary nNextWordBoundary(mxBreakIterator->getWordBoundary(rTxt, nTextPosition, rLocale, ::com::sun::star::i18n::WordType::ANY_WORD, sal_True));
+                                sal_Int32 nNextSentenceBreak(mxBreakIterator->endOfSentence(rTxt, nTextPosition, rLocale));
                                 static const ByteString aCommentStringA("XTEXT_EOC");
                                 static const ByteString aCommentStringB("XTEXT_EOW");
                                 static const ByteString aCommentStringC("XTEXT_EOS");
 
-                                for(sal_Int32 i(0); i < nTextLength; i++)
+                                for(sal_Int32 i(nTextPosition); i < nTextPosition + nTextLength; i++)
                                 {
                                     // create the entries for the respective break positions
                                     if(i == nNextCellBreak)
                                     {
-                                        mrMetaFile.AddAction(new MetaCommentAction(aCommentStringA, i));
+                                        mrMetaFile.AddAction(new MetaCommentAction(aCommentStringA, i - nTextPosition));
                                         nNextCellBreak = mxBreakIterator->nextCharacters(rTxt, i, rLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
                                     }
                                     if(i == nNextWordBoundary.endPos)
                                     {
-                                        mrMetaFile.AddAction(new MetaCommentAction(aCommentStringB, i));
+                                        mrMetaFile.AddAction(new MetaCommentAction(aCommentStringB, i - nTextPosition));
                                         nNextWordBoundary = mxBreakIterator->getWordBoundary(rTxt, i + 1, rLocale, ::com::sun::star::i18n::WordType::ANY_WORD, sal_True);
                                     }
                                     if(i == nNextSentenceBreak)
                                     {
-                                        mrMetaFile.AddAction(new MetaCommentAction(aCommentStringC, i));
+                                        mrMetaFile.AddAction(new MetaCommentAction(aCommentStringC, i - nTextPosition));
                                         nNextSentenceBreak = mxBreakIterator->endOfSentence(rTxt, i + 1, rLocale);
                                     }
                                 }
@@ -1000,7 +1010,68 @@ namespace drawinglayer
                     adaptLineToFillDrawMode();
 
                     impStartSvtGraphicStroke(pSvtGraphicStroke);
-                    process(rCandidate.get2DDecomposition(getViewInformation2D()));
+
+                    // #i101491#
+                    // Change default of fat line generation for MetaFiles: Create MetaPolyLineAction
+                    // instead of decomposing all geometries when the polygon has more than given amount of
+                    // points; else the decomposition will get too expensive quiclky. OTOH
+                    // the decomposition provides the better quality e.g. taking edge roundings
+                    // into account which will NOT be taken into account with LineInfo-based actions
+                    const sal_uInt32 nSubPolygonCount(rStrokePrimitive.getB2DPolygon().count());
+                    bool bDone(0 == nSubPolygonCount);
+
+                    if(!bDone && nSubPolygonCount > 1000)
+                    {
+                        // create MetaPolyLineActions, but without LINE_DASH
+                        const attribute::LineAttribute& rLine = rStrokePrimitive.getLineAttribute();
+
+                        if(basegfx::fTools::more(rLine.getWidth(), 0.0))
+                        {
+                            const attribute::StrokeAttribute& rStroke = rStrokePrimitive.getStrokeAttribute();
+                            basegfx::B2DPolyPolygon aHairLinePolyPolygon;
+
+                            if(0.0 == rStroke.getFullDotDashLen())
+                            {
+                                aHairLinePolyPolygon.append(rStrokePrimitive.getB2DPolygon());
+                            }
+                            else
+                            {
+                                basegfx::tools::applyLineDashing(
+                                    rStrokePrimitive.getB2DPolygon(), rStroke.getDotDashArray(),
+                                    &aHairLinePolyPolygon, 0, rStroke.getFullDotDashLen());
+                            }
+
+                            const basegfx::BColor aHairlineColor(maBColorModifierStack.getModifiedColor(rLine.getColor()));
+                            mpOutputDevice->SetLineColor(Color(aHairlineColor));
+                            mpOutputDevice->SetFillColor();
+
+                            aHairLinePolyPolygon.transform(maCurrentTransformation);
+
+                            const LineInfo aLineInfo(LINE_SOLID, basegfx::fround(rLine.getWidth()));
+
+                            for(sal_uInt32 a(0); a < aHairLinePolyPolygon.count(); a++)
+                            {
+                                const basegfx::B2DPolygon aCandidate(aHairLinePolyPolygon.getB2DPolygon(a));
+
+                                if(aCandidate.count() > 1)
+                                {
+                                    const Polygon aToolsPolygon(aCandidate);
+
+                                    mrMetaFile.AddAction(new MetaPolyLineAction(aToolsPolygon, aLineInfo));
+                                }
+                            }
+
+                            bDone = true;
+                        }
+                    }
+
+                    if(!bDone)
+                    {
+                        // use decomposition (creates line geometry as filled polygon
+                        // geometry)
+                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                    }
+
                     impEndSvtGraphicStroke(pSvtGraphicStroke);
 
                     // restore DrawMode
@@ -1622,7 +1693,10 @@ namespace drawinglayer
                     // ChartPrimitive2D
                     const primitive2d::ChartPrimitive2D& rChartPrimitive = static_cast< const primitive2d::ChartPrimitive2D& >(rCandidate);
 
-                    if(!renderChartPrimitive2D(rChartPrimitive, *mpOutputDevice))
+                    if(!renderChartPrimitive2D(
+                        rChartPrimitive,
+                        *mpOutputDevice,
+                        getViewInformation2D()))
                     {
                         // fallback to decomposition (MetaFile)
                         process(rChartPrimitive.get2DDecomposition(getViewInformation2D()));

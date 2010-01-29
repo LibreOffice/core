@@ -1,20 +1,19 @@
-cn  connectivity    :    comphelper MOZ:moz SO:moz_prebuilt svtools UNIXODBC:unixODBC unoil javaunohelper HSQLDB:hsqldb QADEVOOO:qadevOOo NULL
+cn  connectivity    :    l10n comphelper MOZ:moz SO:moz_prebuilt svtools UNIXODBC:unixODBC unoil javaunohelper HSQLDB:hsqldb QADEVOOO:qadevOOo officecfg NULL
 cn  connectivity                                    usr1    -   all cn_mkout NULL
 cn  connectivity\inc                                nmake   -   all cn_inc NULL
 cn  connectivity\com\sun\star\sdbcx\comp\hsqldb     nmake   -   all cn_jhsqldbdb cn_hsqldb cn_inc NULL
 cn  connectivity\source\commontools                 nmake   -   all cn_cmtools cn_parse cn_inc NULL
-cn  connectivity\source\manager                     nmake   -   all cn_manager cn_inc NULL
+cn  connectivity\source\manager                     nmake   -   all cn_manager cn_dbtools cn_inc NULL
 cn  connectivity\source\cpool                       nmake   -   all cn_cpool cn_dbtools cn_inc NULL
 cn  connectivity\source\resource                    nmake   -   all cn_res cn_inc NULL
 cn  connectivity\source\sdbcx                       nmake   -   all cn_sdbcx cn_inc NULL
-cn  connectivity\source\drivers\ado                 nmake   -   w   cn_ado cn_dbtools cn_inc NULL
+cn  connectivity\source\drivers\ado                 nmake   -   all cn_ado cn_dbtools cn_inc NULL
 cn  connectivity\source\drivers\mozab\mozillasrc    nmake   -   all cn_mozab_mozillasrc cn_file cn_inc NULL
 cn  connectivity\source\drivers\mozab\bootstrap     nmake   -   all cn_mozab_bootstrap cn_mozab_mozillasrc cn_inc NULL
 cn  connectivity\source\drivers\mozab               nmake   -   all cn_mozab cn_mozab_bootstrap cn_dbtools cn_inc NULL
-cn  connectivity\source\drivers\kab                 nmake   -   u   cn_kab cn_dbtools cn_inc NULL
-cn  connectivity\source\drivers\macab               nmake   -   u   cn_macab cn_dbtools cn_inc NULL
-cn  connectivity\source\drivers\evoab               nmake   -   u   cn_evoab cn_dbtools cn_file cn_inc NULL
-cn  connectivity\source\drivers\evoab2              nmake   -   u   cn_evoab2 cn_dbtools cn_file cn_inc NULL
+cn  connectivity\source\drivers\kab                 nmake   -   all cn_kab cn_dbtools cn_inc NULL
+cn  connectivity\source\drivers\macab               nmake   -   all cn_macab cn_dbtools cn_inc NULL
+cn  connectivity\source\drivers\evoab2              nmake   -   all cn_evoab2 cn_dbtools cn_file cn_inc NULL
 cn  connectivity\source\drivers\calc                nmake   -   all cn_calc cn_file cn_inc NULL
 cn  connectivity\source\drivers\odbcbase            nmake   -   all cn_odbcbase cn_dbtools cn_inc NULL
 cn  connectivity\source\drivers\odbc                nmake   -   all cn_odbc cn_odbcbase cn_inc NULL
@@ -29,3 +28,5 @@ cn  connectivity\source\parse                       nmake   -   all cn_parse cn_
 cn  connectivity\source\simpledbt                   nmake   -   all cn_simpledbt cn_cmtools cn_inc NULL
 cn  connectivity\source\dbtools                     nmake   -   all cn_dbtools cn_simpledbt cn_cmtools cn_parse cn_res cn_sdbcx cn_inc cn_res NULL
 cn  connectivity\qa\connectivity\tools              nmake   -   all cn_qa_tools cn_inc NULL
+cn  connectivity\util                               nmake   -   all cn_util cn_ado cn_mozab cn_kab cn_evoab2 cn_calc cn_odbc cn_mysql cn_jdbc cn_adabas cn_flat cn_dbase cn_hsqldb NULL
+

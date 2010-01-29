@@ -31,7 +31,6 @@
 package com.sun.star.script.framework.security;
 
 import com.sun.star.awt.ActionEvent;
-import com.sun.star.awt.XActionListener;
 import com.sun.star.awt.ItemEvent;
 import com.sun.star.awt.XItemListener;
 import com.sun.star.awt.XButton;
@@ -40,7 +39,6 @@ import com.sun.star.awt.XControl;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XControlContainer;
 import com.sun.star.awt.XDialog;
-import com.sun.star.awt.XFixedText;
 import com.sun.star.awt.XToolkit;
 import com.sun.star.awt.XWindow;
 
@@ -52,14 +50,11 @@ import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
-import com.sun.star.lang.XTypeProvider;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XInitialization;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.registry.XRegistryKey;
-import com.sun.star.task.XJobExecutor;
-import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.RuntimeException;

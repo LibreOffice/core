@@ -67,7 +67,7 @@ namespace SchXMLTools
         XML_CHART_CLASS_RADAR,
         XML_CHART_CLASS_BAR,
         XML_CHART_CLASS_STOCK,
-        XML_CHART_CLASS_BUBBLE, // not yet implemented
+        XML_CHART_CLASS_BUBBLE,
         XML_CHART_CLASS_ADDIN,
         XML_CHART_CLASS_UNKNOWN
     };
@@ -127,6 +127,16 @@ namespace SchXMLTools
             ::com::sun::star::chart2::data::XDataSequence > & xDataSequence,
         ::rtl::OUString & rOutXMLRange,
         bool bClearProp = false );
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider > getDataProviderFromParent( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDoc );
+
+    bool switchBackToDataProviderFromParent( const ::com::sun::star::uno::Reference<
+        ::com::sun::star::chart2::XChartDocument >& xChartDoc
+        , const tSchXMLLSequencesPerIndex & rLSequencesPerIndex );
+
+    void copyProperties(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & xSource,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & xDestination );
 }
 
 #endif  // SCH_XML_TOOLS_HXX_

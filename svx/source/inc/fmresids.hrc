@@ -263,6 +263,7 @@
 #define RID_STR_SVT_SQL_SYNTAX_QUERY_EXISTS         (RID_FORMS_START + 147)
 #define RID_STR_READONLY_VIEW                       (RID_FORMS_START + 148)
 #define RID_STR_ALREADYEXISTOVERWRITE               (RID_FORMS_START + 149)
+#define RID_STR_OBJECT_LABEL                        (RID_FORMS_START + 150)
 
 // Error-String-Id's -----------------------------------------------------------
 #define RID_ERR_START                               (RID_FORMS_START + 600)

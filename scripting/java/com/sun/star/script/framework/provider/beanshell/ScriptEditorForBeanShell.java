@@ -33,7 +33,6 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import java.awt.FlowLayout;
@@ -42,17 +41,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import java.io.File;
 import java.io.InputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 import java.util.HashMap;
-
-import bsh.Interpreter;
 
 import com.sun.star.script.provider.XScriptContext;
 import com.sun.star.script.framework.provider.ScriptEditor;

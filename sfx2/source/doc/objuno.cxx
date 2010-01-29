@@ -99,33 +99,37 @@ using namespace ::com::sun::star;
 #define PROPERTY_UNBOUND 0
 #define PROPERTY_MAYBEVOID ::com::sun::star::beans::PropertyAttribute::MAYBEVOID
 
-SfxItemPropertyMap aDocInfoPropertyMap_Impl[] =
+const SfxItemPropertyMapEntry* lcl_GetDocInfoPropertyMap()
 {
-    { "Author"          , 6 , WID_FROM,           &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    { "AutoloadEnabled" , 15, MID_DOCINFO_AUTOLOADENABLED, &::getBooleanCppuType(),   PROPERTY_UNBOUND, 0 },
-    { "AutoloadSecs"    , 12, MID_DOCINFO_AUTOLOADSECS, &::getCppuType((const sal_Int32*)0),     PROPERTY_UNBOUND, 0 },
-    { "AutoloadURL"     , 11, MID_DOCINFO_AUTOLOADURL, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    { "CreationDate"    , 12, WID_DATE_CREATED,   &::getCppuType((const ::com::sun::star::util::DateTime*)0),PROPERTY_MAYBEVOID, 0 },
-    { "DefaultTarget"   , 13, MID_DOCINFO_DEFAULTTARGET, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    { "Description"     , 11, MID_DOCINFO_DESCRIPTION, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    { "DocumentStatistic", 17 , MID_DOCINFO_STATISTIC, &::getCppuType((const uno::Sequence< beans::NamedValue >*)0), PROPERTY_UNBOUND, 0 },
-    { "EditingCycles"   , 13, MID_DOCINFO_REVISION, &::getCppuType((const sal_Int16*)0),   PROPERTY_UNBOUND, 0 },
-    { "EditingDuration" , 15, MID_DOCINFO_EDITTIME, &::getCppuType((const sal_Int32*)0),   PROPERTY_UNBOUND, 0 },
-    { "Generator"       , 9,  SID_APPLICATION, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    { "Keywords"        , 8 , WID_KEYWORDS,       &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    { "Language"        , 8,  MID_DOCINFO_CHARLOCALE, &::getCppuType((const lang::Locale*)0), PROPERTY_UNBOUND, 0 },
-    { "MIMEType"        , 8 , WID_CONTENT_TYPE,   &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND | ::com::sun::star::beans::PropertyAttribute::READONLY, 0 },
-    { "ModifiedBy"      , 10, MID_DOCINFO_MODIFICATIONAUTHOR, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    { "ModifyDate"      , 10, WID_DATE_MODIFIED,  &::getCppuType((const ::com::sun::star::util::DateTime*)0),PROPERTY_MAYBEVOID, 0 },
-    { "PrintDate"       , 9 , MID_DOCINFO_PRINTDATE, &::getCppuType((const ::com::sun::star::util::DateTime*)0),PROPERTY_MAYBEVOID, 0 },
-    { "PrintedBy"       , 9 , MID_DOCINFO_PRINTEDBY, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    { "Subject"         , 7 , MID_DOCINFO_SUBJECT, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    { "Template"        , 8 , MID_DOCINFO_TEMPLATE, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    { "TemplateFileName", 16, SID_TEMPLATE_NAME, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    { "TemplateDate"    , 12, MID_DOCINFO_TEMPLATEDATE, &::getCppuType((const ::com::sun::star::util::DateTime*)0),PROPERTY_MAYBEVOID, 0 },
-    { "Title"           , 5 , WID_TITLE,          &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
-    {0,0,0,0,0,0}
-};
+    static SfxItemPropertyMapEntry aDocInfoPropertyMap_Impl[] =
+    {
+        { "Author"          , 6 , WID_FROM,           &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
+        { "AutoloadEnabled" , 15, MID_DOCINFO_AUTOLOADENABLED, &::getBooleanCppuType(),   PROPERTY_UNBOUND, 0 },
+        { "AutoloadSecs"    , 12, MID_DOCINFO_AUTOLOADSECS, &::getCppuType((const sal_Int32*)0),     PROPERTY_UNBOUND, 0 },
+        { "AutoloadURL"     , 11, MID_DOCINFO_AUTOLOADURL, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
+        { "CreationDate"    , 12, WID_DATE_CREATED,   &::getCppuType((const ::com::sun::star::util::DateTime*)0),PROPERTY_MAYBEVOID, 0 },
+        { "DefaultTarget"   , 13, MID_DOCINFO_DEFAULTTARGET, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
+        { "Description"     , 11, MID_DOCINFO_DESCRIPTION, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
+        { "DocumentStatistic", 17 , MID_DOCINFO_STATISTIC, &::getCppuType((const uno::Sequence< beans::NamedValue >*)0), PROPERTY_UNBOUND, 0 },
+        { "EditingCycles"   , 13, MID_DOCINFO_REVISION, &::getCppuType((const sal_Int16*)0),   PROPERTY_UNBOUND, 0 },
+        { "EditingDuration" , 15, MID_DOCINFO_EDITTIME, &::getCppuType((const sal_Int32*)0),   PROPERTY_UNBOUND, 0 },
+        { "Generator"       , 9,  SID_APPLICATION, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
+        { "Keywords"        , 8 , WID_KEYWORDS,       &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
+        { "Language"        , 8,  MID_DOCINFO_CHARLOCALE, &::getCppuType((const lang::Locale*)0), PROPERTY_UNBOUND, 0 },
+        { "MIMEType"        , 8 , WID_CONTENT_TYPE,   &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND | ::com::sun::star::beans::PropertyAttribute::READONLY, 0 },
+        { "ModifiedBy"      , 10, MID_DOCINFO_MODIFICATIONAUTHOR, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
+        { "ModifyDate"      , 10, WID_DATE_MODIFIED,  &::getCppuType((const ::com::sun::star::util::DateTime*)0),PROPERTY_MAYBEVOID, 0 },
+        { "PrintDate"       , 9 , MID_DOCINFO_PRINTDATE, &::getCppuType((const ::com::sun::star::util::DateTime*)0),PROPERTY_MAYBEVOID, 0 },
+        { "PrintedBy"       , 9 , MID_DOCINFO_PRINTEDBY, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
+        { "Subject"         , 7 , MID_DOCINFO_SUBJECT, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
+        { "Template"        , 8 , MID_DOCINFO_TEMPLATE, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
+        { "TemplateFileName", 16, SID_TEMPLATE_NAME, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
+        { "TemplateDate"    , 12, MID_DOCINFO_TEMPLATEDATE, &::getCppuType((const ::com::sun::star::util::DateTime*)0),PROPERTY_MAYBEVOID, 0 },
+        { "Title"           , 5 , WID_TITLE,          &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
+        {0,0,0,0,0,0}
+    };
+    return aDocInfoPropertyMap_Impl;
+}
 
 static USHORT aDaysInMonth[12] = { 31, 28, 31, 30, 31, 30,
                                    31, 31, 30, 31, 30, 31 };
@@ -171,7 +175,7 @@ struct OUStringHashCode
     }
 };
 
-struct SfxExtendedItemPropertyMap : public SfxItemPropertyMap
+struct SfxExtendedItemPropertyMap : public SfxItemPropertyMapEntry
 {
     ::com::sun::star::uno::Any aValue;
 };
@@ -219,13 +223,13 @@ class MixedPropertySetInfo : public ::cppu::WeakImplHelper1< ::com::sun::star::b
 {
     private:
 
-        SfxItemPropertyMap* _pFixProps;
+        SfxItemPropertyMap  _aPropertyMap;
         ::rtl::OUString* _pUserKeys;
         uno::Reference<beans::XPropertySet> _xUDProps;
 
     public:
 
-        MixedPropertySetInfo(SfxItemPropertyMap* pFixProps,
+        MixedPropertySetInfo( const SfxItemPropertyMapEntry* pFixProps,
                              ::rtl::OUString* pUserKeys,
                              uno::Reference<beans::XPropertySet> xUDProps);
 
@@ -238,10 +242,10 @@ class MixedPropertySetInfo : public ::cppu::WeakImplHelper1< ::com::sun::star::b
 
 //-----------------------------------------------------------------------------
 
-MixedPropertySetInfo::MixedPropertySetInfo(SfxItemPropertyMap* pFixProps    ,
+MixedPropertySetInfo::MixedPropertySetInfo(const SfxItemPropertyMapEntry* pFixProps,
                      ::rtl::OUString* pUserKeys,
                      uno::Reference<beans::XPropertySet> xUDProps)
-    : _pFixProps    (pFixProps    )
+    : _aPropertyMap( pFixProps )
     , _pUserKeys(pUserKeys)
     , _xUDProps(xUDProps)
 {
@@ -261,7 +265,9 @@ MixedPropertySetInfo::~MixedPropertySetInfo()
     ::comphelper::SequenceAsVector< ::com::sun::star::beans::Property > lProps;
 
     // copy "fix" props
-    SfxItemPropertyMap* pFixProp = _pFixProps;
+    //todo: os: this ugly thing should be replaced
+    const SfxItemPropertyMapEntry* pFixProp = lcl_GetDocInfoPropertyMap();
+
     while(pFixProp && pFixProp->pName)
     {
         ::com::sun::star::beans::Property aProp;
@@ -300,27 +306,17 @@ MixedPropertySetInfo::~MixedPropertySetInfo()
 
 //-----------------------------------------------------------------------------
 
-::com::sun::star::beans::Property SAL_CALL MixedPropertySetInfo::getPropertyByName( const ::rtl::OUString& sName )
+::com::sun::star::beans::Property SAL_CALL MixedPropertySetInfo::getPropertyByName(
+    const ::rtl::OUString& sName )
     throw(::com::sun::star::beans::UnknownPropertyException,
           ::com::sun::star::uno::RuntimeException          )
 {
     ::com::sun::star::beans::Property aProp;
 
     // search it as "fix" prop
-    SfxItemPropertyMap* pFixProp = _pFixProps;
-    while(pFixProp && pFixProp->pName)
-    {
-        if (sName.equalsAscii(pFixProp->pName))
-        {
-            aProp.Name       = sName;
-            aProp.Handle     = pFixProp->nWID;
-            aProp.Type       = *(pFixProp->pType);
-            aProp.Attributes = (sal_Int16)(pFixProp->nFlags);
-            return aProp;
-        }
-        ++pFixProp;
-    }
-
+    if( _aPropertyMap.hasPropertyByName( sName ) )
+        return _aPropertyMap.getPropertyByName( sName );
+    else
     // search it as "dynamic" prop
     return _xUDProps->getPropertySetInfo()->getPropertyByName(sName);
 }
@@ -330,17 +326,9 @@ MixedPropertySetInfo::~MixedPropertySetInfo()
 ::sal_Bool SAL_CALL MixedPropertySetInfo::hasPropertyByName(const ::rtl::OUString& sName)
     throw(::com::sun::star::uno::RuntimeException)
 {
-    // "fix" prop?
-    SfxItemPropertyMap* pFixProp = _pFixProps;
-    while(pFixProp && pFixProp->pName)
-    {
-        if (sName.equalsAscii(pFixProp->pName))
-            return sal_True;
-        ++pFixProp;
-    }
-
-    // "dynamic" prop?
-    return _xUDProps->getPropertySetInfo()->hasPropertyByName(sName);
+    return _aPropertyMap.hasPropertyByName( sName ) ? // "fix" prop?
+        sal_True :
+        _xUDProps->getPropertySetInfo()->hasPropertyByName(sName); // "dynamic" prop?
 }
 
 //-----------------------------------------------------------------------------
@@ -358,11 +346,13 @@ struct SfxDocumentInfoObject_Impl
 
     // the actual contents
     uno::Reference<document::XDocumentProperties> m_xDocProps;
+    SfxItemPropertyMap      m_aPropertyMap;
 
     SfxDocumentInfoObject_Impl()
         : _aDisposeContainer( _aMutex )
         , bDisposed(sal_False)
         , m_xDocProps()
+        , m_aPropertyMap( lcl_GetDocInfoPropertyMap() )
     {
         // the number of user fields is not changeable from the outside
         // we can't set it too high because every name/value pair will be written to the file (even if empty)
@@ -529,7 +519,7 @@ void SAL_CALL  SfxDocumentInfoObject::removeEventListener(const ::com::sun::star
 
     uno::Reference<beans::XPropertySet> xPropSet(
         _pImp->m_xDocProps->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
-    MixedPropertySetInfo* pInfo = new MixedPropertySetInfo( aDocInfoPropertyMap_Impl, _pImp->m_UserDefined, xPropSet);
+    MixedPropertySetInfo* pInfo = new MixedPropertySetInfo( lcl_GetDocInfoPropertyMap(), _pImp->m_UserDefined, xPropSet);
     uno::Reference< beans::XPropertySetInfo > xInfo(
         static_cast< beans::XPropertySetInfo* >(pInfo), uno::UNO_QUERY_THROW);
     return xInfo;
@@ -542,12 +532,10 @@ void SAL_CALL  SfxDocumentInfoObject::setPropertyValue(const ::rtl::OUString& aP
         beans::PropertyVetoException, lang::IllegalArgumentException,
         lang::WrappedTargetException)
 {
-    const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(
-            aDocInfoPropertyMap_Impl,
-            aPropertyName );
+    const SfxItemPropertySimpleEntry* pEntry = _pImp->m_aPropertyMap.getByName( aPropertyName );
     // fix prop!
-    if ( pMap )
-        setFastPropertyValue( pMap->nWID, aValue );
+    if ( pEntry )
+        setFastPropertyValue( pEntry->nWID, aValue );
     else
     // dynamic prop!
     {
@@ -563,11 +551,10 @@ uno::Any  SAL_CALL  SfxDocumentInfoObject::getPropertyValue(const ::rtl::OUStrin
         uno::RuntimeException, beans::UnknownPropertyException,
         lang::WrappedTargetException)
 {
-    const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName( aDocInfoPropertyMap_Impl,
-        aPropertyName );
+    const SfxItemPropertySimpleEntry* pEntry = _pImp->m_aPropertyMap.getByName( aPropertyName );
     // fix prop!
-    if ( pMap )
-        return getFastPropertyValue( pMap->nWID );
+    if ( pEntry )
+        return getFastPropertyValue( pEntry->nWID );
     else
     // dynamic prop!
     {
@@ -680,8 +667,7 @@ void SAL_CALL SfxDocumentInfoObject::addProperty(const ::rtl::OUString&         
           ::com::sun::star::uno::RuntimeException         )
 {
     // clash with "fix" properties ?
-    sal_Bool bFixProp = (SfxItemPropertyMap::GetByName( aDocInfoPropertyMap_Impl, sName ) != 0);
-
+    sal_Bool bFixProp = _pImp->m_aPropertyMap.getByName( sName ) != 0;
     if ( bFixProp )
     {
         ::rtl::OUStringBuffer sMsg(256);
@@ -707,7 +693,7 @@ void SAL_CALL SfxDocumentInfoObject::removeProperty(const ::rtl::OUString& sName
           ::com::sun::star::uno::RuntimeException          )
 {
     // clash with "fix" properties ?
-    sal_Bool bFixProp = (SfxItemPropertyMap::GetByName( aDocInfoPropertyMap_Impl, sName ) != 0);
+    sal_Bool bFixProp = _pImp->m_aPropertyMap.getByName( sName ) != 0;
     if ( bFixProp )
     {
         ::rtl::OUStringBuffer sMsg(256);

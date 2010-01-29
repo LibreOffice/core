@@ -45,31 +45,31 @@ class BreakpointWindow;
 class AppBasEd : public AppEdit  {  // Editor-Window:
 using DockingWindow::Notify;
 
-    SbModuleRef pMod;               // compiliertes Modul
-    BOOL bCompiled;                 // TRUE, wenn compiliert
+    SbModuleRef pMod;               // compile module
+    BOOL bCompiled;                 // TRUE if compiled
 protected:
     DECL_LINK( EditChange, void * );
 #define BREAKPOINTSWIDTH 15
     BreakpointWindow *pBreakpoints;
-    virtual USHORT ImplSave();              // Datei speichern
+    virtual USHORT ImplSave();              // Save file
 
 public:
     TYPEINFO();
     AppBasEd( BasicFrame*, SbModule* );
     ~AppBasEd();
-    FileType GetFileType();         // Liefert den Filetype
+    FileType GetFileType();         // Returns Filetype
     SbModule* GetModule()           { return pMod; }
-    long InitMenu( Menu* );         // Initialisierung des Menues
-    virtual long DeInitMenu( Menu* );   // rücksetzen, so daß wieder alle Shortcuts enabled sind
-    virtual void Command( const CommandEvent& rCEvt );  // Kommando-Handler
-    virtual void Resize();              // Berücksichtigt die Breakpointleiste
-    virtual void PostLoad();            // Nachbearbeiten des geladenen (Source am Modul setzen)
-    virtual void PostSaveAs();          // Nachbearbeiten des Modils ...
+    long InitMenu( Menu* );         // Initialision of the menus
+    virtual long DeInitMenu( Menu* );   // Reset to enable all shortcuts
+    virtual void Command( const CommandEvent& rCEvt );  // Command handler
+    virtual void Resize();              // Includes the breakpoint bar
+    virtual void PostLoad();         // Set source of module
+    virtual void PostSaveAs();       // Postprocess of module...
     void Reload();
-    void LoadSource();              // Quelltext zu Objekt laden
-    BOOL Compile();                 // Text compilieren
-    void Run();                     // Image laufenlassen
-    void Disassemble();             // Image disassemblieren
+    void LoadSource();               // Load source for object
+    BOOL Compile();                  // Compile text
+    void Run();                      // Run image
+    void Disassemble();              // Disassemble image
     const String& GetModName() const { return pMod->GetName(); }
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 };

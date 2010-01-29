@@ -454,7 +454,7 @@ void GetDoubleSequence( std::vector< com::sun::star::beans::PropertyValue >& rDe
     }
     while ( nIndex >= 0 );
 
-    if ( vDirection.size() )
+    if ( !vDirection.empty() )
     {
         uno::Sequence< double > aDirectionsSeq( vDirection.size() );
         std::vector< double >::const_iterator aIter = vDirection.begin();
@@ -512,7 +512,7 @@ sal_Int32 GetEnhancedParameterPairSequence( std::vector< com::sun::star::beans::
     {
         vParameter.push_back( aParameter );
     }
-    if ( vParameter.size() )
+    if ( !vParameter.empty() )
     {
         uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair > aParameterSeq( vParameter.size() );
         std::vector< com::sun::star::drawing::EnhancedCustomShapeParameterPair >::const_iterator aIter = vParameter.begin();
@@ -545,7 +545,7 @@ void GetEnhancedRectangleSequence( std::vector< com::sun::star::beans::PropertyV
     {
         vTextFrame.push_back( aParameter );
     }
-    if ( vTextFrame.size() )
+    if ( !vTextFrame.empty() )
     {
         uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeTextFrame > aTextFrameSeq( vTextFrame.size() );
         std::vector< com::sun::star::drawing::EnhancedCustomShapeTextFrame >::const_iterator aIter = vTextFrame.begin();
@@ -739,7 +739,7 @@ void GetEnhancedPath( std::vector< com::sun::star::beans::PropertyValue >& rDest
         {
             // check if the last command is identical,
             // if so, we just need to increment the count
-            if ( vSegments.size() && ( vSegments[ vSegments.size() - 1 ].Command == nLatestSegmentCommand ) )
+            if ( !vSegments.empty() && ( vSegments[ vSegments.size() - 1 ].Command == nLatestSegmentCommand ) )
                 vSegments[ vSegments.size() -1 ].Count++;
             else
             {
@@ -1075,7 +1075,7 @@ void SdXMLCustomShapePropertyMerge( std::vector< com::sun::star::beans::Property
                                     const std::vector< beans::PropertyValues >& rElement,
                                         const rtl::OUString& rElementName )
 {
-    if ( rElement.size() )
+    if ( !rElement.empty() )
     {
         uno::Sequence< beans::PropertyValues > aPropSeq( rElement.size() );
         std::vector< beans::PropertyValues >::const_iterator aIter = rElement.begin();
@@ -1096,7 +1096,7 @@ void SdXMLCustomShapePropertyMerge( std::vector< com::sun::star::beans::Property
                                     const std::vector< rtl::OUString >& rElement,
                                         const rtl::OUString& rElementName )
 {
-    if ( rElement.size() )
+    if ( !rElement.empty() )
     {
         uno::Sequence< rtl::OUString > aPropSeq( rElement.size() );
         std::vector< rtl::OUString >::const_iterator aIter = rElement.begin();
@@ -1117,7 +1117,7 @@ void SdXMLCustomShapePropertyMerge( std::vector< com::sun::star::beans::Property
                                     const std::vector< com::sun::star::beans::PropertyValue >& rElement,
                                         const rtl::OUString& rElementName )
 {
-    if ( rElement.size() )
+    if ( !rElement.empty() )
     {
         uno::Sequence< beans::PropertyValue > aPropSeq( rElement.size() );
         std::vector< beans::PropertyValue >::const_iterator aIter = rElement.begin();
@@ -1157,7 +1157,7 @@ void CheckAndResolveEquationParameter( com::sun::star::drawing::EnhancedCustomSh
 void XMLEnhancedCustomShapeContext::EndElement()
 {
     // resolve properties that are indexing a Equation
-    if ( maEquations.size() )
+    if ( !maEquations.empty() )
     {
         // creating hash map containing the name and index of each equation
         EquationHashMap* pH = new EquationHashMap;
@@ -1283,7 +1283,7 @@ void XMLEnhancedCustomShapeContext::EndElement()
     SdXMLCustomShapePropertyMerge( mrCustomShapeGeometry, maPath,      EASGet( EAS_Path ) );
     SdXMLCustomShapePropertyMerge( mrCustomShapeGeometry, maTextPath,  EASGet( EAS_TextPath ) );
     SdXMLCustomShapePropertyMerge( mrCustomShapeGeometry, maEquations, EASGet( EAS_Equations ) );
-    if  ( maHandles.size() )
+    if  ( !maHandles.empty() )
         SdXMLCustomShapePropertyMerge( mrCustomShapeGeometry, maHandles, EASGet( EAS_Handles ) );
 }
 
@@ -1326,7 +1326,8 @@ SvXMLImportContext* XMLEnhancedCustomShapeContext::CreateChildContext( USHORT nP
     else if ( aTokenEnum == EAS_handle )
     {
         std::vector< com::sun::star::beans::PropertyValue > aHandle;
-        for( sal_Int16 nAttr = 0; nAttr < xAttrList->getLength(); nAttr++ )
+        const sal_Int16 nLength = xAttrList->getLength();
+        for( sal_Int16 nAttr = 0; nAttr < nLength; nAttr++ )
         {
             rtl::OUString aLocalName;
             const rtl::OUString& rValue = xAttrList->getValueByIndex( nAttr );

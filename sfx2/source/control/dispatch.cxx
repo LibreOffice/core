@@ -270,8 +270,6 @@ int SfxDispatcher::Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
             }
         }
 
-        SfxBindings *pBindings = GetBindings();
-
         // Alles holen, was gebraucht wird, da der Slot den Execute evtl. nicht
         // "uberlebt, falls es ein 'Pseudoslot' f"ur Macros oder Verben ist
         sal_Bool bAutoUpdate = rSlot.IsMode(SFX_SLOT_AUTOUPDATE);
@@ -308,9 +306,17 @@ int SfxDispatcher::Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
             // falls 'this' noch lebt
             if ( bThisDispatcherAlive )
                 pImp->pInCallAliveFlag = pOldInCallAliveFlag;
-            else if ( pOldInCallAliveFlag )
-                // auch verschachtelte Stack-Frames sch"utzen
-                *pOldInCallAliveFlag = sal_False;
+            else
+            {
+                if ( pOldInCallAliveFlag )
+                {
+                    // auch verschachtelte Stack-Frames sch"utzen
+                    *pOldInCallAliveFlag = sal_False;
+                }
+
+                // do nothing after this object is dead
+                return rReq.IsDone();
+            }
         }
 
         // TabPage-ID und Executing-SID zurueck setzen
@@ -325,6 +331,8 @@ int SfxDispatcher::Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
 
         if ( rReq.IsDone() )
         {
+            SfxBindings *pBindings = GetBindings();
+
             // bei AutoUpdate sofort updaten; "Pseudoslots" d"urfen nicht
             // Autoupdate sein!
             if ( bAutoUpdate && pBindings )

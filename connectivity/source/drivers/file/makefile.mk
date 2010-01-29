@@ -82,7 +82,6 @@ SHL1STDLIBS=\
     $(VOSLIB)					\
     $(SVLLIB)					\
     $(TOOLSLIB)					\
-    $(SVTOOLLIB)				\
     $(UCBHELPERLIB)				\
     $(SALLIB)					\
     $(DBTOOLSLIB)				\

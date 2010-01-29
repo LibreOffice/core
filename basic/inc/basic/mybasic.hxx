@@ -77,12 +77,13 @@ public:
     void Reset();
     SbError GetErrors() { return nError; }
 
-    // nicht mit #ifdefs klammern, da diese Headerdatei für testtool und basic
-    // gleichermaßen verwendet wird.
-    SbxObject *pTestObject;         // für das Testtool; ansonsten NULL
+        // Do not use #ifdefs here because this header file is both used for testtool and basic
+    SbxObject *pTestObject; // for Testool; otherwise NULL
 
     virtual void LoadIniFile();
-    virtual SbTextType GetSymbolType( const String &Symbol, BOOL bWasTTControl );   // Besimmt den erweiterten Symboltyp für das Syntaxhighlighting
+
+    // Determines the extended symbol type for syntax highlighting
+    virtual SbTextType GetSymbolType( const String &Symbol, BOOL bWasTTControl );
     virtual const String GetSpechialErrorText();
     virtual void ReportRuntimeError( AppBasEd *pEditWin );
     virtual void DebugFindNoErrors( BOOL bDebugFindNoErrors );

@@ -70,6 +70,7 @@
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
+#include <svtools/extendedsecurityoptions.hxx>
 #include <svtools/svlbox.hxx>
 #include <svtools/eitem.hxx>
 #include <svtools/intitem.hxx>
@@ -1176,9 +1177,15 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
     aLinguOptionsCLB.SetSelectHdl( LINK( this, SvxLinguTabPage, SelectHdl_Impl ));
     aLinguOptionsCLB.SetDoubleClickHdl(LINK(this, SvxLinguTabPage, BoxDoubleClickHdl_Impl));
 
-    aMoreDictsLink.SetURL( String(
-        RTL_CONSTASCII_STRINGPARAM( "http://extensions.services.openoffice.org/dictionary?cid=926386" ) ) );
-    aMoreDictsLink.SetClickHdl( LINK( this, SvxLinguTabPage, OpenURLHdl_Impl ) );
+    if ( SvtExtendedSecurityOptions().GetOpenHyperlinkMode()
+            != SvtExtendedSecurityOptions::OPEN_NEVER )
+    {
+        aMoreDictsLink.SetURL( String(
+            RTL_CONSTASCII_STRINGPARAM( "http://extensions.services.openoffice.org/dictionary?cid=926386" ) ) );
+        aMoreDictsLink.SetClickHdl( LINK( this, SvxLinguTabPage, OpenURLHdl_Impl ) );
+    }
+    else
+        aMoreDictsLink.Hide();
 
 
     // force recalculation of hash value used for checking the need of updating
@@ -2017,10 +2024,14 @@ void SvxLinguTabPage::HideGroups( sal_uInt16 nGrp )
         aSize.Height() += nDeltaY;
         aLinguOptionsCLB.SetSizePixel( aSize );
 
-        aSize = GetOutputSizePixel();
-        aSize.Height() += ( aMoreDictsLink.GetSizePixel().Height() * 11 / 8 );
-        SetSizePixel( aSize );
-        aMoreDictsLink.Show();
+        if ( SvtExtendedSecurityOptions().GetOpenHyperlinkMode()
+                != SvtExtendedSecurityOptions::OPEN_NEVER )
+        {
+            aSize = GetOutputSizePixel();
+            aSize.Height() += ( aMoreDictsLink.GetSizePixel().Height() * 11 / 8 );
+            SetSizePixel( aSize );
+            aMoreDictsLink.Show();
+        }
     }
 }
 /*--------------------------------------------------
@@ -2064,9 +2075,21 @@ SvxEditModulesDlg::SvxEditModulesDlg(Window* pParent, SvxLinguData_Impl& rData) 
     aPrioUpPB  .Enable( FALSE );
     aPrioDownPB.Enable( FALSE );
 
-    aMoreDictsLink.SetURL( String(
-        RTL_CONSTASCII_STRINGPARAM( "http://extensions.services.openoffice.org/dictionary?cid=926386" ) ) );
-    aMoreDictsLink.SetClickHdl( LINK( this, SvxEditModulesDlg, OpenURLHdl_Impl ) );
+    if ( SvtExtendedSecurityOptions().GetOpenHyperlinkMode()
+            != SvtExtendedSecurityOptions::OPEN_NEVER )
+    {
+        aMoreDictsLink.SetURL( String(
+            RTL_CONSTASCII_STRINGPARAM( "http://extensions.services.openoffice.org/dictionary?cid=926386" ) ) );
+        aMoreDictsLink.SetClickHdl( LINK( this, SvxEditModulesDlg, OpenURLHdl_Impl ) );
+    }
+    else
+    {
+        aMoreDictsLink.Hide();
+        long nPos = aMoreDictsLink.GetPosPixel().Y() + aMoreDictsLink.GetSizePixel().Height();
+        Size aSize = aModulesCLB.GetSizePixel();
+        aSize.Height() += ( nPos - ( aModulesCLB.GetPosPixel().Y() + aSize.Height() ) );
+        aModulesCLB.SetSizePixel( aSize );
+    }
 
     //
     //fill language box

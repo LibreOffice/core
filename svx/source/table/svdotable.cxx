@@ -1930,21 +1930,6 @@ void lcl_VertLine( OutputDevice& rDev, const Point& rTop, const Point& rBottom,
 
 // --------------------------------------------------------------------
 
-SdrObject* SdrTableObj::CheckHit(const Point& rPnt, USHORT /*nTol*/, const SetOfByte* pVisiLayer) const
-{
-    if(pVisiLayer && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(GetLayer())))
-    {
-        return NULL;
-    }
-
-    if( (rPnt.X() >= aOutRect.Left()) && (rPnt.X() <= aOutRect.Right()) && (rPnt.Y() >= aOutRect.Top()) && rPnt.Y() <= aOutRect.Bottom() )
-        return const_cast<SdrObject*>(static_cast<const SdrObject*>(this));
-
-    return NULL;
-}
-
-// --------------------------------------------------------------------
-
 void SdrTableObj::TakeObjNameSingul(XubString& rName) const
 {
     rName = ImpGetResStr(STR_ObjNameSingulTable);
@@ -2106,7 +2091,7 @@ void SdrTableObj::EndTextEdit(SdrOutliner& rOutl)
 {
     if(rOutl.IsModified())
     {
-        if( GetModel() )
+        if( GetModel() && GetModel()->IsUndoEnabled() )
             GetModel()->AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*this) );
 
         OutlinerParaObject* pNewText = 0;
@@ -2676,7 +2661,7 @@ Pointer SdrTableObj::GetCreatePointer() const
 
 void SdrTableObj::createCell( CellRef& xNewCell )
 {
-    xNewCell.set( new Cell( *this, 0 ) );
+    xNewCell = Cell::create( *this, 0 );
 }
 
 // --------------------------------------------------------------------

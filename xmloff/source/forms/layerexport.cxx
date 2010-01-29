@@ -361,7 +361,7 @@ namespace xmloff
         else
         {
             bKnownPage = sal_True;
-            if (_bClear && m_aCurrentPageIds->second.size())
+            if (_bClear && !m_aCurrentPageIds->second.empty() )
                 m_aCurrentPageIds->second.clear();
         }
 
@@ -375,7 +375,7 @@ namespace xmloff
         else
         {
             bKnownPage = sal_True;
-            if (_bClear && m_aCurrentPageReferring->second.size())
+            if (_bClear && !m_aCurrentPageReferring->second.empty() )
                 m_aCurrentPageReferring->second.clear();
         }
         return bKnownPage;
@@ -488,7 +488,7 @@ namespace xmloff
             else
             {
                 // step up
-                while ((nChildPos >= xLoop->getCount()) && aContainerHistory.size())
+                while ((nChildPos >= xLoop->getCount()) && !aContainerHistory.empty() )
                 {
                     xLoop = aContainerHistory.top();
                     aContainerHistory.pop();
@@ -669,7 +669,7 @@ namespace xmloff
                 // ----------------------------------
                 // determine the column style
 
-                if ( aPropertyStates.size() )
+                if ( !aPropertyStates.empty() )
                 {   // add to the style pool
                     ::rtl::OUString sColumnStyleName = m_rContext.GetAutoStylePool()->Add( XML_STYLE_FAMILY_CONTROL_ID, aPropertyStates );
 

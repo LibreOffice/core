@@ -48,9 +48,9 @@ protected:
 
 public:
     StatusLine( BasicFrame* );
-    void Message( const String& );              // Text anzeigen
-    void Pos( const String& s );                    // Textposition anzeigen
-    void SetProfileName( const String& s );     // Current Profile
+    void Message( const String& );           // Show text
+    void Pos( const String& s );             // Show text position
+    void SetProfileName( const String& s );  // Current Profile
     void LoadTaskToolBox();
 };
 

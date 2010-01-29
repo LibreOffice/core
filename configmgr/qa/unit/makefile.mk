@@ -54,10 +54,10 @@ ALLTAR: test
 
 $(MISC)$/$(TARGET).rdb .ERRREMOVE:
     $(COPY) $(SOLARBINDIR)$/types.rdb $@
-    regcomp -register -r $@ -c $(subst,$/,/ $(DLLDEST)$/configmgr2.uno$(DLLPOST))
-    regcomp -register -r $@ -c $(subst,$/,/ $(SOLARLIBDIR)/sax.uno$(DLLPOST))
-    regcomp -register -r $@ -c $(subst,$/,/ $(SOLARLIBDIR)/stocservices.uno$(DLLPOST))
-    regcomp -register -r $@ -c $(subst,$/,/ $(SOLARLIBDIR)/streams.uno$(DLLPOST))
+    $(REGCOMP) -register -r $@ -c $(subst,$/,/ $(DLLDEST)$/configmgr2.uno$(DLLPOST))
+    $(REGCOMP) -register -r $@ -c $(subst,$/,/ $(SOLARLIBDIR)/sax.uno$(DLLPOST))
+    $(REGCOMP) -register -r $@ -c $(subst,$/,/ $(SOLARLIBDIR)/stocservices.uno$(DLLPOST))
+    $(REGCOMP) -register -r $@ -c $(subst,$/,/ $(SOLARLIBDIR)/streams.uno$(DLLPOST))
 
 test .PHONY: $(SHL1TARGETN) $(MISC)$/$(TARGET).rdb
-    testshl2 $(SHL1TARGETN) -forward "$(MISC)$/$(TARGET).rdb#$(PWD)$/$(MISC)$/$(TARGET).registry"
+    $(AUGMENT_LIBRARY_PATH) testshl2 $(SHL1TARGETN) -forward "$(MISC)$/$(TARGET).rdb#$(PWD)$/$(MISC)$/$(TARGET).registry"

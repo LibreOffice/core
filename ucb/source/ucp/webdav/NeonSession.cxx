@@ -60,6 +60,7 @@
 #include <com/sun/star/security/CertificateContainerStatus.hpp>
 #include <com/sun/star/security/CertificateContainer.hpp>
 #include <com/sun/star/security/XCertificateContainer.hpp>
+#include <com/sun/star/task/XMasterPasswordHandling.hpp>
 
 
 #ifndef _SIMPLECERTIFICATIONVALIDATIONREQUEST_HXX_
@@ -329,11 +330,19 @@ extern "C" int NeonSession_NeonAuth( void *       inUserData,
         //thePassWord = rtl::OUString::createFromAscii( inoutPassWord );
     }
 
+    //i97003 (tkr): Ask XMasterPasswordHandling if we should store the credentials persistently and give this information to the SimpleAuthenticationRequest
+    uno::Reference< ::com::sun::star::task::XMasterPasswordHandling > xMasterPasswordHandling =
+    uno::Reference< ::com::sun::star::task::XMasterPasswordHandling >(
+                    theSession->getMSF().get()->createInstance( rtl::OUString::createFromAscii( "com.sun.star.task.PasswordContainer" )), uno::UNO_QUERY );
+    // -
+
     int theRetVal = pListener->authenticate(
                             rtl::OUString::createFromAscii( inRealm ),
                             theSession->getHostName(),
                             theUserName,
-                            thePassWord );
+                            thePassWord,
+                            xMasterPasswordHandling.is() ? xMasterPasswordHandling->isPersistentStoringAllowed() : sal_False);
+
     rtl::OString aUser(
         rtl::OUStringToOString( theUserName, RTL_TEXTENCODING_UTF8 ) );
     if ( aUser.getLength() > ( NE_ABUFSIZ - 1 ) )
@@ -1247,6 +1256,16 @@ void NeonSession::POST( const rtl::OUString & inPath,
                           rReferer );
 
     HandleError( theRetVal );
+}
+
+// -------------------------------------------------------------------
+// ABORT
+// -------------------------------------------------------------------
+void NeonSession::ABORT()
+    throw ( DAVException )
+{
+    if (NULL !=m_pHttpSession)
+        ne_close_connection(m_pHttpSession);
 }
 
 // -------------------------------------------------------------------

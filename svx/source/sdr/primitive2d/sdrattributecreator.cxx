@@ -473,7 +473,14 @@ namespace drawinglayer
             return pRetval;
         }
 
-        attribute::SdrTextAttribute* createNewSdrTextAttribute(const SfxItemSet& rSet, const SdrText& rText)
+        // #i101508# Support handing over given text-to-border distances
+        attribute::SdrTextAttribute* createNewSdrTextAttribute(
+            const SfxItemSet& rSet,
+            const SdrText& rText,
+            const sal_Int32* pLeft,
+            const sal_Int32* pUpper,
+            const sal_Int32* pRight,
+            const sal_Int32* pLower)
         {
             attribute::SdrTextAttribute* pRetval(0);
             const SdrTextObj& rTextObj = rText.GetObject();
@@ -505,7 +512,10 @@ namespace drawinglayer
                     }
                     else
                     {
-                        bInEditMode = false;
+                        // #i100537#
+                        // GetEditOutlinerParaObject() returning no object does not mean that
+                        // text edit mode is not active. Do not reset the flag here
+                        // bInEditMode = false;
                     }
                 }
 
@@ -516,10 +526,10 @@ namespace drawinglayer
                     rText,
                     aOutlinerParaObject,
                     ((const XFormTextStyleItem&)rSet.Get(XATTR_FORMTXTSTYLE)).GetValue(),
-                    rTextObj.GetTextLeftDistance(),
-                    rTextObj.GetTextUpperDistance(),
-                    rTextObj.GetTextRightDistance(),
-                    rTextObj.GetTextLowerDistance(),
+                    pLeft ? *pLeft : rTextObj.GetTextLeftDistance(),
+                    pUpper ? *pUpper : rTextObj.GetTextUpperDistance(),
+                    pRight ? *pRight : rTextObj.GetTextRightDistance(),
+                    pLower ? *pLower : rTextObj.GetTextLowerDistance(),
                     ((const SdrTextContourFrameItem&)rSet.Get(SDRATTR_TEXT_CONTOURFRAME)).GetValue(),
                     (SDRTEXTFIT_PROPORTIONAL == eFit || SDRTEXTFIT_ALLLINES == eFit),
                     ((const XFormTextHideFormItem&)rSet.Get(XATTR_FORMTXTHIDEFORM)).GetValue(),
@@ -588,10 +598,18 @@ namespace drawinglayer
 
             if(aBitmap.GetPrefMapMode() != aDestinationMapUnit)
             {
-                // #i96237# need to use LogicToLogic, source is not always pixels
-                aBitmap.SetPrefSize(Application::GetDefaultDevice()->LogicToLogic(
-                    aBitmap.GetPrefSize(), aBitmap.GetPrefMapMode(), aDestinationMapUnit));
-                aBitmap.SetPrefMapMode(aDestinationMapUnit);
+                // #i100360# for MAP_PIXEL, LogicToLogic will not work properly,
+                // so fallback to Application::GetDefaultDevice()
+                if(MAP_PIXEL == aBitmap.GetPrefMapMode().GetMapUnit())
+                {
+                    aBitmap.SetPrefSize(Application::GetDefaultDevice()->PixelToLogic(
+                        aBitmap.GetPrefSize(), aDestinationMapUnit));
+                }
+                else
+                {
+                    aBitmap.SetPrefSize(OutputDevice::LogicToLogic(
+                        aBitmap.GetPrefSize(), aBitmap.GetPrefMapMode(), aDestinationMapUnit));
+                }
             }
 
             // get size
@@ -662,7 +680,7 @@ namespace drawinglayer
 
             // when object has text and text is fontwork and hide contour is set for fontwork, force
             // line and fill style to empty
-            if(pText && pText->isFontwork() && pText->isHideContour())
+            if(pText && pText->getSdrFormTextAttribute() && pText->isHideContour())
             {
                 bFontworkHideContour = true;
             }
@@ -727,7 +745,7 @@ namespace drawinglayer
 
             // when object has text and text is fontwork and hide contour is set for fontwork, force
             // line and fill style to empty
-            if(pText && pText->isFontwork() && pText->isHideContour())
+            if(pText && pText->getSdrFormTextAttribute() && pText->isHideContour())
             {
                 bFontworkHideContour = true;
             }
@@ -1020,7 +1038,14 @@ namespace drawinglayer
             }
         }
 
-        attribute::SdrFillTextAttribute* createNewSdrFillTextAttribute(const SfxItemSet& rSet, const SdrText* pSdrText)
+        // #i101508# Support handing over given text-to-border distances
+        attribute::SdrFillTextAttribute* createNewSdrFillTextAttribute(
+            const SfxItemSet& rSet,
+            const SdrText* pSdrText,
+            const sal_Int32* pLeft,
+            const sal_Int32* pUpper,
+            const sal_Int32* pRight,
+            const sal_Int32* pLower)
         {
             attribute::SdrFillTextAttribute* pRetval(0L);
             attribute::SdrFillAttribute* pFill(0L);
@@ -1031,12 +1056,12 @@ namespace drawinglayer
             // look for text first
             if(pSdrText)
             {
-                pText = createNewSdrTextAttribute(rSet, *pSdrText);
+                pText = createNewSdrTextAttribute(rSet, *pSdrText, pLeft, pUpper, pRight, pLower);
             }
 
             // when object has text and text is fontwork and hide contour is set for fontwork, force
             // fill style to empty
-            if(pText && pText->isFontwork() && pText->isHideContour())
+            if(pText && pText->getSdrFormTextAttribute() && pText->isHideContour())
             {
                 bFontworkHideContour = true;
             }

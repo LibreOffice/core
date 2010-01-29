@@ -36,6 +36,7 @@
 #include <comphelper/property.hxx>
 #include <comphelper/uno3.hxx>
 #include <osl/thread.h>
+#include <tools/diagnose_ex.h>
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/FetchDirection.hpp>
@@ -78,39 +79,33 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 //------------------------------------------------------------------------------
-OStatement_Base::OStatement_Base(OConnection* _pConnection )
-    :OStatement_BASE(m_aMutex)
-    ,OPropertySetHelper(OStatement_BASE::rBHelper)
+OCommonStatement::OCommonStatement(OConnection* _pConnection )
+    :OCommonStatement_IBASE(m_aMutex)
+    ,OPropertySetHelper(OCommonStatement_IBASE::rBHelper)
+    ,OCommonStatement_SBASE((::cppu::OWeakObject*)_pConnection, this)
     ,m_xDBMetaData(_pConnection->getMetaData())
     ,m_pTable(NULL)
     ,m_pConnection(_pConnection)
     ,m_aParser(_pConnection->getDriver()->getMSFactory())
     ,m_pSQLIterator( new OSQLParseTreeIterator( _pConnection, _pConnection->createCatalog()->getTables(), m_aParser, NULL ) )
     ,m_pParseTree(NULL)
-    ,rBHelper(OStatement_BASE::rBHelper)
+    ,rBHelper(OCommonStatement_IBASE::rBHelper)
 {
     m_pConnection->acquire();
-    OSL_TRACE("In/Out: OStatement_Base::OStatement_Base" );
+    OSL_TRACE("In/Out: OCommonStatement::OCommonStatement" );
 }
 // -----------------------------------------------------------------------------
-OStatement_Base::~OStatement_Base()
+OCommonStatement::~OCommonStatement()
 {
 }
+
 //------------------------------------------------------------------------------
-void OStatement_Base::disposeResultSet()
-{
-    // free the cursor if alive
-    Reference< XComponent > xComp(m_xResultSet.get(), UNO_QUERY);
-    if (xComp.is())
-        xComp->dispose();
-    m_xResultSet = Reference< XResultSet>();
-}
-//------------------------------------------------------------------------------
-void OStatement_BASE2::disposing()
+void OCommonStatement::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    disposeResultSet();
+    clearWarnings();
+    clearCachedResultSet();
 
     if (m_pConnection)
         m_pConnection->release();
@@ -119,76 +114,38 @@ void OStatement_BASE2::disposing()
     m_pSQLIterator->dispose();
 
     dispose_ChildImpl();
-    OStatement_Base::disposing();
+    OCommonStatement_IBASE::disposing();
 }
 //-----------------------------------------------------------------------------
-void SAL_CALL OStatement_BASE2::release() throw()
+Any SAL_CALL OCommonStatement::queryInterface( const Type & rType ) throw(RuntimeException)
 {
-    relase_ChildImpl();
-}
-//-----------------------------------------------------------------------------
-Any SAL_CALL OStatement_Base::queryInterface( const Type & rType ) throw(RuntimeException)
-{
-    Any aRet = OStatement_BASE::queryInterface(rType);
+    Any aRet = OCommonStatement_IBASE::queryInterface(rType);
     if(!aRet.hasValue())
         aRet = OPropertySetHelper::queryInterface(rType);
     return aRet;
 }
 // -------------------------------------------------------------------------
-Sequence< Type > SAL_CALL OStatement_Base::getTypes(  ) throw(RuntimeException)
+Sequence< Type > SAL_CALL OCommonStatement::getTypes(  ) throw(RuntimeException)
 {
     ::cppu::OTypeCollection aTypes( ::getCppuType( (const Reference< XMultiPropertySet > *)0 ),
                                     ::getCppuType( (const Reference< XFastPropertySet > *)0 ),
                                     ::getCppuType( (const Reference< XPropertySet > *)0 ));
 
-    return ::comphelper::concatSequences(aTypes.getTypes(),OStatement_BASE::getTypes());
+    return ::comphelper::concatSequences(aTypes.getTypes(),OCommonStatement_IBASE::getTypes());
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OStatement_Base::close(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OCommonStatement::close(  ) throw(SQLException, RuntimeException)
 {
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
+        checkDisposed(OCommonStatement_IBASE::rBHelper.bDisposed);
     }
     dispose();
 }
+
+
 // -------------------------------------------------------------------------
-
-void OStatement_Base::reset() throw (SQLException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
-
-    clearWarnings ();
-
-    if (m_xResultSet.get().is())
-        clearMyResultSet();
-}
-//--------------------------------------------------------------------
-// clearMyResultSet
-// If a ResultSet was created for this Statement, close it
-//--------------------------------------------------------------------
-
-void OStatement_Base::clearMyResultSet () throw (SQLException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
-    try
-    {
-        Reference<XCloseable> xCloseable;
-        if ( ::comphelper::query_interface( m_xResultSet.get(), xCloseable ) )
-            xCloseable->close();
-    }
-    catch( const DisposedException& ) { }
-
-    m_xResultSet = Reference< XResultSet >();
-}
-
-void OStatement_Base::createTable( )
-    throw ( SQLException, RuntimeException )
+void OCommonStatement::createTable( ) throw ( SQLException, RuntimeException )
 {
     if(m_pParseTree)
     {
@@ -222,7 +179,7 @@ void OStatement_Base::createTable( )
             MDatabaseMetaDataHelper     _aDbHelper;
             if (!_aDbHelper.NewAddressBook(m_pConnection,ouTableName))
             {
-                getOwnConnection()->throwGenericSQLException( _aDbHelper.getErrorResourceId(),*this );
+                getOwnConnection()->throwSQLException( _aDbHelper.getError(), *this );
             }
             m_pSQLIterator.reset( new ::connectivity::OSQLParseTreeIterator(
                 m_pConnection, m_pConnection->createCatalog()->getTables(), m_aParser, NULL ) );
@@ -230,15 +187,13 @@ void OStatement_Base::createTable( )
 
     }
     else
-        getOwnConnection()->throwGenericSQLException( STR_QUERY_TOO_COMPLEX ,*this);
+        getOwnConnection()->throwSQLException( STR_QUERY_TOO_COMPLEX, *this );
 }
 // -------------------------------------------------------------------------
-sal_Bool OStatement_Base::parseSql( const ::rtl::OUString& sql , sal_Bool bAdjusted)
+OCommonStatement::StatementType OCommonStatement::parseSql( const ::rtl::OUString& sql , sal_Bool bAdjusted)
     throw ( SQLException, RuntimeException )
 {
     ::rtl::OUString aErr;
-
-    OSL_TRACE("In/Out :: OStatement::parseSql(%s)\n", OUtoCStr( sql ) );
 
     m_pParseTree = m_aParser.parseTree(aErr,sql);
 
@@ -256,7 +211,7 @@ sal_Bool OStatement_Base::parseSql( const ::rtl::OUString& sql , sal_Bool bAdjus
         m_pSQLIterator->traverseAll();
         const OSQLTables& xTabs = m_pSQLIterator->getTables();
         if(xTabs.empty())
-            getOwnConnection()->throwGenericSQLException( STR_QUERY_AT_LEAST_ONE_TABLES,*this );
+            getOwnConnection()->throwSQLException( STR_QUERY_AT_LEAST_ONE_TABLES, *this );
 
 #if OSL_DEBUG_LEVEL > 0
         OSQLTables::const_iterator citer;
@@ -285,12 +240,14 @@ sal_Bool OStatement_Base::parseSql( const ::rtl::OUString& sql , sal_Bool bAdjus
             createColumnMapping();
 
             analyseSQL();
-            break;
+            return eSelect;
+
         case SQL_STATEMENT_CREATE_TABLE:
             createTable();
-            return sal_False;
+            return eCreateTable;
+
         default:
-            getOwnConnection()->throwGenericSQLException( STR_QUERY_TOO_COMPLEX ,*this);
+            break;
         }
     }
     else if(!bAdjusted) //Our sql parser does not support a statement like "create table foo"
@@ -298,35 +255,71 @@ sal_Bool OStatement_Base::parseSql( const ::rtl::OUString& sql , sal_Bool bAdjus
     {
         return parseSql(sql + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("(""E-mail"" caracter)")),sal_True);
     }
-    else
-        getOwnConnection()->throwGenericSQLException( STR_QUERY_TOO_COMPLEX ,*this);
-    return sal_True;
+
+    getOwnConnection()->throwSQLException( STR_QUERY_TOO_COMPLEX, *this );
+    OSL_ENSURE( false, "OCommonStatement::parseSql: unreachable!" );
+    return eSelect;
 
 }
 // -------------------------------------------------------------------------
-
-OResultSet* OStatement_Base::createResultSet()
+Reference< XResultSet > OCommonStatement::impl_executeCurrentQuery()
 {
-    return new OResultSet( this, m_pSQLIterator );
+    clearCachedResultSet();
+
+    ::rtl::Reference< OResultSet > pResult( new OResultSet( this, m_pSQLIterator ) );
+    initializeResultSet( pResult.get() );
+
+    pResult->executeQuery();
+    cacheResultSet( pResult );  // only cache if we survived the execution
+
+    return pResult.get();
+
 }
-// -------------------------------------------------------------------------
 
-void OStatement_Base::initializeResultSet( OResultSet* _pResult )
+// -------------------------------------------------------------------------
+void OCommonStatement::initializeResultSet( OResultSet* _pResult )
 {
-    OSL_TRACE("In : initializeResultSet");
+    ENSURE_OR_THROW( _pResult, "invalid result set" );
+
     _pResult->setColumnMapping(m_aColMapping);
     _pResult->setOrderByColumns(m_aOrderbyColumnNumber);
     _pResult->setOrderByAscending(m_aOrderbyAscending);
     _pResult->setBindingRow(m_aRow);
     _pResult->setTable(m_pTable);
-    OSL_TRACE("Out : initializeResultSet");
 }
 
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL OStatement_Base::execute( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+void OCommonStatement::clearCachedResultSet()
+{
+    Reference< XResultSet > xResultSet( m_xResultSet.get(), UNO_QUERY );
+    if ( !xResultSet.is() )
+        return;
+
+    try
+    {
+        Reference< XCloseable > xCloseable( xResultSet, UNO_QUERY_THROW );
+        xCloseable->close();
+    }
+    catch( const DisposedException& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
+    m_xResultSet = Reference< XResultSet >();
+}
+
+// -------------------------------------------------------------------------
+void OCommonStatement::cacheResultSet( const ::rtl::Reference< OResultSet >& _pResult )
+{
+    ENSURE_OR_THROW( _pResult.is(), "invalid result set" );
+    m_xResultSet = Reference< XResultSet >( _pResult.get() );
+}
+
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OCommonStatement::execute( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OCommonStatement_IBASE::rBHelper.bDisposed);
 
     OSL_TRACE("Statement::execute( %s )", OUtoCStr( sql ) );
 
@@ -336,31 +329,26 @@ sal_Bool SAL_CALL OStatement_Base::execute( const ::rtl::OUString& sql ) throw(S
 }
 // -------------------------------------------------------------------------
 
-Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
+Reference< XResultSet > SAL_CALL OCommonStatement::executeQuery( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_ThreadMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OCommonStatement_IBASE::rBHelper.bDisposed);
 
     OSL_TRACE("Statement::executeQuery( %s )", OUtoCStr( sql ) );
 
-    if (!parseSql( sql )) //parseSql return false means this sql is a create table statement
+    // parse the statement
+    StatementType eStatementType = parseSql( sql );
+    if ( eStatementType != eSelect )
         return NULL;
 
-    OResultSet* pResult = createResultSet();
-    Reference< XResultSet > xRS = pResult;
-    initializeResultSet( pResult );
-
-    pResult->executeQuery();
-    m_xResultSet = xRS; // we need a reference to it for later use
-
-    return xRS;
+    return impl_executeCurrentQuery();
 }
 // -------------------------------------------------------------------------
 
-Reference< XConnection > SAL_CALL OStatement_Base::getConnection(  ) throw(SQLException, RuntimeException)
+Reference< XConnection > SAL_CALL OCommonStatement::getConnection(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OCommonStatement_IBASE::rBHelper.bDisposed);
 
     // just return our connection here
     return (Reference< XConnection >)m_pConnection;
@@ -370,37 +358,37 @@ Any SAL_CALL OStatement::queryInterface( const Type & rType ) throw(RuntimeExcep
 {
     Any aRet = ::cppu::queryInterface(rType,static_cast< XServiceInfo*> (this));
     if(!aRet.hasValue())
-        aRet = OStatement_Base::queryInterface(rType);
+        aRet = OCommonStatement::queryInterface(rType);
     return aRet;
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL OStatement_Base::executeUpdate( const ::rtl::OUString& /*sql*/ ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OCommonStatement::executeUpdate( const ::rtl::OUString& /*sql*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XPreparedStatement::executeUpdate", *this );
+    ::dbtools::throwFeatureNotImplementedException( "XStatement::executeUpdate", *this );
     return 0;
 
 }
 // -------------------------------------------------------------------------
-Any SAL_CALL OStatement_Base::getWarnings(  ) throw(SQLException, RuntimeException)
+Any SAL_CALL OCommonStatement::getWarnings(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OCommonStatement_IBASE::rBHelper.bDisposed);
 
     return makeAny(m_aLastWarning);
 }
 // -------------------------------------------------------------------------
 
 // -------------------------------------------------------------------------
-void SAL_CALL OStatement_Base::clearWarnings(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OCommonStatement::clearWarnings(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    checkDisposed(OCommonStatement_IBASE::rBHelper.bDisposed);
 
 
     m_aLastWarning = SQLWarning();
 }
 // -------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper* OStatement_Base::createArrayHelper( ) const
+::cppu::IPropertyArrayHelper* OCommonStatement::createArrayHelper( ) const
 {
     // this properties are define by the service resultset
     // they must in alphabetic order
@@ -421,12 +409,12 @@ void SAL_CALL OStatement_Base::clearWarnings(  ) throw(SQLException, RuntimeExce
 }
 
 // -------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper & OStatement_Base::getInfoHelper()
+::cppu::IPropertyArrayHelper & OCommonStatement::getInfoHelper()
 {
-    return *const_cast<OStatement_Base*>(this)->getArrayHelper();
+    return *const_cast<OCommonStatement*>(this)->getArrayHelper();
 }
 // -------------------------------------------------------------------------
-sal_Bool OStatement_Base::convertFastPropertyValue(
+sal_Bool OCommonStatement::convertFastPropertyValue(
                             Any & /*rConvertedValue*/,
                             Any & /*rOldValue*/,
                             sal_Int32 /*nHandle*/,
@@ -438,7 +426,7 @@ sal_Bool OStatement_Base::convertFastPropertyValue(
     return bConverted;
 }
 // -------------------------------------------------------------------------
-void OStatement_Base::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& /*rValue*/) throw (Exception)
+void OCommonStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& /*rValue*/) throw (Exception)
 {
     // set the value to what ever is nescessary
     switch(nHandle)
@@ -456,7 +444,7 @@ void OStatement_Base::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const A
     }
 }
 // -------------------------------------------------------------------------
-void OStatement_Base::getFastPropertyValue(Any& /*rValue*/,sal_Int32 nHandle) const
+void OCommonStatement::getFastPropertyValue(Any& /*rValue*/,sal_Int32 nHandle) const
 {
     switch(nHandle)
     {
@@ -475,32 +463,32 @@ void OStatement_Base::getFastPropertyValue(Any& /*rValue*/,sal_Int32 nHandle) co
 // -------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO(OStatement,"com.sun.star.sdbcx.OStatement","com.sun.star.sdbc.Statement");
 // -----------------------------------------------------------------------------
-void SAL_CALL OStatement_Base::acquire() throw()
+void SAL_CALL OCommonStatement::acquire() throw()
 {
-    OStatement_BASE::acquire();
+    OCommonStatement_IBASE::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OStatement_Base::release() throw()
+void SAL_CALL OCommonStatement::release() throw()
 {
-    OStatement_BASE::release();
+    relase_ChildImpl();
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OStatement::acquire() throw()
 {
-    OStatement_BASE2::acquire();
+    OCommonStatement::acquire();
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OStatement::release() throw()
 {
-    OStatement_BASE2::release();
+    OCommonStatement::release();
 }
 // -----------------------------------------------------------------------------
-Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OStatement_Base::getPropertySetInfo(  ) throw(RuntimeException)
+Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OCommonStatement::getPropertySetInfo(  ) throw(RuntimeException)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 // -----------------------------------------------------------------------------
-void OStatement_Base::createColumnMapping()
+void OCommonStatement::createColumnMapping()
 {
     size_t i;
 
@@ -524,7 +512,7 @@ void OStatement_Base::createColumnMapping()
 }
 // -----------------------------------------------------------------------------
 
-void OStatement_Base::analyseSQL()
+void OCommonStatement::analyseSQL()
 {
     const OSQLParseNode* pOrderbyClause = m_pSQLIterator->getOrderTree();
     if(pOrderbyClause)
@@ -549,7 +537,7 @@ void OStatement_Base::analyseSQL()
     }
 }
 //------------------------------------------------------------------
-void OStatement_Base::setOrderbyColumn( OSQLParseNode* pColumnRef,
+void OCommonStatement::setOrderbyColumn(    OSQLParseNode* pColumnRef,
                                         OSQLParseNode* pAscendingDescending)
 {
     ::rtl::OUString aColumnName;

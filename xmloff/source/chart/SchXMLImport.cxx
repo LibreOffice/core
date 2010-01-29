@@ -117,155 +117,23 @@ private:
 // element maps
 // ----------------------------------------
 
-static __FAR_DATA SvXMLTokenMapEntry aDocElemTokenMap[] =
-{
-    { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES,   XML_TOK_DOC_AUTOSTYLES  },
-    { XML_NAMESPACE_OFFICE, XML_STYLES,             XML_TOK_DOC_STYLES  },
-    { XML_NAMESPACE_OFFICE, XML_META,               XML_TOK_DOC_META    },
-    { XML_NAMESPACE_OFFICE, XML_BODY,               XML_TOK_DOC_BODY    },
-    XML_TOKEN_MAP_END
-};
 
-static __FAR_DATA SvXMLTokenMapEntry aTableElemTokenMap[] =
-{
-    { XML_NAMESPACE_TABLE,  XML_TABLE_HEADER_COLUMNS,   XML_TOK_TABLE_HEADER_COLS   },
-    { XML_NAMESPACE_TABLE,  XML_TABLE_COLUMNS,          XML_TOK_TABLE_COLUMNS       },
-    { XML_NAMESPACE_TABLE,  XML_TABLE_COLUMN,           XML_TOK_TABLE_COLUMN        },
-    { XML_NAMESPACE_TABLE,  XML_TABLE_HEADER_ROWS,      XML_TOK_TABLE_HEADER_ROWS   },
-    { XML_NAMESPACE_TABLE,  XML_TABLE_ROWS,             XML_TOK_TABLE_ROWS          },
-    { XML_NAMESPACE_TABLE,  XML_TABLE_ROW,              XML_TOK_TABLE_ROW           },
-    XML_TOKEN_MAP_END
-};
 
-static __FAR_DATA SvXMLTokenMapEntry aChartElemTokenMap[] =
-{
-    { XML_NAMESPACE_CHART,  XML_PLOT_AREA,              XML_TOK_CHART_PLOT_AREA     },
-    { XML_NAMESPACE_CHART,  XML_TITLE,                  XML_TOK_CHART_TITLE         },
-    { XML_NAMESPACE_CHART,  XML_SUBTITLE,               XML_TOK_CHART_SUBTITLE      },
-    { XML_NAMESPACE_CHART,  XML_LEGEND,             XML_TOK_CHART_LEGEND        },
-    { XML_NAMESPACE_TABLE,  XML_TABLE,                  XML_TOK_CHART_TABLE         },
-    XML_TOKEN_MAP_END
-};
 
-static __FAR_DATA SvXMLTokenMapEntry aPlotAreaElemTokenMap[] =
-{
-    { XML_NAMESPACE_CHART,  XML_AXIS,                   XML_TOK_PA_AXIS             },
-    { XML_NAMESPACE_CHART,  XML_SERIES,                 XML_TOK_PA_SERIES           },
-    { XML_NAMESPACE_CHART,  XML_WALL,                   XML_TOK_PA_WALL             },
-    { XML_NAMESPACE_CHART,  XML_FLOOR,                  XML_TOK_PA_FLOOR            },
-    { XML_NAMESPACE_DR3D,   XML_LIGHT,                  XML_TOK_PA_LIGHT_SOURCE     },
-    { XML_NAMESPACE_CHART,  XML_STOCK_GAIN_MARKER,      XML_TOK_PA_STOCK_GAIN       },
-    { XML_NAMESPACE_CHART,  XML_STOCK_LOSS_MARKER,      XML_TOK_PA_STOCK_LOSS       },
-    { XML_NAMESPACE_CHART,  XML_STOCK_RANGE_LINE,       XML_TOK_PA_STOCK_RANGE      },
-    XML_TOKEN_MAP_END
-};
 
-static __FAR_DATA SvXMLTokenMapEntry aSeriesElemTokenMap[] =
-{
-    { XML_NAMESPACE_CHART,  XML_DATA_POINT,       XML_TOK_SERIES_DATA_POINT       },
-    { XML_NAMESPACE_CHART,  XML_DOMAIN,           XML_TOK_SERIES_DOMAIN           },
-    { XML_NAMESPACE_CHART,  XML_MEAN_VALUE,       XML_TOK_SERIES_MEAN_VALUE_LINE  },
-    { XML_NAMESPACE_CHART,  XML_REGRESSION_CURVE, XML_TOK_SERIES_REGRESSION_CURVE },
-    { XML_NAMESPACE_CHART,  XML_ERROR_INDICATOR,  XML_TOK_SERIES_ERROR_INDICATOR  },
-    XML_TOKEN_MAP_END
-};
 
-static __FAR_DATA SvXMLTokenMapEntry aAxisElemTokenMap[] =
-{
-    { XML_NAMESPACE_CHART,  XML_TITLE,                  XML_TOK_AXIS_TITLE      },
-    { XML_NAMESPACE_CHART,  XML_CATEGORIES,             XML_TOK_AXIS_CATEGORIES },
-    { XML_NAMESPACE_CHART,  XML_GRID,                   XML_TOK_AXIS_GRID       },
-    XML_TOKEN_MAP_END
-};
 
 // ----------------------------------------
 // attribute maps
 // ----------------------------------------
 
-static __FAR_DATA SvXMLTokenMapEntry aChartAttrTokenMap[] =
-{
-    { XML_NAMESPACE_CHART,  XML_CLASS,                  XML_TOK_CHART_CLASS         },
-    { XML_NAMESPACE_SVG,    XML_WIDTH,                  XML_TOK_CHART_WIDTH         },
-    { XML_NAMESPACE_SVG,    XML_HEIGHT,                 XML_TOK_CHART_HEIGHT        },
-    { XML_NAMESPACE_CHART,  XML_STYLE_NAME,             XML_TOK_CHART_STYLE_NAME    },
-    { XML_NAMESPACE_CHART,  XML_COLUMN_MAPPING,         XML_TOK_CHART_COL_MAPPING   },
-    { XML_NAMESPACE_CHART,  XML_ROW_MAPPING,            XML_TOK_CHART_ROW_MAPPING   },
-    XML_TOKEN_MAP_END
-};
 
-static __FAR_DATA SvXMLTokenMapEntry aPlotAreaAttrTokenMap[] =
-{
-    { XML_NAMESPACE_SVG,    XML_X,                      XML_TOK_PA_X                 },
-    { XML_NAMESPACE_SVG,    XML_Y,                      XML_TOK_PA_Y                 },
-    { XML_NAMESPACE_SVG,    XML_WIDTH,                  XML_TOK_PA_WIDTH             },
-    { XML_NAMESPACE_SVG,    XML_HEIGHT,                 XML_TOK_PA_HEIGHT            },
-    { XML_NAMESPACE_CHART,  XML_STYLE_NAME,             XML_TOK_PA_STYLE_NAME        },
-    { XML_NAMESPACE_TABLE,  XML_CELL_RANGE_ADDRESS,     XML_TOK_PA_CHART_ADDRESS     },
-    { XML_NAMESPACE_CHART,  XML_DATA_SOURCE_HAS_LABELS, XML_TOK_PA_DS_HAS_LABELS     },
-    { XML_NAMESPACE_DR3D,   XML_TRANSFORM,              XML_TOK_PA_TRANSFORM         },
-    { XML_NAMESPACE_DR3D,   XML_VRP,                    XML_TOK_PA_VRP               },
-    { XML_NAMESPACE_DR3D,   XML_VPN,                    XML_TOK_PA_VPN               },
-    { XML_NAMESPACE_DR3D,   XML_VUP,                    XML_TOK_PA_VUP               },
-    { XML_NAMESPACE_DR3D,   XML_PROJECTION,             XML_TOK_PA_PROJECTION        },
-    { XML_NAMESPACE_DR3D,   XML_DISTANCE,               XML_TOK_PA_DISTANCE          },
-    { XML_NAMESPACE_DR3D,   XML_FOCAL_LENGTH,           XML_TOK_PA_FOCAL_LENGTH      },
-    { XML_NAMESPACE_DR3D,   XML_SHADOW_SLANT,           XML_TOK_PA_SHADOW_SLANT      },
-    { XML_NAMESPACE_DR3D,   XML_SHADE_MODE,             XML_TOK_PA_SHADE_MODE        },
-    { XML_NAMESPACE_DR3D,   XML_AMBIENT_COLOR,          XML_TOK_PA_AMBIENT_COLOR     },
-    { XML_NAMESPACE_DR3D,   XML_LIGHTING_MODE,          XML_TOK_PA_LIGHTING_MODE     },
-    XML_TOKEN_MAP_END
-};
 
-static __FAR_DATA SvXMLTokenMapEntry aAxisAttrTokenMap[] =
-{
-    { XML_NAMESPACE_CHART,  XML_DIMENSION,              XML_TOK_AXIS_DIMENSION      },
-    { XML_NAMESPACE_CHART,  XML_NAME,                   XML_TOK_AXIS_NAME           },
-    { XML_NAMESPACE_CHART,  XML_STYLE_NAME,             XML_TOK_AXIS_STYLE_NAME     },
-    XML_TOKEN_MAP_END
-};
 
-static __FAR_DATA SvXMLTokenMapEntry aLegendAttrTokenMap[] =
-{
-    { XML_NAMESPACE_CHART,  XML_LEGEND_POSITION,        XML_TOK_LEGEND_POSITION     },
-    { XML_NAMESPACE_SVG,    XML_X,                      XML_TOK_LEGEND_X            },
-    { XML_NAMESPACE_SVG,    XML_Y,                      XML_TOK_LEGEND_Y            },
-    { XML_NAMESPACE_CHART,  XML_STYLE_NAME,             XML_TOK_LEGEND_STYLE_NAME   },
-    XML_TOKEN_MAP_END
-};
 
-static __FAR_DATA SvXMLTokenMapEntry aAutoStyleAttrTokenMap[] =
-{
-    { XML_NAMESPACE_STYLE,  XML_FAMILY,                 XML_TOK_AS_FAMILY           },
-    { XML_NAMESPACE_STYLE,  XML_NAME,                   XML_TOK_AS_NAME             },
-    XML_TOKEN_MAP_END
-};
 
-static __FAR_DATA SvXMLTokenMapEntry aCellAttrTokenMap[] =
-{
-    { XML_NAMESPACE_OFFICE, XML_VALUE_TYPE,             XML_TOK_CELL_VAL_TYPE       },
-    { XML_NAMESPACE_OFFICE, XML_VALUE,                  XML_TOK_CELL_VALUE          },
-    XML_TOKEN_MAP_END
-};
 
-static __FAR_DATA SvXMLTokenMapEntry aSeriesAttrTokenMap[] =
-{
-    { XML_NAMESPACE_CHART,  XML_VALUES_CELL_RANGE_ADDRESS,  XML_TOK_SERIES_CELL_RANGE    },
-    { XML_NAMESPACE_CHART,  XML_LABEL_CELL_ADDRESS,         XML_TOK_SERIES_LABEL_ADDRESS },
-    { XML_NAMESPACE_CHART,  XML_ATTACHED_AXIS,              XML_TOK_SERIES_ATTACHED_AXIS },
-    { XML_NAMESPACE_CHART,  XML_STYLE_NAME,                 XML_TOK_SERIES_STYLE_NAME    },
-    { XML_NAMESPACE_CHART,  XML_CLASS,                      XML_TOK_SERIES_CHART_CLASS   },
-    XML_TOKEN_MAP_END
-};
 
-static __FAR_DATA SvXMLTokenMapEntry aRegressionEquationAttrTokenMap[] =
-{
-    { XML_NAMESPACE_CHART,  XML_STYLE_NAME,             XML_TOK_REGEQ_STYLE_NAME         },
-    { XML_NAMESPACE_CHART,  XML_DISPLAY_EQUATION,       XML_TOK_REGEQ_DISPLAY_EQUATION   },
-    { XML_NAMESPACE_CHART,  XML_DISPLAY_R_SQUARE,       XML_TOK_REGEQ_DISPLAY_R_SQUARE   },
-    { XML_NAMESPACE_SVG,    XML_X,                      XML_TOK_REGEQ_POS_X              },
-    { XML_NAMESPACE_SVG,    XML_Y,                      XML_TOK_REGEQ_POS_Y              },
-    XML_TOKEN_MAP_END
-};
 
 // ========================================
 
@@ -352,42 +220,121 @@ SvXMLImportContext* SchXMLImportHelper::CreateChartContext(
 const SvXMLTokenMap& SchXMLImportHelper::GetDocElemTokenMap()
 {
     if( ! mpChartDocElemTokenMap )
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aDocElemTokenMap[] =
+        {
+            { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES,   XML_TOK_DOC_AUTOSTYLES  },
+            { XML_NAMESPACE_OFFICE, XML_STYLES,             XML_TOK_DOC_STYLES  },
+            { XML_NAMESPACE_OFFICE, XML_META,               XML_TOK_DOC_META    },
+            { XML_NAMESPACE_OFFICE, XML_BODY,               XML_TOK_DOC_BODY    },
+            XML_TOKEN_MAP_END
+        };
+
         mpChartDocElemTokenMap = new SvXMLTokenMap( aDocElemTokenMap );
+    } // if( ! mpChartDocElemTokenMap )
+
     return *mpChartDocElemTokenMap;
 }
 
 const SvXMLTokenMap& SchXMLImportHelper::GetTableElemTokenMap()
 {
     if( ! mpTableElemTokenMap )
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aTableElemTokenMap[] =
+    {
+        { XML_NAMESPACE_TABLE,  XML_TABLE_HEADER_COLUMNS,   XML_TOK_TABLE_HEADER_COLS   },
+        { XML_NAMESPACE_TABLE,  XML_TABLE_COLUMNS,          XML_TOK_TABLE_COLUMNS       },
+        { XML_NAMESPACE_TABLE,  XML_TABLE_COLUMN,           XML_TOK_TABLE_COLUMN        },
+        { XML_NAMESPACE_TABLE,  XML_TABLE_HEADER_ROWS,      XML_TOK_TABLE_HEADER_ROWS   },
+        { XML_NAMESPACE_TABLE,  XML_TABLE_ROWS,             XML_TOK_TABLE_ROWS          },
+        { XML_NAMESPACE_TABLE,  XML_TABLE_ROW,              XML_TOK_TABLE_ROW           },
+        XML_TOKEN_MAP_END
+    };
+
         mpTableElemTokenMap = new SvXMLTokenMap( aTableElemTokenMap );
+    } // if( ! mpTableElemTokenMap )
+
     return *mpTableElemTokenMap;
 }
 
 const SvXMLTokenMap& SchXMLImportHelper::GetChartElemTokenMap()
 {
     if( ! mpChartElemTokenMap )
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aChartElemTokenMap[] =
+        {
+            { XML_NAMESPACE_CHART,  XML_PLOT_AREA,              XML_TOK_CHART_PLOT_AREA     },
+            { XML_NAMESPACE_CHART,  XML_TITLE,                  XML_TOK_CHART_TITLE         },
+            { XML_NAMESPACE_CHART,  XML_SUBTITLE,               XML_TOK_CHART_SUBTITLE      },
+            { XML_NAMESPACE_CHART,  XML_LEGEND,             XML_TOK_CHART_LEGEND        },
+            { XML_NAMESPACE_TABLE,  XML_TABLE,                  XML_TOK_CHART_TABLE         },
+            XML_TOKEN_MAP_END
+        };
+
         mpChartElemTokenMap = new SvXMLTokenMap( aChartElemTokenMap );
+    } // if( ! mpChartElemTokenMap )
+
     return *mpChartElemTokenMap;
 }
 
 const SvXMLTokenMap& SchXMLImportHelper::GetPlotAreaElemTokenMap()
 {
     if( ! mpPlotAreaElemTokenMap )
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aPlotAreaElemTokenMap[] =
+{
+    { XML_NAMESPACE_CHART,  XML_AXIS,                   XML_TOK_PA_AXIS             },
+    { XML_NAMESPACE_CHART,  XML_SERIES,                 XML_TOK_PA_SERIES           },
+    { XML_NAMESPACE_CHART,  XML_WALL,                   XML_TOK_PA_WALL             },
+    { XML_NAMESPACE_CHART,  XML_FLOOR,                  XML_TOK_PA_FLOOR            },
+    { XML_NAMESPACE_DR3D,   XML_LIGHT,                  XML_TOK_PA_LIGHT_SOURCE     },
+    { XML_NAMESPACE_CHART,  XML_STOCK_GAIN_MARKER,      XML_TOK_PA_STOCK_GAIN       },
+    { XML_NAMESPACE_CHART,  XML_STOCK_LOSS_MARKER,      XML_TOK_PA_STOCK_LOSS       },
+    { XML_NAMESPACE_CHART,  XML_STOCK_RANGE_LINE,       XML_TOK_PA_STOCK_RANGE      },
+    XML_TOKEN_MAP_END
+};
+
         mpPlotAreaElemTokenMap = new SvXMLTokenMap( aPlotAreaElemTokenMap );
+    } // if( ! mpPlotAreaElemTokenMap )
+
     return *mpPlotAreaElemTokenMap;
 }
 
 const SvXMLTokenMap& SchXMLImportHelper::GetSeriesElemTokenMap()
 {
     if( ! mpSeriesElemTokenMap )
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aSeriesElemTokenMap[] =
+{
+    { XML_NAMESPACE_CHART,  XML_DATA_POINT,       XML_TOK_SERIES_DATA_POINT       },
+    { XML_NAMESPACE_CHART,  XML_DOMAIN,           XML_TOK_SERIES_DOMAIN           },
+    { XML_NAMESPACE_CHART,  XML_MEAN_VALUE,       XML_TOK_SERIES_MEAN_VALUE_LINE  },
+    { XML_NAMESPACE_CHART,  XML_REGRESSION_CURVE, XML_TOK_SERIES_REGRESSION_CURVE },
+    { XML_NAMESPACE_CHART,  XML_ERROR_INDICATOR,  XML_TOK_SERIES_ERROR_INDICATOR  },
+    XML_TOKEN_MAP_END
+};
+
         mpSeriesElemTokenMap = new SvXMLTokenMap( aSeriesElemTokenMap );
+    } // if( ! mpSeriesElemTokenMap )
+
     return *mpSeriesElemTokenMap;
 }
 
 const SvXMLTokenMap& SchXMLImportHelper::GetAxisElemTokenMap()
 {
     if( ! mpAxisElemTokenMap )
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aAxisElemTokenMap[] =
+{
+    { XML_NAMESPACE_CHART,  XML_TITLE,                  XML_TOK_AXIS_TITLE      },
+    { XML_NAMESPACE_CHART,  XML_CATEGORIES,             XML_TOK_AXIS_CATEGORIES },
+    { XML_NAMESPACE_CHART,  XML_GRID,                   XML_TOK_AXIS_GRID       },
+    XML_TOKEN_MAP_END
+};
+
         mpAxisElemTokenMap = new SvXMLTokenMap( aAxisElemTokenMap );
+    } // if( ! mpAxisElemTokenMap )
+
     return *mpAxisElemTokenMap;
 }
 
@@ -396,56 +343,166 @@ const SvXMLTokenMap& SchXMLImportHelper::GetAxisElemTokenMap()
 const SvXMLTokenMap& SchXMLImportHelper::GetChartAttrTokenMap()
 {
     if( ! mpChartAttrTokenMap )
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aChartAttrTokenMap[] =
+{
+    { XML_NAMESPACE_XLINK,  XML_HREF,                   XML_TOK_CHART_HREF          },
+    { XML_NAMESPACE_CHART,  XML_CLASS,                  XML_TOK_CHART_CLASS         },
+    { XML_NAMESPACE_SVG,    XML_WIDTH,                  XML_TOK_CHART_WIDTH         },
+    { XML_NAMESPACE_SVG,    XML_HEIGHT,                 XML_TOK_CHART_HEIGHT        },
+    { XML_NAMESPACE_CHART,  XML_STYLE_NAME,             XML_TOK_CHART_STYLE_NAME    },
+    { XML_NAMESPACE_CHART,  XML_COLUMN_MAPPING,         XML_TOK_CHART_COL_MAPPING   },
+    { XML_NAMESPACE_CHART,  XML_ROW_MAPPING,            XML_TOK_CHART_ROW_MAPPING   },
+    XML_TOKEN_MAP_END
+};
+
         mpChartAttrTokenMap = new SvXMLTokenMap( aChartAttrTokenMap );
+    } // if( ! mpChartAttrTokenMap )
+
     return *mpChartAttrTokenMap;
 }
 
 const SvXMLTokenMap& SchXMLImportHelper::GetPlotAreaAttrTokenMap()
 {
     if( ! mpPlotAreaAttrTokenMap )
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aPlotAreaAttrTokenMap[] =
+{
+    { XML_NAMESPACE_SVG,    XML_X,                      XML_TOK_PA_X                 },
+    { XML_NAMESPACE_SVG,    XML_Y,                      XML_TOK_PA_Y                 },
+    { XML_NAMESPACE_SVG,    XML_WIDTH,                  XML_TOK_PA_WIDTH             },
+    { XML_NAMESPACE_SVG,    XML_HEIGHT,                 XML_TOK_PA_HEIGHT            },
+    { XML_NAMESPACE_CHART,  XML_STYLE_NAME,             XML_TOK_PA_STYLE_NAME        },
+    { XML_NAMESPACE_TABLE,  XML_CELL_RANGE_ADDRESS,     XML_TOK_PA_CHART_ADDRESS     },
+    { XML_NAMESPACE_CHART,  XML_DATA_SOURCE_HAS_LABELS, XML_TOK_PA_DS_HAS_LABELS     },
+    { XML_NAMESPACE_DR3D,   XML_TRANSFORM,              XML_TOK_PA_TRANSFORM         },
+    { XML_NAMESPACE_DR3D,   XML_VRP,                    XML_TOK_PA_VRP               },
+    { XML_NAMESPACE_DR3D,   XML_VPN,                    XML_TOK_PA_VPN               },
+    { XML_NAMESPACE_DR3D,   XML_VUP,                    XML_TOK_PA_VUP               },
+    { XML_NAMESPACE_DR3D,   XML_PROJECTION,             XML_TOK_PA_PROJECTION        },
+    { XML_NAMESPACE_DR3D,   XML_DISTANCE,               XML_TOK_PA_DISTANCE          },
+    { XML_NAMESPACE_DR3D,   XML_FOCAL_LENGTH,           XML_TOK_PA_FOCAL_LENGTH      },
+    { XML_NAMESPACE_DR3D,   XML_SHADOW_SLANT,           XML_TOK_PA_SHADOW_SLANT      },
+    { XML_NAMESPACE_DR3D,   XML_SHADE_MODE,             XML_TOK_PA_SHADE_MODE        },
+    { XML_NAMESPACE_DR3D,   XML_AMBIENT_COLOR,          XML_TOK_PA_AMBIENT_COLOR     },
+    { XML_NAMESPACE_DR3D,   XML_LIGHTING_MODE,          XML_TOK_PA_LIGHTING_MODE     },
+    XML_TOKEN_MAP_END
+};
+
         mpPlotAreaAttrTokenMap = new SvXMLTokenMap( aPlotAreaAttrTokenMap );
+    } // if( ! mpPlotAreaAttrTokenMap )
+
     return *mpPlotAreaAttrTokenMap;
 }
 
 const SvXMLTokenMap& SchXMLImportHelper::GetAxisAttrTokenMap()
 {
     if( ! mpAxisAttrTokenMap )
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aAxisAttrTokenMap[] =
+{
+    { XML_NAMESPACE_CHART,  XML_DIMENSION,              XML_TOK_AXIS_DIMENSION      },
+    { XML_NAMESPACE_CHART,  XML_NAME,                   XML_TOK_AXIS_NAME           },
+    { XML_NAMESPACE_CHART,  XML_STYLE_NAME,             XML_TOK_AXIS_STYLE_NAME     },
+    XML_TOKEN_MAP_END
+};
+
         mpAxisAttrTokenMap = new SvXMLTokenMap( aAxisAttrTokenMap );
+    } // if( ! mpAxisAttrTokenMap )
+
     return *mpAxisAttrTokenMap;
 }
 
 const SvXMLTokenMap& SchXMLImportHelper::GetLegendAttrTokenMap()
 {
     if( ! mpLegendAttrTokenMap )
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aLegendAttrTokenMap[] =
+{
+    { XML_NAMESPACE_CHART,  XML_LEGEND_POSITION,        XML_TOK_LEGEND_POSITION     },
+    { XML_NAMESPACE_SVG,    XML_X,                      XML_TOK_LEGEND_X            },
+    { XML_NAMESPACE_SVG,    XML_Y,                      XML_TOK_LEGEND_Y            },
+    { XML_NAMESPACE_CHART,  XML_STYLE_NAME,             XML_TOK_LEGEND_STYLE_NAME   },
+    XML_TOKEN_MAP_END
+};
+
         mpLegendAttrTokenMap = new SvXMLTokenMap( aLegendAttrTokenMap );
+    } // if( ! mpLegendAttrTokenMap )
+
     return *mpLegendAttrTokenMap;
 }
 
 const SvXMLTokenMap& SchXMLImportHelper::GetAutoStyleAttrTokenMap()
 {
     if( ! mpAutoStyleAttrTokenMap )
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aAutoStyleAttrTokenMap[] =
+{
+    { XML_NAMESPACE_STYLE,  XML_FAMILY,                 XML_TOK_AS_FAMILY           },
+    { XML_NAMESPACE_STYLE,  XML_NAME,                   XML_TOK_AS_NAME             },
+    XML_TOKEN_MAP_END
+};
+
         mpAutoStyleAttrTokenMap = new SvXMLTokenMap( aAutoStyleAttrTokenMap );
+    } // if( ! mpAutoStyleAttrTokenMap )
+
     return *mpAutoStyleAttrTokenMap;
 }
 
 const SvXMLTokenMap& SchXMLImportHelper::GetCellAttrTokenMap()
 {
     if( ! mpCellAttrTokenMap )
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aCellAttrTokenMap[] =
+{
+    { XML_NAMESPACE_OFFICE, XML_VALUE_TYPE,             XML_TOK_CELL_VAL_TYPE       },
+    { XML_NAMESPACE_OFFICE, XML_VALUE,                  XML_TOK_CELL_VALUE          },
+    XML_TOKEN_MAP_END
+};
+
         mpCellAttrTokenMap = new SvXMLTokenMap( aCellAttrTokenMap );
+    } // if( ! mpCellAttrTokenMap )
+
     return *mpCellAttrTokenMap;
 }
 
 const SvXMLTokenMap& SchXMLImportHelper::GetSeriesAttrTokenMap()
 {
     if( ! mpSeriesAttrTokenMap )
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aSeriesAttrTokenMap[] =
+{
+    { XML_NAMESPACE_CHART,  XML_VALUES_CELL_RANGE_ADDRESS,  XML_TOK_SERIES_CELL_RANGE    },
+    { XML_NAMESPACE_CHART,  XML_LABEL_CELL_ADDRESS,         XML_TOK_SERIES_LABEL_ADDRESS },
+    { XML_NAMESPACE_CHART,  XML_ATTACHED_AXIS,              XML_TOK_SERIES_ATTACHED_AXIS },
+    { XML_NAMESPACE_CHART,  XML_STYLE_NAME,                 XML_TOK_SERIES_STYLE_NAME    },
+    { XML_NAMESPACE_CHART,  XML_CLASS,                      XML_TOK_SERIES_CHART_CLASS   },
+    XML_TOKEN_MAP_END
+};
+
         mpSeriesAttrTokenMap = new SvXMLTokenMap( aSeriesAttrTokenMap );
+    } // if( ! mpSeriesAttrTokenMap )
+
     return *mpSeriesAttrTokenMap;
 }
 
 const SvXMLTokenMap& SchXMLImportHelper::GetRegEquationAttrTokenMap()
 {
     if( ! mpRegEquationAttrTokenMap )
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aRegressionEquationAttrTokenMap[] =
+{
+    { XML_NAMESPACE_CHART,  XML_STYLE_NAME,             XML_TOK_REGEQ_STYLE_NAME         },
+    { XML_NAMESPACE_CHART,  XML_DISPLAY_EQUATION,       XML_TOK_REGEQ_DISPLAY_EQUATION   },
+    { XML_NAMESPACE_CHART,  XML_DISPLAY_R_SQUARE,       XML_TOK_REGEQ_DISPLAY_R_SQUARE   },
+    { XML_NAMESPACE_SVG,    XML_X,                      XML_TOK_REGEQ_POS_X              },
+    { XML_NAMESPACE_SVG,    XML_Y,                      XML_TOK_REGEQ_POS_Y              },
+    XML_TOKEN_MAP_END
+};
+
         mpRegEquationAttrTokenMap = new SvXMLTokenMap( aRegressionEquationAttrTokenMap );
+    } // if( ! mpRegEquationAttrTokenMap )
+
     return *mpRegEquationAttrTokenMap;
 }
 
@@ -556,38 +613,6 @@ void SchXMLImportHelper::ResizeChartData( sal_Int32 nSeries, sal_Int32 nDataPoin
             }
         }
     }
-}
-
-// static
-Reference< chart2::data::XDataProvider > SchXMLImportHelper::GetDataProvider(
-    const Reference< chart2::XChartDocument > & xDoc )
-{
-    Reference< chart2::data::XDataProvider > xResult;
-    if( xDoc.is())
-    {
-        try
-        {
-            xResult.set( xDoc->getDataProvider());
-//             if( ! xResult.is())
-//             {
-//                 Reference< container::XChild > xChild( xDoc, uno::UNO_QUERY_THROW );
-//                 Reference< lang::XMultiServiceFactory > xFact( xChild->getParent(), uno::UNO_QUERY );
-//                 if( xFact.is())
-//                 {
-//                     Reference< chart2::data::XDataReceiver > xReceiver( xDoc, uno::UNO_QUERY_THROW );
-//                     xResult.set(
-//                         xFact->createInstance( OUString::createFromAscii("com.sun.star.chart2.data.DataProvider")),
-//                         uno::UNO_QUERY_THROW );
-//                     xReceiver->attachDataProvider( xResult );
-//                 }
-//             }
-        }
-        catch( const uno::Exception & )
-        {
-            // didn't get a data provider from  the container
-        }
-    }
-    return xResult;
 }
 
 //static
@@ -740,6 +765,8 @@ SchXMLImport::SchXMLImport(
     sal_uInt16 nImportFlags ) :
         SvXMLImport( xServiceFactory, nImportFlags )
 {
+    GetNamespaceMap().Add( GetXMLToken(XML_NP_XLINK), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
+
     mbIsGraphicLoadOnDemandSupported = false;
 }
 
@@ -751,6 +778,8 @@ SchXMLImport::SchXMLImport(
     sal_Bool /*bLoadDoc*/, sal_Bool bShowProgress )
 :   SvXMLImport( xServiceFactory, xModel, rGrfContainer )
 {
+    GetNamespaceMap().Add( GetXMLToken(XML_NP_XLINK), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
+
     // get status indicator (if requested)
     if( bShowProgress )
     {

@@ -38,6 +38,11 @@
 #include <memory>
 #include "connectivity/dbtoolsdllapi.hxx"
 
+namespace comphelper
+{
+    class ComponentContext;
+}
+
 //........................................................................
 namespace dbtools
 {
@@ -130,7 +135,14 @@ namespace dbtools
             <code>SELECT * FROM table correlation_name</code> is generated.
         */
         bool generateASBeforeCorrelationName() const;
+
+        /** should date time be escaped like '2001-01-01' => #2001-01-01#
+        */
         bool shouldEscapeDateTime() const;
+
+        /** auto increment columns should be automaticly used as primary key.
+        */
+        bool isAutoIncrementPrimaryKey() const;
 
         /** determines the syntax to use for boolean comparison predicates
 
@@ -150,6 +162,17 @@ namespace dbtools
         * \return <TRUE/> when relations are supported, otherwise <FALSE/>
         */
         bool supportsColumnAliasInOrderBy() const;
+
+        /** determines whether user administration is supported for the database
+
+            User administration support is controlled by the availability of the XUsersSupplier
+            interface, and it returning a non-NULL users container.
+
+            @param _rContext
+                the component context we operate in. Might be needed to create the
+                css.sdbc.DriverManager instance.
+        */
+        bool    supportsUserAdministration( const ::comphelper::ComponentContext& _rContext ) const;
 
         /** determines whether in the application UI, empty table folders (aka catalogs/schemas) should be displayed
         */

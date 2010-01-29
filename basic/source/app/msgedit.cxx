@@ -179,7 +179,7 @@ void MsgEdit::AddAnyMsg( TTLogMsg *LogMsg )
         }
 
         if ( !bFileLoading )
-        {   // Kommt vom Testtool und muß gleich geschrieben werden.
+        {   // Comes from Testtool and must be written immediately
             BOOL bFileWasChanged = pAppError->DiskFileChanged( SINCE_LAST_LOAD );
 
             DBG_ASSERT( aLogFileName == LogMsg->aLogFileName, "Logging to different logfile as before" );
@@ -253,8 +253,8 @@ void MsgEdit::AddRun( String aMsg, TTDebugData aDebugData )
     COPY_TTDEBUGDATA( LOG_RUN );
     if ( !bFileLoading || ( bFileLoading && nVersion >= 2 ) )
         pCurrentRun = aEditTree.InsertEntry( aMsg, NULL, FALSE, 0, pTTDebugData );
-    else        // Erstes Dateiformat
-        pCurrentRun = aEditTree.InsertEntry( aMsg, NULL, FALSE, LIST_APPEND, pTTDebugData );    // und damit an Ende!
+    else        // First file format
+        pCurrentRun = aEditTree.InsertEntry( aMsg, NULL, FALSE, LIST_APPEND, pTTDebugData );    // and therefor at the end
 
     aEditTree.ShowEntry( pCurrentRun );
     pCurrentTestCase = NULL;
@@ -266,7 +266,7 @@ void MsgEdit::AddTestCase( String aMsg, TTDebugData aDebugData )
 {
     if ( pCurrentRun )
     {
-        if ( aMsg.Len() == 0 )  // Am Ende des Testcase
+        if ( aMsg.Len() == 0 )  // End of Testcase
         {
             pCurrentTestCase = NULL;
         }
@@ -494,7 +494,7 @@ String MsgEdit::Impl_MakeText( SvLBoxEntry *pEntry ) const
         case LOG_ASSERTION: break;
         case LOG_ASSERTION_STACK:aRet.AppendAscii("--> ");  break;
         case LOG_QA_ERROR:  break;
-        default:DBG_ERROR("Unbekannter Typ im ResultFenster");
+        default:DBG_ERROR("Unknown type in ResultWindow!");
     }
     aRet += aEditTree.GetEntryText( pEntry );
     return aRet;
@@ -527,7 +527,7 @@ String MsgEdit::Impl_MakeSaveText( SvLBoxEntry *pEntry ) const
     TTDebugData *aData = (TTDebugData*)pEntry->GetUserData();
 
     if ( aEditTree.PrevSibling( pEntry ) && LOGTYPE( aEditTree.PrevSibling( pEntry ) ) == LOG_TEST_CASE )
-    {   // Um Cases richtig abzuschliessen, so daß Warnings und Msgs in Hirarchie richtig.
+    {   // To properly finish cases and warnings/msgs are in correct hierarchie
         aRet += String::CreateFromInt32( (int)LOG_TEST_CASE );
         aRet.AppendAscii(";;0;0;0;\"\"\n");
     }
@@ -620,14 +620,18 @@ void MsgEdit::SetText( const String& rStr )
     DBG_ERROR("Not Implemented");
 }
 
-BOOL MsgEdit::HasText() const { return aEditTree.First() != NULL; }
+BOOL MsgEdit::HasText() const
+{
+  return aEditTree.First() != NULL;
+}
 
-// Es wird entweder ab Beginn oder ab Markierungsbegin + 1 gesucht.
+// Search from the beginning or mark start + 1
 BOOL MsgEdit::Find( const String& s )
 {
     TextSelection r  = GetSelection();
     USHORT bgn   = (USHORT) r.GetStart().GetPara() + 1;
-    if ( r.GetStart().GetPara() == 0 ) bgn = 0; // Suchen ganz von Anfang
+    if ( r.GetStart().GetPara() == 0 )
+        bgn = 0;    // Search from the beginning
 
     SvLBoxEntry *pEntry = aEditTree.GetModel()->GetEntryAtAbsPos( bgn );
     while ( pEntry )
@@ -641,11 +645,12 @@ BOOL MsgEdit::Find( const String& s )
     }
     return FALSE;
 }
+
 /******************************************************************
 
-Zum Fileformat der *.res Dateien:
-Die Informationenn werden als Semikolon getrennte Strings
-zusammengebastelt. Reihenfolge:
+ Fileformat of *.res file:
+ Information are stored as semicolon separated strings
+ Order:
 
     LogType;Filename;Line;Col1;Col2;Message
 
@@ -661,11 +666,11 @@ BOOL MsgEdit::Load( const String& aName )
     {
         aEditTree.Clear();
         String aLine;
-        bFileLoading = TRUE;    // So daß nicht gleich wieder auf Platte mitgelogt wird.
+        bFileLoading = TRUE;  // To avoid logging to disk
         TTLogMsg *pLogMsg = new TTLogMsg;
         while( !aStrm.IsEof() && bOk )
         {
-            if ( nVersion >= 3 )    // Wir habe utf8
+            if ( nVersion >= 3 )    // utf8
                 aStrm.ReadByteStringLine( aLine, RTL_TEXTENCODING_UTF8 );
             else
                 aStrm.ReadByteStringLine( aLine, RTL_TEXTENCODING_IBM_850 );
@@ -685,7 +690,9 @@ BOOL MsgEdit::Load( const String& aName )
                 aDebugData.nCol1 = USHORT( TOKEN(3).ToInt32() );
                 aDebugData.nCol2 = USHORT( TOKEN(4).ToInt32() );
                 aDebugData.aMsg = aLine.GetQuotedToken( 5, CUniString("\"\"") );
-                aDebugData.aMsg.Erase(0,1);                         // Anführungszeichen entfernen
+
+                // Remove leading and trailing quotes
+                aDebugData.aMsg.Erase(0,1);
                 aDebugData.aMsg.Erase(aDebugData.aMsg.Len()-1,1);
 
                 pLogMsg->aLogFileName.Erase();
@@ -704,7 +711,7 @@ BOOL MsgEdit::Load( const String& aName )
         delete pLogMsg;
         aStrm.Close();
         if ( nVersion < 2 && !bLoadError )
-            Save( aName );  // Muß sein, sonst passiert beim mitloggen Blödsinn.
+            Save( aName );  // Necessary to avoid mess
 
     }
     else
@@ -918,7 +925,7 @@ TTFeatures TTTreeListBox::GetFeatures( SvLBoxEntry* pEntry )
         case LOG_QA_ERROR:
                 return HasQAError;
         default:
-            DBG_ERROR("Unbekannter Typ im ResultFenster");
+            DBG_ERROR("Unknown type in ResultWindow");
     }
     return HasNothing;
 }
@@ -986,7 +993,7 @@ void TTTreeListBox::InitEntry(SvLBoxEntry* pEntry,
     const String& rStr ,const Image& rImg1, const Image& rImg2,
     SvLBoxButtonKind eButtonKind )
 {
-    USHORT nColToHilite = 1; //0==Bitmap;1=="Spalte1";2=="Spalte2"
+    USHORT nColToHilite = 1; //0==Bitmap;1=="Column1";2=="Column2"
     SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2, eButtonKind );
     SvLBoxString* pCol = (SvLBoxString*)pEntry->GetItem( nColToHilite );
     TTLBoxString* pStr = new TTLBoxString( pEntry, 0, pCol->GetText() );

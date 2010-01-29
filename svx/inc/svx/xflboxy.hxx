@@ -32,6 +32,7 @@
 #define _SVX_XFLBOXY_HXX
 
 #include <svtools/intitem.hxx>
+#include "svx/svxdllapi.h"
 
 /*************************************************************************
 |*
@@ -39,7 +40,7 @@
 |*
 \************************************************************************/
 
-class XFillBmpPosOffsetXItem : public SfxUInt16Item
+class SVX_DLLPUBLIC XFillBmpPosOffsetXItem : public SfxUInt16Item
 {
 public:
                             TYPEINFO();
@@ -62,7 +63,7 @@ public:
 |*
 \************************************************************************/
 
-class XFillBmpPosOffsetYItem : public SfxUInt16Item
+class SVX_DLLPUBLIC XFillBmpPosOffsetYItem : public SfxUInt16Item
 {
 public:
                             TYPEINFO();

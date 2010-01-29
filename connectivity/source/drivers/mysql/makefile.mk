@@ -42,7 +42,7 @@ VISIBILITY_HIDDEN=TRUE
 ENVCFLAGS+=/FR$(SLO)$/
 .ENDIF
 
-.INCLUDE :	settings.mk
+.INCLUDE : $(PRJ)$/makefile.pmk
 .INCLUDE :  $(PRJ)$/version.mk
 
 
@@ -68,11 +68,9 @@ SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
     $(CPPULIB)					\
     $(CPPUHELPERLIB)			\
-    $(VOSLIB)					\
     $(SALLIB)					\
     $(DBTOOLSLIB)				\
-    $(COMPHELPERLIB)            \
-    $(UNOTOOLSLIB)
+    $(COMPHELPERLIB)
 
 
 SHL1DEPN=
@@ -85,6 +83,6 @@ DEF1EXPORTFILE=	exports.dxp
 
 # --- Targets ----------------------------------
 
-.INCLUDE : target.mk
+.INCLUDE : $(PRJ)$/target.pmk
 
 

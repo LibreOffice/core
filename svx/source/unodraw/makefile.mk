@@ -70,7 +70,8 @@ SLOFILES =	\
         $(SLO)$/unodtabl.obj	\
         $(SLO)$/gluepts.obj     \
         $(SLO)$/recoveryui.obj	\
-        $(SLO)$/tableshape.obj
+        $(SLO)$/tableshape.obj  \
+        $(SLO)$/shapepropertynotifier.obj
 
 SRS1NAME=unodraw
 SRC1FILES =  \

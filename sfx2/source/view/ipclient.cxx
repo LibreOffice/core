@@ -44,6 +44,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/embed/XStateChangeListener.hpp>
 #include <com/sun/star/embed/StateChangeInProgressException.hpp>
+#include <com/sun/star/embed/XLinkageSupport.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
@@ -1105,7 +1106,14 @@ void SfxInPlaceClient::DeactivateObject()
                     m_pViewSh->GetWindow()->GrabFocus();
             }
             else
-                m_pImp->m_xObject->changeState( embed::EmbedStates::RUNNING );
+            {
+                // the links should not stay in running state for long time because of locking
+                uno::Reference< embed::XLinkageSupport > xLink( m_pImp->m_xObject, uno::UNO_QUERY );
+                if ( xLink.is() && xLink->isLink() )
+                    m_pImp->m_xObject->changeState( embed::EmbedStates::LOADED );
+                else
+                    m_pImp->m_xObject->changeState( embed::EmbedStates::RUNNING );
+            }
 
             if ( m_pViewSh )
             {
@@ -1130,7 +1138,14 @@ void SfxInPlaceClient::ResetObject()
             if ( m_pImp->m_xObject->getStatus( m_pImp->m_nAspect ) & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
                 m_pImp->m_xObject->changeState( embed::EmbedStates::INPLACE_ACTIVE );
             else
-                m_pImp->m_xObject->changeState( embed::EmbedStates::RUNNING );
+            {
+                // the links should not stay in running state for long time because of locking
+                uno::Reference< embed::XLinkageSupport > xLink( m_pImp->m_xObject, uno::UNO_QUERY );
+                if ( xLink.is() && xLink->isLink() )
+                    m_pImp->m_xObject->changeState( embed::EmbedStates::LOADED );
+                else
+                    m_pImp->m_xObject->changeState( embed::EmbedStates::RUNNING );
+            }
         }
         catch (com::sun::star::uno::Exception& )
         {}

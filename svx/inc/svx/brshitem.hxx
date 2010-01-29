@@ -62,6 +62,9 @@ enum SvxGraphicPosition
     GPOS_AREA, GPOS_TILED
 };
 
+#define PARA_DEST_PARA  0
+#define PARA_DEST_CHAR  1
+
 class SvxBrushItem_Impl;
 class SVX_DLLPUBLIC SvxBrushItem : public SfxPoolItem
 {

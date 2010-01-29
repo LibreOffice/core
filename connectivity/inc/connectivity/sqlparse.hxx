@@ -46,6 +46,8 @@
 #include <com/sun/star/i18n/XLocaleData.hpp>
 #include "connectivity/IParseContext.hxx"
 #include "connectivity/dbtoolsdllapi.hxx"
+#include <salhelper/singletonref.hxx>
+#include <osl/mutex.hxx>
 
 #include <map>
 
@@ -112,6 +114,27 @@ namespace connectivity
     };
 
     //==========================================================================
+    // OSQLParseNodesContainer
+    // grabage collection of nodes
+    //==========================================================================
+    class OSQLParseNodesContainer
+    {
+        ::osl::Mutex m_aMutex;
+        ::std::vector< OSQLParseNode* > m_aNodes;
+    public:
+        OSQLParseNodesContainer();
+        ~OSQLParseNodesContainer();
+
+        void push_back(OSQLParseNode* _pNode);
+        void erase(OSQLParseNode* _pNode);
+        bool empty() const;
+        void clear();
+        void clearAndDelete();
+    };
+
+    typedef salhelper::SingletonRef<OSQLParseNodesContainer> OSQLParseNodesGarbageCollector;
+
+    //==========================================================================
     //= OSQLParser
     //==========================================================================
     struct OSQLParser_Data;
@@ -130,11 +153,9 @@ namespace connectivity
         static RuleIDMap            s_aReverseRuleIDLookup;
         static OParseContext        s_aDefaultContext;
 
-    //  parts controled by mutex
-        //  static ::osl::Mutex         s_aMutex;
-        static OSQLScanner*         s_pScanner;
-        static OSQLParseNodes*      s_pGarbageCollector;
-        static sal_Int32            s_nRefCount;
+        static OSQLScanner*                     s_pScanner;
+        static OSQLParseNodesGarbageCollector*  s_pGarbageCollector;
+        static sal_Int32                        s_nRefCount;
 
     // informations on the current parse action
         const IParseContext*        m_pContext;
@@ -211,7 +232,8 @@ namespace connectivity
         // compares the _sFunctionName with all known function names and return the DataType of the return value
         static sal_Int32 getFunctionReturnType(const ::rtl::OUString& _sFunctionName, const IParseContext* pContext = NULL);
 
-
+        // returns the type for a parameter in a given function name
+        static sal_Int32 getFunctionParameterType(sal_uInt32 _nTokenId,sal_uInt32 _nPos);
 
         void error(sal_Char *fmt);
         int SQLlex();

@@ -246,9 +246,7 @@
 #define STR_READONLY                        (RID_SFX_START+105)
 
 #define STR_SFX_FILTERNAME_ALL                  (RID_SFX_START+106)
-#define STR_FILTERNAME_CFG                  (RID_SFX_START+107)
 #define STR_EDIT                            (RID_SFX_START+108)
-#define STR_HUMAN_APPNAME                   (RID_SFX_START+109)
 #define STR_QUERY_SAVE_DOCUMENT             (RID_SFX_START+110)
 #define STR_BYTES                           (RID_SFX_START+111)
 #define STR_KB                              (RID_SFX_START+112)
@@ -369,14 +367,6 @@
 #define MID_DOCINFO_KEYWORDS                 0x17
 #define MID_DOCINFO_SUBJECT                  0x1b
 #define MID_DOCINFO_TITLE                        0x1d
-#define MID_DOCINFO_FIELD1TITLE              0x20
-#define MID_DOCINFO_FIELD2TITLE              0x21
-#define MID_DOCINFO_FIELD3TITLE              0x22
-#define MID_DOCINFO_FIELD4TITLE              0x23
-#define MID_DOCINFO_FIELD1                   0x24
-#define MID_DOCINFO_FIELD2                   0x25
-#define MID_DOCINFO_FIELD3                   0x26
-#define MID_DOCINFO_FIELD4                   0x27
 #define MID_DOCINFO_AUTOLOADENABLED          0x2d
 #define MID_DOCINFO_AUTOLOADURL              0x2e
 #define MID_DOCINFO_AUTOLOADSECS             0x2f

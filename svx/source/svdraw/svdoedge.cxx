@@ -44,7 +44,6 @@
 #include <svx/svddrgv.hxx>
 #include "svddrgm1.hxx"
 #include <svx/svdhdl.hxx>
-#include "svdtouch.hxx"
 #include <svx/svdtrans.hxx>
 #include <svx/svdetc.hxx>
 #include "svdglob.hxx"   // StringCache
@@ -58,6 +57,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <svx/sdrhittesthelper.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -415,30 +415,6 @@ void SdrEdgeObj::RecalcSnapRect()
 void SdrEdgeObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
 {
     rRect=GetSnapRect();
-}
-
-SdrObject* SdrEdgeObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
-{
-    if(pVisiLayer && !pVisiLayer->IsSet(sal::static_int_cast< sal_uInt8 >(GetLayer())))
-    {
-        return NULL;
-    }
-
-    INT32 nMyTol=nTol;
-    INT32 nWdt=ImpGetLineWdt()/2; // Halbe Strichstaerke
-    if (nWdt>nMyTol) nMyTol=nWdt; // Bei dicker Linie keine Toleranz noetig
-    Rectangle aR(rPnt,rPnt);
-    aR.Left()  -=nMyTol;
-    aR.Right() +=nMyTol;
-    aR.Top()   -=nMyTol;
-    aR.Bottom()+=nMyTol;
-
-    sal_Bool bHit(sal_False);
-
-    const Polygon aPoly(pEdgeTrack->getB2DPolygon().getDefaultAdaptiveSubdivision());
-    bHit = IsRectTouchesLine(aPoly,aR);
-    if (!bHit && HasText()) bHit = SdrTextObj::CheckHit(rPnt,nTol,pVisiLayer)!=NULL;
-    return bHit ? (SdrObject*)this : NULL;
 }
 
 FASTBOOL SdrEdgeObj::IsNode() const
@@ -2134,7 +2110,8 @@ FASTBOOL SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, 
                 USHORT nGesAnz=nConAnz+9;
                 FASTBOOL bUserFnd=FALSE;
                 ULONG nBestDist=0xFFFFFFFF;
-                for (USHORT i=0; i<nGesAnz; i++) {
+                for (USHORT i=0; i<nGesAnz; i++)
+                {
                     FASTBOOL bUser=i<nConAnz;
                     FASTBOOL bVertex=i>=nConAnz+0 && i<nConAnz+4;
                     FASTBOOL bCorner=i>=nConAnz+4 && i<nConAnz+8;
@@ -2191,7 +2168,9 @@ FASTBOOL SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, 
                 }
                 // Falls kein Konnektor getroffen wird nochmal
                 // HitTest versucht fuer BestConnector (=bCenter)
-                if (!bFnd && !bEdge && pObj->IsHit(rPt,nBoundHitTol,&rVisLayer))
+                if(!bFnd &&
+                    !bEdge &&
+                    SdrObjectPrimitiveHit(*pObj, rPt, nBoundHitTol, rPV, &rVisLayer, false))
                 {
                     // #109007#
                     // Suppress default connect at object inside bound

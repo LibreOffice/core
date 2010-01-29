@@ -41,10 +41,11 @@ VISIBILITY_HIDDEN=TRUE
 ENVCFLAGS+=/FR$(SLO)$/
 .ENDIF
 
-.INCLUDE : settings.mk
 .INCLUDE :  $(PRJ)$/version.mk
+.INCLUDE : $(PRJ)$/makefile.pmk
 
 .IF "$(GUI)"=="UNX"
+
 # --- Files -------------------------------------
 
 EXCEPTIONSFILES=\
@@ -79,10 +80,7 @@ SHL1STDLIBS=\
     $(CPPULIB)					\
     $(CPPUHELPERLIB)			\
     $(VOSLIB)					\
-    $(SVLLIB)					\
-    $(VCLLIB)					\
     $(TOOLSLIB)					\
-    $(I18NISOLANGLIB)			\
     $(SVTOOLLIB)				\
     $(UNOTOOLSLIB)				\
     $(UCBHELPERLIB)				\
@@ -102,9 +100,9 @@ SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=	$(SHL1TARGET)
 
+.ELSE
+dummy:
+    @echo "Nothing to build for GUI $(GUI)"
 .ENDIF
 # --- Targets ----------------------------------
-
-.INCLUDE : target.mk
-
-
+.INCLUDE : $(PRJ)$/target.pmk

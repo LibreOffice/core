@@ -527,13 +527,5 @@ PCodeBuffConvertor<T,S>::convert()
     m_nCnvtdSize = static_cast<S>( aTrnsfrmer.buffer().GetSize() );
 }
 
-void NeverRunsEver()
-{
-    // force instatiation of templates... I dunno why, but I have to do
-    // this to force instatiation of the template. Otherwise using the template
-    // in another code module results in link errors :-(
-    PCodeBuffConvertor< UINT16, UINT32 > aInst1(0,0);
-    aInst1.convert();
-    PCodeBuffConvertor< UINT32, UINT16 > aInst2(0,0);
-    aInst2.convert();
-}
+template class PCodeBuffConvertor< UINT16, UINT32 >;
+template class PCodeBuffConvertor< UINT32, UINT16 >;

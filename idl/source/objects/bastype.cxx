@@ -69,10 +69,10 @@ static BOOL ReadRangeSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm,
             {
                 ULONG n = pTok->GetNumber();
                 if( nSign == -1 || n <= nMax )
-                { // nich tueber dem Maximum
+                { // nicht ueber dem Maximum
                     if( (nSign == -1 && n < 0x8000000
                          && -(long)n >= nMin)
-                      || (nSign == 1 && n >= 0x8000000 || (long)n > nMin) )
+                      || ( (nSign == 1 && n >= 0x8000000) || (long)n > nMin) )
                     {
                         *pValue = (long)n;
                     }

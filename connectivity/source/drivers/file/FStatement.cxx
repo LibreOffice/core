@@ -48,6 +48,7 @@
 #include "resource/file_res.hrc"
 #include <algorithm>
 #include <tools/debug.hxx>
+#include <rtl/logfile.hxx>
 
 #define THROW_SQL(x) \
     OTools::ThrowException(x,m_aStatementHandle,SQL_HANDLE_STMT,*this)
@@ -89,6 +90,7 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection )
     ,m_bEscapeProcessing(sal_True)
     ,rBHelper(OStatement_BASE::rBHelper)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::OStatement_Base" );
     DBG_CTOR( file_OStatement_Base, NULL );
 
     m_pConnection->acquire();
@@ -118,6 +120,7 @@ OStatement_Base::~OStatement_Base()
 //------------------------------------------------------------------------------
 void OStatement_Base::disposeResultSet()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::disposeResultSet" );
     // free the cursor if alive
     Reference< XComponent > xComp(m_xResultSet.get(), UNO_QUERY);
     if (xComp.is())
@@ -177,15 +180,17 @@ void SAL_CALL OStatement_BASE2::release() throw()
 //-----------------------------------------------------------------------------
 Any SAL_CALL OStatement_Base::queryInterface( const Type & rType ) throw(RuntimeException)
 {
-    Any aRet = OStatement_BASE::queryInterface(rType);
+    //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::queryInterface" );
+    const Any aRet = OStatement_BASE::queryInterface(rType);
     return aRet.hasValue() ? aRet : OPropertySetHelper::queryInterface(rType);
 }
 // -------------------------------------------------------------------------
 Sequence< Type > SAL_CALL OStatement_Base::getTypes(  ) throw(RuntimeException)
 {
-        ::cppu::OTypeCollection aTypes( ::getCppuType( (const Reference< ::com::sun::star::beans::XMultiPropertySet > *)0 ),
-                                                                        ::getCppuType( (const Reference< ::com::sun::star::beans::XFastPropertySet > *)0 ),
-                                                                        ::getCppuType( (const Reference< ::com::sun::star::beans::XPropertySet > *)0 ));
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::getTypes" );
+    ::cppu::OTypeCollection aTypes( ::getCppuType( (const Reference< ::com::sun::star::beans::XMultiPropertySet > *)0 ),
+                                                                    ::getCppuType( (const Reference< ::com::sun::star::beans::XFastPropertySet > *)0 ),
+                                                                    ::getCppuType( (const Reference< ::com::sun::star::beans::XPropertySet > *)0 ));
 
     return ::comphelper::concatSequences(aTypes.getTypes(),OStatement_BASE::getTypes());
 }
@@ -193,11 +198,13 @@ Sequence< Type > SAL_CALL OStatement_Base::getTypes(  ) throw(RuntimeException)
 
 void SAL_CALL OStatement_Base::cancel(  ) throw(RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::cancel" );
 }
 // -------------------------------------------------------------------------
 
 void SAL_CALL OStatement_Base::close(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::close" );
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -208,6 +215,7 @@ void SAL_CALL OStatement_Base::close(  ) throw(SQLException, RuntimeException)
 
 void OStatement_Base::reset() throw (SQLException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::reset" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
@@ -224,6 +232,7 @@ void OStatement_Base::reset() throw (SQLException)
 
 void OStatement_Base::clearMyResultSet () throw (SQLException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::clearMyResultSet " );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
@@ -244,6 +253,7 @@ void OStatement_Base::clearMyResultSet () throw (SQLException)
 
 void OStatement_Base::setWarning (const SQLWarning &ex) throw( SQLException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::setWarning " );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
@@ -254,6 +264,7 @@ void OStatement_Base::setWarning (const SQLWarning &ex) throw( SQLException)
 // -------------------------------------------------------------------------
 Any SAL_CALL OStatement_Base::getWarnings(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::getWarnings" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
@@ -262,6 +273,7 @@ Any SAL_CALL OStatement_Base::getWarnings(  ) throw(SQLException, RuntimeExcepti
 // -------------------------------------------------------------------------
 void SAL_CALL OStatement_Base::clearWarnings(  ) throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::clearWarnings" );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
@@ -270,6 +282,7 @@ void SAL_CALL OStatement_Base::clearWarnings(  ) throw(SQLException, RuntimeExce
 // -------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OStatement_Base::createArrayHelper( ) const
 {
+    //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::createArrayHelper" );
     Sequence< Property > aProps;
     describeProperties(aProps);
     return new ::cppu::OPropertyArrayHelper(aProps);
@@ -278,6 +291,7 @@ void SAL_CALL OStatement_Base::clearWarnings(  ) throw(SQLException, RuntimeExce
 // -------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper & OStatement_Base::getInfoHelper()
 {
+    //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::getInfoHelper" );
     return *const_cast<OStatement_Base*>(this)->getArrayHelper();
 }
 // -------------------------------------------------------------------------
@@ -350,6 +364,7 @@ sal_Int32 SAL_CALL OStatement::executeUpdate( const ::rtl::OUString& sql ) throw
 // -----------------------------------------------------------------------------
 void SAL_CALL OStatement_Base::disposing(void)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::disposing" );
     if(m_aEvaluateRow.isValid())
     {
         m_aEvaluateRow->get().clear();
@@ -361,6 +376,7 @@ void SAL_CALL OStatement_Base::disposing(void)
 // -----------------------------------------------------------------------------
 Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OStatement_Base::getPropertySetInfo(  ) throw(RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::getPropertySetInfo" );
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 // -----------------------------------------------------------------------------
@@ -372,11 +388,13 @@ Any SAL_CALL OStatement::queryInterface( const Type & rType ) throw(RuntimeExcep
 // -----------------------------------------------------------------------------
 OSQLAnalyzer* OStatement_Base::createAnalyzer()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::createAnalyzer" );
     return new OSQLAnalyzer(m_pConnection);
 }
 // -----------------------------------------------------------------------------
 void OStatement_Base::anylizeSQL()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::anylizeSQL" );
     OSL_ENSURE(m_pSQLAnalyzer,"OResultSet::anylizeSQL: Analyzer isn't set!");
     // start analysing the statement
     m_pSQLAnalyzer->setOrigColumns(m_xColNames);
@@ -408,6 +426,7 @@ void OStatement_Base::anylizeSQL()
 void OStatement_Base::setOrderbyColumn( OSQLParseNode* pColumnRef,
                                         OSQLParseNode* pAscendingDescending)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::setOrderbyColumn" );
     ::rtl::OUString aColumnName;
     if (pColumnRef->count() == 1)
         aColumnName = pColumnRef->getChild(0)->getTokenValue();
@@ -456,6 +475,7 @@ void OStatement_Base::setOrderbyColumn( OSQLParseNode* pColumnRef,
 // -----------------------------------------------------------------------------
 void OStatement_Base::construct(const ::rtl::OUString& sql)  throw(SQLException, RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::construct" );
     ::rtl::OUString aErr;
     m_pParseTree = m_aParser.parseTree(aErr,sql);
     if(m_pParseTree)
@@ -531,6 +551,7 @@ void OStatement_Base::construct(const ::rtl::OUString& sql)  throw(SQLException,
 // -----------------------------------------------------------------------------
 void OStatement_Base::createColumnMapping()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::createColumnMapping" );
     // initialize the column index map (mapping select columns to table columns)
     ::vos::ORef<connectivity::OSQLColumns>  xColumns = m_aSQLIterator.getSelectColumns();
     m_aColMapping.resize(xColumns->get().size() + 1);
@@ -544,6 +565,7 @@ void OStatement_Base::createColumnMapping()
 // -----------------------------------------------------------------------------
 void OStatement_Base::initializeResultSet(OResultSet* _pResult)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::initializeResultSet" );
     GetAssignValues();
 
     _pResult->setSqlAnalyzer(m_pSQLAnalyzer);
@@ -562,6 +584,7 @@ void OStatement_Base::initializeResultSet(OResultSet* _pResult)
 // -----------------------------------------------------------------------------
 void OStatement_Base::GetAssignValues()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::GetAssignValues" );
     if (m_pParseTree == NULL)
     {
         ::dbtools::throwFunctionSequenceException(*this);
@@ -616,7 +639,7 @@ void OStatement_Base::GetAssignValues()
                 aColumnNameList.push_back(pCol->getTokenValue());
             }
         }
-        if(!aColumnNameList.size())
+        if ( aColumnNameList.empty() )
             throwFunctionSequenceException(*this);
 
         // Werte ...
@@ -629,10 +652,10 @@ void OStatement_Base::GetAssignValues()
         if (! SQL_ISTOKEN(pValuesOrQuerySpec->getChild(0),VALUES))
             throwFunctionSequenceException(*this);
 
-        OSL_ENSURE(pValuesOrQuerySpec->count() == 2,"OResultSet: pValuesOrQuerySpec->count() != 2");
+        OSL_ENSURE(pValuesOrQuerySpec->count() == 4,"OResultSet: pValuesOrQuerySpec->count() != 4");
 
         // Liste von Werten
-        OSQLParseNode * pInsertAtomCommalist = pValuesOrQuerySpec->getChild(1);
+        OSQLParseNode * pInsertAtomCommalist = pValuesOrQuerySpec->getChild(2);
         OSL_ENSURE(pInsertAtomCommalist != NULL,"OResultSet: pInsertAtomCommalist darf nicht NULL sein!");
         OSL_ENSURE(pInsertAtomCommalist->count() > 0,"OResultSet: pInsertAtomCommalist <= 0");
 
@@ -642,40 +665,22 @@ void OStatement_Base::GetAssignValues()
         for (sal_uInt32 i = 0; i < pInsertAtomCommalist->count(); i++)
         {
             pRow_Value_Const = pInsertAtomCommalist->getChild(i); // row_value_constructor
-            if(pRow_Value_Const->count() == 3)  // '(' row_value_const_list ')'
+            OSL_ENSURE(pRow_Value_Const != NULL,"OResultSet: pRow_Value_Const darf nicht NULL sein!");
+            if(SQL_ISRULE(pRow_Value_Const,parameter))
             {
-                pRow_Value_Const = pRow_Value_Const->getChild(1); // row_value_const_list
-                OSL_ENSURE(pRow_Value_Const != NULL,"OResultSet: pRow_Value_Const darf nicht NULL sein!");
-                if(SQL_ISRULE(pRow_Value_Const,parameter))
-                {
-                    if(pRow_Value_Const->count() == aColumnNameList.size())
-                        ParseAssignValues(aColumnNameList,pRow_Value_Const,nIndex++); // kann nur ein Columnname vorhanden sein pro Schleife
-                    else
-                    {
-//                      aStatus.Set(SQL_STAT_ERROR,
-//                      String::CreateFromAscii("S1000"),
-//                      aStatus.CreateErrorMessage(String(SdbResId(STR_STAT_SYNTAX_ERROR))),
-//                      0, String() );
-                        throwFunctionSequenceException(*this);
-                    }
-                }
-                else if(pRow_Value_Const->isToken())
-                    ParseAssignValues(aColumnNameList,pRow_Value_Const,static_cast<xub_StrLen>(i));
-                else
-                {
-                    if(pRow_Value_Const->count() == aColumnNameList.size())
-                    {
-                        for (sal_uInt32 j = 0; j < pRow_Value_Const->count(); ++j)
-                            ParseAssignValues(aColumnNameList,pRow_Value_Const->getChild(j),nIndex++);
-                    }
-                    else
-                        throwFunctionSequenceException(*this);
-                }
+                ParseAssignValues(aColumnNameList,pRow_Value_Const,nIndex++); // kann nur ein Columnname vorhanden sein pro Schleife
             }
+            else if(pRow_Value_Const->isToken())
+                ParseAssignValues(aColumnNameList,pRow_Value_Const,static_cast<xub_StrLen>(i));
             else
             {
-                //  aStatus.SetStatementTooComplex();
-                throwFunctionSequenceException(*this);
+                if(pRow_Value_Const->count() == aColumnNameList.size())
+                {
+                    for (sal_uInt32 j = 0; j < pRow_Value_Const->count(); ++j)
+                        ParseAssignValues(aColumnNameList,pRow_Value_Const->getChild(j),nIndex++);
+                }
+                else
+                    throwFunctionSequenceException(*this);
             }
         }
     }
@@ -729,6 +734,7 @@ void OStatement_Base::GetAssignValues()
 // -------------------------------------------------------------------------
 void OStatement_Base::ParseAssignValues(const ::std::vector< String>& aColumnNameList,OSQLParseNode* pRow_Value_Constructor_Elem,xub_StrLen nIndex)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::ParseAssignValues" );
     OSL_ENSURE(nIndex <= aColumnNameList.size(),"SdbFileCursor::ParseAssignValues: nIndex > aColumnNameList.GetTokenCount()");
     String aColumnName(aColumnNameList[nIndex]);
     OSL_ENSURE(aColumnName.Len() > 0,"OResultSet: Column-Name nicht gefunden");
@@ -760,6 +766,7 @@ void OStatement_Base::SetAssignValue(const String& aColumnName,
                                    BOOL bSetNull,
                                    UINT32 nParameter)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::SetAssignValue" );
     Reference<XPropertySet> xCol;
     m_xColNames->getByName(aColumnName) >>= xCol;
     sal_Int32 nId = Reference<XColumnLocate>(m_xColNames,UNO_QUERY)->findColumn(aColumnName);
@@ -842,8 +849,11 @@ void OStatement_Base::SetAssignValue(const String& aColumnName,
 // -----------------------------------------------------------------------------
 void OStatement_Base::parseParamterElem(const String& /*_sColumnName*/,OSQLParseNode* /*pRow_Value_Constructor_Elem*/)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::parseParamterElem" );
     // do nothing here
 }
-    }
-}
+// =============================================================================
+    } // namespace file
+// =============================================================================
+}// namespace connectivity
 // -----------------------------------------------------------------------------

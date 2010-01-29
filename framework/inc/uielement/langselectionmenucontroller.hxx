@@ -58,6 +58,8 @@
 #include <cppuhelper/weak.hxx>
 #include <rtl/ustring.hxx>
 
+#include "helper/mischelper.hxx"
+
 namespace framework
 {
     class LanguageSelectionMenuController :  public PopupMenuControllerBase
@@ -97,7 +99,6 @@ namespace framework
             };
 
             sal_Bool                                                               m_bShowMenu;
-            ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XLanguageGuessing >    m_xLanguageGuesser;
             ::rtl::OUString                                                        m_aLangStatusCommandURL;
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > m_xLanguageDispatch;
             ::rtl::OUString                                                        m_aMenuCommandURL_Lang;
@@ -111,6 +112,7 @@ namespace framework
             sal_Int16           m_nScriptType;
             ::rtl::OUString     m_aKeyboardLang;
             ::rtl::OUString     m_aGuessedText;
+            LanguageGuessingHelper      m_aLangGuessHelper;
 
             void fillPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu, const Mode rMode );
     };

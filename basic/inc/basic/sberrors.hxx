@@ -37,7 +37,7 @@
 typedef ULONG SbError;
 #endif
 
-// Abbildung auf SbxError
+// Mapping to SbxError
 #define ERRCODE_BASIC_SYNTAX                ERRCODE_SBX_SYNTAX                  // unspecified syntax error
 #define ERRCODE_BASIC_BAD_ARGUMENT          ERRCODE_SBX_NOTIMP                  // Invalid procedure call
 #define ERRCODE_BASIC_MATH_OVERFLOW         ERRCODE_SBX_OVERFLOW                // Overflow
@@ -68,7 +68,7 @@ typedef ULONG SbError;
 #define ERRCODE_BASIC_WRONG_ARGS            ERRCODE_SBX_WRONG_ARGS              // Wrong number of arguments
 #define ERRCODE_BASIC_NOT_A_COLL            ERRCODE_SBX_NOT_A_COLL              // Object not a collection
 
-// Basic-spezifische Fehlermeldungen an ERRCODE_AREA_SBX anhaengen
+// Append Basic specific error messages to ERRCODE_AREA_SBX
 #define ERRCODE_BASIC_NO_GOSUB              ((LAST_SBX_ERROR_ID+1UL) | ERRCODE_AREA_SBX | \
                                             ERRCODE_CLASS_RUNTIME)              // Return without Gosub
 #define ERRCODE_BASIC_REDO_FROM_START       ((LAST_SBX_ERROR_ID+2UL) | ERRCODE_AREA_SBX | \
@@ -200,8 +200,8 @@ typedef ULONG SbError;
 #define ERRCODE_BASIC_GETPROP_FAILED        ((LAST_SBX_ERROR_ID+62UL) | ERRCODE_AREA_SBX | \
                                             ERRCODE_CLASS_RUNTIME)              // Unable to get property
 
-// Compiler Errors (treten waehrend des Programmlaufs nicht auf)
-// Diese IDs koennen sich jederzeit verschieben
+// Compiler Errors (do not occure at runtime)
+// These IDs can shift at any time
 
 #define ERRCODE_BASIC_UNEXPECTED            ((LAST_SBX_ERROR_ID+63UL) | ERRCODE_AREA_SBX | \
                                             ERRCODE_CLASS_COMPILER)             // Unexpected symbol: xx
@@ -233,7 +233,7 @@ typedef ULONG SbError;
 #define ERRCODE_BASIC_UNDEF_TYPE            ((LAST_SBX_ERROR_ID+76UL) | ERRCODE_AREA_SBX | \
                                             ERRCODE_CLASS_COMPILER)             // Unknown user defined type xxx
 #define ERRCODE_BASIC_BAD_EXIT              ((LAST_SBX_ERROR_ID+77UL) | ERRCODE_AREA_SBX | \
-                                            ERRCODE_CLASS_COMPILER)             // Exit XXX expexted
+                                            ERRCODE_CLASS_COMPILER)             // Exit XXX expected
 #define ERRCODE_BASIC_BAD_BLOCK             ((LAST_SBX_ERROR_ID+78UL) | ERRCODE_AREA_SBX | \
                                             ERRCODE_CLASS_COMPILER)             // Unterminated statement block: missing XX
 #define ERRCODE_BASIC_BAD_BRACKETS          ((LAST_SBX_ERROR_ID+79UL) | ERRCODE_AREA_SBX | \
@@ -290,7 +290,7 @@ typedef ULONG SbError;
 #define ERRCODE_BASIC_LOOP_NOT_INIT         ((LAST_SBX_ERROR_ID+109UL) | ERRCODE_AREA_SBX | \
                                             ERRCODE_CLASS_COMPILER)             // For loop not initialized
 
-// Alte Codes auf neue mappen
+// Map old codes to new codes
 #define SbERR_SYNTAX                        ERRCODE_BASIC_SYNTAX
 #define SbERR_NO_GOSUB                      ERRCODE_BASIC_NO_GOSUB
 #define SbERR_REDO_FROM_START               ERRCODE_BASIC_REDO_FROM_START
@@ -520,8 +520,8 @@ typedef ULONG SbError;
 #define SbERR_SETPROP_FAILED        1005    // Unable to set property
 #define SbERR_GETPROP_FAILED        1006    // Unable to get property
 
-// Compiler Errors (treten waehrend des Programmlaufs nicht auf)
-// Diese IDs koennen sich jederzeit verschieben
+// Compiler Errors (do not happen at runtime)
+// These IDs can shift at any time
 
 #define SbERR_COMPILER_BGN          950
 #define SbERR_UNEXPECTED            951 // Unexpected symbol: xx

@@ -90,6 +90,12 @@
 #include <svx/sdr/contact/viewcontactofsdrole2obj.hxx>
 #include <svx/svdograf.hxx>
 
+// #i100710#
+#include <svx/xlnclit.hxx>
+#include <svx/xbtmpit.hxx>
+#include <svx/xflbmtit.hxx>
+#include <svx/xflbstit.hxx>
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
@@ -409,7 +415,14 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::activatingUI()
                     if ( xObject->getStatus( pObj->GetAspect() ) & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
                         xObject->changeState( embed::EmbedStates::INPLACE_ACTIVE );
                     else
-                        xObject->changeState( embed::EmbedStates::RUNNING );
+                    {
+                        // the links should not stay in running state for long time because of locking
+                        uno::Reference< embed::XLinkageSupport > xLink( xObject, uno::UNO_QUERY );
+                        if ( xLink.is() && xLink->isLink() )
+                            xObject->changeState( embed::EmbedStates::LOADED );
+                        else
+                            xObject->changeState( embed::EmbedStates::RUNNING );
+                    }
                 }
                 catch (com::sun::star::uno::Exception& )
                 {}
@@ -644,9 +657,7 @@ void SdrEmbedObjectLink::DataChanged( const String& /*rMimeType*/,
             try
             {
                 sal_Int32 nState = xObject->getCurrentState();
-                if ( nState == embed::EmbedStates::LOADED )
-                    xObject->changeState( embed::EmbedStates::RUNNING );
-                else
+                if ( nState != embed::EmbedStates::LOADED )
                 {
                     // in some cases the linked file probably is not locked so it could be changed
                     xObject->changeState( embed::EmbedStates::LOADED );
@@ -1473,17 +1484,39 @@ SdrObject* SdrOle2Obj::getFullDragClone() const
     // slow when the whole OLE needs to be cloned. Get the Metafile and
     // create a graphic object with it
     Graphic* pOLEGraphic = GetGraphic();
+    SdrObject* pClone = 0;
 
     if(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
     {
         pOLEGraphic = getEmbeddedObjectRef().GetHCGraphic();
     }
 
-    SdrObject* pClone = new SdrGrafObj(*pOLEGraphic, GetSnapRect());
+    if(pOLEGraphic)
+    {
+        pClone = new SdrGrafObj(*pOLEGraphic, GetSnapRect());
 
-    // this would be the place where to copy all attributes
-    // when OLE will support fill and line style
-    // pClone->SetMergedItem(pOleObject->GetMergedItemSet());
+        // this would be the place where to copy all attributes
+        // when OLE will support fill and line style
+        // pClone->SetMergedItem(pOleObject->GetMergedItemSet());
+    }
+    else
+    {
+        // #i100710# pOLEGraphic may be zero (no visualisation available),
+        // so we need to use the OLE replacement graphic
+        pClone = new SdrRectObj(GetSnapRect());
+
+        // gray outline
+        pClone->SetMergedItem(XLineStyleItem(XLINE_SOLID));
+        const svtools::ColorConfig aColorConfig;
+        const svtools::ColorConfigValue aColor(aColorConfig.GetColorValue(svtools::OBJECTBOUNDARIES));
+        pClone->SetMergedItem(XLineColorItem(String(), aColor.nColor));
+
+        // bitmap fill
+        pClone->SetMergedItem(XFillStyleItem(XFILL_BITMAP));
+        pClone->SetMergedItem(XFillBitmapItem(String(), GetEmtyOLEReplacementBitmap()));
+        pClone->SetMergedItem(XFillBmpTileItem(false));
+        pClone->SetMergedItem(XFillBmpStretchItem(false));
+    }
 
     return pClone;
 }
@@ -1541,13 +1574,6 @@ void SdrOle2Obj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 UINT16 SdrOle2Obj::GetObjIdentifier() const
 {
     return bFrame ? UINT16(OBJ_FRAME) : UINT16(OBJ_OLE2);
-}
-
-// -----------------------------------------------------------------------------
-
-SdrObject* SdrOle2Obj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const
-{
-    return ImpCheckHit(rPnt,nTol,pVisiLayer,TRUE,TRUE);
 }
 
 // -----------------------------------------------------------------------------
@@ -1883,40 +1909,60 @@ void SdrOle2Obj::NbcMove(const Size& rSize)
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SdrOle2Obj::Unload( const uno::Reference< embed::XEmbeddedObject >& xObj, sal_Int64 nAspect )
+sal_Bool SdrOle2Obj::CanUnloadRunningObj( const uno::Reference< embed::XEmbeddedObject >& xObj, sal_Int64 nAspect )
 {
     sal_Bool bResult = sal_False;
 
     sal_Int32 nState = xObj->getCurrentState();
     if ( nState == embed::EmbedStates::LOADED )
     {
+        // the object is already unloaded
         bResult = sal_True;
     }
     else
     {
-        sal_Int64 nMiscStatus = xObj->getStatus( nAspect );
         uno::Reference < util::XModifiable > xModifiable( xObj->getComponent(), uno::UNO_QUERY );
-
-        if ( embed::EmbedMisc::MS_EMBED_ALWAYSRUN != ( nMiscStatus & embed::EmbedMisc::MS_EMBED_ALWAYSRUN ) &&
-        embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY != ( nMiscStatus & embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY ) &&
-        !( xModifiable.is() && xModifiable->isModified() ) &&
-        !( nState == embed::EmbedStates::INPLACE_ACTIVE || nState == embed::EmbedStates::UI_ACTIVE || nState == embed::EmbedStates::ACTIVE ) )
+        if ( !xModifiable.is() )
+            bResult = sal_True;
+        else
         {
-            try
+            sal_Int64 nMiscStatus = xObj->getStatus( nAspect );
+
+            if ( embed::EmbedMisc::MS_EMBED_ALWAYSRUN != ( nMiscStatus & embed::EmbedMisc::MS_EMBED_ALWAYSRUN ) &&
+            embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY != ( nMiscStatus & embed::EmbedMisc::EMBED_ACTIVATEIMMEDIATELY ) &&
+            !( xModifiable.is() && xModifiable->isModified() ) &&
+            !( nState == embed::EmbedStates::INPLACE_ACTIVE || nState == embed::EmbedStates::UI_ACTIVE || nState == embed::EmbedStates::ACTIVE ) )
             {
-                xObj->changeState( embed::EmbedStates::LOADED );
                 bResult = sal_True;
             }
-            catch( ::com::sun::star::uno::Exception& e )
-            {
-                (void)e;
-                DBG_ERROR(
-                    (OString("SdrOle2Obj::Unload=(), "
-                            "exception caught: ") +
-                    rtl::OUStringToOString(
-                        comphelper::anyToString( cppu::getCaughtException() ),
-                        RTL_TEXTENCODING_UTF8 )).getStr() );
-            }
+        }
+    }
+
+    return bResult;
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Bool SdrOle2Obj::Unload( const uno::Reference< embed::XEmbeddedObject >& xObj, sal_Int64 nAspect )
+{
+    sal_Bool bResult = sal_False;
+
+    if ( CanUnloadRunningObj( xObj, nAspect ) )
+    {
+        try
+        {
+            xObj->changeState( embed::EmbedStates::LOADED );
+            bResult = sal_True;
+        }
+        catch( ::com::sun::star::uno::Exception& e )
+        {
+            (void)e;
+            DBG_ERROR(
+                (OString("SdrOle2Obj::Unload=(), "
+                        "exception caught: ") +
+                rtl::OUStringToOString(
+                    comphelper::anyToString( cppu::getCaughtException() ),
+                    RTL_TEXTENCODING_UTF8 )).getStr() );
         }
     }
 
@@ -2162,79 +2208,11 @@ sal_Bool SdrOle2Obj::AddOwnLightClient()
 
 //////////////////////////////////////////////////////////////////////////////
 
-bool SdrOle2Obj::executeOldDoPaintPreparations(SdrPageView* pPageVew) const
+bool SdrOle2Obj::executeOldDoPaintPreparations(SdrPageView* /*pPageVew*/) const
 {
-    bool bIsActive(false);
-    // copy of the old SdrOle2Obj::Do_PaintObject stuff which evtl. needs
-    // to be emulated.
-
-    // //charts must be painted resolution dependent!! #i82893#, #i75867#
-    // if( ChartPrettyPainter::IsChart(xObjRef) && ChartPrettyPainter::ShouldPrettyPaintChartOnThisDevice( rOut.GetOutDev() ) )
-    //     if( !rOut.GetOffset().nA && !rOut.GetOffset().nB )//offset!=0 is the scenario 'copy -> past special gdi metafile' which does not work with direct painting so far
-    //         if( ChartPrettyPainter::DoPrettyPaintChart( this->getXModel(), rOut.GetOutDev(), aRect ) )
-    //             return bOk;
-    //
-    // if( !GetGraphic() )
-    //     ( (SdrOle2Obj*) this)->GetObjRef_Impl();    // try to create embedded object
-
-    // this one can be used directly, just reformatting a bit
-    if(!GetGraphic())
-    {
-        // try to create embedded object
-        const_cast< SdrOle2Obj* >(this)->GetObjRef_Impl();
-    }
-
-    // if ( xObjRef.is() )
-    // {
-    //     sal_Int64 nMiscStatus = xObjRef->getStatus( GetAspect() );
-    //     if( !bSizProt && (nMiscStatus & embed::EmbedMisc::EMBED_NEVERRESIZE) )
-    //      ( (SdrOle2Obj*) this)->bSizProt = TRUE;
-
-    // old stuff which relies on xObjRef and nMiscStatus
-    if(xObjRef.is())
-    {
-        const sal_Int64 nMiscStatus(xObjRef->getStatus(GetAspect()));
-
-        // this hack (to change model data during PAINT argh(!)) can also be reproduced
-        // directly
-        if(!IsResizeProtect() && (nMiscStatus & embed::EmbedMisc::EMBED_NEVERRESIZE))
-        {
-            const_cast< SdrOle2Obj* >(this)->SetResizeProtect(true);
-        }
-
-    //     OutputDevice* pOut = rOut.GetOutDev();
-    //
-    //     //TODO/LATER: currently it's not possible to compare the windows, the XOutDev contains a virtual device
-    //     sal_Int32 nState = xObjRef->getCurrentState();
-    //     //if ( ( nState != embed::EmbedStates::INPLACE_ACTIVE && nState != embed::EmbedStates::UI_ACTIVE ) ||
-    //     //       pModel && SfxInPlaceClient::GetActiveWindow( pModel->GetPersist(), xObjRef ) != pOut )
-    //  {
-    //         if ( nMiscStatus & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
-    //      {
-    //          // PlugIn-Objekt connecten
-    //          if (rInfoRec.pPV!=NULL)
-    //          {
-    //              SdrOle2Obj* pOle2Obj = (SdrOle2Obj*) this;
-    //              SdrView* pSdrView = (SdrView*) &rInfoRec.pPV->GetView();
-    //              pSdrView->DoConnect(pOle2Obj);
-    //          }
-    //      }
-
-        // nState is used in old paint to see if OLE is activated and to do
-        // a different paint
-        const sal_Int32 nState(xObjRef->getCurrentState());
-
-        bIsActive = (nState == embed::EmbedStates::ACTIVE);
-
-        // for this one i need the view.
-        if(pPageVew && (nMiscStatus & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE))
-        {
-            // connect plugin object
-            pPageVew->GetView().DoConnect(const_cast< SdrOle2Obj* >(this));
-        }
-    }
-
-    return bIsActive;
+    //#i101925# moved this stuff to method ViewObjectContactOfSdrOle2Obj::createPrimitive2DSequence and reorganized it further to avoid superfluous metafile creation for charts
+    //this method can be removed with the next incompatible build
+    return false;
 }
 
 Bitmap SdrOle2Obj::GetEmtyOLEReplacementBitmap() const

@@ -85,6 +85,7 @@
 #include <svtools/numuno.hxx>
 #include <tools/multisel.hxx>
 #include <tools/shl.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/help.hxx>
 #include <vcl/image.hxx>
 #include <vcl/longcurr.hxx>
@@ -800,6 +801,8 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
     }
 }
 
+enum InspectorAction { eOpenInspector, eCloseInspector, eUpdateInspector, eNone };
+
 //------------------------------------------------------------------------------
 void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMenu& rMenu, sal_uInt16 nExecutionResult)
 {
@@ -812,6 +815,8 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
 
     ::rtl::OUString aFieldType;
     sal_Bool    bReplace = sal_False;
+    InspectorAction eInspectorAction = eNone;
+    Reference< XPropertySet > xColumnToInspect;
     switch (nExecutionResult)
     {
         case SID_FM_DELETECOL:
@@ -822,22 +827,9 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
             ::comphelper::disposeComponent(xCol);
         }   break;
         case SID_FM_SHOW_PROPERTY_BROWSER:
-        {
-            Reference< XInterface >  xCol;
-            ::cppu::extractInterface(xCol, xCols->getByIndex(nPos));
-            FmInterfaceItem aIFaceItem(SID_FM_SHOW_PROPERTY_BROWSER, xCol);
-            SfxBoolItem aShowItem(SID_FM_SHOW_PROPERTIES, !rMenu.IsItemChecked(SID_FM_SHOW_PROPERTY_BROWSER));
-
-            // execute the slot, use the dispatcher of the current view frame (which should be the one we're residing in)
-            SfxViewFrame* pCurrentFrame = SfxViewFrame::Current();
-            if (pCurrentFrame)
-                pCurrentFrame->GetBindings().GetDispatcher()->Execute( SID_FM_SHOW_PROPERTY_BROWSER, SFX_CALLMODE_ASYNCHRON,
-                                          &aIFaceItem, &aShowItem, 0L );
-            else
-            {
-                DBG_ERROR("FmGridHeader::PostExecuteColumnContextMenu : no current view frame -> no bindings !");
-            }
-        }   break;
+            eInspectorAction = rMenu.IsItemChecked( SID_FM_SHOW_PROPERTY_BROWSER ) ? eOpenInspector : eCloseInspector;
+            xColumnToInspect.set( xCols->getByIndex( nPos ), UNO_QUERY );
+            break;
         case SID_FM_EDIT + nChangeTypeOffset:
             bReplace = sal_True;
         case SID_FM_EDIT:
@@ -945,50 +937,74 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
             break;
     }
 
-    if (aFieldType.getLength())
+    if ( aFieldType.getLength() )
     {
-        Reference< ::com::sun::star::form::XGridColumnFactory >  xFactory(xCols, UNO_QUERY);
-        Reference< ::com::sun::star::beans::XPropertySet >  xCol = xFactory->createColumn(aFieldType);
-        if (xCol.is())
+        try
         {
-            if (bReplace)
+            Reference< XGridColumnFactory > xFactory( xCols, UNO_QUERY_THROW );
+            Reference< XPropertySet > xNewCol( xFactory->createColumn( aFieldType ), UNO_SET_THROW );
+
+            if ( bReplace )
             {
                 // ein paar Properties hinueberretten
-                Reference< ::com::sun::star::beans::XPropertySet >  xReplaced;
-                ::cppu::extractInterface(xReplaced, xCols->getByIndex(nPos));
+                Reference< XPropertySet > xReplaced( xCols->getByIndex( nPos ), UNO_QUERY );
 
-                // the application locale
-                ::com::sun::star::lang::Locale aAppLocale = Application::GetSettings().GetUILocale();
+                OStaticDataAccessTools().TransferFormComponentProperties(
+                    xReplaced, xNewCol, Application::GetSettings().GetUILocale() );
 
-                OStaticDataAccessTools().TransferFormComponentProperties(xReplaced, xCol, aAppLocale);
+                xCols->replaceByIndex( nPos, makeAny( xNewCol ) );
+                ::comphelper::disposeComponent( xReplaced );
 
-                xCols->replaceByIndex( nPos, makeAny( xCol ) );
-                ::comphelper::disposeComponent(xReplaced);
+                eInspectorAction = eUpdateInspector;
+                xColumnToInspect = xNewCol;
             }
             else
             {
                 // Standardlabel setzen
-                ::rtl::OUString sLabelBase = String(SVX_RES(RID_STR_COLUMN));
+                ::rtl::OUString sLabelBase = String( SVX_RES( RID_STR_COLUMN ) );
                 // disambiguate the name
-                Reference< XNameAccess > xColNames(xCols, UNO_QUERY);
+                Reference< XNameAccess > xColNames( xCols, UNO_QUERY );
                 ::rtl::OUString sLabel;
-                for (sal_Int32 i=1; i<65535; ++i)
+                for ( sal_Int32 i=1; i<65535; ++i )
                 {
                     sLabel = sLabelBase;
-                    sLabel += ::rtl::OUString::valueOf((sal_Int32)i);
-                    if (!xColNames->hasByName(sLabel))
+                    sLabel += ::rtl::OUString::valueOf( (sal_Int32)i );
+                    if ( !xColNames->hasByName( sLabel ) )
                         break;
                 }
                 // no fallback in case the name is not unique (which is rather improbable) ....
-                xCol->setPropertyValue(FM_PROP_LABEL, makeAny(sLabel));
-                xCol->setPropertyValue(FM_PROP_NAME, makeAny(sLabel));
+                xNewCol->setPropertyValue( FM_PROP_LABEL, makeAny( sLabel ) );
+                xNewCol->setPropertyValue( FM_PROP_NAME, makeAny( sLabel ) );
 
                 FormControlFactory determine( ::comphelper::getProcessServiceFactory() );
-                determine.initializeControlModel( DocumentClassification::classifyHostDocument( xCols ), xCol );
+                determine.initializeControlModel( DocumentClassification::classifyHostDocument( xCols ), xNewCol );
 
-                xCols->insertByIndex( nPos, makeAny( xCol ) );
+                xCols->insertByIndex( nPos, makeAny( xNewCol ) );
             }
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
 
+    SfxViewFrame* pCurrentFrame = SfxViewFrame::Current();
+    OSL_ENSURE( pCurrentFrame, "FmGridHeader::PostExecuteColumnContextMenu: no view frame -> no bindings -> no property browser!" );
+    if ( pCurrentFrame )
+    {
+        if ( eInspectorAction == eUpdateInspector )
+        {
+            if ( !pCurrentFrame->HasChildWindow( SID_FM_SHOW_PROPERTIES ) )
+                eInspectorAction = eNone;
+        }
+
+        if ( eInspectorAction != eNone )
+        {
+            FmInterfaceItem aIFaceItem( SID_FM_SHOW_PROPERTY_BROWSER, xColumnToInspect );
+            SfxBoolItem aShowItem( SID_FM_SHOW_PROPERTIES, eInspectorAction == eCloseInspector ? FALSE : TRUE );
+
+            pCurrentFrame->GetBindings().GetDispatcher()->Execute( SID_FM_SHOW_PROPERTY_BROWSER, SFX_CALLMODE_ASYNCHRON,
+                                      &aIFaceItem, &aShowItem, 0L );
         }
     }
 }
@@ -1597,7 +1613,7 @@ void FmGridControl::ColumnMoved(sal_uInt16 nId)
         DbGridColumn* pCol = DbGridControl::GetColumns().GetObject(GetModelColumnPos(nId));
         Reference< ::com::sun::star::beans::XPropertySet >  xCol;
 
-        // Einfuegen mu� sich an den Column Positionen orientieren
+        // Einfuegen muß sich an den Column Positionen orientieren
         sal_Int32 i;
         Reference< XInterface > xCurrent;
         for (i = 0; !xCol.is() && i < xColumns->getCount(); i++)

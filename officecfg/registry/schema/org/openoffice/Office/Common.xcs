@@ -1455,6 +1455,18 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 				<author>MBA</author>
 				<desc>Contains the current and default path settings used by the Office.</desc>
 			</info>
+      <group oor:name="Info">
+        <info>
+          <author>CD</author>
+          <desc>Contains various properties information purpose only.</desc>
+        </info>
+        <prop oor:name="WorkPathChanged" oor:type="xs:boolean">
+          <info>
+            <desc>A flag which is set by the tools options dialog whenever a user changed the work path.</desc>
+          </info>
+          <value>true</value>
+        </prop>
+      </group>
 			<group oor:name="Current">
 				<info>
 					<author>MBA</author>
@@ -2334,6 +2346,13 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 				</info>
 				<value>true</value>
 			</prop>
+			<prop oor:name="ShowOfficeUpdateDialog" oor:type="xs:boolean">
+				<info>
+					<author>MAV</author>
+					<desc>Specifies whether the office update dialog should be shown in case the loaded document has newer ODF version than the maximal supported one.</desc>
+				</info>
+				<value>true</value>
+			</prop>
 		</group>
 		<group oor:name="Security">
 			<info>
@@ -2743,6 +2762,13 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 					<info>
 						<author>PB</author>
 						<desc>Shows all deactivated menu entries. Menu commands that are normally not necessary are hidden by default.</desc>
+					</info>
+					<value>true</value>
+				</prop>
+				<prop oor:name="IsSystemIconsInMenus" oor:type="xs:boolean">
+					<info>
+						<author>CMC</author>
+						<desc>Indicates whether icons in the office menus should shown/hidden by following the System theme.</desc>
 					</info>
 					<value>true</value>
 				</prop>
@@ -5617,11 +5643,17 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 			<prop oor:name="UseDocumentSystemFileLocking" oor:type="xs:boolean">
 				<info>
 					<author>MAV</author>
-					<desc>Allows to specify whether the OOo document file locking mechanics should use the system file locking additionaly.</desc>
+					<desc>Allows to specify whether the OOo document file locking mechanics should use the system file locking.</desc>
 				</info>
 				<value>true</value>
 			</prop>
-
+			<prop oor:name="UseDocumentOOoLockFile" oor:type="xs:boolean">
+				<info>
+					<author>MAV</author>
+					<desc>Allows to specify whether the OOo document file locking mechanics should use the lock file for locking.</desc>
+				</info>
+				<value>true</value>
+			</prop>
 			<prop oor:name="UseSystemPrintDialog" oor:type="xs:boolean">
 				<info>
 					<author>PL</author>

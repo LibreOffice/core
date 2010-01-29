@@ -528,7 +528,13 @@
                     <value xml:lang="en-US">~Page Number</value>
                 </prop>
             </node>
-            <node oor:name=".uno:ModifyField" oor:op="replace">
+      <node oor:name=".uno:InsertPagesField" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+
+          <value xml:lang="en-US">Page ~Count</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:ModifyField" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
 
                     <value xml:lang="en-US">F~ields...</value>
@@ -724,15 +730,6 @@
                 <prop oor:name="Label" oor:type="xs:string">
 
                     <value xml:lang="en-US">Shift</value>
-                </prop>
-                <prop oor:name="Properties" oor:type="xs:int">
-                    <value>1</value>
-                </prop>
-            </node>
-            <node oor:name=".uno:Bullet" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-
-                    <value xml:lang="en-US">S~pecial Character...</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>

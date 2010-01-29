@@ -51,17 +51,21 @@ using ::rtl::OUStringBuffer;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-static SvXMLEnumMapEntry __READONLY_DATA aFontFamilyGenericMapping[] =
+const SvXMLEnumMapEntry* lcl_getFontFamilyGenericMapping()
 {
-    { XML_DECORATIVE,       FAMILY_DECORATIVE },
+    static SvXMLEnumMapEntry __READONLY_DATA aFontFamilyGenericMapping[] =
+    {
+        { XML_DECORATIVE,       FAMILY_DECORATIVE },
 
-    { XML_MODERN,           FAMILY_MODERN   },
-    { XML_ROMAN,            FAMILY_ROMAN    },
-    { XML_SCRIPT,           FAMILY_SCRIPT   },
-    { XML_SWISS,            FAMILY_SWISS    },
-    { XML_SYSTEM,           FAMILY_SYSTEM   },
-    { XML_TOKEN_INVALID,    0               }
-};
+        { XML_MODERN,           FAMILY_MODERN   },
+        { XML_ROMAN,            FAMILY_ROMAN    },
+        { XML_SCRIPT,           FAMILY_SCRIPT   },
+        { XML_SWISS,            FAMILY_SWISS    },
+        { XML_SYSTEM,           FAMILY_SYSTEM   },
+        { XML_TOKEN_INVALID,    0               }
+    };
+    return aFontFamilyGenericMapping;
+}
 
 static SvXMLEnumMapEntry __READONLY_DATA aFontPitchMapping[] =
 {
@@ -219,7 +223,7 @@ XMLFontFamilyPropHdl::~XMLFontFamilyPropHdl()
 sal_Bool XMLFontFamilyPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
     sal_uInt16 eNewFamily;
-    sal_Bool bRet = SvXMLUnitConverter::convertEnum( eNewFamily, rStrImpValue, aFontFamilyGenericMapping );
+    sal_Bool bRet = SvXMLUnitConverter::convertEnum( eNewFamily, rStrImpValue, lcl_getFontFamilyGenericMapping() );
     if( bRet )
         rValue <<= (sal_Int16)eNewFamily;
 
@@ -236,7 +240,7 @@ sal_Bool XMLFontFamilyPropHdl::exportXML( OUString& rStrExpValue, const uno::Any
     {
         FontFamily eFamily = (FontFamily)nFamily;
         if( eFamily != FAMILY_DONTKNOW )
-            bRet = SvXMLUnitConverter::convertEnum( aOut, eFamily, aFontFamilyGenericMapping );
+            bRet = SvXMLUnitConverter::convertEnum( aOut, eFamily, lcl_getFontFamilyGenericMapping() );
     }
 
     rStrExpValue = aOut.makeStringAndClear();

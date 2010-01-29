@@ -39,14 +39,10 @@ TARGET=emboleobj
 
 .INCLUDE :  settings.mk
 
-.IF "$(DISABLE_ATL)"==""
+# .IF "$(DISABLE_ATL)"==""
 
 LIBTARGET=NO
 USE_DEFFILE=YES
-INCPRE+=$(ATL_INCLUDE)
-.IF "$(MFC_INCLUDE)"!=""
-INCPRE+=$(MFC_INCLUDE)
-.ENDIF
 
 # --- Files --------------------------------------------------------
 
@@ -127,9 +123,6 @@ SHL1STDLIBS+=\
 
 DEF1EXPORTFILE=	exports.dxp
 
-.ELSE
-SHL1STDLIBS+=\
-    -lembobj
 .ENDIF
 
 
@@ -137,7 +130,7 @@ SHL1DEF= $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME= $(SHL1TARGET)
 
-.ENDIF
+# .ENDIF
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk

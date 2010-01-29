@@ -1029,6 +1029,25 @@ void SfxToolBoxControl::Select( USHORT nModifier )
 
 void SfxToolBoxControl::Select( BOOL /*bMod1*/ )
 {
+    if(::comphelper::UiEventsLogger::isEnabled()) //#i88653# #i102805#
+    {
+        ::rtl::OUString sAppName;
+        try
+        {
+            static ::rtl::OUString our_aModuleManagerName = ::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager");
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager =
+                ::comphelper::getProcessServiceFactory();
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager > xModuleManager(
+                xServiceManager->createInstance(our_aModuleManagerName)
+                , ::com::sun::star::uno::UNO_QUERY_THROW);
+            sAppName = xModuleManager->identify(m_xFrame);
+        } catch(::com::sun::star::uno::Exception&) {}
+        Sequence<PropertyValue> vSource;
+        ::comphelper::UiEventsLogger::appendDispatchOrigin(vSource, sAppName, ::rtl::OUString::createFromAscii("SfxToolBoxControl"));
+        URL aURL;
+        aURL.Complete = m_aCommandURL;
+        ::comphelper::UiEventsLogger::logDispatch(aURL, vSource);
+    }
     svt::ToolboxController::execute( pImpl->nSelectModifier );
 }
 
@@ -1511,7 +1530,7 @@ SfxAppToolBoxControl_Impl::SfxAppToolBoxControl_Impl( USHORT nSlotId, USHORT nId
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     m_nSymbolsStyle         = rSettings.GetSymbolsStyle();
     m_bWasHiContrastMode    = rSettings.GetMenuColor().IsDark();
-    m_bShowMenuImages       = SvtMenuOptions().IsMenuIconsEnabled();
+    m_bShowMenuImages       = rSettings.GetUseImagesInMenus();
 
     SetImage( String() );
 }
@@ -1787,7 +1806,7 @@ IMPL_LINK( SfxAppToolBoxControl_Impl, Activate, Menu *, pActMenu )
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
         ULONG nSymbolsStyle     = rSettings.GetSymbolsStyle();
         BOOL bIsHiContrastMode  = rSettings.GetMenuColor().IsDark();
-        BOOL bShowMenuImages    = SvtMenuOptions().IsMenuIconsEnabled();
+        BOOL bShowMenuImages    = rSettings.GetUseImagesInMenus();
 
         if (( nSymbolsStyle != m_nSymbolsStyle ) ||
             ( bIsHiContrastMode != m_bWasHiContrastMode ) ||

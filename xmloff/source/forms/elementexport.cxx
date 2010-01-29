@@ -529,15 +529,15 @@ namespace xmloff
         {
             static sal_Int32 nBooleanPropertyAttributeIds[] =
             {   // attribute flags
-                CCA_CURRENT_SELECTED, CCA_DISABLED, CCA_DROPDOWN, CCA_PRINTABLE, CCA_READONLY, CCA_SELECTED, CCA_TAB_STOP
+                CCA_CURRENT_SELECTED, CCA_DISABLED, CCA_DROPDOWN, CCA_PRINTABLE, CCA_READONLY, CCA_SELECTED, CCA_TAB_STOP, CCA_ENABLEVISIBLE
             };
             static const ::rtl::OUString* pBooleanPropertyNames[] =
             {   // property names
-                &PROPERTY_STATE, &PROPERTY_ENABLED, &PROPERTY_DROPDOWN, &PROPERTY_PRINTABLE, &PROPERTY_READONLY, &PROPERTY_DEFAULT_STATE, &PROPERTY_TABSTOP
+                &PROPERTY_STATE, &PROPERTY_ENABLED, &PROPERTY_DROPDOWN, &PROPERTY_PRINTABLE, &PROPERTY_READONLY, &PROPERTY_DEFAULT_STATE, &PROPERTY_TABSTOP, &PROPERTY_ENABLEVISIBLE
             };
             static sal_Bool nBooleanPropertyAttrFlags[] =
             {   // attribute defaults
-                BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_FALSE | BOOLATTR_INVERSE_SEMANTICS, BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_TRUE, BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_VOID
+                BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_FALSE | BOOLATTR_INVERSE_SEMANTICS, BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_TRUE, BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_FALSE, BOOLATTR_DEFAULT_VOID, BOOLATTR_DEFAULT_FALSE
             };
         #if OSL_DEBUG_LEVEL > 0
             sal_Int32 nIdCount = sizeof(nBooleanPropertyAttributeIds) / sizeof(nBooleanPropertyAttributeIds[0]);
@@ -1292,14 +1292,14 @@ namespace xmloff
         // one or both of the selected flags.
         // 21.05.2001 - 85388 - frank.schoenheit@germany.sun.com
 
-        if (aSelection.size() || aDefaultSelection.size())
+        if ( !aSelection.empty() || !aDefaultSelection.empty() )
         {
             sal_Int16 nLastSelected = -1;
-            if (aSelection.size())
+            if ( !aSelection.empty() )
                 nLastSelected = *(--aSelection.end());
 
             sal_Int16 nLastDefaultSelected = -1;
-            if (aDefaultSelection.size())
+            if ( !aDefaultSelection.empty() )
                 nLastDefaultSelected = *(--aDefaultSelection.end());
 
             // the maximum element in both sets

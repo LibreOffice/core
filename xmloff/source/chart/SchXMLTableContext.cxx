@@ -43,7 +43,10 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/XChartTypeContainer.hpp>
+#include <com/sun/star/chart2/XInternalDataProvider.hpp>
 #include <com/sun/star/chart/XChartDataArray.hpp>
 #include <com/sun/star/chart/ChartSeriesAddress.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -337,37 +340,6 @@ void lcl_fillRangeMapping(
                 }
             }
         }
-    }
-}
-
-void lcl_copyProperties(
-    const Reference< beans::XPropertySet > & xSource,
-    const Reference< beans::XPropertySet > & xDestination )
-{
-    if( ! (xSource.is() && xDestination.is()))
-        return;
-
-    try
-    {
-        Reference< beans::XPropertySetInfo > xSrcInfo( xSource->getPropertySetInfo(), uno::UNO_QUERY_THROW );
-        Reference< beans::XPropertySetInfo > xDestInfo( xDestination->getPropertySetInfo(), uno::UNO_QUERY_THROW );
-        Sequence< beans::Property > aProperties( xSrcInfo->getProperties());
-        const sal_Int32 nLength = aProperties.getLength();
-        for( sal_Int32 i = 0; i < nLength; ++i )
-        {
-            OUString aName( aProperties[i].Name);
-            if( xDestInfo->hasPropertyByName( aName ))
-            {
-                beans::Property aProp( xDestInfo->getPropertyByName( aName ));
-                if( (aProp.Attributes & beans::PropertyAttribute::READONLY) == 0 )
-                    xDestination->setPropertyValue(
-                        aName, xSource->getPropertyValue( aName ));
-            }
-        }
-    }
-    catch( const uno::Exception & )
-    {
-        OSL_ENSURE( false, "Copying property sets failed!" );
     }
 }
 
@@ -672,7 +644,8 @@ void SchXMLTableColumnContext::StartElement( const uno::Reference< xml::sax::XAt
 {
     // get number-columns-repeated attribute
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-    rtl::OUString aValue;
+    sal_Int32 nRepeated = 1;
+    bool bHidden = false;
 
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
@@ -683,19 +656,32 @@ void SchXMLTableColumnContext::StartElement( const uno::Reference< xml::sax::XAt
         if( nPrefix == XML_NAMESPACE_TABLE &&
             IsXMLToken( aLocalName, XML_NUMBER_COLUMNS_REPEATED ) )
         {
-            aValue = xAttrList->getValueByIndex( i );
-            break;   // we only need this attribute
+            rtl::OUString aValue = xAttrList->getValueByIndex( i );
+            if( aValue.getLength())
+                nRepeated = aValue.toInt32();
+        }
+        else if( nPrefix == XML_NAMESPACE_TABLE &&
+            IsXMLToken( aLocalName, XML_VISIBILITY ) )
+        {
+            rtl::OUString aVisibility = xAttrList->getValueByIndex( i );
+            bHidden = aVisibility.equals( GetXMLToken( XML_COLLAPSE ) );
         }
     }
 
-    if( aValue.getLength())
+    sal_Int32 nOldCount = mrTable.nNumberOfColsEstimate;
+    sal_Int32 nNewCount = nOldCount + nRepeated;
+    mrTable.nNumberOfColsEstimate = nNewCount;
+
+    if( bHidden )
     {
-        sal_Int32 nRepeated = aValue.toInt32();
-        mrTable.nNumberOfColsEstimate += nRepeated;
-    }
-    else
-    {
-        mrTable.nNumberOfColsEstimate++;
+        //i91578 display of hidden values (copy paste scenario; use hidden flag during migration to locale table upon paste )
+        sal_Int32 nColOffset = ( mrTable.bHasHeaderColumn ? 1 : 0 );
+        for( sal_Int32 nN = nOldCount; nN<nNewCount; nN++ )
+        {
+            sal_Int32 nHiddenColumnIndex = nN-nColOffset;
+            if( nHiddenColumnIndex>=0 )
+                mrTable.aHiddenColumns.push_back(nHiddenColumnIndex);
+        }
     }
 }
 
@@ -999,7 +985,7 @@ void SchXMLTableHelper::applyTableSimple(
 
 // ----------------------------------------
 
-void SchXMLTableHelper::applyTable(
+void SchXMLTableHelper::applyTableToInternalDataProvider(
     const SchXMLTable& rTable,
     uno::Reference< chart2::XChartDocument > xChartDoc )
 {
@@ -1014,19 +1000,12 @@ void SchXMLTableHelper::applyTable(
     // prerequisite for this method: all objects (data series, domains, etc.)
     // need their own range string.
 
-    // If the range-strings are valid (starting with "local-table") they should
-    // be interpreted like given, otherwise (when the ranges refer to Calc- or
-    // Writer-ranges, but the container is not available like when pasting a
-    // chart from Calc to Impress) the range is ignored, and every object gets
-    // one table column in the order of appearance, which is: 1. categories,
-    // 2. data series: 2.a) domains, 2.b) values (main-role, usually y-values)
-
     // apply all data read in the table to the chart data-array of the internal
     // data provider
     lcl_applyXMLTableToInternalDataprovider( rTable, xDataArray );
 }
 
-void SchXMLTableHelper::postProcessTable(
+void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
     const SchXMLTable& rTable,
     const tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
     uno::Reference< chart2::XChartDocument > xChartDoc,
@@ -1034,6 +1013,14 @@ void SchXMLTableHelper::postProcessTable(
 {
     if( ! (xChartDoc.is() && xChartDoc->hasInternalDataProvider()))
         return;
+
+    // If the range-strings are valid (starting with "local-table") they should
+    // be interpreted like given, otherwise (when the ranges refer to Calc- or
+    // Writer-ranges, but the container is not available like when pasting a
+    // chart from Calc to Impress) the range is ignored, and every object gets
+    // one table column in the order of appearance, which is: 1. categories,
+    // 2. data series: 2.a) domains, 2.b) values (main-role, usually y-values)
+
     Reference< chart2::data::XDataProvider >  xDataProv( xChartDoc->getDataProvider());
 
     // create a mapping from original ranges to new ranges
@@ -1062,7 +1049,7 @@ void SchXMLTableHelper::postProcessTable(
                         lcl_reassignDataSequence( xSeq, xDataProv, aRangeMap, aRange ));
                     if( xNewSeq != xSeq )
                     {
-                        lcl_copyProperties( Reference< beans::XPropertySet >( xSeq, uno::UNO_QUERY ),
+                        SchXMLTools::copyProperties( Reference< beans::XPropertySet >( xSeq, uno::UNO_QUERY ),
                                             Reference< beans::XPropertySet >( xNewSeq, uno::UNO_QUERY ));
                         aLSeqIt->second->setValues( xNewSeq );
                     }
@@ -1082,7 +1069,7 @@ void SchXMLTableHelper::postProcessTable(
                             Reference< chart2::data::XDataSequence > xNewSequence(
                                 xDataProv->createDataSequenceByRangeRepresentation(
                                     OUString(RTL_CONSTASCII_USTRINGPARAM("categories"))));
-                            lcl_copyProperties(
+                            SchXMLTools::copyProperties(
                                 xOldSequenceProp, Reference< beans::XPropertySet >( xNewSequence, uno::UNO_QUERY ));
                             aLSeqIt->second->setValues( xNewSequence );
                             bCategoriesApplied = true;
@@ -1093,7 +1080,7 @@ void SchXMLTableHelper::postProcessTable(
                             OUString aRep( OUString::valueOf( aLSeqIt->first.first ));
                             Reference< chart2::data::XDataSequence > xNewSequence(
                                 xDataProv->createDataSequenceByRangeRepresentation( aRep ));
-                            lcl_copyProperties(
+                            SchXMLTools::copyProperties(
                                 xOldSequenceProp, Reference< beans::XPropertySet >( xNewSequence, uno::UNO_QUERY ));
                             aLSeqIt->second->setValues( xNewSequence );
                         }
@@ -1114,7 +1101,7 @@ void SchXMLTableHelper::postProcessTable(
                         lcl_reassignDataSequence( xSeq, xDataProv, aRangeMap, aRange ));
                     if( xNewSeq != xSeq )
                     {
-                        lcl_copyProperties( Reference< beans::XPropertySet >( xSeq, uno::UNO_QUERY ),
+                        SchXMLTools::copyProperties( Reference< beans::XPropertySet >( xSeq, uno::UNO_QUERY ),
                                             Reference< beans::XPropertySet >( xNewSeq, uno::UNO_QUERY ));
                         aLSeqIt->second->setLabel( xNewSeq );
                     }
@@ -1126,7 +1113,7 @@ void SchXMLTableHelper::postProcessTable(
 
                     Reference< chart2::data::XDataSequence > xNewSeq(
                         xDataProv->createDataSequenceByRangeRepresentation( aRep ));
-                    lcl_copyProperties( Reference< beans::XPropertySet >( xSeq, uno::UNO_QUERY ),
+                    SchXMLTools::copyProperties( Reference< beans::XPropertySet >( xSeq, uno::UNO_QUERY ),
                                         Reference< beans::XPropertySet >( xNewSeq, uno::UNO_QUERY ));
                     aLSeqIt->second->setLabel( xNewSeq );
                 }
@@ -1142,6 +1129,135 @@ void SchXMLTableHelper::postProcessTable(
         SchXMLTools::CreateCategories(
             xDataProv, xChartDoc, OUString(RTL_CONSTASCII_USTRINGPARAM("categories")),
             0 /* nCooSysIndex */, 0 /* nDimension */ );
+    }
+
+    //i91578 display of hidden values (copy paste scenario; use hidden flag during migration to locale table upon paste )
+    //remove series that consist only of hidden columns
+    Reference< chart2::XInternalDataProvider > xInternalDataProvider( xDataProv, uno::UNO_QUERY );
+    if( xInternalDataProvider.is() && !rTable.aHiddenColumns.empty() )
+    {
+        try
+        {
+            Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xChartDoc->getFirstDiagram(), uno::UNO_QUERY_THROW );
+            Sequence< Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems() );
+            for( sal_Int32 nC=0; nC<aCooSysSeq.getLength(); ++nC )
+            {
+                Reference< chart2::XChartTypeContainer > xCooSysContainer( aCooSysSeq[nC], uno::UNO_QUERY_THROW );
+                Sequence< Reference< chart2::XChartType > > aChartTypeSeq( xCooSysContainer->getChartTypes());
+                for( sal_Int32 nT=0; nT<aChartTypeSeq.getLength(); ++nT )
+                {
+                    Reference< chart2::XDataSeriesContainer > xSeriesContainer( aChartTypeSeq[nT], uno::UNO_QUERY );
+                    if(!xSeriesContainer.is())
+                        continue;
+                    Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xSeriesContainer->getDataSeries() );
+                    std::vector< Reference< chart2::XDataSeries > > aRemainingSeries;
+
+                    for( sal_Int32 nS = 0; nS < aSeriesSeq.getLength(); nS++ )
+                    {
+                        Reference< chart2::data::XDataSource > xDataSource( aSeriesSeq[nS], uno::UNO_QUERY );
+                        if( xDataSource.is() )
+                        {
+                            bool bHasUnhiddenColumns = false;
+                            rtl::OUString aRange;
+                            uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > aSequences( xDataSource->getDataSequences() );
+                            for( sal_Int32 nN=0; nN< aSequences.getLength(); ++nN )
+                            {
+                                Reference< chart2::data::XLabeledDataSequence > xLabeledSequence( aSequences[nN] );
+                                if(!xLabeledSequence.is())
+                                    continue;
+                                Reference< chart2::data::XDataSequence > xValues( xLabeledSequence->getValues() );
+                                if( xValues.is() )
+                                {
+                                    aRange = xValues->getSourceRangeRepresentation();
+                                    if( ::std::find( rTable.aHiddenColumns.begin(), rTable.aHiddenColumns.end(), aRange.toInt32() ) == rTable.aHiddenColumns.end() )
+                                        bHasUnhiddenColumns = true;
+                                }
+                                if( !bHasUnhiddenColumns )
+                                {
+                                    Reference< chart2::data::XDataSequence > xLabel( xLabeledSequence->getLabel() );
+                                    if( xLabel.is() )
+                                    {
+                                        aRange = xLabel->getSourceRangeRepresentation();
+                                        sal_Int32 nSearchIndex = 0;
+                                        OUString aSecondToken = aRange.getToken( 1, ' ', nSearchIndex );
+                                        if( ::std::find( rTable.aHiddenColumns.begin(), rTable.aHiddenColumns.end(), aSecondToken.toInt32() ) == rTable.aHiddenColumns.end() )
+                                            bHasUnhiddenColumns = true;
+                                    }
+                                }
+                            }
+                            if( bHasUnhiddenColumns )
+                                aRemainingSeries.push_back( aSeriesSeq[nS] );
+                        }
+                    }
+
+                    if( static_cast<sal_Int32>(aRemainingSeries.size()) != aSeriesSeq.getLength() )
+                    {
+                        //remove the series that have only hidden data
+                        Sequence< Reference< chart2::XDataSeries > > aRemainingSeriesSeq( aRemainingSeries.size());
+                        ::std::copy( aRemainingSeries.begin(), aRemainingSeries.end(), aRemainingSeriesSeq.getArray());
+                        xSeriesContainer->setDataSeries( aRemainingSeriesSeq );
+
+                        //remove unused sequences
+                        Reference< chart2::data::XDataSource > xDataSource( xChartDoc, uno::UNO_QUERY );
+                        if( xDataSource.is() )
+                        {
+                            //first detect which collumns are really used
+                            std::map< sal_Int32, bool > aUsageMap;
+                            rtl::OUString aRange;
+                            Sequence< Reference< chart2::data::XLabeledDataSequence > > aUsedSequences( xDataSource->getDataSequences() );
+                            for( sal_Int32 nN=0; nN< aUsedSequences.getLength(); ++nN )
+                            {
+                                Reference< chart2::data::XLabeledDataSequence > xLabeledSequence( aUsedSequences[nN] );
+                                if(!xLabeledSequence.is())
+                                    continue;
+                                Reference< chart2::data::XDataSequence > xValues( xLabeledSequence->getValues() );
+                                if( xValues.is() )
+                                {
+                                    aRange = xValues->getSourceRangeRepresentation();
+                                    sal_Int32 nIndex = aRange.toInt32();
+                                    if( nIndex!=0 || !aRange.equals(lcl_aCategoriesRange) )
+                                        aUsageMap[nIndex] = true;
+                                }
+                                Reference< chart2::data::XDataSequence > xLabel( xLabeledSequence->getLabel() );
+                                if( xLabel.is() )
+                                {
+                                    aRange = xLabel->getSourceRangeRepresentation();
+                                    sal_Int32 nSearchIndex = 0;
+                                    OUString aSecondToken = aRange.getToken( 1, ' ', nSearchIndex );
+                                    if( aSecondToken.getLength() )
+                                        aUsageMap[aSecondToken.toInt32()] = true;
+                                }
+                            }
+
+                            ::std::vector< sal_Int32 > aSequenceIndexesToDelete;
+                            for( ::std::vector< sal_Int32 >::const_iterator aIt(
+                                     rTable.aHiddenColumns.begin()); aIt != rTable.aHiddenColumns.end(); ++aIt )
+                            {
+                                sal_Int32 nSequenceIndex = *aIt;
+                                if( aUsageMap.find(nSequenceIndex) != aUsageMap.end() )
+                                    continue;
+                                aSequenceIndexesToDelete.push_back(nSequenceIndex);
+                            }
+
+                            // delete unnecessary sequences of the internal data
+                            // iterate using greatest index first, so that deletion does not
+                            // shift other sequences that will be deleted later
+                            ::std::sort( aSequenceIndexesToDelete.begin(), aSequenceIndexesToDelete.end());
+                            for( ::std::vector< sal_Int32 >::reverse_iterator aIt(
+                                     aSequenceIndexesToDelete.rbegin()); aIt != aSequenceIndexesToDelete.rend(); ++aIt )
+                            {
+                                if( *aIt != -1 )
+                                    xInternalDataProvider->deleteSequence( *aIt );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        catch( uno::Exception & ex )
+        {
+            (void)ex; // avoid warning for pro build
+        }
     }
 }
 

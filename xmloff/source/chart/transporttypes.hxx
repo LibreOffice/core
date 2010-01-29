@@ -68,6 +68,8 @@ struct SchXMLTable
 
     ::rtl::OUString aTableNameOfFile;                   /// the table name read at the table:table element
 
+    ::std::vector< sal_Int32 > aHiddenColumns;
+
     SchXMLTable() : nRowIndex( -1 ),
                     nColumnIndex( -1 ),
                     nMaxColumnIndex( -1 ),
@@ -134,9 +136,25 @@ struct SchXMLAxis
 
 // ----------------------------------------
 
-// struct PostponedStyleObject
-// {
-// };
+struct GlobalSeriesImportInfo
+{
+    GlobalSeriesImportInfo( sal_Bool& rAllRangeAddressesAvailable )
+        : rbAllRangeAddressesAvailable( rAllRangeAddressesAvailable )
+        , nCurrentDataIndex( 0 )
+        , nFirstFirstDomainIndex( -1 )
+        , nFirstSecondDomainIndex( -1 )
+    {}
+
+    sal_Bool& rbAllRangeAddressesAvailable;
+
+    sal_Int32 nCurrentDataIndex;
+
+    ::rtl::OUString aFirstFirstDomainAddress;
+    sal_Int32 nFirstFirstDomainIndex;
+
+    ::rtl::OUString aFirstSecondDomainAddress;
+    sal_Int32 nFirstSecondDomainIndex;
+};
 
 struct DataRowPointStyle
 {

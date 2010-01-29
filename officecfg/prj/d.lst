@@ -4,6 +4,7 @@ mkdir: %_DEST%\xml%_EXT%\registry\schema\org
 mkdir: %_DEST%\xml%_EXT%\registry\schema\org\openoffice
 mkdir: %_DEST%\xml%_EXT%\registry\schema\org\openoffice\Office
 mkdir: %_DEST%\xml%_EXT%\registry\schema\org\openoffice\Office\UI
+mkdir: %_DEST%\xml%_EXT%\registry\schema\org\openoffice\Office\DataAccess
 mkdir: %_DEST%\xml%_EXT%\registry\schema\org\openoffice\Office\OOoImprovement
 mkdir: %_DEST%\xml%_EXT%\registry\schema\org\openoffice\ucb
 mkdir: %_DEST%\xml%_EXT%\registry\schema\org\openoffice\TypeDetection
@@ -11,6 +12,7 @@ mkdir: %_DEST%\xml%_EXT%\registry\schema\org\openoffice\TypeDetection
 ..\%__SRC%\misc\registry\schema\org\openoffice\*.xcs %_DEST%\xml%_EXT%\registry\schema\org\openoffice
 ..\%__SRC%\misc\registry\schema\org\openoffice\Office\*.xcs %_DEST%\xml%_EXT%\registry\schema\org\openoffice\Office
 ..\%__SRC%\misc\registry\schema\org\openoffice\Office\UI\*.xcs %_DEST%\xml%_EXT%\registry\schema\org\openoffice\Office\UI
+..\%__SRC%\misc\registry\schema\org\openoffice\Office\DataAccess\*.xcs %_DEST%\xml%_EXT%\registry\schema\org\openoffice\Office\DataAccess
 ..\%__SRC%\misc\registry\schema\org\openoffice\Office\OOoImprovement\*.xcs %_DEST%\xml%_EXT%\registry\schema\org\openoffice\Office\OOoImprovement
 ..\%__SRC%\misc\registry\schema\org\openoffice\ucb\*.xcs %_DEST%\xml%_EXT%\registry\schema\org\openoffice\ucb
 ..\%__SRC%\misc\registry\schema\org\openoffice\TypeDetection\*.xcs %_DEST%\xml%_EXT%\registry\schema\org\openoffice\TypeDetection
@@ -20,6 +22,7 @@ mkdir: %_DEST%\xml%_EXT%\registry\data\org
 mkdir: %_DEST%\xml%_EXT%\registry\data\org\openoffice
 mkdir: %_DEST%\xml%_EXT%\registry\data\org\openoffice\Office
 mkdir: %_DEST%\xml%_EXT%\registry\data\org\openoffice\Office\UI
+mkdir: %_DEST%\xml%_EXT%\registry\data\org\openoffice\Office\DataAccess
 mkdir: %_DEST%\xml%_EXT%\registry\data\org\openoffice\Office\OOoImprovement
 mkdir: %_DEST%\xml%_EXT%\registry\data\org\openoffice\ucb
 mkdir: %_DEST%\xml%_EXT%\registry\data\org\openoffice\TypeDetection
@@ -32,6 +35,7 @@ mkdir: %_DEST%\xml%_EXT%\registry\data\org\openoffice\TypeDetection
 ..\%__SRC%\misc\registry\data\org\openoffice\*.xcu %_DEST%\xml%_EXT%\registry\data\org\openoffice
 ..\%__SRC%\misc\registry\data\org\openoffice\Office\*.xcu %_DEST%\xml%_EXT%\registry\data\org\openoffice\Office
 ..\%__SRC%\misc\registry\data\org\openoffice\Office\UI\*.xcu %_DEST%\xml%_EXT%\registry\data\org\openoffice\Office\UI
+..\%__SRC%\misc\registry\data\org\openoffice\Office\DataAccess\*.xcu %_DEST%\xml%_EXT%\registry\data\org\openoffice\Office\DataAccess
 ..\%__SRC%\misc\registry\data\org\openoffice\ucb\*.xcu %_DEST%\xml%_EXT%\registry\data\org\openoffice\ucb
 ..\%__SRC%\misc\registry\data\org\openoffice\TypeDetection\*.xcu %_DEST%\xml%_EXT%\registry\data\org\openoffice\TypeDetection
 

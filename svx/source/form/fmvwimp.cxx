@@ -94,6 +94,7 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/msgbox.hxx>
 #include <vcl/stdtext.hxx>
+#include <rtl/logfile.hxx>
 
 #include <algorithm>
 
@@ -164,6 +165,7 @@ FmXPageViewWinRec::FmXPageViewWinRec( const ::comphelper::ComponentContext& _rCo
     m_pViewImpl( _pViewImpl ),
     m_pWindow( dynamic_cast< Window* >( &_rWindow.GetPaintWindow().GetOutputDevice() ) )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXPageViewWinRec::FmXPageViewWinRec" );
     DBG_CTOR(FmXPageViewWinRec,NULL);
 
     // create an XFormController for every form
@@ -197,6 +199,7 @@ FmXPageViewWinRec::~FmXPageViewWinRec()
 //------------------------------------------------------------------
 void FmXPageViewWinRec::dispose()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXPageViewWinRec::dispose" );
     for (   ::std::vector< Reference< XFormController > >::const_iterator i = m_aControllerList.begin();
             i != m_aControllerList.end();
             ++i
@@ -210,7 +213,7 @@ void FmXPageViewWinRec::dispose()
             Reference< XChild > xControllerModel( xController->getModel(), UNO_QUERY );
             if ( xControllerModel.is() )
             {
-                Reference< XEventAttacherManager >  xEventManager( xControllerModel->getParent(), UNO_QUERY );
+                Reference< XEventAttacherManager >  xEventManager( xControllerModel->getParent(), UNO_QUERY_THROW );
                 Reference< XInterface > xControllerNormalized( xController, UNO_QUERY_THROW );
                 xEventManager->detach( i - m_aControllerList.begin(), xControllerNormalized );
             }
@@ -232,12 +235,14 @@ void FmXPageViewWinRec::dispose()
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL FmXPageViewWinRec::hasElements(void) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXPageViewWinRec::hasElements" );
     return getCount() != 0;
 }
 
 //------------------------------------------------------------------------------
 Type SAL_CALL  FmXPageViewWinRec::getElementType(void) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXPageViewWinRec::getElementType" );
     return ::getCppuType((const Reference< XFormController>*)0);
 }
 
@@ -245,6 +250,7 @@ Type SAL_CALL  FmXPageViewWinRec::getElementType(void) throw( RuntimeException )
 //------------------------------------------------------------------------------
 Reference< XEnumeration >  SAL_CALL FmXPageViewWinRec::createEnumeration(void) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXPageViewWinRec::createEnumeration" );
     return new ::comphelper::OEnumerationByIndex(this);
 }
 
@@ -252,12 +258,14 @@ Reference< XEnumeration >  SAL_CALL FmXPageViewWinRec::createEnumeration(void) t
 //------------------------------------------------------------------------------
 sal_Int32 SAL_CALL FmXPageViewWinRec::getCount(void) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXPageViewWinRec::getCount" );
     return m_aControllerList.size();
 }
 
 //------------------------------------------------------------------------------
 Any SAL_CALL FmXPageViewWinRec::getByIndex(sal_Int32 nIndex) throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXPageViewWinRec::getByIndex" );
     if (nIndex < 0 ||
         nIndex >= getCount())
         throw IndexOutOfBoundsException();
@@ -294,6 +302,7 @@ Reference< XFormController >  getControllerSearchChilds( const Reference< XIndex
 //------------------------------------------------------------------------
 Reference< XFormController >  FmXPageViewWinRec::getController( const Reference< XForm > & xForm ) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXPageViewWinRec::getController" );
     Reference< XTabControllerModel >  xModel(xForm, UNO_QUERY);
     for (::std::vector< Reference< XFormController > >::const_iterator i = m_aControllerList.begin();
          i != m_aControllerList.end(); i++)
@@ -312,6 +321,7 @@ Reference< XFormController >  FmXPageViewWinRec::getController( const Reference<
 //------------------------------------------------------------------------
 void FmXPageViewWinRec::setController(const Reference< XForm > & xForm,  FmXFormController* _pParent )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXPageViewWinRec::setController" );
     DBG_ASSERT( xForm.is(), "FmXPageViewWinRec::setController: there should be a form!" );
     Reference< XIndexAccess >  xFormCps(xForm, UNO_QUERY);
     if (!xFormCps.is())
@@ -378,6 +388,7 @@ void FmXPageViewWinRec::setController(const Reference< XForm > & xForm,  FmXForm
 //------------------------------------------------------------------------
 void FmXPageViewWinRec::updateTabOrder( const Reference< XForm >& _rxForm )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXPageViewWinRec::updateTabOrder" );
     OSL_PRECOND( _rxForm.is(), "FmXPageViewWinRec::updateTabOrder: illegal argument!" );
     if ( !_rxForm.is() )
         return;
@@ -428,11 +439,13 @@ FmXFormView::FmXFormView(const ::comphelper::ComponentContext& _rContext, FmForm
     ,m_bFirstActivation( true )
     ,m_isTabOrderUpdateSuspended( false )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::FmXFormView" );
 }
 
 //------------------------------------------------------------------------
 void FmXFormView::cancelEvents()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::cancelEvents" );
     if ( m_nActivationEvent )
     {
         Application::RemoveUserEvent( m_nActivationEvent );
@@ -461,6 +474,7 @@ void FmXFormView::cancelEvents()
 //------------------------------------------------------------------------
 void FmXFormView::notifyViewDying( )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::notifyViewDying" );
     DBG_ASSERT( m_pView, "FmXFormView::notifyViewDying: my view already died!" );
     m_pView = NULL;
     cancelEvents();
@@ -481,6 +495,7 @@ FmXFormView::~FmXFormView()
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormView::disposing(const EventObject& Source) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::disposing" );
     if ( m_xWindow.is() && Source.Source == m_xWindow )
         removeGridWindowListening();
 }
@@ -489,6 +504,7 @@ void SAL_CALL FmXFormView::disposing(const EventObject& Source) throw( RuntimeEx
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormView::formActivated(const EventObject& rEvent) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::formActivated" );
     if ( m_pView && m_pView->GetFormShell() && m_pView->GetFormShell()->GetImpl() )
         m_pView->GetFormShell()->GetImpl()->formActivated( rEvent );
 }
@@ -496,6 +512,7 @@ void SAL_CALL FmXFormView::formActivated(const EventObject& rEvent) throw( Runti
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormView::formDeactivated(const EventObject& rEvent) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::formDeactivated" );
     if ( m_pView && m_pView->GetFormShell() && m_pView->GetFormShell()->GetImpl() )
         m_pView->GetFormShell()->GetImpl()->formDeactivated( rEvent );
 }
@@ -504,6 +521,7 @@ void SAL_CALL FmXFormView::formDeactivated(const EventObject& rEvent) throw( Run
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormView::elementInserted(const ContainerEvent& evt) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::elementInserted" );
     try
     {
         Reference< XControlContainer > xControlContainer( evt.Source, UNO_QUERY_THROW );
@@ -534,17 +552,20 @@ void SAL_CALL FmXFormView::elementInserted(const ContainerEvent& evt) throw( Run
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormView::elementReplaced(const ContainerEvent& evt) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::elementReplaced" );
     elementInserted(evt);
 }
 
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormView::elementRemoved(const ContainerEvent& /*evt*/) throw( RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::elementRemoved" );
 }
 
 //------------------------------------------------------------------------------
 FmWinRecList::const_iterator FmXFormView::findWindow( const Reference< XControlContainer >& _rxCC )  const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::findWindow" );
     for (FmWinRecList::const_iterator i = m_aWinList.begin();
             i != m_aWinList.end(); i++)
     {
@@ -557,6 +578,7 @@ FmWinRecList::const_iterator FmXFormView::findWindow( const Reference< XControlC
 //------------------------------------------------------------------------------
 FmWinRecList::iterator FmXFormView::findWindow( const Reference< XControlContainer >& _rxCC )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::findWindow" );
     for (FmWinRecList::iterator i = m_aWinList.begin();
             i != m_aWinList.end(); i++)
     {
@@ -569,6 +591,7 @@ FmWinRecList::iterator FmXFormView::findWindow( const Reference< XControlContain
 //------------------------------------------------------------------------------
 void FmXFormView::addWindow(const SdrPageWindow& rWindow)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::addWindow" );
     FmFormPage* pFormPage = PTR_CAST( FmFormPage, rWindow.GetPageView().GetPage() );
     if ( !pFormPage )
         return;
@@ -591,6 +614,7 @@ void FmXFormView::addWindow(const SdrPageWindow& rWindow)
 //------------------------------------------------------------------------------
 void FmXFormView::removeWindow( const Reference< XControlContainer >& _rxCC )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::removeWindow" );
     // Wird gerufen, wenn
     // - in den Design-Modus geschaltet wird
     // - ein Window geloescht wird, waehrend man im Design-Modus ist
@@ -613,6 +637,7 @@ void FmXFormView::removeWindow( const Reference< XControlContainer >& _rxCC )
 //------------------------------------------------------------------------------
 void FmXFormView::displayAsyncErrorMessage( const SQLErrorEvent& _rEvent )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::displayAsyncErrorMessage" );
     DBG_ASSERT( 0 == m_nErrorMessageEvent, "FmXFormView::displayAsyncErrorMessage: not too fast, please!" );
         // This should not happen - usually, the PostUserEvent is faster than any possible user
         // interaction which could trigger a new error. If it happens, we need a queue for the events.
@@ -631,6 +656,7 @@ IMPL_LINK(FmXFormView, OnDelayedErrorMessage, void*, /*EMPTYTAG*/)
 //------------------------------------------------------------------------------
 void FmXFormView::onFirstViewActivation( const FmFormModel* _pDocModel )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::onFirstViewActivation" );
     if ( _pDocModel && _pDocModel->GetAutoControlFocus() )
         m_nAutoFocusEvent = Application::PostUserEvent( LINK( this, FmXFormView, OnAutoFocus ) );
 }
@@ -638,6 +664,7 @@ void FmXFormView::onFirstViewActivation( const FmFormModel* _pDocModel )
 //------------------------------------------------------------------------------
 void FmXFormView::suspendTabOrderUpdate()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::suspendTabOrderUpdate" );
     OSL_ENSURE( !m_isTabOrderUpdateSuspended, "FmXFormView::suspendTabOrderUpdate: nesting not allowed!" );
     m_isTabOrderUpdateSuspended = true;
 }
@@ -645,6 +672,7 @@ void FmXFormView::suspendTabOrderUpdate()
 //------------------------------------------------------------------------------
 void FmXFormView::resumeTabOrderUpdate()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::resumeTabOrderUpdate" );
     OSL_ENSURE( m_isTabOrderUpdateSuspended, "FmXFormView::resumeTabOrderUpdate: not suspended!" );
     m_isTabOrderUpdateSuspended = false;
 
@@ -729,6 +757,7 @@ IMPL_LINK(FmXFormView, OnActivate, void*, /*EMPTYTAG*/)
 //------------------------------------------------------------------------------
 void FmXFormView::Activate(sal_Bool bSync)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::Activate" );
     if (m_nActivationEvent)
     {
         Application::RemoveUserEvent(m_nActivationEvent);
@@ -746,6 +775,7 @@ void FmXFormView::Activate(sal_Bool bSync)
 //------------------------------------------------------------------------------
 void FmXFormView::Deactivate(BOOL bDeactivateController)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::Deactivate" );
     if (m_nActivationEvent)
     {
         Application::RemoveUserEvent(m_nActivationEvent);
@@ -760,11 +790,13 @@ void FmXFormView::Deactivate(BOOL bDeactivateController)
 //------------------------------------------------------------------------------
 FmFormShell* FmXFormView::GetFormShell() const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::GetFormShell" );
     return m_pView ? m_pView->GetFormShell() : NULL;
 }
 // -----------------------------------------------------------------------------
 void FmXFormView::AutoFocus( sal_Bool _bSync )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::AutoFocus" );
     if (m_nAutoFocusEvent)
         Application::RemoveUserEvent(m_nAutoFocusEvent);
 
@@ -785,14 +817,20 @@ static Reference< XControl > lcl_firstFocussableControl( const Sequence< Referen
     {
         try
         {
+            if ( !pControls->is() )
+                continue;
+
+            Reference< XPropertySet > xModelProps( (*pControls)->getModel(), UNO_QUERY_THROW );
+
+            // only enabled controls are allowed to participate
+            sal_Bool bEnabled = sal_False;
+            OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_ENABLED ) >>= bEnabled );
+            if ( !bEnabled )
+                continue;
+
             // check the class id of the control model
             sal_Int16 nClassId = FormComponentType::CONTROL;
-
-            Reference< XPropertySet > xModelProps;
-            if ( pControls->is() )
-                xModelProps = xModelProps.query( (*pControls)->getModel() );
-            if ( xModelProps.is() )
-                xModelProps->getPropertyValue( FM_PROP_CLASSID ) >>= nClassId;
+            OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_CLASSID ) >>= nClassId );
 
             // controls which are not focussable
             if  (   ( FormComponentType::CONTROL != nClassId )
@@ -857,6 +895,7 @@ namespace
 // -----------------------------------------------------------------------------
 Reference< XFormController > FmXFormView::getFormController( const Reference< XForm >& _rxForm, const OutputDevice& _rDevice ) const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::getFormController" );
     Reference< XFormController > xController;
 
     for ( FmWinRecList::const_iterator rec = m_aWinList.begin(); rec != m_aWinList.end(); ++rec )
@@ -958,6 +997,7 @@ namespace
 // -----------------------------------------------------------------------------
 void FmXFormView::onCreatedFormObject( FmFormObj& _rFormObject )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::onCreatedFormObject" );
     FmFormShell* pShell = m_pView ? m_pView->GetFormShell() : NULL;
     FmXFormShell* pShellImpl = pShell ? pShell->GetImpl() : NULL;
     OSL_ENSURE( pShellImpl, "FmXFormView::onCreatedFormObject: no form shell!" );
@@ -1081,19 +1121,20 @@ namespace
 
         Reference< XFormComponent > xFormComponent( _rSdrObj.GetUnoControlModel(), UNO_QUERY_THROW );
         Reference< XForm > xTargetForm(
-            rPage.GetImpl()->findPlaceInFormComponentHierarchy( xFormComponent, _rxDataSource, _rDataSourceName, _rCommand, _nCommandType ),
+            rPage.GetImpl().findPlaceInFormComponentHierarchy( xFormComponent, _rxDataSource, _rDataSourceName, _rCommand, _nCommandType ),
             UNO_SET_THROW );
+
+        rPage.GetImpl().setUniqueName( xFormComponent, xTargetForm );
 
         Reference< XIndexContainer > xFormAsContainer( xTargetForm, UNO_QUERY_THROW );
         xFormAsContainer->insertByIndex( xFormAsContainer->getCount(), makeAny( xFormComponent ) );
-
-        rPage.GetImpl()->setUniqueName( xFormComponent, xTargetForm );
     }
 }
 
 // -----------------------------------------------------------------------------
 SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescriptor& _rColumnDescriptor )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::implCreateFieldControl" );
     // not if we're in design mode
     if ( !m_pView->IsDesignMode() )
         return NULL;
@@ -1287,12 +1328,16 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
         }
 
         //////////////////////////////////////////////////////////////////////
-        // Objekte gruppieren
+        // group objects
+        bool bCheckbox = ( OBJ_FM_CHECKBOX == nOBJID );
+        OSL_ENSURE( !bCheckbox || !pLabel, "FmXFormView::implCreateFieldControl: why was there a label created for a check box?" );
+        if ( bCheckbox )
+            return pControl;
+
         SdrObjGroup* pGroup  = new SdrObjGroup();
         SdrObjList* pObjList = pGroup->GetSubList();
-        pObjList->InsertObject(pLabel);
-        pObjList->InsertObject(pControl);
-
+        pObjList->InsertObject( pLabel );
+        pObjList->InsertObject( pControl );
 
         if ( bDateNTimeField )
         {   // so far we created a date field only, but we also need a time field
@@ -1311,7 +1356,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
     }
     catch(const Exception&)
     {
-        DBG_ERROR("FmXFormView::implCreateFieldControl: caught an exception while creating the control !");
+        DBG_UNHANDLED_EXCEPTION();
     }
 
 
@@ -1321,6 +1366,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
 // -----------------------------------------------------------------------------
 SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor &_rDesc )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::implCreateXFormsControl" );
     // not if we're in design mode
     if ( !m_pView->IsDesignMode() )
         return NULL;
@@ -1331,7 +1377,6 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
     try
     {
         // determine the table/query field which we should create a control for
-        Reference< XPropertySet >   xField;
         Reference< XNumberFormats > xNumberFormats;
         ::rtl::OUString sLabelPostfix = _rDesc.szName;
 
@@ -1382,7 +1427,7 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
         {
             SdrUnoObj* pLabel( NULL );
             SdrUnoObj* pControl( NULL );
-            if  (   !createControlLabelPair( *pOutDev, 0, 0, xField, xNumberFormats, nOBJID, sLabelPostfix,
+            if  (   !createControlLabelPair( *pOutDev, 0, 0, NULL, xNumberFormats, nOBJID, sLabelPostfix,
                         pLabel, pControl )
                 )
             {
@@ -1397,6 +1442,11 @@ SdrObject* FmXFormView::implCreateXFormsControl( const ::svx::OXFormsDescriptor 
             DBG_ASSERT( xBindableValue.is(), "FmXFormView::implCreateXFormsControl: control's not bindable!" );
             if ( xBindableValue.is() )
                 xBindableValue->setValueBinding(xValueBinding);
+
+            bool bCheckbox = ( OBJ_FM_CHECKBOX == nOBJID );
+            OSL_ENSURE( !bCheckbox || !pLabel, "FmXFormView::implCreateXFormsControl: why was there a label created for a check box?" );
+            if ( bCheckbox )
+                return pControl;
 
             //////////////////////////////////////////////////////////////////////
             // group objects
@@ -1452,6 +1502,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXO
         const Reference< XDataSource >& _rxDataSource, const ::rtl::OUString& _rDataSourceName,
         const ::rtl::OUString& _rCommand, const sal_Int32 _nCommandType )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::createControlLabelPair" );
     if  (   !createControlLabelPair( m_aContext, _rOutDev, _nXOffsetMM, _nYOffsetMM,
                 _rxField, _rxNumberFormats, _nControlObjectID, _rFieldPostfix, FmFormInventor, OBJ_FM_FIXEDTEXT,
                 NULL, NULL, NULL, _rpLabel, _rpControl )
@@ -1459,12 +1510,14 @@ bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXO
         return false;
 
     // insert the control model(s) into the form component hierachy
-    lcl_insertIntoFormComponentHierarchy_throw( *m_pView, *_rpLabel, _rxDataSource, _rDataSourceName, _rCommand, _nCommandType );
+    if ( _rpLabel )
+        lcl_insertIntoFormComponentHierarchy_throw( *m_pView, *_rpLabel, _rxDataSource, _rDataSourceName, _rCommand, _nCommandType );
     lcl_insertIntoFormComponentHierarchy_throw( *m_pView, *_rpControl, _rxDataSource, _rDataSourceName, _rCommand, _nCommandType );
 
     // some context-dependent initializations
     FormControlFactory aControlFactory( m_aContext );
-    aControlFactory.initializeControlModel( impl_getDocumentType(), *_rpLabel );
+    if ( _rpLabel )
+        aControlFactory.initializeControlModel( impl_getDocumentType(), *_rpLabel );
     aControlFactory.initializeControlModel( impl_getDocumentType(), *_rpControl );
 
     return true;
@@ -1477,6 +1530,7 @@ bool FmXFormView::createControlLabelPair( const ::comphelper::ComponentContext& 
     const ::rtl::OUString& _rFieldPostfix, UINT32 _nInventor, UINT16 _nLabelObjectID,
     SdrPage* _pLabelPage, SdrPage* _pControlPage, SdrModel* _pModel, SdrUnoObj*& _rpLabel, SdrUnoObj*& _rpControl)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::createControlLabelPair" );
     sal_Int32 nDataType = 0;
     ::rtl::OUString sFieldName;
     Any aFieldName;
@@ -1487,17 +1541,7 @@ bool FmXFormView::createControlLabelPair( const ::comphelper::ComponentContext& 
         aFieldName >>= sFieldName;
     }
 
-    // the label
-    ::std::auto_ptr< SdrUnoObj > pLabel( dynamic_cast< SdrUnoObj* >(
-        SdrObjFactory::MakeNewObject( _nInventor, _nLabelObjectID, _pLabelPage, _pModel ) ) );
-    OSL_ENSURE( pLabel.get(), "FmXFormView::createControlLabelPair: could not create the label!" );
-    if ( !pLabel.get() )
-        return false;
-
-    Reference< XPropertySet > xLabelSet( pLabel->GetUnoControlModel(), UNO_QUERY );
-    xLabelSet->setPropertyValue( FM_PROP_LABEL, makeAny( sFieldName + _rFieldPostfix ) );
-
-    // positionieren unter Beachtung der Einstellungen des Ziel-Output-Devices
+    // calculate the positions, respecting the settings of the target device
     ::Size aTextSize( _rOutDev.GetTextWidth(sFieldName + _rFieldPostfix), _rOutDev.GetTextHeight() );
 
     MapMode   eTargetMode( _rOutDev.GetMapMode() ),
@@ -1513,13 +1557,38 @@ bool FmXFormView::createControlLabelPair( const ::comphelper::ComponentContext& 
     aRealSize.Width() = std::max(aRealSize.Width(), aDefTxtSize.Width());
     aRealSize.Height()= aDefSize.Height();
 
-    // je nach Skalierung des Zieldevices muss die Groesse noch normiert werden (#53523#)
+    // adjust to scaling of the target device (#53523#)
     aRealSize.Width() = long(Fraction(aRealSize.Width(), 1) * eTargetMode.GetScaleX());
     aRealSize.Height() = long(Fraction(aRealSize.Height(), 1) * eTargetMode.GetScaleY());
-    pLabel->SetLogicRect( ::Rectangle(
-        _rOutDev.LogicToLogic( ::Point( _nXOffsetMM, _nYOffsetMM ), eSourceMode, eTargetMode ),
-        _rOutDev.LogicToLogic( aRealSize, eSourceMode, eTargetMode )
-    ) );
+
+    // for boolean fields, we do not create a label, but just a checkbox
+    bool bNeedLabel = ( _nControlObjectID != OBJ_FM_CHECKBOX );
+
+    // the label
+    ::std::auto_ptr< SdrUnoObj > pLabel;
+    Reference< XPropertySet > xLabelModel;
+    if ( bNeedLabel )
+    {
+        pLabel.reset( dynamic_cast< SdrUnoObj* >(
+            SdrObjFactory::MakeNewObject( _nInventor, _nLabelObjectID, _pLabelPage, _pModel ) ) );
+        OSL_ENSURE( pLabel.get(), "FmXFormView::createControlLabelPair: could not create the label!" );
+        if ( !pLabel.get() )
+            return false;
+
+        xLabelModel.set( pLabel->GetUnoControlModel(), UNO_QUERY );
+        if ( xLabelModel.is() )
+        {
+            xLabelModel->setPropertyValue( FM_PROP_LABEL, makeAny( sFieldName + _rFieldPostfix ) );
+            String sObjectLabel( SVX_RES( RID_STR_OBJECT_LABEL ) );
+            sObjectLabel.SearchAndReplaceAllAscii( "#object#", sFieldName );
+            xLabelModel->setPropertyValue( FM_PROP_NAME, makeAny( ::rtl::OUString( sObjectLabel ) ) );
+        }
+
+        pLabel->SetLogicRect( ::Rectangle(
+            _rOutDev.LogicToLogic( ::Point( _nXOffsetMM, _nYOffsetMM ), eSourceMode, eTargetMode ),
+            _rOutDev.LogicToLogic( aRealSize, eSourceMode, eTargetMode )
+        ) );
+    }
 
     // the control
     ::std::auto_ptr< SdrUnoObj > pControl( dynamic_cast< SdrUnoObj* >(
@@ -1532,21 +1601,29 @@ bool FmXFormView::createControlLabelPair( const ::comphelper::ComponentContext& 
     if ( !xControlSet.is() )
         return false;
 
-    // position
-    ::Size szControlSize;
-    if (DataType::BIT == nDataType || nDataType == DataType::BOOLEAN )
-        szControlSize = aDefSize;
-    else if (OBJ_FM_IMAGECONTROL == _nControlObjectID || DataType::LONGVARCHAR == nDataType || DataType::LONGVARBINARY == nDataType )
-        szControlSize = aDefImageSize;
-    else
-        szControlSize = aDefSize;
+    // size of the control
+    ::Size aControlSize( aDefSize );
+    switch ( nDataType )
+    {
+    case DataType::BIT:
+    case DataType::BOOLEAN:
+        aControlSize = aDefSize;
+        break;
+    case DataType::LONGVARCHAR:
+    case DataType::LONGVARBINARY:
+        aControlSize = aDefImageSize;
+        break;
+    }
 
-    // normieren wie oben
-    szControlSize.Width() = long(Fraction(szControlSize.Width(), 1) * eTargetMode.GetScaleX());
-    szControlSize.Height() = long(Fraction(szControlSize.Height(), 1) * eTargetMode.GetScaleY());
+    if ( OBJ_FM_IMAGECONTROL == _nControlObjectID )
+        aControlSize = aDefImageSize;
+
+    aControlSize.Width() = long(Fraction(aControlSize.Width(), 1) * eTargetMode.GetScaleX());
+    aControlSize.Height() = long(Fraction(aControlSize.Height(), 1) * eTargetMode.GetScaleY());
+
     pControl->SetLogicRect( ::Rectangle(
         _rOutDev.LogicToLogic( ::Point( aRealSize.Width() + _nXOffsetMM, _nYOffsetMM ), eSourceMode, eTargetMode ),
-        _rOutDev.LogicToLogic( szControlSize, eSourceMode, eTargetMode )
+        _rOutDev.LogicToLogic( aControlSize, eSourceMode, eTargetMode )
     ) );
 
     // some initializations
@@ -1554,8 +1631,16 @@ bool FmXFormView::createControlLabelPair( const ::comphelper::ComponentContext& 
 
     if ( aFieldName.hasValue() )
     {
-        xControlSet->setPropertyValue(FM_PROP_CONTROLSOURCE, aFieldName);
-        xControlSet->setPropertyValue(FM_PROP_NAME, aFieldName);
+        xControlSet->setPropertyValue( FM_PROP_CONTROLSOURCE, aFieldName );
+        xControlSet->setPropertyValue( FM_PROP_NAME, aFieldName );
+        if ( !bNeedLabel )
+        {
+            // no dedicated label control => use the label property
+            if ( xControlPropInfo->hasPropertyByName( FM_PROP_LABEL ) )
+                xControlSet->setPropertyValue( FM_PROP_LABEL, makeAny( sFieldName + _rFieldPostfix ) );
+            else
+                OSL_ENSURE( false, "FmXFormView::createControlLabelPair: can't set a label for the control!" );
+        }
     }
 
     if ( nDataType == DataType::LONGVARCHAR && xControlPropInfo->hasPropertyByName( FM_PROP_MULTILINE ) )
@@ -1564,13 +1649,11 @@ bool FmXFormView::createControlLabelPair( const ::comphelper::ComponentContext& 
     }
 
     // announce the label to the control
-    if (xControlPropInfo->hasPropertyByName(FM_PROP_CONTROLLABEL))
+    if ( xControlPropInfo->hasPropertyByName( FM_PROP_CONTROLLABEL ) && xLabelModel.is() )
     {
-        // (try-catch as the control may refuse a model without the right service name - which we don't know
-        // usually a fixed text we use as label should be accepted, but to be sure ....)
         try
         {
-            xControlSet->setPropertyValue(FM_PROP_CONTROLLABEL, makeAny(xLabelSet));
+            xControlSet->setPropertyValue( FM_PROP_CONTROLLABEL, makeAny( xLabelModel ) );
         }
         catch( const Exception& )
         {
@@ -1578,8 +1661,11 @@ bool FmXFormView::createControlLabelPair( const ::comphelper::ComponentContext& 
         }
     }
 
-    FormControlFactory aControlFactory( _rContext );
-    aControlFactory.initializeFieldDependentProperties( _rxField, xControlSet, _rxNumberFormats );
+    if ( _rxField.is() )
+    {
+        FormControlFactory aControlFactory( _rContext );
+        aControlFactory.initializeFieldDependentProperties( _rxField, xControlSet, _rxNumberFormats );
+    }
 
     _rpLabel = pLabel.release();
     _rpControl = pControl.release();
@@ -1602,6 +1688,7 @@ void FmXFormView::ObjectRemoveListener::Notify( SfxBroadcaster& /*rBC*/, const S
 //------------------------------------------------------------------------------
 void FmXFormView::ObjectRemovedInAliveMode( const SdrObject* pObject )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::ObjectRemovedInAliveMode" );
     // wenn das entfernte Objekt in meiner MarkList, die ich mir beim Umschalten in den Alive-Mode gemerkt habe, steht,
     // muss ich es jetzt da rausnehmen, da ich sonst beim Zurueckschalten versuche, die Markierung wieder zu setzen
     // (interesanterweise geht das nur bei gruppierten Objekten schief (beim Zugriff auf deren ObjList GPF), nicht bei einzelnen)
@@ -1624,6 +1711,7 @@ void FmXFormView::ObjectRemovedInAliveMode( const SdrObject* pObject )
 //------------------------------------------------------------------------------
 void FmXFormView::stopMarkListWatching()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::stopMarkListWatching" );
     if ( m_pWatchStoredList )
     {
         m_pWatchStoredList->EndListeningAll();
@@ -1635,6 +1723,7 @@ void FmXFormView::stopMarkListWatching()
 //------------------------------------------------------------------------------
 void FmXFormView::startMarkListWatching()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::startMarkListWatching" );
     if ( !m_pWatchStoredList )
     {
         m_pWatchStoredList = new ObjectRemoveListener( this );
@@ -1651,6 +1740,7 @@ void FmXFormView::startMarkListWatching()
 //------------------------------------------------------------------------------
 void FmXFormView::saveMarkList( sal_Bool _bSmartUnmark )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::saveMarkList" );
     if ( m_pView )
     {
         m_aMark = m_pView->GetMarkedObjectList();
@@ -1709,6 +1799,7 @@ static sal_Bool lcl_hasObject( SdrObjListIter& rIter, SdrObject* pObj )
 //------------------------------------------------------------------------------
 void FmXFormView::restoreMarkList( SdrMarkList& _rRestoredMarkList )
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::restoreMarkList" );
     if ( !m_pView )
         return;
 
@@ -1796,6 +1887,7 @@ void FmXFormView::restoreMarkList( SdrMarkList& _rRestoredMarkList )
 // -----------------------------------------------------------------------------
 void SAL_CALL FmXFormView::focusGained( const FocusEvent& /*e*/ ) throw (RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::focusGained" );
     if ( m_xWindow.is() && m_pView )
     {
         m_pView->SetMoveOutside( TRUE, FmFormView::ImplAccess() );
@@ -1804,6 +1896,7 @@ void SAL_CALL FmXFormView::focusGained( const FocusEvent& /*e*/ ) throw (Runtime
 // -----------------------------------------------------------------------------
 void SAL_CALL FmXFormView::focusLost( const FocusEvent& /*e*/ ) throw (RuntimeException)
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::focusLost" );
     // when switch the focus outside the office the mark didn't change
     // so we can not remove us as focus listener
     if ( m_xWindow.is() && m_pView )
@@ -1814,6 +1907,7 @@ void SAL_CALL FmXFormView::focusLost( const FocusEvent& /*e*/ ) throw (RuntimeEx
 // -----------------------------------------------------------------------------
 void FmXFormView::removeGridWindowListening()
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::removeGridWindowListening" );
     if ( m_xWindow.is() )
     {
         m_xWindow->removeFocusListener(this);
@@ -1828,6 +1922,7 @@ void FmXFormView::removeGridWindowListening()
 // -----------------------------------------------------------------------------
 DocumentType FmXFormView::impl_getDocumentType() const
 {
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmXFormView::impl_getDocumentType" );
     if ( GetFormShell() && GetFormShell()->GetImpl() )
         return GetFormShell()->GetImpl()->getDocumentType();
     return eUnknownDocumentType;

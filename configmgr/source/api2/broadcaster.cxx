@@ -1112,12 +1112,6 @@ Broadcaster::Broadcaster(Notifier const& aNotifier, configuration::NodeChanges c
     OSL_ASSERT(m_pImpl.isValid());
 }
 // ---------------------------------------------------------------------------------------------------
-Broadcaster::Broadcaster(Notifier const& aNotifier, configuration::NodeChangeInformation const& aChange, bool bLocal)
-: m_pImpl( Impl::create(aNotifier.m_aImpl,ApiTreeRef(aNotifier.m_pTree),aChange,bLocal) )
-{
-    OSL_ASSERT(m_pImpl.isValid());
-}
-// ---------------------------------------------------------------------------------------------------
 Broadcaster::Broadcaster(Notifier const& aNotifier, configuration::NodeChangesInformation const& aChanges, bool bLocal)
 : m_pImpl( Impl::create(aNotifier.m_aImpl,ApiTreeRef(aNotifier.m_pTree),aChanges,bLocal) )
 {
@@ -1180,16 +1174,6 @@ void Broadcaster::notifyListeners(configuration::NodeChange const& aChange) thro
 
     configuration::NodeChanges aChanges;
     aChanges.add(aChange);
-    this->notifyListeners(aChanges, true);
-}
-// ---------------------------------------------------------------------------------------------------
-
-void Broadcaster::notifyListeners(configuration::NodeChangeInformation const& aChange) throw()
-{
-    OSL_ENSURE(!aChange.isEmptyChange(),"Notifying without a change !");
-
-    configuration::NodeChangesInformation aChanges;
-    aChanges.push_back(aChange);
     this->notifyListeners(aChanges, true);
 }
 // ---------------------------------------------------------------------------------------------------

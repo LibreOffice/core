@@ -41,43 +41,26 @@ jclass java_lang_Boolean::theClass = 0;
 java_lang_Boolean::~java_lang_Boolean()
 {}
 
-jclass java_lang_Boolean::getMyClass()
+jclass java_lang_Boolean::getMyClass() const
 {
     // die Klasse muss nur einmal geholt werden, daher statisch
-    if( !theClass ){
-        SDBThreadAttach t;
-        if( !t.pEnv ) return (jclass)NULL;
-        jclass tempClass = t.pEnv->FindClass("java/lang/Boolean"); OSL_ENSURE(tempClass,"Java : FindClass nicht erfolgreich!");
-        jclass globClass = (jclass)t.pEnv->NewGlobalRef( tempClass );
-        t.pEnv->DeleteLocalRef( tempClass );
-        saveClassRef( globClass );
+    if( !theClass )
+    {
+        theClass = findMyClass("java/lang/Boolean");
     }
     return theClass;
 }
 
-void java_lang_Boolean::saveClassRef( jclass pClass )
+java_lang_Boolean::java_lang_Boolean( sal_Bool _par0 ): java_lang_Object( NULL, (jobject)NULL )
 {
-    if( pClass==NULL  )
-        return;
-    // der uebergebe Klassen-Handle ist schon global, daher einfach speichern
-    theClass = pClass;
-}
-
-java_lang_Boolean::java_lang_Boolean( sal_Bool _par0 ): java_lang_Object( NULL, (jobject)NULL ){
     SDBThreadAttach t;
-    if( !t.pEnv )
-        return;
-    jvalue args[1];
-        // Parameter konvertieren
-        args[0].z = _par0;
     // Java-Call fuer den Konstruktor absetzen
     // temporaere Variable initialisieren
     static const char * cSignature = "(Z)V";
     jobject tempObj;
-    static jmethodID mID = NULL;
-    if ( !mID  )
-        mID  = t.pEnv->GetMethodID( getMyClass(), "<init>", cSignature );OSL_ENSURE(mID,"Unknown method id!");
-    tempObj = t.pEnv->NewObjectA( getMyClass(), mID, args );
+    static jmethodID mID(NULL);
+    obtainMethodId(t.pEnv, "<init>",cSignature, mID);
+    tempObj = t.pEnv->NewObject( getMyClass(), mID, _par0 );
     saveRef( t.pEnv, tempObj );
     t.pEnv->DeleteLocalRef( tempObj );
     // und aufraeumen

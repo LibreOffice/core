@@ -28,12 +28,12 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-.IF "$(GUI)"=="WNT"
 
 PRJ=..$/..$/..
 PRJINC=..$/..
 PRJNAME=connectivity
 TARGET=ado
+VISIBILITY_HIDDEN=TRUE
 
 #	ENABLE_EXCEPTIONS=TRUE
 
@@ -42,9 +42,10 @@ TARGET=ado
 ENVCFLAGS+=/FR$(SLO)$/
 .ENDIF
 
-.INCLUDE : settings.mk
 .INCLUDE :  $(PRJ)$/version.mk
+.INCLUDE : $(PRJ)$/makefile.pmk
 
+.IF "$(GUI)"=="WNT"
 # --- Files -------------------------------------
         
 EXCEPTIONSFILES= \
@@ -108,9 +109,10 @@ SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=	$(SHL1TARGET)
 DEF1EXPORTFILE=	exports.dxp
 
-# --- Targets ----------------------------------
-
-.INCLUDE : target.mk
-
+.ELSE
+dummy:
+    @echo "Nothing to build for GUI $(GUI)"
 .ENDIF # "$(GUI)"=="WNT"
+# --- Targets ----------------------------------
+.INCLUDE : $(PRJ)$/target.pmk
 

@@ -570,12 +570,14 @@ namespace dbtools
     /** ask the user for parameters if the prepared statement needs some and sets them in the prepared statement
         @param _xConnection     the connection must be able to create <type scope="com::sun::star::sdb">SingleSelectQueryComposer</type>s
         @param _xPreparedStmt   the prepared statement where the parameters could be set when needed
+        @param _aParametersSet  contains which parameters have to asked for and which already have set.
     */
     OOO_DLLPUBLIC_DBTOOLS
     void askForParameters(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >& _xComposer,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters>& _xParameters,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxHandler);
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxHandler,
+                            const ::std::bit_vector& _aParametersSet = ::std::bit_vector());
 
     /** call the appropiate set method for the specific sql type @see com::sun::star::sdbc::DataType
         @param  _xParams        the parameters where to set the value

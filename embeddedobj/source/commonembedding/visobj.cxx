@@ -68,10 +68,21 @@ void SAL_CALL OCommonEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const
 
     m_bHasClonedSize = sal_False;
 
+    sal_Bool bBackToLoaded = sal_False;
     if ( m_nObjectState == embed::EmbedStates::LOADED )
+    {
         changeState( embed::EmbedStates::RUNNING );
 
-    if ( !m_pDocHolder->SetExtent( nAspect, aSize ) )
+        // the links should be switched back to loaded state for now to avoid locking problems
+        bBackToLoaded = m_bIsLink;
+    }
+
+    sal_Bool bSuccess = m_pDocHolder->SetExtent( nAspect, aSize );
+
+    if ( bBackToLoaded )
+        changeState( embed::EmbedStates::LOADED );
+
+    if ( !bSuccess )
         throw uno::Exception(); // TODO:
 }
 
@@ -96,12 +107,24 @@ awt::Size SAL_CALL OCommonEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
     if ( m_bHasClonedSize )
         return m_aClonedSize;
 
+    sal_Bool bBackToLoaded = sal_False;
     if ( m_nObjectState == embed::EmbedStates::LOADED )
+    {
         changeState( embed::EmbedStates::RUNNING );
 
+        // the links should be switched back to loaded state for now to avoid locking problems
+        bBackToLoaded = m_bIsLink;
+    }
+
     awt::Size aResult;
-    if ( !m_pDocHolder->GetExtent( nAspect, &aResult ) )
+    sal_Bool bSuccess = m_pDocHolder->GetExtent( nAspect, &aResult );
+
+    if ( bBackToLoaded )
+        changeState( embed::EmbedStates::LOADED );
+
+    if ( !bSuccess )
         throw uno::Exception(); // TODO:
+
     return aResult;
 }
 
@@ -126,15 +149,24 @@ sal_Int32 SAL_CALL OCommonEmbeddedObject::getMapUnit( sal_Int64 nAspect )
     if ( m_bHasClonedSize )
         return m_nClonedMapUnit;
 
+    sal_Bool bBackToLoaded = sal_False;
     if ( m_nObjectState == embed::EmbedStates::LOADED )
+    {
         changeState( embed::EmbedStates::RUNNING );
 
+        // the links should be switched back to loaded state for now to avoid locking problems
+        bBackToLoaded = m_bIsLink;
+    }
+
     sal_Int32 nResult = m_pDocHolder->GetMapUnit( nAspect );
+
+    if ( bBackToLoaded )
+        changeState( embed::EmbedStates::LOADED );
+
     if ( nResult < 0  )
         throw uno::Exception(); // TODO:
 
     return nResult;
-
 }
 
 embed::VisualRepresentation SAL_CALL OCommonEmbeddedObject::getPreferredVisualRepresentation( sal_Int64 nAspect )
@@ -160,8 +192,14 @@ embed::VisualRepresentation SAL_CALL OCommonEmbeddedObject::getPreferredVisualRe
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Illegal call!\n" ),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
+    sal_Bool bBackToLoaded = sal_False;
     if ( m_nObjectState == embed::EmbedStates::LOADED )
+    {
         changeState( embed::EmbedStates::RUNNING );
+
+        // the links should be switched back to loaded state for now to avoid locking problems
+        bBackToLoaded = m_bIsLink;
+    }
 
     OSL_ENSURE( m_pDocHolder->GetComponent().is(), "Running or Active object has no component!\n" );
 
@@ -192,6 +230,9 @@ embed::VisualRepresentation SAL_CALL OCommonEmbeddedObject::getPreferredVisualRe
         else
             throw uno::RuntimeException();
     }
+
+    if ( bBackToLoaded )
+        changeState( embed::EmbedStates::LOADED );
 
     return aVisualRepresentation;
 }

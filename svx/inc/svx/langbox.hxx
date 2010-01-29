@@ -37,6 +37,7 @@
 #include "svx/svxdllapi.h"
 #include <vcl/image.hxx>
 #include <tools/solar.h>
+#include <layout/layout.hxx>
 
 class SvtLanguageTable;
 
@@ -95,6 +96,31 @@ public:
     LanguageType    GetSelectLanguage() const;
     BOOL            IsLanguageSelected( const LanguageType eLangType ) const;
 };
+
+#if ENABLE_LAYOUT
+namespace layout
+{
+class SvxLanguageBoxImpl;
+class SVX_DLLPUBLIC SvxLanguageBox : public ListBox
+{
+    /*DECL_GET_IMPL( SvxLanguageBox );
+    DECL_CONSTRUCTORS( SvxLanguageBox, ListBox, WB_BORDER );
+    DECL_GET_WINDOW (SvxLanguageBox);*/
+
+public:
+    SvxLanguageBox( Context*, const char*, BOOL bCheck = FALSE );
+    ~SvxLanguageBox ();
+    void SetLanguageList (sal_Int16 list, bool hasLangNone, bool langNoneIsLangAll=false, bool checkSpellAvailable=false);
+
+    sal_uInt16 InsertLanguage (LanguageType const type, sal_uInt16 pos=LISTBOX_APPEND);
+    sal_uInt16 InsertLanguage (LanguageType const type, bool checkEntry, sal_uInt16 pos=LISTBOX_APPEND);
+    void RemoveLanguage (LanguageType const type);
+    void SelectLanguage (LanguageType const type, bool select=true);
+    LanguageType GetSelectLanguage () const;
+    bool IsLanguageSelected( LanguageType const type) const;
+};
+};
+#endif
 
 #endif
 

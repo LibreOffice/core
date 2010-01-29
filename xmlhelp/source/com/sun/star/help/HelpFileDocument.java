@@ -34,11 +34,9 @@ import java.io.File;
 import java.io.Reader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 //import java.io.FileReader;
 import java.io.StringReader;
 
-import org.apache.lucene.document.DateTools;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 

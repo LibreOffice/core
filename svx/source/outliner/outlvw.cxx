@@ -1635,3 +1635,15 @@ USHORT OutlinerView::GetSelectedScriptType() const
     DBG_CHKTHIS(OutlinerView,0);
     return pEditView->GetSelectedScriptType();
 }
+
+String OutlinerView::GetSurroundingText() const
+{
+    DBG_CHKTHIS(OutlinerView,0);
+    return pEditView->GetSurroundingText();
+}
+
+Selection OutlinerView::GetSurroundingTextSelection() const
+{
+    DBG_CHKTHIS(OutlinerView,0);
+    return pEditView->GetSurroundingTextSelection();
+}

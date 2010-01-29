@@ -258,7 +258,7 @@ USHORT aV5Map[] = {
     4035, 4036, 4037, 4038
 };
 
-SV_IMPL_PTRARR( ContentList, ContentNode* );
+SV_IMPL_PTRARR( DummyContentList, ContentNode* );
 SV_IMPL_VARARR( ScriptTypePosInfos, ScriptTypePosInfo );
 SV_IMPL_VARARR( WritingDirectionInfos, WritingDirectionInfo );
 // SV_IMPL_VARARR( ExtraCharInfos, ExtraCharInfo );

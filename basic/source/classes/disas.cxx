@@ -43,51 +43,51 @@
 static const char* pOp1[] = {
     "NOP",
 
-    // Operatoren
-    // die folgenden Operatoren sind genauso angeordnet
-    // wie der enum SbxVarOp
+    // Operators
+    // the following operators have the same order as in
+    // enum SbxVarOp
     "EXP", "MUL", "DIV", "MOD", "PLUS", "MINUS", "NEG",
     "EQ", "NE", "LT", "GT", "LE", "GE",
     "IDIV", "AND", "OR", "XOR", "EQV", "IMP", "NOT",
     "CAT",
-    // Ende enum SbxVarOp
+    // End enum SbxVarOp
     "LIKE", "IS",
-    // Laden/speichern
-    "ARGC",             // neuen Argv einrichten
-    "ARGV",             // TOS ==> aktueller Argv
+    // Load/Store
+    "ARGC",             // Create new Argv
+    "ARGV",             // TOS ==> current Argv
     "INPUT",            // Input ==> TOS
     "LINPUT",           // Line Input ==> TOS
-    "GET",              // TOS anfassen
-    "SET",              // Speichern Objekt TOS ==> TOS-1
+    "GET",              // get TOS
+    "SET",              // Save Object TOS ==> TOS-1
     "PUT",              // TOS ==> TOS-1
-    "CONST",            // TOS ==> TOS-1, dann ReadOnly
+    "CONST",            // TOS ==> TOS-1, then ReadOnly
     "DIM",              // DIM
     "REDIM",            // REDIM
     "REDIMP",           // REDIM PRESERVE
-    "ERASE",            // TOS loeschen
-    // Verzweigen
-    "STOP",             // Programmende
-    "INITFOR",          // FOR-Variable initialisieren
-    "NEXT",             // FOR-Variable inkrementieren
-    "CASE",             // Anfang CASE
-    "ENDCASE",          // Ende CASE
-    "STDERR",           // Standard-Fehlerbehandlung
-    "NOERROR",          // keine Fehlerbehandlung
-    "LEAVE",            // UP verlassen
-    // E/A
-    "CHANNEL",          // TOS = Kanalnummer
+    "ERASE",            // delete TOS
+    // Branch
+    "STOP",             // End of program
+    "INITFOR",          // FOR-Variable init
+    "NEXT",             // FOR-Variable increment
+    "CASE",             // Begin CASE
+    "ENDCASE",          // End CASE
+    "STDERR",           // Default error handling
+    "NOERROR",          // No error handling
+    "LEAVE",            // leave UP
+    // I/O
+    "CHANNEL",          // TOS = Channelnumber
     "PRINT",            // print TOS
     "PRINTF",           // print TOS in field
     "WRITE",            // write TOS
     "RENAME",           // Rename Tos+1 to Tos
     "PROMPT",           // TOS = Prompt for Input
-    "RESTART",          // Restartpunkt definieren
-    "STDIO",            // E/A-Kanal 0 einstellen
-    // Sonstiges
-    "EMPTY",            // Leeren Ausdruck auf Stack
-    "ERROR",            // TOS = Fehlercode
-    "LSET",             // Speichern Objekt TOS ==> TOS-1
-    "RSET",             // Speichern Objekt TOS ==> TOS-1
+    "RESTART",          // Define restart point
+    "STDIO",            // Switch to I/O channel 0
+    // Misc
+    "EMPTY",            // Empty statement to stack
+    "ERROR",            // TOS = error code
+    "LSET",             // Save object TOS ==> TOS-1
+    "RSET",             // Save object TOS ==> TOS-1 (TODO: Same as above?)
     "REDIMP_ERASE",
     "INITFOREACH",
     "VBASET",
@@ -96,127 +96,135 @@ static const char* pOp1[] = {
 };
 
 static const char* pOp2[] = {
-    "NUMBER",           // Laden einer numerischen Konstanten (+ID)
-    "STRING",           // Laden einer Stringkonstanten (+ID)
-    "CONSTANT",         // Immediate Load (+Wert)
-    "ARGN",             // Speichern eines named Args in Argv (+StringID)
-    "PAD",              // String auf feste Laenge bringen (+Laenge)
-    // Verzweigungen
-    "JUMP",             // Sprung (+Target)
-    "JUMP.T",           // TOS auswerten, bedingter Sprung (+Target)
-    "JUMP.F",           // TOS auswerten, bedingter Sprung (+Target)
-    "ONJUMP",           // TOS auswerten, Sprung in JUMP-Tabelle (+MaxVal)
-    "GOSUB",            // UP-Aufruf (+Target)
-    "RETURN",           // UP-Return (+0 oder Target)
-    "TESTFOR",          // FOR-Variable testen, inkrementieren (+Endlabel)
-    "CASETO",           // Tos+1 <= Case <= Tos, 2xremove (+Target)
-    "ERRHDL",           // Fehler-Handler (+Offset)
-    "RESUME",           // Resume nach Fehlern (+0 or 1 or Label)
-    // E/A
-    "CLOSE",            // (+Kanal/0)
-    "PRCHAR",           // (+char)
-    // Objekte
-    "SETCLASS",         // Set + Klassennamen testen (+StringId)
-    "TESTCLASS",        // Check TOS class (+StringId)
-    "LIB",              // Libnamen fuer Declare-Procs setzen (+StringId)
-    // Neues ab Beta 3
-    "BASED",            // TOS wird um BASE erhoeht, BASE davor gepusht
-    "ARGTYP",           // Letzten Parameter in Argv konvertieren (+Typ)
+    "NUMBER",            // Load a numeric constant (+ID)
+    "STRING",            // Load a string constant (+ID)
+    "CONSTANT",          // Immediate Load (+value)
+    "ARGN",              // Save named args in argv (+StringID)
+    "PAD",               // Pad String to defined length (+length)
+    // Branches
+    "JUMP",              // Jump to target (+Target)
+    "JUMP.T",            // evaluate TOS, conditional jump (+Target)
+    "JUMP.F",            // evaluate TOS, conditional jump (+Target)
+    "ONJUMP",            // evaluate TOS, jump into JUMP-table (+MaxVal)
+    "GOSUB",             // UP-Call (+Target)
+    "RETURN",            // UP-Return (+0 or Target)
+    "TESTFOR",           // Test FOR-Variable, increment (+Endlabel)
+    "CASETO",            // Tos+1 <= Case <= Tos, 2xremove (+Target)
+    "ERRHDL",            // Error-Handler (+Offset)
+    "RESUME",            // Resume after errors (+0 or 1 or Label)
+    // I/O
+    "CLOSE",             // (+channel/0)
+    "PRCHAR",            // (+char)
+    // Objects
+    "SETCLASS",          // Test Set + Classname (+StringId)
+    "TESTCLASS",         // Check TOS class (+StringId)
+    "LIB",               // Set Libname for Declare-Procs (+StringId)
+    // New since Beta 3 (TODO: Which Beta3?)
+    "BASED",             // TOS is incremted about BASE, push BASE before
+    "ARGTYP",            // Convert last parameter in argv (+Type)
     "VBASETCLASS",
 };
 
 static const char* pOp3[] = {
-    // Alle Opcodes mit zwei Operanden
-    "RTL",              // Laden aus RTL (+StringID+Typ)
-    "FIND",             // Laden (+StringID+Typ)
-    "ELEM",             // Laden Element (+StringID+Typ)
+    // All opcodes with two operands
+    "RTL",              // Load from RTL (+StringID+Typ)
+    "FIND",             // Load (+StringID+Typ)
+    "ELEM",             // Load element (+StringID+Typ)
     "PARAM",            // Parameter (+Offset+Typ)
-    // Verzweigen
-    "CALL",             // DECLARE-Methode rufen (+StringID+Typ)
-    "CALL.C",           // Cdecl-DECLARE-Methode rufen (+StringID+Typ)
+
+    // Branching
+    "CALL",             // Call DECLARE method (+StringID+Typ)
+    "CALL.C",           // Call Cdecl-DECLARE method (+StringID+Typ)
     "CASEIS",           // Case-Test (+Test-Opcode+False-Target)
-    "STMNT",            // Beginn eines Statements (+Line+Col)
-    // E/A
+    "STMNT",            // Start of a statement (+Line+Col)
+
+    // I/O
     "OPEN",             // (+SvStreamFlags+Flags)
-    // Objekte und Variable
-    "LOCAL",            // Lokale Variable (+StringID+Typ)
-    "PUBLIC",           // Modulglobale Variable (+StringID+Typ)
-    "GLOBAL",           // Globale Variable (+StringID+Typ)
-    "CREATE",           // Objekt kreieren (+StringId+StringId)
-    "STATIC",           // Objekt kreieren (+StringId+StringId)
-    "TCREATE",          // User defined Objekt kreieren (+StringId+StringId)
-    "DCREATE",          // User defined Objekt-Array kreieren (+StringId+StringId)
-    "GLOBAL_P",         // Globale Variable definieren, die beim Neustart von Basic
-                        // nicht ueberschrieben wird, P=PERSIST (+StringID+Typ)
-    "FIND_G",           // Sucht globale Variable mit Spezialbehandlung wegen _GLOBAL_P
-    "DCREATE_REDIMP",   // User defined Objekt-Array redimensionieren (+StringId+StringId)
+
+    // Objects and variables
+    "LOCAL",            // Local variables (+StringID+Typ)
+    "PUBLIC",           // Modul global var (+StringID+Typ)
+    "GLOBAL",           // Global var (+StringID+Typ)
+    "CREATE",           // Create object (+StringId+StringId)
+    "STATIC",           // Create static object (+StringId+StringId)
+    "TCREATE",          // Create User defined Object (+StringId+StringId)
+    "DCREATE",          // Create User defined Object-Array kreieren (+StringId+StringId)
+    "GLOBAL_P",         // Define persistent global var (existing after basic restart)
+                        // P=PERSIST (+StringID+Typ)
+    "FIND_G",           // Searches for global var with special handling due to _GLOBAL_P
+    "DCREATE_REDIMP",   // Change dimensions of a user defined Object-Array (+StringId+StringId)
     "FIND_CM",          // Search inside a class module (CM) to enable global search in time
     "PUBLIC_P",         // Module global Variable (persisted between calls)(+StringID+Typ)
 };
 
 static const char** pOps[3] = { pOp1, pOp2, pOp3 };
 
-typedef void( SbiDisas::*Func )( String& );     // Verarbeitungsroutine
+typedef void( SbiDisas::*Func )( String& );  // Processing routines
 
 static const Func pOperand2[] = {
-    &SbiDisas::StrOp,   // Laden einer numerischen Konstanten (+ID)
-    &SbiDisas::StrOp,   // Laden einer Stringkonstanten (+ID)
+    &SbiDisas::StrOp,   // Load a numeric constant (+ID)
+    &SbiDisas::StrOp,   // Load a string constant (+ID)
     &SbiDisas::ImmOp,   // Immediate Load (+Wert)
-    &SbiDisas::StrOp,   // Speichern eines benannten Arguments(+ID)
-    &SbiDisas::ImmOp,   // String auf feste Laenge bringen (+Laenge)
-    // Verzweigungen
-    &SbiDisas::LblOp,   // Sprung (+Target)
-    &SbiDisas::LblOp,   // TOS auswerten), bedingter Sprung (+Target)
-    &SbiDisas::LblOp,   // TOS auswerten), bedingter Sprung (+Target)
-    &SbiDisas::OnOp,        // TOS auswerten), Sprung in JUMP-Tabelle (+MaxVal)
-    &SbiDisas::LblOp,   // UP-Aufruf (+Target)
-    &SbiDisas::ReturnOp,    // UP-Return (+0 oder Target)
-    &SbiDisas::LblOp,   // FOR-Variable testen), inkrementieren (+Endlabel)
+    &SbiDisas::StrOp,   // Save a named argument (+ID)
+    &SbiDisas::ImmOp,   // Strip String to fixed size (+length)
+
+    // Branches
+    &SbiDisas::LblOp,   // Jump (+Target)
+    &SbiDisas::LblOp,   // eval TOS, conditional jump (+Target)
+    &SbiDisas::LblOp,   // eval TOS, conditional jump (+Target)
+    &SbiDisas::OnOp,    // eval TOS, jump in JUMP table (+MaxVal)
+    &SbiDisas::LblOp,   // UP call (+Target)
+    &SbiDisas::ReturnOp,    // UP Return (+0 or Target)
+    &SbiDisas::LblOp,   // test FOR-Variable, increment (+Endlabel)
     &SbiDisas::LblOp,   // Tos+1 <= Case <= Tos), 2xremove (+Target)
-    &SbiDisas::LblOp,   // Fehler-Handler (+Offset)
-    &SbiDisas::ResumeOp,    // Resume nach Fehlern (+0 or 1 or Label)
-    // E/A
-    &SbiDisas::CloseOp, // (+Kanal/0)
+    &SbiDisas::LblOp,   // Error handler (+Offset)
+    &SbiDisas::ResumeOp,    // Resume after errors (+0 or 1 or Label)
+
+    // I/O
+    &SbiDisas::CloseOp, // (+channel/0)
     &SbiDisas::CharOp,  // (+char)
-    // Objekte
-    &SbiDisas::StrOp,   // Klassennamen testen (+StringId)
+
+    // Objects
+    &SbiDisas::StrOp,   // Test classname (+StringId)
     &SbiDisas::StrOp,   // TESTCLASS, Check TOS class (+StringId)
-    &SbiDisas::StrOp,   // Libnamen fuer Declare-Procs setzen (+StringId)
-    &SbiDisas::ImmOp,   // TOS wird um BASE erhoeht, BASE davor gepusht
-    &SbiDisas::TypeOp,  // Letzten Parameter in Argv konvertieren (+Typ)
+    &SbiDisas::StrOp,   // Set libname for declare procs (+StringId)
+    &SbiDisas::ImmOp,   // TOS is incremented about BASE erhoeht, BASE pushed before
+    &SbiDisas::TypeOp,  // Convert last parameter to/in(?) argv (+Typ)
     &SbiDisas::StrOp,   // VBASETCLASS (+StringId)
 };
 
 static const Func pOperand3[] = {
-    // Alle Opcodes mit zwei Operanden
-    &SbiDisas::VarOp,   // Laden aus RTL (+StringID+Typ)
-    &SbiDisas::VarOp,   // Laden (+StringID+Typ)
-    &SbiDisas::VarOp,   // Laden Element (+StringID+Typ)
+    // All opcodes with two operands
+    &SbiDisas::VarOp,   // Load from RTL (+StringID+Typ)
+    &SbiDisas::VarOp,   // Load (+StringID+Typ)
+    &SbiDisas::VarOp,   // Load Element (+StringID+Typ)
     &SbiDisas::OffOp,   // Parameter (+Offset+Typ)
-    // Verzweigen
-    &SbiDisas::VarOp,   // DECLARE-Methode rufen (+StringID+Typ)
-    &SbiDisas::VarOp,   // CDecl-DECLARE-Methode rufen (+StringID+Typ)
+
+    // Branch
+    &SbiDisas::VarOp,   // Call DECLARE-Method (+StringID+Typ)
+    &SbiDisas::VarOp,   // Call CDecl-DECLARE-Methode (+StringID+Typ)
     &SbiDisas::CaseOp,  // Case-Test (+Test-Opcode+False-Target)
-    &SbiDisas::StmntOp, // Statement (+Zeilen+Spalte)
-    // E/A
+    &SbiDisas::StmntOp, // Statement (+Row+Column)
+
+    // I/O
     &SbiDisas::StrmOp,  // (+SvStreamFlags+Flags)
-    // Objekte
-    &SbiDisas::VarDefOp, // Lokale Variable definieren (+StringID+Typ)
-    &SbiDisas::VarDefOp, // Modulglobale Variable definieren (+StringID+Typ)
-    &SbiDisas::VarDefOp, // Globale Variable definieren (+StringID+Typ)
-    &SbiDisas::Str2Op,   // Objekt kreieren (+StringId+StringId)
-    &SbiDisas::VarDefOp, // Statische Variable definieren (+StringID+Typ)
-    &SbiDisas::Str2Op,   // User defined Objekt kreieren (+StringId+StringId)
-    &SbiDisas::Str2Op,   // User defined Objekt-Array kreieren (+StringId+StringId)
-    &SbiDisas::VarDefOp, // Globale Variable definieren, die beim Neustart von Basic
-                                // nicht ueberschrieben wird, P=PERSIST (+StringID+Typ)
-    &SbiDisas::VarOp,    // Sucht globale Variable mit Spezialbehandlung wegen _GLOBAL_P
-    &SbiDisas::Str2Op,   // User defined Objekt-Array redimensionieren (+StringId+StringId)
+
+    // Objects
+    &SbiDisas::VarDefOp,   // Define local var (+StringID+Typ)
+    &SbiDisas::VarDefOp,   // Define Module global var (+StringID+Typ)
+    &SbiDisas::VarDefOp,   // Define global var (+StringID+Typ)
+    &SbiDisas::Str2Op,     // Create object (+StringId+StringId)
+    &SbiDisas::VarDefOp,   // Define static object (+StringID+Typ)
+    &SbiDisas::Str2Op,     // Create User defined Object (+StringId+StringId)
+    &SbiDisas::Str2Op,     // Create User defined Object-Array (+StringId+StringId)
+    &SbiDisas::VarDefOp,   // Define persistent global var P=PERSIST (+StringID+Typ)
+    &SbiDisas::VarOp,    // Searches for global var with special handling due to  _GLOBAL_P
+    &SbiDisas::Str2Op,     // Redimensionate User defined Object-Array (+StringId+StringId)
     &SbiDisas::VarOp,    // FIND_CM
     &SbiDisas::VarDefOp, // PUBLIC_P
 };
 
-
+// TODO: Why as method? Isn't a simple define sufficient?
 static const char* _crlf()
 {
 #if defined (UNX) || defined( PM2 )
@@ -226,9 +234,7 @@ static const char* _crlf()
 #endif
 }
 
-// Diese Methode ist hier, damit die Datei als eigenes Segment geladen werden
-// kann.
-
+// This method exists because we want to load the file as own segment
 BOOL SbModule::Disassemble( String& rText )
 {
     rText.Erase();
@@ -248,7 +254,7 @@ SbiDisas::SbiDisas( SbModule* p, const SbiImage* q ) : rImg( *q ), pMod( p )
     nPC = 0;
     nOp1 = nOp2 = nParts = 0;
     eOp = _NOP;
-    // Label-Bits setzen
+    // Set Label-Bits
     nOff = 0;
     while( Fetch() )
     {
@@ -270,7 +276,7 @@ SbiDisas::SbiDisas( SbModule* p, const SbiImage* q ) : rImg( *q ), pMod( p )
         }
     }
     nOff = 0;
-    // Die Publics noch dazu
+    // Add the publics
     for( USHORT i = 0; i < pMod->GetMethods()->Count(); i++ )
     {
         SbMethod* pMeth = PTR_CAST(SbMethod,pMod->GetMethods()->Get( i ));
@@ -282,8 +288,7 @@ SbiDisas::SbiDisas( SbModule* p, const SbiImage* q ) : rImg( *q ), pMod( p )
     }
 }
 
-// Aktuellen Opcode auslesen
-
+// Read current opcode
 BOOL SbiDisas::Fetch()
 {
     nPC = nOff;
@@ -356,10 +361,10 @@ BOOL SbiDisas::DisasLine( String& rText )
     rText.Erase();
     if( !Fetch() )
         return FALSE;
-    // Neue Zeile?
+    // New line?
     if( eOp == _STMNT && nOp1 != nLine )
     {
-        // Zeile raussuchen
+        // Find line
         String aSource = rImg.aOUSource;
         nLine = nOp1;
         USHORT n = 0;
@@ -369,7 +374,7 @@ BOOL SbiDisas::DisasLine( String& rText )
             if( n == STRING_NOTFOUND ) break;
             else n++;
         }
-        // Stelle anzeigen
+        // Show position
         if( n != STRING_NOTFOUND )
         {
             USHORT n2 = aSource.SearchAscii( "\n", n );
@@ -444,9 +449,7 @@ BOOL SbiDisas::DisasLine( String& rText )
     return TRUE;
 }
 
-
-// Auslesen aus StringPool
-
+// Read from StringPool
 void SbiDisas::StrOp( String& rText )
 {
     String aStr = rImg.GetString( (USHORT)nOp1 );
@@ -476,14 +479,12 @@ void SbiDisas::Str2Op( String& rText )
 }
 
 // Immediate Operand
-
 void SbiDisas::ImmOp( String& rText )
 {
     rText += String::CreateFromInt32(nOp1);
 }
 
 // OnGoto Operand
-
 void SbiDisas::OnOp( String& rText )
 {
     rText += String::CreateFromInt32(nOp1 & 0x7FFF);
@@ -492,7 +493,6 @@ void SbiDisas::OnOp( String& rText )
 }
 
 // Label
-
 void SbiDisas::LblOp( String& rText )
 {
     char cBuf[ 10 ];
@@ -500,16 +500,14 @@ void SbiDisas::LblOp( String& rText )
     rText.AppendAscii( cBuf );
 }
 
-// 0 oder Label
-
+// 0 or Label
 void SbiDisas::ReturnOp( String& rText )
 {
     if( nOp1 )
         LblOp( rText );
 }
 
-// 0, 1 oder Label
-
+// 0, 1 or Label
 void SbiDisas::ResumeOp( String& rText )
 {
     switch( nOp1 )
@@ -519,24 +517,21 @@ void SbiDisas::ResumeOp( String& rText )
     }
 }
 
-// Prompt ausgeben
+// print Prompt
 // FALSE/TRUE
-
 void SbiDisas::PromptOp( String& rText )
 {
     if( nOp1 )
         rText.AppendAscii( "\"? \"" );
 }
 
-// 0 oder 1
-
+// 0 or 1
 void SbiDisas::CloseOp( String& rText )
 {
     rText.AppendAscii( nOp1 ? "Channel" : "All" );
 }
 
-// Zeichen ausgeben
-
+// Print character
 void SbiDisas::CharOp( String& rText )
 {
     const char* p = NULL;
@@ -558,13 +553,12 @@ void SbiDisas::CharOp( String& rText )
         rText += (USHORT)nOp1;
 }
 
-// Variable ausgeben: String-ID und Typ
-
+// Print var: String-ID and type
 void SbiDisas::VarOp( String& rText )
 {
     rText += rImg.GetString( (USHORT)(nOp1 & 0x7FFF) );
     rText.AppendAscii( "\t; " );
-    // Der Typ
+    // The type
     UINT32 n = nOp1;
     nOp1 = nOp2;
     TypeOp( rText );
@@ -572,24 +566,22 @@ void SbiDisas::VarOp( String& rText )
         rText.AppendAscii( ", Args" );
 }
 
-// Variable definieren: String-ID und Typ
-
+// Define variable: String-ID and type
 void SbiDisas::VarDefOp( String& rText )
 {
     rText += rImg.GetString( (USHORT)(nOp1 & 0x7FFF) );
     rText.AppendAscii( "\t; " );
-    // Der Typ
+    // The Typ
     nOp1 = nOp2;
     TypeOp( rText );
 }
 
-// Variable ausgeben: Offset und Typ
-
+// Print variable: Offset and Typ
 void SbiDisas::OffOp( String& rText )
 {
     rText += String::CreateFromInt32( nOp1 & 0x7FFF );
     rText.AppendAscii( "\t; " );
-    // Der Typ
+    // The type
     UINT32 n = nOp1;
     nOp1 = nOp2;
     TypeOp( rText );
@@ -597,8 +589,8 @@ void SbiDisas::OffOp( String& rText )
         rText.AppendAscii( ", Args" );
 }
 
-// Datentyp
-#ifdef HP9000
+// Data type
+#ifdef HP9000 // TODO: remove this!
 static char* SbiDisas_TypeOp_pTypes[13] = {
     "Empty","Null","Integer","Long","Single","Double",
     "Currency","Date","String","Object","Error","Boolean",
@@ -633,8 +625,7 @@ void SbiDisas::TypeOp( String& rText )
 #undef pTypes
 #endif
 
-// TRUE-Label, Bedingungs-Opcode
-
+// TRUE-Label, condition Opcode
 void SbiDisas::CaseOp( String& rText )
 {
     LblOp( rText );
@@ -642,8 +633,7 @@ void SbiDisas::CaseOp( String& rText )
     rText.AppendAscii( pOp1[ nOp2 - SbxEQ + _EQ ] );
 }
 
-// Zeile, Spalte
-
+// Row, column
 void SbiDisas::StmntOp( String& rText )
 {
     rText += String::CreateFromInt32( nOp1 );
@@ -657,7 +647,6 @@ void SbiDisas::StmntOp( String& rText )
 }
 
 // open mode, flags
-
 void SbiDisas::StrmOp( String& rText )
 {
     char cBuf[ 10 ];

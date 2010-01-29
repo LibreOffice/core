@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: dp_gui_updatedialog.cxx,v $
- * $Revision: 1.18.10.1 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -82,6 +79,7 @@
 #include "com/sun/star/xml/dom/XElement.hpp"
 #include "com/sun/star/xml/dom/XNode.hpp"
 #include "osl/diagnose.h"
+#include "rtl/bootstrap.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/string.h"
 #include "rtl/ustrbuf.hxx"
@@ -545,7 +543,7 @@ bool UpdateDialog::Thread::update(
     du.aUpdateInfo = updateInfo;
     du.unsatisfiedDependencies.realloc(ds.getLength());
     for (sal_Int32 i = 0; i < ds.getLength(); ++i) {
-        du.unsatisfiedDependencies[i] = dp_misc::Dependencies::name(ds[i]);
+        du.unsatisfiedDependencies[i] = dp_misc::Dependencies::getErrorText(ds[i]);
     }
     du.permission = ! packageManager->isReadOnly();
     const ::boost::optional< ::rtl::OUString> updateWebsiteURL(infoset.getLocalizedUpdateWebsiteURL());
@@ -630,6 +628,7 @@ UpdateDialog::UpdateDialog(
     m_noDescription(String(DpGuiResId(RID_DLG_UPDATE_NODESCRIPTION))),
     m_noInstall(String(DpGuiResId(RID_DLG_UPDATE_NOINSTALL))),
     m_noDependency(String(DpGuiResId(RID_DLG_UPDATE_NODEPENDENCY))),
+    m_noDependencyCurVer(String(DpGuiResId(RID_DLG_UPDATE_NODEPENDENCY_CUR_VER))),
     m_noPermission(String(DpGuiResId(RID_DLG_UPDATE_NOPERMISSION))),
     m_noPermissionVista(String(DpGuiResId(RID_DLG_UPDATE_NOPERMISSION_VISTA))),
     m_browserbased(String(DpGuiResId(RID_DLG_UPDATE_BROWSERBASED))),
@@ -1111,7 +1110,18 @@ IMPL_LINK(UpdateDialog, selectionHandler, void *, EMPTYARG)
             {
                 UpdateDialog::DisabledUpdate & data = m_disabledUpdates[
                     p->index.disabledUpdate];
-                if (data.unsatisfiedDependencies.getLength() != 0) {
+                if (data.unsatisfiedDependencies.getLength() != 0)
+                {
+                    // create error string for version mismatch
+                    ::rtl::OUString sVersion( RTL_CONSTASCII_USTRINGPARAM("%VERSION") );
+                    sal_Int32 nPos = m_noDependencyCurVer.indexOf( sVersion );
+                    if ( nPos >= 0 )
+                    {
+                        ::rtl::OUString sCurVersion( RTL_CONSTASCII_USTRINGPARAM( "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version") ":Version:OOOPackageVersion}"));
+                        ::rtl::Bootstrap::expandMacros(sCurVersion);
+                        m_noDependencyCurVer = m_noDependencyCurVer.replaceAt( nPos, sVersion.getLength(), sCurVersion );
+                    }
+
                     b.append(m_noInstall);
                     b.append(LF);
                     b.append(m_noDependency);
@@ -1126,6 +1136,9 @@ IMPL_LINK(UpdateDialog, selectionHandler, void *, EMPTYARG)
                             confineToParagraph(
                                 data.unsatisfiedDependencies[i]));
                     }
+                    b.append(LF);
+                    b.appendAscii(RTL_CONSTASCII_STRINGPARAM("  "));
+                    b.append(m_noDependencyCurVer);
                 }
                 if (!data.permission) {
                     if (b.getLength() == 0) {

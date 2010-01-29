@@ -77,6 +77,12 @@ public:
             && maParagraphDataVector == rCandidate.maParagraphDataVector
             && mbIsEditDoc == rCandidate.mbIsEditDoc);
     }
+
+    // #i102062#
+    bool isWrongListEqual(const ImplOutlinerParaObject& rCompare) const
+    {
+        return mpEditTextObject->isWrongListEqual(*rCompare.mpEditTextObject);
+    }
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -145,6 +151,17 @@ bool OutlinerParaObject::operator==(const OutlinerParaObject& rCandidate) const
     }
 
     return (*rCandidate.mpImplOutlinerParaObject == *mpImplOutlinerParaObject);
+}
+
+// #i102062#
+bool OutlinerParaObject::isWrongListEqual(const OutlinerParaObject& rCompare) const
+{
+    if(rCompare.mpImplOutlinerParaObject == mpImplOutlinerParaObject)
+    {
+        return true;
+    }
+
+    return mpImplOutlinerParaObject->isWrongListEqual(*rCompare.mpImplOutlinerParaObject);
 }
 
 sal_uInt16 OutlinerParaObject::GetOutlinerMode() const

@@ -66,9 +66,6 @@ protected:
     // Strichstaerke ermitteln. Keine Linie -> 0.
     sal_Int32 ImpGetLineWdt() const;
 
-    // Schattenabstand ermitteln. FALSE=Kein Schatten.
-    FASTBOOL ImpGetShadowDist(sal_Int32& nXDist, sal_Int32& nYDist) const;
-
     // Zuhoeren, ob sich ein StyleSheet aendert
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 

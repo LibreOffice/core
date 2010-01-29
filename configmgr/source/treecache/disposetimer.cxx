@@ -77,25 +77,6 @@ bool equivalentOptions(RequestOptions const& lhs, RequestOptions const& rhs)
 }
 // -------------------------------------------------------------------------
 
-void OTreeDisposeScheduler::clearTasks(RequestOptions const& _aOptions)
-{
-    CFG_TRACE_INFO("Cancelling all data cleanup tasks for user '%s' with locale '%s'",
-                    OUSTRING2ASCII(_aOptions.getEntity()),
-                    OUSTRING2ASCII(_aOptions.getLocale()));
-
-    Agenda::iterator it = m_aAgenda.begin();
-    while(it != m_aAgenda.end())
-    {
-        Agenda::iterator cur = it++;
-        if (equivalentOptions(_aOptions,cur->second))
-        {
-            m_aAgenda.erase(cur);
-            CFG_TRACE_INFO_NI("- One pending task canceled");
-        }
-    }
-}
-// -------------------------------------------------------------------------
-
 void OTreeDisposeScheduler::stopAndClearTasks()
 {
     CFG_TRACE_INFO("Cancelling all data cleanup tasks, Stopping Cleanup timer");

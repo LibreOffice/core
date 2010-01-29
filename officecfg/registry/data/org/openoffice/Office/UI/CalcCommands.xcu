@@ -1259,6 +1259,11 @@
                     <value xml:lang="en-US">Select All Sheets</value>
                 </prop>
             </node>
+            <node oor:name=".uno:TableDeselectAll" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Deselect All Sheets</value>
+                </prop>
+            </node>
             <node oor:name=".uno:Add" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Append Sheet</value>

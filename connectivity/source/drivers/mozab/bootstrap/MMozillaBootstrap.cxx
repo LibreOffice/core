@@ -30,6 +30,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
+
 #include "MMozillaBootstrap.hxx"
 
 using namespace com::sun::star::uno;
