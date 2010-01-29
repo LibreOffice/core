@@ -74,6 +74,7 @@
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/ItemStyle.hpp>
 #include <com/sun/star/frame/status/Visibility.hpp>
 
 //_________________________________________________________________________________________________________________
@@ -82,9 +83,9 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/extract.hxx>
 #include <svtools/menuoptions.hxx>
-#include <svtools/historyoptions.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/cmdoptions.hxx>
+#include <unotools/historyoptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/cmdoptions.hxx>
 #include <unotools/localfilehelper.hxx>
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
@@ -136,6 +137,7 @@ static const char ITEM_DESCRIPTOR_LABEL[]             = "Label";
 static const char ITEM_DESCRIPTOR_TYPE[]              = "Type";
 static const char ITEM_DESCRIPTOR_MODULEIDENTIFIER[]  = "ModuleIdentifier";
 static const char ITEM_DESCRIPTOR_DISPATCHPROVIDER[]  = "DispatchProvider";
+static const char   ITEM_DESCRIPTOR_STYLE[]         = "Style";
 
 const sal_Int32   LEN_DESCRIPTOR_COMMANDURL           = 10;
 const sal_Int32   LEN_DESCRIPTOR_HELPURL              = 7;
@@ -144,6 +146,7 @@ const sal_Int32   LEN_DESCRIPTOR_LABEL                = 5;
 const sal_Int32   LEN_DESCRIPTOR_TYPE                 = 4;
 const sal_Int32   LEN_DESCRIPTOR_MODULEIDENTIFIER     = 16;
 const sal_Int32   LEN_DESCRIPTOR_DISPATCHPROVIDER     = 16;
+static const sal_Int32 ITEM_DESCRIPTOR_STYLE_LEN       = 5;
 
 const sal_uInt16 ADDONMENU_MERGE_ITEMID_START = 1500;
 
@@ -1327,6 +1330,11 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
         Reference< XDispatch > xDispatch;
         Reference< XStatusListener > xStatusListener;
         PopupMenu* pPopup = pMenu->GetPopupMenu( nItemId );
+        bool bItemShowMenuImages = m_bShowMenuImages;
+        MenuItemBits nBits =  pMenu->GetItemBits( nItemId );
+        // overwrite the show icons on menu option?
+        if ( nBits )
+            bItemShowMenuImages = ( ( nBits & MIB_ICON ) == MIB_ICON );
         if ( pPopup )
         {
             // Retrieve module identifier from Help Command entry
@@ -1422,7 +1430,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
                         pSubMenuManager->m_aMenuItemCommand = ::rtl::OUString();
 
                         // Set image for the addon popup menu item
-                        if ( m_bShowMenuImages && !pPopup->GetItemImage( ITEMID_ADDONLIST ))
+                        if ( bItemShowMenuImages && !pPopup->GetItemImage( ITEMID_ADDONLIST ))
                         {
                             Reference< XFrame > xTemp( rFrame );
                             Image aImage = GetImageFromURL( xTemp, aItemCommand, FALSE, m_bWasHiContrast );
@@ -1441,7 +1449,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
         }
         else if ( pMenu->GetItemType( i ) != MENUITEM_SEPARATOR )
         {
-            if ( m_bShowMenuImages )
+            if ( bItemShowMenuImages )
             {
                 if ( AddonMenuManager::IsAddonMenuId( nItemId ))
                 {
@@ -1752,7 +1760,7 @@ void MenuBarManager::FillMenu(
         sal_uInt16                      nType = 0;
         Reference< XIndexAccess >       xIndexContainer;
         Reference< XDispatchProvider >  xDispatchProvider( rDispatchProvider );
-
+        sal_Int16 nStyle = 0;
         try
         {
             if ( rItemContainer->getByIndex( n ) >>= aProp )
@@ -1781,6 +1789,8 @@ void MenuBarManager::FillMenu(
                     else if ( aPropName.equalsAsciiL( ITEM_DESCRIPTOR_DISPATCHPROVIDER,
                                                       LEN_DESCRIPTOR_DISPATCHPROVIDER ))
                         aProp[i].Value >>= xDispatchProvider;
+                   else if ( aProp[i].Name.equalsAsciiL( ITEM_DESCRIPTOR_STYLE, ITEM_DESCRIPTOR_STYLE_LEN ))
+                        aProp[i].Value >>= nStyle;
                 }
 
                 if ( nType == ::com::sun::star::ui::ItemType::DEFAULT )
@@ -1791,7 +1801,15 @@ void MenuBarManager::FillMenu(
                     sal_Int32 nHelpId = aHelpURL.toInt32();
                     if ( nHelpId > 0 )
                         pMenu->SetHelpId( nId, (USHORT)nHelpId );
-
+                    if ( nStyle )
+                    {
+                        MenuItemBits nBits = pMenu->GetItemBits( nId );
+                        if ( nStyle & ::com::sun::star::ui::ItemStyle::ICON )
+                           nBits |= MIB_ICON;
+                        if ( nStyle & ::com::sun::star::ui::ItemStyle::TEXT )
+                           nBits |= MIB_TEXT;
+                        pMenu->SetItemBits( nId, nBits );
+                    }
                     if ( xIndexContainer.is() )
                     {
                         PopupMenu* pNewPopupMenu = new PopupMenu;

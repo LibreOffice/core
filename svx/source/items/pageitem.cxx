@@ -40,7 +40,7 @@
 #include <svx/unomid.hxx>
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/style/BreakType.hpp>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;

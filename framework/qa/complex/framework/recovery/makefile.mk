@@ -40,7 +40,7 @@ PACKAGE = complex$/framework$/recovery
 
 #----- compile .java files -----------------------------------------
 
-JARFILES = mysql.jar mysql.jar sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
+JARFILES = mysql.jar mysql.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
 JAVAFILES      = RecoveryTest.java RecoveryTools.java CrashThread.java TimeoutThread.java KlickButtonThread.java
 JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 

@@ -39,8 +39,17 @@
 #include "diagnose_ex.h"
 #include "resource/sharedresources.hxx"
 #include "resource/ado_res.hrc"
+#include "com/sun/star/bridge/oleautomation/Date.hpp"
+#include "com/sun/star/bridge/oleautomation/Currency.hpp"
+#include "com/sun/star/bridge/oleautomation/SCode.hpp"
+#include "com/sun/star/bridge/oleautomation/Decimal.hpp"
 
+using namespace com::sun::star::beans;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::bridge::oleautomation;
 using namespace connectivity::ado;
+using ::rtl::OUString;
+
 OLEString::OLEString()
     :m_sStr(NULL)
 {
@@ -698,6 +707,88 @@ SAFEARRAY* OLEVariant::getUI1SAFEARRAYPtr() const
     return V_ARRAY(&varDest);
 }
 // -----------------------------------------------------------------------------
+::com::sun::star::uno::Any OLEVariant::makeAny() const
+{
+    ::com::sun::star::uno::Any aValue;
+    switch (V_VT(this))
+    {
+        case VT_EMPTY:
+        case VT_NULL:
+            aValue.setValue(NULL, Type());
+            break;
+        case VT_I2:
+            aValue.setValue( & iVal, getCppuType( (sal_Int16*)0));
+            break;
+        case VT_I4:
+            aValue.setValue( & lVal, getCppuType( (sal_Int32*)0));
+            break;
+        case VT_R4:
+            aValue.setValue( & fltVal, getCppuType( (float*)0));
+            break;
+        case VT_R8:
+            aValue.setValue(& dblVal, getCppuType( (double*)0));
+            break;
+        case VT_CY:
+         {
+             Currency cy(cyVal.int64);
+             aValue <<= cy;
+            break;
+         }
+        case VT_DATE:
+         {
+             aValue <<= (::com::sun::star::util::Date)*this;
+            break;
+         }
+        case VT_BSTR:
+        {
+            OUString b(reinterpret_cast<const sal_Unicode*>(bstrVal));
+            aValue.setValue( &b, getCppuType( &b));
+            break;
+        }
+        case VT_BOOL:
+        {
+            sal_Bool b= boolVal == VARIANT_TRUE;
+            aValue.setValue( &b, getCppuType( &b));
+            break;
+        }
+        case VT_I1:
+            aValue.setValue( & cVal, getCppuType((sal_Int8*)0));
+            break;
+        case VT_UI1: // there is no unsigned char in UNO
+            aValue.setValue( & bVal, getCppuType( (sal_Int8*)0));
+            break;
+        case VT_UI2:
+            aValue.setValue( & uiVal, getCppuType( (sal_uInt16*)0));
+            break;
+        case VT_UI4:
+            aValue.setValue( & ulVal, getCppuType( (sal_uInt32*)0));
+            break;
+        case VT_INT:
+            aValue.setValue( & intVal, getCppuType( (sal_Int32*)0));
+            break;
+        case VT_UINT:
+            aValue.setValue( & uintVal, getCppuType( (sal_uInt32*)0));
+            break;
+        case VT_VOID:
+            aValue.setValue( NULL, Type());
+            break;
+         case VT_DECIMAL:
+         {
+             Decimal dec;
+             dec.Scale = decVal.scale;
+             dec.Sign = decVal.sign;
+             dec.LowValue = decVal.Lo32;
+             dec.MiddleValue = decVal.Mid32;
+             dec.HighValue = decVal.Hi32;
+             aValue <<= dec;
+             break;
+         }
+
+        default:
+            break;
+    }
+    return aValue;
+}
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------

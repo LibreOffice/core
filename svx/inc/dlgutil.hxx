@@ -34,8 +34,8 @@
 #ifndef _FIELD_HXX
 #include <vcl/field.hxx>
 #endif
-#include <svtools/poolitem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/poolitem.hxx>
+#include <svl/intitem.hxx>
 #include "svx/svxdllapi.h"
 
 // macro -----------------------------------------------------------------

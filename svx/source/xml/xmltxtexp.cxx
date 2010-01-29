@@ -38,8 +38,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <tools/debug.hxx>
-#include <svtools/itemprop.hxx>
-#include <svtools/brdcst.hxx>
+#include <svl/itemprop.hxx>
+#include <svl/brdcst.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <sfx2/docfile.hxx>
 #ifndef _SVSTOR_HXX

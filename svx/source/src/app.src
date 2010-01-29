@@ -28,16 +28,7 @@
  *
  ************************************************************************/
 
-#ifndef _GLOBLMN_HRC
-#include "globlmn_tmpl.hrc"
-#endif
-#ifndef _GLOBALACC_SRC
-#include "globlac.hrc"
-#endif
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
-
 #include "app.hrc"
 
  //----------------------------------------------------------------------------
@@ -50,34 +41,15 @@ ErrorBox RID_ERRBOX_MODULENOTINSTALLED
     Message [ en-US ] = "The action could not be executed. The %PRODUCTNAME program module needed for this action is currently not installed.";
 };
 
- // Image-Listen ----------------------------------------------------------
-
 #define IMAGE_ID_LIST\
     IdList = {\
         SID_HLINKBAR_LINK; \
         SID_HLINKBAR_SEARCH; \
         SID_HLINKBAR_TARGET; \
         SID_HYPERLINK_DIALOG; \
-        SID_FM_RECORD_ABSOLUTE; \
-        SID_FM_RECORD_FIRST; \
-        SID_FM_RECORD_PREV; \
-        SID_FM_RECORD_NEXT; \
-        SID_FM_RECORD_LAST; \
-        SID_FM_RECORD_SAVE; \
-        SID_FM_RECORD_UNDO; \
-        SID_FM_RECORD_NEW; \
-        SID_FM_RECORD_DELETE; \
-        SID_FM_REFRESH; \
-        SID_FM_SORTUP; \
-        SID_FM_SORTDOWN; \
-        SID_FM_ORDERCRIT; \
-        SID_FM_AUTOFILTER; \
-        SID_FM_FILTERCRIT; \
-        SID_FM_FORM_FILTERED; \
-        SID_FM_REMOVE_FILTER_SORT; \
     };\
     IdCount = {\
-        21;\
+        4;\
     };
 
 ImageList RID_DEFAULTIMAGELIST_SC
@@ -110,29 +82,8 @@ ImageList RID_DEFAULTIMAGELIST_LCH
 
 // Strings ---------------------------------------------------------------
 
-#define MN_EDIT 20
-#define MN_VIEW 21
-#define MN_EXTRA 22
-#define MN_WIN 30
-#define MN_HELP 31
-#define MN_TEMPLATES 11
-
-#define  ACC Accelerator
-#define ACCK AcceleratorItem
-
- // die Acceleratoren
-
 String RID_DESKTOP
 {
     Text = "%PRODUCTNAME" ;
 };
 
-String STR_SD_STAROFFICE_XML_DRAW
-{
-    Text [ en-US ] = "%PRODUCTNAME XML (Draw)";
-};
-
-String STR_SD_STAROFFICE_XML_IMPRESS
-{
-    Text [ en-US ] = "%PRODUCTNAME XML (Impress)";
-};

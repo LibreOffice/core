@@ -329,8 +329,8 @@ extern "C" int NeonSession_NeonAuth( void *       inUserData,
 #ifdef NE_FEATURE_SSPI
     bCanUseSystemCreds = (attempt == 0) && // avoid endless loops
                          ne_has_support( NE_FEATURE_SSPI ) && // Windows-only feature.
-                         ( ne_strcasecmp( inAuthProtocol, "NTLM" ) == 0 ) ||
-                         ( ne_strcasecmp( inAuthProtocol, "Negotiate" ) == 0 );
+                         ( ( ne_strcasecmp( inAuthProtocol, "NTLM" ) == 0 ) ||
+                           ( ne_strcasecmp( inAuthProtocol, "Negotiate" ) == 0 ) );
 #endif
 
     // #i97003# (tkr): Ask XMasterPasswordHandling if we should store the
@@ -1319,8 +1319,11 @@ void NeonSession::POST( const rtl::OUString & inPath,
 void NeonSession::ABORT()
     throw ( DAVException )
 {
-    if (NULL !=m_pHttpSession)
-        ne_close_connection(m_pHttpSession);
+    // 11.11.09 (tkr): The following code lines causing crashes if closing a ongoing connection. It turned out that this existing solution doesn't work in multi-threading environments.
+    // So I disabled them in 3.2. . Issue #73893# should fix it in OOo 3.3.
+
+    //if (NULL !=m_pHttpSession)
+    //  ne_close_connection(m_pHttpSession);
 }
 
 // -------------------------------------------------------------------

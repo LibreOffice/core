@@ -63,7 +63,7 @@ class XGradientTable;
 #include <svx/xfillit0.hxx>
 #include <svx/xtextit0.hxx>
 #include <svx/xsetit.hxx>
-#include <xlinjoit.hxx>
+#include <svx/xlinjoit.hxx>
 
 
 #endif      // _XATTR_HXX

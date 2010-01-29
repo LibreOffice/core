@@ -38,7 +38,7 @@
 #include "osl/file.hxx"
 #include "ucbhelper/content.hxx"
 #include "comphelper/servicedecl.hxx"
-#include "svtools/inettype.hxx"
+#include "svl/inettype.hxx"
 #include "cppuhelper/implbase1.hxx"
 
 using namespace ::com::sun::star;

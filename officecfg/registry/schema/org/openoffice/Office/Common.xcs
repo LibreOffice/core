@@ -844,11 +844,28 @@
 			</prop>
 			<prop oor:name="DynamicBorderColors" oor:type="xs:boolean">
 				<info>
-					<desc>specifies whether the controls should use dynamic border coloring, if possible.
-Dymamic border coloring means that when the mouse is hovered over a control, and when a control receives the focus, this is indicated with special border colors.</desc>
+          <desc>
+            specifies whether the controls should use dynamic border coloring, if possible.
+            Dymamic border coloring means that when the mouse is hovered over a control, and when a control receives the focus, this is indicated with special border colors.
+          </desc>
 				</info>
 				<value>false</value>
 			</prop>
+      <prop oor:name="UseDocumentTextMetrics" oor:type="xs:boolean">
+        <info>
+          <desc>
+            controls whether form controls, when they render their text, use the same metrics as the document
+            does. If this is set to &lt;true&gt;, then the control text's appearance better matches the text
+            in the surrounding document.&lt;/p&gt;
+            &lt;p&gt;Technically, documents use a reference device for formatting, which usually has a higher
+            resolution than the actual output device. The option decides whether form controls should use
+            the same reference device as the surrounding document. However, some of OOo's document implementations
+            do not properly use their reference device in all situations, in which case the option might better
+            be disabled.&lt;p&gt;
+          </desc>
+        </info>
+        <value>true</value>
+      </prop>
 		</group>
 		<group oor:name="ProductVersionID">
 			<info>
@@ -1158,8 +1175,8 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
           <desc>
             This switch decides if Interactions in the DrawingLayer are visualized using Wireframe or Full-Object
             previews. If false, only Wireframe will be used. If true, Full-Object preview which gives a much better
-            feedback about the object interaction will be used. This mode is used for modification and creation of 
-            objects. During interaction, a geometric copy of the object(s) is shown with 50% transparence in the 
+            feedback about the object interaction will be used. This mode is used for modification and creation of
+            objects. During interaction, a geometric copy of the object(s) is shown with 50% transparence in the
             foreground. That copy shows exactly what You will get when You end the interaction.
           </desc>
           <label>This switch determines if DrawingLayer Interactions show Wireframe or Full-Object preview.</label>
@@ -1181,7 +1198,8 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
       <prop oor:name="QuadraticFormControlRenderLimit" oor:type="xs:int">
         <info>
           <author>AW</author>
-          <desc>This defines a Limitation for the default raster conversion of FormControls in edit mode.
+          <desc>
+            This defines a Limitation for the default raster conversion of FormControls in edit mode.
                 These have the ability to be displayed using this fallback to Bitmaps.
                 The number is the maximum number of pixels to use, e.g. 300x150 Pixels is allowed as default.
                 When FormControls would need more Pixels than this, the Bitmap will be limited and scaled to the needed pixel size at paint time.
@@ -1194,8 +1212,8 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
         <info>
           <author>AW</author>
           <desc>
-            This switch defines if the selections in the applications (text or cells) are visualized using 
-            inverse (XOR) when set to false (the old selection method, also used when in HighContrast mode) 
+            This switch defines if the selections in the applications (text or cells) are visualized using
+            inverse (XOR) when set to false (the old selection method, also used when in HighContrast mode)
             or a transparent overlay selection using the system's selection color.
           </desc>
           <label>This switch defines if for text/cell selections the old inverse or the new transparent selection is to be used.</label>
@@ -5356,6 +5374,13 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 						</constraints>
 						<value>0</value>
 					</prop>
+                    <prop oor:name="AllowDuplicateFieldNames" oor:type="xs:boolean">
+						<info>
+							<author>pl</author>
+							<desc>Specifies whether multiple form fields exported are allowed to have the same field name.</desc>
+						</info>
+						<value>false</value>
+                    </prop>
                     <prop oor:name="IsSkipEmptyPages" oor:type="xs:boolean">
                             <info>
                                     <author>FME</author>
@@ -6517,7 +6542,7 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 				<desc>Contains settings for smart tags.</desc>
 			</info>
             <group oor:name="Writer">
-				<info>
+        <info>
     				<author>FME</author>
 					<desc>Contains Writer specific settings for smart tags.</desc>
 				</info>

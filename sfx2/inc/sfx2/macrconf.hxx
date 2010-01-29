@@ -35,7 +35,7 @@
 #include "sal/types.h"
 #include <tools/errcode.hxx>
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>     // SvUShorts
+#include <svl/svstdarr.hxx>     // SvUShorts
 #include <sfx2/evntconf.hxx>
 
 class SfxMacroInfo;

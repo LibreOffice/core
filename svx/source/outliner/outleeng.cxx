@@ -37,7 +37,7 @@
 #include <outleeng.hxx>
 #include <paralist.hxx>
 #include <outliner.hrc>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/eeitem.hxx>
 #include "editstat.hxx"
 #include "outlundo.hxx"
