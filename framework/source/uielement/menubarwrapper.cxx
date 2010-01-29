@@ -37,8 +37,6 @@
 #include <uielement/menubarwrapper.hxx>
 #include <threadhelp/resetableguard.hxx>
 #include <helper/actiontriggerhelper.hxx>
-#include <uielement/constitemcontainer.hxx>
-#include <uielement/rootitemcontainer.hxx>
 #include <services.h>
 
 //_________________________________________________________________________________________________________________
@@ -110,21 +108,13 @@ DEFINE_XTYPEPROVIDER_11 (   MenuBarWrapper                                  ,
 MenuBarWrapper::MenuBarWrapper(
     const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xServiceManager
     )
-:    UIConfigElementWrapperBase( UIElementType::MENUBAR ),
-     m_bRefreshPopupControllerCache( sal_True ),
-     mxServiceFactory( xServiceManager )
+:    UIConfigElementWrapperBase( UIElementType::MENUBAR,xServiceManager ),
+     m_bRefreshPopupControllerCache( sal_True )
 {
 }
 
 MenuBarWrapper::~MenuBarWrapper()
 {
-}
-
-// #110897#
-const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& MenuBarWrapper::getServiceFactory()
-{
-    // #110897#
-    return mxServiceFactory;
 }
 
 void SAL_CALL MenuBarWrapper::dispose() throw (::com::sun::star::uno::RuntimeException)
@@ -173,7 +163,7 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
 
             Reference< XModuleManager > xModuleManager;
             xModuleManager = Reference< XModuleManager >(
-                getServiceFactory()->createInstance(
+                m_xServiceFactory->createInstance(
                     SERVICENAME_MODULEMANAGER ), UNO_QUERY_THROW );
 
             try
@@ -184,15 +174,16 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
             {
             }
 
+            Reference< XURLTransformer > xTrans;
             try
             {
+                xTrans.set( m_xServiceFactory->createInstance(
+                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                                    "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
                 m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, sal_False );
                 if ( m_xConfigData.is() )
                 {
                     // Fill menubar with container contents
-                    Reference< XURLTransformer > xTrans( getServiceFactory()->createInstance(
-                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                    "com.sun.star.util.URLTransformer" ))), UNO_QUERY );
                     USHORT nId = 1;
                     MenuBarManager::FillMenuWithConfiguration( nId, pVCLMenuBar, aModuleIdentifier, m_xConfigData, xTrans );
                 }
@@ -221,8 +212,9 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                 Reference< XDispatchProvider > xDispatchProvider;
 
                 // #110897#
-                MenuBarManager* pMenuBarManager = new MenuBarManager( getServiceFactory(),
+                MenuBarManager* pMenuBarManager = new MenuBarManager( m_xServiceFactory,
                                                                       xFrame,
+                                                                      xTrans,
                                                                       xDispatchProvider,
                                                                       aModuleIdentifier,
                                                                       pVCLMenuBar,
@@ -270,61 +262,15 @@ void SAL_CALL MenuBarWrapper::updateSettings() throw ( RuntimeException )
         }
     }
 }
-
-void SAL_CALL MenuBarWrapper::setSettings( const Reference< XIndexAccess >& xSettings ) throw ( RuntimeException )
+void MenuBarWrapper::impl_fillNewData()
 {
-    ResetableGuard aLock( m_aLock );
+    // Transient menubar => Fill menubar with new data
+    MenuBarManager* pMenuBarManager = static_cast< MenuBarManager *>( m_xMenuBarManager.get() );
 
-    if ( m_bDisposed )
-        throw DisposedException();
-
-    if ( xSettings.is() )
-    {
-        // Create a copy of the data if the container is not const
-        Reference< XIndexReplace > xReplace( xSettings, UNO_QUERY );
-        if ( xReplace.is() )
-            m_xConfigData = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( xSettings ) ), UNO_QUERY );
-        else
-            m_xConfigData = xSettings;
-
-        if ( m_xConfigSource.is() && m_bPersistent )
-        {
-            ::rtl::OUString aResourceURL( m_aResourceURL );
-            Reference< XUIConfigurationManager > xUICfgMgr( m_xConfigSource );
-
-            aLock.unlock();
-
-            try
-            {
-                xUICfgMgr->replaceSettings( aResourceURL, m_xConfigData );
-            }
-            catch( NoSuchElementException& )
-            {
-            }
-        }
-        else if ( !m_bPersistent )
-        {
-            // Transient menubar => Fill menubar with new data
-            MenuBarManager* pMenuBarManager = static_cast< MenuBarManager *>( m_xMenuBarManager.get() );
-
-            if ( pMenuBarManager )
-                pMenuBarManager->SetItemContainer( m_xConfigData );
-        }
-    }
+    if ( pMenuBarManager )
+        pMenuBarManager->SetItemContainer( m_xConfigData );
 }
 
-Reference< XIndexAccess > SAL_CALL MenuBarWrapper::getSettings( sal_Bool bWriteable ) throw ( RuntimeException )
-{
-    ResetableGuard aLock( m_aLock );
-
-    if ( m_bDisposed )
-        throw DisposedException();
-
-    if ( bWriteable )
-        return Reference< XIndexAccess >( static_cast< OWeakObject * >( new RootItemContainer( m_xConfigData ) ), UNO_QUERY );
-    else
-        return m_xConfigData;
-}
 
 void MenuBarWrapper::fillPopupControllerCache()
 {
@@ -333,7 +279,7 @@ void MenuBarWrapper::fillPopupControllerCache()
         MenuBarManager* pMenuBarManager = static_cast< MenuBarManager *>( m_xMenuBarManager.get() );
         if ( pMenuBarManager )
             pMenuBarManager->GetPopupController( m_aPopupControllerCache );
-        if ( m_aPopupControllerCache.size() > 0 )
+        if ( !m_aPopupControllerCache.empty() )
             m_bRefreshPopupControllerCache = sal_False;
     }
 }
@@ -354,7 +300,7 @@ throw (::com::sun::star::uno::RuntimeException)
         throw DisposedException();
 
     fillPopupControllerCache();
-    return ( m_aPopupControllerCache.size() > 0 );
+    return ( !m_aPopupControllerCache.empty() );
 }
 
 // XNameAccess
@@ -374,12 +320,9 @@ throw ( container::NoSuchElementException,
     PopupControllerCache::const_iterator pIter = m_aPopupControllerCache.find( aName );
     if ( pIter != m_aPopupControllerCache.end() )
     {
-        Any a;
         uno::Reference< frame::XDispatchProvider > xDispatchProvider;
         xDispatchProvider = pIter->second.m_xDispatchProvider;
-
-        a = uno::makeAny( xDispatchProvider );
-        return a;
+        return uno::makeAny( xDispatchProvider );
     }
     else
         throw container::NoSuchElementException();

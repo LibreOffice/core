@@ -179,7 +179,6 @@ StatusBarEntryProperty StatusBarEntries[OReadStatusBarDocumentHandler::SB_XML_EN
 OReadStatusBarDocumentHandler::OReadStatusBarDocumentHandler(
     const Reference< XIndexContainer >& rStatusBarItems ) :
     ThreadHelpBase( &Application::GetSolarMutex() ),
-    ::cppu::OWeakObject(),
     m_aStatusBarItems( rStatusBarItems )
 {
     ::rtl::OUString aNamespaceStatusBar( RTL_CONSTASCII_USTRINGPARAM( XMLNS_STATUSBAR ));
@@ -212,18 +211,6 @@ OReadStatusBarDocumentHandler::OReadStatusBarDocumentHandler(
 
 OReadStatusBarDocumentHandler::~OReadStatusBarDocumentHandler()
 {
-}
-
-Any SAL_CALL OReadStatusBarDocumentHandler::queryInterface( const Type & rType )
-throw( RuntimeException )
-{
-    Any a = ::cppu::queryInterface(
-                rType ,
-                SAL_STATIC_CAST( XDocumentHandler*, this ));
-    if ( a.hasValue() )
-        return a;
-
-    return OWeakObject::queryInterface( rType );
 }
 
 // XDocumentHandler
@@ -428,11 +415,11 @@ throw(  SAXException, RuntimeException )
                             aStatusbarItemProp[4].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_WIDTH ));
                             aStatusbarItemProp[5].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ));
 
-                            aStatusbarItemProp[0].Value = makeAny( aCommandURL );
-                            aStatusbarItemProp[1].Value = makeAny( aHelpURL );
-                            aStatusbarItemProp[2].Value = makeAny( nOffset );
-                            aStatusbarItemProp[3].Value = makeAny( nItemBits );
-                            aStatusbarItemProp[4].Value = makeAny( nWidth );
+                            aStatusbarItemProp[0].Value <<= aCommandURL;
+                            aStatusbarItemProp[1].Value <<= aHelpURL;
+                            aStatusbarItemProp[2].Value <<= nOffset;
+                            aStatusbarItemProp[3].Value <<= nItemBits;
+                            aStatusbarItemProp[4].Value <<= nWidth;
                             aStatusbarItemProp[5].Value = makeAny( ::com::sun::star::ui::ItemType::DEFAULT );
 
                             m_aStatusBarItems->insertByIndex( m_aStatusBarItems->getCount(), makeAny( aStatusbarItemProp ) );

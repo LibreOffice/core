@@ -98,12 +98,6 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const OUSTRING & aName, const ANY &
 
             // create Configuration at first, creation might call this method also and that would overwrite everything
             // we might have stored before!
-            USHORT nID = (USHORT) SfxEventConfiguration::GetEventId_Impl( aName );
-            OSL_ENSURE( nID, "SfxEvents_Impl::replaceByName: no ID for the given event!" );
-            if ( !nID )
-                // throw?
-                return;
-
             if ( mpObjShell && !mpObjShell->IsLoading() )
                 mpObjShell->SetModified( TRUE );
 
@@ -370,7 +364,7 @@ SfxEvents_Impl::SfxEvents_Impl( SfxObjectShell* pShell,
     if ( pShell )
         maEventNames = pShell->GetEventNames();
     else
-        maEventNames = SfxObjectShell::GetEventNames_Impl();
+        maEventNames = GlobalEventConfig().getElementNames();
 
     maEventData = SEQUENCE < ANY > ( maEventNames.getLength() );
 
@@ -646,24 +640,6 @@ SfxGlobalEvents_Impl::~SfxGlobalEvents_Impl()
 }
 
 //-----------------------------------------------------------------------------
-void SfxGlobalEvents_Impl::Notify( SfxBroadcaster& /*aBC*/, const SfxHint& aHint )
-{
-    SfxEventHint* pNamedHint = PTR_CAST(SfxEventHint, &aHint);
-    if (!pNamedHint)
-        return;
-
-    css::uno::Reference< css::document::XEventsSupplier > xSup;
-
-    ::rtl::OUString sName  = SfxEventConfiguration::GetEventName_Impl(pNamedHint->GetEventId());
-    SfxObjectShell* pShell = pNamedHint->GetObjShell();
-    if (pShell)
-        xSup = css::uno::Reference< css::document::XEventsSupplier >(pShell->GetModel(), UNO_QUERY);
-
-    css::document::EventObject aEvent(xSup, sName);
-    notifyEvent(aEvent);
-}
-
-//-----------------------------------------------------------------------------
 css::uno::Reference< css::container::XNameReplace > SAL_CALL SfxGlobalEvents_Impl::getEvents()
     throw(css::uno::RuntimeException)
 {
@@ -708,7 +684,7 @@ void SAL_CALL SfxGlobalEvents_Impl::notifyDocumentEvent( const ::rtl::OUString& 
         const css::uno::Reference< css::frame::XController2 >& /*_ViewController*/, const css::uno::Any& /*_Supplement*/ )
         throw (css::lang::IllegalArgumentException, css::lang::NoSupportException, css::uno::RuntimeException)
 {
-    // we're a multiplexer only, no change to generate artifical events here
+    // we're a multiplexer only, no chance to generate artifical events here
     throw css::lang::NoSupportException(::rtl::OUString(), *this);
 }
 

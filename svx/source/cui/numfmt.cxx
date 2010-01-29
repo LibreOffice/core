@@ -292,7 +292,6 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage( Window*             pParent,
         pNumFmtShell    ( NULL ),
         nInitFormat     ( ULONG_MAX ),
 
-        aStrEurope      ( THIS_SVX_RES( STR_EUROPE) ),
         sAutomaticEntry ( THIS_SVX_RES( STR_AUTO_ENTRY)),
         pLastActivWindow( NULL )
 {
@@ -1887,7 +1886,7 @@ void SvxNumberFormatTabPage::FillCurrencyBox()
     USHORT  nPos=0;
     USHORT  nSelPos=0;
 
-    pNumFmtShell->GetCurrencySymbols(aList,aStrEurope,&nSelPos);
+    pNumFmtShell->GetCurrencySymbols( aList, &nSelPos);
 
     for(USHORT i=1;i<aList.Count();i++)
     {

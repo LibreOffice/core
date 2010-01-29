@@ -10,7 +10,7 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\global\accelerator\es
 ..\%__SRC%\inc\svxslots.ilb %_DEST%\inc%_EXT%\svxslots.ilb
 ..\%__SRC%\inc\*.ilb* %_DEST%\inc%_EXT%\*.ilb*
 ..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
-..\%__SRC%\lib\isvx.lib %_DEST%\lib%_EXT%\isvx.lib
+..\%__SRC%\lib\isvx*.lib %_DEST%\lib%_EXT%\isvx*.lib
 ..\%__SRC%\bin\gengal* %_DEST%\bin%_EXT%\gengal*
 ..\%__SRC%\bin\gengalrc %_DEST%\bin%_EXT%\gengal.ini
 ..\%__SRC%\bin\cui*.dll %_DEST%\bin%_EXT%\cui*.dll
@@ -554,6 +554,8 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\svx\SmartTagCtl.hxx %_DEST%\inc%_EXT%\svx\SmartTagCtl.hxx
 ..\inc\svx\databaselocationinput.hxx %_DEST%\inc%_EXT%\svx\databaselocationinput.hxx
 ..\inc\xlinjoit.hxx %_DEST%\inc%_EXT%\svx\xlinjoit.hxx
+..\inc\svx\dbcharsethelper.hxx %_DEST%\inc%_EXT%\svx\dbcharsethelper.hxx
+..\inc\svx\dbtoolsclient.hxx %_DEST%\inc%_EXT%\svx\dbtoolsclient.hxx
 
 mkdir: %_DEST%\inc%_EXT%\svx\sdr
 mkdir: %_DEST%\inc%_EXT%\svx\sdr\properties
@@ -604,6 +606,7 @@ mkdir: %_DEST%\inc%_EXT%\svx\sdr\overlay
 ..\inc\svx\sdr\overlay\overlaypolypolygon.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlaypolypolygon.hxx
 ..\inc\svx\sdr\overlay\overlayobjectcell.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlayobjectcell.hxx
 ..\inc\svx\sdr\overlay\overlayprimitive2dsequenceobject.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlayprimitive2dsequenceobject.hxx
+..\inc\svx\sdr\overlay\overlayselection.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlayselection.hxx
 ..\inc\svx\sdr\overlay\overlaytools.hxx %_DEST%\inc%_EXT%\svx\sdr\overlay\overlaytools.hxx
 
 mkdir: %_DEST%\inc%_EXT%\svx\sdr\animation

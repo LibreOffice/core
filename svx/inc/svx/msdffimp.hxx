@@ -36,9 +36,7 @@
 #include <tools/solar.h>        // UINTXX
 #include <svtools/svarray.hxx>
 
-#ifndef _SV_COLOR_HXX //autogen
 #include <tools/color.hxx>
-#endif
 #include <tools/gen.hxx>
 #include <tools/table.hxx>
 #include <svx/msdffdef.hxx>
@@ -48,7 +46,7 @@
 
 #include <map>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include "svx/svxdllapi.h"
+#include <svx/svxdllapi.h>
 
 #include <sot/storage.hxx>
 
@@ -483,6 +481,7 @@ public:
     MSFilterTracer*     mpTracer;
     sal_Bool            mbTracing;
 
+    Color MSO_TEXT_CLR_ToColor( sal_uInt32 nColorCode ) const;
     Color MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nContextProperty = DFF_Prop_lineColor ) const;
     virtual BOOL SeekToShape( SvStream& rSt, void* pClientData, UINT32 nId ) const;
     FASTBOOL SeekToRec( SvStream& rSt, USHORT nRecId, ULONG nMaxFilePos, DffRecordHeader* pRecHd = NULL, ULONG nSkipCount = 0 ) const;

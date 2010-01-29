@@ -460,7 +460,7 @@ void OSQLParseTreeIterator::traverseOneTableName( OSQLTables& _rTables,const OSQ
     ::rtl::OUString aTableRange(rTableRange);
 
     // Tabellenname abholen
-    OSQLParseNode::getTableComponents(pTableName,aCatalog,aSchema,aTableName);
+    OSQLParseNode::getTableComponents(pTableName,aCatalog,aSchema,aTableName,m_pImpl->m_xDatabaseMetaData);
 
     // create the composed name like DOMAIN.USER.TABLE1
     aComposedName = ::dbtools::composeTableName(m_pImpl->m_xDatabaseMetaData,
@@ -1687,13 +1687,7 @@ void OSQLParseTreeIterator::setSelectColumnName(::vos::ORef<OSQLColumns>& _rColu
         OSL_ENSURE(_rColumns == m_aSelectColumns,"Invalid columns used here!");
         ConstOSQLTablesIterator aFind = m_pImpl->m_pTables->find(rTableRange);
 
-        if(aFind == m_pImpl->m_pTables->end())
-        {
-            ::rtl::OUString strExpression = rTableRange;
-            strExpression += ::rtl::OUString::createFromAscii(".");
-            strExpression += rColumnName;
-        }
-        else
+        if(aFind != m_pImpl->m_pTables->end())
             appendColumns(_rColumns,rTableRange,aFind->second);
     }
     else if ( !rTableRange.getLength() )
@@ -1813,11 +1807,6 @@ void OSQLParseTreeIterator::setSelectColumnName(::vos::ORef<OSQLColumns>& _rColu
         // Tabelle existiert nicht oder Feld nicht vorhanden
         if (bError)
         {
-            ::rtl::OUString strExpression = rTableRange;
-            if (strExpression.getLength())
-                strExpression += ::rtl::OUString::createFromAscii(".");
-            strExpression += rColumnName;
-
             ::rtl::OUString aNewColName(getUniqueColumnName(rColumnAlias));
 
             OParseColumn* pColumn = new OParseColumn(aNewColName,::rtl::OUString(),::rtl::OUString(),

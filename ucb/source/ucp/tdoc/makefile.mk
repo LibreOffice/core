@@ -43,6 +43,7 @@ NO_BSYMBOLIC=TRUE
 .INCLUDE: settings.mk
 
 # --- General -----------------------------------------------------
+.IF "$(L10N_framework)"==""
 
 # no "lib" prefix
 DLLPRE =
@@ -88,6 +89,8 @@ SYMBOLPREFIX=$(TARGET)
 .ENDIF
 
 DEF1NAME=$(SHL1TARGET)
+
+.ENDIF # L10N_framework
 
 # --- Targets ----------------------------------------------------------
 

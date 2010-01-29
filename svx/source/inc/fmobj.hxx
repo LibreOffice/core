@@ -62,8 +62,8 @@ class FmFormObj: public SdrUnoObj
                             // only to be used for comparison with the current ref device!
 
 public:
-    FmFormObj(const ::rtl::OUString& rModelName,sal_Int32 _nType);
-    FmFormObj(sal_Int32 _nType);
+    SVX_DLLPUBLIC FmFormObj(const ::rtl::OUString& rModelName,sal_Int32 _nType);
+    SVX_DLLPUBLIC FmFormObj(sal_Int32 _nType);
 
     TYPEINFO();
 

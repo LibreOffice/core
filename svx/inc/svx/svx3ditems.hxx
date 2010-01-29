@@ -48,12 +48,12 @@ public:
 
 class Svx3DBackscaleItem : public SfxUInt16Item {
 public:
-    Svx3DBackscaleItem(sal_uInt16 nVal = 100);
+    SVX_DLLPUBLIC Svx3DBackscaleItem(sal_uInt16 nVal = 100);
 };
 
 class Svx3DDepthItem : public SfxUInt32Item {
 public:
-    Svx3DDepthItem(sal_uInt32 nVal = 1000);
+    SVX_DLLPUBLIC Svx3DDepthItem(sal_uInt32 nVal = 1000);
 };
 
 class SVX_DLLPUBLIC Svx3DHorizontalSegmentsItem : public SfxUInt32Item {
@@ -63,12 +63,12 @@ public:
 
 class Svx3DVerticalSegmentsItem : public SfxUInt32Item {
 public:
-    Svx3DVerticalSegmentsItem(sal_uInt32 nVal = 24);
+    SVX_DLLPUBLIC Svx3DVerticalSegmentsItem(sal_uInt32 nVal = 24);
 };
 
 class Svx3DEndAngleItem : public SfxUInt32Item {
 public:
-    Svx3DEndAngleItem(sal_uInt32 nVal = 3600);
+    SVX_DLLPUBLIC Svx3DEndAngleItem(sal_uInt32 nVal = 3600);
 };
 
 class SVX_DLLPUBLIC Svx3DDoubleSidedItem : public SfxBoolItem {
@@ -85,29 +85,29 @@ public:
     virtual sal_uInt16 GetVersion(sal_uInt16 nFileFormatVersion) const;
 };
 
-class Svx3DNormalsKindItem : public SfxUInt16Item {
+class SVX_DLLPUBLIC Svx3DNormalsKindItem : public SfxUInt16Item {
 public:
     Svx3DNormalsKindItem(sal_uInt16 nVal = 0);
 
     // use drawing::NormalsKind
-    virtual sal_Bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool = NULL) const;
+    SVX_DLLPRIVATE virtual  sal_Bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    SVX_DLLPRIVATE virtual  sal_Bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    SVX_DLLPRIVATE virtual SfxPoolItem* Clone(SfxItemPool* pPool = NULL) const;
 };
 
 class Svx3DNormalsInvertItem : public SfxBoolItem {
 public:
-    Svx3DNormalsInvertItem(BOOL bVal = 0);
+    SVX_DLLPUBLIC Svx3DNormalsInvertItem(BOOL bVal = 0);
 };
 
-class Svx3DTextureProjectionXItem : public SfxUInt16Item {
+class SVX_DLLPUBLIC Svx3DTextureProjectionXItem : public SfxUInt16Item {
 public:
     Svx3DTextureProjectionXItem(sal_uInt16 nVal = 0);
 
     // use drawing::TextureProjectionMode
-    virtual sal_Bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool = NULL) const;
+    SVX_DLLPRIVATE virtual  sal_Bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    SVX_DLLPRIVATE virtual  sal_Bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    SVX_DLLPRIVATE virtual SfxPoolItem* Clone(SfxItemPool* pPool = NULL) const;
 };
 
 class SVX_DLLPUBLIC Svx3DTextureProjectionYItem : public SfxUInt16Item {
@@ -122,7 +122,7 @@ public:
 
 class Svx3DShadow3DItem : public SfxBoolItem {
 public:
-    Svx3DShadow3DItem(BOOL bVal = 0);
+    SVX_DLLPUBLIC Svx3DShadow3DItem(BOOL bVal = 0);
 };
 
 class Svx3DMaterialColorItem : public SvxColorItem {
@@ -132,68 +132,68 @@ public:
 
 class Svx3DMaterialEmissionItem : public SvxColorItem {
 public:
-    Svx3DMaterialEmissionItem(const Color& rCol = Color(0x00000000));
+    SVX_DLLPUBLIC Svx3DMaterialEmissionItem(const Color& rCol = Color(0x00000000));
 };
 
 class Svx3DMaterialSpecularItem : public SvxColorItem {
 public:
-    Svx3DMaterialSpecularItem(const Color& rCol = Color(0x00ffffff));
+    SVX_DLLPUBLIC Svx3DMaterialSpecularItem(const Color& rCol = Color(0x00ffffff));
 };
 
 class Svx3DMaterialSpecularIntensityItem : public SfxUInt16Item {
 public:
-    Svx3DMaterialSpecularIntensityItem(sal_uInt16 nVal = 15);
+    SVX_DLLPUBLIC Svx3DMaterialSpecularIntensityItem(sal_uInt16 nVal = 15);
 };
 
-class Svx3DTextureKindItem : public SfxUInt16Item {
+class SVX_DLLPUBLIC Svx3DTextureKindItem : public SfxUInt16Item {
 public:
     Svx3DTextureKindItem(sal_uInt16 nVal = 3);
 
     // use drawing::TextureKind
-    virtual sal_Bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool = NULL) const;
+    SVX_DLLPRIVATE virtual  sal_Bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    SVX_DLLPRIVATE virtual  sal_Bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    SVX_DLLPRIVATE virtual SfxPoolItem* Clone(SfxItemPool* pPool = NULL) const;
 };
 
-class Svx3DTextureModeItem : public SfxUInt16Item {
+class SVX_DLLPUBLIC Svx3DTextureModeItem : public SfxUInt16Item {
 public:
     Svx3DTextureModeItem(sal_uInt16 nVal = 2);
 
     // use drawing:TextureMode
-    virtual sal_Bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool = NULL) const;
+    SVX_DLLPRIVATE virtual  sal_Bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    SVX_DLLPRIVATE virtual  sal_Bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    SVX_DLLPRIVATE virtual SfxPoolItem* Clone(SfxItemPool* pPool = NULL) const;
 };
 
 class Svx3DTextureFilterItem : public SfxBoolItem {
 public:
-    Svx3DTextureFilterItem(BOOL bVal = 0);
+    SVX_DLLPUBLIC Svx3DTextureFilterItem(BOOL bVal = 0);
 };
 
 // Svx3D _3DSCENE_ Items
-class Svx3DPerspectiveItem : public SfxUInt16Item {
+class SVX_DLLPUBLIC Svx3DPerspectiveItem : public SfxUInt16Item {
 public:
     Svx3DPerspectiveItem(sal_uInt16 nVal = (sal_uInt16)PR_PERSPECTIVE);
 
     // use drawing::ProjectionMode
-    virtual sal_Bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool = NULL) const;
+    SVX_DLLPRIVATE virtual  sal_Bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    SVX_DLLPRIVATE virtual  sal_Bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    SVX_DLLPRIVATE virtual SfxPoolItem* Clone(SfxItemPool* pPool = NULL) const;
 };
 
 class Svx3DDistanceItem : public SfxUInt32Item {
 public:
-    Svx3DDistanceItem(sal_uInt32 nVal = 100);
+    SVX_DLLPUBLIC Svx3DDistanceItem(sal_uInt32 nVal = 100);
 };
 
 class Svx3DFocalLengthItem : public SfxUInt32Item {
 public:
-    Svx3DFocalLengthItem(sal_uInt32 nVal = 100);
+    SVX_DLLPUBLIC Svx3DFocalLengthItem(sal_uInt32 nVal = 100);
 };
 
 class Svx3DTwoSidedLightingItem : public SfxBoolItem {
 public:
-    Svx3DTwoSidedLightingItem(BOOL bVal = 0);
+    SVX_DLLPUBLIC Svx3DTwoSidedLightingItem(BOOL bVal = 0);
 };
 
 class SVX_DLLPUBLIC Svx3DLightcolor1Item : public SvxColorItem {
@@ -323,17 +323,17 @@ public:
 
 class Svx3DShadowSlantItem : public SfxUInt16Item {
 public:
-    Svx3DShadowSlantItem(sal_uInt16 nVal = 0);
+    SVX_DLLPUBLIC Svx3DShadowSlantItem(sal_uInt16 nVal = 0);
 };
 
-class Svx3DShadeModeItem : public SfxUInt16Item {
+class SVX_DLLPUBLIC Svx3DShadeModeItem : public SfxUInt16Item {
 public:
     Svx3DShadeModeItem(sal_uInt16 nVal = 2);
 
     // use drawing::ShadeMode
-    virtual sal_Bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool = NULL) const;
+    SVX_DLLPRIVATE virtual  sal_Bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    SVX_DLLPRIVATE virtual  sal_Bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    SVX_DLLPRIVATE virtual SfxPoolItem* Clone(SfxItemPool* pPool = NULL) const;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -362,19 +362,19 @@ public:
 };
 
 // #107245# Item to replace bExtrudeCloseFront and bLatheCloseFront
-class Svx3DCloseFrontItem : public SfxBoolItem {
+class SVX_DLLPUBLIC Svx3DCloseFrontItem : public SfxBoolItem {
 public:
     Svx3DCloseFrontItem(BOOL bVal = 1);
-    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nItemVersion) const;
-    virtual sal_uInt16 GetVersion(sal_uInt16 nFileFormatVersion) const;
+    SVX_DLLPRIVATE virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nItemVersion) const;
+    SVX_DLLPRIVATE virtual sal_uInt16 GetVersion(sal_uInt16 nFileFormatVersion) const;
 };
 
 // #107245# Item to replace bExtrudeCloseBack and bLatheCloseBack
-class Svx3DCloseBackItem : public SfxBoolItem {
+class SVX_DLLPUBLIC Svx3DCloseBackItem : public SfxBoolItem {
 public:
     Svx3DCloseBackItem(BOOL bVal = 1);
-    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nItemVersion) const;
-    virtual sal_uInt16 GetVersion(sal_uInt16 nFileFormatVersion) const;
+    SVX_DLLPRIVATE virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nItemVersion) const;
+    SVX_DLLPRIVATE virtual sal_uInt16 GetVersion(sal_uInt16 nFileFormatVersion) const;
 };
 
 #endif // _SVX3DITEMS_HXX

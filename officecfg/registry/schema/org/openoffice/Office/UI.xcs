@@ -418,11 +418,11 @@
 			</group>
 			<group oor:name="CalcNotesBackground">
 				<info>
-					<desc>Specifies the settings used for the background of notes in Calc.</desc>
+					<desc>Specifies the settings used for the background of comments in Calc.</desc>
 				</info>
 				<prop oor:name="Color" oor:type="xs:int">
 					<info>
-						<desc>Specifies the color used for the background of notes.</desc>
+						<desc>Specifies the color used for the background of comments.</desc>
 					</info>
 				</prop>
 			</group>

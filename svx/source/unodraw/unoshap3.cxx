@@ -760,7 +760,10 @@ Svx3DLatheObject::~Svx3DLatheObject() throw()
 {
 }
 
-static bool PolyPolygonShape3D_to_B3dPolyPolygon( const Any& rValue, basegfx::B3DPolyPolygon& rResultPolygon )
+bool PolyPolygonShape3D_to_B3dPolyPolygon(
+    const Any& rValue,
+    basegfx::B3DPolyPolygon& rResultPolygon,
+    bool bCorrectPolygon)
 {
     drawing::PolyPolygonShape3D aSourcePolyPolygon;
     if( !(rValue >>= aSourcePolyPolygon) )
@@ -791,7 +794,14 @@ static bool PolyPolygonShape3D_to_B3dPolyPolygon( const Any& rValue, basegfx::B3
         pInnerSequenceX++;
         pInnerSequenceY++;
         pInnerSequenceZ++;
-        basegfx::tools::checkClosed(aNewPolygon);
+
+        // #i101520# correction is needed for imported polygons of old format,
+        // see callers
+        if(bCorrectPolygon)
+        {
+            basegfx::tools::checkClosed(aNewPolygon);
+        }
+
         rResultPolygon.append(aNewPolygon);
     }
     return true;
@@ -855,7 +865,9 @@ bool Svx3DLatheObject::setPropertyValueImpl( const ::rtl::OUString& rName, const
     {
         // Polygondefinition in das Objekt packen
         basegfx::B3DPolyPolygon aNewB3DPolyPolygon;
-        if( PolyPolygonShape3D_to_B3dPolyPolygon( rValue, aNewB3DPolyPolygon ) )
+
+        // #i101520# Probably imported
+        if( PolyPolygonShape3D_to_B3dPolyPolygon( rValue, aNewB3DPolyPolygon, true ) )
         {
             // #105127# SetPolyPoly3D sets the Svx3DVerticalSegmentsItem to the number
             // of points of the polygon. Thus, value gets lost. To avoid this, rescue
@@ -973,7 +985,9 @@ bool Svx3DExtrudeObject::setPropertyValueImpl( const ::rtl::OUString& rName, con
     {
         // Polygondefinition in das Objekt packen
         basegfx::B3DPolyPolygon aNewB3DPolyPolygon;
-        if( PolyPolygonShape3D_to_B3dPolyPolygon( rValue, aNewB3DPolyPolygon ) )
+
+        // #i101520# Probably imported
+        if( PolyPolygonShape3D_to_B3dPolyPolygon( rValue, aNewB3DPolyPolygon, true ) )
         {
             // Polygon setzen
             const basegfx::B3DHomMatrix aIdentity;
@@ -1082,7 +1096,9 @@ bool Svx3DPolygonObject::setPropertyValueImpl( const ::rtl::OUString& rName, con
     {
         // Polygondefinition in das Objekt packen
         basegfx::B3DPolyPolygon aNewB3DPolyPolygon;
-        if( PolyPolygonShape3D_to_B3dPolyPolygon( rValue, aNewB3DPolyPolygon ) )
+
+        // #i101520# Direct API data (e.g. from chart)
+        if( PolyPolygonShape3D_to_B3dPolyPolygon( rValue, aNewB3DPolyPolygon, false ) )
         {
             // Polygon setzen
             static_cast<E3dPolygonObj*>(mpObj.get())->SetPolyPolygon3D(aNewB3DPolyPolygon);
@@ -1094,7 +1110,9 @@ bool Svx3DPolygonObject::setPropertyValueImpl( const ::rtl::OUString& rName, con
     {
         // Normalendefinition in das Objekt packen
         basegfx::B3DPolyPolygon aNewB3DPolyPolygon;
-        if( PolyPolygonShape3D_to_B3dPolyPolygon( rValue, aNewB3DPolyPolygon ) )
+
+        // #i101520# Direct API data (e.g. from chart)
+        if( PolyPolygonShape3D_to_B3dPolyPolygon( rValue, aNewB3DPolyPolygon, false ) )
         {
             // Polygon setzen
             static_cast<E3dPolygonObj*>(mpObj.get())->SetPolyNormals3D(aNewB3DPolyPolygon);
@@ -1106,7 +1124,9 @@ bool Svx3DPolygonObject::setPropertyValueImpl( const ::rtl::OUString& rName, con
     {
         // Texturdefinition in das Objekt packen
         basegfx::B3DPolyPolygon aNewB3DPolyPolygon;
-        if( PolyPolygonShape3D_to_B3dPolyPolygon( rValue, aNewB3DPolyPolygon ) )
+
+        // #i101520# Direct API data (e.g. from chart)
+        if( PolyPolygonShape3D_to_B3dPolyPolygon( rValue, aNewB3DPolyPolygon, false ) )
         {
             // Polygon setzen
             const basegfx::B3DHomMatrix aIdentity;

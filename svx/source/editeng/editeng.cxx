@@ -86,11 +86,9 @@
 #include <vcl/help.hxx>
 #include <svx/xpoly.hxx>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
-#ifndef _COM_SUN_STAR_I18N_XINPUTSEQUENCECHECKER_HPP_
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
-#endif
 
-#include <srchdlg.hxx>
+#include <sfx2/srchdefs.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <svx/frmdiritem.hxx>
@@ -99,16 +97,9 @@
 
 // Spaeter -> TOOLS\STRING.H (fuer Grep: WS_TARGET)
 
-//using namespace ::rtl;
-//using namespace ::utl;
 using namespace ::com::sun::star;
-//using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::uno;
-//using namespace ::com::sun::star::lang;
-//using namespace ::com::sun::star::beans;
-//using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::linguistic2;
-
 
 
 DBG_NAME( EditEngine )
@@ -706,13 +697,33 @@ sal_uInt16 EditEngine::GetParagraphCount() const
 sal_uInt16 EditEngine::GetLineCount( sal_uInt16 nParagraph ) const
 {
     DBG_CHKTHIS( EditEngine, 0 );
+    if ( !pImpEditEngine->IsFormatted() )
+        pImpEditEngine->FormatDoc();
     return pImpEditEngine->GetLineCount( nParagraph );
 }
 
 sal_uInt16 EditEngine::GetLineLen( sal_uInt16 nParagraph, sal_uInt16 nLine ) const
 {
     DBG_CHKTHIS( EditEngine, 0 );
+    if ( !pImpEditEngine->IsFormatted() )
+        pImpEditEngine->FormatDoc();
     return pImpEditEngine->GetLineLen( nParagraph, nLine );
+}
+
+void EditEngine::GetLineBoundaries( /*out*/USHORT &rStart, /*out*/USHORT &rEnd, USHORT nParagraph, USHORT nLine ) const
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    if ( !pImpEditEngine->IsFormatted() )
+        pImpEditEngine->FormatDoc();
+    return pImpEditEngine->GetLineBoundaries( rStart, rEnd, nParagraph, nLine );
+}
+
+USHORT EditEngine::GetLineNumberAtIndex( USHORT nPara, USHORT nIndex ) const
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    if ( !pImpEditEngine->IsFormatted() )
+        pImpEditEngine->FormatDoc();
+    return pImpEditEngine->GetLineNumberAtIndex( nPara, nIndex );
 }
 
 sal_uInt32 EditEngine::GetLineHeight( sal_uInt16 nParagraph, sal_uInt16 nLine )

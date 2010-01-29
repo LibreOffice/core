@@ -278,19 +278,6 @@ namespace sdr
         void CellProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr)
         {
             TextProperties::SetStyleSheet( pNewStyleSheet, bDontRemoveHardAttr );
-
-            if( bDontRemoveHardAttr && pNewStyleSheet )
-            {
-                GetObjectItemSet();
-
-                const SfxItemSet& rStyleAttribs = pNewStyleSheet->GetItemSet();
-
-                for ( USHORT nWhich = SDRATTR_START; nWhich <= SDRATTR_TABLE_LAST; nWhich++ )
-                {
-                    if ( rStyleAttribs.GetItemState( nWhich ) == SFX_ITEM_ON )
-                        mpItemSet->ClearItem( nWhich );
-                }
-            }
         }
     } // end of namespace properties
 } // end of namespace sdr
@@ -1755,6 +1742,72 @@ void SAL_CALL Cell::disposing( const EventObject& /*Source*/ ) throw (RuntimeExc
 {
     mxTable.clear();
     dispose();
+}
+
+static OUString getCellName( sal_Int32 nCol, sal_Int32 nRow )
+{
+    rtl::OUStringBuffer aBuf;
+
+    if (nCol < 26*26)
+    {
+        if (nCol < 26)
+            aBuf.append( static_cast<sal_Unicode>( 'A' +
+                        static_cast<sal_uInt16>(nCol)));
+        else
+        {
+            aBuf.append( static_cast<sal_Unicode>( 'A' +
+                        (static_cast<sal_uInt16>(nCol) / 26) - 1));
+            aBuf.append( static_cast<sal_Unicode>( 'A' +
+                        (static_cast<sal_uInt16>(nCol) % 26)));
+        }
+    }
+    else
+    {
+        String aStr;
+        while (nCol >= 26)
+        {
+            sal_Int32 nC = nCol % 26;
+            aStr += static_cast<sal_Unicode>( 'A' +
+                    static_cast<sal_uInt16>(nC));
+            nCol = nCol - nC;
+            nCol = nCol / 26 - 1;
+        }
+        aStr += static_cast<sal_Unicode>( 'A' +
+                static_cast<sal_uInt16>(nCol));
+        aStr.Reverse();
+        aBuf.append( aStr);
+    }
+    aBuf.append( OUString::valueOf(nRow+1) );
+    return aBuf.makeStringAndClear();
+}
+
+OUString Cell::getName()
+{
+    // todo: optimize!
+    OUString sName;
+    if( mxTable.is() ) try
+    {
+        Reference< XCell > xThis( static_cast< XCell* >( this ) );
+
+        sal_Int32 nRowCount = mxTable->getRowCount();
+        sal_Int32 nColCount = mxTable->getColumnCount();
+        for( sal_Int32 nRow = 0; nRow < nRowCount; nRow++ )
+        {
+            for( sal_Int32 nCol = 0; nCol < nColCount; nCol++ )
+            {
+                Reference< XCell > xCell( mxTable->getCellByPosition( nCol, nRow ) );
+                if( xCell == xThis )
+                {
+                    return getCellName( nCol, nRow );
+                }
+            }
+        }
+    }
+    catch( Exception& )
+    {
+    }
+
+    return sName;
 }
 
 } }

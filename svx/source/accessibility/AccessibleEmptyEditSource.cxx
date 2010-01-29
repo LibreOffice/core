@@ -161,6 +161,8 @@ namespace accessibility
         sal_Bool        GetAttributeRun( USHORT&, USHORT&, USHORT, USHORT ) const { return sal_False; }
         USHORT          GetLineCount( USHORT nPara ) const { return nPara == 0 ? 1 : 0; }
         USHORT          GetLineLen( USHORT, USHORT ) const { return 0; }
+        void            GetLineBoundaries( /*out*/USHORT & rStart, /*out*/USHORT & rEnd, USHORT /*nParagraph*/, USHORT /*nLine*/ ) const  { rStart = rEnd = 0; }
+        USHORT          GetLineNumberAtIndex( USHORT /*nPara*/, USHORT /*nIndex*/ ) const   { return 0; }
 
         // the following two methods would, strictly speaking, require
         // a switch to a real EditSource, too. Fortunately, the
@@ -336,6 +338,13 @@ namespace accessibility
             // to become a full-fledged EditSource the first time a
             // user start entering text in a previously empty object.
             if( mbEditSourceEmpty )
+                Switch2ProxyEditSource();
+        }
+        else if (pSdrHint && pSdrHint->GetObject()!=NULL)
+        {
+            // When the SdrObject just got a para outliner object then
+            // switch the edit source.
+            if (pSdrHint->GetObject()->GetOutlinerParaObject() != NULL)
                 Switch2ProxyEditSource();
         }
 

@@ -35,7 +35,6 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <cppuhelper/interfacecontainer.h>
@@ -357,10 +356,6 @@ uno::Sequence<rtl::OUString> SAL_CALL SalAquaFilePicker::getFiles() throw( uno::
             if (nFiles > 1) {
                 aSelectedFiles[0] = OUString(sDirectoryURL);
             }
-
-            implsetDisplayDirectory(sDirectoryURL);
-
-            OSL_TRACE("dir url: %s", OUStringToOString(sDirectoryURL, RTL_TEXTENCODING_UTF8).getStr());
         }
 
         short nSequenceIndex = nFiles > 1 ? nIndex + 1 : nIndex;
@@ -453,12 +448,7 @@ throw( uno::RuntimeException )
     m_pControlHelper->setValue(nControlId, nControlAction, rValue);
 
     if (nControlId == ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION && m_nDialogType == NAVIGATIONSERVICES_SAVE) {
-        sal_Bool bAutoExtensionOn = sal_False;
-        rValue >>= bAutoExtensionOn;
-        if (bAutoExtensionOn == sal_True) {
-            [m_pDialog setExtensionHidden:bAutoExtensionOn];
-            updateSaveFileNameExtension();
-        }
+        updateSaveFileNameExtension();
     }
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
@@ -775,21 +765,30 @@ void SalAquaFilePicker::updateSaveFileNameExtension() {
         return;
     }
 
-    if (m_pControlHelper->isAutoExtensionEnabled() == false)
-        return;
+    // we need to set this here again because initial setting does
+    //[m_pDialog setExtensionHidden:YES];
 
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    ensureFilterHelper();
+    if (m_pControlHelper->isAutoExtensionEnabled() == false) {
+        OSL_TRACE("allowing other file types");
+        [m_pDialog setAllowedFileTypes:nil];
+        [m_pDialog setAllowsOtherFileTypes:YES];
+    } else {
+        ensureFilterHelper();
 
-    OUStringList aStringList = m_pFilterHelper->getCurrentFilterSuffixList();
-    if( aStringList.empty()) // #i9328#
-        return;
+        OUStringList aStringList = m_pFilterHelper->getCurrentFilterSuffixList();
+        if( aStringList.empty()) // #i9328#
+            return;
 
-    rtl::OUString suffix = (*(aStringList.begin())).copy(1);
-    NSString *requiredFileType = [NSString stringWithOUString:suffix];
+        rtl::OUString suffix = (*(aStringList.begin())).copy(1);
+        NSString *requiredFileType = [NSString stringWithOUString:suffix];
 
-    [m_pDialog setRequiredFileType:requiredFileType];
+        [m_pDialog setRequiredFileType:requiredFileType];
+
+        OSL_TRACE("disallowing other file types");
+        [m_pDialog setAllowsOtherFileTypes:NO];
+    }
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }

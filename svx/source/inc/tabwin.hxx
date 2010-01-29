@@ -42,7 +42,7 @@
 //#endif
 #include <comphelper/propmultiplex.hxx>
 #include <svtools/transfer.hxx>
-#include "dbtoolsclient.hxx"
+#include "svx/dbtoolsclient.hxx"
 
 //==================================================================
 class FmFieldWin;

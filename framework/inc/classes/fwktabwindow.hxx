@@ -84,9 +84,6 @@ public:
     virtual void    ActivatePage();
     virtual void    DeactivatePage();
     virtual void    Resize();
-
-    void            Reset();
-    void            Save();
 };
 
 struct TabEntry
@@ -131,7 +128,6 @@ public:
     FwkTabPage*     AddTabPage( sal_Int32 nIndex, const css::uno::Sequence< css::beans::NamedValue >& rProperties );
     void            ActivatePage( sal_Int32 nIndex );
     void            RemovePage( sal_Int32 nIndex );
-    sal_Int32       GetActivePageId() const;
     virtual void        Resize();
 };
 

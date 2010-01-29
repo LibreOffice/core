@@ -30,6 +30,7 @@
 #ifndef __FRAMEWORK_CLASSES_BMKMENU_HXX
 #define __FRAMEWORK_CLASSES_BMKMENU_HXX
 
+#include "classes/addonmenu.hxx"
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
@@ -52,7 +53,7 @@ namespace framework
 {
 
 class BmkMenu_Impl;
-class BmkMenu : public PopupMenu
+class BmkMenu : public AddonMenu
 {
     public:
                         enum BmkMenuType
@@ -76,7 +77,6 @@ class BmkMenu : public PopupMenu
                                  BmkMenuType, BmkMenu* pRoot );
 
         BmkMenu_Impl*   _pImp;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& m_xFrame;
 };
 
 } // namespace framework

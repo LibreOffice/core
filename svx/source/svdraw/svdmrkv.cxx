@@ -208,6 +208,12 @@ void __EXPORT SdrMarkView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
             bMarkedObjRectDirty=TRUE;
             bMarkedPointsRectsDirty=TRUE;
         }
+/* removed for now since this breaks existing code who iterates over the mark list and sequentially replaces objects
+        if( eKind==HINT_OBJREMOVED && IsObjMarked( const_cast<SdrObject*>(pSdrHint->GetObject()) ) )
+        {
+            MarkObj( const_cast<SdrObject*>(pSdrHint->GetObject()), GetSdrPageView(), TRUE );
+        }
+*/
     }
     SdrSnapView::Notify(rBC,rHint);
 }

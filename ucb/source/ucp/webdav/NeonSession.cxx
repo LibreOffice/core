@@ -32,6 +32,7 @@
 #include "precompiled_ucb.hxx"
 
 #include <hash_map>
+#include <vector>
 #include <string.h>
 #include <rtl/string.h>
 #include <ne_socket.h>
@@ -40,7 +41,10 @@
 #include <ne_locks.h>
 #include <ne_ssl.h>
 #include "libxml/parser.h"
-#include <rtl/ustrbuf.hxx>
+#include "rtl/ustrbuf.hxx"
+#include "comphelper/sequence.hxx"
+#include "ucbhelper/simplecertificatevalidationrequest.hxx"
+
 #include "DAVAuthListener.hxx"
 #include "NeonTypes.hxx"
 #include "NeonSession.hxx"
@@ -48,12 +52,9 @@
 #include "NeonPropFindRequest.hxx"
 #include "NeonHeadRequest.hxx"
 #include "NeonUri.hxx"
-#ifndef _LINKSEQUENCE_HXX_
 #include "LinkSequence.hxx"
-#endif
-
-#include <com/sun/star/xml/crypto/XSEInitializer.hpp>
 #include "UCBDeadPropertyValue.hxx"
+
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/security/CertificateValidity.hpp>
@@ -61,18 +62,10 @@
 #include <com/sun/star/security/CertificateContainer.hpp>
 #include <com/sun/star/security/XCertificateContainer.hpp>
 #include <com/sun/star/task/XMasterPasswordHandling.hpp>
-
-
-#ifndef _SIMPLECERTIFICATIONVALIDATIONREQUEST_HXX_
-#include "ucbhelper/simplecertificatevalidationrequest.hxx"
-#endif
-
-#include <cppuhelper/bootstrap.hxx>
-
+#include <com/sun/star/xml/crypto/XSEInitializer.hpp>
 
 using namespace com::sun::star;
 using namespace webdav_ucp;
-using namespace com::sun::star::security;
 
 #define SEINITIALIZER_COMPONENT "com.sun.star.xml.crypto.SEInitializer"
 
@@ -255,6 +248,9 @@ extern "C" void NeonSession_ResponseBlockWriter( void * inUserData,
 
 // -------------------------------------------------------------------
 extern "C" int NeonSession_NeonAuth( void *       inUserData,
+#ifdef NE_FEATURE_SSPI
+                                     const char * inAuthProtocol,
+#endif
                                      const char * inRealm,
                                      int          attempt,
                                      char *       inoutUserName,
@@ -270,8 +266,6 @@ extern "C" int NeonSession_NeonAuth( void *       inUserData,
  * should be attempted with the username/password, or non-zero to
  * cancel the request. (if non-zero, username and password are
  * ignored.)  */
-
-
 
 #if 0
     // Give'em only a limited mumber of retries..
@@ -330,18 +324,41 @@ extern "C" int NeonSession_NeonAuth( void *       inUserData,
         //thePassWord = rtl::OUString::createFromAscii( inoutPassWord );
     }
 
-    //i97003 (tkr): Ask XMasterPasswordHandling if we should store the credentials persistently and give this information to the SimpleAuthenticationRequest
-    uno::Reference< ::com::sun::star::task::XMasterPasswordHandling > xMasterPasswordHandling =
-    uno::Reference< ::com::sun::star::task::XMasterPasswordHandling >(
-                    theSession->getMSF().get()->createInstance( rtl::OUString::createFromAscii( "com.sun.star.task.PasswordContainer" )), uno::UNO_QUERY );
-    // -
+    bool bCanUseSystemCreds = false;
+
+#ifdef NE_FEATURE_SSPI
+    bCanUseSystemCreds = (attempt == 0) && // avoid endless loops
+                         ne_has_support( NE_FEATURE_SSPI ) && // Windows-only feature.
+                         ( ne_strcasecmp( inAuthProtocol, "NTLM" ) == 0 ) ||
+                         ( ne_strcasecmp( inAuthProtocol, "Negotiate" ) == 0 );
+#endif
+
+    // #i97003# (tkr): Ask XMasterPasswordHandling if we should store the
+    // credentials persistently and give this information to the auth listener
+    uno::Reference< task::XMasterPasswordHandling > xMasterPasswordHandling;
+    try
+    {
+        xMasterPasswordHandling =
+            uno::Reference< task::XMasterPasswordHandling >(
+                theSession->getMSF()->createInstance(
+                    rtl::OUString::createFromAscii(
+                        "com.sun.star.task.PasswordContainer" )),
+                uno::UNO_QUERY );
+    }
+    catch ( uno::Exception const & )
+    {
+    }
 
     int theRetVal = pListener->authenticate(
                             rtl::OUString::createFromAscii( inRealm ),
                             theSession->getHostName(),
                             theUserName,
                             thePassWord,
-                            xMasterPasswordHandling.is() ? xMasterPasswordHandling->isPersistentStoringAllowed() : sal_False);
+                            xMasterPasswordHandling.is()
+                                ? xMasterPasswordHandling->
+                                    isPersistentStoringAllowed()
+                                : sal_False,
+                            bCanUseSystemCreds);
 
     rtl::OString aUser(
         rtl::OUStringToOString( theUserName, RTL_TEXTENCODING_UTF8 ) );
@@ -368,7 +385,6 @@ extern "C" int NeonSession_NeonAuth( void *       inUserData,
             rtl::OUStringToOString( thePassWord, RTL_TEXTENCODING_UTF8 ) );
 
     return theRetVal;
-
 }
 
 // -------------------------------------------------------------------
@@ -378,101 +394,144 @@ namespace {
     // Helper function
     ::rtl::OUString GetHostnamePart( const ::rtl::OUString& _rRawString )
     {
-            ::rtl::OUString sPart;
-            ::rtl::OUString sPartId = ::rtl::OUString::createFromAscii( "CN=" );
-            sal_Int32 nContStart = _rRawString.indexOf( sPartId );
-            if ( nContStart != -1 )
-            {
-                nContStart = nContStart + sPartId.getLength();
-                sal_Int32 nContEnd = _rRawString.indexOf( sal_Unicode( ',' ), nContStart );
-                sPart = _rRawString.copy( nContStart, nContEnd - nContStart );
-            }
-            return sPart;
+        ::rtl::OUString sPart;
+        ::rtl::OUString sPartId = ::rtl::OUString::createFromAscii( "CN=" );
+        sal_Int32 nContStart = _rRawString.indexOf( sPartId );
+        if ( nContStart != -1 )
+        {
+            nContStart = nContStart + sPartId.getLength();
+            sal_Int32 nContEnd
+                = _rRawString.indexOf( sal_Unicode( ',' ), nContStart );
+            sPart = _rRawString.copy( nContStart, nContEnd - nContStart );
+        }
+        return sPart;
     }
 }
+
 // -------------------------------------------------------------------
 extern "C" int NeonSession_CertificationNotify( void *userdata,
                                                 int failures,
                                                 const ne_ssl_certificate *cert )
 {
+    OSL_ASSERT( cert );
+
     NeonSession * pSession = static_cast< NeonSession * >( userdata );
-    uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment > xSecurityEnv;
-     uno::Reference< ::com::sun::star::security::XCertificateContainer > xCertificateContainer;
+    uno::Reference< security::XCertificateContainer > xCertificateContainer;
+    try
+    {
+        xCertificateContainer
+            = uno::Reference< security::XCertificateContainer >(
+                pSession->getMSF()->createInstance(
+                    rtl::OUString::createFromAscii(
+                        "com.sun.star.security.CertificateContainer" ) ),
+                uno::UNO_QUERY );
+    }
+    catch ( uno::Exception const & )
+    {
+    }
 
-
-    xCertificateContainer = uno::Reference< ::com::sun::star::security::XCertificateContainer >(
-                    pSession->getMSF().get()->createInstance( rtl::OUString::createFromAscii( "com.sun.star.security.CertificateContainer" )), uno::UNO_QUERY );
-
-    // YD if xmlsecurity is not built (os2), we cannot continue.
-    if (!xCertificateContainer.is())
+    if ( !xCertificateContainer.is() )
         return 1;
-
-    char * dn;
 
     failures = 0;
 
-    dn = ne_ssl_readable_dname( ne_ssl_cert_subject( cert ) );
-
+    char * dn = ne_ssl_readable_dname( ne_ssl_cert_subject( cert ) );
     rtl::OUString cert_subject( dn, strlen( dn ), RTL_TEXTENCODING_UTF8, 0 );
 
     free( dn );
 
-    CertificateContainerStatus certificateContainer;
-    certificateContainer = xCertificateContainer.get()->hasCertificate( pSession->getHostName(), cert_subject );
+    security::CertificateContainerStatus certificateContainer(
+        xCertificateContainer->hasCertificate(
+            pSession->getHostName(), cert_subject ) );
 
-    if( certificateContainer != CertificateContainerStatus_NOCERT )
+    if ( certificateContainer != security::CertificateContainerStatus_NOCERT )
+       return
+            certificateContainer == security::CertificateContainerStatus_TRUSTED
+            ? 0
+            : 1;
+
+    uno::Reference< xml::crypto::XSEInitializer > xSEInitializer;
+    try
     {
-            if( certificateContainer == CertificateContainerStatus_TRUSTED )
-                return 0;
-            else
-                return 1;
+        xSEInitializer = uno::Reference< xml::crypto::XSEInitializer >(
+            pSession->getMSF()->createInstance(
+                rtl::OUString::createFromAscii( SEINITIALIZER_COMPONENT ) ),
+            uno::UNO_QUERY );
+    }
+    catch ( uno::Exception const & )
+    {
     }
 
-    rtl::OUString sSEInitializer;
-    ::com::sun::star::uno::Reference< com::sun::star::xml::crypto::XSEInitializer > mxSEInitializer;
-    ::com::sun::star::uno::Reference< com::sun::star::xml::crypto::XXMLSecurityContext > mxSecurityContext;
+    if ( !xSEInitializer.is() )
+        return 1;
 
-    sSEInitializer = rtl::OUString::createFromAscii( SEINITIALIZER_COMPONENT );
-    mxSEInitializer = uno::Reference< com::sun::star::xml::crypto::XSEInitializer > (
-            pSession->getMSF().get()->createInstance( sSEInitializer ), uno::UNO_QUERY );
+    uno::Reference< xml::crypto::XXMLSecurityContext > xSecurityContext(
+        xSEInitializer->createSecurityContext( rtl::OUString() ) );
 
-    if ( mxSEInitializer.is() )
-        mxSecurityContext = mxSEInitializer->createSecurityContext( rtl::OUString::createFromAscii( "" ) );
+    uno::Reference< xml::crypto::XSecurityEnvironment > xSecurityEnv(
+        xSecurityContext->getSecurityEnvironment() );
 
-    xSecurityEnv = mxSecurityContext->getSecurityEnvironment();
+    //The end entity certificate
+    char * eeCertB64 = ne_ssl_cert_export( cert );
 
+    rtl::OString sEECertB64( eeCertB64 );
 
-    char * rawCert;
+    uno::Reference< com::sun::star::security::XCertificate > xEECert(
+        xSecurityEnv->createCertificateFromAscii(
+            rtl::OStringToOUString( sEECertB64, RTL_TEXTENCODING_ASCII_US ) ) );
 
-    rawCert = ne_ssl_cert_export( cert );
+    ne_free( eeCertB64 );
+    eeCertB64 = 0;
 
-    ::rtl::OString sRawCert( rawCert );
-
-    uno::Reference< com::sun::star::security::XCertificate> xCert = xSecurityEnv->createCertificateFromAscii( ::rtl::OStringToOUString( sRawCert, RTL_TEXTENCODING_ASCII_US ) );
-
-    sal_Int64 certValidity = xSecurityEnv->verifyCertificate( xCert );
-
-
-    if ( pSession->isDomainMatch( GetHostnamePart( xCert.get()->getSubjectName())) )
+    std::vector< uno::Reference< security::XCertificate > > vecCerts;
+    const ne_ssl_certificate * issuerCert = cert;
+    do
     {
-        //if host name matched with  certificate then look if the certificate was ok
-        if( certValidity == ::security::CertificateValidity::VALID )
+        //get the intermediate certificate
+        //the returned value is const ! Therfore it does not need to be freed
+        //with ne_ssl_cert_free, which takes a non-const argument
+        issuerCert = ne_ssl_cert_signedby( issuerCert );
+        if ( NULL == issuerCert )
+            break;
+
+        char * imCertB64 = ne_ssl_cert_export( issuerCert );
+        rtl::OString sInterMediateCertB64( imCertB64 );
+        ne_free( imCertB64 );
+
+        uno::Reference< security::XCertificate> xImCert(
+            xSecurityEnv->createCertificateFromAscii(
+                rtl::OStringToOUString(
+                    sInterMediateCertB64, RTL_TEXTENCODING_ASCII_US ) ) );
+        if ( xImCert.is() )
+            vecCerts.push_back( xImCert );
+    }
+    while ( 1 );
+
+    sal_Int64 certValidity = xSecurityEnv->verifyCertificate( xEECert,
+        ::comphelper::containerToSequence( vecCerts ) );
+
+    if ( pSession->isDomainMatch(
+        GetHostnamePart( xEECert.get()->getSubjectName() ) ) )
+    {
+        // if host name matched with certificate then look if the
+        // certificate was ok
+        if( certValidity == security::CertificateValidity::VALID )
             return 0;
     }
 
-    const uno::Reference< ucb::XCommandEnvironment > xEnv =
-            pSession->getRequestEnvironment().m_xEnv.get();
-
+    const uno::Reference< ucb::XCommandEnvironment > xEnv(
+        pSession->getRequestEnvironment().m_xEnv );
     if ( xEnv.is() )
     {
-        failures = static_cast<int>(certValidity);
+        failures = static_cast< int >( certValidity );
 
-        uno::Reference< task::XInteractionHandler > xIH
-            = xEnv->getInteractionHandler();
+        uno::Reference< task::XInteractionHandler > xIH(
+            xEnv->getInteractionHandler() );
         if ( xIH.is() )
         {
-            rtl::Reference< ucbhelper::SimpleCertificateValidationRequest > xRequest
-                = new ucbhelper::SimpleCertificateValidationRequest((sal_Int32)failures, xCert, pSession->getHostName() );
+            rtl::Reference< ucbhelper::SimpleCertificateValidationRequest >
+                xRequest( new ucbhelper::SimpleCertificateValidationRequest(
+                    (sal_Int32)failures, xEECert, pSession->getHostName() ) );
             xIH->handle( xRequest.get() );
 
             rtl::Reference< ucbhelper::InteractionContinuation > xSelection
@@ -480,31 +539,34 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
 
             if ( xSelection.is() )
             {
-                    uno::Reference< task::XInteractionApprove > xApprove(
+                uno::Reference< task::XInteractionApprove > xApprove(
                     xSelection.get(), uno::UNO_QUERY );
-        if ( xApprove.is() )
+                if ( xApprove.is() )
                 {
-                    xCertificateContainer->addCertificate(pSession->getHostName(), cert_subject,  sal_True );
+                    xCertificateContainer->addCertificate(
+                        pSession->getHostName(), cert_subject,  sal_True );
                     return 0;
-                } else {
-                    // Dont trust Cert
-                    xCertificateContainer->addCertificate(pSession->getHostName(), cert_subject, sal_False );
+                }
+                else
+                {
+                    // Don't trust cert
+                    xCertificateContainer->addCertificate(
+                        pSession->getHostName(), cert_subject, sal_False );
                     return 1;
                 }
-
             }
-        } else
+        }
+        else
         {
-            // Dont trust Cert
-            xCertificateContainer->addCertificate(pSession->getHostName(), cert_subject, sal_False );
+            // Don't trust cert
+            xCertificateContainer->addCertificate(
+                pSession->getHostName(), cert_subject, sal_False );
             return 1;
         }
-
-
     }
-
     return 1;
 }
+
 // -------------------------------------------------------------------
 extern "C" void NeonSession_PreSendRequest( ne_request * req,
                                             void * userdata,
@@ -574,8 +636,9 @@ extern "C" void NeonSession_PreSendRequest( ne_request * req,
 
         ++it1;
     }
-    }
 }
+
+} // namespace
 
 // -------------------------------------------------------------------
 // Constructor
@@ -725,7 +788,6 @@ void NeonSession::Init()
         //               ne_buffer *header);
 
         ne_hook_pre_send( m_pHttpSession, NeonSession_PreSendRequest, this );
-
 #if 0
         /* Hook called after the request is sent. May return:
          *  NE_OK     everything is okay
@@ -772,15 +834,8 @@ void NeonSession::Init()
         ne_redirect_register( m_pHttpSession );
 
         // authentication callbacks.
-
-        // Note: Calling ne_set_[server|proxy]_auth more than once per
-        //       m_pHttpSession instance sometimes(?) crashes Neon! ( last
-        //       checked: 0.22.0)
-        //ne_set_server_auth( m_pHttpSession, NeonSession_NeonAuth, this );
         ne_add_server_auth( m_pHttpSession, NE_AUTH_ALL, NeonSession_NeonAuth, this );
-        //ne_set_proxy_auth ( m_pHttpSession, NeonSession_NeonAuth, this );
         ne_add_proxy_auth ( m_pHttpSession, NE_AUTH_ALL, NeonSession_NeonAuth, this );
-
     }
 }
 

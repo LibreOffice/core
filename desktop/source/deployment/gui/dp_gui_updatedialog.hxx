@@ -48,6 +48,7 @@
 #include <svtools/fixedhyper.hxx>
 
 #include "descedit.hxx"
+#include "dp_gui_updatedata.hxx"
 
 /// @HTML
 
@@ -56,18 +57,14 @@ class KeyEvent;
 class MouseEvent;
 class ResId;
 class Window;
+
 namespace com { namespace sun { namespace star {
     namespace awt { class XThrobber; }
     namespace deployment { class XPackageManager; }
     namespace uno { class XComponentContext; }
 } } }
-namespace dp_gui {
-    class SelectedPackage;
-    struct UpdateData;
-}
 
 namespace dp_gui {
-
 /**
    The modal &ldquo;Check for Updates&rdquo; dialog.
 */
@@ -92,13 +89,9 @@ public:
        if non-null, check for updates for all managed packages
     */
     UpdateDialog(
-        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-            const & context,
+        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const & context,
         Window * parent,
-        rtl::Reference< dp_gui::SelectedPackage > const & selectedPackage,
-        com::sun::star::uno::Sequence< com::sun::star::uno::Reference<
-            com::sun::star::deployment::XPackageManager > > const &
-            packageManagers,
+        const std::vector< dp_gui::TUpdateListEntry > &vExtensionList,
         std::vector< dp_gui::UpdateData > * updateData);
 
     ~UpdateDialog();

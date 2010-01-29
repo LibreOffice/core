@@ -188,8 +188,8 @@ void OResultSet::disposing(void)
     if(m_bFreeHandle)
         m_pStatement->getOwnConnection()->freeStatementHandle(m_aStatementHandle);
 
-    m_xStatement    = NULL;
-    m_xMetaData     = NULL;
+m_xStatement.clear();
+m_xMetaData.clear();
 }
 // -------------------------------------------------------------------------
 SQLRETURN OResultSet::unbind(sal_Bool _bUnbindHandle)
@@ -843,8 +843,8 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    SQLSMALLINT nMaxLen = 20;
-    SQLINTEGER nRealLen = 0;
+    SQLLEN nMaxLen = 20;
+    SQLLEN nRealLen = 0;
     Sequence<sal_Int8> aBookmark(nMaxLen);
 
     SQLRETURN nRet = N3SQLBindCol(m_aStatementHandle,
@@ -925,7 +925,7 @@ void SAL_CALL OResultSet::updateRow(  ) throw(SQLException, RuntimeException)
     sal_Bool bPositionByBookmark = ( NULL != getOdbcFunction( ODBC3SQLBulkOperations ) );
     if ( bPositionByBookmark )
     {
-        SQLINTEGER nRealLen = 0;
+        SQLLEN nRealLen = 0;
         nRet = N3SQLBindCol(m_aStatementHandle,
                             0,
                             SQL_C_VARBOOKMARK,
@@ -1491,7 +1491,7 @@ void OResultSet::fillRow(sal_Int32 _nToColumn)
 
     for (; pColumn < pColumnEnd; ++nColumn, ++pColumn)
     {
-        sal_Int32 nType = pColumn->getTypeKind();
+        const sal_Int32 nType = pColumn->getTypeKind();
         switch (nType)
         {
             case DataType::CHAR:

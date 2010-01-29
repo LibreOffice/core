@@ -214,29 +214,29 @@
 #define RID_STR_SVT_SQL_SYNTAX_COLUMN               (RID_FORMS_START +  98)
 #define RID_STR_PROPTITLE_SCROLLBAR                 (RID_FORMS_START +  99)
 #define RID_STR_PROPTITLE_SPINBUTTON                (RID_FORMS_START + 100)
-#define RID_STR_EDIT_CLASSNAME                      (RID_FORMS_START + 101)
-#define RID_STR_BUTTON_CLASSNAME                    (RID_FORMS_START + 102)
-#define RID_STR_FIXEDTEXT_CLASSNAME                 (RID_FORMS_START + 103)
-#define RID_STR_CHECKBOX_CLASSNAME                  (RID_FORMS_START + 104)
-#define RID_STR_RADIOBUTTON_CLASSNAME               (RID_FORMS_START + 105)
-#define RID_STR_LISTBOX_CLASSNAME                   (RID_FORMS_START + 106)
-#define RID_STR_COMBOBOX_CLASSNAME                  (RID_FORMS_START + 107)
-#define RID_STR_FORMATTED_CLASSNAME                 (RID_FORMS_START + 108)
-#define RID_STR_GROUPBOX_CLASSNAME                  (RID_FORMS_START + 109)
-#define RID_STR_CONTROL_CLASSNAME                   (RID_FORMS_START + 110)
-#define RID_STR_IMAGE_CLASSNAME                     (RID_FORMS_START + 111)
-#define RID_STR_GRID_CLASSNAME                      (RID_FORMS_START + 112)
-#define RID_STR_FILECONTROL_CLASSNAME               (RID_FORMS_START + 113)
-#define RID_STR_DATEFIELD_CLASSNAME                 (RID_FORMS_START + 114)
-#define RID_STR_TIMEFIELD_CLASSNAME                 (RID_FORMS_START + 115)
-#define RID_STR_NUMERICFIELD_CLASSNAME              (RID_FORMS_START + 116)
-#define RID_STR_CURRENCYFIELD_CLASSNAME             (RID_FORMS_START + 117)
-#define RID_STR_PATTERNFIELD_CLASSNAME              (RID_FORMS_START + 118)
-#define RID_STR_IMAGECONTROL_CLASSNAME              (RID_FORMS_START + 119)
-#define RID_STR_HIDDEN_CLASSNAME                    (RID_FORMS_START + 120)
-#define RID_STR_CLASSNAME_SCROLLBAR                 (RID_FORMS_START + 121)
-#define RID_STR_CLASSNAME_SPINBUTTON                (RID_FORMS_START + 122)
-#define RID_STR_NAVBAR_CLASSNAME                    (RID_FORMS_START + 123)
+#define RID_STR_PROPTITLE_HIDDEN                    (RID_FORMS_START + 101)
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
+    // FREE
 #define RID_STR_DATANAVIGATOR                       (RID_FORMS_START + 124)
 #define RID_STR_DATANAV_SUBM_PARENT                 (RID_FORMS_START + 125)
 #define RID_STR_DATANAV_SUBM_ID                     (RID_FORMS_START + 126)

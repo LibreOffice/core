@@ -138,15 +138,12 @@ private:
     ::com::sun::star::awt::Size maChartSize;
 
     /** @descr  This method bundles some settings to the chart model and executes them with
-            a locked controller.  This includes setting the draw page size and setting
-            the chart type.
-        @param  aChartSize  The size the draw page will be set to.
+            a locked controller.  This includes setting the chart type.
         @param  aServiceName The name of the service the diagram is initialized with.
         @param  bSetWitchData   Indicates wether the data set takes it's data series from
             rows or from columns.
     */
-    void    InitChart   (com::sun::star::awt::Size aChartSize,
-                        const ::rtl::OUString & rChartTypeServiceName,
+    void    InitChart   (const ::rtl::OUString & rChartTypeServiceName,
                         sal_Bool bSetSwitchData);
 
     void MergeSeriesForStockChart();

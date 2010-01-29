@@ -82,7 +82,7 @@ void OEvoabDriver::disposing()
             xComp->dispose();
             }
             catch (com::sun::star::lang::DisposedException e) {
-             xComp=NULL;
+             xComp.clear();
             }
         }
     }

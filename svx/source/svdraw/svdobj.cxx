@@ -129,6 +129,10 @@
 #include "svx/shapepropertynotifier.hxx"
 #include <svx/sdrhittesthelper.hxx>
 
+// --> OD 2009-07-10 #i73249#
+#include <svx/svdundo.hxx>
+// <--
+
 using namespace ::com::sun::star;
 
 // #104018# replace macros above with type-detecting methods
@@ -759,7 +763,29 @@ void SdrObject::SetName(const String& rStr)
 
     if(pPlusData && pPlusData->aObjName != rStr)
     {
+        // --> OD 2009-07-09 #i73249#
+        // Undo/Redo for setting object's name
+        bool bUndo( false );
+        if ( GetModel() && GetModel()->IsUndoEnabled() )
+        {
+            bUndo = true;
+            SdrUndoAction* pUndoAction =
+                    GetModel()->GetSdrUndoFactory().CreateUndoObjectStrAttr(
+                                                    *this,
+                                                    SdrUndoObjStrAttr::OBJ_NAME,
+                                                    GetName(),
+                                                    rStr );
+            GetModel()->BegUndo( pUndoAction->GetComment() );
+            GetModel()->AddUndo( pUndoAction );
+        }
+        // <--
         pPlusData->aObjName = rStr;
+        // --> OD 2009-07-09 #i73249#
+        if ( bUndo )
+        {
+            GetModel()->EndUndo();
+        }
+        // <--
         SetChanged();
         BroadcastObjectChange();
     }
@@ -784,7 +810,29 @@ void SdrObject::SetTitle(const String& rStr)
 
     if(pPlusData && pPlusData->aObjTitle != rStr)
     {
+        // --> OD 2009-07-13 #i73249#
+        // Undo/Redo for setting object's title
+        bool bUndo( false );
+        if ( GetModel() && GetModel()->IsUndoEnabled() )
+        {
+            bUndo = true;
+            SdrUndoAction* pUndoAction =
+                    GetModel()->GetSdrUndoFactory().CreateUndoObjectStrAttr(
+                                                    *this,
+                                                    SdrUndoObjStrAttr::OBJ_TITLE,
+                                                    GetTitle(),
+                                                    rStr );
+            GetModel()->BegUndo( pUndoAction->GetComment() );
+            GetModel()->AddUndo( pUndoAction );
+        }
+        // <--
         pPlusData->aObjTitle = rStr;
+        // --> OD 2009-07-13 #i73249#
+        if ( bUndo )
+        {
+            GetModel()->EndUndo();
+        }
+        // <--
         SetChanged();
         BroadcastObjectChange();
     }
@@ -809,7 +857,29 @@ void SdrObject::SetDescription(const String& rStr)
 
     if(pPlusData && pPlusData->aObjDescription != rStr)
     {
+        // --> OD 2009-07-13 #i73249#
+        // Undo/Redo for setting object's description
+        bool bUndo( false );
+        if ( GetModel() && GetModel()->IsUndoEnabled() )
+        {
+            bUndo = true;
+            SdrUndoAction* pUndoAction =
+                    GetModel()->GetSdrUndoFactory().CreateUndoObjectStrAttr(
+                                                    *this,
+                                                    SdrUndoObjStrAttr::OBJ_DESCRIPTION,
+                                                    GetDescription(),
+                                                    rStr );
+            GetModel()->BegUndo( pUndoAction->GetComment() );
+            GetModel()->AddUndo( pUndoAction );
+        }
+        // <--
         pPlusData->aObjDescription = rStr;
+        // --> OD 2009-07-13 #i73249#
+        if ( bUndo )
+        {
+            GetModel()->EndUndo();
+        }
+        // <--
         SetChanged();
         BroadcastObjectChange();
     }
@@ -2863,8 +2933,8 @@ void SdrObject::impl_setUnoShape( const uno::Reference< uno::XInterface >& _rxUn
 {
     maWeakUnoShape = _rxUnoShape;
     mpSvxShape = SvxShape::getImplementation( _rxUnoShape );
-    OSL_ENSURE( mpSvxShape || !_rxUnoShape.is(),
-        "SdrObject::setUnoShape: not sure it's a good idea to have an XShape which is not implemented by SvxShape ..." );
+//    OSL_ENSURE( mpSvxShape || !_rxUnoShape.is(),
+//        "SdrObject::setUnoShape: not sure it's a good idea to have an XShape which is not implemented by SvxShape ..." );
 }
 
 /** only for internal use! */

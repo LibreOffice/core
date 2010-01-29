@@ -97,8 +97,8 @@ sdbcx::ObjectType OIndexesHelper::createObject(const ::rtl::OUString& _rName)
             {
                 sal_Int32 nClustered = xRow->getShort(7);
                 sal_Bool bPrimarKeyIndex = sal_False;
-                xRow = NULL;
-                xResult = NULL;
+                xRow.clear();
+                xResult.clear();
                 try
                 {
                     xResult = m_pTable->getMetaData()->getPrimaryKeys(aCatalog,aSchema,aTable);

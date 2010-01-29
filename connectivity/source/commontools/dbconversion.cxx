@@ -99,9 +99,9 @@ namespace dbtools
         ::rtl::OUStringBuffer aTemp(toDateString(aDate));
         aTemp.appendAscii(" ");
         Time aTime(0,_rDateTime.Seconds,_rDateTime.Minutes,_rDateTime.Hours);
-        aTemp.append(toTimeString(aTime));
+        aTemp.append( toTimeString(aTime) );
         aTemp.appendAscii(".");
-        aTemp.append(static_cast<sal_Int32>(_rDateTime.HundredthSeconds));
+        aTemp.append( static_cast<sal_Int32>(_rDateTime.HundredthSeconds));
         return  aTemp.makeStringAndClear();
     }
     //------------------------------------------------------------------------------

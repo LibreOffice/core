@@ -951,32 +951,86 @@ bool ImpPathForDragAndCreate::endPathDrag(SdrDragStat& rDrag)
 
 String ImpPathForDragAndCreate::getSpecialDragComment(const SdrDragStat& rDrag) const
 {
-    ImpSdrPathDragData* pDragData = mpSdrPathDragData;
-
-    if(!pDragData)
-    {
-        // getSpecialDragComment is also used from create, so fallback to GetUser()
-        // when mpSdrPathDragData is not set
-        pDragData = (ImpSdrPathDragData*)rDrag.GetUser();
-    }
-
-    if(!pDragData)
-    {
-        DBG_ERROR("ImpPathForDragAndCreate::MovDrag(): ImpSdrPathDragData ist ungueltig");
-        return String();
-    }
-
-    // Hier auch mal pDragData verwenden !!!
     XubString aStr;
-
     const SdrHdl* pHdl = rDrag.GetHdl();
+    const bool bCreateComment(rDrag.GetView() && &mrSdrPathObject == rDrag.GetView()->GetCreateObj());
 
-    if(!mrSdrPathObject.GetModel() || !pHdl)
+    if(bCreateComment && rDrag.GetUser())
     {
+        // #i103058# re-add old creation comment mode
+        ImpPathCreateUser* pU = (ImpPathCreateUser*)rDrag.GetUser();
+        const SdrObjKind eKindMerk(meObjectKind);
+        mrSdrPathObject.meKind = pU->eAktKind;
+        mrSdrPathObject.ImpTakeDescriptionStr(STR_ViewCreateObj, aStr);
+        mrSdrPathObject.meKind = eKindMerk;
+
+        Point aPrev(rDrag.GetPrev());
+        Point aNow(rDrag.GetNow());
+
+        if(pU->bLine)
+            aNow = pU->aLineEnd;
+
+        aNow -= aPrev;
+        aStr.AppendAscii(" (");
+
+        XubString aMetr;
+
+        if(pU->bCircle)
+        {
+            mrSdrPathObject.GetModel()->TakeWinkStr(Abs(pU->nCircRelWink), aMetr);
+            aStr += aMetr;
+            aStr.AppendAscii(" r=");
+            mrSdrPathObject.GetModel()->TakeMetricStr(pU->nCircRadius, aMetr, TRUE);
+            aStr += aMetr;
+        }
+
+        aStr.AppendAscii("dx=");
+        mrSdrPathObject.GetModel()->TakeMetricStr(aNow.X(), aMetr, TRUE);
+        aStr += aMetr;
+
+        aStr.AppendAscii(" dy=");
+        mrSdrPathObject.GetModel()->TakeMetricStr(aNow.Y(), aMetr, TRUE);
+        aStr += aMetr;
+
+        if(!IsFreeHand(meObjectKind))
+        {
+            INT32 nLen(GetLen(aNow));
+            aStr.AppendAscii("  l=");
+            mrSdrPathObject.GetModel()->TakeMetricStr(nLen, aMetr, TRUE);
+            aStr += aMetr;
+
+            INT32 nWink(GetAngle(aNow));
+            aStr += sal_Unicode(' ');
+            mrSdrPathObject.GetModel()->TakeWinkStr(nWink, aMetr);
+            aStr += aMetr;
+        }
+
+        aStr += sal_Unicode(')');
+    }
+    else if(!mrSdrPathObject.GetModel() || !pHdl)
+    {
+        // #i103058# fallback when no model and/or Handle, both needed
+        // for else-path
         mrSdrPathObject.ImpTakeDescriptionStr(STR_DragPathObj, aStr);
     }
     else
     {
+        // #i103058# standard for modification; model and handle needed
+        ImpSdrPathDragData* pDragData = mpSdrPathDragData;
+
+        if(!pDragData)
+        {
+            // getSpecialDragComment is also used from create, so fallback to GetUser()
+            // when mpSdrPathDragData is not set
+            pDragData = (ImpSdrPathDragData*)rDrag.GetUser();
+        }
+
+        if(!pDragData)
+        {
+            DBG_ERROR("ImpPathForDragAndCreate::MovDrag(): ImpSdrPathDragData ist ungueltig");
+            return String();
+        }
+
         if(!pDragData->IsMultiPointDrag() && pDragData->bEliminate)
         {
             // Punkt von ...
@@ -2150,12 +2204,26 @@ bool SdrPathObj::applySpecialDrag(SdrDragStat& rDrag)
 String SdrPathObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 {
     String aRetval;
-    ImpPathForDragAndCreate aDragAndCreate(*((SdrPathObj*)this));
-    bool bDidWork(aDragAndCreate.beginPathDrag((SdrDragStat&)rDrag));
 
-    if(bDidWork)
+    if(mpDAC)
     {
-        aRetval = aDragAndCreate.getSpecialDragComment(rDrag);
+        // #i103058# also get a comment when in creation
+        const bool bCreateComment(rDrag.GetView() && this == rDrag.GetView()->GetCreateObj());
+
+        if(bCreateComment)
+        {
+            aRetval = mpDAC->getSpecialDragComment(rDrag);
+        }
+    }
+    else
+    {
+        ImpPathForDragAndCreate aDragAndCreate(*((SdrPathObj*)this));
+        bool bDidWork(aDragAndCreate.beginPathDrag((SdrDragStat&)rDrag));
+
+        if(bDidWork)
+        {
+            aRetval = aDragAndCreate.getSpecialDragComment(rDrag);
+        }
     }
 
     return aRetval;

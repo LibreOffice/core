@@ -51,7 +51,7 @@
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/weakref.hxx>
 
 //_________________________________________________________________________________________________________________
@@ -63,10 +63,8 @@ namespace framework{
 //_________________________________________________________________________________________________________________
 
 
-class DockingAreaDefaultAcceptor    :   public css::lang::XTypeProvider                             ,
-                                        public ::com::sun::star::ui::XDockingAreaAcceptor   ,
-                                        private ThreadHelpBase                                      ,
-                                        public ::cppu::OWeakObject
+class DockingAreaDefaultAcceptor    :   private ThreadHelpBase                                      ,
+                                        public ::cppu::WeakImplHelper1< ::com::sun::star::ui::XDockingAreaAcceptor >
 {
     public:
 
@@ -91,13 +89,6 @@ class DockingAreaDefaultAcceptor    :   public css::lang::XTypeProvider         
 
          DockingAreaDefaultAcceptor(    const css::uno::Reference< css::frame::XFrame >& xOwner );
         virtual ~DockingAreaDefaultAcceptor();
-
-        //---------------------------------------------------------------------------------------------------------
-        //  XInterface
-        //---------------------------------------------------------------------------------------------------------
-
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
 
         //---------------------------------------------------------------------------------------------------------
         //  XDockingAreaAcceptor

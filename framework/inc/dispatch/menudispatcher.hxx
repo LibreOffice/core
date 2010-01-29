@@ -312,8 +312,6 @@ class MenuDispatcher   :   // interfaces
 
         static sal_Bool impldbg_checkParameter_MenuDispatcher      (   const   css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory        ,
                                                                         const   css::uno::Reference< css::frame::XFrame >&              xOwner          );
-        static sal_Bool impldbg_checkParameter_dispatch             (   const   css::util::URL&                                         aURL            ,
-                                                                        const   css::uno::Sequence< css::beans::PropertyValue >&        seqArguments    );
         static sal_Bool impldbg_checkParameter_addStatusListener    (   const   css::uno::Reference< css::frame::XStatusListener >&     xControl        ,
                                                                         const   css::util::URL&                                         aURL            );
         static sal_Bool impldbg_checkParameter_removeStatusListener (   const   css::uno::Reference< css::frame::XStatusListener >&     xControl        ,

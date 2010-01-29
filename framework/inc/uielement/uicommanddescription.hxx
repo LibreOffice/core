@@ -59,28 +59,22 @@
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <rtl/ustring.hxx>
 
 namespace framework
 {
-
-class ConfigurationAccess_UICommand;
-class UICommandDescription :  public com::sun::star::lang::XTypeProvider    ,
-                              public com::sun::star::lang::XServiceInfo     ,
-                              public com::sun::star::container::XNameAccess ,
-                              private ThreadHelpBase                        ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
-                              public ::cppu::OWeakObject
+class UICommandDescription :  private ThreadHelpBase                        ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+                              public ::cppu::WeakImplHelper2< com::sun::star::lang::XServiceInfo        ,
+                                                              com::sun::star::container::XNameAccess >
 {
     public:
         UICommandDescription( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
         virtual ~UICommandDescription();
 
         //  XInterface, XTypeProvider, XServiceInfo
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
-
+private:
         // XNameAccess
         virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
             throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
@@ -97,6 +91,7 @@ class UICommandDescription :  public com::sun::star::lang::XTypeProvider    ,
         virtual sal_Bool SAL_CALL hasElements()
             throw (::com::sun::star::uno::RuntimeException);
 
+public:
         typedef ::std::hash_map< ::rtl::OUString,
                                  ::rtl::OUString,
                                  OUStringHashCode,
@@ -107,7 +102,10 @@ class UICommandDescription :  public com::sun::star::lang::XTypeProvider    ,
                                  OUStringHashCode,
                                  ::std::equal_to< ::rtl::OUString > > UICommandsHashMap;
 
-    private:
+    protected:
+        UICommandDescription( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager,bool  );
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > impl_createConfigAccess(const ::rtl::OUString& _sName);
+        void impl_fillElements(const sal_Char* _pName);
         sal_Bool                                                                            m_bConfigRead;
         rtl::OUString                                                                       m_aPrivateResourceURL;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;

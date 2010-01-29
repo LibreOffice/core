@@ -35,7 +35,7 @@ TARGET=mozab
 TARGET2=$(TARGET)drv
 VISIBILITY_HIDDEN=TRUE
 
-.IF ( "$(SYSTEM_MOZILLA)" == "YES" && "$(WITH_MOZILLA)" == "YES") || "$(WITH_MOZILLA)" == "NO" || ( "$(OS)" == "MACOSX" )
+.IF ( "$(SYSTEM_MOZILLA)" == "YES" && "$(WITH_MOZILLA)" == "YES") || "$(WITH_MOZILLA)" == "NO" || ( "$(OS)" == "MACOSX" ) || ( "$(OS)" == "OS2" )
 all: 
     @echo "    Not building the mozilla address book driver"
     @echo "    dependency to Mozilla developer snapshots not feasable at the moment"
@@ -75,9 +75,6 @@ MOZ_LIB_XPCOM= $(MOZ_EMBED_LIB) $(MOZ_LIB)$/nspr4.lib $(MOZ_REG_LIB) $(MOZ_LIB)$
 MOZ_LIB_XPCOM= -L$(MOZ_LIB) -lnspr4 -lxpcom_core -lmozreg_s -lembed_base_s
 .ENDIF
 #End of mozilla specific stuff.
-
-# Disable '-z defs' due to broken libxpcom.
-LINKFLAGSDEFS=$(0)
 
 USE_DEFFILE=TRUE
 ENABLE_EXCEPTIONS=TRUE

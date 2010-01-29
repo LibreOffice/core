@@ -820,39 +820,6 @@ ULONG SfxContentHelper::GetSize( const String& rContent )
 }
 
 // -----------------------------------------------------------------------
-
-sal_Bool SfxContentHelper::IsYounger( const String& rIsYoung, const String& rIsOlder )
-{
-    DateTime aYoungDate, aOlderDate;
-    INetURLObject aYoungObj( rIsYoung );
-    DBG_ASSERT( aYoungObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
-    INetURLObject aOlderObj( rIsOlder );
-    DBG_ASSERT( aOlderObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
-    try
-    {
-        uno::Reference< ucb::XCommandEnvironment > aCmdEnv;
-        ::ucbhelper::Content aYoung( aYoungObj.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
-        util::DateTime aTempYoungDate;
-        aYoung.getPropertyValue( OUString::createFromAscii( "DateModified" ) ) >>= aTempYoungDate;
-        CONVERT_DATETIME( aTempYoungDate, aYoungDate );
-        ::ucbhelper::Content aOlder( aOlderObj.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
-        util::DateTime aTempOlderDate;
-        aOlder.getPropertyValue( OUString::createFromAscii( "DateModified" ) ) >>= aTempOlderDate;
-        CONVERT_DATETIME( aTempOlderDate, aOlderDate );
-    }
-    catch( ucb::CommandAbortedException& )
-    {
-        DBG_ERRORFILE( "CommandAbortedException" );
-    }
-    catch( uno::Exception& )
-    {
-        DBG_ERRORFILE( "Any other exception" );
-    }
-
-    return ( aYoungDate > aOlderDate );
-}
-
-// -----------------------------------------------------------------------
 // please don't use it (only used in appbas.cxx and appcfg.cxx)
 sal_Bool SfxContentHelper::Exists( const String& rContent )
 {

@@ -36,6 +36,7 @@ PROJECTPCHSOURCE=$(PRJ)$/util$/svxpch
 
 PRJNAME=svx
 TARGET=svxrtf
+LIBTARGET=NO
 AUTOSEG=true
 
 # --- Settings -----------------------------------------------------
@@ -48,10 +49,16 @@ AUTOSEG=true
 EXCEPTIONSFILES= \
         $(SLO)$/svxrtf.obj
 
-SLOFILES =	\
-        $(SLO)$/rtfgrf.obj  \
+LIB1TARGET= $(SLB)$/$(TARGET)-core.lib
+LIB1OBJFILES= \
         $(SLO)$/rtfitem.obj \
         $(SLO)$/svxrtf.obj
+
+LIB2TARGET= $(SLB)$/$(TARGET).lib
+LIB2OBJFILES= \
+        $(SLO)$/rtfgrf.obj
+
+SLOFILES = $(LIB1OBJFILES) $(LIB2OBJFILES)
 
 # ==========================================================================
 

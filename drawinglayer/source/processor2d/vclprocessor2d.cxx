@@ -4,10 +4,6 @@
  *
  *  $RCSfile: vclprocessor2d.cxx,v $
  *
- *  $Revision: 1.31 $
- *
- *  last change: $Author: aw $ $Date: 2008-06-24 15:31:09 $
- *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
  *
@@ -142,77 +138,31 @@ namespace drawinglayer
         {
             // decompose matrix to have position and size of text
             basegfx::B2DHomMatrix aLocalTransform(maCurrentTransformation * rTextCandidate.getTextTransform());
-            basegfx::B2DVector aScale, aTranslate;
+            basegfx::B2DVector aFontScaling, aTranslate;
             double fRotate, fShearX;
-            aLocalTransform.decompose(aScale, aTranslate, fRotate, fShearX);
+            aLocalTransform.decompose(aFontScaling, aTranslate, fRotate, fShearX);
             bool bPrimitiveAccepted(false);
 
             if(basegfx::fTools::equalZero(fShearX))
             {
-                if(basegfx::fTools::less(aScale.getX(), 0.0) && basegfx::fTools::less(aScale.getY(), 0.0))
+                if(basegfx::fTools::less(aFontScaling.getX(), 0.0) && basegfx::fTools::less(aFontScaling.getY(), 0.0))
                 {
                     // handle special case: If scale is negative in (x,y) (3rd quadrant), it can
-                    // be expressed as rotation by PI
-                    aScale = basegfx::absolute(aScale);
+                    // be expressed as rotation by PI. Use this since the Font rendering will not
+                    // apply the negative scales in any form
+                    aFontScaling = basegfx::absolute(aFontScaling);
                     fRotate += F_PI;
                 }
 
-                if(basegfx::fTools::more(aScale.getX(), 0.0) && basegfx::fTools::more(aScale.getY(), 0.0))
+                if(basegfx::fTools::more(aFontScaling.getX(), 0.0) && basegfx::fTools::more(aFontScaling.getY(), 0.0))
                 {
-                    // #i96581# Get the font forced without FontStretching (use FontHeight as FontWidth)
+                    // Get the VCL font (use FontHeight as FontWidth)
                     Font aFont(primitive2d::getVclFontFromFontAttributes(
                         rTextCandidate.getFontAttributes(),
-
-                        // #i100373# FontScaling
-                        //
-                        // There are two different definitions for unscaled fonts, (1) 0==width and
-                        // (2) height==width where (2) is the more modern one supported on all non-WIN32
-                        // systems and (1) is the old one coming from WIN16-VCL definitions where
-                        // that ominous FontWidth (available over FontMetric) is involved. While
-                        // WIN32 only supports (1), all other systems support (2). When on WIN32, the
-                        // support for (1) is ensured inside getVclFontFromFontAttributes.
-                        //
-                        // The former usage of (2) leads to problems when it is used on non-WIN32 systems
-                        // and exported to MetaFile FontActions where the scale is taken over unseen. When
-                        // such a MetaFile is imported on a WIN32-System supporting (1), all fonts are
-                        // seen as scaled an look wrong.
-                        //
-                        // The simplest and fastest solution is to fallback to (1) independent from the
-                        // system we are running on.
-                        //
-                        // The best solution would be a system-independent Y-value just expressing the
-                        // font scaling, e.g. when (2) is used and width == height, use 1.0 as Y-Value,
-                        // which would also solve the involved ominous FontWidth value for WIN32-systems.
-                        // This is a region which needs redesign urgently.
-                        //
-                        0, // aScale.getY(),
-
-                        aScale.getY(),
+                        aFontScaling.getX(),
+                        aFontScaling.getY(),
                         fRotate,
-                        *mpOutputDevice));
-
-                    if(!basegfx::fTools::equal(aScale.getX(), aScale.getY()))
-                    {
-                        // #100424# We have a hint on FontScaling here. To decide a look
-                        // at the pure font's scale is needed, since e.g. SC uses unequally scaled
-                        // MapModes (was: #i96581#, but use available full precision from primitive
-                        // now). aTranslate and fShearX can be reused since no longer needed.
-                        basegfx::B2DVector aFontScale;
-                        double fFontRotate;
-                        rTextCandidate.getTextTransform().decompose(aFontScale, aTranslate, fFontRotate, fShearX);
-
-                        if(!basegfx::fTools::equal(aFontScale.getX(), aFontScale.getY()))
-                        {
-                            // indeed a FontScaling. Set at Font. Use the combined scale
-                            // and rotate here
-                            aFont = primitive2d::getVclFontFromFontAttributes(
-                                rTextCandidate.getFontAttributes(),
-                                aScale.getX(),
-                                aScale.getY(),
-                                fRotate,
-                                *mpOutputDevice);
-                        }
-                    }
+                        rTextCandidate.getLocale()));
 
                     // handle additional font attributes
                     const primitive2d::TextDecoratedPortionPrimitive2D* pTCPP =
@@ -225,11 +175,13 @@ namespace drawinglayer
                         const basegfx::BColor aTextlineColor = maBColorModifierStack.getModifiedColor(pTCPP->getTextlineColor());
                         mpOutputDevice->SetTextLineColor( Color(aTextlineColor) );
 
-                                                // set Overline attribute
+                        // set Overline attribute
                         FontUnderline eFontOverline = mapTextLineStyle( pTCPP->getFontOverline() );
                         if( eFontOverline != UNDERLINE_NONE )
                         {
                             aFont.SetOverline( eFontOverline );
+                            const basegfx::BColor aOverlineColor = maBColorModifierStack.getModifiedColor(pTCPP->getOverlineColor());
+                            mpOutputDevice->SetOverlineColor( Color(aOverlineColor) );
                             if( pTCPP->getWordLineMode() )
                                 aFont.SetWordLineMode( true );
                         }
@@ -314,10 +266,11 @@ namespace drawinglayer
                     if(rTextCandidate.getDXArray().size())
                     {
                         aTransformedDXArray.reserve(rTextCandidate.getDXArray().size());
-                        const basegfx::B2DVector aPixelVector(aLocalTransform * basegfx::B2DVector(1.0, 0.0));
+                        const basegfx::B2DVector aPixelVector(maCurrentTransformation * basegfx::B2DVector(1.0, 0.0));
                         const double fPixelVectorFactor(aPixelVector.getLength());
 
-                        for(::std::vector< double >::const_iterator aStart(rTextCandidate.getDXArray().begin()); aStart != rTextCandidate.getDXArray().end(); aStart++)
+                        for(::std::vector< double >::const_iterator aStart(rTextCandidate.getDXArray().begin());
+                            aStart != rTextCandidate.getDXArray().end(); aStart++)
                         {
                             aTransformedDXArray.push_back(basegfx::fround((*aStart) * fPixelVectorFactor));
                         }
@@ -680,6 +633,15 @@ namespace drawinglayer
             double fRotate, fShearX;
             aLocalTransform.decompose(aScale, aTranslate, fRotate, fShearX);
 
+            if(basegfx::fTools::less(aScale.getX(), 0.0) && basegfx::fTools::less(aScale.getY(), 0.0))
+            {
+                // #i102175# handle special case: If scale is negative in (x,y) (3rd quadrant), it can
+                // be expressed as rotation by PI. This needs to be done for Metafiles since
+                // these can be rotated, but not really mirrored
+                aScale = basegfx::absolute(aScale);
+                fRotate += F_PI;
+            }
+
             // get BoundRect
             basegfx::B2DRange aOutlineRange(rMetaCandidate.getB2DRange(getViewInformation2D()));
             aOutlineRange.transform(maCurrentTransformation);
@@ -713,8 +675,18 @@ namespace drawinglayer
             // rotation
             if(!basegfx::fTools::equalZero(fRotate))
             {
-                double fRotation((fRotate / F_PI180) * -10.0);
-                aMetaFile.Rotate((sal_uInt16)(fRotation));
+                // #i103530#
+                // MetaFile::Rotate has no input parameter check, so the parameter needs to be
+                // well-aligned to the old range [0..3600] 10th degrees with inverse orientation
+                sal_Int16 nRotation((sal_Int16)((fRotate / F_PI180) * -10.0));
+
+                while(nRotation < 0)
+                    nRotation += 3600;
+
+                while(nRotation >= 3600)
+                    nRotation -= 3600;
+
+                aMetaFile.Rotate(nRotation);
             }
 
             // Prepare target output size

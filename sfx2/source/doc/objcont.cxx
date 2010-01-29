@@ -1383,54 +1383,6 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
     }
 }
 
-/*
-SfxEventConfigItem_Impl* SfxObjectShell::GetEventConfig_Impl( BOOL bForce )
-{
-    if ( bForce && !pImp->pEventConfig )
-    {
-        pImp->pEventConfig = new SfxEventConfigItem_Impl( SFX_ITEMTYPE_DOCEVENTCONFIG,
-                    SFX_APP()->GetEventConfig(), this );
-        if (pImp->pCfgMgr)
-            pImp->pEventConfig->Connect( pImp->pCfgMgr );
-        pImp->pEventConfig->Initialize();
-    }
-
-    return pImp->pEventConfig;
-} */
-
-//REMOVE    SvStorageRef SfxObjectShell::GetConfigurationStorage( SotStorage* pStor )
-//REMOVE    {
-//REMOVE        // configuration storage shall be opened in own storage or a new storage, if the
-//REMOVE        // document is getting stored into this storage
-//REMOVE        if ( !pStor )
-//REMOVE            pStor = GetStorage();
-//REMOVE
-//REMOVE        if ( pStor->IsOLEStorage() )
-//REMOVE                    return (SvStorageRef) SotStorageRef();
-//REMOVE
-//REMOVE        // storage is always opened in transacted mode, so changes must be commited
-//REMOVE        SotStorageRef xStorage = pStor->OpenSotStorage( DEFINE_CONST_UNICODE("Configurations"),
-//REMOVE                    IsReadOnly() ? STREAM_STD_READ : STREAM_STD_READWRITE );
-//REMOVE        if ( xStorage.Is() && xStorage->GetError() )
-//REMOVE            xStorage.Clear();
-//REMOVE            return (SvStorageRef) xStorage;
-//REMOVE    }
-
-//REMOVE    SotStorageStreamRef SfxObjectShell::GetConfigurationStream( const String& rName, BOOL bCreate )
-//REMOVE    {
-//REMOVE        SotStorageStreamRef xStream;
-//REMOVE        SvStorageRef xStorage = GetConfigurationStorage();
-//REMOVE        if ( xStorage.Is() )
-//REMOVE        {
-//REMOVE            xStream = xStorage->OpenSotStream( rName,
-//REMOVE                bCreate ? STREAM_STD_READWRITE|STREAM_TRUNC : STREAM_STD_READ );
-//REMOVE            if ( xStream.Is() && xStream->GetError() )
-//REMOVE                xStream.Clear();
-//REMOVE        }
-//REMOVE
-//REMOVE        return xStream;
-//REMOVE    }
-
 SfxObjectShellRef MakeObjectShellForOrganizer_Impl( const String& aTargetURL, BOOL bForWriting )
 {
     // check for own format

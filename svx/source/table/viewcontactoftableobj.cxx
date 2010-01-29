@@ -123,7 +123,7 @@ namespace drawinglayer
                         getTransform(),
                         *getSdrFTAttribute().getText(),
                         0,
-                        true, false));
+                        true, false, false));
                 }
             }
 
@@ -687,17 +687,7 @@ namespace sdr
 
                 if(pNewShadowAttribute)
                 {
-                    // attention: shadow is added BEFORE object stuff to render it BEHIND object (!)
-                    const drawinglayer::primitive2d::Primitive2DReference xShadow(drawinglayer::primitive2d::createShadowPrimitive(xRetval, *pNewShadowAttribute));
-
-                    if(xShadow.is())
-                    {
-                        drawinglayer::primitive2d::Primitive2DSequence xContentWithShadow(2);
-                        xContentWithShadow[0] = xShadow;
-                        xContentWithShadow[1] = drawinglayer::primitive2d::Primitive2DReference(new drawinglayer::primitive2d::GroupPrimitive2D(xRetval));
-                        xRetval = xContentWithShadow;
-                    }
-
+                    xRetval = drawinglayer::primitive2d::createEmbeddedShadowPrimitive(xRetval, *pNewShadowAttribute);
                     delete pNewShadowAttribute;
                 }
             }

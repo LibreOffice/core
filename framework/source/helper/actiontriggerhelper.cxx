@@ -119,7 +119,7 @@ void InsertSubMenuItems( Menu* pSubMenu, USHORT& nItemId, Reference< XIndexConta
     {
         AddonsOptions aAddonOptions;
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-        sal_Bool bHiContrast = rSettings.GetMenuColor().IsDark();
+        sal_Bool bHiContrast = rSettings.GetHighContrastMode();
 
         OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
 
@@ -128,9 +128,7 @@ void InsertSubMenuItems( Menu* pSubMenu, USHORT& nItemId, Reference< XIndexConta
             try
             {
                 Reference< XPropertySet > xPropSet;
-                Any a = xIndexAccess->getByIndex( i );
-
-                if (( a >>= xPropSet ) && ( xPropSet.is() ))
+                if (( xIndexAccess->getByIndex( i ) >>= xPropSet ) && ( xPropSet.is() ))
                 {
                     if ( IsSeparator( xPropSet ))
                     {

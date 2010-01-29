@@ -521,7 +521,7 @@ void TitleHelper::impl_updateTitleForFrame (const css::uno::Reference< css::fram
     impl_appendProductName      (sTitle);
     impl_appendModuleName       (sTitle);
     impl_appendProductExtension (sTitle);
-    impl_appendEvalVersion      (sTitle);
+    //impl_appendEvalVersion      (sTitle);
     impl_appendDebugVersion     (sTitle);
 
     // SYNCHRONIZED ->
@@ -633,29 +633,29 @@ void TitleHelper::impl_appendDebugVersion (::rtl::OUStringBuffer&)
 #endif
 
 //*****************************************************************************************************************
-void TitleHelper::impl_appendEvalVersion (::rtl::OUStringBuffer& sTitle)
+void TitleHelper::impl_appendEvalVersion (::rtl::OUStringBuffer& /*sTitle*/)
 {
     // SYNCHRONIZED ->
-    ::osl::ResettableMutexGuard aLock(m_aMutex);
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR ;
-    aLock.clear ();
-    // <- SYNCHRONIZED
+ //   ::osl::ResettableMutexGuard aLock(m_aMutex);
+ //   css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR ;
+    //aLock.clear ();
+    //// <- SYNCHRONIZED
 
-    css::uno::Reference< css::beans::XMaterialHolder > xHolder(
-        xSMGR->createInstance(SERVICENAME_TABREG),
-        css::uno::UNO_QUERY);
+    //css::uno::Reference< css::beans::XMaterialHolder > xHolder(
+ //       xSMGR->createInstance(SERVICENAME_TABREG),
+    //  css::uno::UNO_QUERY);
 
-    if ( ! xHolder.is())
-        return;
+ //   if ( ! xHolder.is())
+    //  return;
 
-          ::comphelper::SequenceAsHashMap aMaterial(xHolder->getMaterial());
-    const ::rtl::OUString                 sEvalTitle = aMaterial.getUnpackedValueOrDefault(TABREG_PROPNAME_TITLE, ::rtl::OUString());
+    //    ::comphelper::SequenceAsHashMap aMaterial(xHolder->getMaterial());
+    //const ::rtl::OUString               sEvalTitle = aMaterial.getUnpackedValueOrDefault(TABREG_PROPNAME_TITLE, ::rtl::OUString());
 
-    if (sEvalTitle.getLength())
-    {
-        sTitle.appendAscii (" "       );
-        sTitle.append      (sEvalTitle);
-    }
+    //if (sEvalTitle.getLength())
+    //{
+    //  sTitle.appendAscii (" "       );
+    //  sTitle.append      (sEvalTitle);
+    //}
 }
 
 //-----------------------------------------------

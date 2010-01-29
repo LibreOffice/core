@@ -36,5 +36,7 @@ TARGET=javaexamples
 .INCLUDE : ant.mk
 
 .IF "$(SOLAR_JAVA)"!=""
+.IF "$(L10N_framework)"==""
 ALLTAR : ANTBUILD
+.ENDIF
 .ENDIF

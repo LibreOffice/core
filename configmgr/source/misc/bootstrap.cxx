@@ -47,7 +47,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
-#include <osl/module.hxx>
 #include <osl/diagnose.h>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/configuration/MissingBootstrapFileException.hpp>
@@ -238,27 +237,15 @@ void BootstrapContext::initialize()
 
     ComponentContext::initialize(sURL);
 }
-// ---------------------------------------------------------------------------
-
-static rtl::OUString getCurrentModuleDirectory() // URL including terminating slash
-{
-    rtl::OUString aFileURL;
-    if ( !osl::Module::getUrlFromAddress(reinterpret_cast< oslGenericFunction >( &getCurrentModuleDirectory ),aFileURL) )
-    {
-        OSL_TRACE(false, "Cannot locate current module - using executable instead");
-
-        OSL_VERIFY(osl_Process_E_None == osl_getExecutableFile(&aFileURL.pData));
-    }
-
-    OSL_ENSURE(0 < aFileURL.lastIndexOf('/'), "Cannot find directory for module URL");
-
-    return aFileURL.copy(0, aFileURL.lastIndexOf('/') + 1);
-}
 // ---------------------------------------------------------------------------------------
 
 rtl::OUString BootstrapContext::getDefaultConfigurationBootstrapURL()
 {
-    return getCurrentModuleDirectory() + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(CONFIGMGR_INIFILE));
+    rtl::OUString url(
+        RTL_CONSTASCII_USTRINGPARAM(
+            "$OOO_BASE_DIR/program/" SAL_CONFIGFILE("configmgr")));
+    rtl::Bootstrap::expandMacros(url); //TODO: detect failure
+    return url;
 }
 // ---------------------------------------------------------------------------------------
 

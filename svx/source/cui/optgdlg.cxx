@@ -103,6 +103,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/container/XSet.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
 
 #include <vcl/svapp.hxx>
 
@@ -136,7 +137,6 @@ int OfaMiscTabPage::DeactivatePage( SfxItemSet* pSet_ )
     return LEAVE_PAGE;
 }
 
-#   ifdef ENABLE_GTK
 namespace
 {
         ::rtl::OUString impl_SystemFileOpenServiceName()
@@ -146,13 +146,35 @@ namespace
 
             if ( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "gnome" ) )
             {
+                #ifdef ENABLE_GTK
                 return ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.GtkFilePicker" );
+                #else
+                return rtl::OUString();
+                #endif
+            }
+            else if ( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "kde4" ) )
+            {
+                #ifdef ENABLE_KDE4
+                return ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.KDE4FilePicker" );
+                #else
+                return rtl::OUString();
+                #endif
             }
             else if ( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "kde" ) )
             {
+                #ifdef ENABLE_KDE
                 return ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.KDEFilePicker" );
+                #else
+                return rtl::OUString();
+                #endif
             }
+            #if defined WNT
             return ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.SystemFilePicker" );
+            #elif (defined MACOSX && defined QUARTZ)
+            return ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.AquaFilePicker" );
+            #else
+            return rtl::OUString();
+            #endif
         }
 
         sal_Bool lcl_HasSystemFilePicker()
@@ -179,8 +201,6 @@ namespace
             return bRet;
         }
 }
-
-#endif
 
 // -----------------------------------------------------------------------
 
@@ -210,20 +230,11 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
 {
     FreeResource();
 
-    //system fileopen only available in Windows and with gtk vclplug based
-    //picker and on MacOSX (aqua version)
-#if !defined( WNT ) && !defined( ENABLE_GTK ) && !(defined(MACOSX) && defined(QUARTZ))
-    aFileDlgFL.Hide();
-    aFileDlgCB.Hide();
-#else
-#   ifdef ENABLE_GTK
     if (!lcl_HasSystemFilePicker())
     {
         aFileDlgFL.Hide();
         aFileDlgCB.Hide();
     }
-#   endif
-#endif
 
     #if ! defined(QUARTZ)
     aPrintDlgFL.Hide();
@@ -691,6 +702,12 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aMousePosLB         ( this, SVX_RES( LB_MOUSEPOS ) ),
     aMouseMiddleFT      ( this, SVX_RES( FT_MOUSEMIDDLE ) ),
     aMouseMiddleLB      ( this, SVX_RES( LB_MOUSEMIDDLE ) ),
+
+    // #i97672#
+    maSelectionFL(this, SVX_RES(FL_SELECTION)),
+    maSelectionCB(this, SVX_RES(CB_SELECTION)),
+    maSelectionMF(this, SVX_RES(MF_SELECTION)),
+
     nSizeLB_InitialSelection(0),
     nStyleLB_InitialSelection(0),
     pAppearanceCfg(new SvtTabAppearanceCfg),
@@ -753,6 +770,9 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
 
 #endif
 
+    // #i97672#
+    maSelectionCB.SetToggleHdl( LINK( this, OfaViewTabPage, OnSelectionToggled ) );
+
     FreeResource();
 
     if( ! Application::ValidateSystemFont() )
@@ -807,6 +827,15 @@ IMPL_LINK( OfaViewTabPage, OnAntialiasingToggled, void*, NOTINTERESTEDIN )
 }
 #endif
 
+// #i97672#
+IMPL_LINK( OfaViewTabPage, OnSelectionToggled, void*, NOTINTERESTEDIN )
+{
+    (void)NOTINTERESTEDIN;
+    const bool bSelectionEnabled(maSelectionCB.IsChecked());
+    maSelectionMF.Enable(bSelectionEnabled);
+    return 0;
+}
+
 /*-----------------06.12.96 11.50-------------------
 
 --------------------------------------------------*/
@@ -828,6 +857,7 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& )
 
     BOOL bModified = FALSE;
     BOOL bMenuOptModified = FALSE;
+    bool bRepaintWindows(false);
 
     SvtMiscOptions aMiscOptions;
     UINT16 nSizeLB_NewSelection = aIconSizeLB.GetSelectEntryPos();
@@ -953,16 +983,30 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& )
         {
             mpDrawinglayerOpt->SetAntiAliasing(aUseAntiAliase.IsChecked());
             bModified = TRUE;
+            bRepaintWindows = true;
+        }
+    }
 
-            // react on AA change; invalidate all windows to force
-            // a repaint when changing from AA to non-AA or vice-versa
-            Window* pAppWindow = Application::GetFirstTopLevelWindow();
+    // #i97672#
+    if(maSelectionCB.IsEnabled())
+    {
+        const bool bNewSelection(maSelectionCB.IsChecked());
+        const sal_uInt16 nNewTransparence((sal_uInt16)maSelectionMF.GetValue());
 
-            while(pAppWindow)
-            {
-                pAppWindow->Invalidate();
-                pAppWindow = Application::GetNextTopLevelWindow(pAppWindow);
-            }
+        if(bNewSelection != (bool)mpDrawinglayerOpt->IsTransparentSelection())
+        {
+            mpDrawinglayerOpt->SetTransparentSelection(maSelectionCB.IsChecked());
+            bModified = TRUE;
+            bRepaintWindows = true;
+        }
+
+        // #i104150# even read the value when maSelectionMF is disabled; it may have been
+        // modified by enabling-modify-disabling by the user
+        if(nNewTransparence != mpDrawinglayerOpt->GetTransparentSelectionPercent())
+        {
+            mpDrawinglayerOpt->SetTransparentSelectionPercent(nNewTransparence);
+            bModified = TRUE;
+            bRepaintWindows = true;
         }
     }
 
@@ -991,6 +1035,17 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& )
     {
         pAppearanceCfg->Commit();
         pAppearanceCfg->SetApplicationDefaults ( GetpApp() );
+    }
+
+    if(bRepaintWindows)
+    {
+        Window* pAppWindow = Application::GetFirstTopLevelWindow();
+
+        while(pAppWindow)
+        {
+            pAppWindow->Invalidate();
+            pAppWindow = Application::GetNextTopLevelWindow(pAppWindow);
+        }
     }
 
     return bModified;
@@ -1080,6 +1135,27 @@ void OfaViewTabPage::Reset( const SfxItemSet& )
         }
 
         aUseAntiAliase.SaveValue();
+    }
+
+    {
+        // #i97672# Selection
+        // check if transparent selection is possible on this system
+        const bool bTransparentSelectionPossible(
+            !GetSettings().GetStyleSettings().GetHighContrastMode()
+            && supportsOperation(OutDevSupport_TransparentRect));
+
+        // enter values
+        if(bTransparentSelectionPossible)
+        {
+            maSelectionCB.Check(mpDrawinglayerOpt->IsTransparentSelection());
+        }
+        else
+        {
+            maSelectionCB.Enable(false);
+        }
+
+        maSelectionMF.SetValue(mpDrawinglayerOpt->GetTransparentSelectionPercent());
+        maSelectionMF.Enable(mpDrawinglayerOpt->IsTransparentSelection() && bTransparentSelectionPossible);
     }
 
 #if defined( UNX )
@@ -1202,8 +1278,13 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
 
     // initialize user interface language selection
     SvtLanguageTable* pLanguageTable = new SvtLanguageTable;
-    String aStr( pLanguageTable->GetString( LANGUAGE_SYSTEM ) );
-    aUserInterfaceLB.InsertEntry(aStr);
+    const String aStr( pLanguageTable->GetString( LANGUAGE_SYSTEM ) );
+
+    String aUILang(aStr);
+    aUILang += String::CreateFromAscii(" - ");
+    aUILang += pLanguageTable->GetString( Application::GetSettings().GetUILanguage() );
+
+    aUserInterfaceLB.InsertEntry(aUILang);
     aUserInterfaceLB.SetEntryData(0, 0);
     aUserInterfaceLB.SelectEntryPos(0);
     try
@@ -1265,16 +1346,24 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
     }
 
     aWesternLanguageLB.SetLanguageList( LANG_LIST_WESTERN | LANG_LIST_ONLY_KNOWN, TRUE,  FALSE, TRUE );
-    aAsianLanguageLB  .SetLanguageList( LANG_LIST_CJK     | LANG_LIST_ONLY_KNOWN, TRUE,  FALSE, TRUE );
+    aWesternLanguageLB.InsertDefaultLanguage( ::com::sun::star::i18n::ScriptType::LATIN );
+    aAsianLanguageLB.SetLanguageList( LANG_LIST_CJK     | LANG_LIST_ONLY_KNOWN, TRUE,  FALSE, TRUE );
+    aAsianLanguageLB.InsertDefaultLanguage( ::com::sun::star::i18n::ScriptType::ASIAN );
     aComplexLanguageLB.SetLanguageList( LANG_LIST_CTL     | LANG_LIST_ONLY_KNOWN, TRUE,  FALSE, TRUE );
-    aLocaleSettingLB  .SetLanguageList( LANG_LIST_ALL     | LANG_LIST_ONLY_KNOWN, FALSE, FALSE, FALSE);
-    aLocaleSettingLB.InsertLanguage( LANGUAGE_SYSTEM );
+    aComplexLanguageLB.InsertDefaultLanguage( ::com::sun::star::i18n::ScriptType::COMPLEX );
 
-    // insert SYSTEM entry, no specific currency
-    aCurrencyLB.InsertEntry( aStr );
+    aLocaleSettingLB.SetLanguageList( LANG_LIST_ALL     | LANG_LIST_ONLY_KNOWN, FALSE, FALSE, FALSE);
+    aLocaleSettingLB.InsertDefaultLanguage( ::com::sun::star::i18n::ScriptType::WEAK );
+
+    const NfCurrencyTable& rCurrTab = SvNumberFormatter::GetTheCurrencyTable();
+    const NfCurrencyEntry& rCurr = SvNumberFormatter::GetCurrencyEntry( LANGUAGE_SYSTEM );
+    // insert SYSTEM entry
+    String aDefaultCurr(aStr);
+    aDefaultCurr += String::CreateFromAscii(" - ");
+    aDefaultCurr += rCurr.GetBankSymbol();
+    aCurrencyLB.InsertEntry( aDefaultCurr );
     // all currencies
     String aTwoSpace( RTL_CONSTASCII_USTRINGPARAM( "  " ) );
-    const NfCurrencyTable& rCurrTab = SvNumberFormatter::GetTheCurrencyTable();
     USHORT nCurrCount = rCurrTab.Count();
     // first entry is SYSTEM, skip it
     for ( USHORT j=1; j < nCurrCount; ++j )
@@ -1497,7 +1586,7 @@ BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         if(!bCurrentDocCBChecked)
         {
             Any aValue;
-            Locale aLocale = SvxCreateLocale( eSelectLang );
+            Locale aLocale = MsLangId::convertLanguageToLocale( eSelectLang, false );
             aValue <<= aLocale;
             OUString aPropName( C2U("DefaultLocale") );
             pLangConfig->aLinguConfig.SetProperty( aPropName, aValue );
@@ -1506,7 +1595,8 @@ BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         }
         if(pCurrentDocShell)
         {
-            rSet.Put(SvxLanguageItem(eSelectLang, SID_ATTR_LANGUAGE));
+            rSet.Put(SvxLanguageItem(MsLangId::resolveSystemLanguageByScriptType(eSelectLang, ::com::sun::star::i18n::ScriptType::LATIN),
+                SID_ATTR_LANGUAGE));
             bRet = TRUE;
         }
     }
@@ -1517,7 +1607,7 @@ BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         if(!bCurrentDocCBChecked)
         {
             Any aValue;
-            Locale aLocale = SvxCreateLocale( eSelectLang );
+            Locale aLocale = MsLangId::convertLanguageToLocale( eSelectLang, false );
             aValue <<= aLocale;
             OUString aPropName( C2U("DefaultLocale_CJK") );
             pLangConfig->aLinguConfig.SetProperty( aPropName, aValue );
@@ -1526,7 +1616,8 @@ BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         }
         if(pCurrentDocShell)
         {
-            rSet.Put(SvxLanguageItem(eSelectLang, SID_ATTR_CHAR_CJK_LANGUAGE));
+            rSet.Put(SvxLanguageItem(MsLangId::resolveSystemLanguageByScriptType(eSelectLang, ::com::sun::star::i18n::ScriptType::ASIAN),
+                SID_ATTR_CHAR_CJK_LANGUAGE));
             bRet = TRUE;
         }
     }
@@ -1537,7 +1628,7 @@ BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         if(!bCurrentDocCBChecked)
         {
             Any aValue;
-            Locale aLocale = SvxCreateLocale( eSelectLang );
+            Locale aLocale = MsLangId::convertLanguageToLocale( eSelectLang, false );
             aValue <<= aLocale;
             OUString aPropName( C2U("DefaultLocale_CTL") );
             pLangConfig->aLinguConfig.SetProperty( aPropName, aValue );
@@ -1546,7 +1637,8 @@ BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         }
         if(pCurrentDocShell)
         {
-            rSet.Put(SvxLanguageItem(eSelectLang, SID_ATTR_CHAR_CTL_LANGUAGE));
+            rSet.Put(SvxLanguageItem(MsLangId::resolveSystemLanguageByScriptType(eSelectLang, ::com::sun::star::i18n::ScriptType::COMPLEX),
+                SID_ATTR_CHAR_CTL_LANGUAGE));
             bRet = TRUE;
         }
     }
@@ -1646,13 +1738,18 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
         aWestLang = pLangConfig->aLinguConfig.GetProperty(C2U("DefaultLocale"));
         Locale aLocale;
         aWestLang >>= aLocale;
-        eCurLang = SvxLocaleToLanguage( aLocale );
+
+        eCurLang = MsLangId::convertLocaleToLanguage( aLocale );
+
         aCJKLang = pLangConfig->aLinguConfig.GetProperty(C2U("DefaultLocale_CJK"));
+        aLocale = Locale();
         aCJKLang >>= aLocale;
-        eCurLangCJK = SvxLocaleToLanguage( aLocale );
+        eCurLangCJK = MsLangId::convertLocaleToLanguage( aLocale );
+
         aCTLLang = pLangConfig->aLinguConfig.GetProperty(C2U("DefaultLocale_CTL"));
+        aLocale = Locale();
         aCTLLang >>= aLocale;
-        eCurLangCTL = SvxLocaleToLanguage( aLocale );
+        eCurLangCTL = MsLangId::convertLocaleToLanguage( aLocale );
     }
     catch(Exception&)
     {
@@ -1664,13 +1761,25 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
         aCurrentDocCB.Check(bLanguageCurrentDoc_Impl);
         const SfxPoolItem* pLang;
         if( SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_LANGUAGE, FALSE, &pLang))
-            eCurLang = ((const SvxLanguageItem*)pLang)->GetValue();
+        {
+            LanguageType eTempCurLang = ((const SvxLanguageItem*)pLang)->GetValue();
+            if (MsLangId::resolveSystemLanguageByScriptType(eCurLang, ::com::sun::star::i18n::ScriptType::LATIN) != eTempCurLang)
+                eCurLang = eTempCurLang;
+        }
 
         if( SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_CHAR_CJK_LANGUAGE, FALSE, &pLang))
-            eCurLangCJK = ((const SvxLanguageItem*)pLang)->GetValue();
+        {
+            LanguageType eTempCurLang = ((const SvxLanguageItem*)pLang)->GetValue();
+            if (MsLangId::resolveSystemLanguageByScriptType(eCurLangCJK, ::com::sun::star::i18n::ScriptType::ASIAN) != eTempCurLang)
+                eCurLangCJK = eTempCurLang;
+        }
 
         if( SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_CHAR_CTL_LANGUAGE, FALSE, &pLang))
-            eCurLangCTL = ((const SvxLanguageItem*)pLang)->GetValue();
+        {
+            LanguageType eTempCurLang = ((const SvxLanguageItem*)pLang)->GetValue();
+            if (MsLangId::resolveSystemLanguageByScriptType(eCurLangCTL, ::com::sun::star::i18n::ScriptType::COMPLEX) != eTempCurLang)
+                eCurLangCTL = eTempCurLang;
+        }
     }
     if(LANGUAGE_NONE == eCurLang || LANGUAGE_DONTKNOW == eCurLang)
         aWesternLanguageLB.SelectLanguage(LANGUAGE_NONE);

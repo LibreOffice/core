@@ -65,6 +65,7 @@
 #include "shapeimpl.hxx"
 #include "svx/unoshprp.hxx"
 #include <svx/svdoashp.hxx>
+#include "unopolyhelper.hxx"
 
 // #i29181#
 #include "svdviter.hxx"
@@ -1833,7 +1834,7 @@ bool SvxGraphicObject::getPropertyValueImpl( const ::rtl::OUString& rName, const
         }
         else
         {
-            const GraphicObject& rGrafObj = static_cast< SdrGrafObj*>( mpObj.get() )->GetGraphicObject();
+            const GraphicObject& rGrafObj = static_cast< SdrGrafObj*>( mpObj.get() )->GetGraphicObject(true);
             OUString aURL( RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX));
             aURL += OUString::createFromAscii( rGrafObj.GetUniqueID().GetBuffer() );
             rValue <<= aURL;

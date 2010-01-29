@@ -79,6 +79,12 @@ bool ZipFile::IsZipFile(const std::string& /*FileName*/)
     return true;
 }
 
+bool ZipFile::IsZipFile(void* /*stream*/)
+{
+    return true;
+}
+
+
 /** Returns wheter the version of the specified zip file may be uncompressed with the
           currently used zlib version or not
 
@@ -99,6 +105,12 @@ bool ZipFile::IsValidZipFileVersionNumber(const std::string& /*FileName*/)
     return true;
 }
 
+bool ZipFile::IsValidZipFileVersionNumber(void* /* stream*/)
+{
+    return true;
+}
+
+
 /** Constructs a zip file from a zip file
 
     @precond    The given parameter must be a string with length > 0
@@ -118,6 +130,16 @@ ZipFile::ZipFile(const std::string& FileName)
     if (0 == m_uzFile)
         throw IOException(-1);
 }
+
+ZipFile::ZipFile(void* stream, zlib_filefunc_def* fa) 
+{
+    fa->opaque = stream;
+    m_uzFile = unzOpen2((const char *)NULL, fa);
+
+    if (0 == m_uzFile)
+        throw IOException(-1);
+}
+
 
 /** Destroys a zip file
 */

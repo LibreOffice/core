@@ -40,6 +40,7 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 
 # ------------------------------------------------------------------
+.IF "$(L10N_framework)"==""
 
 SLOFILES= \
         $(SLO)$/eventattacher.obj
@@ -58,6 +59,8 @@ SHL1STDLIBS= \
 
 SHL1DEPN=
 SHL1LIBS=	$(SLB)$/$(TARGET).lib
+
+.ENDIF # L10N_framework
 
 # --- Targets ------------------------------------------------------
 

@@ -57,6 +57,7 @@ SLOFILES=           \
                     $(SLO)$/addonmenu.obj							\
                     $(SLO)$/addonsoptions.obj						\
                     $(SLO)$/fwkresid.obj                            \
+                    $(SLO)$/fwlresid.obj                            \
                     $(SLO)$/framelistanalyzer.obj                   \
                     $(SLO)$/sfxhelperfunctions.obj                  \
                     $(SLO)$/menuextensionsupplier.obj               \

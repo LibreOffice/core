@@ -3,6 +3,7 @@ fp	fpicker\inc							nmake	-	all	fp_inc NULL
 fp	fpicker\source\generic				nmake	-	all	fp_generic fp_inc NULL
 fp	fpicker\source\office				nmake	-	all	fp_office fp_inc NULL
 fp	fpicker\source\unx\gnome			nmake	-	u	fp_gnome_filepicker fp_inc NULL
+fp	fpicker\source\unx\kde4			nmake	-	u	fp_kde4_filepicker fp_inc NULL
 fp	fpicker\source\aqua					nmake	-	u	fp_macosx_filepicker NULL
 fp	fpicker\source\win32\filepicker		nmake	-	w	fp_win32_filepicker fp_inc NULL
 fp	fpicker\source\win32\folderpicker	nmake	-	w	fp_win32_folderpicker fp_inc NULL

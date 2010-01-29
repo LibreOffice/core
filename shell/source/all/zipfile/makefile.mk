@@ -33,6 +33,9 @@ PRJ=..$/..$/..
 PRJNAME=shell
 TARGET=zipfile
 ENABLE_EXCEPTIONS=TRUE
+EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
+
+
 
 # --- Settings -----------------------------------------------------
 
@@ -45,8 +48,8 @@ SLOFILES=$(SLO)$/zipfile.obj\
     $(SLO)$/zipexcptn.obj
 
 SLOFILES_X64=$(SLO_X64)$/zipfile.obj\
-    $(SLO_X64)$/zipexcptn.obj
-
+             $(SLO_X64)$/zipexcptn.obj
+             
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	set_wntx64.mk

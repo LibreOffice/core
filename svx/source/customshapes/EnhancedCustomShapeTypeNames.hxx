@@ -33,12 +33,10 @@
 #include <svx/msdffdef.hxx>
 #include <rtl/ustring.hxx>
 
-class EnhancedCustomShapeTypeNames
+namespace EnhancedCustomShapeTypeNames
 {
-    public :
-
-    static MSO_SPT Get( const rtl::OUString& );
-    static rtl::OUString Get( const MSO_SPT );
-};
+    SVX_DLLPUBLIC MSO_SPT Get( const rtl::OUString& );
+    SVX_DLLPUBLIC rtl::OUString Get( const MSO_SPT );
+}
 
 #endif

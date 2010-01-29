@@ -296,6 +296,7 @@ sal_Bool Package::isBundle() throw (RuntimeException)
     return false; // default
 }
 
+//______________________________________________________________________________
 ::sal_Bool Package::checkPrerequisites(
         const css::uno::Reference< css::task::XAbortChannel >&,
         const css::uno::Reference< css::ucb::XCommandEnvironment >&,
@@ -303,6 +304,16 @@ sal_Bool Package::isBundle() throw (RuntimeException)
         throw (css::deployment::DeploymentException,
             css::ucb::CommandFailedException,
             css::ucb::CommandAbortedException,
+            css::uno::RuntimeException)
+{
+    return true;
+}
+
+//______________________________________________________________________________
+::sal_Bool Package::checkDependencies(
+        const css::uno::Reference< css::ucb::XCommandEnvironment >& )
+        throw (css::deployment::DeploymentException,
+            css::ucb::CommandFailedException,
             css::uno::RuntimeException)
 {
     return true;

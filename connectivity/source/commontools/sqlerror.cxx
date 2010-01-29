@@ -277,7 +277,7 @@ namespace connectivity
         }
 
         if ( !sState.getLength() )
-            sState = ::rtl::OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "S1000" ), RTL_TEXTENCODING_ASCII_US );
+            sState = ::rtl::OUString::intern( RTL_CONSTASCII_USTRINGPARAM( "S1000" ) );
 
         return sState;
     }

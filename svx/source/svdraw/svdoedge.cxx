@@ -1920,11 +1920,21 @@ bool SdrEdgeObj::applySpecialDrag(SdrDragStat& rDragStat)
        return true;
 }
 
-String SdrEdgeObj::getSpecialDragComment(const SdrDragStat& /*rDrag*/) const
+String SdrEdgeObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 {
-    XubString aStr;
-    ImpTakeDescriptionStr(STR_DragEdgeTail,aStr);
-    return aStr;
+    const bool bCreateComment(rDrag.GetView() && this == rDrag.GetView()->GetCreateObj());
+
+    if(bCreateComment)
+    {
+        return String();
+    }
+    else
+    {
+        XubString aStr;
+        ImpTakeDescriptionStr(STR_DragEdgeTail, aStr);
+
+        return aStr;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -127,8 +127,7 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const ::rtl::
             ( TargetHelper::matchSpecialTarget(sName, TargetHelper::E_DEFAULT) )
            )
         {
-            css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(xSMGR, PACKAGE, RELPATH, KEY, ::comphelper::ConfigurationHelper::E_READONLY);
-            aVal >>= sCreator;
+            ::comphelper::ConfigurationHelper::readDirectKey(xSMGR, PACKAGE, RELPATH, KEY, ::comphelper::ConfigurationHelper::E_READONLY) >>= sCreator;
         }
 
         xCreator = css::uno::Reference< css::lang::XSingleServiceFactory >(
