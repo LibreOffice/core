@@ -67,8 +67,8 @@
 #ifndef _COM_SUN_STAR_UCB_XCOMMANDPROCESSOR_HPP_
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UCB_OPENCOMMANDARGUMENT2_HPP_
-#include <com/sun/star/ucb/OpenCommandArgument2.hpp>
+#ifndef _COM_SUN_STAR_UCB_OPENCOMMANDARGUMENT_HPP_
+#include <com/sun/star/ucb/OpenCommandArgument.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_OPENMODE_HPP_
 #include <com/sun/star/ucb/OpenMode.hpp>
@@ -390,19 +390,30 @@ namespace dbaui
                 aCreationArgs.put( "ClassID", aClassId );
                 aCreationArgs.put( (::rtl::OUString)PROPERTY_ACTIVE_CONNECTION, m_xConnection );
 
+                // separate values which are real creation args from args relevant for opening the doc
+                ::comphelper::NamedValueCollection aCommandArgs;
+                if ( aCreationArgs.has( "Hidden" ) )
+                {
+                    aCommandArgs.put( "Hidden", aCreationArgs.get( "Hidden" ) );
+                    aCreationArgs.remove( "Hidden" );
+                }
+
                 Reference< XCommandProcessor > xContent( xORB->createInstanceWithArguments(
                         SERVICE_SDB_DOCUMENTDEFINITION,
                         aCreationArgs.getWrappedPropertyValues()
                     ),
                     UNO_QUERY_THROW
                 );
-
                 o_rDefinition.set( xContent, UNO_QUERY );
+
+                // put the OpenMode into the OpenArgs
+                OpenCommandArgument aOpenModeArg;
+                aOpenModeArg.Mode = OpenMode::DOCUMENT;
+                aCommandArgs.put( "OpenMode", aOpenModeArg );
+
                 Command aCommand;
                 aCommand.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "openDesign" ) );
-                OpenCommandArgument2 aOpenCommand;
-                aOpenCommand.Mode = OpenMode::DOCUMENT;
-                aCommand.Argument <<= aOpenCommand;
+                aCommand.Argument <<= aCommandArgs.getPropertyValues();
                 WaitObject aWaitCursor( m_pDialogParent );
                 xNewDocument.set( xContent->execute( aCommand, xContent->createCommandIdentifier(), NULL ), UNO_QUERY );
             }

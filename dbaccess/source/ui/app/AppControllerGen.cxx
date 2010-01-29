@@ -533,13 +533,13 @@ Reference< XComponent > SAL_CALL OApplicationController::loadComponentWithArgume
 }
 
 // -----------------------------------------------------------------------------
-Reference< XComponent > SAL_CALL OApplicationController::createComponent( ::sal_Int32 i_nObjectType ) throw (IllegalArgumentException, SQLException, RuntimeException)
+Reference< XComponent > SAL_CALL OApplicationController::createComponent( ::sal_Int32 i_nObjectType, Reference< XComponent >& o_DocumentDefinition  ) throw (IllegalArgumentException, SQLException, RuntimeException)
 {
-    return createComponentWithArguments( i_nObjectType, Sequence< PropertyValue >() );
+    return createComponentWithArguments( i_nObjectType, Sequence< PropertyValue >(), o_DocumentDefinition );
 }
 
 // -----------------------------------------------------------------------------
-Reference< XComponent > SAL_CALL OApplicationController::createComponentWithArguments( ::sal_Int32 i_nObjectType, const Sequence< PropertyValue >& i_rArguments ) throw (IllegalArgumentException, SQLException, RuntimeException)
+Reference< XComponent > SAL_CALL OApplicationController::createComponentWithArguments( ::sal_Int32 i_nObjectType, const Sequence< PropertyValue >& i_rArguments, Reference< XComponent >& o_DocumentDefinition ) throw (IllegalArgumentException, SQLException, RuntimeException)
 {
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     ::osl::MutexGuard aGuard( getMutex() );
@@ -548,7 +548,8 @@ Reference< XComponent > SAL_CALL OApplicationController::createComponentWithArgu
 
     Reference< XComponent > xComponent( newElement(
         lcl_objectType2ElementType( i_nObjectType ),
-        ::comphelper::NamedValueCollection( i_rArguments )
+        ::comphelper::NamedValueCollection( i_rArguments ),
+        o_DocumentDefinition
     ) );
 
     return xComponent;

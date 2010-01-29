@@ -201,7 +201,11 @@ namespace dbaui
                 Additional arguments to pass when creating the component
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
-            newElement( ElementType _eType, const ::comphelper::NamedValueCollection& i_rAdditionalArguments );
+            newElement(
+                ElementType _eType,
+                const ::comphelper::NamedValueCollection& i_rAdditionalArguments,
+                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& o_rDocumentDefinition
+            );
 
         /** creates a new database object, using an auto pilot
             @param _eType
@@ -468,8 +472,8 @@ namespace dbaui
         virtual ::sal_Bool SAL_CALL closeSubComponents(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL loadComponent( ::sal_Int32 ObjectType, const ::rtl::OUString& ObjectName, ::sal_Bool ForEditing ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL loadComponentWithArguments( ::sal_Int32 ObjectType, const ::rtl::OUString& ObjectName, ::sal_Bool ForEditing, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL createComponent( ::sal_Int32 ObjectType ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL createComponentWithArguments( ::sal_Int32 ObjectType, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL createComponent( ::sal_Int32 ObjectType, ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& o_DocumentDefinition ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL createComponentWithArguments( ::sal_Int32 ObjectType, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments, ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& o_DocumentDefinition ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
         // XContextMenuInterception
         virtual void SAL_CALL registerContextMenuInterceptor( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XContextMenuInterceptor >& Interceptor ) throw (::com::sun::star::uno::RuntimeException);

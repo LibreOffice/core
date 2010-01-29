@@ -1374,7 +1374,10 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     if ( bAutoPilot )
                         getContainer()->PostUserEvent( LINK( this, OApplicationController, OnCreateWithPilot ), reinterpret_cast< void* >( eType ) );
                     else
-                        newElement( eType, aCreationArgs );
+                    {
+                        Reference< XComponent > xDocDefinition;
+                        newElement( eType, aCreationArgs, xDocDefinition );
+                    }
                 }
                 break;
             case SID_APP_NEW_FOLDER:
@@ -2073,12 +2076,13 @@ void OApplicationController::newElementWithPilot( ElementType _eType )
 }
 
 // -----------------------------------------------------------------------------
-Reference< XComponent > OApplicationController::newElement( ElementType _eType, const ::comphelper::NamedValueCollection& i_rAdditionalArguments )
+Reference< XComponent > OApplicationController::newElement( ElementType _eType, const ::comphelper::NamedValueCollection& i_rAdditionalArguments,
+                                                           Reference< XComponent >& o_rDocumentDefinition )
 {
     OSL_ENSURE(getContainer(),"View is NULL! -> GPF");
 
     Reference< XComponent > xComponent;
-    Reference< XComponent > xDefinition;
+    o_rDocumentDefinition.clear();
 
     switch ( _eType )
     {
@@ -2089,7 +2093,7 @@ Reference< XComponent > OApplicationController::newElement( ElementType _eType, 
             if ( !aHelper->isConnected() )
                 break;
 
-            xComponent = aHelper->newDocument( _eType == E_FORM ? ID_FORM_NEW_TEXT : ID_REPORT_NEW_TEXT, i_rAdditionalArguments, xDefinition );
+            xComponent = aHelper->newDocument( _eType == E_FORM ? ID_FORM_NEW_TEXT : ID_REPORT_NEW_TEXT, i_rAdditionalArguments, o_rDocumentDefinition );
         }
         break;
 
@@ -2121,7 +2125,7 @@ Reference< XComponent > OApplicationController::newElement( ElementType _eType, 
     }
 
     if ( xComponent.is() )
-        onDocumentOpened( ::rtl::OUString(), _eType, E_OPEN_DESIGN, xComponent, xDefinition );
+        onDocumentOpened( ::rtl::OUString(), _eType, E_OPEN_DESIGN, xComponent, o_rDocumentDefinition );
 
     return xComponent;
 }
