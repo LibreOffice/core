@@ -81,7 +81,6 @@ done
 
 if [ -z "$md5sum" ]; then
     echo "ERROR: no md5sum: found!"
-    exit
 fi
 
 start_dir=`pwd`
@@ -99,7 +98,7 @@ for i in `cat $1` ; do
                 failed="$failed $i"
                 wret=0
             fi
-            if [ -f $i ]; then
+            if [ -f $i -a -n $md5sum ]; then
                 sum=`$md5sum $i | sed "s/ [ *].*//"`
                 sum2=`echo $i | sed "s/-.*//"`
                 if [ "$sum" != "$sum2" ]; then
@@ -114,5 +113,6 @@ done
 
 if [ ! -z "$failed" ]; then
     echo $failed | sed "s/ /\n/g" | sed "s/^/ERROR: failed to download: /"
+    exit 1
 fi
 
