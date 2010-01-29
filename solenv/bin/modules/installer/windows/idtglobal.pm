@@ -1381,7 +1381,7 @@ sub add_custom_action_to_install_table
         my $line = $actionname . "\t" . $actioncondition . "\t" . $actionposition . "\n";
         push(@{$installtable}, $line);
 
-        $infoline = "Added $actionname CustomAction into table $customactionidttablename (NO_FILE has been set)\n";
+        $infoline = "Added $actionname CustomAction into table $installtablename (NO_FILE has been set)\n";
         push(@installer::globals::logfileinfo, $infoline);
         return;
     }
@@ -2089,7 +2089,7 @@ sub get_customaction_position
     {
         my $line = ${$sequencetable}[$i];
 
-        if ( $line =~ /^\s*(\w+)\t.*\t\s*(\d+)\s$/ )    # matching only, if position is a number!
+        if ( $line =~ /^\s*([\w\.]+)\t.*\t\s*(\d+)\s$/ )    # matching only, if position is a number!
         {
             my $compareaction = $1;
             my $localposition = $2;
@@ -2123,7 +2123,7 @@ sub set_positions_in_table
 
     for ( my $i = 0; $i <= $#{$sequencetable}; $i++ )
     {
-        if ( ${$sequencetable}[$i] =~ /^\s*(\w+)\t.*\t\s*POSITIONTEMPLATE_end\s*$/ )
+        if ( ${$sequencetable}[$i] =~ /^\s*([\w\.]+)\t.*\t\s*POSITIONTEMPLATE_end\s*$/ )
         {
             my $customaction = $1;
             $lastposition = $lastposition + 25;
@@ -2150,7 +2150,7 @@ sub set_positions_in_table
 
         for ( my $i = 0; $i <= $#{$sequencetable}; $i++ )
         {
-            if ( ${$sequencetable}[$i] =~ /^\s*(\w+)\t.*\t\s*(POSITIONTEMPLATE_.*?)\s*$/ )
+            if ( ${$sequencetable}[$i] =~ /^\s*([\w\.]+)\t.*\t\s*(POSITIONTEMPLATE_.*?)\s*$/ )
             {
                 my $onename = $1;
                 my $templatename = $2;
@@ -2208,7 +2208,7 @@ sub set_positions_in_table
 
         for ( my $i = 0; $i <= $#{$sequencetable}; $i++ )
         {
-            if ( ${$sequencetable}[$i] =~ /^\s*(\w+)\t.*\t\s*(POSITIONTEMPLATE_.*?)\s*$/ )
+            if ( ${$sequencetable}[$i] =~ /^\s*([\w\.]+)\t.*\t\s*(POSITIONTEMPLATE_.*?)\s*$/ )
             {
                 my $customactionname = $1;
                 my $fulltemplate = $2;

@@ -39,6 +39,7 @@ use installer::globals;
 use installer::logger;
 use installer::pathanalyzer;
 use installer::worker;
+use installer::windows::font;
 use installer::windows::idtglobal;
 use installer::windows::language;
 
@@ -453,7 +454,7 @@ sub get_filesize
 
 sub get_fileversion
 {
-    my ($onefile, $allvariables) = @_;
+    my ($onefile, $allvariables, $styles) = @_;
 
     my $fileversion = "";
 
@@ -473,6 +474,12 @@ sub get_fileversion
         if ( $allvariables->{'VENDORPATCHVERSION'} ) { $vendornumber = $allvariables->{'VENDORPATCHVERSION'}; }
         $fileversion = $libraryversion . "\." . $installer::globals::buildid . "\." . $vendornumber;
         if ( $onefile->{'FileVersion'} ) { $fileversion = $onefile->{'FileVersion'}; } # overriding FileVersion in scp
+
+        # if ( $styles =~ /\bFONT\b/ )
+        # {
+        #   my $newfileversion = installer::windows::font::get_font_version($onefile->{'sourcepath'});
+        #   if ( $newfileversion != 0 ) { $fileversion = $newfileversion; }
+        # }
     }
 
     if ( $installer::globals::prepare_winpatch ) { $fileversion = ""; } # Windows patches do not allow this version # -> who says so?
@@ -803,7 +810,7 @@ sub create_files_table
 
         $file{'FileSize'} = get_filesize($onefile);
 
-        $file{'Version'} = get_fileversion($onefile, $allvariables);
+        $file{'Version'} = get_fileversion($onefile, $allvariables, $styles);
 
         $file{'Language'} = get_language_for_file($onefile);
 

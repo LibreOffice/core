@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/bin/bash
+
 PS=":"
 # cygwin:
 if [ "$GUI" = "WNT" ]; then
@@ -8,14 +9,22 @@ fi
 JARFOLDER=$SOLARVERSION/$INPATH/bin$UPDMINOREXT
 SOLVER_LIB=$SOLARVERSION/$INPATH/lib$UPDMINOREXT
 
+# it is possible to give an other OOoRunner.jar
 if [ -n "$RUNNERJAR" ]; then
     myCLASSPATH=$RUNNERJAR
 else 
     myCLASSPATH=$JARFOLDER/OOoRunner.jar
 fi
 
-myCLASSPATH=$myCLASSPATH${PS}${JARFOLDER}/ridl.jar${PS}${JARFOLDER}/unoil.jar${PS}${JARFOLDER}/jurt.jar${PS}${JARFOLDER}/juh.jar${PS}${JARFOLDER}/java_uno.jar
-myCLASSPATH=$myCLASSPATH${PS}/net/unoapi/export/unoapi/bin/mysql.jar${PS}$SOLVER_LIB
+myCLASSPATH=$myCLASSPATH${PS}${JARFOLDER}/ridl.jar${PS}\
+${JARFOLDER}/unoil.jar${PS}\
+${JARFOLDER}/jurt.jar${PS}\
+${JARFOLDER}/juh.jar${PS}\
+${JARFOLDER}/java_uno.jar
+
+myCLASSPATH=$myCLASSPATH${PS}\
+/net/unoapi/export/unoapi/bin/mysql.jar${PS}\
+$SOLVER_LIB
 
 if [ -n "$JAVAI" ]; then
 	JAVABIN=$JAVAI
@@ -26,8 +35,12 @@ elif [ -n "$JAVA_HOME" ]; then
         JAVABIN=$JAVA_HOME/bin/java
     fi
 else
-	echo "please set environment variable JAVA_HOME"
-	exit 1
+    # there seems to be some machines without real java
+    JAVABIN=$(which java)
+    if [ -z "$JAVABIN" ]; then 
+        echo "please set environment variable JAVA_HOME"
+        exit 1
+    fi
 fi
 
 if [ x${USER}x = xx ]; then
@@ -46,12 +59,13 @@ if [ -n "$RUNNERPROPS" ]; then
     PARAM="$PARAM -runnerini $RUNNERPROPS"
 fi
 
-MYXDEBUG=""
-if [ -n "$XDEBUG" ]; then
-    # export XDEBUG="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8001" 
-    MYXDEBUG=$XDEBUG
+DEBUG_THE_API=""
+if [ -n "$DEBUGAPI" ]; then
+    export DEBUGAPI="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=9002,suspend=y" 
+    DEBUG_THE_API=$DEBUGAPI
 fi
 
-COMMAND="$JAVABIN -Xmx120m $MYXDEBUG -cp $myCLASSPATH org.openoffice.Runner $PARAM $*"
+COMMAND="$JAVABIN -Xmx120m $DEBUG_THE_API -cp $myCLASSPATH org.openoffice.Runner $PARAM $*"
 echo $COMMAND
 $COMMAND
+# if COMMAND fails, it returns also the exitcode

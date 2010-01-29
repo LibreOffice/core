@@ -527,7 +527,7 @@ End
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_sxd
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
-    ModuleID = gid_Module_Root;
+    ModuleID = gid_Module_Prg_Draw_Bin;
     Name = ".sxd";
     Value = "soffice.StarDrawDocument.6";
     Styles = ();
@@ -589,7 +589,7 @@ End
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_odg
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
-    ModuleID = gid_Module_Root;
+    ModuleID = gid_Module_Prg_Draw_Bin;
     Name = ".odg";
     Value = "opendocument.DrawDocument.1";
     Styles = ();
@@ -866,18 +866,18 @@ End
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Otg
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
-    ModuleID = gid_Module_Root;
+    ModuleID = gid_Module_Prg_Draw_Bin;
     Name = ".otg";
-    Value = "opendocument.ImpressDocument.1";
+    Value = "opendocument.DrawDocument.1";
     Styles = ();
 End
 
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_Std
     ParentID = PREDEFINED_HKEY_LOCAL_MACHINE;
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
-    ModuleID = gid_Module_Root;
+    ModuleID = gid_Module_Prg_Draw_Bin;
     Name = ".std";
-    Value = "opendocument.ImpressDocument.1";
+    Value = "opendocument.DrawDocument.1";
     Styles = ();
 End
 

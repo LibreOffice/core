@@ -797,7 +797,7 @@ sub install_simple ($$$$$$)
 
         push @lines, "$destination\n";
         # printf "cp $sourcepath $destdir$destination\n";
-        copy ("$sourcepath", "$destdir$destination") || die "Can't copy file: $!";
+        copy ("$sourcepath", "$destdir$destination") || die "Can't copy file: $sourcepath -> $destdir$destination $!";
         my $sourcestat = stat($sourcepath);
         utime ($sourcestat->atime, $sourcestat->mtime, "$destdir$destination");
         chmod (oct($unixrights), "$destdir$destination") || die "Can't change permissions: $!";
@@ -2373,7 +2373,8 @@ sub collect_all_files_from_includepathes
 
         my @sourcefiles = ();
         my $pathstring = "";
-        installer::systemactions::read_complete_directory($includepath, $pathstring, \@sourcefiles);
+        # installer::systemactions::read_complete_directory($includepath, $pathstring, \@sourcefiles);
+        installer::systemactions::read_full_directory($includepath, $pathstring, \@sourcefiles);
 
         if ( ! ( $#sourcefiles > -1 ))
         {
@@ -2397,6 +2398,8 @@ sub collect_all_files_from_includepathes
             push(@installer::globals::allincludepathes, \%allfileshash);
         }
     }
+
+    $installer::globals::include_pathes_read = 1;
 
     installer::logger::globallog("Reading all directories: End");
     push( @installer::globals::globallogfileinfo, "\n");
@@ -2680,7 +2683,6 @@ sub generate_cygwin_pathes
         ${$filesref}[$i]->{'cyg_sourcepath'} = $cyg_sourcepathlist[$i];
     }
 }
-
 
 sub filter_pkgmapfile
 {
@@ -3273,6 +3275,44 @@ sub add_license_into_systemintegrationpackages
         change_onefile_in_pkgmap($pkgmap, $copyrightfilename, "copyright");
         installer::files::save_file($pkgmapfilename, $pkgmap);
     }
+}
+
+#########################################################
+# Collecting all pkgmap files from an installation set
+#########################################################
+
+sub collectpackagemaps
+{
+    my ( $installdir, $languagestringref, $allvariables ) = @_;
+
+    installer::logger::include_header_into_logfile("Collecing all packagemaps (pkgmap):");
+
+    my $pkgmapdir = installer::systemactions::create_directories("pkgmap", $languagestringref);
+    my $subdirname = $allvariables->{'UNIXPRODUCTNAME'} . "_pkgmaps";
+    my $pkgmapsubdir = $pkgmapdir . $installer::globals::separator . $subdirname;
+    if ( -d $pkgmapsubdir ) { installer::systemactions::remove_complete_directory($pkgmapsubdir); }
+    if ( ! -d $pkgmapsubdir ) { installer::systemactions::create_directory($pkgmapsubdir); }
+
+    $installdir =~ s/\/\s*$//;
+    # Collecting all packages in $installdir and its sub package ("packages")
+    my $searchdir = $installdir . $installer::globals::separator . $installer::globals::epmoutpath;
+
+    my $allpackages = installer::systemactions::get_all_directories_without_path($searchdir);
+
+    for ( my $i = 0; $i <= $#{$allpackages}; $i++ )
+    {
+        my $pkgmapfile = $searchdir . $installer::globals::separator . ${$allpackages}[$i] . $installer::globals::separator . "pkgmap";
+        my $destfilename = $pkgmapsubdir . $installer::globals::separator . ${$allpackages}[$i] . "_pkgmap";
+        installer::systemactions::copy_one_file($pkgmapfile, $destfilename);
+    }
+
+    # Create a tar gz file with all package maps
+    my $tarfilename = $subdirname . ".tar";
+    my $targzname = $tarfilename . ".gz";
+    # my $systemcall = "cd $pkgmapdir; tar -cf - $subdirname > $tarfilename";
+    $systemcall = "cd $pkgmapdir; tar -cf - $subdirname | gzip > $targzname";
+    make_systemcall($systemcall);
+    installer::systemactions::remove_complete_directory($pkgmapsubdir, 1);
 }
 
 1;

@@ -151,6 +151,10 @@ BUILD_FLAGS=-f vc7.mak EXFLAGS="/EHa /Zc:wchar_t-" CCNUMVER=$(CCNUMVER)
 CXX+= -Wl,--hash-style=both
 .ENDIF
 
+.IF "$(HAVE_LD_BSYMBOLIC_FUNCTIONS)"  == "TRUE"
+CXX+= -Wl,-Bsymbolic-functions -Wl,--dynamic-list-cpp-new -Wl,--dynamic-list-cpp-typeinfo
+.ENDIF
+
 .IF "$(COM)"=="C52"
 BUILD_ACTION=make
 .IF "$(CCNUMVER)">="00050008"

@@ -1,42 +1,14 @@
-PCVSLib version 0.02
-====================
-
-PCVSLib is a pure perl implementation of the CVS client protocol. 
-It currently supports only a subset of of the specified requests 
-and responses, just enough to support the OpenOffice.org CWS tools. 
-If it ever is complete and stable enough for general use, it might
-be worthwhile to submit it to CPAN.
-
-INSTALLATION
-
-To install this module type the following:
-
-   perl Makefile.PL
-   make
-   make test
-   make install
-
-DEPENDENCIES
-
-This module requires these other modules and libraries:
-
-  nothing which is not included in perl-5.6 or later,
-  a cvs command line client is needed for running the
-  test suite.
-
-COPYRIGHT AND LICENCE
-
+#!/bin/bash
 #*************************************************************************
-#
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
-# $RCSfile: README,v $
+# $RCSfile: makefile,v $
 #
-# $Revision: 1.3 $
+# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -54,5 +26,10 @@ COPYRIGHT AND LICENCE
 # version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
-#
-#*************************************************************************
+#***********************************************************************/
+
+LIBRPMBUILD=$(find ${COMPATH} -name 'librpmbuild-4.1*' -print)
+# echo $(dirname $LIBRPMBUILD)
+LD_LIBRARY_PATH=$(dirname ${LIBRPMBUILD}) ${BUILD_TOOLS?}/rpm "$@"
+# LD_LIBRARY_PATH=${LD_LIBRARY_PATH+${LD_LIBRARY_PATH}:}${COMPATH?}/lib \
+# ${BUILD_TOOLS?}/rpm "$@"

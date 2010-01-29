@@ -33,7 +33,7 @@ MKFILENAME:=RULES.MK
 
 $(OBJ)$/%.obj : %.cxx
     @echo ------------------------------
-    @echo Making: $@
+    @echo Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$<
 .IF "$(GUI)"=="UNX"
     @$(RM) $@ $(@:s/.obj/.o/)
     $(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXOBJ) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $(CFLAGSINCXX)$(PWD)$/$*.cxx
@@ -58,7 +58,7 @@ $(OBJ)$/%.obj : %.cxx
 
 $(OBJ)$/%.obj : %.cpp
     @echo ------------------------------
-    @echo Making: $@
+    @echo Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$<
 .IF "$(GUI)"=="UNX"
     @$(RM) $@ $(@:s/.obj/.o/)
     $(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXOBJ) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $(CFLAGSINCXX)$(PWD)$/$*.cpp
@@ -81,7 +81,7 @@ $(OBJ)$/%.obj : %.cpp
 
 $(OBJ)$/%.obj : %.cc
     @echo ------------------------------
-    @echo Making: $@
+    @echo Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$<
 .IF "$(GUI)"=="UNX"
     @$(RM) $@ $(@:s/.obj/.o/)
     $(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSCXXOBJ) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $(CFLAGSINCXX)$(PWD)$/$*.cc
@@ -163,7 +163,7 @@ $(SLO)$/precompiled_ex.% .PHONY:
 
 $(SLO)$/%.obj : %.cxx
     @echo ------------------------------
-    @echo Making: $@
+    @echo Compiling: $(PRJNAME)/$(PATH_IN_MODULE)/$<
 .IF "$(ENABLE_PCH)"!="" && ( "$(PRJNAME)"!="sw" || "$(BUILD_SPECIAL)"!="TRUE" )
 # just a helper var	
     @noop $(assign used_exc_switches=$(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)))
@@ -528,7 +528,7 @@ $(MISC)$/%.dpslo :
     @@$(RM) $@
     @@-$(CDD) $(MISC) && $(!null,$(all_local_slo) $(TYPE:s/+//) echo #) $(foreach,i,$(all_local_slo:b:+".dpcc") s_$(i)) > $(@:f)
     @@-$(CDD) $(MISC) && $(!null,$(all_misc_slo) $(TYPE:s/+//) echo #) $(foreach,i,$(all_misc_slo:b:+".dpcc") s_$(i)) >> $(@:f)
-    @$(TYPE) $(mktmp $(foreach,i,$(all_local_slo:b:+".dpcc") $(@:^"\n") : $(MISC)$/s_$i) $(foreach,i,$(all_misc_slo:b:+".dpcc") $(@:^"\n") : $(MISC)$/s_$i)) >> $@
+    @$(TYPE) $(mktmp $(foreach,i,$(all_local_slo:b:+".dpcc") $(@:s#\#/#:^"\n") : $(MISC:s#\#/#)/s_$i) $(foreach,i,$(all_misc_slo:b:+".dpcc") $(@:s#\#/#:^"\n") : $(MISC:s#\#/#)$/s_$i)) >> $@
     @$(TYPE) $(mktmp $(TARGET)_known_dpcc+=$(all_local_slo:b:+".dpcc":^"s_") $(all_misc_slo:b:+".dpcc":^"s_")) >> $@
 
 $(MISC)$/%.dpobj :
@@ -536,7 +536,7 @@ $(MISC)$/%.dpobj :
     @@$(RM) $@
     @@-$(CDD) $(MISC) && $(!null,$(all_local_obj) $(TYPE:s/+//) echo #) $(foreach,i,$(all_local_obj:b:+".dpcc") o_$(i)) > $(@:f)
     @@-$(CDD) $(MISC) && $(!null,$(all_misc_obj) $(TYPE:s/+//) echo #) $(foreach,i,$(all_misc_obj:b:+".dpcc") o_$(i)) >> $(@:f)
-    @$(TYPE) $(mktmp $(foreach,i,$(all_local_obj:b:+".dpcc") $(@:^"\n") : $(MISC)$/o_$i) $(foreach,i,$(all_misc_obj:b:+".dpcc") $(@:^"\n") : $(MISC)$/o_$i)) >> $@
+    @$(TYPE) $(mktmp $(foreach,i,$(all_local_obj:b:+".dpcc") $(@:s#\#/#:^"\n") : $(MISC:s#\#/#)/o_$i) $(foreach,i,$(all_misc_obj:b:+".dpcc") $(@:s#\#/#:^"\n") : $(MISC:s#\#/#)/o_$i)) >> $@
     @$(TYPE) $(mktmp $(TARGET)_known_dpcc+=$(all_local_obj:b:+".dpcc":^"s_") $(all_misc_obj:b:+".dpcc":^"s_")) >> $@
 
 # see also %.dpslo 
@@ -752,37 +752,38 @@ $(MISC)$/%.sh : %.sh
 $(COMMONMISC)$/$(TARGET)$/%.ulf : %.ulf
     -$(MKDIR) $(@:d)
     -$(RM) $@
-    $(ULFEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+    $(ULFEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(RENAME) $@.$(INPATH) $@
     -$(RM) $@.$(INPATH)
 
 $(COMMONMISC)$/$(TARGET)$/%.xrb : %.xrb
     -$(MKDIR) $(@:d)
     -$(RM) $@
-    $(XMLEX) -t xrb -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+    $(XMLEX) -t xrb -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(RENAME) $@.$(INPATH) $@
     -$(RM) $@.$(INPATH)
 
 $(COMMONMISC)$/$(MYPATH)$/%.xrm : %.xrm
     -$(MKDIRHIER) $(@:d)
     -$(RM) $@
-    $(XRMEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+    echo trysdf = $(TRYSDF)
+    $(XRMEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(RENAME) $@.$(INPATH) $@
     -$(RM) $@.$(INPATH)
 
-$(COMMONMISC)$/$(TARGET)$/%.xrm : %.xrm
-    -$(MKDIRHIER) $(@:d)
-    -$(RM) $@
-    $(XRMEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
-    $(RENAME) $@.$(INPATH) $@
-    -$(RM) $@.$(INPATH)
-
-$(COMMONMISC)$/%.xrm : %.xrm
-    -$(MKDIR) $(@:d)
-    -$(RM) $@
-    $(XRMEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
-    $(RENAME) $@.$(INPATH) $@
-    -$(RM) $@.$(INPATH)
+#$(COMMONMISC)$/$(TARGET)$/%.xrm : %.xrm
+#    -$(MKDIRHIER) $(@:d)
+#    -$(RM) $@
+#	$(XRMEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
+#    $(RENAME) $@.$(INPATH) $@
+#    -$(RM) $@.$(INPATH)
+#
+#$(COMMONMISC)$/%.xrm : %.xrm
+#    -$(MKDIR) $(@:d)
+#    -$(RM) $@
+#	$(XRMEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
+#    $(RENAME) $@.$(INPATH) $@
+#    -$(RM) $@.$(INPATH)
 .ENDIF			# "$(WITH_LANG)"!=""
 
 .IF "$(WITH_LANG)"!=""
@@ -818,15 +819,16 @@ $(COMMONMISC)$/$(TARGET)$/%.uulf : $$(@:b).ulf
     @$(RENAME) $@.$(INPATH) $@
     @-$(RM) $@.$(INPATH)
 
+# This is still needed?????
 $(COMMONMISC)$/$(TARGET)$/%.xrm : %.xrm
     -$(MKDIR) $(@:d)
     -$(RM) $@
-    $(XRMEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m localize.sdf -l all
+    $(XRMEX) -p $(PRJNAME) -i $(@:f) -o $(@).$(INPATH) -m $(LOCALIZESDF) -l all
     $(RENAME) $@.$(INPATH) $@
     -$(RM) $@.$(INPATH)
 
 # dirty hack
 # if local *.sdf file is missing
-%.sdf:
-    echo > $@
+#%.sdf:
+#    echo > $@
 

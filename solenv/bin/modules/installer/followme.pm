@@ -144,13 +144,25 @@ sub read_followme_info
         my $line = ${$filecontent}[$i];
 
         if ( $line =~ /^\s*finalinstalldir:\s*(.*?)\s*$/ ) { $finalinstalldir = $1; }
+        if( $^O =~ /cygwin/i ) { $finalinstalldir =~ s/\\/\//; }
+        if (( $^O =~ /MSWin/i ) && ( $ENV{'USE_SHELL'} eq "4nt" )) { $finalinstalldir =~ s/\//\\/; }
         if ( $line =~ /^\s*downloadname:\s*(.*?)\s*$/ ) { $downloadname = $1; }
         if ( $line =~ /^\s*currentinstallnumber:\s*(.*?)\s*$/ ) { $currentinstallnumber = $1; }
         if ( $line =~ /^\s*loggingdir:\s*(.*?)\s*$/ ) { $loggingdir = $1; }
+        if( $^O =~ /cygwin/i ) { $loggingdir =~ s/\\/\//; }
+        if (( $^O =~ /MSWin/i ) && ( $ENV{'USE_SHELL'} eq "4nt" )) { $loggingdir =~ s/\//\\/; }
         if ( $line =~ /^\s*installlogdir:\s*(.*?)\s*$/ ) { $installlogdir = $1; }
+        if( $^O =~ /cygwin/i ) { $installlogdir =~ s/\\/\//; }
+        if (( $^O =~ /MSWin/i ) && ( $ENV{'USE_SHELL'} eq "4nt" )) { $installlogdir =~ s/\//\\/; }
         if ( $line =~ /^\s*languagestring:\s*(.*?)\s*$/ ) { $languagestring = $1; }
         if ( $line =~ /^\s*languagesarray:\s*(.*?)\s*$/ ) { push(@languagesarray, $1); }
-        if ( $line =~ /^\s*includepatharray:\s*(.*?)\s*$/ ) { push(@includepatharray, $1 . "\n"); }
+        if ( $line =~ /^\s*includepatharray:\s*(.*?)\s*$/ )
+        {
+            my $path = $1;
+            if( $^O =~ /cygwin/i ) { $path  =~ s/\\/\//; }
+            if (( $^O =~ /MSWin/i ) && ( $ENV{'USE_SHELL'} eq "4nt" )) { $path =~ s/\//\\/; }
+            push(@includepatharray, $path . "\n");
+        }
         if ( $line =~ /^\s*allvariableshash:\s*(.*?)\s*:\s*(.*?)\s*$/ ) { $allvariableshash{$1} = $2; }
         if ( $line =~ /^\s*globals:(.*?)\s*:\s*(.*?)\s*$/ )
         {
@@ -176,8 +188,14 @@ sub read_followme_info
             if ( $name eq "issolaris" ) { $installer::globals::issolaris = $value; }
             if ( $name eq "islinux" ) { $installer::globals::islinux = $value; }
             if ( $name eq "unpackpath" ) { $installer::globals::unpackpath = $value; }
+            if( $^O =~ /cygwin/i ) { $installer::globals::unpackpath =~ s/\\/\//; }
+            if (( $^O =~ /MSWin/i ) && ( $ENV{'USE_SHELL'} eq "4nt" )) { $installer::globals::unpackpath =~ s/\//\\/; }
             if ( $name eq "idttemplatepath" ) { $installer::globals::idttemplatepath = $value; }
+            if( $^O =~ /cygwin/i ) { $installer::globals::idttemplatepath =~ s/\\/\//; }
+            if (( $^O =~ /MSWin/i ) && ( $ENV{'USE_SHELL'} eq "4nt" )) { $installer::globals::idttemplatepath =~ s/\//\\/; }
             if ( $name eq "idtlanguagepath" ) { $installer::globals::idtlanguagepath = $value; }
+            if( $^O =~ /cygwin/i ) { $installer::globals::idtlanguagepath =~ s/\\/\//; }
+            if (( $^O =~ /MSWin/i ) && ( $ENV{'USE_SHELL'} eq "4nt" )) { $installer::globals::idtlanguagepath =~ s/\//\\/; }
             if ( $name eq "logfilename" ) { $installer::globals::logfilename = $value; }
             if ( $name eq "product" ) { $installer::globals::product = $value; }
             if ( $name eq "patch" ) { $installer::globals::patch = $value; }

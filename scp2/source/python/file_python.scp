@@ -35,7 +35,7 @@ File gid_File_Lib_Pyuno
   #ifdef UNX
     Name = STRING(CONCAT2(libpyuno,UNXSUFFIX));
   #else
-    Name = "pyuno.dll";
+    Name = "pyuno.pyd";
   #endif
     Dir = gid_Dir_Program;
     Styles = (PACKED);

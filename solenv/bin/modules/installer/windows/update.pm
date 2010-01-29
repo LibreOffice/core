@@ -50,10 +50,18 @@ sub extract_all_tables_from_msidatabase
     my $infoline = "";
     my $systemcall = "";
     my $returnvalue = "";
+    my $extraslash = "";        # Has to be set for non-ActiveState perl
 
     # Export of all tables by using "*"
 
-    $systemcall = $msidb . " -d " . $fulldatabasepath . " -f " . $workdir . " -e \*";
+    if ( $^O =~ /cygwin/i ) {
+        # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
+        $fulldatabasepath =~ s/\//\\\\/g;
+        $workdir =~ s/\//\\\\/g;
+        $extraslash = "\\";
+    }
+
+    $systemcall = $msidb . " -d " . $fulldatabasepath . " -f " . $workdir . " -e " . $extraslash . "*";
     $returnvalue = system($systemcall);
 
     $infoline = "Systemcall: $systemcall\n";

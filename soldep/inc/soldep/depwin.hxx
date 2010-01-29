@@ -72,6 +72,7 @@ public:
     void            SetSelectedProject( ObjectWin* object ) { mpSelectedProject = object; };
     ObjectWin*      GetSelectedProject() { return mpSelectedProject; };
 //  DECL_LINK( PopupSelected, PopupMenu* );
+    void    DrawOutput( OutputDevice* pDevice, const Point& rOffset  );
 };
 
 #endif

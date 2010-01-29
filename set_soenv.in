@@ -90,7 +90,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $SHELL,
      $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
      $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB,
 	 $PROEXT,
-     $SYSTEM_PYTHON, $PYTHONPATH, $PYTHONHOME, $SYSTEM_MOZILLA, $EPM_FLAGS);
+     $SYSTEM_PYTHON, $PYTHONPATH, $SYSTEM_MOZILLA, $EPM_FLAGS);
 #
 #-------------------------------------------
 # IId. Declaring the aliases.
@@ -186,7 +186,6 @@ $CALL_CDECL           = "TRUE";
 $COMMON_OUTDIR        = "";
 $common_build         = "";
 $NO_REC_RES           = "TRUE";
-$NO_HIDS              = "TRUE";
 $SO3                  = "TRUE";
 $SOLAR_JAVA           = "@SOLAR_JAVA@";
 $SOLAR_PLUGIN         = "TRUE";
@@ -1122,7 +1121,7 @@ if ($platform =~ m/cygwin|os2/)
 # The general environment path.
 if ($platform =~ m/linux|netbsd|odf1|irix|freebsd|aix|solaris/)
 {  $PATH              = $cur_dir.
-                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
+#                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
                         $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN.
                         $ps.'$SOLARENV'.$BIN;
 
@@ -1153,7 +1152,7 @@ elsif ($platform =~ m/cygwin/)
    my ( $tmppath );
 
    $PATH              = $cur_dir.
-                        $ps.CygFormat($SOLARVER).$ds.$INPATH.$BIN.
+#                        $ps.CygFormat($SOLARVER).$ds.$INPATH.$BIN.
                         $ps.CygFormat($SOLARENV).$ds."bin".
                         $ps.CygFormat($SOLARENV).$ds.$OUTPATH.$BIN;
 
@@ -1291,7 +1290,7 @@ elsif ($platform =~ m/os2/)
    # needed is appended to the end.
 
    $PATH              = $cur_dir.
-                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
+#                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
                         $ps.'$SOLARENV'.$ds."bin".
                         $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN;
 
@@ -1319,7 +1318,7 @@ elsif ($platform =~ m/os2/)
 
 elsif ($platform =~ m/darwin/)
 {  $PATH              = $cur_dir.
-                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
+#                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
                         $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN.
                         $ps.'$SOLARENV'.$BIN;
 
@@ -1516,11 +1515,9 @@ else
 
 if ($SYSTEM_PYTHON eq "NO") {
     $PYTHONPATH           = '.'.$wps.$SOLARVER.$ds.$INPATH.$ds.'lib'.$wps.$SOLARVER.$ds.$INPATH.$ds.'lib'.$ds.'python'.$wps.$SOLARVER.$ds.$INPATH.$ds.'lib'.$ds.'python'.$ds.'lib-dynload'.$wps.$SOLARVER.$ds.$INPATH.$ds.'lib'.$ds.'pyuno'.$wps.$SOLARVER.$ds.$INPATH.$ds.'bin'.$ds.'pyuno';
-    $PYTHONHOME           = $SOLARVER.$ds.$INPATH;
     if ($GUIBASE eq "WIN") {
-        # PYTHONPATH and PYTHONHOME need to use '\' directory seperators;
+        # PYTHONPATH need to use '\' directory seperators;
         $PYTHONPATH = WinPath( $PYTHONPATH, ";" );
-        $PYTHONHOME = WinPath( $PYTHONHOME, ";" );
     }
 }
 
@@ -1624,7 +1621,6 @@ ToFile( "common_build",      $common_build,      "e" );
 ToFile( "BMP_WRITES_FLAG",   $BMP_WRITES_FLAG,   "e" );
 ToFile( "BUILD_SOSL_RELEASE", $BUILD_SOSL_RELEASE, "e" );
 ToFile( "NO_REC_RES",        $NO_REC_RES,        "e" );
-ToFile( "NO_HIDS",           $NO_HIDS,           "e" );
 ToFile( "SO3",               $SO3,               "e" );
 ToFile( "SOLAR_PLUGIN",      $SOLAR_PLUGIN,      "e" );
 ToFile( "UPDATER",           $UPDATER,           "e" );
@@ -1756,6 +1752,7 @@ ToFile( "RPM",               "@RPM@",            "e" );
 ToFile( "DPKG",              "@DPKG@",           "e" );
 ToFile( "PKGMK",             "@PKGMK@",          "e" );
 ToFile( "GNUMAKE",           "@GNUMAKE@",        "e" );
+ToFile( "GNUTAR",            "@GNUTAR@",         "e" );
 ToFile( "UPD",               $UPD,               "e" );
 ToFile( "WORK_STAMP",        $WORK_STAMP,        "e" );
 ToFile( "SOLARVER",          $SOLARVER,          "e" );
@@ -1800,6 +1797,8 @@ ToFile( "CC",                $CC,                "e" );
 ToFile( "HAVE_GCC_VISIBILITY_FEATURE",
 		"@HAVE_GCC_VISIBILITY_FEATURE@", "e" );
 ToFile( "HAVE_LD_HASH_STYLE","@HAVE_LD_HASH_STYLE@","e" );
+ToFile( "HAVE_LD_BSYMBOLIC_FUNCTIONS",
+		"@HAVE_LD_BSYMBOLIC_FUNCTIONS@","e" );
 ToFile( "CXX",               $CXX,               "e" );
 ToFile( "MINGWCXX",          "@MINGWCXX@",       "e" );
 ToFile( "MINGWSTRIP",        "@MINGWSTRIP@",     "e" );
@@ -1815,6 +1814,7 @@ ToFile( "ENABLE_FONTCONFIG", "@ENABLE_FONTCONFIG@", "e" );
 ToFile( "ENABLE_DIRECTX",    "@ENABLE_DIRECTX@",    "e" );
 ToFile( "ENABLE_LAYOUT",     "@ENABLE_LAYOUT@",     "e" );
 ToFile( "ENABLE_PCH",        "@ENABLE_PCH@",       "e" );
+ToFile( "NO_HIDS",           "@NO_HIDS@",       "e" );
 ToFile( "VC_STANDARD",       "@VC_STANDARD@",      "e" );
 ToFile( "WITH_GPC",          "@WITH_GPC@",         "e" );
 ToFile( "WITH_MYSPELL_DICTS","@WITH_MYSPELL_DICTS@","e");
@@ -1836,7 +1836,6 @@ ToFile( "MOZ_LIB_XPCOM",     "@MOZ_LIB_XPCOM@",    "e" );
 ToFile( "MOZ_NSPR_CFLAGS",   "@MOZ_NSPR_CFLAGS@",  "e" );
 ToFile( "MOZ_NSS_CFLAGS",    "@MOZ_NSS_CFLAGS@",   "e" );
 ToFile( "MOZ_LDAP_CFLAGS",   "@MOZ_LDAP_CFLAGS@",  "e" );
-ToFile( "WITH_WRITER2LATEX", "@WITH_WRITER2LATEX@", "e" );
 ToFile( "WITH_FONTS",        "@WITH_FONTS@",       "e" );
 ToFile( "WITHOUT_AFMS",      "@WITHOUT_AFMS@",     "e" );
 ToFile( "WITHOUT_PPDS",      "@WITHOUT_PPDS@",     "e" );
@@ -1990,7 +1989,6 @@ ToFile( "ZIPDEP",        $perlpre."zipdep.pl",      "e" );
 ToFile( "USE_SHELL",             '@USE_SHELL@',     "e" );
 if ($SYSTEM_PYTHON eq "NO") {
     ToFile( "PYTHONPATH",        $PYTHONPATH,        "e" );
-    ToFile( "PYTHONHOME",        $PYTHONHOME,        "e" );
 }
 
 #

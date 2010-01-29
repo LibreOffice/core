@@ -655,7 +655,6 @@ ANT
 XINERAMA_LINK
 USE_XINERAMA
 SCPDEFS
-WITH_WRITER2LATEX
 WITHOUT_AFMS
 WITHOUT_PPDS
 WITH_FONTS
@@ -911,7 +910,9 @@ PERL
 HAVE_LD_HASH_STYLE
 _cc
 GNUMAKE
+NO_HIDS
 ENABLE_PCH
+HAVE_LD_BSYMBOLIC_FUNCTIONS
 GCCVER
 COMPATH
 OBJEXT
@@ -949,6 +950,7 @@ ENABLE_CRASHDUMP
 PTHREAD_LIBS
 PTHREAD_CFLAGS
 OSVERSION
+GNUTAR
 target_os
 target_vendor
 target_cpu
@@ -1019,6 +1021,7 @@ enable_lockdown
 enable_vba
 with_vba_package_format
 enable_pch
+enable_hids
 enable_mozilla
 with_fonts
 with_ppds
@@ -1074,7 +1077,6 @@ with_system_dicts
 with_external_dict_dir
 with_external_hyph_dir
 with_external_thes_dir
-with_writer2latex
 with_system_libs
 with_system_headers
 with_system_jars
@@ -1824,6 +1826,8 @@ Optional Features:
 
   --enable-pch            EXPERIMENTAL: Enables precompiled header support for C++.
 
+  --enable-hids            Enables generation of HelpId lists.
+
   --disable-mozilla       OO.o usually includes a strangely hacked up mozilla
                           binary for your platform, to build without this
                           version, use this option.
@@ -2074,10 +2078,6 @@ Optional Packages:
   --with-external-hyph-dir Specify external hyphenation pattern dir
 
   --with-external-thes-dir Specify external thesaurus dir
-
-  --without-writer2latex Removes writer2latex from openoffice.org installation
-                          set, for people building for specific distributions
-                          where writer2latex is known to be already available
 
   --with-system-libs      Use libs already on system -- enables all
                           --with-system-* flags except mozilla and
@@ -2886,6 +2886,11 @@ if test "${enable_pch+set}" = set; then
   enableval=$enable_pch;
 fi
 
+# Check whether --enable-hids was given.
+if test "${enable_hids+set}" = set; then
+  enableval=$enable_hids;
+fi
+
 # Check whether --enable-mozilla was given.
 if test "${enable_mozilla+set}" = set; then
   enableval=$enable_mozilla;
@@ -3224,12 +3229,6 @@ fi
 # Check whether --with-external-thes-dir was given.
 if test "${with_external_thes_dir+set}" = set; then
   withval=$with_external_thes_dir;
-fi
-
-
-# Check whether --with-writer2latex was given.
-if test "${with_writer2latex+set}" = set; then
-  withval=$with_writer2latex;
 fi
 
 
@@ -4348,6 +4347,53 @@ case "$build_os" in
         test_randr=yes
 		test_freetype=yes
 		_os=SunOS
+		# Extract the first word of "gtar", so it can be a program name with args.
+set dummy gtar; ac_word=$2
+{ $as_echo "$as_me:$LINENO: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if test "${ac_cv_path_GNUTAR+set}" = set; then
+  $as_echo_n "(cached) " >&6
+else
+  case $GNUTAR in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_GNUTAR="$GNUTAR" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+as_dummy="$PATH:/usr/sfw/bin"
+for as_dir in $as_dummy
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_path_GNUTAR="$as_dir/$ac_word$ac_exec_ext"
+    $as_echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+IFS=$as_save_IFS
+
+  ;;
+esac
+fi
+GNUTAR=$ac_cv_path_GNUTAR
+if test -n "$GNUTAR"; then
+  { $as_echo "$as_me:$LINENO: result: $GNUTAR" >&5
+$as_echo "$GNUTAR" >&6; }
+else
+  { $as_echo "$as_me:$LINENO: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+		if test -z "$GNUTAR"; then
+			{ { $as_echo "$as_me:$LINENO: error: gtar (gnu tar) not found but needed. Install it (SUN Freeware package)." >&5
+$as_echo "$as_me: error: gtar (gnu tar) not found but needed. Install it (SUN Freeware package)." >&2;}
+   { (exit 1); exit 1; }; }
+		fi
+
 
 						   		{ $as_echo "$as_me:$LINENO: checking the Solaris operating system release" >&5
 $as_echo_n "checking the Solaris operating system release... " >&6; }
@@ -6002,6 +6048,75 @@ $as_echo "ok (GNU ld)" >&6; }
 fi
 
 
+HAVE_LD_BSYMBOLIC_FUNCTIONS=
+if test "$GCC" = "yes"; then
+   { $as_echo "$as_me:$LINENO: checking for -Bsymbolic-functions linker support " >&5
+$as_echo_n "checking for -Bsymbolic-functions linker support ... " >&6; }
+   bsymbolic_functions_ldflags_save=$LDFLAGS
+   LDFLAGS="$LDFLAGS -Wl,-Bsymbolic-functions -Wl,--dynamic-list-cpp-new -Wl,--dynamic-list-cpp-typeinfo"
+
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+   #include <stdio.h>
+
+int
+main ()
+{
+
+    printf ("hello world\n");
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval ac_try_echo="\"\$as_me:$LINENO: $ac_try_echo\""
+$as_echo "$ac_try_echo") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  $as_echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext && {
+	 test "$cross_compiling" = yes ||
+	 $as_test_x conftest$ac_exeext
+       }; then
+  HAVE_LD_BSYMBOLIC_FUNCTIONS=TRUE
+else
+  $as_echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+
+fi
+
+rm -rf conftest.dSYM
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+   if test "z$HAVE_LD_BSYMBOLIC_FUNCTIONS" = "zTRUE"; then
+     { $as_echo "$as_me:$LINENO: result: found " >&5
+$as_echo "found " >&6; }
+   else
+     { $as_echo "$as_me:$LINENO: result: not found " >&5
+$as_echo "not found " >&6; }
+   fi
+   LDFLAGS=$bsymbolic_functions_ldflags_save
+fi
+
+
 { $as_echo "$as_me:$LINENO: checking whether to enable pch feature" >&5
 $as_echo_n "checking whether to enable pch feature... " >&6; }
 if test -n "$enable_pch" && test "$enable_pch" != "no"; then
@@ -6020,6 +6135,19 @@ $as_echo "$as_me: WARNING: Precompiled header not yet supported for your platfor
    fi
 else
    ENABLE_PCH=""
+   { $as_echo "$as_me:$LINENO: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+{ $as_echo "$as_me:$LINENO: checking whether to enable hid list feature" >&5
+$as_echo_n "checking whether to enable hid list feature... " >&6; }
+if test -n "$enable_hids" && test "$enable_hids" != "no"; then
+   NO_HIDS=""
+   { $as_echo "$as_me:$LINENO: result: yes" >&5
+$as_echo "yes" >&6; }
+else
+   NO_HIDS="TRUE"
    { $as_echo "$as_me:$LINENO: result: no" >&5
 $as_echo "no" >&6; }
 fi
@@ -6064,6 +6192,25 @@ $as_echo "$as_me: error: failed ($GNUMAKE $_make_version need 3.79.1+)" >&2;}
    { (exit 1); exit 1; }; }
    fi
 fi
+
+
+{ $as_echo "$as_me:$LINENO: checking for GNU tar" >&5
+$as_echo_n "checking for GNU tar... " >&6; }
+for a in $GNUTAR gtar gnutar tar; do
+      $a --version 2> /dev/null | grep GNU  2>&1 > /dev/null
+      if test $? -eq 0;  then
+           GNUTAR=$a
+           break
+      fi
+done
+{ $as_echo "$as_me:$LINENO: result: $GNUTAR" >&5
+$as_echo "$GNUTAR" >&6; }
+if test -z "$GNUTAR"; then
+    { { $as_echo "$as_me:$LINENO: error: not found. install GNU tar." >&5
+$as_echo "$as_me: error: not found. install GNU tar." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
 
 
 if test "$_os" = "SunOS"; then
@@ -6142,8 +6289,7 @@ if test "$GCC" = "yes"; then
 $as_echo_n "checking for --hash-style=both linker support ... " >&6; }
    hash_style_ldflags_save=$LDFLAGS
    LDFLAGS="$LDFLAGS -Wl,--hash-style=both"
-
-cat >conftest.$ac_ext <<_ACEOF
+   cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
@@ -6619,14 +6765,17 @@ $as_echo_n "checking the Version of Microsoft C/C++ Compiler... " >&6; }
 $as_echo "found Compiler version $CCNUMVER." >&6; }
 			if test "$CCNUMVER" -ge "001500000000"; then
 				COMEX=12
+				MSVSVER=2008
 				{ $as_echo "$as_me:$LINENO: result: found .NET 2008 / VS 9.0." >&5
 $as_echo "found .NET 2008 / VS 9.0." >&6; }
 			elif test "$CCNUMVER" -ge "001400000000"; then
 				COMEX=11
+				MSVSVER=2005
 				{ $as_echo "$as_me:$LINENO: result: found .NET 2005." >&5
 $as_echo "found .NET 2005." >&6; }
 			elif test "$CCNUMVER" -ge "001300102240"; then
 				COMEX=10
+				MSVSVER=2003
 				{ $as_echo "$as_me:$LINENO: result: found .NET 2003." >&5
 $as_echo "found .NET 2003." >&6; }
 			else
@@ -15080,7 +15229,7 @@ if test "${am_cv_pathless_PYTHON+set}" = set; then
   $as_echo_n "(cached) " >&6
 else
 
-	for am_cv_pathless_PYTHON in python python2 python2.4 python2.3 python2.2 python2.1 python2.0 python1.6 python1.5 none; do
+	for am_cv_pathless_PYTHON in python python2 python2.6 python2.5 python2.4 python2.3 python2.2 python2.1 python2.0 python1.6 python1.5 none; do
 	  test "$am_cv_pathless_PYTHON" = none && break
 	  prog="import sys, string
 # split strings by '.' and convert to numeric.  Append some zeros
@@ -18058,10 +18207,16 @@ fi
 { $as_echo "$as_me:$LINENO: checking for toolkit mozilla should use" >&5
 $as_echo_n "checking for toolkit mozilla should use... " >&6; }
 if test -z "$with_mozilla_toolkit"; then
-   if test "$_os" != "WINNT"; then
-      MOZILLA_TOOLKIT=gtk2
-      { $as_echo "$as_me:$LINENO: result: gtk2" >&5
+   if test "$_os" != "WINNT" ; then
+      if test "$_os" = "Darwin" ; then
+         MOZILLA_TOOLKIT=mac
+         { $as_echo "$as_me:$LINENO: result: mac" >&5
+$as_echo "mac" >&6; }
+      else
+         MOZILLA_TOOLKIT=gtk2
+         { $as_echo "$as_me:$LINENO: result: gtk2" >&5
 $as_echo "gtk2" >&6; }
+      fi
    fi
 else
    MOZILLA_TOOLKIT=$with_mozilla_toolkit
@@ -18084,8 +18239,8 @@ else
       enable_build_mozilla=
 fi
 
-{ $as_echo "$as_me:$LINENO: checking whether to build Mozilla" >&5
-$as_echo_n "checking whether to build Mozilla... " >&6; }
+{ $as_echo "$as_me:$LINENO: checking whether to build Mozilla/SeaMonkey" >&5
+$as_echo_n "checking whether to build Mozilla/SeaMonkey... " >&6; }
 if test -n "$enable_build_mozilla"; then
    BUILD_MOZAB="TRUE"
    { $as_echo "$as_me:$LINENO: result: yes" >&5
@@ -18097,18 +18252,29 @@ $as_echo "no" >&6; }
 fi
 
 if test "$BUILD_MOZAB" = "TRUE"; then
+  if test "$_os" = "WINNT"; then
+    if test "$WITH_MINGWIN" != "yes"; then
+      # compiling with MSVC. Only supported platform here is MSVS2005 at the moment.
+      if test "$MSVSVER" != "2005"; then
+        { { $as_echo "$as_me:$LINENO: error: Building SeaMonkey is supported with Microsoft Visual Studio .NET 2005 only." >&5
+$as_echo "$as_me: error: Building SeaMonkey is supported with Microsoft Visual Studio .NET 2005 only." >&2;}
+   { (exit 1); exit 1; }; }
+      fi
+    else
+      { $as_echo "$as_me:$LINENO: WARNING: Building SeaMonkey with mingwin is not tested, and likely to break." >&5
+$as_echo "$as_me: WARNING: Building SeaMonkey with mingwin is not tested, and likely to break." >&2;}
+      echo "Building SeaMonkey with mingwin is not tested, and likely to break." >> warn
+    fi
+  fi
+
    if test -z "$MOZILLA_VERSION"; then
-      MOZILLA_VERSION=1.7.5
+      MOZILLA_VERSION=1.1.14
    fi
-   if test "$MOZILLA_VERSION" = "1.7b" ; then
-      MOZILLA_SOURCE_VERSION="mozilla-source-1.7b-source"
-   else
-      MOZILLA_SOURCE_VERSION="mozilla-source-${MOZILLA_VERSION}"
-   fi
+   MOZILLA_SOURCE_VERSION="seamonkey-${MOZILLA_VERSION}.source"
    for e in gz bz2; do
       { $as_echo "$as_me:$LINENO: checking for $MOZILLA_SOURCE_VERSION.tar.$e" >&5
 $as_echo_n "checking for $MOZILLA_SOURCE_VERSION.tar.$e... " >&6; }
-      if test ! -e "./moz/download/$MOZILLA_SOURCE_VERSION.tar.$e" && test "$HAVE_MOZILLA_TARBALL" != "y"; then
+      if test ! -e "moz/download/$MOZILLA_SOURCE_VERSION.tar.$e" && test "$HAVE_MOZILLA_TARBALL" != "y"; then
          { $as_echo "$as_me:$LINENO: result: not found" >&5
 $as_echo "not found" >&6; }
          HAVE_MOZILLA_TARBALL=n
@@ -18119,34 +18285,24 @@ $as_echo "found" >&6; }
       fi
    done
    if test "$HAVE_MOZILLA_TARBALL" != "y"; then
-         { { $as_echo "$as_me:$LINENO: error: Mozilla source archive not found.
+         { { $as_echo "$as_me:$LINENO: error: Mozilla/SeaMonkey source archive not found.
 Please copy $MOZILLA_SOURCE_VERSION.tar.bz2 or $MOZILLA_SOURCE_VERSION.tar.gz to moz/download/.
 The archives can be found here:
-http://ftp.mozilla.org/pub/mozilla.org/mozilla/releases/mozilla$MOZILLA_VERSION/source/" >&5
-$as_echo "$as_me: error: Mozilla source archive not found.
+http://releases.mozilla.org/pub/mozilla.org/seamonkey/releases/$MOZILLA_VERSION/" >&5
+$as_echo "$as_me: error: Mozilla/SeaMonkey source archive not found.
 Please copy $MOZILLA_SOURCE_VERSION.tar.bz2 or $MOZILLA_SOURCE_VERSION.tar.gz to moz/download/.
 The archives can be found here:
-http://ftp.mozilla.org/pub/mozilla.org/mozilla/releases/mozilla$MOZILLA_VERSION/source/" >&2;}
+http://releases.mozilla.org/pub/mozilla.org/seamonkey/releases/$MOZILLA_VERSION/" >&2;}
    { (exit 1); exit 1; }; }
    fi
    if test "$_os" = "WINNT"; then
-      { $as_echo "$as_me:$LINENO: checking for glib and libIDL binaries" >&5
-$as_echo_n "checking for glib and libIDL binaries... " >&6; }
-      if test ! -e "./moz/download/vc71-glib-1.2.10-bin.zip" \
-           -o ! -e "./moz/download/vc71-libIDL-0.6.8-bin.zip" \
-           -o ! -e "./moz/download/wintools.zip" ; then
-{ { $as_echo "$as_me:$LINENO: error: One or more of the following archives is missing in moz/download/
-  vc71-glib-1.2.10-bin.zip
-  vc71-libIDL-0.6.8-bin.zip
-(from ftp://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/historic/vc71/)
-  wintools.zip
-(from http://ftp.mozilla.org/pub/mozilla.org/mozilla/source/wintools.zip)" >&5
-$as_echo "$as_me: error: One or more of the following archives is missing in moz/download/
-  vc71-glib-1.2.10-bin.zip
-  vc71-libIDL-0.6.8-bin.zip
-(from ftp://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/historic/vc71/)
-  wintools.zip
-(from http://ftp.mozilla.org/pub/mozilla.org/mozilla/source/wintools.zip)" >&2;}
+      { $as_echo "$as_me:$LINENO: checking for moztools binaries" >&5
+$as_echo_n "checking for moztools binaries... " >&6; }
+      if test ! -e "moz/download/vc8-moztools.zip" ; then
+        { { $as_echo "$as_me:$LINENO: error: The following file is missing in moz/download: vc8-moztools.zip
+(from ftp://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/historic/vc8/)" >&5
+$as_echo "$as_me: error: The following file is missing in moz/download: vc8-moztools.zip
+(from ftp://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32/historic/vc8/)" >&2;}
    { (exit 1); exit 1; }; }
       else
          { $as_echo "$as_me:$LINENO: result: ok" >&5
@@ -27303,9 +27459,9 @@ fi
         if test -z "$COMMONS_LOGGING_JAR"; then
                 COMMONS_LOGGING_JAR=/usr/share/java/commons-logging-1.1.1.jar
         fi
-   as_ac_File=`$as_echo "ac_cv_file_$COMMONS_HTTPCLIENT_JAR" | $as_tr_sh`
-{ $as_echo "$as_me:$LINENO: checking for $COMMONS_HTTPCLIENT_JAR" >&5
-$as_echo_n "checking for $COMMONS_HTTPCLIENT_JAR... " >&6; }
+   as_ac_File=`$as_echo "ac_cv_file_$COMMONS_LOGGING_JAR" | $as_tr_sh`
+{ $as_echo "$as_me:$LINENO: checking for $COMMONS_LOGGING_JAR" >&5
+$as_echo_n "checking for $COMMONS_LOGGING_JAR... " >&6; }
 if { as_var=$as_ac_File; eval "test \"\${$as_var+set}\" = set"; }; then
   $as_echo_n "(cached) " >&6
 else
@@ -27313,7 +27469,7 @@ else
   { { $as_echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
 $as_echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
    { (exit 1); exit 1; }; }
-if test -r "$COMMONS_HTTPCLIENT_JAR"; then
+if test -r "$COMMONS_LOGGING_JAR"; then
   eval "$as_ac_File=yes"
 else
   eval "$as_ac_File=no"
@@ -27328,8 +27484,8 @@ as_val=`eval 'as_val=${'$as_ac_File'}
    if test "x$as_val" = x""yes; then
   :
 else
-  { { $as_echo "$as_me:$LINENO: error: commons-httpclient.jar not found." >&5
-$as_echo "$as_me: error: commons-httpclient.jar not found." >&2;}
+  { { $as_echo "$as_me:$LINENO: error: commons-logging.jar not found." >&5
+$as_echo "$as_me: error: commons-logging.jar not found." >&2;}
    { (exit 1); exit 1; }; }
 fi
 
@@ -28051,21 +28207,6 @@ else
 $as_echo "no" >&6; }
   WITHOUT_AFMS=YES
   SCPDEFS="$SCPDEFS -DWITHOUT_AFMS"
-fi
-
-
-{ $as_echo "$as_me:$LINENO: checking whether to include writer2latex" >&5
-$as_echo_n "checking whether to include writer2latex... " >&6; }
-if test "$with_writer2latex" != "no" ; then
-  { $as_echo "$as_me:$LINENO: result: yes" >&5
-$as_echo "yes" >&6; }
-  WITH_WRITER2LATEX=YES
-  BUILD_TYPE="$BUILD_TYPE WRITER2LATEX"
-else
-  { $as_echo "$as_me:$LINENO: result: no" >&5
-$as_echo "no" >&6; }
-  WITH_WRITER2LATEX=NO
-  SCPDEFS="$SCPDEFS -DWITHOUT_WRITER2LATEX"
 fi
 
 

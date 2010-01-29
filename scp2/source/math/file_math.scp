@@ -38,12 +38,6 @@ File gid_File_Html_W3c_Ipr
     Name = "w3c_ipr_software_notice.html";
 End
 
-File gid_File_Dtd_Math
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Dtd_Math_1_01;
-    Name = "math.dtd";
-End
 #endif
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Sm , sm)
@@ -70,7 +64,12 @@ File gid_File_Exe_Smath
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Name = EXENAME(smath);
+  #ifdef WNT
+    FileDescription = "%PRODUCTNAME Math";
+    Styles = (PACKED, PATCH_SO_NAME);
+  #else
     Styles = (PACKED);
+  #endif
 End
 
 // new user interface configuration files

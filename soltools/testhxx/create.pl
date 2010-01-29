@@ -91,9 +91,59 @@ if ($ENV{OS} eq 'LINUX') {
         "\n";
     print STDOUT 'QUIT %my_ret%', "\n";
 } elsif ($ENV{OS} eq 'WNT' and $ENV{USE_SHELL} ne '4nt') {
-    print STDOUT '#!/bin/bash', "\n";
-    print STDOUT 'echo testhxx not yet available on this platform 1>&2', "\n";
-    print STDOUT 'exit 1', "\n";
+  if ($ENV{COM} eq 'GCC') {
+    1 while $in =~ s!\s+-I\s*\.\S*\s*! !g; # discard relative includes
+    $in =~ s!(\s+-I\s*)(?i:$solarversion)(\S*)!$1\${SOLARVERSION}$2!og;
+        # macrofy includes to solver
+    $in =~ s!\s+-o\s*\S+! -o /dev/null! || die 'bad input: no -o';
+    $in =~ s!\S+/testhxx.cxx!\${my_tmp}!
+        || die 'bad input: no source file';
+    print STDOUT '#!/bin/sh', "\n";
+    print STDOUT
+        'my_tmp=${TMPDIR:-/tmp}/`id -u`_$$_include.cc', "\n";
+    print STDOUT 'my_pat=`dirname $1`', "\n";
+    print STDOUT 'my_fil=`basename $1`', "\n";
+    print STDOUT 'my_org=${PWD}', "\n";
+    print STDOUT 'cd $my_pat || exit 1', "\n";
+    print STDOUT 'my_pat=`cygpath -m \`pwd\``', "\n";
+    print STDOUT 'cd $my_org || exit 1', "\n";
+    print STDOUT
+        'echo "#include \\"${my_pat}/${my_fil}\\"" > ${my_tmp} || exit 1', "\n";
+    print STDOUT $in, ' > ${my_tmp}.out 2>&1', "\n";
+    print STDOUT 'my_ret=$?', "\n";
+    print STDOUT
+        'if [ ${my_ret} -ne 0 ] ; then echo $1 >&2 ; cat ${my_tmp}.out >&2 ;',
+        ' fi', "\n";
+    print STDOUT 'unlink ${my_tmp} || exit 1', "\n";
+    print STDOUT 'unlink ${my_tmp}.out || exit 1', "\n";
+    print STDOUT 'exit ${my_ret}', "\n";
+  } else {
+    1 while $in =~ s!\s+-I\s*\.\S*\s*! !g; # discard relative includes
+    $in =~ s!(\s+-I\s*)(?i:$solarversion)(\S*)!$1\${SOLARVERSION}$2!og;
+        # macrofy includes to solver
+    $in =~ s!\s+-Fo\s*\S+! -Fo$[my_tmp}obj! || die 'bad input: no -Fo';
+    $in =~ s!\s+-Zi\s! !;
+    $in =~ s!\s+-Fd\s*\S+!!;
+    print STDOUT '#!/bin/sh', "\n";
+    print STDOUT
+        'my_tmp=${TMPDIR:-/tmp}/`id -u`_$$_include.cc', "\n";
+    print STDOUT 'my_pat=`dirname $1`', "\n";
+    print STDOUT 'my_fil=`basename $1`', "\n";
+    print STDOUT 'my_org=${PWD}', "\n";
+    print STDOUT 'cd $my_pat || exit 1', "\n";
+    print STDOUT 'my_pat=`pwd`', "\n";
+    print STDOUT 'cd $my_org || exit 1', "\n";
+    print STDOUT
+        'echo "#include \\"${my_pat}/${my_fil}\\"" > ${my_tmp} || exit 1', "\n";
+    print STDOUT $in, ' > ${my_tmp}.out 2>&1', "\n";
+    print STDOUT 'my_ret=$?', "\n";
+    print STDOUT
+        'if [ ${my_ret} -ne 0 ] ; then echo $1 >&2 ; cat ${my_tmp}.out >&2 ;',
+        ' fi', "\n";
+    print STDOUT 'unlink ${my_tmp} || exit 1', "\n";
+    print STDOUT 'unlink ${my_tmp}.out || exit 1', "\n";
+    print STDOUT 'exit ${my_ret}', "\n";
+  }
 } else {
     print STDOUT 'echo \'no testhxx on this platform\'', "\n";
 }

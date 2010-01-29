@@ -31,6 +31,7 @@
 
 package installer::archivefiles;
 
+use Archive::Zip qw( :ERROR_CODES :CONSTANTS );
 use installer::converter;
 use installer::existence;
 use installer::exiter;
@@ -198,15 +199,22 @@ sub resolving_archive_flag
 
             if ( $installer::globals::dounzip ) { installer::systemactions::create_directory($unzipdir); }  # creating subdirectories with the names of the zipfiles
 
-            $systemcall = "$installer::globals::unzippath -l $sourcepath |";
-            open (UNZIP, "$systemcall");
-            my @zipfile = <UNZIP>;
-            close (UNZIP);
+            my $zip = Archive::Zip->new();
+            if ( $zip->read($sourcepath) != AZ_OK )
+            {
+                $infoline = "ERROR: Could not unzip $sourcepath\n";
+                push( @installer::globals::logfileinfo, $infoline);
+            }
 
-            $infoline = "Systemcall: $systemcall\n";
-            push( @installer::globals::logfileinfo, $infoline);
+            my $counter = 0;
+            my $contains_dll = 0;
+            foreach my $member ( $zip->memberNames() )
+            {
+                $counter++;
+                if ( $member =~ /.dll\s*$/ ) { $contains_dll = 1; }
+            }
 
-            if (!( $#zipfile > -1 ))    # the zipfile is empty
+            if (! ( $counter > 0 )) # the zipfile is empty
             {
                 $infoline = "ERROR: Could not unzip $sourcepath\n";
                 push( @installer::globals::logfileinfo, $infoline);
@@ -214,22 +222,11 @@ sub resolving_archive_flag
             }
             else
             {
-                # now really unpacking the files
-                # Parameter -o : overwrite files without prompting
-                # Parameter -q : quiet mode
-
                 if ( $installer::globals::dounzip )         # really unpacking the files
                 {
-                    $returnvalue = 1;
-                    $systemcall = "$installer::globals::unzippath -o -q $sourcepath -d $unzipdir";
-                    $returnvalue = system($systemcall);
+                    if ( $zip->extractTree("", $unzipdir) != AZ_OK ) { installer::exiter::exit_program("ERROR: $infoline", "resolving_archive_flag"); }
 
-                    $infoline = "Systemcall: $systemcall\n";
-                    push( @installer::globals::logfileinfo, $infoline);
-
-                    if ($returnvalue) { installer::exiter::exit_program("ERROR: $infoline", "resolving_archive_flag"); }
-
-                    if ( $^O =~ /cygwin/i )
+                    if (( $^O =~ /cygwin/i ) && ( $contains_dll ))
                     {
                         # Make dll's executable
                         $systemcall = "cd $unzipdir; find . -name \\*.dll -exec chmod 775 \{\} \\\;";
@@ -264,133 +261,119 @@ sub resolving_archive_flag
                 my $zipfileref = \@zipfile;
                 my $unziperror = 0;
 
-                # Format: Length, Date, Time, Name
-                # This includes new destination directories!
-
-                for ( my $j = 0; $j <= $#{$zipfileref}; $j++ )
+                foreach my $zipname ( $zip->memberNames() )
                 {
-                    my $line = ${$zipfileref}[$j];
+                    # Format from Archive:::Zip :
+                    # dir1/
+                    # dir1/so7drawing.desktop
 
-                    # Format:
-                    #    0 07-25-03  18:21   dir1/
-                    # 1241 07-25-03  18:21   dir1/so7drawing.desktop
+                    # some directories and files (from the help) start with "./simpress.idx"
 
-                    if ( $line =~ /^\s*(\d+)\s+(\S+)\s+(\S+)\s+(\S+.*\S+?)\s*$/ )
+                    $zipname =~ s/^\s*\.\///;
+
+                    if ($installer::globals::iswin and $^O =~ /MSWin/i) { $zipname =~ s/\//\\/g; }
+
+                    if ( $zipname =~ /\Q$installer::globals::separator\E\s*$/ ) # slash or backslash at the end characterizes a directory
                     {
-                        my $zipsize = $1;
-                        my $zipdate = $2;
-                        my $ziptime = $3;
-                        my $zipname = $4;
+                        $zipname = $zipname . "\n";
+                        push(@{$additionalpathsref}, $zipname);
 
-                        # some directories and files (from the help) start with "./simpress.idx"
+                        # Also needed here:
+                        # Name
+                        # Language
+                        # ismultilingual
+                        # Basedirectory
 
-                        $zipname =~ s/^\s*\.\///;
+                        # This is not needed, because the list of all directories for the
+                        # epm list file is generated from the destination directories of the
+                        # files included in the product!
+                    }
+                    else
+                    {
+                        my %newfile = ();
+                        %newfile = %{$onefile};
+                        $newfile{'Name'} = $zipname;
+                        my $destination = $onefile->{'destination'};
+                        installer::pathanalyzer::get_path_from_fullqualifiedname(\$destination);
+                        $newfile{'destination'} = $destination . $zipname;
+                        $newfile{'sourcepath'} = $unzipdir . $zipname;
+                        $newfile{'zipfilename'} = $onefile->{'Name'};
+                        $newfile{'zipfilesource'} = $onefile->{'sourcepath'};
+                        $newfile{'zipfiledestination'} = $onefile->{'destination'};
 
-                        if ($installer::globals::iswin and $^O =~ /MSWin/i) { $zipname =~ s/\//\\/g; }
-
-                        # if ( $zipsize == 0 )  # also files can have a size of 0
-                        if ( $zipname =~ /\Q$installer::globals::separator\E\s*$/ ) # slash or backslash at the end characterizes a directory
+                        if (( $use_internal_rights ) && ( ! $installer::globals::iswin ))
                         {
-                            $zipname = $zipname . "\n";
-                            push(@{$additionalpathsref}, $zipname);
-
-                            # Also needed here:
-                            # Name
-                            # Language
-                            # ismultilingual
-                            # Basedirectory
-
-                            # This is not needed, because the list of all directories for the
-                            # epm list file is generated from the destination directories of the
-                            # files included in the product!
+                            my $value = sprintf("%o", (stat($newfile{'sourcepath'}))[2]);
+                            $newfile{'UnixRights'} = substr($value, 3);
+                            $infoline = "Setting unix rights for \"$newfile{'sourcepath'}\" to \"$newfile{'UnixRights'}\"\n";
+                            push( @installer::globals::logfileinfo, $infoline);
                         }
-                        else
+
+                        if ( $select_files )
                         {
-                            my %newfile = ();
-                            %newfile = %{$onefile};
-                            $newfile{'Name'} = $zipname;
-                            my $destination = $onefile->{'destination'};
-                            installer::pathanalyzer::get_path_from_fullqualifiedname(\$destination);
-                            $newfile{'destination'} = $destination . $zipname;
-                            $newfile{'sourcepath'} = $unzipdir . $zipname;
-                            $newfile{'zipfilename'} = $onefile->{'Name'};
-                            $newfile{'zipfilesource'} = $onefile->{'sourcepath'};
-                            $newfile{'zipfiledestination'} = $onefile->{'destination'};
-
-                            if (( $use_internal_rights ) && ( ! $installer::globals::iswin ))
+                            if ( ! installer::existence::exists_in_array($zipname,$selectlistfiles) )
                             {
-                                my $value = sprintf("%o", (stat($newfile{'sourcepath'}))[2]);
-                                $newfile{'UnixRights'} = substr($value, 3);
-                                $infoline = "Setting unix rights for \"$newfile{'sourcepath'}\" to \"$newfile{'UnixRights'}\"\n";
+                                $infoline = "Removing from ARCHIVE file $onefilename: $zipname\n";
                                 push( @installer::globals::logfileinfo, $infoline);
+                                next; # ignoring files, that are not included in $selectlistfiles
                             }
-
-                            if ( $select_files )
+                            else
                             {
-                                if ( ! installer::existence::exists_in_array($zipname,$selectlistfiles) )
-                                {
-                                    $infoline = "Removing from ARCHIVE file $onefilename: $zipname\n";
-                                    push( @installer::globals::logfileinfo, $infoline);
-                                    next; # ignoring files, that are not included in $selectlistfiles
-                                }
-                                else
-                                {
-                                    $infoline = "Keeping from ARCHIVE file $onefilename: $zipname\n";
-                                    push( @installer::globals::logfileinfo, $infoline);
-                                    push( @keptfiles, $zipname); # collecting all kept files
-                                }
-                            }
-
-                            if ( $select_patch_files )
-                            {
-                                # Is this file listed in the Patchfile list?
-                                # $zipname (filename including path in zip file has to be listed in patchfile list
-
-                                if ( ! installer::existence::exists_in_array($zipname,$patchlistfiles) )
-                                {
-                                    $newfile{'Styles'} =~ s/\bPATCH\b//;    # removing the flag PATCH
-                                    $newfile{'Styles'} =~ s/\,\s*\,/\,/;
-                                    $newfile{'Styles'} =~ s/\(\s*\,/\(/;
-                                    $newfile{'Styles'} =~ s/\,\s*\)/\)/;
-                                    # $infoline = "Removing PATCH flag from: $zipname\n";
-                                    # push( @installer::globals::logfileinfo, $infoline);
-                                }
-                                else
-                                {
-                                    # $infoline = "Keeping PATCH flag at: $zipname\n";
-                                    # push( @installer::globals::logfileinfo, $infoline);
-                                    push( @keptpatchflags, $zipname); # collecting all PATCH flags
-                                }
-                            }
-
-                            if ( $rename_to_language )
-                            {
-                                my $newzipname = put_language_into_name($zipname, $onelanguage);
-                                my $oldfilename = $unzipdir . $zipname;
-                                my $newfilename = $unzipdir . $newzipname;
-
-                                installer::systemactions::copy_one_file($oldfilename, $newfilename);
-
-                                $newfile{'Name'} = $newzipname;
-                                $newfile{'destination'} = $destination . $newzipname;
-                                $newfile{'sourcepath'} = $unzipdir . $newzipname;
-
-                                $infoline = "RENAME_TO_LANGUAGE: Using $newzipname instead of $zipname!\n";
+                                $infoline = "Keeping from ARCHIVE file $onefilename: $zipname\n";
                                 push( @installer::globals::logfileinfo, $infoline);
+                                push( @keptfiles, $zipname); # collecting all kept files
                             }
-
-                            my $sourcefiletest = $unzipdir . $zipname;
-                            if ( ! -f $sourcefiletest )
-                            {
-                                $infoline = "ATTENTION: Unzip failed for $sourcefiletest!\n";
-                                push( @installer::globals::logfileinfo, $infoline);
-                                $unziperror = 1;
-                            }
-
-                            # only adding the new line into the files array, if not in repeat modus
-
-                            if ( ! $repeat_unzip ) { push(@newallfilesarray, \%newfile); }
                         }
+
+                        if ( $select_patch_files )
+                        {
+                            # Is this file listed in the Patchfile list?
+                            # $zipname (filename including path in zip file has to be listed in patchfile list
+
+                            if ( ! installer::existence::exists_in_array($zipname,$patchlistfiles) )
+                            {
+                                $newfile{'Styles'} =~ s/\bPATCH\b//;    # removing the flag PATCH
+                                $newfile{'Styles'} =~ s/\,\s*\,/\,/;
+                                $newfile{'Styles'} =~ s/\(\s*\,/\(/;
+                                $newfile{'Styles'} =~ s/\,\s*\)/\)/;
+                                # $infoline = "Removing PATCH flag from: $zipname\n";
+                                # push( @installer::globals::logfileinfo, $infoline);
+                            }
+                            else
+                            {
+                                # $infoline = "Keeping PATCH flag at: $zipname\n";
+                                # push( @installer::globals::logfileinfo, $infoline);
+                                push( @keptpatchflags, $zipname); # collecting all PATCH flags
+                            }
+                        }
+
+                        if ( $rename_to_language )
+                        {
+                            my $newzipname = put_language_into_name($zipname, $onelanguage);
+                            my $oldfilename = $unzipdir . $zipname;
+                            my $newfilename = $unzipdir . $newzipname;
+
+                            installer::systemactions::copy_one_file($oldfilename, $newfilename);
+
+                            $newfile{'Name'} = $newzipname;
+                            $newfile{'destination'} = $destination . $newzipname;
+                            $newfile{'sourcepath'} = $unzipdir . $newzipname;
+
+                            $infoline = "RENAME_TO_LANGUAGE: Using $newzipname instead of $zipname!\n";
+                            push( @installer::globals::logfileinfo, $infoline);
+                        }
+
+                        my $sourcefiletest = $unzipdir . $zipname;
+                        if ( ! -f $sourcefiletest )
+                        {
+                            $infoline = "ATTENTION: Unzip failed for $sourcefiletest!\n";
+                            push( @installer::globals::logfileinfo, $infoline);
+                            $unziperror = 1;
+                        }
+
+                        # only adding the new line into the files array, if not in repeat modus
+
+                        if ( ! $repeat_unzip ) { push(@newallfilesarray, \%newfile); }
                     }
                 }
 

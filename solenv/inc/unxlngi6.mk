@@ -157,10 +157,15 @@ LINKFLAGSRUNPATH_OXT=
 LINKFLAGSRUNPATH_NONE=
 # flag -Wl,-z,noexecstack sets the NX bit on the stack
 LINKFLAGS=-Wl,-z,noexecstack -Wl,-z,combreloc $(LINKFLAGSDEFS)
+.IF "$(HAVE_LD_BSYMBOLIC_FUNCTIONS)"  == "TRUE"
+LINKFLAGS += -Wl,-Bsymbolic-functions -Wl,--dynamic-list-cpp-new -Wl,--dynamic-list-cpp-typeinfo
+.ENDIF
 
 # linker flags for linking applications
-LINKFLAGSAPPGUI= -Wl,-export-dynamic -Wl,--noinhibit-exec
-LINKFLAGSAPPCUI= -Wl,-export-dynamic -Wl,--noinhibit-exec
+LINKFLAGSAPPGUI= -Wl,-export-dynamic -Wl,--noinhibit-exec \
+    -Wl,-rpath-link,$(LB):$(SOLARLIBDIR)
+LINKFLAGSAPPCUI= -Wl,-export-dynamic -Wl,--noinhibit-exec \
+    -Wl,-rpath-link,$(LB):$(SOLARLIBDIR)
 
 # linker flags for linking shared libraries
 LINKFLAGSSHLGUI= -shared
@@ -202,11 +207,11 @@ LINKFLAGS += -Wl,-zdynsort
 .ENDIF
 
 # libraries for linking applications
-STDLIBGUIMT+=-lX11 -ldl -lpthread -lm
-STDLIBCUIMT+=-ldl -lpthread -lm
+STDLIBGUIMT+=-Wl,--as-needed -lX11 -ldl -lpthread -lm -Wl,--no-as-needed
+STDLIBCUIMT+=-Wl,--as-needed -ldl -lpthread -lm -Wl,--no-as-needed
 # libraries for linking shared libraries
-STDSHLGUIMT+=-lX11 -lXext -ldl -lpthread -lm
-STDSHLCUIMT+=-ldl -lpthread -lm
+STDSHLGUIMT+=-Wl,--as-needed -lX11 -lXext -ldl -lpthread -lm -Wl,--no-as-needed
+STDSHLCUIMT+=-Wl,--as-needed -ldl -lpthread -lm -Wl,--no-as-needed
 
 LIBSALCPPRT*=-Wl,--whole-archive -lsalcpprt -Wl,--no-whole-archive
 

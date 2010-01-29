@@ -1,8 +1,0 @@
-- implement the 'add' request.
-- restrict the 'rdiff' command to one module
-- more test code for 'static' directories
-- remove command: does not check for still existing files. should this be done in
-  the internal listener or is the user to provide this listener? Currently use it with
-  the force flag.
-
-check the places in the sources which are marked with TODO

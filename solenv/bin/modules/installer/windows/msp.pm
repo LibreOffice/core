@@ -78,6 +78,13 @@ sub install_installation_sets
     my $olddatabase = installer::windows::admin::make_admin_install($oldinstallsetdatabasepath, $oldinstallpath);
     my $newdatabase = installer::windows::admin::make_admin_install($newinstallsetdatabasepath, $newinstallpath);
 
+    if ( $^O =~ /cygwin/i ) {
+        $olddatabase = qx{cygpath -w "$olddatabase"};
+        $olddatabase =~ s/\s*$//g;
+        $newdatabase = qx{cygpath -w "$newdatabase"};
+        $newdatabase =~ s/\s*$//g;
+    }
+
     return ($olddatabase, $newdatabase);
 }
 
@@ -93,10 +100,21 @@ sub extract_all_tables_from_pcpfile
     my $infoline = "";
     my $systemcall = "";
     my $returnvalue = "";
+    my $extraslash = "";        # Has to be set for non-ActiveState perl
+
+    my $localfullpcpfile = $fullpcpfilepath;
+    my $localworkdir = $workdir;
+
+    if ( $^O =~ /cygwin/i ) {
+        # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
+        $localfullpcpfile =~ s/\//\\\\/g;
+        $localworkdir =~ s/\//\\\\/g;
+        $extraslash = "\\";
+    }
 
     # Export of all tables by using "*"
 
-    $systemcall = $msidb . " -d " . $fullpcpfilepath . " -f " . $workdir . " -e \*";
+    $systemcall = $msidb . " -d " . $localfullpcpfile . " -f " . $localworkdir . " -e " . $extraslash . "*";
     $returnvalue = system($systemcall);
 
     $infoline = "Systemcall: $systemcall\n";
@@ -148,7 +166,16 @@ sub include_tables_into_pcpfile
 
     # Import of tables
 
-    $systemcall = $msidb . " -d " . $fullpcpfilepath . " -f " . $workdir . " -i " . $tables;
+    my $localworkdir = $workdir;
+    my $localfullpcpfilepath = $fullpcpfilepath;
+
+    if ( $^O =~ /cygwin/i ) {
+        # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
+        $localfullpcpfilepath =~ s/\//\\\\/g;
+        $localworkdir =~ s/\//\\\\/g;
+    }
+
+    $systemcall = $msidb . " -d " . $localfullpcpfilepath . " -f " . $localworkdir . " -i " . $tables;
 
     $returnvalue = system($systemcall);
 
@@ -195,7 +222,25 @@ sub execute_msimsp
 
     if ( -f $logfilename ) { unlink $logfilename; }
 
-    $systemcall = $msimsp . " -s " . $fullpcpfilename . " -p " . $mspfilename . " -l " . $logfilename . " -f " . $msimsptemppath;
+    my $localfullpcpfilename = $fullpcpfilename;
+    my $localmspfilename = $mspfilename;
+    my $locallogfilename = $logfilename;
+    my $localmsimsptemppath = $msimsptemppath;
+
+    if ( $^O =~ /cygwin/i ) {
+        # msimsp.exe really wants backslashes. (And double escaping because system() expands the string.)
+        $localfullpcpfilename =~ s/\//\\\\/g;
+        $locallogfilename =~ s/\//\\\\/g;
+
+        $localmspfilename =~ s/\\/\\\\/g; # path already contains backslash
+        # $localmspfilename =~ s/\//\\\\/g;
+
+        $localmsimsptemppath = qx{cygpath -w "$localmsimsptemppath"};
+        $localmsimsptemppath =~ s/\\/\\\\/g;
+        $localmsimsptemppath =~ s/\s*$//g;
+    }
+
+    $systemcall = $msimsp . " -s " . $localfullpcpfilename . " -p " . $localmspfilename . " -l " . $locallogfilename . " -f " . $localmsimsptemppath;
     installer::logger::print_message( "... $systemcall ...\n" );
 
     $returnvalue = system($systemcall);
@@ -242,18 +287,34 @@ sub check_and_save_tables
 }
 
 ####################################################################
+# Setting the languages for the service packs
+####################################################################
+
+sub create_langstring
+{
+    my ( $languagesarrayref ) = @_;
+
+    my $langstring = "";
+    for ( my $i = 0; $i <= $#{$languagesarrayref}; $i++ ) { $langstring = $langstring . "_" . ${$languagesarrayref}[$i]; }
+
+    return $langstring;
+}
+
+####################################################################
 # Setting the name of the msp database
 ####################################################################
 
 sub set_mspfilename
 {
-    my ($allvariables, $mspdir) = @_;
+    my ($allvariables, $mspdir, $languagesarrayref) = @_;
 
-    my $databasename = $allvariables->{'PRODUCTNAME'} . $allvariables->{'PRODUCTVERSION'};
+    my $databasename = $allvariables->{'PRODUCTNAME'};
     $databasename = lc($databasename);
     $databasename =~ s/\.//g;
     $databasename =~ s/\-//g;
     $databasename =~ s/\s//g;
+
+    if ( $allvariables->{'MSPPRODUCTVERSION'} ) { $databasename = $databasename . $allvariables->{'MSPPRODUCTVERSION'}; }
 
     # possibility to overwrite the name with variable DATABASENAME
     # if ( $allvariables->{'DATABASENAME'} ) { $databasename = $allvariables->{'DATABASENAME'}; }
@@ -267,8 +328,10 @@ sub set_mspfilename
     if (( $allvariables->{'SERVICEPACK'} ) && ( $allvariables->{'SERVICEPACK'} == 1 ))
     {
         my $windowspatchlevel = 0;
-        if ( $allvariables->{'WINDOWSPATCHLEVEL'} ) { $windowspatchlevel = $allvariables->{'WINDOWSPATCHLEVEL'}; }
+        if ( $allvariables->{'MSPPATCHLEVEL'} ) { $windowspatchlevel = $allvariables->{'MSPPATCHLEVEL'}; }
         $databasename = $databasename . "_servicepack_" . $windowspatchlevel;
+        my $languagestring = create_langstring($languagesarrayref);
+        $databasename = $databasename . $languagestring;
     }
     else
     {
@@ -283,6 +346,8 @@ sub set_mspfilename
     $databasename = $databasename . ".msp";
 
     my $fullmspname = $mspdir . $installer::globals::separator . $databasename;
+
+    if ( $^O =~ /cygwin/i ) { $fullmspname =~ s/\//\\/g; }
 
     return $fullmspname;
 }
@@ -1092,7 +1157,7 @@ sub analyze_msimsp_logfile
 
 sub create_msp_patch
 {
-    my ($installationdir, $includepatharrayref, $allvariables, $languagestringref, $filesarray) = @_;
+    my ($installationdir, $includepatharrayref, $allvariables, $languagestringref, $languagesarrayref, $filesarray) = @_;
 
     my $force = 1; # print this message even in 'quiet' mode
     installer::logger::print_message( "\n******************************************\n" );
@@ -1174,7 +1239,7 @@ sub create_msp_patch
     check_and_save_tables($tablelist, $localmspdir);
 
     # Setting the name of the new msp file
-    my $mspfilename = set_mspfilename($allvariables, $mspdir);
+    my $mspfilename = set_mspfilename($allvariables, $mspdir, $languagesarrayref);
 
     # Editing tables
     edit_tables($tablelist, $localmspdir, $olddatabase, $newdatabase, $mspfilename, $allvariables, $languagestringref);
@@ -1191,6 +1256,9 @@ sub create_msp_patch
     installer::logger::print_message( "... copying installation set ...\n" );
 
     my $oldinstallationsetpath = $installer::globals::updatedatabasepath;
+
+    if ( $^O =~ /cygwin/i ) { $oldinstallationsetpath =~ s/\\/\//g; }
+
     installer::pathanalyzer::get_path_from_fullqualifiedname(\$oldinstallationsetpath);
     installer::systemactions::copy_complete_directory($oldinstallationsetpath, $mspdir);
 

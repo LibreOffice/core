@@ -349,6 +349,17 @@ ULONG Depper::AddObjectToList( DepWin* pParentWin, ObjectList* pObjLst, ULONG &L
     return pWin->GetId();
 }
 
+/*void Depper::DrawOutput( OutputDevice* pDevice )
+{
+    GetDepWin()->DrawOutput( pDevice );
+    ObjectList* pObjList = GetObjectList();
+    for ( USHORT i = pObjList->Count(); i > 0; i-- )
+    {
+        ObjectWin* pWin = pObjList->GetObject( i - 1 );
+        pWin->DrawOutput( pDevice );
+    }
+}*/
+
 ObjectWin* Depper::RemoveObjectFromList( ObjectList* pObjLst, ULONG &WinCount, USHORT nId, BOOL bDelete )
 {
     ObjectWin* pWin = ObjIdToPtr( pObjLst, nId );

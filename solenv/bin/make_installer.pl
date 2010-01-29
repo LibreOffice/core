@@ -8,8 +8,6 @@
 #
 # $RCSfile: make_installer.pl,v $
 #
-# $Revision: 1.121 $
-#
 # This file is part of OpenOffice.org.
 #
 # OpenOffice.org is free software: you can redistribute it and/or modify
@@ -412,6 +410,9 @@ if ( $installer::globals::globallogging ) { installer::files::save_array_of_hash
 
 if ( $allvariableshashref->{'SHIFT_BASIS_INTO_BRAND_LAYER'} ) { $dirsinproductarrayref = installer::scriptitems::shift_basis_directory_parents($dirsinproductarrayref); }
 if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productdirectories1a.log", $dirsinproductarrayref); }
+if ( $allvariableshashref->{'OFFICEDIRECTORYNAME'} ) { installer::scriptitems::set_officedirectory_name($dirsinproductarrayref, $allvariableshashref->{'OFFICEDIRECTORYNAME'}); }
+if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productdirectories1b.log", $dirsinproductarrayref); }
+
 
 installer::scriptitems::resolve_all_directory_names($dirsinproductarrayref);
 if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productdirectories2.log", $dirsinproductarrayref); }
@@ -948,10 +949,13 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     installer::scriptitems::get_Source_Directory_For_Files_From_Includepathlist($scpactionsinproductlanguageresolvedarrayref, $includepatharrayref_lang, $dirsinproductlanguageresolvedarrayref, "ScpActions");
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions5.log", $scpactionsinproductlanguageresolvedarrayref); }
 
-    # Editing scpactions with flag SCPZIP_REPLACE.
+    # Editing scpactions with flag SCPZIP_REPLACE and PATCH_SO_NAME.
 
     installer::scpzipfiles::resolving_scpzip_replace_flag($scpactionsinproductlanguageresolvedarrayref, $allvariableshashref, "ScpAction", $languagestringref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions6.log", $scpactionsinproductlanguageresolvedarrayref); }
+
+    installer::scppatchsoname::resolving_patchsoname_flag($scpactionsinproductlanguageresolvedarrayref, $allvariableshashref, "ScpAction", $languagestringref);
+    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions6a.log", $scpactionsinproductlanguageresolvedarrayref); }
 
     #########################################################
     # language dependent links part
@@ -1359,7 +1363,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # try it again later.
             ####################################################
 
-            if (( $installer::globals::patch ) || ( $installer::globals::languagepack )) { $allvariableshashref->{'POOLPRODUCT'} = 0; }
+            if (( $installer::globals::patch ) || ( $installer::globals::languagepack ) || ( $installer::globals::packageformat eq "native" )) { $allvariableshashref->{'POOLPRODUCT'} = 0; }
 
             if ( $allvariableshashref->{'POOLPRODUCT'} )
             {
@@ -1686,7 +1690,8 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                             installer::epmfile::create_new_directory_structure($newepmdir);
                             $installer::globals::postprocess_specialepm = 1;
 
-                            if (( $installer::globals::patch ) && ( $installer::globals::issolarisx86build )) { installer::worker::fix2_solaris_x86_patch($packagename, $installer::globals::epmoutpath); }
+                            # solaris patch not needed anymore
+                            # if (( $installer::globals::patch ) && ( $installer::globals::issolarisx86build )) { installer::worker::fix2_solaris_x86_patch($packagename, $installer::globals::epmoutpath); }
                         }
                     }
                     else    # this is the standard epm (not relocatable) or ( nonlinux and nonsolaris )
@@ -1808,6 +1813,8 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             chdir($currentdir); # changing back into start directory
         }
+
+        if (( $installer::globals::issolarispkgbuild ) && ( $allvariableshashref->{'COLLECT_PKGMAP'} )) { installer::worker::collectpackagemaps($installdir, $languagestringref, $allvariableshashref); }
 
         #######################################################
         # Analyzing the log file
@@ -2219,14 +2226,14 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         }
 
         # Analyzing the ScpActions and copying the files into the installation set
-        # At least the loader, instmsia.exe and instmsiw.exe
+        # At least the loader.exe
 
         installer::logger::print_message( "... copying files into installation set ...\n" );
 
         # installer::windows::msiglobal::copy_scpactions_into_installset($defaultlanguage, $installdir, $scpactionsinproductlanguageresolvedarrayref);
         installer::worker::put_scpactions_into_installset($installdir);
 
-        # ... copying the setup.exe, instmsia.exe and instmsiw.exe
+        # ... copying the setup.exe
 
         installer::windows::msiglobal::copy_windows_installer_files_into_installset($installdir, $includepatharrayref, $allvariableshashref);
 
@@ -2298,13 +2305,13 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         # Creating Windows msp patches
         #######################################################
 
-        if (( $is_success ) && ( $installer::globals::updatedatabase ) && ( $allvariableshashref->{'CREATE_MSP_INSTALLSET'} ) && ( ! ( $^O =~ /cygwin/i ))) # not supported for cygwin yet
+        if (( $is_success ) && ( $installer::globals::updatedatabase ) && ( $allvariableshashref->{'CREATE_MSP_INSTALLSET'} ))
         {
             # Required:
             # Temp path for administrative installations: $installer::globals::temppath
             # Path of new installation set: $finalinstalldir
             # Path of old installation set: $installer::globals::updatedatabasepath
-            my $mspdir = installer::windows::msp::create_msp_patch($finalinstalldir, $includepatharrayref, $allvariableshashref, $languagestringref, $filesinproductlanguageresolvedarrayref);
+            my $mspdir = installer::windows::msp::create_msp_patch($finalinstalldir, $includepatharrayref, $allvariableshashref, $languagestringref, $languagesarrayref, $filesinproductlanguageresolvedarrayref);
             ($is_success, $finalinstalldir) = installer::worker::analyze_and_save_logfile($loggingdir, $mspdir, $installlogdir, $allsettingsarrayref, $languagestringref, $current_install_number);
             installer::worker::clean_output_tree(); # removing directories created in the output tree
         }

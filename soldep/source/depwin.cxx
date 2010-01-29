@@ -116,6 +116,21 @@ void DepWin::Paint( const Rectangle& rRect )
     }
 }
 
+void DepWin::DrawOutput( OutputDevice* pDevice, const Point& rOffset  )
+{
+    ULONG i = 0;
+    ULONG nListCount = ConList.Count();
+
+    for ( i=0 ; i < nListCount ; i++ )
+    {
+        ConList.GetObject( i )->DrawOutput( pDevice, rOffset );
+    }
+    if ( mbStartNewCon )
+    {
+        pDevice->DrawLine( maNewConStart, maNewConEnd );
+    }
+}
+
 void DepWin::MouseButtonUp( const MouseEvent& rMEvt )
 {
     if ( rMEvt.IsRight() )

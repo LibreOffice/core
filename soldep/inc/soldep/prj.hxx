@@ -358,7 +358,7 @@ public:
 DECLARE_LIST( StarFileList, StarFile * )
 
 #define STAR_MODE_SINGLE_PARSE          0x0000
-#define STAR_MODE_RECURSIVE_PARSE       0x0001
+//#define STAR_MODE_RECURSIVE_PARSE     0x0001      it dosen't work anymore
 #define STAR_MODE_MULTIPLE_PARSE        0x0002
 
 class Star : public StarList
@@ -382,7 +382,7 @@ protected:
     Link aFileIOErrorHdl; // called with &String as parameter!!!
 
     void InsertSolarList( String sProject );
-    String CreateFileName( String sProject );
+    String CreateFileName( String& rProject, String& rSourceRoot );
 
     void            Expand_Impl();
     void            ExpandPrj_Impl( Prj *pPrj, Prj *pDepPrj );

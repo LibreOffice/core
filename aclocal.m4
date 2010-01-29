@@ -118,7 +118,7 @@ AC_DEFUN([AM_PATH_PYTHON],
   dnl $prefix/lib/site-python in 1.4 to $prefix/lib/python1.5/site-packages
   dnl in 1.5.
   m4_define([_AM_PYTHON_INTERPRETER_LIST],
-            [python python2 python2.4 python2.3 python2.2 dnl
+            [python python2 python2.6 python2.5 python2.4 python2.3 python2.2 dnl
 python2.1 python2.0 python1.6 python1.5])
 
   m4_if([$1],[],[

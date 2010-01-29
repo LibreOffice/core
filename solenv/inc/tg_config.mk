@@ -8,7 +8,7 @@
 #
 # $RCSfile: tg_config.mk,v $
 #
-# $Revision: 1.22 $
+# $Revision: 1.21.72.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -121,12 +121,12 @@ $(PROCESSOUT)$/registry$/data$/$(PACKAGEDIR)$/%.xcu : %.xcu
 # --- localizations ---
 .IF "$(WITH_LANG)"!=""
 .IF "$(XCU_LANG)"!=""
-$(XCU_LANG) : localize.sdf
+$(XCU_LANG) : $(LOCALIZESDF)
 .ENDIF			# "$(XCU_LANG)"!=""
 
 $(PROCESSOUT)$/merge$/$(PACKAGEDIR)$/%.xcu : %.xcu
     -$(MKDIRHIER) $(@:d)
-    $(CFGEX) -p $(PRJNAME) -i $(@:f) -o $@ -m localize.sdf -l all
+    $(CFGEX) -p $(PRJNAME) -i $(@:f) -o $@ -m $(LOCALIZESDF) -l all
 
 .IF "$(XCU_LANG)" != ""
 $(XCU_LANG) : $(XSLDIR)$/alllang.xsl

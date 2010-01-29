@@ -35,11 +35,18 @@ Directory gid_Dir_Share_Layout
     DosName = "layout";
 End
 
-File gid_File_Zip_Sw_Layout
+File gid_File_Zip_Toolkit_Layout
    Dir = gid_Dir_Share_Layout;
    USER_FILE_BODY;
    Styles = (ARCHIVE, PATCH);
-   Name = "sw-layout.zip";
+   Name = "toolkit-layout.zip";
+End
+
+File gid_File_Zip_Sc_Layout
+   Dir = gid_Dir_Share_Layout;
+   USER_FILE_BODY;
+   Styles = (ARCHIVE, PATCH);
+   Name = "sc-layout.zip";
 End
 
 File gid_File_Zip_Svx_Layout
@@ -48,3 +55,11 @@ File gid_File_Zip_Svx_Layout
    Styles = (ARCHIVE, PATCH);
    Name = "svx-layout.zip";
 End
+
+File gid_File_Zip_Sw_Layout
+   Dir = gid_Dir_Share_Layout;
+   USER_FILE_BODY;
+   Styles = (ARCHIVE, PATCH);
+   Name = "sw-layout.zip";
+End
+

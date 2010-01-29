@@ -1,9 +1,0 @@
-rem @echo off
-iff "%SOLARENV%" == "" then
-    echo Please configure environment with setsolar
-endiff
-iff "%PERL%" == "" then
-	call perl5 -I%SOLARENV%\bin\modules %SOLARENV%\bin\merge2top.pl %1&
-else
-	call %PERL% -I%SOLARENV%\bin\modules %SOLARENV%\bin\merge2top.pl %1&
-endiff
