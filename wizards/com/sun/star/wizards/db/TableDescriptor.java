@@ -34,9 +34,7 @@ import com.sun.star.beans.PropertyVetoException;
 import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.WrappedTargetException;
-import com.sun.star.lang.XInitialization;
 import com.sun.star.sdbc.SQLException;
-import com.sun.star.ui.dialogs.XExecutableDialog;
 import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.ui.WizardDialog;
 import java.util.Vector;
@@ -59,7 +57,6 @@ import com.sun.star.sdbcx.XColumnsSupplier;
 import com.sun.star.sdbcx.XDataDescriptorFactory;
 import com.sun.star.sdbcx.XDrop;
 import com.sun.star.sdbcx.XKeysSupplier;
-import com.sun.star.sdbcx.XTablesSupplier;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Desktop;
@@ -89,7 +86,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
     private boolean bIDFieldisInserted = false;
     private String IDFieldName = "";
     private String sColumnAlreadyExistsMessage = "";
-    private WizardDialog oUnoDialog;
+//    private WizardDialog oUnoDialog;
     private XWindow xWindow;
 
     /**
@@ -121,11 +118,11 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
     {
         if (super.getConnection(_curPropertyValue))
         {
-            XTablesSupplier xDBTables = (XTablesSupplier) UnoRuntime.queryInterface(XTablesSupplier.class, DBConnection);
-            xTableNames = xDBTables.getTables();
-            xTableAppend = (XAppend) UnoRuntime.queryInterface(XAppend.class, xTableNames);
-            xTableDrop = (XDrop) UnoRuntime.queryInterface(XDrop.class, xTableNames);
-            xTableDataDescriptorFactory = (XDataDescriptorFactory) UnoRuntime.queryInterface(XDataDescriptorFactory.class, xTableNames);
+            // XTablesSupplier xDBTables = (XTablesSupplier) UnoRuntime.queryInterface(XTablesSupplier.class, DBConnection);
+            // xTableNames = xDBTables.getTables();
+            xTableAppend = (XAppend) UnoRuntime.queryInterface(XAppend.class, getTableNamesAsNameAccess());
+            xTableDrop = (XDrop) UnoRuntime.queryInterface(XDrop.class, getTableNamesAsNameAccess());
+            xTableDataDescriptorFactory = (XDataDescriptorFactory) UnoRuntime.queryInterface(XDataDescriptorFactory.class, getTableNamesAsNameAccess());
             xPropTableDataDescriptor = xTableDataDescriptorFactory.createDataDescriptor();
             XColumnsSupplier xColumnsSupplier = (XColumnsSupplier) UnoRuntime.queryInterface(XColumnsSupplier.class, xPropTableDataDescriptor);
             xNameAccessColumns = xColumnsSupplier.getColumns();
@@ -133,7 +130,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
             try
             {
                 createTypeInspector();
-                sTableFilters = (String[]) AnyConverter.toArray(xDataSourcePropertySet.getPropertyValue("TableFilter"));
+                sTableFilters = (String[]) AnyConverter.toArray(getDataSourcePropertySet().getPropertyValue("TableFilter"));
             }
             catch (Exception e)
             {
@@ -246,7 +243,10 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
 
     /**
      * creates the table under the passed name
+     * @param _catalogname
+     * @param _schemaname
      * @param _tablename is made unique if necessary
+     * @param _fieldnames
      * @return true or false to indicate successful creation or not
      */
     public boolean createTable(String _catalogname, String _schemaname, String _tablename, String[] _fieldnames)
@@ -261,9 +261,9 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
                 if (!isColunnNameDuplicate(xNameAccessColumns, xColPropertySet))
                 {
                     xAppendColumns.appendByDescriptor(xColPropertySet); //xColPropertySet.setPropertyValue("Type", new Integer(32423))
-                }
-                else
-                {
+                        }
+                        else
+                        {
                     breturn = false;
                 }
             }
@@ -272,7 +272,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
                 assignTableProperty("Name", _tablename);
                 assignTableProperty("CatalogName", _catalogname);
                 assignTableProperty("SchemaName", _schemaname);
-                xTableContainer = (XContainer) UnoRuntime.queryInterface(XContainer.class, xTableNames);
+                xTableContainer = (XContainer) UnoRuntime.queryInterface(XContainer.class, getTableNamesAsNameAccess());
                 xTableContainer.addContainerListener(this);
                 if (keycolumncontainer.size() > 0)
                 {
@@ -295,6 +295,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
                 }
                 if (breturn)
                 {
+                    // TODO: LLA: describe what is he doing here.
                     xTableAppend.appendByDescriptor(xPropTableDataDescriptor);
                 }
             }
@@ -340,7 +341,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
             }
             if (xTableDrop != null)
             {
-                if (xTableNames.hasByName(_tablename))
+                if (getTableNamesAsNameAccess().hasByName(_tablename))
                 {
                     xTableDrop.dropByName(_tablename);
                 }
@@ -850,7 +851,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
             sTableFilters = sNewTableFilters;
             try
             {
-                xDataSourcePropertySet.setPropertyValue("TableFilter", sTableFilters);
+                getDataSourcePropertySet().setPropertyValue("TableFilter", sTableFilters);
             }
             catch (Exception e)
             {

@@ -34,17 +34,16 @@ import com.sun.star.awt.Size;
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XDevice;
-import com.sun.star.beans.PropertyVetoException;
-import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.container.XChild;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
+import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.view.XControlAccess;
 import com.sun.star.wizards.common.*;
 
-import com.sun.star.sdbc.*;
+import com.sun.star.sdbc.DataType;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.Type;
@@ -55,13 +54,10 @@ import com.sun.star.drawing.XControlShape;
 import com.sun.star.drawing.XDrawPage;
 import com.sun.star.drawing.XDrawPageSupplier;
 import com.sun.star.drawing.XShape;
-//import com.sun.star.drawing.XShapeGroup;
 import com.sun.star.drawing.XShapeGrouper;
 import com.sun.star.drawing.XShapes;
 import com.sun.star.form.XFormsSupplier;
 import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.IndexOutOfBoundsException;
-import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
@@ -76,8 +72,8 @@ public class FormHandler
     public XDrawPage xDrawPage;
     private XDrawPageSupplier xDrawPageSupplier;
     public String[] sModelServices = new String[8];
-    public XNameContainer xNamedForm;
     public static ControlData[] oControlData;
+
     public final static int SOLABEL = 0;
     public final static int SOTEXTBOX = 1;
     public final static int SOCHECKBOX = 2;
@@ -129,29 +125,32 @@ public class FormHandler
         sModelServices[SONUMERICCONTROL] = "com.sun.star.form.component.FormattedField";
         sModelServices[SOGRIDCONTROL] = "com.sun.star.form.component.GridControl";
         sModelServices[SOIMAGECONTROL] = "com.sun.star.form.component.DatabaseImageControl";
-        oControlData = new ControlData[17];
-        oControlData[0] = createControlData(DataType.BIT, SOCHECKBOX, "CheckBox", "CheckBox", false);
-        oControlData[1] = createControlData(DataType.BOOLEAN, SOCHECKBOX, "CheckBox", "CheckBox", false);
-        oControlData[2] = createControlData(DataType.TINYINT, SONUMERICCONTROL, "FormattedField", "FormattedField", false);
-        oControlData[3] = createControlData(DataType.SMALLINT, SONUMERICCONTROL, "FormattedField", "FormattedField", false);
-        oControlData[4] = createControlData(DataType.INTEGER, SONUMERICCONTROL, "FormattedField", "FormattedField", false);
-        oControlData[5] = createControlData(DataType.BIGINT, SONUMERICCONTROL, "FormattedField", "FormattedField", false);
-        oControlData[6] = createControlData(DataType.FLOAT, SONUMERICCONTROL, "FormattedField", "FormattedField", false);
-        oControlData[7] = createControlData(DataType.REAL, SONUMERICCONTROL, "FormattedField", "FormattedField", false);
-        oControlData[8] = createControlData(DataType.DOUBLE, SONUMERICCONTROL, "FormattedField", "FormattedField", false);
-        oControlData[9] = createControlData(DataType.NUMERIC, SONUMERICCONTROL, "FormattedField", "FormattedField", false);
-        oControlData[10] = createControlData(DataType.DECIMAL, SONUMERICCONTROL, "FormattedField", "FormattedField", false);
-        oControlData[11] = createControlData(DataType.CHAR, SOTEXTBOX, "TextField", "TextField", false);
-        oControlData[12] = createControlData(DataType.VARCHAR, SOTEXTBOX, "TextField", "TextField", true);
+
+        oControlData = new ControlData[22];
+        oControlData[0] = createControlData(DataType.BIT,          SOCHECKBOX, "CheckBox", "CheckBox", false);
+        oControlData[1] = createControlData(DataType.BOOLEAN,      SOCHECKBOX, "CheckBox", "CheckBox", false);
+        oControlData[2] = createControlData(DataType.TINYINT,      SONUMERICCONTROL, "FormattedField", "FormattedField", false);
+        oControlData[3] = createControlData(DataType.SMALLINT,     SONUMERICCONTROL, "FormattedField", "FormattedField", false);
+        oControlData[4] = createControlData(DataType.INTEGER,      SONUMERICCONTROL, "FormattedField", "FormattedField", false);
+        oControlData[5] = createControlData(DataType.BIGINT,       SONUMERICCONTROL, "FormattedField", "FormattedField", false);
+        oControlData[6] = createControlData(DataType.FLOAT,        SONUMERICCONTROL, "FormattedField", "FormattedField", false);
+        oControlData[7] = createControlData(DataType.REAL,         SONUMERICCONTROL, "FormattedField", "FormattedField", false);
+        oControlData[8] = createControlData(DataType.DOUBLE,       SONUMERICCONTROL, "FormattedField", "FormattedField", false);
+        oControlData[9] = createControlData(DataType.NUMERIC,      SONUMERICCONTROL, "FormattedField", "FormattedField", false);
+        oControlData[10] = createControlData(DataType.DECIMAL,     SONUMERICCONTROL, "FormattedField", "FormattedField", false);
+        oControlData[11] = createControlData(DataType.CHAR,        SOTEXTBOX, "TextField", "TextField", false);
+        oControlData[12] = createControlData(DataType.VARCHAR,     SOTEXTBOX, "TextField", "TextField", true);
         oControlData[13] = createControlData(DataType.LONGVARCHAR, SOTEXTBOX, "TextField", "TextField", true);
-        oControlData[14] = createControlData(DataType.DATE, SODATECONTROL, "DateField", "DateField", false);
-        oControlData[15] = createControlData(DataType.TIME, SOTIMECONTROL, "TimeField", "TimeField", false);
-        oControlData[16] = createControlData(DataType.TIMESTAMP, SODATECONTROL, "DateField", "TextField", false);
-        ControlData[] oImageControlData = new ControlData[4];
-        oImageControlData[0] = createControlData(DataType.BINARY, SOIMAGECONTROL, "ImageControl", "TextField", false);
-        oImageControlData[1] = createControlData(DataType.VARBINARY, SOIMAGECONTROL, "ImageControl", "TextField", false);
-        oImageControlData[2] = createControlData(DataType.LONGVARBINARY, SOIMAGECONTROL, "ImageControl", "TextField", false);
-        oImageControlData[3] = createControlData(DataType.BLOB, SOIMAGECONTROL, "ImageControl", "TextField", false);
+        oControlData[14] = createControlData(DataType.DATE,        SODATECONTROL, "DateField", "DateField", false);
+        oControlData[15] = createControlData(DataType.TIME,        SOTIMECONTROL, "TimeField", "TimeField", false);
+        oControlData[16] = createControlData(DataType.TIMESTAMP,   SODATECONTROL, "DateField", "TextField", false);
+        // oImageControlData = new ControlData[4];
+        oControlData[17] = createControlData(DataType.BINARY,      SOIMAGECONTROL, "ImageControl", "TextField", false);
+        oControlData[18] = createControlData(DataType.VARBINARY,   SOIMAGECONTROL, "ImageControl", "TextField", false);
+        oControlData[19] = createControlData(DataType.LONGVARBINARY, SOIMAGECONTROL, "ImageControl", "TextField", false);
+        oControlData[20] = createControlData(DataType.BLOB,        SOIMAGECONTROL, "ImageControl", "TextField", false);
+
+        oControlData[21] = createControlData(DataType.OTHER,       SOIMAGECONTROL, "ImageControl", "TextField", false);
     }
 
     public int getControlType(int _fieldtype)
@@ -160,7 +159,8 @@ public class FormHandler
         {
             if (oControlData[i].DataType == _fieldtype)
             {
-                return oControlData[i].ControlType;
+                final int nType = oControlData[i].ControlType;
+                return nType;
             }
         }
         return -1;
@@ -190,6 +190,7 @@ public class FormHandler
         XDevice xDevice = (XDevice) UnoRuntime.queryInterface(XDevice.class, oLabelControl.xWindowPeer);
         iXPixelFactor = (int) (100000 / xDevice.getInfo().PixelPerMeterX);
         iYPixelFactor = (int) (100000 / xDevice.getInfo().PixelPerMeterY);
+
         nLabelHeight = (oLabelControl.getPreferredHeight("The quick brown fox...") + 1);
         Control oTextControl = new Control(this, SOTEXTBOX, new Point(), new Size());
         nDBRefHeight = (oTextControl.getPreferredHeight("The quick brown fox...") + 1);
@@ -299,7 +300,7 @@ public class FormHandler
         {
             for (int i = xDrawPage.getCount() - 1; i >= 0; i--)
             {
-                if (hasControlByName(_FormName, xDrawPage.getByIndex(i)))
+                if (belongsToForm(xDrawPage.getByIndex(i), _FormName))
                 {
                     XShape xShape = (XShape) UnoRuntime.queryInterface(XShape.class, xDrawPage.getByIndex(i));
                     xDrawPage.remove(xShape);
@@ -312,7 +313,23 @@ public class FormHandler
         }
     }
 
-    public boolean hasControlByName(String _FormName, Object _oDrawPageElement)
+    public void removeElement( XNameContainer _parentContainer, String _formName )
+    {
+        try
+        {
+            _parentContainer.removeByName( _formName );
+        }
+        catch ( WrappedTargetException e )
+        {
+            e.printStackTrace( System.err );
+        }
+        catch( final NoSuchElementException e )
+        {
+            e.printStackTrace( System.err );
+        }
+    }
+
+    public boolean belongsToForm(Object _oDrawPageElement, String _FormName)
     {
         XServiceInfo xServiceInfo = (XServiceInfo) UnoRuntime.queryInterface(XServiceInfo.class, _oDrawPageElement);
         if (xServiceInfo.supportsService("com.sun.star.drawing.ControlShape"))
@@ -325,7 +342,7 @@ public class FormHandler
                 XChild xChild = (XChild) UnoRuntime.queryInterface(XChild.class, xControlModel);
                 XNamed xNamed = (XNamed) UnoRuntime.queryInterface(XNamed.class, xChild.getParent());
                 String sName = xNamed.getName();
-                return _FormName.equals(xNamed.getName());
+                return _FormName.equals(sName);
             }
         }
         return false;
@@ -340,6 +357,7 @@ public class FormHandler
             {
                 oDBForm = xMSFDoc.createInstance("com.sun.star.form.component.Form");
                 _xNamedFormContainer.insertByName(_FormName, oDBForm);
+                XNameContainer xNamedForm;
                 xNamedForm = (XNameContainer) UnoRuntime.queryInterface(XNameContainer.class, oDBForm);
                 return xNamedForm;
             }
@@ -543,7 +561,7 @@ public class FormHandler
     /**
      * @return
      */
-    public int getDBRefHeight()
+    public int getControlReferenceHeight()
     {
         if (this.nDBRefHeight == -1)
         {

@@ -36,8 +36,10 @@ import java.util.Calendar;
 import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
+// import com.sun.star.i18n.NumberFormatIndex;
 import com.sun.star.lang.Locale;
 import com.sun.star.lang.XMultiServiceFactory;
+// import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.RuntimeException;
 import com.sun.star.uno.UnoRuntime;
@@ -204,7 +206,7 @@ public class Helper
             if (oUnoObject != null)
             {
                 XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oUnoObject);
-                Property[] aProps = xPSet.getPropertySetInfo().getProperties();
+                // Property[] aProps = xPSet.getPropertySetInfo().getProperties();
                 Object oObject = xPSet.getPropertyValue(PropertyName);
                 return oObject;
             }

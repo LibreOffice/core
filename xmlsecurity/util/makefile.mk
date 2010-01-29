@@ -92,7 +92,6 @@ SHL2STDLIBS +=			\
     $(CPPULIB)			\
     $(CPPUHELPERLIB)	\
     $(SALLIB)	\
-    $(UNOTOOLSLIB)	    \
     $(SVLLIB)			\
     $(TOOLSLIB)			\
     $(COMPHELPERLIB)	\
@@ -151,10 +150,7 @@ SHL4STDLIBS=\
                 $(TOOLSLIB) 		\
                 $(SVTOOLLIB) 		\
                 $(SALLIB)			\
-                $(VOSLIB)			\
-                $(SOTLIB)			\
                 $(SVLLIB)			\
-                $(SFXLIB)			\
                 $(XMLOFFLIB)		\
                 $(SVXLIB)
 

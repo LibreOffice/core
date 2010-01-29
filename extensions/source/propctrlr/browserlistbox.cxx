@@ -667,11 +667,21 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void OBrowserListBox::SetPropertyValue(const ::rtl::OUString& _rEntryName, const Any& _rValue)
+    void OBrowserListBox::SetPropertyValue(const ::rtl::OUString& _rEntryName, const Any& _rValue, bool _bUnknownValue )
     {
         ListBoxLines::iterator line = m_aLines.find( _rEntryName );
         if ( line != m_aLines.end() )
-            impl_setControlAsPropertyValue( line->second, _rValue );
+        {
+            if ( _bUnknownValue )
+            {
+                Reference< XPropertyControl > xControl( line->second.pLine->getControl() );
+                OSL_ENSURE( xControl.is(), "OBrowserListBox::SetPropertyValue: illegal control!" );
+                if ( xControl.is() )
+                    xControl->setValue( Any() );
+            }
+            else
+                impl_setControlAsPropertyValue( line->second, _rValue );
+        }
     }
 
     //------------------------------------------------------------------------

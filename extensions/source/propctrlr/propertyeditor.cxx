@@ -437,11 +437,11 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void OPropertyEditor::SetPropertyValue( const ::rtl::OUString& rEntryName, const Any& _rValue )
+    void OPropertyEditor::SetPropertyValue( const ::rtl::OUString& rEntryName, const Any& _rValue, bool _bUnknownValue )
     {
         OBrowserPage* pPage = getPage( rEntryName );
         if ( pPage )
-            pPage->getListBox().SetPropertyValue( rEntryName, _rValue );
+            pPage->getListBox().SetPropertyValue( rEntryName, _rValue, _bUnknownValue );
     }
 
     //------------------------------------------------------------------

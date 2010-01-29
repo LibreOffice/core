@@ -43,6 +43,7 @@
 
 #include <basidesh.hxx>
 #include <iderdll.hxx>
+#include "dlgedobj.hxx"
 
 TYPEINIT1( DlgEdView, SdrView );
 
@@ -151,3 +152,68 @@ void DlgEdView::MakeVisible( const Rectangle& rRect, Window& rWin )
 
 //----------------------------------------------------------------------------
 
+SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, USHORT nTol)
+{
+    DlgEdObj* pDlgEdObj = dynamic_cast< DlgEdObj* >(pRetval);
+
+    if(pDlgEdObj)
+    {
+        bool bExcludeInner(false);
+
+        if(0 != dynamic_cast< DlgEdForm* >(pRetval))
+        {
+            // from DlgEdForm::CheckHit; exclude inner for DlgEdForm
+            bExcludeInner = true;
+        }
+        else if(pDlgEdObj->supportsService("com.sun.star.awt.UnoControlGroupBoxModel"))
+        {
+            // from DlgEdObj::CheckHit; exclude inner for group shapes
+            bExcludeInner = true;
+        }
+
+        if(bExcludeInner)
+        {
+            // use direct model data; it's a DlgEdObj, so GetLastBoundRect()
+            // will access aOutRect directly
+            const Rectangle aOuterRectangle(pDlgEdObj->GetLastBoundRect());
+
+            if(!aOuterRectangle.IsEmpty()
+                && RECT_EMPTY != aOuterRectangle.Right()
+                && RECT_EMPTY != aOuterRectangle.Bottom())
+            {
+                basegfx::B2DRange aOuterRange(
+                    aOuterRectangle.Left(), aOuterRectangle.Top(),
+                    aOuterRectangle.Right(), aOuterRectangle.Bottom());
+
+                if(nTol)
+                {
+                    aOuterRange.grow(-1.0 * nTol);
+                }
+
+                if(aOuterRange.isInside(basegfx::B2DPoint(rPnt.X(), rPnt.Y())))
+                {
+                    pRetval = 0;
+                }
+            }
+        }
+    }
+
+    return pRetval;
+}
+
+SdrObject* DlgEdView::CheckSingleSdrObjectHit(const Point& rPnt, USHORT nTol, SdrObject* pObj, SdrPageView* pPV, ULONG nOptions, const SetOfByte* pMVisLay) const
+{
+    // call parent
+    SdrObject* pRetval = SdrView::CheckSingleSdrObjectHit(rPnt, nTol, pObj, pPV, nOptions, pMVisLay);
+
+    if(pRetval)
+    {
+        // check hitted object locally
+        pRetval = impLocalHitCorrection(pRetval, rPnt, nTol);
+    }
+
+    return pRetval;
+}
+
+//----------------------------------------------------------------------------
+// eof

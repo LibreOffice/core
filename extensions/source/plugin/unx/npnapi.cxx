@@ -365,7 +365,12 @@ static void l_NPN_ReloadPlugins( NPBool /*reloadPages*/ )
 
 static NPError l_NPN_GetValue( NPP, NPNVariable variable, void* value )
 {
-    switch( variable )
+    /*
+     * We want to handle values injected into a NPNVariable which aren't in
+     * the old enum we build against, but that we know are in the new enum
+     * we want to support
+         */
+    switch( (int)variable )
     {
         case NPNVxDisplay:
             *((Display**)value) = pXtAppDisplay;
@@ -396,14 +401,14 @@ static NPError l_NPN_GetValue( NPP, NPNVariable variable, void* value )
             medDebug( 1, "xembed requested\n" );
             break;
         case NPNVToolkit:
-            #ifdef ENABLE_GTK
+#           ifdef ENABLE_GTK
             *(int*)value = NPNVGtk2;
-            #else
+#           else
             *(int*)value = 0;
-            #endif
+#           endif
             medDebug( 1, "toolkit requested\n" );
             break;
-         default:
+        default:
             medDebug( 1, "unknown NPNVariable %x requested\n", variable );
             return NPERR_INVALID_PARAM;
     }
@@ -449,13 +454,13 @@ static NPNetscapeFuncs aNetscapeFuncs =
     l_NPN_MemFree,
     l_NPN_MemFlush,
     l_NPN_ReloadPlugins,
-    #ifdef OJI
+#   ifdef OJI
     l_NPN_GetJavaEnv,
     l_NPN_GetJavaPeer,
-    #else
+#   else
     NULL,
     NULL,
-    #endif
+#   endif
     l_NPN_GetURLNotify,
     l_NPN_PostURLNotify,
     l_NPN_GetValue,

@@ -259,7 +259,7 @@ void ORadioButtonModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, cons
         }
     }
 
-    if (nHandle == PROPERTY_ID_DEFAULTCHECKED)
+    if (nHandle == PROPERTY_ID_DEFAULT_STATE)
     {
         sal_Int16 nValue;
         rValue >>= nValue;
@@ -269,7 +269,7 @@ void ORadioButtonModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, cons
             Any aZero;
             nValue = 0;
             aZero <<= nValue;
-            SetSiblingPropsTo(PROPERTY_DEFAULTCHECKED, aZero);
+            SetSiblingPropsTo(PROPERTY_DEFAULT_STATE, aZero);
         }
     }
 }
@@ -341,7 +341,7 @@ void SAL_CALL ORadioButtonModel::read(const Reference<XObjectInputStream>& _rxIn
     }
 
     setReferenceValue( sReferenceValue );
-    setDefaultChecked( (CheckState)nDefaultChecked );
+    setDefaultChecked( (ToggleState)nDefaultChecked );
 
     // Nach dem Lesen die Defaultwerte anzeigen
     if ( getControlSource().getLength() )

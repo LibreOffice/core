@@ -671,14 +671,14 @@ Reference<XNumberFormatsSupplier>  OFormattedModel::calcFormFormatsSupplier() co
     Reference< XRowSet > xRowSet( xNextParentForm, UNO_QUERY );
     Reference< XNumberFormatsSupplier > xSupplier;
     if (xRowSet.is())
-        xSupplier = getNumberFormats(getConnection(xRowSet), sal_True, m_xServiceFactory);
+        xSupplier = getNumberFormats( getConnection(xRowSet), sal_True, getContext().getLegacyServiceFactory() );
     return xSupplier;
 }
 
 //------------------------------------------------------------------------------
 Reference< XNumberFormatsSupplier > OFormattedModel::calcDefaultFormatsSupplier() const
 {
-    return StandardFormatsSupplier::get( m_xServiceFactory );
+    return StandardFormatsSupplier::get( getContext().getLegacyServiceFactory() );
 }
 
 // XBoundComponent

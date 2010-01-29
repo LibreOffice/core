@@ -68,7 +68,7 @@ abstract public class SectionObject
 
     public int getHeight(int _nDefault)
     {
-        final int nHeight = getPropertySetHelper().getPropertyValueAsInteger("Height", 500);
+        final int nHeight = getPropertySetHelper().getPropertyValueAsInteger("Height", _nDefault);
         return nHeight;
     }
 

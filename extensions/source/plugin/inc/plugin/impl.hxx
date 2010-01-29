@@ -75,16 +75,14 @@
 #include "plugin/win/sysplug.hxx"
 #endif
 
-#ifdef OS2
+#ifdef WNT
+#include <plugin/win/sysplug.hxx>
+#elif defined(OS2)
 #include "plugin/os2/sysplug.hxx"
-#endif
-
-#if defined(UNX)
-#if defined(QUARTZ)
+#elif defined(QUARTZ)
 #include "plugin/aqua/sysplug.hxx"
-#else
+#elif defined(UNX)
 #include "plugin/unx/sysplug.hxx"
-#endif
 #endif
 
 #if ! defined (QUARTZ)

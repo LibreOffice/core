@@ -47,7 +47,6 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import com.sun.star.util.XNumberFormats;
 import com.sun.star.util.XNumberFormatsSupplier;
 import com.sun.star.view.XSelectionSupplier;
 import com.sun.star.wizards.common.Desktop;

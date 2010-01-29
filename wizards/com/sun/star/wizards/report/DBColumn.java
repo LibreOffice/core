@@ -105,7 +105,7 @@ public class DBColumn
         bIsGroupColumn = false;
         if (CurDBMetaData.RecordFieldColumns != null)
         {
-            CurDBField = CurDBMetaData.getFieldColumnByFieldName(CurDBMetaData.RecordFieldColumns[i].m_sFieldName);
+            CurDBField = CurDBMetaData.getFieldColumnByFieldName(CurDBMetaData.RecordFieldColumns[i].getFieldName());
         }
         else
         {
@@ -132,7 +132,7 @@ public class DBColumn
             XTextRange xTextCell = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, xCell);
             String CompString = "Column";
             XTextCursor xLocCellCursor = TextDocument.createTextCursor(xCell);
-            if (isNameCell(xLocCellCursor, CurDBField.m_sFieldName, CompString) || (_bforce))
+            if (isNameCell(xLocCellCursor, CurDBField.getFieldName(), CompString) || (_bforce))
             {
                 xNameCell = xCell;
                 xNameTextCell = xTextCell;
@@ -196,7 +196,7 @@ public class DBColumn
                 xTextCell = (XTextRange) UnoRuntime.queryInterface(XTextRange.class, xCell);
                 String CompString = TableName.substring(4);
                 XTextCursor xLocCellCursor = TextDocument.createTextCursor(xCell);
-                if (isNameCell(xLocCellCursor, CurDBField.m_sFieldName, CompString))
+                if (isNameCell(xLocCellCursor, CurDBField.getFieldName(), CompString))
                 {
                     xNameCell = xCell;
                     xNameTextCell = xTextCell;
@@ -244,7 +244,7 @@ public class DBColumn
         }
         else
         {
-            oTextTableHandler.getNumberFormatter().setNumberFormat(xValCell, CurDBField.DBFormatKey, CurDBMetaData.getNumberFormatter());
+            oTextTableHandler.getNumberFormatter().setNumberFormat(xValCell, CurDBField.getDBFormatKey(), CurDBMetaData.getNumberFormatter());
         }
         setCellFont();
     }
@@ -261,7 +261,7 @@ public class DBColumn
         xTextCursor.gotoStart(false);
         xTextCursor.gotoEnd(true);
         xTextCursor.setString("");
-        oTextFieldHandler.insertUserField(xTextCursor, CurDBField.m_sFieldName, CurDBField.getFieldTitle());
+        oTextFieldHandler.insertUserField(xTextCursor, CurDBField.getFieldName(), CurDBField.getFieldTitle());
     }
 
     public void insertUserFieldToTableCell(TextFieldHandler oTextFieldHandler, XCell xCell)
@@ -270,7 +270,7 @@ public class DBColumn
         xTextCursor.gotoStart(false);
         xTextCursor.gotoEnd(true);
         xTextCursor.setString("");
-        oTextFieldHandler.insertUserField(xTextCursor, CurDBField.m_sFieldName, CurDBField.getFieldTitle());
+        oTextFieldHandler.insertUserField(xTextCursor, CurDBField.getFieldName(), CurDBField.getFieldTitle());
     }
 
     public void formatValueCell()
@@ -284,7 +284,7 @@ public class DBColumn
 
     private boolean checkforLeftAlignment()
     {
-        bAlignLeft = ((CurDBField.bIsNumberFormat) && (ValColumn == xTableColumns.getCount() - 1));
+        bAlignLeft = ((CurDBField.isNumberFormat()) && (ValColumn == xTableColumns.getCount() - 1));
         return bAlignLeft;
     }
 
@@ -364,9 +364,9 @@ public class DBColumn
         try
         {
             Object CurGroupValue;
-            if (bIsGroupColumn == false && CurDBField.bIsNumberFormat == false)
+            if (bIsGroupColumn == false && CurDBField.isNumberFormat() == false)
             {
-                CurGroupValue = BlindtextCreator.adjustBlindTextlength(CurDBField.getFieldTitle(), CurDBField.FieldWidth, _bIsLandscape, bIsGroupColumn, CurDBMetaData.getRecordFieldNames());
+                CurGroupValue = BlindtextCreator.adjustBlindTextlength(CurDBField.getFieldTitle(), CurDBField.getFieldWidth(), _bIsLandscape, bIsGroupColumn, CurDBMetaData.getRecordFieldNames());
             }
             else
             {
@@ -378,7 +378,9 @@ public class DBColumn
                 Helper.setUnoPropertyValue(xValCellCursor, "ParaAdjust", new Integer(ParagraphAdjust.LEFT_value));
             }
 
-            if ((CurDBField.FieldType == com.sun.star.sdbc.DataType.BIT) || (CurDBField.FieldType == com.sun.star.sdbc.DataType.BOOLEAN))
+            int nFieldType = CurDBField.getFieldType();
+            if ((nFieldType == com.sun.star.sdbc.DataType.BIT) ||
+                (nFieldType == com.sun.star.sdbc.DataType.BOOLEAN))
             {
                 CharFontName = "StarSymbol";
                 Helper.setUnoPropertyValue(xValCellCursor, "CharFontName", CharFontName);
@@ -414,8 +416,9 @@ public class DBColumn
         try
         {
             XPropertyState xPropertyState;
-            int FieldType = CurDBField.FieldType;
-            if ((FieldType == com.sun.star.sdbc.DataType.BIT) || (CurDBField.FieldType == com.sun.star.sdbc.DataType.BOOLEAN))
+            int nFieldType = CurDBField.getFieldType();
+            if ((nFieldType == com.sun.star.sdbc.DataType.BIT) ||
+                (nFieldType == com.sun.star.sdbc.DataType.BOOLEAN))
             {
                 CharFontName = "StarSymbol";
                 PropertyState = com.sun.star.beans.PropertyState.DIRECT_VALUE;

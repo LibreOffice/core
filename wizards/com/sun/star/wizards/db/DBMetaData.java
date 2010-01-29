@@ -90,30 +90,14 @@ import com.sun.star.sdbcx.XTablesSupplier;
 public class DBMetaData
 {
 
-    public XNameAccess xTableNames;
-    public XNameAccess xQueryNames;
-    private XInteractionHandler oInteractionHandler;
-    private XNameAccess xNameAccess;
-    private XInterface xDatabaseContext;
+    private XNameAccess xQueryNames;
     public XDatabaseMetaData xDBMetaData;
-    public XDataSource xDataSource;
-    public XOfficeDatabaseDocument xModel;
-    private XCompletedConnection xCompleted;
-    public XPropertySet xDataSourcePropertySet;
-    // private int[] nDataTypes = null;
-    private XWindowPeer xWindowPeer;
+    private XDataSource xDataSource;
+    private XOfficeDatabaseDocument xModel;
+    private XPropertySet xDataSourcePropertySet;
     public String[] DataSourceNames;
     public String[] CommandNames;
-    public String[] TableNames = new String[]
-    {
-    };
-    public String[] QueryNames = new String[]
-    {
-    };
     public java.util.Vector CommandObjects = new Vector(1);
-    public int[][] WidthList;
-    public int[] NumericTypes;
-    public int[] BinaryTypes;
     public Locale aLocale;
     public int[] CommandTypes;
     public String DataSourceName;
@@ -122,22 +106,65 @@ public class DBMetaData
     public com.sun.star.lang.XMultiServiceFactory xMSF;
     public XComponent xConnectionComponent;
     public SQLQueryComposer oSQLQueryComposer;
-    int iMaxColumnsInSelect;
-    int iMaxColumnsInGroupBy;
-    int iMaxColumnsInTable;
-    int iMaxColumnNameLength = -1;
-    int iMaxTableNameLength = -1;
+
+    private XNameAccess m_xTableNames;
+    private XInteractionHandler oInteractionHandler;
+    private XNameAccess xNameAccess;
+    private XInterface xDatabaseContext;
+    private XCompletedConnection xCompleted;
+    // private int[] nDataTypes = null;
+    private XWindowPeer xWindowPeer;
+    private String[] TableNames = new String[] {};
+    private String[] QueryNames = new String[] {};
+
+    protected int[][] WidthList;
+    protected static final int[] NumericTypes = {
+            DataType.TINYINT, // ==  -6;
+            DataType.BIGINT, // ==  -5
+            DataType.NUMERIC, // ==  - 2
+            DataType.DECIMAL, // ==   3;
+            DataType.INTEGER, // ==   4;
+            DataType.SMALLINT, // ==   5;
+            DataType.FLOAT, // ==   6;
+            DataType.REAL, // ==   7;
+            DataType.DOUBLE, // ==   8;
+        };
+    protected static final int[] BinaryTypes = { //new int[12];
+            DataType.BINARY,
+            DataType.VARBINARY,
+            DataType.LONGVARBINARY,
+            DataType.BLOB,
+            DataType.SQLNULL,
+            DataType.OBJECT,
+            DataType.DISTINCT,
+            DataType.STRUCT,
+            DataType.ARRAY,
+            DataType.CLOB,
+            DataType.REF
+            /* DataType.OTHER, */
+        };
+
+    private int iMaxColumnsInSelect;
+    private int iMaxColumnsInGroupBy;
+    private int iMaxColumnsInTable;
+    private int iMaxColumnNameLength = -1;
+    private int iMaxTableNameLength = -1;
     private boolean bPasswordIsRequired;
     // private boolean bFormatKeysareset = false;
-    final int NOLIMIT = 9999999;
-    final int RID_DB_COMMON = 1000;
-    final int INVALID = 9999999;
+    private final static int NOLIMIT = 9999999;
+    protected final static int RID_DB_COMMON = 1000;
+    private final static int INVALID = 9999999;
     public TypeInspector oTypeInspector;
     private PropertyValue[] aInfoPropertyValues = null;
     private boolean bisSQL92CheckEnabled = false;
     private NumberFormatter oNumberFormatter = null;
     private long lDateCorrection = INVALID;
     private boolean bdisposeConnection = false;
+
+    public XPropertySet getDataSourcePropertySet()
+    {
+        return xDataSourcePropertySet;
+    }
 
     public DBMetaData(XMultiServiceFactory xMSF)
     {
@@ -231,8 +258,8 @@ public class DBMetaData
 
     public boolean hasTableByName(String _stablename)
     {
-        getTableNames();
-        return xTableNames.hasByName(_stablename);
+        // getTableNames();
+        return getTableNamesAsNameAccess().hasByName(_stablename);
     }
 
     public void setTableByName(String _tableName)
@@ -279,10 +306,10 @@ public class DBMetaData
     public class CommandObject
     {
 
-        public XNameAccess xColumns;
-        public XPropertySet xPropertySet;
-        public String Name;
-        public int CommandType;
+        private XNameAccess xColumns;
+        private XPropertySet xPropertySet;
+        private String Name;
+        private int CommandType;
 
         public CommandObject(String _CommandName, int _CommandType)
         {
@@ -291,26 +318,39 @@ public class DBMetaData
                 Object oCommand;
                 this.Name = _CommandName;
                 this.CommandType = _CommandType;
-                if (xTableNames == null)
-                {
-                    setCommandNames();
-                }
+                // if (getTableNamesAsNameAccess() == null)
+                // {
+                //     initCommandNames();
+                // }
                 if (CommandType == com.sun.star.sdb.CommandType.TABLE)
                 {
-                    oCommand = xTableNames.getByName(Name);
+                    oCommand = getTableNamesAsNameAccess().getByName(Name);
                 }
                 else
                 {
-                    oCommand = xQueryNames.getByName(Name);
+                    oCommand = getQueryNamesAsNameAccess().getByName(Name);
                 }
                 XColumnsSupplier xCommandCols = (XColumnsSupplier) UnoRuntime.queryInterface(XColumnsSupplier.class, oCommand);
                 xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oCommand);
+// TODO: Performance leak getColumns() take very long.
                 xColumns = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xCommandCols.getColumns());
             }
             catch (Exception exception)
             {
                 exception.printStackTrace(System.out);
             }
+        }
+        public XNameAccess getColumns()
+        {
+            return xColumns;
+        }
+        public String getName()
+        {
+            return Name;
+        }
+        public XPropertySet getPropertySet()
+        {
+            return xPropertySet;
         }
     }
 
@@ -331,13 +371,36 @@ public class DBMetaData
         return bHasEscapeProcessing;
     }
 
-    public void setCommandNames()
+    // public void initCommandNames()
+    // {
+        // getTableNames();
+    // }
+
+    public XNameAccess getQueryNamesAsNameAccess()
     {
-        getTableNames();
         XQueriesSupplier xDBQueries = (XQueriesSupplier) UnoRuntime.queryInterface(XQueriesSupplier.class, DBConnection);
         xQueryNames = (XNameAccess) xDBQueries.getQueries();
-        QueryNames = xQueryNames.getElementNames();
+        return xQueryNames;
+    }
 
+    public XNameAccess getTableNamesAsNameAccess()
+    {
+        XTablesSupplier xDBTables = (XTablesSupplier) UnoRuntime.queryInterface(XTablesSupplier.class, DBConnection);
+        XNameAccess xTableNames = xDBTables.getTables();
+        return xTableNames;
+    }
+
+    public String[] getQueryNames()
+    {
+        if (QueryNames != null)
+        {
+            if (QueryNames.length > 0)
+            {
+                return QueryNames;
+            }
+        }
+        QueryNames = getQueryNamesAsNameAccess().getElementNames();
+        return QueryNames;
     }
 
     public String[] getTableNames()
@@ -349,9 +412,7 @@ public class DBMetaData
                 return TableNames;
             }
         }
-        XTablesSupplier xDBTables = (XTablesSupplier) UnoRuntime.queryInterface(XTablesSupplier.class, DBConnection);
-        xTableNames = (XNameAccess) xDBTables.getTables();
-        TableNames = (String[]) xTableNames.getElementNames();
+        TableNames = (String[]) getTableNamesAsNameAccess().getElementNames();
         return TableNames;
     }
 
@@ -377,30 +438,8 @@ public class DBMetaData
         WidthList[16][0] = DataType.TIMESTAMP; // ==  93;
         // NumericTypes are all types where aggregate functions can be performed on.
         // Similarly to a major competitor date/time/timmestamp fields are not included
-        NumericTypes = new int[9];
-        NumericTypes[0] = DataType.TINYINT; // ==  -6;
-        NumericTypes[1] = DataType.BIGINT; // ==  -5
-        NumericTypes[2] = DataType.NUMERIC; // ==  - 2
-        NumericTypes[3] = DataType.DECIMAL; // ==   3;
-        NumericTypes[4] = DataType.INTEGER; // ==   4;
-        NumericTypes[5] = DataType.SMALLINT; // ==   5;
-        NumericTypes[6] = DataType.FLOAT; // ==   6;
-        NumericTypes[7] = DataType.REAL; // ==   7;
-        NumericTypes[8] = DataType.DOUBLE; // ==   8;
 
-        BinaryTypes = new int[12];
-        BinaryTypes[0] = DataType.BINARY;
-        BinaryTypes[1] = DataType.VARBINARY;
-        BinaryTypes[2] = DataType.LONGVARBINARY;
-        BinaryTypes[3] = DataType.BLOB;
-        BinaryTypes[4] = DataType.SQLNULL;
-        BinaryTypes[5] = DataType.OBJECT;
-        BinaryTypes[6] = DataType.DISTINCT;
-        BinaryTypes[7] = DataType.STRUCT;
-        BinaryTypes[8] = DataType.ARRAY;
-        BinaryTypes[9] = DataType.CLOB;
-        BinaryTypes[10] = DataType.REF;
-        BinaryTypes[11] = DataType.OTHER;
+
     }
 
     public boolean isBinaryDataType(int _itype)
@@ -521,15 +560,32 @@ public class DBMetaData
         return _sname;
     }
 
+    public XDataSource getDataSource()
+    {
+        if (xDataSource == null)
+        {
+            try
+            {
+                    Object oDataSource = xNameAccess.getByName(DataSourceName);
+                    xDataSource = (XDataSource) UnoRuntime.queryInterface(XDataSource.class, oDataSource);
+            }
+            catch (com.sun.star.container.NoSuchElementException e)
+            {
+            }
+            catch (com.sun.star.lang.WrappedTargetException e)
+            {
+            }
+        }
+        return xDataSource;
+    }
+
     private void setDataSourceByName(String _DataSourceName, boolean bgetInterfaces)
     {
         try
         {
             this.DataSourceName = _DataSourceName;
-            Object oDataSource = xNameAccess.getByName(DataSourceName);
-            xDataSource = (XDataSource) UnoRuntime.queryInterface(XDataSource.class, oDataSource);
             getDataSourceInterfaces();
-            XDocumentDataSource xDocu = (XDocumentDataSource) UnoRuntime.queryInterface(XDocumentDataSource.class, this.xDataSource);
+            XDocumentDataSource xDocu = (XDocumentDataSource) UnoRuntime.queryInterface(XDocumentDataSource.class, getDataSource());
             if (xDocu != null)
             {
                 xModel = xDocu.getDatabaseDocument();
@@ -1078,7 +1134,6 @@ public class DBMetaData
 
     public void finish()
     {
-        xTableNames = null;
         xQueryNames = null;
         oInteractionHandler = null;
         xNameAccess = null;

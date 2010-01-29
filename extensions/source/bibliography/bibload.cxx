@@ -692,7 +692,7 @@ sal_Bool BibliographyLoader::hasElements(void) throw ( RuntimeException )
 Reference< XPropertySetInfo >  BibliographyLoader::getPropertySetInfo(void) throw
                                             ( RuntimeException )
 {
-    static SfxItemPropertyMap aBibProps_Impl[] =
+    static SfxItemPropertyMapEntry aBibProps_Impl[] =
     {
         { MAP_CHAR_LEN("BibliographyDataFieldNames"), 0, &::getCppuType((Sequence<PropertyValue>*)0), PropertyAttribute::READONLY, 0},
         {0,0,0,0,0,0}

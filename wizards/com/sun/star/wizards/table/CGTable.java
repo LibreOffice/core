@@ -29,16 +29,10 @@
  ************************************************************************/
 package com.sun.star.wizards.table;
 
-import com.sun.star.awt.XListBox;
-import com.sun.star.container.NoSuchElementException;
 import com.sun.star.container.XNameAccess;
-import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.wizards.common.ConfigGroup;
 import com.sun.star.wizards.common.Configuration;
 import com.sun.star.wizards.common.Desktop;
-import com.sun.star.wizards.common.Helper;
 
 public class CGTable
 {

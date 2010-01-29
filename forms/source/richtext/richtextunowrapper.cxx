@@ -37,6 +37,7 @@
 /** === end UNO includes === **/
 #include <svx/unofored.hxx>
 #include <svx/editview.hxx>
+#include <svx/unoipset.hxx>
 
 //........................................................................
 namespace frm
@@ -51,10 +52,10 @@ namespace frm
     //====================================================================
     namespace
     {
-        const SfxItemPropertyMap* getTextEnginePropertyMap()
+        const SvxItemPropertySet* getTextEnginePropertySet()
         {
             // Propertymap fuer einen Outliner Text
-            static const SfxItemPropertyMap aTextEnginePropertyMap[] =
+            static const SfxItemPropertyMapEntry aTextEnginePropertyMap[] =
             {
                 SVX_UNOEDIT_CHAR_PROPERTIES,
                 SVX_UNOEDIT_FONT_PROPERTIES,
@@ -63,8 +64,8 @@ namespace frm
                 { MAP_CHAR_LEN("ParaUserDefinedAttributes"), EE_PARA_XMLATTRIBS, &::getCppuType( static_cast< const Reference< XNameContainer >* >( NULL ) ), 0, 0 },
                 { NULL, 0, 0, NULL, 0, 0 }
             };
-
-            return aTextEnginePropertyMap;
+            static SvxItemPropertySet aTextEnginePropertySet( aTextEnginePropertyMap );
+            return &aTextEnginePropertySet;
         }
     }
 
@@ -73,7 +74,7 @@ namespace frm
     //====================================================================
     //--------------------------------------------------------------------
     ORichTextUnoWrapper::ORichTextUnoWrapper( EditEngine& _rEngine, IEngineTextChangeListener* _pTextChangeListener )
-        :SvxUnoText( getTextEnginePropertyMap() )
+        :SvxUnoText( getTextEnginePropertySet() )
     {
         SetEditSource( new RichTextEditSource( _rEngine, _pTextChangeListener ) );
     }

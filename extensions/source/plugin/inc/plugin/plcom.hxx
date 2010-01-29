@@ -42,7 +42,7 @@ protected:
     ::rtl::OString              m_aLibName;
     std::list< String >         m_aFilesToDelete;
 public:
-    PluginComm( const ::rtl::OString& rLibName );
+    PluginComm( const ::rtl::OString& rLibName, bool bReusable = true );
     virtual ~PluginComm();
 
     int getRefCount() { return m_nRefCount; }

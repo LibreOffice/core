@@ -56,7 +56,6 @@ SHL1STDLIBS= \
         $(TOOLSLIB) \
         $(CPPUHELPERLIB) \
         $(CPPULIB) \
-        $(VOSLIB) \
         $(SALLIB)
 
 SHL1DEPN=		makefile.mk

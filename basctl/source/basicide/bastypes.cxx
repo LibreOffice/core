@@ -656,7 +656,7 @@ long BasicIDETabBar::AllowRenaming()
     if ( !bValid )
         ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_BADSBXNAME ) ) ).Execute();
 
-    return bValid ? TAB_RENAMING_YES : TAB_RENAMING_NO;
+    return bValid ? TABBAR_RENAMING_YES : TABBAR_RENAMING_NO;
 }
 
 

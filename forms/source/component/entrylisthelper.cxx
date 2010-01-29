@@ -31,6 +31,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_forms.hxx"
 #include "entrylisthelper.hxx"
+#include "FormComponent.hxx"
+
 #include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>
 #include <comphelper/property.hxx>
@@ -50,18 +52,18 @@ namespace frm
     //= OEntryListHelper
     //=====================================================================
     //---------------------------------------------------------------------
-    OEntryListHelper::OEntryListHelper( ::osl::Mutex& _rMutex )
-        :m_rMutex( _rMutex )
-        ,m_aRefreshListeners( _rMutex )
+    OEntryListHelper::OEntryListHelper( OControlModel& _rControlModel )
+        :m_rControlModel( _rControlModel )
+        ,m_aRefreshListeners( _rControlModel.getInstanceMutex() )
     {
     }
 
     //---------------------------------------------------------------------
-    OEntryListHelper::OEntryListHelper( const OEntryListHelper& _rSource, ::osl::Mutex& _rMutex )
-        :m_rMutex( _rMutex )
+    OEntryListHelper::OEntryListHelper( const OEntryListHelper& _rSource, OControlModel& _rControlModel )
+        :m_rControlModel( _rControlModel )
         ,m_xListSource ( _rSource.m_xListSource  )
         ,m_aStringItems( _rSource.m_aStringItems )
-        ,m_aRefreshListeners( _rMutex )
+        ,m_aRefreshListeners( _rControlModel.getInstanceMutex() )
     {
     }
 
@@ -73,14 +75,14 @@ namespace frm
     //---------------------------------------------------------------------
     void SAL_CALL OEntryListHelper::setListEntrySource( const Reference< XListEntrySource >& _rxSource ) throw (RuntimeException)
     {
-        ::osl::ResettableMutexGuard aGuard( m_rMutex );
+        ControlModelLock aLock( m_rControlModel );
 
         // disconnect from the current external list source
         disconnectExternalListSource();
 
         // and connect to the new one
         if ( _rxSource.is() )
-            connectExternalListSource( _rxSource, aGuard );
+            connectExternalListSource( _rxSource, aLock );
     }
 
     //---------------------------------------------------------------------
@@ -93,7 +95,8 @@ namespace frm
     //---------------------------------------------------------------------
     void SAL_CALL OEntryListHelper::entryChanged( const ListEntryEvent& _rEvent ) throw (RuntimeException)
     {
-        ::osl::ResettableMutexGuard aGuard( m_rMutex );
+        ControlModelLock aLock( m_rControlModel );
+
         OSL_ENSURE( _rEvent.Source == m_xListSource,
             "OEntryListHelper::entryChanged: where did this come from?" );
         OSL_ENSURE( ( _rEvent.Position >= 0 ) && ( _rEvent.Position < m_aStringItems.getLength() ),
@@ -107,14 +110,15 @@ namespace frm
             )
         {
             m_aStringItems[ _rEvent.Position ] = _rEvent.Entries[ 0 ];
-            stringItemListChanged( aGuard );
+            stringItemListChanged( aLock );
         }
     }
 
     //---------------------------------------------------------------------
     void SAL_CALL OEntryListHelper::entryRangeInserted( const ListEntryEvent& _rEvent ) throw (RuntimeException)
     {
-        ::osl::ResettableMutexGuard aGuard( m_rMutex );
+        ControlModelLock aLock( m_rControlModel );
+
         OSL_ENSURE( _rEvent.Source == m_xListSource,
             "OEntryListHelper::entryRangeInserted: where did this come from?" );
         OSL_ENSURE( ( _rEvent.Position > 0 ) && ( _rEvent.Position < m_aStringItems.getLength() ) && ( _rEvent.Entries.getLength() > 0 ),
@@ -143,14 +147,15 @@ namespace frm
                 aMovedEntries
             );
 
-            stringItemListChanged( aGuard );
+            stringItemListChanged( aLock );
         }
     }
 
     //---------------------------------------------------------------------
     void SAL_CALL OEntryListHelper::entryRangeRemoved( const ListEntryEvent& _rEvent ) throw (RuntimeException)
     {
-        ::osl::ResettableMutexGuard aGuard( m_rMutex );
+        ControlModelLock aLock( m_rControlModel );
+
         OSL_ENSURE( _rEvent.Source == m_xListSource,
             "OEntryListHelper::entryRangeRemoved: where did this come from?" );
         OSL_ENSURE( ( _rEvent.Position > 0 ) && ( _rEvent.Count > 0 ) && ( _rEvent.Position + _rEvent.Count <= m_aStringItems.getLength() ),
@@ -170,21 +175,22 @@ namespace frm
             // shrink the array
             m_aStringItems.realloc( m_aStringItems.getLength() - _rEvent.Count );
 
-            stringItemListChanged( aGuard );
+            stringItemListChanged( aLock );
         }
     }
 
     //---------------------------------------------------------------------
     void SAL_CALL OEntryListHelper::allEntriesChanged( const EventObject& _rEvent ) throw (RuntimeException)
     {
-        ::osl::ResettableMutexGuard aGuard( m_rMutex );
+        ControlModelLock aLock( m_rControlModel );
+
         OSL_ENSURE( _rEvent.Source == m_xListSource,
             "OEntryListHelper::allEntriesChanged: where did this come from?" );
 
         Reference< XListEntrySource > xSource( _rEvent.Source, UNO_QUERY );
         if ( _rEvent.Source == m_xListSource )
         {
-            impl_lock_refreshList( aGuard );
+            impl_lock_refreshList( aLock );
         }
     }
 
@@ -207,8 +213,8 @@ namespace frm
     void SAL_CALL OEntryListHelper::refresh() throw(RuntimeException)
     {
         {
-            ::osl::ResettableMutexGuard aGuard( m_rMutex );
-            impl_lock_refreshList( aGuard );
+            ControlModelLock aLock( m_rControlModel );
+            impl_lock_refreshList( aLock );
         }
 
         EventObject aEvt( static_cast< XRefreshable* >( this ) );
@@ -216,7 +222,7 @@ namespace frm
     }
 
     //---------------------------------------------------------------------
-    void OEntryListHelper::impl_lock_refreshList( ::osl::ResettableMutexGuard& _rInstanceLock )
+    void OEntryListHelper::impl_lock_refreshList( ControlModelLock& _rInstanceLock )
     {
         if ( hasExternalListSource() )
         {
@@ -272,7 +278,7 @@ namespace frm
     }
 
     //---------------------------------------------------------------------
-    void OEntryListHelper::connectExternalListSource( const Reference< XListEntrySource >& _rxSource, ::osl::ResettableMutexGuard& _rInstanceLock )
+    void OEntryListHelper::connectExternalListSource( const Reference< XListEntrySource >& _rxSource, ControlModelLock& _rInstanceLock )
     {
         OSL_ENSURE( !hasExternalListSource(), "OEntryListHelper::connectExternalListSource: only to be called if no external source is active!" );
         OSL_ENSURE( _rxSource.is(), "OEntryListHelper::connectExternalListSource: invalid list source!" );
@@ -306,7 +312,7 @@ namespace frm
     }
 
     //---------------------------------------------------------------------
-    void OEntryListHelper::setNewStringItemList( const ::com::sun::star::uno::Any& _rValue, ::osl::ResettableMutexGuard& _rInstanceLock )
+    void OEntryListHelper::setNewStringItemList( const ::com::sun::star::uno::Any& _rValue, ControlModelLock& _rInstanceLock )
     {
         OSL_PRECOND( !hasExternalListSource(), "OEntryListHelper::setNewStringItemList: this should never have survived convertNewListSourceProperty!" );
         OSL_VERIFY( _rValue >>= m_aStringItems );

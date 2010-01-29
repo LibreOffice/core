@@ -72,6 +72,17 @@ public class Test05 implements StorageTest {
                 return false;
             }
 
+            byte pBigBytes[] = new byte[33000];
+            for ( int nInd = 0; nInd < 33000; nInd++ )
+                pBigBytes[nInd] = (byte)( nInd % 128 );
+
+            // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
+            if ( !m_aTestHelper.WriteBytesToSubstream( xSubSubStorage, "BigSubStream1", "MediaType1", true, pBigBytes ) )
+                return false;
+
+            // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
+            if ( !m_aTestHelper.WriteBytesToSubstream( xSubSubStorage, "BigSubStream2", "MediaType2", false, pBigBytes ) )
+                return false;
 
             byte pBytes1[] = { 1, 1, 1, 1, 1 };
 
@@ -126,27 +137,40 @@ public class Test05 implements StorageTest {
             XStream xSubStream1 = m_aTestHelper.OpenStream( xSubSubStorage,
                                                             "SubStream1",
                                                             ElementModes.WRITE | ElementModes.NOCREATE );
+            XStream xBigSubStream1 = m_aTestHelper.OpenStream( xSubSubStorage,
+                                                               "BigSubStream1",
+                                                               ElementModes.WRITE | ElementModes.NOCREATE );
             XStream xSubStream2 = m_aTestHelper.OpenStream( xSubSubStorage,
                                                             "SubStream2",
                                                             ElementModes.READ | ElementModes.NOCREATE );
-            if ( xSubStream1 == null || xSubStream2 == null )
+            XStream xBigSubStream2 = m_aTestHelper.OpenStream( xSubSubStorage,
+                                                               "BigSubStream2",
+                                                               ElementModes.READ | ElementModes.NOCREATE );
+
+            if ( xSubStream1 == null || xBigSubStream1 == null || xSubStream2 == null || xBigSubStream2 == null )
                 return false;
 
             // it should be possible to have more then one copy of stream for reading
             XStream xSubStream2clone = m_aTestHelper.OpenStream( xSubSubStorage,
                                                                 "SubStream2",
                                                                 ElementModes.READ | ElementModes.NOCREATE );
-            if ( xSubStream2 == null )
+            XStream xBigSubStream2clone = m_aTestHelper.OpenStream( xSubSubStorage,
+                                                                    "BigSubStream2",
+                                                                    ElementModes.READ | ElementModes.NOCREATE );
+            if ( xSubStream2clone == null || xBigSubStream2clone == null )
                 return false;
 
 
-            // so now the first stream can not be open neither for reading nor for writing
+            // so now the first streams can not be open neither for reading nor for writing
             if ( !m_aTestHelper.cantOpenStream( xSubSubStorage, "SubStream1", ElementModes.WRITE )
-              || !m_aTestHelper.cantOpenStream( xSubSubStorage, "SubStream1", ElementModes.READ ) )
+              || !m_aTestHelper.cantOpenStream( xSubSubStorage, "SubStream1", ElementModes.READ )
+              || !m_aTestHelper.cantOpenStream( xSubSubStorage, "BigSubStream1", ElementModes.WRITE )
+              || !m_aTestHelper.cantOpenStream( xSubSubStorage, "BigSubStream1", ElementModes.READ ) )
                 return false;
 
-            // the second stream can not be open for writing
-            if ( !m_aTestHelper.cantOpenStream( xSubSubStorage, "SubStream2", ElementModes.WRITE ) )
+            // the second streams can not be open for writing
+            if ( !m_aTestHelper.cantOpenStream( xSubSubStorage, "SubStream2", ElementModes.WRITE )
+              || !m_aTestHelper.cantOpenStream( xSubSubStorage, "BigSubStream2", ElementModes.WRITE ) )
                 return false;
 
 
@@ -249,7 +273,13 @@ public class Test05 implements StorageTest {
             if ( !m_aTestHelper.checkStream( xResSubSubStorage, "SubStream1", "MediaType1", true, pBytes1 ) )
                 return false;
 
+            if ( !m_aTestHelper.checkStream( xResSubSubStorage, "BigSubStream1", "MediaType1", true, pBigBytes ) )
+                return false;
+
             if ( !m_aTestHelper.checkStream( xResSubSubStorage, "SubStream2", "MediaType2", false, pBytes2 ) )
+                return false;
+
+            if ( !m_aTestHelper.checkStream( xResSubSubStorage, "BigSubStream2", "MediaType2", false, pBigBytes ) )
                 return false;
 
             // dispose used storages to free resources

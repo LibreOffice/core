@@ -38,7 +38,6 @@ inline bool isSeparator(const char c){
     return c == GUESS_SEPARATOR_OPEN || c == GUESS_SEPARATOR_SEP || c == GUESS_SEPARATOR_CLOSE || c == '\0';
 }
 
-std::string     upperCase(const std::string &s);
 int             start(const std::string &s1, const std::string &s2);
 
 #endif

@@ -36,27 +36,38 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #endif
 #include <vector>
-#include <stack>
+
+#include <HashMaps.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XAttributeList; } }
     namespace beans { struct PropertyValue; }
 } } }
 
-enum ElementNames
+typedef ::std::hash_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash, eqFunc > StringHashMap;
+
+struct ManifestScopeEntry
 {
-    e_Manifest,
-    e_FileEntry,
-    e_EncryptionData,
-    e_Algorithm,
-    e_KeyDerivation
+    ::rtl::OUString m_aConvertedName;
+    StringHashMap   m_aNamespaces;
+
+    ManifestScopeEntry( const ::rtl::OUString& aConvertedName, const StringHashMap& aNamespaces )
+    : m_aConvertedName( aConvertedName )
+    , m_aNamespaces( aNamespaces )
+    {}
+
+    ~ManifestScopeEntry()
+    {}
 };
+
+typedef ::std::vector< ManifestScopeEntry > ManifestStack;
+
 class ManifestImport : public cppu::WeakImplHelper1 < com::sun::star::xml::sax::XDocumentHandler >
 {
 protected:
     com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > aSequence;
     sal_Int16       nNumProperty;
-    ::std::stack < ElementNames > aStack;
+    ManifestStack aStack;
     sal_Bool bIgnoreEncryptData;
     ::std::vector < ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > > & rManVector;
 
@@ -92,6 +103,13 @@ protected:
     const ::rtl::OUString sBlowfish;
     const ::rtl::OUString sPBKDF2;
     const ::rtl::OUString sChecksumType;
+
+
+    ::rtl::OUString PushNameAndNamespaces( const ::rtl::OUString& aName,
+                                           const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttribs,
+                                           StringHashMap& o_aConvertedAttribs );
+    ::rtl::OUString ConvertNameWithNamespace( const ::rtl::OUString& aName, const StringHashMap& aNamespaces );
+    ::rtl::OUString ConvertName( const ::rtl::OUString& aName );
 
 public:
     ManifestImport( std::vector < ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > > & rNewVector );

@@ -49,7 +49,10 @@
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #endif
 
+#include <osl/diagnose.hxx>
+
 using namespace ::rtl;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
@@ -83,7 +86,7 @@ void SAL_CALL ManifestWriter::writeManifestSequence( const Reference< XOutputStr
             }
             catch( SAXException& )
             {
-                throw RuntimeException();
+                throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
             }
     }
 }

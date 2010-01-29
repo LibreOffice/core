@@ -84,6 +84,7 @@ public class StorageUnitTest  extends ComplexTestCase
                                 "ExecuteTest15",
                                 "ExecuteTest16",
                                 "ExecuteTest17",
+                                "ExecuteTest18",
                                 "ExecuteRegressionTest_114358",
                                 "ExecuteRegressionTest_i29169",
                                 "ExecuteRegressionTest_i30400",
@@ -97,7 +98,8 @@ public class StorageUnitTest  extends ComplexTestCase
                                 "ExecuteRegressionTest_i59886",
                                 "ExecuteRegressionTest_i61909",
                                 "ExecuteRegressionTest_i84234",
-                                "ExecuteRegressionTest_125919"};
+                                "ExecuteRegressionTest_125919"
+                                };
     }
 
     public String getTestObjectName()
@@ -234,6 +236,11 @@ public class StorageUnitTest  extends ComplexTestCase
         assure( "Test17 failed!", aTest.test() );
     }
 
+    public void ExecuteTest18()
+    {
+        StorageTest aTest = new Test18( m_xMSF, m_xStorageFactory, log );
+        assure( "Test18 failed!", aTest.test() );
+    }
 
     public void ExecuteRegressionTest_114358()
     {

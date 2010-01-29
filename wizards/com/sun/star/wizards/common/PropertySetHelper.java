@@ -45,7 +45,7 @@ public class PropertySetHelper
 {
 
     protected XPropertySet m_xPropertySet;
-    private HashMap m_aHashMap;
+    private HashMap<String, Object> m_aHashMap;
 
     public PropertySetHelper(Object _aObj)
     {
@@ -56,11 +56,11 @@ public class PropertySetHelper
         m_xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, _aObj);
     }
 
-    private HashMap getHashMap()
+    private HashMap<String, Object> getHashMap()
     {
         if (m_aHashMap == null)
         {
-            m_aHashMap = new HashMap();
+            m_aHashMap = new HashMap<String, Object>();
         }
         return m_aHashMap;
     }

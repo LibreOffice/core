@@ -44,11 +44,19 @@ public class Test11 implements StorageTest {
                 return false;
             }
 
+            byte pBigBytes[] = new byte[33000];
+            for ( int nInd = 0; nInd < 33000; nInd++ )
+                pBigBytes[nInd] = (byte)( nInd % 128 );
+
             String sPass1 = "111111111";
             byte pBytes1[] = { 1, 1, 1, 1, 1 };
 
             // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
             if ( !m_aTestHelper.WriteBytesToEncrSubstream( xTempStorage, "SubStream1", "MediaType1", true, pBytes1, sPass1 ) )
+                return false;
+
+            // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
+            if ( !m_aTestHelper.WriteBytesToEncrSubstream( xTempStorage, "BigSubStream1", "MediaType1", true, pBigBytes, sPass1 ) )
                 return false;
 
             // open a new substorage
@@ -66,6 +74,10 @@ public class Test11 implements StorageTest {
 
             // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
             if ( !m_aTestHelper.WriteBytesToEncrSubstream( xTempSubStorage, "SubStream2", "MediaType2", true, pBytes2, sPass2 ) )
+                return false;
+
+            // open a new substream, set "MediaType" and "Compressed" properties to it and write some bytes
+            if ( !m_aTestHelper.WriteBytesToEncrSubstream( xTempSubStorage, "BigSubStream2", "MediaType2", true, pBigBytes, sPass2 ) )
                 return false;
 
             // set "MediaType" property for storages and check that "IsRoot" and "OpenMode" properties are set correctly
@@ -122,7 +134,14 @@ public class Test11 implements StorageTest {
             if ( !m_aTestHelper.InternalCheckStream( xClonedSubStream, "SubStream1", "MediaType1", true, pBytes1, true ) )
                 return false;
 
+            XStream xClonedBigSubStream = m_aTestHelper.cloneEncrSubStream( xTempStorage, "BigSubStream1", sPass1 );
+            if ( !m_aTestHelper.InternalCheckStream( xClonedBigSubStream, "BigSubStream1", "MediaType1", true, pBigBytes, true ) )
+                return false;
+
             if ( !m_aTestHelper.disposeStream( xClonedSubStream, "SubStream1" ) )
+                return false;
+
+            if ( !m_aTestHelper.disposeStream( xClonedBigSubStream, "BigSubStream1" ) )
                 return false;
 
             // ==============================
@@ -145,6 +164,9 @@ public class Test11 implements StorageTest {
             if ( !m_aTestHelper.checkEncrStream( xClonedSubStorage, "SubStream2", "MediaType2", pBytes2, sPass2 ) )
                 return false;
 
+            if ( !m_aTestHelper.checkEncrStream( xClonedSubStorage, "BigSubStream2", "MediaType2", pBigBytes, sPass2 ) )
+                return false;
+
             // ==============================
             // commit the root storage and check cloning
             // ==============================
@@ -165,6 +187,9 @@ public class Test11 implements StorageTest {
             if ( !m_aTestHelper.checkEncrStream( xCloneOfRoot, "SubStream1", "MediaType1", pBytes1, sPass1 ) )
                 return false;
 
+            if ( !m_aTestHelper.checkEncrStream( xCloneOfRoot, "BigSubStream1", "MediaType1", pBigBytes, sPass1 ) )
+                return false;
+
             XStorage xSubStorageOfClone = xCloneOfRoot.openStorageElement( "SubStorage1", ElementModes.READ );
             if ( xSubStorageOfClone == null )
             {
@@ -176,6 +201,9 @@ public class Test11 implements StorageTest {
                 return false;
 
             if ( !m_aTestHelper.checkEncrStream( xSubStorageOfClone, "SubStream2", "MediaType2", pBytes2, sPass2 ) )
+                return false;
+
+            if ( !m_aTestHelper.checkEncrStream( xSubStorageOfClone, "BigSubStream2", "MediaType2", pBigBytes, sPass2 ) )
                 return false;
 
             return true;

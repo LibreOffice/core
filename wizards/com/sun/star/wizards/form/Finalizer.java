@@ -32,8 +32,6 @@ package com.sun.star.wizards.form;
 import com.sun.star.awt.XRadioButton;
 import com.sun.star.awt.XTextComponent;
 import com.sun.star.wizards.common.Desktop;
-import com.sun.star.wizards.common.JavaTools;
-import com.sun.star.wizards.db.DBMetaData;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.*;
 
@@ -57,7 +55,7 @@ public class Finalizer
     public Finalizer(WizardDialog _CurUnoDialog)
     {
         this.CurUnoDialog = _CurUnoDialog;
-        curtabindex = (short) (FormWizard.SOSTOREPAGE * 100);
+        curtabindex = (short) (FormWizard.SOSTORE_PAGE * 100);
 
         String slblFormName = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 50);
         String slblProceed = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 51);

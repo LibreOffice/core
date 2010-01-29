@@ -1,4 +1,5 @@
-/*************************************************************************
+/*
+ ************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -6,7 +7,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: ImplValidCharacters.hxx,v $
+ * $RCSfile: Renderer.java,v $
  * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
@@ -27,34 +28,16 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _IMPL_VALID_CHARACTERS_HXX_
-#define _IMPL_VALID_CHARACTERS_HXX_
+package com.sun.star.wizards.common;
 
-#include <sal/types.h>
-
-static sal_Bool Impl_IsValidChar ( const sal_Unicode *pChar, sal_Int16 nLength, sal_Bool bSlashAllowed )
+/**
+ * A General interface which gives a string
+ * that represents the rendered argument object.
+ * Can be used to reference resources, internationalizartion
+ * a.s.o
+ */
+public interface IRenderer
 {
-    for ( sal_Int16 i = 0 ; i < nLength ; i++ )
-    {
-        switch ( pChar[i] )
-        {
-            case '\\':
-            case '?':
-            case '<':
-            case '>':
-            case '\"':
-            case '|':
-            case ':':
-                return sal_False;
-            case '/':
-                if ( !bSlashAllowed )
-                    return sal_False;
-            break;
-            default:
-                if ( pChar[i] < 32  || pChar[i] > 127 )
-                    return sal_False;
-        }
-    }
-    return sal_True;
+
+    public String render(Object object);
 }
-#endif

@@ -40,9 +40,7 @@ import com.sun.star.lang.XServiceInfo;
 import com.sun.star.text.TextContentAnchorType;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Helper;
-import com.sun.star.wizards.common.JavaTools;
 
 /**
  * @author Administrator

@@ -141,7 +141,7 @@ namespace oooimprovecore
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if ( pFact )
             {
-                AbstractSfxSingleTabDialog *pDlg = pFact->CreateSfxSingleTabDialog( NULL, aSet, 0, RID_SVXPAGE_IMPROVEMENT );
+                SfxAbstractDialog *pDlg = pFact->CreateSfxDialog( NULL, aSet, 0, RID_SVXPAGE_IMPROVEMENT );
                 pDlg->Execute();
                 delete pDlg;
             }

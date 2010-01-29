@@ -96,15 +96,18 @@ class LangGuess_Impl :
         XLanguageGuessing,
         XServiceInfo >
 {
-    SimpleGuesser guesser;
+    SimpleGuesser   m_aGuesser;
+    bool            m_bInitialized;
     css::uno::Reference< css::uno::XComponentContext >  m_xContext;
 
-    LangGuess_Impl(const LangGuess_Impl &); // not defined
-    void operator =(const LangGuess_Impl &); // not defined
+    LangGuess_Impl( const LangGuess_Impl & ); // not defined
+    LangGuess_Impl & operator =( const LangGuess_Impl & ); // not defined
+
     virtual ~LangGuess_Impl() {}
+    void    EnsureInitialized();
 
 public:
-    explicit LangGuess_Impl(css::uno::Reference< css::uno::XComponentContext > const & context);
+    explicit LangGuess_Impl(css::uno::Reference< css::uno::XComponentContext > const & rxContext);
 
     // XServiceInfo implementation
     virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException);
@@ -129,50 +132,64 @@ public:
 
 //*************************************************************************
 
-LangGuess_Impl::LangGuess_Impl(css::uno::Reference< css::uno::XComponentContext > const & context) :
-    m_xContext(context)
+LangGuess_Impl::LangGuess_Impl(css::uno::Reference< css::uno::XComponentContext > const & rxContext) :
+    m_bInitialized( false ),
+    m_xContext( rxContext )
 {
-    // set default fingerprint path to where those get installed
-    String aPhysPath;
-    String aURL( SvtPathOptions().GetFingerprintPath() );
-    utl::LocalFileHelper::ConvertURLToPhysicalName( aURL, aPhysPath );
+}
+
+//*************************************************************************
+
+void LangGuess_Impl::EnsureInitialized()
+{
+    if (!m_bInitialized)
+    {
+        // set this to true at the very start to prevent loops because of
+        // implicitly called functions below
+        m_bInitialized = true;
+
+        // set default fingerprint path to where those get installed
+        String aPhysPath;
+        String aURL( SvtPathOptions().GetFingerprintPath() );
+        utl::LocalFileHelper::ConvertURLToPhysicalName( aURL, aPhysPath );
 #ifdef WNT
-        aPhysPath += '\\';
+            aPhysPath += '\\';
 #else
-        aPhysPath += '/';
+            aPhysPath += '/';
 #endif
 
-    SetFingerPrintsDB( aPhysPath );
+        SetFingerPrintsDB( aPhysPath );
 
-    //
-    // disable currently not functional languages...
-    //
-    struct LangCountry
-    {
-        const char *pLang;
-        const char *pCountry;
-    };
-    LangCountry aDisable[] =
-    {
-        {"gv", ""}, {"sco", ""},                            // no lang-id available yet...
-//        {"hy", ""}, {"drt", ""},                          // 0 bytes fingerprints...
-        {"zh", "CN"}, {"zh", "TW"}, {"ja", ""}, {"ko", ""}, // not yet correct functional...
-        {"ka", ""}, {"hi", ""}, {"mr", ""}, {"ne", ""},
-        {"sa", ""}, {"ta", ""}, {"th", ""},
-        {"qu", ""}, {"yi", ""}
-    };
-    sal_Int32 nNum = sizeof(aDisable) / sizeof(aDisable[0]);
-    Sequence< Locale > aDisableSeq( nNum );
-    Locale *pDisableSeq = aDisableSeq.getArray();
-    for (sal_Int32 i = 0;  i < nNum;  ++i)
-    {
-        Locale aLocale;
-        aLocale.Language = OUString::createFromAscii( aDisable[i].pLang );
-        aLocale.Country  = OUString::createFromAscii( aDisable[i].pCountry );
-        pDisableSeq[i] = aLocale;
+        //
+        // disable currently not functional languages...
+        //
+        struct LangCountry
+        {
+            const char *pLang;
+            const char *pCountry;
+        };
+        LangCountry aDisable[] =
+        {
+            {"gv", ""}, {"sco", ""},                            // no lang-id available yet...
+//            {"hy", ""}, {"drt", ""},                          // 0 bytes fingerprints...
+            {"zh", "CN"}, {"zh", "TW"}, {"ja", ""}, {"ko", ""}, // not yet correct functional...
+            {"ka", ""}, {"hi", ""}, {"mr", ""}, {"ne", ""},
+            {"sa", ""}, {"ta", ""}, {"th", ""},
+            {"qu", ""}, {"yi", ""}
+        };
+        sal_Int32 nNum = sizeof(aDisable) / sizeof(aDisable[0]);
+        Sequence< Locale > aDisableSeq( nNum );
+        Locale *pDisableSeq = aDisableSeq.getArray();
+        for (sal_Int32 i = 0;  i < nNum;  ++i)
+        {
+            Locale aLocale;
+            aLocale.Language = OUString::createFromAscii( aDisable[i].pLang );
+            aLocale.Country  = OUString::createFromAscii( aDisable[i].pCountry );
+            pDisableSeq[i] = aLocale;
+        }
+        disableLanguages( aDisableSeq );
+        DBG_ASSERT( nNum == getDisabledLanguages().getLength(), "size mismatch" );
     }
-    disableLanguages( aDisableSeq );
-    DBG_ASSERT( nNum == getDisabledLanguages().getLength(), "size mismatch" );
 }
 
 //*************************************************************************
@@ -187,7 +204,7 @@ Sequence< com::sun::star::lang::Locale > SAL_CALL LangGuess_Impl::guessLanguages
     Sequence< com::sun::star::lang::Locale > aRes;
 
     OString o = OUStringToOString( rText, RTL_TEXTENCODING_UTF8 );
-    vector<Guess> gs = guesser.GuessLanguage(o.pData->buffer);
+    vector<Guess> gs = m_aGuesser.GuessLanguage(o.pData->buffer);
 
     aRes.realloc(gs.size());
 
@@ -210,6 +227,7 @@ Sequence< com::sun::star::lang::Locale > SAL_CALL LangGuess_Impl::guessLanguages
 }
 */
 //*************************************************************************
+
 Locale SAL_CALL LangGuess_Impl::guessPrimaryLanguage(
         const ::rtl::OUString& rText,
         ::sal_Int32 nStartPos,
@@ -218,11 +236,13 @@ Locale SAL_CALL LangGuess_Impl::guessPrimaryLanguage(
 {
     osl::MutexGuard aGuard( GetLangGuessMutex() );
 
+    EnsureInitialized();
+
     lang::Locale aRes;
     if (nStartPos >=0 && nLen >= 0 && nStartPos + nLen <= rText.getLength())
     {
         OString o( OUStringToOString( rText.copy(nStartPos, nLen), RTL_TEXTENCODING_UTF8 ) );
-        Guess g = guesser.GuessPrimaryLanguage((char*)o.getStr());
+        Guess g = m_aGuesser.GuessPrimaryLanguage((char*)o.getStr());
         aRes.Language   = OUString::createFromAscii(g.GetLanguage().c_str());
         aRes.Country    = OUString::createFromAscii(g.GetCountry().c_str());
     }
@@ -247,7 +267,7 @@ void LangGuess_Impl::SetFingerPrintsDB(
 
     //cout << "Conf file : " << conf_file_path.getStr() << " directory : " << path.getStr() << endl;
 
-    guesser.SetDBPath((const char*)conf_file_path.getStr(), (const char*)path.getStr());
+    m_aGuesser.SetDBPath((const char*)conf_file_path.getStr(), (const char*)path.getStr());
 }
 
 //*************************************************************************
@@ -256,8 +276,10 @@ uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getAvailableLanguages(  )
 {
     osl::MutexGuard aGuard( GetLangGuessMutex() );
 
+    EnsureInitialized();
+
     Sequence< com::sun::star::lang::Locale > aRes;
-    vector<Guess> gs = guesser.GetAllManagedLanguages();
+    vector<Guess> gs = m_aGuesser.GetAllManagedLanguages();
     aRes.realloc(gs.size());
 
     com::sun::star::lang::Locale *pRes = aRes.getArray();
@@ -278,8 +300,10 @@ uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getEnabledLanguages(  )
 {
     osl::MutexGuard aGuard( GetLangGuessMutex() );
 
+    EnsureInitialized();
+
     Sequence< com::sun::star::lang::Locale > aRes;
-    vector<Guess> gs = guesser.GetAvailableLanguages();
+    vector<Guess> gs = m_aGuesser.GetAvailableLanguages();
     aRes.realloc(gs.size());
 
     com::sun::star::lang::Locale *pRes = aRes.getArray();
@@ -300,8 +324,10 @@ uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getDisabledLanguages(  )
 {
     osl::MutexGuard aGuard( GetLangGuessMutex() );
 
+    EnsureInitialized();
+
     Sequence< com::sun::star::lang::Locale > aRes;
-    vector<Guess> gs = guesser.GetUnavailableLanguages();
+    vector<Guess> gs = m_aGuesser.GetUnavailableLanguages();
     aRes.realloc(gs.size());
 
     com::sun::star::lang::Locale *pRes = aRes.getArray();
@@ -323,6 +349,8 @@ void SAL_CALL LangGuess_Impl::disableLanguages(
 {
     osl::MutexGuard aGuard( GetLangGuessMutex() );
 
+    EnsureInitialized();
+
     sal_Int32 nLanguages = rLanguages.getLength();
     const Locale *pLanguages = rLanguages.getConstArray();
 
@@ -336,7 +364,7 @@ void SAL_CALL LangGuess_Impl::disableLanguages(
         language += l.getStr();
         language += "-";
         language += c.getStr();
-        guesser.DisableLanguage(language);
+        m_aGuesser.DisableLanguage(language);
     }
 }
 
@@ -347,6 +375,8 @@ void SAL_CALL LangGuess_Impl::enableLanguages(
 {
     osl::MutexGuard aGuard( GetLangGuessMutex() );
 
+    EnsureInitialized();
+
     sal_Int32 nLanguages = rLanguages.getLength();
     const Locale *pLanguages = rLanguages.getConstArray();
 
@@ -360,7 +390,7 @@ void SAL_CALL LangGuess_Impl::enableLanguages(
         language += l.getStr();
         language += "-";
         language += c.getStr();
-        guesser.EnableLanguage(language);
+        m_aGuesser.EnableLanguage(language);
     }
 }
 

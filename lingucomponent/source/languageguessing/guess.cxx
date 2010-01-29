@@ -102,13 +102,7 @@ Guess::Guess(char * guess_str)
         if(lang!=""){//if not we use the default value
             language_str=lang;
         }
-
-        if(/*country!=""*/1){
-            country_str=country;
-        }
-        else{//if we don't have an availlable country, we use the language as a country
-            country_str=upperCase(language_str);
-        }
+        country_str=country;
 
         if(enc!=""){//if not we use the default value
             encoding_str=enc;

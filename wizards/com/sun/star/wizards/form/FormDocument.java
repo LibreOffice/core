@@ -37,7 +37,6 @@ import com.sun.star.awt.Size;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameContainer;
-import com.sun.star.frame.XModel;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
@@ -53,35 +52,28 @@ import com.sun.star.wizards.document.GridControl;
 
 public class FormDocument extends TextDocument
 {
+    protected Vector oControlForms = new Vector();
+    protected CommandMetaData oMainFormDBMetaData;
+    protected CommandMetaData oSubFormDBMetaData;
+    protected String[][] LinkFieldNames;
 
-    public FormHandler oFormHandler;
-    public ViewHandler oViewHandler;
-    public TextStyleHandler oTextStyleHandler;
-    public XPropertySet xPropPageStyle;
-    public final int SOSYMBOLMARGIN = 2000;
+    private FormHandler oFormHandler;
+    private ViewHandler oViewHandler;
+    private TextStyleHandler oTextStyleHandler;
+    private XPropertySet xPropPageStyle;
     private final int SOFORMGAP = 2000;
-    public Vector oControlForms = new Vector();
-    public CommandMetaData oMainFormDBMetaData;
-    public CommandMetaData oSubFormDBMetaData;
     private boolean bhasSubForm;
     private UIControlArranger curUIControlArranger;
-    public StyleApplier curStyleApplier;
-    public String[][] LinkFieldNames;
-    public XModel xModel;
-    private String sMsgEndAutopilot;
-    int MainFormStandardHeight;
-    int nPageWidth;
-    int nPageHeight;
-    int nFormWidth;
-    int nFormHeight;
-    int nMainFormFieldCount;
-    int totfieldcount;
-    Point aMainFormPoint;
-    Point aSubFormPoint;
-    final static String SOMAINFORM = "MainForm";
-    final static String SOSUBFORM = "SubForm";
+    private StyleApplier curStyleApplier;
+    private int nPageWidth;
+    private int nPageHeight;
+    private int nFormWidth;
+    private int nFormHeight;
+    private Point aMainFormPoint;
+    private final static String SOMAINFORM = "MainForm";
+    private final static String SOSUBFORM = "SubForm";
 
-    public FormDocument(XMultiServiceFactory xMSF, Resource oResource)
+    public FormDocument(XMultiServiceFactory xMSF)
     {
         super(xMSF, new TextDocument.ModuleIdentifier("com.sun.star.sdb.FormDesign"), true);
         try
@@ -101,7 +93,6 @@ public class FormDocument extends TextDocument
             Size aSize = oTextStyleHandler.changePageAlignment(xPropPageStyle, true);
             nPageWidth = aSize.Width;
             nPageHeight = aSize.Height;
-            sMsgEndAutopilot = oResource.getResText(UIConsts.RID_DB_COMMON + 33);
         }
         catch (Exception e)
         {
@@ -129,7 +120,7 @@ public class FormDocument extends TextDocument
         try
         {
             int nMargin;
-            totfieldcount = getTotFieldCount();
+            int totfieldcount = getMainFieldCount() + getSubFieldCount();
             if (totfieldcount > 30)
             {
                 nMargin = 500;
@@ -156,15 +147,16 @@ public class FormDocument extends TextDocument
         }
     }
 
-    public void initialize(boolean _baddParentForm, boolean _bhasSubForm, boolean _bModifySubForm, Short _NBorderType)
+    public void initialize(boolean _baddParentForm, boolean _bShouldHaveSubForm, boolean _bModifySubForm, Short _NBorderType)
     {
-        bhasSubForm = _bhasSubForm;
+        bhasSubForm = _bShouldHaveSubForm;
         adjustPageStyle();
         if (_baddParentForm)
         {
             if (oControlForms.size() == 0)
             {
-                oControlForms.addElement(new ControlForm(this, SOMAINFORM, aMainFormPoint, getMainFormSize(FormWizard.SOGRID)));
+                final ControlForm aMainControlForm = new ControlForm(this, SOMAINFORM, aMainFormPoint, getMainFormSize(FormWizard.SOGRID));
+                oControlForms.addElement(aMainControlForm);
             }
             else
             {
@@ -173,13 +165,15 @@ public class FormDocument extends TextDocument
             }
             ((ControlForm) oControlForms.get(0)).initialize(curUIControlArranger.getSelectedArrangement(0), _NBorderType);
         }
-        if (_bhasSubForm)
+        if (_bShouldHaveSubForm)
         {
             if (oControlForms.size() == 1)
             {
                 adjustMainFormSize(_NBorderType);
-                oControlForms.addElement(new ControlForm(this, SOSUBFORM, getSubFormPoint(), getSubFormSize()));
-                ((ControlForm) oControlForms.get(1)).initialize(curUIControlArranger.getSelectedArrangement(1), _NBorderType);
+                final ControlForm aSubControlForm = new ControlForm(this, SOSUBFORM, getSubFormPoint(), getSubFormSize());
+                oControlForms.addElement(aSubControlForm);
+                /* ((ControlForm) oControlForms.get(1))*/
+                aSubControlForm.initialize(curUIControlArranger.getSelectedArrangement(1), _NBorderType);
             }
             else if (_bModifySubForm)
             {
@@ -193,20 +187,28 @@ public class FormDocument extends TextDocument
         }
         else
         {
-            if (oFormHandler.hasFormByName(SOSUBFORM))
+            ControlForm aMainForm = (ControlForm) oControlForms.get(0);
+            // boolean bHasSubForm = aMainForm.xFormContainer.hasByName(SOSUBFORM);
+            // WRONG if (oFormHandler.hasFormByName(SOSUBFORM))
+            if (aMainForm.xFormContainer != null && aMainForm.xFormContainer.hasByName(SOSUBFORM))
             {
-                oFormHandler.removeFormByName(SOSUBFORM);
+                oFormHandler.removeControlsofForm(SOSUBFORM);
+                oFormHandler.removeElement( aMainForm.xFormContainer, SOSUBFORM );
+                ((ControlForm) oControlForms.get(1)).oFormController = null;
+                // aMainForm.xFormContainer = null; // .removeFormByName(SOSUBFORM);
                 oControlForms.remove(1);
                 adjustMainFormSize(_NBorderType);
             }
         }
     }
 
-    private int getTotFieldCount()
+    private int getMainFieldCount()
     {
-        nMainFormFieldCount = oMainFormDBMetaData.getFieldNames().length;
-        totfieldcount = nMainFormFieldCount + oSubFormDBMetaData.getFieldNames().length;
-        return totfieldcount;
+        return oMainFormDBMetaData.getFieldNames().length;
+    }
+    private int getSubFieldCount()
+    {
+        return oSubFormDBMetaData.getFieldNames().length;
     }
 
     private Size getMainFormSize(int _curArrangement)
@@ -220,12 +222,11 @@ public class FormDocument extends TextDocument
             }
             else
             {
-                totfieldcount = getTotFieldCount();
-                nMainFormHeight = (int) (((double) nMainFormFieldCount / (double) totfieldcount) * ((double) (nFormHeight - SOFORMGAP) / 2));
+                int nTotalFieldCount = getMainFieldCount() + getSubFieldCount();
+                nMainFormHeight = (int) (((double) getMainFieldCount() / (double) nTotalFieldCount) * ((double) (nFormHeight - SOFORMGAP) / 2));
             }
         }
         Size aMainFormSize = new Size(nFormWidth, nMainFormHeight);
-        MainFormStandardHeight = nMainFormHeight;
         return aMainFormSize;
     }
 
@@ -442,7 +443,7 @@ public class FormDocument extends TextDocument
         {
             if (oFormController != null)
             {
-                return oFormController.LabelControlList;
+                return oFormController.getLabelControlList();
             }
             else
             {

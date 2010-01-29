@@ -188,7 +188,7 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
                if (!sLang.getLength())
                    continue;
                rtl::OUString sRegion;
-               if (nIndex != -1);
+               if (nIndex != -1)
                    sRegion = sChunk.copy( nIndex, sChunk.getLength() - nIndex );
 
                // Thus we first get the language of the dictionary

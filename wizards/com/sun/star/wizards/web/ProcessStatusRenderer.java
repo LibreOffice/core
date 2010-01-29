@@ -32,7 +32,7 @@ package com.sun.star.wizards.web;
 import java.util.Hashtable;
 import java.util.Map;
 
-import com.sun.star.wizards.common.Renderer;
+import com.sun.star.wizards.common.IRenderer;
 
 /**
  * @author rpiterman
@@ -42,7 +42,7 @@ import com.sun.star.wizards.common.Renderer;
  * display the current task status.
  * (renders the state to resource strings)
  */
-public class ProcessStatusRenderer implements Renderer, WebWizardConst
+public class ProcessStatusRenderer implements IRenderer, WebWizardConst
 {
 
     Map strings = new Hashtable(12);

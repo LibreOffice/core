@@ -62,6 +62,7 @@ extern "C" void SAL_CALL createRegistryInfo_ObjectInspectorModel();
 extern "C" void SAL_CALL createRegistryInfo_SubmissionPropertyHandler();
 extern "C" void SAL_CALL createRegistryInfo_StringRepresentation();
 extern "C" void SAL_CALL createRegistryInfo_MasterDetailLinkDialog();
+extern "C" void SAL_CALL createRegistryInfo_FormGeometryHandler();
 
 //---------------------------------------------------------------------------------------
 
@@ -88,6 +89,7 @@ extern "C" void SAL_CALL pcr_initializeModule()
         createRegistryInfo_SubmissionPropertyHandler();
         createRegistryInfo_StringRepresentation();
         createRegistryInfo_MasterDetailLinkDialog();
+        createRegistryInfo_FormGeometryHandler();
         s_bInit = sal_True;
     }
 }

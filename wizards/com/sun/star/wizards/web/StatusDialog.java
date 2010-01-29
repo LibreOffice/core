@@ -32,10 +32,9 @@ package com.sun.star.wizards.web;
 import com.sun.star.awt.XButton;
 import com.sun.star.awt.XFixedText;
 import com.sun.star.awt.XProgressBar;
-import com.sun.star.awt.XWindowListener;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.Helper;
-import com.sun.star.wizards.common.Renderer;
+import com.sun.star.wizards.common.IRenderer;
 import com.sun.star.wizards.ui.UnoDialog;
 import com.sun.star.wizards.ui.UnoDialog2;
 import com.sun.star.wizards.ui.event.MethodInvocation;
@@ -59,7 +58,7 @@ public class StatusDialog extends UnoDialog2 implements TaskListener
     private XFixedText lblCounter;
     private XButton btnCancel;
     private String[] res;
-    private Renderer renderer;
+    private IRenderer renderer;
     private boolean enableBreak = false;
     private boolean closeOnFinish = true;
     private MethodInvocation finishedMethod;
@@ -285,7 +284,7 @@ public class StatusDialog extends UnoDialog2 implements TaskListener
     /**
      * @return the subTask renderer object
      */
-    public Renderer getRenderer()
+    public IRenderer getRenderer()
     {
         return renderer;
     }
@@ -293,7 +292,7 @@ public class StatusDialog extends UnoDialog2 implements TaskListener
     /**
      * @param renderer
      */
-    public void setRenderer(Renderer renderer)
+    public void setRenderer(IRenderer renderer)
     {
         this.renderer = renderer;
     }

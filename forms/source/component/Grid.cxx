@@ -99,10 +99,12 @@ OGridControlModel::OGridControlModel(const Reference<XMultiServiceFactory>& _rxF
     ,FontControlModel( false )
     ,m_aSelectListeners(m_aMutex)
     ,m_aResetListeners(m_aMutex)
+    ,m_aRowSetChangeListeners(m_aMutex)
     ,m_aDefaultControl( FRM_SUN_CONTROL_GRIDCONTROL )
     ,m_nBorder(1)
     ,m_nWritingMode( WritingMode2::CONTEXT )
     ,m_nContextWritingMode( WritingMode2::CONTEXT )
+    ,m_bEnableVisible(sal_True)
     ,m_bEnable(sal_True)
     ,m_bNavigation(sal_True)
     ,m_bRecordMarker(sal_True)
@@ -123,11 +125,13 @@ OGridControlModel::OGridControlModel( const OGridControlModel* _pOriginal, const
     ,FontControlModel( _pOriginal )
     ,m_aSelectListeners( m_aMutex )
     ,m_aResetListeners( m_aMutex )
+    ,m_aRowSetChangeListeners( m_aMutex )
 {
     DBG_CTOR(OGridControlModel,NULL);
 
     m_aDefaultControl = _pOriginal->m_aDefaultControl;
     m_bEnable = _pOriginal->m_bEnable;
+    m_bEnableVisible = _pOriginal->m_bEnableVisible;
     m_bNavigation = _pOriginal->m_bNavigation;
     m_nBorder = _pOriginal->m_nBorder;
     m_nWritingMode = _pOriginal->m_nWritingMode;
@@ -157,7 +161,17 @@ OGridControlModel::~OGridControlModel()
 
 // XCloneable
 //------------------------------------------------------------------------------
-IMPLEMENT_DEFAULT_CLONING( OGridControlModel )
+Reference< XCloneable > SAL_CALL OGridControlModel::createClone( ) throw (RuntimeException)
+{
+    OGridControlModel* pClone = new OGridControlModel( this, getContext().getLegacyServiceFactory() );
+    osl_incrementInterlockedCount( &pClone->m_refCount );
+    pClone->OControlModel::clonedFrom( this );
+    // do not call OInterfaceContainer::clonedFrom, it would clone the elements aka columns, which is
+    // already done in the ctor
+    //pClone->OInterfaceContainer::clonedFrom( *this );
+    osl_decrementInterlockedCount( &pClone->m_refCount );
+    return static_cast< XCloneable* >( static_cast< OControlModel* >( pClone ) );
+}
 
 //------------------------------------------------------------------------------
 void OGridControlModel::cloneColumns( const OGridControlModel* _pOriginalContainer )
@@ -234,20 +248,47 @@ void SAL_CALL OGridControlModel::errorOccured( const SQLErrorEvent& _rEvent ) th
     onError( _rEvent );
 }
 
+// XRowSetSupplier
+//------------------------------------------------------------------------------
+Reference< XRowSet > SAL_CALL OGridControlModel::getRowSet(  ) throw (RuntimeException)
+{
+    return Reference< XRowSet >( getParent(), UNO_QUERY );
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL OGridControlModel::setRowSet( const Reference< XRowSet >& /*_rxDataSource*/ ) throw (RuntimeException)
+{
+    OSL_ENSURE( false, "OGridControlModel::setRowSet: not supported!" );
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL OGridControlModel::addRowSetChangeListener( const Reference< XRowSetChangeListener >& i_Listener ) throw (RuntimeException)
+{
+    if ( i_Listener.is() )
+        m_aRowSetChangeListeners.addInterface( i_Listener );
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL OGridControlModel::removeRowSetChangeListener( const Reference< XRowSetChangeListener >& i_Listener ) throw (RuntimeException)
+{
+    m_aRowSetChangeListeners.removeInterface( i_Listener );
+}
+
 // XChild
 //------------------------------------------------------------------------------
-void SAL_CALL OGridControlModel::setParent(const InterfaceRef& Parent) throw(NoSupportException, RuntimeException)
+void SAL_CALL OGridControlModel::setParent( const InterfaceRef& i_Parent ) throw(NoSupportException, RuntimeException)
 {
-    if (m_xParentFormLoadable.is())
-        m_xParentFormLoadable->removeLoadListener(this);
+    ::osl::ClearableMutexGuard aGuard( m_aMutex );
+    if ( i_Parent == getParent() )
+        return;
 
-    OControlModel::setParent(Parent);
+    OControlModel::setParent( i_Parent );
 
-    Reference< XForm > xForm(m_xParent, UNO_QUERY);
-    m_xParentFormLoadable = Reference< XLoadable >  (xForm, UNO_QUERY);
-    if (m_xParentFormLoadable.is())
-        m_xParentFormLoadable->addLoadListener(this);
+    EventObject aEvent( *this );
+    aGuard.clear();
+    m_aRowSetChangeListeners.notifyEach( &XRowSetChangeListener::onRowSetChanged, aEvent );
 }
+
 //------------------------------------------------------------------------------
 Sequence< Type > SAL_CALL OGridControlModel::getTypes(  ) throw(RuntimeException)
 {
@@ -274,6 +315,7 @@ void OGridControlModel::disposing()
     EventObject aEvt(static_cast<XWeak*>(this));
     m_aSelectListeners.disposeAndClear(aEvt);
     m_aResetListeners.disposeAndClear(aEvt);
+    m_aRowSetChangeListeners.disposeAndClear(aEvt);
 }
 
 // XEventListener
@@ -288,6 +330,8 @@ void OGridControlModel::disposing(const EventObject& _rEvent) throw( RuntimeExce
 //-----------------------------------------------------------------------------
 sal_Bool SAL_CALL OGridControlModel::select(const Any& rElement) throw(IllegalArgumentException, RuntimeException)
 {
+    ::osl::ClearableMutexGuard aGuard( m_aMutex );
+
     Reference<XPropertySet> xSel;
     if (rElement.hasValue() && !::cppu::extractInterface(xSel, rElement))
     {
@@ -304,11 +348,11 @@ sal_Bool SAL_CALL OGridControlModel::select(const Any& rElement) throw(IllegalAr
         }
     }
 
-    if (xSel != m_xSelection)
+    if ( xSel != m_xSelection )
     {
         m_xSelection = xSel;
-        EventObject aEvt(xMe);
-        m_aSelectListeners.notifyEach( &XSelectionChangeListener::selectionChanged, aEvt );
+        aGuard.clear();
+        m_aSelectListeners.notifyEach( &XSelectionChangeListener::selectionChanged, EventObject( *this ) );
         return sal_True;
     }
     return sal_False;
@@ -346,16 +390,16 @@ Reference<XPropertySet>  OGridControlModel::createColumn(sal_Int32 nTypeId) cons
     Reference<XPropertySet>  xReturn;
     switch (nTypeId)
     {
-        case TYPE_CHECKBOX:         xReturn = new CheckBoxColumn(OControlModel::m_xServiceFactory); break;
-        case TYPE_COMBOBOX:         xReturn = new ComboBoxColumn(OControlModel::m_xServiceFactory); break;
-        case TYPE_CURRENCYFIELD:    xReturn = new CurrencyFieldColumn(OControlModel::m_xServiceFactory); break;
-        case TYPE_DATEFIELD:        xReturn = new DateFieldColumn(OControlModel::m_xServiceFactory); break;
-        case TYPE_LISTBOX:          xReturn = new ListBoxColumn(OControlModel::m_xServiceFactory); break;
-        case TYPE_NUMERICFIELD:     xReturn = new NumericFieldColumn(OControlModel::m_xServiceFactory); break;
-        case TYPE_PATTERNFIELD:     xReturn = new PatternFieldColumn(OControlModel::m_xServiceFactory); break;
-        case TYPE_TEXTFIELD:        xReturn = new TextFieldColumn(OControlModel::m_xServiceFactory); break;
-        case TYPE_TIMEFIELD:        xReturn = new TimeFieldColumn(OControlModel::m_xServiceFactory); break;
-        case TYPE_FORMATTEDFIELD:   xReturn = new FormattedFieldColumn(OControlModel::m_xServiceFactory); break;
+        case TYPE_CHECKBOX:         xReturn = new CheckBoxColumn( getContext() ); break;
+        case TYPE_COMBOBOX:         xReturn = new ComboBoxColumn( getContext() ); break;
+        case TYPE_CURRENCYFIELD:    xReturn = new CurrencyFieldColumn( getContext() ); break;
+        case TYPE_DATEFIELD:        xReturn = new DateFieldColumn( getContext() ); break;
+        case TYPE_LISTBOX:          xReturn = new ListBoxColumn( getContext() ); break;
+        case TYPE_NUMERICFIELD:     xReturn = new NumericFieldColumn( getContext() ); break;
+        case TYPE_PATTERNFIELD:     xReturn = new PatternFieldColumn( getContext() ); break;
+        case TYPE_TEXTFIELD:        xReturn = new TextFieldColumn( getContext() ); break;
+        case TYPE_TIMEFIELD:        xReturn = new TimeFieldColumn( getContext() ); break;
+        case TYPE_FORMATTEDFIELD:   xReturn = new FormattedFieldColumn( getContext() ); break;
         default:
             DBG_ERROR("OGridControlModel::createColumn: Unknown Column");
             break;
@@ -415,7 +459,7 @@ void OGridControlModel::_reset()
 //------------------------------------------------------------------------------
 void OGridControlModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
-    BEGIN_DESCRIBE_BASE_PROPERTIES( 36 )
+    BEGIN_DESCRIBE_BASE_PROPERTIES( 37 )
         DECL_PROP1(NAME,                ::rtl::OUString,    BOUND);
         DECL_PROP2(CLASSID,             sal_Int16,          READONLY, TRANSIENT);
         DECL_PROP1(TAG,                 ::rtl::OUString,    BOUND);
@@ -423,6 +467,7 @@ void OGridControlModel::describeFixedProperties( Sequence< Property >& _rProps )
         DECL_PROP3(TABSTOP,             sal_Bool,           BOUND, MAYBEDEFAULT, MAYBEVOID);
         DECL_PROP2(HASNAVIGATION,       sal_Bool,           BOUND, MAYBEDEFAULT);
         DECL_PROP1(ENABLED,             sal_Bool,           BOUND);
+        DECL_PROP2(ENABLEVISIBLE,       sal_Bool,           BOUND, MAYBEDEFAULT);
         DECL_PROP1(BORDER,              sal_Int16,          BOUND);
         DECL_PROP2(BORDERCOLOR,         sal_Int16,          BOUND, MAYBEVOID);
         DECL_PROP1(DEFAULTCONTROL,      ::rtl::OUString,    BOUND);
@@ -495,6 +540,9 @@ void OGridControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle ) co
             break;
         case PROPERTY_ID_ENABLED:
             setBOOL(rValue, m_bEnable);
+            break;
+        case PROPERTY_ID_ENABLEVISIBLE:
+            setBOOL(rValue, m_bEnableVisible);
             break;
         case PROPERTY_ID_BORDER:
             rValue <<= (sal_Int16)m_nBorder;
@@ -574,6 +622,9 @@ sal_Bool OGridControlModel::convertFastPropertyValue( Any& rConvertedValue, Any&
         case PROPERTY_ID_ENABLED:
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bEnable);
             break;
+        case PROPERTY_ID_ENABLEVISIBLE:
+            bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bEnableVisible);
+            break;
         case PROPERTY_ID_BORDER:
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_nBorder);
             break;
@@ -645,6 +696,9 @@ void OGridControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, con
         case PROPERTY_ID_ENABLED:
             m_bEnable = getBOOL(rValue);
             break;
+        case PROPERTY_ID_ENABLEVISIBLE:
+            m_bEnableVisible = getBOOL(rValue);
+            break;
         case PROPERTY_ID_RECORDMARKER:
             m_bRecordMarker = getBOOL(rValue);
             break;
@@ -702,6 +756,7 @@ Any OGridControlModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
         case PROPERTY_ID_RECORDMARKER:
         case PROPERTY_ID_DISPLAYSYNCHRON:
         case PROPERTY_ID_ENABLED:
+        case PROPERTY_ID_ENABLEVISIBLE:
             aReturn = makeBoolAny(sal_True);
             break;
 
@@ -735,72 +790,6 @@ Any OGridControlModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
     return aReturn;
 }
 
-// XLoadListener
-//------------------------------------------------------------------------------
-void SAL_CALL OGridControlModel::loaded(const EventObject& rEvent) throw(RuntimeException)
-{
-    Reference<XLoadListener>  xListener;
-    sal_Int32 nCount = getCount();
-    for (sal_Int32 nIndex=0; nIndex < nCount; ++nIndex)
-    {
-        getByIndex(nIndex) >>= xListener;
-        if (xListener.is())
-            xListener->loaded(rEvent);
-    }
-}
-
-//------------------------------------------------------------------------------
-void SAL_CALL OGridControlModel::unloaded(const EventObject& rEvent) throw(RuntimeException)
-{
-    Reference<XLoadListener>  xListener;
-    sal_Int32 nCount = getCount();
-    for (sal_Int32 nIndex=0; nIndex < nCount; nIndex++)
-    {
-        getByIndex(nIndex) >>= xListener;
-        if (xListener.is())
-            xListener->unloaded(rEvent);
-    }
-}
-
-//------------------------------------------------------------------------------
-void SAL_CALL OGridControlModel::reloading(const EventObject& rEvent) throw(RuntimeException)
-{
-    Reference<XLoadListener>  xListener;
-    sal_Int32 nCount = getCount();
-    for (sal_Int32 nIndex=0; nIndex < nCount; nIndex++)
-    {
-        getByIndex(nIndex) >>= xListener;
-        if (xListener.is())
-            xListener->reloading(rEvent);
-    }
-}
-
-//------------------------------------------------------------------------------
-void SAL_CALL OGridControlModel::unloading(const EventObject& rEvent) throw(RuntimeException)
-{
-    Reference<XLoadListener>  xListener;
-    sal_Int32 nCount = getCount();
-    for (sal_Int32 nIndex=0; nIndex < nCount; nIndex++)
-    {
-        getByIndex(nIndex) >>= xListener;
-        if (xListener.is())
-            xListener->unloading(rEvent);
-    }
-}
-
-//------------------------------------------------------------------------------
-void SAL_CALL OGridControlModel::reloaded(const EventObject& rEvent) throw(RuntimeException)
-{
-    Reference<XLoadListener>  xListener;
-    sal_Int32 nCount = getCount();
-    for (sal_Int32 nIndex=0; nIndex < nCount; nIndex++)
-    {
-        getByIndex(nIndex) >>= xListener;
-        if (xListener.is())
-            xListener->reloaded(rEvent);
-    }
-}
-
 //------------------------------------------------------------------------------
 OGridColumn* OGridControlModel::getColumnImplementation(const InterfaceRef& _rxIFace) const
 {
@@ -813,42 +802,32 @@ OGridColumn* OGridControlModel::getColumnImplementation(const InterfaceRef& _rxI
 }
 
 //------------------------------------------------------------------------------
-void OGridControlModel::gotColumn(const Reference< XInterface >& _rxColumn)
+void OGridControlModel::gotColumn( const Reference< XInterface >& _rxColumn )
 {
-    // if our form is already loaded, tell the column
-    // 18.05.2001 - 86558 - frank.schoenheit@germany.sun.com
-    if (m_xParentFormLoadable.is() && m_xParentFormLoadable->isLoaded())
-    {
-        Reference< XLoadListener > xColumnLoadListener(_rxColumn, UNO_QUERY);
-        if (xColumnLoadListener.is())
-        {   // it's kind of a fake ...
-            EventObject aFakedLoadEvent;
-            aFakedLoadEvent.Source = m_xParentFormLoadable;
-            xColumnLoadListener->loaded(aFakedLoadEvent);
-        }
-    }
+    Reference< XSQLErrorBroadcaster > xBroadcaster( _rxColumn, UNO_QUERY );
+    if ( xBroadcaster.is() )
+        xBroadcaster->addSQLErrorListener( this );
 }
 
 //------------------------------------------------------------------------------
 void OGridControlModel::lostColumn(const Reference< XInterface >& _rxColumn)
 {
-    if (Reference<XInterface>(m_xSelection, UNO_QUERY).get() == Reference<XInterface>(_rxColumn, UNO_QUERY).get())
+    if ( m_xSelection == _rxColumn )
     {   // the currently selected element was replaced
         m_xSelection.clear();
-        EventObject aEvt(static_cast<XWeak*>(this));
+        EventObject aEvt( static_cast< XWeak* >( this ) );
         m_aSelectListeners.notifyEach( &XSelectionChangeListener::selectionChanged, aEvt );
     }
+
+    Reference< XSQLErrorBroadcaster > xBroadcaster( _rxColumn, UNO_QUERY );
+    if ( xBroadcaster.is() )
+        xBroadcaster->removeSQLErrorListener( this );
 }
 
 //------------------------------------------------------------------------------
 void OGridControlModel::implRemoved(const InterfaceRef& _rxObject)
 {
     OInterfaceContainer::implRemoved(_rxObject);
-
-    Reference< XSQLErrorBroadcaster > xBroadcaster( _rxObject, UNO_QUERY );
-    if ( xBroadcaster.is() )
-        xBroadcaster->removeSQLErrorListener( this );
-
     lostColumn(_rxObject);
 }
 
@@ -856,20 +835,30 @@ void OGridControlModel::implRemoved(const InterfaceRef& _rxObject)
 void OGridControlModel::implInserted( const ElementDescription* _pElement )
 {
     OInterfaceContainer::implInserted( _pElement );
-
-    Reference< XSQLErrorBroadcaster > xBroadcaster( _pElement->xInterface, UNO_QUERY );
-    if ( xBroadcaster.is() )
-        xBroadcaster->addSQLErrorListener( this );
-
     gotColumn( _pElement->xInterface );
 }
 
 //------------------------------------------------------------------------------
-void OGridControlModel::implReplaced( const InterfaceRef& _rxReplacedObject, const ElementDescription* _pElement )
+void OGridControlModel::impl_replacedElement( const ContainerEvent& _rEvent, ::osl::ClearableMutexGuard& _rInstanceLock )
 {
-    OInterfaceContainer::implReplaced( _rxReplacedObject, _pElement );
-    lostColumn( _rxReplacedObject );
-    gotColumn( _pElement->xInterface );
+    Reference< XInterface > xOldColumn( _rEvent.ReplacedElement, UNO_QUERY );
+    Reference< XInterface > xNewColumn( _rEvent.Element, UNO_QUERY );
+
+    bool bNewSelection = ( xOldColumn == m_xSelection );
+
+    lostColumn( xOldColumn );
+    gotColumn( xNewColumn );
+
+    if ( bNewSelection )
+        m_xSelection.set( xNewColumn, UNO_QUERY );
+
+    OInterfaceContainer::impl_replacedElement( _rEvent, _rInstanceLock );
+    // <<---- SYNCHRONIZED
+
+    if ( bNewSelection )
+    {
+        m_aSelectListeners.notifyEach( &XSelectionChangeListener::selectionChanged, EventObject( *this ) );
+    }
 }
 
 //------------------------------------------------------------------------------

@@ -87,6 +87,7 @@ public class ConfigGroup implements ConfigNode
      * Java Object value.
      * @param field
      * @return the value of the field as a Object.
+     * @throws IllegalAccessException
      */
     public Object convertValue(Field field) throws IllegalAccessException
     {

@@ -84,7 +84,7 @@ XFileStream::XFileStream( ZipEntry & rEntry,
         if ( bHaveEncryptData )
         {
             if ( !bNewRawStream )
-                ZipFile::StaticGetCipher ( rData, maCipher );
+                ZipFile::StaticGetCipher ( rData, maCipher, sal_True );
             else
             {
                 // Put in the EncryptedDataHeader
@@ -210,7 +210,7 @@ void SAL_CALL XFileStream::seek( sal_Int64 location )
         throw( IllegalArgumentException, IOException, RuntimeException)
 {
     if ( location > mnZipSize || location < 0 )
-        throw IllegalArgumentException();
+        throw IllegalArgumentException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >(), 1 );
     if ( location > mxTempSeek->getLength() )
     {
         sal_Int64 nUntil = location + n_ConstBufferSize > mnZipSize ? mnZipSize : location + n_ConstBufferSize;

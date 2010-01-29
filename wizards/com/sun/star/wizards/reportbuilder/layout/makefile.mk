@@ -53,6 +53,7 @@ JARCLASSDIRS	= \
 # --- Files --------------------------------------------------------
 
 JAVAFILES=                     \
+    LayoutConstants.java       \
     ReportBuilderLayouter.java \
     Tabular.java               \
     ColumnarSingleColumn.java  \

@@ -31,13 +31,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 
+#pragma warning(disable: 4917)
 #include <windows.h>
 #include <comdef.h>
 #include <tchar.h>
 #include <atlbase.h>
-extern CComModule _Module;
 #include<atlcom.h>
-#include<atlimpl.cpp>
 #include <stdio.h>
 #include <com/sun/star/bridge/ModelDependent.hpp>
 #include <com/sun/star/bridge/XBridgeSupplier2.hpp>
@@ -50,9 +49,6 @@ extern CComModule _Module;
 #include <rtl/string.h>
 
 
-CComModule _Module;
-BEGIN_OBJECT_MAP(ObjectMap)
-END_OBJECT_MAP()
 
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
@@ -62,13 +58,12 @@ using namespace com::sun::star::bridge::ModelDependent;
 using namespace cppu;
 using namespace rtl;
 HRESULT doTest();
-bool incrementMultidimensionalIndex(sal_Int32 dimensions,
-                                                                   const sal_Int32 * parDimensionLengths,
-                                                                   sal_Int32 * parMultidimensionalIndex);
+bool incrementMultidimensionalIndex(
+    sal_Int32 dimensions,
+    const sal_Int32 * parDimensionLengths,
+    sal_Int32 * parMultidimensionalIndex);
 
-
-
-int __cdecl _tmain( int argc, _TCHAR * argv[] )
+int __cdecl _tmain( int /*argc*/, _TCHAR * /*argv[]*/ )
 {
     HRESULT hr;
     if( FAILED( hr=CoInitialize(NULL)))
@@ -78,8 +73,6 @@ int __cdecl _tmain( int argc, _TCHAR * argv[] )
     }
 
 
-    _Module.Init( ObjectMap, GetModuleHandle( NULL));
-
     if( FAILED(hr=doTest()))
     {
         _com_error err( hr);
@@ -87,8 +80,6 @@ int __cdecl _tmain( int argc, _TCHAR * argv[] )
         MessageBox( NULL, errMsg, "Test failed", MB_ICONERROR);
     }
 
-
-    _Module.Term();
     CoUninitialize();
     return 0;
 }
@@ -99,7 +90,7 @@ int __cdecl _tmain( int argc, _TCHAR * argv[] )
 HRESULT doTest()
 {
     HRESULT hr= S_OK;
-    long i,j;
+    long j = 0;
     SAFEARRAY* par;
     CComDispatchDriver disp;
     CComVariant result;
@@ -118,7 +109,7 @@ HRESULT doTest()
         // one dimensional array
         par= SafeArrayCreateVector( VT_UI1, 0, 5);
         unsigned char arbyte[]= { 1,2,3,4,5};
-        for(  i= 0; i < 5;i++)
+        for(long i= 0; i < 5;i++)
             hr= SafeArrayPutElement( par, &i, &arbyte[i]);
 
         result.Clear();
@@ -173,7 +164,7 @@ HRESULT doTest()
 
         SAFEARRAY* arRet= result.parray;
 
-        for( i= 0; i < 2 ; i++)
+        for(long i= 0; i < 2 ; i++)
         {
             CComVariant varx;
             varx.Clear();
@@ -191,19 +182,16 @@ HRESULT doTest()
 
         }
         SafeArrayDestroy( par);
-
-
-
-
     }
 
     return hr;
 }
 
 // left index is least significant
-bool incrementMultidimensionalIndex(sal_Int32 dimensions,
-                                              const sal_Int32 * parDimensionLengths,
-                                              sal_Int32 * parMultidimensionalIndex)
+bool incrementMultidimensionalIndex(
+    sal_Int32 dimensions,
+    const sal_Int32 * parDimensionLengths,
+    sal_Int32 * parMultidimensionalIndex)
 {
     if( dimensions < 1)
         return sal_False;

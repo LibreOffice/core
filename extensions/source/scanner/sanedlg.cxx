@@ -722,7 +722,7 @@ void SaneDlg::AcquirePreview()
     {
 #if OSL_DEBUG_LEVEL > 1
         aTransporter.getStream().Seek( STREAM_SEEK_TO_END );
-        fprintf( stderr, "Previewbitmapstream contains %d bytes\n", aTransporter.getStream().Tell() );
+        fprintf( stderr, "Previewbitmapstream contains %d bytes\n", (int)aTransporter.getStream().Tell() );
 #endif
         aTransporter.getStream().Seek( STREAM_SEEK_TO_BEGIN );
         maPreviewBitmap.Read( aTransporter.getStream(), TRUE );

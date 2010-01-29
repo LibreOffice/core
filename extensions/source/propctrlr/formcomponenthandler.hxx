@@ -174,10 +174,6 @@ namespace pcr
         */
         bool impl_shouldExcludeProperty_nothrow( const ::com::sun::star::beans::Property& _rProperty ) const;
 
-        /** determines the default measure unit for the document in which our component lives
-        */
-        sal_Int16 impl_getDocumentMeasurementUnit_throw() const;
-
         /** initializes the list of field names, if we're handling a control which supports the
             DataField property
         */

@@ -69,12 +69,11 @@ CFLAGSCXX += -I$(PRJ)$/source$/lingutil $(HUNSPELL_CFLAGS)
 CFLAGSCC += -I$(PRJ)$/source$/lingutil $(HUNSPELL_CFLAGS)
 
 EXCEPTIONSFILES=	\
-        $(SLO)$/ntprophelp.obj\
-        $(SLO)$/nthesimp.obj
+        $(SLO)$/nthesimp.obj \
+        $(SLO)$/nthesdta.obj
 
 SLOFILES=	\
         $(SLO)$/nthesdta.obj\
-        $(SLO)$/ntprophelp.obj\
         $(SLO)$/ntreg.obj\
         $(SLO)$/nthesimp.obj
 
@@ -84,14 +83,10 @@ SHL1TARGET= $(TARGET)$(DLLPOSTFIX)
 SHL1STDLIBS= \
         $(CPPULIB) 	 \
         $(CPPUHELPERLIB) 	 \
-        $(VOSLIB)		\
         $(TOOLSLIB)		\
         $(I18NISOLANGLIB)   \
-        $(SVTOOLLIB)	\
         $(SVLLIB)		\
-        $(VCLLIB)		\
         $(SALLIB)		\
-        $(UCBHELPERLIB)	\
         $(UNOTOOLSLIB)	\
         $(LNGLIB) \
                 $(ULINGULIB) \
@@ -99,7 +94,7 @@ SHL1STDLIBS= \
         $(HUNSPELLLIB)
 
 # build DLL
-SHL1LIBS=		$(SLB)$/$(TARGET).lib
+SHL1LIBS=       $(SLB)$/$(TARGET).lib $(SLB)$/libulingu.lib
 SHL1IMPLIB=		i$(TARGET)
 SHL1DEPN=		$(SHL1LIBS)
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def

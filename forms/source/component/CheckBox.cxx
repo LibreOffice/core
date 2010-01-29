@@ -209,7 +209,7 @@ void SAL_CALL OCheckBoxModel::read(const Reference<stario::XObjectInputStream>& 
             break;
     }
     setReferenceValue( sReferenceValue );
-    setDefaultChecked( static_cast< CheckState >( nDefaultChecked ) );
+    setDefaultChecked( static_cast< ToggleState >( nDefaultChecked ) );
 
     // Nach dem Lesen die Defaultwerte anzeigen
     if ( getControlSource().getLength() )

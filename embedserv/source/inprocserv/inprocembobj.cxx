@@ -863,7 +863,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetHostNames( LPCOLESTR szContainerApp, L
 {
     WRITEDEBUGINFO( "InprocEmbedDocument_Impl::SetHostNames( LPCOLESTR szContainerApp, LPCOLESTR szContainerObj )" );
 
-    HRESULT hr = S_OK;
     if ( CheckDefHandler() )
     {
         ComSmart< IOleObject > pOleObject;
@@ -877,7 +876,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetHostNames( LPCOLESTR szContainerApp, L
         }
     }
 
-    return hr;
+    return S_OK;
 }
 
 //-------------------------------------------------------------------------------

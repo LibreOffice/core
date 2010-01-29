@@ -29,18 +29,13 @@
  ************************************************************************/
 package com.sun.star.wizards.form;
 
-import java.beans.PropertyChangeEvent;
-
 import com.sun.star.awt.ItemEvent;
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.awt.XFixedText;
 import com.sun.star.awt.XListBox;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.Exception;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.JavaTools;
-import com.sun.star.wizards.common.SystemDialog;
-import com.sun.star.wizards.db.CommandMetaData;
 import com.sun.star.wizards.db.RelationController;
 import com.sun.star.wizards.ui.UnoDialog;
 import com.sun.star.wizards.ui.WizardDialog;
@@ -50,22 +45,22 @@ import com.sun.star.wizards.ui.DBLimitedFieldSelection;
 public class FieldLinker extends DBLimitedFieldSelection
 {
 
-    XFixedText[] lblSlaveFields;
-    XFixedText[] lblMasterFields;
-    XListBox[] lstSlaveFields;
-    XListBox[] lstMasterFields;
-    final int SOMASTERINDEX = 1;
-    final int SOSLAVEINDEX = 0;
-    int SOFIRSTLINKLST = 0;
-    int SOSECLINKLST = 1;
-    int SOTHIRDLINKLST = 2;
-    int SOFOURTHLINKLST = 3;
-    int[] SOLINKLST = null;
-    String[] sSlaveListHeader;
-    String[] sMasterListHeader; //CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 40);
-    String sSlaveHidString;
-    String sMasterHidString;
-    Integer IListBoxPosX;
+    private XFixedText[] lblSlaveFields;
+    private XFixedText[] lblMasterFields;
+    private XListBox[] lstSlaveFields;
+    private XListBox[] lstMasterFields;
+    private final int SOMASTERINDEX = 1;
+    private final int SOSLAVEINDEX = 0;
+    private int SOFIRSTLINKLST = 0;
+    private int SOSECLINKLST = 1;
+    private int SOTHIRDLINKLST = 2;
+    private int SOFOURTHLINKLST = 3;
+    private int[] SOLINKLST = null;
+    private String[] sSlaveListHeader;
+    private String[] sMasterListHeader; //CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 40);
+    private String sSlaveHidString;
+    private String sMasterHidString;
+    private Integer IListBoxPosX;
 
     public FieldLinker(WizardDialog _CurUnoDialog, int iStep, int iCompPosX, int iCompPosY, int iCompWidth, int _firsthelpid)
     {
@@ -109,11 +104,29 @@ public class FieldLinker extends DBLimitedFieldSelection
             lstSlaveFields[i] = CurUnoDialog.insertListBox("lstSlaveFieldLink" + new Integer(i + 1).toString(), SOLINKLST[i], null, new ItemListenerImpl(),
                     new String[]
                     {
-                        "Dropdown", "Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                        "Dropdown",
+                        "Enabled",
+                        "Height",
+                        "HelpURL",
+                        "LineCount",
+                        "PositionX",
+                        "PositionY",
+                        "Step",
+                        "TabIndex",
+                        "Width"
                     },
                     new Object[]
                     {
-                        Boolean.TRUE, new Boolean(bDoEnable), UIConsts.INTEGER_12, sSlaveHidString, new Integer(97), new Integer(iCurPosY + 10), IStep, new Short(curtabindex++), new Integer(97)
+                        Boolean.TRUE,
+                        new Boolean(bDoEnable),
+                        UIConsts.INTEGER_12,
+                        sSlaveHidString,
+                        Short.valueOf(UnoDialog.getListBoxLineCount()),
+                        new Integer(97),
+                        new Integer(iCurPosY + 10),
+                        IStep,
+                        new Short(curtabindex++),
+                        new Integer(97)
                     });
 
             lblMasterFields[i] = CurUnoDialog.insertLabel("lblMasterFieldLink" + new Integer(i + 1).toString(),
@@ -129,11 +142,29 @@ public class FieldLinker extends DBLimitedFieldSelection
             lstMasterFields[i] = CurUnoDialog.insertListBox("lstMasterFieldLink" + new Integer(i + 1).toString(), SOLINKLST[i], null, new ItemListenerImpl(),
                     new String[]
                     {
-                        "Dropdown", "Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                        "Dropdown",
+                        "Enabled",
+                        "Height",
+                        "HelpURL",
+                        "LineCount",
+                        "PositionX",
+                        "PositionY",
+                        "Step",
+                        "TabIndex",
+                        "Width"
                     },
                     new Object[]
                     {
-                        Boolean.TRUE, new Boolean(bDoEnable), UIConsts.INTEGER_12, sMasterHidString, new Integer(206), new Integer(iCurPosY + 10), IStep, new Short(curtabindex++), new Integer(97)
+                        Boolean.TRUE,
+                        new Boolean(bDoEnable),
+                        UIConsts.INTEGER_12,
+                        sMasterHidString,
+                        Short.valueOf(UnoDialog.getListBoxLineCount()),
+                        new Integer(206),
+                        new Integer(iCurPosY + 10),
+                        IStep,
+                        new Short(curtabindex++),
+                        new Integer(97)
                     });
             iCurPosY = iCurPosY + 38;
         }
@@ -145,8 +176,10 @@ public class FieldLinker extends DBLimitedFieldSelection
 
     protected void enableNextControlRow(int curindex)
     {
-        setMaxSelIndex();
-        boolean bDoEnable = ((lstSlaveFields[curindex].getSelectedItemPos() > 0) && (lstMasterFields[curindex].getSelectedItemPos() > 0));
+        // setMaxSelIndex();
+        boolean bSlaveField = lstSlaveFields[curindex].getSelectedItemPos() > 0;
+        boolean bMasterField = lstMasterFields[curindex].getSelectedItemPos() > 0;
+        boolean bDoEnable = (bSlaveField && bMasterField);
         if (!bDoEnable)
         {
             moveupSelectedItems(curindex, bDoEnable);
@@ -157,9 +190,9 @@ public class FieldLinker extends DBLimitedFieldSelection
         }
     }
 
-    protected void setMaxSelIndex()
+    protected int getMaxSelIndex()
     {
-        MaxSelIndex = -1;
+        int MaxSelIndex = -1;
         for (int i = 0; i < rowcount; i++)
         {
             if ((lstSlaveFields[i].getSelectedItemPos() > 0) && (lstMasterFields[i].getSelectedItemPos() > 0))
@@ -167,6 +200,7 @@ public class FieldLinker extends DBLimitedFieldSelection
                 MaxSelIndex += 1;
             }
         }
+        return MaxSelIndex;
     }
 
     protected void toggleControlRow(int i, boolean bDoEnable)
@@ -179,14 +213,8 @@ public class FieldLinker extends DBLimitedFieldSelection
             Helper.setUnoPropertyValue(UnoDialog.getModel(lstMasterFields[i]), "Enabled", new Boolean(bDoEnable));
             if (bDoEnable == false)
             {
-                Helper.setUnoPropertyValue(UnoDialog.getModel(lstSlaveFields[i]), "SelectedItems", new short[]
-                        {
-                            0
-                        });
-                Helper.setUnoPropertyValue(UnoDialog.getModel(lstMasterFields[i]), "SelectedItems", new short[]
-                        {
-                            0
-                        });
+                Helper.setUnoPropertyValue(UnoDialog.getModel(lstSlaveFields[i]), "SelectedItems", new short[] { 0 });
+                Helper.setUnoPropertyValue(UnoDialog.getModel(lstMasterFields[i]), "SelectedItems", new short[] { 0 });
             }
         }
     }
@@ -198,34 +226,22 @@ public class FieldLinker extends DBLimitedFieldSelection
 
         if ((iNextMasterItemPos != 0) && (iNextSlaveItemPos != 0))
         {
-            Helper.setUnoPropertyValue(UnoDialog.getModel(lstMasterFields[curindex]), "SelectedItems", new short[]
-                    {
-                        iNextMasterItemPos
-                    });
-            Helper.setUnoPropertyValue(UnoDialog.getModel(lstSlaveFields[curindex]), "SelectedItems", new short[]
-                    {
-                        iNextSlaveItemPos
-                    });
+            Helper.setUnoPropertyValue(UnoDialog.getModel(lstMasterFields[curindex]), "SelectedItems", new short[] {iNextMasterItemPos });
+            Helper.setUnoPropertyValue(UnoDialog.getModel(lstSlaveFields[curindex]), "SelectedItems", new short[]  {iNextSlaveItemPos});
 
-            Helper.setUnoPropertyValue(UnoDialog.getModel(lstMasterFields[curindex + 1]), "SelectedItems", new short[]
-                    {
-                        0
-                    });
-            Helper.setUnoPropertyValue(UnoDialog.getModel(lstSlaveFields[curindex + 1]), "SelectedItems", new short[]
-                    {
-                        0
-                    });
+            Helper.setUnoPropertyValue(UnoDialog.getModel(lstMasterFields[curindex + 1]), "SelectedItems", new short[] { 0 });
+            Helper.setUnoPropertyValue(UnoDialog.getModel(lstSlaveFields[curindex + 1]), "SelectedItems", new short[] { 0 });
             toggleControlRow(curindex, true);
         }
     }
 
     public void initialize(String[] _AllMasterFieldNames, String[] _AllSlaveFieldNames, String[][] _LinkFieldNames)
     {
-        short[] MasterSelList = null;
-        short[] SlaveSelList = null;
+        // short[] MasterSelList = null;
+        // short[] SlaveSelList = null;
         String[] MasterLinkNames = JavaTools.ArrayOutOfMultiDimArray(_LinkFieldNames, SOMASTERINDEX);
         String[] SlaveLinkNames = JavaTools.ArrayOutOfMultiDimArray(_LinkFieldNames, SOSLAVEINDEX);
-        String[] ViewMasterFieldNames = addNoneFieldItemToList(_AllMasterFieldNames);
+        String[] ViewMasterFieldNames = addNoneFieldItemToList(_AllMasterFieldNames); // add '-undefiened-'
         String[] ViewSlaveFieldNames = addNoneFieldItemToList(_AllSlaveFieldNames);
         for (int i = 0; i < super.rowcount; i++)
         {
@@ -254,10 +270,10 @@ public class FieldLinker extends DBLimitedFieldSelection
      */
     public String[][] getLinkFieldNames()
     {
-        String sLinkFieldsAreDuplicate = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 19);
-        setMaxSelIndex();
-        String[][] LinkFieldNames = new String[2][MaxSelIndex + 1];
-        for (int i = 0; i <= MaxSelIndex; i++)
+        // setMaxSelIndex();
+        int nSelectedIndex = getMaxSelIndex();
+        String[][] LinkFieldNames = new String[2][nSelectedIndex + 1];
+        for (int i = 0; i <= nSelectedIndex; i++)
         {
             LinkFieldNames[0][i] = lstSlaveFields[i].getSelectedItem();
             LinkFieldNames[1][i] = lstMasterFields[i].getSelectedItem();
@@ -265,18 +281,17 @@ public class FieldLinker extends DBLimitedFieldSelection
         int iduplicate = JavaTools.getDuplicateFieldIndex(LinkFieldNames);
         if (iduplicate != -1)
         {
+            String sLinkFieldsAreDuplicate = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 19);
             String sLocLinkFieldsAreDuplicate = JavaTools.replaceSubString(sLinkFieldsAreDuplicate, LinkFieldNames[0][iduplicate], "<FIELDNAME1>");
             sLocLinkFieldsAreDuplicate = JavaTools.replaceSubString(sLocLinkFieldsAreDuplicate, LinkFieldNames[1][iduplicate], "<FIELDNAME2>");
-            CurUnoDialog.setCurrentStep(FormWizard.SOFIELDLINKERPAGE);
+            CurUnoDialog.setCurrentStep(FormWizard.SOFIELDLINKER_PAGE);
             CurUnoDialog.enableNavigationButtons(true, true, true);
             CurUnoDialog.showMessageBox("WarningBox", VclWindowPeerAttribute.OK, sLocLinkFieldsAreDuplicate);
             CurUnoDialog.setFocus("lstSlaveFieldLink" + (iduplicate + 1));
             return null;
         }
-        else
-        {
             return LinkFieldNames;
-        }
+
     }
 
     public void enable(boolean _bdoenable)

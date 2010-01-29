@@ -1,4 +1,5 @@
-/*************************************************************************
+/*
+ * ***********************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -6,8 +7,9 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: Renderer.java,v $
- * $Revision: 1.5 $
+ * $RCSfile: InBlocksLabelsLeft.java,v $
+ *
+ * $Revision: 1.2.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -26,17 +28,29 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/
-package com.sun.star.wizards.common;
+ * **********************************************************************
+ */
+
+package com.sun.star.wizards.reportbuilder.layout;
 
 /**
- * A General interface which gives a string
- * that represents the rendered argument object.
- * Can be used to reference resources, internationalizartion
- * a.s.o
+ *
+ * @author ll93751
  */
-public interface Renderer
+public class LayoutConstants
 {
+    public static final int LabelHeight = 500;
+    public static final int FormattedFieldHeight = 500;
+    public static final int EmptyLineHeight = 500;
 
-    public String render(Object object);
+    public static final int BinaryHeight = 4000;
+    public static final int MemoFieldHeight = 4000;
+
+    public static final int LineHeight = 250;
+
+    /**
+     * Groups will indent
+     * This is the factor (5mm) which will multiply with the current indent
+     */
+    public static final int IndentFactorWidth = 500;
 }

@@ -31,11 +31,9 @@
 package com.sun.star.comp.beans;
 
 import java.awt.Component;
-import java.awt.Canvas;
 
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.SystemDependent;
-import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XEventListener;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XMultiComponentFactory;
@@ -49,7 +47,6 @@ import com.sun.star.awt.WindowAttribute;
 import com.sun.star.awt.WindowClass;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
-import com.sun.star.uno.Exception;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.Type;
 import com.sun.star.beans.NamedValue;

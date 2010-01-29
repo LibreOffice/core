@@ -31,19 +31,23 @@
 #ifndef _FRM_COLUMNS_HXX
 #define _FRM_COLUMNS_HXX
 
-#include <cppuhelper/component.hxx>
-#include <comphelper/proparrhlp.hxx>
-#include <comphelper/propagg.hxx>
-#include <comphelper/uno3.hxx>
-#include "frm_strings.hxx"
-#include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/io/XObjectOutputStream.hpp>
-#include <com/sun/star/io/XObjectInputStream.hpp>
-#include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <cppuhelper/compbase3.hxx>
-#include <comphelper/broadcasthelper.hxx>
 #include "cloneable.hxx"
+#include "frm_strings.hxx"
+
+/** === begin UNO includes === **/
+#include <com/sun/star/io/XObjectInputStream.hpp>
+#include <com/sun/star/io/XObjectOutputStream.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/util/XCloneable.hpp>
+/** === end UNO includes === **/
+
+#include <comphelper/broadcasthelper.hxx>
+#include <comphelper/componentcontext.hxx>
+#include <comphelper/propagg.hxx>
+#include <comphelper/proparrhlp.hxx>
+#include <comphelper/uno3.hxx>
+#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/component.hxx>
 
 using namespace comphelper;
 
@@ -55,8 +59,7 @@ namespace frm
 //==================================================================
 // OGridColumn
 //==================================================================
-typedef ::cppu::WeakAggComponentImplHelper3 <   ::com::sun::star::container::XChild
-                                            ,   ::com::sun::star::lang::XUnoTunnel
+typedef ::cppu::WeakAggComponentImplHelper2 <   ::com::sun::star::lang::XUnoTunnel
                                             ,   ::com::sun::star::util::XCloneable > OGridColumn_BASE;
 class OGridColumn   :public ::comphelper::OBaseMutex
                     ,public OGridColumn_BASE
@@ -70,17 +73,15 @@ protected:
     ::com::sun::star::uno::Any  m_aHidden;                  // column hidden?
 // [properties]
 
-    InterfaceRef                m_xParent;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>
-                                m_xORB;
-    ::rtl::OUString             m_aModelName;
+    ::comphelper::ComponentContext  m_aContext;
+    ::rtl::OUString                 m_aModelName;
 
 // [properties]
     ::rtl::OUString             m_aLabel;                   // Name der Spalte
 // [properties]
 
 public:
-    OGridColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory, const ::rtl::OUString& _sModelName = ::rtl::OUString());
+    OGridColumn(const ::comphelper::ComponentContext& _rContext, const ::rtl::OUString& _sModelName = ::rtl::OUString());
     OGridColumn(const OGridColumn* _pOriginal );
     virtual ~OGridColumn();
 
@@ -101,10 +102,6 @@ public:
 
     // XEventListener
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& _rSource) throw(::com::sun::star::uno::RuntimeException);
-
-    // XChild
-    virtual InterfaceRef SAL_CALL getParent() throw(::com::sun::star::uno::RuntimeException){return m_xParent;}
-    virtual void SAL_CALL setParent(const InterfaceRef& Parent) throw(::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
 
     // XPersistObject
     virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream);
@@ -135,30 +132,30 @@ protected:
     virtual OGridColumn* createCloneColumn() const = 0;
 };
 
-#define DECL_COLUMN(ClassName)                                      \
-class ClassName                                                     \
-    :public OGridColumn                                             \
-    ,public OAggregationArrayUsageHelper< ClassName >               \
-{                                                                                   \
-public:                                                                             \
-    ClassName(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);\
-    ClassName(const ClassName* _pCloneFrom);\
-                                                                                    \
+#define DECL_COLUMN(ClassName)                                                                              \
+class ClassName                                                                                             \
+    :public OGridColumn                                                                                     \
+    ,public OAggregationArrayUsageHelper< ClassName >                                                       \
+{                                                                                                           \
+public:                                                                                                     \
+    ClassName(const ::comphelper::ComponentContext& _rContext );                                            \
+    ClassName(const ClassName* _pCloneFrom);                                                                \
+                                                                                                            \
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);  \
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();             \
-    \
-    virtual void fillProperties(    \
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,  \
+    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();                                         \
+                                                                                                            \
+    virtual void fillProperties(                                                                            \
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,          \
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps  \
-        ) const;    \
-    \
-    virtual OGridColumn* createCloneColumn() const; \
+        ) const;                                                                                            \
+                                                                                                            \
+    virtual OGridColumn* createCloneColumn() const;                                                         \
 };
 
 
 #define IMPL_COLUMN(ClassName, Model, bAllowDropDown)                               \
-ClassName::ClassName(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory) \
-    :OGridColumn(_rxFactory, Model) \
+    ClassName::ClassName( const ::comphelper::ComponentContext& _rContext ) \
+    :OGridColumn(_rContext, Model) \
 { \
 } \
 ClassName::ClassName( const ClassName* _pCloneFrom ) \

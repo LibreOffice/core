@@ -84,7 +84,7 @@ END
 // Bitmap
 //
 
-IDB_MFCCONTROL   BITMAP DISCARDABLE  "MfcControlCtl.bmp"
+//IDB_MFCCONTROL   BITMAP DISCARDABLE  "MfcControlCtl.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //

@@ -917,6 +917,7 @@ namespace pcr
         :OComboboxControl_Base( PropertyControlType::ComboBox, pParent, nWinStyle )
     {
         getTypedControlWindow()->SetDropDownLineCount( LB_DEFAULT_COUNT );
+        getTypedControlWindow()->SetSelectHdl( LINK( this, OComboboxControl, OnEntrySelected ) );
     }
 
     //------------------------------------------------------------------
@@ -966,6 +967,15 @@ namespace pcr
             *pIter = getTypedControlWindow()->GetEntry(i);
 
         return aRet;
+    }
+
+    //------------------------------------------------------------------
+    IMPL_LINK( OComboboxControl, OnEntrySelected, void*, /*_pNothing*/ )
+    {
+        if ( !getTypedControlWindow()->IsTravelSelect() )
+            // fire a commit
+            m_aImplControl.notifyModifiedValue();
+        return 0L;
     }
 
     //==================================================================
@@ -1045,7 +1055,7 @@ namespace pcr
     {
         SetCompoundControl( TRUE );
 
-        m_pImplEdit = new MultiLineEdit( this, WB_TABSTOP | WB_IGNORETAB | WB_NOBORDER | _nStyle & WB_READONLY );
+        m_pImplEdit = new MultiLineEdit( this, WB_TABSTOP | WB_IGNORETAB | WB_NOBORDER | (_nStyle & WB_READONLY) );
         SetSubEdit( m_pImplEdit );
         m_pImplEdit->Show();
 

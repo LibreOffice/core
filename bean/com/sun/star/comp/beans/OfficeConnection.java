@@ -31,7 +31,6 @@
 package com.sun.star.comp.beans;
 
 import java.awt.Container;
-import java.net.MalformedURLException;
 
 import com.sun.star.lang.XComponent;
 import com.sun.star.uno.XComponentContext;

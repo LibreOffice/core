@@ -151,7 +151,7 @@ public class BackgroundsDialog extends ImageListDialog
      * @author rpiterman
      *
      */
-    private class BGRenderer implements ImageList.ImageRenderer
+    private class BGRenderer implements ImageList.IImageRenderer
     {
 
         private int cut;

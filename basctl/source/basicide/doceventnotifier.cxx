@@ -140,8 +140,7 @@ namespace basctl
     //--------------------------------------------------------------------
     void SAL_CALL DocumentEventNotifier_Impl::notifyEvent( const EventObject& _rEvent ) throw (RuntimeException)
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-        ::osl::MutexGuard aGuard( m_aMutex );
+        ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
         OSL_PRECOND( !impl_isDisposed_nothrow(), "DocumentEventNotifier_Impl::notifyEvent: disposed, but still getting events?" );
         if ( impl_isDisposed_nothrow() )
@@ -151,7 +150,6 @@ namespace basctl
         OSL_ENSURE( xDocument.is(), "DocumentEventNotifier_Impl::notifyEvent: illegal source document!" );
         if ( !xDocument.is() )
             return;
-        ScriptDocument aDocument( xDocument );
 
         struct EventEntry
         {
@@ -172,8 +170,24 @@ namespace basctl
 
         for ( size_t i=0; i < sizeof( aEvents ) / sizeof( aEvents[0] ); ++i )
         {
-            if ( _rEvent.EventName.equalsAscii( aEvents[i].pEventName ) )
+            if ( !_rEvent.EventName.equalsAscii( aEvents[i].pEventName ) )
+                continue;
+
+            ScriptDocument aDocument( xDocument );
+            {
+                // the listener implementations usually require the SolarMutex, so lock it here.
+                // But ensure the proper order of locking the solar and the own mutex
+                aGuard.clear();
+                ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
+                ::osl::MutexGuard aGuard2( m_aMutex );
+
+                if ( impl_isDisposed_nothrow() )
+                    // somebody took the chance to dispose us -> bail out
+                    return;
+
                 (m_pListener->*aEvents[i].listenerMethod)( aDocument );
+            }
+            break;
         }
     }
 
@@ -250,7 +264,6 @@ namespace basctl
     //--------------------------------------------------------------------
     void DocumentEventNotifier::dispose()
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
         m_pImpl->dispose();
     }
 

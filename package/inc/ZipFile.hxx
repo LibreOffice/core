@@ -131,7 +131,7 @@ public:
             sal_Bool bDecrypt)
         throw(::com::sun::star::io::IOException, ::com::sun::star::packages::zip::ZipException, ::com::sun::star::uno::RuntimeException);
 
-    static void StaticGetCipher ( const vos::ORef < EncryptionData > & xEncryptionData, rtlCipher &rCipher );
+    static sal_Bool StaticGetCipher ( const vos::ORef < EncryptionData > & xEncryptionData, rtlCipher &rCipher, sal_Bool bDecode );
 
     static void StaticFillHeader ( const vos::ORef < EncryptionData > & rData,
                                     sal_Int32 nSize,

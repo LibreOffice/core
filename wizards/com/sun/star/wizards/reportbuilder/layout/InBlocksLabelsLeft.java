@@ -104,6 +104,7 @@ public class InBlocksLabelsLeft extends ColumnarTwoColumns
         SectionObject aSOLabel = getDesignTemplate().getDetailLabel();
         aSOLabel.setFontToBold();
         SectionObject aSOTextField = getDesignTemplate().getDetailTextField();
+        int nLastHeight = 0;
         while (nCount > 0)
         {
             final String sLabel = aFieldTitleNames[i];
@@ -112,18 +113,19 @@ public class InBlocksLabelsLeft extends ColumnarTwoColumns
             final String sFieldName = convertToFieldName(aFieldNames[i]);
             nFieldWidth = 3000 + nDelta;
             aRectLabelFields = insertFormattedField(xSection, sFieldName, aRectLabelFields, nFieldWidth, aSOTextField);
-
+            nLastHeight = Math.max(aRectLabelFields.Height, nLastHeight);
             final int nNextX = aRectLabelFields.X + nLabelWidth + nFieldWidth;
             if (nNextX > (getPageWidth() - getRightPageIndent()))
             {
                 // TODO: label height is fix
-                aRectLabelFields.Y += aSOTextField.getHeight(500);
+                aRectLabelFields.Y += Math.max(aSOTextField.getHeight(LayoutConstants.FormattedFieldHeight), nLastHeight);
+                nLastHeight = 0;
                 aRectLabelFields.X = getLeftPageIndent() + getLeftGroupIndent(getCountOfGroups());
             }
             ++i;
             --nCount;
         }
-        aRectLabelFields.Y += aSOLabel.getHeight(500); // one empty line
+        aRectLabelFields.Y += Math.max(aSOLabel.getHeight(LayoutConstants.EmptyLineHeight), nLastHeight); // one empty line
         xSection.setHeight(aRectLabelFields.Y);
         doNotBreakInTable(xSection);
     }

@@ -31,57 +31,61 @@
 #ifndef _FORMS_FORMCOMPONENT_HXX_
 #define _FORMS_FORMCOMPONENT_HXX_
 
-#include <osl/mutex.hxx>
-#include <rtl/ustring.hxx>
+#include "cloneable.hxx"
+#include "ids.hxx"
+#include "property.hrc"
+#include "property.hxx"
+#include "propertybaghelper.hxx"
+#include "resettable.hxx"
+#include "services.hxx"
+#include "windowstateguard.hxx"
+
+/** === begin UNO includes === **/
+#include <com/sun/star/awt/XControl.hpp>
+#include <com/sun/star/beans/XPropertyAccess.hpp>
+#include <com/sun/star/beans/XPropertyContainer.hpp>
+#include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/form/binding/XBindableValue.hpp>
+#include <com/sun/star/form/FormComponentType.hpp>
+#include <com/sun/star/form/validation/XValidatableFormComponent.hpp>
+#include <com/sun/star/form/validation/XValidityConstraintListener.hpp>
+#include <com/sun/star/form/XBoundComponent.hpp>
+#include <com/sun/star/form/XBoundControl.hpp>
+#include <com/sun/star/form/XFormComponent.hpp>
+#include <com/sun/star/form/XLoadListener.hpp>
+#include <com/sun/star/form/XReset.hpp>
+#include <com/sun/star/io/XMarkableStream.hpp>
+#include <com/sun/star/io/XPersistObject.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/sdb/XColumn.hpp>
+#include <com/sun/star/sdb/XColumnUpdate.hpp>
+#include <com/sun/star/sdb/XRowSetChangeListener.hpp>
+#include <com/sun/star/sdbc/XRowSet.hpp>
+#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#include <com/sun/star/uno/XAggregation.hpp>
+#include <com/sun/star/util/XCloneable.hpp>
+#include <com/sun/star/util/XModifyListener.hpp>
+#include <com/sun/star/form/XLoadable.hpp>
+/** === end UNO includes === **/
+
+#include <comphelper/componentcontext.hxx>
+#include <comphelper/propagg.hxx>
+#include <comphelper/propertybag.hxx>
+#include <comphelper/propmultiplex.hxx>
+#include <comphelper/sequence.hxx>
+#include <comphelper/uno3.hxx>
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase7.hxx>
-#include <com/sun/star/awt/XControl.hpp>
-#include <com/sun/star/uno/XAggregation.hpp>
-#include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/form/XBoundControl.hpp>
-#include <com/sun/star/io/XPersistObject.hpp>
-#include <com/sun/star/io/XMarkableStream.hpp>
-#include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/form/XFormComponent.hpp>
-#include <com/sun/star/form/XBoundComponent.hpp>
-#include <com/sun/star/form/XLoadListener.hpp>
-#include <com/sun/star/form/XReset.hpp>
-#include <com/sun/star/sdbc/XRowSet.hpp>
-#include <com/sun/star/sdb/XColumn.hpp>
-#include <com/sun/star/sdb/XColumnUpdate.hpp>
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <com/sun/star/form/FormComponentType.hpp>
-#include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/form/binding/XBindableValue.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/util/XModifyListener.hpp>
-#include <com/sun/star/form/validation/XValidityConstraintListener.hpp>
-#include <com/sun/star/form/validation/XValidatableFormComponent.hpp>
-#include <com/sun/star/beans/XPropertyContainer.hpp>
-#include <com/sun/star/beans/XPropertyAccess.hpp>
-
-#include <comphelper/propagg.hxx>
-#include <comphelper/propertybag.hxx>
-#include <comphelper/uno3.hxx>
-#include <comphelper/sequence.hxx>
-#include <comphelper/componentcontext.hxx>
-#include "services.hxx"
-#ifndef _FRM_PROPERTY_HRC_
-#include "property.hrc"
-#endif
-#include "property.hxx"
-#include "cloneable.hxx"
-#include "ids.hxx"
-#include "windowstateguard.hxx"
-#include "propertybaghelper.hxx"
-#include <comphelper/propmultiplex.hxx>
+#include <osl/mutex.hxx>
+#include <rtl/ustring.hxx>
 
 #include <memory>
 
@@ -104,6 +108,64 @@ namespace frm
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException) \
         { return ::rtl::OUString::createFromAscii("com.sun.star.comp.forms.") + ::rtl::OUString::createFromAscii(#ImplName); }
 
+    class OControlModel;
+
+    //=========================================================================
+    //= ControlModelLock
+    //=========================================================================
+    /** class whose instances lock a OControlModel
+
+        Locking here merely means locking the OControlModel's mutex.
+
+        In addition to the locking facility, the class is also able to fire property
+        change notifications. This happens when the last ControlModelLock instance on a stack
+        dies.
+    */
+    class ControlModelLock
+    {
+    public:
+        ControlModelLock( OControlModel& _rModel )
+            :m_rModel( _rModel )
+            ,m_bLocked( false )
+        {
+            acquire();
+        }
+
+        ~ControlModelLock()
+        {
+            if ( m_bLocked )
+                release();
+        }
+        inline void acquire();
+        inline void release();
+
+        inline OControlModel& getModel() const { return m_rModel; };
+
+        /** adds a property change notification, which is to be fired when the last lock on the model
+            (in the current thread) is released.
+        */
+        void    addPropertyNotification(
+                    const sal_Int32 _nHandle,
+                    const ::com::sun::star::uno::Any& _rOldValue,
+                    const ::com::sun::star::uno::Any& _rNewValue
+                );
+
+    private:
+        void    impl_notifyAll_nothrow();
+
+    private:
+        OControlModel&                                                  m_rModel;
+        bool                                                            m_bLocked;
+        ::com::sun::star::uno::Sequence< sal_Int32 >                    m_aHandles;
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >   m_aOldValues;
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >   m_aNewValues;
+
+    private:
+        ControlModelLock();                                     // never implemented
+        ControlModelLock( const ControlModelLock& );            // never implemented
+        ControlModelLock& operator=( const ControlModelLock& ); // never implemented
+    };
+
 //=========================================================================
 //= OControl
 //= base class for form layer controls
@@ -117,7 +179,7 @@ class OControl  :public ::cppu::OComponentHelper
                 ,public OControl_BASE
 {
 protected:
-    osl::Mutex                                  m_aMutex;
+    ::osl::Mutex                                m_aMutex;
     OImplementationIdsRef                       m_aHoldIdHelper;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >
                                                 m_xControl;
@@ -125,8 +187,6 @@ protected:
                                                 m_xAggregate;
 
     ::comphelper::ComponentContext              m_aContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                                                m_xServiceFactory;  // legacy only, use m_aContext instead
     WindowStateGuard                            m_aWindowStateGuard;
 
 public:
@@ -301,18 +361,13 @@ class OControlModel :public ::cppu::OComponentHelper
 
 protected:
     ::comphelper::ComponentContext  m_aContext;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                                    m_xServiceFactory;  // legacy only, use m_aContext instead
 
-    ::osl::Mutex    m_aMutex;
+    ::osl::Mutex                    m_aMutex;
+    oslInterlockedCount             m_lockCount;
 
     InterfaceRef                    m_xParent;                  // ParentComponent
     OImplementationIdsRef           m_aHoldIdHelper;
     PropertyBagHelper               m_aPropertyBagHelper;
-
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
-        getORB( ) const { return m_xServiceFactory; }
-        // legacy only, use getContext instead!
 
     const ::comphelper::ComponentContext&
         getContext() const { return m_aContext; }
@@ -465,6 +520,22 @@ protected:
     virtual void describeAggregateProperties(
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
     ) const;
+
+public:
+    struct LockAccess { friend class ControlModelLock; private: LockAccess() { } };
+
+    void                lockInstance( LockAccess );
+    oslInterlockedCount unlockInstance( LockAccess );
+
+    void                firePropertyChanges(
+                            const ::com::sun::star::uno::Sequence< sal_Int32 >& _rHandles,
+                            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rOldValues,
+                            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rNewValues,
+                            LockAccess
+                        );
+
+    inline ::osl::Mutex&
+                        getInstanceMutex() { return m_aMutex; }
 };
 
 //==================================================================
@@ -520,7 +591,7 @@ protected:
 #define IMPLEMENT_DEFAULT_CLONING( classname ) \
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL classname::createClone( ) throw (::com::sun::star::uno::RuntimeException) \
     { \
-        classname* pClone = new classname( this, getORB() ); \
+        classname* pClone = new classname( this, getContext().getLegacyServiceFactory() ); \
         pClone->clonedFrom( this ); \
         return pClone; \
     }
@@ -529,9 +600,10 @@ protected:
 //= OBoundControlModel
 //= model of a form layer control which is bound to a data source field
 //==================================================================
-typedef ::cppu::ImplHelper3 <   ::com::sun::star::form::XLoadListener
+typedef ::cppu::ImplHelper4 <   ::com::sun::star::form::XLoadListener
                             ,   ::com::sun::star::form::XReset
                             ,   ::com::sun::star::beans::XPropertyChangeListener
+                            ,   ::com::sun::star::sdb::XRowSetChangeListener
                             >   OBoundControlModel_BASE1;
 
 // separated into an own base class since derivees can disable the support for this
@@ -565,14 +637,20 @@ protected:
     };
 
 private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+                                        m_xField;
+    // the form which controls supplies the field we bind to.
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >
+                                        m_xAmbientForm;
+
     ::rtl::OUString                     m_sValuePropertyName;
     sal_Int32                           m_nValuePropertyAggregateHandle;
     sal_Int32                           m_nFieldType;
     ::com::sun::star::uno::Type         m_aValuePropertyType;
     bool                                m_bValuePropertyMayBeVoid;
 
+    ResetHelper                         m_aResetHelper;
     ::cppu::OInterfaceContainerHelper   m_aUpdateListeners;
-    ::cppu::OInterfaceContainerHelper   m_aResetListeners;
     ::cppu::OInterfaceContainerHelper   m_aFormComponentListeners;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >
@@ -585,15 +663,13 @@ private:
     ::rtl::OUString                     m_aControlSource;           // Datenquelle, Name des Feldes
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                                         m_xLabelControl;            // reference to a sibling control (model) which is our label
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                                        m_xField;
     sal_Bool                            m_bInputRequired;
 // </properties>
 
     ::comphelper::OPropertyChangeMultiplexer*
                                 m_pAggPropMultiplexer;
 
-    sal_Bool                    m_bLoadListening            : 1;    // are we currently a load listener at our parent form?
+    bool                        m_bFormListening            : 1;    // are we currently a XLoadListener at our ambient form?
     sal_Bool                    m_bLoaded                   : 1;
     sal_Bool                    m_bRequired                 : 1;
     const sal_Bool              m_bCommitable               : 1;    // do we support XBoundComponent?
@@ -910,10 +986,10 @@ protected:
 
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   _getTypes();
 
-    inline const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& getField() const
-    {
-        return m_xField;
-    }
+    /// sets m_xField to the given new value, without notifying our listeners
+    void    impl_setField_noNotify(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxField
+            );
     inline bool hasField() const
     {
         return m_xField.is();
@@ -927,6 +1003,12 @@ protected:
     virtual void describeFixedProperties(
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps
     ) const;
+
+public:
+    inline const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& getField() const
+    {
+        return m_xField;
+    }
 
 public:
     // UNO Anbindung
@@ -979,6 +1061,9 @@ public:
 // XPropertyChangeListener
     virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(::com::sun::star::uno::RuntimeException);
 
+    // XRowSetChangeListener
+    virtual void SAL_CALL onRowSetChanged( const ::com::sun::star::lang::EventObject& i_Event ) throw (::com::sun::star::uno::RuntimeException);
+
 // XLoadListener
     virtual void SAL_CALL loaded( const ::com::sun::star::lang::EventObject& aEvent ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL unloading( const ::com::sun::star::lang::EventObject& aEvent ) throw(::com::sun::star::uno::RuntimeException);
@@ -1030,7 +1115,7 @@ protected:
         @precond
             we do have an active external binding in place
     */
-    void        transferExternalValueToControl( ::osl::ResettableMutexGuard& _rInstanceLock );
+    void        transferExternalValueToControl( ControlModelLock& _rInstanceLock );
 
     /** transfers the control value to the external binding
         @precond
@@ -1038,7 +1123,7 @@ protected:
         @precond
             we do have an active external binding in place
     */
-    void        transferControlValueToExternal( ::osl::ResettableMutexGuard& _rInstanceLock );
+    void        transferControlValueToExternal( ControlModelLock& _rInstanceLock );
 
     /** calculates the type which is to be used to communicate with the current external binding,
         and stores it in m_aExternalValueType
@@ -1093,46 +1178,41 @@ private:
     /// initializes listening at the value property
     void        implInitValuePropertyListening( ) const;
 
-    /** adds the component as load listener to the parent form
+    /** adds or removes the component as load listener to/from our form, and (if necessary) as RowSetChange listener at
+        our parent.
 
-        @precond there is a valid (non-NULL) parent form
         @precond there must no external value binding be in place
-        @precond We are currently *not* listening at the parent form.
     */
-    void        startLoadListening( );
+    void        doFormListening( const bool _bStart );
 
-    /** removes the component as load listener from the parent form
-        @precond We currently *are* listening at the parent form.
+    inline bool isFormListening() const { return m_bFormListening; }
+
+    /** determines the new value of m_xAmbientForm
     */
-    void        stopLoadListening( );
+    void        impl_determineAmbientForm_nothrow();
 
-    inline sal_Bool isLoadListening() const { return m_bLoadListening; }
+    /** connects to a value supplier which is an database column.
 
-    /** connects to a value supplier which is an database column
+        The column is take from our parent, which must be a database form respectively row set.
 
         @precond The control does not have an external value supplier
-        @precond Our mutex is not locked
 
-        @param _rxRowSet
-            The row set which contains the column which we should connect to
         @param _bFromReload
             Determines whether the connection is made after the row set has been loaded (<FALSE/>)
             or reloaded (<TRUE/>)
 
-        @see disconnectDatabaseColumn
+        @see impl_disconnectDatabaseColumn_noNotify
     */
-    void        connectDatabaseColumn(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& _rxRowSet,
+    void        impl_connectDatabaseColumn_noNotify(
                     bool  _bFromReload
                 );
 
     /** disconnects from a value supplier which is an database column
 
         @precond The control does not have an external value supplier
-        @precond Our mutex is not locked
-        @see connectDatabaseColumn
+        @see impl_connectDatabaseColumn_noNotify
     */
-    void        disconnectDatabaseColumn( );
+    void        impl_disconnectDatabaseColumn_noNotify();
 
     /** connects to an external value binding
 
@@ -1147,7 +1227,7 @@ private:
     */
     void        connectExternalValueBinding(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >& _rxBinding,
-                    ::osl::ResettableMutexGuard& _rInstanceLock
+                    ControlModelLock& _rInstanceLock
                 );
 
     /** disconnects from an external value binding
@@ -1195,6 +1275,23 @@ private:
                     const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XValueBinding >& _rxBinding
                 );
 };
+
+    //=========================================================================
+    //= inlines
+    //=========================================================================
+    inline void ControlModelLock::acquire()
+    {
+        m_rModel.lockInstance( OControlModel::LockAccess() );
+        m_bLocked = true;
+    }
+    inline void ControlModelLock::release()
+    {
+        OSL_ENSURE( m_bLocked, "ControlModelLock::release: not locked!" );
+        m_bLocked = false;
+
+        if ( 0 == m_rModel.unlockInstance( OControlModel::LockAccess() ) )
+            impl_notifyAll_nothrow();
+    }
 
 //.........................................................................
 }

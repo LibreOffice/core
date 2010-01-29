@@ -29,6 +29,7 @@ vendor = "OpenOffice.org"
 description = "Language module for OpenOffice.org %OOOBASEVERSION, language %LANGUAGESTRING"
 destpath = "/opt"
 packageversion = "%OOOPACKAGEVERSION"
+pkg_list_entry = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core01"
 End
 
 Start
@@ -44,6 +45,7 @@ vendor = "OpenOffice.org"
 description = "Language fonts module for OpenOffice.org %OOOBASEVERSION, language %LANGUAGESTRING"
 destpath = "/opt"
 packageversion = "%OOOPACKAGEVERSION"
+pkg_list_entry = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core01"
 End
 
 Start
@@ -59,6 +61,7 @@ vendor = "OpenOffice.org"
 description = "Language resource module for OpenOffice.org %OOOBASEVERSION, language %LANGUAGESTRING"
 destpath = "/opt"
 packageversion = "%OOOPACKAGEVERSION"
+pkg_list_entry = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core01"
 End
 
 Start
@@ -74,6 +77,7 @@ vendor = "OpenOffice.org"
 description = "Language help module for OpenOffice.org %OOOBASEVERSION, language %LANGUAGESTRING"
 destpath = "/opt"
 packageversion = "%OOOPACKAGEVERSION"
+pkg_list_entry = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-core01"
 End
 
 Start
@@ -89,6 +93,7 @@ vendor = "OpenOffice.org"
 description = "Writer language module for OpenOffice.org %OOOBASEVERSION, language %LANGUAGESTRING"
 destpath = "/opt"
 packageversion = "%OOOPACKAGEVERSION"
+pkg_list_entry = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-writer"
 End
 
 Start
@@ -104,6 +109,7 @@ vendor = "OpenOffice.org"
 description = "Calc language module for OpenOffice.org %OOOBASEVERSION, language %LANGUAGESTRING"
 destpath = "/opt"
 packageversion = "%OOOPACKAGEVERSION"
+pkg_list_entry = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-calc"
 End
 
 Start
@@ -119,6 +125,7 @@ vendor = "OpenOffice.org"
 description = "Impress language module for OpenOffice.org %OOOBASEVERSION, language %LANGUAGESTRING"
 destpath = "/opt"
 packageversion = "%OOOPACKAGEVERSION"
+pkg_list_entry = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-impress"
 End
 
 Start
@@ -134,6 +141,7 @@ vendor = "OpenOffice.org"
 description = "Draw language module for OpenOffice.org %OOOBASEVERSION, language %LANGUAGESTRING"
 destpath = "/opt"
 packageversion = "%OOOPACKAGEVERSION"
+pkg_list_entry = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-draw"
 End
 
 Start
@@ -149,6 +157,7 @@ vendor = "OpenOffice.org"
 description = "Math language module for OpenOffice.org %OOOBASEVERSION, language %LANGUAGESTRING"
 destpath = "/opt"
 packageversion = "%OOOPACKAGEVERSION"
+pkg_list_entry = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-math"
 End
 
 Start
@@ -164,6 +173,7 @@ vendor = "OpenOffice.org"
 description = "Base language module for OpenOffice.org %OOOBASEVERSION, language %LANGUAGESTRING"
 destpath = "/opt"
 packageversion = "%OOOPACKAGEVERSION"
+pkg_list_entry = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-base"
 End
 
 Start
@@ -179,6 +189,7 @@ vendor = "OpenOffice.org"
 description = "Legacy filters (e.g. StarOffice 5.2) for OpenOffice.org %OOOBASEVERSION, language %LANGUAGESTRING"
 destpath = "/opt"
 packageversion = "%OOOPACKAGEVERSION"
+pkg_list_entry = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-binfilter"
 End
 
 Start
@@ -194,4 +205,5 @@ vendor = "OpenOffice.org"
 description = "Online update language module for OpenOffice.org %OOOBASEVERSION, language %LANGUAGESTRING"
 destpath = "/opt"
 packageversion = "%OOOPACKAGEVERSION"
+pkg_list_entry = "%BASISPACKAGEPREFIX%WITHOUTDOTOOOBASEVERSION-onlineupdate"
 End

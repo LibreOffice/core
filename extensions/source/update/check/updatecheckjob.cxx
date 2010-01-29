@@ -51,6 +51,27 @@ namespace uno = com::sun::star::uno ;
 namespace
 {
 
+class InitUpdateCheckJobThread : public osl::Thread
+{
+public:
+    InitUpdateCheckJobThread( const uno::Reference< uno::XComponentContext > &xContext,
+                              const uno::Sequence< beans::NamedValue > &xParameters );
+
+    virtual void SAL_CALL run();
+    virtual void SAL_CALL onTerminated();
+
+    void    showDialog();
+
+protected:
+    ~InitUpdateCheckJobThread();
+
+private:
+    osl::Condition m_aCondition;
+    uno::Reference<uno::XComponentContext> m_xContext;
+    uno::Sequence<beans::NamedValue> m_xParameters;
+    bool m_bShowDialog;
+};
+
 class UpdateCheckJob :
     public ::cppu::WeakImplHelper2< task::XJob, lang::XServiceInfo >
 {
@@ -80,15 +101,64 @@ public:
         throw (uno::RuntimeException);
 
 private:
-    uno::Reference<uno::XComponentContext> m_xContext;
+    uno::Reference<uno::XComponentContext>  m_xContext;
+    InitUpdateCheckJobThread               *m_pInitThread;
 
     void handleExtensionUpdates( const uno::Sequence< beans::NamedValue > &rListProp );
 };
 
 //------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+InitUpdateCheckJobThread::InitUpdateCheckJobThread(
+            const uno::Reference< uno::XComponentContext > &xContext,
+            const uno::Sequence< beans::NamedValue > &xParameters ) :
+    m_xContext( xContext ),
+    m_xParameters( xParameters ),
+    m_bShowDialog( false )
+{
+    create();
+}
+
+//------------------------------------------------------------------------------
+InitUpdateCheckJobThread::~InitUpdateCheckJobThread()
+{
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL InitUpdateCheckJobThread::run()
+{
+    TimeValue tv = { 25, 0 };
+
+    m_aCondition.wait( &tv );
+
+    rtl::Reference< UpdateCheck > aController( UpdateCheck::get() );
+    aController->initialize( m_xParameters, m_xContext );
+
+    if ( m_bShowDialog )
+        aController->showDialog( true );
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL InitUpdateCheckJobThread::onTerminated()
+{
+    delete this;
+}
+
+//------------------------------------------------------------------------------
+void InitUpdateCheckJobThread::showDialog()
+{
+    m_bShowDialog = true;
+    m_aCondition.set();
+}
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 UpdateCheckJob::UpdateCheckJob(const uno::Reference<uno::XComponentContext>& xContext) :
-    m_xContext(xContext)
+    m_xContext(xContext),
+    m_pInitThread( NULL )
 {
 }
 
@@ -141,11 +211,10 @@ UpdateCheckJob::execute(const uno::Sequence<beans::NamedValue>& namedValues)
             }
         }
     }
+
     uno::Sequence<beans::NamedValue> aConfig =
         getValue< uno::Sequence<beans::NamedValue> > (namedValues, "JobConfig");
-
-    rtl::Reference<UpdateCheck> aController(UpdateCheck::get());
-    aController->initialize(aConfig, m_xContext);
+    m_pInitThread = new InitUpdateCheckJobThread( m_xContext, aConfig );
 
     /* Determine the way we got invoked here -
      * see Developers Guide Chapter "4.7.2 Jobs" to understand the magic
@@ -158,7 +227,7 @@ UpdateCheckJob::execute(const uno::Sequence<beans::NamedValue>& namedValues)
 
     if( ! aEventName.equalsAscii("onFirstVisibleTask") )
     {
-        aController->showDialog(true);
+        m_pInitThread->showDialog();
     }
 
     return uno::Any();

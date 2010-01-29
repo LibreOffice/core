@@ -85,6 +85,10 @@ public class NumberFormatter
 
 
     /**
+     * @param _xMSF
+     * @param _xNumberFormatsSupplier
+     * @return
+     * @throws Exception
      * @deprecated
      *
      */
@@ -167,9 +171,8 @@ public class NumberFormatter
 
     /**
      * returns a numberformat for a FormatString.
-     * @param _xFormatObject
-     * @param _xNumberFormats
-     * @param FormatString
+     * @param _FormatString
+     * @param _aLocale
      * @return
      */
     public int defineNumberFormat(String _FormatString, Locale _aLocale)

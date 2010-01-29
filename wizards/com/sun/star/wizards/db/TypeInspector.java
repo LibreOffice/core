@@ -31,9 +31,7 @@ package com.sun.star.wizards.db;
 
 import java.util.Vector;
 
-import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.sdbc.ColumnSearch;
 import com.sun.star.sdbc.ColumnValue;
 import com.sun.star.sdbc.DataType;
@@ -82,15 +80,15 @@ public class TypeInspector
         try
         {
             xResultSet = _xResultSet;
-            Vector aTypeNameVector = new Vector();
-            Vector aTypeVector = new Vector();
-            Vector aNullableVector = new Vector();
-            Vector aAutoIncrementVector = new Vector();
-            Vector aPrecisionVector = new Vector();
-            Vector aMinScaleVector = new Vector();
-            Vector aMaxScaleVector = new Vector();
-            Vector aSearchableVector = new Vector();
-            Integer[] aIntegerDataTypes = null;
+            Vector<String> aTypeNameVector = new Vector<String>();
+            Vector<Integer> aTypeVector = new Vector<Integer>();
+            Vector<Integer> aNullableVector = new Vector<Integer>();
+            Vector<Boolean> aAutoIncrementVector = new Vector<Boolean>();
+            Vector<Integer> aPrecisionVector = new Vector<Integer>();
+            Vector<Integer> aMinScaleVector = new Vector<Integer>();
+            Vector<Integer> aMaxScaleVector = new Vector<Integer>();
+            Vector<Integer> aSearchableVector = new Vector<Integer>();
+            // Integer[] aIntegerDataTypes = null;
 //      XResultSet xResultSet = xDBMetaDagetTypeInfo();
             XRow xRow = (XRow) UnoRuntime.queryInterface(XRow.class, xResultSet);
             while (xResultSet.next())
