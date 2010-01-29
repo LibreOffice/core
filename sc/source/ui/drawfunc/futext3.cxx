@@ -130,7 +130,7 @@ void FuText::StopEditMode(BOOL /*bTextDirection*/)
     if( pNote )
     {
         // hide the caption object if it is in hidden state
-        pNote->HideCaptionTemp();
+        pNote->ShowCaptionTemp( aNotePos, false );
 
         // update author and date
         pNote->AutoStamp();

@@ -68,6 +68,13 @@
 #define ED_VAL2             33
 #define ED_VAL3             34
 #define FL_CRITERIA         35
+#define FL_SEPARATOR        36
+#define LB_OP3              37
+#define LB_FIELD4           38
+#define LB_COND4            39
+#define ED_VAL4             40
+#define LB_SCROLL           41
+#define LB_OP4              42
 
 // Spezialfilter
 

@@ -563,31 +563,6 @@ uno::Reference< XAccessible > ScChildrenShapes::GetAt(const awt::Point& rPoint) 
 
             --i;
         }
-/*      Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
-        if (pWindow)
-        {
-            Point aPnt( rPoint.X, rPoint.Y );
-            aPnt = pWindow->PixelToLogic( aPnt );
-            SdrPage* pDrawPage = GetDrawPage();
-            if (pDrawPage)
-            {
-                SdrObject * pObj = GetDrawPage()->CheckHit(aPnt, 1, NULL, false);
-                if (pObj)
-                {
-                    uno::Reference<drawing::XShape> xShape (pObj->getUnoShape(), uno::UNO_QUERY);
-                    SortedShapes::iterator aItr;;
-                    if (FindShape(xShape, aItr))
-                    {
-                        if ((*aItr) && (*aItr)->pAccShape)
-                            xAccessible = (*aItr)->pAccShape;
-                        else
-                            xAccessible = Get(aItr - maZOrderedShapes.begin());
-                    }
-                    else
-                        DBG_ERRORFILE("a shape is not in the list");
-                }
-            }
-        }*/
     }
     return xAccessible;
 }

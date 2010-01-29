@@ -85,6 +85,7 @@ SHL1STDLIBS=       \
     $(SVXLIB)		\
     $(GOODIESLIB)	\
     $(BASEGFXLIB) \
+    $(DRAWINGLAYERLIB) \
     $(VCLLIB)		\
     $(CPPULIB)		\
     $(CPPUHELPERLIB)	\
@@ -188,23 +189,18 @@ SHL6STDLIBS= \
     $(SVTOOLLIB)	\
     $(SVLLIB)		\
     $(SVXLIB)		\
-    $(GOODIESLIB)	\
     $(BASEGFXLIB) \
+    $(DRAWINGLAYERLIB) \
     $(VCLLIB)		\
     $(CPPULIB)		\
     $(CPPUHELPERLIB)	\
     $(COMPHELPERLIB)	\
-    $(UCBHELPERLIB)	\
     $(TKLIB)		\
     $(VOSLIB)		\
     $(SALLIB)		\
     $(TOOLSLIB)	\
-    $(I18NISOLANGLIB) \
     $(UNOTOOLSLIB) \
     $(SOTLIB)		\
-    $(XMLOFFLIB)	\
-    $(DBTOOLSLIB)	\
-    $(AVMEDIALIB)   \
     $(OOXLIB)       \
     $(SAXLIB) \
     $(FORLIB)
@@ -231,6 +227,10 @@ SHL8STDLIBS= \
             $(COMPHELPERLIB) \
             $(CPPULIB) \
             $(SALLIB)
+
+.IF "$(ENABLE_LAYOUT)" == "TRUE"
+SHL8STDLIBS+=$(TKLIB)
+.ENDIF # ENABLE_LAYOUT == TRUE
 
 SHL8LIBS=   $(SLB)$/scui.lib
 LIB8TARGET = $(SLB)$/scui.lib

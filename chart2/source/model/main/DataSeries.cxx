@@ -136,7 +136,7 @@ namespace chart
 DataSeries::DataSeries( const uno::Reference< uno::XComponentContext > & xContext ) :
         ::property::OPropertySet( m_aMutex ),
         m_xContext( xContext ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+        m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
 }
 
@@ -145,7 +145,7 @@ DataSeries::DataSeries( const DataSeries & rOther ) :
         impl::DataSeries_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
     m_xContext( rOther.m_xContext ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
     if( ! rOther.m_aDataSequences.empty())
     {

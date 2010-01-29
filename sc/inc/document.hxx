@@ -90,6 +90,7 @@ class ScDBData;
 class ScDetOpData;
 class ScDetOpList;
 class ScDocOptions;
+class ScDocProtection;
 class ScDocumentPool;
 class ScDrawLayer;
 class ScExtDocOptions;
@@ -108,6 +109,7 @@ class ScRangeName;
 class ScStyleSheet;
 class ScStyleSheetPool;
 class ScTable;
+class ScTableProtection;
 class ScTokenArray;
 class ScValidationData;
 class ScValidationDataList;
@@ -136,6 +138,8 @@ class ScAutoNameCache;
 class ScTemporaryChartLock;
 class ScLookupCache;
 struct ScLookupCacheMapImpl;
+class SfxUndoManager;
+class ScFormulaParserPool;
 
 namespace com { namespace sun { namespace star {
     namespace lang {
@@ -232,6 +236,7 @@ friend class ScHorizontalCellIterator;
 friend class ScHorizontalAttrIterator;
 friend class ScDocAttrIterator;
 friend class ScAttrRectIterator;
+friend class ScDocShell;
 #if OLD_PIVOT_IMPLEMENTATION
 friend class ScPivot;
 #endif
@@ -241,6 +246,7 @@ private:
 
     vos::ORef<ScPoolHelper> xPoolHelper;
 
+    SfxUndoManager*     mpUndoManager;
     ScFieldEditEngine*  pEditEngine;                    // uses pEditPool from xPoolHelper
     ScNoteEditEngine*   pNoteEngine;                    // uses pEditPool from xPoolHelper
     SfxItemPool*    pNoteItemPool; // SfxItemPool to be used if pDrawLayer not created.
@@ -283,9 +289,14 @@ private:
 
     ScFieldEditEngine*  pCacheFieldEditEngine;
 
-    com::sun::star::uno::Sequence<sal_Int8> aProtectPass;
+    ::std::auto_ptr<ScDocProtection> pDocProtection;
 
     ::std::auto_ptr<ScExternalRefManager> pExternalRefMgr;
+
+    // mutable for lazy construction
+    mutable ::std::auto_ptr< ScFormulaParserPool >
+                        mxFormulaParserPool;            /// Pool for all external formula parsers used by this document.
+
     String              aDocName;                       // opt: Dokumentname
     String              aDocCodeName;                       // opt: Dokumentname
     ScRangePairListRef  xColNameRanges;
@@ -348,7 +359,6 @@ private:
 
     ScLkUpdMode         eLinkMode;
 
-    BOOL                bProtected;
     BOOL                bAutoCalc;                      // Automatisch Berechnen
     BOOL                bAutoCalcShellDisabled;         // in/von/fuer ScDocShell disabled
     // ob noch ForcedFormulas berechnet werden muessen,
@@ -408,7 +418,7 @@ private:
 
     mutable BOOL        bStyleSheetUsageInvalid;
 
-    BOOL                bUndoEnabled;
+    bool                mbUndoEnabled;
     bool                mbAdjustHeightEnabled;
     bool                mbExecuteLinkEnabled;
     bool                mbChangeReadOnlyEnabled;    // allow changes in read-only document (for API import filters)
@@ -532,13 +542,14 @@ public:
     SC_DLLPUBLIC inline SCTAB   GetTableCount() const { return nMaxTableNumber; }
     SvNumberFormatterIndexTable* GetFormatExchangeList() const { return pFormatExchangeList; }
 
-    SC_DLLPUBLIC void           SetDocProtection( BOOL bProtect, const com::sun::star::uno::Sequence <sal_Int8>& aPass );
-    SC_DLLPUBLIC void           SetTabProtection( SCTAB nTab, BOOL bProtect, const com::sun::star::uno::Sequence <sal_Int8>& aPass );
+    SC_DLLPUBLIC ScDocProtection* GetDocProtection() const;
+    SC_DLLPUBLIC void            SetDocProtection(const ScDocProtection* pProtect);
     SC_DLLPUBLIC BOOL           IsDocProtected() const;
     BOOL            IsDocEditable() const;
     SC_DLLPUBLIC BOOL           IsTabProtected( SCTAB nTab ) const;
-    const com::sun::star::uno::Sequence <sal_Int8>& GetDocPassword() const;
-    const com::sun::star::uno::Sequence <sal_Int8>& GetTabPassword( SCTAB nTab ) const;
+    SC_DLLPUBLIC    ScTableProtection* GetTabProtection( SCTAB nTab ) const;
+    SC_DLLPUBLIC void SetTabProtection(SCTAB nTab, const ScTableProtection* pProtect);
+    void            CopyTabProtection(SCTAB nTabSrc, SCTAB nTabDest);
 
     void            LockTable(SCTAB nTab);
     void            UnlockTable(SCTAB nTab);
@@ -580,6 +591,8 @@ public:
     SC_DLLPUBLIC void           TransferDrawPage(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDestPos);
     SC_DLLPUBLIC void           SetVisible( SCTAB nTab, BOOL bVisible );
     SC_DLLPUBLIC BOOL           IsVisible( SCTAB nTab ) const;
+    BOOL            IsPendingRowHeights( SCTAB nTab ) const;
+    void            SetPendingRowHeights( SCTAB nTab, BOOL bSet );
     SC_DLLPUBLIC void           SetLayoutRTL( SCTAB nTab, BOOL bRTL );
     SC_DLLPUBLIC BOOL           IsLayoutRTL( SCTAB nTab ) const;
     BOOL            IsNegativePage( SCTAB nTab ) const;
@@ -593,7 +606,7 @@ public:
     SC_DLLPUBLIC BOOL           IsActiveScenario( SCTAB nTab ) const;
     SC_DLLPUBLIC void           SetActiveScenario( SCTAB nTab, BOOL bActive );      // nur fuer Undo etc.
     SC_DLLPUBLIC formula::FormulaGrammar::AddressConvention GetAddressConvention() const;
-    formula::FormulaGrammar::Grammar GetGrammar() const;
+    SC_DLLPUBLIC formula::FormulaGrammar::Grammar GetGrammar() const;
     void            SetGrammar( formula::FormulaGrammar::Grammar eGram );
     SC_DLLPUBLIC BYTE           GetLinkMode( SCTAB nTab ) const;
     BOOL            IsLinked( SCTAB nTab ) const;
@@ -616,6 +629,10 @@ public:
     bool            IsInExternalReferenceMarking() const;
     void            MarkUsedExternalReferences();
     bool            MarkUsedExternalReferences( ScTokenArray & rArr );
+
+    /** Returns the pool containing external formula parsers. Creates the pool
+        on first call. */
+    ScFormulaParserPool& GetFormulaParserPool() const;
 
     BOOL            HasDdeLinks() const;
     BOOL            HasAreaLinks() const;
@@ -774,6 +791,12 @@ public:
     SC_DLLPUBLIC ScPostIt* GetOrCreateNote( const ScAddress& rPos );
     /** Deletes the note at the passed cell address. */
     void            DeleteNote( const ScAddress& rPos );
+    /** Creates the captions of all uninitialized cell notes in the specified sheet.
+        @param bForced  True = always create all captions, false = skip when Undo is disabled. */
+    void            InitializeNoteCaptions( SCTAB nTab, bool bForced = false );
+    /** Creates the captions of all uninitialized cell notes in all sheets.
+        @param bForced  True = always create all captions, false = skip when Undo is disabled. */
+    void            InitializeAllNoteCaptions( bool bForced = false );
 
     BOOL            ExtendMergeSel( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL& rEndCol, SCROW& rEndRow, const ScMarkData& rMark,
@@ -891,22 +914,26 @@ public:
 
     BOOL            InsertRow( SCCOL nStartCol, SCTAB nStartTab,
                                SCCOL nEndCol,   SCTAB nEndTab,
-                               SCROW nStartRow, SCSIZE nSize, ScDocument* pRefUndoDoc = NULL );
+                               SCROW nStartRow, SCSIZE nSize, ScDocument* pRefUndoDoc = NULL,
+                               const ScMarkData* pTabMark = NULL );
     SC_DLLPUBLIC BOOL           InsertRow( const ScRange& rRange, ScDocument* pRefUndoDoc = NULL );
     void            DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
                                SCCOL nEndCol,   SCTAB nEndTab,
                                SCROW nStartRow, SCSIZE nSize,
-                               ScDocument* pRefUndoDoc = NULL, BOOL* pUndoOutline = NULL );
+                               ScDocument* pRefUndoDoc = NULL, BOOL* pUndoOutline = NULL,
+                               const ScMarkData* pTabMark = NULL );
     void            DeleteRow( const ScRange& rRange,
                                ScDocument* pRefUndoDoc = NULL, BOOL* pUndoOutline = NULL );
     BOOL            InsertCol( SCROW nStartRow, SCTAB nStartTab,
                                SCROW nEndRow,   SCTAB nEndTab,
-                               SCCOL nStartCol, SCSIZE nSize, ScDocument* pRefUndoDoc = NULL );
+                               SCCOL nStartCol, SCSIZE nSize, ScDocument* pRefUndoDoc = NULL,
+                               const ScMarkData* pTabMark = NULL );
     SC_DLLPUBLIC BOOL           InsertCol( const ScRange& rRange, ScDocument* pRefUndoDoc = NULL );
     void            DeleteCol( SCROW nStartRow, SCTAB nStartTab,
                                SCROW nEndRow, SCTAB nEndTab,
                                SCCOL nStartCol, SCSIZE nSize,
-                               ScDocument* pRefUndoDoc = NULL, BOOL* pUndoOutline = NULL );
+                               ScDocument* pRefUndoDoc = NULL, BOOL* pUndoOutline = NULL,
+                               const ScMarkData* pTabMark = NULL );
     void            DeleteCol( const ScRange& rRange,
                                ScDocument* pRefUndoDoc = NULL, BOOL* pUndoOutline = NULL );
 
@@ -919,8 +946,9 @@ public:
     BOOL            IsClipOrUndo() const                        { return bIsClip || bIsUndo; }
     BOOL            IsUndo() const                              { return bIsUndo; }
     BOOL            IsClipboard() const                         { return bIsClip; }
-    BOOL            IsUndoEnabled() const                       { return bUndoEnabled; }
-    void            EnableUndo( BOOL bVal )                     { bUndoEnabled = bVal; }
+    bool            IsUndoEnabled() const                       { return mbUndoEnabled; }
+    void            EnableUndo( bool bVal );
+
     bool            IsAdjustHeightEnabled() const               { return mbAdjustHeightEnabled; }
     void            EnableAdjustHeight( bool bVal )             { mbAdjustHeightEnabled = bVal; }
     bool            IsExecuteLinkEnabled() const                { return mbExecuteLinkEnabled; }
@@ -1235,7 +1263,8 @@ public:
                                         BOOL bShrink );
     void            UpdateAllRowHeights( OutputDevice* pDev,
                                         double nPPTX, double nPPTY,
-                                        const Fraction& rZoomX, const Fraction& rZoomY );
+                                        const Fraction& rZoomX, const Fraction& rZoomY,
+                                        const ScMarkData* pTabMark = NULL );
     long            GetNeededSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                     OutputDevice* pDev,
                                     double nPPTX, double nPPTY,
@@ -1472,7 +1501,8 @@ public:
 
 
 private:
-//UNUSED2008-05  void               SetAutoFilterFlags();
+    ScDocument(const ScDocument& r); // disabled with no definition
+
     void                FindMaxRotCol( SCTAB nTab, RowInfo* pRowInfo, SCSIZE nArrCount,
                                         SCCOL nX1, SCCOL nX2 ) const;
 
@@ -1683,6 +1713,7 @@ public:
     formula::FormulaGrammar::Grammar  GetStorageGrammar() const
                             { return eStorageGrammar; }
 
+    SfxUndoManager*     GetUndoManager();
 private: // CLOOK-Impl-Methoden
 
     void    ImplCreateOptions(); // bei Gelegenheit auf on-demand umstellen?

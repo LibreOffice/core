@@ -46,13 +46,13 @@ namespace chart
 
 LabeledDataSequence::LabeledDataSequence( const Reference< uno::XComponentContext > & xContext ) :
         m_xContext( xContext ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+        m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {}
 
 LabeledDataSequence::LabeledDataSequence(
     const uno::Reference< chart2::data::XDataSequence > & rValues ) :
         m_xData( rValues ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+        m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
     ModifyListenerHelper::addListener( m_xData, m_xModifyEventForwarder );
 }
@@ -62,7 +62,7 @@ LabeledDataSequence::LabeledDataSequence(
     const uno::Reference< chart2::data::XDataSequence > & rLabel ) :
         m_xData( rValues ),
         m_xLabel( rLabel ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+        m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
     ModifyListenerHelper::addListener( m_xData, m_xModifyEventForwarder );
     ModifyListenerHelper::addListener( m_xLabel, m_xModifyEventForwarder );

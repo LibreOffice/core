@@ -37,6 +37,8 @@
 #include <svtools/itemset.hxx>
 #include "TextDirectionListBox.hxx"
 
+#include <svx/dialcontrol.hxx>
+
 class SvNumberFormatter;
 
 //.............................................................................
@@ -47,7 +49,7 @@ namespace chart
 class DataLabelResources
 {
 public:
-    DataLabelResources( Window* pParent, const SfxItemSet& rInAttrs, bool bShowTextDirectionListBox );
+    DataLabelResources( Window* pParent, const SfxItemSet& rInAttrs );
     virtual ~DataLabelResources();
 
     BOOL FillItemSet(SfxItemSet& rOutAttrs) const;
@@ -67,6 +69,11 @@ private:
 
     FixedText           m_aFT_LabelPlacement;
     ListBox             m_aLB_LabelPlacement;
+
+    FixedLine           m_aFL_Rotate;
+    svx::DialControl    m_aDC_Dial;
+    FixedText           m_aFT_Degrees;
+    NumericField        m_aNF_Degrees;
 
     FixedText               m_aFT_TextDirection;
     TextDirectionListBox    m_aLB_TextDirection;

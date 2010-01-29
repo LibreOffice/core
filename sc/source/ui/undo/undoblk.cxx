@@ -451,7 +451,7 @@ void ScUndoDeleteCells::DoChange( const BOOL bUndo )
     for( i=0; i<nCount; i++ )
     {
         if ( pDoc->HasAttrib( aWorkRange.aStart.Col(), aWorkRange.aStart.Row(), pTabs[i],
-            aWorkRange.aEnd.Col(), aWorkRange.aEnd.Row(), pTabs[i], HASATTR_MERGED ) )
+            aWorkRange.aEnd.Col(), aWorkRange.aEnd.Row(), pTabs[i], HASATTR_MERGED | HASATTR_OVERLAPPED ) )
         {
             // #i51445# old merge flag attributes must be deleted also for single cells,
             // not only for whole columns/rows

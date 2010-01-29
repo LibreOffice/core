@@ -31,7 +31,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 #include <sfx2/docfile.hxx>
+#include <sfx2/sfxsids.hrc>
 #include <svtools/saveopt.hxx>
+#include <svtools/itemset.hxx>
+#include <svtools/stritem.hxx>
+#include <svtools/eitem.hxx>
 #include "xecontent.hxx"
 #include "xltracer.hxx"
 #include "xehelper.hxx"
@@ -42,8 +46,10 @@
 #include "xepivot.hxx"
 #include "xeroot.hxx"
 
-// for filter manager
-#include "excrecds.hxx"
+#include "excrecds.hxx"  // for filter manager
+#include "tabprotection.hxx"
+#include "document.hxx"
+#include "scextopt.hxx"
 
 // Global data ================================================================
 
@@ -219,6 +225,40 @@ XclExpRecordRef XclExpRoot::CreateRecord( sal_uInt16 nRecId ) const
     }
     DBG_ASSERT( xRec.is(), "XclExpRoot::CreateRecord - unknown record ID or missing object" );
     return xRec;
+}
+
+bool XclExpRoot::IsDocumentEncrypted() const
+{
+    // We need to encrypt the content when the document structure is protected.
+    const ScDocProtection* pDocProt = GetDoc().GetDocProtection();
+    if (pDocProt && pDocProt->isProtected() && pDocProt->isOptionEnabled(ScDocProtection::STRUCTURE))
+        return true;
+
+    if (GetPassword().Len() > 0)
+        // Password is entered directly into the save dialog.
+        return true;
+
+    return false;
+}
+
+const String XclExpRoot::GetPassword() const
+{
+    SfxItemSet* pSet = GetMedium().GetItemSet();
+    if (!pSet)
+        return String();
+
+    const SfxPoolItem* pItem = NULL;
+    if (SFX_ITEM_SET == pSet->GetItemState(SID_PASSWORD, sal_True, &pItem))
+    {
+        const SfxStringItem* pStrItem = dynamic_cast<const SfxStringItem*>(pItem);
+        if (pStrItem)
+        {
+            // Password from the save dialog.
+            return pStrItem->GetValue();
+        }
+    }
+
+    return String();
 }
 
 XclExpRootData::XclExpLinkMgrRef XclExpRoot::GetLocalLinkMgrRef() const

@@ -37,6 +37,8 @@
 #include "xistring.hxx"
 #include "xiroot.hxx"
 
+#include <map>
+
 /* ============================================================================
 Classes to import the big Excel document contents (related to several cells or
 globals for the document).
@@ -246,6 +248,65 @@ public:
         @return  Error code that may cause an error message after import. */
     static ErrCode      ReadFilepass( XclImpStream& rStrm );
 };
+
+// ============================================================================
+
+// Document protection ========================================================
+
+class XclImpDocProtectBuffer : protected XclImpRoot
+{
+public:
+    explicit            XclImpDocProtectBuffer( const XclImpRoot& rRoot );
+
+    /** document structure protection flag  */
+    void                ReadDocProtect( XclImpStream& rStrm );
+
+    /** document windows properties protection flag */
+    void                ReadWinProtect( XclImpStream& rStrm );
+
+    void                ReadPasswordHash( XclImpStream& rStrm );
+
+    void                Apply() const;
+
+private:
+    sal_uInt16      mnPassHash;
+    bool            mbDocProtect:1;
+    bool            mbWinProtect:1;
+};
+
+// Sheet protection ===========================================================
+
+class XclImpSheetProtectBuffer : protected XclImpRoot
+{
+public:
+    explicit            XclImpSheetProtectBuffer( const XclImpRoot& rRoot );
+
+    void                ReadProtect( XclImpStream& rStrm, SCTAB nTab );
+
+    void                ReadOptions( XclImpStream& rStrm, SCTAB nTab );
+
+    void                ReadPasswordHash( XclImpStream& rStrm, SCTAB nTab );
+
+    void                Apply() const;
+
+private:
+    struct Sheet
+    {
+        bool        mbProtected;
+        sal_uInt16  mnPasswordHash;
+        sal_uInt16  mnOptions;
+
+        Sheet();
+        Sheet(const Sheet& r);
+    };
+
+    Sheet* GetSheetItem( SCTAB nTab );
+
+private:
+    typedef ::std::map<SCTAB, Sheet> ProtectedSheetMap;
+    ProtectedSheetMap   maProtectedSheets;
+};
+
 
 // ============================================================================
 

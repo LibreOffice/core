@@ -48,6 +48,7 @@ class   ScHorizontalCellIterator;
 struct  ScMyCell;
 class   ScXMLExport;
 class   ScFormatRangeStyles;
+class   ScBaseCell;
 
 //==============================================================================
 
@@ -311,6 +312,8 @@ struct ScMyCell
     sal_Int32                   nStyleIndex;
     sal_Int32                   nNumberFormat;
     com::sun::star::table::CellContentType  nType;
+
+    ScBaseCell*                 pBaseCell;
 
     sal_Bool                    bIsAutoStyle;
 

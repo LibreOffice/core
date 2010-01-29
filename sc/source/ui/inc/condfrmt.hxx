@@ -71,6 +71,7 @@ private:
     formula::RefButton          aRbCond12;
     FixedText           aFtCond1Template;
     ListBox             aLbCond1Template;
+    PushButton          aBtnNew1;
     FixedLine           aFlSep1;
 
     CheckBox            aCbxCond2;
@@ -83,6 +84,7 @@ private:
     formula::RefButton          aRbCond22;
     FixedText           aFtCond2Template;
     ListBox             aLbCond2Template;
+    PushButton          aBtnNew2;
     FixedLine           aFlSep2;
 
     CheckBox            aCbxCond3;
@@ -95,6 +97,7 @@ private:
     formula::RefButton          aRbCond32;
     FixedText           aFtCond3Template;
     ListBox             aLbCond3Template;
+    PushButton          aBtnNew3;
 
     OKButton            aBtnOk;
     CancelButton        aBtnCancel;
@@ -146,6 +149,7 @@ private:
     DECL_LINK( GetFocusHdl, Control* );
     DECL_LINK( LoseFocusHdl, Control* );
     DECL_LINK( BtnHdl, PushButton* );
+    DECL_LINK( NewBtnHdl, PushButton* );
 #endif // _CONDFRMT_CXX
 };
 

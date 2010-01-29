@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: notesuno.cxx,v $
- * $Revision: 1.11.128.4 $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,13 +64,14 @@ using namespace com::sun::star;
 //------------------------------------------------------------------------
 
 //  keine Properties fuer Text in Notizen
-const SfxItemPropertyMap* lcl_GetAnnotationPropertyMap()
+const SvxItemPropertySet* lcl_GetAnnotationPropertySet()
 {
-    static SfxItemPropertyMap aAnnotationPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aAnnotationPropertyMap_Impl[] =
     {
         {0,0,0,0,0,0}
     };
-    return aAnnotationPropertyMap_Impl;
+    static SvxItemPropertySet aAnnotationPropertySet_Impl( aAnnotationPropertyMap_Impl );
+    return &aAnnotationPropertySet_Impl;
 }
 
 //------------------------------------------------------------------------
@@ -219,14 +220,14 @@ rtl::OUString SAL_CALL ScAnnotationObj::getAuthor() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
     const ScPostIt* pNote = ImplGetNote();
-    return pNote ? pNote->GetAuthor() : EMPTY_STRING;
+    return pNote ? pNote->GetAuthor() : rtl::OUString();
 }
 
 rtl::OUString SAL_CALL ScAnnotationObj::getDate() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
     const ScPostIt* pNote = ImplGetNote();
-    return pNote ? pNote->GetDate() : EMPTY_STRING;
+    return pNote ? pNote->GetDate() : rtl::OUString();
 }
 
 sal_Bool SAL_CALL ScAnnotationObj::getIsVisible() throw(uno::RuntimeException)
@@ -257,7 +258,7 @@ SvxUnoText& ScAnnotationObj::GetUnoText()
     if (!pUnoText)
     {
         ScAnnotationEditSource aEditSource( pDocShell, aCellPos );
-        pUnoText = new SvxUnoText( &aEditSource, lcl_GetAnnotationPropertyMap(),
+        pUnoText = new SvxUnoText( &aEditSource, lcl_GetAnnotationPropertySet(),
                                     uno::Reference<text::XText>() );
         pUnoText->acquire();
     }
@@ -268,7 +269,6 @@ const ScPostIt* ScAnnotationObj::ImplGetNote() const
 {
     return pDocShell ? pDocShell->GetDocument()->GetNote( aCellPos ) : 0;
 }
-
 //------------------------------------------------------------------------
 
 ScAnnotationShapeObj::ScAnnotationShapeObj(ScDocShell* pDocSh, const ScAddress& rPos) :
@@ -287,7 +287,7 @@ SvxUnoText& ScAnnotationShapeObj::GetUnoText()
     if (!pUnoText)
     {
         ScAnnotationEditSource aEditSource( pDocShell, aCellPos );
-        pUnoText = new SvxUnoText( &aEditSource, lcl_GetAnnotationPropertyMap(),
+        pUnoText = new SvxUnoText( &aEditSource, lcl_GetAnnotationPropertySet(),
                                     uno::Reference<text::XText>() );
         pUnoText->acquire();
     }
@@ -298,7 +298,7 @@ uno::Reference < drawing::XShape > ScAnnotationShapeObj::GetXShape()
 {
     if (!xShape.is())
         if( ScPostIt* pNote = pDocShell->GetDocument()->GetNote( aCellPos ) )
-            if( SdrObject* pCaption = pNote->GetCaption() )
+            if( SdrObject* pCaption = pNote->GetOrCreateCaption( aCellPos ) )
                 xShape.set( pCaption->getUnoShape(), uno::UNO_QUERY );
     return xShape;
 }

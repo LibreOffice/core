@@ -1420,6 +1420,7 @@ void ScDetectiveFunc::UpdateAllComments( ScDocument& rDoc )
 
     for( SCTAB nObjTab = 0, nTabCount = rDoc.GetTableCount(); nObjTab < nTabCount; ++nObjTab )
     {
+        rDoc.InitializeNoteCaptions( nObjTab );
         SdrPage* pPage = pModel->GetPage( static_cast< sal_uInt16 >( nObjTab ) );
         DBG_ASSERT( pPage, "Page ?" );
         if( pPage )
@@ -1430,6 +1431,7 @@ void ScDetectiveFunc::UpdateAllComments( ScDocument& rDoc )
                 if ( ScDrawObjData* pData = ScDrawLayer::GetNoteCaptionData( pObject, nObjTab ) )
                 {
                     ScPostIt* pNote = rDoc.GetNote( pData->maStart );
+                    // caption should exist, we iterate over drawing objects...
                     DBG_ASSERT( pNote && (pNote->GetCaption() == pObject), "ScDetectiveFunc::UpdateAllComments - invalid cell note" );
                     if( pNote )
                     {

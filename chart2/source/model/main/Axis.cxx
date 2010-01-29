@@ -296,7 +296,7 @@ namespace chart
 
 Axis::Axis( Reference< uno::XComponentContext > const & /* xContext */ ) :
         ::property::OPropertySet( m_aMutex ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder()),
+        m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder()),
         m_aScaleData( AxisHelper::createDefaultScale() ),
         m_xGrid( new GridProperties() ),
         m_aSubGridProperties(),
@@ -317,7 +317,7 @@ Axis::Axis( const Axis & rOther ) :
         MutexContainer(),
         impl::Axis_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder()),
+    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder()),
     m_aScaleData( rOther.m_aScaleData )
 {
     m_xGrid.set( CloneHelper::CreateRefClone< Reference< beans::XPropertySet > >()( rOther.m_xGrid ));

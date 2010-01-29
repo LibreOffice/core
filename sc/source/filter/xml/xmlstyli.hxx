@@ -107,20 +107,22 @@ class XMLTableStyleContext : public XMLPropStyleContext
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
-    void SetOperator(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
-        const com::sun::star::sheet::ConditionOperator aOp) const;
-    void SetBaseCellAddress(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
-        const rtl::OUString& sBaseCell) const;
-    void SetStyle(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
-        const rtl::OUString& sApplyStyle) const;
-    void SetFormula1(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
-        const rtl::OUString& sFormula, bool bPreParse = true) const;
-    void SetFormula2(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
-        const rtl::OUString& sFormula) const;
-    void SetFormulas(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
-        const rtl::OUString& sFormulas) const;
-    void SetGrammar(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
-        const formula::FormulaGrammar::Grammar eGrammar) const;
+    void SetOperator(
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rProps,
+            ::com::sun::star::sheet::ConditionOperator eOp ) const;
+
+    void SetBaseCellAddress(
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rProps,
+            const ::rtl::OUString& rBaseCell ) const;
+
+    void SetStyle(
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rProps,
+            const ::rtl::OUString& rApplyStyle ) const;
+
+    void SetFormula(
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rProps,
+        sal_Int32 nFormulaIdx, const ::rtl::OUString& rFormula,
+        const ::rtl::OUString& rFormulaNmsp, ::formula::FormulaGrammar::Grammar eGrammar, bool bHasNmsp ) const;
 
     void GetConditionalFormat(
         ::com::sun::star::uno::Any& aAny, const rtl::OUString& sCondition,

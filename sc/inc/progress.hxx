@@ -36,6 +36,17 @@
 
 class ScDocument;
 
+/*
+ * #i102566
+ * Drawing a progress bar update is not cheap, so if we draw it on every
+ * percentage change of 200 calculations we get one progress draw per 2
+ * calculations which is slower than doing the calculations themselves. So as a
+ * rough guide only do an update per MIN_NO_CODES_PER_PROGRESS_UPDATE
+ * calculations
+ */
+#define MIN_NO_CODES_PER_PROGRESS_UPDATE 100
+
+
 class SC_DLLPUBLIC ScProgress
 {
 private:

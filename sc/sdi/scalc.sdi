@@ -6870,6 +6870,31 @@ SfxVoidItem TableSelectAll FID_TAB_SELECTALL
 ]
 
 //--------------------------------------------------------------------------
+SfxVoidItem TableDeselectAll FID_TAB_DESELECTALL
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_EDIT;
+]
+
+//--------------------------------------------------------------------------
 SfxVoidItem TextAttributes SID_DRAWTEXT_ATTR_DLG
 ()
 [

@@ -53,11 +53,11 @@ using namespace com::sun::star;
 
 //! SearchWords sucht in ganzen Zellen - umbenennen ???
 
-//  SfxItemPropertyMap nur fuer GetPropertySetInfo
+//  SfxItemPropertyMapEntry nur fuer GetPropertySetInfo
 
-const SfxItemPropertyMap* lcl_GetSearchPropertyMap()
+const SfxItemPropertyMapEntry* lcl_GetSearchPropertyMap()
 {
-    static SfxItemPropertyMap aSearchPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aSearchPropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_SRCHBACK),     0,      &getBooleanCppuType(),       0, 0},
         {MAP_CHAR_LEN(SC_UNO_SRCHBYROW),    0,      &getBooleanCppuType(),       0, 0},

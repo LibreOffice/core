@@ -61,10 +61,11 @@ private: //private member
                         m_xNumberFormatsSupplier;
 
     SvNumberFormatter* m_pNumberFormatter;
+    ::com::sun::star::uno::Any m_aNullDate;
 };
 
 
-class OOO_DLLPUBLIC_CHARTVIEW FixedNumberFormatter
+class FixedNumberFormatter
 {
 public:
     FixedNumberFormatter( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xSupplier

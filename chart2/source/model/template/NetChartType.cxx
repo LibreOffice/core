@@ -34,10 +34,11 @@
 #include "PropertyHelper.hxx"
 #include "macros.hxx"
 #include "PolarCoordinateSystem.hxx"
-#include "Scaling.hxx"
 #include "servicenames_charttypes.hxx"
 #include "ContainerHelper.hxx"
 #include "AxisIndexDefines.hxx"
+#include "AxisHelper.hxx"
+
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 
@@ -137,7 +138,7 @@ Reference< XCoordinateSystem > SAL_CALL
     if( xAxis.is() )
     {
         ScaleData aScaleData = xAxis->getScaleData();
-        aScaleData.Scaling = new LinearScaling( 1.0, 0.0 );
+        aScaleData.Scaling = AxisHelper::createLinearScaling();
         aScaleData.AxisType = AxisType::CATEGORY;
         aScaleData.Orientation = AxisOrientation_MATHEMATICAL;
         xAxis->setScaleData( aScaleData );

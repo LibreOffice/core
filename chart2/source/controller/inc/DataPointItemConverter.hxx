@@ -103,6 +103,7 @@ private:
     sal_Int32                           m_nNumberFormat;
     sal_Int32                           m_nPercentNumberFormat;
     ::com::sun::star::uno::Sequence< sal_Int32 > m_aAvailableLabelPlacements;
+    bool                                m_bForbidPercentValue;
 };
 
 } //  namespace wrapper

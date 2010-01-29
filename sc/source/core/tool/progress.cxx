@@ -162,7 +162,7 @@ void ScProgress::CreateInterpretProgress( ScDocument* pDoc, BOOL bWait )
             if ( !pGlobalProgress )
                 pInterpretProgress = new ScProgress( pDoc->GetDocumentShell(),
                     ScGlobal::GetRscString( STR_PROGRESS_CALCULATING ),
-                    pDoc->GetFormulaCodeInTree(), FALSE, bWait );
+                    pDoc->GetFormulaCodeInTree()/MIN_NO_CODES_PER_PROGRESS_UPDATE, FALSE, bWait );
             pInterpretDoc = pDoc;
         }
     }

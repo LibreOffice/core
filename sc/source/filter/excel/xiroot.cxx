@@ -52,6 +52,7 @@
 XclImpRootData::XclImpRootData( XclBiff eBiff, SfxMedium& rMedium,
         SotStorageRef xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc ) :
     XclRootData( eBiff, rMedium, xRootStrg, rDoc, eTextEnc, false ),
+    mbPassQueried( false ),
     mbHasCodePage( false )
 {
 }
@@ -86,6 +87,8 @@ XclImpRoot::XclImpRoot( XclImpRootData& rImpRootData ) :
         GetOldRoot().pAutoFilterBuffer = new XclImpAutoFilterBuffer;
         mrImpData.mxWebQueryBfr.reset( new XclImpWebQueryBuffer( GetRoot() ) );
         mrImpData.mxPTableMgr.reset( new XclImpPivotTableManager( GetRoot() ) );
+        mrImpData.mxTabProtect.reset( new XclImpSheetProtectBuffer( GetRoot() ) );
+        mrImpData.mxDocProtect.reset( new XclImpDocProtectBuffer( GetRoot() ) );
     }
 
     mrImpData.mxPageSett.reset( new XclImpPageSettings( GetRoot() ) );
@@ -232,6 +235,18 @@ XclImpPivotTableManager& XclImpRoot::GetPivotTableManager() const
     return *mrImpData.mxPTableMgr;
 }
 
+XclImpSheetProtectBuffer& XclImpRoot::GetSheetProtectBuffer() const
+{
+    DBG_ASSERT( mrImpData.mxTabProtect.is(), "XclImpRoot::GetSheetProtectBuffer - invalid call, wrong BIFF" );
+    return *mrImpData.mxTabProtect;
+}
+
+XclImpDocProtectBuffer& XclImpRoot::GetDocProtectBuffer() const
+{
+    DBG_ASSERT( mrImpData.mxDocProtect.is(), "XclImpRoot::GetDocProtectBuffer - invalid call, wrong BIFF" );
+    return *mrImpData.mxDocProtect;
+}
+
 XclImpPageSettings& XclImpRoot::GetPageSettings() const
 {
     return *mrImpData.mxPageSett;
@@ -253,6 +268,17 @@ String XclImpRoot::GetScAddInName( const String& rXclName ) const
     if( ScGlobal::GetAddInCollection()->GetCalcName( rXclName, aScName ) )
         return aScName;
     return rXclName;
+}
+
+const String& XclImpRoot::QueryPassword() const
+{
+    if( !mrImpData.mbPassQueried )
+    {
+        mrImpData.maPassw = ScfApiHelper::QueryPasswordForMedium( GetMedium() );
+        // set to true, even if dialog has been cancelled (never ask twice)
+        mrImpData.mbPassQueried = true;
+    }
+    return mrImpData.maPassw;
 }
 
 // ============================================================================

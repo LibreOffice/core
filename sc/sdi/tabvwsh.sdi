@@ -53,6 +53,7 @@ interface Tables
 ]
 {
     FID_TAB_SELECTALL   [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_TAB_DESELECTALL [ ExecMethod = Execute; StateMethod = GetState; ]
     FID_TAB_MENU_RENAME [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
     FID_TAB_APPEND  [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
     FID_INS_TABLE   [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]

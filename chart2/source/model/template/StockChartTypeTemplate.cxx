@@ -35,7 +35,6 @@
 #include "DataSeriesHelper.hxx"
 #include "StockDataInterpreter.hxx"
 #include "CartesianCoordinateSystem.hxx"
-#include "Scaling.hxx"
 #include "AxisHelper.hxx"
 #include "DiagramHelper.hxx"
 #include "servicenames_charttypes.hxx"

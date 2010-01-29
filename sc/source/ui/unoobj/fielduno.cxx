@@ -63,9 +63,9 @@ using namespace com::sun::star;
 
 //  alles ohne Which-ID, Map nur fuer PropertySetInfo
 
-const SfxItemPropertyMap* lcl_GetURLPropertyMap()
+const SfxItemPropertySet* lcl_GetURLPropertySet()
 {
-    static SfxItemPropertyMap aURLPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aURLPropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_ANCTYPE),  0,  &getCppuType((text::TextContentAnchorType*)0), beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ANCTYPES), 0,  &getCppuType((uno::Sequence<text::TextContentAnchorType>*)0), beans::PropertyAttribute::READONLY, 0 },
@@ -75,24 +75,26 @@ const SfxItemPropertyMap* lcl_GetURLPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_URL),      0,  &getCppuType((rtl::OUString*)0),    0, 0},
         {0,0,0,0,0,0}
     };
-    return aURLPropertyMap_Impl;
+    static SfxItemPropertySet aURLPropertySet_Impl( aURLPropertyMap_Impl );
+    return &aURLPropertySet_Impl;
 }
 
-const SfxItemPropertyMap* lcl_GetHeaderFieldPropertyMap()
+const SfxItemPropertySet* lcl_GetHeaderFieldPropertySet()
 {
-    static SfxItemPropertyMap aHeaderFieldPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aHeaderFieldPropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_ANCTYPE),  0,  &getCppuType((text::TextContentAnchorType*)0), beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ANCTYPES), 0,  &getCppuType((uno::Sequence<text::TextContentAnchorType>*)0), beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_TEXTWRAP), 0,  &getCppuType((text::WrapTextMode*)0), beans::PropertyAttribute::READONLY, 0 },
         {0,0,0,0,0,0}
     };
-    return aHeaderFieldPropertyMap_Impl;
+    static SfxItemPropertySet aHeaderFieldPropertySet_Impl( aHeaderFieldPropertyMap_Impl );
+    return &aHeaderFieldPropertySet_Impl;
 }
 
-const SfxItemPropertyMap* lcl_GetFileFieldPropertyMap()
+const SfxItemPropertySet* lcl_GetFileFieldPropertySet()
 {
-    static SfxItemPropertyMap aFileFieldPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aFileFieldPropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_ANCTYPE),  0,  &getCppuType((text::TextContentAnchorType*)0), beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ANCTYPES), 0,  &getCppuType((uno::Sequence<text::TextContentAnchorType>*)0), beans::PropertyAttribute::READONLY, 0 },
@@ -100,7 +102,8 @@ const SfxItemPropertyMap* lcl_GetFileFieldPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_TEXTWRAP), 0,  &getCppuType((text::WrapTextMode*)0), beans::PropertyAttribute::READONLY, 0 },
         {0,0,0,0,0,0}
     };
-    return aFileFieldPropertyMap_Impl;
+    static SfxItemPropertySet aFileFieldPropertySet_Impl( aFileFieldPropertyMap_Impl );
+    return &aFileFieldPropertySet_Impl;
 }
 
 //------------------------------------------------------------------------
@@ -443,7 +446,7 @@ void SAL_CALL ScCellFieldsObj::removeRefreshListener( const uno::Reference<util:
 ScCellFieldObj::ScCellFieldObj(ScDocShell* pDocSh, const ScAddress& rPos,
                                             const ESelection& rSel) :
     OComponentHelper( getMutex() ),
-    aPropSet( lcl_GetURLPropertyMap() ),
+    pPropSet( lcl_GetURLPropertySet() ),
     pDocShell( pDocSh ),
     aCellPos( rPos ),
     aSelection( rSel )
@@ -674,8 +677,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScCellFieldObj::getPropertySetI
                                                         throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    static uno::Reference<beans::XPropertySetInfo> aRef(
-        new SfxItemPropertySetInfo( aPropSet.getPropertyMap() ));
+    static uno::Reference<beans::XPropertySetInfo> aRef = pPropSet->getPropertySetInfo();
     return aRef;
 }
 
@@ -1129,7 +1131,7 @@ sal_Int16 lcl_SvxToUnoFileFormat( SvxFileFormat nSvxValue )
 ScHeaderFieldObj::ScHeaderFieldObj(ScHeaderFooterContentObj* pContent, USHORT nP,
                                             USHORT nT, const ESelection& rSel) :
     OComponentHelper( getMutex() ),
-    aPropSet( (nT == SC_SERVICE_FILEFIELD) ? lcl_GetFileFieldPropertyMap() : lcl_GetHeaderFieldPropertyMap() ),
+    pPropSet( (nT == SC_SERVICE_FILEFIELD) ? lcl_GetFileFieldPropertySet() : lcl_GetHeaderFieldPropertySet() ),
     pContentObj( pContent ),
     nPart( nP ),
     nType( nT ),
@@ -1381,14 +1383,12 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScHeaderFieldObj::getPropertySe
     if (nType == SC_SERVICE_FILEFIELD)
     {
         //  file field has different properties
-        static uno::Reference<beans::XPropertySetInfo> aFileFieldInfo(
-            new SfxItemPropertySetInfo( aPropSet.getPropertyMap() ));
+        static uno::Reference<beans::XPropertySetInfo> aFileFieldInfo = pPropSet->getPropertySetInfo();
         return aFileFieldInfo;
     }
     else
     {
-        static uno::Reference<beans::XPropertySetInfo> aRef(
-            new SfxItemPropertySetInfo( aPropSet.getPropertyMap() ));
+        static uno::Reference<beans::XPropertySetInfo> aRef = pPropSet->getPropertySetInfo();
         return aRef;
     }
 }

@@ -51,6 +51,8 @@
 
 using namespace com::sun::star;
 using namespace xmloff::token;
+using namespace ::formula;
+using ::rtl::OUString;
 
 class ScXMLContentValidationContext : public SvXMLImportContext
 {
@@ -62,7 +64,6 @@ class ScXMLContentValidationContext : public SvXMLImportContext
     rtl::OUString      sErrorMessageType;
     rtl::OUString      sBaseCellAddress;
     rtl::OUString      sCondition;
-    formula::FormulaGrammar::Grammar eGrammar;
     sal_Int16          nShowList;
     sal_Bool           bAllowEmptyCell;
     sal_Bool           bDisplayHelp;
@@ -73,11 +74,10 @@ class ScXMLContentValidationContext : public SvXMLImportContext
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
-    void GetAlertStyle(const rtl::OUString& sMessageType, com::sun::star::sheet::ValidationAlertStyle& aAlertStyle);
-    void SetFormulas(const rtl::OUString& sFormulas, rtl::OUString& sFormula1, rtl::OUString& sFormula2) const;
-    void GetCondition(const rtl::OUString& sCondition, rtl::OUString& sFormula1, rtl::OUString& sFormula2,
-        com::sun::star::sheet::ValidationType& aValidationType,
-        com::sun::star::sheet::ConditionOperator& aOperator);
+    com::sun::star::sheet::ValidationAlertStyle GetAlertStyle() const;
+    void SetFormula( OUString& rFormula, OUString& rFormulaNmsp, FormulaGrammar::Grammar& reGrammar,
+        const OUString& rCondition, const OUString& rGlobNmsp, FormulaGrammar::Grammar eGlobGrammar, bool bHasNmsp ) const;
+    void GetCondition( ScMyImportValidation& rValidation ) const;
 
 public:
 
@@ -235,20 +235,11 @@ ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImpo
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    sName(),
-    sHelpTitle(),
-    sHelpMessage(),
-    sErrorTitle(),
-    sErrorMessage(),
-    sErrorMessageType(),
-    sBaseCellAddress(),
-    sCondition(),
     nShowList(sheet::TableValidationVisibility::UNSORTED),
     bAllowEmptyCell(sal_True),
     bDisplayHelp(sal_False),
     bDisplayError(sal_False)
 {
-    const formula::FormulaGrammar::Grammar eStorageGrammar = eGrammar = GetScImport().GetDocument()->GetStorageGrammar();
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetContentValidationAttrTokenMap();
     for( sal_Int16 i=0; i < nAttrCount; ++i )
@@ -265,14 +256,7 @@ ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImpo
                 sName = sValue;
             break;
             case XML_TOK_CONTENT_VALIDATION_CONDITION:
-                {
-                    sal_uInt16 nCondPrefix = GetImport().GetNamespaceMap().
-                            _GetKeyByAttrName( sValue, &sCondition, sal_False );
-
-                    if (!ScXMLImport::IsAcceptedFormulaNamespace( nCondPrefix,
-                                sValue, eGrammar, eStorageGrammar))
-                        sCondition = sValue;
-                }
+                sCondition = sValue;
             break;
             case XML_TOK_CONTENT_VALIDATION_BASE_CELL_ADDRESS:
                 sBaseCellAddress = sValue;
@@ -336,189 +320,116 @@ SvXMLImportContext *ScXMLContentValidationContext::CreateChildContext( USHORT nP
     return pContext;
 }
 
-void ScXMLContentValidationContext::GetAlertStyle(const rtl::OUString& sMessageType, com::sun::star::sheet::ValidationAlertStyle& aAlertStyle)
+sheet::ValidationAlertStyle ScXMLContentValidationContext::GetAlertStyle() const
 {
-    if (IsXMLToken(sMessageType, XML_MACRO))
-        aAlertStyle = sheet::ValidationAlertStyle_MACRO;
-    else if (IsXMLToken(sMessageType, XML_STOP))
-        aAlertStyle = sheet::ValidationAlertStyle_STOP;
-    else if (IsXMLToken(sMessageType, XML_WARNING))
-        aAlertStyle = sheet::ValidationAlertStyle_WARNING;
-    else if (IsXMLToken(sMessageType, XML_INFORMATION))
-        aAlertStyle = sheet::ValidationAlertStyle_INFO;
-    else    // don't leave uninitialized
-        aAlertStyle = sheet::ValidationAlertStyle_STOP;
+    if (IsXMLToken(sErrorMessageType, XML_MACRO))
+        return sheet::ValidationAlertStyle_MACRO;
+    if (IsXMLToken(sErrorMessageType, XML_STOP))
+        return sheet::ValidationAlertStyle_STOP;
+    if (IsXMLToken(sErrorMessageType, XML_WARNING))
+        return sheet::ValidationAlertStyle_WARNING;
+    if (IsXMLToken(sErrorMessageType, XML_INFORMATION))
+        return sheet::ValidationAlertStyle_INFO;
+    // default for unknown
+    return sheet::ValidationAlertStyle_STOP;
 }
 
-void ScXMLContentValidationContext::SetFormulas(const rtl::OUString& sFormulas, rtl::OUString& sFormula1, rtl::OUString& sFormula2) const
+void ScXMLContentValidationContext::SetFormula( OUString& rFormula, OUString& rFormulaNmsp, FormulaGrammar::Grammar& reGrammar,
+    const OUString& rCondition, const OUString& rGlobNmsp, FormulaGrammar::Grammar eGlobGrammar, bool bHasNmsp ) const
 {
-    sal_Int32 i = 0;
-    sal_Bool bString = sal_False;
-    sal_Int32 nBrakes = 0;
-    while ((sFormulas[i] != ',' || nBrakes > 0 || bString) && i < sFormulas.getLength())
+    reGrammar = FormulaGrammar::GRAM_UNSPECIFIED;
+    if( bHasNmsp )
     {
-        if (sFormulas[i] == '(')
-            ++nBrakes;
-        if (sFormulas[i] == ')')
-            --nBrakes;
-        if (sFormulas[i] == '"')
-            bString = !bString;
-        ++i;
+        // the entire attribute contains a namespace: internal namespace not allowed
+        rFormula = rCondition;
+        rFormulaNmsp = rGlobNmsp;
+        reGrammar = eGlobGrammar;
     }
-    if (sFormulas[i] == ',')
+    else
     {
-        sFormula1 = sFormulas.copy(0, i);
-        sFormula2 = sFormulas.copy(i + 1);
+        // the attribute does not contain a namespace: try to find a namespace of an external grammar
+        GetScImport().ExtractFormulaNamespaceGrammar( rFormula, rFormulaNmsp, reGrammar, rCondition, true );
+        if( reGrammar != FormulaGrammar::GRAM_EXTERNAL )
+            reGrammar = eGlobGrammar;
     }
 }
 
-void ScXMLContentValidationContext::GetCondition(const rtl::OUString& sTempCondition, rtl::OUString& sFormula1, rtl::OUString& sFormula2,
-        com::sun::star::sheet::ValidationType& aValidationType,
-        com::sun::star::sheet::ConditionOperator& aOperator)
+void ScXMLContentValidationContext::GetCondition( ScMyImportValidation& rValidation ) const
 {
-    aValidationType = sheet::ValidationType_ANY;    // #b6343997# default if no condition is given
-    aOperator = sheet::ConditionOperator_NONE;
+    rValidation.aValidationType = sheet::ValidationType_ANY;    // #b6343997# default if no condition is given
+    rValidation.aOperator = sheet::ConditionOperator_NONE;
 
-    rtl::OUString sLocalCondition(sTempCondition);
-    if (sLocalCondition.getLength())
+    if( sCondition.getLength() > 0 )
     {
-        // ToDo: erase all blanks in the condition, but not in formulas or strings
-        rtl::OUString scell_content(RTL_CONSTASCII_USTRINGPARAM("cell_content"));
-        rtl::OUString scell_content_is_date(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-date"));
-        rtl::OUString scell_content_is_time(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-time"));
-        rtl::OUString scell_content_is_between(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-between"));
-        rtl::OUString scell_content_is_in_list(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-in-list"));
-        rtl::OUString scell_content_text_length(RTL_CONSTASCII_USTRINGPARAM("cell-content-text-length"));
-        rtl::OUString scell_content_is_not_between(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-not-between"));
-        rtl::OUString scell_content_is_whole_number(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-whole-number"));
-        rtl::OUString scell_content_is_decimal_number(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-decimal-number"));
-        rtl::OUString scell_content_text_length_is_between(RTL_CONSTASCII_USTRINGPARAM("cell-content-text-length-is-between"));
-        rtl::OUString scell_content_text_length_is_not_between(RTL_CONSTASCII_USTRINGPARAM("cell-content-text-length-is-not-between"));
-        sal_Int32 i = 0;
-        sal_Bool bAnd(sal_True);
-        while (sLocalCondition[i] != '(' && i < sLocalCondition.getLength())
-            ++i;
-        if (sLocalCondition[i] == '(')
+        // extract leading namespace from condition string
+        OUString aCondition, aConditionNmsp;
+        FormulaGrammar::Grammar eGrammar = FormulaGrammar::GRAM_UNSPECIFIED;
+        GetScImport().ExtractFormulaNamespaceGrammar( aCondition, aConditionNmsp, eGrammar, sCondition );
+        bool bHasNmsp = aCondition.getLength() < sCondition.getLength();
+
+        // parse a condition from the attribute string
+        ScXMLConditionParseResult aParseResult;
+        ScXMLConditionHelper::parseCondition( aParseResult, aCondition, 0 );
+
+        /*  Check the result. A valid value in aParseResult.meToken implies
+            that the other members of aParseResult are filled with valid data
+            for that token. */
+        bool bSecondaryPart = false;
+        switch( aParseResult.meToken )
         {
-            if (i != scell_content_text_length.getLength() &&
-                i != scell_content_text_length_is_between.getLength() &&
-                i != scell_content_text_length_is_not_between.getLength() &&
-                i != scell_content_is_in_list.getLength())
+            case XML_COND_TEXTLENGTH:               // condition is 'cell-content-text-length()<operator><expression>'
+            case XML_COND_TEXTLENGTH_ISBETWEEN:     // condition is 'cell-content-text-length-is-between(<expression1>,<expression2>)'
+            case XML_COND_TEXTLENGTH_ISNOTBETWEEN:  // condition is 'cell-content-text-length-is-not-between(<expression1>,<expression2>)'
+            case XML_COND_ISINLIST:                 // condition is 'cell-content-is-in-list(<expression>)'
+                rValidation.aValidationType = aParseResult.meValidation;
+                rValidation.aOperator = aParseResult.meOperator;
+            break;
+
+            case XML_COND_ISWHOLENUMBER:            // condition is 'cell-content-is-whole-number() and <condition>'
+            case XML_COND_ISDECIMALNUMBER:          // condition is 'cell-content-is-decimal-number() and <condition>'
+            case XML_COND_ISDATE:                   // condition is 'cell-content-is-date() and <condition>'
+            case XML_COND_ISTIME:                   // condition is 'cell-content-is-time() and <condition>'
+                rValidation.aValidationType = aParseResult.meValidation;
+                bSecondaryPart = true;
+            break;
+
+            default:;   // unacceptable or unknown condition
+        }
+
+        /*  Parse the following 'and <condition>' part of some conditions. This
+            updates the members of aParseResult that will contain the operands
+            and comparison operator then. */
+        if( bSecondaryPart )
+        {
+            ScXMLConditionHelper::parseCondition( aParseResult, aCondition, aParseResult.mnEndIndex );
+            if( aParseResult.meToken == XML_COND_AND )
             {
-                if (i == scell_content_is_time.getLength())
+                ScXMLConditionHelper::parseCondition( aParseResult, aCondition, aParseResult.mnEndIndex );
+                switch( aParseResult.meToken )
                 {
-                    rtl::OUString sTemp = sLocalCondition.copy(0, i);
-                    if (sTemp == scell_content_is_time)
-                        aValidationType = sheet::ValidationType_TIME;
-                    else
-                        aValidationType = sheet::ValidationType_DATE;
-                }
-                else if (i == scell_content_is_whole_number.getLength())
-                    aValidationType = sheet::ValidationType_WHOLE;
-                else if (i == scell_content_is_decimal_number.getLength())
-                    aValidationType = sheet::ValidationType_DECIMAL;
-                sLocalCondition = sLocalCondition.copy(i + 2);
-                rtl::OUString sTemp = sLocalCondition.copy(0, 5);
-                if (sTemp.compareToAscii(" and ") == 0)
-                    sLocalCondition = sLocalCondition.copy(5);
-                else
-                    bAnd = sal_False;
-            }
-            if (sLocalCondition.getLength() && bAnd)
-            {
-                i = 0;
-                while (sLocalCondition[i] != '(' && i < sLocalCondition.getLength())
-                    ++i;
-                if (sLocalCondition[i] == '(')
-                {
-                    rtl::OUString sTemp = sLocalCondition.copy(0, i);
-                    sLocalCondition = sLocalCondition.copy(i + 1);
-                    if (i == scell_content_is_between.getLength() ||
-                        i == scell_content_text_length_is_between.getLength())
-                    {
-                        if (sTemp == scell_content_is_in_list)
-                        {
-                            aValidationType = sheet::ValidationType_LIST;
-                            sFormula1 = sLocalCondition.copy(0, sLocalCondition.getLength() - 1);
-                            aOperator = sheet::ConditionOperator_EQUAL;
-                        }
-                        else
-                        {
-                            if (i == scell_content_text_length_is_between.getLength())
-                                aValidationType = sheet::ValidationType_TEXT_LEN;
-                            aOperator = sheet::ConditionOperator_BETWEEN;
-                            sLocalCondition = sLocalCondition.copy(0, sLocalCondition.getLength() - 1);
-                            SetFormulas(sLocalCondition, sFormula1, sFormula2);
-                        }
-                    }
-                    else if (i == scell_content_is_not_between.getLength() ||
-                        i == scell_content_text_length_is_not_between.getLength())
-                    {
-                        if (i == scell_content_text_length_is_not_between.getLength())
-                            aValidationType = sheet::ValidationType_TEXT_LEN;
-                        aOperator = sheet::ConditionOperator_NOT_BETWEEN;
-                        sLocalCondition = sLocalCondition.copy(0, sLocalCondition.getLength() - 1);
-                        SetFormulas(sLocalCondition, sFormula1, sFormula2);
-                    }
-                    else if (i == scell_content.getLength() ||
-                        i == scell_content_text_length.getLength())
-                    {
-                        if (i == scell_content_text_length.getLength())
-                            aValidationType = sheet::ValidationType_TEXT_LEN;
-                        sLocalCondition = sLocalCondition.copy(1);
-                        switch (sLocalCondition[0])
-                        {
-                            case '<' :
-                            {
-                                if (sLocalCondition[1] == '=')
-                                {
-                                    aOperator = sheet::ConditionOperator_LESS_EQUAL;
-                                    sLocalCondition = sLocalCondition.copy(2);
-                                }
-                                else
-                                {
-                                    aOperator = sheet::ConditionOperator_LESS;
-                                    sLocalCondition = sLocalCondition.copy(1);
-                                }
-                            }
-                            break;
-                            case '>' :
-                            {
-                                if (sLocalCondition[1] == '=')
-                                {
-                                    aOperator = sheet::ConditionOperator_GREATER_EQUAL;
-                                    sLocalCondition = sLocalCondition.copy(2);
-                                }
-                                else
-                                {
-                                    aOperator = sheet::ConditionOperator_GREATER;
-                                    sLocalCondition = sLocalCondition.copy(1);
-                                }
-                            }
-                            break;
-                            case '=' :
-                            {
-                                aOperator = sheet::ConditionOperator_EQUAL;
-                                sLocalCondition = sLocalCondition.copy(1);
-                            }
-                            break;
-                            case '!' :
-                            {
-                                aOperator = sheet::ConditionOperator_NOT_EQUAL;
-                                sLocalCondition = sLocalCondition.copy(1);
-                            }
-                            break;
-                        }
-                        sFormula1 = sLocalCondition;
-                    }
+                    case XML_COND_CELLCONTENT:  // condition is 'and cell-content()<operator><expression>'
+                    case XML_COND_ISBETWEEN:    // condition is 'and cell-content-is-between(<expression1>,<expression2>)'
+                    case XML_COND_ISNOTBETWEEN: // condition is 'and cell-content-is-not-between(<expression1>,<expression2>)'
+                        rValidation.aOperator = aParseResult.meOperator;
+                    break;
+                    default:;   // unacceptable or unknown condition
                 }
             }
         }
-    }
 
-    // a validation type (date, integer) without a condition isn't possible
-    if ( aOperator == sheet::ConditionOperator_NONE )
-        aValidationType = sheet::ValidationType_ANY;
+        // a validation type (date, integer) without a condition isn't possible
+        if( rValidation.aOperator == sheet::ConditionOperator_NONE )
+            rValidation.aValidationType = sheet::ValidationType_ANY;
+
+        // parse the formulas
+        if( rValidation.aValidationType != sheet::ValidationType_ANY )
+        {
+            SetFormula( rValidation.sFormula1, rValidation.sFormulaNmsp1, rValidation.eGrammar1,
+                aParseResult.maOperand1, aConditionNmsp, eGrammar, bHasNmsp );
+            SetFormula( rValidation.sFormula2, rValidation.sFormulaNmsp2, rValidation.eGrammar2,
+                aParseResult.maOperand2, aConditionNmsp, eGrammar, bHasNmsp );
+        }
+    }
 }
 
 void ScXMLContentValidationContext::EndElement()
@@ -546,15 +457,15 @@ void ScXMLContentValidationContext::EndElement()
     }
 
     ScMyImportValidation aValidation;
-    aValidation.eGrammar = eGrammar;
+    aValidation.eGrammar1 = aValidation.eGrammar2 = GetScImport().GetDocument()->GetStorageGrammar();
     aValidation.sName = sName;
     aValidation.sBaseCellAddress = sBaseCellAddress;
     aValidation.sImputTitle = sHelpTitle;
     aValidation.sImputMessage = sHelpMessage;
     aValidation.sErrorTitle = sErrorTitle;
     aValidation.sErrorMessage = sErrorMessage;
-    GetCondition(sCondition, aValidation.sFormula1, aValidation.sFormula2, aValidation.aValidationType, aValidation.aOperator);
-    GetAlertStyle(sErrorMessageType, aValidation.aAlertStyle);
+    GetCondition( aValidation );
+    aValidation.aAlertStyle = GetAlertStyle();
     aValidation.bShowErrorMessage = bDisplayError;
     aValidation.bShowImputMessage = bDisplayHelp;
     aValidation.bIgnoreBlanks = bAllowEmptyCell;

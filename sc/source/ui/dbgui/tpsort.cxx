@@ -544,6 +544,18 @@ IMPL_LINK( ScTabPageSortFields, SelectHdl, ListBox *, pLb )
 // Sortieroptionen-Tabpage:
 //========================================================================
 
+#if ENABLE_LAYOUT_EXPERIMENTAL
+#include <layout/layout-pre.hxx>
+
+#if ENABLE_LAYOUT
+#undef ScResId
+#define ScResId(x) #x
+#undef SfxTabPage
+#define SfxTabPage( parent, id, args ) SfxTabPage( parent, "sort-options.xml", id, &args )
+#endif /* ENABLE_LAYOUT */
+
+#endif /* ENABLE_LAYOUT_EXPERIMENTAL */
+
 ScTabPageSortOptions::ScTabPageSortOptions( Window*             pParent,
                                             const SfxItemSet&   rArgSet )
 
@@ -569,6 +581,11 @@ ScTabPageSortOptions::ScTabPageSortOptions( Window*             pParent,
         aFtAreaLabel    ( this, ScResId( FT_AREA_LABEL ) ),
 //      aFtArea         ( this, ScResId( FT_AREA ) ),
         //
+#if ENABLE_LAYOUT_EXPERIMENTAL
+#undef this
+#undef ScResId
+#define ScResId(x) this, #x
+#endif /* ENABLE_LAYOUT_EXPERIMENTAL */
         aStrRowLabel    ( ScResId( STR_ROW_LABEL ) ),
         aStrColLabel    ( ScResId( STR_COL_LABEL ) ),
         aStrUndefined   ( ScResId( SCSTR_UNDEFINED ) ),
@@ -579,7 +596,7 @@ ScTabPageSortOptions::ScTabPageSortOptions( Window*             pParent,
                           rArgSet.Get( nWhichSort )).GetSortData() ),
         pViewData       ( NULL ),
         pDoc            ( NULL ),
-        pDlg            ( (ScSortDlg*)(GetParent()->GetParent()) ),
+        pDlg            ( (ScSortDlg*)(GetParent() ? GetParent()->GetParent() : 0 ) ),
         pColRes         ( NULL ),
         pColWrap        ( NULL )
 {
@@ -708,6 +725,9 @@ USHORT* __EXPORT ScTabPageSortOptions::GetRanges()
 
 // -----------------------------------------------------------------------
 
+#if ENABLE_LAYOUT_EXPERIMENTAL
+#undef SfxTabPage
+#endif /* ENABLE_LAYOUT_EXPERIMENTAL */
 SfxTabPage* __EXPORT ScTabPageSortOptions::Create(
                                             Window*             pParent,
                                             const SfxItemSet&   rArgSet )
@@ -884,9 +904,11 @@ int __EXPORT ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSetP )
 
         if ( !bPosInputOk )
         {
+#if !ENABLE_LAYOUT_EXPERIMENTAL
             ErrorBox( this, WinBits( WB_OK | WB_DEF_OK ),
                      ScGlobal::GetRscString( STR_INVALID_TABREF )
                     ).Execute();
+#endif /* ENABLE_LAYOUT_EXPERIMENTAL */
             aEdOutPos.GrabFocus();
             aEdOutPos.SetSelection( Selection( 0, SELECTION_MAX ) );
             theOutPos.Set(0,0,0);

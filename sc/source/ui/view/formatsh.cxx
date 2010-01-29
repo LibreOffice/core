@@ -1093,7 +1093,12 @@ void ScFormatShell::ExecuteAlignment( SfxRequest& rReq )
                         break;
 
                         case SID_H_ALIGNCELL:
-                            pTabViewShell->ApplyAttr( SvxHorJustifyItem( (SvxCellHorJustify)((const SvxHorJustifyItem*)pItem)->GetValue(), ATTR_HOR_JUSTIFY ) );
+                        {
+                            SvxCellHorJustify eJust = (SvxCellHorJustify)((const SvxHorJustifyItem*)pItem)->GetValue();
+                            // #i78476# update alignment of text in cell edit mode
+                            pTabViewShell->UpdateInputHandlerCellAdjust( eJust );
+                            pTabViewShell->ApplyAttr( SvxHorJustifyItem( eJust, ATTR_HOR_JUSTIFY ) );
+                        }
                         break;
                         case SID_V_ALIGNCELL:
                             pTabViewShell->ApplyAttr( SvxVerJustifyItem( (SvxCellVerJustify)((const SvxVerJustifyItem*)pItem)->GetValue(), ATTR_VER_JUSTIFY ) );

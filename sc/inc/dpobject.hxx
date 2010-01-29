@@ -107,7 +107,6 @@ private:
     BOOL                    bSettingsChanged;
     BOOL                    bAlive;         // FALSE if only used to hold settings
     BOOL                    bAllowMove;
-    BOOL                    bInfoValid;     // affects: nHeaderRows
     long                    nHeaderRows;    // page fields plus filter button
 
 
@@ -127,7 +126,8 @@ public:
     void                InvalidateData();
     void                InvalidateSource();
 
-    void                Output();
+
+    void                Output( const ScAddress& rPos );
     ScRange             GetNewOutputRange( BOOL& rOverflow );
     const ScRange       GetOutputRangeByType( sal_Int32 nType );
 

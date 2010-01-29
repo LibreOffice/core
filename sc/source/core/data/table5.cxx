@@ -51,7 +51,10 @@
 #include "stlpool.hxx"
 #include "stlsheet.hxx"
 #include "brdcst.hxx"
+#include "tabprotection.hxx"
 #include "globstr.hrc"
+
+using ::com::sun::star::uno::Sequence;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -271,6 +274,24 @@ void ScTable::SetPageSize( const Size& rSize )
     }
     else
         bPageSizeValid = FALSE;
+}
+
+BOOL ScTable::IsProtected() const
+{
+    return pTabProtection.get() && pTabProtection->isProtected();
+}
+
+void ScTable::SetProtection(const ScTableProtection* pProtect)
+{
+    if (pProtect)
+        pTabProtection.reset(new ScTableProtection(*pProtect));
+    else
+        pTabProtection.reset(NULL);
+}
+
+ScTableProtection* ScTable::GetProtection()
+{
+    return pTabProtection.get();
 }
 
 Size ScTable::GetPageSize() const

@@ -356,7 +356,7 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                     // error during storage creation means _here_ that the medium
                     // is broken, but we can not handle it in medium since unpossibility
                     // to create a storage does not _always_ means that the medium is broken
-                    aMedium.SetError( aMedium.GetLastStorageCreationState() );
+                    aMedium.SetError( aMedium.GetLastStorageCreationState(), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
                     if ( xInteraction.is() )
                     {
                         OUString empty;

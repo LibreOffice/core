@@ -62,6 +62,7 @@ class XMLNumberFormatAttributesExportHelper;
 class ScChartListener;
 class SfxItemPool;
 class ScAddress;
+class ScBaseCell;
 
 typedef std::vector< com::sun::star::uno::Reference < com::sun::star::drawing::XShapes > > ScMyXShapesVec;
 
@@ -187,9 +188,10 @@ class ScXMLExport : public SvXMLExport
     void SetRepeatAttribute (const sal_Int32 nEqualCellCount);
 
     sal_Bool IsCellTypeEqual (const ScMyCell& aCell1, const ScMyCell& aCell2) const;
-    sal_Bool IsEditCell(const com::sun::star::table::CellAddress& aAddress) const;
+     sal_Bool IsEditCell(const com::sun::star::table::CellAddress& aAddress, ScMyCell* pMyCell = NULL) const;
 //UNUSED2008-05  sal_Bool IsEditCell(const com::sun::star::uno::Reference <com::sun::star::table::XCell>& xCell) const;
     sal_Bool IsEditCell(ScMyCell& rCell) const;
+    sal_Bool IsMultiLineFormulaCell(ScMyCell& rCell) const;
 //UNUSED2008-05  sal_Bool IsAnnotationEqual(const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell1,
 //UNUSED2008-05                             const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell2);
     sal_Bool IsCellEqual (ScMyCell& aCell1, ScMyCell& aCell2);

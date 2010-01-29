@@ -65,14 +65,14 @@ PushButton PB_NUMBERFORMAT \
 { \
     HelpID = HID_SCH_PB_NUMBERFORMAT; \
     TabStop = TRUE ; \
-    Pos = MAP_APPFONT ( xpos+8 , ypos+12  ) ; \
+    Pos = MAP_APPFONT ( xpos+100 , ypos-3  ) ; \
     Size = MAP_APPFONT ( 100 , 14 ) ; \
     Text [ en-US ] = "Number ~format..." ; \
 }; \
 CheckBox CB_VALUE_AS_PERCENTAGE \
 { \
     HelpID = HID_SCH_DATALABEL_PERCENT; \
-    Pos = MAP_APPFONT ( xpos , ypos+30  ) ; \
+    Pos = MAP_APPFONT ( xpos , ypos+17  ) ; \
     Size = MAP_APPFONT ( 136 , 10 ) ; \
     TabStop = TRUE ; \
     Text [ en-US ] = "Show value as ~percentage" ; \
@@ -81,29 +81,29 @@ PushButton PB_PERCENT_NUMBERFORMAT \
 { \
     HelpID = HID_SCH_PB_PERCENT_NUMBERFORMAT; \
     TabStop = TRUE ; \
-    Pos = MAP_APPFONT ( xpos+8 , ypos+42  ) ; \
+    Pos = MAP_APPFONT ( xpos+100 , ypos+17-3  ) ; \
     Size = MAP_APPFONT ( 100 , 14 ) ; \
     Text [ en-US ] = "Percentage f~ormat..." ; \
 }; \
 CheckBox CB_CATEGORY \
 { \
     HelpID = HID_SCH_DATALABEL_TEXT; \
-    Pos  = MAP_APPFONT ( xpos , ypos+62  ); \
-    Size = MAP_APPFONT ( 182 , 10 ); \
+    Pos  = MAP_APPFONT ( xpos , ypos+33  ); \
+    Size = MAP_APPFONT ( 254 , 10 ); \
     TabStop = TRUE; \
     Text [ en-US ] = "Show ~category"; \
 }; \
 CheckBox CB_SYMBOL \
 { \
     HelpID = HID_SCH_DATALABEL_SYMBOL; \
-    Pos  = MAP_APPFONT ( xpos , ypos+76  ) ; \
-    Size = MAP_APPFONT ( 182 , 10 ) ; \
+    Pos  = MAP_APPFONT ( xpos , ypos+49  ) ; \
+    Size = MAP_APPFONT ( 254 , 10 ) ; \
     TabStop = TRUE ; \
     Text [ en-US ] = "Show ~legend key" ; \
 }; \
 FixedText FT_LABEL_PLACEMENT \
 { \
-    Pos  = MAP_APPFONT ( xpos , ypos+104  ) ; \
+    Pos  = MAP_APPFONT ( xpos , ypos+84  ) ; \
     Size = MAP_APPFONT ( 182 , 10 ) ; \
     TabStop = FALSE ; \
     Text [ en-US ] = "Place~ment"; \
@@ -113,7 +113,7 @@ ListBox LB_LABEL_PLACEMENT \
     HelpID = HID_SCH_DATALABEL_PLACEMENT; \
     Border = TRUE ; \
     AutoHScroll = TRUE ; \
-    Pos = MAP_APPFONT ( xpos+100 , ypos+102 ) ; \
+    Pos = MAP_APPFONT ( xpos+100 , ypos+82 ) ; \
     Size = MAP_APPFONT ( 89 , 12 ) ; \
     TabStop = TRUE ; \
     Group = TRUE ; \
@@ -121,16 +121,48 @@ ListBox LB_LABEL_PLACEMENT \
     DDExtraWidth = TRUE ; \
     WORKAROUND          \
 }; \
+FixedLine FL_LABEL_ROTATE \
+{ \
+    Pos = MAP_APPFONT ( xpos, ypos+103 ) ; \
+    Size = MAP_APPFONT ( 248, 8 ) ; \
+    Text [ en-US ] = "Rotate Text" ; \
+}; \
+Control CT_LABEL_DIAL \
+{ \
+    HelpId = HID_SCH_DATALABEL_ROTATION_KNOB ; \
+    Pos = MAP_APPFONT ( xpos+6 , ypos+116 ) ; \
+    Size = MAP_APPFONT ( 43 , 43 ) ; \
+    Text = "ABCD" ; \
+}; \
+FixedText FT_LABEL_DEGREES \
+{ \
+    Pos = MAP_APPFONT ( xpos+87 , ypos+133  ) ; \
+    Size = MAP_APPFONT ( 46, 8 ) ; \
+    Text [ en-US ] = "~Degrees" ; \
+}; \
+NumericField NF_LABEL_DEGREES \
+{ \
+    HelpId = HID_SCH_DATALABEL_ROTATION_EDIT ; \
+    Pos = MAP_APPFONT ( xpos+55 , ypos+131 ) ; \
+    Size = MAP_APPFONT ( 28 , 12 ) ; \
+    Border = TRUE ; \
+    TabStop = TRUE ; \
+    Repeat = TRUE ; \
+    Spin = TRUE ; \
+    Minimum = 0 ; \
+    Maximum = 359 ; \
+    SpinSize = 5 ; \
+}; \
 FixedText FT_LABEL_TEXTDIR \
 { \
-    Pos = MAP_APPFONT ( xpos , ypos+120 ) ; \
+    Pos = MAP_APPFONT ( xpos , ypos+162 ) ; \
     Size = MAP_APPFONT ( 64 , 8 ) ; \
     Text [ en-US ] = "Te~xt direction" ; \
 }; \
 ListBox LB_LABEL_TEXTDIR \
 { \
     HelpID = HID_SCH_TEXTDIRECTION; \
-    Pos = MAP_APPFONT ( xpos+66 , ypos+118 ) ; \
+    Pos = MAP_APPFONT ( xpos+66 , ypos+160 ) ; \
     Size = MAP_APPFONT ( 170 , 100 ) ; \
     Border = TRUE; \
     TabStop = TRUE; \

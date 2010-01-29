@@ -381,7 +381,8 @@ void ScXMLDatabaseRangeContext::EndElement()
 
                                 pDBData->SetSortParam(aSortParam);
                             }
-                            uno::Reference <sheet::XSheetFilterDescriptor> xSheetFilterDescriptor(xDatabaseRange->getFilterDescriptor());
+                            uno::Reference< sheet::XSheetFilterDescriptor2 > xSheetFilterDescriptor(
+                                    xDatabaseRange->getFilterDescriptor(), uno::UNO_QUERY );
                             if (xSheetFilterDescriptor.is())
                             {
                                 uno::Reference <beans::XPropertySet> xFilterPropertySet (xSheetFilterDescriptor, uno::UNO_QUERY);
@@ -396,7 +397,7 @@ void ScXMLDatabaseRangeContext::EndElement()
                                     xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_USEREGEX)), uno::makeAny(bFilterUseRegularExpressions));
                                     xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_OUTPOS)), uno::makeAny(aFilterOutputPosition));
                                 }
-                                xSheetFilterDescriptor->setFilterFields(aFilterFields);
+                                xSheetFilterDescriptor->setFilterFields2(aFilterFields);
                                 if (bFilterConditionSourceRange)
                                 {
                                     ScRange aAdvSource;

@@ -36,7 +36,6 @@
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include "charttoolsdllapi.hxx"
 
 namespace chart
 {
@@ -94,7 +93,7 @@ private:
 
 // --------------------------------------------------------------------------------
 
-class OOO_DLLPUBLIC_CHARTTOOLS WeakModifyListenerAdapter :
+class WeakModifyListenerAdapter :
         public WeakListenerAdapter< ::com::sun::star::util::XModifyListener >
 {
 public:
@@ -110,7 +109,7 @@ protected:
 
 // --------------------------------------------------------------------------------
 
-class OOO_DLLPUBLIC_CHARTTOOLS WeakSelectionChangeListenerAdapter :
+class WeakSelectionChangeListenerAdapter :
         public WeakListenerAdapter< ::com::sun::star::view::XSelectionChangeListener >
 {
 public:

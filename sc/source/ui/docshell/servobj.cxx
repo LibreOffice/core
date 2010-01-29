@@ -200,10 +200,12 @@ BOOL __EXPORT ScServerObject::GetData(
         if( aDdeTextFmt.EqualsAscii( "CSV" ) ||
             aDdeTextFmt.EqualsAscii( "FCSV" ) )
             aObj.SetSeparator( ',' );
+        aObj.SetExportTextOptions( ScExportTextOptions( ScExportTextOptions::ToSpace, ' ', false ) );
         return aObj.ExportData( rMimeType, rData ) ? 1 : 0;
     }
 
     ScImportExport aObj( pDoc, aRange );
+    aObj.SetExportTextOptions( ScExportTextOptions( ScExportTextOptions::ToSpace, ' ', false ) );
     if( aObj.IsRef() )
         return aObj.ExportData( rMimeType, rData ) ? 1 : 0;
     return 0;

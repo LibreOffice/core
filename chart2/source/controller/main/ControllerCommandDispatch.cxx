@@ -52,6 +52,7 @@
 #include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
+#include <com/sun/star/chart2/data/XDatabaseDataProvider.hpp>
 
 // only needed until #i68864# is fixed
 #include <com/sun/star/frame/XLayoutManager.hpp>

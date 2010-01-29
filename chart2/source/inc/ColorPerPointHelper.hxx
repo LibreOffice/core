@@ -56,7 +56,7 @@ public:
 
     // returns true if AttributedDataPoints contains nPointIndex and the
     // property Color is DEFAULT
-    static bool hasPointOwnProperties(
+    SAL_DLLPRIVATE static bool hasPointOwnProperties(
         const ::com::sun::star::uno::Reference<
               ::com::sun::star::beans::XPropertySet >& xSeriesProperties
         , sal_Int32 nPointIndex );

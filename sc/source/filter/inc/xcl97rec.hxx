@@ -35,6 +35,8 @@
 #include "xcl97esc.hxx"
 #include "xlstyle.hxx"
 
+#include <vector>
+
 // --- class XclMsodrawing_Base --------------------------------------
 
 class XclMsodrawing_Base
@@ -57,29 +59,26 @@ public:
 
 // --- class XclMsodrawinggroup --------------------------------------
 
-class XclMsodrawinggroup : public XclMsodrawing_Base, public ExcRecord
+class XclMsodrawinggroup : public XclMsodrawing_Base, public XclExpRecord
 {
 private:
 
-    virtual void                SaveCont( XclExpStream& rStrm );
+    virtual void                WriteBody( XclExpStream& rStrm );
 
 public:
                                 XclMsodrawinggroup( RootData& rRoot,
                                     UINT16 nEscherType = 0 );
     virtual                     ~XclMsodrawinggroup();
-
-    virtual UINT16              GetNum() const;
-    virtual sal_Size            GetLen() const;
 };
 
 
 // --- class XclMsodrawing -------------------------------------------
 
-class XclMsodrawing : public XclMsodrawing_Base, public ExcRecord
+class XclMsodrawing : public XclMsodrawing_Base, public XclExpRecord
 {
 private:
 
-    virtual void                SaveCont( XclExpStream& rStrm );
+    virtual void                WriteBody( XclExpStream& rStrm );
 
 public:
                                 XclMsodrawing(
@@ -87,9 +86,6 @@ public:
                                     UINT16 nEscherType = 0,
                                     sal_Size nInitialSize = 0 );
     virtual                     ~XclMsodrawing();
-
-    virtual UINT16              GetNum() const;
-    virtual sal_Size            GetLen() const;
 };
 
 
@@ -464,23 +460,24 @@ public:
     virtual sal_Size            GetLen() const;
 };
 
+// ============================================================================
 
-// ---- class XclProtection ------------------------------------------
-
-class XclProtection : public ExcDummyRec
+/** Represents a SHEETPROTECTION record that stores sheet protection
+    options.  Note that a sheet still needs to save its sheet protection
+    options even when it's not protected. */
+class XclExpSheetProtectOptions : public XclExpRecord
 {
-    // replacement for records PROTECT, SCENPROTECT, OBJPROTECT...
-private:
-    static const BYTE           pMyData[];
-    static const sal_Size       nMyLen;
 public:
-    virtual sal_Size            GetLen( void ) const;
-    virtual const BYTE*         GetData( void ) const;
+    explicit            XclExpSheetProtectOptions( const XclExpRoot& rRoot, SCTAB nTab );
+
+private:
+    virtual void        WriteBody( XclExpStream& rStrm );
+
+private:
+    sal_uInt16      mnOptions;      /// Encoded sheet protection options.
 };
 
-
-// -------------------------------------------------------------------
-
+// ============================================================================
 
 class XclCalccount : public ExcRecord
 {
@@ -542,6 +539,163 @@ public:
                                 XclRefmode( const ScDocument& );
 
     virtual void                SaveXml( XclExpXmlStream& rStrm );
+};
+
+// ============================================================================
+
+class XclExpFilePass : public XclExpRecord
+{
+public:
+    explicit XclExpFilePass( const XclExpRoot& rRoot );
+    virtual ~XclExpFilePass();
+
+private:
+    virtual void WriteBody( XclExpStream& rStrm );
+
+private:
+    const XclExpRoot& mrRoot;
+};
+
+// ============================================================================
+
+class XclExpFnGroupCount : public XclExpRecord
+{
+public:
+    explicit XclExpFnGroupCount();
+    virtual ~XclExpFnGroupCount();
+
+private:
+    virtual void WriteBody( XclExpStream& rStrm );
+};
+
+// ============================================================================
+
+/** Beginning of User Interface Records */
+class XclExpInterfaceHdr : public XclExpRecord
+{
+public:
+    explicit XclExpInterfaceHdr();
+    virtual ~XclExpInterfaceHdr();
+
+private:
+    virtual void WriteBody( XclExpStream& rStrm );
+};
+
+// ============================================================================
+
+/** Beginning of User Interface Records */
+class XclExpInterfaceEnd : public XclExpRecord
+{
+public:
+    explicit XclExpInterfaceEnd();
+    virtual ~XclExpInterfaceEnd();
+
+private:
+    virtual void WriteBody( XclExpStream& rStrm );
+};
+
+// ============================================================================
+
+/** ADDMENU/DELMENU Record Group Count */
+class XclExpMMS : public XclExpRecord
+{
+public:
+    explicit XclExpMMS();
+    virtual ~XclExpMMS();
+
+private:
+    virtual void WriteBody( XclExpStream& rStrm );
+};
+
+// ============================================================================
+
+/** Write Access User Name - This record contains the user name, which is
+    the name you type when you install Excel. */
+class XclExpWriteAccess : public XclExpRecord
+{
+public:
+    explicit XclExpWriteAccess();
+    virtual ~XclExpWriteAccess();
+
+private:
+    virtual void WriteBody( XclExpStream& rStrm );
+};
+
+// ============================================================================
+
+class XclExpCodePage : public XclExpRecord
+{
+public:
+    explicit XclExpCodePage();
+    virtual ~XclExpCodePage();
+
+private:
+    virtual void WriteBody( XclExpStream& rStrm );
+};
+
+// ============================================================================
+
+class XclExpDSF : public XclExpRecord
+{
+public:
+    explicit XclExpDSF();
+    virtual ~XclExpDSF();
+
+private:
+    virtual void WriteBody( XclExpStream& rStrm );
+};
+
+// ============================================================================
+
+class XclExpProt4Rev : public XclExpRecord
+{
+public:
+    explicit XclExpProt4Rev();
+    virtual ~XclExpProt4Rev();
+
+private:
+    virtual void WriteBody( XclExpStream& rStrm );
+};
+
+// ============================================================================
+
+class XclExpProt4RevPass : public XclExpRecord
+{
+public:
+    explicit XclExpProt4RevPass();
+    virtual ~XclExpProt4RevPass();
+
+private:
+    virtual void WriteBody( XclExpStream& rStrm );
+};
+
+// ============================================================================
+
+/** What's this record for?  It is a zero-byte record. */
+class XclExpExcel9File : public XclExpRecord
+{
+public:
+    explicit XclExpExcel9File();
+    virtual ~XclExpExcel9File();
+
+private:
+    virtual void WriteBody( XclExpStream& rStrm );
+};
+
+// ============================================================================
+
+class XclExpRecalcId : public XclExpDummyRecord
+{
+public:
+    explicit XclExpRecalcId();
+};
+
+// ============================================================================
+
+class XclExpBookExt : public XclExpDummyRecord
+{
+public:
+    explicit XclExpBookExt();
 };
 
 

@@ -176,14 +176,8 @@ SfxItemSet& __EXPORT ScStyleSheet::GetItemSet()
                     if ( pDoc && pDoc->IsLoadingDone() )
                     {
                         // Setzen von sinnvollen Default-Werten:
-                        // SfxPrinter*      pPrinter = pDoc->GetPrinter();
                         SvxPageItem     aPageItem( ATTR_PAGE );
-                        // #50536# PaperBin auf Default lassen,
-                        // nicht auf aktuelle Drucker-Einstellung umsetzen
-                        // SvxSizeItem      aPaperSizeItem(ATTR_PAGE_SIZE,SvxPaperInfo::GetPaperSize(pPrinter) );
-
-                        SvxPaper        aDefaultPaper = SvxPaperInfo::GetDefaultSvxPaper( Application::GetSettings().GetLanguage() );
-                        SvxSizeItem     aPaperSizeItem( ATTR_PAGE_SIZE, SvxPaperInfo::GetPaperSize(aDefaultPaper) );
+                        SvxSizeItem     aPaperSizeItem( ATTR_PAGE_SIZE, SvxPaperInfo::GetDefaultPaperSize() );
 
                         SvxSetItem      aHFSetItem(
                                             (const SvxSetItem&)

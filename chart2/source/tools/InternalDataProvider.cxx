@@ -138,13 +138,6 @@ public:
     void setColumnLabels( const ::std::vector< OUString > & rNewColumnLabels );
     ::std::vector< OUString > getColumnLabels() const;
 
-    /** returns whether the data source was created by putting sequence contents
-        into columns (true) or rows (false)
-     */
-    bool setDataByDataSource(
-        const Reference< chart2::data::XDataSource > & xDataSource,
-        const Sequence< beans::PropertyValue > & rArgs );
-
 #if OSL_DEBUG_LEVEL > 2
     void traceData() const;
 #endif
@@ -628,49 +621,6 @@ void InternalData::setColumnLabels( const ::std::vector< OUString > & rNewColumn
     return m_aColumnLabels;
 }
 
-bool InternalData::setDataByDataSource(
-    const Reference< chart2::data::XDataSource > & xDataSource,
-    const Sequence< beans::PropertyValue > & rArgs )
-{
-    OUString aRangeRepresentation;
-    uno::Sequence< sal_Int32 > aSequenceMapping; //yyyy todo...? InternalData::setDataByDataSource
-    bool bUseColumns = true;
-    bool bFirstCellAsLabel = true;
-    bool bHasCategories = true;
-
-    DataSourceHelper::readArguments( rArgs, aRangeRepresentation, aSequenceMapping, bUseColumns, bFirstCellAsLabel, bHasCategories );
-
-    typedef ::std::vector< Reference< chart2::data::XLabeledDataSequence > > tLSeqCntType;
-    tLSeqCntType aLSeqVec( ContainerHelper::SequenceToVector( xDataSource->getDataSequences()));
-    tLSeqCntType::const_iterator aIt( aLSeqVec.begin());
-    const tLSeqCntType::const_iterator aEndIt( aLSeqVec.end());
-
-    if( bHasCategories && aIt != aEndIt )
-    {
-        if( bUseColumns )
-            setRowLabels( ContainerHelper::SequenceToVector(
-                              DataSequenceToStringSequence( (*aIt)->getValues() )));
-        else
-            setColumnLabels( ContainerHelper::SequenceToVector(
-                                 DataSequenceToStringSequence( (*aIt)->getValues() )));
-        ++aIt;
-    }
-
-    ::std::vector< Sequence< double > > aDataVec;
-    ::std::vector< OUString > aLabelVec;
-    transform( aIt, aEndIt, back_inserter( aDataVec ),  lcl_ValuesOfLabeledSequence());
-    transform( aIt, aEndIt, back_inserter( aLabelVec ), lcl_LabelOfLabeledSequence());
-
-    setData( ContainerHelper::ContainerToSequence( aDataVec ), bUseColumns );
-
-    if( bUseColumns )
-        setColumnLabels( aLabelVec );
-    else
-        setRowLabels( aLabelVec );
-
-    return bUseColumns;
-}
-
 #if OSL_DEBUG_LEVEL > 2
 void InternalData::traceData() const
 {
@@ -1049,8 +999,9 @@ Reference< chart2::data::XDataSource > SAL_CALL InternalDataProvider::createData
     impl::InternalData & rData( getInternalData());
 
     // categories
-    aResultLSeqVec.push_back(
-        new LabeledDataSequence( createDataSequenceAndAddToMap( lcl_aCategoriesRangeName, lcl_aCategoriesRoleName )));
+    if ( bHasCategories )
+        aResultLSeqVec.push_back(
+            new LabeledDataSequence( createDataSequenceAndAddToMap( lcl_aCategoriesRangeName, lcl_aCategoriesRoleName )));
 
     // data with labels
     ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aDataVec;

@@ -74,7 +74,7 @@ public:
             DataEntry() {}  //! uninitialized
     };
 
-    /** Contruct with nMaxAccess=MAXROW, for example. */
+    /** Construct with nMaxAccess=MAXROW, for example. */
                                 ScCompressedArray( A nMaxAccess,
                                         const D& rValue,
                                         size_t nDelta = nScCompressedArrayDelta );

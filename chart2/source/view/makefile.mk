@@ -79,15 +79,12 @@ SHL1STDLIBS=	$(CHARTTOOLS)		\
                 $(CPPULIB)			\
                 $(CPPUHELPERLIB)	\
                 $(COMPHELPERLIB)	\
-                $(GOODIESLIB)		\
                 $(SALLIB)			\
                 $(SVLLIB)			\
                 $(SVTOOLLIB)		\
                 $(SVXLIB)			\
-                $(TKLIB)			\
                 $(TOOLSLIB) 		\
                 $(UNOTOOLSLIB)      \
-                $(I18NISOLANGLIB)   \
                 $(BASEGFXLIB) 		\
                 $(VCLLIB)           \
                 $(SFXLIB)			\

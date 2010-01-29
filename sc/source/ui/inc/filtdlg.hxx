@@ -59,7 +59,6 @@ class TypedScStrCollection;
 // Gemeinsame Resource-Objekte:
 
 #define _COMMON_FILTER_RSCOBJS \
-    FixedLine       aFlOptions; \
     CheckBox        aBtnCase; \
     CheckBox        aBtnRegExp; \
     CheckBox        aBtnHeader; \
@@ -71,17 +70,12 @@ class TypedScStrCollection;
     CheckBox        aBtnDestPers; \
     FixedText       aFtDbAreaLabel; \
     FixedInfo       aFtDbArea; \
-    OKButton        aBtnOk; \
-    CancelButton    aBtnCancel; \
-    HelpButton      aBtnHelp; \
-    MoreButton      aBtnMore; \
     const String    aStrUndefined; \
     const String    aStrNoName; \
     const String    aStrNone;
 
 
 #define _INIT_COMMON_FILTER_RSCOBJS \
-    aFlOptions      ( this, ScResId( FL_OPTIONS ) ), \
     aBtnCase        ( this, ScResId( BTN_CASE ) ), \
     aBtnRegExp      ( this, ScResId( BTN_REGEXP ) ), \
     aBtnHeader      ( this, ScResId( BTN_HEADER ) ), \
@@ -93,10 +87,6 @@ class TypedScStrCollection;
     aBtnDestPers    ( this, ScResId( BTN_DEST_PERS ) ), \
     aFtDbAreaLabel  ( this, ScResId( FT_DBAREA_LABEL ) ), \
     aFtDbArea       ( this, ScResId( FT_DBAREA ) ), \
-    aBtnOk          ( this, ScResId( BTN_OK ) ), \
-    aBtnCancel      ( this, ScResId( BTN_CANCEL ) ), \
-    aBtnHelp        ( this, ScResId( BTN_HELP ) ), \
-    aBtnMore        ( this, ScResId( BTN_MORE ) ), \
     aStrUndefined   ( ScResId( SCSTR_UNDEFINED ) ), \
     aStrNoName      ( ScGlobal::GetRscString(STR_DB_NONAME) ), \
     aStrNone        ( ScResId( SCSTR_NONE ) ),
@@ -116,28 +106,46 @@ public:
     virtual void    SetActive();
 
     virtual BOOL    Close();
+    void            SliderMoved();
+    USHORT          GetSliderPos();
+    void            RefreshEditRow( USHORT nOffset );
 
 private:
     FixedLine       aFlCriteria;
     //----------------------------
+    ListBox         aLbConnect1;
     ListBox         aLbField1;
     ListBox         aLbCond1;
     ComboBox        aEdVal1;
     //----------------------------
-    ListBox         aLbConnect1;
+    ListBox         aLbConnect2;
     ListBox         aLbField2;
     ListBox         aLbCond2;
     ComboBox        aEdVal2;
     //----------------------------
-    ListBox         aLbConnect2;
+    ListBox         aLbConnect3;
     ListBox         aLbField3;
     ListBox         aLbCond3;
     ComboBox        aEdVal3;
+    //----------------------------
+    ListBox         aLbConnect4;
+    ListBox         aLbField4;
+    ListBox         aLbCond4;
+    ComboBox        aEdVal4;
     //----------------------------
     FixedText       aFtConnect;
     FixedText       aFtField;
     FixedText       aFtCond;
     FixedText       aFtVal;
+    FixedLine       aFlSeparator;
+
+    ScrollBar       aScrollBar;
+
+    FixedLine       aFlOptions;
+    MoreButton      aBtnMore;
+    HelpButton      aBtnHelp;
+    OKButton        aBtnOk;
+    CancelButton    aBtnCancel;
 
     _COMMON_FILTER_RSCOBJS
 
@@ -155,9 +163,11 @@ private:
     ScDocument*         pDoc;
     SCTAB               nSrcTab;
 
-    ComboBox*           aValueEdArr[3];
-    ListBox*            aFieldLbArr[3];
-    ListBox*            aCondLbArr[3];
+    ComboBox*           aValueEdArr[4];
+    ListBox*            aFieldLbArr[4];
+    ListBox*            aCondLbArr[4];
+    ListBox*            aConnLbArr[4];
+    BOOL                bRefreshExceptQuery[MAXQUERY];
     USHORT              nFieldCount;
     BOOL                bRefInputMode;
 
@@ -184,6 +194,7 @@ private:
     DECL_LINK( CheckBoxHdl,  CheckBox* );
     DECL_LINK( EndDlgHdl,    Button* );
     DECL_LINK( MoreClickHdl, MoreButton* );
+    DECL_LINK( ScrollHdl, ScrollBar* );
 
     // Hack: RefInput-Kontrolle
     DECL_LINK( TimeOutHdl,   Timer* );
@@ -212,7 +223,14 @@ private:
     formula::RefEdit    aEdFilterArea;
     formula::RefButton  aRbFilterArea;
 
+    FixedLine       aFlOptions;
+
     _COMMON_FILTER_RSCOBJS
+
+    OKButton        aBtnOk;
+    CancelButton    aBtnCancel;
+    HelpButton      aBtnHelp;
+    MoreButton      aBtnMore;
 
     ScFilterOptionsMgr* pOptionsMgr;
 
@@ -238,6 +256,7 @@ private:
     DECL_LINK( FilterAreaSelHdl, ListBox* );
     DECL_LINK( FilterAreaModHdl, formula::RefEdit* );
     DECL_LINK( EndDlgHdl,        Button* );
+    DECL_LINK( ScrollHdl, ScrollBar* );
 
     // Hack: RefInput-Kontrolle
     DECL_LINK( TimeOutHdl,       Timer* );

@@ -114,6 +114,49 @@ void ScXMLExternalRefTabSourceContext::EndElement()
 
 // ============================================================================
 
+ScXMLExternalRefRowsContext::ScXMLExternalRefRowsContext(
+    ScXMLImport& rImport, USHORT nPrefix, const OUString& rLName,
+    const Reference<XAttributeList>& /* xAttrList */, ScXMLExternalTabData& rRefInfo ) :
+    SvXMLImportContext( rImport, nPrefix, rLName ),
+    mrScImport(rImport),
+    mrExternalRefInfo(rRefInfo)
+{
+}
+
+ScXMLExternalRefRowsContext::~ScXMLExternalRefRowsContext()
+{
+}
+
+SvXMLImportContext* ScXMLExternalRefRowsContext::CreateChildContext(
+    USHORT nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& xAttrList )
+{
+    // #i101319# row elements inside group, rows or header-rows
+    // are treated like row elements directly in the table element
+
+    const SvXMLTokenMap& rTokenMap = mrScImport.GetTableRowsElemTokenMap();
+    sal_uInt16 nToken = rTokenMap.Get(nPrefix, rLocalName);
+    switch (nToken)
+    {
+        case XML_TOK_TABLE_ROWS_ROW_GROUP:
+        case XML_TOK_TABLE_ROWS_HEADER_ROWS:
+        case XML_TOK_TABLE_ROWS_ROWS:
+            return new ScXMLExternalRefRowsContext(
+                mrScImport, nPrefix, rLocalName, xAttrList, mrExternalRefInfo);
+        case XML_TOK_TABLE_ROWS_ROW:
+            return new ScXMLExternalRefRowContext(
+                mrScImport, nPrefix, rLocalName, xAttrList, mrExternalRefInfo);
+        default:
+            ;
+    }
+    return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
+}
+
+void ScXMLExternalRefRowsContext::EndElement()
+{
+}
+
+// ============================================================================
+
 ScXMLExternalRefRowContext::ScXMLExternalRefRowContext(
     ScXMLImport& rImport, USHORT nPrefix, const OUString& rLName,
     const Reference<XAttributeList>& xAttrList, ScXMLExternalTabData& rRefInfo ) :
@@ -153,7 +196,7 @@ SvXMLImportContext* ScXMLExternalRefRowContext::CreateChildContext(
 {
     const SvXMLTokenMap& rTokenMap = mrScImport.GetTableRowElemTokenMap();
     sal_uInt16 nToken = rTokenMap.Get(nPrefix, rLocalName);
-    if (nToken == XML_TOK_TABLE_ROW_CELL)
+    if (nToken == XML_TOK_TABLE_ROW_CELL || nToken == XML_TOK_TABLE_ROW_COVERED_CELL)
         return new ScXMLExternalRefCellContext(mrScImport, nPrefix, rLocalName, xAttrList, mrExternalRefInfo);
 
     return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);

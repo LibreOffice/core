@@ -51,6 +51,9 @@ namespace chart
 class OOO_DLLPUBLIC_CHARTTOOLS AxisHelper
 {
 public:
+    static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XScaling > createLinearScaling();
+    static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XScaling > createLogarithmicScaling( double fBase = 10.0 );
+
     static ::com::sun::star::chart2::ScaleData createDefaultScale();
 
     static void removeExplicitScaling( ::com::sun::star::chart2::ScaleData& rScaleData );
@@ -95,14 +98,14 @@ public:
     static sal_Bool isGridShown( sal_Int32 nDimensionIndex, sal_Int32 nCooSysIndex, bool bMainGrid
                 , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram );
 
-    static void makeAxisVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis );
+    SAL_DLLPRIVATE static void makeAxisVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis );
     static void makeGridVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xGridProperties );
 
-    static void makeAxisInvisible( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis );
-    static void makeGridInvisible( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xGridProperties );
+    SAL_DLLPRIVATE static void makeAxisInvisible( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis );
+    SAL_DLLPRIVATE static void makeGridInvisible( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xGridProperties );
 
-    static sal_Bool areAxisLabelsVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xAxisProperties );
-    static sal_Bool isAxisVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis );
+    SAL_DLLPRIVATE static sal_Bool areAxisLabelsVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xAxisProperties );
+    SAL_DLLPRIVATE static sal_Bool isAxisVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis );
     static sal_Bool isGridVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xGridProperties );
 
     static ::com::sun::star::uno::Reference<
@@ -187,7 +190,7 @@ public:
     /** @param bOnlyVisible if </TRUE>, only axes with property "Show" set to
                </TRUE> are returned
      */
-    static std::vector<
+    SAL_DLLPRIVATE static std::vector<
                 ::com::sun::star::uno::Reference<
                     ::com::sun::star::chart2::XAxis > >
             getAllAxesOfCoordinateSystem( const ::com::sun::star::uno::Reference<

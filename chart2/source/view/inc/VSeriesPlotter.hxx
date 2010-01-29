@@ -99,7 +99,6 @@ class VDataSeriesGroup
 public:
     VDataSeriesGroup();
     VDataSeriesGroup( VDataSeries* pSeries );
-    VDataSeriesGroup( const ::std::vector< VDataSeries* >& rSeriesVector );
     virtual ~VDataSeriesGroup();
 
     void addSeries( VDataSeries* pSeries );//takes ownership of pSeries

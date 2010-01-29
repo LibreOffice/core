@@ -52,13 +52,13 @@ public:
     virtual ::com::sun::star::uno::Any getPropertyValue( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-    virtual void setPropertyToDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
+SAL_DLLPRIVATE virtual void setPropertyToDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Any getPropertyDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
+SAL_DLLPRIVATE virtual ::com::sun::star::uno::Any getPropertyDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::beans::PropertyState getPropertyState( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
+SAL_DLLPRIVATE virtual ::com::sun::star::beans::PropertyState getPropertyState( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
 
 protected:
@@ -72,8 +72,8 @@ public:
     static void addIgnoreLineProperties( std::vector< WrappedProperty* >& rList );
 
     static void addIgnoreFillProperties( std::vector< WrappedProperty* >& rList );
-    static void addIgnoreFillProperties_without_BitmapProperties( std::vector< WrappedProperty* >& rList );
-    static void addIgnoreFillProperties_only_BitmapProperties( std::vector< WrappedProperty* >& rList );
+    SAL_DLLPRIVATE static void addIgnoreFillProperties_without_BitmapProperties( std::vector< WrappedProperty* >& rList );
+    SAL_DLLPRIVATE static void addIgnoreFillProperties_only_BitmapProperties( std::vector< WrappedProperty* >& rList );
 };
 
 //.............................................................................

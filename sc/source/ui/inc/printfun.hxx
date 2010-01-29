@@ -92,7 +92,7 @@ public:
 
     Size        aUserSize;
     MapMode     aUserMapMode;
-    Paper       ePaper;
+    Paper   ePaper;
     Orientation eOrientation;
     USHORT      nPaperBin;
 };

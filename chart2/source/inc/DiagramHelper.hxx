@@ -157,7 +157,7 @@ public:
     /** Replaces all occurences of xCooSysToReplace in the tree with
         xReplacement in the diagram's tree
      */
-    static void replaceCoordinateSystem(
+    SAL_DLLPRIVATE static void replaceCoordinateSystem(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XDiagram > & xDiagram,
         const ::com::sun::star::uno::Reference<
@@ -230,12 +230,12 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XChartDocument > & xChartDoc );
 
-    static ::com::sun::star::uno::Sequence< rtl::OUString >
+    SAL_DLLPRIVATE static ::com::sun::star::uno::Sequence< rtl::OUString >
         generateAutomaticCategories(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XCoordinateSystem > & xCooSys );
 
-    static void generateAutomaticCategoriesFromChartType(
+    SAL_DLLPRIVATE static void generateAutomaticCategoriesFromChartType(
             ::com::sun::star::uno::Sequence< rtl::OUString >& rRet,
             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType );
 
@@ -251,7 +251,7 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XDiagram > & xDiagram );
 
-    static bool areChartTypesCompatible( const ::com::sun::star::uno::Reference<
+    SAL_DLLPRIVATE static bool areChartTypesCompatible( const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XChartType >& xFirstType,
                 const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XChartType >& xSecondType );

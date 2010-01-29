@@ -40,7 +40,7 @@
 #include "ModifyListenerHelper.hxx"
 #include "DataSourceHelper.hxx"
 #include "DisposeHelper.hxx"
-#include "UndoManager.hxx"
+#include "ChartModelHelper.hxx"
 #include "ThreeDHelper.hxx"
 #include "AxisHelper.hxx"
 
@@ -112,19 +112,19 @@ ImplChartModel::ImplChartModel(
         m_spChartData( new ChartData( m_xContext )),
         m_bIsDisposed( false ),
         m_xPageBackground( new PageBackground( m_xContext )),
-        m_xUndoManager( new UndoManager()),
-        m_xDashTable( new NameContainer( ::getCppuType( reinterpret_cast< const drawing::LineDash * >(0)),
+        m_xUndoManager( ChartModelHelper::createUndoManager() ),
+        m_xDashTable( createNameContainer( ::getCppuType( reinterpret_cast< const drawing::LineDash * >(0)),
                 C2U( "com.sun.star.drawing.DashTable" ), C2U( "com.sun.star.comp.chart.DashTable" ) )),
-        m_xGradientTable( new NameContainer( ::getCppuType( reinterpret_cast< const awt::Gradient * >(0)),
+        m_xGradientTable( createNameContainer( ::getCppuType( reinterpret_cast< const awt::Gradient * >(0)),
                 C2U( "com.sun.star.drawing.GradientTable" ), C2U( "com.sun.star.comp.chart.GradientTable" ) )),
-        m_xHatchTable( new NameContainer( ::getCppuType( reinterpret_cast< const drawing::Hatch * >(0)),
+        m_xHatchTable( createNameContainer( ::getCppuType( reinterpret_cast< const drawing::Hatch * >(0)),
                 C2U( "com.sun.star.drawing.HatchTable" ), C2U( "com.sun.star.comp.chart.HatchTable" ) )),
-        m_xBitmapTable( new NameContainer( ::getCppuType( reinterpret_cast< const OUString * >(0)), // URL
+        m_xBitmapTable( createNameContainer( ::getCppuType( reinterpret_cast< const OUString * >(0)), // URL
                 C2U( "com.sun.star.drawing.BitmapTable" ), C2U( "com.sun.star.comp.chart.BitmapTable" ) )),
-        m_xTransparencyGradientTable( new NameContainer( ::getCppuType( reinterpret_cast< const awt::Gradient * >(0)),
+        m_xTransparencyGradientTable( createNameContainer( ::getCppuType( reinterpret_cast< const awt::Gradient * >(0)),
                 C2U( "com.sun.star.drawing.TransparencyGradientTable" ), C2U( "com.sun.star.comp.chart.TransparencyGradientTable" ) )),
-        m_xXMLNamespaceMap( new NameContainer( ::getCppuType( (const OUString*) 0 ),
-                C2U( "com.sun.star.xml.NamespaceMap" ), C2U( "com.sun.star.comp.chart.XMLNameSpaceMap" ) )),
+        m_xXMLNamespaceMap( createNameContainer( ::getCppuType( (const OUString*) 0 ),
+                C2U( "com.sun.star.xml.NamespaceMap" ), C2U( "com.sun.star.comp.chart.XMLNameSpaceMap" ) ), uno::UNO_QUERY),
         m_xModifyListener( xListener )
 {
     ModifyListenerHelper::addListener( m_xPageBackground, m_xModifyListener );

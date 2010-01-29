@@ -1022,12 +1022,19 @@ BOOL ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
             }
         }
         else if ( (rEntry.eOp == SC_EQUAL || rEntry.eOp == SC_NOT_EQUAL) ||
+                  (rEntry.eOp == SC_CONTAINS || rEntry.eOp == SC_DOES_NOT_CONTAIN ||
+                   rEntry.eOp == SC_BEGINS_WITH || rEntry.eOp == SC_ENDS_WITH ||
+                   rEntry.eOp == SC_DOES_NOT_BEGIN_WITH || rEntry.eOp == SC_DOES_NOT_END_WITH) ||
                 (rEntry.bQueryByString && (pCell ? pCell->HasStringData() :
                                            HasStringData(
                                                static_cast<SCCOL>(rEntry.nField),
                                                nRow))))
         {   // by String
             String  aCellStr;
+            if( rEntry.eOp == SC_CONTAINS || rEntry.eOp == SC_DOES_NOT_CONTAIN
+                || rEntry.eOp == SC_BEGINS_WITH || rEntry.eOp == SC_ENDS_WITH
+                || rEntry.eOp == SC_DOES_NOT_BEGIN_WITH || rEntry.eOp == SC_DOES_NOT_END_WITH )
+                bMatchWholeCell = FALSE;
             if ( pCell )
             {
                 if (pCell->GetCellType() != CELLTYPE_NOTE)
@@ -1040,7 +1047,10 @@ BOOL ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
                 GetInputString( static_cast<SCCOL>(rEntry.nField), nRow, aCellStr );
 
             BOOL bRealRegExp = (rParam.bRegExp && ((rEntry.eOp == SC_EQUAL)
-                || (rEntry.eOp == SC_NOT_EQUAL)));
+                || (rEntry.eOp == SC_NOT_EQUAL) || (rEntry.eOp == SC_CONTAINS)
+                || (rEntry.eOp == SC_DOES_NOT_CONTAIN) || (rEntry.eOp == SC_BEGINS_WITH)
+                || (rEntry.eOp == SC_ENDS_WITH) || (rEntry.eOp == SC_DOES_NOT_BEGIN_WITH)
+                || (rEntry.eOp == SC_DOES_NOT_END_WITH)));
             BOOL bTestRegExp = (pbTestEqualCondition && rParam.bRegExp
                 && ((rEntry.eOp == SC_LESS_EQUAL)
                     || (rEntry.eOp == SC_GREATER_EQUAL)));
@@ -1048,20 +1058,61 @@ BOOL ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
             {
                 xub_StrLen nStart = 0;
                 xub_StrLen nEnd   = aCellStr.Len();
-                BOOL bMatch = (BOOL) rEntry.GetSearchTextPtr( rParam.bCaseSens )
-                    ->SearchFrwrd( aCellStr, &nStart, &nEnd );
+
                 // from 614 on, nEnd is behind the found text
+                BOOL bMatch = FALSE;
+                if ( rEntry.eOp == SC_ENDS_WITH || rEntry.eOp == SC_DOES_NOT_END_WITH )
+                {
+                    nEnd = 0;
+                    nStart = aCellStr.Len();
+                    bMatch = (BOOL) rEntry.GetSearchTextPtr( rParam.bCaseSens )
+                        ->SearchBkwrd( aCellStr, &nStart, &nEnd );
+                }
+                else
+                {
+                    bMatch = (BOOL) rEntry.GetSearchTextPtr( rParam.bCaseSens )
+                        ->SearchFrwrd( aCellStr, &nStart, &nEnd );
+                }
                 if ( bMatch && bMatchWholeCell
                         && (nStart != 0 || nEnd != aCellStr.Len()) )
                     bMatch = FALSE;    // RegExp must match entire cell string
                 if ( bRealRegExp )
-                    bOk = ((rEntry.eOp == SC_NOT_EQUAL) ? !bMatch : bMatch);
+                    switch (rEntry.eOp)
+                {
+                    case SC_EQUAL:
+                    case SC_CONTAINS:
+                        bOk = bMatch;
+                        break;
+                    case SC_NOT_EQUAL:
+                    case SC_DOES_NOT_CONTAIN:
+                        bOk = !bMatch;
+                        break;
+                    case SC_BEGINS_WITH:
+                        bOk = ( bMatch && (nStart == 0) );
+                        break;
+                    case SC_DOES_NOT_BEGIN_WITH:
+                        bOk = !( bMatch && (nStart == 0) );
+                        break;
+                    case SC_ENDS_WITH:
+                        bOk = ( bMatch && (nEnd == aCellStr.Len()) );
+                        break;
+                    case SC_DOES_NOT_END_WITH:
+                        bOk = !( bMatch && (nEnd == aCellStr.Len()) );
+                        break;
+                    default:
+                        {
+                            // added to avoid warnings
+                        }
+                }
                 else
                     bTestEqual = bMatch;
             }
             if ( !bRealRegExp )
             {
-                if ( rEntry.eOp == SC_EQUAL || rEntry.eOp == SC_NOT_EQUAL )
+                if ( rEntry.eOp == SC_EQUAL || rEntry.eOp == SC_NOT_EQUAL
+                    || rEntry.eOp == SC_CONTAINS || rEntry.eOp == SC_DOES_NOT_CONTAIN
+                    || rEntry.eOp == SC_BEGINS_WITH || rEntry.eOp == SC_ENDS_WITH
+                    || rEntry.eOp == SC_DOES_NOT_BEGIN_WITH || rEntry.eOp == SC_DOES_NOT_END_WITH )
                 {
                     if ( !rEntry.bQueryByString && rEntry.pStr->Len() == 0 )
                     {
@@ -1069,22 +1120,54 @@ BOOL ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
                         // the query value is assigned directly, and the string is empty. In that case,
                         // don't find any string (isEqual would find empty string results in formula cells).
                         bOk = FALSE;
+                        if ( rEntry.eOp == SC_NOT_EQUAL )
+                            bOk = !bOk;
                     }
                     else if ( bMatchWholeCell )
+                    {
                         bOk = pTransliteration->isEqual( aCellStr, *rEntry.pStr );
+                        if ( rEntry.eOp == SC_NOT_EQUAL )
+                            bOk = !bOk;
+                    }
                     else
                     {
-                        ::com::sun::star::uno::Sequence< sal_Int32 > xOff;
                         String aCell( pTransliteration->transliterate(
                             aCellStr, ScGlobal::eLnge, 0, aCellStr.Len(),
-                            &xOff ) );
+                            NULL ) );
                         String aQuer( pTransliteration->transliterate(
                             *rEntry.pStr, ScGlobal::eLnge, 0, rEntry.pStr->Len(),
-                            &xOff ) );
-                        bOk = (aCell.Search( aQuer ) != STRING_NOTFOUND);
+                            NULL ) );
+                        xub_StrLen nIndex = (rEntry.eOp == SC_ENDS_WITH
+                            || rEntry.eOp == SC_DOES_NOT_END_WITH)? (aCell.Len()-aQuer.Len()):0;
+                        xub_StrLen nStrPos = aCell.Search( aQuer, nIndex );
+                        switch (rEntry.eOp)
+                        {
+                        case SC_EQUAL:
+                        case SC_CONTAINS:
+                            bOk = ( nStrPos != STRING_NOTFOUND );
+                            break;
+                        case SC_NOT_EQUAL:
+                        case SC_DOES_NOT_CONTAIN:
+                            bOk = ( nStrPos == STRING_NOTFOUND );
+                            break;
+                        case SC_BEGINS_WITH:
+                            bOk = ( nStrPos == 0 );
+                            break;
+                        case SC_DOES_NOT_BEGIN_WITH:
+                            bOk = ( nStrPos != 0 );
+                            break;
+                        case SC_ENDS_WITH:
+                            bOk = ( nStrPos + aQuer.Len() == aCell.Len() );
+                            break;
+                        case SC_DOES_NOT_END_WITH:
+                            bOk = ( nStrPos + aQuer.Len() != aCell.Len() );
+                            break;
+                        default:
+                            {
+                                // added to avoid warnings
+                            }
+                        }
                     }
-                    if ( rEntry.eOp == SC_NOT_EQUAL )
-                        bOk = !bOk;
                 }
                 else
                 {   // use collator here because data was probably sorted

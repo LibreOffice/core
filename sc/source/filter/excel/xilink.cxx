@@ -263,6 +263,7 @@ void XclImpTabInfo::ReadTabid( XclImpStream& rStrm )
     DBG_ASSERT_BIFF( rStrm.GetRoot().GetBiff() == EXC_BIFF8 );
     if( rStrm.GetRoot().GetBiff() == EXC_BIFF8 )
     {
+        rStrm.EnableDecryption();
         sal_Size nReadCount = rStrm.GetRecLeft() / 2;
         DBG_ASSERT( nReadCount <= 0xFFFF, "XclImpTabInfo::ReadTabid - record too long" );
         maTabIdVec.clear();

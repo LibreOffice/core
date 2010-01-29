@@ -73,12 +73,16 @@ public:
         @return  Count of bytes really read. */
     sal_uInt16          Read( SvStream& rStrm, void* pData, sal_uInt16 nBytes );
 
+    const String        GetPassword() const;
+
 protected:
     /** Protected copy c'tor for OnClone(). */
     explicit            XclImpDecrypter( const XclImpDecrypter& rSrc );
 
     /** Sets the decrypter to a state showing whether the password was correct. */
     void                SetHasValidPassword( bool bValid );
+
+    void                SetPassword( const String& rPass );
 
 private:
     /** Implementation of cloning this object. */
@@ -89,6 +93,7 @@ private:
     virtual sal_uInt16  OnRead( SvStream& rStrm, sal_uInt8* pnData, sal_uInt16 nBytes ) = 0;
 
 private:
+    String              maPass;         /// Stored password (needed for export)
     ErrCode             mnError;        /// Decrypter error code.
     sal_Size            mnOldPos;       /// Last known stream position.
     sal_uInt16          mnRecSize;      /// Current record size.

@@ -63,7 +63,12 @@ class ScEditUtil
 
 public:
     static String ModifyDelimiters( const String& rOld );
+
+    /// Retrieves string with paragraphs delimited by spaces
     static String GetSpaceDelimitedString( const EditEngine& rEngine );
+
+    /// Retrieves string with paragraphs delimited by new lines ('\n').
+    static String GetMultilineString( const EditEngine& rEngine );
 
 public:
                 ScEditUtil( ScDocument* pDocument, SCCOL nX, SCROW nY, SCTAB nZ,

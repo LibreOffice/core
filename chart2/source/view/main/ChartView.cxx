@@ -86,7 +86,6 @@
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
-#include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
@@ -631,6 +630,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
     sal_Bool bSortByXValues = sal_False;
     sal_Bool bConnectBars = sal_False;
     sal_Bool bGroupBarsPerAxis = sal_True;
+    sal_Bool bIncludeHiddenCells = sal_True;
     sal_Int32 nStartingAngle = 90;
     try
     {
@@ -638,6 +638,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
         xDiaProp->getPropertyValue( C2U( "SortByXValues" ) ) >>= bSortByXValues;
         xDiaProp->getPropertyValue( C2U( "ConnectBars" ) ) >>= bConnectBars;
         xDiaProp->getPropertyValue( C2U( "GroupBarsPerAxis" ) ) >>= bGroupBarsPerAxis;
+        xDiaProp->getPropertyValue( C2U( "IncludeHiddenCells" ) ) >>= bIncludeHiddenCells;
         xDiaProp->getPropertyValue( C2U( "StartingAngle" ) ) >>= nStartingAngle;
     }
     catch( const uno::Exception & ex )
@@ -703,6 +704,9 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
                 uno::Reference< XDataSeries > xDataSeries( aSeriesList[nS], uno::UNO_QUERY );
                 if(!xDataSeries.is())
                     continue;
+                if( !bIncludeHiddenCells && !DataSeriesHelper::hasUnhiddenData(xDataSeries) )
+                    continue;
+
                 VDataSeries* pSeries = new VDataSeries( xDataSeries );
 
                 pSeries->setGlobalSeriesIndex(nGlobalSeriesIndex);
@@ -719,6 +723,9 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
 
                 rtl::OUString aSeriesParticle( ObjectIdentifier::createParticleForSeries( nDiagramIndex, nCS, nT, nS ) );
                 pSeries->setParticle(aSeriesParticle);
+
+                OUString aRole( ChartTypeHelper::getRoleOfSequenceForDataLabelNumberFormatDetection( xChartType ) );
+                pSeries->setRoleOfSequenceForDataLabelNumberFormatDetection(aRole);
 
                 //ignore secondary axis for charttypes that do not suppoert them
                 if( pSeries->getAttachedAxisIndex() != MAIN_AXIS_INDEX &&
@@ -1689,11 +1696,11 @@ bool lcl_getPropertySwapXAndYAxis( const uno::Reference< XDiagram >& xDiagram )
 
 }
 
-//static
-sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
+sal_Int32 lcl_getExplicitNumberFormatKeyForAxis(
                   const Reference< chart2::XAxis >& xAxis
                 , const Reference< chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem
-                , const Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier )
+                , const Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier
+                , bool bSearchForParallelAxisIfNothingIsFound )
 {
     sal_Int32 nNumberFormatKey(0);
     Reference< beans::XPropertySet > xProp( xAxis, uno::UNO_QUERY );
@@ -1720,13 +1727,15 @@ sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
             typedef ::std::map< sal_Int32, sal_Int32 > tNumberformatFrequency;
             tNumberformatFrequency aKeyMap;
 
+            bool bNumberFormatKeyFoundViaAttachedData = false;
+            sal_Int32 nAxisIndex = 0;
+            sal_Int32 nDimensionIndex = 1;
+
             try
             {
                 Reference< XChartTypeContainer > xCTCnt( xCorrespondingCoordinateSystem, uno::UNO_QUERY_THROW );
                 if( xCTCnt.is() )
                 {
-                    sal_Int32 nDimensionIndex = 1;
-                    sal_Int32 nAxisIndex = 0;
                     AxisHelper::getIndicesForAxis( xAxis, xCorrespondingCoordinateSystem, nDimensionIndex, nAxisIndex );
                     ::rtl::OUString aRoleToMatch;
                     if( nDimensionIndex == 0 )
@@ -1735,7 +1744,7 @@ sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
                     for( sal_Int32 nCTIdx=0; nCTIdx<aChartTypes.getLength(); ++nCTIdx )
                     {
                         if( nDimensionIndex != 0 )
-                            aRoleToMatch = aChartTypes[nCTIdx]->getRoleOfSequenceForSeriesLabel();
+                            aRoleToMatch = ChartTypeHelper::getRoleOfSequenceForYAxisNumberFormatDetection( aChartTypes[nCTIdx] );
                         Reference< XDataSeriesContainer > xDSCnt( aChartTypes[nCTIdx], uno::UNO_QUERY_THROW );
                         Sequence< Reference< XDataSeries > > aDataSeriesSeq( xDSCnt->getDataSeries());
                         for( sal_Int32 nSeriesIdx=0; nSeriesIdx<aDataSeriesSeq.getLength(); ++nSeriesIdx )
@@ -1796,13 +1805,36 @@ sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
                     if( (*aIt).second > nMaxFreq )
                     {
                         nNumberFormatKey = (*aIt).first;
+                        bNumberFormatKeyFoundViaAttachedData = true;
                         nMaxFreq = (*aIt).second;
                     }
+                }
+            }
+
+            if( bSearchForParallelAxisIfNothingIsFound )
+            {
+                //no format is set to this axis and no data is set to this axis
+                //--> try to obtain the format from the parallel y-axis
+                if( !bNumberFormatKeyFoundViaAttachedData && nDimensionIndex == 1 )
+                {
+                    sal_Int32 nParallelAxisIndex = (nAxisIndex==1) ?0 :1;
+                    Reference< XAxis > xParallelAxis( AxisHelper::getAxis( 1, nParallelAxisIndex, xCorrespondingCoordinateSystem ) );
+                    nNumberFormatKey = lcl_getExplicitNumberFormatKeyForAxis( xParallelAxis, xCorrespondingCoordinateSystem, xNumberFormatsSupplier, false );
                 }
             }
         }
     }
     return nNumberFormatKey;
+}
+
+//static
+sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
+                  const Reference< chart2::XAxis >& xAxis
+                , const Reference< chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem
+                , const Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier )
+{
+    return lcl_getExplicitNumberFormatKeyForAxis( xAxis, xCorrespondingCoordinateSystem, xNumberFormatsSupplier
+        , true /*bSearchForParallelAxisIfNothingIsFound*/ );
 }
 
 //static
@@ -1825,24 +1857,36 @@ sal_Int32 ExplicitValueProvider::getPercentNumberFormat( const Reference< util::
 }
 
 
-sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForLabel(
+sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel(
         const uno::Reference< beans::XPropertySet >& xSeriesOrPointProp,
         const uno::Reference< XDataSeries >& xSeries,
         sal_Int32 nPointIndex /*-1 for whole series*/,
-        const uno::Reference< beans::XPropertySet >& xAttachedAxisProps
+        const uno::Reference< XDiagram >& xDiagram
         )
 {
     sal_Int32 nFormat=0;
     if( !xSeriesOrPointProp.is() )
         return nFormat;
+
     rtl::OUString aPropName( C2U( "NumberFormat" ) );
     if( !(xSeriesOrPointProp->getPropertyValue(aPropName) >>= nFormat) )
     {
-        if( xAttachedAxisProps.is() && !( xAttachedAxisProps->getPropertyValue( aPropName ) >>= nFormat ) )
+        uno::Reference< chart2::XChartType > xChartType( DataSeriesHelper::getChartTypeOfSeries( xSeries, xDiagram ) );
+
+        bool bFormatFound = false;
+        if( ChartTypeHelper::shouldLabelNumberFormatKeyBeDetectedFromYAxis( xChartType ) )
+        {
+            uno::Reference< beans::XPropertySet > xAttachedAxisProps( DiagramHelper::getAttachedAxis( xSeries, xDiagram ), uno::UNO_QUERY );
+            if( xAttachedAxisProps.is() && ( xAttachedAxisProps->getPropertyValue( aPropName ) >>= nFormat ) )
+                bFormatFound = true;
+        }
+        if( !bFormatFound )
         {
             Reference< chart2::data::XDataSource > xSeriesSource( xSeries, uno::UNO_QUERY );
+            OUString aRole( ChartTypeHelper::getRoleOfSequenceForDataLabelNumberFormatDetection( xChartType ) );
+
             Reference< data::XLabeledDataSequence > xLabeledSequence(
-                DataSeriesHelper::getDataSequenceByRole( xSeriesSource, C2U("values-y"), false ));
+                DataSeriesHelper::getDataSequenceByRole( xSeriesSource, aRole, false ));
             if( xLabeledSequence.is() )
             {
                 Reference< data::XDataSequence > xValues( xLabeledSequence->getValues() );
@@ -1856,7 +1900,7 @@ sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForLabel(
     return nFormat;
 }
 
-sal_Int32 ExplicitValueProvider::getExplicitPercentageNumberFormatKeyForLabel(
+sal_Int32 ExplicitValueProvider::getExplicitPercentageNumberFormatKeyForDataLabel(
         const uno::Reference< beans::XPropertySet >& xSeriesOrPointProp,
         const uno::Reference< util::XNumberFormatsSupplier >& xNumberFormatsSupplier )
 {

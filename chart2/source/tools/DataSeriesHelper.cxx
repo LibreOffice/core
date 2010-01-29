@@ -644,5 +644,96 @@ bool areAllSeriesAttachedToSameAxis( const uno::Reference< chart2::XChartType >&
     }
 }
 
+namespace
+{
+
+bool lcl_SequenceHasUnhiddenData( const uno::Reference< chart2::data::XDataSequence >& xDataSequence )
+{
+    if( !xDataSequence.is() )
+        return false;
+    uno::Reference< beans::XPropertySet > xProp( xDataSequence, uno::UNO_QUERY );
+    if( xProp.is() )
+    {
+        uno::Sequence< sal_Int32 > aHiddenValues;
+        try
+        {
+            xProp->getPropertyValue( C2U( "HiddenValues" ) ) >>= aHiddenValues;
+            if( !aHiddenValues.getLength() )
+                return true;
+        }
+        catch( uno::Exception& e )
+        {
+            (void)e; // avoid warning
+            return true;
+        }
+    }
+    if( xDataSequence->getData().getLength() )
+        return true;
+    return false;
+}
+
+}
+
+bool hasUnhiddenData( const uno::Reference< chart2::XDataSeries >& xSeries )
+{
+    uno::Reference< chart2::data::XDataSource > xDataSource =
+        uno::Reference< chart2::data::XDataSource >( xSeries, uno::UNO_QUERY );
+
+    uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aDataSequences = xDataSource->getDataSequences();
+
+    for(sal_Int32 nN = aDataSequences.getLength();nN--;)
+    {
+        if( !aDataSequences[nN].is() )
+            continue;
+        if( lcl_SequenceHasUnhiddenData( aDataSequences[nN]->getValues() ) )
+            return true;
+        if( lcl_SequenceHasUnhiddenData( aDataSequences[nN]->getLabel() ) )
+            return true;
+    }
+    return false;
+}
+
+struct lcl_LessIndex
+{
+    inline bool operator() ( const sal_Int32& first, const sal_Int32& second )
+    {
+        return ( first < second );
+    }
+};
+
+sal_Int32 translateIndexFromHiddenToFullSequence( sal_Int32 nIndex, const Reference< chart2::data::XDataSequence >& xDataSequence, bool bTranslate )
+{
+    if( !bTranslate )
+        return nIndex;
+
+    try
+    {
+        uno::Reference<beans::XPropertySet> xProp( xDataSequence, uno::UNO_QUERY );
+        if( xProp.is())
+        {
+            Sequence<sal_Int32> aHiddenIndicesSeq;
+            xProp->getPropertyValue( C2U("HiddenValues") ) >>= aHiddenIndicesSeq;
+            if( aHiddenIndicesSeq.getLength() )
+            {
+                ::std::vector< sal_Int32 > aHiddenIndices( ContainerHelper::SequenceToVector( aHiddenIndicesSeq ) );
+                ::std::sort( aHiddenIndices.begin(), aHiddenIndices.end(), lcl_LessIndex() );
+
+                sal_Int32 nHiddenCount = static_cast<sal_Int32>(aHiddenIndices.size());
+                for( sal_Int32 nN = 0; nN < nHiddenCount; ++nN)
+                {
+                    if( aHiddenIndices[nN] <= nIndex )
+                        nIndex += 1;
+                    else
+                        break;
+                }
+            }
+        }
+    }
+    catch (const beans::UnknownPropertyException&)
+    {
+    }
+    return nIndex;
+}
+
 } //  namespace DataSeriesHelper
 } //  namespace chart

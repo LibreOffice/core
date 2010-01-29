@@ -80,6 +80,8 @@ public:
 protected:
     explicit OPropertySet( const OPropertySet & rOther, ::osl::Mutex & rMutex );
 
+    void SetNewValuesExplicitlyEvenIfTheyEqualDefault();
+
     /** implement this method to provide default values for all properties
         supporting defaults.  If a property does not have a default value, you
         may throw an UnknownPropertyException.
@@ -311,6 +313,7 @@ private:
 
     /// pImpl idiom implementation
     ::std::auto_ptr< impl::ImplOPropertySet > m_pImplProperties;
+    bool m_bSetNewValuesExplicitlyEvenIfTheyEqualDefault;
 };
 
 } //  namespace property

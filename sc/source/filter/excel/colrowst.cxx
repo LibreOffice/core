@@ -95,6 +95,12 @@ void XclImpColRowSettings::SetWidthRange( SCCOL nScCol1, SCCOL nScCol2, sal_uInt
 {
     DBG_ASSERT( (nScCol1 <= nScCol2) && ValidCol( nScCol2 ), "XclImpColRowSettings::SetColWidthRange - invalid column range" );
     nScCol2 = ::std::min( nScCol2, MAXCOL );
+    if (nScCol2 == 256)
+        // In BIFF8, the column range is 0-255, and the use of 256 probably
+        // means the range should extend to the max column if the loading app
+        // support columns beyond 255.
+        nScCol2 = MAXCOL;
+
     nScCol1 = ::std::min( nScCol1, nScCol2 );
     ::std::fill( maWidths.begin() + nScCol1, maWidths.begin() + nScCol2 + 1, nWidth );
     for( ScfUInt8Vec::iterator aIt = maColFlags.begin() + nScCol1, aEnd = maColFlags.begin() + nScCol2 + 1; aIt != aEnd; ++aIt )

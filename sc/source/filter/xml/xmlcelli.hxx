@@ -30,6 +30,7 @@
 #ifndef SC_XMLCELLI_HXX
 #define SC_XMLCELLI_HXX
 
+#include <memory>
 #include "XMLDetectiveContext.hxx"
 #include "XMLCellRangeSourceContext.hxx"
 #include <xmloff/xmlictxt.hxx>
@@ -37,7 +38,6 @@
 #include <com/sun/star/table/XCell.hpp>
 #include <tools/time.hxx>
 #include <com/sun/star/util/DateTime.hpp>
-#include <sal/types.h>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
@@ -48,31 +48,18 @@
 #include <boost/optional.hpp>
 
 class ScXMLImport;
-class OutlinerParaObject;
-
-struct ScMyImportAnnotation
-{
-    rtl::OUString sAuthor;
-    rtl::OUString sCreateDate;
-    rtl::OUString sText;
-    sal_Bool bDisplay;
-    Rectangle* pRect;
-    SfxItemSet* pItemSet;
-    OutlinerParaObject* pOPO;
-
-    ScMyImportAnnotation() : bDisplay(sal_False), pRect(NULL), pItemSet(NULL), pOPO(NULL) {}
-    ~ScMyImportAnnotation();
-};
+struct ScXMLAnnotationData;
 
 class ScXMLTableRowCellContext : public SvXMLImportContext
 {
+    typedef ::std::pair< ::rtl::OUString, ::rtl::OUString > FormulaWithNamespace;
     com::sun::star::uno::Reference<com::sun::star::table::XCell> xBaseCell;
     com::sun::star::uno::Reference<com::sun::star::document::XActionLockable> xLockable;
     ::boost::optional< rtl::OUString > pOUTextValue;
     ::boost::optional< rtl::OUString > pOUTextContent;
-    ::boost::optional< rtl::OUString > pOUFormula;
+    ::boost::optional< FormulaWithNamespace > pOUFormula;
     rtl::OUString* pContentValidationName;
-    ScMyImportAnnotation*   pMyAnnotation;
+    ::std::auto_ptr< ScXMLAnnotationData > mxAnnotationData;
     ScMyImpDetectiveObjVec* pDetectiveObjVec;
     ScMyImpCellRangeSource* pCellRangeSource;
     double      fValue;
@@ -140,8 +127,6 @@ public:
     void SetCellRangeSource( const ::com::sun::star::table::CellAddress& rPosition );
 
     virtual void EndElement();
-
-    void AddAnnotation(ScMyImportAnnotation* pValue) { pMyAnnotation = pValue; }
 };
 
 #endif

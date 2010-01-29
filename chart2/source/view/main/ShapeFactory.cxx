@@ -1023,7 +1023,8 @@ uno::Reference< drawing::XShape >
                     , const Stripe& rStripe
                     , const uno::Reference< beans::XPropertySet >& xSourceProp
                     , const tPropertyNameMap& rPropertyNameMap
-                    , sal_Bool bDoubleSided )
+                    , sal_Bool bDoubleSided
+                    , bool bRotatedTexture )
 {
     if( !xTarget.is() )
         return 0;
@@ -1047,7 +1048,7 @@ uno::Reference< drawing::XShape >
 
             //TexturePolygon
             xProp->setPropertyValue( C2U( UNO_NAME_3D_TEXTUREPOLYGON3D )
-                , rStripe.getTexturePolygon() );
+                , rStripe.getTexturePolygon( bRotatedTexture ) );
 
 
             //Normals Polygon
@@ -1570,6 +1571,53 @@ uno::Reference< drawing::XShapes >
         ASSERT_EXCEPTION( e );
     }
     return 0;
+}
+
+uno::Reference< drawing::XShape >
+        ShapeFactory::createCircle2D( const uno::Reference< drawing::XShapes >& xTarget
+                    , const drawing::Position3D& rPosition
+                    , const drawing::Direction3D& rSize )
+{
+    if( !xTarget.is() )
+        return 0;
+
+    //create shape
+    uno::Reference< drawing::XShape > xShape(
+        m_xShapeFactory->createInstance( C2U(
+            "com.sun.star.drawing.EllipseShape") ), uno::UNO_QUERY );
+    xTarget->add(xShape);
+
+    try
+    {
+        drawing::Position3D aCenterPosition(
+            rPosition.PositionX - (rSize.DirectionX / 2.0),
+            rPosition.PositionY - (rSize.DirectionY / 2.0),
+            rPosition.PositionZ );
+        xShape->setPosition( Position3DToAWTPoint( aCenterPosition ));
+        xShape->setSize( Direction3DToAWTSize( rSize ));
+    }
+    catch( const uno::Exception & e )
+    {
+        ASSERT_EXCEPTION( e );
+    }
+
+    //set properties
+    uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
+    DBG_ASSERT(xProp.is(), "created shape offers no XPropertySet");
+    if( xProp.is())
+    {
+        try
+        {
+            drawing::CircleKind eKind = drawing::CircleKind_FULL;
+            xProp->setPropertyValue( C2U( UNO_NAME_CIRCKIND )
+                , uno::makeAny( eKind ) );
+        }
+        catch( uno::Exception& e )
+        {
+            ASSERT_EXCEPTION( e );
+        }
+    }
+    return xShape;
 }
 
 uno::Reference< drawing::XShape >

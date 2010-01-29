@@ -82,6 +82,8 @@
 #include <svx/flagsdef.hxx>
 #include <svx/numinf.hxx>
 
+#include <svtools/cjkoptions.hxx>
+
 //.............................................................................
 namespace chart
 {
@@ -345,6 +347,8 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
 
     this->SetText( pDialogParameter->getLocalizedName() );
 
+    SvtCJKOptions aCJKOptions;
+
     switch (eObjectType)
     {
         case OBJECTTYPE_TITLE:
@@ -354,6 +358,8 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
             AddTabPage(RID_SVXPAGE_CHAR_NAME, String(SchResId(STR_PAGE_CHARACTERS)));
             AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, String(SchResId(STR_PAGE_FONT_EFFECTS)));
             AddTabPage(TP_ALIGNMENT, String(SchResId(STR_PAGE_ALIGNMENT)), SchAlignmentTabPage::Create, NULL);
+            if( aCJKOptions.IsAsianTypographyEnabled() )
+                AddTabPage(RID_SVXPAGE_PARA_ASIAN, String(SchResId(STR_PAGE_ASIAN)));
             break;
 
         case OBJECTTYPE_LEGEND:
@@ -363,6 +369,8 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
             AddTabPage(RID_SVXPAGE_CHAR_NAME, String(SchResId(STR_PAGE_CHARACTERS)));
             AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, String(SchResId(STR_PAGE_FONT_EFFECTS)));
             AddTabPage(TP_LEGEND_POS, String(SchResId(STR_PAGE_POSITION)), SchLegendPosTabPage::Create, NULL);
+            if( aCJKOptions.IsAsianTypographyEnabled() )
+                AddTabPage(RID_SVXPAGE_PARA_ASIAN, String(SchResId(STR_PAGE_ASIAN)));
             break;
 
         case OBJECTTYPE_DATA_SERIES:
@@ -377,6 +385,8 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
             }
             AddTabPage(RID_SVXPAGE_CHAR_NAME, String(SchResId(STR_PAGE_CHARACTERS)));
             AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, String(SchResId(STR_PAGE_FONT_EFFECTS)));
+            if( aCJKOptions.IsAsianTypographyEnabled() )
+                AddTabPage(RID_SVXPAGE_PARA_ASIAN, String(SchResId(STR_PAGE_ASIAN)));
             AddTabPage(TP_DATA_DESCR, String(SchResId(STR_OBJECT_DATALABELS)), DataLabelsTabPage::Create, NULL);
 //             if( m_pParameter->HasStatisticProperties() )
 //                 AddTabPage(TP_YERRORBAR, String(SchResId(STR_PAGE_YERROR_BARS)), ErrorBarsTabPage::Create, NULL);
@@ -401,6 +411,8 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
                 AddTabPage(RID_SVXPAGE_NUMBERFORMAT, String(SchResId(STR_PAGE_NUMBERS)));
             AddTabPage(RID_SVXPAGE_CHAR_NAME, String(SchResId(STR_PAGE_CHARACTERS)));
             AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, String(SchResId(STR_PAGE_FONT_EFFECTS)));
+            if( aCJKOptions.IsAsianTypographyEnabled() )
+                AddTabPage(RID_SVXPAGE_PARA_ASIAN, String(SchResId(STR_PAGE_ASIAN)));
             break;
         }
 

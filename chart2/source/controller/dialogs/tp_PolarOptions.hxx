@@ -58,6 +58,9 @@ private:
     svx::DialControl m_aAngleDial;
     FixedText        m_aFT_Degrees;
     NumericField     m_aNF_StartingAngle;
+
+    FixedLine        m_aFL_PlotOptions;
+    CheckBox         m_aCB_IncludeHiddenCells;
 };
 
 //.............................................................................

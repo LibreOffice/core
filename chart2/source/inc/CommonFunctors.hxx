@@ -100,8 +100,11 @@ struct OOO_DLLPUBLIC_CHARTTOOLS AnyToString : public ::std::unary_function< ::co
         ::com::sun::star::uno::TypeClass eClass( rAny.getValueType().getTypeClass() );
         if( eClass == ::com::sun::star::uno::TypeClass_DOUBLE )
         {
+            const double* pDouble = reinterpret_cast< const double * >( rAny.getValue() );
+            if( ::rtl::math::isNan(*pDouble) )
+                return ::rtl::OUString();
             return ::rtl::math::doubleToUString(
-                * reinterpret_cast< const double * >( rAny.getValue() ),
+                * pDouble,
                 rtl_math_StringFormat_Automatic,
                 -1, // use maximum decimal places available
                 sal_Char( '.' ), // decimal separator

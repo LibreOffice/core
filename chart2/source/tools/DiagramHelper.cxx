@@ -503,8 +503,12 @@ void DiagramHelper::setDimension(
 
     try
     {
-        //change all coordinate systems:
+        bool rbFound = false;
+        bool rbAmbiguous = true;
+        StackMode eStackMode = DiagramHelper::getStackMode( xDiagram, rbFound, rbAmbiguous );
+        bool bIsSupportingOnlyDeepStackingFor3D=false;
 
+        //change all coordinate systems:
         Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY_THROW );
         Sequence< Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
         for( sal_Int32 nCS = 0; nCS < aCooSysList.getLength(); ++nCS )
@@ -520,6 +524,7 @@ void DiagramHelper::setDimension(
             for( sal_Int32 nT = 0; nT < aChartTypeList.getLength(); ++nT )
             {
                 Reference< XChartType > xChartType( aChartTypeList[nT], uno::UNO_QUERY );
+                bIsSupportingOnlyDeepStackingFor3D = ChartTypeHelper::isSupportingOnlyDeepStackingFor3D( xChartType );
                 if(!xNewCooSys.is())
                 {
                     xNewCooSys = xChartType->createCoordinateSystem( nNewDimensionCount );
@@ -533,6 +538,12 @@ void DiagramHelper::setDimension(
             // replace the old coordinate system at all places where it was used
             DiagramHelper::replaceCoordinateSystem( xDiagram, xOldCooSys, xNewCooSys );
         }
+
+        //correct stack mode if necessary
+        if( nNewDimensionCount==3 && eStackMode != StackMode_Z_STACKED && bIsSupportingOnlyDeepStackingFor3D )
+            DiagramHelper::setStackMode( xDiagram, StackMode_Z_STACKED );
+        else if( nNewDimensionCount==2 && eStackMode == StackMode_Z_STACKED )
+            DiagramHelper::setStackMode( xDiagram, StackMode_NONE );
     }
     catch( uno::Exception & ex )
     {
@@ -556,6 +567,8 @@ void DiagramHelper::replaceCoordinateSystem(
     {
         try
         {
+            Reference< chart2::data::XLabeledDataSequence > xCategories = DiagramHelper::getCategoriesFromDiagram( xDiagram );
+
             // move chart types of xCooSysToReplace to xReplacement
             Reference< XChartTypeContainer > xCTCntCooSys( xCooSysToReplace, uno::UNO_QUERY_THROW );
             Reference< XChartTypeContainer > xCTCntReplacement( xReplacement, uno::UNO_QUERY_THROW );
@@ -563,6 +576,9 @@ void DiagramHelper::replaceCoordinateSystem(
 
             xCont->removeCoordinateSystem( xCooSysToReplace );
             xCont->addCoordinateSystem( xReplacement );
+
+            if( xCategories.is() )
+                DiagramHelper::setCategoriesToDiagram( xCategories, xDiagram );
         }
         catch( uno::Exception & ex )
         {

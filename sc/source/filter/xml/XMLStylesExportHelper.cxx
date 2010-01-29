@@ -944,7 +944,7 @@ sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int32 nTable,
 }
 
 sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32 nColumn, const sal_Int32 nRow,
-    sal_Bool& bIsAutoStyle, sal_Int32& nValidationIndex, sal_Int32& nNumberFormat, const sal_Bool bRemoveRange)
+    sal_Bool& bIsAutoStyle, sal_Int32& nValidationIndex, sal_Int32& nNumberFormat, const sal_Int32 nRemoveBeforeRow)
 {
     DBG_ASSERT(static_cast<size_t>(nTable) < aTables.size(), "wrong table");
     ScMyFormatRangeAddresses* pFormatRanges(aTables[nTable]);
@@ -977,7 +977,7 @@ sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int32 nTable, const s
         }
         else
         {
-            if (bRemoveRange && (*aItr).aRangeAddress.EndRow < nRow)
+            if ((*aItr).aRangeAddress.EndRow < nRemoveBeforeRow)
                 aItr = pFormatRanges->erase(aItr);
             else
                 ++aItr;

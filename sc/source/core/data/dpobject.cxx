@@ -166,7 +166,6 @@ ScDPObject::ScDPObject( ScDocument* pD ) :
     bSettingsChanged( FALSE ),
     bAlive( FALSE ),
     bAllowMove( FALSE ),
-    bInfoValid( FALSE ),
     nHeaderRows( 0 )
 {
 }
@@ -185,7 +184,6 @@ ScDPObject::ScDPObject(const ScDPObject& r) :
     bSettingsChanged( FALSE ),
     bAlive( FALSE ),
     bAllowMove( FALSE ),
-    bInfoValid( r.bInfoValid ),
     nHeaderRows( r.nHeaderRows )
 {
     if (r.pSaveData)
@@ -310,7 +308,6 @@ void ScDPObject::WriteSourceDataTo( ScDPObject& rDest ) const
 void ScDPObject::WriteTempDataTo( ScDPObject& rDest ) const
 {
     rDest.nHeaderRows = nHeaderRows;
-    rDest.bInfoValid = bInfoValid;
 }
 
 BOOL ScDPObject::IsSheetData() const
@@ -344,7 +341,6 @@ void ScDPObject::CreateOutput()
 
         long nOldRows = nHeaderRows;
         nHeaderRows = pOutput->GetHeaderRows();
-        bInfoValid = TRUE;
 
         if ( bAllowMove && nHeaderRows != nOldRows )
         {
@@ -449,13 +445,11 @@ void ScDPObject::CreateObjects()
 void ScDPObject::InvalidateData()
 {
     bSettingsChanged = TRUE;
-    bInfoValid = FALSE;
 }
 
 void ScDPObject::InvalidateSource()
 {
     xSource = NULL;
-    bInfoValid = FALSE;
 }
 
 ScRange ScDPObject::GetNewOutputRange( BOOL& rOverflow )
@@ -472,7 +466,7 @@ ScRange ScDPObject::GetNewOutputRange( BOOL& rOverflow )
     }
 }
 
-void ScDPObject::Output()
+void ScDPObject::Output( const ScAddress& rPos )
 {
     //  clear old output area
     pDoc->DeleteAreaTab( aOutRange.aStart.Col(), aOutRange.aStart.Row(),
@@ -483,6 +477,8 @@ void ScDPObject::Output()
                           aOutRange.aStart.Tab(), SC_MF_AUTO );
 
     CreateOutput();             // create xSource and pOutput if not already done
+
+    pOutput->SetPosition( rPos );
 
     pOutput->Output();
 
@@ -535,8 +531,6 @@ void ScDPObject::RefreshAfterLoad()
     }
     else
         nHeaderRows = 0;        // nothing found, no drop-down lists
-
-    bInfoValid = TRUE;
 }
 
 void ScDPObject::UpdateReference( UpdateRefMode eUpdateRefMode,
@@ -2345,7 +2339,7 @@ ScDPCollection::ScDPCollection(const ScDPCollection& r) :
     ScCollection(r),
     pDoc(r.pDoc),
     maSharedString(r.maSharedString),
-    maCacheCellPool(r.maCacheCellPool)
+    maCacheCellPool()   // #i101725# don't copy hash_set with pointers from the other collection
 {
 }
 
@@ -2507,8 +2501,9 @@ void ScDPCollection::clearCacheCellPool()
     vector<ScDPCacheCell*> ps;
     ps.reserve(maCacheCellPool.size());
     copy(maCacheCellPool.begin(), maCacheCellPool.end(), back_inserter(ps));
-    for_each(ps.begin(), ps.end(), DeleteCacheCells());
     maCacheCellPool.clear();
+    // for correctness' sake, delete the elements after clearing the hash_set
+    for_each(ps.begin(), ps.end(), DeleteCacheCells());
 }
 
 //------------------------------------------------------------------------

@@ -158,7 +158,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         MapUnit = MAP_APPFONT ;
-        Delta = 73 ;
+        Delta = 90 ;
     };
     Window WND_FIELD
     {
@@ -178,9 +178,34 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ en-US ] = "Result" ;
         Hide = TRUE ;
     };
-    FixedText FT_OUTAREA
+
+    FixedText FT_INAREA
     {
         Pos = MAP_APPFONT ( 12 , 203 ) ;
+        Size = MAP_APPFONT ( 59 , 8 ) ;
+        Hide = TRUE ;
+        Text [ en-US ] = "Selection from" ;
+    };
+    Edit ED_INAREA
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 73 , 201 ) ;
+        Size = MAP_APPFONT ( 100 , 12 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+    };
+    ImageButton RB_INAREA
+    {
+        Pos = MAP_APPFONT ( 177 , 200 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+        QuickHelpText [ en-US ] = "Shrink" ;
+    };
+
+    FixedText FT_OUTAREA
+    {
+        Pos = MAP_APPFONT ( 12 , 221 ) ;
         Size = MAP_APPFONT ( 59 , 8 ) ;
         Hide = TRUE ;
         Text [ en-US ] = "Results to" ;
@@ -188,7 +213,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     ListBox LB_OUTAREA
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 73 , 201 ) ;
+        Pos = MAP_APPFONT ( 73 , 219 ) ;
         Size = MAP_APPFONT ( 75 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -197,14 +222,14 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     Edit ED_OUTAREA
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 152 , 201 ) ;
+        Pos = MAP_APPFONT ( 152 , 219 ) ;
         Size = MAP_APPFONT ( 100 , 12 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
     };
     ImageButton RB_OUTAREA
     {
-        Pos = MAP_APPFONT ( 256 , 200 ) ;
+        Pos = MAP_APPFONT ( 256 , 218 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
@@ -212,7 +237,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     CheckBox BTN_IGNEMPTYROWS
     {
-        Pos = MAP_APPFONT ( 12 , 219 ) ;
+        Pos = MAP_APPFONT ( 12 , 237 ) ;
         Size = MAP_APPFONT ( 124 , 10 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
@@ -220,7 +245,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     CheckBox BTN_DETECTCAT
     {
-        Pos = MAP_APPFONT ( 142 , 219 ) ;
+        Pos = MAP_APPFONT ( 142 , 237 ) ;
         Size = MAP_APPFONT ( 124 , 10 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
@@ -228,7 +253,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     CheckBox BTN_TOTALCOL
     {
-        Pos = MAP_APPFONT ( 12 , 233 ) ;
+        Pos = MAP_APPFONT ( 12 , 251 ) ;
         Size = MAP_APPFONT ( 124 , 10 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
@@ -236,7 +261,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     CheckBox BTN_TOTALROW
     {
-        Pos = MAP_APPFONT ( 142 , 233 ) ;
+        Pos = MAP_APPFONT ( 142 , 251 ) ;
         Size = MAP_APPFONT ( 124 , 10 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
@@ -244,7 +269,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     CheckBox BTN_FILTER
     {
-        Pos = MAP_APPFONT ( 12 , 247 ) ;
+        Pos = MAP_APPFONT ( 12 , 265 ) ;
         Size = MAP_APPFONT ( 124 , 10 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
@@ -252,7 +277,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     CheckBox BTN_DRILLDOWN
     {
-        Pos = MAP_APPFONT ( 142 , 247 ) ;
+        Pos = MAP_APPFONT ( 142 , 265 ) ;
         Size = MAP_APPFONT ( 124 , 10 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;

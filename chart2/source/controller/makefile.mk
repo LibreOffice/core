@@ -93,7 +93,6 @@ SHL1STDLIBS=	$(CHARTTOOLS)		\
                 $(SVXLIB)			\
                 $(TKLIB)			\
                 $(TOOLSLIB) 		\
-                $(I18NISOLANGLIB)   \
                 $(VCLLIB)           \
                 $(SFXLIB)			\
                 $(UNOTOOLSLIB)		\

@@ -93,6 +93,21 @@ class StarBASIC;
 
 //========================================================================
 
+namespace
+{
+    const String SYLK_LF = String::CreateFromAscii("\x1b :");
+    const String DOUBLE_SEMICOLON = String::CreateFromAscii(";;");
+    const String DOUBLE_DOUBLEQUOTE = String::CreateFromAscii("\"\"");
+}
+
+enum SylkVersion
+{
+    SYLK_SCALC3,    // Wrote wrongly quoted strings and unescaped semicolons.
+    SYLK_OOO32,     // Correct strings, plus multiline content.
+    SYLK_OWN,       // Place our new versions, if any, before this value.
+    SYLK_OTHER      // Assume that aliens wrote correct strings.
+};
+
 
 // Gesamtdokument ohne Undo
 
@@ -102,7 +117,7 @@ ScImportExport::ScImportExport( ScDocument* p )
       nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
       bFormulas( FALSE ), bIncludeFiltered( TRUE ),
       bAll( TRUE ), bSingle( TRUE ), bUndo( FALSE ),
-      bOverflow( FALSE ), mbApi( true )
+      bOverflow( FALSE ), mbApi( true ), mExportTextOptions()
 {
     pUndoDoc = NULL;
     pExtOptions = NULL;
@@ -117,7 +132,7 @@ ScImportExport::ScImportExport( ScDocument* p, const ScAddress& rPt )
       nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
       bFormulas( FALSE ), bIncludeFiltered( TRUE ),
       bAll( FALSE ), bSingle( TRUE ), bUndo( BOOL( pDocSh != NULL ) ),
-      bOverflow( FALSE ), mbApi( true )
+      bOverflow( FALSE ), mbApi( true ), mExportTextOptions()
 {
     pUndoDoc = NULL;
     pExtOptions = NULL;
@@ -133,7 +148,7 @@ ScImportExport::ScImportExport( ScDocument* p, const ScRange& r )
       nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
       bFormulas( FALSE ), bIncludeFiltered( TRUE ),
       bAll( FALSE ), bSingle( FALSE ), bUndo( BOOL( pDocSh != NULL ) ),
-      bOverflow( FALSE ), mbApi( true )
+      bOverflow( FALSE ), mbApi( true ), mExportTextOptions()
 {
     pUndoDoc = NULL;
     pExtOptions = NULL;
@@ -150,7 +165,7 @@ ScImportExport::ScImportExport( ScDocument* p, const String& rPos )
       nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
       bFormulas( FALSE ), bIncludeFiltered( TRUE ),
       bAll( FALSE ), bSingle( TRUE ), bUndo( BOOL( pDocSh != NULL ) ),
-      bOverflow( FALSE ), mbApi( true )
+      bOverflow( FALSE ), mbApi( true ), mExportTextOptions()
 {
     pUndoDoc = NULL;
     pExtOptions = NULL;
@@ -575,6 +590,7 @@ void ScImportExport::WriteUnicodeOrByteString( SvStream& rStrm, const String& rS
 }
 
 
+// This function could be replaced by endlub()
 // static
 void ScImportExport::WriteUnicodeOrByteEndl( SvStream& rStrm )
 {
@@ -605,7 +621,7 @@ enum DoubledQuoteMode
     DQM_SEPARATE    // end one string and begin next
 };
 
-const sal_Unicode* lcl_ScanString( const sal_Unicode* p, String& rString,
+static const sal_Unicode* lcl_ScanString( const sal_Unicode* p, String& rString,
             sal_Unicode cStr, DoubledQuoteMode eMode )
 {
     p++;    //! jump over opening quote
@@ -653,8 +669,126 @@ const sal_Unicode* lcl_ScanString( const sal_Unicode* p, String& rString,
     return p;
 }
 
+void lcl_UnescapeSylk( String & rString, SylkVersion eVersion )
+{
+    // Older versions didn't escape the semicolon.
+    // Older versions quoted the string and doubled embedded quotes, but not
+    // the semicolons, which was plain wrong.
+    if (eVersion >= SYLK_OOO32)
+        rString.SearchAndReplaceAll( DOUBLE_SEMICOLON, ';' );
+    else
+        rString.SearchAndReplaceAll( DOUBLE_DOUBLEQUOTE, '"' );
 
-void lcl_WriteString( SvStream& rStrm, String& rString, sal_Unicode cStr )
+    rString.SearchAndReplaceAll( SYLK_LF, _LF );
+}
+
+static const sal_Unicode* lcl_ScanSylkString( const sal_Unicode* p,
+        String& rString, SylkVersion eVersion )
+{
+    const sal_Unicode* pStartQuote = p;
+    const sal_Unicode* pEndQuote = 0;
+    while( *(++p) )
+    {
+        if( *p == '"' )
+        {
+            pEndQuote = p;
+            if (eVersion >= SYLK_OOO32)
+            {
+                if (*(p+1) == ';')
+                {
+                    if (*(p+2) == ';')
+                    {
+                        p += 2;     // escaped ';'
+                        pEndQuote = 0;
+                    }
+                    else
+                        break;      // end field
+                }
+            }
+            else
+            {
+                if (*(p+1) == '"')
+                {
+                    ++p;            // escaped '"'
+                    pEndQuote = 0;
+                }
+                else if (*(p+1) == ';')
+                    break;          // end field
+            }
+        }
+    }
+    if (!pEndQuote)
+        pEndQuote = p;  // Take all data as string.
+    rString.Append( pStartQuote + 1, sal::static_int_cast<xub_StrLen>( pEndQuote - pStartQuote - 1 ) );
+    lcl_UnescapeSylk( rString, eVersion);
+    return p;
+}
+
+static const sal_Unicode* lcl_ScanSylkFormula( const sal_Unicode* p,
+        String& rString, SylkVersion eVersion )
+{
+    const sal_Unicode* pStart = p;
+    if (eVersion >= SYLK_OOO32)
+    {
+        while (*p)
+        {
+            if (*p == ';')
+            {
+                if (*(p+1) == ';')
+                    ++p;        // escaped ';'
+                else
+                    break;      // end field
+            }
+            ++p;
+        }
+        rString.Append( pStart, sal::static_int_cast<xub_StrLen>( p - pStart));
+        lcl_UnescapeSylk( rString, eVersion);
+    }
+    else
+    {
+        // Nasty. If in old versions the formula contained a semicolon, it was
+        // quoted and embedded quotes were doubled, but semicolons were not. If
+        // there was no semicolon, it could still contain quotes and doubled
+        // embedded quotes if it was something like ="a""b", which was saved as
+        // E"a""b" as is and has to be preserved, even if older versions
+        // couldn't even load it correctly. However, theoretically another
+        // field might follow and thus the line contain a semicolon again, such
+        // as ...;E"a""b";...
+        bool bQuoted = false;
+        if (*p == '"')
+        {
+            // May be a quoted expression or just a string constant expression
+            // with quotes.
+            while (*(++p))
+            {
+                if (*p == '"')
+                {
+                    if (*(p+1) == '"')
+                        ++p;            // escaped '"'
+                    else
+                        break;          // closing '"', had no ';' yet
+                }
+                else if (*p == ';')
+                {
+                    bQuoted = true;     // ';' within quoted expression
+                    break;
+                }
+            }
+            p = pStart;
+        }
+        if (bQuoted)
+            p = lcl_ScanSylkString( p, rString, eVersion);
+        else
+        {
+            while (*p && *p != ';')
+                ++p;
+            rString.Append( pStart, sal::static_int_cast<xub_StrLen>( p - pStart));
+        }
+    }
+    return p;
+}
+
+static void lcl_DoubleEscapeChar( String& rString, sal_Unicode cStr )
 {
     xub_StrLen n = 0;
     while( ( n = rString.Search( cStr, n ) ) != STRING_NOTFOUND )
@@ -662,9 +796,18 @@ void lcl_WriteString( SvStream& rStrm, String& rString, sal_Unicode cStr )
         rString.Insert( cStr, n );
         n += 2;
     }
+}
 
-    rString.Insert( cStr, 0 );
-    rString.Append( cStr );
+static void lcl_WriteString( SvStream& rStrm, String& rString, sal_Unicode cQuote, sal_Unicode cEsc )
+{
+    if (cEsc)
+        lcl_DoubleEscapeChar( rString, cEsc );
+
+    if (cQuote)
+    {
+        rString.Insert( cQuote, 0 );
+        rString.Append( cQuote );
+    }
 
     ScImportExport::WriteUnicodeOrByteString( rStrm, rString );
 }
@@ -1279,6 +1422,7 @@ BOOL ScImportExport::Doc2Text( SvStream& rStrm )
     SCCOL nEndCol = aRange.aEnd.Col();
     SCROW nEndRow = aRange.aEnd.Row();
     String aCell;
+    bool bConvertLF = (GetSystemLineEnd() != LINEEND_LF);
 
     for (nRow = nStartRow; nRow <= nEndRow; nRow++)
     {
@@ -1296,15 +1440,28 @@ BOOL ScImportExport::Doc2Text( SvStream& rStrm )
                         {
                             pDoc->GetFormula( nCol, nRow, aRange.aStart.Tab(), aCell, TRUE );
                             if( aCell.Search( cSep ) != STRING_NOTFOUND )
-                                lcl_WriteString( rStrm, aCell, cStr );
+                                lcl_WriteString( rStrm, aCell, cStr, cStr );
                             else
                                 lcl_WriteSimpleString( rStrm, aCell );
                         }
                         else
                         {
                             pDoc->GetString( nCol, nRow, aRange.aStart.Tab(), aCell );
-                            if( aCell.Search( cSep ) != STRING_NOTFOUND )
-                                lcl_WriteString( rStrm, aCell, cStr );
+
+                            bool bMultiLineText = ( aCell.Search( _LF ) != STRING_NOTFOUND );
+                            if( bMultiLineText )
+                            {
+                                if( mExportTextOptions.meNewlineConversion == ScExportTextOptions::ToSpace )
+                                    aCell.SearchAndReplaceAll( _LF, ' ' );
+                                else if ( mExportTextOptions.meNewlineConversion == ScExportTextOptions::ToSystem && bConvertLF )
+                                    aCell.ConvertLineEnd();
+                            }
+
+                            if( mExportTextOptions.mcSeparatorConvertTo && cSep )
+                                aCell.SearchAndReplaceAll( cSep, mExportTextOptions.mcSeparatorConvertTo );
+
+                            if( mExportTextOptions.mbAddQuotes && ( aCell.Search( cSep ) != STRING_NOTFOUND ) )
+                                lcl_WriteString( rStrm, aCell, cStr, cStr );
                             else
                                 lcl_WriteSimpleString( rStrm, aCell );
                         }
@@ -1322,8 +1479,21 @@ BOOL ScImportExport::Doc2Text( SvStream& rStrm )
                     default:
                     {
                         pDoc->GetString( nCol, nRow, aRange.aStart.Tab(), aCell );
-                        if( aCell.Search( cSep ) != STRING_NOTFOUND )
-                            lcl_WriteString( rStrm, aCell, cStr );
+
+                        bool bMultiLineText = ( aCell.Search( _LF ) != STRING_NOTFOUND );
+                        if( bMultiLineText )
+                        {
+                            if( mExportTextOptions.meNewlineConversion == ScExportTextOptions::ToSpace )
+                                aCell.SearchAndReplaceAll( _LF, ' ' );
+                            else if ( mExportTextOptions.meNewlineConversion == ScExportTextOptions::ToSystem && bConvertLF )
+                                aCell.ConvertLineEnd();
+                        }
+
+                        if( mExportTextOptions.mcSeparatorConvertTo && cSep )
+                            aCell.SearchAndReplaceAll( cSep, mExportTextOptions.mcSeparatorConvertTo );
+
+                        if( mExportTextOptions.mbAddQuotes && ( aCell.Search( cSep ) != STRING_NOTFOUND ) )
+                            lcl_WriteString( rStrm, aCell, cStr, cStr );
                         else
                             lcl_WriteSimpleString( rStrm, aCell );
                     }
@@ -1348,6 +1518,7 @@ BOOL ScImportExport::Sylk2Doc( SvStream& rStrm )
 {
     BOOL bOk = TRUE;
     BOOL bMyDoc = FALSE;
+    SylkVersion eVersion = SYLK_OTHER;
 
     // US-English separators for StringToDouble
     sal_Unicode cDecSep = '.';
@@ -1424,8 +1595,8 @@ BOOL ScImportExport::Sylk2Doc( SvStream& rStrm )
                             if( *p == '"' )
                             {
                                 bText = TRUE;
-                                aText = '\'';       // force string cell
-                                p = lcl_ScanString( p, aText, '"', DQM_ESCAPE );
+                                aText.Erase();
+                                p = lcl_ScanSylkString( p, aText, eVersion);
                             }
                             else
                                 bText = FALSE;
@@ -1435,7 +1606,11 @@ BOOL ScImportExport::Sylk2Doc( SvStream& rStrm )
                             if ( !(*q == ';' && *(q+1) == 'I') )
                             {   // don't ignore value
                                 if( bText )
-                                    pDoc->SetString( nCol, nRow, aRange.aStart.Tab(), aText );
+                                {
+                                    pDoc->PutCell( nCol, nRow, aRange.aStart.Tab(),
+                                            ScBaseCell::CreateTextCell( aText, pDoc),
+                                            (BOOL) TRUE);
+                                }
                                 else
                                 {
                                     double fVal = rtl_math_uStringToDouble( p,
@@ -1466,15 +1641,7 @@ BOOL ScImportExport::Sylk2Doc( SvStream& rStrm )
                             if( !bMyDoc || !bData )
                                 break;
                             aText = '=';
-                            if( *p == '"' )
-                                p = lcl_ScanString( p, aText, '"', DQM_ESCAPE );
-                            else
-                            {
-                                const sal_Unicode* q = p;
-                                while( *p && *p != ';' )
-                                    p++;
-                                aText.Append( q, sal::static_int_cast<xub_StrLen>( p-q ) );
-                            }
+                            p = lcl_ScanSylkFormula( p, aText, eVersion);
                             ScAddress aPos( nCol, nRow, aRange.aStart.Tab() );
                             /* FIXME: do we want GRAM_ODFF_A1 instead? At the
                              * end it probably should be GRAM_ODFF_R1C1, since
@@ -1584,7 +1751,11 @@ BOOL ScImportExport::Sylk2Doc( SvStream& rStrm )
             else if( cTag == 'I' && *p == 'D' )
             {
                 aLine.Erase( 0, 4 );
-                bMyDoc = aLine.EqualsAscii( "SCALC3" );
+                if (aLine.EqualsAscii( "CALCOOO32" ))
+                    eVersion = SYLK_OOO32;
+                else if (aLine.EqualsAscii( "SCALC3" ))
+                    eVersion = SYLK_SCALC3;
+                bMyDoc = (eVersion <= SYLK_OWN);
             }
             else if( cTag == 'E' )                      // Ende
                 break;
@@ -1616,7 +1787,7 @@ BOOL ScImportExport::Doc2Sylk( SvStream& rStrm )
     String aCellStr;
     String aValStr;
     lcl_WriteSimpleString( rStrm,
-            String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM( "ID;PSCALC3" )) );
+            String( RTL_CONSTASCII_USTRINGPARAM( "ID;PCALCOOO32")));
     WriteUnicodeOrByteEndl( rStrm );
 
     for (nRow = nStartRow; nRow <= nEndRow; nRow++)
@@ -1661,6 +1832,7 @@ BOOL ScImportExport::Doc2Sylk( SvStream& rStrm )
                 case CELLTYPE_EDIT:
                 hasstring:
                     pDoc->GetString( nCol, nRow, aRange.aStart.Tab(), aCellStr );
+                    aCellStr.SearchAndReplaceAll( _LF, SYLK_LF );
 
                     aBufStr.AssignAscii(RTL_CONSTASCII_STRINGPARAM( "C;X" ));
                     aBufStr += String::CreateFromInt32( c );
@@ -1668,7 +1840,7 @@ BOOL ScImportExport::Doc2Sylk( SvStream& rStrm )
                     aBufStr += String::CreateFromInt32( r );
                     aBufStr.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ";K" ));
                     lcl_WriteSimpleString( rStrm, aBufStr );
-                    lcl_WriteString( rStrm, aCellStr, '"' );
+                    lcl_WriteString( rStrm, aCellStr, '"', ';' );
 
                 checkformula:
                     if( bForm )
@@ -1730,12 +1902,7 @@ BOOL ScImportExport::Doc2Sylk( SvStream& rStrm )
                         }
                         lcl_WriteSimpleString( rStrm, aPrefix );
                         if ( aCellStr.Len() )
-                        {
-                            if( aCellStr.Search( ';' ) != STRING_NOTFOUND )
-                                lcl_WriteString( rStrm, aCellStr, '"' );
-                            else
-                                lcl_WriteSimpleString( rStrm, aCellStr );
-                        }
+                            lcl_WriteString( rStrm, aCellStr, 0, ';' );
                     }
                     WriteUnicodeOrByteEndl( rStrm );
                     break;

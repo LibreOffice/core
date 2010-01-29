@@ -288,6 +288,10 @@ void ScDPSource::SetOrientation(long nColumn, USHORT nNew)
         case sheet::DataPilotFieldOrientation_PAGE:
             nPageDims[nPageDimCount++] = nColumn;
             break;
+        case sheet::DataPilotFieldOrientation_HIDDEN:
+            /*  Do not assert HIDDEN as it occurs e.g. while using the
+                csss.XDataPilotTables.createDataPilotDescriptor() function. */
+            break;
         default:
             DBG_ERROR( "ScDPSource::SetOrientation: unexpected orientation" );
             break;
@@ -1129,7 +1133,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPSource::getPropertySetInfo(
 {
     ScUnoGuard aGuard;
 
-    static SfxItemPropertyMap aDPSourceMap_Impl[] =
+    static SfxItemPropertyMapEntry aDPSourceMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_COLGRAND), 0,  &getBooleanCppuType(),              0, 0 },
         {MAP_CHAR_LEN(SC_UNO_DATADESC), 0,  &getCppuType((rtl::OUString*)0),    beans::PropertyAttribute::READONLY, 0 },
@@ -1508,7 +1512,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPDimension::getPropertySetIn
 {
     ScUnoGuard aGuard;
 
-    static SfxItemPropertyMap aDPDimensionMap_Impl[] =
+    static SfxItemPropertyMapEntry aDPDimensionMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_FILTER),   0,  &getCppuType((uno::Sequence<sheet::TableFilterField>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNO_FUNCTION), 0,  &getCppuType((sheet::GeneralFunction*)0),   0, 0 },
@@ -1974,13 +1978,16 @@ public:
 
 BOOL ScDPGlobalMembersOrder::operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 ) const
 {
-    ScDPMembers* pMembers = rLevel.GetMembersObject();
-    ScDPMember* pMember1 = pMembers->getByIndex(nIndex1);
-    ScDPMember* pMember2 = pMembers->getByIndex(nIndex2);
-
-    sal_Int32 nCompare = pMember1->Compare( *pMember2 );
-
-    return bAscending ? ( nCompare < 0 ) : ( nCompare > 0 );
+    sal_Int32 nCompare = 0;
+    // seems that some ::std::sort() implementations pass the same index twice
+    if( nIndex1 != nIndex2 )
+    {
+        ScDPMembers* pMembers = rLevel.GetMembersObject();
+        ScDPMember* pMember1 = pMembers->getByIndex(nIndex1);
+        ScDPMember* pMember2 = pMembers->getByIndex(nIndex2);
+        nCompare = pMember1->Compare( *pMember2 );
+    }
+    return bAscending ? (nCompare < 0) : (nCompare > 0);
 }
 
 // -----------------------------------------------------------------------
@@ -2037,7 +2044,7 @@ void ScDPLevel::EvaluateSortOrder()
                 ScDPMembers* pLocalMembers = GetMembersObject();
                 long nCount = pLocalMembers->getCount();
 
-                DBG_ASSERT( aGlobalOrder.empty(), "sort twice?" );
+//                DBG_ASSERT( aGlobalOrder.empty(), "sort twice?" );
                 aGlobalOrder.resize( nCount );
                 for (long nPos=0; nPos<nCount; nPos++)
                     aGlobalOrder[nPos] = nPos;
@@ -2190,7 +2197,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPLevel::getPropertySetInfo()
 {
     ScUnoGuard aGuard;
 
-    static SfxItemPropertyMap aDPLevelMap_Impl[] =
+    static SfxItemPropertyMapEntry aDPLevelMap_Impl[] =
     {
         //! change type of AutoShow/Layout/Sorting to API struct when available
         {MAP_CHAR_LEN(SC_UNO_AUTOSHOW), 0,  &getCppuType((sheet::DataPilotFieldAutoShowInfo*)0),     0, 0 },
@@ -2657,7 +2664,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPMember::getPropertySetInfo(
 {
     ScUnoGuard aGuard;
 
-    static SfxItemPropertyMap aDPMemberMap_Impl[] =
+    static SfxItemPropertyMapEntry aDPMemberMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_ISVISIBL), 0,  &getBooleanCppuType(),              0, 0 },
         {MAP_CHAR_LEN(SC_UNO_POSITION), 0,  &getCppuType((sal_Int32*)0),        0, 0 },

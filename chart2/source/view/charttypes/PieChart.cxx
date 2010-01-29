@@ -376,7 +376,7 @@ void PieChart::createShapes()
         sal_Int32 nPointCount=pSeries->getTotalPointCount();
         for( nPointIndex = 0; nPointIndex < nPointCount; nPointIndex++ )
         {
-            double fY = pSeries->getY( nPointIndex );
+            double fY = pSeries->getYValue( nPointIndex );
             if(fY<0.0)
             {
                 //@todo warn somehow that negative values are treated as positive
@@ -402,7 +402,7 @@ void PieChart::createShapes()
 
             uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShape(pSeries, xSeriesTarget);
             //collect data point information (logic coordinates, style ):
-            double fLogicYValue = fabs(pSeries->getY( nPointIndex ));
+            double fLogicYValue = fabs(pSeries->getYValue( nPointIndex ));
             if( ::rtl::math::isNan(fLogicYValue) )
                 continue;
             if(fLogicYValue==0.0)//@todo: continue also if the resolution to small

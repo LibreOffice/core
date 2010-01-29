@@ -32,6 +32,7 @@
 #define SC_DPDIMSAVE_HXX
 
 #include <vector>
+#include <map>
 #include <tools/string.hxx>
 #include "dpgroup.hxx"      // for ScDPNumGroupInfo
 #include "scdllapi.h"
@@ -50,6 +51,8 @@ class ScDPSaveGroupDimension;
 //  These have to be applied before the other ScDPSaveData settings.
 //
 
+// ============================================================================
+
 class SC_DLLPUBLIC ScDPSaveGroupItem
 {
     String                  aGroupName;     // name of group
@@ -57,7 +60,6 @@ class SC_DLLPUBLIC ScDPSaveGroupItem
 
 public:
                 ScDPSaveGroupItem( const String& rName );
-                ScDPSaveGroupItem( const ScDPSaveGroupItem& r );
                 ~ScDPSaveGroupItem();
 
     void    AddToData( ScDPGroupDimension& rDataDim, SvNumberFormatter* pFormatter ) const;
@@ -80,6 +82,8 @@ public:
 
 typedef ::std::vector<ScDPSaveGroupItem> ScDPSaveGroupItemVec;
 
+// ============================================================================
+
 class SC_DLLPUBLIC ScDPSaveGroupDimension
 {
     String                  aSourceDim;     // always the real source from the original data
@@ -90,7 +94,7 @@ class SC_DLLPUBLIC ScDPSaveGroupDimension
 
 public:
                 ScDPSaveGroupDimension( const String& rSource, const String& rName );
-                ScDPSaveGroupDimension( const ScDPSaveGroupDimension& r );
+                ScDPSaveGroupDimension( const String& rSource, const String& rName, const ScDPNumGroupInfo& rDateInfo, sal_Int32 nPart );
                 ~ScDPSaveGroupDimension();
 
     void    AddToData( ScDPGroupTableData& rData ) const;
@@ -119,7 +123,7 @@ public:
     void    Rename( const String& rNewName );
 };
 
-typedef ::std::vector<ScDPSaveGroupDimension> ScDPSaveGroupDimensionVec;
+// ============================================================================
 
 class SC_DLLPUBLIC ScDPSaveNumGroupDimension
 {
@@ -130,7 +134,7 @@ class SC_DLLPUBLIC ScDPSaveNumGroupDimension
 
 public:
                 ScDPSaveNumGroupDimension( const String& rName, const ScDPNumGroupInfo& rInfo );
-                ScDPSaveNumGroupDimension( const ScDPSaveNumGroupDimension& r );
+                ScDPSaveNumGroupDimension( const String& rName, const ScDPNumGroupInfo& rDateInfo, sal_Int32 nPart );
                 ~ScDPSaveNumGroupDimension();
 
     void        AddToData( ScDPGroupTableData& rData ) const;
@@ -145,46 +149,57 @@ public:
     void        SetDateInfo( const ScDPNumGroupInfo& rInfo, sal_Int32 nPart );
 };
 
-typedef ::std::vector<ScDPSaveNumGroupDimension> ScDPSaveNumGroupDimensionVec;
+// ============================================================================
 
 class SC_DLLPUBLIC ScDPDimensionSaveData
 {
-    ScDPSaveGroupDimensionVec    aGroupDimensions;
-    ScDPSaveNumGroupDimensionVec aNumGroupDimensions;
-
-
-                            // not implemented
-    ScDPDimensionSaveData&  operator=( const ScDPDimensionSaveData& );
-
 public:
             ScDPDimensionSaveData();
-            ScDPDimensionSaveData( const ScDPDimensionSaveData& r );
             ~ScDPDimensionSaveData();
 
     bool    operator==( const ScDPDimensionSaveData& r ) const;
 
     void    WriteToData( ScDPGroupTableData& rData ) const;
 
-    String  CreateGroupDimName( const String& rSourceName, const ScDPObject& rObject, bool bAllowSource,
-                                const std::vector<String>* pDeletedNames );
-    void    AddGroupDimension( const ScDPSaveGroupDimension& rGroup );
-    void    RemoveGroupDimension( const String& rDimensionName );
+    String  CreateGroupDimName( const String& rSourceName, const ScDPObject& rObject, bool bAllowSource, const ::std::vector< String >* pDeletedNames );
+    String  CreateDateGroupDimName( sal_Int32 nDatePart, const ScDPObject& rObject, bool bAllowSource, const ::std::vector< String >* pDeletedNames );
 
-    void    AddNumGroupDimension( const ScDPSaveNumGroupDimension& rGroup );
-    void    RemoveNumGroupDimension( const String& rDimensionName );
+    void    AddGroupDimension( const ScDPSaveGroupDimension& rGroupDim );
+    void    ReplaceGroupDimension( const ScDPSaveGroupDimension& rGroupDim );
+    void    RemoveGroupDimension( const String& rGroupDimName );
 
-    const ScDPSaveGroupDimension* GetGroupDimForBase( const String& rBaseName ) const;
-    const ScDPSaveGroupDimension* GetNamedGroupDim( const String& rGroupDim ) const;
-    const ScDPSaveNumGroupDimension* GetNumGroupDim( const String& rName ) const;
+    void    AddNumGroupDimension( const ScDPSaveNumGroupDimension& rGroupDim );
+    void    ReplaceNumGroupDimension( const ScDPSaveNumGroupDimension& rGroupDim );
+    void    RemoveNumGroupDimension( const String& rGroupDimName );
 
-    ScDPSaveGroupDimension* GetGroupDimAccForBase( const String& rBaseName );
-    ScDPSaveGroupDimension* GetNamedGroupDimAcc( const String& rGroupDim );
-    ScDPSaveNumGroupDimension* GetNumGroupDimAcc( const String& rName );
+    const ScDPSaveGroupDimension* GetGroupDimForBase( const String& rBaseDimName ) const;
+    const ScDPSaveGroupDimension* GetNamedGroupDim( const String& rGroupDimName ) const;
+    const ScDPSaveGroupDimension* GetFirstNamedGroupDim( const String& rBaseDimName ) const;
+    const ScDPSaveGroupDimension* GetNextNamedGroupDim( const String& rGroupDimName ) const;
+    const ScDPSaveNumGroupDimension* GetNumGroupDim( const String& rGroupDimName ) const;
+
+    ScDPSaveGroupDimension* GetGroupDimAccForBase( const String& rBaseDimName );
+    ScDPSaveGroupDimension* GetNamedGroupDimAcc( const String& rGroupDimName );
+    ScDPSaveGroupDimension* GetFirstNamedGroupDimAcc( const String& rBaseDimName );
+    ScDPSaveGroupDimension* GetNextNamedGroupDimAcc( const String& rGroupDimName );
+
+    ScDPSaveNumGroupDimension* GetNumGroupDimAcc( const String& rGroupDimName );
 
     bool    HasGroupDimensions() const;
 
     sal_Int32 CollectDateParts( const String& rBaseDimName ) const;
+
+private:
+    typedef ::std::vector< ScDPSaveGroupDimension >         ScDPSaveGroupDimVec;
+    typedef ::std::map< String, ScDPSaveNumGroupDimension > ScDPSaveNumGroupDimMap;
+
+    ScDPDimensionSaveData& operator=( const ScDPDimensionSaveData& );
+
+    ScDPSaveGroupDimVec maGroupDims;
+    ScDPSaveNumGroupDimMap maNumGroupDims;
 };
+
+// ============================================================================
 
 #endif
 

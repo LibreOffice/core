@@ -132,15 +132,27 @@ public:
     class Table
     {
     public:
+
+        enum ReferencedFlag
+        {
+            UNREFERENCED,
+            REFERENCED_MARKED,      // marked as referenced during store to file
+            REFERENCED_PERMANENT    // permanently marked, e.g. from within interpreter
+        };
+
         Table();
         ~Table();
 
         SC_DLLPUBLIC void setCell(SCCOL nCol, SCROW nRow, TokenRef pToken, sal_uInt32 nFmtIndex = 0);
         TokenRef getCell(SCCOL nCol, SCROW nRow, sal_uInt32* pnFmtIndex = NULL) const;
         bool hasRow( SCROW nRow ) const;
-        /// A temporary state used only during store to file.
-        bool isReferenced() const;
+        /** Set/clear referenced status flag only if current status is not
+            REFERENCED_PERMANENT. */
         void setReferenced( bool bReferenced );
+        /// Unconditionally set the reference status flag.
+        void setReferencedFlag( ReferencedFlag eFlag );
+        ReferencedFlag getReferencedFlag() const;
+        bool isReferenced() const;
         /// Obtain a sorted vector of rows.
         void getAllRows(::std::vector<SCROW>& rRows) const;
         /// Obtain a sorted vector of columns.
@@ -148,8 +160,8 @@ public:
         void getAllNumberFormats(::std::vector<sal_uInt32>& rNumFmts) const;
 
     private:
-        RowsDataType maRows;
-        bool         mbReferenced;
+        RowsDataType   maRows;
+        ReferencedFlag meReferenced;
     };
 
     typedef ::boost::shared_ptr<Table>      TableTypeRef;
@@ -173,7 +185,7 @@ public:
      */
     ScExternalRefCache::TokenRef getCellData(
         sal_uInt16 nFileId, const String& rTabName, SCCOL nCol, SCROW nRow,
-        bool bEmptyCellOnNull, sal_uInt32* pnFmtIndex = NULL);
+        bool bEmptyCellOnNull, bool bWriteEmpty, sal_uInt32* pnFmtIndex);
 
     /**
      * Get a cached cell range data.
@@ -183,7 +195,7 @@ public:
      *         guaranteed if the TokenArrayRef is properly used..
      */
     ScExternalRefCache::TokenArrayRef getCellRangeData(
-        sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange, bool bEmptyCellOnNull);
+        sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange, bool bEmptyCellOnNull, bool bWriteEmpty);
 
     ScExternalRefCache::TokenArrayRef getRangeNameTokens(sal_uInt16 nFileId, const String& rName);
     void setRangeNameTokens(sal_uInt16 nFileId, const String& rName, TokenArrayRef pArray);
@@ -219,9 +231,16 @@ public:
      * Set a table as referenced, used only during store-to-file.
      * @returns <TRUE/> if ALL tables of ALL documents are marked.
      */
-    bool setCacheTableReferenced( sal_uInt16 nFileId, const String& rTabName );
+    bool setCacheTableReferenced( sal_uInt16 nFileId, const String& rTabName, size_t nSheets, bool bPermanent );
     void setAllCacheTableReferencedStati( bool bReferenced );
     bool areAllCacheTablesReferenced() const;
+
+    /**
+     * Set a table as permanently referenced, to be called if not in
+     * mark-during-store-to-file cycle.
+     */
+    void setCacheTableReferencedPermanently( sal_uInt16 nFileId, const String& rTabName, size_t nSheets );
+
 private:
     struct ReferencedStatus
     {
@@ -497,8 +516,14 @@ public:
      * Set a table as referenced, used only during store-to-file.
      * @returns <TRUE/> if ALL tables of ALL external documents are marked.
      */
-    bool setCacheTableReferenced( sal_uInt16 nFileId, const String& rTabName );
+    bool setCacheTableReferenced( sal_uInt16 nFileId, const String& rTabName, size_t nSheets );
     void setAllCacheTableReferencedStati( bool bReferenced );
+
+    /**
+     * Set a table as permanently referenced, to be called if not in
+     * mark-during-store-to-file cycle.
+     */
+    void setCacheTableReferencedPermanently( sal_uInt16 nFileId, const String& rTabName, size_t nSheets );
 
     /**
      * @returns <TRUE/> if setAllCacheTableReferencedStati(false) was called,

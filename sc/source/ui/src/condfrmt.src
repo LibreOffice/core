@@ -128,6 +128,13 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         DropDown = TRUE ;
         Sort = TRUE ;
     };
+    PushButton BTN_COND1_NEW
+    {
+        Pos = MAP_APPFONT ( 124 , 34 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~New Style..." ;
+    };
     FixedLine FL_SEP1
     {
         Pos = MAP_APPFONT ( 6 , 51 ) ;
@@ -223,6 +230,13 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         DropDown = TRUE ;
         Sort = TRUE ;
     };
+    PushButton BTN_COND2_NEW
+    {
+        Pos = MAP_APPFONT ( 124 , 88 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Ne~w Style..." ;
+    };
     FixedLine FL_SEP2
     {
         Pos = MAP_APPFONT ( 6 , 105 ) ;
@@ -317,6 +331,13 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         TabStop = TRUE ;
         DropDown = TRUE ;
         Sort = TRUE ;
+    };
+    PushButton BTN_COND3_NEW
+    {
+        Pos = MAP_APPFONT ( 124 , 142 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "New ~Style..." ;
     };
     OKButton BTN_OK
     {

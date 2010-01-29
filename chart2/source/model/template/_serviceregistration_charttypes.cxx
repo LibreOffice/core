@@ -41,6 +41,7 @@
 #include "NetChartType.hxx"
 #include "PieChartType.hxx"
 #include "ScatterChartType.hxx"
+#include "BubbleChartType.hxx"
 
 namespace
 {
@@ -106,6 +107,14 @@ static struct ::cppu::ImplementationEntry g_entries_chart2_charttypes[] =
           ::chart::ScatterChartType::create
         , ::chart::ScatterChartType::getImplementationName_Static
         , ::chart::ScatterChartType::getSupportedServiceNames_Static
+        , ::cppu::createSingleComponentFactory
+        , 0
+        , 0
+    }
+        ,{
+          ::chart::BubbleChartType::create
+        , ::chart::BubbleChartType::getImplementationName_Static
+        , ::chart::BubbleChartType::getSupportedServiceNames_Static
         , ::cppu::createSingleComponentFactory
         , 0
         , 0

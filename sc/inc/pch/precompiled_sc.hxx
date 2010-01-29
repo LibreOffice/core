@@ -36,6 +36,7 @@
 
 #include <algorithm>
 #include <assert.h>
+#include <deque>
 #include <stdarg.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -48,6 +49,8 @@
 #include <memory>
 #include <new>
 #include <cfloat>
+
+#include <boost/bind.hpp>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>

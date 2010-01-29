@@ -38,6 +38,9 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
 
+#include <layout/layout.hxx>
+#include <layout/layout-pre.hxx>
+
 //------------------------------------------------------------------------
 
 class ScMoveTableDlg : public ModalDialog
@@ -72,6 +75,7 @@ private:
     DECL_LINK( SelHdl, ListBox * );
 };
 
+#include <layout/layout-post.hxx>
 
 #endif // SC_MVTABDLG_HXX
 

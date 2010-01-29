@@ -230,6 +230,19 @@ const sal_uInt16 EXC_ID_USESELFS            = 0x0160;
 const sal_uInt16 EXC_ID_USERSVIEWBEGIN      = 0x01AA;
 const sal_uInt16 EXC_ID_USERSVIEWEND        = 0x01AB;
 
+// (0x8xx) Future records -----------------------------------------------------
+
+/** Enumerates different header types of future records. */
+enum XclFutureRecType
+{
+    EXC_FUTUREREC_SIMPLE,           /// Record identifier and empty flags field.
+    EXC_FUTUREREC_UNUSEDREF         /// Record identifier, empty flags field, unused range address.
+};
+
+const sal_uInt16 EXC_FUTUREREC_EMPTYFLAGS   = 0x0000;
+const sal_uInt16 EXC_FUTUREREC_HASREF       = 0x0001;
+const sal_uInt16 EXC_FUTUREREC_ALERT        = 0x0002;
+
 // ============================================================================
 
 #endif

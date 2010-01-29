@@ -34,17 +34,32 @@
 #include "docuno.hxx"
 #include "docoptio.hxx"
 
+#define PROP_UNO_CALCASSHOWN    1
+#define PROP_UNO_DEFTABSTOP     2
+#define PROP_UNO_IGNORECASE     3
+#define PROP_UNO_ITERENABLED    4
+#define PROP_UNO_ITERCOUNT      5
+#define PROP_UNO_ITEREPSILON    6
+#define PROP_UNO_LOOKUPLABELS   7
+#define PROP_UNO_MATCHWHOLE     8
+#define PROP_UNO_NULLDATE       9
+#define PROP_UNO_SPELLONLINE    10
+#define PROP_UNO_STANDARDDEC    11
+#define PROP_UNO_REGEXENABLED   12
+
 
 class ScDocOptionsHelper
 {
 public:
-    static const SfxItemPropertyMap* GetPropertyMap();
+    static const SfxItemPropertyMapEntry* GetPropertyMap();
 
     static sal_Bool setPropertyValue( ScDocOptions& rOptions,
+                                    const SfxItemPropertyMap& rPropMap,
                                     const ::rtl::OUString& aPropertyName,
                                     const ::com::sun::star::uno::Any& aValue );
     static ::com::sun::star::uno::Any getPropertyValue(
                                     const ScDocOptions& rOptions,
+                                    const SfxItemPropertyMap& rPropMap,
                                     const ::rtl::OUString& PropertyName );
 };
 

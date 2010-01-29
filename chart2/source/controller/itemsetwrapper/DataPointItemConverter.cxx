@@ -239,7 +239,8 @@ DataPointItemConverter::DataPointItemConverter(
         m_nSpecialFillColor(nSpecialFillColor),
         m_nNumberFormat(nNumberFormat),
         m_nPercentNumberFormat(nPercentNumberFormat),
-        m_aAvailableLabelPlacements()
+        m_aAvailableLabelPlacements(),
+        m_bForbidPercentValue(true)
 {
     m_aConverters.push_back( new GraphicPropertyItemConverter(
                                  rPropertySet, rItemPool, rDrawModel, xNamedPropertyContainerFactory, eMapTo ));
@@ -257,6 +258,8 @@ DataPointItemConverter::DataPointItemConverter(
     bool bAmbiguous = false;
     sal_Bool bSwapXAndY = DiagramHelper::getVertical( xDiagram, bFound, bAmbiguous );
     m_aAvailableLabelPlacements = ChartTypeHelper::getSupportedLabelPlacements( xChartType, DiagramHelper::getDimension( xDiagram ), bSwapXAndY, xSeries );
+
+    m_bForbidPercentValue = AxisType::CATEGORY != ChartTypeHelper::getAxisType( xChartType, 0 );
 }
 
 DataPointItemConverter::~DataPointItemConverter()
@@ -521,6 +524,24 @@ bool DataPointItemConverter::ApplySpecialItem(
             }
         }
         break;
+
+        case SCHATTR_TEXT_DEGREES:
+        {
+            double fValue = static_cast< double >(
+                static_cast< const SfxInt32Item & >(
+                    rItemSet.Get( nWhichId )).GetValue()) / 100.0;
+            double fOldValue = 0.0;
+            bool bPropExisted =
+                ( GetPropertySet()->getPropertyValue( C2U( "TextRotation" )) >>= fOldValue );
+
+            if( ! bPropExisted ||
+                ( bPropExisted && fOldValue != fValue ))
+            {
+                GetPropertySet()->setPropertyValue( C2U( "TextRotation" ), uno::makeAny( fValue ));
+                bChanged = true;
+            }
+        }
+        break;
     }
 
     return bChanged;
@@ -630,6 +651,12 @@ void DataPointItemConverter::FillSpecialItem(
         }
         break;
 
+        case SCHATTR_DATADESCR_NO_PERCENTVALUE:
+        {
+            rOutItemSet.Put( SfxBoolItem( nWhichId, m_bForbidPercentValue ));
+        }
+        break;
+
         case SCHATTR_STYLE_SYMBOL:
         {
             chart2::Symbol aSymbol;
@@ -654,6 +681,18 @@ void DataPointItemConverter::FillSpecialItem(
                && aSymbol.Graphic.is() )
             {
                 rOutItemSet.Put( SvxBrushItem( Graphic( aSymbol.Graphic ), GPOS_MM, SCHATTR_SYMBOL_BRUSH ));
+            }
+        }
+        break;
+
+        case SCHATTR_TEXT_DEGREES:
+        {
+            double fValue = 0;
+
+            if( GetPropertySet()->getPropertyValue( C2U( "TextRotation" )) >>= fValue )
+            {
+                rOutItemSet.Put( SfxInt32Item( nWhichId, static_cast< sal_Int32 >(
+                                                   ::rtl::math::round( fValue * 100.0 ) ) ));
             }
         }
         break;

@@ -64,7 +64,6 @@ public:
             ::com::sun::star::chart2::XChartDocument > & xChartDoc );
 
     ::com::sun::star::awt::Size getPageSize() const;
-    bool useAutoScale() const;
 
     /** Retrieves the state auto-resize from all objects that support this
         feature.  If all objects return the same state, AUTO_RESIZE_YES or
@@ -78,11 +77,6 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartDocument > & xChartDoc );
 
-    /** Retrieves the current auto-resize state from the internally set chart
-        document
-     */
-    AutoResizeState getAutoResizeState() const;
-
     /** sets or resets the auto-resize at all objects that support this feature
         for text to the opposite of the current setting.  If the current state
         is ambiguous, it is turned on.  If the current state is unknown it stays
@@ -90,16 +84,12 @@ public:
     */
     void toggleAutoResizeState();
 
-    /** sets the auto-resize at all objects that support this feature for text.
-        eNewState must be either AUTO_RESIZE_YES or AUTO_RESIZE_NO
-    */
-    void setAutoResizeState( AutoResizeState eNewState );
 
     /** Sets the ReferencePageSize according to the internal settings of this
         class at the XPropertySet, and the adapted font sizes if bAdaptFontSizes
         is </TRUE>.
      */
-    void setValuesAtPropertySet(
+    SAL_DLLPRIVATE void setValuesAtPropertySet(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > & xProp,
         bool bAdaptFontSizes = true );
@@ -108,7 +98,7 @@ public:
         class at the XTitle, and the adapted font sizes at the contained
         XFormattedStrings
      */
-    void setValuesAtTitle(
+    SAL_DLLPRIVATE void setValuesAtTitle(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XTitle > & xTitle );
 
@@ -118,6 +108,14 @@ public:
      */
     void setValuesAtAllDataSeries();
 
+private:
+    SAL_DLLPRIVATE bool useAutoScale() const;
+
+    /** sets the auto-resize at all objects that support this feature for text.
+        eNewState must be either AUTO_RESIZE_YES or AUTO_RESIZE_NO
+    */
+    SAL_DLLPRIVATE void setAutoResizeState( AutoResizeState eNewState );
+
     /** Retrieves the auto-resize state from the given propertyset.  The result
         will be put into eInOutState.  If you initialize eInOutState with
         AUTO_RESIZE_UNKNOWN, you will get the actual state.  If you pass any
@@ -125,23 +123,15 @@ public:
         esp. AUTO_RESIZE_AMBIGUOUS, if the value was NO before, and is YES for
         the current property set, or the other way round.
      */
-    static void getAutoResizeFromPropSet(
+    SAL_DLLPRIVATE static void getAutoResizeFromPropSet(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > & xProp,
         AutoResizeState & rInOutState );
 
-    /** calls getAutoResizeFromPropSet with the title's property set
-     */
-    static void getAutoResizeFromTitle(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::XTitle > & xTitle,
-        AutoResizeState & rInOutState );
-
-private:
-    void impl_setValuesAtTitled(
+    SAL_DLLPRIVATE void impl_setValuesAtTitled(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XTitled > & xTitled );
-    static void impl_getAutoResizeFromTitled(
+    SAL_DLLPRIVATE static void impl_getAutoResizeFromTitled(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XTitled > & xTitled,
         AutoResizeState & rInOutState );

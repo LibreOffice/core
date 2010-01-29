@@ -68,9 +68,9 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------------
 
-const SfxItemPropertyMap* lcl_GetHdFtPropertyMap()
+const SvxItemPropertySet * lcl_GetHdFtPropertySet()
 {
-    static SfxItemPropertyMap aHdFtPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aHdFtPropertyMap_Impl[] =
     {
         SVX_UNOEDIT_CHAR_PROPERTIES,
         SVX_UNOEDIT_FONT_PROPERTIES,
@@ -85,7 +85,7 @@ const SfxItemPropertyMap* lcl_GetHdFtPropertyMap()
         //  modify PropertyMap to include CONVERT_TWIPS flag for font height
         //  (headers/footers are in twips)
 
-        SfxItemPropertyMap* pEntry = aHdFtPropertyMap_Impl;
+        SfxItemPropertyMapEntry* pEntry = aHdFtPropertyMap_Impl;
         while (pEntry->pName)
         {
             if ( ( pEntry->nWID == EE_CHAR_FONTHEIGHT ||
@@ -100,8 +100,8 @@ const SfxItemPropertyMap* lcl_GetHdFtPropertyMap()
         }
         bTwipsSet = TRUE;
     }
-
-    return aHdFtPropertyMap_Impl;
+    static SvxItemPropertySet aHdFtPropertySet_Impl( aHdFtPropertyMap_Impl );
+    return &aHdFtPropertySet_Impl;
 }
 
 //------------------------------------------------------------------------
@@ -349,7 +349,7 @@ void ScHeaderFooterTextObj::CreateUnoText_Impl()
     {
         //  can't be aggregated because getString/setString is handled here
         ScSharedHeaderFooterEditSource aEditSource( &aTextData );
-        pUnoText = new SvxUnoText( &aEditSource, lcl_GetHdFtPropertyMap(), uno::Reference<text::XText>() );
+        pUnoText = new SvxUnoText( &aEditSource, lcl_GetHdFtPropertySet(), uno::Reference<text::XText>() );
         pUnoText->acquire();
     }
 }
@@ -920,7 +920,7 @@ ScSimpleEditSourceHelper::~ScSimpleEditSourceHelper()
 }
 
 ScEditEngineTextObj::ScEditEngineTextObj() :
-    SvxUnoText( GetOriginalSource(), ScCellObj::GetEditPropertyMap(), uno::Reference<text::XText>() )
+    SvxUnoText( GetOriginalSource(), ScCellObj::GetEditPropertySet(), uno::Reference<text::XText>() )
 {
 }
 
@@ -1104,7 +1104,7 @@ void ScCellTextData::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 ScCellTextObj::ScCellTextObj(ScDocShell* pDocSh, const ScAddress& rP) :
     ScCellTextData( pDocSh, rP ),
-    SvxUnoText( GetOriginalSource(), ScCellObj::GetEditPropertyMap(), uno::Reference<text::XText>() )
+    SvxUnoText( GetOriginalSource(), ScCellObj::GetEditPropertySet(), uno::Reference<text::XText>() )
 {
 }
 

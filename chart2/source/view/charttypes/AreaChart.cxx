@@ -89,7 +89,6 @@ AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel
         , m_bExpandIfValuesCloseToBorder( bExpandIfValuesCloseToBorder )
         , m_nKeepAspectRatio(nKeepAspectRatio)
         , m_aGivenAspectRatio(rAspectRatio)
-        , m_eNanHandling( bCategoryXAxis ? NAN_AS_GAP : NAN_AS_INTERPOLATED )
         , m_eCurveStyle(CurveStyle_LINES)
         , m_nCurveResolution(20)
         , m_nSplineOrder(3)
@@ -102,9 +101,6 @@ AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel
         m_pMainPosHelper = new PlottingPositionHelper();
     PlotterBase::m_pPosHelper = m_pMainPosHelper;
     VSeriesPlotter::m_pMainPosHelper = m_pMainPosHelper;
-
-    if( m_bArea )
-        m_eNanHandling = NAN_AS_ZERO;
 
     try
     {
@@ -234,6 +230,12 @@ bool AreaChart::keepAspectRatio() const
 
 void AreaChart::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32 xSlot, sal_Int32 ySlot )
 {
+    if( m_bArea && pSeries )
+    {
+        sal_Int32 nMissingValueTreatment = pSeries->getMissingValueTreatment();
+        if( nMissingValueTreatment == ::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP  )
+            pSeries->setMissingValueTreatment( ::com::sun::star::chart::MissingValueTreatment::USE_ZERO );
+    }
     if( m_nDimension == 3 && !m_bCategoryXAxis )
     {
         //3D xy always deep
@@ -351,9 +353,10 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
         if( m_bConnectLastToFirstPoint && !ShapeFactory::isPolygonEmptyOrSinglePoint(*pSeriesPoly) )
         {
             // do NOT connect last and first point, if one is NAN, and NAN handling is NAN_AS_GAP
-            double fFirstY = pSeries->getY( 0 );
-            double fLastY = pSeries->getY( VSeriesPlotter::getPointCount() - 1 );
-            if( (m_eNanHandling != NAN_AS_GAP) || (::rtl::math::isFinite( fFirstY ) && ::rtl::math::isFinite( fLastY )) )
+            double fFirstY = pSeries->getYValue( 0 );
+            double fLastY = pSeries->getYValue( VSeriesPlotter::getPointCount() - 1 );
+            if( (pSeries->getMissingValueTreatment() != ::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP)
+                || (::rtl::math::isFinite( fFirstY ) && ::rtl::math::isFinite( fLastY )) )
             {
                 // connect last point in last polygon with first point in first polygon
                 ::basegfx::B2DRectangle aScaledLogicClipDoubleRect( pPosHelper->getScaledLogicClipDoubleRect() );
@@ -573,13 +576,6 @@ void lcl_reorderSeries( ::std::vector< ::std::vector< VDataSeriesGroup > >&  rZS
 
 }//anonymous namespace
 
-void AreaChart::impl_maybeReplaceNanWithZero( double& rfValue )
-{
-    if( m_eNanHandling == NAN_AS_ZERO &&
-        ( ::rtl::math::isNan(rfValue) || ::rtl::math::isInf(rfValue) )  )
-        rfValue = 0.0;
-}
-
 //better performance for big data
 struct FormerPoint
 {
@@ -676,8 +672,7 @@ void AreaChart::createShapes()
                         pPosHelper = m_pMainPosHelper;
                     PlotterBase::m_pPosHelper = pPosHelper;
 
-                    double fAdd = pSeries->getY( nIndex );
-                    impl_maybeReplaceNanWithZero( fAdd );
+                    double fAdd = pSeries->getYValue( nIndex );
                     if( !::rtl::math::isNan(fAdd) && !::rtl::math::isInf(fAdd) )
                         aLogicYSumMap[nAttachedAxisIndex] += fabs( fAdd );
                 }
@@ -709,23 +704,6 @@ void AreaChart::createShapes()
                     if(!pSeries)
                         continue;
 
-                    sal_Int32 nMissingValueTreatment = pSeries->getMissingValueTreatment();
-                    switch( nMissingValueTreatment )
-                    {
-                       case ::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP:
-                           if( !m_bArea )
-                               m_eNanHandling = NAN_AS_GAP;
-                           break;
-                       case ::com::sun::star::chart::MissingValueTreatment::USE_ZERO:
-                           m_eNanHandling = NAN_AS_ZERO;
-                           break;
-                       case ::com::sun::star::chart::MissingValueTreatment::CONTINUE:
-                           m_eNanHandling = NAN_AS_INTERPOLATED;
-                           break;
-                       default:
-                           break;
-                    }
-
                     /*  #i70133# ignore points outside of series length in standard area
                         charts. Stacked area charts will use missing points as zeros. In
                         standard charts, pSeriesList contains only one series. */
@@ -745,10 +723,8 @@ void AreaChart::createShapes()
                     (*aSeriesIter)->m_fLogicZPos = fLogicZ;
 
                     //collect data point information (logic coordinates, style ):
-                    double fLogicX = (*aSeriesIter)->getX(nIndex);
-                    double fLogicY = (*aSeriesIter)->getY(nIndex);
-                    impl_maybeReplaceNanWithZero( fLogicX );
-                    impl_maybeReplaceNanWithZero( fLogicY );
+                    double fLogicX = (*aSeriesIter)->getXValue(nIndex);
+                    double fLogicY = (*aSeriesIter)->getYValue(nIndex);
 
                     if( m_nDimension==3 && m_bArea && pSeriesList->size()!=1 )
                         fLogicY = fabs( fLogicY );
@@ -762,7 +738,7 @@ void AreaChart::createShapes()
                         || ::rtl::math::isNan(fLogicY) || ::rtl::math::isInf(fLogicY)
                         || ::rtl::math::isNan(fLogicZ) || ::rtl::math::isInf(fLogicZ) )
                     {
-                        if( m_eNanHandling == NAN_AS_GAP )
+                        if( (*aSeriesIter)->getMissingValueTreatment() == ::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP )
                         {
                             drawing::PolyPolygonShape3D& rPolygon = (*aSeriesIter)->m_aPolyPolygonShape3D;
                             sal_Int32& rIndex = (*aSeriesIter)->m_nPolygonIndex;

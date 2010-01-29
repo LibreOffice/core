@@ -202,7 +202,7 @@ public:
     sal_Bool            ISSET_SetEmbedded;
 
 protected:
-    void impl_init();
+SAL_DLLPRIVATE void impl_init();
 };
 
 }

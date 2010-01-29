@@ -41,15 +41,22 @@
 
 //-----------------------------------------------------------------------------
 // chart types
+// Images:
 
 #define IMG_TYPE_COLUMN_HC (RID_SCH_START + 1)
 #define IMG_TYPE_BAR_HC    (RID_SCH_START + 2)
 #define IMG_TYPE_PIE_HC    (RID_SCH_START + 3)
-#define IMG_TYPE_LINE_HC   (RID_SCH_START + 4)
-#define IMG_TYPE_AREA_HC   (RID_SCH_START + 5)
-#define IMG_TYPE_NET_HC    (RID_SCH_START + 6)
-#define IMG_TYPE_STOCK_HC  (RID_SCH_START + 7)
-#define IMG_TYPE_COLUMN_LINE_HC  (RID_SCH_START + 8)
+#define IMG_TYPE_AREA_HC   (RID_SCH_START + 4)
+#define IMG_TYPE_LINE_HC   (RID_SCH_START + 5)
+#define IMG_TYPE_XY_HC     (RID_SCH_START + 6)
+#define IMG_TYPE_BUBBLE_HC (RID_SCH_START + 7)
+#define IMG_TYPE_NET_HC    (RID_SCH_START + 8)
+#define IMG_TYPE_STOCK_HC  (RID_SCH_START + 9)
+#define IMG_TYPE_COLUMN_LINE_HC  (RID_SCH_START + 10)
+
+//-----------------------------------------------------------------------------
+//Chart Subtypes
+// Bitmaps:
 
 //----------------------
 // Column Chart Subtypes
@@ -183,7 +190,13 @@
 #define BMP_COLUMN_LINE_HC (RID_SCH_START + 86)
 #define BMP_COLUMN_LINE_STACKED_HC (RID_SCH_START + 87)
 
+//----------------------
+// Bubble Chart Subtypes
+#define BMP_BUBBLE_1_HC (RID_SCH_START + 88)
+
 //-----------------------------------------------------------------------------
+//further Images:
+
 //SchStatisticTabPage and SchDataStatisticsDlg part 1
 #define BMP_INDICATE_BOTH_VERTI_HC (RID_SCH_START + 89)
 #define BMP_INDICATE_UP_HC (RID_SCH_START + 90)
@@ -199,6 +212,5 @@
 #define BMP_REGRESSION_EXP_HC (RID_SCH_START + 95)
 #define BMP_REGRESSION_POWER_HC (RID_SCH_START + 96)
 
-//-----------------------------------------------------------------------------
 // hide-button for range-choosing
-#define IMG_SELECTRANGE_HC (RID_SCH_START + 9)
+#define IMG_SELECTRANGE_HC (RID_SCH_START + 100)

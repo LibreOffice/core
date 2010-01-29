@@ -38,6 +38,8 @@
 #include <svtools/syslocale.hxx>
 // header for class ConfigItem
 #include <unotools/configitem.hxx>
+// header for rtl::Static
+#include <rtl/instance.hxx>
 
 
 //.............................................................................
@@ -96,37 +98,20 @@ FieldUnit CalcConfigItem::getFieldUnit()
     return eResult;
 }
 
-// ----------------------------------------
-
-ConfigurationAccess * ConfigurationAccess::m_pThis = 0;
-
-// private, use static getConfigurationAccess method
-ConfigurationAccess::ConfigurationAccess()
-    : m_pCalcConfigItem(0)
+namespace
 {
-    m_pCalcConfigItem = new CalcConfigItem();
+    //a CalcConfigItem Singleton
+    struct theCalcConfigItem : public rtl::Static< CalcConfigItem, theCalcConfigItem > {};
 }
 
-// static
-ConfigurationAccess * ConfigurationAccess::getConfigurationAccess()
+namespace ConfigurationAccess
 {
-    // note: not threadsafe
-    if( !m_pThis )
-        m_pThis = new ConfigurationAccess();
-    return m_pThis;
-}
-
-ConfigurationAccess::~ConfigurationAccess()
-{
-    delete m_pCalcConfigItem;
-}
-
-FieldUnit ConfigurationAccess::getFieldUnit()
-{
-    OSL_ASSERT( m_pCalcConfigItem );
-    FieldUnit aUnit( m_pCalcConfigItem->getFieldUnit() );
-    return aUnit;
-}
+    FieldUnit getFieldUnit()
+    {
+        FieldUnit aUnit( theCalcConfigItem::get().getFieldUnit() );
+        return aUnit;
+    }
+} //namespace ConfigurationAccess
 
 //.............................................................................
 } //namespace chart

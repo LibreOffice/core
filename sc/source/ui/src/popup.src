@@ -183,6 +183,12 @@ Menu RID_POPUP_TAB
         };
         MenuItem
         {
+            Identifier = FID_TAB_DESELECTALL ;
+            HelpId = FID_TAB_DESELECTALL ;
+            Text [ en-US ] = "D~eselect All Sheets" ;
+        };
+        MenuItem
+        {
             Identifier = FID_TAB_RTL ;
             HelpId = FID_TAB_RTL ;
             Text [ en-US ] = "S~heet Right-To-Left" ;

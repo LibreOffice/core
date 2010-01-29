@@ -629,7 +629,7 @@ void ScDPFieldWindow::DelField( size_t nDelIndex )
 
 void ScDPFieldWindow::ClearFields()
 {
-    if( eType == TYPE_SELECT )
+    if( eType == TYPE_SELECT || eType == TYPE_PAGE || eType == TYPE_COL || eType == TYPE_ROW || eType == TYPE_DATA)
     {
         com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
         if (!xTempAcc.is() && pAccessible)

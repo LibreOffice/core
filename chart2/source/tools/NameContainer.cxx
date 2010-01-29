@@ -50,6 +50,12 @@ namespace chart
 {
 //.............................................................................
 
+uno::Reference< container::XNameContainer > createNameContainer(
+        const ::com::sun::star::uno::Type& rType, const rtl::OUString& rServicename, const rtl::OUString& rImplementationName )
+{
+    return new NameContainer( rType, rServicename, rImplementationName );
+}
+
 NameContainer::NameContainer( const ::com::sun::star::uno::Type& rType, const OUString& rServicename, const OUString& rImplementationName )
     : m_aType( rType )
     , m_aServicename( rServicename )

@@ -38,6 +38,7 @@
 #include "scitems.hxx"
 #include <sfx2/request.hxx>
 #include <basic/sbstar.hxx>
+#include <layout/layout.hxx>
 #include <svtools/languageoptions.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/whiter.hxx>
@@ -54,7 +55,6 @@
 //CHINA001 #include "strindlg.hxx"
 //CHINA001 #include "mvtabdlg.hxx"
 #include "docfunc.hxx"
-
 
 #include "scabstdlg.hxx" //CHINA001
 
@@ -621,11 +621,17 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 {
                     //  wenn's nicht von Basic kommt, nochmal nachfragen:
 
-                    bDoIt = ( RET_YES ==
-                              QueryBox( GetDialogParent(),
-                                        WinBits( WB_YES_NO | WB_DEF_YES ),
-                                        ScGlobal::GetRscString(STR_QUERY_DELTAB)
-                                       ).Execute() );
+#if ENABLE_LAYOUT
+// Using layout::QueryBox without client code modification is
+// deprecated, rather add HIG-complient buttons with verbs.
+#define QueryBox( parent, winbits, question ) layout::QueryBox (parent, question, ScGlobal::GetRscString (STR_UNDO_DELETE_TAB))
+#endif /* ENABLE_LAYOUT */
+
+                        bDoIt = ( RET_YES ==
+                                  QueryBox( GetDialogParent(),
+                                            WinBits( WB_YES_NO | WB_DEF_YES ),
+                                            ScGlobal::GetRscString(STR_QUERY_DELTAB)
+                                      ).Execute() );
                 }
                 if( bDoIt )
                 {

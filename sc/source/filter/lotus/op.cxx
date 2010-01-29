@@ -466,7 +466,7 @@ void OP_Note123( SvStream& r, UINT16 n)
     delete [] pText;
 
     ScAddress aPos( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab) );
-    ScNoteUtil::CreateNoteFromString( *pDoc, aPos, aNoteText, false );
+    ScNoteUtil::CreateNoteFromString( *pDoc, aPos, aNoteText, false, false );
 }
 
 void OP_HorAlign123( BYTE nAlignPattern, SfxItemSet& rPatternItemSet )

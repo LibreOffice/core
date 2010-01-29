@@ -38,6 +38,7 @@
 #include "PropertyHelper.hxx"
 #include "macros.hxx"
 #include "ContainerHelper.hxx"
+#include "ModifyListenerHelper.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -110,7 +111,7 @@ namespace chart
 StockBar::StockBar( bool bRisingCourse ) :
         ::property::OPropertySet( m_aMutex ),
     m_bRisingCourse( bRisingCourse ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
     if( ! m_bRisingCourse )
     {
@@ -128,7 +129,7 @@ StockBar::StockBar( const StockBar & rOther ) :
         impl::StockBar_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
     m_bRisingCourse( rOther.m_bRisingCourse ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {}
 
 StockBar::~StockBar()

@@ -47,6 +47,7 @@
 #include "tabvwsh.hxx"
 #include "sc.hrc"
 #include "global.hxx"
+#include "docsh.hxx"
 #include "document.hxx"
 #include "cell.hxx"
 #include "globstr.hrc"
@@ -159,6 +160,10 @@ void __EXPORT ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
             if (nParts & PAINT_EXTRAS)          // zuerst, falls Tabelle weg ist !!!
                 if (PaintExtras())
                     nParts = PAINT_ALL;
+
+            // if the current sheet has pending row height updates (sheet links refreshed),
+            // execute them before invalidating the window
+            GetViewData()->GetDocShell()->UpdatePendingRowHeights( GetViewData()->GetTabNo() );
 
             if (nParts & PAINT_SIZE)
                 RepeatResize();                     //! InvalidateBorder ???

@@ -434,6 +434,22 @@ inline size_t ScAddress::hash() const
             (static_cast<size_t>(nCol) << 24) ^ static_cast<size_t>(nRow);
 }
 
+struct ScAddressHashFunctor
+{
+    size_t operator()( const ScAddress & rAdr ) const
+    {
+        return rAdr.hash();
+    }
+};
+
+struct ScAddressEqualFunctor
+{
+    bool operator()( const ScAddress & rAdr1, const ScAddress & rAdr2 ) const
+    {
+        return rAdr1 == rAdr2;
+    }
+};
+
 
 // === ScRange ===============================================================
 
@@ -521,7 +537,9 @@ public:
     inline bool operator>( const ScRange& r ) const;
     inline bool operator>=( const ScRange& r ) const;
 
-    inline size_t hash() const;
+    /// Hash 2D area ignoring table number.
+    inline size_t hashArea() const;
+    /// Hash start column and start and end rows.
     inline size_t hashStartColumn() const;
 };
 
@@ -580,7 +598,7 @@ inline bool ScRange::In( const ScRange& r ) const
 }
 
 
-inline size_t ScRange::hash() const
+inline size_t ScRange::hashArea() const
 {
     // Assume that there are not that many ranges with identical corners so we
     // won't have too many collisions. Also assume that more lower row and
@@ -607,6 +625,23 @@ inline size_t ScRange::hashStartColumn() const
         (static_cast<size_t>(aStart.Row()) << 16) ^ // start row <= 2^8
         static_cast<size_t>(aEnd.Row());
 }
+
+
+struct ScRangeHashAreaFunctor
+{
+    size_t operator()( const ScRange & rRange ) const
+    {
+        return rRange.hashArea();
+    }
+};
+
+struct ScRangeEqualFunctor
+{
+    bool operator()( const ScRange & rRange1, const ScRange & rRange2 ) const
+    {
+        return rRange1 == rRange2;
+    }
+};
 
 
 // === ScRangePair ===========================================================
@@ -756,12 +791,14 @@ template< typename T > void PutInOrder( T& nStart, T& nEnd )
 
 bool ConvertSingleRef( ScDocument* pDoc, const String& rRefString,
         SCTAB nDefTab, ScRefAddress& rRefAddress,
-        const ScAddress::Details& rDetails = ScAddress::detailsOOOa1);
+        const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
+        ScAddress::ExternalInfo* pExtInfo = NULL );
 
 bool ConvertDoubleRef(ScDocument* pDoc, const String& rRefString,
         SCTAB nDefTab, ScRefAddress& rStartRefAddress,
         ScRefAddress& rEndRefAddress,
-        const ScAddress::Details& rDetails = ScAddress::detailsOOOa1);
+        const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
+        ScAddress::ExternalInfo* pExtInfo = NULL );
 
 /// append alpha representation of column to buffer
 SC_DLLPUBLIC void ScColToAlpha( rtl::OUStringBuffer& rBuffer, SCCOL nCol);

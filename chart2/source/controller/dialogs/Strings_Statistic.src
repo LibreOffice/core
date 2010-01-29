@@ -52,10 +52,6 @@ String STR_CONTROLTEXT_ERROR_BARS_FROM_DATA
 //------------------------------------------------------------------------
 //------------------------------------------------------------------------
 
-String STR_REGRESSION_NONE
-{
-    Text [ en-US ] = "No Regression" ;
-};
 String STR_REGRESSION_LINEAR
 {
     Text [ en-US ] = "Linear Regression" ;

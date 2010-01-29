@@ -167,8 +167,10 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
             if ( aRangeListRef->Count() )
             {
                 pScDoc->LimitChartIfAll( aRangeListRef );               // limit whole columns/rows to used area
+
+                // update string from modified ranges.  The ranges must be in the current formula syntax.
                 String aTmpStr;
-                aRangeListRef->Format( aTmpStr, SCR_ABS_3D, pScDoc, pScDoc->GetAddressConvention() );   // update string from changed ranges
+                aRangeListRef->Format( aTmpStr, SCR_ABS_3D, pScDoc, pScDoc->GetAddressConvention() );
                 aRangeString = aTmpStr;
 
                 ScChartPositioner aChartPositioner( pScDoc, aRangeListRef );

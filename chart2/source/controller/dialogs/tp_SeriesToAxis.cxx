@@ -31,9 +31,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_chart2.hxx"
 #include "tp_SeriesToAxis.hxx"
+#include "tp_SeriesToAxis.hrc"
 
 #include "ResId.hxx"
-#include "TabPages.hrc"
 #include "chartview/ChartSfxItemIds.hxx"
 #include "NoWarningThisInCTOR.hxx"
 
@@ -43,6 +43,8 @@
 #include <svtools/intitem.hxx>
 //SfxIntegerListItem
 #include <svtools/ilstitem.hxx>
+#include <svtools/controldims.hrc>
+
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 
 //.............................................................................
@@ -63,10 +65,12 @@ SchOptionTabPage::SchOptionTabPage(Window* pWindow,const SfxItemSet& rInAttrs) :
     aMTOverlap(this,SchResId(MT_OVERLAP)),
     aCBConnect(this,SchResId(CB_CONNECTOR)),
     aCBAxisSideBySide(this,SchResId(CB_BARS_SIDE_BY_SIDE)),
-    m_aFL_EmptyCells(this,SchResId(FL_PLOT_MISSING_VALUES)),
+    m_aFL_PlotOptions(this,SchResId(FL_PLOT_OPTIONS)),
+    m_aFT_MissingValues(this,SchResId(FT_MISSING_VALUES)),
     m_aRB_DontPaint(this,SchResId(RB_DONT_PAINT)),
     m_aRB_AssumeZero(this,SchResId(RB_ASSUME_ZERO)),
     m_aRB_ContinueLine(this,SchResId(RB_CONTINUE_LINE)),
+    m_aCBIncludeHiddenCells(this,SchResId(CB_INCLUDE_HIDDEN_CELLS)),
     m_bProvidesSecondaryYAxis(true),
     m_bProvidesOverlapAndGapWidth(false)
 {
@@ -122,6 +126,9 @@ BOOL SchOptionTabPage::FillItemSet(SfxItemSet& rOutAttrs)
         rOutAttrs.Put(SfxInt32Item(SCHATTR_MISSING_VALUE_TREATMENT,::com::sun::star::chart::MissingValueTreatment::USE_ZERO));
     else if(m_aRB_ContinueLine.IsChecked())
         rOutAttrs.Put(SfxInt32Item(SCHATTR_MISSING_VALUE_TREATMENT,::com::sun::star::chart::MissingValueTreatment::CONTINUE));
+
+    if (m_aCBIncludeHiddenCells.IsVisible())
+        rOutAttrs.Put(SfxBoolItem(SCHATTR_INCLUDE_HIDDEN_CELLS, m_aCBIncludeHiddenCells.IsChecked()));
 
     return TRUE;
 }
@@ -212,11 +219,24 @@ void SchOptionTabPage::Reset(const SfxItemSet& rInAttrs)
         }
         else
         {
+            m_aFT_MissingValues.Show(FALSE);
             m_aRB_DontPaint.Show(FALSE);
             m_aRB_AssumeZero.Show(FALSE);
             m_aRB_ContinueLine.Show(FALSE);
-            m_aFL_EmptyCells.Show(FALSE);
         }
+    }
+
+    // Include hidden cells
+    if (rInAttrs.GetItemState(SCHATTR_INCLUDE_HIDDEN_CELLS, TRUE, &pPoolItem) == SFX_ITEM_SET)
+    {
+        bool bVal = static_cast<const SfxBoolItem*>(pPoolItem)->GetValue();
+        m_aCBIncludeHiddenCells.Check(bVal);
+    }
+    else
+    {
+        m_aCBIncludeHiddenCells.Show(FALSE);
+        if(!m_aFT_MissingValues.IsVisible())
+            m_aFL_PlotOptions.Show(FALSE);
     }
 
     AdaptControlPositionsAndVisibility();
@@ -229,6 +249,17 @@ void SchOptionTabPage::Init( bool bProvidesSecondaryYAxis, bool bProvidesOverlap
     m_bProvidesBarConnectors = bProvidesBarConnectors;
 
     AdaptControlPositionsAndVisibility();
+}
+
+void lcl_offsetControl(Control& rCtrl, long nXOffset, long nYOffset )
+{
+    Point aPos = rCtrl.GetPosPixel();
+    rCtrl.SetPosPixel( Point(aPos.getX() + nXOffset, aPos.getY() + nYOffset) );
+}
+
+void lcl_optimzeRadioButtonSize( RadioButton& rCtrl )
+{
+    rCtrl.SetSizePixel( rCtrl.CalcMinimumSize() );
 }
 
 void SchOptionTabPage::AdaptControlPositionsAndVisibility()
@@ -254,20 +285,30 @@ void SchOptionTabPage::AdaptControlPositionsAndVisibility()
         else
             aPos = aGrpBar.GetPosPixel();
 
-        long nDiffX = aRbtAxis1.GetPosPixel().getX() - aGrpAxis.GetPosPixel().getX();
-        long nDiffY = aRbtAxis1.GetPosPixel().getY() - aGrpAxis.GetPosPixel().getY();
-        long nDiffY1 = aRbtAxis2.GetPosPixel().getY() - aRbtAxis1.GetPosPixel().getY();
-
-        m_aFL_EmptyCells.SetPosPixel( aPos );
-        m_aRB_DontPaint.SetPosPixel( Point( aPos.getX() + nDiffX, aPos.getY() + nDiffY ) );
-        m_aRB_AssumeZero.SetPosPixel( Point( aPos.getX() + nDiffX, aPos.getY() + nDiffY + nDiffY1  ) );
-        m_aRB_ContinueLine.SetPosPixel( Point( aPos.getX() + nDiffX, aPos.getY() + nDiffY + nDiffY1 * 2 ) );
+        long nYOffset = aPos.getY() - m_aFL_PlotOptions.GetPosPixel().getY();
+        lcl_offsetControl(m_aFL_PlotOptions,       0, nYOffset);
+        lcl_offsetControl(m_aFT_MissingValues,     0, nYOffset);
+        lcl_offsetControl(m_aRB_DontPaint,         0, nYOffset);
+        lcl_offsetControl(m_aRB_AssumeZero,        0, nYOffset);
+        lcl_offsetControl(m_aRB_ContinueLine,      0, nYOffset);
+        lcl_offsetControl(m_aCBIncludeHiddenCells, 0, nYOffset);
     }
 
-    if( !m_aRB_DontPaint.IsVisible() )
+    m_aFT_MissingValues.SetSizePixel( m_aFT_MissingValues.CalcMinimumSize() );
+    lcl_optimzeRadioButtonSize( m_aRB_DontPaint );
+    lcl_optimzeRadioButtonSize( m_aRB_AssumeZero );
+    lcl_optimzeRadioButtonSize( m_aRB_ContinueLine );
+
+    Size aControlDistance( m_aFT_MissingValues.LogicToPixel( Size(RSC_SP_CTRL_DESC_X,RSC_SP_CTRL_GROUP_Y), MapMode(MAP_APPFONT) ) );
+    long nXOffset = m_aFT_MissingValues.GetPosPixel().getX() + m_aFT_MissingValues.GetSizePixel().getWidth() + aControlDistance.getWidth() - m_aRB_DontPaint.GetPosPixel().getX();
+    lcl_offsetControl(m_aRB_DontPaint,         nXOffset, 0);
+    lcl_offsetControl(m_aRB_AssumeZero,        nXOffset, 0);
+    lcl_offsetControl(m_aRB_ContinueLine,      nXOffset, 0);
+
+    if( !m_aFT_MissingValues.IsVisible() )
     {
-        m_aRB_ContinueLine.SetPosPixel( m_aRB_AssumeZero.GetPosPixel() );
-        m_aRB_AssumeZero.SetPosPixel( m_aRB_DontPaint.GetPosPixel() );
+        //for example for stock charts
+        m_aCBIncludeHiddenCells.SetPosPixel( m_aFT_MissingValues.GetPosPixel() );
     }
 }
 //.............................................................................

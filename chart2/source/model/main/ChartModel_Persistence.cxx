@@ -37,6 +37,7 @@
 #include "ChartDebugTrace.hxx"
 #include "macros.hxx"
 #include "ChartViewHelper.hxx"
+#include "ChartModelHelper.hxx"
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
@@ -407,6 +408,7 @@ void SAL_CALL ChartModel::initNew()
     try
     {
         m_pImplChartModel->CreateDefaultChart();
+        ChartModelHelper::setIncludeHiddenCells( false, this );
     }
     catch( uno::Exception & ex )
     {

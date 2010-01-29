@@ -41,7 +41,7 @@ namespace chart
 {
 /** Base Class for UndoGuard and UndoLiveUpdateGuard
 */
-class OOO_DLLPUBLIC_CHARTTOOLS UndoGuard_Base
+class UndoGuard_Base
 {
 public:
     explicit UndoGuard_Base( const rtl::OUString & rUndoMessage
@@ -51,7 +51,7 @@ public:
             ::com::sun::star::frame::XModel > & xModel );
     virtual ~UndoGuard_Base();
 
-    void commitAction();
+OOO_DLLPUBLIC_CHARTTOOLS void commitAction();
 
 protected:
     ::com::sun::star::uno::Reference<

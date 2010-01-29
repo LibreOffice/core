@@ -112,14 +112,14 @@ namespace chart
 
 Wall::Wall() :
         ::property::OPropertySet( m_aMutex ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {}
 
 Wall::Wall( const Wall & rOther ) :
         MutexContainer(),
         impl::Wall_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {}
 
 Wall::~Wall()

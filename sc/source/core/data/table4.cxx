@@ -106,7 +106,14 @@ short lcl_DecompValueString( String& aValue, sal_Int32& nVal, USHORT* pMinDigits
         nNum = nNeg = 1;
     while ( p[nNum] && CharClass::isAsciiNumeric( p[nNum] ) )
         nNum++;
-    if ( nNum > nNeg )
+
+    sal_Unicode cNext = p[nNum];            // 0 if at the end
+    sal_Unicode cLast = p[aValue.Len()-1];
+
+    // #i5550# If there are numbers at the beginning and the end,
+    // prefer the one at the beginning only if it's followed by a space.
+    // Otherwise, use the number at the end, to enable things like IP addresses.
+    if ( nNum > nNeg && ( cNext == 0 || cNext == ' ' || !CharClass::isAsciiNumeric(cLast) ) )
     {   // number at the beginning
         nVal = aValue.Copy( 0, nNum ).ToInt32();
         //  #60893# any number with a leading zero sets the minimum number of digits

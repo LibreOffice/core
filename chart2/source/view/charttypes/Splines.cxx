@@ -318,108 +318,133 @@ void SplineCalculater::CalculateCubicSplines(
     , sal_Int32 nGranularity )
 {
     DBG_ASSERT( nGranularity > 0, "Granularity is invalid" );
+
     rResult.SequenceX.realloc(0);
     rResult.SequenceY.realloc(0);
     rResult.SequenceZ.realloc(0);
 
-    if( !rInput.SequenceX.getLength() )
+    sal_Int32 nOuterCount = rInput.SequenceX.getLength();
+    if( !nOuterCount )
         return;
-    if( rInput.SequenceX[0].getLength() <= 1 )
-        return; //we need at least two points
 
-    sal_Int32 nMaxIndexPoints = rInput.SequenceX[0].getLength()-1; // is >=1
-    const double* pOldX = rInput.SequenceX[0].getConstArray();
-    const double* pOldY = rInput.SequenceY[0].getConstArray();
-    const double* pOldZ = rInput.SequenceZ[0].getConstArray();
+    rResult.SequenceX.realloc(nOuterCount);
+    rResult.SequenceY.realloc(nOuterCount);
+    rResult.SequenceZ.realloc(nOuterCount);
 
-    // #i13699# The curve gets a parameter and then for each coordinate a
-    // separate spline will be calculated using the parameter as first argument
-    // and the point coordinate as second argument. Therefore the points need
-    // not to be sorted in its x-coordinates. The parameter is sorted by
-    // construction.
-
-    ::std::vector < double > aParameter(nMaxIndexPoints+1);
-    aParameter[0]=0.0;
-    for( sal_Int32 nIndex=1; nIndex<=nMaxIndexPoints; nIndex++ )
+    for( sal_Int32 nOuter = 0; nOuter < nOuterCount; ++nOuter )
     {
-        // The euclidian distance leads to curve loops for functions having single extreme points
-//         aParameter[nIndex]=aParameter[nIndex-1]+
-//             sqrt( (pOldX[nIndex]-pOldX[nIndex-1])*(pOldX[nIndex]-pOldX[nIndex-1])+
-//                   (pOldY[nIndex]-pOldY[nIndex-1])*(pOldY[nIndex]-pOldY[nIndex-1])+
-//                   (pOldZ[nIndex]-pOldZ[nIndex-1])*(pOldZ[nIndex]-pOldZ[nIndex-1]));
+        if( rInput.SequenceX[nOuter].getLength() <= 1 )
+            continue; //we need at least two points
 
-        // use increment of 1 instead
-        aParameter[nIndex]=aParameter[nIndex-1]+1;
-    }
-    // Split the calculation to X, Y and Z coordinate
-    tPointVecType aInputX;
-    aInputX.resize(nMaxIndexPoints+1);
-    tPointVecType aInputY;
-    aInputY.resize(nMaxIndexPoints+1);
-    tPointVecType aInputZ;
-    aInputZ.resize(nMaxIndexPoints+1);
-    for (sal_Int32 nN=0;nN<=nMaxIndexPoints; nN++ )
-    {
-      aInputX[ nN ].first=aParameter[nN];
-      aInputX[ nN ].second=pOldX[ nN ];
-      aInputY[ nN ].first=aParameter[nN];
-      aInputY[ nN ].second=pOldY[ nN ];
-      aInputZ[ nN ].first=aParameter[nN];
-      aInputZ[ nN ].second=pOldZ[ nN ];
-    }
+        sal_Int32 nMaxIndexPoints = rInput.SequenceX[nOuter].getLength()-1; // is >=1
+        const double* pOldX = rInput.SequenceX[nOuter].getConstArray();
+        const double* pOldY = rInput.SequenceY[nOuter].getConstArray();
+        const double* pOldZ = rInput.SequenceZ[nOuter].getConstArray();
 
-    // generate a spline for each coordinate. It holds the complete
-    // information to calculate each point of the curve
+        // #i13699# The curve gets a parameter and then for each coordinate a
+        // separate spline will be calculated using the parameter as first argument
+        // and the point coordinate as second argument. Therefore the points need
+        // not to be sorted in its x-coordinates. The parameter is sorted by
+        // construction.
 
-    // generate the kind "natural spline"
-    double fInfty;
-    ::rtl::math::setInf( &fInfty, sal_False );
-    lcl_SplineCalculation aSplineX( aInputX, fInfty, fInfty );
-    lcl_SplineCalculation aSplineY( aInputY, fInfty, fInfty );
-    lcl_SplineCalculation aSplineZ( aInputZ, fInfty, fInfty );
-
-    // fill result polygon with calculated values
-    rResult.SequenceX.realloc(1);
-    rResult.SequenceY.realloc(1);
-    rResult.SequenceZ.realloc(1);
-    rResult.SequenceX[0].realloc( nMaxIndexPoints*nGranularity + 1);
-    rResult.SequenceY[0].realloc( nMaxIndexPoints*nGranularity + 1);
-    rResult.SequenceZ[0].realloc( nMaxIndexPoints*nGranularity + 1);
-
-    double* pNewX = rResult.SequenceX[0].getArray();
-    double* pNewY = rResult.SequenceY[0].getArray();
-    double* pNewZ = rResult.SequenceZ[0].getArray();
-
-    sal_Int32 nNewPointIndex = 0; // Index in result points
-    // needed for inner loop
-    double    fInc;   // step for intermediate points
-    sal_Int32 nj;     // for loop
-    double    fParam; // a intermediate parameter value
-
-    for( sal_Int32 ni = 0; ni < nMaxIndexPoints; ni++ )
-    {
-        // given point is surely a curve point
-        pNewX[nNewPointIndex] = pOldX[ni];
-        pNewY[nNewPointIndex] = pOldY[ni];
-        pNewZ[nNewPointIndex] = pOldZ[ni];
-        nNewPointIndex++;
-
-        // calculate intermediate points
-        fInc = ( aParameter[ ni+1 ] - aParameter[ni] ) / static_cast< double >( nGranularity );
-        for(nj = 1; nj < nGranularity; nj++)
+        ::std::vector < double > aParameter(nMaxIndexPoints+1);
+        aParameter[0]=0.0;
+        for( sal_Int32 nIndex=1; nIndex<=nMaxIndexPoints; nIndex++ )
         {
-            fParam = aParameter[ni] + ( fInc * static_cast< double >( nj ) );
+            // The euclidian distance leads to curve loops for functions having single extreme points
+            //aParameter[nIndex]=aParameter[nIndex-1]+
+            //sqrt( (pOldX[nIndex]-pOldX[nIndex-1])*(pOldX[nIndex]-pOldX[nIndex-1])+
+            //(pOldY[nIndex]-pOldY[nIndex-1])*(pOldY[nIndex]-pOldY[nIndex-1])+
+            //(pOldZ[nIndex]-pOldZ[nIndex-1])*(pOldZ[nIndex]-pOldZ[nIndex-1]));
 
-            pNewX[nNewPointIndex]=aSplineX.GetInterpolatedValue( fParam );
-            pNewY[nNewPointIndex]=aSplineY.GetInterpolatedValue( fParam );
-            pNewZ[nNewPointIndex]=aSplineZ.GetInterpolatedValue( fParam );
-            nNewPointIndex++;
+            // use increment of 1 instead
+            aParameter[nIndex]=aParameter[nIndex-1]+1;
         }
+        // Split the calculation to X, Y and Z coordinate
+        tPointVecType aInputX;
+        aInputX.resize(nMaxIndexPoints+1);
+        tPointVecType aInputY;
+        aInputY.resize(nMaxIndexPoints+1);
+        tPointVecType aInputZ;
+        aInputZ.resize(nMaxIndexPoints+1);
+        for (sal_Int32 nN=0;nN<=nMaxIndexPoints; nN++ )
+        {
+          aInputX[ nN ].first=aParameter[nN];
+          aInputX[ nN ].second=pOldX[ nN ];
+          aInputY[ nN ].first=aParameter[nN];
+          aInputY[ nN ].second=pOldY[ nN ];
+          aInputZ[ nN ].first=aParameter[nN];
+          aInputZ[ nN ].second=pOldZ[ nN ];
+        }
+
+        // generate a spline for each coordinate. It holds the complete
+        // information to calculate each point of the curve
+        double fXDerivation;
+        double fYDerivation;
+        double fZDerivation;
+        if( pOldX[ 0 ] == pOldX[nMaxIndexPoints] &&
+            pOldY[ 0 ] == pOldY[nMaxIndexPoints] &&
+            pOldZ[ 0 ] == pOldZ[nMaxIndexPoints] )
+        {
+            // #i101050# avoid a corner in closed lines, which are smoothed by spline
+            // This derivation are special for parameter of kind 0,1,2,3... If you
+            // change generating parameters (see above), then adapt derivations too.)
+            fXDerivation = 0.5 * (pOldX[1]-pOldX[nMaxIndexPoints-1]);
+            fYDerivation = 0.5 * (pOldY[1]-pOldY[nMaxIndexPoints-1]);
+            fZDerivation = 0.5 * (pOldZ[1]-pOldZ[nMaxIndexPoints-1]);
+        }
+        else // generate the kind "natural spline"
+        {
+            double fInfty;
+            ::rtl::math::setInf( &fInfty, sal_False );
+            fXDerivation = fInfty;
+            fYDerivation = fInfty;
+            fZDerivation = fInfty;
+        }
+        lcl_SplineCalculation aSplineX( aInputX, fXDerivation, fXDerivation );
+        lcl_SplineCalculation aSplineY( aInputY, fYDerivation, fYDerivation );
+        lcl_SplineCalculation aSplineZ( aInputZ, fZDerivation, fZDerivation );
+
+        // fill result polygon with calculated values
+        rResult.SequenceX[nOuter].realloc( nMaxIndexPoints*nGranularity + 1);
+        rResult.SequenceY[nOuter].realloc( nMaxIndexPoints*nGranularity + 1);
+        rResult.SequenceZ[nOuter].realloc( nMaxIndexPoints*nGranularity + 1);
+
+        double* pNewX = rResult.SequenceX[nOuter].getArray();
+        double* pNewY = rResult.SequenceY[nOuter].getArray();
+        double* pNewZ = rResult.SequenceZ[nOuter].getArray();
+
+        sal_Int32 nNewPointIndex = 0; // Index in result points
+        // needed for inner loop
+        double    fInc;   // step for intermediate points
+        sal_Int32 nj;     // for loop
+        double    fParam; // a intermediate parameter value
+
+        for( sal_Int32 ni = 0; ni < nMaxIndexPoints; ni++ )
+        {
+            // given point is surely a curve point
+            pNewX[nNewPointIndex] = pOldX[ni];
+            pNewY[nNewPointIndex] = pOldY[ni];
+            pNewZ[nNewPointIndex] = pOldZ[ni];
+            nNewPointIndex++;
+
+            // calculate intermediate points
+            fInc = ( aParameter[ ni+1 ] - aParameter[ni] ) / static_cast< double >( nGranularity );
+            for(nj = 1; nj < nGranularity; nj++)
+            {
+                fParam = aParameter[ni] + ( fInc * static_cast< double >( nj ) );
+
+                pNewX[nNewPointIndex]=aSplineX.GetInterpolatedValue( fParam );
+                pNewY[nNewPointIndex]=aSplineY.GetInterpolatedValue( fParam );
+                pNewZ[nNewPointIndex]=aSplineZ.GetInterpolatedValue( fParam );
+                nNewPointIndex++;
+            }
+        }
+        // add last point
+        pNewX[nNewPointIndex] = pOldX[nMaxIndexPoints];
+        pNewY[nNewPointIndex] = pOldY[nMaxIndexPoints];
+        pNewZ[nNewPointIndex] = pOldZ[nMaxIndexPoints];
     }
-    // add last point
-    pNewX[nNewPointIndex] = pOldX[nMaxIndexPoints];
-    pNewY[nNewPointIndex] = pOldY[nMaxIndexPoints];
-    pNewZ[nNewPointIndex] = pOldZ[nMaxIndexPoints];
 }
 
 void SplineCalculater::CalculateBSplines(
@@ -436,80 +461,85 @@ void SplineCalculater::CalculateBSplines(
     rResult.SequenceY.realloc(0);
     rResult.SequenceZ.realloc(0);
 
-    if( !rInput.SequenceX.getLength() )
+    sal_Int32 nOuterCount = rInput.SequenceX.getLength();
+    if( !nOuterCount )
         return; // no input
 
-    if( rInput.SequenceX[0].getLength() <= 1 )
-        return; // need at least 2 control points
+    rResult.SequenceX.realloc(nOuterCount);
+    rResult.SequenceY.realloc(nOuterCount);
+    rResult.SequenceZ.realloc(nOuterCount);
 
-    sal_Int32 n = rInput.SequenceX[0].getLength()-1; // maximum index of control points
+    for( sal_Int32 nOuter = 0; nOuter < nOuterCount; ++nOuter )
+    {
+        if( rInput.SequenceX[nOuter].getLength() <= 1 )
+            continue; // need at least 2 control points
 
-    double fCurveparam =0.0; // parameter for the curve
-    // 0<= fCurveparam < fMaxCurveparam
-    double fMaxCurveparam = 2.0+ n - k;
-    if (fMaxCurveparam <= 0.0)
-        return; // not enough control points for desired spline order
+        sal_Int32 n = rInput.SequenceX[nOuter].getLength()-1; // maximum index of control points
 
-    if (nGranularity < 1)
-        return; //need at least 1 line for each part beween the control points
+        double fCurveparam =0.0; // parameter for the curve
+        // 0<= fCurveparam < fMaxCurveparam
+        double fMaxCurveparam = 2.0+ n - k;
+        if (fMaxCurveparam <= 0.0)
+            return; // not enough control points for desired spline order
 
-    const double* pOldX = rInput.SequenceX[0].getConstArray();
-    const double* pOldY = rInput.SequenceY[0].getConstArray();
-    const double* pOldZ = rInput.SequenceZ[0].getConstArray();
+        if (nGranularity < 1)
+            return; //need at least 1 line for each part beween the control points
 
-    // keep this amount of steps to go well with old version
-    sal_Int32 nNewSectorCount = nGranularity * n;
-    double fCurveStep = fMaxCurveparam/static_cast< double >(nNewSectorCount);
+        const double* pOldX = rInput.SequenceX[nOuter].getConstArray();
+        const double* pOldY = rInput.SequenceY[nOuter].getConstArray();
+        const double* pOldZ = rInput.SequenceZ[nOuter].getConstArray();
 
-    double *b       = new double [n + k + 1]; // values of blending functions
+        // keep this amount of steps to go well with old version
+        sal_Int32 nNewSectorCount = nGranularity * n;
+        double fCurveStep = fMaxCurveparam/static_cast< double >(nNewSectorCount);
 
-    const double* t = createTVector(n, k); // knot vector
+        double *b       = new double [n + k + 1]; // values of blending functions
 
-    rResult.SequenceX.realloc(1);
-    rResult.SequenceY.realloc(1);
-    rResult.SequenceZ.realloc(1);
-    rResult.SequenceX[0].realloc(nNewSectorCount+1);
-    rResult.SequenceY[0].realloc(nNewSectorCount+1);
-    rResult.SequenceZ[0].realloc(nNewSectorCount+1);
-    double* pNewX = rResult.SequenceX[0].getArray();
-    double* pNewY = rResult.SequenceY[0].getArray();
-    double* pNewZ = rResult.SequenceZ[0].getArray();
+        const double* t = createTVector(n, k); // knot vector
 
-    // variables needed inside loop, when calculating one point of output
-    sal_Int32 nPointIndex =0; //index of given contol points
-    double fX=0.0;
-    double fY=0.0;
-    double fZ=0.0; //coordinates of a new BSpline point
+        rResult.SequenceX[nOuter].realloc(nNewSectorCount+1);
+        rResult.SequenceY[nOuter].realloc(nNewSectorCount+1);
+        rResult.SequenceZ[nOuter].realloc(nNewSectorCount+1);
+        double* pNewX = rResult.SequenceX[nOuter].getArray();
+        double* pNewY = rResult.SequenceY[nOuter].getArray();
+        double* pNewZ = rResult.SequenceZ[nOuter].getArray();
 
-    for(sal_Int32 nNewSector=0; nNewSector<nNewSectorCount; nNewSector++)
-    { // in first looping fCurveparam has value 0.0
+        // variables needed inside loop, when calculating one point of output
+        sal_Int32 nPointIndex =0; //index of given contol points
+        double fX=0.0;
+        double fY=0.0;
+        double fZ=0.0; //coordinates of a new BSpline point
 
-        // Calculate the values of the blending functions for actual curve parameter
-        BVector(fCurveparam, n, k, b, t);
+        for(sal_Int32 nNewSector=0; nNewSector<nNewSectorCount; nNewSector++)
+        { // in first looping fCurveparam has value 0.0
 
-        // output point(fCurveparam) = sum over {input point * value of blending function}
-        fX = 0.0;
-        fY = 0.0;
-        fZ = 0.0;
-        for (nPointIndex=0;nPointIndex<=n;nPointIndex++)
-        {
-            fX +=pOldX[nPointIndex]*b[nPointIndex];
-            fY +=pOldY[nPointIndex]*b[nPointIndex];
-            fZ +=pOldZ[nPointIndex]*b[nPointIndex];
+            // Calculate the values of the blending functions for actual curve parameter
+            BVector(fCurveparam, n, k, b, t);
+
+            // output point(fCurveparam) = sum over {input point * value of blending function}
+            fX = 0.0;
+            fY = 0.0;
+            fZ = 0.0;
+            for (nPointIndex=0;nPointIndex<=n;nPointIndex++)
+            {
+                fX +=pOldX[nPointIndex]*b[nPointIndex];
+                fY +=pOldY[nPointIndex]*b[nPointIndex];
+                fZ +=pOldZ[nPointIndex]*b[nPointIndex];
+            }
+            pNewX[nNewSector] = fX;
+            pNewY[nNewSector] = fY;
+            pNewZ[nNewSector] = fZ;
+
+            fCurveparam += fCurveStep; //for next looping
         }
-        pNewX[nNewSector] = fX;
-        pNewY[nNewSector] = fY;
-        pNewZ[nNewSector] = fZ;
+        // add last control point to BSpline curve
+        pNewX[nNewSectorCount] = pOldX[n];
+        pNewY[nNewSectorCount] = pOldY[n];
+        pNewZ[nNewSectorCount] = pOldZ[n];
 
-        fCurveparam += fCurveStep; //for next looping
+        delete[] t;
+        delete[] b;
     }
-    // add last control point to BSpline curve
-    pNewX[nNewSectorCount] = pOldX[n];
-    pNewY[nNewSectorCount] = pOldY[n];
-    pNewZ[nNewSectorCount] = pOldZ[n];
-
-    delete[] t;
-    delete[] b;
 }
 
 //.............................................................................

@@ -51,6 +51,8 @@
 #include <oox/core/tokens.hxx>
 #include <formula/grammar.hxx>
 
+#define DEBUG_XL_ENCRYPTION 0
+
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::io::XOutputStream;
 using ::com::sun::star::io::XStream;
@@ -63,7 +65,10 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::rtl::OString;
 using ::rtl::OUString;
 using ::utl::OStreamWrapper;
+using ::std::vector;
+
 using namespace formula;
+
 // ============================================================================
 
 XclExpStream::XclExpStream( SvStream& rOutStrm, const XclExpRoot& rRoot, sal_uInt16 nMaxRecSize ) :
@@ -92,16 +97,19 @@ XclExpStream::~XclExpStream()
 void XclExpStream::StartRecord( sal_uInt16 nRecId, sal_Size nRecSize )
 {
     DBG_ASSERT( !mbInRec, "XclExpStream::StartRecord - another record still open" );
+    DisableEncryption();
     mnMaxContSize = mnCurrMaxSize = mnMaxRecSize;
     mnPredictSize = nRecSize;
     mbInRec = true;
     InitRecord( nRecId );
     SetSliceSize( 0 );
+    EnableEncryption();
 }
 
 void XclExpStream::EndRecord()
 {
     DBG_ASSERT( mbInRec, "XclExpStream::EndRecord - no record open" );
+    DisableEncryption();
     UpdateRecSize();
     mrStrm.Seek( STREAM_SEEK_TO_END );
     mbInRec = false;
@@ -111,6 +119,86 @@ void XclExpStream::SetSliceSize( sal_uInt16 nSize )
 {
     mnMaxSliceSize = nSize;
     mnSliceSize = 0;
+}
+
+XclExpStream& XclExpStream::operator<<( sal_Int8 nValue )
+{
+    PrepareWrite( 1 );
+    if (mbUseEncrypter && HasValidEncrypter())
+        mxEncrypter->Encrypt(mrStrm, nValue);
+    else
+        mrStrm << nValue;
+    return *this;
+}
+
+XclExpStream& XclExpStream::operator<<( sal_uInt8 nValue )
+{
+    PrepareWrite( 1 );
+    if (mbUseEncrypter && HasValidEncrypter())
+        mxEncrypter->Encrypt(mrStrm, nValue);
+    else
+        mrStrm << nValue;
+    return *this;
+}
+
+XclExpStream& XclExpStream::operator<<( sal_Int16 nValue )
+{
+    PrepareWrite( 2 );
+    if (mbUseEncrypter && HasValidEncrypter())
+        mxEncrypter->Encrypt(mrStrm, nValue);
+    else
+        mrStrm << nValue;
+    return *this;
+}
+
+XclExpStream& XclExpStream::operator<<( sal_uInt16 nValue )
+{
+    PrepareWrite( 2 );
+    if (mbUseEncrypter && HasValidEncrypter())
+        mxEncrypter->Encrypt(mrStrm, nValue);
+    else
+        mrStrm << nValue;
+    return *this;
+}
+
+XclExpStream& XclExpStream::operator<<( sal_Int32 nValue )
+{
+    PrepareWrite( 4 );
+    if (mbUseEncrypter && HasValidEncrypter())
+        mxEncrypter->Encrypt(mrStrm, nValue);
+    else
+        mrStrm << nValue;
+    return *this;
+}
+
+XclExpStream& XclExpStream::operator<<( sal_uInt32 nValue )
+{
+    PrepareWrite( 4 );
+    if (mbUseEncrypter && HasValidEncrypter())
+        mxEncrypter->Encrypt(mrStrm, nValue);
+    else
+        mrStrm << nValue;
+    return *this;
+}
+
+XclExpStream& XclExpStream::operator<<( float fValue )
+{
+    PrepareWrite( 4 );
+    if (mbUseEncrypter && HasValidEncrypter())
+        mxEncrypter->Encrypt(mrStrm, fValue);
+    else
+        mrStrm << fValue;
+    return *this;
+}
+
+XclExpStream& XclExpStream::operator<<( double fValue )
+{
+    PrepareWrite( 8 );
+    if (mbUseEncrypter && HasValidEncrypter())
+        mxEncrypter->Encrypt(mrStrm, fValue);
+    else
+        mrStrm << fValue;
+    return *this;
 }
 
 sal_Size XclExpStream::Write( const void* pData, sal_Size nBytes )
@@ -127,9 +215,21 @@ sal_Size XclExpStream::Write( const void* pData, sal_Size nBytes )
             while( bValid && (nBytesLeft > 0) )
             {
                 sal_Size nWriteLen = ::std::min< sal_Size >( PrepareWrite(), nBytesLeft );
-                sal_Size nWriteRet = mrStrm.Write( pBuffer, nWriteLen );
+                sal_Size nWriteRet = nWriteLen;
+                if (mbUseEncrypter && HasValidEncrypter())
+                {
+                    DBG_ASSERT(nWriteLen > 0, "XclExpStream::Write: write length is 0!");
+                    vector<sal_uInt8> aBytes(nWriteLen);
+                    memcpy(&aBytes[0], pBuffer, nWriteLen);
+                    mxEncrypter->EncryptBytes(mrStrm, aBytes);
+                    // TODO: How do I check if all the bytes have been successfully written ?
+                }
+                else
+                {
+                    nWriteRet = mrStrm.Write( pBuffer, nWriteLen );
                 bValid = (nWriteLen == nWriteRet);
                 DBG_ASSERT( bValid, "XclExpStream::Write - stream write error" );
+                }
                 pBuffer += nWriteRet;
                 nRet += nWriteRet;
                 nBytesLeft -= nWriteRet;
@@ -265,6 +365,26 @@ void XclExpStream::WriteCharBuffer( const ScfUInt8Vec& rBuffer )
     Write( &rBuffer[ 0 ], rBuffer.size() );
 }
 
+void XclExpStream::SetEncrypter( XclExpEncrypterRef xEncrypter )
+{
+    mxEncrypter = xEncrypter;
+}
+
+bool XclExpStream::HasValidEncrypter() const
+{
+    return mxEncrypter.is() && mxEncrypter->IsValid();
+}
+
+void XclExpStream::EnableEncryption( bool bEnable )
+{
+    mbUseEncrypter = bEnable && HasValidEncrypter();
+}
+
+void XclExpStream::DisableEncryption()
+{
+    EnableEncryption(false);
+}
+
 sal_Size XclExpStream::SetSvStreamPos( sal_Size nPos )
 {
     DBG_ASSERT( !mbInRec, "XclExpStream::SetSvStreamPos - not allowed inside of a record" );
@@ -355,6 +475,193 @@ void XclExpStream::WriteRawZeroBytes( sal_Size nBytes )
 }
 
 // ============================================================================
+
+XclExpBiff8Encrypter::XclExpBiff8Encrypter( const XclExpRoot& rRoot, const sal_uInt8 nDocId[16],
+                                            const sal_uInt8 nSalt[16] ) :
+    mrRoot(rRoot),
+    mnOldPos(STREAM_SEEK_TO_END),
+    mbValid(false)
+{
+    String aPass = rRoot.GetPassword();
+    if (aPass.Len() == 0)
+        // Empty password.  Get the default biff8 password.
+        aPass = XclCryptoHelper::GetBiff8WbProtPassword();
+    Init(aPass, nDocId, nSalt);
+}
+
+XclExpBiff8Encrypter::~XclExpBiff8Encrypter()
+{
+}
+
+bool XclExpBiff8Encrypter::IsValid() const
+{
+    return mbValid;
+}
+
+void XclExpBiff8Encrypter::GetSaltDigest( sal_uInt8 nSaltDigest[16] ) const
+{
+    memcpy(nSaltDigest, mnSaltDigest, 16);
+}
+
+void XclExpBiff8Encrypter::Encrypt( SvStream& rStrm, sal_uInt8 nData )
+{
+    vector<sal_uInt8> aByte(1);
+    aByte[0] = nData;
+    EncryptBytes(rStrm, aByte);
+}
+
+void XclExpBiff8Encrypter::Encrypt( SvStream& rStrm, sal_uInt16 nData )
+{
+    ::std::vector<sal_uInt8> pnBytes(2);
+    pnBytes[0] = nData & 0xFF;
+    pnBytes[1] = (nData >> 8) & 0xFF;
+    EncryptBytes(rStrm, pnBytes);
+}
+
+void XclExpBiff8Encrypter::Encrypt( SvStream& rStrm, sal_uInt32 nData )
+{
+    ::std::vector<sal_uInt8> pnBytes(4);
+    pnBytes[0] = nData & 0xFF;
+    pnBytes[1] = (nData >>  8) & 0xFF;
+    pnBytes[2] = (nData >> 16) & 0xFF;
+    pnBytes[3] = (nData >> 24) & 0xFF;
+    EncryptBytes(rStrm, pnBytes);
+}
+
+void XclExpBiff8Encrypter::Encrypt( SvStream& rStrm, float fValue )
+{
+    ::std::vector<sal_uInt8> pnBytes(4);
+    memcpy(&pnBytes[0], &fValue, 4);
+    EncryptBytes(rStrm, pnBytes);
+}
+
+void XclExpBiff8Encrypter::Encrypt( SvStream& rStrm, double fValue )
+{
+    ::std::vector<sal_uInt8> pnBytes(8);
+    memcpy(&pnBytes[0], &fValue, 8);
+    EncryptBytes(rStrm, pnBytes);
+}
+
+void XclExpBiff8Encrypter::Encrypt( SvStream& rStrm, sal_Int8 nData )
+{
+    Encrypt(rStrm, static_cast<sal_uInt8>(nData));
+}
+
+void XclExpBiff8Encrypter::Encrypt( SvStream& rStrm, sal_Int16 nData )
+{
+    Encrypt(rStrm, static_cast<sal_uInt16>(nData));
+}
+
+void XclExpBiff8Encrypter::Encrypt( SvStream& rStrm, sal_Int32 nData )
+{
+    Encrypt(rStrm, static_cast<sal_uInt32>(nData));
+}
+
+void XclExpBiff8Encrypter::Init( const String& aPass, const sal_uInt8 nDocId[16],
+                                 const sal_uInt8 nSalt[16] )
+{
+    memset(mnSaltDigest, 0, sizeof(mnSaltDigest));
+
+    xub_StrLen nLen = aPass.Len();
+    bool bValid = (0 < nLen) && (nLen < 16);
+    if ( bValid )
+    {
+        // transform String to sal_uInt16 array
+        memset(mnPassw, 0, sizeof(mnPassw));
+        for (xub_StrLen nChar = 0; nChar < nLen; ++nChar)
+            mnPassw[nChar] = static_cast<sal_uInt16>(aPass.GetChar(nChar));
+
+        // copy document ID
+        memcpy(mnDocId, nDocId, sizeof(mnDocId));
+
+        // init codec
+        maCodec.InitKey(mnPassw, mnDocId);
+
+        // generate salt hash.
+        ::svx::MSCodec_Std97 aCodec;
+        aCodec.InitKey(mnPassw, mnDocId);
+        aCodec.CreateSaltDigest(nSalt, mnSaltDigest);
+
+        // verify to make sure it's in good shape.
+        bValid = maCodec.VerifyKey(nSalt, mnSaltDigest);
+    }
+
+    mbValid = bValid;
+}
+
+sal_uInt32 XclExpBiff8Encrypter::GetBlockPos( sal_Size nStrmPos ) const
+{
+    return static_cast<sal_uInt32>(nStrmPos / EXC_ENCR_BLOCKSIZE);
+}
+
+sal_uInt16 XclExpBiff8Encrypter::GetOffsetInBlock( sal_Size nStrmPos ) const
+{
+    return static_cast<sal_uInt16>(nStrmPos % EXC_ENCR_BLOCKSIZE);
+}
+
+void XclExpBiff8Encrypter::EncryptBytes( SvStream& rStrm, vector<sal_uInt8>& aBytes )
+{
+    sal_Size nStrmPos = rStrm.Tell();
+    sal_uInt16 nBlockOffset = GetOffsetInBlock(nStrmPos);
+    sal_uInt32 nBlockPos = GetBlockPos(nStrmPos);
+
+#if DEBUG_XL_ENCRYPTION
+    fprintf(stdout, "XclExpBiff8Encrypter::EncryptBytes: stream pos = %ld  offset in block = %d  block pos = %ld\n",
+            nStrmPos, nBlockOffset, nBlockPos);
+#endif
+
+    sal_uInt16 nSize = static_cast< sal_uInt16 >( aBytes.size() );
+    if (nSize == 0)
+        return;
+
+#if DEBUG_XL_ENCRYPTION
+    fprintf(stdout, "RAW: ");
+    for (sal_uInt16 i = 0; i < nSize; ++i)
+        fprintf(stdout, "%2.2X ", aBytes[i]);
+    fprintf(stdout, "\n");
+#endif
+
+    if (mnOldPos != nStrmPos)
+    {
+        sal_uInt16 nOldOffset = GetOffsetInBlock(mnOldPos);
+        sal_uInt32 nOldBlockPos = GetBlockPos(mnOldPos);
+
+        if ( (nBlockPos != nOldBlockPos) || (nBlockOffset < nOldOffset) )
+        {
+            maCodec.InitCipher(nBlockPos);
+            nOldOffset = 0;
+        }
+
+        if (nBlockOffset > nOldOffset)
+            maCodec.Skip(nBlockOffset - nOldOffset);
+    }
+
+    sal_uInt16 nBytesLeft = nSize;
+    sal_uInt16 nPos = 0;
+    while (nBytesLeft > 0)
+    {
+        sal_uInt16 nBlockLeft = EXC_ENCR_BLOCKSIZE - nBlockOffset;
+        sal_uInt16 nEncBytes = ::std::min(nBlockLeft, nBytesLeft);
+
+        bool bRet = maCodec.Encode(&aBytes[nPos], nEncBytes, &aBytes[nPos], nEncBytes);
+        DBG_ASSERT(bRet, "XclExpBiff8Encrypter::EncryptBytes: encryption failed!!");
+        bRet = bRet; // to remove a silly compiler warning.
+
+        sal_Size nRet = rStrm.Write(&aBytes[nPos], nEncBytes);
+        DBG_ASSERT(nRet == nEncBytes, "XclExpBiff8Encrypter::EncryptBytes: fail to write to stream!!");
+        nRet = nRet; // to remove a silly compiler warning.
+
+        nStrmPos = rStrm.Tell();
+        nBlockOffset = GetOffsetInBlock(nStrmPos);
+        nBlockPos = GetBlockPos(nStrmPos);
+        if (nBlockOffset == 0)
+            maCodec.InitCipher(nBlockPos);
+
+        nBytesLeft -= nEncBytes;
+        nPos += nEncBytes;
+    }
+    mnOldPos = nStrmPos;
+}
 
 rtl::OUString XclXmlUtils::GetStreamName( const char* sStreamDir, const char* sStream, sal_Int32 nId )
 {
@@ -666,7 +973,7 @@ sax_fastparser::FSHelperPtr XclExpXmlStream::CreateOutputStream (
     if( pRelationshipId )
         *pRelationshipId = sRelationshipId;
 
-    sax_fastparser::FSHelperPtr p = openOutputStreamWithSerializer( sFullStream, OUString::createFromAscii( sContentType ) );
+    sax_fastparser::FSHelperPtr p = openFragmentStreamWithSerializer( sFullStream, OUString::createFromAscii( sContentType ) );
 
     maOpenedStreamMap[ sFullStream ] = std::make_pair( sRelationshipId, p );
 
@@ -683,14 +990,14 @@ sal_Int32 XclExpXmlStream::getSchemeClr( sal_Int32 /*nColorSchemeToken*/ ) const
     return -1;
 }
 
-const oox::vml::DrawingPtr XclExpXmlStream::getDrawings()
+oox::vml::Drawing* XclExpXmlStream::getVmlDrawing()
 {
-    return oox::vml::DrawingPtr();
+    return 0;
 }
 
 const oox::drawingml::Theme* XclExpXmlStream::getCurrentTheme() const
 {
-    return NULL;
+    return 0;
 }
 
 const oox::drawingml::table::TableStyleListPtr XclExpXmlStream::getTableStyles()

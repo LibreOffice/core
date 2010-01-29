@@ -61,6 +61,7 @@
 #include "PieChart.hxx"
 #include "AreaChart.hxx"
 #include "CandleStickChart.hxx"
+#include "BubbleChart.hxx"
 //
 
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
@@ -75,6 +76,8 @@
 #include <tools/debug.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <com/sun/star/util/XCloneable.hpp>
+
+#include <svx/unoshape.hxx>
 
 #include <functional>
 
@@ -116,13 +119,6 @@ VDataSeriesGroup::VDataSeriesGroup( VDataSeries* pSeries )
 {
 }
 
-VDataSeriesGroup::VDataSeriesGroup( const ::std::vector< VDataSeries* >& rSeriesVector )
-        : m_aSeriesVector(rSeriesVector)
-        , m_bMaxPointCountDirty(true)
-        , m_nMaxPointCount(0)
-        , m_aListOfCachedYValues()
-{
-}
 VDataSeriesGroup::~VDataSeriesGroup()
 {
 }
@@ -394,7 +390,7 @@ OUString VSeriesPlotter::getLabelTextForValue( VDataSeries& rDataSeries
         }
         else
         {
-            if( m_aAxesNumberFormats.hasFormat(1,rDataSeries.getAttachedAxisIndex()) ) //y-axis
+            if( rDataSeries.shouldLabelNumberFormatKeyBeDetectedFromYAxis() && m_aAxesNumberFormats.hasFormat(1,rDataSeries.getAttachedAxisIndex()) ) //y-axis
                 nNumberFormatKey = m_aAxesNumberFormats.getFormat(1,rDataSeries.getAttachedAxisIndex());
             else
                 nNumberFormatKey = rDataSeries.detectNumberFormatKey( nPointIndex );
@@ -465,11 +461,15 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
         //prepare text
         ::rtl::OUStringBuffer aText;
         ::rtl::OUString aSeparator(sal_Unicode(' '));
+        double fRotationDegrees = 0.0;
         try
         {
             uno::Reference< beans::XPropertySet > xPointProps( rDataSeries.getPropertiesOfPoint( nPointIndex ) );
             if(xPointProps.is())
+            {
                 xPointProps->getPropertyValue( C2U( "LabelSeparator" ) ) >>= aSeparator;
+                xPointProps->getPropertyValue( C2U( "TextRotation" ) ) >>= fRotationDegrees;
+            }
         }
         catch( uno::Exception& e )
         {
@@ -537,8 +537,21 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
             createText( xTarget_, aText.makeStringAndClear()
                         , *pPropNames, *pPropValues, ShapeFactory::makeTransformation( aScreenPosition2D ) );
 
+        const awt::Point aUnrotatedTextPos( xTextShape->getPosition() );
+        if( fRotationDegrees != 0.0 )
+        {
+            const double fDegreesPi( fRotationDegrees * ( F_PI / -180.0 ) );
+            uno::Reference< beans::XPropertySet > xProp( xTextShape, uno::UNO_QUERY );
+            if( xProp.is() )
+                xProp->setPropertyValue( C2U( "Transformation" ), ShapeFactory::makeTransformation( aScreenPosition2D, fDegreesPi ) );
+            LabelPositionHelper::correctPositionForRotation( xTextShape, eAlignment, fRotationDegrees, true /*bRotateAroundCenter*/ );
+        }
+
         if( xSymbol.is() && xTextShape.is() )
         {
+            const awt::Point aOldTextPos( xTextShape->getPosition() );
+            awt::Point aNewTextPos( aOldTextPos );
+
             awt::Size aSymbolSize( xSymbol->getSize() );
             awt::Size aTextSize( xTextShape->getSize() );
 
@@ -550,7 +563,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
             aSymbolSize.Width =  nXDiff * 75/100;
             aSymbolSize.Height = nYDiff * 75/100;
 
-            awt::Point aSymbolPosition( xTextShape->getPosition() );
+            awt::Point aSymbolPosition( aUnrotatedTextPos );
             aSymbolPosition.Y += (nYDiff * 25/200);
 
             if(LABEL_ALIGN_LEFT==eAlignment
@@ -563,39 +576,21 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                 || LABEL_ALIGN_RIGHT_TOP==eAlignment
                 || LABEL_ALIGN_RIGHT_BOTTOM==eAlignment )
             {
-                aScreenPosition2D.X += nXDiff;
+                aNewTextPos.X += nXDiff;
             }
             else if(LABEL_ALIGN_TOP==eAlignment
                 || LABEL_ALIGN_BOTTOM==eAlignment
                 || LABEL_ALIGN_CENTER==eAlignment )
             {
                 aSymbolPosition.X -= nXDiff/2;
-                aScreenPosition2D.X += nXDiff/2;
+                aNewTextPos.X += nXDiff/2;
             }
 
             xSymbol->setSize( aSymbolSize );
             xSymbol->setPosition( aSymbolPosition );
 
-            /*
-            ::basegfx::B2DHomMatrix aM;
-            //As autogrow is active the rectangle is automatically expanded to that side
-            //to which the text is not adjusted.
-            aM.scale( aSymbolSize.Width, aSymbolSize.Height );
-            aM.translate( aSymbolPosition.X, aSymbolPosition.Y );
-            uno::Any aATransformation( uno::makeAny( B2DHomMatrixToHomogenMatrix3(aM) ) );
-
             //set position
-            uno::Reference< beans::XPropertySet > xSymbolProp( xSymbol, uno::UNO_QUERY );
-            if( xSymbolProp.is() )
-            {
-                xSymbolProp->setPropertyValue( C2U( "Transformation" ), aATransformation );
-            }
-            */
-
-            //set position
-            uno::Reference< beans::XPropertySet > xProp( xTextShape, uno::UNO_QUERY );
-            if( xProp.is() )
-                xProp->setPropertyValue( C2U( "Transformation" ), ShapeFactory::makeTransformation( aScreenPosition2D ) );
+            xTextShape->setPosition( aNewTextPos );
         }
     }
     catch( uno::Exception& e )
@@ -1415,7 +1410,7 @@ void VDataSeriesGroup::getMinimumAndMaximiumX( double& rfMinimum, double& rfMaxi
         sal_Int32 nPointCount = (*aSeriesIter)->getTotalPointCount();
         for(sal_Int32 nN=0;nN<nPointCount;nN++)
         {
-            double fX = (*aSeriesIter)->getX( nN );
+            double fX = (*aSeriesIter)->getXValue( nN );
             if( ::rtl::math::isNan(fX) )
                 continue;
             if(rfMaximum<fX)
@@ -1447,12 +1442,12 @@ void VDataSeriesGroup::getMinimumAndMaximiumYInContinuousXRange( double& rfMinY,
             if( nAxisIndex != (*aSeriesIter)->getAttachedAxisIndex() )
                 continue;
 
-            double fX = (*aSeriesIter)->getX( nN );
+            double fX = (*aSeriesIter)->getXValue( nN );
             if( ::rtl::math::isNan(fX) )
                 continue;
             if( fX < fMinX || fX > fMaxX )
                 continue;
-            double fY = (*aSeriesIter)->getY( nN );
+            double fY = (*aSeriesIter)->getYValue( nN );
             if( ::rtl::math::isNan(fY) )
                 continue;
             if(rfMaxY<fY)
@@ -2069,6 +2064,8 @@ VSeriesPlotter* VSeriesPlotter::createSeriesPlotter(
         pRet = new AreaChart(xChartTypeModel,nDimensionCount,true,true);
     else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER) )
         pRet = new AreaChart(xChartTypeModel,nDimensionCount,false,true);
+    else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE) )
+        pRet = new BubbleChart(xChartTypeModel,nDimensionCount);
     else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
         pRet = new PieChart(xChartTypeModel,nDimensionCount);
     else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_NET) )

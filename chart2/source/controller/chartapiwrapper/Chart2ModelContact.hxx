@@ -34,6 +34,7 @@
 #include <com/sun/star/chart2/ExplicitIncrementData.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/chart2/XTitle.hpp>
 #include <cppuhelper/weakref.hxx>
@@ -86,6 +87,9 @@ public:
 
     sal_Int32 getExplicitNumberFormatKeyForAxis(
             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis );
+
+    sal_Int32 getExplicitNumberFormatKeyForSeries(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& xSeries );
 
     /** Returns the size of the page in logic coordinates.  This value is used
         for setting an appropriate "ReferencePageSize" for FontHeights.

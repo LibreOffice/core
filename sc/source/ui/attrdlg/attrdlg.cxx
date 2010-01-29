@@ -56,6 +56,11 @@
 #include <svx/flagsdef.hxx> //CHINA001
 #include <svx/flstitem.hxx> //CHINA001
 #include <sfx2/app.hxx> //CHINA001
+
+#if !LAYOUT_SFX_TABDIALOG_BROKEN
+#include <layout/layout-pre.hxx>
+#endif
+
 //==================================================================
 
 ScAttrDlg::ScAttrDlg( SfxViewFrame*     pFrameP,
@@ -72,7 +77,12 @@ ScAttrDlg::ScAttrDlg( SfxViewFrame*     pFrameP,
     DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
 
     DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT ), "GetTabPageCreatorFunc fail!");//CHINA001
+#if LAYOUT_SFX_TABDIALOG_BROKEN
     AddTabPage( TP_NUMBER, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT ), 0 ); //CHINA001 AddTabPage( TP_NUMBER,     SvxNumberFormatTabPage::Create, 0 );
+#else
+    String number = rtl::OUString::createFromAscii ("Numbers");
+    AddTabPage( TP_NUMBER, number, pFact->GetTabPageCreatorFunc (RID_SVXPAGE_NUMBERFORMAT), 0, FALSE, TAB_APPEND);
+#endif
     DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), "GetTabPageCreatorFunc fail!");//CHINA001
     AddTabPage( TP_FONT, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), 0 ); //CHINA001 AddTabPage( TP_FONT,        SvxCharNamePage::Create,        0 );
     DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_EFFECTS ), "GetTabPageCreatorFunc fail!");//CHINA001

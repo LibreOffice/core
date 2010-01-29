@@ -438,10 +438,6 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Cell merge not possible if cells already merged!" ;
     };
-    String STR_MSSG_APPLYPATTLINES_0
-    {
-        Text [ en-US ] = "Cannot apply borders to multiple selection" ;
-    };
     String STR_MSSG_INSERTCELLS_0
     {
         Text [ en-US ] = "Inserting into merged ranges not possible" ;

@@ -239,6 +239,7 @@
 
 //  data pilot field
 #define SC_UNONAME_FUNCTION         "Function"
+#define SC_UNONAME_SUBTOTALS        "Subtotals"
 #define SC_UNONAME_SELPAGE          "SelectedPage"
 #define SC_UNONAME_USESELPAGE       "UseSelectedPage"
 #define SC_UNONAME_HASREFERENCE     "HasReference"
@@ -317,7 +318,10 @@
 #define SC_UNONAME_FORMULA2         "Formula2"
 #define SC_UNONAME_SOURCEPOS        "SourcePosition"
 #define SC_UNONAME_SOURCESTR        "SourcePositionAsString" // only for use in XML filter
-#define SC_UNONAME_GRAMMAR          "Grammar" // only for use in XML filter
+#define SC_UNONAME_FORMULANMSP1     "FormulaNamespace1" // only for use in XML filter
+#define SC_UNONAME_FORMULANMSP2     "FormulaNamespace2" // only for use in XML filter
+#define SC_UNONAME_GRAMMAR1         "Grammar1" // only for use in XML filter
+#define SC_UNONAME_GRAMMAR2         "Grammar2" // only for use in XML filter
 #define SC_UNONAME_STYLENAME        "StyleName"
 
 //  validation
@@ -570,7 +574,6 @@
 #define SC_UNO_DRILLDOWN            "DrillDownOnDoubleClick"
 #define SC_UNO_SHOWFILT             "ShowFilterButton"
 
-
 //  range selection
 #define SC_UNONAME_INITVAL          "InitialValue"
 #define SC_UNONAME_TITLE            "Title"
@@ -599,7 +602,6 @@
 // <--
 
 // FormulaParser
-#define SC_UNO_REFERENCEPOS         "ReferencePosition"
 #define SC_UNO_COMPILEENGLISH       "CompileEnglish"
 #define SC_UNO_FORMULACONVENTION    "FormulaConvention"
 #define SC_UNO_IGNORELEADING        "IgnoreLeadingSpaces"
@@ -608,8 +610,9 @@
 #define SC_UNO_COMPILEFAP           "CompileFAP"
 
 // Chart2
-#define SC_UNONAME_ISHIDDEN         "IsHidden"
-#define SC_UNONAME_ROLE             "Role"
+#define SC_UNONAME_ROLE                 "Role"
+#define SC_UNONAME_HIDDENVALUES         "HiddenValues"
+#define SC_UNONAME_INCLUDEHIDDENCELLS   "IncludeHiddenCells"
 #define SC_UNONAME_HIDDENVALUES     "HiddenValues"
 
 // Solver

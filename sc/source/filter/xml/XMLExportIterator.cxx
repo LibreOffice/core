@@ -568,6 +568,7 @@ ScMyCell::ScMyCell() :
     aShapeList(),
     aDetectiveObjVec(),
     nValidationIndex(-1),
+    pBaseCell(NULL),
     bIsAutoStyle( sal_False ),
     bHasShape( sal_False ),
     bIsMergedBase( sal_False ),
@@ -807,11 +808,11 @@ sal_Bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell, ScFormatRangeStyles
         HasAnnotation( aCell );
         SetMatrixCellData( aCell );
         sal_Bool bIsAutoStyle;
-        sal_Bool bRemoveStyleRange((aLastAddress.Row == aCell.aCellAddress.Row) &&
-            (aLastAddress.Column + 1 == aCell.aCellAddress.Column));
+        // Ranges before the previous cell are not needed by ExportFormatRanges anymore and can be removed
+        sal_Int32 nRemoveBeforeRow = aLastAddress.Row;
         aCell.nStyleIndex = pCellStyles->GetStyleNameIndex(aCell.aCellAddress.Sheet,
             aCell.aCellAddress.Column, aCell.aCellAddress.Row,
-            bIsAutoStyle, aCell.nValidationIndex, aCell.nNumberFormat, bRemoveStyleRange);
+            bIsAutoStyle, aCell.nValidationIndex, aCell.nNumberFormat, nRemoveBeforeRow);
         aLastAddress = aCell.aCellAddress;
         aCell.bIsAutoStyle = bIsAutoStyle;
 

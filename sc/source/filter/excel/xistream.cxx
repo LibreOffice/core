@@ -36,6 +36,8 @@
 #include "xlstring.hxx"
 #include "xiroot.hxx"
 
+#include <vector>
+
 // ============================================================================
 // Decryption
 // ============================================================================
@@ -97,9 +99,19 @@ sal_uInt16 XclImpDecrypter::Read( SvStream& rStrm, void* pData, sal_uInt16 nByte
     return nRet;
 }
 
+const String XclImpDecrypter::GetPassword() const
+{
+    return maPass;
+}
+
 void XclImpDecrypter::SetHasValidPassword( bool bValid )
 {
     mnError = bValid ? ERRCODE_NONE : EXC_ENCR_ERROR_WRONG_PASS;
+}
+
+void XclImpDecrypter::SetPassword( const String& rPass )
+{
+    maPass = rPass;
 }
 
 // ----------------------------------------------------------------------------
@@ -157,6 +169,9 @@ void XclImpBiff5Decrypter::Init( const ByteString& rPass, sal_uInt16 nKey, sal_u
         // init codec
         maCodec.InitKey( mpnPassw );
         bValid = maCodec.VerifyKey( nKey, nHash );
+
+        String aUniPass( rPass, RTL_TEXTENCODING_MS_1252 );
+        SetPassword( aUniPass );
     }
 
     SetHasValidPassword( bValid );
@@ -255,6 +270,8 @@ void XclImpBiff8Decrypter::Init(
         // init codec
         maCodec.InitKey( mpnPassw, mpnDocId );
         bValid = maCodec.VerifyKey( pnSaltData, pnSaltHash );
+
+        SetPassword(rPass);
     }
 
     SetHasValidPassword( bValid );

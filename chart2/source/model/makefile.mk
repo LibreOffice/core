@@ -75,7 +75,6 @@ SHL1LIBS= 		$(LIB1TARGET)
 #Links import libraries.
 
 SHL1STDLIBS=	$(CHARTTOOLS) 		\
-                $(BASEGFXLIB) 		\
                 $(CPPULIB)			\
                 $(CPPUHELPERLIB)	\
                 $(COMPHELPERLIB)	\
@@ -84,7 +83,6 @@ SHL1STDLIBS=	$(CHARTTOOLS) 		\
                 $(SVLLIB)			\
                 $(SVTOOLLIB)		\
                 $(GOODIESLIB)		\
-                $(SOTLIB)			\
                 $(SALLIB)			\
                 $(UCBHELPERLIB)
 

@@ -219,7 +219,7 @@ BOOL ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
                 // NB: rich text format is lost.
                 // This is also true of Cells.
                 if( ScPostIt* pNote = pCell->GetNote() )
-                    pNote->SetText( aString );
+                    pNote->SetText( ScAddress( nCol, nRow, nTab ), aString );
             }
             else if ( cMatrixFlag != MM_NONE )
             {   // #60558# Matrix nicht zerreissen

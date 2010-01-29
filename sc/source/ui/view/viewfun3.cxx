@@ -185,6 +185,9 @@
 #include <sot/exchange.hxx>
 #include <memory>
 
+#include "attrib.hxx"
+#include "patattr.hxx"
+#include "dociter.hxx"
 #include "viewfunc.hxx"
 #include "tabvwsh.hxx"
 #include "docsh.hxx"
@@ -1056,11 +1059,35 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
     //  pDoc->HasCommonAttr( StartCol,nStartRow, nUndoEndCol,nUndoEndRow, nStartTab,
     //                          pClipDoc, nClipStartX, nClipStartY );
 
+    ScDocFunc& rDocFunc = pDocSh->GetDocFunc();
+    if ( bRecord )
+    {
+        String aUndo = ScGlobal::GetRscString( pClipDoc->IsCutMode() ? STR_UNDO_MOVE : STR_UNDO_COPY );
+        pUndoMgr->EnterListAction( aUndo, aUndo );
+    }
+
     if (bClipOver)
         if (lcl_SelHasAttrib( pDoc, nStartCol,nStartRow, nUndoEndCol,nUndoEndRow, aFilteredMark, HASATTR_OVERLAPPED ))
         {       // "Cell merge not possible if cells already merged"
-            ErrorMessage(STR_MSSG_PASTEFROMCLIP_1);
-            return FALSE;
+            ScDocAttrIterator aIter( pDoc, nStartTab, nStartCol, nStartRow, nUndoEndCol, nUndoEndRow );
+            const ScPatternAttr* pPattern = NULL;
+            const ScMergeAttr* pMergeFlag = NULL;
+            const ScMergeFlagAttr* pMergeFlagAttr = NULL;
+            SCCOL nCol = -1;
+            SCROW nRow1 = -1;
+            SCROW nRow2 = -1;
+            while ( ( pPattern = aIter.GetNext( nCol, nRow1, nRow2 ) ) != NULL )
+            {
+                pMergeFlag = (const ScMergeAttr*) &pPattern->GetItem(ATTR_MERGE);
+                pMergeFlagAttr = (const ScMergeFlagAttr*) &pPattern->GetItem(ATTR_MERGE_FLAG);
+                if( ( pMergeFlag && pMergeFlag->IsMerged() ) || ( pMergeFlagAttr && pMergeFlagAttr->IsOverlapped() ) )
+                {
+                    ScRange aRange(nCol, nRow1, nStartTab);
+                    pDoc->ExtendOverlapped(aRange);
+                    pDoc->ExtendMerge(aRange, TRUE, TRUE);
+                    rDocFunc.UnmergeCells(aRange, bRecord, TRUE);
+                }
+            }
         }
 
     if ( !bCutMode )
@@ -1163,7 +1190,7 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
 
     // skipped rows and merged cells don't mix
     if ( !bIncludeFiltered && pClipDoc->HasClipFilteredRows() )
-        pDocSh->GetDocFunc().UnmergeCells( aUserRange, FALSE, TRUE );
+        rDocFunc.UnmergeCells( aUserRange, FALSE, TRUE );
 
     pDoc->ExtendMergeSel( nStartCol, nStartRow, nEndCol, nEndRow, aFilteredMark, TRUE );    // Refresh
                                                                                     // und Bereich neu
@@ -1256,6 +1283,7 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
         }
         else
             pUndoMgr->AddUndoAction( pUndo );
+        pUndoMgr->LeaveListAction();
     }
 
     USHORT nPaint = PAINT_GRID;

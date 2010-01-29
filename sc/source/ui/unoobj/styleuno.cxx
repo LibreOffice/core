@@ -83,9 +83,9 @@ using namespace ::com::sun::star;
 
 //------------------------------------------------------------------------
 
-const SfxItemPropertyMap* lcl_GetCellStyleMap()
+const SfxItemPropertySet* lcl_GetCellStyleSet()
 {
-    static SfxItemPropertyMap aCellStyleMap_Impl[] =
+    static SfxItemPropertyMapEntry aCellStyleMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_ASIANVERT),ATTR_VERTICAL_ASIAN,&getBooleanCppuType(),                  0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_BOTTBORDER),ATTR_BORDER,       &::getCppuType((const table::BorderLine*)0),        0, BOTTOM_BORDER | CONVERT_TWIPS },
@@ -166,14 +166,15 @@ const SfxItemPropertyMap* lcl_GetCellStyleMap()
         {MAP_CHAR_LEN(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    &getCppuType((sal_Int16*)0),            0, 0 },
         {0,0,0,0,0,0}
     };
-    return aCellStyleMap_Impl;
+    static SfxItemPropertySet aCellStyleSet_Impl( aCellStyleMap_Impl );
+    return &aCellStyleSet_Impl;
 }
 
 //  Map mit allen Seitenattributen, incl. Kopf-/Fusszeilenattribute
 
-const SfxItemPropertyMap* lcl_GetPageStyleMap()
+const SfxItemPropertySet * lcl_GetPageStyleSet()
 {
-    static SfxItemPropertyMap aPageStyleMap_Impl[] =
+    static SfxItemPropertyMapEntry aPageStyleMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_PAGE_BACKCOLOR),   ATTR_BACKGROUND,    &::getCppuType((const sal_Int32*)0),            0, MID_BACK_COLOR },
         {MAP_CHAR_LEN(SC_UNO_PAGE_GRAPHICFILT), ATTR_BACKGROUND,    &::getCppuType((const ::rtl::OUString*)0),          0, MID_GRAPHIC_FILTER },
@@ -285,14 +286,15 @@ const SfxItemPropertyMap* lcl_GetPageStyleMap()
         {MAP_CHAR_LEN(SC_UNONAME_WRITING),      ATTR_WRITINGDIR,    &getCppuType((sal_Int16*)0),            0, 0 },
         {0,0,0,0,0,0}
     };
-    return aPageStyleMap_Impl;
+    static SfxItemPropertySet aPageStyleSet_Impl( aPageStyleMap_Impl );
+    return &aPageStyleSet_Impl;
 }
 
 //  Map mit Inhalten des Header-Item-Sets
 
 const SfxItemPropertyMap* lcl_GetHeaderStyleMap()
 {
-    static SfxItemPropertyMap aHeaderStyleMap_Impl[] =
+    static SfxItemPropertyMapEntry aHeaderStyleMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRBACKCOL),  ATTR_BACKGROUND,    &::getCppuType((const sal_Int32*)0),            0, MID_BACK_COLOR },
         {MAP_CHAR_LEN(SC_UNO_PAGE_HDRGRFFILT),  ATTR_BACKGROUND,    &::getCppuType((const ::rtl::OUString*)0),          0, MID_GRAPHIC_FILTER },
@@ -323,14 +325,15 @@ const SfxItemPropertyMap* lcl_GetHeaderStyleMap()
         {MAP_CHAR_LEN(OLD_UNO_PAGE_HDRBACKTRAN),ATTR_BACKGROUND,    &::getBooleanCppuType(),            0, MID_GRAPHIC_TRANSPARENT },
         {0,0,0,0,0,0}
     };
-    return aHeaderStyleMap_Impl;
+    static SfxItemPropertyMap aHeaderStyleMap( aHeaderStyleMap_Impl );
+    return &aHeaderStyleMap;
 }
 
 //  Map mit Inhalten des Footer-Item-Sets
 
 const SfxItemPropertyMap* lcl_GetFooterStyleMap()
 {
-    static SfxItemPropertyMap aFooterStyleMap_Impl[] =
+    static SfxItemPropertyMapEntry aFooterStyleMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRBACKCOL),  ATTR_BACKGROUND,    &::getCppuType((const sal_Int32*)0),            0, MID_BACK_COLOR },
         {MAP_CHAR_LEN(SC_UNO_PAGE_FTRGRFFILT),  ATTR_BACKGROUND,    &::getCppuType((const ::rtl::OUString*)0),          0, MID_GRAPHIC_FILTER },
@@ -361,7 +364,8 @@ const SfxItemPropertyMap* lcl_GetFooterStyleMap()
         {MAP_CHAR_LEN(OLD_UNO_PAGE_FTRBACKTRAN),ATTR_BACKGROUND,    &::getBooleanCppuType(),            0, MID_GRAPHIC_TRANSPARENT },
         {0,0,0,0,0,0}
     };
-    return aFooterStyleMap_Impl;
+    static SfxItemPropertyMap aFooterStyleMap( aFooterStyleMap_Impl );
+    return &aFooterStyleMap;
 }
 
 
@@ -1089,7 +1093,7 @@ void SAL_CALL ScStyleFamilyObj::removeVetoableChangeListener( const ::rtl::OUStr
 //UNUSED2008-05  }
 
 ScStyleObj::ScStyleObj(ScDocShell* pDocSh, SfxStyleFamily eFam, const String& rName) :
-    aPropSet( (eFam == SFX_STYLE_FAMILY_PARA) ? lcl_GetCellStyleMap() : lcl_GetPageStyleMap() ),
+    pPropSet( (eFam == SFX_STYLE_FAMILY_PARA) ? lcl_GetCellStyleSet() : lcl_GetPageStyleSet() ),
     pDocShell( pDocSh ),
     eFamily( eFam ),
     aStyleName( rName )
@@ -1307,34 +1311,34 @@ uno::Reference<container::XIndexReplace> ScStyleObj::CreateEmptyNumberingRules()
 
 // beans::XPropertyState
 
-const SfxItemSet* ScStyleObj::GetStyleItemSet_Impl( const String& rPropName,
-                                        const SfxItemPropertyMap*& rpResultEntry )
+const SfxItemSet* ScStyleObj::GetStyleItemSet_Impl( const ::rtl::OUString& rPropName,
+                                        const SfxItemPropertySimpleEntry*& rpResultEntry )
 {
     //! OUString as argument?
 
     SfxStyleSheetBase* pStyle = GetStyle_Impl();
     if (pStyle)
     {
-        const SfxItemPropertyMap* pMap = NULL;
+        const SfxItemPropertySimpleEntry* pEntry = NULL;
         if ( eFamily == SFX_STYLE_FAMILY_PAGE )
         {
-            pMap = SfxItemPropertyMap::GetByName( lcl_GetHeaderStyleMap(), rPropName );
-            if ( pMap )     // only item-wids in header/footer map
+            pEntry = lcl_GetHeaderStyleMap()->getByName( rPropName );
+            if ( pEntry )     // only item-wids in header/footer map
             {
-                rpResultEntry = pMap;
+                rpResultEntry = pEntry;
                 return &((const SvxSetItem&)pStyle->GetItemSet().Get(ATTR_PAGE_HEADERSET)).GetItemSet();
             }
-            pMap = SfxItemPropertyMap::GetByName( lcl_GetFooterStyleMap(), rPropName );
-            if ( pMap )     // only item-wids in header/footer map
+            pEntry = lcl_GetFooterStyleMap()->getByName( rPropName );
+            if ( pEntry )      // only item-wids in header/footer map
             {
-                rpResultEntry = pMap;
+                rpResultEntry = pEntry;
                 return &((const SvxSetItem&)pStyle->GetItemSet().Get(ATTR_PAGE_FOOTERSET)).GetItemSet();
             }
         }
-        pMap = SfxItemPropertyMap::GetByName( aPropSet.getPropertyMap(), rPropName );
-        if ( pMap )
+        pEntry = pPropSet->getPropertyMap()->getByName( rPropName );
+        if ( pEntry )
         {
-            rpResultEntry = pMap;
+            rpResultEntry = pEntry;
             return &pStyle->GetItemSet();
         }
     }
@@ -1348,10 +1352,9 @@ beans::PropertyState SAL_CALL ScStyleObj::getPropertyState( const rtl::OUString&
 {
     ScUnoGuard aGuard;
     beans::PropertyState eRet = beans::PropertyState_DIRECT_VALUE;
-    String aString(aPropertyName);
 
-    const SfxItemPropertyMap* pResultEntry = NULL;
-    const SfxItemSet* pItemSet = GetStyleItemSet_Impl( aString, pResultEntry );
+    const SfxItemPropertySimpleEntry* pResultEntry = NULL;
+    const SfxItemSet* pItemSet = GetStyleItemSet_Impl( aPropertyName, pResultEntry );
 
     if ( pItemSet && pResultEntry )
     {
@@ -1405,12 +1408,12 @@ void SAL_CALL ScStyleObj::setPropertyToDefault( const rtl::OUString& aPropertyNa
 {
     ScUnoGuard aGuard;
 
-    const SfxItemPropertyMap* pMap = aPropSet.getPropertyMap();
-    pMap = SfxItemPropertyMap::GetByName( pMap, aPropertyName );
-    if ( !pMap )
+    const SfxItemPropertyMap* pMap = pPropSet->getPropertyMap();
+    const SfxItemPropertySimpleEntry* pEntry = pMap->getByName( aPropertyName );
+    if ( !pEntry )
         throw beans::UnknownPropertyException();
 
-    SetOnePropertyValue( pMap, NULL );
+    SetOnePropertyValue( aPropertyName, pEntry, NULL );
 }
 
 uno::Any SAL_CALL ScStyleObj::getPropertyDefault( const rtl::OUString& aPropertyName )
@@ -1418,11 +1421,10 @@ uno::Any SAL_CALL ScStyleObj::getPropertyDefault( const rtl::OUString& aProperty
                                     uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    String aString(aPropertyName);
     uno::Any aAny;
 
-    const SfxItemPropertyMap* pResultEntry = NULL;
-    const SfxItemSet* pStyleSet = GetStyleItemSet_Impl( aString, pResultEntry );
+    const SfxItemPropertySimpleEntry* pResultEntry = NULL;
+    const SfxItemSet* pStyleSet = GetStyleItemSet_Impl( aPropertyName, pResultEntry );
 
     if ( pStyleSet && pResultEntry )
     {
@@ -1467,14 +1469,14 @@ uno::Any SAL_CALL ScStyleObj::getPropertyDefault( const rtl::OUString& aProperty
                 case ATTR_PAGE_SCALETO:
                     {
                         const ScPageScaleToItem aItem((const ScPageScaleToItem&)pItemSet->Get(nWhich));
-                        if (aString.EqualsAscii( SC_UNO_PAGE_SCALETOX ))
+                        if (aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SC_UNO_PAGE_SCALETOX )))
                             aAny = uno::makeAny(static_cast<sal_Int16>(aItem.GetWidth()));
                         else
                             aAny = uno::makeAny(static_cast<sal_Int16>(aItem.GetHeight()));
                     }
                     break;
                 default:
-                    aAny = aPropSet.getPropertyValue( *pResultEntry, *pItemSet );
+                    pPropSet->getPropertyValue( *pResultEntry, *pItemSet, aAny );
             }
         }
         else if ( IsScUnoWid( nWhich ) )
@@ -1523,17 +1525,11 @@ void SAL_CALL ScStyleObj::setPropertyValues( const uno::Sequence< rtl::OUString 
         const rtl::OUString* pNames = aPropertyNames.getConstArray();
         const uno::Any* pValues = aValues.getConstArray();
 
-        const SfxItemPropertyMap* pPropertyMap = aPropSet.getPropertyMap();
-        const SfxItemPropertyMap* pMap = pPropertyMap;
+        const SfxItemPropertyMap* pPropertyMap = pPropSet->getPropertyMap();
         for (sal_Int32 i = 0; i < nCount; i++)
         {
-            String aNameString = pNames[i];
-            pMap = SfxItemPropertyMap::GetByName( pMap, aNameString );
-            SetOnePropertyValue( pMap, &pValues[i] );
-            if (!pMap)
-                pMap = pPropertyMap;
-            else
-                pMap++;
+            const SfxItemPropertySimpleEntry*  pEntry = pPropertyMap->getByName( pNames[i] );
+            SetOnePropertyValue( pNames[i], pEntry, &pValues[i] );
         }
     }
 }
@@ -1637,17 +1633,11 @@ void SAL_CALL ScStyleObj::setPropertiesToDefault( const uno::Sequence<rtl::OUStr
     {
         const rtl::OUString* pNames = aPropertyNames.getConstArray();
 
-        const SfxItemPropertyMap* pPropertyMap = aPropSet.getPropertyMap();
-        const SfxItemPropertyMap* pMap = pPropertyMap;
+        const SfxItemPropertyMap* pPropertyMap = pPropSet->getPropertyMap();
         for (sal_Int32 i = 0; i < nCount; i++)
         {
-            String aNameString(pNames[i]);
-            pMap = SfxItemPropertyMap::GetByName( pMap, aNameString );
-            SetOnePropertyValue( pMap, NULL );
-            if (!pMap)
-                pMap = pPropertyMap;
-            else
-                pMap++;
+            const SfxItemPropertySimpleEntry*  pEntry = pPropertyMap->getByName( pNames[i] );
+            SetOnePropertyValue( pNames[i], pEntry, NULL );
         }
     }
 }
@@ -1678,7 +1668,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScStyleObj::getPropertySetInfo(
                                                         throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return aPropSet.getPropertySetInfo();
+    return pPropSet->getPropertySetInfo();
 }
 
 void SAL_CALL ScStyleObj::setPropertyValue(
@@ -1689,53 +1679,51 @@ void SAL_CALL ScStyleObj::setPropertyValue(
 {
     ScUnoGuard aGuard;
 
-    const SfxItemPropertyMap* pMap = aPropSet.getPropertyMap();
-    pMap = SfxItemPropertyMap::GetByName( pMap, aPropertyName );
-    if ( !pMap )
+    const SfxItemPropertySimpleEntry*  pEntry = pPropSet->getPropertyMap()->getByName( aPropertyName );
+    if ( !pEntry )
         throw beans::UnknownPropertyException();
 
-    SetOnePropertyValue( pMap, &aValue );
+    SetOnePropertyValue( aPropertyName, pEntry, &aValue );
 }
 
-void ScStyleObj::SetOnePropertyValue( const SfxItemPropertyMap* pMap, const uno::Any* pValue )
+void ScStyleObj::SetOnePropertyValue( const ::rtl::OUString& rPropertyName, const SfxItemPropertySimpleEntry* pEntry, const uno::Any* pValue )
                                 throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
     SfxStyleSheetBase* pStyle = GetStyle_Impl();
-    if ( pStyle && pMap )
+    if ( pStyle && pEntry )
     {
         //  #70909# cell styles cannot be modified if any sheet is protected
         if ( eFamily == SFX_STYLE_FAMILY_PARA && lcl_AnyTabProtected( *pDocShell->GetDocument() ) )
             throw uno::RuntimeException();
 
-        String aString(String::CreateFromAscii( pMap->pName ));
-
         SfxItemSet& rSet = pStyle->GetItemSet();    // direkt im lebenden Style aendern...
         sal_Bool bDone = sal_False;
         if ( eFamily == SFX_STYLE_FAMILY_PAGE )
         {
-            const SfxItemPropertyMap* pHeaderMap =
-                    SfxItemPropertyMap::GetByName( lcl_GetHeaderStyleMap(), aString );
-            if ( pHeaderMap )   // only item-wids in header/footer map
+            if(pEntry->nWID == SC_WID_UNO_HEADERSET)
             {
-                SvxSetItem aNewHeader( (const SvxSetItem&)rSet.Get(ATTR_PAGE_HEADERSET) );
-                if (pValue)
-                    aPropSet.setPropertyValue( *pHeaderMap, *pValue, aNewHeader.GetItemSet() );
-                else
-                    aNewHeader.GetItemSet().ClearItem( pHeaderMap->nWID );
-                rSet.Put( aNewHeader );
-                bDone = sal_True;
+                const SfxItemPropertySimpleEntry* pHeaderEntry = lcl_GetHeaderStyleMap()->getByName( rPropertyName );
+                if ( pHeaderEntry ) // only item-wids in header/footer map
+                {
+                    SvxSetItem aNewHeader( (const SvxSetItem&)rSet.Get(ATTR_PAGE_HEADERSET) );
+                    if (pValue)
+                        pPropSet->setPropertyValue( *pHeaderEntry, *pValue, aNewHeader.GetItemSet() );
+                    else
+                        aNewHeader.GetItemSet().ClearItem( pHeaderEntry->nWID );
+                    rSet.Put( aNewHeader );
+                    bDone = sal_True;
+                }
             }
-            else
+            else if(pEntry->nWID == SC_WID_UNO_FOOTERSET)
             {
-                const SfxItemPropertyMap* pFooterMap =
-                        SfxItemPropertyMap::GetByName( lcl_GetFooterStyleMap(), aString );
-                if ( pFooterMap )   // only item-wids in header/footer map
+                const SfxItemPropertySimpleEntry* pFooterEntry = lcl_GetFooterStyleMap()->getByName( rPropertyName );
+                if ( pFooterEntry ) // only item-wids in header/footer map
                 {
                     SvxSetItem aNewFooter( (const SvxSetItem&)rSet.Get(ATTR_PAGE_FOOTERSET) );
                     if (pValue)
-                        aPropSet.setPropertyValue( *pFooterMap, *pValue, aNewFooter.GetItemSet() );
+                        pPropSet->setPropertyValue( *pFooterEntry, *pValue, aNewFooter.GetItemSet() );
                     else
-                        aNewFooter.GetItemSet().ClearItem( pFooterMap->nWID );
+                        aNewFooter.GetItemSet().ClearItem( pFooterEntry->nWID );
                     rSet.Put( aNewFooter );
                     bDone = sal_True;
                 }
@@ -1743,15 +1731,13 @@ void ScStyleObj::SetOnePropertyValue( const SfxItemPropertyMap* pMap, const uno:
         }
         if (!bDone)
         {
-            const SfxItemPropertyMap* pOwnMap =
-                    SfxItemPropertyMap::GetByName( aPropSet.getPropertyMap(), aString );
-            if ( pOwnMap )
+            if ( pEntry )
             {
-                if ( IsScItemWid( pOwnMap->nWID ) )
+                if ( IsScItemWid( pEntry->nWID ) )
                 {
                     if (pValue)
                     {
-                        switch ( pOwnMap->nWID )        // fuer Item-Spezial-Behandlungen
+                        switch ( pEntry->nWID )     // fuer Item-Spezial-Behandlungen
                         {
                             case ATTR_VALUE_FORMAT:
                                 {
@@ -1782,7 +1768,7 @@ void ScStyleObj::SetOnePropertyValue( const SfxItemPropertyMap* pMap, const uno:
                                 {
                                     sal_Int16 nVal = 0;
                                     *pValue >>= nVal;
-                                    rSet.Put( SfxUInt16Item( pOwnMap->nWID, (USHORT)HMMToTwips(nVal) ) );
+                                    rSet.Put( SfxUInt16Item( pEntry->nWID, (USHORT)HMMToTwips(nVal) ) );
                                 }
                                 break;
                             case ATTR_ROTATE_VALUE:
@@ -1835,7 +1821,7 @@ void ScStyleObj::SetOnePropertyValue( const SfxItemPropertyMap* pMap, const uno:
                                     rSet.ClearItem(ATTR_PAGE_SCALETO);
                                     sal_Int16 nVal = 0;
                                     *pValue >>= nVal;
-                                    rSet.Put( SfxUInt16Item( pOwnMap->nWID, nVal ) );
+                                    rSet.Put( SfxUInt16Item( pEntry->nWID, nVal ) );
                                 }
                                 break;
                             case ATTR_PAGE_FIRSTPAGENO:
@@ -1852,7 +1838,7 @@ void ScStyleObj::SetOnePropertyValue( const SfxItemPropertyMap* pMap, const uno:
                                     sal_Bool bBool = sal_False;
                                     *pValue >>= bBool;
                                     //! sal_Bool-MID fuer ScViewObjectModeItem definieren?
-                                    rSet.Put( ScViewObjectModeItem( pOwnMap->nWID,
+                                    rSet.Put( ScViewObjectModeItem( pEntry->nWID,
                                         bBool ? VOBJ_MODE_SHOW : VOBJ_MODE_HIDE ) );
                                 }
                                 break;
@@ -1895,7 +1881,7 @@ void ScStyleObj::SetOnePropertyValue( const SfxItemPropertyMap* pMap, const uno:
                                     if (*pValue >>= nPages)
                                     {
                                         ScPageScaleToItem aItem = ((const ScPageScaleToItem&)rSet.Get(ATTR_PAGE_SCALETO));
-                                        if ( aString.EqualsAscii(SC_UNO_PAGE_SCALETOX))
+                                        if ( rPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SC_UNO_PAGE_SCALETOX)))
                                             aItem.SetWidth(static_cast<sal_uInt16>(nPages));
                                         else
                                             aItem.SetHeight(static_cast<sal_uInt16>(nPages));
@@ -1909,27 +1895,27 @@ void ScStyleObj::SetOnePropertyValue( const SfxItemPropertyMap* pMap, const uno:
                                 //  #65253# Default-Items mit falscher Slot-ID
                                 //  funktionieren im SfxItemPropertySet3 nicht
                                 //! Slot-IDs aendern...
-                                if ( rSet.GetPool()->GetSlotId(pOwnMap->nWID) == pOwnMap->nWID &&
-                                     rSet.GetItemState(pOwnMap->nWID, sal_False) == SFX_ITEM_DEFAULT )
+                                if ( rSet.GetPool()->GetSlotId(pEntry->nWID) == pEntry->nWID &&
+                                     rSet.GetItemState(pEntry->nWID, sal_False) == SFX_ITEM_DEFAULT )
                                 {
-                                    rSet.Put( rSet.Get(pOwnMap->nWID) );
+                                    rSet.Put( rSet.Get(pEntry->nWID) );
                                 }
-                                aPropSet.setPropertyValue( *pOwnMap, *pValue, rSet );
+                                pPropSet->setPropertyValue( *pEntry, *pValue, rSet );
                         }
                     }
                     else
                     {
-                        rSet.ClearItem( pOwnMap->nWID );
+                        rSet.ClearItem( pEntry->nWID );
                         // #67847# language for number formats
-                        if ( pOwnMap->nWID == ATTR_VALUE_FORMAT )
+                        if ( pEntry->nWID == ATTR_VALUE_FORMAT )
                             rSet.ClearItem( ATTR_LANGUAGE_FORMAT );
 
                         //! for ATTR_ROTATE_VALUE, also reset ATTR_ORIENTATION?
                     }
                 }
-                else if ( IsScUnoWid( pOwnMap->nWID ) )
+                else if ( IsScUnoWid( pEntry->nWID ) )
                 {
-                    switch ( pOwnMap->nWID )
+                    switch ( pEntry->nWID )
                     {
                         case SC_WID_UNO_TBLBORD:
                             {
@@ -1987,10 +1973,9 @@ uno::Any SAL_CALL ScStyleObj::getPropertyValue( const rtl::OUString& aPropertyNa
                         uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    String aString(aPropertyName);
     uno::Any aAny;
 
-    if ( aString.EqualsAscii( SC_UNONAME_DISPNAME ) )      // read-only
+    if ( aPropertyName.equalsAscii( SC_UNONAME_DISPNAME ) )      // read-only
     {
         //  core always has the display name
         SfxStyleSheetBase* pStyle = GetStyle_Impl();
@@ -1999,8 +1984,8 @@ uno::Any SAL_CALL ScStyleObj::getPropertyValue( const rtl::OUString& aPropertyNa
     }
     else
     {
-        const SfxItemPropertyMap* pResultEntry = NULL;
-        const SfxItemSet* pItemSet = GetStyleItemSet_Impl( aString, pResultEntry );
+        const SfxItemPropertySimpleEntry* pResultEntry = NULL;
+        const SfxItemSet* pItemSet = GetStyleItemSet_Impl( aPropertyName, pResultEntry );
 
         if ( pItemSet && pResultEntry )
         {
@@ -2065,7 +2050,7 @@ uno::Any SAL_CALL ScStyleObj::getPropertyValue( const rtl::OUString& aPropertyNa
                     case ATTR_PAGE_SCALETO:
                         {
                             ScPageScaleToItem aItem((const ScPageScaleToItem&)pItemSet->Get(ATTR_PAGE_SCALETO));
-                            if (aString.EqualsAscii(SC_UNO_PAGE_SCALETOX))
+                            if (aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SC_UNO_PAGE_SCALETOX)))
                                 aAny = uno::makeAny(static_cast<sal_Int16>(aItem.GetWidth()));
                             else
                                 aAny = uno::makeAny(static_cast<sal_Int16>(aItem.GetHeight()));
@@ -2080,10 +2065,10 @@ uno::Any SAL_CALL ScStyleObj::getPropertyValue( const rtl::OUString& aPropertyNa
                         {
                             SfxItemSet aNoEmptySet( *pItemSet );
                             aNoEmptySet.Put( aNoEmptySet.Get( nWhich ) );
-                            aAny = aPropSet.getPropertyValue( *pResultEntry, aNoEmptySet );
+                            pPropSet->getPropertyValue( *pResultEntry, aNoEmptySet, aAny );
                         }
                         else
-                            aAny = aPropSet.getPropertyValue( *pResultEntry, *pItemSet );
+                            pPropSet->getPropertyValue( *pResultEntry, *pItemSet, aAny );
                 }
             }
             else if ( IsScUnoWid( nWhich ) )
@@ -2127,10 +2112,9 @@ sal_Bool SAL_CALL ScStyleObj::supportsService( const rtl::OUString& rServiceName
                                                     throw(uno::RuntimeException)
 {
     BOOL bPage = ( eFamily == SFX_STYLE_FAMILY_PAGE );
-    String aServiceStr( rServiceName );
-    return aServiceStr.EqualsAscii( SCSTYLE_SERVICE ) ||
-           aServiceStr.EqualsAscii( bPage ? SCPAGESTYLE_SERVICE
-                                          : SCCELLSTYLE_SERVICE );
+    return rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SCSTYLE_SERVICE ) )||
+           rServiceName.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM ( bPage ? SCPAGESTYLE_SERVICE : SCCELLSTYLE_SERVICE ));
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScStyleObj::getSupportedServiceNames()

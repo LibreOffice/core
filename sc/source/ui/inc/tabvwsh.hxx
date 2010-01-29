@@ -33,11 +33,13 @@
 
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfac.hxx>
+#include <svx/svxenum.hxx>
 #include "scdllapi.h"
 #include "dbfunc.hxx"           // -> tabview
 #include "target.hxx"
 #include "rangelst.hxx"         // ScRangeListRef
 #include "shellids.hxx"
+#include "tabprotection.hxx" // for ScPasswordHash
 
 class FmFormShell;
 class SbxObject;
@@ -257,6 +259,7 @@ public:
 
     ScInputHandler* GetInputHandler() const;
     void            UpdateInputHandler( BOOL bForce = FALSE, BOOL bStopEditing = TRUE );
+    void            UpdateInputHandlerCellAdjust( SvxCellHorJustify eJust );
     BOOL            TabKeyInput(const KeyEvent& rKEvt);
     BOOL            SfxKeyInput(const KeyEvent& rKEvt);
 
@@ -427,6 +430,8 @@ public:
     void    RemoveAccessibilityObject( SfxListener& rObject );
     void    BroadcastAccessibility( const SfxHint &rHint );
     BOOL    HasAccessibilityObjects();
+
+    bool    ExecuteRetypePassDlg(ScPasswordHash eDesiredHash);
 
     using ScTabView::ShowCursor;
 };

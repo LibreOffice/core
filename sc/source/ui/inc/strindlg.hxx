@@ -37,6 +37,9 @@
 #include <vcl/imagebtn.hxx>
 #include <vcl/edit.hxx>
 
+#include <layout/layout.hxx>
+#include <layout/layout-pre.hxx>
+
 //------------------------------------------------------------------------
 
 class ScStringInputDlg : public ModalDialog
@@ -59,6 +62,7 @@ private:
     HelpButton      aBtnHelp;
 };
 
+#include <layout/layout-post.hxx>
 
 #endif // SC_STRINDLG_HXX
 

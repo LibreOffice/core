@@ -7,7 +7,7 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: tabvwsha.cxx,v $
- * $Revision: 1.28 $
+ * $Revision: 1.28.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -452,6 +452,11 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
                 rSet.Put( SfxBoolItem( nWhich, GetViewData()->GetDocShell()->IsReadOnly() ) );
                 break;
 
+            case FID_TAB_DESELECTALL:
+                if ( nTabSelCount == 1 )
+                    rSet.DisableItem( nWhich );     // enabled only if several sheets are selected
+                break;
+
         } // switch ( nWitch )
         nWhich = aIter.NextWhich();
     } // while ( nWitch )
@@ -673,6 +678,12 @@ void ScTabViewShell::UpdateInputHandler( BOOL bForce /* = FALSE */, BOOL bStopEd
     rBindings.Invalidate( SID_STATUS_SUM );         // immer zusammen mit Eingabezeile
     rBindings.Invalidate( SID_ATTR_SIZE );
     rBindings.Invalidate( SID_TABLE_CELL );
+}
+
+void ScTabViewShell::UpdateInputHandlerCellAdjust( SvxCellHorJustify eJust )
+{
+    if( ScInputHandler* pHdl = pInputHandler ? pInputHandler : SC_MOD()->GetInputHdl() )
+        pHdl->UpdateCellAdjust( eJust );
 }
 
 //------------------------------------------------------------------

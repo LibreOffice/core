@@ -63,6 +63,7 @@ class ScShowTabDlg;
 class ScStringInputDlg;
 class ScImportOptionsDlg;
 class SfxTabDialog;
+class ScSortWarningDlg;
 
 #define DECL_ABSTDLG_BASE(Class,DialogClass)        \
     DialogClass*        pDlg;                       \
@@ -354,6 +355,23 @@ class AbstractTabDialog_Impl : public SfxAbstractTabDialog
     virtual void        SetText( const XubString& rStr ); //add by CHINA001
     virtual String      GetText() const; //add by CHINA001
 };
+#if ENABLE_LAYOUT
+namespace layout
+{
+//add for ScAttrDlg , ScHFEditDlg, ScStyleDlg, ScSubTotalDlg, ScCharDlg, ScParagraphDlg, ScValidationDlg, ScSortDlg
+class AbstractTabDialog_Impl : public SfxAbstractTabDialog
+{
+    DECL_ABSTDLG_BASE( AbstractTabDialog_Impl,SfxTabDialog )
+    virtual void                SetCurPageId( USHORT nId );
+    virtual const SfxItemSet*   GetOutputItemSet() const;
+    virtual const USHORT*       GetInputRanges( const SfxItemPool& pItem ); //add by CHINA001
+    virtual void                SetInputSet( const SfxItemSet* pInSet );   //add by CHINA001
+        //From class Window.
+    virtual void        SetText( const XubString& rStr ); //add by CHINA001
+    virtual String      GetText() const; //add by CHINA001
+};
+} // end namespace layout
+#endif /* ENABLE_LAYOUT */
 //------------------------------------------------------------------------
 //AbstractDialogFactory_Impl implementations
 class ScAbstractDialogFactory_Impl : public ScAbstractDialogFactory
@@ -381,6 +399,9 @@ public:
                                                     const String&   rStrLabel,
                                                     int nId,
                                                     BOOL                bColDefault = TRUE );
+
+    virtual VclAbstractDialog * CreateScSortWarningDlg( Window* pParent, const String& rExtendText, const String& rCurrentText, int nId );
+
     virtual AbstractScDataPilotDatabaseDlg * CreateScDataPilotDatabaseDlg (Window* pParent ,int nId ); //add for ScDataPilotDatabaseDlg
 
     virtual AbstractScDataPilotSourceTypeDlg * CreateScDataPilotSourceTypeDlg (  Window* pParent, BOOL bEnableExternal, int nId ) ; //add for ScDataPilotSourceTypeDlg

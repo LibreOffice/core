@@ -47,6 +47,15 @@
 #include "scresid.hxx"
 #include "globstr.hrc"
 
+#include <layout/layout-pre.hxx>
+
+#if ENABLE_LAYOUT
+#undef ScResId
+#define ScResId(x) #x
+#undef ModalDialog
+#define ModalDialog( parent, id ) Dialog( parent, "move-copy-sheet.xml", id )
+#endif /* ENABLE_LAYOUT */
+
 //==================================================================
 
 ScMoveTableDlg::ScMoveTableDlg( Window* pParent )
@@ -66,6 +75,10 @@ ScMoveTableDlg::ScMoveTableDlg( Window* pParent )
         nTable      ( 0 ),
         bCopyTable  ( FALSE )
 {
+#if ENABLE_LAYOUT
+#undef ScResId
+    SetHelpId (FID_TAB_MOVE);
+#endif /* ENABLE_LAYOUT */
     Init();
     FreeResource();
 }

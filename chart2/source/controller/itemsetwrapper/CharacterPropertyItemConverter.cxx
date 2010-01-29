@@ -78,7 +78,7 @@ namespace
 //         IPM_MAP_ENTRY( EE_CHAR_WEIGHT_CTL, "CharWeightComplex", 0 )
 //         IPM_MAP_ENTRY( EE_CHAR_ITALIC_CJK, "CharPostureAsian", 0 )
 //         IPM_MAP_ENTRY( EE_CHAR_ITALIC_CTL, "CharPostureComplex", 0 )
-
+        IPM_MAP_ENTRY( EE_PARA_ASIANCJKSPACING, "ParaIsCharacterDistance", 0 )
         );
 
     return aCharacterPropertyMap;
@@ -290,6 +290,11 @@ void CharacterPropertyItemConverter::FillSpecialItem(
                 rOutItemSet.Put( SfxStringItem( nWhichId, C2U( "" ) ) );
         }
         break;
+
+        case EE_PARA_FORBIDDENRULES:
+        case EE_PARA_HANGINGPUNCTUATION:
+            rOutItemSet.DisableItem( nWhichId );
+            break;
     }
 }
 

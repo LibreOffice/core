@@ -77,7 +77,10 @@
 #include <com/sun/star/sheet/XCellRangeMovement.hpp>
 #include <com/sun/star/sheet/XCellRangeData.hpp>
 #include <com/sun/star/sheet/FormulaResult.hpp>
+#include <com/sun/star/sheet/FilterOperator2.hpp>
 #include <com/sun/star/sheet/TableFilterField.hpp>
+#include <com/sun/star/sheet/TableFilterField2.hpp>
+#include <com/sun/star/sheet/XSheetFilterDescriptor2.hpp>
 #include <com/sun/star/sheet/XSheetFilterable.hpp>
 #include <com/sun/star/sheet/FilterConnection.hpp>
 #include <com/sun/star/util/CellProtection.hpp>
@@ -4027,7 +4030,7 @@ void lcl_SetAllQueryForField( ScDocShell* pDocShell, SCCOLROW nField, sal_Int16 
 }
 
 // Modifies sCriteria, and nOp depending on the value of sCriteria
-void lcl_setTableFieldsFromCriteria( rtl::OUString& sCriteria1, uno::Reference< beans::XPropertySet >& xDescProps, sheet::TableFilterField& rFilterField )
+void lcl_setTableFieldsFromCriteria( rtl::OUString& sCriteria1, uno::Reference< beans::XPropertySet >& xDescProps, sheet::TableFilterField2& rFilterField )
 {
     // #TODO make this more efficient and cycle through
     // sCriteria1 character by character to pick up <,<>,=, * etc.
@@ -4047,10 +4050,10 @@ void lcl_setTableFieldsFromCriteria( rtl::OUString& sCriteria1, uno::Reference< 
     if ( ( nPos = sCriteria1.indexOf( EQUALS ) ) == 0 )
     {
         if ( sCriteria1.getLength() == EQUALS.getLength() )
-            rFilterField.Operator = sheet::FilterOperator_EMPTY;
+            rFilterField.Operator = sheet::FilterOperator2::EMPTY;
         else
         {
-            rFilterField.Operator = sheet::FilterOperator_EQUAL;
+            rFilterField.Operator = sheet::FilterOperator2::EQUAL;
             sCriteria1 = sCriteria1.copy( EQUALS.getLength() );
             sCriteria1 = VBAToRegexp( sCriteria1 );
             // UseRegularExpressions
@@ -4062,10 +4065,10 @@ void lcl_setTableFieldsFromCriteria( rtl::OUString& sCriteria1, uno::Reference< 
     else if ( ( nPos = sCriteria1.indexOf( NOTEQUALS ) ) == 0 )
     {
         if ( sCriteria1.getLength() == NOTEQUALS.getLength() )
-            rFilterField.Operator = sheet::FilterOperator_NOT_EMPTY;
+            rFilterField.Operator = sheet::FilterOperator2::NOT_EMPTY;
         else
         {
-            rFilterField.Operator = sheet::FilterOperator_NOT_EQUAL;
+            rFilterField.Operator = sheet::FilterOperator2::NOT_EQUAL;
             sCriteria1 = sCriteria1.copy( NOTEQUALS.getLength() );
             sCriteria1 = VBAToRegexp( sCriteria1 );
             // UseRegularExpressions
@@ -4079,12 +4082,12 @@ void lcl_setTableFieldsFromCriteria( rtl::OUString& sCriteria1, uno::Reference< 
         if ( ( nPos = sCriteria1.indexOf( GREATERTHANEQUALS ) ) == 0 )
         {
             sCriteria1 = sCriteria1.copy( GREATERTHANEQUALS.getLength() );
-            rFilterField.Operator = sheet::FilterOperator_GREATER_EQUAL;
+            rFilterField.Operator = sheet::FilterOperator2::GREATER_EQUAL;
         }
         else
         {
             sCriteria1 = sCriteria1.copy( GREATERTHAN.getLength() );
-            rFilterField.Operator = sheet::FilterOperator_GREATER;
+            rFilterField.Operator = sheet::FilterOperator2::GREATER;
         }
 
     }
@@ -4094,17 +4097,17 @@ void lcl_setTableFieldsFromCriteria( rtl::OUString& sCriteria1, uno::Reference< 
         if ( ( nPos = sCriteria1.indexOf( LESSTHANEQUALS ) ) == 0 )
         {
             sCriteria1 = sCriteria1.copy( LESSTHANEQUALS.getLength() );
-            rFilterField.Operator = sheet::FilterOperator_LESS_EQUAL;
+            rFilterField.Operator = sheet::FilterOperator2::LESS_EQUAL;
         }
         else
         {
             sCriteria1 = sCriteria1.copy( LESSTHAN.getLength() );
-            rFilterField.Operator = sheet::FilterOperator_LESS;
+            rFilterField.Operator = sheet::FilterOperator2::LESS;
         }
 
     }
     else
-        rFilterField.Operator = sheet::FilterOperator_EQUAL;
+        rFilterField.Operator = sheet::FilterOperator2::EQUAL;
 
     if ( bIsNumeric )
     {
@@ -4213,13 +4216,16 @@ ScVbaRange::AutoFilter( const uno::Any& Field, const uno::Any& Criteria1, const 
     bool bAll = false;;
     if ( ( Field >>= nField )  )
     {
-        uno::Sequence< sheet::TableFilterField > sTabFilts;
-        uno::Reference< sheet::XSheetFilterDescriptor > xDesc = xDataBaseRange->getFilterDescriptor();
-        uno::Reference< beans::XPropertySet > xDescProps( xDesc, uno::UNO_QUERY_THROW );
+        uno::Reference< sheet::XSheetFilterDescriptor2 > xDesc(
+                xDataBaseRange->getFilterDescriptor(), uno::UNO_QUERY );
+        if ( xDesc.is() )
+        {
+            uno::Sequence< sheet::TableFilterField2 > sTabFilts;
+            uno::Reference< beans::XPropertySet > xDescProps( xDesc, uno::UNO_QUERY_THROW );
         if ( Criteria1.hasValue() )
         {
             sTabFilts.realloc( 1 );
-            sTabFilts[0].Operator = sheet::FilterOperator_EQUAL;// sensible default
+            sTabFilts[0].Operator = sheet::FilterOperator2::EQUAL;// sensible default
             if ( !bCritHasNumericValue )
             {
                 Criteria1 >>= sCriteria1;
@@ -4252,16 +4258,16 @@ ScVbaRange::AutoFilter( const uno::Any& Field, const uno::Any& Criteria1, const 
             switch ( nOperator )
             {
                 case excel::XlAutoFilterOperator::xlBottom10Items:
-                    sTabFilts[0].Operator = sheet::FilterOperator_BOTTOM_VALUES;
+                    sTabFilts[0].Operator = sheet::FilterOperator2::BOTTOM_VALUES;
                     break;
                 case excel::XlAutoFilterOperator::xlBottom10Percent:
-                    sTabFilts[0].Operator = sheet::FilterOperator_BOTTOM_PERCENT;
+                    sTabFilts[0].Operator = sheet::FilterOperator2::BOTTOM_PERCENT;
                     break;
                 case excel::XlAutoFilterOperator::xlTop10Items:
-                    sTabFilts[0].Operator = sheet::FilterOperator_TOP_VALUES;
+                    sTabFilts[0].Operator = sheet::FilterOperator2::TOP_VALUES;
                     break;
                 case excel::XlAutoFilterOperator::xlTop10Percent:
-                    sTabFilts[0].Operator = sheet::FilterOperator_TOP_PERCENT;
+                    sTabFilts[0].Operator = sheet::FilterOperator2::TOP_PERCENT;
                     break;
                 case excel::XlAutoFilterOperator::xlOr:
                     nConn = sheet::FilterConnection_OR;
@@ -4300,12 +4306,12 @@ ScVbaRange::AutoFilter( const uno::Any& Field, const uno::Any& Criteria1, const 
                 {
                     Criteria2 >>= sTabFilts[1].NumericValue;
                     sTabFilts[1].IsNumeric = sal_True;
-                    sTabFilts[1].Operator = sheet::FilterOperator_EQUAL;
+                    sTabFilts[1].Operator = sheet::FilterOperator2::EQUAL;
                 }
             }
         }
 
-        xDesc->setFilterFields( sTabFilts );
+        xDesc->setFilterFields2( sTabFilts );
         if ( !bAll )
         {
             xDataBaseRange->refresh();
@@ -4313,6 +4319,7 @@ ScVbaRange::AutoFilter( const uno::Any& Field, const uno::Any& Criteria1, const 
         else
             // was 0 based now seems to be 1
             lcl_SetAllQueryForField( pShell, nField, nSheet );
+        }
     }
     else
     {
@@ -4333,7 +4340,10 @@ ScVbaRange::AutoFilter( const uno::Any& Field, const uno::Any& Criteria1, const 
                     lcl_SetAllQueryForField( pShell, rEntry.nField, nSheet );
             }
             // remove exising filters
-            xDataBaseRange->getFilterDescriptor()->setFilterFields( uno::Sequence< sheet::TableFilterField >() );
+            uno::Reference< sheet::XSheetFilterDescriptor2 > xSheetFilterDescriptor(
+                    xDataBaseRange->getFilterDescriptor(), uno::UNO_QUERY );
+            if( xSheetFilterDescriptor.is() )
+                xSheetFilterDescriptor->setFilterFields2( uno::Sequence< sheet::TableFilterField2 >() );
         }
         xDBRangeProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("AutoFilter") ), uno::Any(!bHasAuto) );
 

@@ -827,6 +827,10 @@ void __EXPORT ScPreviewShell::Execute( SfxRequest& rReq )
         case SID_CURSORRIGHT:
             DoScroll( nSlot );
             break;
+        case SID_CANCEL:
+            if( ScViewUtil::IsFullScreen( *this ) )
+                ScViewUtil::SetFullScreen( *this, false );
+            break;
 
         default:
             break;

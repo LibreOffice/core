@@ -82,7 +82,11 @@ private:
     SvNumberFormatter*  pNumFormatter;
     SvStream&           rIn;
     BOOL                bPlain;
+    String              aLookAheadLine;
 
+    bool                ReadNextLine( String& rStr );
+    bool                LookAhead();
+    DATASET             GetNumberDataset( const sal_Unicode* pPossibleNumericData );
     static inline BOOL  IsBOT( const sal_Unicode* pRef );
     static inline BOOL  IsEOD( const sal_Unicode* pRef );
     static inline BOOL  Is1_0( const sal_Unicode* pRef );

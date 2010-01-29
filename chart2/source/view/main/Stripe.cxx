@@ -161,7 +161,7 @@ uno::Any Stripe::getNormalsPolygon() const
     return uno::Any( &aPP, ::getCppuType((const drawing::PolyPolygonShape3D*)0) );
 }
 
-uno::Any Stripe::getTexturePolygon() const
+uno::Any Stripe::getTexturePolygon( bool bRotatedTexture ) const
 {
     drawing::PolyPolygonShape3D aPP;
 
@@ -181,21 +181,42 @@ uno::Any Stripe::getTexturePolygon() const
     double* pInnerSequenceY = pOuterSequenceY->getArray();
     double* pInnerSequenceZ = pOuterSequenceZ->getArray();
 
-    *pInnerSequenceX++ = 0.0;
-    *pInnerSequenceY++ = 0.0;
-    *pInnerSequenceZ++ = 0.0;
+    if( !bRotatedTexture )
+    {
+        *pInnerSequenceX++ = 0.0;
+        *pInnerSequenceY++ = 0.0;
+        *pInnerSequenceZ++ = 0.0;
 
-    *pInnerSequenceX++ = 1.0;
-    *pInnerSequenceY++ = 0.0;
-    *pInnerSequenceZ++ = 0.0;
+        *pInnerSequenceX++ = 1.0;
+        *pInnerSequenceY++ = 0.0;
+        *pInnerSequenceZ++ = 0.0;
 
-    *pInnerSequenceX++ = 1.0;
-    *pInnerSequenceY++ = 1.0;
-    *pInnerSequenceZ++ = 0.0;
+        *pInnerSequenceX++ = 1.0;
+        *pInnerSequenceY++ = 1.0;
+        *pInnerSequenceZ++ = 0.0;
 
-    *pInnerSequenceX++ = 0.0;
-    *pInnerSequenceY++ = 1.0;
-    *pInnerSequenceZ++ = 0.0;
+        *pInnerSequenceX++ = 0.0;
+        *pInnerSequenceY++ = 1.0;
+        *pInnerSequenceZ++ = 0.0;
+    }
+    else
+    {
+        *pInnerSequenceX++ = 1.0;
+        *pInnerSequenceY++ = 0.0;
+        *pInnerSequenceZ++ = 0.0;
+
+        *pInnerSequenceX++ = 1.0;
+        *pInnerSequenceY++ = 1.0;
+        *pInnerSequenceZ++ = 0.0;
+
+        *pInnerSequenceX++ = 0.0;
+        *pInnerSequenceY++ = 1.0;
+        *pInnerSequenceZ++ = 0.0;
+
+        *pInnerSequenceX++ = 0.0;
+        *pInnerSequenceY++ = 0.0;
+        *pInnerSequenceZ++ = 0.0;
+    }
 
     return uno::Any( &aPP, ::getCppuType((const drawing::PolyPolygonShape3D*)0) );
 }

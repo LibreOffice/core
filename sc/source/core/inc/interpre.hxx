@@ -70,6 +70,21 @@ struct ScCompare
         }
 };
 
+struct ScCompareOptions
+{
+    ScQueryEntry        aQueryEntry;
+    bool                bRegEx;
+    bool                bMatchWholeCell;
+    bool                bIgnoreCase;
+
+                        ScCompareOptions( ScDocument* pDoc, const ScQueryEntry& rEntry, bool bReg );
+private:
+                        // Not implemented, prevent usage.
+                        ScCompareOptions();
+                        ScCompareOptions( const ScCompareOptions & );
+     ScCompareOptions&  operator=( const ScCompareOptions & );
+};
+
 class ScToken;
 
 #define MAXSTACK      (4096 / sizeof(formula::FormulaToken*))
@@ -356,9 +371,16 @@ void ScChoseJump();
 // Returns true if last jump was executed and result matrix pushed.
 bool JumpMatrix( short nStackLevel );
 
-double CompareFunc( const ScCompare& rComp );
+/** @param pOptions
+        NULL means case sensitivity document option is to be used!
+ */
+double CompareFunc( const ScCompare& rComp, ScCompareOptions* pOptions = NULL );
 double Compare();
-ScMatrixRef CompareMat();
+/** @param pOptions
+        NULL means case sensitivity document option is to be used!
+ */
+ScMatrixRef CompareMat( ScCompareOptions* pOptions = NULL );
+ScMatrixRef QueryMat( ScMatrix* pMat, ScCompareOptions& rOptions );
 void ScEqual();
 void ScNotEqual();
 void ScLess();

@@ -208,7 +208,7 @@ protected:
         if( !xErrorBarProperties.is() )
         {
             // todo: use a valid context
-            xErrorBarProperties = new ::chart::ErrorBar( uno::Reference< uno::XComponentContext >() );
+            xErrorBarProperties = ::chart::createErrorBar( uno::Reference< uno::XComponentContext >() );
             //default in new and old api are different
             xErrorBarProperties->setPropertyValue( C2U( "ShowPositiveError" ), uno::makeAny(sal_Bool(sal_False)) );
             xErrorBarProperties->setPropertyValue( C2U( "ShowNegativeError" ), uno::makeAny(sal_Bool(sal_False)) );

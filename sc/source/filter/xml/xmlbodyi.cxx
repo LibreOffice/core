@@ -52,6 +52,7 @@
 #include "XMLTrackedChangesContext.hxx"
 #include "XMLEmptyContext.hxx"
 #include "scerrors.hxx"
+#include "tabprotection.hxx"
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -62,7 +63,10 @@
 #include <sal/types.h>
 #include <tools/debug.hxx>
 
+#include <memory>
+
 using rtl::OUString;
+
 using namespace com::sun::star;
 using namespace xmloff::token;
 
@@ -281,10 +285,17 @@ void ScXMLBodyContext::EndElement()
         // #i37959# handle document protection after the sheet settings
         if (bProtected)
         {
+            ::std::auto_ptr<ScDocProtection> pProtection(new ScDocProtection);
+            pProtection->setProtected(true);
+
             uno::Sequence<sal_Int8> aPass;
             if (sPassword.getLength())
+            {
                 SvXMLUnitConverter::decodeBase64(aPass, sPassword);
-            pDoc->SetDocProtection(bProtected, aPass);
+                pProtection->setPasswordHash(aPass, PASSHASH_OOO);
+            }
+
+            pDoc->SetDocProtection(pProtection.get());
         }
     }
     GetScImport().UnlockSolarMutex();

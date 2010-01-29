@@ -2104,9 +2104,8 @@ void ScAttrArray::InsertRow( SCROW nStartRow, SCSIZE nSize )
         //  im eingefuegten Bereich ist nichts zusammengefasst
     }
 
-    //  Flags nicht duplizieren
-    //! direkt am Pattern testen ??
-    RemoveFlags( nStartRow, nStartRow+nSize-1, SC_MF_HOR | SC_MF_VER | SC_MF_AUTO );
+    // Don't duplicate the merge flags in the inserted row.
+    RemoveFlags( nStartRow, nStartRow+nSize-1, SC_MF_ALL );
 }
 
 

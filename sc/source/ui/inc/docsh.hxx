@@ -103,7 +103,6 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
     double              nPrtToScreenFactor;
 //!   FontList*           pFontList;
     DocShell_Impl*      pImpl;
-    SfxUndoManager*     pUndoManager;
     ScDocFunc*          pDocFunc;
 
     //SfxObjectCreateMode   eShellMode;
@@ -291,7 +290,8 @@ public:
     BOOL            IsEditable() const;
 
     BOOL            AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab );
-    void            UpdateAllRowHeights();
+    void            UpdateAllRowHeights( const ScMarkData* pTabMark = NULL );
+    void            UpdatePendingRowHeights( SCTAB nUpdateTab, bool bBefore = false );
 
 #if OLD_PIVOT_IMPLEMENTATION
     void            PivotUpdate( ScPivot* pOldPivot, ScPivot* pNewPivot,

@@ -3812,6 +3812,15 @@ StackVar ScInterpreter::Interpret()
                 default : PushError( errUnknownOpCode);                 break;
             }
 
+            // If the function signalled that it pushed a subroutine on the
+            // instruction code stack instead of a result, continue with
+            // execution of the subroutine.
+            if (sp > nStackBase && pStack[sp-1]->GetOpCode() == ocCall)
+            {
+                Pop();
+                continue;   // while( ( pCur = aCode.Next() ) != NULL  ...
+            }
+
             // Remember result matrix in case it could be reused.
             if (pTokenMatrixMap && sp && GetStackType() == svMatrix)
                 pTokenMatrixMap->insert( ScTokenMatrixMap::value_type( pCur,

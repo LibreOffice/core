@@ -235,6 +235,12 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( USHORT nPrefix,
         // external cache data.
         switch (nToken)
         {
+            case XML_TOK_TABLE_ROW_GROUP:
+            case XML_TOK_TABLE_HEADER_ROWS:
+            case XML_TOK_TABLE_ROWS:
+                // #i101319# don't discard rows in groups or header (repeat range)
+                return new ScXMLExternalRefRowsContext(
+                    GetScImport(), nPrefix, rLName, xAttrList, *pExternalRefInfo);
             case XML_TOK_TABLE_ROW:
                 return new ScXMLExternalRefRowContext(
                     GetScImport(), nPrefix, rLName, xAttrList, *pExternalRefInfo);

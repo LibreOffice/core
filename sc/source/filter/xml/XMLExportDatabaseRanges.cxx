@@ -203,44 +203,56 @@ void ScXMLExportDatabaseRanges::WriteImportDescriptor(const uno::Sequence <beans
     }
 }
 
-rtl::OUString ScXMLExportDatabaseRanges::getOperatorXML(const sheet::FilterOperator aFilterOperator, const sal_Bool bUseRegularExpressions) const
+rtl::OUString ScXMLExportDatabaseRanges::getOperatorXML(const long aFilterOperator, const sal_Bool bUseRegularExpressions) const
 {
     switch (aFilterOperator)
     {
-        case sheet::FilterOperator_EQUAL :
+        case sheet::FilterOperator2::EQUAL :
         {
             if (bUseRegularExpressions)
                 return GetXMLToken(XML_MATCH);
             else
                 return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("="));
         }
-        case sheet::FilterOperator_NOT_EQUAL :
+        case sheet::FilterOperator2::NOT_EQUAL :
         {
             if (bUseRegularExpressions)
                 return GetXMLToken(XML_NOMATCH);
             else
                 return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("!="));
         }
-        case sheet::FilterOperator_BOTTOM_PERCENT :
+        case sheet::FilterOperator2::BOTTOM_PERCENT :
             return GetXMLToken(XML_BOTTOM_PERCENT);
-        case sheet::FilterOperator_BOTTOM_VALUES :
+        case sheet::FilterOperator2::BOTTOM_VALUES :
             return GetXMLToken(XML_BOTTOM_VALUES);
-        case sheet::FilterOperator_EMPTY :
+        case sheet::FilterOperator2::EMPTY :
             return GetXMLToken(XML_EMPTY);
-        case sheet::FilterOperator_GREATER :
+        case sheet::FilterOperator2::GREATER :
             return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">"));
-        case sheet::FilterOperator_GREATER_EQUAL :
+        case sheet::FilterOperator2::GREATER_EQUAL :
             return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">="));
-        case sheet::FilterOperator_LESS :
+        case sheet::FilterOperator2::LESS :
             return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<"));
-        case sheet::FilterOperator_LESS_EQUAL :
+        case sheet::FilterOperator2::LESS_EQUAL :
             return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<="));
-        case sheet::FilterOperator_NOT_EMPTY :
+        case sheet::FilterOperator2::NOT_EMPTY :
             return GetXMLToken(XML_NOEMPTY);
-        case sheet::FilterOperator_TOP_PERCENT :
+        case sheet::FilterOperator2::TOP_PERCENT :
             return GetXMLToken(XML_TOP_PERCENT);
-        case sheet::FilterOperator_TOP_VALUES :
+        case sheet::FilterOperator2::TOP_VALUES :
             return GetXMLToken(XML_TOP_VALUES);
+        case sheet::FilterOperator2::CONTAINS :
+            return GetXMLToken(XML_CONTAINS);
+        case sheet::FilterOperator2::DOES_NOT_CONTAIN :
+            return GetXMLToken(XML_DOES_NOT_CONTAIN);
+        case sheet::FilterOperator2::BEGINS_WITH :
+            return GetXMLToken(XML_BEGINS_WITH);
+        case sheet::FilterOperator2::DOES_NOT_BEGIN_WITH :
+            return GetXMLToken(XML_DOES_NOT_BEGIN_WITH);
+        case sheet::FilterOperator2::ENDS_WITH :
+            return GetXMLToken(XML_ENDS_WITH);
+        case sheet::FilterOperator2::DOES_NOT_END_WITH :
+            return GetXMLToken(XML_DOES_NOT_END_WITH);
         default:
         {
             // added to avoid warnings
@@ -249,7 +261,7 @@ rtl::OUString ScXMLExportDatabaseRanges::getOperatorXML(const sheet::FilterOpera
     return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("="));
 }
 
-void ScXMLExportDatabaseRanges::WriteCondition(const sheet::TableFilterField& aFilterField, sal_Bool bIsCaseSensitive, sal_Bool bUseRegularExpressions)
+void ScXMLExportDatabaseRanges::WriteCondition(const sheet::TableFilterField2& aFilterField, sal_Bool bIsCaseSensitive, sal_Bool bUseRegularExpressions)
 {
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, rtl::OUString::valueOf(aFilterField.Field));
     if (bIsCaseSensitive)
@@ -267,9 +279,9 @@ void ScXMLExportDatabaseRanges::WriteCondition(const sheet::TableFilterField& aF
     SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_FILTER_CONDITION, sal_True, sal_True);
 }
 
-void ScXMLExportDatabaseRanges::WriteFilterDescriptor(const uno::Reference <sheet::XSheetFilterDescriptor>& xSheetFilterDescriptor, const rtl::OUString sDatabaseRangeName)
+void ScXMLExportDatabaseRanges::WriteFilterDescriptor(const uno::Reference <sheet::XSheetFilterDescriptor2>& xSheetFilterDescriptor, const rtl::OUString sDatabaseRangeName)
 {
-    uno::Sequence <sheet::TableFilterField> aTableFilterFields(xSheetFilterDescriptor->getFilterFields());
+    uno::Sequence< sheet::TableFilterField2 > aTableFilterFields( xSheetFilterDescriptor->getFilterFields2() );
     sal_Int32 nTableFilterFields = aTableFilterFields.getLength();
     if (nTableFilterFields > 0)
     {
@@ -336,7 +348,7 @@ void ScXMLExportDatabaseRanges::WriteFilterDescriptor(const uno::Reference <shee
             else
             {
                 SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_FILTER_OR, sal_True, sal_True);
-                sheet::TableFilterField aPrevFilterField = aTableFilterFields[0];
+                sheet::TableFilterField2 aPrevFilterField = aTableFilterFields[0];
                 sheet::FilterConnection aConnection = aTableFilterFields[1].Connection;
                 sal_Bool bOpenAndElement;
                 rtl::OUString aName = rExport.GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, GetXMLToken(XML_FILTER_AND));
@@ -632,7 +644,9 @@ void ScXMLExportDatabaseRanges::WriteDatabaseRanges(const com::sun::star::uno::R
                                 if (::cppu::any2bool(xPropertySetDatabaseRange->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_STRIPDAT)))))
                                     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_HAS_PERSISTENT_DATA, XML_FALSE);
                             }
-                            uno::Reference <sheet::XSheetFilterDescriptor> xSheetFilterDescriptor(xDatabaseRange->getFilterDescriptor());
+
+                            uno::Reference< sheet::XSheetFilterDescriptor2 > xSheetFilterDescriptor(
+                                    xDatabaseRange->getFilterDescriptor(), uno::UNO_QUERY );
                             uno::Sequence <beans::PropertyValue> aSortProperties(xDatabaseRange->getSortDescriptor());
                             if (xSheetFilterDescriptor.is())
                             {

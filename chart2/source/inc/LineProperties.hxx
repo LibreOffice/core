@@ -62,9 +62,9 @@ public:
 
     static void AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap );
 
-    static bool IsLineVisible( const ::com::sun::star::uno::Reference<
+    SAL_DLLPRIVATE static bool IsLineVisible( const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet >& xLineProperties );
-    static void SetLineVisible( const ::com::sun::star::uno::Reference<
+    SAL_DLLPRIVATE static void SetLineVisible( const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet >& xLineProperties );
     static void SetLineInvisible( const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet >& xLineProperties );

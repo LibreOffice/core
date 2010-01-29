@@ -49,6 +49,11 @@ Image IMG_TYPE_LINE
     ImageBitmap = Bitmap { File = "typepointline_16.png" ; };
     MaskColor = STD_MASKCOLOR;
 };
+Image IMG_TYPE_XY
+{
+    ImageBitmap = Bitmap { File = "typexy_16.png" ; };
+    MaskColor = STD_MASKCOLOR;
+};
 Image IMG_TYPE_AREA
 {
     ImageBitmap = Bitmap { File = "typearea_16.png" ; };
@@ -68,6 +73,15 @@ Image IMG_TYPE_COLUMN_LINE
 {
     ImageBitmap = Bitmap { File = "typecolumnline_16.png" ; };
     MaskColor = STD_MASKCOLOR;
+};
+Image IMG_TYPE_BUBBLE
+{
+    ImageBitmap = Bitmap { File = "typebubble_16.png" ; };
+    MaskColor = STD_MASKCOLOR;
+};
+Bitmap BMP_BUBBLE_1
+{
+    File = "bubble_52x60.png" ;
 };
 Bitmap BMP_AREAS_2D
 {

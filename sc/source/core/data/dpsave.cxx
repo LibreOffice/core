@@ -832,8 +832,8 @@ ScDPSaveDimension* ScDPSaveData::GetNewDimensionByName(const String& rName)
 
 ScDPSaveDimension* ScDPSaveData::GetDataLayoutDimension()
 {
-    long nCount = aDimList.Count();
-    for (long i=0; i<nCount; i++)
+    ULONG nCount = aDimList.Count();
+    for (ULONG i=0; i<nCount; i++)
     {
         ScDPSaveDimension* pDim = (ScDPSaveDimension*)aDimList.GetObject(i);
         if ( pDim->IsDataLayout() )
