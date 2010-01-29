@@ -1,4 +1,4 @@
-RASQAL2 {
+UDK_3_0_0 {
 global:
 GetVersionInfo;
 rasqal_xsd_decimal_set_string;
