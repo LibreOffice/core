@@ -75,7 +75,7 @@ SchXMLListItemContext::SchXMLListItemContext(
 SchXMLListItemContext::~SchXMLListItemContext()
 {}
 
-void SchXMLListItemContext::StartElement( const Reference< xml::sax::XAttributeList >& xAttrList )
+void SchXMLListItemContext::StartElement( const Reference< xml::sax::XAttributeList >& /*xAttrList*/ )
 {
 }
 
@@ -111,7 +111,7 @@ SchXMLTextListContext::~SchXMLTextListContext()
 {
 }
 
-void SchXMLTextListContext::StartElement( const Reference< xml::sax::XAttributeList >& xAttrList )
+void SchXMLTextListContext::StartElement( const Reference< xml::sax::XAttributeList >& /*xAttrList*/ )
 {
 }
 
