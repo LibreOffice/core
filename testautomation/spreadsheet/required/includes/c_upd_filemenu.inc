@@ -42,10 +42,11 @@
 ' #1 tFileOpen 
 ' #1 tFileOpenCSV
 ' #1 tFileOpenDBF
+' #1 tFileOpenHTML
 ' #1 tFileRecentDocuments
 ' #1 tFileClose
 ' #1 tFileSave
-' #0 tFileSaveAsDBF
+' #1 tFileSaveAsDBF
 ' #1 tFileVersions
 ' #1 tFilePagePreview
 ' #1 tFilePrint
@@ -61,6 +62,7 @@ sub c_upd_filemenu
     Call tFileOpen
     Call tFileOpenCSV
     Call tFileOpenDBF
+    Call tFileOpenHTML
     Call tFileRecentDocuments
     Call tFileClose
     Call tFileSave
@@ -176,20 +178,15 @@ testcase tFileOpenCSV
     dim sTestFile as string
     
     sTestFile = convertpath(gTesttoolPath & "spreadsheet/required/input/tFileOpen_CSV.csv"
-    '/// Opening new spreadsheet document for getting defined starting environment
     Printlog " Opening new spreadsheet document for getting defined starting environment"
     Call hNewDocument
-    '/// Open File-Open-dialog
     Printlog " Open File-Open-dialog"
     FileOpen
     Kontext "OeffnenDlg"
-    '/// Enter filename  spreadsheet/required/input/tFileOpen_CSV.csv
     Printlog " Enter filename  spreadsheet/required/input/tFileOpen_CSV.csv"
     Dateiname.settext (sTestFile)
-    '/// Click on Open
     Printlog " Click on Open"
     Oeffnen.Click
-    '/// Check existence of CSV import dialog
     Printlog " Check existence of CSV import dialog"
     Kontext "TextImport"
     if Not TextImport.exists(2) then
@@ -220,10 +217,36 @@ testcase tFileOpenCSV
         end if
     end if
     Call Dialogtest (TextImport)
+    Kontext "TextImport"
+    Printlog " Use every control"
+    CharacterSet.GetItemCount
+    Language.GetItemCount
+    FromRow.More
+    FixedWidth.Check
+    Separated.Check
+    Tab.Check
+    Semicolon.Check
+    Comma.Check
+    SpaceCB.Check
+    Other.Check
+    OtherText.SetText "a"
+    MergeDelimiter.Check
+    TextDelimiter.GetItemCount
+    QuotedAsText.Check
+    DetectSpecialNumbers.Check
+    Printlog " Cancel Text Import dialog"
+    TextImport.cancel
+    Printlog " Open File-Open-dialog"
+    FileOpen
+    Kontext "OeffnenDlg"
+    Printlog " Enter filename  spreadsheet/required/input/tFileOpen_CSV.csv"
+    Dateiname.settext (sTestFile)
+    Printlog " Click on Open"
+    Oeffnen.Click
+    Kontext "TextImport"
     TextImport.ok
     Printlog " - CSV import dialog is in function"
     Kontext "DocumentCalc"
-    '/// Close document
     printlog " Close document"
     Call hCloseDocument
         
@@ -276,6 +299,62 @@ testcase tFileOpenDBF
         Call hCloseDocument
     end if
         
+endcase
+
+'-----------------------------------------------------------
+
+testcase tFileOpenHTML
+
+    Dim sTestFile as string
+    Dim sTestFilter1 as string
+    Dim sTestFilter2 as string
+
+    sTestFile = convertpath(gTesttoolPath & "spreadsheet/required/input/HTML_Doc_Numberformats_in_table.html"
+    sTestFilter1 = hGetUIFiltername ("HTML (StarCalc)")
+    sTestFilter2 = hGetUIFiltername ("calc_HTML_WebQuery")
+
+    Printlog " Opening new spreadsheet document for getting defined starting environment"
+    Call hNewDocument
+    Printlog " Open File-Open-dialog"
+    FileOpen
+    Kontext "OeffnenDlg"
+    Printlog " Enter filename  spreadsheet/required/input/HTML_Doc_Numberformats_in_table.html"
+    Dateiname.settext (sTestFile)
+    Printlog " Choose Calc HTML filter"
+    Call hSelectUIFilter (sTestFilter1)
+    Printlog " Click on Open"
+    Oeffnen.Click
+    sleep (1)
+    Kontext "HTMLImportOptions"
+    Printlog " Use every control on dialog Import Options"
+    Custom.Check
+    CustomLanguage.GetItemCount
+    Automatic.Check
+    DetectSpecialNumbers.Check
+    HTMLImportOptions.OK
+    Printlog " Close recent document"
+    Call hCloseDocument
+    Printlog " Retry with Calc Web Querry filter"
+    Printlog " Open File-Open-dialog"
+    FileOpen
+    Kontext "OeffnenDlg"
+    Printlog " Enter filename  spreadsheet/required/input/HTML_Doc_Numberformats_in_table.html"
+    Dateiname.settext (sTestFile)
+    Printlog " Choose Calc Web Query filter"
+    Call hSelectUIFilter (sTestFilter2)
+    Printlog " Click on Open"
+    Oeffnen.Click
+    sleep (1)
+    Kontext "HTMLImportOptions"
+    Printlog " Use every control on dialog Import Options"
+    Custom.Check
+    CustomLanguage.GetItemCount
+    Automatic.Check
+    DetectSpecialNumbers.Check
+    HTMLImportOptions.OK
+    Printlog " Close recent document"
+    Call hCloseDocument
+
 endcase
 
 '-----------------------------------------------------------
