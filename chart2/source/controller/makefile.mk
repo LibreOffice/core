@@ -104,7 +104,7 @@ SHL1STDLIBS=	$(CHARTTOOLS)		\
 #specifies the exported symbols for Windows only:
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 
-SHL1VERSIONMAP = controller.map
+SHL1VERSIONMAP = $(SOLARENV)/src/component.map
 
 #--------definition file
 

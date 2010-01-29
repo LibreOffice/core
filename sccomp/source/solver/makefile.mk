@@ -64,7 +64,7 @@ SHL1STDLIBS=    $(COMPHELPERLIB)    \
 
 SHL1DEPN=       makefile.mk
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
-SHL1VERSIONMAP= exports.map
+SHL1VERSIONMAP= $(SOLARENV)/src/component.map
 DEF1NAME=       $(SHL1TARGET)
 
 # --- Resources --------------------------------
