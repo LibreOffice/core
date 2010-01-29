@@ -186,7 +186,9 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
         delete pDlg;
         delete pInStream;
     }
-    else if ( aFilterString == ScDocShell::GetWebQueryFilterName() || aFilterString == ScDocShell::GetHtmlFilterName() )
+    else if ( !bExport &&
+              (aFilterString == ScDocShell::GetWebQueryFilterName() ||
+               aFilterString == ScDocShell::GetHtmlFilterName()) )
     {
         // HTML import.
         ::std::auto_ptr<AbstractScTextImportOptionsDlg> pDlg(
