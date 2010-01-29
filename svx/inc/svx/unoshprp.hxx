@@ -189,9 +189,7 @@
 
 #define OWN_ATTR_STYLE                          (OWN_ATTR_VALUE_START+87)
 
-#define OWN_ATTR_EDGE_POLYPOLYGONBEZIER         (OWN_ATTR_VALUE_START+88)
-
-// maximum is OWN_ATTR_VALUE_END = OWN_ATTR_VALUE_START+90
+#define OWN_ATTR_EDGE_POLYPOLYGONBEZIER         (OWN_ATTR_VALUE_START+88)   // maximum is OWN_ATTR_VALUE_START+88, see svl/inc/svl/solar.hrc
 
 // #FontWork#
 #define FONTWORK_PROPERTIES \
