@@ -50,7 +50,7 @@ SLOFILES= \
 
 SHL1TARGET= dtrans
 
-SHL1VERSIONMAP= exports.map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 SHL1STDLIBS= \
         $(SALLIB)	\

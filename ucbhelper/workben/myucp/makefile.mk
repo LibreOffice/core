@@ -72,7 +72,7 @@ LIB1OBJFILES=$(SLOFILES)
 
 SHL1TARGET=$(TARGET)
 SHL1IMPLIB=i$(TARGET)
-SHL1VERSIONMAP=exports.map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 # @@@ Add additional libs here.
 SHL1STDLIBS=\
