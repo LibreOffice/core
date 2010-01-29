@@ -373,12 +373,6 @@ namespace drawinglayer
                                     aOrigin.X() + basegfx::fround(aTopLeftPixel.getX()),
                                     aOrigin.Y() + basegfx::fround(aTopLeftPixel.getY()));
                             }
-                            else if( xControlWindow.is() )
-                            {
-                                Window* pWin = VCLUnoHelper::GetWindow( rXControl->getPeer() );
-                                if( pWin )
-                                    pWin->Invalidate();
-                            }
 
                             // restore original graphics
                             xControlView->setGraphics(xOriginalGraphics);
