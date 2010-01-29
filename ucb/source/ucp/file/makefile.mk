@@ -71,7 +71,7 @@ SHL1STDLIBS=\
     $(SALLIB)  \
     $(UCBHELPERLIB)
 
-SHL1VERSIONMAP=exports.map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 .IF "$(GUI)" == "OS2"
 DEF1EXPORTFILE=exports2.dxp

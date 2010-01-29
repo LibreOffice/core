@@ -77,7 +77,7 @@ SHL1STDLIBS=\
 
 SHL1STDLIBS+=$(PKGCONFIG_LIBS)
 
-SHL1VERSIONMAP= exports.map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 .ENDIF          # "$(ENABLE_GIO)"!=""
 .ENDIF # L10N_framework

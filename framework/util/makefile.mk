@@ -223,7 +223,7 @@ SHL3DEPN=       $(SHL1IMPLIBN) $(SHL1TARGETN) $(SHL2TARGETN)
 
 DEF3NAME=       $(SHL3TARGET)
 
-SHL3VERSIONMAP= exports.map
+SHL3VERSIONMAP= $(SOLARENV)/src/component.map
 
 # --- services library ----------------------------------------------------
 
@@ -365,7 +365,7 @@ SHL4DEPN=       $(SHL1IMPLIBN) $(SHL1TARGETN) $(SHL2IMPLIBN) $(SHL2TARGETN)
 
 DEF4NAME=       $(SHL4TARGET)
 
-SHL4VERSIONMAP= exports.map
+SHL4VERSIONMAP= $(SOLARENV)/src/component.map
 
 # --- services library ----------------------------------------------------
 
@@ -396,7 +396,7 @@ SHL5DEPN=       $(SHL1IMPLIBN) $(SHL1TARGETN)
 
 DEF5NAME=       $(SHL5TARGET)
 
-SHL5VERSIONMAP= exports.map
+SHL5VERSIONMAP= $(SOLARENV)/src/component.map
 
 RESLIB1NAME=        fwe
 RESLIB1IMAGES=      $(PRJ)$/res

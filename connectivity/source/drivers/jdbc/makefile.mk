@@ -82,7 +82,7 @@ SLOFILES=\
         $(SLO)$/tools.obj                           \
         $(SLO)$/ContextClassLoader.obj
 
-SHL1VERSIONMAP=$(JDBC_TARGET).map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 # --- Library -----------------------------------
 

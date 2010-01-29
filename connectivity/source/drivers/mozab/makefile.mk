@@ -89,7 +89,7 @@ SLOFILES=\
             
 # --- MOZAB BASE Library -----------------------------------
 
-SHL1VERSIONMAP= $(TARGET).map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 SHL1TARGET=	$(TARGET)$(DLLPOSTFIX)
 SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\

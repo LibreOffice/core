@@ -65,7 +65,7 @@ SLOFILES=\
     $(SLO)$/EApi.obj \
     $(SLO)$/NDebug.obj
 
-SHL1VERSIONMAP=$(TARGET).map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 
 # --- Library -----------------------------------

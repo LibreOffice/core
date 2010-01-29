@@ -44,7 +44,7 @@ DLLPRE =
 # --- Library -----------------------------------
 
 SHL1TARGET=	$(CFGMGR_TARGET)$(CFGMGR_MAJOR).uno
-SHL1VERSIONMAP= $(TARGET).map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\

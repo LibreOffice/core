@@ -50,7 +50,7 @@ SHL1STDLIBS = \
         $(CPPULIB)              \
         $(SALLIB)
 
-SHL1VERSIONMAP = $(TARGET).map
+SHL1VERSIONMAP = $(SOLARENV)/src/component.map
 SHL1TARGET = $(TARGET)
 
 SHL1DEPN =

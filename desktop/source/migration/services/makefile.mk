@@ -58,7 +58,7 @@ SLOFILES= \
         $(SLO)$/autocorrmigration.obj
 
 SHL1TARGET=$(TARGET)
-SHL1VERSIONMAP = migrationoo2.map
+SHL1VERSIONMAP = $(SOLARENV)/src/component.map
 
 SHL1STDLIBS= \
     $(DEPLOYMENTMISCLIB) \

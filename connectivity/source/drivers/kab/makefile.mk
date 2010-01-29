@@ -65,7 +65,7 @@ DEPOBJFILES= \
 
 # --- Library -----------------------------------
 
-SHL1VERSIONMAP=$(TARGET).map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 SHL1TARGET= $(TARGET)$(KAB_MAJOR)
 SHL1OBJS=$(SLOFILES)

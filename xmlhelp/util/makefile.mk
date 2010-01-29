@@ -54,7 +54,7 @@ CFLAGS+=-GR
 SHL1TARGET=$(TARGET)$(UCP_VERSION)
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 SHL1IMPLIB=i$(TARGET)
-SHL1VERSIONMAP=exports.map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 # Add additional libs here.
 SHL1STDLIBS=                     \

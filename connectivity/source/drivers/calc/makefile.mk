@@ -61,7 +61,7 @@ SLOFILES=\
     $(SLO)$/Cservices.obj			\
     $(SLO)$/CDriver.obj
 
-SHL1VERSIONMAP= $(TARGET).map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 # --- Library -----------------------------------
 

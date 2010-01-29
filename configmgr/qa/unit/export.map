@@ -1,4 +1,4 @@
-UDK_3.0 {
+UDK_3_0_0 {
     global:
         registerAllTestFunction;
 

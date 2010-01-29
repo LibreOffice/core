@@ -74,7 +74,7 @@ EXCEPTIONSFILES=\
     $(SLO)$/EDriver.obj
 
 
-SHL1VERSIONMAP=$(TARGET).map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 # --- Library -----------------------------------
 SHL1TARGET=$(TARGET)$(DLLPOSTFIX)

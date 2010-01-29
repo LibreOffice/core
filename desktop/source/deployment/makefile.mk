@@ -53,7 +53,7 @@ INCPRE += inc
 DLLPRE =
 
 SHL1TARGET = $(TARGET)$(DLLPOSTFIX).uno
-SHL1VERSIONMAP = deployment.map
+SHL1VERSIONMAP = $(SOLARENV)/src/component.map
 
 SHL1LIBS = \
     $(SLB)$/deployment_manager.lib \

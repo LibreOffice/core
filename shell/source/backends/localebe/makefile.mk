@@ -67,7 +67,7 @@ SHL1STDLIBS=    \
 SHL1STDLIBS+= -framework CoreServices
 .ENDIF
 
-SHL1VERSIONMAP=exports.map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 

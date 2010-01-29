@@ -75,7 +75,7 @@ SLOFILES=\
         $(SLO)$/BResultSetMetaData.obj			\
         $(SLO)$/BResultSet.obj
 
-SHL1VERSIONMAP=$(TARGET).map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 # --- Library -----------------------------------
 
