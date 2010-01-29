@@ -44,7 +44,8 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files -------------------------------------
 
 SLOFILES=	\
-        $(SLO)$/dbdocrecovery.obj
+        $(SLO)$/dbdocrecovery.obj \
+        $(SLO)$/subcomponentloader.obj
 
 # --- Targets ----------------------------------
 

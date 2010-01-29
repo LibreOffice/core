@@ -26,6 +26,8 @@
 #ifndef DBACCESS_DBDOCRECOVERY_HXX
 #define DBACCESS_DBDOCRECOVERY_HXX
 
+#include "dbaccessdllapi.h"
+
 /** === begin UNO includes === **/
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/frame/XController.hpp>
@@ -48,7 +50,7 @@ namespace dbaccess
     //= DatabaseDocumentRecovery
     //====================================================================
     struct DatabaseDocumentRecovery_Data;
-    class DatabaseDocumentRecovery
+    class DBACCESS_DLLPRIVATE DatabaseDocumentRecovery
     {
     public:
         DatabaseDocumentRecovery(

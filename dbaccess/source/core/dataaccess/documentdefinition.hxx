@@ -253,6 +253,12 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable >
             impl_getComponent_throw( const bool i_ForceCreate = true );
 
+    /** shows or hides our component
+
+        The embedded object must exist, and be in state LOADED, at least.
+    */
+    void    impl_showOrHideComponent_throw( const bool i_bShow );
+
     // OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 

@@ -252,6 +252,7 @@
 #include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
+#include <com/sun/star/util/XModifiable2.hpp>
 
 using namespace ::com::sun::star;
 using namespace view;
@@ -415,6 +416,40 @@ namespace dbaccess
         {
         }
         inline void resetClient(ODocumentDefinition* _pClient) { m_pClient = _pClient; }
+    };
+
+    //==================================================================
+    // LockModifiable
+    //==================================================================
+    class LockModifiable
+    {
+    public:
+        LockModifiable( const Reference< XInterface >& i_rModifiable )
+            :m_xModifiable( i_rModifiable, UNO_QUERY )
+        {
+            OSL_ENSURE( m_xModifiable.is(), "LockModifiable::LockModifiable: invalid component!" );
+            if ( m_xModifiable.is() )
+            {
+                if ( !m_xModifiable->isSetModifiedEnabled() )
+                {
+                    // somebody already locked that, no need to lock it, again, and no need to unlock it later
+                    m_xModifiable.clear();
+                }
+                else
+                {
+                    m_xModifiable->disableSetModified();
+                }
+            }
+        }
+
+        ~LockModifiable()
+        {
+            if ( m_xModifiable.is() )
+                m_xModifiable->enableSetModified();
+        }
+
+    private:
+        Reference< XModifiable2 >   m_xModifiable;
     };
 
     //==================================================================
@@ -885,6 +920,9 @@ void ODocumentDefinition::impl_initObjectEditView( const Reference< XController 
         Reference< XViewSettingsSupplier > xSettingsSupplier( _rxController, UNO_QUERY_THROW );
         Reference< XPropertySet > xViewSettings( xSettingsSupplier->getViewSettings(), UNO_QUERY_THROW );
 
+        // the below code could indirectly tamper with the "modified" flag of the model, temporarily disable this
+        LockModifiable aLockModify( _rxController->getModel() );
+
         // The visual area size can be changed by the setting of the following properties
         // so it should be restored later
         PreserveVisualAreaSize aPreserveVisAreaSize( _rxController->getModel() );
@@ -902,13 +940,43 @@ void ODocumentDefinition::impl_initObjectEditView( const Reference< XController 
         xViewSettings->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowOnlineLayout")),makeAny(sal_True));
         xViewSettings->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RasterSubdivisionX")),makeAny(sal_Int32(5)));
         xViewSettings->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RasterSubdivisionY")),makeAny(sal_Int32(5)));
-
-        Reference< XModifiable > xModifiable( _rxController->getModel(), UNO_QUERY_THROW );
-        xModifiable->setModified( sal_False );
     }
     catch( const Exception& )
     {
         DBG_UNHANDLED_EXCEPTION();
+    }
+}
+
+// -----------------------------------------------------------------------------
+void ODocumentDefinition::impl_showOrHideComponent_throw( const bool i_bShow )
+{
+    const sal_Int32 nCurrentState = m_xEmbeddedObject.is() ? m_xEmbeddedObject->getCurrentState() : EmbedStates::LOADED;
+    switch ( nCurrentState )
+    {
+    default:
+    case EmbedStates::LOADED:
+        throw embed::WrongStateException( ::rtl::OUString(), *this );
+
+    case EmbedStates::RUNNING:
+        if ( !i_bShow )
+            // fine, a running (and not yet active) object is never visible
+            return;
+        {
+            LockModifiable aLockModify( impl_getComponent_throw() );
+            m_xEmbeddedObject->changeState( EmbedStates::ACTIVE );
+            impl_onActivateEmbeddedObject( false );
+        }
+        break;
+
+    case EmbedStates::ACTIVE:
+    {
+        Reference< XModel > xEmbeddedDoc( impl_getComponent_throw( true ), UNO_QUERY_THROW );
+        Reference< XController > xEmbeddedController( xEmbeddedDoc->getCurrentController(), UNO_SET_THROW );
+        Reference< XFrame > xEmbeddedFrame( xEmbeddedController->getFrame(), UNO_SET_THROW );
+        Reference< XWindow > xEmbeddedWindow( xEmbeddedFrame->getContainerWindow(), UNO_SET_THROW );
+        xEmbeddedWindow->setVisible( i_bShow );
+    }
+    break;
     }
 }
 
@@ -1084,6 +1152,7 @@ void ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, con
 
     if ( _bActivate && !bOpenHidden )
     {
+        LockModifiable aLockModify( impl_getComponent_throw() );
         m_xEmbeddedObject->changeState( EmbedStates::ACTIVE );
         impl_onActivateEmbeddedObject( false );
     }
@@ -1131,11 +1200,16 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
                 }
             }
 
-            // m_bOpenInDesign = bOpenInDesign;
-            // onCommandOpenSomething( aCommand.Argument, !bOpenForMail, Environment, aRet, aGuard );
-
             m_bOpenInDesign = bOpenInDesign || bOpenForMail;
             onCommandOpenSomething( aCommand.Argument, bActivateObject, Environment, aRet, aGuard );
+        }
+        else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "show" ) ) )
+        {
+            impl_showOrHideComponent_throw( true );
+        }
+        else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "hide" ) ) )
+        {
+            impl_showOrHideComponent_throw( false );
         }
         else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "copyTo" ) ) )
         {
@@ -1792,8 +1866,9 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& _x
                     m_xEmbeddedObject->changeState(EmbedStates::RUNNING);
                     if ( bSetSize )
                     {
-                        awt::Size aSize( DEFAULT_WIDTH, DEFAULT_HEIGHT );
+                        LockModifiable aLockModify( impl_getComponent_throw( false ) );
 
+                        awt::Size aSize( DEFAULT_WIDTH, DEFAULT_HEIGHT );
                         m_xEmbeddedObject->setVisualAreaSize(Aspects::MSOLE_CONTENT,aSize);
                     }
                 }

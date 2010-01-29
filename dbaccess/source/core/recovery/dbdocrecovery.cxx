@@ -27,6 +27,7 @@
 
 #include "recovery/dbdocrecovery.hxx"
 #include "sdbcoretools.hxx"
+#include "subcomponentloader.hxx"
 #include "dbastrings.hrc"
 
 /** === begin UNO includes === **/
@@ -40,6 +41,10 @@
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
+#include <com/sun/star/sdb/XFormDocumentsSupplier.hpp>
+#include <com/sun/star/sdb/XReportDocumentsSupplier.hpp>
+#include <com/sun/star/ucb/XCommandProcessor.hpp>
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
@@ -84,6 +89,10 @@ namespace dbaccess
     using ::com::sun::star::io::XActiveDataSink;
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::util::XModifiable;
+    using ::com::sun::star::sdb::XFormDocumentsSupplier;
+    using ::com::sun::star::sdb::XReportDocumentsSupplier;
+    using ::com::sun::star::ucb::XCommandProcessor;
+    using ::com::sun::star::container::XHierarchicalNameAccess;
     /** === end UNO using === **/
 
     namespace ElementModes = ::com::sun::star::embed::ElementModes;
@@ -107,7 +116,7 @@ namespace dbaccess
             UNKNOWN         = 10001
         };
 
-        struct SubComponentDescriptor
+        struct DBACCESS_DLLPRIVATE SubComponentDescriptor
         {
             ::rtl::OUString     sName;
             bool                bForEditing;
@@ -130,7 +139,7 @@ namespace dbaccess
         typedef ::std::map< SubComponentType, MapStringToCompDesc > MapCompTypeToCompDescs;
 
         // .........................................................................
-        void lcl_getPersistentRepresentation( const MapStringToCompDesc::value_type& i_rComponentDesc, ::rtl::OUStringBuffer& o_rBuffer )
+        static void lcl_getPersistentRepresentation( const MapStringToCompDesc::value_type& i_rComponentDesc, ::rtl::OUStringBuffer& o_rBuffer )
         {
             o_rBuffer.append( i_rComponentDesc.first );
             o_rBuffer.append( sal_Unicode( '=' ) );
@@ -140,7 +149,7 @@ namespace dbaccess
         }
 
         // .........................................................................
-        bool lcl_extractCompDesc( const ::rtl::OUString& i_rIniLine, ::rtl::OUString& o_rStorName, SubComponentDescriptor& o_rCompDesc )
+        static bool lcl_extractCompDesc( const ::rtl::OUString& i_rIniLine, ::rtl::OUString& o_rStorName, SubComponentDescriptor& o_rCompDesc )
         {
             const sal_Int32 nEqualSignPos = i_rIniLine.indexOf( sal_Unicode( '=' ) );
             if ( nEqualSignPos < 1 )
@@ -162,7 +171,7 @@ namespace dbaccess
         }
 
         // .........................................................................
-        SubComponentType lcl_databaseObjectToSubComponentType( const sal_Int32 i_nObjectType )
+        static SubComponentType lcl_databaseObjectToSubComponentType( const sal_Int32 i_nObjectType )
         {
             switch ( i_nObjectType )
             {
@@ -177,14 +186,14 @@ namespace dbaccess
         }
 
         // .........................................................................
-        const ::rtl::OUString& lcl_getRecoveryDataSubStorageName()
+        static const ::rtl::OUString& lcl_getRecoveryDataSubStorageName()
         {
             static const ::rtl::OUString s_sRecDataStorName( RTL_CONSTASCII_USTRINGPARAM( "recovery" ) );
             return s_sRecDataStorName;
         }
 
         // .........................................................................
-        const ::rtl::OUString& lcl_getComponentsStorageName( const SubComponentType i_eType )
+        static const ::rtl::OUString& lcl_getComponentsStorageName( const SubComponentType i_eType )
         {
             static const ::rtl::OUString s_sFormsStorageName( RTL_CONSTASCII_USTRINGPARAM( "forms" ) );
             static const ::rtl::OUString s_sReportsStorageName( RTL_CONSTASCII_USTRINGPARAM( "reports" ) );
@@ -214,21 +223,21 @@ namespace dbaccess
         }
 
         // .........................................................................
-        const ::rtl::OUString& lcl_getObjectMapStreamName()
+        static const ::rtl::OUString& lcl_getObjectMapStreamName()
         {
             static const ::rtl::OUString s_sObjectMapStreamName( RTL_CONSTASCII_USTRINGPARAM( "storage-component-map.ini" ) );
             return s_sObjectMapStreamName;
         }
 
         // .........................................................................
-        const ::rtl::OUString& lcl_getMapStreamEncodingName()
+        static const ::rtl::OUString& lcl_getMapStreamEncodingName()
         {
             static const ::rtl::OUString s_sMapStreamEncodingName( RTL_CONSTASCII_USTRINGPARAM( "UTF-8" ) );
             return s_sMapStreamEncodingName;
         }
 
         // .........................................................................
-        void lcl_writeObjectMap_throw( const ::comphelper::ComponentContext& i_rContext, const Reference< XStorage >& i_rStorage,
+        static void lcl_writeObjectMap_throw( const ::comphelper::ComponentContext& i_rContext, const Reference< XStorage >& i_rStorage,
             const MapStringToCompDesc& i_mapStorageToCompDesc )
         {
             if ( i_mapStorageToCompDesc.empty() )
@@ -265,7 +274,7 @@ namespace dbaccess
         }
 
         // .........................................................................
-        bool lcl_isSectionStart( const ::rtl::OUString& i_rIniLine, ::rtl::OUString& o_rSectionName )
+        static bool lcl_isSectionStart( const ::rtl::OUString& i_rIniLine, ::rtl::OUString& o_rSectionName )
         {
             const sal_Int32 nLen = i_rIniLine.getLength();
             if ( ( nLen > 0 ) && ( i_rIniLine.getStr()[0] == '[' ) && ( i_rIniLine.getStr()[ nLen - 1 ] == ']' ) )
@@ -277,7 +286,7 @@ namespace dbaccess
         }
 
         // .........................................................................
-        void lcl_stripTrailingLineFeed( ::rtl::OUString& io_rLine )
+        static void lcl_stripTrailingLineFeed( ::rtl::OUString& io_rLine )
         {
             const sal_Int32 nLen = io_rLine.getLength();
             if ( ( nLen > 0 ) && ( io_rLine.getStr()[ nLen - 1 ] == '\n' ) )
@@ -285,7 +294,7 @@ namespace dbaccess
         }
 
         // .........................................................................
-        void lcl_readObjectMap_throw( const ::comphelper::ComponentContext& i_rContext, const Reference< XStorage >& i_rStorage,
+        static void lcl_readObjectMap_throw( const ::comphelper::ComponentContext& i_rContext, const Reference< XStorage >& i_rStorage,
             MapStringToCompDesc& o_mapStorageToObjectName )
         {
             ENSURE_OR_THROW( i_rStorage.is(), "invalid storage" );
@@ -339,7 +348,7 @@ namespace dbaccess
         }
 
         // .........................................................................
-        bool lcl_determineReadOnly( const Reference< XComponent >& i_rComponent )
+        static bool lcl_determineReadOnly( const Reference< XComponent >& i_rComponent )
         {
             Reference< XModel > xDocument( i_rComponent, UNO_QUERY );
             if ( !xDocument.is() )
@@ -356,7 +365,7 @@ namespace dbaccess
         }
 
         // .........................................................................
-        void lcl_markModified( const Reference< XComponent >& i_rSubComponent )
+        static void lcl_markModified( const Reference< XComponent >& i_rSubComponent )
         {
             const Reference< XModifiable > xModify( i_rSubComponent, UNO_QUERY );
             if ( !xModify.is() )
@@ -366,6 +375,36 @@ namespace dbaccess
             }
 
             xModify->setModified( sal_True );
+        }
+
+        // .........................................................................
+        static Reference< XCommandProcessor > lcl_getSubComponentDef_nothrow( const Reference< XController >& i_rAppUI,
+            SubComponentType i_eType, const ::rtl::OUString& i_rName )
+        {
+            ENSURE_OR_RETURN( i_rAppUI.is(), "lcl_getSubComponentDef_nothrow: illegal controller", NULL );
+            ENSURE_OR_RETURN( ( i_eType == FORM ) || ( i_eType == REPORT ), "lcl_getSubComponentDef_nothrow: illegal controller", NULL );
+
+            Reference< XCommandProcessor > xCommandProcessor;
+            try
+            {
+                Reference< XHierarchicalNameAccess > xDefinitionContainer;
+                if ( i_eType == FORM )
+                {
+                    Reference< XFormDocumentsSupplier > xSuppForms( i_rAppUI->getModel(), UNO_QUERY_THROW );
+                    xDefinitionContainer.set( xSuppForms->getFormDocuments(), UNO_QUERY_THROW );
+                }
+                else
+                {
+                    Reference< XReportDocumentsSupplier > xSuppReports( i_rAppUI->getModel(), UNO_QUERY_THROW );
+                    xDefinitionContainer.set( xSuppReports->getReportDocuments(), UNO_QUERY_THROW );
+                }
+                xCommandProcessor.set( xDefinitionContainer->getByHierarchicalName( i_rName ), UNO_QUERY_THROW );
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+            return xCommandProcessor;
         }
     }
 
@@ -670,17 +709,45 @@ namespace dbaccess
                 ::comphelper::NamedValueCollection aLoadArgs;
                 aLoadArgs.put( "RecoveryStorage", xCompStor );
 
+                // load/create the sub component hidden. We'll show it when the main app window is shown.
+                aLoadArgs.put( "Hidden", true );
+
                 try
                 {
                     Reference< XComponent > xSubComponent;
+                    Reference< XCommandProcessor > xDocDefinition;
+
                     if ( sComponentName.getLength() )
                     {
-                        xSubComponent = xDocumentUI->loadComponentWithArguments( eComponentType, sComponentName,
-                            stor->second.bForEditing, aLoadArgs.getPropertyValues() );
+                        xDocDefinition = lcl_getSubComponentDef_nothrow( i_rTargetController, eComponentType, sComponentName );
+                        xSubComponent.set( xDocumentUI->loadComponentWithArguments(
+                                eComponentType,
+                                sComponentName,
+                                stor->second.bForEditing,
+                                aLoadArgs.getPropertyValues()
+                            ),
+                            UNO_SET_THROW
+                        );
                     }
                     else
                     {
-                        xSubComponent = xDocumentUI->createComponentWithArguments( eComponentType, aLoadArgs.getPropertyValues() );
+                        Reference< XComponent > xDocDefComponent;
+                        xSubComponent.set( xDocumentUI->createComponentWithArguments(
+                                eComponentType,
+                                aLoadArgs.getPropertyValues(),
+                                xDocDefComponent
+                            ),
+                            UNO_SET_THROW
+                        );
+
+                        xDocDefinition.set( xDocDefComponent, UNO_QUERY );
+                        OSL_ENSURE( xDocDefinition.is(), "DatabaseDocumentRecovery::recoverSubDocuments: loaded a form/report, but don't have a document definition?!" );
+                    }
+
+                    if ( xDocDefinition.is() )
+                    {
+                        Reference< XInterface > xLoader( *new SubComponentLoader( i_rTargetController, xDocDefinition ) );
+                        (void)xLoader;
                     }
 
                     // at the moment, we only store, during session save, sub components which are modified. So, set this
