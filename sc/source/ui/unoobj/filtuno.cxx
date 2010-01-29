@@ -186,24 +186,25 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
         delete pDlg;
         delete pInStream;
     }
-    else if ( !bExport &&
-              (aFilterString == ScDocShell::GetWebQueryFilterName() ||
-               aFilterString == ScDocShell::GetHtmlFilterName()) )
+    else if ( aFilterString == ScDocShell::GetWebQueryFilterName() || aFilterString == ScDocShell::GetHtmlFilterName() )
     {
-        // HTML import.
-        ::std::auto_ptr<AbstractScTextImportOptionsDlg> pDlg(
-            pFact->CreateScTextImportOptionsDlg(NULL, RID_SCDLG_TEXT_IMPORT_OPTIONS));
-
-        if (pDlg->Execute() == RET_OK)
+        if (!bExport)
         {
-            LanguageType eLang = pDlg->GetLanguageType();
-            OUStringBuffer aBuf;
+            // HTML import.
+            ::std::auto_ptr<AbstractScTextImportOptionsDlg> pDlg(
+                pFact->CreateScTextImportOptionsDlg(NULL, RID_SCDLG_TEXT_IMPORT_OPTIONS));
 
-            aBuf.append(String::CreateFromInt32(static_cast<sal_Int32>(eLang)));
-            aBuf.append(sal_Unicode(' '));
-            aBuf.append(pDlg->IsDateConversionSet() ? sal_Unicode('1') : sal_Unicode('0'));
-            aFilterOptions = aBuf.makeStringAndClear();
-            nRet = ui::dialogs::ExecutableDialogResults::OK;
+            if (pDlg->Execute() == RET_OK)
+            {
+                LanguageType eLang = pDlg->GetLanguageType();
+                OUStringBuffer aBuf;
+
+                aBuf.append(String::CreateFromInt32(static_cast<sal_Int32>(eLang)));
+                aBuf.append(sal_Unicode(' '));
+                aBuf.append(pDlg->IsDateConversionSet() ? sal_Unicode('1') : sal_Unicode('0'));
+                aFilterOptions = aBuf.makeStringAndClear();
+                nRet = ui::dialogs::ExecutableDialogResults::OK;
+            }
         }
     }
     else
