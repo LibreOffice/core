@@ -37,6 +37,7 @@
 
 #include "file_url.h"
 #include "file_error.h"
+
 #include "path_helper.hxx"
 
 #include "osl/diagnose.h"
@@ -675,13 +676,13 @@ static DWORD create_dir_with_callback(
     else
     {
         /* the long urls can not contain ".." while calling CreateDirectory, no idea why! */
-        sal_Unicode pBuf[MAX_LONG_PATH];
+        ::osl::LongPathBuffer< sal_Unicode > aBuf( MAX_LONG_PATH );
         sal_uInt32 nNewLen = GetCaseCorrectPathName( reinterpret_cast<LPCTSTR>( rtl_uString_getStr( dir_path ) ),
-                                                      pBuf,
-                                                      MAX_LONG_PATH,
+                                                      aBuf,
+                                                      aBuf.getBufSizeInSymbols(),
                                                       sal_False );
 
-        bCreated = CreateDirectoryW( pBuf, NULL );
+        bCreated = CreateDirectoryW( aBuf, NULL );
     }
 
     if ( bCreated )
@@ -790,13 +791,13 @@ oslFileError SAL_CALL osl_createDirectory(rtl_uString* strPath)
         else
         {
             /* the long urls can not contain ".." while calling CreateDirectory, no idea why! */
-            sal_Unicode pBuf[MAX_LONG_PATH];
+            ::osl::LongPathBuffer< sal_Unicode > aBuf( MAX_LONG_PATH );
             sal_uInt32 nNewLen = GetCaseCorrectPathName( reinterpret_cast<LPCTSTR>( rtl_uString_getStr( strSysPath ) ),
-                                                          pBuf,
-                                                          MAX_LONG_PATH,
+                                                          aBuf,
+                                                          aBuf.getBufSizeInSymbols(),
                                                           sal_False );
 
-            bCreated = CreateDirectoryW( pBuf, NULL );
+            bCreated = CreateDirectoryW( aBuf, NULL );
         }
 
 
@@ -1785,15 +1786,15 @@ oslFileError SAL_CALL osl_getFileStatus(
         if ( !pItemImpl->bFullPathNormalized )
         {
             sal_uInt32 nLen = rtl_uString_getLength( pItemImpl->m_pFullPath );
-            sal_Unicode pBuffer[ MAX_LONG_PATH];
+            ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
             sal_uInt32 nNewLen = GetCaseCorrectPathName( reinterpret_cast<LPCTSTR>( rtl_uString_getStr( pItemImpl->m_pFullPath ) ),
-                                                      pBuffer,
-                                                      MAX_LONG_PATH,
+                                                      aBuffer,
+                                                      aBuffer.getBufSizeInSymbols(),
                                                       sal_True );
 
             if ( nNewLen )
             {
-                rtl_uString_newFromStr( &pItemImpl->m_pFullPath, reinterpret_cast< const sal_Unicode* >( pBuffer ) );
+                rtl_uString_newFromStr( &pItemImpl->m_pFullPath, aBuffer );
                 pItemImpl->bFullPathNormalized = TRUE;
             }
         }

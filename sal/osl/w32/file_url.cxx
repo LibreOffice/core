@@ -41,6 +41,8 @@
 #include "osl/file.h"
 #include "osl/mutex.h"
 
+#include "path_helper.hxx"
+
 #include <stdio.h>
 #include <tchar.h>
 
@@ -403,32 +405,39 @@ DWORD IsValidFilePath(rtl_uString *path, LPCTSTR *lppError, DWORD dwFlags, rtl_u
 }
 
 //#####################################################
-static BOOL PathRemoveFileSpec(LPTSTR lpPath, LPTSTR lpFileName )
+static sal_Int32 PathRemoveFileSpec(LPTSTR lpPath, LPTSTR lpFileName, sal_Int32 nFileBufLen )
 {
-    BOOL    fSuccess = FALSE;   // Assume failure
-    LPTSTR  lpLastBkSlash = _tcsrchr( lpPath, '\\' );
-    LPTSTR  lpLastSlash = _tcsrchr( lpPath, '/' );
-    LPTSTR  lpLastDelimiter = lpLastSlash > lpLastBkSlash ? lpLastSlash : lpLastBkSlash;
+    sal_Int32 nRemoved = 0;
 
-    if ( lpLastDelimiter )
+    if ( nFileBufLen )
     {
-            if ( 0 == *(lpLastDelimiter + 1) )
-            {
-                if ( lpLastDelimiter > lpPath && *(lpLastDelimiter - 1) != ':' )
+        lpFileName[0] = 0;
+        LPTSTR  lpLastBkSlash = _tcsrchr( lpPath, '\\' );
+        LPTSTR  lpLastSlash = _tcsrchr( lpPath, '/' );
+        LPTSTR  lpLastDelimiter = lpLastSlash > lpLastBkSlash ? lpLastSlash : lpLastBkSlash;
+
+        if ( lpLastDelimiter )
+        {
+                sal_Int32 nDelLen = _tcslen( lpLastDelimiter );
+                if ( 1 == nDelLen )
                 {
-                    *lpLastDelimiter = 0;
-                    *lpFileName = 0;
-                    fSuccess = TRUE;
+                    if ( lpLastDelimiter > lpPath && *(lpLastDelimiter - 1) != ':' )
+                    {
+                        *lpLastDelimiter = 0;
+                        *lpFileName = 0;
+                        nRemoved = nDelLen;
+                    }
                 }
-            }
-            else
-            {
-                _tcscpy( lpFileName, lpLastDelimiter + 1 );
-                *(++lpLastDelimiter) = 0;
-                fSuccess = TRUE;
-            }
+                else if ( nDelLen && nDelLen - 1 < nFileBufLen )
+                {
+                    _tcscpy( lpFileName, lpLastDelimiter + 1 );
+                    *(++lpLastDelimiter) = 0;
+                    nRemoved = nDelLen - 1;
+                }
+        }
     }
-    return fSuccess;
+
+    return nRemoved;
 }
 
 //#####################################################
@@ -454,38 +463,31 @@ static LPTSTR PathAddBackslash(LPTSTR lpPath, sal_Int32 nBufLen)
 //#####################################################
 // Same as GetLongPathName but also 95/NT4
 static DWORD GetCaseCorrectPathNameEx(
-    LPCTSTR lpszShortPath,  // file name
-    LPTSTR  lpszLongPath,   // path buffer
+    LPTSTR  lpszPath,   // path buffer to convert
     DWORD   cchBuffer,      // size of path buffer
     DWORD   nSkipLevels,
     BOOL bCheckExistence )
 {
-        TCHAR   szPath[MAX_LONG_PATH];
-        TCHAR   szFile[MAX_LONG_PATH]; /* MAX_LONG_PATH is used here for the case of invalid long file names */
-        BOOL    fSuccess;
-
-        cchBuffer = cchBuffer; /* avoid warnings */
-
-        _tcscpy( szPath, lpszShortPath );
-
-        fSuccess = PathRemoveFileSpec( szPath, szFile );
-
-        if ( fSuccess )
+        ::osl::LongPathBuffer< sal_Unicode > szFile( MAX_PATH + 1 );
+        sal_Int32 nRemoved = PathRemoveFileSpec( lpszPath, szFile, MAX_PATH + 1 );
+        sal_Int32 nLastStepRemoved = nRemoved;
+        while ( nLastStepRemoved && szFile[0] == 0 )
         {
-            int nLen = _tcslen( szPath );
-            LPCTSTR lpszFileSpec = lpszShortPath + nLen;
-            BOOL    bSkipThis;
+            // remove separators
+            nLastStepRemoved = PathRemoveFileSpec( lpszPath, szFile, MAX_PATH + 1 );
+            nRemoved += nLastStepRemoved;
+        }
 
-            if ( 0 == _tcscmp( lpszFileSpec, TEXT("..") ) )
+        if ( nRemoved )
+        {
+            BOOL bSkipThis = FALSE;
+
+            if ( 0 == _tcscmp( szFile, TEXT("..") ) )
             {
                 bSkipThis = TRUE;
                 nSkipLevels += 1;
             }
-            else if (
-                0 == _tcscmp( lpszFileSpec, TEXT(".") ) ||
-                0 == _tcscmp( lpszFileSpec, TEXT("\\") ) ||
-                0 == _tcscmp( lpszFileSpec, TEXT("/") )
-                )
+            else if ( 0 == _tcscmp( szFile, TEXT(".") ) )
             {
                 bSkipThis = TRUE;
             }
@@ -497,31 +499,35 @@ static DWORD GetCaseCorrectPathNameEx(
             else
                 bSkipThis = FALSE;
 
-            GetCaseCorrectPathNameEx( szPath, szPath, MAX_LONG_PATH, nSkipLevels, bCheckExistence );
+            GetCaseCorrectPathNameEx( lpszPath, cchBuffer, nSkipLevels, bCheckExistence );
 
-            PathAddBackslash( szPath, ELEMENTS_OF_ARRAY( szPath ) );
+            PathAddBackslash( lpszPath, cchBuffer );
 
             /* Analyze parent if not only a trailing backslash was cutted but a real file spec */
             if ( !bSkipThis )
             {
                 if ( bCheckExistence )
                 {
+                    ::osl::LongPathBuffer< sal_Unicode > aShortPath( MAX_LONG_PATH );
+                    _tcscpy( aShortPath, lpszPath );
+                    _tcscat( aShortPath, szFile );
+
                     WIN32_FIND_DATA aFindFileData;
-                    HANDLE  hFind = FindFirstFile( lpszShortPath, &aFindFileData );
+                    HANDLE  hFind = FindFirstFile( aShortPath, &aFindFileData );
 
                     if ( IsValidHandle(hFind) )
                     {
-                        _tcscat( szPath, aFindFileData.cFileName[0] ? aFindFileData.cFileName : aFindFileData.cAlternateFileName );
+                        _tcscat( lpszPath, aFindFileData.cFileName[0] ? aFindFileData.cFileName : aFindFileData.cAlternateFileName );
 
                         FindClose( hFind );
                     }
                     else
-                        return 0;
+                        lpszPath[0] = 0;
                 }
                 else
                 {
                     /* add the segment name back */
-                    _tcscat( szPath, szFile );
+                    _tcscat( lpszPath, szFile );
                 }
             }
         }
@@ -531,14 +537,14 @@ static DWORD GetCaseCorrectPathNameEx(
                or a network share. If still levels to skip are left, the path specification
                tries to travel below the file system root */
             if ( nSkipLevels )
-                return 0;
-
-            _tcsupr( szPath );
+                    lpszPath[0] = 0;
+            else
+                _tcsupr( lpszPath );
         }
 
-        _tcscpy( lpszLongPath, szPath );
+        rtl_freeMemory( szFile );
 
-        return _tcslen( lpszLongPath );
+        return _tcslen( lpszPath );
 }
 
 //#####################################################
@@ -564,10 +570,16 @@ DWORD GetCaseCorrectPathName(
             return ELEMENTS_OF_ARRAY(WSTR_SYSTEM_ROOT_PATH) - 1;
         }
     }
-    else
+    else if ( lpszShortPath )
     {
-        return GetCaseCorrectPathNameEx( lpszShortPath, lpszLongPath, cchBuffer, 0, bCheckExistence );
+        if ( _tcslen( lpszShortPath ) <= cchBuffer )
+        {
+            _tcscpy( lpszLongPath, lpszShortPath );
+            return GetCaseCorrectPathNameEx( lpszLongPath, cchBuffer, 0, bCheckExistence );
+        }
     }
+
+    return 0;
 }
 
 
@@ -1063,8 +1075,8 @@ oslFileError SAL_CALL osl_getAbsoluteFileURL( rtl_uString* ustrBaseURL, rtl_uStr
 
     if ( !eError )
     {
-        TCHAR   szBuffer[MAX_LONG_PATH];
-        TCHAR   szCurrentDir[MAX_LONG_PATH];
+        ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
+        ::osl::LongPathBuffer< sal_Unicode > aCurrentDir( MAX_LONG_PATH );
         LPTSTR  lpFilePart = NULL;
         DWORD   dwResult;
 
@@ -1079,28 +1091,28 @@ oslFileError SAL_CALL osl_getAbsoluteFileURL( rtl_uString* ustrBaseURL, rtl_uStr
         {
             osl_acquireMutex( g_CurrentDirectoryMutex );
 
-            GetCurrentDirectory( MAX_LONG_PATH, szCurrentDir );
-            SetCurrentDirectory( reinterpret_cast<LPCTSTR>(ustrBaseSysPath->buffer) );
+            GetCurrentDirectoryW( aCurrentDir.getBufSizeInSymbols(), aCurrentDir );
+            SetCurrentDirectoryW( reinterpret_cast<LPCTSTR>(ustrBaseSysPath->buffer) );
         }
 
-        dwResult = GetFullPathName( reinterpret_cast<LPCTSTR>(ustrRelSysPath->buffer), MAX_LONG_PATH, szBuffer, &lpFilePart );
+        dwResult = GetFullPathNameW( reinterpret_cast<LPCTSTR>(ustrRelSysPath->buffer), aBuffer.getBufSizeInSymbols(), aBuffer, &lpFilePart );
 
         if ( ustrBaseSysPath )
         {
-            SetCurrentDirectory( szCurrentDir );
+            SetCurrentDirectoryW( aCurrentDir );
 
             osl_releaseMutex( g_CurrentDirectoryMutex );
         }
 
         if ( dwResult )
         {
-            if ( dwResult >= MAX_LONG_PATH )
+            if ( dwResult >= aBuffer.getBufSizeInSymbols() )
                 eError = osl_File_E_INVAL;
             else
             {
                 rtl_uString *ustrAbsSysPath = NULL;
 
-                rtl_uString_newFromStr( &ustrAbsSysPath, reinterpret_cast<const sal_Unicode*>(szBuffer) );
+                rtl_uString_newFromStr( &ustrAbsSysPath, aBuffer );
 
                 eError = osl_getFileURLFromSystemPath( ustrAbsSysPath, pustrAbsoluteURL );
 
