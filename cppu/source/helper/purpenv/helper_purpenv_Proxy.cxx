@@ -278,10 +278,12 @@ static uno::TypeDescription getAcquireMethod(void)
     typelib_TypeDescriptionReference * type_XInterface =
         * typelib_static_type_getByTypeClass(typelib_TypeClass_INTERFACE);
 
-    typelib_InterfaceTypeDescription * pTXInterfaceDescr = 0;
-    TYPELIB_DANGER_GET    ((typelib_TypeDescription **)&pTXInterfaceDescr, type_XInterface);
-    uno::TypeDescription acquire(pTXInterfaceDescr->ppAllMembers[1]);
-    TYPELIB_DANGER_RELEASE((typelib_TypeDescription  *)pTXInterfaceDescr);
+    typelib_TypeDescription * pTXInterfaceDescr = 0;
+    TYPELIB_DANGER_GET    (&pTXInterfaceDescr, type_XInterface);
+    uno::TypeDescription acquire(
+        reinterpret_cast< typelib_InterfaceTypeDescription * >(
+            pTXInterfaceDescr)->ppAllMembers[1]);
+    TYPELIB_DANGER_RELEASE(pTXInterfaceDescr);
 
     return acquire;
 }
@@ -291,10 +293,12 @@ static uno::TypeDescription getReleaseMethod(void)
     typelib_TypeDescriptionReference * type_XInterface =
         * typelib_static_type_getByTypeClass(typelib_TypeClass_INTERFACE);
 
-    typelib_InterfaceTypeDescription * pTXInterfaceDescr = 0;
-    TYPELIB_DANGER_GET    ((typelib_TypeDescription **)&pTXInterfaceDescr, type_XInterface);
-    uno::TypeDescription release(pTXInterfaceDescr->ppAllMembers[2]);
-    TYPELIB_DANGER_RELEASE((typelib_TypeDescription  *)pTXInterfaceDescr);
+    typelib_TypeDescription * pTXInterfaceDescr = 0;
+    TYPELIB_DANGER_GET    (&pTXInterfaceDescr, type_XInterface);
+    uno::TypeDescription release(
+        reinterpret_cast< typelib_InterfaceTypeDescription * >(
+            pTXInterfaceDescr)->ppAllMembers[2]);
+    TYPELIB_DANGER_RELEASE(pTXInterfaceDescr);
 
     return release;
 }
