@@ -88,7 +88,7 @@
 
 #include <tools/debug.hxx>
 #include <rtl/math.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <svx/unoshape.hxx>
 #include <comphelper/extract.hxx>
 #include <svx/eeitem.hxx>
@@ -1139,7 +1139,7 @@ void ScXMLExport::WriteRowContent()
 {
     ScMyRowFormatRange aRange;
     sal_Int32 nIndex(-1);
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     sal_Int32 nPrevCol(0);
 #endif
     sal_Int32 nCols(0);
@@ -1148,7 +1148,7 @@ void ScXMLExport::WriteRowContent()
     sal_Bool bIsFirst(sal_True);
     while (pRowFormatRanges->GetNext(aRange))
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         DBG_ASSERT(bIsFirst || (!bIsFirst && (nPrevCol + nCols == aRange.nStartColumn)), "here are some columns missing");
 #endif
         if (bIsFirst)
@@ -1158,7 +1158,7 @@ void ScXMLExport::WriteRowContent()
             bIsAutoStyle = aRange.bIsAutoStyle;
             nCols = aRange.nRepeatColumns;
             bIsFirst = sal_False;
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             nPrevCol = aRange.nStartColumn;
 #endif
         }
@@ -1185,7 +1185,7 @@ void ScXMLExport::WriteRowContent()
                 bIsAutoStyle = aRange.bIsAutoStyle;
                 nCols = aRange.nRepeatColumns;
                 nPrevValidationIndex = aRange.nValidationIndex;
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 nPrevCol = aRange.nStartColumn;
 #endif
             }

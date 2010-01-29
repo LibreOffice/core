@@ -36,7 +36,7 @@
 #include "scitems.hxx"
 #include <tools/debug.hxx>
 #include <tools/shl.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <svx/unomid.hxx>
 #include "unowids.hxx"
 #include <rtl/uuid.h>

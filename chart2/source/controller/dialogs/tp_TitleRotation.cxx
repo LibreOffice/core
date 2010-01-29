@@ -40,7 +40,7 @@
 #include <svx/frmdiritem.hxx>
 
 // header for class SfxInt32Item
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 
 //.............................................................................
 namespace chart

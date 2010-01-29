@@ -38,7 +38,7 @@
 #include <com/sun/star/sheet/FormulaToken.hpp>
 #include <com/sun/star/sheet/XFormulaParser.hpp>
 #include <cppuhelper/implbase3.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <formula/FormulaOpCodeMapperObj.hxx>
 #include "address.hxx"
 #include "compiler.hxx"

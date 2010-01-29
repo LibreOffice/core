@@ -31,7 +31,7 @@
 #ifndef SC_RESULT_HXX
 #define SC_RESULT_HXX
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <vcl/timer.hxx>
 #include <tools/string.hxx>
 

@@ -33,8 +33,8 @@
 
 
 
-#include <svtools/smplhint.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/smplhint.hxx>
+#include <svl/itemprop.hxx>
 #include <svx/unomid.hxx>
 #include <i18npool/mslangid.hxx>
 

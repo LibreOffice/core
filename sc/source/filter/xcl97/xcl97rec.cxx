@@ -37,14 +37,14 @@
 #include <svx/editobj.hxx>
 #include <svx/svdoole2.hxx>
 #include <sot/storage.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/writingmodeitem.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/math.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/zformat.hxx>
 #include "cell.hxx"
 #include "drwlayer.hxx"
 
@@ -57,13 +57,13 @@
 
 #include "scitems.hxx"
 
-#include <svtools/fltrcfg.hxx>
+#include <unotools/fltrcfg.hxx>
 #include <svx/brshitem.hxx>
 #include <svx/boxitem.hxx>
 #include <svx/frmdiritem.hxx>
 #include <svx/adjitem.hxx>
 #include <svx/eeitem.hxx>
-#include <svx/msoleexp.hxx>
+#include <filter/msfilter/msoleexp.hxx>
 
 #include <unotools/localedatawrapper.hxx>
 

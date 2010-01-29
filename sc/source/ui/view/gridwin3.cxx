@@ -39,7 +39,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/sizeitem.hxx>
 #include <sfx2/bindings.hxx>
-#include <svtools/ptitem.hxx>
+#include <svl/ptitem.hxx>
 
 #include "tabvwsh.hxx"
 #include "gridwin.hxx"
@@ -215,6 +215,7 @@ void ScGridWindow::DrawRedraw( ScOutputData& rOutputData, ScUpdateMode eMode, UL
             pDrView->setHideOle(!bDrawOle);
             pDrView->setHideChart(!bDrawChart);
             pDrView->setHideDraw(!bDrawDraw);
+            pDrView->setHideFormControl(!bDrawDraw);
         }
 
         if(SC_UPDATE_CHANGED == eMode)

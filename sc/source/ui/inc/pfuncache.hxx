@@ -34,6 +34,7 @@
 #include <vector>
 #include <tools/gen.hxx>
 #include "rangelst.hxx"
+#include "printopt.hxx"
 
 class ScDocShell;
 class ScMarkData;
@@ -58,6 +59,7 @@ class ScPrintSelectionStatus
 {
     ScPrintSelectionMode    eMode;
     ScRangeList             aRanges;
+    ScPrintOptions          aOptions;
 
 public:
             ScPrintSelectionStatus() : eMode(SC_PRINTSEL_INVALID) {}
@@ -65,11 +67,13 @@ public:
 
     void    SetMode(ScPrintSelectionMode eNew)  { eMode = eNew; }
     void    SetRanges(const ScRangeList& rNew)  { aRanges = rNew; }
+    void    SetOptions(const ScPrintOptions& rNew) { aOptions = rNew; }
 
     BOOL    operator==(const ScPrintSelectionStatus& rOther) const
-            { return eMode == rOther.eMode && aRanges == rOther.aRanges; }
+            { return eMode == rOther.eMode && aRanges == rOther.aRanges && aOptions == rOther.aOptions; }
 
     ScPrintSelectionMode GetMode() const { return eMode; }
+    const ScPrintOptions& GetOptions() const { return aOptions; }
 };
 
 

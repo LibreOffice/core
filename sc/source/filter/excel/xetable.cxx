@@ -35,7 +35,7 @@
 #include <map>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include "scitems.hxx"
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include "document.hxx"
 #include "dociter.hxx"
 #include "olinetab.hxx"

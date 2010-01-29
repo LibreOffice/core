@@ -41,7 +41,7 @@
 #include <svx/chrtitem.hxx>
 
 // header for SfxInt32Item
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/eeitem.hxx>
 #include <svx/frmdiritem.hxx>
 

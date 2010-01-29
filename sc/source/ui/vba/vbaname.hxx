@@ -34,7 +34,9 @@
 #include <com/sun/star/sheet/XNamedRange.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
 
-#include "vbahelperinterface.hxx"
+#include <vbahelper/vbahelperinterface.hxx>
+
+class ScDocument;
 
 typedef InheritedHelperInterfaceImpl1< ov::excel::XName > NameImpl_BASE;
 

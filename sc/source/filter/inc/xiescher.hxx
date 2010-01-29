@@ -33,8 +33,8 @@
 
 #include <vector>
 #include <map>
-#include <svx/msdffimp.hxx>
-#include <svx/msocximex.hxx>
+#include <filter/msfilter/msdffimp.hxx>
+#include <filter/msfilter/msocximex.hxx>
 #include <vcl/graph.hxx>
 #include "xlescher.hxx"
 #include "xiroot.hxx"

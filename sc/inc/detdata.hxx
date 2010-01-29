@@ -31,7 +31,7 @@
 #ifndef SC_DETDATA_HXX
 #define SC_DETDATA_HXX
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include "global.hxx"
 #include "address.hxx"
 

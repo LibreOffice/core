@@ -40,7 +40,7 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svx/linkmgr.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <vcl/msgbox.hxx>
 
 #include "arealink.hxx"
@@ -171,6 +171,10 @@ void __EXPORT ScAreaLink::Closed()
 
         bAddUndo = FALSE;   // nur einmal
     }
+
+    SCTAB nDestTab = aDestArea.aStart.Tab();
+    if (pDoc->IsStreamValid(nDestTab))
+        pDoc->SetStreamValid(nDestTab, FALSE);
 
     SvBaseLink::Closed();
 }

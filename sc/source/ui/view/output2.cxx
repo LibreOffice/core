@@ -55,8 +55,8 @@
 #include <svx/scripttypeitem.hxx>
 #include <svx/udlnitem.hxx>
 #include <svx/unolingu.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
@@ -64,7 +64,7 @@
 
 #ifndef _SVSTDARR_USHORTS
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 
 #include "output.hxx"
