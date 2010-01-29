@@ -39,6 +39,7 @@ import com.sun.star.wizards.common.*;
 public class QueryMetaData extends CommandMetaData
 {
 
+    private SQLQueryComposer oSQLQueryComposer = null;
     FieldColumn CurFieldColumn;
     public String Command;
     // Vector CommandNamesV;
@@ -292,5 +293,11 @@ public class QueryMetaData extends CommandMetaData
             iAggregate = JavaTools.FieldInTable(AggregateFieldNames, _DisplayFieldName);
         }
         return iAggregate;
+    }
+    public SQLQueryComposer getSQLQueryComposer()
+    {
+        if ( oSQLQueryComposer == null )
+            oSQLQueryComposer = new SQLQueryComposer(this);
+        return oSQLQueryComposer;
     }
 }
