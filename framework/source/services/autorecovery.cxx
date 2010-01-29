@@ -2449,7 +2449,7 @@ void AutoRecovery::implts_saveOneDoc(const ::rtl::OUString&                     
     {
         try
         {
-            xDocRecover->saveToRecoveryFile( rInfo.NewTempURL, lNewArgs.getAsConstPropertyValueList() );
+            xDocRecover->storeToRecoveryFile( rInfo.NewTempURL, lNewArgs.getAsConstPropertyValueList() );
 
             #ifdef TRIGGER_FULL_DISC_CHECK
             throw css::uno::Exception();

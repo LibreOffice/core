@@ -1657,7 +1657,7 @@ void SAL_CALL SfxBaseModel::storeToURL( const   ::rtl::OUString&                
     return m_pData->m_bModifiedSinceLastSave;
 }
 
-void SAL_CALL SfxBaseModel::saveToRecoveryFile( const ::rtl::OUString& i_TargetLocation, const Sequence< PropertyValue >& i_MediaDescriptor ) throw ( RuntimeException, IOException, WrappedTargetException )
+void SAL_CALL SfxBaseModel::storeToRecoveryFile( const ::rtl::OUString& i_TargetLocation, const Sequence< PropertyValue >& i_MediaDescriptor ) throw ( RuntimeException, IOException, WrappedTargetException )
 {
     SfxModelGuard aGuard( *this );
 
@@ -1665,7 +1665,7 @@ void SAL_CALL SfxBaseModel::saveToRecoveryFile( const ::rtl::OUString& i_TargetL
     SfxSaveGuard aSaveGuard( this, m_pData, sal_False );
     impl_store( i_TargetLocation, i_MediaDescriptor, sal_True );
 
-    // no need for subsequent calls to saveToRecoveryFile, unless we're modified, again
+    // no need for subsequent calls to storeToRecoveryFile, unless we're modified, again
     m_pData->m_bModifiedSinceLastSave = sal_False;
 }
 
