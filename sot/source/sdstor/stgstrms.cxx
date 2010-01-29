@@ -1104,7 +1104,7 @@ StgTmpStrm::~StgTmpStrm()
     }
 }
 
-ULONG StgTmpStrm::GetSize()
+ULONG StgTmpStrm::GetSize() const
 {
     ULONG n;
     if( pStrm )

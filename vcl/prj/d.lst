@@ -58,6 +58,7 @@ mkdir: %_DEST%\inc%_EXT%\vcl
 ..\inc\vcl\imagerepository.hxx %_DEST%\inc%_EXT%\vcl\imagerepository.hxx
 ..\inc\vcl\imgcons.hxx %_DEST%\inc%_EXT%\vcl\imgcons.hxx
 ..\inc\vcl\imgctrl.hxx %_DEST%\inc%_EXT%\vcl\imgctrl.hxx
+..\inc\vcl\impdel.hxx %_DEST%\inc%_EXT%\vcl\impdel.hxx
 ..\inc\vcl\inputctx.hxx %_DEST%\inc%_EXT%\vcl\inputctx.hxx
 ..\inc\vcl\javachild.hxx %_DEST%\inc%_EXT%\vcl\javachild.hxx
 ..\inc\vcl\jobset.hxx %_DEST%\inc%_EXT%\vcl\jobset.hxx
@@ -80,10 +81,10 @@ mkdir: %_DEST%\inc%_EXT%\vcl
 ..\inc\vcl\morebtn.hxx %_DEST%\inc%_EXT%\vcl\morebtn.hxx
 ..\inc\vcl\msgbox.hxx %_DEST%\inc%_EXT%\vcl\msgbox.hxx
 ..\inc\vcl\octree.hxx %_DEST%\inc%_EXT%\vcl\octree.hxx
+..\inc\vcl\oldprintadaptor.hxx %_DEST%\inc%_EXT%\vcl\oldprintadaptor.hxx
 ..\inc\vcl\outdev.hxx %_DEST%\inc%_EXT%\vcl\outdev.hxx
 ..\inc\vcl\pointr.hxx %_DEST%\inc%_EXT%\vcl\pointr.hxx
 ..\inc\vcl\print.hxx %_DEST%\inc%_EXT%\vcl\print.hxx
-..\inc\vcl\prndlg.hxx %_DEST%\inc%_EXT%\vcl\prndlg.hxx
 ..\inc\vcl\prntypes.hxx %_DEST%\inc%_EXT%\vcl\prntypes.hxx
 ..\inc\vcl\ptrstyle.hxx %_DEST%\inc%_EXT%\vcl\ptrstyle.hxx
 ..\inc\vcl\regband.hxx %_DEST%\inc%_EXT%\vcl\regband.hxx

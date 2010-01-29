@@ -3320,7 +3320,7 @@ static long ImplHandleIMEConversion( Os2SalFrame* pFrame, MPARAM nMP2Param )
                 if ( pBuf )
                 {
                     aEvt.maText = XubString( pBuf, (USHORT)nBufLen );
-                    delete pBuf;
+                    delete [] pBuf;
                     if ( pAttrBuf )
                     {
                         USHORT nTextLen = aEvt.maText.Len();
@@ -3346,7 +3346,7 @@ static long ImplHandleIMEConversion( Os2SalFrame* pFrame, MPARAM nMP2Param )
                             }
                             aEvt.mpTextAttr = pSalAttrAry;
                         }
-                        delete pAttrBuf;
+                        delete [] pAttrBuf;
                     }
                     if ( bLastCursor )
                         aEvt.mnCursorPos = aEvt.maText.Len();
@@ -3358,7 +3358,7 @@ static long ImplHandleIMEConversion( Os2SalFrame* pFrame, MPARAM nMP2Param )
                 // wieder zerstoeren
                 pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void*)&aEvt );
                 if ( pSalAttrAry )
-                    delete pSalAttrAry;
+                    delete [] pSalAttrAry;
             }
             else
                 pIMEData->mpReleaseIME( hWnd, hIMI );

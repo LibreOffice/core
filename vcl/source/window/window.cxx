@@ -68,7 +68,7 @@
 #include "vcl/wall.hxx"
 #include "vcl/gradient.hxx"
 #include "vcl/toolbox.h"
-#include "vcl/fontcfg.hxx"
+#include "unotools/fontcfg.hxx"
 #include "vcl/sysdata.hxx"
 #include "vcl/sallayout.hxx"
 #include "vcl/button.hxx" // Button::GetStandardText
@@ -310,7 +310,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
     if ( !bUseSystemFont )
     {
         ImplInitFontList();
-        String aConfigFont = vcl::DefaultFontConfiguration::get()->getUserInterfaceFont( rSettings.GetUILocale() );
+        String aConfigFont = utl::DefaultFontConfiguration::get()->getUserInterfaceFont( rSettings.GetUILocale() );
         xub_StrLen nIndex = 0;
         while( nIndex != STRING_NOTFOUND )
         {
@@ -698,6 +698,7 @@ void Window::ImplInitWindowData( WindowType nType )
     mpWindowImpl->mbCallHandlersDuringInputDisabled = FALSE; // TRUE: call event handlers even if input is disabled
     mpWindowImpl->mbDisableAccessibleLabelForRelation = FALSE; // TRUE: do not set LabelFor relation on accessible objects
     mpWindowImpl->mbDisableAccessibleLabeledByRelation = FALSE; // TRUE: do not set LabeledBy relation on accessible objects
+    mpWindowImpl->mbHelpTextDynamic = FALSE;          // TRUE: append help id in HELP_DEBUG case
 
     mbEnableRTL         = Application::GetSettings().GetLayoutRTL();         // TRUE: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
 }
@@ -1279,7 +1280,10 @@ void Window::ImplLoadRes( const ResId& rResId )
     if ( nObjMask & WINDOW_TEXT )
         SetText( ReadStringRes() );
     if ( nObjMask & WINDOW_HELPTEXT )
+    {
         SetHelpText( ReadStringRes() );
+        mpWindowImpl->mbHelpTextDynamic = TRUE;
+    }
     if ( nObjMask & WINDOW_QUICKTEXT )
         SetQuickHelpText( ReadStringRes() );
     if ( nObjMask & WINDOW_EXTRALONG )
@@ -8109,8 +8113,25 @@ const XubString& Window::GetHelpText() const
                     ((Window*)this)->mpWindowImpl->maHelpText = pHelp->GetHelpText( aStrHelpId, this );
                 else
                     ((Window*)this)->mpWindowImpl->maHelpText = pHelp->GetHelpText( nNumHelpId, this );
+                mpWindowImpl->mbHelpTextDynamic = FALSE;
             }
         }
+    }
+    else if( mpWindowImpl->mbHelpTextDynamic && (nNumHelpId || bStrHelpId) )
+    {
+        static const char* pEnv = getenv( "HELP_DEBUG" );
+        if( pEnv && *pEnv )
+        {
+            rtl::OUStringBuffer aTxt( 64+mpWindowImpl->maHelpText.Len() );
+            aTxt.append( mpWindowImpl->maHelpText );
+            aTxt.appendAscii( "\n+++++++++++++++\n" );
+            if( bStrHelpId )
+                aTxt.append( rtl::OUString( aStrHelpId ) );
+            else
+                aTxt.append( sal_Int32( nNumHelpId ) );
+            mpWindowImpl->maHelpText = aTxt.makeStringAndClear();
+        }
+        mpWindowImpl->mbHelpTextDynamic = FALSE;
     }
 
     return mpWindowImpl->maHelpText;
@@ -9752,6 +9773,8 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     EnableOutput();
 
     DBG_ASSERT( GetMapMode().GetMapUnit() == MAP_PIXEL, "MapMode must be PIXEL based" );
+    if ( GetMapMode().GetMapUnit() != MAP_PIXEL )
+        return;
 
     // preserve graphicsstate
     Push();

@@ -47,6 +47,7 @@ class VCL_DLLPUBLIC FixedText : public Control
 {
 //#if 0 // _SOLAR__PRIVATE
 private:
+    using Control::ImplInitSettings;
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
@@ -58,6 +59,11 @@ public:
 //#endif
 protected:
     virtual void    FillLayoutData() const;
+    virtual const Font&
+                    GetCanonicalFont( const StyleSettings& _rStyle ) const;
+    virtual const Color&
+                    GetCanonicalTextColor( const StyleSettings& _rStyle ) const;
+
 public:
                     FixedText( Window* pParent, WinBits nStyle = 0 );
                     FixedText( Window* pParent, const ResId& rResId );
@@ -81,6 +87,7 @@ public:
 class VCL_DLLPUBLIC FixedLine : public Control
 {
 private:
+    using Control::ImplInitSettings;
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
@@ -89,6 +96,10 @@ private:
 
 protected:
     virtual void    FillLayoutData() const;
+    virtual const Font&
+                    GetCanonicalFont( const StyleSettings& _rStyle ) const;
+    virtual const Color&
+                    GetCanonicalTextColor( const StyleSettings& _rStyle ) const;
 
 public:
                     FixedLine( Window* pParent, WinBits nStyle = WB_HORZ );
@@ -113,6 +124,7 @@ private:
     Bitmap          maBitmap;
     Bitmap          maBitmapHC;
 
+    using Control::ImplInitSettings;
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
@@ -153,6 +165,7 @@ private:
     BOOL            mbInUserDraw;
 
 private:
+    using Control::ImplInitSettings;
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
@@ -174,6 +187,7 @@ public:
     virtual void    StateChanged( StateChangedType nType );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
+    virtual Size    GetOptimalSize(WindowSizeType eType) const;
 
     void            SetImage( const Image& rImage );
     const Image&    GetImage() const { return maImage; }

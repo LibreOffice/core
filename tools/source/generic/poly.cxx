@@ -957,59 +957,6 @@ void Polygon::Optimize( ULONG nOptimizeFlags, const PolyOptimizeData* pData )
     }
 }
 
-// -----------------------------------------------------------------------
-
-void Polygon::GetSimple( Polygon& rResult ) const
-{
-    if( !mpImplPolygon->mpFlagAry )
-        rResult = *this;
-    else
-    {
-        ::std::vector< Point > aPointVector;
-
-        for( USHORT i = 0, nCount = GetSize(); i < nCount; )
-        {
-            if( ( ( i + 3 ) < nCount ) &&
-                ( POLY_NORMAL == mpImplPolygon->mpFlagAry[ i ] ) &&
-                ( POLY_CONTROL == mpImplPolygon->mpFlagAry[ i + 1 ] ) &&
-                ( POLY_CONTROL == mpImplPolygon->mpFlagAry[ i + 2 ] ) &&
-                ( POLY_NORMAL == mpImplPolygon->mpFlagAry[ i + 3 ] ) )
-            {
-                const USHORT    nSegmentPoints = 25;
-                const Polygon   aSegmentPoly( mpImplPolygon->mpPointAry[ i ], mpImplPolygon->mpPointAry[ i + 1 ],
-                                              mpImplPolygon->mpPointAry[ i + 3 ], mpImplPolygon->mpPointAry[ i + 2 ],
-                                              nSegmentPoints );
-                const USHORT    nSegmentSize = aSegmentPoly.GetSize();
-
-                if( nSegmentSize )
-                {
-                    const Point*    pPointArray = aSegmentPoly.mpImplPolygon->mpPointAry;
-                    const Point*    pCur = pPointArray;
-                    const Point*    pLast;
-
-                    aPointVector.push_back( *( pLast = pCur ) );
-
-                    for( USHORT j = 1; j < nSegmentSize; j++ )
-                        if( *( pCur = pPointArray + j ) != *pLast )
-                            aPointVector.push_back( *( pLast = pCur ) );
-                }
-
-                i += 3;
-            }
-            else
-                aPointVector.push_back( mpImplPolygon->mpPointAry[ i++ ] );
-        }
-
-        // fill result polygon
-        rResult = Polygon( (USHORT)aPointVector.size() );
-        ::std::vector< Point >::iterator aIter( aPointVector.begin() ), aEnd( aPointVector.end() );
-        Point* pPointArray = rResult.mpImplPolygon->mpPointAry;
-        USHORT nPoints = rResult.mpImplPolygon->mnPoints;
-        while( nPoints-- && aIter != aEnd )
-            *pPointArray++ = *aIter++;
-    }
-}
-
 // =======================================================================
 
 /* Recursively subdivide cubic bezier curve via deCasteljau.
@@ -1668,7 +1615,16 @@ void Polygon::Clip( const Rectangle& rRect, BOOL bPolygon )
 Rectangle Polygon::GetBoundRect() const
 {
     DBG_CHKTHIS( Polygon, NULL );
-    DBG_ASSERT( !mpImplPolygon->mpFlagAry, "GetBoundRect could fail with beziers!" );
+    // Removing the assert. Bezier curves have the attribute that each single
+    // curve segment defined by four points can not exit the four-point polygon
+    // defined by that points. This allows to say that the curve segment can also
+    // never leave the Range of it's defining points.
+    // The result is that Polygon::GetBoundRect() may not create the minimal
+    // BoundRect of the Polygon (to get that, use basegfx::B2DPolygon classes),
+    // but will always create a valid BoundRect, at least as long as this method
+    // 'blindly' travels over all points, including control points.
+    //
+    // DBG_ASSERT( !mpImplPolygon->mpFlagAry, "GetBoundRect could fail with beziers!" );
 
     USHORT  nCount = mpImplPolygon->mnPoints;
     if( ! nCount )

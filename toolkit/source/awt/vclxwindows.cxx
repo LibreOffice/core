@@ -408,6 +408,7 @@ void VCLXButton::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_VERTICALALIGN,
                      BASEPROPERTY_WRITING_MODE,
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
+                     BASEPROPERTY_REFERENCE_DEVICE,
                      0);
     VCLXImageConsumer::ImplGetPropertyIds( rIds );
 }
@@ -420,9 +421,6 @@ VCLXButton::VCLXButton()
 
 VCLXButton::~VCLXButton()
 {
-#ifndef __SUNPRO_CC
-    OSL_TRACE ("%s", __FUNCTION__);
-#endif
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXButton::CreateAccessibleContext()
@@ -817,6 +815,7 @@ void VCLXCheckBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_VERTICALALIGN,
                      BASEPROPERTY_WRITING_MODE,
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
+                     BASEPROPERTY_REFERENCE_DEVICE,
                      0);
     VCLXImageConsumer::ImplGetPropertyIds( rIds );
 }
@@ -1116,6 +1115,7 @@ void VCLXRadioButton::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_VERTICALALIGN,
                      BASEPROPERTY_WRITING_MODE,
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
+                     BASEPROPERTY_REFERENCE_DEVICE,
                      0);
     VCLXImageConsumer::ImplGetPropertyIds( rIds );
 }
@@ -1540,6 +1540,7 @@ void VCLXListBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_ALIGN,
                      BASEPROPERTY_WRITING_MODE,
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
+                     BASEPROPERTY_REFERENCE_DEVICE,
                      BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR,
                      0);
     VCLXWindow::ImplGetPropertyIds( rIds );
@@ -2759,6 +2760,7 @@ void VCLXFixedText::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_VERTICALALIGN,
                      BASEPROPERTY_WRITING_MODE,
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
+                     BASEPROPERTY_REFERENCE_DEVICE,
                      0);
     VCLXWindow::ImplGetPropertyIds( rIds );
 }
@@ -3388,6 +3390,7 @@ void VCLXEdit::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_PAINTTRANSPARENT,
                      BASEPROPERTY_AUTOHSCROLL,
                      BASEPROPERTY_AUTOVSCROLL,
+                     BASEPROPERTY_VERTICALALIGN,
                      BASEPROPERTY_WRITING_MODE,
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
                      0);
@@ -3762,6 +3765,7 @@ void VCLXComboBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_ALIGN,
                      BASEPROPERTY_WRITING_MODE,
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
+                     BASEPROPERTY_REFERENCE_DEVICE,
                      BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR,
                      0);
     // no, don't call VCLXEdit here - it has properties which we do *not* want to have at at combo box
@@ -4280,6 +4284,7 @@ void VCLXDateField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_ENFORCE_FORMAT,
                      BASEPROPERTY_TEXT,
                      BASEPROPERTY_HIDEINACTIVESELECTION,
+                     BASEPROPERTY_VERTICALALIGN,
                      BASEPROPERTY_WRITING_MODE,
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
                      BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR,
@@ -4621,6 +4626,7 @@ void VCLXTimeField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_ENFORCE_FORMAT,
                      BASEPROPERTY_TEXT,
                      BASEPROPERTY_HIDEINACTIVESELECTION,
+                     BASEPROPERTY_VERTICALALIGN,
                      BASEPROPERTY_WRITING_MODE,
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
                      BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR,
@@ -4924,6 +4930,7 @@ void VCLXNumericField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_VALUE_DOUBLE,
                      BASEPROPERTY_ENFORCE_FORMAT,
                      BASEPROPERTY_HIDEINACTIVESELECTION,
+                     BASEPROPERTY_VERTICALALIGN,
                      BASEPROPERTY_WRITING_MODE,
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
                      BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR,
@@ -5518,6 +5525,7 @@ void VCLXCurrencyField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_VALUE_DOUBLE,
                      BASEPROPERTY_ENFORCE_FORMAT,
                      BASEPROPERTY_HIDEINACTIVESELECTION,
+                     BASEPROPERTY_VERTICALALIGN,
                      BASEPROPERTY_WRITING_MODE,
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
                      BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR,
@@ -5865,6 +5873,7 @@ void VCLXPatternField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_TABSTOP,
                      BASEPROPERTY_TEXT,
                      BASEPROPERTY_HIDEINACTIVESELECTION,
+                     BASEPROPERTY_VERTICALALIGN,
                      BASEPROPERTY_WRITING_MODE,
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
                      BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR,

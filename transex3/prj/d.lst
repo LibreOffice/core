@@ -41,8 +41,10 @@ mkdir: %_DEST%\bin%_EXT%\help\com\sun\star\help
 ..\%__SRC%\class\receditor\receditor.jar %_DEST%\bin%_EXT%\receditor.jar
 
 ..\scripts\localize.pl %_DEST%\bin%_EXT%\localize.pl
+..\scripts\localize_old.pl %_DEST%\bin%_EXT%\localize_old.pl
 ..\scripts\localize %_DEST%\bin%_EXT%\localize
 ..\scripts\fast_merge.pl %_DEST%\bin%_EXT%\fast_merge.pl
+..\scripts\keyidGen.pl %_DEST%\bin%_EXT%\keyidGen.pl
 
 ..\inc\export.hxx %_DEST%\inc%_EXT%\transex3\export.hxx
 ..\inc\transex3\directory.hxx %_DEST%\inc%_EXT%\transex3\directory.hxx

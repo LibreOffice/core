@@ -45,11 +45,7 @@
 #include <osl/time.h>
 #include <rtl/bootstrap.hxx>
 
-#ifdef SYSTEM_EXPAT
 #include <expat.h>
-#else
-#include <expat/xmlparse.h>
-#endif
 
 #define DBHELP_ONLY
 
@@ -118,35 +114,41 @@ void IndexerPreProcessor::processDocument
 {
     std::string aStdStr_EncodedDocPathURL = getEncodedPath( EncodedDocPath );
 
-    xmlDocPtr resCaption = xsltApplyStylesheet( m_xsltStylesheetPtrCaption, doc, NULL );
-    xmlNodePtr pResNodeCaption = resCaption->xmlChildrenNode;
-    if( pResNodeCaption )
+    if( m_xsltStylesheetPtrCaption )
     {
-        fs::path fsCaptionPureTextFile_docURL = m_fsCaptionFilesDirName / aStdStr_EncodedDocPathURL;
-        std::string aCaptionPureTextFileStr_docURL = fsCaptionPureTextFile_docURL.native_file_string();
-        FILE* pFile_docURL = fopen( aCaptionPureTextFileStr_docURL.c_str(), "w" );
-        if( pFile_docURL )
+        xmlDocPtr resCaption = xsltApplyStylesheet( m_xsltStylesheetPtrCaption, doc, NULL );
+        xmlNodePtr pResNodeCaption = resCaption->xmlChildrenNode;
+        if( pResNodeCaption )
         {
-            fprintf( pFile_docURL, "%s\n", pResNodeCaption->content );
-            fclose( pFile_docURL );
+            fs::path fsCaptionPureTextFile_docURL = m_fsCaptionFilesDirName / aStdStr_EncodedDocPathURL;
+            std::string aCaptionPureTextFileStr_docURL = fsCaptionPureTextFile_docURL.native_file_string();
+            FILE* pFile_docURL = fopen( aCaptionPureTextFileStr_docURL.c_str(), "w" );
+            if( pFile_docURL )
+            {
+                fprintf( pFile_docURL, "%s\n", pResNodeCaption->content );
+                fclose( pFile_docURL );
+            }
         }
+        xmlFreeDoc(resCaption);
     }
-    xmlFreeDoc(resCaption);
 
-    xmlDocPtr resContent = xsltApplyStylesheet( m_xsltStylesheetPtrContent, doc, NULL );
-    xmlNodePtr pResNodeContent = resContent->xmlChildrenNode;
-    if( pResNodeContent )
+    if( m_xsltStylesheetPtrContent )
     {
-        fs::path fsContentPureTextFile_docURL = m_fsContentFilesDirName / aStdStr_EncodedDocPathURL;
-        std::string aContentPureTextFileStr_docURL = fsContentPureTextFile_docURL.native_file_string();
-        FILE* pFile_docURL = fopen( aContentPureTextFileStr_docURL.c_str(), "w" );
-        if( pFile_docURL )
+        xmlDocPtr resContent = xsltApplyStylesheet( m_xsltStylesheetPtrContent, doc, NULL );
+        xmlNodePtr pResNodeContent = resContent->xmlChildrenNode;
+        if( pResNodeContent )
         {
-            fprintf( pFile_docURL, "%s\n", pResNodeContent->content );
-            fclose( pFile_docURL );
+            fs::path fsContentPureTextFile_docURL = m_fsContentFilesDirName / aStdStr_EncodedDocPathURL;
+            std::string aContentPureTextFileStr_docURL = fsContentPureTextFile_docURL.native_file_string();
+            FILE* pFile_docURL = fopen( aContentPureTextFileStr_docURL.c_str(), "w" );
+            if( pFile_docURL )
+            {
+                fprintf( pFile_docURL, "%s\n", pResNodeContent->content );
+                fclose( pFile_docURL );
+            }
         }
+        xmlFreeDoc(resContent);
     }
-    xmlFreeDoc(resContent);
 }
 
 struct Data
@@ -174,15 +176,23 @@ void writeKeyValue_DBHelp( FILE* pFile, const std::string& aKeyStr, const std::s
     if( pFile == NULL )
         return;
     char cLF = 10;
-    int nKeyLen = aKeyStr.length();
-    int nValueLen = aValueStr.length();
+    unsigned int nKeyLen = aKeyStr.length();
+    unsigned int nValueLen = aValueStr.length();
     fprintf( pFile, "%x ", nKeyLen );
     if( nKeyLen > 0 )
-        fwrite( aKeyStr.c_str(), 1, nKeyLen, pFile );
-    fprintf( pFile, " %x ", nValueLen );
+    {
+        if (fwrite( aKeyStr.c_str(), 1, nKeyLen, pFile ) != nKeyLen)
+            fprintf(stderr, "fwrite to db failed\n");
+    }
+    if (fprintf( pFile, " %x ", nValueLen ) < 0)
+        fprintf(stderr, "fwrite to db failed\n");
     if( nValueLen > 0 )
-        fwrite( aValueStr.c_str(), 1, nValueLen, pFile );
-    fprintf( pFile, "%c", cLF );
+    {
+        if (fwrite( aValueStr.c_str(), 1, nValueLen, pFile ) != nValueLen)
+            fprintf(stderr, "fwrite to db failed\n");
+    }
+    if (fprintf( pFile, "%c", cLF ) < 0)
+        fprintf(stderr, "fwrite to db failed\n");
 }
 
 class HelpKeyword
@@ -237,8 +247,9 @@ public:
 class HelpLinker
 {
 public:
-    void main(std::vector<std::string> &args, std::string* pExtensionPath = NULL )
-        throw( HelpProcessingException );
+    void main(std::vector<std::string> &args,
+        std::string* pExtensionPath = NULL, const rtl::OUString* pOfficeHelpPath = NULL )
+            throw( HelpProcessingException );
 
     HelpLinker()
         : init(true)
@@ -476,8 +487,10 @@ void HelpLinker::link() throw( HelpProcessingException )
 
     if( !bExtensionMode )
     {
+#ifndef OS2 // YD @TODO@ crashes libc runtime :-(
         std::cout << "Making " << outputFile.native_file_string() <<
             " from " << helpFiles.size() << " input files" << std::endl;
+#endif
     }
 
     // here we start our loop over the hzip files.
@@ -741,21 +754,21 @@ void HelpLinker::link() throw( HelpProcessingException )
 }
 
 
-void HelpLinker::main(std::vector<std::string> &args, std::string* pExtensionPath)
-    throw( HelpProcessingException )
+void HelpLinker::main( std::vector<std::string> &args,
+    std::string* pExtensionPath, const rtl::OUString* pOfficeHelpPath )
+        throw( HelpProcessingException )
 {
     rtl::OUString aOfficeHelpPath;
 
     bExtensionMode = false;
-    if( pExtensionPath && pExtensionPath->length() > 0 )
+    if( pExtensionPath && pExtensionPath->length() > 0 && pOfficeHelpPath )
     {
         helpFiles.clear();
         bExtensionMode = true;
         extensionPath = *pExtensionPath;
         sourceRoot = fs::path(extensionPath);
 
-        aOfficeHelpPath = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("$OOO_BASE_DIR/help") );
-        rtl::Bootstrap::expandMacros( aOfficeHelpPath );
+        aOfficeHelpPath = *pOfficeHelpPath;
     }
     if (args.size() > 0 && args[0][0] == '@')
     {
@@ -1014,7 +1027,9 @@ int main(int argc, char**argv)
         exit(1);
     }
     sal_uInt32 endtime = osl_getGlobalTimer();
+#ifndef OS2 // YD @TODO@ crashes libc runtime :-(
     std::cout << "time taken was " << (endtime-starttime)/1000.0 << " seconds" << std::endl;
+#endif
     return 0;
 }
 
@@ -1053,6 +1068,7 @@ HelpProcessingErrorInfo& HelpProcessingErrorInfo::operator=( const struct HelpPr
 // Returns true in case of success, false in case of error
 HELPLINKER_DLLPUBLIC bool compileExtensionHelp
 (
+     const rtl::OUString& aOfficeHelpPath,
     const rtl::OUString& aExtensionName,
     const rtl::OUString& aExtensionLanguageRoot,
     sal_Int32 nXhpFileCount, const rtl::OUString* pXhpFiles,
@@ -1095,7 +1111,7 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
     try
     {
         HelpLinker* pHelpLinker = new HelpLinker();
-        pHelpLinker->main( args,&aStdStrExtensionPath );
+        pHelpLinker->main( args, &aStdStrExtensionPath, &aOfficeHelpPath );
         delete pHelpLinker;
     }
     catch( const HelpProcessingException& e )

@@ -33,7 +33,7 @@
 
 #include "svtools/svtdllapi.h"
 #include <tools/string.hxx>
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 
 class Point;
 class Rectangle;
@@ -96,7 +96,7 @@ public:
 
     static rtl_TextEncoding nActualTextEncoding;
 
-                        IMapObject() {};
+                        IMapObject();
                         IMapObject( const String& rURL,
                                     const String& rAltText,
                                     const String& rDesc,
