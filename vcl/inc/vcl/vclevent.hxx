@@ -36,11 +36,19 @@
 #include "vcl/dllapi.h"
 #include "vcl/impdel.hxx"
 
+#include <com/sun/star/uno/Reference.hxx>
+
 #include <list>
 #include <vector>
 
 class Window;
 class Menu;
+
+namespace com { namespace sun { namespace star {
+    namespace accessibility {
+        class XAccessible;
+    }
+}}}
 
 #define VCLEVENT_OBJECT_DYING                  1
 
@@ -240,6 +248,17 @@ public:
 
     Menu* GetMenu() const { return pMenu; }
     USHORT GetItemPos() const { return mnPos; }
+};
+
+class VCL_DLLPUBLIC VclAccessibleEvent: public VclSimpleEvent
+{
+public:
+    VclAccessibleEvent( ULONG n, const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxAccessible );
+    virtual ~VclAccessibleEvent();
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetAccessible() const;
+
+private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > mxAccessible;
 };
 
 class VCL_DLLPUBLIC VclEventListeners : public std::list<Link>
