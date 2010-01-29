@@ -57,6 +57,7 @@
 #endif // UNX
 #include <rsctools.hxx>
 #include <rscerror.h>
+#include <sal/main.h>
 #include <tools/fsys.hxx>
 
 /*************** C O D E ************************************************/
@@ -325,14 +326,8 @@ static BOOL CallRsc2( ByteString aRsc2Name,
 |*    Letzte Aenderung  MM 05.09.91
 |*
 *************************************************************************/
-#if defined UNX || (defined OS2 && (defined CSET || defined GCC )) || defined WTC || defined MTW || defined ICC || defined(__MINGW32__)
-int main ( int argc, char ** argv)
+SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
-#else
-int cdecl main ( int argc, char ** argv)
-{
-#endif
-
     BOOL            bPrePro  = TRUE;
     BOOL            bResFile = TRUE;
     BOOL            bHelp    = FALSE;
