@@ -70,6 +70,9 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/epsprimitive2d.hxx>
 
+#include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/window.hxx>
+
 //////////////////////////////////////////////////////////////////////////////
 
 using namespace com::sun::star;
@@ -369,6 +372,12 @@ namespace drawinglayer
                                 xControlView->draw(
                                     aOrigin.X() + basegfx::fround(aTopLeftPixel.getX()),
                                     aOrigin.Y() + basegfx::fround(aTopLeftPixel.getY()));
+                            }
+                            else if( xControlWindow.is() )
+                            {
+                                Window* pWin = VCLUnoHelper::GetWindow( rXControl->getPeer() );
+                                if( pWin )
+                                    pWin->Invalidate();
                             }
 
                             // restore original graphics
