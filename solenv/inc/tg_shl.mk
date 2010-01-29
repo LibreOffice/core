@@ -176,7 +176,9 @@ SHL$(TNR)VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL$(TNR)VERSIONMAP)
 $(USE_SHL$(TNR)VERSIONMAP): $(SHL$(TNR)OBJS) $(SHL$(TNR)LIBS)
 .ENDIF
 
-$(USE_SHL$(TNR)VERSIONMAP): $(SHL$(TNR)VERSIONMAP)
+# .ERRREMOVE is needed as a recipe line like "$(AWK) ... > $@" would create $@
+# even if the $(AWK) part fails:
+$(USE_SHL$(TNR)VERSIONMAP) .ERRREMOVE: $(SHL$(TNR)VERSIONMAP)
     @@-$(RM) -f $@
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files

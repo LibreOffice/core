@@ -29,29 +29,17 @@
 #
 #*************************************************************************
 
-# Add symbol patterns _ZTI* and _ZTS* to the global section of version UDK_3_0_0
-# (and if that version is not yet present, add it).  For C++ exception handling
-# to work across libraries, it is important that all libraries use those symbols
-# with the same version name.
-#
-# The below code fails with 'perverted' mapfiles (using a strange line layout,
-# or containing version UDK_3_0_0 without a global section, ...).
+# Add certain symbol patterns to the first global section.
 
 BEGIN { state = 0 }
-END {
-    if (state == 0) {
-        print "# Weak RTTI symbols for C++ exceptions:"
-        print "UDK_3_0_0 {"
-	print "\tglobal:"
-	print "\t_ZTI*; _ZTS*;"
-        print "};"
-    }
-}
-state == 2 {
-    print "        _ZTI*; _ZTS*; # weak RTTI symbols for C++ exceptions"
-    state = 3
-}
-# #i66636# - ???
-/^[\t ]*UDK_3_0_0[\t ]*\{/ { state = 1 }
+/\{/ && state == 1 { exit 1 } #TODO: print error explanation to stderr?
+/^[\t ]*UDK_3_0_0[\t ]*\{/ && state == 0 { state = 1 }
 /^[\t ]*global[\t ]*:/ && state == 1 { state = 2 }
 { print }
+state == 2 {
+    print "_ZTI*; _ZTS*; # weak RTTI symbols for C++ exceptions"
+    if (ENVIRON["USE_SYSTEM_STL"] != "YES")
+        print "_ZN4_STL7num_put*; # for STLport"
+    state = 3
+}
+END { if (state != 3) exit 1 } #TODO: print error explanation to stderr?
