@@ -154,7 +154,7 @@ SHL4STDLIBS=\
                 $(XMLOFFLIB)		\
                 $(SVXCORELIB)
 
-SHL4VERSIONMAP = xmlsecurity.map
+SHL4VERSIONMAP = $(SOLARENV)/src/component.map
 SHL4DEPN=
 SHL4IMPLIB=i$(TARGET)
 SHL4DEF=$(MISC)$/$(SHL4TARGET).def

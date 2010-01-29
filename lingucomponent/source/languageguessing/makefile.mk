@@ -72,7 +72,7 @@ SHL1IMPLIB=     i$(TARGET)
 SHL1DEPN=       $(SHL1LIBS)
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
 .IF "$(OS)"!="MACOSX"
-SHL1VERSIONMAP= $(TARGET).map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 .ENDIF
 
 # build DEF file

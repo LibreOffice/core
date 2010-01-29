@@ -86,7 +86,7 @@ SHL1LIBS=       $(SLB)$/$(TARGET).lib
 SHL1IMPLIB=		i$(TARGET)
 SHL1DEPN=		$(SHL1LIBS)
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
-SHL1VERSIONMAP=exports.map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 DEF1NAME=		$(SHL1TARGET)
 
 # --- Targets ------------------------------------------------------

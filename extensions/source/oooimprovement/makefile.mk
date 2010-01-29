@@ -77,7 +77,7 @@ SHL1TARGET= oooimp$(DLLPOSTFIX)
 SHL1LIBS= $(SLB)$/$(TARGET).lib
 SHL1DEF= $(MISC)$/$(SHL1TARGET).def
 DEF1NAME= $(SHL1TARGET)
-SHL1VERSIONMAP= oooimprovement.map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 PACKAGEDIR=$(subst,.,$/ $(PACKAGE))
 SPOOLDIR=$(MISC)$/registry$/spool
