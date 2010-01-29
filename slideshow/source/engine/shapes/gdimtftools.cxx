@@ -189,7 +189,7 @@ bool getMetaFile( const uno::Reference< lang::XComponent >&       xSource,
                   int                                             mtfLoadFlags,
                   const uno::Reference< uno::XComponentContext >& rxContext )
 {
-    ENSURE_OR_RETURN( rxContext.is(),
+    ENSURE_OR_RETURN_FALSE( rxContext.is(),
                        "getMetaFile(): Invalid context" );
 
     // create dummy XGraphicRenderer, which receives the
@@ -389,7 +389,7 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
             break;
 
         default:
-            ENSURE_OR_RETURN(false,
+            ENSURE_OR_RETURN_FALSE(false,
                               "getAnimationFromGraphic(): Unexpected case" );
             break;
     }

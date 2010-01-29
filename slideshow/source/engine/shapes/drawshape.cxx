@@ -330,7 +330,7 @@ namespace slideshow
             mbForceUpdate = false;
             mbAttributeLayerRevoked = false;
 
-            ENSURE_OR_RETURN( !maViewShapes.empty(),
+            ENSURE_OR_RETURN_FALSE( !maViewShapes.empty(),
                                "DrawShape::implRender(): render called on DrawShape without views" );
 
             if( maBounds.isEmpty() )
@@ -1062,7 +1062,7 @@ namespace slideshow
 
         bool DrawShape::setIntrinsicAnimationFrame( ::std::size_t nCurrFrame )
         {
-            ENSURE_OR_RETURN( nCurrFrame < maAnimationFrames.size(),
+            ENSURE_OR_RETURN_FALSE( nCurrFrame < maAnimationFrames.size(),
                                "DrawShape::setIntrinsicAnimationFrame(): frame index out of bounds" );
 
             if( mnCurrFrame != nCurrFrame )

@@ -112,7 +112,7 @@ namespace slideshow
                 rEvent.get(),
                 rEvent->getActivationTime(0.0));
 #endif
-            ENSURE_OR_RETURN( rEvent,
+            ENSURE_OR_RETURN_FALSE( rEvent,
                                "EventQueue::addEvent: event ptr NULL" );
 
             // prepare entry
@@ -141,7 +141,7 @@ namespace slideshow
                 rEvent->getActivationTime(0.0));
 #endif
 
-            ENSURE_OR_RETURN( rEvent.get() != NULL,
+            ENSURE_OR_RETURN_FALSE( rEvent.get() != NULL,
                                "EventQueue::addEvent: event ptr NULL" );
             maNextEvents.push_back(
                 EventEntry( rEvent, rEvent->getActivationTime(
@@ -161,7 +161,7 @@ namespace slideshow
                 rpEvent->getActivationTime(0.0));
 #endif
 
-            ENSURE_OR_RETURN(
+            ENSURE_OR_RETURN_FALSE(
                 rpEvent.get() != NULL,
                     "EventQueue::addEvent: event ptr NULL");
 
