@@ -83,20 +83,20 @@ smoketest .PHONY: $(MISC)/installation.flag $(SHL1TARGETN) \
 # removed after smoketest); can be removed once issue 50885 is fixed:
 .IF "$(OS)" == "WNT"
 $(MISC)/installation.flag: $(shell ls \
-        $(SRC_ROOT)/instsetoo_native/$(INPATH)/OpenOffice/archive/install/$(defaultlangiso)/OOo_*_install.zip)
+        $(SOLARSRC)/instsetoo_native/$(INPATH)/OpenOffice/archive/install/$(defaultlangiso)/OOo_*_install.zip)
     my_tmp=$$(cygpath -m $$(mktemp -dt ooosmoke.XXXXXX)) && \
     unzip \
-        $(SRC_ROOT)/instsetoo_native/$(INPATH)/OpenOffice/archive/install/$(defaultlangiso)/OOo_*_install.zip \
+        $(SOLARSRC)/instsetoo_native/$(INPATH)/OpenOffice/archive/install/$(defaultlangiso)/OOo_*_install.zip \
         -d "$$my_tmp" && \
     mv "$$my_tmp"/OOo_*_install "$$my_tmp"/opt && \
     echo "$$my_tmp" > $@
 .ELSE
 $(MISC)/installation.flag: $(shell ls \
-        $(SRC_ROOT)/instsetoo_native/$(INPATH)/OpenOffice/archive/install/$(defaultlangiso)/OOo_*_install.tar.gz)
+        $(SOLARSRC)/instsetoo_native/$(INPATH)/OpenOffice/archive/install/$(defaultlangiso)/OOo_*_install.tar.gz)
     $(RM) -r $(MISC)/installation
     $(MKDIR) $(MISC)/installation
     cd $(MISC)/installation && $(GNUTAR) xfz \
-        $(SRC_ROOT)/instsetoo_native/$(INPATH)/OpenOffice/archive/install/$(defaultlangiso)/OOo_*_install.tar.gz
+        $(SOLARSRC)/instsetoo_native/$(INPATH)/OpenOffice/archive/install/$(defaultlangiso)/OOo_*_install.tar.gz
     $(MV) $(MISC)/installation/OOo_*_install $(MISC)/installation/opt
     $(TOUCH) $@
 .END

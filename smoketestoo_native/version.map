@@ -23,7 +23,7 @@
 # for a copy of the LGPLv3 License.
 #***********************************************************************/
 
-UDK_3.1 {
+UDK_3_0_0 {
     global:
         cppunitTestPlugIn;
 
