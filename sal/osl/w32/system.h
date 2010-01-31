@@ -108,7 +108,11 @@
 #endif // #ifdef GCC
 
 #ifdef _DLL_
+#ifdef __cplusplus
+    extern "C" DWORD g_dwPlatformId;
+#else
     extern DWORD g_dwPlatformId;
+#endif // #ifdef __cplusplus
     #define IS_NT (g_dwPlatformId == VER_PLATFORM_WIN32_NT)
 #else
     extern DWORD GetPlatformId(void);

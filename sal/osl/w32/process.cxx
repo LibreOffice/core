@@ -221,7 +221,7 @@ oslProcessError SAL_CALL osl_joinProcessWithTimeout(oslProcess Process, const Ti
  *
  ***************************************************************************/
 
-oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
+extern "C" oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
     rtl_uString ** ppFileURL
 ) SAL_THROW_EXTERN_C()
 {
@@ -416,7 +416,7 @@ oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *ustrVar, rtl_uString **
  * Current Working Directory.
  ***************************************************************************/
 
-extern oslMutex g_CurrentDirectoryMutex;
+extern "C" oslMutex g_CurrentDirectoryMutex;
 
 oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir )
 {
@@ -451,7 +451,7 @@ oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir
  * Process Locale.
  ***************************************************************************/
 
-extern void _imp_getProcessLocale( rtl_Locale ** ppLocale );
+extern "C" void _imp_getProcessLocale( rtl_Locale ** ppLocale );
 
 static rtl_Locale * g_theProcessLocale = NULL;
 
