@@ -72,7 +72,7 @@
 using namespace com::sun::star;
 
 #define SC_SERVICE_ROWSET           "com.sun.star.sdb.RowSet"
-#define SC_SERVICE_INTHANDLER       "com.sun.star.sdb.InteractionHandler"
+#define SC_SERVICE_INTHANDLER       "com.sun.star.task.InteractionHandler"
 
 //! move to a header file?
 #define SC_DBPROP_DATASOURCENAME    "DataSourceName"
