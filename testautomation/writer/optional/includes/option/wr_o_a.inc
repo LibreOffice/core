@@ -59,15 +59,11 @@ testcase tToolsOptionsWriterPrint
     Call hToolsOptions("WRITER","PRINT")
 
     Grafiken.Check
-    Tabellen.Check
-    Zeichnungen.Check
     Kontrollfelder.Check
     Hintergrund.Check
     SchwarzDrucken.Check
     LinkeSeiten.Check
     RechteSeiten.Check
-    Umgekehrt.Check
-
     Prospekt.UnCheck
 
     Seitenende.Check
@@ -97,14 +93,11 @@ testcase tToolsOptionsWriterPrint
     Printlog "  - uncheck everything"
 
     Grafiken.UnCheck
-    Tabellen.UnCheck
-    Zeichnungen.UnCheck
     Kontrollfelder.UnCheck
     Hintergrund.UnCheck
     SchwarzDrucken.UnCheck
     LinkeSeiten.Check               ' that's so, otherwise there will be no printing
     RechteSeiten.Check              ' that's so, otherwise there will be no printing
-    Umgekehrt.UnCheck
     Prospekt.UnCheck
     Keine.Check
     AusDruckereinstellung.UnCheck
