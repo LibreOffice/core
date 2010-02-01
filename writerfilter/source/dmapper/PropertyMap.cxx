@@ -131,6 +131,7 @@ void PropertyMap::Insert( PropertyIds eId, bool bIsTextProperty, const uno::Any&
     Invalidate();
 }
 
+#ifdef DEBUG_DOMAINMAPPER
 XMLTag::Pointer_t PropertyMap::toTag()
 {
     XMLTag::Pointer_t pResult(new XMLTag("PropertyMap"));
@@ -159,6 +160,7 @@ XMLTag::Pointer_t PropertyMap::toTag()
 
     return pResult;
 }
+#endif
 
 /*-- 13.12.2006 10:46:42---------------------------------------------------
 

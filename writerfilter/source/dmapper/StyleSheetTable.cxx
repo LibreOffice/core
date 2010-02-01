@@ -201,6 +201,7 @@ PropertyMapPtr TableStyleSheetEntry::GetProperties( sal_Int32 nMask )
     return pProps;
 }
 
+#ifdef DEBUG_DOMAINMAPPER
 XMLTag::Pointer_t TableStyleSheetEntry::toTag()
 {
     XMLTag::Pointer_t pResult(StyleSheetEntry::toTag());
@@ -216,6 +217,7 @@ XMLTag::Pointer_t TableStyleSheetEntry::toTag()
 
     return pResult;
 }
+#endif
 
 void lcl_mergeProps( PropertyMapPtr pToFill,  PropertyMapPtr pToAdd, TblStyleType nStyleId )
 {
