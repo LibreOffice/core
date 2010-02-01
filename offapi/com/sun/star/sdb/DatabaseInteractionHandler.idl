@@ -31,7 +31,7 @@
 #define __com_sun_star_sdb_InteractionHandler_idl__
 
 module com { module sun { module star { module task {
-    published interface XInteractionHandler;
+    interface XInteractionHandler2;
 }; }; }; };
 
 module com {  module sun {  module star {  module sdb {
