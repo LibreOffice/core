@@ -1949,7 +1949,7 @@ uno::Reference< sdbc::XConnection> SwNewDBMgr::GetConnection(const String& rData
         {
             rxSource.set(xComplConnection,UNO_QUERY);
             Reference< XInteractionHandler > xHandler(
-                    xMgr->createInstance( C2U( "com.sun.star.sdb.InteractionHandler" )), UNO_QUERY);
+                    xMgr->createInstance( C2U( "com.sun.star.task.InteractionHandler" )), UNO_QUERY);
                 xConnection = xComplConnection->connectWithCompletion( xHandler );
         }
     }
@@ -3100,7 +3100,7 @@ uno::Reference<XResultSet> SwNewDBMgr::createCursor(const ::rtl::OUString& _sDat
 
                 if ( xRowSet.is() )
                 {
-                    uno::Reference< XInteractionHandler > xHandler(xMgr->createInstance(C2U("com.sun.star.sdb.InteractionHandler")), UNO_QUERY);
+                    uno::Reference< XInteractionHandler > xHandler(xMgr->createInstance(C2U("com.sun.star.task.InteractionHandler")), UNO_QUERY);
                     xRowSet->executeWithCompletion(xHandler);
                 }
                 xResultSet = uno::Reference<XResultSet>(xRowSet, UNO_QUERY);
