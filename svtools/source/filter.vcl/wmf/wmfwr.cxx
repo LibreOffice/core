@@ -2027,12 +2027,13 @@ void WMFWriter::WriteEmbeddedEMF( const GDIMetaFile& rMTF )
 {
     EMFWriter aEMFWriter;
     SvMemoryStream aStream;
+
     if( aEMFWriter.WriteEMF( rMTF, aStream ) )
     {
-        aStream.Seek( 0 );
-        sal_Size nTotalSize = aStream.GetSize();
+        sal_Size nTotalSize = aStream.Tell();
         if( nTotalSize > SAL_MAX_UINT32 )
             return;
+        aStream.Seek( 0 );
         sal_uInt32 nRemainingSize = static_cast< sal_uInt32 >( nTotalSize );
         sal_uInt32 nRecCounts = ( (nTotalSize - 1) / 0x2000 ) + 1;
         sal_uInt16 nCheckSum = 0, nWord;
