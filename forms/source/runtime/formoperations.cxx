@@ -92,7 +92,7 @@ namespace frm
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::sdbc::XRowSet;
     using ::com::sun::star::sdbc::XResultSetUpdate;
-    using ::com::sun::star::form::XFormController;
+    using ::com::sun::star::form::runtime::XFormController;
     using ::com::sun::star::form::runtime::XFeatureInvalidation;
     using ::com::sun::star::form::runtime::FeatureState;
     using ::com::sun::star::lang::IllegalArgumentException;

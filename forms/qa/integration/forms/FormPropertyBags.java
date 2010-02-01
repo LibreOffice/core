@@ -47,8 +47,6 @@ import com.sun.star.lang.XMultiServiceFactory;
 
 import com.sun.star.util.XCloseable;
 
-import integration.forms.DocumentHelper;
-
 public class FormPropertyBags extends complexlib.ComplexTestCase implements XPropertyChangeListener
 {
     private DocumentHelper          m_document;
@@ -90,8 +88,7 @@ public class FormPropertyBags extends complexlib.ComplexTestCase implements XPro
     {
         if ( m_document != null )
         {
-            XCloseable closeDoc = (XCloseable)UnoRuntime.queryInterface( XCloseable.class,
-                m_document.getDocument() );
+            XCloseable closeDoc = UnoRuntime.queryInterface( XCloseable.class, m_document.getDocument() );
             closeDoc.close( true );
         }
     }
@@ -108,7 +105,7 @@ public class FormPropertyBags extends complexlib.ComplexTestCase implements XPro
         XPropertySet textFieldModel = m_formLayer.createControlAndShape( "DatabaseTextField", 10, 10, 25, 6 );
 
         // check whether adding new properties is successful
-        XPropertyContainer propContainer = (XPropertyContainer)UnoRuntime.queryInterface(
+        XPropertyContainer propContainer = UnoRuntime.queryInterface(
             XPropertyContainer.class, textFieldModel );
         assure("XPropertyContainer not supported!", propContainer != null );
 
@@ -166,8 +163,7 @@ public class FormPropertyBags extends complexlib.ComplexTestCase implements XPro
     private void impl_checkPropertyPersistence() throws com.sun.star.uno.Exception
     {
         // store the document
-        XStorable store = (XStorable)UnoRuntime.queryInterface( XStorable.class,
-            m_document.getDocument() );
+        XStorable store = UnoRuntime.queryInterface( XStorable.class, m_document.getDocument() );
         String documentURL = util.utils.getOfficeTemp( m_orb ) + "document.odt";
         PropertyValue[] storeArguments = new PropertyValue[] { new PropertyValue() };
         storeArguments[0].Name = "FilterName";
