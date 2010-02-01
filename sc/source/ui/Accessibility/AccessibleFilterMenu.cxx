@@ -43,7 +43,6 @@
 #include "svx/unoedsrc.hxx"
 #include "svx/editdata.hxx"
 #include "svx/outliner.hxx"
-#include "svtools/itemset.hxx"
 #include "vcl/unohelp.hxx"
 #include "dpcontrol.hxx"
 
