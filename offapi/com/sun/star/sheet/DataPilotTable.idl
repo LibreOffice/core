@@ -39,6 +39,10 @@
 #include <com/sun/star/sheet/XDataPilotTable.idl>
 #endif
 
+#ifndef __com_sun_star_util_XModifyBroadcaster_idl__
+#include <com/sun/star/util/XModifyBroadcaster.idl>
+#endif
+
 //=============================================================================
 
 module com {  module sun {  module star {  module sheet {
@@ -61,6 +65,14 @@ published service DataPilotTable
      */
     interface com::sun::star::sheet::XDataPilotTable;
 
+    //-------------------------------------------------------------------------
+
+    /** allows notification of modifications to the data pilot table.
+
+    @since OOo 3.3.0
+
+    */
+    [optional] interface com::sun::star::util::XModifyBroadcaster;
 };
 
 //=============================================================================
