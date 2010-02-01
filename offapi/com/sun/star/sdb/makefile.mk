@@ -62,6 +62,7 @@ IDLFILES=\
     DatabaseContext.idl \
     DatabaseDocument.idl \
     DatabaseEnvironment.idl \
+    DatabaseInteractionHandler.idl \
     DataColumn.idl \
     DataSettings.idl \
     DataSource.idl \
