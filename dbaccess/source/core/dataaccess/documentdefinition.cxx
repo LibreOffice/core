@@ -1466,7 +1466,7 @@ sal_Bool ODocumentDefinition::save(sal_Bool _bApprove)
             pRequest->addContinuation(pAbort);
 
             // create the handler, let it handle the request
-            Reference< XInteractionHandler > xHandler( m_aContext.createComponent( (::rtl::OUString)SERVICE_SDB_INTERACTION_HANDLER ), UNO_QUERY );
+            Reference< XInteractionHandler > xHandler( m_aContext.createComponent( (::rtl::OUString)SERVICE_TASK_INTERACTION_HANDLER ), UNO_QUERY );
             if ( xHandler.is() )
                 xHandler->handle(xRequest);
 
@@ -1541,7 +1541,7 @@ sal_Bool ODocumentDefinition::saveAs()
             pRequest->addContinuation(pAbort);
 
             // create the handler, let it handle the request
-            Reference< XInteractionHandler > xHandler(m_aContext.createComponent(::rtl::OUString(SERVICE_SDB_INTERACTION_HANDLER)), UNO_QUERY);
+            Reference< XInteractionHandler > xHandler(m_aContext.createComponent(::rtl::OUString(SERVICE_TASK_INTERACTION_HANDLER)), UNO_QUERY);
             if ( xHandler.is() )
                 xHandler->handle(xRequest);
 

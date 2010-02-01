@@ -1511,7 +1511,7 @@ void SAL_CALL CopyTableWizard::initialize( const Sequence< Any >& _rArguments ) 
                 );
         }
         if ( !m_xInteractionHandler.is() )
-            m_xInteractionHandler.set( m_aContext.createComponent( "com.sun.star.sdb.InteractionHandler" ), UNO_QUERY_THROW );
+            m_xInteractionHandler.set( m_aContext.createComponent( "com.sun.star.task.InteractionHandler" ), UNO_QUERY_THROW );
 
         InteractionHandler xSourceDocHandler;
         Reference< XPropertySet > xSourceDescriptor( impl_ensureDataAccessDescriptor_throw( _rArguments, 0, m_xSourceConnection, xSourceDocHandler ) );

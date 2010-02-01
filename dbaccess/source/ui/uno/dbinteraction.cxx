@@ -100,7 +100,8 @@
 
 extern "C" void SAL_CALL createRegistryInfo_OInteractionHandler()
 {
-    static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::OInteractionHandler > aOInteractionHandler_AutoRegistration;
+    static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::SQLExceptionInteractionHandler > aSQLExceptionInteractionHandler_AutoRegistration;
+    static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::LegacyInteractionHandler > aLegacyInteractionHandler_AutoRegistration;
 }
 
 //.........................................................................
@@ -116,62 +117,70 @@ namespace dbaui
     using namespace ::dbtools;
 
     //=========================================================================
-    //= OInteractionHandler
+    //= BasicInteractionHandler
     //=========================================================================
     //-------------------------------------------------------------------------
-    OInteractionHandler::OInteractionHandler(const Reference< XMultiServiceFactory >& _rxORB)
-        :m_xORB(_rxORB)
+    BasicInteractionHandler::BasicInteractionHandler( const Reference< XMultiServiceFactory >& _rxORB, const bool i_bFallbackToGeneric )
+        :m_xORB( _rxORB )
+        ,m_bFallbackToGeneric( i_bFallbackToGeneric )
     {
+        OSL_ENSURE( !m_bFallbackToGeneric,
+            "BasicInteractionHandler::BasicInteractionHandler: enabling legacy behavior, there should be no clients of this anymore!" );
     }
 
     //-------------------------------------------------------------------------
-    IMPLEMENT_SERVICE_INFO1_STATIC(OInteractionHandler, "com.sun.star.comp.dbu.OInteractionHandler", "com.sun.star.sdb.InteractionHandler");
+    ::sal_Bool SAL_CALL BasicInteractionHandler::handleInteractionRequest( const Reference< XInteractionRequest >& i_rRequest ) throw (RuntimeException)
+    {
+        return impl_handle_throw( i_rRequest );
+    }
 
     //-------------------------------------------------------------------------
-    void SAL_CALL OInteractionHandler::handle(const Reference< XInteractionRequest >& _rxRequest) throw(RuntimeException)
+    void SAL_CALL BasicInteractionHandler::handle( const Reference< XInteractionRequest >& i_rRequest ) throw(RuntimeException)
     {
-        Any aRequest;
-        if (_rxRequest.is())
-        {
-            try { aRequest = _rxRequest->getRequest(); }
-            catch(RuntimeException&) { }
-        }
-        DBG_ASSERT(aRequest.hasValue(), "OInteractionHandler::handle: invalid request!");
-        if (!aRequest.hasValue())
-            // no request -> no handling
-            return;
+        impl_handle_throw( i_rRequest );
+    }
 
-        Sequence< Reference< XInteractionContinuation > > aContinuations;
-        try { aContinuations = _rxRequest->getContinuations(); }
-        catch(RuntimeException&) { }
+    //-------------------------------------------------------------------------
+    sal_Bool BasicInteractionHandler::impl_handle_throw( const Reference< XInteractionRequest >& i_Request )
+    {
+        Any aRequest( i_Request->getRequest() );
+        DBG_ASSERT(aRequest.hasValue(), "BasicInteractionHandler::handle: invalid request!");
+        if ( !aRequest.hasValue() )
+            // no request -> no handling
+            return sal_False;
+
+        Sequence< Reference< XInteractionContinuation > > aContinuations( i_Request->getContinuations() );
 
         // try to extract an SQLException (or one of it's derived members
-        SQLExceptionInfo aInfo(aRequest);
-        if (aInfo.isValid())
+        SQLExceptionInfo aInfo( aRequest );
+        if ( aInfo.isValid() )
         {
-            implHandle(aInfo, aContinuations);
-            return;
+            implHandle( aInfo, aContinuations );
+            return sal_True;
         }
 
         ParametersRequest aParamRequest;
-        if (aRequest >>= aParamRequest)
-        {   // it's an authentication request
-            implHandle(aParamRequest, aContinuations);
-            return;
+        if ( aRequest >>= aParamRequest )
+        {
+            implHandle( aParamRequest, aContinuations );
+            return sal_True;
         }
 
         DocumentSaveRequest aDocuRequest;
-        if (aRequest >>= aDocuRequest)
-        {   // it's an document request
-            implHandle(aDocuRequest, aContinuations);
-            return;
+        if ( aRequest >>= aDocuRequest )
+        {
+            implHandle( aDocuRequest, aContinuations );
+            return sal_True;
         }
 
-        OSL_VERIFY( implHandleUnknown( _rxRequest ) );
+        if ( m_bFallbackToGeneric )
+            return implHandleUnknown( i_Request );
+
+        return sal_False;
     }
 
     //-------------------------------------------------------------------------
-    void OInteractionHandler::implHandle(const ParametersRequest& _rParamRequest, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
+    void BasicInteractionHandler::implHandle(const ParametersRequest& _rParamRequest, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
     {
         ::vos::OGuard aGuard(Application::GetSolarMutex());
             // want to open a dialog ....
@@ -182,7 +191,7 @@ namespace dbaui
         Reference< XInteractionSupplyParameters > xParamCallback;
         if (-1 != nParamPos)
             xParamCallback = Reference< XInteractionSupplyParameters >(_rContinuations[nParamPos], UNO_QUERY);
-        DBG_ASSERT(xParamCallback.is(), "OInteractionHandler::implHandle(ParametersRequest): can't set the parameters without an appropriate interaction handler!s");
+        DBG_ASSERT(xParamCallback.is(), "BasicInteractionHandler::implHandle(ParametersRequest): can't set the parameters without an appropriate interaction handler!s");
 
         // determine the style of the dialog, dependent on the present continuation types
         WinBits nDialogStyle = WB_OK | WB_DEF_OK;
@@ -215,7 +224,7 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
-    void OInteractionHandler::implHandle(const SQLExceptionInfo& _rSqlInfo, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
+    void BasicInteractionHandler::implHandle(const SQLExceptionInfo& _rSqlInfo, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
     {
         ::vos::OGuard aGuard(Application::GetSolarMutex());
             // want to open a dialog ....
@@ -257,14 +266,14 @@ namespace dbaui
                     if ( nApprovePos != -1 )
                         _rContinuations[ nApprovePos ]->select();
                     else
-                        OSL_ENSURE( nResult != RET_YES, "OInteractionHandler::implHandle: no handler for YES!" );
+                        OSL_ENSURE( nResult != RET_YES, "BasicInteractionHandler::implHandle: no handler for YES!" );
                     break;
 
                 case RET_NO:
                     if ( nDisapprovePos != -1 )
                         _rContinuations[ nDisapprovePos ]->select();
                     else
-                        OSL_ENSURE( false, "OInteractionHandler::implHandle: no handler for NO!" );
+                        OSL_ENSURE( false, "BasicInteractionHandler::implHandle: no handler for NO!" );
                     break;
 
                 case RET_CANCEL:
@@ -273,13 +282,13 @@ namespace dbaui
                     else if ( nDisapprovePos != -1 )
                         _rContinuations[ nDisapprovePos ]->select();
                     else
-                        OSL_ENSURE( false, "OInteractionHandler::implHandle: no handler for CANCEL!" );
+                        OSL_ENSURE( false, "BasicInteractionHandler::implHandle: no handler for CANCEL!" );
                     break;
                 case RET_RETRY:
                     if ( nRetryPos != -1 )
                         _rContinuations[ nRetryPos ]->select();
                     else
-                        OSL_ENSURE( false, "OInteractionHandler::implHandle: where does the RETRY come from?" );
+                        OSL_ENSURE( false, "BasicInteractionHandler::implHandle: where does the RETRY come from?" );
                     break;
             }
         }
@@ -289,7 +298,7 @@ namespace dbaui
         }
     }
     //-------------------------------------------------------------------------
-    void OInteractionHandler::implHandle(const DocumentSaveRequest& _rDocuRequest, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
+    void BasicInteractionHandler::implHandle(const DocumentSaveRequest& _rDocuRequest, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
     {
         ::vos::OGuard aGuard(Application::GetSolarMutex());
             // want to open a dialog ....
@@ -318,7 +327,7 @@ namespace dbaui
             if (-1 != nDocuPos)
             {
                 Reference< XInteractionDocumentSave > xCallback(_rContinuations[nDocuPos], UNO_QUERY);
-                DBG_ASSERT(xCallback.is(), "OInteractionHandler::implHandle(DocumentSaveRequest): can't save document without an appropriate interaction handler!s");
+                DBG_ASSERT(xCallback.is(), "BasicInteractionHandler::implHandle(DocumentSaveRequest): can't save document without an appropriate interaction handler!s");
 
                 // determine the style of the dialog, dependent on the present continuation types
                 WinBits nDialogStyle = WB_OK | WB_DEF_OK;
@@ -357,7 +366,7 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
-    bool OInteractionHandler::implHandleUnknown( const Reference< XInteractionRequest >& _rxRequest )
+    bool BasicInteractionHandler::implHandleUnknown( const Reference< XInteractionRequest >& _rxRequest )
     {
         Reference< XInteractionHandler > xFallbackHandler;
         if ( m_xORB.is() )
@@ -371,7 +380,7 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
-    sal_Int32 OInteractionHandler::getContinuation(Continuation _eCont, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
+    sal_Int32 BasicInteractionHandler::getContinuation(Continuation _eCont, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
     {
         const Reference< XInteractionContinuation >* pContinuations = _rContinuations.getConstArray();
         for (sal_Int32 i=0; i<_rContinuations.getLength(); ++i, ++pContinuations)
@@ -408,6 +417,15 @@ namespace dbaui
         return -1;
     }
 
+    //==========================================================================
+    //= SQLExceptionInteractionHandler
+    //==========================================================================
+    IMPLEMENT_SERVICE_INFO1_STATIC( SQLExceptionInteractionHandler, "com.sun.star.comp.dbaccess.DatabaseInteractionHandler", "com.sun.star.sdb.DatabaseInteractionHandler" );
+
+    //==========================================================================
+    //= LegacyInteractionHandler
+    //==========================================================================
+    IMPLEMENT_SERVICE_INFO1_STATIC( LegacyInteractionHandler, "com.sun.star.comp.dbaccess.LegacyInteractionHandler", "com.sun.star.sdb.InteractionHandler" );
 
 //.........................................................................
 }   // namespace dbaui

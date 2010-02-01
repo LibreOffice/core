@@ -3410,7 +3410,7 @@ void SbaTableQueryBrowser::implAdministrate( SvLBoxEntry* _pApplyTo )
             {
                 Reference< XInteractionHandler > xInteractionHandler(
                     getORB()->createInstance(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.InteractionHandler" ) ) ),
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.InteractionHandler" ) ) ),
                         UNO_QUERY );
                 OSL_ENSURE( xInteractionHandler.is(), "SbaTableQueryBrowser::implAdministrate: no interaction handler available!" );
 

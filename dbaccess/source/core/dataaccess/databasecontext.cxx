@@ -420,7 +420,7 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const ::rtl::OUStrin
         ::comphelper::NamedValueCollection aArgs;
         aArgs.put( "URL", _sURL );
         aArgs.put( "MacroExecutionMode", MacroExecMode::USE_CONFIG );
-        aArgs.put( "InteractionHandler", m_aContext.createComponent( "com.sun.star.sdb.InteractionHandler" ) );
+        aArgs.put( "InteractionHandler", m_aContext.createComponent( "com.sun.star.task.InteractionHandler" ) );
 
         Sequence< PropertyValue > aResource( aArgs.getPropertyValues() );
         xLoad->load( aResource );

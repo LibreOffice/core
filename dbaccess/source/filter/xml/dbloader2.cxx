@@ -448,7 +448,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     if ( !aMediaDesc.has( "InteractionHandler" ) )
     {
         Reference< XInteractionHandler > xHandler;
-        if ( m_aContext.createComponent( "com.sun.star.sdb.InteractionHandler", xHandler ) )
+        if ( m_aContext.createComponent( "com.sun.star.task.InteractionHandler", xHandler ) )
             aMediaDesc.put( "InteractionHandler", xHandler );
     }
 

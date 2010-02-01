@@ -378,11 +378,11 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
             }
             else
             {   // instantiate the default SDB interaction handler
-                Reference< XInteractionHandler > xHandler(_rMF->createInstance(SERVICE_SDB_INTERACTION_HANDLER), UNO_QUERY);
+                Reference< XInteractionHandler > xHandler(_rMF->createInstance(SERVICE_TASK_INTERACTION_HANDLER), UNO_QUERY);
                 if (!xHandler.is())
                 {
                     OSL_ENSURE(sal_False, "createConnection: could not instantiate an interaction handler!");
-                    // ShowServiceNotAvailableError(NULL, String(SERVICE_SDB_INTERACTION_HANDLER), sal_True);
+                    // ShowServiceNotAvailableError(NULL, String(SERVICE_TASK_INTERACTION_HANDLER), sal_True);
                         // TODO: a real parent!
                 }
                 else
