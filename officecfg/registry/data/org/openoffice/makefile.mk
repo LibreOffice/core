@@ -44,7 +44,8 @@ XCUFILES= \
     Setup.xcu \
     VCL.xcu \
     FirstStartWizard.xcu \
-    UserProfile.xcu
+    UserProfile.xcu \
+    Interaction.xcu
 
 MODULEFILES= \
     Setup-brand.xcu \

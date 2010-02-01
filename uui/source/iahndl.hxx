@@ -54,6 +54,8 @@
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #endif
 
+#include <hash_map>
+
 class Window;
 class LoginErrorInfo;
 struct CntHTTPCookieRequest;
@@ -113,14 +115,17 @@ namespace com { namespace sun { namespace star {
     }
 } } }
 
+typedef ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > Continuations;
+
+typedef ::std::hash_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >    StringHashMap;
+
 class UUIInteractionHelper
 {
 private:
-    osl::Mutex m_aPropertyMutex;
-    com::sun::star::uno::Reference<
-    com::sun::star::lang::XMultiServiceFactory >
-    m_xServiceFactory;
-    com::sun::star::uno::Sequence< com::sun::star::uno::Any > m_aProperties;
+    mutable osl::Mutex                                                                      m_aPropertyMutex;
+            ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >  m_xServiceFactory;
+            ::com::sun::star::uno::Sequence< com::sun::star::uno::Any >                     m_aProperties;
+            StringHashMap                                                                   m_aTypedCustomHandlers;
 
     UUIInteractionHelper(UUIInteractionHelper &); // not implemented
     void operator =(UUIInteractionHelper); // not implemented
@@ -152,298 +157,278 @@ public:
         throw (com::sun::star::uno::RuntimeException);
 
 private:
-    bool
-    handle_impl(com::sun::star::uno::Reference<
-                    com::sun::star::task::XInteractionRequest > const &
-                rRequest)
-        throw (com::sun::star::uno::RuntimeException);
+    bool    handle_impl(
+                com::sun::star::uno::Reference< com::sun::star::task::XInteractionRequest > const & rRequest
+            )
+            throw (com::sun::star::uno::RuntimeException);
 
-    void
-    GetInteractionHandlerList(InteractionHandlerDataList &rdataList);
+    void    GetInteractionHandlerList(InteractionHandlerDataList &rdataList);
 
     sal_Bool
-    isDomainMatch( rtl::OUString hostName, rtl::OUString certHostName);
+            isDomainMatch(
+                rtl::OUString hostName,
+                rtl::OUString certHostName
+            );
+
     static long
-    handlerequest(void* pHandleData, void* pInteractionHandler);
+            handlerequest(
+                void* pHandleData,
+                void* pInteractionHandler
+            );
 
     com::sun::star::beans::Optional< rtl::OUString >
-    getStringFromRequest_impl(com::sun::star::uno::Reference<
-                    com::sun::star::task::XInteractionRequest > const &
-                rRequest)
-        throw (com::sun::star::uno::RuntimeException);
+            getStringFromRequest_impl(
+                com::sun::star::uno::Reference< com::sun::star::task::XInteractionRequest > const & rRequest
+            )
+            throw (com::sun::star::uno::RuntimeException);
 
     static long
-    getstringfromrequest(void* pHandleData, void* pInteractionHandler);
+            getstringfromrequest(void* pHandleData, void* pInteractionHandler);
 
-    Window * getParentProperty() SAL_THROW(());
+    Window* getParentProperty() SAL_THROW(());
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>  getParentXWindow() SAL_THROW(());
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow>
+            getParentXWindow() const SAL_THROW(());
 
-    rtl::OUString getContextProperty() SAL_THROW(());
+    rtl::OUString
+            getContextProperty() SAL_THROW(());
 
-    bool
-    initPasswordContainer(com::sun::star::uno::Reference<
-                  com::sun::star::task::XPasswordContainer > *
-              pContainer,
-                          com::sun::star::uno::Reference<
-                  com::sun::star::task::XUrlContainer > *
-              pUrlContainer)
-        const SAL_THROW(());
+    bool    initPasswordContainer(
+                com::sun::star::uno::Reference< com::sun::star::task::XPasswordContainer > * pContainer,
+                com::sun::star::uno::Reference< com::sun::star::task::XUrlContainer > * pUrlContainer
+            ) const
+            SAL_THROW(());
 
     com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler >
-    getInteractionHandler() const
-        SAL_THROW((com::sun::star::uno::RuntimeException));
+            getInteractionHandler() const
+            SAL_THROW((com::sun::star::uno::RuntimeException));
 
-    void executeLoginDialog(LoginErrorInfo & rInfo,
+    void    executeLoginDialog(LoginErrorInfo & rInfo,
                             rtl::OUString const & rRealm)
         SAL_THROW((com::sun::star::uno::RuntimeException));
 
-    void
-    executeMasterPasswordDialog(LoginErrorInfo & rInfo,
-                                com::sun::star::task::PasswordRequestMode nMode)
-        SAL_THROW((com::sun::star::uno::RuntimeException));
+    void    executeMasterPasswordDialog(
+                LoginErrorInfo & rInfo,
+                com::sun::star::task::PasswordRequestMode nMode
+            )
+            SAL_THROW((com::sun::star::uno::RuntimeException));
 
-    void
-    executePasswordDialog(LoginErrorInfo & rInfo,
-                          com::sun::star::task::PasswordRequestMode nMode,
-              ::rtl::OUString aDocumentName)
-        SAL_THROW((com::sun::star::uno::RuntimeException));
+    void    executePasswordDialog(
+                LoginErrorInfo & rInfo,
+                com::sun::star::task::PasswordRequestMode nMode,
+                ::rtl::OUString aDocumentName
+            )
+            SAL_THROW((com::sun::star::uno::RuntimeException));
 
-    void
-    executeMSPasswordDialog(LoginErrorInfo & rInfo,
-                          com::sun::star::task::PasswordRequestMode nMode,
-              ::rtl::OUString aDocumentName)
-        SAL_THROW((com::sun::star::uno::RuntimeException));
+    void    executeMSPasswordDialog(
+                LoginErrorInfo & rInfo,
+                com::sun::star::task::PasswordRequestMode nMode,
+                ::rtl::OUString aDocumentName
+            )
+            SAL_THROW((com::sun::star::uno::RuntimeException));
 
-    void executeCookieDialog(CntHTTPCookieRequest & rRequest)
-        SAL_THROW((com::sun::star::uno::RuntimeException));
+    void    executeCookieDialog(
+                CntHTTPCookieRequest & rReques
+            )
+            SAL_THROW((com::sun::star::uno::RuntimeException));
 
-    void executeFilterDialog(rtl::OUString       const & rURL    ,
-                             uui::FilterNameList const & rFilters,
-                             rtl::OUString             & rFilter )
-        SAL_THROW((com::sun::star::uno::RuntimeException));
+    void    executeFilterDialog(
+                rtl::OUString       const & rURL    ,
+                uui::FilterNameList const & rFilters,
+                rtl::OUString             & rFilter
+            )
+            SAL_THROW((com::sun::star::uno::RuntimeException));
 
-    sal_Bool executeUnknownAuthDialog( const cssu::Reference< dcss::security::XCertificate >& rXCert )
-        SAL_THROW((com::sun::star::uno::RuntimeException));
+    sal_Bool
+            executeUnknownAuthDialog(
+                const cssu::Reference< dcss::security::XCertificate >& rXCert
+            )
+            SAL_THROW((com::sun::star::uno::RuntimeException));
 
-    sal_Bool executeSSLWarnDialog( const cssu::Reference< dcss::security::XCertificate >& rXCert,
-                                   sal_Int32 const & failures,
-                                   const rtl::OUString & hostName)
-        SAL_THROW((com::sun::star::uno::RuntimeException));
+    sal_Bool
+            executeSSLWarnDialog(
+                const cssu::Reference< dcss::security::XCertificate >& rXCert,
+                sal_Int32 const & failures,
+                const rtl::OUString & hostName
+            )
+            SAL_THROW((com::sun::star::uno::RuntimeException));
 
     rtl::OUString
-    getLocalizedDatTimeStr( ::com::sun::star::util::DateTime aDateTime );
+            getLocalizedDatTimeStr(
+                ::com::sun::star::util::DateTime aDateTime
+            );
 
-    USHORT
-    executeErrorDialog(com::sun::star::task::InteractionClassification
-                   eClassification,
-                       rtl::OUString const & rContext,
-                       rtl::OUString const & rMessage,
-                       WinBits nButtonMask )
-        SAL_THROW((com::sun::star::uno::RuntimeException));
+    USHORT  executeErrorDialog(
+                com::sun::star::task::InteractionClassification eClassification,
+                rtl::OUString const & rContext,
+                rtl::OUString const & rMessage,
+                WinBits nButtonMask
+            )
+            SAL_THROW((com::sun::star::uno::RuntimeException));
 
-    USHORT
-    executeMessageBox( rtl::OUString const & rTitle,
-                       rtl::OUString const & rMessage,
-                       WinBits nButtonMask )
-        SAL_THROW((com::sun::star::uno::RuntimeException));
-
-    void
-    handleAuthenticationRequest(
-        com::sun::star::ucb::AuthenticationRequest const & rRequest,
-        com::sun::star::uno::Sequence<
-        com::sun::star::uno::Reference<
-            com::sun::star::task::XInteractionContinuation > > const &
-    rContinuations,
-        rtl::OUString const & rURL)
-        SAL_THROW((com::sun::star::uno::RuntimeException));
-
-    void
-    handleCertificateValidationRequest(
-        com::sun::star::ucb::CertificateValidationRequest const & rRequest,
-        com::sun::star::uno::Sequence<
-        com::sun::star::uno::Reference<
-            com::sun::star::task::XInteractionContinuation > > const &
-    rContinuations)
-        SAL_THROW((com::sun::star::uno::RuntimeException));
-
-    void
-    handleNameClashResolveRequest(
-        com::sun::star::ucb::NameClashResolveRequest const & rRequest,
-        com::sun::star::uno::Sequence< com::sun::star::uno::Reference<
-            com::sun::star::task::XInteractionContinuation > > const &
-        rContinuations)
-        SAL_THROW((com::sun::star::uno::RuntimeException));
-
-    void
-    handleMasterPasswordRequest(
-        com::sun::star::task::PasswordRequestMode nMode,
-        com::sun::star::uno::Sequence<
-        com::sun::star::uno::Reference<
-            com::sun::star::task::XInteractionContinuation > > const &
-    rContinuations)
-        SAL_THROW((com::sun::star::uno::RuntimeException));
+    USHORT  executeMessageBox(
+                rtl::OUString const & rTitle,
+                rtl::OUString const & rMessage,
+                WinBits nButtonMask
+            )
+            SAL_THROW((com::sun::star::uno::RuntimeException));
 
 
-    void
-    handlePasswordRequest(
-        com::sun::star::task::PasswordRequestMode nMode,
-        com::sun::star::uno::Sequence<
-        com::sun::star::uno::Reference<
-            com::sun::star::task::XInteractionContinuation > > const &
-    rContinuations,
-    ::rtl::OUString aDocumentName = ::rtl::OUString())
-        SAL_THROW((com::sun::star::uno::RuntimeException));
+    void    handleAuthenticationRequest(
+                com::sun::star::ucb::AuthenticationRequest const & rRequest,
+                Continuations const & rContinuations,
+                rtl::OUString const & rURL
+            )
+            SAL_THROW((com::sun::star::uno::RuntimeException));
 
-     void
-    handleMSPasswordRequest(
-        com::sun::star::task::PasswordRequestMode nMode,
-        com::sun::star::uno::Sequence<
-        com::sun::star::uno::Reference<
-            com::sun::star::task::XInteractionContinuation > > const &
-    rContinuations,
-    ::rtl::OUString aDocumentName = ::rtl::OUString())
-        SAL_THROW((com::sun::star::uno::RuntimeException));
+    void    handleCertificateValidationRequest(
+                com::sun::star::ucb::CertificateValidationRequest const & rRequest,
+                Continuations const & rContinuations
+            )
+            SAL_THROW((com::sun::star::uno::RuntimeException));
 
-    void
-    handleCookiesRequest(
-        com::sun::star::ucb::HandleCookiesRequest const & rRequest,
-        com::sun::star::uno::Sequence<
-        com::sun::star::uno::Reference<
-            com::sun::star::task::XInteractionContinuation > > const &
-    rContinuations)
-        SAL_THROW((com::sun::star::uno::RuntimeException));
+    void    handleNameClashResolveRequest(
+                com::sun::star::ucb::NameClashResolveRequest const & rRequest,
+                Continuations const & rContinuations
+            )
+            SAL_THROW((com::sun::star::uno::RuntimeException));
 
-    void
-    handleNoSuchFilterRequest(
-        com::sun::star::document::NoSuchFilterRequest const & rRequest,
-        com::sun::star::uno::Sequence<
-        com::sun::star::uno::Reference<
-            com::sun::star::task::XInteractionContinuation > > const &
-    rContinuations)
-        SAL_THROW((com::sun::star::uno::RuntimeException));
+    void    handleMasterPasswordRequest(
+                com::sun::star::task::PasswordRequestMode nMode,
+                Continuations const & rContinuations
+            )
+            SAL_THROW((com::sun::star::uno::RuntimeException));
 
-    void
-    handleAmbigousFilterRequest(
-        com::sun::star::document::AmbigousFilterRequest const & rRequest,
-        com::sun::star::uno::Sequence<
-        com::sun::star::uno::Reference<
-            com::sun::star::task::XInteractionContinuation > > const &
-    rContinuations)
-        SAL_THROW((com::sun::star::uno::RuntimeException));
 
-    void
-    handleFilterOptionsRequest(
-        com::sun::star::document::FilterOptionsRequest const & rRequest,
-        com::sun::star::uno::Sequence<
-        com::sun::star::uno::Reference<
-            com::sun::star::task::XInteractionContinuation > > const &
-    rContinuations)
-        SAL_THROW((com::sun::star::uno::RuntimeException));
+    void    handlePasswordRequest(
+                com::sun::star::task::PasswordRequestMode nMode,
+                Continuations const & rContinuations,
+                ::rtl::OUString aDocumentName = ::rtl::OUString()
+            )
+            SAL_THROW((com::sun::star::uno::RuntimeException));
 
-    void
-    handleErrorRequest(
-        com::sun::star::task::InteractionClassification eClassification,
-        ErrCode nErrorCode,
-        std::vector< rtl::OUString > const & rArguments,
-        com::sun::star::uno::Sequence<
-        com::sun::star::uno::Reference<
-            com::sun::star::task::XInteractionContinuation > > const &
-    rContinuations,
-    bool bObtainErrorStringOnly,
-    bool & bHasErrorString,
-    rtl::OUString & rErrorString)
-        SAL_THROW((com::sun::star::uno::RuntimeException));
+     void   handleMSPasswordRequest(
+                com::sun::star::task::PasswordRequestMode nMode,
+                Continuations const & rContinuations,
+                ::rtl::OUString aDocumentName = ::rtl::OUString()
+            )
+            SAL_THROW((com::sun::star::uno::RuntimeException));
 
-    void
-    handleGenericErrorRequest(
-    sal_Int32 nErrorCode,
-        com::sun::star::uno::Sequence<
-        com::sun::star::uno::Reference<
-            com::sun::star::task::XInteractionContinuation > > const &
-        rContinuations,
-    bool bObtainErrorStringOnly,
-    bool & bHasErrorString,
-    rtl::OUString & rErrorString)
-        SAL_THROW((com::sun::star::uno::RuntimeException));
+    void    handleCookiesRequest(
+                com::sun::star::ucb::HandleCookiesRequest const & rRequest,
+                Continuations const & rContinuations
+            )
+            SAL_THROW((com::sun::star::uno::RuntimeException));
 
-    void
-    handleMacroConfirmRequest(
-        const ::rtl::OUString& aDocumentURL,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xZipStorage,
-        const ::rtl::OUString& aDocumentVersion,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignatureInformation > aSignInfo,
-        com::sun::star::uno::Sequence<
-            com::sun::star::uno::Reference<
-                com::sun::star::task::XInteractionContinuation > > const &
-                    rContinuations
-    )
-        SAL_THROW((com::sun::star::uno::RuntimeException));
+    void    handleNoSuchFilterRequest(
+                com::sun::star::document::NoSuchFilterRequest const & rRequest,
+                Continuations const & rContinuations
+            )
+            SAL_THROW((com::sun::star::uno::RuntimeException));
 
-    void
-    handleFutureDocumentVersionUpdateRequest(
-        const ::com::sun::star::task::FutureDocumentVersionProductUpdateRequest& _rRequest,
-        com::sun::star::uno::Sequence<
-            com::sun::star::uno::Reference<
-                com::sun::star::task::XInteractionContinuation > > const &
-                    rContinuations
-    )
-        SAL_THROW((com::sun::star::uno::RuntimeException));
+    void    handleAmbigousFilterRequest(
+                com::sun::star::document::AmbigousFilterRequest const & rRequest,
+                Continuations const & rContinuations
+            )
+            SAL_THROW((com::sun::star::uno::RuntimeException));
 
-    void
-    handleBrokenPackageRequest(
-    std::vector< rtl::OUString > const & rArguments,
-    ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::task::XInteractionContinuation > > const &
-    rContinuations,
-    bool bObtainErrorStringOnly,
-    bool & bHasErrorString,
-    rtl::OUString & rErrorString)
-        SAL_THROW((::com::sun::star::uno::RuntimeException));
+    void    handleFilterOptionsRequest(
+                com::sun::star::document::FilterOptionsRequest const & rRequest,
+                Continuations const & rContinuations
+            )
+            SAL_THROW((com::sun::star::uno::RuntimeException));
 
-    bool handleMessageboxRequests(
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::task::XInteractionRequest > const &
-    rRequest,
-    bool bObtainErrorStringOnly,
-    bool & bHasErrorString,
-    rtl::OUString & rErrorString);
 
-    bool handleDialogRequests(
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::task::XInteractionRequest > const &
-    rRequest);
+    void    handleErrorRequest(
+                com::sun::star::task::InteractionClassification eClassification,
+                ErrCode nErrorCode,
+                std::vector< rtl::OUString > const & rArguments,
+                Continuations const & rContinuations,
+                bool bObtainErrorStringOnly,
+                bool & bHasErrorString,
+                rtl::OUString & rErrorString
+            )
+            SAL_THROW((com::sun::star::uno::RuntimeException));
 
-    bool handleErrorHandlerRequests(
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::task::XInteractionRequest > const &
-    rRequest,
-    bool bObtainErrorStringOnly,
-    bool & bHasErrorString,
-    rtl::OUString & rErrorString);
+    void    handleGenericErrorRequest(
+                sal_Int32 nErrorCode,
+                Continuations const & rContinuations,
+                bool bObtainErrorStringOnly,
+                bool & bHasErrorString,
+                rtl::OUString & rErrorString
+            )
+            SAL_THROW((com::sun::star::uno::RuntimeException));
 
-    void handleLockedDocumentRequest(
-    const ::rtl::OUString& aDocumentURL,
-    const ::rtl::OUString& aInfo,
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
-        ::com::sun::star::task::XInteractionContinuation > > const &
-            rContinuations,
-    sal_uInt16 nMode )
-        SAL_THROW((::com::sun::star::uno::RuntimeException));
+    void    handleMacroConfirmRequest(
+                const ::rtl::OUString& aDocumentURL,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xZipStorage,
+                const ::rtl::OUString& aDocumentVersion,
+                const ::com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignatureInformation > aSignInfo,
+                Continuations const & rContinuations
+            )
+            SAL_THROW((com::sun::star::uno::RuntimeException));
 
-    void handleChangedByOthersRequest(
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
-        ::com::sun::star::task::XInteractionContinuation > > const &
-            rContinuations )
-        SAL_THROW((::com::sun::star::uno::RuntimeException));
+    void    handleFutureDocumentVersionUpdateRequest(
+                const ::com::sun::star::task::FutureDocumentVersionProductUpdateRequest& _rRequest,
+                Continuations const & rContinuations
+            )
+            SAL_THROW((com::sun::star::uno::RuntimeException));
 
-    void handleLockFileIgnoreRequest(
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
-        ::com::sun::star::task::XInteractionContinuation > > const &
-            rContinuations )
-        SAL_THROW((::com::sun::star::uno::RuntimeException));
+    void    handleBrokenPackageRequest(
+                ::std::vector< rtl::OUString > const & rArguments,
+                Continuations const &
+                rContinuations,
+                bool bObtainErrorStringOnly,
+                bool & bHasErrorString,
+                ::rtl::OUString & rErrorString
+            )
+            SAL_THROW((::com::sun::star::uno::RuntimeException));
 
+    bool    handleMessageboxRequests(
+                ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest > const & rRequest,
+                bool bObtainErrorStringOnly,
+                bool & bHasErrorString,
+                ::rtl::OUString & rErrorString
+            );
+
+    bool    handleDialogRequests(
+                ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest > const & rRequest
+            );
+
+    bool    handleErrorHandlerRequests(
+                ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest > const &  rRequest,
+                bool bObtainErrorStringOnly,
+                bool & bHasErrorString,
+                ::rtl::OUString & rErrorString
+            );
+
+    bool    handleTypedHandlerImplementations(
+                ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest > const &  rRequest
+            );
+
+    void    handleLockedDocumentRequest(
+                const ::rtl::OUString& aDocumentURL,
+                const ::rtl::OUString& aInfo,
+                Continuations const &
+                rContinuations,
+                sal_uInt16 nMode
+            )
+            SAL_THROW( ( ::com::sun::star::uno::RuntimeException ) );
+
+    void    handleChangedByOthersRequest(
+                Continuations const & rContinuations
+            )
+            SAL_THROW( ( ::com::sun::star::uno::RuntimeException ) );
+
+    void    handleLockFileIgnoreRequest(
+                Continuations const & rContinuations
+            )
+            SAL_THROW( ( ::com::sun::star::uno::RuntimeException ) );
+
+    bool    handleCustomRequest(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& i_rRequest,
+                const ::rtl::OUString& i_rServiceName
+            ) const;
 };
 
 #endif // UUI_IAHNDL_HXX

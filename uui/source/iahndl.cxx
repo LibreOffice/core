@@ -111,6 +111,7 @@
 
 #include "vos/mutex.hxx"
 #include "tools/rcid.h"
+#include "tools/diagnose_ex.h"
 #include "vcl/svapp.hxx"
 #include "svl/svtools.hrc"
 #include "svl/httpcook.hxx"
@@ -118,7 +119,10 @@
 #include "toolkit/helper/vclunohelper.hxx"
 #include "comphelper/sequenceashashmap.hxx"
 #include "comphelper/documentconstants.hxx"
+#include "comphelper/namedvaluecollection.hxx"
+#include "typelib/typedescription.hxx"
 #include "unotools/configmgr.hxx"
+#include "unotools/confignode.hxx"
 
 #include "ids.hrc"
 #include "cookiedg.hxx"
@@ -144,6 +148,7 @@ using namespace com::sun;
 
 namespace csss = ::com::sun::star::security;
 
+/** === begin UNO using === **/
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::Reference;
@@ -152,6 +157,15 @@ using ::com::sun::star::task::XInteractionAbort;
 using ::com::sun::star::task::XInteractionApprove;
 using ::com::sun::star::task::XInteractionAskLater;
 using ::com::sun::star::task::FutureDocumentVersionProductUpdateRequest;
+using ::com::sun::star::uno::XInterface;
+using ::com::sun::star::lang::XInitialization;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::task::XInteractionHandler2;
+using ::com::sun::star::uno::Exception;
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::task::XInteractionRequest;
+using ::com::sun::star::lang::XMultiServiceFactory;
+/** === end UNO using === **/
 
 
 #define CONFIG_INTERACTIONHANDLERS_KEY "/org.openoffice.ucb.InteractionHandler/InteractionHandlers"
@@ -1316,6 +1330,114 @@ bool UUIInteractionHelper::handleErrorHandlerRequests(
     return false;
 }
 
+namespace
+{
+    // .................................................................................................................
+    static bool lcl_matchesRequest( const Any& i_rRequest, const ::rtl::OUString& i_rTypeName, const ::rtl::OUString& i_rPropagation )
+    {
+        const ::com::sun::star::uno::TypeDescription aTypeDesc( i_rTypeName );
+        const typelib_TypeDescription* pTypeDesc = aTypeDesc.get();
+        if ( !pTypeDesc || !pTypeDesc->pWeakRef )
+        {
+#if OSL_DEBUG_LEVEL > 0
+            ::rtl::OStringBuffer aMessage;
+            aMessage.append( "no type found for '" );
+            aMessage.append( ::rtl::OUStringToOString( i_rTypeName, RTL_TEXTENCODING_UTF8 ) );
+            aMessage.append( "'" );
+            OSL_ENSURE( false, aMessage.makeStringAndClear().getStr() );
+#endif
+            return false;
+        }
+        const ::com::sun::star::uno::Type aType( pTypeDesc->pWeakRef );
+
+        const bool bExactMatch = ( i_rPropagation.compareToAscii( "named-only" ) == 0 );
+        if ( bExactMatch )
+            return i_rRequest.getValueType().equals( aType );
+
+        return i_rRequest.isExtractableTo( aType );
+    }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+bool UUIInteractionHelper::handleCustomRequest( const Reference< XInteractionRequest >& i_rRequest, const ::rtl::OUString& i_rServiceName ) const
+{
+    try
+    {
+        Reference< XInteractionHandler2 > xHandler( m_xServiceFactory->createInstance( i_rServiceName ), UNO_QUERY_THROW );
+
+        Reference< XInitialization > xHandlerInit( xHandler, UNO_QUERY );
+        if ( xHandlerInit.is() )
+        {
+            ::comphelper::NamedValueCollection aInitArgs;
+            aInitArgs.put( "Parent", getParentXWindow() );
+            xHandlerInit->initialize( aInitArgs.getWrappedPropertyValues() );
+        }
+
+        if ( xHandler->handleInteractionRequest( i_rRequest ) )
+            return true;
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    return false;
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+bool UUIInteractionHelper::handleTypedHandlerImplementations( Reference< XInteractionRequest > const & rRequest )
+{
+    // the request
+    const Any aRequest( rRequest->getRequest() );
+
+    const StringHashMap::const_iterator aCacheHitTest = m_aTypedCustomHandlers.find( aRequest.getValueTypeName() );
+    if ( aCacheHitTest != m_aTypedCustomHandlers.end() )
+        return handleCustomRequest( rRequest, aCacheHitTest->second );
+
+    // the base registration node for "typed" interaction handlers
+    const ::utl::OConfigurationTreeRoot aConfigRoot( ::utl::OConfigurationTreeRoot::createWithServiceFactory(
+        m_xServiceFactory,
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Interaction/InteractionHandlers" ) ),
+        -1,
+        ::utl::OConfigurationTreeRoot::CM_READONLY
+    ) );
+
+    // loop through all registered implementations
+    const Sequence< ::rtl::OUString > aRegisteredHandlers( aConfigRoot.getNodeNames() );
+    const ::rtl::OUString* pHandlerName = aRegisteredHandlers.getConstArray();
+    const ::rtl::OUString* pHandlersEnd = aRegisteredHandlers.getConstArray() + aRegisteredHandlers.getLength();
+    for ( ; pHandlerName != pHandlersEnd; ++pHandlerName )
+    {
+        const ::utl::OConfigurationNode aHandlerNode( aConfigRoot.openNode( *pHandlerName ) );
+        const ::utl::OConfigurationNode aTypesNode( aHandlerNode.openNode( "HandledRequestTypes" ) );
+
+        // loop through all the types which the current handler is registered for
+        const Sequence< ::rtl::OUString > aHandledTypes( aTypesNode.getNodeNames() );
+        const ::rtl::OUString* pType = aHandledTypes.getConstArray();
+        const ::rtl::OUString* pTypesEnd = aHandledTypes.getConstArray() + aHandledTypes.getLength();
+        for ( ; pType != pTypesEnd; ++pType )
+        {
+            // the UNO type is the node name
+            ::utl::OConfigurationNode aType( aTypesNode.openNode( *pType ) );
+            // and there's a child denoting how the responsibility propagates
+            ::rtl::OUString sPropagation;
+            OSL_VERIFY( aType.getNodeValue( "Propagation" ) >>= sPropagation );
+            if ( lcl_matchesRequest( aRequest, *pType, sPropagation ) )
+            {
+                // retrieve the service/implementation name of the handler
+                ::rtl::OUString sServiceName;
+                OSL_VERIFY( aHandlerNode.getNodeValue( "ServiceName" ) >>= sServiceName );
+                // cache the information who feels responsible for requests of this type
+                m_aTypedCustomHandlers[ aRequest.getValueTypeName() ] = sServiceName;
+                // actually handle the request
+                if ( handleCustomRequest( rRequest, sServiceName ) )
+                    return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 bool
 UUIInteractionHelper::handle_impl(
     star::uno::Reference< star::task::XInteractionRequest > const & rRequest)
@@ -1326,74 +1448,53 @@ UUIInteractionHelper::handle_impl(
         if (!rRequest.is())
             return false;
 
-        ////////////////////////////////////////////////////////////
         // Display Messagebox
-        ////////////////////////////////////////////////////////////
         bool bDummy = false;
         rtl::OUString aDummy;
-        if (! handleMessageboxRequests(rRequest, false, bDummy, aDummy))
+        if ( handleMessageboxRequests(rRequest, false, bDummy, aDummy) )
+            return true;
+
+        // Use ErrorHandler::HandleError
+        if ( handleErrorHandlerRequests(rRequest, false, bDummy, aDummy) )
+            return true;
+
+        // Display Special Dialog
+        if ( handleDialogRequests( rRequest ) )
+            return true;
+
+        // Use typed InteractionHandlers from configuration
+        if ( handleTypedHandlerImplementations( rRequest ) )
+            return true;
+
+        // Use customized InteractionHandler from configuration
+        InteractionHandlerDataList dataList;
+        GetInteractionHandlerList(dataList);
+
+        InteractionHandlerDataList::const_iterator aEnd(dataList.end());
+        for (   InteractionHandlerDataList::const_iterator aIt( dataList.begin() );
+                aIt != aEnd;
+                ++aIt
+            )
         {
-            ////////////////////////////////////////////////////////////
-            // Use ErrorHandler::HandleError
-            ////////////////////////////////////////////////////////////
-            if (!handleErrorHandlerRequests(rRequest, false, bDummy, aDummy))
-            {
-                ////////////////////////////////////////////////////////////
-                // Display Special Dialog
-                ////////////////////////////////////////////////////////////
-                if (!handleDialogRequests(rRequest))
-                {
-                    ////////////////////////////////////////////////////////////
-                    // Use customized InteractionHandler from configuration
-                    ////////////////////////////////////////////////////////////
-                    InteractionHandlerDataList dataList;
-
-                    GetInteractionHandlerList(dataList);
-
-                    InteractionHandlerDataList::const_iterator aEnd(dataList.end());
-                    for (InteractionHandlerDataList::const_iterator aIt(dataList.begin());
-                         aIt != aEnd; ++aIt)
-                    {
-                        Reference< uno::XInterface > xIfc =
-                            m_xServiceFactory->createInstance(aIt->ServiceName);
-
-
-                        Reference< com::sun::star::lang::XInitialization > xInitialization =
-                            Reference< com::sun::star::lang::XInitialization >( xIfc, UNO_QUERY );
-
-                        OSL_ENSURE( xInitialization.is(), "Custom Interactionhandler does not implement mandatory interface XInitialization!" );
-                        if (xInitialization.is())
-                        {
-                            uno::Sequence< uno::Any > propertyValues(1);
-                            beans::PropertyValue    aProperty;
-
-                            aProperty.Name = rtl::OUString::createFromAscii( "Parent" );
-                            aProperty.Value <<= getParentXWindow();
-                            propertyValues[ 0 ] <<= aProperty;
-
-                            xInitialization->initialize(propertyValues);
-                        }
-
-                        Reference< task::XInteractionHandler2 >
-                            xInteractionHandler( xIfc, UNO_QUERY );
-
-                        OSL_ENSURE( xInteractionHandler.is(),
-                                    "Custom Interactionhandler does not implement "
-                                    "mandatory interface XInteractionHandler2!" );
-                        if (xInteractionHandler.is())
-                            if (xInteractionHandler->handleInteractionRequest(rRequest))
-                                return true;
-                    }
-                    return false;
-                }
-            }
+            if ( handleCustomRequest( rRequest, aIt->ServiceName ) )
+                return true;
         }
+
+        return false;
     }
     catch (std::bad_alloc const &)
     {
         throw star::uno::RuntimeException(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
             star::uno::Reference< star::uno::XInterface >());
+    }
+    catch( const uno::RuntimeException& )
+    {
+        throw;  // allowed to leave here
+    }
+    catch( const uno::Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
     }
     return true;
 }
@@ -1514,20 +1615,15 @@ Window * UUIInteractionHelper::getParentProperty() SAL_THROW(())
     return 0;
 }
 
-star::uno::Reference< ::com::sun::star::awt::XWindow>  UUIInteractionHelper::getParentXWindow() SAL_THROW(())
+star::uno::Reference< ::com::sun::star::awt::XWindow>  UUIInteractionHelper::getParentXWindow() const SAL_THROW(())
 {
     osl::MutexGuard aGuard(m_aPropertyMutex);
-    for (sal_Int32 i = 0; i < m_aProperties.getLength(); ++i)
+    ::comphelper::NamedValueCollection aProperties( m_aProperties );
+    if ( aProperties.has( "Parent" ) )
     {
-        star::beans::PropertyValue aProperty;
-        if ((m_aProperties[i] >>= aProperty)
-            && aProperty.
-                   Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Parent")))
-        {
-            star::uno::Reference< star::awt::XWindow > xWindow;
-            aProperty.Value >>= xWindow;
-            return xWindow;
-        }
+        star::uno::Reference< star::awt::XWindow > xWindow;
+        OSL_VERIFY( aProperties.get( "Parent" ) >>= xWindow );
+        return xWindow;
     }
     return 0;
 }
@@ -3357,11 +3453,8 @@ UUIInteractionHelper::handleFutureDocumentVersionUpdateRequest(
         // suitable place), again, and we would only have one place where we remember the s_bDeferredToNextSession
         // flag.
         //
-        // The side effect (well, actually the more important effect) would be that we do not need to burden
-        // this central implementation with all interactions which are possible. Instead, separate parts of OOo
-        // can define/implement different requests. (for instance, everything which today is done in the
-        // css.sdb.InteractionHandler can then be routed through a "normal" interaction handler, where today we
-        // always need to tell people to instantiate the SDB-version of the handler, not the normal one.)
+        // Note: The above pattern has been implemented in CWS autorecovery. Now the remaining task is to move the
+        // handling of this interaction to SFX, again.
 
     if ( !s_bDeferredToNextSession )
     {

@@ -3942,7 +3942,7 @@ bool FmXFormController::ensureInteractionHandler()
     if ( !m_xORB.is() )
         return false;
 
-    m_xInteractionHandler.set( m_xORB->createInstance( SRV_SDB_INTERACTION_HANDLER ), UNO_QUERY );
+    m_xInteractionHandler.set( m_xORB->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.InteractionHandler" ) ) ), UNO_QUERY );
     OSL_ENSURE( m_xInteractionHandler.is(), "FmXFormController::ensureInteractionHandler: could not create an interaction handler!" );
     return m_xInteractionHandler.is();
 }

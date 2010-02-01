@@ -59,7 +59,6 @@
 #define FM_CONTROL_GRIDCONTROL          rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "stardiv.one.form.control.GridControl" ) )
 #define FM_FORM_CONTROLLER              rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.FormController" ) )
 #define SRV_SDB_CONNECTION              rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.Connection" ) )
-#define SRV_SDB_INTERACTION_HANDLER     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.InteractionHandler" ) )
 #define FM_SUN_COMPONENT_FORM           rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.Form" ) )
 #define FM_SUN_COMPONENT_TEXTFIELD      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.TextField" ) )
 #define FM_SUN_COMPONENT_LISTBOX        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.component.ListBox" ) )
