@@ -74,7 +74,7 @@
 #include <vcl/combobox.hxx>
 #include <accessibility/extended/AccessibleGridControl.hxx>
 #include <svtools/accessibletable.hxx>
-//#include "vcl/popupmenuwindow.hxx"
+#include "vcl/popupmenuwindow.hxx"
 
 #include <floatingwindowaccessible.hxx>
 
