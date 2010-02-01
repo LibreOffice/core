@@ -41,7 +41,6 @@
 #define CM_FIRST_SLIDE  8
 #define CM_LAST_SLIDE   9
 #define CM_SLIDES       10
-#ifdef ENABLE_PRESENTER_EXTRA_UI
 //CM for extra presenter UI
 #define CM_ERASE_ALLINK 11
 #define CM_ERASE_INK    12
@@ -61,6 +60,5 @@
 #define CM_PEN_MODE 26
 #define CM_ERASE_MODE 27
 #define CM_POINTER_OPTION 28
-#endif //ENABLE_PRESENTER_EXTRA_UI
 
 #endif
