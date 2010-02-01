@@ -220,7 +220,7 @@ public class DBMetaData
             this.xMSF = xMSF;
             xDatabaseContext = (XInterface) xMSF.createInstance("com.sun.star.sdb.DatabaseContext");
             xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xDatabaseContext);
-            XInterface xInteractionHandler = (XInterface) xMSF.createInstance("com.sun.star.sdb.InteractionHandler");
+            XInterface xInteractionHandler = (XInterface) xMSF.createInstance("com.sun.star.task.InteractionHandler");
             oInteractionHandler = (XInteractionHandler) UnoRuntime.queryInterface(XInteractionHandler.class, xInteractionHandler);
             DataSourceNames = xNameAccess.getElementNames();
         }
@@ -722,7 +722,7 @@ public class DBMetaData
             }
             else
             {
-                XInterface xInteractionHandler = (XInterface) xMSF.createInstance("com.sun.star.sdb.InteractionHandler");
+                XInterface xInteractionHandler = (XInterface) xMSF.createInstance("com.sun.star.task.InteractionHandler");
                 XInteractionHandler oInteractionHandler2 = (XInteractionHandler) UnoRuntime.queryInterface(XInteractionHandler.class, xInteractionHandler);
                 boolean bExitLoop = true;
                 do

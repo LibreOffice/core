@@ -150,7 +150,7 @@ Reference< XConnection > getConnection(const ::rtl::OUString& _rURL)
         try
         {
 
-            Reference<XInterface> xHdl = xMgr->createInstance(C2U("com.sun.star.sdb.InteractionHandler"));
+            Reference<XInterface> xHdl = xMgr->createInstance(C2U("com.sun.star.task.InteractionHandler"));
             Reference<task::XInteractionHandler> xIHdl(xHdl, UNO_QUERY);
             xConn = xComplConn->connectWithCompletion(xIHdl);
 //          xConn = xDataSource->getConnection(sUser, sPwd);

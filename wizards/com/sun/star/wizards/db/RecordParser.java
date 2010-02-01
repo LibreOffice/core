@@ -84,7 +84,7 @@ public class RecordParser extends QueryMetaData
             xRowSetColumnsSupplier = (XColumnsSupplier) UnoRuntime.queryInterface(XColumnsSupplier.class, xRowSet);
             xRowSetComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, xRowSet);
             xExecute = (com.sun.star.sdb.XCompletedExecution) UnoRuntime.queryInterface(com.sun.star.sdb.XCompletedExecution.class, xRowSet);
-            XInterface oInteraction = (XInterface) xMSF.createInstance("com.sun.star.sdb.InteractionHandler");
+            XInterface oInteraction = (XInterface) xMSF.createInstance("com.sun.star.task.InteractionHandler");
             xInteraction = (XInteractionHandler) UnoRuntime.queryInterface(XInteractionHandler.class, oInteraction);
         }
         catch (Exception exception)
