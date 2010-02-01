@@ -1569,7 +1569,8 @@ void  SwPagePreView::GetState( SfxItemSet& rSet )
     ASSERT(nWhich, leeres Set);
     SwPagePreviewLayout* pPagePrevwLay = GetViewShell()->PagePreviewLayout();
     //#106746# zoom has to be disabled if Accessibility support is switched on
-    BOOL bZoomEnabled = !Application::GetSettings().GetMiscSettings().GetEnableATToolSupport();
+    // MT 2010/01, see #110498#
+    BOOL bZoomEnabled = TRUE; // !Application::GetSettings().GetMiscSettings().GetEnableATToolSupport();
 
     while(nWhich)
     {
