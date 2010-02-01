@@ -712,52 +712,45 @@ namespace dbaccess
                 // load/create the sub component hidden. We'll show it when the main app window is shown.
                 aLoadArgs.put( "Hidden", true );
 
-                try
+                Reference< XComponent > xSubComponent;
+                Reference< XCommandProcessor > xDocDefinition;
+
+                if ( sComponentName.getLength() )
                 {
-                    Reference< XComponent > xSubComponent;
-                    Reference< XCommandProcessor > xDocDefinition;
-
-                    if ( sComponentName.getLength() )
-                    {
-                        xDocDefinition = lcl_getSubComponentDef_nothrow( i_rTargetController, eComponentType, sComponentName );
-                        xSubComponent.set( xDocumentUI->loadComponentWithArguments(
-                                eComponentType,
-                                sComponentName,
-                                stor->second.bForEditing,
-                                aLoadArgs.getPropertyValues()
-                            ),
-                            UNO_SET_THROW
-                        );
-                    }
-                    else
-                    {
-                        Reference< XComponent > xDocDefComponent;
-                        xSubComponent.set( xDocumentUI->createComponentWithArguments(
-                                eComponentType,
-                                aLoadArgs.getPropertyValues(),
-                                xDocDefComponent
-                            ),
-                            UNO_SET_THROW
-                        );
-
-                        xDocDefinition.set( xDocDefComponent, UNO_QUERY );
-                        OSL_ENSURE( xDocDefinition.is(), "DatabaseDocumentRecovery::recoverSubDocuments: loaded a form/report, but don't have a document definition?!" );
-                    }
-
-                    if ( xDocDefinition.is() )
-                    {
-                        Reference< XInterface > xLoader( *new SubComponentLoader( i_rTargetController, xDocDefinition ) );
-                        (void)xLoader;
-                    }
-
-                    // at the moment, we only store, during session save, sub components which are modified. So, set this
-                    // recovered sub component to "modified", too.
-                    lcl_markModified( xSubComponent );
+                    xDocDefinition = lcl_getSubComponentDef_nothrow( i_rTargetController, eComponentType, sComponentName );
+                    xSubComponent.set( xDocumentUI->loadComponentWithArguments(
+                            eComponentType,
+                            sComponentName,
+                            stor->second.bForEditing,
+                            aLoadArgs.getPropertyValues()
+                        ),
+                        UNO_SET_THROW
+                    );
                 }
-                catch ( const Exception& )
+                else
                 {
-                    DBG_UNHANDLED_EXCEPTION();
+                    Reference< XComponent > xDocDefComponent;
+                    xSubComponent.set( xDocumentUI->createComponentWithArguments(
+                            eComponentType,
+                            aLoadArgs.getPropertyValues(),
+                            xDocDefComponent
+                        ),
+                        UNO_SET_THROW
+                    );
+
+                    xDocDefinition.set( xDocDefComponent, UNO_QUERY );
+                    OSL_ENSURE( xDocDefinition.is(), "DatabaseDocumentRecovery::recoverSubDocuments: loaded a form/report, but don't have a document definition?!" );
                 }
+
+                if ( xDocDefinition.is() )
+                {
+                    Reference< XInterface > xLoader( *new SubComponentLoader( i_rTargetController, xDocDefinition ) );
+                    (void)xLoader;
+                }
+
+                // at the moment, we only store, during session save, sub components which are modified. So, set this
+                // recovered sub component to "modified", too.
+                lcl_markModified( xSubComponent );
             }
 
             xComponentsStor->dispose();
