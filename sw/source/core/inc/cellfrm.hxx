@@ -51,7 +51,7 @@ public:
 
     virtual BOOL GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState* = 0 ) const;
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );
-    virtual void Paint( const SwRect& ) const;
+    virtual void Paint( const SwRect&, const SwPrtOptions *pPrintData = NULL ) const;
     virtual void CheckDirection( BOOL bVert );
 
     const SwTableBox *GetTabBox() const { return pTabBox; }
