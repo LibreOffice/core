@@ -779,10 +779,17 @@ oslFileError _osl_getSystemPathFromFileURL( rtl_uString *strURL, rtl_uString **p
                 }
                 else
                 {
-                    if ( 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( pDecodedURL + nSkip, nDecodedLen - nSkip, WSTR_SYSTEM_ROOT_PATH, ELEMENTS_OF_ARRAY(WSTR_SYSTEM_ROOT_PATH) - 1, ELEMENTS_OF_ARRAY(WSTR_SYSTEM_ROOT_PATH) - 1 )
+                    ::osl::LongPathBuffer< sal_Unicode > aBuf( MAX_LONG_PATH );
+                    sal_uInt32 nNewLen = GetCaseCorrectPathName( pDecodedURL + nSkip,
+                                                                 aBuf,
+                                                                 aBuf.getBufSizeInSymbols(),
+                                                                 sal_False );
+
+                    if ( nNewLen <= MAX_PATH - 12
+                      || 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( pDecodedURL + nSkip, nDecodedLen - nSkip, WSTR_SYSTEM_ROOT_PATH, ELEMENTS_OF_ARRAY(WSTR_SYSTEM_ROOT_PATH) - 1, ELEMENTS_OF_ARRAY(WSTR_SYSTEM_ROOT_PATH) - 1 )
                       || 0 == rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( pDecodedURL + nSkip, nDecodedLen - nSkip, WSTR_LONG_PATH_PREFIX, ELEMENTS_OF_ARRAY(WSTR_LONG_PATH_PREFIX) - 1, ELEMENTS_OF_ARRAY(WSTR_LONG_PATH_PREFIX) - 1 ) )
                     {
-                        rtl_uString_newFromStr_WithLength( &strTempPath, pDecodedURL + nSkip, nDecodedLen - nSkip );
+                        rtl_uString_newFromStr_WithLength( &strTempPath, aBuf, nNewLen );
                     }
                     else if ( pDecodedURL[nSkip] == (sal_Unicode)'\\' && pDecodedURL[nSkip+1] == (sal_Unicode)'\\' )
                     {
@@ -790,7 +797,7 @@ oslFileError _osl_getSystemPathFromFileURL( rtl_uString *strURL, rtl_uString **p
                         rtl_uString *strSuffix = NULL;
                         rtl_uString *strPrefix = NULL;
                         rtl_uString_newFromStr_WithLength( &strPrefix, WSTR_LONG_PATH_PREFIX_UNC, ELEMENTS_OF_ARRAY( WSTR_LONG_PATH_PREFIX_UNC ) - 1 );
-                        rtl_uString_newFromStr_WithLength( &strSuffix, pDecodedURL + nSkip + 2, nDecodedLen - nSkip - 2 );
+                        rtl_uString_newFromStr_WithLength( &strSuffix, aBuf + 2, nNewLen - 2 );
 
                         rtl_uString_newConcat( &strTempPath, strPrefix, strSuffix );
 
@@ -802,7 +809,7 @@ oslFileError _osl_getSystemPathFromFileURL( rtl_uString *strURL, rtl_uString **p
                         rtl_uString *strSuffix = NULL;
                         rtl_uString *strPrefix = NULL;
                         rtl_uString_newFromStr_WithLength( &strPrefix, WSTR_LONG_PATH_PREFIX, ELEMENTS_OF_ARRAY( WSTR_LONG_PATH_PREFIX ) - 1 );
-                        rtl_uString_newFromStr_WithLength( &strSuffix, pDecodedURL + nSkip, nDecodedLen - nSkip );
+                        rtl_uString_newFromStr_WithLength( &strSuffix, aBuf, nNewLen );
 
                         rtl_uString_newConcat( &strTempPath, strPrefix, strSuffix );
 

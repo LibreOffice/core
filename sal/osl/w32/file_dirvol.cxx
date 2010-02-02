@@ -668,22 +668,7 @@ static DWORD create_dir_with_callback(
 
     BOOL bCreated = FALSE;
 
-    if ( rtl_uString_getLength( dir_path ) < MAX_PATH - 12 )
-    {
-        /* this is a normal short URL, ".." are acceptable here */
-        bCreated = CreateDirectoryW( reinterpret_cast<LPCWSTR>(rtl_uString_getStr( dir_path )), NULL );
-    }
-    else
-    {
-        /* the long urls can not contain ".." while calling CreateDirectory, no idea why! */
-        ::osl::LongPathBuffer< sal_Unicode > aBuf( MAX_LONG_PATH );
-        sal_uInt32 nNewLen = GetCaseCorrectPathName( reinterpret_cast<LPCTSTR>( rtl_uString_getStr( dir_path ) ),
-                                                      aBuf,
-                                                      aBuf.getBufSizeInSymbols(),
-                                                      sal_False );
-
-        bCreated = CreateDirectoryW( aBuf, NULL );
-    }
+    bCreated = CreateDirectoryW( reinterpret_cast<LPCWSTR>(rtl_uString_getStr( dir_path )), NULL );
 
     if ( bCreated )
     {
@@ -783,23 +768,7 @@ oslFileError SAL_CALL osl_createDirectory(rtl_uString* strPath)
     {
         BOOL bCreated = FALSE;
 
-        if ( rtl_uString_getLength( strSysPath ) < MAX_PATH - 12 )
-        {
-            /* this is a normal short URL, ".." are acceptable here */
-            bCreated = CreateDirectoryW( reinterpret_cast<LPCWSTR>(rtl_uString_getStr( strSysPath )), NULL );
-        }
-        else
-        {
-            /* the long urls can not contain ".." while calling CreateDirectory, no idea why! */
-            ::osl::LongPathBuffer< sal_Unicode > aBuf( MAX_LONG_PATH );
-            sal_uInt32 nNewLen = GetCaseCorrectPathName( reinterpret_cast<LPCTSTR>( rtl_uString_getStr( strSysPath ) ),
-                                                          aBuf,
-                                                          aBuf.getBufSizeInSymbols(),
-                                                          sal_False );
-
-            bCreated = CreateDirectoryW( aBuf, NULL );
-        }
-
+        bCreated = CreateDirectoryW( reinterpret_cast<LPCWSTR>(rtl_uString_getStr( strSysPath )), NULL );
 
         if ( !bCreated )
         {
