@@ -1204,7 +1204,7 @@ print <<EOF;
 //   '$src_text'
 // which are part of the OOXML documentation
 
-#include <filter/msfilter/escherex.hxx>
+#include <svx/escherex.hxx>
 
 const char* pShapeTypes[ ESCHER_ShpInst_COUNT ] =
 {

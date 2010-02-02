@@ -33,8 +33,7 @@
 
 #include <map>
 #include <memory>
-
-#include <oox/ole/oleobjecthelper.hxx>
+#include "oox/ole/oleobjecthelper.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace awt { struct Rectangle; }

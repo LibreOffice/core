@@ -30,7 +30,7 @@
 
 #include <oox/dllapi.h>
 #include <sax/fshelper.hxx>
-#include <filter/msfilter/escherex.hxx>
+#include <svx/escherex.hxx>
 
 namespace rtl {
     class OString;
