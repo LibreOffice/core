@@ -698,7 +698,6 @@ bool wwFont::Write(SvStream *pTableStrm) const
     return true;
 }
 
-#ifdef DOCX
 void wwFont::WriteDocx( const DocxAttributeOutput* rAttrOutput ) const
 {
     // no font embedding, panose id, subsetting, ... implemented
@@ -713,7 +712,6 @@ void wwFont::WriteDocx( const DocxAttributeOutput* rAttrOutput ) const
 
     rAttrOutput->EndFont();
 }
-#endif
 
 bool operator<(const wwFont &r1, const wwFont &r2)
 {
@@ -831,7 +829,6 @@ void wwFontHelper::WriteFontTable(SvStream *pTableStream, WW8Fib& rFib)
     }
 }
 
-#ifdef DOCX
 void wwFontHelper::WriteFontTable( const DocxAttributeOutput& rAttrOutput )
 {
     ::std::vector<const wwFont *> aFontList( AsVector() );
@@ -839,7 +836,6 @@ void wwFontHelper::WriteFontTable( const DocxAttributeOutput& rAttrOutput )
     ::std::for_each( aFontList.begin(), aFontList.end(),
         ::std::bind2nd( ::std::mem_fun( &wwFont::WriteDocx ), &rAttrOutput ) );
 }
-#endif
 
 /*  */
 
