@@ -31,6 +31,7 @@
 #include "precompiled_sw.hxx"
 
 #include <SidebarWin.hxx>
+#include <SidebarWinAcc.hxx>
 #include <PostItMgr.hxx>
 
 #include <SidebarTxtControl.hxx>
@@ -92,7 +93,8 @@ namespace sw { namespace sidebarwindows {
 SwSidebarWin::SwSidebarWin( SwEditWin& rEditWin,
                             WinBits nBits,
                             SwPostItMgr& aMgr,
-                            SwPostItBits aBits)
+                            SwPostItBits aBits,
+                            SwSidebarItem& rSidebarItem )
     : Window(&rEditWin, nBits)
     , mrMgr(aMgr)
     , mrView( rEditWin.GetView() )
@@ -119,24 +121,34 @@ SwSidebarWin::SwSidebarWin( SwEditWin& rEditWin,
     , mLayoutStatus( SwPostItHelper::INVISIBLE )
     , mbReadonly( false )
     , mbIsFollow( false )
+    , mrSidebarItem( rSidebarItem )
 {
     mpShadow = ShadowOverlayObject::CreateShadowOverlayObject( mrView );
     if ( mpShadow )
     {
         mpShadow->setVisible(false);
     }
+
+    mrMgr.ConnectSidebarWinToFrm( *(mrSidebarItem.maLayoutInfo.mpAnchorFrm),
+                                  *(mrSidebarItem.GetFmtFld()),
+                                  *this );
 }
 
 SwSidebarWin::~SwSidebarWin()
 {
-    if (mpOutlinerView)
+    if ( mpSidebarTxtControl )
     {
-        delete mpOutlinerView;
+        if ( mpOutlinerView )
+        {
+            mpOutlinerView->SetWindow( 0 );
+        }
+        delete mpSidebarTxtControl;
     }
 
-    if (mpSidebarTxtControl)
+    if ( mpOutlinerView )
     {
-        delete mpSidebarTxtControl;
+        delete mpOutlinerView;
+        mpOutlinerView = 0;
     }
 
     if (mpOutliner)
@@ -160,11 +172,14 @@ SwSidebarWin::~SwSidebarWin()
     {
         mpVScrollbar->RemoveEventListener( LINK( this, SwSidebarWin, WindowEventListener ) );
         delete mpVScrollbar;
+        mpVScrollbar = 0;
     }
 
     AnchorOverlayObject::DestroyAnchorOverlayObject( mpAnchor );
+    mpAnchor = 0;
 
     ShadowOverlayObject::DestroyShadowOverlayObject( mpShadow );
+    mpShadow = 0;
 
     delete mpMenuButton;
 
@@ -189,10 +204,12 @@ void SwSidebarWin::Paint( const Rectangle& rRect)
         }
         SetLineColor();
         DrawRect( PixelToLogic(
-                Rectangle( Point( mpMetadataAuthor->GetPosPixel().X()+mpMetadataAuthor->GetSizePixel().Width(),
+                Rectangle( Point( mpMetadataAuthor->GetPosPixel().X() +
+                                    mpMetadataAuthor->GetSizePixel().Width(),
                                   mpMetadataAuthor->GetPosPixel().Y() ),
-                                  Size( GetMetaButtonAreaWidth(),
-                                        GetSizePixel().Height() - mpMetadataAuthor->GetPosPixel().Y() ) ) ) );
+                           Size( GetMetaButtonAreaWidth(),
+                                 mpMetadataAuthor->GetSizePixel().Height() +
+                                    mpMetadataDate->GetSizePixel().Height() ) ) ) );
     }
 }
 
@@ -308,7 +325,6 @@ void SwSidebarWin::InitControls()
     mpOutlinerView = new OutlinerView ( mpOutliner, mpSidebarTxtControl );
     mpOutlinerView->SetBackgroundColor(COL_TRANSPARENT);
     mpOutliner->InsertView(mpOutlinerView );
-    mpSidebarTxtControl->SetTextView(mpOutlinerView);
     mpOutlinerView->SetOutputArea( PixelToLogic( Rectangle(0,0,1,1) ) );
 
     mpOutlinerView->SetAttribs(DefaultItem());
@@ -342,7 +358,7 @@ void SwSidebarWin::InitControls()
     sal_uInt16 aIndex = SW_MOD()->InsertRedlineAuthor(GetAuthor());
     SetColor( mrMgr.GetColorDark(aIndex),
               mrMgr.GetColorLight(aIndex),
-              mrMgr.GetColorAnkor(aIndex));
+              mrMgr.GetColorAnchor(aIndex));
 
     CheckMetaText();
 
@@ -800,7 +816,7 @@ void SwSidebarWin::HideNote()
         Window::Hide();
     if (mpAnchor)
     {
-        if (mrMgr.IsShowAnkor())
+        if (mrMgr.IsShowAnchor())
             mpAnchor->SetAnchorState(AS_TRI);
         else
             mpAnchor->setVisible(false);
@@ -1188,7 +1204,39 @@ bool SwSidebarWin::IsScrollbarVisible() const
     return HasScrollbar() && mpVScrollbar->IsVisible();
 }
 
-} } // eof of namespace sw::sidebarwindows::
+void SwSidebarWin::ChangeSidebarItem( SwSidebarItem& rSidebarItem )
+{
+    const bool bAnchorChanged = mrSidebarItem.maLayoutInfo.mpAnchorFrm !=
+                                        rSidebarItem.maLayoutInfo.mpAnchorFrm;
+    if ( bAnchorChanged )
+    {
+        mrMgr.DisconnectSidebarWinFromFrm( *(mrSidebarItem.maLayoutInfo.mpAnchorFrm),
+                                           *this );
+    }
+
+    mrSidebarItem = rSidebarItem;
+
+    if ( bAnchorChanged )
+    {
+        mrMgr.ConnectSidebarWinToFrm( *(mrSidebarItem.maLayoutInfo.mpAnchorFrm),
+                                      *(mrSidebarItem.GetFmtFld()),
+                                      *this );
+    }
+}
+
+css::uno::Reference< css::accessibility::XAccessible > SwSidebarWin::CreateAccessible()
+{
+    SidebarWinAccessible* pAcc( new SidebarWinAccessible( *this,
+                                                          mrView.GetWrtShell(),
+                                                          mrSidebarItem ) );
+    css::uno::Reference< css::awt::XWindowPeer > xWinPeer( pAcc );
+    SetWindowPeer( xWinPeer, pAcc );
+
+    css::uno::Reference< css::accessibility::XAccessible > xAcc( xWinPeer, css::uno::UNO_QUERY );
+    return xAcc;
+}
+
+} } // eof of namespace sw::sidebarwindows
 
 /********** SwRedComment**************/
 /*

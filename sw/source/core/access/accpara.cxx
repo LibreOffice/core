@@ -31,12 +31,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 #include <txtfrm.hxx>
+#include <flyfrm.hxx>
 #include <ndtxt.hxx>
 #include <pam.hxx>
 #include <unoobj.hxx>
 #include <crstate.hxx>
 #include <accmap.hxx>
-#include "fesh.hxx"
+#include <fesh.hxx>
 #include <viewopt.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -52,48 +53,32 @@
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <breakit.hxx>
-#include "accpara.hxx"
-#ifndef _ACCESS_HRC
-#include "access.hrc"
-#endif
-#include "accportions.hxx"
+#include <accpara.hxx>
+#include <access.hrc>
+#include <accportions.hxx>
 #include <sfx2/viewsh.hxx>      // for ExecuteAtViewShell(...)
 #include <sfx2/viewfrm.hxx>      // for ExecuteAtViewShell(...)
 #include <sfx2/dispatch.hxx>    // for ExecuteAtViewShell(...)
 #include <unotools/charclass.hxx>   // for GetWordBoundary
 // for get/setCharacterAttribute(...)
-#include "unocrsr.hxx"
-#include "unoobj.hxx"
-#include "unoport.hxx"
-#include "doc.hxx"
-#include "crsskip.hxx"
+#include <unocrsr.hxx>
+#include <unoobj.hxx>
+#include <unoport.hxx>
+#include <doc.hxx>
+#include <crsskip.hxx>
 #include <txtatr.hxx>
 #include <acchyperlink.hxx>
 #include <acchypertextdata.hxx>
-// --> OD 2005-12-02 #i27138#
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
-// <--
 #include <comphelper/accessibletexthelper.hxx>
-// --> OD 2006-07-12 #i63870#
 #include <unomap.hxx>
-// <--
-// --> OD 2007-01-15 #i72800#
 #include <unoprnms.hxx>
-// <--
-// --> OD 2007-01-15 #i73371#
 #include <com/sun/star/text/WritingMode2.hpp>
-// <--
-// --> OD 2007-01-17 #i71385#
 #include <svx/brshitem.hxx>
 #include <viewimp.hxx>
-// <--
-// --> OD 2007-11-12 #i82637#
 #include <boost/scoped_ptr.hpp>
-// <--
-// --> OD 2008-05-26 #i71360#
 #include <textmarkuphelper.hxx>
-// <--
 
 #include <algorithm>
 
@@ -1691,7 +1676,7 @@ awt::Rectangle SwAccessibleParagraph::getCharacterBounds(
     CHECK_FOR_WINDOW( XAccessibleComponent, pWin );
 
     Rectangle aScreenRect( GetMap()->CoreToPixel( aCoreRect.SVRect() ));
-    SwRect aFrmLogBounds( GetBounds() ); // twip rel to doc root
+    SwRect aFrmLogBounds( GetBounds( *(GetMap()) ) ); // twip rel to doc root
 
     Point aFrmPixPos( GetMap()->CoreToPixel( aFrmLogBounds.SVRect() ).TopLeft() );
     aScreenRect.Move( -aFrmPixPos.X(), -aFrmPixPos.Y() );
@@ -1729,7 +1714,7 @@ sal_Int32 SwAccessibleParagraph::getIndexAtPoint( const awt::Point& rPoint )
     Window *pWin = GetWindow();
     CHECK_FOR_WINDOW( XAccessibleComponent, pWin );
     Point aPoint( rPoint.X, rPoint.Y );
-    SwRect aLogBounds( GetBounds( GetFrm() ) ); // twip rel to doc root
+    SwRect aLogBounds( GetBounds( *(GetMap()), GetFrm() ) ); // twip rel to doc root
     Point aPixPos( GetMap()->CoreToPixel( aLogBounds.SVRect() ).TopLeft() );
     aPoint.X() += aPixPos.X();
     aPoint.Y() += aPixPos.Y();
@@ -2557,7 +2542,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getNumberOfLineWithCaret()
 
                 Rectangle aScreenRect( GetMap()->CoreToPixel( aCursorCoreRect.SVRect() ));
 
-                SwRect aFrmLogBounds( GetBounds() ); // twip rel to doc root
+                SwRect aFrmLogBounds( GetBounds( *(GetMap()) ) ); // twip rel to doc root
                 Point aFrmPixPos( GetMap()->CoreToPixel( aFrmLogBounds.SVRect() ).TopLeft() );
                 aScreenRect.Move( -aFrmPixPos.X(), -aFrmPixPos.Y() );
 

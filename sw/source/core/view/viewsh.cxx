@@ -2606,6 +2606,15 @@ void ViewShell::InvalidateAccessibleParaAttrs( const SwTxtFrm& rTxtFrm )
     }
 }
 
+SwAccessibleMap* ViewShell::GetAccessibleMap()
+{
+    if ( Imp()->IsAccessible() )
+    {
+        return &(Imp()->GetAccessibleMap());
+    }
+
+    return 0;
+}
 /* -----------------------------06.05.2002 13:23------------------------------
 
  ---------------------------------------------------------------------------*/

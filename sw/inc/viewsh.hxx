@@ -78,19 +78,15 @@ struct ShellResource;
 class SwRegionRects;
 class SwFrm;
 class SvtAccessibilityOptions;
-// OD 12.12.2002 #103492#
 class SwPagePreviewLayout;
-// --> OD 2005-12-01 #i27138#
 class SwTxtFrm;
-// <--
 class BitmapEx;
 
 struct SwAccessibilityOptions;
 class Region;
 class SwPostItMgr;
-
-// #i74769#
 class SdrPaintWindow;
+class SwAccessibleMap;
 
 //JP 19.07.98: - Bug 52312
 // define fuer Flags, die im CTOR oder den darunter liegenden Schichten
@@ -266,7 +262,7 @@ public:
     sal_Bool SmoothScroll( long lXDiff, long lYDiff, const Rectangle* );//Browser
     void EnableSmooth( sal_Bool b ) { bEnableSmooth = b; }
 
-    const SwRect &VisArea() const { return aVisArea; }
+    const SwRect& VisArea() const { return aVisArea; }
         //Es wird, wenn notwendig, soweit gescrollt, dass das
         //uebergebene Rect im sichtbaren Ausschnitt liegt.
     void MakeVisible( const SwRect & );
@@ -574,6 +570,8 @@ public:
         input parameter - paragraph frame, whose attributes have changed
     */
     void InvalidateAccessibleParaAttrs( const SwTxtFrm& rTxtFrm );
+
+    SwAccessibleMap* GetAccessibleMap();
 
     ViewShell( ViewShell&, Window *pWin = 0, OutputDevice *pOut = 0,
                 long nFlags = 0 );

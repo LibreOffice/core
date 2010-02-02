@@ -75,7 +75,6 @@ SidebarTxtControl::SidebarTxtControl( SwSidebarWin& rSidebarWin,
                                       SwView& rDocView,
                                       SwPostItMgr& rPostItMgr )
     : Control( &rSidebarWin, nBits )
-    , mpOutlinerView(0)
     , mrSidebarWin( rSidebarWin )
     , mrDocView( rDocView )
     , mrPostItMgr( rPostItMgr )
@@ -87,6 +86,11 @@ SidebarTxtControl::SidebarTxtControl( SwSidebarWin& rSidebarWin,
 SidebarTxtControl::~SidebarTxtControl()
 {
     RemoveEventListener( LINK( &mrSidebarWin, SwSidebarWin, WindowEventListener ) );
+}
+
+OutlinerView* SidebarTxtControl::GetTextView() const
+{
+    return mrSidebarWin.GetOutlinerView();
 }
 
 void SidebarTxtControl::GetFocus()
@@ -155,7 +159,10 @@ void SidebarTxtControl::Paint( const Rectangle& rRect)
         }
     }
 
-    mpOutlinerView->Paint( rRect );
+    if ( GetTextView() )
+    {
+        GetTextView()->Paint( rRect );
+    }
 
     if ( mrSidebarWin.GetLayoutStatus()==SwPostItHelper::DELETED )
     {
@@ -210,7 +217,7 @@ void SidebarTxtControl::KeyInput( const KeyEvent& rKeyEvt )
                  ( bIsProtected &&
                    !mrSidebarWin.GetOutlinerView()->GetOutliner()->GetEditEngine().DoesKeyChangeText(rKeyEvt)) )
             {
-                bDone = mpOutlinerView->PostKeyEvent( rKeyEvt );
+                bDone = GetTextView() && GetTextView()->PostKeyEvent( rKeyEvt );
             }
             else
             {
@@ -234,14 +241,15 @@ void SidebarTxtControl::KeyInput( const KeyEvent& rKeyEvt )
 
 void SidebarTxtControl::MouseMove( const MouseEvent& rMEvt )
 {
-    if ( mpOutlinerView )
+    if ( GetTextView() )
     {
-        mpOutlinerView->MouseMove( rMEvt );
+        OutlinerView* pOutlinerView( GetTextView() );
+        pOutlinerView->MouseMove( rMEvt );
         // mba: why does OutlinerView not handle the modifier setting?!
         // this forces the postit to handle *all* pointer types
-        SetPointer( mpOutlinerView->GetPointer( rMEvt.GetPosPixel() ) );
+        SetPointer( pOutlinerView->GetPointer( rMEvt.GetPosPixel() ) );
 
-        const EditView& aEV = mpOutlinerView->GetEditView();
+        const EditView& aEV = pOutlinerView->GetEditView();
         const SvxFieldItem* pItem = aEV.GetFieldUnderMousePointer();
         if ( pItem )
         {
@@ -264,14 +272,14 @@ void SidebarTxtControl::MouseMove( const MouseEvent& rMEvt )
 
 void SidebarTxtControl::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    if (mpOutlinerView )
+    if ( GetTextView() )
     {
         SvtSecurityOptions aSecOpts;
         bool bExecuteMod = aSecOpts.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK);
 
         if ( !bExecuteMod || (bExecuteMod && rMEvt.GetModifier() == KEY_MOD1))
         {
-            const EditView& aEV = mpOutlinerView->GetEditView();
+            const EditView& aEV = GetTextView()->GetEditView();
             const SvxFieldItem* pItem = aEV.GetFieldUnderMousePointer();
             if ( pItem )
             {
@@ -279,7 +287,7 @@ void SidebarTxtControl::MouseButtonDown( const MouseEvent& rMEvt )
                 const SvxURLField* pURL = PTR_CAST( SvxURLField, pFld );
                 if ( pURL )
                 {
-                    mpOutlinerView->MouseButtonDown( rMEvt );
+                    GetTextView()->MouseButtonDown( rMEvt );
                     SwWrtShell &rSh = mrDocView.GetWrtShell();
                     String sURL( pURL->GetURL() );
                     String sTarget( pURL->GetTargetFrame() );
@@ -291,15 +299,17 @@ void SidebarTxtControl::MouseButtonDown( const MouseEvent& rMEvt )
     }
 
     GrabFocus();
-    if ( mpOutlinerView )
-        mpOutlinerView->MouseButtonDown( rMEvt );
+    if ( GetTextView() )
+    {
+        GetTextView()->MouseButtonDown( rMEvt );
+    }
     mrDocView.GetViewFrame()->GetBindings().InvalidateAll(FALSE);
 }
 
 void SidebarTxtControl::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    if ( mpOutlinerView )
-        mpOutlinerView->MouseButtonUp( rMEvt );
+    if ( GetTextView() )
+        GetTextView()->MouseButtonUp( rMEvt );
 }
 
 IMPL_LINK( SidebarTxtControl, OnlineSpellCallback, SpellCallbackInfo*, pInfo )
@@ -321,11 +331,12 @@ void SidebarTxtControl::Command( const CommandEvent& rCEvt )
 {
     if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
     {
-        if (!mrSidebarWin.IsProtected() &&
-            mpOutlinerView->IsWrongSpelledWordAtPos( rCEvt.GetMousePosPixel(),TRUE ))
+        if ( !mrSidebarWin.IsProtected() &&
+             GetTextView() &&
+             GetTextView()->IsWrongSpelledWordAtPos( rCEvt.GetMousePosPixel(),TRUE ))
         {
             Link aLink = LINK(this, SidebarTxtControl, OnlineSpellCallback);
-            mpOutlinerView->ExecuteSpellPopup(rCEvt.GetMousePosPixel(),&aLink);
+            GetTextView()->ExecuteSpellPopup(rCEvt.GetMousePosPixel(),&aLink);
         }
         else
         {
@@ -373,8 +384,8 @@ void SidebarTxtControl::Command( const CommandEvent& rCEvt )
     }
     else
     {
-        if ( mpOutlinerView )
-            mpOutlinerView->Command( rCEvt );
+        if ( GetTextView() )
+            GetTextView()->Command( rCEvt );
         else
             Window::Command(rCEvt);
     }
@@ -382,16 +393,16 @@ void SidebarTxtControl::Command( const CommandEvent& rCEvt )
 
 XubString SidebarTxtControl::GetSurroundingText() const
 {
-    if( mpOutlinerView )
-        return mpOutlinerView->GetSurroundingText();
+    if( GetTextView() )
+        return GetTextView()->GetSurroundingText();
     else
         return XubString::EmptyString();
 }
 
 Selection SidebarTxtControl::GetSurroundingTextSelection() const
 {
-    if( mpOutlinerView )
-        return mpOutlinerView->GetSurroundingTextSelection();
+    if( GetTextView() )
+        return GetTextView()->GetSurroundingTextSelection();
     else
         return Selection( 0, 0 );
 }

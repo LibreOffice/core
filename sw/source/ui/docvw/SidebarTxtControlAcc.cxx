@@ -44,6 +44,7 @@
 #include <svx/AccessibleTextHelper.hxx>
 #include <svx/outliner.hxx>
 
+
 namespace css = ::com::sun::star;
 
 namespace sw { namespace sidebarwindows {
@@ -82,12 +83,18 @@ SidebarTextEditSource::SidebarTextEditSource( SidebarTxtControl& rSidebarTxtCont
     , mTextForwarder( *(rSidebarTxtControl.GetTextView()->GetOutliner()), NULL )
     , mViewForwarder( *(rSidebarTxtControl.GetTextView()) )
 {
-    mrSidebarTxtControl.GetTextView()->GetOutliner()->SetNotifyHdl( LINK(this, SidebarTextEditSource, NotifyHdl) );
+    if ( mrSidebarTxtControl.GetTextView() )
+    {
+        mrSidebarTxtControl.GetTextView()->GetOutliner()->SetNotifyHdl( LINK(this, SidebarTextEditSource, NotifyHdl) );
+    }
 }
 
 SidebarTextEditSource::~SidebarTextEditSource()
 {
-    mrSidebarTxtControl.GetTextView()->GetOutliner()->SetNotifyHdl( Link() );
+    if ( mrSidebarTxtControl.GetTextView() )
+    {
+        mrSidebarTxtControl.GetTextView()->GetOutliner()->SetNotifyHdl( Link() );
+    }
 }
 
 SvxEditSource* SidebarTextEditSource::Clone() const
@@ -172,12 +179,17 @@ class SidebarTxtControlAccessibleContext : public VCLXAccessibleComponent
     private:
         SidebarTxtControl& mrSidebarTxtControl;
         ::accessibility::AccessibleTextHelper* mpAccessibleTextHelper;
+
+        ::vos::OMutex maMutex;
+
+        void defunc();
 };
 
 SidebarTxtControlAccessibleContext::SidebarTxtControlAccessibleContext( SidebarTxtControl& rSidebarTxtControl )
     : VCLXAccessibleComponent( rSidebarTxtControl.GetWindowPeer() )
     , mrSidebarTxtControl( rSidebarTxtControl )
     , mpAccessibleTextHelper( 0 )
+    , maMutex()
 {
     ::std::auto_ptr<SvxEditSource> pEditSource(
                         new SidebarTextEditSource( mrSidebarTxtControl ) );
@@ -187,51 +199,93 @@ SidebarTxtControlAccessibleContext::SidebarTxtControlAccessibleContext( SidebarT
 
 SidebarTxtControlAccessibleContext::~SidebarTxtControlAccessibleContext()
 {
+    defunc();
+}
+
+void SidebarTxtControlAccessibleContext::defunc()
+{
     delete mpAccessibleTextHelper;
+    mpAccessibleTextHelper = 0;
 }
 
 sal_Int32 SAL_CALL SidebarTxtControlAccessibleContext::getAccessibleChildCount()
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return mpAccessibleTextHelper->GetChildCount();
+    vos::OGuard aGuard( maMutex );
+
+    sal_Int32 nChildCount( 0 );
+
+    if ( mpAccessibleTextHelper )
+    {
+        nChildCount = mpAccessibleTextHelper->GetChildCount();
+    }
+
+    return nChildCount;
 }
 
 css::uno::Reference< css::accessibility::XAccessible > SAL_CALL SidebarTxtControlAccessibleContext::getAccessibleChild( sal_Int32 i )
     throw ( css::lang::IndexOutOfBoundsException, css::uno::RuntimeException )
 {
-    return mpAccessibleTextHelper->GetChild( i );
+    vos::OGuard aGuard( maMutex );
+
+    css::uno::Reference< css::accessibility::XAccessible > xChild;
+
+    if ( mpAccessibleTextHelper )
+    {
+        xChild = mpAccessibleTextHelper->GetChild( i );
+    }
+
+    return xChild;
 }
 
 void SAL_CALL SidebarTxtControlAccessibleContext::addEventListener (
     const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener)
     throw (css::uno::RuntimeException)
 {
-    mpAccessibleTextHelper->AddEventListener(xListener);
+    vos::OGuard aGuard( maMutex );
+
+    if ( mpAccessibleTextHelper )
+    {
+        mpAccessibleTextHelper->AddEventListener(xListener);
+    }
 }
 
 void SAL_CALL SidebarTxtControlAccessibleContext::removeEventListener (
     const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener)
     throw (css::uno::RuntimeException)
 {
-    mpAccessibleTextHelper->RemoveEventListener(xListener);
+    vos::OGuard aGuard( maMutex );
+
+    if ( mpAccessibleTextHelper )
+    {
+        mpAccessibleTextHelper->RemoveEventListener(xListener);
+    }
 }
 
 void SidebarTxtControlAccessibleContext::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
-    switch ( rVclWindowEvent.GetId() )
+    if ( mpAccessibleTextHelper )
     {
-        case VCLEVENT_WINDOW_GETFOCUS:
-        case VCLEVENT_CONTROL_GETFOCUS:
+        switch ( rVclWindowEvent.GetId() )
         {
-            mpAccessibleTextHelper->SetFocus( sal_True );
+            case VCLEVENT_OBJECT_DYING:
+            {
+                defunc();
+            }
+            break;
+            case VCLEVENT_WINDOW_GETFOCUS:
+            case VCLEVENT_CONTROL_GETFOCUS:
+            {
+                mpAccessibleTextHelper->SetFocus( sal_True );
+            }
+            break;
+            case VCLEVENT_WINDOW_LOSEFOCUS:
+            case VCLEVENT_CONTROL_LOSEFOCUS:
+            {
+                mpAccessibleTextHelper->SetFocus( sal_False );
+            }
+            break;
         }
-        break;
-        case VCLEVENT_WINDOW_LOSEFOCUS:
-        case VCLEVENT_CONTROL_LOSEFOCUS:
-        {
-            mpAccessibleTextHelper->SetFocus( sal_False );
-        }
-        break;
     }
 
     VCLXAccessibleComponent::ProcessWindowEvent( rVclWindowEvent );

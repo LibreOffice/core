@@ -35,6 +35,7 @@
 #include <SidebarWin.hxx>
 
 class PopupMenu;
+class OutlinerParaObject;
 
 namespace sw { namespace annotation {
 
@@ -43,9 +44,10 @@ class SwAnnotationWin : public sw::sidebarwindows::SwSidebarWin
     public:
         SwAnnotationWin( SwEditWin& rEditWin,
                          WinBits nBits,
-                         SwFmtFld* aField,
                          SwPostItMgr& aMgr,
-                         SwPostItBits aBits );
+                         SwPostItBits aBits,
+                         SwSidebarItem& rSidebarItem,
+                         SwFmtFld* aField );
         virtual ~SwAnnotationWin();
 
         virtual void    UpdateData();

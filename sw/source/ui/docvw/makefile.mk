@@ -57,9 +57,11 @@ SLOFILES =  \
         $(SLO)$/romenu.obj \
         $(SLO)$/srcedtw.obj \
                 $(SLO)$/PostItMgr.obj \
+                $(SLO)$/frmsidebarwincontainer.obj \
                 $(SLO)$/AnchorOverlayObject.obj \
                 $(SLO)$/ShadowOverlayObject.obj \
                 $(SLO)$/SidebarWin.obj \
+                $(SLO)$/SidebarWinAcc.obj \
                 $(SLO)$/AnnotationWin.obj \
                 $(SLO)$/AnnotationMenuButton.obj \
                 $(SLO)$/SidebarTxtControl.obj \

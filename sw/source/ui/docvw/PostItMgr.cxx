@@ -37,6 +37,7 @@
 
 #include <SidebarWin.hxx>
 #include <AnnotationWin.hxx>
+#include <frmsidebarwincontainer.hxx>
 
 #include <SidebarWindowsConsts.hxx>
 #include <AnchorOverlayObject.hxx>
@@ -90,8 +91,8 @@
 
 #include "swevent.hxx"
 
-// distance between ankor Y and initial note position
-#define POSTIT_INITIAL_ANKOR_DISTANCE       20
+// distance between Anchor Y and initial note position
+#define POSTIT_INITIAL_ANCHOR_DISTANCE      20
 //distance between two postits
 #define POSTIT_SPACE_BETWEEN                8
 #define POSTIT_MINIMUMSIZE_WITH_META        60
@@ -114,17 +115,22 @@ bool comp_date( const SwPostItItem* a, const SwPostItItem* b)
 }
 */
 
-// if position is on the same line, sort by x (Left) position, otherwise by y(Bottom) position
-// if two notes are at the same position, sort by logical node position
-bool comp_pos(const SwSidebarItem *a, const SwSidebarItem *b)
+//
+bool comp_pos(const SwSidebarItem* a, const SwSidebarItem* b)
 {
-    return (a->maLayoutInfo.mPosition.Bottom() == b->maLayoutInfo.mPosition.Bottom())
-            ? ( ( (a->maLayoutInfo.mPosition.Left() == b->maLayoutInfo.mPosition.Left()) &&
-                  (a->GetBroadCaster()->ISA(SwFmtFld) && b->GetBroadCaster()->ISA(SwFmtFld)) )
-                ? *(static_cast<SwFmtFld*>(a->GetBroadCaster())->GetTxtFld()->GetStart()) <
-                    *(static_cast<SwFmtFld*>(b->GetBroadCaster())->GetTxtFld()->GetStart())
-                : a->maLayoutInfo.mPosition.Left() < b->maLayoutInfo.mPosition.Left() )
-            : a->maLayoutInfo.mPosition.Bottom() < b->maLayoutInfo.mPosition.Bottom();
+    // --> OD 2010-01-19 #i88070#
+    // sort by anchor position
+//// if position is on the same line, sort by x (Left) position, otherwise by y(Bottom) position
+//// if two notes are at the same position, sort by logical node position
+//    return (a->maLayoutInfo.mPosition.Bottom() == b->maLayoutInfo.mPosition.Bottom())
+//            ? ( ( (a->maLayoutInfo.mPosition.Left() == b->maLayoutInfo.mPosition.Left()) &&
+//                  (a->GetBroadCaster()->ISA(SwFmtFld) && b->GetBroadCaster()->ISA(SwFmtFld)) )
+//                ? *(static_cast<SwFmtFld*>(a->GetBroadCaster())->GetTxtFld()->GetStart()) <
+//                    *(static_cast<SwFmtFld*>(b->GetBroadCaster())->GetTxtFld()->GetStart())
+//                : a->maLayoutInfo.mPosition.Left() < b->maLayoutInfo.mPosition.Left() )
+//            : a->maLayoutInfo.mPosition.Bottom() < b->maLayoutInfo.mPosition.Bottom();
+    return a->GetAnchorPosition() < b->GetAnchorPosition();
+    // <--
 }
 
 SwPostItMgr::SwPostItMgr(SwView* pView)
@@ -140,12 +146,14 @@ SwPostItMgr::SwPostItMgr(SwView* pView)
     , mbReadOnly(mpView->GetDocShell()->IsReadOnly())
     , mbDeleteNote(true)
     , mpAnswer(0)
+    , mbIsShowAnchor( false )
+    , mpFrmSidebarWinContainer( 0 )
 {
     if(!mpView->GetDrawView() )
         mpView->GetWrtShell().MakeDrawView();
 
     SwNoteProps aProps;
-    mpIsShowAnkor = aProps.IsShowAnkor();
+    mbIsShowAnchor = aProps.IsShowAnchor();
 
     //make sure we get the colour yellow always, even if not the first one of comments or redlining
     SW_MOD()->GetRedlineAuthor();
@@ -167,6 +175,8 @@ SwPostItMgr::SwPostItMgr(SwView* pView)
 
 SwPostItMgr::~SwPostItMgr()
 {
+    delete mpFrmSidebarWinContainer;
+
     if ( mnEventId )
         Application::RemoveUserEvent( mnEventId );
     // forget about all our Sidebar windows
@@ -491,8 +501,10 @@ bool SwPostItMgr::CalcRects()
             SwRect aOldRect(pItem->maLayoutInfo.mPosition);
             SwPostItHelper::SwLayoutStatus eOldStatus = pItem->mLayoutStatus;
             std::vector< SwLayoutInfo > aInfo;
-             SwPosition aPosition = pItem->GetPosition();
-            pItem->mLayoutStatus = SwPostItHelper::getLayoutInfos( aInfo, aPosition );
+            {
+                SwPosition aPosition = pItem->GetAnchorPosition();
+                pItem->mLayoutStatus = SwPostItHelper::getLayoutInfos( aInfo, aPosition );
+            }
             if( aInfo.size() )
             {
                 pItem->maLayoutInfo = aInfo[0];
@@ -503,7 +515,7 @@ bool SwPostItMgr::CalcRects()
         }
 
         // show notes in right order in navigator
-        //prevent ankors during layout to overlap, e.g. when moving a frame
+        //prevent Anchors during layout to overlap, e.g. when moving a frame
         Sort(SORT_POS);
 
         // sort the items into the right page vector, so layout can be done by page
@@ -674,7 +686,7 @@ void SwPostItMgr::LayoutPostIts()
 
                             pPostIt->SetChangeTracking(
                                 pItem->mLayoutStatus,
-                                GetColorAnkor(pItem->maLayoutInfo.mRedlineAuthor));
+                                GetColorAnchor(pItem->maLayoutInfo.mRedlineAuthor));
                             pPostIt->SetSidebarPosition(mPages[n]->eSidebarPosition);
                             pPostIt->SetFollow(pPostIt->CalcFollow());
                             aPostItHeight = ( pPostIt->GetPostItTextHeight() < pPostIt->GetMinimumSizeWithoutMeta()
@@ -687,6 +699,7 @@ void SwPostItMgr::LayoutPostIts()
                                                           aPostItHeight,
                                                           pItem->maLayoutInfo.mPosition,
                                                           mlPageEnd );
+                            pPostIt->ChangeSidebarItem( *pItem );
 
                             if (pItem->bFocus)
                             {
@@ -1659,23 +1672,23 @@ void SwPostItMgr::CorrectPositions()
        return;
 
    // yeah, I know, if this is a left page it could be wrong, but finding the page and the note is probably not even faster than just doing it
-   const long aAnkorX = mpEditWin->LogicToPixel( Point((long)(pFirstPostIt->Anchor()->GetSixthPosition().getX()),0)).X();
-   const long aAnkorY = mpEditWin->LogicToPixel( Point(0,(long)(pFirstPostIt->Anchor()->GetSixthPosition().getY()))).Y() + 1;
-   if (Point(aAnkorX,aAnkorY) != pFirstPostIt->GetPosPixel())
+   const long aAnchorX = mpEditWin->LogicToPixel( Point((long)(pFirstPostIt->Anchor()->GetSixthPosition().getX()),0)).X();
+   const long aAnchorY = mpEditWin->LogicToPixel( Point(0,(long)(pFirstPostIt->Anchor()->GetSixthPosition().getY()))).Y() + 1;
+   if (Point(aAnchorX,aAnchorY) != pFirstPostIt->GetPosPixel())
    {
-       long aAnkorPosX = 0;
-       long aAnkorPosY = 0;
+       long aAnchorPosX = 0;
+       long aAnchorPosY = 0;
        for (unsigned long n=0;n<mPages.size();n++)
        {
            for(SwSidebarItem_iterator i = mPages[n]->mList->begin(); i!= mPages[n]->mList->end(); i++)
            {
                if ((*i)->bShow && (*i)->pPostIt)
                {
-                    aAnkorPosX = mPages[n]->eSidebarPosition == sw::sidebarwindows::SIDEBAR_LEFT
+                    aAnchorPosX = mPages[n]->eSidebarPosition == sw::sidebarwindows::SIDEBAR_LEFT
                         ? mpEditWin->LogicToPixel( Point((long)((*i)->pPostIt->Anchor()->GetSeventhPosition().getX()),0)).X()
                         : mpEditWin->LogicToPixel( Point((long)((*i)->pPostIt->Anchor()->GetSixthPosition().getX()),0)).X();
-                    aAnkorPosY = mpEditWin->LogicToPixel( Point(0,(long)((*i)->pPostIt->Anchor()->GetSixthPosition().getY()))).Y() + 1;
-                    (*i)->pPostIt->SetPosPixel(Point(aAnkorPosX,aAnkorPosY));
+                    aAnchorPosY = mpEditWin->LogicToPixel( Point(0,(long)((*i)->pPostIt->Anchor()->GetSixthPosition().getY()))).Y() + 1;
+                    (*i)->pPostIt->SetPosPixel(Point(aAnchorPosX,aAnchorPosY));
                }
            }
        }
@@ -1746,16 +1759,16 @@ Color SwPostItMgr::GetColorLight(sal_uInt16 aAuthorIndex)
         return Color(COL_WHITE);
 }
 
-Color SwPostItMgr::GetColorAnkor(sal_uInt16 aAuthorIndex)
+Color SwPostItMgr::GetColorAnchor(sal_uInt16 aAuthorIndex)
 {
     if (!Application::GetSettings().GetStyleSettings().GetHighContrastMode())
     {
-        static const Color aArrayAnkor[] = {
+        static const Color aArrayAnchor[] = {
             COL_AUTHOR1_DARK,       COL_AUTHOR2_DARK,       COL_AUTHOR3_DARK,
             COL_AUTHOR4_DARK,       COL_AUTHOR5_DARK,       COL_AUTHOR6_DARK,
             COL_AUTHOR7_DARK,       COL_AUTHOR8_DARK,       COL_AUTHOR9_DARK };
 
-        return Color( aArrayAnkor[  aAuthorIndex % (sizeof( aArrayAnkor )   / sizeof( aArrayAnkor[0] ))]);
+        return Color( aArrayAnchor[  aAuthorIndex % (sizeof( aArrayAnchor )  / sizeof( aArrayAnchor[0] ))]);
     }
     else
         return Color(COL_WHITE);
@@ -1813,7 +1826,7 @@ void SwPostItMgr::Rescale()
 sal_Int32 SwPostItMgr::GetInitialAnchorDistance() const
 {
     const Fraction& f( mpEditWin->GetMapMode().GetScaleY() );
-    return POSTIT_INITIAL_ANKOR_DISTANCE * f.GetNumerator() / f.GetDenominator();
+    return POSTIT_INITIAL_ANCHOR_DISTANCE * f.GetNumerator() / f.GetDenominator();
 }
 
 sal_Int32 SwPostItMgr::GetSpaceBetween() const
@@ -1982,5 +1995,60 @@ void SwPostItMgr::ToggleInsModeOnActiveSidebarWin()
     if ( HasActiveSidebarWin() )
     {
         mpActivePostIt->ToggleInsMode();
+    }
+}
+
+void SwPostItMgr::ConnectSidebarWinToFrm( const SwFrm& rFrm,
+                                          const SwFmtFld& rFmtFld,
+                                          SwSidebarWin& rSidebarWin )
+{
+    if ( mpFrmSidebarWinContainer == 0 )
+    {
+        mpFrmSidebarWinContainer = new SwFrmSidebarWinContainer();
+    }
+
+    mpFrmSidebarWinContainer->insert( rFrm, rFmtFld, rSidebarWin );
+}
+
+void SwPostItMgr::DisconnectSidebarWinFromFrm( const SwFrm& rFrm,
+                                               SwSidebarWin& rSidebarWin )
+{
+    if ( mpFrmSidebarWinContainer != 0 )
+    {
+        mpFrmSidebarWinContainer->remove( rFrm, rSidebarWin );
+    }
+}
+
+bool SwPostItMgr::HasFrmConnectedSidebarWins( const SwFrm& rFrm )
+{
+    bool bRet( false );
+
+    if ( mpFrmSidebarWinContainer != 0 )
+    {
+        bRet = !mpFrmSidebarWinContainer->empty( rFrm );
+    }
+
+    return bRet;
+}
+
+Window* SwPostItMgr::GetSidebarWinForFrmByIndex( const SwFrm& rFrm,
+                                                 const sal_Int32 nIndex )
+{
+    Window* pSidebarWin( 0 );
+
+    if ( mpFrmSidebarWinContainer != 0 )
+    {
+        pSidebarWin = mpFrmSidebarWinContainer->get( rFrm, nIndex );
+    }
+
+    return pSidebarWin;
+}
+
+void SwPostItMgr::GetAllSidebarWinForFrm( const SwFrm& rFrm,
+                                          std::vector< Window* >* pChildren )
+{
+    if ( mpFrmSidebarWinContainer != 0 )
+    {
+        mpFrmSidebarWinContainer->getAll( rFrm, pChildren );
     }
 }

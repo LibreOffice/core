@@ -62,8 +62,11 @@ namespace sw { namespace annotation {
 }}
 namespace sw { namespace sidebarwindows {
     class SwSidebarWin;
+    class SwFrmSidebarWinContainer;
 }}
 class SwSidebarItem;
+class SwFrm;
+class Window;
 
 #define SORT_POS    1
 #define SORT_AUTHOR 2
@@ -108,23 +111,23 @@ struct FieldShadowState
 class SwNoteProps: public utl::ConfigItem
 {
     private:
-        bool bIsShowAnkor;
+        bool bIsShowAnchor;
     public:
         SwNoteProps()
             : ConfigItem(::rtl::OUString::createFromAscii("Office.Writer/Notes"))
-            , bIsShowAnkor(false)
+            , bIsShowAnchor(false)
         {
             const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rNames = GetPropertyNames();
                 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aValues = GetProperties(rNames);
                 const ::com::sun::star::uno::Any* pValues = aValues.getConstArray();
                DBG_ASSERT(aValues.getLength() == rNames.getLength(), "GetProperties failed");
                 if (aValues.getLength())
-                pValues[0]>>=bIsShowAnkor;
+                pValues[0]>>=bIsShowAnchor;
         }
 
-        bool IsShowAnkor()
+        bool IsShowAnchor()
         {
-            return bIsShowAnkor;
+            return bIsShowAnchor;
         }
             ::com::sun::star::uno::Sequence< ::rtl::OUString >& GetPropertyNames()
             {
@@ -163,7 +166,10 @@ class SwPostItMgr: public SfxListener
         bool                            mbDeleteNote;
         FieldShadowState                mShadowState;
         OutlinerParaObject*             mpAnswer;
-        bool                        mpIsShowAnkor;
+        bool                            mbIsShowAnchor;
+
+        // data structure to collect the <SwSidebarWin> instances for certain <SwFrm> instances.
+        sw::sidebarwindows::SwFrmSidebarWinContainer* mpFrmSidebarWinContainer;
 
         typedef std::list<sw::sidebarwindows::SwSidebarWin*>::iterator  SwSidebarWin_iterator;
 
@@ -216,7 +222,7 @@ class SwPostItMgr: public SfxListener
             bool ShowScrollbar(const unsigned long aPage) const;
             bool HasNotes() const ;
             bool ShowNotes() const;
-        bool IsShowAnkor() { return mpIsShowAnkor;}
+            bool IsShowAnchor() { return mbIsShowAnchor;}
             unsigned long GetSidebarWidth(bool bPx = false) const;
             unsigned long GetSidebarBorderWidth(bool bPx = false) const;
             unsigned long GetNoteWidth();
@@ -265,7 +271,7 @@ class SwPostItMgr: public SfxListener
 
             Color           GetColorDark(sal_uInt16 aAuthorIndex);
             Color           GetColorLight(sal_uInt16 aAuthorIndex);
-            Color           GetColorAnkor(sal_uInt16 aAuthorIndex);
+            Color           GetColorAnchor(sal_uInt16 aAuthorIndex);
 
             bool                ShowPreview(const SwField* pFld,SwFmtFld*& pFmtFld) const;
 
@@ -278,7 +284,18 @@ class SwPostItMgr: public SfxListener
             sal_uInt16 SearchReplace(const SwFmtFld &pFld, const ::com::sun::star::util::SearchOptions& rSearchOptions,bool bSrchForward);
             sal_uInt16 FinishSearchReplace(const ::com::sun::star::util::SearchOptions& rSearchOptions,bool bSrchForward);
 
-    void                    AssureStdModeAtShell();
+            void AssureStdModeAtShell();
+
+            void ConnectSidebarWinToFrm( const SwFrm& rFrm,
+                                         const SwFmtFld& rFmtFld,
+                                         sw::sidebarwindows::SwSidebarWin& rSidebarWin );
+            void DisconnectSidebarWinFromFrm( const SwFrm& rFrm,
+                                              sw::sidebarwindows::SwSidebarWin& rSidebarWin );
+            bool HasFrmConnectedSidebarWins( const SwFrm& rFrm );
+            Window* GetSidebarWinForFrmByIndex( const SwFrm& rFrm,
+                                                const sal_Int32 nIndex );
+            void GetAllSidebarWinForFrm( const SwFrm& rFrm,
+                                         std::vector< Window* >* pChildren );
 };
 
 #endif

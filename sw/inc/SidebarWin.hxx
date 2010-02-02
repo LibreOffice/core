@@ -47,7 +47,6 @@
 
 class SwPostItMgr;
 class SwPostItField;
-class SwFmtFld;
 class OutlinerView;
 class Outliner;
 class ScrollBar;
@@ -56,7 +55,8 @@ class SwView;
 class Edit;
 class MenuButton;
 //class SwRedline;
-class OutlinerParaObject;
+class SwFrm;
+
 
 namespace sw { namespace sidebarwindows {
 
@@ -75,7 +75,8 @@ class SwSidebarWin : public Window
         SwSidebarWin( SwEditWin& rEditWin,
                       WinBits nBits,
                       SwPostItMgr& aMgr,
-                      SwPostItBits aBits );
+                      SwPostItBits aBits,
+                      SwSidebarItem& rSidebarItem );
         virtual ~SwSidebarWin();
 
         void SetSize( const Size& rNewSize );
@@ -175,6 +176,9 @@ class SwSidebarWin : public Window
 
         void SetLanguage(const SvxLanguageItem aNewItem);
 
+        void ChangeSidebarItem( SwSidebarItem& rSidebarItem );
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
+
     protected:
         virtual void    DataChanged( const DataChangedEvent& aEvent);
         virtual void    LoseFocus();
@@ -232,6 +236,8 @@ class SwSidebarWin : public Window
 
         bool            mbReadonly;
         bool            mbIsFollow;
+
+        SwSidebarItem& mrSidebarItem;
 };
 
 } } // eof namespace sw::sidebarwindows

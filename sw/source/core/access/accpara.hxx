@@ -29,24 +29,16 @@
  ************************************************************************/
 #ifndef _ACCPARA_HXX
 #define _ACCPARA_HXX
-#ifndef _ACCCONTEXT_HXX
-#include "acccontext.hxx"
-#endif
+
+#include <acccontext.hxx>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/accessibility/XAccessibleHypertext.hpp>
-// --> OD 2008-05-19 #i71360#
 #include <com/sun/star/accessibility/XAccessibleTextMarkup.hpp>
-// <--
-// --> OD 2008-05-29 #i89175#
 #include <com/sun/star/accessibility/XAccessibleMultiLineText.hpp>
-// <--
-
-// --> OD 2006-07-11 #i63870#
 #include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
 #include <hash_map>
-// <--
-#include "accselectionhelper.hxx"
+#include <accselectionhelper.hxx>
 
 class SwTxtFrm;
 class SwTxtNode;
@@ -70,15 +62,9 @@ class SwAccessibleParagraph :
         public ::com::sun::star::accessibility::XAccessibleEditableText,
         public com::sun::star::accessibility::XAccessibleSelection,
         public com::sun::star::accessibility::XAccessibleHypertext,
-        // --> OD 2008-05-19 #i71360#
         public com::sun::star::accessibility::XAccessibleTextMarkup,
-        // <--
-        // --> OD 2008-05-29 #i89175#
         public com::sun::star::accessibility::XAccessibleMultiLineText,
-        // <--
-        // --> OD 2006-07-11 #i63870#
         public ::com::sun::star::accessibility::XAccessibleTextAttributes
-        // <--
 {
     friend class SwAccessibleHyperlink;
 

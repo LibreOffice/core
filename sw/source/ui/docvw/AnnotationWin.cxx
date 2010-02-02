@@ -68,10 +68,11 @@ namespace sw { namespace annotation {
 
 SwAnnotationWin::SwAnnotationWin( SwEditWin& rEditWin,
                                   WinBits nBits,
-                                  SwFmtFld* aField,
                                   SwPostItMgr& aMgr,
-                                  SwPostItBits aBits)
-    : SwSidebarWin( rEditWin, nBits, aMgr, aBits )
+                                  SwPostItBits aBits,
+                                  SwSidebarItem& rSidebarItem,
+                                  SwFmtFld* aField )
+    : SwSidebarWin( rEditWin, nBits, aMgr, aBits, rSidebarItem )
     , mpFmtFld(aField)
     , mpFld( static_cast<SwPostItField*>(aField->GetFld()))
     , mpButtonPopup(0)

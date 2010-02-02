@@ -38,8 +38,8 @@
 
 #include <tools/string.hxx>
 
-#include "swtypes.hxx"
-#include "swrect.hxx"
+#include <swtypes.hxx>
+#include <swrect.hxx>
 
 class ViewShell;
 class SwFlyFrm;
@@ -57,17 +57,10 @@ struct SdrPaintProcRec;
 class SwAccessibleMap;
 class SdrObject;
 class Fraction;
-// OD 12.12.2002 #103492#
 class SwPagePreviewLayout;
-// OD 15.01.2003 #103492#
-#ifndef _PREVWPAGE_HXX
-#include <prevwpage.hxx>
-#endif
-// OD 15.01.2003 #103492#
+struct PrevwPage;
 #include <vector>
-// --> OD 2005-12-01 #i27138#
 class SwTxtFrm;
-// <--
 
 class SwViewImp
 {

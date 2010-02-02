@@ -54,7 +54,7 @@ typedef sal_Int64 SwPostItBits;
 
 struct SwLayoutInfo
 {
-    SwFrm* mpAssociatedFrm;
+    const SwFrm* mpAnchorFrm;
     SwRect mPosition;
     SwRect mPageFrame;
     SwRect mPagePrtArea;
@@ -63,7 +63,7 @@ struct SwLayoutInfo
     USHORT mRedlineAuthor;
 
     SwLayoutInfo()
-        : mpAssociatedFrm(0)
+        : mpAnchorFrm(0)
         , mPosition()
         , mPageFrame()
         , mPagePrtArea()
@@ -106,9 +106,9 @@ public:
         , maLayoutInfo()
     {}
     virtual ~SwSidebarItem(){}
-    virtual SwPosition GetPosition() = 0;
+    virtual SwPosition GetAnchorPosition() const = 0;
     virtual bool UseElement() = 0;
-    virtual SwFmtFld* GetFmtFld() = 0;
+    virtual SwFmtFld* GetFmtFld() const = 0;
     virtual SfxBroadcaster* GetBroadCaster() const = 0;
     virtual sw::sidebarwindows::SwSidebarWin* GetSidebarWindow( SwEditWin& rEditWin,
                                                                 WinBits nBits,
@@ -126,9 +126,9 @@ public:
         : SwSidebarItem(aShow,aFocus),
         pRedline(pRed) {}
     virtual ~SwRedCommentItem() {}
-    virtual SwPosition GetPosition();
+    virtual SwPosition GetAnchorPosition() const;
     virtual bool UseElement();
-    virtual SwFmtFld* GetFmtFld() {return 0; }
+    virtual SwFmtFld* GetFmtFld() const {return 0; }
     virtual SfxBroadcaster* GetBroadCaster() const { return dynamic_cast<SfxBroadcaster *> (pRedline); }
     virtual sw::sidebarwindows::SwSidebarWin* GetSidebarWindow( SwEditWin& rEditWin,
                                                                 WinBits nBits,
@@ -150,9 +150,9 @@ class SwAnnotationItem: public SwSidebarItem
         , pFmtFld(p)
     {}
     virtual ~SwAnnotationItem() {}
-    virtual SwPosition GetPosition();
+    virtual SwPosition GetAnchorPosition() const;
     virtual bool UseElement();
-    virtual SwFmtFld* GetFmtFld() {return pFmtFld;}
+    virtual SwFmtFld* GetFmtFld() const {return pFmtFld;}
     virtual SfxBroadcaster* GetBroadCaster() const { return dynamic_cast<SfxBroadcaster *> (pFmtFld); }
     virtual sw::sidebarwindows::SwSidebarWin* GetSidebarWindow( SwEditWin& rEditWin,
                                                                 WinBits nBits,

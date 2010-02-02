@@ -45,11 +45,49 @@
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <txtfrm.hxx>
+#include <tabfrm.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <redline.hxx>
 #include <scriptinfo.hxx>
 #include <svx/charhiddenitem.hxx>
 
+
+namespace {
+
+struct LayoutInfoOrder
+{
+    bool operator()( const SwLayoutInfo& rLayoutInfo,
+                     const SwLayoutInfo& rNewLayoutInfo )
+    {
+        if ( rLayoutInfo.mnPageNumber != rNewLayoutInfo.mnPageNumber )
+        {
+            // corresponding <SwFrm> instances are on different pages
+            return rLayoutInfo.mnPageNumber < rNewLayoutInfo.mnPageNumber;
+        }
+        else
+        {
+            // corresponding <SwFrm> instances are in different repeating table header rows
+            ASSERT( rLayoutInfo.mpAnchorFrm->FindTabFrm(),
+                    "<LayoutInfoOrder::operator()> - table frame not found" );
+            ASSERT( rNewLayoutInfo.mpAnchorFrm->FindTabFrm(),
+                    "<LayoutInfoOrder::operator()> - table frame not found" );
+            const SwTabFrm* pLayoutInfoTabFrm( rLayoutInfo.mpAnchorFrm->FindTabFrm() );
+            const SwTabFrm* pNewLayoutInfoTabFrm( rNewLayoutInfo.mpAnchorFrm->FindTabFrm() );
+            const SwTabFrm* pTmpTabFrm( pNewLayoutInfoTabFrm );
+            while ( pTmpTabFrm && pTmpTabFrm->GetFollow() )
+            {
+                pTmpTabFrm = static_cast<const SwTabFrm*>(pTmpTabFrm->GetFollow()->GetFrm());
+                if ( pTmpTabFrm == pLayoutInfoTabFrm )
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+};
+
+} // eof anonymous namespace
 
 SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos( std::vector< SwLayoutInfo >& rInfo, SwPosition& rPos )
 {
@@ -71,7 +109,7 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos( std::vector< SwLa
             {
                 SwLayoutInfo aInfo;
                 pTxtFrm->GetCharRect( aInfo.mPosition, rPos, 0 );
-                aInfo.mpAssociatedFrm = pTxtFrm;
+                aInfo.mpAnchorFrm = pTxtFrm;
                 aInfo.mPageFrame = pPage->Frm();
                 aInfo.mPagePrtArea = pPage->Prt();
                 aInfo.mPagePrtArea.Pos() += aInfo.mPageFrame.Pos();
@@ -96,7 +134,14 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos( std::vector< SwLa
                         }
                     }
                 }
-                 rInfo.push_back( aInfo );
+
+                {
+                    std::vector< SwLayoutInfo >::iterator aInsPosIter =
+                                std::lower_bound( rInfo.begin(), rInfo.end(),
+                                                  aInfo, LayoutInfoOrder() );
+
+                    rInfo.insert( aInsPosIter, aInfo );
+                }
             }
         }
     }
@@ -147,7 +192,7 @@ SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos( std::vector< SwLa
     return aRet;
 }
 
-SwPosition SwAnnotationItem::GetPosition()
+SwPosition SwAnnotationItem::GetAnchorPosition() const
 {
     SwTxtFld* pFld = pFmtFld->GetTxtFld();
     //if( pFld )
@@ -173,11 +218,14 @@ sw::sidebarwindows::SwSidebarWin* SwAnnotationItem::GetSidebarWindow(
                                                             SwPostItMgr& aMgr,
                                                             SwPostItBits aBits)
 {
-    return new sw::annotation::SwAnnotationWin( rEditWin, nBits, pFmtFld, aMgr, aBits );
+    return new sw::annotation::SwAnnotationWin( rEditWin, nBits,
+                                                aMgr, aBits,
+                                                *this,
+                                                pFmtFld );
 }
 
 /*
-SwPosition SwRedCommentItem::GetPosition()
+SwPosition SwRedCommentItem::GetAnchorPosition()
 {
     return *pRedline->Start();
 }

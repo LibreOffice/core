@@ -46,7 +46,6 @@ class SwSidebarWin;
 class SidebarTxtControl : public Control
 {
     private:
-        OutlinerView* mpOutlinerView;
         SwSidebarWin& mrSidebarWin;
         SwView& mrDocView;
         SwPostItMgr& mrPostItMgr;
@@ -76,14 +75,7 @@ class SidebarTxtControl : public Control
 
         virtual void GetFocus();
 
-        inline void SetTextView( OutlinerView* aEditView )
-        {
-            mpOutlinerView = aEditView;
-        }
-        inline OutlinerView* GetTextView() const
-        {
-            return mpOutlinerView;
-        }
+        OutlinerView* GetTextView() const;
 
         DECL_LINK( OnlineSpellCallback, SpellCallbackInfo*);
 
