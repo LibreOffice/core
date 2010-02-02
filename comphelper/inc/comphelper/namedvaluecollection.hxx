@@ -64,6 +64,8 @@ namespace comphelper
 
         NamedValueCollection( const NamedValueCollection& _rCopySource );
 
+        NamedValueCollection& operator=( const NamedValueCollection& i_rCopySource );
+
         /** constructs a collection
             @param  _rElements
                 the wrapped elements of the collection. The <code>Any</code> might contain a sequence of
