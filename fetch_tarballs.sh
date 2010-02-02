@@ -53,19 +53,30 @@ fi
 # check for wget and md5sum
 wget=
 md5sum=
+curl=
 
-for i in wget /usr/local/bin/wget /usr/sfw/bin/wget /opt/sfw/bin/wget; do
+for i in wget /usr/bin/wget /usr/local/bin/wget /usr/sfw/bin/wget /opt/sfw/bin/wget; do
     eval "$i --version" > /dev/null 2>&1
     ret=$?
     if [ $ret -eq 0 ]; then
         wget=$i
-        echo found wget $wget
+        echo found wget: $wget
         break 2
     fi
 done
 
-if [ -z "$wget" ]; then
-    echo "ERROR: no wget found!"
+for i in curl /usr/bin/curl /usr/local/bin/curl /usr/sfw/bin/curl /opt/sfw/bin/curl; do
+    eval "$i --version" > /dev/null 2>&1
+    ret=$?
+    if [ $ret -eq 2 ]; then
+        curl=$i
+        echo found curl: $curl
+        break 2
+    fi
+done
+
+if [ -z "$wget" -a -z "$curl" ]; then
+    echo "ERROR: neither  wget nor curl found!"
     exit
 fi
 
@@ -92,11 +103,18 @@ for i in `cat $1` ; do
     else
         if [ "$tarurl" != "" ]; then
             cd $TARFILE_LOCATION
-            $wget -nv -N $tarurl/$i
-            wret=$?
-            if [ $wret -ne 0 ]; then
-                failed="$failed $i"
-                wret=0
+            if [ ! -f $i ]; then
+                if [ ! -z $wget_ ]; then
+                    $wget -nv -N $tarurl/$i
+                else
+                    echo fetching $i
+                    $curl $file_date_check -O $tarurl/$i
+                fi
+                wret=$?
+                if [ $wret -ne 0 ]; then
+                    failed="$failed $i"
+                    wret=0
+                fi
             fi
             if [ -f $i -a -n $md5sum ]; then
                 sum=`$md5sum $i | sed "s/ [ *].*//"`
@@ -112,7 +130,11 @@ for i in `cat $1` ; do
 done
 
 if [ ! -z "$failed" ]; then
-    echo $failed | sed "s/ /\n/g" | sed "s/^/ERROR: failed to download: /"
+    echo
+    echo ERROR: failed on:
+    for i in $failed ; do
+        echo $i
+    done
     exit 1
 fi
 
