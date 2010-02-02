@@ -64,7 +64,13 @@ namespace drawinglayer
             {
                 const SdrOle2Primitive2D& rCompare = (SdrOle2Primitive2D&)rPrimitive;
 
-                if(getOLEContent() == rCompare.getOLEContent()
+                // #i108636# The standard operator== on two UNO sequences did not work as i
+                // would have expected; it just checks the .is() states and the data type
+                // of the sequence. What i need here is detection of equality of the whole
+                // sequence content, thus i need to use the arePrimitive2DSequencesEqual helper
+                // here instead of the operator== which lead to always returning false and thus
+                // always re-decompositions of the subcontent.
+                if(arePrimitive2DSequencesEqual(getOLEContent(), rCompare.getOLEContent())
                     && getTransform() == rCompare.getTransform()
                     && getSdrLFSTAttribute() == rCompare.getSdrLFSTAttribute())
                 {
