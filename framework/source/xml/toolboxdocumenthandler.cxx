@@ -79,6 +79,7 @@ namespace framework
 // Property names of a menu/menu item ItemDescriptor
 static const char ITEM_DESCRIPTOR_COMMANDURL[]  = "CommandURL";
 static const char ITEM_DESCRIPTOR_HELPURL[]     = "HelpURL";
+static const char ITEM_DESCRIPTOR_TOOLTIP[]     = "Tooltip";
 static const char ITEM_DESCRIPTOR_LABEL[]       = "Label";
 static const char ITEM_DESCRIPTOR_TYPE[]        = "Type";
 static const char ITEM_DESCRIPTOR_STYLE[]       = "Style";
@@ -89,6 +90,8 @@ static void ExtractToolbarParameters( const Sequence< PropertyValue > rProp,
                                       ::rtl::OUString&                       rCommandURL,
                                       ::rtl::OUString&                       rLabel,
                                       ::rtl::OUString&                       rHelpURL,
+                                      ::rtl::OUString&                       rTooltip,
+                                      sal_Int16&                      rStyle,
                                       sal_Int16&                      rWidth,
                                       sal_Bool&                       rVisible,
                                       sal_Int16&                      rType )
@@ -102,6 +105,8 @@ static void ExtractToolbarParameters( const Sequence< PropertyValue > rProp,
         }
         else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_HELPURL ))
             rProp[i].Value >>= rHelpURL;
+        else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_TOOLTIP ))
+            rProp[i].Value >>= rTooltip;
         else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_LABEL ))
             rProp[i].Value >>= rLabel;
         else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_TYPE ))
@@ -110,8 +115,29 @@ static void ExtractToolbarParameters( const Sequence< PropertyValue > rProp,
             rProp[i].Value >>= rVisible;
         else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_WIDTH ))
             rProp[i].Value >>= rWidth;
+        else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_STYLE ))
+            rProp[i].Value >>= rStyle;
     }
 }
+
+struct ToolboxStyleItem
+{
+    sal_Int16 nBit;
+    const char* attrName;
+};
+
+ToolboxStyleItem Styles[ ] = {
+    { ::com::sun::star::ui::ItemStyle::RADIO_CHECK, ATTRIBUTE_ITEMSTYLE_RADIO },
+    { ::com::sun::star::ui::ItemStyle::ALIGN_LEFT, ATTRIBUTE_ITEMSTYLE_LEFT },
+    { ::com::sun::star::ui::ItemStyle::AUTO_SIZE, ATTRIBUTE_ITEMSTYLE_AUTO },
+    { ::com::sun::star::ui::ItemStyle::REPEAT, ATTRIBUTE_ITEMSTYLE_REPEAT },
+    { ::com::sun::star::ui::ItemStyle::DROPDOWN_ONLY, ATTRIBUTE_ITEMSTYLE_DROPDOWNONLY },
+    { ::com::sun::star::ui::ItemStyle::DROP_DOWN, ATTRIBUTE_ITEMSTYLE_DROPDOWN },
+    { ::com::sun::star::ui::ItemStyle::ICON, ATTRIBUTE_ITEMSTYLE_IMAGE },
+    { ::com::sun::star::ui::ItemStyle::TEXT, ATTRIBUTE_ITEMSTYLE_TEXT },
+};
+
+sal_Int32 nStyleItemEntries = sizeof( Styles ) / sizeof( Styles[ 0 ] );
 
 struct ToolBarEntryProperty
 {
@@ -135,7 +161,8 @@ ToolBarEntryProperty ToolBoxEntries[OReadToolBoxDocumentHandler::TB_XML_ENTRY_CO
     { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_USER              },
     { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_HELPID            },
     { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_ITEMSTYLE         },
-    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_UINAME            }
+    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_UINAME            },
+    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_TOOLTIP           },
 };
 
 OReadToolBoxDocumentHandler::OReadToolBoxDocumentHandler( const Reference< XIndexContainer >& rItemContainer ) :
@@ -145,6 +172,7 @@ OReadToolBoxDocumentHandler::OReadToolBoxDocumentHandler( const Reference< XInde
     m_aLabel( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_LABEL )),
     m_aStyle( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_STYLE )),
     m_aHelpURL( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_HELPURL )),
+    m_aTooltip( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TOOLTIP )),
     m_aIsVisible( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_VISIBLE )),
     m_aCommandURL( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_COMMANDURL ))
  {
@@ -179,6 +207,8 @@ OReadToolBoxDocumentHandler::OReadToolBoxDocumentHandler( const Reference< XInde
     m_nHashCode_Style_DropDown      = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_DROPDOWN ).hashCode();
     m_nHashCode_Style_Repeat        = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_REPEAT ).hashCode();
     m_nHashCode_Style_DropDownOnly  = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_DROPDOWNONLY ).hashCode();
+    m_nHashCode_Style_Text  = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_TEXT ).hashCode();
+    m_nHashCode_Style_Image  = ::rtl::OUString::createFromAscii( ATTRIBUTE_ITEMSTYLE_IMAGE ).hashCode();
 
     m_bToolBarStartFound            = sal_False;
     m_bToolBarEndFound              = sal_False;
@@ -298,6 +328,7 @@ throw(  SAXException, RuntimeException )
                 ::rtl::OUString        aLabel;
                 ::rtl::OUString        aCommandURL;
                 ::rtl::OUString        aHelpURL;
+                ::rtl::OUString        aTooltip;
                 ::rtl::OUString        aBitmapName;
                 sal_uInt16      nItemBits( 0 );
                 sal_uInt16      nWidth( 0 );
@@ -369,6 +400,12 @@ throw(  SAXException, RuntimeException )
                             }
                             break;
 
+                            case TB_ATTRIBUTE_TOOLTIP:
+                            {
+                                aTooltip = xAttribs->getValueByIndex( n );
+                            }
+                            break;
+
                             case TB_ATTRIBUTE_STYLE:
                             {
                                 // read space seperated item style list
@@ -393,6 +430,12 @@ throw(  SAXException, RuntimeException )
                                             nItemBits |= ::com::sun::star::ui::ItemStyle::REPEAT;
                                         else if ( nHashCode == m_nHashCode_Style_DropDownOnly )
                                             nItemBits |= ::com::sun::star::ui::ItemStyle::DROPDOWN_ONLY;
+                                        else if ( nHashCode == m_nHashCode_Style_DropDown )
+                                            nItemBits |= ::com::sun::star::ui::ItemStyle::DROP_DOWN;
+                                        else if ( nHashCode == m_nHashCode_Style_Text )
+                                            nItemBits |= ::com::sun::star::ui::ItemStyle::TEXT;
+                                        else if ( nHashCode == m_nHashCode_Style_Image )
+                                            nItemBits |= ::com::sun::star::ui::ItemStyle::ICON;
                                     }
                                 }
                                 while ( nIndex >= 0 );
@@ -414,13 +457,14 @@ throw(  SAXException, RuntimeException )
 
                 if ( aCommandURL.getLength() > 0 )
                 {
-                    Sequence< PropertyValue > aToolbarItemProp( 6 );
+                    Sequence< PropertyValue > aToolbarItemProp( 7 );
                     aToolbarItemProp[0].Name = m_aCommandURL;
                     aToolbarItemProp[1].Name = m_aHelpURL;
                     aToolbarItemProp[2].Name = m_aLabel;
                     aToolbarItemProp[3].Name = m_aType;
                     aToolbarItemProp[4].Name = m_aStyle;
                     aToolbarItemProp[5].Name = m_aIsVisible;
+                    aToolbarItemProp[6].Name = m_aTooltip;
 
                     aToolbarItemProp[0].Value <<= aCommandURL;
                     aToolbarItemProp[1].Value <<= aHelpURL;
@@ -428,6 +472,7 @@ throw(  SAXException, RuntimeException )
                     aToolbarItemProp[3].Value = makeAny( ::com::sun::star::ui::ItemType::DEFAULT );
                     aToolbarItemProp[4].Value <<= nItemBits;
                     aToolbarItemProp[5].Value <<= bVisible;
+                    aToolbarItemProp[6].Value <<= aTooltip;
 
                     m_rItemContainer->insertByIndex( m_rItemContainer->getCount(), makeAny( aToolbarItemProp ) );
                 }
@@ -718,13 +763,15 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxDocument() throw
             ::rtl::OUString    aCommandURL;
             ::rtl::OUString    aLabel;
             ::rtl::OUString    aHelpURL;
+            ::rtl::OUString    aTooltip;
             sal_Bool    bVisible( sal_True );
             sal_Int16   nType( ::com::sun::star::ui::ItemType::DEFAULT );
             sal_Int16   nWidth( 0 );
+            sal_Int16   nStyle( 0 );
 
-            ExtractToolbarParameters( aProps, aCommandURL, aLabel, aHelpURL, nWidth, bVisible, nType );
+            ExtractToolbarParameters( aProps, aCommandURL, aLabel, aHelpURL, aTooltip, nStyle, nWidth, bVisible, nType );
             if ( nType == ::com::sun::star::ui::ItemType::DEFAULT )
-                WriteToolBoxItem( aCommandURL, aLabel, aHelpURL, nWidth, bVisible );
+                WriteToolBoxItem( aCommandURL, aLabel, aHelpURL, aTooltip, nStyle, nWidth, bVisible );
             else if ( nType == ::com::sun::star::ui::ItemType::SEPARATOR_SPACE )
                 WriteToolBoxSpace();
             else if ( nType == ::com::sun::star::ui::ItemType::SEPARATOR_LINE )
@@ -748,6 +795,8 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxItem(
     const ::rtl::OUString& rCommandURL,
     const ::rtl::OUString& rLabel,
     const ::rtl::OUString& rHelpURL,
+    const ::rtl::OUString& rTooltip,
+    sal_Int16       nStyle,
     sal_Int16       nWidth,
     sal_Bool        bVisible )
 throw ( SAXException, RuntimeException )
@@ -783,6 +832,32 @@ throw ( SAXException, RuntimeException )
         pList->AddAttribute( m_aXMLToolbarNS + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_HELPID )),
                              m_aAttributeType,
                              rHelpURL );
+    }
+
+    if ( rTooltip.getLength() > 0 )
+    {
+        pList->AddAttribute( m_aXMLToolbarNS + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_TOOLTIP )),
+                             m_aAttributeType,
+                             rTooltip );
+    }
+
+    if ( nStyle > 0 )
+    {
+        rtl::OUString aValue;
+        ToolboxStyleItem* pStyle = Styles;
+
+        for ( sal_Int32 nIndex = 0; nIndex < nStyleItemEntries; ++nIndex, ++pStyle )
+        {
+            if ( nStyle & pStyle->nBit )
+            {
+                if ( aValue.getLength() )
+                    aValue = aValue.concat( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(" ") ) );
+                aValue += rtl::OUString::createFromAscii( pStyle->attrName );
+            }
+        }
+        pList->AddAttribute( m_aXMLToolbarNS + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ITEMSTYLE )),
+                             m_aAttributeType,
+                             aValue );
     }
 
     if ( nWidth > 0 )

@@ -156,7 +156,7 @@
     </node>
   </node>
   <node oor:name="RegisteredNames">
-    <node oor:name="Bibliography" oor:op="replace">
+    <node oor:name="org.openoffice.Bibliography" oor:op="replace">
         <prop oor:name="Location" oor:type="xs:string">
             <value>$(userurl)/database/biblio.odb</value>
         </prop>
