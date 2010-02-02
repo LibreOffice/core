@@ -199,7 +199,7 @@ public:
 
     SdrObject*      CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rectangle& rRect, BOOL bInsert=FALSE);
     SdrObject*      CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert);
-    SdrObject*      GetPresObj(PresObjKind eObjKind, int nIndex = 1 );
+    SdrObject*      GetPresObj(PresObjKind eObjKind, int nIndex = 1, bool bFuzzySearch = false );
     PresObjKind     GetPresObjKind(SdrObject* pObj) const;
     String          GetPresObjText(PresObjKind eObjKind) const;
     SfxStyleSheet*  GetStyleSheetForPresObj(PresObjKind eObjKind) const;

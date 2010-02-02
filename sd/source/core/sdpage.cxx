@@ -162,18 +162,40 @@ SdPage::~SdPage()
 }
 
 /** returns the nIndex'th object from the given PresObjKind, index starts with 1 */
-SdrObject* SdPage::GetPresObj(PresObjKind eObjKind, int nIndex )
+SdrObject* SdPage::GetPresObj(PresObjKind eObjKind, int nIndex, bool bFuzzySearch /* = false */ )
 {
     int nObjFound = 0;          // index of the searched object
     SdrObject* pObj = 0;
     while( (pObj = maPresentationShapeList.getNextShape(pObj)) != 0 )
     {
         SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(*pObj);
-        if( pInfo && (pInfo->mePresObjKind == eObjKind) )
+        if( pInfo )
         {
-            nObjFound++;    // found one
-            if( nObjFound == nIndex )
-                return pObj;
+            bool bFound = false;
+            if( pInfo->mePresObjKind == eObjKind )
+            {
+                bFound = true;
+            }
+            else if( bFuzzySearch && (eObjKind == PRESOBJ_OUTLINE) )
+            {
+                switch( pInfo->mePresObjKind )
+                {
+                case PRESOBJ_GRAPHIC:
+                case PRESOBJ_OBJECT:
+                case PRESOBJ_CHART:
+                case PRESOBJ_ORGCHART:
+                case PRESOBJ_TABLE:
+                case PRESOBJ_IMAGE:
+                    bFound = TRUE;
+                    break;
+                }
+            }
+            if( bFound )
+            {
+                nObjFound++;    // found one
+                if( nObjFound == nIndex )
+                    return pObj;
+            }
         }
     }
 
@@ -1357,7 +1379,7 @@ void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDescripto
     for( i = 0; (i < PRESOBJ_MAX) && (rDescriptor.meKind[i] != PRESOBJ_NONE); i++ )
     {
         PresObjKind eKind = rDescriptor.meKind[i];
-        SdrObject* pObj = rPage.GetPresObj( eKind, PresObjIndex[eKind] );
+        SdrObject* pObj = rPage.GetPresObj( eKind, PresObjIndex[eKind], true );
         if( pObj )
         {
             PresObjIndex[eKind]++; // on next search for eKind, find next shape with same eKind

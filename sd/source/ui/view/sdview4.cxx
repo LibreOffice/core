@@ -123,6 +123,8 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         const bool bIsGraphic = pPickObj->ISA( SdrGrafObj );
         if( bIsGraphic || pObj->IsEmptyPresObj() )
         {
+            SdPage* pPage = (SdPage*) pPickObj->GetPage();
+
             if( bIsGraphic )
             {
                 // Das Objekt wird mit der Bitmap gefuellt
@@ -147,9 +149,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
             if( bUndo )
                 BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
 
-            SdPage* pPage = (SdPage*) pPickObj->GetPage();
-
-            if (pPage && pPage->GetPresObjKind(pPickObj) == PRESOBJ_GRAPHIC)
+            if (pPage && pPage->IsPresObj(pPickObj))
             {
                 // Neues PresObj in die Liste eintragen
                 pNewGrafObj->SetUserCall(pPickObj->GetUserCall());
