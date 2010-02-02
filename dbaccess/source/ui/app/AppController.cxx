@@ -78,6 +78,7 @@
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
 #include <com/sun/star/sdb/application/DatabaseObjectContainer.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
+#include <com/sun/star/container/XHierarchicalName.hpp>
 /** === end UNO includes === **/
 
 #ifndef _TOOLS_DEBUG_HXX
@@ -2046,14 +2047,27 @@ void OApplicationController::newElementWithPilot( ElementType _eType )
             if ( aHelper->isConnected() )
             {
                 sal_Int32 nCommandType = -1;
-                const ::rtl::OUString sName(getCurrentlySelectedName(nCommandType));
+                const ::rtl::OUString sCurrentSelected( getCurrentlySelectedName( nCommandType ) );
                 Reference< XComponent > xComponent,xDefinition;
                 if ( E_REPORT == _eType )
-                    xComponent = aHelper->newReportWithPilot(xDefinition,nCommandType,sName);
+                    xComponent = aHelper->newReportWithPilot( xDefinition, nCommandType, sCurrentSelected );
                 else
-                    xComponent = aHelper->newFormWithPilot(xDefinition,nCommandType,sName);
+                    xComponent = aHelper->newFormWithPilot( xDefinition, nCommandType, sCurrentSelected );
+                OSL_POSTCOND( xComponent.is() && xDefinition.is(), "OApplicationController::newElementWithPilot:"
+                    "invalid component/docdef!" );
 
-                onDocumentOpened( ::rtl::OUString(), _eType, E_OPEN_DESIGN, xComponent, xDefinition );
+                ::rtl::OUString sName;
+                try
+                {
+                    Reference< XHierarchicalName > xName( xDefinition, UNO_QUERY_THROW );
+                    sName = xName->getHierarchicalName();
+                }
+                catch( const Exception& )
+                {
+                    DBG_UNHANDLED_EXCEPTION();
+                }
+                if ( xComponent.is() && xDefinition.is() )
+                    onDocumentOpened( sName, _eType, E_OPEN_DESIGN, xComponent, xDefinition );
             }
         }
         break;
