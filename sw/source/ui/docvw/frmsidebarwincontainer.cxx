@@ -47,9 +47,9 @@ namespace {
             : mnIndex( nIndex )
         {}
 
-        bool operator < ( const SidebarWinKey& SidebarWinKey ) const
+        bool operator < ( const SidebarWinKey& rSidebarWinKey ) const
         {
-            return mnIndex < SidebarWinKey.mnIndex;
+            return mnIndex < rSidebarWinKey.mnIndex;
         }
     };
 

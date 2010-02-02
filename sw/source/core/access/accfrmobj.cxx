@@ -54,8 +54,8 @@ namespace css = ::com::sun::star;
 namespace sw { namespace access {
 
 SwAccessibleChild::SwAccessibleChild()
-    : mpDrawObj( 0 )
-    , mpFrm( 0 )
+    : mpFrm( 0 )
+    , mpDrawObj( 0 )
     , mpWindow( 0 )
 {}
 

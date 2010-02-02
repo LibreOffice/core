@@ -178,8 +178,6 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrm *pFrm,
     SwAccessibleChild aFrm( pFrm );
     bool bVisibleOnly = aFrm.IsVisibleChildrenOnly();
 
-    uno::Reference < XAccessible > xAcc;
-
     const SwAccessibleChildSList aList( *pFrm, *(GetMap()) );
     SwAccessibleChildSList::const_iterator aIter( aList.begin() );
     while( aIter != aList.end() )
