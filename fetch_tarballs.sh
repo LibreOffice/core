@@ -104,7 +104,7 @@ for i in `cat $1` ; do
         if [ "$tarurl" != "" ]; then
             cd $TARFILE_LOCATION
             if [ ! -f $i ]; then
-                if [ ! -z $wget_ ]; then
+                if [ ! -z $wget ]; then
                     $wget -nv -N $tarurl/$i
                 else
                     echo fetching $i
