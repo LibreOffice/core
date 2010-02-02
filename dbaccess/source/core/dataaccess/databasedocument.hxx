@@ -626,6 +626,14 @@ private:
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_rMediaDescriptor,
                     DocumentGuard& _rDocGuard
                 );
+
+    /** throws an IOException with the message as defined in the RID_STR_ERROR_WHILE_SAVING resource, wrapping
+        the given caught non-IOException error
+    */
+    void        impl_throwIOExceptionCausedBySave_throw(
+                    const ::com::sun::star::uno::Any& i_rError,
+                    const ::rtl::OUString& i_rTargetURL
+                ) const;
 };
 
 /** an extended version of the ModelMethodGuard, which also cares for the initialization state

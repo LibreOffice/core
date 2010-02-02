@@ -923,11 +923,49 @@ void SAL_CALL ODatabaseDocument::store(  ) throw (IOException, RuntimeException)
 {
     DocumentGuard aGuard( *this );
 
-    if ( m_pImpl->getDocFileLocation() == m_pImpl->getURL() )
-        if ( m_pImpl->m_bDocumentReadOnly )
-            throw IOException();
+    ::rtl::OUString sDocumentURL( m_pImpl->getURL() );
+    if ( sDocumentURL.getLength() )
+    {
+        if ( m_pImpl->getDocFileLocation() == m_pImpl->getURL() )
+            if ( m_pImpl->m_bDocumentReadOnly )
+                throw IOException();
 
-    impl_storeAs_throw( m_pImpl->getURL(), m_pImpl->getMediaDescriptor(), SAVE, aGuard );
+        impl_storeAs_throw( m_pImpl->getURL(), m_pImpl->getMediaDescriptor(), SAVE, aGuard );
+        return;
+    }
+
+    // if we have no URL, but did survive the DocumentGuard above, then we've been inited via XLoadable::initNew,
+    // i.e. we're based on a temporary storage
+    OSL_ENSURE( m_pImpl->getDocFileLocation().getLength() == 0, "ODatabaseDocument::store: unexpected URL inconsistency!" );
+
+    try
+    {
+        impl_storeToStorage_throw( m_pImpl->getRootStorage(), m_pImpl->getMediaDescriptor().getPropertyValues(), aGuard );
+    }
+    catch( const Exception& )
+    {
+        Any aError = ::cppu::getCaughtException();
+        if  (   aError.isExtractableTo( ::cppu::UnoType< IOException >::get() )
+            ||  aError.isExtractableTo( ::cppu::UnoType< RuntimeException >::get() )
+            )
+        {
+            // allowed to leave
+            throw;
+        }
+        impl_throwIOExceptionCausedBySave_throw( aError, ::rtl::OUString() );
+    }
+}
+
+// -----------------------------------------------------------------------------
+void ODatabaseDocument::impl_throwIOExceptionCausedBySave_throw( const Any& i_rError, const ::rtl::OUString& i_rTargetURL ) const
+{
+    ::rtl::OUString sErrorMessage = extractExceptionMessage( m_pImpl->m_aContext, i_rError );
+    sErrorMessage = ResourceManager::loadString(
+        RID_STR_ERROR_WHILE_SAVING,
+        "$location$", i_rTargetURL,
+        "$message$", sErrorMessage
+    );
+    throw IOException( sErrorMessage, *const_cast< ODatabaseDocument* >( this ) );
 }
 
 // -----------------------------------------------------------------------------
@@ -1010,13 +1048,7 @@ void ODatabaseDocument::impl_storeAs_throw( const ::rtl::OUString& _rURL, const 
             throw;
         }
 
-        ::rtl::OUString sErrorMessage = extractExceptionMessage( m_pImpl->m_aContext, aError );
-        sErrorMessage = ResourceManager::loadString(
-            RID_STR_ERROR_WHILE_SAVING,
-            "$location$", _rURL,
-            "$message$", sErrorMessage
-        );
-        throw IOException( sErrorMessage, *this );
+        impl_throwIOExceptionCausedBySave_throw( aError, _rURL );
     }
 
     // notify the document event
@@ -1169,16 +1201,7 @@ void SAL_CALL ODatabaseDocument::storeToURL( const ::rtl::OUString& _rURL, const
             throw;
         }
 
-        Exception aExcept;
-        aError >>= aExcept;
-
-        ::rtl::OUString sErrorMessage = extractExceptionMessage( m_pImpl->m_aContext, aError );
-        sErrorMessage = ResourceManager::loadString(
-            RID_STR_ERROR_WHILE_SAVING,
-            "$location$", _rURL,
-            "$message$", sErrorMessage
-        );
-        throw IOException( sErrorMessage, *this );
+        impl_throwIOExceptionCausedBySave_throw( aError, _rURL );
     }
 
     m_aEventNotifier.notifyDocumentEventAsync( "OnSaveToDone", NULL, makeAny( _rURL ) );
