@@ -324,8 +324,9 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
         case PRESOBJ_HANDOUT:
         {
             //Erste Standardseite am SdrPageObj vermerken
-            SdrPage* pFirstPage = ( (SdDrawDocument*) pModel )->GetSdPage(0, PK_STANDARD);
-            pSdrObj = new SdrPageObj( pFirstPage );
+            // #i105146# We want no content to be displayed for PK_HANDOUT,
+            // so just never set a page as content
+            pSdrObj = new SdrPageObj(0);
             pSdrObj->SetResizeProtect(TRUE);
         }
         break;
@@ -767,28 +768,17 @@ void SdPage::CreateTitleAndLayout(BOOL bInit, BOOL bCreate )
             CalculateHandoutAreas( *static_cast< SdDrawDocument* >(GetModel() ), pMasterPage->GetAutoLayout(), false, aAreas );
 
             const bool bSkip = pMasterPage->GetAutoLayout() == AUTOLAYOUT_HANDOUT3;
-
-            sal_uInt16 nPage = 0;
             std::vector< Rectangle >::iterator iter( aAreas.begin() );
+
             while( iter != aAreas.end() )
             {
                 SdrPageObj* pPageObj = static_cast<SdrPageObj*>(pMasterPage->CreatePresObj(PRESOBJ_HANDOUT, FALSE, (*iter++), TRUE) );
-
-                const sal_uInt16 nDestinationPageNum(2 * nPage + 1);
-
-                if(nDestinationPageNum < pModel->GetPageCount())
-                {
-                    pPageObj->SetReferencedPage(pModel->GetPage(nDestinationPageNum));
-                }
-                else
-                {
-                    pPageObj->SetReferencedPage(0L);
-                }
+                // #i105146# We want no content to be displayed for PK_HANDOUT,
+                // so just never set a page as content
+                pPageObj->SetReferencedPage(0L);
 
                 if( bSkip && iter != aAreas.end() )
                     iter++;
-
-                nPage++;
             }
         }
 
