@@ -777,6 +777,7 @@ class TOOLS_DLLPUBLIC SvMemoryStream : public SvStream
     SvMemoryStream & operator= (const SvMemoryStream&);
 
     friend class SvCacheStream;
+    sal_Size            GetSize() const { return nSize; }
 
 protected:
     sal_Size            nSize;
@@ -819,7 +820,6 @@ public:
 
     virtual void    ResetError();
 
-    sal_Size            GetSize() const { return nSize; }
     sal_Size        GetEndOfData() const { return nEndOfData; }
     const void*     GetData() { Flush(); return pBuf; }
     operator const  void*() { Flush(); return pBuf; }
