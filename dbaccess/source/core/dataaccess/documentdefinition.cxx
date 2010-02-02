@@ -1189,14 +1189,17 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
                 sal_Int32 nCurrentState = m_xEmbeddedObject->getCurrentState();
                 bool bIsActive = ( nCurrentState == EmbedStates::ACTIVE );
 
-                // exception: new-style reports always create a new document when "open" is executed
-                Reference< report::XReportDefinition > xReportDefinition( getComponent(), UNO_QUERY );
-                bool bIsAliveNewStyleReport = ( xReportDefinition.is() && ( bOpen || bOpenForMail ) );
-
-                if ( bIsActive && !bIsAliveNewStyleReport )
+                if ( bIsActive )
                 {
-                    impl_onActivateEmbeddedObject( true );
-                    return makeAny( getComponent() );
+                    // exception: new-style reports always create a new document when "open" is executed
+                    Reference< report::XReportDefinition > xReportDefinition( impl_getComponent_throw( false ), UNO_QUERY );
+                    bool bIsAliveNewStyleReport = ( xReportDefinition.is() && ( bOpen || bOpenForMail ) );
+
+                    if ( !bIsAliveNewStyleReport )
+                    {
+                        impl_onActivateEmbeddedObject( true );
+                        return makeAny( getComponent() );
+                    }
                 }
             }
 
