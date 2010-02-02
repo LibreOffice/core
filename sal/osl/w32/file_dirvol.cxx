@@ -37,6 +37,7 @@
 
 #include "file_url.h"
 #include "file_error.h"
+
 #include "path_helper.hxx"
 
 #include "osl/diagnose.h"
@@ -294,7 +295,7 @@ struct DirectoryItem_Impl
         WIN32_FIND_DATA FindData;
         TCHAR           cDriveString[MAX_PATH];
     };
-    TCHAR           szFullPath[MAX_PATH];
+    rtl_uString*    m_pFullPath;
     BOOL            bFullPathNormalized;
     int             nRefCount;
 };
@@ -313,7 +314,7 @@ struct Directory_Impl
         HANDLE  hDirectory;
         HANDLE  hEnumDrives;
     };
-    TCHAR   szDirectoryPath[MAX_PATH];
+    rtl_uString*    m_pDirectoryPath;
 };
 
 //#####################################################
@@ -398,34 +399,48 @@ typedef struct tagDIRECTORY
 } DIRECTORY, *PDIRECTORY, FAR *LPDIRECTORY;
 
 //#####################################################
-static HANDLE WINAPI OpenDirectory(LPCTSTR lpszPath)
+static HANDLE WINAPI OpenDirectory( rtl_uString* pPath)
 {
-    LPDIRECTORY pDirectory = (LPDIRECTORY)HeapAlloc(GetProcessHeap(), 0, sizeof(DIRECTORY));
+    LPDIRECTORY pDirectory = NULL;
 
-    if (pDirectory)
+    if ( pPath )
     {
-        TCHAR   szFileMask[MAX_PATH];
-        int     nLen;
-
-        _tcscpy( szFileMask, lpszPath );
-        nLen = _tcslen( szFileMask );
-
-        if (nLen && szFileMask[nLen-1] != '\\')
-            _tcscat(szFileMask, TEXT("\\*.*"));
-        else
-            _tcscat(szFileMask, TEXT("*.*"));
-
-        pDirectory->hFind = FindFirstFile(szFileMask, &pDirectory->aFirstData);
-
-        if (!IsValidHandle(pDirectory->hFind))
+        sal_uInt32 nLen = rtl_uString_getLength( pPath );
+        if ( nLen )
         {
-            if ( GetLastError() != ERROR_NO_MORE_FILES )
+            TCHAR* pSuffix = 0;
+            sal_uInt32 nSuffLen = 0;
+
+            if ( pPath->buffer[nLen - 1] != L'\\' )
             {
-                HeapFree(GetProcessHeap(), 0, pDirectory);
-                pDirectory = NULL;
+                pSuffix = L"\\*.*";
+                nSuffLen = 4;
+            }
+            else
+            {
+                pSuffix = L"*.*";
+                nSuffLen = 3;
+            }
+
+            TCHAR* szFileMask = reinterpret_cast< TCHAR* >( rtl_allocateMemory( sizeof( TCHAR ) * ( nLen + nSuffLen + 1 ) ) );
+
+            _tcscpy( szFileMask, reinterpret_cast<LPCTSTR>( rtl_uString_getStr( pPath ) ) );
+            _tcscat( szFileMask, pSuffix );
+
+            pDirectory = (LPDIRECTORY)HeapAlloc(GetProcessHeap(), 0, sizeof(DIRECTORY));
+            pDirectory->hFind = FindFirstFile(szFileMask, &pDirectory->aFirstData);
+
+            if (!IsValidHandle(pDirectory->hFind))
+            {
+                if ( GetLastError() != ERROR_NO_MORE_FILES )
+                {
+                    HeapFree(GetProcessHeap(), 0, pDirectory);
+                    pDirectory = NULL;
+                }
             }
         }
     }
+
     return (HANDLE)pDirectory;
 }
 
@@ -502,15 +517,26 @@ static oslFileError osl_openLocalRoot(
         Directory_Impl  *pDirImpl;
 
         pDirImpl = reinterpret_cast<Directory_Impl*>(rtl_allocateMemory( sizeof(Directory_Impl)));
-        _tcscpy( pDirImpl->szDirectoryPath, reinterpret_cast<LPCTSTR>(rtl_uString_getStr(strSysPath)) );
+        ZeroMemory( pDirImpl, sizeof(Directory_Impl) );
+        rtl_uString_newFromString( &pDirImpl->m_pDirectoryPath, strSysPath );
 
         /* Append backslash if neccessary */
 
         /* @@@ToDo
            use function ensure backslash
         */
-        if ( pDirImpl->szDirectoryPath[_tcslen(pDirImpl->szDirectoryPath) - 1] != L'\\' )
-            _tcscat( pDirImpl->szDirectoryPath, L"\\" );
+        sal_uInt32 nLen = rtl_uString_getLength( pDirImpl->m_pDirectoryPath );
+        if ( nLen && pDirImpl->m_pDirectoryPath->buffer[nLen - 1] != L'\\' )
+        {
+            rtl_uString* pCurDir = 0;
+            rtl_uString* pBackSlash = 0;
+
+            rtl_uString_assign( &pCurDir, pDirImpl->m_pDirectoryPath );
+            rtl_uString_newFromStr( &pBackSlash, L"\\" );
+            rtl_uString_newConcat( &pDirImpl->m_pDirectoryPath, pCurDir, pBackSlash );
+            rtl_uString_release( pBackSlash );
+            rtl_uString_release( pCurDir );
+        }
 
         pDirImpl->uType = DIRECTORYTYPE_LOCALROOT;
         pDirImpl->hEnumDrives = OpenLogicalDrivesEnum();
@@ -526,7 +552,16 @@ static oslFileError osl_openLocalRoot(
         else
         {
             if ( pDirImpl )
+            {
+                if ( pDirImpl->m_pDirectoryPath )
+                {
+                    rtl_uString_release( pDirImpl->m_pDirectoryPath );
+                    pDirImpl->m_pDirectoryPath = 0;
+                }
+
                 rtl_freeMemory(pDirImpl);
+                pDirImpl = 0;
+            }
 
             error = oslTranslateFileError( GetLastError() );
         }
@@ -547,22 +582,40 @@ static oslFileError SAL_CALL osl_openFileDirectory(
     *pDirectory = NULL;
 
     Directory_Impl *pDirImpl = reinterpret_cast<Directory_Impl*>(rtl_allocateMemory(sizeof(Directory_Impl)));
-    _tcscpy( pDirImpl->szDirectoryPath, reinterpret_cast<LPCTSTR>(rtl_uString_getStr(strDirectoryPath)) );
+    ZeroMemory( pDirImpl, sizeof(Directory_Impl) );
+    rtl_uString_newFromString( &pDirImpl->m_pDirectoryPath, strDirectoryPath );
 
     /* Append backslash if neccessary */
 
     /* @@@ToDo
        use function ensure backslash
     */
-    if ( pDirImpl->szDirectoryPath[_tcslen(pDirImpl->szDirectoryPath) - 1] != L'\\' )
-        _tcscat( pDirImpl->szDirectoryPath, L"\\" );
+    sal_uInt32 nLen = rtl_uString_getLength( pDirImpl->m_pDirectoryPath );
+    if ( nLen && pDirImpl->m_pDirectoryPath->buffer[nLen - 1] != L'\\' )
+    {
+        rtl_uString* pCurDir = 0;
+        rtl_uString* pBackSlash = 0;
+
+        rtl_uString_assign( &pCurDir, pDirImpl->m_pDirectoryPath );
+        rtl_uString_newFromStr( &pBackSlash, L"\\" );
+        rtl_uString_newConcat( &pDirImpl->m_pDirectoryPath, pCurDir, pBackSlash );
+        rtl_uString_release( pBackSlash );
+        rtl_uString_release( pCurDir );
+    }
+
 
     pDirImpl->uType = DIRECTORYTYPE_FILESYSTEM;
-    pDirImpl->hDirectory = OpenDirectory( pDirImpl->szDirectoryPath );
+    pDirImpl->hDirectory = OpenDirectory( pDirImpl->m_pDirectoryPath );
 
     if ( !pDirImpl->hDirectory )
     {
         error = oslTranslateFileError( GetLastError() );
+
+        if ( pDirImpl->m_pDirectoryPath )
+        {
+            rtl_uString_release( pDirImpl->m_pDirectoryPath );
+            pDirImpl->m_pDirectoryPath = 0;
+        }
 
         rtl_freeMemory(pDirImpl), pDirImpl = 0;
     }
@@ -595,6 +648,7 @@ static oslFileError SAL_CALL osl_openNetworkServer(
         Directory_Impl  *pDirImpl;
 
         pDirImpl = reinterpret_cast<Directory_Impl*>(rtl_allocateMemory(sizeof(Directory_Impl)));
+        ZeroMemory( pDirImpl, sizeof(Directory_Impl) );
         pDirImpl->uType = DIRECTORYTYPE_NETROOT;
         pDirImpl->hDirectory = hEnum;
         *pDirectory = (oslDirectory)pDirImpl;
@@ -612,7 +666,26 @@ static DWORD create_dir_with_callback(
     // user specified callback function. On success
     // the function returns ERROR_SUCCESS else a Win32 error code.
 
-    if (CreateDirectory(reinterpret_cast<LPCTSTR>(dir_path->buffer), NULL))
+    BOOL bCreated = FALSE;
+
+    if ( rtl_uString_getLength( dir_path ) < MAX_PATH - 12 )
+    {
+        /* this is a normal short URL, ".." are acceptable here */
+        bCreated = CreateDirectoryW( reinterpret_cast<LPCWSTR>(rtl_uString_getStr( dir_path )), NULL );
+    }
+    else
+    {
+        /* the long urls can not contain ".." while calling CreateDirectory, no idea why! */
+        ::osl::LongPathBuffer< sal_Unicode > aBuf( MAX_LONG_PATH );
+        sal_uInt32 nNewLen = GetCaseCorrectPathName( reinterpret_cast<LPCTSTR>( rtl_uString_getStr( dir_path ) ),
+                                                      aBuf,
+                                                      aBuf.getBufSizeInSymbols(),
+                                                      sal_False );
+
+        bCreated = CreateDirectoryW( aBuf, NULL );
+    }
+
+    if ( bCreated )
     {
         if (aDirectoryCreationCallbackFunc)
         {
@@ -708,15 +781,34 @@ oslFileError SAL_CALL osl_createDirectory(rtl_uString* strPath)
 
     if ( osl_File_E_None == error )
     {
-        if ( CreateDirectoryW( reinterpret_cast<LPCWSTR>(rtl_uString_getStr( strSysPath )), NULL ) )
-            error = osl_File_E_None;
-/*@@@ToDo
-  The else case is a hack because the ucb or the webtop had some
-  problems with the error code that CreateDirectory returns in
-  case the path is only a logical drive, should be removed!
-*/
+        BOOL bCreated = FALSE;
+
+        if ( rtl_uString_getLength( strSysPath ) < MAX_PATH - 12 )
+        {
+            /* this is a normal short URL, ".." are acceptable here */
+            bCreated = CreateDirectoryW( reinterpret_cast<LPCWSTR>(rtl_uString_getStr( strSysPath )), NULL );
+        }
         else
         {
+            /* the long urls can not contain ".." while calling CreateDirectory, no idea why! */
+            ::osl::LongPathBuffer< sal_Unicode > aBuf( MAX_LONG_PATH );
+            sal_uInt32 nNewLen = GetCaseCorrectPathName( reinterpret_cast<LPCTSTR>( rtl_uString_getStr( strSysPath ) ),
+                                                          aBuf,
+                                                          aBuf.getBufSizeInSymbols(),
+                                                          sal_False );
+
+            bCreated = CreateDirectoryW( aBuf, NULL );
+        }
+
+
+        if ( !bCreated )
+        {
+            /*@@@ToDo
+              The following case is a hack because the ucb or the webtop had some
+              problems with the error code that CreateDirectory returns in
+              case the path is only a logical drive, should be removed!
+            */
+
             const sal_Unicode   *pBuffer = rtl_uString_getStr( strSysPath );
             sal_Int32           nLen = rtl_uString_getLength( strSysPath );
 
@@ -865,6 +957,12 @@ static oslFileError SAL_CALL osl_getNextDrive(
     }
     else
     {
+        if ( pItemImpl->m_pFullPath )
+        {
+            rtl_uString_release( pItemImpl->m_pFullPath );
+            pItemImpl->m_pFullPath = 0;
+        }
+
         rtl_freeMemory( pItemImpl );
         return oslTranslateFileError( GetLastError() );
     }
@@ -898,14 +996,24 @@ static oslFileError SAL_CALL osl_getNextFileItem(
     {
         pItemImpl->uType = DIRECTORYITEM_FILE;
         pItemImpl->nRefCount = 1;
-        _tcscpy( pItemImpl->szFullPath, pDirImpl->szDirectoryPath );
-        _tcscat( pItemImpl->szFullPath, pItemImpl->FindData.cFileName );
+
+        rtl_uString* pTmpFileName = 0;
+        rtl_uString_newFromStr( &pTmpFileName,  pItemImpl->FindData.cFileName );
+        rtl_uString_newConcat( &pItemImpl->m_pFullPath, pDirImpl->m_pDirectoryPath, pTmpFileName );
+        rtl_uString_release( pTmpFileName );
+
         pItemImpl->bFullPathNormalized = FALSE;
         *pItem = (oslDirectoryItem)pItemImpl;
         return osl_File_E_None;
     }
     else
     {
+        if ( pItemImpl->m_pFullPath )
+        {
+            rtl_uString_release( pItemImpl->m_pFullPath );
+            pItemImpl->m_pFullPath = 0;
+        }
+
         rtl_freeMemory( pItemImpl );
         return oslTranslateFileError( GetLastError() );
     }
@@ -964,6 +1072,12 @@ oslFileError SAL_CALL osl_closeDirectory(oslDirectory Directory)
         default:
             OSL_ENSURE( 0, "Invalid directory type" );
             break;
+        }
+
+        if ( pDirImpl->m_pDirectoryPath )
+        {
+            rtl_uString_release( pDirImpl->m_pDirectoryPath );
+            pDirImpl->m_pDirectoryPath = 0;
         }
 
         rtl_freeMemory(pDirImpl);
@@ -1027,8 +1141,7 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
                 pItemImpl->uType = DIRECTORYITEM_SERVER;
 
                 osl_acquireDirectoryItem( (oslDirectoryItem)pItemImpl );
-
-                _tcscpy( pItemImpl->szFullPath, reinterpret_cast<LPCTSTR>(strSysFilePath->buffer) );
+                rtl_uString_newFromString( &pItemImpl->m_pFullPath, strSysFilePath );
 
                 // Assign a title anyway
                 {
@@ -1091,7 +1204,7 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
                 osl_acquireDirectoryItem( (oslDirectoryItem)pItemImpl );
 
                 CopyMemory( &pItemImpl->FindData, &aFindData, sizeof(WIN32_FIND_DATA) );
-                _tcscpy( pItemImpl->szFullPath, reinterpret_cast<LPCTSTR>(rtl_uString_getStr(strSysFilePath)) );
+                rtl_uString_newFromString( &pItemImpl->m_pFullPath, strSysFilePath );
 
                 // MT: This costs 600ms startup time on fast v60x!
                 // GetCaseCorrectPathName( pItemImpl->szFullPath, pItemImpl->szFullPath, sizeof(pItemImpl->szFullPath) );
@@ -1133,7 +1246,16 @@ oslFileError SAL_CALL osl_releaseDirectoryItem( oslDirectoryItem Item )
         return osl_File_E_INVAL;
 
     if ( ! --pItemImpl->nRefCount )
+    {
+        if ( pItemImpl->m_pFullPath )
+        {
+            rtl_uString_release( pItemImpl->m_pFullPath );
+            pItemImpl->m_pFullPath = 0;
+        }
+
         rtl_freeMemory( pItemImpl );
+    }
+
     return osl_File_E_None;
 }
 
@@ -1347,18 +1469,22 @@ static oslFileError get_filesystem_attributes(
     }
     if (is_filesystem_attributes_request(field_mask))
     {
-        WCHAR vn[MAX_PATH];
-        WCHAR fsn[MAX_PATH];
+        /* the following two parameters can not be longer than MAX_PATH+1 */
+        WCHAR vn[MAX_PATH+1];
+        WCHAR fsn[MAX_PATH+1];
+
         DWORD serial;
         DWORD mcl;
         DWORD flags;
 
         LPCTSTR pszPath = reinterpret_cast<LPCTSTR>(path.getStr());
-        if (GetVolumeInformation(pszPath, vn, MAX_PATH, &serial, &mcl, &flags, fsn, MAX_PATH))
+        if (GetVolumeInformation(pszPath, vn, MAX_PATH+1, &serial, &mcl, &flags, fsn, MAX_PATH+1))
         {
+            // Currently sal does not use this value, instead MAX_PATH is used
             pInfo->uValidFields   |= osl_VolumeInfo_Mask_MaxNameLength;
             pInfo->uMaxNameLength  = mcl;
 
+            // Should the uMaxPathLength be set to 32767, "\\?\" prefix allowes it
             pInfo->uValidFields   |= osl_VolumeInfo_Mask_MaxPathLength;
             pInfo->uMaxPathLength  = MAX_PATH;
 
@@ -1561,11 +1687,7 @@ static oslFileError SAL_CALL osl_getServerInfo(
 
     if ( uFieldMask & osl_FileStatus_Mask_FileURL )
     {
-        rtl_uString *ustrSystemPath = NULL;
-
-        rtl_uString_newFromStr( &ustrSystemPath, reinterpret_cast<const sal_Unicode*>(pItemImpl->szFullPath) );
-        osl_getFileURLFromSystemPath( ustrSystemPath, &pStatus->ustrFileURL );
-        rtl_uString_release( ustrSystemPath );
+        osl_getFileURLFromSystemPath( pItemImpl->m_pFullPath, &pStatus->ustrFileURL );
         pStatus->uValidFields |= osl_FileStatus_Mask_FileURL;
     }
     return osl_File_E_None;
@@ -1594,7 +1716,7 @@ oslFileError SAL_CALL osl_getFileStatus(
 
     if ( uFieldMask & osl_FileStatus_Mask_Validate )
     {
-        HANDLE  hFind = FindFirstFile( pItemImpl->szFullPath, &pItemImpl->FindData );
+        HANDLE  hFind = FindFirstFile( reinterpret_cast<LPCTSTR>( rtl_uString_getStr( pItemImpl->m_pFullPath ) ), &pItemImpl->FindData );
 
         if ( hFind != INVALID_HANDLE_VALUE )
             FindClose( hFind );
@@ -1654,28 +1776,30 @@ oslFileError SAL_CALL osl_getFileStatus(
 
     if ( uFieldMask & osl_FileStatus_Mask_LinkTargetURL )
     {
-        rtl_uString *ustrFullPath = NULL;
-
-        rtl_uString_newFromStr( &ustrFullPath, reinterpret_cast<const sal_Unicode*>(pItemImpl->szFullPath) );
-        osl_getFileURLFromSystemPath( ustrFullPath, &pStatus->ustrLinkTargetURL );
-        rtl_uString_release( ustrFullPath );
+        osl_getFileURLFromSystemPath( pItemImpl->m_pFullPath, &pStatus->ustrLinkTargetURL );
 
         pStatus->uValidFields |= osl_FileStatus_Mask_LinkTargetURL;
     }
 
     if ( uFieldMask & osl_FileStatus_Mask_FileURL )
     {
-        rtl_uString *ustrFullPath = NULL;
-
-
         if ( !pItemImpl->bFullPathNormalized )
         {
-            GetCaseCorrectPathName( pItemImpl->szFullPath, pItemImpl->szFullPath, sizeof(pItemImpl->szFullPath) );
-            pItemImpl->bFullPathNormalized = TRUE;
+            sal_uInt32 nLen = rtl_uString_getLength( pItemImpl->m_pFullPath );
+            ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
+            sal_uInt32 nNewLen = GetCaseCorrectPathName( reinterpret_cast<LPCTSTR>( rtl_uString_getStr( pItemImpl->m_pFullPath ) ),
+                                                      aBuffer,
+                                                      aBuffer.getBufSizeInSymbols(),
+                                                      sal_True );
+
+            if ( nNewLen )
+            {
+                rtl_uString_newFromStr( &pItemImpl->m_pFullPath, aBuffer );
+                pItemImpl->bFullPathNormalized = TRUE;
+            }
         }
-        rtl_uString_newFromStr( &ustrFullPath, reinterpret_cast<const sal_Unicode*>(pItemImpl->szFullPath) );
-        osl_getFileURLFromSystemPath( ustrFullPath, &pStatus->ustrFileURL );
-        rtl_uString_release( ustrFullPath );
+
+        osl_getFileURLFromSystemPath( pItemImpl->m_pFullPath, &pStatus->ustrFileURL );
         pStatus->uValidFields |= osl_FileStatus_Mask_FileURL;
     }
 

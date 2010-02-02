@@ -46,6 +46,8 @@
 
 #include "procimpl.h"
 #include "sockimpl.h"
+#include "file_url.h"
+#include "path_helper.hxx"
 #include <rtl/ustrbuf.h>
 #include <rtl/alloc.h>
 
@@ -75,7 +77,7 @@ oslProcess SAL_CALL osl_getProcess(oslProcessIdentifier Ident)
 
     if (hProcess)
     {
-        pProcImpl = rtl_allocateMemory(sizeof(oslProcessImpl));
+        pProcImpl = reinterpret_cast< oslProcessImpl*>( rtl_allocateMemory(sizeof(oslProcessImpl)) );
         pProcImpl->m_hProcess  = hProcess;
         pProcImpl->m_IdProcess = Ident;
     }
@@ -219,19 +221,19 @@ oslProcessError SAL_CALL osl_joinProcessWithTimeout(oslProcess Process, const Ti
  *
  ***************************************************************************/
 
-oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
+extern "C" oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
     rtl_uString ** ppFileURL
 ) SAL_THROW_EXTERN_C()
 {
     oslProcessError result = osl_Process_E_NotFound;
 
-    TCHAR buffer[MAX_PATH];
-    DWORD buflen;
+    ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
+    DWORD buflen = 0;
 
-    if ((buflen = GetModuleFileNameW (0, buffer, MAX_PATH)) > 0)
+    if ((buflen = GetModuleFileNameW (0, aBuffer, aBuffer.getBufSizeInSymbols())) > 0)
     {
         rtl_uString * pAbsPath = 0;
-        rtl_uString_newFromStr_WithLength (&(pAbsPath), buffer, buflen);
+        rtl_uString_newFromStr_WithLength (&(pAbsPath), aBuffer, buflen);
         if (pAbsPath)
         {
             /* Convert from path to url. */
@@ -285,16 +287,16 @@ static rtl_uString ** osl_createCommandArgs_Impl (int argc, char ** argv)
         if (ppArgs[0] != 0)
         {
             /* Ensure absolute path */
-            DWORD dwResult;
-            TCHAR szBuffer[MAX_PATH];
+            ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
+            DWORD dwResult = 0;
 
             dwResult = SearchPath (
-                0, ppArgs[0]->buffer, L".exe", MAX_PATH, szBuffer, 0);
-            if ((0 < dwResult) && (dwResult < MAX_PATH))
+                0, ppArgs[0]->buffer, L".exe", aBuffer.getBufSizeInSymbols(), aBuffer, 0);
+            if ((0 < dwResult) && (dwResult < aBuffer.getBufSizeInSymbols()))
             {
                 /* Replace argv[0] with it's absolute path */
                 rtl_uString_newFromStr_WithLength(
-                    &(ppArgs[0]), szBuffer, dwResult);
+                    &(ppArgs[0]), aBuffer, dwResult);
             }
         }
         if (ppArgs[0] != 0)
@@ -414,24 +416,24 @@ oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *ustrVar, rtl_uString **
  * Current Working Directory.
  ***************************************************************************/
 
-extern oslMutex g_CurrentDirectoryMutex;
+extern "C" oslMutex g_CurrentDirectoryMutex;
 
 oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir )
 {
-    TCHAR   szBuffer[MAX_PATH];
-    DWORD   dwLen;
+    ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
+    DWORD   dwLen = 0;
 
 
     osl_acquireMutex( g_CurrentDirectoryMutex );
-    dwLen = GetCurrentDirectory( sizeof(szBuffer) / sizeof(TCHAR), szBuffer );
+    dwLen = GetCurrentDirectory( aBuffer.getBufSizeInSymbols(), aBuffer );
     osl_releaseMutex( g_CurrentDirectoryMutex );
 
-    if ( dwLen )
+    if ( dwLen && dwLen < aBuffer.getBufSizeInSymbols() )
     {
         oslFileError    eError;
         rtl_uString     *ustrTemp = NULL;;
 
-        rtl_uString_newFromStr_WithLength( &ustrTemp, szBuffer, dwLen );
+        rtl_uString_newFromStr_WithLength( &ustrTemp, aBuffer, dwLen );
         eError = osl_getFileURLFromSystemPath( ustrTemp, pustrWorkingDir );
 
         rtl_uString_release( ustrTemp );
@@ -449,7 +451,7 @@ oslProcessError SAL_CALL osl_getProcessWorkingDir( rtl_uString **pustrWorkingDir
  * Process Locale.
  ***************************************************************************/
 
-extern void _imp_getProcessLocale( rtl_Locale ** ppLocale );
+extern "C" void _imp_getProcessLocale( rtl_Locale ** ppLocale );
 
 static rtl_Locale * g_theProcessLocale = NULL;
 
