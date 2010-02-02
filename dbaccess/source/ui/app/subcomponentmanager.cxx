@@ -51,10 +51,10 @@
 #include <algorithm>
 #include <functional>
 
-//........................................................................
+//......................................................................................................................
 namespace dbaui
 {
-//........................................................................
+//......................................................................................................................
 
     /** === begin UNO using === **/
     using ::com::sun::star::uno::Reference;
@@ -85,13 +85,20 @@ namespace dbaui
     using ::com::sun::star::beans::PropertyChangeEvent;
     /** === end UNO using === **/
 
-    //==============================================================================
+    //==================================================================================================================
     //= helper structs
-    //==============================================================================
+    //==================================================================================================================
     namespace
     {
+        //..............................................................................................................
         struct SubComponentDescriptor
         {
+            /// the name of the sub component, empty if it is yet unsaved
+            ::rtl::OUString sName;
+            /// type of the component - an ElementType value, except for relation design
+            sal_Int32       nComponentType;
+            /// the mode in which the sub component has been opened
+            ElementOpenMode eOpenMode;
             /// the frame which the component resides in. Must not be <NULL/>
             Reference< XFrame >             xFrame;
             /// the controller of the sub component. Must not be <NULL/>
@@ -104,24 +111,31 @@ namespace dbaui
             Reference< XPropertySet >       xDocumentDefinitionProperties;
 
             SubComponentDescriptor()
-                :xFrame()
+                :sName()
+                ,nComponentType( -1 )
+                ,eOpenMode( E_OPEN_NORMAL )
+                ,xFrame()
                 ,xController()
                 ,xModel()
             {
             }
 
-            SubComponentDescriptor( const Reference< XComponent >& _rxComponent )
+            SubComponentDescriptor( const ::rtl::OUString& i_rName, const sal_Int32 i_nComponentType,
+                    const ElementOpenMode i_eOpenMode, const Reference< XComponent >& i_rComponent )
+                :sName( i_rName )
+                ,nComponentType( i_nComponentType )
+                ,eOpenMode( i_eOpenMode )
             {
-                if ( !impl_constructFrom( _rxComponent ) )
+                if ( !impl_constructFrom( i_rComponent ) )
                 {
-                    // _rxComponent is neither a model, nor a controller, nor a frame
+                    // i_rComponent is neither a model, nor a controller, nor a frame
                     // => it must be a css.sdb.DocumentDefinition
-                    Reference< XComponentSupplier > xCompSupp( _rxComponent, UNO_QUERY_THROW );
+                    Reference< XComponentSupplier > xCompSupp( i_rComponent, UNO_QUERY_THROW );
                     Reference< XComponent > xComponent( xCompSupp->getComponent(), UNO_QUERY_THROW );
                     if ( !impl_constructFrom( xComponent ) )
                         throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Illegal component type." ) ), NULL );
-                    xComponentCommandProcessor.set( _rxComponent, UNO_QUERY_THROW );
-                    xDocumentDefinitionProperties.set( _rxComponent, UNO_QUERY_THROW );
+                    xComponentCommandProcessor.set( i_rComponent, UNO_QUERY_THROW );
+                    xDocumentDefinitionProperties.set( i_rComponent, UNO_QUERY_THROW );
                 }
             }
 
@@ -165,6 +179,7 @@ namespace dbaui
             }
         };
 
+        //..............................................................................................................
         struct SelectSubComponent : public ::std::unary_function< SubComponentDescriptor, Reference< XComponent > >
         {
             Reference< XComponent > operator()( const SubComponentDescriptor _desc ) const
@@ -176,55 +191,37 @@ namespace dbaui
             }
         };
 
-        struct SubComponentAccessor
+        //..............................................................................................................
+        typedef ::std::vector< SubComponentDescriptor > SubComponents;
+
+        //..............................................................................................................
+        struct SubComponentMatch : public ::std::unary_function< SubComponentDescriptor, bool >
         {
-            /// the name of the sub component
-            ::rtl::OUString sName;
-            /// type of the component - usually an ElementType value
-            sal_Int32       nComponentType;
-            /// the mode in which the sub component has been opened
-            ElementOpenMode eOpenMode;
-
-            SubComponentAccessor()
-                :sName()
-                ,nComponentType( sal_Int32( E_NONE ) )
-                ,eOpenMode( E_OPEN_NORMAL )
+        public:
+            SubComponentMatch( const ::rtl::OUString& i_rName, const sal_Int32 i_nComponentType,
+                    const ElementOpenMode i_eOpenMode )
+                :m_sName( i_rName )
+                ,m_nComponentType( i_nComponentType )
+                ,m_eOpenMode( i_eOpenMode )
             {
             }
 
-            SubComponentAccessor( const ::rtl::OUString& _rName, const sal_Int32 _nCompType, const ElementOpenMode _eMode )
-                :sName( _rName )
-                ,nComponentType( _nCompType )
-                ,eOpenMode( _eMode )
+            bool operator()( const SubComponentDescriptor& i_rCompareWith ) const
             {
+                return  (   m_sName             ==  i_rCompareWith.sName          )
+                    &&  (   m_nComponentType    ==  i_rCompareWith.nComponentType )
+                    &&  (   m_eOpenMode         ==  i_rCompareWith.eOpenMode      );
             }
+        private:
+            const ::rtl::OUString   m_sName;
+            const sal_Int32         m_nComponentType;
+            const ElementOpenMode   m_eOpenMode;
         };
-
-        struct SubComponentAccessorHash : public ::std::unary_function< SubComponentAccessor, size_t >
-        {
-            size_t operator()( const SubComponentAccessor& _lhs ) const
-            {
-                return _lhs.sName.hashCode() + _lhs.nComponentType + size_t( _lhs.eOpenMode );
-            }
-        };
-        struct SubComponentAccessorEqual : public ::std::binary_function< SubComponentAccessor, SubComponentAccessor, bool >
-        {
-            bool operator()( const SubComponentAccessor& _lhs, const SubComponentAccessor& _rhs ) const
-            {
-                return  (   _lhs.sName          == _rhs.sName           )
-                    &&  (   _lhs.nComponentType == _rhs.nComponentType  )
-                    &&  (   _lhs.eOpenMode      == _rhs.eOpenMode       );
-            }
-        };
-
-        typedef ::std::hash_map< SubComponentAccessor, SubComponentDescriptor, SubComponentAccessorHash, SubComponentAccessorEqual >
-                SubComponentMap;
-
     }
 
-    //==============================================================================
+    //==================================================================================================================
     //= SubComponentManager_Data
-    //==============================================================================
+    //==================================================================================================================
     struct SubComponentManager_Data
     {
         SubComponentManager_Data( OApplicationController& _rController, const ::comphelper::SharedMutex& _rMutex )
@@ -235,35 +232,36 @@ namespace dbaui
 
         OApplicationController&             m_rController;
         mutable ::comphelper::SharedMutex   m_aMutex;
-        SubComponentMap                     m_aComponents;
+        SubComponents                       m_aComponents;
 
         ::osl::Mutex&   getMutex() const { return m_aMutex; }
     };
 
-    //====================================================================
+    //==================================================================================================================
     //= SubComponentManager
-    //====================================================================
-    //--------------------------------------------------------------------
+    //==================================================================================================================
+    //------------------------------------------------------------------------------------------------------------------
     SubComponentManager::SubComponentManager( OApplicationController& _rController, const ::comphelper::SharedMutex& _rMutex )
         :m_pData( new SubComponentManager_Data( _rController, _rMutex ) )
     {
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     SubComponentManager::~SubComponentManager()
     {
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void SubComponentManager::disposing()
     {
         ::osl::MutexGuard aGuard( m_pData->getMutex() );
         m_pData->m_aComponents.clear();
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     namespace
     {
+        //..............................................................................................................
         bool lcl_fallbackToAnotherController( SubComponentDescriptor& _rCompDesc )
         {
             Reference< XController > xFallback;
@@ -301,7 +299,7 @@ namespace dbaui
             return false;
         }
 
-        //----------------------------------------------------------------
+        //..............................................................................................................
         bool lcl_closeComponent( const Reference< XCommandProcessor >& _rxCommandProcessor )
         {
             bool bSuccess = false;
@@ -322,7 +320,7 @@ namespace dbaui
             return bSuccess;
         }
 
-        //----------------------------------------------------------------
+        //..............................................................................................................
         bool lcl_closeComponent( const SubComponentDescriptor& _rComponent )
         {
             if ( _rComponent.xComponentCommandProcessor.is() )
@@ -350,7 +348,7 @@ namespace dbaui
             return bSuccess;
         }
 
-        // -----------------------------------------------------------------------------
+        //..............................................................................................................
         void lcl_notifySubComponentEvent( const SubComponentManager_Data& _rData, const sal_Char* _pAsciiEventName,
                 const SubComponentDescriptor& _rComponent )
         {
@@ -370,7 +368,7 @@ namespace dbaui
         }
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL SubComponentManager::propertyChange( const PropertyChangeEvent& i_rEvent ) throw (RuntimeException)
     {
         if ( i_rEvent.PropertyName != PROPERTY_NAME )
@@ -378,76 +376,66 @@ namespace dbaui
             return;
 
         // find the sub component whose name changed
-        for (   SubComponentMap::iterator comp = m_pData->m_aComponents.begin();
+        for (   SubComponents::iterator comp = m_pData->m_aComponents.begin();
                 comp != m_pData->m_aComponents.end();
                 ++comp
             )
         {
-            if ( comp->second.xDocumentDefinitionProperties != i_rEvent.Source )
+            if ( comp->xDocumentDefinitionProperties != i_rEvent.Source )
                 continue;
 
             ::rtl::OUString sNewName;
             OSL_VERIFY( i_rEvent.NewValue >>= sNewName );
 
-            ::rtl::OUString sOldKnownName( comp->first.sName );
+        #if OSL_DEBUG_LEVEL > 0
+            ::rtl::OUString sOldKnownName( comp->sName );
             ::rtl::OUString sOldName;
             OSL_VERIFY( i_rEvent.OldValue >>= sOldName );
             OSL_ENSURE( sOldName == sOldKnownName, "SubComponentManager::propertyChange: inconsistency in the old names!" );
+        #endif
 
-            // obtain old values
-            SubComponentAccessor aKey( comp->first );
-            SubComponentDescriptor aElement( comp->second );
-
-            // remove old values
-            m_pData->m_aComponents.erase( comp );
-
-            // re-insert under new name
-            aKey.sName = sNewName;
-            m_pData->m_aComponents.insert( SubComponentMap::value_type(
-                aKey, aElement
-            ) ) ;
-
+            comp->sName = sNewName;
             break;
         }
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL SubComponentManager::disposing( const EventObject& _rSource ) throw (RuntimeException)
     {
         ::osl::ClearableMutexGuard aGuard( m_pData->getMutex() );
 
         SubComponentDescriptor aClosedComponent;
 
-        for (   SubComponentMap::iterator comp = m_pData->m_aComponents.begin();
+        for (   SubComponents::iterator comp = m_pData->m_aComponents.begin();
                 comp != m_pData->m_aComponents.end();
                 ++comp
             )
         {
             bool bRemove = false;
 
-            if ( comp->second.xController == _rSource.Source )
+            if ( comp->xController == _rSource.Source )
             {
-                if ( !comp->second.xModel.is() )
+                if ( !comp->xModel.is() )
                 {
                     bRemove = true;
                 }
                 else
                 {
                     // maybe this is just one view to the sub document, and only this view is closed
-                    if ( !lcl_fallbackToAnotherController( comp->second ) )
+                    if ( !lcl_fallbackToAnotherController( *comp ) )
                     {
                         bRemove = true;
                     }
                 }
             }
-            else if ( comp->second.xModel == _rSource.Source )
+            else if ( comp->xModel == _rSource.Source )
             {
                 bRemove = true;
             }
 
             if ( bRemove )
             {
-                aClosedComponent = comp->second;
+                aClosedComponent = *comp;
                 m_pData->m_aComponents.erase( comp );
                 break;
             }
@@ -460,7 +448,7 @@ namespace dbaui
         }
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     Sequence< Reference< XComponent> > SubComponentManager::getSubComponents() const
     {
         ::osl::MutexGuard aGuard( m_pData->getMutex() );
@@ -470,12 +458,12 @@ namespace dbaui
             m_pData->m_aComponents.begin(),
             m_pData->m_aComponents.end(),
             aComponents.getArray(),
-            ::std::compose1( SelectSubComponent(), ::std::select2nd< SubComponentMap::value_type >() )
+            SelectSubComponent()
         );
         return aComponents;
     }
 
-    // -----------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     sal_Bool SubComponentManager::closeSubComponents()
     {
         ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
@@ -483,16 +471,13 @@ namespace dbaui
 
         try
         {
-            typedef ::std::vector< SubComponentAccessor > ComponentAccessors;
-            ComponentAccessors aClosedComponents;
-
-            SubComponentMap aComponents( m_pData->m_aComponents );
-            for (   SubComponentMap::const_iterator comp = aComponents.begin();
-                    comp != aComponents.end();
+            SubComponents aWorkingCopy( m_pData->m_aComponents );
+            for (   SubComponents::const_iterator comp = aWorkingCopy.begin();
+                    comp != aWorkingCopy.end();
                     ++comp
                 )
             {
-                lcl_closeComponent( comp->second );
+                lcl_closeComponent( *comp );
             }
         }
         catch ( const Exception& )
@@ -503,27 +488,35 @@ namespace dbaui
         return empty();
     }
 
-    // -----------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     bool SubComponentManager::empty() const
     {
         ::osl::MutexGuard aGuard( m_pData->getMutex() );
         return m_pData->m_aComponents.empty();
     }
 
-    // -----------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void SubComponentManager::onSubComponentOpened( const ::rtl::OUString&  _rName, const sal_Int32 _nComponentType,
         const ElementOpenMode _eOpenMode, const Reference< XComponent >& _rxComponent )
     {
         ::osl::ClearableMutexGuard aGuard( m_pData->getMutex() );
 
-        // put into map
-        SubComponentAccessor aKey( _rName, _nComponentType, _eOpenMode );
-        SubComponentDescriptor aElement( _rxComponent );
+#if OSL_DEBUG_LEVEL > 0
+        if ( _rName.getLength() )
+        {
+            // check there does not already exist such a component
+            SubComponents::const_iterator existentPos = ::std::find_if(
+                m_pData->m_aComponents.begin(),
+                m_pData->m_aComponents.end(),
+                SubComponentMatch( _rName, _nComponentType, _eOpenMode )
+            );
+            OSL_ENSURE( existentPos == m_pData->m_aComponents.end(), "already existent!" );
+        }
+#endif
+        SubComponentDescriptor aElement( _rName, _nComponentType, _eOpenMode, _rxComponent );
         ENSURE_OR_THROW( aElement.xModel.is() || aElement.xController.is(), "illegal component" );
 
-        m_pData->m_aComponents.insert( SubComponentMap::value_type(
-            aKey, aElement
-        ) ) ;
+        m_pData->m_aComponents.push_back( aElement );
 
         // add as listener
         if ( aElement.xController.is() )
@@ -538,73 +531,77 @@ namespace dbaui
         lcl_notifySubComponentEvent( *m_pData, "OnSubComponentOpened", aElement );
     }
 
-    // -----------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     bool SubComponentManager::activateSubFrame( const ::rtl::OUString& _rName, const sal_Int32 _nComponentType, const ElementOpenMode _eOpenMode ) const
     {
         ::osl::MutexGuard aGuard( m_pData->getMutex() );
 
-        SubComponentAccessor aKey( _rName, _nComponentType, _eOpenMode );
-        SubComponentMap::const_iterator pos = m_pData->m_aComponents.find( aKey );
+        SubComponents::const_iterator pos = ::std::find_if(
+            m_pData->m_aComponents.begin(),
+            m_pData->m_aComponents.end(),
+            SubComponentMatch( _rName, _nComponentType, _eOpenMode )
+        );
         if ( pos == m_pData->m_aComponents.end() )
             // no component with this name/type/open mode
             return false;
 
-        const Reference< XFrame > xFrame( pos->second.xFrame, UNO_SET_THROW );
+        const Reference< XFrame > xFrame( pos->xFrame, UNO_SET_THROW );
         const Reference< XTopWindow > xTopWindow( xFrame->getContainerWindow(), UNO_QUERY_THROW );
         xTopWindow->toFront();
 
         return true;
     }
 
-    // -----------------------------------------------------------------------------
-    bool SubComponentManager::closeSubFrames( const ::rtl::OUString& _rName, const sal_Int32 _nComponentType )
+    //------------------------------------------------------------------------------------------------------------------
+    bool SubComponentManager::closeSubFrames( const ::rtl::OUString& i_rName, const sal_Int32 _nComponentType )
     {
         ::osl::MutexGuard aGuard( m_pData->getMutex() );
+        ENSURE_OR_RETURN_FALSE( i_rName.getLength(), "SubComponentManager::closeSubFrames: illegal name!" );
 
-        SubComponentMap aWorkingCopy( m_pData->m_aComponents );
-        for (   SubComponentMap::const_iterator comp = aWorkingCopy.begin();
+        SubComponents aWorkingCopy( m_pData->m_aComponents );
+        for (   SubComponents::const_iterator comp = aWorkingCopy.begin();
                 comp != aWorkingCopy.end();
                 ++comp
             )
         {
-            if ( ( comp->first.sName != _rName ) || ( comp->first.nComponentType != _nComponentType ) )
+            if ( ( comp->sName != i_rName ) || ( comp->nComponentType != _nComponentType ) )
                 continue;
 
-            if ( !lcl_closeComponent( comp->second ) )
+            if ( !lcl_closeComponent( *comp ) )
                 return false;
         }
 
         return true;
     }
 
-    // -----------------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     bool SubComponentManager::lookupSubComponent( const Reference< XComponent >& i_rComponent,
             ::rtl::OUString& o_rName, sal_Int32& o_rComponentType )
     {
-        for (   SubComponentMap::const_iterator comp = m_pData->m_aComponents.begin();
+        for (   SubComponents::const_iterator comp = m_pData->m_aComponents.begin();
                 comp != m_pData->m_aComponents.end();
                 ++comp
             )
         {
-            if  (   (   comp->second.xModel.is()
-                    &&  ( comp->second.xModel == i_rComponent )
+            if  (   (   comp->xModel.is()
+                    &&  ( comp->xModel == i_rComponent )
                     )
-                ||  (   comp->second.xController.is()
-                    &&  ( comp->second.xController == i_rComponent )
+                ||  (   comp->xController.is()
+                    &&  ( comp->xController == i_rComponent )
                     )
-                ||  (   comp->second.xFrame.is()
-                    &&  ( comp->second.xFrame == i_rComponent )
+                ||  (   comp->xFrame.is()
+                    &&  ( comp->xFrame == i_rComponent )
                     )
                 )
             {
-                o_rName = comp->first.sName;
-                o_rComponentType = comp->first.nComponentType;
+                o_rName = comp->sName;
+                o_rComponentType = comp->nComponentType;
                 return true;
             }
         }
         return false;
     }
 
-//........................................................................
+//......................................................................................................................
 } // namespace dbaui
-//........................................................................
+//......................................................................................................................

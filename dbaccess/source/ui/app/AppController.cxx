@@ -1938,14 +1938,17 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
     case E_REPORT:
     case E_FORM:
     {
-        ::std::auto_ptr< OLinkedDocumentsAccess > aHelper = getDocumentsAccess( _eType );
-        if ( !aHelper->isConnected() )
-            break;
+        if ( !m_pSubComponentManager->activateSubFrame( _sName, _eType, _eOpenMode ) )
+        {
+            ::std::auto_ptr< OLinkedDocumentsAccess > aHelper = getDocumentsAccess( _eType );
+            if ( !aHelper->isConnected() )
+                break;
 
-        Reference< XComponent > xDefinition;
-        xRet = aHelper->open( _sName, xDefinition, _eOpenMode, _rAdditionalArguments );
+            Reference< XComponent > xDefinition;
+            xRet = aHelper->open( _sName, xDefinition, _eOpenMode, _rAdditionalArguments );
 
-        onDocumentOpened( _sName, _eType, _eOpenMode, xRet, xDefinition );
+            onDocumentOpened( _sName, _eType, _eOpenMode, xRet, xDefinition );
+        }
     }
     break;
 
