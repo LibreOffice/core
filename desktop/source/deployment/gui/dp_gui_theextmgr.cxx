@@ -71,14 +71,6 @@ TheExtensionManager::TheExtensionManager( Window *pParent,
     m_pExtMgrDialog( NULL ),
     m_pUpdReqDialog( NULL )
 {
-    if ( dp_misc::office_is_running() )
-    {
-        m_xDesktop.set( xContext->getServiceManager()->createInstanceWithContext(
-                            OUSTR("com.sun.star.frame.Desktop"), xContext ), uno::UNO_QUERY );
-        if ( m_xDesktop.is() )
-            m_xDesktop->addTerminateListener( this );
-    }
-
     m_sPackageManagers.realloc(2);
     m_sPackageManagers[0] = deployment::thePackageManagerFactory::get( m_xContext )->getPackageManager( OUSTR("user") );
     m_sPackageManagers[1] = deployment::thePackageManagerFactory::get( m_xContext )->getPackageManager( OUSTR("shared") );;
@@ -114,6 +106,16 @@ TheExtensionManager::TheExtensionManager( Window *pParent,
      }
     catch ( uno::Exception& )
     {}
+
+    if ( dp_misc::office_is_running() )
+    {
+        // the registration should be done after the construction has been ended
+        // otherwise an exception prevents object creation, but it is registered as a listener
+        m_xDesktop.set( xContext->getServiceManager()->createInstanceWithContext(
+                            OUSTR("com.sun.star.frame.Desktop"), xContext ), uno::UNO_QUERY );
+        if ( m_xDesktop.is() )
+            m_xDesktop->addTerminateListener( this );
+    }
 }
 
 //------------------------------------------------------------------------------
