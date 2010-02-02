@@ -34,8 +34,8 @@
 #ifndef _CPPUHELPER_PROPSHLP_HXX
 #include <cppuhelper/propshlp.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
-#include <cppuhelper/implbase3.hxx>
+#ifndef _CPPUHELPER_IMPLBASE4_HXX_
+#include <cppuhelper/implbase4.hxx>
 #endif
 #ifndef DBA_CONTENTHELPER_HXX
 #include "ContentHelper.hxx"
@@ -66,6 +66,7 @@
 #endif
 #include <com/sun/star/sdb/XSubDocument.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
+#include <com/sun/star/container/XHierarchicalName.hpp>
 
 namespace comphelper
 {
@@ -84,9 +85,10 @@ namespace dbaccess
 //=                   document
 //==========================================================================
 
-typedef ::cppu::ImplHelper3 <   ::com::sun::star::embed::XComponentSupplier
+typedef ::cppu::ImplHelper4 <   ::com::sun::star::embed::XComponentSupplier
                             ,   ::com::sun::star::sdb::XSubDocument
                             ,   ::com::sun::star::util::XCloseListener
+                            ,   ::com::sun::star::container::XHierarchicalName
                             >   ODocumentDefinition_Base;
 
 class ODocumentDefinition
@@ -151,6 +153,10 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL openDesign(  ) throw (::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL store(  ) throw (::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL close(  ) throw (::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    // XHierarchicalName
+    virtual ::rtl::OUString SAL_CALL getHierarchicalName(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL composeHierarchicalName( const ::rtl::OUString& aRelativeName ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
 
 // OPropertySetHelper
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();

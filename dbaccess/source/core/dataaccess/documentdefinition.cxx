@@ -2162,6 +2162,22 @@ void SAL_CALL ODocumentDefinition::store(  ) throw (WrappedTargetException, Runt
     return bSuccess;
 }
 
+// -----------------------------------------------------------------------------
+::rtl::OUString SAL_CALL ODocumentDefinition::getHierarchicalName() throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    return impl_getHierarchicalName( false );
+}
+
+// -----------------------------------------------------------------------------
+::rtl::OUString SAL_CALL ODocumentDefinition::composeHierarchicalName( const ::rtl::OUString& i_rRelativeName ) throw (IllegalArgumentException, NoSupportException, RuntimeException)
+{
+    ::rtl::OUStringBuffer aBuffer;
+    aBuffer.append( getHierarchicalName() );
+    aBuffer.append( sal_Unicode( '/' ) );
+    aBuffer.append( i_rRelativeName );
+    return aBuffer.makeStringAndClear();
+}
 
 // -----------------------------------------------------------------------------
 void SAL_CALL ODocumentDefinition::rename( const ::rtl::OUString& _rNewName ) throw (SQLException, ElementExistException, RuntimeException)
