@@ -490,7 +490,7 @@ SfxItemSet*  SdModule::CreateItemSet( USHORT nSlot )
         nMetric = (FieldUnit)pOptions->GetMetric();
 
     if( nMetric == (FieldUnit)0xffff )
-        nMetric = GetModuleFieldUnit();
+        nMetric = GetFieldUnit();
 
     pRet->Put( SfxUInt16Item( SID_ATTR_METRIC, (UINT16)nMetric ) );
 
