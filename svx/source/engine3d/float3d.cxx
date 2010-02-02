@@ -307,7 +307,7 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
     FreeResource();
 
     // Metrik einstellen
-    eFUnit = pInBindings->GetDispatcher()->GetModule()->GetModuleFieldUnit();
+    eFUnit = pInBindings->GetDispatcher()->GetModule()->GetFieldUnit();
 
     aMtrDepth.SetUnit( eFUnit );
     aMtrDistance.SetUnit( eFUnit );

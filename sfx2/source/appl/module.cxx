@@ -413,13 +413,28 @@ SfxModule* SfxModule::GetActiveModule( SfxViewFrame* pFrame )
     return pSh ? pSh->GetModule() : 0;
 }
 
-FieldUnit SfxModule::GetModuleFieldUnit() const
+FieldUnit SfxModule::GetCurrentFieldUnit()
 {
     FieldUnit eUnit = FUNIT_INCH;
-    const SfxPoolItem* _pItem = GetItem( SID_ATTR_METRIC );
-    if ( _pItem )
-        eUnit = (FieldUnit)( (SfxUInt16Item*)_pItem )->GetValue();
+    SfxModule* pModule = GetActiveModule();
+    if ( pModule )
+    {
+        const SfxPoolItem* pItem = pModule->GetItem( SID_ATTR_METRIC );
+        DBG_ASSERT( pItem, "GetFieldUnit(): no item" );
+        if ( pItem )
+            eUnit = (FieldUnit)( (SfxUInt16Item*)pItem )->GetValue();
+    }
     else
         DBG_ERRORFILE( "GetModuleFieldUnit(): no module found" );
+    return eUnit;
+}
+
+FieldUnit SfxModule::GetFieldUnit() const
+{
+    FieldUnit eUnit = FUNIT_INCH;
+    const SfxPoolItem* pItem = GetItem( SID_ATTR_METRIC );
+    DBG_ASSERT( pItem, "GetFieldUnit(): no item" );
+    if ( pItem )
+        eUnit = (FieldUnit)( (SfxUInt16Item*)pItem )->GetValue();
     return eUnit;
 }

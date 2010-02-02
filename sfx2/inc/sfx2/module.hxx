@@ -97,7 +97,8 @@ public:
     BOOL                        IsActive() const;
 
     static SfxModule*           GetActiveModule( SfxViewFrame* pFrame=NULL );
-    FieldUnit                   GetModuleFieldUnit() const;
+    static FieldUnit            GetCurrentFieldUnit();
+    FieldUnit                   GetFieldUnit() const;
 
 //#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE static SfxModuleArr_Impl& GetModules_Impl();

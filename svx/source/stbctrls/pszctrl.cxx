@@ -81,7 +81,7 @@
 String SvxPosSizeStatusBarControl::GetMetricStr_Impl( long nVal )
 {
     // Applikations-Metrik besorgen und setzen
-    FieldUnit eOutUnit = SfxModule::GetActiveModule()->GetModuleFieldUnit();
+    FieldUnit eOutUnit = SfxModule::GetCurrentFieldUnit();
     FieldUnit eInUnit = FUNIT_100TH_MM;
 
     String sMetric;

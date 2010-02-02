@@ -874,7 +874,7 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx )
 IMPL_LINK( SvxSuperContourDlg, MousePosHdl, ContourWindow*, pWnd )
 {
     String aStr;
-    const FieldUnit eFieldUnit = GetBindings().GetDispatcher()->GetModule()->GetModuleFieldUnit();
+    const FieldUnit eFieldUnit = GetBindings().GetDispatcher()->GetModule()->GetFieldUnit();
     const Point& rMousePos = pWnd->GetMousePos();
     LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
     const sal_Unicode cSep = aLocaleWrapper.getNumDecimalSep().GetChar(0);
@@ -897,7 +897,7 @@ IMPL_LINK( SvxSuperContourDlg, MousePosHdl, ContourWindow*, pWnd )
 IMPL_LINK( SvxSuperContourDlg, GraphSizeHdl, ContourWindow*, pWnd )
 {
     String aStr;
-    const FieldUnit eFieldUnit = GetBindings().GetDispatcher()->GetModule()->GetModuleFieldUnit();
+    const FieldUnit eFieldUnit = GetBindings().GetDispatcher()->GetModule()->GetFieldUnit();
     const Size& rSize = pWnd->GetGraphicSize();
     LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
     const sal_Unicode cSep = aLocaleWrapper.getNumDecimalSep().GetChar(0);
