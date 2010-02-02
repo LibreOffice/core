@@ -95,7 +95,7 @@
 #include "ww8par2.hxx"
 #include "writerhelper.hxx"
 #include "fields.hxx"
-#include <svtools/fltrcfg.hxx>
+#include <unotools/fltrcfg.hxx>
 
 #include <algorithm> // #i24377#
 

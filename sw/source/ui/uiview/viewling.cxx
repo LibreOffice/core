@@ -1062,7 +1062,7 @@ BOOL SwView::ExecFieldPopup( const Point& rPt, IFieldmark *fieldBM )
     aFldDlg.SetPosPixel(pEditWin->OutputToScreenPixel(aPixPos));
 
     /*short ret=*/aFldDlg.Execute();
-    int selection=aFldDlg.getSelection();
+    sal_Int32 selection=aFldDlg.getSelection();
     if (selection>=0) {
         (*fieldBM->GetParameters())[::rtl::OUString::createFromAscii(ODF_FORMDROPDOWN_RESULT)] = makeAny(selection);
     }
