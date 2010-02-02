@@ -116,7 +116,7 @@ public:
 
     /// Output the actual headers and footers.
     virtual void WriteHeadersFooters( BYTE nHeadFootFlags,
-            const SwFrmFmt& rFmt, const SwFrmFmt& rLeftFmt, const SwFrmFmt& rFirstPageFmt, BYTE nBreakCode );
+            const SwFrmFmt& rFmt, const SwFrmFmt& rLeftFmt, const SwFrmFmt& rFirstPageFmt );
 
     /// Write the field
     virtual void OutputField( const SwField* pFld, ww::eField eFldType,
@@ -124,7 +124,6 @@ public:
 
     /// Write the data of the form field
     virtual void WriteFormData( const ::sw::mark::IFieldmark& rFieldmark );
-    virtual void WriteHyperlinkData( const ::sw::mark::IFieldmark& rFieldmark );
 
     virtual void DoComboBox(const rtl::OUString &rName,
                     const rtl::OUString &rHelp,
@@ -158,7 +157,7 @@ protected:
 
     virtual void AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, ULONG nLnNum );
 
-    virtual void SectionBreaksAndFrames( const SwTxtNode& /*rNode*/ ) {}
+    virtual void SectionBreaksAndFrames( const SwTxtNode& rNode ) {}
 
     /// Get ready for a new section.
     virtual void PrepareNewPageDesc( const SfxItemSet* pSet,

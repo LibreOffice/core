@@ -319,8 +319,6 @@ DEF4NAME=$(SHL4TARGET)
 
 SHL4STDLIBS= \
     $(ISWLIB) \
-    $(OOXLIB) \
-    $(SAXLIB) \
     $(SVXCORELIB) \
        $(EDITENGLIB) \
     $(MSFILTERLIB) \

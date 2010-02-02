@@ -296,7 +296,9 @@ public:
     wwFont( const String &rFamilyName, FontPitch ePitch, FontFamily eFamily,
         rtl_TextEncoding eChrSet, bool bWrtWW8 );
     bool Write( SvStream *pTableStram ) const;
+#ifdef DOCX
     void WriteDocx( const DocxAttributeOutput* rAttrOutput ) const;
+#endif
     rtl::OUString GetFamilyName() const { return rtl::OUString( msFamilyNm ); }
     friend bool operator < (const wwFont &r1, const wwFont &r2);
 };
@@ -319,7 +321,9 @@ public:
     USHORT GetId(const SvxFontItem& rFont);
     USHORT GetId(const wwFont& rFont);
     void WriteFontTable( SvStream *pTableStream, WW8Fib& pFib );
+#ifdef DOCX
     void WriteFontTable( const DocxAttributeOutput& rAttrOutput );
+#endif
 };
 
 class DrawObj

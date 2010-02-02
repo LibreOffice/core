@@ -4,11 +4,8 @@ MSWORD_1_0 {
                 ExportRTF;
                 ImportDOC;
                 ExportDOC;
-                component_getImplementationEnvironment;
-                component_writeInfo;
-                component_getFactory;
-                SaveOrDelMSVBAStorage_ww8;
-                GetSaveWarningOfMSVBAStorage_ww8;
+                                SaveOrDelMSVBAStorage_ww8;
+                                GetSaveWarningOfMSVBAStorage_ww8;
         local:
                 *;
 };

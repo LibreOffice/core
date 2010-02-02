@@ -79,7 +79,7 @@ bool DocxExportFilter::exportDocument()
         aExport.ExportDocument( true ); // FIXME support exporting selection only
     }
 
-    commitStorage();
+    commit();
 
     // delete the pCurPam
     if ( pCurPam )

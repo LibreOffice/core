@@ -33,7 +33,7 @@
 
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/drawingml/chart/chartconverter.hxx>
-#include <oox/vml/vmldrawing.hxx>
+#include <oox/vml/drawing.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
@@ -48,7 +48,7 @@ public:
     virtual bool        importDocument() { return false; }
     virtual const ::oox::drawingml::Theme* getCurrentTheme() const { return NULL; }
     virtual sal_Int32   getSchemeClr( sal_Int32 ) const { return 0; }
-    virtual ::oox::vml::Drawing* getVmlDrawing() { return NULL; }
+    virtual const ::oox::vml::DrawingPtr getDrawings() { return ::oox::vml::DrawingPtr(); }
     virtual ::oox::drawingml::chart::ChartConverter& getChartConverter() { static ::oox::drawingml::chart::ChartConverter aConverter; return aConverter; }
     virtual const ::oox::drawingml::table::TableStyleListPtr getTableStyles() { return ::oox::drawingml::table::TableStyleListPtr(); }
 
