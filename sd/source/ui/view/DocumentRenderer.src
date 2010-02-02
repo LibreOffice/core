@@ -163,7 +163,7 @@ Resource _STR_IMPRESS_PRINT_UI_OPTIONS
         {
             < "Original colors" ; > ;
             < "Grayscale" ; > ;
-            < "Black & White" ; > ;
+            < "Black & white" ; > ;
         };
     };
     StringArray _STR_IMPRESS_PRINT_UI_QUALITY_CHOICES_HELP
