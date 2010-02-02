@@ -498,6 +498,40 @@ String lcl_GetCellName( sal_Int32 nColumn, sal_Int32 nRow )
     return sCellName;
 }
 
+/** Find the top left or bottom right corner box in given table.
+  Consider nested lines when finding the box.
+
+  @param i_pTable the table
+
+  @param i_bTopLeft if true, find top left box, otherwise find bottom
+         right box
+ */
+
+const SwTableBox* lcl_FindCornerTableBox(const SwTableLines& rTableLines, const bool i_bTopLeft)
+{
+    bool bFirst = true;
+    const SwTableBox* pBox = 0;
+    do
+    {
+        const SwTableLines& rLines(bFirst ? rTableLines : pBox->GetTabLines());
+        bFirst = false;
+        OSL_ASSERT(rLines.Count() != 0);
+        if (rLines.Count() != 0)
+        {
+            const SwTableLine* pLine(rLines[i_bTopLeft ? 0 : rLines.Count() - 1]);
+            OSL_ASSERT(pLine);
+            const SwTableBoxes& rBoxes(pLine->GetTabBoxes());
+            OSL_ASSERT(rBoxes.Count() != 0);
+            pBox = rBoxes[i_bTopLeft ? 0 : rBoxes.Count() - 1];
+            OSL_ASSERT(pBox);
+        }
+        else
+        {
+            pBox = 0;
+        }
+    } while (pBox && !pBox->GetSttNd());
+    return pBox;
+}
 
 /* -----------------21.11.05 14:46-------------------
 
@@ -3306,7 +3340,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
 
                             // hier muessen die Actions aufgehoben werden
                             UnoActionRemoveContext aRemoveContext(pDoc);
-                            SwTableBox* pTLBox = rLines[0]->GetTabBoxes()[0];
+                            const SwTableBox* pTLBox = lcl_FindCornerTableBox(rLines, true);
                             const SwStartNode* pSttNd = pTLBox->GetSttNd();
                             SwPosition aPos(*pSttNd);
                             // Cursor in die obere linke Zelle des Ranges setzen
@@ -3316,7 +3350,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
 
                             SwTableLine* pLastLine = rLines[rLines.Count() - 1];
                             SwTableBoxes &rBoxes = pLastLine->GetTabBoxes();
-                            const SwTableBox* pBRBox = rBoxes[rBoxes.Count() -1];
+                            const SwTableBox* pBRBox = lcl_FindCornerTableBox(rLines, false);
                             pUnoCrsr->SetMark();
                             pUnoCrsr->GetPoint()->nNode = *pBRBox->GetSttNd();
                             pUnoCrsr->Move( fnMoveForward, fnGoNode );
@@ -3501,7 +3535,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
 
                         // hier muessen die Actions aufgehoben werden
                         UnoActionRemoveContext aRemoveContext(pDoc);
-                        SwTableBox* pTLBox = rLines[0]->GetTabBoxes()[0];
+                        const SwTableBox* pTLBox = lcl_FindCornerTableBox(rLines, true);
                         const SwStartNode* pSttNd = pTLBox->GetSttNd();
                         SwPosition aPos(*pSttNd);
                         // Cursor in die obere linke Zelle des Ranges setzen
@@ -3509,11 +3543,11 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
                         pUnoCrsr->Move( fnMoveForward, fnGoNode );
                         pUnoCrsr->SetRemainInSection( sal_False );
 
-                        SwTableLine* pLastLine = rLines[rLines.Count() - 1];
-                        SwTableBoxes &rBoxes = pLastLine->GetTabBoxes();
-                        const SwTableBox* pBRBox = rBoxes[rBoxes.Count() -1];
+                        const SwTableBox* pBRBox = lcl_FindCornerTableBox(rLines, false);
                         pUnoCrsr->SetMark();
-                        pUnoCrsr->GetPoint()->nNode = *pBRBox->GetSttNd();
+                        const SwStartNode* pLastNd = pBRBox->GetSttNd();
+                        pUnoCrsr->GetPoint()->nNode = *pLastNd;
+
                         pUnoCrsr->Move( fnMoveForward, fnGoNode );
                         SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
                         pCrsr->MakeBoxSels();
