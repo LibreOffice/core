@@ -43,6 +43,10 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 #endif
 
+#ifndef __com_sun_star_beans_PropertyValue_idl__
+#include <com/sun/star/beans/PropertyValue.idl>
+#endif
+
 //=============================================================================
 
 module com { module sun { module star { module sheet {
@@ -75,6 +79,36 @@ published service DataPilotDescriptor
     [optional] interface XDataPilotDataLayoutFieldSupplier;
 
     //=========================================================================
+
+    /** specifies parameters to create the data pilot table from a database.
+
+    @see DatabaseImportDescriptor
+    @since OOo 3.3.0
+
+     */
+    [optional, property] sequence< com::sun::star::beans::PropertyValue > ImportDescriptor;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the name of a <type>DataPilotSource</type> implementation
+        for the data pilot table.
+
+    @since OOo 3.3.0
+
+     */
+    [optional, property] string SourceServiceName;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies arguments that are passed to the implementation named by
+        <member>SourceServiceName</member>.
+
+    @since OOo 3.3.0
+
+     */
+    [optional, property] sequence< com::sun::star::beans::PropertyValue > ServiceArguments;
+
+    //-------------------------------------------------------------------------
 
     /** specifies the orientation of the field.
      */
