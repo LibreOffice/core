@@ -91,11 +91,14 @@ public:
     LongPathBuffer( sal_uInt32 nCharNum )
     : m_pBuffer( reinterpret_cast<T*>( rtl_allocateMemory( nCharNum * sizeof( T ) ) ) )
     , m_nCharNum( nCharNum )
-    {}
+    {
+        OSL_ENSURE( m_pBuffer, "Can not allocate the buffer!" );
+    }
 
     ~LongPathBuffer()
     {
-        rtl_freeMemory( m_pBuffer );
+        if ( m_pBuffer )
+            rtl_freeMemory( m_pBuffer );
         m_pBuffer = 0;
     }
 

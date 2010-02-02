@@ -542,8 +542,6 @@ static DWORD GetCaseCorrectPathNameEx(
                 _tcsupr( lpszPath );
         }
 
-        rtl_freeMemory( szFile );
-
         return _tcslen( lpszPath );
 }
 
