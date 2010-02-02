@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.8 $
+# $Revision: 1.8.114.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -47,7 +47,8 @@ SRC1FILES=			images.src			\
                     stdtext.src 		\
                     helptext.src		\
                     units.src		    \
-                    btntext.src
+                    btntext.src         \
+                    print.src
 
 RESLIB1NAME=		$(RESTARGET)
 RESLIB1IMAGES= $(PRJ)$/source/src
