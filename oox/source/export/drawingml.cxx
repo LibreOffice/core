@@ -43,6 +43,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
@@ -50,6 +51,7 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
@@ -66,8 +68,9 @@
 #include <rtl/strbuf.hxx>
 #include <sfx2/app.hxx>
 #include <svl/languageoptions.hxx>
-#include <svx/escherex.hxx>
-#include <svx/svxenum.hxx>
+#include <filter/msfilter/escherex.hxx>
+#include <editeng/svxenum.hxx>
+#include <unotools/fontdefs.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -487,13 +490,13 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic )
         case DOCUMENT_XLSX: pComponent = "xl"; break;
     }
 
-    Reference< XOutputStream > xOutStream = mpFB->openOutputStream( OUStringBuffer()
-                                                                    .appendAscii( pComponent )
-                                                                    .appendAscii( "/media/image" )
-                                                                    .append( (sal_Int32) mnImageCounter )
-                                                                    .appendAscii( sExtension )
-                                                                    .makeStringAndClear(),
-                                                                    sMediaType );
+    Reference< XOutputStream > xOutStream = mpFB->openFragmentStream( OUStringBuffer()
+                                                                      .appendAscii( pComponent )
+                                                                      .appendAscii( "/media/image" )
+                                                                      .append( (sal_Int32) mnImageCounter )
+                                                                      .appendAscii( sExtension )
+                                                                      .makeStringAndClear(),
+                                                                      sMediaType );
     xOutStream->writeBytes( Sequence< sal_Int8 >( (const sal_Int8*) aData, nDataSize ) );
     xOutStream->closeOutput();
 

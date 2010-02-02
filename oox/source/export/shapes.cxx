@@ -69,9 +69,9 @@
 #include <rtl/strbuf.hxx>
 #include <sfx2/app.hxx>
 #include <svl/languageoptions.hxx>
-#include <svx/escherex.hxx>
+#include <filter/msfilter/escherex.hxx>
 #include <svx/svdoashp.hxx>
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include <svx/unoapi.hxx>
 
 using namespace ::com::sun::star;

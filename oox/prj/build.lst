@@ -1,4 +1,4 @@
-oox	oox : vos cppu cppuhelper comphelper sal offapi sax basegfx tools vcl BOOST:boost OPENSSL:openssl NULL
+oox	oox : vos cppu cppuhelper comphelper sal offapi sax basegfx tools svx vcl BOOST:boost OPENSSL:openssl NULL
 oox	oox				usr1	-   all	oox_mkout NULL
 oox	oox\prj				get	-   all	oox_prj NULL
 oox	oox\source\token		nmake	-   all	oox_token NULL
@@ -15,4 +15,5 @@ oox	oox\source\vml			nmake	-   all	oox_vml oox_token NULL
 oox	oox\source\xls			nmake	-   all	oox_xls oox_token NULL
 oox	oox\source\dump			nmake	-   all	oox_dump oox_token NULL
 oox	oox\source\shape		nmake   -   all oox_shape oox_token NULL
-oox	oox\util			nmake   -   all oox_util oox_token oox_helper oox_core oox_ole oox_vml oox_drawingml oox_diagram oox_chart oox_table oox_ppt oox_xls oox_dump oox_shape oox_docprop NULL
+oox	oox\source\export		nmake   -   all oox_export oox_token NULL
+oox	oox\util			nmake   -   all oox_util oox_token oox_helper oox_core oox_ole oox_vml oox_drawingml oox_diagram oox_chart oox_table oox_ppt oox_xls oox_dump oox_export oox_shape oox_docprop NULL
