@@ -155,6 +155,7 @@ namespace dbaui
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::ucb;
     using namespace ::com::sun::star::sdbc;
+    using namespace ::com::sun::star::sdb::application;
     using namespace ::com::sun::star::task;
     using namespace ::svt;
 
@@ -192,17 +193,13 @@ namespace dbaui
     //==================================================================
     DBG_NAME(OLinkedDocumentsAccess)
     //------------------------------------------------------------------
-    OLinkedDocumentsAccess::OLinkedDocumentsAccess(Window* _pDialogParent
-                                                    , const Reference< XFrame >& _rxParentFrame
-                                                    , const Reference< XMultiServiceFactory >& _rxORB
-                                                    , const Reference< XNameAccess >& _rxContainer
-                                                    , const Reference< XConnection>& _xConnection
-                                                    , const ::rtl::OUString& _sDataSourceName
-                                                    )
+    OLinkedDocumentsAccess::OLinkedDocumentsAccess( Window* _pDialogParent, const Reference< XDatabaseDocumentUI >& i_rDocumentUI,
+        const Reference< XMultiServiceFactory >& _rxORB, const Reference< XNameAccess >& _rxContainer,
+        const Reference< XConnection>& _xConnection, const ::rtl::OUString& _sDataSourceName )
         :m_xORB(_rxORB)
         ,m_xDocumentContainer(_rxContainer)
         ,m_xConnection(_xConnection)
-        ,m_xParentFrame(_rxParentFrame)
+        ,m_xDocumentUI( i_rDocumentUI )
         ,m_pDialogParent(_pDialogParent)
         ,m_sDataSourceName(_sDataSourceName)
     {
@@ -277,44 +274,44 @@ namespace dbaui
         Reference< XComponent> xRet;
         try
         {
-            ::svx::ODataAccessDescriptor aDesc;
-            aDesc.setDataSource(m_sDataSourceName);
+            ::comphelper::NamedValueCollection aArgs;
+            aArgs.put( "DataSourceName", m_sDataSourceName );
+
             if ( _rObjectName.getLength() && ( _nCommandType != -1 ) )
             {
-                aDesc[::svx::daCommandType] <<= _nCommandType;
-                aDesc[::svx::daCommand] <<= _rObjectName;
+                aArgs.put( "CommandType", _nCommandType );
+                aArgs.put( "Command", _rObjectName );
             }
             if ( m_xConnection.is() )
-                aDesc[::svx::daConnection] <<= m_xConnection;
+                aArgs.put( "ActiveConnection", m_xConnection );
 
-            Sequence<Any> aSeq = aDesc.createAnySequence();
-            const sal_Int32 nLength = aSeq.getLength();
-            aSeq.realloc(nLength + 1 );
-            PropertyValue aVal;
-            aVal.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentFrame"));
-            aVal.Value <<= m_xParentFrame;
-            aSeq[nLength] <<= aVal;
+            aArgs.put( "DocumentUI", m_xDocumentUI );
 
-            Reference< XJobExecutor > xFormWizard;
+            Reference< XController > xController( m_xDocumentUI, UNO_QUERY_THROW );
+            aArgs.put( "ParentFrame", xController->getFrame() );
+                // (legacy, 'til not all wizards migrated to the DocumentUI parameter)
+
+            Reference< XJobExecutor > xWizard;
             {
                 WaitObject aWaitCursor( m_pDialogParent );
-                xFormWizard.set(m_xORB->createInstanceWithArguments(::rtl::OUString::createFromAscii(_pWizardService),aSeq),UNO_QUERY);
+                xWizard.set( m_xORB->createInstanceWithArguments(
+                    ::rtl::OUString::createFromAscii(_pWizardService),
+                    aArgs.getWrappedPropertyValues()
+                ), UNO_QUERY );
             }
-            if ( xFormWizard.is() )
+
+            if ( xWizard.is() )
             {
-                xFormWizard->trigger(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("start")));
-                Reference<XPropertySet> xProp(xFormWizard,UNO_QUERY);
-                if ( xProp.is() )
+                xWizard->trigger(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("start")));
+                Reference<XPropertySet> xProp( xWizard, UNO_QUERY_THROW );
+                Reference<XPropertySetInfo> xInfo( xProp->getPropertySetInfo(), UNO_SET_THROW );
+                if ( xInfo->hasPropertyByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Document"))) )
                 {
-                    Reference<XPropertySetInfo> xInfo = xProp->getPropertySetInfo();
-                    if ( xInfo->hasPropertyByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Document"))) )
-                    {
-                        _xDefinition.set(xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentDefinition"))),UNO_QUERY);
-                        xRet.set(xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Document"))),UNO_QUERY);
-                    }
+                    _xDefinition.set(xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentDefinition"))),UNO_QUERY);
+                    xRet.set(xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Document"))),UNO_QUERY);
                 }
-                xFormWizard->trigger(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("end")));
-                ::comphelper::disposeComponent(xFormWizard);
+                xWizard->trigger(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("end")));
+                ::comphelper::disposeComponent(xWizard);
             }
         }
         catch(const Exception& e)

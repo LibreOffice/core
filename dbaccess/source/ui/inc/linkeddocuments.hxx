@@ -55,6 +55,7 @@
 #ifndef _COM_SUN_STAR_UCB_XCONTENT_HPP_
 #include <com/sun/star/ucb/XContent.hpp>
 #endif
+#include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 #ifndef _LINK_HXX
 #include <tools/link.hxx>
 #endif
@@ -83,8 +84,8 @@ namespace dbaui
                     m_xDocumentContainer;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>
                     m_xConnection;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
-                    m_xParentFrame;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >
+                    m_xDocumentUI;
         Window*     m_pDialogParent;
         String      m_sCurrentlyEditing;
         ::rtl::OUString
@@ -92,13 +93,13 @@ namespace dbaui
 
     public:
         OLinkedDocumentsAccess(
-            Window* _pDialogParent
-            ,const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxParentFrame
-            ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
-            ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxContainer
-            ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection
-            ,const ::rtl::OUString& _sDataSourceName
-            );
+            Window* _pDialogParent,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& i_rDocumentUI,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxContainer,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
+            const ::rtl::OUString& _sDataSourceName
+        );
         ~OLinkedDocumentsAccess();
 
         inline sal_Bool isConnected() const { return m_xConnection.is(); }

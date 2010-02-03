@@ -613,7 +613,7 @@ void OApplicationController::getSelectionElementNames(::std::vector< ::rtl::OUSt
     }
 
     ::std::auto_ptr< OLinkedDocumentsAccess > pDocuments( new OLinkedDocumentsAccess(
-        getView(), m_aCurrentFrame.getFrame(), getORB(), xDocContainer, xConnection, getDatabaseName()
+        getView(), this, getORB(), xDocContainer, xConnection, getDatabaseName()
     ) );
     return pDocuments;
 }
