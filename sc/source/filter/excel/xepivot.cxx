@@ -540,16 +540,21 @@ void XclExpPCField::InsertNumDateGroupItems( const ScDPObject& rDPObj, const ScD
     {
         // get the string collection with original source elements
         ScSheetDPData aDPData( GetDocPtr(), *pSrcDesc );
-        const TypedScStrCollection& rOrigColl = aDPData.GetColumnEntries( static_cast< long >( GetBaseFieldIndex() ) );
-
+        // Wang Xu Ming - DataPilot migration
+        // 2009-05-08
+        const std::vector< SCROW > aOrignial = aDPData.GetColumnEntries( static_cast< long >( GetBaseFieldIndex() ) );
         // get the string collection with generated grouping elements
         ScDPNumGroupDimension aTmpDim( rNumInfo );
         if( nDatePart != 0 )
             aTmpDim.MakeDateHelper( rNumInfo, nDatePart );
-        const TypedScStrCollection& rGroupColl = aTmpDim.GetNumEntries( rOrigColl, GetDocPtr() );
-        for( USHORT nIdx = 0, nCount = rGroupColl.GetCount(); nIdx < nCount; ++nIdx )
-            if( const TypedStrData* pStrData = rGroupColl[ nIdx ] )
-                InsertGroupItem( new XclExpPCItem( pStrData->GetString() ) );
+        const std::vector< SCROW > aMemberIds = aTmpDim.GetNumEntries(  static_cast< SCCOL >( GetBaseFieldIndex() ), aDPData.GetCacheTable().GetCache(), aOrignial );
+        for ( size_t  nIdx = 0 ; nIdx < aMemberIds.size(); nIdx++ )
+        {
+            const ScDPItemData* pData = aDPData.GetMemberById(  static_cast< long >( GetBaseFieldIndex() ) , aMemberIds[ nIdx] );
+            if ( pData )
+                InsertGroupItem( new XclExpPCItem( pData->GetString() ) );
+        }
+// End Comments
     }
 }
 

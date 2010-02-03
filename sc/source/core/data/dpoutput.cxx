@@ -59,22 +59,11 @@
 #include "scresid.hxx"
 #include "unonames.hxx"
 #include "sc.hrc"
-
-#include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
-#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
-#include <com/sun/star/sheet/DataPilotTableHeaderData.hpp>
-#include <com/sun/star/sheet/DataPilotTablePositionData.hpp>
-#include <com/sun/star/sheet/DataPilotTablePositionType.hpp>
-#include <com/sun/star/sheet/DataPilotTableResultData.hpp>
-#include <com/sun/star/sheet/DataResultFlags.hpp>
-#include <com/sun/star/sheet/GeneralFunction.hpp>
-#include <com/sun/star/sheet/MemberResultFlags.hpp>
-#include <com/sun/star/sheet/TableFilterField.hpp>
-#include <com/sun/star/sheet/XDataPilotMemberResults.hpp>
-#include <com/sun/star/sheet/XDataPilotResults.hpp>
-#include <com/sun/star/sheet/XHierarchiesSupplier.hpp>
-#include <com/sun/star/sheet/XLevelsSupplier.hpp>
+// Wang Xu Ming -- 2009-8-17
+// DataPilot Migration - Cache&&Performance
+#include "scdpoutputimpl.hxx"
+#include "dpglobal.hxx"
+// End Comments
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <vector>
@@ -617,11 +606,21 @@ void ScDPOutput::HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
     if ( nFlags & sheet::MemberResultFlags::SUBTOTAL )
     {
 //      SvxWeightItem aItem( WEIGHT_BOLD );     // weight is in the style
-
+        // Wang Xu Ming -- 2009-8-17
+        // DataPilot Migration - Cache&&Performance
+        OutputImpl outputimp( pDoc, nTab,
+            nTabStartCol, nTabStartRow, nMemberStartCol, nMemberStartRow,
+            nDataStartCol, nDataStartRow, nTabEndCol, nTabEndRow );
+        // End Comments
         //! limit frames to horizontal or vertical?
         if (bColHeader)
         {
-            lcl_SetFrame( pDoc,nTab, nCol,nMemberStartRow+(SCROW)nLevel, nCol,nTabEndRow, 20 );
+            // Wang Xu Ming -- 2009-8-17
+            // DataPilot Migration - Cache&&Performance
+            //lcl_SetFrame( pDoc,nTab, nCol,nMemberStartRow+(SCROW)nLevel, nCol,nTabEndRow, SC_DP_FRAME_INNER_BOLD );
+            outputimp.OutputBlockFrame( nCol,nMemberStartRow+(SCROW)nLevel, nCol,nDataStartRow-1 );
+            // End Comments
+
             lcl_SetStyleById( pDoc,nTab, nCol,nMemberStartRow+(SCROW)nLevel, nCol,nDataStartRow-1,
                                     STR_PIVOT_STYLE_TITLE );
             lcl_SetStyleById( pDoc,nTab, nCol,nDataStartRow, nCol,nTabEndRow,
@@ -629,7 +628,11 @@ void ScDPOutput::HeaderCell( SCCOL nCol, SCROW nRow, SCTAB nTab,
         }
         else
         {
-            lcl_SetFrame( pDoc,nTab, nMemberStartCol+(SCCOL)nLevel,nRow, nTabEndCol,nRow, 20 );
+            // Wang Xu Ming -- 2009-8-17
+            // DataPilot Migration - Cache&&Performance
+            //lcl_SetFrame( pDoc,nTab, nMemberStartCol+(USHORT)nLevel,nRow, nTabEndCol,nRow, SC_DP_FRAME_INNER_BOLD );
+            outputimp.OutputBlockFrame( nMemberStartCol+(SCCOL)nLevel,nRow, nDataStartCol-1,nRow );
+            // End Comments
             lcl_SetStyleById( pDoc,nTab, nMemberStartCol+(SCCOL)nLevel,nRow, nDataStartCol-1,nRow,
                                     STR_PIVOT_STYLE_TITLE );
             lcl_SetStyleById( pDoc,nTab, nDataStartCol,nRow, nTabEndCol,nRow,
@@ -768,6 +771,20 @@ void ScDPOutput::Output()
     if ( bDoFilter )
         lcl_DoFilterButton( pDoc, aStartPos.Col(), aStartPos.Row(), nTab );
 
+    //  output data results:
+
+    for (long nRow=0; nRow<nRowCount; nRow++)
+    {
+        SCROW nRowPos = nDataStartRow + (SCROW)nRow;                    //! check for overflow
+        const sheet::DataResult* pColAry = pRowAry[nRow].getConstArray();
+        long nThisColCount = pRowAry[nRow].getLength();
+        DBG_ASSERT( nThisColCount == nColCount, "count mismatch" );     //! ???
+        for (long nCol=0; nCol<nThisColCount; nCol++)
+        {
+            SCCOL nColPos = nDataStartCol + (SCCOL)nCol;                //! check for overflow
+            DataCell( nColPos, nRowPos, nTab, pColAry[nCol] );
+        }
+    }
     //  output page fields:
 
     for (nField=0; nField<nPageFieldCount; nField++)
@@ -810,7 +827,12 @@ void ScDPOutput::Output()
                         STR_PIVOT_STYLE_INNER );
 
     //  output column headers:
-
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
+    OutputImpl outputimp( pDoc, nTab,
+        nTabStartCol, nTabStartRow, nMemberStartCol, nMemberStartRow,
+        nDataStartCol, nDataStartRow, nTabEndCol, nTabEndRow );
+    // End Comments
     for (nField=0; nField<nColFieldCount; nField++)
     {
         SCCOL nHdrCol = nDataStartCol + (SCCOL)nField;              //! check for overflow
@@ -825,28 +847,44 @@ void ScDPOutput::Output()
         {
             SCCOL nColPos = nDataStartCol + (SCCOL)nCol;                //! check for overflow
             HeaderCell( nColPos, nRowPos, nTab, pArray[nCol], TRUE, nField );
+            // Wang Xu Ming -- 2009-8-17
+            // DataPilot Migration - Cache&&Performance
             if ( ( pArray[nCol].Flags & sheet::MemberResultFlags::HASMEMBER ) &&
                 !( pArray[nCol].Flags & sheet::MemberResultFlags::SUBTOTAL ) )
             {
+                long nEnd = nCol;
+                while ( nEnd+1 < nThisColCount && ( pArray[nEnd+1].Flags & sheet::MemberResultFlags::CONTINUE ) )
+                    ++nEnd;
+                SCCOL nEndColPos = nDataStartCol + (SCCOL)nEnd;     //! check for overflow
                 if ( nField+1 < nColFieldCount )
                 {
-                    long nEnd = nCol;
-                    while ( nEnd+1 < nThisColCount && ( pArray[nEnd+1].Flags & sheet::MemberResultFlags::CONTINUE ) )
-                        ++nEnd;
-                    SCCOL nEndColPos = nDataStartCol + (SCCOL)nEnd;     //! check for overflow
-                    lcl_SetFrame( pDoc,nTab, nColPos,nRowPos, nEndColPos,nRowPos, 20 );
-                    lcl_SetFrame( pDoc,nTab, nColPos,nRowPos, nEndColPos,nTabEndRow, 20 );
+                    //                  lcl_SetFrame( pDoc,nTab, nColPos,nRowPos, nEndColPos,nRowPos, SC_DP_FRAME_INNER_BOLD );
+                    //                  lcl_SetFrame( pDoc,nTab, nColPos,nRowPos, nEndColPos,nTabEndRow, SC_DP_FRAME_INNER_BOLD );
+                    if ( nField == nColFieldCount - 2 )
+                    {
+                        outputimp.AddCol( nColPos );
+                        if ( nColPos + 1 == nEndColPos  )
+                            outputimp.OutputBlockFrame( nColPos,nRowPos, nEndColPos,nRowPos+1, TRUE );
+                    }
+                    else
+                        outputimp.OutputBlockFrame( nColPos,nRowPos, nEndColPos,nRowPos );
 
                     lcl_SetStyleById( pDoc, nTab, nColPos,nRowPos, nEndColPos,nDataStartRow-1, STR_PIVOT_STYLE_CATEGORY );
                 }
                 else
                     lcl_SetStyleById( pDoc, nTab, nColPos,nRowPos, nColPos,nDataStartRow-1, STR_PIVOT_STYLE_CATEGORY );
             }
+            else if (  pArray[nCol].Flags & sheet::MemberResultFlags::SUBTOTAL )
+                outputimp.AddCol( nColPos );
         }
+        if ( nField== 0 && nColFieldCount == 1 )
+            outputimp.OutputBlockFrame( nDataStartCol,nTabStartRow, nTabEndCol,nRowPos-1 );
+            // End Comments
     }
 
     //  output row headers:
-
+    std::vector<BOOL> vbSetBorder;
+    vbSetBorder.resize( nTabEndRow - nDataStartRow + 1, FALSE );
     for (nField=0; nField<nRowFieldCount; nField++)
     {
         SCCOL nHdrCol = nTabStartCol + (SCCOL)nField;                   //! check for overflow
@@ -871,41 +909,39 @@ void ScDPOutput::Output()
                     while ( nEnd+1 < nThisRowCount && ( pArray[nEnd+1].Flags & sheet::MemberResultFlags::CONTINUE ) )
                         ++nEnd;
                     SCROW nEndRowPos = nDataStartRow + (SCROW)nEnd;     //! check for overflow
-                    lcl_SetFrame( pDoc,nTab, nColPos,nRowPos, nColPos,nEndRowPos, 20 );
-                    lcl_SetFrame( pDoc,nTab, nColPos,nRowPos, nTabEndCol,nEndRowPos, 20 );
+                    // Wang Xu Ming -- 2009-8-17
+                    // DataPilot Migration - Cache&&Performance
+                    //  lcl_SetFrame( pDoc,nTab, nColPos,nRowPos, nColPos,nEndRowPos, SC_DP_FRAME_INNER_BOLD );
+                    //lcl_SetFrame( pDoc,nTab, nColPos,nRowPos, nTabEndCol,nEndRowPos, SC_DP_FRAME_INNER_BOLD );
+                    outputimp.AddRow( nRowPos );
+                    if ( vbSetBorder[ nRow ] == FALSE )
+                    {
+                        outputimp.OutputBlockFrame( nColPos, nRowPos, nTabEndCol, nEndRowPos );
+                        vbSetBorder[ nRow ]  = TRUE;
+                    }
+                    outputimp.OutputBlockFrame( nColPos, nRowPos, nColPos, nEndRowPos );
+
+                    if ( nField == nRowFieldCount - 2 )
+                        outputimp.OutputBlockFrame( nColPos+1, nRowPos, nColPos+1, nEndRowPos );
+                    // End Comments
 
                     lcl_SetStyleById( pDoc, nTab, nColPos,nRowPos, nDataStartCol-1,nEndRowPos, STR_PIVOT_STYLE_CATEGORY );
                 }
                 else
                     lcl_SetStyleById( pDoc, nTab, nColPos,nRowPos, nDataStartCol-1,nRowPos, STR_PIVOT_STYLE_CATEGORY );
             }
+            // Wang Xu Ming -- 2009-8-17
+            // DataPilot Migration - Cache&&Performance
+            else if (  pArray[nRow].Flags & sheet::MemberResultFlags::SUBTOTAL )
+                outputimp.AddRow( nRowPos );
+            // End Comments
         }
     }
 
-    //  output data results:
-
-    for (long nRow=0; nRow<nRowCount; nRow++)
-    {
-        SCROW nRowPos = nDataStartRow + (SCROW)nRow;                    //! check for overflow
-        const sheet::DataResult* pColAry = pRowAry[nRow].getConstArray();
-        long nThisColCount = pRowAry[nRow].getLength();
-        DBG_ASSERT( nThisColCount == nColCount, "count mismatch" );     //! ???
-        for (long nCol=0; nCol<nThisColCount; nCol++)
-        {
-            SCCOL nColPos = nDataStartCol + (SCCOL)nCol;                //! check for overflow
-            DataCell( nColPos, nRowPos, nTab, pColAry[nCol] );
-        }
-    }
-
-    //  frame around the whole table
-
-    lcl_SetFrame( pDoc,nTab, nDataStartCol,nDataStartRow, nTabEndCol,nTabEndRow, 20 );
-    if ( nDataStartCol > nMemberStartCol )
-        lcl_SetFrame( pDoc,nTab, nMemberStartCol,nDataStartRow, nDataStartCol-1,nTabEndRow, 20 );
-    if ( nDataStartRow > nMemberStartRow )
-        lcl_SetFrame( pDoc,nTab, nDataStartCol,nMemberStartRow, nTabEndCol,nDataStartRow-1, 20 );
-
-    lcl_SetFrame( pDoc,nTab, nTabStartCol,nTabStartRow, nTabEndCol,nTabEndRow, 40 );
+// Wang Xu Ming -- 2009-8-17
+// DataPilot Migration - Cache&&Performance
+    outputimp.OutputDataArea();
+// End Comments
 }
 
 ScRange ScDPOutput::GetOutputRange( sal_Int32 nRegionType )

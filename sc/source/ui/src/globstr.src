@@ -1725,5 +1725,17 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Page Styles";
     };
+    String STR_ERR_DATAPILOTSOURCE
+    {
+        Text [ en-US ] = "DataPilot source data is invalid.";
+    };
+    String STR_PIVOT_FIRSTROWEMPTYERR
+    {
+        Text [ en-US ] = "The field name cannot be empty. Check the first row of data source to make sure there are no empty cells." ;
+    };
+    String STR_PIVOT_ONLYONEROWERR
+    {
+        Text [ en-US ] = "DataPilot table needs at least two rows of data to create or refresh." ;
+    };
 };
 

@@ -55,7 +55,11 @@
 #include "attrib.hxx"
 #include "scitems.hxx"
 #include "unonames.hxx"
-
+// Wang Xu Ming -- 2009-8-17
+// DataPilot Migration - Cache&&Performance
+#include "dpglobal.hxx"
+#include "globstr.hrc"
+// End Comments
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
@@ -87,9 +91,6 @@ using ::com::sun::star::sheet::DataPilotTablePositionData;
 using ::com::sun::star::beans::XPropertySet;
 using ::rtl::OUString;
 
-// -----------------------------------------------------------------------
-
-#define MAX_LABELS 256 //!!! from fieldwnd.hxx, must be moved to global.hxx
 
 // -----------------------------------------------------------------------
 
@@ -166,7 +167,9 @@ ScDPObject::ScDPObject( ScDocument* pD ) :
     bSettingsChanged( FALSE ),
     bAlive( FALSE ),
     bAllowMove( FALSE ),
-    nHeaderRows( 0 )
+    bRefresh( FALSE ), // Wang Xu Ming - DataPilot migration
+    nHeaderRows( 0 ),
+    mnCacheId( -1) // Wang Xu Ming - DataPilot migration
 {
 }
 
@@ -184,6 +187,8 @@ ScDPObject::ScDPObject(const ScDPObject& r) :
     bSettingsChanged( FALSE ),
     bAlive( FALSE ),
     bAllowMove( FALSE ),
+    bRefresh( r.bRefresh ), // Wang Xu Ming - DataPilot migration
+     mnCacheId ( r.mnCacheId ), // Wang Xu Ming - DataPilot migration
     nHeaderRows( r.nHeaderRows )
 {
     if (r.pSaveData)
@@ -204,6 +209,7 @@ ScDPObject::~ScDPObject()
     delete pSheetDesc;
     delete pImpDesc;
     delete pServDesc;
+    mnCacheId = -1; // Wang Xu Ming - DataPilot migration
 }
 
 ScDataObject* ScDPObject::Clone() const
@@ -227,6 +233,13 @@ void ScDPObject::SetSaveData(const ScDPSaveData& rData)
     {
         delete pSaveData;
         pSaveData = new ScDPSaveData( rData );
+        // Wang Xu Ming -- 2009-8-17
+        // DataPilot Migration - Cache&&Performance
+        if ( rData.GetCacheId() >= 0 )
+            mnCacheId = rData.GetCacheId();
+        else if ( mnCacheId >= 0 )
+            pSaveData->SetCacheId( mnCacheId );
+        // End Comments
     }
 
     InvalidateData();       // re-init source from SaveData
@@ -392,7 +405,7 @@ void ScDPObject::CreateObjects()
             if ( pImpDesc )
             {
                 // database data
-                pData = new ScDatabaseDPData( pDoc, *pImpDesc );
+                pData = new ScDatabaseDPData( pDoc, *pImpDesc , GetCacheId() );
             }
             else
             {
@@ -402,7 +415,10 @@ void ScDPObject::CreateObjects()
                     DBG_ERROR("no source descriptor");
                     pSheetDesc = new ScSheetSourceDesc;     // dummy defaults
                 }
-                pData = new ScSheetDPData( pDoc, *pSheetDesc );
+                // Wang Xu Ming -- 2009-8-17
+                // DataPilot Migration - Cache&&Performance
+                pData = new ScSheetDPData( pDoc, *pSheetDesc ,GetCacheId());
+                // End Comments
             }
 
             // grouping (for cell or database data)
@@ -413,11 +429,21 @@ void ScDPObject::CreateObjects()
                 pData = pGroupData;
             }
 
-            xSource = new ScDPSource( pData );
-        }
+            // Wang Xu Ming -- 2009-8-17
+            // DataPilot Migration - Cache&&Performance
+            if ( pData )
+               SetCacheId( pData->GetCacheId());
 
-        if (pSaveData)
+            xSource = new ScDPSource( pData );
+            if ( pSaveData && bRefresh )
+            {
+                pSaveData->Refresh( xSource );
+                bRefresh = FALSE;
+            }
+        }
+        if (pSaveData  )
             pSaveData->WriteToSource( xSource );
+        // End Comments
     }
     else if (bSettingsChanged)
     {
@@ -2242,48 +2268,6 @@ uno::Reference<sheet::XDimensionsSupplier> ScDPObject::CreateSource( const ScDPS
     return xRet;
 }
 
-// ============================================================================
-
-ScDPCacheCell::ScDPCacheCell() :
-    mnStrId(ScSimpleSharedString::EMPTY),
-    mnType(SC_VALTYPE_EMPTY),
-    mfValue(0.0),
-    mbNumeric(false)
-{
-}
-
-ScDPCacheCell::ScDPCacheCell(const ScDPCacheCell& r) :
-    mnStrId(r.mnStrId),
-    mnType(r.mnType),
-    mfValue(r.mfValue),
-    mbNumeric(r.mbNumeric)
-{
-}
-
-ScDPCacheCell::~ScDPCacheCell()
-{
-}
-
-// ============================================================================
-
-size_t ScDPCollection::CacheCellHash::operator()(const ScDPCacheCell* pCell) const
-{
-    return pCell->mnStrId + static_cast<size_t>(pCell->mnType) +
-        static_cast<size_t>(pCell->mfValue) + static_cast<size_t>(pCell->mbNumeric);
-}
-
-bool ScDPCollection::CacheCellEqual::operator()(const ScDPCacheCell* p1, const ScDPCacheCell* p2) const
-{
-    if (!p1 && !p2)
-        return true;
-
-    if ((!p1 && p2) || (p1 && !p2))
-        return false;
-
-    return p1->mnStrId == p2->mnStrId && p1->mfValue == p2->mfValue &&
-        p1->mbNumeric == p2->mbNumeric && p1->mnType == p2->mnType;
-}
-
 // ----------------------------------------------------------------------------
 
 ScDPCollection::ScDPCollection(ScDocument* pDocument) :
@@ -2293,15 +2277,12 @@ ScDPCollection::ScDPCollection(ScDocument* pDocument) :
 
 ScDPCollection::ScDPCollection(const ScDPCollection& r) :
     ScCollection(r),
-    pDoc(r.pDoc),
-    maSharedString(r.maSharedString),
-    maCacheCellPool()   // #i101725# don't copy hash_set with pointers from the other collection
+    pDoc(r.pDoc)
 {
 }
 
 ScDPCollection::~ScDPCollection()
 {
-    clearCacheCellPool();
 }
 
 ScDataObject* ScDPCollection::Clone() const
@@ -2406,59 +2387,74 @@ String ScDPCollection::CreateNewName( USHORT nMin ) const
     return String();                    // should not happen
 }
 
-ScSimpleSharedString& ScDPCollection::GetSharedString()
-{
-    return maSharedString;
-}
 
-ScDPCacheCell* ScDPCollection::getCacheCellFromPool(const ScDPCacheCell& rCell)
+
+// Wang Xu Ming -- 2009-8-17
+// DataPilot Migration - Cache&&Performance
+long ScDPObject::GetCacheId() const
 {
-    ScDPCacheCell aCell(rCell);
-    CacheCellPoolType::iterator itr = maCacheCellPool.find(&aCell);
-    if (itr == maCacheCellPool.end())
+    if ( GetSaveData() )
+        return GetSaveData()->GetCacheId();
+    else
+        return mnCacheId;
+}
+ULONG ScDPObject::RefreshCache()
+{
+    CreateObjects();
+    ULONG nErrId = 0;
+    if ( pSheetDesc)
+        nErrId =  pSheetDesc->CheckValidate( pDoc );
+    if ( nErrId == 0 )
     {
-        // Insert a new instance.
-        ScDPCacheCell* p = new ScDPCacheCell(rCell);
-        ::std::pair<CacheCellPoolType::iterator, bool> r =
-            maCacheCellPool.insert(p);
-        if (!r.second)
-            delete p;
+        long nOldId = GetCacheId();
+        long nNewId = pDoc->GetNewDPObjectCacheId();
+        if ( nOldId >= 0 )
+            pDoc->RemoveDPObjectCache( nOldId );
 
-        ScDPCacheCell* p2 = r.second ? *r.first : NULL;
-        DBG_ASSERT(p == p2, "ScDPCollection::getCacheCellFromPool: pointer addresses differ");
-        return p2;
+        ScDPTableDataCache* pCache  = NULL;
+        if ( pSheetDesc )
+            pCache = pSheetDesc->CreateCache( pDoc, nNewId );
+        else if ( pImpDesc )
+            pCache = pImpDesc->CreateCache( pDoc, nNewId );
+
+        if ( pCache == NULL )
+        {
+            //cache failed
+            DBG_ASSERT( pCache , " pCache == NULL" );
+            return STR_ERR_DATAPILOTSOURCE;
+        }
+
+        nNewId = pCache->GetId();
+
+        bRefresh = TRUE;
+        ScDPCollection* pDPCollection = pDoc->GetDPCollection();
+        USHORT nCount = pDPCollection->GetCount();
+        for (USHORT i=0; i<nCount; i++)
+        { //set new cache id
+            if ( (*pDPCollection)[i]->GetCacheId() == nOldId  )
+            {
+                (*pDPCollection)[i]->SetCacheId( nNewId );
+                (*pDPCollection)[i]->SetRefresh();
+
+            }
+        }
+        DBG_ASSERT( GetCacheId() >= 0, " GetCacheId() >= 0 " );
     }
-    return *itr;
+    return nErrId;
 }
-
-namespace {
-
-class DeleteCacheCells : public ::std::unary_function<ScDPCacheCell*, void>
+void ScDPObject::SetCacheId( long nCacheId )
 {
-public:
-    void operator()(ScDPCacheCell* p) const
+    if ( GetCacheId() != nCacheId )
     {
-        delete p;
+        InvalidateSource();
+        if ( GetSaveData() )
+            GetSaveData()->SetCacheId( nCacheId );
+
+        mnCacheId = nCacheId;
     }
-};
-
 }
-
-void ScDPCollection::clearCacheCellPool()
+const ScDPTableDataCache* ScDPObject::GetCache() const
 {
-    // Transferring all stored pointers to a vector first.  For some unknown
-    // reason, deleting cell content instances by directly iterating through
-    // the hash set causes the iteration to return an identical pointer
-    // value twice, causing a double-delete.  I have no idea why this happens.
-
-    using ::std::copy;
-    using ::std::back_inserter;
-
-    vector<ScDPCacheCell*> ps;
-    ps.reserve(maCacheCellPool.size());
-    copy(maCacheCellPool.begin(), maCacheCellPool.end(), back_inserter(ps));
-    maCacheCellPool.clear();
-    // for correctness' sake, delete the elements after clearing the hash_set
-    for_each(ps.begin(), ps.end(), DeleteCacheCells());
+    return pDoc->GetDPObjectCache( GetCacheId() );
 }
-
+// End Comments

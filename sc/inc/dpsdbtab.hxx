@@ -58,23 +58,25 @@ struct ScImportSourceDesc
                  aObject == rOther.aObject &&
                  nType   == rOther.nType &&
                  bNative == rOther.bNative; }
-};
 
-class ScDatabaseDPData_Impl;
+        // Wang Xu Ming -- 2009-9-15
+        // DataPilot Migration - Cache&&Performance
+    ScDPTableDataCache* GetExistDPObjectCache( ScDocument* pDoc ) const;
+    ScDPTableDataCache* CreateCache(  ScDocument* pDoc , long nID  ) const;
+    ScDPTableDataCache* GetCache( ScDocument* pDoc, long nID ) const;
+    long    GetCacheId( ScDocument* pDoc, long nID ) const;
+        // End Comments
+};
 
 class ScDatabaseDPData : public ScDPTableData
 {
 private:
-    ScDatabaseDPData_Impl* pImpl;
-
-    BOOL            OpenDatabase();
-
+     ScDPCacheTable      aCacheTable;
 public:
-                    ScDatabaseDPData(ScDocument* pDoc, const ScImportSourceDesc& rImport);
+                    ScDatabaseDPData(ScDocument* pDoc, const ScImportSourceDesc& rImport, long nCacheId = -1);
     virtual         ~ScDatabaseDPData();
 
     virtual long                    GetColumnCount();
-    virtual const TypedScStrCollection& GetColumnEntries(long nColumn);
     virtual String                  getDimensionName(long nColumn);
     virtual BOOL                    getIsDataLayoutDimension(long nColumn);
     virtual BOOL                    IsDateDimension(long nDim);

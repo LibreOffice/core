@@ -33,6 +33,10 @@
 
 #include <vector>
 #include <hash_map>
+// Wang Xu Ming -- 2009-8-17
+// DataPilot Migration - Cache&&Performance
+#include <list>
+// End Comments
 #include <tools/string.hxx>
 #include <tools/list.hxx>
 #include "global.hxx"       // enum ScSubTotalFunc
@@ -59,7 +63,10 @@
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/implbase6.hxx>
-
+// Wang Xu Ming -- 2009-8-17
+// DataPilot Migration - Cache&&Performance
+#include "dpglobal.hxx"
+// End Comments
 #include "dptabdat.hxx"
 
 namespace com { namespace sun { namespace star {
@@ -73,7 +80,10 @@ namespace com { namespace sun { namespace star {
 
 class ScDPResultMember;
 class ScDPResultData;
-struct ScDPItemData;
+// Wang Xu Ming -- 2009-8-17
+// DataPilot Migration - Cache&&Performance
+class ScDPItemData;
+// End Comments
 class ScDPTableData;
 
 // ------------------------------------------------------------------------
@@ -168,10 +178,18 @@ public:
 
     long                    GetDataDimensionCount();
     String                  GetDataDimName(long nIndex);
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
+    ScDPTableDataCache*         GetCache();
+    const ScDPItemData*            GetItemDataById( long nDim, long nId );
+    long                                       GetDataLayoutDim(){ return pData->GetColumnCount(); }
+    SCROW                                GetMemberId(  long  nDim, const ScDPItemData& rData );
+    // End Comments
     BOOL                    IsDataLayoutDimension(long nDim);
     USHORT                  GetDataLayoutOrientation();
 
     BOOL                    IsDateDimension(long nDim);
+    UINT32                  GetNumberFormat(long nDim);
 
     BOOL                    SubTotalAllowed(long nColumn);      //! move to ScDPResultData
 
@@ -429,6 +447,10 @@ public:
     const ::com::sun::star::sheet::DataPilotFieldReference& GetReferenceValue() const;
 
 //UNUSED2009-05 BOOL                        IsValidPage( const ScDPItemData& rData );
+// Wang Xu Ming -- 2009-8-17
+// DataPilot Migration - Cache&&Performance
+    BOOL                      IsVisible( const ScDPItemData& rData );
+// End Comments
 };
 
 class ScDPHierarchies : public cppu::WeakImplHelper2<
@@ -722,6 +744,12 @@ public:
     long                    getMinMembers() const;
 
     sal_Int32               GetIndexFromName( const ::rtl::OUString& rName ) const;     // <0 if not found
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
+    const std::vector<sal_Int32>&    GetGlobalOrder();
+    const ScDPItemData*               GetSrcItemDataByIndex(  SCROW nIndex);
+    SCROW                                   GetSrcItemsCount();
+    // End Comments
 };
 
 class ScDPMember : public cppu::WeakImplHelper3<
@@ -735,7 +763,10 @@ private:
     long            nHier;
     long            nLev;
 
-    ScDPItemData    maData;
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
+    SCROW       mnDataId;
+    // End Comments
 //  String          aCaption;           // visible name (changeable by user)
 
     sal_Int32       nPosition;          // manual sorting
@@ -743,14 +774,23 @@ private:
     BOOL            bShowDet;
 
 public:
-                            ScDPMember( ScDPSource* pSrc, long nD, long nH, long nL,
-                                            const String& rN, double fV, BOOL bHV );
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
+    ScDPMember( ScDPSource* pSrc, long nD, long nH, long nL,
+        SCROW nIndex /*const String& rN, double fV, BOOL bHV */);
+    // End Comments
     virtual                 ~ScDPMember();
 
     BOOL                    IsNamedItem( const ScDPItemData& r ) const;
     String                  GetNameStr() const;
     void                    FillItemData( ScDPItemData& rData ) const;
-
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
+    //  const ScDPItemData&  GetItemData() const{ return maData; }
+    const ScDPItemData&  GetItemData() const;
+    inline SCROW               GetItemDataId() const { return mnDataId; }
+    BOOL                           IsNamedItem( SCROW    nIndex  ) const;
+    // End Comments
     sal_Int32               Compare( const ScDPMember& rOther ) const;      // visible order
 
                             // XNamed

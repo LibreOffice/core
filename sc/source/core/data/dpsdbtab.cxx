@@ -78,163 +78,175 @@ using ::com::sun::star::uno::UNO_QUERY;
 #define SC_DBPROP_DATASOURCENAME    "DataSourceName"
 #define SC_DBPROP_COMMAND           "Command"
 #define SC_DBPROP_COMMANDTYPE       "CommandType"
-
 // -----------------------------------------------------------------------
-
-class ScDatabaseDPData_Impl
+// Wang Xu Ming -- 2009-9-15
+// DataPilot Migration - Cache&&Performance
+ ScDPTableDataCache* ScImportSourceDesc::GetExistDPObjectCache( ScDocument* pDoc ) const
 {
-public:
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager;
-    ScImportSourceDesc  aDesc;
-    long                nColCount;
-    uno::Reference<sdbc::XRowSet> xRowSet;
-    sal_Int32*          pTypes;
-    SvNumberFormatter*  pFormatter;
+    ScDPTableDataCache* pCache = NULL;
+    ScDPCollection* pDPCollection= pDoc->GetDPCollection();
+    USHORT nCount = pDPCollection->GetCount();
 
-    ScDPCacheTable      aCacheTable;
-
-    ScDatabaseDPData_Impl(ScDPCollection* p) :
-        aCacheTable(p)
+    for ( short i=nCount-1; i>=0 ; i--)
     {
+        if ( const ScImportSourceDesc* pUsedDesc = (*pDPCollection)[i]->GetImportSourceDesc() )
+            if ( *this == *pUsedDesc )
+            {
+                long nID = (*pDPCollection)[i]->GetCacheId();
+                if ( nID >= 0  )
+                    pCache= pDoc->GetDPObjectCache( nID );
+                if ( pCache )
+                    return pCache;
+            }
     }
-};
-
-// -----------------------------------------------------------------------
-
-ScDatabaseDPData::ScDatabaseDPData(
-    ScDocument* pDoc,
-    const ScImportSourceDesc& rImport ) :
-    ScDPTableData(pDoc)
-{
-    pImpl = new ScDatabaseDPData_Impl(pDoc->GetDPCollection());
-    pImpl->xServiceManager = pDoc->GetServiceManager();
-    pImpl->aDesc = rImport;
-    pImpl->nColCount = 0;
-    pImpl->pTypes = NULL;
-    pImpl->pFormatter = NULL;       // created on demand
-
-    OpenDatabase();
-    CreateCacheTable();
+    return NULL;
 }
 
-ScDatabaseDPData::~ScDatabaseDPData()
+ScDPTableDataCache* ScImportSourceDesc::CreateCache( ScDocument* pDoc , long nID  ) const
 {
-    ::comphelper::disposeComponent( pImpl->xRowSet );
+    if ( !pDoc )
+        return NULL;
 
-    delete[] pImpl->pTypes;
-    delete pImpl->pFormatter;       // NumberFormatter is local for this object
-    delete pImpl;
-}
-
-void ScDatabaseDPData::DisposeData()
-{
-    //! use OpenDatabase here?
-    pImpl->aCacheTable.clear();
-}
-
-BOOL ScDatabaseDPData::OpenDatabase()
-{
     sal_Int32 nSdbType = -1;
-    switch ( pImpl->aDesc.nType )
+
+    switch ( nType )
     {
-        case sheet::DataImportMode_SQL:     nSdbType = sdb::CommandType::COMMAND;   break;
-        case sheet::DataImportMode_TABLE:   nSdbType = sdb::CommandType::TABLE;     break;
-        case sheet::DataImportMode_QUERY:   nSdbType = sdb::CommandType::QUERY;     break;
-        default:
-            return FALSE;
+    case sheet::DataImportMode_SQL:        nSdbType = sdb::CommandType::COMMAND;  break;
+    case sheet::DataImportMode_TABLE:   nSdbType = sdb::CommandType::TABLE;      break;
+    case sheet::DataImportMode_QUERY:  nSdbType = sdb::CommandType::QUERY;     break;
+    default:
+        return NULL;
     }
 
-    BOOL bSuccess = FALSE;
+
+   ScDPTableDataCache* pCache = GetExistDPObjectCache( pDoc );
+
+    if ( pCache && ( nID < 0 || nID == pCache->GetId() ) )
+        return pCache;
+
+    if ( pCache == NULL )
+        pCache = new ScDPTableDataCache( pDoc );
+
+    uno::Reference<sdbc::XRowSet> xRowSet ;
     try
     {
-        pImpl->xRowSet = uno::Reference<sdbc::XRowSet>(
-                comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString::createFromAscii( SC_SERVICE_ROWSET ) ),
-                uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySet> xRowProp( pImpl->xRowSet, uno::UNO_QUERY );
+        xRowSet = uno::Reference<sdbc::XRowSet>(
+            comphelper::getProcessServiceFactory()->createInstance(
+            rtl::OUString::createFromAscii( SC_SERVICE_ROWSET ) ),
+            uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xRowProp( xRowSet, uno::UNO_QUERY );
         DBG_ASSERT( xRowProp.is(), "can't get RowSet" );
         if ( xRowProp.is() )
         {
             //
             //  set source parameters
             //
-
             uno::Any aAny;
-
-            aAny <<= rtl::OUString( pImpl->aDesc.aDBName );
+            aAny <<= rtl::OUString( aDBName );
             xRowProp->setPropertyValue(
-                        rtl::OUString::createFromAscii(SC_DBPROP_DATASOURCENAME), aAny );
+                rtl::OUString::createFromAscii(SC_DBPROP_DATASOURCENAME), aAny );
 
-            aAny <<= rtl::OUString( pImpl->aDesc.aObject );
+            aAny <<= rtl::OUString( aObject );
             xRowProp->setPropertyValue(
-                        rtl::OUString::createFromAscii(SC_DBPROP_COMMAND), aAny );
+                rtl::OUString::createFromAscii(SC_DBPROP_COMMAND), aAny );
 
             aAny <<= nSdbType;
             xRowProp->setPropertyValue(
-                        rtl::OUString::createFromAscii(SC_DBPROP_COMMANDTYPE), aAny );
+                rtl::OUString::createFromAscii(SC_DBPROP_COMMANDTYPE), aAny );
 
-            uno::Reference<sdb::XCompletedExecution> xExecute( pImpl->xRowSet, uno::UNO_QUERY );
+            uno::Reference<sdb::XCompletedExecution> xExecute( xRowSet, uno::UNO_QUERY );
             if ( xExecute.is() )
             {
                 uno::Reference<task::XInteractionHandler> xHandler(
-                        comphelper::getProcessServiceFactory()->createInstance(
-                            rtl::OUString::createFromAscii( SC_SERVICE_INTHANDLER ) ),
-                        uno::UNO_QUERY);
+                    comphelper::getProcessServiceFactory()->createInstance(
+                    rtl::OUString::createFromAscii( SC_SERVICE_INTHANDLER ) ),
+                    uno::UNO_QUERY);
                 xExecute->executeWithCompletion( xHandler );
             }
             else
-                pImpl->xRowSet->execute();
-
-            //
-            //  get column descriptions
-            //
-
-            pImpl->nColCount = 0;
-            uno::Reference<sdbc::XResultSetMetaData> xMeta;
-            uno::Reference<sdbc::XResultSetMetaDataSupplier> xMetaSupp( pImpl->xRowSet, uno::UNO_QUERY );
-            if ( xMetaSupp.is() )
-                xMeta = xMetaSupp->getMetaData();
-            if ( xMeta.is() )
-                pImpl->nColCount = xMeta->getColumnCount(); // this is the number of real columns
-
-            uno::Reference<sdbc::XResultSet> xResSet( pImpl->xRowSet, uno::UNO_QUERY );
-            if ( pImpl->nColCount > 0 && xResSet.is() )
-            {
-                pImpl->pTypes = new sal_Int32[pImpl->nColCount];
-                for (long nCol=0; nCol<pImpl->nColCount; nCol++)
-                    pImpl->pTypes[nCol]  = xMeta->getColumnType( nCol+1 );
-
-                bSuccess = TRUE;
-            }
+                xRowSet->execute();
+            SvNumberFormatter aFormat( pDoc->GetServiceManager(), ScGlobal::eLnge);
+            pCache->InitFromDataBase( xRowSet, *aFormat.GetNullDate() );
+            pCache->SetId( nID );
+            pDoc->AddDPObjectCache( pCache );
+            DBG_TRACE1("Create a cache id = %d \n", pCache->GetId() );
         }
     }
     catch ( sdbc::SQLException& rError )
     {
         //! store error message
+        delete pCache;
+        pCache = NULL;
         InfoBox aInfoBox( 0, String(rError.Message) );
         aInfoBox.Execute();
     }
     catch ( uno::Exception& )
     {
+        delete pCache;
+        pCache = NULL;
         DBG_ERROR("Unexpected exception in database");
     }
 
 
-    if (!bSuccess)
-        ::comphelper::disposeComponent( pImpl->xRowSet );
+    ::comphelper::disposeComponent( xRowSet );
+     return pCache;
+}
 
-    return bSuccess;
+ScDPTableDataCache* ScImportSourceDesc::GetCache( ScDocument* pDoc, long nID ) const
+{
+    ScDPTableDataCache* pCache = pDoc->GetDPObjectCache( nID );
+    if ( NULL == pCache && pDoc )
+        pCache = GetExistDPObjectCache( pDoc);
+    if ( NULL == pCache )
+        pCache = CreateCache( pDoc , nID );
+    return pCache;
+}
+
+long ScImportSourceDesc:: GetCacheId( ScDocument* pDoc, long nID ) const
+{
+    ScDPTableDataCache* pCache = GetCache( pDoc,  nID);
+    if ( NULL == pCache )
+        return -1;
+    else
+        return pCache->GetId();
+}
+
+// -----------------------------------------------------------------------
+
+ScDatabaseDPData::ScDatabaseDPData(
+    ScDocument* pDoc,
+    const ScImportSourceDesc& rImport, long nCacheId /*=-1 */ ) :
+    ScDPTableData(pDoc, rImport.GetCacheId( pDoc, nCacheId) ),
+    aCacheTable( pDoc, rImport.GetCacheId( pDoc, nCacheId))
+{
+
+}
+
+ScDatabaseDPData::~ScDatabaseDPData()
+{
+}
+
+void ScDatabaseDPData::DisposeData()
+{
+    //! use OpenDatabase here?
+     aCacheTable.clear();
 }
 
 long ScDatabaseDPData::GetColumnCount()
 {
-    return pImpl->nColCount;
+    CreateCacheTable();
+    return GetCacheTable().getColSize();
 }
 
-const TypedScStrCollection& ScDatabaseDPData::GetColumnEntries(long nColumn)
+// End Comments
+
+void lcl_Reset( const uno::Reference<sdbc::XRowSet>& xRowSet )
+                    throw(sdbc::SQLException, uno::RuntimeException)
 {
-    CreateCacheTable();
-    return pImpl->aCacheTable.getFieldEntries(nColumn);
+    //  isBeforeFirst / beforeFirst is not always available
+    //! query if it is allowed
+
+    xRowSet->execute();     // restart
 }
 
 String ScDatabaseDPData::getDimensionName(long nColumn)
@@ -247,17 +259,12 @@ String ScDatabaseDPData::getDimensionName(long nColumn)
     }
 
     CreateCacheTable();
-    const String* pStr = pImpl->aCacheTable.getFieldName(nColumn);
-    if (pStr)
-        return *pStr;
-
-    DBG_ERROR("getDimensionName: invalid dimension");
-    return String();
+    return aCacheTable.getFieldName((SCCOL)nColumn);
 }
 
 BOOL ScDatabaseDPData::getIsDataLayoutDimension(long nColumn)
 {
-    return ( nColumn == pImpl->nColCount );
+    return ( nColumn == GetCacheTable().getColSize());
 }
 
 BOOL ScDatabaseDPData::IsDateDimension(long /* nDim */)
@@ -274,43 +281,39 @@ void ScDatabaseDPData::SetEmptyFlags( BOOL /* bIgnoreEmptyRows */, BOOL /* bRepe
 
 void ScDatabaseDPData::CreateCacheTable()
 {
-    if (!pImpl->aCacheTable.empty())
+    if (!aCacheTable.empty())
         return;
 
-    // Get null date.
-    if (!pImpl->pFormatter)
-        pImpl->pFormatter = new SvNumberFormatter(pImpl->xServiceManager, ScGlobal::eLnge);
-
-    pImpl->aCacheTable.fillTable(pImpl->xRowSet, *pImpl->pFormatter->GetNullDate());
+    aCacheTable.fillTable();
 }
 
 void ScDatabaseDPData::FilterCacheTable(const vector<ScDPCacheTable::Criterion>& rCriteria, const hash_set<sal_Int32>& rCatDims)
 {
     CreateCacheTable();
-    pImpl->aCacheTable.filterByPageDimension(
+    aCacheTable.filterByPageDimension(
         rCriteria, (IsRepeatIfEmpty() ? rCatDims : hash_set<sal_Int32>()));
 }
 
 void ScDatabaseDPData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>& rCriteria, const hash_set<sal_Int32>& rCatDims, Sequence< Sequence<Any> >& rData)
 {
     CreateCacheTable();
-    sal_Int32 nRowSize = pImpl->aCacheTable.getRowSize();
+    sal_Int32 nRowSize = aCacheTable.getRowSize();
     if (!nRowSize)
         return;
 
-    pImpl->aCacheTable.filterTable(
+    aCacheTable.filterTable(
         rCriteria, rData, IsRepeatIfEmpty() ? rCatDims : hash_set<sal_Int32>());
 }
 
 void ScDatabaseDPData::CalcResults(CalcInfo& rInfo, bool bAutoShow)
 {
     CreateCacheTable();
-    CalcResultsFromCacheTable(pImpl->aCacheTable, rInfo, bAutoShow);
+    CalcResultsFromCacheTable( aCacheTable, rInfo, bAutoShow);
 }
 
 const ScDPCacheTable& ScDatabaseDPData::GetCacheTable() const
 {
-    return pImpl->aCacheTable;
+    return aCacheTable;
 }
 
 // -----------------------------------------------------------------------

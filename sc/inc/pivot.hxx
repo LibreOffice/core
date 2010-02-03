@@ -51,6 +51,7 @@
 
 #include "global.hxx"
 #include "address.hxx"
+#include "dpglobal.hxx"
 
 #include <vector>
 

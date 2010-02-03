@@ -83,6 +83,9 @@ public:
 };
 
 
+bool operator == (const ::com::sun::star::sheet::DataPilotFieldSortInfo &l, const ::com::sun::star::sheet::DataPilotFieldSortInfo &r );
+bool operator == (const ::com::sun::star::sheet::DataPilotFieldAutoShowInfo &l, const ::com::sun::star::sheet::DataPilotFieldAutoShowInfo &r );
+bool operator == (const ::com::sun::star::sheet::DataPilotFieldReference &l, const ::com::sun::star::sheet::DataPilotFieldReference &r );
 class ScDPSaveDimension
 {
 private:
@@ -164,6 +167,9 @@ public:
 
     void                    WriteToSource( const com::sun::star::uno::Reference<
                                             com::sun::star::uno::XInterface>& xDim );
+    void                    Refresh( const com::sun::star::uno::Reference<
+                                    com::sun::star::sheet::XDimensionsSupplier>& xSource ,
+                                    const   std::list<String> & deletedDims);
 };
 
 
@@ -178,7 +184,10 @@ private:
     USHORT      nRepeatEmptyMode;
     BOOL        bFilterButton;      // not passed to DataPilotSource
     BOOL        bDrillDown;         // not passed to DataPilotSource
-
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
+    long      mnCacheId;
+    // End Comments
 public:
     SC_DLLPUBLIC                        ScDPSaveData();
                             ScDPSaveData(const ScDPSaveData& r);
@@ -222,10 +231,15 @@ public:
     BOOL                    GetDrillDown() const { return bDrillDown; }
 
     void                    WriteToSource( const com::sun::star::uno::Reference<
+        com::sun::star::sheet::XDimensionsSupplier>& xSource );
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
+    void                    Refresh( const com::sun::star::uno::Reference<
                                             com::sun::star::sheet::XDimensionsSupplier>& xSource );
-
     BOOL                    IsEmpty() const;
-
+    inline long GetCacheId() const{ return mnCacheId; }
+    inline void SetCacheId( long nCacheId ){ mnCacheId = nCacheId; }
+    // End Comments
     const ScDPDimensionSaveData* GetExistingDimensionData() const   { return pDimensionData; }
     SC_DLLPUBLIC ScDPDimensionSaveData*  GetDimensionData();     // create if not there
     void                    SetDimensionData( const ScDPDimensionSaveData* pNew );      // copied

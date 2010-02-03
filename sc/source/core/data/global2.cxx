@@ -52,6 +52,10 @@
 #include "rechead.hxx"
 #include "compiler.hxx"
 #include "paramisc.hxx"
+// Wang Xu Ming -- 2009-5-18
+// DataPilot Migration
+#include "dpglobal.hxx"
+// End Comments
 
 #include "sc.hrc"
 #include "globstr.hrc"
@@ -61,7 +65,6 @@
 
 
 
-#define MAX_LABELS 256 //!!! aus fieldwnd.hxx, muss noch nach global.hxx ???
 
 //------------------------------------------------------------------------
 // struct ScImportParam:
@@ -274,6 +277,7 @@ ScQueryParam::~ScQueryParam()
 
 //------------------------------------------------------------------------
 
+
 void ScQueryParam::Clear()
 {
     nCol1=nCol2=nDestCol = 0;
@@ -352,6 +356,13 @@ BOOL ScQueryParam::operator==( const ScQueryParam& rOther ) const
             bEqual = pEntries[i] == rOther.pEntries[i];
     }
     return bEqual;
+}
+
+ //------------------------------------------------------------------------
+
+ScQueryEntry&   ScQueryParam::GetEntry(SCSIZE n) const
+{
+     return pEntries[n];
 }
 
 //------------------------------------------------------------------------
@@ -1161,90 +1172,3 @@ String ScGlobal::GetDocTabName( const String& rFileName,
     return aDocTab;
 }
 
-// ============================================================================
-
-ScSimpleSharedString::StringTable::StringTable() :
-    mnStrCount(0)
-{
-    // empty string (ID = 0)
-    maSharedStrings.push_back(String());
-    maSharedStringIds.insert( SharedStrMap::value_type(String(), mnStrCount++) );
-}
-
-ScSimpleSharedString::StringTable::StringTable(const ScSimpleSharedString::StringTable& r) :
-    maSharedStrings(r.maSharedStrings),
-    maSharedStringIds(r.maSharedStringIds),
-    mnStrCount(r.mnStrCount)
-{
-}
-
-ScSimpleSharedString::StringTable::~StringTable()
-{
-}
-
-sal_Int32 ScSimpleSharedString::StringTable::insertString(const String& aStr)
-{
-    SharedStrMap::const_iterator itr = maSharedStringIds.find(aStr),
-        itrEnd = maSharedStringIds.end();
-
-    if (itr == itrEnd)
-    {
-        // new string.
-        maSharedStrings.push_back(aStr);
-        maSharedStringIds.insert( SharedStrMap::value_type(aStr, mnStrCount) );
-        return mnStrCount++;
-    }
-
-    // existing string.
-    return itr->second;
-}
-
-sal_Int32 ScSimpleSharedString::StringTable::getStringId(const String& aStr)
-{
-    SharedStrMap::const_iterator itr = maSharedStringIds.find(aStr),
-        itrEnd = maSharedStringIds.end();
-    if (itr == itrEnd)
-    {
-        // string not found.
-        return insertString(aStr);
-    }
-    return itr->second;
-}
-
-const String* ScSimpleSharedString::StringTable::getString(sal_Int32 nId) const
-{
-    if (nId >= mnStrCount)
-        return NULL;
-
-    return &maSharedStrings[nId];
-}
-
-// ----------------------------------------------------------------------------
-
-ScSimpleSharedString::ScSimpleSharedString()
-{
-}
-
-ScSimpleSharedString::ScSimpleSharedString(const ScSimpleSharedString& r) :
-    maStringTable(r.maStringTable)
-{
-}
-
-ScSimpleSharedString::~ScSimpleSharedString()
-{
-}
-
-sal_Int32 ScSimpleSharedString::insertString(const String& aStr)
-{
-    return maStringTable.insertString(aStr);
-}
-
-const String* ScSimpleSharedString::getString(sal_Int32 nId)
-{
-    return maStringTable.getString(nId);
-}
-
-sal_Int32 ScSimpleSharedString::getStringId(const String& aStr)
-{
-    return maStringTable.getStringId(aStr);
-}

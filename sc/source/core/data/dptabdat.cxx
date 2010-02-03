@@ -55,69 +55,6 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 using ::std::vector;
-using ::std::set;
-using ::std::hash_map;
-
-// -----------------------------------------------------------------------
-
-BOOL ScDPItemData::IsCaseInsEqual( const ScDPItemData& r ) const
-{
-    //! pass Transliteration?
-    //! inline?
-    return bHasValue ? ( r.bHasValue && rtl::math::approxEqual( fValue, r.fValue ) ) :
-                       ( !r.bHasValue &&
-                        ScGlobal::GetpTransliteration()->isEqual( aString, r.aString ) );
-}
-
-size_t ScDPItemData::Hash() const
-{
-    if ( bHasValue )
-        return (size_t) rtl::math::approxFloor( fValue );
-    else
-        // If we do unicode safe case insensitive hash we can drop
-        // ScDPItemData::operator== and use ::IsCasInsEqual
-        return rtl_ustr_hashCode_WithLength( aString.GetBuffer(), aString.Len() );
-}
-
-BOOL ScDPItemData::operator==( const ScDPItemData& r ) const
-{
-    if ( bHasValue )
-    {
-        if ( r.bHasValue )
-            return rtl::math::approxEqual( fValue, r.fValue );
-        else
-            return FALSE;
-    }
-    else if ( r.bHasValue )
-        return FALSE;
-    else
-        // need exact equality until we have a safe case insensitive string hash
-        return aString == r.aString;
-}
-
-sal_Int32 ScDPItemData::Compare( const ScDPItemData& rA,
-                                 const ScDPItemData& rB )
-{
-    if ( rA.bHasValue )
-    {
-        if ( rB.bHasValue )
-        {
-            if ( rtl::math::approxEqual( rA.fValue, rB.fValue ) )
-                return 0;
-            else if ( rA.fValue < rB.fValue )
-                return -1;
-            else
-                return 1;
-        }
-        else
-            return -1;           // values first
-    }
-    else if ( rB.bHasValue )
-        return 1;                // values first
-    else
-        return ScGlobal::GetCollator()->compareString( rA.aString, rB.aString );
-}
-
 // ---------------------------------------------------------------------------
 
 ScDPTableData::CalcInfo::CalcInfo() :
@@ -127,8 +64,9 @@ ScDPTableData::CalcInfo::CalcInfo() :
 
 // ---------------------------------------------------------------------------
 
-ScDPTableData::ScDPTableData(ScDocument* pDoc) :
-    mrSharedString(pDoc->GetDPCollection()->GetSharedString())
+ScDPTableData::ScDPTableData(ScDocument* pDoc, long nCacheId ) :
+    mpDoc ( pDoc ),
+    mnCacheId( nCacheId )
 {
     nLastDateVal = nLastHier = nLastLevel = nLastRet = -1;      // invalid
 
@@ -189,7 +127,7 @@ bool ScDPTableData::IsRepeatIfEmpty()
     return false;
 }
 
-UINT32 ScDPTableData::GetNumberFormat(long)
+ULONG ScDPTableData::GetNumberFormat(long)
 {
     return 0;           // default format
 }
@@ -222,12 +160,6 @@ BOOL ScDPTableData::HasCommonElement( const ScDPItemData&, long,
     DBG_ERROR("HasCommonElement shouldn't be called for non-group data");
     return FALSE;
 }
-
-ScSimpleSharedString& ScDPTableData::GetSharedString()
-{
-    return mrSharedString;
-}
-
 void ScDPTableData::FillRowDataFromCacheTable(sal_Int32 nRow, const ScDPCacheTable& rCacheTable,
                                         const CalcInfo& rInfo, CalcRowData& rData)
 {
@@ -246,25 +178,28 @@ void ScDPTableData::FillRowDataFromCacheTable(sal_Int32 nRow, const ScDPCacheTab
         long nDim = rInfo.aDataSrcCols[i];
         rData.aValues.push_back( ScDPValueData() );
         ScDPValueData& rVal = rData.aValues.back();
-        const ScDPCacheCell* pCell = rCacheTable.getCell(
-            static_cast<SCCOL>(nDim), static_cast<SCROW>(nRow), false);
-        if (pCell)
-        {
-            rVal.fValue = pCell->mbNumeric ? pCell->mfValue : 0.0;
-            rVal.nType = pCell->mnType;
-        }
-        else
-            rVal.Set(0.0, SC_VALTYPE_EMPTY);
+        rCacheTable.getValue( rVal, static_cast<SCCOL>(nDim), static_cast<SCROW>(nRow), false);
     }
 }
 
 void ScDPTableData::ProcessRowData(CalcInfo& rInfo, CalcRowData& rData, bool bAutoShow)
 {
+        // Wang Xu Ming -- 2009-6-16
+        // DataPilot Migration
     if (!bAutoShow)
     {
-        rInfo.pColRoot->LateInitFrom(rInfo.aColDims, rInfo.aColLevels, rData.aColData, 0, *rInfo.pInitState);
-        rInfo.pRowRoot->LateInitFrom(rInfo.aRowDims, rInfo.aRowLevels, rData.aRowData, 0, *rInfo.pInitState);
+            LateInitParams  aColParams( rInfo.aColDims, rInfo.aColLevels, FALSE );
+            LateInitParams  aRowParams ( rInfo.aRowDims, rInfo.aRowLevels, TRUE );
+            // root always init child
+            aColParams.SetInitChild( TRUE );
+            aColParams.SetInitAllChildren( FALSE);
+            aRowParams.SetInitChild( TRUE );
+            aRowParams.SetInitAllChildren( FALSE);
+
+            rInfo.pColRoot->LateInitFrom( aColParams, rData.aColData,0, *rInfo.pInitState);
+            rInfo.pRowRoot->LateInitFrom( aRowParams, rData.aRowData, 0, *rInfo.pInitState);
     }
+        // End Comments
 
     if ( ( !rInfo.pColRoot->GetChildDimension() || rInfo.pColRoot->GetChildDimension()->IsValidEntry(rData.aColData) ) &&
          ( !rInfo.pRowRoot->GetChildDimension() || rInfo.pRowRoot->GetChildDimension()->IsValidEntry(rData.aRowData) ) )
@@ -272,8 +207,11 @@ void ScDPTableData::ProcessRowData(CalcInfo& rInfo, CalcRowData& rData, bool bAu
         //! single process method with ColMembers, RowMembers and data !!!
         if (rInfo.pColRoot->GetChildDimension())
         {
-            vector<ScDPItemData> aEmptyData;
+// Wang Xu Ming -- 2009-6-10
+// DataPilot Migration
+            vector</*ScDPItemData*/ SCROW > aEmptyData;
             rInfo.pColRoot->GetChildDimension()->ProcessData(rData.aColData, NULL, aEmptyData, rData.aValues);
+// End Comments
         }
 
         rInfo.pRowRoot->ProcessData(rData.aRowData, rInfo.pColRoot->GetChildDimension(),
@@ -295,42 +233,94 @@ void ScDPTableData::CalcResultsFromCacheTable(const ScDPCacheTable& rCacheTable,
     }
 }
 
+// Wang Xu Ming -- 2009-6-10
+// DataPilot Migration
 void ScDPTableData::GetItemData(const ScDPCacheTable& rCacheTable, sal_Int32 nRow,
-                                const vector<long>& rDims, vector<ScDPItemData>& rItemData)
+                                const vector<long>& rDims, vector< SCROW/*ScDPItemData*/>& rItemData)
+// End Comments
 {
     sal_Int32 nDimSize = rDims.size();
     for (sal_Int32 i = 0; i < nDimSize; ++i)
     {
         long nDim = rDims[i];
-        rItemData.push_back( ScDPItemData() );
-        ScDPItemData& rData = rItemData.back();
+
         if (getIsDataLayoutDimension(nDim))
         {
-            rData.SetString(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("x")));
+            rItemData.push_back( -1 );
             continue;
         }
 
-        const ScDPCacheCell* pCell = rCacheTable.getCell(
-            static_cast<SCCOL>(nDim), static_cast<SCROW>(nRow), IsRepeatIfEmpty());
-        if (!pCell || pCell->mnType == SC_VALTYPE_EMPTY)
-            continue;
+        nDim = GetSourceDim( nDim );
+        if ( nDim >= rCacheTable.GetCache()->GetColumnCount() )
+           continue;
 
-        const String* pString = GetSharedString().getString(pCell->mnStrId);
-        if (!pString)
-            continue;
+        SCROW nId= rCacheTable.GetCache()->GetItemDataId( static_cast<SCCOL>(nDim), static_cast<SCROW>(nRow), IsRepeatIfEmpty());
+        rItemData.push_back( nId );
 
-        rData.aString = *pString;
-        rData.bHasValue = false;
-        if (pCell->mbNumeric)
-        {
-            rData.bHasValue = true;
-            rData.fValue = pCell->mfValue;
-        }
     }
 }
 
 // -----------------------------------------------------------------------
 
+// Wang Xu Ming -- 2009-6-8
+// DataPilot Migration
+long ScDPTableData::GetMembersCount( long nDim )
+{
+    if ( nDim > MAXCOL )
+        return 0;
+    return GetCacheTable().getFieldEntries( nDim ).size();
+}
 
+long ScDPTableData::GetCacheId() const
+{
+    return mnCacheId;
+}
 
+const ScDPItemData* ScDPTableData::GetMemberByIndex( long nDim, long nIndex )
+{
+    if ( nIndex >= GetMembersCount( nDim ) )
+        return NULL;
 
+    const ::std::vector<SCROW>& nMembers = GetCacheTable().getFieldEntries( nDim );
+
+    return GetCacheTable().GetCache()->GetItemDataById( (SCCOL) nDim, (SCROW)nMembers[nIndex] );
+}
+
+const ScDPItemData* ScDPTableData::GetMemberById( long nDim, long nId)
+{
+
+    return GetCacheTable().GetCache()->GetItemDataById( (SCCOL) nDim, (SCROW)nId);
+}
+
+SCROW   ScDPTableData::GetIdOfItemData( long  nDim, const ScDPItemData& rData )
+{
+        return GetCacheTable().GetCache()->GetIdByItemData((SCCOL) nDim, rData );
+ }
+
+const std::vector< SCROW >& ScDPTableData::GetColumnEntries( long nColumn )
+{
+    return GetCacheTable().getFieldEntries( nColumn );
+}
+
+long ScDPTableData::GetSourceDim( long nDim )
+{
+    return nDim;
+
+}
+
+ long ScDPTableData::Compare( long nDim, long nDataId1, long nDataId2)
+{
+    if ( getIsDataLayoutDimension(nDim) )
+        return 0;
+
+    long n1 = GetCacheTable().GetCache()->GetOrder( nDim, nDataId1);
+    long n2 = GetCacheTable().GetCache()->GetOrder( nDim, nDataId2);
+    if ( n1 > n2 )
+        return 1;
+    else if ( n1 == n2 )
+        return 0;
+    else
+        return -1;
+}
+// End Comments
+// -----------------------------------------------------------------------

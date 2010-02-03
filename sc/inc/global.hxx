@@ -763,21 +763,6 @@ enum ScSubTotalFunc
     };
 
 
-#define     PIVOT_MAXFUNC           11
-#define     PIVOT_FUNC_NONE         0x0000
-#define     PIVOT_FUNC_SUM          0x0001
-#define     PIVOT_FUNC_COUNT        0x0002
-#define     PIVOT_FUNC_AVERAGE      0x0004
-#define     PIVOT_FUNC_MAX          0x0008
-#define     PIVOT_FUNC_MIN          0x0010
-#define     PIVOT_FUNC_PRODUCT      0x0020
-#define     PIVOT_FUNC_COUNT_NUM    0x0040
-#define     PIVOT_FUNC_STD_DEV      0x0080
-#define     PIVOT_FUNC_STD_DEVP     0x0100
-#define     PIVOT_FUNC_STD_VAR      0x0200
-#define     PIVOT_FUNC_STD_VARP     0x0400
-#define     PIVOT_FUNC_AUTO         0x1000
-
 // -----------------------------------------------------------------------
 
 /*
@@ -848,7 +833,7 @@ public:
     ~ScQueryParam();
 
     SCSIZE          GetEntryCount() const           { return nEntryCount; }
-    ScQueryEntry&   GetEntry(SCSIZE n) const        { return pEntries[n]; }
+    ScQueryEntry&   GetEntry(SCSIZE n) const;
     void            Resize(SCSIZE nNew);
 
     ScQueryParam&   operator=   ( const ScQueryParam& r );
@@ -919,46 +904,6 @@ struct ScConsolidateParam
     void                Clear           (); // = ClearDataAreas()+Members
     void                ClearDataAreas  ();
     void                SetAreas        ( ScArea* const* ppAreas, USHORT nCount );
-};
-
-// -----------------------------------------------------------------------
-
-class ScSimpleSharedString
-{
-public:
-    static const sal_Int32 EMPTY = 0;
-
-    ScSimpleSharedString();
-    ScSimpleSharedString(const ScSimpleSharedString& r);
-    ~ScSimpleSharedString();
-
-    const String*    getString(sal_Int32 nId);
-    sal_Int32        getStringId(const String& aStr);
-    sal_Int32        insertString(const String& aStr);
-
-private:
-
-    /** internal shared string table implementation */
-    class StringTable
-    {
-    public:
-        sal_Int32 insertString(const String& aStr);
-        sal_Int32 getStringId(const String& aStr);
-        const String* getString(sal_Int32 nId) const;
-
-        StringTable();
-        StringTable(const StringTable& r);
-        ~StringTable();
-
-    private:
-        typedef ::std::hash_map< String, sal_Int32, ScStringHashCode, ::std::equal_to< String > > SharedStrMap;
-
-        ::std::vector<String> maSharedStrings;
-        SharedStrMap maSharedStringIds;
-        sal_Int32 mnStrCount;
-    };
-
-    StringTable maStringTable;
 };
 
 // -----------------------------------------------------------------------

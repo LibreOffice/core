@@ -50,6 +50,7 @@
 #include "dptabsrc.hxx"
 #include "dptabres.hxx"
 #include "dpobject.hxx"
+#include "dpglobal.hxx"
 
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
@@ -80,6 +81,202 @@ const sal_Int32 SC_DP_DATE_FIRST = -1;
 const sal_Int32 SC_DP_DATE_LAST = 10000;
 
 // ============================================================================
+namespace
+{
+    BOOL lcl_Search( SCCOL nSourceDim, ScDPTableDataCache* pCache , const std::vector< SCROW >& vIdx, SCROW nNew , SCROW& rIndex)
+    {
+        rIndex = vIdx.size();
+        BOOL bFound = FALSE;
+        SCROW nLo = 0;
+        SCROW nHi = vIdx.size() - 1;
+        SCROW nIndex;
+        long nCompare;
+        while (nLo <= nHi)
+        {
+            nIndex = (nLo + nHi) / 2;
+
+            const ScDPItemData* pData  = pCache->GetItemDataById( nSourceDim, vIdx[nIndex] );
+            const ScDPItemData* pDataInsert = pCache->GetItemDataById( nSourceDim, nNew );
+
+            nCompare = ScDPItemData::Compare( *pData, *pDataInsert );
+            if (nCompare < 0)
+                nLo = nIndex + 1;
+            else
+            {
+                nHi = nIndex - 1;
+                if (nCompare == 0)
+                {
+                    bFound = TRUE;
+                    nLo = nIndex;
+                }
+            }
+        }
+        rIndex = nLo;
+        return bFound;
+    }
+
+    void  lcl_Insert( SCCOL nSourceDim, ScDPTableDataCache* pCache ,  std::vector< SCROW >& vIdx, SCROW nNew )
+    {
+        SCROW nIndex = 0;
+        if ( !lcl_Search( nSourceDim, pCache, vIdx, nNew ,nIndex ) )
+            vIdx.insert( vIdx.begin()+nIndex, nNew  );
+    }
+
+    template<bool bUpdateData>
+    SCROW lcl_InsertValue( SCCOL nSourceDim, ScDPTableDataCache* pCache ,  std::vector< SCROW >& vIdx, const ScDPItemData & rData );
+
+    template<>
+    SCROW lcl_InsertValue<false>( SCCOL nSourceDim, ScDPTableDataCache* pCache ,  std::vector< SCROW >& vIdx, const ScDPItemData & rData )
+    {
+        SCROW nNewID = pCache->GetAdditionalItemID( rData );
+        lcl_Insert( nSourceDim, pCache, vIdx, nNewID );
+        return nNewID;
+    }
+
+    template<>
+    SCROW lcl_InsertValue<true>( SCCOL nSourceDim, ScDPTableDataCache* pCache ,  std::vector< SCROW >& vIdx, const ScDPItemData & rData )
+    {
+        SCROW nItemId = lcl_InsertValue<false>( nSourceDim, pCache, vIdx, rData );
+
+        if( const ScDPItemData *pData = pCache->GetItemDataById( nSourceDim, nItemId ) )
+            const_cast<ScDPItemData&>(*pData) = rData;
+
+        return nItemId;
+    }
+
+    template<bool bUpdateData>
+    void lcl_InsertValue ( SCCOL nSourceDim, ScDPTableDataCache* pCache ,  std::vector< SCROW >& vIdx, const String&  rString, const double& fValue )
+    {
+        lcl_InsertValue<bUpdateData>( nSourceDim, pCache, vIdx, ScDPItemData( rString, fValue, TRUE ) );
+    }
+
+    template<bool bUpdateData>
+    void lcl_InsertValue ( SCCOL nSourceDim, ScDPTableDataCache* pCache ,  std::vector< SCROW >& vIdx, const String&  rString, const double& fValue, sal_Int32 nDatePart )
+    {
+        lcl_InsertValue<bUpdateData>( nSourceDim, pCache, vIdx, ScDPItemData( nDatePart, rString, fValue, ScDPItemData::MK_DATA|ScDPItemData::MK_VAL|ScDPItemData::MK_DATEPART ) );
+    }
+
+    void lcl_AppendDateStr( rtl::OUStringBuffer& rBuffer, double fValue, SvNumberFormatter* pFormatter )
+    {
+        ULONG nFormat = pFormatter->GetStandardFormat( NUMBERFORMAT_DATE, ScGlobal::eLnge );
+        String aString;
+        pFormatter->GetInputLineString( fValue, nFormat, aString );
+        rBuffer.append( aString );
+    }
+
+    String lcl_GetNumGroupName( double fStartValue, const ScDPNumGroupInfo& rInfo,
+        bool bHasNonInteger, sal_Unicode cDecSeparator, SvNumberFormatter* pFormatter )
+    {
+        DBG_ASSERT( cDecSeparator != 0, "cDecSeparator not initialized" );
+
+        double fStep = rInfo.Step;
+        double fEndValue = fStartValue + fStep;
+        if ( !bHasNonInteger && ( rInfo.DateValues || !rtl::math::approxEqual( fEndValue, rInfo.End ) ) )
+        {
+            //  The second number of the group label is
+            //  (first number + size - 1) if there are only integer numbers,
+            //  (first number + size) if any non-integer numbers are involved.
+            //  Exception: The last group (containing the end value) is always
+            //  shown as including the end value (but not for dates).
+
+            fEndValue -= 1.0;
+        }
+
+        if ( fEndValue > rInfo.End && !rInfo.AutoEnd )
+        {
+            // limit the last group to the end value
+
+            fEndValue = rInfo.End;
+        }
+
+        rtl::OUStringBuffer aBuffer;
+        if ( rInfo.DateValues )
+        {
+            lcl_AppendDateStr( aBuffer, fStartValue, pFormatter );
+            aBuffer.appendAscii( " - " );   // with spaces
+            lcl_AppendDateStr( aBuffer, fEndValue, pFormatter );
+        }
+        else
+        {
+            rtl::math::doubleToUStringBuffer( aBuffer, fStartValue, rtl_math_StringFormat_Automatic,
+                rtl_math_DecimalPlaces_Max, cDecSeparator, true );
+            aBuffer.append( (sal_Unicode) '-' );
+            rtl::math::doubleToUStringBuffer( aBuffer, fEndValue, rtl_math_StringFormat_Automatic,
+                rtl_math_DecimalPlaces_Max, cDecSeparator, true );
+        }
+
+        return aBuffer.makeStringAndClear();
+    }
+
+    String lcl_GetSpecialNumGroupName( double fValue, bool bFirst, sal_Unicode cDecSeparator,
+        bool bDateValues, SvNumberFormatter* pFormatter )
+    {
+        DBG_ASSERT( cDecSeparator != 0, "cDecSeparator not initialized" );
+
+        rtl::OUStringBuffer aBuffer;
+        aBuffer.append((sal_Unicode)( bFirst ? '<' : '>' ));
+        if ( bDateValues )
+            lcl_AppendDateStr( aBuffer, fValue, pFormatter );
+        else
+            rtl::math::doubleToUStringBuffer( aBuffer, fValue, rtl_math_StringFormat_Automatic,
+            rtl_math_DecimalPlaces_Max, cDecSeparator, true );
+        return aBuffer.makeStringAndClear();
+    }
+
+    inline bool IsInteger( double fValue )
+    {
+        return rtl::math::approxEqual( fValue, rtl::math::approxFloor(fValue) );
+    }
+
+    String lcl_GetNumGroupForValue( double fValue, const ScDPNumGroupInfo& rInfo, bool bHasNonInteger,
+        sal_Unicode cDecSeparator, double& rGroupValue, ScDocument* pDoc )
+    {
+        SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+
+        if ( fValue < rInfo.Start && !rtl::math::approxEqual( fValue, rInfo.Start ) )
+        {
+            rGroupValue = rInfo.Start - rInfo.Step;
+            return lcl_GetSpecialNumGroupName( rInfo.Start, true, cDecSeparator, rInfo.DateValues, pFormatter );
+        }
+
+        if ( fValue > rInfo.End && !rtl::math::approxEqual( fValue, rInfo.End ) )
+        {
+            rGroupValue = rInfo.End + rInfo.Step;
+            return lcl_GetSpecialNumGroupName( rInfo.End, false, cDecSeparator, rInfo.DateValues, pFormatter );
+        }
+
+        double fDiff = fValue - rInfo.Start;
+        double fDiv = rtl::math::approxFloor( fDiff / rInfo.Step );
+        double fGroupStart = rInfo.Start + fDiv * rInfo.Step;
+
+        if ( rtl::math::approxEqual( fGroupStart, rInfo.End ) &&
+            !rtl::math::approxEqual( fGroupStart, rInfo.Start ) )
+        {
+            if ( !rInfo.DateValues )
+            {
+                //  A group that would consist only of the end value is not created,
+                //  instead the value is included in the last group before. So the
+                //  previous group is used if the calculated group start value is the
+                //  selected end value.
+
+                fDiv -= 1.0;
+                fGroupStart = rInfo.Start + fDiv * rInfo.Step;
+            }
+            else
+            {
+                //  For date values, the end value is instead treated as above the limit
+                //  if it would be a group of its own.
+
+                rGroupValue = rInfo.End + rInfo.Step;
+                return lcl_GetSpecialNumGroupName( rInfo.End, false, cDecSeparator, rInfo.DateValues, pFormatter );
+            }
+        }
+
+        rGroupValue = fGroupStart;
+
+        return lcl_GetNumGroupName( fGroupStart, rInfo, bHasNonInteger, cDecSeparator, pFormatter );
+    }
+}
 
 class ScDPGroupDateFilter : public ScDPCacheTable::FilterBase
 {
@@ -87,7 +284,10 @@ public:
     ScDPGroupDateFilter(double fMatchValue, sal_Int32 nDatePart,
                         const Date* pNullDate, const ScDPNumGroupInfo* pNumInfo);
 
-    virtual bool match(const ScDPCacheCell &rCell) const;
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
+    virtual bool match(const ScDPItemData & rCellData) const;
+    // End Comments
 
 private:
     ScDPGroupDateFilter(); // disabled
@@ -110,26 +310,25 @@ ScDPGroupDateFilter::ScDPGroupDateFilter(double fMatchValue, sal_Int32 nDatePart
 //  fprintf(stdout, "ScDPCacheTable:DateGroupFilter::DateGroupFilter: match value = %g; date part = %ld\n",
 //          mfMatchValue, mnDatePart);
 }
-
-bool ScDPGroupDateFilter::match(const ScDPCacheCell& rCell) const
+bool ScDPGroupDateFilter::match( const ScDPItemData & rCellData ) const
 {
     using namespace ::com::sun::star::sheet;
     using ::rtl::math::approxFloor;
     using ::rtl::math::approxEqual;
 
-    if (!rCell.mbNumeric)
+    if ( !rCellData.IsValue() )
         return false;
-
+//  ScDPCacheCell rCell( rCellData.fValue );
     if (!mpNumInfo)
         return false;
 
     // Start and end dates are inclusive.  (An end date without a time value
     // is included, while an end date with a time value is not.)
 
-    if ( rCell.mfValue < mpNumInfo->Start && !approxEqual(rCell.mfValue, mpNumInfo->Start) )
+    if ( rCellData.GetValue() < mpNumInfo->Start && !approxEqual(rCellData.GetValue(), mpNumInfo->Start) )
         return static_cast<sal_Int32>(mfMatchValue) == SC_DP_DATE_FIRST;
 
-    if ( rCell.mfValue > mpNumInfo->End && !approxEqual(rCell.mfValue, mpNumInfo->End) )
+    if ( rCellData.GetValue() > mpNumInfo->End && !approxEqual(rCellData.GetValue(), mpNumInfo->End) )
         return static_cast<sal_Int32>(mfMatchValue) == SC_DP_DATE_LAST;
 
     if (mnDatePart == DataPilotFieldGroupBy::HOURS || mnDatePart == DataPilotFieldGroupBy::MINUTES ||
@@ -138,7 +337,7 @@ bool ScDPGroupDateFilter::match(const ScDPCacheCell& rCell) const
         // handle time
         // (as in the cell functions, ScInterpreter::ScGetHour etc.: seconds are rounded)
 
-        double time = rCell.mfValue - approxFloor(rCell.mfValue);
+        double time = rCellData.GetValue() - approxFloor(rCellData.GetValue());
         long seconds = static_cast<long>(approxFloor(time*D_TIMEFACTOR + 0.5));
 
         switch (mnDatePart)
@@ -167,7 +366,7 @@ bool ScDPGroupDateFilter::match(const ScDPCacheCell& rCell) const
         return false;
     }
 
-    Date date = *mpNullDate + static_cast<long>(approxFloor(rCell.mfValue));
+    Date date = *mpNullDate + static_cast<long>(approxFloor(rCellData.GetValue()));
     switch (mnDatePart)
     {
         case DataPilotFieldGroupBy::YEARS:
@@ -206,17 +405,6 @@ bool ScDPGroupDateFilter::match(const ScDPCacheCell& rCell) const
 
     return false;
 }
-
-// ============================================================================
-
-void lcl_AppendDateStr( rtl::OUStringBuffer& rBuffer, double fValue, SvNumberFormatter* pFormatter )
-{
-    ULONG nFormat = pFormatter->GetStandardFormat( NUMBERFORMAT_DATE, ScGlobal::eLnge );
-    String aString;
-    pFormatter->GetInputLineString( fValue, nFormat, aString );
-    rBuffer.append( aString );
-}
-
 // -----------------------------------------------------------------------
 
 ScDPDateGroupHelper::ScDPDateGroupHelper( const ScDPNumGroupInfo& rInfo, sal_Int32 nPart ) :
@@ -356,15 +544,18 @@ sal_Int32 lcl_GetDatePartValue( double fValue, sal_Int32 nDatePart, SvNumberForm
 BOOL lcl_DateContained( sal_Int32 nGroupPart, const ScDPItemData& rGroupData,
                         sal_Int32 nBasePart, const ScDPItemData& rBaseData )
 {
-    if ( !rGroupData.bHasValue || !rBaseData.bHasValue )
+    if ( !rGroupData.IsValue() || !rBaseData.IsValue() )
     {
         // non-numeric entries involved: only match equal entries
         return rGroupData.IsCaseInsEqual( rBaseData );
     }
 
     // no approxFloor needed, values were created from integers
-    sal_Int32 nGroupValue = (sal_Int32) rGroupData.fValue;
-    sal_Int32 nBaseValue = (sal_Int32) rBaseData.fValue;
+// Wang Xu Ming -- 2009-8-17
+// DataPilot Migration - Cache&&Performance
+    sal_Int32 nGroupValue = (sal_Int32) rGroupData.GetValue();
+    sal_Int32 nBaseValue = (sal_Int32) rBaseData.GetValue();
+// End Comments
     if ( nBasePart > nGroupPart )
     {
         // switch, so the base part is the smaller (inner) part
@@ -419,28 +610,25 @@ String lcl_GetSpecialDateName( double fValue, bool bFirst, SvNumberFormatter* pF
     return aBuffer.makeStringAndClear();
 }
 
-void ScDPDateGroupHelper::FillColumnEntries( TypedScStrCollection& rEntries, const TypedScStrCollection& rOriginal,
-                                            SvNumberFormatter* pFormatter ) const
+void ScDPDateGroupHelper::FillColumnEntries( SCCOL nSourceDim, ScDPTableDataCache* pCache, std::vector< SCROW >& rEntries, const std::vector< SCROW >& rOriginal  ) const
 {
     // auto min/max is only used for "Years" part, but the loop is always needed
     double fSourceMin = 0.0;
     double fSourceMax = 0.0;
     bool bFirst = true;
 
-    USHORT nOriginalCount = rOriginal.GetCount();
-    for (USHORT nOriginalPos=0; nOriginalPos<nOriginalCount; nOriginalPos++)
+    size_t  nOriginalCount = rOriginal.size();
+    for (size_t nOriginalPos=0; nOriginalPos<nOriginalCount; nOriginalPos++)
     {
-        const TypedStrData& rStrData = *rOriginal[nOriginalPos];
-        if ( rStrData.IsStrData() )
+        const  ScDPItemData* pItemData = pCache->GetItemDataById( nSourceDim, rOriginal[nOriginalPos] );
+        if ( pItemData->HasStringData() )
         {
             // string data: just copy
-            TypedStrData* pNew = new TypedStrData( rStrData );
-            if ( !rEntries.Insert( pNew ) )
-                delete pNew;
+            lcl_Insert( nSourceDim, pCache , rEntries,  rOriginal[nOriginalPos] );
         }
         else
         {
-            double fSourceValue = rStrData.GetValue();
+            double fSourceValue = pItemData->GetValue();
             if ( bFirst )
             {
                 fSourceMin = fSourceMax = fSourceValue;
@@ -464,6 +652,7 @@ void ScDPDateGroupHelper::FillColumnEntries( TypedScStrCollection& rEntries, con
         const_cast<ScDPDateGroupHelper*>(this)->aNumInfo.End = rtl::math::approxFloor( fSourceMax ) + 1;
 
     //! if not automatic, limit fSourceMin/fSourceMax for list of year values?
+    SvNumberFormatter* pFormatter = pCache->GetDoc()->GetFormatTable();
 
     long nStart = 0;
     long nEnd = 0;          // including
@@ -487,22 +676,15 @@ void ScDPDateGroupHelper::FillColumnEntries( TypedScStrCollection& rEntries, con
     for ( sal_Int32 nValue = nStart; nValue <= nEnd; nValue++ )
     {
         String aName = lcl_GetDateGroupName( nDatePart, nValue, pFormatter );
-        TypedStrData* pNew = new TypedStrData( aName, nValue, SC_STRTYPE_VALUE );
-        if ( !rEntries.Insert( pNew ) )
-            delete pNew;
+      lcl_InsertValue<false>( nSourceDim, pCache, rEntries, aName, nValue, nDatePart );
     }
 
     // add first/last entry (min/max)
-
     String aFirstName = lcl_GetSpecialDateName( aNumInfo.Start, true, pFormatter );
-    TypedStrData* pFirstEntry = new TypedStrData( aFirstName, SC_DP_DATE_FIRST, SC_STRTYPE_VALUE );
-    if ( !rEntries.Insert( pFirstEntry ) )
-        delete pFirstEntry;
+    lcl_InsertValue<true>( nSourceDim, pCache, rEntries, aFirstName, SC_DP_DATE_FIRST, nDatePart );
 
     String aLastName = lcl_GetSpecialDateName( aNumInfo.End, false, pFormatter );
-    TypedStrData* pLastEntry = new TypedStrData( aLastName, SC_DP_DATE_LAST, SC_STRTYPE_VALUE );
-    if ( !rEntries.Insert( pLastEntry ) )
-        delete pLastEntry;
+    lcl_InsertValue<true>( nSourceDim, pCache, rEntries, aLastName, SC_DP_DATE_LAST, nDatePart );
 }
 
 // -----------------------------------------------------------------------
@@ -543,7 +725,10 @@ void ScDPGroupItem::FillGroupFilter( ScDPCacheTable::GroupFilter& rFilter ) cons
 {
     ScDPItemDataVec::const_iterator itrEnd = aElements.end();
     for (ScDPItemDataVec::const_iterator itr = aElements.begin(); itr != itrEnd; ++itr)
-        rFilter.addMatchItem(itr->aString, itr->fValue, itr->bHasValue);
+// Wang Xu Ming -- 2009-8-17
+// DataPilot Migration - Cache&&Performance
+        rFilter.addMatchItem(itr->GetString(), itr->GetValue(), itr->IsValue());
+// End Comments
 }
 
 // -----------------------------------------------------------------------
@@ -552,15 +737,15 @@ ScDPGroupDimension::ScDPGroupDimension( long nSource, const String& rNewName ) :
     nSourceDim( nSource ),
     nGroupDim( -1 ),
     aGroupName( rNewName ),
-    pDateHelper( NULL ),
-    pCollection( NULL )
+    pDateHelper( NULL )/*,
+    pCollection( NULL )*/
 {
 }
 
 ScDPGroupDimension::~ScDPGroupDimension()
 {
     delete pDateHelper;
-    delete pCollection;
+    maMemberEntries.clear();
 }
 
 ScDPGroupDimension::ScDPGroupDimension( const ScDPGroupDimension& rOther ) :
@@ -568,8 +753,7 @@ ScDPGroupDimension::ScDPGroupDimension( const ScDPGroupDimension& rOther ) :
     nGroupDim( rOther.nGroupDim ),
     aGroupName( rOther.aGroupName ),
     pDateHelper( NULL ),
-    aItems( rOther.aItems ),
-    pCollection( NULL )                 // collection isn't copied - allocated on demand
+   aItems( rOther.aItems )
 {
     if ( rOther.pDateHelper )
         pDateHelper = new ScDPDateGroupHelper( *rOther.pDateHelper );
@@ -588,8 +772,6 @@ ScDPGroupDimension& ScDPGroupDimension::operator=( const ScDPGroupDimension& rOt
     else
         pDateHelper = NULL;
 
-    delete pCollection;                 // collection isn't copied - allocated on demand
-    pCollection = NULL;
     return *this;
 }
 
@@ -608,43 +790,41 @@ void ScDPGroupDimension::SetGroupDim( long nDim )
 {
     nGroupDim = nDim;
 }
-
-const TypedScStrCollection& ScDPGroupDimension::GetColumnEntries(
-                    const TypedScStrCollection& rOriginal, ScDocument* pDoc ) const
+// Wang Xu Ming -- 2009-9-2
+// DataPilot Migration - Cache&&Performance
+const std::vector< SCROW >&  ScDPGroupDimension::GetColumnEntries( const ScDPCacheTable&  rCacheTable, const std::vector< SCROW >& rOriginal  )  const
 {
-    if ( !pCollection )
+    if ( maMemberEntries.empty() )
     {
-        pCollection = new TypedScStrCollection();
         if ( pDateHelper )
-            pDateHelper->FillColumnEntries( *pCollection, rOriginal, pDoc->GetFormatTable() );
+        {
+            pDateHelper->FillColumnEntries(  (SCCOL)GetSourceDim(), rCacheTable.GetCache(), maMemberEntries,  rOriginal  );
+        }
         else
         {
+            for (size_t  i =0; i < rOriginal.size( );  i ++)
+            {
+                const  ScDPItemData* pItemData = rCacheTable.GetCache()->GetItemDataById( (SCCOL)GetSourceDim(), rOriginal[i] );
+                if ( !pItemData || !GetGroupForData( *pItemData ) )
+                {
+                    // not in any group -> add as its own group
+                    maMemberEntries.push_back( rOriginal[i] );
+                }
+            }
+
             long nCount = aItems.size();
             for (long i=0; i<nCount; i++)
             {
-                //! numeric entries?
-                TypedStrData* pNew = new TypedStrData( aItems[i].GetName().aString );
-                if ( !pCollection->Insert( pNew ) )
-                    delete pNew;
-            }
-
-            USHORT nOriginalCount = rOriginal.GetCount();
-            for (USHORT nOriginalPos=0; nOriginalPos<nOriginalCount; nOriginalPos++)
-            {
-                const TypedStrData& rStrData = *rOriginal[nOriginalPos];
-                ScDPItemData aItemData( rStrData.GetString(), rStrData.GetValue(), !rStrData.IsStrData() );
-                if ( !GetGroupForData( aItemData ) )
-                {
-                    // not in any group -> add as its own group
-                    TypedStrData* pNew = new TypedStrData( rStrData );
-                    if ( !pCollection->Insert( pNew ) )
-                        delete pNew;
-                }
+                SCROW nNew = rCacheTable.GetCache()->GetAdditionalItemID(  aItems[i].GetName() );
+                lcl_Insert ( (SCCOL)GetSourceDim(), rCacheTable.GetCache(), maMemberEntries, nNew  );
             }
         }
     }
-    return *pCollection;
+    return maMemberEntries;
 }
+
+// End Comments
+
 
 const ScDPGroupItem* ScDPGroupDimension::GetGroupForData( const ScDPItemData& rData ) const
 {
@@ -674,15 +854,13 @@ const ScDPGroupItem* ScDPGroupDimension::GetGroupByIndex( size_t nIndex ) const
 
 void ScDPGroupDimension::DisposeData()
 {
-    delete pCollection;
-    pCollection = NULL;
+    maMemberEntries.clear();
 }
 
 // -----------------------------------------------------------------------
 
 ScDPNumGroupDimension::ScDPNumGroupDimension() :
     pDateHelper( NULL ),
-    pCollection( NULL ),
     bHasNonInteger( false ),
     cDecSeparator( 0 )
 {
@@ -691,7 +869,6 @@ ScDPNumGroupDimension::ScDPNumGroupDimension() :
 ScDPNumGroupDimension::ScDPNumGroupDimension( const ScDPNumGroupInfo& rInfo ) :
     aGroupInfo( rInfo ),
     pDateHelper( NULL ),
-    pCollection( NULL ),
     bHasNonInteger( false ),
     cDecSeparator( 0 )
 {
@@ -700,7 +877,6 @@ ScDPNumGroupDimension::ScDPNumGroupDimension( const ScDPNumGroupInfo& rInfo ) :
 ScDPNumGroupDimension::ScDPNumGroupDimension( const ScDPNumGroupDimension& rOther ) :
     aGroupInfo( rOther.aGroupInfo ),
     pDateHelper( NULL ),
-    pCollection( NULL ),                // collection isn't copied - allocated on demand
     bHasNonInteger( false ),
     cDecSeparator( 0 )
 {
@@ -718,23 +894,19 @@ ScDPNumGroupDimension& ScDPNumGroupDimension::operator=( const ScDPNumGroupDimen
     else
         pDateHelper = NULL;
 
-    delete pCollection;                 // collection isn't copied - allocated on demand
-    pCollection = NULL;
     bHasNonInteger = false;
     return *this;
 }
 
 void ScDPNumGroupDimension::DisposeData()
 {
-    delete pCollection;
-    pCollection = NULL;
     bHasNonInteger = false;
+    maMemberEntries.clear();
 }
 
 ScDPNumGroupDimension::~ScDPNumGroupDimension()
 {
     delete pDateHelper;
-    delete pCollection;
 }
 
 void ScDPNumGroupDimension::MakeDateHelper( const ScDPNumGroupInfo& rInfo, sal_Int32 nPart )
@@ -745,80 +917,15 @@ void ScDPNumGroupDimension::MakeDateHelper( const ScDPNumGroupInfo& rInfo, sal_I
     aGroupInfo.Enable = sal_True;   //! or query both?
 }
 
-String lcl_GetNumGroupName( double fStartValue, const ScDPNumGroupInfo& rInfo,
-                            bool bHasNonInteger, sal_Unicode cDecSeparator, SvNumberFormatter* pFormatter )
+const std::vector< SCROW >& ScDPNumGroupDimension::GetNumEntries( SCCOL nSourceDim, ScDPTableDataCache* pCache,
+                    const std::vector< SCROW >& rOriginal  ) const
 {
-    DBG_ASSERT( cDecSeparator != 0, "cDecSeparator not initialized" );
-
-    double fStep = rInfo.Step;
-    double fEndValue = fStartValue + fStep;
-    if ( !bHasNonInteger && ( rInfo.DateValues || !rtl::math::approxEqual( fEndValue, rInfo.End ) ) )
+    if ( maMemberEntries.empty() )
     {
-        //  The second number of the group label is
-        //  (first number + size - 1) if there are only integer numbers,
-        //  (first number + size) if any non-integer numbers are involved.
-        //  Exception: The last group (containing the end value) is always
-        //  shown as including the end value (but not for dates).
+        SvNumberFormatter* pFormatter = pCache->GetDoc()->GetFormatTable();
 
-        fEndValue -= 1.0;
-    }
-
-    if ( fEndValue > rInfo.End && !rInfo.AutoEnd )
-    {
-        // limit the last group to the end value
-
-        fEndValue = rInfo.End;
-    }
-
-    rtl::OUStringBuffer aBuffer;
-    if ( rInfo.DateValues )
-    {
-        lcl_AppendDateStr( aBuffer, fStartValue, pFormatter );
-        aBuffer.appendAscii( " - " );   // with spaces
-        lcl_AppendDateStr( aBuffer, fEndValue, pFormatter );
-    }
-    else
-    {
-        rtl::math::doubleToUStringBuffer( aBuffer, fStartValue, rtl_math_StringFormat_Automatic,
-                                            rtl_math_DecimalPlaces_Max, cDecSeparator, true );
-        aBuffer.append( (sal_Unicode) '-' );
-        rtl::math::doubleToUStringBuffer( aBuffer, fEndValue, rtl_math_StringFormat_Automatic,
-                                            rtl_math_DecimalPlaces_Max, cDecSeparator, true );
-    }
-
-    return aBuffer.makeStringAndClear();
-}
-
-String lcl_GetSpecialNumGroupName( double fValue, bool bFirst, sal_Unicode cDecSeparator,
-                                    bool bDateValues, SvNumberFormatter* pFormatter )
-{
-    DBG_ASSERT( cDecSeparator != 0, "cDecSeparator not initialized" );
-
-    rtl::OUStringBuffer aBuffer;
-    aBuffer.append((sal_Unicode)( bFirst ? '<' : '>' ));
-    if ( bDateValues )
-        lcl_AppendDateStr( aBuffer, fValue, pFormatter );
-    else
-        rtl::math::doubleToUStringBuffer( aBuffer, fValue, rtl_math_StringFormat_Automatic,
-                                            rtl_math_DecimalPlaces_Max, cDecSeparator, true );
-    return aBuffer.makeStringAndClear();
-}
-
-inline bool IsInteger( double fValue )
-{
-    return rtl::math::approxEqual( fValue, rtl::math::approxFloor(fValue) );
-}
-
-const TypedScStrCollection& ScDPNumGroupDimension::GetNumEntries(
-                    const TypedScStrCollection& rOriginal, ScDocument* pDoc ) const
-{
-    if ( !pCollection )
-    {
-        SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-
-        pCollection = new TypedScStrCollection();
         if ( pDateHelper )
-            pDateHelper->FillColumnEntries( *pCollection, rOriginal, pFormatter );
+            pDateHelper->FillColumnEntries( nSourceDim, pCache, maMemberEntries,rOriginal );
         else
         {
             // Copy textual entries.
@@ -837,39 +944,37 @@ const TypedScStrCollection& ScDPNumGroupDimension::GetNumEntries(
             double fSourceMax = 0.0;
             bool bFirst = true;
 
-            USHORT nOriginalCount = rOriginal.GetCount();
-            for (USHORT nOriginalPos=0; nOriginalPos<nOriginalCount; nOriginalPos++)
+            size_t  nOriginalCount = rOriginal.size();
+            for (size_t  nOriginalPos=0; nOriginalPos<nOriginalCount; nOriginalPos++)
             {
-                const TypedStrData& rStrData = *rOriginal[nOriginalPos];
-                if ( rStrData.IsStrData() )
-                {
-                    // string data: just copy
-                    TypedStrData* pNew = new TypedStrData( rStrData );
-                    if ( !pCollection->Insert( pNew ) )
-                        delete pNew;
-                }
-                else
-                {
-                    double fSourceValue = rStrData.GetValue();
-                    if ( bFirst )
-                    {
-                        fSourceMin = fSourceMax = fSourceValue;
-                        bFirst = false;
-                    }
-                    else
-                    {
-                        if ( fSourceValue < fSourceMin )
-                            fSourceMin = fSourceValue;
-                        if ( fSourceValue > fSourceMax )
-                            fSourceMax = fSourceValue;
-                    }
-                    if ( !bHasNonInteger && !IsInteger( fSourceValue ) )
-                    {
-                        // if any non-integer numbers are involved, the group labels are
-                        // shown including their upper limit
-                        bHasNonInteger = true;
-                    }
-                }
+               const  ScDPItemData* pItemData = pCache->GetItemDataById( nSourceDim , rOriginal[nOriginalPos] );
+
+               if ( pItemData && pItemData ->HasStringData() )
+               {
+                   lcl_Insert( nSourceDim, pCache, maMemberEntries,  rOriginal[nOriginalPos] );
+               }
+               else
+               {
+                   double fSourceValue = pItemData->GetValue();
+                   if ( bFirst )
+                   {
+                       fSourceMin = fSourceMax = fSourceValue;
+                       bFirst = false;
+                   }
+                   else
+                   {
+                       if ( fSourceValue < fSourceMin )
+                           fSourceMin = fSourceValue;
+                       if ( fSourceValue > fSourceMax )
+                           fSourceMax = fSourceValue;
+                   }
+                   if ( !bHasNonInteger && !IsInteger( fSourceValue ) )
+                   {
+                       // if any non-integer numbers are involved, the group labels are
+                       // shown including their upper limit
+                       bHasNonInteger = true;
+                   }
+               }
             }
 
             if ( aGroupInfo.DateValues )
@@ -901,10 +1006,7 @@ const TypedScStrCollection& ScDPNumGroupDimension::GetNumEntries(
                 String aName = lcl_GetNumGroupName( fLoop, aGroupInfo, bHasNonInteger, cDecSeparator, pFormatter );
                 // create a numerical entry to ensure proper sorting
                 // (in FillMemberResults this needs special handling)
-                TypedStrData* pNew = new TypedStrData( aName, fLoop, SC_STRTYPE_VALUE );
-                if ( !pCollection->Insert( pNew ) )
-                    delete pNew;
-
+                lcl_InsertValue<true>( nSourceDim,  pCache,  maMemberEntries, aName, fLoop );
                 ++nLoopCount;
                 fLoop = aGroupInfo.Start + nLoopCount * aGroupInfo.Step;
                 bFirstGroup = false;
@@ -913,72 +1015,17 @@ const TypedScStrCollection& ScDPNumGroupDimension::GetNumEntries(
             }
 
             String aFirstName = lcl_GetSpecialNumGroupName( aGroupInfo.Start, true, cDecSeparator, aGroupInfo.DateValues, pFormatter );
-            TypedStrData* pFirstEntry = new TypedStrData( aFirstName, aGroupInfo.Start - aGroupInfo.Step, SC_STRTYPE_VALUE );
-            if ( !pCollection->Insert( pFirstEntry ) )
-                delete pFirstEntry;
+            lcl_InsertValue<true>( nSourceDim,  pCache,  maMemberEntries, aFirstName,  aGroupInfo.Start - aGroupInfo.Step );
 
             String aLastName = lcl_GetSpecialNumGroupName( aGroupInfo.End, false, cDecSeparator, aGroupInfo.DateValues, pFormatter );
-            TypedStrData* pLastEntry = new TypedStrData( aLastName, aGroupInfo.End + aGroupInfo.Step, SC_STRTYPE_VALUE );
-            if ( !pCollection->Insert( pLastEntry ) )
-                delete pLastEntry;
+            lcl_InsertValue<true>( nSourceDim,  pCache,  maMemberEntries, aLastName,  aGroupInfo.End + aGroupInfo.Step );
         }
     }
-    return *pCollection;
-}
-
-// -----------------------------------------------------------------------
-
-String lcl_GetNumGroupForValue( double fValue, const ScDPNumGroupInfo& rInfo, bool bHasNonInteger,
-                                sal_Unicode cDecSeparator, double& rGroupValue, ScDocument* pDoc )
-{
-    SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-
-    if ( fValue < rInfo.Start && !rtl::math::approxEqual( fValue, rInfo.Start ) )
-    {
-        rGroupValue = rInfo.Start - rInfo.Step;
-        return lcl_GetSpecialNumGroupName( rInfo.Start, true, cDecSeparator, rInfo.DateValues, pFormatter );
-    }
-
-    if ( fValue > rInfo.End && !rtl::math::approxEqual( fValue, rInfo.End ) )
-    {
-        rGroupValue = rInfo.End + rInfo.Step;
-        return lcl_GetSpecialNumGroupName( rInfo.End, false, cDecSeparator, rInfo.DateValues, pFormatter );
-    }
-
-    double fDiff = fValue - rInfo.Start;
-    double fDiv = rtl::math::approxFloor( fDiff / rInfo.Step );
-    double fGroupStart = rInfo.Start + fDiv * rInfo.Step;
-
-    if ( rtl::math::approxEqual( fGroupStart, rInfo.End ) &&
-         !rtl::math::approxEqual( fGroupStart, rInfo.Start ) )
-    {
-        if ( !rInfo.DateValues )
-        {
-            //  A group that would consist only of the end value is not created,
-            //  instead the value is included in the last group before. So the
-            //  previous group is used if the calculated group start value is the
-            //  selected end value.
-
-            fDiv -= 1.0;
-            fGroupStart = rInfo.Start + fDiv * rInfo.Step;
-        }
-        else
-        {
-            //  For date values, the end value is instead treated as above the limit
-            //  if it would be a group of its own.
-
-            rGroupValue = rInfo.End + rInfo.Step;
-            return lcl_GetSpecialNumGroupName( rInfo.End, false, cDecSeparator, rInfo.DateValues, pFormatter );
-        }
-    }
-
-    rGroupValue = fGroupStart;
-
-    return lcl_GetNumGroupName( fGroupStart, rInfo, bHasNonInteger, cDecSeparator, pFormatter );
+    return maMemberEntries;
 }
 
 ScDPGroupTableData::ScDPGroupTableData( ScDPTableData* pSource, ScDocument* pDocument ) :
-    ScDPTableData(pDocument),
+    ScDPTableData(pDocument, pSource->GetCacheId() ),
     pSourceData( pSource ),
     pDoc( pDocument )
 {
@@ -1018,7 +1065,6 @@ long ScDPGroupTableData::GetDimensionIndex( const String& rName )
     for (long i=0; i<nSourceCount; i++)                         // nSourceCount excludes data layout
         if ( pSourceData->getDimensionName(i) == rName )        //! ignore case?
             return i;
-
     return -1;  // none
 }
 
@@ -1042,34 +1088,51 @@ void ScDPGroupTableData::GetNumGroupInfo( long nDimension, ScDPNumGroupInfo& rIn
         rDecimal    = pNumGroups[nDimension].GetDecSeparator();
     }
 }
-
-const TypedScStrCollection& ScDPGroupTableData::GetColumnEntries(long nColumn)
+// Wang Xu Ming - DataPilot migration
+long  ScDPGroupTableData::GetMembersCount( long nDim )
 {
-    // date handling is in ScDPGroupDimension::GetColumnEntries / ScDPNumGroupDimension::GetNumEntries
-    // (to use the pCollection members)
-
+    const std::vector< SCROW >&  members = GetColumnEntries( nDim );
+    return members.size();
+}
+const std::vector< SCROW >& ScDPGroupTableData::GetColumnEntries( long  nColumn )
+{
     if ( nColumn >= nSourceCount )
     {
-        if ( nColumn == sal::static_int_cast<long>( nSourceCount + aGroups.size() ) )     // data layout dimension?
+        if ( getIsDataLayoutDimension( nColumn) )     // data layout dimension?
             nColumn = nSourceCount;                         // index of data layout in source data
         else
         {
             const ScDPGroupDimension& rGroupDim = aGroups[nColumn - nSourceCount];
             long nSourceDim = rGroupDim.GetSourceDim();
             // collection is cached at pSourceData, GetColumnEntries can be called every time
-            const TypedScStrCollection& rOriginal = pSourceData->GetColumnEntries( nSourceDim );
-            return rGroupDim.GetColumnEntries( rOriginal, pDoc );
+            const  std::vector< SCROW >& rOriginal = pSourceData->GetColumnEntries( nSourceDim );
+            return rGroupDim.GetColumnEntries( GetCacheTable(), rOriginal );
         }
     }
 
     if ( IsNumGroupDimension( nColumn ) )
     {
         // dimension number is unchanged for numerical groups
-        const TypedScStrCollection& rOriginal = pSourceData->GetColumnEntries( nColumn );
-        return pNumGroups[nColumn].GetNumEntries( rOriginal, pDoc );
+        const  std::vector< SCROW >& rOriginal = pSourceData->GetColumnEntries( nColumn );
+        return pNumGroups[nColumn].GetNumEntries( (SCCOL)nColumn,  GetCacheTable().GetCache(), rOriginal );
     }
 
     return pSourceData->GetColumnEntries( nColumn );
+}
+
+const ScDPItemData* ScDPGroupTableData::GetMemberById( long nDim, long nId )
+{
+    if ( nDim >= nSourceCount )
+    {
+        if ( getIsDataLayoutDimension( nDim) )
+            nDim    = nSourceCount;
+        else
+        {
+            const ScDPGroupDimension& rGroupDim = aGroups[nDim - nSourceCount];
+            nDim = rGroupDim.GetSourceDim();
+        }
+    }
+    return pSourceData->GetMemberById( nDim, nId );
 }
 
 String ScDPGroupTableData::getDimensionName(long nColumn)
@@ -1104,7 +1167,7 @@ BOOL ScDPGroupTableData::IsDateDimension(long nDim)
     return pSourceData->IsDateDimension( nDim );
 }
 
-UINT32 ScDPGroupTableData::GetNumberFormat(long nDim)
+ULONG ScDPGroupTableData::GetNumberFormat(long nDim)
 {
     if ( nDim >= nSourceCount )
     {
@@ -1223,16 +1286,19 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPCacheTable::Criterion>&
                 for (size_t i = 0; i < nGroupItemCount; ++i)
                 {
                     const ScDPGroupItem* pGrpItem = pGrpDim->GetGroupByIndex(i);
-                    ScDPItemData aName;
-                    aName.aString   = pFilter->getMatchString();
+                    // Wang Xu Ming -- 2009-6-9
+                    // DataPilot Migration
+                    ScDPItemData aName( pFilter->getMatchString(),pFilter->getMatchValue(),pFilter->hasValue()) ;
+                    /*aName.aString   = pFilter->getMatchString();
                     aName.fValue    = pFilter->getMatchValue();
-                    aName.bHasValue = pFilter->hasValue();
-                    if (!pGrpItem || !pGrpItem->GetName().IsCaseInsEqual(aName))
+                    aName.bHasValue = pFilter->hasValue();*/
+                    // End Comments
+                                       if (!pGrpItem || !pGrpItem->GetName().IsCaseInsEqual(aName))
                         continue;
 
                     ScDPCacheTable::Criterion aCri;
                     aCri.mnFieldIndex = nSrcDim;
-                    aCri.mpFilter.reset(new ScDPCacheTable::GroupFilter(GetSharedString()));
+                    aCri.mpFilter.reset(new ScDPCacheTable::GroupFilter());
                     ScDPCacheTable::GroupFilter* pGrpFilter =
                         static_cast<ScDPCacheTable::GroupFilter*>(aCri.mpFilter.get());
 
@@ -1324,25 +1390,27 @@ void ScDPGroupTableData::CopyFields(const vector<long>& rFieldDims, vector<long>
     }
 }
 
-void ScDPGroupTableData::FillGroupValues( ScDPItemData* pItemData, long nCount, const long* pDims )
+void ScDPGroupTableData::FillGroupValues( /*ScDPItemData* pItemData*/ SCROW* pItemDataIndex, long nCount, const long* pDims )
 {
     long nGroupedColumns = aGroups.size();
 
+    ScDPTableDataCache* pCache = GetCacheTable().GetCache();
     for (long nDim=0; nDim<nCount; nDim++)
     {
         const ScDPDateGroupHelper* pDateHelper = NULL;
 
         long nColumn = pDims[nDim];
+        long nSourceDim = nColumn;
         if ( nColumn >= nSourceCount && nColumn < nSourceCount + nGroupedColumns )
         {
             const ScDPGroupDimension& rGroupDim = aGroups[nColumn - nSourceCount];
+            nSourceDim= rGroupDim.GetSourceDim();
             pDateHelper = rGroupDim.GetDateHelper();
             if ( !pDateHelper )                         // date is handled below
             {
-                const ScDPGroupItem* pGroupItem = rGroupDim.GetGroupForData( pItemData[nDim] );
-                if ( pGroupItem )
-                    pItemData[nDim] = pGroupItem->GetName();
-                // if no group is found, keep the original name
+                 const ScDPGroupItem* pGroupItem = rGroupDim.GetGroupForData( *GetMemberById( nSourceDim, pItemDataIndex[nDim] ));
+              if ( pGroupItem )
+                      pItemDataIndex[nDim] = pCache->GetAdditionalItemID(  pGroupItem->GetName() );
             }
         }
         else if ( IsNumGroupDimension( nColumn ) )
@@ -1350,18 +1418,18 @@ void ScDPGroupTableData::FillGroupValues( ScDPItemData* pItemData, long nCount, 
             pDateHelper = pNumGroups[nColumn].GetDateHelper();
             if ( !pDateHelper )                         // date is handled below
             {
-                if ( pItemData[nDim].bHasValue )
+                 const ScDPItemData* pData = pCache->GetItemDataById( (SCCOL)nSourceDim, pItemDataIndex[nDim]);
+                if ( pData ->IsValue() )
                 {
                     ScDPNumGroupInfo aNumInfo;
                     bool bHasNonInteger = false;
                     sal_Unicode cDecSeparator = 0;
                     GetNumGroupInfo( nColumn, aNumInfo, bHasNonInteger, cDecSeparator );
                     double fGroupValue;
-                    String aGroupName = lcl_GetNumGroupForValue( pItemData[nDim].fValue,
-                                                    aNumInfo, bHasNonInteger, cDecSeparator, fGroupValue, pDoc );
-
-                    // consistent with TypedStrData in GetNumEntries
-                    pItemData[nDim] = ScDPItemData( aGroupName, fGroupValue, TRUE );
+                    String aGroupName = lcl_GetNumGroupForValue( pData->GetValue(),
+                             aNumInfo, bHasNonInteger, cDecSeparator, fGroupValue, pDoc );
+                    ScDPItemData  aItemData ( aGroupName, fGroupValue, TRUE ) ;
+                    pItemDataIndex[nDim] = pCache->GetAdditionalItemID( aItemData  );
                 }
                 // else (textual) keep original value
             }
@@ -1369,12 +1437,18 @@ void ScDPGroupTableData::FillGroupValues( ScDPItemData* pItemData, long nCount, 
 
         if ( pDateHelper )
         {
-            if ( pItemData[nDim].bHasValue )
+            const ScDPItemData* pData  = GetCacheTable().GetCache()->GetItemDataById( (SCCOL)nSourceDim, pItemDataIndex[nDim]);
+              if ( pData ->IsValue() )
             {
                 sal_Int32 nPartValue = lcl_GetDatePartValue(
-                        pItemData[nDim].fValue, pDateHelper->GetDatePart(), pDoc->GetFormatTable(),
-                        &pDateHelper->GetNumInfo() );
-                pItemData[nDim] = ScDPItemData( String(), nPartValue, TRUE );
+                    pData->GetValue(), pDateHelper->GetDatePart(), pDoc->GetFormatTable(),
+                    &pDateHelper->GetNumInfo() );
+// Wang Xu Ming -- 2009-9-7
+// DataPilot Migration - Cache&&Performance
+                //String aName = lcl_GetDateGroupName( pDateHelper, nPartValue, pDoc->GetFormatTable() );
+                ScDPItemData  aItemData( pDateHelper->GetDatePart(), String(), nPartValue, ScDPItemData::MK_DATA|ScDPItemData::MK_VAL|ScDPItemData::MK_DATEPART );
+                pItemDataIndex[nDim] = GetCacheTable().GetCache()->GetAdditionalItemID( aItemData );
+// End Comments
             }
         }
     }
@@ -1530,5 +1604,22 @@ BOOL ScDPGroupTableData::HasCommonElement( const ScDPItemData& rFirstData, long 
     return TRUE;
 }
 
+long ScDPGroupTableData::GetSourceDim( long nDim )
+{
+    if ( getIsDataLayoutDimension( nDim ) )
+        return nSourceCount;
+    if (  nDim >= nSourceCount && nDim < nSourceCount +(long) aGroups.size()  )
+    {
+         const ScDPGroupDimension& rGroupDim = aGroups[nDim - nSourceCount];
+            return  rGroupDim.GetSourceDim();
+    }
+    return nDim;
+}
+ long ScDPGroupTableData::Compare( long nDim, long nDataId1, long nDataId2)
+{
+    if ( getIsDataLayoutDimension(nDim) )
+        return 0;
+    return ScDPItemData::Compare( *GetMemberById(nDim,  nDataId1),*GetMemberById(nDim,  nDataId2) );
+}
 // -----------------------------------------------------------------------
 

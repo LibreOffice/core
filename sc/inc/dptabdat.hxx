@@ -34,7 +34,10 @@
 #include "address.hxx"
 #include "dpoutput.hxx"
 #include "dpcachetable.hxx"
-
+// Wang Xu Ming -- 2009-8-17
+// DataPilot Migration - Cache&&Performance
+#include "dptablecache.hxx"
+// End Comments
 #include <tools/string.hxx>
 
 #include <vector>
@@ -46,8 +49,6 @@ namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldFilter;
 }}}}
 
-class TypedScStrCollection;
-class ScSimpleSharedString;
 
 // -----------------------------------------------------------------------
 
@@ -74,28 +75,6 @@ class ScSimpleSharedString;
 //  base class ScDPTableData to allow implementation with tabular data
 //  by deriving only of this
 //
-
-struct ScDPItemData
-{
-    String  aString;
-    double  fValue;
-    BOOL    bHasValue;
-
-                ScDPItemData() : fValue(0.0), bHasValue(FALSE) {}
-                ScDPItemData( const String& rS, double fV = 0.0, BOOL bHV = FALSE ) :
-                    aString(rS), fValue(fV), bHasValue( bHV ) {}
-
-    void        SetString( const String& rS ) { aString = rS; bHasValue = FALSE; }
-    BOOL        IsCaseInsEqual( const ScDPItemData& r ) const;
-
-    size_t      Hash() const;
-
-    // exact equality
-    BOOL        operator==( const ScDPItemData& r ) const;
-    // case insensitive equality
-    static sal_Int32    Compare( const ScDPItemData& rA, const ScDPItemData& rB );
-};
-
 #define SC_VALTYPE_EMPTY    0
 #define SC_VALTYPE_VALUE    1
 #define SC_VALTYPE_STRING   2
@@ -116,15 +95,18 @@ class ScDPInitState;
 class ScDPResultMember;
 class ScDocument;
 
-class ScDPTableData
+ class SC_DLLPUBLIC ScDPTableData
 {
     //  cached data for GetDatePart
     long    nLastDateVal;
     long    nLastHier;
     long    nLastLevel;
     long    nLastRet;
-    ScSimpleSharedString& mrSharedString;
-
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
+    long                          mnCacheId;
+    const ScDocument*   mpDoc;
+    // End Comments
 public:
 
     /** This structure stores dimension information used when calculating
@@ -150,7 +132,10 @@ public:
         CalcInfo();
     };
 
-                ScDPTableData(ScDocument* pDoc);
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
+    ScDPTableData(ScDocument* pDoc, long nCacheId );
+    // End Comments
     virtual     ~ScDPTableData();
 
     long        GetDatePart( long nDateVal, long nHierarchy, long nLevel );
@@ -159,11 +144,16 @@ public:
                 //! or separate Str and ValueCollection
 
     virtual long                    GetColumnCount() = 0;
-    virtual const TypedScStrCollection& GetColumnEntries(long nColumn) = 0;
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
+    virtual   const std::vector< SCROW >& GetColumnEntries( long nColumn ) ;
+    long                                                     GetCacheId() const;
+    // End Comments
     virtual String                  getDimensionName(long nColumn) = 0;
     virtual BOOL                    getIsDataLayoutDimension(long nColumn) = 0;
     virtual BOOL                    IsDateDimension(long nDim) = 0;
-    virtual UINT32                  GetNumberFormat(long nDim);
+    virtual ULONG                   GetNumberFormat(long nDim);
+    virtual UINT32                  GetNumberFormatByIdx( NfIndexTableOffset );
     virtual void                    DisposeData() = 0;
     virtual void                    SetEmptyFlags( BOOL bIgnoreEmptyRows, BOOL bRepeatIfEmpty ) = 0;
 
@@ -179,23 +169,33 @@ public:
 
                                     // overloaded in ScDPGroupTableData:
     virtual BOOL                    IsBaseForGroup(long nDim) const;
-    virtual long                    GetGroupBase(long nGroupDim) const;
+    virtual long                      GetGroupBase(long nGroupDim) const;
     virtual BOOL                    IsNumOrDateGroup(long nDim) const;
     virtual BOOL                    IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex,
                                                const ScDPItemData& rBaseData, long nBaseIndex ) const;
     virtual BOOL                    HasCommonElement( const ScDPItemData& rFirstData, long nFirstIndex,
                                                       const ScDPItemData& rSecondData, long nSecondIndex ) const;
 
-    ScSimpleSharedString&           GetSharedString();
-
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
+    virtual long                            GetMembersCount( long nDim );
+    virtual const ScDPItemData*   GetMemberByIndex( long nDim, long nIndex );
+    virtual const ScDPItemData*   GetMemberById( long nDim, long nId);
+    virtual SCROW                        GetIdOfItemData( long  nDim, const ScDPItemData& rData );
+    virtual long                GetSourceDim( long nDim );
+    virtual long                Compare( long nDim, long nDataId1, long nDataId2);
+    // End Comments
 protected:
     /** This structure stores vector arrays that hold intermediate data for
         each row during cache table iteration. */
     struct CalcRowData
     {
-        ::std::vector<ScDPItemData>  aColData;
-        ::std::vector<ScDPItemData>  aRowData;
-        ::std::vector<ScDPItemData>  aPageData;
+        // Wang Xu Ming -- 2009-8-17
+        // DataPilot Migration - Cache&&Performance
+        ::std::vector< SCROW >  aColData;
+        ::std::vector< SCROW >  aRowData;
+        ::std::vector< SCROW >  aPageData;
+        // End Comments
         ::std::vector<ScDPValueData> aValues;
     };
 
@@ -204,10 +204,11 @@ protected:
     void            CalcResultsFromCacheTable(const ScDPCacheTable& rCacheTable, CalcInfo& rInfo, bool bAutoShow);
 
 private:
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
     void            GetItemData(const ScDPCacheTable& rCacheTable, sal_Int32 nRow,
-                                const ::std::vector<long>& rDims, ::std::vector<ScDPItemData>& rItemData);
+                                          const ::std::vector<long>& rDims, ::std::vector< SCROW >& rItemData);
+    // End Comments
 };
-
-
 #endif
 

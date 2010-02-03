@@ -59,32 +59,37 @@ class ScRange;
 class ScDPDimension;
 class ScDPCollection;
 struct ScDPCacheCell;
-struct ScDPItemData;
+// Wang Xu Ming -- 2009-8-17
+// DataPilot Migration - Cache&&Performance
+class ScDPItemData;
+// End Comments
 class Date;
 
+// Wang Xu Ming -- 2009-8-17
+// DataPilot Migration - Cache&&Performance
+class ScDPTableDataCache;
+struct ScDPValueData;
+// End Comments
 // ----------------------------------------------------------------------------
 
-class ScDPCacheTable
+class SC_DLLPUBLIC ScDPCacheTable
 {
 public:
-
-    struct Cell
-    {
-        SCROW           mnCategoryRef;
-        ScDPCacheCell*  mpContent;
-
-        Cell();
-        ~Cell();
-    };
-
     /** individual filter item used in SingleFilter and GroupFilter. */
     struct FilterItem
     {
-        sal_Int32   mnMatchStrId;
+        // Wang Xu Ming -- 2009-8-17
+        // DataPilot Migration - Cache&&Performance
+        String       maString;
+        // End Comments
         double      mfValue;
         bool        mbHasValue;
 
         FilterItem();
+// Wang Xu Ming -- 2009-8-17
+// DataPilot Migration - Cache&&Performance
+    bool  match( const  ScDPItemData& rCellData ) const;
+// End Comments
     };
 
     /** interface class used for filtering of rows. */
@@ -93,19 +98,26 @@ public:
     public:
         /** returns true if the matching condition is met for a single cell
             value, or false otherwise. */
-        virtual bool match(const ScDPCacheCell& rCell) const = 0;
+// Wang Xu Ming -- 2009-8-17
+// DataPilot Migration - Cache&&Performance
+        virtual bool match( const  ScDPItemData& rCellData ) const = 0;
+// End Comments
     };
 
     /** ordinary single-item filter. */
     class SingleFilter : public FilterBase
     {
     public:
-        explicit SingleFilter(ScSimpleSharedString& rSharedString,
-                              sal_Int32 nMatchStrId, double fValue, bool bHasValue);
+        // Wang Xu Ming -- 2009-8-17
+        // DataPilot Migration - Cache&&Performance
+        explicit SingleFilter(String aString, double fValue, bool bHasValue);
+        // End Comments
         virtual ~SingleFilter(){}
 
-        virtual bool match(const ScDPCacheCell& rCell) const;
-
+       // Wang Xu Ming -- 2009-8-17
+        // DataPilot Migration - Cache&&Performance
+         virtual bool match(const ScDPItemData& rCellData) const;
+         // End Comments
         const String    getMatchString();
         double          getMatchValue() const;
         bool            hasValue() const;
@@ -114,25 +126,27 @@ public:
         explicit SingleFilter();
 
         FilterItem  maItem;
-        ScSimpleSharedString mrSharedString;
     };
 
     /** multi-item (group) filter. */
     class GroupFilter : public FilterBase
     {
     public:
-        GroupFilter(ScSimpleSharedString& rSharedString);
+        // Wang Xu Ming -- 2009-8-17
+        // DataPilot Migration - Cache&&Performance
+        GroupFilter();
+        // End Comments
         virtual ~GroupFilter(){}
-        virtual bool match(const ScDPCacheCell& rCell) const;
-
+        // Wang Xu Ming -- 2009-8-17
+        // DataPilot Migration - Cache&&Performance
+        virtual bool match(  const  ScDPItemData& rCellData ) const;
+        // End Comments
         void addMatchItem(const String& rStr, double fVal, bool bHasValue);
         size_t getMatchItemCount() const;
 
     private:
-        GroupFilter();
 
         ::std::vector<FilterItem> maItems;
-        ScSimpleSharedString mrSharedString;
     };
 
     /** single filtering criterion. */
@@ -143,22 +157,26 @@ public:
 
         Criterion();
     };
-
-    ScDPCacheTable(ScDPCollection* pCollection);
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
+    ScDPCacheTable( ScDocument* pDoc,long nId );
+    // End Comments
     ~ScDPCacheTable();
 
     sal_Int32 getRowSize() const;
     sal_Int32 getColSize() const;
 
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
+    ScDPTableDataCache* GetCache() const;
     /** Fill the internal table from the cell range provided.  This function
-        assumes that the first row is the column header. */
-    void fillTable(ScDocument* pDoc, const ScRange& rRange, const ScQueryParam& rQuery, BOOL* pSpecial,
-                   bool bIgnoreEmptyRows);
-
+    assumes that the first row is the column header. */
+    void fillTable( const ScQueryParam& rQuery, BOOL* pSpecial,
+        bool bIgnoreEmptyRows, bool bRepeatIfEmpty );
     /** Fill the internal table from database connection object.  This function
         assumes that the first row is the column header. */
-    void fillTable(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xRowSet,
-                   const Date& rNullDate);
+    void fillTable();
+    // End Comments
 
     /** Check whether a specified row is active or not.  When a row is active,
         it is used in calculation of the results data.  A row becomes inactive
@@ -172,15 +190,23 @@ public:
     /** Get the cell instance at specified location within the data grid. Note
         that the data grid doesn't include the header row.  Don't delete the
         returned object! */
-    const ScDPCacheCell* getCell(SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty) const;
+    const ScDPItemData* getCell(SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty) const;
+    void  getValue( ScDPValueData& rVal, SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty) const;
+    String getFieldName( SCCOL  nIndex) const;
+    //End Comments
 
-    const String* getFieldName(sal_Int32 nIndex) const;
+    /** Get the field index (i.e. column ID in the original data source) based
+        on the string value that corresponds with the column title.  It returns
+        -1 if no field matching the string value exists. */
+    sal_Int32 getFieldIndex(const String& rStr) const;
 
-    /** Get the unique entries for a field specified by index.  The caller must
+  // Wang Xu Ming -- 2009-8-17
+  // DataPilot Migration - Cache&&Performance
+   /** Get the unique entries for a field specified by index.  The caller must
         make sure that the table is filled before calling function, or it will
         get an empty collection. */
-    const TypedScStrCollection& getFieldEntries(sal_Int32 nIndex) const;
-
+    const ::std::vector<SCROW>& getFieldEntries( sal_Int32 nColumn ) const;
+    // End Comments
     /** Filter the table based on the specified criteria, and copy the
         result to rTabData.  This method is used, for example, to generate
         a drill-down data table. */
@@ -189,6 +215,7 @@ public:
                      const ::std::hash_set<sal_Int32>& rRepeatIfEmptyDims);
 
     void clear();
+    void swap(ScDPCacheTable& rOther);
     bool empty() const;
 
 private:
@@ -203,26 +230,23 @@ private:
      */
     bool isRowQualified(sal_Int32 nRow, const ::std::vector<Criterion>& rCriteria, const ::std::hash_set<sal_Int32>& rRepeatIfEmptyDims) const;
     void getValueData(ScDocument* pDoc, const ScAddress& rPos, ScDPCacheCell& rCell);
-
+   // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
+   void InitNoneCache( ScDocument* pDoc );
+    // End Comments
 private:
-    typedef ::boost::shared_ptr<TypedScStrCollection> TypedScStrCollectionPtr;
-
-    /** main data table. */
-    ::std::vector< ::std::vector< ::ScDPCacheTable::Cell > > maTable;
-
-    /** header string IDs */
-    ::std::vector<sal_Int32> maHeader;
-
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
     /** unique field entires for each field (column). */
-    ::std::vector<TypedScStrCollectionPtr> maFieldEntries;
-
+    ::std::vector< ::std::vector<SCROW> > maFieldEntries;
+    // End Comments
     /** used to track visibility of rows.  The first row below the header row
         has the index of 0. */
     ::std::vector<bool> maRowsVisible;
-
-    ScSimpleSharedString& mrSharedString;
-    ScDPCollection* mpCollection;
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
+    ScDPTableDataCache* mpCache;
+    ScDPTableDataCache* mpNoneCache;
+    // End Comments
 };
-
-
 #endif

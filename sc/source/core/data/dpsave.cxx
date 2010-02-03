@@ -57,7 +57,19 @@
 #include <com/sun/star/sheet/XMembersSupplier.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-
+// Wang Xu Ming -- 2009-8-17
+// DataPilot Migration - Cache&&Performance
+#include "dptabsrc.hxx"
+#include "dpglobal.hxx"
+using namespace ScDPGlobal;
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDREFERENCETYPE_HPP_
+#include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDREFERENCEITEMTYPE_HPP_
+#include <com/sun/star/sheet/DataPilotFieldReferenceItemType.hpp>
+#endif
+using namespace com::sun::star::sheet;
+// End Comments
 using namespace com::sun::star;
 
 // -----------------------------------------------------------------------
@@ -65,25 +77,6 @@ using namespace com::sun::star;
 #define SC_DPSAVEMODE_NO        0
 #define SC_DPSAVEMODE_YES       1
 #define SC_DPSAVEMODE_DONTKNOW  2
-
-// -----------------------------------------------------------------------
-
-//! move to a header file
-//! use names from unonames.hxx?
-#define DP_PROP_COLUMNGRAND         "ColumnGrand"
-#define DP_PROP_FUNCTION            "Function"
-#define DP_PROP_IGNOREEMPTY         "IgnoreEmptyRows"
-#define DP_PROP_ISDATALAYOUT        "IsDataLayoutDimension"
-#define DP_PROP_ISVISIBLE           "IsVisible"
-#define DP_PROP_ORIENTATION         "Orientation"
-#define DP_PROP_REPEATIFEMPTY       "RepeatIfEmpty"
-#define DP_PROP_ROWGRAND            "RowGrand"
-#define DP_PROP_SHOWDETAILS         "ShowDetails"
-#define DP_PROP_SHOWEMPTY           "ShowEmpty"
-#define DP_PROP_SUBTOTALS           "SubTotals"
-#define DP_PROP_USEDHIERARCHY       "UsedHierarchy"
-#define DP_PROP_FILTER              "Filter"
-#define DP_PROP_POSITION            "Position"
 
 // -----------------------------------------------------------------------
 
@@ -303,6 +296,51 @@ BOOL ScDPSaveDimension::operator== ( const ScDPSaveDimension& r ) const
     for (; a != maMemberList.end() ; ++a, ++b)
         if (!(**a == **b))
             return FALSE;
+
+    if ( this->HasCurrentPage() && r.HasCurrentPage() )
+    {
+        if ( this->GetCurrentPage() != r.GetCurrentPage() )
+        {
+            return FALSE;
+        }
+    }
+    else if ( this->HasCurrentPage() || r.HasCurrentPage() )
+    {
+        return FALSE;
+    }
+    if( pReferenceValue && r.pReferenceValue )
+    {
+        if ( !(*pReferenceValue == *r.pReferenceValue) )
+        {
+            return FALSE;
+        }
+    }
+    else if ( pReferenceValue || r.pReferenceValue )
+    {
+        return FALSE;
+    }
+    if( this->pSortInfo && r.pSortInfo )
+    {
+        if ( !(*this->pSortInfo == *r.pSortInfo) )
+        {
+            return FALSE;
+        }
+    }
+    else if ( this->pSortInfo || r.pSortInfo )
+    {
+        return FALSE;
+    }
+    if( this->pAutoShowInfo && r.pAutoShowInfo )
+    {
+        if ( !(*this->pAutoShowInfo == *r.pAutoShowInfo) )
+        {
+            return FALSE;
+        }
+    }
+    else if ( this->pAutoShowInfo || r.pAutoShowInfo )
+    {
+        return FALSE;
+    }
 
     return TRUE;
 }
@@ -666,6 +704,10 @@ ScDPSaveData::ScDPSaveData() :
     nIgnoreEmptyMode( SC_DPSAVEMODE_DONTKNOW ),
     nRepeatEmptyMode( SC_DPSAVEMODE_DONTKNOW ),
     bFilterButton( TRUE ),
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
+    mnCacheId( -1),
+    // End Comments
     bDrillDown( TRUE )
 {
 }
@@ -676,7 +718,11 @@ ScDPSaveData::ScDPSaveData(const ScDPSaveData& r) :
     nIgnoreEmptyMode( r.nIgnoreEmptyMode ),
     nRepeatEmptyMode( r.nRepeatEmptyMode ),
     bFilterButton( r.bFilterButton ),
-    bDrillDown( r.bDrillDown )
+    // Wang Xu Ming -- 2009-8-17
+    // DataPilot Migration - Cache&&Performance
+    mnCacheId(  r.mnCacheId ),
+    // End Comments
+     bDrillDown( r.bDrillDown )
 {
     if ( r.pDimensionData )
         pDimensionData = new ScDPDimensionSaveData( *r.pDimensionData );
@@ -695,36 +741,11 @@ ScDPSaveData& ScDPSaveData::operator= ( const ScDPSaveData& r )
 {
     if ( &r != this )
     {
-        delete pDimensionData;
-        if ( r.pDimensionData )
-            pDimensionData = new ScDPDimensionSaveData( *r.pDimensionData );
-        else
-            pDimensionData = NULL;
-
-        nColumnGrandMode = r.nColumnGrandMode;
-        nRowGrandMode    = r.nRowGrandMode;
-        nIgnoreEmptyMode = r.nIgnoreEmptyMode;
-        nRepeatEmptyMode = r.nRepeatEmptyMode;
-        bFilterButton    = r.bFilterButton;
-        bDrillDown       = r.bDrillDown;
-
-        //  remove old dimensions
-
-        long nCount = aDimList.Count();
-        long i;
-        for (i=0; i<nCount; i++)
-            delete (ScDPSaveDimension*)aDimList.GetObject(i);
-        aDimList.Clear();
-
-        //  copy new dimensions
-
-        nCount = r.aDimList.Count();
-        for (i=0; i<nCount; i++)
-        {
-            ScDPSaveDimension* pNew =
-                new ScDPSaveDimension( *(ScDPSaveDimension*)r.aDimList.GetObject(i) );
-            aDimList.Insert( pNew, LIST_APPEND );
-        }
+        // Wang Xu Ming -- 2009-8-17
+        // DataPilot Migration - Cache&&Performance
+        this->~ScDPSaveData();
+        new( this ) ScDPSaveData ( r );
+        // End Comments
     }
     return *this;
 }
@@ -736,6 +757,7 @@ BOOL ScDPSaveData::operator== ( const ScDPSaveData& r ) const
          nIgnoreEmptyMode != r.nIgnoreEmptyMode ||
          nRepeatEmptyMode != r.nRepeatEmptyMode ||
          bFilterButton    != r.bFilterButton    ||
+         mnCacheId        != r.mnCacheId ||/// Wang Xu Ming -- 2009-6-18 DataPilot Migration
          bDrillDown       != r.bDrillDown )
         return FALSE;
 
@@ -807,8 +829,8 @@ ScDPSaveDimension* ScDPSaveData::GetNewDimensionByName(const String& rName)
 
 ScDPSaveDimension* ScDPSaveData::GetDataLayoutDimension()
 {
-    ULONG nCount = aDimList.Count();
-    for (ULONG i=0; i<nCount; i++)
+    long nCount = aDimList.Count();
+    for (long i=0; i<nCount; i++)
     {
         ScDPSaveDimension* pDim = (ScDPSaveDimension*)aDimList.GetObject(i);
         if ( pDim->IsDataLayout() )
@@ -990,6 +1012,7 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
         //  reset all orientations
         //! "forgetSettings" or similar at source ?????
         //! reset all duplicated dimensions, or reuse them below !!!
+        DBG_TRACE( "ScDPSaveData::WriteToSource" );
 
         lcl_ResetOrient( xSource );
 
@@ -998,6 +1021,9 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
         {
             ScDPSaveDimension* pDim = (ScDPSaveDimension*)aDimList.GetObject(i);
             rtl::OUString aName = pDim->GetName();
+
+            DBG_TRACESTR(pDim->GetName());
+
             BOOL bData = pDim->IsDataLayout();
 
             //! getByName for ScDPSource, including DataLayoutDimension !!!!!!!!
@@ -1100,3 +1126,194 @@ void ScDPSaveData::SetDimensionData( const ScDPDimensionSaveData* pNew )
         pDimensionData = NULL;
 }
 
+void ScDPSaveData::Refresh( const uno::Reference<sheet::XDimensionsSupplier>& xSource )
+{
+    try
+    {
+        long nCount = aDimList.Count();
+        std::list<String> deletedDims;
+        for (long i=nCount-1; i >=0 ; i--)
+        {
+            ScDPSaveDimension* pDim = (ScDPSaveDimension*)aDimList.GetObject(i);
+
+            rtl::OUString aName = pDim->GetName();
+            if ( pDim->IsDataLayout() )
+                continue;
+
+            uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
+            uno::Reference<container::XIndexAccess> xIntDims = new ScNameToIndexAccess( xDimsName );
+            long nIntCount = xIntDims->getCount();
+            BOOL bFound = FALSE;
+            for (long nIntDim=0; nIntDim<nIntCount && !bFound; nIntDim++)
+            {
+                uno::Reference<uno::XInterface> xIntDim = ScUnoHelpFunctions::AnyToInterface( xIntDims->getByIndex(nIntDim) );
+                uno::Reference<container::XNamed> xDimName( xIntDim, uno::UNO_QUERY );
+                if ( xDimName.is() && xDimName->getName() == aName )
+                    bFound = TRUE;
+            }
+            if ( !bFound )
+            {
+                deletedDims.push_back( aName );
+                aDimList.Remove(i);
+                DBG_TRACE( "\n Remove dim: \t" );
+                DBG_TRACESTR(  String( aName ) );
+            }
+
+        }
+
+        nCount = aDimList.Count();
+        for (long  i=nCount-1; i >=0 ; i--) //check every dimension ??
+        {
+            ScDPSaveDimension* pDim = (ScDPSaveDimension*)aDimList.GetObject(i);
+
+            rtl::OUString aName = pDim->GetName();
+            if ( pDim->IsDataLayout() )
+                continue;
+            pDim->Refresh( xSource, deletedDims );
+
+        }
+    }
+    catch(uno::Exception&)
+    {
+        DBG_ERROR("error in ScDPSaveData::Refresh");
+    }
+
+}
+void ScDPSaveDimension::Refresh( const com::sun::star::uno::Reference<
+                                com::sun::star::sheet::XDimensionsSupplier>& xSource ,
+                                const std::list<String>& deletedDims)
+{
+    if ( xSource.is() )
+    {
+        ScDPSource* pTabSource = static_cast<ScDPSource*>( xSource.get() );
+        ScDPTableDataCache*  pCache = pTabSource->GetCache();
+        if ( pCache->GetId() == -1 )
+            return;
+
+        SCCOL nSrcDim = pCache->GetDimensionIndex( GetName() );
+
+        if ( nSrcDim == -1 )
+            return;
+        if ( pSelectedPage )
+        {//check pSelected page
+            DBG_TRACESTR( (*pSelectedPage) );
+            if ( pCache->GetIdByItemData( nSrcDim, *pSelectedPage ) == -1 )
+            {
+                delete pSelectedPage;
+                pSelectedPage = NULL;
+            }
+
+        };
+
+        if ( pReferenceValue && pReferenceValue->ReferenceItemType == DataPilotFieldReferenceItemType::NAMED )
+        {//check pReferenceValue
+#ifdef DEBUG
+            switch( pReferenceValue->ReferenceType)
+            {
+            case sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE: //both
+                DBG_TRACE( "\n sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE \n" );
+                break;
+            case sheet::DataPilotFieldReferenceType::ITEM_DIFFERENCE: //both
+                DBG_TRACE( "\n sheet::DataPilotFieldReferenceType::ITEM_DIFFERENCE \n" );
+                break;
+            case sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE_DIFFERENCE: //both
+                DBG_TRACE( "\n sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE_DIFFERENCE \n" );
+                break;
+            case sheet::DataPilotFieldReferenceType::RUNNING_TOTAL:
+                DBG_TRACE( "\n sheet::DataPilotFieldReferenceType::RUNNING_TOTAL \n" ); //enable name
+                break;
+            }
+#endif
+            switch( pReferenceValue->ReferenceType)
+            {
+            case sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE:
+            case sheet::DataPilotFieldReferenceType::ITEM_DIFFERENCE:
+            case sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE_DIFFERENCE:
+            case sheet::DataPilotFieldReferenceType::RUNNING_TOTAL:
+                {
+                    if( pReferenceValue->ReferenceItemType == DataPilotFieldReferenceItemType::NAMED  )
+                    {
+                        const String& sReferenceFieldName = pReferenceValue->ReferenceField;
+                        DBG_TRACESTR( sReferenceFieldName );
+                        SCCOL nRefDim = pCache->GetDimensionIndex( sReferenceFieldName );
+                        bool bValid = true;
+                        if ( nRefDim == -1 )
+                            bValid = false;
+                        else if ( pReferenceValue->ReferenceType != sheet::DataPilotFieldReferenceType::RUNNING_TOTAL )
+                        { //running total has not reference item
+                            const String& sReferenceItemName = pReferenceValue->ReferenceItemName;
+                            DBG_TRACESTR( sReferenceItemName );
+                            if ( pCache->GetIdByItemData( nRefDim, sReferenceItemName ) == -1 )
+                                bValid = false;
+                        }
+                        if ( !bValid )
+                        {
+                            delete pReferenceValue;
+                            pReferenceValue = NULL;
+                        }
+                    }
+                }
+                break;
+            }
+
+        };
+
+        if ( pSortInfo )
+        { //check sortinfo
+            if ( pSortInfo->Mode == DataPilotFieldSortMode::DATA )
+            {
+                DBG_TRACE( "\n DataPilotFieldSortMode::DATA \n" );
+                const String& sFieldDimName = pSortInfo->Field;
+                std::list<String>::const_iterator iter = std::find( deletedDims.begin(), deletedDims.end(), sFieldDimName );
+                if ( iter != deletedDims.end() && pCache->GetDimensionIndex( sFieldDimName ) == -1  )
+                {
+                    pSortInfo->Mode = DataPilotFieldSortMode::MANUAL;
+                    pSortInfo->Field = GetName();
+                }
+            }
+
+        };
+
+        if ( pAutoShowInfo )
+        { //check autoshow
+            const String& sFieldDimName = pAutoShowInfo->DataField;
+            std::list<String>::const_iterator iter = std::find( deletedDims.begin(), deletedDims.end(), sFieldDimName );
+            if ( iter != deletedDims.end() && pCache->GetDimensionIndex( sFieldDimName ) == -1  )
+            {
+                delete pAutoShowInfo;
+                pAutoShowInfo = NULL;
+            }
+
+        };
+
+        //remove unused members
+        //SODC_19124
+        for (MemberList::iterator i=maMemberList.begin(); i != maMemberList.end() ; )
+        {
+            rtl::OUString aMemberName = (*i)->GetName();
+            if ( pCache->GetIdByItemData( nSrcDim, aMemberName ) == -1 )
+                i = maMemberList.erase( i );
+            else
+                i++;
+        }
+    }
+}
+// End Comments
+bool operator == (const ::com::sun::star::sheet::DataPilotFieldSortInfo &l, const ::com::sun::star::sheet::DataPilotFieldSortInfo &r )
+{
+    return l.Field == r.Field && l.IsAscending == r.IsAscending && l.Mode == r.Mode;
+}
+bool operator == (const ::com::sun::star::sheet::DataPilotFieldAutoShowInfo &l, const ::com::sun::star::sheet::DataPilotFieldAutoShowInfo &r )
+{
+    return l.IsEnabled == r.IsEnabled &&
+        l.ShowItemsMode == r.ShowItemsMode &&
+        l.ItemCount == r.ItemCount &&
+        l.DataField == r.DataField;
+}
+bool operator == (const ::com::sun::star::sheet::DataPilotFieldReference &l, const ::com::sun::star::sheet::DataPilotFieldReference &r )
+{
+    return l.ReferenceType == r.ReferenceType &&
+        l.ReferenceField == r.ReferenceField &&
+        l.ReferenceItemType == r.ReferenceItemType &&
+        l.ReferenceItemName == r.ReferenceItemName;
+}

@@ -37,7 +37,6 @@
 
 #include <tools/debug.hxx>
 #include <svtools/zforlist.hxx>
-
 #include "dpshttab.hxx"
 #include "dptabres.hxx"
 #include "document.hxx"
@@ -46,7 +45,10 @@
 #include "dpcachetable.hxx"
 #include "dpobject.hxx"
 #include "globstr.hrc"
-
+// Wang Xu Ming -- 2009-8-17
+// DataPilot Migration - Cache&&Performance
+#include "dpglobal.hxx"
+// End Comments
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 
 #include <vector>
@@ -61,55 +63,27 @@ using ::std::hash_set;
 
 // -----------------------------------------------------------------------
 
-class ScSheetDPData_Impl
+ScSheetDPData::ScSheetDPData( ScDocument* pD, const ScSheetSourceDesc& rDesc , long nCacheId) :
+    ScDPTableData(pD, rDesc.GetCacheId( pD, nCacheId) ), // DataPilot Migration - Cache&&Performance
+    aQuery ( rDesc.aQueryParam  ),
+    bIgnoreEmptyRows( FALSE ),
+    bRepeatIfEmpty(FALSE),
+    pSpecial(NULL),
+    aCacheTable( pD, rDesc.GetCacheId( pD, nCacheId))
 {
-public:
-    ScDocument*     pDoc;
-    ScRange         aRange;
-    ScQueryParam    aQuery;
-    BOOL*           pSpecial;           // to flag special handling of query parameters in ValidQuery.
-    BOOL            bIgnoreEmptyRows;
-    BOOL            bRepeatIfEmpty;
-    BOOL*           pDateDim;
-    SCROW           nNextRow;       // for iterator, within range
-
-    ScDPCacheTable  aCacheTable;
-
-    ScSheetDPData_Impl(ScDPCollection* p) :
-        pSpecial(NULL),
-        aCacheTable(p)
-    {
-    }
-};
-
-// -----------------------------------------------------------------------
-
-ScSheetDPData::ScSheetDPData( ScDocument* pD, const ScSheetSourceDesc& rDesc ) :
-    ScDPTableData(pD)
-{
-    pImpl = new ScSheetDPData_Impl(pD->GetDPCollection());
-    pImpl->pDoc = pD;
-    pImpl->aRange = rDesc.aSourceRange;
-    pImpl->aQuery = rDesc.aQueryParam;
-    pImpl->bIgnoreEmptyRows = FALSE;
-    pImpl->bRepeatIfEmpty = FALSE;
-    pImpl->pDateDim = NULL;
-
-    pImpl->nNextRow = pImpl->aRange.aStart.Row() + 1;
-
-    SCSIZE nEntryCount(pImpl->aQuery.GetEntryCount());
-    pImpl->pSpecial = new BOOL[nEntryCount];
+    SCSIZE nEntryCount( aQuery.GetEntryCount());
+    pSpecial = new BOOL[nEntryCount];
     for (SCSIZE j = 0; j < nEntryCount; ++j )
     {
-        ScQueryEntry& rEntry = pImpl->aQuery.GetEntry(j);
+        ScQueryEntry& rEntry = aQuery.GetEntry(j);
         if (rEntry.bDoQuery)
         {
-            pImpl->pSpecial[j] = false;
+           pSpecial[j] = false;
             if (!rEntry.bQueryByString)
             {
                 if (*rEntry.pStr == EMPTY_STRING &&
                    ((rEntry.nVal == SC_EMPTYFIELDS) || (rEntry.nVal == SC_NONEMPTYFIELDS)))
-                    pImpl->pSpecial[j] = true;
+                    pSpecial[j] = true;
             }
             else
             {
@@ -124,27 +98,24 @@ ScSheetDPData::ScSheetDPData( ScDocument* pD, const ScSheetSourceDesc& rDesc ) :
 
 ScSheetDPData::~ScSheetDPData()
 {
-    delete[] pImpl->pDateDim;
-    delete[] pImpl->pSpecial;
-    delete pImpl;
+     delete[] pSpecial;
 }
 
 void ScSheetDPData::DisposeData()
 {
-    pImpl->aCacheTable.clear();
+    aCacheTable.clear();
 }
 
 long ScSheetDPData::GetColumnCount()
 {
     CreateCacheTable();
-    return pImpl->aCacheTable.getColSize();
+    return aCacheTable.getColSize();
 }
 
-const TypedScStrCollection& ScSheetDPData::GetColumnEntries(long nColumn)
+BOOL lcl_HasQuery( const ScQueryParam& rParam )
 {
-    DBG_ASSERT(nColumn>=0 && nColumn < pImpl->aCacheTable.getColSize(), "ScSheetDPData: wrong column");
-    CreateCacheTable();
-    return pImpl->aCacheTable.getFieldEntries(nColumn);
+    return rParam.GetEntryCount() > 0 &&
+            rParam.GetEntry(0).bDoQuery;
 }
 
 String ScSheetDPData::getDimensionName(long nColumn)
@@ -156,35 +127,21 @@ String ScSheetDPData::getDimensionName(long nColumn)
         //return "Data";
         return ScGlobal::GetRscString(STR_PIVOT_DATA);
     }
-    else if (nColumn >= pImpl->aCacheTable.getColSize())
+    else if (nColumn >= aCacheTable.getColSize())
     {
         DBG_ERROR("getDimensionName: invalid dimension");
         return String();
     }
     else
     {
-        const String* pStr = pImpl->aCacheTable.getFieldName(nColumn);
-        if (pStr)
-            return *pStr;
-        else return String();
+        return  aCacheTable.getFieldName((SCCOL)nColumn);
     }
-}
-
-BOOL lcl_HasDateFormat( ScDocument* pDoc, const ScRange& rRange )
-{
-    //! iterate formats in range?
-
-    ScAddress aPos = rRange.aStart;
-    aPos.SetRow( aPos.Row() + 1 );      // below title
-    ULONG nFormat = pDoc->GetNumberFormat( aPos );
-    SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-    return ( pFormatter->GetType(nFormat) & NUMBERFORMAT_DATE ) != 0;
 }
 
 BOOL ScSheetDPData::IsDateDimension(long nDim)
 {
     CreateCacheTable();
-    long nColCount = pImpl->aCacheTable.getColSize();
+    long nColCount = aCacheTable.getColSize();
     if (getIsDataLayoutDimension(nDim))
     {
         return FALSE;
@@ -196,101 +153,165 @@ BOOL ScSheetDPData::IsDateDimension(long nDim)
     }
     else
     {
-        if (!pImpl->pDateDim)
-        {
-            pImpl->pDateDim = new BOOL[nColCount];
-            ScRange aTestRange = pImpl->aRange;
-            for (long i = 0; i < nColCount; ++i)
-            {
-                SCCOL nCol = (SCCOL)( pImpl->aRange.aStart.Col() + i );
-                aTestRange.aStart.SetCol(nCol);
-                aTestRange.aEnd.SetCol(nCol);
-                pImpl->pDateDim[i] = lcl_HasDateFormat( pImpl->pDoc, aTestRange );
-            }
-        }
-        return pImpl->pDateDim[nDim];
+        return aCacheTable.GetCache()->IsDateDimension( nDim);
     }
 }
 
-UINT32 ScSheetDPData::GetNumberFormat(long nDim)
+ULONG ScSheetDPData::GetNumberFormat(long nDim)
 {
     CreateCacheTable();
     if (getIsDataLayoutDimension(nDim))
     {
         return 0;
     }
-    else if (nDim >= pImpl->aCacheTable.getColSize())
+    else if (nDim >= GetCacheTable().getColSize())
     {
         DBG_ERROR("GetNumberFormat: invalid dimension");
         return 0;
     }
     else
     {
-        //  is queried only once per dimension from ScDPOutput -> no need to cache
-
-        ScAddress aPos = pImpl->aRange.aStart;
-        aPos.SetCol( sal::static_int_cast<SCCOL>( aPos.Col() + nDim ) );
-        aPos.SetRow( aPos.Row() + 1 );      // below title
-        return pImpl->pDoc->GetNumberFormat( aPos );
+        return GetCacheTable().GetCache()->GetNumberFormat( nDim );
     }
+}
+UINT32  ScDPTableData::GetNumberFormatByIdx( NfIndexTableOffset eIdx )
+{
+    if( !mpDoc )
+        return 0;
+
+    if ( SvNumberFormatter* pFormatter = mpDoc->GetFormatTable() )
+        return pFormatter->GetFormatIndex( eIdx, LANGUAGE_SYSTEM );
+
+    return 0;
 }
 
 BOOL ScSheetDPData::getIsDataLayoutDimension(long nColumn)
 {
     CreateCacheTable();
-    return (nColumn == pImpl->aCacheTable.getColSize());
+    return (nColumn ==(long)( aCacheTable.getColSize()));
 }
 
 void ScSheetDPData::SetEmptyFlags( BOOL bIgnoreEmptyRows, BOOL bRepeatIfEmpty )
 {
-    pImpl->bIgnoreEmptyRows = bIgnoreEmptyRows;
-    pImpl->bRepeatIfEmpty   = bRepeatIfEmpty;
+    bIgnoreEmptyRows = bIgnoreEmptyRows;
+    bRepeatIfEmpty   = bRepeatIfEmpty;
 }
 
 bool ScSheetDPData::IsRepeatIfEmpty()
 {
-    return pImpl->bRepeatIfEmpty;
+    return bRepeatIfEmpty;
 }
 
 void ScSheetDPData::CreateCacheTable()
 {
     // Scan and store the data from the source range.
-    if (!pImpl->aCacheTable.empty())
+    if (!aCacheTable.empty())
         // already cached.
         return;
 
-    pImpl->aCacheTable.fillTable(pImpl->pDoc, pImpl->aRange, pImpl->aQuery, pImpl->pSpecial,
-                                 pImpl->bIgnoreEmptyRows);
+    aCacheTable.fillTable( aQuery, pSpecial,
+                                bIgnoreEmptyRows, bRepeatIfEmpty );
 }
 
 void ScSheetDPData::FilterCacheTable(const vector<ScDPCacheTable::Criterion>& rCriteria, const hash_set<sal_Int32>& rCatDims)
 {
     CreateCacheTable();
-    pImpl->aCacheTable.filterByPageDimension(
+    aCacheTable.filterByPageDimension(
         rCriteria, (IsRepeatIfEmpty() ? rCatDims : hash_set<sal_Int32>()));
 }
 
 void ScSheetDPData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>& rCriteria, const hash_set<sal_Int32>& rCatDims, Sequence< Sequence<Any> >& rData)
 {
     CreateCacheTable();
-    sal_Int32 nRowSize = pImpl->aCacheTable.getRowSize();
+    sal_Int32 nRowSize = aCacheTable.getRowSize();
     if (!nRowSize)
         return;
 
-    pImpl->aCacheTable.filterTable(
+    aCacheTable.filterTable(
         rCriteria, rData, IsRepeatIfEmpty() ? rCatDims : hash_set<sal_Int32>());
 }
 
 void ScSheetDPData::CalcResults(CalcInfo& rInfo, bool bAutoShow)
 {
     CreateCacheTable();
-    CalcResultsFromCacheTable(pImpl->aCacheTable, rInfo, bAutoShow);
+    CalcResultsFromCacheTable(aCacheTable, rInfo, bAutoShow);
 }
 
 const ScDPCacheTable& ScSheetDPData::GetCacheTable() const
 {
-    return pImpl->aCacheTable;
+    return aCacheTable;
 }
+
+
+// Wang Xu Ming -- 2009-8-5
+// DataPilot Migration - Cache&&Performance
+ScDPTableDataCache* ScSheetSourceDesc::CreateCache( ScDocument* pDoc , long nID ) const
+{
+    if ( pDoc )
+    {
+        ScDPTableDataCache* pCache =  GetExistDPObjectCache( pDoc );
+        if ( pCache && ( nID < 0 || nID == pCache->GetId() ) )
+            return pCache;
+
+        ULONG nErrId = CheckValidate( pDoc );
+        if ( !nErrId )
+        {
+            pCache = new ScDPTableDataCache( pDoc );
+
+            pCache->InitFromDoc( pDoc, aSourceRange );
+            pCache->SetId( nID );
+            pDoc->AddDPObjectCache( pCache );
+
+            DBG_TRACE1("Create a cache id = %d \n", pCache->GetId() );
+        }
+        else
+            DBG_ERROR( "\n Error Create Cache" );
+        return pCache;
+    }
+    return NULL;
+}
+
+ScDPTableDataCache* ScSheetSourceDesc::GetExistDPObjectCache ( ScDocument* pDoc  ) const
+{
+    return pDoc->GetUsedDPObjectCache( aSourceRange );
+}
+ScDPTableDataCache* ScSheetSourceDesc::GetCache( ScDocument* pDoc, long nID ) const
+{
+    ScDPTableDataCache* pCache = pDoc->GetDPObjectCache( nID );
+    if ( NULL == pCache && pDoc )
+        pCache = GetExistDPObjectCache( pDoc );
+    if ( NULL == pCache )
+        pCache = CreateCache( pDoc );
+    return pCache;
+}
+
+long ScSheetSourceDesc:: GetCacheId( ScDocument* pDoc, long nID ) const
+{
+    ScDPTableDataCache* pCache = GetCache( pDoc,  nID);
+    if ( NULL == pCache )
+        return -1;
+    else
+        return pCache->GetId();
+}
+
+ULONG ScSheetSourceDesc::CheckValidate( ScDocument* pDoc ) const
+{
+    ScRange aSrcRange( aSourceRange);
+    if ( !pDoc )
+        return STR_ERR_DATAPILOTSOURCE;
+    for(USHORT i= aSrcRange.aStart.Col();i <= aSrcRange.aEnd.Col();i++)
+    {
+        if ( pDoc->IsBlockEmpty( aSrcRange.aStart.Tab(),
+            i, aSrcRange.aStart.Row(),i, aSrcRange.aStart.Row()))
+            return STR_PIVOT_FIRSTROWEMPTYERR;
+    }
+    if( pDoc->IsBlockEmpty( aSrcRange.aStart.Tab(), aSrcRange.aStart.Col(), aSrcRange.aStart.Row()+1, aSrcRange.aEnd.Col(), aSrcRange.aEnd.Row() ) )
+    {
+        return STR_PIVOT_ONLYONEROWERR;
+    }
+    return 0;
+}
+// End Comments
 
 // -----------------------------------------------------------------------
 
