@@ -29,7 +29,7 @@
 
 #include "sal/config.h"
 
-#include "string"
+#include <ostream>
 
 #include "boost/noncopyable.hpp"
 #include "com/sun/star/beans/PropertyState.hpp"
@@ -65,32 +65,28 @@
 #include "osl/diagnose.h"
 #include "osl/file.hxx"
 #include "osl/process.h"
+#include "osl/thread.h"
 #include "osl/time.h"
 #include "rtl/bootstrap.hxx"
 #include "rtl/string.hxx"
-#include "rtl/textenc.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/main.h"
 #include "sal/types.h"
 
-namespace CppUnit {
-
-template<> struct assertion_traits< rtl::OUString > {
-    static bool equal(rtl::OUString const & x, rtl::OUString const & y) {
-        return x == y;
-    }
-
-    static std::string toString(rtl::OUString const & x) {
-        return rtl::OUStringToOString(x, RTL_TEXTENCODING_UTF8).getStr();
-    }
-};
-
-}
-
 namespace {
 
 namespace css = com::sun::star;
+
+template< typename charT, typename traits > std::basic_ostream<charT, traits> &
+operator <<(
+    std::basic_ostream<charT, traits> & stream, rtl::OUString const & string)
+{
+    return stream <<
+        rtl::OUStringToOString(string, osl_getThreadTextEncoding()).getStr();
+        // best effort; potentially loses data due to conversion failures and
+        // embedded null characters
+}
 
 rtl::OUString argumentName(rtl::OUString const & name) {
     return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("arg-")) + name;
