@@ -489,7 +489,7 @@ testcase tToolsAutocorrectAutoformat
     Call DialogTest ( TabOptionenAutokorrektur )
     printlog " Step through all options in list"
     printlog " Tabpage Options: With entry 10 button 'Edit' should be enabled"
-    Einstellungen.TypeKeys "<Down>",10
+    Einstellungen.TypeKeys "<Down>",9
     Wait 500
     if Bearbeiten.IsEnabled then
         Bearbeiten.Click
@@ -514,8 +514,8 @@ testcase tToolsAutocorrectAutoformat
     end if
 
     Kontext "TabOptionenAutokorrektur"
-    printlog " Tabpage Options: With entry 18 button 'Edit' should be enabled"
-    Einstellungen.TypeKeys "<Down>",2
+    printlog " Tabpage Options: With entry 17 button 'Edit' should be enabled"
+    Einstellungen.TypeKeys "<Down>",1
     Wait 500
     if Bearbeiten.IsEnabled then
         Bearbeiten.Click
@@ -524,40 +524,40 @@ testcase tToolsAutocorrectAutoformat
         Zusammenfassen.Cancel
         Kontext "TabOptionenAutokorrektur"
     else
-        Warnlog "- Button 'Edit' on Entry 18 disabled!"
+        Warnlog "- Button 'Edit' on Entry 17 disabled!"
     end if
 
     Kontext
-    active.SetPage TabTypografisch
-    Kontext "TabTypografisch"
-    EinfachWortAnfang.Click
+    active.SetPage TabLocalizedOptions
+    Kontext "TabLocalizedOptions"
+    SingleQuotesStart.Click
     Kontext "Sonderzeichen"
     Call DialogTest ( Sonderzeichen, 1 )
     Sonderzeichen.Cancel
 
-    Kontext "TabTypografisch"
-    EinfachWortEnde.Click
+    Kontext "TabLocalizedOptions"
+    SingleQuotesEnd.Click
     Kontext "Sonderzeichen"
     Call DialogTest ( Sonderzeichen, 2 )
     Sonderzeichen.Cancel
 
-    Kontext "TabTypografisch"
-    EinfachStandard.Click
+    Kontext "TabLocalizedOptions"
+    SingleQuotesDefault.Click
 
-    Kontext "TabTypografisch"
-    DoppeltWortAnfang.Click
+    Kontext "TabLocalizedOptions"
+    DoubleQuotesStart.Click
     Kontext "Sonderzeichen"
     Call DialogTest ( Sonderzeichen, 3 )
     Sonderzeichen.Cancel
 
-    Kontext "TabTypografisch"
-    DoppeltWortEnde.Click
+    Kontext "TabLocalizedOptions"
+    DoubleQuotesEnd.Click
     Kontext "Sonderzeichen"
     Call DialogTest ( Sonderzeichen, 4 )
     Sonderzeichen.Cancel
 
-    Kontext "TabTypografisch"
-    DoppeltStandard.Click
+    Kontext "TabLocalizedOptions"
+    DoubleQuotesDefault.Click
 
     Kontext
     Active.Setpage TabWortergaenzung
