@@ -285,12 +285,29 @@ public:
     static sal_Int32        GetEnumProperty( const com::sun::star::uno::Reference<
                                                 com::sun::star::beans::XPropertySet>& xProp,
                                             const ::rtl::OUString& rName, long nDefault );
+    static ::rtl::OUString  GetStringProperty(
+        const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xProp,
+        const ::rtl::OUString& rName, const ::rtl::OUString& rDefault );
 
     static sal_Bool         GetBoolFromAny( const com::sun::star::uno::Any& aAny );
     static sal_Int16        GetInt16FromAny( const com::sun::star::uno::Any& aAny );
     static sal_Int32        GetInt32FromAny( const com::sun::star::uno::Any& aAny );
     static sal_Int32        GetEnumFromAny( const com::sun::star::uno::Any& aAny );
     static void             SetBoolInAny( com::sun::star::uno::Any& rAny, sal_Bool bValue );
+
+    static void             SetOptionalPropertyValue(
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rPropSet,
+        const sal_Char* pPropName, const ::com::sun::star::uno::Any& rVal );
+
+    template<typename ValueType>
+    static void             SetOptionalPropertyValue(
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rPropSet,
+        const sal_Char* pPropName, const ValueType& rVal )
+    {
+        ::com::sun::star::uno::Any any;
+        any <<= rVal;
+        SetOptionalPropertyValue(rPropSet, pPropName, any);
+    }
 };
 
 
