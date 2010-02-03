@@ -48,6 +48,7 @@
 #include "osl/thread.h"
 #include "osl/process.h"
 #include "osl/file.hxx"
+#include "sal/main.h"
 
 #include "tools/config.hxx"
 #include "i18npool/mslangid.hxx"
@@ -568,7 +569,7 @@ void inflate_rc_template_to_file(
 #define RC_HEADER(c)   MAKE_ABSOLUTE((c).get_arg("-rch"))
 #define RC_FOOTER(c)   MAKE_ABSOLUTE((c).get_arg("-rcf"))
 
-int main(int argc, char* argv[])
+SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     try
     {
