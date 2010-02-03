@@ -48,6 +48,8 @@
 #include "DataSeriesHelper.hxx"
 #include "DiagramHelper.hxx"
 #include "ChartModelHelper.hxx"
+#include "CommonConverters.hxx"
+#include "macros.hxx"
 #include "chartview/NumberFormatterWrapper.hxx"
 #include "servicenames_charttypes.hxx"
 #include "ResId.hxx"
@@ -190,6 +192,8 @@ public:
     sal_Int32 GetStartColumn() const;
     sal_Int32 GetEndColumn() const;
 
+    static sal_Int32 GetRelativeAppFontXPosForNameField();
+
     void Show();
 
     /** call this before destroying the class.  This notifies the listeners to
@@ -265,23 +269,30 @@ void SeriesHeader::SetColor( const Color & rCol )
     m_spColorBar->SetControlBackground( rCol );
 }
 
+const sal_Int32 nSymbolHeight = 10;
+const sal_Int32 nSymbolDistance = 2;
+
+sal_Int32 SeriesHeader::GetRelativeAppFontXPosForNameField()
+{
+    return nSymbolHeight + nSymbolDistance;
+}
+
 void SeriesHeader::SetPos( const Point & rPos )
 {
     m_aPos = rPos;
 
     // chart type symbol
-    sal_Int32 nHeight = 10;
     Point aPos( rPos );
-    aPos.setY( aPos.getY() + 2 );
-    Size aSize( nHeight, nHeight );
+    aPos.setY( aPos.getY() + nSymbolDistance );
+    Size aSize( nSymbolHeight, nSymbolHeight );
     m_spSymbol->SetPosPixel( m_pDevice->LogicToPixel( aPos, MAP_APPFONT ));
     m_spSymbol->SetSizePixel( m_pDevice->LogicToPixel( aSize, MAP_APPFONT ));
-    aPos.setY( aPos.getY() - 2 );
+    aPos.setY( aPos.getY() - nSymbolDistance );
 
     // series name edit field
-    aPos.setX( aPos.getX() + nHeight + 2 );
-    aSize.setWidth( m_nWidth - nHeight - 2 );
-    nHeight = 12;
+    aPos.setX( aPos.getX() + nSymbolHeight + nSymbolDistance );
+    aSize.setWidth( m_nWidth - nSymbolHeight - nSymbolDistance );
+    sal_Int32 nHeight = 12;
     aSize.setHeight( nHeight );
     m_spSeriesName->SetPosPixel( m_pDevice->LogicToPixel( aPos, MAP_APPFONT ));
     m_spSeriesName->SetSizePixel( m_pDevice->LogicToPixel( aSize, MAP_APPFONT ));
@@ -593,9 +604,10 @@ void DataBrowser::RenewTable()
     InsertHandleColumn( static_cast< sal_uInt16 >(
                             GetDataWindow().LogicToPixel( Size( 42, 0 )).getWidth() ));
 
-    const sal_Int32 nDefaultColumnWidth = 94;
-
-    sal_Int32 nColumnWidth( GetDataWindow().LogicToPixel( Size( nDefaultColumnWidth, 0 )).getWidth());
+    OUString aDefaultSeriesName( ::chart::SchResId::getResString( STR_COLUMN_LABEL ));
+    replaceParamterInString( aDefaultSeriesName, C2U("%COLUMNNUMBER"), OUString::valueOf( sal_Int32(24) ) );
+    sal_Int32 nColumnWidth = GetDataWindow().GetTextWidth( aDefaultSeriesName )
+        + GetDataWindow().LogicToPixel( Point( 4 + impl::SeriesHeader::GetRelativeAppFontXPosForNameField(), 0 ), MAP_APPFONT ).X();
     sal_Int32 nColumnCount = m_apDataBrowserModel->getColumnCount();
     // nRowCount is a member of a base class
     sal_Int32 nRowCountLocal = m_apDataBrowserModel->getMaxRowCount();
