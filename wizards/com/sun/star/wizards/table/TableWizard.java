@@ -35,20 +35,19 @@ import com.sun.star.awt.TextEvent;
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.awt.XTextListener;
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.frame.XFrame;
-import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XInitialization;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.CommandType;
+import com.sun.star.sdb.application.DatabaseObject;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.task.XJobExecutor;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.*;
+import com.sun.star.wizards.db.DatabaseObjectWizard;
 import com.sun.star.wizards.db.TableDescriptor;
 import com.sun.star.wizards.ui.*;
 
-public class TableWizard extends WizardDialog implements XTextListener, XCompletion
+public class TableWizard extends DatabaseObjectWizard implements XTextListener, XCompletion
 {
 
     static String slblFields;
@@ -71,13 +70,11 @@ public class TableWizard extends WizardDialog implements XTextListener, XComplet
     public static final int SOPRIMARYKEYPAGE = 3;
     public static final int SOFINALPAGE = 4;
     private String sMsgColumnAlreadyExists = "";
-    XComponent[] components = null;
-    XFrame CurFrame;
     String WizardHeaderText[] = new String[8];
 
-    public TableWizard(XMultiServiceFactory xMSF)
+    public TableWizard( XMultiServiceFactory xMSF, PropertyValue[] i_wizardContext )
     {
-        super(xMSF, 41200);
+        super( xMSF, 41200, i_wizardContext );
         super.addResourceHandler("TableWizard", "dbw");
         String sTitle = m_oResource.getResText(UIConsts.RID_TABLE + 1);
         Helper.setUnoPropertyValues(xDialogModel,
@@ -298,21 +295,15 @@ public class TableWizard extends WizardDialog implements XTextListener, XComplet
         {
             Desktop.removeSpecialCharacters(curTableDescriptor.xMSF, Configuration.getOfficeLocale(this.curTableDescriptor.xMSF), tablename);
         }
-        if (tablename != "")
+        if ( tablename.length() > 0 )
         {
             if (!curTableDescriptor.hasTableByName(scomposedtablename))
             {
                 wizardmode = curFinalizer.finish();
                 if (createTable())
                 {
-                    if (wizardmode == Finalizer.MODIFYTABLEMODE)
-                    {
-                        components = curTableDescriptor.switchtoDesignmode(curTableDescriptor.getComposedTableName(), com.sun.star.sdb.CommandType.TABLE, CurFrame);
-                    }
-                    else if (wizardmode == Finalizer.WORKWITHTABLEMODE)
-                    {
-                        components = curTableDescriptor.switchtoDataViewmode(curTableDescriptor.getComposedTableName(), com.sun.star.sdb.CommandType.TABLE, CurFrame);
-                    }
+                    final boolean editTableDesign = (wizardmode == Finalizer.MODIFYTABLEMODE );
+                    loadSubComponent( DatabaseObject.TABLE, curTableDescriptor.getComposedTableName(), editTableDesign );
                     super.xDialog.endExecute();
                 }
             }
@@ -330,18 +321,17 @@ public class TableWizard extends WizardDialog implements XTextListener, XComplet
         try
         {
             Object oFormWizard = this.xMSF.createInstance("com.sun.star.wizards.form.CallFormWizard");
-            PropertyValue[] aProperties = new PropertyValue[4];
-            aProperties[0] = Properties.createProperty("ActiveConnection", curTableDescriptor.DBConnection);
-            aProperties[1] = Properties.createProperty("DataSource", curTableDescriptor.getDataSource());
-            aProperties[2] = Properties.createProperty("CommandType", new Integer(CommandType.TABLE));
-            aProperties[3] = Properties.createProperty("Command", scomposedtablename);
-            XInitialization xInitialization = (XInitialization) UnoRuntime.queryInterface(XInitialization.class, oFormWizard);
-            xInitialization.initialize(aProperties);
-            XJobExecutor xJobExecutor = (XJobExecutor) UnoRuntime.queryInterface(XJobExecutor.class, oFormWizard);
+
+            NamedValueCollection wizardContext = new NamedValueCollection();
+            wizardContext.put( "ActiveConnection", curTableDescriptor.DBConnection );
+            wizardContext.put( "DataSource", curTableDescriptor.getDataSource() );
+            wizardContext.put( "CommandType", CommandType.TABLE );
+            wizardContext.put( "Command", scomposedtablename );
+            wizardContext.put( "DocumentUI", m_docUI );
+            XInitialization xInitialization = UnoRuntime.queryInterface( XInitialization.class, oFormWizard );
+            xInitialization.initialize( wizardContext.getPropertyValues() );
+            XJobExecutor xJobExecutor = UnoRuntime.queryInterface( XJobExecutor.class, oFormWizard );
             xJobExecutor.trigger("start");
-            XPropertySet prop = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xJobExecutor);
-            components[0] = (XComponent) prop.getPropertyValue("Document");
-            components[1] = (XComponent) prop.getPropertyValue("DocumentDefinition");
         }
         catch (Exception e)
         {
@@ -370,39 +360,24 @@ public class TableWizard extends WizardDialog implements XTextListener, XComplet
         setCurrentRoadmapItemID((short) 1);
     }
 
-    public XComponent[] startTableWizard(XMultiServiceFactory _xMSF, PropertyValue[] CurPropertyValue)
+    public void startTableWizard(  )
     {
         try
         {
             curTableDescriptor = new TableDescriptor(xMSF, super.xWindow, this.sMsgColumnAlreadyExists);
-            if (curTableDescriptor.getConnection(CurPropertyValue))
+            if ( curTableDescriptor.getConnection( m_wizardContext ) )
             {
-                if (Properties.hasPropertyValue(CurPropertyValue, "ParentFrame"))
-                {
-                    CurFrame = (XFrame) UnoRuntime.queryInterface(XFrame.class, Properties.getPropertyValue(CurPropertyValue, "ParentFrame"));
-                }
-                else
-                {
-                    CurFrame = Desktop.getActiveFrame(xMSF);
-                }
                 buildSteps();
                 createWindowPeer();
                 curTableDescriptor.setWindowPeer(this.xControl.getPeer());
-                //      setAutoMnemonic("lblDialogHeader", false);
                 insertFormRelatedSteps();
                 short RetValue = executeDialog();
                 xComponent.dispose();
-                switch (RetValue)
+                if  (   ( RetValue == 0 )
+                    &&  ( wizardmode == Finalizer.STARTFORMWIZARDMODE )
+                    )
                 {
-                    case 0:                         // via Cancelbutton or via sourceCode with "endExecute"
-                        if (wizardmode == Finalizer.STARTFORMWIZARDMODE)
-                        {
-                            callFormWizard();
-                        }
-                        break;
-                    case 1:
-
-                        break;
+                    callFormWizard();
                 }
             }
         }
@@ -410,7 +385,6 @@ public class TableWizard extends WizardDialog implements XTextListener, XComplet
         {
             jexception.printStackTrace(System.out);
         }
-        return components;
     }
 
     public boolean getTableResources()
