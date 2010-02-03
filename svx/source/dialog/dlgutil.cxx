@@ -36,6 +36,7 @@
 #include "dlgutil.hxx"
 #include <svl/itemset.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <sfx2/module.hxx>
 #include <svl/intitem.hxx>
 
 // -----------------------------------------------------------------------
@@ -46,6 +47,12 @@ FieldUnit GetModuleFieldUnit( const SfxItemSet& rSet )
     const SfxPoolItem* pItem = NULL;
     if ( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_METRIC, FALSE, &pItem ) )
         eUnit = (FieldUnit)( (const SfxUInt16Item*)pItem )->GetValue();
+    else
+    {
+        DBG_ERROR("Using fallback for field unit - field unit should be provided in ItemSet");
+        return SfxModule::GetCurrentFieldUnit();
+    }
+
     return eUnit;
 }
 
