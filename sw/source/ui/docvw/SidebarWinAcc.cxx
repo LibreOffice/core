@@ -87,14 +87,16 @@ class SidebarWinAccessibleContext : public VCLXAccessibleComponent
         {
             vos::OGuard aGuard(maMutex);
 
-            if ( mpAnchorFrm &&
+            sal_Int32 nIndex( -1 );
+
+            if ( mpAnchorFrm && GetWindow() &&
                  mrViewShell.GetAccessibleMap() )
             {
-                // ODsTODO
-
+                nIndex = mrViewShell.GetAccessibleMap()->GetChildIndex( *mpAnchorFrm,
+                                                                        *GetWindow() );
             }
 
-            return -1;
+            return nIndex;
         }
 
     private:

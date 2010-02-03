@@ -38,6 +38,7 @@
 #include <SidebarWin.hxx>
 #include <AnnotationWin.hxx>
 #include <frmsidebarwincontainer.hxx>
+#include <accmap.hxx>
 
 #include <SidebarWindowsConsts.hxx>
 #include <AnchorOverlayObject.hxx>
@@ -175,8 +176,6 @@ SwPostItMgr::SwPostItMgr(SwView* pView)
 
 SwPostItMgr::~SwPostItMgr()
 {
-    delete mpFrmSidebarWinContainer;
-
     if ( mnEventId )
         Application::RemoveUserEvent( mnEventId );
     // forget about all our Sidebar windows
@@ -186,6 +185,9 @@ SwPostItMgr::~SwPostItMgr()
     for(std::vector<SwPostItPageItem*>::iterator i = mPages.begin(); i!= mPages.end() ; i++)
         delete (*i);
     mPages.clear();
+
+    delete mpFrmSidebarWinContainer;
+    mpFrmSidebarWinContainer = 0;
 }
 
 void SwPostItMgr::CheckForRemovedPostIts()
@@ -2007,7 +2009,12 @@ void SwPostItMgr::ConnectSidebarWinToFrm( const SwFrm& rFrm,
         mpFrmSidebarWinContainer = new SwFrmSidebarWinContainer();
     }
 
-    mpFrmSidebarWinContainer->insert( rFrm, rFmtFld, rSidebarWin );
+    const bool bInserted = mpFrmSidebarWinContainer->insert( rFrm, rFmtFld, rSidebarWin );
+    if ( bInserted &&
+         mpWrtShell->GetAccessibleMap() )
+    {
+        mpWrtShell->GetAccessibleMap()->InvalidatePosOrSize( 0, 0, &rSidebarWin, SwRect() );
+    }
 }
 
 void SwPostItMgr::DisconnectSidebarWinFromFrm( const SwFrm& rFrm,
@@ -2015,7 +2022,12 @@ void SwPostItMgr::DisconnectSidebarWinFromFrm( const SwFrm& rFrm,
 {
     if ( mpFrmSidebarWinContainer != 0 )
     {
-        mpFrmSidebarWinContainer->remove( rFrm, rSidebarWin );
+        const bool bRemoved = mpFrmSidebarWinContainer->remove( rFrm, rSidebarWin );
+        if ( bRemoved &&
+             mpWrtShell->GetAccessibleMap() )
+        {
+            mpWrtShell->GetAccessibleMap()->Dispose( 0, 0, &rSidebarWin );
+        }
     }
 }
 

@@ -122,6 +122,7 @@ SwSidebarWin::SwSidebarWin( SwEditWin& rEditWin,
     , mbReadonly( false )
     , mbIsFollow( false )
     , mrSidebarItem( rSidebarItem )
+    , mpAnchorFrm( rSidebarItem.maLayoutInfo.mpAnchorFrm )
 {
     mpShadow = ShadowOverlayObject::CreateShadowOverlayObject( mrView );
     if ( mpShadow )
@@ -136,6 +137,9 @@ SwSidebarWin::SwSidebarWin( SwEditWin& rEditWin,
 
 SwSidebarWin::~SwSidebarWin()
 {
+    mrMgr.DisconnectSidebarWinFromFrm( *(mrSidebarItem.maLayoutInfo.mpAnchorFrm),
+                                       *this );
+
     if ( mpSidebarTxtControl )
     {
         if ( mpOutlinerView )
@@ -1206,15 +1210,23 @@ bool SwSidebarWin::IsScrollbarVisible() const
 
 void SwSidebarWin::ChangeSidebarItem( SwSidebarItem& rSidebarItem )
 {
-    const bool bAnchorChanged = mrSidebarItem.maLayoutInfo.mpAnchorFrm !=
-                                        rSidebarItem.maLayoutInfo.mpAnchorFrm;
+    const bool bAnchorChanged = mpAnchorFrm != rSidebarItem.maLayoutInfo.mpAnchorFrm;
     if ( bAnchorChanged )
     {
-        mrMgr.DisconnectSidebarWinFromFrm( *(mrSidebarItem.maLayoutInfo.mpAnchorFrm),
-                                           *this );
+        mrMgr.DisconnectSidebarWinFromFrm( *(mpAnchorFrm), *this );
     }
 
     mrSidebarItem = rSidebarItem;
+    mpAnchorFrm = mrSidebarItem.maLayoutInfo.mpAnchorFrm;
+
+    if ( GetWindowPeer() )
+    {
+        SidebarWinAccessible* pAcc =
+                        static_cast<SidebarWinAccessible*>( GetWindowPeer() );
+        ASSERT( dynamic_cast<SidebarWinAccessible*>( GetWindowPeer() ),
+                "<SwSidebarWin::ChangeSidebarItem(..)> - unexpected type of window peer -> crash possible!" );
+        pAcc->ChangeSidebarItem( mrSidebarItem );
+    }
 
     if ( bAnchorChanged )
     {

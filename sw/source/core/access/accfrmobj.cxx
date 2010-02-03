@@ -85,18 +85,25 @@ SwAccessibleChild::SwAccessibleChild( Window* pWindow )
 
 
 SwAccessibleChild::SwAccessibleChild( const SwFrm* pFrm,
-                                      const SdrObject* pDrawObj )
+                                      const SdrObject* pDrawObj,
+                                      Window* pWindow )
 {
     if ( pFrm )
     {
         Init( pFrm );
     }
-    else
+    else if ( pDrawObj )
     {
         Init( pDrawObj );
     }
-    ASSERT( (!pFrm || pFrm == mpFrm) && (!pDrawObj || pDrawObj == mpDrawObj),
-            "invalid frame/object combination" );
+    else if ( pWindow )
+    {
+        Init( pWindow );
+    }
+    ASSERT( (!pFrm || pFrm == mpFrm) &&
+            (!pDrawObj || pDrawObj == mpDrawObj) &&
+            (!pWindow || pWindow == mpWindow),
+            "invalid frame/object/window combination" );
 
 }
 

@@ -48,11 +48,11 @@ class SwFrmSidebarWinContainer
         SwFrmSidebarWinContainer();
         ~SwFrmSidebarWinContainer();
 
-        void insert( const SwFrm& rFrm,
+        bool insert( const SwFrm& rFrm,
                      const SwFmtFld& rFmtFld,
                      SwSidebarWin& rSidebarWin );
 
-        void remove( const SwFrm& rFrm,
+        bool remove( const SwFrm& rFrm,
                      const SwSidebarWin& rSidebarWin );
 
         bool empty( const SwFrm& rFrm );

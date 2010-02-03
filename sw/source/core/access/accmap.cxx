@@ -1681,10 +1681,12 @@ void SwAccessibleMap::RemoveContext( const SdrObject *pObj )
 }
 
 
-void SwAccessibleMap::Dispose( const SwFrm *pFrm, const SdrObject *pObj,
+void SwAccessibleMap::Dispose( const SwFrm *pFrm,
+                               const SdrObject *pObj,
+                               Window* pWindow,
                                sal_Bool bRecursive )
 {
-    SwAccessibleChild aFrmOrObj( pFrm, pObj );
+    SwAccessibleChild aFrmOrObj( pFrm, pObj, pWindow );
 
     // Indeed, the following assert checks the frame's accessible flag,
     // because that's the one that is evaluated in the layout. The frame
@@ -1693,11 +1695,11 @@ void SwAccessibleMap::Dispose( const SwFrm *pFrm, const SdrObject *pObj,
     ASSERT( !aFrmOrObj.GetSwFrm() || aFrmOrObj.GetSwFrm()->IsAccessibleFrm(),
             "non accessible frame should be disposed" );
 
-    ::vos::ORef< SwAccessibleContext > xAccImpl;
-    ::vos::ORef< SwAccessibleContext > xParentAccImpl;
-    ::vos::ORef< ::accessibility::AccessibleShape > xShapeAccImpl;
     if( aFrmOrObj.IsAccessible( GetShell()->IsPreView() ) )
     {
+        ::vos::ORef< SwAccessibleContext > xAccImpl;
+        ::vos::ORef< SwAccessibleContext > xParentAccImpl;
+        ::vos::ORef< ::accessibility::AccessibleShape > xShapeAccImpl;
         // get accessible context for frame
         {
             vos::OGuard aGuard( maMutex );
@@ -1808,9 +1810,10 @@ void SwAccessibleMap::Dispose( const SwFrm *pFrm, const SdrObject *pObj,
 
 void SwAccessibleMap::InvalidatePosOrSize( const SwFrm *pFrm,
                                            const SdrObject *pObj,
+                                           Window* pWindow,
                                            const SwRect& rOldBox )
 {
-    SwAccessibleChild aFrmOrObj( pFrm, pObj );
+    SwAccessibleChild aFrmOrObj( pFrm, pObj, pWindow );
     if( aFrmOrObj.IsAccessible( GetShell()->IsPreView() ) )
     {
         ::vos::ORef< SwAccessibleContext > xAccImpl;
@@ -2238,6 +2241,43 @@ void SwAccessibleMap::InvalidateParaTextSelection( const SwTxtFrm& _rTxtFrm )
     }
 }
 
+sal_Int32 SwAccessibleMap::GetChildIndex( const SwFrm& rParentFrm,
+                                          Window& rChild ) const
+{
+    sal_Int32 nIndex( -1 );
+
+    SwAccessibleChild aFrmOrObj( &rParentFrm );
+    if( aFrmOrObj.IsAccessible( GetShell()->IsPreView() ) )
+    {
+        uno::Reference < XAccessible > xAcc;
+        {
+            vos::OGuard aGuard( maMutex );
+
+            if( mpFrmMap )
+            {
+                SwAccessibleContextMap_Impl::iterator aIter =
+                                        mpFrmMap->find( aFrmOrObj.GetSwFrm() );
+                if( aIter != mpFrmMap->end() )
+                {
+                    xAcc = (*aIter).second;
+                }
+            }
+        }
+
+        if( xAcc.is() )
+        {
+            SwAccessibleContext *pAccImpl =
+                            static_cast< SwAccessibleContext *>( xAcc.get() );
+
+            nIndex = pAccImpl->GetChildIndex( const_cast<SwAccessibleMap&>(*this),
+                                              SwAccessibleChild( &rChild ) );
+        }
+    }
+
+    return nIndex;
+}
+
+
 // OD 15.01.2003 #103492# - complete re-factoring of method due to new page/print
 // preview functionality.
 void SwAccessibleMap::UpdatePreview( const std::vector<PrevwPage*>& _rPrevwPages,
@@ -2474,7 +2514,7 @@ sal_Bool SwAccessibleMap::ReplaceChild (
     // Also get keep parent.
     uno::Reference < XAccessible > xParent( pCurrentChild->getAccessibleParent() );
     pCurrentChild = 0;  // well be realease by dispose
-    Dispose( 0, pObj );
+    Dispose( 0, pObj, 0 );
 
     {
         vos::OGuard aGuard( maMutex );
@@ -2511,7 +2551,7 @@ sal_Bool SwAccessibleMap::ReplaceChild (
     }
 
     SwRect aEmptyRect;
-    InvalidatePosOrSize( 0, pObj, aEmptyRect );
+    InvalidatePosOrSize( 0, pObj, 0, aEmptyRect );
 
     return sal_True;
 }

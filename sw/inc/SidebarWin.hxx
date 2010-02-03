@@ -238,6 +238,7 @@ class SwSidebarWin : public Window
         bool            mbIsFollow;
 
         SwSidebarItem& mrSidebarItem;
+        const SwFrm* mpAnchorFrm;
 };
 
 } } // eof namespace sw::sidebarwindows

@@ -106,24 +106,31 @@ SwFrmSidebarWinContainer::~SwFrmSidebarWinContainer()
     delete mpFrmSidebarWinContainer;
 }
 
-void SwFrmSidebarWinContainer::insert( const SwFrm& rFrm,
+bool SwFrmSidebarWinContainer::insert( const SwFrm& rFrm,
                                        const SwFmtFld& rFmtFld,
                                        SwSidebarWin& rSidebarWin )
 {
+    bool bInserted( false );
+
     FrmKey aFrmKey( &rFrm );
     SidebarWinContainer& rSidebarWinContainer = (*mpFrmSidebarWinContainer)[ aFrmKey ];
 
     SidebarWinKey aSidebarWinKey( *(rFmtFld.GetTxtFld()->GetStart()) );
     if ( rSidebarWinContainer.empty() ||
-         rSidebarWinContainer.find( aSidebarWinKey) != rSidebarWinContainer.end() )
+         rSidebarWinContainer.find( aSidebarWinKey) == rSidebarWinContainer.end() )
     {
         rSidebarWinContainer[ aSidebarWinKey ] = &rSidebarWin;
+        bInserted = true;
     }
+
+    return bInserted;
 }
 
-void SwFrmSidebarWinContainer::remove( const SwFrm& rFrm,
+bool SwFrmSidebarWinContainer::remove( const SwFrm& rFrm,
                                        const SwSidebarWin& rSidebarWin )
 {
+    bool bRemoved( false );
+
     FrmKey aFrmKey( &rFrm );
     FrmSidebarWinContainer::iterator aFrmIter = mpFrmSidebarWinContainer->find( aFrmKey );
     if ( aFrmIter != mpFrmSidebarWinContainer->end() )
@@ -136,10 +143,13 @@ void SwFrmSidebarWinContainer::remove( const SwFrm& rFrm,
             if ( (*aIter).second == &rSidebarWin )
             {
                 rSidebarWinContainer.erase( aIter );
+                bRemoved = true;
                 break;
             }
         }
     }
+
+    return bRemoved;
 }
 
 bool SwFrmSidebarWinContainer::empty( const SwFrm& rFrm )
@@ -176,6 +186,8 @@ SwSidebarWin* SwFrmSidebarWinContainer::get( const SwFrm& rFrm,
                 pRet = (*aIter).second;
                 break;
             }
+
+            --nCounter;
         }
     }
 

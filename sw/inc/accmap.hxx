@@ -63,7 +63,6 @@ class MapMode;
 class SwAccPreviewData;
 struct PrevwPage;
 class Window;
-class SwFmtFld;
 
 // real states for events
 #define ACC_STATE_EDITABLE 0x01
@@ -91,7 +90,7 @@ typedef sal_uInt16 tAccessibleStates;
 class SwAccessibleMap : public accessibility::IAccessibleViewForwarder,
                         public accessibility::IAccessibleParent
 {
-    ::vos::OMutex maMutex;
+    mutable ::vos::OMutex maMutex;
     ::vos::OMutex maEventMutex;
     SwAccessibleContextMap_Impl *mpFrmMap;
     SwAccessibleShapeMap_Impl *mpShapeMap;
@@ -204,10 +203,14 @@ public:
     void RemoveContext( const SdrObject *pObj );
 
     // Dispose frame and its children if bRecursive is set
-    void Dispose( const SwFrm *pFrm, const SdrObject *pObj,
-                  sal_Bool bRecursive=sal_False );
+    void Dispose( const SwFrm* pFrm,
+                  const SdrObject* pObj,
+                  Window* pWindow,
+                  sal_Bool bRecursive = sal_False );
 
-    void InvalidatePosOrSize( const SwFrm *pFrm, const SdrObject *pObj,
+    void InvalidatePosOrSize( const SwFrm* pFrm,
+                              const SdrObject* pObj,
+                              Window* pWindow,
                               const SwRect& rOldFrm );
 
     void InvalidateContent( const SwFrm *pFrm );
@@ -262,6 +265,9 @@ public:
         @author OD
     */
     void InvalidateTextSelectionOfAllParas();
+
+    sal_Int32 GetChildIndex( const SwFrm& rParentFrm,
+                             Window& rChild ) const;
 
     // update preview data (and fire events if necessary)
     // OD 15.01.2003 #103492# - complete re-factoring of method due to new

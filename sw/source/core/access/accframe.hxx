@@ -114,11 +114,13 @@ protected:
 
 public:
     // Return the SwFrm this context is attached to.
-    const SwFrm *GetFrm() const { return mpFrm; };
-
+    const SwFrm* GetFrm() const { return mpFrm; };
 
     static const SwFrm* GetParent( const sw::access::SwAccessibleChild& rFrmOrObj,
                                    sal_Bool bInPagePreview );
+
+    sal_Int32 GetChildIndex( SwAccessibleMap& rAccMap,
+                             const sw::access::SwAccessibleChild& rChild ) const;
 
 protected:
 
@@ -136,8 +138,6 @@ protected:
     sal_Int32 GetChildCount( SwAccessibleMap& rAccMap ) const;
     sw::access::SwAccessibleChild GetChild( SwAccessibleMap& rAccMap,
                                             sal_Int32 nPos ) const;
-    sal_Int32 GetChildIndex( SwAccessibleMap& rAccMap,
-                             const sw::access::SwAccessibleChild& rChild ) const;
     sw::access::SwAccessibleChild GetChildAtPixel( const Point& rPos,
                                                    SwAccessibleMap& rAccMap ) const;
     void GetChildren( SwAccessibleMap& rAccMap,

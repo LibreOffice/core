@@ -48,7 +48,8 @@ class SwAccessibleChild
         explicit SwAccessibleChild( const SwFrm* pFrm );
         explicit SwAccessibleChild( Window* pWindow );
         SwAccessibleChild( const SwFrm* pFrm,
-                           const SdrObject* pDrawObj );
+                           const SdrObject* pDrawObj,
+                           Window* pWindow );
 
         SwAccessibleChild( const SwAccessibleChild& r );
         SwAccessibleChild& operator=( const SwAccessibleChild& r );
