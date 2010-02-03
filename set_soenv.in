@@ -593,7 +593,6 @@ elsif ( $platform =~ m/osf1/ )
 } 
 elsif ( $platform =~ m/cygwin/ ) 
 {
-      $COMPATH        = PathFormat('@COMPATH@');
       $MSPDB_PATH     = PathFormat('@MSPDB_PATH@');
       $MIDL_PATH      = PathFormat('@MIDL_PATH@');
       $CSC_PATH       = PathFormat('@CSC_PATH@');
@@ -618,6 +617,8 @@ elsif ( $platform =~ m/cygwin/ )
       $FLIPCMD        = "slfl.pl";
       $PATH_SEPERATOR = ';';
       $outfile        = "winmingw.set"; 
+      $COMPATH        = PathFormat('@COMPATH@/bin');
+      $COMPATH        =~ s/\/bin$//i;
       $COM            = "GCC";
       $CVER           = "C341";
       $OUTPATH        = "wntgcci";
@@ -626,6 +627,7 @@ elsif ( $platform =~ m/cygwin/ )
   }
   else # The MSVC section starts here
   {   $outfile        = "winenv.set";
+      $COMPATH        = PathFormat('@COMPATH@');
       $COM            = "MSC";
       $OUTPATH        = "wntmsci@COMEX@";
       $INPATH         = $OUTPATH.$PROEXT;
