@@ -222,55 +222,102 @@ void OOXMLParserState::setCharacterProperties
 void OOXMLParserState::setCellProperties
 (OOXMLPropertySet::Pointer_t pProps)
 {
-    if (mpCellProps.get() == NULL)
-        mpCellProps = pProps;
-    else
-        mpCellProps->add(pProps);
+    if (mCellProps.size() > 0)
+    {
+        OOXMLPropertySet::Pointer_t & rCellProps = mCellProps.top();
+
+        if (rCellProps.get() == NULL)
+            rCellProps = pProps;
+        else
+            rCellProps->add(pProps);
+    }
 }
 
 void OOXMLParserState::setRowProperties
 (OOXMLPropertySet::Pointer_t pProps)
 {
-    if (mpRowProps.get() == NULL)
-        mpRowProps = pProps;
-    else
-        mpRowProps->add(pProps);
+    if (mRowProps.size() > 0)
+    {
+        OOXMLPropertySet::Pointer_t & rRowProps = mRowProps.top();
+
+        if (rRowProps.get() == NULL)
+            rRowProps = pProps;
+        else
+            rRowProps->add(pProps);
+    }
 }
 
 void OOXMLParserState::resolveCellProperties(Stream & rStream)
 {
-    if (mpCellProps.get() != NULL)
+    if (mCellProps.size() > 0)
     {
-        rStream.props(mpCellProps);
-        mpCellProps.reset(new OOXMLPropertySetImpl());
+        OOXMLPropertySet::Pointer_t pCellProps = mCellProps.top();
+
+        if (pCellProps.get() != NULL)
+        {
+            rStream.props(pCellProps);
+            pCellProps.reset(new OOXMLPropertySetImpl());
+        }
     }
 }
 
 void OOXMLParserState::resolveRowProperties(Stream & rStream)
 {
-    if (mpRowProps.get() != NULL)
+    if (mRowProps.size() > 0)
     {
-        rStream.props(mpRowProps);
-        mpRowProps.reset(new OOXMLPropertySetImpl());
+        OOXMLPropertySet::Pointer_t pRowProps = mRowProps.top();
+
+        if (pRowProps.get() != NULL)
+        {
+            rStream.props(pRowProps);
+            pRowProps.reset(new OOXMLPropertySetImpl());
+        }
     }
 }
 
 void OOXMLParserState::resolveTableProperties(Stream & rStream)
 {
-    if (mpTableProps.get() != NULL)
+    if (mTableProps.size() > 0)
     {
-        rStream.props(mpTableProps);
-        mpTableProps.reset(new OOXMLPropertySetImpl());
+        OOXMLPropertySet::Pointer_t pTableProps = mTableProps.top();
+
+        if (pTableProps.get() != NULL)
+        {
+            rStream.props(pTableProps);
+            pTableProps.reset(new OOXMLPropertySetImpl());
+        }
     }
 }
 
 void OOXMLParserState::setTableProperties
 (OOXMLPropertySet::Pointer_t pProps)
 {
-    if (mpTableProps.get() == NULL)
-        mpTableProps = pProps;
-    else
-        mpTableProps->add(pProps);
+    if (mTableProps.size() > 0)
+    {
+        OOXMLPropertySet::Pointer_t & rTableProps = mTableProps.top();
+        if (rTableProps.get() == NULL)
+            rTableProps = pProps;
+        else
+            rTableProps->add(pProps);
+    }
+}
+
+void OOXMLParserState::startTable()
+{
+    OOXMLPropertySet::Pointer_t pCellProps;
+    OOXMLPropertySet::Pointer_t pRowProps;
+    OOXMLPropertySet::Pointer_t pTableProps;
+
+    mCellProps.push(pCellProps);
+    mRowProps.push(pRowProps);
+    mTableProps.push(pTableProps);
+}
+
+void OOXMLParserState::endTable()
+{
+    mCellProps.pop();
+    mRowProps.pop();
+    mTableProps.pop();
 }
 
 XMLTag::Pointer_t OOXMLParserState::toTag() const

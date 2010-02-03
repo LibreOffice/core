@@ -1955,6 +1955,7 @@ void OOXMLFastContextHandlerTextTable::lcl_startFastElement
  const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
+    mpParserState->startTable();
     mnTableDepth++;
 
     boost::shared_ptr<OOXMLPropertySet> pProps( new OOXMLPropertySetImpl );
@@ -1977,6 +1978,7 @@ void OOXMLFastContextHandlerTextTable::lcl_endFastElement
     endAction(Element);
 
     mnTableDepth--;
+    mpParserState->endTable();
 }
 
 /*

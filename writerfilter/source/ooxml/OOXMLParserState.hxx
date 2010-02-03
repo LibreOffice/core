@@ -30,6 +30,7 @@
 #ifndef INCLUDE_OOXML_PARSER_STATE_HXX
 #define INCLUDE_OOXML_PARSER_STATE_HXX
 
+#include <stack>
 #include <ooxml/OOXMLDocument.hxx>
 #include <resourcemodel/TagLogger.hxx>
 #include "OOXMLPropertySetImpl.hxx"
@@ -37,6 +38,8 @@
 namespace writerfilter {
 namespace ooxml
 {
+
+using ::std::stack;
 
 class OOXMLParserState
 {
@@ -51,9 +54,9 @@ class OOXMLParserState
     rtl::OUString msXNoteId;
     rtl::OUString msTarget;
     OOXMLPropertySet::Pointer_t mpCharacterProps;
-    OOXMLPropertySet::Pointer_t mpCellProps;
-    OOXMLPropertySet::Pointer_t mpRowProps;
-    OOXMLPropertySet::Pointer_t mpTableProps;
+    stack<OOXMLPropertySet::Pointer_t> mCellProps;
+    stack<OOXMLPropertySet::Pointer_t> mRowProps;
+    stack<OOXMLPropertySet::Pointer_t> mTableProps;
 
 public:
     typedef boost::shared_ptr<OOXMLParserState> Pointer_t;
@@ -101,6 +104,9 @@ public:
     void setRowProperties(OOXMLPropertySet::Pointer_t pProps);
     void resolveTableProperties(Stream & rStream);
     void setTableProperties(OOXMLPropertySet::Pointer_t pProps);
+
+    void startTable();
+    void endTable();
 
     string toString() const;
     XMLTag::Pointer_t toTag() const;
