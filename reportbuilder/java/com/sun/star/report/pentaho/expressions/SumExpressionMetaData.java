@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.expressions;
 
 import java.util.Locale;
@@ -37,45 +35,46 @@ import com.sun.star.report.ReportExpressionMetaData;
 
 public class SumExpressionMetaData implements ReportExpressionMetaData
 {
-  public String getDescription (final Locale l)
-  {
-    // todo implement me
-    return null;
-  }
 
-  public String getDisplayName (final Locale l)
-  {
-    // todo implement me
-    return null;
-  }
+    public String getDescription(final Locale l)
+    {
+        // todo implement me
+        return null;
+    }
 
-  public String getName ()
-  {
-    // todo implement me
-    return null;
-  }
+    public String getDisplayName(final Locale l)
+    {
+        // todo implement me
+        return null;
+    }
 
-  public int getParameterCount ()
-  {
-    // todo implement me
-    return 0;
-  }
+    public String getName()
+    {
+        // todo implement me
+        return null;
+    }
 
-  public String getParameterDescription (final int param,final  Locale locale)
-  {
-    // todo implement me
-    return null;
-  }
+    public int getParameterCount()
+    {
+        // todo implement me
+        return 0;
+    }
 
-  public String getParameterDisplayName (final int param,final  Locale locale)
-  {
-    // todo implement me
-    return null;
-  }
+    public String getParameterDescription(final int param, final Locale locale)
+    {
+        // todo implement me
+        return null;
+    }
 
-  public String getParameterName (final int param)
-  {
-    // todo implement me
-    return null;
-  }
+    public String getParameterDisplayName(final int param, final Locale locale)
+    {
+        // todo implement me
+        return null;
+    }
+
+    public String getParameterName(final int param)
+    {
+        // todo implement me
+        return null;
+    }
 }

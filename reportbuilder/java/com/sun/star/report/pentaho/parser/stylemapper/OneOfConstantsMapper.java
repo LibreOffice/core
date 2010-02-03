@@ -49,7 +49,7 @@ public abstract class OneOfConstantsMapper implements StyleMapper
         this.mappings = new HashMap();
     }
 
-    public void addMapping (final String value, final CSSValue target)
+    public void addMapping(final String value, final CSSValue target)
     {
         mappings.put(value, target);
     }

@@ -71,8 +71,10 @@ public class ObjectOleReadHandler extends ElementReadHandler
         String classid = attrs.getValue(OfficeNamespaces.DRAWING_NS, "class-id");
         if (classid != null)
         {
-            if ( classid.equalsIgnoreCase(RPT_CHART_CLASS_ID))
+            if (classid.equalsIgnoreCase(RPT_CHART_CLASS_ID))
+            {
                 classid = OOO_CHART_CLASS_ID;
+            }
             element.setClassId(classid);
         }
     }

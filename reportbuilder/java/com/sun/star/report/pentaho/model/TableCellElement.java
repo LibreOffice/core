@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.model;
 
 import org.jfree.report.structure.Section;
@@ -42,7 +40,7 @@ import org.jfree.report.structure.Section;
 public class TableCellElement extends Section
 {
 
-  public TableCellElement()
-  {
-  }
+    public TableCellElement()
+    {
+    }
 }

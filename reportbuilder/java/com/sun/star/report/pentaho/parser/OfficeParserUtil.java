@@ -46,6 +46,7 @@ import org.pentaho.reporting.libraries.resourceloader.ResourceManager;
 
 public class OfficeParserUtil
 {
+
     private static final Log LOGGER = LogFactory.getLog(OfficeParserUtil.class);
     private static OfficeParserUtil instance;
     private static final String NAMESPACES_PREFIX = "namespaces.";
