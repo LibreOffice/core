@@ -217,15 +217,15 @@ testcase tToolsAutocorrectCustomQuotes(bSimple as boolean)
     Printlog "   - replace quotes" '------------------------------------------------------------------------------------------
     ToolsAutocorrect
     Kontext
-    active.SetPage TabTypografisch
-    Kontext "TabTypografisch"
+    active.SetPage TabLocalizedOptions
+    Kontext "TabLocalizedOptions"
     if bSimple then
-        EinfacheErsetzen.Check
+        SingleQuotesReplace.Check
     else
-        DoppelteErsetzen.Check
-        DoppeltStandard.Click
+        DoubleQuotesReplace.Check
+        DoubleQuotesDefault.Click
     endif
-    TabTypografisch.OK
+    TabLocalizedOptions.OK
     sleep 5
     gMouseClick 50,50
     sleep 5
@@ -252,14 +252,14 @@ testcase tToolsAutocorrectCustomQuotes(bSimple as boolean)
     Printlog "   - dont replace quotes" '------------------------------------------------------------------------------------------
     ToolsAutocorrect
     Kontext
-    Active.SetPage TabTypografisch
-    Kontext "TabTypografisch"
+    Active.SetPage TabLocalizedOptions
+    Kontext "TabLocalizedOptions"
     if bSimple then
-        EinfacheErsetzen.Uncheck
+        SingleQuotesReplace.Uncheck
     else
-        DoppelteErsetzen.Uncheck
+        DoubleQuotesReplace.Uncheck
     endif
-    TabTypografisch.OK
+    TabLocalizedOptions.OK
     sleep 1
     gMouseClick 50,50
     sleep 1
@@ -285,13 +285,13 @@ testcase tToolsAutocorrectCustomQuotes(bSimple as boolean)
     Printlog "   - replace quotes" '------------------------------------------------------------------------------------------
     ToolsAutocorrect
     Kontext
-    active.SetPage TabTypografisch
-    Kontext "TabTypografisch"
+    active.SetPage TabLocalizedOptions
+    Kontext "TabLocalizedOptions"
     if bSimple then
-        EinfacheErsetzen.Check
+        SingleQuotesReplace.Check
         EinfachWortAnfang.Click
     else
-        DoppelteErsetzen.Check
+        DoubleQuotesReplace.Check
         DoppeltWortAnfang.Click
     endif
     Kontext "Sonderzeichen"
@@ -301,7 +301,7 @@ testcase tToolsAutocorrectCustomQuotes(bSimple as boolean)
     sleep 1
     Sonderzeichen.OK
 
-    Kontext "TabTypografisch"
+    Kontext "TabLocalizedOptions"
     if bSimple then
         EinfachWortEnde.Click
     else
@@ -314,8 +314,8 @@ testcase tToolsAutocorrectCustomQuotes(bSimple as boolean)
     sleep 1
     Sonderzeichen.OK
 
-    Kontext "TabTypografisch"
-    TabTypografisch.OK
+    Kontext "TabLocalizedOptions"
+    TabLocalizedOptions.OK
     sleep 5
     gMouseClick 50,50
     sleep 5
@@ -341,17 +341,17 @@ testcase tToolsAutocorrectCustomQuotes(bSimple as boolean)
     Printlog "   - back to standard" '------------------------------------------------------------------------------------------
     ToolsAutocorrect
     Kontext
-    active.SetPage TabTypografisch
-    Kontext "TabTypografisch"
+    active.SetPage TabLocalizedOptions
+    Kontext "TabLocalizedOptions"
     if bSimple then
-        EinfacheErsetzen.Check
+        SingleQuotesReplace.Check
         EinfachStandard.Click
     else
-        DoppelteErsetzen.Check
-        DoppeltStandard.Click
+        DoubleQuotesReplace.Check
+        DoubleQuotesDefault.Click
     endif
 
-    TabTypografisch.OK
+    TabLocalizedOptions.OK
     sleep 1
     hTextrahmenErstellen ( Normal$ + "Hello" + Normal$ + " ",20,20,60,30)
     sleep 2
@@ -374,14 +374,14 @@ testcase tToolsAutocorrectCustomQuotes(bSimple as boolean)
 
     ToolsAutocorrect
     Kontext
-    active.SetPage TabTypografisch
-    Kontext "TabTypografisch"
+    active.SetPage TabLocalizedOptions
+    Kontext "TabLocalizedOptions"
     if bSimple then
-        EinfacheErsetzen.UnCheck
+        SingleQuotesReplace.UnCheck
     else
-        DoppelteErsetzen.UnCheck
+        DoubleQuotesReplace.UnCheck
     endif
-    TabTypografisch.OK
+    TabLocalizedOptions.OK
     sleep 1
 
     hCloseDocument
