@@ -40,7 +40,7 @@
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/providerhelper.hxx>
 
-#include "directory.hxx"
+#include "gvfs_directory.hxx"
 
 #include <libgnomevfs/gnome-vfs-utils.h>
 #include <libgnomevfs/gnome-vfs-directory.h>
@@ -96,7 +96,7 @@ struct ResultListEntry
         gnome_vfs_file_info_copy (&aInfo, fileInfo);
     }
 
-     ~ResultListEntry()
+    ~ResultListEntry()
     {
         gnome_vfs_file_info_clear (&aInfo);
     }
