@@ -34,6 +34,7 @@
 #include <vcl/salbtype.hxx>
 #include "wmfwr.hxx"
 #include <unotools/fontcvt.hxx>
+#include "emfwr.hxx"
 #include <rtl/crc.h>
 #include <rtl/tencinfo.h>
 #include <tools/tenccvt.hxx>
@@ -1875,6 +1876,7 @@ BOOL WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
 {
     WMFWriterAttrStackMember * pAt;
 
+    bEmbedEMF = TRUE;
     bStatus=TRUE;
     pConvert = 0;
     pVirDev = new VirtualDevice;
@@ -1938,6 +1940,8 @@ BOOL WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
     CountActionsAndBitmaps(rMTF);
 
     WriteHeader(rMTF,bPlaceable);
+    if( bEmbedEMF )
+        WriteEmbeddedEMF( rMTF );
     WMFRecord_SetWindowOrg(Point(0,0));
     WMFRecord_SetWindowExt(rMTF.GetPrefSize());
     WMFRecord_SetBkMode( TRUE );
@@ -2015,4 +2019,81 @@ USHORT WMFWriter::CalcSaveTargetMapMode(MapMode& rMapMode,
     }
 
     return nDivisor;
+}
+
+// ------------------------------------------------------------------------
+
+void WMFWriter::WriteEmbeddedEMF( const GDIMetaFile& rMTF )
+{
+    EMFWriter aEMFWriter;
+    SvMemoryStream aStream;
+
+    if( aEMFWriter.WriteEMF( rMTF, aStream ) )
+    {
+        sal_Size nTotalSize = aStream.Tell();
+        if( nTotalSize > SAL_MAX_UINT32 )
+            return;
+        aStream.Seek( 0 );
+        sal_uInt32 nRemainingSize = static_cast< sal_uInt32 >( nTotalSize );
+        sal_uInt32 nRecCounts = ( (nTotalSize - 1) / 0x2000 ) + 1;
+        sal_uInt16 nCheckSum = 0, nWord;
+
+        sal_uInt32 nPos = 0;
+
+        while( nPos + 1 < nTotalSize )
+        {
+            aStream >> nWord;
+            nCheckSum ^= nWord;
+            nPos += 2;
+        }
+
+        nCheckSum = static_cast< sal_uInt16 >( nCheckSum * -1 );
+
+        aStream.Seek( 0 );
+        while( nRemainingSize > 0 )
+        {
+            sal_uInt32 nCurSize;
+            if( nRemainingSize > 0x2000 )
+            {
+                nCurSize = 0x2000;
+                nRemainingSize -= 0x2000;
+            }
+            else
+            {
+                nCurSize = nRemainingSize;
+                nRemainingSize = 0;
+            }
+            WriteEMFRecord( aStream,
+                            nCurSize,
+                            nRemainingSize,
+                            nTotalSize,
+                            nRecCounts,
+                            nCheckSum );
+            nCheckSum = 0;
+        }
+    }
+}
+
+// ------------------------------------------------------------------------
+
+void WMFWriter::WriteEMFRecord( SvMemoryStream& rStream, sal_uInt32 nCurSize, sal_uInt32 nRemainingSize,
+                sal_uInt32 nTotalSize, sal_uInt32 nRecCounts, sal_uInt16 nCheckSum )
+{
+   // according to http://msdn.microsoft.com/en-us/library/dd366152%28PROT.13%29.aspx
+   WriteRecordHeader( 0, W_META_ESCAPE );
+   *pWMF << (sal_uInt16)W_MFCOMMENT         // same as META_ESCAPE_ENHANCED_METAFILE
+          << (sal_uInt16)( nCurSize + 34 )  // we will always have a 34 byte escape header:
+          << (sal_uInt32) 0x43464D57        // WMFC
+          << (sal_uInt32) 0x00000001        // Comment type
+          << (sal_uInt32) 0x00010000        // version
+          << nCheckSum                      // check sum
+          << (sal_uInt32) 0                 // flags = 0
+          << nRecCounts                     // total number of records
+          << nCurSize                       // size of this record's data
+          << nRemainingSize                 // remaining size of data in following records, missing in MSDN documentation
+          << nTotalSize;                    // total size of EMF stream
+
+   pWMF->Write( static_cast< const sal_Char* >( rStream.GetData() ) + rStream.Tell(), nCurSize );
+   rStream.SeekRel( nCurSize );
+   UpdateRecordHeader();
 }
