@@ -2083,7 +2083,8 @@ void OApplicationController::newElementWithPilot( ElementType _eType )
                 else
                     xComponent = aHelper->newTableWithPilot();
 
-                onDocumentOpened( ::rtl::OUString(), _eType, E_OPEN_DESIGN, xComponent, NULL );
+                // no need for onDocumentOpened, the table wizard opens the created table by using
+                // XDatabaseDocumentUI::loadComponent method.
             }
          }
          break;
