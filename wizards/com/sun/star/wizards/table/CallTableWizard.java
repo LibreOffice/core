@@ -109,7 +109,7 @@ public class CallTableWizard
                 if ( sEvent.compareTo("start") == 0 )
                 {
                     TableWizard CurTableWizard = new TableWizard( m_serviceFactory, m_wizardContext );
-                    CurTableWizard.startTableWizard();
+                    Command = CurTableWizard.startTableWizard();
                 }
             }
             catch (Exception exception)

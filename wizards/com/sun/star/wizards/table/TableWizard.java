@@ -72,6 +72,8 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener, 
     private String sMsgColumnAlreadyExists = "";
     String WizardHeaderText[] = new String[8];
 
+    private String m_tableName;
+
     public TableWizard( XMultiServiceFactory xMSF, PropertyValue[] i_wizardContext )
     {
         super( xMSF, 41200, i_wizardContext );
@@ -304,6 +306,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener, 
                 {
                     final boolean editTableDesign = (wizardmode == Finalizer.MODIFYTABLEMODE );
                     loadSubComponent( DatabaseObject.TABLE, curTableDescriptor.getComposedTableName(), editTableDesign );
+                    m_tableName = curTableDescriptor.getComposedTableName();
                     super.xDialog.endExecute();
                 }
             }
@@ -360,7 +363,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener, 
         setCurrentRoadmapItemID((short) 1);
     }
 
-    public void startTableWizard(  )
+    public String startTableWizard(  )
     {
         try
         {
@@ -373,11 +376,11 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener, 
                 insertFormRelatedSteps();
                 short RetValue = executeDialog();
                 xComponent.dispose();
-                if  (   ( RetValue == 0 )
-                    &&  ( wizardmode == Finalizer.STARTFORMWIZARDMODE )
-                    )
+                if ( RetValue == 0 )
                 {
-                    callFormWizard();
+                    if (  wizardmode == Finalizer.STARTFORMWIZARDMODE )
+                        callFormWizard();
+                    return m_tableName;
                 }
             }
         }
@@ -385,6 +388,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener, 
         {
             jexception.printStackTrace(System.out);
         }
+        return "";
     }
 
     public boolean getTableResources()
