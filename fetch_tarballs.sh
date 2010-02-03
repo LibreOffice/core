@@ -66,9 +66,11 @@ for i in wget /usr/bin/wget /usr/local/bin/wget /usr/sfw/bin/wget /opt/sfw/bin/w
 done
 
 for i in curl /usr/bin/curl /usr/local/bin/curl /usr/sfw/bin/curl /opt/sfw/bin/curl; do
-    eval "$i --version" > /dev/null 2>&1
-    ret=$?
-    if [ $ret -eq 2 ]; then
+# mac curl returns "2" on --version
+#    eval "$i --version" > /dev/null 2>&1
+#    ret=$?
+#    if [ $ret -eq 0 ]; then
+    if [ -x $i ]; then
         curl=$i
         echo found curl: $curl
         break 2
@@ -91,7 +93,7 @@ for i in md5sum /usr/local/bin/md5sum gmd5sum /usr/sfw/bin/md5sum /opt/sfw/bin/g
 done
 
 if [ -z "$md5sum" ]; then
-    echo "ERROR: no md5sum: found!"
+    echo "Warning: no md5sum: found!"
 fi
 
 start_dir=`pwd`
@@ -116,7 +118,7 @@ for i in `cat $1` ; do
                     wret=0
                 fi
             fi
-            if [ -f $i -a -n $md5sum ]; then
+            if [ -f $i -a -n "$md5sum" ]; then
                 sum=`$md5sum $i | sed "s/ [ *].*//"`
                 sum2=`echo $i | sed "s/-.*//"`
                 if [ "$sum" != "$sum2" ]; then
