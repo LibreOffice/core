@@ -113,11 +113,9 @@ $(MISC)/$(TARGET)/javamaker.flag: $(MISC)/$(TARGET)/types.rdb
     $(JAVAMAKER) -O$(CLASSDIR) -BUCR -nD -Gc -X$(SOLARBINDIR)/types.rdb $<
     $(TOUCH) $@
 
-# The following dependency (to execute javac whenever javamaker has run) does
-# not work reliably, see #i28827#:
-$(JAVAFILES) $(JAVACLASSFILES): $(MISC)/$(TARGET)/javamaker.flag
+$(JAVATARGET): $(MISC)/$(TARGET)/javamaker.flag
 
-$(MISC)/$(TARGET)/$(TARGET).uno.jar: $(JAVACLASSFILES) \
+$(MISC)/$(TARGET)/$(TARGET).uno.jar: $(JAVATARGET) \
         $(MISC)/$(TARGET)/javamaker.flag manifest
     jar cfm $@ manifest -C $(CLASSDIR) test/cppuhelper/propertysetmixin
 
