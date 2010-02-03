@@ -64,8 +64,6 @@
 #endif
 
 #include <tools/debug.hxx>
-#include <osl/thread.h>
-#include <rtl/bootstrap.hxx>
 #include <rtl/string.h>
 
 #include <vector>
@@ -666,13 +664,26 @@ BOOL PointerList::IsIn( const void* p ) const
 
 // =======================================================================
 
-static rtl::OString DbgGetDbgFileName()
+static void DbgGetDbgFileName( sal_Char* pStr, sal_Int32 nMaxLen )
 {
-    rtl::OUString s;
-    rtl::Bootstrap::get(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DBGSV_INIT")), s,
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dbgsv.ini")));
-    return rtl::OUStringToOString(s, osl_getThreadTextEncoding());
+#if defined( UNX )
+    const sal_Char* pName = getenv("DBGSV_INIT");
+    if ( !pName )
+        pName = ".dbgsv.init";
+    strncpy( pStr, pName, nMaxLen );
+#elif defined( WNT )
+    const sal_Char* pName = getenv("DBGSV_INIT");
+    if ( pName )
+        strncpy( pStr, pName, nMaxLen );
+    else
+        GetProfileStringA( "sv", "dbgsv", "dbgsv.ini", pStr, nMaxLen );
+#elif defined( OS2 )
+    PrfQueryProfileString( HINI_PROFILE, (PSZ)"SV", (PSZ)"DBGSV",
+                           "dbgsv.ini", (PSZ)pStr, nMaxLen );
+#else
+    strncpy( pStr, "dbgsv.ini", nMaxLen );
+#endif
+    pStr[ nMaxLen - 1 ] = 0;
 }
 
 // -----------------------------------------------------------------------
@@ -721,13 +732,14 @@ static DebugData* GetDebugData()
         DbgGetLogFileName( aDebugData.aDbgData.aDebugName );
 
         // DEBUG.INI-File
-        FILETYPE pIniFile = FileOpen( DbgGetDbgFileName().getStr(), "r" );
+        sal_Char aBuf[ 4096 ];
+        DbgGetDbgFileName( aBuf, sizeof( aBuf ) );
+        FILETYPE pIniFile = FileOpen( aBuf, "r" );
         if ( pIniFile != NULL )
         {
             ConfigSection eCurrentSection = eUnknown;
 
             // no sophisticated algorithm here, assume that the whole file fits into aBuf ...
-            sal_Char aBuf[ 4096 ];
             ULONG nReallyRead = FileRead( aBuf, 1, sizeof( aBuf ) / sizeof( sal_Char ) - 1, pIniFile );
             aBuf[ nReallyRead ] = 0;
             const sal_Char* pLine = aBuf;
@@ -1194,7 +1206,9 @@ void* DbgFunc( USHORT nAction, void* pParam )
                 {
                 const DbgData* pData = static_cast< const DbgData* >( pParam );
 
-                FILETYPE pIniFile = FileOpen( DbgGetDbgFileName().getStr(), "w" );
+                sal_Char aBuf[ 4096 ];
+                DbgGetDbgFileName( aBuf, sizeof( aBuf ) );
+                FILETYPE pIniFile = FileOpen( aBuf, "w" );
                 if ( pIniFile == NULL )
                     break;
 
