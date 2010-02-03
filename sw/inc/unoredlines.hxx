@@ -78,8 +78,9 @@ public:
 /* -----------------------------12.01.01 14:58--------------------------------
 
  ---------------------------------------------------------------------------*/
-class SwXRedlineEnumeration : public SwSimpleEnumerationBaseClass,
-    public SwClient
+class SwXRedlineEnumeration
+    : public SwSimpleEnumeration_Base
+    , public SwClient
 {
     SwDoc* pDoc;
     USHORT nCurrentIndex;
