@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -48,7 +48,8 @@ SLOFILES=\
     $(SLO)$/ucbstore.obj \
     $(SLO)$/ucbprops.obj \
     $(SLO)$/provprox.obj \
-    $(SLO)$/ucbcmds.obj
+    $(SLO)$/ucbcmds.obj \
+    $(SLO)$/cmdenv.obj
 
 LIB1TARGET=$(SLB)$/_$(TARGET).lib
 LIB1OBJFILES=$(SLOFILES)
@@ -59,7 +60,7 @@ SHL1STDLIBS=\
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
     $(SALLIB) \
-        $(UCBHELPERLIB)
+    $(UCBHELPERLIB)
 SHL1LIBS=\
     $(LIB1TARGET) \
     $(SLB)$/regexp.lib

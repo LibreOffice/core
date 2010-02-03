@@ -64,12 +64,11 @@ struct LockEntrySequenceParseContext
 extern "C" int LockEntrySequence_startelement_callback(
     void *,
     int parent,
-    const char *nspace,
+    const char * /*nspace*/,
     const char *name,
     const char ** )
 {
-    if ( ( name != 0 ) &&
-         ( ( nspace == 0 ) || ( strcmp( nspace, "" ) == 0 ) ) )
+    if ( name != 0 )
     {
         switch ( parent )
         {
@@ -83,6 +82,31 @@ extern "C" int LockEntrySequence_startelement_callback(
                     return STATE_LOCKSCOPE;
                 else if ( strcmp( name, "locktype" ) == 0 )
                     return STATE_LOCKTYPE;
+
+#define IIS_BUGS_WORKAROUND
+
+#ifdef IIS_BUGS_WORKAROUND
+                /* IIS (6) returns XML violating RFC 4918
+                   for DAV:supportedlock property value.
+
+                   <lockentry>
+                       <write></write>
+                       <shared></shared>
+                   </lockentry>
+                   <lockentry>
+                       <write></write>
+                       <exclusive></exclusive>
+                   </lockentry>
+
+                   Bother...
+                */
+                else if ( strcmp( name, "exclusive" ) == 0 )
+                    return STATE_EXCLUSIVE;
+                else if ( strcmp( name, "shared" ) == 0 )
+                    return STATE_SHARED;
+                else if ( strcmp( name, "write" ) == 0 )
+                    return STATE_WRITE;
+#endif
                 break;
 
             case STATE_LOCKSCOPE:
@@ -165,7 +189,7 @@ extern "C" int LockEntrySequence_endelement_callback(
 // static
 bool LockEntrySequence::createFromXML( const rtl::OString & rInData,
                                        uno::Sequence<
-                                               ucb::LockEntry > & rOutData )
+                                                ucb::LockEntry > & rOutData )
 {
     const sal_Int32 TOKEN_LENGTH = 12; // </lockentry>
     bool success = true;
@@ -191,8 +215,8 @@ bool LockEntrySequence::createFromXML( const rtl::OString & rInData,
                              &aCtx );
 
         ne_xml_parse( parser,
-                       rInData.getStr() + nStart,
-                       nEnd - nStart + TOKEN_LENGTH );
+                      rInData.getStr() + nStart,
+                      nEnd - nStart + TOKEN_LENGTH );
 
 #if NEON_VERSION >= 0x0250
         success = !ne_xml_failed( parser );
@@ -214,7 +238,7 @@ bool LockEntrySequence::createFromXML( const rtl::OString & rInData,
             rOutData[ nCount - 1 ] = *aCtx.pEntry;
         }
 
-        nStart = nEnd + TOKEN_LENGTH + 1;
+        nStart = nEnd + TOKEN_LENGTH;
         nEnd   = rInData.indexOf( "</lockentry>", nStart );
     }
 
