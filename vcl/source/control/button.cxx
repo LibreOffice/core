@@ -1191,7 +1191,10 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
     else
     {
         Rectangle aSymbolRect;
-        ImplDrawAlignedImage( pDev, aPos, aSize, bLayout, 1, nDrawFlags,
+        ULONG nImageSep = 1 + (pDev->GetTextHeight()-10)/2;
+        if( nImageSep < 1 )
+            nImageSep = 1;
+        ImplDrawAlignedImage( pDev, aPos, aSize, bLayout, nImageSep, nDrawFlags,
                               nTextStyle, IsSymbol() ? &aSymbolRect : NULL );
 
         if ( IsSymbol() && ! bLayout )
@@ -1360,7 +1363,7 @@ void PushButton::ImplDrawPushButton( bool bLayout )
         Size aInRectSize( LogicToPixel( Size( aInRect.GetWidth(), aInRect.GetHeight() ) ) );
         aPBVal.mbSingleLine = (aInRectSize.Height() < 2 * aFontSize.Height() );
 
-        if( (nState & CTRL_STATE_ROLLOVER) || ! (GetStyle() & WB_FLATBUTTON) )
+        if( ((nState & CTRL_STATE_ROLLOVER) || HasFocus()) || ! (GetStyle() & WB_FLATBUTTON) )
         {
             bNativeOK = DrawNativeControl( CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL, aCtrlRegion, nState,
                             aControlValue, rtl::OUString()/*PushButton::GetText()*/ );
@@ -1385,7 +1388,7 @@ void PushButton::ImplDrawPushButton( bool bLayout )
         if( (GetStyle() & WB_FLATBUTTON) )
         {
             Rectangle aTempRect( aInRect );
-            if( ! bLayout && bRollOver )
+            if( ! bLayout && (bRollOver || HasFocus()) )
                 ImplDrawPushButtonFrame( this, aTempRect, nButtonStyle );
             aInRect.Left()   += 2;
             aInRect.Top()    += 2;
