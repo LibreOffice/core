@@ -533,6 +533,10 @@ void CUPSManager::initialize()
                                                       pDest->options );
     if( pOpt )
         m_bUseIncludeFeature = true;
+    // do not send include JobPatch; CUPS will insert that itself
+    // TODO: currently unknwon which versions of CUPS insert JobPatches
+    // so currently it is assumed CUPS = don't insert JobPatch files
+    m_bUseJobPatch = false;
 
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     int nPrinter = m_nDests;

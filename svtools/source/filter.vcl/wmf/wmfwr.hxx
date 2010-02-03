@@ -131,6 +131,8 @@ private:
     ULONG nWrittenBitmaps;  // Anzahl der bereits geschriebenen Bitmaps
     ULONG nActBitmapPercent; // Wieviel Prozent die naechste Bitmap schon geschrieben ist.
 
+    BOOL bEmbedEMF; // optionally embedd EMF data into WMF
+
     void MayCallback();
         // Berechnet anhand der obigen 5 Parameter eine Prozentzahl
         // und macht dann ggf. einen Callback. Setzt bStatus auf FALSE wenn User abbrechen
@@ -210,6 +212,13 @@ private:
 
     void WriteHeader(const GDIMetaFile & rMTF, BOOL bPlaceable);
     void UpdateHeader();
+
+    void WriteEmbeddedEMF( const GDIMetaFile& rMTF );
+    void WriteEMFRecord( SvMemoryStream& rStream, sal_uInt32 nCurSize,
+                            sal_uInt32 nRemainingSize,
+                            sal_uInt32 nTotalSize,
+                            sal_uInt32 nRecCounts,
+                            sal_uInt16 nCheckSum );
 
     USHORT CalcSaveTargetMapMode(MapMode& rMapMode, const Size& rPrefSize);
 
