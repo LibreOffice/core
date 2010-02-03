@@ -354,7 +354,7 @@ private:
     /**
      Ensure a cell is open at the current level.
     */
-    void ensureOpenCell();
+    void ensureOpenCell(PropertiesPointer pProps);
 
 protected:
 
@@ -631,9 +631,12 @@ template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::endParagraphGroup()
 {
     sal_Int32 nTableDepthDifference = mnTableDepthNew - mnTableDepth;
+
+    PropertiesPointer pEmptyProps;
+
     while (nTableDepthDifference > 0)
     {
-        ensureOpenCell();
+        ensureOpenCell(pEmptyProps);
         startLevel();
 
         --nTableDepthDifference;
@@ -661,7 +664,7 @@ void TableManager<T, PropertiesPointer>::endParagraphGroup()
 
         else if (isInCell())
         {
-            ensureOpenCell();
+            ensureOpenCell(getCellProps());
 
             if (isCellEnd())
             {
@@ -935,7 +938,7 @@ void  TableManager<T, PropertiesPointer>::closeCell
 }
 
 template <typename T, typename PropertiesPointer>
-void  TableManager<T, PropertiesPointer>::ensureOpenCell()
+void  TableManager<T, PropertiesPointer>::ensureOpenCell(PropertiesPointer pProps)
 {
 #ifdef DEBUG_TABLE
     mpTableLogger->startElement("tablemanager.ensureOpenCell");
@@ -947,7 +950,9 @@ void  TableManager<T, PropertiesPointer>::ensureOpenCell()
         pTableData = mTableDataStack.top();
 
         if (!pTableData->isCellOpen())
-            openCell(getHandle(), getCellProps());
+            openCell(getHandle(), pProps);
+        else
+            pTableData->insertCellProperties(pProps);
     }
 
 #ifdef DEBUG_TABLE
