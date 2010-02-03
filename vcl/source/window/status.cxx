@@ -160,6 +160,7 @@ void StatusBar::ImplInit( Window* pParent, WinBits nStyle )
     mbProgressMode  = FALSE;
     mbInUserDraw    = FALSE;
     mbBottomBorder  = FALSE;
+    mnItemsWidth    = STATUSBAR_OFFSET_X;
     mnDX            = 0;
     mnDY            = 0;
     mnCalcHeight    = 0;
