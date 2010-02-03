@@ -45,10 +45,10 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/docfile.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/svlbox.hxx>
 #include <svtools/svtabbx.hxx>
-#include <svtools/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/sound.hxx>
@@ -121,6 +121,7 @@
 #include "validat.hxx"
 #include "tabprotection.hxx"
 #include "postit.hxx"
+#include "dpcontrol.hxx"
 
 #include "drawview.hxx"
 #include <svx/sdrpagewindow.hxx>
@@ -369,6 +370,8 @@ ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhic
             pNoteMarker( NULL ),
             pFilterBox( NULL ),
             pFilterFloat( NULL ),
+            mpDPFieldPopup(NULL),
+            mpFilterButton(NULL),
             nCursorHideCount( 0 ),
             bMarking( FALSE ),
             nButtonDown( 0 ),
@@ -445,14 +448,26 @@ void __EXPORT ScGridWindow::Resize( const Size& )
 
 void ScGridWindow::ClickExtern()
 {
-    // #i81298# don't delete the filter box when called from its select handler
-    // (possible through row header size update)
-    // #i84277# when initializing the filter box, a Basic error can deactivate the view
-    if ( pFilterBox && ( pFilterBox->IsInSelect() || pFilterBox->IsInInit() ) )
-        return;
+    do
+    {
+        // #i81298# don't delete the filter box when called from its select handler
+        // (possible through row header size update)
+        // #i84277# when initializing the filter box, a Basic error can deactivate the view
+        if ( pFilterBox && ( pFilterBox->IsInSelect() || pFilterBox->IsInInit() ) )
+        {
+            break;
+        }
 
-    DELETEZ(pFilterBox);
-    DELETEZ(pFilterFloat);
+        DELETEZ(pFilterBox);
+        DELETEZ(pFilterFloat);
+    }
+    while (false);
+
+    if (mpDPFieldPopup.get())
+    {
+        mpDPFieldPopup->close(false);
+        mpDPFieldPopup.reset();
+    }
 }
 
 IMPL_LINK( ScGridWindow, PopupModeEndHdl, FloatingWindow*, EMPTYARG )
@@ -507,7 +522,7 @@ void ScGridWindow::ExecPageFieldSelect( SCCOL nCol, SCROW nRow, BOOL bHasSelecti
     }
 }
 
-void ScGridWindow::DoPageFieldMenue( SCCOL nCol, SCROW nRow )
+void ScGridWindow::LaunchPageFieldMenu( SCCOL nCol, SCROW nRow )
 {
     //! merge position/size handling with DoAutoFilterMenue
 
@@ -656,6 +671,22 @@ void ScGridWindow::DoPageFieldMenue( SCCOL nCol, SCROW nRow )
 
     nMouseStatus = SC_GM_FILTER;
     CaptureMouse();
+}
+
+void ScGridWindow::LaunchDPFieldMenu( SCCOL nCol, SCROW nRow )
+{
+    SCTAB nTab = pViewData->GetTabNo();
+    ScDPObject* pDPObj = pViewData->GetDocument()->GetDPAtCursor(nCol, nRow, nTab);
+    if (!pDPObj)
+        return;
+
+    // Get the geometry of the cell.
+    Point aScrPos = pViewData->GetScrPos(nCol, nRow, eWhich);
+    long nSizeX, nSizeY;
+    pViewData->GetMergeSizePixel(nCol, nRow, nSizeX, nSizeY);
+    Size aScrSize(nSizeX-1, nSizeY-1);
+
+    DPLaunchFieldPopupMenu(OutputToScreenPixel(aScrPos), aScrSize, ScAddress(nCol, nRow, nTab), pDPObj);
 }
 
 void ScGridWindow::DoScenarioMenue( const ScRange& rScenRange )
@@ -1619,52 +1650,8 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt )
                                     pDoc->GetAttr( nPosX, nPosY, nTab, ATTR_MERGE_FLAG );
         if (pAttr->HasAutoFilter())
         {
-            Point   aScrPos  = pViewData->GetScrPos(nPosX,nPosY,eWhich);
-            long    nSizeX;
-            long    nSizeY;
-            Point   aDiffPix = aPos;
-
-            aDiffPix -= aScrPos;
-            BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
-            if ( bLayoutRTL )
-                aDiffPix.X() = -aDiffPix.X();
-
-            pViewData->GetMergeSizePixel( nPosX, nPosY, nSizeX, nSizeY );
-
-            //  Breite des Buttons ist nicht von der Zellhoehe abhaengig
-            Size aButSize = aComboButton.GetSizePixel();
-            long nButWidth  = Min( aButSize.Width(),  nSizeX );
-            long nButHeight = Min( aButSize.Height(), nSizeY );
-
-            if ( aDiffPix.X() >= nSizeX - nButWidth &&
-                 aDiffPix.Y() >= nSizeY - nButHeight )
-            {
-                if ( DoPageFieldSelection( nPosX, nPosY ) )
-                    return;
-
-                BOOL  bFilterActive = IsAutoFilterActive( nPosX, nPosY,
-                                                          pViewData->GetTabNo() );
-
-                aComboButton.SetOptSizePixel();
-                DrawComboButton( aScrPos, nSizeX, nSizeY, bFilterActive, TRUE );
-
-#if 0
-                if (   bWasFilterBox
-                    && (SCsCOL)nOldColFBox == nPosX
-                    && (SCsROW)nOldRowFBox == nPosY )
-                {
-                    // Verhindern, dass an gleicher Stelle eine
-                    // FilterBox geoeffnet wird, wenn diese gerade
-                    // geloescht wurde
-
-                    nMouseStatus = SC_GM_FILTER; // fuer ButtonDraw im MouseButtonUp();
-                    return;
-                }
-#endif
-                DoAutoFilterMenue( nPosX, nPosY, FALSE );
-
+            if (DoAutoFilterButton(nPosX, nPosY, rMEvt))
                 return;
-            }
         }
         if (pAttr->HasButton())
         {
@@ -1794,11 +1781,17 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     {
         if ( pFilterBox && pFilterBox->GetMode() == SC_FILTERBOX_FILTER )
         {
-            BOOL  bFilterActive = IsAutoFilterActive( pFilterBox->GetCol(), pFilterBox->GetRow(),
-                pViewData->GetTabNo() );
-            HideCursor();
-            aComboButton.Draw( bFilterActive );
-            ShowCursor();
+            if (mpFilterButton.get())
+            {
+                bool bFilterActive = IsAutoFilterActive(
+                    pFilterBox->GetCol(), pFilterBox->GetRow(), pViewData->GetTabNo() );
+
+                mpFilterButton->setHasHiddenMember(bFilterActive);
+                mpFilterButton->setPopupPressed(false);
+                HideCursor();
+                mpFilterButton->draw();
+                ShowCursor();
+            }
         }
         nMouseStatus = SC_GM_NONE;
         ReleaseMouse();
@@ -2218,9 +2211,14 @@ void __EXPORT ScGridWindow::MouseMove( const MouseEvent& rMEvt )
             nMouseStatus = SC_GM_NONE;
             if ( pFilterBox->GetMode() == SC_FILTERBOX_FILTER )
             {
-                HideCursor();
-                aComboButton.Draw( FALSE );
-                ShowCursor();
+                if (mpFilterButton.get())
+                {
+                    mpFilterButton->setHasHiddenMember(false);
+                    mpFilterButton->setPopupPressed(false);
+                    HideCursor();
+                    mpFilterButton->draw();
+                    ShowCursor();
+                }
             }
             ReleaseMouse();
             pFilterBox->MouseButtonDown( MouseEvent( aRelPos, 1, MOUSE_SIMPLECLICK, MOUSE_LEFT ) );

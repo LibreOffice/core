@@ -36,7 +36,7 @@
 #include <svx/gallery.hxx>
 #include <sfx2/request.hxx>
 #include <svx/fmmodel.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/eeitem.hxx>

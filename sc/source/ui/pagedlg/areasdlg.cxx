@@ -37,7 +37,7 @@
 #include <rangelst.hxx>
 
 #include <sfx2/dispatch.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <vcl/msgbox.hxx>
 #include <unotools/charclass.hxx>
 #include <stdlib.h>

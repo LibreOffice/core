@@ -27,10 +27,11 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "helperdecl.hxx"
+#include <vbahelper/helperdecl.hxx>
 #include "vbawindow.hxx"
 #include "vbaworksheets.hxx"
 #include "vbaworksheet.hxx"
+#include "vbaglobals.hxx"
 #include "vbapane.hxx"
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -56,6 +57,9 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 using namespace ::ooo::vba::excel::XlWindowState;
+
+// nameExists defined in vbaworksheet.cxx
+bool nameExists( uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc, ::rtl::OUString & name, SCTAB& nTab ) throw ( lang::IllegalArgumentException );
 
 typedef  std::hash_map< rtl::OUString,
 SCTAB, ::rtl::OUStringHash,
@@ -118,7 +122,7 @@ public:
         ScDocShell* pDocShell = (ScDocShell*)pModel->GetEmbeddedObject();
         if ( !pDocShell )
             throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Cannot obtain docshell" ) ), uno::Reference< uno::XInterface >() );
-        ScTabViewShell* pViewShell = getBestViewShell( m_xModel );
+        ScTabViewShell* pViewShell = excel::getBestViewShell( m_xModel );
         if ( !pViewShell )
             throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Cannot obtain view shell" ) ), uno::Reference< uno::XInterface >() );
 
@@ -202,14 +206,13 @@ public:
 
 };
 
-ScVbaWindow::ScVbaWindow( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel ) : WindowImpl_BASE( xParent, xContext ), m_xModel( xModel )
+ScVbaWindow::ScVbaWindow( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel ) : WindowImpl_BASE( xParent, xContext, xModel )
 {
     init();
 }
 
 ScVbaWindow::ScVbaWindow( uno::Sequence< uno::Any > const & args, uno::Reference< uno::XComponentContext > const & xContext )
-        : WindowImpl_BASE( getXSomethingFromArgs< XHelperInterface >( args, 0 ), xContext ),
-          m_xModel( getXSomethingFromArgs< frame::XModel >( args, 1 ) )
+        : WindowImpl_BASE( args, xContext )
 {
     init();
 }
@@ -306,8 +309,7 @@ ScVbaWindow::getCaption() throw (uno::RuntimeException)
         if ( ( nCrudLen + nCrudIndex ) == sTitle.getLength() )
         {
             sTitle = sTitle.copy( 0, nCrudIndex );
-            uno::Reference< ov::XGlobals > xTemp( ScVbaGlobals::getGlobalsImpl( mxContext )); // temporary needed for g++ 3.3.5
-            ScVbaWorkbook workbook( uno::Reference< XHelperInterface >( xTemp->getApplication(), uno::UNO_QUERY_THROW ), mxContext, m_xModel );
+            ScVbaWorkbook workbook( uno::Reference< XHelperInterface >( Application(), uno::UNO_QUERY_THROW ), mxContext, m_xModel );
             rtl::OUString sName = workbook.getName();
             // rather bizare hack to make sure the name behavior
             // is like XL
@@ -343,7 +345,7 @@ uno::Any SAL_CALL
 ScVbaWindow::getScrollRow() throw (uno::RuntimeException)
 {
     sal_Int32 nValue = 0;
-    ScTabViewShell* pViewShell = getBestViewShell( m_xModel );
+    ScTabViewShell* pViewShell = excel::getBestViewShell( m_xModel );
     if ( pViewShell )
     {
         ScSplitPos eWhich = pViewShell->GetViewData()->GetActivePart();
@@ -356,7 +358,7 @@ ScVbaWindow::getScrollRow() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaWindow::setScrollRow( const uno::Any& _scrollrow ) throw (uno::RuntimeException)
 {
-    ScTabViewShell* pViewShell = getBestViewShell( m_xModel );
+    ScTabViewShell* pViewShell = excel::getBestViewShell( m_xModel );
     if ( pViewShell )
     {
         sal_Int32 scrollRow = 0;
@@ -371,7 +373,7 @@ uno::Any SAL_CALL
 ScVbaWindow::getScrollColumn() throw (uno::RuntimeException)
 {
     sal_Int32 nValue = 0;
-    ScTabViewShell* pViewShell = getBestViewShell( m_xModel );
+    ScTabViewShell* pViewShell = excel::getBestViewShell( m_xModel );
     if ( pViewShell )
     {
         ScSplitPos eWhich = pViewShell->GetViewData()->GetActivePart();
@@ -384,7 +386,7 @@ ScVbaWindow::getScrollColumn() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaWindow::setScrollColumn( const uno::Any& _scrollcolumn ) throw (uno::RuntimeException)
 {
-    ScTabViewShell* pViewShell = getBestViewShell( m_xModel );
+    ScTabViewShell* pViewShell = excel::getBestViewShell( m_xModel );
     if ( pViewShell )
     {
         sal_Int32 scrollColumn = 0;
@@ -399,7 +401,7 @@ uno::Any SAL_CALL
 ScVbaWindow::getWindowState() throw (uno::RuntimeException)
 {
     sal_Int32 nwindowState = xlNormal;
-    ScTabViewShell* pViewShell = getBestViewShell( m_xModel );
+    ScTabViewShell* pViewShell = excel::getBestViewShell( m_xModel );
     SfxViewFrame* pViewFrame = pViewShell -> GetViewFrame();
     SfxTopViewFrame *pTop= PTR_CAST( SfxTopViewFrame, pViewFrame -> GetTopViewFrame() );
     if ( pTop )
@@ -421,7 +423,7 @@ ScVbaWindow::setWindowState( const uno::Any& _windowstate ) throw (uno::RuntimeE
 {
     sal_Int32 nwindowState = xlMaximized;
     _windowstate >>= nwindowState;
-    ScTabViewShell* pViewShell = getBestViewShell( m_xModel );
+    ScTabViewShell* pViewShell = excel::getBestViewShell( m_xModel );
     SfxViewFrame* pViewFrame = pViewShell -> GetViewFrame();
     SfxTopViewFrame *pTop= PTR_CAST( SfxTopViewFrame, pViewFrame -> GetTopViewFrame() );
     if ( pTop )
@@ -444,8 +446,7 @@ ScVbaWindow::setWindowState( const uno::Any& _windowstate ) throw (uno::RuntimeE
 void
 ScVbaWindow::Activate() throw (css::uno::RuntimeException)
 {
-    uno::Reference< ov::XGlobals > xTemp( ScVbaGlobals::getGlobalsImpl( mxContext )); // temporary needed for g++ 3.3.5
-    ScVbaWorkbook workbook( uno::Reference< XHelperInterface >( xTemp->getApplication(), uno::UNO_QUERY_THROW ), mxContext, m_xModel );
+    ScVbaWorkbook workbook( uno::Reference< XHelperInterface >( Application(), uno::UNO_QUERY_THROW ), mxContext, m_xModel );
 
     workbook.Activate();
 }
@@ -453,8 +454,7 @@ ScVbaWindow::Activate() throw (css::uno::RuntimeException)
 void
 ScVbaWindow::Close( const uno::Any& SaveChanges, const uno::Any& FileName, const uno::Any& RouteWorkBook ) throw (uno::RuntimeException)
 {
-    uno::Reference< ov::XGlobals > xTemp( ScVbaGlobals::getGlobalsImpl( mxContext )); // temporary needed for g++ 3.3.5
-    ScVbaWorkbook workbook( uno::Reference< XHelperInterface >( xTemp->getApplication(), uno::UNO_QUERY_THROW ), mxContext, m_xModel );
+    ScVbaWorkbook workbook( uno::Reference< XHelperInterface >( Application(), uno::UNO_QUERY_THROW ), mxContext, m_xModel );
     workbook.Close(SaveChanges, FileName, RouteWorkBook );
 }
 
@@ -467,13 +467,15 @@ ScVbaWindow::ActivePane() throw (script::BasicErrorException, uno::RuntimeExcept
 uno::Reference< excel::XRange > SAL_CALL
 ScVbaWindow::ActiveCell(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
-    return ScVbaGlobals::getGlobalsImpl( mxContext )->getApplication()->getActiveCell();
+    uno::Reference< excel::XApplication > xApplication( Application(), uno::UNO_QUERY_THROW );
+    return xApplication->getActiveCell();
 }
 
 uno::Any SAL_CALL
 ScVbaWindow::Selection(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
-    return ScVbaGlobals::getGlobalsImpl( mxContext )->getApplication()->getSelection();
+    uno::Reference< excel::XApplication > xApplication( Application(), uno::UNO_QUERY_THROW );
+    return xApplication->getSelection();
 }
 
 ::sal_Bool SAL_CALL
@@ -736,30 +738,25 @@ ScVbaWindow::getZoom() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaWindow::setZoom( const uno::Any& _zoom ) throw (uno::RuntimeException)
 {
-    uno::Reference< beans::XPropertySet > xProps( m_xModel->getCurrentController(), uno::UNO_QUERY_THROW );
-    rtl::OUString sZoomType( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_ZOOMTYPE ) );
-    sal_Int16 nZoomType = view::DocumentZoomType::PAGE_WIDTH;
-    if( _zoom.getValueTypeClass() == uno::TypeClass_BOOLEAN )
-    {
-        //zoom type is PAGE_WIDTH_EXACT in helperapi, it seems that there is a issue for this zoom type in current OOo.
-        // so PAGE_WIDTH is used.
-        xProps->setPropertyValue(sZoomType, uno::makeAny( nZoomType ));
-    }
-    else
-    {
-        nZoomType = view::DocumentZoomType::BY_VALUE;
-        rtl::OUString sZoomValue( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_ZOOMVALUE ));
-        sal_Int16 nZoomValue = 100;
-        _zoom >>= nZoomValue;
-        xProps->setPropertyValue( sZoomType, uno::makeAny( nZoomType ));
-        xProps->setPropertyValue( sZoomValue, uno::makeAny( nZoomValue ));
-    }
+    sal_Int16 nZoom = 100;
+    _zoom >>= nZoom;
+    uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( m_xModel, uno::UNO_QUERY_THROW );
+    uno::Reference< excel::XWorksheet > xActiveSheet = ActiveSheet();
+    SCTAB nTab = 0;
+    rtl::OUString sName = xActiveSheet->getName();
+    bool bSheetExists = nameExists (xSpreadDoc, sName, nTab);
+    if ( !bSheetExists )
+        throw uno::RuntimeException();
+    std::vector< SCTAB > vTabs;
+    vTabs.push_back( nTab );
+    excel::implSetZoom( m_xModel, nZoom, vTabs );
 }
 
 uno::Reference< excel::XWorksheet > SAL_CALL
 ScVbaWindow::ActiveSheet(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
-    return ScVbaGlobals::getGlobalsImpl(mxContext)->getApplication()->getActiveSheet();
+    uno::Reference< excel::XApplication > xApplication( Application(), uno::UNO_QUERY_THROW );
+    return xApplication->getActiveSheet();
 }
 
 uno::Any SAL_CALL
@@ -787,121 +784,9 @@ ScVbaWindow::setView( const uno::Any& _view) throw (uno::RuntimeException)
         default:
             DebugHelper::exception(SbERR_BAD_PARAMETER, rtl::OUString() );
     }
-    dispatchExecute( m_xModel, nSlot );
-}
-
-sal_Bool SAL_CALL
-ScVbaWindow::getVisible() throw (uno::RuntimeException)
-{
-    sal_Bool bVisible = sal_True;
-    uno::Reference< frame::XController > xController( m_xModel->getCurrentController(), uno::UNO_QUERY_THROW );
-    uno::Reference< css::awt::XWindow > xWindow (xController->getFrame()->getContainerWindow(), uno::UNO_QUERY_THROW );
-    uno::Reference< css::awt::XWindow2 > xWindow2 (xWindow, uno::UNO_QUERY_THROW );
-    if( xWindow2.is() )
-    {
-        bVisible = xWindow2->isVisible();
-    }
-    return bVisible;
-}
-
-void SAL_CALL
-ScVbaWindow::setVisible(sal_Bool _visible) throw (uno::RuntimeException)
-{
-    uno::Reference< frame::XController > xController( m_xModel->getCurrentController(), uno::UNO_QUERY_THROW );
-    uno::Reference< css::awt::XWindow > xWindow (xController->getFrame()->getContainerWindow(), uno::UNO_QUERY_THROW );
-    if( xWindow.is() )
-    {
-        xWindow->setVisible( _visible );
-    }
-}
-
-css::awt::Rectangle getPosSize( const uno::Reference< frame::XModel >& xModel )
-{
-    css::awt::Rectangle aRect;
-    uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
-    uno::Reference< css::awt::XWindow > xWindow (xController->getFrame()->getContainerWindow(), uno::UNO_QUERY_THROW );
-    if( xWindow.is() )
-    {
-        aRect = xWindow->getPosSize();
-    }
-    return aRect;
-}
-
-void setPosSize( const uno::Reference< frame::XModel >& xModel, sal_Int32 nValue, USHORT nFlag )
-{
-    uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
-    uno::Reference< css::awt::XWindow > xWindow (xController->getFrame()->getContainerWindow(), uno::UNO_QUERY_THROW );
-    if( xWindow.is() )
-    {
-        css::awt::Rectangle aRect = xWindow->getPosSize();
-        switch( nFlag )
-        {
-            case css::awt::PosSize::X:
-                xWindow->setPosSize( nValue, aRect.Y,   0, 0, css::awt::PosSize::X );
-                break;
-            case css::awt::PosSize::Y:
-                xWindow->setPosSize( aRect.X, nValue,   0, 0, css::awt::PosSize::Y );
-                break;
-            case css::awt::PosSize::WIDTH:
-                xWindow->setPosSize( 0, 0,  nValue, aRect.Height, css::awt::PosSize::WIDTH );
-                break;
-            case css::awt::PosSize::HEIGHT:
-                xWindow->setPosSize( 0, 0,  aRect.Width, nValue, css::awt::PosSize::HEIGHT );
-                break;
-            default:
-                break;
-        }
-    }
-}
-
-sal_Int32 SAL_CALL
-ScVbaWindow::getHeight() throw (uno::RuntimeException)
-{
-    css::awt::Rectangle aRect = getPosSize(m_xModel);
-    return aRect.Height;
-}
-
-void SAL_CALL
-ScVbaWindow::setHeight( sal_Int32 _height ) throw (uno::RuntimeException)
-{
-    setPosSize(m_xModel, _height, css::awt::PosSize::HEIGHT);
-}
-
-sal_Int32 SAL_CALL
-ScVbaWindow::getLeft() throw (uno::RuntimeException)
-{
-    css::awt::Rectangle aRect = getPosSize(m_xModel);
-    return aRect.X;
-}
-
-void SAL_CALL
-ScVbaWindow::setLeft( sal_Int32 _left ) throw (uno::RuntimeException)
-{
-    setPosSize(m_xModel, _left, css::awt::PosSize::X);
-}
-sal_Int32 SAL_CALL
-ScVbaWindow::getTop() throw (uno::RuntimeException)
-{
-    css::awt::Rectangle aRect = getPosSize(m_xModel);
-    return aRect.Y;
-}
-
-void SAL_CALL
-ScVbaWindow::setTop( sal_Int32 _top ) throw (uno::RuntimeException)
-{
-    setPosSize(m_xModel, _top, css::awt::PosSize::Y);
-}
-sal_Int32 SAL_CALL
-ScVbaWindow::getWidth() throw (uno::RuntimeException)
-{
-    css::awt::Rectangle aRect = getPosSize(m_xModel);
-    return aRect.Width;
-}
-
-void SAL_CALL
-ScVbaWindow::setWidth( sal_Int32 _width ) throw (uno::RuntimeException)
-{
-    setPosSize(m_xModel, _width, css::awt::PosSize::WIDTH);
+    ScTabViewShell* pViewShell = excel::getBestViewShell( m_xModel );
+    if ( pViewShell )
+        dispatchExecute( pViewShell, nSlot );
 }
 
 sal_Int32 SAL_CALL
@@ -924,14 +809,14 @@ void SAL_CALL
 ScVbaWindow::PrintOut( const css::uno::Any& From, const css::uno::Any&To, const css::uno::Any& Copies, const css::uno::Any& Preview, const css::uno::Any& ActivePrinter, const css::uno::Any& PrintToFile, const css::uno::Any& Collate, const css::uno::Any& PrToFileName ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
 {
     // need test, print current active sheet
-    PrintOutHelper( From, To, Copies, Preview, ActivePrinter, PrintToFile, Collate, PrToFileName, m_xModel, sal_True );
+    PrintOutHelper( excel::getBestViewShell( m_xModel ), From, To, Copies, Preview, ActivePrinter, PrintToFile, Collate, PrToFileName, sal_True );
 }
 
 void SAL_CALL
 ScVbaWindow::PrintPreview( const css::uno::Any& EnableChanges ) throw (css::script::BasicErrorException, css::uno::RuntimeException)
 {
     // need test, print preview current active sheet
-    PrintPreviewHelper( EnableChanges, m_xModel );
+    PrintPreviewHelper( EnableChanges, excel::getBestViewShell( m_xModel ) );
 }
 
 rtl::OUString&

@@ -67,7 +67,7 @@
 //#define _FSYS_HXX
 //#define _STREAM_HXX
 #define _CACHESTR_HXX
-#define _SV_MULTISEL_HXX
+//#define _SV_MULTISEL_HXX
 
 //SV
 //#define _CLIP_HXX ***
@@ -300,7 +300,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include <svx/svdmodel.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 #include "prevwsh.hxx"
 #include "docsh.hxx"

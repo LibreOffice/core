@@ -30,7 +30,7 @@
 #ifndef _CHART2_VIEW_NUMBERFORMATTERWRAPPER_HXX
 #define _CHART2_VIEW_NUMBERFORMATTERWRAPPER_HXX
 
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include "chartviewdllapi.hxx"
 

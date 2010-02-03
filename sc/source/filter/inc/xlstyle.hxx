@@ -39,7 +39,7 @@
 #include <vcl/vclenum.hxx>
 #include <svx/svxenum.hxx>
 #include <svx/frmdir.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include "fapihelper.hxx"
 
 class XclRoot;

@@ -42,7 +42,7 @@
 #include <vcl/waitobj.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 #include <com/sun/star/sdbc/XResultSet.hpp>
 

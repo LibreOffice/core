@@ -38,7 +38,7 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 
 #include "dbdocutl.hxx"
 #include "document.hxx"

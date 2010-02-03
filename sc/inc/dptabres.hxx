@@ -31,7 +31,7 @@
 #ifndef SC_DPTABRES_HXX
 #define SC_DPTABRES_HXX
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <tools/string.hxx>
 #include <com/sun/star/sheet/MemberResult.hpp>
 #include <com/sun/star/sheet/DataResult.hpp>
@@ -41,6 +41,7 @@
 #include <hash_map>
 #include <hash_set>
 #include <vector>
+#include <memory>
 
 namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldReference;
@@ -262,7 +263,7 @@ public:
 
     long                GetMeasureCount() const     { return nMeasCount; }
     ScSubTotalFunc      GetMeasureFunction(long nMeasure) const;
-    String              GetMeasureString(long nMeasure, BOOL bForce, ScSubTotalFunc eForceFunc) const;
+    String              GetMeasureString(long nMeasure, BOOL bForce, ScSubTotalFunc eForceFunc, bool& rbTotalResult) const;
     String              GetMeasureDimensionName(long nMeasure) const;
     const ::com::sun::star::sheet::DataPilotFieldReference& GetMeasureRefVal(long nMeasure) const;
     USHORT              GetMeasureRefOrient(long nMeasure) const;
@@ -284,6 +285,8 @@ public:
                                     const ScDPItemData& rBaseData, long nBaseIndex ) const;
     BOOL                HasCommonElement( const ScDPItemData& rFirstData, long nFirstIndex,
                                           const ScDPItemData& rSecondData, long nSecondIndex ) const;
+
+    const ScDPSource*   GetSource() const;
 };
 
 

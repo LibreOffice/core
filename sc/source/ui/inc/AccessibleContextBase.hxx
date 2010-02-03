@@ -50,7 +50,7 @@
 #include <cppuhelper/interfacecontainer.h>
 
 
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <cppuhelper/compbase5.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -318,6 +318,8 @@ protected:
     void SetName(const rtl::OUString& rName) { msName = rName; }
     /// Use this method to set initial Description without notification
     void SetDescription(const rtl::OUString& rDesc) { msDescription = rDesc; }
+
+    void SetRole(sal_Int16 nRole);
 
     /// Reference to the parent object.
     ::com::sun::star::uno::Reference<

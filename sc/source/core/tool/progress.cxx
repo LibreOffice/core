@@ -40,8 +40,8 @@
 #include <sfx2/progress.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <svtools/eitem.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/eitem.hxx>
+#include <svl/itemset.hxx>
 
 #define SC_PROGRESS_CXX
 #include "progress.hxx"

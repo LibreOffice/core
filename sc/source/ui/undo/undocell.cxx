@@ -35,7 +35,7 @@
 #include <svx/eeitem.hxx>
 
 #include <svx/editobj.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <sfx2/app.hxx>
 
 #include "undocell.hxx"

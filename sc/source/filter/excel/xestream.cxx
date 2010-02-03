@@ -578,7 +578,7 @@ void XclExpBiff8Encrypter::Init( const String& aPass, const sal_uInt8 nDocId[16]
         maCodec.InitKey(mnPassw, mnDocId);
 
         // generate salt hash.
-        ::svx::MSCodec_Std97 aCodec;
+        ::msfilter::MSCodec_Std97 aCodec;
         aCodec.InitKey(mnPassw, mnDocId);
         aCodec.CreateSaltDigest(nSalt, mnSaltDigest);
 

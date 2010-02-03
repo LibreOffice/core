@@ -63,7 +63,8 @@ EXCEPTIONSFILES= \
     $(SLO)$/drwtrans.obj \
     $(SLO)$/scmod2.obj \
     $(SLO)$/scmod.obj \
-    $(SLO)$/client.obj
+    $(SLO)$/client.obj \
+    $(SLO)$/inputwin.obj
 
 #LIB3TARGET=$(SLB)$/ysclib.lib
 #LIB3OBJFILES=$(SLO)$/sclib.obj

@@ -155,7 +155,7 @@ namespace com { namespace sun { namespace star {
     }
 } } }
 
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 /*
 #ifdef _ZFORLIST_DECLARE_TABLE
 class SvNumberFormatterIndexTable;
@@ -865,6 +865,8 @@ public:
     BOOL            IsCalculatingFormulaTree() { return bCalculatingFormulaTree; }
 
     USHORT          GetErrCode( const ScAddress& ) const;
+
+    bool            ShrinkToDataArea(SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow) const;
 
     void            GetDataArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
                                     SCCOL& rEndCol, SCROW& rEndRow, BOOL bIncludeOld );

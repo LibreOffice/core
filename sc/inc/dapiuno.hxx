@@ -36,8 +36,8 @@
 #include "rangeutl.hxx"     // ScArea
 #include "cellsuno.hxx"     // for XModifyListenerArr_Impl
 
-#include <svtools/lstner.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/lstner.hxx>
+#include <svl/itemprop.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
