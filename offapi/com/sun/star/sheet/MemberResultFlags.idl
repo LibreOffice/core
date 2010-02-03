@@ -59,6 +59,17 @@ published constants MemberResultFlags
      */
     const long CONTINUE = 4;
 
+    //-------------------------------------------------------------------------
+
+    /** The element contains a grand total.
+     */
+    const long GRANDTOTAL = 8;
+
+    //-------------------------------------------------------------------------
+
+    /** The element is a numeric value.
+     */
+    const long NUMERIC = 16;
 };
 
 //=============================================================================

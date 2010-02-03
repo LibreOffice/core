@@ -49,8 +49,6 @@
 #define THIS_OS "NetBSD"
 #elif defined FREEBSD
 #define THIS_OS "FreeBSD"
-#elif defined IRIX
-#define THIS_OS "Irix"
 #endif
 
 #if ! defined THIS_OS
@@ -76,8 +74,6 @@ this is inserted for the case that the preprocessor ignores error
 #else
 #    define THIS_ARCH "SPARC"
 #endif
-#elif defined IRIX
-#    define THIS_ARCH "MIPS"
 #elif defined MIPS
 #    ifdef OSL_BIGENDIAN
 #        define THIS_ARCH "MIPS_EB"

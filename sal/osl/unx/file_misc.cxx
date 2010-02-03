@@ -29,6 +29,7 @@
 
 #include "osl/diagnose.h"
 #include "osl/thread.h"
+#include <osl/signal.h>
 #include "rtl/alloc.h"
 
 #include "system.h"
@@ -47,6 +48,8 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/mman.h>
+
+#include <algorithm>
 
 /************************************************************************
  *   ToDo
@@ -1002,7 +1005,6 @@ static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszD
     int SourceFileFD=0;
     int DestFileFD=0;
     int nRet=0;
-    void* pSourceFile=0;
 
     SourceFileFD=open(pszSourceFileName,O_RDONLY);
     if ( SourceFileFD < 0 )
@@ -1029,56 +1031,71 @@ static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszD
         return 0;
     }
 
-    /* FIXME doCopy: fall back code for systems not having mmap */
-    /* mmap file -- open dest file -- write once -- fsync it */
-    pSourceFile=mmap(0,nSourceSize,PROT_READ,MAP_PRIVATE,SourceFileFD,0);
-
-    if ( pSourceFile == MAP_FAILED )
+    // read and lseek are used to check the possibility to access the data
+    // not a nice solution, but it allows to avoid a crash in case it is an opened samba file
+    // generally, reading of one byte should not affect the performance
+    char nCh;
+    if ( 1 != read( SourceFileFD, &nCh, 1 )
+      || -1 == lseek( SourceFileFD, 0, SEEK_SET ) )
     {
-        /* it's important to set nRet before the hack
-           otherwise errno may be changed by lstat */
         nRet = errno;
-        close(SourceFileFD);
-        close(DestFileFD);
-
+        close( SourceFileFD );
+        close( DestFileFD );
         return nRet;
     }
 
-    nRet = write(DestFileFD,pSourceFile,nSourceSize);
+    size_t nWritten = 0;
+    size_t nRemains = nSourceSize;
 
-    /* #112584# if 'write' could not write the requested number of bytes
-             we have to fail of course; because it's not exactly specified if 'write'
-            sets errno if less than requested byte could be written we set nRet
-           explicitly to ENOSPC */
-    if ((nRet < 0) || (nRet != sal::static_int_cast< int >(nSourceSize)))
+    /* mmap file -- open dest file -- write -- fsync it at the end */
+    void* pSourceFile = mmap( 0, nSourceSize, PROT_READ, MAP_SHARED, SourceFileFD, 0 );
+    if ( pSourceFile != MAP_FAILED )
     {
-        if (nRet < 0)
+        nWritten = write( DestFileFD, pSourceFile, nSourceSize );
+        nRemains -= nWritten;
+        munmap( (char*)pSourceFile, nSourceSize );
+    }
+
+    if ( nRemains )
+    {
+        /* mmap has problems, try the direct streaming */
+        char pBuffer[32000];
+        size_t nRead = 0;
+
+        nRemains = nSourceSize;
+
+        if ( -1 != lseek( SourceFileFD, 0, SEEK_SET )
+          && -1 != lseek( DestFileFD, 0, SEEK_SET ) )
+        {
+            do
+            {
+                nRead = 0;
+                nWritten = 0;
+
+                size_t nToRead = std::min( (size_t)32000, nRemains );
+                nRead = read( SourceFileFD, pBuffer, nToRead );
+                if ( (size_t)-1 != nRead )
+                    nWritten = write( DestFileFD, pBuffer, nRead );
+
+                if ( (size_t)-1 != nWritten )
+                    nRemains -= nWritten;
+            }
+            while( nRemains && (size_t)-1 != nRead && nRead == nWritten );
+        }
+    }
+
+    if ( nRemains )
+    {
+        if ( errno )
             nRet = errno;
         else
             nRet = ENOSPC;
-
-        close(SourceFileFD);
-        close(DestFileFD);
-        munmap((char*)pSourceFile,nSourceSize);
-        return nRet;
     }
 
-    nRet = munmap((char*)pSourceFile,nSourceSize);
-    if ( nRet < 0 )
-    {
-        nRet=errno;
-        close(SourceFileFD);
-        close(DestFileFD);
-        return nRet;
-    }
+    close( SourceFileFD );
+    if ( close( DestFileFD ) == -1 && nRet == 0 )
+        nRet = errno;
 
-    close(SourceFileFD);
-
-    // Removed call to 'fsync' again (#112584#) and instead
-    // evaluate the return value of 'close' in order to detect
-    // and report ENOSPC and other erronous conditions on close
-    if (close(DestFileFD) == -1)
-        return errno;
-    else
-        return 0;
+    return nRet;
 }
+

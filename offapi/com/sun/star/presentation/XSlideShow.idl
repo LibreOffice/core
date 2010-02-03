@@ -46,8 +46,14 @@
 #ifndef __com_sun_star_animations_XAnimationNode_idl__
 #include <com/sun/star/animations/XAnimationNode.idl>
 #endif
+#endif
+#ifndef __com_sun_star_lang_XMultiServiceFactory_idl__
+#include <com/sun/star/lang/XMultiServiceFactory.idl>
 #ifndef __com_sun_star_drawing_XDrawPage_idl__
 #include <com/sun/star/drawing/XDrawPage.idl>
+#endif
+#ifndef __com_sun_star_drawing_XDrawPagesSupplier_idl__
+#include <com/sun/star/drawing/XDrawPagesSupplier.idl>
 #endif
 #ifndef __com_sun_star_drawing_XShape_idl__
 #include <com/sun/star/drawing/XShape.idl>
@@ -93,6 +99,25 @@ interface XSlideShow : ::com::sun::star::uno::XInterface
      */
     boolean nextEffect();
 
+    /** Undo the last effect in the main sequence of the slideshow.<p>
+
+        The current slide is displayed as if the last user-triggered effect
+        has never been triggered.  If there is no previous effect on the
+        current slide then slideEnded(true) is called at the registered
+        XSlideShowListener objects, which can then trigger a change to the
+        previous slide.  Note that this command is executed asynchronously.
+        Multiple calls to update() may be necessary to complete its execution.
+        If there is currently no slideshow running, this method does
+        nothing.<p>
+
+        @return <TRUE/>, if the previous effect was successfully
+        triggered. This method returns <FALSE/>, if there is no show
+        running, the first effect on the first slide was not yet
+        triggered, or the implementation failed to trigger the previous
+        effect.
+     */
+    boolean previousEffect();
+
     /** Start a shape-intrinsic animation or activity.<p>
 
         This method starts an animation or activity intrinsic to the
@@ -130,6 +155,10 @@ interface XSlideShow : ::com::sun::star::uno::XInterface
         @param xPage
         The slide to display.
 
+        @param xDrawPages
+    For future use.
+    This parameter can be NULL when the ENABLE_PRESENTER_EXTRA_UI feature is disabled.
+
         @param xAnimationNode
         The animation node determine the animations to display.
 
@@ -145,11 +174,28 @@ interface XSlideShow : ::com::sun::star::uno::XInterface
                 a different slide, this will still work but will not have any performance
                 improvements
                 </li>
+            <li>name: SkipAllMainSequenceEffects, value: boolean.
+                When <TRUE/> then all main sequence effects on the new slide
+                are triggered.  This is typically used when going back one
+                effect leads to the previous slide.  On that slide all
+                effects have to be shown in order to continue the backward
+                travelling.
+                When <FALSE/>, the default, then no main sequence effect is
+                triggered.
+                </li>
+            <li>name: SkipSlideTransition, value: boolean.
+                When <TRUE/> then the slide transition animation, if there
+                is any, is not displayed.  This is typically used when going
+                back one effect leads to the previous slide.  Typically used
+                together with SkipAllMainSequenceEffects also being <TRUE/>.
+                When <FALSE/>, the default, then the slide transition
+                effect, if it exists, is played.
+                </li>
         </ul>
-
     */
     void displaySlide(
         [in] ::com::sun::star::drawing::XDrawPage xSlide,
+        [in] ::com::sun::star::drawing::XDrawPagesSupplier xDrawPages,
         [in] ::com::sun::star::animations::XAnimationNode aAnimationNode,
         [in] sequence< ::com::sun::star::beans::PropertyValue > aProperties );
 
@@ -175,6 +221,14 @@ interface XSlideShow : ::com::sun::star::uno::XInterface
         empty reference.
      */
     ::com::sun::star::drawing::XDrawPage getCurrentSlide();
+
+    /** Register drawn polygons in presentation mode
+
+     @param xDocFactory
+
+     */
+
+    void registerUserPaintPolygons([in] ::com::sun::star::lang::XMultiServiceFactory xDocFactory);
 
     /** Change a property of the slideshow.<p>
 
