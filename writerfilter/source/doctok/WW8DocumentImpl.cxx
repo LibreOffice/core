@@ -999,15 +999,20 @@ writerfilter::Reference<Table>::Pointer_t WW8DocumentImpl::getListTable() const
 
     if (mpFib->get_fcPlcfLst() != 0 && mpFib->get_lcbPlcfLst() > 0)
     {
-        WW8ListTable * pList = new WW8ListTable(*mpTableStream,
-                                                mpFib->get_fcPlcfLst(),
-                                                mpFib->get_fcPlfLfo() -
-                                                mpFib->get_fcPlcfLst());
+        try
+        {
+            WW8ListTable * pList = new WW8ListTable(*mpTableStream,
+                                                    mpFib->get_fcPlcfLst(),
+                                                    mpFib->get_fcPlfLfo() -
+                                                    mpFib->get_fcPlcfLst());
 
-        pList->setPayloadOffset(mpFib->get_lcbPlcfLst());
-        pList->initPayload();
+            pList->setPayloadOffset(mpFib->get_lcbPlcfLst());
+            pList->initPayload();
 
-        pResult = writerfilter::Reference<Table>::Pointer_t(pList);
+            pResult = writerfilter::Reference<Table>::Pointer_t(pList);
+        }
+        catch (ExceptionOutOfBounds aException) {
+        }
     }
 
     return pResult;
