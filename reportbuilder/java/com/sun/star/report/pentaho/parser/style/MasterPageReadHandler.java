@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.parser.style;
 
 import java.util.ArrayList;
@@ -49,59 +47,59 @@ import org.xml.sax.SAXException;
  */
 public class MasterPageReadHandler extends ElementReadHandler
 {
-  private final OfficeMasterPage masterPage;
-  private final List otherHandlers;
 
-  public MasterPageReadHandler()
-  {
-    masterPage = new OfficeMasterPage();
-    this.otherHandlers = new ArrayList();
-  }
+    private final OfficeMasterPage masterPage;
+    private final List otherHandlers;
 
-  public OfficeMasterPage getMasterPage()
-  {
-    return masterPage;
-  }
-
-  /**
-   * Returns the handler for a child element.
-   *
-   * @param tagName the tag name.
-   * @param atts    the attributes.
-   * @return the handler or null, if the tagname is invalid.
-   *
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected XmlReadHandler getHandlerForChild(final String uri,
-                                              final String tagName,
-                                              final Attributes atts)
-      throws SAXException
-  {
-    final StyleDefinitionReadHandler readHandler =
-            new StyleDefinitionReadHandler();
-    otherHandlers.add(readHandler);
-    return readHandler;
-  }
-
-  /**
-   * Done parsing.
-   *
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected void doneParsing()
-      throws SAXException
-  {
-    for (int i = 0; i < otherHandlers.size(); i++)
+    public MasterPageReadHandler()
     {
-      final ElementReadHandler handler =
-          (ElementReadHandler) otherHandlers.get(i);
-      masterPage.addNode(handler.getElement());
+        masterPage = new OfficeMasterPage();
+        this.otherHandlers = new ArrayList();
     }
-  }
 
+    public OfficeMasterPage getMasterPage()
+    {
+        return masterPage;
+    }
 
-  public Element getElement()
-  {
-    return masterPage;
-  }
+    /**
+     * Returns the handler for a child element.
+     *
+     * @param tagName the tag name.
+     * @param atts    the attributes.
+     * @return the handler or null, if the tagname is invalid.
+     *
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected XmlReadHandler getHandlerForChild(final String uri,
+            final String tagName,
+            final Attributes atts)
+            throws SAXException
+    {
+        final StyleDefinitionReadHandler readHandler =
+                new StyleDefinitionReadHandler();
+        otherHandlers.add(readHandler);
+        return readHandler;
+    }
+
+    /**
+     * Done parsing.
+     *
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected void doneParsing()
+            throws SAXException
+    {
+        for (int i = 0; i < otherHandlers.size(); i++)
+        {
+            final ElementReadHandler handler =
+                    (ElementReadHandler) otherHandlers.get(i);
+            masterPage.addNode(handler.getElement());
+        }
+    }
+
+    public Element getElement()
+    {
+        return masterPage;
+    }
 }

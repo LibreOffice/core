@@ -441,3 +441,16 @@ ErrorBox ERR_INVALID_BACKUP_LOCATION
     Buttons = WB_OK;
     Message [ en-US ] = "You need to choose a backup location other than the document location itself.";
 };
+
+String STR_INVALID_NUMBER_ARGS
+{
+    Text [ en-US ] = "Invalid number of initialization arguments. Expected 1.";
+};
+String STR_NO_DATABASE
+{
+    Text [ en-US ] = "No database document found in the initializatin arguments.";
+};
+String STR_NOT_READONLY
+{
+    Text [ en-US ] = "Not applicable to read-only documents.";
+};

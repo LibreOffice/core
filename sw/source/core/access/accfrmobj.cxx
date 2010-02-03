@@ -59,8 +59,10 @@ sal_Bool SwFrmOrObj::IsBoundAsChar() const
     else
     {
         const SwFrmFmt *pFrmFmt = pObj ? ::FindFrmFmt( pObj ) : 0;
-        return pFrmFmt ? static_cast<sal_Bool>(FLY_IN_CNTNT == pFrmFmt->GetAnchor().GetAnchorId())
-                       : sal_False;
+        return (pFrmFmt)
+            ? static_cast<sal_Bool>(FLY_AS_CHAR ==
+                    pFrmFmt->GetAnchor().GetAnchorId())
+            : sal_False;
     }
 }
 

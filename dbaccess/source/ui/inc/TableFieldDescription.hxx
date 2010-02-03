@@ -83,6 +83,7 @@ namespace dbaui
 
         inline sal_Bool         IsEmpty() const;
 
+        OTableFieldDesc&        operator=( const OTableFieldDesc& _aField );
         sal_Bool                operator==( const OTableFieldDesc& rDesc );
 
         sal_Bool                IsVisible() const    { return m_bVisible;}

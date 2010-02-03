@@ -60,19 +60,21 @@ void MapReturn(long r2, double f0, typelib_TypeClass eTypeClass, sal_uInt64* pRe
     {
     case typelib_TypeClass_HYPER:
     case typelib_TypeClass_UNSIGNED_HYPER:
+            *pRegisterReturn = r2;
+            break;
     case typelib_TypeClass_LONG:
     case typelib_TypeClass_UNSIGNED_LONG:
     case typelib_TypeClass_ENUM:
-            *pRegisterReturn = r2;
+            *(unsigned int*)pRegisterReturn = (unsigned int)r2;
             break;
     case typelib_TypeClass_CHAR:
     case typelib_TypeClass_SHORT:
     case typelib_TypeClass_UNSIGNED_SHORT:
-            *pRegisterReturn = (unsigned short)r2;
+            *(unsigned short*)pRegisterReturn = (unsigned short)r2;
             break;
     case typelib_TypeClass_BOOLEAN:
     case typelib_TypeClass_BYTE:
-            *pRegisterReturn = (unsigned char)r2;
+            *(unsigned char*)pRegisterReturn = (unsigned char)r2;
             break;
     case typelib_TypeClass_FLOAT:
             *reinterpret_cast<float *>( pRegisterReturn ) = f0;
@@ -90,7 +92,6 @@ void MapReturn(long r2, double f0, typelib_TypeClass eTypeClass, sal_uInt64* pRe
 
 #define INSERT_FLOAT( pSV, nr, pFPR, pDS ) \
     { \
-        float tmp = *reinterpret_cast<float *>( pSV ); \
         if ( nr < s390x::MAX_SSE_REGS ) \
         { \
                 pFPR[nr++] = *reinterpret_cast<float *>( pSV ); \
@@ -421,7 +422,6 @@ void unoInterfaceProxyDispatch(
     // is my surrogate
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis
             = static_cast< bridges::cpp_uno::shared::UnoInterfaceProxy *> (pUnoI);
-    typelib_InterfaceTypeDescription * pTypeDescr = pThis->pTypeDescr;
 
     switch (pMemberDescr->eTypeClass)
     {

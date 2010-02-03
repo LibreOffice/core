@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.layoutprocessor;
 
 import java.util.ArrayList;
@@ -50,54 +48,52 @@ import java.util.List;
  */
 public class VariablesCollection
 {
-  private VariablesCollection parent;
-  private String namePrefix;
-  private List variables;
 
-  public VariablesCollection(final String namePrefix)
-  {
-    this(namePrefix, null);
-  }
+    private VariablesCollection parent;
+    private String namePrefix;
+    private List variables;
 
-  public VariablesCollection(final String namePrefix, final VariablesCollection parent)
-  {
-    if (namePrefix == null)
+    public VariablesCollection(final String namePrefix)
     {
-      throw new NullPointerException("NamePrefix cannot be null");
+        this(namePrefix, null);
     }
 
-    this.namePrefix = namePrefix;
-    this.parent = parent;
-    this.variables = new ArrayList();
-  }
+    public VariablesCollection(final String namePrefix, final VariablesCollection parent)
+    {
+        if (namePrefix == null)
+        {
+            throw new NullPointerException("NamePrefix cannot be null");
+        }
 
-  public VariablesCollection getParent()
-  {
-    return parent;
-  }
+        this.namePrefix = namePrefix;
+        this.parent = parent;
+        this.variables = new ArrayList();
+    }
 
-  public String getNamePrefix()
-  {
-    return namePrefix;
-  }
+    public VariablesCollection getParent()
+    {
+        return parent;
+    }
 
-  public String addVariable (final FormattedTextElement element)
-  {
-    variables.add(element);
-    final int size = variables.size();
-    return namePrefix + size;
-  }
+    public String getNamePrefix()
+    {
+        return namePrefix;
+    }
 
-  public FormattedTextElement[] getVariables ()
-  {
-    return (FormattedTextElement[])
-        variables.toArray(new FormattedTextElement[variables.size()]);
-  }
+    public String addVariable(final FormattedTextElement element)
+    {
+        variables.add(element);
+        final int size = variables.size();
+        return namePrefix + size;
+    }
 
-  public int getVariablesCount ()
-  {
-    return variables.size();
-  }
+    public FormattedTextElement[] getVariables()
+    {
+        return (FormattedTextElement[]) variables.toArray(new FormattedTextElement[variables.size()]);
+    }
 
-
+    public int getVariablesCount()
+    {
+        return variables.size();
+    }
 }

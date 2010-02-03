@@ -537,6 +537,9 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
             createText( xTarget_, aText.makeStringAndClear()
                         , *pPropNames, *pPropValues, ShapeFactory::makeTransformation( aScreenPosition2D ) );
 
+        if( !xTextShape.is() )
+            return xTextShape;
+
         const awt::Point aUnrotatedTextPos( xTextShape->getPosition() );
         if( fRotationDegrees != 0.0 )
         {
@@ -547,7 +550,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
             LabelPositionHelper::correctPositionForRotation( xTextShape, eAlignment, fRotationDegrees, true /*bRotateAroundCenter*/ );
         }
 
-        if( xSymbol.is() && xTextShape.is() )
+        if( xSymbol.is() )
         {
             const awt::Point aOldTextPos( xTextShape->getPosition() );
             awt::Point aNewTextPos( aOldTextPos );

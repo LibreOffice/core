@@ -89,7 +89,7 @@
 
     #include <d3d9.h>
     #include <d3dx9.h>
-    #include <dxerr9.h>
+//  #include <dxerr9.h>     #i107614# removing include, it has been changed in the latest sdk fron August2009 from dxerr9.h into dxerr.h
 
     typedef IDirect3DSurface9 surface_type;
 

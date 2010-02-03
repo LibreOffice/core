@@ -76,10 +76,6 @@ namespace rptui
         void            setTitle(const String& _sTitle);
         sal_Int32       getMinHeight() const;
 
-        /** returns the offset where the horizontal ruler must start
-        */
-        sal_Int32       getRulerOffset() const;
-
         /** shows or hides the ruler.
         */
         void            showRuler(sal_Bool _bShow);

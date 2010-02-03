@@ -56,6 +56,7 @@ public class ReportReadHandler extends ElementReadHandler
     {
         this.detail = detail;
     }
+
     public final RootTableReadHandler getDetail()
     {
         return detail;

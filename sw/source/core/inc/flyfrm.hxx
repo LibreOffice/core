@@ -109,10 +109,10 @@ protected:
                                 //(CheckClip) nur das Format aufgerufen wird;
                                 //nicht aber die Breite anhand der Attribute
                                 //wieder bestimmt wird.
-    BOOL bInCnt         :1; // FLY_IN_CNTNT, als Zeichen verankert
-    BOOL bAtCnt         :1; // FLY_AT_CNTNT, am Absatz verankert
-    BOOL bLayout        :1; // FLY_PAGE, FLY_AT_FLY, an Seite oder Rahmen
-    BOOL bAutoPosition  :1; // FLY_AUTO_CNTNT, im Text verankerter Rahmen
+    BOOL bInCnt         :1; // FLY_AS_CHAR, anchored as character
+    BOOL bAtCnt         :1; // FLY_AT_PARA, anchored at paragraph
+    BOOL bLayout        :1; // FLY_AT_PAGE, FLY_AT_FLY, at page or at frame
+    BOOL bAutoPosition  :1; // FLY_AT_CHAR, anchored at character
     BOOL bNoShrink      :1; // temporary forbud of shrinking to avoid loops
     BOOL bLockDeleteContent :1;           // If the flag is set, the content of the
                                         // fly frame is not deleted if moved to

@@ -393,11 +393,6 @@ void OScrollWindowHelper::setDragStripes(BOOL bOn)
     m_aReportWindow.setDragStripes(bOn);
 }
 // -----------------------------------------------------------------------------
-BOOL OScrollWindowHelper::isDragStripes() const
-{
-    return m_aReportWindow.isDragStripes();
-}
-// -----------------------------------------------------------------------------
 sal_uInt32 OScrollWindowHelper::getMarkedObjectCount() const
 {
     return m_aReportWindow.getMarkedObjectCount();

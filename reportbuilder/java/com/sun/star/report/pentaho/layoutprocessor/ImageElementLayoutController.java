@@ -67,6 +67,7 @@ import org.pentaho.reporting.libraries.base.util.ObjectUtilities;
 public class ImageElementLayoutController
         extends AbstractReportElementLayoutController
 {
+
     private static final Log LOGGER = LogFactory.getLog(ImageElementLayoutController.class);
     private ImageElementContext context;
 
@@ -184,7 +185,7 @@ public class ImageElementLayoutController
                 return null;
             }
 
-            addRowStyles(context, table,rowPos,rowSpan);
+            addRowStyles(context, table, rowPos, rowSpan);
             this.context = context;
         }
         return this.context;
@@ -198,9 +199,8 @@ public class ImageElementLayoutController
         final Node[] nodes = tableRow.getNodeArray();
         final String namespace = tableCell.getNamespace();
         final String type = tableCell.getType();
-        for (int i = 0; i < nodes.length; i++)
+        for (final Node node : nodes)
         {
-            final Node node = nodes[i];
             if (!(node instanceof Element))
             {
                 continue;
@@ -211,8 +211,7 @@ public class ImageElementLayoutController
             (ObjectUtilities.equal(child.getNamespace(), namespace) == false ||
             ObjectUtilities.equal(child.getType(), type) == false))
              */
-            if (!ObjectUtilities.equal(child.getNamespace(), namespace) ||
-                    (!ObjectUtilities.equal(child.getType(), type) && (secondType == null || !ObjectUtilities.equal(child.getType(), secondType))))
+            if (!ObjectUtilities.equal(child.getNamespace(), namespace) || (!ObjectUtilities.equal(child.getType(), type) && (secondType == null || !ObjectUtilities.equal(child.getType(), secondType))))
             {
                 continue;
             }
@@ -254,11 +253,7 @@ public class ImageElementLayoutController
             final FlowController controller = getFlowController();
             final GlobalMasterRow masterRow = controller.getMasterRow();
             final ReportDataRow reportDataRow = masterRow.getReportDataRow();
-            if (reportDataRow.getCursor() == 0)
-            {
-                return true;
-            }
-            return false;
+            return reportDataRow.getCursor() == 0;
         }
 
         try
@@ -277,12 +272,11 @@ public class ImageElementLayoutController
     {
         final Node[] columnDefs = columns.getNodeArray();
         int columnCounter = 0;
-        for (int i = 0; i < columnDefs.length; i++)
+        for (Node columnDef : columnDefs)
         {
-            final Element column = (Element) columnDefs[i];
+            final Element column = (Element) columnDef;
 
-            if (!ObjectUtilities.equal(column.getNamespace(), OfficeNamespaces.TABLE_NS) ||
-                    !ObjectUtilities.equal(column.getType(), OfficeToken.TABLE_COLUMN))
+            if (!ObjectUtilities.equal(column.getNamespace(), OfficeNamespaces.TABLE_NS) || !ObjectUtilities.equal(column.getType(), OfficeToken.TABLE_COLUMN))
             {
                 continue;
             }
@@ -306,12 +300,11 @@ public class ImageElementLayoutController
     {
         final Node[] rows = table.getNodeArray();
         int rowCounter = 0;
-        for (int i = 0; i < rows.length; i++)
+        for (Node row1 : rows)
         {
-            final Element row = (Element) rows[i];
+            final Element row = (Element) row1;
 
-            if (!ObjectUtilities.equal(row.getNamespace(), OfficeNamespaces.TABLE_NS) ||
-                    !ObjectUtilities.equal(row.getType(), OfficeToken.TABLE_ROW))
+            if (!ObjectUtilities.equal(row.getNamespace(), OfficeNamespaces.TABLE_NS) || !ObjectUtilities.equal(row.getType(), OfficeToken.TABLE_ROW))
             {
                 continue;
             }

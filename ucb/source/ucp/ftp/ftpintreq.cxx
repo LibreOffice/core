@@ -101,7 +101,6 @@ bool XInteractionApproveImpl::isSelected() const
 }
 
 
-
 // XInteractionDisapproveImpl
 
 XInteractionDisapproveImpl::XInteractionDisapproveImpl()
@@ -154,13 +153,6 @@ void SAL_CALL XInteractionDisapproveImpl::select()
 {
     m_bSelected = true;
 }
-
-
-bool XInteractionDisapproveImpl::isSelected() const
-{
-    return m_bSelected;
-}
-
 
 
 // XInteractionRequestImpl
@@ -231,12 +223,6 @@ XInteractionRequestImpl::getContinuations(  )
     throw (RuntimeException)
 {
     return m_aSeq;
-}
-
-
-bool XInteractionRequestImpl::aborted() const
-{
-    return p2->isSelected();
 }
 
 

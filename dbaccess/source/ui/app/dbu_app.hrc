@@ -68,11 +68,12 @@
 #define RID_STR_FORMS_HELP_TEXT_WIZARD      RID_STR_APP_START + 29
 #define RID_STR_REPORT_HELP_TEXT            RID_STR_APP_START + 30
 #define RID_STR_EMBEDDED_DATABASE           RID_STR_APP_START + 31
-
+#define RID_STR_NO_DIFF_CAT                 RID_STR_APP_START + 32
+#define RID_STR_UNSUPPORTED_OBJECT_TYPE     RID_STR_APP_START + 33
 
 // please adjust checking before insert new strings
 
-#if RID_STR_EMBEDDED_DATABASE > RID_STR_APP_END
+#if RID_STR_UNSUPPORTED_OBJECT_TYPE > RID_STR_APP_END
 #error Resource-Id Ueberlauf in #file, #line
 #endif
 

@@ -446,14 +446,6 @@ DictionaryEntry::DictionaryEntry( const rtl::OUString& rTerm, const rtl::OUStrin
         m_nConversionPropertyType = 1;
 }
 
-DictionaryEntry::DictionaryEntry()
-        : m_aTerm()
-        , m_aMapping()
-        , m_nConversionPropertyType( linguistic2::ConversionPropertyType::OTHER )
-        , m_bNewEntry( sal_True )
-{
-}
-
 DictionaryEntry::~DictionaryEntry()
 {
 }

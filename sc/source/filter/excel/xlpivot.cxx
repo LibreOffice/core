@@ -31,6 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 #include "dpgroup.hxx"
+#include "dpsave.hxx"
 #include "xestream.hxx"
 #include "xistream.hxx"
 #include "xestring.hxx"
@@ -581,7 +582,9 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTFieldInfo& rInfo )
 XclPTFieldExtInfo::XclPTFieldExtInfo() :
     mnFlags( EXC_SXVDEX_DEFAULTFLAGS ),
     mnSortField( EXC_SXVDEX_SORT_OWN ),
-    mnShowField( EXC_SXVDEX_SHOW_NONE )
+    mnShowField( EXC_SXVDEX_SHOW_NONE ),
+    mnNumFmt(0),
+    mpFieldTotalName(NULL)
 {
 }
 
@@ -639,10 +642,19 @@ void XclPTFieldExtInfo::SetApiLayoutMode( sal_Int32 nLayoutMode )
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclPTFieldExtInfo& rInfo )
 {
-    return rStrm
-        >> rInfo.mnFlags
-        >> rInfo.mnSortField
-        >> rInfo.mnShowField;
+    sal_uInt8 nNameLen = 0;
+    rStrm >> rInfo.mnFlags
+          >> rInfo.mnSortField
+          >> rInfo.mnShowField
+          >> rInfo.mnNumFmt
+          >> nNameLen;
+
+    rStrm.Ignore(10);
+    if (nNameLen != 0xFF)
+        // Custom field total name is used.  Pick it up.
+        rInfo.mpFieldTotalName.reset(new rtl::OUString(rStrm.ReadUniString(nNameLen, 0)));
+
+    return rStrm;
 }
 
 XclExpStream& operator<<( XclExpStream& rStrm, const XclPTFieldExtInfo& rInfo )
@@ -650,9 +662,23 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTFieldExtInfo& rInfo )
     rStrm   << rInfo.mnFlags
             << rInfo.mnSortField
             << rInfo.mnShowField
-            << EXC_SXVDEX_FORMAT_NONE
-            << sal_uInt16( 0xFFFF );    // unknown
-    rStrm.WriteZeroBytes( 8 );          // unknown
+            << EXC_SXVDEX_FORMAT_NONE;
+
+    if (rInfo.mpFieldTotalName.get() && rInfo.mpFieldTotalName->getLength() > 0)
+    {
+        rtl::OUString aFinalName = *rInfo.mpFieldTotalName;
+        if (aFinalName.getLength() >= 254)
+            aFinalName = aFinalName.copy(0, 254);
+        sal_uInt8 nNameLen = static_cast<sal_uInt8>(aFinalName.getLength());
+        rStrm << nNameLen;
+        rStrm.WriteZeroBytes(10);
+        rStrm << XclExpString(aFinalName, EXC_STR_NOHEADER);
+    }
+    else
+    {
+        rStrm << sal_uInt16(0xFFFF);
+        rStrm.WriteZeroBytes(8);
+    }
     return rStrm;
 }
 
@@ -922,4 +948,87 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTExtInfo& rInfo )
 }
 
 // ============================================================================
+
+// Pivot table autoformat settings ============================================
+
+/**
+classic     : 10 08 00 00 00 00 00 00 20 00 00 00 01 00 00 00 00
+default     : 10 08 00 00 00 00 00 00 20 00 00 00 01 00 00 00 00
+report01    : 10 08 02 00 00 00 00 00 20 00 00 00 00 10 00 00 00
+report02    : 10 08 02 00 00 00 00 00 20 00 00 00 01 10 00 00 00
+report03    : 10 08 02 00 00 00 00 00 20 00 00 00 02 10 00 00 00
+report04    : 10 08 02 00 00 00 00 00 20 00 00 00 03 10 00 00 00
+report05    : 10 08 02 00 00 00 00 00 20 00 00 00 04 10 00 00 00
+report06    : 10 08 02 00 00 00 00 00 20 00 00 00 05 10 00 00 00
+report07    : 10 08 02 00 00 00 00 00 20 00 00 00 06 10 00 00 00
+report08    : 10 08 02 00 00 00 00 00 20 00 00 00 07 10 00 00 00
+report09    : 10 08 02 00 00 00 00 00 20 00 00 00 08 10 00 00 00
+report10    : 10 08 02 00 00 00 00 00 20 00 00 00 09 10 00 00 00
+table01     : 10 08 00 00 00 00 00 00 20 00 00 00 0a 10 00 00 00
+table02     : 10 08 00 00 00 00 00 00 20 00 00 00 0b 10 00 00 00
+table03     : 10 08 00 00 00 00 00 00 20 00 00 00 0c 10 00 00 00
+table04     : 10 08 00 00 00 00 00 00 20 00 00 00 0d 10 00 00 00
+table05     : 10 08 00 00 00 00 00 00 20 00 00 00 0e 10 00 00 00
+table06     : 10 08 00 00 00 00 00 00 20 00 00 00 0f 10 00 00 00
+table07     : 10 08 00 00 00 00 00 00 20 00 00 00 10 10 00 00 00
+table08     : 10 08 00 00 00 00 00 00 20 00 00 00 11 10 00 00 00
+table09     : 10 08 00 00 00 00 00 00 20 00 00 00 12 10 00 00 00
+table10     : 10 08 00 00 00 00 00 00 20 00 00 00 13 10 00 00 00
+none        : 10 08 00 00 00 00 00 00 20 00 00 00 15 10 00 00 00
+**/
+
+XclPTViewEx9Info::XclPTViewEx9Info() :
+    mbReport( 0 ),
+    mnAutoFormat( 0 ),
+    mnGridLayout( 0x10 )
+{
+}
+
+void XclPTViewEx9Info::Init( const ScDPObject& rDPObj )
+{
+    if( rDPObj.GetHeaderLayout() )
+    {
+        mbReport     = 0;
+        mnAutoFormat = 1;
+        mnGridLayout = 0;
+    }
+    else
+    {
+        // Report1 for now
+        // TODO : sync with autoformat indicies
+        mbReport     = 2;
+        mnAutoFormat = 1;
+        mnGridLayout = 0x10;
+    }
+
+    const ScDPSaveData* pData = rDPObj.GetSaveData();
+    if (pData)
+    {
+        const rtl::OUString* pGrandTotal = pData->GetGrandTotalName();
+        if (pGrandTotal)
+            maGrandTotalName = *pGrandTotal;
+    }
+}
+
+XclImpStream& operator>>( XclImpStream& rStrm, XclPTViewEx9Info& rInfo )
+{
+    rStrm.Ignore( 2 );
+    rStrm >> rInfo.mbReport;            /// 2 for report* fmts ?
+    rStrm.Ignore( 6 );
+    rStrm >> rInfo.mnAutoFormat >> rInfo.mnGridLayout;
+    rInfo.maGrandTotalName = rStrm.ReadUniString();
+    return rStrm;
+}
+
+XclExpStream& operator<<( XclExpStream& rStrm, const XclPTViewEx9Info& rInfo )
+{
+    return rStrm
+        << EXC_PT_AUTOFMT_HEADER
+        << rInfo.mbReport
+        << EXC_PT_AUTOFMT_ZERO
+        << EXC_PT_AUTOFMT_FLAGS
+        << rInfo.mnAutoFormat
+        << rInfo.mnGridLayout
+        << XclExpString(rInfo.maGrandTotalName, EXC_STR_DEFAULT, EXC_PT_MAXSTRLEN);
+}
 

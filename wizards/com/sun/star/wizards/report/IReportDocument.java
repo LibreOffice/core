@@ -204,7 +204,7 @@ public interface IReportDocument
      * @param Name
      * @param OpenMode
      */
-    public void store(String Name, int OpenMode);
+    public void store(String Name, int OpenMode) throws com.sun.star.uno.Exception;
 
     /**
      * The current report is added to the DB View under the given name

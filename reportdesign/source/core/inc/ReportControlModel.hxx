@@ -115,8 +115,6 @@ namespace reportdesign
             ,bPrintWhenGroupChange(sal_False)
         {}
 
-        void dispose();
-
         // XContainer
         void addContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
         void removeContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);

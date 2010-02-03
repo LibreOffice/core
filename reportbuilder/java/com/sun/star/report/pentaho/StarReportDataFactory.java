@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho;
 
 import java.util.HashMap;
@@ -42,85 +40,87 @@ import com.sun.star.report.DataSourceFactory;
 
 public class StarReportDataFactory implements ReportDataFactory, Cloneable
 {
-  private final DataSourceFactory backend;
 
-  public StarReportDataFactory (DataSourceFactory backend)
-  {
-    this.backend = backend;
-  }
+    private final DataSourceFactory backend;
 
-  /**
-   * Queries a datasource. The string 'query' defines the name of the query. The
-   * Parameterset given here may contain more data than actually needed.
-   * <p/>
-   * The dataset may change between two calls, do not assume anything!
-   *
-   * @param query
-   * @param parameters
-   * @return
-   */
-  public ReportData queryData (final String query, final DataSet parameters)
-          throws ReportDataFactoryException
-  {
-    try
+    public StarReportDataFactory(DataSourceFactory backend)
     {
-      final HashMap map = new HashMap();
-      final int count = parameters.getColumnCount();
-      for (int i = 0; i < count; i++)
-      {
-        final Object o = parameters.get(i);
-        map.put (parameters.getColumnName(i), o);
-      }
-      return new StarReportData(backend.queryData(query, map));
+        this.backend = backend;
     }
-    catch(DataSourceException dse)
+
+    /**
+     * Queries a datasource. The string 'query' defines the name of the query. The
+     * Parameterset given here may contain more data than actually needed.
+     * <p/>
+     * The dataset may change between two calls, do not assume anything!
+     *
+     * @param query
+     * @param parameters
+     * @return
+     */
+    public ReportData queryData(final String query, final DataSet parameters)
+            throws ReportDataFactoryException
     {
-        String message = dse.getMessage();
-        if ( message.length() == 0 )
-            message = "Failed to create report data wrapper";
-      throw new ReportDataFactoryException(message,dse);
+        try
+        {
+            final HashMap map = new HashMap();
+            final int count = parameters.getColumnCount();
+            for (int i = 0; i < count; i++)
+            {
+                final Object o = parameters.get(i);
+                map.put(parameters.getColumnName(i), o);
+            }
+            return new StarReportData(backend.queryData(query, map));
+        }
+        catch (DataSourceException dse)
+        {
+            String message = dse.getMessage();
+            if (message.length() == 0)
+            {
+                message = "Failed to create report data wrapper";
+            }
+            throw new ReportDataFactoryException(message, dse);
+        }
+        catch (org.jfree.report.DataSourceException e)
+        {
+            String message = e.getMessage();
+            if (message.length() == 0)
+            {
+                message = "Failed to query data";
+            }
+            throw new ReportDataFactoryException(message);
+        }
     }
-    catch (org.jfree.report.DataSourceException e)
+
+    public void open()
     {
-        String message = e.getMessage();
-        if ( message.length() == 0 )
-            message = "Failed to query data";
-      throw new ReportDataFactoryException(message);
     }
-  }
 
-  public void open()
-  {
-
-  }
-
-  public void close()
-  {
-
-  }
-
-
-  /**
-   * Derives a freshly initialized report data factory, which is independend of
-   * the original data factory. Opening or Closing one data factory must not
-   * affect the other factories.
-   *
-   * @return
-   */
-  public ReportDataFactory derive()
-  {
-    try
+    public void close()
     {
-      return (ReportDataFactory) clone();
     }
-    catch (CloneNotSupportedException e)
-    {
-      throw new IllegalStateException("Clone failed?");
-    }
-  }
 
-  public Object clone () throws CloneNotSupportedException
-  {
-    return super.clone();
-  }
+    /**
+     * Derives a freshly initialized report data factory, which is independend of
+     * the original data factory. Opening or Closing one data factory must not
+     * affect the other factories.
+     *
+     * @return
+     */
+    public ReportDataFactory derive()
+    {
+        try
+        {
+            return (ReportDataFactory) clone();
+        }
+        catch (CloneNotSupportedException e)
+        {
+            throw new IllegalStateException("Clone failed?");
+        }
+    }
+
+    public Object clone() throws CloneNotSupportedException
+    {
+        return super.clone();
+    }
 }

@@ -166,11 +166,11 @@ const short lOutlineMinTextDistance = 216; // 0.15 inch = 0.38 cm
 //Schnittstellen Bedeutung haben (SwDoc).
 enum RndStdIds
 {
-    FLY_AT_CNTNT,       //Absatzgebundener Rahmen
-    FLY_IN_CNTNT,       //Zeichengebundener Rahmen
-    FLY_PAGE,           //Seitengebundener Rahmen
-    FLY_AT_FLY,         //Rahmengebundener Rahmen ( LAYER_IMPL )
-    FLY_AUTO_CNTNT,     //Automatisch positionierter, absatzgebundener Rahmen
+    FLY_AT_PARA,        // anchored at paragraph
+    FLY_AS_CHAR,        // anchored as character
+    FLY_AT_PAGE,        // anchored at page
+    FLY_AT_FLY,         // anchored at frame
+    FLY_AT_CHAR,        // anchored at character
                         //Der Rest wird nur fuer SS benutzt.
     RND_STD_HEADER,
     RND_STD_FOOTER,

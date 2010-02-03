@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report;
 
 /**
@@ -47,8 +45,10 @@ package com.sun.star.report;
  */
 public interface ReportExpression
 {
-  void setParameters (Object[] parameters);
-  Object getParameters ();
 
-  Object getValue(DataRow row);
+    void setParameters(Object[] parameters);
+
+    Object getParameters();
+
+    Object getValue(DataRow row);
 }

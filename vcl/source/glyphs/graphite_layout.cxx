@@ -66,11 +66,13 @@
 #include <unicode/uscript.h>
 
 // Graphite Libraries (must be after vcl headers on windows)
+#include "pregraphitestl.h"
 #include <graphite/GrClient.h>
 #include <graphite/Font.h>
 #include <graphite/ITextSource.h>
 #include <graphite/Segment.h>
 #include <graphite/SegmentPainter.h>
+#include "postgraphitestl.h"
 
 #include <vcl/graphite_layout.hxx>
 #include <vcl/graphite_features.hxx>
@@ -105,8 +107,8 @@ FILE * grLog()
 
 namespace
 {
-    typedef std::pair<gr::GlyphIterator, gr::GlyphIterator>       glyph_range_t;
-    typedef std::pair<gr::GlyphSetIterator, gr::GlyphSetIterator> glyph_set_range_t;
+    typedef sil_std::pair<gr::GlyphIterator, gr::GlyphIterator>       glyph_range_t;
+    typedef sil_std::pair<gr::GlyphSetIterator, gr::GlyphSetIterator> glyph_set_range_t;
 
     inline long round(const float n) {
         return long(n + (n < 0 ? -0.5 : 0.5));
@@ -171,7 +173,7 @@ GraphiteLayout::Glyphs::fill_from(gr::Segment & rSegment, ImplLayoutArgs &rArgs,
     bool bRtl, long &rWidth, float fScaling, std::vector<int> & rChar2Base, std::vector<int> & rGlyph2Char, std::vector<int> & rCharDxs)
 {
     // Create a glyph item for each of the glyph and append it to the base class glyph list.
-    typedef std::pair< gr::GlyphSetIterator, gr::GlyphSetIterator > GrGlyphSet;
+    typedef sil_std::pair< gr::GlyphSetIterator, gr::GlyphSetIterator > GrGlyphSet;
     int nChar = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
     glyph_range_t iGlyphs = rSegment.glyphs();
     int nGlyphs = iGlyphs.second - iGlyphs.first;
@@ -586,7 +588,7 @@ public:
     sal_Int32 hashCode(const grutils::GrFeatureParser * mpFeatures)
     {
         // is this sufficient?
-        std::wstring aFace;
+        sil_std::wstring aFace;
         bool bBold;
         bool bItalic;
         UniqueCacheInfo(aFace, bBold, bItalic);
@@ -720,6 +722,7 @@ bool GraphiteLayout::LayoutGlyphs(ImplLayoutArgs& rArgs, gr::Segment * pSegment)
 #ifdef GRCACHE_REUSE_VECTORS
     // if we have an exact match, then we can reuse the glyph vectors from before
     if (pSegRecord && (pSegRecord->glyphs().size() > 0) &&
+        (pSegRecord->fontScale() == mfScaling) &&
         !(SAL_LAYOUT_FOR_FALLBACK & rArgs.mnFlags) )
     {
         mnWidth = pSegRecord->width();
@@ -765,7 +768,8 @@ bool GraphiteLayout::LayoutGlyphs(ImplLayoutArgs& rArgs, gr::Segment * pSegment)
                 !(SAL_LAYOUT_FOR_FALLBACK & rArgs.mnFlags))
             {
                 pSegRecord->setGlyphVectors(mnWidth, mvGlyphs, mvCharDxs,
-                                            mvChar2BaseGlyph, mvGlyph2Char);
+                                            mvChar2BaseGlyph, mvGlyph2Char,
+                                            mfScaling);
             }
 #endif
 #endif

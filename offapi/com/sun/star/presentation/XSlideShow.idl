@@ -46,8 +46,14 @@
 #ifndef __com_sun_star_animations_XAnimationNode_idl__
 #include <com/sun/star/animations/XAnimationNode.idl>
 #endif
+#endif
+#ifndef __com_sun_star_lang_XMultiServiceFactory_idl__
+#include <com/sun/star/lang/XMultiServiceFactory.idl>
 #ifndef __com_sun_star_drawing_XDrawPage_idl__
 #include <com/sun/star/drawing/XDrawPage.idl>
+#endif
+#ifndef __com_sun_star_drawing_XDrawPagesSupplier_idl__
+#include <com/sun/star/drawing/XDrawPagesSupplier.idl>
 #endif
 #ifndef __com_sun_star_drawing_XShape_idl__
 #include <com/sun/star/drawing/XShape.idl>
@@ -149,6 +155,10 @@ interface XSlideShow : ::com::sun::star::uno::XInterface
         @param xPage
         The slide to display.
 
+        @param xDrawPages
+    For future use.
+    This parameter can be NULL when the ENABLE_PRESENTER_EXTRA_UI feature is disabled.
+
         @param xAnimationNode
         The animation node determine the animations to display.
 
@@ -185,6 +195,7 @@ interface XSlideShow : ::com::sun::star::uno::XInterface
     */
     void displaySlide(
         [in] ::com::sun::star::drawing::XDrawPage xSlide,
+        [in] ::com::sun::star::drawing::XDrawPagesSupplier xDrawPages,
         [in] ::com::sun::star::animations::XAnimationNode aAnimationNode,
         [in] sequence< ::com::sun::star::beans::PropertyValue > aProperties );
 
@@ -210,6 +221,14 @@ interface XSlideShow : ::com::sun::star::uno::XInterface
         empty reference.
      */
     ::com::sun::star::drawing::XDrawPage getCurrentSlide();
+
+    /** Register drawn polygons in presentation mode
+
+     @param xDocFactory
+
+     */
+
+    void registerUserPaintPolygons([in] ::com::sun::star::lang::XMultiServiceFactory xDocFactory);
 
     /** Change a property of the slideshow.<p>
 

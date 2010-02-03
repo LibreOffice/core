@@ -144,11 +144,6 @@ extern "C"
         if( ! ( pNoXInitThreads && *pNoXInitThreads ) )
             XInitThreads();
 
-        #if OSL_DEBUG_LEVEL > 1
-        int nFd = open( "/home/pl93762/log.txt", O_CREAT | O_TRUNC | O_WRONLY, 0755 );
-        dup2( nFd, STDERR_FILENO );
-        #endif
-
         const gchar* pVersion = gtk_check_version( 2, 2, 0 );
         if( pVersion )
         {

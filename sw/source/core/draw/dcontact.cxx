@@ -60,9 +60,7 @@
 #include <dflyobj.hxx>
 #include <dcontact.hxx>
 #include <unodraw.hxx>
-#ifndef IDOCUMENTDRAWMODELACCESS_HXX_INCLUDED
 #include <IDocumentDrawModelAccess.hxx>
-#endif
 #include <doc.hxx>
 #include <hints.hxx>
 #include <txtfrm.hxx>
@@ -1943,7 +1941,7 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
 
     switch ( pAnch->GetAnchorId() )
     {
-        case FLY_PAGE:
+        case FLY_AT_PAGE:
                 {
                 USHORT nPgNum = pAnch->GetPageNum();
                 SwPageFrm *pPage = static_cast<SwPageFrm*>(pRoot->Lower());
@@ -1963,12 +1961,12 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
                 }
                 break;
 
-        case FLY_AUTO_CNTNT:
-        case FLY_AT_CNTNT:
+        case FLY_AT_CHAR:
+        case FLY_AT_PARA:
         case FLY_AT_FLY:
-        case FLY_IN_CNTNT:
+        case FLY_AS_CHAR:
             {
-                if ( pAnch->GetAnchorId() == FLY_IN_CNTNT )
+                if ( pAnch->GetAnchorId() == FLY_AS_CHAR )
                 {
                     ClrContourCache( GetMaster() );
                 }
@@ -2043,7 +2041,7 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
 
                         // OD 2004-01-20 #110582# - find correct follow for
                         // as character anchored objects.
-                        if ( pAnch->GetAnchorId() == FLY_IN_CNTNT &&
+                        if ((pAnch->GetAnchorId() == FLY_AS_CHAR) &&
                              pFrm->IsTxtFrm() )
                         {
                             pFrm = lcl_GetFlyInCntntAnchor(
@@ -2061,7 +2059,7 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
                         {
                             // append 'virtual' drawing object
                             SwDrawVirtObj* pDrawVirtObj = AddVirtObj();
-                            if ( pAnch->GetAnchorId() == FLY_IN_CNTNT )
+                            if ( pAnch->GetAnchorId() == FLY_AS_CHAR )
                             {
                                 ClrContourCache( pDrawVirtObj );
                             }
@@ -2072,7 +2070,7 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
                             pDrawVirtObj->ActionChanged();
                         }
 
-                        if ( pAnch->GetAnchorId() == FLY_IN_CNTNT )
+                        if ( pAnch->GetAnchorId() == FLY_AS_CHAR )
                         {
                             pFrm->InvalidatePrt();
                         }

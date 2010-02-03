@@ -145,6 +145,7 @@ public:
 
     static com::sun::star::uno::Reference< com::sun::star::sdbc::XRow > getPropertyValuesFromGFileInfo(
         GFileInfo *pInfo, const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rSMgr,
+        const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv,
         const com::sun::star::uno::Sequence< com::sun::star::beans::Property >& rProperties);
 
     virtual com::sun::star::uno::Sequence< com::sun::star::beans::Property >
@@ -187,6 +188,11 @@ public:
             throw( com::sun::star::uno::RuntimeException );
     virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContent >
         SAL_CALL createNewContent( const com::sun::star::ucb::ContentInfo& Info )
+            throw( com::sun::star::uno::RuntimeException );
+
+    com::sun::star::uno::Sequence< com::sun::star::ucb::ContentInfo >
+        queryCreatableContentsInfo(
+        const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv)
             throw( com::sun::star::uno::RuntimeException );
 
     GFile* getGFile();

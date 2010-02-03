@@ -40,7 +40,6 @@
 #include "xmlscript/xml_helper.hxx"
 #include "com/sun/star/io/XInputStream.hpp"
 #include "com/sun/star/ucb/CommandFailedException.hpp"
-#include "com/sun/star/ucb/XContentCreator.hpp"
 #include "com/sun/star/ucb/ContentInfo.hpp"
 #include "com/sun/star/ucb/ContentInfoAttribute.hpp"
 
@@ -130,50 +129,46 @@ bool create_folder(
     if (! create_folder(
             &parentContent, url.copy( 0, slash ), xCmdEnv, throw_exc ))
         return false;
-    Reference<XContentCreator> xCreator( parentContent.get(), UNO_QUERY );
-    if (xCreator.is())
+    const Any title( ::rtl::Uri::decode( url.copy( slash + 1 ),
+                                         rtl_UriDecodeWithCharset,
+                                         RTL_TEXTENCODING_UTF8 ) );
+    const Sequence<ContentInfo> infos(
+        parentContent.queryCreatableContentsInfo() );
+    for ( sal_Int32 pos = 0; pos < infos.getLength(); ++pos )
     {
-        const Any title( ::rtl::Uri::decode( url.copy( slash + 1 ),
-                                             rtl_UriDecodeWithCharset,
-                                             RTL_TEXTENCODING_UTF8 ) );
-        const Sequence<ContentInfo> infos(
-            xCreator->queryCreatableContentsInfo() );
-        for ( sal_Int32 pos = 0; pos < infos.getLength(); ++pos )
+        // look KIND_FOLDER:
+        ContentInfo const & info = infos[ pos ];
+        if ((info.Attributes & ContentInfoAttribute::KIND_FOLDER) != 0)
         {
-            // look KIND_FOLDER:
-            ContentInfo const & info = infos[ pos ];
-            if ((info.Attributes & ContentInfoAttribute::KIND_FOLDER) != 0)
-            {
-                // make sure the only required bootstrap property is "Title":
-                Sequence<beans::Property> const & rProps = info.Properties;
-                if (rProps.getLength() != 1 ||
-                    !rProps[ 0 ].Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM("Title") ))
-                    continue;
+            // make sure the only required bootstrap property is "Title":
+            Sequence<beans::Property> const & rProps = info.Properties;
+            if (rProps.getLength() != 1 ||
+                !rProps[ 0 ].Name.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM("Title") ))
+                continue;
 
-                try {
-                    if (parentContent.insertNewContent(
-                            info.Type,
-                            Sequence<OUString>( &StrTitle::get(), 1 ),
-                            Sequence<Any>( &title, 1 ),
-                            ucb_content )) {
-                        if (ret_ucb_content != 0)
-                            *ret_ucb_content = ucb_content;
-                        return true;
-                    }
+            try {
+                if (parentContent.insertNewContent(
+                        info.Type,
+                        Sequence<OUString>( &StrTitle::get(), 1 ),
+                        Sequence<Any>( &title, 1 ),
+                        ucb_content )) {
+                    if (ret_ucb_content != 0)
+                        *ret_ucb_content = ucb_content;
+                    return true;
                 }
-                catch (RuntimeException &) {
+            }
+            catch (RuntimeException &) {
+                throw;
+            }
+            catch (CommandFailedException &) {
+                // Interaction Handler already handled the error
+                // that has occured...
+            }
+            catch (Exception &) {
+                if (throw_exc)
                     throw;
-                }
-                catch (CommandFailedException &) {
-                    // Interaction Handler already handled the error
-                    // that has occured...
-                }
-                catch (Exception &) {
-                    if (throw_exc)
-                        throw;
-                    return false;
-                }
+                return false;
             }
         }
     }

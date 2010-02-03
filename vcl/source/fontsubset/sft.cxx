@@ -1094,6 +1094,14 @@ static void GetNames(TrueTypeFont *t)
     const sal_uInt8* table = getTable( t, O_name );
     int nTableSize = getTableSize(t, O_name);
 
+    if (nTableSize < 4)
+    {
+#if OSL_DEBUG_LEVEL > 1
+        fprintf(stderr, "O_name table too small\n");
+#endif
+        return;
+    }
+
     sal_uInt16 n = GetUInt16(table, 2, 1);
     int i, r;
     sal_Bool bPSNameOK = sal_True;
@@ -1680,7 +1688,6 @@ int OpenTTFontFile( const char* fname, sal_uInt32 facenum, TrueTypeFont** ttf )
         ret = SF_BADFILE;
         goto cleanup;
     }
-
 
     if (((*ttf)->ptr = (sal_uInt8 *) mmap(0, (*ttf)->fsize, PROT_READ, MAP_SHARED, fd, 0)) == MAP_FAILED) {
         ret = SF_MEMORY;
@@ -2702,7 +2709,7 @@ void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info)
     }
 
     table = getTable(ttf, O_post);
-    if (table) {
+    if (table && getTableSize(ttf, O_post) >= 12+sizeof(sal_uInt32)) {
         info->pitch  = GetUInt32(table, 12, 1);
         info->italicAngle = GetInt32(table, 4, 1);
     }
@@ -2808,6 +2815,15 @@ int GetTTNameRecords(TrueTypeFont *ttf, NameRecord **nr)
 {
     const sal_uInt8* table = getTable(ttf, O_name);
     int nTableSize = getTableSize(ttf, O_name );
+
+    if (nTableSize < 6)
+    {
+#if OSL_DEBUG_LEVEL > 1
+        fprintf(stderr, "O_name table too small\n");
+#endif
+        return 0;
+    }
+
     sal_uInt16 n = GetUInt16(table, 2, 1);
     int nStrBase = GetUInt16(table, 4, 1);
     int i;

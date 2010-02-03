@@ -250,5 +250,80 @@ String RID_NO_SUCH_DATA_SOURCE
 {
     Text [ en-US ] = "Error accessing data source '$name$':\n$error$";
 };
-
+String RID_STR_NO_SUB_FOLDER
+{
+    Text [ en-US ] = "There exists no folder named \"$folder$\".";
+};
+String RID_STR_NO_DELETE_BEFORE_AFTER
+{
+    Text [ en-US ] = "Cannot delete the before-first or after-last row.";
+};
+String RID_STR_NO_DELETE_INSERT_ROW
+{
+    Text [ en-US ] = "Cannot delete the insert-row.";
+};
+String RID_STR_RESULT_IS_READONLY
+{
+    Text [ en-US ] = "Result set is read only.";
+};
+String RID_STR_NO_DELETE_PRIVILEGE
+{
+    Text [ en-US ] = "DELETE privilege not available.";
+};
+String RID_STR_ROW_ALREADY_DELETED
+{
+    Text [ en-US ] = "Current row is already deleted.";
+};
+String RID_STR_UPDATE_FAILED
+{
+    Text [ en-US ] = "Current row could be updated.";
+};
 //-------------------------------------------------------------------------
+String RID_STR_NO_INSERT_PRIVILEGE
+{
+    Text [ en-US ] = "INSERT privilege not available.";
+};
+String RID_STR_INTERNAL_ERROR
+{
+    Text [ en-US ] = "Internal error: no statement object provided by the database driver.";
+};
+String RID_STR_EXPRESSION1
+{
+    Text [ en-US ] = "Expression1";
+};
+String RID_STR_NO_SQL_COMMAND
+{
+    Text [ en-US ] = "No SQL command was provided.";
+};
+String RID_STR_INVALID_INDEX
+{
+    Text [ en-US ] = "Invalid column index.";
+};
+String RID_STR_INVALID_CURSOR_STATE
+{
+    Text [ en-US ] = "Invalid cursor state.";
+};
+String RID_STR_CURSOR_BEFORE_OR_AFTER
+{
+    Text [ en-US ] = "The cursor points to before the first or after the last row.";
+};
+String RID_STR_NO_BOOKMARK_BEFORE_OR_AFTER
+{
+    Text [ en-US ] = "The rows before the first and after the last row don't have a bookmark.";
+};
+String RID_STR_NO_BOOKMARK_DELETED
+{
+    Text [ en-US ] = "The current row is deleted, and thus doesn't have a bookmark.";
+};
+String RID_STR_NO_EMBEDDING
+{
+    Text [ en-US ] = "Embedding of database documents is not supported.";
+};
+String RID_STR_CONNECTION_REQUEST
+{
+    Text [ en-US ] = "A connection for the following URL was requested \"$name$\".";
+};
+String RID_STR_MISSING_EXTENSION
+{
+    Text [ en-US ] = "The extension is not installed.";
+};

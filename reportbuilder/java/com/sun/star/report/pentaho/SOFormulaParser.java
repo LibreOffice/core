@@ -75,7 +75,6 @@ public final class SOFormulaParser extends ComponentBase
     private final PropertySetMixin m_prophlp;
     private static final String __serviceName = "com.sun.star.report.meta.FormulaParser";
     private static final String OPERATORS = "org.pentaho.reporting.libraries.formula.operators.";
-
     // attributes
     final private List m_OpCodeMap = new ArrayList();
     private XFormulaOpCodeMapper formulaOpCodeMapper = null;
@@ -119,7 +118,7 @@ public final class SOFormulaParser extends ComponentBase
             for (int i = 0; i < names.length; i++)
             {
                 final String token = names[i];
-                if ( token != null && token.length() > 0 && token.charAt(0) == '"' )
+                if (token != null && token.length() > 0 && token.charAt(0) == '"')
                 {
                     names[i] = token.substring(1, token.length() - 1);
                 }
@@ -138,8 +137,9 @@ public final class SOFormulaParser extends ComponentBase
                 parserAllOpCodes.put(opCode.Token.OpCode, opCode);
                 specialOpCodes.add(opCode);
             }
-        // addOpCodes(names, opCodes,SPECIAL,false);
-        } catch ( Exception ex )
+            // addOpCodes(names, opCodes,SPECIAL,false);
+        }
+        catch (Exception ex)
         {
             ex.printStackTrace();
         }
@@ -150,21 +150,24 @@ public final class SOFormulaParser extends ComponentBase
         // of the PropertySetMixin helper for further information.
         // Ensure that your attributes are initialized correctly!
         m_prophlp = new PropertySetMixin(m_xContext, this,
-                                         new Type(com.sun.star.report.meta.XFormulaParser.class), null);
+                new Type(com.sun.star.report.meta.XFormulaParser.class), null);
     }
-    ;
 
     // com.sun.star.sheet.XFormulaParser:
     public com.sun.star.sheet.FormulaToken[] parseFormula(String aFormula, com.sun.star.table.CellAddress aReferencePos)
     {
         final ArrayList tokens = new ArrayList();
-        if ( !"=".equals(aFormula) )
+        if (!"=".equals(aFormula))
         {
             String formula;
-            if ( aFormula.charAt(0) == '=' )
+            if (aFormula.charAt(0) == '=')
+            {
                 formula = aFormula.substring(1);
+            }
             else
+            {
                 formula = aFormula;
+            }
             final ArrayList images = new ArrayList();
             try
             {
@@ -176,16 +179,20 @@ public final class SOFormulaParser extends ComponentBase
                     final FormulaToken formulaToken;
                     images.add(token.image);
                     final String upper = token.image.toUpperCase();
-                    if ( parserNames.containsKey(upper) )
+                    if (parserNames.containsKey(upper))
                     {
-                        if ( "(".equals(token.image))
+                        if ("(".equals(token.image))
+                        {
                             brackets++;
-                        else if ( ")".equals(token.image))
+                        }
+                        else if (")".equals(token.image))
+                        {
                             --brackets;
+                        }
                         final FormulaOpCodeMapEntry opCode = (FormulaOpCodeMapEntry) parserNames.get(upper);
                         formulaToken = opCode.Token;
                     }
-                    else if ( token.kind == GeneratedFormulaParserConstants.WHITESPACE )
+                    else if (token.kind == GeneratedFormulaParserConstants.WHITESPACE)
                     {
                         final FormulaOpCodeMapEntry opCode = (FormulaOpCodeMapEntry) specialOpCodes.get(FormulaMapGroupSpecialOffset.SPACES);
                         formulaToken = opCode.Token;
@@ -200,10 +207,10 @@ public final class SOFormulaParser extends ComponentBase
                     tokens.add(formulaToken);
                     token = tokenParser.getNextToken();
                 }
-                if ( brackets > 0 )
+                if (brackets > 0)
                 {
                     final FormulaOpCodeMapEntry opCode = (FormulaOpCodeMapEntry) parserNames.get(")");
-                    while ( brackets-- != 0 )
+                    while (brackets-- != 0)
                     {
                         formula = formula.concat(")");
                         images.add(")");
@@ -213,15 +220,18 @@ public final class SOFormulaParser extends ComponentBase
                 }
 
                 parser.parse(formula);
-            } catch ( ParseException ex )
+            }
+            catch (ParseException ex)
             {
                 boolean found = false;
                 // error occured so all token must be bad
                 for (int i = 0; i < tokens.size(); i++)
                 {
-                    if ( !found && ex.currentToken != null && images.get(i).equals(ex.currentToken.image) )
+                    if (!found && ex.currentToken != null && images.get(i).equals(ex.currentToken.image))
+                    {
                         found = true;
-                    if ( found )
+                    }
+                    if (found)
                     {
                         final FormulaToken dest = new FormulaToken();
                         dest.OpCode = ((FormulaOpCodeMapEntry) specialOpCodes.get(FormulaMapGroupSpecialOffset.BAD)).Token.OpCode;
@@ -230,9 +240,11 @@ public final class SOFormulaParser extends ComponentBase
                         tokens.add(i, dest);
                     }
                 }
-            } catch ( java.lang.Exception e )
+            }
+            catch (java.lang.Exception e)
             {
-            } catch ( TokenMgrError e )
+            }
+            catch (TokenMgrError e)
             {
             }
         }
@@ -245,17 +257,21 @@ public final class SOFormulaParser extends ComponentBase
         for (int i = 0; i < aTokens.length; i++)
         {
             final FormulaToken formulaToken = aTokens[i];
-            if ( formulaToken.OpCode == opCodePush.Token.OpCode && !formulaToken.Data.equals(Any.VOID) )
+            if (formulaToken.OpCode == opCodePush.Token.OpCode && !formulaToken.Data.equals(Any.VOID))
             {
                 ret.append(formulaToken.Data);
             }
-            else if ( parserAllOpCodes.containsKey(formulaToken.OpCode) )
+            else if (parserAllOpCodes.containsKey(formulaToken.OpCode))
             {
                 final FormulaOpCodeMapEntry opCode = (FormulaOpCodeMapEntry) parserAllOpCodes.get(formulaToken.OpCode);
-                if ( opCode.Name.length() > 0 )
+                if (opCode.Name.length() > 0)
+                {
                     ret.append(opCode.Name);
-                else if ( !formulaToken.Data.equals(Any.VOID) )
+                }
+                else if (!formulaToken.Data.equals(Any.VOID))
+                {
                     ret.append(formulaToken.Data);
+                }
             }
         }
         return ret.toString();
@@ -330,6 +346,7 @@ public final class SOFormulaParser extends ComponentBase
     /**
      * This method is a simple helper function to used in the static component initialisation functions as well as
      * in getSupportedServiceNames.
+     * @return
      */
     public static String[] getServiceNames()
     {
@@ -341,7 +358,7 @@ public final class SOFormulaParser extends ComponentBase
 
     public XFormulaOpCodeMapper getFormulaOpCodeMapper()
     {
-        if ( formulaOpCodeMapper == null )
+        if (formulaOpCodeMapper == null)
         {
             formulaOpCodeMapper = new SOFormulaOpCodeMapper(this);
         }
@@ -364,15 +381,17 @@ public final class SOFormulaParser extends ComponentBase
             for (; i < opCodes.length; i++)
             {
                 opCode = opCodes[i];
-                if ( names[j].equals(opCode.Name) )
+                if (names[j].equals(opCode.Name))
                 {
                     break;
                 }
             }
-            if ( i >= opCodes.length )
+            if (i >= opCodes.length)
             {
-                if ( !add )
+                if (!add)
+                {
                     continue;
+                }
                 final FormulaToken token = new FormulaToken(ownTokenCounter++, Any.VOID);
                 opCode = new FormulaOpCodeMapEntry(names[j], token);
             }
@@ -400,22 +419,22 @@ public final class SOFormulaParser extends ComponentBase
         while (iter.hasNext())
         {
             final String configKey = (String) iter.next();
-            if ( configKey.endsWith(".class") == false )
+            if (!configKey.endsWith(".class"))
             {
                 continue;
             }
             final String operatorClass = configuration.getConfigProperty(configKey);
-            if ( operatorClass == null )
+            if (operatorClass == null)
             {
                 continue;
             }
-            if ( operatorClass.length() == 0 )
+            if (operatorClass.length() == 0)
             {
                 continue;
             }
             final String tokenKey = configKey.substring(0, configKey.length() - ".class".length()) + ".token";
             final String token = configuration.getConfigProperty(tokenKey);
-            if ( token == null )
+            if (token == null)
             {
                 continue;
             }

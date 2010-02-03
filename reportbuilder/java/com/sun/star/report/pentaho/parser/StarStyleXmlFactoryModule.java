@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.parser;
 
 import com.sun.star.report.pentaho.OfficeNamespaces;
@@ -39,27 +37,28 @@ import org.pentaho.reporting.libraries.xmlns.parser.XmlReadHandler;
 
 public class StarStyleXmlFactoryModule implements XmlFactoryModule
 {
-  public StarStyleXmlFactoryModule()
-  {
-  }
 
-  public XmlReadHandler createReadHandler (final XmlDocumentInfo documentInfo)
-  {
-    return new DocumentStylesReadHandler();
-  }
-
-  public int getDocumentSupport (final XmlDocumentInfo documentInfo)
-  {
-    final String rootNamespace = documentInfo.getRootElementNameSpace();
-    if (OfficeNamespaces.OFFICE_NS.equals(rootNamespace) && "document-styles".equals(documentInfo.getRootElement()) )
+    public StarStyleXmlFactoryModule()
     {
-      return XmlFactoryModule.RECOGNIZED_BY_NAMESPACE;
     }
-    return XmlFactoryModule.NOT_RECOGNIZED;
-  }
 
-  public String getDefaultNamespace(final XmlDocumentInfo documentInfo)
-  {
-    return null;
-  }
+    public XmlReadHandler createReadHandler(final XmlDocumentInfo documentInfo)
+    {
+        return new DocumentStylesReadHandler();
+    }
+
+    public int getDocumentSupport(final XmlDocumentInfo documentInfo)
+    {
+        final String rootNamespace = documentInfo.getRootElementNameSpace();
+        if (OfficeNamespaces.OFFICE_NS.equals(rootNamespace) && "document-styles".equals(documentInfo.getRootElement()))
+        {
+            return XmlFactoryModule.RECOGNIZED_BY_NAMESPACE;
+        }
+        return XmlFactoryModule.NOT_RECOGNIZED;
+    }
+
+    public String getDefaultNamespace(final XmlDocumentInfo documentInfo)
+    {
+        return null;
+    }
 }

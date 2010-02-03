@@ -42,6 +42,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextCursor;
+import com.sun.star.text.XTextRange;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 
@@ -132,6 +133,9 @@ public class SwXDocumentIndex extends TestCase {
 
         tEnv.addObjRelation("CONTENT", (XTextContent)
                         UnoRuntime.queryInterface(XTextContent.class,instance));
+        oCursor.gotoEnd(false);
+        tEnv.addObjRelation("RANGE", (XTextRange)
+                        UnoRuntime.queryInterface(XTextRange.class, oCursor));
 
         // relation for XDocumentIndex
         tEnv.addObjRelation("TextDoc", xTextDoc);

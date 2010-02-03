@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.layoutprocessor;
 
 /**
@@ -39,56 +37,57 @@ package com.sun.star.report.pentaho.layoutprocessor;
  */
 public class ImageElementContext
 {
-  private final int colSpan;
-  private final int rowSpan;
-  private String[] rowStyles;
-  private String[] colStyles;
 
-  public ImageElementContext(final int colSpan, final int rowSpan)
-  {
-    this.colSpan = colSpan;
-    this.rowSpan = rowSpan;
-    this.colStyles = new String[colSpan];
-    this.rowStyles = new String[rowSpan];
-  }
+    private final int colSpan;
+    private final int rowSpan;
+    private String[] rowStyles;
+    private String[] colStyles;
 
-  public int getColSpan()
-  {
-    return colSpan;
-  }
+    public ImageElementContext(final int colSpan, final int rowSpan)
+    {
+        this.colSpan = colSpan;
+        this.rowSpan = rowSpan;
+        this.colStyles = new String[colSpan];
+        this.rowStyles = new String[rowSpan];
+    }
 
-  public int getRowSpan()
-  {
-    return rowSpan;
-  }
+    public int getColSpan()
+    {
+        return colSpan;
+    }
 
-  public String[] getRowStyles()
-  {
-    return rowStyles;
-  }
+    public int getRowSpan()
+    {
+        return rowSpan;
+    }
 
-  public String[] getColStyles()
-  {
-    return colStyles;
-  }
+    public String[] getRowStyles()
+    {
+        return rowStyles;
+    }
 
-  public void setRowStyle (final int pos, final String styleName)
-  {
-    rowStyles[pos] = styleName;
-  }
+    public String[] getColStyles()
+    {
+        return colStyles;
+    }
 
-  public void setColStyle (final int pos, final String styleName)
-  {
-    colStyles[pos] = styleName;
-  }
+    public void setRowStyle(final int pos, final String styleName)
+    {
+        rowStyles[pos] = styleName;
+    }
 
-  public String getRowStyle (final int pos)
-  {
-    return rowStyles[pos];
-  }
+    public void setColStyle(final int pos, final String styleName)
+    {
+        colStyles[pos] = styleName;
+    }
 
-  public String getColStyle (final int pos)
-  {
-    return colStyles[pos];
-  }
+    public String getRowStyle(final int pos)
+    {
+        return rowStyles[pos];
+    }
+
+    public String getColStyle(final int pos)
+    {
+        return colStyles[pos];
+    }
 }

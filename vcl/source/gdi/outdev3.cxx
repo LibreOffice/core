@@ -5601,6 +5601,8 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const String& rStr,
 
     if ( !IsDeviceOutputNecessary() )
         return;
+    if( !mpGraphics && !ImplGetGraphics() )
+        return;
     if( mbInitClipRegion )
         ImplInitClipRegion();
     if( mbOutputClipped )

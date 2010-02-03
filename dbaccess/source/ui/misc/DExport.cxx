@@ -479,6 +479,7 @@ sal_Int16 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int16 _nOl
                         case NumberFormat::DATETIME:
                         case NumberFormat::TEXT:
                         case NumberFormat::DATE:
+                            nNumberFormat = _nOldNumberFormat;
                             break;
                         case NumberFormat::ALL:
                             nNumberFormat = NumberFormat::DATE;
@@ -494,6 +495,7 @@ sal_Int16 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int16 _nOl
                         case NumberFormat::DATETIME:
                         case NumberFormat::TEXT:
                         case NumberFormat::TIME:
+                            nNumberFormat = _nOldNumberFormat;
                             break;
                         case NumberFormat::ALL:
                             nNumberFormat = NumberFormat::TIME;
@@ -510,6 +512,7 @@ sal_Int16 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int16 _nOl
                             nNumberFormat = NumberFormat::CURRENCY;
                             break;
                         case NumberFormat::CURRENCY:
+                            nNumberFormat = _nOldNumberFormat;
                             break;
                         case NumberFormat::ALL:
                             nNumberFormat = NumberFormat::CURRENCY;
@@ -526,6 +529,7 @@ sal_Int16 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int16 _nOl
                     switch(_nOldNumberFormat)
                     {
                         case NumberFormat::NUMBER:
+                            nNumberFormat = _nOldNumberFormat;
                             break;
                         case NumberFormat::CURRENCY:
                             nNumberFormat = NumberFormat::CURRENCY;
@@ -549,6 +553,7 @@ sal_Int16 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int16 _nOl
                         case NumberFormat::DATETIME:
                         case NumberFormat::TEXT:
                         case NumberFormat::TIME:
+                            nNumberFormat = _nOldNumberFormat;
                             break;
                         case NumberFormat::ALL:
                             nNumberFormat = NumberFormat::DATETIME;

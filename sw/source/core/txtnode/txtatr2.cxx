@@ -329,3 +329,13 @@ SwTxtMeta::~SwTxtMeta()
     }
 }
 
+void SwTxtMeta::ChgTxtNode(SwTxtNode * const pNode)
+{
+    m_pTxtNode = pNode; // before Notify!
+    SwFmtMeta & rFmtMeta( static_cast<SwFmtMeta &>(GetAttr()) );
+    if (rFmtMeta.GetTxtAttr() == this)
+    {
+        rFmtMeta.NotifyChangeTxtNode(pNode);
+    }
+}
+

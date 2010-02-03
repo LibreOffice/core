@@ -57,8 +57,7 @@ public class StyleMapperXmlFactoryModule implements XmlFactoryModule
     public int getDocumentSupport(final XmlDocumentInfo documentInfo)
     {
         final String rootNamespace = documentInfo.getRootElementNameSpace();
-        if (StyleMapperXmlFactoryModule.NAMESPACE.equals(rootNamespace) &&
-                "style-mapper-definition".equals(documentInfo.getRootElement()))
+        if (StyleMapperXmlFactoryModule.NAMESPACE.equals(rootNamespace) && "style-mapper-definition".equals(documentInfo.getRootElement()))
         {
 
             return XmlFactoryModule.RECOGNIZED_BY_NAMESPACE;

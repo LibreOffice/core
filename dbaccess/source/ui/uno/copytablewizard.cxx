@@ -70,6 +70,7 @@
 #include <comphelper/interaction.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/proparrhlp.hxx>
+#include <comphelper/string.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -775,9 +776,8 @@ void CopyTableWizard::impl_checkForUnsupportedSettings_throw( const Reference< X
 
     if ( sUnsupportedSetting.getLength() != 0 )
     {
-        ::rtl::OUString sMessage( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unsupported setting in the copy source descriptor: $name$." ) ) );
-            // TODO: resource
-        sMessage = sMessage.replaceAt( sMessage.indexOfAsciiL( "$name$", 6 ), 6, sUnsupportedSetting );
+        ::rtl::OUString sMessage( String(ModuleRes( STR_CTW_ERROR_UNSUPPORTED_SETTING )) );
+        ::comphelper::string::searchAndReplaceAsciiI( sMessage, "$name$", sUnsupportedSetting );
         throw IllegalArgumentException(
             sMessage,
             *const_cast< CopyTableWizard* >( this ),
@@ -849,8 +849,7 @@ void CopyTableWizard::impl_checkForUnsupportedSettings_throw( const Reference< X
         if ( _out_rCommandType == CommandType::QUERY )
             // we cannot copy a query if the connection cannot provide it ...
             throw IllegalArgumentException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "To copy a query, your connection must be able to provide queries." ) ),
-                // TODO: resource
+                String(ModuleRes( STR_CTW_ERROR_NO_QUERY )),
                 *const_cast< CopyTableWizard* >( this ),
                 1
             );
@@ -1516,8 +1515,7 @@ void SAL_CALL CopyTableWizard::initialize( const Sequence< Any >& _rArguments ) 
         {   // ->createWithInteractionHandler
             if ( !( _rArguments[2] >>= m_xInteractionHandler ) )
                 throw IllegalArgumentException(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The given interaction handler is invalid." ) ),
-                    // TODO: resource
+                    String(ModuleRes( STR_CTW_ERROR_INVALID_INTERACTIONHANDLER )),
                     *this,
                     3
                 );
@@ -1578,7 +1576,8 @@ Dialog* CopyTableWizard::createDialog( Window* _pParent )
         *m_pSourceObject,
         m_xSourceConnection.getTyped(),
         m_xDestConnection.getTyped(),
-        m_aContext.getLegacyServiceFactory()
+        m_aContext.getLegacyServiceFactory(),
+        m_xInteractionHandler
     );
 
     impl_attributesToDialog_nothrow( *pWizard );

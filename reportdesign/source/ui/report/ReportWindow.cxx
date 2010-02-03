@@ -378,11 +378,6 @@ void OReportWindow::setDragStripes(BOOL bOn)
     m_aViewsWindow.setDragStripes(bOn);
 }
 // -----------------------------------------------------------------------------
-BOOL OReportWindow::isDragStripes() const
-{
-    return m_aViewsWindow.isDragStripes();
-}
-// -----------------------------------------------------------------------------
 sal_uInt32 OReportWindow::getMarkedObjectCount() const
 {
     return m_aViewsWindow.getMarkedObjectCount();

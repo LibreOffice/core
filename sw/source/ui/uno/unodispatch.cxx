@@ -31,17 +31,18 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <vcl/svapp.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
+#include <svx/dataaccessdescriptor.hxx>
+
 #include <unodispatch.hxx>
-#include <unoobj.hxx>
+#include <unobaseclass.hxx>
 #include <view.hxx>
 #include <cmdid.h>
 #include "wrtsh.hxx"
 #include "dbmgr.hxx"
-#include <svx/dataaccessdescriptor.hxx>
+
 
 using namespace ::com::sun::star;
 using namespace rtl;

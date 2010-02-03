@@ -90,15 +90,6 @@ AccessibleGridControl::AccessibleGridControl(
     m_pImpl.reset( new AccessibleGridControl_Impl() );
     m_pImpl->m_aCreator = _rxCreator;
 }
-// -----------------------------------------------------------------------------
-void AccessibleGridControl::setCreator( const Reference< XAccessible >& _rxCreator )
-{
-#if OSL_DEBUG_LEVEL > 0
-    Reference< XAccessible > xCreator = (Reference< XAccessible >)m_pImpl->m_aCreator;
-    DBG_ASSERT( !xCreator.is(), "accessibility/extended/AccessibleGridControl::setCreator: creator already set!" );
-#endif
-    m_pImpl->m_aCreator = _rxCreator;
-}
 
 // -----------------------------------------------------------------------------
 AccessibleGridControl::~AccessibleGridControl()

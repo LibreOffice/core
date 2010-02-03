@@ -461,10 +461,8 @@ sal_Bool lcl_MinMaxNode( const SwFrmFmtPtr& rpNd, void* pArgs )
     const SwFmtAnchor& rFmtA = ((SwFrmFmt*)rpNd)->GetAnchor();
 
     bool bCalculate = false;
-    if (
-        (FLY_AT_CNTNT == rFmtA.GetAnchorId()) ||
-        (FLY_AUTO_CNTNT == rFmtA.GetAnchorId())
-       )
+    if ((FLY_AT_PARA == rFmtA.GetAnchorId()) ||
+        (FLY_AT_CHAR == rFmtA.GetAnchorId()))
     {
         bCalculate = true;
     }

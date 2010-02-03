@@ -1876,7 +1876,7 @@ void __EXPORT ScUndoDataPilot::Undo()
             else
             {
                 //  delete inserted object
-                pDoc->GetDPCollection()->Free(pDocObj);
+                pDoc->GetDPCollection()->FreeTable(pDocObj);
             }
         }
     }
@@ -1886,7 +1886,7 @@ void __EXPORT ScUndoDataPilot::Undo()
 
         ScDPObject* pDestObj = new ScDPObject( *pOldDPObject );
         pDestObj->SetAlive(TRUE);
-        if ( !pDoc->GetDPCollection()->Insert(pDestObj) )
+        if ( !pDoc->GetDPCollection()->InsertNewTable(pDestObj) )
         {
             DBG_ERROR("cannot insert DPObject");
             DELETEZ( pDestObj );

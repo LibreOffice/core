@@ -35,7 +35,9 @@ import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.PropertyVetoException;
 import com.sun.star.beans.XPropertyChangeListener;
 import com.sun.star.beans.XVetoableChangeListener;
+import com.sun.star.container.XChild;
 import com.sun.star.embed.XStorage;
+import com.sun.star.frame.XModel;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.XInitialization;
 import com.sun.star.lang.XServiceInfo;
@@ -60,6 +62,7 @@ import com.sun.star.report.SOImageService;
 import com.sun.star.report.StorageRepository;
 import com.sun.star.report.XReportDefinition;
 import com.sun.star.report.pentaho.SOReportJobFactory._SOReportJobFactory;
+import com.sun.star.sdb.XDocumentDataSource;
 import com.sun.star.sdbc.XConnection;
 import com.sun.star.sdbc.XRowSet;
 import com.sun.star.task.XJob;
@@ -92,7 +95,7 @@ public class SOReportJobFactory
          * The service name, that must be used to get an instance of this service.
          */
         private static final String __serviceName =
-                                    "com.sun.star.report.pentaho.SOReportJobFactory";
+                "com.sun.star.report.pentaho.SOReportJobFactory";
         private final PropertySetMixin m_prophlp;
         /**
          * The initial component contextr, that gives access to the service manager, supported singletons, ... It's
@@ -106,8 +109,8 @@ public class SOReportJobFactory
         {
             m_cmpCtx = xCompContext;
             m_prophlp = new PropertySetMixin(m_cmpCtx, this,
-                new Type(XJob.class),
-                null); // no optionals
+                    new Type(XJob.class),
+                    null); // no optionals
         }
 
         /**
@@ -117,7 +120,7 @@ public class SOReportJobFactory
          * @throws Exception Every exception will not be handled, but will be passed to the caller.
          */
         public void initialize(final Object[] object)
-            throws com.sun.star.uno.Exception
+                throws com.sun.star.uno.Exception
         {
             /* The component describes what arguments its expected and in which
              * order!At this point you can read the objects and can intialize
@@ -138,13 +141,14 @@ public class SOReportJobFactory
         /**
          * This method is a simple helper function to used in the static component initialisation functions as well as
          * in getSupportedServiceNames.
+         * @return
          */
         public static String[] getServiceNames()
         {
             return new String[]
-                {
-                    __serviceName
-                };
+                    {
+                        __serviceName
+                    };
         }
 
         /**
@@ -177,20 +181,20 @@ public class SOReportJobFactory
                 final XRegistryKey xRegistryRootKey = simpleReg.getRootKey();
                 // read locale
                 final XRegistryKey locale = xRegistryRootKey.openKey(value);
-                if ( locale != null )
+                if (locale != null)
                 {
                     final String newLocale = locale.getStringValue();
-                    if ( newLocale != null )
+                    if (newLocale != null)
                     {
                         currentLocale = newLocale.replace('-', '_');
                     }
                 }
             }
-            catch ( InvalidValueException ex )
+            catch (InvalidValueException ex)
             {
                 Logger.getLogger(SOReportJobFactory.class.getName()).log(Level.SEVERE, null, ex);
             }
-            catch ( InvalidRegistryException ex )
+            catch (InvalidRegistryException ex)
             {
                 Logger.getLogger(SOReportJobFactory.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -199,32 +203,34 @@ public class SOReportJobFactory
         }
 
         public Object execute(final NamedValue[] namedValue)
-            throws com.sun.star.lang.IllegalArgumentException, com.sun.star.uno.Exception
+                throws com.sun.star.lang.IllegalArgumentException, com.sun.star.uno.Exception
         {
             final ClassLoader cl = java.lang.Thread.currentThread().getContextClassLoader();
             Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
             try
             {
                 final XSimpleRegistry simpleReg = (XSimpleRegistry) UnoRuntime.queryInterface(XSimpleRegistry.class,
-                    m_cmpCtx.getServiceManager().createInstanceWithContext("com.sun.star.configuration.ConfigurationRegistry", m_cmpCtx));
+                        m_cmpCtx.getServiceManager().createInstanceWithContext("com.sun.star.configuration.ConfigurationRegistry", m_cmpCtx));
 
-                String currentLocale = getLocaleFromRegistry(simpleReg,"org.openoffice.Setup","L10N/ooSetupSystemLocale");
-                if ( currentLocale == null || "".equals(currentLocale) )
+                String currentLocale = getLocaleFromRegistry(simpleReg, "org.openoffice.Setup", "L10N/ooSetupSystemLocale");
+                if (currentLocale == null || "".equals(currentLocale))
                 {
-                    currentLocale = getLocaleFromRegistry(simpleReg,"org.openoffice.Office.Linguistic","General/DefaultLocale");
+                    currentLocale = getLocaleFromRegistry(simpleReg, "org.openoffice.Office.Linguistic", "General/DefaultLocale");
                 }
-                if ( currentLocale != null && !"".equals(currentLocale) )
+                if (currentLocale != null && !"".equals(currentLocale))
+                {
                     System.setProperty("org.pentaho.reporting.libraries.formula.locale", currentLocale);
+                }
                 final ReportJob job = createReportJob(namedValue);
                 job.execute();
 
             }
-            catch ( java.lang.Exception e )
+            catch (java.lang.Exception e)
             {
                 LOGGER.error("ReportProcessing failed", e);
                 throw new com.sun.star.lang.WrappedTargetException(e.getMessage(), this, null);
             }
-            catch ( java.lang.IncompatibleClassChangeError e2 )
+            catch (java.lang.IncompatibleClassChangeError e2)
             {
                 LOGGER.error("Detected an IncompatibleClassChangeError");
                 throw new com.sun.star.lang.WrappedTargetException("caught a " + e2.getClass().getName(), this, new com.sun.star.uno.Exception(e2.getLocalizedMessage()));
@@ -244,55 +250,55 @@ public class SOReportJobFactory
             String title = null;
             Integer maxRows = null;
 
-            for ( int i = 0; i < namedValue.length; ++i )
+            for (int i = 0; i < namedValue.length; ++i)
             {
                 final NamedValue aProps = namedValue[i];
-                if ( "ActiveConnection".equalsIgnoreCase(aProps.Name) )
+                if ("ActiveConnection".equalsIgnoreCase(aProps.Name))
                 {
                     activeConnection = (XConnection) UnoRuntime.queryInterface(XConnection.class, aProps.Value);
                 }
-                else if ( "ReportDefinition".equalsIgnoreCase(aProps.Name) )
+                else if ("ReportDefinition".equalsIgnoreCase(aProps.Name))
                 {
                     report = (XReportDefinition) UnoRuntime.queryInterface(XReportDefinition.class, aProps.Value);
                 }
-                else if ( "InputStorage".equalsIgnoreCase(aProps.Name) )
+                else if ("InputStorage".equalsIgnoreCase(aProps.Name))
                 {
                     input = (XStorage) UnoRuntime.queryInterface(XStorage.class, aProps.Value);
                 }
-                else if ( "OutputStorage".equalsIgnoreCase(aProps.Name) )
+                else if ("OutputStorage".equalsIgnoreCase(aProps.Name))
                 {
                     output = (XStorage) UnoRuntime.queryInterface(XStorage.class, aProps.Value);
                 }
-                else if ( "RowSet".equalsIgnoreCase(aProps.Name) )
+                else if ("RowSet".equalsIgnoreCase(aProps.Name))
                 {
                     rowSet = (XRowSet) UnoRuntime.queryInterface(XRowSet.class, aProps.Value);
                 }
-                else if ( "mimetype".equalsIgnoreCase(aProps.Name) )
+                else if ("mimetype".equalsIgnoreCase(aProps.Name))
                 {
                     mimetype = (String) aProps.Value;
                 }
-                else if ( "MaxRows".equalsIgnoreCase(aProps.Name) )
+                else if ("MaxRows".equalsIgnoreCase(aProps.Name))
                 {
                     maxRows = (Integer) aProps.Value;
                 }
-                else if ( ReportEngineParameterNames.AUTHOR.equalsIgnoreCase(aProps.Name) )
+                else if (ReportEngineParameterNames.AUTHOR.equalsIgnoreCase(aProps.Name))
                 {
                     author = (String) aProps.Value;
                 }
-                else if ( ReportEngineParameterNames.TITLE.equalsIgnoreCase(aProps.Name) )
+                else if (ReportEngineParameterNames.TITLE.equalsIgnoreCase(aProps.Name))
                 {
                     title = (String) aProps.Value;
                 }
             }
 
-            if ( input == null || output == null )
+            if (input == null || output == null)
             {
                 throw new com.sun.star.lang.IllegalArgumentException();
             }
 
-            if ( rowSet == null )
+            if (rowSet == null)
             {
-                if ( report == null || activeConnection == null )
+                if (report == null || activeConnection == null)
                 {
                     throw new com.sun.star.lang.IllegalArgumentException();
                 }
@@ -301,19 +307,22 @@ public class SOReportJobFactory
             else
             {
                 final XPropertySet set = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, rowSet);
-                if ( set == null )
+                if (set == null)
                 {
                     throw new com.sun.star.lang.IllegalArgumentException();
                 }
                 activeConnection = (XConnection) UnoRuntime.queryInterface(XConnection.class, set.getPropertyValue("ActiveConnection"));
             }
-            if ( mimetype == null )
+            if (mimetype == null)
             {
                 mimetype = PentahoReportEngineMetaData.OPENDOCUMENT_TEXT;
             }
 
+            final XChild child = UnoRuntime.queryInterface(XChild.class, activeConnection);
+            final XDocumentDataSource docSource = UnoRuntime.queryInterface(XDocumentDataSource.class, child.getParent());
+            final XModel model = UnoRuntime.queryInterface(XModel.class, docSource.getDatabaseDocument());
             final DataSourceFactory dataFactory = new SDBCReportDataFactory(m_cmpCtx, activeConnection);
-            final StorageRepository storageRepository = new StorageRepository(input, output);
+            final StorageRepository storageRepository = new StorageRepository(input, output, model.getURL());
 
             final String inputName = "content.xml";
             final String outputName = "content.xml";
@@ -330,11 +339,11 @@ public class SOReportJobFactory
             procParms.setProperty(ReportEngineParameterNames.IMAGE_SERVICE, new SOImageService(m_cmpCtx));
             procParms.setProperty(ReportEngineParameterNames.INPUT_REPORTJOB_FACTORY, this);
             procParms.setProperty(ReportEngineParameterNames.MAXROWS, maxRows);
-            if ( author != null )
+            if (author != null)
             {
                 procParms.setProperty(ReportEngineParameterNames.AUTHOR, author);
             }
-            if ( title != null )
+            if (title != null)
             {
                 procParms.setProperty(ReportEngineParameterNames.TITLE, title);
             }
@@ -349,38 +358,38 @@ public class SOReportJobFactory
         }
 
         public void setPropertyValue(final String aPropertyName, final Object aValue)
-            throws UnknownPropertyException, PropertyVetoException, com.sun.star.lang.IllegalArgumentException,
-                   WrappedTargetException
+                throws UnknownPropertyException, PropertyVetoException, com.sun.star.lang.IllegalArgumentException,
+                WrappedTargetException
         {
             m_prophlp.setPropertyValue(aPropertyName, aValue);
         }
 
         public Object getPropertyValue(final String aPropertyName)
-            throws UnknownPropertyException, WrappedTargetException
+                throws UnknownPropertyException, WrappedTargetException
         {
             return m_prophlp.getPropertyValue(aPropertyName);
         }
 
         public void addPropertyChangeListener(final String aPropertyName, final XPropertyChangeListener xListener)
-            throws UnknownPropertyException, WrappedTargetException
+                throws UnknownPropertyException, WrappedTargetException
         {
             m_prophlp.addPropertyChangeListener(aPropertyName, xListener);
         }
 
         public void removePropertyChangeListener(final String aPropertyName, final XPropertyChangeListener xListener)
-            throws UnknownPropertyException, WrappedTargetException
+                throws UnknownPropertyException, WrappedTargetException
         {
             m_prophlp.removePropertyChangeListener(aPropertyName, xListener);
         }
 
         public void addVetoableChangeListener(final String aPropertyName, final XVetoableChangeListener xListener)
-            throws UnknownPropertyException, WrappedTargetException
+                throws UnknownPropertyException, WrappedTargetException
         {
             m_prophlp.addVetoableChangeListener(aPropertyName, xListener);
         }
 
         public void removeVetoableChangeListener(final String aPropertyName, final XVetoableChangeListener xListener)
-            throws UnknownPropertyException, WrappedTargetException
+                throws UnknownPropertyException, WrappedTargetException
         {
             m_prophlp.removeVetoableChangeListener(aPropertyName, xListener);
         }
@@ -400,20 +409,20 @@ public class SOReportJobFactory
 
         try
         {
-            if ( sImplName.equals(_SOReportJobFactory.class.getName()) )
+            if (sImplName.equals(_SOReportJobFactory.class.getName()))
             {
                 xFactory = Factory.createComponentFactory(_SOReportJobFactory.class, _SOReportJobFactory.getServiceNames());
             }
-            else if ( sImplName.equals(SOFunctionManager.class.getName()) )
+            else if (sImplName.equals(SOFunctionManager.class.getName()))
             {
                 xFactory = Factory.createComponentFactory(SOFunctionManager.class, SOFunctionManager.getServiceNames());
             }
-            else if ( sImplName.equals(SOFormulaParser.class.getName()) )
+            else if (sImplName.equals(SOFormulaParser.class.getName()))
             {
                 xFactory = Factory.createComponentFactory(SOFormulaParser.class, SOFormulaParser.getServiceNames());
             }
         }
-        catch ( java.lang.IncompatibleClassChangeError e2 )
+        catch (java.lang.IncompatibleClassChangeError e2)
         {
         }
 
@@ -431,13 +440,11 @@ public class SOReportJobFactory
     public static boolean __writeRegistryServiceInfo(final XRegistryKey regKey)
     {
         return Factory.writeRegistryServiceInfo(SOFunctionManager.class.getName(),
-            SOFunctionManager.getServiceNames(),
-            regKey) &&
-            Factory.writeRegistryServiceInfo(_SOReportJobFactory.class.getName(),
-            _SOReportJobFactory.getServiceNames(),
-            regKey) &&
-            Factory.writeRegistryServiceInfo(SOFormulaParser.class.getName(),
-            SOFormulaParser.getServiceNames(),
-            regKey);
+                SOFunctionManager.getServiceNames(),
+                regKey) && Factory.writeRegistryServiceInfo(_SOReportJobFactory.class.getName(),
+                _SOReportJobFactory.getServiceNames(),
+                regKey) && Factory.writeRegistryServiceInfo(SOFormulaParser.class.getName(),
+                SOFormulaParser.getServiceNames(),
+                regKey);
     }
 }

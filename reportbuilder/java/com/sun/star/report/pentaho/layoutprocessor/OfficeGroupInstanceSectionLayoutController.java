@@ -26,135 +26,127 @@ import org.jfree.report.JFreeReportInfo;
  */
 public class OfficeGroupInstanceSectionLayoutController extends SectionLayoutController
 {
-  public static final int STATE_PROCESS_VARIABLES = 2;
-  public static final int STATE_PROCESS_NORMAL_FLOW = 3;
-  private int state;
-  private boolean waitForJoin;
 
-  public OfficeGroupInstanceSectionLayoutController()
-  {
-  }
+    public static final int STATE_PROCESS_VARIABLES = 2;
+    public static final int STATE_PROCESS_NORMAL_FLOW = 3;
+    private int state;
+    private boolean waitForJoin;
 
-  public void initialize(final Object node, final FlowController flowController, final LayoutController parent)
-      throws DataSourceException, ReportDataFactoryException, ReportProcessingException
-  {
-    super.initialize(node, flowController, parent);
-    state = STATE_PROCESS_VARIABLES;
-  }
-
-  protected LayoutController processContent(final ReportTarget target)
-      throws DataSourceException, ReportProcessingException, ReportDataFactoryException
-  {
-    if (state == OfficeGroupInstanceSectionLayoutController.STATE_PROCESS_VARIABLES)
+    public OfficeGroupInstanceSectionLayoutController()
     {
-      // todo: Fill the variables section with something sensible ..
-      final VariablesDeclarationSection variables = new VariablesDeclarationSection();
-      final OfficeGroupInstanceSectionLayoutController controller =
-          (OfficeGroupInstanceSectionLayoutController) clone();
-      controller.state =
-          OfficeGroupLayoutController.STATE_PROCESS_NORMAL_FLOW;
-      controller.waitForJoin = true;
-      return processChild(controller, variables, getFlowController());
-    }
-    return super.processContent(target);
-  }
-
-  // isDisplayable is private in version 0.9.1, so until the upgrade we keep this copy of the method
-  // todo: Delete it unce the sun-cvs contains version 0.9.2.
-  protected LayoutController processChild(final SectionLayoutController derived,
-                                          final Node node,
-                                          final FlowController flowController)
-      throws DataSourceException, ReportProcessingException,
-      ReportDataFactoryException
-  {
-    final ReportContext reportContext = flowController.getReportContext();
-    final LayoutControllerFactory layoutControllerFactory = reportContext.getLayoutControllerFactory();
-    if (isDisplayable(node))
-    {
-      derived.setProcessingState(ElementLayoutController.WAITING_FOR_JOIN);
-      return layoutControllerFactory.create(flowController, node, derived);
-    }
-    else
-    {
-      derived.setProcessingState(ElementLayoutController.WAITING_FOR_JOIN);
-      final LayoutController childLc = layoutControllerFactory.create(flowController, node, derived);
-      return LayoutControllerUtil.skipInvisibleElement(childLc);
-    }
-  }
-
-  protected boolean isDisplayable(final Node node) throws DataSourceException
-  {
-    if (! (node instanceof OfficeGroupSection) )
-    {
-      return _isDisplayable(node);
     }
 
-    final OfficeGroupSection section = (OfficeGroupSection) node;
-    if (section.isRepeatSection())
+    public void initialize(final Object node, final FlowController flowController, final LayoutController parent)
+            throws DataSourceException, ReportDataFactoryException, ReportProcessingException
     {
-      return false;
-    }
-    return _isDisplayable(node);
-  }
-
-  protected boolean _isDisplayable(final Node node)
-      throws DataSourceException
-  {
-    // temp method until the pending upgrade to 0.9.2. Later we just call super.isDisplayable(..) instead.
-    if (!node.isEnabled())
-    {
-      return false;
+        super.initialize(node, flowController, parent);
+        state = STATE_PROCESS_VARIABLES;
     }
 
-    final Expression expression = node.getDisplayCondition();
-    if (expression == null)
+    protected LayoutController processContent(final ReportTarget target)
+            throws DataSourceException, ReportProcessingException, ReportDataFactoryException
     {
-      return true;
+        if (state == OfficeGroupInstanceSectionLayoutController.STATE_PROCESS_VARIABLES)
+        {
+            // todo: Fill the variables section with something sensible ..
+            final VariablesDeclarationSection variables = new VariablesDeclarationSection();
+            final OfficeGroupInstanceSectionLayoutController controller =
+                    (OfficeGroupInstanceSectionLayoutController) clone();
+            controller.state =
+                    OfficeGroupLayoutController.STATE_PROCESS_NORMAL_FLOW;
+            controller.waitForJoin = true;
+            return processChild(controller, variables, getFlowController());
+        }
+        return super.processContent(target);
     }
 
-    final Object result = LayoutControllerUtil.evaluateExpression(getFlowController(), node, expression);
-    if (Boolean.TRUE.equals(result))
+    // isDisplayable is private in version 0.9.1, so until the upgrade we keep this copy of the method
+    // todo: Delete it unce the sun-cvs contains version 0.9.2.
+    protected LayoutController processChild(final SectionLayoutController derived,
+            final Node node,
+            final FlowController flowController)
+            throws DataSourceException, ReportProcessingException,
+            ReportDataFactoryException
     {
-      return true;
+        final ReportContext reportContext = flowController.getReportContext();
+        final LayoutControllerFactory layoutControllerFactory = reportContext.getLayoutControllerFactory();
+        if (isDisplayable(node))
+        {
+            derived.setProcessingState(ElementLayoutController.WAITING_FOR_JOIN);
+            return layoutControllerFactory.create(flowController, node, derived);
+        }
+        else
+        {
+            derived.setProcessingState(ElementLayoutController.WAITING_FOR_JOIN);
+            final LayoutController childLc = layoutControllerFactory.create(flowController, node, derived);
+            return LayoutControllerUtil.skipInvisibleElement(childLc);
+        }
     }
-    return false;
-  }
 
-  protected void resetSectionForRepeat()
-  {
-    super.resetSectionForRepeat();
-    state = STATE_PROCESS_VARIABLES;
-  }
-
-  /**
-   * Joins with a delegated process flow. This is generally called from a child
-   * flow and should *not* (I mean it!) be called from outside. If you do,
-   * you'll suffer.
-   *
-   * @param flowController the flow controller of the parent.
-   * @return the joined layout controller that incorperates all changes from the
-   *         delegate.
-   */
-  public LayoutController join(final FlowController flowController)
-  {
-    if (waitForJoin)
+    protected boolean isDisplayable(final Node node) throws DataSourceException
     {
-      final OfficeGroupInstanceSectionLayoutController derived = (OfficeGroupInstanceSectionLayoutController) clone();
-      derived.setProcessingState(ElementLayoutController.OPENED);
-      derived.setFlowController(flowController);
-      derived.waitForJoin = false;
-      return derived;
+        if (!(node instanceof OfficeGroupSection))
+        {
+            return _isDisplayable(node);
+        }
+
+        final OfficeGroupSection section = (OfficeGroupSection) node;
+        return !section.isRepeatSection() && _isDisplayable(node);
     }
-    return super.join(flowController);
-  }
 
-  protected AttributeMap computeAttributes(final FlowController fc, final Element element, final ReportTarget target)
-      throws DataSourceException
-  {
-    final AttributeMap map = new AttributeMap( super.computeAttributes(fc, element, target) );
-    map.setAttribute(JFreeReportInfo.REPORT_NAMESPACE, "iteration-count", Integer.valueOf(getIterationCount()));
-    map.makeReadOnly();
-    return map;
-  }
+    protected boolean _isDisplayable(final Node node)
+            throws DataSourceException
+    {
+        // temp method until the pending upgrade to 0.9.2. Later we just call super.isDisplayable(..) instead.
+        if (!node.isEnabled())
+        {
+            return false;
+        }
 
+        final Expression expression = node.getDisplayCondition();
+        if (expression == null)
+        {
+            return true;
+        }
+
+        final Object result = LayoutControllerUtil.evaluateExpression(getFlowController(), node, expression);
+        return Boolean.TRUE.equals(result);
+    }
+
+    protected void resetSectionForRepeat()
+    {
+        super.resetSectionForRepeat();
+        state = STATE_PROCESS_VARIABLES;
+    }
+
+    /**
+     * Joins with a delegated process flow. This is generally called from a child
+     * flow and should *not* (I mean it!) be called from outside. If you do,
+     * you'll suffer.
+     *
+     * @param flowController the flow controller of the parent.
+     * @return the joined layout controller that incorperates all changes from the
+     *         delegate.
+     */
+    public LayoutController join(final FlowController flowController)
+    {
+        if (waitForJoin)
+        {
+            final OfficeGroupInstanceSectionLayoutController derived = (OfficeGroupInstanceSectionLayoutController) clone();
+            derived.setProcessingState(ElementLayoutController.OPENED);
+            derived.setFlowController(flowController);
+            derived.waitForJoin = false;
+            return derived;
+        }
+        return super.join(flowController);
+    }
+
+    protected AttributeMap computeAttributes(final FlowController fc, final Element element, final ReportTarget target)
+            throws DataSourceException
+    {
+        final AttributeMap map = new AttributeMap(super.computeAttributes(fc, element, target));
+        map.setAttribute(JFreeReportInfo.REPORT_NAMESPACE, "iteration-count", getIterationCount());
+        map.makeReadOnly();
+        return map;
+    }
 }

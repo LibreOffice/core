@@ -835,6 +835,11 @@ void SwSectionFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         break;
     }
     SwFrmFmt::Modify( pOld, pNew );
+
+    if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
+    {   // invalidate cached uno object
+        SetXTextSection(uno::Reference<text::XTextSection>(0));
+    }
 }
 
         // erfrage vom Format Informationen

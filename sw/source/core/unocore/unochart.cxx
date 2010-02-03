@@ -34,7 +34,6 @@
 #include <memory>
 #include <algorithm>
 
-
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart2/data/LabelOrigin.hpp>
 #include <cppuhelper/interfacecontainer.hxx>
@@ -51,7 +50,7 @@
 #include <swtable.hxx>
 #include <unoprnms.hxx>
 #include <unomap.hxx>
-#include <unoobj.hxx>
+#include <unomid.h>
 #include <unocrsr.hxx>
 #include <unotbl.hxx>
 #include <doc.hxx>

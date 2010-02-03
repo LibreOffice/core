@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -43,27 +43,21 @@ ENABLE_EXCEPTIONS=TRUE
 # no "lib" prefix
 DLLPRE =
 
-.IF "$(SYSTEM_ZLIB)" == "YES"
-CFLAGS+=-DSYSTEM_ZLIB
-.ENDIF
-
 # --- Files ---
-
 
 SLOFILES=\
     $(SLO)$/updatefeed.obj \
-        
+
 SHL1NOCHECK=TRUE
-SHL1TARGET=$(TARGET).uno   
+SHL1TARGET=$(TARGET).uno
 SHL1OBJS=$(SLOFILES)
 
 SHL1IMPLIB=i$(SHL1TARGET)
 SHL1STDLIBS=    \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
-    $(SALLIB) \
-    $(ZLIB3RDLIB)
-        
+    $(SALLIB)
+
 SHL1VERSIONMAP=..$/exports.map
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)

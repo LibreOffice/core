@@ -61,7 +61,6 @@ namespace textconversiondlgs
 
 struct DictionaryEntry
 {
-    DictionaryEntry();
     DictionaryEntry( const rtl::OUString& rTerm, const rtl::OUString& rMapping
                     , sal_Int16 nConversionPropertyType //linguistic2::ConversionPropertyType
                     , sal_Bool bNewEntry = sal_False );

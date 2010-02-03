@@ -34,9 +34,7 @@
 #include "hintids.hxx"
 #include <svx/protitem.hxx>
 #include <svx/svdpagv.hxx>
-#ifndef _FM_FMMODEL_HXX
 #include <svx/fmmodel.hxx>
-#endif
 
 #include "swtypes.hxx"
 #include "pagefrm.hxx"
@@ -62,8 +60,6 @@
 
 #include <com/sun/star/embed/EmbedMisc.hpp>
 
-using namespace com::sun::star;
-
 // OD 18.06.2003 #108784#
 //#ifndef _SVDVMARK_HXX //autogen
 //#include <svx/svdvmark.hxx>
@@ -73,6 +69,10 @@ using namespace com::sun::star;
 #include <sortedobjs.hxx>
 #include <flyfrms.hxx>
 // <--
+
+
+using namespace com::sun::star;
+
 
 class SwSdrHdl : public SdrHdl
 {
@@ -258,7 +258,7 @@ void SwDrawView::AddCustomHdl()
     const SwFmtAnchor &rAnchor = pFrmFmt->GetAnchor();
     // <--
 
-    if(FLY_IN_CNTNT == rAnchor.GetAnchorId())
+    if (FLY_AS_CHAR == rAnchor.GetAnchorId())
         return;
 
     const SwFrm* pAnch;
@@ -267,7 +267,7 @@ void SwDrawView::AddCustomHdl()
 
     Point aPos(aAnchorPoint);
 
-    if ( FLY_AUTO_CNTNT == rAnchor.GetAnchorId() )
+    if ( FLY_AT_CHAR == rAnchor.GetAnchorId() )
     {
         // --> OD 2004-06-24 #i28701# - use last character rectangle saved at object
         // in order to avoid a format of the anchor frame
@@ -1019,7 +1019,7 @@ void SwDrawView::CheckPossibilities()
                         "<SwDrawView::CheckPossibilities()> - missing frame format" );
                 bProtect = TRUE;
             }
-            else if ( FLY_IN_CNTNT == pFrmFmt->GetAnchor().GetAnchorId() &&
+            else if ((FLY_AS_CHAR == pFrmFmt->GetAnchor().GetAnchorId()) &&
                       rMrkList.GetMarkCount() > 1 )
             {
                 bProtect = TRUE;

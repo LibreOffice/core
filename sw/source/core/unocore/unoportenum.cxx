@@ -45,13 +45,18 @@
 #include <unocrsr.hxx>
 #include <docary.hxx>
 #include <tox.hxx>
-#include <unoclbck.hxx>
-#include <unoobj.hxx>
+#include <unomid.h>
+#include <unoparaframeenum.hxx>
+#include <unocrsrhelper.hxx>
+#include <unorefmark.hxx>
+#include <unobookmark.hxx>
 #include <unoredline.hxx>
 #include <unofield.hxx>
 #include <unometa.hxx>
+#include <fmtmeta.hxx>
 #include <fmtanchr.hxx>
 #include <fmtrfmrk.hxx>
+#include <frmfmt.hxx>
 #include <unoidx.hxx>
 #include <redline.hxx>
 #include <crsskip.hxx>
@@ -94,8 +99,9 @@ namespace
         BYTE                        nBkmType;
         const SwPosition            aPosition;
 
-        SwXBookmarkPortion_Impl( SwXBookmark* pXMark, BYTE nType, const SwPosition &rPosition )
-        : xBookmark ( pXMark )
+        SwXBookmarkPortion_Impl(uno::Reference<text::XTextContent> const& xMark,
+                const BYTE nType, SwPosition const& rPosition)
+        : xBookmark ( xMark )
         , nBkmType  ( nType )
         , aPosition ( rPosition )
         {
@@ -159,7 +165,9 @@ namespace
             {
                 const BYTE nType = hasOther ? BKM_TYPE_START : BKM_TYPE_START_END;
                 rBkmArr.insert(SwXBookmarkPortion_ImplSharedPtr(
-                    new SwXBookmarkPortion_Impl ( SwXBookmarks::GetObject(*pBkmk, &rDoc ), nType, rStartPos)));
+                    new SwXBookmarkPortion_Impl(
+                            SwXBookmark::CreateXBookmark(rDoc, *pBkmk),
+                            nType, rStartPos)));
             }
 
             const SwPosition& rEndPos = pBkmk->GetMarkEnd();
@@ -177,8 +185,12 @@ namespace
                     pEndPos = pCrossRefEndPos.get();
                 }
                 if(pEndPos)
+                {
                     rBkmArr.insert(SwXBookmarkPortion_ImplSharedPtr(
-                        new SwXBookmarkPortion_Impl ( SwXBookmarks::GetObject(*pBkmk, &rDoc ), BKM_TYPE_END, *pEndPos)));
+                        new SwXBookmarkPortion_Impl(
+                                SwXBookmark::CreateXBookmark(rDoc, *pBkmk),
+                                BKM_TYPE_END, *pEndPos)));
+                }
             }
         }
     }
@@ -416,9 +428,7 @@ lcl_CreateRefMarkPortion(
     SwDoc* pDoc = pUnoCrsr->GetDoc();
     const SwFmtRefMark& rRefMark =
         static_cast<const SwFmtRefMark&>(rAttr.GetAttr());
-    Reference<XTextContent> xContent =
-        static_cast<SwUnoCallBack*>(pDoc->GetUnoCallBack())
-        ->GetRefMark(rRefMark);
+    Reference<XTextContent> xContent;
     if (!xContent.is())
     {
         xContent = new SwXReferenceMark(pDoc, &rRefMark);
@@ -458,19 +468,15 @@ static Reference<XTextRange>
 lcl_CreateTOXMarkPortion(
     Reference<XText> const& xParent,
     const SwUnoCrsr * const pUnoCrsr,
-    const SwTxtAttr & rAttr, const bool bEnd)
+    SwTxtAttr & rAttr, const bool bEnd)
 {
     SwDoc* pDoc = pUnoCrsr->GetDoc();
-    const SwTOXMark& rTOXMark = static_cast<const SwTOXMark&>(rAttr.GetAttr());
+    SwTOXMark & rTOXMark = static_cast<SwTOXMark&>(rAttr.GetAttr());
 
-    Reference<XTextContent> xContent =
-        static_cast<SwUnoCallBack*>(pDoc->GetUnoCallBack())
-        ->GetTOXMark(rTOXMark);
-    if (!xContent.is())
-    {
-        xContent = new SwXDocumentIndexMark(rTOXMark.GetTOXType(),
-                       &rTOXMark, pDoc);
-    }
+    const Reference<XTextContent> xContent(
+        SwXDocumentIndexMark::CreateXDocumentIndexMark(*pDoc,
+                    *const_cast<SwTOXType*>(rTOXMark.GetTOXType()), rTOXMark),
+        uno::UNO_QUERY);
 
     SwXTextPortion* pPortion = 0;
     if (!bEnd)
@@ -483,6 +489,33 @@ lcl_CreateTOXMarkPortion(
     {
         pPortion = new SwXTextPortion(pUnoCrsr, xParent, PORTION_TOXMARK_END);
         pPortion->SetTOXMark(xContent);
+    }
+    return pPortion;
+}
+
+//-----------------------------------------------------------------------------
+static uno::Reference<text::XTextRange>
+lcl_CreateMetaPortion(
+    uno::Reference<text::XText> const& xParent,
+    const SwUnoCrsr * const pUnoCrsr,
+    SwTxtAttr & rAttr, ::std::auto_ptr<TextRangeList_t const> & pPortions)
+{
+    const uno::Reference<rdf::XMetadatable> xMeta( SwXMeta::CreateXMeta(
+            *static_cast<SwFmtMeta &>(rAttr.GetAttr()).GetMeta(),
+            xParent, pPortions));
+    SwXTextPortion * pPortion(0);
+    if (RES_TXTATR_META == rAttr.Which())
+    {
+        const uno::Reference<text::XTextContent> xContent(xMeta,
+                uno::UNO_QUERY);
+        pPortion = new SwXTextPortion(pUnoCrsr, xParent, PORTION_META);
+        pPortion->SetMeta(xContent);
+    }
+    else
+    {
+        const uno::Reference<text::XTextField> xField(xMeta, uno::UNO_QUERY);
+        pPortion = new SwXTextPortion(pUnoCrsr, xParent, PORTION_FIELD);
+        pPortion->SetTextField(xField);
     }
     return pPortion;
 }
@@ -687,30 +720,13 @@ lcl_ExportHints(
                         }
                         else
                         {
-                            TextRangeList_t *const pCurrentPortions(Top.first);
+                            ::std::auto_ptr<const TextRangeList_t>
+                                pCurrentPortions(Top.first);
                             rPortionStack.pop();
-                            SwXTextPortion * pPortion;
-                            if (RES_TXTATR_META == nWhich)
-                            {
-                                SwXMeta * const pMeta =
-                                    new SwXMeta(pDoc, xParent,
-                                        pCurrentPortions,
-                                        static_cast<SwTxtMeta * const>(pAttr));
-                                pPortion = new SwXTextPortion(
-                                    pUnoCrsr, xParent, PORTION_META);
-                                pPortion->SetMeta(pMeta);
-                            }
-                            else
-                            {
-                                SwXMetaField * const pMeta =
-                                    new SwXMetaField(pDoc, xParent,
-                                        pCurrentPortions,
-                                        static_cast<SwTxtMeta * const>(pAttr));
-                                pPortion = new SwXTextPortion(
-                                    pUnoCrsr, xParent, PORTION_FIELD);
-                                pPortion->SetTextField(pMeta);
-                            }
-                            rPortionStack.top().first->push_back(pPortion);
+                            const uno::Reference<text::XTextRange> xPortion(
+                                lcl_CreateMetaPortion(xParent, pUnoCrsr,
+                                    *pAttr, pCurrentPortions));
+                            rPortionStack.top().first->push_back(xPortion);
                         }
                     }
                     break;
@@ -726,7 +742,7 @@ lcl_ExportHints(
     while(nStartIndex < pHints->GetStartCount() &&
         nCurrentIndex >= (nNextStart = (*pHints->GetStart(nStartIndex)->GetStart())))
     {
-        const SwTxtAttr * const pAttr = pHints->GetStart(nStartIndex);
+        SwTxtAttr * const pAttr = pHints->GetStart(nStartIndex);
         USHORT nAttrWhich = pAttr->Which();
         if (nNextStart == nCurrentIndex)
         {
@@ -1127,7 +1143,7 @@ lcl_CreatePortions(
         // text at nCurrentIndex; i.e. it must be set _once_ per iteration
         uno::Reference< XTextRange > xRef;
 
-        SwXTextCursor::SelectPam(*pUnoCrsr, sal_True); // set mark
+        SwUnoCursorHelper::SelectPam(*pUnoCrsr, true); // set mark
 
         const sal_Int32 nFirstFrameIndex =
             lcl_ExportFrames( *PortionStack.top().first,

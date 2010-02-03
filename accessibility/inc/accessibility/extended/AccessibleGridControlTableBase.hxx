@@ -198,14 +198,6 @@ protected:
         @return  The child index of the specified cell address. */
     sal_Int32 implGetChildIndex( sal_Int32 nRow, sal_Int32 nColumn ) const;
 
-    /** @attention  This method requires locked mutex's and a living object.
-        @return  <TRUE/>, if the specified row is selected. */
-    sal_Bool implIsRowSelected( sal_Int32 nRow ) const;
-
-    /** @attention  This method requires locked mutex's and a living object.
-        @return  The count of selected rows. */
-    sal_Int32 implGetSelectedRowCount() const;
-
     /** Fills a sequence with sorted indexes of completely selected rows.
         @attention  This method requires locked mutex's and a living object.
         @param rSeq  Out-parameter that takes the sorted row index list. */

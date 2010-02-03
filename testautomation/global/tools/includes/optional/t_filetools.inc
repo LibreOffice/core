@@ -159,7 +159,7 @@ function hHandleActivesOnLoad( iTries as integer , iAdd as integer ) as boolean
                         hHandleActivesOnLoad() = FALSE
                         exit function
                     endif
-                    warnlog( "#105670# - File corruption warning, the template is broken" )
+                    qaerrorlog( "#105670# - File corruption warning, the template is broken" )
                 endif
             endif
 

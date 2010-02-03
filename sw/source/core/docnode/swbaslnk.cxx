@@ -31,14 +31,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <hintids.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 
-#ifndef _OSL_THREAD_HXX_
 #include <osl/thread.hxx>
-#endif
 #include <salhelper/condition.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <sfx2/docfile.hxx>
@@ -492,18 +489,23 @@ void SwBaseLink::Closed()
 
 const SwNode* SwBaseLink::GetAnchor() const
 {
-    SwFrmFmt* pFmt;
-    if( pCntntNode && 0 != ( pFmt = pCntntNode->GetFlyFmt()) )
+    if (pCntntNode)
     {
-        const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
-        const SwPosition* pAPos;
-        if( 0 != ( pAPos = rAnchor.GetCntntAnchor()) &&
-            ( FLY_IN_CNTNT == rAnchor.GetAnchorId() ||
-            FLY_AUTO_CNTNT == rAnchor.GetAnchorId() ||
-            FLY_AT_FLY == rAnchor.GetAnchorId() ||
-            FLY_AT_CNTNT == rAnchor.GetAnchorId() ))
-                return &pAPos->nNode.GetNode();
-        return 0;
+        SwFrmFmt *const pFmt = pCntntNode->GetFlyFmt();
+        if (pFmt)
+        {
+            const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
+            SwPosition const*const pAPos = rAnchor.GetCntntAnchor();
+            if (pAPos &&
+                ((FLY_AS_CHAR == rAnchor.GetAnchorId()) ||
+                 (FLY_AT_CHAR == rAnchor.GetAnchorId()) ||
+                 (FLY_AT_FLY  == rAnchor.GetAnchorId()) ||
+                 (FLY_AT_PARA == rAnchor.GetAnchorId())))
+            {
+                    return &pAPos->nNode.GetNode();
+            }
+            return 0;
+        }
     }
 
     ASSERT( !this, "GetAnchor nicht ueberlagert" );

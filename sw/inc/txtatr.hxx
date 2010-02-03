@@ -80,7 +80,7 @@ public:
         const xub_StrLen i_nStart, const xub_StrLen i_nEnd );
     virtual ~SwTxtMeta();
 
-    void ChgTxtNode( SwTxtNode * const pNode ) { m_pTxtNode = pNode; }
+    void ChgTxtNode(SwTxtNode * const pNode);
     SwTxtNode * GetTxtNode() const { return m_pTxtNode; }
 
 };

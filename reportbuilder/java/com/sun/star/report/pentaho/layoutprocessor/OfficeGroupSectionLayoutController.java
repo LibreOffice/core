@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.layoutprocessor;
 
 import org.jfree.report.flow.layoutprocessor.SectionLayoutController;
@@ -58,58 +56,56 @@ import org.jfree.report.JFreeReportInfo;
 public class OfficeGroupSectionLayoutController extends SectionLayoutController
 {
 
-  public OfficeGroupSectionLayoutController()
-  {
-  }
-
-  protected LayoutController startElement(final ReportTarget target)
-      throws DataSourceException, ReportProcessingException, ReportDataFactoryException
-  {
-    final OfficeGroupSection section = (OfficeGroupSection) getElement();
-    if (!section.isRepeatSection())
+    public OfficeGroupSectionLayoutController()
     {
-      return super.startElement(target);
     }
 
-    final LayoutController controller = getParent();
-    if (!(controller instanceof OfficeGroupLayoutController))
+    protected LayoutController startElement(final ReportTarget target)
+            throws DataSourceException, ReportProcessingException, ReportDataFactoryException
     {
-      return super.startElement(target);
-    }
-    final OfficeGroupLayoutController oglc = (OfficeGroupLayoutController) controller;
-    if (!oglc.isNormalFlowProcessing())
-    {
-      return super.startElement(target);
-    }
+        final OfficeGroupSection section = (OfficeGroupSection) getElement();
+        if (!section.isRepeatSection())
+        {
+            return super.startElement(target);
+        }
 
-    // Skip the processing if the section is a repeating header or footer and we are processing the normal flow ..
-    final ElementLayoutController clone = (ElementLayoutController) this.clone();
-    clone.setProcessingState(ElementLayoutController.FINISHED);
-    return clone;
-  }
+        final LayoutController controller = getParent();
+        if (!(controller instanceof OfficeGroupLayoutController))
+        {
+            return super.startElement(target);
+        }
+        final OfficeGroupLayoutController oglc = (OfficeGroupLayoutController) controller;
+        if (!oglc.isNormalFlowProcessing())
+        {
+            return super.startElement(target);
+        }
 
-  protected AttributeMap computeAttributes(final FlowController fc,
-                                           final Element element,
-                                           final ReportTarget target)
-      throws DataSourceException
-  {
-    final AttributeMap attrs = super.computeAttributes(fc, element, target);
-    final LayoutController controller = getParent();
-    if (!(controller instanceof OfficeGroupLayoutController))
-    {
-      return attrs;
-    }
-    final OfficeGroupLayoutController oglc = (OfficeGroupLayoutController) controller;
-    if (oglc.isNormalFlowProcessing())
-    {
-      return attrs;
+        // Skip the processing if the section is a repeating header or footer and we are processing the normal flow ..
+        final ElementLayoutController clone = (ElementLayoutController) this.clone();
+        clone.setProcessingState(ElementLayoutController.FINISHED);
+        return clone;
     }
 
-    final AttributeMap retval = new AttributeMap(attrs);
-    retval.setAttribute(JFreeReportInfo.REPORT_NAMESPACE, "repeated-section", OfficeToken.TRUE);
-    retval.makeReadOnly();
-    return retval;
-  }
+    protected AttributeMap computeAttributes(final FlowController fc,
+            final Element element,
+            final ReportTarget target)
+            throws DataSourceException
+    {
+        final AttributeMap attrs = super.computeAttributes(fc, element, target);
+        final LayoutController controller = getParent();
+        if (!(controller instanceof OfficeGroupLayoutController))
+        {
+            return attrs;
+        }
+        final OfficeGroupLayoutController oglc = (OfficeGroupLayoutController) controller;
+        if (oglc.isNormalFlowProcessing())
+        {
+            return attrs;
+        }
 
-
+        final AttributeMap retval = new AttributeMap(attrs);
+        retval.setAttribute(JFreeReportInfo.REPORT_NAMESPACE, "repeated-section", OfficeToken.TRUE);
+        retval.makeReadOnly();
+        return retval;
+    }
 }

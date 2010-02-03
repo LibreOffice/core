@@ -58,7 +58,15 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 
+#include <hash_map>
+
 using namespace com::sun::star;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Any;
+using ::rtl::OUString;
+using ::rtl::OUStringHash;
+using ::std::hash_map;
+using ::std::auto_ptr;
 
 // -----------------------------------------------------------------------
 
@@ -99,6 +107,7 @@ void lcl_SetBoolProperty( const uno::Reference<beans::XPropertySet>& xProp,
 
 ScDPSaveMember::ScDPSaveMember(const String& rName) :
     aName( rName ),
+    mpLayoutName(NULL),
     nVisibleMode( SC_DPSAVEMODE_DONTKNOW ),
     nShowDetailsMode( SC_DPSAVEMODE_DONTKNOW )
 {
@@ -106,9 +115,12 @@ ScDPSaveMember::ScDPSaveMember(const String& rName) :
 
 ScDPSaveMember::ScDPSaveMember(const ScDPSaveMember& r) :
     aName( r.aName ),
+    mpLayoutName(NULL),
     nVisibleMode( r.nVisibleMode ),
     nShowDetailsMode( r.nShowDetailsMode )
 {
+    if (r.mpLayoutName.get())
+        mpLayoutName.reset(new OUString(*r.mpLayoutName));
 }
 
 ScDPSaveMember::~ScDPSaveMember()
@@ -153,12 +165,23 @@ void ScDPSaveMember::SetName( const String& rNew )
     aName = rNew;
 }
 
+void ScDPSaveMember::SetLayoutName( const OUString& rName )
+{
+    mpLayoutName.reset(new OUString(rName));
+}
+
+const OUString* ScDPSaveMember::GetLayoutName() const
+{
+    return mpLayoutName.get();
+}
+
+void ScDPSaveMember::RemoveLayoutName()
+{
+    mpLayoutName.reset(NULL);
+}
+
 void ScDPSaveMember::WriteToSource( const uno::Reference<uno::XInterface>& xMember, sal_Int32 nPosition )
 {
-    //  nothing to do?
-    if ( nVisibleMode == SC_DPSAVEMODE_DONTKNOW && nShowDetailsMode == SC_DPSAVEMODE_DONTKNOW && nPosition < 0 )
-        return;
-
     uno::Reference<beans::XPropertySet> xMembProp( xMember, uno::UNO_QUERY );
     DBG_ASSERT( xMembProp.is(), "no properties at member" );
     if ( xMembProp.is() )
@@ -173,17 +196,11 @@ void ScDPSaveMember::WriteToSource( const uno::Reference<uno::XInterface>& xMemb
             lcl_SetBoolProperty( xMembProp,
                     rtl::OUString::createFromAscii(DP_PROP_SHOWDETAILS), (BOOL)nShowDetailsMode );
 
+        if (mpLayoutName.get())
+            ScUnoHelpFunctions::SetOptionalPropertyValue(xMembProp, SC_UNO_LAYOUTNAME, *mpLayoutName);
+
         if ( nPosition >= 0 )
-        {
-            try
-            {
-                xMembProp->setPropertyValue( rtl::OUString::createFromAscii(DP_PROP_POSITION), uno::Any(nPosition) );
-            }
-            catch ( uno::Exception& )
-            {
-                // position is optional - exception must be ignored
-            }
-        }
+            ScUnoHelpFunctions::SetOptionalPropertyValue(xMembProp, DP_PROP_POSITION, nPosition);
     }
 }
 
@@ -191,8 +208,9 @@ void ScDPSaveMember::WriteToSource( const uno::Reference<uno::XInterface>& xMemb
 
 ScDPSaveDimension::ScDPSaveDimension(const String& rName, BOOL bDataLayout) :
     aName( rName ),
-    pLayoutName( NULL ),
     pSelectedPage( NULL ),
+    mpLayoutName(NULL),
+    mpSubtotalName(NULL),
     bIsDataLayout( bDataLayout ),
     bDupFlag( FALSE ),
     nOrientation( sheet::DataPilotFieldOrientation_HIDDEN ),
@@ -211,6 +229,8 @@ ScDPSaveDimension::ScDPSaveDimension(const String& rName, BOOL bDataLayout) :
 
 ScDPSaveDimension::ScDPSaveDimension(const ScDPSaveDimension& r) :
     aName( r.aName ),
+    mpLayoutName(NULL),
+    mpSubtotalName(NULL),
     bIsDataLayout( r.bIsDataLayout ),
     bDupFlag( r.bDupFlag ),
     nOrientation( r.nOrientation ),
@@ -251,14 +271,14 @@ ScDPSaveDimension::ScDPSaveDimension(const ScDPSaveDimension& r) :
         pLayoutInfo = new sheet::DataPilotFieldLayoutInfo( *(r.pLayoutInfo) );
     else
         pLayoutInfo = NULL;
-    if (r.pLayoutName)
-        pLayoutName = new String( *(r.pLayoutName) );
-    else
-        pLayoutName = NULL;
     if (r.pSelectedPage)
         pSelectedPage = new String( *(r.pSelectedPage) );
     else
         pSelectedPage = NULL;
+    if (r.mpLayoutName.get())
+        mpLayoutName.reset(new OUString(*r.mpLayoutName));
+    if (r.mpSubtotalName.get())
+        mpSubtotalName.reset(new OUString(*r.mpSubtotalName));
 }
 
 ScDPSaveDimension::~ScDPSaveDimension()
@@ -269,7 +289,6 @@ ScDPSaveDimension::~ScDPSaveDimension()
     delete pSortInfo;
     delete pAutoShowInfo;
     delete pLayoutInfo;
-    delete pLayoutName;
     delete pSelectedPage;
     delete [] pSubTotalFuncs;
 }
@@ -370,25 +389,45 @@ void ScDPSaveDimension::SetUsedHierarchy(long nNew)
     nUsedHierarchy = nNew;
 }
 
-BOOL ScDPSaveDimension::HasLayoutName() const
+void ScDPSaveDimension::SetSubtotalName(const OUString& rName)
 {
-    return ( pLayoutName != NULL );
+    mpSubtotalName.reset(new OUString(rName));
 }
 
-void ScDPSaveDimension::SetLayoutName(const String* pName)
+const OUString* ScDPSaveDimension::GetSubtotalName() const
 {
-    delete pLayoutName;
-    if (pName)
-        pLayoutName = new String( *pName );
-    else
-        pLayoutName = NULL;
+    return mpSubtotalName.get();
 }
 
-const String& ScDPSaveDimension::GetLayoutName() const
+bool ScDPSaveDimension::IsMemberNameInUse(const OUString& rName) const
 {
-    if (pLayoutName)
-        return *pLayoutName;
-    return aName;
+    MemberList::const_iterator itr = maMemberList.begin(), itrEnd = maMemberList.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        const ScDPSaveMember* pMem = *itr;
+        if (rName.equalsIgnoreAsciiCase(pMem->GetName()))
+            return true;
+
+        const OUString* pLayoutName = pMem->GetLayoutName();
+        if (pLayoutName && rName.equalsIgnoreAsciiCase(*pLayoutName))
+            return true;
+    }
+    return false;
+}
+
+void ScDPSaveDimension::SetLayoutName(const OUString& rName)
+{
+    mpLayoutName.reset(new OUString(rName));
+}
+
+const OUString* ScDPSaveDimension::GetLayoutName() const
+{
+    return mpLayoutName.get();
+}
+
+void ScDPSaveDimension::RemoveLayoutName()
+{
+    mpLayoutName.reset(NULL);
 }
 
 void ScDPSaveDimension::SetReferenceValue(const sheet::DataPilotFieldReference* pNew)
@@ -520,15 +559,15 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
             aFilter = uno::Sequence<sheet::TableFilterField>( &aField, 1 );
         }
         // else keep empty sequence
-        try
-        {
-            aAny <<= aFilter;
-            xDimProp->setPropertyValue( rtl::OUString::createFromAscii(DP_PROP_FILTER), aAny );
-        }
-        catch ( beans::UnknownPropertyException& )
-        {
-            // recent addition - allow source to not handle it (no error)
-        }
+
+        ScUnoHelpFunctions::SetOptionalPropertyValue(xDimProp, DP_PROP_FILTER, aFilter);
+        if (mpLayoutName.get())
+            ScUnoHelpFunctions::SetOptionalPropertyValue(xDimProp, SC_UNO_LAYOUTNAME, *mpLayoutName);
+
+        const OUString* pSubTotalName = GetSubtotalName();
+        if (pSubTotalName)
+            // Custom subtotal name, with '?' being replaced by the visible field name later.
+            ScUnoHelpFunctions::SetOptionalPropertyValue(xDimProp, SC_UNO_FIELD_SUBTOTALNAME, *pSubTotalName);
     }
 
     //  Level loop outside of maMemberList loop
@@ -545,6 +584,8 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
         xHiers = new ScNameToIndexAccess( xHiersName );
         nHierCount = xHiers->getCount();
     }
+
+    sal_Bool bHasHiddenMember = false;
 
     for (long nHier=0; nHier<nHierCount; nHier++)
     {
@@ -585,41 +626,13 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
                         rtl::OUString::createFromAscii(DP_PROP_SHOWEMPTY), (BOOL)nShowEmptyMode );
 
                 if ( pSortInfo )
-                {
-                    aAny <<= *pSortInfo;
-                    try
-                    {
-                        xLevProp->setPropertyValue( rtl::OUString::createFromAscii(SC_UNO_SORTING), aAny );
-                    }
-                    catch ( beans::UnknownPropertyException& )
-                    {
-                        // recent addition - allow source to not handle it (no error)
-                    }
-                }
+                    ScUnoHelpFunctions::SetOptionalPropertyValue(xLevProp, SC_UNO_SORTING, *pSortInfo);
+
                 if ( pAutoShowInfo )
-                {
-                    aAny <<= *pAutoShowInfo;
-                    try
-                    {
-                        xLevProp->setPropertyValue( rtl::OUString::createFromAscii(SC_UNO_AUTOSHOW), aAny );
-                    }
-                    catch ( beans::UnknownPropertyException& )
-                    {
-                        // recent addition - allow source to not handle it (no error)
-                    }
-                }
+                    ScUnoHelpFunctions::SetOptionalPropertyValue(xLevProp, SC_UNO_AUTOSHOW, *pAutoShowInfo);
+
                 if ( pLayoutInfo )
-                {
-                    aAny <<= *pLayoutInfo;
-                    try
-                    {
-                        xLevProp->setPropertyValue( rtl::OUString::createFromAscii(SC_UNO_LAYOUT), aAny );
-                    }
-                    catch ( beans::UnknownPropertyException& )
-                    {
-                        // recent addition - allow source to not handle it (no error)
-                    }
-                }
+                    ScUnoHelpFunctions::SetOptionalPropertyValue(xLevProp, SC_UNO_LAYOUT, *pLayoutInfo);
 
                 // exceptions are caught at ScDPSaveData::WriteToSource
             }
@@ -638,12 +651,15 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
 
                         for (MemberList::const_iterator i=maMemberList.begin(); i != maMemberList.end() ; i++)
                         {
-                            rtl::OUString aMemberName = (*i)->GetName();
+                            ScDPSaveMember* pMember = *i;
+                            if (!pMember->GetIsVisible())
+                                bHasHiddenMember = true;
+                            rtl::OUString aMemberName = pMember->GetName();
                             if ( xMembers->hasByName( aMemberName ) )
                             {
                                 uno::Reference<uno::XInterface> xMemberInt = ScUnoHelpFunctions::AnyToInterface(
                                     xMembers->getByName( aMemberName ) );
-                                (*i)->WriteToSource( xMemberInt, nPosition );
+                                pMember->WriteToSource( xMemberInt, nPosition );
 
                                 if ( nPosition >= 0 )
                                     ++nPosition;            // increase if initialized
@@ -655,6 +671,35 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
             }
         }
     }
+
+    if (xDimProp.is())
+        ScUnoHelpFunctions::SetOptionalPropertyValue(xDimProp, SC_UNO_HAS_HIDDEN_MEMBER, bHasHiddenMember);
+}
+
+void ScDPSaveDimension::UpdateMemberVisibility(const hash_map<OUString, bool, OUStringHash>& rData)
+{
+    typedef hash_map<OUString, bool, OUStringHash> DataMap;
+    MemberList::iterator itrMem = maMemberList.begin(), itrMemEnd = maMemberList.end();
+    for (; itrMem != itrMemEnd; ++itrMem)
+    {
+        ScDPSaveMember* pMem = *itrMem;
+        const String& rMemName = pMem->GetName();
+        DataMap::const_iterator itr = rData.find(rMemName);
+        if (itr != rData.end())
+            pMem->SetIsVisible(itr->second);
+    }
+}
+
+bool ScDPSaveDimension::HasInvisibleMember() const
+{
+    MemberList::const_iterator itrMem = maMemberList.begin(), itrMemEnd = maMemberList.end();
+    for (; itrMem != itrMemEnd; ++itrMem)
+    {
+        const ScDPSaveMember* pMem = *itrMem;
+        if (!pMem->GetIsVisible())
+            return true;
+    }
+    return false;
 }
 
 // -----------------------------------------------------------------------
@@ -666,7 +711,9 @@ ScDPSaveData::ScDPSaveData() :
     nIgnoreEmptyMode( SC_DPSAVEMODE_DONTKNOW ),
     nRepeatEmptyMode( SC_DPSAVEMODE_DONTKNOW ),
     bFilterButton( TRUE ),
-    bDrillDown( TRUE )
+    bDrillDown( TRUE ),
+    mbDimensionMembersBuilt(false),
+    mpGrandTotalName(NULL)
 {
 }
 
@@ -676,7 +723,9 @@ ScDPSaveData::ScDPSaveData(const ScDPSaveData& r) :
     nIgnoreEmptyMode( r.nIgnoreEmptyMode ),
     nRepeatEmptyMode( r.nRepeatEmptyMode ),
     bFilterButton( r.bFilterButton ),
-    bDrillDown( r.bDrillDown )
+    bDrillDown( r.bDrillDown ),
+    mbDimensionMembersBuilt(r.mbDimensionMembersBuilt),
+    mpGrandTotalName(NULL)
 {
     if ( r.pDimensionData )
         pDimensionData = new ScDPDimensionSaveData( *r.pDimensionData );
@@ -689,6 +738,9 @@ ScDPSaveData::ScDPSaveData(const ScDPSaveData& r) :
         ScDPSaveDimension* pNew = new ScDPSaveDimension( *(ScDPSaveDimension*)r.aDimList.GetObject(i) );
         aDimList.Insert( pNew, LIST_APPEND );
     }
+
+    if (r.mpGrandTotalName.get())
+        mpGrandTotalName.reset(new OUString(*r.mpGrandTotalName));
 }
 
 ScDPSaveData& ScDPSaveData::operator= ( const ScDPSaveData& r )
@@ -707,6 +759,7 @@ ScDPSaveData& ScDPSaveData::operator= ( const ScDPSaveData& r )
         nRepeatEmptyMode = r.nRepeatEmptyMode;
         bFilterButton    = r.bFilterButton;
         bDrillDown       = r.bDrillDown;
+        mbDimensionMembersBuilt = r.mbDimensionMembersBuilt;
 
         //  remove old dimensions
 
@@ -725,6 +778,9 @@ ScDPSaveData& ScDPSaveData::operator= ( const ScDPSaveData& r )
                 new ScDPSaveDimension( *(ScDPSaveDimension*)r.aDimList.GetObject(i) );
             aDimList.Insert( pNew, LIST_APPEND );
         }
+
+        if (r.mpGrandTotalName.get())
+            mpGrandTotalName.reset(new OUString(*r.mpGrandTotalName));
     }
     return *this;
 }
@@ -736,7 +792,8 @@ BOOL ScDPSaveData::operator== ( const ScDPSaveData& r ) const
          nIgnoreEmptyMode != r.nIgnoreEmptyMode ||
          nRepeatEmptyMode != r.nRepeatEmptyMode ||
          bFilterButton    != r.bFilterButton    ||
-         bDrillDown       != r.bDrillDown )
+         bDrillDown       != r.bDrillDown ||
+         mbDimensionMembersBuilt != r.mbDimensionMembersBuilt)
         return FALSE;
 
     if ( pDimensionData || r.pDimensionData )
@@ -752,6 +809,16 @@ BOOL ScDPSaveData::operator== ( const ScDPSaveData& r ) const
                 *(ScDPSaveDimension*)r.aDimList.GetObject(i) ) )
             return FALSE;
 
+    if (mpGrandTotalName.get())
+    {
+        if (!r.mpGrandTotalName.get())
+            return false;
+        if (!mpGrandTotalName->equals(*r.mpGrandTotalName))
+            return false;
+    }
+    else if (r.mpGrandTotalName.get())
+        return false;
+
     return TRUE;
 }
 
@@ -763,6 +830,16 @@ ScDPSaveData::~ScDPSaveData()
     aDimList.Clear();
 
     delete pDimensionData;
+}
+
+void ScDPSaveData::SetGrandTotalName(const OUString& rName)
+{
+    mpGrandTotalName.reset(new OUString(rName));
+}
+
+const OUString* ScDPSaveData::GetGrandTotalName() const
+{
+    return mpGrandTotalName.get();
 }
 
 ScDPSaveDimension* ScDPSaveData::GetDimensionByName(const String& rName)
@@ -779,7 +856,7 @@ ScDPSaveDimension* ScDPSaveData::GetDimensionByName(const String& rName)
     return pNew;
 }
 
-ScDPSaveDimension* ScDPSaveData::GetExistingDimensionByName(const String& rName)
+ScDPSaveDimension* ScDPSaveData::GetExistingDimensionByName(const String& rName) const
 {
     long nCount = aDimList.Count();
     for (long i=0; i<nCount; i++)
@@ -807,16 +884,25 @@ ScDPSaveDimension* ScDPSaveData::GetNewDimensionByName(const String& rName)
 
 ScDPSaveDimension* ScDPSaveData::GetDataLayoutDimension()
 {
-    ULONG nCount = aDimList.Count();
-    for (ULONG i=0; i<nCount; i++)
+    ScDPSaveDimension* pDim = GetExistingDataLayoutDimension();
+    if (pDim)
+        return pDim;
+
+    ScDPSaveDimension* pNew = new ScDPSaveDimension( String(), TRUE );
+    aDimList.Insert( pNew, LIST_APPEND );
+    return pNew;
+}
+
+ScDPSaveDimension* ScDPSaveData::GetExistingDataLayoutDimension() const
+{
+    long nCount = aDimList.Count();
+    for (long i=0; i<nCount; i++)
     {
         ScDPSaveDimension* pDim = (ScDPSaveDimension*)aDimList.GetObject(i);
         if ( pDim->IsDataLayout() )
             return pDim;
     }
-    ScDPSaveDimension* pNew = new ScDPSaveDimension( String(), TRUE );
-    aDimList.Insert( pNew, LIST_APPEND );
-    return pNew;
+    return NULL;
 }
 
 ScDPSaveDimension* ScDPSaveData::DuplicateDimension(const String& rName)
@@ -868,6 +954,18 @@ ScDPSaveDimension* ScDPSaveData::GetInnermostDimension(USHORT nOrientation)
             pInner = pDim;
     }
     return pInner;      // the last matching one
+}
+
+ScDPSaveDimension* ScDPSaveData::GetFirstDimension(sheet::DataPilotFieldOrientation eOrientation)
+{
+    long nCount = aDimList.Count();
+    for (long i = 0; i < nCount; ++i)
+    {
+        ScDPSaveDimension* pDim = static_cast<ScDPSaveDimension*>(aDimList.GetObject(i));
+        if (pDim->GetOrientation() == eOrientation && !pDim->IsDataLayout())
+            return pDim;
+    }
+    return NULL;
 }
 
 long ScDPSaveData::GetDataDimensionCount() const
@@ -982,6 +1080,10 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
         {
             // no error
         }
+
+        const OUString* pGrandTotalName = GetGrandTotalName();
+        if (pGrandTotalName)
+            ScUnoHelpFunctions::SetOptionalPropertyValue(xSourceProp, SC_UNO_GRANDTOTAL_NAME, *pGrandTotalName);
     }
 
     // exceptions in the other calls are errors
@@ -1100,3 +1202,58 @@ void ScDPSaveData::SetDimensionData( const ScDPDimensionSaveData* pNew )
         pDimensionData = NULL;
 }
 
+void ScDPSaveData::BuildAllDimensionMembers(ScDPTableData* pData)
+{
+    if (mbDimensionMembersBuilt)
+        return;
+
+    // First, build a dimension name-to-index map.
+    typedef hash_map<OUString, long, ::rtl::OUStringHash> NameIndexMap;
+    NameIndexMap aMap;
+    long nColCount = pData->GetColumnCount();
+    for (long i = 0; i < nColCount; ++i)
+        aMap.insert( NameIndexMap::value_type(pData->getDimensionName(i), i));
+
+    NameIndexMap::const_iterator itrEnd = aMap.end();
+
+    sal_uInt32 n = aDimList.Count();
+    for (sal_uInt32 i = 0; i < n; ++i)
+    {
+        ScDPSaveDimension* pDim = static_cast<ScDPSaveDimension*>(aDimList.GetObject(i));
+        const String& rDimName = pDim->GetName();
+        if (!rDimName.Len())
+            // empty dimension name.  It must be data layout.
+            continue;
+
+        NameIndexMap::const_iterator itr = aMap.find(rDimName);
+        if (itr == itrEnd)
+            // dimension name not in the data.  This should never happen!
+            continue;
+
+        long nDimIndex = itr->second;
+        const TypedScStrCollection& rMembers = pData->GetColumnEntries(nDimIndex);
+        sal_uInt16 nMemberCount = rMembers.GetCount();
+        for (sal_uInt16 j = 0; j < nMemberCount; ++j)
+        {
+            const String& rMemName = rMembers[j]->GetString();
+            if (pDim->GetExistingMemberByName(rMemName))
+                // this member instance already exists.  nothing to do.
+                continue;
+
+            auto_ptr<ScDPSaveMember> pNewMember(new ScDPSaveMember(rMemName));
+            pNewMember->SetIsVisible(true);
+            pDim->AddMember(pNewMember.release());
+        }
+    }
+
+    mbDimensionMembersBuilt = true;
+}
+
+bool ScDPSaveData::HasInvisibleMember(const OUString& rDimName) const
+{
+    ScDPSaveDimension* pDim = GetExistingDimensionByName(rDimName);
+    if (!pDim)
+        return false;
+
+    return pDim->HasInvisibleMember();
+}

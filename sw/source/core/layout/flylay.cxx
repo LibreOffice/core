@@ -600,7 +600,7 @@ void SwFlyLayFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
         SwPageFrm *pOldPage = GetPageFrm();
         AnchorFrm()->RemoveFly( this );
 
-        if( FLY_PAGE == pAnch->GetAnchorId() )
+        if ( FLY_AT_PAGE == pAnch->GetAnchorId() )
         {
             USHORT nPgNum = pAnch->GetPageNum();
             SwRootFrm *pRoot = FindRootFrm();
@@ -955,7 +955,7 @@ void SwPageFrm::AppendDrawObjToPage( SwAnchoredObject& _rNewObj )
             _rNewObj.DrawObj()->SetOrdNum( nNewNum );
     }
 
-    if ( FLY_IN_CNTNT == _rNewObj.GetFrmFmt().GetAnchor().GetAnchorId() )
+    if ( FLY_AS_CHAR == _rNewObj.GetFrmFmt().GetAnchor().GetAnchorId() )
     {
         return;
     }
@@ -999,7 +999,8 @@ void SwPageFrm::RemoveDrawObjFromPage( SwAnchoredObject& _rToRemoveObj )
         }
         if ( GetUpper() )
         {
-            if ( FLY_IN_CNTNT != _rToRemoveObj.GetFrmFmt().GetAnchor().GetAnchorId() )
+            if (FLY_AS_CHAR !=
+                    _rToRemoveObj.GetFrmFmt().GetAnchor().GetAnchorId())
             {
                 ((SwRootFrm*)GetUpper())->SetSuperfluous();
                 InvalidatePage();
@@ -1333,7 +1334,7 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
         const SwDrawContact *pC = (const SwDrawContact*)GetUserCall(pSdrObj);
         const SwFrmFmt  *pFmt = (const SwFrmFmt*)pC->GetFmt();
         const SwFmtAnchor &rAnch = pFmt->GetAnchor();
-        if ( FLY_IN_CNTNT == rAnch.GetAnchorId() )
+        if ( FLY_AS_CHAR == rAnch.GetAnchorId() )
         {
             const SwFrm* pAnchorFrm = pC->GetAnchorFrm( pSdrObj );
             if( !pAnchorFrm )

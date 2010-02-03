@@ -552,20 +552,18 @@ String STR_COPYTABLE_TITLE_COPY
     Text [ en-US ] = "Copy table" ;
 };
 
-ErrorBox ERROR_INVALID_TABLE_NAME
+String STR_INVALID_TABLE_NAME
 {
-    Buttons = WB_OK;
-    Message [ en-US ] = "This table name is not valid in the current database.";
+    Text [ en-US ] = "This table name is not valid in the current database.";
 };
 String STR_SUGGEST_APPEND_TABLE_DATA
 {
     Text [ en-US ] = "Choose the option 'Append data' on the first page to append data to an existing table.";
 };
 
-ErrorBox ERROR_INVALID_TABLE_NAME_LENGTH
+String STR_INVALID_TABLE_NAME_LENGTH
 {
-    Buttons = WB_OK;
-    Message [ en-US ] = "Please change the table name. It is too long.";
+    Text [ en-US ] = "Please change the table name. It is too long.";
 };
 
 Image IMG_SORTUP_H

@@ -96,9 +96,7 @@ public final class StyleMapperKey
 
             final StyleMapperKey that = (StyleMapperKey) o;
 
-            if ((attributeName != null ? !attributeName.equals(that.attributeName) : that.attributeName != null) ||
-                    (attributeNamespace != null ? !attributeNamespace.equals(that.attributeNamespace) : that.attributeNamespace != null) ||
-                    !elementName.equals(that.elementName) || !elementNamespace.equals(that.elementNamespace))
+            if ((attributeName != null ? !attributeName.equals(that.attributeName) : that.attributeName != null) || (attributeNamespace != null ? !attributeNamespace.equals(that.attributeNamespace) : that.attributeNamespace != null) || !elementName.equals(that.elementName) || !elementNamespace.equals(that.elementNamespace))
             {
                 return false;
             }

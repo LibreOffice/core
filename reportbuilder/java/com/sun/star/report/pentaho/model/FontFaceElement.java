@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.model;
 
 import org.jfree.report.structure.Section;
@@ -42,19 +40,18 @@ import com.sun.star.report.pentaho.OfficeNamespaces;
  */
 public class FontFaceElement extends Section
 {
-  public FontFaceElement()
-  {
-  }
 
-  public String getStyleName()
-  {
-    return (String) getAttribute(OfficeNamespaces.STYLE_NS, "name");
-  }
+    public FontFaceElement()
+    {
+    }
 
-  public void setStyleName(final String name)
-  {
-    setAttribute(OfficeNamespaces.STYLE_NS, "name", name);
-  }
+    public String getStyleName()
+    {
+        return (String) getAttribute(OfficeNamespaces.STYLE_NS, "name");
+    }
 
-
+    public void setStyleName(final String name)
+    {
+        setAttribute(OfficeNamespaces.STYLE_NS, "name", name);
+    }
 }

@@ -30,6 +30,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <hintids.hxx>
 #include <i18npool/lang.h>
 #include <svl/slstitm.hxx>
@@ -53,7 +54,6 @@
 #include <svx/outliner.hxx>
 #include <svx/editstat.hxx>
 #include <svx/svdoutl.hxx>
-#include <unoobj.hxx>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
@@ -67,12 +67,8 @@
 #include <swundo.hxx>
 #include <breakit.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif

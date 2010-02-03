@@ -911,7 +911,7 @@ OSQLParseNode* OSQLParser::convertNode(sal_Int32 nType,OSQLParseNode*& pLiteral)
             }
             break;
         default:
-            OSL_ENSURE(0,"Not handled!");
+            ;
         }
     }
     return pReturn;

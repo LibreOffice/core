@@ -30,13 +30,17 @@
 #ifndef _UNOFIELD_HXX
 #define _UNOFIELD_HXX
 
-#include <com/sun/star/text/XDependentTextField.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
+#include <com/sun/star/text/XDependentTextField.hpp>
+
+#include <cppuhelper/implbase5.hxx>
+
 #include <calbck.hxx>
-#include <unoobj.hxx>
 #include <unocoll.hxx>
 #include <RefreshListenerContainer.hxx>
+
 
 class SwFieldType;
 class SwDoc;

@@ -561,6 +561,10 @@
 #define SC_UNO_ROWFIELDCOUNT        "RowFieldCount"
 #define SC_UNO_COLUMNFIELDCOUNT     "ColumnFieldCount"
 #define SC_UNO_DATAFIELDCOUNT       "DataFieldCount"
+#define SC_UNO_LAYOUTNAME           "LayoutName"
+#define SC_UNO_FIELD_SUBTOTALNAME   "FieldSubtotalName"
+#define SC_UNO_GRANDTOTAL_NAME      "GrandTotalName"
+#define SC_UNO_HAS_HIDDEN_MEMBER    "HasHiddenMember"
 
 //  (preliminary:)
 #define SC_UNO_REFVALUE             "ReferenceValue"

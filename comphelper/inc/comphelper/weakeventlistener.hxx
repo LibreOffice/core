@@ -76,7 +76,7 @@ namespace comphelper
 
         inline void resetListener( )
         {
-            m_aListener = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >();
+            m_aListener.clear();
         }
 
 

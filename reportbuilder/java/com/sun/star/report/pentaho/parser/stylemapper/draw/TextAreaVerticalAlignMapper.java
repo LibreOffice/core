@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.parser.stylemapper.draw;
 
 import com.sun.star.report.pentaho.parser.stylemapper.OneOfConstantsMapper;
@@ -37,12 +35,13 @@ import org.jfree.layouting.input.style.values.CSSConstant;
 
 public class TextAreaVerticalAlignMapper extends OneOfConstantsMapper
 {
-  public TextAreaVerticalAlignMapper ()
-  {
-    super (BoxStyleKeys.BOX_VERTICAL_ALIGN);
-    addMapping("top", new CSSConstant("top"));
-    addMapping("bottom", new CSSConstant("bottom"));
-    addMapping("middle", new CSSConstant("middle"));
-    addMapping("justify", new CSSConstant("justify"));
-  }
+
+    public TextAreaVerticalAlignMapper()
+    {
+        super(BoxStyleKeys.BOX_VERTICAL_ALIGN);
+        addMapping("top", new CSSConstant("top"));
+        addMapping("bottom", new CSSConstant("bottom"));
+        addMapping("middle", new CSSConstant("middle"));
+        addMapping("justify", new CSSConstant("justify"));
+    }
 }

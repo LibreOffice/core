@@ -186,6 +186,7 @@ public:
     // <--
     SvxNumberFormat(const SvxNumberFormat& rFormat);
     SvxNumberFormat(SvStream &rStream);
+
     virtual ~SvxNumberFormat();
 
     SvStream&       Store(SvStream &rStream, FontToSubsFontConverter pConverter);

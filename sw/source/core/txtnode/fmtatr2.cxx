@@ -57,7 +57,6 @@
 #include <ndtxt.hxx> // for meta
 #include <doc.hxx> // for meta
 #include <unometa.hxx>
-#include <unoobj.hxx> // SwXTextRange
 #include <docsh.hxx>
 #include <svl/zforlist.hxx> // GetNumberFormat
 
@@ -650,19 +649,28 @@ void SwFmtMeta::SetTxtAttr(SwTxtMeta * const i_pTxtAttr)
     }
 }
 
-void SwFmtMeta::NotifyRemoval()
+void SwFmtMeta::NotifyChangeTxtNode(SwTxtNode *const pTxtNode)
 {
     // N.B.: do not reset m_pTxtAttr here: see call in nodes.cxx,
     // where the hint is not deleted!
     ASSERT(m_pMeta, "NotifyRemoval: no meta ?");
     if (m_pMeta)
     {
-        SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT,
-            &static_cast<SwModify&>(*m_pMeta) ); // cast to proper base class!
-        m_pMeta->Modify(&aMsgHint, &aMsgHint);
+        if (!pTxtNode)
+        {
+            SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT,
+                &static_cast<SwModify&>(*m_pMeta) ); // cast to base class!
+            m_pMeta->Modify(&aMsgHint, &aMsgHint);
+        }
+        else
+        {   // do not call Modify, that would call SwXMeta::Modify!
+            m_pMeta->NotifyChangeTxtNode();
+        }
     }
 }
 
+// UGLY: this really awful method fixes up an inconsistent state,
+// and if it is not called when copying, total chaos will undoubtedly ensue
 void SwFmtMeta::DoCopy(SwFmtMeta & rOriginalMeta)
 {
     ASSERT(m_pMeta, "DoCopy called for SwFmtMeta with no sw::Meta?");
@@ -673,6 +681,8 @@ void SwFmtMeta::DoCopy(SwFmtMeta & rOriginalMeta)
         // inserted via MakeTxtAttr! so fix it up to point at the original item
         // (maybe would be better to tell MakeTxtAttr that it creates a copy?)
         pOriginal->SetFmtMeta(&rOriginalMeta);
+        // force pOriginal to register in original text node!
+        pOriginal->NotifyChangeTxtNode();
         if (RES_TXTATR_META == Which())
         {
             m_pMeta.reset( new ::sw::Meta(this) );
@@ -685,7 +695,10 @@ void SwFmtMeta::DoCopy(SwFmtMeta & rOriginalMeta)
             m_pMeta = pTargetDoc->GetMetaFieldManager().makeMetaField( this,
                 pMetaField->m_nNumberFormat, pMetaField->IsFixedLanguage() );
         }
+        // this cannot be done in Clone: a Clone is not necessarily a copy!
         m_pMeta->RegisterAsCopyOf(*pOriginal);
+        // force copy Meta to register in target text node!
+        m_pMeta->NotifyChangeTxtNode();
     }
 }
 
@@ -718,15 +731,28 @@ SwTxtNode * Meta::GetTxtNode() const
     return (pTxtAttr) ? pTxtAttr->GetTxtNode() : 0;
 }
 
-// SwClient
-void Meta::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
+void Meta::NotifyChangeTxtNode()
 {
     SwTxtNode * const pTxtNode( GetTxtNode() );
     if (pTxtNode && (GetRegisteredIn() != pTxtNode))
     {
         pTxtNode->Add(this);
     }
+    else if (!pTxtNode && GetRegisteredIn())
+    {
+        const_cast<SwModify *>(GetRegisteredIn())->Remove(this);
+    }
+}
+
+// SwClient
+void Meta::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
+{
+    NotifyChangeTxtNode();
     SwModify::Modify(pOld, pNew);
+    if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
+    {   // invalidate cached uno object
+        SetXMeta(uno::Reference<rdf::XMetadatable>(0));
+    }
 }
 
 // sw::Metadatable
@@ -765,31 +791,7 @@ bool Meta::IsInContent() const
 ::com::sun::star::uno::Reference< ::com::sun::star::rdf::XMetadatable >
 Meta::MakeUnoObject()
 {
-    // re-use existing SwXMeta
-    SwClientIter iter( *this );
-    SwClient * pClient( iter.First( TYPE( SwXMeta ) ) );
-    while (pClient) {
-        SwXMeta *const pMeta( dynamic_cast<SwXMeta*>(pClient) );
-        if (pMeta && pMeta->GetCoreObject() == this) {
-            return pMeta;
-        }
-        pClient = iter.Next();
-    }
-
-    // create new SwXMeta
-    SwTxtMeta * const pTxtAttr( GetTxtAttr() );
-    OSL_ENSURE(pTxtAttr, "MakeUnoObject: no text attr?");
-    if (!pTxtAttr) return 0;
-    SwTxtNode * const pTxtNode( pTxtAttr->GetTxtNode() );
-    OSL_ENSURE(pTxtNode, "MakeUnoObject: no text node?");
-    if (!pTxtNode) return 0;
-    const SwPosition aPos(*pTxtNode, *pTxtAttr->GetStart());
-    const uno::Reference<text::XText> xParentText(
-            SwXTextRange::CreateParentXText(pTxtNode->GetDoc(), aPos) );
-    if (!xParentText.is()) return 0;
-    return (RES_TXTATR_META == m_pFmt->Which())
-        ? new SwXMeta     (pTxtNode->GetDoc(), xParentText, 0, pTxtAttr)
-        : new SwXMetaField(pTxtNode->GetDoc(), xParentText, 0, pTxtAttr);
+    return SwXMeta::CreateXMeta(*this);
 }
 
 /*************************************************************************

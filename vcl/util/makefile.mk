@@ -303,6 +303,7 @@ SHL2STDLIBS=\
             $(VOSLIB)           \
             $(BASEGFXLIB)	\
             $(UNOTOOLSLIB) \
+            $(COMPHELPERLIB)	\
             $(CPPUHELPERLIB) \
             $(CPPULIB) \
             $(SALLIB)

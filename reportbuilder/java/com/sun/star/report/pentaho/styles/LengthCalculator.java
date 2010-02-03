@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.styles;
 
 import org.jfree.layouting.input.style.values.CSSNumericType;
@@ -44,73 +42,72 @@ import org.jfree.layouting.input.style.values.CSSNumericValue;
  */
 public class LengthCalculator
 {
-  // and centimeter (x10)
-  private double millimeter;
+    // and centimeter (x10)
 
-  // and pica (x12) and inch(x72). Px is assumed to be in 96dpi.
-  private double point;
+    private double millimeter;
+    // and pica (x12) and inch(x72). Px is assumed to be in 96dpi.
+    private double point;
+    private double pixel;
 
-  private double pixel;
-
-  public LengthCalculator()
-  {
-  }
-
-  public void add (final CSSNumericValue value)
-  {
-    if (value == null)
+    public LengthCalculator()
     {
-      return;
     }
 
-    final CSSNumericType numericType = value.getType();
-    if (numericType == CSSNumericType.CM)
+    public void add(final CSSNumericValue value)
     {
-      millimeter += value.getValue() * 10;
-    }
-    else if (numericType == CSSNumericType.MM)
-    {
-      millimeter += value.getValue();
-    }
-    else if (numericType == CSSNumericType.PT)
-    {
-      point += value.getValue();
-    }
-    else if (numericType == CSSNumericType.PC)
-    {
-      point += 12 * value.getValue();
-    }
-    else if (numericType == CSSNumericType.INCH)
-    {
-      point += 72 * value.getValue();
-    }
-    else if (numericType == CSSNumericType.PX)
-    {
-      pixel += value.getValue();
-    }
-    // LOGGER.debug ("Adding " + value  + " [mm: " + millimeter + "] [pt: " + point + "] px: [" + pixel + "]");
-  }
+        if (value == null)
+        {
+            return;
+        }
 
-  public CSSNumericValue getResult ()
-  {
-    if (pixel == 0 && point == 0)
-    {
-      return CSSNumericValue.createValue(CSSNumericType.MM, millimeter);
+        final CSSNumericType numericType = value.getType();
+        if (numericType == CSSNumericType.CM)
+        {
+            millimeter += value.getValue() * 10;
+        }
+        else if (numericType == CSSNumericType.MM)
+        {
+            millimeter += value.getValue();
+        }
+        else if (numericType == CSSNumericType.PT)
+        {
+            point += value.getValue();
+        }
+        else if (numericType == CSSNumericType.PC)
+        {
+            point += 12 * value.getValue();
+        }
+        else if (numericType == CSSNumericType.INCH)
+        {
+            point += 72 * value.getValue();
+        }
+        else if (numericType == CSSNumericType.PX)
+        {
+            pixel += value.getValue();
+        }
+        // LOGGER.debug ("Adding " + value  + " [mm: " + millimeter + "] [pt: " + point + "] px: [" + pixel + "]");
     }
-    if (pixel == 0 && millimeter == 0)
-    {
-      return CSSNumericValue.createValue(CSSNumericType.PT, point);
-    }
-    if (point == 0 && millimeter == 0)
-    {
-      return CSSNumericValue.createValue(CSSNumericType.PX, pixel);
-    }
-    // else convert it.
 
-    double result = point;
-    result += (millimeter * 10 * 72 / 254);
-    result += pixel * 72 / 96;
+    public CSSNumericValue getResult()
+    {
+        if (pixel == 0 && point == 0)
+        {
+            return CSSNumericValue.createValue(CSSNumericType.MM, millimeter);
+        }
+        if (pixel == 0 && millimeter == 0)
+        {
+            return CSSNumericValue.createValue(CSSNumericType.PT, point);
+        }
+        if (point == 0 && millimeter == 0)
+        {
+            return CSSNumericValue.createValue(CSSNumericType.PX, pixel);
+        }
+        // else convert it.
 
-    return CSSNumericValue.createValue(CSSNumericType.PT, result);
-  }
+        double result = point;
+        result += (millimeter * 10 * 72 / 254);
+        result += pixel * 72 / 96;
+
+        return CSSNumericValue.createValue(CSSNumericType.PT, result);
+    }
 }

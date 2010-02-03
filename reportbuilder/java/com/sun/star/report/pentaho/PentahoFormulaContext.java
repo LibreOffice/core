@@ -44,6 +44,7 @@ import org.pentaho.reporting.libraries.base.config.Configuration;
  */
 public class PentahoFormulaContext implements FormulaContext
 {
+
     final private FormulaContext backend;
     final private Configuration config;
 

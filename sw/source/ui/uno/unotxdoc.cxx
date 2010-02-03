@@ -53,7 +53,10 @@
 #include <svl/stritem.hxx>
 #include <unotxdoc.hxx>
 #include <svl/numuno.hxx>
-#include <unoobj.hxx>
+#include <fldbas.hxx>
+#include <unotextbodyhf.hxx>
+#include <unotextrange.hxx>
+#include <unotextcursor.hxx>
 #include <unosett.hxx>
 #include <unocoll.hxx>
 #include <unoredlines.hxx>
@@ -764,19 +767,12 @@ Reference< util::XReplaceDescriptor >  SwXTextDocument::createReplaceDescriptor(
 SwUnoCrsr*  SwXTextDocument::CreateCursorForSearch(Reference< XTextCursor > & xCrsr)
 {
     getText();
-     XText* pText = xBodyText.get();
+    XText *const pText = xBodyText.get();
     SwXBodyText* pBText = (SwXBodyText*)pText;
-    xCrsr = pBText->CreateTextCursor(sal_True);
+    SwXTextCursor *const pXTextCursor = pBText->CreateTextCursor(true);
+    xCrsr.set( static_cast<text::XWordCursor*>(pXTextCursor) );
 
-    Reference<XUnoTunnel> xRangeTunnel( xCrsr, UNO_QUERY);
-    SwXTextCursor* pxUnoCrsr = 0;
-    if(xRangeTunnel.is())
-    {
-        pxUnoCrsr = reinterpret_cast<SwXTextCursor*>(xRangeTunnel->getSomething(
-                                SwXTextCursor::getUnoTunnelId()));
-    }
-
-    SwUnoCrsr*  pUnoCrsr = pxUnoCrsr->GetCrsr();
+    SwUnoCrsr *const pUnoCrsr = pXTextCursor->GetCursor();
     pUnoCrsr->SetRemainInSection(sal_False);
     return pUnoCrsr;
 }
@@ -1007,10 +1003,7 @@ Reference< XIndexAccess >
     if(!pResultCrsr)
         throw RuntimeException();
     Reference< XIndexAccess >  xRet;
-    if(nResult)
-        xRet = new SwXTextRanges(pResultCrsr);
-    else
-        xRet = new SwXTextRanges();
+    xRet = new SwXTextRanges( (nResult) ? pResultCrsr : 0 );
     delete pResultCrsr;
     return xRet;
 }
@@ -1030,11 +1023,10 @@ Reference< XInterface >  SwXTextDocument::findFirst(const Reference< util::XSear
     Reference< XInterface >  xRet;
     if(nResult)
     {
-        Reference< XTextRange >  xTempRange = SwXTextRange::CreateTextRangeFromPosition(
-                        pDocShell->GetDoc(),
-                        *pResultCrsr->GetPoint(),
-                        pResultCrsr->GetMark());
-        xRet = *new SwXTextCursor(xTempRange->getText(), pResultCrsr);
+        const uno::Reference< text::XText >  xParent =
+            ::sw::CreateParentXText(*pDocShell->GetDoc(),
+                    *pResultCrsr->GetPoint());
+        xRet = *new SwXTextCursor(xParent, *pResultCrsr);
         delete pResultCrsr;
     }
     return xRet;
@@ -1058,12 +1050,11 @@ Reference< XInterface >  SwXTextDocument::findNext(const Reference< XInterface >
     Reference< XInterface >  xRet;
     if(nResult)
     {
-        Reference< XTextRange >  xTempRange = SwXTextRange::CreateTextRangeFromPosition(
-                        pDocShell->GetDoc(),
-                        *pResultCrsr->GetPoint(),
-                        pResultCrsr->GetMark());
+        const uno::Reference< text::XText >  xParent =
+            ::sw::CreateParentXText(*pDocShell->GetDoc(),
+                    *pResultCrsr->GetPoint());
 
-        xRet = *new SwXTextCursor(xTempRange->getText(), pResultCrsr);
+        xRet = *new SwXTextCursor(xParent, *pResultCrsr);
         delete pResultCrsr;
     }
     return xRet;

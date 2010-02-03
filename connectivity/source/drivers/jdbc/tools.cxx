@@ -153,6 +153,8 @@ java_util_Properties* connectivity::createStringPropertyArray(const Sequence< Pr
             &&  pBegin->Name.compareToAscii( "SupportsTableCreation" )
             &&  pBegin->Name.compareToAscii( "UseJava" )
             &&  pBegin->Name.compareToAscii( "Authentication" )
+            &&  pBegin->Name.compareToAscii( "PreferDosLikeLineEnds" )
+            &&  pBegin->Name.compareToAscii( "PrimaryKeySupport" )
             )
         {
             ::rtl::OUString aStr;

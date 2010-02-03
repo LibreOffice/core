@@ -469,3 +469,11 @@ String RID_STR_EMBEDDED_DATABASE
 {
     Text [ en-US ] = "Embedded database";
 };
+String RID_STR_NO_DIFF_CAT
+{
+    Text [ en-US ] = "You cannot select different categories.";
+};
+String RID_STR_UNSUPPORTED_OBJECT_TYPE
+{
+    Text [ en-US ] = "Unsupported object type found ($type$).";
+};

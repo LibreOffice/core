@@ -53,6 +53,7 @@ public interface JobProgressIndicator
      * Stopped indicators must ignore that call.
      *
      * @param string the progress description
+     * @param text
      * @param maxValue the maximum value
      * @see JobProgressIndicator#setText(String)
      */

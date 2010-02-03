@@ -115,7 +115,6 @@ SLOFILES =	\
         $(SLO)$/unotextmarkup.obj\
         $(SLO)$/TextCursorHelper.obj \
     $(SLO)$/unotext.obj\
-    $(SLO)$/unoclbck.obj\
     $(SLO)$/unomap.obj\
     $(SLO)$/unoprnms.obj\
     $(SLO)$/XMLRangeHelper.obj

@@ -36,11 +36,19 @@
 #include "vcl/dllapi.h"
 #include "vcl/impdel.hxx"
 
+#include <com/sun/star/uno/Reference.hxx>
+
 #include <list>
 #include <vector>
 
 class Window;
 class Menu;
+
+namespace com { namespace sun { namespace star {
+    namespace accessibility {
+        class XAccessible;
+    }
+}}}
 
 #define VCLEVENT_OBJECT_DYING                  1
 
@@ -242,6 +250,17 @@ public:
     USHORT GetItemPos() const { return mnPos; }
 };
 
+class VCL_DLLPUBLIC VclAccessibleEvent: public VclSimpleEvent
+{
+public:
+    VclAccessibleEvent( ULONG n, const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxAccessible );
+    virtual ~VclAccessibleEvent();
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetAccessible() const;
+
+private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > mxAccessible;
+};
+
 class VCL_DLLPUBLIC VclEventListeners : public std::list<Link>
 {
 public:
@@ -262,7 +281,10 @@ class VCL_DLLPUBLIC VclEventListeners2 : public vcl::DeletionNotifier
         std::list< Link >::iterator     m_aIt;
         bool                            m_bWasInvalidated;
 
-        ListenerIt() : m_bWasInvalidated( false ) {}
+        ListenerIt(const std::list<Link>::iterator& rIt)
+            : m_aIt(rIt)
+            , m_bWasInvalidated( false )
+        {}
     };
 
     std::vector< ListenerIt >      m_aIterators;

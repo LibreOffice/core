@@ -33,9 +33,7 @@
 
 
 #include <sfx2/viewfrm.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <sfx2/dispatch.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <IDocumentUndoRedo.hxx>
@@ -45,24 +43,19 @@
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <docsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <chartins.hxx>
 #include <tablemgr.hxx>
 #include <frmfmt.hxx>
 #include <swtable.hxx>
 #include <tblsel.hxx>
-#include <unoobj.hxx>
 #include <unochart.hxx>
 #include <autoedit.hxx>
 #include <doc.hxx>
 
 #include <edtwin.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #ifndef _CHARTINS_HRC
 #include <chartins.hrc>
 #endif

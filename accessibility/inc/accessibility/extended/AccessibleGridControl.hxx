@@ -64,14 +64,6 @@ protected:
 
     virtual ~AccessibleGridControl();
 
-    /** sets the XAccessible which created the context
-
-        <p>To be called only once, and only if in the ctor NULL was passed.</p>
-    */
-    void    setCreator(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxCreator
-    );
-
     /** Cleans up members. */
     using AccessibleGridControlBase::disposing;
     virtual void SAL_CALL disposing();

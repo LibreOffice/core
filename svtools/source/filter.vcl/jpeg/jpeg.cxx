@@ -656,10 +656,14 @@ void* JPEGWriter::GetScanline( long nY )
                     aColor = pAcc->GetPaletteColor( (BYTE) pAcc->GetPixel( nY, nX ) );
 #ifndef SYSTEM_JPEG
                     *pTmp++ = aColor.GetBlue();
+                    if ( bGreys )
+                        continue;
                     *pTmp++ = aColor.GetGreen();
                     *pTmp++ = aColor.GetRed();
 #else
                     *pTmp++ = aColor.GetRed();
+                    if ( bGreys )
+                        continue;
                     *pTmp++ = aColor.GetGreen();
                     *pTmp++ = aColor.GetBlue();
 #endif
@@ -672,10 +676,14 @@ void* JPEGWriter::GetScanline( long nY )
                     aColor = pAcc->GetPixel( nY, nX );
 #ifndef SYSTEM_JPEG
                     *pTmp++ = aColor.GetBlue();
+                    if ( bGreys )
+                        continue;
                     *pTmp++ = aColor.GetGreen();
                     *pTmp++ = aColor.GetRed();
 #else
                     *pTmp++ = aColor.GetRed();
+                    if ( bGreys )
+                        continue;
                     *pTmp++ = aColor.GetGreen();
                     *pTmp++ = aColor.GetBlue();
 #endif
@@ -711,20 +719,43 @@ BOOL JPEGWriter::Write( const Graphic& rGraphic )
 
     pAcc = aGraphicBmp.AcquireReadAccess();
 
+    if ( !bGreys )  // bitmap was not explicitely converted into greyscale,
+    {               // check if source is greyscale only
+
+        sal_Bool bIsGrey = sal_True;
+
+        long nWidth = pAcc->Width();
+        for ( long nY = 0; bIsGrey && ( nY < pAcc->Height() ); nY++ )
+        {
+            BitmapColor aColor;
+            for( long nX = 0L; bIsGrey && ( nX < nWidth ); nX++ )
+            {
+                aColor = pAcc->HasPalette() ? pAcc->GetPaletteColor( (BYTE) pAcc->GetPixel( nY, nX ) )
+                                            : pAcc->GetPixel( nY, nX );
+                bIsGrey = ( aColor.GetRed() == aColor.GetGreen() ) && ( aColor.GetRed() == aColor.GetBlue() );
+            }
+        }
+        if ( bIsGrey )
+            bGreys = sal_True;
+    }
+
     if( pAcc )
     {
+        if ( bGreys )
+            bNative = ( pAcc->GetScanlineFormat() == BMP_FORMAT_8BIT_PAL );
+        else
 #ifndef SYSTEM_JPEG
-        bNative = ( pAcc->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_BGR );
+            bNative = ( pAcc->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_BGR );
 #else
-        bNative = ( pAcc->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_RGB );
+            bNative = ( pAcc->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_RGB );
 #endif
 
         if( !bNative )
-            pBuffer = new BYTE[ AlignedWidth4Bytes( pAcc->Width() * 24L ) ];
+            pBuffer = new BYTE[ AlignedWidth4Bytes( bGreys ? pAcc->Width() * 8L : pAcc->Width() * 24L ) ];
 
         JPEGCallbackStruct aCallbackData;
         aCallbackData.xStatusIndicator = xStatusIndicator;
-        bRet = (BOOL) WriteJPEG( this, &rOStm, pAcc->Width(), pAcc->Height(), nQuality, &aCallbackData );
+        bRet = (BOOL) WriteJPEG( this, &rOStm, pAcc->Width(), pAcc->Height(), bGreys, nQuality, &aCallbackData );
 
         delete[] pBuffer;
         pBuffer = NULL;

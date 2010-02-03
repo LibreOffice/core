@@ -114,6 +114,11 @@ struct TxtAttrDeleter
     TxtAttrDeleter( SwDoc & rDoc ) : m_rPool( rDoc.GetAttrPool() ) { }
     void operator() (SwTxtAttr * const pAttr)
     {
+        if (RES_TXTATR_META == pAttr->Which() ||
+            RES_TXTATR_METAFIELD == pAttr->Which())
+        {
+            static_cast<SwTxtMeta *>(pAttr)->ChgTxtNode(0); // prevents ASSERT
+        }
         SwTxtAttr::Destroy( pAttr, m_rPool );
     }
 };
@@ -159,7 +164,8 @@ bool isNestedAny(const xub_StrLen nStart1, const xub_StrLen nEnd1,
                  const xub_StrLen nStart2, const xub_StrLen nEnd2)
 {
     return ((nStart1 == nStart2) || (nEnd1 == nEnd2))
-        ? (nStart1 != nEnd1) // same start/end: nested except if hint1 empty
+        // same start/end: nested except if hint1 empty and hint2 not empty
+        ? (nStart1 != nEnd1) || (nStart2 == nEnd2)
         : ((nStart1 < nStart2) ? (nEnd1 >= nEnd2) : (nEnd1 <= nEnd2));
 }
 
@@ -1168,7 +1174,7 @@ void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
             break;
 
         case RES_TXTATR_TOXMARK:
-            nDelMsg = RES_TOXMARK_DELETED;
+            static_cast<SwTOXMark&>(pAttr->GetAttr()).InvalidateTOXMark();
             break;
 
         case RES_TXTATR_REFMARK:
@@ -1177,7 +1183,7 @@ void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
 
         case RES_TXTATR_META:
         case RES_TXTATR_METAFIELD:
-            static_cast<SwFmtMeta&>(pAttr->GetAttr()).NotifyRemoval();
+            static_cast<SwTxtMeta*>(pAttr)->ChgTxtNode(0);
             break;
 
         default:
@@ -1269,11 +1275,15 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                     InsertText( c, aIdx, nInsertFlags );
                     nInsMode |= nsSetAttrMode::SETATTR_NOTXTATRCHR;
 
-                    if( pAnchor && FLY_IN_CNTNT == pAnchor->GetAnchorId() &&
+                    if (pAnchor &&
+                        (FLY_AS_CHAR == pAnchor->GetAnchorId()) &&
                         pAnchor->GetCntntAnchor() &&
                         pAnchor->GetCntntAnchor()->nNode == *this &&
                         pAnchor->GetCntntAnchor()->nContent == aIdx )
-                        ((SwIndex&)pAnchor->GetCntntAnchor()->nContent)--;
+                    {
+                        const_cast<SwIndex&>(
+                            pAnchor->GetCntntAnchor()->nContent)--;
+                    }
                 }
                 pFly->SetAnchor( this );
 

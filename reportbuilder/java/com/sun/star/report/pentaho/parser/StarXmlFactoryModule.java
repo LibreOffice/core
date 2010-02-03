@@ -50,8 +50,7 @@ public class StarXmlFactoryModule implements XmlFactoryModule
     public int getDocumentSupport(final XmlDocumentInfo documentInfo)
     {
         final String rootNamespace = documentInfo.getRootElementNameSpace();
-        if (OfficeNamespaces.OFFICE_NS.equals(rootNamespace) &&
-                ("document-content".equals(documentInfo.getRootElement()) || "document".equals(documentInfo.getRootElement())))
+        if (OfficeNamespaces.OFFICE_NS.equals(rootNamespace) && ("document-content".equals(documentInfo.getRootElement()) || "document".equals(documentInfo.getRootElement())))
         {
             return XmlFactoryModule.RECOGNIZED_BY_NAMESPACE;
         }

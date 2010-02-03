@@ -31,55 +31,23 @@
 #ifndef DBAUI_WIZ_COPYTABLEDIALOG_HXX
 #define DBAUI_WIZ_COPYTABLEDIALOG_HXX
 
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATA_HPP_
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
-#endif
-#ifndef DBAUI_TYPEINFO_HXX
 #include "TypeInfo.hxx"
-#endif
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
-#ifndef _SVT_WIZDLG_HXX
 #include <svtools/wizdlg.hxx>
-#endif
-#ifndef DBAUI_DATABASEEXPORT_HXX
 #include "DExport.hxx"
-#endif
-#ifndef DBAUI_WIZ_TABBPAGE_HXX
 #include "WTabPage.hxx"
-#endif
-#ifndef DBAUI_FIELDDESCRIPTIONS_HXX
 #include "FieldDescriptions.hxx"
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XKEYSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
-#endif
-#ifndef _SV_LSTBOX_HXX
+#include <com/sun/star/task/XInteractionHandler.hpp>
 #include <vcl/lstbox.hxx>
-#endif
-
 #include <functional>
 
 namespace dbaui
@@ -299,6 +267,7 @@ namespace dbaui
 
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xFactory;
+        ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler>  m_xInteractionHandler;
 
         String                  m_sTypeNames;       // these type names are the ones out of the resource file
         sal_uInt32              m_nPageCount;
@@ -343,7 +312,8 @@ namespace dbaui
             const ICopyTableSourceObject&                                                           _rSourceObject,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >&          _xSourceConnection,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >&          _xConnection,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler>&   _xInteractionHandler
         );
 
         // used for importing rtf/html sources
@@ -445,6 +415,8 @@ namespace dbaui
         void showColumnTypeNotSupported(const ::rtl::OUString& _rColumnName);
 
         void removeColumnNameFromNameMap(const ::rtl::OUString& _sName);
+        void showError(const ::rtl::OUString& _sErrorMesage);
+        void showError(const ::com::sun::star::uno::Any& _aError);
     };
 }
 

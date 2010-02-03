@@ -242,7 +242,7 @@ public abstract class AbstractReportElementLayoutController
             }
             catch (DataSourceException e)
             {
-            // ignore .. assume that the reference has not changed.
+                // ignore .. assume that the reference has not changed.
             }
         }
         final LValue[] childValues = lValue.getChildValues();

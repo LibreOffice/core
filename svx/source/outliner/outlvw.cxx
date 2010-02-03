@@ -357,6 +357,18 @@ BOOL __EXPORT OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
         aDDStartPosRef=pEditView->GetWindow()->PixelToLogic( aDDStartPosPix,pOwner->GetRefMapMode());
         return TRUE;
     }
+
+    // special case for outliner view in impress, check if double click hits the page icon for toggle
+    if( (nPara == EE_PARA_NOT_FOUND) && (pOwner->ImplGetOutlinerMode() == OUTLINERMODE_OUTLINEVIEW) && (eTarget == MouseText) && (rMEvt.GetClicks() == 2) )
+    {
+        ESelection aSel( pEditView->GetSelection() );
+        nPara = aSel.nStartPara;
+        Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
+        if( (pPara && pOwner->pParaList->HasChilds(pPara)) && pPara->HasFlag(PARAFLAG_ISPAGE) )
+        {
+            ImpToggleExpand( pPara );
+        }
+    }
     return pEditView->MouseButtonDown( rMEvt );
 }
 

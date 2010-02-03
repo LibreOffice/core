@@ -53,9 +53,7 @@
 #include <fmturl.hxx>
 #include <fmthdft.hxx>
 #include <fmtcnct.hxx>
-#ifndef _FMTLINE_HXX
 #include <fmtline.hxx>
-#endif
 #include <tgrditem.hxx>
 #include <hfspacingitem.hxx>
 #include <fmtruby.hxx>
@@ -687,13 +685,13 @@ SfxItemPresentation SwFmtAnchor::GetPresentation
             USHORT nId = 0;
             switch ( GetAnchorId() )
             {
-                case FLY_AT_CNTNT:      //Absatzgebundener Rahmen
+                case FLY_AT_PARA:
                     nId = STR_FLY_AT_CNTNT;
                     break;
-                case FLY_IN_CNTNT:      //Zeichengebundener Rahmen
+                case FLY_AS_CHAR:
                     nId = STR_FLY_IN_CNTNT;
                     break;
-                case FLY_PAGE:          //Seitengebundener Rahmen
+                case FLY_AT_PAGE:
                     nId = STR_FLY_PAGE;
                     break;
                 default:;//prevent warning

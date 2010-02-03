@@ -73,6 +73,10 @@ extern "C" {
             return new IncludesCollection;
     }
 
+    void delete_IncludesCollection(IncludesCollection *m) {
+            delete m;
+    }
+
     int call_IncludesCollection_exists(IncludesCollection* m, const char * filePath) {
         return m->exists(filePath);
     }

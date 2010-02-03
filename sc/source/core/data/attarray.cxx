@@ -2117,7 +2117,8 @@ void ScAttrArray::InsertRow( SCROW nStartRow, SCSIZE nSize )
     }
 
     // Don't duplicate the merge flags in the inserted row.
-    RemoveFlags( nStartRow, nStartRow+nSize-1, SC_MF_ALL );
+    // #i108488# SC_MF_SCENARIO has to be allowed.
+    RemoveFlags( nStartRow, nStartRow+nSize-1, SC_MF_HOR | SC_MF_VER | SC_MF_AUTO | SC_MF_BUTTON );
 }
 
 

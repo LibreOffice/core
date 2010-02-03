@@ -36,6 +36,7 @@
 #include <vcl/dialog.hxx>
 
 class FixedLine;
+class TabControl;
 
 // ----------------------
 // - TabDialog -
@@ -60,6 +61,8 @@ public:
 
     virtual void        Resize();
     virtual void        StateChanged( StateChangedType nStateChange );
+
+    SAL_DLLPRIVATE TabControl* ImplGetFirstTabControl() const;
 
     void                AdjustLayout();
 

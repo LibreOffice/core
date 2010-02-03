@@ -43,7 +43,7 @@ public class AuthorFunctionDescription extends AbstractFunctionDescription
 
     public AuthorFunctionDescription()
     {
-        super("AUTHOR","com.sun.star.report.function.metadata.Author-Function");
+        super("AUTHOR", "com.sun.star.report.function.metadata.Author-Function");
     }
 
     public FunctionCategory getCategory()

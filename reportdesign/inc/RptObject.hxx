@@ -109,7 +109,6 @@ protected:
     virtual void SetSnapRectImpl(const Rectangle& _rRect) = 0;
     virtual SdrPage* GetImplPage() const = 0;
     virtual void SetObjectItemHelper(const SfxPoolItem& rItem);
-    sal_Bool IsInside(const Rectangle& _rRect,const Point& rPnt,USHORT nTol) const;
 
     /** called by instances of derived classes to implement their overloading of getUnoShape
     */

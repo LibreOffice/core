@@ -47,13 +47,9 @@
 #include <fmtornt.hxx>
 #include <svx/lrspitem.hxx>
 #include <svx/ulspitem.hxx>
-#ifndef _SVX_SVDOBJ_HXX
 #include <svx/svdobj.hxx>
-#endif
 #include <pam.hxx>
-#ifndef _ENVIRONMENTOFANCHOREDOBJECT
 #include <environmentofanchoredobject.hxx>
-#endif
 #include <frmtool.hxx>
 #include <ndtxt.hxx>
 #include <dflyobj.hxx>
@@ -209,7 +205,7 @@ void SwToCntntAnchoredObjectPosition::CalcPosition()
     {
         // if object is at-character anchored, determine character-rectangle
         // and frame, position has to be oriented at.
-        mbAnchorToChar = FLY_AUTO_CNTNT == rFrmFmt.GetAnchor().GetAnchorId();
+        mbAnchorToChar = (FLY_AT_CHAR == rFrmFmt.GetAnchor().GetAnchorId());
         if ( mbAnchorToChar )
         {
             const SwFmtAnchor& rAnch = rFrmFmt.GetAnchor();

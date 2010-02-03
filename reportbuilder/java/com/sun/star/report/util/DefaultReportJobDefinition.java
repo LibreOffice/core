@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.util;
 
 import com.sun.star.report.DataSourceFactory;
@@ -43,81 +41,79 @@ import com.sun.star.report.ReportJobDefinition;
 
 public class DefaultReportJobDefinition implements ReportJobDefinition
 {
-  public static final String OUTPUT_TYPE = "output-type";
 
-  private final DefaultParameterMap parameters;
-  private final DefaultJobProperties properties;
+    public static final String OUTPUT_TYPE = "output-type";
+    private final DefaultParameterMap parameters;
+    private final DefaultJobProperties properties;
 
-  public DefaultReportJobDefinition (final ReportEngineMetaData metaData)
-  {
-    this.parameters = new DefaultParameterMap();
-    this.properties = new DefaultJobProperties(metaData);
-  }
+    public DefaultReportJobDefinition(final ReportEngineMetaData metaData)
+    {
+        this.parameters = new DefaultParameterMap();
+        this.properties = new DefaultJobProperties(metaData);
+    }
 
-  public void setDataSourceFactory (final DataSourceFactory dataSourceFactory)
-          throws JobDefinitionException
-  {
-    this.properties.setProperty(ReportEngineParameterNames.INPUT_DATASOURCE_FACTORY, dataSourceFactory);
-  }
+    public void setDataSourceFactory(final DataSourceFactory dataSourceFactory)
+            throws JobDefinitionException
+    {
+        this.properties.setProperty(ReportEngineParameterNames.INPUT_DATASOURCE_FACTORY, dataSourceFactory);
+    }
 
-  public DataSourceFactory getDataSourceFactory ()
-  {
-    return (DataSourceFactory) this.properties.getProperty(ReportEngineParameterNames.INPUT_DATASOURCE_FACTORY);
-  }
+    public DataSourceFactory getDataSourceFactory()
+    {
+        return (DataSourceFactory) this.properties.getProperty(ReportEngineParameterNames.INPUT_DATASOURCE_FACTORY);
+    }
 
-  public InputRepository getInputRepository ()
-  {
-    return (InputRepository)
-            this.properties.getProperty(ReportEngineParameterNames.INPUT_REPOSITORY);
-  }
+    public InputRepository getInputRepository()
+    {
+        return (InputRepository) this.properties.getProperty(ReportEngineParameterNames.INPUT_REPOSITORY);
+    }
 
-  public void setInputRepository (final InputRepository inputRepository)
-          throws JobDefinitionException
-  {
-    this.properties.setProperty(ReportEngineParameterNames.INPUT_REPOSITORY, inputRepository);
-  }
+    public void setInputRepository(final InputRepository inputRepository)
+            throws JobDefinitionException
+    {
+        this.properties.setProperty(ReportEngineParameterNames.INPUT_REPOSITORY, inputRepository);
+    }
 
-  public OutputRepository getOutputRepository ()
-  {
-    return (OutputRepository)
-            this.properties.getProperty(ReportEngineParameterNames.OUTPUT_REPOSITORY);
-  }
+    public OutputRepository getOutputRepository()
+    {
+        return (OutputRepository) this.properties.getProperty(ReportEngineParameterNames.OUTPUT_REPOSITORY);
+    }
 
-  public void setOutputRepository (final OutputRepository outputRepository)
-          throws JobDefinitionException
-  {
-    this.properties.setProperty(ReportEngineParameterNames.OUTPUT_REPOSITORY, outputRepository);
-  }
+    public void setOutputRepository(final OutputRepository outputRepository)
+            throws JobDefinitionException
+    {
+        this.properties.setProperty(ReportEngineParameterNames.OUTPUT_REPOSITORY, outputRepository);
+    }
 
-  /**
-   * The parameters of the root report definition. The parameters for the subreports are
-   * defined using mappings, it would not make sense to define them here.
-   *
-   * @return a map container for query parameters.
-   */
-  public ParameterMap getQueryParameters ()
-  {
-    return parameters;
-  }
+    /**
+     * The parameters of the root report definition. The parameters for the subreports are
+     * defined using mappings, it would not make sense to define them here.
+     *
+     * @return a map container for query parameters.
+     */
+    public ParameterMap getQueryParameters()
+    {
+        return parameters;
+    }
 
-  public void setReportDefinitionName (final String reportDefinitionName)
-          throws JobDefinitionException
-  {
-    this.properties.setProperty(ReportEngineParameterNames.INPUT_NAME, reportDefinitionName);
-  }
+    public void setReportDefinitionName(final String reportDefinitionName)
+            throws JobDefinitionException
+    {
+        this.properties.setProperty(ReportEngineParameterNames.INPUT_NAME, reportDefinitionName);
+    }
 
-  /**
-   * The name under which we can load the report definition.
-   *
-   * @return the report definition's name.
-   */
-  public String getReportDefinitionName ()
-  {
-    return (String) this.properties.getProperty(ReportEngineParameterNames.INPUT_NAME);
-  }
+    /**
+     * The name under which we can load the report definition.
+     *
+     * @return the report definition's name.
+     */
+    public String getReportDefinitionName()
+    {
+        return (String) this.properties.getProperty(ReportEngineParameterNames.INPUT_NAME);
+    }
 
-  public JobProperties getProcessingParameters ()
-  {
-    return properties;
-  }
+    public JobProperties getProcessingParameters()
+    {
+        return properties;
+    }
 }

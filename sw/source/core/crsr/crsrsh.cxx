@@ -66,7 +66,7 @@
 #include <mdiexp.hxx>           // ...Percent()
 #include <fmteiro.hxx>
 #include <wrong.hxx> // SMARTTAGS
-#include <unoobj.hxx> // SMARTTAGS
+#include <unotextrange.hxx> // SMARTTAGS
 #include <vcl/svapp.hxx>
 #include <numrule.hxx>
 #include <IGrammarContact.hxx>
@@ -3372,8 +3372,8 @@ void lcl_FillTextRange( uno::Reference<text::XTextRange>& rRange,
     SwPosition aEndPos( aStartPos );
     aEndPos.nContent = nBegin + nLen;
 
-    uno::Reference<text::XTextRange> xRange =
-        SwXTextRange::CreateTextRangeFromPosition( rNode.GetDoc(), aStartPos, &aEndPos);
+    const uno::Reference<text::XTextRange> xRange =
+        SwXTextRange::CreateXTextRange(*rNode.GetDoc(), aStartPos, &aEndPos);
 
     rRange = xRange;
 }

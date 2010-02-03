@@ -125,7 +125,7 @@ SwColumnDlg::SwColumnDlg(Window* pParent, SwWrtShell& rSh) :
     FreeResource();
 
     SwRect aRect;
-    rWrtShell.CalcBoundRect(aRect, FLY_IN_CNTNT);
+    rWrtShell.CalcBoundRect(aRect, FLY_AS_CHAR);
 
     nSelectionWidth = aRect.Width();
 

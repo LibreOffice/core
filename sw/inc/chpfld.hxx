@@ -32,9 +32,11 @@
 
 #include "fldbas.hxx"
 
+
 class SwFrm;
+class SwCntntNode;
 class SwTxtNode;
-#include <unoobj.hxx>
+
 
 enum SwChapterFormat
 {

@@ -31,15 +31,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
-#endif
 #include <EnhancedPDFExportHelper.hxx>
 #include <hintids.hxx>
 
-#ifndef _OUTDEV_HXX
 #include <vcl/outdev.hxx>
-#endif
 #include <tools/multisel.hxx>
 #include <svx/adjitem.hxx>
 #include <svx/lrspitem.hxx>
@@ -370,9 +366,9 @@ bool SwTaggedPDFHelper::CheckReopenTag()
         {
             const SwFmtAnchor& rAnchor =
                 static_cast<const SwFlyFrm*>(&rFrm)->GetFmt()->GetAnchor();
-            if ( FLY_AT_CNTNT == rAnchor.GetAnchorId() ||
-                 FLY_AUTO_CNTNT == rAnchor.GetAnchorId() ||
-                 FLY_PAGE == rAnchor.GetAnchorId() )
+            if ((FLY_AT_PARA == rAnchor.GetAnchorId()) ||
+                (FLY_AT_CHAR == rAnchor.GetAnchorId()) ||
+                (FLY_AT_PAGE == rAnchor.GetAnchorId()))
             {
                 pKeyFrm = static_cast<const SwFlyFrm&>(rFrm).GetAnchorFrm();
                 bContinue = true;
@@ -1814,7 +1810,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
                         // --> FME 2005-05-09 #i44368# Links in Header/Footer
                         const SwFmtAnchor &rAnch = pFrmFmt->GetAnchor();
-                        if ( FLY_PAGE != rAnch.GetAnchorId() )
+                        if (FLY_AT_PAGE != rAnch.GetAnchorId())
                         {
                             const SwPosition* pPosition = rAnch.GetCntntAnchor();
                             if ( pPosition && pDoc->IsInHeaderFooter( pPosition->nNode ) )

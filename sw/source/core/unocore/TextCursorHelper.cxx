@@ -30,8 +30,10 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include "TextCursorHelper.hxx"
-#include "unoobj.hxx"
+#include "unobaseclass.hxx"
+
 
 using namespace ::com::sun::star;
 /* -----------------------------03.03.03 11:07--------------------------------

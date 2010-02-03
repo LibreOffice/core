@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.parser.style;
 
 import java.util.ArrayList;
@@ -48,54 +46,53 @@ import org.xml.sax.SAXException;
  */
 public class StyleDefinitionReadHandler extends ElementReadHandler
 {
-  private final Section rawSection;
-  private final List childs;
 
-  public StyleDefinitionReadHandler()
-  {
-    this.rawSection = new Section();
-    this.childs = new ArrayList();
-  }
+    private final Section rawSection;
+    private final List childs;
 
-  /**
-   * Returns the handler for a child element.
-   *
-   * @param tagName the tag name.
-   * @param atts    the attributes.
-   * @return the handler or null, if the tagname is invalid.
-   *
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected XmlReadHandler getHandlerForChild(final String uri,
-                                              final String tagName,
-                                              final Attributes atts)
-      throws SAXException
-  {
-    final StyleDefinitionReadHandler readHandler =
-        new StyleDefinitionReadHandler();
-    childs.add(readHandler);
-    return readHandler;
-  }
-
-
-  /**
-   * Done parsing.
-   *
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected void doneParsing()
-      throws SAXException
-  {
-    for (int i = 0; i < childs.size(); i++)
+    public StyleDefinitionReadHandler()
     {
-      final ElementReadHandler handler = (ElementReadHandler) childs.get(i);
-      rawSection.addNode(handler.getElement());
+        this.rawSection = new Section();
+        this.childs = new ArrayList();
     }
-  }
 
+    /**
+     * Returns the handler for a child element.
+     *
+     * @param tagName the tag name.
+     * @param atts    the attributes.
+     * @return the handler or null, if the tagname is invalid.
+     *
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected XmlReadHandler getHandlerForChild(final String uri,
+            final String tagName,
+            final Attributes atts)
+            throws SAXException
+    {
+        final StyleDefinitionReadHandler readHandler =
+                new StyleDefinitionReadHandler();
+        childs.add(readHandler);
+        return readHandler;
+    }
 
-  public Element getElement()
-  {
-    return rawSection;
-  }
+    /**
+     * Done parsing.
+     *
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected void doneParsing()
+            throws SAXException
+    {
+        for (int i = 0; i < childs.size(); i++)
+        {
+            final ElementReadHandler handler = (ElementReadHandler) childs.get(i);
+            rawSection.addNode(handler.getElement());
+        }
+    }
+
+    public Element getElement()
+    {
+        return rawSection;
+    }
 }

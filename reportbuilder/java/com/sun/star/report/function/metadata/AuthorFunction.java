@@ -50,7 +50,7 @@ public class AuthorFunction implements Function
         return "AUTHOR";
     }
 
-    public TypeValuePair evaluate(final FormulaContext context,final ParameterCallback parameters)
+    public TypeValuePair evaluate(final FormulaContext context, final ParameterCallback parameters)
             throws EvaluationException
     {
         if (parameters.getParameterCount() != 0)

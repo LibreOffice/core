@@ -78,12 +78,12 @@ public class TableCellLayoutController extends SectionLayoutController
             final DataFlags value = computeValue();
             if (value != null)
             {
-                FormatValueUtility.applyValueForCell(value.getValue(), attributeMap,valueType);
+                FormatValueUtility.applyValueForCell(value.getValue(), attributeMap, valueType);
             }
         }
         catch (Exception e)
         {
-        // ignore ..
+            // ignore ..
         }
         attributeMap.makeReadOnly();
         return attributeMap;
@@ -161,7 +161,7 @@ public class TableCellLayoutController extends SectionLayoutController
                         }
                         catch (DataSourceException e)
                         {
-                        // ignore silently ..
+                            // ignore silently ..
                         }
                     }
 
@@ -181,7 +181,7 @@ public class TableCellLayoutController extends SectionLayoutController
                             }
                             catch (DataSourceException e)
                             {
-                            // ignore silently ..
+                                // ignore silently ..
                             }
                         }
                     }

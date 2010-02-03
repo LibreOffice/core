@@ -3097,7 +3097,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
             XPropertySet xPropSet = (XPropertySet)
                 UnoRuntime.queryInterface(XPropertySet.class, xPortion);
             String type = (String) xPropSet.getPropertyValue("TextPortionType");
-            assure("first: not text", type.equals("Text"));
+            assure("first: not text: " + type, type.equals("Text"));
             String txt = xPortion.getString();
             assure("first: text differs: " + txt, "45".equals(txt));
         }

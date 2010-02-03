@@ -64,9 +64,6 @@ namespace rptui
         ::rtl::OUString     m_sUndecoratedContent;
 
     public:
-        // constructs a ReportFormula instance which is initially invalid.
-        ReportFormula();
-
         /// constructs a ReportFormula object from a string
         ReportFormula( const ::rtl::OUString& _rFormula );
 

@@ -42,7 +42,8 @@ import org.jfree.report.structure.Node;
  * @author Thomas Morgner
  * @since 02.03.2007
  */
-public class OfficeReport extends Element {
+public class OfficeReport extends Element
+{
 
     private Node pageHeader;
     private Node pageFooter;
@@ -54,78 +55,97 @@ public class OfficeReport extends Element {
     private Node preBodySection;
     private Node postBodySection;
 
-    public Node getPostBodySection() {
+    public Node getPostBodySection()
+    {
         return postBodySection;
     }
 
-    public void setPostBodySection(final Node postBodySection) {
+    public void setPostBodySection(final Node postBodySection)
+    {
         this.postBodySection = postBodySection;
     }
 
-    public Node getPreBodySection() {
+    public Node getPreBodySection()
+    {
         return preBodySection;
     }
 
-    public void setPreBodySection(final Node preBodySection) {
+    public void setPreBodySection(final Node preBodySection)
+    {
         this.preBodySection = preBodySection;
     }
 
-    public OfficeReport() {
+    public OfficeReport()
+    {
     }
 
-    public Node getPageHeader() {
+    public Node getPageHeader()
+    {
         return pageHeader;
     }
 
-    public void setPageHeader(final Node pageHeader) {
+    public void setPageHeader(final Node pageHeader)
+    {
         this.pageHeader = pageHeader;
     }
 
-    public Node getPageFooter() {
+    public Node getPageFooter()
+    {
         return pageFooter;
     }
 
-    public void setPageFooter(final Node pageFooter) {
+    public void setPageFooter(final Node pageFooter)
+    {
         this.pageFooter = pageFooter;
     }
 
-    public Node getColumnHeader() {
+    public Node getColumnHeader()
+    {
         return columnHeader;
     }
 
-    public void setColumnHeader(final Node columnHeader) {
+    public void setColumnHeader(final Node columnHeader)
+    {
         this.columnHeader = columnHeader;
     }
 
-    public Node getColumnFooter() {
+    public Node getColumnFooter()
+    {
         return columnFooter;
     }
 
-    public void setColumnFooter(final Node columnFooter) {
+    public void setColumnFooter(final Node columnFooter)
+    {
         this.columnFooter = columnFooter;
     }
 
-    public Node getReportHeader() {
+    public Node getReportHeader()
+    {
         return reportHeader;
     }
 
-    public void setReportHeader(final Node reportHeader) {
+    public void setReportHeader(final Node reportHeader)
+    {
         this.reportHeader = reportHeader;
     }
 
-    public Node getReportFooter() {
+    public Node getReportFooter()
+    {
         return reportFooter;
     }
 
-    public void setReportFooter(final Node reportFooter) {
+    public void setReportFooter(final Node reportFooter)
+    {
         this.reportFooter = reportFooter;
     }
 
-    public Node getBodySection() {
+    public Node getBodySection()
+    {
         return bodySection;
     }
 
-    public void setBodySection(final Node bodySection) {
+    public void setBodySection(final Node bodySection)
+    {
         this.bodySection = bodySection;
     }
 }

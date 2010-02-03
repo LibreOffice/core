@@ -71,7 +71,9 @@ import org.pentaho.reporting.libraries.base.util.WaitingImageObserver;
  */
 public class ImageProducer
 {
+
     private static final Log LOGGER = LogFactory.getLog(ImageProducer.class);
+
     public static class OfficeImage
     {
 
@@ -140,7 +142,7 @@ public class ImageProducer
         {
             if (hashCode != null)
             {
-                return hashCode.intValue();
+                return hashCode;
             }
 
             final int length = Math.min(keyData.length, 512);
@@ -150,7 +152,7 @@ public class ImageProducer
                 final byte b = keyData[i];
                 hashValue = b + hashValue * 23;
             }
-            this.hashCode = Integer.valueOf(hashValue);
+            this.hashCode = hashValue;
             return hashValue;
         }
     }
@@ -320,7 +322,7 @@ public class ImageProducer
         }
         catch (MalformedURLException e)
         {
-        // ignore .. but we had to try this ..
+            // ignore .. but we had to try this ..
         }
 
         final OfficeImage o = (OfficeImage) imageCache.get(source);
@@ -365,6 +367,22 @@ public class ImageProducer
                 LOGGER.warn("Failed to create image from local input-repository", e);
             }
         }
+        else
+        {
+            try
+            {
+                URI rootURI = new URI(inputRepository.getRootURL());
+                final URI uri = rootURI.resolve(source);
+                return produceFromURL(uri.toURL(), preserveIRI);
+            }
+            catch (URISyntaxException ex)
+            {
+            }
+            catch (MalformedURLException e)
+            {
+                // ignore .. but we had to try this ..
+            }
+        }
 
         // Return the image as broken image instead ..
         final OfficeImage officeImage = new OfficeImage(source, null, null);
@@ -381,7 +399,7 @@ public class ImageProducer
         {
             uri = new URI(urlString);
         }
-        catch ( URISyntaxException ex )
+        catch (URISyntaxException ex)
         {
             Logger.getLogger(ImageProducer.class.getName()).log(Level.SEVERE, null, ex);
         }

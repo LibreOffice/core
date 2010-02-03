@@ -57,12 +57,16 @@ sub new {
     my $proto = shift;
     my $class = ref($proto) || $proto;
     my $source_root = shift;
-    if (defined $source_root) {
-        $source_root =~ s/\\|\/$//;
-    } else {
-        $source_root = $ENV{SOLARSRC};
-    };
     my $self = {};
+    $self->{USER_SOURCE_ROOT} = undef;
+    if (defined $source_root) {
+        $self->{USER_SOURCE_ROOT} = $source_root;
+        $source_root =~ s/\\|\/$//;
+        $source_root .= '/..';
+    } else {
+        $source_root = $ENV{SOURCE_ROOT_DIR};
+    };
+    $source_root = Cwd::realpath($source_root);
     $self->{DEBUG} = 0;
     $self->{SOURCE_ROOT} = $source_root;
     $self->{REPOSITORIES} = {};
@@ -71,8 +75,11 @@ sub new {
     $self->{ACTIVATED_MODULES} = {};
     $self->{MODULE_REPOSITORY} = {};
     $self->{REAL_MODULES} = {};
+    if (defined $self->{USER_SOURCE_ROOT}) {
+        ${$self->{REPOSITORIES}}{File::Basename::basename($self->{USER_SOURCE_ROOT})} = $self->{USER_SOURCE_ROOT};
+    };
     $self->{SOURCE_CONFIG_FILE} = get_config_file($source_root);
-    $self->{SOURCE_CONFIG_DEFAULT} = Cwd::realpath($source_root) .'/'.SOURCE_CONFIG_FILE_NAME;
+    $self->{SOURCE_CONFIG_DEFAULT} = $source_root .'/'.SOURCE_CONFIG_FILE_NAME;
     read_config_file($self);
     bless($self, $class);
     return $self;
@@ -201,23 +208,46 @@ sub get_module_paths {
             croak("Cannot read $_ repository content");
         };
     };
+    my @false_actives = ();
+    foreach (keys %{$self->{ACTIVATED_MODULES}}) {
+        push(@false_actives, $_) if (!defined  ${$self->{MODULE_PATHS}}{$_});
+    };
+    croak("Error!! Activated module(s): @false_actives\nnot found in the active repositories!! Please check your " . $self->{SOURCE_CONFIG_FILE} . "\n") if (scalar @false_actives);
     croak("No modules found!") if (!scalar keys %{$self->{MODULE_PATHS}});
 };
 
 sub get_config_file {
     my $source_root = shift;
-    foreach ($source_root, $source_root . '/..') {
-        if (-f $_ . '/' . SOURCE_CONFIG_FILE_NAME) {
-            return Cwd::realpath($_) .'/'.SOURCE_CONFIG_FILE_NAME;
+    my $possible_path = $source_root . '/' . SOURCE_CONFIG_FILE_NAME;
+    return $possible_path if (-f $possible_path);
+    return '';
+};
+
+sub get_hg_root {
+    my $self = shift;
+    return $self->{USER_SOURCE_ROOT} if (defined $self->{USER_SOURCE_ROOT});
+    my $hg_root;
+    if (open(COMMAND, "hg root 2>&1 |")) {
+        foreach (<COMMAND>) {
+            next if (/^Not trusting file/);
+            chomp;
+            $hg_root = $_;
+            last;
+        };
+        close COMMAND;
+        chomp $hg_root;
+        if ($hg_root !~ /There is no Mercurial repository here/) {
+            return $hg_root;
         };
     };
-    return '';
+    croak('Cannot open find source_config and/or determine hg root directory for ' . cwd());
 };
 
 sub read_config_file {
     my $self = shift;
     if (!$self->{SOURCE_CONFIG_FILE}) {
-        ${$self->{REPOSITORIES}}{File::Basename::basename($self->{SOURCE_ROOT})} = $self->{SOURCE_ROOT};
+        my $repository_root = get_hg_root($self);
+        ${$self->{REPOSITORIES}}{File::Basename::basename($repository_root)} = $repository_root;
         return;
     };
     my $repository_section = 0;
@@ -243,7 +273,7 @@ sub read_config_file {
             next if (!$repository_section && !$module_section);
             if (/\s*(\S+)=active\s*(\s+#)*/) {
                 if ($repository_section) {
-                    ${$self->{REPOSITORIES}}{$1} = File::Basename::dirname($self->{SOURCE_ROOT}) . "/$1";
+                    ${$self->{REPOSITORIES}}{$1} = $self->{SOURCE_ROOT} . "/$1";
                     next;
                 }
                 if ($module_section) {
@@ -254,6 +284,11 @@ sub read_config_file {
             croak("Line $line in " . $self->{SOURCE_CONFIG_FILE} . 'violates format. Please make your checks!!');
         };
         close SOURCE_CONFIG_FILE;
+        if (!scalar keys %{$self->{REPOSITORIES}}) {
+            # Fallback - default repository is the directory where is our module...
+            my $hg_root = get_hg_root($self);
+            ${$self->{REPOSITORIES}}{File::Basename::basename($hg_root)} = $hg_root;
+        };
     } else {
         croak('Cannot open ' . $self->{SOURCE_CONFIG_FILE} . 'for reading');
     };

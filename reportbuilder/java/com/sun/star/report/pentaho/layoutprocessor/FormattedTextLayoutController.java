@@ -59,7 +59,9 @@ import org.jfree.layouting.util.AttributeMap;
 public class FormattedTextLayoutController
         extends AbstractReportElementLayoutController
 {
+
     private static final Log LOGGER = LogFactory.getLog(FormattedTextLayoutController.class);
+
     public FormattedTextLayoutController()
     {
     }
@@ -133,9 +135,8 @@ public class FormattedTextLayoutController
         }
         else
         {
-
             final DataFlags df = FormatValueUtility.computeDataFlag(element, getFlowController());
-            if (df != null)
+            if (df != null && df.getValue() instanceof String )
             {
                 target.processContent(df);
             }

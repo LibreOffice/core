@@ -45,7 +45,6 @@
 #include "docstat.hxx"
 #include "docsh.hxx"
 #include <doc.hxx>
-#include <unoobj.hxx>
 #include "xmlimp.hxx"
 #include "xmlexp.hxx"
 

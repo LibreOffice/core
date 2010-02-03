@@ -30,25 +30,18 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
-
-
 
 #define _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_STRINGS
 #include <hintids.hxx>
 
-#ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _HELP_HXX //autogen
 #include <vcl/help.hxx>
-#endif
 #ifndef _SVSTDARR_HXX
 #include <svl/svstdarr.hxx>
 #endif
@@ -64,7 +57,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <unocrsr.hxx>
 #include <unotools.hxx>
-#include <unoobj.hxx>
 #include <comphelper/processfactory.hxx>
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
@@ -75,12 +67,8 @@
 #include <swwait.hxx>
 #include <swtypes.hxx>
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
-#ifndef _BASESH_HXX
 #include <basesh.hxx>
-#endif
 #include <glossary.hxx>
 #include <gloshdl.hxx>
 #include <glosbib.hxx>
@@ -88,20 +76,12 @@
 #include <glosdoc.hxx>
 #include <macassgn.hxx>
 #include <swevent.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <shellio.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#ifndef _SWERROR_H
 #include <swerror.h>
-#endif
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif

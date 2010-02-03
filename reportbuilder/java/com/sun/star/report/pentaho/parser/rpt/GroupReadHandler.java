@@ -79,7 +79,7 @@ public class GroupReadHandler extends ElementReadHandler
         super.startParsing(attrs);
 
         final String groupExpr = attrs.getValue(OfficeNamespaces.OOREPORT_NS, "group-expression");
-        if ( groupExpr != null && !"".equals(groupExpr) )
+        if (groupExpr != null && !"".equals(groupExpr))
         {
             final FormulaExpression function = new FormulaExpression();
             function.setFormula(groupExpr);
@@ -128,7 +128,7 @@ public class GroupReadHandler extends ElementReadHandler
         }
         if ("group-footer".equals(tagName))
         {
-            ((Element)((Section)rh.getDetail().getElement()).getNode(0)).setAttribute(JFreeReportInfo.REPORT_NAMESPACE,"has-group-footer", OfficeToken.TRUE);
+            ((Element) ((Section) rh.getDetail().getElement()).getNode(0)).setAttribute(JFreeReportInfo.REPORT_NAMESPACE, "has-group-footer", OfficeToken.TRUE);
             groupFooter = new GroupSectionReadHandler();
             return groupFooter;
         }

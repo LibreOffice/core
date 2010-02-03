@@ -94,6 +94,7 @@ ALLDPC:
     @echo $(EMQ)# > $(MISC)/$(TARGET).dpc
 
 ALLDEP:
+    @echo nothing to do here...
 
 .ENDIF
 

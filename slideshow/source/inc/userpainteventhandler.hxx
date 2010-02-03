@@ -51,8 +51,12 @@ namespace slideshow
         {
         public:
             virtual ~UserPaintEventHandler() {}
-
             virtual bool colorChanged( RGBColor const& rUserColor ) = 0;
+        virtual bool widthChanged( double nUserStrokeWidth ) = 0;
+        virtual bool eraseAllInkChanged(bool const& rEraseAllInk) =0;
+            virtual bool eraseInkWidthChanged(sal_Int32 rEraseInkSize) =0;
+            virtual bool switchEraserMode() = 0;
+            virtual bool switchPenMode() = 0;
             virtual bool disable() = 0;
         };
 

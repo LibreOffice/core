@@ -27,7 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 package com.sun.star.report.util;
 
 import java.util.HashMap;
@@ -52,71 +51,72 @@ import com.sun.star.report.OutputRepository;
 public class ManifestWriter
 {
     // need this two strings other it breaks the ooo build :-(
-  public static final String MANIFEST_NS = "urn:oasis:names:tc:opendocument:xmlns:manifest:1.0";
-  public static final String TAG_DEF_PREFIX = "com.sun.star.report.pentaho.output.";
-  private final Map entries;
 
-  public ManifestWriter()
-  {
-    entries = new HashMap();
-  }
+    public static final String MANIFEST_NS = "urn:oasis:names:tc:opendocument:xmlns:manifest:1.0";
+    public static final String TAG_DEF_PREFIX = "com.sun.star.report.pentaho.output.";
+    private final Map entries;
 
-  public void addEntry(final String fullPath, final String mimeType)
-  {
-    if (fullPath == null)
+    public ManifestWriter()
     {
-      throw new NullPointerException();
-    }
-    if (mimeType == null)
-    {
-      throw new NullPointerException();
-    }
-    if ("META-INF/manifest.xml".equals(fullPath))
-    {
-      return;
-    }
-    entries.put(fullPath, mimeType);
-  }
-
-  public boolean isEmpty()
-  {
-    return entries.isEmpty();
-  }
-
-  public void write(final OutputRepository outputRepository) throws IOException
-  {
-    if (isEmpty())
-    {
-      return;
+        entries = new HashMap();
     }
 
-    final DefaultTagDescription tagDescription = new DefaultTagDescription();
-    tagDescription.configure(JFreeReportBoot.getInstance().getGlobalConfig(),
-        TAG_DEF_PREFIX);
-
-    final OutputStream manifestOutputStream =
-        outputRepository.createOutputStream("META-INF/manifest.xml", "text/xml");
-
-    final OutputStreamWriter writer = new OutputStreamWriter(manifestOutputStream, "UTF-8");
-    final XmlWriter xmlWriter = new XmlWriter(writer, tagDescription);
-    xmlWriter.setAlwaysAddNamespace(true);
-    xmlWriter.writeXmlDeclaration("UTF-8");
-
-    final AttributeList rootAttributes = new AttributeList();
-    rootAttributes.addNamespaceDeclaration("manifest", MANIFEST_NS);
-    xmlWriter.writeTag(MANIFEST_NS, "manifest", rootAttributes, XmlWriterSupport.OPEN);
-
-    final Iterator iterator = entries.entrySet().iterator();
-    while (iterator.hasNext())
+    public void addEntry(final String fullPath, final String mimeType)
     {
-      final Map.Entry entry = (Map.Entry) iterator.next();
-      final AttributeList entryAttrs = new AttributeList();
-      entryAttrs.setAttribute(MANIFEST_NS, "media-type", (String) entry.getValue());
-      entryAttrs.setAttribute(MANIFEST_NS, "full-path", (String) entry.getKey());
-      xmlWriter.writeTag(MANIFEST_NS, "file-entry", entryAttrs, XmlWriterSupport.CLOSE);
+        if (fullPath == null)
+        {
+            throw new NullPointerException();
+        }
+        if (mimeType == null)
+        {
+            throw new NullPointerException();
+        }
+        if ("META-INF/manifest.xml".equals(fullPath))
+        {
+            return;
+        }
+        entries.put(fullPath, mimeType);
     }
 
-    xmlWriter.writeCloseTag();
-    xmlWriter.close();
-  }
+    public boolean isEmpty()
+    {
+        return entries.isEmpty();
+    }
+
+    public void write(final OutputRepository outputRepository) throws IOException
+    {
+        if (isEmpty())
+        {
+            return;
+        }
+
+        final DefaultTagDescription tagDescription = new DefaultTagDescription();
+        tagDescription.configure(JFreeReportBoot.getInstance().getGlobalConfig(),
+                TAG_DEF_PREFIX);
+
+        final OutputStream manifestOutputStream =
+                outputRepository.createOutputStream("META-INF/manifest.xml", "text/xml");
+
+        final OutputStreamWriter writer = new OutputStreamWriter(manifestOutputStream, "UTF-8");
+        final XmlWriter xmlWriter = new XmlWriter(writer, tagDescription);
+        xmlWriter.setAlwaysAddNamespace(true);
+        xmlWriter.writeXmlDeclaration("UTF-8");
+
+        final AttributeList rootAttributes = new AttributeList();
+        rootAttributes.addNamespaceDeclaration("manifest", MANIFEST_NS);
+        xmlWriter.writeTag(MANIFEST_NS, "manifest", rootAttributes, XmlWriterSupport.OPEN);
+
+        final Iterator iterator = entries.entrySet().iterator();
+        while (iterator.hasNext())
+        {
+            final Map.Entry entry = (Map.Entry) iterator.next();
+            final AttributeList entryAttrs = new AttributeList();
+            entryAttrs.setAttribute(MANIFEST_NS, "media-type", (String) entry.getValue());
+            entryAttrs.setAttribute(MANIFEST_NS, "full-path", (String) entry.getKey());
+            xmlWriter.writeTag(MANIFEST_NS, "file-entry", entryAttrs, XmlWriterSupport.CLOSE);
+        }
+
+        xmlWriter.writeCloseTag();
+        xmlWriter.close();
+    }
 }

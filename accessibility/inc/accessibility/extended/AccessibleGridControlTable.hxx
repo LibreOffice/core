@@ -211,13 +211,6 @@ protected:
 
 
     //// internal helper methods ------------------------------------------------
-        /** Returns the specified row or column. Uses one of the parameters,
-        depending on object type.
-        @attention  This method requires locked mutex's and a living object.
-        @return  The XAccessible interface of the specified column/row. */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessible >
-    implGetChild( sal_Int32 nRow, sal_uInt16 nColumnPos );
     ///** @attention  This method requires a locked mutex.
     //    @return  The XAccessibleTable interface of the specified header bar. */
     ::com::sun::star::uno::Reference<

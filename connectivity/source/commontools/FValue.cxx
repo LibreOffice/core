@@ -1955,7 +1955,7 @@ namespace detail
         virtual Reference< XInputStream >   getCharacterStream() const  { return m_xRow->getCharacterStream( m_nPos ); };
         virtual Reference< XBlob >          getBlob() const             { return m_xRow->getBlob( m_nPos ); };
         virtual Reference< XClob >          getClob() const             { return m_xRow->getClob( m_nPos ); };
-        virtual Any                         getObject() const           { return m_xRow->getObject( m_nPos, NULL ); };
+        virtual Any                         getObject() const           { return m_xRow->getObject( m_nPos ,NULL); };
         virtual sal_Bool                    wasNull() const             { return m_xRow->wasNull( ); };
 
     private:

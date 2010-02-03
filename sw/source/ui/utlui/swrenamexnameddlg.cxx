@@ -63,7 +63,6 @@
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <swmodule.hxx>
-#include <unoobj.hxx>
 #include <unocrsr.hxx>
 
 #include "swrenamexnameddlg.hxx"

@@ -62,6 +62,8 @@ public interface ReportJob
      * first. If we execute at once, the user either has to deal with
      * threading code or wont receive any progress information in single
      * threaded environments.
+     * @throws java.io.IOException
+     * @throws ReportExecutionException
      */
     void execute()
             throws ReportExecutionException, IOException;

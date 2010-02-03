@@ -51,6 +51,7 @@
 
 #include <rtl/strbuf.hxx>
 #include <rtl/memory.h>
+#include <rtl/alloc.h>
 
 // disable warnings again because someone along the line has enabled them
 #if defined __SUNPRO_CC
@@ -573,6 +574,33 @@ PDFEntry* PDFReader::read( const char* pBuffer, unsigned int nLen )
 
 PDFEntry* PDFReader::read( const char* pFileName )
 {
+    #ifdef WIN32
+    /* #i106583#
+       since converting to boost 1.39 file_iterator does not work anymore on all Windows systems
+       C++ stdlib istream_iterator does not allow "-" apparently
+       using spirit 2.0 doesn't work in our environment with the MSC
+
+       So for the time being bite the bullet and read the whole file.
+       FIXME: give Spirit 2.x another try when we upgrade boost again.
+    */
+    PDFEntry* pRet = NULL;
+    FILE* fp = fopen( pFileName, "rb" );
+    if( fp )
+    {
+        fseek( fp, 0, SEEK_END );
+        unsigned int nLen = (unsigned int)ftell( fp );
+        fseek( fp, 0, SEEK_SET );
+        char* pBuf = (char*)rtl_allocateMemory( nLen );
+        if( pBuf )
+        {
+            fread( pBuf, 1, nLen, fp );
+            pRet = read( pBuf, nLen );
+            rtl_freeMemory( pBuf );
+        }
+        fclose( fp );
+    }
+    return pRet;
+    #else
     file_iterator<> file_start( pFileName );
     if( ! file_start )
         return NULL;
@@ -629,8 +657,8 @@ PDFEntry* PDFReader::read( const char* pFileName )
         }
     }
     #endif
-
     return pRet;
+    #endif // WIN32
 }
 
 #if defined __SUNPRO_CC

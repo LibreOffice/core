@@ -99,6 +99,8 @@ struct CellInfo
     BOOL                        bVOverlapped : 1;
     BOOL                        bAutoFilter : 1;
     BOOL                        bPushButton : 1;
+    bool                        bPopupButton: 1;
+    bool                        bFilterActive:1;
 
     BOOL                        bPrinted : 1;               // bei Bedarf (Pagebreak-Modus)
 

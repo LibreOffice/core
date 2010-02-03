@@ -148,6 +148,9 @@ namespace xmloff { namespace token {
         XML_NP_OFFICE_EXT,
         XML_N_OFFICE_EXT,
 
+        XML_NP_TABLE_EXT,
+        XML_N_TABLE_EXT,
+
         // units
         XML_UNIT_MM,
         XML_UNIT_M,
@@ -520,6 +523,7 @@ namespace xmloff { namespace token {
         XML_DATA_LABEL_SYMBOL,
         XML_DATA_LABEL_TEXT,
         XML_DATA_PILOT_FIELD,
+        XML_DATA_PILOT_GRAND_TOTAL,
         XML_DATA_PILOT_LEVEL,
         XML_DATA_PILOT_MEMBER,
         XML_DATA_PILOT_MEMBERS,

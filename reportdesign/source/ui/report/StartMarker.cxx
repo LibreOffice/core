@@ -286,12 +286,6 @@ void OStartMarker::showRuler(sal_Bool _bShow)
     m_aVRuler.Show(!m_bCollapsed && m_bShowRuler);
 }
 //------------------------------------------------------------------------------
-sal_Int32 OStartMarker::getRulerOffset() const
-{
-    return m_aVRuler.GetSizePixel().Width();
-}
-
-//------------------------------------------------------------------------------
 void OStartMarker::RequestHelp( const HelpEvent& rHEvt )
 {
     if( m_aText.GetText().Len())

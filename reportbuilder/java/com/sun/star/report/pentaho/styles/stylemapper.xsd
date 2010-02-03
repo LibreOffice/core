@@ -34,62 +34,62 @@
             xmlns="http://jfreereport.sourceforge.net/namespaces/engine/openoffice/stylemapper"
             targetNamespace="http://jfreereport.sourceforge.net/namespaces/engine/openoffice/stylemapper"
             attributeFormDefault="unqualified">
-  <xsd:annotation>
-    <xsd:documentation>
+    <xsd:annotation>
+        <xsd:documentation>
       This schema describes the format of the stylemapper definition file.
       The stylemapper declares what style-families are referenced by an element.
-    </xsd:documentation>
-  </xsd:annotation>
+        </xsd:documentation>
+    </xsd:annotation>
 
-  <xsd:simpleType name="styleNameRefType">
-    <xsd:restriction base="xsd:NMTOKEN">
-      <xsd:enumeration value="styleNameRef"/>
-      <xsd:enumeration value="styleNameRefs"/>
-    </xsd:restriction>
-  </xsd:simpleType>
-
-  <xsd:simpleType name="styleFamilyType">
-    <xsd:restriction base="xsd:NMTOKEN">
-      <xsd:enumeration value="paragraph"/>
-      <xsd:enumeration value="text"/>
-      <xsd:enumeration value="section"/>
-      <xsd:enumeration value="table"/>
-      <xsd:enumeration value="table-column"/>
-      <xsd:enumeration value="table-row"/>
-      <xsd:enumeration value="table-cell"/>
-      <xsd:enumeration value="table-page"/>
-      <xsd:enumeration value="chart"/>
-      <xsd:enumeration value="default"/>
-      <xsd:enumeration value="drawing-page"/>
-      <xsd:enumeration value="graphic"/>
-      <xsd:enumeration value="presentation"/>
-      <xsd:enumeration value="control"/>
-      <xsd:enumeration value="ruby"/>
-      <xsd:enumeration value="custom-shape"/>
-    </xsd:restriction>
-  </xsd:simpleType>
-
-  <xsd:element name="mapping">
-    <xsd:complexType>
-      <xsd:attribute name="element-namespace" use="required" type="xsd:anyURI"/>
-      <xsd:attribute name="element-name"  use="required" type="xsd:NCName"/>
-      <xsd:attribute name="attribute-namespace"  use="required" type="xsd:anyURI"/>
-      <xsd:attribute name="attribute-name"  use="required" type="xsd:NCName"/>
-      <xsd:attribute name="type"  use="required" type="styleNameRefType"/>
-      <xsd:attribute name="style-family"  use="required" type="styleFamilyType"/>
-    </xsd:complexType>
-  </xsd:element>
-
-  <xsd:element name="style-mapper-definition">
-    <xsd:complexType>
-      <xsd:complexContent>
-        <xsd:restriction base="xsd:anyType">
-          <xsd:sequence>
-            <xsd:element ref="mapping" minOccurs="0" maxOccurs="unbounded"/>
-          </xsd:sequence>
+    <xsd:simpleType name="styleNameRefType">
+        <xsd:restriction base="xsd:NMTOKEN">
+            <xsd:enumeration value="styleNameRef"/>
+            <xsd:enumeration value="styleNameRefs"/>
         </xsd:restriction>
-      </xsd:complexContent>
-    </xsd:complexType>
-  </xsd:element>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="styleFamilyType">
+        <xsd:restriction base="xsd:NMTOKEN">
+            <xsd:enumeration value="paragraph"/>
+            <xsd:enumeration value="text"/>
+            <xsd:enumeration value="section"/>
+            <xsd:enumeration value="table"/>
+            <xsd:enumeration value="table-column"/>
+            <xsd:enumeration value="table-row"/>
+            <xsd:enumeration value="table-cell"/>
+            <xsd:enumeration value="table-page"/>
+            <xsd:enumeration value="chart"/>
+            <xsd:enumeration value="default"/>
+            <xsd:enumeration value="drawing-page"/>
+            <xsd:enumeration value="graphic"/>
+            <xsd:enumeration value="presentation"/>
+            <xsd:enumeration value="control"/>
+            <xsd:enumeration value="ruby"/>
+            <xsd:enumeration value="custom-shape"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:element name="mapping">
+        <xsd:complexType>
+            <xsd:attribute name="element-namespace" use="required" type="xsd:anyURI"/>
+            <xsd:attribute name="element-name"  use="required" type="xsd:NCName"/>
+            <xsd:attribute name="attribute-namespace"  use="required" type="xsd:anyURI"/>
+            <xsd:attribute name="attribute-name"  use="required" type="xsd:NCName"/>
+            <xsd:attribute name="type"  use="required" type="styleNameRefType"/>
+            <xsd:attribute name="style-family"  use="required" type="styleFamilyType"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="style-mapper-definition">
+        <xsd:complexType>
+            <xsd:complexContent>
+                <xsd:restriction base="xsd:anyType">
+                    <xsd:sequence>
+                        <xsd:element ref="mapping" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                </xsd:restriction>
+            </xsd:complexContent>
+        </xsd:complexType>
+    </xsd:element>
 
 </xsd:schema>

@@ -43,21 +43,14 @@
 #include <svx/svdview.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/outlobj.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <edtwin.hxx>
 #include <wrtsh.hxx>
 #include <viewopt.hxx>
-#ifndef _DRAWBASE_HXX
 #include <drawbase.hxx>
-#endif
-#ifndef _CONRECT_HXX
 #include <conrect.hxx>
-#endif
+
 
 /*************************************************************************
 |*
@@ -119,7 +112,7 @@ BOOL ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
         case OBJ_TEXT:
             if( bMarquee )
             {
-                m_pSh->ChgAnchor(FLY_IN_CNTNT);
+                m_pSh->ChgAnchor(FLY_AS_CHAR);
 
                 if( pObj )
                 {

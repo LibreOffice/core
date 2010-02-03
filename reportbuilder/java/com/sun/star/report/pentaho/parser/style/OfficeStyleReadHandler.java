@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.parser.style;
 
 import java.util.ArrayList;
@@ -47,60 +45,60 @@ import org.xml.sax.SAXException;
  */
 public class OfficeStyleReadHandler extends ElementReadHandler
 {
-  private final OfficeStyle officeStyle;
-  private final List childs;
 
-  public OfficeStyleReadHandler()
-  {
-    this.officeStyle = new OfficeStyle();
-    this.childs = new ArrayList();
-  }
+    private final OfficeStyle officeStyle;
+    private final List childs;
 
-  /**
-   * Returns the handler for a child element.
-   *
-   * @param tagName the tag name.
-   * @param atts    the attributes.
-   * @return the handler or null, if the tagname is invalid.
-   *
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected XmlReadHandler getHandlerForChild (final String uri,
-                                               final String tagName,
-                                               final Attributes atts)
-          throws SAXException
-  {
+    public OfficeStyleReadHandler()
+    {
+        this.officeStyle = new OfficeStyle();
+        this.childs = new ArrayList();
+    }
+
+    /**
+     * Returns the handler for a child element.
+     *
+     * @param tagName the tag name.
+     * @param atts    the attributes.
+     * @return the handler or null, if the tagname is invalid.
+     *
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected XmlReadHandler getHandlerForChild(final String uri,
+            final String tagName,
+            final Attributes atts)
+            throws SAXException
+    {
 //    if (OfficeParserUtil.getInstance().isValidStyleElement(uri, tagName))
 //    {
 //    }
-    final StyleDefinitionReadHandler readHandler =
-            new StyleDefinitionReadHandler();
-    childs.add(readHandler);
-    return readHandler;
-  }
-
-
-  /**
-   * Done parsing.
-   *
-   * @throws org.xml.sax.SAXException if there is a parsing error.
-   */
-  protected void doneParsing() throws SAXException
-  {
-    for (int i = 0; i < childs.size(); i++)
-    {
-      final ElementReadHandler handler = (ElementReadHandler) childs.get(i);
-      officeStyle.addNode(handler.getElement());
+        final StyleDefinitionReadHandler readHandler =
+                new StyleDefinitionReadHandler();
+        childs.add(readHandler);
+        return readHandler;
     }
-  }
 
-  public OfficeStyle getOfficeStyle()
-  {
-    return officeStyle;
-  }
+    /**
+     * Done parsing.
+     *
+     * @throws org.xml.sax.SAXException if there is a parsing error.
+     */
+    protected void doneParsing() throws SAXException
+    {
+        for (int i = 0; i < childs.size(); i++)
+        {
+            final ElementReadHandler handler = (ElementReadHandler) childs.get(i);
+            officeStyle.addNode(handler.getElement());
+        }
+    }
 
-  public Element getElement()
-  {
-    return officeStyle;
-  }
+    public OfficeStyle getOfficeStyle()
+    {
+        return officeStyle;
+    }
+
+    public Element getElement()
+    {
+        return officeStyle;
+    }
 }

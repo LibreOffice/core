@@ -177,9 +177,7 @@ private:
     void                    exportGroupsExpressionAsFunction(const Reference< XGroups>& _xGroups);
     ::rtl::OUString         convertFormula(const ::rtl::OUString& _sFormula);
 
-    ::rtl::OUString         implConvertAny(const Any& _rValue);
     ::rtl::OUString         implConvertNumber(sal_Int32 _nValue);
-    ::rtl::OUString         implConvertMeasure(sal_Int32 _nValue);
 
 private:
                                     ORptExport();

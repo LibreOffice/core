@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.model;
 
 import org.jfree.report.structure.StaticText;
@@ -43,8 +41,9 @@ import org.jfree.report.structure.StaticText;
  */
 public class RawText extends StaticText
 {
-  public RawText(final String text)
-  {
-    super(text);
-  }
+
+    public RawText(final String text)
+    {
+        super(text);
+    }
 }

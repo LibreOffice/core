@@ -75,7 +75,7 @@ public class PageContext
             // TODO: IS this code correct? Why not columnCount = pc.getColumnCount(); ?
             if (columnCount != null)
             {
-                return columnCount.intValue();
+                return columnCount;
             }
             pc = pc.getParent();
         }

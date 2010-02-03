@@ -38,7 +38,7 @@
 #include "com/sun/star/ucb/XCommandProcessor.hpp"
 #include "com/sun/star/sdbc/XRow.hpp"
 #include "ftpresultsetI.hxx"
-
+#include "ftpcontent.hxx"
 
 
 using namespace std;
@@ -96,6 +96,10 @@ ResultSetI::ResultSetI(const Reference<XMultiServiceFactory>&  xMSF,
             else if(Name.compareToAscii("DateCreated") == 0)
                 xRow->appendTimestamp(seqProp[i],
                                       dirvec[n].m_aDate);
+            else if(Name.compareToAscii("CreatableContentsInfo") == 0)
+                xRow->appendObject(
+                    seqProp[i],
+                    makeAny(FTPContent::queryCreatableContentsInfo_Static()));
             else
                 xRow->appendVoid(seqProp[i]);
         }

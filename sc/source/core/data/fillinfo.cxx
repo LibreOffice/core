@@ -332,6 +332,8 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
             pInfo->bVOverlapped = FALSE;
             pInfo->bAutoFilter  = FALSE;
             pInfo->bPushButton  = FALSE;
+            pInfo->bPopupButton = false;
+            pInfo->bFilterActive = false;
             pInfo->nRotateDir   = SC_ROTDIR_NONE;
 
             pInfo->bPrinted     = FALSE;                    //  view-intern
@@ -458,6 +460,8 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                         BOOL bAutoFilter  = ((nOverlap & SC_MF_AUTO) != 0);
                         BOOL bPushButton  = ((nOverlap & SC_MF_BUTTON) != 0);
                         BOOL bScenario    = ((nOverlap & SC_MF_SCENARIO) != 0);
+                        bool bPopupButton = ((nOverlap & SC_MF_BUTTON_POPUP) != 0);
+                        bool bFilterActive = ((nOverlap & SC_MF_HIDDEN_MEMBER) != 0);
                         if (bMerged||bHOverlapped||bVOverlapped)
                             bAnyMerged = TRUE;                              // intern
 
@@ -498,6 +502,8 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                 pInfo->bVOverlapped = bVOverlapped;
                                 pInfo->bAutoFilter  = bAutoFilter;
                                 pInfo->bPushButton  = bPushButton;
+                                pInfo->bPopupButton = bPopupButton;
+                                pInfo->bFilterActive = bFilterActive;
                                 pInfo->pLinesAttr   = pLinesAttr;
                                 pInfo->mpTLBRLine   = pTLBRLine;
                                 pInfo->mpBLTRLine   = pBLTRLine;
@@ -512,7 +518,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                         nCurRow >= aEmbedRange.aStart.Row() &&
                                         nCurRow <= aEmbedRange.aEnd.Row();
 
-                                if (bPushButton || bScenario)
+                                if (bScenario)
                                 {
                                     pInfo->pBackground = ScGlobal::GetButtonBrushItem();
                                     pThisRowInfo->bEmptyBack = FALSE;

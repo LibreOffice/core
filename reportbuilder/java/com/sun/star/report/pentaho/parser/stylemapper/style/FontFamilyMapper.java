@@ -52,7 +52,10 @@ public class FontFamilyMapper implements StyleMapper
         {
             final CSSStringValue cssVal = new CSSStringValue(CSSStringType.STRING, attrValue);
             targetRule.setPropertyValue(FontStyleKeys.FONT_FAMILY,
-                    new CSSValueList(new CSSValue[]{cssVal}));
+                    new CSSValueList(new CSSValue[]
+                    {
+                        cssVal
+                    }));
         }
         else
         {

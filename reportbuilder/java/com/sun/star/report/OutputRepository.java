@@ -58,6 +58,7 @@ public interface OutputRepository
     /** allows to acces sub repositories inside this repository
      *
      * @param name describes the path to the sub repository
+     * @param mimeType
      * @return the sub repository
      * @throws java.io.IOException when the sub repository doesn't exist.
      */

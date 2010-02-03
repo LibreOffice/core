@@ -77,8 +77,8 @@ namespace remotebridges_bridge
         try
         {
             // TODO possible optimization : give
-            ::rtl::ByteSequence seq( nSize , ::rtl::BYTESEQ_NODEFAULT );
-            sal_Int32 nRead = m->m_r->read( *(Sequence<sal_Int8>*)&seq , nSize );
+            Sequence<sal_Int8> seq = toUnoSequence( ::rtl::ByteSequence(nSize, ::rtl::BYTESEQ_NODEFAULT) );
+            sal_Int32 nRead = m->m_r->read( seq , nSize );
             memcpy( pDest , seq.getConstArray() , nRead );
             return nRead;
         }

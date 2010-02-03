@@ -108,16 +108,12 @@
 #ifndef _TABLE_HRC
 #include <table.hrc>
 #endif
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#include <unoobj.hxx>
+#include <unobaseclass.hxx>
 
 #define SwTableShell
 #include <sfx2/msg.hxx>

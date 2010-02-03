@@ -33,11 +33,11 @@
 #include "filtask.hxx"
 #include "filglob.hxx"
 
-/*********************************************************************************/
-/*                                                                               */
-/*                                 TaskHandling                                  */
-/*                                                                               */
-/*********************************************************************************/
+/******************************************************************************/
+/*                                                                            */
+/*                              TaskHandling                                  */
+/*                                                                            */
+/******************************************************************************/
 
 
 using namespace fileaccess;
@@ -70,7 +70,9 @@ TaskManager::startTask(
     TaskMap::iterator it = m_aTaskMap.find( CommandId );
     if( it != m_aTaskMap.end() )
     {
-        throw DuplicateCommandIdentifierException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
+        throw DuplicateCommandIdentifierException(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ),
+            uno::Reference< uno::XInterface >() );
     }
     m_aTaskMap[ CommandId ] = TaskHandling( xCommandEnv );
 }
@@ -91,7 +93,8 @@ TaskManager::endTask( sal_Int32 CommandId,
     sal_Int32 MinorCode = it->second.getMinorErrorCode();
     bool isHandled = it->second.isHandled();
 
-    Reference< XCommandEnvironment > xComEnv = it->second.getCommandEnvironment();
+    Reference< XCommandEnvironment > xComEnv
+        = it->second.getCommandEnvironment();
 
     m_aTaskMap.erase( it );
 
@@ -119,17 +122,6 @@ TaskManager::abort( sal_Int32 CommandId )
         else
             it->second.abort();
     }
-}
-
-
-bool SAL_CALL TaskManager::isAborted( sal_Int32 CommandId )
-{
-    osl::MutexGuard aGuard( m_aMutex );
-    TaskMap::iterator it = m_aTaskMap.find( CommandId );
-    if( it == m_aTaskMap.end() || it->second.isAborted() )
-        return false;
-    else
-        return true;
 }
 
 
@@ -178,45 +170,9 @@ TaskManager::getCommandId( void )
 
 
 
-uno::Reference< task::XInteractionHandler > SAL_CALL
-TaskManager::getInteractionHandler( sal_Int32 CommandId )
-{
-    osl::MutexGuard aGuard( m_aMutex );
-    TaskMap::iterator it = m_aTaskMap.find( CommandId );
-    if( it == m_aTaskMap.end() )
-        return uno::Reference< task::XInteractionHandler >( 0 );
-    else
-        return it->second.getInteractionHandler();
-}
-
-
-
-uno::Reference< XProgressHandler > SAL_CALL
-TaskManager::getProgressHandler( sal_Int32 CommandId )
-{
-    osl::MutexGuard aGuard( m_aMutex );
-    TaskMap::iterator it = m_aTaskMap.find( CommandId );
-    if( it == m_aTaskMap.end() )
-        return uno::Reference< XProgressHandler >( 0 );
-    else
-        return it->second.getProgressHandler();
-}
-
-
-uno::Reference< XCommandEnvironment > SAL_CALL
-TaskManager::getCommandEnvironment( sal_Int32 CommandId )
-{
-    osl::MutexGuard aGuard( m_aMutex );
-    TaskMap::iterator it = m_aTaskMap.find( CommandId );
-    if( it == m_aTaskMap.end() )
-        return uno::Reference< XCommandEnvironment >( 0 );
-    else
-        return it->second.getCommandEnvironment();
-}
-
-
-void SAL_CALL TaskManager::handleTask( sal_Int32 CommandId,
-                                       const uno::Reference< task::XInteractionRequest >& request )
+void SAL_CALL TaskManager::handleTask(
+    sal_Int32 CommandId,
+    const uno::Reference< task::XInteractionRequest >& request )
 {
     osl::MutexGuard aGuard( m_aMutex );
     TaskMap::iterator it = m_aTaskMap.find( CommandId );
@@ -229,8 +185,3 @@ void SAL_CALL TaskManager::handleTask( sal_Int32 CommandId,
         it->second.setHandled();
     }
 }
-
-
-
-
-

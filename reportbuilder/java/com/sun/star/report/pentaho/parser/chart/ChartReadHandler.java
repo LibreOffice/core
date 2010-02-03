@@ -30,6 +30,7 @@
 package com.sun.star.report.pentaho.parser.chart;
 
 import com.sun.star.report.pentaho.OfficeNamespaces;
+import java.lang.Object;
 import java.util.ArrayList;
 
 import com.sun.star.report.pentaho.parser.ElementReadHandler;
@@ -98,9 +99,9 @@ public class ChartReadHandler extends ElementReadHandler
      */
     protected void doneParsing() throws SAXException
     {
-        for (int i = 0; i < children.size(); i++)
+        for (Object aChildren : children)
         {
-            final ElementReadHandler handler = (ElementReadHandler) children.get(i);
+            final ElementReadHandler handler = (ElementReadHandler) aChildren;
             element.addNode(handler.getElement());
         }
     }

@@ -168,8 +168,12 @@ public:
     long            GetEntryFlags( USHORT nPos ) const;
 
     void            SetTopEntry( USHORT nPos );
+    void            ShowProminentEntry( USHORT nPos );
     void            SetTopEntryStr( const XubString& rStr );
     USHORT          GetTopEntry() const;
+
+    void            SetProminentEntryType( ProminentEntry eType );
+    ProminentEntry  GetProminentEntryType() const;
 
     void            SaveValue() { mnSaveValue = GetSelectEntryPos(); }
     USHORT          GetSavedValue() const { return mnSaveValue; }

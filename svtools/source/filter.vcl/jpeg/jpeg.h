@@ -64,7 +64,7 @@ void*   JPEGMalloc( size_t size );
 void    JPEGFree( void *ptr );
 long    JPEGCallback( void* pCallbackData, long nPercent );
 
-long    WriteJPEG( void* pJPEGWriter, void* pOStm, long nWidth, long nHeight,
+long    WriteJPEG( void* pJPEGWriter, void* pOStm, long nWidth, long nHeight, long bGreyScale,
                    long nQualityPercent, void* pCallbackData );
 void*   GetScanline( void* pJPEGWriter, long nY );
 

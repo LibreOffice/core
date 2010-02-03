@@ -85,6 +85,7 @@ public final class SOFunctionManager extends ComponentBase implements XFunctionM
     /**
      * This method is a simple helper function to used in the static component initialisation functions as well as
      * in getSupportedServiceNames.
+     * @return
      */
     public static String[] getServiceNames()
     {
@@ -140,27 +141,33 @@ public final class SOFunctionManager extends ComponentBase implements XFunctionM
     // com.sun.star.report.meta.XFunctionManager:
     public com.sun.star.report.meta.XFunctionCategory getCategory(int position) throws com.sun.star.lang.IndexOutOfBoundsException, com.sun.star.lang.WrappedTargetException
     {
-        if ( position >= categories.length )
+        if (position >= categories.length)
+        {
             throw new com.sun.star.lang.IndexOutOfBoundsException();
-        return new StarFunctionCategory(defaultContext,m_xContext, functionRegistry, position, categories[position]);
+        }
+        return new StarFunctionCategory(defaultContext, m_xContext, functionRegistry, position, categories[position]);
     }
 
     public XFunctionDescription getFunctionByName(String arg0) throws NoSuchElementException
     {
         final FunctionDescription func = functionRegistry.getMetaData(arg0);
-        if ( func == null )
+        if (func == null)
+        {
             throw new NoSuchElementException();
+        }
         int i = 0;
         for (; i < categories.length; i++)
         {
-            if ( categories[i] == func.getCategory() )
+            if (categories[i] == func.getCategory())
+            {
                 break;
+            }
         }
         try
         {
             return new StarFunctionDescription(defaultContext, m_xContext, getCategory(i), func);
         }
-        catch ( Exception ex )
+        catch (Exception ex)
         {
         }
         return null;

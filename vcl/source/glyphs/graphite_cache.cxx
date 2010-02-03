@@ -36,8 +36,10 @@
 #include <tools/debug.hxx>
 #include <vcl/sallayout.hxx>
 
+#include "pregraphitestl.h"
 #include <graphite/GrClient.h>
 #include <graphite/Segment.h>
+#include "postgraphitestl.h"
 
 #include <rtl/ustring.hxx>
 #include <vcl/graphite_layout.hxx>

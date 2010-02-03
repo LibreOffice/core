@@ -105,7 +105,7 @@ testcase tToolsCustomizeKeyboardFunction(lList())
 	i87952 = ".uno:InsertApplet"
 	i92080 = ".uno:SaveGraphic"
 	i96322 = ".uno:ActivateStyleApply"
-	i100037 = ".uno:AcceptTracedChange, .uno:DeleteComment, .uno:RejectTracedChange, .uno:ReplyNote, .uno:TaskPaneInsertPage"
+	i100037 = ".uno:AcceptTracedChange, .uno:DeleteComment, .uno:RejectTracedChange, .uno:ReplyNote, .uno:TaskPaneInsertPage, .uno:ValidityReference"
     
     Call hNewDocument
     sleep 2
@@ -137,52 +137,52 @@ testcase tToolsCustomizeKeyboardFunction(lList())
                         listAppend(lList(),sTemp2)
                         bErrorFound = false
                         if (inStr(i60617,sTemp2)>0) then
-                            qaErrorLog "#i60617# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            WarnLog "#i60617# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         if (inStr(sTemp2,i64346)>0) then
-                            qaErrorLog "#i64346# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            WarnLog "#i64346# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         if (inStr(i43969,sTemp2)>0) then
-                            qaErrorLog "#i41265# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            WarnLog "#i41265# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         if (inStr(i80850,sTemp2)>0) then
-                            qaErrorLog "#i80850# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            WarnLog "#i80850# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         if (inStr(i84982,sTemp2)>0) then
-                            qaErrorLog "#i84982# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            WarnLog "#i84982# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         if (inStr(i84983,sTemp2)>0) then
-                            qaErrorLog "#i84983# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            WarnLog "#i84983# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         if (inStr(i87950,sTemp2)>0) then
-                            qaErrorLog "#i87950# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            WarnLog "#i87950# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         if (inStr(i87951,sTemp2)>0) then
-                            qaErrorLog "#i87951# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            WarnLog "#i87951# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         if (inStr(i87952,sTemp2)>0) then
-                            qaErrorLog "#i87952# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            warnLog "#i87952# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         if (inStr(i92080,sTemp2)>0) then
-                            qaErrorLog "#i92080# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            WarnLog "#i92080# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         if (inStr(i96322,sTemp2)>0) then
-                            qaErrorLog "#i96322# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            WarnLog "#i96322# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         
                         if (inStr(i100037,sTemp2)>0) then
-                            qaErrorLog "#i100037# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                            WarnLog "#i100037# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         if ( not bErrorFound ) then

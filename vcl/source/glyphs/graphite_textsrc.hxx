@@ -62,9 +62,11 @@
 #include "vcl/dllapi.h"
 
 // Libraries
+#include "pregraphitestl.h"
 #include <graphite/GrClient.h>
 #include <graphite/Font.h>
 #include <graphite/ITextSource.h>
+#include "postgraphitestl.h"
 
 // Module type definitions and forward declarations.
 //
@@ -91,7 +93,7 @@ public:
         virtual float           getVerticalOffset(gr::toffset ich);
         virtual gr::isocode     getLanguage(gr::toffset ich);
 
-        virtual std::pair<gr::toffset, gr::toffset> propertyRange(gr::toffset ich);
+        virtual sil_std::pair<gr::toffset, gr::toffset> propertyRange(gr::toffset ich);
         virtual size_t  getFontFeatures(gr::toffset ich, gr::FeatureSetting * prgfset);
         virtual bool    sameSegment(gr::toffset ich1, gr::toffset ich2);
 

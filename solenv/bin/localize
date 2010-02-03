@@ -12,9 +12,9 @@ else
     export LD_LIBRARY_PATH=${LD_LIBRARY_PATH+${LD_LIBRARY_PATH}:}${SOLARVERSION?}/${INPATH?}/lib${UPDMINOREXT}
 fi
 
-if [ x${SOLARVER}x = xx -o x${UPDMINOR}x = xx  ]; then
+if [ x${SOLARVER}x = xx -o x${UPDMINOREXT}x = xx  ]; then
     exec perl -w $SOLARVERSION/$INPATH/bin/localize.pl "$@"
 else
-    exec perl -w $SOLARVERSION/$INPATH/bin.$UPDMINOR/localize.pl "$@"
+    exec perl -w $SOLARVERSION/$INPATH/bin$UPDMINOREXT/localize.pl "$@"
 fi
 

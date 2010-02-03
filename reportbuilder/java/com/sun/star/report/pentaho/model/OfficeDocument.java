@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.model;
 
 import com.sun.star.report.JobProperties;
@@ -43,32 +41,35 @@ import org.jfree.report.JFreeReport;
  */
 public class OfficeDocument extends JFreeReport
 {
-  private OfficeStylesCollection stylesCollection;
-  private JobProperties jobProperties;
 
-    public JobProperties getJobProperties() {
+    private OfficeStylesCollection stylesCollection;
+    private JobProperties jobProperties;
+
+    public JobProperties getJobProperties()
+    {
         return jobProperties;
     }
 
-    public void setJobProperties(final JobProperties jobProperties) {
+    public void setJobProperties(final JobProperties jobProperties)
+    {
         this.jobProperties = jobProperties;
     }
 
-  public OfficeDocument()
-  {
-  }
-
-  public OfficeStylesCollection getStylesCollection()
-  {
-    return stylesCollection;
-  }
-
-  public void setStylesCollection(final OfficeStylesCollection stylesCollection)
-  {
-    if (stylesCollection == null)
+    public OfficeDocument()
     {
-      throw new NullPointerException();
     }
-    this.stylesCollection = stylesCollection;
-  }
+
+    public OfficeStylesCollection getStylesCollection()
+    {
+        return stylesCollection;
+    }
+
+    public void setStylesCollection(final OfficeStylesCollection stylesCollection)
+    {
+        if (stylesCollection == null)
+        {
+            throw new NullPointerException();
+        }
+        this.stylesCollection = stylesCollection;
+    }
 }

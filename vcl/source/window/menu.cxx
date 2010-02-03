@@ -5578,6 +5578,17 @@ BOOL MenuBarWindow::ImplHandleKeyEvent( const KeyEvent& rKEvent, BOOL bFromMenu 
                     n = pMenu->GetItemCount()-1;
             }
 
+            // handling gtk like (aka mbOpenMenuOnF10)
+            // do not highlight an item when opening a sub menu
+            // unless there already was a higlighted sub menu item
+            bool bWasHighlight = false;
+            if( pActivePopup )
+            {
+                MenuFloatingWindow* pSubWindow = dynamic_cast<MenuFloatingWindow*>(pActivePopup->ImplGetWindow());
+                if( pSubWindow )
+                    bWasHighlight = (pSubWindow->GetHighlightedItem() != ITEMPOS_INVALID);
+            }
+
             USHORT nLoop = n;
 
             if( nCode == KEY_HOME )
@@ -5604,7 +5615,10 @@ BOOL MenuBarWindow::ImplHandleKeyEvent( const KeyEvent& rKEvent, BOOL bFromMenu 
                 MenuItemData* pData = (MenuItemData*)pMenu->GetItemList()->GetDataFromPos( n );
                 if ( ( pData->eType != MENUITEM_SEPARATOR ) && pMenu->ImplIsVisible( n ) )
                 {
-                    ChangeHighlightItem( n, TRUE );
+                    BOOL bDoSelect = TRUE;
+                    if( ImplGetSVData()->maNWFData.mbOpenMenuOnF10 )
+                        bDoSelect = bWasHighlight;
+                    ChangeHighlightItem( n, bDoSelect );
                     break;
                 }
             } while ( n != nLoop );

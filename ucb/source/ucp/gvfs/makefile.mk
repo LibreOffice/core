@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -62,10 +62,10 @@ PKGCONFIG_LIBS!:=-Wl,--export-dynamic $(PKGCONFIG_LIBS:s/ -llinc//:s/ -lbonobo-a
 DLLPRE =
 
 SLOFILES=\
-    $(SLO)$/content.obj	\
-    $(SLO)$/directory.obj	\
-    $(SLO)$/stream.obj	\
-    $(SLO)$/provider.obj
+    $(SLO)$/gvfs_content.obj	\
+    $(SLO)$/gvfs_directory.obj	\
+    $(SLO)$/gvfs_stream.obj	\
+    $(SLO)$/gvfs_provider.obj
 
 SHL1NOCHECK=TRUE
 SHL1TARGET=$(TARGET)$(UCPGVFS_MAJOR).uno

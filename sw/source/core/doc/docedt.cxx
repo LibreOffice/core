@@ -220,17 +220,15 @@ void _RestFlyInRange( _SaveFlyArr & rArr, const SwNodeIndex& rSttIdx,
 
 void _SaveFlyInRange( const SwNodeRange& rRg, _SaveFlyArr& rArr )
 {
-    SwFrmFmt* pFmt;
-    const SwFmtAnchor* pAnchor;
-    const SwPosition* pAPos;
     SwSpzFrmFmts& rFmts = *rRg.aStart.GetNode().GetDoc()->GetSpzFrmFmts();
     for( sal_uInt16 n = 0; n < rFmts.Count(); ++n )
     {
-        pFmt = (SwFrmFmt*)rFmts[n];
-        pAnchor = &pFmt->GetAnchor();
-        if( ( FLY_AT_CNTNT == pAnchor->GetAnchorId() ||
-              FLY_AUTO_CNTNT == pAnchor->GetAnchorId() ) &&
-            0 != ( pAPos = pAnchor->GetCntntAnchor() ) &&
+        SwFrmFmt *const pFmt = static_cast<SwFrmFmt*>(rFmts[n]);
+        SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();
+        SwPosition const*const pAPos = pAnchor->GetCntntAnchor();
+        if (pAPos &&
+            ((FLY_AT_PARA == pAnchor->GetAnchorId()) ||
+             (FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
             rRg.aStart <= pAPos->nNode && pAPos->nNode < rRg.aEnd )
         {
             _SaveFly aSave( pAPos->nNode.GetIndex() - rRg.aStart.GetIndex(),
@@ -260,7 +258,6 @@ void _SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
                 pPos->nContent == rEndNdIdx.GetNode().GetCntntNode()->Len() ))
                     ? 0 : 1;
 
-    const SwPosition* pAPos;
     const SwNodeIndex* pCntntIdx;
 
     for( sal_uInt16 n = 0; n < rFmts.Count(); ++n )
@@ -268,9 +265,10 @@ void _SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
         sal_Bool bInsPos = sal_False;
         pFmt = (SwFrmFmt*)rFmts[n];
         pAnchor = &pFmt->GetAnchor();
-        if( ( FLY_AT_CNTNT == pAnchor->GetAnchorId() ||
-              FLY_AUTO_CNTNT == pAnchor->GetAnchorId() ) &&
-            0 != ( pAPos = pAnchor->GetCntntAnchor() ) &&
+        const SwPosition* pAPos = pAnchor->GetCntntAnchor();
+        if (pAPos &&
+            ((FLY_AT_PARA == pAnchor->GetAnchorId()) ||
+             (FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
             // nicht verschieben, wenn die InsPos im CntntBereich vom Fly ist
             ( 0 == ( pCntntIdx = pFmt->GetCntnt().GetCntntIdx() ) ||
               !( *pCntntIdx < rInsPos &&
@@ -317,14 +315,14 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
 
     SwDoc* pDoc = rMkNdIdx.GetNode().GetDoc();
     SwSpzFrmFmts& rTbl = *pDoc->GetSpzFrmFmts();
-    const SwPosition* pAPos;
     for ( sal_uInt16 i = rTbl.Count(); i; )
     {
         SwFrmFmt *pFmt = rTbl[--i];
         const SwFmtAnchor &rAnch = pFmt->GetAnchor();
-        if( ( rAnch.GetAnchorId() == FLY_AT_CNTNT ||
-              rAnch.GetAnchorId() == FLY_AUTO_CNTNT ) &&
-            0 != ( pAPos = rAnch.GetCntntAnchor() ) &&
+        SwPosition const*const pAPos = rAnch.GetCntntAnchor();
+        if (pAPos &&
+            ((rAnch.GetAnchorId() == FLY_AT_PARA) ||
+             (rAnch.GetAnchorId() == FLY_AT_CHAR)) &&
             ( bDelFwrd
                 ? rMkNdIdx < pAPos->nNode && pAPos->nNode <= rPtNdIdx
                 : rPtNdIdx <= pAPos->nNode && pAPos->nNode < rMkNdIdx ))
@@ -2620,14 +2618,14 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
             // was ist mit Fly's ??
         {
             // stehen noch FlyFrames rum, loesche auch diese
-            const SwPosition* pAPos;
             for( sal_uInt16 n = 0; n < GetSpzFrmFmts()->Count(); ++n )
             {
                 SwFrmFmt* pFly = (*GetSpzFrmFmts())[n];
                 const SwFmtAnchor* pAnchor = &pFly->GetAnchor();
-                if( ( FLY_AT_CNTNT == pAnchor->GetAnchorId() ||
-                      FLY_AUTO_CNTNT == pAnchor->GetAnchorId() ) &&
-                    0 != ( pAPos = pAnchor->GetCntntAnchor() ) &&
+                SwPosition const*const pAPos = pAnchor->GetCntntAnchor();
+                if (pAPos &&
+                    ((FLY_AT_PARA == pAnchor->GetAnchorId()) ||
+                     (FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
                     aRg.aStart <= pAPos->nNode && pAPos->nNode <= aRg.aEnd )
                 {
                     DelLayoutFmt( pFly );

@@ -85,7 +85,7 @@ class RTSDialog : public TabDialog
     DECL_LINK( ClickButton, Button* );
 
     // helper functions
-    void insertAllPPDValues( ListBox&, const ::psp::PPDKey* );
+    void insertAllPPDValues( ListBox&, const psp::PPDParser*, const psp::PPDKey* );
 public:
     RTSDialog( const ::psp::PrinterInfo& rJobData, const String& rPrinter, bool bAllPages, Window* pParent = NULL );
     ~RTSDialog();

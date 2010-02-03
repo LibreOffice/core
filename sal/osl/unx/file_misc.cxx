@@ -1013,6 +1013,15 @@ static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszD
         return nRet;
     }
 
+    DestFileFD=open(pszDestFileName, O_WRONLY | O_CREAT, mode);
+
+    if ( DestFileFD < 0 )
+    {
+        nRet=errno;
+        close(SourceFileFD);
+        return nRet;
+    }
+
     /* HACK: because memory mapping fails on various
        platforms if the size of the source file is  0 byte */
     if (0 == nSourceSize)
@@ -1030,16 +1039,8 @@ static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszD
       || -1 == lseek( SourceFileFD, 0, SEEK_SET ) )
     {
         nRet = errno;
-        (void) close( SourceFileFD );
-        return nRet;
-    }
-
-    DestFileFD=open(pszDestFileName, O_WRONLY | O_CREAT, mode);
-
-    if ( DestFileFD < 0 )
-    {
-        nRet=errno;
-        close(SourceFileFD);
+        close( SourceFileFD );
+        close( DestFileFD );
         return nRet;
     }
 

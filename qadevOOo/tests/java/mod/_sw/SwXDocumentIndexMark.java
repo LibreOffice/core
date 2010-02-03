@@ -127,15 +127,6 @@ public class SwXDocumentIndexMark extends TestCase {
             UnoRuntime.queryInterface(XDocumentIndexMark.class, oDIM);
 
         try {
-            xDIM.attach(oText);
-            //xDIM.setMarkEntry("SwXDocumentIndexMark");
-        } catch( com.sun.star.lang.IllegalArgumentException e ) {
-            log.println("Error: " + e);
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't attach IndexMark", e);
-        }
-
-        try {
             oText.insertTextContent(oCursor, xDIM, false);
         } catch (com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace(log);

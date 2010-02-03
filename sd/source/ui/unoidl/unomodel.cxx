@@ -65,6 +65,7 @@
 #include <svx/unofill.hxx>
 #include <svx/unopool.hxx>
 #include <svx/svdorect.hxx>
+#include <svx/flditem.hxx>
 #include <vos/mutex.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 
@@ -110,6 +111,12 @@
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
+
+#include <com/sun/star/office/XAnnotation.hpp>
+#include <com/sun/star/office/XAnnotationAccess.hpp>
+#include <com/sun/star/office/XAnnotationEnumeration.hpp>
+#include <com/sun/star/geometry/RealPoint2D.hpp>
+#include <com/sun/star/util/DateTime.hpp>
 
 using ::rtl::OUString;
 
@@ -1602,6 +1609,42 @@ sal_Int32 ImplPDFGetBookmarkPage( const String& rBookmark, SdDrawDocument& rDoc 
     return nPage;
 }
 
+void ImplPDFExportComments( uno::Reference< drawing::XDrawPage > xPage, vcl::PDFExtOutDevData& rPDFExtOutDevData )
+{
+    try
+    {
+        uno::Reference< office::XAnnotationAccess > xAnnotationAccess( xPage, uno::UNO_QUERY_THROW );
+        uno::Reference< office::XAnnotationEnumeration > xAnnotationEnumeration( xAnnotationAccess->createAnnotationEnumeration() );
+
+        LanguageType eLanguage = Application::GetSettings().GetLanguage();
+        while( xAnnotationEnumeration->hasMoreElements() )
+        {
+            uno::Reference< office::XAnnotation > xAnnotation( xAnnotationEnumeration->nextElement() );
+
+            geometry::RealPoint2D aRealPoint2D( xAnnotation->getPosition() );
+            uno::Reference< text::XText > xText( xAnnotation->getTextRange() );
+//          rtl::OUString sInitials( getInitials( sAuthor ) );
+            util::DateTime aDateTime( xAnnotation->getDateTime() );
+
+            Date aDate( aDateTime.Day, aDateTime.Month, aDateTime.Year );
+            Time aTime;
+            String aStr( SvxDateTimeField::GetFormatted( aDate, aTime, SVXDATEFORMAT_B, *(SD_MOD()->GetNumberFormatter()), eLanguage ) );
+
+            vcl::PDFNote aNote;
+            String sTitle( xAnnotation->getAuthor() );
+            sTitle.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ", " ) );
+            sTitle += aStr;
+            aNote.Title = sTitle;
+            aNote.Contents = xText->getString();
+            rPDFExtOutDevData.CreateNote( Rectangle( Point( static_cast< long >( aRealPoint2D.X * 100 ),
+                static_cast< long >( aRealPoint2D.Y * 100 ) ), Size( 1000, 1000 ) ), aNote );
+        }
+    }
+    catch( uno::Exception& )
+    {
+    }
+}
+
 void ImplPDFExportShapeInteraction( uno::Reference< drawing::XShape > xShape, SdDrawDocument& rDoc, vcl::PDFExtOutDevData& rPDFExtOutDevData )
 {
     const rtl::OUString sGroup   ( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GroupShape" ) );
@@ -1844,7 +1887,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
         for( sal_Int32 nProperty = 0, nPropertyCount = rxOptions.getLength(); nProperty < nPropertyCount; ++nProperty )
         {
             if( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) ) )
-                rxOptions[ nProperty].Value >>= xRenderDevice;
+                rxOptions[ nProperty ].Value >>= xRenderDevice;
             else if ( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotesPages" ) ) )
             {
                 rxOptions[ nProperty].Value >>= bExportNotesPages;
@@ -1940,6 +1983,8 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                             uno::Reference< drawing::XDrawPage > xPage( uno::Reference< drawing::XDrawPage >::query( pPage->getUnoPage() ) );
                             if ( xPage.is() )
                             {
+                                if ( pPDFExtOutDevData->GetIsExportNotes() )
+                                    ImplPDFExportComments( xPage, *pPDFExtOutDevData );
                                 uno::Reference< beans::XPropertySet > xPagePropSet( xPage, uno::UNO_QUERY );
                                 if( xPagePropSet.is() )
                                 {

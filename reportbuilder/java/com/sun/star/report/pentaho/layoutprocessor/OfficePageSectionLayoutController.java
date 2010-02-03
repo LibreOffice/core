@@ -15,15 +15,16 @@ import org.jfree.report.JFreeReportInfo;
  */
 public class OfficePageSectionLayoutController extends SectionLayoutController
 {
-  public OfficePageSectionLayoutController()
-  {
-  }
 
-  protected AttributeMap computeAttributes(final FlowController flowController, final Element element, final ReportTarget reportTarget) throws DataSourceException
-  {
-    final AttributeMap map = new AttributeMap( super.computeAttributes(flowController, element, reportTarget));
-    map.setAttribute(JFreeReportInfo.REPORT_NAMESPACE, "role", "spreadsheet-section");
-    map.makeReadOnly();
-    return map;
-  }
+    public OfficePageSectionLayoutController()
+    {
+    }
+
+    protected AttributeMap computeAttributes(final FlowController flowController, final Element element, final ReportTarget reportTarget) throws DataSourceException
+    {
+        final AttributeMap map = new AttributeMap(super.computeAttributes(flowController, element, reportTarget));
+        map.setAttribute(JFreeReportInfo.REPORT_NAMESPACE, "role", "spreadsheet-section");
+        map.makeReadOnly();
+        return map;
+    }
 }

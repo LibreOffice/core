@@ -1,3 +1,4 @@
+
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -349,6 +350,27 @@ Resource RID_UUI_ERRHDL
     STRING (ERRCODE_UUI_INVALID_XFORMS_SUBMISSION_DATA & ERRCODE_RES_MASK)
     {
         Text [ en-US ] = "The form contains invalid data. Do you still want to continue?";
+    };
+
+    String (ERRCODE_UUI_LOCKING_LOCKED & ERRCODE_RES_MASK)
+    {
+        Text [ en-US ] = "The file $(ARG1) is locked by another user. Currently, another write access to this file cannot be granted.";
+
+    };
+
+    String (ERRCODE_UUI_LOCKING_LOCKED_SELF & ERRCODE_RES_MASK)
+    {
+        Text [ en-US ] = "The file $(ARG1) is locked by yourself. Currently, another write access to this file cannot be granted.";
+    };
+
+    String (ERRCODE_UUI_LOCKING_NOT_LOCKED & ERRCODE_RES_MASK)
+    {
+        Text [ en-US ] = "The file $(ARG1) is currently not locked by yourself.";
+    };
+
+    String (ERRCODE_UUI_LOCKING_LOCK_EXPIRED & ERRCODE_RES_MASK)
+    {
+        Text [ en-US ] = "The previously obtained lock for file $(ARG1) has expired.\nThis can happen due to problems on the server managing the file lock. It cannot be guaranteed that write operations on this file will not overwrite changes done by other users!";
     };
 
     STRING (ERRCODE_UUI_UNKNOWNAUTH_UNTRUSTED)

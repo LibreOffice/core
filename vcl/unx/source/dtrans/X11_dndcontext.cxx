@@ -42,8 +42,8 @@ using namespace x11;
  */
 
 DropTargetDropContext::DropTargetDropContext(
-    Window aDropWindow,
-    Time aTimestamp,
+    XLIB_Window aDropWindow,
+    XLIB_Time aTimestamp,
     SelectionManager& rManager ) :
         m_aDropWindow( aDropWindow ),
         m_nTimestamp( aTimestamp ),
@@ -77,8 +77,8 @@ void DropTargetDropContext::dropComplete( sal_Bool success ) throw()
  */
 
 DropTargetDragContext::DropTargetDragContext(
-    Window aDropWindow,
-    Time aTimestamp,
+    XLIB_Window aDropWindow,
+    XLIB_Time aTimestamp,
     SelectionManager& rManager ) :
         m_aDropWindow( aDropWindow ),
         m_nTimestamp( aTimestamp ),
@@ -106,8 +106,8 @@ void DropTargetDragContext::rejectDrag() throw()
  */
 
 DragSourceContext::DragSourceContext(
-    Window aDropWindow,
-    Time aTimestamp,
+    XLIB_Window aDropWindow,
+    XLIB_Time aTimestamp,
     SelectionManager& rManager ) :
         m_aDropWindow( aDropWindow ),
         m_nTimestamp( aTimestamp ),

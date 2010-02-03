@@ -31,11 +31,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
 #include "cmdid.h"
 #include "hintids.hxx"
-
 
 #include <svl/stritem.hxx>
 #include <svx/protitem.hxx>
@@ -212,11 +209,11 @@ void SwFlyFrmAttrMgr::InsertFlyFrm(RndStdIds    eAnchorType,
                                    const Size   &rSize,
                                    BOOL bAbs )
 {
-    ASSERT( eAnchorType == FLY_PAGE     ||
-            eAnchorType == FLY_AT_CNTNT ||
-            eAnchorType == FLY_AUTO_CNTNT ||
-            eAnchorType == FLY_AT_FLY ||
-            eAnchorType == FLY_IN_CNTNT, "Rahmentyp nicht erlaubt" );
+    ASSERT( eAnchorType == FLY_AT_PAGE ||
+            eAnchorType == FLY_AT_PARA ||
+            eAnchorType == FLY_AT_CHAR ||
+            eAnchorType == FLY_AT_FLY  ||
+            eAnchorType == FLY_AS_CHAR,     "invalid frame type" );
 
     if ( bAbs )
         SetAbsPos( rPos );
@@ -238,8 +235,8 @@ void SwFlyFrmAttrMgr::SetAnchor( RndStdIds eId )
     pOwnSh->GetPageNum( nPhyPageNum, nVirtPageNum );
 
     aSet.Put( SwFmtAnchor( eId, nPhyPageNum ) );
-    if( FLY_PAGE == eId || FLY_AT_CNTNT == eId || FLY_AUTO_CNTNT == eId
-        || FLY_AT_FLY == eId )
+    if ((FLY_AT_PAGE == eId) || (FLY_AT_PARA == eId) || (FLY_AT_CHAR == eId)
+        || (FLY_AT_FLY == eId))
     {
         SwFmtVertOrient aVertOrient( GetVertOrient() );
         SwFmtHoriOrient aHoriOrient( GetHoriOrient() );
@@ -319,7 +316,7 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
         rVal.nWidth = rVal.nHeight;
         rVal.nHeight = nTmp;
     }
-    if ( eAnchorType == FLY_PAGE || eAnchorType == FLY_AT_FLY )
+    if ((eAnchorType == FLY_AT_PAGE) || (eAnchorType == FLY_AT_FLY))
     {
         // MinimalPosition
         rVal.nMinHPos = aBoundRect.Left();
@@ -369,8 +366,8 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
     }
     // OD 12.11.2003 #i22341# - handle to character anchored objects vertical
     // aligned at character or top of line in a special case
-    else if ( eAnchorType == FLY_AT_CNTNT ||
-                ( eAnchorType == FLY_AUTO_CNTNT &&
+    else if ((eAnchorType == FLY_AT_PARA) ||
+                ((eAnchorType == FLY_AT_CHAR) &&
                 !(rVal.nVRelOrient == text::RelOrientation::CHAR) &&
                 !(rVal.nVRelOrient == text::RelOrientation::TEXT_LINE) ) )
     {
@@ -437,7 +434,7 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
     // vertical aligned at character or top of line.
     // Note: (1) positive vertical values are positions above the top of line
     //       (2) negative vertical values are positions below the top of line
-    else if ( eAnchorType == FLY_AUTO_CNTNT &&
+    else if ( (eAnchorType == FLY_AT_CHAR) &&
               ( rVal.nVRelOrient == text::RelOrientation::CHAR ||
                 rVal.nVRelOrient == text::RelOrientation::TEXT_LINE ) )
     {
@@ -484,7 +481,7 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
             rVal.nMaxHeight = aBoundRect.Height();
         }
     }
-    else if ( eAnchorType == FLY_IN_CNTNT )
+    else if ( eAnchorType == FLY_AS_CHAR )
     {
         rVal.nMinHPos = 0;
         rVal.nMaxHPos = 0;

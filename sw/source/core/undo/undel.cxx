@@ -81,7 +81,7 @@ void lcl_MakeAutoFrms( const SwSpzFrmFmts& rSpzArr, ULONG nMovedIndex )
         {
             pFmt = (SwFlyFrmFmt*)rSpzArr[n];
             pAnchor = &pFmt->GetAnchor();
-            if( pAnchor->GetAnchorId() == FLY_AUTO_CNTNT )
+            if (pAnchor->GetAnchorId() == FLY_AT_CHAR)
             {
                 const SwPosition* pAPos = pAnchor->GetCntntAnchor();
                 if( pAPos && nMovedIndex == pAPos->nNode.GetIndex() )
@@ -632,7 +632,7 @@ void lcl_ReAnchorAtCntntFlyFrames( const SwSpzFrmFmts& rSpzArr, SwPosition &rPos
         {
             pFmt = (SwFlyFrmFmt*)rSpzArr[n];
             pAnchor = &pFmt->GetAnchor();
-            if( pAnchor->GetAnchorId() == FLY_AT_CNTNT )
+            if (pAnchor->GetAnchorId() == FLY_AT_PARA)
             {
                 pAPos =  pAnchor->GetCntntAnchor();
                 if( pAPos && nOldIdx == pAPos->nNode.GetIndex() )

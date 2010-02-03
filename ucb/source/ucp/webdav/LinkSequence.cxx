@@ -64,12 +64,11 @@ struct LinkSequenceParseContext
 extern "C" int LinkSequence_startelement_callback(
     void *,
     int parent,
-    const char *nspace,
+    const char * /*nspace*/,
     const char *name,
     const char ** )
 {
-    if ( ( name != 0 ) &&
-         ( ( nspace == 0 ) || ( strcmp( nspace, "" ) == 0 ) ) )
+    if ( name != 0 )
     {
         switch ( parent )
         {
@@ -192,7 +191,7 @@ bool LinkSequence::createFromXML( const rtl::OString & rInData,
             rOutData[ nCount - 1 ] = *aCtx.pLink;
         }
 
-        nStart = nEnd + TOKEN_LENGTH + 1;
+        nStart = nEnd + TOKEN_LENGTH;
         nEnd   = rInData.indexOf( "</link>", nStart );
     }
 
@@ -215,11 +214,11 @@ bool LinkSequence::toXML( const uno::Sequence< ucb::Link > & rInData,
 
         for ( sal_Int32 n = 0; n < nCount; ++n )
         {
-               rOutData += aPre;
-               rOutData += rInData[ n ].Source;
-               rOutData += aMid;
-               rOutData += rInData[ n ].Destination;
-               rOutData += aEnd;
+                rOutData += aPre;
+                rOutData += rInData[ n ].Source;
+                rOutData += aMid;
+                rOutData += rInData[ n ].Destination;
+                rOutData += aEnd;
         }
         return true;
     }

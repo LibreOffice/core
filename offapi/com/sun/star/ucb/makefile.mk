@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -55,8 +55,10 @@ IDLFILES=\
     CachedDynamicResultSetStub.idl\
     CachedDynamicResultSetStubFactory.idl\
     CHAOSProgressStart.idl\
+    CertificateValidationRequest.idl\
     Command.idl\
     CommandAbortedException.idl\
+    CommandEnvironment.idl\
     CommandFailedException.idl\
     CommandInfo.idl\
     CommandInfoChange.idl\
@@ -122,6 +124,10 @@ IDLFILES=\
     InteractiveCHAOSException.idl\
     InteractiveFileIOException.idl\
     InteractiveIOException.idl\
+    InteractiveLockingException.idl\
+    InteractiveLockingLockedException.idl\
+    InteractiveLockingLockExpiredException.idl\
+    InteractiveLockingNotLockedException.idl\
     InteractiveNetworkConnectException.idl\
     InteractiveNetworkException.idl\
     InteractiveNetworkGeneralException.idl\
@@ -264,8 +270,7 @@ IDLFILES=\
     XSimpleFileAccess3.idl\
     XSortedDynamicResultSetFactory.idl\
     XSourceInitialization.idl\
-    XWebDAVCommandEnvironment.idl \
-    CertificateValidationRequest.idl
+    XWebDAVCommandEnvironment.idl
 
 # ------------------------------------------------------------------
 

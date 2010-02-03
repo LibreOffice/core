@@ -304,15 +304,6 @@ Reference< XAccessible > AccessibleGridControlHeader::implGetChild(
     return xChild;
 }
 
-void AccessibleGridControlHeader::ensureIsValidHeaderIndex( sal_Int32 nIndex )
-    throw ( lang::IndexOutOfBoundsException )
-{
-    if( isRowBar() )
-        ensureIsValidRow( nIndex );
-    else
-        ensureIsValidColumn( nIndex );
-}
-
 // ============================================================================
 
 } // namespace accessibility

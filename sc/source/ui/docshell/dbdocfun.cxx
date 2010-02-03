@@ -1234,7 +1234,7 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
                                   aRange.aEnd.Col(),   aRange.aEnd.Row(),
                                   nTab, SC_MF_AUTO );
 
-            pDoc->GetDPCollection()->Free( pOldObj );   // object is deleted here
+            pDoc->GetDPCollection()->FreeTable( pOldObj );  // object is deleted here
 
             rDocShell.PostPaintGridAll();   //! only necessary parts
             rDocShell.PostPaint( aRange.aStart.Col(), aRange.aStart.Row(), nTab,
@@ -1278,7 +1278,7 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
 
                 pDestObj = new ScDPObject( *pNewObj );
                 pDestObj->SetAlive(TRUE);
-                if ( !pDoc->GetDPCollection()->Insert(pDestObj) )
+                if ( !pDoc->GetDPCollection()->InsertNewTable(pDestObj) )
                 {
                     DBG_ERROR("cannot insert DPObject");
                     DELETEZ( pDestObj );

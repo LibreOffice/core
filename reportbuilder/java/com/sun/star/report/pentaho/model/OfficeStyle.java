@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.model;
 
 import com.sun.star.report.OfficeToken;
@@ -44,91 +42,91 @@ import org.jfree.report.structure.Section;
  */
 public class OfficeStyle extends Section
 {
-  public OfficeStyle()
-  {
-    setNamespace(OfficeNamespaces.STYLE_NS);
-    setType("style");
-  }
 
-  public String getStyleName()
-  {
-    return (String) getAttribute(OfficeNamespaces.STYLE_NS, "name");
-  }
+    public OfficeStyle()
+    {
+        setNamespace(OfficeNamespaces.STYLE_NS);
+        setType("style");
+    }
 
-  public void setStyleName(final String name)
-  {
-    setAttribute(OfficeNamespaces.STYLE_NS, "name", name);
-  }
+    public String getStyleName()
+    {
+        return (String) getAttribute(OfficeNamespaces.STYLE_NS, "name");
+    }
 
-  /**
-   * A parent style name must be a common style (it cannot be an automatic
-   * style) and has to exist. If no parent style is given, an implementation
-   * specific default style is used.
-   *
-   * @return
-   */
-  public String getStyleParent()
-  {
-    return (String) getAttribute(OfficeNamespaces.STYLE_NS, "parent-style-name");
-  }
+    public void setStyleName(final String name)
+    {
+        setAttribute(OfficeNamespaces.STYLE_NS, "name", name);
+    }
 
-  public void setStyleParent(final String parentName)
-  {
-    setAttribute(OfficeNamespaces.STYLE_NS, "parent-style-name", parentName);
-  }
+    /**
+     * A parent style name must be a common style (it cannot be an automatic
+     * style) and has to exist. If no parent style is given, an implementation
+     * specific default style is used.
+     *
+     * @return
+     */
+    public String getStyleParent()
+    {
+        return (String) getAttribute(OfficeNamespaces.STYLE_NS, "parent-style-name");
+    }
 
-  public String getStyleFamily()
-  {
-    return (String) getAttribute(OfficeNamespaces.STYLE_NS, "family");
-  }
+    public void setStyleParent(final String parentName)
+    {
+        setAttribute(OfficeNamespaces.STYLE_NS, "parent-style-name", parentName);
+    }
 
-  public void setStyleFamily(final String family)
-  {
-    setAttribute(OfficeNamespaces.STYLE_NS, "family", family);
-  }
+    public String getStyleFamily()
+    {
+        return (String) getAttribute(OfficeNamespaces.STYLE_NS, "family");
+    }
+
+    public void setStyleFamily(final String family)
+    {
+        setAttribute(OfficeNamespaces.STYLE_NS, "family", family);
+    }
 
 //  public String getMasterPageName()
 //  {
 //    return (String) getAttribute(OfficeNamespaces.STYLE_NS, "master-page-name");
 //  }
+    public Element getParagraphProperties()
+    {
+        return findFirstChild(OfficeNamespaces.STYLE_NS, "paragraph-properties");
+    }
 
-  public Element getParagraphProperties ()
-  {
-    return findFirstChild(OfficeNamespaces.STYLE_NS, "paragraph-properties");
-  }
+    public Element getTextProperties()
+    {
+        return findFirstChild(OfficeNamespaces.STYLE_NS, "text-properties");
+    }
 
-  public Element getTextProperties ()
-  {
-    return findFirstChild(OfficeNamespaces.STYLE_NS, "text-properties");
-  }
+    public Element getTableRowProperties()
+    {
+        return findFirstChild(OfficeNamespaces.STYLE_NS, "table-row-properties");
+    }
 
-  public Element getTableRowProperties ()
-  {
-    return findFirstChild(OfficeNamespaces.STYLE_NS, "table-row-properties");
-  }
+    public Element getTableProperties()
+    {
+        return findFirstChild(OfficeNamespaces.STYLE_NS, "table-properties");
+    }
 
-  public Element getTableProperties ()
-  {
-    return findFirstChild(OfficeNamespaces.STYLE_NS, "table-properties");
-  }
+    public Element getTableColumnProperties()
+    {
+        return findFirstChild(OfficeNamespaces.STYLE_NS, "table-column-properties");
+    }
 
-  public Element getTableColumnProperties ()
-  {
-    return findFirstChild(OfficeNamespaces.STYLE_NS, "table-column-properties");
-  }
+    public Element getSectionProperties()
+    {
+        return findFirstChild(OfficeNamespaces.STYLE_NS, "section-properties");
+    }
 
-  public Element getSectionProperties ()
-  {
-    return findFirstChild(OfficeNamespaces.STYLE_NS, "section-properties");
-  }
+    public Element getTableCellProperties()
+    {
+        return findFirstChild(OfficeNamespaces.STYLE_NS, "table-cell-properties");
+    }
 
-  public Element getTableCellProperties ()
-  {
-    return findFirstChild(OfficeNamespaces.STYLE_NS, "table-cell-properties");
-  }
-
-  public Element getGraphicProperties ()
-  {
-    return findFirstChild(OfficeNamespaces.STYLE_NS, OfficeToken.GRAPHIC_PROPERTIES);
-  }
+    public Element getGraphicProperties()
+    {
+        return findFirstChild(OfficeNamespaces.STYLE_NS, OfficeToken.GRAPHIC_PROPERTIES);
+    }
 }

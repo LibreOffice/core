@@ -240,7 +240,7 @@ uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues( sal_uInt32 nInde
     if ( getResult( nIndex ) )
     {
         uno::Reference< sdbc::XRow > xRow = Content::getPropertyValuesFromGFileInfo(
-            maResults[ nIndex ]->pInfo, m_xSMgr, getResultSet()->getProperties());
+            maResults[ nIndex ]->pInfo, m_xSMgr, getResultSet()->getEnvironment(), getResultSet()->getProperties());
 
         maResults[ nIndex ]->xRow = xRow;
         return xRow;

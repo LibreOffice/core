@@ -601,6 +601,17 @@ Reference< XSQLQueryComposer >  OConnection::createQueryComposer(void) throw( Ru
     return xComposer;
 }
 // -----------------------------------------------------------------------------
+void OConnection::impl_fillTableFilter()
+{
+    Reference<XPropertySet> xProp(getParent(),UNO_QUERY);
+    if ( xProp.is() )
+    {
+        xProp->getPropertyValue(PROPERTY_TABLEFILTER)       >>= m_aTableFilter;
+        xProp->getPropertyValue(PROPERTY_TABLETYPEFILTER)   >>= m_aTableTypeFilter;
+    }
+}
+
+// -----------------------------------------------------------------------------
 void OConnection::refresh(const Reference< XNameAccess >& _rToBeRefreshed)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::refresh" );
@@ -608,6 +619,7 @@ void OConnection::refresh(const Reference< XNameAccess >& _rToBeRefreshed)
     {
         if (!m_pTables->isInitialized())
         {
+            impl_fillTableFilter();
             // check if our "master connection" can supply tables
             getMasterTables();
 
@@ -625,6 +637,7 @@ void OConnection::refresh(const Reference< XNameAccess >& _rToBeRefreshed)
     {
         if (!m_pViews->isInitialized())
         {
+            impl_fillTableFilter();
             // check if our "master connection" can supply tables
             Reference< XViewsSupplier > xMaster(getMasterTables(),UNO_QUERY);
 

@@ -238,6 +238,8 @@ namespace sdr { namespace contact {
                         getGraphics() const { return m_xControlView->getGraphics(); }
         inline void     draw( const Point& _rTopLeft ) const { m_xControlView->draw( _rTopLeft.X(), _rTopLeft.Y() ); }
 
+               void     invalidate() const;
+
     public:
         inline  const Reference< XControl >&    getControl() const  { return m_xControl; }
     };
@@ -295,6 +297,15 @@ namespace sdr { namespace contact {
     {
         // no check whether we're valid, this is the responsibility of the caller
         m_xControlView->setZoom( (float)_rScale.getX(), (float)_rScale.getY() );
+    }
+
+    //--------------------------------------------------------------------
+    void ControlHolder::invalidate() const
+    {
+        Window* pWindow = VCLUnoHelper::GetWindow( m_xControl->getPeer() );
+        OSL_ENSURE( pWindow, "ControlHolder::invalidate: no implementation access!" );
+        if ( pWindow )
+            pWindow->Invalidate();
     }
 
     //--------------------------------------------------------------------
@@ -1666,6 +1677,8 @@ namespace sdr { namespace contact {
         double fRotate, fShearX;
         _rViewInformation.getObjectToViewTransformation().decompose( aScale, aTranslate, fRotate, fShearX );
     #endif
+        const bool bHadControl = m_pVOCImpl->getExistentControl().is();
+
         // force control here to make it a VCL ChildWindow. Will be fetched
         // and used below by getExistentControl()
         m_pVOCImpl->ensureControl( &_rViewInformation.getObjectToViewTransformation() );
@@ -1675,6 +1688,9 @@ namespace sdr { namespace contact {
         const ViewContactOfUnoControl& rViewContactOfUnoControl( m_pVOCImpl->getViewContact() );
         Reference< XControlModel > xControlModel( rViewContactOfUnoControl.GetSdrUnoObj().GetUnoControlModel() );
         const ControlHolder& rControl( m_pVOCImpl->getExistentControl() );
+
+        if ( !bHadControl && rControl.is() && rControl.isVisible() )
+            rControl.invalidate();
 
         // check if we already have an XControl.
         if ( !xControlModel.is() || !rControl.is() )

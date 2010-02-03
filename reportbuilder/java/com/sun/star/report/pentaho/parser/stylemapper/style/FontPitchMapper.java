@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.parser.stylemapper.style;
 
 import com.sun.star.report.pentaho.parser.stylemapper.OneOfConstantsMapper;
@@ -37,10 +35,11 @@ import org.jfree.layouting.input.style.values.CSSConstant;
 
 public class FontPitchMapper extends OneOfConstantsMapper
 {
-  public FontPitchMapper ()
-  {
-    super (FontStyleKeys.FONT_PITCH);
-    addMapping("variable", new CSSConstant("variable"));
-    addMapping("fixed", new CSSConstant("fixed"));
-  }
+
+    public FontPitchMapper()
+    {
+        super(FontStyleKeys.FONT_PITCH);
+        addMapping("variable", new CSSConstant("variable"));
+        addMapping("fixed", new CSSConstant("fixed"));
+    }
 }

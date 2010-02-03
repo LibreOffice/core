@@ -37,15 +37,19 @@
 #include "viewdata.hxx"
 #include "cbutton.hxx"
 #include <svx/sdr/overlay/overlayobject.hxx>
+#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 #include <vector>
+#include <memory>
 
 // ---------------------------------------------------------------------------
 
 struct ScTableInfo;
 class ScViewSelectionEngine;
 class ScDPObject;
+class ScDPFieldPopupWindow;
+class ScDPFieldButton;
 class ScOutputData;
 class ScFilterListBox;
 class AutoFilterPopup;
@@ -121,6 +125,8 @@ private:
 
     ScFilterListBox*        pFilterBox;
     FloatingWindow*         pFilterFloat;
+    ::std::auto_ptr<ScDPFieldPopupWindow> mpDPFieldPopup;
+    ::std::auto_ptr<ScDPFieldButton>      mpFilterButton;
 
     USHORT                  nCursorHideCount;
 
@@ -187,11 +193,22 @@ private:
     BOOL            TestMouse( const MouseEvent& rMEvt, BOOL bAction );
 
     BOOL            DoPageFieldSelection( SCCOL nCol, SCROW nRow );
+    bool            DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt );
     void            DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt );
 
     void            DPMouseMove( const MouseEvent& rMEvt );
     void            DPMouseButtonUp( const MouseEvent& rMEvt );
     void            DPTestMouse( const MouseEvent& rMEvt, BOOL bMove );
+
+    /**
+     * Check if the mouse click is on a field popup button.
+     *
+     * @return bool true if the field popup menu has been launched and no
+     *         further mouse event handling is necessary, false otherwise.
+     */
+    bool            DPTestFieldPopupArrow(const MouseEvent& rMEvt, const ScAddress& rPos, ScDPObject* pDPObj);
+    void            DPLaunchFieldPopupMenu(
+        const Point& rScrPos, const Size& rScrSize, const ScAddress& rPos, ScDPObject* pDPObj);
 
     void            RFMouseMove( const MouseEvent& rMEvt, BOOL bUp );
 
@@ -315,9 +332,11 @@ public:
 
     void            DoAutoFilterMenue( SCCOL nCol, SCROW nRow, BOOL bDataSelect );
     void            DoScenarioMenue( const ScRange& rScenRange );
-    void            DoPageFieldMenue( SCCOL nCol, SCROW nRow );
 
-    BOOL            HasPageFieldData( SCCOL nCol, SCROW nRow ) const;
+    void            LaunchPageFieldMenu( SCCOL nCol, SCROW nRow );
+    void            LaunchDPFieldMenu( SCCOL nCol, SCROW nRow );
+
+    ::com::sun::star::sheet::DataPilotFieldOrientation GetDPFieldOrientation( SCCOL nCol, SCROW nRow ) const;
 
     void            DrawButtons( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
                                     ScTableInfo& rTabInfo, OutputDevice* pContentDev );
@@ -356,6 +375,8 @@ public:
     void            DoInvertRect( const Rectangle& rPixel );
 
     void            CheckNeedsRepaint();
+
+    void            UpdateDPFromFieldPopupMenu();
 
     // #114409#
     void CursorChanged();

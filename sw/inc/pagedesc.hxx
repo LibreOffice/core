@@ -344,4 +344,7 @@ public:
     operator SwPageDesc() const; // #i7983#
 };
 
+
+SwPageDesc* GetPageDescByName_Impl(SwDoc& rDoc, const String& rName);
+
 #endif  //_PAGEDESC_HXX
