@@ -250,50 +250,50 @@ testcase tiToolsAutoCorrect
                 Call DialogTest ( TabOptionen )
                 Kontext
             '/// select tabpage 'Custom Quotes' ///'
-            Messagebox.SetPage TabTypografisch
-                Kontext "TabTypografisch"  ' 1a
+            Messagebox.SetPage TabLocalizedOptions
+                Kontext "TabLocalizedOptions"  ' 1a
                     '/// in the part of 'single quotes': ///'
                     '///+ check 'replace' ///'
                     '///+ click 'start quote' ///'
-                    EinfacheErsetzen.Check
-                    EinfachWortAnfang.Click
+                    SingleQuotesReplace.Check
+                    SingleQuotesStart.Click
                     Kontext "Sonderzeichen"
                         Call DialogTest ( Sonderzeichen, 1 )
                         '///+  cancel dialog 'start quote' ///'
                         Sonderzeichen.Cancel
-                Kontext "TabTypografisch"  ' 1b
+                Kontext "TabLocalizedOptions"  ' 1b
                     '///+ click 'end quote' ///'
-                    EinfachWortEnde.Click
+                    SingleQuotesEnd.Click
                     Kontext "Sonderzeichen"
                         Call DialogTest ( Sonderzeichen, 2 )
                         '///+  cancel dialog 'end quote' ///'
                         Sonderzeichen.Cancel
-                Kontext "TabTypografisch"  ' 1s
+                Kontext "TabLocalizedOptions"  ' 1s
                     '///+ click button 'default' ///'
-                    EinfachStandard.Click
+                    SingleQuotesDefault.Click
 
-                Kontext "TabTypografisch"  ' 2a
+                Kontext "TabLocalizedOptions"  ' 2a
                     '/// in the part of 'double quotes': ///'
                     '///+ click 'start quote' ///'
-                    DoppeltWortAnfang.Click
+                    DoubleQuotesStart.Click
                     Kontext "Sonderzeichen"
                         Call DialogTest ( Sonderzeichen, 3 )
                         '///+  cancel dialog 'start quote' ///'
                         Sonderzeichen.Cancel
-                Kontext "TabTypografisch"  ' 2b
+                Kontext "TabLocalizedOptions"  ' 2b
                     '///+ click 'end quote' ///'
-                    DoppeltWortEnde.Click
+                    DoubleQuotesEnd.Click
                     Kontext "Sonderzeichen"
                         Call DialogTest ( Sonderzeichen, 4 )
                         '///+  cancel dialog 'end quote' ///'
                         Sonderzeichen.Cancel
-                Kontext "TabTypografisch"  ' 2s
+                Kontext "TabLocalizedOptions"  ' 2s
                     '///+ click button 'default' ///'
-                    DoppeltStandard.Click
+                    DoubleQuotesDefault.Click
                     '///+ UNcheck 'replace' ///'
-                    EinfacheErsetzen.UnCheck
+                    SingleQuotesReplace.UnCheck
                     '/// cancel dialog 'AtorCorrect' ///'
-                    TabTypografisch.cancel
+                    TabLocalizedOptions.cancel
     '/// close application ///'
     Call hCloseDocument
 endcase
