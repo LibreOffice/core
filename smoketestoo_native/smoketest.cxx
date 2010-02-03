@@ -193,12 +193,9 @@ void Test::setUp() {
         RTL_CONSTASCII_USTRINGPARAM("-env:UNO_JAVA_JFW_ENV_JREHOME=true"));
     rtl::OUString classpathArg(
         RTL_CONSTASCII_USTRINGPARAM("-env:UNO_JAVA_JFW_ENV_CLASSPATH=true"));
-    rtl::OUString dbgsvArg(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-env:DBGSV_INIT=")) +
-        getArgument(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dbgsv"))));
     rtl_uString * args[] = {
         noquickArg.pData, nofirstArg.pData, acceptArg.pData, userArg.pData,
-        jreArg.pData, classpathArg.pData, dbgsvArg.pData };
+        jreArg.pData, classpathArg.pData };
     rtl_uString ** envs = 0;
     rtl::OUString argEnv;
     if (getOptionalArgument(
