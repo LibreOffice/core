@@ -1379,18 +1379,18 @@ testcase tToolsAutocorrectOptions_13
 
      ToolsAutoCorrect
      Kontext
-     Active.SetPage TabTypografisch
-     Kontext "TabTypografisch"
-     EinfacheErsetzen.UnCheck
-     EinfachWortAnfang.Click
+     Active.SetPage TabLocalizedOptions
+     Kontext "TabLocalizedOptions"
+     SingleQuotesReplace.UnCheck
+     SingleQuotesStart.Click
      Kontext "Sonderzeichen"
      Schriftliste.TypeKeys "<PageUp><Home>"
      Schriftliste.TypeKeys "<Right>", 59   ' is [
      Schriftliste.TypeKeys "<Space>"
      Sonderzeichen.OK
 
-     Kontext "TabTypografisch"
-     TabTypografisch.OK
+     Kontext "TabLocalizedOptions"
+     TabLocalizedOptions.OK
 
      wTypeKeys (testContent + "Hello")
      wait 100
@@ -1436,12 +1436,12 @@ testcase tToolsAutocorrectOptions_13
 
      ToolsAutoCorrect
      Kontext
-     Active.Setpage TabTypografisch
-     Kontext "TabTypografisch"
-     EinfacheErsetzen.Check
-     EinfachStandard.Click
+     Active.Setpage TabLocalizedOptions
+     Kontext "TabLocalizedOptions"
+     SingleQuotesReplace.Check
+     SingleQuotesDefault.Click
      wait 100
-     TabTypografisch.OK
+     TabLocalizedOptions.OK
 
     Call hCloseDocument
 
