@@ -42,7 +42,7 @@
 #include "osl/module.h"
 
 #include "uxtheme.h"
-#include "tmschema.h"
+#include "vssym32.h"
 
 #include <map>
 #include <string>
