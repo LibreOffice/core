@@ -55,7 +55,7 @@ wget=
 md5sum=
 curl=
 
-for i in wget /usr/bin/wget /usr/local/bin/wget /usr/sfw/bin/wget /opt/sfw/bin/wget; do
+for i in wget /usr/bin/wget /usr/local/bin/wget /usr/sfw/bin/wget /opt/sfw/bin/wget /opt/local/bin/wget; do
     eval "$i --version" > /dev/null 2>&1
     ret=$?
     if [ $ret -eq 0 ]; then
@@ -65,7 +65,7 @@ for i in wget /usr/bin/wget /usr/local/bin/wget /usr/sfw/bin/wget /opt/sfw/bin/w
     fi
 done
 
-for i in curl /usr/bin/curl /usr/local/bin/curl /usr/sfw/bin/curl /opt/sfw/bin/curl; do
+for i in curl /usr/bin/curl /usr/local/bin/curl /usr/sfw/bin/curl /opt/sfw/bin/curl /opt/local/bin/curl; do
 # mac curl returns "2" on --version
 #    eval "$i --version" > /dev/null 2>&1
 #    ret=$?
@@ -82,7 +82,7 @@ if [ -z "$wget" -a -z "$curl" ]; then
     exit
 fi
 
-for i in md5sum /usr/local/bin/md5sum gmd5sum /usr/sfw/bin/md5sum /opt/sfw/bin/gmd5sum; do
+for i in md5sum /usr/local/bin/md5sum gmd5sum /usr/sfw/bin/md5sum /opt/sfw/bin/gmd5sum /opt/local/bin/md5sum; do
     eval "$i --version" > /dev/null 2>&1
     ret=$?
     if [ $ret -eq 0 ]; then
