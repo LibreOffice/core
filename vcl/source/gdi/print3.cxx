@@ -742,26 +742,42 @@ PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( cons
 {
     PrinterController::PageSize aPageSize;
     aPageSize.aSize = mpPrinter->GetPaperSize();
+    awt::Size aSetSize, aIsSize;
     for( sal_Int32 nProperty = 0, nPropertyCount = i_rProps.getLength(); nProperty < nPropertyCount; ++nProperty )
     {
-        if( i_rProps[ nProperty ].Name.equalsAscii( "PageSize" ) )
+        if( i_rProps[ nProperty ].Name.equalsAscii( "PreferredPageSize" ) )
         {
-            awt::Size aSize;
-            i_rProps[ nProperty].Value >>= aSize;
-            aPageSize.aSize.Width() = aSize.Width;
-            aPageSize.aSize.Height() = aSize.Height;
-
-            Size aCurSize( mpPrinter->GetPaperSize() );
-            Size aRealPaperSize( getRealPaperSize( aPageSize.aSize ) );
-            if( aRealPaperSize != aCurSize )
-                mpPrinter->SetPaperSizeUser( aRealPaperSize, ! isFixedPageSize() );
+            i_rProps[ nProperty ].Value >>= aSetSize;
         }
-        if( i_rProps[ nProperty ].Name.equalsAscii( "PageIncludesNonprintableArea" ) )
+        else if( i_rProps[ nProperty ].Name.equalsAscii( "PageSize" ) )
+        {
+            i_rProps[ nProperty ].Value >>= aIsSize;
+        }
+        else if( i_rProps[ nProperty ].Name.equalsAscii( "PageIncludesNonprintableArea" ) )
         {
             sal_Bool bVal = sal_False;
-            i_rProps[ nProperty].Value >>= bVal;
+            i_rProps[ nProperty ].Value >>= bVal;
             aPageSize.bFullPaper = static_cast<bool>(bVal);
         }
+    }
+
+    Size aCurSize( mpPrinter->GetPaperSize() );
+    if( aSetSize.Width && aSetSize.Height )
+    {
+        Size aSetPaperSize( aSetSize.Width, aSetSize.Height );
+        Size aRealPaperSize( getRealPaperSize( aSetPaperSize ) );
+        if( aRealPaperSize != aCurSize )
+            aIsSize = aSetSize;
+    }
+
+    if( aIsSize.Width && aIsSize.Height )
+    {
+        aPageSize.aSize.Width() = aIsSize.Width;
+        aPageSize.aSize.Height() = aIsSize.Height;
+
+        Size aRealPaperSize( getRealPaperSize( aPageSize.aSize ) );
+        if( aRealPaperSize != aCurSize )
+            mpPrinter->SetPaperSizeUser( aRealPaperSize, ! isFixedPageSize() );
     }
     return aPageSize;
 }
