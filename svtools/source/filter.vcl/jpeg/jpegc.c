@@ -182,7 +182,7 @@ Exit:
 }
 
 long WriteJPEG( void* pJPEGWriter, void* pOStm,
-                long nWidth, long nHeight,
+                long nWidth, long nHeight, long bGreys,
                 long nQualityPercent, void* pCallbackData )
 {
     struct jpeg_compress_struct cinfo;
@@ -208,8 +208,16 @@ long WriteJPEG( void* pJPEGWriter, void* pOStm,
 
     cinfo.image_width = (JDIMENSION) nWidth;
     cinfo.image_height = (JDIMENSION) nHeight;
-    cinfo.input_components = 3;
-    cinfo.in_color_space = JCS_RGB;
+    if ( bGreys )
+    {
+        cinfo.input_components = 1;
+        cinfo.in_color_space = JCS_GRAYSCALE;
+    }
+    else
+    {
+        cinfo.input_components = 3;
+        cinfo.in_color_space = JCS_RGB;
+    }
 
     jpeg_set_defaults( &cinfo );
     jpeg_set_quality( &cinfo, (int) nQualityPercent, FALSE );

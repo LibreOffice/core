@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.25 $
+# $Revision: 1.25.114.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -45,6 +45,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES= \
+            $(SLO)$/arrange.obj		\
             $(SLO)$/abstdlg.obj		\
             $(SLO)$/accel.obj		\
             $(SLO)$/accmgr.obj		\
@@ -69,7 +70,9 @@ SLOFILES= \
             $(SLO)$/mnemonic.obj	\
             $(SLO)$/mnemonicengine.obj  \
             $(SLO)$/msgbox.obj		\
+            $(SLO)$/popupmenuwindow.obj		\
             $(SLO)$/scrwnd.obj		\
+            $(SLO)$/printdlg.obj    \
             $(SLO)$/seleng.obj		\
             $(SLO)$/split.obj		\
             $(SLO)$/splitwin.obj	\

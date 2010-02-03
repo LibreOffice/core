@@ -60,4 +60,9 @@
 */
 #define LISTBOX_ENTRY_FLAG_MULTILINE                0x0000002
 
+/** this flags lets the item be drawn disabled (e.g. in grey text)
+    usage only guaranteed with LISTBOX_ENTRY_FLAG_DISABLE_SELECTION
+*/
+#define LISTBOX_ENTRY_FLAG_DRAW_DISABLED            0x0000004
+
 #endif  // _SV_LSTBOX_H

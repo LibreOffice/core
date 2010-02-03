@@ -102,10 +102,10 @@ IMPL_XTYPEPROVIDER_END
 
 VCLXPrinterPropertySet::VCLXPrinterPropertySet( const String& rPrinterName )
     : OPropertySetHelper( BrdcstHelper )
+    , mpPrinter( new Printer( rPrinterName ) )
 {
     osl::Guard< vos::IMutex > aSolarGuard( Application::GetSolarMutex() );
 
-    mpPrinter = new Printer( rPrinterName );
     mnOrientation = 0;
     mbHorizontal = sal_False;
 }
@@ -113,8 +113,7 @@ VCLXPrinterPropertySet::VCLXPrinterPropertySet( const String& rPrinterName )
 VCLXPrinterPropertySet::~VCLXPrinterPropertySet()
 {
     osl::Guard< vos::IMutex > aSolarGuard( Application::GetSolarMutex() );
-
-     delete mpPrinter;
+    mpPrinter.reset();
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice >  VCLXPrinterPropertySet::GetDevice()
@@ -326,13 +325,16 @@ IMPL_XTYPEPROVIDER_START( VCLXPrinter )
     VCLXPrinterPropertySet::getTypes()
 IMPL_XTYPEPROVIDER_END
 
-sal_Bool VCLXPrinter::start( const ::rtl::OUString& rJobName, sal_Int16 /*nCopies*/, sal_Bool /*bCollate*/ ) throw(::com::sun::star::awt::PrinterException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+sal_Bool VCLXPrinter::start( const ::rtl::OUString& /*rJobName*/, sal_Int16 /*nCopies*/, sal_Bool /*bCollate*/ ) throw(::com::sun::star::awt::PrinterException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
 
     sal_Bool bDone = sal_True;
-    if ( GetPrinter() )
-        bDone = GetPrinter()->StartJob( rJobName );
+    if ( mpListener.get() )
+    {
+        maInitJobSetup = mpPrinter->GetJobSetup();
+        mpListener.reset( new vcl::OldStylePrintAdaptor( mpPrinter ) );
+    }
 
     return bDone;
 }
@@ -341,24 +343,28 @@ void VCLXPrinter::end(  ) throw(::com::sun::star::awt::PrinterException, ::com::
 {
     ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
 
-    if ( GetPrinter() )
-        GetPrinter()->EndJob();
+    if ( mpListener.get() )
+    {
+        Printer::PrintJob( mpListener, maInitJobSetup );
+        mpListener.reset();
+    }
 }
 
 void VCLXPrinter::terminate(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
 
-    if ( GetPrinter() )
-        GetPrinter()->AbortJob();
+    mpListener.reset();
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice > VCLXPrinter::startPage(  ) throw(::com::sun::star::awt::PrinterException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
 
-    if ( GetPrinter() )
-        GetPrinter()->StartPage();
+    if ( mpListener.get() )
+    {
+        mpListener->StartPage();
+    }
     return GetDevice();
 }
 
@@ -366,8 +372,10 @@ void VCLXPrinter::endPage(  ) throw(::com::sun::star::awt::PrinterException, ::c
 {
     ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
 
-    if ( GetPrinter() )
-        GetPrinter()->EndPage();
+    if ( mpListener.get() )
+    {
+        mpListener->EndPage();
+    }
 }
 
 

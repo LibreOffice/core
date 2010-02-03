@@ -582,7 +582,7 @@ protected:
 
             void        ImplCallEventListeners( ULONG nEvent, void* pData = NULL );
             void        CallEventListeners( ULONG nEvent, void* pData = NULL );
-
+            void        FireVclEvent( VclSimpleEvent* pEvent );
 
     // FIXME: this is a hack to workaround missing layout functionality
     SAL_DLLPRIVATE void ImplAdjustNWFSizes();
@@ -898,6 +898,13 @@ public:
     BOOL                HasActiveChildFrame();
     USHORT              GetGetFocusFlags() const;
     void                GrabFocusToDocument();
+
+    /**
+     * Set this when you need to act as if the window has focus even if it
+     * doesn't.  This is necessary for implementing tab stops inside floating
+     * windows, but floating windows don't get focus from the system.
+     */
+    void                SetFakeFocus( bool bFocus );
 
     BOOL                IsCompoundControl() const;
     BOOL                HasCompoundControlFocus() const;
