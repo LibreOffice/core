@@ -2853,6 +2853,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     if (m_pRenderData)
     {
         awt::Size aPageSize;
+        awt::Size aPreferredPageSize;
         Size aTmpSize;
         if (bIsSwSrcView || bPrintProspect)
         {
@@ -2870,21 +2871,19 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
             Printer *pPrinter = dynamic_cast< Printer * >(lcl_GetOutputDevice( *m_pPrintUIOptions ));
             if (pPrinter)
             {
+                // HTML source view and prospect adapt to the printer's paper size
+                aTmpSize = pPrinter->GetPaperSize();
+                aTmpSize = pPrinter->LogicToLogic( aTmpSize,
+                            pPrinter->GetMapMode(), MapMode( MAP_100TH_MM ));
+                aPageSize = awt::Size( aTmpSize.Width(), aTmpSize.Height() );
                 if (bPrintProspect)
                 {
-                    aTmpSize = pDoc->GetPageSize( USHORT(nRenderer + 1), bIsSkipEmptyPages );
                     // we just state what output size we would need
-                    // the rest is nowadays up to vcl
-                    aPageSize = awt::Size ( TWIP_TO_MM100( 2 * aTmpSize.Width() ),
-                                            TWIP_TO_MM100( aTmpSize.Height() ));
-                }
-                else
-                {
-                    // printing HTML source view
-                    aTmpSize = pPrinter->GetPaperSize();
-                    aTmpSize = pPrinter->LogicToLogic( aTmpSize,
-                                pPrinter->GetMapMode(), MapMode( MAP_100TH_MM ));
-                    aPageSize = awt::Size( aTmpSize.Width(), aTmpSize.Height() );
+                    // which may cause vcl to set that page size on the printer
+                    // (if available and not overriden by the user)
+                    aTmpSize = pDoc->GetPageSize( USHORT(nRenderer + 1), bIsSkipEmptyPages );
+                    aPreferredPageSize = awt::Size ( TWIP_TO_MM100( 2 * aTmpSize.Width() ),
+                                                     TWIP_TO_MM100( aTmpSize.Height() ));
                 }
             }
         }
@@ -2900,6 +2899,12 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
         aRenderer[0].Value <<= aPageSize;
         aRenderer[1].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageIncludesNonprintableArea" ) );
         aRenderer[1].Value <<= sal_True;
+        if( aPreferredPageSize.Width && aPreferredPageSize.Height )
+        {
+            aRenderer.realloc(3);
+            aRenderer[2].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "PreferredPageSize" ) );
+            aRenderer[2].Value <<= aPreferredPageSize;
+        }
     }
 
     m_pPrintUIOptions->appendPrintUIOptions( aRenderer );
