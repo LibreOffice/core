@@ -75,6 +75,7 @@
 #include <viewsh.hxx>
 #include <shellres.hxx>
 
+
 #define MAX_FIELDLEN 64000
 
 using namespace com::sun::star;
@@ -433,7 +434,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
                 // Damit die Frames bei Einfuegen in existierendes Doc
                 //  erzeugt werden (erst nach Setzen des Ankers!):
                 if(pDoc->GetRootFrm()
-                   && FLY_AT_CNTNT == pFmt->GetAnchor().GetAnchorId())
+                   && (FLY_AT_PARA == pFmt->GetAnchor().GetAnchorId()))
                 {
                     pFmt->MakeFrms();
                 }
@@ -1281,7 +1282,7 @@ SwFltOutBase::~SwFltOutBase()
 }
 
 SwFltOutBase::SwFltOutBase(SwDoc& rDocu)
-    : rDoc(rDocu), eFlyAnchor(FLY_AT_CNTNT), bFlyAbsPos(false)
+    : rDoc(rDocu), eFlyAnchor(FLY_AT_PARA), bFlyAbsPos(false)
 {
 }
 
@@ -1698,8 +1699,8 @@ BOOL SwFltOutBase::BeginFly( RndStdIds eAnchor /*= FLY_AT_CNTNT*/,
         ASSERT( FALSE, "SetFlyAnchor() ohne Fly" );
         return;
     }
-    if( eAnchor == FLY_IN_CNTNT ){
-        ASSERT( FALSE, "SetFlyAnchor( FLY_IN_CNTNT ) nicht implementiert" );
+    if ( eAnchor == FLY_AS_CHAR ){
+        ASSERT( FALSE, "SetFlyAnchor( FLY_AS_CHAR ) nicht implementiert" );
         return;
     }
     SwFmtAnchor& rAnchor = (SwFmtAnchor&)GetFlyFrmAttr( RES_ANCHOR );

@@ -37,9 +37,7 @@
 #include <editeng/wghtitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
-#ifndef _SVX_TSTPITEM_HXX //autogen
 #include <editeng/tstpitem.hxx>
-#endif
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/adjitem.hxx>
@@ -55,9 +53,7 @@
 #include <editeng/langitem.hxx>
 #include <editeng/charrotateitem.hxx>
 #include <editeng/frmdiritem.hxx>
-#ifndef _SVX_EMPHITEM_HXX
 #include <editeng/emphitem.hxx>
-#endif
 #include <editeng/scriptspaceitem.hxx>
 #include <viewopt.hxx>
 #include <doc.hxx>
@@ -1303,13 +1299,13 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
         {
             if ( get(IDocumentSettingAccess::BROWSE_MODE) )
             {
-                aSet.Put( SwFmtAnchor( FLY_IN_CNTNT ));
+                aSet.Put( SwFmtAnchor( FLY_AS_CHAR ));
                 aSet.Put( SwFmtVertOrient( 0, text::VertOrientation::LINE_CENTER, text::RelOrientation::PRINT_AREA ) );
                 aSet.Put( SwFmtSurround( SURROUND_NONE ) );
             }
             else
             {
-                aSet.Put( SwFmtAnchor( FLY_AT_CNTNT ));
+                aSet.Put( SwFmtAnchor( FLY_AT_PARA ));
                 aSet.Put( SwFmtSurround( SURROUND_PARALLEL ) );
                 aSet.Put( SwFmtHoriOrient( 0, text::HoriOrientation::CENTER, text::RelOrientation::PRINT_AREA ) );
                 aSet.Put( SwFmtVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::PRINT_AREA ) );
@@ -1330,7 +1326,7 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
     case RES_POOLFRM_GRAPHIC:
     case RES_POOLFRM_OLE:
         {
-            aSet.Put( SwFmtAnchor( FLY_AT_CNTNT ));
+            aSet.Put( SwFmtAnchor( FLY_AT_PARA ));
             aSet.Put( SwFmtHoriOrient( 0, text::HoriOrientation::CENTER, text::RelOrientation::FRAME ));
             aSet.Put( SwFmtVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ));
             aSet.Put( SwFmtSurround( SURROUND_NONE ));
@@ -1338,14 +1334,14 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
         break;
     case RES_POOLFRM_FORMEL:
         {
-            aSet.Put( SwFmtAnchor( FLY_IN_CNTNT ) );
+            aSet.Put( SwFmtAnchor( FLY_AS_CHAR ) );
             aSet.Put( SwFmtVertOrient( 0, text::VertOrientation::CHAR_CENTER, text::RelOrientation::FRAME ) );
             aSet.Put( SvxLRSpaceItem( 114, 114, 0, 0, RES_LR_SPACE ) );
         }
         break;
     case RES_POOLFRM_MARGINAL:
         {
-            aSet.Put( SwFmtAnchor( FLY_AT_CNTNT ));
+            aSet.Put( SwFmtAnchor( FLY_AT_PARA ));
             aSet.Put( SwFmtHoriOrient( 0, text::HoriOrientation::LEFT, text::RelOrientation::FRAME ));
             aSet.Put( SwFmtVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ));
             aSet.Put( SwFmtSurround( SURROUND_PARALLEL ));
@@ -1358,7 +1354,7 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
         break;
     case RES_POOLFRM_WATERSIGN:
         {
-            aSet.Put( SwFmtAnchor( FLY_PAGE ));
+            aSet.Put( SwFmtAnchor( FLY_AT_PAGE ));
             aSet.Put( SwFmtHoriOrient( 0, text::HoriOrientation::CENTER, text::RelOrientation::FRAME ));
             aSet.Put( SwFmtVertOrient( 0, text::VertOrientation::CENTER, text::RelOrientation::FRAME ));
             aSet.Put( SvxOpaqueItem( FALSE ));
@@ -1368,7 +1364,7 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
 
     case RES_POOLFRM_LABEL:
         {
-            aSet.Put( SwFmtAnchor( FLY_IN_CNTNT ) );
+            aSet.Put( SwFmtAnchor( FLY_AS_CHAR ) );
             aSet.Put( SwFmtVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ) );
             aSet.Put( SvxLRSpaceItem( 114, 114, 0, 0, RES_LR_SPACE ) );
 

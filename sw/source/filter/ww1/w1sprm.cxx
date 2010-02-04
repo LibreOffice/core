@@ -31,11 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
-
 #include <hintids.hxx>
-
 #include <tools/solar.h>
 #include <editeng/paperinf.hxx>
 #include <editeng/lrspitem.hxx>
@@ -46,11 +42,7 @@
 #include <editeng/shaditem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/lspcitem.hxx>
-#ifndef _SVX_TSTPITEM_HXX //autogen
 #include <editeng/tstpitem.hxx>
-#endif
-
-
 #include <fmtclds.hxx>
 #include <fmtfsize.hxx>
 #include <pam.hxx>
@@ -68,9 +60,7 @@
 #include <w1par.hxx>
 #include <mdiexp.hxx>
 #include <swerror.h>
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>
-#endif
 
 using namespace ::com::sun::star;
 
@@ -595,13 +585,13 @@ void Ww1SingleSprmPpc::Start(
     sal_Int16 eVRel;        // Seite oder Seitenrand
 
     switch ( ( nPpc & 0x30 ) >> 4 ){        // Y - Bindung bestimmt Sw-Bindung
-    case 0: eAnchor = FLY_AT_CNTNT;         // Vert Margin
+    case 0: eAnchor = FLY_AT_PARA;          // Vert Margin
             eVRel = text::RelOrientation::PRINT_AREA;
 //          if( nYPos < 0 )
 //              nYPos = 0;                  // koennen wir nicht
             break;
 /*  case 1:*/                               // Vert. Seite
-    default:eAnchor = FLY_PAGE;             // Vert Page oder unknown
+    default:eAnchor = FLY_AT_PAGE;          // Vert Page oder unknown
             eVRel = text::RelOrientation::FRAME;
             break;                          // 2=Vert. Paragraph, 3=Use Default
     }

@@ -48,9 +48,7 @@
 #include <swtable.hxx>
 #include <swundo.hxx>
 #include <sortopt.hxx>
-#ifndef _DOCSORT_HXX
 #include <docsort.hxx>
-#endif
 #include <undobj.hxx>
 #include <tblsel.hxx>
 #include <cellatr.hxx>
@@ -341,18 +339,13 @@ BOOL SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
     const SwPosition *pStart = rPaM.Start(), *pEnd = rPaM.End();
     // Index auf den Start der Selektion
 
-    SwFrmFmt* pFmt;
-    const SwFmtAnchor* pAnchor;
-    const SwPosition* pAPos;
-    USHORT n;
-
-    for( n = 0; n < GetSpzFrmFmts()->Count(); ++n )
+    for ( USHORT n = 0; n < GetSpzFrmFmts()->Count(); ++n )
     {
-        pFmt = (SwFrmFmt*)(*GetSpzFrmFmts())[n];
-        pAnchor = &pFmt->GetAnchor();
+        SwFrmFmt *const pFmt = static_cast<SwFrmFmt*>((*GetSpzFrmFmts())[n]);
+        SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();
+        SwPosition const*const pAPos = pAnchor->GetCntntAnchor();
 
-        if( FLY_AT_CNTNT == pAnchor->GetAnchorId() &&
-            0 != (pAPos = pAnchor->GetCntntAnchor() ) &&
+        if (pAPos && (FLY_AT_PARA == pAnchor->GetAnchorId()) &&
             pStart->nNode <= pAPos->nNode && pAPos->nNode <= pEnd->nNode )
             return FALSE;
     }
@@ -444,7 +437,7 @@ BOOL SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
 
     DoUndo( FALSE );
 
-    for( n = 0; n < aSortArr.Count(); ++n )
+    for ( USHORT n = 0; n < aSortArr.Count(); ++n )
     {
         SwSortTxtElement* pBox = (SwSortTxtElement*)aSortArr[n];
         aStart      = nBeg + n;

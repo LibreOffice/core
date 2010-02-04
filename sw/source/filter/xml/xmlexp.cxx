@@ -31,7 +31,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -41,7 +40,6 @@
 #include <com/sun/star/xforms/XFormsSupplier.hpp>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/xmlgrhlp.hxx>
 #include <svx/xmleohlp.hxx>
 #include <svx/xmlgrhlp.hxx>
 #include <editeng/eeitem.hxx>
@@ -58,7 +56,7 @@
 #include <docsh.hxx>
 #include <docstat.hxx>
 #include <swerror.h>
-#include <unoobj.hxx>
+#include <unotext.hxx>
 #include <xmltexte.hxx>
 #include <xmlexp.hxx>
 #include <sfx2/viewsh.hxx>
@@ -75,6 +73,7 @@
 // --> OD 2007-03-30 #i73788#
 #include <pausethreadstarting.hxx>
 // <--
+
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;

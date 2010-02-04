@@ -90,7 +90,7 @@ SwFlyAtCntFrm::SwFlyAtCntFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
     SwFlyFreeFrm( pFmt, pAnch )
 {
     bAtCnt = TRUE;
-    bAutoPosition = FLY_AUTO_CNTNT == pFmt->GetAnchor().GetAnchorId();
+    bAutoPosition = (FLY_AT_CHAR == pFmt->GetAnchor().GetAnchorId());
 }
 
 // --> OD 2004-06-29 #i28701#

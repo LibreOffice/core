@@ -438,7 +438,7 @@ const SwFrm *SwAccessibleFrame::GetParent( const SwFrmOrObj& rFrmOrObj,
             const SwFlyFrm *pFly = static_cast< const SwFlyFrm *>( pFrm );
             if( pFly->IsFlyInCntFrm() )
             {
-                // For FLY_IN_CNTNT the parent is the anchor
+                // For FLY_AS_CHAR the parent is the anchor
                 aParent = pFly->GetAnchorFrm();
                 ASSERT( aParent.IsAccessible( bInPagePreview ),
                         "parent is not accessible" );
@@ -471,9 +471,9 @@ const SwFrm *SwAccessibleFrame::GetParent( const SwFrmOrObj& rFrmOrObj,
         {
             const SwFrmFmt *pFrmFmt = pContact->GetFmt();
             ASSERT( pFrmFmt, "frame format is missing" );
-            if( pFrmFmt && FLY_IN_CNTNT == pFrmFmt->GetAnchor().GetAnchorId() )
+            if (pFrmFmt && FLY_AS_CHAR == pFrmFmt->GetAnchor().GetAnchorId())
             {
-                // For FLY_IN_CNTNT the parent is the anchor
+                // For FLY_AS_CHAR the parent is the anchor
                 aParent = pContact->GetAnchorFrm();
                 ASSERT( aParent.IsAccessible( bInPagePreview ),
                         "parent is not accessible" );

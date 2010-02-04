@@ -366,7 +366,7 @@ BYTE SwFlowFrm::BwdMoveNecessary( const SwPageFrm *pPage, const SwRect &rRect )
                 //denn dann weiche ich ihm nicht aus.
                 if ( ::IsFrmInSameKontext( pAnchor, &rThis ) )
                 {
-                    if ( rFmt.GetAnchor().GetAnchorId() == FLY_AT_CNTNT )
+                    if ( rFmt.GetAnchor().GetAnchorId() == FLY_AT_PARA )
                     {
                         // Den Index des anderen erhalten wir immer ueber das Ankerattr.
                         ULONG nTmpIndex = rFmt.GetAnchor().GetCntntAnchor()->nNode.GetIndex();

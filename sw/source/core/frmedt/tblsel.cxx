@@ -30,6 +30,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <hintids.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/protitem.hxx>
@@ -984,11 +985,11 @@ BOOL IsEmptyBox( const SwTableBox& rBox, SwPaM& rPam )
 
         for( USHORT n = 0; n < rFmts.Count(); ++n )
         {
-            const SwPosition* pAPos;
             const SwFmtAnchor& rAnchor = rFmts[n]->GetAnchor();
-            if( ( FLY_AT_CNTNT == rAnchor.GetAnchorId() ||
-                  FLY_AUTO_CNTNT == rAnchor.GetAnchorId() ) &&
-                0 != ( pAPos = rAnchor.GetCntntAnchor() ) &&
+            const SwPosition* pAPos = rAnchor.GetCntntAnchor();
+            if (pAPos &&
+                ((FLY_AT_PARA == rAnchor.GetAnchorId()) ||
+                 (FLY_AT_CHAR == rAnchor.GetAnchorId())) &&
                 nSttIdx <= ( nIdx = pAPos->nNode.GetIndex() ) &&
                 nIdx < nEndIdx )
             {

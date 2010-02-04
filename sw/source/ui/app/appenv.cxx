@@ -43,18 +43,12 @@
 #include <svx/svxids.hrc>
 
 #include <svtools/svmedit.hxx>
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <sfx2/app.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/printer.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <sfx2/dispatch.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/lrspitem.hxx>
@@ -67,21 +61,13 @@
 #include <paratr.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <frmatr.hxx>
 #include <fldbas.hxx>
 #include <swundo.hxx>
-#ifndef IDOCUMENTDEVICEACCESS_HXX_INCLUDED
 #include <IDocumentDeviceAccess.hxx>
-#endif
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 #include <fmtcol.hxx>
 #include <frmmgr.hxx>
 #include <fldmgr.hxx>
@@ -91,9 +77,7 @@
 #include <SwStyleNameMapper.hxx>
 #include <crsskip.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif
@@ -478,7 +462,7 @@ static USHORT nTitleNo = 0;
         if (rItem.bSend)
         {
             pSh->SttEndDoc(TRUE);
-            aMgr.InsertFlyFrm(FLY_PAGE,
+            aMgr.InsertFlyFrm(FLY_AT_PAGE,
                 Point(rItem.lSendFromLeft + lLeft, rItem.lSendFromTop  + lUpper),
                 Size (rItem.lAddrFromLeft - rItem.lSendFromLeft, 0));
 
@@ -494,7 +478,7 @@ static USHORT nTitleNo = 0;
         // Empfaenger
         pSh->SttEndDoc(TRUE);
 
-        aMgr.InsertFlyFrm(FLY_PAGE,
+        aMgr.InsertFlyFrm(FLY_AT_PAGE,
             Point(rItem.lAddrFromLeft + lLeft, rItem.lAddrFromTop  + lUpper),
             Size (nPageW - rItem.lAddrFromLeft - 566, 0));
         pSh->EnterSelFrmMode();

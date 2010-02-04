@@ -46,9 +46,7 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/keepitem.hxx>
 
-#ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
-#endif
 #include <fmtfsize.hxx>
 #include <fmtanchr.hxx>
 #include <fmtclbl.hxx>
@@ -1014,10 +1012,12 @@ BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
                          rFmt.GetFrmSize().GetWidthPercent() )
                         continue;
 
-                    if ( FLY_IN_CNTNT == rFmt.GetAnchor().GetAnchorId() )
+                    if ( FLY_AS_CHAR == rFmt.GetAnchor().GetAnchorId() )
+                    {
                         nMinWidth = Max( nMinWidth,
                                          bFly ? rFmt.GetFrmSize().GetWidth()
                                               : pObj->GetObjRect().Width() );
+                    }
                     // <--
                 }
 

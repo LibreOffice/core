@@ -30,6 +30,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <SwSpellDialogChildWindow.hxx>
 #include <vcl/msgbox.hxx>
 #include <editeng/svxacorr.hxx>
@@ -50,20 +51,19 @@
 #include <unotools/linguprops.hxx>
 #include <unotools/lingucfg.hxx>
 #include <doc.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <docary.hxx>
 #include <frmfmt.hxx>
 #include <dcontact.hxx>
 #include <edtwin.hxx>
 #include <pam.hxx>
 #include <drawbase.hxx>
-#include <unoobj.hxx>
+#include <unotextrange.hxx>
 #ifndef _DIALOG_HXX
 #include <dialog.hrc>
 #endif
 #include <cmdid.h>
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -258,8 +258,10 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence (void)
                     //mark the start position only if not at start of doc
                     if(!pWrtShell->IsStartOfDoc())
                     {
-                        m_pSpellState->m_xStartRange = SwXTextRange::CreateTextRangeFromPosition(
-                                pWrtShell->GetDoc(), *pCrsr->Start(), pCrsr->End());
+                        m_pSpellState->m_xStartRange =
+                            SwXTextRange::CreateXTextRange(
+                                *pWrtShell->GetDoc(),
+                                *pCrsr->Start(), pCrsr->End());
                     }
                     pWrtShell->SpellStart( DOCPOS_START, DOCPOS_END, DOCPOS_CURR, FALSE );
                 }
@@ -390,7 +392,8 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence (void)
                 if(RET_YES == nRet)
                 {
                     SwUnoInternalPaM aPam(*pWrtShell->GetDoc());
-                    if(SwXTextRange::XTextRangeToSwPaM(aPam, m_pSpellState->m_xStartRange))
+                    if (::sw::XTextRangeToSwPaM(aPam,
+                                m_pSpellState->m_xStartRange))
                     {
                         pWrtShell->SetSelection(aPam);
                         pWrtShell->SpellStart(DOCPOS_START, DOCPOS_CURR, DOCPOS_START);

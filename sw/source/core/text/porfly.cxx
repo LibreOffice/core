@@ -39,9 +39,7 @@
 #include "frmfmt.hxx"   // SwFrmFmt
 #include "viewsh.hxx"
 
-#ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
-#endif
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <fmtanchr.hxx>
@@ -56,6 +54,7 @@
 
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
+
 
 /*************************************************************************
  *                class SwFlyPortion
@@ -178,7 +177,7 @@ void SwTxtFrm::MoveFlyInCnt( SwTxtFrm *pNew, xub_StrLen nStart, xub_StrLen nEnd 
             // <SwSortedList> entries
             SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
             const SwFmtAnchor& rAnch = pAnchoredObj->GetFrmFmt().GetAnchor();
-            if ( rAnch.GetAnchorId() == FLY_IN_CNTNT )
+            if (rAnch.GetAnchorId() == FLY_AS_CHAR)
             {
                 const SwPosition* pPos = rAnch.GetCntntAnchor();
                 xub_StrLen nIdx = pPos->nContent.GetIndex();

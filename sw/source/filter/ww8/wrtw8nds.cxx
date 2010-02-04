@@ -376,7 +376,7 @@ xub_StrLen SwAttrIter::SearchNext( xub_StrLen nStartPos )
         if (nPos >= nStartPos && nPos <= nMinPos)
             nMinPos = nPos;
 
-        if (maFlyIter->GetFrmFmt().GetAnchor().GetAnchorId() == FLY_AUTO_CNTNT)
+        if (maFlyIter->GetFrmFmt().GetAnchor().GetAnchorId() == FLY_AT_CHAR)
         {
             ++nPos;
             if (nPos >= nStartPos && nPos <= nMinPos)
@@ -1301,7 +1301,7 @@ short MSWordExportBase::TrueFrameDirection( const SwFrmFmt &rFlyFmt ) const
         {
             pItem = 0;
             const SwFmtAnchor* pAnchor = &pFlyFmt->GetAnchor();
-            if ( FLY_PAGE != pAnchor->GetAnchorId() &&
+            if ((FLY_AT_PAGE != pAnchor->GetAnchorId()) &&
                 pAnchor->GetCntntAnchor() )
             {
                 pFlyFmt = pAnchor->GetCntntAnchor()->nNode.GetNode().GetFlyFmt();
@@ -1359,7 +1359,7 @@ SvxBrushItem WW8Export::TrueFrameBgBrush(const SwFrmFmt &rFlyFmt) const
         {
             pRet = 0;
             const SwFmtAnchor* pAnchor = &pFlyFmt->GetAnchor();
-            if (FLY_PAGE != pAnchor->GetAnchorId() &&
+            if ((FLY_AT_PAGE != pAnchor->GetAnchorId()) &&
                 pAnchor->GetCntntAnchor())
             {
                 pFlyFmt =
@@ -2497,12 +2497,13 @@ void WW8AttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFmt, const Point
                 aOffset -= aPageRect.Pos();
 
                 m_rWW8Export.pFlyOffset = &aOffset;
-                m_rWW8Export.eNewAnchorType = FLY_PAGE;
+                m_rWW8Export.eNewAnchorType = FLY_AT_PAGE;
             }
 
             m_rWW8Export.mpParentFrame = &rFmt;
             if (
-                 m_rWW8Export.bIsInTable && (FLY_PAGE != rAnch.GetAnchorId()) &&
+                 m_rWW8Export.bIsInTable &&
+                 (FLY_AT_PAGE != rAnch.GetAnchorId()) &&
                  !m_rWW8Export.pDoc->GetNodes()[ nStt ]->IsNoTxtNode()
                )
             {
@@ -2534,7 +2535,7 @@ void AttributeOutputBase::OutputFlyFrame( const sw::Frame& rFmt )
     Point* pLayPos;
     bool bValidNdPos = false, bValidPgPos = false;
 
-    if ( FLY_PAGE == rFmt.GetFrmFmt().GetAnchor().GetAnchorId() )
+    if (FLY_AT_PAGE == rFmt.GetFrmFmt().GetAnchor().GetAnchorId())
     {
         // get the Layout Node-Position.
         if ( !bValidPgPos )

@@ -30,6 +30,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/embed/XClassifiedObject.hpp>
@@ -47,9 +48,7 @@
 #include <memory>
 #include <hints.hxx>
 #include <doc.hxx>
-#ifndef _DOCSH_HXX //autogen
 #include <docsh.hxx>
-#endif
 #include <editsh.hxx>
 #include <swcli.hxx>
 #include <ndindex.hxx>
@@ -64,7 +63,9 @@
 #include <ndole.hxx>
 #include <frmfmt.hxx>
 #include <frame.hxx>
-#include <unoobj.hxx>
+#include <unotextrange.hxx>
+#include <unotextcursor.hxx>
+#include <unoparagraph.hxx>
 #include <unomap.hxx>
 #include <unoprnms.hxx>
 #include <unoevent.hxx>
@@ -101,6 +102,7 @@
 #include <unoframe.hxx>
 #include <fmtanchr.hxx>
 #include <fmtclds.hxx>
+#include <fmtcntnt.hxx>
 #include <frmatr.hxx>
 #include <ndtxt.hxx>
 #include <ndgrf.hxx>
@@ -1404,7 +1406,8 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                         aSet.Put(aAnchor);
                     }
                 }
-                else if(aAnchor.GetAnchorId() != FLY_PAGE && !aAnchor.GetCntntAnchor())
+                else if ((aAnchor.GetAnchorId() != FLY_AT_PAGE) &&
+                         !aAnchor.GetCntntAnchor())
                 {
                     SwNode& rNode = pDoc->GetNodes().GetEndOfContent();
                     SwPaM aPam(rNode);
@@ -2025,7 +2028,7 @@ void SwXFrame::dispose(void) throw( uno::RuntimeException )
                ( pObj->GetUserCall() &&
                  !static_cast<SwContact*>(pObj->GetUserCall())->IsInDTOR() ) ) )
         {
-            if( pFmt->GetAnchor().GetAnchorId() == FLY_IN_CNTNT )
+            if (pFmt->GetAnchor().GetAnchorId() == FLY_AS_CHAR)
             {
                 const SwPosition &rPos = *(pFmt->GetAnchor().GetCntntAnchor());
                 SwTxtNode *pTxtNode = rPos.nNode.GetNode().GetTxtNode();
@@ -2051,11 +2054,11 @@ uno::Reference< text::XTextRange >  SwXFrame::getAnchor(void) throw( uno::Runtim
         const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
         // return an anchor for non-page bound frames
         // and for page bound frames that have a page no == NULL and a content position
-        if( rAnchor.GetAnchorId() != FLY_PAGE ||
+        if ((rAnchor.GetAnchorId() != FLY_AT_PAGE) ||
             (rAnchor.GetCntntAnchor() && !rAnchor.GetPageNum()))
         {
             const SwPosition &rPos = *(rAnchor.GetCntntAnchor());
-            aRef = SwXTextRange::CreateTextRangeFromPosition(pFmt->GetDoc(), rPos, 0);
+            aRef = SwXTextRange::CreateXTextRange(*pFmt->GetDoc(), rPos, 0);
         }
     }
     else
@@ -2097,7 +2100,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
     {
         SwUnoInternalPaM aIntPam(*pDoc);
         //das muss jetzt sal_True liefern
-        SwXTextRange::XTextRangeToSwPaM(aIntPam, xTextRange);
+        ::sw::XTextRangeToSwPaM(aIntPam, xTextRange);
 
         SwNode& rNode = pDoc->GetNodes().GetEndOfContent();
         SwPaM aPam(rNode);
@@ -2130,7 +2133,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
         }
 
         const SfxPoolItem* pItem;
-        RndStdIds eAnchorId = FLY_AT_CNTNT;
+        RndStdIds eAnchorId = FLY_AT_PARA;
         if(SFX_ITEM_SET == aFrmSet.GetItemState(RES_ANCHOR, sal_False, &pItem) )
         {
             eAnchorId = ((const SwFmtAnchor*)pItem)->GetAnchorId();
@@ -2138,10 +2141,10 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 !aPam.GetNode()->FindFlyStartNode())
             {
                 //rahmengebunden geht nur dort, wo ein Rahmen ist!
-                SwFmtAnchor aAnchor(FLY_AT_CNTNT);
+                SwFmtAnchor aAnchor(FLY_AT_PARA);
                 aFrmSet.Put(aAnchor);
             }
-            else if( FLY_PAGE == eAnchorId &&
+            else if ((FLY_AT_PAGE == eAnchorId) &&
                      0 == ((const SwFmtAnchor*)pItem)->GetPageNum() )
             {
                 SwFmtAnchor aAnchor( *((const SwFmtAnchor*)pItem) );
@@ -2164,10 +2167,10 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 SwFmtAnchor* pAnchorItem = 0;
                 // the frame is inserted bound to page
                 // to prevent conflicts if the to-be-anchored position is part of the to-be-copied text
-                if(eAnchorId != FLY_PAGE)
+                if (eAnchorId != FLY_AT_PAGE)
                 {
                     pAnchorItem = static_cast<SwFmtAnchor*>(aFrmSet.Get(RES_ANCHOR).Clone());
-                    aFrmSet.Put( SwFmtAnchor( FLY_PAGE, 1 ));
+                    aFrmSet.Put( SwFmtAnchor( FLY_AT_PAGE, 1 ));
                 }
 
                 pFmt = pDoc->MakeFlyAndMove( *m_pCopySource, aFrmSet,
@@ -2185,8 +2188,10 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 DELETEZ( m_pCopySource );
             }
             else
-                pFmt = pDoc->MakeFlySection( FLY_AT_CNTNT, aPam.GetPoint(),
+            {
+                pFmt = pDoc->MakeFlySection( FLY_AT_PARA, aPam.GetPoint(),
                                          &aFrmSet, pParentFrmFmt );
+            }
             if(pFmt)
             {
                 pFmt->Add(this);
@@ -2427,7 +2432,7 @@ void SwXFrame::attach(const uno::Reference< text::XTextRange > & xTextRange)
         }
         SwDoc* pDoc = pFmt->GetDoc();
         SwUnoInternalPaM aIntPam(*pDoc);
-        if(SwXTextRange::XTextRangeToSwPaM(aIntPam, xTextRange))
+        if (::sw::XTextRangeToSwPaM(aIntPam, xTextRange))
         {
             SfxItemSet aSet( pDoc->GetAttrPool(),
                         RES_ANCHOR, RES_ANCHOR );
@@ -2608,7 +2613,8 @@ const SwStartNode *SwXTextFrame::GetStartNode() const
     return pSttNd;
 }
 
-uno::Reference< text::XTextCursor >   SwXTextFrame::createCursor() throw ( uno::RuntimeException)
+uno::Reference< text::XTextCursor >
+SwXTextFrame::CreateCursor() throw (uno::RuntimeException)
 {
     return createTextCursor();
 }
@@ -2649,10 +2655,11 @@ uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursor(void) throw(
             throw aExcept;
         }
 
-        SwXTextCursor* pXCrsr = new SwXTextCursor(this, *aPam.GetPoint(), CURSOR_FRAME, pFmt->GetDoc());
-        aRef =  (text::XWordCursor*)pXCrsr;
+        SwXTextCursor *const pXCursor = new SwXTextCursor(
+                 *pFmt->GetDoc(), this, CURSOR_FRAME, *aPam.GetPoint());
+        aRef =  static_cast<text::XWordCursor*>(pXCursor);
 #if OSL_DEBUG_LEVEL > 1
-        SwUnoCrsr*  pUnoCrsr = pXCrsr->GetCrsr();
+        SwUnoCrsr *const pUnoCrsr = pXCursor->GetCursor();
         (void) pUnoCrsr;
 #endif
     }
@@ -2669,7 +2676,7 @@ uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursorByRange(const
     uno::Reference< text::XTextCursor >  aRef;
     SwFrmFmt* pFmt = GetFrmFmt();
     SwUnoInternalPaM aPam(*GetDoc());
-    if(pFmt && SwXTextRange::XTextRangeToSwPaM(aPam, aTextPosition))
+    if (pFmt && ::sw::XTextRangeToSwPaM(aPam, aTextPosition))
     {
         SwNode& rNode = pFmt->GetCntnt().GetCntntIdx()->GetNode();
 #if OSL_DEBUG_LEVEL > 1
@@ -2679,8 +2686,11 @@ uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursorByRange(const
         (void)p2;
 #endif
         if(aPam.GetNode()->FindFlyStartNode() == rNode.FindFlyStartNode())
-            aRef =  (text::XWordCursor*)new SwXTextCursor(this ,
-                *aPam.GetPoint(), CURSOR_FRAME, pFmt->GetDoc(), aPam.GetMark());
+        {
+            aRef = static_cast<text::XWordCursor*>(
+                    new SwXTextCursor(*pFmt->GetDoc(), this, CURSOR_FRAME,
+                        *aPam.GetPoint(), aPam.GetMark()));
+        }
     }
     else
         throw uno::RuntimeException();
@@ -2697,14 +2707,15 @@ uno::Reference< container::XEnumeration >  SwXTextFrame::createEnumeration(void)
     if(pFmt)
     {
         SwPosition aPos(pFmt->GetCntnt().GetCntntIdx()->GetNode());
-        SwUnoCrsr* pUnoCrsr = GetDoc()->CreateUnoCrsr(aPos, sal_False);
-        pUnoCrsr->Move( fnMoveForward, fnGoNode );
+        ::std::auto_ptr<SwUnoCrsr> pUnoCursor(
+                GetDoc()->CreateUnoCrsr(aPos, sal_False));
+        pUnoCursor->Move(fnMoveForward, fnGoNode);
 //      // no Cursor in protected sections
 //      SwCrsrSaveState aSave( *pUnoCrsr );
 //      if(pUnoCrsr->IsInProtectTable( sal_True ) ||
 //          pUnoCrsr->IsSelOvr( SELOVER_TOGGLE | SELOVER_CHANGEPOS ))
 //          throw  uno::RuntimeException() );
-        aRef = new SwXParagraphEnumeration(this, pUnoCrsr, CURSOR_FRAME);
+        aRef = new SwXParagraphEnumeration(this, pUnoCursor, CURSOR_FRAME);
     }
     return aRef;
 }

@@ -472,7 +472,7 @@ BOOL SwDoc::DeleteSelection( SwDrawView& rDrawView )
                 SwDrawContact *pC = (SwDrawContact*)GetUserCall(pObj);
                 SwDrawFrmFmt *pFrmFmt = (SwDrawFrmFmt*)pC->GetFmt();
                 if( pFrmFmt &&
-                    FLY_IN_CNTNT == pFrmFmt->GetAnchor().GetAnchorId() )
+                    FLY_AS_CHAR == pFrmFmt->GetAnchor().GetAnchorId() )
                 {
                     rDrawView.MarkObj( pObj, rDrawView.Imp().GetPageView(), TRUE );
                     --i;

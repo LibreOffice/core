@@ -35,18 +35,14 @@
 
 #include <stack>
 
-#ifndef __RSC //autogen
 #include <tools/errinf.hxx>
-#endif
 #include <tools/stream.hxx>
 #include <svl/itemiter.hxx>
 #include <svtools/rtftoken.h>
 #include <svl/intitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/ulspitem.hxx>
-#ifndef _SVX_TSTPITEM_HXX //autogen
 #include <editeng/tstpitem.hxx>
-#endif
 #include <editeng/lspcitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/escpitem.hxx>
@@ -82,21 +78,15 @@
 #include <fltini.hxx>
 #include <fchrfmt.hxx>
 #include <paratr.hxx>
-#ifndef _SECTIOM_HXX
 #include <section.hxx>
-#endif
 #include <fmtclbl.hxx>
 #include <viewsh.hxx>
 #include <shellres.hxx>
 #include <hfspacingitem.hxx>
 #include <tox.hxx>
 #include <swerror.h>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>          // ResId fuer Statusleiste
-#endif
 #include <SwStyleNameMapper.hxx>
 #include <tblsel.hxx>           // SwSelBoxes
 
@@ -471,8 +461,8 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
                         for ( USHORT nI = pFrmFmts->Count(); nI; --nI )
                         {
                             const SwFmtAnchor & rAnchor = (*pFrmFmts)[ nI - 1 ]->GetAnchor();
-                            if ( FLY_AT_CNTNT == rAnchor.GetAnchorId() ||
-                                 FLY_AUTO_CNTNT == rAnchor.GetAnchorId() )
+                            if ((FLY_AT_PARA == rAnchor.GetAnchorId()) ||
+                                (FLY_AT_CHAR == rAnchor.GetAnchorId()))
                             {
                                 const SwPosition * pObjPos = rAnchor.GetCntntAnchor();
                                 if ( pObjPos && nNodeIdx == pObjPos->nNode.GetIndex() )
@@ -1270,14 +1260,7 @@ void SwRTFParser::ReadDrawingObject()
         sw::util::SetLayer aSetLayer(*pDoc);
         aSetLayer.SendObjectToHeaven(*pStroke);
         */
-        /*
-            FLY_AT_CNTNT,       //Absatzgebundener Rahmen <to paragraph>
-        FLY_IN_CNTNT,       //Zeichengebundener Rahmen <as character>
-        FLY_PAGE,           //Seitengebundener Rahmen <to page>
-        FLY_AT_FLY,         //Rahmengebundener Rahmen ( LAYER_IMPL ) <to frame>
-        FLY_AUTO_CNTNT,     //Automatisch positionierter, absatzgebundener Rahmen <to character>
-        */
-        SwFmtAnchor aAnchor( FLY_AT_CNTNT );
+        SwFmtAnchor aAnchor( FLY_AT_PARA );
         aAnchor.SetAnchor( pPam->GetPoint() );
         aFlySet.Put( aAnchor );
 
@@ -1343,7 +1326,7 @@ void SwRTFParser::InsertShpObject(SdrObject* pStroke, int _nZOrder)
         SwFmtFollowTextFlow aFollowTextFlow( FALSE );
         aFlySet.Put( aFollowTextFlow );
 
-        SwFmtAnchor aAnchor( FLY_AT_CNTNT );
+        SwFmtAnchor aAnchor( FLY_AT_PARA );
         aAnchor.SetAnchor( pPam->GetPoint() );
         aFlySet.Put( aAnchor );
 
@@ -3710,8 +3693,9 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
             xub_StrLen nPos = pPam->GetPoint()->nContent.GetIndex();
             SfxItemSet aSet( pDoc->GetAttrPool(), RES_FRMATR_BEGIN,
                                             RES_FRMATR_END-1 );
-            aSet.Put( SwFmtAnchor( FLY_IN_CNTNT ));
-            pHdFtFmt = pDoc->MakeFlySection( FLY_IN_CNTNT, pPam->GetPoint(), &aSet );
+            aSet.Put( SwFmtAnchor( FLY_AS_CHAR ));
+            pHdFtFmt = pDoc->MakeFlySection( FLY_AS_CHAR,
+                            pPam->GetPoint(), &aSet );
 
             pTxtAttr = pPam->GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
                                                 nPos, RES_TXTATR_FLYCNT );

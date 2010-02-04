@@ -208,7 +208,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
                                            BOOL bDontAppend )
 {
     BOOL bMoveBackward = FALSE;
-    SwFmtAnchor aAnchor( FLY_IN_CNTNT );
+    SwFmtAnchor aAnchor( FLY_AS_CHAR );
     sal_Int16 eVertRel = text::RelOrientation::FRAME;
 
     if( text::HoriOrientation::NONE != eHoriOri )
@@ -267,14 +267,14 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
         xub_StrLen nCntnt = pPam->GetPoint()->nContent.GetIndex();
         if( nCntnt )
         {
-            aAnchor.SetType( FLY_AUTO_CNTNT );
+            aAnchor.SetType( FLY_AT_CHAR );
             bMoveBackward = TRUE;
             eVertOri = text::VertOrientation::CHAR_BOTTOM;
             eVertRel = text::RelOrientation::CHAR;
         }
         else
         {
-            aAnchor.SetType( FLY_AT_CNTNT );
+            aAnchor.SetType( FLY_AT_PARA );
             eVertOri = text::VertOrientation::TOP;
             eVertRel = text::RelOrientation::PRINT_AREA;
         }
@@ -301,7 +301,7 @@ void SwHTMLParser::RegisterFlyFrm( SwFrmFmt *pFlyFmt )
     // automatisch verankerte Rahmen muessen noch um eine Position
     // nach vorne verschoben werden.
     if( RES_DRAWFRMFMT != pFlyFmt->Which() &&
-        FLY_AT_CNTNT == pFlyFmt->GetAnchor().GetAnchorId() &&
+        (FLY_AT_PARA == pFlyFmt->GetAnchor().GetAnchorId()) &&
         SURROUND_THROUGHT == pFlyFmt->GetSurround().GetSurround() )
     {
         aMoveFlyFrms.Insert( pFlyFmt, aMoveFlyFrms.Count() );
@@ -778,7 +778,7 @@ IMAGE_SETEVENT:
                     aMacroItem.SetMacro( aEvents[ n ], *pMacro );
         }
 
-        if( FLY_IN_CNTNT == pFlyFmt->GetAnchor().GetAnchorId() &&
+        if ((FLY_AS_CHAR == pFlyFmt->GetAnchor().GetAnchorId()) &&
             aAttrTab.pINetFmt->GetSttPara() ==
                         pPam->GetPoint()->nNode &&
             aAttrTab.pINetFmt->GetSttCnt() ==
@@ -1342,20 +1342,16 @@ void SwHTMLParser::StripTrailingPara()
         {
             ULONG nNodeIdx = pPam->GetPoint()->nNode.GetIndex();
 
-            USHORT i;
-
-            const SwFrmFmt* pFmt;
-            const SwFmtAnchor* pAnchor;
-            const SwPosition* pAPos;
             const SwSpzFrmFmts& rFrmFmtTbl = *pDoc->GetSpzFrmFmts();
 
-            for( i=0; i<rFrmFmtTbl.Count(); i++ )
+            for( USHORT i=0; i<rFrmFmtTbl.Count(); i++ )
             {
-                pFmt = rFrmFmtTbl[i];
-                pAnchor = &pFmt->GetAnchor();
-                if( 0 != ( pAPos = pAnchor->GetCntntAnchor()) &&
-                    (FLY_AT_CNTNT == pAnchor->GetAnchorId() ||
-                     FLY_AUTO_CNTNT == pAnchor->GetAnchorId()) &&
+                SwFrmFmt const*const pFmt = rFrmFmtTbl[i];
+                SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();
+                SwPosition const*const pAPos = pAnchor->GetCntntAnchor();
+                if (pAPos &&
+                    ((FLY_AT_PARA == pAnchor->GetAnchorId()) ||
+                     (FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
                     pAPos->nNode == nNodeIdx )
 
                     return;     // den Knoten duerfen wir nicht loeschen

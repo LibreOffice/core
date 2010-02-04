@@ -932,7 +932,7 @@ SwFlyFrmFmt* SwDoc::_InsNoTxtNode( const SwPosition& rPos, SwNoTxtNode* pNode,
     SwFlyFrmFmt *pFmt = 0;
     if( pNode )
     {
-        pFmt = _MakeFlySection( rPos, *pNode, FLY_AT_CNTNT,
+        pFmt = _MakeFlySection( rPos, *pNode, FLY_AT_PARA,
                                 pFlyAttrSet, pFrmFmt );
         if( pGrfAttrSet )
             pNode->SetAttr( *pGrfAttrSet );

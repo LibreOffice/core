@@ -39,15 +39,9 @@
 #include <svl/macitem.hxx>
 #include <unotools/charclass.hxx>
 #include <editeng/scripttypeitem.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
-#ifndef _BASESH_HXX
 #include <basesh.hxx>
-#endif
 #include <wrtsh.hxx>
 #include <frmatr.hxx>
 #include <initui.hxx>

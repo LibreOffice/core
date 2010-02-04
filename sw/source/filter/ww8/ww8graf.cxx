@@ -188,13 +188,13 @@ bool SwWW8ImplReader::ReadGrafStart(void* pData, short nDataSiz,
     }
     pStrm->Read(pData, nDataSiz);
 
-    RndStdIds eAnchor = (SVBT8ToByte(pDo->by) < 2) ? FLY_PAGE : FLY_AT_CNTNT;
+    RndStdIds eAnchor = (SVBT8ToByte(pDo->by) < 2) ? FLY_AT_PAGE : FLY_AT_PARA;
     rSet.Put(SwFmtAnchor(eAnchor));
 
     nDrawXOfs2 = nDrawXOfs;
     nDrawYOfs2 = nDrawYOfs;
 
-    if( eAnchor == FLY_AT_CNTNT )
+    if (eAnchor == FLY_AT_PARA)
     {
         if( SVBT8ToByte( pDo->bx ) == 1 )       // Pos: echt links
             nDrawXOfs2 = static_cast< short >(nDrawXOfs2 - maSectionManager.GetPageLeft());
@@ -2245,7 +2245,7 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
 {
     ASSERT(pRecord || pFSPA, "give me something! to work with for anchoring");
     if (!pRecord && !pFSPA)
-        return FLY_PAGE;
+        return FLY_AT_PAGE;
 
     SvxMSDffImportRec aRecordFromFSPA;
     if (!pRecord)
@@ -2296,7 +2296,7 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
     UINT32 nYRelTo = nCntRelTo > pRecord->nYRelTo ? pRecord->nYRelTo : 1;
 
     // --> OD 2005-03-03 #i43718#
-    RndStdIds eAnchor = IsInlineEscherHack() ? FLY_IN_CNTNT : FLY_AUTO_CNTNT;
+    RndStdIds eAnchor = IsInlineEscherHack() ? FLY_AS_CHAR : FLY_AT_CHAR;
     // <--
 
     SwFmtAnchor aAnchor( eAnchor );
@@ -2460,7 +2460,7 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
 
         if (
             (pFSPA->nYaTop < 0) && (eVertOri == text::VertOrientation::NONE) &&
-            ((eAnchor == FLY_AT_CNTNT) || (eAnchor == FLY_AUTO_CNTNT))
+            ((eAnchor == FLY_AT_PARA) || (eAnchor == FLY_AT_CHAR))
            )
         {
             maTracer.Log(sw::log::eNegativeVertPlacement);
@@ -2843,7 +2843,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
 SwFrmFmt *SwWW8ImplReader::AddAutoAnchor(SwFrmFmt *pFmt)
 {
-    if (pFmt && (pFmt->GetAnchor().GetAnchorId() != FLY_IN_CNTNT))
+    if (pFmt && (pFmt->GetAnchor().GetAnchorId() != FLY_AS_CHAR))
     {
         sal_uInt16 nTextAreaWidth = static_cast< sal_uInt16 >( maSectionManager.GetPageWidth() -
             maSectionManager.GetPageRight() - maSectionManager.GetPageLeft());
@@ -2858,8 +2858,10 @@ SwFrmFmt *SwWW8ImplReader::AddAutoAnchor(SwFrmFmt *pFmt)
      *
      * Leave to later and set the correct location then.
      */
-    if ((pFmt) && (pFmt->GetAnchor().GetAnchorId() != FLY_IN_CNTNT))
+    if ((pFmt) && (pFmt->GetAnchor().GetAnchorId() != FLY_AS_CHAR))
+    {
         pAnchorStck->AddAnchor(*pPaM->GetPoint(), pFmt);
+    }
     return pFmt;
 }
 
@@ -3232,7 +3234,7 @@ void SwWW8ImplReader::GrafikDtor()
 
 void SwWW8FltAnchorStack::AddAnchor(const SwPosition& rPos, SwFrmFmt *pFmt)
 {
-    ASSERT(pFmt->GetAnchor().GetAnchorId() != FLY_IN_CNTNT,
+    ASSERT(pFmt->GetAnchor().GetAnchorId() != FLY_AS_CHAR,
         "Don't use fltanchors with inline frames, slap!");
     NewAttr(rPos, SwFltAnchor(pFmt));
 }

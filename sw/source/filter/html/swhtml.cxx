@@ -2838,7 +2838,7 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
         SwFrmFmt *pFrmFmt = aMoveFlyFrms[ --n ];
 
         const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
-        ASSERT( FLY_AT_CNTNT==rAnchor.GetAnchorId(),
+        ASSERT( FLY_AT_PARA == rAnchor.GetAnchorId(),
                 "Nur Auto-Rahmen brauchen eine Spezialbehandlung" );
         const SwPosition *pFlyPos = rAnchor.GetCntntAnchor();
         ULONG nFlyParaIdx = pFlyPos->nNode.GetIndex();
@@ -2863,7 +2863,7 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
             pAttrPam->GetPoint()->nContent.Assign( pAttrPam->GetCntntNode(),
                                                    aMoveFlyCnts[n] );
             SwFmtAnchor aAnchor( rAnchor );
-            aAnchor.SetType( FLY_AUTO_CNTNT );
+            aAnchor.SetType( FLY_AT_CHAR );
             aAnchor.SetAnchor( pAttrPam->GetPoint() );
             pFrmFmt->SetFmtAttr( aAnchor );
 
@@ -4412,27 +4412,23 @@ BOOL SwHTMLParser::HasCurrentParaFlys( BOOL bNoSurroundOnly,
     // sonst:               Der Absatz enthaelt irgendeinen Rahmen
     SwNodeIndex& rNodeIdx = pPam->GetPoint()->nNode;
 
-    SwFrmFmt* pFmt;
-    const SwFmtAnchor* pAnchor;
-    const SwPosition* pAPos;
     const SwSpzFrmFmts& rFrmFmtTbl = *pDoc->GetSpzFrmFmts();
 
-    USHORT i;
     BOOL bFound = FALSE;
-    for( i=0; i<rFrmFmtTbl.Count(); i++ )
+    for ( USHORT i=0; i<rFrmFmtTbl.Count(); i++ )
     {
-        pFmt = rFrmFmtTbl[i];
-        pAnchor = &pFmt->GetAnchor();
+        SwFrmFmt *const pFmt = rFrmFmtTbl[i];
+        SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();
         // Ein Rahmen wurde gefunden, wenn
         // - er absatzgebunden ist, und
         // - im aktuellen Absatz verankert ist, und
         //   - jeder absatzgebunene Rahmen zaehlt, oder
         //   - (nur Rahmen oder umlauf zaehlen und ) der Rahmen keinen
         //     Umlauf besitzt
-
-        if( 0 != ( pAPos = pAnchor->GetCntntAnchor()) &&
-            (FLY_AT_CNTNT == pAnchor->GetAnchorId() ||
-             FLY_AUTO_CNTNT == pAnchor->GetAnchorId()) &&
+        SwPosition const*const pAPos = pAnchor->GetCntntAnchor();
+        if (pAPos &&
+            ((FLY_AT_PARA == pAnchor->GetAnchorId()) ||
+             (FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
             pAPos->nNode == rNodeIdx )
         {
             if( !(bNoSurroundOnly || bSurroundOnly) )
@@ -5074,18 +5070,16 @@ void SwHTMLParser::InsertLineBreak()
         SwTxtNode* pTxtNd = rNodeIdx.GetNode().GetTxtNode();
         if( pTxtNd )
         {
-            SwFrmFmt* pFmt;
-            const SwFmtAnchor* pAnchor;
-            const SwPosition* pAPos;
             const SwSpzFrmFmts& rFrmFmtTbl = *pDoc->GetSpzFrmFmts();
 
             for( USHORT i=0; i<rFrmFmtTbl.Count(); i++ )
             {
-                pFmt = rFrmFmtTbl[i];
-                pAnchor = &pFmt->GetAnchor();
-                if( 0 != ( pAPos = pAnchor->GetCntntAnchor()) &&
-                    (FLY_AT_CNTNT == pAnchor->GetAnchorId() ||
-                     FLY_AUTO_CNTNT == pAnchor->GetAnchorId()) &&
+                SwFrmFmt *const pFmt = rFrmFmtTbl[i];
+                SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();
+                SwPosition const*const pAPos = pAnchor->GetCntntAnchor();
+                if (pAPos &&
+                    ((FLY_AT_PARA == pAnchor->GetAnchorId()) ||
+                     (FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
                     pAPos->nNode == rNodeIdx &&
                     pFmt->GetSurround().GetSurround() != SURROUND_NONE )
                 {

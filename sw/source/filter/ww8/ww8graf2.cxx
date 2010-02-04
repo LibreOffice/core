@@ -33,9 +33,7 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 
-#ifndef __SGI_STL_ITERATOR
 #include <iterator>
-#endif
 #include <hintids.hxx>
 #include <svl/urihelper.hxx>
 #include <svx/svdpage.hxx>
@@ -415,7 +413,7 @@ SwFlyFrmFmt* SwWW8ImplReader::MakeGrafNotInCntnt(const WW8PicDesc& rPD,
 
     // Damit die Frames bei Einfuegen in existierendes Doc erzeugt werden:
     if (rDoc.GetRootFrm() &&
-        (FLY_AT_CNTNT == pFlyFmt->GetAnchor().GetAnchorId()))
+        (FLY_AT_PARA == pFlyFmt->GetAnchor().GetAnchorId()))
     {
         pFlyFmt->MakeFrms();
     }
@@ -548,9 +546,11 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
             //              it is anchored in content; because this anchor add
             //              a character into the textnode.
             //              IussueZilla task 2806
-            if( FLY_IN_CNTNT ==
+            if (FLY_AS_CHAR ==
                 pFlyFmtOfJustInsertedGraphic->GetAnchor().GetAnchorId() )
+            {
                 aFlySet.ClearItem( RES_ANCHOR );
+            }
 
             pFlyFmtOfJustInsertedGraphic->SetFmtAttr( aFlySet );
 
