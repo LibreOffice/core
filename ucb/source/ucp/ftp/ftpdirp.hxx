@@ -146,11 +146,6 @@ namespace ftp {
             FTPDirentry &rEntry,
             const sal_Char  *pBuffer );
 
-        static sal_Bool parseUNKNOWN (
-            FTPDirentry &rEntry,
-            const sal_Char  *pBuffer,
-            sal_uInt32       nLength);
-
 
     private:
 
