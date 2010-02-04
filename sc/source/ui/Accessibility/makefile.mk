@@ -47,12 +47,16 @@ SLOFILES =  										\
         $(SLO)$/AccessibleContextBase.obj			\
         $(SLO)$/AccessibleTableBase.obj				\
         $(SLO)$/AccessibleDocument.obj				\
+        $(SLO)$/AccessibleGlobal.obj				\
         $(SLO)$/AccessibleSpreadsheet.obj			\
         $(SLO)$/AccessibleCell.obj					\
         $(SLO)$/AccessibilityHints.obj				\
         $(SLO)$/AccessibleDocumentBase.obj			\
         $(SLO)$/AccessibleCellBase.obj				\
         $(SLO)$/AccessibleDocumentPagePreview.obj	\
+        $(SLO)$/AccessibleFilterMenu.obj	\
+        $(SLO)$/AccessibleFilterMenuItem.obj	\
+        $(SLO)$/AccessibleFilterTopWindow.obj	\
         $(SLO)$/AccessiblePreviewTable.obj			\
         $(SLO)$/AccessiblePreviewCell.obj			\
         $(SLO)$/AccessiblePreviewHeaderCell.obj		\
@@ -68,11 +72,15 @@ EXCEPTIONSFILES=									\
         $(SLO)$/AccessibleContextBase.obj			\
         $(SLO)$/AccessibleTableBase.obj				\
         $(SLO)$/AccessibleDocument.obj				\
+        $(SLO)$/AccessibleGlobal.obj				\
         $(SLO)$/AccessibleSpreadsheet.obj			\
         $(SLO)$/AccessibleCell.obj					\
         $(SLO)$/AccessibleDocumentBase.obj			\
         $(SLO)$/AccessibleCellBase.obj				\
         $(SLO)$/AccessibleDocumentPagePreview.obj	\
+        $(SLO)$/AccessibleFilterMenu.obj	\
+        $(SLO)$/AccessibleFilterMenuItem.obj	\
+        $(SLO)$/AccessibleFilterTopWindow.obj	\
         $(SLO)$/AccessiblePreviewTable.obj			\
         $(SLO)$/AccessiblePreviewCell.obj			\
         $(SLO)$/AccessiblePreviewHeaderCell.obj		\
