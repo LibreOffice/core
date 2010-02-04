@@ -97,6 +97,7 @@
 #include <unotools/bootstrap.hxx>
 #include <unotools/configmgr.hxx>
 #include <svl/documentlockfile.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 
 #include <tools/urlobj.hxx>
 
