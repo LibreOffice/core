@@ -2723,6 +2723,8 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             const TypeId aSwViewTypeId = TYPE(SwView);
             if (pView->IsA(aSwViewTypeId))
             {
+                if (m_pRenderData && m_pRenderData->NeedNewViewOptionAdjust( *pWrtShell ) )
+                    m_pRenderData->ViewOptionAdjustStop();
                 if (m_pRenderData && !m_pRenderData->IsViewOptionAdjust())
                     m_pRenderData->ViewOptionAdjustStart( *pWrtShell, *pWrtShell->GetViewOptions() );
             }

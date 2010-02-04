@@ -281,6 +281,11 @@ void SwRenderData::DeletePostItData()
     }
 }
 
+bool SwRenderData::NeedNewViewOptionAdjust( const SwWrtShell& rCompare ) const
+{
+    return m_pViewOptionAdjust ? ! m_pViewOptionAdjust->checkShell( rCompare ) : true;
+}
+
 
 void SwRenderData::ViewOptionAdjustStart( SwWrtShell &rSh, const SwViewOption &rViewOptions )
 {
