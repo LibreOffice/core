@@ -289,7 +289,7 @@ namespace drawinglayer
                 return;
             }
 
-            switch(rCandidate.getPrimitiveID())
+            switch(rCandidate.getPrimitive2DID())
             {
                 case PRIMITIVE2D_ID_TRANSFORMPRIMITIVE2D :
                 {
@@ -451,8 +451,9 @@ namespace drawinglayer
                 {
                     if(!getHitTextOnly())
                     {
-                        const primitive2d::ScenePrimitive2D& rSceneCandidate(static_cast< const primitive2d::ScenePrimitive2D& >(rCandidate));
-                        check3DHit(rSceneCandidate);
+                        const primitive2d::ScenePrimitive2D& rScenePrimitive2D(
+                            static_cast< const primitive2d::ScenePrimitive2D& >(rCandidate));
+                        check3DHit(rScenePrimitive2D);
                     }
 
                     break;

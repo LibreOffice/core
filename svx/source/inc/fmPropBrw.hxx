@@ -37,6 +37,7 @@
 #include <com/sun/star/inspection/XObjectInspectorModel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 /** === end UNO includes === **/
+
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/childwin.hxx>

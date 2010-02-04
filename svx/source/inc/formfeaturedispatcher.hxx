@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: fmdispatch.hxx,v $
- * $Revision: 1.4 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -31,18 +28,19 @@
 #ifndef SVX_FMDISPATCH_HXX
 #define SVX_FMDISPATCH_HXX
 
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
+/** === begin UNO includes === **/
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/form/runtime/XFormOperations.hpp>
+/** === end UNO includes === **/
 
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/interfacecontainer.hxx>
 
 //........................................................................
 namespace svx
 {
 //........................................................................
-
-    class FormControllerHelper;
 
     //====================================================================
     //= OSingleFeatureDispatcher
@@ -55,10 +53,11 @@ namespace svx
     private:
         ::osl::Mutex&                       m_rMutex;
         ::cppu::OInterfaceContainerHelper   m_aStatusListeners;
-        const FormControllerHelper&         m_rController;
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormOperations >
+                                            m_xFormOperations;
         const ::com::sun::star::util::URL   m_aFeatureURL;
         ::com::sun::star::uno::Any          m_aLastKnownState;
-        const sal_Int32                     m_nFeatureId;
+        const sal_Int16                     m_nFormFeature;
         sal_Bool                            m_bLastKnownEnabled;
         sal_Bool                            m_bDisposed;
 
@@ -80,9 +79,9 @@ namespace svx
         */
         OSingleFeatureDispatcher(
             const ::com::sun::star::util::URL& _rFeatureURL,
-            sal_Int32 _nFeatureId,
-            const FormControllerHelper& _rController,
-                  ::osl::Mutex& _rMutex
+            const sal_Int16 _nFormFeature,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormOperations >& _rxFormOperations,
+            ::osl::Mutex& _rMutex
         );
 
         /** disposes the dispatcher instance

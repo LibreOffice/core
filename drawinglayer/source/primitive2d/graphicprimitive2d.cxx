@@ -56,6 +56,18 @@
 #include <vcl/svapp.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
+// includes for testing MetafilePrimitive2D::create2DDecomposition
+
+// this switch defines if the test code is included or not
+#undef USE_DEBUG_CODE_TO_TEST_METAFILE_DECOMPOSE
+
+#ifdef USE_DEBUG_CODE_TO_TEST_METAFILE_DECOMPOSE
+#include <vcl/gradient.hxx>
+#include <vcl/pngread.hxx>
+#include <vcl/lineinfo.hxx>
+#endif // USE_DEBUG_CODE_TO_TEST_METAFILE_DECOMPOSE
+
+//////////////////////////////////////////////////////////////////////////////
 
 namespace
 {
@@ -211,19 +223,52 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence GraphicPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence GraphicPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D&
+#ifdef USE_DEBUG_CODE_TO_TEST_METAFILE_DECOMPOSE
+            rViewInformation
+#else
+            /*rViewInformation*/
+#endif // USE_DEBUG_CODE_TO_TEST_METAFILE_DECOMPOSE
+            ) const
         {
             Primitive2DSequence aRetval;
 
             if(255L != getGraphicAttr().GetTransparency())
             {
-                // get transformed graphic. Suppress rotation and cropping, only filtering is needed
-                // here (and may be replaced later on). Cropping is handled below as mask primitive (if set)
-                GraphicAttr aSuppressGraphicAttr(getGraphicAttr());
-                aSuppressGraphicAttr.SetCrop(0L, 0L, 0L, 0L);
-                aSuppressGraphicAttr.SetRotation(0);
-                Graphic aTransformedGraphic(getGraphicObject().GetTransformedGraphic(&aSuppressGraphicAttr));
                 Primitive2DReference xPrimitive;
+
+                // do not apply mirroring from GraphicAttr to the Metafile by calling
+                // GetTransformedGraphic, this will try to mirror the Metafile using Scale()
+                // at the Metafile. This again calls Scale at the single MetaFile actions,
+                // but this implementation never worked. I reworked that implementations,
+                // but for security reasons i will try not to use it.
+                basegfx::B2DHomMatrix aTransform(getTransform());
+
+                if(getGraphicAttr().IsMirrored())
+                {
+                    // content needs mirroring
+                    const bool bHMirr(getGraphicAttr().GetMirrorFlags() & BMP_MIRROR_HORZ);
+                    const bool bVMirr(getGraphicAttr().GetMirrorFlags() & BMP_MIRROR_VERT);
+
+                    // mirror by applying negative scale to the unit primitive and
+                    // applying the object transformation on it.
+                    aTransform = basegfx::tools::createScaleB2DHomMatrix(
+                        bHMirr ? -1.0 : 1.0,
+                        bVMirr ? -1.0 : 1.0);
+                    aTransform.translate(
+                        bHMirr ? 1.0 : 0.0,
+                        bVMirr ? 1.0 : 0.0);
+                    aTransform = getTransform() * aTransform;
+                }
+
+                // Get transformed graphic. Suppress rotation and cropping, only filtering is needed
+                // here (and may be replaced later on). Cropping is handled below as mask primitive (if set).
+                // Also need to suppress mirroring, it is part of the transformation now (see above).
+                GraphicAttr aSuppressGraphicAttr(getGraphicAttr());
+                aSuppressGraphicAttr.SetCrop(0, 0, 0, 0);
+                aSuppressGraphicAttr.SetRotation(0);
+                aSuppressGraphicAttr.SetMirrorFlags(0);
+                const Graphic aTransformedGraphic(getGraphicObject().GetTransformedGraphic(&aSuppressGraphicAttr));
 
                 switch(aTransformedGraphic.GetType())
                 {
@@ -244,7 +289,7 @@ namespace drawinglayer
                                 {
                                     animation::AnimationEntryFixed aTime((double)aData.stepTime(a), (double)a / (double)aData.count());
                                     aAnimationLoop.append(aTime);
-                                    const Primitive2DReference xRef(new BitmapPrimitive2D(aData.stepBitmapEx(a), getTransform()));
+                                    const Primitive2DReference xRef(new BitmapPrimitive2D(aData.stepBitmapEx(a), aTransform));
                                     aBitmapPrimitives[a] = xRef;
                                 }
 
@@ -258,7 +303,7 @@ namespace drawinglayer
                         }
                         else
                         {
-                            xPrimitive = Primitive2DReference(new BitmapPrimitive2D(aTransformedGraphic.GetBitmapEx(), getTransform()));
+                            xPrimitive = Primitive2DReference(new BitmapPrimitive2D(aTransformedGraphic.GetBitmapEx(), aTransform));
                         }
 
                         break;
@@ -266,37 +311,480 @@ namespace drawinglayer
 
                     case GRAPHIC_GDIMETAFILE :
                     {
-                        // create MetafilePrimitive2D
-                        const GDIMetaFile& rMetafile = aTransformedGraphic.GetGDIMetaFile();
+#ifdef USE_DEBUG_CODE_TO_TEST_METAFILE_DECOMPOSE
+                        static bool bDoTest(false);
 
-                        xPrimitive = Primitive2DReference(
-                            new MetafilePrimitive2D(
-                                getTransform(),
-                                rMetafile));
-
-                        // #i100357# find out if clipping is needed for this primitive. Unfortunately,
-                        // there exist Metafiles who's content is bigger than the proposed PrefSize set
-                        // at them. This is an error, but we need to work around this
-                        const Size aMetaFilePrefSize(rMetafile.GetPrefSize());
-                        const Size aMetaFileRealSize(
-                            const_cast< GDIMetaFile& >(rMetafile).GetBoundRect(
-                                *Application::GetDefaultDevice()).GetSize());
-
-                        if(aMetaFileRealSize.getWidth() > aMetaFilePrefSize.getWidth()
-                            || aMetaFileRealSize.getHeight() > aMetaFilePrefSize.getHeight())
+                        if(bDoTest)
                         {
-                            // clipping needed. Embed to MaskPrimitive2D. Create childs and mask polygon
-                            const primitive2d::Primitive2DSequence aChildContent(&xPrimitive, 1);
-                            basegfx::B2DPolygon aMaskPolygon(
-                                basegfx::tools::createPolygonFromRect(
-                                    basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
-                            aMaskPolygon.transform(getTransform());
+                            // All this is/was test code for testing MetafilePrimitive2D::create2DDecomposition
+                            // extensively. It may be needed again when diverse actions need debugging, so i leave
+                            // it in here, but take it out using USE_DEBUG_CODE_TO_TEST_METAFILE_DECOMPOSE.
+                            // Use it by compiling with the code, insert any DrawObject, convert to Metafile. The
+                            // debugger will then stop here (when breakpoint set, of course). You may enter single
+                            // parts of actions and/or change to true what You want to check.
+                            GDIMetaFile aMtf;
+                            VirtualDevice aOut;
+                            const basegfx::B2DRange aRange(getB2DRange(rViewInformation));
+                            const Rectangle aRectangle(
+                                basegfx::fround(aRange.getMinX()), basegfx::fround(aRange.getMinY()),
+                                basegfx::fround(aRange.getMaxX()), basegfx::fround(aRange.getMaxY()));
+                            const Point aOrigin(aRectangle.TopLeft());
+                            const Fraction aScaleX(aRectangle.getWidth());
+                            const Fraction aScaleY(aRectangle.getHeight());
+                            MapMode aMapMode(MAP_100TH_MM, aOrigin, aScaleX, aScaleY);
+
+                            Size aDummySize(2, 2);
+                            aOut.SetOutputSizePixel(aDummySize);
+                            aOut.EnableOutput(FALSE);
+                            aOut.SetMapMode(aMapMode);
+
+                            aMtf.Clear();
+                            aMtf.Record(&aOut);
+
+                            const Fraction aNeutralFraction(1, 1);
+                            const MapMode aRelativeMapMode(
+                                MAP_RELATIVE,
+                                Point(-aRectangle.Left(), -aRectangle.Top()),
+                                aNeutralFraction, aNeutralFraction);
+                            aOut.SetMapMode(aRelativeMapMode);
+
+                            if(false)
+                            {
+                                const sal_Int32 nHor(aRectangle.getWidth() / 4);
+                                const sal_Int32 nVer(aRectangle.getHeight() / 4);
+                                const Rectangle aCenteredRectangle(
+                                    aRectangle.Left() + nHor, aRectangle.Top() + nVer,
+                                    aRectangle.Right() - nHor, aRectangle.Bottom() - nVer);
+                                aOut.SetClipRegion(aCenteredRectangle);
+                            }
+
+                            if(false)
+                            {
+                                const Rectangle aRightRectangle(aRectangle.TopCenter(), aRectangle.BottomRight());
+                                aOut.IntersectClipRegion(aRightRectangle);
+                            }
+
+                            if(false)
+                            {
+                                const Rectangle aRightRectangle(aRectangle.TopCenter(), aRectangle.BottomRight());
+                                const Rectangle aBottomRectangle(aRectangle.LeftCenter(), aRectangle.BottomRight());
+                                Region aRegion(aRightRectangle);
+                                aRegion.Intersect(aBottomRectangle);
+                                aOut.IntersectClipRegion(aRegion);
+                            }
+
+                            if(false)
+                            {
+                                const sal_Int32 nHor(aRectangle.getWidth() / 10);
+                                const sal_Int32 nVer(aRectangle.getHeight() / 10);
+                                aOut.MoveClipRegion(nHor, nVer);
+                            }
+
+                            if(false)
+                            {
+                                Wallpaper aWallpaper(Color(COL_BLACK));
+                                aOut.DrawWallpaper(aRectangle, aWallpaper);
+                            }
+
+                            if(false)
+                            {
+                                Wallpaper aWallpaper(Gradient(GRADIENT_LINEAR, Color(COL_RED), Color(COL_GREEN)));
+                                aOut.DrawWallpaper(aRectangle, aWallpaper);
+                            }
+
+                            if(false)
+                            {
+                                SvFileStream aRead((const String&)String(ByteString( "c:\\test.png" ), RTL_TEXTENCODING_UTF8), STREAM_READ);
+                                vcl::PNGReader aPNGReader(aRead);
+                                BitmapEx aBitmapEx(aPNGReader.Read());
+                                Wallpaper aWallpaper(aBitmapEx);
+                                aOut.DrawWallpaper(aRectangle, aWallpaper);
+                            }
+
+                            if(false)
+                            {
+                                const double fHor(aRectangle.getWidth());
+                                const double fVer(aRectangle.getHeight());
+                                Color aColor(basegfx::BColor(rand() / 32767.0, rand() / 32767.0, rand() / 32767.0));
+
+                                for(sal_uInt32 a(0); a < 5000; a++)
+                                {
+                                    const Point aPoint(
+                                        aRectangle.Left() + basegfx::fround(rand() * (fHor / 32767.0)),
+                                        aRectangle.Top() + basegfx::fround(rand() * (fVer / 32767.0)));
+
+                                    if(!(a % 3))
+                                    {
+                                        aColor = Color(basegfx::BColor(rand() / 32767.0, rand() / 32767.0, rand() / 32767.0));
+                                    }
+
+                                    aOut.DrawPixel(aPoint, aColor);
+                                }
+                            }
+
+                            if(false)
+                            {
+                                const double fHor(aRectangle.getWidth());
+                                const double fVer(aRectangle.getHeight());
+
+                                aOut.SetLineColor(Color(basegfx::BColor(rand() / 32767.0, rand() / 32767.0, rand() / 32767.0)));
+                                aOut.SetFillColor();
+
+                                for(sal_uInt32 a(0); a < 5000; a++)
+                                {
+                                    const Point aPoint(
+                                        aRectangle.Left() + basegfx::fround(rand() * (fHor / 32767.0)),
+                                        aRectangle.Top() + basegfx::fround(rand() * (fVer / 32767.0)));
+                                    aOut.DrawPixel(aPoint);
+                                }
+                            }
+
+                            if(false)
+                            {
+                                const double fHor(aRectangle.getWidth());
+                                const double fVer(aRectangle.getHeight());
+
+                                aOut.SetLineColor(Color(basegfx::BColor(rand() / 32767.0, rand() / 32767.0, rand() / 32767.0)));
+                                aOut.SetFillColor();
+
+                                Point aStart(
+                                    aRectangle.Left() + basegfx::fround(rand() * (fHor / 32767.0)),
+                                    aRectangle.Top() + basegfx::fround(rand() * (fVer / 32767.0)));
+                                Point aStop(
+                                    aRectangle.Left() + basegfx::fround(rand() * (fHor / 32767.0)),
+                                    aRectangle.Top() + basegfx::fround(rand() * (fVer / 32767.0)));
+
+                                LineInfo aLineInfo(LINE_SOLID, basegfx::fround(fHor / 50.0));
+                                bool bUseLineInfo(false);
+
+                                for(sal_uInt32 a(0); a < 20; a++)
+                                {
+                                    if(!(a%6))
+                                    {
+                                        bUseLineInfo = !bUseLineInfo;
+                                    }
+
+                                    if(!(a%4))
+                                    {
+                                        aOut.SetLineColor(Color(basegfx::BColor(rand() / 32767.0, rand() / 32767.0, rand() / 32767.0)));
+                                    }
+
+                                    if(a%3)
+                                    {
+                                        aStart = aStop;
+                                        aStop = Point(
+                                            aRectangle.Left() + basegfx::fround(rand() * (fHor / 32767.0)),
+                                            aRectangle.Top() + basegfx::fround(rand() * (fVer / 32767.0)));
+                                    }
+                                    else
+                                    {
+                                        aStart = Point(
+                                            aRectangle.Left() + basegfx::fround(rand() * (fHor / 32767.0)),
+                                            aRectangle.Top() + basegfx::fround(rand() * (fVer / 32767.0)));
+                                        aStop = Point(
+                                            aRectangle.Left() + basegfx::fround(rand() * (fHor / 32767.0)),
+                                            aRectangle.Top() + basegfx::fround(rand() * (fVer / 32767.0)));
+                                    }
+
+                                    if(bUseLineInfo)
+                                    {
+                                        aOut.DrawLine(aStart, aStop, aLineInfo);
+                                    }
+                                    else
+                                    {
+                                        aOut.DrawLine(aStart, aStop);
+                                    }
+                                }
+                            }
+
+                            if(false)
+                            {
+                                aOut.SetLineColor(Color(basegfx::BColor(rand() / 32767.0, rand() / 32767.0, rand() / 32767.0)));
+                                aOut.SetFillColor(Color(basegfx::BColor(rand() / 32767.0, rand() / 32767.0, rand() / 32767.0)));
+                                aOut.DrawRect(aRectangle);
+                            }
+
+                            if(false)
+                            {
+                                aOut.SetLineColor(Color(basegfx::BColor(rand() / 32767.0, rand() / 32767.0, rand() / 32767.0)));
+                                aOut.SetFillColor(Color(basegfx::BColor(rand() / 32767.0, rand() / 32767.0, rand() / 32767.0)));
+                                const sal_uInt32 nHor(aRectangle.getWidth() / 10);
+                                const sal_uInt32 nVer(aRectangle.getHeight() / 10);
+                                aOut.DrawRect(aRectangle, nHor, nVer);
+                            }
+
+                            if(false)
+                            {
+                                aOut.SetLineColor(Color(basegfx::BColor(rand() / 32767.0, rand() / 32767.0, rand() / 32767.0)));
+                                aOut.SetFillColor(Color(basegfx::BColor(rand() / 32767.0, rand() / 32767.0, rand() / 32767.0)));
+                                aOut.DrawEllipse(aRectangle);
+                            }
+
+                            if(false)
+                            {
+                                aOut.SetLineColor(Color(basegfx::BColor(rand() / 32767.0, rand() / 32767.0, rand() / 32767.0)));
+                                aOut.SetFillColor(Color(basegfx::BColor(rand() / 32767.0, rand() / 32767.0, rand() / 32767.0)));
+                                aOut.DrawArc(aRectangle, aRectangle.TopLeft(), aRectangle.BottomCenter());
+                            }
+
+                            if(false)
+                            {
+                                aOut.SetLineColor(Color(basegfx::BColor(rand() / 32767.0, rand() / 32767.0, rand() / 32767.0)));
+                                aOut.SetFillColor(Color(basegfx::BColor(rand() / 32767.0, rand() / 32767.0, rand() / 32767.0)));
+                                aOut.DrawPie(aRectangle, aRectangle.TopLeft(), aRectangle.BottomCenter());
+                            }
+
+                            if(false)
+                            {
+                                aOut.SetLineColor(Color(basegfx::BColor(rand() / 32767.0, rand() / 32767.0, rand() / 32767.0)));
+                                aOut.SetFillColor(Color(basegfx::BColor(rand() / 32767.0, rand() / 32767.0, rand() / 32767.0)));
+                                aOut.DrawChord(aRectangle, aRectangle.TopLeft(), aRectangle.BottomCenter());
+                            }
+
+                            if(false)
+                            {
+                                const double fHor(aRectangle.getWidth());
+                                const double fVer(aRectangle.getHeight());
+
+                                for(sal_uInt32 b(0); b < 5; b++)
+                                {
+                                    const sal_uInt32 nCount(basegfx::fround(rand() * (20 / 32767.0)));
+                                    const bool bClose(basegfx::fround(rand() / 32767.0));
+                                    Polygon aPolygon(nCount + (bClose ? 1 : 0));
+
+                                    for(sal_uInt32 a(0); a < nCount; a++)
+                                    {
+                                        const Point aPoint(
+                                            aRectangle.Left() + basegfx::fround(rand() * (fHor / 32767.0)),
+                                            aRectangle.Top() + basegfx::fround(rand() * (fVer / 32767.0)));
+                                        aPolygon[a] = aPoint;
+                                    }
+
+                                    if(bClose)
+                                    {
+                                        aPolygon[aPolygon.GetSize() - 1] = aPolygon[0];
+                                    }
+
+                                    aOut.SetLineColor(Color(basegfx::BColor(rand() / 32767.0, rand() / 32767.0, rand() / 32767.0)));
+                                    aOut.SetFillColor(Color(basegfx::BColor(rand() / 32767.0, rand() / 32767.0, rand() / 32767.0)));
+
+                                    if(!(b%2))
+                                    {
+                                        const LineInfo aLineInfo(LINE_SOLID, basegfx::fround(fHor / 50.0));
+                                        aOut.DrawPolyLine(aPolygon, aLineInfo);
+                                    }
+                                    else
+                                    {
+                                        aOut.DrawPolyLine(aPolygon);
+                                    }
+                                }
+                            }
+
+                            if(false)
+                            {
+                                const double fHor(aRectangle.getWidth());
+                                const double fVer(aRectangle.getHeight());
+
+                                for(sal_uInt32 b(0); b < 5; b++)
+                                {
+                                    const sal_uInt32 nCount(basegfx::fround(rand() * (20 / 32767.0)));
+                                    const bool bClose(basegfx::fround(rand() / 32767.0));
+                                    Polygon aPolygon(nCount + (bClose ? 1 : 0));
+
+                                    for(sal_uInt32 a(0); a < nCount; a++)
+                                    {
+                                        const Point aPoint(
+                                            aRectangle.Left() + basegfx::fround(rand() * (fHor / 32767.0)),
+                                            aRectangle.Top() + basegfx::fround(rand() * (fVer / 32767.0)));
+                                        aPolygon[a] = aPoint;
+                                    }
+
+                                    if(bClose)
+                                    {
+                                        aPolygon[aPolygon.GetSize() - 1] = aPolygon[0];
+                                    }
+
+                                    aOut.SetLineColor(Color(basegfx::BColor(rand() / 32767.0, rand() / 32767.0, rand() / 32767.0)));
+                                    aOut.SetFillColor(Color(basegfx::BColor(rand() / 32767.0, rand() / 32767.0, rand() / 32767.0)));
+                                    aOut.DrawPolygon(aPolygon);
+                                }
+                            }
+
+                            if(false)
+                            {
+                                const double fHor(aRectangle.getWidth());
+                                const double fVer(aRectangle.getHeight());
+                                PolyPolygon aPolyPolygon;
+
+                                for(sal_uInt32 b(0); b < 3; b++)
+                                {
+                                    const sal_uInt32 nCount(basegfx::fround(rand() * (6 / 32767.0)));
+                                    const bool bClose(basegfx::fround(rand() / 32767.0));
+                                    Polygon aPolygon(nCount + (bClose ? 1 : 0));
+
+                                    for(sal_uInt32 a(0); a < nCount; a++)
+                                    {
+                                        const Point aPoint(
+                                            aRectangle.Left() + basegfx::fround(rand() * (fHor / 32767.0)),
+                                            aRectangle.Top() + basegfx::fround(rand() * (fVer / 32767.0)));
+                                        aPolygon[a] = aPoint;
+                                    }
+
+                                    if(bClose)
+                                    {
+                                        aPolygon[aPolygon.GetSize() - 1] = aPolygon[0];
+                                    }
+
+                                    aPolyPolygon.Insert(aPolygon);
+                                }
+
+                                aOut.SetLineColor(Color(basegfx::BColor(rand() / 32767.0, rand() / 32767.0, rand() / 32767.0)));
+                                aOut.SetFillColor(Color(basegfx::BColor(rand() / 32767.0, rand() / 32767.0, rand() / 32767.0)));
+                                aOut.DrawPolyPolygon(aPolyPolygon);
+                            }
+
+                            if(false)
+                            {
+                                SvFileStream aRead((const String&)String(ByteString( "c:\\test.png" ), RTL_TEXTENCODING_UTF8), STREAM_READ);
+                                vcl::PNGReader aPNGReader(aRead);
+                                BitmapEx aBitmapEx(aPNGReader.Read());
+                                aOut.DrawBitmapEx(aRectangle.TopLeft(), aBitmapEx);
+                            }
+
+                            if(false)
+                            {
+                                SvFileStream aRead((const String&)String(ByteString( "c:\\test.png" ), RTL_TEXTENCODING_UTF8), STREAM_READ);
+                                vcl::PNGReader aPNGReader(aRead);
+                                BitmapEx aBitmapEx(aPNGReader.Read());
+                                aOut.DrawBitmapEx(aRectangle.TopLeft(), aRectangle.GetSize(), aBitmapEx);
+                            }
+
+                            if(false)
+                            {
+                                SvFileStream aRead((const String&)String(ByteString( "c:\\test.png" ), RTL_TEXTENCODING_UTF8), STREAM_READ);
+                                vcl::PNGReader aPNGReader(aRead);
+                                BitmapEx aBitmapEx(aPNGReader.Read());
+                                const Size aSizePixel(aBitmapEx.GetSizePixel());
+                                aOut.DrawBitmapEx(
+                                    aRectangle.TopLeft(),
+                                    aRectangle.GetSize(),
+                                    Point(0, 0),
+                                    Size(aSizePixel.Width() /2, aSizePixel.Height() / 2),
+                                    aBitmapEx);
+                            }
+
+                            if(false)
+                            {
+                                const double fHor(aRectangle.getWidth());
+                                const double fVer(aRectangle.getHeight());
+                                const Point aPointA(
+                                    aRectangle.Left() + basegfx::fround(fHor * 0.2),
+                                    aRectangle.Top() + basegfx::fround(fVer * 0.3));
+                                const Point aPointB(
+                                    aRectangle.Left() + basegfx::fround(fHor * 0.2),
+                                    aRectangle.Top() + basegfx::fround(fVer * 0.5));
+                                const Point aPointC(
+                                    aRectangle.Left() + basegfx::fround(fHor * 0.2),
+                                    aRectangle.Top() + basegfx::fround(fVer * 0.7));
+                                const String aText(ByteString("Hello, World!"), RTL_TEXTENCODING_UTF8);
+
+                                const String aFontName(ByteString("Comic Sans MS"), RTL_TEXTENCODING_UTF8);
+                                Font aFont(aFontName, Size(0, 1000));
+                                aFont.SetAlign(ALIGN_BASELINE);
+                                aFont.SetColor(COL_RED);
+                                //sal_Int32* pDXArray = new sal_Int32[aText.Len()];
+
+                                aFont.SetOutline(true);
+                                aOut.SetFont(aFont);
+                                aOut.DrawText(aPointA, aText, 0, aText.Len());
+
+                                aFont.SetShadow(true);
+                                aOut.SetFont(aFont);
+                                aOut.DrawText(aPointB, aText, 0, aText.Len());
+
+                                aFont.SetRelief(RELIEF_EMBOSSED);
+                                aOut.SetFont(aFont);
+                                aOut.DrawText(aPointC, aText, 0, aText.Len());
+
+                                //delete pDXArray;
+                            }
+
+                            if(false)
+                            {
+                                const double fHor(aRectangle.getWidth());
+                                const double fVer(aRectangle.getHeight());
+                                const Point aPointA(
+                                    aRectangle.Left() + basegfx::fround(fHor * 0.2),
+                                    aRectangle.Top() + basegfx::fround(fVer * 0.3));
+                                const Point aPointB(
+                                    aRectangle.Left() + basegfx::fround(fHor * 0.2),
+                                    aRectangle.Top() + basegfx::fround(fVer * 0.5));
+                                const Point aPointC(
+                                    aRectangle.Left() + basegfx::fround(fHor * 0.2),
+                                    aRectangle.Top() + basegfx::fround(fVer * 0.7));
+                                const String aText(ByteString("Hello, World!"), RTL_TEXTENCODING_UTF8);
+
+                                const String aFontName(ByteString("Comic Sans MS"), RTL_TEXTENCODING_UTF8);
+                                Font aFont(aFontName, Size(0, 1000));
+                                aFont.SetAlign(ALIGN_BASELINE);
+                                aFont.SetColor(COL_RED);
+
+                                aOut.SetFont(aFont);
+                                const sal_Int32 nWidth(aOut.GetTextWidth(aText, 0, aText.Len()));
+                                aOut.DrawText(aPointA, aText, 0, aText.Len());
+                                aOut.DrawTextLine(aPointA, nWidth, STRIKEOUT_SINGLE, UNDERLINE_SINGLE, UNDERLINE_SMALLWAVE);
+                                aOut.DrawTextLine(aPointB, nWidth, STRIKEOUT_SINGLE, UNDERLINE_SINGLE, UNDERLINE_SMALLWAVE);
+                                aOut.DrawTextLine(aPointC, nWidth, STRIKEOUT_SINGLE, UNDERLINE_SINGLE, UNDERLINE_SMALLWAVE);
+                            }
+
+                            aMtf.Stop();
+                            aMtf.WindStart();
+                            aMtf.SetPrefMapMode(MapMode(MAP_100TH_MM));
+                            aMtf.SetPrefSize(Size(aRectangle.getWidth(), aRectangle.getHeight()));
 
                             xPrimitive = Primitive2DReference(
-                                new MaskPrimitive2D(
-                                    basegfx::B2DPolyPolygon(aMaskPolygon),
-                                    aChildContent));
+                                new MetafilePrimitive2D(
+                                    aTransform,
+                                    aMtf));
                         }
+                        else
+                        {
+#endif // USE_DEBUG_CODE_TO_TEST_METAFILE_DECOMPOSE
+                            // create MetafilePrimitive2D
+                            const Graphic aGraphic(getGraphicObject().GetGraphic());
+                            const GDIMetaFile& rMetafile = aTransformedGraphic.GetGDIMetaFile();
+
+                            xPrimitive = Primitive2DReference(
+                                new MetafilePrimitive2D(
+                                    aTransform,
+                                    rMetafile));
+
+                            // #i100357# find out if clipping is needed for this primitive. Unfortunately,
+                            // there exist Metafiles who's content is bigger than the proposed PrefSize set
+                            // at them. This is an error, but we need to work around this
+                            const Size aMetaFilePrefSize(rMetafile.GetPrefSize());
+                            const Size aMetaFileRealSize(
+                                const_cast< GDIMetaFile& >(rMetafile).GetBoundRect(
+                                    *Application::GetDefaultDevice()).GetSize());
+
+                            if(aMetaFileRealSize.getWidth() > aMetaFilePrefSize.getWidth()
+                                || aMetaFileRealSize.getHeight() > aMetaFilePrefSize.getHeight())
+                            {
+                                // clipping needed. Embed to MaskPrimitive2D. Create childs and mask polygon
+                                const primitive2d::Primitive2DSequence aChildContent(&xPrimitive, 1);
+                                basegfx::B2DPolygon aMaskPolygon(
+                                    basegfx::tools::createPolygonFromRect(
+                                        basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
+                                aMaskPolygon.transform(aTransform);
+
+                                xPrimitive = Primitive2DReference(
+                                    new MaskPrimitive2D(
+                                        basegfx::B2DPolyPolygon(aMaskPolygon),
+                                        aChildContent));
+                            }
+#ifdef USE_DEBUG_CODE_TO_TEST_METAFILE_DECOMPOSE
+                        }
+#endif // USE_DEBUG_CODE_TO_TEST_METAFILE_DECOMPOSE
 
                         break;
                     }
@@ -319,7 +807,9 @@ namespace drawinglayer
                         getTransform().decompose(aScale, aTranslate, fRotate, fShearX);
 
                         // create ranges. The current object range is just scale and translate
-                        const basegfx::B2DRange aCurrent(aTranslate.getX(), aTranslate.getY(), aTranslate.getX() + aScale.getX(), aTranslate.getY() + aScale.getY());
+                        const basegfx::B2DRange aCurrent(
+                            aTranslate.getX(), aTranslate.getY(),
+                            aTranslate.getX() + aScale.getX(), aTranslate.getY() + aScale.getY());
 
                         // calculate scalings between real image size and logic object size. This
                         // is necessary since the crop values are relative to original bitmap size
@@ -369,11 +859,15 @@ namespace drawinglayer
                             // build new object transformation for transform primitive which contains xPrimitive
                             basegfx::B2DHomMatrix aNewObjectTransform(getTransform());
                             aNewObjectTransform.invert();
-                            aNewObjectTransform.scale(aCropped.getWidth(), aCropped.getHeight());
-                            aNewObjectTransform.translate(aCropped.getMinX() - aCurrent.getMinX(), aCropped.getMinY() - aCurrent.getMinY());
-                            aNewObjectTransform.shearX(fShearX);
-                            aNewObjectTransform.rotate(fRotate);
-                            aNewObjectTransform.translate(aTranslate.getX(), aTranslate.getY());
+                            aNewObjectTransform = basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                aCropped.getWidth(), aCropped.getHeight(),
+                                aCropped.getMinX() - aCurrent.getMinX(), aCropped.getMinY() - aCurrent.getMinY())
+                                * aNewObjectTransform;
+
+                            // add shear, rotate and translate using combined matrix to speedup
+                            const basegfx::B2DHomMatrix aCombinedMatrix(basegfx::tools::createShearXRotateTranslateB2DHomMatrix(
+                                fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
+                            aNewObjectTransform = aCombinedMatrix * aNewObjectTransform;
 
                             // prepare TransformPrimitive2D with xPrimitive
                             const Primitive2DReference xTransformPrimitive(new TransformPrimitive2D(aNewObjectTransform, Primitive2DSequence(&xPrimitive, 1L)));
@@ -410,7 +904,7 @@ namespace drawinglayer
             const basegfx::B2DHomMatrix& rTransform,
             const GraphicObject& rGraphicObject,
             const GraphicAttr& rGraphicAttr)
-        :   BasePrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maTransform(rTransform),
             maGraphicObject(rGraphicObject),
             maGraphicAttr(rGraphicAttr)
@@ -420,7 +914,7 @@ namespace drawinglayer
         GraphicPrimitive2D::GraphicPrimitive2D(
             const basegfx::B2DHomMatrix& rTransform,
             const GraphicObject& rGraphicObject)
-        :   BasePrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maTransform(rTransform),
             maGraphicObject(rGraphicObject),
             maGraphicAttr()
@@ -429,7 +923,7 @@ namespace drawinglayer
 
         bool GraphicPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const GraphicPrimitive2D& rCompare = (GraphicPrimitive2D&)rPrimitive;
 

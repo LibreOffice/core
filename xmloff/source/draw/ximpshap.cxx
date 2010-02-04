@@ -2994,7 +2994,18 @@ void SdXMLPluginShapeContext::EndElement()
         else
         {
             // in case we have a media object
-            xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaURL" ) ), uno::makeAny( maHref ) );
+
+            OUString sTempRef;
+
+            // check for package URL
+            if( GetImport().IsPackageURL( maHref ) )
+            {
+                sTempRef = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.Package:" ) );
+            }
+
+            sTempRef += maHref;
+
+            xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaURL" ) ), uno::makeAny( sTempRef ) );
 
             for( sal_Int32 nParam = 0; nParam < maParams.getLength(); ++nParam )
             {

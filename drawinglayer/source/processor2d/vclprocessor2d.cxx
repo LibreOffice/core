@@ -63,6 +63,8 @@
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/metric.hxx>
+#include <drawinglayer/primitive2d/textenumsprimitive2d.hxx>
+#include <drawinglayer/primitive2d/epsprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // control support
@@ -99,34 +101,6 @@ namespace drawinglayer
         using ::com::sun::star::awt::XWindow;
         using ::com::sun::star::awt::PosSize::POSSIZE;
 
-        static FontUnderline mapTextLineStyle(primitive2d::FontUnderline eLineStyle)
-        {
-            switch(eLineStyle)
-            {
-                default:
-                    DBG_WARNING1( "DrawingLayer: Unknown text line style attribute (%d)!", eLineStyle );
-                    // fall through
-                case primitive2d::FONT_UNDERLINE_NONE:          return UNDERLINE_NONE;
-                case primitive2d::FONT_UNDERLINE_SINGLE:        return UNDERLINE_SINGLE;
-                case primitive2d::FONT_UNDERLINE_DOUBLE:        return UNDERLINE_DOUBLE;
-                case primitive2d::FONT_UNDERLINE_DOTTED:        return UNDERLINE_DOTTED;
-                case primitive2d::FONT_UNDERLINE_DASH:          return UNDERLINE_DASH;
-                case primitive2d::FONT_UNDERLINE_LONGDASH:      return UNDERLINE_LONGDASH;
-                case primitive2d::FONT_UNDERLINE_DASHDOT:       return UNDERLINE_DASHDOT;
-                case primitive2d::FONT_UNDERLINE_DASHDOTDOT:    return UNDERLINE_DASHDOTDOT;
-                case primitive2d::FONT_UNDERLINE_SMALLWAVE:     return UNDERLINE_SMALLWAVE;
-                case primitive2d::FONT_UNDERLINE_WAVE:          return UNDERLINE_WAVE;
-                case primitive2d::FONT_UNDERLINE_DOUBLEWAVE:    return UNDERLINE_DOUBLEWAVE;
-                case primitive2d::FONT_UNDERLINE_BOLD:          return UNDERLINE_BOLD;
-                case primitive2d::FONT_UNDERLINE_BOLDDOTTED:    return UNDERLINE_BOLDDOTTED;
-                case primitive2d::FONT_UNDERLINE_BOLDDASH:      return UNDERLINE_BOLDDASH;
-                case primitive2d::FONT_UNDERLINE_BOLDLONGDASH:  return UNDERLINE_LONGDASH;
-                case primitive2d::FONT_UNDERLINE_BOLDDASHDOT:   return UNDERLINE_BOLDDASHDOT;
-                case primitive2d::FONT_UNDERLINE_BOLDDASHDOTDOT:return UNDERLINE_BOLDDASHDOT;
-                case primitive2d::FONT_UNDERLINE_BOLDWAVE:      return UNDERLINE_BOLDWAVE;
-            }
-        }
-
         //////////////////////////////////////////////////////////////////////////////
         // rendering support
 
@@ -157,8 +131,8 @@ namespace drawinglayer
                 if(basegfx::fTools::more(aFontScaling.getX(), 0.0) && basegfx::fTools::more(aFontScaling.getY(), 0.0))
                 {
                     // Get the VCL font (use FontHeight as FontWidth)
-                    Font aFont(primitive2d::getVclFontFromFontAttributes(
-                        rTextCandidate.getFontAttributes(),
+                    Font aFont(primitive2d::getVclFontFromFontAttribute(
+                        rTextCandidate.getFontAttribute(),
                         aFontScaling.getX(),
                         aFontScaling.getY(),
                         fRotate,
@@ -176,7 +150,7 @@ namespace drawinglayer
                         mpOutputDevice->SetTextLineColor( Color(aTextlineColor) );
 
                         // set Overline attribute
-                        FontUnderline eFontOverline = mapTextLineStyle( pTCPP->getFontOverline() );
+                        const FontUnderline eFontOverline(primitive2d::mapTextLineToFontUnderline( pTCPP->getFontOverline() ));
                         if( eFontOverline != UNDERLINE_NONE )
                         {
                             aFont.SetOverline( eFontOverline );
@@ -187,7 +161,7 @@ namespace drawinglayer
                         }
 
                         // set Underline attribute
-                        FontUnderline eFontUnderline = mapTextLineStyle( pTCPP->getFontUnderline() );
+                        const FontUnderline eFontUnderline(primitive2d::mapTextLineToFontUnderline( pTCPP->getFontUnderline() ));
                         if( eFontUnderline != UNDERLINE_NONE )
                         {
                             aFont.SetUnderline( eFontUnderline );
@@ -198,35 +172,23 @@ namespace drawinglayer
                         }
 
                         // set Strikeout attribute
-                        FontStrikeout eFontStrikeout = STRIKEOUT_NONE;
-                        switch( pTCPP->getFontStrikeout() )
-                        {
-                            default:
-                               DBG_WARNING1( "DrawingLayer: Unknown strikeout attribute (%d)!", pTCPP->getFontStrikeout() );
-                                // fall through
-                            case primitive2d::FONT_STRIKEOUT_NONE:      eFontStrikeout = STRIKEOUT_NONE; break;
-                            case primitive2d::FONT_STRIKEOUT_SINGLE:    eFontStrikeout = STRIKEOUT_SINGLE; break;
-                            case primitive2d::FONT_STRIKEOUT_DOUBLE:    eFontStrikeout = STRIKEOUT_DOUBLE; break;
-                            case primitive2d::FONT_STRIKEOUT_BOLD:      eFontStrikeout = STRIKEOUT_BOLD; break;
-                            case primitive2d::FONT_STRIKEOUT_SLASH:     eFontStrikeout = STRIKEOUT_SLASH; break;
-                            case primitive2d::FONT_STRIKEOUT_X:         eFontStrikeout = STRIKEOUT_X; break;
-                        }
+                        const FontStrikeout eFontStrikeout(primitive2d::mapTextStrikeoutToFontStrikeout(pTCPP->getTextStrikeout()));
 
                         if( eFontStrikeout != STRIKEOUT_NONE )
                             aFont.SetStrikeout( eFontStrikeout );
 
                         // set EmphasisMark attribute
                         FontEmphasisMark eFontEmphasisMark = EMPHASISMARK_NONE;
-                        switch( pTCPP->getFontEmphasisMark() )
+                        switch( pTCPP->getTextEmphasisMark() )
                         {
                             default:
-                                DBG_WARNING1( "DrawingLayer: Unknown EmphasisMark style (%d)!", pTCPP->getFontEmphasisMark() );
+                                DBG_WARNING1( "DrawingLayer: Unknown EmphasisMark style (%d)!", pTCPP->getTextEmphasisMark() );
                                 // fall through
-                            case primitive2d::FONT_EMPHASISMARK_NONE:   eFontEmphasisMark = EMPHASISMARK_NONE; break;
-                            case primitive2d::FONT_EMPHASISMARK_DOT:    eFontEmphasisMark = EMPHASISMARK_DOT; break;
-                            case primitive2d::FONT_EMPHASISMARK_CIRCLE: eFontEmphasisMark = EMPHASISMARK_CIRCLE; break;
-                            case primitive2d::FONT_EMPHASISMARK_DISC:   eFontEmphasisMark = EMPHASISMARK_DISC; break;
-                            case primitive2d::FONT_EMPHASISMARK_ACCENT: eFontEmphasisMark = EMPHASISMARK_ACCENT; break;
+                            case primitive2d::TEXT_EMPHASISMARK_NONE:   eFontEmphasisMark = EMPHASISMARK_NONE; break;
+                            case primitive2d::TEXT_EMPHASISMARK_DOT:    eFontEmphasisMark = EMPHASISMARK_DOT; break;
+                            case primitive2d::TEXT_EMPHASISMARK_CIRCLE: eFontEmphasisMark = EMPHASISMARK_CIRCLE; break;
+                            case primitive2d::TEXT_EMPHASISMARK_DISC:   eFontEmphasisMark = EMPHASISMARK_DISC; break;
+                            case primitive2d::TEXT_EMPHASISMARK_ACCENT: eFontEmphasisMark = EMPHASISMARK_ACCENT; break;
                         }
 
                         if( eFontEmphasisMark != EMPHASISMARK_NONE )
@@ -242,14 +204,14 @@ namespace drawinglayer
 
                         // set Relief attribute
                         FontRelief eFontRelief = RELIEF_NONE;
-                        switch( pTCPP->getFontRelief() )
+                        switch( pTCPP->getTextRelief() )
                         {
                             default:
-                                DBG_WARNING1( "DrawingLayer: Unknown Relief style (%d)!", pTCPP->getFontRelief() );
+                                DBG_WARNING1( "DrawingLayer: Unknown Relief style (%d)!", pTCPP->getTextRelief() );
                                 // fall through
-                            case primitive2d::FONT_RELIEF_NONE:     eFontRelief = RELIEF_NONE; break;
-                            case primitive2d::FONT_RELIEF_EMBOSSED: eFontRelief = RELIEF_EMBOSSED; break;
-                            case primitive2d::FONT_RELIEF_ENGRAVED: eFontRelief = RELIEF_ENGRAVED; break;
+                            case primitive2d::TEXT_RELIEF_NONE:     eFontRelief = RELIEF_NONE; break;
+                            case primitive2d::TEXT_RELIEF_EMBOSSED: eFontRelief = RELIEF_EMBOSSED; break;
+                            case primitive2d::TEXT_RELIEF_ENGRAVED: eFontRelief = RELIEF_ENGRAVED; break;
                         }
 
                         if( eFontRelief != RELIEF_NONE )
@@ -282,7 +244,7 @@ namespace drawinglayer
                     const Point aStartPoint(basegfx::fround(aPoint.getX()), basegfx::fround(aPoint.getY()));
                     const sal_uInt32 nOldLayoutMode(mpOutputDevice->GetLayoutMode());
 
-                    if(rTextCandidate.getFontAttributes().getRTL())
+                    if(rTextCandidate.getFontAttribute().getRTL())
                     {
                         sal_uInt32 nRTLLayoutMode(nOldLayoutMode & ~(TEXT_LAYOUT_COMPLEX_DISABLED|TEXT_LAYOUT_BIDI_STRONG));
                         nRTLLayoutMode |= TEXT_LAYOUT_BIDI_RTL|TEXT_LAYOUT_TEXTORIGIN_LEFT;
@@ -310,7 +272,7 @@ namespace drawinglayer
                             rTextCandidate.getTextLength());
                     }
 
-                    if(rTextCandidate.getFontAttributes().getRTL())
+                    if(rTextCandidate.getFontAttribute().getRTL())
                     {
                         mpOutputDevice->SetLayoutMode(nOldLayoutMode);
                     }
@@ -428,7 +390,7 @@ namespace drawinglayer
                 {
                     // no shear or rotate, draw direct in pixel coordinates
                     bPrimitiveAccepted = true;
-                    BitmapEx aBitmapEx(rFillBitmapAttribute.getBitmap());
+                    BitmapEx aBitmapEx(rFillBitmapAttribute.getBitmapEx());
                     bool bPainted(false);
 
                     if(maBColorModifierStack.count())
@@ -547,21 +509,32 @@ namespace drawinglayer
             basegfx::BColor aStartColor(maBColorModifierStack.getModifiedColor(rGradient.getStartColor()));
             basegfx::BColor aEndColor(maBColorModifierStack.getModifiedColor(rGradient.getEndColor()));
             basegfx::B2DPolyPolygon aLocalPolyPolygon(rPolygonCandidate.getB2DPolyPolygon());
-            aLocalPolyPolygon.transform(maCurrentTransformation);
 
-            if(aStartColor == aEndColor)
+            if(aLocalPolyPolygon.count())
             {
-                // no gradient at all, draw as polygon
-                mpOutputDevice->SetLineColor();
-                mpOutputDevice->SetFillColor(Color(aStartColor));
-                mpOutputDevice->DrawPolyPolygon(aLocalPolyPolygon);
-            }
-            else
-            {
-                impDrawGradientToOutDev(
-                    *mpOutputDevice, aLocalPolyPolygon, rGradient.getStyle(), rGradient.getSteps(),
-                    aStartColor, aEndColor, rGradient.getBorder(),
-                    -rGradient.getAngle(), rGradient.getOffsetX(), rGradient.getOffsetY(), false);
+                aLocalPolyPolygon.transform(maCurrentTransformation);
+
+                if(aStartColor == aEndColor)
+                {
+                    // no gradient at all, draw as polygon in AA and non-AA case
+                    mpOutputDevice->SetLineColor();
+                    mpOutputDevice->SetFillColor(Color(aStartColor));
+                    mpOutputDevice->DrawPolyPolygon(aLocalPolyPolygon);
+                }
+                else if(getOptionsDrawinglayer().IsAntiAliasing())
+                {
+                    // For AA, direct render has to be avoided since it uses XOR maskings which will not
+                    // work with AA. Instead, the decompose which uses MaskPrimitive2D with fillings is
+                    // used
+                    process(rPolygonCandidate.get2DDecomposition(getViewInformation2D()));
+                }
+                else
+                {
+                    impDrawGradientToOutDev(
+                        *mpOutputDevice, aLocalPolyPolygon, rGradient.getStyle(), rGradient.getSteps(),
+                        aStartColor, aEndColor, rGradient.getBorder(),
+                        -rGradient.getAngle(), rGradient.getOffsetX(), rGradient.getOffsetY(), false);
+                }
             }
         }
 
@@ -574,9 +547,9 @@ namespace drawinglayer
             if(rPolyPolygon.count())
             {
                 const attribute::FillBitmapAttribute& rFillBitmapAttribute = rPolygonCandidate.getFillBitmap();
-                const Bitmap& rBitmap = rFillBitmapAttribute.getBitmap();
+                const BitmapEx& rBitmapEx = rFillBitmapAttribute.getBitmapEx();
 
-                if(rBitmap.IsEmpty())
+                if(rBitmapEx.IsEmpty())
                 {
                     // empty bitmap, done
                     bDone = true;
@@ -668,7 +641,9 @@ namespace drawinglayer
             aLocalPolyPolygon.transform(maCurrentTransformation);
             mpOutputDevice->DrawPolyPolygon(aLocalPolyPolygon);
 
-            if(mnPolygonStrokePrimitive2D && getOptionsDrawinglayer().IsAntiAliasing())
+            if(mnPolygonStrokePrimitive2D
+                && getOptionsDrawinglayer().IsAntiAliasing()
+                && (mpOutputDevice->GetAntialiasing() & ANTIALIASING_ENABLE_B2DDRAW))
             {
                 // when AA is on and this filled polygons are the result of stroked line geometry,
                 // draw the geometry once extra as lines to avoid AA 'gaps' between partial polygons
@@ -1253,6 +1228,43 @@ namespace drawinglayer
 
                 // leave PolygonStrokePrimitive2D
                 mnPolygonStrokePrimitive2D--;
+            }
+        }
+
+        void VclProcessor2D::RenderEpsPrimitive2D(const primitive2d::EpsPrimitive2D& rEpsPrimitive2D)
+        {
+            // The new decomposition of Metafiles made it necessary to add an Eps
+            // primitive to handle embedded Eps data. On some devices, this can be
+            // painted directly (mac, printer).
+            // To be able to handle the replacement correctly, i need to handle it myself
+            // since DrawEPS will not be able e.g. to rotate the replacement. To be able
+            // to do that, i added a boolean return to OutputDevice::DrawEPS(..)
+            // to know when EPS was handled directly already.
+            basegfx::B2DRange aRange(0.0, 0.0, 1.0, 1.0);
+            aRange.transform(maCurrentTransformation * rEpsPrimitive2D.getEpsTransform());
+
+            if(!aRange.isEmpty())
+            {
+                const Rectangle aRectangle(
+                    (sal_Int32)floor(aRange.getMinX()), (sal_Int32)floor(aRange.getMinY()),
+                    (sal_Int32)ceil(aRange.getMaxX()), (sal_Int32)ceil(aRange.getMaxY()));
+
+                if(!aRectangle.IsEmpty())
+                {
+                    // try to paint EPS directly without fallback visualisation
+                    const bool bEPSPaintedDirectly(mpOutputDevice->DrawEPS(
+                        aRectangle.TopLeft(),
+                        aRectangle.GetSize(),
+                        rEpsPrimitive2D.getGfxLink(),
+                        0));
+
+                    if(!bEPSPaintedDirectly)
+                    {
+                        // use the decomposition which will correctly handle the
+                        // fallback visualisation using full transformation (e.g. rotation)
+                        process(rEpsPrimitive2D.get2DDecomposition(getViewInformation2D()));
+                    }
+                }
             }
         }
 
