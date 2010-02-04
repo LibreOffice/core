@@ -89,6 +89,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -229,7 +230,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
         MutexGuard aGuard(m_aMutex);
 
         // extrat known arguments
-        ::rtl::OUString sName, sPersistentName, sURL;
+        ::rtl::OUString sName, sPersistentName, sURL, sMediaType;
         Reference< XCommandProcessor > xCopyFrom;
         Reference< XConnection > xConnection;
         sal_Bool bAsTemplate;
@@ -242,6 +243,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
         lcl_extractAndRemove( aArgs, PROPERTY_EMBEDDEDOBJECT, xCopyFrom );
         lcl_extractAndRemove( aArgs, PROPERTY_ACTIVE_CONNECTION, xConnection );
         lcl_extractAndRemove( aArgs, PROPERTY_AS_TEMPLATE, bAsTemplate );
+        lcl_extractAndRemove( aArgs, INFO_MEDIATYPE, sMediaType );
 
         // ClassID has two allowed types, so a special treatment here
         Any aClassIDArg = aArgs.get( "ClassID" );
@@ -278,6 +280,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
             if ( xElements.is() )
                 sPersistentName = ::dbtools::createUniqueName(xElements,sPersistentName);
 
+            const bool bNeedClassID = ( aClassID.getLength() == 0 ) && ( 0 == sURL.getLength() );
             if ( xCopyFrom.is() )
             {
                 Sequence<Any> aIni(2);
@@ -291,10 +294,16 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
                 Reference<XPropertySet> xProp(xCopyFrom,UNO_QUERY);
                 if ( xProp.is() && xProp->getPropertySetInfo().is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_AS_TEMPLATE) )
                     xProp->getPropertyValue(PROPERTY_AS_TEMPLATE) >>= bAsTemplate;
-            }
 
-            if ( ( aClassID.getLength() == 0 ) && ( 0 == sURL.getLength() ) )
-                ODocumentDefinition::GetDocumentServiceFromMediaType( getContainerStorage(), sPersistentName, m_aContext, aClassID );
+                // if we do not have an own class ID, see if we can determine one from the copy we just created
+                if ( bNeedClassID )
+                    ODocumentDefinition::GetDocumentServiceFromMediaType( getContainerStorage(), sPersistentName, m_aContext, aClassID );
+            }
+            else
+            {
+                if ( bNeedClassID && sMediaType.getLength() )
+                    ODocumentDefinition::GetDocumentServiceFromMediaType( sMediaType, m_aContext, aClassID );
+            }
         }
 
         ODefinitionContainer_Impl::const_iterator aFind = rDefinitions.find( sName );
@@ -405,9 +414,12 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
 
                     ::rtl::OUString sServiceName;
                     if ( Reference< XNameAccess >( xObjectToCopy, UNO_QUERY ).is() )
+                    {
                         if ( m_bFormsContainer )
                             sServiceName = SERVICE_NAME_FORM_COLLECTION;
-                        else sServiceName = SERVICE_NAME_REPORT_COLLECTION;
+                        else
+                            sServiceName = SERVICE_NAME_REPORT_COLLECTION;
+                    }
                     else
                         sServiceName = SERVICE_SDB_DOCUMENTDEFINITION;
 
@@ -528,7 +540,7 @@ namespace
         if ( bRet )
         {
             _rRet = _xNameContainer->getByName(_sSimpleName = sName);
-            while ( nIndex != -1 )
+            while ( nIndex != -1 && bRet )
             {
                 sName = _sName.getToken(0,'/',nIndex);
                 _xNameContainer.set(_rRet,UNO_QUERY);
@@ -542,8 +554,10 @@ namespace
                 }
             }
         }
-        else if ( nIndex == -1 )
-            _sSimpleName = sName; // a content on the root content
+        if ( nIndex == -1 )
+            _sSimpleName = sName; // a content
+        else
+            _xNameContainer.clear(); // a sub folder doesn't exist
         return bRet;
     }
 }
@@ -565,7 +579,6 @@ Reference< XComponent > SAL_CALL ODocumentContainer::loadComponentFromURL( const
         if ( !lcl_queryContent(_sURL,xNameContainer,aContent,sName) )
         {
             ::rtl::OUString sMessage( DBA_RES( RID_STR_NAME_NOT_FOUND ) );
-                // TODO: resource
             ::comphelper::string::searchAndReplaceAsciiI( sMessage, "$name$", _sURL );
             throw IllegalArgumentException( sMessage, *this, 1 );
         }
@@ -622,15 +635,24 @@ sal_Bool SAL_CALL ODocumentContainer::hasByHierarchicalName( const ::rtl::OUStri
 // XHierarchicalNameContainer
 void SAL_CALL ODocumentContainer::insertByHierarchicalName( const ::rtl::OUString& _sName, const Any& _aElement ) throw (IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
 {
+    Reference< XContent > xContent(_aElement,UNO_QUERY);
+    if ( !xContent.is() )
+        throw IllegalArgumentException();
+
     ClearableMutexGuard aGuard(m_aMutex);
     Any aContent;
     Reference< XNameContainer > xNameContainer(this);
     ::rtl::OUString sName;
     if ( lcl_queryContent(_sName,xNameContainer,aContent,sName) )
         throw ElementExistException(_sName,*this);
-    Reference< XContent > xContent(_aElement,UNO_QUERY);
-    if ( !xContent.is() )
-        throw IllegalArgumentException();
+
+    if ( !xNameContainer.is() )
+    {
+        ::rtl::OUString sMessage( DBA_RES( RID_STR_NO_SUB_FOLDER ) );
+        sal_Int32 index = sName.getLength();
+        ::comphelper::string::searchAndReplaceAsciiI( sMessage, "$folder$", _sName.getToken(0,'/',index) );
+        throw IllegalArgumentException( sMessage, *this, 1 );
+    }
 
     xNameContainer->insertByName(sName,_aElement);
 }

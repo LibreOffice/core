@@ -73,7 +73,8 @@ SLOFILES=	\
         $(SLO)$/tablecontainer.obj				\
         $(SLO)$/SingleSelectQueryComposer.obj	\
         $(SLO)$/HelperCollections.obj			\
-        $(SLO)$/datasettings.obj
+        $(SLO)$/datasettings.obj                \
+        $(SLO)$/columnsettings.obj
 
 # --- Targets ----------------------------------
 

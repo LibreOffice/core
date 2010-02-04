@@ -178,7 +178,7 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
                 {
                     String strMessage = String(ModuleRes(STR_TABLEDESIGN_DUPLICATE_NAME));
                     strMessage.SearchAndReplaceAscii("$column$", sNewName);
-                    OSQLWarningBox( this, strMessage ).Execute();
+                    pWiz->showError(strMessage);
                     pCurFieldDescr->SetName(sName);
                     DisplayData(pCurFieldDescr);
                     static_cast<OWizTypeSelect*>(GetParent())->setDuplicateName(sal_True);

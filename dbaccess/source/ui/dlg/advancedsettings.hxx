@@ -74,6 +74,7 @@ namespace dbaui
         CheckBox*           m_pCheckRequiredFields;
         CheckBox*           m_pIgnoreCurrency;
         CheckBox*           m_pEscapeDateTime;
+        CheckBox*           m_pPrimaryKeySupport;
 
         FixedText*          m_pBooleanComparisonModeLabel;
         ListBox*            m_pBooleanComparisonMode;
@@ -83,8 +84,7 @@ namespace dbaui
 
         BooleanSettingDescs m_aBooleanSettings;
 
-        AdvancedSettingsSupport
-                            m_aSupported;
+        bool                m_bHasBooleanComparisonMode;
 
     public:
         virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );

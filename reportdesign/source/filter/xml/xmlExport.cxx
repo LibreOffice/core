@@ -172,40 +172,6 @@ namespace rptxml
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString lcl_implGetPropertyXMLType(const Type& _rType)
-    {
-        // possible types we can write (either because we recognize them directly or because we convert _rValue
-        // into one of these types)
-        static const ::rtl::OUString s_sTypeBoolean (RTL_CONSTASCII_USTRINGPARAM("boolean"));
-        static const ::rtl::OUString s_sTypeShort   (RTL_CONSTASCII_USTRINGPARAM("short"));
-        static const ::rtl::OUString s_sTypeInteger (RTL_CONSTASCII_USTRINGPARAM("int"));
-        static const ::rtl::OUString s_sTypeLong    (RTL_CONSTASCII_USTRINGPARAM("long"));
-        static const ::rtl::OUString s_sTypeDouble  (RTL_CONSTASCII_USTRINGPARAM("double"));
-        static const ::rtl::OUString s_sTypeString  (RTL_CONSTASCII_USTRINGPARAM("string"));
-
-        // handle the type description
-        switch (_rType.getTypeClass())
-        {
-            case TypeClass_STRING:
-                return s_sTypeString;
-            case TypeClass_DOUBLE:
-                return s_sTypeDouble;
-            case TypeClass_BOOLEAN:
-                return s_sTypeBoolean;
-            case TypeClass_BYTE:
-            case TypeClass_SHORT:
-                return s_sTypeShort;
-            case TypeClass_LONG:
-                return s_sTypeInteger;
-            case TypeClass_HYPER:
-                return s_sTypeLong;
-            case TypeClass_ENUM:
-                return s_sTypeInteger;
-
-            default:
-                return s_sTypeDouble;
-        }
-    }
 
     class OSpecialHanldeXMLExportPropertyMapper : public SvXMLExportPropertyMapper
     {
@@ -292,6 +258,16 @@ ORptExport::ORptExport(const Reference< XMultiServiceFactory >& _rxMSF,sal_uInt1
     if( (getExportFlags() & (EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_FONTDECLS) ) != 0 )
     {
         _GetNamespaceMap().Add( GetXMLToken(XML_NP_STYLE), GetXMLToken(XML_N_STYLE), XML_NAMESPACE_STYLE );
+    }
+    // RDFa: needed for content and header/footer styles
+    if( (getExportFlags() & (EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_MASTERSTYLES|EXPORT_CONTENT) ) != 0 )
+    {
+        _GetNamespaceMap().Add( GetXMLToken(XML_NP_XHTML),GetXMLToken(XML_N_XHTML), XML_NAMESPACE_XHTML );
+    }
+    // GRDDL: to convert RDFa and meta.xml to RDF
+    if( (getExportFlags() & (EXPORT_META|EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_MASTERSTYLES|EXPORT_CONTENT) ) != 0 )
+    {
+        _GetNamespaceMap().Add( GetXMLToken(XML_NP_GRDDL),GetXMLToken(XML_N_GRDDL), XML_NAMESPACE_GRDDL );
     }
 
     _GetNamespaceMap().Add( GetXMLToken(XML_NP_TABLE), GetXMLToken(XML_N_TABLE), XML_NAMESPACE_TABLE );
@@ -1476,45 +1452,6 @@ sal_uInt32 ORptExport::exportDoc(enum ::xmloff::token::XMLTokenEnum eClass)
     return aBuffer.makeStringAndClear();
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString ORptExport::implConvertMeasure(sal_Int32 _nValue)
-{
-    ::rtl::OUStringBuffer aBuffer;
-    GetMM100UnitConverter().convertMeasure(aBuffer, _nValue);
-    return aBuffer.makeStringAndClear();
-}
-// -----------------------------------------------------------------------------
-::rtl::OUString ORptExport::implConvertAny(const Any& _rValue)
-{
-    ::rtl::OUStringBuffer aBuffer;
-    switch (_rValue.getValueTypeClass())
-    {
-        case TypeClass_STRING:
-        {   // extract the string
-            ::rtl::OUString sCurrentValue;
-            _rValue >>= sCurrentValue;
-            aBuffer.append(sCurrentValue);
-        }
-        break;
-        case TypeClass_DOUBLE:
-            // let the unit converter format is as string
-            GetMM100UnitConverter().convertDouble(aBuffer, getDouble(_rValue));
-            break;
-        case TypeClass_BOOLEAN:
-            aBuffer = getBOOL(_rValue) ? ::xmloff::token::GetXMLToken(XML_TRUE) : ::xmloff::token::GetXMLToken(XML_FALSE);
-            break;
-        case TypeClass_BYTE:
-        case TypeClass_SHORT:
-        case TypeClass_LONG:
-            // let the unit converter format is as string
-            GetMM100UnitConverter().convertNumber(aBuffer, getINT32(_rValue));
-            break;
-        default:
-            OSL_ENSURE(0,"ORptExport::implConvertAny: Invalid type");
-    }
-
-    return aBuffer.makeStringAndClear();
-}
-// -----------------------------------------------------------------------------
 UniReference < XMLPropertySetMapper > ORptExport::GetCellStylePropertyMapper() const
 {
     return m_xCellStylesPropertySetMapper;
@@ -1650,6 +1587,7 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
                 uno::Reference< XFunction> xFunction = xFunctions->createFunction();
                 ::rtl::OUString sFunction,sPrefix,sPostfix;
                 ::rtl::OUString sExpression = xGroup->getExpression();
+                ::rtl::OUString sFunctionName;
                 switch(nGroupOn)
                 {
                     case report::GroupOn::PREFIX_CHARACTERS:
@@ -1660,8 +1598,9 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
                         sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("YEAR"));
                         break;
                     case report::GroupOn::QUARTAL:
-                        sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MONTH"));
-                        sPostfix = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/4"));
+                        sFunction   = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INT((MONTH"));
+                        sPostfix    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-1)/3)+1"));
+                        sFunctionName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("QUARTAL_")) + sExpression;
                         break;
                     case report::GroupOn::MONTH:
                         sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MONTH"));
@@ -1689,15 +1628,21 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
                             exportFunction(xCountFunction);
                             sExpression = sCountName;
                             sPrefix = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" / ")) + ::rtl::OUString::valueOf(xGroup->getGroupInterval());
+                            sFunctionName = sFunction + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_")) + sExpression;
                         }
                         break;
                     default:
                         ;
                 }
+                if ( !sFunctionName.getLength() )
+                    sFunctionName = sFunction + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_")) + sExpression;
                 if ( sFunction.getLength() )
                 {
+                    sal_Unicode pReplaceChars[] = { '(',')',';',',','+','-','[',']','/','*'};
+                    for(sal_uInt32 j= 0; j < sizeof(pReplaceChars)/sizeof(pReplaceChars[0]);++j)
+                        sFunctionName = sFunctionName.replace(pReplaceChars[j],'_');
 
-                    xFunction->setName(sFunction + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_")) + sExpression);
+                    xFunction->setName(sFunctionName);
                     sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:")) + sFunction;
                     sFunction += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("(["));
                     sFunction += sExpression;

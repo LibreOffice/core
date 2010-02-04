@@ -140,10 +140,12 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                                     nGroupOn = report::GroupOn::YEAR;
                                 else if ( sFormula ==::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:MONTH")))
                                 {
-                                    if ( sCompleteFormula.endsWithIgnoreAsciiCaseAsciiL("\4",2) )
-                                        nGroupOn = report::GroupOn::QUARTAL;
-                                    else
-                                        nGroupOn = report::GroupOn::MONTH;
+                                    nGroupOn = report::GroupOn::MONTH;
+                                }
+                                else if ( sCompleteFormula.matchAsciiL("rpt:INT((MONTH",sizeof("rpt:INT((MONTH"),0)
+                                       && sCompleteFormula.endsWithIgnoreAsciiCaseAsciiL("-1)/3)+1",sizeof("-1)/3)+1")) )
+                                {
+                                    nGroupOn = report::GroupOn::QUARTAL;
                                 }
                                 else if ( sFormula ==::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:WEEK")))
                                     nGroupOn = report::GroupOn::WEEK;

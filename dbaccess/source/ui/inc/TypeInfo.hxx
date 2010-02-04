@@ -83,6 +83,7 @@ const sal_uInt16 TYPE_BLOB      = 27;
 const sal_uInt16 TYPE_CLOB      = 28;
 const sal_uInt16 TYPE_REF       = 29;
 const sal_uInt16 TYPE_OTHER     = 30;
+const sal_uInt16 TYPE_BIT       = 31;
 
     class OTypeInfo
     {
