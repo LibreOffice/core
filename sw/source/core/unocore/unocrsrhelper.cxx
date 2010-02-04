@@ -32,16 +32,21 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <map>
+
+#include <com/sun/star/text/XTextSection.hpp>
 
 #include <cmdid.h>
 #include <unocrsrhelper.hxx>
-#include <unoobj.hxx>
+#include <unofootnote.hxx>
+#include <unorefmark.hxx>
 #include <unostyle.hxx>
 #include <unoidx.hxx>
 #include <unofield.hxx>
 #include <unotbl.hxx>
 #include <unosett.hxx>
 #include <unoframe.hxx>
+#include <unocrsr.hxx>
 #include <doc.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <fmtftn.hxx>
@@ -64,6 +69,7 @@
 #include <docary.hxx>
 #include <swtable.hxx>
 #include <tox.hxx>
+#include <doctxm.hxx>
 #include <fchrfmt.hxx>
 #include <svx/flstitem.hxx>
 #include <vcl/metric.hxx>
@@ -100,8 +106,9 @@ using ::rtl::OUString;
 
 namespace SwUnoCursorHelper
 {
+
 /* -----------------16.09.98 12:27-------------------
- *  Lesen spezieller Properties am Cursor
+*   Lesen spezieller Properties am Cursor
  * --------------------------------------------------*/
 sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                                         , SwPaM& rPam
@@ -193,7 +200,10 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 pFmt = FN_UNO_PARA_CONDITIONAL_STYLE_NAME == rEntry.nWID
                             ? pNode->GetFmtColl() : &pNode->GetAnyFmtColl();
             else
-                pFmt = SwXTextCursor::GetCurTxtFmtColl(rPam, FN_UNO_PARA_CONDITIONAL_STYLE_NAME == rEntry.nWID);
+            {
+                pFmt = SwUnoCursorHelper::GetCurTxtFmtColl(rPam,
+                        FN_UNO_PARA_CONDITIONAL_STYLE_NAME == rEntry.nWID);
+            }
             if(pFmt)
             {
                 if( pAny )
@@ -301,10 +311,13 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
             {
                 if( pAny )
                 {
-                    const SwTOXMark& rMark = pTxtAttr->GetTOXMark();
-                    uno::Reference< XDocumentIndexMark >  xRef = SwXDocumentIndexMark::GetObject(
-                            (SwTOXType*)rMark.GetTOXType(), &rMark, rPam.GetDoc());
-                    pAny->setValue(&xRef, ::getCppuType((uno::Reference<XDocumentIndex>*)0));
+                    SwTOXMark & rMark =
+                        static_cast<SwTOXMark&>(pTxtAttr->GetAttr());
+                    const uno::Reference< text::XDocumentIndexMark > xRef =
+                        SwXDocumentIndexMark::CreateXDocumentIndexMark(
+                            *rPam.GetDoc(),
+                            *const_cast<SwTOXType*>(rMark.GetTOXType()), rMark);
+                    (*pAny) <<= xRef;
                 }
             }
             else
@@ -320,9 +333,10 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
             {
                 if( pAny )
                 {
-                    uno::Reference< XDocumentIndex > aRef =
-                        SwXDocumentIndexes::GetObject((SwTOXBaseSection*)pBase);
-                    pAny->setValue(&aRef, ::getCppuType((uno::Reference<XDocumentIndex>*)0));
+                    const uno::Reference< text::XDocumentIndex > xRef =
+                        SwXDocumentIndex::CreateXDocumentIndex(*rPam.GetDoc(),
+                            *static_cast<SwTOXBaseSection const*>(pBase));
+                    (*pAny) <<= xRef;
                 }
             }
             else
@@ -434,8 +448,9 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 {
                     if( pAny )
                     {
-                        uno::Reference< XFootnote >  xFoot = new SwXFootnote(rPam.GetDoc(), rFtn);
-                        pAny->setValue(&xFoot, ::getCppuType((uno::Reference<XFootnote>*)0));
+                        const uno::Reference< text::XFootnote > xFootnote =
+                            SwXFootnote::CreateXFootnote(*rPam.GetDoc(), rFtn);
+                        *pAny <<= xFootnote;
                     }
                 }
                 else

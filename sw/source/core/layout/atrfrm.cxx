@@ -51,9 +51,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <svtools/unoimap.hxx>
 #include <svtools/unoevent.hxx>
-#ifndef __SBX_SBXVARIABLE_HXX //autogen
 #include <basic/sbxvar.hxx>
-#endif
 #include <svtools/imap.hxx>
 #include <svtools/imapobj.hxx>
 #include <svx/ulspitem.hxx>
@@ -79,9 +77,7 @@
 #include <fmtcnct.hxx>
 #include <node.hxx>
 #include <section.hxx>
-#ifndef _FMTLINE_HXX
 #include <fmtline.hxx>
-#endif
 #include <tgrditem.hxx>
 #include <hfspacingitem.hxx>
 #include <doc.hxx>
@@ -103,6 +99,7 @@
 #include <fmtclbl.hxx>
 #include <swunohelper.hxx>
 #include <unoframe.hxx>
+#include <unotextbodyhf.hxx>
 #include <SwStyleNameMapper.hxx>
 /// OD 22.08.2002 #99657#
 ///     include definition of class SvxBrushItem and GraphicObject
@@ -110,18 +107,12 @@
 #include <svx/brshitem.hxx>
 #include <goodies/grfmgr.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _UNOMID_H
 #include <unomid.h>
-#endif
 #ifndef _COMCORE_HRC
 #include <comcore.hrc>
 #endif
-#ifndef _SVX_SVUNDO_HXX
 #include <svx/svdundo.hxx> // #111827#
-#endif
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
 // --> OD 2006-03-06 #125892#
@@ -207,7 +198,8 @@ void DelHFFormat( SwClient *pToRemove, SwFrmFmt *pFmt )
         SwClient *pLast = aIter.GoStart();
         if( pLast )
             do {
-                bDel = pLast->IsA( TYPE(SwFrm) )|| pLast->IsA(TYPE(SwXHeadFootText));
+                bDel = pLast->IsA( TYPE(SwFrm) )
+                    || SwXHeadFootText::IsXHeadFootText(pLast);
             } while( bDel && 0 != ( pLast = aIter++ ));
     }
 
@@ -1484,9 +1476,11 @@ void SwFmtAnchor::SetAnchor( const SwPosition *pPos )
         delete pCntntAnchor;
     pCntntAnchor = pPos ? new SwPosition( *pPos ) : 0;
         //AM Absatz gebundene Flys sollten nie in den Absatz hineinzeigen.
-    if ( pCntntAnchor && ( FLY_AT_CNTNT == nAnchorId ||
-                           FLY_AT_FLY == nAnchorId ))
+    if (pCntntAnchor &&
+        ((FLY_AT_PARA == nAnchorId) || (FLY_AT_FLY == nAnchorId)))
+    {
         pCntntAnchor->nContent.Assign( 0, 0 );
+    }
 }
 
 SwFmtAnchor& SwFmtAnchor::operator=(const SwFmtAnchor& rAnchor)
@@ -1543,14 +1537,23 @@ BOOL SwFmtAnchor::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         case MID_ANCHOR_ANCHORTYPE:
 
             text::TextContentAnchorType eRet;
-            switch((sal_Int16)GetAnchorId())
+            switch (GetAnchorId())
             {
-                case  FLY_AUTO_CNTNT : eRet = text::TextContentAnchorType_AT_CHARACTER;break;
-                case  FLY_PAGE       : eRet = text::TextContentAnchorType_AT_PAGE;      break;
-                case  FLY_AT_FLY     : eRet = text::TextContentAnchorType_AT_FRAME;    break;
-                case  FLY_IN_CNTNT   : eRet = text::TextContentAnchorType_AS_CHARACTER;break;
-                //case  FLY_AT_CNTNT  :
-                default: eRet = text::TextContentAnchorType_AT_PARAGRAPH;
+                case  FLY_AT_CHAR:
+                    eRet = text::TextContentAnchorType_AT_CHARACTER;
+                    break;
+                case  FLY_AT_PAGE:
+                    eRet = text::TextContentAnchorType_AT_PAGE;
+                    break;
+                case  FLY_AT_FLY:
+                    eRet = text::TextContentAnchorType_AT_FRAME;
+                    break;
+                case  FLY_AS_CHAR:
+                    eRet = text::TextContentAnchorType_AS_CHARACTER;
+                    break;
+                //case  FLY_AT_PARA:
+                default:
+                    eRet = text::TextContentAnchorType_AT_PARAGRAPH;
             }
             rVal <<= eRet;
         break;
@@ -1591,10 +1594,10 @@ BOOL SwFmtAnchor::PutValue( const uno::Any& rVal, BYTE nMemberId )
             switch( SWUnoHelper::GetEnumAsInt32( rVal ) )
             {
                 case  text::TextContentAnchorType_AS_CHARACTER:
-                    eAnchor = FLY_IN_CNTNT;
+                    eAnchor = FLY_AS_CHAR;
                     break;
                 case  text::TextContentAnchorType_AT_PAGE:
-                    eAnchor = FLY_PAGE;
+                    eAnchor = FLY_AT_PAGE;
                     if( GetPageNum() > 0 && pCntntAnchor )
                     {
                         // If the anchor type is page and a valid page number
@@ -1608,11 +1611,11 @@ BOOL SwFmtAnchor::PutValue( const uno::Any& rVal, BYTE nMemberId )
                     eAnchor = FLY_AT_FLY;
                     break;
                 case  text::TextContentAnchorType_AT_CHARACTER:
-                    eAnchor = FLY_AUTO_CNTNT;
+                    eAnchor = FLY_AT_CHAR;
                     break;
                 //case  text::TextContentAnchorType_AT_PARAGRAPH:
                 default:
-                    eAnchor = FLY_AT_CNTNT;
+                    eAnchor = FLY_AT_PARA;
                     break;
             }
             SetType( eAnchor );
@@ -1624,7 +1627,7 @@ BOOL SwFmtAnchor::PutValue( const uno::Any& rVal, BYTE nMemberId )
             if((rVal >>= nVal) && nVal > 0)
             {
                 SetPageNum( nVal );
-                if( FLY_PAGE == GetAnchorId() && pCntntAnchor )
+                if ((FLY_AT_PAGE == GetAnchorId()) && pCntntAnchor)
                 {
                     // If the anchor type is page and a valid page number
                     // is set, the content paoition has to be deleted to not
@@ -2478,6 +2481,11 @@ void SwFrmFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     // wegen RESET_FMTWRITTEN.
 //  if ( GetDepends() )
         SwFmt::Modify( pOld, pNew );
+
+    if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
+    {   // invalidate cached uno object
+        SetXObject(uno::Reference<uno::XInterface>(0));
+    }
 }
 
 //Vernichtet alle Frms, die in aDepend angemeldet sind.
@@ -2597,7 +2605,7 @@ sal_Bool SwFrmFmt::IsLowerOf( const SwFrmFmt& rFmt ) const
 
     // dann mal ueber die Node-Positionen versuchen
     const SwFmtAnchor* pAnchor = &rFmt.GetAnchor();
-    if( FLY_PAGE != pAnchor->GetAnchorId() && pAnchor->GetCntntAnchor() )
+    if ((FLY_AT_PAGE != pAnchor->GetAnchorId()) && pAnchor->GetCntntAnchor())
     {
         const SwSpzFrmFmts& rFmts = *GetDoc()->GetSpzFrmFmts();
         const SwNode* pFlyNd = pAnchor->GetCntntAnchor()->nNode.GetNode().
@@ -2616,9 +2624,11 @@ sal_Bool SwFrmFmt::IsLowerOf( const SwFrmFmt& rFmt ) const
                         return sal_True;
 
                     pAnchor = &pFmt->GetAnchor();
-                    if( FLY_PAGE == pAnchor->GetAnchorId() ||
+                    if ((FLY_AT_PAGE == pAnchor->GetAnchorId()) ||
                         !pAnchor->GetCntntAnchor() )
+                    {
                         return sal_False;
+                    }
 
                     pFlyNd = pAnchor->GetCntntAnchor()->nNode.GetNode().
                                 FindFlyStartNode();
@@ -2702,11 +2712,13 @@ void SwFlyFrmFmt::MakeFrms()
     SwFmtAnchor aAnchorAttr( GetAnchor() );
     switch( aAnchorAttr.GetAnchorId() )
     {
-    case FLY_IN_CNTNT:
-    case FLY_AT_CNTNT:
-    case FLY_AUTO_CNTNT:
+    case FLY_AS_CHAR:
+    case FLY_AT_PARA:
+    case FLY_AT_CHAR:
         if( aAnchorAttr.GetCntntAnchor() )
+        {
             pModify = aAnchorAttr.GetCntntAnchor()->nNode.GetNode().GetCntntNode();
+        }
         break;
 
     case FLY_AT_FLY:
@@ -2752,7 +2764,7 @@ void SwFlyFrmFmt::MakeFrms()
         }
         break;
 
-    case FLY_PAGE:
+    case FLY_AT_PAGE:
         {
             sal_uInt16 nPgNum = aAnchorAttr.GetPageNum();
             SwPageFrm *pPage = (SwPageFrm*)GetDoc()->GetRootFrm()->Lower();
@@ -2852,12 +2864,12 @@ void SwFlyFrmFmt::MakeFrms()
                     pFly = new SwFlyLayFrm( this, pFrm );
                     break;
 
-                case FLY_AT_CNTNT:
-                case FLY_AUTO_CNTNT:
+                case FLY_AT_PARA:
+                case FLY_AT_CHAR:
                     pFly = new SwFlyAtCntFrm( this, pFrm );
                     break;
 
-                case FLY_IN_CNTNT:
+                case FLY_AS_CHAR:
                     pFly = new SwFlyInCntFrm( this, pFrm );
                     break;
                 default:
@@ -3056,8 +3068,8 @@ SwHandleAnchorNodeChg::SwHandleAnchorNodeChg( SwFlyFrmFmt& _rFlyFrmFmt,
       mbAnchorNodeChanged( false )
 {
     const RndStdIds nNewAnchorType( _rNewAnchorFmt.GetAnchorId() );
-    if ( ( nNewAnchorType == FLY_AT_CNTNT ||
-           nNewAnchorType == FLY_AUTO_CNTNT ) &&
+    if ( ((nNewAnchorType == FLY_AT_PARA) ||
+          (nNewAnchorType == FLY_AT_CHAR)) &&
          _rNewAnchorFmt.GetCntntAnchor() &&
          _rNewAnchorFmt.GetCntntAnchor()->nNode.GetNode().GetCntntNode() )
     {

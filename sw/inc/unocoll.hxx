@@ -481,7 +481,6 @@ class SwXBookmarks : public SwCollectionBaseClass,
         virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
         virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
-        static SwXBookmark* GetObject( ::sw::mark::IMark& rBkm, SwDoc* pDoc);
 };
 
 class SwXNumberingRulesCollection : public cppu::WeakImplHelper1

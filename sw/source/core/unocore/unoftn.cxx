@@ -31,13 +31,20 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <rtl/uuid.h>
 
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <rtl/uuid.h>
-#include <unoobj.hxx>
+#include <comphelper/sequence.hxx>
+
+#include <unomid.h>
+#include <unofootnote.hxx>
+#include <unotextrange.hxx>
+#include <unotextcursor.hxx>
+#include <unoparagraph.hxx>
 #include <unomap.hxx>
 #include <unoprnms.hxx>
+#include <unoevtlstnr.hxx>
 #include <doc.hxx>
 #include <ftnidx.hxx>
 #include <fmtftn.hxx>
@@ -46,12 +53,162 @@
 #include <unocrsr.hxx>
 #include <hints.hxx>
 
+
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
 /******************************************************************
- *
+ * SwXFootnote
  ******************************************************************/
+
+class SwXFootnote::Impl
+    : public SwClient
+{
+
+public:
+
+    SwXFootnote &               m_rThis;
+    const bool                  m_bIsEndnote;
+    SwEventListenerContainer    m_ListenerContainer;
+    bool                        m_bIsDescriptor;
+    const SwFmtFtn *            m_pFmtFtn;
+    ::rtl::OUString             m_sLabel;
+
+    Impl(   SwXFootnote & rThis,
+            SwDoc *const pDoc, SwFmtFtn const*const pFootnote,
+            const bool bIsEndnote)
+        : SwClient((pDoc) ? pDoc->GetUnoCallBack() : 0)
+        , m_rThis(rThis)
+        , m_bIsEndnote(bIsEndnote)
+        , m_ListenerContainer(static_cast< ::cppu::OWeakObject* >(&rThis))
+        , m_bIsDescriptor(0 == pFootnote)
+        , m_pFmtFtn(pFootnote)
+    {
+    }
+
+    const SwFmtFtn* GetFootnoteFormat() const {
+        return m_rThis.GetDoc() ? m_pFmtFtn : 0;
+    }
+
+    SwFmtFtn const& GetFootnoteFormatOrThrow() {
+        SwFmtFtn const*const pFootnote( GetFootnoteFormat() );
+        if (!pFootnote) {
+            throw uno::RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "SwXFootnote: disposed or invalid")), 0);
+        }
+        return *pFootnote;
+    }
+
+    void    Invalidate();
+
+    // SwClient
+    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+
+};
+
+/* -----------------------------07.01.00 12:39--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwXFootnote::Impl::Invalidate()
+{
+    if (GetRegisteredIn())
+    {
+        const_cast<SwModify*>(GetRegisteredIn())->Remove(this);
+    }
+    m_ListenerContainer.Disposing();
+    m_pFmtFtn = 0;
+    m_rThis.SetDoc(0);
+}
+
+/* -----------------18.01.99 09:12-------------------
+ *
+ * --------------------------------------------------*/
+void SwXFootnote::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+{
+    ClientModify(this, pOld, pNew);
+
+    if (!GetRegisteredIn()) // removed => dispose
+    {
+        Invalidate();
+    }
+    else if (pOld)
+    {
+        switch (pOld->Which())
+        {
+            case RES_FOOTNOTE_DELETED:
+                if (static_cast<const void*>(m_pFmtFtn) ==
+                        static_cast<SwPtrMsgPoolItem *>(pOld)->pObject)
+                {
+                    Invalidate();
+                }
+                break;
+        }
+    }
+}
+
+/*-- 10.12.98 15:31:44---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwXFootnote::SwXFootnote(const bool bEndnote)
+    : SwXText(0, CURSOR_FOOTNOTE)
+    , m_pImpl( new SwXFootnote::Impl(*this, 0, 0, bEndnote) )
+{
+}
+/*-- 10.12.98 15:31:45---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwXFootnote::SwXFootnote(SwDoc & rDoc, const SwFmtFtn& rFmt)
+    : SwXText(& rDoc, CURSOR_FOOTNOTE)
+    , m_pImpl( new SwXFootnote::Impl(*this, &rDoc, &rFmt, rFmt.IsEndNote()) )
+{
+}
+/*-- 10.12.98 15:31:45---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwXFootnote::~SwXFootnote()
+{
+}
+
+SwXFootnote *
+SwXFootnote::GetXFootnote(
+        SwModify const& /*rUnoCB*/, SwFmtFtn const& /*rFootnoteFmt*/)
+{
+    // re-use existing SwXFootnote
+    // #i105557#: do not iterate over the registered clients: race condition
+    // to do this properly requires the SwXFootnote to register at the
+    // SwFmtFtn directly, not at the unocallback
+    // also this function must return a uno Reference!
+#if 0
+    SwClientIter aIter( rUnoCB );
+    SwXFootnote::Impl * pXFootnote = static_cast<SwXFootnote::Impl*>(
+            aIter.First( TYPE( SwXFootnote::Impl )));
+    while (pXFootnote)
+    {
+        SwDoc *const pDoc = pXFootnote->m_rThis.GetDoc();
+        if (pDoc)
+        {
+            SwFmtFtn const*const pFtn = pXFootnote->GetFootnoteFormat();
+            if (pFtn == &rFootnoteFmt)
+            {
+                return & pXFootnote->m_rThis;
+            }
+        }
+        pXFootnote = static_cast<SwXFootnote::Impl*>(aIter.Next());
+    }
+#endif
+    return 0;
+}
+
+SwXFootnote *
+SwXFootnote::CreateXFootnote(SwDoc & rDoc, SwFmtFtn const& rFootnoteFmt)
+{
+    SwXFootnote *const pXFootnote(
+        GetXFootnote(*rDoc.GetUnoCallBack(), rFootnoteFmt));
+    return (pXFootnote)
+        ?   pXFootnote
+        :   new SwXFootnote(rDoc, rFootnoteFmt);
+}
+
 /* -----------------------------13.03.00 12:15--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -63,105 +220,71 @@ const uno::Sequence< sal_Int8 > & SwXFootnote::getUnoTunnelId()
 /* -----------------------------10.03.00 18:04--------------------------------
 
  ---------------------------------------------------------------------------*/
-sal_Int64 SAL_CALL SwXFootnote::getSomething( const uno::Sequence< sal_Int8 >& rId )
-    throw(uno::RuntimeException)
+sal_Int64 SAL_CALL
+SwXFootnote::getSomething(const uno::Sequence< sal_Int8 >& rId)
+throw (uno::RuntimeException)
 {
-    if( rId.getLength() == 16
-        && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
-                                        rId.getConstArray(), 16 ) )
-    {
-        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
-    }
-    return SwXText::getSomething( rId );
+    const sal_Int64 nRet( ::sw::UnoTunnelImpl<SwXFootnote>(rId, this) );
+    return (nRet) ? nRet : SwXText::getSomething(rId);
 }
+
 /* -----------------------------06.04.00 16:36--------------------------------
 
  ---------------------------------------------------------------------------*/
-OUString SwXFootnote::getImplementationName(void) throw( uno::RuntimeException )
+OUString SAL_CALL
+SwXFootnote::getImplementationName() throw (uno::RuntimeException)
 {
     return C2U("SwXFootnote");
 }
+
 /* -----------------------------06.04.00 16:36--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwXFootnote::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
+static char const*const g_ServicesFootnote[] =
 {
-    return  !rServiceName.compareToAscii("com.sun.star.text.Footnote") ||
-            !rServiceName.compareToAscii("com.sun.star.text.TextContent") ||
-            !rServiceName.compareToAscii("com.sun.star.text.Text") ||
-            (m_bIsEndnote && !rServiceName.compareToAscii("com.sun.star.text.Endnote"));
-;
+    "com.sun.star.text.TextContent",
+    "com.sun.star.text.Footnote",
+    "com.sun.star.text.Text",
+    "com.sun.star.text.Endnote", // NB: only supported for endnotes!
+};
+static const size_t g_nServicesEndnote(
+    sizeof(g_ServicesFootnote)/sizeof(g_ServicesFootnote[0]));
+static const size_t g_nServicesFootnote( g_nServicesEndnote - 1 ); // NB: omit!
+
+sal_Bool SAL_CALL SwXFootnote::supportsService(const OUString& rServiceName)
+throw (uno::RuntimeException)
+{
+    vos::OGuard g(Application::GetSolarMutex());
+    return ::sw::SupportsServiceImpl(
+            (m_pImpl->m_bIsEndnote) ? g_nServicesEndnote : g_nServicesFootnote,
+            g_ServicesFootnote, rServiceName);
 }
-/* -----------------------------06.04.00 16:36--------------------------------
 
- ---------------------------------------------------------------------------*/
-uno::Sequence< OUString > SwXFootnote::getSupportedServiceNames(void) throw( uno::RuntimeException )
+uno::Sequence< OUString > SAL_CALL
+SwXFootnote::getSupportedServiceNames() throw (uno::RuntimeException)
 {
-    uno::Sequence< OUString > aRet(m_bIsEndnote ? 4 : 3);
-    OUString* pArray = aRet.getArray();
-    pArray[0] = C2U("com.sun.star.text.Footnote");
-    pArray[1] = C2U("com.sun.star.text.TextContent");
-    pArray[2] = C2U("com.sun.star.text.Text");
-    if(m_bIsEndnote)
-        pArray[3] = C2U("com.sun.star.text.Endnote");
-    return aRet;
-}
-/*-- 10.12.98 15:31:44---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-TYPEINIT1(SwXFootnote, SwClient);
-
-SwXFootnote::SwXFootnote(sal_Bool bEndnote) :
-    SwXText(0, CURSOR_FOOTNOTE),
-    aLstnrCntnr( (text::XTextContent*)this),
-    pFmtFtn(0),
-    m_bIsDescriptor(sal_True),
-    m_bIsEndnote(bEndnote)
-{
-
-}
-/*-- 10.12.98 15:31:45---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-SwXFootnote::SwXFootnote(SwDoc* _pDoc, const SwFmtFtn& rFmt) :
-    SwXText(_pDoc, CURSOR_FOOTNOTE),
-    aLstnrCntnr( (text::XTextContent*)this),
-    pFmtFtn(&rFmt),
-    m_bIsDescriptor(sal_False),
-    m_bIsEndnote(rFmt.IsEndNote())
-{
-    GetDoc()->GetUnoCallBack()->Add(this);
-}
-/*-- 10.12.98 15:31:45---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-SwXFootnote::~SwXFootnote()
-{
-
-}
-/* -----------------------------21.03.00 15:39--------------------------------
-
- ---------------------------------------------------------------------------*/
-uno::Sequence< uno::Type > SAL_CALL SwXFootnote::getTypes(  ) throw(uno::RuntimeException)
-{
-    uno::Sequence< uno::Type > aFtnTypes = SwXFootnoteBaseClass::getTypes();
-    uno::Sequence< uno::Type > aTextTypes = SwXText::getTypes();
-
-    long nIndex = aFtnTypes.getLength();
-    aFtnTypes.realloc(  aFtnTypes.getLength() + aTextTypes.getLength());
-
-    uno::Type* pFtnTypes = aFtnTypes.getArray();
-    const uno::Type* pTextTypes = aTextTypes.getConstArray();
-    for(long nPos = 0; nPos < aTextTypes.getLength(); nPos++)
-        pFtnTypes[nIndex++] = pTextTypes[nPos];
-
-    return aFtnTypes;
+    vos::OGuard g(Application::GetSolarMutex());
+    return ::sw::GetSupportedServiceNamesImpl(
+            (m_pImpl->m_bIsEndnote) ? g_nServicesEndnote : g_nServicesFootnote,
+            g_ServicesFootnote);
 }
 
 /* -----------------------------21.03.00 15:39--------------------------------
 
  ---------------------------------------------------------------------------*/
-uno::Sequence< sal_Int8 > SAL_CALL SwXFootnote::getImplementationId(  ) throw(uno::RuntimeException)
+uno::Sequence< uno::Type > SAL_CALL
+SwXFootnote::getTypes() throw (uno::RuntimeException)
+{
+    const uno::Sequence< uno::Type > aTypes = SwXFootnote_Base::getTypes();
+    const uno::Sequence< uno::Type > aTextTypes = SwXText::getTypes();
+    return ::comphelper::concatSequences(aTypes, aTextTypes);
+}
+
+/* -----------------------------21.03.00 15:39--------------------------------
+
+ ---------------------------------------------------------------------------*/
+uno::Sequence< sal_Int8 > SAL_CALL
+SwXFootnote::getImplementationId() throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     static uno::Sequence< sal_Int8 > aId( 16 );
@@ -176,37 +299,49 @@ uno::Sequence< sal_Int8 > SAL_CALL SwXFootnote::getImplementationId(  ) throw(un
 /* -----------------------------21.03.00 15:46--------------------------------
 
  ---------------------------------------------------------------------------*/
-uno::Any SAL_CALL SwXFootnote::queryInterface( const uno::Type& aType ) throw(uno::RuntimeException)
+uno::Any SAL_CALL
+SwXFootnote::queryInterface(const uno::Type& rType)
+throw (uno::RuntimeException)
 {
-    uno::Any aRet = SwXFootnoteBaseClass::queryInterface(aType);
-    if(aRet.getValueType() == ::getCppuVoidType() )
-        aRet = SwXText::queryInterface(aType);
-    return aRet;
+    const uno::Any ret = SwXFootnote_Base::queryInterface(rType);
+    return (ret.getValueType() == ::getCppuVoidType())
+        ?   SwXText::queryInterface(rType)
+        :   ret;
 }
 
 /*-- 10.12.98 15:31:47---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-OUString SwXFootnote::getLabel(void) throw( uno::RuntimeException )
+OUString SAL_CALL SwXFootnote::getLabel() throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    String sRet;
-    const SwFmtFtn*  pFmt = SwXFootnote::FindFmt();
+
+    ::rtl::OUString sRet;
+    SwFmtFtn const*const pFmt = m_pImpl->GetFootnoteFormat();
     if(pFmt)
+    {
         sRet = pFmt->GetNumStr();
-    else if(m_bIsDescriptor)
-        return m_sLabel;
+    }
+    else if (m_pImpl->m_bIsDescriptor)
+    {
+        sRet = m_pImpl->m_sLabel;
+    }
     else
+    {
         throw uno::RuntimeException();
+    }
     return sRet;
 }
+
 /*-- 10.12.98 15:31:48---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXFootnote::setLabel(const OUString& aLabel) throw( uno::RuntimeException )
+void SAL_CALL
+SwXFootnote::setLabel(const OUString& aLabel) throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    const SwFmtFtn*  pFmt = FindFmt();
+
+    SwFmtFtn const*const pFmt = m_pImpl->GetFootnoteFormat();
     if(pFmt)
     {
         const SwTxtFtn* pTxtFtn = pFmt->GetTxtFtn();
@@ -216,297 +351,292 @@ void SwXFootnote::setLabel(const OUString& aLabel) throw( uno::RuntimeException 
         SwPaM aPam(rTxtNode, *pTxtFtn->GetStart());
         GetDoc()->SetCurFtn(aPam, aLabel, pFmt->GetNumber(), pFmt->IsEndNote());
     }
-    else if(m_bIsDescriptor)
-        m_sLabel = String(aLabel);
+    else if (m_pImpl->m_bIsDescriptor)
+    {
+        m_pImpl->m_sLabel = String(aLabel);
+    }
     else
+    {
         throw uno::RuntimeException();
-
+    }
 }
+
 /* -----------------18.02.99 13:32-------------------
  *
  * --------------------------------------------------*/
-void SwXFootnote::attachToRange(const uno::Reference< text::XTextRange > & xTextRange)
-            throw( lang::IllegalArgumentException, uno::RuntimeException )
+void SAL_CALL
+SwXFootnote::attach(const uno::Reference< text::XTextRange > & xTextRange)
+throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    if(!m_bIsDescriptor)
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    if (!m_pImpl->m_bIsDescriptor)
+    {
         throw uno::RuntimeException();
-    uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
-    SwXTextRange* pRange = 0;
-    OTextCursorHelper* pCursor = 0;
-    if(xRangeTunnel.is())
-    {
-        pRange  = reinterpret_cast< SwXTextRange * >(
-                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextRange::getUnoTunnelId()) ));
-        pCursor = reinterpret_cast< OTextCursorHelper * >(
-                sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
     }
-    SwDoc* pNewDoc = pRange ? (SwDoc*)pRange->GetDoc() : pCursor ? (SwDoc*)pCursor->GetDoc() : 0;
-    if(pNewDoc)
+    const uno::Reference<lang::XUnoTunnel> xRangeTunnel(
+            xTextRange, uno::UNO_QUERY);
+    SwXTextRange *const pRange =
+        ::sw::UnoTunnelGetImplementation<SwXTextRange>(xRangeTunnel);
+    OTextCursorHelper *const pCursor =
+        ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
+    SwDoc *const pNewDoc =
+        (pRange) ? pRange->GetDoc() : ((pCursor) ? pCursor->GetDoc() : 0);
+    if (!pNewDoc)
     {
-        SwUnoInternalPaM aPam(*pNewDoc);
-        //das muss jetzt sal_True liefern
-        SwXTextRange::XTextRangeToSwPaM(aPam, xTextRange);
-
-        UnoActionContext aCont(pNewDoc);
-        SwTxtAttr* pTxtAttr = 0;
-        pNewDoc->DeleteAndJoin(aPam);
-        aPam.DeleteMark();
-        SwFmtFtn aFootNote(m_bIsEndnote);
-        if(m_sLabel.Len())
-            aFootNote.SetNumStr(m_sLabel);
-
-        SwXTextCursor const*const pTextCursor(
-                dynamic_cast<SwXTextCursor*>(pCursor));
-        const bool bForceExpandHints( (pTextCursor)
-                ? pTextCursor->IsAtEndOfMeta() : false );
-        const SetAttrMode nInsertFlags = (bForceExpandHints)
-            ? nsSetAttrMode::SETATTR_FORCEHINTEXPAND
-            : nsSetAttrMode::SETATTR_DEFAULT;
-
-        pNewDoc->InsertPoolItem(aPam, aFootNote, nInsertFlags);
-
-        pTxtAttr = aPam.GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
-                    aPam.GetPoint()->nContent.GetIndex()-1, RES_TXTATR_FTN );
-
-        if(pTxtAttr)
-        {
-            const SwFmtFtn& rFtn = pTxtAttr->GetFtn();
-            pFmtFtn = &rFtn;
-            pNewDoc->GetUnoCallBack()->Add(this);
-            //force creation of sequence id - is used for references
-            if(pNewDoc->IsInReading())
-                ((SwTxtFtn*)pTxtAttr)->SetSeqNo(pNewDoc->GetFtnIdxs().Count());
-            else
-                ((SwTxtFtn*)pTxtAttr)->SetSeqRefNo();
-        }
-        m_bIsDescriptor = sal_False;
-        SetDoc(pNewDoc);
-    }
-    else
         throw lang::IllegalArgumentException();
-}
-/*-- 10.12.98 15:31:48---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void SwXFootnote::attach(const uno::Reference< text::XTextRange > & xTextRange)
-            throw( lang::IllegalArgumentException, uno::RuntimeException )
-{
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    attachToRange( xTextRange );
-}
-/*-- 10.12.98 15:31:48---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-uno::Reference< text::XTextRange >  SwXFootnote::getAnchor(void) throw( uno::RuntimeException )
-{
-    vos::OGuard aGuard(Application::GetSolarMutex());
-    uno::Reference< text::XTextRange >  aRef;
-    const SwFmtFtn*  pFmt = FindFmt();
-    if(pFmt)
-    {
-        const SwTxtFtn* pTxtFtn = pFmt->GetTxtFtn();
-        SwPaM aPam( pTxtFtn->GetTxtNode(), *pTxtFtn->GetStart() );
-        SwPosition aMark( *aPam.Start() );
-        aPam.SetMark();
-        aPam.GetMark()->nContent++;
-        aRef = SwXTextRange::CreateTextRangeFromPosition((SwDoc*)GetDoc(), *aPam.Start(), aPam.End());
     }
-    else
-        throw uno::RuntimeException();
-    return aRef;
+
+    SwUnoInternalPaM aPam(*pNewDoc);
+    //das muss jetzt sal_True liefern
+    ::sw::XTextRangeToSwPaM(aPam, xTextRange);
+
+    UnoActionContext aCont(pNewDoc);
+    pNewDoc->DeleteAndJoin(aPam);
+    aPam.DeleteMark();
+    SwFmtFtn aFootNote(m_pImpl->m_bIsEndnote);
+    if (m_pImpl->m_sLabel.getLength())
+    {
+        aFootNote.SetNumStr(m_pImpl->m_sLabel);
+    }
+
+    SwXTextCursor const*const pTextCursor(
+            dynamic_cast<SwXTextCursor*>(pCursor));
+    const bool bForceExpandHints( (pTextCursor)
+            ? pTextCursor->IsAtEndOfMeta() : false );
+    const SetAttrMode nInsertFlags = (bForceExpandHints)
+        ? nsSetAttrMode::SETATTR_FORCEHINTEXPAND
+        : nsSetAttrMode::SETATTR_DEFAULT;
+
+    pNewDoc->InsertPoolItem(aPam, aFootNote, nInsertFlags);
+
+    SwTxtFtn *const pTxtAttr = static_cast<SwTxtFtn*>(
+        aPam.GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
+                aPam.GetPoint()->nContent.GetIndex()-1, RES_TXTATR_FTN ));
+
+    if (pTxtAttr)
+    {
+        const SwFmtFtn& rFtn = pTxtAttr->GetFtn();
+        m_pImpl->m_pFmtFtn = &rFtn;
+        pNewDoc->GetUnoCallBack()->Add(m_pImpl.get());
+        // force creation of sequence id - is used for references
+        if (pNewDoc->IsInReading())
+        {
+            pTxtAttr->SetSeqNo(pNewDoc->GetFtnIdxs().Count());
+        }
+        else
+        {
+            pTxtAttr->SetSeqRefNo();
+        }
+    }
+    m_pImpl->m_bIsDescriptor = sal_False;
+    SetDoc(pNewDoc);
+}
+
+/*-- 10.12.98 15:31:48---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Reference< text::XTextRange > SAL_CALL
+SwXFootnote::getAnchor() throw (uno::RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    SwFmtFtn const& rFmt( m_pImpl->GetFootnoteFormatOrThrow() );
+
+    SwTxtFtn const*const pTxtFtn = rFmt.GetTxtFtn();
+    SwPaM aPam( pTxtFtn->GetTxtNode(), *pTxtFtn->GetStart() );
+    SwPosition aMark( *aPam.Start() );
+    aPam.SetMark();
+    aPam.GetMark()->nContent++;
+    const uno::Reference< text::XTextRange > xRet =
+        SwXTextRange::CreateXTextRange(*GetDoc(), *aPam.Start(), aPam.End());
+    return xRet;
 }
 /*-- 10.12.98 15:31:49---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXFootnote::dispose(void) throw( uno::RuntimeException )
+void SAL_CALL SwXFootnote::dispose() throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    const SwFmtFtn*  pFmt = FindFmt();
-    if(pFmt)
-    {
-        const SwTxtFtn* pTxtFtn = pFmt->GetTxtFtn();
-        DBG_ASSERT(pTxtFtn, "kein TextNode?");
-        SwTxtNode& rTxtNode = (SwTxtNode&)pTxtFtn->GetTxtNode();
-        xub_StrLen nPos = *pTxtFtn->GetStart();
-        SwPaM aPam(rTxtNode, nPos, rTxtNode, nPos+1 );
-        GetDoc()->DeleteAndJoin( aPam );
-    }
-    else
-        throw uno::RuntimeException();
 
+    SwFmtFtn const& rFmt( m_pImpl->GetFootnoteFormatOrThrow() );
+
+    SwTxtFtn const*const pTxtFtn = rFmt.GetTxtFtn();
+    DBG_ASSERT(pTxtFtn, "no TextNode?");
+    SwTxtNode& rTxtNode = const_cast<SwTxtNode&>(pTxtFtn->GetTxtNode());
+    const xub_StrLen nPos = *pTxtFtn->GetStart();
+    SwPaM aPam(rTxtNode, nPos, rTxtNode, nPos+1);
+    GetDoc()->DeleteAndJoin( aPam );
 }
+
 /*-- 10.12.98 15:31:49---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXFootnote::addEventListener(const uno::Reference< lang::XEventListener > & aListener) throw( uno::RuntimeException )
+void SAL_CALL
+SwXFootnote::addEventListener(
+    const uno::Reference< lang::XEventListener > & xListener)
+throw (uno::RuntimeException)
 {
-    if(!GetRegisteredIn())
+    vos::OGuard g(Application::GetSolarMutex());
+
+    if (!m_pImpl->GetFootnoteFormat())
+    {
         throw uno::RuntimeException();
-    aLstnrCntnr.AddListener(aListener);
+    }
+    m_pImpl->m_ListenerContainer.AddListener(xListener);
 }
 /*-- 10.12.98 15:31:50---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXFootnote::removeEventListener(const uno::Reference< lang::XEventListener > & aListener) throw( uno::RuntimeException )
+void SAL_CALL
+SwXFootnote::removeEventListener(
+    const uno::Reference< lang::XEventListener > & xListener)
+throw (uno::RuntimeException)
 {
-    if(!GetRegisteredIn() || !aLstnrCntnr.RemoveListener(aListener))
+    vos::OGuard g(Application::GetSolarMutex());
+
+    if (!m_pImpl->GetFootnoteFormat() ||
+        !m_pImpl->m_ListenerContainer.RemoveListener(xListener))
+    {
         throw uno::RuntimeException();
+    }
 }
+
 /* -----------------06.05.99 15:31-------------------
  *
  * --------------------------------------------------*/
 const SwStartNode *SwXFootnote::GetStartNode() const
 {
-    const SwStartNode *pSttNd = 0;
-    const SwFmtFtn*  pFmt = FindFmt();
+    SwFmtFtn const*const   pFmt = m_pImpl->GetFootnoteFormat();
     if(pFmt)
     {
         const SwTxtFtn* pTxtFtn = pFmt->GetTxtFtn();
         if( pTxtFtn )
-            pSttNd = pTxtFtn->GetStartNode()->GetNode().GetStartNode();
+        {
+            return pTxtFtn->GetStartNode()->GetNode().GetStartNode();
+        }
     }
-    return pSttNd;
+    return 0;
 }
 
-uno::Reference< text::XTextCursor >   SwXFootnote::createCursor() throw ( uno::RuntimeException)
+uno::Reference< text::XTextCursor >
+SwXFootnote::CreateCursor() throw (uno::RuntimeException)
 {
     return createTextCursor();
 }
+
 /*-- 10.12.98 15:31:50---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Reference< text::XTextCursor >  SwXFootnote::createTextCursor(void) throw( uno::RuntimeException )
+uno::Reference< text::XTextCursor > SAL_CALL
+SwXFootnote::createTextCursor() throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    uno::Reference< text::XTextCursor >  aRef;
-    const SwFmtFtn*  pFmt = FindFmt();
-    if(pFmt)
-    {
-        const SwTxtFtn* pTxtFtn = pFmt->GetTxtFtn();
-        SwPosition aPos( *pTxtFtn->GetStartNode() );
-        SwXTextCursor* pXCrsr = new SwXTextCursor(this, aPos, CURSOR_FOOTNOTE, GetDoc());
-        aRef =  (text::XWordCursor*)pXCrsr;
-        SwUnoCrsr*  pUnoCrsr = pXCrsr->GetCrsr();
-        pUnoCrsr->Move(fnMoveForward, fnGoNode);
-    }
-    else
-        throw uno::RuntimeException();
-    return aRef;
+
+    SwFmtFtn const& rFmt( m_pImpl->GetFootnoteFormatOrThrow() );
+
+    SwTxtFtn const*const pTxtFtn = rFmt.GetTxtFtn();
+    SwPosition aPos( *pTxtFtn->GetStartNode() );
+    SwXTextCursor *const pXCursor =
+        new SwXTextCursor(*GetDoc(), this, CURSOR_FOOTNOTE, aPos);
+    SwUnoCrsr *const pUnoCrsr = pXCursor->GetCursor();
+    pUnoCrsr->Move(fnMoveForward, fnGoNode);
+    const uno::Reference< text::XTextCursor > xRet =
+        static_cast<text::XWordCursor*>(pXCursor);
+    return xRet;
 }
+
 /*-- 10.12.98 15:31:51---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Reference< text::XTextCursor >  SwXFootnote::createTextCursorByRange(
-    const uno::Reference< text::XTextRange > & aTextPosition)
-            throw( uno::RuntimeException )
+uno::Reference< text::XTextCursor > SAL_CALL
+SwXFootnote::createTextCursorByRange(
+    const uno::Reference< text::XTextRange > & xTextPosition)
+throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    const SwFmtFtn*  pFmt = FindFmt();
-    if( !pFmt )
-        throw uno::RuntimeException();
-    uno::Reference< text::XTextCursor >  aRef;
+
+    SwFmtFtn const& rFmt( m_pImpl->GetFootnoteFormatOrThrow() );
+
     SwUnoInternalPaM aPam(*GetDoc());
-    if(SwXTextRange::XTextRangeToSwPaM(aPam, aTextPosition))
+    if (!::sw::XTextRangeToSwPaM(aPam, xTextPosition))
     {
-        const SwTxtFtn* pTxtFtn = pFmt->GetTxtFtn();
-        const SwNode* pFtnStartNode = &pTxtFtn->GetStartNode()->GetNode();
-
-        const SwNode* pStart = aPam.GetNode()->FindFootnoteStartNode();
-        if( pStart != pFtnStartNode )
-            throw uno::RuntimeException();
-
-        aRef = (text::XWordCursor*)new SwXTextCursor(this , *aPam.GetPoint(), CURSOR_FOOTNOTE, GetDoc(), aPam.GetMark());
-    }
-    else
         throw uno::RuntimeException();
-    return aRef;
+    }
+
+    SwTxtFtn const*const pTxtFtn = rFmt.GetTxtFtn();
+    SwNode const*const pFtnStartNode = &pTxtFtn->GetStartNode()->GetNode();
+
+    const SwNode* pStart = aPam.GetNode()->FindFootnoteStartNode();
+    if (pStart != pFtnStartNode)
+    {
+        throw uno::RuntimeException();
+    }
+
+    const uno::Reference< text::XTextCursor > xRet =
+        static_cast<text::XWordCursor*>(
+                new SwXTextCursor(*GetDoc(), this, CURSOR_FOOTNOTE,
+                    *aPam.GetPoint(), aPam.GetMark()));
+    return xRet;
 }
+
 /*-- 13.06.00 14:28:23---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Reference< container::XEnumeration >  SwXFootnote::createEnumeration() throw( uno::RuntimeException )
+uno::Reference< container::XEnumeration > SAL_CALL
+SwXFootnote::createEnumeration() throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    uno::Reference< container::XEnumeration >  aRef;
-    const SwFmtFtn*  pFmt = FindFmt();
-    if(pFmt)
-    {
-        const SwTxtFtn* pTxtFtn = pFmt->GetTxtFtn();
-        SwPosition aPos( *pTxtFtn->GetStartNode() );
-        SwXTextCursor* pXCrsr = new SwXTextCursor(this, aPos, CURSOR_FOOTNOTE, GetDoc());
-        SwUnoCrsr*  pUnoCrsr = pXCrsr->GetCrsr();
-        pUnoCrsr->Move(fnMoveForward, fnGoNode);
-        aRef = new SwXParagraphEnumeration(this, pUnoCrsr, CURSOR_FOOTNOTE);
-    }
-    return aRef;
+
+    SwFmtFtn const& rFmt( m_pImpl->GetFootnoteFormatOrThrow() );
+
+    SwTxtFtn const*const pTxtFtn = rFmt.GetTxtFtn();
+    SwPosition aPos( *pTxtFtn->GetStartNode() );
+    ::std::auto_ptr<SwUnoCrsr> pUnoCursor(
+        GetDoc()->CreateUnoCrsr(aPos, sal_False));
+    pUnoCursor->Move(fnMoveForward, fnGoNode);
+    const uno::Reference< container::XEnumeration >  xRet =
+        new SwXParagraphEnumeration(this, pUnoCursor, CURSOR_FOOTNOTE);
+    return xRet;
 }
+
 /*-- 13.06.00 14:28:24---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Type SwXFootnote::getElementType(  ) throw(uno::RuntimeException)
+uno::Type SAL_CALL SwXFootnote::getElementType() throw (uno::RuntimeException)
 {
-    return ::getCppuType(static_cast<uno::Reference<XTextRange>*>(0));
+    return text::XTextRange::static_type();
 }
 /*-- 13.06.00 14:28:24---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Bool SwXFootnote::hasElements(  ) throw(uno::RuntimeException)
+sal_Bool SAL_CALL SwXFootnote::hasElements() throw (uno::RuntimeException)
 {
     return sal_True;
 }
-/* -----------------------------07.01.00 12:39--------------------------------
 
- ---------------------------------------------------------------------------*/
-void SwXFootnote::Invalidate()
-{
-    if(GetRegisteredIn())
-    {
-        ((SwModify*)GetRegisteredIn())->Remove(this);
-        pFmtFtn = 0;
-        aLstnrCntnr.Disposing();
-        SetDoc(0);
-    }
-}
-/* -----------------18.01.99 09:12-------------------
- *
- * --------------------------------------------------*/
-void SwXFootnote::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
-{
-    switch( pOld ? pOld->Which() : 0 )
-    {
-    case RES_REMOVE_UNO_OBJECT:
-    case RES_OBJECTDYING:
-        if( (void*)GetRegisteredIn() == ((SwPtrMsgPoolItem *)pOld)->pObject )
-            Invalidate();
-        break;
-    case RES_FMT_CHG:
-        // wurden wir an das neue umgehaengt und wird das alte geloscht?
-        if( ((SwFmtChg*)pNew)->pChangedFmt == GetRegisteredIn() &&
-            ((SwFmtChg*)pOld)->pChangedFmt->IsFmtInDTOR() )
-            Invalidate();
-        break;
-    case RES_FOOTNOTE_DELETED:
-        if( (void*)pFmtFtn == ((SwPtrMsgPoolItem *)pOld)->pObject )
-            Invalidate();
-        break;
-    }
-}
 /*-- 11.09.00 13:12:03---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Reference< beans::XPropertySetInfo > SwXFootnote::getPropertySetInfo(  )
-    throw(uno::RuntimeException)
+uno::Reference< beans::XPropertySetInfo > SAL_CALL
+SwXFootnote::getPropertySetInfo()
+throw (uno::RuntimeException)
 {
-    static uno::Reference< beans::XPropertySetInfo >  xRef = aSwMapProvider.GetPropertySet(PROPERTY_MAP_FOOTNOTE)->getPropertySetInfo();
-    return xRef;
+    vos::OGuard g(Application::GetSolarMutex());
+    static uno::Reference< beans::XPropertySetInfo > xRet =
+        aSwMapProvider.GetPropertySet(PROPERTY_MAP_FOOTNOTE)
+            ->getPropertySetInfo();
+    return xRet;
 }
+
 /*-- 11.09.00 13:12:04---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXFootnote::setPropertyValue( const ::rtl::OUString&,
-    const uno::Any& )
-        throw(beans::UnknownPropertyException, beans::PropertyVetoException,
-            lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL
+SwXFootnote::setPropertyValue(const ::rtl::OUString&, const uno::Any&)
+throw (beans::UnknownPropertyException, beans::PropertyVetoException,
+        lang::IllegalArgumentException, lang::WrappedTargetException,
+        uno::RuntimeException)
 {
     //no values to be set
     throw lang::IllegalArgumentException();
@@ -514,28 +644,34 @@ void SwXFootnote::setPropertyValue( const ::rtl::OUString&,
 /*-- 11.09.00 13:12:04---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Any SwXFootnote::getPropertyValue( const OUString& rPropertyName )
-    throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+uno::Any SAL_CALL
+SwXFootnote::getPropertyValue(const OUString& rPropertyName)
+throw (beans::UnknownPropertyException, lang::WrappedTargetException,
+        uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+
     uno::Any aRet;
-    if(!SwXParagraph::getDefaultTextContentValue(aRet, rPropertyName))
+    if (! ::sw::GetDefaultTextContentValue(aRet, rPropertyName))
     {
-        if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_START_REDLINE))||
-                rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_END_REDLINE)))
+        if (rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_START_REDLINE)) ||
+            rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_END_REDLINE)))
         {
             //redline can only be returned if it's a living object
-            if(!m_bIsDescriptor)
-                aRet = SwXText::getPropertyValue(rPropertyName);
-        }
-        else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_REFERENCE_ID)))
-        {
-            const SwFmtFtn*  pFmt = FindFmt();
-            if(pFmt)
+            if (!m_pImpl->m_bIsDescriptor)
             {
-                const SwTxtFtn* pTxtFtn = pFmt->GetTxtFtn();
+                aRet = SwXText::getPropertyValue(rPropertyName);
+            }
+        }
+        else if (rPropertyName.equalsAsciiL(
+                    SW_PROP_NAME(UNO_NAME_REFERENCE_ID)))
+        {
+            SwFmtFtn const*const pFmt = m_pImpl->GetFootnoteFormat();
+            if (pFmt)
+            {
+                SwTxtFtn const*const pTxtFtn = pFmt->GetTxtFtn();
                 DBG_ASSERT(pTxtFtn, "no TextNode?");
-                aRet <<= (sal_Int16)pTxtFtn->GetSeqRefNo();
+                aRet <<= static_cast<sal_Int16>(pTxtFtn->GetSeqRefNo());
             }
         }
         else
@@ -547,37 +683,51 @@ uno::Any SwXFootnote::getPropertyValue( const OUString& rPropertyName )
     }
     return aRet;
 }
+
 /*-- 11.09.00 13:12:04---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXFootnote::addPropertyChangeListener( const OUString& /*aPropertyName*/,
-    const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
-        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+void SAL_CALL
+SwXFootnote::addPropertyChangeListener(
+        const ::rtl::OUString& /*rPropertyName*/,
+        const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
+throw (beans::UnknownPropertyException, lang::WrappedTargetException,
+    uno::RuntimeException)
 {
-}
-/*-- 11.09.00 13:12:04---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void SwXFootnote::removePropertyChangeListener( const OUString& /*aPropertyName*/,
-    const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ )
-        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
-{
-}
-/*-- 11.09.00 13:12:04---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void SwXFootnote::addVetoableChangeListener( const OUString& /*PropertyName*/,
-    const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
-        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
-{
-}
-/*-- 11.09.00 13:12:05---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void SwXFootnote::removeVetoableChangeListener( const OUString& /*PropertyName*/,
-    const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
-        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
-{
+    OSL_ENSURE(false,
+        "SwXFootnote::addPropertyChangeListener(): not implemented");
 }
 
+void SAL_CALL
+SwXFootnote::removePropertyChangeListener(
+        const ::rtl::OUString& /*rPropertyName*/,
+        const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
+throw (beans::UnknownPropertyException, lang::WrappedTargetException,
+    uno::RuntimeException)
+{
+    OSL_ENSURE(false,
+        "SwXFootnote::removePropertyChangeListener(): not implemented");
+}
+
+void SAL_CALL
+SwXFootnote::addVetoableChangeListener(
+        const ::rtl::OUString& /*rPropertyName*/,
+        const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
+throw (beans::UnknownPropertyException, lang::WrappedTargetException,
+    uno::RuntimeException)
+{
+    OSL_ENSURE(false,
+        "SwXFootnote::addVetoableChangeListener(): not implemented");
+}
+
+void SAL_CALL
+SwXFootnote::removeVetoableChangeListener(
+        const ::rtl::OUString& /*rPropertyName*/,
+        const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
+throw (beans::UnknownPropertyException, lang::WrappedTargetException,
+        uno::RuntimeException)
+{
+    OSL_ENSURE(false,
+        "SwXFootnote::removeVetoableChangeListener(): not implemented");
+}
 

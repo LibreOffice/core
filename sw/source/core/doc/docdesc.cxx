@@ -39,6 +39,7 @@
 #include "svx/frmdiritem.hxx"
 #include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/printer.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <fmtfsize.hxx>

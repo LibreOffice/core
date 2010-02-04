@@ -463,7 +463,7 @@ BOOL SwDepend::GetInfo( SfxPoolItem& rInfo ) const
 /********************************************************************/
 
 
-SwClientIter::SwClientIter( SwModify& rModify )
+SwClientIter::SwClientIter( SwModify const& rModify )
     : rRoot( rModify )
 {
     // hinten einketten!

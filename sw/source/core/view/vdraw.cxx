@@ -46,9 +46,7 @@
 #include <svx/svdoutl.hxx>
 
 #ifdef DBG_UTIL
-#ifndef _SVX_FMGLOB_HXX
 #include <svx/fmglob.hxx>
-#endif
 #endif
 
 #include "fesh.hxx"
@@ -57,14 +55,14 @@
 #include "viewimp.hxx"
 #include "dflyobj.hxx"
 #include "viewopt.hxx"
+#include "swprtopt.hxx"
 #include "dcontact.hxx"
 #include "dview.hxx"
 #include "flyfrm.hxx"
 #include <vcl/svapp.hxx>
 
-#ifndef IDOCUMENTDRAWMODELACCESS_HXX_INCLUDED
 #include <IDocumentDrawModelAccess.hxx>
-#endif
+
 
 /*************************************************************************
 |*
@@ -184,6 +182,7 @@ void SwViewImp::UnlockPaint()
 // outliner of the draw view for painting layers <hell> and <heaven>.
 // OD 25.06.2003 #108784# - correct type of 1st parameter
 void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
+                            const SwPrtOptions * _pPrintData,
                             const SwRect& ,
                             const Color* _pPageBackgrdColor,
                             const bool _bIsPageRightToLeft ) const
@@ -230,6 +229,12 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
         }
 
         pOutDev->Push( PUSH_LINECOLOR ); // #114231#
+        if (_pPrintData)
+        {
+            // hide drawings but not form controls (form controls are handled elsewhere)
+            SdrView &rSdrView = const_cast< SdrView & >(GetPageView()->GetView());
+            rSdrView.setHideDraw( !_pPrintData->IsPrintDraw() );
+        }
         GetPageView()->DrawLayer(_nLayerID, pOutDev);
         pOutDev->Pop();
 
@@ -337,8 +342,10 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
             const SwFrm *pAnchor = ((SwDrawContact*)pCont)->GetAnchorFrm();
             if ( !pAnchor || pAnchor->IsInFly() || !pAnchor->IsValid() ||
                  !pAnchor->GetUpper() || !pAnchor->FindPageFrm() ||
-                 FLY_IN_CNTNT == pCont->GetFmt()->GetAnchor().GetAnchorId() )
+                 (FLY_AS_CHAR == pCont->GetFmt()->GetAnchor().GetAnchorId()) )
+            {
                 continue;
+            }
 
             // OD 19.06.2003 #108784# - no move for drawing objects in header/footer
             if ( pAnchor->FindFooterOrHeader() )

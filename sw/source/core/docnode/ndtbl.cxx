@@ -38,7 +38,6 @@
 #endif
 #include <hintids.hxx>
 
-
 #include <svx/lrspitem.hxx>
 #include <svx/brkitem.hxx>
 #include <svx/protitem.hxx>
@@ -91,9 +90,7 @@
 #include <comcore.hrc>
 #endif
 #include "docsh.hxx"
-#ifdef LINUX
 #include <tabcol.hxx>
-#endif
 #include <unochart.hxx>
 
 #include <node.hxx>
@@ -104,6 +101,9 @@
 // --> OD 2005-12-05 #i27138#
 #include <rootfrm.hxx>
 // <--
+#include <fldupde.hxx>
+
+
 #ifndef DBG_UTIL
 #define CHECK_TABLE(t)
 #else
@@ -113,7 +113,6 @@
 #define CHECK_TABLE(t)
 #endif
 #endif
-#include <fldupde.hxx>
 
 
 using namespace ::com::sun::star;
@@ -1684,17 +1683,19 @@ BOOL SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
     // #i28006# Fly frames have to be restored even if the table was
     // #alone in the section
     const SwSpzFrmFmts& rFlyArr = *GetDoc()->GetSpzFrmFmts();
-    const SwPosition* pAPos;
     for( USHORT n = 0; n < rFlyArr.Count(); ++n )
     {
-        SwFrmFmt* pFmt = (SwFrmFmt*)rFlyArr[n];
+        SwFrmFmt *const pFmt = (SwFrmFmt*)rFlyArr[n];
         const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
-        if( ( FLY_AT_CNTNT == rAnchor.GetAnchorId() ||
-              FLY_AUTO_CNTNT == rAnchor.GetAnchorId() ) &&
-            0 != ( pAPos = rAnchor.GetCntntAnchor() ) &&
+        SwPosition const*const pAPos = rAnchor.GetCntntAnchor();
+        if (pAPos &&
+            ((FLY_AT_PARA == rAnchor.GetAnchorId()) ||
+             (FLY_AT_CHAR == rAnchor.GetAnchorId())) &&
             nStt <= pAPos->nNode.GetIndex() &&
             pAPos->nNode.GetIndex() < nEnd )
+        {
             pFmt->MakeFrms();
+        }
     }
 
     return TRUE;

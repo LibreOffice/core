@@ -448,12 +448,12 @@ SwUndoTblToTxt::SwUndoTblToTxt( const SwTable& rTbl, sal_Unicode cCh )
     const SwSpzFrmFmts& rFrmFmtTbl = *pTblNd->GetDoc()->GetSpzFrmFmts();
     for( USHORT n = 0; n < rFrmFmtTbl.Count(); ++n )
     {
-        const SwPosition* pAPos;
         SwFrmFmt* pFmt = rFrmFmtTbl[ n ];
-        const SwFmtAnchor* pAnchor = &pFmt->GetAnchor();
-        if( 0 != ( pAPos = pAnchor->GetCntntAnchor()) &&
-            ( FLY_AUTO_CNTNT == pAnchor->GetAnchorId() ||
-              FLY_AT_CNTNT == pAnchor->GetAnchorId() ) &&
+        SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();
+        SwPosition const*const pAPos = pAnchor->GetCntntAnchor();
+        if (pAPos &&
+            ((FLY_AT_CHAR == pAnchor->GetAnchorId()) ||
+             (FLY_AT_PARA == pAnchor->GetAnchorId())) &&
             nTblStt <= pAPos->nNode.GetIndex() &&
             pAPos->nNode.GetIndex() < nTblEnd )
         {

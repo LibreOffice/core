@@ -3668,6 +3668,12 @@ void SwTxtNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
     }
 
     m_bNotifiable = bWasNotifiable;
+
+    if (pOldValue && (RES_REMOVE_UNO_OBJECT == pOldValue->Which()))
+    {   // invalidate cached uno object
+        SetXParagraph(::com::sun::star::uno::Reference<
+                ::com::sun::star::text::XTextContent>(0));
+    }
 }
 
 SwFmtColl* SwTxtNode::ChgFmtColl( SwFmtColl *pNewColl )
@@ -5017,27 +5023,15 @@ bool SwTxtNode::IsInContent() const
     return !GetDoc()->IsInHeaderFooter( SwNodeIndex(*this) );
 }
 
-#include <unoobj.hxx>
+#include <unoparagraph.hxx>
 
-::com::sun::star::uno::Reference< ::com::sun::star::rdf::XMetadatable >
+using namespace ::com::sun::star;
+
+uno::Reference< rdf::XMetadatable >
 SwTxtNode::MakeUnoObject()
 {
-    // re-use existing SwXParagraph
-    SwClientIter iter( *this );
-    SwClient * pClient( iter.First( TYPE( SwXParagraph ) ) );
-    while (pClient) {
-        SwXParagraph *pPara( dynamic_cast<SwXParagraph*>(pClient) );
-        if (pPara && pPara->GetCoreObject() == this ) {
-            return pPara;
-        }
-        pClient = iter.Next();
-    }
-
-    // create new SwXParagraph
-    SwPosition Pos( *this );
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > xParent(
-        SwXTextRange::CreateParentXText( GetDoc(), Pos  ) );
-    SwXParagraph * pXPara( new SwXParagraph( xParent, this ) );
-    return pXPara;
+    const uno::Reference<rdf::XMetadatable> xMeta(
+            SwXParagraph::CreateXParagraph(*GetDoc(), *this), uno::UNO_QUERY);
+    return xMeta;
 }
 

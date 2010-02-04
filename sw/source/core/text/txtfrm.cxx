@@ -65,9 +65,7 @@
 #include <txtftn.hxx>
 #include <charatr.hxx>
 #include <ftninfo.hxx>
-#ifndef _FMTLINE_HXX
 #include <fmtline.hxx>
-#endif
 #include <txtfrm.hxx>       // SwTxtFrm
 #include <sectfrm.hxx>      // SwSectFrm
 #include <txtcfg.hxx>       // DBG_LOOP
@@ -76,9 +74,7 @@
 #include <txtcache.hxx>
 #include <fntcache.hxx>     // GetLineSpace benutzt pLastFont
 #include <SwGrammarMarkUp.hxx>
-#ifndef _LINEINFO_HXX
 #include <lineinfo.hxx>
-#endif
 #include <SwPortionHandler.hxx>
 // OD 2004-01-15 #110582#
 #include <dcontact.hxx>
@@ -100,6 +96,7 @@
 #include <txtpaint.hxx>     // DbgRect
 extern const sal_Char *GetPrepName( const enum PrepareHint ePrep );
 #endif
+
 
 TYPEINIT1( SwTxtFrm, SwCntntFrm );
 
@@ -487,7 +484,7 @@ bool lcl_HideObj( const SwTxtFrm& _rFrm,
 {
     bool bRet( true );
 
-    if ( _eAnchorType == FLY_AUTO_CNTNT )
+    if (_eAnchorType == FLY_AT_CHAR)
     {
         const IDocumentSettingAccess* pIDSA = _rFrm.GetTxtNode()->getIDocumentSettingAccess();
         if ( !pIDSA->get(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING) &&
@@ -560,8 +557,9 @@ void SwTxtFrm::HideAndShowObjects()
                 // under certain conditions
                 const RndStdIds eAnchorType( pContact->GetAnchorId() );
                 const xub_StrLen nObjAnchorPos = pContact->GetCntntAnchorIndex().GetIndex();
-                if ( eAnchorType != FLY_AUTO_CNTNT ||
-                     lcl_HideObj( *this, eAnchorType, nObjAnchorPos, (*GetDrawObjs())[i] ) )
+                if ((eAnchorType != FLY_AT_CHAR) ||
+                    lcl_HideObj( *this, eAnchorType, nObjAnchorPos,
+                                 (*GetDrawObjs())[i] ))
                 {
                     pContact->MoveObjToInvisibleLayer( pObj );
                 }
@@ -588,12 +586,12 @@ void SwTxtFrm::HideAndShowObjects()
                 const RndStdIds eAnchorType( pContact->GetAnchorId() );
                 // <--
 
-                if ( eAnchorType == FLY_AT_CNTNT )
+                if (eAnchorType == FLY_AT_PARA)
                 {
                     pContact->MoveObjToVisibleLayer( pObj );
                 }
-                else if ( eAnchorType == FLY_AUTO_CNTNT ||
-                          eAnchorType == FLY_IN_CNTNT )
+                else if ((eAnchorType == FLY_AT_CHAR) ||
+                         (eAnchorType == FLY_AS_CHAR))
                 {
                     xub_StrLen nHiddenStart;
                     xub_StrLen nHiddenEnd;
@@ -1704,7 +1702,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                             // --> OD 2004-07-16 #i28701# - consider all
                             // to-character anchored objects
                             if ( pAnchoredObj->GetFrmFmt().GetAnchor().GetAnchorId()
-                                    == FLY_AUTO_CNTNT )
+                                    == FLY_AT_CHAR )
                             {
                                 bFormat = sal_True;
                                 break;

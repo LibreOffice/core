@@ -295,7 +295,7 @@ public:
 
     void   PaintExtraData( const SwRect & rRect ) const; //Seitennummer usw.
     SwRect Paint();
-    virtual void Paint( const SwRect & ) const;
+    virtual void Paint( const SwRect &, const SwPrtOptions *pPrintData = NULL ) const;
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );
     virtual sal_Bool GetInfo( SfxPoolItem & ) const;
 
