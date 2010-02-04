@@ -58,18 +58,17 @@ function fAutocorrectOptions(Options as String)
     case "CapitalizeFirstLetter"       : Einstellungen.TypeKeys "<Down>",2
     case "AutomaticBoldAndUnderline"   : Einstellungen.TypeKeys "<Down>",3
     case "URLRecognition"              : Einstellungen.TypeKeys "<Down>",4
-    case "ReplaceDashes"               : Einstellungen.TypeKeys "<Down>",7
-    case "DeleteSpaceParagraph"        : Einstellungen.TypeKeys "<Down>",8
-    case "DeleteSpaceLine"             : Einstellungen.TypeKeys "<Down>",9
-    case "IgnoreDoulbeSpaces"          : Einstellungen.TypeKeys "<Down>",10
-    case "ApplyNumbering"              : Einstellungen.TypeKeys "<Down>",11
-    case "ApplyBorder"                 : Einstellungen.TypeKeys "<Down>",12
-    case "CreateTable"                 : Einstellungen.TypeKeys "<Down>",13
-    case "ApplyStyles"                 : Einstellungen.TypeKeys "<Down>",14
-    case "RemoveBlankParagraphs"       : Einstellungen.TypeKeys "<Down>",15
-    case "ReplaceCustomStyles"         : Einstellungen.TypeKeys "<Down>",16
-    case "ReplaceBullets"              : Einstellungen.TypeKeys "<Down>",17
-    case "ReplaceQuotes"               : Einstellungen.TypeKeys "<Down>",18
+    case "ReplaceDashes"               : Einstellungen.TypeKeys "<Down>",5
+    case "DeleteSpaceParagraph"        : Einstellungen.TypeKeys "<Down>",6
+    case "DeleteSpaceLine"             : Einstellungen.TypeKeys "<Down>",7
+    case "IgnoreDoulbeSpaces"          : Einstellungen.TypeKeys "<Down>",8
+    case "ApplyNumbering"              : Einstellungen.TypeKeys "<Down>",9
+    case "ApplyBorder"                 : Einstellungen.TypeKeys "<Down>",10
+    case "CreateTable"                 : Einstellungen.TypeKeys "<Down>",11
+    case "ApplyStyles"                 : Einstellungen.TypeKeys "<Down>",12
+    case "RemoveBlankParagraphs"       : Einstellungen.TypeKeys "<Down>",13
+    case "ReplaceCustomStyles"         : Einstellungen.TypeKeys "<Down>",14
+    case "ReplaceBullets"              : Einstellungen.TypeKeys "<Down>",15
     case "CombineSingleLine"           : Einstellungen.TypeKeys "<End>"
 
     end select
