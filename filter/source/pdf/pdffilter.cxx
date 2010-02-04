@@ -35,7 +35,7 @@
 #include "pdfexport.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
-#include <svtools/outstrm.hxx>
+#include <svl/outstrm.hxx>
 #include <svtools/FilterConfigItem.hxx>
 
 // -------------
@@ -85,7 +85,8 @@ sal_Bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
         aCfgItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "MaxImageResolution" ) ), 300 );
         aCfgItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "UseTaggedPDF" ) ), sal_False );
         aCfgItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "SelectPdfVersion" ) ), 0 );
-        aCfgItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "ExportNotes" ) ), sal_True );
+        aCfgItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "ExportNotes" ) ), sal_False );
+        aCfgItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "ExportNotesPages" ) ), sal_False );
         aCfgItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "UseTransitionEffects" ) ), sal_True );
         aCfgItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "IsSkipEmptyPages" ) ), sal_False );
         aCfgItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "ExportFormFields" ) ), sal_True );
