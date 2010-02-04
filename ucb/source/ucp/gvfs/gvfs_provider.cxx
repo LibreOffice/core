@@ -33,8 +33,8 @@
 
 #include <ucbhelper/contentidentifier.hxx>
 #include <libgnomevfs/gnome-vfs-init.h>
-#include "provider.hxx"
-#include "content.hxx"
+#include "gvfs_provider.hxx"
+#include "gvfs_content.hxx"
 
 using namespace com::sun::star;
 using namespace gvfs;
