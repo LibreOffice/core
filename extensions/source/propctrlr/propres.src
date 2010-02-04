@@ -64,3 +64,8 @@ String RID_EMBED_IMAGE_PLACEHOLDER
 {
     Text [ en-US ] = "<Embedded-Image>";
 };
+
+String RID_STR_TEXT_FORMAT
+{
+    Text [ en-US ] = "Text";
+};
