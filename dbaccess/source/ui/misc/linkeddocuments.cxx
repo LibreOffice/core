@@ -268,81 +268,62 @@ namespace dbaui
         return xRet;
     }
     //------------------------------------------------------------------
-    Reference< XComponent> OLinkedDocumentsAccess::impl_newWithPilot( const char* _pWizardService,
-        Reference< XComponent >& _xDefinition, const sal_Int32 _nCommandType, const ::rtl::OUString& _rObjectName )
+    void OLinkedDocumentsAccess::impl_newWithPilot( const char* _pWizardService,
+        const sal_Int32 _nCommandType, const ::rtl::OUString& _rObjectName )
     {
-        Reference< XComponent> xRet;
         try
         {
             ::comphelper::NamedValueCollection aArgs;
             aArgs.put( "DataSourceName", m_sDataSourceName );
+
+            if ( m_xConnection.is() )
+                aArgs.put( "ActiveConnection", m_xConnection );
 
             if ( _rObjectName.getLength() && ( _nCommandType != -1 ) )
             {
                 aArgs.put( "CommandType", _nCommandType );
                 aArgs.put( "Command", _rObjectName );
             }
-            if ( m_xConnection.is() )
-                aArgs.put( "ActiveConnection", m_xConnection );
 
             aArgs.put( "DocumentUI", m_xDocumentUI );
-
-            Reference< XController > xController( m_xDocumentUI, UNO_QUERY_THROW );
-            aArgs.put( "ParentFrame", xController->getFrame() );
-                // (legacy, 'til not all wizards migrated to the DocumentUI parameter)
 
             Reference< XJobExecutor > xWizard;
             {
                 WaitObject aWaitCursor( m_pDialogParent );
                 xWizard.set( m_xORB->createInstanceWithArguments(
-                    ::rtl::OUString::createFromAscii(_pWizardService),
+                    ::rtl::OUString::createFromAscii( _pWizardService ),
                     aArgs.getWrappedPropertyValues()
-                ), UNO_QUERY );
+                    ), UNO_QUERY_THROW );
             }
 
-            if ( xWizard.is() )
-            {
-                xWizard->trigger(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("start")));
-                Reference<XPropertySet> xProp( xWizard, UNO_QUERY_THROW );
-                Reference<XPropertySetInfo> xInfo( xProp->getPropertySetInfo(), UNO_SET_THROW );
-                if ( xInfo->hasPropertyByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Document"))) )
-                {
-                    _xDefinition.set(xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentDefinition"))),UNO_QUERY);
-                    xRet.set(xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Document"))),UNO_QUERY);
-                }
-                xWizard->trigger(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("end")));
-                ::comphelper::disposeComponent(xWizard);
-            }
+            xWizard->trigger( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "start" ) ) );
+            ::comphelper::disposeComponent( xWizard );
         }
         catch(const Exception& e)
         {
-            (void) e;
-            OSL_ENSURE(sal_False, "OLinkedDocumentsAccess::newWithPilot: caught an exception while loading the object!");
+            DBG_UNHANDLED_EXCEPTION();
         }
-        return xRet;
     }
     //------------------------------------------------------------------
-    Reference< XComponent> OLinkedDocumentsAccess::newFormWithPilot(Reference< XComponent >& _xDefinition,const sal_Int32 _nCommandType,const ::rtl::OUString& _rObjectName)
+    void OLinkedDocumentsAccess::newFormWithPilot( const sal_Int32 _nCommandType,const ::rtl::OUString& _rObjectName )
     {
-        return impl_newWithPilot( "com.sun.star.wizards.form.CallFormWizard", _xDefinition, _nCommandType, _rObjectName );
+        impl_newWithPilot( "com.sun.star.wizards.form.CallFormWizard", _nCommandType, _rObjectName );
     }
 
     //------------------------------------------------------------------
-    Reference< XComponent> OLinkedDocumentsAccess::newReportWithPilot( Reference< XComponent >& _xDefinition, const sal_Int32 _nCommandType, const ::rtl::OUString& _rObjectName )
+    void OLinkedDocumentsAccess::newReportWithPilot( const sal_Int32 _nCommandType, const ::rtl::OUString& _rObjectName )
     {
-        return impl_newWithPilot( "com.sun.star.wizards.report.CallReportWizard", _xDefinition, _nCommandType, _rObjectName );
+        impl_newWithPilot( "com.sun.star.wizards.report.CallReportWizard", _nCommandType, _rObjectName );
     }
     //------------------------------------------------------------------
-    Reference< XComponent> OLinkedDocumentsAccess::newTableWithPilot()
+    void OLinkedDocumentsAccess::newTableWithPilot()
     {
-        Reference< XComponent > xDefinition;
-        return impl_newWithPilot( "com.sun.star.wizards.table.CallTableWizard", xDefinition, -1, ::rtl::OUString() );
+        impl_newWithPilot( "com.sun.star.wizards.table.CallTableWizard", -1, ::rtl::OUString() );
     }
     //------------------------------------------------------------------
-    Reference< XComponent> OLinkedDocumentsAccess::newQueryWithPilot()
+    void OLinkedDocumentsAccess::newQueryWithPilot()
     {
-        Reference< XComponent > xDefinition;
-        return impl_newWithPilot( "com.sun.star.wizards.query.CallQueryWizard", xDefinition, -1, ::rtl::OUString() );
+        impl_newWithPilot( "com.sun.star.wizards.query.CallQueryWizard", -1, ::rtl::OUString() );
     }
     //------------------------------------------------------------------
     Reference< XComponent > OLinkedDocumentsAccess::newDocument( sal_Int32 i_nActionID,

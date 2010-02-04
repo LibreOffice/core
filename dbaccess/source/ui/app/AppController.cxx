@@ -2048,26 +2048,10 @@ void OApplicationController::newElementWithPilot( ElementType _eType )
             {
                 sal_Int32 nCommandType = -1;
                 const ::rtl::OUString sCurrentSelected( getCurrentlySelectedName( nCommandType ) );
-                Reference< XComponent > xComponent,xDefinition;
                 if ( E_REPORT == _eType )
-                    xComponent = aHelper->newReportWithPilot( xDefinition, nCommandType, sCurrentSelected );
+                    aHelper->newReportWithPilot( nCommandType, sCurrentSelected );
                 else
-                    xComponent = aHelper->newFormWithPilot( xDefinition, nCommandType, sCurrentSelected );
-                OSL_POSTCOND( xComponent.is() && xDefinition.is(), "OApplicationController::newElementWithPilot:"
-                    "invalid component/docdef!" );
-
-                ::rtl::OUString sName;
-                try
-                {
-                    Reference< XHierarchicalName > xName( xDefinition, UNO_QUERY_THROW );
-                    sName = xName->getHierarchicalName();
-                }
-                catch( const Exception& )
-                {
-                    DBG_UNHANDLED_EXCEPTION();
-                }
-                if ( xComponent.is() && xDefinition.is() )
-                    onDocumentOpened( sName, _eType, E_OPEN_DESIGN, xComponent, xDefinition );
+                    aHelper->newFormWithPilot( nCommandType, sCurrentSelected );
             }
         }
         break;
@@ -2077,20 +2061,19 @@ void OApplicationController::newElementWithPilot( ElementType _eType )
             ::std::auto_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess(_eType);
             if ( aHelper->isConnected() )
             {
-                Reference< XComponent > xComponent;
                 if ( E_QUERY == _eType )
-                    xComponent = aHelper->newQueryWithPilot();
+                    aHelper->newQueryWithPilot();
                 else
-                    xComponent = aHelper->newTableWithPilot();
-
-                // no need for onDocumentOpened, the table wizard opens the created table by using
-                // XDatabaseDocumentUI::loadComponent method.
+                    aHelper->newTableWithPilot();
             }
          }
          break;
         case E_NONE:
             break;
     }
+
+    // no need for onDocumentOpened, the table wizard opens the created table by using
+    // XDatabaseDocumentUI::loadComponent method.
 }
 
 // -----------------------------------------------------------------------------
@@ -2908,7 +2891,7 @@ void OApplicationController::containerFound( const Reference< XContainer >& _xCo
         try
         {
             sName = getContainer()->getQualifiedName( NULL );
-            OSL_ENSURE( sName.getLength(), "OApplicationController::newElementWithPilot: no name given!" );
+            OSL_ENSURE( sName.getLength(), "OApplicationController::getCurrentlySelectedName: no name given!" );
         }
         catch( const Exception& )
         {

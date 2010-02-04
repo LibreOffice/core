@@ -232,7 +232,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
         ::rtl::OUString sName, sPersistentName, sURL;
         Reference< XCommandProcessor > xCopyFrom;
         Reference< XConnection > xConnection;
-        sal_Bool bAsTemplate;
+        sal_Bool bAsTemplate( sal_False );
         Sequence< sal_Int8 > aClassID;
 
         ::comphelper::NamedValueCollection aArgs( _aArguments );
