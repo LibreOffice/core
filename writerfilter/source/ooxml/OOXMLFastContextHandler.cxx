@@ -153,7 +153,7 @@ OOXMLFastContextHandler::OOXMLFastContextHandler
   mnTableDepth(0),
   mnInstanceNumber(mnInstanceCount),
   mnRefCount(0),
-  m_xContext(pContext->m_xContext),
+  m_xContext(),
   mbFallback(false)
 {
     if (pContext != NULL)
