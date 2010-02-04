@@ -130,7 +130,8 @@ OXMLColumn::OXMLColumn( ODBFilter& rImport
                 break;
             case XML_TOK_COLUMN_DEFAULT_VALUE:
                 if ( sValue.getLength() && sType.getLength() )
-                    SvXMLUnitConverter::convertAny(m_aDefaultValue,sType,sValue);
+                    m_aDefaultValue <<= sValue;
+                //    SvXMLUnitConverter::convertAny(m_aDefaultValue,sType,sValue);
                 break;
             case XML_TOK_COLUMN_VISIBLE:
                 m_bHidden = sValue.equalsAscii("false");
