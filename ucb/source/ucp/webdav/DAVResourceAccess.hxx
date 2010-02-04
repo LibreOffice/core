@@ -212,12 +212,14 @@ public:
               com::sun::star::ucb::XCommandEnvironment > & xEnv )
         throw( DAVException );
 
+#if 0 // currently not used, but please don't remove code
     // refresh existing lock.
     sal_Int64
     LOCK( sal_Int64 nTimeout,
           const com::sun::star::uno::Reference<
               com::sun::star::ucb::XCommandEnvironment > & xEnv )
         throw ( DAVException );
+#endif
 
     void
     UNLOCK( const com::sun::star::uno::Reference<
