@@ -45,6 +45,7 @@
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/printer.hxx>
+#include <sfx2/progress.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
@@ -1518,12 +1519,6 @@ MOVEPAGE:
             rReq.SetSlot( FN_PRINT_PAGEPREVIEW );
             return;
         }
-        case FN_PREVIEW_PRINT_OPTIONS :
-        {
-            SwPreviewPrintOptionsDialog aDlg(aViewWin, *this);
-            aDlg.Execute();
-        }
-        break;
         case SID_PRINTDOCDIRECT:
         case SID_PRINTDOC:
             ::SetAppPrintOptions( aViewWin.GetViewShell(), FALSE );
@@ -1786,7 +1781,7 @@ void SwPagePreView::Init(const SwViewOption * pPrefs)
 
     // OD 09.01.2003 #i6467# - adjust view shell option to the same as for print
     SwPrtOptions aPrintOptions( GetViewFrame()->GetObjectShell()->GetTitle(0) );
-    SwView::MakeOptions( 0, aPrintOptions, 0, 0, false, 0, 0 );
+    aPrintOptions.MakeOptions( false );
     GetViewShell()->AdjustOptionsForPagePreview( aPrintOptions );
 
     IDocumentSettingAccess* pIDSA = pESh->getIDocumentSettingAccess();
@@ -2414,72 +2409,6 @@ void SwPagePreView::ScrollDocSzChg()
 
 
 // alles zum Thema Drucken
-
-USHORT  SwPagePreView::Print( SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *pDlg )
-{
-    ViewShell* pSh = aViewWin.GetViewShell();
-    SfxPrinter* pPrinter = GetPrinter();
-    if( !pPrinter || !pPrinter->InitJob( &aViewWin,
-                pSh->HasDrawView() && !bIsAPI && pSh->GetDrawView()->GetModel()->HasTransparentObjects() ))
-        return ERRCODE_IO_ABORT;
-
-    SwWait aWait( *GetDocShell(), TRUE );
-
-    USHORT nRowCol = ( aViewWin.GetRow() << 8 ) +
-                        aViewWin.GetCol();  // Zeilen / DoppelSeiten
-
-    {
-        // die Felder aktualisieren
-        // ACHTUNG: hochcasten auf die EditShell, um die SS zu nutzen.
-        //          In den Methoden wird auf die akt. Shell abgefragt!
-        SwEditShell* pESh = (SwEditShell*)pSh;
-        SwDocStat aDocStat;
-        BOOL bIsModified = pESh->IsModified();
-
-        pESh->StartAllAction();
-        pESh->UpdateDocStat( aDocStat );
-        pSh->UpdateFlds();
-        pESh->EndAllAction();
-
-        if( !bIsModified )
-            pESh->ResetModified();
-    }
-
-    // Druckauftrag starten
-    SfxObjectShell *pObjShell = GetViewFrame()->GetObjectShell();
-    SwPrtOptions aOpts( pObjShell->GetTitle(0) );
-
-    BOOL bPrtPros;
-    BOOL bPrtPros_RTL;
-    SwView::MakeOptions( pDlg, aOpts, &bPrtPros, &bPrtPros_RTL, FALSE, GetPrinter(), GetDocShell()->GetDoc()->getPrintData() );
-
-    if( bNormalPrint )
-    {
-        if( bPrtPros )
-            pSh->PrintProspect( aOpts, rProgress, bPrtPros_RTL );
-        else
-            pSh->Prt( aOpts, &rProgress );
-    }
-    else
-    {
-        const SwPagePreViewPrtData* pPPVPD = pSh->GetDoc()->GetPreViewPrtData();
-        if( pPPVPD && pPPVPD->GetCol() && pPPVPD->GetRow() )
-        {
-            // Zeilen / Seiten
-            nRowCol = ( pPPVPD->GetRow() << 8 ) + pPPVPD->GetCol();
-        }
-        else
-            pPPVPD = 0;
-        pSh->PrintPreViewPage( aOpts, nRowCol, rProgress, pPPVPD );
-    }
-
-    return 0; // OK
-}
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 SfxPrinter*  SwPagePreView::GetPrinter( BOOL bCreate )
 {

@@ -57,8 +57,10 @@ SwPosFlyFrm::SwPosFlyFrm( const SwNodeIndex& rIdx, const SwFrmFmt* pFmt,
 {
     BOOL bFnd = FALSE;
     const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
-    if( FLY_PAGE == rAnchor.GetAnchorId() )
+    if (FLY_AT_PAGE == rAnchor.GetAnchorId())
+    {
         pNdIdx = new SwNodeIndex( rIdx );
+    }
     else if( pFmt->GetDoc()->GetRootFrm() )
     {
         SwClientIter aIter( (SwFmt&)*pFmt );
@@ -88,8 +90,10 @@ SwPosFlyFrm::SwPosFlyFrm( const SwNodeIndex& rIdx, const SwFrmFmt* pFmt,
 SwPosFlyFrm::~SwPosFlyFrm()
 {
     const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
-    if( FLY_PAGE == rAnchor.GetAnchorId() )
+    if (FLY_AT_PAGE == rAnchor.GetAnchorId())
+    {
         delete pNdIdx;
+    }
 }
 
 BOOL SwPosFlyFrm::operator==( const SwPosFlyFrm& )

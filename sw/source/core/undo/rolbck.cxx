@@ -922,7 +922,7 @@ SwHistoryChangeFlyAnchor::SwHistoryChangeFlyAnchor( SwFrmFmt& rFmt )
     : SwHistoryHint( HSTRY_CHGFLYANCHOR )
     , m_rFmt( rFmt )
     , m_nOldNodeIndex( rFmt.GetAnchor().GetCntntAnchor()->nNode.GetIndex() )
-    , m_nOldContentIndex( ( FLY_AUTO_CNTNT == rFmt.GetAnchor().GetAnchorId() )
+    , m_nOldContentIndex( (FLY_AT_CHAR == rFmt.GetAnchor().GetAnchorId())
             ?   rFmt.GetAnchor().GetCntntAnchor()->nContent.GetIndex()
             :   STRING_MAXLEN )
 {

@@ -299,7 +299,7 @@ public:
     virtual BOOL GetInfo( SfxPoolItem& ) const;
 
         // suche im Format nach der angemeldeten Tabelle
-    static SwTable* FindTable( SwFrmFmt* pFmt );
+    static SwTable * FindTable( SwFrmFmt const*const pFmt );
 
         // Struktur ein wenig aufraeumen
     void GCLines();

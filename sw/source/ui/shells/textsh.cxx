@@ -39,9 +39,7 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/lnkbase.hxx>
 
-#ifndef __RSC //autogen
 #include <tools/errinf.hxx>
-#endif
 #include <svx/svdview.hxx>
 #include <svl/ptitem.hxx>
 #include <svl/stritem.hxx>
@@ -82,9 +80,7 @@
 #include <docsh.hxx>
 #include <doc.hxx>
 #include <uitool.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif
@@ -112,9 +108,7 @@
 #ifndef _POPUP_HRC
 #include <popup.hrc>
 #endif
-#ifndef _SWERROR_H
 #include <swerror.h>
-#endif
 #include <SwAppletImpl.hxx>
 #include <unochart.hxx>
 
@@ -566,7 +560,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 aCol.Init( nCols, aCol.GetGutterWidth(), aCol.GetWishWidth() );
                 aMgr.SetCol( aCol );
             }
-            aMgr.InsertFlyFrm(FLY_AT_CNTNT, aStartPos, aSize);
+            aMgr.InsertFlyFrm(FLY_AT_PARA, aStartPos, aSize);
             GetShell().EndAllAction();
             GetShell().UnlockPaint();
         }
@@ -600,7 +594,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             Size aSize(aMgr.GetSize());
             aSize.Width() = GetShell().GetAnyCurRect(RECT_PAGE_PRT).Width();
             Point aPos = aMgr.GetPos();
-            RndStdIds eAnchor = FLY_AT_CNTNT;
+            RndStdIds eAnchor = FLY_AT_PARA;
             if(pArgs->GetItemState(nSlot, FALSE, &pItem) == SFX_ITEM_SET)
                 eAnchor = (RndStdIds)((SfxUInt16Item *)pItem)->GetValue();
             if(pArgs->GetItemState(FN_PARAM_1, FALSE, &pItem)  == SFX_ITEM_SET)
@@ -764,7 +758,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             SwFlyFrmAttrMgr aFrmMgr( TRUE, &rSh, FRMMGR_TYPE_GRF );
             // am FrmMgr muessen die richtigen Parameter eingestellt werden
 
-            aFrmMgr.SetAnchor(FLY_IN_CNTNT);
+            aFrmMgr.SetAnchor(FLY_AS_CHAR);
 
             rSh.SplitNode( FALSE, FALSE );
             rSh.SplitNode( FALSE, FALSE );

@@ -34,12 +34,6 @@
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 
-// #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
-// #include <com/sun/star/lang/Locale.hpp>
-// #endif
-// #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
-// #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
-// #endif
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
@@ -49,9 +43,6 @@
 #include <svl/svstdarr.hxx>
 #include <svl/aeitem.hxx>
 
-// #ifndef _FILTER_HXX
-// #include <svtools/filter.hxx>
-// #endif
 #include <SwStyleNameMapper.hxx>
 #include <docary.hxx>
 #include <hintids.hxx>
@@ -69,12 +60,8 @@
 #include <svx/viewlayoutitem.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <svx/htmlmode.hxx>
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
@@ -93,9 +80,7 @@
 #include <svl/whiter.hxx>
 #include <svl/ptitem.hxx>
 #include <svx/linkmgr.hxx>
-#ifndef __RSC //autogen
 #include <tools/errinf.hxx>
-#endif
 #include <tools/urlobj.hxx>
 #include <svx/svdview.hxx>
 #include <swtypes.hxx>
@@ -146,10 +131,6 @@
 
 #include <PostItMgr.hxx>
 #include <postit.hxx>
-
-// #ifndef _FRMMGR_HXX
-// #include <frmmgr.hxx>
-// #endif
 
 #include <ndtxt.hxx> //#outline level,added by zhaojianwei
 
