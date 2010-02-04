@@ -215,7 +215,7 @@ SfxObjectShellRef SfxApplication::DocAlreadyLoaded
 
         SfxViewFrame* pFrame;
         for( pFrame = SfxViewFrame::GetFirst( xDoc );
-             pFrame && !pFrame->IsVisible_Impl();
+             pFrame && !pFrame->IsVisible();
              pFrame = SfxViewFrame::GetNext( *pFrame, xDoc ) ) ;
         if ( pFrame )
         {

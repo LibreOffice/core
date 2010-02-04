@@ -209,7 +209,7 @@ public:
                                         const Point &rPos, const Size &rSize );
     void                    Hide();
     void                    Show();
-    BOOL                    IsVisible_Impl() const;
+    BOOL                    IsVisible() const;
     void                    ToTop();
     void                    Enable( BOOL bEnable );
     virtual BOOL            Close();

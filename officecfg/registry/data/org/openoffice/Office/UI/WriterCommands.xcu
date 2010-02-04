@@ -77,14 +77,6 @@
                     <value xml:lang="en-US">Foote~r</value>
                 </prop>
             </node>
-            <node oor:name=".uno:PreviewPrintOptions" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Print options page view</value>
-                </prop>
-                <prop oor:name="Properties" oor:type="xs:int">
-                    <value>1</value>
-                </prop>
-            </node>
             <node oor:name=".uno:PreviewZoom" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Preview Zoom</value>
@@ -911,7 +903,7 @@
             </node>
             <node oor:name=".uno:PrintPagePreView" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Print page view</value>
+                    <value xml:lang="en-US">Print document</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>

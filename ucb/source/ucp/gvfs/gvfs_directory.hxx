@@ -33,7 +33,7 @@
 #include <rtl/ref.hxx>
 #include <ucbhelper/resultset.hxx>
 #include <ucbhelper/resultsethelper.hxx>
-#include "content.hxx"
+#include "gvfs_content.hxx"
 
 namespace gvfs {
 
@@ -44,11 +44,11 @@ class DynamicResultSet : public ::ucbhelper::ResultSetImplHelper
         com::sun::star::ucb::XCommandEnvironment > m_xEnv;
 
 private:
-      virtual void initStatic();
-      virtual void initDynamic();
+    virtual void initStatic();
+    virtual void initDynamic();
 
 public:
-      DynamicResultSet( const com::sun::star::uno::Reference<
+    DynamicResultSet( const com::sun::star::uno::Reference<
                         com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
                       const rtl::Reference< Content >& rxContent,
                       const com::sun::star::ucb::OpenCommandArgument2& rCommand,

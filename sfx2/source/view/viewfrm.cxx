@@ -1532,7 +1532,7 @@ sal_uInt16 SfxViewFrame::Count()
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
         SfxViewFrame *pFrame = rFrames[i];
-        if ( pFrame->IsVisible_Impl() )
+        if ( pFrame->IsVisible() )
             ++nFound;
     }
     return nFound;
@@ -1554,7 +1554,7 @@ SfxViewFrame* SfxViewFrame::GetFirst
     {
         SfxViewFrame *pFrame = rFrames.GetObject(nPos);
         if  (   ( !pDoc || pDoc == pFrame->GetObjectShell() )
-            &&  ( !bOnlyIfVisible || pFrame->IsVisible_Impl() )
+            &&  ( !bOnlyIfVisible || pFrame->IsVisible() )
             )
             return pFrame;
     }
@@ -1585,7 +1585,7 @@ SfxViewFrame* SfxViewFrame::GetNext
     {
         SfxViewFrame *pFrame = rFrames.GetObject(nPos);
         if  (   ( !pDoc || pDoc == pFrame->GetObjectShell() )
-            &&  ( !bOnlyIfVisible || pFrame->IsVisible_Impl() )
+            &&  ( !bOnlyIfVisible || pFrame->IsVisible() )
             )
             return pFrame;
     }
@@ -1599,7 +1599,7 @@ void SfxViewFrame::CloseHiddenFrames_Impl()
     for ( sal_uInt16 nPos=0; nPos<rFrames.Count(); )
     {
         SfxViewFrame *pFrame = rFrames.GetObject(nPos);
-        if ( !pFrame->IsVisible_Impl() )
+        if ( !pFrame->IsVisible() )
             pFrame->DoClose();
         else
             nPos++;
@@ -1860,7 +1860,7 @@ void SfxViewFrame::Show()
 }
 
 //--------------------------------------------------------------------
-sal_Bool SfxViewFrame::IsVisible_Impl() const
+sal_Bool SfxViewFrame::IsVisible() const
 {
     return pImp->bObjLocked;
 }
@@ -1888,7 +1888,7 @@ void SfxViewFrame::MakeActive_Impl( BOOL bGrabFocus )
 {
     if ( GetViewShell() && !GetFrame().IsClosing_Impl() )
     {
-        if ( IsVisible_Impl() )
+        if ( IsVisible() )
         {
             if ( GetViewShell() )
             {
