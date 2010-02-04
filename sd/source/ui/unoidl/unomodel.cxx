@@ -64,7 +64,7 @@
 #include <svx/unofill.hxx>
 #include <svx/unopool.hxx>
 #include <svx/svdorect.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #include <vos/mutex.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <svx/svdpool.hxx>
