@@ -787,13 +787,10 @@ bool ScDPObject::IsDimNameInUse(const OUString& rName) const
         if (!xPropSet.is())
             continue;
 
-        Any any = xPropSet->getPropertyValue(OUString::createFromAscii(SC_UNO_LAYOUTNAME));
-        OUString aLayoutName;
-        if (any >>= aLayoutName)
-        {
-            if (aLayoutName.equalsIgnoreAsciiCase(rName))
-                return true;
-        }
+        OUString aLayoutName = ScUnoHelpFunctions::GetStringProperty(
+            xPropSet, OUString::createFromAscii(SC_UNO_LAYOUTNAME), OUString());
+        if (aLayoutName.equalsIgnoreAsciiCase(rName))
+            return true;
     }
     return false;
 }

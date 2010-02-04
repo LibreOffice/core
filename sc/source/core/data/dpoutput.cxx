@@ -454,14 +454,12 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                             if ( xLevNam.is() && xLevRes.is() )
                             {
                                 String aName = xLevNam->getName();
-                                OUString aCaption = aName; // Caption equals the field name by default.
                                 Reference<XPropertySet> xPropSet(xLevel, UNO_QUERY);
-                                if (xPropSet.is())
-                                {
-                                    Any any = xPropSet->getPropertyValue(
-                                        OUString::createFromAscii(SC_UNO_LAYOUTNAME));
-                                    any >>= aCaption;
-                                }
+                                // Caption equals the field name by default.
+                                // #i108948# use ScUnoHelpFunctions::GetStringProperty, because
+                                // LayoutName is new and may not be present in external implementation
+                                OUString aCaption = ScUnoHelpFunctions::GetStringProperty( xPropSet,
+                                    OUString::createFromAscii(SC_UNO_LAYOUTNAME), aName );
 
                                 bool bRowFieldHasMember = false;
                                 switch ( eDimOrient )
