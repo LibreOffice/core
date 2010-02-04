@@ -8,7 +8,7 @@
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.8 $
+# $Revision: 1.0 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -32,9 +32,17 @@
 PRJ=..$/..
 
 PRJNAME=scripting
-TARGET=dlgprov
+TARGET=vbaevents
+.IF "$(ENABLE_VBA)"!="YES"
+dummy:
+        @echo "not building vbaevents..."
+.ENDIF
+
+VISIBILITY_HIDDEN=TRUE
+NO_BSYMBOLIC=	TRUE
 ENABLE_EXCEPTIONS=TRUE
 COMP1TYPELIST=$(TARGET)
+COMPRDB=$(SOLARBINDIR)$/types.rdb
 
 # --- Settings -----------------------------------------------------
 
@@ -43,28 +51,28 @@ DLLPRE =
 
 # ------------------------------------------------------------------
 
+#.INCLUDE :  ..$/cppumaker.mk
+
 SLOFILES= \
-        $(SLO)$/dlgprov.obj \
-        $(SLO)$/dlgevtatt.obj
+        $(SLO)$/service.obj \
+        $(SLO)$/eventhelper.obj
 
 SHL1TARGET= $(TARGET)$(DLLPOSTFIX).uno
-SHL1IMPLIB=	i$(TARGET)
+SHL1IMPLIB=     i$(TARGET)
 
 SHL1VERSIONMAP=$(TARGET).map
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
-
+                                                                              
 SHL1STDLIBS= \
-        $(SFX2LIB) \
-        $(VCLLIB) \
-        $(TOOLSLIB) \
-        $(XMLSCRIPTLIB) \
-        $(CPPUHELPERLIB) \
+                $(CPPUHELPERLIB) \
+        $(BASICLIB) \
         $(COMPHELPERLIB) \
-        $(UCBHELPERLIB) \
-        $(CPPULIB) \
-        $(SALLIB)
-
+        $(SFXLIB) \
+                $(CPPULIB) \
+                $(TOOLSLIB) \
+                $(SALLIB)
+                                                                              
 SHL1DEPN=
 SHL1LIBS=$(SLB)$/$(TARGET).lib
 
