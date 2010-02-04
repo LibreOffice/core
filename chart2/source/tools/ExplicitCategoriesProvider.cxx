@@ -254,13 +254,8 @@ std::vector< ComplexCategory > lcl_DataSequenceToComplexCategoryVector(
         {
             if( aCurrent.getLength() && aPrevious != aCurrent )
             {
-                if( aPrevious.getLength() )
-                {
-                    aResult.push_back( ComplexCategory(aPrevious,nCurrentCount) );
-                    nCurrentCount=1;
-                }
-                else
-                    nCurrentCount++;
+                aResult.push_back( ComplexCategory(aPrevious,nCurrentCount) );
+                nCurrentCount=1;
                 aPrevious = aCurrent;
             }
             else
