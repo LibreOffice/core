@@ -85,6 +85,13 @@ published service PrintOptions
                 Otherwhise following actions (as e.g. closing the corresponding model) can fail.
      */
     [optional, property] boolean Wait;
+
+    //-------------------------------------------------------------------------
+    /** determines the duplex mode for the print job.
+
+        @see <type>DuplexMode</type> for more information about supported values
+     */
+    [optional, property] short DuplexMode;
 };
 
 //=============================================================================

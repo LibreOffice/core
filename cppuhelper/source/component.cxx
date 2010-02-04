@@ -90,6 +90,10 @@ void OComponentHelper::release() throw()
         {
             if (! rBHelper.bDisposed)
             {
+                // *before* again incrementing our ref count, ensure that our weak connection point
+                // will not create references to us anymore (via XAdapter::queryAdapted)
+                disposeWeakConnectionPoint();
+
                 Reference<XInterface > xHoldAlive( *this );
                 // First dispose
                 try

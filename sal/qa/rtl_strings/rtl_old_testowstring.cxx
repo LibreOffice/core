@@ -61,7 +61,7 @@
 
 #include <rtl/locale.hxx>
 
-#include <cppunit/simpleheader.hxx>
+#include <testshl/simpleheader.hxx>
 
 #define TEST_ENSURE(c, m) CPPUNIT_ASSERT_MESSAGE((m), (c))
 // #if OSL_DEBUG_LEVEL > 0
