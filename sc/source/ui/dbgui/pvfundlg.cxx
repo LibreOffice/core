@@ -742,9 +742,12 @@ ScDPShowDetailDlg::ScDPShowDetailDlg( Window* pParent, ScDPObject& rDPObj, USHOR
             const ScDPSaveDimension* pDimension = pSaveData ? pSaveData->GetExistingDimensionByName(aName) : 0;
             if ( !pDimension || (pDimension->GetOrientation() != nOrient) )
             {
-                const OUString* pLayoutName = pDimension->GetLayoutName();
-                if (pLayoutName)
-                    aName = *pLayoutName;
+                if (pDimension)
+                {
+                    const OUString* pLayoutName = pDimension->GetLayoutName();
+                    if (pLayoutName)
+                        aName = *pLayoutName;
+                }
                 maLbDims.InsertEntry( aName );
                 maNameIndexMap.insert(DimNameIndexMap::value_type(aName, nDim));
             }
