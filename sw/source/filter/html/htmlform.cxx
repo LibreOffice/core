@@ -34,22 +34,16 @@
 
 #include <hintids.hxx>
 #include <vcl/svapp.hxx>
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <vcl/imgcons.hxx>
 
-#ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>
 #include <svl/urihelper.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/docfile.hxx>
-#ifndef _SFXAPP_HXX
 #include <sfx2/viewfrm.hxx>
-#endif
 #include <svx/lrspitem.hxx>
 #include <svx/ulspitem.hxx>
 #include <svx/brshitem.hxx>
@@ -87,12 +81,13 @@
 #include <docsh.hxx>
 #include <viewsh.hxx>
 #include <unodraw.hxx>
-#include <unoobj.hxx>
+#include <unotextrange.hxx>
 #include "dcontact.hxx"
 
 #include "swcss1.hxx"
 #include "swhtml.hxx"
 #include "htmlform.hxx"
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
