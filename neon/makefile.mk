@@ -71,6 +71,7 @@ OUT2INC= \
     $(BUILD_DIR)$/ne_alloc.h \
     $(BUILD_DIR)$/ne_auth.h \
     $(BUILD_DIR)$/ne_basic.h \
+    $(BUILD_DIR)$/ne_compress.h \
     $(BUILD_DIR)$/ne_defs.h \
     $(BUILD_DIR)$/ne_locks.h \
     $(BUILD_DIR)$/ne_props.h \
