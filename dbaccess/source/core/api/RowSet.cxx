@@ -1578,7 +1578,11 @@ void ORowSet::setStatementResultSetType( const Reference< XPropertySet >& _rxSta
             { ResultSetType::SCROLL_INSENSITIVE, ResultSetConcurrency::READ_ONLY },
             { ResultSetType::FORWARD_ONLY, ResultSetConcurrency::READ_ONLY }
         };
-        for ( sal_Int32 i=0; i<5; ++i )
+        sal_Int32 i=0;
+        if ( m_xActiveConnection->getMetaData()->isReadOnly() )
+            i = 2; // if the database is read-only we only should use read-only concurrency
+
+        for ( ; i<5; ++i )
         {
             nResultSetType = nCharacteristics[i][0];
             nResultSetConcurrency = nCharacteristics[i][1];
@@ -1900,6 +1904,8 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                     if(!xColumn.is())
                     {
                         // no column found so we could look at the position i
+                        //bReFetchName = sal_True;
+                        //sColumnLabel = ::rtl::OUString();
                         Reference<XIndexAccess> xIndexAccess(m_xColumns,UNO_QUERY);
                         if(xIndexAccess.is() && i <= xIndexAccess->getCount())
                         {
@@ -1909,7 +1915,9 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                         {
                             Sequence< ::rtl::OUString> aSeq = m_xColumns->getElementNames();
                             if( i <= aSeq.getLength())
+                            {
                                 m_xColumns->getByName(aSeq.getConstArray()[i-1]) >>= xColumn;
+                            }
                         }
                     }
                     if(bReFetchName && xColumn.is())
@@ -2317,6 +2325,12 @@ sal_Bool ORowSet::impl_buildActiveCommand_throw()
                     {
                         xQuery->getPropertyValue(PROPERTY_COMMAND) >>= sCommand;
                         xQuery->getPropertyValue(PROPERTY_ESCAPE_PROCESSING) >>= bDoEscapeProcessing;
+                        if ( bDoEscapeProcessing != m_bUseEscapeProcessing )
+                        {
+                            sal_Bool bOldValue = m_bUseEscapeProcessing;
+                            m_bUseEscapeProcessing = bDoEscapeProcessing;
+                            fireProperty(PROPERTY_ID_ESCAPE_PROCESSING,bOldValue,bDoEscapeProcessing);
+                        }
 
                         ::rtl::OUString aCatalog,aSchema,aTable;
                         xQuery->getPropertyValue(PROPERTY_UPDATE_CATALOGNAME)   >>= aCatalog;

@@ -79,7 +79,6 @@
 #include <com/sun/star/sdb/application/DatabaseObjectContainer.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 /** === end UNO includes === **/
-
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/string.hxx>

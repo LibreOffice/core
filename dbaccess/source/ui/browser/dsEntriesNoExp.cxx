@@ -119,9 +119,21 @@ SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getEntryType( SvLBoxEntry*
         return etTableOrView;
 
     if (pQueries == pEntryParent)
-        return etQuery;
+    {
+        DBTreeListUserData* pEntryData = static_cast<DBTreeListUserData*>(_pEntry->GetUserData());
+        if ( pEntryData )
+            return pEntryData->eType;
 
-    return etUnknown;
+        return etQuery;
+    }
+    while( pEntryParent != pQueries )
+    {
+        pEntryParent = m_pTreeView->getListBox().GetParent(pEntryParent);
+        if ( !pEntryParent )
+            return etUnknown;
+    }
+
+    return etQueryContainer;
 }
 //------------------------------------------------------------------------------
 void SbaTableQueryBrowser::select(SvLBoxEntry* _pEntry, sal_Bool _bSelect)
