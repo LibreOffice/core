@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: XInteractionSupplyAuthentication.idl,v $
- * $Revision: 1.9 $
+ * $RCSfile: $
+ * $Revision: $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,13 +27,12 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_ucb_XInteractionSupplyAuthentication2_idl__
-#define __com_sun_star_ucb_XInteractionSupplyAuthentication2_idl__
+#ifndef __com_sun_star_ucb_InteractiveLockingLockedException_idl__
+#define __com_sun_star_ucb_InteractiveLockingLockedException_idl__
 
-#ifndef __com_sun_star_ucb_XInteractionSupplyAuthentication_idl__
-#include <com/sun/star/ucb/XInteractionSupplyAuthentication.idl>
+#ifndef __com_sun_star_ucb_InteractiveLockingException_idl__
+#include <com/sun/star/ucb/InteractiveLockingException.idl>
 #endif
-
 
 
 //=============================================================================
@@ -41,37 +40,19 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** An interaction continuation handing back some authentication data.
+/** An error indicating that the resource is locked.
 
-    <p> This continuation is typically used in conjunction with
-    <type>AuthenticationRequest</type>. </p>
-
-    @since OOo 3.2
+    @since OOo 3.3
 */
-/*published*/ interface XInteractionSupplyAuthentication2 : XInteractionSupplyAuthentication
+/*published*/ exception InteractiveLockingLockedException : com::sun::star::ucb::InteractiveLockingException
 {
     //-------------------------------------------------------------------------
-    /** Specifies if 'system credentials' can be obtained and used by the issuer
-        of the authentiction request.
+    /** The owner of the lock.
 
-        @param Default
-        Returns the default behavior for system credentials handling (to be
-        initially displayed to the user).
-
-        @returns
-        <true/> if the issuer is able to obtain and use system credentials.
-        <false/> otherwise.
+        <true/>, the lock has been obtained by this OOo session.
+        <false/> the lock has been obtained by another principal.
     */
-    boolean canUseSystemCredentials( [out] boolean Default );
-
-    //-------------------------------------------------------------------------
-    /** Set a new 'use system credentials' value to hand back.
-
-        @param UseSystemCredentials
-        <true/> means the request issuer shall obtain and use system credentials.
-     */
-    void setUseSystemCredentials( [in] boolean UseSystemCredentials );
-
+    boolean SelfOwned;
 };
 
 //=============================================================================

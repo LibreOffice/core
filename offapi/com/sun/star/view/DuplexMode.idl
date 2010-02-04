@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: XInteractionSupplyAuthentication.idl,v $
- * $Revision: 1.9 $
+ * $RCSfile: PaperFormat.idl,v $
+ * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,51 +27,39 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_ucb_XInteractionSupplyAuthentication2_idl__
-#define __com_sun_star_ucb_XInteractionSupplyAuthentication2_idl__
-
-#ifndef __com_sun_star_ucb_XInteractionSupplyAuthentication_idl__
-#include <com/sun/star/ucb/XInteractionSupplyAuthentication.idl>
-#endif
-
+#ifndef __com_sun_star_view_DuplexMode_idl__
+#define __com_sun_star_view_DuplexMode_idl__
 
 
 //=============================================================================
 
-module com { module sun { module star { module ucb {
+module com {  module sun {  module star {  module view {
 
 //=============================================================================
-/** An interaction continuation handing back some authentication data.
 
-    <p> This continuation is typically used in conjunction with
-    <type>AuthenticationRequest</type>. </p>
-
-    @since OOo 3.2
-*/
-/*published*/ interface XInteractionSupplyAuthentication2 : XInteractionSupplyAuthentication
+/** These constants specify available duplex modes
+ */
+constants DuplexMode
 {
     //-------------------------------------------------------------------------
-    /** Specifies if 'system credentials' can be obtained and used by the issuer
-        of the authentiction request.
-
-        @param Default
-        Returns the default behavior for system credentials handling (to be
-        initially displayed to the user).
-
-        @returns
-        <true/> if the issuer is able to obtain and use system credentials.
-        <false/> otherwise.
-    */
-    boolean canUseSystemCredentials( [out] boolean Default );
+    /** specifies an unknown duplex mode.
+     */
+    const short UNKNOWN = 0;
 
     //-------------------------------------------------------------------------
-    /** Set a new 'use system credentials' value to hand back.
-
-        @param UseSystemCredentials
-        <true/> means the request issuer shall obtain and use system credentials.
+    /** specifies that there is no duplex mode enabled
      */
-    void setUseSystemCredentials( [in] boolean UseSystemCredentials );
+    const short OFF = 1;
 
+    //-------------------------------------------------------------------------
+    /** specifies a long edge duplex mode
+     */
+    const short LONGEDGE = 2;
+
+    //-------------------------------------------------------------------------
+    /** specifies a short edge duplex mode
+     */
+    const short SHORTEDGE = 3;
 };
 
 //=============================================================================

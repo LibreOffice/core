@@ -63,6 +63,7 @@ IDLFILES=\
     DatabaseDocument.idl \
     DatabaseEnvironment.idl \
     DatabaseInteractionHandler.idl \
+    DatabaseRegistrationEvent.idl \
     DataColumn.idl \
     DataSettings.idl \
     DataSource.idl \
@@ -114,6 +115,8 @@ IDLFILES=\
     XDataAccessDescriptorFactory.idl \
     XDatabaseAccess.idl \
     XDatabaseAccessListener.idl \
+    XDatabaseRegistrations.idl \
+    XDatabaseRegistrationsListener.idl \
     XDatabaseEnvironment.idl \
     XDocumentDataSource.idl \
     XFormDocumentsSupplier.idl \
