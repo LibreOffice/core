@@ -47,6 +47,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/optional.hxx>
 #include <comphelper/servicedecl.hxx>
+#include <comphelper/namecontainer.hxx>
 
 #include <cppcanvas/spritecanvas.hxx>
 #include <cppcanvas/vclfactory.hxx>
@@ -62,6 +63,7 @@
 #include <basegfx/tools/canvastools.hxx>
 
 #include <vcl/font.hxx>
+#include "rtl/ref.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
@@ -74,6 +76,16 @@
 #include <com/sun/star/presentation/XSlideShowListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/drawing/PointSequenceSequence.hpp>
+#include <com/sun/star/drawing/PointSequence.hpp>
+#include <com/sun/star/drawing/XLayer.hpp>
+#include <com/sun/star/drawing/XLayerSupplier.hpp>
+#include <com/sun/star/drawing/XLayerManager.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+
+#include "com/sun/star/uno/Reference.hxx"
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 
 #include "unoviewcontainer.hxx"
@@ -103,8 +115,10 @@
 #include <map>
 #include <vector>
 #include <iterator>
+#include <string>
 #include <algorithm>
 #include <stdio.h>
+#include <iostream>
 
 using namespace com::sun::star;
 using namespace ::slideshow::internal;
@@ -213,6 +227,13 @@ private:
 
 typedef cppu::WeakComponentImplHelper1<presentation::XSlideShow> SlideShowImplBase;
 
+typedef ::std::vector< ::cppcanvas::PolyPolygonSharedPtr> PolyPolygonVector;
+
+/// Maps XDrawPage for annotations persistence
+typedef ::std::map< ::com::sun::star::uno::Reference<
+                                    ::com::sun::star::drawing::XDrawPage>,
+                                    PolyPolygonVector>  PolygonMap;
+
 class SlideShowImpl : private cppu::BaseMutex,
                       public CursorManager,
                       public SlideShowImplBase
@@ -293,9 +314,11 @@ private:
         throw (uno::RuntimeException);
     virtual void SAL_CALL displaySlide(
         uno::Reference<drawing::XDrawPage> const& xSlide,
+        uno::Reference<drawing::XDrawPagesSupplier> const& xDrawPages,
         uno::Reference<animations::XAnimationNode> const& xRootNode,
         uno::Sequence<beans::PropertyValue> const& rProperties )
         throw (uno::RuntimeException);
+    virtual void SAL_CALL registerUserPaintPolygons( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xDocFactory ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL setProperty(
         beans::PropertyValue const& rProperty ) throw (uno::RuntimeException);
     virtual sal_Bool SAL_CALL addView(
@@ -354,9 +377,13 @@ private:
     /// Stop currently running show.
     void stopShow();
 
+    ///Find a polygons vector in maPolygons (map)
+    PolygonMap::iterator findPolygons( uno::Reference<drawing::XDrawPage> const& xDrawPage);
+
     /// Creates a new slide.
     SlideSharedPtr makeSlide(
         uno::Reference<drawing::XDrawPage> const& xDrawPage,
+        uno::Reference<drawing::XDrawPagesSupplier> const& xDrawPages,
         uno::Reference<animations::XAnimationNode> const& xRootNode );
 
     /// Checks whether the given slide/animation node matches mpPrefetchSlide
@@ -429,7 +456,19 @@ private:
     /// map of sal_Int16 values, specifying the mouse cursor for every shape
     ShapeCursorMap                          maShapeCursors;
 
+    //map of vector of Polygons, containing polygons drawn on each slide.
+    PolygonMap                              maPolygons;
+
     boost::optional<RGBColor>               maUserPaintColor;
+
+    boost::optional<double>                 maUserPaintStrokeWidth;
+
+    //changed for the eraser project
+    boost::optional<bool>           maEraseAllInk;
+    boost::optional<bool>           maSwitchPenMode;
+    boost::optional<bool>           maSwitchEraserMode;
+    boost::optional<sal_Int32>          maEraseInk;
+    //end changed
 
     boost::shared_ptr<canvas::tools::ElapsedTime> mpPresTimer;
     ScreenUpdater                           maScreenUpdater;
@@ -459,6 +498,8 @@ private:
     SlideSharedPtr                          mpPrefetchSlide;
     /// slide to be prefetched: best candidate for upcoming slide
     uno::Reference<drawing::XDrawPage>      mxPrefetchSlide;
+    ///  save the XDrawPagesSupplier to retieve polygons
+    uno::Reference<drawing::XDrawPagesSupplier>  mxDrawPagesSupplier;
     /// slide animation to be prefetched:
     uno::Reference<animations::XAnimationNode> mxPrefetchAnimationNode;
 
@@ -550,6 +591,7 @@ SlideShowImpl::SlideShowImpl(
       maShapeEventListeners(),
       maShapeCursors(),
       maUserPaintColor(),
+      maUserPaintStrokeWidth(4.0),
       mpPresTimer( new canvas::tools::ElapsedTime ),
       maScreenUpdater(maViewContainer),
       maEventQueue( mpPresTimer ),
@@ -569,6 +611,7 @@ SlideShowImpl::SlideShowImpl(
       mpCurrentSlide(),
       mpPrefetchSlide(),
       mxPrefetchSlide(),
+      mxDrawPagesSupplier(),
       mxPrefetchAnimationNode(),
       mnCurrentCursor(awt::SystemPointer::ARROW),
       mnWaitSymbolRequestCount(0),
@@ -865,14 +908,38 @@ ActivitySharedPtr SlideShowImpl::createSlideTransition(
             true ));
 }
 
-SlideSharedPtr SlideShowImpl::makeSlide(
-    uno::Reference<drawing::XDrawPage> const& xDrawPage,
-    uno::Reference<animations::XAnimationNode> const& xRootNode )
+PolygonMap::iterator SlideShowImpl::findPolygons( uno::Reference<drawing::XDrawPage> const& xDrawPage)
 {
-    if (! xDrawPage.is())
+    // TODO(P2) : Optimze research in the map.
+    bool bFound = false;
+    PolygonMap::iterator aIter=maPolygons.begin();
+
+
+    while(aIter!=maPolygons.end() && !bFound)
+    {
+        if(aIter->first == xDrawPage)
+            bFound = true;
+        else
+            aIter++;
+    }
+
+    return aIter;
+}
+
+SlideSharedPtr SlideShowImpl::makeSlide(
+    uno::Reference<drawing::XDrawPage> const&          xDrawPage,
+    uno::Reference<drawing::XDrawPagesSupplier> const& xDrawPages,
+    uno::Reference<animations::XAnimationNode> const&  xRootNode )
+{
+    if( !xDrawPage.is() )
         return SlideSharedPtr();
 
+    //Retrieve polygons for the current slide
+    PolygonMap::iterator aIter;
+    aIter = findPolygons(xDrawPage);
+
     const SlideSharedPtr pSlide( createSlide(xDrawPage,
+                                             xDrawPages,
                                              xRootNode,
                                              maEventQueue,
                                              maEventMultiplexer,
@@ -884,7 +951,9 @@ SlideSharedPtr SlideShowImpl::makeSlide(
                                              mxComponentContext,
                                              maShapeEventListeners,
                                              maShapeCursors,
+                                             (aIter != maPolygons.end()) ? aIter->second :  PolyPolygonVector(),
                                              maUserPaintColor ? *maUserPaintColor : RGBColor(),
+                                             *maUserPaintStrokeWidth,
                                              !!maUserPaintColor,
                                              mbImageAnimationsAllowed,
                                              mbDisableAnimationZOrder) );
@@ -949,7 +1018,14 @@ void SlideShowImpl::stopShow()
     // Force-end running animation
     // ===========================
     if (mpCurrentSlide)
+    {
         mpCurrentSlide->hide();
+        //Register polygons in the map
+        if(findPolygons(mpCurrentSlide->getXDrawPage()) != maPolygons.end())
+            maPolygons.erase(mpCurrentSlide->getXDrawPage());
+
+        maPolygons.insert(make_pair(mpCurrentSlide->getXDrawPage(),mpCurrentSlide->getPolygons()));
+    }
 
     // clear all queues
     maEventQueue.clear();
@@ -1024,6 +1100,7 @@ private:
 
 void SlideShowImpl::displaySlide(
     uno::Reference<drawing::XDrawPage> const& xSlide,
+    uno::Reference<drawing::XDrawPagesSupplier> const& xDrawPages,
     uno::Reference<animations::XAnimationNode> const& xRootNode,
     uno::Sequence<beans::PropertyValue> const& rProperties )
     throw (uno::RuntimeException)
@@ -1037,6 +1114,12 @@ void SlideShowImpl::displaySlide(
 
     // precondition: must only be called from the main thread!
     DBG_TESTSOLARMUTEX();
+
+#ifdef ENABLE_PRESENTER_EXTRA_UI
+    mxDrawPagesSupplier = xDrawPages;
+#else
+    mxDrawPagesSupplier = NULL;
+#endif
 
     stopShow();  // MUST call that: results in
     // maUserEventQueue.clear(). What's more,
@@ -1070,9 +1153,7 @@ void SlideShowImpl::displaySlide(
             mpCurrentSlide = mpPrefetchSlide;
         }
         else
-        {
-            mpCurrentSlide = makeSlide( xSlide, xRootNode );
-        }
+            mpCurrentSlide = makeSlide( xSlide, xDrawPages, xRootNode );
 
         OSL_ASSERT( mpCurrentSlide );
         if (mpCurrentSlide)
@@ -1382,6 +1463,129 @@ sal_Bool SlideShowImpl::removeView(
     return true;
 }
 
+void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMultiServiceFactory >& xDocFactory ) throw (uno::RuntimeException)
+{
+    //Retrieve Polygons if user ends presentation by context menu
+    if (mpCurrentSlide)
+    {
+        if(findPolygons(mpCurrentSlide->getXDrawPage()) != maPolygons.end())
+            maPolygons.erase(mpCurrentSlide->getXDrawPage());
+
+        maPolygons.insert(make_pair(mpCurrentSlide->getXDrawPage(),mpCurrentSlide->getPolygons()));
+    }
+
+    //Creating the layer for shapes
+    // query for the XLayerManager
+    uno::Reference< drawing::XLayerSupplier > xLayerSupplier(xDocFactory, uno::UNO_QUERY);
+    uno::Reference< container::XNameAccess > xNameAccess = xLayerSupplier->getLayerManager();
+
+    uno::Reference< drawing::XLayerManager > xLayerManager(xNameAccess, uno::UNO_QUERY);
+    // create a layer and set its properties
+    uno::Reference< drawing::XLayer > xDrawnInSlideshow = xLayerManager->insertNewByIndex(xLayerManager->getCount());
+    uno::Reference< beans::XPropertySet > xLayerPropSet(xDrawnInSlideshow, uno::UNO_QUERY);
+
+    //Layer Name which enables to catch annotations
+    rtl::OUString layerName = rtl::OUString::createFromAscii("DrawnInSlideshow");
+    uno::Any aPropLayer;
+
+    aPropLayer <<= layerName;
+    xLayerPropSet->setPropertyValue(rtl::OUString::createFromAscii("Name"), aPropLayer);
+
+    aPropLayer <<= true;
+    xLayerPropSet->setPropertyValue(rtl::OUString::createFromAscii("IsVisible"), aPropLayer);
+
+    aPropLayer <<= false;
+    xLayerPropSet->setPropertyValue(rtl::OUString::createFromAscii("IsLocked"), aPropLayer);
+
+    PolygonMap::iterator aIter=maPolygons.begin();
+
+    PolyPolygonVector aPolygons;
+    ::cppcanvas::PolyPolygonSharedPtr pPolyPoly;
+    ::basegfx::B2DPolyPolygon b2DPolyPoly;
+
+    //Register polygons for each slide
+    while(aIter!=maPolygons.end())
+    {
+        aPolygons = aIter->second;
+        //Get shapes for the slide
+        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > Shapes(aIter->first, ::com::sun::star::uno::UNO_QUERY);
+        //Retrieve polygons for one slide
+        for( PolyPolygonVector::iterator aIterPoly=aPolygons.begin(),
+                 aEnd=aPolygons.end();
+             aIterPoly!=aEnd; ++aIterPoly )
+        {
+            pPolyPoly = (*aIterPoly);
+            b2DPolyPoly = ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(pPolyPoly->getUNOPolyPolygon());
+
+            //Normally there is only one polygon
+            for(sal_uInt32 i=0; i< b2DPolyPoly.count();i++)
+            {
+                const ::basegfx::B2DPolygon& aPoly =  b2DPolyPoly.getB2DPolygon(i);
+                sal_uInt32 nPoints = aPoly.count();
+
+                if( nPoints > 1)
+                {
+                    //create the PolyLineShape
+                    uno::Reference< uno::XInterface > polyshape(xDocFactory->createInstance(
+                                                                    rtl::OUString::createFromAscii("com.sun.star.drawing.PolyLineShape") ) );
+                    uno::Reference< drawing::XShape > rPolyShape(polyshape, uno::UNO_QUERY);
+
+                    //Add the shape to the slide
+                    Shapes->add(rPolyShape);
+
+                    //Retrieve shape properties
+                    uno::Reference< beans::XPropertySet > aXPropSet = uno::Reference< beans::XPropertySet >( rPolyShape, uno::UNO_QUERY );
+                    //Construct a sequence of points sequence
+                    drawing::PointSequenceSequence aRetval;
+                    //Create only one sequence for one polygon
+                    aRetval.realloc( 1 );
+                    // Retrieve the sequence of points from aRetval
+                    drawing::PointSequence* pOuterSequence = aRetval.getArray();
+                    // Create 2 points in this sequence
+                    pOuterSequence->realloc(nPoints);
+                    // Get these points which are in an array
+                    awt::Point* pInnerSequence = pOuterSequence->getArray();
+                    for( sal_uInt32 n = 0; n < nPoints; n++ )
+                    {
+                        //Create a point from the polygon
+                        *pInnerSequence++ = awt::Point( aPoly.getB2DPoint(n).getX(), aPoly.getB2DPoint(n).getY());
+                    }
+
+                    //Fill the properties
+                    //Give the built PointSequenceSequence.
+                    uno::Any aParam;
+                    aParam <<= aRetval;
+                    aXPropSet->setPropertyValue( rtl::OUString::createFromAscii("PolyPolygon"), aParam );
+
+                    //LineStyle : SOLID by default
+                    uno::Any            aAny;
+                    drawing::LineStyle  eLS;
+                    eLS = drawing::LineStyle_SOLID;
+                    aAny <<= eLS;
+                    aXPropSet->setPropertyValue( rtl::OUString::createFromAscii("LineStyle"), aAny );
+
+                    //LineColor
+                    sal_uInt32          nLineColor;
+                    nLineColor = pPolyPoly->getRGBALineColor();
+                    //Transform polygon color from RRGGBBAA to AARRGGBB
+                    aAny <<= RGBAColor2UnoColor(nLineColor);
+                    aXPropSet->setPropertyValue( rtl::OUString::createFromAscii("LineColor"), aAny );
+
+                    //LineWidth
+                    double              fLineWidth;
+                    fLineWidth = pPolyPoly->getStrokeWidth();
+                    aAny <<= (sal_Int32)fLineWidth;
+                    aXPropSet->setPropertyValue( rtl::OUString::createFromAscii("LineWidth"), aAny );
+
+                    // make polygons special
+                    xLayerManager->attachShapeToLayer(rPolyShape, xDrawnInSlideshow);
+                }
+            }
+        }
+        ++aIter;
+    }
+}
+
 sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
     throw (uno::RuntimeException)
 {
@@ -1429,6 +1633,126 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
         if( mnCurrentCursor == awt::SystemPointer::ARROW )
             resetCursor();
 
+        return true;
+    }
+
+    //adding support for erasing features in UserPaintOverlay
+    if (rProperty.Name.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("EraseAllInk") ))
+    {
+        bool nEraseAllInk(false);
+        if (rProperty.Value >>= nEraseAllInk)
+        {
+            OSL_ENSURE( mbMouseVisible,
+                        "setProperty(): User paint overrides invisible mouse" );
+
+            // enable user paint
+            maEraseAllInk.reset( nEraseAllInk );
+            maEventMultiplexer.notifyEraseAllInk( *maEraseAllInk );
+        }
+        else
+        {
+        // disable user paint
+        maEraseAllInk.reset();
+        maEventMultiplexer.notifyUserPaintDisabled();
+        }
+
+        if( mnCurrentCursor == awt::SystemPointer::ARROW )
+        resetCursor();
+
+        return true;
+    }
+
+    if (rProperty.Name.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("SwitchPenMode") ))
+    {
+        bool nSwitchPenMode(false);
+        if (rProperty.Value >>= nSwitchPenMode)
+        {
+            OSL_ENSURE( mbMouseVisible,
+                        "setProperty(): User paint overrides invisible mouse" );
+
+            if(nSwitchPenMode == true){
+            // Switch to Pen Mode
+            maSwitchPenMode.reset( nSwitchPenMode );
+            maEventMultiplexer.notifySwitchPenMode();
+            }
+        }
+
+        if( mnCurrentCursor == awt::SystemPointer::ARROW )
+            resetCursor();
+        return true;
+    }
+
+
+    if (rProperty.Name.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("SwitchEraserMode") ))
+    {
+        bool nSwitchEraserMode(false);
+        if (rProperty.Value >>= nSwitchEraserMode)
+        {
+            OSL_ENSURE( mbMouseVisible,
+                        "setProperty(): User paint overrides invisible mouse" );
+            if(nSwitchEraserMode == true){
+            // switch to Eraser mode
+            maSwitchEraserMode.reset( nSwitchEraserMode );
+            maEventMultiplexer.notifySwitchEraserMode();
+            }
+        }
+
+        if( mnCurrentCursor == awt::SystemPointer::ARROW )
+            resetCursor();
+        return true;
+    }
+
+
+
+    if (rProperty.Name.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("EraseInk") ))
+    {
+        sal_Int32 nEraseInk(100);
+        if (rProperty.Value >>= nEraseInk)
+        {
+            OSL_ENSURE( mbMouseVisible,
+                        "setProperty(): User paint overrides invisible mouse" );
+
+            // enable user paint
+            maEraseInk.reset( nEraseInk );
+            maEventMultiplexer.notifyEraseInkWidth( *maEraseInk );
+        }
+        else
+        {
+            // disable user paint
+            maEraseInk.reset();
+            maEventMultiplexer.notifyUserPaintDisabled();
+        }
+
+        if( mnCurrentCursor == awt::SystemPointer::ARROW )
+            resetCursor();
+
+        return true;
+    }
+
+    // new Property for pen's width
+    if (rProperty.Name.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("UserPaintStrokeWidth") ))
+    {
+        double nWidth(4.0);
+        if (rProperty.Value >>= nWidth)
+        {
+            OSL_ENSURE( mbMouseVisible,"setProperty(): User paint overrides invisible mouse" );
+            // enable user paint stroke width
+            maUserPaintStrokeWidth.reset( nWidth );
+            maEventMultiplexer.notifyUserPaintStrokeWidth( *maUserPaintStrokeWidth );
+        }
+        else
+        {
+            // disable user paint stroke width
+            maUserPaintStrokeWidth.reset();
+            maEventMultiplexer.notifyUserPaintDisabled();
+        }
+        if( mnCurrentCursor == awt::SystemPointer::ARROW )
+            resetCursor();
         return true;
     }
 
@@ -1940,6 +2264,9 @@ void SlideShowImpl::notifySlideAnimationsEnded()
 {
     osl::MutexGuard const guard( m_aMutex );
 
+    //Draw polygons above animations
+    mpCurrentSlide->drawPolygons();
+
     OSL_ENSURE( !isDisposed(), "### already disposed!" );
 
     // This struct will receive the (interruptable) event,
@@ -2023,7 +2350,7 @@ void SlideShowImpl::notifySlideAnimationsEnded()
         if (! matches( mpPrefetchSlide,
                        mxPrefetchSlide, mxPrefetchAnimationNode ))
         {
-            mpPrefetchSlide = makeSlide( mxPrefetchSlide,
+            mpPrefetchSlide = makeSlide( mxPrefetchSlide, mxDrawPagesSupplier,
                                          mxPrefetchAnimationNode );
         }
         if (mpPrefetchSlide)
@@ -2121,6 +2448,8 @@ bool SlideShowImpl::handleAnimationEvent( const AnimationNodeSharedPtr& rNode )
             boost::bind( &animations::XAnimationListener::endEvent,
                          _1,
                          boost::cref(xNode) ));
+        if(mpCurrentSlide->isPaintOverlayActive())
+           mpCurrentSlide->drawPolygons();
         break;
     default:
         break;
