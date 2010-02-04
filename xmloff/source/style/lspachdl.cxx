@@ -40,10 +40,6 @@
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
 
-#ifndef _XMLOFF_XMLEMENT_HXX
-#include <xmloff/xmlelement.hxx>
-#endif
-
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 

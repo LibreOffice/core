@@ -35,7 +35,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <xmloff/xmluconv.hxx>
-#include <xmlkywd.hxx>
 #include <xmloff/xmltoken.hxx>
 
 using ::rtl::OUString;
@@ -80,7 +79,7 @@ sal_Bool XMLClipPropertyHandler::importXML( const OUString& rStrImpValue, uno::A
     sal_Bool bRet = sal_False;
     sal_Int32 nLen = rStrImpValue.getLength();
     if( nLen > 6 &&
-        0 == rStrImpValue.compareToAscii( sXML_rect, 4 ) &&
+        0 == rStrImpValue.compareTo( GetXMLToken(XML_RECT), 4 ) &&
         rStrImpValue[4] == '(' &&
         rStrImpValue[nLen-1] == ')' )
     {

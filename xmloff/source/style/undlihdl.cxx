@@ -37,13 +37,7 @@
 
 
 #include <com/sun/star/uno/Any.hxx>
-#ifndef _COM_SUN_STAR_AWT_FONTUNDERLINE_HPP
 #include <com/sun/star/awt/FontUnderline.hpp>
-#endif
-
-#ifndef _XMLOFF_XMLEMENT_HXX
-#include <xmloff/xmlelement.hxx>
-#endif
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;

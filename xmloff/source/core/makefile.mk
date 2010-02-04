@@ -42,12 +42,6 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 .INCLUDE: $(PRJ)$/util$/makefile.pmk
 
-# --- to build xmlkywd.obj in obj, too -----------------------------
-
-OBJFILES =  $(OBJ)$/xmlkywd.obj
-LIB2TARGET =$(LB)$/xmlkywd.lib
-LIB2OBJFILES  =$(OBJFILES)
-
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
@@ -63,7 +57,6 @@ SLOFILES =	\
         $(SLO)$/xmlexp.obj		\
         $(SLO)$/xmlictxt.obj	\
         $(SLO)$/xmlimp.obj		\
-        $(SLO)$/xmlkywd.obj		\
         $(SLO)$/xmltkmap.obj	\
         $(SLO)$/xmltoken.obj	\
         $(SLO)$/xmluconv.obj	\

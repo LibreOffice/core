@@ -37,10 +37,6 @@
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Any.hxx>
-
-#ifndef _XMLOFF_XMLEMENT_HXX
-#include <xmloff/xmlelement.hxx>
-#endif
 #include <com/sun/star/lang/Locale.hpp>
 
 using ::rtl::OUString;

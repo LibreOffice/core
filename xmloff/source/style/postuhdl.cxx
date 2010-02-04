@@ -38,10 +38,6 @@
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <tools/fontenum.hxx>
 
-#ifndef _XMLOFF_XMLEMENT_HXX
-#include <xmloff/xmlelement.hxx>
-#endif
-
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 

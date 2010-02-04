@@ -51,11 +51,6 @@ XMLRectangleMembersHdl::XMLRectangleMembersHdl( sal_Int32 nType )
 {
 }
 
-    sal_Int32 X;
-    sal_Int32 Y;
-    sal_Int32 Width;
-    sal_Int32 Height;
-
 XMLRectangleMembersHdl::~XMLRectangleMembersHdl()
 {
 }

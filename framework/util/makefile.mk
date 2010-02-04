@@ -83,7 +83,6 @@ LIB2OBJFILES=   \
                 $(SLO)$/statusbardocumenthandler.obj            \
                 $(SLO)$/toolboxconfiguration.obj                \
                 $(SLO)$/toolboxdocumenthandler.obj              \
-                $(SLO)$/toolboxlayoutdocumenthandler.obj        \
                 $(SLO)$/imagesconfiguration.obj                 \
                 $(SLO)$/imagesdocumenthandler.obj               \
                 $(SLO)$/xmlnamespaces.obj                       \

@@ -53,14 +53,11 @@
 #include <xmloff/txtimp.hxx>
 #include <xmloff/nmspmap.hxx>
 #include "xmlnmspe.hxx"
-#include "xmlkywd.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/prstylei.hxx>
 #include "xmlerror.hxx"
 #include <xmloff/xmluconv.hxx>
-#include <tools/debug.hxx>
 #include <rtl/ustring.hxx>
-#include <tools/debug.hxx>
 
 
 using namespace ::com::sun::star::uno;
@@ -88,15 +85,15 @@ static const sal_Char* aIndexServiceMap[] =
     "com.sun.star.text.IllustrationsIndex"
 };
 
-static const sal_Char* aIndexSourceElementMap[] =
+static const XMLTokenEnum aIndexSourceElementMap[] =
 {
-    sXML_table_of_content_source,
-    sXML_alphabetical_index_source,
-    sXML_table_index_source,
-    sXML_object_index_source,
-    sXML_bibliography_source,
-    sXML_user_index_source,
-    sXML_illustration_index_source
+    XML_TABLE_OF_CONTENT_SOURCE,
+    XML_ALPHABETICAL_INDEX_SOURCE,
+    XML_TABLE_INDEX_SOURCE,
+    XML_OBJECT_INDEX_SOURCE,
+    XML_BIBLIOGRAPHY_SOURCE,
+    XML_USER_INDEX_SOURCE,
+    XML_ILLUSTRATION_INDEX_SOURCE
 };
 
 SvXMLEnumMapEntry __READONLY_DATA aIndexTypeMap[] =
@@ -120,7 +117,6 @@ XMLIndexTOCContext::XMLIndexTOCContext(
 ,   sTitle(RTL_CONSTASCII_USTRINGPARAM("Title"))
 ,   sIsProtected(RTL_CONSTASCII_USTRINGPARAM("IsProtected"))
 ,   sName(RTL_CONSTASCII_USTRINGPARAM("Name"))
-,   pSourceElementName(NULL)
 ,   bValid(sal_False)
 {
     if (XML_NAMESPACE_TEXT == nPrfx)
@@ -129,13 +125,12 @@ XMLIndexTOCContext::XMLIndexTOCContext(
         if (SvXMLUnitConverter::convertEnum(nTmp, rLocalName, aIndexTypeMap))
         {
             // check for array index:
-            DBG_ASSERT(nTmp < (sizeof(aIndexServiceMap)/sizeof(sal_Char*)), "index out of range");
-            DBG_ASSERT(sizeof(aIndexServiceMap) ==
+            OSL_ENSURE(nTmp < (sizeof(aIndexServiceMap)/sizeof(sal_Char*)), "index out of range");
+            OSL_ENSURE(sizeof(aIndexServiceMap) ==
                        sizeof(aIndexSourceElementMap),
                        "service and source element maps must be same size");
 
-            eIndexType = (enum IndexTypeEnum)nTmp;
-            pSourceElementName = aIndexSourceElementMap[eIndexType];
+            eIndexType = static_cast<IndexTypeEnum>(nTmp);
             bValid = sal_True;
         }
     }
@@ -329,7 +324,7 @@ SvXMLImportContext* XMLIndexTOCContext::CreateChildContext(
                     xBodyContextRef = pContext;
                 }
             }
-            else if (0 == rLocalName.compareToAscii(pSourceElementName))
+            else if (IsXMLToken(rLocalName, aIndexSourceElementMap[eIndexType]))
             {
                 // instantiate source context for the appropriate index type
                 switch (eIndexType)
@@ -370,7 +365,7 @@ SvXMLImportContext* XMLIndexTOCContext::CreateChildContext(
                         break;
 
                     default:
-                        DBG_ERROR("index type not implemented");
+                        OSL_ENSURE(false, "index type not implemented");
                         break;
                 }
             }
