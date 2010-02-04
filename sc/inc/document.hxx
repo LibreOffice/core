@@ -291,6 +291,7 @@ private:
                         mxFormulaParserPool;            /// Pool for all external formula parsers used by this document.
 
     String              aDocName;                       // opt: Dokumentname
+    String              aDocCodeName;                       // opt: Dokumentname
     ScRangePairListRef  xColNameRanges;
     ScRangePairListRef  xRowNameRanges;
 
@@ -435,6 +436,8 @@ public:
 
     SC_DLLPUBLIC const String&  GetName() const { return aDocName; }
     void            SetName( const String& r ) { aDocName = r; }
+    const String&   GetCodeName() const { return aDocCodeName; }
+    void            SetCodeName( const String& r ) { aDocCodeName = r; }
 
     void            GetDocStat( ScDocStat& rDocStat );
 
@@ -520,6 +523,8 @@ public:
 
     SC_DLLPUBLIC BOOL           HasTable( SCTAB nTab ) const;
     SC_DLLPUBLIC BOOL           GetName( SCTAB nTab, String& rName ) const;
+    SC_DLLPUBLIC BOOL           GetCodeName( SCTAB nTab, String& rName ) const;
+    SC_DLLPUBLIC BOOL           SetCodeName( SCTAB nTab, String& rName );
     SC_DLLPUBLIC BOOL           GetTable( const String& rName, SCTAB& rTab ) const;
     SC_DLLPUBLIC inline SCTAB   GetTableCount() const { return nMaxTableNumber; }
     SvNumberFormatterIndexTable* GetFormatExchangeList() const { return pFormatExchangeList; }

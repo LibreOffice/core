@@ -52,6 +52,7 @@ class XclImpStream;
 
 class ImportExcel8 : public ImportExcel
 {
+        SCTAB mnTab;
     protected:
         ExcScenarioList         aScenList;
 
