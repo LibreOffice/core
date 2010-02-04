@@ -5174,7 +5174,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                             else
                             {
                                 fNumber = 0.0;
-                                seqAdjustmentValues[ 0 ].Value <<= fNumber;
+                                seqAdjustmentValues[ 1 ].Value <<= fNumber;
                                 seqAdjustmentValues[ 1 ].State = com::sun::star::beans::PropertyState_DIRECT_VALUE;
                             }
 
@@ -5310,7 +5310,9 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         SdrObject::Free( pRet );
 
                         pRet = new SdrEdgeObj();
+                        ApplyAttributes( rSt, aSet, aObjData );
                         pRet->SetLogicRect( aObjData.aBoundRect );
+                        pRet->SetMergedItemSet(aSet);
 
                         // Konnektoren
                         MSO_ConnectorStyle eConnectorStyle = (MSO_ConnectorStyle)GetPropertyValue( DFF_Prop_cxstyle, mso_cxstyleStraight );
