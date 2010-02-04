@@ -44,6 +44,7 @@ SLOFILES = \
     $(SLO)/childaccess.obj \
     $(SLO)/components.obj \
     $(SLO)/configurationprovider.obj \
+    $(SLO)/configurationregistry.obj \
     $(SLO)/data.obj \
     $(SLO)/defaultprovider.obj \
     $(SLO)/groupnode.obj \

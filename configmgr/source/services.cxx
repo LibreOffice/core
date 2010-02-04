@@ -44,6 +44,7 @@
 #include "sal/types.h"
 
 #include "configurationprovider.hxx"
+#include "configurationregistry.hxx"
 #include "defaultprovider.hxx"
 
 namespace {
@@ -65,6 +66,9 @@ static cppu::ImplementationEntry const services[] = {
     { &dummy, &configmgr::default_provider::getImplementationName,
       &configmgr::default_provider::getSupportedServiceNames,
       &configmgr::default_provider::createFactory, 0, 0 },
+    { &dummy, &configmgr::configuration_registry::getImplementationName,
+      &configmgr::configuration_registry::getSupportedServiceNames,
+      &configmgr::configuration_registry::createFactory, 0, 0 },
     { 0, 0, 0, 0, 0, 0 }
 };
 
