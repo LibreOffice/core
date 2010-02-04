@@ -24,7 +24,7 @@ class dbfTools
     */
     static public XPropertySet queryPropertySet( Object aComp )
     {
-        return (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class, aComp );
+        return UnoRuntime.queryInterface( XPropertySet.class, aComp );
     }
 
     /* ------------------------------------------------------------------ */
@@ -32,7 +32,7 @@ class dbfTools
     */
     static public XIndexContainer queryIndexContainer( Object aComp )
     {
-        return (XIndexContainer)UnoRuntime.queryInterface( XIndexContainer.class, aComp );
+        return UnoRuntime.queryInterface( XIndexContainer.class, aComp );
     }
 
     /* ------------------------------------------------------------------ */
@@ -40,15 +40,16 @@ class dbfTools
     */
     static public XComponent queryComponent( Object aComp )
     {
-        return (XComponent)UnoRuntime.queryInterface( XComponent.class, aComp );
+        return UnoRuntime.queryInterface( XComponent.class, aComp );
     }
 
     /* ------------------------------------------------------------------ */
     /** retrieves the parent of the given object
     */
+    @SuppressWarnings("unchecked")
     static Object getParent( Object aComponent, Class aInterfaceClass )
     {
-        XChild xAsChild = (XChild)UnoRuntime.queryInterface( XChild.class, aComponent );
+        XChild xAsChild = UnoRuntime.queryInterface( XChild.class, aComponent );
         return UnoRuntime.queryInterface( aInterfaceClass, xAsChild.getParent() );
     }
 };
