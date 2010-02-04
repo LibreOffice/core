@@ -31,7 +31,7 @@
 #ifndef SC_APPLUNO_HXX
 #define SC_APPLUNO_HXX
 
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/XRecentFunctions.hpp>

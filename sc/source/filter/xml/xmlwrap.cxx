@@ -45,8 +45,8 @@
 #include <svx/xmlgrhlp.hxx>
 #include <svtools/sfxecode.hxx>
 #include <sfx2/frame.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/itemset.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <tools/urlobj.hxx>
 #include <com/sun/star/container/XChild.hpp>
@@ -71,7 +71,7 @@
 
 #include <svx/xmleohlp.hxx>
 #include <rtl/logfile.hxx>
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 
 #include "document.hxx"
 #include "xmlwrap.hxx"
@@ -265,7 +265,24 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
     }
     catch( xml::sax::SAXParseException& r )
     {
-        if( bEncrypted )
+        // sax parser sends wrapped exceptions,
+        // try to find the original one
+        xml::sax::SAXException aSaxEx = *(xml::sax::SAXException*)(&r);
+        sal_Bool bTryChild = sal_True;
+
+        while( bTryChild )
+        {
+            xml::sax::SAXException aTmp;
+            if ( aSaxEx.WrappedException >>= aTmp )
+                aSaxEx = aTmp;
+            else
+                bTryChild = sal_False;
+        }
+
+        packages::zip::ZipIOException aBrokenPackage;
+        if ( aSaxEx.WrappedException >>= aBrokenPackage )
+            return ERRCODE_IO_BROKENPACKAGE;
+        else if( bEncrypted )
             nReturn = ERRCODE_SFX_WRONGPASSWORD;
         else
         {
@@ -298,7 +315,10 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
     }
     catch( xml::sax::SAXException& r )
     {
-        if( bEncrypted )
+        packages::zip::ZipIOException aBrokenPackage;
+        if ( r.WrappedException >>= aBrokenPackage )
+            return ERRCODE_IO_BROKENPACKAGE;
+        else if( bEncrypted )
             nReturn = ERRCODE_SFX_WRONGPASSWORD;
         else
         {
@@ -717,12 +737,8 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
         {
             // old stream is still in this file's storage - open read-only
 
-            SfxMedium* pSrcMed = rDoc.GetDocumentShell()->GetMedium();
-            String aSrcURL = pSrcMed->GetOrigURL();
-
-            // SfxMedium must not be read-only, or it will create a temp file in GetStorage
-            SfxMedium aTmpMedium( aSrcURL, STREAM_READWRITE, FALSE, NULL, NULL );
-            uno::Reference<embed::XStorage> xTmpStorage = aTmpMedium.GetStorage();
+            // #i106854# use the document's storage directly, without a temporary SfxMedium
+            uno::Reference<embed::XStorage> xTmpStorage = rDoc.GetDocumentShell()->GetStorage();
             uno::Reference<io::XStream> xSrcStream;
             uno::Reference<io::XInputStream> xSrcInput;
             try

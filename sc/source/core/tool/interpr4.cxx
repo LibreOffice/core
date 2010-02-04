@@ -40,7 +40,7 @@
 #include <basic/sbmod.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/sbx.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/logfile.hxx>
 #include <stdlib.h>
@@ -3279,7 +3279,7 @@ void ScInterpreter::ScCalcTeam()
     if( !bShown )
     {
         ShowTheTeam();
-        String aTeam( RTL_CONSTASCII_USTRINGPARAM( "Ballach, Nebel, Rentz, Rathke, Marmion" ) );
+        String aTeam( RTL_CONSTASCII_USTRINGPARAM( "Nebel, Benisch, Rentz, Rathke" ) );
         if ( (GetByte() == 1) && ::rtl::math::approxEqual( GetDouble(), 1996) )
             aTeam.AppendAscii( "   (a word with 'B': -Olk, -Nietsch, -Daeumling)" );
         PushString( aTeam );

@@ -37,7 +37,7 @@
 
 #include <tools/debug.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>
 

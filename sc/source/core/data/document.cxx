@@ -46,9 +46,9 @@
 #include <svx/svdocapt.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
-#include <svtools/poolcach.hxx>
-#include <svtools/saveopt.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/poolcach.hxx>
+#include <unotools/saveopt.hxx>
+#include <svl/zforlist.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <tools/tenccvt.hxx>
@@ -476,6 +476,12 @@ BOOL ScDocument::RenameTab( SCTAB nTab, const String& rName, BOOL /* bUpdateRef 
                 if ( pChartListenerCollection )
                     pChartListenerCollection->UpdateChartsContainingTab( nTab );
                 pTab[nTab]->SetName(rName);
+
+                // If formulas refer to the renamed sheet, the TokenArray remains valid,
+                // but the XML stream must be re-generated.
+                for (i=0; i<=MAXTAB; ++i)
+                    if (pTab[i] && pTab[i]->IsStreamValid())
+                        pTab[i]->SetStreamValid( FALSE );
             }
         }
     return bValid;
@@ -633,6 +639,32 @@ BOOL ScDocument::GetTableArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) cons
     return FALSE;
 }
 
+bool ScDocument::ShrinkToDataArea(SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow) const
+{
+    if (!ValidTab(nTab) || !pTab[nTab])
+        return false;
+
+    SCCOL nCol1, nCol2;
+    SCROW nRow1, nRow2;
+    pTab[nTab]->GetFirstDataPos(nCol1, nRow1);
+    pTab[nTab]->GetLastDataPos(nCol2, nRow2);
+
+    if (nCol1 > nCol2 || nRow1 > nRow2)
+        // invalid range.
+        return false;
+
+    // Make sure the area only shrinks, and doesn't grow.
+    if (rStartCol < nCol1)
+        rStartCol = nCol1;
+    if (nCol2 < rEndCol)
+        rEndCol = nCol2;
+    if (rStartRow < nRow1)
+        rStartRow = nRow1;
+    if (nRow2 < rEndRow)
+        rEndRow = nRow2;
+
+    return true;  // success!
+}
 
 //  zusammenhaengender Bereich
 
@@ -2877,6 +2909,26 @@ void ScDocument::SetTableOpDirty( const ScRange& rRange )
     for (SCTAB i=rRange.aStart.Tab(); i<=nTab2; i++)
         if (pTab[i]) pTab[i]->SetTableOpDirty( rRange );
     SetAutoCalc( bOldAutoCalc );
+}
+
+
+void ScDocument::InterpretDirtyCells( const ScRangeList& rRanges )
+{
+    ULONG nRangeCount = rRanges.Count();
+    for (ULONG nPos=0; nPos<nRangeCount; nPos++)
+    {
+        ScCellIterator aIter( this, *rRanges.GetObject(nPos) );
+        ScBaseCell* pCell = aIter.GetFirst();
+        while (pCell)
+        {
+            if (pCell->GetCellType() == CELLTYPE_FORMULA)
+            {
+                if ( static_cast<ScFormulaCell*>(pCell)->GetDirty() && GetAutoCalc() )
+                    static_cast<ScFormulaCell*>(pCell)->Interpret();
+            }
+            pCell = aIter.GetNext();
+        }
+    }
 }
 
 

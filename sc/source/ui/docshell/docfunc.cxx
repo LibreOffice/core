@@ -48,8 +48,8 @@
 #include <vcl/sound.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/waitobj.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/PasswordHelper.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/PasswordHelper.hxx>
 
 #include <list>
 
@@ -2016,7 +2016,7 @@ BOOL ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
                     nScenarioCount ++;
 
                 pDoc->CopyToDocument( nUndoStartX, nUndoStartY, i, nUndoEndX, nUndoEndY, i+nScenarioCount,
-                    IDF_ALL, FALSE, pUndoDoc );
+                    IDF_ALL | IDF_NOCAPTIONS, FALSE, pUndoDoc );
             }
         }
 
@@ -2277,7 +2277,7 @@ BOOL ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
     }
     ScDrawLayer::SetGlobalDrawPersist(aDragShellRef);
 
-    ScClipParam aClipParam(ScRange(nStartCol, nStartRow, 0, nEndCol, nEndRow, 0), false);
+    ScClipParam aClipParam(ScRange(nStartCol, nStartRow, 0, nEndCol, nEndRow, 0), bCut);
     pDoc->CopyToClip(aClipParam, pClipDoc, &aSourceMark, false, bScenariosAdded, true);
 
     ScDrawLayer::SetGlobalDrawPersist(NULL);
@@ -3079,6 +3079,9 @@ BOOL ScDocFunc::InsertPageBreak( BOOL bColumn, const ScAddress& rPos,
         pDoc->SetRowFlags( static_cast<SCROW>(nPos), nTab, nFlags );
     pDoc->UpdatePageBreaks( nTab );
 
+    if (pDoc->IsStreamValid(nTab))
+        pDoc->SetStreamValid(nTab, FALSE);
+
     if (bColumn)
     {
         rDocShell.PostPaint( static_cast<SCCOL>(nPos)-1, 0, nTab, MAXCOL, MAXROW, nTab, PAINT_GRID );
@@ -3134,6 +3137,9 @@ BOOL ScDocFunc::RemovePageBreak( BOOL bColumn, const ScAddress& rPos,
     else
         pDoc->SetRowFlags( static_cast<SCROW>(nPos), nTab, nFlags );
     pDoc->UpdatePageBreaks( nTab );
+
+    if (pDoc->IsStreamValid(nTab))
+        pDoc->SetStreamValid(nTab, FALSE);
 
     if (bColumn)
     {
@@ -3577,7 +3583,7 @@ BOOL ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
             //! auch bei Undo selektierte Tabellen beruecksichtigen
             pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
             pUndoDoc->InitUndo( pDoc, nStartTab, nEndTab );
-            pDoc->CopyToDocument( rRange, IDF_ALL, FALSE, pUndoDoc );
+            pDoc->CopyToDocument( rRange, IDF_ALL & ~IDF_NOTE, FALSE, pUndoDoc );
         }
 
         // use TokenArray if given, string (and flags) otherwise
@@ -3665,7 +3671,7 @@ BOOL ScDocFunc::TabOp( const ScRange& rRange, const ScMarkData* pTabMark,
             //! auch bei Undo selektierte Tabellen beruecksichtigen
             ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
             pUndoDoc->InitUndo( pDoc, nStartTab, nEndTab );
-            pDoc->CopyToDocument( rRange, IDF_ALL, FALSE, pUndoDoc );
+            pDoc->CopyToDocument( rRange, IDF_ALL & ~IDF_NOTE, FALSE, pUndoDoc );
 
             rDocShell.GetUndoManager()->AddUndoAction(
                     new ScUndoTabOp( &rDocShell,

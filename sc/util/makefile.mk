@@ -41,10 +41,6 @@ USE_DEFFILE=TRUE
 
 .INCLUDE :  settings.mk
 
-.IF "$(OS)"=="IRIX"
-LINKFLAGS+=-Wl,-LD_LAYOUT:lgot_buffer=30
-.ENDIF
-
 # --- Resourcen ----------------------------------------------------
 
 RESLIB1LIST=\
@@ -58,6 +54,7 @@ RESLIB1LIST=\
     $(SRS)$/formdlgs.srs \
     $(SRS)$/pagedlg.srs	\
     $(SRS)$/navipi.srs	\
+    $(SRS)$/cctrl.srs	\
     $(SOLARCOMMONRESDIR)$/sfx.srs
 
 RESLIB1NAME=sc
@@ -78,6 +75,7 @@ SHL1IMPLIB= sci
 
 # dynamic libraries
 SHL1STDLIBS=       \
+        $(VBAHELPERLIB) \
     $(BASICLIB)	\
     $(SFXLIB)		\
     $(SVTOOLLIB)	\
@@ -189,7 +187,7 @@ SHL6STDLIBS= \
     $(SVTOOLLIB)	\
     $(SVLLIB)		\
     $(SVXCORELIB)		\
-    $(SVXMSFILTERLIB)		\
+    $(MSFILTERLIB)		\
     $(SVXLIB)		\
     $(BASEGFXLIB) \
     $(DRAWINGLAYERLIB) \
@@ -229,8 +227,9 @@ SHL8STDLIBS= \
             $(I18NISOLANGLIB) \
             $(COMPHELPERLIB) \
             $(CPPULIB) \
-            $(SALLIB)
-
+            $(SALLIB) \
+            $(FORLIB) \
+            $(FORUILIB)
 .IF "$(ENABLE_LAYOUT)" == "TRUE"
 SHL8STDLIBS+=$(TKLIB)
 .ENDIF # ENABLE_LAYOUT == TRUE
@@ -300,6 +299,7 @@ SHL9RPATH=OOO
 .ENDIF
 
 SHL9STDLIBS= \
+        $(VBAHELPERLIB) \
         $(CPPUHELPERLIB) \
         $(VCLLIB) \
         $(CPPULIB) \
@@ -315,6 +315,7 @@ SHL9STDLIBS= \
         $(ISCLIB) \
         $(VCLLIB) \
         $(TKLIB) \
+        $(SVXMSFILTERLIB)		\
         $(FORLIB)
 
 SHL9DEPN=$(SHL1TARGETN) $(SHL8TARGETN)

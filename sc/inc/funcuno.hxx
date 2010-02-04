@@ -35,7 +35,7 @@
 #include <com/sun/star/sheet/XFunctionAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <cppuhelper/implbase3.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 
 class ScDocument;
 class ScDocOptions;

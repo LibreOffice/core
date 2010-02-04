@@ -64,10 +64,10 @@
 #include <svtools/parhtml.hxx>
 #include <rtl/ustring.h>
 #include <rtl/logfile.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <vcl/window.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <tools/urlobj.hxx>
 #include <vos/mutex.hxx>
 #include <svtools/sfxecode.hxx>
@@ -350,7 +350,7 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
             // maybe that IsStorage() already created an error!
             if ( bIsStorage )
             {
-                uno::Reference < embed::XStorage > xStorage(aMedium.GetStorage());
+                uno::Reference < embed::XStorage > xStorage(aMedium.GetStorage( sal_False ));
                 if ( aMedium.GetLastStorageCreationState() != ERRCODE_NONE )
                 {
                     // error during storage creation means _here_ that the medium

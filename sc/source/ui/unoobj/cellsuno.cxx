@@ -50,8 +50,8 @@
 #include <svx/unotext.hxx>
 #include <svx/svdpage.hxx>
 #include <sfx2/bindings.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <rtl/uuid.h>
 #include <float.h>              // DBL_MIN
 
@@ -1093,7 +1093,7 @@ BOOL lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
     {
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         pUndoDoc->InitUndo( pDoc, nTab, nTab );
-        pDoc->CopyToDocument( rRange, IDF_CONTENTS, FALSE, pUndoDoc );
+        pDoc->CopyToDocument( rRange, IDF_CONTENTS|IDF_NOCAPTIONS, FALSE, pUndoDoc );
     }
 
     pDoc->DeleteAreaTab( nStartCol, nStartRow, nEndCol, nEndRow, nTab, IDF_CONTENTS );

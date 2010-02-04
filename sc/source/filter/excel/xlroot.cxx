@@ -33,8 +33,8 @@
 #include "xlroot.hxx"
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <vcl/svapp.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/stritem.hxx>
+#include <svl/languageoptions.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/docfile.hxx>
@@ -54,7 +54,7 @@
 #include "xlstyle.hxx"
 #include "xlchart.hxx"
 #include "xltracer.hxx"
-
+#include <unotools/useroptions.hxx>
 #include "root.hxx"
 
 namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
@@ -95,7 +95,10 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     mnScTab( 0 ),
     mbExport( bExport )
 {
-    // default script type, e.g. for empty cells
+ maUserName = SvtUserOptions().GetLastName();
+    if( maUserName.Len() == 0 )
+        maUserName = CREATE_STRING( "Calc" );
+
     switch( ScGlobal::GetDefaultScriptType() )
     {
         case SCRIPTTYPE_LATIN:      mnDefApiScript = ApiScriptType::LATIN;      break;

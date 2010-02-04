@@ -40,7 +40,7 @@
 #include <tools/debug.hxx>
 #include <rtl/math.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 
 #include "dpgroup.hxx"
 #include "collect.hxx"
@@ -71,6 +71,7 @@ using ::rtl::OUStringHash;
 using ::std::vector;
 using ::std::hash_set;
 using ::std::hash_map;
+using ::boost::shared_ptr;
 
 #define D_TIMEFACTOR              86400.0
 
@@ -1024,7 +1025,7 @@ const std::vector< SCROW >& ScDPNumGroupDimension::GetNumEntries( SCCOL nSourceD
     return maMemberEntries;
 }
 
-ScDPGroupTableData::ScDPGroupTableData( ScDPTableData* pSource, ScDocument* pDocument ) :
+ScDPGroupTableData::ScDPGroupTableData( const shared_ptr<ScDPTableData>& pSource, ScDocument* pDocument ) :
     ScDPTableData(pDocument, pSource->GetCacheId() ),
     pSourceData( pSource ),
     pDoc( pDocument )
@@ -1039,7 +1040,6 @@ ScDPGroupTableData::ScDPGroupTableData( ScDPTableData* pSource, ScDocument* pDoc
 ScDPGroupTableData::~ScDPGroupTableData()
 {
     delete[] pNumGroups;
-    delete pSourceData;
 }
 
 void ScDPGroupTableData::AddGroupDimension( const ScDPGroupDimension& rGroup )

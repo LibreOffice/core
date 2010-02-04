@@ -162,7 +162,7 @@ namespace com { namespace sun { namespace star {
     }
 } } }
 
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 /*
 #ifdef _ZFORLIST_DECLARE_TABLE
 class SvNumberFormatterIndexTable;
@@ -633,8 +633,8 @@ public:
                                     const String& aFileName,
                                     const String& aTabName );
 
-    bool            HasExternalRefManager() { return pExternalRefMgr.get(); }
-    SC_DLLPUBLIC ScExternalRefManager* GetExternalRefManager();
+    bool            HasExternalRefManager() const { return pExternalRefMgr.get(); }
+    SC_DLLPUBLIC ScExternalRefManager* GetExternalRefManager() const;
     bool            IsInExternalReferenceMarking() const;
     void            MarkUsedExternalReferences();
     bool            MarkUsedExternalReferences( ScTokenArray & rArr );
@@ -855,6 +855,7 @@ public:
     void            SetDirty();
     void            SetDirty( const ScRange& );
     void            SetTableOpDirty( const ScRange& );  // for Interpreter TableOp
+    void            InterpretDirtyCells( const ScRangeList& rRanges );
     void            CalcAll();
     SC_DLLPUBLIC void           CalcAfterLoad();
     void            CompileAll();
@@ -887,6 +888,8 @@ public:
     BOOL            IsCalculatingFormulaTree() { return bCalculatingFormulaTree; }
 
     USHORT          GetErrCode( const ScAddress& ) const;
+
+    bool            ShrinkToDataArea(SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow) const;
 
     void            GetDataArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
                                     SCCOL& rEndCol, SCROW& rEndRow, BOOL bIncludeOld );

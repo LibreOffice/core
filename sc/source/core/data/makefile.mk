@@ -80,6 +80,7 @@ SLOFILES =  \
     $(SLO)$/dpglobal.obj \
     $(SLO)$/dpobject.obj \
     $(SLO)$/dpoutput.obj \
+    $(SLO)$/dpoutputgeometry.obj \
     $(SLO)$/dpsave.obj \
     $(SLO)$/dpsdbtab.obj \
     $(SLO)$/dpshttab.obj \
@@ -146,6 +147,7 @@ EXCEPTIONSFILES= \
     $(SLO)$/dpsdbtab.obj \
     $(SLO)$/dpobject.obj \
     $(SLO)$/dpoutput.obj \
+    $(SLO)$/dpoutputgeometry.obj \
     $(SLO)$/dpsave.obj \
     $(SLO)$/dbdocutl.obj \
     $(SLO)$/dptabsrc.obj \

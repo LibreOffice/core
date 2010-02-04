@@ -55,10 +55,10 @@
 #include <sfx2/viewfrm.hxx>
 
 #define _ZFORLIST_DECLARE_TABLE
-#include <svtools/stritem.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/stritem.hxx>
+#include <svl/whiter.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <vcl/msgbox.hxx>
@@ -70,7 +70,7 @@
 #include <sfx2/passwd.hxx>
 #include <svx/hlnkitem.hxx>
 #include <basic/sbxcore.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <vcl/waitobj.hxx>
 #include <unotools/localedatawrapper.hxx>
 
@@ -1387,7 +1387,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             pTabViewShell->CellContentChanged();        // => PasteFromXXX ???
             break;
 
-        case FID_PASTE_CONTENTS:
+        case SID_PASTE_SPECIAL:
             // Unterscheidung, ob eigene oder fremde Daten,
             // dadurch FID_INS_CELL_CONTENTS ueberfluessig
             {
@@ -1484,43 +1484,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             }
             pTabViewShell->CellContentChanged();        // => PasteFromSystem() ???
             break;
-
-#if 0
-        //  clipboard slots were used only for old basic:
-
-        case SID_GET_CLPBRD_FORMAT_COUNT:
-            rReq.SetReturnValue( SfxUInt16Item( nSlot, Clipboard::GetFormatCount() ) );
-            break;
-
-        case SID_GET_CLPBRD_FORMAT_BY_IDX:
-            if (pReqArgs)
-            {
-                const SfxPoolItem* pItem;
-                if ( pReqArgs->GetItemState(nSlot, TRUE, &pItem) == SFX_ITEM_SET &&
-                     pItem->ISA(SfxUInt16Item) )
-                {
-                    USHORT nCount = Clipboard::GetFormatCount();
-                    USHORT nPos = ((const SfxUInt16Item*)pItem)->GetValue();    // 1-based
-                    if ( nPos && nPos <= nCount )
-                        rReq.SetReturnValue( SfxUInt32Item( nSlot, Clipboard::GetFormat(--nPos) ) );
-                }
-            }
-            break;
-
-        case SID_GET_CLPBRD_FORMAT_NAME:
-            if (pReqArgs)
-            {
-                const SfxPoolItem* pItem;
-                if ( pReqArgs->GetItemState(nSlot, TRUE, &pItem) == SFX_ITEM_SET &&
-                     pItem->ISA(SfxUInt32Item) )
-                {
-                    String aName = Exchange::GetFormatName(
-                                    ((const SfxUInt32Item*)pItem)->GetValue() );
-                    rReq.SetReturnValue( SfxStringItem( nSlot, aName ) );
-                }
-            }
-            break;
-#endif
 
         //
         //  sonstiges

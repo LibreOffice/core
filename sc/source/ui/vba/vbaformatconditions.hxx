@@ -35,7 +35,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/sheet/XSheetConditionalEntries.hpp>
-#include "vbacollectionimpl.hxx"
+#include <vbahelper/vbacollectionimpl.hxx>
 
 typedef CollTestImplHelper< ov::excel::XFormatConditions > ScVbaFormatConditions_BASE;
 class ScVbaFormatConditions: public ScVbaFormatConditions_BASE

@@ -44,8 +44,8 @@
 
 #include <tools/debug.hxx>
 #include <rtl/math.hxx>
-#include <svtools/itemprop.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/itemprop.hxx>
+#include <svl/intitem.hxx>
 
 #include "scitems.hxx"
 #include "document.hxx"
@@ -85,6 +85,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::sheet::DataPilotFieldAutoShowInfo;
+using ::rtl::OUString;
 
 // -----------------------------------------------------------------------
 
@@ -141,15 +142,14 @@ ScDPSource::ScDPSource( ScDPTableData* pD ) :
     pRowResRoot( NULL ),
     pColResults( NULL ),
     pRowResults( NULL ),
-    bResultOverflow( FALSE )
+    bResultOverflow( FALSE ),
+    mpGrandTotalName(NULL)
 {
     pData->SetEmptyFlags( bIgnoreEmptyRows, bRepeatIfEmpty );
 }
 
 ScDPSource::~ScDPSource()
 {
-    delete pData;           // ScDPTableData is not ref-counted
-
     if (pDimensions)
         pDimensions->release();     // ref-counted
 
@@ -161,6 +161,16 @@ ScDPSource::~ScDPSource()
     delete pColResRoot;
     delete pRowResRoot;
     delete pResData;
+}
+
+void ScDPSource::SetGrandTotalName(const ::rtl::OUString& rName)
+{
+    mpGrandTotalName.reset(new ::rtl::OUString(rName));
+}
+
+const ::rtl::OUString* ScDPSource::GetGrandTotalName() const
+{
+    return mpGrandTotalName.get();
 }
 
 USHORT ScDPSource::GetOrientation(long nColumn)
@@ -186,16 +196,21 @@ long ScDPSource::GetDataDimensionCount()
     return nDataDimCount;
 }
 
+ScDPDimension* ScDPSource::GetDataDimension(long nIndex)
+{
+    if (nIndex < 0 || nIndex >= nDataDimCount)
+        return NULL;
+
+    long nDimIndex = nDataDims[nIndex];
+    return GetDimensionsObject()->getByIndex(nDimIndex);
+}
+
 String ScDPSource::GetDataDimName( long nIndex )
 {
     String aRet;
-    if ( nIndex >= 0 && nIndex < nDataDimCount )
-    {
-        long nDimIndex = nDataDims[nIndex];
-        ScDPDimension* pDim = GetDimensionsObject()->getByIndex(nDimIndex);
-        if (pDim)
-            aRet = String( pDim->getName() );
-    }
+    ScDPDimension* pDim = GetDataDimension(nIndex);
+    if (pDim)
+        aRet = String(pDim->getName());
     return aRet;
 }
 
@@ -492,7 +507,10 @@ String ScDPSource::getDataDescription()
 
     String aRet;
     if ( pResData->GetMeasureCount() == 1 )
-        aRet = pResData->GetMeasureString( 0, TRUE, SUBTOTAL_FUNC_NONE );
+    {
+        bool bTotalResult = false;
+        aRet = pResData->GetMeasureString( 0, TRUE, SUBTOTAL_FUNC_NONE, bTotalResult );
+    }
 
     //  empty for more than one measure
 
@@ -1136,6 +1154,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPSource::getPropertySetInfo(
                                                         throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    using beans::PropertyAttribute::READONLY;
 
     static SfxItemPropertyMapEntry aDPSourceMap_Impl[] =
     {
@@ -1144,6 +1163,10 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPSource::getPropertySetInfo(
         {MAP_CHAR_LEN(SC_UNO_IGNOREEM), 0,  &getBooleanCppuType(),              0, 0 },     // for sheet data only
         {MAP_CHAR_LEN(SC_UNO_REPEATIF), 0,  &getBooleanCppuType(),              0, 0 },     // for sheet data only
         {MAP_CHAR_LEN(SC_UNO_ROWGRAND), 0,  &getBooleanCppuType(),              0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_ROWFIELDCOUNT),    0, &getCppuType(static_cast<sal_Int32*>(0)), READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNO_COLUMNFIELDCOUNT), 0, &getCppuType(static_cast<sal_Int32*>(0)), READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNO_DATAFIELDCOUNT),   0, &getCppuType(static_cast<sal_Int32*>(0)), READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNO_GRANDTOTAL_NAME),  0, &getCppuType(static_cast<OUString*>(0)), 0, 0 },
         {0,0,0,0,0,0}
     };
     static uno::Reference<beans::XPropertySetInfo> aRef =
@@ -1165,6 +1188,12 @@ void SAL_CALL ScDPSource::setPropertyValue( const rtl::OUString& aPropertyName, 
         setIgnoreEmptyRows( lcl_GetBoolFromAny( aValue ) );
     else if ( aNameStr.EqualsAscii( SC_UNO_REPEATIF ) )
         setRepeatIfEmpty( lcl_GetBoolFromAny( aValue ) );
+    else if (aNameStr.EqualsAscii(SC_UNO_GRANDTOTAL_NAME))
+    {
+        OUString aName;
+        if (aValue >>= aName)
+            mpGrandTotalName.reset(new OUString(aName));
+    }
     else
     {
         DBG_ERROR("unknown property");
@@ -1194,6 +1223,11 @@ uno::Any SAL_CALL ScDPSource::getPropertyValue( const rtl::OUString& aPropertyNa
         aRet <<= static_cast<sal_Int32>(nColDimCount);
     else if ( aNameStr.EqualsAscii( SC_UNO_DATAFIELDCOUNT ) )       // read-only
         aRet <<= static_cast<sal_Int32>(nDataDimCount);
+    else if (aNameStr.EqualsAscii(SC_UNO_GRANDTOTAL_NAME))
+    {
+        if (mpGrandTotalName.get())
+            aRet <<= *mpGrandTotalName;
+    }
     else
     {
         DBG_ERROR("unknown property");
@@ -1341,9 +1375,12 @@ ScDPDimension::ScDPDimension( ScDPSource* pSrc, long nD ) :
     pHierarchies( NULL ),
     nUsedHier( 0 ),
     nFunction( SUBTOTAL_FUNC_SUM ),     // sum is default
+    mpLayoutName(NULL),
+    mpSubtotalName(NULL),
     nSourceDim( -1 ),
     bHasSelectedPage( FALSE ),
-    pSelectedData( NULL )
+    pSelectedData( NULL ),
+    mbHasHiddenMember(false)
 {
     //! hold pSource
 }
@@ -1366,6 +1403,16 @@ ScDPHierarchies* ScDPDimension::GetHierarchiesObject()
         pHierarchies->acquire();        // ref-counted
     }
     return pHierarchies;
+}
+
+const rtl::OUString* ScDPDimension::GetLayoutName() const
+{
+    return mpLayoutName.get();
+}
+
+const rtl::OUString* ScDPDimension::GetSubtotalName() const
+{
+    return mpSubtotalName.get();
 }
 
 uno::Reference<container::XNameAccess> SAL_CALL ScDPDimension::getHierarchies()
@@ -1540,6 +1587,9 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPDimension::getPropertySetIn
         {MAP_CHAR_LEN(SC_UNO_POSITION), 0,  &getCppuType((sal_Int32*)0),                0, 0 },
         {MAP_CHAR_LEN(SC_UNO_REFVALUE), 0,  &getCppuType((sheet::DataPilotFieldReference*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNO_USEDHIER), 0,  &getCppuType((sal_Int32*)0),                0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_LAYOUTNAME), 0, &getCppuType(static_cast<rtl::OUString*>(0)), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_FIELD_SUBTOTALNAME), 0, &getCppuType(static_cast<rtl::OUString*>(0)), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_HAS_HIDDEN_MEMBER), 0, &getBooleanCppuType(), 0, 0 },
         {0,0,0,0,0,0}
     };
     static uno::Reference<beans::XPropertySetInfo> aRef =
@@ -1610,6 +1660,20 @@ void SAL_CALL ScDPDimension::setPropertyValue( const rtl::OUString& aPropertyNam
         }
         DELETEZ( pSelectedData );       // invalid after changing aSelectedPage
     }
+    else if (aNameStr.EqualsAscii(SC_UNO_LAYOUTNAME))
+    {
+        OUString aTmpName;
+        if (aValue >>= aTmpName)
+            mpLayoutName.reset(new OUString(aTmpName));
+    }
+    else if (aNameStr.EqualsAscii(SC_UNO_FIELD_SUBTOTALNAME))
+    {
+        OUString aTmpName;
+        if (aValue >>= aTmpName)
+            mpSubtotalName.reset(new OUString(aTmpName));
+    }
+    else if (aNameStr.EqualsAscii(SC_UNO_HAS_HIDDEN_MEMBER))
+        aValue >>= mbHasHiddenMember;
     else
     {
         DBG_ERROR("unknown property");
@@ -1686,6 +1750,12 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const rtl::OUString& aPropert
         else
             aRet <<= uno::Sequence<sheet::TableFilterField>(0);
     }
+    else if (aNameStr.EqualsAscii(SC_UNO_LAYOUTNAME))
+        aRet <<= mpLayoutName.get() ? *mpLayoutName : OUString::createFromAscii("");
+    else if (aNameStr.EqualsAscii(SC_UNO_FIELD_SUBTOTALNAME))
+        aRet <<= mpSubtotalName.get() ? *mpSubtotalName : OUString::createFromAscii("");
+    else if (aNameStr.EqualsAscii(SC_UNO_HAS_HIDDEN_MEMBER))
+        aRet <<= mbHasHiddenMember;
     else
     {
         DBG_ERROR("unknown property");
@@ -2189,7 +2259,11 @@ uno::Sequence<sheet::MemberResult> SAL_CALL ScDPLevel::getResults() throw(uno::R
             return aRet;
     }
 
-    return pSource->GetData()->getDimensionName( nSrcDim );     // (original) dimension name
+    ScDPDimension* pDim = pSource->GetDimensionsObject()->getByIndex(nSrcDim);
+    if (!pDim)
+        return rtl::OUString();
+
+    return pDim->getName();
 }
 
 void SAL_CALL ScDPLevel::setName( const ::rtl::OUString& /* rNewName */ ) throw(uno::RuntimeException)
@@ -2292,6 +2366,20 @@ uno::Any SAL_CALL ScDPLevel::getPropertyValue( const rtl::OUString& aPropertyNam
         aRet <<= aAutoShowInfo;
     else if ( aNameStr.EqualsAscii( SC_UNO_LAYOUT ) )
         aRet <<= aLayoutInfo;
+    else if (aNameStr.EqualsAscii(SC_UNO_LAYOUTNAME))
+    {
+        // read only property
+        long nSrcDim = pSource->GetSourceDim(nDim);
+        ScDPDimension* pDim = pSource->GetDimensionsObject()->getByIndex(nSrcDim);
+        if (!pDim)
+            return aRet;
+
+        const OUString* pLayoutName = pDim->GetLayoutName();
+        if (!pLayoutName)
+            return aRet;
+
+        aRet <<= *pLayoutName;
+    }
     else
     {
         DBG_ERROR("unknown property");
@@ -2582,9 +2670,10 @@ ScDPMember::ScDPMember( ScDPSource* pSrc, long nD, long nH, long nL,
     nDim( nD ),
     nHier( nH ),
     nLev( nL ),
-     nPosition( -1 ),
+    mnDataId( nIndex ),
+    mpLayoutName(NULL),
+    nPosition( -1 ),
     bVisible( TRUE ),
-     mnDataId( nIndex ),
     bShowDet( TRUE )
 {
     //! hold pSource
@@ -2662,6 +2751,11 @@ void ScDPMember::FillItemData( ScDPItemData& rData ) const
     rData = GetItemData() ;
 }
 
+const OUString* ScDPMember::GetLayoutName() const
+{
+    return mpLayoutName.get();
+}
+
 String ScDPMember::GetNameStr() const
 {
       return GetItemData().GetString();
@@ -2721,6 +2815,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPMember::getPropertySetInfo(
         {MAP_CHAR_LEN(SC_UNO_ISVISIBL), 0,  &getBooleanCppuType(),              0, 0 },
         {MAP_CHAR_LEN(SC_UNO_POSITION), 0,  &getCppuType((sal_Int32*)0),        0, 0 },
         {MAP_CHAR_LEN(SC_UNO_SHOWDETA), 0,  &getBooleanCppuType(),              0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_LAYOUTNAME), 0, &getCppuType(static_cast<rtl::OUString*>(0)), 0, 0 },
         {0,0,0,0,0,0}
     };
     static uno::Reference<beans::XPropertySetInfo> aRef =
@@ -2744,6 +2839,12 @@ void SAL_CALL ScDPMember::setPropertyValue( const rtl::OUString& aPropertyName, 
         if (aValue >>= nInt)
             setPosition( nInt );
     }
+    else if (aNameStr.EqualsAscii(SC_UNO_LAYOUTNAME))
+    {
+        rtl::OUString aName;
+        if (aValue >>= aName)
+            mpLayoutName.reset(new rtl::OUString(aName));
+    }
     else
     {
         DBG_ERROR("unknown property");
@@ -2763,6 +2864,8 @@ uno::Any SAL_CALL ScDPMember::getPropertyValue( const rtl::OUString& aPropertyNa
         lcl_SetBoolInAny( aRet, getShowDetails() );
     else if ( aNameStr.EqualsAscii( SC_UNO_POSITION ) )
         aRet <<= (sal_Int32) getPosition();
+    else if (aNameStr.EqualsAscii(SC_UNO_LAYOUTNAME))
+        aRet <<= mpLayoutName.get() ? *mpLayoutName : rtl::OUString();
     else
     {
         DBG_ERROR("unknown property");

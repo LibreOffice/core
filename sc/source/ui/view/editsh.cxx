@@ -64,12 +64,12 @@
 #include <sfx2/viewfrm.hxx>
 #include <sot/exchange.hxx>
 #include <svtools/cliplistener.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/sound.hxx>
 #include <sot/formats.hxx>
 #include <svtools/transfer.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 
 #define _EDITSH_CXX
 #include "editsh.hxx"
@@ -268,7 +268,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
             }
             break;
 
-        case FID_PASTE_CONTENTS:
+        case SID_PASTE_SPECIAL:
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 SfxAbstractPasteDialog* pDlg = pFact->CreatePasteDialog( pViewData->GetDialogParent() );
@@ -714,7 +714,7 @@ IMPL_LINK( ScEditShell, ClipboardChanged, TransferableDataHelper*, pDataHelper )
 
         SfxBindings& rBindings = pViewData->GetBindings();
         rBindings.Invalidate( SID_PASTE );
-        rBindings.Invalidate( FID_PASTE_CONTENTS );
+        rBindings.Invalidate( SID_PASTE_SPECIAL );
         rBindings.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
     }
     return 0;
@@ -742,7 +742,7 @@ void __EXPORT ScEditShell::GetClipState( SfxItemSet& rSet )
         switch (nWhich)
         {
             case SID_PASTE:
-            case FID_PASTE_CONTENTS:
+            case SID_PASTE_SPECIAL:
                 if( !bPastePossible )
                     rSet.DisableItem( nWhich );
                 break;

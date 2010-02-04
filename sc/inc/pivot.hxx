@@ -54,6 +54,7 @@
 #include "dpglobal.hxx"
 
 #include <vector>
+#include <boost/shared_ptr.hpp>
 
 class SubTotal;
 #include "collect.hxx"
@@ -70,7 +71,9 @@ class SvStream;
 class ScDocument;
 class ScUserListData;
 class ScProgress;
-struct LabelData;
+struct ScDPLabelData;
+
+typedef ::boost::shared_ptr<ScDPLabelData> ScDPLabelDataRef;
 
 // -----------------------------------------------------------------------
 
@@ -94,8 +97,7 @@ struct ScPivotParam
     SCCOL           nCol;           // Cursor Position /
     SCROW           nRow;           // bzw. Anfang des Zielbereiches
     SCTAB           nTab;
-    LabelData**     ppLabelArr;
-    SCSIZE          nLabels;
+    ::std::vector<ScDPLabelDataRef> maLabelArray;
     PivotField      aPageArr[PIVOT_MAXPAGEFIELD];
     PivotField      aColArr[PIVOT_MAXFIELD];
     PivotField      aRowArr[PIVOT_MAXFIELD];
@@ -116,10 +118,8 @@ struct ScPivotParam
     ScPivotParam&   operator=       ( const ScPivotParam& r );
     BOOL            operator==      ( const ScPivotParam& r ) const;
 //UNUSED2009-05 void            Clear           ();
-    void            ClearLabelData  ();
     void            ClearPivotArrays();
-    void            SetLabelData    ( LabelData**   ppLabArr,
-                                      SCSIZE        nLab );
+    void            SetLabelData    (const ::std::vector<ScDPLabelDataRef>& r);
     void            SetPivotArrays  ( const PivotField* pPageArr,
                                       const PivotField* pColArr,
                                       const PivotField* pRowArr,
@@ -137,24 +137,45 @@ typedef PivotField          PivotPageFieldArr[PIVOT_MAXPAGEFIELD];
 
 //------------------------------------------------------------------------
 
-struct LabelData
+struct ScDPLabelData
 {
-    String              maName;         /// Visible name of the dimension.
+    ::rtl::OUString     maName;         /// Original name of the dimension.
+    ::rtl::OUString     maLayoutName;   /// Layout name (display name)
     SCsCOL              mnCol;
     USHORT              mnFuncMask;     /// Page/Column/Row subtotal function.
     sal_Int32           mnUsedHier;     /// Used hierarchy.
     bool                mbShowAll;      /// true = Show all (also empty) results.
     bool                mbIsValue;      /// true = Sum or count in data field.
 
+    struct Member
+    {
+        ::rtl::OUString maName;
+        ::rtl::OUString maLayoutName;
+        bool mbVisible;
+        bool mbShowDetails;
+
+        Member();
+
+        /**
+         * return the name that should be displayed in the dp dialogs i.e.
+         * when the layout name is present, use it, or else use the original
+         * name.
+         */
+        ::rtl::OUString SC_DLLPUBLIC getDisplayName() const;
+    };
+    ::std::vector<Member>                               maMembers;
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  maHiers;        /// Hierarchies.
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >  maMembers;      /// Members.
-    ::com::sun::star::uno::Sequence< sal_Bool >         maVisible;      /// Visibility of members.
-    ::com::sun::star::uno::Sequence< sal_Bool >         maShowDet;      /// Show details of members.
     ::com::sun::star::sheet::DataPilotFieldSortInfo     maSortInfo;     /// Sorting info.
     ::com::sun::star::sheet::DataPilotFieldLayoutInfo   maLayoutInfo;   /// Layout info.
     ::com::sun::star::sheet::DataPilotFieldAutoShowInfo maShowInfo;     /// AutoShow info.
 
-    explicit            LabelData( const String& rName, short nCol, bool bIsValue );
+    explicit            ScDPLabelData( const String& rName, short nCol, bool bIsValue );
+
+    /**
+     * return the name that should be displayed in the dp dialogs i.e. when
+     * the layout name is present, use it, or else use the original name.
+     */
+    ::rtl::OUString SC_DLLPUBLIC getDisplayName() const;
 };
 
 // ============================================================================
@@ -172,7 +193,6 @@ struct ScDPFuncData
 
 // ============================================================================
 
-typedef LabelData ScDPLabelData;
 typedef std::vector< ScDPLabelData > ScDPLabelDataVec;
 typedef std::vector< String > ScDPNameVec;
 

@@ -51,15 +51,20 @@ using ::rtl::OUString;
 void ScRefTokenHelper::compileRangeRepresentation(
     vector<ScSharedTokenRef>& rRefTokens, const OUString& rRangeStr, ScDocument* pDoc, FormulaGrammar::Grammar eGrammar)
 {
-    const sal_Unicode cSep = ';';
+    const sal_Unicode cSep = GetScCompilerNativeSymbol(ocSep).GetChar(0);
     const sal_Unicode cQuote = '\'';
+
+    // #i107275# ignore parentheses
+    OUString aRangeStr = rRangeStr;
+    while( (aRangeStr.getLength() >= 2) && (aRangeStr[ 0 ] == '(') && (aRangeStr[ aRangeStr.getLength() - 1 ] == ')') )
+        aRangeStr = aRangeStr.copy( 1, aRangeStr.getLength() - 2 );
 
     bool bFailure = false;
     sal_Int32 nOffset = 0;
     while (nOffset >= 0 && !bFailure)
     {
         OUString aToken;
-        ScRangeStringConverter::GetTokenByOffset(aToken, rRangeStr, nOffset, cSep, cQuote);
+        ScRangeStringConverter::GetTokenByOffset(aToken, aRangeStr, nOffset, cSep, cQuote);
         if (nOffset < 0)
             break;
 

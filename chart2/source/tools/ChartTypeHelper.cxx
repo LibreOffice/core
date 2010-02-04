@@ -549,7 +549,7 @@ sal_Int32 ChartTypeHelper::getNumberOfDisplayedSeries(
                 if( (xChartTypeProp->getPropertyValue( C2U("UseRings")) >>= bDonut)
                     && !bDonut )
                 {
-                    return 1;
+                    return nNumberOfSeries>0 ? 1 : 0;
                 }
             }
         }

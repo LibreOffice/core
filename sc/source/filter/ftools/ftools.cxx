@@ -33,9 +33,9 @@
 #include "ftools.hxx"
 #include <tools/color.hxx>
 #include <unotools/charclass.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
+#include <svl/poolitem.hxx>
 #include <sot/storage.hxx>
 
 #include <math.h>
@@ -160,13 +160,15 @@ Color ScfTools::GetMixedColor( const Color& rFore, const Color& rBack, sal_uInt8
 
 // *** conversion of names *** ------------------------------------------------
 
+/* XXX As in sc/source/core/tool/rangenam.cxx ScRangeData::IsValidName() */
+
 void ScfTools::ConvertToScDefinedName( String& rName )
 {
     xub_StrLen nLen = rName.Len();
-    if( nLen && !ScCompiler::IsCharWordChar( rName, 0 ) )
+    if( nLen && !ScCompiler::IsCharFlagAllConventions( rName, 0, SC_COMPILER_C_CHAR_NAME ) )
         rName.SetChar( 0, '_' );
     for( xub_StrLen nPos = 1; nPos < nLen; ++nPos )
-        if( !ScCompiler::IsWordChar( rName, nPos ) )
+        if( !ScCompiler::IsCharFlagAllConventions( rName, nPos, SC_COMPILER_C_NAME ) )
             rName.SetChar( nPos, '_' );
 }
 

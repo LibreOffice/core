@@ -67,6 +67,7 @@ using ::std::vector;
 using ::std::pair;
 using ::std::hash_map;
 using ::com::sun::star::uno::Sequence;
+using ::rtl::OUString;
 
 // -----------------------------------------------------------------------
 
@@ -870,11 +871,11 @@ USHORT ScDPResultData::GetMeasureRefOrient(long nMeasure) const
     return pMeasRefOrient[nMeasure];
 }
 
-String ScDPResultData::GetMeasureString(long nMeasure, BOOL bForce, ScSubTotalFunc eForceFunc) const
+String ScDPResultData::GetMeasureString(long nMeasure, BOOL bForce, ScSubTotalFunc eForceFunc, bool& rbTotalResult) const
 {
     //  with bForce==TRUE, return function instead of "result" for single measure
     //  with eForceFunc != SUBTOTAL_FUNC_NONE, always use eForceFunc
-
+    rbTotalResult = false;
     if ( nMeasure < 0 || ( nMeasCount == 1 && !bForce && eForceFunc == SUBTOTAL_FUNC_NONE ) )
     {
         //  for user-specified subtotal function with all measures,
@@ -882,12 +883,19 @@ String ScDPResultData::GetMeasureString(long nMeasure, BOOL bForce, ScSubTotalFu
         if ( eForceFunc != SUBTOTAL_FUNC_NONE )
             return ScGlobal::GetRscString(nFuncStrIds[eForceFunc]);
 
+        rbTotalResult = true;
         return ScGlobal::GetRscString(STR_TABLE_ERGEBNIS);
     }
     else
     {
         DBG_ASSERT( pMeasNames && nMeasure < nMeasCount, "bumm" );
-
+        ScDPDimension* pDataDim = pSource->GetDataDimension(nMeasure);
+        if (pDataDim)
+        {
+            const OUString* pLayoutName = pDataDim->GetLayoutName();
+            if (pLayoutName)
+                return *pLayoutName;
+        }
         String aRet;
         ScSubTotalFunc eFunc = ( eForceFunc == SUBTOTAL_FUNC_NONE ) ?
                                     GetMeasureFunction(nMeasure) : eForceFunc;
@@ -956,6 +964,11 @@ BOOL ScDPResultData::HasCommonElement(/* const ScDPItemData& rFirstData*/SCROW n
         return pSource->GetData()->HasCommonElement( *pFirstData, nFirstIndex, rSecondData, nSecondIndex );
     else
         return FALSE;
+}
+
+const ScDPSource* ScDPResultData::GetSource() const
+{
+    return pSource;
 }
 
 ResultMembers* ScDPResultData::GetDimResultMembers( long nDim ,  ScDPDimension* pDim, ScDPLevel*   pLevel) const
@@ -1328,6 +1341,33 @@ void ScDPResultMember::ProcessData( const vector< SCROW >& aChildMembers, const 
     }
 }
 
+/**
+ * Parse subtotal string and replace all occurrences of '?' with the caption
+ * string.  Do ensure that escaped characters are not translated.
+ */
+static String lcl_parseSubtotalName(const String& rSubStr, const String& rCaption)
+{
+    String aNewStr;
+    xub_StrLen n = rSubStr.Len();
+    bool bEscaped = false;
+    for (xub_StrLen i = 0; i < n; ++i)
+    {
+        sal_Unicode c = rSubStr.GetChar(i);
+        if (!bEscaped && c == sal_Unicode('\\'))
+        {
+            bEscaped = true;
+            continue;
+        }
+
+        if (!bEscaped && c == sal_Unicode('?'))
+            aNewStr.Append(rCaption);
+        else
+            aNewStr.Append(c);
+        bEscaped = false;
+    }
+    return aNewStr;
+}
+
 void ScDPResultMember::FillMemberResults( uno::Sequence<sheet::MemberResult>* pSequences,
                                             long& rPos, long nMeasure, BOOL bRoot,
                                             const String* pMemberName,
@@ -1360,17 +1400,25 @@ void ScDPResultMember::FillMemberResults( uno::Sequence<sheet::MemberResult>* pS
     }
 
     String aCaption = aName;
+    if (pMemberDesc)
+    {
+        const OUString* pLayoutName = pMemberDesc->GetLayoutName();
+        if (pLayoutName)
+        {
+            aCaption = *pLayoutName;
+            bIsNumeric = false; // layout name is always non-numeric.
+        }
+    }
+
     if ( pMemberCaption )                   // use pMemberCaption if != NULL
         aCaption = *pMemberCaption;
     if (!aCaption.Len())
         aCaption = ScGlobal::GetRscString(STR_EMPTYDATA);
 
-    if ( !bIsNumeric )
-    {
-        // add a "'" character so a string isn't parsed as value in the output cell
-        //! have a separate bit in Flags (MemberResultFlags) instead?
-        aCaption.Insert( (sal_Unicode) '\'', 0 );
-    }
+    if (bIsNumeric)
+        pArray[rPos].Flags |= sheet::MemberResultFlags::NUMERIC;
+    else
+        pArray[rPos].Flags &= ~sheet::MemberResultFlags::NUMERIC;
 
     if ( nSize && !bRoot )                  // root is overwritten by first dimension
     {
@@ -1435,9 +1483,30 @@ void ScDPResultMember::FillMemberResults( uno::Sequence<sheet::MemberResult>* pS
                 if (bHasChild)
                     eForce = lcl_GetForceFunc( pParentLevel, nUserPos );
 
-                String aSubStr = aName;     //! caption?
+                bool bTotalResult = false;
+                String aSubStr = aCaption;
                 aSubStr += ' ';
-                aSubStr += pResultData->GetMeasureString(nMemberMeasure, FALSE, eForce);
+                aSubStr += pResultData->GetMeasureString(nMemberMeasure, FALSE, eForce, bTotalResult);
+
+                if (bTotalResult)
+                {
+                    if (pMemberDesc)
+                    {
+                        // single data field layout.
+                        const OUString* pSubtotalName = pParentDim->GetSubtotalName();
+                        if (pSubtotalName)
+                            aSubStr = lcl_parseSubtotalName(*pSubtotalName, aCaption);
+                        pArray[rPos].Flags &= ~sheet::MemberResultFlags::GRANDTOTAL;
+                    }
+                    else
+                    {
+                        // root member - subtotal (grand total?) for multi-data field layout.
+                        const rtl::OUString* pGrandTotalName = pResultData->GetSource()->GetGrandTotalName();
+                        if (pGrandTotalName)
+                            aSubStr = *pGrandTotalName;
+                        pArray[rPos].Flags |= sheet::MemberResultFlags::GRANDTOTAL;
+                    }
+                }
 
                 pArray[rPos].Name    = rtl::OUString(aName);
                 pArray[rPos].Caption = rtl::OUString(aSubStr);
@@ -2975,8 +3044,9 @@ void ScDPResultDimension::FillMemberResults( uno::Sequence<sheet::MemberResult>*
         //  in data layout dimension, use first member with different measures/names
         if ( bIsDataLayout )
         {
+            bool bTotalResult = false;
             String aMbrName = pResultData->GetMeasureDimensionName( nSorted );
-            String aMbrCapt = pResultData->GetMeasureString( nSorted, FALSE, SUBTOTAL_FUNC_NONE );
+            String aMbrCapt = pResultData->GetMeasureString( nSorted, FALSE, SUBTOTAL_FUNC_NONE, bTotalResult );
             maMemberArray[0]->FillMemberResults( pSequences, nPos, nSorted, FALSE, &aMbrName, &aMbrCapt );
         }
         else if ( pMember->IsVisible() )

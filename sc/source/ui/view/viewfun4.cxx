@@ -54,9 +54,9 @@
 #include <sfx2/fcontnr.hxx>
 #include <svtools/langtab.hxx>
 #include <svtools/filter.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/transfer.hxx>
-#include <svtools/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
 #include <vcl/msgbox.hxx>
 #include <avmedia/mediawindow.hxx>
 
@@ -155,7 +155,7 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
             {
                 ScDocument* pRedoDoc = new ScDocument( SCDOCMODE_UNDO );
                 pRedoDoc->InitUndo( pDoc, nTab, nTab );
-                pDoc->CopyToDocument( nStartCol,nStartRow,nTab, nStartCol,nEndRow,nTab, IDF_ALL, FALSE, pRedoDoc );
+                pDoc->CopyToDocument( nStartCol,nStartRow,nTab, nStartCol,nEndRow,nTab, IDF_ALL|IDF_NOCAPTIONS, FALSE, pRedoDoc );
 
                 ScMarkData aDestMark;
                 aDestMark.SelectOneTable( nTab );

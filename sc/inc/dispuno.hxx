@@ -34,8 +34,8 @@
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <cppuhelper/implbase2.hxx>
-#include <svtools/lstner.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/lstner.hxx>
+#include <svl/svarray.hxx>
 #include "global.hxx"       // ScImportParam
 
 

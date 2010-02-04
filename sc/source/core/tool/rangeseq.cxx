@@ -33,7 +33,7 @@
 
 
 
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <rtl/math.hxx>
 #include <tools/debug.hxx>
 

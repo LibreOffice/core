@@ -31,7 +31,7 @@
 #ifndef SC_NAMEUNO_HXX
 #define SC_NAMEUNO_HXX
 
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include "address.hxx"
 #include "formula/grammar.hxx"
 #include <com/sun/star/sheet/XLabelRange.hpp>

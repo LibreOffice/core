@@ -43,7 +43,7 @@
 
 #include <rtl/math.hxx>
 #include <vcl/dialog.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 
 using namespace ::com::sun::star;
 
@@ -682,7 +682,7 @@ BOOL ErrorBarResources::FillItemSet(SfxItemSet& rOutAttrs) const
 
 void ErrorBarResources::FillValueSets()
 {
-    bool bIsHighContrast = ( true && m_aRbConst.GetDisplayBackground().GetColor().IsDark() );
+    bool bIsHighContrast = ( true && m_aRbConst.GetSettings().GetStyleSettings().GetHighContrastMode() );
 
     // do not scale images, show then centered
 //     m_aFiPositive.SetStyle( (m_aFiPositive.GetStyle() & (~WB_SCALE)) | WB_CENTER );

@@ -40,8 +40,8 @@
 
 #include <sfx2/sfxhelp.hxx>
 
-#include "vbahelper.hxx"
-#include "vbahelperinterface.hxx"
+#include "excelvbahelper.hxx"
+#include <vbahelper/vbahelperinterface.hxx>
 
 typedef ::cppu::WeakImplHelper1< ov::XAssistant > Assistant;
 typedef InheritedHelperInterfaceImpl< Assistant > ScVbaAssistantImpl_BASE;

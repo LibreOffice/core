@@ -40,15 +40,17 @@
 #include <svx/svdpage.hxx>
 #include <svx/svxids.hrc>
 
-#include <svtools/numuno.hxx>
-#include <svtools/smplhint.hxx>
-#include <svtools/undoopt.hxx>
+#include <svl/numuno.hxx>
+#include <svl/smplhint.hxx>
+#include <unotools/undoopt.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/waitobj.hxx>
 #include <unotools/charclass.hxx>
 #include <tools/multisel.hxx>
+#include <tools/resary.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <ctype.h>
 #include <float.h>  // DBL_MAX
@@ -90,11 +92,15 @@
 #include "unoguard.hxx"
 #include "unonames.hxx"
 #include "shapeuno.hxx"
+#include "viewuno.hxx"
+#include "tabvwsh.hxx"
 #include "printfun.hxx"
 #include "pfuncache.hxx"
 #include "scmod.hxx"
 #include "rangeutl.hxx"
 #include "ViewSettingsSequenceDefines.hxx"
+#include "sc.hrc"
+#include "scresid.hxx"
 
 #ifndef _SVX_UNOSHAPE_HXX
 #include <svx/unoshape.hxx>
@@ -209,6 +215,147 @@ SC_SIMPLE_SERVICE_INFO( ScTableSheetsObj, "ScTableSheetsObj", "com.sun.star.shee
 
 //------------------------------------------------------------------------
 
+class ScPrintUIOptions : public vcl::PrinterOptionsHelper
+{
+public:
+    ScPrintUIOptions();
+    void SetDefaults();
+};
+
+ScPrintUIOptions::ScPrintUIOptions()
+{
+    const ScPrintOptions& rPrintOpt = SC_MOD()->GetPrintOptions();
+    sal_Int32 nContent = rPrintOpt.GetAllSheets() ? 0 : 1;
+    sal_Bool bSuppress = rPrintOpt.GetSkipEmpty();
+
+    ResStringArray aStrings( ScResId( SCSTR_PRINT_OPTIONS ) );
+    DBG_ASSERT( aStrings.Count() >= 19, "resource incomplete" );
+    if( aStrings.Count() < 19 ) // bad resource ?
+        return;
+
+    m_aUIProperties.realloc( 8 );
+
+    // create Section for spreadsheet (results in an extra tab page in dialog)
+    SvtModuleOptions aOpt;
+    String aAppGroupname( aStrings.GetString( 18 ) );
+    aAppGroupname.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ),
+                                    aOpt.GetModuleName( SvtModuleOptions::E_SCALC ) );
+    m_aUIProperties[0].Value = getGroupControlOpt( aAppGroupname, rtl::OUString() );
+
+    // create subgroup for pages
+    m_aUIProperties[1].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 0 ) ), rtl::OUString() );
+
+    // create a bool option for empty pages
+    m_aUIProperties[2].Value = getBoolControlOpt( rtl::OUString( aStrings.GetString( 1 ) ),
+                                                  rtl::OUString( aStrings.GetString( 2 ) ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsIncludeEmptyPages" ) ),
+                                                  ! bSuppress
+                                                  );
+    // create Subgroup for print content
+    vcl::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;
+    aPrintRangeOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) );
+    m_aUIProperties[3].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 6 ) ),
+                                                      rtl::OUString(),
+                                                      aPrintRangeOpt
+                                                      );
+
+    // create a choice for the content to create
+    uno::Sequence< rtl::OUString > aChoices( 3 ), aHelpTexts( 3 );
+    aChoices[0] = aStrings.GetString( 7 );
+    aHelpTexts[0] = aStrings.GetString( 8 );
+    aChoices[1] = aStrings.GetString( 9 );
+    aHelpTexts[1] = aStrings.GetString( 10 );
+    aChoices[2] = aStrings.GetString( 11 );
+    aHelpTexts[2] = aStrings.GetString( 12 );
+    m_aUIProperties[4].Value = getChoiceControlOpt( rtl::OUString(),
+                                                    aHelpTexts,
+                                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) ),
+                                                    aChoices,
+                                                    nContent );
+
+    // create Subgroup for print range
+    aPrintRangeOpt.mbInternalOnly = sal_True;
+    m_aUIProperties[5].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 13 ) ),
+                                                      rtl::OUString(),
+                                                      aPrintRangeOpt
+                                                      );
+
+    // create a choice for the range to print
+    rtl::OUString aPrintRangeName( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) );
+    aChoices.realloc( 2 );
+    aHelpTexts.realloc( 2 );
+    aChoices[0] = aStrings.GetString( 14 );
+    aHelpTexts[0] = aStrings.GetString( 15 );
+    aChoices[1] = aStrings.GetString( 16 );
+    aHelpTexts[1] = aStrings.GetString( 17 );
+    m_aUIProperties[6].Value = getChoiceControlOpt( rtl::OUString(),
+                                                    aHelpTexts,
+                                                    aPrintRangeName,
+                                                    aChoices,
+                                                    0 );
+
+    // create a an Edit dependent on "Pages" selected
+    vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt( aPrintRangeName, 1, sal_True );
+    m_aUIProperties[7].Value = getEditControlOpt( rtl::OUString(),
+                                                  rtl::OUString(),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ),
+                                                  rtl::OUString(),
+                                                  aPageRangeOpt
+                                                  );
+
+    // "Print only selected sheets" isn't needed because of the "Selected Sheets" choice in "Print content"
+#if 0
+    // create subgroup for sheets
+    m_aUIProperties[8].Value = getSubgroupControlOpt( rtl::OUString( aStrings.GetString( 3 ) ), rtl::OUString() );
+
+    // create a bool option for selected pages only
+    m_aUIProperties[9].Value = getBoolControlOpt( rtl::OUString( aStrings.GetString( 4 ) ),
+                                                  rtl::OUString( aStrings.GetString( 5 ) ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsOnlySelectedSheets" ) ),
+                                                  i_bSelectedOnly
+                                                  );
+#endif
+}
+
+void ScPrintUIOptions::SetDefaults()
+{
+    // re-initialize the default values from print options
+
+    const ScPrintOptions& rPrintOpt = SC_MOD()->GetPrintOptions();
+    sal_Int32 nContent = rPrintOpt.GetAllSheets() ? 0 : 1;
+    sal_Bool bSuppress = rPrintOpt.GetSkipEmpty();
+
+    for (sal_Int32 nUIPos=0; nUIPos<m_aUIProperties.getLength(); ++nUIPos)
+    {
+        uno::Sequence<beans::PropertyValue> aUIProp;
+        if ( m_aUIProperties[nUIPos].Value >>= aUIProp )
+        {
+            for (sal_Int32 nPropPos=0; nPropPos<aUIProp.getLength(); ++nPropPos)
+            {
+                rtl::OUString aName = aUIProp[nPropPos].Name;
+                if ( aName.equalsAscii("Property") )
+                {
+                    beans::PropertyValue aPropertyValue;
+                    if ( aUIProp[nPropPos].Value >>= aPropertyValue )
+                    {
+                        if ( aPropertyValue.Name.equalsAscii( "PrintContent" ) )
+                        {
+                            aPropertyValue.Value <<= nContent;
+                            aUIProp[nPropPos].Value <<= aPropertyValue;
+                        }
+                        else if ( aPropertyValue.Name.equalsAscii( "IsIncludeEmptyPages" ) )
+                        {
+                            ScUnoHelpFunctions::SetBoolInAny( aPropertyValue.Value, ! bSuppress );
+                            aUIProp[nPropPos].Value <<= aPropertyValue;
+                        }
+                    }
+                }
+            }
+            m_aUIProperties[nUIPos].Value <<= aUIProp;
+        }
+    }
+}
+
 // static
 void ScModelObj::CreateAndSet(ScDocShell* pDocSh)
 {
@@ -221,7 +368,9 @@ ScModelObj::ScModelObj( ScDocShell* pDocSh ) :
     aPropSet( lcl_GetDocOptPropertyMap() ),
     pDocShell( pDocSh ),
     pPrintFuncCache( NULL ),
-    maChangesListeners( m_aMutex )
+    pPrinterOptions( NULL ),
+    maChangesListeners( m_aMutex ),
+    mnXlsWriteProtPass( 0 )
 {
     // pDocShell may be NULL if this is the base of a ScDocOptionsObj
     if ( pDocShell )
@@ -239,11 +388,13 @@ ScModelObj::~ScModelObj()
         xNumberAgg->setDelegator(uno::Reference<uno::XInterface>());
 
     delete pPrintFuncCache;
+    delete pPrinterOptions;
 }
 
 uno::Reference< uno::XAggregation> ScModelObj::GetFormatter()
 {
-    if ( !xNumberAgg.is() )
+    // pDocShell may be NULL if this is the base of a ScDocOptionsObj
+    if ( !xNumberAgg.is() && pDocShell )
     {
         // setDelegator veraendert den RefCount, darum eine Referenz selber halten
         // (direkt am m_refCount, um sich beim release nicht selbst zu loeschen)
@@ -597,20 +748,65 @@ bool lcl_ParseTarget( const String& rTarget, ScRange& rTargetRange, Rectangle& r
     return bRangeValid;
 }
 
-BOOL ScModelObj::FillRenderMarkData( const uno::Any& aSelection, ScMarkData& rMark,
-                                     ScPrintSelectionStatus& rStatus ) const
+BOOL ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
+                                     const uno::Sequence< beans::PropertyValue >& rOptions,
+                                     ScMarkData& rMark,
+                                     ScPrintSelectionStatus& rStatus, String& rPagesStr ) const
 {
     DBG_ASSERT( !rMark.IsMarked() && !rMark.IsMultiMarked(), "FillRenderMarkData: MarkData must be empty" );
     DBG_ASSERT( pDocShell, "FillRenderMarkData: DocShell must be set" );
 
     BOOL bDone = FALSE;
 
+    uno::Reference<frame::XController> xView;
+
+    // defaults when no options are passed: all sheets, include empty pages
+    sal_Bool bSelectedSheetsOnly = sal_False;
+    sal_Bool bIncludeEmptyPages = sal_True;
+
+    bool bHasPrintContent = false;
+    sal_Int32 nPrintContent = 0;        // all sheets / selected sheets / selected cells
+    sal_Int32 nPrintRange = 0;          // all pages / pages
+    rtl::OUString aPageRange;           // "pages" edit value
+
+    for( sal_Int32 i = 0, nLen = rOptions.getLength(); i < nLen; i++ )
+    {
+        if( rOptions[i].Name.equalsAscii( "IsOnlySelectedSheets" ) )
+        {
+            rOptions[i].Value >>= bSelectedSheetsOnly;
+        }
+        else if( rOptions[i].Name.equalsAscii( "IsIncludeEmptyPages" ) )
+        {
+            rOptions[i].Value >>= bIncludeEmptyPages;
+        }
+        else if( rOptions[i].Name.equalsAscii( "PageRange" ) )
+        {
+            rOptions[i].Value >>= aPageRange;
+        }
+        else if( rOptions[i].Name.equalsAscii( "PrintRange" ) )
+        {
+            rOptions[i].Value >>= nPrintRange;
+        }
+        else if( rOptions[i].Name.equalsAscii( "PrintContent" ) )
+        {
+            bHasPrintContent = true;
+            rOptions[i].Value >>= nPrintContent;
+        }
+        else if( rOptions[i].Name.equalsAscii( "View" ) )
+        {
+            rOptions[i].Value >>= xView;
+        }
+    }
+
+    // "Print Content" selection wins over "Selected Sheets" option
+    if ( bHasPrintContent )
+        bSelectedSheetsOnly = ( nPrintContent != 0 );
+
     uno::Reference<uno::XInterface> xInterface(aSelection, uno::UNO_QUERY);
     if ( xInterface.is() )
     {
         ScCellRangesBase* pSelObj = ScCellRangesBase::getImplementation( xInterface );
         uno::Reference< drawing::XShapes > xShapes( xInterface, uno::UNO_QUERY );
-
         if ( pSelObj && pSelObj->GetDocShell() == pDocShell )
         {
             BOOL bSheet = ( ScTableSheetObj::getImplementation( xInterface ) != NULL );
@@ -683,12 +879,41 @@ BOOL ScModelObj::FillRenderMarkData( const uno::Any& aSelection, ScMarkData& rMa
         // other selection types aren't supported
     }
 
+    // restrict to selected sheets if a view is available
+    if ( bSelectedSheetsOnly && xView.is() )
+    {
+        ScTabViewObj* pViewObj = ScTabViewObj::getImplementation( xView );
+        if (pViewObj)
+        {
+            ScTabViewShell* pViewSh = pViewObj->GetViewShell();
+            if (pViewSh)
+            {
+                const ScMarkData& rViewMark = pViewSh->GetViewData()->GetMarkData();
+                SCTAB nTabCount = pDocShell->GetDocument()->GetTableCount();
+                for (SCTAB nTab = 0; nTab < nTabCount; nTab++)
+                    if (!rViewMark.GetTableSelect(nTab))
+                        rMark.SelectTable( nTab, FALSE );
+            }
+        }
+    }
+
+    ScPrintOptions aNewOptions;
+    aNewOptions.SetSkipEmpty( !bIncludeEmptyPages );
+    aNewOptions.SetAllSheets( !bSelectedSheetsOnly );
+    rStatus.SetOptions( aNewOptions );
+
+    // "PrintRange" enables (1) or disables (0) the "PageRange" edit
+    if ( nPrintRange == 1 )
+        rPagesStr = aPageRange;
+    else
+        rPagesStr.Erase();
+
     return bDone;
 }
 
 
 sal_Int32 SAL_CALL ScModelObj::getRendererCount( const uno::Any& aSelection,
-                                    const uno::Sequence<beans::PropertyValue>& /* xOptions */ )
+                                    const uno::Sequence<beans::PropertyValue>& rOptions )
                                 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
@@ -697,7 +922,8 @@ sal_Int32 SAL_CALL ScModelObj::getRendererCount( const uno::Any& aSelection,
 
     ScMarkData aMark;
     ScPrintSelectionStatus aStatus;
-    if ( !FillRenderMarkData( aSelection, aMark, aStatus ) )
+    String aPagesStr;
+    if ( !FillRenderMarkData( aSelection, rOptions, aMark, aStatus, aPagesStr ) )
         return 0;
 
     //  The same ScPrintFuncCache object in pPrintFuncCache is used as long as
@@ -709,11 +935,37 @@ sal_Int32 SAL_CALL ScModelObj::getRendererCount( const uno::Any& aSelection,
         delete pPrintFuncCache;
         pPrintFuncCache = new ScPrintFuncCache( pDocShell, aMark, aStatus );
     }
-    return pPrintFuncCache->GetPageCount();
+    sal_Int32 nPages = pPrintFuncCache->GetPageCount();
+
+    sal_Int32 nSelectCount = nPages;
+    if ( aPagesStr.Len() )
+    {
+        MultiSelection aPageRanges( aPagesStr );
+        aPageRanges.SetTotalRange( Range( 1, nPages ) );
+        nSelectCount = aPageRanges.GetSelectCount();
+    }
+    return nSelectCount;
 }
 
-uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 nRenderer,
-                                    const uno::Any& aSelection, const uno::Sequence<beans::PropertyValue>& /* xOptions */ )
+sal_Int32 lcl_GetRendererNum( sal_Int32 nSelRenderer, const String& rPagesStr, sal_Int32 nTotalPages )
+{
+    if ( !rPagesStr.Len() )
+        return nSelRenderer;
+
+    MultiSelection aPageRanges( rPagesStr );
+    aPageRanges.SetTotalRange( Range( 1, nTotalPages ) );
+
+    sal_Int32 nSelected = aPageRanges.FirstSelected();
+    while ( nSelRenderer > 0 )
+    {
+        nSelected = aPageRanges.NextSelected();
+        --nSelRenderer;
+    }
+    return nSelected - 1;       // selection is 1-based
+}
+
+uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 nSelRenderer,
+                                    const uno::Any& aSelection, const uno::Sequence<beans::PropertyValue>& rOptions  )
                                 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
@@ -722,7 +974,8 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
 
     ScMarkData aMark;
     ScPrintSelectionStatus aStatus;
-    if ( !FillRenderMarkData( aSelection, aMark, aStatus ) )
+    String aPagesStr;
+    if ( !FillRenderMarkData( aSelection, rOptions, aMark, aStatus, aPagesStr ) )
         throw lang::IllegalArgumentException();
 
     if ( !pPrintFuncCache || !pPrintFuncCache->IsSameSelection( aStatus ) )
@@ -731,8 +984,33 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         pPrintFuncCache = new ScPrintFuncCache( pDocShell, aMark, aStatus );
     }
     long nTotalPages = pPrintFuncCache->GetPageCount();
+    sal_Int32 nRenderer = lcl_GetRendererNum( nSelRenderer, aPagesStr, nTotalPages );
     if ( nRenderer >= nTotalPages )
-        throw lang::IllegalArgumentException();
+    {
+        if ( nSelRenderer == 0 )
+        {
+            // getRenderer(0) is used to query the settings, so it must always return something
+
+            SCTAB nCurTab = 0;      //! use current sheet from view?
+            ScPrintFunc aDefaultFunc( pDocShell, pDocShell->GetPrinter(), nCurTab );
+            Size aTwips = aDefaultFunc.GetPageSize();
+            awt::Size aPageSize( TwipsToHMM( aTwips.Width() ), TwipsToHMM( aTwips.Height() ) );
+
+            uno::Sequence<beans::PropertyValue> aSequence(1);
+            beans::PropertyValue* pArray = aSequence.getArray();
+            pArray[0].Name = rtl::OUString::createFromAscii( SC_UNONAME_PAGESIZE );
+            pArray[0].Value <<= aPageSize;
+
+            if( ! pPrinterOptions )
+                pPrinterOptions = new ScPrintUIOptions;
+            else
+                pPrinterOptions->SetDefaults();
+            pPrinterOptions->appendPrintUIOptions( aSequence );
+            return aSequence;
+        }
+        else
+            throw lang::IllegalArgumentException();
+    }
 
     //  printer is used as device (just for page layout), draw view is not needed
 
@@ -746,7 +1024,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         pSelRange = &aRange;
     }
     ScPrintFunc aFunc( pDocShell, pDocShell->GetPrinter(), nTab,
-                        pPrintFuncCache->GetFirstAttr(nTab), nTotalPages, pSelRange );
+                        pPrintFuncCache->GetFirstAttr(nTab), nTotalPages, pSelRange, &aStatus.GetOptions() );
     aFunc.SetRenderFlag( TRUE );
 
     Range aPageRange( nRenderer+1, nRenderer+1 );
@@ -777,10 +1055,21 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         pArray[1].Name = rtl::OUString::createFromAscii( SC_UNONAME_SOURCERANGE );
         pArray[1].Value <<= aRangeAddress;
     }
+
+    #if 0
+    const ScPrintOptions& rPrintOpt =
+    #endif
+    // FIXME: is this for side effects ?
+        SC_MOD()->GetPrintOptions();
+    if( ! pPrinterOptions )
+        pPrinterOptions = new ScPrintUIOptions;
+    else
+        pPrinterOptions->SetDefaults();
+    pPrinterOptions->appendPrintUIOptions( aSequence );
     return aSequence;
 }
 
-void SAL_CALL ScModelObj::render( sal_Int32 nRenderer, const uno::Any& aSelection,
+void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelection,
                                     const uno::Sequence<beans::PropertyValue>& rOptions )
                                 throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
@@ -790,7 +1079,8 @@ void SAL_CALL ScModelObj::render( sal_Int32 nRenderer, const uno::Any& aSelectio
 
     ScMarkData aMark;
     ScPrintSelectionStatus aStatus;
-    if ( !FillRenderMarkData( aSelection, aMark, aStatus ) )
+    String aPagesStr;
+    if ( !FillRenderMarkData( aSelection, rOptions, aMark, aStatus, aPagesStr ) )
         throw lang::IllegalArgumentException();
 
     if ( !pPrintFuncCache || !pPrintFuncCache->IsSameSelection( aStatus ) )
@@ -799,6 +1089,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nRenderer, const uno::Any& aSelectio
         pPrintFuncCache = new ScPrintFuncCache( pDocShell, aMark, aStatus );
     }
     long nTotalPages = pPrintFuncCache->GetPageCount();
+    sal_Int32 nRenderer = lcl_GetRendererNum( nSelRenderer, aPagesStr, nTotalPages );
     if ( nRenderer >= nTotalPages )
         throw lang::IllegalArgumentException();
 
@@ -833,7 +1124,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nRenderer, const uno::Any& aSelectio
     //  to increase performance, ScPrintState might be used here for subsequent
     //  pages of the same sheet
 
-    ScPrintFunc aFunc( pDev, pDocShell, nTab, pPrintFuncCache->GetFirstAttr(nTab), nTotalPages, pSelRange );
+    ScPrintFunc aFunc( pDev, pDocShell, nTab, pPrintFuncCache->GetFirstAttr(nTab), nTotalPages, pSelRange, &aStatus.GetOptions() );
     aFunc.SetDrawView( pDrawView );
     aFunc.SetRenderFlag( TRUE );
     if( aStatus.GetMode() == SC_PRINTSEL_RANGE_EXCLUSIVELY_OLE_AND_DRAW_OBJECTS )
@@ -847,11 +1138,11 @@ void SAL_CALL ScModelObj::render( sal_Int32 nRenderer, const uno::Any& aSelectio
     long nDisplayStart = pPrintFuncCache->GetDisplayStart( nTab );
     long nTabStart = pPrintFuncCache->GetTabStart( nTab );
 
+    vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
     if ( nRenderer == nTabStart )
     {
         // first page of a sheet: add outline item for the sheet name
 
-        vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
         if ( pPDFData && pPDFData->GetIsExportBookmarks() )
         {
             // the sheet starts at the top of the page
@@ -864,7 +1155,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nRenderer, const uno::Any& aSelectio
         }
         //--->i56629
         // add the named destination stuff
-        if( pPDFData->GetIsExportNamedDestinations() )
+        if( pPDFData && pPDFData->GetIsExportNamedDestinations() )
         {
             Rectangle aArea( pDev->PixelToLogic( Rectangle( 0,0,0,0 ) ) );
             String aTabName;
@@ -879,7 +1170,6 @@ void SAL_CALL ScModelObj::render( sal_Int32 nRenderer, const uno::Any& aSelectio
 
     //  resolve the hyperlinks for PDF export
 
-    vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
     if ( pPDFData )
     {
         //  iterate over the hyperlinks that were output for this page
@@ -1448,6 +1738,14 @@ void SAL_CALL ScModelObj::setPropertyValue(
             if ( aObjName.getLength() )
                 pDoc->RestoreChartListener( aObjName );
         }
+        else if ( aString.EqualsAscii( "WriteProtectionPassword" ) )
+        {
+            /*  This is a hack for #160550# to preserve the write-protection
+                password in an XLS roundtrip. This property MUST NOT be used
+                for any other purpose. This property will be deleted when the
+                feature "Write Protection With Password" will be implemented. */
+            aValue >>= mnXlsWriteProtPass;
+        }
 
         if ( aNewOpt != rOldOpt )
         {
@@ -1609,6 +1907,14 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const rtl::OUString& aPropertyNa
         else if ( aString.EqualsAscii( "InternalDocument" ) )
         {
             ScUnoHelpFunctions::SetBoolInAny( aRet, (pDocShell->GetCreateMode() == SFX_CREATE_MODE_INTERNAL) );
+        }
+        else if ( aString.EqualsAscii( "WriteProtectionPassword" ) )
+        {
+            /*  This is a hack for #160550# to preserve the write-protection
+                password in an XLS roundtrip. This property MUST NOT be used
+                for any other purpose. This property will be deleted when the
+                feature "Write Protection With Password" will be implemented. */
+            aRet <<= mnXlsWriteProtPass;
         }
     }
 

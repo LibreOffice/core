@@ -662,7 +662,9 @@
 //#define SID_OPENDLG_MODCHART      (SC_MESSAGE_START + 58)
 #define SID_OPENDLG_CONDFRMT        (SC_MESSAGE_START + 59)
 #define SID_OPENDLG_OPTSOLVER       (SC_MESSAGE_START + 60)
-
+//<!--Added by PengYunQuan for Validity Cell Range Picker
+#define SID_VALIDITY_REFERENCE      (SC_MESSAGE_START + 61)
+//-->Added by PengYunQuan for Validity Cell Range Picker
 #define SC_HINT_NAVIGATOR_UPDATEALL  (SC_MESSAGE_START + 65)
 
 // Funktionen ------------------------------------------------------------
@@ -675,7 +677,6 @@
 #define FILE_MENU_END           (SC_FUNCTION_START + 20)
 
 #define EDIT_MENU_START         (FILE_MENU_END)
-#define FID_PASTE_CONTENTS      (EDIT_MENU_START)
 #define FID_DELETE_CELLCONTENTS (EDIT_MENU_START + 1)
 #define FID_DELETE_CELL         (EDIT_MENU_START + 2)
 #define FID_DELETE_TABLE        (EDIT_MENU_START + 3)
@@ -856,8 +857,6 @@
 #define RID_INPUTBAR_END        (RID_INPUTBAR_START+1)
 
 #define DRAW_BAR_START          (RID_INPUTBAR_END)
-//! SID_OBJECT_MIRROR wird sicher mal allgemein
-#define SID_OBJECT_MIRROR       (DRAW_BAR_START)
 #define SID_DRAWTOABOVE         (DRAW_BAR_START+15)
 #define SID_DRAWTOBELOW         (DRAW_BAR_START+16)
 //#define SID_GROUP             (DRAW_BAR_START+17)
@@ -1105,10 +1104,6 @@
 
 #define SID_DELETE_SCENARIO     (SID_NEW_SLOTS+95)
 #define SID_EDIT_SCENARIO       (SID_NEW_SLOTS+96)
-
-#define SID_GET_CLPBRD_FORMAT_COUNT     (SID_NEW_SLOTS+97)
-#define SID_GET_CLPBRD_FORMAT_BY_IDX    (SID_NEW_SLOTS+98)
-#define SID_GET_CLPBRD_FORMAT_NAME      (SID_NEW_SLOTS+99)
 
 // idl Parameter ---------------------------------------------------------
 
@@ -1382,6 +1377,8 @@
 
 #define SCSTR_RENAMEOBJECT          (STR_START + 215)
 
+#define SCSTR_PRINT_OPTIONS     (STR_START+216)
+
 // Navigator - in der Reihenfolge wie SC_CONTENT_...
 #define SCSTR_CONTENT_ROOT      (STR_START + 250)
 #define SCSTR_CONTENT_TABLE     (STR_START + 251)
@@ -1444,6 +1441,8 @@
 #define RID_IMG_H_DROP_URL      (BMP_START + 5)
 #define RID_IMG_H_DROP_LINK     (BMP_START + 6)
 #define RID_IMG_H_DROP_COPY     (BMP_START + 7)
+#define RID_IMG_SELECT_CURRENT   (BMP_START + 8)
+#define RID_IMG_UNSELECT_CURRENT (BMP_START + 9)
 
 #define RID_SCPTR_PIVOTCOL      (BMP_START + 81)
 #define RID_SCPTR_PIVOTROW      (BMP_START + 82)
@@ -1635,8 +1634,9 @@
 #define RID_SCDLG_DOCPROTECTION         (SC_DIALOGS_START + 149)
 #define RID_SCDLG_RETYPEPASS            (SC_DIALOGS_START + 150)
 #define RID_SCDLG_RETYPEPASS_INPUT      (SC_DIALOGS_START + 151)
+#define RID_POPUP_FILTER                (SC_DIALOGS_START + 152)
 
-#define SC_DIALOGS_END          (SC_DIALOGS_START + 152)
+#define SC_DIALOGS_END                  (SC_DIALOGS_START + 153)
 
 #ifndef STD_MASKCOLOR
 #define STD_MASKCOLOR Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; }

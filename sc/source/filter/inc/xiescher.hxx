@@ -33,8 +33,8 @@
 
 #include <vector>
 #include <map>
-#include <svx/msdffimp.hxx>
-#include <svx/msocximex.hxx>
+#include <filter/msfilter/msdffimp.hxx>
+#include <filter/msfilter/msocximex.hxx>
 #include <vcl/graph.hxx>
 #include "xlescher.hxx"
 #include "xiroot.hxx"
@@ -979,7 +979,7 @@ class SdrObjList;
 /** Derived from SvxMSDffManager and SvxMSConvertOCXControls, contains core
     implementation of DFF stream import and OCX form control import.
  */
-class XclImpDffManager : protected XclImpSimpleDffManager, protected SvxMSConvertOCXControls
+class XclImpDffManager : public XclImpSimpleDffManager, protected SvxMSConvertOCXControls
 {
 public:
     explicit            XclImpDffManager(

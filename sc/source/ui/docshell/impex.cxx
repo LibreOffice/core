@@ -53,9 +53,9 @@ class StarBASIC;
 #include <tools/string.hxx>
 #include <rtl/math.hxx>
 #include <svtools/htmlout.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <sot/formats.hxx>
 #include <sfx2/mieclip.hxx>
 #include <unotools/charclass.hxx>
@@ -253,7 +253,7 @@ BOOL ScImportExport::StartPaste()
     {
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         pUndoDoc->InitUndo( pDoc, aRange.aStart.Tab(), aRange.aEnd.Tab() );
-        pDoc->CopyToDocument( aRange, IDF_ALL, FALSE, pUndoDoc );
+        pDoc->CopyToDocument( aRange, IDF_ALL | IDF_NOCAPTIONS, FALSE, pUndoDoc );
     }
     return TRUE;
 }
@@ -270,7 +270,7 @@ void ScImportExport::EndPaste()
     {
         ScDocument* pRedoDoc = new ScDocument( SCDOCMODE_UNDO );
         pRedoDoc->InitUndo( pDoc, aRange.aStart.Tab(), aRange.aEnd.Tab() );
-        pDoc->CopyToDocument( aRange, IDF_ALL, FALSE, pRedoDoc );
+        pDoc->CopyToDocument( aRange, IDF_ALL | IDF_NOCAPTIONS, FALSE, pRedoDoc );
         ScMarkData aDestMark;
         aDestMark.SelectOneTable( aRange.aStart.Tab() );
         pDocSh->GetUndoManager()->AddUndoAction(
