@@ -626,6 +626,7 @@ struct OReportDefinitionImpl
     sal_Bool                                                m_bControllersLocked;
     sal_Bool                                                m_bModified;
     sal_Bool                                                m_bEscapeProcessing;
+    sal_Bool                                                m_bSetModifiedEnabled;
     OReportDefinitionImpl(::osl::Mutex& _aMutex)
     :m_aStorageChangeListeners(_aMutex)
     ,m_aCloseListener(_aMutex)
@@ -643,6 +644,7 @@ struct OReportDefinitionImpl
     ,m_bControllersLocked(sal_False)
     ,m_bModified(sal_False)
     ,m_bEscapeProcessing(sal_True)
+    ,m_bSetModifiedEnabled( sal_True )
     {}
 
     OReportDefinitionImpl(::osl::Mutex& _aMutex,const OReportDefinitionImpl& _aCopy)
@@ -1955,6 +1957,38 @@ embed::VisualRepresentation SAL_CALL OReportDefinition::getPreferredVisualRepres
 }
 // -----------------------------------------------------------------------------
 // XModifiable
+::sal_Bool SAL_CALL OReportDefinition::disableSetModified(  ) throw (uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    ::connectivity::checkDisposed( ReportDefinitionBase::rBHelper.bDisposed );
+
+    const sal_Bool bWasEnabled = m_pImpl->m_bSetModifiedEnabled;
+    m_pImpl->m_bSetModifiedEnabled = sal_False;
+    return bWasEnabled;
+}
+
+// -----------------------------------------------------------------------------
+::sal_Bool SAL_CALL OReportDefinition::enableSetModified(  ) throw (uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    ::connectivity::checkDisposed( ReportDefinitionBase::rBHelper.bDisposed );
+
+    const sal_Bool bWasEnabled = m_pImpl->m_bSetModifiedEnabled;
+    m_pImpl->m_bSetModifiedEnabled = sal_True;
+    return bWasEnabled;
+}
+
+// -----------------------------------------------------------------------------
+::sal_Bool SAL_CALL OReportDefinition::isSetModifiedEnabled(  ) throw (uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    ::connectivity::checkDisposed( ReportDefinitionBase::rBHelper.bDisposed );
+
+    return m_pImpl->m_bSetModifiedEnabled;
+}
+
+// -----------------------------------------------------------------------------
+// XModifiable
 ::sal_Bool SAL_CALL OReportDefinition::isModified(  ) throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -1966,6 +2000,10 @@ void SAL_CALL OReportDefinition::setModified( ::sal_Bool _bModified ) throw (bea
 {
     ::osl::ResettableMutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
+
+    if ( !m_pImpl->m_bSetModifiedEnabled )
+        return;
+
     if ( m_pImpl->m_pReportModel->IsReadOnly() && _bModified )
         throw beans::PropertyVetoException();
     if ( m_pImpl->m_bModified != _bModified )
