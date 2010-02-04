@@ -63,7 +63,6 @@
 #include <editeng/postitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/crsditem.hxx>
-#include <unoobj.hxx>
 #include <docsh.hxx>
 #include <fmtanchr.hxx>
 #include <docary.hxx>
