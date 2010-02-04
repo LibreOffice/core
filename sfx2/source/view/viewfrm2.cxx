@@ -231,7 +231,7 @@ String SfxViewFrame::UpdateTitle()
 
     // Name des SbxObjects
     String aSbxName = pObjSh->SfxShell::GetName();
-    if ( IsVisible_Impl() )
+    if ( IsVisible() )
     {
         aSbxName += ':';
         aSbxName += String::CreateFromInt32(pImp->nDocViewNo);

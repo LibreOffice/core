@@ -174,6 +174,10 @@ private:
     getInteractionHandler()
         SAL_THROW((com::sun::star::uno::RuntimeException));
 
+    bool    handleTypedHandlerImplementations(
+                ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest > const &  rRequest
+            );
+
     bool
     tryOtherInteractionHandler(
         com::sun::star::uno::Reference<

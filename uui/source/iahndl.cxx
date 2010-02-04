@@ -112,6 +112,8 @@ using ::com::sun::star::task::XInteractionRequest;
 using ::com::sun::star::lang::XMultiServiceFactory;
 /** === end UNO using === **/
 
+using namespace ::com::sun::star;
+
 namespace {
 
 class HandleData : public osl::Condition
