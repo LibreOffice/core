@@ -60,6 +60,7 @@ SLOFILES=   \
             $(SLO)$/docpasswordhelper.obj \
             $(SLO)$/docpasswordrequest.obj \
             $(SLO)$/documentinfo.obj \
+            $(SLO)$/evtmethodhelper.obj \
             $(SLO)$/documentiologring.obj \
             $(SLO)$/evtlistenerhlp.obj \
             $(SLO)$/ihwrapnofilter.obj \
