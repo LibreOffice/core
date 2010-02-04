@@ -476,6 +476,7 @@ void UnoEditControl::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) t
 //  ----------------------------------------------------
 UnoControlFileControlModel::UnoControlFileControlModel()
 {
+    ImplRegisterProperty( BASEPROPERTY_ALIGN );
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
     ImplRegisterProperty( BASEPROPERTY_BORDER );
     ImplRegisterProperty( BASEPROPERTY_BORDERCOLOR );
@@ -489,6 +490,7 @@ UnoControlFileControlModel::UnoControlFileControlModel()
     ImplRegisterProperty( BASEPROPERTY_READONLY );
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );
     ImplRegisterProperty( BASEPROPERTY_TEXT );
+    ImplRegisterProperty( BASEPROPERTY_VERTICALALIGN );
     ImplRegisterProperty( BASEPROPERTY_WRITING_MODE );
     ImplRegisterProperty( BASEPROPERTY_CONTEXT_WRITING_MODE );
     ImplRegisterProperty( BASEPROPERTY_HIDEINACTIVESELECTION );

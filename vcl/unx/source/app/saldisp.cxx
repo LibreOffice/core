@@ -2304,11 +2304,7 @@ long SalX11Display::Dispatch( XEvent *pEvent )
             return 0;
 
     SalInstance* pInstance = GetSalData()->m_pInstance;
-    if( pInstance->GetEventCallback() )
-    {
-        YieldMutexReleaser aReleaser;
-        pInstance->CallEventCallback( pEvent, sizeof( XEvent ) );
-    }
+    pInstance->CallEventCallback( pEvent, sizeof( XEvent ) );
 
     switch( pEvent->type )
     {

@@ -42,6 +42,7 @@ namespace vcl
 {
 
 typedef sal_uInt32 ULONG;
+typedef sal_uInt32 UINT32;
 typedef sal_uInt16 USHORT;
 typedef sal_uInt8 FT_Byte;
 
@@ -280,13 +281,11 @@ int ReadGSUB( struct _TrueTypeFont* pTTFile,
                         return false;
                     for( int i = nCntRange; --i >= 0; )
                     {
-                        const USHORT nGlyph0 = NEXT_UShort( pCoverage );
-                        const USHORT nGlyph1 = NEXT_UShort( pCoverage );
-                        const USHORT nStartCoverageIndex = NEXT_UShort( pCoverage );
-                        OSL_ENSURE( aSubstVector.size() == nStartCoverageIndex, "coverage index mismatch");
-                        (void)nStartCoverageIndex;
-                        for( USHORT j = nGlyph0; j <= nGlyph1; ++j )
-                            aSubstVector.push_back( GlyphSubst( j, 0 ) );
+                        const UINT32 nGlyph0 = NEXT_UShort( pCoverage );
+                        const UINT32 nGlyph1 = NEXT_UShort( pCoverage );
+                        const USHORT nCovIdx = NEXT_UShort( pCoverage );
+                        for( UINT32 j = nGlyph0; j <= nGlyph1; ++j )
+                            aSubstVector.push_back( GlyphSubst( static_cast<USHORT>(j + nCovIdx), 0 ) );
                     }
                 }
                 break;
