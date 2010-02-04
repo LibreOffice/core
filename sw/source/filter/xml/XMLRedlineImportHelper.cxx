@@ -33,7 +33,8 @@
 
 
 #include "XMLRedlineImportHelper.hxx"
-#include "unoobj.hxx"
+#include <unotextcursor.hxx>
+#include <unotextrange.hxx>
 #include <unocrsr.hxx>
 #include "doc.hxx"
 #include <tools/datetime.hxx>
@@ -161,7 +162,7 @@ void XTextRangeOrNodeIndexPosition::SetAsNodeIndex(
 #ifdef DBG_UTIL
     sal_Bool bSuccess =
 #endif
-        SwXTextRange::XTextRangeToSwPaM( aPaM, rRange);
+        ::sw::XTextRangeToSwPaM(aPaM, rRange);
     DBG_ASSERT(bSuccess, "illegal range");
 
     // PaM -> Index
@@ -179,7 +180,7 @@ void XTextRangeOrNodeIndexPosition::CopyPositionInto(SwPosition& rPos)
 #ifdef DBG_UTIL
         sal_Bool bSuccess =
 #endif
-            SwXTextRange::XTextRangeToSwPaM(aUnoPaM, xRange);
+            ::sw::XTextRangeToSwPaM(aUnoPaM, xRange);
         DBG_ASSERT(bSuccess, "illegal range");
 
         rPos = *aUnoPaM.GetPoint();
@@ -499,11 +500,11 @@ Reference<XTextCursor> XMLRedlineImportHelper::CreateRedlineTextSection(
 
         // create (UNO-) cursor
         SwPosition aPos(*pRedlineNode);
-        SwXTextCursor* pCursor =
-            new SwXTextCursor(pXText, aPos, CURSOR_REDLINE, pDoc);
-        pCursor->GetCrsr()->Move(fnMoveForward, fnGoNode);
-
-        xReturn = (XWordCursor*)pCursor;    // cast to avoid ambigiouty
+        SwXTextCursor *const pXCursor =
+            new SwXTextCursor(*pDoc, pXText, CURSOR_REDLINE, aPos);
+        pXCursor->GetCursor()->Move(fnMoveForward, fnGoNode);
+        // cast to avoid ambiguity
+        xReturn = static_cast<text::XWordCursor*>(pXCursor);
     }
     // else: unknown redline -> Ignore
 
@@ -686,7 +687,7 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
             if( nPoint < pRedlineInfo->pContentIndex->GetIndex() ||
                 nPoint > pRedlineInfo->pContentIndex->GetNode().EndOfSectionIndex() )
                 pRedline->SetContentIdx(pRedlineInfo->pContentIndex);
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             else
                 ASSERT( false, "Recursive change tracking" );
 #endif

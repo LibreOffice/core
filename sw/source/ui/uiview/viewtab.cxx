@@ -44,11 +44,11 @@
 #include <svx/ulspitem.hxx>
 #include <svx/boxitem.hxx>
 #include <svx/frmdiritem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/eitem.hxx>
+#include <svl/whiter.hxx>
 #include <svx/ruler.hxx>
 #include <svx/protitem.hxx>
-#include <svtools/rectitem.hxx>
+#include <svl/rectitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <fmtfsize.hxx>
 #include <fmthdft.hxx>
@@ -347,7 +347,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             if(aSize.GetWidthPercent())
             {
                 SwRect aRect;
-                rSh.CalcBoundRect(aRect, FLY_IN_CNTNT);
+                rSh.CalcBoundRect(aRect, FLY_AS_CHAR);
                 long nPrtWidth = aRect.Width();
                 aSize.SetWidthPercent(BYTE((nPageWidth - aLongLR.GetLeft() - aLongLR.GetRight()) * 100 /nPrtWidth));
             }
@@ -472,7 +472,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             if(aSize.GetHeightPercent())
             {
                 SwRect aRect;
-                rSh.CalcBoundRect(aRect, FLY_IN_CNTNT);
+                rSh.CalcBoundRect(aRect, FLY_AS_CHAR);
                 long nPrtHeight = aRect.Height();
                 aSize.SetHeightPercent(BYTE(nHeight * 100 /nPrtHeight));
             }

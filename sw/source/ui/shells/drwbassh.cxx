@@ -39,19 +39,17 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <svx/svdview.hxx>
 #include <vcl/msgbox.hxx>
 #include <svx/srchitem.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/swframevalidation.hxx>
 #include <svx/anchorid.hxx>
 #include <svx/htmlmode.hxx>
 #include <uitool.hxx>
 #include <fmtornt.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <wview.hxx>
@@ -238,7 +236,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                             if ( pFact )
                             {
                                 AbstractSvxCaptionDialog* pCaptionDlg =
-                                        pFact->CreateCaptionDialog( NULL, pSdrView, RID_SVXDLG_CAPTION, nAllowedAnchors );
+                                        pFact->CreateCaptionDialog( NULL, pSdrView, nAllowedAnchors );
                                 pCaptionDlg->SetValidateFramePosLink( LINK(this, SwDrawBaseShell, ValidatePosition) );
                                 pDlg = pCaptionDlg;
                                 DBG_ASSERT(pDlg, "Dialogdiet fail!");
@@ -251,7 +249,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                             {
 
                                 AbstractSvxTransformTabDialog* pTransform =
-                                            pFact->CreateSvxTransformTabDialog( NULL, NULL, pSdrView, RID_SVXDLG_TRANSFORM, nAllowedAnchors );
+                                            pFact->CreateSvxTransformTabDialog( NULL, NULL, pSdrView, nAllowedAnchors );
                                 pTransform->SetValidateFramePosLink( LINK(this, SwDrawBaseShell, ValidatePosition) );
                                 pDlg = pTransform;
                                 DBG_ASSERT(pDlg, "Dialogdiet fail!");
@@ -479,7 +477,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                 {   // Objekte nicht aneinander ausrichten
 
                     USHORT nAnchor = pSh->GetAnchorId();
-                    if (nAnchor == FLY_IN_CNTNT)
+                    if (nAnchor == FLY_AS_CHAR)
                     {
                         sal_Int16 nVertOrient = -1;
 
@@ -509,7 +507,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                         }
                         break;
                     }
-                    if (nAnchor == FLY_AT_CNTNT)
+                    if (nAnchor == FLY_AT_PARA)
                         break;  // Absatzverankerte Rahmen nicht ausrichten
                 }
 
@@ -567,7 +565,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
-                AbstractSvxObjectNameDialog* pDlg = pFact->CreateSvxObjectNameDialog(NULL, aName, RID_SVXDLG_OBJECT_NAME);
+                AbstractSvxObjectNameDialog* pDlg = pFact->CreateSvxObjectNameDialog(NULL, aName);
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
                 pDlg->SetCheckNameHdl(LINK(this, SwDrawBaseShell, CheckGroupShapeNameHdl));
@@ -599,7 +597,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
-                AbstractSvxObjectTitleDescDialog* pDlg = pFact->CreateSvxObjectTitleDescDialog(NULL, aTitle, aDescription, RID_SVXDLG_OBJECT_TITLE_DESC);
+                AbstractSvxObjectTitleDescDialog* pDlg = pFact->CreateSvxObjectTitleDescDialog(NULL, aTitle, aDescription);
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
                 if(RET_OK == pDlg->Execute())
@@ -855,7 +853,7 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation 
         pValidation->nWidth = pValidation->nHeight;
         pValidation->nHeight = nTmp;
     }
-    if ( eAnchorType == FLY_PAGE || eAnchorType == FLY_AT_FLY )
+    if ((eAnchorType == FLY_AT_PAGE) || (eAnchorType == FLY_AT_FLY))
     {
         // MinimalPosition
         pValidation->nMinHPos = aBoundRect.Left();
@@ -903,7 +901,7 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation 
         pValidation->nMaxVPos   = aBoundRect.Bottom() - pValidation->nHeight;
         pValidation->nMaxWidth  = aBoundRect.Right()  - nH;
     }
-    else if ( eAnchorType == FLY_AT_CNTNT || eAnchorType == FLY_AUTO_CNTNT )
+    else if ((eAnchorType == FLY_AT_PARA) || (eAnchorType == FLY_AT_CHAR))
     {
         if (pValidation->nHPos + pValidation->nWidth > aBoundRect.Right())
         {
@@ -964,7 +962,7 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation 
         pValidation->nMaxHeight  = pValidation->nMaxVPos + pValidation->nHeight - nV;
         pValidation->nMaxWidth   = pValidation->nMaxHPos + pValidation->nWidth - nH;
     }
-    else if ( eAnchorType == FLY_IN_CNTNT )
+    else if (eAnchorType == FLY_AS_CHAR)
     {
         pValidation->nMinHPos = 0;
         pValidation->nMaxHPos = 0;

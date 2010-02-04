@@ -39,14 +39,10 @@
 #include <tools/datetime.hxx>
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_ULONGS
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #endif
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
 #include <unotools/charclass.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <doc.hxx>
@@ -69,14 +65,13 @@
 #include <chpfld.hxx>
 #include <reffld.hxx>
 #include <flddropdown.hxx>
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 #include <section.hxx>
 #include <cellatr.hxx>
 #include <docary.hxx>
 #include <authfld.hxx>
 #include <txtinet.hxx>
+#include <fmtcntnt.hxx>
 #ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>      // fuer InitFldTypes
 #endif
@@ -601,7 +596,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                     {
                         if( aPara.CalcWithStackOverflow() )
                             pFld->CalcField( aPara );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                         else
                         {
                             // mind. ein ASSERT
@@ -669,7 +664,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                     {
                         if( aPara.CalcWithStackOverflow() )
                             pFml->Calc( aPara, nValue );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                         else
                         {
                             // mind. ein ASSERT
@@ -907,7 +902,7 @@ void _SetGetExpFld::SetBodyPos( const SwCntntFrm& rFrm )
         SwNodeIndex aIdx( *rFrm.GetNode() );
         SwDoc& rDoc = *aIdx.GetNodes().GetDoc();
         SwPosition aPos( aIdx );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ASSERT( ::GetBodyTxtNode( rDoc, aPos, rFrm ), "wo steht das Feld" );
 #else
         ::GetBodyTxtNode( rDoc, aPos, rFrm );
@@ -2551,7 +2546,7 @@ void SwDocUpdtFld::GetBodyNode( const SwTxtFld& rTFld, USHORT nFldWhich )
     {
         // einen Index fuers bestimmen vom TextNode anlegen
         SwPosition aPos( rDoc.GetNodes().GetEndOfPostIts() );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ASSERT( GetBodyTxtNode( rDoc, aPos, *pFrm ), "wo steht das Feld" );
 #else
         GetBodyTxtNode( rDoc, aPos, *pFrm );
@@ -2599,7 +2594,7 @@ void SwDocUpdtFld::GetBodyNode( const SwSectionNode& rSectNd )
             if( !pFrm )
                 break;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             ASSERT( GetBodyTxtNode( rDoc, aPos, *pFrm ), "wo steht das Feld" );
 #else
             GetBodyTxtNode( rDoc, aPos, *pFrm );

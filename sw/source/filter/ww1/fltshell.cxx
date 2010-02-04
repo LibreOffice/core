@@ -35,10 +35,8 @@
 #include <hintids.hxx>
 #include <hints.hxx>
 
-#ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
-#endif
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svx/impgrf.hxx>
 #include <svx/boxitem.hxx>
 #include <svx/boxitem.hxx>
@@ -47,7 +45,7 @@
 #include <svx/cntritem.hxx>
 #include <svx/postitem.hxx>
 #include <svx/crsditem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <unotools/charclass.hxx>
 #include <txtftn.hxx>
 #include <fmtpdsc.hxx>
@@ -72,12 +70,11 @@
 #include <section.hxx>          // class SwSection
 #include <tblsel.hxx>           // class SwSelBoxes
 #include <pagedesc.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>            // class SwDocSh
-#endif
 #include <fltshell.hxx>
 #include <viewsh.hxx>
 #include <shellres.hxx>
+
 
 #define MAX_FIELDLEN 64000
 
@@ -437,7 +434,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
                 // Damit die Frames bei Einfuegen in existierendes Doc
                 //  erzeugt werden (erst nach Setzen des Ankers!):
                 if(pDoc->GetRootFrm()
-                   && FLY_AT_CNTNT == pFmt->GetAnchor().GetAnchorId())
+                   && (FLY_AT_PARA == pFmt->GetAnchor().GetAnchorId()))
                 {
                     pFmt->MakeFrms();
                 }
@@ -1285,7 +1282,7 @@ SwFltOutBase::~SwFltOutBase()
 }
 
 SwFltOutBase::SwFltOutBase(SwDoc& rDocu)
-    : rDoc(rDocu), eFlyAnchor(FLY_AT_CNTNT), bFlyAbsPos(false)
+    : rDoc(rDocu), eFlyAnchor(FLY_AT_PARA), bFlyAbsPos(false)
 {
 }
 
@@ -1685,7 +1682,7 @@ SfxItemSet* SwFltOutBase::NewFlyDefaults()
 BOOL SwFltOutBase::BeginFly( RndStdIds eAnchor /*= FLY_AT_CNTNT*/,
                            BOOL bAbsolutePos /*= FALSE*/,
                            const SfxItemSet*
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                                pMoreAttrs /*= 0*/
 #endif
                             )
@@ -1702,8 +1699,8 @@ BOOL SwFltOutBase::BeginFly( RndStdIds eAnchor /*= FLY_AT_CNTNT*/,
         ASSERT( FALSE, "SetFlyAnchor() ohne Fly" );
         return;
     }
-    if( eAnchor == FLY_IN_CNTNT ){
-        ASSERT( FALSE, "SetFlyAnchor( FLY_IN_CNTNT ) nicht implementiert" );
+    if ( eAnchor == FLY_AS_CHAR ){
+        ASSERT( FALSE, "SetFlyAnchor( FLY_AS_CHAR ) nicht implementiert" );
         return;
     }
     SwFmtAnchor& rAnchor = (SwFmtAnchor&)GetFlyFrmAttr( RES_ANCHOR );

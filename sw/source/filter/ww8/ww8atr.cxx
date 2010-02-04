@@ -41,9 +41,9 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/salbtype.hxx>
-#include <svtools/zformat.hxx>
-#include <svtools/itemiter.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/zformat.hxx>
+#include <svl/itemiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/tstpitem.hxx>
 #include <svx/adjitem.hxx>
@@ -128,9 +128,7 @@
 
 #include <writerfilter/doctok/sprmids.hxx>
 
-#if OSL_DEBUG_LEVEL > 1
-#  include <fmtcntnt.hxx>
-#endif
+#include <fmtcntnt.hxx>
 #include "writerhelper.hxx"
 #include "writerwordglue.hxx"
 #include "wrtww8.hxx"
@@ -966,7 +964,7 @@ void WW8AttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pTe
             TableRowEnd( pTextNodeInfoInner->getDepth() );
 
             SVBT16 nSty;
-            ShortToSVBT16( m_rWW8Export.nStyleBeforeFly, nSty );
+            ShortToSVBT16( 0, nSty );
             m_rWW8Export.pO->Insert( (BYTE*)&nSty, 2, m_rWW8Export.pO->Count() );     // Style #
             TableInfoRow( pTextNodeInfoInner );
             m_rWW8Export.pPapPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), m_rWW8Export.pO->Count(),
@@ -980,6 +978,24 @@ void WW8AttributeOutput::StartRunProperties()
 {
     WW8_WrPlcFld* pCurrentFields = m_rWW8Export.CurrentFieldPlc();
     m_nFieldResults = pCurrentFields ? pCurrentFields->ResultCount() : 0;
+}
+
+
+void WW8AttributeOutput::StartRun( const SwRedlineData* pRedlineData )
+{
+    if (pRedlineData)
+    {
+        const String &rComment = pRedlineData->GetComment();
+        //Only possible to export to main text
+        if (rComment.Len() && (m_rWW8Export.nTxtTyp == TXT_MAINTEXT))
+        {
+            if (m_rWW8Export.pAtn->IsNewRedlineComment(pRedlineData))
+            {
+                m_rWW8Export.pAtn->Append( m_rWW8Export.Fc2Cp( m_rWW8Export.Strm().Tell() ), pRedlineData );
+                m_rWW8Export.WritePostItBegin( m_rWW8Export.pO );
+            }
+        }
+    }
 }
 
 void WW8AttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
@@ -1559,7 +1575,7 @@ bool WW8Export::TransBrush(const Color& rCol, WW8_SHD& rShd)
         rShd = WW8_SHD();               // alles Nullen : transparent
     else
     {
-        rShd.SetFore( 8);
+        rShd.SetFore( 0);
         rShd.SetBack( TransCol( rCol ) );
         rShd.SetStyle( bWrtWW8, 0 );
     }
@@ -2555,8 +2571,8 @@ void WW8AttributeOutput::SetField( const SwField& rFld, ww::eField eType, const 
 
 void WW8AttributeOutput::PostitField( const SwField* pFld )
 {
-    const SwPostItField& rPFld = *(SwPostItField*)pFld;
-    m_rWW8Export.pAtn->Append( m_rWW8Export.Fc2Cp( m_rWW8Export.Strm().Tell() ), rPFld );
+    const SwPostItField *pPFld = (const SwPostItField*)pFld;
+    m_rWW8Export.pAtn->Append( m_rWW8Export.Fc2Cp( m_rWW8Export.Strm().Tell() ), pPFld );
     m_rWW8Export.WritePostItBegin( m_rWW8Export.pO );
 }
 
@@ -3582,7 +3598,7 @@ ULONG WW8Export::ReplaceCr( BYTE nChar )
         pChpPlc->AppendFkpEntry(rStrm.Tell());
         nRetPos = rStrm.Tell();
     }
-#ifdef PRODUCT
+#ifndef DBG_UTIL
     else
     {
         ASSERT( nRetPos || nPos == (ULONG)pFib->fcMin,
@@ -4069,15 +4085,15 @@ void WW8AttributeOutput::FormatAnchor( const SwFmtAnchor& rAnchor )
         BYTE nP = 0;
         switch ( rAnchor.GetAnchorId() )
         {
-            case FLY_PAGE:
+            case FLY_AT_PAGE:
                 // Vert: Page | Horz: Page
                 nP |= (1 << 4) | (2 << 6);
                 break;
             // Im Fall eine Flys als Zeichen: Absatz-gebunden setzen!!!
             case FLY_AT_FLY:
-            case FLY_AUTO_CNTNT:
-            case FLY_AT_CNTNT:
-            case FLY_IN_CNTNT:
+            case FLY_AT_CHAR:
+            case FLY_AT_PARA:
+            case FLY_AS_CHAR:
                 // Vert: Page | Horz: Page
                 nP |= (2 << 4) | (0 << 6);
                 break;

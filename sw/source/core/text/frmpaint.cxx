@@ -600,7 +600,7 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
  *                      SwTxtFrm::Paint()
  *************************************************************************/
 
-void SwTxtFrm::Paint( const SwRect &rRect ) const
+void SwTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/ ) const
 {
     ResetRepaint();
 
@@ -728,7 +728,7 @@ void SwTxtFrm::Paint( const SwRect &rRect ) const
                 //DBG_LOOP; shadows declaration above.
                 //resolved into:
 #if  OSL_DEBUG_LEVEL > 1
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 DbgLoop aDbgLoop2( (const void*) this );
 #endif
 #endif

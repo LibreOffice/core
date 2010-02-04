@@ -34,7 +34,7 @@
 
 #include <float.h>
 #include <sfx2/app.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <svx/pageitem.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -94,6 +94,10 @@ SwDBFieldType::SwDBFieldType(SwDoc* pDocPtr, const String& rNam, const SwDBData&
         sName += DB_DELIM;
     }
     sName += GetColumnName();
+}
+//------------------------------------------------------------------------------
+SwDBFieldType::~SwDBFieldType()
+{
 }
 //------------------------------------------------------------------------------
 

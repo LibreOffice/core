@@ -32,13 +32,11 @@
 #include "precompiled_sw.hxx"
 
 #include <hintids.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
 #include <svx/sizeitem.hxx>
 #include <fmtfsize.hxx>
 #include <fldbas.hxx>
@@ -55,6 +53,8 @@
 #include "swabstdlg.hxx"
 #include <index.hrc>
 #include <globals.hrc>
+
+
 // STATIC DATA -----------------------------------------------------------
 
 void SwTextShell::ExecIdx(SfxRequest &rReq)
@@ -136,7 +136,7 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
                             0   );
             SwWrtShell& rSh = GetShell();
             SwRect aRect;
-            rSh.CalcBoundRect(aRect, FLY_IN_CNTNT);
+            rSh.CalcBoundRect(aRect, FLY_AS_CHAR);
 
             long nWidth = aRect.Width();
             aSet.Put(SwFmtFrmSize(ATT_VAR_SIZE, nWidth));

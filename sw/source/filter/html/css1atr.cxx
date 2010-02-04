@@ -35,10 +35,8 @@
 
 #include "hintids.hxx"
 #include <vcl/svapp.hxx>
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/boxitem.hxx>
 #include <svx/ulspitem.hxx>
 #include <svx/udlnitem.hxx>
@@ -67,7 +65,7 @@
 #include <svtools/htmlout.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svx/htmlmode.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/bigint.hxx>
 #include <unotools/charclass.hxx>
@@ -2130,8 +2128,8 @@ void SwHTMLWriter::OutCSS1_FrmFmtOptions( const SwFrmFmt& rFrmFmt,
         const SwFmtAnchor& rAnchor = rFrmFmt.GetAnchor();
         switch( rAnchor.GetAnchorId() )
         {
-        case FLY_AT_CNTNT:
-        case FLY_AUTO_CNTNT:
+        case FLY_AT_PARA:
+        case FLY_AT_CHAR:
             if( text::RelOrientation::FRAME == rHoriOri.GetRelationOrient() ||
                 text::RelOrientation::PRINT_AREA == rHoriOri.GetRelationOrient() )
             {
@@ -2146,7 +2144,7 @@ void SwHTMLWriter::OutCSS1_FrmFmtOptions( const SwFrmFmt& rFrmFmt,
                 break;
             }
 
-        case FLY_PAGE:
+        case FLY_AT_PAGE:
         case FLY_AT_FLY:
             {
                 // position
@@ -2375,7 +2373,7 @@ void SwHTMLWriter::OutCSS1_FrmFmtBackground( const SwFrmFmt& rFrmFmt )
     const SwFmtAnchor& rAnchor = rFrmFmt.GetAnchor();
     RndStdIds eAnchorId = rAnchor.GetAnchorId();
     const SwPosition *pAnchorPos = rAnchor.GetCntntAnchor();
-    if( FLY_PAGE != eAnchorId && pAnchorPos )
+    if (FLY_AT_PAGE != eAnchorId && pAnchorPos)
     {
         const SwNode& rNode = pAnchorPos->nNode.GetNode();
         if( rNode.IsCntntNode() )

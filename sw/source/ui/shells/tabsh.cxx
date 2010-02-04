@@ -34,11 +34,11 @@
 
 #ifndef _ZFORLIST_HXX
 #define _ZFORLIST_DECLARE_TABLE
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #endif
-#include <svtools/stritem.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <svl/stritem.hxx>
+#include <svl/whiter.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <svx/rulritem.hxx>
 #include <svx/srchitem.hxx>
 #include <svx/lrspitem.hxx>
@@ -55,7 +55,7 @@
 #include <svx/numinf.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svxdlg.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/zformat.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
@@ -108,16 +108,12 @@
 #ifndef _TABLE_HRC
 #include <table.hrc>
 #endif
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#include <unoobj.hxx>
+#include <unobaseclass.hxx>
 
 #define SwTableShell
 #include <sfx2/msg.hxx>

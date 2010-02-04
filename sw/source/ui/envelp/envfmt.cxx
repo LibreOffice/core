@@ -44,7 +44,7 @@
 
 #define _SVSTDARR_LONGSSORT
 #define _SVSTDARR_LONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <svx/paperinf.hxx>
 #ifndef _SVX_TSTPITEM_HXX //autogen
 #include <svx/tstpitem.hxx>

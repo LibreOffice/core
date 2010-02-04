@@ -41,7 +41,7 @@
 #endif
 #include <tools/poly.hxx>
 #define _SVSTDARR_LONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <svx/xoutbmp.hxx>
 #include <sfx2/progress.hxx>
 #include <svx/brshitem.hxx>
@@ -1366,7 +1366,7 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
             continue;
 
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         //Flys, die innerhalb des eigenen verankert sind, muessen eine
         //groessere OrdNum haben oder Zeichengebunden sein.
         if ( pSelfFly && bLowerOfSelf )
@@ -2052,7 +2052,7 @@ void lcl_AdjustRectToPixelSize( SwRect& io_aSwRect, const OutputDevice &aOut )
 
     io_aSwRect = SwRect( aSizedRect );
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     Rectangle aTestOrgPxRect = aOut.LogicToPixel( io_aSwRect.SVRect() );
     Rectangle aTestNewPxRect = aOut.LogicToPixel( aSizedRect );
     ASSERT( aTestOrgPxRect == aTestNewPxRect,
@@ -2740,7 +2740,7 @@ void SwTabFrmPainter::Insert( SwLineEntry& rNew, bool bHori )
 |*
 |*************************************************************************/
 
-void SwRootFrm::Paint( const SwRect& rRect ) const
+void SwRootFrm::Paint( const SwRect& rRect, const SwPrtOptions *pPrintData ) const
 {
         ASSERT( Lower() && Lower()->IsPageFrm(), "Lower der Root keine Seite." );
 
@@ -2939,7 +2939,7 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
                     // OD 29.08.2002 #102450# - add 3rd parameter
                     // OD 09.12.2002 #103045# - add 4th parameter for horizontal text direction.
                     const IDocumentDrawModelAccess* pIDDMA = pSh->getIDocumentDrawModelAccess();
-                    pSh->Imp()->PaintLayer( pIDDMA->GetHellId(), aPaintRect,
+                    pSh->Imp()->PaintLayer( pIDDMA->GetHellId(), pPrintData, aPaintRect,
                                             &aPageBackgrdColor, (pPage->IsRightToLeft() ? true : false) );
                     pLines->PaintLines( pSh->GetOut() );
                     pLines->LockLines( FALSE );
@@ -2972,7 +2972,7 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
                 {
                     /// OD 29.08.2002 #102450# - add 3rd parameter
                     // OD 09.12.2002 #103045# - add 4th parameter for horizontal text direction.
-                    pSh->Imp()->PaintLayer( pSh->GetDoc()->GetHeavenId(), aPaintRect,
+                    pSh->Imp()->PaintLayer( pSh->GetDoc()->GetHeavenId(), pPrintData, aPaintRect,
                                             &aPageBackgrdColor,
                                             (pPage->IsRightToLeft() ? true : false) );
                 }
@@ -3190,7 +3190,7 @@ SwShortCut::SwShortCut( const SwFrm& rFrm, const SwRect& rRect )
     }
 }
 
-void SwLayoutFrm::Paint( const SwRect& rRect ) const
+void SwLayoutFrm::Paint( const SwRect& rRect, const SwPrtOptions* /* pPrintData */ ) const
 {
     ViewShell *pSh = GetShell();
 
@@ -3478,7 +3478,7 @@ BOOL SwFlyFrm::IsPaint( SdrObject *pObj, const ViewShell *pSh )
 /*************************************************************************
 |*  SwCellFrm::Paint( const SwRect& ) const
 |*************************************************************************/
-void SwCellFrm::Paint( const SwRect& rRect ) const
+void SwCellFrm::Paint( const SwRect& rRect, const SwPrtOptions* /* pPrintData */ ) const
 {
     if ( GetLayoutRowSpan() >= 1 )
         SwLayoutFrm::Paint( rRect );
@@ -3497,7 +3497,7 @@ void SwCellFrm::Paint( const SwRect& rRect ) const
 void MA_FASTCALL lcl_PaintLowerBorders( const SwLayoutFrm *pLay,
                                const SwRect &rRect, const SwPageFrm *pPage );
 
-void SwFlyFrm::Paint( const SwRect& rRect ) const
+void SwFlyFrm::Paint( const SwRect& rRect, const SwPrtOptions* /* pPrintData */ ) const
 {
     //wegen der Ueberlappung von Rahmen und Zeichenobjekten muessen die
     //Flys ihre Umrandung (und die der Innenliegenden) direkt ausgeben.
@@ -3732,7 +3732,7 @@ void SwFlyFrm::Paint( const SwRect& rRect ) const
 |*
 |*************************************************************************/
 
-void SwTabFrm::Paint( const SwRect& rRect ) const
+void SwTabFrm::Paint( const SwRect& rRect, const SwPrtOptions* /* pPrintData */ ) const
 {
     if ( pGlobalShell->GetViewOptions()->IsTable() )
     {
@@ -6438,10 +6438,10 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
                 // OD 09.12.2002 #103045# - add 4th parameter for horizontal text direction.
                 const IDocumentDrawModelAccess* pIDDMA = pSh->getIDocumentDrawModelAccess();
 
-                pSh->Imp()->PaintLayer( pIDDMA->GetHellId(),
+                pSh->Imp()->PaintLayer( pIDDMA->GetHellId(), 0,
                                         aRetouchePart, &aPageBackgrdColor,
                                         (pPage->IsRightToLeft() ? true : false) );
-                pSh->Imp()->PaintLayer( pIDDMA->GetHeavenId(),
+                pSh->Imp()->PaintLayer( pIDDMA->GetHeavenId(), 0,
                                         aRetouchePart, &aPageBackgrdColor,
                                         (pPage->IsRightToLeft() ? true : false) );
             }
@@ -6691,14 +6691,14 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
         // OD 30.08.2002 #102450# - add 3rd parameter
         // OD 09.12.2002 #103045# - add 4th parameter for horizontal text direction.
         const IDocumentDrawModelAccess* pIDDMA = pSh->getIDocumentDrawModelAccess();
-        pImp->PaintLayer( pIDDMA->GetHellId(), aOut, &aPageBackgrdColor,
+        pImp->PaintLayer( pIDDMA->GetHellId(), 0, aOut, &aPageBackgrdColor,
                           (pFlyPage->IsRightToLeft() ? true : false) );
         pLines->PaintLines( &aDev );
         if ( pFly->IsFlyInCntFrm() )
             pFly->Paint( aOut );
         pLines->PaintLines( &aDev );
         /// OD 30.08.2002 #102450# - add 3rd parameter
-        pImp->PaintLayer( pIDDMA->GetHeavenId(), aOut, &aPageBackgrdColor,
+        pImp->PaintLayer( pIDDMA->GetHeavenId(), 0, aOut, &aPageBackgrdColor,
                           (pFlyPage->IsRightToLeft() ? true : false) );
         pLines->PaintLines( &aDev );
         DELETEZ( pLines );

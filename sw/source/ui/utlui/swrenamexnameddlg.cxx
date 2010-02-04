@@ -57,13 +57,12 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <shellio.hxx>
 #include <docsh.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <swmodule.hxx>
-#include <unoobj.hxx>
 #include <unocrsr.hxx>
 
 #include "swrenamexnameddlg.hxx"

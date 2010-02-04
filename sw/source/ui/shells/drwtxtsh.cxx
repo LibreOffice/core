@@ -30,10 +30,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <hintids.hxx>
 #include <i18npool/lang.h>
-#include <svtools/slstitm.hxx>
-#include <svtools/cjkoptions.hxx>
+#include <svl/slstitm.hxx>
+#include <svl/cjkoptions.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/langitem.hxx>
 #include <svx/svdview.hxx>
@@ -49,11 +50,10 @@
 #include <sfx2/bindings.hxx>
 #include <svx/fontwork.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/outliner.hxx>
 #include <svx/editstat.hxx>
 #include <svx/svdoutl.hxx>
-#include <unoobj.hxx>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
@@ -67,12 +67,8 @@
 #include <swundo.hxx>
 #include <breakit.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif
@@ -577,7 +573,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
                 {
                     SfxAbstractTabDialog *pDlg = pFact->CreateTextTabDialog(
                                 &(GetView().GetViewFrame()->GetWindow()),
-                                &aNewAttr, RID_SVXDLG_TEXT, pSdrView );
+                                &aNewAttr, pSdrView );
                     USHORT nResult = pDlg->Execute();
 
                     if (nResult == RET_OK)

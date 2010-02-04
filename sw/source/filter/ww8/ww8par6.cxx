@@ -32,7 +32,7 @@
 #include "precompiled_sw.hxx"
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 #include <stdlib.h>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <rtl/tencinfo.h>
 
 
@@ -44,9 +44,7 @@
 #include <svx/langitem.hxx>
 #include <svx/cmapitem.hxx>
 #include <svx/shdditem.hxx>
-#ifndef _SVX_CNTRITEM_HXX //autogen
 #include <svx/cntritem.hxx>
-#endif
 #include <svx/crsditem.hxx>
 #include <svx/postitem.hxx>
 #include <svx/wghtitem.hxx>
@@ -65,19 +63,13 @@
 #include <svx/boxitem.hxx>
 #include <svx/ulspitem.hxx>
 #include <svx/lrspitem.hxx>
-#ifndef _SVX_TSTPITEM_HXX //autogen
 #include <svx/tstpitem.hxx>
-#endif
 #include <svx/akrnitem.hxx>
 #include <svx/paperinf.hxx>
-#ifndef _SVX_EMPHITEM_HXX //autogen
 #include <svx/emphitem.hxx>
-#endif
 #include <svx/forbiddenruleitem.hxx>
 #include <svx/twolinesitem.hxx>
-#ifndef _SVX_SCRIPSPACEITEM_HXX
 #include <svx/scriptspaceitem.hxx>
-#endif
 #include <svx/hngpnctitem.hxx>
 #include <svx/pbinitem.hxx>
 #include <svx/charscaleitem.hxx>
@@ -1995,7 +1987,7 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
     nYBind = (( rWW.nSp29 & 0x30 ) >> 4);
     // --> OD 2005-08-24 #i53725# - absolute positioned objects have to be
     // anchored at-paragraph to assure its correct anchor position.
-    eAnchor = FLY_AT_CNTNT;
+    eAnchor = FLY_AT_PARA;
     // <--
     switch (nYBind)
     {
@@ -2287,7 +2279,7 @@ void WW8FlySet::Init(const SwWW8ImplReader& rReader, const SwPaM* pPaM)
         Reader::ResetFrmFmtAttrs(*this);  // Abstand/Umrandung raus
 
     Put(SvxLRSpaceItem(RES_LR_SPACE)); //inline writer ole2 objects start with 0.2cm l/r
-    SwFmtAnchor aAnchor(FLY_IN_CNTNT);
+    SwFmtAnchor aAnchor(FLY_AS_CHAR);
 
     aAnchor.SetAnchor(pPaM->GetPoint());
     Put(aAnchor);
@@ -2519,8 +2511,10 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo,
             pWWZOrder->InsertTextLayerObject(pOurNewObject);
         }
 
-        if (FLY_IN_CNTNT != pSFlyPara->eAnchor)
+        if (FLY_AS_CHAR != pSFlyPara->eAnchor)
+        {
             pAnchorStck->AddAnchor(*pPaM->GetPoint(),pSFlyPara->pFlyFmt);
+        }
 
         // merke Pos im Haupttext
         pSFlyPara->pMainTextPos = new SwPosition( *pPaM->GetPoint() );
@@ -3206,7 +3200,7 @@ SwFrmFmt *SwWW8ImplReader::ContainsSingleInlineGraphic(const SwPaM &rRegion)
     subscripting to force the graphic into a centered position on the line, so
     we must check when applying sub/super to see if it the subscript range
     contains only a single graphic, and if that graphic is anchored as
-    FLY_IN_CNTNT and then we can change its anchoring to centered in the line.
+    FLY_AS_CHAR and then we can change its anchoring to centered in the line.
     */
     SwFrmFmt *pRet=0;
     SwNodeIndex aBegin(rRegion.Start()->nNode);
@@ -3223,8 +3217,8 @@ SwFrmFmt *SwWW8ImplReader::ContainsSingleInlineGraphic(const SwPaM &rRegion)
     {
         const SwFmtFlyCnt& rFly = pTFlyAttr->GetFlyCnt();
         SwFrmFmt *pFlyFmt = rFly.GetFrmFmt();
-        if( pFlyFmt &&
-            FLY_IN_CNTNT == pFlyFmt->GetAnchor().GetAnchorId() )
+        if (pFlyFmt &&
+            (FLY_AS_CHAR == pFlyFmt->GetAnchor().GetAnchorId()))
         {
             pRet = pFlyFmt;
         }
@@ -3240,7 +3234,7 @@ bool SwWW8ImplReader::ConvertSubToGraphicPlacement()
     subscripting to force the graphic into a centered position on the line, so
     we must check when applying sub/super to see if it the subscript range
     contains only a single graphic, and if that graphic is anchored as
-    FLY_IN_CNTNT and then we can change its anchoring to centered in the line.
+    FLY_AS_CHAR and then we can change its anchoring to centered in the line.
     */
     bool bIsGraphicPlacementHack = false;
     USHORT nPos;
@@ -4673,7 +4667,7 @@ void SwWW8ImplReader::Read_ParaBackColor(USHORT, const BYTE* pData, short nLen)
 
 sal_uInt32 SwWW8ImplReader::ExtractColour(const BYTE* &rpData,
     bool
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         bVer67
 #endif
     )

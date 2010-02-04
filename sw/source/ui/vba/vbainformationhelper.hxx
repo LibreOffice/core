@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: unoclbck.hxx,v $
- * $Revision: 1.6 $
+ * $RCSfile:
+ * $Revision:
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,26 +27,20 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _UNOCLBCK_HXX
-#define _UNOCLBCK_HXX
-#include <calbck.hxx>
+#ifndef SW_VBA_INFORMATIONHELPER_HXX
+#define SW_VBA_INFORMATIONHELPER_HXX
 
-class SwXReferenceMark;
-class SwFmtRefMark;
-class SwFmtFtn;
-class SwXFootnote;
-class SwTOXMark;
-class SwXDocumentIndexMark;
+#include <vbahelper/vbahelperinterface.hxx>
+#include <com/sun/star/text/XTextViewCursor.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
-class SwUnoCallBack : public SwModify
+class SwVbaInformationHelper
 {
 public:
-    SwUnoCallBack(SwModify *pToRegisterIn);
-    virtual ~SwUnoCallBack();
+    static sal_Int32 handleWdActiveEndPageNumber( const css::uno::Reference< css::text::XTextViewCursor >& xTVCursor ) throw( css::uno::RuntimeException );
+    static sal_Int32 handleWdNumberOfPagesInDocument( const css::uno::Reference< css::frame::XModel >& xModel ) throw( css::uno::RuntimeException );
+    static double handleWdVerticalPositionRelativeToPage( const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::text::XTextViewCursor >& xTVCursor ) throw( css::uno::RuntimeException );
+    //static double verticalPositionRelativeToPageBoundary( const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::text::XTextViewCursor >& xTVCursor, const css::uno::Reference< css::beans::XPropertySet >& xStyleProps ) throw( css::uno::RuntimeException );
 
-    // returns the API object of a reference mark if available
-    SwXReferenceMark*   GetRefMark(const SwFmtRefMark& rMark);
-    SwXFootnote*        GetFootnote(const SwFmtFtn& rMark);
-    SwXDocumentIndexMark* GetTOXMark(const SwTOXMark& rMark);
 };
-#endif
+#endif /* SW_VBA_INFORMATIONHELPER_HXX */

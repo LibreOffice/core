@@ -55,10 +55,10 @@
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <sfx2/docfile.hxx>
 #include <svtools/sfxecode.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <unotools/streamwrap.hxx>
 #include <svx/xmlgrhlp.hxx>
 #include <svx/xmleohlp.hxx>
@@ -72,7 +72,7 @@
 #include <fltini.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
-#include <unoobj.hxx>
+#include <unotextrange.hxx>
 #include <swmodule.hxx>
 #include <SwXMLSectionList.hxx>
 
@@ -788,9 +788,8 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
     }
     else if( bInsertMode )
     {
-        uno::Reference<XTextRange> xInsertTextRange =
-            SwXTextRange::CreateTextRangeFromPosition( &rDoc, *rPaM.GetPoint(),
-                                                           0 );
+        const uno::Reference<text::XTextRange> xInsertTextRange =
+            SwXTextRange::CreateXTextRange(rDoc, *rPaM.GetPoint(), 0);
         OUString sTextInsertModeRange(
                 RTL_CONSTASCII_USTRINGPARAM("TextInsertModeRange"));
         xInfoSet->setPropertyValue( sTextInsertModeRange,

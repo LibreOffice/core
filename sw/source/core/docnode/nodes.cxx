@@ -47,10 +47,11 @@
 #include <ddefld.hxx>
 #include <swddetbl.hxx>
 #include <frame.hxx>
-#include <fmtmeta.hxx>
+#include <txtatr.hxx>
+#include <tox.hxx> // InvalidateTOXMark
 
 #include <docsh.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 extern BOOL CheckNodesRange( const SwNodeIndex& rStt,
                             const SwNodeIndex& rEnd, BOOL bChkSection );
@@ -341,7 +342,8 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSz,
                                 break;
 
                             case RES_TXTATR_TOXMARK:
-                                nDelMsg = RES_TOXMARK_DELETED;
+                                static_cast<SwTOXMark&>(pAttr->GetAttr())
+                                    .InvalidateTOXMark();
                                 break;
 
                             case RES_TXTATR_REFMARK:
@@ -350,8 +352,13 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSz,
 
                             case RES_TXTATR_META:
                             case RES_TXTATR_METAFIELD:
-                                static_cast<SwFmtMeta&>(pAttr->GetAttr())
-                                    .NotifyRemoval();
+                                {
+                                    SwTxtMeta *const pTxtMeta(
+                                        static_cast<SwTxtMeta*>(pAttr));
+                                    // force removal of UNO object
+                                    pTxtMeta->ChgTxtNode(0);
+                                    pTxtMeta->ChgTxtNode(pTxtNd);
+                                }
                                 break;
 
                             default:
@@ -408,7 +415,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSz,
             if( pFrmNd && !((SwCntntNode*)pFrmNd)->GetDepends() )
                 pFrmNd = 0;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             if( !pFrmNd )
                 ASSERT( !this, "ChgNode() - kein FrameNode gefunden" );
 #endif

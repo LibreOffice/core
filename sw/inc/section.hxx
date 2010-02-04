@@ -38,8 +38,13 @@
 #ifndef _TOOLS_REF_HXX
 #include <tools/ref.hxx>
 #endif
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <frmfmt.hxx>
+
+
+namespace com { namespace sun { namespace star {
+    namespace text { class XTextSection; }
+} } }
 
 // Forward Deklaration
 class SwSectionFmt;
@@ -230,6 +235,13 @@ class SW_DLLPUBLIC SwSectionFmt : public SwFrmFmt
 {
     friend class SwDoc;
 
+    /** why does this exist in addition to the m_wXObject in SwFrmFmt?
+        in case of an index, both a SwXDocumentIndex and a SwXTextSection
+        register at this SwSectionFmt, so we need to have two refs.
+     */
+    ::com::sun::star::uno::WeakReference<
+        ::com::sun::star::text::XTextSection> m_wXTextSection;
+
     /* SW_DLLPUBLIC */ SwSection* _GetSection() const;
     SW_DLLPRIVATE void UpdateParent();      // Parent wurde veraendert
 
@@ -271,6 +283,14 @@ public:
 
     // ist die Section eine gueltige fuers GlobalDocument?
     const SwSection* GetGlobalDocSection() const;
+
+    SW_DLLPRIVATE ::com::sun::star::uno::WeakReference<
+        ::com::sun::star::text::XTextSection> const& GetXTextSection() const
+            { return m_wXTextSection; }
+    SW_DLLPRIVATE void SetXTextSection(::com::sun::star::uno::Reference<
+                    ::com::sun::star::text::XTextSection> const& xTextSection)
+            { m_wXTextSection = xTextSection; }
+
 };
 
 // -------------- inlines ---------------------------------

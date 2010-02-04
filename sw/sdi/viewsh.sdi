@@ -145,7 +145,7 @@ interface TextEditView : BaseTextEditView
 }
  //=========================================================================
 
-shell SwView : SfxViewShell
+shell SwView
 
 {
     import TextEditView [Automation];
@@ -155,7 +155,7 @@ shell SwView : SfxViewShell
 //  import ReplaceAttributes;
 }
 
-interface TextPrintPreview : View
+interface TextPrintPreview
 [ uuid = "1622A480-111A-101D-9757-6E74207A7520" ]
 {
     SID_BROWSER_MODE
@@ -225,10 +225,6 @@ interface TextPrintPreview : View
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
-    ]
-    FN_PREVIEW_PRINT_OPTIONS //status()
-    [
-        ExecMethod = Execute ;
     ]
     FN_PRINT_PAGEPREVIEW // status()
     [
@@ -325,7 +321,7 @@ interface TextPrintPreview : View
 
  //=========================================================================
 
-shell SwPagePreView : SfxViewShell
+shell SwPagePreView
 {
     import TextPrintPreview[Automation];
 }

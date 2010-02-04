@@ -48,7 +48,7 @@
 #include "dbg_lay.hxx"
 
 #include <ftnidx.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <docary.hxx>
 #include <svx/keepitem.hxx>
 #include <svx/ulspitem.hxx>
@@ -57,9 +57,7 @@
 // --> collapsing borders FME 2005-05-27 #i29550#
 #include <svx/boxitem.hxx>
 // <--
-#ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
-#endif
 #include <fmtlsplt.hxx>
 #include <fmtrowsplt.hxx>
 #include <fmtsrnd.hxx>
@@ -340,7 +338,7 @@ void lcl_InvalidateLowerObjs( SwLayoutFrm& _rLayoutFrm,
                     pAnchoredObj->ClearCharRectAndTopOfLine();
                     pAnchoredObj->SetCurrRelPos( Point( 0, 0 ) );
                     if ( pAnchoredObj->GetFrmFmt().GetAnchor().GetAnchorId()
-                            == FLY_IN_CNTNT )
+                            == FLY_AS_CHAR )
                     {
                         pAnchoredObj->AnchorFrm()
                                 ->Prepare( PREP_FLY_ATTR_CHG,
@@ -3650,7 +3648,7 @@ SwCntntFrm *SwTabFrm::FindLastCntnt()
             // Spalten abklappern, dies erledigt SwSectionFrm::FindLastCntnt
             if( pRet->IsColBodyFrm() )
             {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 SwSectionFrm* pSect = pRet->FindSctFrm();
                 ASSERT( pSect, "Wo kommt denn die Spalte her?")
                 ASSERT( IsAnLower( pSect ), "Gespaltene Zelle?" );
@@ -4194,7 +4192,7 @@ long MA_FASTCALL CalcHeightWidthFlys( const SwFrm *pFrm )
                     // the text flow have to be considered.
                     const SwFrmFmt& rFrmFmt = pAnchoredObj->GetFrmFmt();
                     const bool bConsiderObj =
-                            rFrmFmt.GetAnchor().GetAnchorId() != FLY_IN_CNTNT &&
+                        (rFrmFmt.GetAnchor().GetAnchorId() != FLY_AS_CHAR) &&
                             pAnchoredObj->GetObjRect().Top() != WEIT_WECH &&
                             rFrmFmt.GetFollowTextFlow().GetValue() &&
                             pAnchoredObj->GetPageFrm() == pTmp->FindPageFrm();
@@ -4617,7 +4615,7 @@ void SwRowFrm::Format( const SwBorderAttrs *pAttrs )
     {
         bValidSize = TRUE;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         if ( HasFixSize() )
         {
             const SwFmtFrmSize &rFrmSize = GetFmt()->GetFrmSize();
@@ -5222,7 +5220,7 @@ BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva )
                              !( pTabFrm->IsFollow() &&
                                 pTabFrm->FindMaster()->IsRebuildLastLine() ) &&
                              !pAnchoredObj->GetFrmFmt().GetAnchor().GetAnchorId()
-                                                            == FLY_IN_CNTNT )
+                                                            == FLY_AS_CHAR )
                         {
                             SwPageFrm* pPageFrm = pAnchoredObj->GetPageFrm();
                             SwPageFrm* pPageOfAnchor = pFrm->FindPageFrm();

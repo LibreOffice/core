@@ -38,7 +38,7 @@
 #include <ctype.h>
 #include <hintids.hxx>
 
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <unotools/charclass.hxx>
 #include <svx/boxitem.hxx>
 #include <svx/lrspitem.hxx>
@@ -386,7 +386,7 @@ BOOL SwAutoFormat::HasObjects( const SwNode& rNd )
     for( USHORT n = 0; n < rFmts.Count(); ++n )
     {
         const SwFmtAnchor& rAnchor = rFmts[ n ]->GetAnchor();
-        if( FLY_PAGE != rAnchor.GetAnchorId() &&
+        if ((FLY_AT_PAGE != rAnchor.GetAnchorId()) &&
             rAnchor.GetCntntAnchor() &&
             &rAnchor.GetCntntAnchor()->nNode.GetNode() == &rNd )
         {

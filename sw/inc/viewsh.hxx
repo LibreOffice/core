@@ -32,13 +32,14 @@
 #include <com/sun/star/embed/XClassifiedObject.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <tools/rtti.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include "swdllapi.h"
 #include <swtypes.hxx>
 #include <ring.hxx>
 #include <swrect.hxx>
 #include <errhdl.hxx>
 #include <vcl/mapmod.hxx>
+#include <vcl/print.hxx>
 
 namespace com { namespace sun { namespace star { namespace accessibility {
            class XAccessible; } } } }
@@ -70,6 +71,7 @@ class SfxViewShell;
 class SwViewOption;
 class SwViewImp;
 class SwPrtOptions;
+class SwPrintData;
 class SwPagePreViewPrtData;
 class Window;
 class OutputDevice;
@@ -92,11 +94,18 @@ class SwPostItMgr;
 // #i74769#
 class SdrPaintWindow;
 
+namespace vcl
+{
+    class OldStylePrintAdaptor;
+}
+
+
 //JP 19.07.98: - Bug 52312
 // define fuer Flags, die im CTOR oder den darunter liegenden Schichten
 // benoetigt werden.
 // Zur Zeit wird fuer die DrawPage das PreView Flag benoetigt
 #define VSHELLFLAG_ISPREVIEW            ((long)0x1)
+
 
 class SW_DLLPUBLIC ViewShell : public Ring
 {
@@ -186,7 +195,7 @@ class SW_DLLPUBLIC ViewShell : public Ring
     SW_DLLPRIVATE void Scroll();    //Scrollen wenn sich aus der LayAction Scrollmoeglichkeiten
                     //ergaben.
 
-    SW_DLLPRIVATE void PrepareForPrint( const SwPrtOptions &rOptions );
+    SW_DLLPRIVATE void PrepareForPrint( const SwPrintData &rOptions );
 
     SW_DLLPRIVATE void ImplApplyViewOptions( const SwViewOption &rOpt );
 
@@ -209,8 +218,7 @@ public:
     const SwNodes& GetNodes() const;
 
     //Nach Druckerwechsel, vom Doc
-    //pPDFOut != NULL is used for PDF export.
-    void            InitPrt( SfxPrinter * , OutputDevice *pPDFOut = NULL );
+    void            InitPrt( OutputDevice *pOutDev );
 
     //Klammerung von zusammengehoerenden Aktionen.
     inline void StartAction();
@@ -361,22 +369,25 @@ public:
     void   ChgAllPageOrientation( sal_uInt16 eOri );
     void   ChgAllPageSize( Size &rSz );
 
-    //Druckauftrag abwickeln.
-    // pPDFOut != Null is: do PDF Export (no printing!)
-    sal_Bool Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
-                  OutputDevice* pPDFOut = NULL );
+    // printing of one page.
+    // bIsPDFExport == true is: do PDF Export (no printing!)
+    sal_Bool PrintOrPDFExport( OutputDevice *pOutDev, const SwPrtOptions &rPrintData,
+            sal_Int32 nRenderer /* offset in vector of pages to print */ );
 
-    //"Drucken" fuer OLE 2.0
-    static void PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, SwPrtOptions& rOptions,
+    // printing of one brochure page
+    void PrintProspect( OutputDevice *pOutDev, const SwPrintData &rPrintData,
+            sal_Int32 nRenderer /* offset in vector of page pairs for prospect printing */ );
+
+    // printing for OLE 2.0
+    static void PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintData& rOptions,
                          OutputDevice* pOleOut, const Rectangle& rRect );
 
     // creates temporary doc with selected text for PDF export
-    SwDoc * CreatePrtDoc( SfxPrinter* pPrt, SfxObjectShellRef& );
+    SwDoc * CreatePrtDoc( SfxObjectShellRef& );
     SwDoc * FillPrtDoc( SwDoc* pPrtDoc, const SfxPrinter* pPrt );
 
     //Wird intern fuer die Shell gerufen die Druckt. Formatiert die Seiten.
-    void CalcPagesForPrint( sal_uInt16 nMax, SfxProgress* pProgress = 0,
-        const String* pStr = NULL, ULONG nMergeAct = 0, ULONG nMergeCnt = 0 );
+    void CalcPagesForPrint( sal_uInt16 nMax );
 
     //All about fields.
     void UpdateFlds(sal_Bool bCloseDB = sal_False);
@@ -474,14 +485,6 @@ public:
         view option will be adjusted.
     */
     void AdjustOptionsForPagePreview( const SwPrtOptions &_rPrintOptions );
-
-    // print page/print preview
-    void PrintPreViewPage( SwPrtOptions& rOptions, sal_uInt16 nRowCol,
-                           SfxProgress& rProgress,
-                           const SwPagePreViewPrtData* = 0 );
-
-    // Prospekt-Format drucken
-    void PrintProspect( SwPrtOptions&, SfxProgress& , BOOL bRTL);
 
     sal_Bool IsViewLocked() const { return bViewLocked; }
     void LockView( sal_Bool b )   { bViewLocked = b;    }

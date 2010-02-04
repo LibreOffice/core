@@ -43,6 +43,7 @@
 #include <cppuhelper/implbase4.hxx> // helper for implementations
 #include <IMark.hxx>
 #include <unobaseclass.hxx>
+#include "swdllapi.h"
 /***************************************************
  ***************************************************
  *
@@ -284,7 +285,7 @@ cppu::WeakImplHelper3
     ::com::sun::star::lang::XServiceInfo
 >
 SwCollectionBaseClass;
-class SwXTextTables : public SwCollectionBaseClass,
+class SW_DLLPUBLIC SwXTextTables : public SwCollectionBaseClass,
     public SwUnoCollection
 {
 protected:
@@ -480,7 +481,6 @@ class SwXBookmarks : public SwCollectionBaseClass,
         virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
         virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
-        static SwXBookmark* GetObject( ::sw::mark::IMark& rBkm, SwDoc* pDoc);
 };
 
 class SwXNumberingRulesCollection : public cppu::WeakImplHelper1

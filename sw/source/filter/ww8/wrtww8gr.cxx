@@ -37,8 +37,8 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <rtl/math.hxx>
 #include <svtools/filter.hxx>
-#include <svtools/itemiter.hxx>
-#include "svtools/urihelper.hxx"
+#include <svl/itemiter.hxx>
+#include "svl/urihelper.hxx"
 
 #include <svtools/embedhlp.hxx>
 
@@ -49,7 +49,7 @@
 #include <svx/boxitem.hxx>
 #include <svx/shaditem.hxx>
 #include <svx/shaditem.hxx>
-#include <svx/msoleexp.hxx>
+#include <filter/msfilter/msoleexp.hxx>
 #include <svx/lrspitem.hxx> // SvxLRSpaceItem
 #include <svx/ulspitem.hxx>
 #include <svx/fhgtitem.hxx>
@@ -404,7 +404,7 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
 
     const SwFrmFmt &rFlyFmt = rFrame.GetFrmFmt();
     const RndStdIds eAn = rFlyFmt.GetAttrSet().GetAnchor(false).GetAnchorId();
-    if( eAn == FLY_IN_CNTNT )
+    if (eAn == FLY_AS_CHAR)
     {
         sal_Int16 eVert = rFlyFmt.GetVertOrient().GetVertOrient();
         if ((eVert == text::VertOrientation::CHAR_CENTER) || (eVert == text::VertOrientation::LINE_CENTER))
@@ -465,8 +465,8 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
     // Otherwise, an additional paragraph is exported for a graphic, which is
     // forced to be treated as inline, because it's anchored inside another frame.
     if ( !rFrame.IsInline() &&
-         ( ( eAn == FLY_AT_CNTNT && ( bWrtWW8 || !bIsInTable ) ) ||
-           eAn == FLY_PAGE ) )
+         ( ((eAn == FLY_AT_PARA) && ( bWrtWW8 || !bIsInTable )) ||
+           (eAn == FLY_AT_PAGE)) )
     // <--
     {
         WriteChar( (char)0x0d ); // umgebenden Rahmen mit CR abschliessen

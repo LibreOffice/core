@@ -39,7 +39,7 @@
 #include <hintids.hxx>
 #define _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_STRINGSISORTDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #include "cmdid.h"
 #include "swmodule.hxx"
@@ -51,7 +51,7 @@
 #ifndef _METRIC_HXX //autogen
 #include <vcl/metric.hxx>
 #endif
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/htmlmode.hxx>
 #include <sfx2/objsh.hxx>
@@ -68,7 +68,7 @@
 #define _SVSTDARR_XUB_STRLEN
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #include "charatr.hxx"
 #include "viewopt.hxx"

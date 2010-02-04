@@ -34,8 +34,8 @@
 
 #include <stdlib.h>
 #include <hintids.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <svx/protitem.hxx>
@@ -835,6 +835,11 @@ void SwSectionFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         break;
     }
     SwFrmFmt::Modify( pOld, pNew );
+
+    if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
+    {   // invalidate cached uno object
+        SetXTextSection(uno::Reference<text::XTextSection>(0));
+    }
 }
 
         // erfrage vom Format Informationen

@@ -100,12 +100,12 @@ class SwAccessibleContextMap_Impl: public _SwAccessibleContextMap_Impl
 {
 public:
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     sal_Bool mbLocked;
 #endif
 
     SwAccessibleContextMap_Impl()
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         : mbLocked( sal_False )
 #endif
     {}
@@ -227,11 +227,11 @@ class SwAccessibleShapeMap_Impl: public _SwAccessibleShapeMap_Impl
 
 public:
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     sal_Bool mbLocked;
 #endif
     SwAccessibleShapeMap_Impl( SwAccessibleMap *pMap )
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         : mbLocked( sal_False )
 #endif
     {
@@ -1009,7 +1009,7 @@ SwAccessibleMap::~SwAccessibleMap()
 
     {
         vos::OGuard aGuard( maMutex );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ASSERT( !mpFrmMap || mpFrmMap->empty(),
                 "Frame map should be empty after disposing the root frame" );
         if( mpFrmMap )
@@ -1062,7 +1062,7 @@ SwAccessibleMap::~SwAccessibleMap()
 
     {
         vos::OGuard aGuard( maEventMutex );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ASSERT( !(mpEvents || mpEventMap), "pending events" );
         if( mpEvents )
         {
@@ -1101,12 +1101,12 @@ uno::Reference< XAccessible > SwAccessibleMap::_GetDocumentView(
         if( !mpFrmMap )
         {
             mpFrmMap = new SwAccessibleContextMap_Impl;
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             mpFrmMap->mbLocked = sal_False;
 #endif
         }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ASSERT( !mpFrmMap->mbLocked, "Map is locked" );
         mpFrmMap->mbLocked = sal_True;
 #endif
@@ -1138,7 +1138,7 @@ uno::Reference< XAccessible > SwAccessibleMap::_GetDocumentView(
             }
         }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         mpFrmMap->mbLocked = sal_False;
 #endif
     }

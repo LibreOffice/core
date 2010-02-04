@@ -45,18 +45,14 @@
 #include <com/sun/star/awt/XTextLayoutConstrains.hpp>
 #include <hintids.hxx>
 #include <vcl/svapp.hxx>
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/htmlout.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
-#include "svtools/urihelper.hxx"
-#ifndef _TOOLKIT_UNOHLP_HXX
+#include <svl/urihelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
 #include <svx/svdouno.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/brshitem.hxx>
@@ -67,7 +63,7 @@
 #include <svx/postitem.hxx>
 #include <svx/udlnitem.hxx>
 #include <svx/crsditem.hxx>
-#include <unoobj.hxx>
+
 #include <docsh.hxx>
 #include <fmtanchr.hxx>
 #include <docary.hxx>
@@ -80,6 +76,7 @@
 #include "wrthtml.hxx"
 #include "htmlfly.hxx"
 #include "htmlform.hxx"
+
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -1427,7 +1424,7 @@ void SwHTMLWriter::GetControls()
 
         const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
         const SwPosition *pPos = rAnchor.GetCntntAnchor();
-        if( FLY_IN_CNTNT != rAnchor.GetAnchorId() || !pPos )
+        if ((FLY_AS_CHAR != rAnchor.GetAnchorId()) || !pPos)
             continue;
 
         const SdrObject *pSdrObj =

@@ -33,23 +33,20 @@
 
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 #include <tools/urlobj.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <rtl/tencinfo.h>
 #include <swerror.h>
-#ifndef _NDTXT
 #include <ndtxt.hxx>
-#endif
 #include <pam.hxx>
 #include <shellio.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
 #include "ww8glsy.hxx"
 #include "ww8par.hxx"
+
 
 WW8Glossary::WW8Glossary(SvStorageStreamRef &refStrm, BYTE nVersion,
     SvStorage *pStg)
@@ -82,10 +79,10 @@ bool WW8Glossary::HasBareGraphicEnd(SwDoc *pDoc,SwNodeIndex &rIdx)
             RES_DRAWFRMFMT != pFrmFmt->Which() )
                 continue;
         const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
-        const SwPosition* pAPos;
-        if( ( FLY_AT_CNTNT == rAnchor.GetAnchorId() ||
-            FLY_AUTO_CNTNT == rAnchor.GetAnchorId() ) &&
-            0 != ( pAPos = rAnchor.GetCntntAnchor()) &&
+        SwPosition const*const pAPos = rAnchor.GetCntntAnchor();
+        if (pAPos &&
+            ((FLY_AT_PARA == rAnchor.GetAnchorId()) ||
+             (FLY_AT_CHAR == rAnchor.GetAnchorId())) &&
             rIdx == pAPos->nNode.GetIndex() )
             {
                 bRet=true;

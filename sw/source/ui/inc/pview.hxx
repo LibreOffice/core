@@ -222,8 +222,6 @@ class SW_DLLPUBLIC SwPagePreView: public SfxViewShell
     SW_DLLPRIVATE int             ChgPage( int eMvMode, int bUpdateScrollbar = TRUE );
 
 
-    SW_DLLPRIVATE virtual USHORT          Print( SfxProgress &rProgress, BOOL bIsAPI,
-                                   PrintDialog *pPrintDialog = 0 );
     SW_DLLPRIVATE virtual SfxPrinter*     GetPrinter( BOOL bCreate = FALSE );
     SW_DLLPRIVATE virtual USHORT          SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
     SW_DLLPRIVATE virtual SfxTabPage*     CreatePrintOptionsPage( Window *pParent,

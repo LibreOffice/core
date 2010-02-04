@@ -39,7 +39,7 @@
 #include <svx/svdmodel.hxx>
 #include <svx/tstpitem.hxx>
 #include <svx/svdpage.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 
 
 #include <fmtflcnt.hxx>
@@ -462,10 +462,10 @@ void SwUndoFmtAttr::SaveFlyAnchor( bool bSvDrwPt )
     xub_StrLen nCntnt = 0;
     switch( rAnchor.GetAnchorId() )
     {
-    case FLY_IN_CNTNT:
-    case FLY_AUTO_CNTNT:
+    case FLY_AS_CHAR:
+    case FLY_AT_CHAR:
         nCntnt = rAnchor.GetCntntAnchor()->nContent.GetIndex();
-    case FLY_AT_CNTNT:
+    case FLY_AT_PARA:
     case FLY_AT_FLY:
         m_nNodeIndex = rAnchor.GetCntntAnchor()->nNode.GetIndex();
         break;
@@ -489,7 +489,7 @@ bool SwUndoFmtAttr::RestoreFlyAnchor( SwUndoIter& rIter )
         static_cast<const SwFmtAnchor&>( m_pOldSet->Get( RES_ANCHOR, FALSE ) );
 
     SwFmtAnchor aNewAnchor( rAnchor.GetAnchorId() );
-    if( FLY_PAGE != rAnchor.GetAnchorId() )
+    if (FLY_AT_PAGE != rAnchor.GetAnchorId())
     {
         SwNode* pNd = pDoc->GetNodes()[ m_nNodeIndex  ];
 
@@ -505,8 +505,8 @@ bool SwUndoFmtAttr::RestoreFlyAnchor( SwUndoIter& rIter )
         }
 
         SwPosition aPos( *pNd );
-        if( FLY_IN_CNTNT == rAnchor.GetAnchorId() ||
-            FLY_AUTO_CNTNT == rAnchor.GetAnchorId() )
+        if ((FLY_AS_CHAR == rAnchor.GetAnchorId()) ||
+            (FLY_AT_CHAR == rAnchor.GetAnchorId()))
         {
             aPos.nContent.Assign( (SwTxtNode*)pNd, rAnchor.GetPageNum() );
             if ( aPos.nContent.GetIndex() >
@@ -549,7 +549,7 @@ bool SwUndoFmtAttr::RestoreFlyAnchor( SwUndoIter& rIter )
     const SwFmtAnchor &rOldAnch = pFrmFmt->GetAnchor();
     // --> OD 2006-03-13 #i54336#
     // Consider case, that as-character anchored object has moved its anchor position.
-    if ( FLY_IN_CNTNT == rOldAnch.GetAnchorId() )
+    if (FLY_AS_CHAR == rOldAnch.GetAnchorId())
     // <--
     {
         //Bei InCntnt's wird es spannend: Das TxtAttribut muss vernichtet
@@ -613,7 +613,7 @@ bool SwUndoFmtAttr::RestoreFlyAnchor( SwUndoIter& rIter )
             SwFmtFrmSize( ATT_VAR_SIZE, aDrawOldPt.X(), aDrawOldPt.Y() ) );
     }
 
-    if( FLY_IN_CNTNT == aNewAnchor.GetAnchorId() )
+    if (FLY_AS_CHAR == aNewAnchor.GetAnchorId())
     {
         const SwPosition* pPos = aNewAnchor.GetCntntAnchor();
         SwTxtNode* pTxtNd = pPos->nNode.GetNode().GetTxtNode();

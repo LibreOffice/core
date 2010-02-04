@@ -63,7 +63,7 @@
 #include <extinput.hxx>
 #include <crsskip.hxx>
 #include <scriptinfo.hxx>
-#include <unoobj.hxx>
+#include <unocrsrhelper.hxx>
 #include <section.hxx>
 #include <unochart.hxx>
 #include <numrule.hxx>
@@ -283,7 +283,7 @@ const Graphic* SwEditShell::GetGraphic( BOOL bWait ) const
             if( pGrf->IsSwapOut() ||
                 ( pGrfNode->IsLinkedFile() && GRAPHIC_DEFAULT == pGrf->GetType() ) )
             {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 ASSERT( pGrfNode->SwapIn( bWait ) || !bWait, "Grafik konnte nicht geladen werden" );
 #else
                 pGrfNode->SwapIn( bWait );
@@ -294,7 +294,7 @@ const Graphic* SwEditShell::GetGraphic( BOOL bWait ) const
         {
             if ( pGrf->IsSwapOut() && !pGrfNode->IsLinkedFile() )
             {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 ASSERT( pGrfNode->SwapIn( bWait ) || !bWait, "Grafik konnte nicht geladen werden" );
 #else
                 pGrfNode->SwapIn( bWait );
@@ -726,7 +726,7 @@ Graphic SwEditShell::GetIMapGraphic() const
             if( rGrf.IsSwapOut() || ( ((SwGrfNode*)pNd)->IsLinkedFile() &&
                                     GRAPHIC_DEFAULT == rGrf.GetType() ) )
             {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 ASSERT( ((SwGrfNode*)pNd)->SwapIn( TRUE ) || !TRUE, "Grafik konnte nicht geladen werden" );
 #else
                 ((SwGrfNode*)pNd)->SwapIn( TRUE );
@@ -1111,7 +1111,7 @@ String SwEditShell::DeleteExtTextInput( SwExtTextInput* pDel, BOOL bInsText )
     if( pDel )
     {
         rtl::OUString sTmp;
-        SwXTextCursor::getTextFromPam(*pDel, sTmp);
+        SwUnoCursorHelper::GetTextFromPam(*pDel, sTmp);
         sRet = sTmp;
         SET_CURR_SHELL( this );
         StartAllAction();

@@ -66,7 +66,7 @@
 #include <mdiexp.hxx>           // ...Percent()
 #include <fmteiro.hxx>
 #include <wrong.hxx> // SMARTTAGS
-#include <unoobj.hxx> // SMARTTAGS
+#include <unotextrange.hxx> // SMARTTAGS
 #include <vcl/svapp.hxx>
 #include <numrule.hxx>
 #include <IGrammarContact.hxx>
@@ -332,7 +332,7 @@ if( GetWin() )
 }
 
 
-#if !defined( PRODUCT )
+#if defined(DBG_UTIL)
 
 void SwCrsrShell::SttCrsrMove()
 {
@@ -1459,7 +1459,7 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
                 Point aCentrPt( aCharRect.Center() );
                 aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
                 pTblFrm->GetCrsrOfst( pTblCrsr->GetPoint(), aCentrPt, &aTmpState );
-#ifdef PRODUCT
+#ifndef DBG_UTIL
                 pTblFrm->GetCharRect( aCharRect, *pTblCrsr->GetPoint() );
 #else
                 if ( !pTblFrm->GetCharRect( aCharRect, *pTblCrsr->GetPoint() ) )
@@ -2014,7 +2014,7 @@ void SwCrsrShell::Combine()
     SwCrsrSaveState aSaveState( *pCurCrsr );
     if( pCrsrStk->HasMark() )           // nur wenn GetMark gesetzt wurde
     {
-#ifdef PRODUCT
+#ifndef DBG_UTIL
         CheckNodesRange( pCrsrStk->GetMark()->nNode, pCurCrsr->GetPoint()->nNode, TRUE );
 #else
         if( !CheckNodesRange( pCrsrStk->GetMark()->nNode, pCurCrsr->GetPoint()->nNode, TRUE ))
@@ -3372,8 +3372,8 @@ void lcl_FillTextRange( uno::Reference<text::XTextRange>& rRange,
     SwPosition aEndPos( aStartPos );
     aEndPos.nContent = nBegin + nLen;
 
-    uno::Reference<text::XTextRange> xRange =
-        SwXTextRange::CreateTextRangeFromPosition( rNode.GetDoc(), aStartPos, &aEndPos);
+    const uno::Reference<text::XTextRange> xRange =
+        SwXTextRange::CreateXTextRange(*rNode.GetDoc(), aStartPos, &aEndPos);
 
     rRange = xRange;
 }

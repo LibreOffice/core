@@ -31,22 +31,18 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
-#endif
 #include <EnhancedPDFExportHelper.hxx>
 #include <hintids.hxx>
 
-#ifndef _OUTDEV_HXX
 #include <vcl/outdev.hxx>
-#endif
 #include <tools/multisel.hxx>
 #include <svx/adjitem.hxx>
 #include <svx/lrspitem.hxx>
 #include <svx/langitem.hxx>
 #include <svx/scripttypeitem.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <swatrset.hxx>
 #include <frmatr.hxx>
 #include <paratr.hxx>
@@ -106,7 +102,7 @@ FrmTagIdMap SwEnhancedPDFExportHelper::aFrmTagIdMap;
 
 LanguageType SwEnhancedPDFExportHelper::eLanguageDefault = 0;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 static std::vector< USHORT > aStructStack;
 
@@ -295,7 +291,7 @@ SwTaggedPDFHelper::SwTaggedPDFHelper( const Num_Info* pNumInfo,
 
     if ( mpPDFExtOutDevData && mpPDFExtOutDevData->GetIsExportTaggedPDF() )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         sal_Int32 nCurrentStruct = mpPDFExtOutDevData->GetCurrentStructureElement();
         lcl_DBGCheckStack();
 #endif
@@ -308,7 +304,7 @@ SwTaggedPDFHelper::SwTaggedPDFHelper( const Num_Info* pNumInfo,
         else
             BeginTag( vcl::PDFWriter::NonStructElement, aEmptyString );
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         nCurrentStruct = mpPDFExtOutDevData->GetCurrentStructureElement();
         lcl_DBGCheckStack();
 #endif
@@ -323,13 +319,13 @@ SwTaggedPDFHelper::~SwTaggedPDFHelper()
 {
     if ( mpPDFExtOutDevData && mpPDFExtOutDevData->GetIsExportTaggedPDF() )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         sal_Int32 nCurrentStruct = mpPDFExtOutDevData->GetCurrentStructureElement();
         lcl_DBGCheckStack();
 #endif
         EndStructureElements();
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         nCurrentStruct = mpPDFExtOutDevData->GetCurrentStructureElement();
         lcl_DBGCheckStack();
 #endif
@@ -370,9 +366,9 @@ bool SwTaggedPDFHelper::CheckReopenTag()
         {
             const SwFmtAnchor& rAnchor =
                 static_cast<const SwFlyFrm*>(&rFrm)->GetFmt()->GetAnchor();
-            if ( FLY_AT_CNTNT == rAnchor.GetAnchorId() ||
-                 FLY_AUTO_CNTNT == rAnchor.GetAnchorId() ||
-                 FLY_PAGE == rAnchor.GetAnchorId() )
+            if ((FLY_AT_PARA == rAnchor.GetAnchorId()) ||
+                (FLY_AT_CHAR == rAnchor.GetAnchorId()) ||
+                (FLY_AT_PAGE == rAnchor.GetAnchorId()))
             {
                 pKeyFrm = static_cast<const SwFlyFrm&>(rFrm).GetAnchorFrm();
                 bContinue = true;
@@ -398,7 +394,7 @@ bool SwTaggedPDFHelper::CheckReopenTag()
         const bool bSuccess = mpPDFExtOutDevData->SetCurrentStructureElement( nReopenTag );
         ASSERT( bSuccess, "Failed to reopen tag" )
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         aStructStack.push_back( 99 );
 #endif
 
@@ -421,7 +417,7 @@ bool SwTaggedPDFHelper::CheckRestoreTag() const
         (void)bSuccess;
         ASSERT( bSuccess, "Failed to restore reopened tag" )
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         aStructStack.pop_back();
 #endif
 
@@ -441,7 +437,7 @@ void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType, const Str
     const sal_Int32 nId = mpPDFExtOutDevData->BeginStructureElement( eType, rtl::OUString( rString ) );
     ++nEndStructureElement;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     aStructStack.push_back( static_cast<USHORT>(eType) );
 #endif
 
@@ -501,7 +497,7 @@ void SwTaggedPDFHelper::EndTag()
 {
     mpPDFExtOutDevData->EndStructureElement();
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     aStructStack.pop_back();
 #endif
 }
@@ -977,7 +973,7 @@ void SwTaggedPDFHelper::BeginNumberedListStructureElements()
             nRestoreCurrentTag = mpPDFExtOutDevData->GetCurrentStructureElement();
             mpPDFExtOutDevData->SetCurrentStructureElement( nReopenTag );
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             aStructStack.push_back( 99 );
 #endif
         }
@@ -1529,7 +1525,7 @@ SwEnhancedPDFExportHelper::SwEnhancedPDFExportHelper( SwEditShell& rSh,
     aNumListBodyIdMap.clear();
     aFrmTagIdMap.clear();
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     aStructStack.clear();
 #endif
 
@@ -1814,7 +1810,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
                         // --> FME 2005-05-09 #i44368# Links in Header/Footer
                         const SwFmtAnchor &rAnch = pFrmFmt->GetAnchor();
-                        if ( FLY_PAGE != rAnch.GetAnchorId() )
+                        if (FLY_AT_PAGE != rAnch.GetAnchorId())
                         {
                             const SwPosition* pPosition = rAnch.GetCntntAnchor();
                             if ( pPosition && pDoc->IsInHeaderFooter( pPosition->nNode ) )

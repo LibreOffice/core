@@ -42,7 +42,7 @@
 
 #include <algorithm>                //std::swap
 #include <functional>               //std::binary_function
-#   include <svtools/itemiter.hxx>  //SfxItemIter
+#   include <svl/itemiter.hxx>  //SfxItemIter
 #   include <svx/svdobj.hxx>        //SdrObject
 #   include <svx/svdoole2.hxx>      //SdrOle2Obj
 #   include <svx/fmglob.hxx>        //FmFormInventor
@@ -190,7 +190,7 @@ namespace sw
           meWriterType(eTxtBox),
           mpStartFrameContent(0),
           // --> OD 2007-04-19 #i43447# - move to initialization list
-          mbIsInline( (rFmt.GetAnchor().GetAnchorId() == FLY_IN_CNTNT) )
+          mbIsInline( (rFmt.GetAnchor().GetAnchorId() == FLY_AS_CHAR) )
           // <--
     {
         switch (rFmt.Which())

@@ -34,24 +34,15 @@
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 
-// #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
-// #include <com/sun/star/lang/Locale.hpp>
-// #endif
-// #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
-// #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
-// #endif
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
 
 
 #define _SVSTDARR_STRINGSSORTDTOR
-#include <svtools/svstdarr.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/svstdarr.hxx>
+#include <svl/aeitem.hxx>
 
-// #ifndef _FILTER_HXX
-// #include <svtools/filter.hxx>
-// #endif
 #include <SwStyleNameMapper.hxx>
 #include <docary.hxx>
 #include <hintids.hxx>
@@ -59,8 +50,8 @@
 #include <undobj.hxx>
 #include <swundo.hxx>
 #include <caption.hxx>
-#include <svtools/PasswordHelper.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/PasswordHelper.hxx>
+#include <svl/urihelper.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -69,12 +60,8 @@
 #include <svx/viewlayoutitem.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <svx/htmlmode.hxx>
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
@@ -91,12 +78,10 @@
 #include <svx/sizeitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/topfrm.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/ptitem.hxx>
+#include <svl/whiter.hxx>
+#include <svl/ptitem.hxx>
 #include <svx/linkmgr.hxx>
-#ifndef __RSC //autogen
 #include <tools/errinf.hxx>
-#endif
 #include <tools/urlobj.hxx>
 #include <svx/svdview.hxx>
 #include <swtypes.hxx>
@@ -147,10 +132,6 @@
 
 #include <PostItMgr.hxx>
 #include <postit.hxx>
-
-// #ifndef _FRMMGR_HXX
-// #include <frmmgr.hxx>
-// #endif
 
 #include <ndtxt.hxx> //#outline level,added by zhaojianwei
 
@@ -1624,7 +1605,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
-                        pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aCoreSet, RID_SVXDLG_ZOOM);
+                        pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aCoreSet);
                         DBG_ASSERT(pDlg, "Dialogdiet fail!");
                     }
 

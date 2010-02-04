@@ -30,6 +30,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -38,19 +39,17 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlictxt.hxx>
-#ifndef _XMLOFF_TXTIMP_HXX
 #include <xmloff/txtimp.hxx>
-#endif
 #include <xmloff/nmspmap.hxx>
-#ifndef _XMLOFF_XMLTEXTSHAPEIMPORTHELPER_HXX_
 #include <xmloff/XMLTextShapeImportHelper.hxx>
-#endif
 #include <xmloff/XMLFontStylesContext.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <doc.hxx>
-#include <unoobj.hxx>
+#include <TextCursorHelper.hxx>
+#include <unotext.hxx>
+#include <unotextrange.hxx>
 #include "unocrsr.hxx"
 #include <poolfmt.hxx>
 #include <ndtxt.hxx>
@@ -65,7 +64,7 @@
 #include <sfx2/printer.hxx>
 #include <ForbiddenCharactersEnum.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 #include <tools/diagnose_ex.h>
 #include <hash_set>
 #include <stringhash.hxx>
@@ -714,9 +713,9 @@ void SwXMLImport::startDocument( void )
         }
         if( pCrsrSh )
         {
-            Reference<XTextRange> xInsertTextRange(
-                SwXTextRange::CreateTextRangeFromPosition(
-                                pDoc, *pCrsrSh->GetCrsr()->GetPoint(), 0 ) );
+            const uno::Reference<text::XTextRange> xInsertTextRange(
+                SwXTextRange::CreateXTextRange(
+                    *pDoc, *pCrsrSh->GetCrsr()->GetPoint(), 0 ) );
             setTextInsertMode( xInsertTextRange );
             xTextCursor = GetTextImport()->GetCursor();
             pTxtCrsr = 0;
@@ -842,7 +841,7 @@ void SwXMLImport::endDocument( void )
                                             pTxtNode->GetTxt().Len() );
                 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 // !!! This should be impossible !!!!
                 ASSERT( pSttNdIdx->GetIndex()+1 !=
                                         pPaM->GetBound( sal_True ).nNode.GetIndex(),

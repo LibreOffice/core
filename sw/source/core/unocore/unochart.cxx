@@ -34,14 +34,13 @@
 #include <memory>
 #include <algorithm>
 
-
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart2/data/LabelOrigin.hpp>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <vos/mutex.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/zforlist.hxx>     // SvNumberFormatter
+#include <svl/zforlist.hxx>     // SvNumberFormatter
 #include <svtools/chartprettypainter.hxx>
 
 #include <tools/link.hxx>
@@ -51,7 +50,7 @@
 #include <swtable.hxx>
 #include <unoprnms.hxx>
 #include <unomap.hxx>
-#include <unoobj.hxx>
+#include <unomid.h>
 #include <unocrsr.hxx>
 #include <unotbl.hxx>
 #include <doc.hxx>

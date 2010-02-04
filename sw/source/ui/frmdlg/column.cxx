@@ -44,7 +44,7 @@
 #include <svx/lrspitem.hxx>
 #include <svx/sizeitem.hxx>
 #include "svx/frmdiritem.hxx"
-#include <svtools/ctloptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/msgbox.hxx>
 #include <swmodule.hxx>
@@ -125,7 +125,7 @@ SwColumnDlg::SwColumnDlg(Window* pParent, SwWrtShell& rSh) :
     FreeResource();
 
     SwRect aRect;
-    rWrtShell.CalcBoundRect(aRect, FLY_IN_CNTNT);
+    rWrtShell.CalcBoundRect(aRect, FLY_AS_CHAR);
 
     nSelectionWidth = aRect.Width();
 

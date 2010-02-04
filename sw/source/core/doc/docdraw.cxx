@@ -32,9 +32,7 @@
 #include "precompiled_sw.hxx"
 #include <hintids.hxx>
 #include <rtl/logfile.hxx>
-#ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
-#endif
 #include <sfx2/printer.hxx>
 #include <svx/eeitem.hxx>
 #include <svx/flditem.hxx>
@@ -46,22 +44,16 @@
 #include <svx/langitem.hxx>
 #include <svx/unolingu.hxx>
 
-#ifndef _SVDOMEAS_HXX
 #include <svx/svdfield.hxx>
-#endif
 #include <svx/svdpool.hxx>
 #include <fmtanchr.hxx>
 #include <charatr.hxx>
 #include <frmfmt.hxx>
 #include <charfmt.hxx>
 #include <viewimp.hxx>
-#ifndef _SWHINTS_HXX
 #include <swhints.hxx>
-#endif
 #include <doc.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <rootfrm.hxx>  //Damit der RootDtor gerufen wird.
 #include <poolfmt.hxx>
 #include <viewsh.hxx>           // fuer MakeDrawView
@@ -258,7 +250,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
             SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pObj);
 
             // --> OD 2005-08-16 #i53320#
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             SwAnchoredDrawObject* pAnchoredDrawObj =
                 static_cast<SwAnchoredDrawObject*>(pContact->GetAnchoredObj( pObj ));
             ASSERT( bGroupMembersNotPositioned == pAnchoredDrawObj->NotYetPositioned(),
@@ -481,7 +473,7 @@ BOOL SwDoc::DeleteSelection( SwDrawView& rDrawView )
                 SwDrawContact *pC = (SwDrawContact*)GetUserCall(pObj);
                 SwDrawFrmFmt *pFrmFmt = (SwDrawFrmFmt*)pC->GetFmt();
                 if( pFrmFmt &&
-                    FLY_IN_CNTNT == pFrmFmt->GetAnchor().GetAnchorId() )
+                    FLY_AS_CHAR == pFrmFmt->GetAnchor().GetAnchorId() )
                 {
                     rDrawView.MarkObj( pObj, rDrawView.Imp().GetPageView(), TRUE );
                     --i;
