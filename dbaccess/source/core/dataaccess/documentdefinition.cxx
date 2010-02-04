@@ -954,7 +954,7 @@ void ODocumentDefinition::impl_showOrHideComponent_throw( const bool i_bShow )
         {
             LockModifiable aLockModify( impl_getComponent_throw() );
             m_xEmbeddedObject->changeState( EmbedStates::ACTIVE );
-            impl_onActivateEmbeddedObject( false );
+            impl_onActivateEmbeddedObject_nothrow( false );
         }
         break;
 
@@ -1144,7 +1144,7 @@ Any ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, cons
     {
         LockModifiable aLockModify( impl_getComponent_throw() );
         m_xEmbeddedObject->changeState( EmbedStates::ACTIVE );
-        ODocumentDefinition::impl_onActivateEmbeddedObject_nothrow( false );
+        impl_onActivateEmbeddedObject_nothrow( false );
     }
 
     if ( !m_bForm && m_pImpl->m_aProps.bAsTemplate && !m_bOpenInDesign )
@@ -1198,7 +1198,7 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
 
                 if ( !bIsAliveNewStyleReport )
                 {
-                    impl_onActivateEmbeddedObject( true );
+                    impl_onActivateEmbeddedObject_nothrow( true );
                     return makeAny( getComponent() );
                 }
             }

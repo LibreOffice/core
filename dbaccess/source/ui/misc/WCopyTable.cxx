@@ -709,7 +709,7 @@ OCopyTableWizard::OCopyTableWizard( Window* pParent, const ::rtl::OUString& _rDe
     ::dbaui::fillTypeInfo( _xConnection, m_sTypeNames, m_aTypeInfo, m_aTypeInfoIndex );
     ::dbaui::fillTypeInfo( _xConnection, m_sTypeNames, m_aDestTypeInfo, m_aDestTypeInfoIndex );
 
-    m_xInteractionHandler.set( m_xFactory->createInstance( SERVICE_SDB_INTERACTION_HANDLER ), UNO_QUERY);
+    m_xInteractionHandler.set( m_xFactory->createInstance( SERVICE_TASK_INTERACTION_HANDLER ), UNO_QUERY);
 
     OCopyTable* pPage1( new OCopyTable( this ) );
     pPage1->disallowViews();
