@@ -71,6 +71,7 @@ struct Gregorian
 };
 
 const sal_uInt16 UPPER_PRECISION = 300; // entirely arbitrary...
+const double EXP_LOWER_BOUND = 1.0E-4; // prefer scientific notation below this value.
 
 }
 
@@ -2012,6 +2013,12 @@ bool SvNumberformat::GetOutputString(double fNumber, sal_uInt16 nCharCount, Stri
     if (bSign)
         fTestNum = -fTestNum;
 
+    if (fTestNum < EXP_LOWER_BOUND)
+    {
+        lcl_GetOutputStringScientific(fNumber, nCharCount, GetFormatter(), rOutString);
+        return true;
+    }
+
     double fExp = log10(fTestNum);
     // Values < 1.0 always have one digit before the decimal point.
     sal_uInt16 nDigitPre = fExp >= 0.0 ? static_cast<sal_uInt16>(ceil(fExp)) : 1;
@@ -2072,7 +2079,27 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
             {
                 if (rScan.GetStandardPrec() == SvNumberFormatter::UNLIMITED_PRECISION)
                 {
+                    bool bSign = ::rtl::math::isSignBitSet(fNumber);
+                    if (bSign)
+                        fNumber = -fNumber;
                     ImpGetOutputInputLine(fNumber, OutString);
+                    if (fNumber < EXP_LOWER_BOUND)
+                    {
+                        xub_StrLen nLen = OutString.Len();
+                        if (!nLen)
+                            return false;
+
+                        if (nLen > 11)
+                        {
+                            sal_uInt16 nStandardPrec = rScan.GetStandardPrec();
+                            nStandardPrec = ::std::min(nStandardPrec, static_cast<sal_uInt16>(14)); // limits to 14 decimals
+                            OutString = ::rtl::math::doubleToUString( fNumber,
+                                    rtl_math_StringFormat_E, nStandardPrec /*2*/,
+                                    GetFormatter().GetNumDecimalSep().GetChar(0), true);
+                        }
+                    }
+                    if (bSign)
+                        OutString.Insert('-', 0);
                     return false;
                 }
                 ImpGetOutputStandard(fNumber, OutString);
