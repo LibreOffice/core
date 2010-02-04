@@ -827,8 +827,8 @@ uno::Reference<drawing::XLayer> SdLayerManager::GetLayer (SdrLayer* pLayer)
         xLayer = new SdLayer (this, pLayer);
 
         // Remember the new xLayer for future calls.
-        xRef = uno::Reference<uno::XInterface> (xLayer, uno::UNO_QUERY);
-        mpLayers->insert (xRef);
+        uno::WeakReference<uno::XInterface> wRef(xLayer);
+        mpLayers->insert(wRef);
     }
 
     return xLayer;
