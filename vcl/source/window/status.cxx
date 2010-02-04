@@ -1570,9 +1570,9 @@ void StatusBar::SetBottomBorder( BOOL bBottomBorder )
 
 void StatusBar::SetTopBorder( BOOL bTopBorder )
 {
-    if ( mpImplData->mbTopBorder != bTopBorder )
+    if ( mpImplData->mbTopBorder != static_cast<bool>(bTopBorder) )
     {
-        mpImplData->mbTopBorder = bTopBorder;
+        mpImplData->mbTopBorder = static_cast<bool>(bTopBorder);
         ImplCalcBorder();
     }
 }
