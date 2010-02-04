@@ -3388,11 +3388,6 @@ USHORT* SvxCharPositionPage::GetRanges()
 }
 
 // -----------------------------------------------------------------------
-#define ENABLE_AND_CHECK( aCheckBox )   \
-    if ( !aCheckBox.IsEnabled() )       \
-        aCheckBox.Enable();             \
-    aCheckBox.Check( TRUE )
-
 void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
 {
     String sUser = GetUserData();
@@ -3433,6 +3428,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
             m_aFontSizeEdit.Enable();
 
             short nFac;
+            sal_Bool bAutomatic(sal_False);
 
             if ( nEsc > 0 )
             {
@@ -3440,8 +3436,8 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
                 m_aHighPosBtn.Check( TRUE );
                 if ( nEsc == DFLT_ESC_AUTO_SUPER )
                 {
-                    ENABLE_AND_CHECK( m_aHighLowRB );
                     nEsc = DFLT_ESC_SUPER;
+                    bAutomatic = sal_True;
                 }
             }
             else
@@ -3450,10 +3446,15 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
                 m_aLowPosBtn.Check( TRUE );
                 if ( nEsc == DFLT_ESC_AUTO_SUB )
                 {
-                    ENABLE_AND_CHECK( m_aHighLowRB );
                     nEsc = DFLT_ESC_SUB;
+                    bAutomatic = sal_True;
                 }
             }
+            if (!m_aHighLowRB.IsEnabled())
+            {
+                m_aHighLowRB.Enable();
+            }
+            m_aHighLowRB.Check(bAutomatic);
 
             if ( m_aHighLowRB.IsChecked() )
             {
