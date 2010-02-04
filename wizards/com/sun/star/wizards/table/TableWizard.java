@@ -250,7 +250,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener, 
     {
         curScenarioSelector = new ScenarioSelector(this, this.curTableDescriptor, slblFields, slblSelFields);
         curFieldFormatter = new FieldFormatter(this, curTableDescriptor);
-        if (this.curTableDescriptor.supportsCoreSQLGrammar())
+        if ( this.curTableDescriptor.supportsPrimaryKeys() )
         {
             curPrimaryKeyHandler = new PrimaryKeyHandler(this, curTableDescriptor);
         }
@@ -264,7 +264,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener, 
         boolean bTableCreated = false;
         String schemaname = curFinalizer.getSchemaName();
         String catalogname = curFinalizer.getCatalogName();
-        if (curTableDescriptor.supportsCoreSQLGrammar())
+        if (curTableDescriptor.supportsPrimaryKeys())
         {
             String[] keyfieldnames = curPrimaryKeyHandler.getPrimaryKeyFields(curTableDescriptor);
             if (keyfieldnames != null)
@@ -353,7 +353,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener, 
         int i = 0;
         i = insertRoadmapItem(0, true, m_oResource.getResText(UIConsts.RID_TABLE + 2), SOMAINPAGE);
         i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_TABLE + 3), SOFIELDSFORMATPAGE);
-        if (this.curTableDescriptor.supportsCoreSQLGrammar())
+        if (this.curTableDescriptor.supportsPrimaryKeys())
         {
             i = insertRoadmapItem(i, false, m_oResource.getResText(UIConsts.RID_TABLE + 4), SOPRIMARYKEYPAGE);
         }

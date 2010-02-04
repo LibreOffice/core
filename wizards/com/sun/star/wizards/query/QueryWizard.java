@@ -295,6 +295,10 @@ public class QueryWizard extends DatabaseObjectWizard
                 loadSubComponent( CommandType.QUERY, m_createdQuery, CurFinalizer.displayQueryDesign() );
                 xDialog.endExecute();
             }
+            else
+            {
+                setControlProperty("btnWizardFinish", "Enabled", false);
+            }
         }
     }
 

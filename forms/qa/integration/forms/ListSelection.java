@@ -30,7 +30,6 @@
 package integration.forms;
 
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.sheet.XSpreadsheets;
@@ -48,15 +47,10 @@ import com.sun.star.script.ScriptEventDescriptor;
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.accessibility.XAccessibleSelection;
-import com.sun.star.accessibility.XAccessibleAction;
 import com.sun.star.frame.XStorable;
 
-import integration.forms.DocumentHelper;
-
-public class ListSelection extends integration.forms.TestCase implements com.sun.star.awt.XItemListener
+public class ListSelection extends integration.forms.TestCase
 {
-    private final static boolean m_useJavaCallbacks = false;
-
     /** Creates a new instance of ListSelection */
     public ListSelection()
     {
@@ -98,7 +92,7 @@ public class ListSelection extends integration.forms.TestCase implements com.sun
             {
                 log.println( "Round " + ( i + 1 ) + " of " + runs );
                 prepareDocument();
-                clickTheListBox();
+                impl_clickListBox();
                 synchronized( this ) { this.wait( 1000 ); }
                 closeDocument();
             }
@@ -106,7 +100,7 @@ public class ListSelection extends integration.forms.TestCase implements com.sun
     }
 
     /* ------------------------------------------------------------------ */
-    final protected void clickTheListBox()
+    final private void impl_clickListBox()
     {
         try
         {
@@ -122,13 +116,6 @@ public class ListSelection extends integration.forms.TestCase implements com.sun
                 XAccessible accessibleListBox = (XAccessible)UnoRuntime.queryInterface(
                     XAccessible.class, getListBoxControl( activeSheet ) );
                 XAccessibleContext context = accessibleListBox.getAccessibleContext();
-
-                // open the popup of the list box (not really necessary, but to better
-                // simlate user action ...)
-/*                XAccessibleAction listBoxActions = (XAccessibleAction)UnoRuntime.queryInterface(
-                    XAccessibleAction.class, context );
-                listBoxActions.doAccessibleAction( 0 );
-*/
 
                 // the first "accessible child" of a list box is its list
                 XAccessibleSelection accessibleList = (XAccessibleSelection)UnoRuntime.queryInterface(
@@ -158,7 +145,7 @@ public class ListSelection extends integration.forms.TestCase implements com.sun
     }
 
     /* ------------------------------------------------------------------ */
-    final protected void createListenerScript()
+    final private void impl_setupListenerScript()
     {
         try
         {
@@ -203,7 +190,7 @@ public class ListSelection extends integration.forms.TestCase implements com.sun
     }
 
     /* ------------------------------------------------------------------ */
-    final protected void assignCallbackScript( XPropertySet controlModel, String interfaceName, String interfaceMethod, String scriptCode )
+    final private void impl_assignStarBasicScript( XPropertySet controlModel, String interfaceName, String interfaceMethod, String scriptCode )
     {
         try
         {
@@ -240,8 +227,7 @@ public class ListSelection extends integration.forms.TestCase implements com.sun
     protected void prepareDocument() throws com.sun.star.uno.Exception, java.lang.Exception
     {
         super.prepareDocument();
-        if ( !m_useJavaCallbacks )
-            createListenerScript();
+        impl_setupListenerScript();
 
         SpreadsheetDocument document = (SpreadsheetDocument)m_document;
         XSpreadsheets sheets = document.getSheets();
@@ -264,7 +250,7 @@ public class ListSelection extends integration.forms.TestCase implements com.sun
         for ( int i = 0; i < 4; ++i )
         {
             XPropertySet buttonModel = m_formLayer.createControlAndShape( "CommandButton", 10, 10 + i * 10, 30, 8 );
-            assignCallbackScript( buttonModel, "XActionListener", "actionPerformed", "document:default.callbacks.onButtonClicked" );
+            impl_assignStarBasicScript( buttonModel, "XActionListener", "actionPerformed", "document:default.callbacks.onButtonClicked" );
         }
 
         // and a list box
@@ -273,24 +259,14 @@ public class ListSelection extends integration.forms.TestCase implements com.sun
         listBox.setPropertyValue( "StringItemList", newSheetNames );
         listBox.setPropertyValue( "Name", "ListBox" );
 
-        if ( !m_useJavaCallbacks )
-            assignCallbackScript( listBox, "XItemListener", "itemStateChanged", "document:default.callbacks.onListBoxSelected" );
+        impl_assignStarBasicScript( listBox, "XItemListener", "itemStateChanged", "document:default.callbacks.onListBoxSelected" );
 
         // clone this sheet
         for ( short i = 1; i < newSheetNames.length; ++i )
-            sheets.copyByName( newSheetNames[0], newSheetNames[i], (short)i );
+            sheets.copyByName( newSheetNames[0], newSheetNames[i], i );
 
         // switch the thing to alive mode
         m_document.getCurrentView().toggleFormDesignMode();
-
-        // add to the list box control as item listener
-        if ( m_useJavaCallbacks )
-        {
-            XControl control = m_document.getCurrentView().getControl( listBox );
-            XListBox listBoxControl = (XListBox)UnoRuntime.queryInterface(
-                XListBox.class, control );
-            listBoxControl.addItemListener( this );
-        }
 
         try
         {
@@ -321,49 +297,5 @@ public class ListSelection extends integration.forms.TestCase implements com.sun
     {
         return (XListBox)UnoRuntime.queryInterface(
             XListBox.class, m_document.getCurrentView().getControl( getListBoxModel( sheet ) ) );
-    }
-
-    /* ------------------------------------------------------------------ */
-    public void itemStateChanged( com.sun.star.awt.ItemEvent event ) throws com.sun.star.uno.RuntimeException
-    {
-        try
-        {
-            // get the selected string
-            XControl control = (XControl)UnoRuntime.queryInterface( XControl.class,
-                event.Source );
-            XPropertySet model = dbfTools.queryPropertySet( control.getModel() );
-            String[] entries = (String[])model.getPropertyValue( "StringItemList" );
-            String selectedEntry = entries[ event.Selected ];
-
-            // activate this sheet
-            SpreadsheetDocument document = (SpreadsheetDocument)m_document;
-            XSpreadsheet sheet = (XSpreadsheet)UnoRuntime.queryInterface(
-                XSpreadsheet.class, document.getSheets().getByName( selectedEntry ) );
-            XSpreadsheetView view = (XSpreadsheetView)m_document.getCurrentView().query( XSpreadsheetView.class );
-            view.setActiveSheet( sheet );
-
-            if ( m_useJavaCallbacks )
-            {
-                // after we switched to another sheet, we need to register at its list box
-                // control, again. The reason is that controls exist as long as their sheet is active.
-                XListBox listBoxControl = getListBoxControl( sheet );
-                listBoxControl.addItemListener( this );
-
-                // in the list box of this new sheet, select its name. Everything else
-                // is way too confusing
-                listBoxControl.selectItem( selectedEntry, true );
-                    // don't do it. It deadlocks :(
-            }
-        }
-        catch( com.sun.star.uno.Exception e )
-        {
-            e.printStackTrace( System.err );
-        }
-    }
-
-    /* ------------------------------------------------------------------ */
-    public void disposing( com.sun.star.lang.EventObject rEvent ) throws com.sun.star.uno.RuntimeException
-    {
-        // not interested in by now
     }
  }

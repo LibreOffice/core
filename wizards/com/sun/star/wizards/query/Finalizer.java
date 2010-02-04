@@ -31,6 +31,7 @@ package com.sun.star.wizards.query;
 
 import com.sun.star.wizards.common.*;
 import com.sun.star.awt.XRadioButton;
+import com.sun.star.awt.XTextComponent;
 import com.sun.star.wizards.db.*;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.XComponent;
@@ -44,7 +45,7 @@ public class Finalizer
 {
     private QueryWizard m_queryWizard;
     private String resQuery;
-    private Object m_aTxtTitle;
+    private XTextComponent m_aTxtTitle;
     private XRadioButton xRadioDisplayQuery;
     private QuerySummary CurDBMetaData;
 
@@ -74,7 +75,7 @@ public class Finalizer
                 {
                     new Integer(8), reslblQueryTitle, new Integer(95), new Integer(27), new Integer(QueryWizard.SOSUMMARY_PAGE), new Short(curtabindex++), new Integer(52)
                 });
-        m_aTxtTitle = m_queryWizard.insertTextField("txtQueryTitle", 0, null, new String[]
+        m_aTxtTitle = m_queryWizard.insertTextField("txtQueryTitle", "changeTitle", this, new String[]
                 {
                     "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"
                 },
@@ -127,6 +128,11 @@ public class Finalizer
                 });
     }
 
+    public void changeTitle()
+    {
+        final String TitleName = m_aTxtTitle.getText();
+        CurUnoDialog.enableFinishButton(!"".equals(TitleName));
+    }
     /* TODO: The title textbox always has to be updated when
     a new Table has been selected if it is clear that the user has not made any input meanwhile
      */
