@@ -289,10 +289,10 @@ testcase tToolsAutocorrectCustomQuotes(bSimple as boolean)
     Kontext "TabLocalizedOptions"
     if bSimple then
         SingleQuotesReplace.Check
-        EinfachWortAnfang.Click
+        SingleQuotesStart.Click
     else
         DoubleQuotesReplace.Check
-        DoppeltWortAnfang.Click
+        DoubleQuotesStart.Click
     endif
     Kontext "Sonderzeichen"
     sleep 1
@@ -303,9 +303,9 @@ testcase tToolsAutocorrectCustomQuotes(bSimple as boolean)
 
     Kontext "TabLocalizedOptions"
     if bSimple then
-        EinfachWortEnde.Click
+        SingleQuotesEnd.Click
     else
-        DoppeltWortEnde.Click
+        DoubleQuotesEnd.Click
     endif
     Kontext "Sonderzeichen"
     sleep 1
@@ -345,7 +345,7 @@ testcase tToolsAutocorrectCustomQuotes(bSimple as boolean)
     Kontext "TabLocalizedOptions"
     if bSimple then
         SingleQuotesReplace.Check
-        EinfachStandard.Click
+        SingleQuotesDefault.Click
     else
         DoubleQuotesReplace.Check
         DoubleQuotesDefault.Click
