@@ -1626,8 +1626,13 @@ OUString SAL_CALL ScDataPilotFieldObj::getName() throw(RuntimeException)
         if( pDim->IsDataLayout() )
             aName = OUString( RTL_CONSTASCII_USTRINGPARAM( SC_DATALAYOUT_NAME ) );
         else
-            aName = pDim->GetLayoutName();
-    }
+        {
+            const rtl::OUString* pLayoutName = pDim->GetLayoutName();
+            if (pLayoutName)
+                aName = *pLayoutName;
+            else
+                aName = pDim->GetName();
+        }                                                                }
     return aName;
 }
 
@@ -1639,7 +1644,7 @@ void SAL_CALL ScDataPilotFieldObj::setName( const OUString& rName ) throw(Runtim
     if( pDim && !pDim->IsDataLayout() )
     {
         String aName( rName );
-        pDim->SetLayoutName( &aName );
+        pDim->SetLayoutName(aName);
         SetDPObject( pDPObj );
     }
 }
@@ -3069,7 +3074,7 @@ Sequence<OUString> SAL_CALL ScDataPilotItemsObj::getElementNames()
     ScUnoGuard aGuard;
     Sequence< OUString > aSeq;
     if( ScDPObject* pDPObj = GetDPObject() )
-        pDPObj->GetMembers( lcl_GetObjectIndex( pDPObj, maFieldId ), aSeq );
+        pDPObj->GetMemberNames( lcl_GetObjectIndex( pDPObj, maFieldId ), aSeq );
     return aSeq;
 }
 

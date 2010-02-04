@@ -96,12 +96,13 @@ private:
     USHORT                  nPane;          // ScSplitPos oder SC_VIEWPANE_ACTIVE
 
 protected:
-    ScTabViewShell*         GetViewShell() const    { return pViewShell; }
     ::com::sun::star::awt::Rectangle GetVisArea() const;
 
 public:
                             ScViewPaneBase(ScTabViewShell* pViewSh, USHORT nP);
     virtual                 ~ScViewPaneBase();
+
+    ScTabViewShell*         GetViewShell() const    { return pViewShell; }
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
                                 const ::com::sun::star::uno::Type & rType )
@@ -124,7 +125,7 @@ public:
                             getReferredCells() throw(::com::sun::star::uno::RuntimeException);
 
                             // XFormLayerAccess
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > SAL_CALL
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > SAL_CALL
                             getFormController( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::form::XForm >& Form )
                                     throw (::com::sun::star::uno::RuntimeException);
