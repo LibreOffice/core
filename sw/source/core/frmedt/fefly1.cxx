@@ -919,7 +919,7 @@ void SwFEShell::InsertDrawObj( SdrObject& rDrawObj,
     SET_CURR_SHELL( this );
 
     SfxItemSet rFlyAttrSet( GetDoc()->GetAttrPool(), aFrmFmtSetRange );
-    rFlyAttrSet.Put( SwFmtAnchor( FLY_AT_CNTNT ));
+    rFlyAttrSet.Put( SwFmtAnchor( FLY_AT_PARA ));
     // --> OD 2009-12-29 #i89920#
     rFlyAttrSet.Put( SwFmtSurround( SURROUND_THROUGHT ) );
     rDrawObj.SetLayer( getIDocumentDrawModelAccess()->GetHeavenId() );

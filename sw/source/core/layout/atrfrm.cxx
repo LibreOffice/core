@@ -2829,7 +2829,7 @@ void SwFlyFrmFmt::MakeFrms()
                 }
                 else
                 {
-                    aAnchorAttr.SetType( FLY_AT_CNTNT );
+                    aAnchorAttr.SetType( FLY_AT_PARA );
                     SetFmtAttr( aAnchorAttr );
                     MakeFrms();
                     return;

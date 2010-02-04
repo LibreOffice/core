@@ -192,7 +192,7 @@ class SW_DLLPUBLIC ViewShell : public Ring
     SW_DLLPRIVATE sal_Bool CheckInvalidForPaint( const SwRect & );//Direkt Paint oder lieber
                                                 //eine Aktion ausloesen.
 
-    SW_DLLPRIVATE void PrepareForPrint( const SwPrtOptions &rOptions );
+    SW_DLLPRIVATE void PrepareForPrint( const SwPrintData &rOptions );
 
     SW_DLLPRIVATE void ImplApplyViewOptions( const SwViewOption &rOpt );
 

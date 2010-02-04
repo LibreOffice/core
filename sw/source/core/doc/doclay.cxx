@@ -657,9 +657,9 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
     // --> OD 2010-01-07 #i107811#
     // Assure that at-page anchored fly frames have a page num or a content anchor set.
     if ( !pAnchor ||
-         ( FLY_PAGE != pAnchor->GetAnchorId() &&
+         ( FLY_AT_PAGE != pAnchor->GetAnchorId() &&
            !pAnchor->GetCntntAnchor() ) ||
-         ( FLY_PAGE == pAnchor->GetAnchorId() &&
+         ( FLY_AT_PAGE == pAnchor->GetAnchorId() &&
            !pAnchor->GetCntntAnchor() &&
            pAnchor->GetPageNum() == 0 ) )
     {
@@ -680,8 +680,8 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
             }
 
             eAnchorId = aAnch.GetAnchorId();
-            if ( FLY_PAGE != eAnchorId ||
-                 ( FLY_PAGE == eAnchorId &&
+            if ( FLY_AT_PAGE != eAnchorId ||
+                 ( FLY_AT_PAGE == eAnchorId &&
                    ( !pAnchor ||
                      aAnch.GetPageNum() == 0 ) ) )
             {
