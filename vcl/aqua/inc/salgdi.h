@@ -175,6 +175,9 @@ public:
     void                RefreshRect(float lX, float lY, float lWidth, float lHeight);
 
     void                SetState();
+    void                UnsetState();
+    // InvalidateContext does an UnsetState and sets mrContext to 0
+    void                InvalidateContext();
 
     virtual BOOL        unionClipRegion( long nX, long nY, long nWidth, long nHeight );
     virtual bool        unionClipRegion( const ::basegfx::B2DPolyPolygon& );
@@ -359,6 +362,7 @@ private:
     void ApplyXorContext();
     void Pattern50Fill();
     UInt32 getState( ControlState nState );
+    UInt32 getTrackState( ControlState nState );
 };
 
 class XorEmulation

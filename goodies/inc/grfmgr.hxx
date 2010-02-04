@@ -353,7 +353,7 @@ public:
     void                    ReleaseFromCache();
 
     const Graphic&          GetGraphic() const;
-    void                    SetGraphic( const Graphic& rGraphic );
+    void                    SetGraphic( const Graphic& rGraphic, const GraphicObject* pCopyObj = 0);
     void                    SetGraphic( const Graphic& rGraphic, const String& rLink );
 
     /** Get graphic transformed according to given attributes

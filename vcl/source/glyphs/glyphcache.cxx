@@ -79,9 +79,7 @@ GlyphCache::~GlyphCache()
 
 // -----------------------------------------------------------------------
 
-#ifndef IRIX
 inline
-#endif
 size_t GlyphCache::IFSD_Hash::operator()( const ImplFontSelectData& rFontSelData ) const
 {
     // TODO: is it worth to improve this hash function?

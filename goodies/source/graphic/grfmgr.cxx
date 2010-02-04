@@ -911,7 +911,7 @@ const Graphic& GraphicObject::GetGraphic() const
 
 // -----------------------------------------------------------------------------
 
-void GraphicObject::SetGraphic( const Graphic& rGraphic )
+void GraphicObject::SetGraphic( const Graphic& rGraphic, const GraphicObject* pCopyObj )
 {
     mpMgr->ImplUnregisterObj( *this );
 
@@ -924,7 +924,7 @@ void GraphicObject::SetGraphic( const Graphic& rGraphic )
     delete mpLink, mpLink = NULL;
     delete mpSimpleCache, mpSimpleCache = NULL;
 
-    mpMgr->ImplRegisterObj( *this, maGraphic );
+    mpMgr->ImplRegisterObj( *this, maGraphic, 0, pCopyObj);
 
     if( mpSwapOutTimer )
         mpSwapOutTimer->Start();
