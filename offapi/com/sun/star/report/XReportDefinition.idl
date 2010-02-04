@@ -75,8 +75,8 @@
 #ifndef __com_sun_star_awt_Size_idl__
 #include <com/sun/star/awt/Size.idl>
 #endif
-#ifndef __com_sun_star_util_XModifiable_idl__
-#include <com/sun/star/util/XModifiable.idl>
+#ifndef __com_sun_star_util_XModifiable2_idl__
+#include <com/sun/star/util/XModifiable2.idl>
 #endif
 #ifndef __com_sun_star_document_XEventBroadcaster_idl__
 #include <com/sun/star/document/XEventBroadcaster.idl>
@@ -158,7 +158,7 @@ interface XReportDefinition
         of the document without saving any changes.
         </p>
      */
-    interface com::sun::star::util::XModifiable;
+    interface com::sun::star::util::XModifiable2;
 
     /** allows the creation of sub reports.
     */
