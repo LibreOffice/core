@@ -33,12 +33,18 @@ import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XComponent;
-import com.sun.star.wizards.common.*;
+import com.sun.star.sdb.application.DatabaseObject;
+import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.JavaTools;
+import com.sun.star.wizards.common.NoValidPathException;
+import com.sun.star.wizards.common.Properties;
+import com.sun.star.wizards.db.DatabaseObjectWizard;
 import com.sun.star.wizards.db.RelationController;
 import com.sun.star.wizards.document.OfficeDocument;
-import com.sun.star.wizards.ui.*;
+import com.sun.star.wizards.ui.CommandFieldSelection;
+import com.sun.star.wizards.ui.UIConsts;
 
-public class FormWizard extends WizardDialog
+public class FormWizard extends DatabaseObjectWizard
 {
 
     private CommandFieldSelection curDBCommandFieldSelection;
@@ -67,13 +73,13 @@ public class FormWizard extends WizardDialog
     public static final int SOGRID = 3;
     public static final int SOTOPJUSTIFIED = 4;
     private String slblTables;
-    private boolean bFormOpenMode;
-    private boolean bcreateForm = false;
+    private boolean m_openForEditing;
+    private boolean m_success = false;
     private String FormName;
 
-    public FormWizard(XMultiServiceFactory xMSF)
+    public FormWizard( XMultiServiceFactory i_servicFactory, final PropertyValue[] i_wizardContext )
     {
-        super(xMSF, 34400);
+        super( i_servicFactory, 34400, i_wizardContext );
         super.addResourceHandler("FormWizard", "dbw");
         Helper.setUnoPropertyValues(xDialogModel,
                 new String[]
@@ -171,7 +177,6 @@ public class FormWizard extends WizardDialog
         switch (nOldStep)
         {
             case SOMAIN_PAGE:
-//              curFormDocument.oMainFormDBMetaData.setFieldNames(curDBCommandFieldSelection.getSelectedFieldNames());
             {
                 final String sTableName = curDBCommandFieldSelection.getSelectedCommandName();
                 final String[] aFieldNames = curDBCommandFieldSelection.getSelectedFieldNames();
@@ -218,40 +223,6 @@ public class FormWizard extends WizardDialog
                 break;
         }
     }
-
-/*
-    public static void main(String args[])
-    {
-
-        String ConnectStr = "uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager";      //localhost  ;Lo-1.Germany.sun.com; 10.16.65.155
-        PropertyValue[] curproperties = null;
-        try
-        {
-            XMultiServiceFactory xLocMSF = com.sun.star.wizards.common.Desktop.connect(ConnectStr);
-            FormWizard CurFormWizard = new FormWizard(xLocMSF);
-            if (xLocMSF != null)
-            {
-                System.out.println("Connected to " + ConnectStr);
-                curproperties = new PropertyValue[1];
-//            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MyHSQL.odb");
-                curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MyHSQL.odb");
-                curproperties[0] = Properties.createProperty("DataSourceName", "MyHSQLDatabase");
- // file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/myjapanesehsqldatasourceMyDocAssign.odb");
- // MyDBase; Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb ; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
- //          /--/curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///x:/bc/MyHSQL Database.odb"); //MyDBase; Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb ; Mydbwizard2DocAssign.odb; NewAccessDatabase,  baseLocation ); "DataSourceName", "db1");
- //          curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography");
- //          curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography");
- // Bibliography*         CurTableWizard.startTableWizard(xLocMSF, curproperties);
-
-                CurFormWizard.startFormWizard(xLocMSF, curproperties);
-            }
-        }
-        catch (Exception exception)
-        {
-            exception.printStackTrace(System.out);
-        }
-    }
-*/
 
     public void buildSteps() throws NoValidPathException
     {
@@ -317,14 +288,14 @@ public class FormWizard extends WizardDialog
             String sNewFormName = curFinalizer.getName();
             if (!curFormDocument.oMainFormDBMetaData.hasFormDocumentByName(sNewFormName))
             {
-                bFormOpenMode = curFinalizer.getOpenMode();
+                m_openForEditing = curFinalizer.getOpenForEditing();
                 FormName = curFinalizer.getName();
                 if (curFormDocument.finalizeForms(CurDataEntrySetter, curFieldLinker, curFormConfiguration))
                 {
 
                     if (curFinalizer.finish())
                     {
-                        bcreateForm = true;
+                        m_success = true;
                         xDialog.endExecute();
                     }
                 }
@@ -340,7 +311,7 @@ public class FormWizard extends WizardDialog
     // @Override
     public void cancelWizard()
     {
-        bcreateForm = false;
+        m_success = false;
         xDialog.endExecute();
     }
 
@@ -361,33 +332,29 @@ public class FormWizard extends WizardDialog
         setCurrentRoadmapItemID((short) 1);
     }
 
-    public XComponent[] startFormWizard(XMultiServiceFactory _xMSF, PropertyValue[] CurPropertyValue)
+    public void startFormWizard()
     {
-        XComponent[] ret = null;
         try
         {
             curFormDocument = new FormDocument(xMSF);
-            if (curFormDocument.oMainFormDBMetaData.getConnection(CurPropertyValue))
+            if ( curFormDocument.oMainFormDBMetaData.getConnection( m_wizardContext ) )
             {
                 curFormDocument.oSubFormDBMetaData.getConnection(new PropertyValue[]
                         {
                             Properties.createProperty("ActiveConnection", curFormDocument.oMainFormDBMetaData.DBConnection)
                         });
                 curFormDocument.xProgressBar.setValue(20);
-                // SystemDialog.showMessageBox(xMSF, "FormName", 0, "slblFields");
                 buildSteps();
-                // SystemDialog.showMessageBox(xMSF, "FormName", 0, "slblFields");
-                this.curDBCommandFieldSelection.preselectCommand(CurPropertyValue, false);
+                this.curDBCommandFieldSelection.preselectCommand( m_wizardContext, false );
                 XWindowPeer xWindowPeer2 = createWindowPeer(curFormDocument.xWindowPeer);
-                curFormDocument.oMainFormDBMetaData.setWindowPeer(xWindowPeer2 /* xControl.getPeer() */ );
-                //      setAutoMnemonic("lblDialogHeader", false);
+                curFormDocument.oMainFormDBMetaData.setWindowPeer( xWindowPeer2 );
                 insertFormRelatedSteps();
-                short RetValue = executeDialog(curFormDocument.xFrame);
+                short dialogReturn = executeDialog(curFormDocument.xFrame);
                 xComponent.dispose();
-                if (bcreateForm)
+                if ( ( dialogReturn == 0 ) && m_success )
                 {
-                    curFormDocument.oMainFormDBMetaData.addFormDocument(curFormDocument.xComponent);
-                    ret = curFormDocument.oMainFormDBMetaData.openFormDocument(FormName, bFormOpenMode);
+                    curFormDocument.oMainFormDBMetaData.addFormDocument( curFormDocument.xComponent );
+                    loadSubComponent( DatabaseObject.FORM, FormName, m_openForEditing );
                 }
             }
         }
@@ -395,11 +362,10 @@ public class FormWizard extends WizardDialog
         {
             jexception.printStackTrace(System.out);
         }
-        if ((!bcreateForm) && (curFormDocument != null))
+        if ((!m_success) && (curFormDocument != null))
         {
             OfficeDocument.close(curFormDocument.xComponent);
         }
-        return ret;
     }
 
     private boolean getFormResources()

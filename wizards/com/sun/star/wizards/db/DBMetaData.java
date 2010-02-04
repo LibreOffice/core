@@ -81,6 +81,7 @@ import com.sun.star.wizards.common.Configuration;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.FileAccess;
 import com.sun.star.wizards.common.JavaTools;
+import com.sun.star.wizards.common.NamedValueCollection;
 import com.sun.star.wizards.common.NumberFormatter;
 import com.sun.star.wizards.common.Properties;
 import com.sun.star.wizards.common.Resource;
@@ -922,82 +923,33 @@ public class DBMetaData
      * @param _xDocNameAccess
      * @param _bcreateTemplate  describes the type of the document: "form" or "report"
      */
-    public void addDatabaseDocument(XComponent _xComponent, XHierarchicalNameAccess _xDocNameAccess, boolean _bcreateTemplate)
+    public void addDatabaseDocument(XComponent _xComponent, XHierarchicalNameAccess _xDocNameAccess, boolean i_createTemplate)
     {
         try
         {
-            PropertyValue[] aDocProperties;
             XModel xDocumentModel = UnoRuntime.queryInterface( XModel.class, _xComponent );
-            String sPath = xDocumentModel.getURL();
-            String basename = FileAccess.getBasename(sPath, "/");
+            String documentURL = xDocumentModel.getURL();
+            String basename = FileAccess.getBasename(documentURL, "/");
             XCloseable xCloseable = UnoRuntime.queryInterface( XCloseable.class, _xComponent );
             xCloseable.close(false);
-            if (_bcreateTemplate)
-            {
-                aDocProperties = new PropertyValue[5];
-            }
-            else
-            {
-                aDocProperties = new PropertyValue[4];
-            }
-            aDocProperties[0] = Properties.createProperty("Name", basename);
-            aDocProperties[1] = Properties.createProperty("Parent", _xDocNameAccess);
-            aDocProperties[2] = Properties.createProperty("URL", sPath);
-            aDocProperties[3] = Properties.createProperty("DocumentTitle", basename);
-            if (_bcreateTemplate)
-            {
-                aDocProperties[4] = Properties.createProperty("AsTemplate", new Boolean(_bcreateTemplate));
-            }
+
+            NamedValueCollection creationArgs = new NamedValueCollection();
+            creationArgs.put( "Name", basename );
+            creationArgs.put( "URL", documentURL );
+            creationArgs.put( "AsTemplate", new Boolean( i_createTemplate ) );
             XMultiServiceFactory xDocMSF = UnoRuntime.queryInterface( XMultiServiceFactory.class, _xDocNameAccess );
-            Object oDBDocument = xDocMSF.createInstanceWithArguments("com.sun.star.sdb.DocumentDefinition", aDocProperties);
+            Object oDBDocument = xDocMSF.createInstanceWithArguments( "com.sun.star.sdb.DocumentDefinition", creationArgs.getPropertyValues() );
             XHierarchicalNameContainer xHier = UnoRuntime.queryInterface( XHierarchicalNameContainer.class, _xDocNameAccess );
             String sdocname = Desktop.getUniqueName(_xDocNameAccess, basename);
             xHier.insertByHierarchicalName(sdocname, oDBDocument);
             XInterface xInterface = (XInterface) xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
             XSimpleFileAccess xSimpleFileAccess = UnoRuntime.queryInterface( XSimpleFileAccess.class, xInterface );
-            xSimpleFileAccess.kill(sPath);
+            xSimpleFileAccess.kill(documentURL);
         }
         catch (Exception e)
         {
             e.printStackTrace(System.out);
         }
-    }
-
-    public XComponent[] openDatabaseDocument(String _docname, boolean _bAsTemplate, boolean _bOpenInDesign, XHierarchicalNameAccess _xDocuments)
-    {
-        XComponent[] xRetComponent = new XComponent[2];
-        try
-        {
-            XComponentLoader xComponentLoader = UnoRuntime.queryInterface( XComponentLoader.class, _xDocuments );
-            PropertyValue[] aPropertyValues = new PropertyValue[4];
-            aPropertyValues[0] = Properties.createProperty("OpenMode", _bOpenInDesign ? "openDesign" : "open");
-            aPropertyValues[1] = Properties.createProperty("ActiveConnection", this.DBConnection);
-            aPropertyValues[2] = Properties.createProperty("DocumentTitle", _docname);
-            aPropertyValues[3] = Properties.createProperty("AsTemplate", new Boolean(_bAsTemplate));
-            XHierarchicalNameContainer xHier = UnoRuntime.queryInterface( XHierarchicalNameContainer.class, _xDocuments );
-            if (xHier.hasByHierarchicalName(_docname))
-            {
-                xRetComponent[0] = UnoRuntime.queryInterface( XComponent.class, xHier.getByHierarchicalName( _docname ) );
-                xRetComponent[1] = xComponentLoader.loadComponentFromURL(_docname, "", 0, aPropertyValues);
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace(System.out);
-        }
-        return xRetComponent;
-    }
-
-    public XComponent[] openFormDocument(String _sformname, boolean _bOpenInDesign)
-    {
-        XHierarchicalNameAccess xFormDocuments = getFormDocuments();
-        return openDatabaseDocument(_sformname, false, _bOpenInDesign, xFormDocuments);
-    }
-
-    public XComponent[] openReportDocument(String _sreportname, boolean _bAsTemplate, boolean _bOpenInDesign)
-    {
-        XHierarchicalNameAccess xReportDocuments = getReportDocuments();
-        return openDatabaseDocument(_sreportname, _bAsTemplate, _bOpenInDesign, xReportDocuments);
     }
 
     public void createTypeInspector() throws SQLException
