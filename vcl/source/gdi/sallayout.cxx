@@ -1803,8 +1803,8 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     int nRunStart, nRunEnd;
     while (rArgs.GetNextRun(&nRunStart, &nRunEnd, &bRtl))
     {
-        if (bRtl) std::fill(vRtl.begin() + nRunStart - rArgs.mnMinCharPos,
-                            vRtl.begin() + nRunEnd - rArgs.mnMinCharPos, true);
+        if (bRtl) std::fill(vRtl.begin() + ( nRunStart - rArgs.mnMinCharPos ),
+                            vRtl.begin() + ( nRunEnd - rArgs.mnMinCharPos ), true);
     }
     rArgs.ResetPos();
 
