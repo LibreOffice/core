@@ -87,6 +87,7 @@ class CommandData
     ByteString      aComment;
     ByteString      sClientRestriction;
     SByteStringList *pDepList;
+    SByteStringList *pCommandList;
     USHORT      nOSType;
     USHORT      nCommand;
 
@@ -130,6 +131,9 @@ public:
 
     void        AddDepth(){nDepth++;}
     ULONG       GetDepth(){return nDepth;}
+
+    void AddCommand(ByteString* pCommand);
+    SByteStringList* GetCommandList() {return pCommandList;}
 
     CommandData& operator<<  ( SvStream& rStream );
     CommandData& operator>>  ( SvStream& rStream );
@@ -284,6 +288,8 @@ private:
     BOOL            bIsAvailable;
     SByteStringList* RemoveStringList(SByteStringList* pStringList );
     SDepInfoList*   RemoveDepInfoList(SDepInfoList* pInfoList );
+    PrjList*        pTempCommandDataList;
+    BOOL            bTempCommandDataListPermanent;
 public:
                     Prj();
                     Prj( ByteString aName );
@@ -317,6 +323,14 @@ public:
     void            IsAvailable( BOOL bAvailable ) { bIsAvailable=bAvailable; }
 
     void            ExtractDependencies();
+
+    PrjList*        GetCommandDataList ();
+    void            RemoveTempCommandDataList();
+    void            GenerateTempCommandDataList();
+    void            GenerateEmptyTempCommandDataList();
+    BOOL            HasTempCommandDataList() {return pTempCommandDataList != NULL;}
+    void            SetTempCommandDataListPermanent (BOOL bVar = TRUE) {bTempCommandDataListPermanent = bVar;}
+    BOOL            IsTempCommandDataListPermanent() {return bTempCommandDataListPermanent;}
 
     Prj&            operator<<  ( SvStream& rStream );
     Prj&            operator>>  ( SvStream& rStream );
