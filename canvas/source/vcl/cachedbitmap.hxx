@@ -33,7 +33,7 @@
 
 #include <canvas/base/cachedprimitivebase.hxx>
 
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 
 #include <boost/shared_ptr.hpp>
 

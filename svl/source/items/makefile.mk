@@ -70,6 +70,7 @@ SLOFILES=\
     $(SLO)$/sfontitm.obj	\
     $(SLO)$/sitem.obj	    \
     $(SLO)$/slstitm.obj	\
+    $(SLO)$/srchitem.obj \
     $(SLO)$/stritem.obj	\
     $(SLO)$/style.obj	\
     $(SLO)$/stylepool.obj	\

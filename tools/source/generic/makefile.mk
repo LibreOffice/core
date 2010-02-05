@@ -44,6 +44,7 @@ TARGET=gen
 EXCEPTIONSFILES = $(SLO)$/poly.obj $(OBJ)$/poly.obj
 
 SLOFILES=       $(SLO)$/toolsin.obj     \
+            $(SLO)$/b3dtrans.obj                \
             $(SLO)$/link.obj                \
             $(SLO)$/bigint.obj              \
             $(SLO)$/fract.obj               \
@@ -56,6 +57,7 @@ SLOFILES=       $(SLO)$/toolsin.obj     \
             $(SLO)$/line.obj
 
 OBJFILES=       $(OBJ)$/toolsin.obj     \
+            $(OBJ)$/b3dtrans.obj                \
             $(OBJ)$/link.obj                \
             $(OBJ)$/bigint.obj              \
             $(OBJ)$/fract.obj               \

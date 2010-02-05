@@ -6,7 +6,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: langtab.hxx,v $
+ * $RCSfile: srchdefs.hxx,v $
  * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
@@ -27,35 +27,26 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _SVTOOLS_LANGTAB_HXX_
-#define _SVTOOLS_LANGTAB_HXX_
+
+#ifndef _SFX_SRCHDEFS_HXX_
+#define _SFX_SRCHDEFS_HXX_
 
 
-#include <tools/resary.hxx>
-#include <i18npool/lang.h>
-#include <svtools/svtdllapi.h>
+#define SEARCH_OPTIONS_SEARCH       ((sal_uInt16)0x0001)
+#define SEARCH_OPTIONS_SEARCH_ALL   ((sal_uInt16)0x0002)
+#define SEARCH_OPTIONS_REPLACE      ((sal_uInt16)0x0004)
+#define SEARCH_OPTIONS_REPLACE_ALL  ((sal_uInt16)0x0008)
+#define SEARCH_OPTIONS_WHOLE_WORDS  ((sal_uInt16)0x0010)
+#define SEARCH_OPTIONS_BACKWARDS    ((sal_uInt16)0x0020)
+#define SEARCH_OPTIONS_REG_EXP      ((sal_uInt16)0x0040)
+#define SEARCH_OPTIONS_EXACT        ((sal_uInt16)0x0080)
+#define SEARCH_OPTIONS_SELECTION    ((sal_uInt16)0x0100)
+#define SEARCH_OPTIONS_FAMILIES     ((sal_uInt16)0x0200)
+#define SEARCH_OPTIONS_FORMAT       ((sal_uInt16)0x0400)
+#define SEARCH_OPTIONS_MORE         ((sal_uInt16)0x0800)
+#define SEARCH_OPTIONS_SIMILARITY   ((sal_uInt16)0x1000)
+#define SEARCH_OPTIONS_CONTENT      ((sal_uInt16)0x2000)
 
-//========================================================================
-//  class SvtLanguageTable
-//========================================================================
-
-class SVT_DLLPUBLIC SvtLanguageTable : public ResStringArray
-{
-public:
-    SvtLanguageTable();
-    ~SvtLanguageTable();
-
-    const String&   GetString( const LanguageType eType ) const;
-    LanguageType    GetType( const String& rStr ) const;
-
-    sal_uInt32      GetEntryCount() const;
-    LanguageType    GetTypeAtIndex( sal_uInt32 nIndex ) const;
-    static String   GetLanguageString( const LanguageType eType );
-};
-
-// Add LRE or RLE embedding characters to the string based on the
-// String content (see #i78466#, #i32179#)
-SVT_DLLPUBLIC const String ApplyLreOrRleEmbedding( const String &rText );
 
 #endif
 

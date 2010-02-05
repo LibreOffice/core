@@ -1,14 +1,14 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
+# 
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
 # $RCSfile: makefile.mk,v $
 #
-# $Revision: 1.61 $
+# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -28,35 +28,43 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
+
 PRJ=..$/..
 
 PRJNAME=svtools
-TARGET=config
-
-ENABLE_EXCEPTIONS := TRUE
+TARGET=graphic
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/util$/svt.pmk
 
+.IF "$(GUI)"=="WIN"
+LINKFLAGS=$(LINKFLAGS) /PACKC:32768
+.ENDIF
+
 # --- Files --------------------------------------------------------
 
-SLOFILES=  \
-        $(SLO)$/accessibilityoptions.obj	\
-        $(SLO)$/apearcfg.obj				\
-        $(SLO)$/colorcfg.obj            \
-        $(SLO)$/extcolorcfg.obj            \
-        $(SLO)$/fontsubstconfig.obj				\
-        $(SLO)$/helpopt.obj                 \
-    $(SLO)$/htmlcfg.obj \
-        $(SLO)$/itemholder2.obj \
-        $(SLO)$/menuoptions.obj				\
-        $(SLO)$/miscopt.obj             \
-        $(SLO)$/optionsdrawinglayer.obj		\
-        $(SLO)$/printoptions.obj			
+SLOFILES=							\
+            $(SLO)$/grfattr.obj		\
+            $(SLO)$/grfmgr.obj		\
+            $(SLO)$/grfmgr2.obj		\
+            $(SLO)$/grfcache.obj	\
+            $(SLO)$/descriptor.obj	\
+            $(SLO)$/provider.obj	\
+            $(SLO)$/graphic.obj		\
+            $(SLO)$/renderer.obj	\
+            $(SLO)$/graphicunofactory.obj	\
+            $(SLO)$/transformer.obj
 
-# --- Targets ------------------------------------------------------
+EXCEPTIONSFILES=					\
+            $(SLO)$/descriptor.obj	\
+            $(SLO)$/provider.obj	\
+            $(SLO)$/graphic.obj		\
+            $(SLO)$/renderer.obj	\
+            $(SLO)$/graphicunofactory.obj	\
+            $(SLO)$/transformer.obj
+
+# --- Target -------------------------------------------------------
 
 .INCLUDE :  target.mk
-

@@ -84,6 +84,7 @@ SLOFILES=   \
             $(SLO)$/sequenceashashmap.obj \
             $(SLO)$/sequence.obj \
             $(SLO)$/servicedecl.obj \
+            $(SLO)$/serviceinfohelper.obj \
             $(SLO)$/sharedmutex.obj \
             $(SLO)$/synchronousdispatch.obj \
             $(SLO)$/storagehelper.obj \

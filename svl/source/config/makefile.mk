@@ -43,8 +43,10 @@ ENABLE_EXCEPTIONS := TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES=  \
+        $(SLO)$/asiancfg.obj \
         $(SLO)$/cjkoptions.obj          \
         $(SLO)$/ctloptions.obj          \
+        $(SLO)$/srchcfg.obj \
         $(SLO)$/itemholder2.obj \
         $(SLO)$/languageoptions.obj  
 
