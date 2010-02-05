@@ -34,9 +34,9 @@
 
 #include <hintids.hxx>
 #include <svl/itemiter.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/brkitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/brkitem.hxx>
 #ifndef _SVX_SVDOBJ_HXX
 #include <svx/svdobj.hxx>
 #endif

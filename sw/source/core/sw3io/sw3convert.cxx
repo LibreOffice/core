@@ -48,8 +48,8 @@
 #define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
 #endif
-#include <svx/lrspitem.hxx>
-#include <svx/tstpitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/tstpitem.hxx>
 #include <fmtinfmt.hxx>
 #include <fmtfld.hxx>
 #include <frmatr.hxx>

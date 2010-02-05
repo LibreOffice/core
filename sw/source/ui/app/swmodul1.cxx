@@ -42,13 +42,13 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <cppuhelper/implbase1.hxx> // helper for implementations
 #include <svx/dataaccessdescriptor.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/cmapitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/cmapitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/brshitem.hxx>
 #include <vcl/msgbox.hxx>
 #include <swmodule.hxx>
 #include <swtypes.hxx>

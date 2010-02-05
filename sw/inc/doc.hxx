@@ -78,7 +78,7 @@ class SwList;
 #include <vos/ref.hxx>
 #include <svx/svdtypes.hxx>
 #include <svl/style.hxx>
-#include <svx/numitem.hxx>
+#include <editeng/numitem.hxx>
 #include "comphelper/implementationreference.hxx"
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
@@ -116,7 +116,6 @@ class SvNumberFormatter;
 class SvStringsSort;
 class SvUShorts;
 class SvUShortsSort;
-class SvxLinkManager;
 class SvxMacro;
 class SvxMacroTableDtor;
 class SvxBorderLine;
@@ -244,6 +243,7 @@ namespace container {
 namespace sfx2 {
     class SvLinkSource;
     class IXmlIdRegistry;
+    class LinkManager;
 }
 
 //PageDescriptor-Schnittstelle, Array hier wegen inlines.
@@ -360,7 +360,7 @@ class SW_DLLPUBLIC SwDoc :
     SfxObjectShellRef* pDocShRef;     // fuers Kopieren von OLE-Nodes (wenn keine
                                         // DocShell gesetzt ist, muss dieser
                                         // Ref-Pointer gesetzt sein!!!!)
-    SvxLinkManager  *pLinkMgr;          // Liste von Verknuepften (Grafiken/DDE/OLE)
+    sfx2::LinkManager   *pLinkMgr;          // Liste von Verknuepften (Grafiken/DDE/OLE)
 
     SwAutoCorrExceptWord *pACEWord;     // fuer die automatische Uebernahme von
                                         // autokorrigierten Woertern, die "zurueck"
@@ -843,8 +843,8 @@ public:
     */
     virtual bool IsVisibleLinks() const;
     virtual void SetVisibleLinks(bool bFlag);
-    virtual SvxLinkManager& GetLinkManager();
-    virtual const SvxLinkManager& GetLinkManager() const;
+    virtual sfx2::LinkManager& GetLinkManager();
+    virtual const sfx2::LinkManager& GetLinkManager() const;
     virtual void UpdateLinks(BOOL bUI);
     virtual bool GetData(const String& rItem, const String& rMimeType, ::com::sun::star::uno::Any& rValue) const;
     virtual bool SetData(const String& rItem, const String& rMimeType, const ::com::sun::star::uno::Any& rValue);

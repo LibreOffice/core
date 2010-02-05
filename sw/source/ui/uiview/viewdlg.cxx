@@ -35,7 +35,7 @@
 
 #include "hintids.hxx"
 #include <sfx2/viewfrm.hxx>
-#include <svx/tstpitem.hxx>
+#include <editeng/tstpitem.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/request.hxx>
 

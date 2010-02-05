@@ -33,12 +33,12 @@
 #include <hintids.hxx>
 #include <hints.hxx>
 
-#include <svx/fontitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/lrspitem.hxx>
 // --> OD 2008-01-17 #newlistlevelattrs#
-#include <svx/tstpitem.hxx>
+#include <editeng/tstpitem.hxx>
 // <--
 #include <svl/urihelper.hxx>
 #ifndef _SVSTDARR_HXX

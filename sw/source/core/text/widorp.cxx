@@ -38,10 +38,10 @@
 #include "ftnboss.hxx"
 #include "ndtxt.hxx"
 #include "paratr.hxx"
-#include <svx/orphitem.hxx>
-#include <svx/widwitem.hxx>
-#include <svx/keepitem.hxx>
-#include <svx/spltitem.hxx>
+#include <editeng/orphitem.hxx>
+#include <editeng/widwitem.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/spltitem.hxx>
 #include <frmatr.hxx>
 #include <txtftn.hxx>
 #include <fmtftn.hxx>

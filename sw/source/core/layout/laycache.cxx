@@ -33,7 +33,7 @@
 
 
 #include <hintids.hxx>
-#include <svx/brkitem.hxx>
+#include <editeng/brkitem.hxx>
 #include <tools/stream.hxx>
 #include <doc.hxx>
 #include <docstat.hxx>

@@ -34,7 +34,7 @@
 #include <svl/itemiter.hxx>
 #include <svtools/imapobj.hxx>
 #include <svtools/soerr.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/protitem.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/fmglob.hxx>

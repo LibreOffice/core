@@ -58,9 +58,9 @@
 #include "dbg_lay.hxx"
 #include "viewsh.hxx"
 #include "viewimp.hxx"
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <fmtftntx.hxx>
 // OD 2004-05-24 #i28701#
 #include <dflyobj.hxx>

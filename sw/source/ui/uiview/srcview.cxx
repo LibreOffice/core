@@ -52,8 +52,8 @@
 #include <svl/whiter.hxx>
 #include <unotools/saveopt.hxx>
 #include <svtools/transfer.hxx>
-
-#include <svx/htmlcfg.hxx>
+#include <svx/svxids.hrc>
+#include <svtools/htmlcfg.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -63,12 +63,12 @@
 #include <sfx2/request.hxx>
 #include <sfx2/prnmon.hxx>
 #include <sfx2/docfile.hxx>
-#include <svx/fhgtitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <svx/srchdlg.hxx>
-#include <svx/srchitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/flstitem.hxx>
-#include "svx/unolingu.hxx"
+#include <svl/srchitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/flstitem.hxx>
+#include "editeng/unolingu.hxx"
 #include <sfx2/sfxhtml.hxx>
 #include <swtypes.hxx>
 #include <swmodule.hxx>

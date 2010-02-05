@@ -51,8 +51,8 @@
 #include <ndindex.hxx>
 #include <frmtool.hxx>
 #include <pagedesc.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/shaditem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/shaditem.hxx>
 #include <fmtclds.hxx>
 #include <viewsh.hxx>
 #include <viewimp.hxx>

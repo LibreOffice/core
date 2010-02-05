@@ -55,15 +55,14 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/fmglob.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/crsditem.hxx>
-
+#include <editeng/brshitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/crsditem.hxx>
 #include <docsh.hxx>
 #include <fmtanchr.hxx>
 #include <docary.hxx>

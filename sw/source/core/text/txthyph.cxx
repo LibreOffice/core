@@ -33,7 +33,7 @@
 
 
 #include <hintids.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <EnhancedPDFExportHelper.hxx>
 #include <viewopt.hxx>  // SwViewOptions

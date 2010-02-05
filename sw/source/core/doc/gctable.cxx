@@ -33,7 +33,7 @@
 
 
 #include <hintids.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <tblrwcl.hxx>
 #include <swtblfmt.hxx>
 

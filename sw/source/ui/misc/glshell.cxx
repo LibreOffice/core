@@ -39,11 +39,11 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svl/macitem.hxx>
 #include <gloshdl.hxx>
 
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>

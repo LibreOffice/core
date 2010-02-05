@@ -45,12 +45,12 @@
 #define _SVSTDARR_LONGSSORT
 #define _SVSTDARR_LONGS
 #include <svl/svstdarr.hxx>
-#include <svx/paperinf.hxx>
+#include <editeng/paperinf.hxx>
 #ifndef _SVX_TSTPITEM_HXX //autogen
-#include <svx/tstpitem.hxx>
+#include <editeng/tstpitem.hxx>
 #endif
-#include <svx/lrspitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/brshitem.hxx>
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif

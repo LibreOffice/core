@@ -40,10 +40,10 @@
 #ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
 #endif
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/XImageProducerSupplier.hpp>

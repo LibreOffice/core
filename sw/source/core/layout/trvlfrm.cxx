@@ -35,7 +35,7 @@
 #include <hintids.hxx>
 #include <hints.hxx>
 #include <tools/bigint.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/protitem.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/outdev.hxx>
 #include <fmtpdsc.hxx>

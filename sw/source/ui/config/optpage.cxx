@@ -51,9 +51,9 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/bindings.hxx>
 #include <svx/xtable.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svx/dlgutil.hxx>
 #include <fmtcol.hxx>
 #include <charatr.hxx>

@@ -42,7 +42,7 @@
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <svl/urihelper.hxx>
 #include <vcl/graph.hxx>
 

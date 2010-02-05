@@ -32,7 +32,7 @@
 
 #include <limits.h>
 #include <tools/solar.h>
-#include <svx/frmdir.hxx>
+#include <editeng/frmdir.hxx>
 
 // POOLCOLL-IDs:
 // +----+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+

@@ -86,7 +86,7 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 // <--
 // --> OD 2007-01-17 #i71385#
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <viewimp.hxx>
 // <--
 // --> OD 2007-11-12 #i82637#

@@ -34,17 +34,17 @@
 #include <ctype.h>
 #include <hintids.hxx>
 #include <hints.hxx>
+#include <svtools/filter.hxx>
 
 #include <vcl/graph.hxx>
 #include <svl/urihelper.hxx>
-#include <svx/impgrf.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/cmapitem.hxx>
-#include <svx/cntritem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/crsditem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/cmapitem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/crsditem.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/charclass.hxx>
 #include <txtftn.hxx>
@@ -1086,7 +1086,7 @@ void SwFltShell::NextPage()
 SwFltShell& SwFltShell::AddGraphic( const String& rPicName )
 {
     // embedded:
-    GraphicFilter* pFilter = ::GetGrfFilter();
+    GraphicFilter* pFilter = GraphicFilter::GetGraphicFilter();
     Graphic aGraphic;
     // one of: GFF_NOT GFF_BMP GFF_GIF GFF_JPG GFF_PCD GFF_PCX GFF_PNG
     // GFF_TIF GFF_XBM GFF_DXF GFF_MET GFF_PCT GFF_SGF GFF_SVM GFF_WMF

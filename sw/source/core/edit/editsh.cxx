@@ -696,7 +696,7 @@ String SwEditShell::Calculate()
 }
 
 
-SvxLinkManager& SwEditShell::GetLinkManager()
+sfx2::LinkManager& SwEditShell::GetLinkManager()
 {
     return pDoc->GetLinkManager();
 }

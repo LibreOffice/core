@@ -36,10 +36,10 @@
 #include <hintids.hxx>
 
 #define _ZFORLIST_DECLARE_TABLE
-#include <svx/brshitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/protitem.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/protitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <tools/fract.hxx>
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>

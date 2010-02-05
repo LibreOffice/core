@@ -44,15 +44,14 @@
 #include <vcl/mnemonic.hxx>
 #include <svl/urihelper.hxx>
 #include <svl/stritem.hxx>
-#include <svx/impgrf.hxx>
 #include <svx/htmlmode.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/protitem.hxx>
-#include <svx/prntitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/protitem.hxx>
+#include <editeng/prntitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <svx/swframevalidation.hxx>
 #include <sot/clsids.hxx>
 
@@ -77,17 +76,14 @@
 // OD 19.09.2003 #i18732#
 #include <fmtfollowtextflow.hxx>
 
-#ifndef _FRMUI_HRC
 #include <frmui.hrc>
-#endif
-#ifndef _FRMPAGE_HRC
 #include <frmpage.hrc>
-#endif
 #include <sfx2/filedlghelper.hxx>
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
+#include <svtools/filter.hxx>
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -2557,7 +2553,7 @@ IMPL_LINK( SwGrfExtPage, BrowseHdl, Button *, EMPTYARG )
         aBmpWin.MirrorVert(FALSE);
 
         Graphic aGraphic;
-        ::LoadGraphic( pGrfDlg->GetPath(), aEmptyStr, aGraphic );
+        GraphicFilter::LoadGraphic( pGrfDlg->GetPath(), aEmptyStr, aGraphic );
         aBmpWin.SetGraphic(aGraphic);
 
         BOOL bEnable = GRAPHIC_BITMAP      == aGraphic.GetType() ||

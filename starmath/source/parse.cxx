@@ -39,7 +39,7 @@
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <i18npool/lang.h>
 #include <unotools/charclass.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <unotools/syslocale.hxx>
 #include "parse.hxx"
 #ifndef _STARMATH_HRC

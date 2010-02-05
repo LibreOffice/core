@@ -34,7 +34,7 @@
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 #include <tools/resid.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <ftninfo.hxx>
 #include <ftnidx.hxx>
 #include <doc.hxx>
@@ -55,8 +55,8 @@
 #ifndef _COMCORE_HRC
 #include <comcore.hrc>
 #endif
-#include <svx/adjitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <frmatr.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <SwNodeNum.hxx>

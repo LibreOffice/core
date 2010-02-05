@@ -44,11 +44,11 @@
 #include <hintids.hxx>
 #include <linguistic/lngprops.hxx>
 #include <vcl/msgbox.hxx>
-#include <svx/unolingu.hxx>
-#include <svx/svxacorr.hxx>
-#include <svx/langitem.hxx>
-#include <svx/SpellPortions.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/unolingu.hxx>
+#include <editeng/svxacorr.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/SpellPortions.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <charatr.hxx>
 #include <editsh.hxx>
 #include <doc.hxx>

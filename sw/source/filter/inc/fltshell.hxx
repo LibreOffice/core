@@ -38,7 +38,7 @@
 #include <hintids.hxx>
 #include <vcl/keycod.hxx>
 #include <tools/datetime.hxx>
-#include <svx/brkitem.hxx>
+#include <editeng/brkitem.hxx>
 #include <poolfmt.hxx>
 #include <fmtornt.hxx>
 #include <ndindex.hxx>

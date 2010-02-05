@@ -44,7 +44,7 @@
 #include <unotextrange.hxx>
 #include <unotextcursor.hxx>
 #include <unocoll.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <docstat.hxx>
 #include <editsh.hxx>
 #include <viewsh.hxx>
@@ -93,7 +93,7 @@
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <textapi.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #include <docsh.hxx>
 #include <fmtmeta.hxx> // MetaFieldManager
 

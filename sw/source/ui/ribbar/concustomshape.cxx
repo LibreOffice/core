@@ -42,7 +42,7 @@
 #include <svx/sdtaaitm.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdocapt.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif
@@ -64,7 +64,7 @@
 #include <svl/itempool.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdoashp.hxx>
-#include <svx/adjitem.hxx>
+#include <editeng/adjitem.hxx>
 
 #include <math.h>
 

@@ -32,8 +32,8 @@
 #include "precompiled_sw.hxx"
 
 #include <hintids.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/protitem.hxx>
 #include <fmtanchr.hxx>
 #include <fmtfsize.hxx>
 #include <frmatr.hxx>

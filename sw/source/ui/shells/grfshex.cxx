@@ -33,13 +33,9 @@
 
 
 #include <docary.hxx>
-#ifndef _GRFSH_HXX
 #include <grfsh.hxx>
-#endif
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <docary.hxx>
 #ifndef _TEXTSH_HXX
 #include <textsh.hxx>
@@ -53,7 +49,6 @@
 #define _SVSTDARR_STRINGSSORTDTOR
 #include <svl/svstdarr.hxx>
 #include <svtools/filter.hxx>
-#include <svx/impgrf.hxx>
 #include <svx/htmlmode.hxx>
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>

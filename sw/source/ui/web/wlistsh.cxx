@@ -35,7 +35,7 @@
 #include <sfx2/msg.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/imapdlg.hxx>
 
 #include "cmdid.h"

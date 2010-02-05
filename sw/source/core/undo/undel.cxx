@@ -34,7 +34,7 @@
 
 #include <hintids.hxx>
 #include <unotools/charclass.hxx>
-#include <svx/brkitem.hxx>
+#include <editeng/brkitem.hxx>
 #include <fmtpdsc.hxx>
 #include <frmfmt.hxx>
 #include <fmtanchr.hxx>
@@ -56,9 +56,9 @@
 #include <comcore.hrc> // #111827#
 #include <undo.hrc>
 
-// #include <svx/svxacorr.hxx>
+// #include <editeng/svxacorr.hxx>
 // #include <comphelper/processfactory.hxx>
-// #include <svx/unolingu.hxx>
+// #include <editeng/unolingu.hxx>
 // #include <unotools/localedatawrapper.hxx>
 
 // using namespace comphelper;

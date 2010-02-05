@@ -55,10 +55,10 @@
 #include <sfx2/dispatch.hxx>
 #include <svl/eitem.hxx>
 #include <svtools/txtcmp.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <svl/itemset.hxx>
-#include <svx/langitem.hxx>
-#include "svx/unolingu.hxx"
+#include <editeng/langitem.hxx>
+#include "editeng/unolingu.hxx"
 #include <swtypes.hxx>
 #include <idxmrk.hxx>
 #include <txttxmrk.hxx>

@@ -32,7 +32,7 @@
 
 #include <tools/string.hxx>
 #include <svl/itemset.hxx>
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_USHORTS

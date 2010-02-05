@@ -40,17 +40,17 @@
 
 #include <svl/svstdarr.hxx>
 #include <unotools/charclass.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/tstpitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/cscoitem.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/cscoitem.hxx>
+#include <editeng/unolingu.hxx>
 
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 #include <swwait.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtanchr.hxx>

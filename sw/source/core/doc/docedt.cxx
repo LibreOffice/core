@@ -35,8 +35,8 @@
 #include <hintids.hxx>
 
 #include <vcl/sound.hxx>
-#include <svx/cscoitem.hxx>
-#include <svx/brkitem.hxx>
+#include <editeng/cscoitem.hxx>
+#include <editeng/brkitem.hxx>
 #include <linguistic/lngprops.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/i18n/WordType.hdl>

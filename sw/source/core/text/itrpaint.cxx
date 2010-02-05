@@ -38,9 +38,9 @@
 #include "errhdl.hxx"
 #include "txtatr.hxx"  // SwINetFmt
 #include <tools/multisel.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <txtinet.hxx>
 #include <fchrfmt.hxx>
 #include <frmatr.hxx>

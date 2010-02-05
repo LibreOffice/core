@@ -35,8 +35,8 @@
 #include <hintids.hxx>
 
 #include <com/sun/star/i18n/ScriptType.hdl>
-#include <svx/twolinesitem.hxx>
-#include <svx/charrotateitem.hxx>
+#include <editeng/twolinesitem.hxx>
+#include <editeng/charrotateitem.hxx>
 #include <vcl/outdev.hxx>
 #include <fmtfld.hxx>
 #include <fldbas.hxx>      // SwField

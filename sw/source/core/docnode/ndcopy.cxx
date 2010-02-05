@@ -36,7 +36,7 @@
 #include <hintids.hxx>
 
 
-#include <svx/brkitem.hxx>
+#include <editeng/brkitem.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtanchr.hxx>
 #include <fmtcntnt.hxx>

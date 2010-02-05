@@ -33,15 +33,15 @@
 
 #include <SwSpellDialogChildWindow.hxx>
 #include <vcl/msgbox.hxx>
-#include <svx/svxacorr.hxx>
-#include <svx/acorrcfg.hxx>
+#include <editeng/svxacorr.hxx>
+#include <editeng/acorrcfg.hxx>
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <wrtsh.hxx>
 #include <sfx2/printer.hxx>
 #include <svx/svdoutl.hxx>

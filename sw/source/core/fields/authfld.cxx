@@ -39,8 +39,8 @@
 #include <hintids.hxx>
 
 #include <svl/svstdarr.hxx>
-#include <svx/unolingu.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/unolingu.hxx>
+#include <editeng/langitem.hxx>
 #include <swtypes.hxx>
 #include <tools/resid.hxx>
 #ifndef _COMCORE_HRC

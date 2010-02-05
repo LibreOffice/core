@@ -48,7 +48,7 @@
 #include <doc.hxx>
 #include <docary.hxx>
 #include <paratr.hxx>
-#include <svx/tstpitem.hxx>
+#include <editeng/tstpitem.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <hints.hxx> // SwPtrMsgPoolItem
 

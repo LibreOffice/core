@@ -37,7 +37,7 @@
 #define _SVSTDARR_USHORTSSORT
 #include <hintids.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/tstpitem.hxx>
+#include <editeng/tstpitem.hxx>
 #include <svx/svdpage.hxx>
 #include <svl/itemiter.hxx>
 

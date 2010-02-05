@@ -33,7 +33,7 @@
 #include <tools/solar.h>
 #include <sal/types.h>
 #include <svl/svarray.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <hintids.hxx>
 
 class String;

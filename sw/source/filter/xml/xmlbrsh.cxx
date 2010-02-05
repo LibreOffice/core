@@ -36,15 +36,16 @@
 #include "hintids.hxx"
 #include <tools/debug.hxx>
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <editeng/memberids.hrc>
 
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #include <svx/unomid.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <xmloff/xmluconv.hxx>
 
 #include "xmlbrshi.hxx"

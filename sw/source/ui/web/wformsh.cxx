@@ -38,7 +38,7 @@
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <sfx2/objface.hxx>
 #include <tools/globname.hxx>
 #include <sfx2/app.hxx>

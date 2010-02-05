@@ -41,8 +41,8 @@
 #include <ndtxt.hxx>
 #include <txtfrm.hxx>
 #include <swundo.hxx>
-#include <svx/langitem.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 
 using namespace ::com::sun::star;

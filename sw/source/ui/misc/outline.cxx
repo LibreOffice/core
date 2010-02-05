@@ -42,7 +42,7 @@
 #include <vcl/msgbox.hxx>
 #endif
 #include <sfx2/tabdlg.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <unotools/configmgr.hxx>
 #include <SwStyleNameMapper.hxx>
 

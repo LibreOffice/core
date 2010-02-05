@@ -36,6 +36,8 @@
 // STL includes
 #include <list>
 
+#include <svx/svxids.hrc>
+#include <editeng/memberids.hrc>
 #include <float.h> // for DBL_MIN
 #include <swtypes.hxx>
 #include <cmdid.h>
@@ -87,12 +89,12 @@
 #include <unotextcursor.hxx>
 #include <unoparagraph.hxx>
 #include <svl/zforlist.hxx>     // SvNumberFormatter
-#include <svx/brkitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <fmtornt.hxx>
-#include <svx/keepitem.hxx>
+#include <editeng/keepitem.hxx>
 #include <fmtlsplt.hxx>
 #include <swundo.hxx>
 #include <vos/mutex.hxx>

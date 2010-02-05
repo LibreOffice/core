@@ -36,12 +36,11 @@
 #include <iterator>
 #include <hintids.hxx>
 #include <svl/urihelper.hxx>
-#include <svx/impgrf.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/opaqitem.hxx>
+#include <editeng/opaqitem.hxx>
 #include <filter/msfilter/msdffimp.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
@@ -62,6 +61,7 @@
 #include "ww8par.hxx"           // class SwWWImplReader
 #include "ww8par2.hxx"          // struct WWFlyPara
 #include "ww8graf.hxx"
+#include <svtools/filter.hxx>
 
 using namespace ::com::sun::star;
 using namespace sw::types;
@@ -261,7 +261,7 @@ extern void WW8PicShadowToReal(  WW8_PIC_SHADOW*  pPicS,  WW8_PIC*  pPic );
 
 bool SwWW8ImplReader::GetPictGrafFromStream(Graphic& rGraphic, SvStream& rSrc)
 {
-    return 0 == ::GetGrfFilter()->ImportGraphic(rGraphic, aEmptyStr, rSrc,
+    return 0 == GraphicFilter::GetGraphicFilter()->ImportGraphic(rGraphic, aEmptyStr, rSrc,
         GRFILTER_FORMAT_DONTKNOW);
 }
 

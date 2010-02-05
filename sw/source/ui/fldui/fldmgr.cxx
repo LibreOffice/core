@@ -45,14 +45,14 @@
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <comphelper/processfactory.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/app.hxx>
 #include <basic/basmgr.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svl/macitem.hxx>
 #include <basic/sbmod.hxx>
 #include <fmtrfmrk.hxx>

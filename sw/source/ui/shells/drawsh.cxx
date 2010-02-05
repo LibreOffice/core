@@ -41,7 +41,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/objface.hxx>
 #include <svl/itemiter.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/xftsfit.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>

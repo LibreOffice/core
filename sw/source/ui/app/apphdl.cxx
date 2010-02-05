@@ -46,7 +46,7 @@
 #include <sfx2/event.hxx>
 #include <sfx2/objitem.hxx>
 #include <svx/dataaccessdescriptor.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
@@ -100,7 +100,7 @@
 #include <mmconfigitem.hxx>
 #include <mailmergechildwindow.hxx>
 #include <linguistic/lngprops.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>

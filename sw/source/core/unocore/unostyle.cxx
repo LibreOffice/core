@@ -31,6 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <svx/svxids.hrc>
 #include <hintids.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -39,14 +40,14 @@
 #include <svl/style.hxx>
 #include <svl/itemiter.hxx>
 #include <svx/pageitem.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/flstitem.hxx>
-#include <svx/paperinf.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/flstitem.hxx>
+#include <editeng/paperinf.hxx>
 #include <pagedesc.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
@@ -64,9 +65,7 @@
 #include <fmthdft.hxx>
 #include <fmtpdsc.hxx>
 #include <tools/urlobj.hxx>
-#ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>
-#endif
 #include <poolfmt.hxx>
 #include "unoevent.hxx"
 #include <fmtruby.hxx>

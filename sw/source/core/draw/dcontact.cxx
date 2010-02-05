@@ -31,10 +31,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 #include "hintids.hxx"
-#include <svx/protitem.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/protitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/svdogrp.hxx>

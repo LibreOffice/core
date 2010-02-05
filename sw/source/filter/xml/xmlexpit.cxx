@@ -40,8 +40,9 @@
 #include <xmloff/attrlist.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <svx/xmlcnitm.hxx>
+#include <editeng/xmlcnitm.hxx>
 #include <xmloff/xmlexp.hxx>
+#include <editeng/memberids.hrc>
 
 #ifndef _SVSTDARR_USHORTS
 #define _SVSTDARR_USHORTS
@@ -52,13 +53,13 @@
 #include "hintids.hxx"
 #include "unomid.h"
 #include <svx/unomid.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/keepitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/brshitem.hxx>
 #include "fmtpdsc.hxx"
 #include "fmtornt.hxx"
 #include "fmtfsize.hxx"

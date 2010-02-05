@@ -40,8 +40,8 @@
 #include "viewsh.hxx"
 
 #include <vcl/outdev.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <fmtanchr.hxx>
 #include <fmtflcnt.hxx>
 #include <fmtornt.hxx>

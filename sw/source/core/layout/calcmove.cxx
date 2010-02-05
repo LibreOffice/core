@@ -43,8 +43,8 @@
 #include "frmtool.hxx"
 #include "txtftn.hxx"
 #include "fmtftn.hxx"
-#include <svx/ulspitem.hxx>
-#include <svx/keepitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/keepitem.hxx>
 
 #include <vcl/outdev.hxx>
 #include <fmtfsize.hxx>

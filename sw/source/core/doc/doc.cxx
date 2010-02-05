@@ -35,7 +35,7 @@
 
 #include <tools/shl.hxx>
 #include <tools/globname.hxx>
-
+#include <svx/svxids.hrc>
 #include <com/sun/star/i18n/WordType.hdl>
 #include <com/sun/star/i18n/ForbiddenCharacters.hdl>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -52,11 +52,11 @@
 #include <svl/itemiter.hxx>
 #include <unotools/syslocale.hxx>
 #include <sfx2/printer.hxx>
-#include <svx/keepitem.hxx>
-#include <svx/cscoitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/linkmgr.hxx>
-#include <svx/forbiddencharacterstable.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/cscoitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <sfx2/linkmgr.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
 #include <svx/svdmodel.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -2434,12 +2434,12 @@ void SwDoc::SetVisibleLinks(bool bFlag)
     mbVisibleLinks = bFlag;
 }
 
-SvxLinkManager& SwDoc::GetLinkManager()
+sfx2::LinkManager& SwDoc::GetLinkManager()
 {
     return *pLinkMgr;
 }
 
-const SvxLinkManager& SwDoc::GetLinkManager() const
+const sfx2::LinkManager& SwDoc::GetLinkManager() const
 {
     return *pLinkMgr;
 }
@@ -2458,7 +2458,7 @@ bool SwDoc::LinksUpdated() const
 bool SwDoc::EmbedAllLinks()
 {
     BOOL bRet = FALSE;
-    SvxLinkManager& rLnkMgr = GetLinkManager();
+    sfx2::LinkManager& rLnkMgr = GetLinkManager();
     const ::sfx2::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
     if( rLnks.Count() )
     {

@@ -38,7 +38,7 @@
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
 #include <fmtsrnd.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/lrspitem.hxx>
 
 #ifndef WW8SCAN_HXX
 #include "ww8scan.hxx"  // class WW8Style

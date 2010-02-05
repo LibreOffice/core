@@ -43,8 +43,8 @@
 #include <charfmt.hxx>
 #include <dflyobj.hxx>
 #include <rowfrm.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/charrotateitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/charrotateitem.hxx>
 #include <breakit.hxx>
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>

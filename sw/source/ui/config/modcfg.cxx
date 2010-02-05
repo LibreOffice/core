@@ -36,11 +36,11 @@
 #include <sot/clsids.hxx>
 #include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
-#include <goodies/mailenum.hxx>
+#include <svl/mailenum.hxx>
 #ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
 #endif
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include <tools/debug.hxx>
 
 #include <tools/globname.hxx>

@@ -37,10 +37,10 @@
 
 #include <vcl/outdev.hxx>
 #include <tools/multisel.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/zforlist.hxx>
 #include <swatrset.hxx>

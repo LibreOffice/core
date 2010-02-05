@@ -39,12 +39,12 @@
 #include <float.h>
 #include <hintids.hxx>
 #include <hints.hxx>    // fuer SwAttrSetChg
-#include <svx/lrspitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/linkmgr.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/colritem.hxx>
+#include <sfx2/linkmgr.hxx>
+#include <editeng/boxitem.hxx>
 
 
 #include <fmtfsize.hxx>

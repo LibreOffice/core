@@ -34,8 +34,8 @@
 
 #include "cmdid.h"
 #include "hintids.hxx"
-#include <svx/sizeitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/objface.hxx>
@@ -46,7 +46,7 @@
 #include <svl/whiter.hxx>
 #include <svl/intitem.hxx>
 #include <tools/shl.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 
 // --> FME 2005-01-04 #i35572#
 #include <numrule.hxx>

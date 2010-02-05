@@ -49,8 +49,8 @@
 #include <sfx2/progress.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/prnmon.hxx>
-#include <svx/paperinf.hxx>
-#include <svx/pbinitem.hxx>
+#include <editeng/paperinf.hxx>
+#include <editeng/pbinitem.hxx>
 #include <svx/svdview.hxx>
 #include <unotools/localedatawrapper.hxx>
 

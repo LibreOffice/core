@@ -47,7 +47,7 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <redline.hxx>
 #include <scriptinfo.hxx>
-#include <svx/charhiddenitem.hxx>
+#include <editeng/charhiddenitem.hxx>
 
 
 SwPostItHelper::SwLayoutStatus SwPostItHelper::getLayoutInfos( std::vector< SwLayoutInfo >& rInfo, SwPosition& rPos )

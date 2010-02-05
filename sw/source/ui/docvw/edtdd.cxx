@@ -36,7 +36,7 @@
 
 
 #include <svx/svdview.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 //#ifndef _SVDVMARK_HXX //autogen
 //#include <svx/svdvmark.hxx>
 //#endif

@@ -45,7 +45,7 @@
 #include "txtfrm.hxx"
 #include "ndtxt.hxx"
 #include "txttypes.hxx"
-#include <svx/paravertalignitem.hxx>
+#include <editeng/paravertalignitem.hxx>
 
 class Font;
 class OutputDevice;

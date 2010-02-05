@@ -38,7 +38,7 @@
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <fmtinfmt.hxx>
 #include <txtatr.hxx>
 #include <txtinet.hxx>
@@ -51,7 +51,7 @@
 #include <swundo.hxx>
 #include <viscrs.hxx>
 
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 
 using namespace ::com::sun::star;
 

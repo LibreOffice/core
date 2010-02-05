@@ -36,42 +36,41 @@
 #include <osl/endian.h>
 #include <svx/fmglob.hxx>
 #include <svx/sdtaitm.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/udlnitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/udlnitem.hxx>
 #include <svx/xlineit.hxx>
 #include <svx/xfillit.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/sdtaitm.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/sxctitm.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdocirc.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/colritem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/cntritem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/impgrf.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <svx/svdoattr.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <svx/rectenum.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/outliner.hxx>         // #79453#
-#include <svx/frmdiritem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/outliner.hxx>         // #79453#
+#include <editeng/frmdiritem.hxx>
 #include <svx/xfltrit.hxx>
 #include <filter/msfilter/msdffimp.hxx>
 #include <grfatr.hxx>           // class SwCropGrf
@@ -95,15 +94,15 @@
 #include "ww8par2.hxx"          // SwWW8StyInf
 #include "ww8graf.hxx"
 #include <fmtinfmt.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/flditem.hxx>
 // OD 30.09.2003 #i18732#
 #include <fmtfollowtextflow.hxx>
 #include "writerhelper.hxx"
 #include "writerwordglue.hxx"
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <svx/editobj.hxx>
+#include <editeng/editobj.hxx>
 
 #include <math.h>
 
@@ -1423,7 +1422,7 @@ const WW8_BordersSO &WW8_BordersSO::Get0x01LineMatch(eBorderCode eCode)
 {
     /*
     // Linien-Defaults in Twips: fruehere Writer-Defaults,
-    //                           siehe auch <svx/boxitem.hxx>
+    //                           siehe auch <editeng/boxitem.hxx>
     #define DEF_LINE_WIDTH_0        1
     #define DEF_LINE_WIDTH_1        20
     #define DEF_LINE_WIDTH_2        50

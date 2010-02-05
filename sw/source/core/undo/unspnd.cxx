@@ -37,7 +37,7 @@
 #include "swtable.hxx"
 #include "ndtxt.hxx"
 #include "swundo.hxx"           // fuer die UndoIds
-#include <svx/brkitem.hxx>
+#include <editeng/brkitem.hxx>
 #include <fmtpdsc.hxx>
 #include <frmfmt.hxx>
 #include "undobj.hxx"

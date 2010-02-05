@@ -43,7 +43,7 @@
 #include <vcl/msgbox.hxx>
 #endif
 #include <unotools/charclass.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <wrtsh.hxx>
 #include <fldbas.hxx>
 #include <expfld.hxx>

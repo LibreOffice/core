@@ -37,10 +37,10 @@
 
 #define _SVSTDARR_STRINGSSORT
 #include <svl/svstdarr.hxx>
-#include <svx/langitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/tstpitem.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <sot/clsids.hxx>
 #include <docsh.hxx>
 #include <ndole.hxx>

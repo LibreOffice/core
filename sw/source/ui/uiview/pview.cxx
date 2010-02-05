@@ -53,8 +53,8 @@
 #include <sfx2/dispatch.hxx>
 #include <vcl/msgbox.hxx>
 #include <svx/stddlg.hxx>
-#include <svx/paperinf.hxx>
-#include <svx/srchitem.hxx>
+#include <editeng/paperinf.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/svdview.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/zoomslideritem.hxx>

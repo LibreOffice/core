@@ -35,7 +35,7 @@
 #ifndef _TOOLS_STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
-#include <svx/svxfont.hxx>
+#include <editeng/svxfont.hxx>
 #include <swtypes.hxx>
 #include <drawfont.hxx>     // SwDrawTextInfo
 

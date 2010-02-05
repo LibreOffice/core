@@ -99,11 +99,11 @@ LIB1OBJFILES= $(OUT)$/slo$/swmodule.obj \
 SHL1STDLIBS+= \
     $(LNGLIB) \
     $(SVXCORELIB) \
+    $(EDITENGLIB) \
     $(SVXLIB) \
     $(SFXLIB) \
     $(XMLOFFLIB) \
     $(BASICLIB) \
-    $(GOODIESLIB) \
     $(BASEGFXLIB) \
     $(DRAWINGLAYERLIB) \
     $(SVTOOLLIB) \
@@ -179,6 +179,7 @@ DEF3NAME=       $(SHL3TARGET)
 SHL3STDLIBS= \
         $(ISWLIB) \
             $(SVXCORELIB) \
+            $(EDITENGLIB) \
             $(SVXLIB) \
             $(SFX2LIB) \
             $(SVTOOLLIB) \
@@ -319,9 +320,9 @@ DEF4NAME=$(SHL4TARGET)
 SHL4STDLIBS= \
     $(ISWLIB) \
     $(SVXCORELIB) \
+       $(EDITENGLIB) \
     $(MSFILTERLIB) \
     $(SFXLIB) \
-    $(GOODIESLIB) \
     $(BASEGFXLIB) \
     $(SVTOOLLIB) \
     $(TKLIB) \
@@ -367,8 +368,9 @@ SHL5STDLIBS= \
                 $(VCLLIB) \
                 $(TKLIB) \
                 $(I18NISOLANGLIB) \
+                $(EDITENGLIB) \
                 $(SVXCORELIB) \
-                $(SVXMSFILTERLIB) \
+                $(SVXMSFILTERLIB)
 
 SHL5DEPN=$(SHL1TARGETN)
 SHL5LIBS=$(SLB)$/$(TARGET_VBA).lib

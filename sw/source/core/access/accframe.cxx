@@ -34,7 +34,7 @@
 
 
 #include <hintids.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <flyfrm.hxx>
 #include <rootfrm.hxx>
 #include <txtfrm.hxx>

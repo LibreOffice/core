@@ -32,7 +32,7 @@
 #include "precompiled_sw.hxx"
 
 
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <fmtcntnt.hxx>
 #include <doc.hxx>
 #include <docary.hxx>

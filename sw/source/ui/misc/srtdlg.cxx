@@ -43,7 +43,7 @@
 #include <svl/eitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svxids.hrc>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <unotools/collatorwrapper.hxx>

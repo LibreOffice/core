@@ -46,9 +46,9 @@
 #define _SVSTDARR_BOOLS
 #include <svl/svstdarr.hxx>
 #endif
-#include <svx/svxrtf.hxx>
-#include <svx/numitem.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/svxrtf.hxx>
+#include <editeng/numitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <redline.hxx>
 #ifndef __SGI_STL_ALGORITHM
 #include <algorithm>

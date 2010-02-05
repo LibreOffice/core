@@ -35,8 +35,8 @@
 #include "hintids.hxx"
 #include <vcl/help.hxx>
 #include <svx/ruler.hxx>
-#include <svx/paperinf.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/paperinf.hxx>
+#include <editeng/lrspitem.hxx>
 #include <sfx2/bindings.hxx>
 #ifndef _VIEW_HXX
 #include <view.hxx>

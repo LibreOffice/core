@@ -34,7 +34,7 @@
 
 
 
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <sfx2/app.hxx>
 #ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>

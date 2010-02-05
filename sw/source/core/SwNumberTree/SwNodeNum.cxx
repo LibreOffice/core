@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include <numrule.hxx>
 #include <SwNodeNum.hxx>
 #include <ndtxt.hxx>

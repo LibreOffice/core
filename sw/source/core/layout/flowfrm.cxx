@@ -41,16 +41,16 @@
 #include "dflyobj.hxx"
 #include "frmtool.hxx"
 #include "dcontact.hxx"
-#include <svx/brkitem.hxx>
-#include <svx/keepitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/keepitem.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtanchr.hxx>
 #include <fmtpdsc.hxx>
-#include <svx/ulspitem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <tgrditem.hxx>
 #include <txtftn.hxx>
 #include <fmtftn.hxx>
-#include <svx/pgrditem.hxx>
+#include <editeng/pgrditem.hxx>
 #include <paratr.hxx>
 
 #include "ftnfrm.hxx"

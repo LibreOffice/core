@@ -47,7 +47,7 @@
 #include <xmloff/families.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/i18nmap.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/protitem.hxx>
 #include "poolfmt.hxx"
 #include "fmtfsize.hxx"
 #include "fmtornt.hxx"
@@ -1452,6 +1452,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     pDDESource(NULL),
     bFirstSection( sal_False ),
     bRelWidth( sal_True ),
+    bHasSubTables( sal_False ),
     nHeaderRows( 0 ),
     nCurRow( 0UL ),
     nCurCol( 0UL ),

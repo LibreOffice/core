@@ -34,7 +34,7 @@
 #include "hintids.hxx"
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <xmloff/XMLFontAutoStylePool.hxx>
-#include <svx/fontitem.hxx>
+#include <editeng/fontitem.hxx>
 #include <unotext.hxx>
 #include <doc.hxx>
 #include <xmlexp.hxx>

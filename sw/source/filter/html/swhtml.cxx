@@ -35,7 +35,8 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
-
+#include <sfx2/sfx.hrc>
+#include <svx/svxids.hrc>
 #ifdef DBG_UTIL
 #include <stdlib.h>
 #endif
@@ -54,25 +55,25 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
 
-#include <svx/htmlcfg.hxx>
-#include <svx/linkmgr.hxx>
-#include <svx/kernitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/blnkitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/protitem.hxx>
-#include <svx/flstitem.hxx>
+#include <svtools/htmlcfg.hxx>
+#include <sfx2/linkmgr.hxx>
+#include <editeng/kernitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/blnkitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/protitem.hxx>
+#include <editeng/flstitem.hxx>
 
 
 #include <frmatr.hxx>

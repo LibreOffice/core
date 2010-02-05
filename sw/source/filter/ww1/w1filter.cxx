@@ -34,29 +34,29 @@
 
 #include <tools/solar.h>
 #include <comphelper/string.hxx>
-#include <svx/paperinf.hxx>
+#include <editeng/paperinf.hxx>
 #include <svtools/filter.hxx>
 #ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
 #endif
-#include <svx/fontitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/crsditem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/crsditem.hxx>
 #ifndef _SVX_CNTRITEM_HXX //autogen
-#include <svx/cntritem.hxx>
+#include <editeng/cntritem.hxx>
 #endif
-#include <svx/cmapitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/wrlmitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/kernitem.hxx>
-#include <svx/escpitem.hxx>
+#include <editeng/cmapitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/wrlmitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/kernitem.hxx>
+#include <editeng/escpitem.hxx>
 #ifndef _SVX_TSTPITEM_HXX //autogen
-#include <svx/tstpitem.hxx>
+#include <editeng/tstpitem.hxx>
 #endif
 #include <svl/urihelper.hxx>
 #include <fmtfsize.hxx>

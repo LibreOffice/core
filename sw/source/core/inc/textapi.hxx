@@ -28,9 +28,13 @@
  *
  ************************************************************************/
 
-#include <svx/unoedsrc.hxx>
-#include <svx/unotext.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/unoedsrc.hxx>
+#include <editeng/unotext.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/unoipset.hxx>
+#include <editeng/unoprnms.hxx>
+#include <editeng/unoforou.hxx>
 
 class SwDoc;
 

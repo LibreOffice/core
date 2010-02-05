@@ -71,17 +71,17 @@
 #include <svl/undo.hxx>
 #include <svl/urihelper.hxx>
 #include <svl/whiter.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editstat.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/unolingu.hxx>
 #include <ucbhelper/content.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/mapunit.hxx>
 #include <vcl/msgbox.hxx>
-
+#include <sfx2/sfx.hrc>
 #include <document.hxx>
 #include <action.hxx>
 #include <config.hxx>
@@ -97,8 +97,8 @@
 #include "mathtype.hxx"
 #include "mathmlimport.hxx"
 #include "mathmlexport.hxx"
-
-
+#include <sfx2/sfxsids.hrc>
+#include <svx/svxids.hrc>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;

@@ -54,8 +54,8 @@
 #include <cppuhelper/implbase6.hxx>
 #include <svl/brdcst.hxx>
 
-#include <svx/editeng.hxx>
-#include <svx/unoedsrc.hxx> // SvxEditSource, SvxTextForwarder, SvxViewForwarder, SvxEditViewForwarder
+#include <editeng/editeng.hxx>
+#include <editeng/unoedsrc.hxx> // SvxEditSource, SvxTextForwarder, SvxViewForwarder, SvxEditViewForwarder
 #include <svx/AccessibleTextHelper.hxx>
 #include <edit.hxx>
 

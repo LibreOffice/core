@@ -37,9 +37,9 @@
 #include <tools/pstm.hxx>
 #include <vcl/outdev.hxx>
 #include <svl/itemiter.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/keepitem.hxx>
-#include <svx/brkitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/brkitem.hxx>
 #include <fmtornt.hxx>
 #include <pagefrm.hxx>
 #include <section.hxx>
@@ -73,7 +73,7 @@
 #include <bodyfrm.hxx>
 #include <cellfrm.hxx>
 #include <dbg_lay.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/frmdiritem.hxx>
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
 

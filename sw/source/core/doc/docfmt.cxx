@@ -39,11 +39,11 @@
 #include <rtl/logfile.hxx>
 #include <svl/itemiter.hxx>
 #include <sfx2/app.hxx>
-#include <svx/tstpitem.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/brkitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/brkitem.hxx>
 #include <svl/whiter.hxx>
 #ifndef _ZFORLIST_HXX //autogen
 #define _ZFORLIST_DECLARE_TABLE

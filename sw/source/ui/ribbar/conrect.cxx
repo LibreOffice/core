@@ -42,7 +42,7 @@
 #include <svx/sdtaaitm.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdocapt.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <cmdid.h>
 #include <view.hxx>
 #include <edtwin.hxx>

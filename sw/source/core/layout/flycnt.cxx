@@ -47,8 +47,8 @@
 #include "ndtxt.hxx"
 #include "swundo.hxx"
 #include "errhdl.hxx"
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>

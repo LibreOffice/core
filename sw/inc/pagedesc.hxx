@@ -39,7 +39,7 @@
 //#ifndef _NUMRULE_HXX
 //#include <numrule.hxx>
 //#endif
-#include <svx/numitem.hxx>
+#include <editeng/numitem.hxx>
 
 class SfxPoolItem;
 class SwTxtFmtColl;

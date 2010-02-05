@@ -40,7 +40,7 @@
 #include <svl/itemprop.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/processfactory.hxx>
-#include <svx/paperinf.hxx>
+#include <editeng/paperinf.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/print.hxx>
 #include <toolkit/awt/vclxdevice.hxx>

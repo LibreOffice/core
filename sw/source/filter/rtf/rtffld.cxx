@@ -44,10 +44,10 @@
 #include <svl/urihelper.hxx>
 #include <svtools/rtftoken.h>
 #include <svl/zforlist.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/brkitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/brkitem.hxx>
 #include <fmtfld.hxx>
 #include <fmtinfmt.hxx>
 #include <swtypes.hxx>
@@ -69,7 +69,7 @@
 #include <breakit.hxx>
 #include <reffld.hxx>
 #include <SwStyleNameMapper.hxx>
-#include <svx/charhiddenitem.hxx>
+#include <editeng/charhiddenitem.hxx>
 
 
 // bestimme, ob es sich um ein IMPORT/TOC - Feld handelt.

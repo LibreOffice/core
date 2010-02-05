@@ -49,8 +49,8 @@
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/docinsert.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/htmlcfg.hxx>
+#include <editeng/sizeitem.hxx>
+#include <svtools/htmlcfg.hxx>
 
 #include <comphelper/storagehelper.hxx>
 #include <uitool.hxx>

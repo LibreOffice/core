@@ -39,8 +39,8 @@
 #include <sfx2/request.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
-#include <svx/numitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/numitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <numrule.hxx>
 
 #include "cmdid.h"

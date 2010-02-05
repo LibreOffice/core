@@ -36,7 +36,7 @@
 #include <tools/stream.hxx>
 #include <tools/resid.hxx>
 #include <sfx2/app.hxx>
-#include <svx/paperinf.hxx>
+#include <editeng/paperinf.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <unotools/useroptions.hxx>
 #include <tools/shl.hxx>

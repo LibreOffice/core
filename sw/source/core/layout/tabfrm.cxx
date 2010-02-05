@@ -50,12 +50,12 @@
 #include <ftnidx.hxx>
 #include <svl/itemiter.hxx>
 #include <docary.hxx>
-#include <svx/keepitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/brshitem.hxx>
 // --> collapsing borders FME 2005-05-27 #i29550#
-#include <svx/boxitem.hxx>
+#include <editeng/boxitem.hxx>
 // <--
 #include <vcl/outdev.hxx>
 #include <fmtlsplt.hxx>

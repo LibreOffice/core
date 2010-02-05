@@ -38,7 +38,7 @@
 #include <svl/eitem.hxx>
 #include <svl/macitem.hxx>
 #include <unotools/charclass.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <cmdid.h>
 #include <view.hxx>
 #include <basesh.hxx>

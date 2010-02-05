@@ -58,12 +58,11 @@
 #include "fmtcnct.hxx"  // SwFmtChain
 #include <pormulti.hxx>     // SwMultiPortion
 #include <svx/obj3d.hxx>
-
-#include <svx/txtrange.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
+#include <editeng/txtrange.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
 // --> OD 2004-06-16 #i28701#
-#include <svx/lspcitem.hxx>
+#include <editeng/lspcitem.hxx>
 // <--
 #include <txtflcnt.hxx>
 #include <fmtsrnd.hxx>
@@ -78,10 +77,10 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <svx/obj3d.hxx>
-#include <svx/txtrange.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lspcitem.hxx>
+#include <editeng/txtrange.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lspcitem.hxx>
 #include <svx/svdoedge.hxx>
 #include "doc.hxx"
 

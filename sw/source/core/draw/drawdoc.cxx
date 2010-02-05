@@ -38,7 +38,7 @@
 #include <unotools/pathoptions.hxx>
 #include <sot/storage.hxx>
 #include <svl/intitem.hxx>
-#include <svx/forbiddencharacterstable.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <svx/xtable.hxx>

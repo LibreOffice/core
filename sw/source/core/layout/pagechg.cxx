@@ -74,7 +74,7 @@
 #include "htmltbl.hxx"
 #include "pagedesc.hxx"
 #include "poolfmt.hxx"
-#include <svx/frmdiritem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <swfntcch.hxx> // SwFontAccess
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>

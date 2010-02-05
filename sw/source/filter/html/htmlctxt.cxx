@@ -34,10 +34,10 @@
 
 #include "hintids.hxx"
 #include <svl/itemiter.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/fhgtitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <svtools/htmltokn.h>
 
 #include "doc.hxx"

@@ -36,7 +36,7 @@
 #include "hintids.hxx"
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
-#include <svx/srchitem.hxx> //***
+#include <svl/srchitem.hxx> //***
 
 #include "swtypes.hxx"
 #include "cmdid.h"

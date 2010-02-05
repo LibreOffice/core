@@ -51,8 +51,8 @@
 #include <IDocumentDeviceAccess.hxx>
 #endif
 #include <hintids.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <svtools/ehdl.hxx>
@@ -90,7 +90,7 @@
 #include <swunohelper.hxx>
 #include <vos/mutex.hxx>
 #include <shellio.hxx>
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <sfx2/event.hxx>
 #include <swevent.hxx>
 #include <mmoutputpage.hrc>

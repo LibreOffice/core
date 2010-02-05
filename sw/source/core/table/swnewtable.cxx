@@ -46,8 +46,8 @@
 #include <set>
 #include <list>
 #include <memory>
-#include <svx/boxitem.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/protitem.hxx>
 #include <swtblfmt.hxx>
 
 #ifndef DBG_UTIL

@@ -49,9 +49,9 @@
 #include <sfx2/printer.hxx>
 #include <svx/htmlmode.hxx>
 #include <sfx2/bindings.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #ifndef _SVX_TSTPITEM_HXX //autogen
-#include <svx/tstpitem.hxx>
+#include <editeng/tstpitem.hxx>
 #endif
 #include <svx/optgrid.hxx>
 #include <svx/svxdlg.hxx>
@@ -86,9 +86,9 @@
 #endif
 #include <glosdoc.hxx>
 #include <uiitems.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <unotools/lingucfg.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>

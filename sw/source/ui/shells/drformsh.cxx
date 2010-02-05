@@ -42,7 +42,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/svdouno.hxx>
 #include <com/sun/star/form/FormButtonType.hpp>

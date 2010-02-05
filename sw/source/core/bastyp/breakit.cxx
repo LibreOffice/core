@@ -40,9 +40,9 @@
 #include <unotools/localedatawrapper.hxx>
 
 #ifndef _SVX_LINGU_HXX
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #endif
-#include <svx/scripttypeitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include "swtypes.hxx"
 
 using namespace com::sun::star;

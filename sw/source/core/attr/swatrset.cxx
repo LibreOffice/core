@@ -34,10 +34,10 @@
 
 #include <hintids.hxx>
 #include <svl/whiter.hxx>
-#include <svx/colritem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/bolnitem.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/bolnitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <svx/xtable.hxx>
 #include <fmtpdsc.hxx>
 #include <pagedesc.hxx>

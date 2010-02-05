@@ -33,8 +33,8 @@
 
 
 #include <hintids.hxx>
-#include <svx/keepitem.hxx>
-#include <svx/hyznitem.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/hyznitem.hxx>
 #include <pagefrm.hxx>      // ChangeFtnRef
 #include <ndtxt.hxx>        // MakeFrm()
 #include <dcontact.hxx>     // SwDrawContact

@@ -42,8 +42,8 @@
 #include <fmtsrnd.hxx>
 #include <svx/svdobj.hxx>
 #include <dcontact.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <sortedobjs.hxx>
 #include <pagefrm.hxx>
 // <--

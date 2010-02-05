@@ -33,7 +33,6 @@
 
 
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
-
 #include <stdlib.h>
 #include <hintids.hxx>
 #include <rtl/logfile.hxx>
@@ -51,7 +50,7 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/app.hxx>
 #include <svx/ruler.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/protitem.hxx>
 #include <svx/fmshell.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
@@ -100,7 +99,7 @@
 #include <prtopt.hxx>
 #include <swprtopt.hxx>
 #include <linguistic/lngprops.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 //#include <sfx2/app.hxx>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/scanner/ScannerContext.hpp>

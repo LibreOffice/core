@@ -32,8 +32,8 @@
 #include "precompiled_sw.hxx"
 #include <hintids.hxx>
 #include <tools/debug.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <tools/fract.hxx>
 #include <wrtswtbl.hxx>
 #include <swtable.hxx>

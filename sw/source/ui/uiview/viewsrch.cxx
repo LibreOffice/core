@@ -46,12 +46,12 @@
 #endif
 #include <svl/itempool.hxx>
 #include <svl/eitem.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <sfx2/request.hxx>
 #include <svx/srchdlg.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/wrkwin.hxx>
-#include "svx/unolingu.hxx"
+#include "editeng/unolingu.hxx"
 #include <swmodule.hxx>
 #include <swwait.hxx>
 #include <workctrl.hxx>

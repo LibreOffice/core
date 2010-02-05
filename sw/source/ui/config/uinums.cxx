@@ -42,7 +42,7 @@
 #endif
 #include <sfx2/docfile.hxx>
 #include <svl/itemiter.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 
 
 #include <tools/resid.hxx>

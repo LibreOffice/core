@@ -40,8 +40,8 @@
 #include <dcontact.hxx>
 #include <frmfmt.hxx>
 #include <frmatr.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <fmtornt.hxx>
 
 #include <com/sun/star/text/HoriOrientation.hpp>

@@ -47,10 +47,9 @@
 #include <sfx2/app.hxx>
 #include <sfx2/imgmgr.hxx>
 #include <svx/gallery.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/impgrf.hxx>
-#include <svx/numitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/numitem.hxx>
 #include <swvset.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>

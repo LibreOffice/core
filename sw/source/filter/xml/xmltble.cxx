@@ -42,11 +42,10 @@
 #include <xmloff/numehelp.hxx>
 #include <svl/cntnrsrt.hxx>
 #include <svl/zforlist.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <fmtrowsplt.hxx>
-#include <svx/frmdiritem.hxx>
-
+#include <editeng/frmdiritem.hxx>
 #include <list>
 #include "swtable.hxx"
 #include "doc.hxx"

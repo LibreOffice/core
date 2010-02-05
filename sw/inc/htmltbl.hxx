@@ -33,7 +33,7 @@
 
 
 #include <vcl/timer.hxx>
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 
 #include "swtypes.hxx"
 #include "node.hxx"     // Fuer SwStartNode

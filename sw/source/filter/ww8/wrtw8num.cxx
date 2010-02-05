@@ -35,8 +35,8 @@
 
 #include <hintids.hxx>
 #include <vcl/font.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
 #include <numrule.hxx>

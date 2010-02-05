@@ -42,8 +42,13 @@
 #include <tools/debug.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <svx/unolingu.hxx>
-
+#include <editeng/unolingu.hxx>
+#include <com/sun/star/text/ChapterFormat.hpp>
+#include <com/sun/star/text/ReferenceFieldPart.hpp>
+#include <com/sun/star/text/BibliographyDataField.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <hints.hxx>
 #include <cmdid.h>
 #include <swtypes.hxx>
@@ -52,9 +57,7 @@
 #include <doc.hxx>
 #include <docary.hxx>
 #include <poolfmt.hxx>
-#ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>
-#endif
 #include <pagedesc.hxx>
 #include <fmtcntnt.hxx>
 #include <unomap.hxx>

@@ -53,7 +53,7 @@
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <svtools/indexentryres.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <column.hxx>
 #include <fmtfsize.hxx>
 #include <shellio.hxx>

@@ -50,23 +50,23 @@ JP 20.07.95:
 #include <svl/svarray.hxx>
 #include "hintids.hxx"          //_immmer_ vor den solar-items!
 #include <svx/algitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/crsditem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/crsditem.hxx>
 #ifndef _SVX_CNTRTITEM_HXX //autogen
-#include <svx/cntritem.hxx>
+#include <editeng/cntritem.hxx>
 #endif
-#include <svx/shdditem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/adjitem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/adjitem.hxx>
 #include <svx/rotmodit.hxx>
 #include <svl/intitem.hxx>
-#include <svx/bolnitem.hxx>
+#include <editeng/bolnitem.hxx>
 #include "swdllapi.h"
 
 struct SwAfVersions;

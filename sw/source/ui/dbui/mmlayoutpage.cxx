@@ -62,7 +62,7 @@
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <svl/urihelper.hxx>
 #include <shellio.hxx>
 #include <osl/file.hxx>

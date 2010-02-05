@@ -42,9 +42,9 @@
 #ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
 #endif
-#include <svx/adjitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/brkitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/brkitem.hxx>
 #include <svtools/htmltokn.h>
 #ifndef _HTMLKYWD_H
 #include <svtools/htmlkywd.hxx>

@@ -49,7 +49,7 @@
 #include <svx/hlnkitem.hxx>
 
 #include <svx/svxdlg.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <sfx2/dispatch.hxx>
 #include <fmtinfmt.hxx>

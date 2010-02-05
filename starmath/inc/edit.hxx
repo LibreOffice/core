@@ -33,7 +33,7 @@
 #include <vcl/window.hxx>
 #include <vcl/timer.hxx>
 #include <svtools/transfer.hxx>
-#include <svx/editdata.hxx>
+#include <editeng/editdata.hxx>
 #include <svtools/colorcfg.hxx>
 
 //#ifndef _ACCESSIBILITY_HXX_

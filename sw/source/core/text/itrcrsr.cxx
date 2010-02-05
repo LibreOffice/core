@@ -40,10 +40,10 @@
 #include "pam.hxx"
 #include "swselectionlist.hxx"
 #include <sortedobjs.hxx>
-#include <svx/protitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/lspcitem.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/protitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <frmatr.hxx>
 #include <pagedesc.hxx> // SwPageDesc
 #include <tgrditem.hxx>

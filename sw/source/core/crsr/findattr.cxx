@@ -40,9 +40,9 @@
 #include <vcl/svapp.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/whiter.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/fontitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/fontitem.hxx>
 #include <fmtpdsc.hxx>
 #include <txatbase.hxx>
 #include <fchrfmt.hxx>

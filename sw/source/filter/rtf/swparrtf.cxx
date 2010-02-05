@@ -40,15 +40,15 @@
 #include <svl/itemiter.hxx>
 #include <svtools/rtftoken.h>
 #include <svl/intitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/tstpitem.hxx>
-#include <svx/lspcitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/hyznitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/hyznitem.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtfld.hxx>
 #include <fmthdft.hxx>
@@ -86,15 +86,13 @@
 #include <tox.hxx>
 #include <swerror.h>
 #include <cmdid.h>
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>          // ResId fuer Statusleiste
-#endif
 #include <SwStyleNameMapper.hxx>
 #include <tblsel.hxx>           // SwSelBoxes
 
 #include <docsh.hxx>
 #include <fmtlsplt.hxx> // SwLayoutSplit
-#include <svx/keepitem.hxx>
+#include <editeng/keepitem.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdorect.hxx>
 
@@ -103,13 +101,13 @@
 #include <fmtfollowtextflow.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/opaqitem.hxx>
+#include <editeng/opaqitem.hxx>
 #include "svx/svdograf.hxx"
 #include <svx/xflclit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/svdoutl.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/paperinf.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/paperinf.hxx>
 
 #include <tools/stream.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

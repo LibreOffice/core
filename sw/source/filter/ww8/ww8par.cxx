@@ -49,16 +49,16 @@
 #include <comphelper/docpasswordrequest.hxx>
 #include <hintids.hxx>
 
-#include <svx/tstpitem.hxx>
-#include <svx/cscoitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/cscoitem.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/paperinf.hxx>
-#include <svx/lrspitem.hxx> // SvxLRSpaceItem
-#include <svx/ulspitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/charhiddenitem.hxx>
+#include <editeng/paperinf.hxx>
+#include <editeng/lrspitem.hxx> // SvxLRSpaceItem
+#include <editeng/ulspitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/charhiddenitem.hxx>
 #include <filter/msfilter/svxmsbas.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdoole2.hxx>

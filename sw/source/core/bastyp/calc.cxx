@@ -42,13 +42,13 @@
 #include <cfloat>
 #include <hintids.hxx>
 #include <rtl/math.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/charclass.hxx>
-#include <svx/unolingu.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/unolingu.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <unotools/useroptions.hxx>
 #include <tools/datetime.hxx>
 #include <svl/zforlist.hxx>

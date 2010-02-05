@@ -35,6 +35,7 @@ StarMath
 [
     HelpText ( "StarMath Application" )
     SlotIdFile ( "starmath.hrc" )
+    SlotIdFile ( "editeng/editids.hrc" )
     SlotIdFile ( "sfx2/sfxsids.hrc" )
     SlotIdFile ( "svx/svxids.hrc" )
 ]

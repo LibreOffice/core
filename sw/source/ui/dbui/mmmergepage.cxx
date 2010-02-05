@@ -42,7 +42,7 @@
 #endif
 #include <dbui.hrc>
 #include <mmmergepage.hrc>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/eitem.hxx>
 #include <swabstdlg.hxx>

@@ -44,7 +44,7 @@
 #include <svx/xflasit.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/xfillit.hxx>

@@ -38,8 +38,8 @@
 #include <svl/stritem.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
-#include <svx/protitem.hxx>
-#include <svx/linkmgr.hxx>
+#include <editeng/protitem.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <tools/urlobj.hxx>
 
 #include <sfx2/sfxsids.hrc>
@@ -1281,7 +1281,7 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
     ULONG nDataFormat = SotExchange::GetFormatIdFromMimeType( rMimeType );
 
     if( !pSectNd || !pDoc || pDoc->IsInDtor() || ChkNoDataFlag() ||
-        SvxLinkManager::RegisterStatusInfoId() == nDataFormat )
+        sfx2::LinkManager::RegisterStatusInfoId() == nDataFormat )
     {
         // sollten wir schon wieder im Undo stehen?
         return ;

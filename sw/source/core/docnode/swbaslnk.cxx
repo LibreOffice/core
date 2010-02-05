@@ -42,11 +42,11 @@
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/objsh.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/boxitem.hxx>
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>       // fuer die EventIds
 #endif
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <svtools/soerr.hxx>
 #include <fmtfsize.hxx>
 #include <fmtanchr.hxx>
@@ -118,7 +118,7 @@ void SwBaseLink::DataChanged( const String& rMimeType,
     ULONG nFmt = SotExchange::GetFormatIdFromMimeType( rMimeType );
 
     if( pCntntNode->IsNoTxtNode() &&
-        nFmt == SvxLinkManager::RegisterStatusInfoId() )
+        nFmt == sfx2::LinkManager::RegisterStatusInfoId() )
     {
         // nur eine Statusaenderung - Events bedienen ?
         ::rtl::OUString sState;
@@ -127,9 +127,9 @@ void SwBaseLink::DataChanged( const String& rMimeType,
             USHORT nEvent = 0;
             switch( sState.toInt32() )
             {
-            case STATE_LOAD_OK:     nEvent = SVX_EVENT_IMAGE_LOAD;  break;
-            case STATE_LOAD_ERROR:  nEvent = SVX_EVENT_IMAGE_ERROR; break;
-            case STATE_LOAD_ABORT:  nEvent = SVX_EVENT_IMAGE_ABORT; break;
+            case sfx2::LinkManager::STATE_LOAD_OK:      nEvent = SVX_EVENT_IMAGE_LOAD;  break;
+            case sfx2::LinkManager::STATE_LOAD_ERROR:   nEvent = SVX_EVENT_IMAGE_ERROR; break;
+            case sfx2::LinkManager::STATE_LOAD_ABORT:   nEvent = SVX_EVENT_IMAGE_ABORT; break;
             }
 
             SwFrmFmt* pFmt;
@@ -160,7 +160,7 @@ void SwBaseLink::DataChanged( const String& rMimeType,
         ((SwGrfNode*)pCntntNode)->SetGrafikArrived( bGraphicArrived );
 
         Graphic aGrf;
-        if( SvxLinkManager::GetGraphicFromAny( rMimeType, rValue, aGrf ) &&
+        if( sfx2::LinkManager::GetGraphicFromAny( rMimeType, rValue, aGrf ) &&
             ( GRAPHIC_DEFAULT != aGrf.GetType() ||
               GRAPHIC_DEFAULT != rGrfObj.GetType() ) )
         {

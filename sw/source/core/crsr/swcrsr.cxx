@@ -33,7 +33,7 @@
 
 
 #include <hintids.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/protitem.hxx>
 
 #include <com/sun/star/i18n/WordType.hdl>
 #include <com/sun/star/i18n/CharType.hdl>

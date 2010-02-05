@@ -35,10 +35,10 @@
 #include <hintids.hxx>
 
 #ifndef _SVX_TSTPITEM_HXX //autogen
-#include <svx/tstpitem.hxx>
+#include <editeng/tstpitem.hxx>
 #endif
-#include <svx/lrspitem.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif

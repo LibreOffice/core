@@ -64,7 +64,7 @@
 #include <svl/smplhint.hxx>
 #include <svl/macitem.hxx>
 
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 
 #include <memory>
 

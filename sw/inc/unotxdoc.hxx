@@ -75,7 +75,7 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <svl/itemprop.hxx>
 #include <svx/fmdmod.hxx>
-#include <svx/UnoForbiddenCharsTable.hxx>
+#include <editeng/UnoForbiddenCharsTable.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase2.hxx> // helper for implementations
 #include <cppuhelper/implbase4.hxx> // helper for implementations

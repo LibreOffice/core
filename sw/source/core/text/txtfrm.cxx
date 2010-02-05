@@ -35,12 +35,12 @@
 #include <svl/ctloptions.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/sfxuno.hxx>
-#include <svx/langitem.hxx>
-#include <svx/lspcitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/pgrditem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/pgrditem.hxx>
 #include <swmodule.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <doc.hxx>      // GetDoc()

@@ -35,7 +35,7 @@
 #include <i18npool/lang.h>
 #include <tools/string.hxx>
 
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include <svl/svarray.hxx>
 #include <svl/poolitem.hxx>
 #include "swdllapi.h"

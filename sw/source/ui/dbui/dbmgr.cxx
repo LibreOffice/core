@@ -77,7 +77,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/progress.hxx>
 #include <sfx2/dispatch.hxx>
-#include <goodies/mailenum.hxx>
+#include <svl/mailenum.hxx>
 #include <cmdid.h>
 #include <swmodule.hxx>
 #include <view.hxx>
@@ -116,10 +116,10 @@
 #include <comphelper/property.hxx>
 #include <mailmergehelper.hxx>
 #include <maildispatcher.hxx>
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <i18npool/mslangid.hxx>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svl/numuno.hxx>
 
 #include <unomailmerge.hxx>

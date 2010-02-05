@@ -47,10 +47,10 @@
 #include <sfx2/dispatch.hxx>
 
 #include <sfx2/objface.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/protitem.hxx>
 #include <sfx2/request.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/htmlmode.hxx>
 #include <svx/sdgluitm.hxx>
 #include <svx/sdgcoitm.hxx>
@@ -58,7 +58,7 @@
 #include <svx/sdgtritm.hxx>
 #include <svx/sdginitm.hxx>
 #include <svx/sdgmoitm.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <svx/grfflt.hxx>
 #include <svx/tbxcolor.hxx>
 #include <fmturl.hxx>
