@@ -119,7 +119,7 @@ void X11GlyphPeer::InitAntialiasing()
     // enable XRENDER accelerated aliasing on screens that support it
     // unless it explicitly disabled by an environment variable
     if( (nEnvAntiAlias & 2) == 0 )
-        mnUsingXRender = XRenderPeer::GetInstance().InitRenderText( mnMaxScreens );
+        mnUsingXRender = XRenderPeer::GetInstance().InitRenderText();
 
     // else enable client side antialiasing for these screens
     // unless it is explicitly disabled by an environment variable

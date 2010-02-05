@@ -42,7 +42,7 @@ public:
     static XRenderPeer& GetInstance();
     int                 GetVersion() const;
 
-    sal_uInt32          InitRenderText( int nMaxDepth );
+    sal_uInt32          InitRenderText();
 
 protected:
                         XRenderPeer();
