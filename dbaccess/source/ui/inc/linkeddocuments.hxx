@@ -119,24 +119,16 @@ namespace dbaui
                           ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& o_rDefinition
                 );
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
-                newFormWithPilot(
-                    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>& _xDefinition,
+        void    newFormWithPilot(
                     const sal_Int32 _nCommandType = -1,
                     const ::rtl::OUString& _rObjectName = ::rtl::OUString()
                 );
-
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
-                newReportWithPilot(
-                    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>& _xDefinition,
+        void    newReportWithPilot(
                     const sal_Int32 _nCommandType = -1,
                     const ::rtl::OUString& _rObjectName = ::rtl::OUString()
                 );
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
-                newQueryWithPilot();
-
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
-                newTableWithPilot();
+        void    newQueryWithPilot();
+        void    newTableWithPilot();
 
         enum RESULT
         {
@@ -148,15 +140,14 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
             impl_open(
                 const ::rtl::OUString& _rLinkName,
-                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>& _xDefinition,
+                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _xDefinition,
                 ElementOpenMode _eOpenMode,
                 const ::comphelper::NamedValueCollection& _rAdditionalArgs
             );
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
+        void
             impl_newWithPilot(
                 const char* _pWizardService,
-                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _xDefinition,
                 const sal_Int32 _nCommandType,
                 const ::rtl::OUString& _rObjectName
             );
