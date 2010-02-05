@@ -59,7 +59,6 @@
 #include <vcl/cvtgrf.hxx>
 
 using ::rtl::OUString;
-using namespace ::vos;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;

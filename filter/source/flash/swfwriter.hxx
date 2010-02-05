@@ -321,8 +321,10 @@ public:
     /** inserts a place shape tag into the movie stream or the current sprite */
     void placeShape( sal_uInt16 nID, sal_uInt16 nDepth, sal_Int32 x, sal_Int32 y, sal_uInt16 nClipDepth = 0, const char* pName = NULL );
 
+#ifdef THEFUTURE
     /** inserts a move shape tag into the movie stream or the current sprite */
     void moveShape( sal_uInt16 nDepth, sal_Int32 x, sal_Int32 y );
+#endif
 
     /** inserts a remove shape tag into the movie stream or the current sprite */
     void removeShape( sal_uInt16 nDepth );

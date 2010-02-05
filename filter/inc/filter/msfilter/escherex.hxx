@@ -37,7 +37,7 @@
 #include <tools/list.hxx>
 #include <tools/stream.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
