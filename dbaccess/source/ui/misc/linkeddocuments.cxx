@@ -330,32 +330,39 @@ namespace dbaui
         const ::comphelper::NamedValueCollection& i_rCreationArgs, Reference< XComponent >& o_rDefinition )
     {
         OSL_ENSURE(m_xDocumentContainer.is(), "OLinkedDocumentsAccess::newDocument: invalid document container!");
-        // determine the URL to use for the new document
+        // determine the class ID to use for the new document
         Sequence<sal_Int8> aClassId;
-        switch ( i_nActionID )
+        if  (   !i_rCreationArgs.has( "ClassID" )
+            &&  !i_rCreationArgs.has( "MediaType" )
+            &&  !i_rCreationArgs.has( "DocumentServiceName" )
+            )
         {
-            case ID_FORM_NEW_TEXT:
-                aClassId = lcl_GetSequenceClassID(SO3_SW_CLASSID);
-                OSL_ENSURE(aClassId == comphelper::MimeConfigurationHelper::GetSequenceClassID(SO3_SW_CLASSID),"Not equal");
-                break;
+            switch ( i_nActionID )
+            {
+                case ID_FORM_NEW_TEXT:
+                    aClassId = lcl_GetSequenceClassID(SO3_SW_CLASSID);
+                    OSL_ENSURE(aClassId == comphelper::MimeConfigurationHelper::GetSequenceClassID(SO3_SW_CLASSID),"Not equal");
+                    break;
 
-            case ID_FORM_NEW_CALC:
-                aClassId = lcl_GetSequenceClassID(SO3_SC_CLASSID);
-                break;
+                case ID_FORM_NEW_CALC:
+                    aClassId = lcl_GetSequenceClassID(SO3_SC_CLASSID);
+                    break;
 
-            case ID_FORM_NEW_IMPRESS:
-                aClassId = lcl_GetSequenceClassID(SO3_SIMPRESS_CLASSID);
-                break;
+                case ID_FORM_NEW_IMPRESS:
+                    aClassId = lcl_GetSequenceClassID(SO3_SIMPRESS_CLASSID);
+                    break;
 
-            case ID_REPORT_NEW_TEXT:
-                aClassId = comphelper::MimeConfigurationHelper::GetSequenceClassID(SO3_RPT_CLASSID_90);
-                break;
+                case ID_REPORT_NEW_TEXT:
+                    aClassId = comphelper::MimeConfigurationHelper::GetSequenceClassID(SO3_RPT_CLASSID_90);
+                    break;
 
-            default:
-                OSL_ENSURE( sal_False, "OLinkedDocumentsAccess::newDocument: please use newFormWithPilot!" );
-                return Reference< XComponent >();
+                default:
+                    OSL_ENSURE( sal_False, "OLinkedDocumentsAccess::newDocument: please use newFormWithPilot!" );
+                    return Reference< XComponent >();
 
+            }
         }
+
         // load the document as template
         Reference< XComponent > xNewDocument;
         try
@@ -365,7 +372,8 @@ namespace dbaui
             if ( xORB.is() )
             {
                 ::comphelper::NamedValueCollection aCreationArgs( i_rCreationArgs );
-                aCreationArgs.put( "ClassID", aClassId );
+                if ( aClassId.getLength() )
+                    aCreationArgs.put( "ClassID", aClassId );
                 aCreationArgs.put( (::rtl::OUString)PROPERTY_ACTIVE_CONNECTION, m_xConnection );
 
                 // separate values which are real creation args from args relevant for opening the doc

@@ -230,7 +230,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
         MutexGuard aGuard(m_aMutex);
 
         // extrat known arguments
-        ::rtl::OUString sName, sPersistentName, sURL, sMediaType;
+        ::rtl::OUString sName, sPersistentName, sURL, sMediaType, sDocServiceName;
         Reference< XCommandProcessor > xCopyFrom;
         Reference< XConnection > xConnection;
         sal_Bool bAsTemplate( sal_False );
@@ -244,6 +244,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
         lcl_extractAndRemove( aArgs, PROPERTY_ACTIVE_CONNECTION, xConnection );
         lcl_extractAndRemove( aArgs, PROPERTY_AS_TEMPLATE, bAsTemplate );
         lcl_extractAndRemove( aArgs, INFO_MEDIATYPE, sMediaType );
+        lcl_extractAndRemove( aArgs, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentServiceName" ) ), sDocServiceName );
 
         // ClassID has two allowed types, so a special treatment here
         Any aClassIDArg = aArgs.get( "ClassID" );
@@ -301,8 +302,18 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
             }
             else
             {
-                if ( bNeedClassID && sMediaType.getLength() )
-                    ODocumentDefinition::GetDocumentServiceFromMediaType( sMediaType, m_aContext, aClassID );
+                if ( bNeedClassID )
+                {
+                    if ( sMediaType.getLength() )
+                        ODocumentDefinition::GetDocumentServiceFromMediaType( sMediaType, m_aContext, aClassID );
+                    else if ( sDocServiceName.getLength() )
+                    {
+                        ::comphelper::MimeConfigurationHelper aConfigHelper( m_aContext.getLegacyServiceFactory() );
+                        const Sequence< NamedValue > aProps( aConfigHelper.GetObjectPropsByDocumentName( sDocServiceName ) );
+                        const ::comphelper::NamedValueCollection aMediaTypeProps( aProps );
+                        aClassID = aMediaTypeProps.getOrDefault( "ClassID", Sequence< sal_Int8 >() );
+                    }
+                }
             }
         }
 
