@@ -82,4 +82,10 @@ public interface InputRepository
     boolean isReadable(final String name);
 
     void closeInputRepository();
+
+    /** returns the URL of the database document
+     *
+     * @return the URL of the database document
+     */
+    String getRootURL();
 }

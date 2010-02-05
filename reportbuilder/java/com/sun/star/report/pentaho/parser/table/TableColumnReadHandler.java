@@ -42,6 +42,7 @@ public class TableColumnReadHandler extends ElementReadHandler
 {
 
     private final Section tableColumn;
+
     public TableColumnReadHandler()
     {
         tableColumn = new Section();

@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.model;
 
 import org.jfree.report.expressions.FormulaExpression;
@@ -44,20 +42,20 @@ import org.jfree.report.expressions.FormulaExpression;
  */
 public class FormattedTextElement extends ReportElement
 {
-  private FormulaExpression valueExpression;
 
-  public FormattedTextElement()
-  {
-  }
+    private FormulaExpression valueExpression;
 
+    public FormattedTextElement()
+    {
+    }
 
-  public FormulaExpression getValueExpression()
-  {
-    return valueExpression;
-  }
+    public FormulaExpression getValueExpression()
+    {
+        return valueExpression;
+    }
 
-  public void setValueExpression(final FormulaExpression valueExpression)
-  {
-    this.valueExpression = valueExpression;
-  }
+    public void setValueExpression(final FormulaExpression valueExpression)
+    {
+        this.valueExpression = valueExpression;
+    }
 }
