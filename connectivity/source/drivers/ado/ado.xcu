@@ -157,6 +157,11 @@
             <value>3</value>
           </prop>
         </node>
+        <node oor:name="ColumnAliasInOrderBy" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>false</value>
+          </prop>
+        </node>
       </node>
       <node oor:name="Features">
         <node oor:name="UseSQL92NamingConstraints" oor:op="replace">
