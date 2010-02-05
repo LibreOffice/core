@@ -34,6 +34,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <com/sun/star/linguistic2/XMeaning.hpp>
+#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <svl/stritem.hxx>
@@ -102,7 +103,8 @@ SfxThesSubMenuControl::SfxThesSubMenuControl( USHORT nSlotId, Menu &rMenu, SfxBi
 {
     rMenu.SetPopupMenu(nSlotId, pMenu);
     pMenu->SetSelectHdl(LINK(this, SfxThesSubMenuControl, MenuSelect));
-    FillMenu();
+    pMenu->Clear();
+    rParent.EnableItem( GetId(), FALSE );
 }
 
 
@@ -113,27 +115,7 @@ SfxThesSubMenuControl::~SfxThesSubMenuControl()
 
 
 /*
-    Fuellt das Menu mit den aktuellen Verben aus der ViewShell.
- */
-void SfxThesSubMenuControl::FillMenu()
-{
-    pMenu->Clear();
-    pMenu->SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
-    SfxViewShell *pView = GetBindings().GetDispatcher()->GetFrame()->GetViewShell();
-    if (pView)
-    {
-        pMenu->InsertItem( 1, String::CreateFromAscii("bla blub") );
-
-    }
-
-    rParent.EnableItem( GetId(), (BOOL)pMenu->GetItemCount() );
-}
-
-
-/*
     Statusbenachrichtigung;
-    fuellt gfs. das Menu mit den aktuellen Verben aus der ViewShell.
-    der DocumentShell.
     Ist die Funktionalit"at disabled, wird der entsprechende
     Menueeintrag im Parentmenu disabled, andernfalls wird er enabled.
  */
@@ -143,8 +125,6 @@ void SfxThesSubMenuControl::StateChanged(
     const SfxPoolItem* /*pState*/ )
 {
     rParent.EnableItem(GetId(), SFX_ITEM_AVAILABLE == eState );
-    if ( SFX_ITEM_AVAILABLE == eState )
-        FillMenu();
 }
 
 
@@ -199,9 +179,10 @@ SfxThesSubMenuHelper::SfxThesSubMenuHelper()
     try
     {
         uno::Reference< lang::XMultiServiceFactory >  xMSF( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-        m_xThesarus = uno::Reference< linguistic2::XThesaurus > ( xMSF->createInstance(
+        m_xLngMgr = uno::Reference< linguistic2::XLinguServiceManager >( xMSF->createInstance(
                 OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.linguistic2.Thesaurus" ) ) ), uno::UNO_QUERY_THROW ) ;
+                    "com.sun.star.linguistic2.LinguServiceManager" ))), uno::UNO_QUERY_THROW );
+        m_xThesarus = m_xLngMgr->getThesaurus();
     }
     catch (uno::Exception &e)
     {
@@ -269,6 +250,80 @@ bool SfxThesSubMenuHelper::GetMeanings(
 }
 
 
+String SfxThesSubMenuHelper::GetThesImplName( const lang::Locale &rLocale ) const
+{
+    String aRes;
+    DBG_ASSERT( m_xLngMgr.is(), "LinguServiceManager missing" );
+    if (m_xLngMgr.is())
+    {
+        uno::Sequence< OUString > aServiceNames = m_xLngMgr->getConfiguredServices(
+                OUString::createFromAscii("com.sun.star.linguistic2.Thesaurus"), rLocale );
+        // there should be at most one thesaurus configured for each language
+        DBG_ASSERT( aServiceNames.getLength() <= 1, "more than one thesaurus found. Should not be possible" );
+        if (aServiceNames.getLength() == 1)
+            aRes = aServiceNames[0];
+    }
+    return aRes;
+}
+
 ////////////////////////////////////////////////////////////
+
+//!! temporary implement locally:
+//!! once MBAs latest CWS is integrated this functions are available in svtools
+//!! under a slightly different name
+
+#include <sfx2/docfile.hxx>
+
+#define IMPGRF_INIKEY_ASLINK        "ImportGraphicAsLink"
+#define IMPGRF_INIKEY_PREVIEW       "ImportGraphicPreview"
+#define IMPGRF_CONFIGNAME           String(DEFINE_CONST_UNICODE("ImportGraphicDialog"))
+
+GraphicFilter* lcl_GetGrfFilter()
+{
+    return GraphicFilter::GetGraphicFilter();
+}
+
+// -----------------------------------------------------------------------
+
+int lcl_LoadGraphic( const String &rPath, const String &rFilterName,
+                 Graphic& rGraphic, GraphicFilter* pFilter,
+                 USHORT* pDeterminedFormat )
+{
+    if ( !pFilter )
+        pFilter = ::lcl_GetGrfFilter();
+
+    const USHORT nFilter = rFilterName.Len() && pFilter->GetImportFormatCount()
+                    ? pFilter->GetImportFormatNumber( rFilterName )
+                    : GRFILTER_FORMAT_DONTKNOW;
+
+    SfxMedium* pMed = 0;
+
+    // dann teste mal auf File-Protokoll:
+    SvStream* pStream = NULL;
+    INetURLObject aURL( rPath );
+
+    if ( aURL.HasError() || INET_PROT_NOT_VALID == aURL.GetProtocol() )
+    {
+        aURL.SetSmartProtocol( INET_PROT_FILE );
+        aURL.SetSmartURL( rPath );
+    }
+    else if ( INET_PROT_FILE != aURL.GetProtocol() )
+    {
+        // z.Z. nur auf die aktuelle DocShell
+        pMed = new SfxMedium( rPath, STREAM_READ, TRUE );
+        pMed->DownLoad();
+        pStream = pMed->GetInStream();
+    }
+    int nRes = GRFILTER_OK;
+
+    if ( !pStream )
+        nRes = pFilter->ImportGraphic( rGraphic, aURL, nFilter, pDeterminedFormat );
+    else
+        nRes = pFilter->ImportGraphic( rGraphic, rPath, *pStream,
+                                       nFilter, pDeterminedFormat );
+    if ( pMed )
+        delete pMed;
+    return nRes;
+}
 
 

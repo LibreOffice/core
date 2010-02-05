@@ -41,8 +41,15 @@ ModalDialog RID_SVXDLG_THESAURUS
     OutputSize = TRUE ;
     Size = MAP_APPFONT ( 265, 230 ) ;
     Text [ en-US ] = "Thesaurus" ;
-    Moveable = TRUE ;
     SvLook = TRUE ;
+    Moveable = TRUE ;
+
+    FixedImage IMG_VENDOR
+    {
+        Pos = MAP_APPFONT ( 0, 0 ) ;
+        Size = MAP_APPFONT ( 265, 0  ) ;    // correct size will be applied at runtime
+        Hide = TRUE;
+    };
 
     ImageButton BTN_LEFT
     {
@@ -134,6 +141,15 @@ ModalDialog RID_SVXDLG_THESAURUS
     String STR_ERR_WORDNOTFOUND
     {
         Text [ en-US ] = "Word not found in thesaurus" ;
+    };
+
+    Image IMG_DEFAULT_VENDOR
+    {
+        ImageBitmap = Bitmap { File = "vendor01.png"; };
+    };
+    Image IMG_DEFAULT_VENDOR_HC
+    {
+        ImageBitmap = Bitmap { File = "vendor01h.png"; };
     };
 };
 

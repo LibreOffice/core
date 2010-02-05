@@ -38,6 +38,7 @@
 #include <vcl/combobox.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/image.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/menubtn.hxx>
 #include <vcl/msgbox.hxx>
@@ -136,6 +137,7 @@ struct SvxThesaurusDialog_Impl
 {
     Window*         m_pParent;
 
+    FixedImage      aVendorImageFI;
     ImageButton     aLeftBtn;
     FixedText       aWordText;
     LookUpComboBox  aWordCB;
@@ -151,6 +153,8 @@ struct SvxThesaurusDialog_Impl
     CancelButton    aCancelBtn;
 
     String          aErrStr;
+    Image           aVendorDefaultImage;
+    Image           aVendorDefaultImageHC;
 
     uno::Reference< linguistic2::XThesaurus >   xThesaurus;
     OUString        aLookUpText;
@@ -169,6 +173,7 @@ struct SvxThesaurusDialog_Impl
     DECL_LINK( AlternativesDoubleClickHdl_Impl, SvxCheckListBox * );
 
     DECL_STATIC_LINK( SvxThesaurusDialog_Impl, SelectFirstHdl_Impl, SvxCheckListBox * );
+    DECL_STATIC_LINK( SvxThesaurusDialog_Impl, VendorImageInitHdl, SvxThesaurusDialog_Impl * );
 
 
     SvxThesaurusDialog_Impl( Window* pParent );
@@ -178,6 +183,7 @@ struct SvxThesaurusDialog_Impl
             queryMeanings_Impl( ::rtl::OUString& rTerm, const lang::Locale& rLocale, const beans::PropertyValues& rProperties ) throw(lang::IllegalArgumentException, uno::RuntimeException);
 
     bool    UpdateAlternativesBox_Impl();
+    void    UpdateVendorImage();
     void    SetWindowTitle( LanguageType nLanguage );
 };
 

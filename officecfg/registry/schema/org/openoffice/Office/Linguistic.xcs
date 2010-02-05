@@ -124,6 +124,31 @@
                     <label>Spell and grammar context menu dictionary image</label>
                 </info>
             </prop>
+            <prop oor:name="ThesaurusDialogImage" oor:type="xs:string">
+                <info>
+                    <desc>The path to the image for the thesaurus dialog.</desc>
+                    <label>Thesaurus dialog image</label>
+                </info>
+            </prop>
+            <prop oor:name="ThesaurusDialogImage_HC" oor:type="xs:string">
+                <info>
+                    <desc>The path to the image for the thesaurus dialog in high contrast mode.</desc>
+                    <label>Thesaurus dialog image</label>
+                </info>
+            </prop>
+            <prop oor:name="SynonymsContextMenuImage" oor:type="xs:string">
+                <info>
+                    <desc>The path to the image for the synonyms context menu.</desc>
+                    <label>Synonyms context menu image</label>
+                </info>
+            </prop>
+            <prop oor:name="SynonymsContextMenuImage_HC" oor:type="xs:string">
+                <info>
+                    <desc>The path to the image for the synonyms context menu in high contrast mode.</desc>
+                    <label>Synonyms context menu image</label>
+                </info>
+            </prop>
+
         </group>
 
         <group oor:name="GrammarCheckerEntry">

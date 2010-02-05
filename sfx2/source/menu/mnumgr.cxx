@@ -30,8 +30,10 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
+
 #include <com/sun/star/embed/VerbDescriptor.hpp>
 #include <com/sun/star/embed/VerbAttributes.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 
 #ifdef SOLARIS
 // HACK: prevent conflict between STLPORT and Workshop headers on Solaris 8
@@ -53,10 +55,15 @@
 #include <framework/addonmenu.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <unotools/lingucfg.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svl/stritem.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
+#include <osl/file.hxx>
+#include <vcl/graph.hxx>
+#include <svtools/filter.hxx>
+#include <svx/impgrf.hxx>
 
 #include <sfx2/mnumgr.hxx>
 
@@ -177,6 +184,24 @@ void InsertVerbs_Impl( SfxBindings* pBindings, const com::sun::star::uno::Sequen
 
 //--------------------------------------------------------------------
 
+
+static Image lcl_GetImageFromPngUrl( const ::rtl::OUString &rFileUrl )
+{
+    Image aRes;
+
+    ::rtl::OUString aTmp;
+    osl::FileBase::getSystemPathFromFileURL( rFileUrl, aTmp );
+
+    Graphic aGraphic;
+    const String aFilterName( RTL_CONSTASCII_USTRINGPARAM( IMP_PNG ) );
+    if( GRFILTER_OK == lcl_LoadGraphic( aTmp, aFilterName, aGraphic ) )
+    {
+        aRes = Image( aGraphic.GetBitmapEx() );
+    }
+    return aRes;
+}
+
+
 PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
 {
     //
@@ -209,15 +234,28 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
         const size_t nNumSynonyms = aSynonyms.size();
         if (nNumSynonyms > 0)
         {
+            SvtLinguConfig aCfg;
+            const bool bHC = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
+
+            Image aImage;
+            String sThesImplName( aHelper.GetThesImplName( aLocale ) );
+            ::rtl::OUString aSynonymsImageUrl( aCfg.GetSynonymsContextImage( sThesImplName, bHC ) );
+            if (sThesImplName.Len() > 0 && aSynonymsImageUrl.getLength() > 0)
+                aImage = Image( lcl_GetImageFromPngUrl( aSynonymsImageUrl ) );
+
             for (USHORT i = 0; (size_t)i < nNumSynonyms; ++i)
             {
                 //! item ids should start with values > 0, since 0 has special meaning
                 const USHORT nId = i + 1;
+
                 String aItemText( GetThesaurusReplaceText_Impl( aSynonyms[i] ) );
                 pThesSubMenu->InsertItem( nId, aItemText );
                 ::rtl::OUString aCmd( ::rtl::OUString::createFromAscii( ".uno:ThesaurusFromContext?WordReplace:string=" ) );
                 aCmd += aItemText;
                 pThesSubMenu->SetItemCommand( nId, aCmd );
+
+                if (aSynonymsImageUrl.getLength() > 0)
+                    pThesSubMenu->SetItemImage( nId, aImage );
             }
         }
         else // nNumSynonyms == 0

@@ -33,6 +33,7 @@
 #define _THESSUBMENU_HXX_
 
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
+#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
 
 #include <vcl/menu.hxx>
 #include <sfx2/mnuitem.hxx>
@@ -55,7 +56,6 @@ class SfxThesSubMenuControl : public SfxMenuControl
     Menu&               rParent;
 
 private:
-    void            FillMenu();
     virtual void    StateChanged( USHORT, SfxItemState, const SfxPoolItem* pState );
     DECL_LINK( MenuSelect, Menu * );
 
@@ -72,7 +72,8 @@ public:
 
 class SfxThesSubMenuHelper
 {
-    css::uno::Reference< css::linguistic2::XThesaurus >     m_xThesarus;
+    css::uno::Reference< css::linguistic2::XLinguServiceManager >   m_xLngMgr;
+    css::uno::Reference< css::linguistic2::XThesaurus >             m_xThesarus;
 
 private:
     
@@ -94,9 +95,24 @@ public:
 
     // get the first nMax Synonym entries, even if different meanings need to be evaluated
     bool    GetMeanings( std::vector< ::rtl::OUString > & rSynonyms, const ::rtl::OUString & rWord, const css::lang::Locale & rLocale, sal_Int16 nMaxSynonms );
+
+    String  GetThesImplName( const css::lang::Locale &rLocale ) const;
 };
 
 ////////////////////////////////////////////////////////////
+
+
+#include <svx/impgrf.hxx>
+
+//!! temporary implemented locally:
+//!! once MBAs latest CWS is integrated this functions are available in svtools
+//!! under a slightly different name
+GraphicFilter* lcl_GetGrfFilter();
+int   lcl_LoadGraphic( const String& rPath, const String& rFilter,
+                     Graphic& rGraphic,
+                     GraphicFilter* pFilter = NULL,
+                     USHORT* pDeterminedFormat = NULL );
+
     
 #endif
 

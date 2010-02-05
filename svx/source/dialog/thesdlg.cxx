@@ -44,13 +44,17 @@
 
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <com/sun/star/linguistic2/XMeaning.hpp>
+#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
 
 #include <tools/shl.hxx>
 #include <svl/lngmisc.hxx>
 #include <svtools/svlbitm.hxx>
 #include <svtools/svtreebx.hxx>
 #include <svtools/langtab.hxx>
+#include <unotools/lingucfg.hxx>
 #include <i18npool/mslangid.hxx>
+#include <comphelper/processfactory.hxx>
+#include <osl/file.hxx>
 
 
 #include <stack>
@@ -213,6 +217,7 @@ void ThesaurusAlternativesCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
 
 SvxThesaurusDialog_Impl::SvxThesaurusDialog_Impl( Window* pParent ) :
     m_pParent       ( pParent ),
+    aVendorImageFI  ( pParent , SVX_RES( IMG_VENDOR ) ),
     aLeftBtn        ( pParent, SVX_RES( BTN_LEFT ) ),
     aWordText       ( pParent, SVX_RES( FT_WORD ) ),
     aWordCB         ( pParent, SVX_RES( CB_WORD ) ),
@@ -227,6 +232,8 @@ SvxThesaurusDialog_Impl::SvxThesaurusDialog_Impl( Window* pParent ) :
     aOkBtn          ( pParent, SVX_RES( BTN_THES_OK ) ),
     aCancelBtn      ( pParent, SVX_RES( BTN_THES_CANCEL ) ),
     aErrStr         (          SVX_RES( STR_ERR_WORDNOTFOUND ) ),
+    aVendorDefaultImage    ( SVX_RES( IMG_DEFAULT_VENDOR ) ),
+    aVendorDefaultImageHC  ( SVX_RES( IMG_DEFAULT_VENDOR_HC ) ),
     xThesaurus      ( NULL ),
     aLookUpText     (),
     nLookUpLanguage ( LANGUAGE_NONE ),
@@ -242,6 +249,8 @@ SvxThesaurusDialog_Impl::SvxThesaurusDialog_Impl( Window* pParent ) :
     aLookUpBtn.SetClickHdl( LINK( this, SvxThesaurusDialog_Impl, LookUpHdl_Impl ) );
     m_pAlternativesCT->SetSelectHdl( LINK( this, SvxThesaurusDialog_Impl, AlternativesSelectHdl_Impl ));
     m_pAlternativesCT->SetDoubleClickHdl( LINK( this, SvxThesaurusDialog_Impl, AlternativesDoubleClickHdl_Impl ));
+
+    Application::PostUserEvent( STATIC_LINK( this, SvxThesaurusDialog_Impl, VendorImageInitHdl ) );
 }
 
 
@@ -354,6 +363,7 @@ IMPL_LINK( SvxThesaurusDialog_Impl, LanguageHdl_Impl, MenuButton *, pBtn )
         if (xThesaurus->hasLocale( SvxCreateLocale( nLang ) ))
             nLookUpLanguage = nLang;
         SetWindowTitle( nLang );
+        UpdateVendorImage();
         UpdateAlternativesBox_Impl();
     }
     return 0;
@@ -452,6 +462,202 @@ IMPL_STATIC_LINK( SvxThesaurusDialog_Impl, SelectFirstHdl_Impl, SvxCheckListBox 
         pBox->SelectEntryPos( 0 );
     return 0;
 }
+
+////////////////////////////////////////////////////////////
+
+//!! temporary implement locally:
+//!! once MBAs latest CWS is integrated this functions are available in svtools
+//!! under a slightly different name
+
+#include <svx/impgrf.hxx>
+#include <sfx2/docfile.hxx>
+
+#define IMPGRF_INIKEY_ASLINK        "ImportGraphicAsLink"
+#define IMPGRF_INIKEY_PREVIEW       "ImportGraphicPreview"
+#define IMPGRF_CONFIGNAME           String(DEFINE_CONST_UNICODE("ImportGraphicDialog"))
+
+GraphicFilter* lcl_GetGrfFilter()
+{
+    return GraphicFilter::GetGraphicFilter();
+}
+
+// -----------------------------------------------------------------------
+
+int lcl_LoadGraphic( const String &rPath, const String &rFilterName,
+                 Graphic& rGraphic, GraphicFilter* pFilter,
+                 USHORT* pDeterminedFormat )
+{
+    if ( !pFilter )
+        pFilter = ::lcl_GetGrfFilter();
+
+    const USHORT nFilter = rFilterName.Len() && pFilter->GetImportFormatCount()
+                    ? pFilter->GetImportFormatNumber( rFilterName )
+                    : GRFILTER_FORMAT_DONTKNOW;
+
+    SfxMedium* pMed = 0;
+
+    // dann teste mal auf File-Protokoll:
+    SvStream* pStream = NULL;
+    INetURLObject aURL( rPath );
+
+    if ( aURL.HasError() || INET_PROT_NOT_VALID == aURL.GetProtocol() )
+    {
+        aURL.SetSmartProtocol( INET_PROT_FILE );
+        aURL.SetSmartURL( rPath );
+    }
+    else if ( INET_PROT_FILE != aURL.GetProtocol() )
+    {
+        // z.Z. nur auf die aktuelle DocShell
+        pMed = new SfxMedium( rPath, STREAM_READ, TRUE );
+        pMed->DownLoad();
+        pStream = pMed->GetInStream();
+    }
+    int nRes = GRFILTER_OK;
+
+    if ( !pStream )
+        nRes = pFilter->ImportGraphic( rGraphic, aURL, nFilter, pDeterminedFormat );
+    else
+        nRes = pFilter->ImportGraphic( rGraphic, rPath, *pStream,
+                                       nFilter, pDeterminedFormat );
+    if ( pMed )
+        delete pMed;
+    return nRes;
+}
+
+////////////////////////////////////////////////////////////
+
+static Image lcl_GetImageFromPngUrl( const OUString &rFileUrl )
+{
+    Image aRes;
+
+    OUString aTmp;
+    osl::FileBase::getSystemPathFromFileURL( rFileUrl, aTmp );
+
+    Graphic aGraphic;
+    const String aFilterName( RTL_CONSTASCII_USTRINGPARAM( IMP_PNG ) );
+    if( GRFILTER_OK == lcl_LoadGraphic( aTmp, aFilterName, aGraphic, NULL, NULL ) )
+    {
+        aRes = Image( aGraphic.GetBitmapEx() );
+    }
+    return aRes;
+}
+
+
+static String lcl_GetThesImplName( const lang::Locale &rLocale )
+{
+    String aRes;
+
+    uno::Reference< linguistic2::XLinguServiceManager >     xLngMgr;
+    try
+    {
+        uno::Reference< lang::XMultiServiceFactory >  xMSF( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
+        xLngMgr = uno::Reference< linguistic2::XLinguServiceManager >( xMSF->createInstance(
+                OUString( RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.linguistic2.LinguServiceManager" ))), uno::UNO_QUERY_THROW );
+
+        DBG_ASSERT( xLngMgr.is(), "LinguServiceManager missing" );
+        if (xLngMgr.is())
+        {
+            uno::Sequence< OUString > aServiceNames = xLngMgr->getConfiguredServices(
+                    OUString::createFromAscii("com.sun.star.linguistic2.Thesaurus"), rLocale );
+            // there should be at most one thesaurus configured for each language
+            DBG_ASSERT( aServiceNames.getLength() <= 1, "more than one thesaurus found. Should not be possible" );
+            if (aServiceNames.getLength() == 1)
+                aRes = aServiceNames[0];
+        }
+    }
+    catch (uno::Exception &e)
+    {
+        (void) e;
+        DBG_ASSERT( 0, "failed to get thesaurus" );
+    }
+
+    return aRes;
+}
+
+
+void SvxThesaurusDialog_Impl::UpdateVendorImage()
+{
+    m_pParent->SetUpdateMode( sal_False );
+
+    SvtLinguConfig aCfg;
+    if (aCfg.HasVendorImages( "ThesaurusDialogImage" ))
+    {
+        const bool bHC = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
+
+        Image aImage;
+        String sThesImplName( lcl_GetThesImplName( SvxCreateLocale( nLookUpLanguage ) ) );
+        OUString aThesDialogImageUrl( aCfg.GetThesaurusDialogImage( sThesImplName, bHC ) );
+        if (sThesImplName.Len() > 0 && aThesDialogImageUrl.getLength() > 0)
+            aImage = Image( lcl_GetImageFromPngUrl( aThesDialogImageUrl ) );
+        else
+            aImage = bHC ? aVendorDefaultImageHC : aVendorDefaultImage;
+        aVendorImageFI.SetImage( aImage );
+    }
+
+    m_pParent->SetUpdateMode( sal_True );
+}
+
+
+IMPL_STATIC_LINK( SvxThesaurusDialog_Impl, VendorImageInitHdl, SvxThesaurusDialog_Impl *, EMPTYARG )
+{
+    pThis->m_pParent->SetUpdateMode( sal_False );
+
+    SvtLinguConfig aCfg;
+    if (aCfg.HasVendorImages( "ThesaurusDialogImage" ))
+    {
+        const bool bHC = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
+        Image aImage( bHC ? pThis->aVendorDefaultImageHC : pThis->aVendorDefaultImage );
+        pThis->aVendorImageFI.SetImage( aImage );
+        pThis->aVendorImageFI.Show();
+
+        // move down visible controls according to the vendor images height
+        Size aVendorSize = pThis->aVendorImageFI.GetSizePixel();
+        Size aImageSize  = pThis->aVendorImageFI.GetImage().GetSizePixel();
+        if (aImageSize.Height())
+        {
+            aVendorSize.Height() = aImageSize.Height();
+            if(aVendorSize.Width() < aImageSize.Width())
+                aVendorSize.Width() = aImageSize.Width();
+            pThis->aVendorImageFI.SetSizePixel( aVendorSize );
+        }
+        const sal_Int32 nDiff = aVendorSize.Height();
+        pThis->aVendorImageFI.SetSizePixel( aVendorSize );
+        Control* aControls[] = {
+            &pThis->aLeftBtn,
+            &pThis->aWordText,
+            &pThis->aWordCB,
+            &pThis->aLookUpBtn,
+            &pThis->m_aAlternativesText,
+            pThis->m_pAlternativesCT.get(),
+            &pThis->aReplaceText,
+            &pThis->aReplaceEdit,
+            &pThis->aFL,
+            &pThis->aHelpBtn,
+            &pThis->aLangMBtn,
+            &pThis->aOkBtn,
+            &pThis->aCancelBtn,
+            0
+        };
+        sal_Int32 nControl = 0;
+        while (aControls[nControl])
+        {
+            Point aPos = aControls[nControl]->GetPosPixel();
+            aPos.Y() += nDiff;
+            aControls[nControl]->SetPosPixel(aPos);
+            ++nControl;
+        }
+        Size aDlgSize = pThis->m_pParent->GetSizePixel();
+        aDlgSize.Height() += nDiff;
+        pThis->m_pParent->SetSizePixel( aDlgSize );
+        pThis->m_pParent->Invalidate();
+    }
+
+    pThis->UpdateVendorImage();
+    pThis->m_pParent->SetUpdateMode( sal_True );
+
+    return 0;
+};
 
 
 // class SvxThesaurusDialog ----------------------------------------------
