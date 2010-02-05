@@ -42,27 +42,44 @@ testcase db_JDBCMySQL
     '   databases specific settings for JDBC MySQL
     ' **************************************************
     
-    qaerrorlog "due to issue 98387 this test will not work anymore."
-    goto endsub
-    
-	Dim sFileName as string	
+    dim sDBConfigFile as string
+
+    sDBConfigFile = environ ( "VTT_DB_CONFIG_FILE" )
+
+    printlog sDBConfigFile
+
+    if (sDBConfigFile = "") then
+        qaerrorlog "settings for external databases not found. see wiki page. This test ist stopped now"
+        goto endsub
+    else
+        if Dir( sDBConfigFile ) = "" then ' the file does not exists
+            qaerrorlog "settings for external databases not found. see wiki page. This test ist stopped now"
+        else
+            ' file exists , so we can do th next step
+        endif
+
+    endif
+
+
+
+    Dim sFileName as string
     sFileName = gOfficePath + Convertpath("user/work/TT_JDBC-MYSQL.odb")
-        
-    Dim sTableName as string	
-    sTableName = "tt_test_create-table"    
-	
-	Dim sUser as string
-	sUser = "testtool"
-	
-	Dim sPWD as string
-	sPWD = "testtool"
-	
-	dim sCatalog as string
-	sCatalog = " "     			' not used in this ds
-	
-	dim sSchema as string
-	sSchema = " "     			' not used in this ds
-	
+
+    Dim sTableName as string
+    sTableName = "tt_test_create-table"
+
+    Dim sUser as string
+    sUser = "testtool"
+
+    Dim sPWD as string
+    sPWD = "testtool"
+
+    dim sCatalog as string
+    sCatalog = " "     			' not used in this ds
+
+    dim sSchema as string
+    sSchema = " "     			' not used in this ds
+
     Dim aFieldTypeContent(30,2) as string 'database specific data matrix
        	
     aFieldTypeContent(1,1)="tt_bool"
@@ -162,39 +179,38 @@ testcase db_JDBCMySQL
     aFieldContent(1,4)="1"		
     aFieldContent(1,5)="1"
     aFieldContent(1,6)="1"
-            
-        call fSetJDBCDriverFiles(gTesttoolPath + Convertpath("dbaccess/optional/input/driver/mysql_jconnector.jar"))
-        'after changing the classpath the office has to be restarted.
-        call ExitRestartTheOffice
 
-        dim dbok as boolean
-   		dbok = false
+    dim aDatabaseProperties(7) as string
+    aDatabaseProperties() = tools_dbtools_fgetMySQLJDBCDatabaseProperties(sDBConfigFile)
+
+    call fSetJDBCDriverFiles(aDatabaseProperties(7))
+    'after changing the classpath the office has to be restarted.
+    call ExitRestartTheOffice
+
+    dim dbok as boolean
+    dbok = false
         
-        dim aDatabaseProperties(5) as string
-        aDatabaseProperties() = tools_dbtools_fgetMySQLJDBCDatabaseProperties()
-        
-        ' if and only if no properties are defined in the environment file the test is stopped
-        if(aDatabaseProperties(1) = "no") then
-            qaerrorlog "No database properties from Mysql defiened. The Test is stopped here."
-            goto endsub
-        endif
-                                            
-        dbok = fCreateMySQL_JDBC_Datasource(sFileName,aDatabaseProperties(3),aDatabaseProperties(2),aDatabaseProperties(4),aDatabaseProperties(5))
-        if dbok = true then
-        
-		    call fOpendatabase(sFileName,aDatabaseProperties(6))
-            call fCreateTable( aFieldTypeContent(), sTableName)
-            call fInsertIntoTable( aFieldContent(), sTableName)
-            call fCloseDatabase    
-            
-            'use "dbaccess/optional/includes/b_lvl1_Query.inc"
-            'call b_lvl1_Query(sFileName,"dbase")
-                      
-            call tRelation( sFileName, aDatabaseProperties(6), "rel1", "rel2" )
-            
-		else 
-            warnlog "Data Source could not be created - beyond testcases stopped"
-		endif
-	
+    ' if and only if no properties are defined in the environment file the test is stopped
+    if(aDatabaseProperties(1) = "no") then
+        qaerrorlog "No database properties from Mysql defiened. The Test is stopped here."
+        goto endsub
+    endif
+
+    dbok = fCreateMySQL_JDBC_Datasource(sFileName,aDatabaseProperties(3),aDatabaseProperties(2),aDatabaseProperties(4),aDatabaseProperties(5))
+    if dbok = true then
+        call fOpendatabase(sFileName,aDatabaseProperties(6))
+        call fCreateTable( aFieldTypeContent(), sTableName)
+        call fInsertIntoTable( aFieldContent(), sTableName)
+        call fCloseDatabase
+
+        'use "dbaccess/optional/includes/b_lvl1_Query.inc"
+        'call b_lvl1_Query(sFileName,"dbase")
+
+        'call tRelation( sFileName, aDatabaseProperties(6), "rel1", "rel2" )
+
+    else
+        warnlog "Data Source could not be created - beyond testcases stopped"
+    endif
+
 endcase
 

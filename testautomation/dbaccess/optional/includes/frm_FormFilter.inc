@@ -72,7 +72,7 @@ testcase tLoadForm
     printlog "execute the form filter"    
 	FM_FF_Execute
 	wait(1000)
-    qaerrorlog "workarounf issue 102010"
+    printlog "workaround issue 102010"
 	DocumentWriter.TypeKeys "<MOD1 F6>" , true
     sleep(1)
     DocumentWriter.TypeKeys "<MOD1 F5>" , true   
@@ -105,7 +105,7 @@ testcase tLoadForm
 	FM_FF_Execute
 	wait(1000)
     
-    qaerrorlog "workarounf issue 102010"
+    printlog "workaround issue 102010"
     DocumentWriter.TypeKeys "<MOD1 F6>" , true
     sleep(1)
     DocumentWriter.TypeKeys "<MOD1 F5>" , true   

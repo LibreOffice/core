@@ -56,15 +56,15 @@ sub DatabaseTypes
 
     printlog "------------------ DatabaseTypes.inc ---------------------"
     
-    call tMySQLODBCProperties
-    call tMySQLJDBCProperties
-    call tAdabasProperties
-    call tOracleJDBCProperties
-    call tJDBCProperties
-    call tODBCProperties
-    call tdBaseProperties
-    call tTextProperties
-    call tSpreadsheetProperties
+  '  call tMySQLODBCProperties
+   ' call tMySQLJDBCProperties
+    'call tAdabasProperties
+    'call tOracleJDBCProperties
+    'call tJDBCProperties
+    'call tODBCProperties
+    'call tdBaseProperties
+    'call tTextProperties
+    'call tSpreadsheetProperties
     call tMozillaProperties
     call tLDAPProperties
     call tEvolutionProperties
@@ -324,7 +324,7 @@ testcase tEvolutionProperties
     Kontext "TabGeneral"    
         call DialogTest(TabGeneral)
         try
-            if ( DatabaseType.getItemCount() > 12 ) then
+            if ( isDriverInstalled("sdbc:address:evolution:ldap")) then
                 DataBaseType.select(hGetDatabaseDisplayName("sdbc:address:evolution:ldap"))
                 Kontext "ConnectionType"        
                 ConnectionType.OK
@@ -365,13 +365,26 @@ testcase tMozillaProperties
     
     Kontext "TabGeneral"    
         call DialogTest(TabGeneral)
-        DataBaseType.select(hGetDatabaseDisplayName("sdbc:address:mozilla:"))
+        try
+            if ( isDriverInstalled("sdbc:address:mozilla:")) then
+                DataBaseType.select(hGetDatabaseDisplayName("sdbc:address:mozilla:"))
+                Kontext "ConnectionType"
+                ConnectionType.OK
+            else
+                qaerrorlog "Mozilla does not appear to be available on this system"
+                Kontext "ConnectionType"
+                ConnectionType.Cancel
+            endif
+        catch
+            warnlog "failed to select DataBaseType Mozilla - maybe not installed or activated in this build"
+            TabGeneral.Cancel
+            call fCloseDatabase
+            goto endsub
+        endcatch
+        
 
     'add sleep to give OOo time to react 
     sleep(2)    
-
-    Kontext "ConnectionType"        
-        ConnectionType.OK
         
     'call fCheckAdvancedDialog("Mozilla")
     

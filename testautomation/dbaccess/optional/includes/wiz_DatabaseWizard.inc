@@ -40,6 +40,7 @@ sub wiz_DatabaseWizard
     call tNewDatabase
     call tOpenDatabase
     call tOpenNoneDatabaseDocument
+    call tStartTableWizardFromWizard
     call tODBC
     call tEvolution
     call tMozilla
@@ -310,5 +311,75 @@ endcase
 '-------------------------------------------------------------------------
 testcase tOracleJDBC
 qaerrorlog "not yet implemented"
+endcase
+'-------------------------------------------------------------------------
+testcase tStartTableWizardFromWizard
+
+    printlog "start database wizard via FILE / NEW / DATABASE"
+    Kontext "DocumentWriter"
+        if (DocumentWriter.exists(1)) then
+            DocumentWriter.UseMenu
+        else
+            Kontext "DocumentBackground"
+            DocumentBackground.UseMenu
+        endif
+        hMenuSelectNr(1)
+        hMenuSelectNr(1)
+        hMenuSelectNr(5)
+
+    sleep(10)
+
+    Kontext "DatabaseWizard"
+        printlog "check create new database"
+        CreateNewDatabase.Check        
+        sleep(1)
+        printlog "click next button"
+        NextBtn.Click
+        sleep(1)
+        printlog "check the 'Create Table with wizard' option"
+        StartTableWizard.check()
+        printlog "click finished button"
+        FinishBtn.Click
+        sleep(1)
+
+    Kontext "SpeichernDlg"
+        printlog "click save in the save as dialog"
+        if ( Dateiname.getSelText() = "" ) then
+            warnlog "#i58413# Default filename is missing"
+            Dim sFileName as String
+            sFileName = ConvertPath(gOfficePath + "user/work/TTDB1.odb")
+            if ( app.Dir( ConvertPath(sFileName) ) ) <> "" then
+                app.kill(ConvertPath(sFileName))
+            endif
+            Dateiname.setText(sFileName)
+        endif
+        Speichern.click
+        sleep(10)
+
+    Kontext "MessageBox"
+        if MessageBox.exists then
+            MessageBox.yes
+        end if
+
+    sleep(5)
+
+    Kontext "TableWizard"
+        printlog "check if the table wizard appear"
+        if( TableWizard.exists(10) ) then
+            printlog "the table wizard appear."            
+            CancelBtn.click()
+        else
+            warnlog "the table wizard does not appear."
+        endif
+
+    Kontext "ContainerView"
+
+    ViewTables
+
+    sleep(1)
+    
+    printlog "close the database"
+    call fCloseDatabase(true)
+
 endcase
 '-------------------------------------------------------------------------
