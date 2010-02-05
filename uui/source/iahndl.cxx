@@ -439,8 +439,7 @@ bool UUIInteractionHelper::handleTypedHandlerImplementations( Reference< XIntera
                 // cache the information who feels responsible for requests of this type
                 m_aTypedCustomHandlers[ aRequest.getValueTypeName() ] = sServiceName;
                 // actually handle the request
-                if ( handleCustomRequest( rRequest, sServiceName ) )
-                    return true;
+                return handleCustomRequest( rRequest, sServiceName );
             }
         }
     }
