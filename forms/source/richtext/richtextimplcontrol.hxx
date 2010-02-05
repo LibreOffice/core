@@ -34,7 +34,7 @@
 #include "richtextviewport.hxx"
 #include "richtextengine.hxx"
 #include <vcl/scrbar.hxx>
-#include <svx/editdata.hxx>
+#include <editeng/editdata.hxx>
 
 #include <map>
 

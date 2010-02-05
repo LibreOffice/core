@@ -31,8 +31,8 @@
 #ifndef FORMS_SOURCE_RICHTEXT_RICHTEXTUNOWRAPPER_HXX
 #define FORMS_SOURCE_RICHTEXT_RICHTEXTUNOWRAPPER_HXX
 
-#include <svx/unotext.hxx>
-#include <svx/unoedsrc.hxx>
+#include <editeng/unotext.hxx>
+#include <editeng/unoedsrc.hxx>
 
 //........................................................................
 namespace frm

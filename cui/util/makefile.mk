@@ -60,11 +60,11 @@ SHL1LIBS=	\
 
 
 SHL1STDLIBS= \
+            $(EDITENGLIB) \
             $(SVXCORELIB) \
             $(SVXLIB) \
             $(AVMEDIALIB) \
             $(SFX2LIB) \
-            $(GOODIESLIB) \
             $(BASEGFXLIB) \
             $(BASICLIB) \
             $(LNGLIB) \

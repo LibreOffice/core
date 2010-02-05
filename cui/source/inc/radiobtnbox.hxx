@@ -33,13 +33,12 @@
 // include ---------------------------------------------------------------
 
 #include <svx/simptabl.hxx>
-#include "svx/svxdllapi.h"
 
 namespace svx {
 
 // class SvxRadioButtonListBox -------------------------------------------
 
-class SVX_DLLPUBLIC SvxRadioButtonListBox : public SvxSimpleTable
+class SvxRadioButtonListBox : public SvxSimpleTable
 {
     using SvxSimpleTable::SetTabs;
 

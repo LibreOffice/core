@@ -6,7 +6,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: basslots.hrc,v $
+ * $RCSfile: thesdlg.hrc,v $
  * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
@@ -27,6 +27,36 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#ifndef _SVX_THESDLG_HRC
+#define _SVX_THESDLG_HRC
 
-#include <svx/svxids.hrc>
-#include <editeng/memberids.hrc>
+// defines ---------------------------------------------------------------
+
+#define BTN_THES_OK             10
+#define BTN_THES_CANCEL         11
+#define BTN_LANGUAGE            12
+#define BTN_THES_HELP           13
+#define BTN_LOOKUP              14
+#define FT_WORD                 15
+#define LB_WORD                 16
+#define FT_MEAN                 17
+#define LB_MEAN                 18
+#define FT_SYNON                19
+#define LB_SYNON                20
+#define FT_REPL                 21
+#define ED_REPL                 22
+#define FL_VAR                                  23
+
+#define STR_ERR_WORDNOTFOUND    30
+
+// LanguageDialog --------------------------------------------------------
+
+#define LB_THES_LANGUAGE        10
+#define FL_THES_LANGUAGE                11
+#define BTN_LANG_OK             12
+#define BTN_LANG_CANCEL         12
+#define BTN_LANG_HELP           13
+
+
+#endif
+

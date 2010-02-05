@@ -712,7 +712,7 @@ SvxAreaTabPage::SvxAreaTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
     SetExchangeSupport();
 
     // set Metrics
-    eFUnit = GetModuleFieldUnit( &rInAttrs );
+    eFUnit = GetModuleFieldUnit( rInAttrs );
 
     switch ( eFUnit )
     {

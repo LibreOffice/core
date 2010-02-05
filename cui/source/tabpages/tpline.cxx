@@ -35,7 +35,7 @@
 
 #ifndef _SVX_SIZEITEM_HXX //autogen
 
-#include <svx/sizeitem.hxx>
+#include <editeng/sizeitem.hxx>
 #endif
 #include <tools/shl.hxx>
 #include <tools/urlobj.hxx>
@@ -64,14 +64,14 @@
 #include <svx/svdmodel.hxx>
 #include <svx/numvset.hxx>
 #include <vcl/msgbox.hxx>
-#include <svx/numitem.hxx>
-#include <svx/svxenum.hxx>
+#include <editeng/numitem.hxx>
+#include <editeng/svxenum.hxx>
 #include <sfx2/objsh.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <svx/gallery.hxx>
 #include <svx/xbitmap.hxx>
 #include <unotools/localfilehelper.hxx>
-#include "svx/opengrf.hxx"
+#include "sfx2/opengrf.hxx"
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 
@@ -174,7 +174,7 @@ SvxLineTabPage::SvxLineTabPage
     SetExchangeSupport();
 
     // Metrik einstellen
-    FieldUnit eFUnit = GetModuleFieldUnit( &rInAttrs );
+    FieldUnit eFUnit = GetModuleFieldUnit( rInAttrs );
 
     switch ( eFUnit )
     {
@@ -1555,7 +1555,6 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
 
         PopupMenu* pPopup = new PopupMenu;
         String aEmptyStr;
-        SfxObjectShell *pDocSh = SfxObjectShell::Current();
 
         nNumMenuGalleryItems=aGrfNames.Count();
         for(long i = 0; i < nNumMenuGalleryItems; i++)
@@ -1575,7 +1574,7 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
             pInfo->pBrushItem = pBrushItem;
             pInfo->nItemId = (UINT16)(MN_GALLERY_ENTRY + i);
             aGrfBrushItems.Insert(pInfo, i);
-            const Graphic* pGraphic = pBrushItem->GetGraphic(pDocSh);
+            const Graphic* pGraphic = pBrushItem->GetGraphic();
 
             if(pGraphic)
             {

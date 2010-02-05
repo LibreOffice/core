@@ -100,7 +100,7 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
     SetExchangeSupport();
 
     // Metrik einstellen
-    FieldUnit eFUnit = GetModuleFieldUnit( &rInAttrs );
+    FieldUnit eFUnit = GetModuleFieldUnit( rInAttrs );
 
     switch ( eFUnit )
     {

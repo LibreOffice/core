@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_forms.hxx"
 #include "parametrizedattributedispatcher.hxx"
-#include <svx/editview.hxx>
+#include <editeng/editview.hxx>
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
 

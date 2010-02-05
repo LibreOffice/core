@@ -30,7 +30,7 @@
 #ifndef FORMS_SOURCE_RICHTEXT_RICHTEXTENGINE_HXX
 #define FORMS_SOURCE_RICHTEXT_RICHTEXTENGINE_HXX
 
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 #include <tools/link.hxx>
 
 #include <vector>

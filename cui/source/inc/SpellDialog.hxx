@@ -45,13 +45,13 @@
 #include <com/sun/star/uno/Reference.hxx>
 
 
-#include <svx/svxbox.hxx>
+#include <svtools/svxbox.hxx>
 #include <svx/langbox.hxx>
 #include <memory>
 #include <svtools/svmedit.hxx>
 #include <svl/lstner.hxx>
 #include <svtools/xtextedt.hxx>
-#include <svx/SpellPortions.hxx>
+#include <editeng/SpellPortions.hxx>
 
 class ScrollBar;
 class TextEngine;

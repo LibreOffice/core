@@ -33,7 +33,7 @@
 
 
 #include <ide_pch.hxx>
-
+#include <svx/svxids.hrc>
 
 #define GLOBALOVERFLOW2
 

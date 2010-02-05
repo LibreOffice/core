@@ -47,7 +47,7 @@
 #include <comphelper/guarding.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/editstat.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 

@@ -34,34 +34,20 @@
 
 
 #include <svtools/stdctrl.hxx>
-#ifndef _COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
-#endif
-#ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
-#endif
-#ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
-#endif
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
-#endif
-#ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
-#endif
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
 #include <sfx2/childwin.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <svl/svarray.hxx>
 #define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 #include <svtools/svmedit.hxx>
-#include <sfx2/srchdefs.hxx>
+#include <svl/srchdefs.hxx>
 
 class SvxJSearchOptionsPage;
 

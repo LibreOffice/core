@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cui.hxx"
 #include <svl/zforlist.hxx>
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #include <svl/flagitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <unotools/lingucfg.hxx>
@@ -69,12 +69,13 @@
 #include <svx/dlgutil.hxx>
 #include "cuitabarea.hxx"
 #include <cuires.hrc>
-#include <svx/unolingu.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/unolingu.hxx>
+#include <editeng/langitem.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
-
-
+#include <editeng/editids.hrc>
+#include <svx/svxids.hrc>
+#include <svl/intitem.hxx>
 #include <dialmgr.hxx>
 #include <svtools/helpopt.hxx>
 #include <unotools/saveopt.hxx>

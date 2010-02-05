@@ -39,7 +39,7 @@
 #include <svtools/stdctrl.hxx>
 #include <svx/pagectrl.hxx>
 #include <svx/frmdirlbox.hxx>
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include <i18npool/paper.hxx>
 #include <svx/flagsdef.hxx>
 

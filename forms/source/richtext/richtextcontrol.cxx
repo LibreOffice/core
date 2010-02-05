@@ -52,7 +52,7 @@
 #include <vcl/svapp.hxx>
 
 #include <svx/svxids.hrc>
-#include <svx/editview.hxx>
+#include <editeng/editview.hxx>
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
 #include <sfx2/msgpool.hxx>

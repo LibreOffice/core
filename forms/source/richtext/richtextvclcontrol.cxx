@@ -53,13 +53,14 @@
     #endif
     #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #endif
-#include <svx/scripttypeitem.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editview.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/fhgtitem.hxx>
-
+#include <editeng/scripttypeitem.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/editids.hrc>
+#include <svx/svxids.hrc>
 #include <memory>
 
 //........................................................................

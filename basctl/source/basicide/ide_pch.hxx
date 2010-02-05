@@ -29,6 +29,9 @@
  ************************************************************************/
 #include <svheader.hxx>
 
+#define ITEMID_SEARCH           0
+#define ITEMID_SIZE             0
+
 #include <vcl/wrkwin.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/menu.hxx>
@@ -38,6 +41,8 @@
 #include <svl/aeitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
+#include <svl/intitem.hxx>
+#include <svl/srchitem.hxx>
 
 #define _BASIC_TEXTPORTIONS
 #include <basic/sbdef.hxx>
@@ -63,86 +68,6 @@
 #include <sfx2/dinfdlg.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/progress.hxx>
+#include <editeng/sizeitem.hxx>
 
-
-#define ITEMID_FONT             0
-#define ITEMID_POSTURE          0
-#define ITEMID_WEIGHT           0
-#define ITEMID_SHADOWED         0
-#define ITEMID_CONTOUR          0
-#define ITEMID_CROSSEDOUT       0
-#define ITEMID_UNDERLINE        0
-#define ITEMID_FONTHEIGHT       0
-#define ITEMID_COLOR            0
-#define ITEMID_ADJUST           0
-#define ITEMID_LINESPACING      0
-#define ITEMID_TABSTOP          0
-#define ITEMID_LRSPACE          0
-#define ITEMID_ULSPACE          0
-#define ITEMID_SEARCH           0
-#define ITEMID_SEARCH           0
-#define ITEMID_SIZE             0
-#define ITEMID_FONTLIST     0
-#define ITEMID_AUTOKERN     0
-#define ITEMID_WORDLINEMODE 0
-#define ITEMID_PROPSIZE     0
-#define ITEMID_CHARSETCOLOR 0
-#define ITEMID_KERNING      0
-#define ITEMID_CASEMAP      0
-#define ITEMID_ESCAPEMENT   0
-#define ITEMID_LANGUAGE     0
-#define ITEMID_NOLINEBREAK  0
-#define ITEMID_NOHYPHENHERE 0
-#define ITEMID_BLINK        0
-#define ITEMID_PAPERBIN     0
-#define ITEMID_PRINT        0
-#define ITEMID_OPAQUE       0
-#define ITEMID_PROTECT      0
-#define ITEMID_SHADOW       0
-#define ITEMID_BOX          0
-#define ITEMID_BOXINFO      0
-#define ITEMID_FMTBREAK     0
-#define ITEMID_FMTKEEP      0
-#define ITEMID_LINE         0
-#define ITEMID_BRUSH        0
-
-#include <svx/srchitem.hxx>
-#include <svx/flstitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/fwdtitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/akrnitem.hxx>
-#include <svx/wrlmitem.hxx>
-#include <svx/cntritem.hxx>
-#include <svx/prszitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/cscoitem.hxx>
-#include <svx/kernitem.hxx>
-
-#include <svx/cmapitem.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/nlbkitem.hxx>
-#include <svx/nhypitem.hxx>
-#include <svx/lcolitem.hxx>
-#include <svx/blnkitem.hxx>
-
-#include <svx/pbinitem.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/prntitem.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/protitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/keepitem.hxx>
-#include <svx/bolnitem.hxx>
-#include <svx/brshitem.hxx>
 

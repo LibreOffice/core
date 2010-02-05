@@ -46,8 +46,8 @@
 #include <unotools/lingucfg.hxx>
 #include <svtools/textdata.hxx>
 #include <svtools/filter.hxx>
-#include <svx/unolingu.hxx>
-#include <svx/splwrap.hxx>
+#include <editeng/unolingu.hxx>
+#include <editeng/splwrap.hxx>
 #include <linguistic/lngprops.hxx>
 #include <linguistic/misc.hxx>
 #include <comphelper/processfactory.hxx>
@@ -60,12 +60,11 @@
 #include <vcl/help.hxx>
 #include <vcl/graph.hxx>
 #include <osl/file.hxx>
-#include <svx/impgrf.hxx>
 #include <cuires.hrc>
 #include <helpid.hrc>
 #include "SpellDialog.hrc"
-#include <svx/optitems.hxx>
-#include <svx/svxenum.hxx>
+#include <editeng/optitems.hxx>
+#include <editeng/svxenum.hxx>
 #include <svx/SpellDialogChildWindow.hxx>
 #include "SpellDialog.hxx"
 #include <svx/dlgutil.hxx>
@@ -73,6 +72,7 @@
 #include <dialmgr.hxx>
 #include <svx/svxerr.hxx>
 #include "treeopt.hxx"
+#include <svtools/langtab.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -887,7 +887,7 @@ static Image lcl_GetImageFromPngUrl( const ::rtl::OUString &rFileUrl )
     osl::FileBase::getSystemPathFromFileURL( rFileUrl, aTmp );
     Graphic aGraphic;
     const String aFilterName( RTL_CONSTASCII_USTRINGPARAM( IMP_PNG ) );
-    if( GRFILTER_OK == LoadGraphic( aTmp, aFilterName, aGraphic ) )
+    if( GRFILTER_OK == GraphicFilter::LoadGraphic( aTmp, aFilterName, aGraphic ) )
     {
         aRes = Image( aGraphic.GetBitmapEx() );
     }
@@ -927,7 +927,7 @@ void SpellDialog::SetTitle_Impl(LanguageType nLang)
             sTitle = m_sTitleSpellingGrammar;
         }
     }
-    sTitle.SearchAndReplaceAscii( "$LANGUAGE ($LOCATION)", ::GetLanguageString(nLang) );
+    sTitle.SearchAndReplaceAscii( "$LANGUAGE ($LOCATION)", SvtLanguageTable::GetLanguageString(nLang) );
     SetText( sTitle );
 }
 /*-------------------------------------------------------------------------

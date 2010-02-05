@@ -29,9 +29,6 @@
 #
 #*************************************************************************
 
-# define SVX_DLLIMPLEMENTATION (see @ svxdllapi.h)
-CDEFS += -DSVX_DLLIMPLEMENTATION
-
 .IF "$(ENABLE_GTK)" != ""
 CFLAGS+=-DENABLE_GTK
 .ENDIF

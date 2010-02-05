@@ -33,7 +33,7 @@
 
 // include ---------------------------------------------------------------
 #include <tools/shl.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <svx/dlgutil.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <svl/eitem.hxx>

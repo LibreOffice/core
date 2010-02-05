@@ -61,10 +61,10 @@
 #include "autocdlg.hxx"
 #include "autocdlg.hrc"
 #include "helpid.hrc"
-#include <svx/acorrcfg.hxx>
-#include <svx/svxacorr.hxx>
+#include <editeng/acorrcfg.hxx>
+#include <editeng/svxacorr.hxx>
 #include "cuicharmap.hxx"
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <dialmgr.hxx>
 #include <svx/svxids.hrc> // SID_OPEN_SMARTTAGSOPTIONS
 

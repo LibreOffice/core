@@ -32,8 +32,6 @@
 
 // include ---------------------------------------------------------------
 
-#include "svx/svxdllapi.h"
-
 #include <vcl/tabpage.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>

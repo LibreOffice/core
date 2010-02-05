@@ -32,7 +32,7 @@
 #include "precompiled_cui.hxx"
 #include <svtools/langtab.hxx>
 #include <svl/zforlist.hxx>
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #include <svl/flagitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <unotools/lingucfg.hxx>
@@ -55,8 +55,8 @@
 #include <unotools/configitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <comphelper/types.hxx>
-#include <svx/unolingu.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/unolingu.hxx>
+#include <editeng/langitem.hxx>
 #include "cuioptgenrl.hxx"
 #include "optpath.hxx"
 #include "optsave.hxx"

@@ -43,7 +43,7 @@
 
 #include <cuires.hrc>
 #include "tabstpge.hrc"
-#include <svx/lrspitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include "tabstpge.hxx"
 #include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
@@ -153,7 +153,7 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent,
 
 
     // Metrik einstellen
-    FieldUnit eFUnit = GetModuleFieldUnit( &rAttr );
+    FieldUnit eFUnit = GetModuleFieldUnit( rAttr );
     SetFieldUnit( aTabBox, eFUnit );
 
     // Buttons initialisieren

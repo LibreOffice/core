@@ -47,20 +47,21 @@
 
 #include <cuires.hrc>
 #include "backgrnd.hrc"
-#include <svx/svxitems.hrc> // RID_SVXITEM_COL_WHITE
 #include <svx/dialmgr.hxx>
+#include <editeng/memberids.hrc>
+#include <editeng/editrids.hrc>
+#include <editeng/eerdll.hxx>
 
 // Tabellenhintergrund
 #define TBL_DEST_CELL   0
 #define TBL_DEST_ROW    1
 #define TBL_DEST_TBL    2
 
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include "backgrnd.hxx"
 
 #include <svx/xtable.hxx>
-#include <svx/opengrf.hxx>
-#include <svx/impgrf.hxx>
+#include <sfx2/opengrf.hxx>
 #include <svx/svxerr.hxx>
 #include <svx/drawitem.hxx>
 #include <dialmgr.hxx>
@@ -1171,7 +1172,7 @@ BOOL SvxBackgroundTabPage::LoadLinkedGraphic_Impl()
 
 {
     BOOL bResult = ( aBgdGraphicPath.Len() > 0 ) &&
-                   ( GRFILTER_OK == LoadGraphic( aBgdGraphicPath,
+                   ( GRFILTER_OK == GraphicFilter::LoadGraphic( aBgdGraphicPath,
                                                  aBgdGraphicFilter,
                                                  aBgdGraphic ) );
     return bResult;
@@ -1209,7 +1210,7 @@ void SvxBackgroundTabPage::FillColorValueSets_Impl()
         long nCount = pColorTable->Count();
         XColorEntry* pEntry = NULL;
         Color aColWhite( COL_WHITE );
-        String aStrWhite( SVX_RES( RID_SVXITEMS_COLOR_WHITE ) );
+        String aStrWhite( EditResId( RID_SVXITEMS_COLOR_WHITE ) );
         WinBits nBits = ( aBackgroundColorSet.GetStyle() | WB_ITEMBORDER | WB_NAMEFIELD | WB_NONEFIELD );
         aBackgroundColorSet.SetText( SVX_RESSTR( RID_SVXSTR_TRANSPARENT ) );
         aBackgroundColorSet.SetStyle( nBits );
@@ -1883,7 +1884,7 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
 
         if(bGraphTransparency)
         {
-            const GraphicObject* pObject = rBgdAttr.GetGraphicObject(SfxObjectShell::Current());
+            const GraphicObject* pObject = rBgdAttr.GetGraphicObject();
             if(pObject)
                 aGraphTransMF.SetValue(lcl_TransparencyToPercent(pObject->GetAttr().GetTransparency()));
             else
@@ -1903,8 +1904,7 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
             // Grafik ist im Item vorhanden und muss nicht
             // geladen werden:
 
-            const Graphic* pGraphic =
-                rBgdAttr.GetGraphic( SfxObjectShell::Current() );
+            const Graphic* pGraphic = rBgdAttr.GetGraphic();
 
             if ( !pGraphic && aBtnPreview.IsChecked() )
                 bIsGraphicValid = LoadLinkedGraphic_Impl();

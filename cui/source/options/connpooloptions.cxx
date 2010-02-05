@@ -31,18 +31,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cui.hxx"
 
-#ifdef SVX_DLLIMPLEMENTATION
-#undef SVX_DLLIMPLEMENTATION
-#endif
 #include "connpooloptions.hxx"
-#ifndef _OFFAPP_CONNPOOLOPTIONS_HRC_
 #include "connpooloptions.hrc"
-#endif
 #include <svtools/editbrowsebox.hxx>
 #include <vcl/field.hxx>
 #include "connpoolsettings.hxx"
 #include <svl/eitem.hxx>
-
 #include <cuires.hrc>
 #include "helpid.hrc"
 #include <dialmgr.hxx>

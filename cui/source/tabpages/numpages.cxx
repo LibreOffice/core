@@ -43,18 +43,18 @@
 #include <i18npool/mslangid.hxx>
 #include <svtools/valueset.hxx>
 #include <helpid.hrc>
-#include <svx/numitem.hxx>
+#include <editeng/numitem.hxx>
 #include <svl/eitem.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/gallery.hxx>
 #include <svl/urihelper.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/msgbox.hxx>
 #include "cuicharmap.hxx"
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/xtable.hxx>
 #include <svx/drawitem.hxx>
@@ -62,7 +62,7 @@
 #include <svx/htmlmode.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/ctrltool.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -76,7 +76,7 @@
 
 #include <algorithm>
 #include <vector>
-#include "svx/opengrf.hxx"
+#include "sfx2/opengrf.hxx"
 
 #include <cuires.hrc> //CHINA001
 #include <sfx2/request.hxx> //CHINA001

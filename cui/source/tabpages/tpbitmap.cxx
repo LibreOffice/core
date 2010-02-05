@@ -73,7 +73,7 @@
 //#include "dlgname.hrc"
 #include <svx/svxdlg.hxx> //CHINA001
 #include <dialmgr.hxx>
-#include "svx/opengrf.hxx"
+#include "sfx2/opengrf.hxx"
 
 #define DLGWIN this->GetParent()->GetParent()
 

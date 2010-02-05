@@ -54,6 +54,7 @@ SRC1FILES =  \
         gallery.src \
         grfflt.src \
         hangulhanjadlg.src \
+        hyphen.src \
         hlmarkwn.src \
         hyperdlg.src \
         iconcdlg.src \
@@ -69,6 +70,7 @@ SRC1FILES =  \
         srchxtra.src \
         svuidlg.src \
         tbxform.src \
+        thesdlg.src \
         zoom.src \
 
 
@@ -89,6 +91,7 @@ SLOFILES+=\
         $(SLO)$/hlmailtp.obj \
         $(SLO)$/hlmarkwn.obj \
         $(SLO)$/hltpbase.obj \
+        $(SLO)$/hyphen.obj \
         $(SLO)$/iconcdlg.obj \
         $(SLO)$/insdlg.obj \
         $(SLO)$/insrc.obj \
@@ -106,6 +109,7 @@ SLOFILES+=\
         $(SLO)$/SpellDialog.obj \
         $(SLO)$/splitcelldlg.obj \
         $(SLO)$/srchxtra.obj \
+        $(SLO)$/thesdlg.obj \
         $(SLO)$/zoom.obj \
 
 

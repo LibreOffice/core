@@ -31,9 +31,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cui.hxx"
 
-#ifdef SVX_DLLIMPLEMENTATION
-#undef SVX_DLLIMPLEMENTATION
-#endif
 #include "connpoolsettings.hxx"
 
 //........................................................................

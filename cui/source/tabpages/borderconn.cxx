@@ -33,10 +33,10 @@
 
 #include "borderconn.hxx"
 #include <svx/frmsel.hxx>
-#include "svx/bolnitem.hxx"
-#include <svx/boxitem.hxx>
+#include "editeng/bolnitem.hxx"
+#include <editeng/boxitem.hxx>
 #include <svx/algitem.hxx>
-#include <svx/shaditem.hxx>
+#include <editeng/shaditem.hxx>
 
 namespace svx {
 

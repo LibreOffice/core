@@ -122,7 +122,7 @@ SvxLineDefTabPage::SvxLineDefTabPage
     SetExchangeSupport();
 
     // Metrik einstellen
-    eFUnit = GetModuleFieldUnit( &rInAttrs );
+    eFUnit = GetModuleFieldUnit( rInAttrs );
 
     switch ( eFUnit )
     {

@@ -48,7 +48,7 @@
 #include "localizationmgr.hxx"
 #include "managelang.hxx"
 #include "dlgresid.hrc"
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 
 #include <svtools/langtab.hxx>
 

@@ -38,7 +38,7 @@
 #include <vcl/fixed.hxx>
 #include <sfx2/tabdlg.hxx>
 
-#include <svx/tstpitem.hxx>
+#include <editeng/tstpitem.hxx>
 #include <svx/flagsdef.hxx>
 
 // forward ---------------------------------------------------------------

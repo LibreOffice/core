@@ -38,8 +38,8 @@
 #include <sfx2/sfxsids.hrc>
 #include <dialmgr.hxx>
 #include <svx/dlgutil.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <grfpage.hxx>
 #include <svx/grfcrop.hxx>
 #include <grfpage.hrc>
@@ -93,7 +93,7 @@ SvxGrfCropPage::SvxGrfCropPage ( Window *pParent, const SfxItemSet &rSet )
     SetExchangeSupport();
 
     // set the correct metric
-    const FieldUnit eMetric = GetModuleFieldUnit( &rSet );
+    const FieldUnit eMetric = GetModuleFieldUnit( rSet );
 
     SetFieldUnit( aWidthMF, eMetric );
     SetFieldUnit( aHeightMF, eMetric );
@@ -698,7 +698,7 @@ void SvxGrfCropPage::GraphicHasChanged( BOOL bFound )
         aBottomMF.SetSpinSize(nSpin);
 
         //Originalgroesse anzeigen
-        const FieldUnit eMetric = GetModuleFieldUnit( &GetItemSet() );
+        const FieldUnit eMetric = GetModuleFieldUnit( GetItemSet() );
 
         MetricField aFld(this, WB_HIDE);
         SetFieldUnit( aFld, eMetric );

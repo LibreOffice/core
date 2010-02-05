@@ -137,7 +137,7 @@ SvxMeasurePage::SvxMeasurePage( Window* pWindow, const SfxItemSet& rInAttrs ) :
 
     FreeResource();
 
-    const FieldUnit eFUnit = GetModuleFieldUnit( &rInAttrs );
+    const FieldUnit eFUnit = GetModuleFieldUnit( rInAttrs );
     SetFieldUnit( aMtrFldLineDist, eFUnit );
     SetFieldUnit( aMtrFldHelplineOverhang, eFUnit );
     SetFieldUnit( aMtrFldHelplineDist, eFUnit );
