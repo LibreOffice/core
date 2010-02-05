@@ -662,7 +662,8 @@ void GtkXLib::Init()
         if( pScreen )
         {
             g_signal_connect( G_OBJECT(pScreen), "size-changed", G_CALLBACK(signalScreenSizeChanged), m_pGtkSalDisplay );
-            g_signal_connect( G_OBJECT(pScreen), "monitors-changed", G_CALLBACK(signalMonitorsChanged), m_pGtkSalDisplay );
+            if( ! gtk_check_version( 2, 14, 0 ) ) // monitors-changed came in with 2.14, avoid an assertion
+                g_signal_connect( G_OBJECT(pScreen), "monitors-changed", G_CALLBACK(signalMonitorsChanged), m_pGtkSalDisplay );
         }
     }
 }

@@ -3436,20 +3436,23 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetHighlightColor( aHighlightColor );
     aStyleSet.SetHighlightTextColor( aHighlightTextColor );
 
-    // hyperlink colors
-    GdkColor *link_color = NULL;
-    gtk_widget_style_get (m_pWindow, "link-color", &link_color, NULL);
-    if (link_color)
+    if( ! gtk_check_version( 2, 10, 0 ) ) // link colors came in with 2.10, avoid an assertion
     {
-        aStyleSet.SetLinkColor(getColor(*link_color));
-        gdk_color_free (link_color);
-        link_color = NULL;
-    }
-    gtk_widget_style_get (m_pWindow, "visited-link-color", &link_color, NULL);
-    if (link_color)
-    {
-        aStyleSet.SetVisitedLinkColor(getColor(*link_color));
-        gdk_color_free (link_color);
+        // hyperlink colors
+        GdkColor *link_color = NULL;
+        gtk_widget_style_get (m_pWindow, "link-color", &link_color, NULL);
+        if (link_color)
+        {
+            aStyleSet.SetLinkColor(getColor(*link_color));
+            gdk_color_free (link_color);
+            link_color = NULL;
+        }
+        gtk_widget_style_get (m_pWindow, "visited-link-color", &link_color, NULL);
+        if (link_color)
+        {
+            aStyleSet.SetVisitedLinkColor(getColor(*link_color));
+            gdk_color_free (link_color);
+        }
     }
 
     // Tab colors
