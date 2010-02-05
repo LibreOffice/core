@@ -33,7 +33,7 @@
 
 
 #include "fuparagr.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
@@ -41,8 +41,8 @@
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/svxids.hrc>
-#include <svx/editdata.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/lrspitem.hxx>
 #include <svx/svdoutl.hxx>
 
 #include "app.hrc"

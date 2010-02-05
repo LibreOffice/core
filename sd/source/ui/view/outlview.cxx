@@ -33,14 +33,14 @@
 
 #include "OutlineView.hxx"
 #include <memory>
-#include <svx/forbiddencharacterstable.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
 #include <sfx2/progress.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svx/svxids.hrc>
 #include "eetext.hxx"
-#include <svx/eeitem.hxx>
-#include <svx/editstat.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/lrspitem.hxx>
 #include <svx/svdotext.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/imagemgr.hxx>
@@ -52,21 +52,21 @@
 #include <svx/svdundo.hxx>
 #include <svl/brdcst.hxx>
 #include <vcl/msgbox.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/tstpitem.hxx>
-#include <svx/lspcitem.hxx>
-#include <svx/numitem.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/numitem.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/numitem.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/numitem.hxx>
+#include <editeng/editeng.hxx>
 
 // #97766#
-#include <svx/editobj.hxx>
-#include <svx/editund2.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/editund2.hxx>
 
-#include <svx/editview.hxx>
-#include <svx/svxfont.hxx>
-#include <svx/fhgtitem.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/svxfont.hxx>
+#include <editeng/fhgtitem.hxx>
 
 #include "DrawDocShell.hxx"
 #include "drawdoc.hxx"

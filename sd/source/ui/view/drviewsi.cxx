@@ -35,10 +35,10 @@
 #include <svx/xtable.hxx>
 #include "sdattr.hxx"
 #include <svl/aeitem.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <sfx2/request.hxx>
 #include <svx/svditer.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/colritem.hxx>
 #include <sfx2/viewfrm.hxx>
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>

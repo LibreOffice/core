@@ -39,9 +39,9 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/style.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/fontitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/fontitem.hxx>
 
 #include <fuhhconv.hxx>
 #include "drawdoc.hxx"

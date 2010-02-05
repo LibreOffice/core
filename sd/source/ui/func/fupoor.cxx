@@ -74,7 +74,7 @@
 #include <svx/svditer.hxx>
 
 // #98533#
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;

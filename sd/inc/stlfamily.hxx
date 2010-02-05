@@ -48,7 +48,7 @@
 
 #include <svl/style.hxx>
 
-#include <svx/unoipset.hxx>
+#include <editeng/unoipset.hxx>
 
 class SdStyleSheet;
 class SdPage;

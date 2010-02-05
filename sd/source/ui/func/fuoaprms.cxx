@@ -36,7 +36,7 @@
 
 #include "sdattr.hxx"
 #include <svx/svdpagv.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/colritem.hxx>
 #include <svx/svdundo.hxx>
 #include <vcl/group.hxx>
 #include <vcl/fixed.hxx>

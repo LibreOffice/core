@@ -51,7 +51,7 @@
 #include <svx/svdopath.hxx>
 #include <svx/svditer.hxx>
 #include <svl/style.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdundo.hxx>

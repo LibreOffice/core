@@ -40,10 +40,10 @@
 
 #include <svx/dialogs.hrc>
 #include <svx/drawitem.hxx>
-#include <svx/bulitem.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/numitem.hxx>
+#include <editeng/bulitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/numitem.hxx>
 #include <svx/svdmodel.hxx>
 
 #include "DrawDocShell.hxx"

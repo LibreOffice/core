@@ -44,7 +44,7 @@
 #include <svx/zoomitem.hxx>
 #endif
 #ifndef _EDITDATA_HXX
-#include <svx/editdata.hxx>
+#include <editeng/editdata.hxx>
 #endif
 #include <basic/sberrors.hxx>
 #include <vcl/msgbox.hxx>
@@ -53,9 +53,9 @@
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svl/aeitem.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <basic/sbstar.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xfillit0.hxx>
 

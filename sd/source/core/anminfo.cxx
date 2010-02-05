@@ -35,8 +35,8 @@
 #include "svx/xtable.hxx"
 #include <svx/svdopath.hxx>
 #include <svl/urihelper.hxx>
-#include <svx/flditem.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include "anminfo.hxx"
 #include "glob.hxx"

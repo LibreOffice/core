@@ -45,15 +45,15 @@
 #include <svx/ofaitem.hxx>
 #include <svx/svxerr.hxx>
 #include <svx/dialmgr.hxx>
-#include <sfx2/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/srchdlg.hxx>
 #ifdef _OUTLINER_HXX
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #endif
 #include <sfx2/request.hxx>
 #include <svl/style.hxx>
 #include <svx/drawitem.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 
 

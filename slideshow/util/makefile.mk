@@ -67,7 +67,7 @@ SHL1STDLIBS= $(TOOLSLIB) \
              $(CANVASTOOLSLIB) \
              $(CPPCANVASLIB) \
              $(UNOTOOLSLIB) \
-             $(GOODIESLIB) \
+             $(SVTOOLLIB) \
              $(AVMEDIALIB)
 
 SHL1IMPLIB=i$(TARGET)

@@ -36,10 +36,11 @@
 #include <sfx2/request.hxx>
 
 #include <sfx2/viewfrm.hxx>
+#include <svx/svxids.hrc>
 
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
  
-#include <svx/editview.hxx>
+#include <editeng/editview.hxx>
 
 #include "app.hrc"
 #include "helpids.h"
@@ -49,12 +50,8 @@
 #include "FrameView.hxx"
 #include "OutlineViewShell.hxx"
 #include "drawdoc.hxx"
-#ifndef SD_ACCESSIBILITY_ACCESSIBLE_DRAW_DOCUMENT_VIEW_HXX
 #include "AccessibleDrawDocumentView.hxx"
-#endif
-#ifndef SD_WINDOW_UPDATER_HXX
 #include "WindowUpdater.hxx"
-#endif
 
 namespace sd {
 

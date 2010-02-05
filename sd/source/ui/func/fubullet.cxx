@@ -37,9 +37,9 @@
 #ifndef _BINDING_HXX //autogen
 #include <sfx2/bindings.hxx>
 #endif
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svl/poolitem.hxx>
-#include <svx/fontitem.hxx>
+#include <editeng/fontitem.hxx>
 #include "OutlineViewShell.hxx"
 #include "DrawViewShell.hxx"
 #include "Window.hxx"

@@ -40,9 +40,9 @@
 #include <svx/globl3d.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svdotable.hxx>
-#include <svx/outliner.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/editeng.hxx>
 
 #define _SD_DLL // fuer SD_MOD()
 #include "sdmod.hxx"

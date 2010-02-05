@@ -51,7 +51,7 @@
 #include <svtools/ehdl.hxx>
 
 #include <svx/svxids.hrc>
-#include <sfx2/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/svxerr.hxx>
 
 #include <svx/xmlsecctrl.hxx>

@@ -53,8 +53,8 @@
 #include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
 #include <tools/debug.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/flditem.hxx>
 
 #include <svx/svdotable.hxx>
 

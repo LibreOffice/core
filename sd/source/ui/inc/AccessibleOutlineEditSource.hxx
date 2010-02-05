@@ -35,10 +35,10 @@
 #include <vcl/svapp.hxx>
 #include <svl/brdcst.hxx>
 #include <svl/lstner.hxx>
-#include <svx/unoedsrc.hxx>
-#include <svx/editdata.hxx>
-#include <svx/unoforou.hxx>
-#include <svx/unoviwou.hxx>
+#include <editeng/unoedsrc.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/unoforou.hxx>
+#include <editeng/unoviwou.hxx>
 
 class OutlinerView;
 class SdrOutliner;

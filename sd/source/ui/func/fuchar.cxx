@@ -36,9 +36,9 @@
 
 #include <sfx2/viewfrm.hxx>
 
-#include <svx/editdata.hxx>
+#include <editeng/editdata.hxx>
 #include <svx/svxids.hrc>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>

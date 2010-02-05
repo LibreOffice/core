@@ -52,7 +52,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/app.hxx>
 #include <svx/ruler.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #include <svtools/ehdl.hxx>
 #include <svx/svdoole2.hxx>
 #include <svtools/sfxecode.hxx>

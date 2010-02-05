@@ -72,7 +72,7 @@
 #include <svx/svxids.hrc>
 #endif
 #include <svx/dialmgr.hxx>
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
 #include <svx/drawitem.hxx>
 
 #include <svx/xtable.hxx>

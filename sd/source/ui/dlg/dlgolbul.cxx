@@ -42,10 +42,10 @@
 #endif
 #include <sfx2/objsh.hxx>
 #include <svx/drawitem.hxx>
-#include <svx/bulitem.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/bulitem.hxx>
+#include <editeng/eeitem.hxx>
 
-#include <svx/numitem.hxx>
+#include <editeng/numitem.hxx>
 
 #include <svx/dialogs.hrc>
 #include <svl/intitem.hxx>

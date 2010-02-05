@@ -66,7 +66,7 @@
 #include "sdresid.hxx"
 #include "drawview.hxx"
 #include "eetext.hxx"
-#include <svx/editdata.hxx>
+#include <editeng/editdata.hxx>
 #include "sdabstdlg.hxx"
 
 namespace sd

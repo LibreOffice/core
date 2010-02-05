@@ -35,16 +35,16 @@
 #include "futhes.hxx"
 
 #include <tools/pstm.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #include <vcl/msgbox.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdotext.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <svx/dialogs.hrc>
 #include <svx/svxerr.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <comphelper/processfactory.hxx>
 #include "app.hrc"
 #include "strings.hrc"

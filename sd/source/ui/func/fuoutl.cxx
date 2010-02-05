@@ -34,7 +34,7 @@
 
 #include "fuoutl.hxx"
 
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #include "OutlineView.hxx"
 #include "OutlineViewShell.hxx"
 #ifndef SD_WINDOW_SHELL_HXX

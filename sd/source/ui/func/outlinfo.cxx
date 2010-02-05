@@ -32,10 +32,10 @@
 #include "precompiled_sd.hxx"
 
 #include <vcl/metric.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdoutl.hxx>
-#include <svx/svxfont.hxx>
+#include <editeng/svxfont.hxx>
 #include "drawdoc.hxx"
 #include "outlinfo.hxx"
 #include <algorithm>
@@ -52,7 +52,7 @@
 #ifndef _COM_SUN_STAR_I18N_CHARACTERITERATORMODE_HDL_
 #include <com/sun/star/i18n/CharacterIteratorMode.hdl>
 #endif
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

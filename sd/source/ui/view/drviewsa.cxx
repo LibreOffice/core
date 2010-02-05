@@ -35,7 +35,7 @@
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/processfactory.hxx>
 #ifndef _SVX_SIZEITEM
-#include <svx/sizeitem.hxx>
+#include <editeng/sizeitem.hxx>
 #endif
 #include <svx/svdlayer.hxx>
 #ifndef _SVX_ZOOMITEM

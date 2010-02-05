@@ -67,7 +67,6 @@
 #include <sfx2/filedlghelper.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/filter.hxx>
-#include <svx/impgrf.hxx>
 #include <svx/xoutbmp.hxx>
 
 // --
@@ -211,7 +210,7 @@ sal_Bool SdGRFFilter::Import()
 {
     Graphic         aGraphic;
     const String    aFileName( mrMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
-    GraphicFilter*  pGraphicFilter = GetGrfFilter();
+    GraphicFilter*  pGraphicFilter = GraphicFilter::GetGraphicFilter();
     const USHORT    nFilter = pGraphicFilter->GetImportFormatNumberForTypeName( mrMedium.GetFilter()->GetTypeName() );
     sal_Bool        bRet = sal_False;
 
@@ -313,7 +312,7 @@ sal_Bool SdGRFFilter::Export()
                 {
                     uno::Reference< lang::XComponent > xSource( pPage->getUnoPage(), uno::UNO_QUERY );
                     SfxItemSet* pSet = mrMedium.GetItemSet();
-                    GraphicFilter* pGraphicFilter = GetGrfFilter();
+                    GraphicFilter*  pGraphicFilter = GraphicFilter::GetGraphicFilter();
                     if ( pSet && pGraphicFilter && xSource.is() )
                     {
                         const String aTypeName( mrMedium.GetFilter()->GetTypeName() );
@@ -481,7 +480,7 @@ void SdGRFFilter::SaveGraphic( const ::com::sun::star::uno::Reference< ::com::su
 
         // populate filter dialog filter list and select default filter to match graphic mime type
 
-        GraphicFilter& rGF = *GetGrfFilter();
+        GraphicFilter& rGF = *GraphicFilter::GetGraphicFilter();
         Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
         OUString aDefaultFormatName;
         USHORT nCount = rGF.GetExportFormatCount();

@@ -38,12 +38,12 @@
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
 #endif
-#include <svx/eeitem.hxx>
-#include <svx/flditem.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/langitem.hxx>
 #include <svx/langbox.hxx>
 #include <svx/svdotext.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 #include <sfx2/viewfrm.hxx>
 
 #ifndef _SD_SDRESID_HXX

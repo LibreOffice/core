@@ -39,6 +39,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/svdobj.hxx>
+#include <comphelper/serviceinfohelper.hxx>
 
 // folgende fuer InsertSdPage()
 #include <svx/svdlayer.hxx>
@@ -52,7 +53,7 @@
 #include <unomodel.hxx>
 #include "unoprnms.hxx"
 #include <com/sun/star/lang/NoSupportException.hpp>
-
+#include <svx/svdpool.hxx>
 #include "unohelp.hxx"
 #include "FrameView.hxx"
 #include "DrawViewShell.hxx"
@@ -94,7 +95,7 @@ const SvxItemPropertySet* ImplGetSdLayerPropertySet()
         { MAP_CHAR_LEN("Description"),              WID_LAYER_DESC,     &::getCppuType((const OUString*)0), 0, 0 },
         { 0,0,0,0,0,0}
     };
-    static SvxItemPropertySet aSDLayerPropertySet_Impl( aSdLayerPropertyMap_Impl );
+    static SvxItemPropertySet aSDLayerPropertySet_Impl( aSdLayerPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
     return &aSDLayerPropertySet_Impl;
 }
 
@@ -182,7 +183,7 @@ OUString SAL_CALL SdLayer::getImplementationName()
 sal_Bool SAL_CALL SdLayer::supportsService( const OUString& ServiceName )
     throw(uno::RuntimeException)
 {
-    return SvxServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
 }
 
 uno::Sequence< OUString > SAL_CALL SdLayer::getSupportedServiceNames()
@@ -523,7 +524,7 @@ OUString SAL_CALL SdLayerManager::getImplementationName()
 sal_Bool SAL_CALL SdLayerManager::supportsService( const OUString& ServiceName )
     throw(uno::RuntimeException)
 {
-    return SvxServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
 }
 
 uno::Sequence< OUString > SAL_CALL SdLayerManager::getSupportedServiceNames()

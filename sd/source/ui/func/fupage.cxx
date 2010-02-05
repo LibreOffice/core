@@ -55,23 +55,23 @@
 #ifndef _SVX_SVDUNDO_HXX
 #include <svx/svdundo.hxx>
 #endif
-#include <svx/eeitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xsetit.hxx>
 #include <svl/itempool.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
 
 #include "glob.hrc"
-#include <svx/shaditem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/pbinitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/pbinitem.hxx>
 #include <sfx2/app.hxx>
-#include <svx/opengrf.hxx>
+#include <sfx2/opengrf.hxx>
 
 #include "strings.hrc"
 #include "sdpage.hxx"

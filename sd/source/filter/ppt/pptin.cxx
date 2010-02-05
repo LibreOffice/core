@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
-#include <svx/numitem.hxx>
+#include <editeng/numitem.hxx>
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <vcl/wrkwin.hxx>
@@ -46,19 +46,19 @@
 #include <vcl/msgbox.hxx>
 #include <svl/style.hxx>
 #include <svx/xflclit.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/colritem.hxx>
 #include <svl/whiter.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xlnclit.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/editeng.hxx>
-#include <svx/bulitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/lspcitem.hxx>
-#include <svx/tstpitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/bulitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/tstpitem.hxx>
 
 #include <sfx2/docinf.hxx>
 
@@ -74,9 +74,9 @@
 #include "anminfo.hxx"
 #include <svx/gallery.hxx>
 #include <tools/urlobj.hxx>
-#include <svx/numitem.hxx>
+#include <editeng/numitem.hxx>
 #include <svl/itempool.hxx>
-#include <svx/fhgtitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/svdogrp.hxx>
@@ -91,7 +91,7 @@
 #include <unotools/fltrcfg.hxx>
 #include <sfx2/progress.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/editstat.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/docfac.hxx>
 #define MAX_USER_MOVE       2

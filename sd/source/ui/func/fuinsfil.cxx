@@ -34,9 +34,9 @@
 #include "fuinsfil.hxx"
 #include <vcl/wrkwin.hxx>
 #include <sfx2/progress.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #ifndef _EDITENG_HXX
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 #endif
 #include <svl/stritem.hxx>
 #include <sfx2/request.hxx>
@@ -49,7 +49,7 @@
 #include <sfx2/filedlghelper.hxx>
 #include <sot/formats.hxx>
 #include <svl/urihelper.hxx>
-#include <svx/forbiddencharacterstable.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>

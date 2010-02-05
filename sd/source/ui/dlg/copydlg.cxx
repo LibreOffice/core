@@ -117,7 +117,7 @@ CopyDlg::CopyDlg(
     maBtnSetDefault.SetClickHdl( LINK( this, CopyDlg, SetDefault ) );
 
 
-    FieldUnit eFUnit( GetModuleFieldUnit() );
+    FieldUnit eFUnit( SfxModule::GetCurrentFieldUnit() );
 
     SetFieldUnit( maMtrFldMoveX, eFUnit, TRUE );
     SetFieldUnit( maMtrFldMoveY, eFUnit, TRUE );

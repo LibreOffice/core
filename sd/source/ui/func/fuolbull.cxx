@@ -35,12 +35,12 @@
 #include "fuolbull.hxx"
 #include <vcl/msgbox.hxx>
 #include <svl/intitem.hxx>
-#include <svx/outliner.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/eeitem.hxx>
 #include <sfx2/request.hxx>
 #include <svl/intitem.hxx>
 
-#include <svx/editdata.hxx>
+#include <editeng/editdata.hxx>
 #include <svx/svxids.hrc>
 #include "OutlineView.hxx"
 #include "OutlineViewShell.hxx"

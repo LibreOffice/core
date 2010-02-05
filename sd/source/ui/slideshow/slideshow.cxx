@@ -35,6 +35,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <comphelper/serviceinfohelper.hxx>
 
 #include <cppuhelper/bootstrap.hxx>
 
@@ -43,7 +44,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
-
+#include <svx/svdpool.hxx>
 #include <svl/itemprop.hxx>
 
 #include <sfx2/topfrm.hxx>
@@ -151,7 +152,7 @@ const SfxItemPropertyMapEntry* ImplGetPresentationPropertyMap()
 
 SlideShow::SlideShow( SdDrawDocument* pDoc )
 : SlideshowBase( m_aMutex )
-, maPropSet(ImplGetPresentationPropertyMap())
+, maPropSet(ImplGetPresentationPropertyMap(), SdrObject::GetGlobalDrawObjectItemPool())
 , mbIsInStartup(false)
 , mpDoc( pDoc )
 , mpCurrentViewShellBase( 0 )
@@ -278,7 +279,7 @@ OUString SAL_CALL SlideShow::getImplementationName(  ) throw(RuntimeException)
 
 sal_Bool SAL_CALL SlideShow::supportsService( const OUString& ServiceName ) throw(RuntimeException)
 {
-    return SvxServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames(  ) );
+    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames(  ) );
 }
 
 // --------------------------------------------------------------------

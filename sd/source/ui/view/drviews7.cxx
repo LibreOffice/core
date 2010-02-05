@@ -36,9 +36,9 @@
 #include <svx/fmglob.hxx>
 #include <svx/globl3d.hxx>
 #include <svx/svdouno.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #ifndef _FLDITEM_HXX
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #endif
 #ifndef _SVXIDS_HXX
 #include <svx/svxids.hrc>
@@ -53,7 +53,7 @@
 #include <svl/whiter.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdograf.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
 

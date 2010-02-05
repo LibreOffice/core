@@ -299,7 +299,7 @@ SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  )
         eFUnit = (FieldUnit)rItem.GetValue();
     }
     else
-        eFUnit = GetModuleFieldUnit();
+        eFUnit = SfxModule::GetCurrentFieldUnit();
 
     SetFieldUnit( aMtrFldTabstop, eFUnit );
 

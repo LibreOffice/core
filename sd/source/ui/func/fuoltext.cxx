@@ -35,9 +35,9 @@
 #include "fuoltext.hxx"
 
 #include <sfx2/viewfrm.hxx>
-#include <svx/outliner.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/flditem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>

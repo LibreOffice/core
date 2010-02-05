@@ -46,15 +46,12 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/svdoole2.hxx>
-#ifndef _IMPGRF_HXX
-#include <svx/impgrf.hxx>
-#endif
 #include <sot/storage.hxx>
 #include <sfx2/app.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
-
+#include <svtools/filter.hxx>
 #include "app.hrc"
 #include "Window.hxx"
 #include "DrawDocShell.hxx"
@@ -367,7 +364,7 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, EMPTYARG )
             aURL = INetURLObject( aURLStr );
         }
 
-        GraphicFilter*  pGraphicFilter = GetGrfFilter();
+        GraphicFilter*  pGraphicFilter = GraphicFilter::GetGraphicFilter();
         Graphic         aGraphic;
 
         aCurrentDropFile = aURL.GetMainURL( INetURLObject::NO_DECODE );

@@ -40,7 +40,7 @@
 #include <svx/svdpool.hxx>
 #include <svx/unomaster.hxx>
 
-#include <svx/unoipset.hxx>
+#include <editeng/unoipset.hxx>
 
 #include <cppuhelper/implbase2.hxx>
 

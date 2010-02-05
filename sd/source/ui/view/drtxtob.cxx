@@ -33,10 +33,11 @@
 
 #include "TextObjectBar.hxx"
 
+#include <svx/svxids.hrc>
 
-#include <svx/ulspitem.hxx>
-#include <svx/lspcitem.hxx>
-#include <svx/adjitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/adjitem.hxx>
 #include <vcl/vclenum.hxx>
 #include <sfx2/app.hxx>
 #include <svl/whiter.hxx>
@@ -44,13 +45,13 @@
 #include <svl/style.hxx>
 #include <svl/languageoptions.hxx>
 #include <sfx2/tplpitem.hxx>
-#include <svx/escpitem.hxx>
+#include <editeng/escpitem.hxx>
 #include <svx/svdoutl.hxx>
 #include <svl/intitem.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/writingmodeitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/writingmodeitem.hxx>
+#include <editeng/frmdiritem.hxx>
 
 
 #include <sfx2/objface.hxx>

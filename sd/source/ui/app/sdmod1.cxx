@@ -39,16 +39,16 @@
 
 #include <svx/dialogs.hrc>
 
-#include <svx/langitem.hxx>
-#include <svx/editdata.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/editdata.hxx>
 #include <vcl/msgbox.hxx>
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/docfile.hxx>
-#include <svx/paperinf.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/paperinf.hxx>
+#include <editeng/eeitem.hxx>
 #include <unotools/useroptions.hxx>
 
 #include "app.hrc"

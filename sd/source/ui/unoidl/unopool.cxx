@@ -32,7 +32,7 @@
 #include "precompiled_sd.hxx"
 #include <i18npool/mslangid.hxx>
 #include <comphelper/propertysetinfo.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/unopool.hxx>
 
 #include "drawdoc.hxx"

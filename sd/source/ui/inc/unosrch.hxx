@@ -39,8 +39,8 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <comphelper/servicehelper.hxx>
-#include <svx/editdata.hxx>
-#include <svx/unoipset.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/unoipset.hxx>
 
 class SdrObject;
 class SvxItemPropertySet;

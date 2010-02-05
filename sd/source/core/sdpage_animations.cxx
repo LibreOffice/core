@@ -35,7 +35,7 @@
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include <comphelper/processfactory.hxx>
 #include <vos/mutex.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #include "CustomAnimationCloner.hxx"
 #include "drawdoc.hxx"
 #include "sdpage.hxx"

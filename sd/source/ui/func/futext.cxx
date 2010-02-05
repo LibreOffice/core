@@ -33,38 +33,37 @@
 
 
 #include "futext.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/editerr.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/svxerr.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/help.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/editstat.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/intitem.hxx>
 #include <svx/svdotext.hxx>
-#ifndef _SVDOGROUP_HXX //autogen
 #include <svx/svdogrp.hxx>
-#endif
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #include <svl/style.hxx>
 #include <svx/svdpagv.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svxids.hrc>
 #include <sfx2/docfile.hxx>
 #include <comphelper/processfactory.hxx>
-#include <svx/outlobj.hxx>
-
+#include <editeng/outlobj.hxx>
+#include <svtools/langtab.hxx>
 
 // #104122#
-#include <svx/frmdiritem.hxx>
+#include <editeng/frmdiritem.hxx>
 
 #include <svx/svdetc.hxx>
-#include <svx/editview.hxx>
+#include <editeng/editview.hxx>
 
 #include "sdresid.hxx"
 #include "app.hrc"
@@ -1385,7 +1384,7 @@ void FuText::ReceiveRequest(SfxRequest& rReq)
 
 IMPL_LINK( FuText, SpellError, void *, nLang )
 {
-    String aError( ::GetLanguageString( (LanguageType)(ULONG)nLang ) );
+    String aError( SvtLanguageTable::GetLanguageString( (LanguageType)(ULONG)nLang ) );
     ErrorHandler::HandleError(* new StringErrorInfo(
                                 ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS, aError) );
     return 0;

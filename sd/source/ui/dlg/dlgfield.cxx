@@ -37,14 +37,14 @@
 
 
 
-#include <svx/editeng.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/flditem.hxx>
 #include <svl/zforlist.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <svl/itemset.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <unotools/useroptions.hxx>
 
 #include "strings.hrc"

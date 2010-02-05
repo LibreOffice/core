@@ -34,7 +34,7 @@
 
 #include <limits.h>     // LONG_MAX
 #include <tools/solar.h>
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #include "bmcache.hxx"
 
 // eine Struktur fuer die Cache-Eintraege

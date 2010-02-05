@@ -42,9 +42,9 @@
 #include <svx/globl3d.hxx>
 #endif
 #include <svx/hlnkitem.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #ifndef _FLDITEM_HXX
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #endif
 #include <sfx2/viewfrm.hxx>
 #include <svl/whiter.hxx>
