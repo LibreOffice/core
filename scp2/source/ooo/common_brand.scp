@@ -346,7 +346,7 @@ File gid_Brand_File_Desktophelper_Txt
     Styles = (PACKED);
     Dir = gid_Brand_Dir_Program;
     Name = "desktophelper.txt";
-	ComponentCondition = "CREATEDESKTOPLINK=1";
+    ComponentCondition = "CREATEDESKTOPLINK=1";
 End
 #endif
 
@@ -377,17 +377,17 @@ End
 
 #ifdef WNT
 File gid_Brand_File_Bin_Rebaseoo
-	BIN_FILE_BODY;
-	Dir = gid_Brand_Dir_Program;
-	Styles = (PACKED);
-	Name = "rebaseoo.exe";
+    BIN_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Styles = (PACKED);
+    Name = "rebaseoo.exe";
 End
 
 File gid_Brand_File_Bin_Rebasegui
-	BIN_FILE_BODY;
-	Dir = gid_Brand_Dir_Program;
-	Styles = (PACKED);
-	Name = "rebasegui.exe";
+    BIN_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Styles = (PACKED);
+    Name = "rebasegui.exe";
 End
 #endif
 
@@ -505,37 +505,37 @@ End
 
 #if defined UNX && ! defined MACOSX
 File gid_Brand_File_Share_Xdg_Calc
-	TXT_FILE_BODY;
-	Dir = gid_Brand_Dir_Share_Xdg;
-	Name = "calc.desktop";
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Share_Xdg;
+    Name = "calc.desktop";
     Styles = (PACKED,SCPZIP_REPLACE);
 End
 #endif
 
 #if defined UNX && ! defined MACOSX
 File gid_Brand_File_Share_Xdg_Draw
-	TXT_FILE_BODY;
-	Dir = gid_Brand_Dir_Share_Xdg;
-	Name = "draw.desktop";
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Share_Xdg;
+    Name = "draw.desktop";
     Styles = (PACKED,SCPZIP_REPLACE);
 End
 #endif
 
 #if defined UNX && ! defined MACOSX
 File gid_Brand_File_Share_Xdg_Impress
-	TXT_FILE_BODY;
-	Dir = gid_Brand_Dir_Share_Xdg;
-	Name = "impress.desktop";
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Share_Xdg;
+    Name = "impress.desktop";
     Styles = (PACKED,SCPZIP_REPLACE);
 End
 #endif
 
 #if defined UNX && ! defined MACOSX
 File gid_Brand_File_Share_Xdg_Math
-	TXT_FILE_BODY;
-	Dir = gid_Brand_Dir_Share_Xdg;
-	Name = "math.desktop";
-	Styles = (PACKED,SCPZIP_REPLACE);
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Share_Xdg;
+    Name = "math.desktop";
+    Styles = (PACKED,SCPZIP_REPLACE);
 End
 #endif
 
@@ -979,7 +979,7 @@ ProfileItem gid_Brand_Profileitem_Version_Extensionupdateurl
     Section = "Version";
     Order = 18;
     Key = "ExtensionUpdateURL";
-    Value = "http://updateext.services.openoffice.org/ProductUpdateService/check.Update";
+    Value = "http://updateexte.services.openoffice.org/ExtensionUpdateService/check.Update";
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Brand_Base_Dir
