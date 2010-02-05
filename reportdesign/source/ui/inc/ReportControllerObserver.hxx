@@ -68,11 +68,6 @@ namespace rptui
         // do not allow copy
         OXReportControllerObserver(const OXReportControllerObserver&);
         OXReportControllerObserver& operator=(const OXReportControllerObserver&);
-
-//  protected:
-
-        void switchListening(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxObject, sal_Bool _bStartListening);
-
         virtual  ~OXReportControllerObserver(); // UNO Object must have private destructor!
     public:
         OXReportControllerObserver(const OReportController& _rController);
