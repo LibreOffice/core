@@ -114,7 +114,7 @@
 #include <unotools/moduleoptions.hxx>
 #include <osl/thread.hxx>
 
-#include <svx/paperinf.hxx>
+#include <editeng/paperinf.hxx>
 #include <svx/svdlayer.hxx>
 #include <svx/xmleohlp.hxx>
 #include <svx/xmlgrhlp.hxx>

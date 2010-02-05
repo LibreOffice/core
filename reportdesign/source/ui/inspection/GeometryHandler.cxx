@@ -111,7 +111,7 @@
 #define ITEMID_LINEEND_LIST     SID_LINEEND_LIST
 #include <svx/drawitem.hxx>
 #define ITEMID_BRUSH            SID_ATTR_BRUSH
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <sfx2/docfilt.hxx>
 
 #include "dlgpage.hxx"

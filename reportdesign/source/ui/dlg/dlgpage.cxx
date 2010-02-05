@@ -34,7 +34,7 @@
 #include <svx/tabarea.hxx>
 #include <svx/flagsdef.hxx>
 #include <svx/svxdlg.hxx>
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include "dlgpage.hxx"
 #include "ModuleHelper.hxx"
 #include "RptResId.hrc"

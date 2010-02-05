@@ -120,7 +120,6 @@ SHL2STDLIBS= \
         $(FWELIB)				\
         $(TKLIB)				\
         $(VCLLIB)				\
-        $(GOODIESLIB)			\
         $(SVLLIB)				\
         $(SOTLIB)				\
         $(UNOTOOLSLIB)			\

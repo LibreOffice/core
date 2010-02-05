@@ -66,7 +66,7 @@
 #include <vcl/graph.hxx>
 #endif
 #ifndef _GRFMGR_HXX
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #endif
 #include "callbacks.hxx"
 #include <memory>

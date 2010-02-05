@@ -108,18 +108,18 @@
 #include <vcl/waitobj.hxx>
 
 #include <svx/fmview.hxx>
-#include <svx/paperinf.hxx>
+#include <editeng/paperinf.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svdobj.hxx>
 #include <svx/dataaccessdescriptor.hxx>
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include <svx/pageitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/sizeitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/sizeitem.hxx>
 #include <svx/zoomitem.hxx>
 #include <svx/zoomslideritem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <svx/flagsdef.hxx> //CHINA001
 #include <svx/svdpagv.hxx>
 #include <svx/svxdlg.hxx>

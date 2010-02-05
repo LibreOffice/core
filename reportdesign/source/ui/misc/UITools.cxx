@@ -46,36 +46,37 @@
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <svx/svdpool.hxx>
 
-#include <svx/charscaleitem.hxx>
+#include <editeng/charscaleitem.hxx>
 #include <svx/algitem.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/xtable.hxx>       // XColorTable
-#include <svx/brshitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/emphitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/cntritem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/prszitem.hxx>
-#include <svx/wrlmitem.hxx>
-#include <svx/cmapitem.hxx>
-#include <svx/kernitem.hxx>
-#include <svx/blnkitem.hxx>
-#include <svx/flstitem.hxx>
-#include <svx/akrnitem.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/emphitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/prszitem.hxx>
+#include <editeng/wrlmitem.hxx>
+#include <editeng/cmapitem.hxx>
+#include <editeng/kernitem.hxx>
+#include <editeng/blnkitem.hxx>
+#include <editeng/flstitem.hxx>
+#include <editeng/akrnitem.hxx>
+#include <editeng/colritem.hxx>
 #include <svx/drawitem.hxx>
-#include <svx/twolinesitem.hxx>
-#include <svx/charreliefitem.hxx>
-#include <svx/charrotateitem.hxx>
-#include <svx/charhiddenitem.hxx>
+#include <editeng/twolinesitem.hxx>
+#include <editeng/charreliefitem.hxx>
+#include <editeng/charrotateitem.hxx>
+#include <editeng/charhiddenitem.hxx>
 #include <svx/xgrscit.hxx>
 #include <svx/svditer.hxx>
 #include <svx/xtable.hxx>
@@ -273,7 +274,7 @@ namespace
     {
         uno::Reference< beans::XPropertySetInfo> xInfo = _xShape->getPropertySetInfo();
         SvxUnoPropertyMapProvider aMap;
-        const SfxItemPropertyMap* pPropertyMap = aMap.GetPropertySet(SVXMAP_CUSTOMSHAPE)->getPropertyMap();
+        const SfxItemPropertyMap* pPropertyMap = aMap.GetPropertySet(SVXMAP_CUSTOMSHAPE, SdrObject::GetGlobalDrawObjectItemPool())->getPropertyMap();
         PropertyEntryVector_t aPropVector = pPropertyMap->getPropertyEntries();
         PropertyEntryVector_t::const_iterator aIt = aPropVector.begin();
         while( aIt != aPropVector.end() )
@@ -296,7 +297,7 @@ namespace
     {
         const uno::Reference< beans::XPropertySetInfo> xInfo = _xShape->getPropertySetInfo();
         SvxUnoPropertyMapProvider aMap;
-        const SfxItemPropertyMap* pPropertyMap = aMap.GetPropertySet(SVXMAP_CUSTOMSHAPE)->getPropertyMap();
+        const SfxItemPropertyMap* pPropertyMap = aMap.GetPropertySet(SVXMAP_CUSTOMSHAPE, SdrObject::GetGlobalDrawObjectItemPool())->getPropertyMap();
         PropertyEntryVector_t aPropVector = pPropertyMap->getPropertyEntries();
         PropertyEntryVector_t::const_iterator aIt = aPropVector.begin();
         while( aIt != aPropVector.end() )

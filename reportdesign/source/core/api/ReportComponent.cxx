@@ -43,7 +43,7 @@
 #include <com/sun/star/text/ParagraphVertAlign.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/lingucfg.hxx>
 #include <i18npool/mslangid.hxx>
