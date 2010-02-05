@@ -52,11 +52,18 @@ module com { module sun { module star { module ucb {
 
     <p>Creation of a new (persistent) content:
     <ol>
-        <li>newObject = creator.createNewContent( ... )
+        <li>creatabletypes = creator.queryCreatableContentsInfo()
+        <li>choose a suitable type from creatabletypes
+        <li>newObject = creator.createNewContent( type )
         <li>initialize the new object (i.e. newObject.Property1 = ...)
         <li>let the new content execute the command "insert". That command
             commits the data and makes the new content persistent.
     </ol>
+
+    @deprecated
+
+    <p>This interface is deprecated.  Use <type>Content</type> property
+       "CreatableContentsInfo" and command "createNewContent" instead.
 
     @version  1.0
     @author   Kai Sommerfeld
@@ -74,13 +81,13 @@ published interface XContentCreator: com::sun::star::uno::XInterface
     sequence<com::sun::star::ucb::ContentInfo> queryCreatableContentsInfo();
 
     //-------------------------------------------------------------------------
-    /** creates a new content of given type..
+    /** creates a new content of given type.
 
         @param Info
         the content information.
 
         @returns
-        the new content, if operation was succesful.
+        the new content, if operation was successful.
     */
     com::sun::star::ucb::XContent createNewContent(
                         [in] com::sun::star::ucb::ContentInfo Info );
