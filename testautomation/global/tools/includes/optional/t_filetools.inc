@@ -154,7 +154,7 @@ function hHandleActivesOnLoad( iTries as integer , iAdd as integer ) as boolean
                     hFileWait( FALSE )
                     kontext "Active"
                     if ( Active.exists( 2 ) ) then
-                        warnlog( "#105670# - File corruption warning, the template is broken" )
+                        qaerrorlog( "#105670# - File corruption warning, the template is broken" )
                         qaerrorlog( CFN & "Trying to recover." )
                         Active.ok()
                         hHandleActivesOnLoad() = FALSE

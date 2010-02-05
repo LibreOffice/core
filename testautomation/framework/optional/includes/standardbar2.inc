@@ -142,7 +142,7 @@ testcase tStandardBar_2
                         TabEtiketten.Cancel()
                         printlog( "- Labels (Labels dialog)" )
             case 11 :   Kontext
-                        Active.SetPage()
+                        Active.SetPage( TabEtikettenMedium )
                         kontext "tabetikettenmedium"
                         TabEtikettenMedium.Cancel()
                         printlog( "- Business cards (Labels dialog)" )
