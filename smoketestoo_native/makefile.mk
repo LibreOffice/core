@@ -52,13 +52,26 @@ my_file = file:///
 my_file = file://
 .END
 
+# The following conditional is an approximation of: UPDATER==YES and
+# CWS_WORK_STAMP not set and either SOL_TMP not set or SOLARENV not starting
+# with SOL_TMP:
+.IF "$(UPDATER)" == "YES" && "$(CWS_WORK_STAMP)" == "" && \
+    "$(SOLARENV:s/$(SOL_TMP)//" == "$(SOLARENV)"
+my_instsets = $(shell ls -dt \
+    $(SHIPDRIVE)/$(INPATH)/OpenOffice/archive/$(WORK_STAMP)_$(UPDMINOR)_native_packed-*_$(defaultlangiso).$(BUILD))
+my_instset = $(my_instsets:1)
+.ELSE
+my_instset = \
+    $(SOLARSRC)/instsetoo_native/$(INPATH)/OpenOffice/archive/install/$(defaultlangiso)
+.ENDIF
+
 .IF "$(OS)" == "MACOSX"
-my_path = $(MISC)/installation/opt/OpenOffice.org.app/Contents/MacOS/soffice
+my_soffice = $(MISC)/installation/opt/OpenOffice.org.app/Contents/MacOS/soffice
 .ELIF "$(OS)" == "WNT"
-my_path = \
+my_soffice = \
     `cat $(MISC)/installation.flag`'/opt/OpenOffice.org 3/program/soffice.exe'
 .ELSE
-my_path = $(MISC)/installation/opt/openoffice.org3/program/soffice
+my_soffice = $(MISC)/installation/opt/openoffice.org3/program/soffice
 .END
 
 ALLTAR: smoketest
@@ -70,7 +83,7 @@ smoketest .PHONY: $(MISC)/installation.flag $(SHL1TARGETN) \
     $(CPPUNITTESTER) $(SHL1TARGETN) \
         -env:UNO_SERVICES=$(my_file)$(PWD)/$(MISC)/services.rdb \
         -env:UNO_TYPES=$(my_file)$(SOLARBINDIR)/types.rdb \
-        -env:arg-path=$(my_path) -env:arg-user=$(MISC)/user \
+        -env:arg-path=$(my_soffice) -env:arg-user=$(MISC)/user \
         -env:arg-env=$(OOO_LIBRARY_PATH_VAR)"$${{$(OOO_LIBRARY_PATH_VAR)+=$$$(OOO_LIBRARY_PATH_VAR)}}" \
         -env:arg-doc=$(BIN)/smoketestdoc.sxw
 .IF "$(OS)" == "WNT"
@@ -82,21 +95,16 @@ smoketest .PHONY: $(MISC)/installation.flag $(SHL1TARGETN) \
 # case installation.flag contains the path to the temp installation, which is
 # removed after smoketest); can be removed once issue 50885 is fixed:
 .IF "$(OS)" == "WNT"
-$(MISC)/installation.flag: $(shell ls \
-        $(SOLARSRC)/instsetoo_native/$(INPATH)/OpenOffice/archive/install/$(defaultlangiso)/OOo_*_install.zip)
+$(MISC)/installation.flag: $(shell ls $(my_instset)/OOo_*_install.zip)
     my_tmp=$$(cygpath -m $$(mktemp -dt ooosmoke.XXXXXX)) && \
-    unzip \
-        $(SOLARSRC)/instsetoo_native/$(INPATH)/OpenOffice/archive/install/$(defaultlangiso)/OOo_*_install.zip \
-        -d "$$my_tmp" && \
+    unzip $(my_instset)/OOo_*_install.zip -d "$$my_tmp" && \
     mv "$$my_tmp"/OOo_*_install "$$my_tmp"/opt && \
     echo "$$my_tmp" > $@
 .ELSE
-$(MISC)/installation.flag: $(shell ls \
-        $(SOLARSRC)/instsetoo_native/$(INPATH)/OpenOffice/archive/install/$(defaultlangiso)/OOo_*_install.tar.gz)
+$(MISC)/installation.flag: $(shell ls $(my_instset)/OOo_*_install.tar.gz)
     $(RM) -r $(MISC)/installation
     $(MKDIR) $(MISC)/installation
-    cd $(MISC)/installation && $(GNUTAR) xfz \
-        $(SOLARSRC)/instsetoo_native/$(INPATH)/OpenOffice/archive/install/$(defaultlangiso)/OOo_*_install.tar.gz
+    cd $(MISC)/installation && $(GNUTAR) xfz $(my_instset)/OOo_*_install.tar.gz
     $(MV) $(MISC)/installation/OOo_*_install $(MISC)/installation/opt
     $(TOUCH) $@
 .END
