@@ -39,11 +39,15 @@ module com { module sun { module star {
 module com { module sun { module star { module task {
 
 //============================================================================
-/** An interaction request handler that lets the user handle a number of well
-    known requests via GUI dialogs (and the
-    <type scope="com::sun::star::task">PasswordContainer</type> service).
+/** An interaction request handler that lets the user handle requests via GUI dialogs.
 
-    <P>The well known requests handled by this service include
+    <p>The interaction handler service has a numerof of <a href="#built_in_handler">built-in handlers</a>, responsible
+    for a lot of well known interactions. Additionally, there's a configuration module which allows to
+    <a href="#configuring_handlers">configure additional handlers</a>, responsible for arbitrary requests.</a></p>
+
+    <a name="built_in_handler"></a>
+    <h3>Built-in Handlers</h3>
+    The following well-known requests can be dealt with by the built-in handlers:
     <UL>
         <LI><type scope="com::sun::star::ucb">AuthenticationRequest</type></LI>
         <LI><type scope="com::sun::star::ucb">CertificateValidationRequest</type></LI>
@@ -134,6 +138,26 @@ module com { module sun { module star { module task {
         only.  The names of the two volumes involved (two
         <atom>string</atom>s).</DD>
     </DL></P>
+
+    <a name="configuring_handlers"></a>
+    <h3>Configurating additional Handlers</h3>
+
+    <p>It is possible to configure additional interaction handlers, to which certain requests can be delegated. The
+    configuration node <code>/org.openoffice.Interaction/InteractionHandlers</code> is evaluated and respected
+    by the <code>InteractionHandler</code> implementation.</p>
+
+    <p>A custom interaction handler can declare itself responsible for an arbitrary number of UNO types, specified
+    by full-qualified type name. Also, for each type, it can specify whether it is responsible for only this particular
+    type, or all possibly existent derived types.</p>
+
+    <p>Whenever the <code>InteractionHandler</code> encounteres a request it cannot fulfill itself, it will examine
+    the configuration, to find a handler implementation for the request, and delegate it to the first matching
+    handler.</p>
+
+    <p>If multiple custom interaction handlers declare themself responsible for the same request type, it is not
+    defined which handler will actully be invoked. Thus, when deploying a custom interaction handler, ensure
+    that the types you specify are general enough to cover all requests you want to handle, but also specific
+    enough to not cover requests which other handlers might be interested in.</p>
  */
 published service InteractionHandler
 {
