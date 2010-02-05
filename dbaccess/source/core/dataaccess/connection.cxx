@@ -78,6 +78,10 @@ using namespace ::comphelper;
 using namespace ::cppu;
 using namespace ::dbtools;
 
+using ::com::sun::star::sdb::tools::XTableName;
+using ::com::sun::star::sdb::tools::XObjectNames;
+using ::com::sun::star::sdb::tools::XDataSourceMetaData;
+
 //........................................................................
 namespace dbaccess
 {
@@ -821,7 +825,7 @@ void OConnection::impl_loadConnectionTools_throw()
 }
 
 // -----------------------------------------------------------------------------
-Reference< tools::XTableName > SAL_CALL OConnection::createTableName(  ) throw (RuntimeException)
+Reference< XTableName > SAL_CALL OConnection::createTableName(  ) throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::createTableName" );
     MutexGuard aGuard(m_aMutex);
@@ -832,7 +836,7 @@ Reference< tools::XTableName > SAL_CALL OConnection::createTableName(  ) throw (
 }
 
 // -----------------------------------------------------------------------------
-Reference< tools::XObjectNames > SAL_CALL OConnection::getObjectNames(  ) throw (RuntimeException)
+Reference< XObjectNames > SAL_CALL OConnection::getObjectNames(  ) throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::getObjectNames" );
     MutexGuard aGuard(m_aMutex);
@@ -843,7 +847,7 @@ Reference< tools::XObjectNames > SAL_CALL OConnection::getObjectNames(  ) throw 
 }
 
 // -----------------------------------------------------------------------------
-Reference< tools::XDataSourceMetaData > SAL_CALL OConnection::getDataSourceMetaData(  ) throw (RuntimeException)
+Reference< XDataSourceMetaData > SAL_CALL OConnection::getDataSourceMetaData(  ) throw (RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::getDataSourceMetaData" );
     MutexGuard aGuard(m_aMutex);
