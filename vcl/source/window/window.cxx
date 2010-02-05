@@ -699,6 +699,7 @@ void Window::ImplInitWindowData( WindowType nType )
     mpWindowImpl->mbDisableAccessibleLabelForRelation = FALSE; // TRUE: do not set LabelFor relation on accessible objects
     mpWindowImpl->mbDisableAccessibleLabeledByRelation = FALSE; // TRUE: do not set LabeledBy relation on accessible objects
     mpWindowImpl->mbHelpTextDynamic = FALSE;          // TRUE: append help id in HELP_DEBUG case
+    mpWindowImpl->mbFakeFocusSet = FALSE; // TRUE: pretend as if the window has focus.
 
     mbEnableRTL         = Application::GetSettings().GetLayoutRTL();         // TRUE: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
 }
@@ -3915,6 +3916,20 @@ void Window::ImplCallFocusChangeActivate( Window* pNewOverlapWindow,
     }
 }
 
+static bool IsWindowFocused(const WindowImpl& rWinImpl)
+{
+    if (rWinImpl.mpSysObj)
+        return true;
+
+    if (rWinImpl.mpFrameData->mbHasFocus)
+        return true;
+
+    if (rWinImpl.mbFakeFocusSet)
+        return true;
+
+    return false;
+}
+
 // -----------------------------------------------------------------------
 void Window::ImplGrabFocus( USHORT nFlags )
 {
@@ -3986,9 +4001,7 @@ void Window::ImplGrabFocus( USHORT nFlags )
         pFrame = pFrame->mpWindowImpl->mpFrameData->mpNextFrame;
     }
 
-    BOOL bHasFocus = TRUE;
-        if ( !mpWindowImpl->mpSysObj && !mpWindowImpl->mpFrameData->mbHasFocus )
-            bHasFocus = FALSE;
+    bool bHasFocus = IsWindowFocused(*mpWindowImpl);
 
     BOOL bMustNotGrabFocus = FALSE;
     // #100242#, check parent hierarchy if some floater prohibits grab focus
@@ -4759,7 +4772,10 @@ void Window::doLazyDelete()
     SystemWindow* pSysWin = dynamic_cast<SystemWindow*>(this);
     DockingWindow* pDockWin = dynamic_cast<DockingWindow*>(this);
     if( pSysWin || ( pDockWin && pDockWin->IsFloatingMode() ) )
+    {
+        Show( FALSE );
         SetParent( ImplGetDefaultWindow() );
+    }
     vcl::LazyDeletor<Window>::Delete( this );
 }
 
@@ -5379,6 +5395,11 @@ void Window::CallEventListeners( ULONG nEvent, void* pData )
 
         pWindow = pWindow->GetParent();
     }
+}
+
+void Window::FireVclEvent( VclSimpleEvent* pEvent )
+{
+    ImplGetSVData()->mpApp->ImplCallEventListeners(pEvent);
 }
 
 // -----------------------------------------------------------------------
@@ -7754,6 +7775,11 @@ void Window::GrabFocusToDocument()
         }
         pWin = pWin->GetParent();
     }
+}
+
+void Window::SetFakeFocus( bool bFocus )
+{
+    ImplGetWindowImpl()->mbFakeFocusSet = bFocus;
 }
 
 // -----------------------------------------------------------------------

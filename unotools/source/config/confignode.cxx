@@ -465,16 +465,9 @@ namespace utl
                 aReturn = m_xHierarchyAccess->getByHierarchicalName(_rPath);
             }
         }
-        catch(NoSuchElementException& e)
+        catch(const NoSuchElementException&)
         {
-            #if OSL_DEBUG_LEVEL > 0
-            rtl::OStringBuffer aBuf( 256 );
-            aBuf.append("OConfigurationNode::getNodeValue: caught a NoSuchElementException while trying to open ");
-            aBuf.append( rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ) );
-            OSL_ENSURE(sal_False, aBuf.getStr());
-            #else
-            (void)e;
-            #endif
+            DBG_UNHANDLED_EXCEPTION();
         }
         return aReturn;
     }
@@ -497,7 +490,7 @@ namespace utl
                 }
                 catch(Exception&)
                 {
-                    OSL_ENSURE(sal_False, "OConfigurationNode::cloneAsRoot: could not retrieve the node path!");
+                    DBG_UNHANDLED_EXCEPTION();
                 }
             }
 
@@ -558,13 +551,9 @@ namespace utl
             m_xCommitter->commitChanges();
             return sal_True;
         }
-        catch(WrappedTargetException&)
+        catch(const Exception&)
         {
-            OSL_ENSURE(sal_False, "OConfigurationTreeRoot::commit: caught a WrappedTargetException!");
-        }
-        catch(RuntimeException&)
-        {
-            OSL_ENSURE(sal_False, "OConfigurationTreeRoot::commit: caught a RuntimeException!");
+            DBG_UNHANDLED_EXCEPTION();
         }
         return sal_False;
     }
@@ -601,7 +590,7 @@ namespace utl
             }
             catch(const Exception&)
             {
-                OSL_ENSURE(sal_False, "OConfigurationTreeRoot::createWithProvider: unable to check the service conformance of the provider given!");
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
 #endif
@@ -645,15 +634,9 @@ namespace utl
                             try { xComp->dispose(); } catch(Exception&) { }
                     }
                 }
-                catch(Exception& e)
+                catch(const Exception&)
                 {
-                #if OSL_DEBUG_LEVEL > 0
-                    ::rtl::OString sMessage( "OConfigurationTreeRoot::createWithProvider: caught an exception while creating the access object!\nmessage:\n" );
-                    sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US );
-                    OSL_ENSURE( sal_False, sMessage.getStr() );
-                #else
-                    (void)e;
-                #endif
+                    DBG_UNHANDLED_EXCEPTION();
                 }
             }
             bTryAgain = CM_PREFER_UPDATABLE == _eMode;
@@ -680,9 +663,9 @@ namespace utl
                 if (xProviderAsFac.is())
                     return createWithProvider(xProviderAsFac, _rPath, _nDepth, _eMode, _bLazyWrite);
             }
-            catch(Exception&)
+            catch(const Exception&)
             {
-                OSL_ENSURE(sal_False, "OConfigurationTreeRoot::createWithServiceFactory: error while instantiating the provider service!");
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
         return OConfigurationTreeRoot();
