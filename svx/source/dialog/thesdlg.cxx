@@ -340,7 +340,7 @@ void SvxThesaurusDialog_Impl::SetWindowTitle( LanguageType nLanguage )
 
 IMPL_LINK( SvxThesaurusDialog_Impl, LeftBtnHdl_Impl, Button *, pBtn )
 {
-    if (pBtn)
+    if (pBtn && aLookUpHistory.size() >= 2)
     {
         aLookUpHistory.pop();                       // remove current look up word from stack
         aWordCB.SetText( aLookUpHistory.top() );    // retrieve previous look up word
@@ -364,7 +364,7 @@ IMPL_LINK( SvxThesaurusDialog_Impl, LanguageHdl_Impl, MenuButton *, pBtn )
             nLookUpLanguage = nLang;
         SetWindowTitle( nLang );
         UpdateVendorImage();
-        UpdateAlternativesBox_Impl();
+        LookUpHdl_Impl( NULL );
     }
     return 0;
 }
@@ -375,7 +375,8 @@ IMPL_LINK( SvxThesaurusDialog_Impl, LookUpHdl_Impl, Button *, EMPTYARG /*pBtn*/ 
     String aText( aWordCB.GetText() );
 
     aLookUpText = OUString( aText );
-    if (aLookUpText.getLength() > 0)
+    if (aLookUpText.getLength() > 0 &&
+            (aLookUpHistory.size() == 0 || aLookUpText != aLookUpHistory.top()))
         aLookUpHistory.push( aLookUpText );
 
     UpdateAlternativesBox_Impl();
