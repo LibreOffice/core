@@ -139,14 +139,12 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
     private void initialize(Object _aDoc, XConnection _xConnection)
     {
         m_aReportDocument = _aDoc;
-        // TODO: type down how we got such ID
-        final String sClassID = "d7896d52-b7af-4820-9dfe-d404d015960f"; // CLASSID for Report Builder
 
         try
         {
             NamedValueCollection creationArgs = new NamedValueCollection();
             creationArgs.put( "ActiveConnection", _xConnection );
-            creationArgs.put( "ClassID", sClassID );
+            creationArgs.put( "MediaType", "com.sun.star.report.ReportDefinition" );
             creationArgs.put( "Mode", "remote" );
 
             XComponent[] docDefinition = new XComponent[] { null };
