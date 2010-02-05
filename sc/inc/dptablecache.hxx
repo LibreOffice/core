@@ -36,7 +36,7 @@
 #include "global.hxx"
 #endif
 //Added by PengYunQuan for SODC_16015
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 //end
 #include <vector>
 #include "dpglobal.hxx"

@@ -876,7 +876,7 @@ String ScDPTableDataCache::GetDimensionName( USHORT nColumn ) const
 {
     DBG_ASSERT( nColumn>=0 && nColumn < mrLabelNames.size()-1 , "ScDPTableDataCache::GetDimensionName");
     DBG_ASSERT( mrLabelNames.size() == static_cast <USHORT> (mnColumnCount+1), "ScDPTableDataCache::GetDimensionName");
-    if ( nColumn+1 < mrLabelNames.size() )
+    if ( static_cast<size_t>(nColumn+1) < mrLabelNames.size() )
     {
         return mrLabelNames[nColumn+1]->aString;
     }

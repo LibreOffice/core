@@ -1254,16 +1254,16 @@ void ScDPSaveData::BuildAllDimensionMembers(ScDPTableData* pData)
             continue;
 
         long nDimIndex = itr->second;
-        const TypedScStrCollection& rMembers = pData->GetColumnEntries(nDimIndex);
-        sal_uInt16 nMemberCount = rMembers.GetCount();
-        for (sal_uInt16 j = 0; j < nMemberCount; ++j)
+        sal_Int32 mMemberCount = pData->GetMembersCount( nDimIndex );
+        for (sal_Int32 j = 0; j < mMemberCount; ++j)
         {
-            const String& rMemName = rMembers[j]->GetString();
-            if (pDim->GetExistingMemberByName(rMemName))
+            const ScDPItemData* pMemberData = pData->GetMemberByIndex( nDimIndex, j );
+            String aMemName = pMemberData->GetString();
+            if (pDim->GetExistingMemberByName(aMemName))
                 // this member instance already exists.  nothing to do.
                 continue;
 
-            auto_ptr<ScDPSaveMember> pNewMember(new ScDPSaveMember(rMemName));
+            auto_ptr<ScDPSaveMember> pNewMember(new ScDPSaveMember(aMemName));
             pNewMember->SetIsVisible(true);
             pDim->AddMember(pNewMember.release());
         }

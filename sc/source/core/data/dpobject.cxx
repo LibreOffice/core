@@ -427,10 +427,11 @@ ScDPTableData* ScDPObject::GetTableData()
 {
     if (!mpTableData)
     {
+        shared_ptr<ScDPTableData> pData;
         if ( pImpDesc )
         {
             // database data
-            mpTableData.reset(new ScDatabaseDPData(pDoc, *pImpDesc, GetCacheId()));
+            pData.reset(new ScDatabaseDPData(pDoc, *pImpDesc, GetCacheId()));
         }
         else
         {
@@ -442,17 +443,25 @@ ScDPTableData* ScDPObject::GetTableData()
             }
             // Wang Xu Ming -- 2009-8-17
             // DataPilot Migration - Cache&&Performance
-            mpTableData.reset(new ScSheetDPData(pDoc, *pSheetDesc, GetCacheId()));
+            pData.reset(new ScSheetDPData(pDoc, *pSheetDesc, GetCacheId()));
             // End Comments
         }
 
         // grouping (for cell or database data)
         if ( pSaveData && pSaveData->GetExistingDimensionData() )
         {
-            shared_ptr<ScDPGroupTableData> pGroupData(new ScDPGroupTableData(mpTableData, pDoc));
+            shared_ptr<ScDPGroupTableData> pGroupData(new ScDPGroupTableData(pData, pDoc));
             pSaveData->GetExistingDimensionData()->WriteToData(*pGroupData);
-            mpTableData = pGroupData;
+            pData = pGroupData;
         }
+
+        // Wang Xu Ming -- 2009-8-17
+        // DataPilot Migration - Cache&&Performance
+        if ( pData )
+           SetCacheId( pData->GetCacheId());        // resets mpTableData
+        // End Comments
+
+        mpTableData = pData;                        // after SetCacheId
     }
 
     return mpTableData.get();
@@ -482,11 +491,6 @@ void ScDPObject::CreateObjects()
             DBG_ASSERT( !pServDesc, "DPSource could not be created" );
             ScDPTableData* pData = GetTableData();
 
-            // Wang Xu Ming -- 2009-8-17
-            // DataPilot Migration - Cache&&Performance
-            if ( pData )
-               SetCacheId( pData->GetCacheId());
-
             ScDPSource* pSource = new ScDPSource( pData );
             xSource = pSource;
 
@@ -498,7 +502,6 @@ void ScDPObject::CreateObjects()
         }
         if (pSaveData  )
             pSaveData->WriteToSource( xSource );
-        // End Comments
     }
     else if (bSettingsChanged)
     {
@@ -2556,8 +2559,4 @@ bool ScDPCollection::HasDPTable(SCCOL nCol, SCROW nRow, SCTAB nTab) const
     return pMergeAttr->HasDPTable();
 }
 
-ScDPCacheCell* ScDPCollection::getCacheCellFromPool(const ScDPCacheCell& rCell)
-{
-    return pDoc->GetDPObjectCache( GetCacheId() );
-}
 

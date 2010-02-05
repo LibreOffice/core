@@ -1400,6 +1400,7 @@ void ScDPResultMember::FillMemberResults( uno::Sequence<sheet::MemberResult>* pS
     }
 
     String aCaption = aName;
+    const ScDPMember* pMemberDesc = GetDPMember();
     if (pMemberDesc)
     {
         const OUString* pLayoutName = pMemberDesc->GetLayoutName();

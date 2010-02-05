@@ -109,7 +109,7 @@ ScDPItemDataPool::~ScDPItemDataPool(void)
 
 const ScDPItemData* ScDPItemDataPool::getData( sal_Int32 nId )
 {
-    if ( nId >= maItems.size() )
+    if ( nId >= static_cast<sal_Int32>(maItems.size()) )
         return NULL;
     else
         return &(maItems[nId]);
