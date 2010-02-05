@@ -178,6 +178,7 @@ Module gid_Module_Root_Files_4
 	gid_File_Lib_Dbt,
 	gid_File_Lib_Dbfile,
 	gid_File_Lib_Drawinglayer,
+        gid_File_Lib_Editeng,
 	gid_File_Oo_Office_Dataaccess_Flat_Xcu,
 	gid_File_Lib_Flat,
 	gid_File_Lib_For,

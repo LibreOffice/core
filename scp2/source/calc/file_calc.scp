@@ -59,8 +59,6 @@ STD_LIB_FILE( gid_File_Lib_Scfilt, scfilt)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Scd, scd)
 
-STD_LIB_FILE( gid_File_Lib_Tfu, tfu)
-
 STD_RES_FILE( gid_File_Res_Solver, solver)
 
 STD_RES_FILE( gid_File_Res_Analysis, analysis)
@@ -68,8 +66,6 @@ STD_RES_FILE( gid_File_Res_Analysis, analysis)
 STD_RES_FILE( gid_File_Res_Date, date)
 
 STD_RES_FILE( gid_File_Res_Sc, sc )
-
-STD_RES_FILE( gid_File_Res_Tfu, tfu )
 
 File gid_File_Registry_Spool_Oo_Office_Embedding_Calc_Xcu
     TXT_FILE_BODY;

@@ -69,6 +69,7 @@ Module gid_Module_Langpack_Resource_Template
              gid_File_Res_Dba,
              gid_File_Res_Dbw,
              gid_File_Res_Dkt,
+             gid_File_Res_Editeng,
              gid_File_Res_Epb,
              gid_File_Res_Epg,
              gid_File_Res_Epp,
