@@ -30,14 +30,12 @@
 package com.sun.star.wizards.report;
 
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.wizards.common.Properties;
-import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.wizards.common.Desktop;
+import com.sun.star.sdb.application.XDatabaseDocumentUI;
+import com.sun.star.wizards.common.NamedValueCollection;
 
 /** This class capsulates the class, that implements the minimal component, a
  * factory for creating the service (<CODE>__getServiceFactory</CODE>) and a
@@ -50,7 +48,7 @@ public class CallReportWizard
 
     static boolean bWizardstartedalready;
 
-    public static void main(String args[])
+/*    public static void main(String args[])
     {
         String ConnectStr = "uno:pipe,name=fs93730;urp;StarOffice.ServiceManager";
         try
@@ -61,15 +59,15 @@ public class CallReportWizard
                 PropertyValue[] curproperties = new PropertyValue[1];
                 curproperties[0] = Properties.createProperty("DataSourceName", "countries");
 
-                ReportWizard wizard = new ReportWizard(orb);
-                wizard.startReportWizard(orb, curproperties);
+                ReportWizard wizard = new ReportWizard( orb, curproperties );
+                wizard.startReportWizard();
             }
         }
         catch (java.lang.Exception jexception)
         {
             jexception.printStackTrace(System.out);
         }
-    }
+    }*/
 
     /** Gives a factory for creating the service.
      * This method is called by the <code>JavaLoader</code>
@@ -121,9 +119,7 @@ public class CallReportWizard
     public static class ReportWizardImplementation extends com.sun.star.lib.uno.helper.PropertySet implements com.sun.star.lang.XInitialization, com.sun.star.lang.XServiceInfo, com.sun.star.lang.XTypeProvider, com.sun.star.task.XJobExecutor
     {
 
-        PropertyValue[] databaseproperties;
-        public XComponent DocumentDefinition = null;
-        public XComponent Document = null;
+        private PropertyValue[] m_wizardContext;
 
         /** The constructor of the inner class has a XMultiServiceFactory parameter.
          * @param xmultiservicefactoryInitialization A special service factory
@@ -133,59 +129,32 @@ public class CallReportWizard
         {
             super();
             xmultiservicefactory = xmultiservicefactoryInitialization;
-            registerProperty("Document", (short) (PropertyAttribute.READONLY | PropertyAttribute.MAYBEVOID));
-            registerProperty("DocumentDefinition", (short) (PropertyAttribute.READONLY | PropertyAttribute.MAYBEVOID));
         }
 
         public void trigger(String sEvent)
         {
             try
             {
-                com.sun.star.frame.XComponentLoader xcomponentloader = (com.sun.star.frame.XComponentLoader) com.sun.star.uno.UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, xmultiservicefactory.createInstance("com.sun.star.frame.Desktop"));
                 if (sEvent.compareTo("start") == 0)
                 {
                     if (bWizardstartedalready != true)
                     {
-                        ReportWizard CurReportWizard = new ReportWizard(xmultiservicefactory);
-                        XComponent[] obj = CurReportWizard.startReportWizard(xmultiservicefactory, databaseproperties);
-                        if (obj != null)
-                        {
-                            DocumentDefinition = obj[0];
-                            if (obj.length > 1)
-                            {
-                                Document = obj[1];
-                            }
-                            else
-                            {
-                                Document = null;
-                            }
-                        }
+                        ReportWizard CurReportWizard = new ReportWizard( xmultiservicefactory, m_wizardContext );
+                        CurReportWizard.startReportWizard();
                     }
                     bWizardstartedalready = false;
-                }
-                else if (sEvent.compareTo("end") == 0)
-                {
-                    DocumentDefinition = null;
-                    Document = null;
-                    databaseproperties = null;
                 }
                 else if (sEvent.compareTo("fill") == 0)
                 {
                     Dataimport CurDataimport = new Dataimport(xmultiservicefactory);
-                    XTextDocument xTextDocument = null;
-                    if (databaseproperties != null)
+                    if (m_wizardContext != null)
                     {
-                        for (int i = 0; i < databaseproperties.length; ++i)
+                        NamedValueCollection context = new NamedValueCollection( m_wizardContext );
+                        XTextDocument textDocument = context.queryOrDefault( "TextDocument", null, XTextDocument.class );
+                        XDatabaseDocumentUI documentUI = context.queryOrDefault( "DocumentUI", null, XDatabaseDocumentUI.class );
+                        if ( textDocument != null )
                         {
-                            if (databaseproperties[i].Name.equals("TextDocument"))
-                            {
-                                xTextDocument = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, databaseproperties[i].Value);
-                            }
-
-                        }
-                        if (xTextDocument != null)
-                        {
-                            CurDataimport.createReport(xmultiservicefactory, xTextDocument, databaseproperties);
+                            CurDataimport.createReport(xmultiservicefactory, documentUI, textDocument, m_wizardContext);
                         }
                     }
                 }
@@ -212,7 +181,7 @@ public class CallReportWizard
          */
         public void initialize(Object[] object) throws com.sun.star.uno.Exception
         {
-            this.databaseproperties = Properties.convertToPropertyValueArray(object);
+            this.m_wizardContext = Properties.convertToPropertyValueArray(object);
 
         //    xmultiservicefactory = (XMultiservicefactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, object[0]);
         }

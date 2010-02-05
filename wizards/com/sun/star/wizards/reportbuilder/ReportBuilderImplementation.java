@@ -33,7 +33,6 @@ package com.sun.star.wizards.reportbuilder;
 
 import com.sun.star.util.XModeSelector;
 
-import com.sun.star.wizards.report.*;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
@@ -46,10 +45,15 @@ import com.sun.star.frame.XFrame;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.report.XReportDefinition;
+import com.sun.star.sdb.XSubDocument;
+import com.sun.star.sdb.application.DatabaseObject;
+import com.sun.star.sdb.application.XDatabaseDocumentUI;
 import com.sun.star.sdbc.XConnection;
 import com.sun.star.ucb.XCommandProcessor;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.util.XModifiable;
 import com.sun.star.util.XURLTransformer;
+import com.sun.star.wizards.common.NoValidPathException;
 import com.sun.star.wizards.common.Resource;
 import com.sun.star.wizards.db.FieldColumn;
 import java.lang.reflect.Constructor;
@@ -59,6 +63,15 @@ import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.Vector;
 import com.sun.star.wizards.common.FileAccess;
+import com.sun.star.wizards.common.NamedValueCollection;
+import com.sun.star.wizards.report.IReportBuilderLayouter;
+import com.sun.star.wizards.report.IReportDefinitionReadAccess;
+import com.sun.star.wizards.report.IReportDocument;
+import com.sun.star.wizards.report.ReportImplementationHelper;
+import com.sun.star.wizards.report.ReportLayouter;
+import com.sun.star.wizards.report.ReportWizard;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This class use the IReportDocument Interface to communicate between the UI
@@ -69,61 +82,35 @@ import com.sun.star.wizards.common.FileAccess;
 public class ReportBuilderImplementation extends ReportImplementationHelper
         implements IReportDocument, IReportDefinitionReadAccess
 {
+    private Resource            m_resource;
+    private XDatabaseDocumentUI m_documentUI;
 
     private static final int MAXIMUM_GROUPCOUNT = 4;
-//    public ReportTextDocument getDoc()
-//    {
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
-    public void clearDocument()
-    {
-        // throw new UnsupportedOperationException("Not supported yet.");
-    }
-    private Resource m_aResource;
 
-    public ReportBuilderImplementation()
-    {
-        // super(null, ReportLayouter.SOOPTPORTRAIT);
-        super(null, ReportLayouter.SOOPTLANDSCAPE);
-        m_aResource = null;
-    }
-
-    private ReportBuilderImplementation(XMultiServiceFactory _aMSF, Resource _oResource)
+    private ReportBuilderImplementation( XMultiServiceFactory _serviceFactory )
     {
         // creates an access to the ReportBuilder Extension
-        // super(_aMSF, ReportLayouter.SOOPTPORTRAIT);
-        super(_aMSF, ReportLayouter.SOOPTLANDSCAPE);
-        m_aResource = _oResource;
+        super(_serviceFactory, ReportLayouter.SOOPTLANDSCAPE);
     }
 
-    /**
-     * This is the Factory method. To create a ReportBuilderImplementation Object.
-     *
-     * @param _xMSF
-     * @param _oResource
-     * @return
-     */
-    public static IReportDocument create(XMultiServiceFactory _xMSF, Resource _oResource)
+    public static IReportDocument create( XMultiServiceFactory i_serviceFactory )
     {
-        final ReportBuilderImplementation a = new ReportBuilderImplementation(_xMSF, _oResource);
-        // a.m_xGlobalServiceFactory = _xGlobalServiceFactory;
-        return a;
+        return new ReportBuilderImplementation( i_serviceFactory );
     }
 
-//    public void setInitialDocument(Object _aDoc)
-//    {
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
+    public void initialize( final XDatabaseDocumentUI i_documentUI, final Resource i_resource )
+    {
+        m_documentUI = i_documentUI;
+        m_resource = i_resource;
+    }
+
+    public void clearDocument()
+    {
+    }
+
     public XWindowPeer getWizardParent()
     {
-        // throw new UnsupportedOperationException("Not supported yet.");
-        // com.sun.star.frame.XFrame xFrame = thisComponent;
-        // openReportBuilderView();
-        // XInterface xInterface = (XInterface) getMSF().createInstance("com.sun.star.frame.Desktop");
-        // XDesktop xDesktop = (XDesktop) UnoRuntime.queryInterface(XDesktop.class, xInterface);
-        // XFrame xFrame = xDesktop.getCurrentFrame();
-
-        final XWindowPeer aWindowPeer = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, getFrame().getComponentWindow());
+        final XWindowPeer aWindowPeer = UnoRuntime.queryInterface( XWindowPeer.class, getFrame().getComponentWindow() );
         return aWindowPeer;
     }
     private XFrame m_xFrame = null;
@@ -137,17 +124,12 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
      */
     private IReportBuilderLayouter getReportBuilderLayouter()
     {
-        // if (m_aReportBuilderLayouter == null)
-        // {
-        // m_aReportBuilderLayouter = ReportBuilderLayouter.create(getRecordParser().getReportDocuments(), getConnection());
-        // m_aReportBuilderLayouter = ReportBuilderLayouter.create(m_xReportDefinition /* , getConnection() */ );
         final IReportBuilderLayouter aReportBuilderLayouter = (IReportBuilderLayouter) getLayoutMap().get(m_sReportBuilderLayoutName);
         return aReportBuilderLayouter;
-    // }
     }
     private Object m_aReportDocument;
-    private XPropertySet m_aDocumentDefinition;
-    private XReportDefinition m_xReportDefinition;
+    private XPropertySet m_documentDefinition;
+    private XReportDefinition m_reportDocument;
 
     /**
      * initialize the Report Builder and open it representation
@@ -160,75 +142,36 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
         // TODO: type down how we got such ID
         final String sClassID = "d7896d52-b7af-4820-9dfe-d404d015960f"; // CLASSID for Report Builder
 
-        Object args[] = new Object[2];
-
-        final PropertyValue aClassID = new PropertyValue();
-        aClassID.Name = "ClassID";
-        aClassID.Value = sClassID;
-        args[0] = aClassID;
-
-        PropertyValue aConnection = new PropertyValue();
-        aConnection.Name = "ActiveConnection";
-        aConnection.Value = _xConnection;
-        args[1] = aConnection;
-
-
-        XReportDefinition xReportDefinition = null;
-        final XMultiServiceFactory xMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, /* getRecordParser().getReportDocuments() */ _aDoc);
         try
         {
-            final Object aObj = xMSF.createInstanceWithArguments("com.sun.star.sdb.DocumentDefinition", args);
-            final XPropertySet aDocumentDefinition = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, aObj);
-            m_aDocumentDefinition = aDocumentDefinition;
+            NamedValueCollection creationArgs = new NamedValueCollection();
+            creationArgs.put( "ActiveConnection", _xConnection );
+            creationArgs.put( "ClassID", sClassID );
+            creationArgs.put( "Mode", "remote" );
 
-            final XCommandProcessor xProcessor = (XCommandProcessor) UnoRuntime.queryInterface(XCommandProcessor.class, aObj);
-            final com.sun.star.ucb.Command aCommand = new com.sun.star.ucb.Command();
-            aCommand.Name = "openDesign";
-            final com.sun.star.ucb.OpenCommandArgument2 aOpenCommand = new com.sun.star.ucb.OpenCommandArgument2();
-            aOpenCommand.Mode = com.sun.star.ucb.OpenMode.DOCUMENT;
+            XComponent[] docDefinition = new XComponent[] { null };
+            XComponent reportDefinitionComp = m_documentUI.createComponentWithArguments(
+                DatabaseObject.REPORT, creationArgs.getPropertyValues(), docDefinition );
 
-            PropertyValue args2[] = new PropertyValue[2];
-
-            PropertyValue aPropOpenCommand = new PropertyValue();
-            aPropOpenCommand.Name = "";
-            aPropOpenCommand.Value = aOpenCommand;
-            args2[0] = aPropOpenCommand;
-
-            PropertyValue aAddField = new PropertyValue();
-            aAddField.Name = "Mode";
-            aAddField.Value = "remote";
-            args2[1] = aAddField;
-
-            aCommand.Argument = args2;
-            // com.sun.star.usb.XCommandEnvironment xEnv = new com.sun.star.ucb.XCommandEnvironment();
-            final Object aObj2 = xProcessor.execute(aCommand, xProcessor.createCommandIdentifier(), null);
-            xReportDefinition = (XReportDefinition) UnoRuntime.queryInterface(XReportDefinition.class, aObj2);
+            m_documentDefinition = UnoRuntime.queryInterface( XPropertySet.class, docDefinition[0] );
+            m_reportDocument = UnoRuntime.queryInterface( XReportDefinition.class, reportDefinitionComp );
         }
         catch (com.sun.star.uno.Exception e)
         {
             ReportWizard.getLogger().log(com.sun.star.logging.LogLevel.SEVERE, "Problems with initialize the ReportDefinition" + e.getMessage());
 
         }
-        m_xReportDefinition = xReportDefinition;
 
         switchOffPropertyBrowser();
         switchOffAddFieldWindow();
 
         setPageOrientation(m_nDefaultPageOrientation, false /* NO_LAYOUT*/);
-    // try
-    // {
-    //     Thread.sleep(1000);
-    // }
-    // catch (java.lang.InterruptedException e)
-    // {
-    // }
-
     }
 
     private XModeSelector getModeSelector()
     {
         final XController xController = getReportDefinition().getCurrentController();
-        final XModeSelector xModeSelector = (XModeSelector) UnoRuntime.queryInterface(XModeSelector.class, xController);
+        final XModeSelector xModeSelector = UnoRuntime.queryInterface( XModeSelector.class, xController );
         return xModeSelector;
     }
 
@@ -273,11 +216,11 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
         try
         {
             final XController xController = getReportDefinition().getCurrentController();
-            final XDispatchProvider xDP = (XDispatchProvider) UnoRuntime.queryInterface(XDispatchProvider.class, xController);
+            final XDispatchProvider xDP = UnoRuntime.queryInterface( XDispatchProvider.class, xController );
 
             // Create special service for parsing of given URL.
             final Object aURLTransformer = getMSF().createInstance("com.sun.star.util.URLTransformer");
-            final XURLTransformer xURLTransformer = (XURLTransformer) UnoRuntime.queryInterface(com.sun.star.util.XURLTransformer.class, aURLTransformer);
+            final XURLTransformer xURLTransformer = UnoRuntime.queryInterface( com.sun.star.util.XURLTransformer.class, aURLTransformer );
 
             com.sun.star.util.URL[] aURL = new com.sun.star.util.URL[1];
             aURL[0] = new com.sun.star.util.URL();
@@ -309,41 +252,27 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
         if (m_xFrame == null)
         {
             initialize(getRecordParser().getReportDocuments(), getConnection());
-            // m_xFrame = getFrame();
             m_xFrame = getReportDefinition().getCurrentController().getFrame();
             setPageOrientation(m_nDefaultPageOrientation, true /* NO_LAYOUT*/);
         }
         return m_xFrame;
     }
 
-//    public XMultiServiceFactory getDocumentServiceFactory()
-//    {
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
-
-//    public void addTextSectionCopies()
-//    {
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
     public boolean reconnectToDatabase(XMultiServiceFactory xMSF, PropertyValue[] Properties)
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return false;
     }
 
     public void insertDatabaseDatatoReportDocument(XMultiServiceFactory xMSF)
     {
-        // throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public void StopProcess()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public void store(String Name, int OpenMode) throws com.sun.star.uno.Exception
     {
-        // throw new UnsupportedOperationException("Not supported yet.");
-        // getReportBuilderLayouter().store(Name);
         // store into the ZIP Storage
         if (OpenMode == 1 /* static Report */)
         {
@@ -351,23 +280,21 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
             return;
         }
 
-        final XCommandProcessor xProcessor = UnoRuntime.queryInterface(XCommandProcessor.class, m_aDocumentDefinition);
+        final XCommandProcessor xProcessor = UnoRuntime.queryInterface( XCommandProcessor.class, m_documentDefinition );
         final com.sun.star.ucb.Command aCommand = new com.sun.star.ucb.Command();
-        aCommand.Name = "storeOwn";
+        aCommand.Name = "store";
 
-        final Object aObj2 = xProcessor.execute(aCommand, xProcessor.createCommandIdentifier(), null);
+        xProcessor.execute(aCommand, xProcessor.createCommandIdentifier(), null);
 
         final XHierarchicalNameContainer aNameContainer = UnoRuntime.queryInterface(XHierarchicalNameContainer.class, m_aReportDocument);
-        aNameContainer.insertByHierarchicalName(Name, m_aDocumentDefinition);
+        aNameContainer.insertByHierarchicalName( Name, m_documentDefinition );
     }
 
     public boolean liveupdate_addGroupNametoDocument(String[] GroupNames, String CurGroupTitle, Vector GroupFieldVector, ArrayList ReportPath, int iSelCount)
     {
-        // throw new UnsupportedOperationException("Not supported yet.");
         final int GroupCount = GroupFieldVector.size();
         if (GroupCount < MAXIMUM_GROUPCOUNT)
         {
-            // removeGroupNamesofRecordTable(iSelCount);
             final FieldColumn CurFieldColumn = getRecordParser().getFieldColumnByTitle(CurGroupTitle);
             GroupFieldVector.addElement(CurFieldColumn.getFieldName());
         }
@@ -376,16 +303,10 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
 
     public void refreshGroupFields(String[] _sNewNames)
     {
-        // throw new UnsupportedOperationException("Not supported yet.");
     }
 
-//    public boolean isGroupField(String _FieldName)
-//    {
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
     public void liveupdate_removeGroupName(String[] NewSelGroupNames, String CurGroupTitle, Vector GroupFieldVector)
     {
-        // throw new UnsupportedOperationException("Not supported yet.");
         final FieldColumn CurFieldColumn = getRecordParser().getFieldColumnByTitle(CurGroupTitle);
         GroupFieldVector.removeElement(CurFieldColumn.getFieldName());
     }
@@ -401,15 +322,12 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
 
     public void setPageOrientation(int nOrientation)
     {
-        // throw new UnsupportedOperationException("Not supported yet.");
         setPageOrientation(nOrientation, true);
     }
 
     public void liveupdate_changeLayoutTemplate(String LayoutTemplatePath/*, String BitmapPath*/)
     {
-        // throw new UnsupportedOperationException("Not supported yet.");
         /* Right Listbox */
-
         final IReportBuilderLayouter aLayouter = getReportBuilderLayouter();
         aLayouter.loadAndSetBackgroundTemplate(LayoutTemplatePath);
         aLayouter.layout();
@@ -435,147 +353,131 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
 
     public void liveupdate_changeContentTemplate(String ContentTemplatePath)
     {
-        // throw new UnsupportedOperationException("Not supported yet.");
         /* Left Listbox */
         setReportBuilderLayouterName(ContentTemplatePath);
     }
 
     public void layout_setupRecordSection(String TemplateName)
     {
-        // throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public void removeTextTableAndTextSection()
     {
-        // throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public void layout_selectFirstPage()
     {
-        // throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    private void closeReportDefinition()
+    {
+        try
+        {
+            if ( m_documentDefinition != null )
+            {
+                // set the document to "not modified", to ensure that it won't ask the user before closing
+                XModifiable documentModify = UnoRuntime.queryInterface( XModifiable.class, m_reportDocument );
+                documentModify.setModified( false );
+                // actually close
+                XSubDocument subComponent = UnoRuntime.queryInterface( XSubDocument.class, m_documentDefinition );
+                subComponent.close();
+            }
+        }
+        catch ( Exception ex )
+        {
+            Logger.getLogger( ReportBuilderImplementation.class.getName() ).log( Level.SEVERE, null, ex );
+        }
+        m_documentDefinition = null;
+        m_reportDocument = null;
     }
 
     public void dispose()
     {
-        // throw new UnsupportedOperationException("Not supported yet.");
         getReportBuilderLayouter().dispose();
-
-        try
-        {
-            // XCloseable xClose = (XCloseable)UnoRuntime.queryInterface(XCloseable.class, m_xReportDefinition);
-            // xClose.close(true);
-            // Failed!
-
-            // next idea, which should always work.
-            // XController xController = m_xReportDefinition.getCurrentController();
-            // XDispatchProvider xDispatcher = (XDispatchProvider)UnoRuntime.queryInterface(XDispatchProvider.class, xController);
-            // xDispatcher.queryDispatch();
-
-            final XComponent xDocumentComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, m_aDocumentDefinition);
-            xDocumentComponent.dispose();
-            m_xReportDefinition = null;
-
-        // TODO: dispose() office will be killed.
-        // m_xReportDefinition.dispose();
-        }
-        catch (Exception e)
-        {
-            // catch all possible exceptions
-            int dummy = 0;
-        }
+        closeReportDefinition();
     }
 
     public XComponent getComponent()
     {
-        // throw new UnsupportedOperationException("Not supported yet.");
         return null;
     }
 
     public void liveupdate_changeUserFieldContent(String fieldName, String titlename)
     {
-        // throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public void liveupdate_updateReportTitle(String _sTitleName)
     {
-        // throw new UnsupportedOperationException("Not supported yet.");
     }
 
-//    public void finish()
-//    {
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
     public void addReportToDBView()
     {
-        // throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    private XComponent[] createFinalReportDocument(String Name, Object _aDBConnection, boolean _bAsTemplate, boolean _bOpenInDesign)
+    private XComponent loadReport( final String i_reportName )
     {
-        XComponent[] xComponents = new XComponent[1];
         try
         {
-            PropertyValue[] aProperties = new PropertyValue[2];
-            aProperties[0] = new PropertyValue();
-            aProperties[0].Name = "ActiveConnection";
-            // aProperties[0].Value = m_aDocumentDefinition;
-            aProperties[0].Value = _aDBConnection;
-
-            final com.sun.star.ucb.OpenCommandArgument2 aOpenCommand = new com.sun.star.ucb.OpenCommandArgument2();
-            aOpenCommand.Mode = com.sun.star.ucb.OpenMode.DOCUMENT;
-
-            aProperties[1] = new PropertyValue();
-            aProperties[1].Name = "OpenCommand"; // This name is 'Schall und Rauch'
-//            // since Java 6
-//            // aProperties[1].Value = Integer.valueOf(com.sun.star.ucb.OpenMode.DOCUMENT);
-            aProperties[1].Value = aOpenCommand;
-
-//            aProperties[2] = new PropertyValue();
-//            aProperties[2].Name = "Title"; // This name is 'Schall und Rauch'
-//            aProperties[2].Value = Name;
-
-            final XCommandProcessor xProcessor = (XCommandProcessor) UnoRuntime.queryInterface(XCommandProcessor.class, m_aDocumentDefinition);
-            com.sun.star.ucb.Command aCommand = new com.sun.star.ucb.Command();
-            aCommand.Name = "open";
-            aCommand.Argument = aProperties;
-
-            final Object aObj2 = xProcessor.execute(aCommand, xProcessor.createCommandIdentifier(), null);
-            xComponents[0] = (XComponent) UnoRuntime.queryInterface(XComponent.class, aObj2);
+            return m_documentUI.loadComponent( DatabaseObject.REPORT, i_reportName, false );
         }
-        catch (com.sun.star.uno.Exception e)
+        catch ( Exception ex )
         {
-            int dummy = 0;
+            Logger.getLogger( ReportBuilderImplementation.class.getName() ).log( Level.SEVERE, null, ex );
         }
-        return xComponents;
+        return null;
     }
 
-    public XComponent[] createFinalReportDocument(String Name, boolean _bAsTemplate, boolean _bOpenInDesign)
+    private XComponent loadReportFromDocumentDefinition()
     {
-        // XComponent[] xComponents = getReportBuilderLayouter().createFinalReportDocument(Name, getRecordParser().DBConnection ,_bAsTemplate, _bOpenInDesign);
-        if (_bAsTemplate == true && _bOpenInDesign == false)
+        final XCommandProcessor commandProcessor = UnoRuntime.queryInterface(XCommandProcessor.class, m_documentDefinition);
+
+        com.sun.star.ucb.Command aCommand = new com.sun.star.ucb.Command();
+        aCommand.Name = "open";
+        try
         {
-            final XComponent[] xComponents = createFinalReportDocument(Name, getRecordParser().DBConnection, _bAsTemplate, _bOpenInDesign);
-            dispose();
-            return xComponents;
+            final Object result = commandProcessor.execute( aCommand, commandProcessor.createCommandIdentifier(), null );
+            return UnoRuntime.queryInterface( XComponent.class, result );
         }
-        else if (_bAsTemplate == false)
+        catch ( Exception ex )
         {
-            final XComponent[] xComponents = createFinalReportDocument(Name, getRecordParser().DBConnection, _bAsTemplate, _bOpenInDesign);
-            boolean bDocisStored = getRecordParser().storeDatabaseDocumentToTempPath(xComponents[0], Name);
-            if (bDocisStored)
-            {
-                getRecordParser().addReportDocument(xComponents[0], false);
-            }
-            dispose();
+            Logger.getLogger( ReportBuilderImplementation.class.getName() ).log( Level.SEVERE, null, ex );
         }
-        else
+        return null;
+    }
+
+    public void createAndOpenReportDocument( String i_name, boolean i_asTemplate, boolean i_openForEditing )
+    {
+        if ( i_openForEditing )
         {
             // we won't destroy the report builder window, also don't create a document
             // Do we need to reopen the report builder with the known name?
             switchOnAddFieldWindow();
             switchOnPropertyBrowser();
+            return;
         }
-        return null;
+
+        if ( i_asTemplate )
+        {
+            // don't need the report definition anymore - the document it represents has already been stored
+            closeReportDefinition();
+
+            // open the report, again, this time not in design, but containing data
+            loadReport( i_name );
+        }
+        else
+        {
+            // execute the report from the (yet unsaved) report definition
+            XComponent document = loadReportFromDocumentDefinition();
+
+            // don't need the report definition anymore
+            closeReportDefinition();
+
+            // store the generated report
+            if ( getRecordParser().storeDatabaseDocumentToTempPath( document, i_name ) )
+                getRecordParser().addReportDocument( document, false );
+        }
+
+        dispose();
     }
 
     private XConnection getConnection()
@@ -586,7 +488,6 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
     public void initializeFieldColumns(final int _nType, final String TableName, final String[] FieldNames)
     {
         getRecordParser().initializeFieldColumns(FieldNames, TableName);
-//        getRecordParser().createRecordFieldNames();
 
         final com.sun.star.wizards.db.RecordParser a = getRecordParser();
         int[] FieldTypes = new int[FieldNames.length];
@@ -597,7 +498,6 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
             FieldWidths[i] = a.FieldColumns[i].getFieldWidth();
         }
         getReportBuilderLayouter().setTableName(_nType, TableName);
-//        getReportBuilderLayouter().insertFields(getRecordParser().getRecordFieldNames());
         getReportBuilderLayouter().insertFieldNames(FieldNames);
         getReportBuilderLayouter().insertFieldTypes(FieldTypes);
         getReportBuilderLayouter().insertFieldWidths(FieldWidths);
@@ -608,7 +508,6 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
     public void setFieldTitles(String[] _aFieldTitles)
     {
         getRecordParser().setFieldTitles(_aFieldTitles);
-//        getRecordParser().createRecordFieldNames();
 
         getReportBuilderLayouter().insertFieldTitles(_aFieldTitles);
         getReportBuilderLayouter().layout();
@@ -617,18 +516,12 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
     public void setSorting(String[][] _aSortFieldNames)
     {
         getRecordParser().setSortFieldNames(_aSortFieldNames);
-//        getRecordParser().createRecordFieldNames();
     }
 
     public void setGrouping(String[] _aGroupFieldNames)
     {
         getRecordParser().prependSortFieldNames(_aGroupFieldNames);
 
-        // getRecordParser().createRecordFieldNames();
-
-        // getReportBuilderLayouter().insertFields(getRecordParser().getRecordFieldNames());
-//         getReportBuilderLayouter().insertFieldTitles(getRecordParser().get);
-        // getReportBuilderLayouter().insertGroups(_aGroupFieldNames);
         getReportBuilderLayouter().insertGroupNames(_aGroupFieldNames);
         getReportBuilderLayouter().layout();
     }
@@ -643,18 +536,18 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
     {
         if (m_aReportPath == null)
         {
-            // Check general availability of office paths
             try
             {
-                m_aReportPath = FileAccess.getOfficePaths(getMSF(), "Template", "share", "/wizard");
-                FileAccess.combinePaths(getMSF(), m_aReportPath, "/wizard/report");
+                // Check general availability of office paths
+                m_aReportPath = FileAccess.getOfficePaths( getMSF(), "Template", "share", "/wizard" );
+                FileAccess.combinePaths( getMSF(), m_aReportPath, "/wizard/report" );
             }
-            catch (Exception e)
+            catch ( NoValidPathException ex )
             {
+                Logger.getLogger( ReportBuilderImplementation.class.getName() ).log( Level.SEVERE, null, ex );
             }
         }
         return m_aReportPath;
-    // return "";
     }
 
     public String getContentPath()
@@ -686,7 +579,7 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
                     });
             Object[] aParams = new Object[2];
             aParams[0] = this;
-            aParams[1] = m_aResource;
+            aParams[1] = m_resource;
             final IReportBuilderLayouter aReportBuilderLayouter = (IReportBuilderLayouter) cTor.newInstance(aParams);
             return aReportBuilderLayouter;
         }
@@ -694,34 +587,6 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
         {
             e.printStackTrace();
         }
-//            catch (NoSuchMethodException ex)
-//            {
-//                ex.printStackTrace();
-//            }
-//            catch (SecurityException ex)
-//            {
-//                ex.printStackTrace();
-//            }
-//            catch (InstantiationException ex)
-//            {
-//                ex.printStackTrace();
-//            }
-//            catch (IllegalAccessException ex)
-//            {
-//                ex.printStackTrace();
-//            }
-//            catch (IllegalArgumentException ex)
-//            {
-//                ex.printStackTrace();
-//            }
-//            catch (InvocationTargetException ex)
-//            {
-//                ex.printStackTrace();
-//            }
-//            catch (ClassNotFoundException e)
-//            {
-//                e.printStackTrace();
-//            }
         return null;
     }
     private LinkedHashMap m_aLayoutMap = null;
@@ -837,11 +702,11 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
 
     public XReportDefinition getReportDefinition()
     {
-        if (m_xReportDefinition == null)
+        if (m_reportDocument == null)
         {
             throw new NullPointerException("Report Definition is not already initialized, check if you too early access the report definition.");
         }
-        return m_xReportDefinition;
+        return m_reportDocument;
     }
 
     public XMultiServiceFactory getGlobalMSF()
@@ -851,7 +716,6 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
 
     public void importReportData(ReportWizard aWizard)
     {
-        // throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public String getDefaultHeaderLayout()
@@ -863,7 +727,6 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
     {
         getRecordParser().Command = _sCommand;
         getReportDefinition().setCommand(_sCommand);
-    // throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public void setCommandType(int _nCommand)
@@ -880,11 +743,6 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
             throw new java.io.IOException("default.otr");
         }
 
-        final String sName = FileAccess.getFilename(sDefaultHeaderLayoutPath);
-        // if (sName.toLowerCase().equals("default.otr_") ||
-        //         LayoutTemplatePath.equals("DefaultLayoutOfHeaders"))
-        // File aFile = new File(sDefaultHeaderLayoutPath);
-        // File aFile = new File(sName);
         FileAccess aAccess = new FileAccess(getGlobalMSF());
         if (! aAccess.exists(sDefaultHeaderLayoutPath, true))
         {

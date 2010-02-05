@@ -34,6 +34,8 @@ package com.sun.star.wizards.report;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sdb.application.XDatabaseDocumentUI;
+import com.sun.star.wizards.common.Resource;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -45,14 +47,14 @@ import java.util.Vector;
  */
 public interface IReportDocument
 {
-    // public ReportTextDocument getDoc();
     // -------------------------------------------------------------------------
     // initialisation
     // -------------------------------------------------------------------------
+    public void initialize(
+            final XDatabaseDocumentUI i_documentUI,
+            final Resource i_resource
+        );
 
-    // -------------------------------------------------------------------------
-    // opening the dialog
-    // -------------------------------------------------------------------------
     // -------------------------------------------------------------------------
     // Access Helper
     // -------------------------------------------------------------------------
@@ -211,7 +213,7 @@ public interface IReportDocument
      *
      * TODO: add Name to this functionality
      */
-    public void addReportToDBView(/* String Name */);
+    public void addReportToDBView();
 
     public void importReportData(ReportWizard aWizard);
 
@@ -222,7 +224,11 @@ public interface IReportDocument
      * @param _bOpenInDesign
      * @return
      */
-    public XComponent[] createFinalReportDocument(String Name, boolean _bAsTemplate, boolean _bOpenInDesign);
+    public void createAndOpenReportDocument(
+        final String Name,
+        final boolean _bAsTemplate,
+        final boolean _bOpenInDesign
+    );
 
     public void dispose();
     // -------------------------------------------------------------------------
