@@ -1075,10 +1075,6 @@ Any ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, cons
     }
     aDocumentArgs.put( "MacroExecutionMode", *aDocumentMacroMode );
 
-
-    if ( xConnection.is() )
-        m_xLastKnownConnection = xConnection;
-
     if  (   ( nOpenMode == OpenMode::ALL )
         ||  ( nOpenMode == OpenMode::FOLDERS )
         ||  ( nOpenMode == OpenMode::DOCUMENTS )
@@ -1803,7 +1799,7 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
     return aMediaDesc.getPropertyValues();
 }
 // -----------------------------------------------------------------------------
-void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& _xConnection, const Sequence< sal_Int8 >& _aClassID,
+void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& i_rConnection, const Sequence< sal_Int8 >& _aClassID,
         const Sequence< PropertyValue >& i_rOpenCommandArguments, const bool _bSuppressMacros, const bool _bReadOnly )
 {
     if ( !m_xEmbeddedObject.is() )
@@ -1856,7 +1852,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& _x
 
                 Sequence< PropertyValue > aEmbeddedObjectDescriptor;
                 Sequence< PropertyValue > aLoadArgs( fillLoadArgs(
-                    _xConnection, _bSuppressMacros, _bReadOnly, i_rOpenCommandArguments, aEmbeddedObjectDescriptor ) );
+                    i_rConnection, _bSuppressMacros, _bReadOnly, i_rOpenCommandArguments, aEmbeddedObjectDescriptor ) );
 
                 m_xEmbeddedObject.set(xEmbedFactory->createInstanceUserInit(aClassID
                                                                             ,sDocumentService
@@ -1902,7 +1898,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& _x
 
             Sequence< PropertyValue > aEmbeddedObjectDescriptor;
             Sequence< PropertyValue > aLoadArgs( fillLoadArgs(
-                _xConnection, _bSuppressMacros, _bReadOnly, i_rOpenCommandArguments, aEmbeddedObjectDescriptor ) );
+                i_rConnection, _bSuppressMacros, _bReadOnly, i_rOpenCommandArguments, aEmbeddedObjectDescriptor ) );
 
             Reference<XCommonEmbedPersist> xCommon(m_xEmbeddedObject,UNO_QUERY);
             OSL_ENSURE(xCommon.is(),"unsupported interface!");
@@ -1963,6 +1959,9 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& _x
             DBG_UNHANDLED_EXCEPTION();
         }
     }
+
+    if ( i_rConnection.is() )
+        m_xLastKnownConnection = i_rConnection;
 }
 
 // -----------------------------------------------------------------------------

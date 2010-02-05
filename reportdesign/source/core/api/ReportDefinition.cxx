@@ -625,6 +625,7 @@ struct OReportDefinitionImpl
     sal_Bool                                                m_bControllersLocked;
     sal_Bool                                                m_bModified;
     sal_Bool                                                m_bEscapeProcessing;
+    sal_Bool                                                m_bSetModifiedEnabled;
     OReportDefinitionImpl(::osl::Mutex& _aMutex)
     :m_aStorageChangeListeners(_aMutex)
     ,m_aCloseListener(_aMutex)
@@ -642,6 +643,7 @@ struct OReportDefinitionImpl
     ,m_bControllersLocked(sal_False)
     ,m_bModified(sal_False)
     ,m_bEscapeProcessing(sal_True)
+    ,m_bSetModifiedEnabled( sal_True )
     {}
 
     OReportDefinitionImpl(::osl::Mutex& _aMutex,const OReportDefinitionImpl& _aCopy)
@@ -804,55 +806,61 @@ void SAL_CALL OReportDefinition::dispose() throw(uno::RuntimeException)
 // -----------------------------------------------------------------------------
 void SAL_CALL OReportDefinition::disposing()
 {
-    m_pImpl->m_aControllers.clear();
+    notifyEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnUnload")));
+
     uno::Reference< frame::XModel > xHoldAlive( this );
-    {
-        notifyEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnUnload")));
 
-        lang::EventObject aDisposeEvent( static_cast< ::cppu::OWeakObject* >( this ) );
-        m_pImpl->m_aModifyListeners.disposeAndClear( aDisposeEvent );
-        m_pImpl->m_aCloseListener.disposeAndClear( aDisposeEvent );
-        m_pImpl->m_aDocEventListeners.disposeAndClear( aDisposeEvent );
-        m_pImpl->m_aStorageChangeListeners.disposeAndClear( aDisposeEvent );
+    lang::EventObject aDisposeEvent( static_cast< ::cppu::OWeakObject* >( this ) );
+    m_pImpl->m_aModifyListeners.disposeAndClear( aDisposeEvent );
+    m_pImpl->m_aCloseListener.disposeAndClear( aDisposeEvent );
+    m_pImpl->m_aDocEventListeners.disposeAndClear( aDisposeEvent );
+    m_pImpl->m_aStorageChangeListeners.disposeAndClear( aDisposeEvent );
 
-        ::comphelper::disposeComponent(m_pImpl->m_xGroups);
-        m_pImpl->m_xReportHeader.clear();
-        m_pImpl->m_xReportFooter.clear();
-        m_pImpl->m_xPageHeader.clear();
-        m_pImpl->m_xPageFooter.clear();
-        m_pImpl->m_xDetail.clear();
-        //::comphelper::disposeComponent(m_pImpl->m_xReportHeader);
-        //::comphelper::disposeComponent(m_pImpl->m_xReportFooter);
-        //::comphelper::disposeComponent(m_pImpl->m_xPageHeader);
-        //::comphelper::disposeComponent(m_pImpl->m_xPageFooter);
-        //::comphelper::disposeComponent(m_pImpl->m_xDetail);
-        ::comphelper::disposeComponent(m_pImpl->m_xFunctions);
+    // SYNCHRONIZED --->
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    ::osl::ResettableMutexGuard aGuard(m_aMutex);
 
-        //::comphelper::disposeComponent(m_pImpl->m_xStorage);
-            // don't dispose, this currently is the task of either the ref count going to
-            // 0, or of the embedded object (if we're embedded, which is the only possible
-            // case so far)
-            // #i78366# / 2007-06-18 / frank.schoenheit@sun.com
-        m_pImpl->m_xStorage.clear();
-        m_pImpl->m_xViewData.clear();
-        m_pImpl->m_xCurrentController.clear();
-        m_pImpl->m_xNumberFormatsSupplier.clear();
-        m_pImpl->m_xStyles.clear();
-        m_pImpl->m_xXMLNamespaceMap.clear();
-        m_pImpl->m_xGradientTable.clear();
-        m_pImpl->m_xHatchTable.clear();
-        m_pImpl->m_xBitmapTable.clear();
-        m_pImpl->m_xTransparencyGradientTable.clear();
-        m_pImpl->m_xDashTable.clear();
-        m_pImpl->m_xMarkerTable.clear();
-        m_pImpl->m_xUIConfigurationManager.clear();
-        m_pImpl->m_pReportModel.reset();
-        m_pImpl->m_pObjectContainer.reset();
-        m_pImpl->m_aArgs.realloc(0);
-        m_pImpl->m_xTitleHelper.clear();
-        m_pImpl->m_xNumberedControllers.clear();
-    }
+    m_pImpl->m_aControllers.clear();
+
+    ::comphelper::disposeComponent(m_pImpl->m_xGroups);
+    m_pImpl->m_xReportHeader.clear();
+    m_pImpl->m_xReportFooter.clear();
+    m_pImpl->m_xPageHeader.clear();
+    m_pImpl->m_xPageFooter.clear();
+    m_pImpl->m_xDetail.clear();
+    //::comphelper::disposeComponent(m_pImpl->m_xReportHeader);
+    //::comphelper::disposeComponent(m_pImpl->m_xReportFooter);
+    //::comphelper::disposeComponent(m_pImpl->m_xPageHeader);
+    //::comphelper::disposeComponent(m_pImpl->m_xPageFooter);
+    //::comphelper::disposeComponent(m_pImpl->m_xDetail);
+    ::comphelper::disposeComponent(m_pImpl->m_xFunctions);
+
+    //::comphelper::disposeComponent(m_pImpl->m_xStorage);
+        // don't dispose, this currently is the task of either the ref count going to
+        // 0, or of the embedded object (if we're embedded, which is the only possible
+        // case so far)
+        // #i78366# / 2007-06-18 / frank.schoenheit@sun.com
+    m_pImpl->m_xStorage.clear();
+    m_pImpl->m_xViewData.clear();
+    m_pImpl->m_xCurrentController.clear();
+    m_pImpl->m_xNumberFormatsSupplier.clear();
+    m_pImpl->m_xStyles.clear();
+    m_pImpl->m_xXMLNamespaceMap.clear();
+    m_pImpl->m_xGradientTable.clear();
+    m_pImpl->m_xHatchTable.clear();
+    m_pImpl->m_xBitmapTable.clear();
+    m_pImpl->m_xTransparencyGradientTable.clear();
+    m_pImpl->m_xDashTable.clear();
+    m_pImpl->m_xMarkerTable.clear();
+    m_pImpl->m_xUIConfigurationManager.clear();
+    m_pImpl->m_pReportModel.reset();
+    m_pImpl->m_pObjectContainer.reset();
+    m_pImpl->m_aArgs.realloc(0);
+    m_pImpl->m_xTitleHelper.clear();
+    m_pImpl->m_xNumberedControllers.clear();
+    // <--- SYNCHRONIZED
 }
+
 // -----------------------------------------------------------------------------
 ::rtl::OUString OReportDefinition::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
@@ -1948,6 +1956,38 @@ embed::VisualRepresentation SAL_CALL OReportDefinition::getPreferredVisualRepres
 }
 // -----------------------------------------------------------------------------
 // XModifiable
+::sal_Bool SAL_CALL OReportDefinition::disableSetModified(  ) throw (uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    ::connectivity::checkDisposed( ReportDefinitionBase::rBHelper.bDisposed );
+
+    const sal_Bool bWasEnabled = m_pImpl->m_bSetModifiedEnabled;
+    m_pImpl->m_bSetModifiedEnabled = sal_False;
+    return bWasEnabled;
+}
+
+// -----------------------------------------------------------------------------
+::sal_Bool SAL_CALL OReportDefinition::enableSetModified(  ) throw (uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    ::connectivity::checkDisposed( ReportDefinitionBase::rBHelper.bDisposed );
+
+    const sal_Bool bWasEnabled = m_pImpl->m_bSetModifiedEnabled;
+    m_pImpl->m_bSetModifiedEnabled = sal_True;
+    return bWasEnabled;
+}
+
+// -----------------------------------------------------------------------------
+::sal_Bool SAL_CALL OReportDefinition::isSetModifiedEnabled(  ) throw (uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    ::connectivity::checkDisposed( ReportDefinitionBase::rBHelper.bDisposed );
+
+    return m_pImpl->m_bSetModifiedEnabled;
+}
+
+// -----------------------------------------------------------------------------
+// XModifiable
 ::sal_Bool SAL_CALL OReportDefinition::isModified(  ) throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -1959,6 +1999,10 @@ void SAL_CALL OReportDefinition::setModified( ::sal_Bool _bModified ) throw (bea
 {
     ::osl::ResettableMutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
+
+    if ( !m_pImpl->m_bSetModifiedEnabled )
+        return;
+
     if ( m_pImpl->m_pReportModel->IsReadOnly() && _bModified )
         throw beans::PropertyVetoException();
     if ( m_pImpl->m_bModified != _bModified )
