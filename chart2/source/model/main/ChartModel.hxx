@@ -70,7 +70,7 @@
 #endif
 #include <osl/mutex.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 
 // for auto_ptr
 #include <memory>

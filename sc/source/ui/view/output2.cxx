@@ -37,24 +37,24 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 
-#include <svx/adjitem.hxx>
+#include <editeng/adjitem.hxx>
 #include <svx/algitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svx/colritem.hxx>
-#include <svx/editobj.hxx>
-#include <svx/editstat.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/forbiddencharacterstable.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/langitem.hxx>
 #include <svx/rotmodit.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/unolingu.hxx>
 #include <svl/zforlist.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/metric.hxx>

@@ -41,7 +41,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
-#include <svx/AccessibleStaticTextBase.hxx>
+#include <editeng/AccessibleStaticTextBase.hxx>
 #include <comphelper/uno3.hxx>
 #include "AccessibleContextBase.hxx"
 

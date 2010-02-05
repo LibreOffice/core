@@ -33,7 +33,7 @@
 
 
 
-#include <svx/editobj.hxx>
+#include <editeng/editobj.hxx>
 
 #include "userlist.hxx"
 #include "uiitems.hxx"

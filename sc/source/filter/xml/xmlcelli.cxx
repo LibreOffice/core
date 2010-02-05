@@ -51,7 +51,7 @@
 #include "XMLStylesImportHelper.hxx"
 
 #include "arealink.hxx"
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include "convuno.hxx"
 #include "XMLConverter.hxx"
 #include "scerrors.hxx"
@@ -67,8 +67,8 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <svl/zforlist.hxx>
 #include <svx/svdocapt.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/editobj.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/editobj.hxx>
 #include <svx/unoapi.hxx>
 #include <svl/languageoptions.hxx>
 
@@ -739,7 +739,7 @@ void ScXMLTableRowCellContext::SetCellRangeSource( const table::CellAddress& rPo
             String sSourceStr( pCellRangeSource->sSourceStr );
             ScAreaLink* pLink = new ScAreaLink( pDoc->GetDocumentShell(), pCellRangeSource->sURL,
                 sFilterName, pCellRangeSource->sFilterOptions, sSourceStr, aDestRange, pCellRangeSource->nRefresh );
-            SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
+            sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
             pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, pCellRangeSource->sURL, &sFilterName, &sSourceStr );
         }
     }

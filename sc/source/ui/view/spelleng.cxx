@@ -36,12 +36,12 @@
 #include <memory>
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 
-#include <svx/langitem.hxx>
-#include <svx/editobj.hxx>
-#include <svx/editview.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/editview.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>

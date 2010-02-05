@@ -36,8 +36,8 @@
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 
 #include <unotools/textsearch.hxx>
-#include <svx/srchitem.hxx>
-#include <svx/editobj.hxx>
+#include <svl/srchitem.hxx>
+#include <editeng/editobj.hxx>
 
 #include "table.hxx"
 #include "collect.hxx"

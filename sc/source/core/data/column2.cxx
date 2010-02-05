@@ -36,17 +36,17 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <svx/algitem.hxx>
-#include <svx/editobj.hxx>
-#include <svx/editstat.hxx>
-#include <svx/emphitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/forbiddencharacterstable.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/emphitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
 #include <svx/rotmodit.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <editeng/unolingu.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/broadcast.hxx>
 #include <svl/listeneriter.hxx>

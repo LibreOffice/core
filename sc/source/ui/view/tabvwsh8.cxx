@@ -36,7 +36,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/boxitem.hxx>
+#include <editeng/boxitem.hxx>
 
 #include "tabvwsh.hxx"
 #include "document.hxx"

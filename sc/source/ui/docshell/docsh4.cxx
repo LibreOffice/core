@@ -45,7 +45,7 @@ using namespace ::com::sun::star;
 
 #include "scitems.hxx"
 #include <sfx2/fcontnr.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>

@@ -41,10 +41,10 @@
 
 #include "scitems.hxx"
 #include <sfx2/app.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
-#include <svx/flditem.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/outliner.hxx>
 #include <basic/sbstar.hxx>
 
 #include <sfx2/sfxdlg.hxx>
@@ -63,7 +63,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/macrconf.hxx>
 #include <sfx2/printer.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svtools/colorcfg.hxx>
 
 #include <svl/whiter.hxx>

@@ -36,7 +36,7 @@
 //------------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>

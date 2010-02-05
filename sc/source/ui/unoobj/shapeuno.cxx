@@ -38,7 +38,7 @@
 #include <svtools/unoimap.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/unoshape.hxx>
-#include <svx/unofield.hxx>
+#include <editeng/unofield.hxx>
 #include <svx/shapepropertynotifier.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <cppuhelper/implbase2.hxx>

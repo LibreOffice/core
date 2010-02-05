@@ -33,7 +33,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/stritem.hxx>
@@ -2102,7 +2102,7 @@ void ScInterpreter::ScStyle()
         PushIllegalParameter();
 }
 
-ScDdeLink* lcl_GetDdeLink( SvxLinkManager* pLinkMgr,
+ScDdeLink* lcl_GetDdeLink( sfx2::LinkManager* pLinkMgr,
                                 const String& rA, const String& rT, const String& rI, BYTE nM )
 {
     USHORT nCount = pLinkMgr->GetLinks().Count();
@@ -2145,7 +2145,7 @@ void ScInterpreter::ScDde()
         //  temporary documents (ScFunctionAccess) have no DocShell
         //  and no LinkManager -> abort
 
-        SvxLinkManager* pLinkMgr = pDok->GetLinkManager();
+        sfx2::LinkManager* pLinkMgr = pDok->GetLinkManager();
         if (!pLinkMgr)
         {
             PushNoValue();

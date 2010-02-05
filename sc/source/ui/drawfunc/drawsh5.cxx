@@ -35,7 +35,7 @@
 
 //------------------------------------------------------------------
 
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>

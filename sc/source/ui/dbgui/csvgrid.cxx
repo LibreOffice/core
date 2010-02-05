@@ -46,12 +46,12 @@
 
 // *** edit engine ***
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 
-#include <svx/colritem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/fontitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
 #include <svl/itemset.hxx>
 #include "editutil.hxx"
 // *** edit engine ***

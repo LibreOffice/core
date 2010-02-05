@@ -37,7 +37,7 @@
 #include "viewdata.hxx"
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <unotools/accessiblerelationsethelper.hxx>
-#include <svx/AccessibleStaticTextBase.hxx>
+#include <editeng/AccessibleStaticTextBase.hxx>
 #include <comphelper/uno3.hxx>
 
 class ScTabViewShell;

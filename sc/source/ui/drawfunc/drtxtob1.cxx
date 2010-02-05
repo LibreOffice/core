@@ -36,15 +36,15 @@
 //------------------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <svx/svxdlg.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/hyznitem.hxx>
-#include <svx/orphitem.hxx>
-#include <svx/outliner.hxx>
-#include <svx/spltitem.hxx>
-#include <svx/widwitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/hyznitem.hxx>
+#include <editeng/orphitem.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/spltitem.hxx>
+#include <editeng/widwitem.hxx>
 #include <sot/exchange.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/transfer.hxx>

@@ -79,18 +79,18 @@
 #include <svx/svdocapt.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/editobj.hxx>
-#include <svx/outliner.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svditer.hxx>
-#include <svx/writingmodeitem.hxx>
+#include <editeng/writingmodeitem.hxx>
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/colritem.hxx>
 #include <svx/xflclit.hxx>
-#include <svx/adjitem.hxx>
+#include <editeng/adjitem.hxx>
 #include <svx/xlineit.hxx>
 #include <svx/xlinjoit.hxx>
 #include <svx/xlntrit.hxx>

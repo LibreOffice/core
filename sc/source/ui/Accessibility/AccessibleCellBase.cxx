@@ -55,7 +55,7 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <tools/debug.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <rtl/uuid.h>
 #include <comphelper/sequence.hxx>
 #include <sfx2/objsh.hxx>

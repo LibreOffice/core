@@ -80,12 +80,12 @@ SHL1LIBS= 		$(LIB1TARGET)
 
 SHL1STDLIBS=	$(CHARTTOOLS)		\
                 $(CHARTVIEW)		\
+                $(EDITENGLIB)			\
                 $(CPPULIB)			\
                 $(CPPUHELPERLIB)	\
                 $(COMPHELPERLIB)	\
                 $(BASEGFXLIB)		\
                 $(DRAWINGLAYERLIB)	\
-                $(GOODIESLIB)		\
                 $(BASEGFXLIB) 		\
                 $(SALLIB)			\
                 $(SVLLIB)			\

@@ -36,10 +36,10 @@
 
 #include "scitems.hxx"
 
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/fontwork.hxx>
 //#include <svx/labdlg.hxx> CHINA001
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/tabarea.hxx>
 #include <svx/tabline.hxx>
 //CHINA001 #include <svx/transfrm.hxx>

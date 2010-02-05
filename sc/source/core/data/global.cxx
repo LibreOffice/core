@@ -37,11 +37,11 @@
 #include <vcl/svapp.hxx>
 #include "scitems.hxx"
 #include <svx/algitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/editobj.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/srchitem.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <svl/srchitem.hxx>
+#include <editeng/langitem.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>

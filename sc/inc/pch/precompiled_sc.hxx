@@ -162,10 +162,10 @@
 #include <unotools/pathoptions.hxx>
 #include <svl/solar.hrc>
 #include <unotools/useroptions.hxx>
-#include <svx/editobj.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/fmglob.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/sdangitm.hxx>
 #include <svx/sderitm.hxx>
 #include <svx/sdmetitm.hxx>

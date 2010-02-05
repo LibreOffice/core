@@ -33,21 +33,21 @@
 
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
-
+#include <editeng/eeitem.hxx>
+#include <svx/svdpool.hxx>
 
 #include <svx/algitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/editeng.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/flditem.hxx>
 #include <svx/fmdpage.hxx>
-#include <svx/langitem.hxx>
-#include <svx/linkmgr.hxx>
-#include <svx/srchitem.hxx>
+#include <editeng/langitem.hxx>
+#include <sfx2/linkmgr.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/unomid.hxx>
-#include <svx/unoprnms.hxx>
-#include <svx/unotext.hxx>
+#include <editeng/unoprnms.hxx>
+#include <editeng/unotext.hxx>
 #include <svx/svdpage.hxx>
 #include <sfx2/bindings.hxx>
 #include <svl/zforlist.hxx>
@@ -794,7 +794,7 @@ const SfxItemPropertyMapEntry* lcl_GetEditPropertyMap()
 }
 const SvxItemPropertySet* lcl_GetEditPropertySet()
 {
-    static SvxItemPropertySet aEditPropertySet( lcl_GetEditPropertyMap() );
+    static SvxItemPropertySet aEditPropertySet( lcl_GetEditPropertyMap(), SdrObject::GetGlobalDrawObjectItemPool() );
     return &aEditPropertySet;
 }
 
@@ -7681,7 +7681,7 @@ void SAL_CALL ScTableSheetObj::link( const rtl::OUString& aUrl, const rtl::OUStr
             //  Update immer, auch wenn der Link schon da war
             //! Update nur fuer die betroffene Tabelle???
 
-            SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
+            sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
             USHORT nCount = pLinkManager->GetLinks().Count();
             for ( USHORT i=0; i<nCount; i++ )
             {

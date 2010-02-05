@@ -40,8 +40,8 @@
 #include <boost/bind.hpp>
 
 #include <vcl/mapmod.hxx>
-#include <svx/editobj.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/editstat.hxx>
 
 #include "cell.hxx"
 #include "compiler.hxx"

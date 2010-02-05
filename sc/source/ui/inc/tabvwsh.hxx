@@ -31,9 +31,10 @@
 #ifndef SC_TABVWSH_HXX
 #define SC_TABVWSH_HXX
 
+#include <svtools/htmlcfg.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfac.hxx>
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include "scdllapi.h"
 #include "dbfunc.hxx"           // -> tabview
 #include "target.hxx"
@@ -106,6 +107,7 @@ private:
     static USHORT           nInsCellsCtrlState;
     static USHORT           nInsObjCtrlState;
 
+    SvxHtmlOptions          aHTMLOpt;
     ObjectSelectionType     eCurOST;
     USHORT                  nDrawSfxId;
     USHORT                  nCtrlSfxId;
@@ -198,6 +200,7 @@ private:
     DECL_LINK( SimpleRefAborted, String* );
     DECL_LINK( SimpleRefChange, String* );
     DECL_LINK( FormControlActivated, FmFormShell* );
+    DECL_LINK( HtmlOptionsHdl, void * );
 
 protected:
     virtual void    Activate(BOOL bMDI);

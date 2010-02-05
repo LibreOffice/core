@@ -47,7 +47,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/transliterationwrapper.hxx>
 
@@ -146,7 +146,7 @@ void __EXPORT ScTableLink::Edit( Window* pParent, const Link& rEndEditHdl )
 void __EXPORT ScTableLink::DataChanged( const String&,
                                         const ::com::sun::star::uno::Any& )
 {
-    SvxLinkManager* pLinkManager=pImpl->m_pDocSh->GetDocument()->GetLinkManager();
+    sfx2::LinkManager* pLinkManager=pImpl->m_pDocSh->GetDocument()->GetLinkManager();
     if (pLinkManager!=NULL)
     {
         String aFile;

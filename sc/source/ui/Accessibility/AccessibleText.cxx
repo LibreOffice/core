@@ -32,7 +32,7 @@
 #include "precompiled_sc.hxx"
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 
 #include <memory>
@@ -48,12 +48,12 @@
 #include "unoguard.hxx"
 #include "patattr.hxx"
 #include "inputwin.hxx"
-#include <svx/unofored.hxx>
-#include <svx/editview.hxx>
-#include <svx/unoedhlp.hxx>
+#include <editeng/unofored.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/unoedhlp.hxx>
 #include <vcl/virdev.hxx>
-#include <svx/editobj.hxx>
-#include <svx/adjitem.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/adjitem.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/algitem.hxx>
 

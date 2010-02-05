@@ -34,9 +34,9 @@
 #include <tools/solar.h>
 
 #include "scitems.hxx"
-#include <svx/fontitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/colritem.hxx>
 
 // ---------------------------------------------------- class LotusFontBuffer -
 

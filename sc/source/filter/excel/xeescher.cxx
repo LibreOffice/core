@@ -52,8 +52,8 @@
 #include <vcl/bmpacc.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdocapt.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/editobj.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/editobj.hxx>
 
 #include "editutil.hxx"
 #include "unonames.hxx"

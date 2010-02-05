@@ -36,15 +36,15 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
 #define _SVSTDARR_STRINGS
-#include <svx/boxitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/srchitem.hxx>
-#include <svx/linkmgr.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <svl/srchitem.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
@@ -2408,7 +2408,7 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
 
     if (bLink)
     {
-        SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
+        sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
 
         SfxMedium* pMed = pSrcShell->GetMedium();
         String aFileName = pMed->GetName();

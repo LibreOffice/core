@@ -81,8 +81,8 @@ SHL1STDLIBS=       \
     $(SVTOOLLIB)	\
     $(SVLLIB)		\
     $(SVXCORELIB)		\
+    $(EDITENGLIB)		\
     $(SVXLIB)		\
-    $(GOODIESLIB)	\
     $(BASEGFXLIB) \
     $(DRAWINGLAYERLIB) \
     $(VCLLIB)		\
@@ -187,6 +187,7 @@ SHL6STDLIBS= \
     $(SVTOOLLIB)	\
     $(SVLLIB)		\
     $(SVXCORELIB)		\
+    $(EDITENGLIB)		\
     $(MSFILTERLIB)		\
     $(SVXLIB)		\
     $(BASEGFXLIB) \
@@ -215,6 +216,7 @@ DEF8NAME=$(SHL8TARGET)
 
 SHL8STDLIBS= \
             $(ISCLIB) \
+            $(EDITENGLIB)		\
             $(SVXCORELIB) \
             $(SVXLIB) \
             $(SFX2LIB) \
@@ -309,6 +311,7 @@ SHL9STDLIBS= \
         $(SALLIB)\
         $(BASICLIB)	\
         $(SFXLIB)	\
+        $(EDITENGLIB)		\
         $(SVXCORELIB)	\
         $(SVTOOLLIB)    \
         $(SVLLIB) \

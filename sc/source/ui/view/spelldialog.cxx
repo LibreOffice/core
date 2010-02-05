@@ -36,9 +36,9 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svxids.hrc>
-#include <svx/editstat.hxx>
-#include <svx/editview.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/unolingu.hxx>
 #include "selectionstate.hxx"
 
 #include "spelleng.hxx"

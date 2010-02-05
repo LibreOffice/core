@@ -31,16 +31,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-#include <svx/editeng.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdview.hxx>
-#include <svx/editobj.hxx>
+#include <editeng/editobj.hxx>
 #include <vcl/cursor.hxx>
 #include <sfx2/objsh.hxx>
-#include <svx/writingmodeitem.hxx>
+#include <editeng/writingmodeitem.hxx>
 
 #include "global.hxx"
 #include "drwlayer.hxx"

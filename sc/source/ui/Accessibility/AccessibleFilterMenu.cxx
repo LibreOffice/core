@@ -40,9 +40,9 @@
 #include "docpool.hxx"
 
 #include "tools/gen.hxx"
-#include "svx/unoedsrc.hxx"
-#include "svx/editdata.hxx"
-#include "svx/outliner.hxx"
+#include "editeng/unoedsrc.hxx"
+#include "editeng/editdata.hxx"
+#include "editeng/outliner.hxx"
 #include "vcl/unohelp.hxx"
 #include "dpcontrol.hxx"
 

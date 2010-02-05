@@ -37,12 +37,12 @@
 
 #include "scitems.hxx"
 #include <svx/algitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/bolnitem.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/shaditem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/bolnitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/shaditem.hxx>
 #include <svl/poolcach.hxx>
-#include <svx/fontitem.hxx>
+#include <editeng/fontitem.hxx>
 #include <unotools/fontcvt.hxx>
 
 #include "attarray.hxx"

@@ -32,11 +32,11 @@
 #include "precompiled_sc.hxx"
 #include "xihelper.hxx"
 #include <svl/itemset.hxx>
-#include <svx/editobj.hxx>
+#include <editeng/editobj.hxx>
 #include <tools/urlobj.hxx>
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/flditem.hxx>
 #include "document.hxx"
 #include "cell.hxx"
 #include "rangelst.hxx"

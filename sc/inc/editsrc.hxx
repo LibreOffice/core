@@ -32,7 +32,7 @@
 #define SC_EDITSRC_HXX
 
 #include "address.hxx"
-#include <svx/unoedsrc.hxx>
+#include <editeng/unoedsrc.hxx>
 #include <svl/lstner.hxx>
 
 #include <memory>

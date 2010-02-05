@@ -34,8 +34,9 @@
 
 
 #include "rangelst.hxx"
-#include <svx/unotext.hxx>
-
+#include <editeng/unotext.hxx>
+#include <svx/svdpool.hxx>
+#include <svx/svdobj.hxx>
 #include "notesuno.hxx"
 #include "textuno.hxx"
 #include "cellsuno.hxx"     // getParent
@@ -52,7 +53,7 @@
 #include "undocell.hxx"
 #include "unoguard.hxx"
 #include "userdat.hxx"
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svditer.hxx>
@@ -70,7 +71,7 @@ const SvxItemPropertySet* lcl_GetAnnotationPropertySet()
     {
         {0,0,0,0,0,0}
     };
-    static SvxItemPropertySet aAnnotationPropertySet_Impl( aAnnotationPropertyMap_Impl );
+    static SvxItemPropertySet aAnnotationPropertySet_Impl( aAnnotationPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
     return &aAnnotationPropertySet_Impl;
 }
 

@@ -50,7 +50,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#include <svx/editobj.hxx>
+#include <editeng/editobj.hxx>
 #include <svx/AccessibleTextHelper.hxx>
 #include <rtl/uuid.h>
 #include <unotools/accessiblestatesethelper.hxx>

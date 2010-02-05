@@ -50,7 +50,7 @@
 #include <tools/debug.hxx>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
-#include <svx/unoprnms.hxx>
+#include <editeng/unoprnms.hxx>
 
 #include <algorithm>
 #include <memory>

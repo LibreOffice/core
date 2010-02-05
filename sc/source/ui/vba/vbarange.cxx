@@ -121,7 +121,7 @@
 #include <ooo/vba/excel/XlSearchDirection.hpp>
 
 #include <scitems.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <cellsuno.hxx>
 #include <dbcolect.hxx>
 #include "docfunc.hxx"

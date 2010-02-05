@@ -32,7 +32,7 @@
 #include "precompiled_sc.hxx"
 
 
-
+#include <editeng/outliner.hxx>
 #include <svx/fmdpage.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdmark.hxx>

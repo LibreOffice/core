@@ -33,7 +33,7 @@
 
 #include "scdllapi.h"
 #include "address.hxx"
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 #include <svx/pageitem.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>

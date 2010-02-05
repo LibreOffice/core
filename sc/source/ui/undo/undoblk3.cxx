@@ -34,9 +34,9 @@
 // INCLUDE -------------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/boxitem.hxx>
-#include <svx/srchitem.hxx>
-#include <svx/linkmgr.hxx>
+#include <editeng/boxitem.hxx>
+#include <svl/srchitem.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/virdev.hxx>
 #include <sfx2/app.hxx>
@@ -1755,7 +1755,7 @@ BOOL __EXPORT ScUndoRefreshLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 
 //----------------------------------------------------------------------------
 
-ScAreaLink* lcl_FindAreaLink( SvxLinkManager* pLinkManager, const String& rDoc,
+ScAreaLink* lcl_FindAreaLink( sfx2::LinkManager* pLinkManager, const String& rDoc,
                             const String& rFlt, const String& rOpt,
                             const String& rSrc, const ScRange& rDest )
 {
@@ -1819,7 +1819,7 @@ String __EXPORT ScUndoInsertAreaLink::GetComment() const
 void __EXPORT ScUndoInsertAreaLink::Undo()
 {
     ScDocument* pDoc = pDocShell->GetDocument();
-    SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
+    sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
 
     ScAreaLink* pLink = lcl_FindAreaLink( pLinkManager, aDocName, aFltName, aOptions,
                                             aAreaName, aRange );
@@ -1835,7 +1835,7 @@ void __EXPORT ScUndoInsertAreaLink::Undo()
 void __EXPORT ScUndoInsertAreaLink::Redo()
 {
     ScDocument* pDoc = pDocShell->GetDocument();
-    SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
+    sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
 
     ScAreaLink* pLink = new ScAreaLink( pDocShell, aDocName, aFltName, aOptions,
                                             aAreaName, aRange.aStart, nRefreshDelay );
@@ -1909,7 +1909,7 @@ String __EXPORT ScUndoRemoveAreaLink::GetComment() const
 void __EXPORT ScUndoRemoveAreaLink::Undo()
 {
     ScDocument* pDoc = pDocShell->GetDocument();
-    SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
+    sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
 
     ScAreaLink* pLink = new ScAreaLink( pDocShell, aDocName, aFltName, aOptions,
                                         aAreaName, aRange.aStart, nRefreshDelay );
@@ -1928,7 +1928,7 @@ void __EXPORT ScUndoRemoveAreaLink::Undo()
 void __EXPORT ScUndoRemoveAreaLink::Redo()
 {
     ScDocument* pDoc = pDocShell->GetDocument();
-    SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
+    sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
 
     ScAreaLink* pLink = lcl_FindAreaLink( pLinkManager, aDocName, aFltName, aOptions,
                                             aAreaName, aRange );
@@ -2074,7 +2074,7 @@ void ScUndoUpdateAreaLink::DoChange( const BOOL bUndo ) const
 void __EXPORT ScUndoUpdateAreaLink::Undo()
 {
     ScDocument* pDoc = pDocShell->GetDocument();
-    SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
+    sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
     ScAreaLink* pLink = lcl_FindAreaLink( pLinkManager, aNewDoc, aNewFlt, aNewOpt,
                                             aNewArea, aNewRange );
     if (pLink)
@@ -2093,7 +2093,7 @@ void __EXPORT ScUndoUpdateAreaLink::Undo()
 void __EXPORT ScUndoUpdateAreaLink::Redo()
 {
     ScDocument* pDoc = pDocShell->GetDocument();
-    SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
+    sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
     ScAreaLink* pLink = lcl_FindAreaLink( pLinkManager, aOldDoc, aOldFlt, aOldOpt,
                                             aOldArea, aOldRange );
     if (pLink)

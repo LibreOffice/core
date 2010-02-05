@@ -43,8 +43,8 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <sot/exchange.hxx>
 #include <svx/objfac3d.hxx>
 #include <svx/xtable.hxx>
@@ -56,10 +56,10 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdundo.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <svx/drawitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/scriptspaceitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/scriptspaceitem.hxx>
 #include <svx/shapepropertynotifier.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/docfile.hxx>

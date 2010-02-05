@@ -41,7 +41,7 @@
 #include "CommonConverters.hxx"
 #include "ChartTypeHelper.hxx"
 #include "ThreeDHelper.hxx"
-#include <svx/unoprnms.hxx>
+#include <editeng/unoprnms.hxx>
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
 #include <com/sun/star/drawing/FillStyle.hpp>

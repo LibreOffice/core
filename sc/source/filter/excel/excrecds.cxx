@@ -41,27 +41,27 @@
 #include <filter/msfilter/countryid.hxx>
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <sfx2/objsh.hxx>
 
-#include <svx/editdata.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editobj.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/editstat.hxx>
 
-#include <svx/flditem.hxx>
-#include <svx/flstitem.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/flstitem.hxx>
 
 #include <svx/algitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <svx/pageitem.hxx>
-#include <svx/paperinf.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/escpitem.hxx>
+#include <editeng/paperinf.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/escpitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>

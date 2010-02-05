@@ -36,10 +36,7 @@
 #include "ItemPropertyMap.hxx"
 #include "PropertyHelper.hxx"
 #include "CommonConverters.hxx"
-
-// #ifndef _SFXINTITEM_HXX
-// #include <svl/intitem.hxx>
-// #endif
+#include <editeng/memberids.hrc>
 #include <svx/xflclit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xflbmtit.hxx>
@@ -51,7 +48,7 @@
 #include <svx/xflgrit.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xlntrit.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 // for SfxBoolItem
 #include <svl/eitem.hxx>
 // for XFillGradientStepCountItem

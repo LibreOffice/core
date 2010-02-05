@@ -34,14 +34,14 @@
 #include <svx/svdpool.hxx>
 #include <svx/sdtaitm.hxx>
 #include <svx/svdotext.hxx>
-#include <svx/editobj.hxx>
+#include <editeng/editobj.hxx>
 #include <svx/svdoole2.hxx>
 #include <sot/storage.hxx>
 #include <svl/itemset.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/unoapi.hxx>
-#include <svx/writingmodeitem.hxx>
+#include <editeng/writingmodeitem.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/math.hxx>
 #include <svl/zformat.hxx>
@@ -58,11 +58,11 @@
 #include "scitems.hxx"
 
 #include <unotools/fltrcfg.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <filter/msfilter/msoleexp.hxx>
 
 #include <unotools/localedatawrapper.hxx>

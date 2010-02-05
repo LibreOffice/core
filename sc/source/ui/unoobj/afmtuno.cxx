@@ -34,6 +34,7 @@
 
 
 #include "scitems.hxx"
+#include <editeng/memberids.hrc>
 #include <tools/debug.hxx>
 #include <tools/shl.hxx>
 #include <svl/poolitem.hxx>

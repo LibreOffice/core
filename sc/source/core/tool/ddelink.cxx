@@ -35,7 +35,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 #include <tools/list.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
 #include <svl/zforlist.hxx>
 
@@ -250,7 +250,7 @@ void __EXPORT ScDdeLink::ListenersGone()
 
     ScDocument* pStackDoc = pDoc;   // member pDoc can't be used after removing the link
 
-    SvxLinkManager* pLinkMgr = pDoc->GetLinkManager();
+    sfx2::LinkManager* pLinkMgr = pDoc->GetLinkManager();
     pLinkMgr->Remove( this);        // deletes this
 
     if ( !pLinkMgr->GetLinks().Count() )            // letzten geloescht ?

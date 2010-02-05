@@ -34,7 +34,7 @@
 #include <svl/poolitem.hxx>
 #include <svl/itemset.hxx>
 #include <unotools/fontcvt.hxx>
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include "scdllapi.h"
 
 class Font;

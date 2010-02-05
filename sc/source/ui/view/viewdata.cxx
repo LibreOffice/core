@@ -36,18 +36,18 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 
 #include <sfx2/viewfrm.hxx>
-#include <svx/adjitem.hxx>
+#include <editeng/adjitem.hxx>
 #include <svx/algitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svx/editview.hxx>
-#include <svx/editstat.hxx>
-#include <svx/outliner.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/unolingu.hxx>
 
 #include <vcl/svapp.hxx>
 #include <rtl/math.hxx>

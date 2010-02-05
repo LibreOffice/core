@@ -34,7 +34,7 @@
 
 
 #include "scitems.hxx"
-#include <svx/scripttypeitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>

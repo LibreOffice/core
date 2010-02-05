@@ -37,9 +37,9 @@
 
 #include "scitems.hxx"
 #include <svx/algitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/wghtitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/wghtitem.hxx>
 #include <unotools/transliterationwrapper.hxx>
 
 #include "dpoutput.hxx"

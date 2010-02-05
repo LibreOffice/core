@@ -42,7 +42,7 @@
 #include <svx/svxids.hrc>
 
 //CHINA001 #include <svx/chardlg.hxx>
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
 //CHINA001 #include <svx/paragrph.hxx>
 //CHINA001 #include <svx/tabstpge.hxx>
 #include <sfx2/objsh.hxx>

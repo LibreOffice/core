@@ -55,7 +55,7 @@
 #include <com/sun/star/uno/Any.hxx>
 
 
-#include <svx/unoprnms.hxx>
+#include <editeng/unoprnms.hxx>
 #include <tools/color.hxx>
 #include <tools/debug.hxx>
 #include <rtl/math.hxx>

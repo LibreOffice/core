@@ -33,11 +33,11 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 
-#include <svx/editview.hxx>
+#include <editeng/editview.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpagv.hxx>
 #include <svtools/imapobj.hxx>

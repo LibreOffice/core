@@ -42,7 +42,7 @@
 #include "ChartTypeHelper.hxx"
 #include "ThreeDHelper.hxx"
 #include <rtl/math.hxx>
-#include <svx/unoprnms.hxx>
+#include <editeng/unoprnms.hxx>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 
 //.............................................................................

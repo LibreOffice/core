@@ -46,12 +46,12 @@
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 
 // for UNO_NAME_GRAPHOBJ_URLPREFIX
-#include <svx/unoprnms.hxx>
+#include <editeng/unoprnms.hxx>
 
 // for Graphic
 #include <vcl/graph.hxx>
 // for GraphicObject
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #include <vcl/outdev.hxx>
 
 #include <comphelper/processfactory.hxx>

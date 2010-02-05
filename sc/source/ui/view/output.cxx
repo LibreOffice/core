@@ -36,13 +36,13 @@
 #include <com/sun/star/embed/EmbedMisc.hpp>
 
 #include "scitems.hxx"
-#include <svx/boxitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/editdata.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/editdata.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svx/rotmodit.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/svxfont.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/svxfont.hxx>
 #include <svx/svdoole2.hxx>
 #include <tools/poly.hxx>
 #include <vcl/svapp.hxx>

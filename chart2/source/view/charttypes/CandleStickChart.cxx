@@ -45,7 +45,7 @@
 #include "DataSeriesHelper.hxx"
 #include <tools/debug.hxx>
 #include <rtl/math.hxx>
-#include <svx/unoprnms.hxx>
+#include <editeng/unoprnms.hxx>
 
 //.............................................................................
 namespace chart

@@ -46,7 +46,7 @@
 #include <svx/svdoutl.hxx>
 
 // header for class SvxForbiddenCharactersTable
-#include <svx/forbiddencharacterstable.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
 
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>

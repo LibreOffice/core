@@ -43,12 +43,12 @@
 #include <tools/color.hxx>
 #include <scitems.hxx>
 #include <svx/algitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/fontitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
 #include <map>
 
 #include "global.hxx"

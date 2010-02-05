@@ -40,11 +40,11 @@
 
 #include "scitems.hxx"
 #include "rangelst.hxx"
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
 #include <svx/pageitem.hxx>
-#include <svx/paperinf.hxx>
+#include <editeng/paperinf.hxx>
 #include <svx/postattr.hxx>
-#include <svx/sizeitem.hxx>
+#include <editeng/sizeitem.hxx>
 #include <unotools/misccfg.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/app.hxx>

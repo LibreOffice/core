@@ -43,8 +43,8 @@
 #include <svl/itemset.hxx>
 #include <formula/grammar.hxx>
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/flditem.hxx>
 #include "document.hxx"
 #include "validat.hxx"
 #include "unonames.hxx"

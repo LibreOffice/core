@@ -68,7 +68,7 @@
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
-#include <svx/unoprnms.hxx>
+#include <editeng/unoprnms.hxx>
 #include <tools/color.hxx>
 // header for class OUStringBuffer
 #include <rtl/ustrbuf.hxx>

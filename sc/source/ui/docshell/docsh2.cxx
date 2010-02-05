@@ -40,7 +40,7 @@
 #include "scitems.hxx"
 #include <tools/gen.hxx>
 #include <svtools/ctrltool.hxx>
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
 #include <svx/drawitem.hxx>
 #include <sfx2/printer.hxx>
 #include <svl/smplhint.hxx>
@@ -48,9 +48,9 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
 #include <vcl/svapp.hxx>
-#include <svx/asiancfg.hxx>
-#include <svx/forbiddencharacterstable.hxx>
-#include <svx/unolingu.hxx>
+#include <svl/asiancfg.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
+#include <editeng/unolingu.hxx>
 #include <rtl/logfile.hxx>
 
 #include <comphelper/processfactory.hxx>

@@ -34,24 +34,24 @@
 //------------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 #include <svx/algitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svx/colritem.hxx>
-#include <svx/editobj.hxx>
-#include <svx/editstat.hxx>
-#include <svx/editview.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/forbiddencharacterstable.hxx>
-#include <svx/langitem.hxx>
-#include <svx/svxacorr.hxx>
-#include <svx/unolingu.hxx>
-#include <svx/wghtitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/svxacorr.hxx>
+#include <editeng/unolingu.hxx>
+#include <editeng/wghtitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>

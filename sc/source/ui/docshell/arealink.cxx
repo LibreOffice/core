@@ -39,7 +39,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/msgbox.hxx>
 
@@ -130,7 +130,7 @@ void __EXPORT ScAreaLink::DataChanged( const String&,
     if (bInCreate)
         return;
 
-    SvxLinkManager* pLinkManager=pImpl->m_pDocSh->GetDocument()->GetLinkManager();
+    sfx2::LinkManager* pLinkManager=pImpl->m_pDocSh->GetDocument()->GetLinkManager();
     if (pLinkManager!=NULL)
     {
         String aFile;

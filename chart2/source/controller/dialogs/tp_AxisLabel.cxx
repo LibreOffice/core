@@ -42,8 +42,8 @@
 
 // header for SfxInt32Item
 #include <svl/intitem.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/frmdiritem.hxx>
 
 //.............................................................................
 namespace chart

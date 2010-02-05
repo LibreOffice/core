@@ -40,8 +40,8 @@
 #include <svx/svdobj.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/zformat.hxx>
 #include <sot/storage.hxx>

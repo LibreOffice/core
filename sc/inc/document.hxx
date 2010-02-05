@@ -69,7 +69,9 @@ class SvxBoxInfoItem;
 class SvxBoxItem;
 class SvxBrushItem;
 class SvxForbiddenCharactersTable;
-class SvxLinkManager;
+namespace sfx2 {
+    class LinkManager;
+    }
 class SvxSearchItem;
 class SvxShadowItem;
 class Window;
@@ -260,7 +262,7 @@ private:
     ScChartCollection*  pChartCollection;
     std::auto_ptr< ScTemporaryChartLock > apTemporaryChartLock;
     ScPatternAttr*      pSelectionAttr;                 // Attribute eines Blocks
-    mutable SvxLinkManager*     pLinkManager;
+    mutable sfx2::LinkManager*      pLinkManager;
     ScFormulaCell*      pFormulaTree;                   // Berechnungsbaum Start
     ScFormulaCell*      pEOFormulaTree;                 // Berechnungsbaum Ende, letzte Zelle
     ScFormulaCell*      pFormulaTrack;                  // BroadcastTrack Start
@@ -444,7 +446,7 @@ public:
     SC_DLLPUBLIC void           InitDrawLayer( SfxObjectShell* pDocShell = NULL );
     XColorTable*    GetColorTable();
 
-    SC_DLLPUBLIC SvxLinkManager*        GetLinkManager() const;
+    SC_DLLPUBLIC sfx2::LinkManager*     GetLinkManager() const;
 
     SC_DLLPUBLIC const ScDocOptions&        GetDocOptions() const;
     SC_DLLPUBLIC void                   SetDocOptions( const ScDocOptions& rOpt );

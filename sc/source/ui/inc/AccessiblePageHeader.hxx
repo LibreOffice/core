@@ -33,7 +33,7 @@
 #define _SC_ACCESSIBLEPAGEHEADER_HXX
 
 #include "AccessibleContextBase.hxx"
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 
 class ScPreviewShell;
 class EditTextObject;

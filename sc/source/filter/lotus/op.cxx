@@ -48,9 +48,9 @@
 #include "patattr.hxx"
 #include "docpool.hxx"
 #include <svx/algitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/wghtitem.hxx>
 
 #include "cell.hxx"
 #include "rangenam.hxx"

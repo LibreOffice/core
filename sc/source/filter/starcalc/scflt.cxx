@@ -36,25 +36,25 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <svx/algitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/editdata.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editobj.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <svx/pageitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/wghtitem.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/PasswordHelper.hxx>
 #include <stdio.h>

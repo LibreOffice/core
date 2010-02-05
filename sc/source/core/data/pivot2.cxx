@@ -40,8 +40,8 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/boxitem.hxx>
-#include <svx/wghtitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/wghtitem.hxx>
 #include <svx/algitem.hxx>
 #include <unotools/transliterationwrapper.hxx>
 

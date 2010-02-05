@@ -32,11 +32,11 @@
 #include "precompiled_sc.hxx"
 #include "xlpage.hxx"
 #include <sfx2/printer.hxx>
-#include <svx/svxenum.hxx>
-#include <svx/paperinf.hxx>
+#include <editeng/svxenum.hxx>
+#include <editeng/paperinf.hxx>
 #include <vcl/svapp.hxx>
 #include "scitems.hxx"
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include "global.hxx"
 #include "xlconst.hxx"
 

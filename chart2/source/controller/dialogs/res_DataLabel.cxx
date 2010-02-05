@@ -49,8 +49,8 @@
 #include <svl/stritem.hxx>
 //SfxIntegerListItem
 #include <svl/ilstitem.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/frmdiritem.hxx>
 
 // header for define RET_OK
 #include <vcl/msgbox.hxx>

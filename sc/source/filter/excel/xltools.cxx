@@ -36,7 +36,7 @@
 #include <sal/mathconf.h>
 #include <unotools/fontcvt.hxx>
 #include <sfx2/objsh.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/editstat.hxx>
 #include "xestream.hxx"
 #include "document.hxx"
 #include "docuno.hxx"

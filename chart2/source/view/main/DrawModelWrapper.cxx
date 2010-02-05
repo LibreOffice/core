@@ -41,7 +41,7 @@
 // header for class SfxBoolItem
 #include <svl/eitem.hxx>
 // header for define EE_PARA_HYPHENATE
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 // header for class Svx3DPercentDiagonalItem
 #include <svx/svx3ditems.hxx>
 // header for class SvtPathOptions
@@ -57,7 +57,7 @@
 // header for class SdrOutliner
 #include <svx/svdoutl.hxx>
 // header for class LinguMgr
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 // header for class Application
 #include <vcl/svapp.hxx>
 // header for class VirtualDevice

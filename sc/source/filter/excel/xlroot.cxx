@@ -39,9 +39,9 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/docfile.hxx>
 #include <vcl/font.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/editstat.hxx>
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include "document.hxx"
 #include "docpool.hxx"
 #include "docuno.hxx"

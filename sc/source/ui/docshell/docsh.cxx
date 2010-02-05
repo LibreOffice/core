@@ -35,8 +35,8 @@
 
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
-#include <svx/svxenum.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/svxenum.hxx>
 #include <svx/algitem.hxx>
 
 
@@ -62,7 +62,7 @@
 #include <sfx2/sfx.hrc>
 #include <sfx2/topfrm.hxx>
 #include <sfx2/objface.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <svl/documentlockfile.hxx>
 #include <svl/sharecontrolfile.hxx>

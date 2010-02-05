@@ -32,7 +32,7 @@
 #include "precompiled_sc.hxx"
 
 
-
+#include <editeng/memberids.hrc>
 #include <svl/smplhint.hxx>
 #include <svl/itemprop.hxx>
 #include <svx/unomid.hxx>

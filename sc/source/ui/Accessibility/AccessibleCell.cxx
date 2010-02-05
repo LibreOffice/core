@@ -34,7 +34,7 @@
 
 #include "AccessibleCell.hxx"
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 
 #include "AccessibleText.hxx"
@@ -61,7 +61,7 @@
 #include <com/sun/star/accessibility/XAccessibleTable.hpp>
 #include <rtl/uuid.h>
 #include <tools/debug.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <comphelper/sequence.hxx>
 #include <float.h>
 

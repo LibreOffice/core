@@ -76,10 +76,10 @@
 #include "scitems.hxx"
 
 // #108584#
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 // #108584#
-#include <svx/fhgtitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace com::sun::star;

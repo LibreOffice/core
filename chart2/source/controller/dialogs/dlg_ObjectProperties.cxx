@@ -76,7 +76,7 @@
 #include <svx/svxgrahicitem.hxx>
 
 #include <svx/dialogs.hrc>
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
 #include <svx/tabline.hxx>
 
 #include <svx/flagsdef.hxx>

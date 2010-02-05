@@ -65,7 +65,7 @@
 #include <svx/svxdlg.hxx>
 #include <sot/formats.hxx>
 #include <svx/postattr.hxx>
-#include <svx/fontitem.hxx>
+#include <editeng/fontitem.hxx>
 #include <svx/clipfmtitem.hxx>
 #include <sfx2/passwd.hxx>
 #include <svx/hlnkitem.hxx>

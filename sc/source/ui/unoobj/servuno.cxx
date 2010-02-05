@@ -36,7 +36,7 @@
 #include <tools/debug.hxx>
 #include <svtools/unoimap.hxx>
 #include <svx/unofill.hxx>
-#include <svx/unonrule.hxx>
+#include <editeng/unonrule.hxx>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 
 #include "servuno.hxx"
@@ -62,11 +62,11 @@
 #include <svx/xmlgrhlp.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
-
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <com/sun/star/document/XCodeNameQuery.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
+#include <svx/unomod.hxx>
 
 using namespace ::com::sun::star;
 

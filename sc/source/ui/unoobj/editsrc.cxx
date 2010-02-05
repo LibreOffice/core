@@ -34,14 +34,14 @@
 #include "editsrc.hxx"
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
-#include <svx/unofored.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/unofored.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdocapt.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/editobj.hxx>
-
+#include <editeng/outlobj.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/outliner.hxx>
 #include "textuno.hxx"
 #include "editutil.hxx"
 #include "docsh.hxx"

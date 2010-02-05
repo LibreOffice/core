@@ -33,7 +33,7 @@
 
 #include "global.hxx"           // ScRange, ScAddress
 #include "address.hxx"
-#include <svx/unotext.hxx>
+#include <editeng/unotext.hxx>
 #include <svl/brdcst.hxx>
 #include <svl/lstner.hxx>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>

@@ -36,7 +36,7 @@
 #include <tools/string.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/nfkeytab.hxx>
-#include <svx/svxfont.hxx>
+#include <editeng/svxfont.hxx>
 #include "xerecord.hxx"
 #include "xlstyle.hxx"
 #include "xeroot.hxx"

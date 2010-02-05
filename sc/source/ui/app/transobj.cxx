@@ -36,7 +36,7 @@
 
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 
 #include <com/sun/star/uno/Sequence.hxx>
@@ -63,8 +63,8 @@
 #include "scmod.hxx"
 
 // for InitDocShell
-#include <svx/paperinf.hxx>
-#include <svx/sizeitem.hxx>
+#include <editeng/paperinf.hxx>
+#include <editeng/sizeitem.hxx>
 #include <svx/algitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/zforlist.hxx>
