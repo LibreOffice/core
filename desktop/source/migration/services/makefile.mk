@@ -54,8 +54,7 @@ SLOFILES= \
         $(SLO)$/cexports.obj \
         $(SLO)$/basicmigration.obj \
         $(SLO)$/wordbookmigration.obj \
-        $(SLO)$/extensionmigration.obj \
-        $(SLO)$/autocorrmigration.obj
+        $(SLO)$/extensionmigration.obj
 
 SHL1TARGET=$(TARGET)
 SHL1VERSIONMAP = migrationoo2.map

@@ -41,8 +41,6 @@
 #define RID_SVX_FIRSTFREE                   305
 
 // some strings also used in CUI
-#define RID_SVXSTR_PAPERBIN                 (RID_SVX_START + 145)
-#define RID_SVXSTR_PAPERBIN_SETTINGS        (RID_SVX_START + 149)
 #define RID_SVXERRCTX                       (RID_SVX_START + 351)
 #define RID_SVXSTR_COLOR                    (RID_SVX_START + 179)
 #define RID_SVXSTR_TRANSPARENT              (RID_SVX_START + 190)
@@ -178,20 +176,6 @@
 #define RID_SVXPAGE_FOOTER                  (RID_SVX_START +  26)
 #define RID_SVXPAGE_HEADER                  (RID_SVX_START +  27)
 #define RID_SVXQBX_DELETE_HEADFOOT          (RID_SVX_START +  28)
-
-// ResId fuer die Linguistik-Dialoge
-#define RID_SVXDLG_HYPHENATE                (RID_SVX_START +  30)
-#define RID_SVXDLG_THESAURUS                (RID_SVX_START +  31)
-#define RID_SVXDLG_THES_LANGUAGE            (RID_SVX_START +  38)
-
-// ResIds fuer HM-QueryBoxen und Error-Strings
-#define RID_SVXQB_THESAURUS                 (RID_SVX_START +  33)
-#define RID_SVXQB_CONTINUE                  (RID_SVX_START +  34)
-#define RID_SVXQB_BODYTEXT                  (RID_SVX_START +  35)
-#define RID_SVXQB_SPECIAL                   (RID_SVX_START +  36)
-#define RID_SVXQB_SPECIAL_FORCED            (RID_SVX_START +  37)
-// + 38 ist vergeben, siehe RID_SVXDLG_THES_LANGUAGE
-#define RID_SVXQB_BW_CONTINUE               (RID_SVX_START +  39)
 
 // ResId's fuer Dialoge aus StarDraw
 #define RID_SVXPAGE_POSITION                (RID_SVX_START +  46)
@@ -427,64 +411,11 @@
 #define RID_SVXSTR_SEARCH                   (RID_SVX_START +  81)
 #define RID_SVXSTR_REPLACE                  (RID_SVX_START +  82)
 
-// Strings fuer die HM-Strings
-#define RID_SVXSTR_HMSTATUS_BEGIN           (RID_SVX_START +  90)
-#define RID_SVXSTR_HMSTATUS_OK              (RID_SVX_START +  90)
-#define RID_SVXSTR_HMSTATUS_DONTUSE         (RID_SVX_START +  91)
-#define RID_SVXSTR_HMSTATUS_WRONG           (RID_SVX_START +  92)
-#define RID_SVXSTR_HMSTATUS_CAPERROR        (RID_SVX_START +  93)
-#define RID_SVXSTR_HMERR_CHECKINSTALL       (RID_SVX_START +  94)
-#define RID_SVXSTR_HMERR_ADDWORD            (RID_SVX_START +  95)
-#define RID_SVXSTR_HMSTATUS_INVALID_LANG    (RID_SVX_START +  96)
-
-// paper formats
-#define RID_SVXSTR_PAPER_A0                 (RID_SVX_START + 100)
-#define RID_SVXSTR_PAPER_A1                 (RID_SVX_START + 101)
-#define RID_SVXSTR_PAPER_A2                 (RID_SVX_START + 102)
-#define RID_SVXSTR_PAPER_A3                 (RID_SVX_START + 103)
-#define RID_SVXSTR_PAPER_A4                 (RID_SVX_START + 104)
-#define RID_SVXSTR_PAPER_A5                 (RID_SVX_START + 105)
-#define RID_SVXSTR_PAPER_B4_ISO             (RID_SVX_START + 106)
-#define RID_SVXSTR_PAPER_B5_ISO             (RID_SVX_START + 107)
-#define RID_SVXSTR_PAPER_LETTER             (RID_SVX_START + 108)
-#define RID_SVXSTR_PAPER_LEGAL              (RID_SVX_START + 109)
-#define RID_SVXSTR_PAPER_TABLOID            (RID_SVX_START + 110)
-#define RID_SVXSTR_PAPER_USER               (RID_SVX_START + 111)
-#define RID_SVXSTR_PAPER_B6_ISO             (RID_SVX_START + 112)
-#define RID_SVXSTR_PAPER_C4                 (RID_SVX_START + 113)
-#define RID_SVXSTR_PAPER_C5                 (RID_SVX_START + 114)
-#define RID_SVXSTR_PAPER_C6                 (RID_SVX_START + 115)
-#define RID_SVXSTR_PAPER_C65                (RID_SVX_START + 116)
-#define RID_SVXSTR_PAPER_DL                 (RID_SVX_START + 117)
-#define RID_SVXSTR_PAPER_DIA                (RID_SVX_START + 118)
-#define RID_SVXSTR_PAPER_SCREEN             (RID_SVX_START + 119)
-#define RID_SVXSTR_PAPER_C                  (RID_SVX_START + 120)
-#define RID_SVXSTR_PAPER_D                  (RID_SVX_START + 121)
-#define RID_SVXSTR_PAPER_E                  (RID_SVX_START + 122)
-#define RID_SVXSTR_PAPER_EXECUTIVE          (RID_SVX_START + 123)
-#define RID_SVXSTR_PAPER_LEGAL2             (RID_SVX_START + 124)
-#define RID_SVXSTR_PAPER_MONARCH            (RID_SVX_START + 125)
-#define RID_SVXSTR_PAPER_COM675             (RID_SVX_START + 126)
-#define RID_SVXSTR_PAPER_COM9               (RID_SVX_START + 127)
-#define RID_SVXSTR_PAPER_COM10              (RID_SVX_START + 128)
-#define RID_SVXSTR_PAPER_COM11              (RID_SVX_START + 129)
-#define RID_SVXSTR_PAPER_COM12              (RID_SVX_START + 130)
-#define RID_SVXSTR_PAPER_KAI16              (RID_SVX_START + 131)
-#define RID_SVXSTR_PAPER_KAI32              (RID_SVX_START + 132)
-#define RID_SVXSTR_PAPER_KAI32BIG           (RID_SVX_START + 133)
-#define RID_SVXSTR_PAPER_B4_JIS             (RID_SVX_START + 134)
-#define RID_SVXSTR_PAPER_B5_JIS             (RID_SVX_START + 135)
-#define RID_SVXSTR_PAPER_B6_JIS             (RID_SVX_START + 136)
-
 #define RID_SVXSTR_FULLSIZE                 (RID_SVX_START + 144)
 
 // ResIds fuer die verschiedenen Strings des PageDlgs
 #define RID_SVXSTR_CALC_PAGE                (RID_SVX_START + 146)
 #define RID_SVXSTR_DRAW_PAGE                (RID_SVX_START + 147)
-
-// HM_ERR
-#define RID_SVXSTR_HMERR_THESAURUS          (RID_SVX_START + 150)
-#define RID_SVXSTR_HMERR_HYPH               (RID_SVX_START + 151)
 
 // Strings der ToolBox-Controls aus tbcontrl.cxx
 #define RID_SVXSTR_FILLPATTERN              (RID_SVX_START + 191)
@@ -528,13 +459,6 @@
 #define RID_SVXSTR_RULER_TAB_RIGHT          (RID_SVX_START + 246)
 #define RID_SVXSTR_RULER_TAB_DECIMAL        (RID_SVX_START + 247)
 #define RID_SVXSTR_RULER_TAB_CENTER         (RID_SVX_START + 248)
-
-// File-/Grafik-Link String, Dialog Name
-#define RID_SVXSTR_FILELINK                 (RID_SVX_START + 255)
-#define RID_SVXSTR_GRAFIKLINK               (RID_SVX_START + 256)
-#define RID_SVXSTR_EDITGRFLINK              (RID_SVX_START + 257)
-#define RID_SVXSTR_GRFLINKPROGRESS          (RID_SVX_START + 258)
-#define RID_SVXGRF_GRAPHICLOAD              (RID_SVX_START + 259)
 
 // Schlie"ssen (im TabDialog Line/Area)
 #define RID_SVXSTR_CLOSE                    (RID_SVX_START + 260)
@@ -803,14 +727,6 @@
 #define RID_SVXSTR_HATCH_START              RID_SVXSTR_HATCH0
 #define RID_SVXSTR_HATCH_END                RID_SVXSTR_HATCH10
 
-// strings for error messsages of OpenGraphics dialog
-#define RID_SVXSTR_GRFILTER_OPENERROR       (RID_SVX_START + 683)
-#define RID_SVXSTR_GRFILTER_IOERROR         (RID_SVX_START + 684)
-#define RID_SVXSTR_GRFILTER_FORMATERROR     (RID_SVX_START + 685)
-#define RID_SVXSTR_GRFILTER_VERSIONERROR    (RID_SVX_START + 686)
-#define RID_SVXSTR_GRFILTER_FILTERERROR     (RID_SVX_START + 687)
-#define RID_SVXSTR_GRFILTER_TOOBIG          (RID_SVX_START + 688)
-
 // Default-Bitmap-Names
 #define RID_SVXSTR_BMP0_DEF                 (RID_SVX_START + 691)
 #define RID_SVXSTR_BMP1_DEF                 (RID_SVX_START + 692)
@@ -925,11 +841,6 @@
 #define RID_SVXSTR_QRY_PRINT_MSG            (RID_SVX_START + 803)
 #define RID_SVXSTR_QRY_PRINT_ALL            (RID_SVX_START + 804)
 #define RID_SVXSTR_QRY_PRINT_SELECTION      (RID_SVX_START + 805)
-
-// strings for error messsages in dictionary updates
-#define RID_SVXSTR_DIC_ERR_UNKNOWN          (RID_SVX_START +  810)
-#define RID_SVXSTR_DIC_ERR_FULL             (RID_SVX_START +  811)
-#define RID_SVXSTR_DIC_ERR_READONLY         (RID_SVX_START +  812)
 
 // strings for graphic attributes/undo
 #define RID_SVXSTR_GRAFCROP                 (RID_SVX_START + 820)

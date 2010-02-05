@@ -37,8 +37,8 @@
 //
 //------------------------------------------------------------------------
 #include <svl/itemset.hxx>
-#include <svx/editdata.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/outliner.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpool.hxx>

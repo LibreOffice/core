@@ -43,8 +43,6 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 SLOFILES = \
         $(SLO)$/xmlexport.obj		\
-        $(SLO)$/xmltxtimp.obj		\
-        $(SLO)$/xmltxtexp.obj		\
         $(SLO)$/xmlxtimp.obj		\
         $(SLO)$/xmlxtexp.obj		\
         $(SLO)$/xmlgrhlp.obj		\

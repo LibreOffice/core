@@ -98,12 +98,6 @@ public:
      */
     void                FillWithMimeAndSelectBest();
 
-    /** Get the best MIME encoding matching the system locale, or if that isn't
-        determinable one that matches the UI locale, or UTF8 if everything else
-        fails.
-     */
-    static  rtl_TextEncoding    GetBestMimeEncoding();
-
     const SvxTextEncodingTable*     GetTextEncodingTable() const
                             { return m_pEncTable; }
 

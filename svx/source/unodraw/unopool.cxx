@@ -49,7 +49,7 @@
 #include <svx/xflbmtit.hxx>
 #include <svx/unopage.hxx>
 #include <svx/svdetc.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 
 #include "unoapi.hxx"
 #include <memory>

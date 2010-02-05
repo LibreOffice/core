@@ -48,7 +48,7 @@
 #include <svx/sdr/attribute/sdrtextattribute.hxx>
 #include <svx/sdr/attribute/sdrallattribute.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
-#include <svx/borderline.hxx>
+#include <editeng/borderline.hxx>
 #include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
 
 #include "cell.hxx"

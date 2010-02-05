@@ -39,8 +39,8 @@
 
 #include <svx/fntctl.hxx>       //
 #include <svx/svxids.hrc>
-#include "flstitem.hxx"
-#include "fontitem.hxx"
+#include "editeng/flstitem.hxx"
+#include "editeng/fontitem.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 

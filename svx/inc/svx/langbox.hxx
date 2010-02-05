@@ -60,6 +60,9 @@ class SvtLanguageTable;
                                             // opposed to Arabic-Egypt.
 
 
+// load language strings from resource
+SVX_DLLPUBLIC String    GetDicInfoStr( const String& rName, const USHORT nLang, BOOL bNeg );
+
 class SVX_DLLPUBLIC SvxLanguageBox : public ListBox
 {
 public:

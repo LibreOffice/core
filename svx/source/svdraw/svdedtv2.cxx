@@ -32,7 +32,7 @@
 #include "precompiled_svx.hxx"
 
 #include <svx/svdedtv.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdogrp.hxx>   // fuer's Gruppieren
 #include <svx/svdovirt.hxx>  // fuer VirtualObject-Bundling (Writer)
@@ -48,8 +48,8 @@
 #include <svx/svdetc.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <vcl/msgbox.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/eeitem.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 

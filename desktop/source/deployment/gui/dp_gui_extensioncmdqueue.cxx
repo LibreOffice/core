@@ -252,7 +252,6 @@ public:
                           const bool bEnable );
     void checkForUpdates( const std::vector< TUpdateListEntry > &vExtensionList );
     void stop();
-    bool hasTerminated();
     bool isBusy();
 
     static OUString searchAndReplaceAll( const OUString &rSource,
@@ -745,13 +744,6 @@ void ExtensionCmdQueue::Thread::stop()
 }
 
 //------------------------------------------------------------------------------
-bool ExtensionCmdQueue::Thread::hasTerminated()
-{
-    osl::MutexGuard aGuard( m_mutex );
-    return m_bTerminated;
-}
-
-//------------------------------------------------------------------------------
 bool ExtensionCmdQueue::Thread::isBusy()
 {
     osl::MutexGuard aGuard( m_mutex );
@@ -1159,17 +1151,6 @@ void ExtensionCmdQueue::checkForUpdates( const std::vector< TUpdateListEntry > &
 void ExtensionCmdQueue::stop()
 {
     m_thread->stop();
-}
-
-void ExtensionCmdQueue::stopAndWait()
-{
-    m_thread->stop();
-    m_thread->join();
-}
-
-bool ExtensionCmdQueue::hasTerminated()
-{
-    return m_thread->hasTerminated();
 }
 
 bool ExtensionCmdQueue::isBusy()

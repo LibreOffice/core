@@ -36,7 +36,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <tools/color.hxx>
 #include <svx/sdr/attribute/sdrformtextattribute.hxx>
 #include <tools/weakbase.hxx>

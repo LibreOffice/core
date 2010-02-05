@@ -44,7 +44,7 @@
 #include <svx/obj3d.hxx>
 #include <svx/polysc3d.hxx>
 #include <svx/e3ditem.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/colritem.hxx>
 #include <svx/lathe3d.hxx>
 #include <svx/sphere3d.hxx>
 #include <svx/extrud3d.hxx>

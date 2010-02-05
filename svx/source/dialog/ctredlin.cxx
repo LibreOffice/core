@@ -39,7 +39,7 @@
 #include <svtools/txtcmp.hxx>
 #include <unotools/charclass.hxx>
 // INCLUDE -------------------------------------------------------------------
-#include <unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <svx/dialmgr.hxx>
 #include "ctredlin.hrc"
 #include <svx/ctredlin.hxx>

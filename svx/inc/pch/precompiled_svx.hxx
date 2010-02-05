@@ -740,7 +740,7 @@
 #include "sfx2/sfxstatuslistener.hxx"
 #include "sfx2/sfxuno.hxx"
 #include "sfx2/shell.hxx"
-#include "sfx2/srchdefs.hxx"
+#include "svl/srchdefs.hxx"
 #include "sfx2/tplpitem.hxx"
 #include "sfx2/viewfrm.hxx"
 #include "sot/clsids.hxx"

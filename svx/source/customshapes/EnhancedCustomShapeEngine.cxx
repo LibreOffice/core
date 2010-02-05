@@ -45,8 +45,8 @@
 #include <svx/svdoashp.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdorect.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/outliner.hxx>
 #include <svx/svdoutl.hxx>
 #include <svl/itemset.hxx>
 #include <svx/svdopath.hxx>

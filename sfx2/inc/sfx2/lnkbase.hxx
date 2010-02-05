@@ -51,7 +51,7 @@ namespace sfx2
 {
 
 struct ImplBaseLinkData;
-class SvLinkManager;
+class LinkManager;
 class SvLinkSource;
 class FileDialogHelper;
 
@@ -82,7 +82,7 @@ struct BaseLink_Impl;
 class SFX2_DLLPUBLIC SvBaseLink : public SvRefBase
 {
 private:
-    friend class SvLinkManager;
+    friend class LinkManager;
     friend class SvLinkSource;
 
     SvLinkSourceRef         xObj;
@@ -148,9 +148,9 @@ public:
     ULONG           GetContentType() const;
     BOOL            SetContentType( ULONG nType );
 
-    SvLinkManager*          GetLinkManager();
-    const SvLinkManager*    GetLinkManager() const;
-    void                    SetLinkManager( SvLinkManager* _pMgr );
+    LinkManager*          GetLinkManager();
+    const LinkManager*    GetLinkManager() const;
+    void                    SetLinkManager( LinkManager* _pMgr );
 
     BOOL            Update();
     void            Disconnect();

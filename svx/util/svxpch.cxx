@@ -54,7 +54,7 @@
 #include <sfxview.hxx>
 #include <sfxdlg.hxx>
 #include <sfxstyle.hxx>
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include <sbx.hxx>
 #include <hmwrap.hxx>
 #include <mail.hxx>

@@ -962,11 +962,8 @@ BOOL SfxObjectShell::Remove
         String aName(pMySheet->GetName());
         String aEmpty;
         SfxStyleFamily  eFamily = pMySheet->GetFamily();
-        if (pMySheet)
-        {
-            pMyPool->Remove(pMySheet);
-            bRet = TRUE;
-        }
+        pMyPool->Remove(pMySheet);
+        bRet = TRUE;
 
         SfxStyleSheetBase* pTestSheet = pMyPool->First();
         while (pTestSheet)
@@ -987,20 +984,10 @@ BOOL SfxObjectShell::Remove
 
             pTestSheet = pMyPool->Next();
         }
-        if(bRet)
-            SetModified( TRUE );
+
+        SetModified( TRUE );
     }
-/*
-    else if (nIdx1 == CONTENT_CONFIG)
-    {
-        if (GetConfigManager()->RemoveItem(nIdx2))
-        {
-            SetModified(TRUE);
-            bRet = TRUE;
-            SFX_APP()->GetDispatcher_Impl()->Update_Impl(TRUE);
-        }
-    }
-*/
+
     return bRet;
 }
 

@@ -51,7 +51,7 @@ class SfxViewFrame;
 class SfxBindings;
 class SfxItemSet;
 class SfxPopupMenuManager;
-
+class SfxModule;
 struct SfxDispatcher_Impl;
 struct SfxPlugInInfo_Impl;
 
@@ -202,7 +202,7 @@ public:
 
     SfxShell*           GetShell(USHORT nIdx) const;
     SfxViewFrame*       GetFrame() const;
-
+    SfxModule*      GetModule() const;
     // caller has to clean up the Manager on his own
     static SfxPopupMenuManager* Popup( sal_uInt16 nConfigId,Window *pWin, const Point *pPos );
 

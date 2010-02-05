@@ -41,7 +41,7 @@
 #include "xattr.hxx"
 #include <svx/xtable.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/itemtype.hxx>
+#include <editeng/itemtype.hxx>
 #include <svx/xdef.hxx>
 
 #define GLOBALOVERFLOW

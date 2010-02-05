@@ -37,16 +37,17 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 
 #include <rtl/ref.hxx>
-
+#include <svl/style.hxx>
 #include "svx/sdtaitm.hxx"
 #include "tablemodel.hxx"
-#include "svx/unotext.hxx"
+#include "editeng/unotext.hxx"
 #include "svx/svdtext.hxx"
 
 // -----------------------------------------------------------------------------
 
 class SfxItemSet;
 class OutlinerParaObject;
+class SdrObject;
 
 namespace sdr { namespace properties {
     class TextProperties;

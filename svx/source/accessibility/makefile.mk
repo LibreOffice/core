@@ -33,7 +33,6 @@ PRJ=..$/..
 
 PRJNAME=svx
 TARGET=accessibility
-LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
@@ -43,21 +42,13 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-LIB1TARGET= $(SLB)$/$(TARGET)-core.lib
-LIB1OBJFILES= \
-    $(SLO)$/AccessibleStringWrap.obj
-
-LIB2TARGET= $(SLB)$/$(TARGET).lib
-LIB2OBJFILES= \
+SLOFILES= \
     $(SLO)$/charmapacc.obj						\
     $(SLO)$/svxrectctaccessiblecontext.obj		\
     $(SLO)$/GraphCtlAccessibleContext.obj		\
     $(SLO)$/ChildrenManager.obj 				\
     $(SLO)$/ChildrenManagerImpl.obj 			\
     $(SLO)$/DescriptionGenerator.obj 			\
-    $(SLO)$/AccessibleContextBase.obj			\
-    $(SLO)$/AccessibleComponentBase.obj			\
-    $(SLO)$/AccessibleSelectionBase.obj			\
     $(SLO)$/AccessibleShape.obj					\
     $(SLO)$/AccessibleGraphicShape.obj			\
     $(SLO)$/AccessibleOLEShape.obj				\
@@ -66,18 +57,12 @@ LIB2OBJFILES= \
     $(SLO)$/AccessibleTextHelper.obj			\
     $(SLO)$/AccessibleEmptyEditSource.obj		\
     $(SLO)$/AccessibleTextEventQueue.obj		\
-    $(SLO)$/AccessibleStaticTextBase.obj		\
-    $(SLO)$/AccessibleParaManager.obj			\
-    $(SLO)$/AccessibleEditableTextPara.obj		\
-    $(SLO)$/AccessibleImageBullet.obj			\
     $(SLO)$/ShapeTypeHandler.obj				\
     $(SLO)$/SvxShapeTypes.obj					\
     $(SLO)$/AccessibleControlShape.obj			\
     $(SLO)$/DGColorNameLookUp.obj				\
     $(SLO)$/AccessibleFrameSelector.obj
     
-SLOFILES = $(LIB1OBJFILES) $(LIB2OBJFILES)
-
 SRS2NAME = accessibility
 SRC2FILES = accessibility.src
 

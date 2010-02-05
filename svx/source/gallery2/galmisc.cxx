@@ -45,7 +45,7 @@
 #include <avmedia/mediawindow.hxx>
 #include <vcl/svapp.hxx>
 
-#include "svx/impgrf.hxx"
+#include "svtools/filter.hxx"
 #include <svx/svdpage.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/fmmodel.hxx>
@@ -129,7 +129,7 @@ USHORT GalleryGraphicImport( const INetURLObject& rURL, Graphic& rGraphic,
 
     if( pIStm )
     {
-        GraphicFilter*      pGraphicFilter = GetGrfFilter();
+        GraphicFilter*      pGraphicFilter = GraphicFilter::GetGraphicFilter();
         GalleryProgress*    pProgress = bShowProgress ? new GalleryProgress( pGraphicFilter ) : NULL;
         USHORT              nFormat;
 

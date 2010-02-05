@@ -81,19 +81,6 @@ PersistentMap::~PersistentMap()
 }
 
 //______________________________________________________________________________
-void PersistentMap::flush() const
-{
-    try {
-        int err = m_db.sync(0);
-        if (err != 0)
-            throw_rtexc(err);
-    }
-    catch (DbException & exc) {
-        throw_rtexc( exc.get_errno(), exc.what() );
-    }
-}
-
-//______________________________________________________________________________
 PersistentMap::PersistentMap( OUString const & url_, bool readOnly )
     : m_db( 0, 0 )
 {

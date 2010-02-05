@@ -59,7 +59,6 @@ SHL1TARGET= drawinglayer$(DLLPOSTFIX)
 SHL1IMPLIB= idrawinglayer
 
 SHL1STDLIBS=\
-        $(GOODIESLIB)		\
         $(VCLLIB)			\
         $(BASEGFXLIB)		\
         $(TOOLSLIB)			\

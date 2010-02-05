@@ -35,10 +35,10 @@
 #include "svditext.hxx"
 #include <svx/svdmodel.hxx> // fuer GetMaxObjSize
 #include <svx/svdoutl.hxx>
-#include <svx/outliner.hxx>
-#include <editstat.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/editstat.hxx>
 #include <svl/itemset.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/sdtfchim.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1256,36 +1256,6 @@ String SfxVirtualMenu::GetItemHelpText( USHORT nSlotId ) const
 }
 
 //--------------------------------------------------------------------
-/*
-void SfxVirtualMenu::InvalidateKeyCodes()
-{
-    DBG_ASSERT( pSVMenu, "invalidating key of incomplete menu" );
-
-    SfxApplication* pSfxApp = SFX_APP();
-    SfxViewFrame *pViewFrame = pBindings->GetDispatcher()->GetFrame();
-    SfxAcceleratorManager* pAccMgr = pViewFrame->GetViewShell()->GetAccMgr_Impl();
-    SfxAcceleratorManager* pAppAccel = pSfxApp->GetAppAccel_Impl();
-    if ( !pAccMgr )
-        pAccMgr = pAppAccel;
-
-    for ( USHORT nPos = 0; nPos < pSVMenu->GetItemCount(); ++nPos )
-    {
-        USHORT nId = pSVMenu->GetItemId(nPos);
-        SfxVirtualMenu *pPopup = GetPopupMenu(nId);
-//        if ( pPopup )
-//            pPopup->InvalidateKeyCodes();
-//        else if ( nId )
-        if ( nId && !pSVMenu->GetPopupMenu( nId ) )
-        {
-            KeyCode aCode = pAccMgr->GetKeyCode( nId );
-            if ( !aCode.GetCode() && pAccMgr != pAppAccel )
-                aCode = pAppAccel->GetKeyCode( nId );
-            pSVMenu->SetAccelKey( nId, aCode );
-        }
-    }
-} */
-
-//--------------------------------------------------------------------
 
 // set the checkmark of the specified item
 

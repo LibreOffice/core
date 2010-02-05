@@ -45,16 +45,9 @@ namespace css = com::sun::star;
 namespace migration
 {
 
-
 rtl::OUString jvmfwk_getImplementationName();
 
 css::uno::Sequence< rtl::OUString > jvmfwk_getSupportedServiceNames();
-
-
-css::uno::Reference< css::uno::XInterface > SAL_CALL jvmfwk_create(
-    css::uno::Reference< css::uno::XComponentContext > const & )
-    throw (css::uno::Exception);
-
 
 } //end blind namespace
 

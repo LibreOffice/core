@@ -31,7 +31,7 @@
 #ifndef _SDGMOITM_HXX
 #define _SDGMOITM_HXX
 
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #include <svl/eitem.hxx>
 #include <svx/svddef.hxx>
 #include "svx/svxdllapi.h"

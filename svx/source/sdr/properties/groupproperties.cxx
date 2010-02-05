@@ -34,7 +34,7 @@
 #include <svl/itemset.hxx>
 #include <svl/whiter.hxx>
 #include <svx/svddef.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/svdpage.hxx>

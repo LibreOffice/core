@@ -46,7 +46,7 @@
 #include <svx/xdef.hxx>
 
 #include "unoapi.hxx"
-#include <svx/unoprnms.hxx>
+#include <editeng/unoprnms.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 using namespace com::sun::star;
@@ -718,7 +718,7 @@ XPropertyEntry* SvxUnoXBitmapTable::getEntry( const OUString& rName, const uno::
     if(!(rAny >>= aURL))
         return NULL;
 
-    GraphicObject aGrafObj( CreateGraphicObjectFromURL( aURL ) );
+    GraphicObject aGrafObj( GraphicObject::CreateGraphicObjectFromURL( aURL ) );
     XOBitmap aBMP( aGrafObj );
 
     const String aName( rName );

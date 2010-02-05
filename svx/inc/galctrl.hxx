@@ -45,7 +45,7 @@
 #include <svtools/transfer.hxx>
 #include <svtools/valueset.hxx>
 #include <svtools/brwbox.hxx>
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #include "svx/galmisc.hxx"
 #include "svx/svxdllapi.h"
 

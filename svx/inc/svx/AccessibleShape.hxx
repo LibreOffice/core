@@ -32,9 +32,10 @@
 #ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_HXX
 #define _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_HXX
 
-#include <svx/AccessibleContextBase.hxx>
-#include <svx/AccessibleComponentBase.hxx>
+#include <editeng/AccessibleContextBase.hxx>
+#include <editeng/AccessibleComponentBase.hxx>
 #include <svx/IAccessibleViewForwarderListener.hxx>
+#include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -43,6 +44,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <svx/AccessibleTextHelper.hxx>
 #include "svx/svxdllapi.h"
+#include "ChildrenManager.hxx"
 
 class SdrObject;
 

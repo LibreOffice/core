@@ -30,7 +30,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include <linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/contentbroker.hxx>

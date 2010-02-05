@@ -32,10 +32,11 @@
 // include ---------------------------------------------------------------
 
 #include <sfx2/sfxdlg.hxx>
-#include <svx/hangulhanja.hxx> //add for HangulHanjaConversionDialog
+#include <editeng/edtdlg.hxx>
+
 class SdrModel;
 class SdrView;
-using namespace svx;
+
 #include <svx/dstribut_enum.hxx>
 #include <svx/rectenum.hxx> //add for enum RECT_POINT
 #include <com/sun/star/container/XIndexContainer.hpp> //add for FmShowColsDialog
@@ -47,6 +48,8 @@ namespace linguistic2{
     class XDictionary;
     class XSpellChecker1;
     class XSpellChecker;
+    class XThesaurus;
+    class XHyphenator;
 }}}}
 class SvxSpellWrapper; //add for SvxSpellCheckDialog
 typedef SfxTabPage* (*CreateSvxDistributePage)(Window *pParent, const SfxItemSet &rAttrSet, SvxDistributeHorizontal eHor, SvxDistributeVertical eVer);
@@ -61,6 +64,8 @@ class SearchAttrItemList;
 class FmFormShell;
 class Graphic;
 class SdrObject;
+class SvxSpellWrapper;
+
 namespace svx{ class SpellDialogChildWindow;}
 
 #define EMPTY_FRAME_REF com::sun::star::uno::Reference < com::sun::star::frame::XFrame >()
@@ -71,33 +76,6 @@ class AbstractSvxDistributeDialog :public VclAbstractDialog  //add for SvxDistri
 public:
     virtual SvxDistributeHorizontal GetDistributeHor() const = 0;
     virtual SvxDistributeVertical GetDistributeVer() const = 0;
-};
-
-class AbstractHangulHanjaConversionDialog : public VclAbstractTerminatedDialog //add for HangulHanjaConversionDialog
-{
- public:
-    virtual void EnableRubySupport( sal_Bool _bVal ) = 0;
-     virtual void SetByCharacter( sal_Bool _bByCharacter ) = 0;
-    virtual void SetConversionDirectionState( sal_Bool _bTryBothDirections, HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection ) = 0;
-     virtual void SetConversionFormat( HangulHanjaConversion::ConversionFormat _eType ) = 0;
-    virtual void    SetOptionsChangedHdl( const Link& _rHdl ) = 0;
-     virtual void   SetIgnoreHdl( const Link& _rHdl ) = 0;
-     virtual void   SetIgnoreAllHdl( const Link& _rHdl ) = 0;
-     virtual void   SetChangeHdl( const Link& _rHdl ) = 0;
-     virtual void   SetChangeAllHdl( const Link& _rHdl ) = 0;
-    virtual void    SetClickByCharacterHdl( const Link& _rHdl ) = 0;
-     virtual void   SetConversionFormatChangedHdl( const Link& _rHdl ) = 0;
-     virtual void   SetFindHdl( const Link& _rHdl ) = 0;
-    virtual sal_Bool        GetUseBothDirections( ) const= 0;
-    virtual HangulHanjaConversion::ConversionDirection    GetDirection( HangulHanjaConversion::ConversionDirection _eDefaultDirection ) const = 0;
-    virtual void    SetCurrentString(
-                    const String& _rNewString,
-                    const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rSuggestions,
-                    bool _bOriginatesFromDocument = true )=0;
-    virtual String  GetCurrentString( ) const =0;
-    virtual HangulHanjaConversion::ConversionFormat    GetConversionFormat( ) const =0;
-    virtual void    FocusSuggestion( )= 0;
-    virtual String  GetCurrentSuggestion( ) const =0;
 };
 
 class AbstractFmShowColsDialog : public VclAbstractDialog //add for FmShowColsDialog
@@ -356,12 +334,12 @@ public:
 
 //-------------------------------------------------------------
 
-class SVX_DLLPUBLIC SvxAbstractDialogFactory : public SfxAbstractDialogFactory
+class SVX_DLLPUBLIC SvxAbstractDialogFactory : public SfxAbstractDialogFactory, public EditAbstractDialogFactory
 {
 public:
     static SvxAbstractDialogFactory* Create();
 
-    // define dtor as this will create typeinfo in svx library
+    // define dtor as this will create typeinfo and in svx library and export vtable
     virtual                             ~SvxAbstractDialogFactory();
 
     virtual SfxAbstractTabDialog*       CreateTextTabDialog( Window* pParent,
@@ -377,9 +355,6 @@ public:
                                             const SfxItemSet& rAttr,
                                             SvxDistributeHorizontal eHor = SvxDistributeHorizontalNone,
                                             SvxDistributeVertical eVer = SvxDistributeVerticalNone)= 0;
-
-    virtual AbstractHangulHanjaConversionDialog * CreateHangulHanjaConversionDialog( Window* _pParent,  //add for HangulHanjaConversionDialog CHINA001
-                                            HangulHanjaConversion::ConversionDirection _ePrimaryDirection ) = 0;
 
     virtual AbstractFmShowColsDialog * CreateFmShowColsDialog( Window* pParent ) = 0;
 

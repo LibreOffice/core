@@ -37,10 +37,9 @@
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
-
+#include <com/sun/star/awt/XRequestCallback.hpp>
 
 #include <platform.h>
-
 #include <cppuhelper/interfacecontainer.h>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -194,43 +193,36 @@ struct OleComponentNative_Impl {
     ComSmart< IStorage > m_pIStorage;
     FormatEtcList m_aFormatsList;
     uno::Sequence< datatransfer::DataFlavor > m_aSupportedGraphFormats;
-    uno::Sequence< ::rtl::OUString > m_aGraphShortFormats; //short names for formats from previous sequence
 
     OleComponentNative_Impl()
     {
         // TODO: Extend format list
         m_aSupportedGraphFormats.realloc( 5 );
-        m_aGraphShortFormats.realloc( 5 );
 
         m_aSupportedGraphFormats[0] = datatransfer::DataFlavor(
             ::rtl::OUString::createFromAscii( "application/x-openoffice-emf;windows_formatname=\"Image EMF\"" ),
             ::rtl::OUString::createFromAscii( "Windows Enhanced Metafile" ),
             getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) );
-        m_aGraphShortFormats[0] = ::rtl::OUString::createFromAscii( "EMF" );
 
         m_aSupportedGraphFormats[1] = datatransfer::DataFlavor(
             ::rtl::OUString::createFromAscii( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" ),
             ::rtl::OUString::createFromAscii( "Windows Metafile" ),
             getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) );
-        m_aGraphShortFormats[1] = ::rtl::OUString::createFromAscii( "WMF" );
 
         m_aSupportedGraphFormats[2] = datatransfer::DataFlavor(
             ::rtl::OUString::createFromAscii( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" ),
             ::rtl::OUString::createFromAscii( "Bitmap" ),
             getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) );
-        m_aGraphShortFormats[2] = ::rtl::OUString::createFromAscii( "BMP" );
 
         m_aSupportedGraphFormats[3] = datatransfer::DataFlavor(
             ::rtl::OUString::createFromAscii( "image/png" ),
             ::rtl::OUString::createFromAscii( "PNG" ),
             getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) );
-        m_aGraphShortFormats[3] = ::rtl::OUString::createFromAscii( "PNG" );
 
         m_aSupportedGraphFormats[0] = datatransfer::DataFlavor(
             ::rtl::OUString::createFromAscii( "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" ),
             ::rtl::OUString::createFromAscii( "GDIMetafile" ),
             getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) );
-        m_aGraphShortFormats[0] = ::rtl::OUString::createFromAscii( "SVM" );
     }
 
     void AddSupportedFormat( const FORMATETC& aFormatEtc );
@@ -307,9 +299,11 @@ sal_Bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium
 
         unsigned char* pBuf = NULL;
         sal_uInt32 nBufSize = 0;
+        ::rtl::OUString aFormat;
 
         if ( aMedium.tymed == TYMED_MFPICT ) // Win Metafile
         {
+            aFormat = ::rtl::OUString::createFromAscii("image/x-wmf");
             METAFILEPICT* pMF = ( METAFILEPICT* )GlobalLock( aMedium.hMetaFilePict );
             if ( pMF )
             {
@@ -340,6 +334,7 @@ sal_Bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium
         }
         else if ( aMedium.tymed == TYMED_ENHMF ) // Enh Metafile
         {
+            aFormat = ::rtl::OUString::createFromAscii("image/x-emf");
             nBufSize = GetEnhMetaFileBits( aMedium.hEnhMetaFile, 0, NULL );
             pBuf = new unsigned char[nBufSize];
             if ( nBufSize && nBufSize == GetEnhMetaFileBits( aMedium.hEnhMetaFile, nBufSize, pBuf ) )
@@ -353,6 +348,7 @@ sal_Bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium
         }
         else if ( aMedium.tymed == TYMED_GDI ) // Bitmap
         {
+            aFormat = ::rtl::OUString::createFromAscii("image/x-MS-bmp");
             nBufSize = GetBitmapBits( aMedium.hBitmap, 0, NULL );
             pBuf = new unsigned char[nBufSize];
             if ( nBufSize && nBufSize == sal::static_int_cast< ULONG >( GetBitmapBits( aMedium.hBitmap, nBufSize, pBuf ) ) )
@@ -372,7 +368,7 @@ sal_Bool OleComponentNative_Impl::ConvertDataForFlavor( const STGMEDIUM& aMedium
                   && aFlavor.DataType == m_aSupportedGraphFormats[nInd].DataType
                   && aFlavor.DataType == getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) )
             {
-                bAnyIsReady = ConvertBufferToFormat( ( void* )pBuf, nBufSize, m_aGraphShortFormats[nInd], aResult );
+                bAnyIsReady = ConvertBufferToFormat( ( void* )pBuf, nBufSize, aFormat, aResult );
                 break;
             }
         }
@@ -1424,9 +1420,11 @@ void OleComponent::OnViewChange_Impl( sal_uInt32 dwAspect )
 
     if ( xLockObject.is() )
     {
-        // the request will be deleted immedeatelly after execution by it's implementation
-        MainThreadNotificationRequest* pMTNotifRequest = new MainThreadNotificationRequest( xLockObject, OLECOMP_ONVIEWCHANGE, dwAspect );
-        MainThreadNotificationRequest::mainThreadWorkerStart( pMTNotifRequest );
+        uno::Reference < awt::XRequestCallback > xRequestCallback( 
+            m_xFactory->createInstance(
+             ::rtl::OUString::createFromAscii("com.sun.star.awt.AsyncCallback") ),
+             uno::UNO_QUERY );
+        xRequestCallback->addCallback( new MainThreadNotificationRequest( xLockObject, OLECOMP_ONVIEWCHANGE, dwAspect ), uno::Any() );
     }
 }
 
@@ -1443,9 +1441,11 @@ void OleComponent::OnClose_Impl()
 
     if ( xLockObject.is() )
     {
-        // the request will be deleted immedeatelly after execution by it's implementation
-        MainThreadNotificationRequest* pMTNotifRequest = new MainThreadNotificationRequest( xLockObject, OLECOMP_ONCLOSE );
-        MainThreadNotificationRequest::mainThreadWorkerStart( pMTNotifRequest );
+        uno::Reference < awt::XRequestCallback > xRequestCallback( 
+            m_xFactory->createInstance(
+             ::rtl::OUString::createFromAscii("com.sun.star.awt.AsyncCallback") ),
+             uno::UNO_QUERY );
+        xRequestCallback->addCallback( new MainThreadNotificationRequest( xLockObject, OLECOMP_ONCLOSE ), uno::Any() );
     }
 }
 

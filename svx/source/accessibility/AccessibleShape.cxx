@@ -48,9 +48,9 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/text/XText.hpp>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <rtl/ref.hxx>
-#include <svx/unoedsrc.hxx>
+#include <editeng/unoedsrc.hxx>
 #include <svx/unoshtxt.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdmodel.hxx>

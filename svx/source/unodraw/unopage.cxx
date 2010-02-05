@@ -38,11 +38,12 @@
 #include <osl/mutex.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sot/clsids.hxx>
+#include <comphelper/serviceinfohelper.hxx>
 
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
 #include <sfx2/objsh.hxx>
-
+#include <svx/svdpool.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
@@ -826,7 +827,7 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
                         }
                         if( pRet == NULL )
                         {
-                            pRet = new SvxOle2Shape( pObj, aSvxMapProvider.GetMap(SVXMAP_OLE2),  aSvxMapProvider.GetPropertySet(SVXMAP_OLE2) );
+                            pRet = new SvxOle2Shape( pObj, aSvxMapProvider.GetMap(SVXMAP_OLE2),  aSvxMapProvider.GetPropertySet(SVXMAP_OLE2, SdrObject::GetGlobalDrawObjectItemPool()) );
                         }
                      }
                     break;
@@ -840,7 +841,7 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
                     pRet = new SvxShapePolyPolygon( pObj , PolygonKind_PATHPLIN );
                     break;
                 case OBJ_PAGE:
-                    pRet = new SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_PAGE),  aSvxMapProvider.GetPropertySet(SVXMAP_PAGE) );
+                    pRet = new SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_PAGE),  aSvxMapProvider.GetPropertySet(SVXMAP_PAGE, SdrObject::GetGlobalDrawObjectItemPool()) );
                     break;
                 case OBJ_MEASURE:
                     pRet = new SvxShapeDimensioning( pObj );
@@ -935,7 +936,7 @@ OUString SAL_CALL SvxDrawPage::getImplementationName() throw( uno::RuntimeExcept
 sal_Bool SAL_CALL SvxDrawPage::supportsService( const OUString& ServiceName )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return SvxServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
 }
 
 uno::Sequence< OUString > SAL_CALL SvxDrawPage::getSupportedServiceNames() throw( uno::RuntimeException )

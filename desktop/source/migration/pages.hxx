@@ -54,7 +54,6 @@ private:
     {
         OEM_NONE, OEM_NORMAL, OEM_EXTENDED
     };
-    OEMType checkOEM();
     bool bIsEvalVersion;
     bool bNoEvalText;
     void checkEval();

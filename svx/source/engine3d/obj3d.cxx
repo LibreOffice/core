@@ -58,9 +58,9 @@
 #include <svx/xlnwtit.hxx>
 #include <vcl/virdev.hxx>
 #include <tools/poly.hxx>
-#include <goodies/b3dtrans.hxx>
+#include <tools/b3dtrans.hxx>
 #include <svx/svxids.hrc>
-#include <svx/colritem.hxx>
+#include <editeng/colritem.hxx>
 #include <svx/e3ditem.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xfltrit.hxx>
@@ -70,7 +70,7 @@
 #include <svx/svx3ditems.hxx>
 #include <svl/whiter.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/xgrscit.hxx>
 #include "svdoimp.hxx"
 #include <svx/sdr/properties/e3dproperties.hxx>

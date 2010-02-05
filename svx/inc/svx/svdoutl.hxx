@@ -31,7 +31,7 @@
 #ifndef _SVDOUTL_HXX
 #define _SVDOUTL_HXX
 
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #include "svx/svxdllapi.h"
 #include <svx/svdobj.hxx>
 

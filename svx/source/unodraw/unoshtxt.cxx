@@ -34,7 +34,7 @@
 #include <vcl/svapp.hxx>
 
 #include <svx/unoshtxt.hxx>
-#include <unoedhlp.hxx>
+#include <editeng/unoedhlp.hxx>
 #include <svl/lstner.hxx>
 #include <rtl/ref.hxx>
 #include <osl/mutex.hxx>
@@ -45,16 +45,16 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdetc.hxx>
-#include <svx/outliner.hxx>
-#include <svx/unoforou.hxx>
-#include <svx/unoviwou.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/unoforou.hxx>
+#include <editeng/unoviwou.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editobj.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editobj.hxx>
 
-#include <svx/unotext.hxx>
+#include <editeng/unotext.hxx>
 #include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
 #include <comphelper/processfactory.hxx>
 #include <vos/mutex.hxx>
@@ -610,8 +610,8 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
 // -
         }
 
-        mpTextForwarder = new SvxOutlinerForwarder( *mpOutliner, mpObject );
 
+        mpTextForwarder = new SvxOutlinerForwarder( *mpOutliner, (mpObject->GetObjInventor() == SdrInventor) && (mpObject->GetObjIdentifier() == OBJ_OUTLINETEXT) );
         // delay listener subscription and UAA initialization until Outliner is fully setup
         bCreated = sal_True;
 
@@ -710,8 +710,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetEditModeTextForwarder()
 
         if( pEditOutliner )
         {
-            mpTextForwarder = new SvxOutlinerForwarder( *pEditOutliner, mpObject );
-
+            mpTextForwarder = new SvxOutlinerForwarder( *pEditOutliner, (mpObject->GetObjInventor() == SdrInventor) && (mpObject->GetObjIdentifier() == OBJ_OUTLINETEXT) );
             mbForwarderIsEditMode = sal_True;
         }
     }

@@ -32,7 +32,7 @@
 #define SVX_SPELL_DIALOG_CHILD_WINDOW_HXX
 
 #include <sfx2/childwin.hxx>
-#include <svx/SpellPortions.hxx>
+#include <editeng/SpellPortions.hxx>
 #include "svx/svxdllapi.h"
 #include <vcl/image.hxx>
 

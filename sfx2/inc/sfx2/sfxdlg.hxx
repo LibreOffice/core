@@ -61,7 +61,7 @@ struct TransferableObjectDescriptor;
 
 namespace sfx2
 {
-    class SvLinkManager;
+    class LinkManager;
 }
 
 namespace com { namespace sun { namespace star { namespace frame {
@@ -115,9 +115,10 @@ public:
 
 namespace com { namespace sun { namespace star { namespace frame { class XFrame; } } } }
 
-class SFX2_DLLPUBLIC SfxAbstractDialogFactory : public VclAbstractDialogFactory
+class SFX2_DLLPUBLIC SfxAbstractDialogFactory : virtual public VclAbstractDialogFactory
 {
 public:
+                                        virtual ~SfxAbstractDialogFactory();    // needed for export of vtable
     static SfxAbstractDialogFactory*    Create();
     virtual VclAbstractDialog*          CreateSfxDialog( Window* pParent, const SfxBindings& rBindings, sal_uInt32 nResId ) = 0;
     virtual VclAbstractDialog*          CreateFrameDialog( Window* pParent, const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame, sal_uInt32 nResId, const String& rParameter ) = 0;
@@ -141,7 +142,7 @@ public:
     virtual VclAbstractDialog*          CreateEditObjectDialog( Window* pParent, USHORT nSlotId,
             const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObj )=0;
     virtual  SfxAbstractPasteDialog*         CreatePasteDialog( Window* pParent )=0;
-    virtual  SfxAbstractLinksDialog*         CreateLinksDialog( Window* pParent, sfx2::SvLinkManager* pMgr, BOOL bHTML=FALSE, sfx2::SvBaseLink* p=0 )=0;
+    virtual  SfxAbstractLinksDialog*         CreateLinksDialog( Window* pParent, sfx2::LinkManager* pMgr, BOOL bHTML=FALSE, sfx2::SvBaseLink* p=0 )=0;
     virtual VclAbstractDialog *         CreateSvxScriptOrgDialog( Window* pParent,  const String& rLanguage ) = 0;
 
     virtual AbstractScriptSelectorDialog*

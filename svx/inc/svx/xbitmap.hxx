@@ -35,7 +35,7 @@
 #ifndef _BITMAP_HXX //autogen
 #include <vcl/bitmap.hxx>
 #endif
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #include <svx/xenum.hxx>
 #include "svx/svxdllapi.h"
 

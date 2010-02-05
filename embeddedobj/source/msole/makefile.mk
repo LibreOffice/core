@@ -91,13 +91,14 @@ EXCEPTIONSFILES += \
 SHL1OBJS= $(SLOFILES)
 
 SHL1STDLIBS=\
+    $(UNOTOOLSLIB)\
     $(SALLIB)\
     $(VOSLIB)\
     $(CPPULIB)\
     $(CPPUHELPERLIB)\
     $(COMPHELPERLIB)\
-    $(TOOLSLIB)\
-    $(SVTOOLLIB)
+    $(TOOLSLIB)
+    
 
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
@@ -107,7 +108,6 @@ EMBOBJLIB=iembobj.lib
 .ENDIF
 
 SHL1STDLIBS+=\
-    $(VCLLIB)\
     $(EMBOBJLIB)\
     $(OLE32LIB)\
     $(GDI32LIB)\
@@ -118,7 +118,6 @@ DEF1EXPORTFILE=	exports.dxp
 .ELIF "$(GUI)"=="OS2"
 
 SHL1STDLIBS+=\
-    $(VCLLIB)\
     iembobj.lib
 
 DEF1EXPORTFILE=	exports.dxp

@@ -49,7 +49,7 @@
 #include <vcl/metaact.hxx>
 #include <tools/zcodec.hxx>
 
-#include "svx/impgrf.hxx"
+#include "svtools/filter.hxx"
 #include "xmlgrhlp.hxx"
 
 #include <algorithm>
@@ -142,7 +142,7 @@ SvXMLGraphicInputStream::SvXMLGraphicInputStream( const ::rtl::OUString& rGraphi
             {
                 if( aGraphic.GetType() == GRAPHIC_BITMAP )
                 {
-                    GraphicFilter*  pFilter = GetGrfFilter();
+                    GraphicFilter*  pFilter = GraphicFilter::GetGraphicFilter();
                     String          aFormat;
 
                     if( aGraphic.IsAnimated() )
@@ -334,7 +334,7 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
         mpOStm->Seek( 0 );
         USHORT nFormat = GRFILTER_FORMAT_DONTKNOW;
         USHORT pDeterminedFormat = GRFILTER_FORMAT_DONTKNOW;
-        GetGrfFilter()->ImportGraphic( aGraphic, String(), *mpOStm ,nFormat,&pDeterminedFormat );
+        GraphicFilter::GetGraphicFilter()->ImportGraphic( aGraphic, String(), *mpOStm ,nFormat,&pDeterminedFormat );
 
         if (pDeterminedFormat == GRFILTER_FORMAT_DONTKNOW)
         {
@@ -377,7 +377,7 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
                         if (nStreamLen_)
                         {
                             pDest->Seek(0L);
-                            GetGrfFilter()->ImportGraphic( aGraphic, String(), *pDest ,nFormat,&pDeterminedFormat );
+                            GraphicFilter::GetGraphicFilter()->ImportGraphic( aGraphic, String(), *pDest ,nFormat,&pDeterminedFormat );
                         }
                     }
                     delete pDest;
@@ -573,7 +573,7 @@ Graphic SvXMLGraphicHelper::ImplReadGraphic( const ::rtl::OUString& rPictureStor
     if( aStream.xStream.is() )
     {
         SvStream* pStream = utl::UcbStreamHelper::CreateStream( aStream.xStream );
-        GetGrfFilter()->ImportGraphic( aGraphic, String(), *pStream );
+        GraphicFilter::GetGraphicFilter()->ImportGraphic( aGraphic, String(), *pStream );
         delete pStream;
     }
 
@@ -619,7 +619,7 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
             {
                 if( aGraphic.GetType() == GRAPHIC_BITMAP )
                 {
-                    GraphicFilter*  pFilter = GetGrfFilter();
+                    GraphicFilter*  pFilter = GraphicFilter::GetGraphicFilter();
                     String          aFormat;
 
                     if( aGraphic.IsAnimated() )

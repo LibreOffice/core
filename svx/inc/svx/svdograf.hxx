@@ -34,7 +34,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <vcl/graph.hxx>
 #include <svx/svdorect.hxx>
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #include "svx/svxdllapi.h"
 
 //////////////////////////////////////////////////////////////////////////////

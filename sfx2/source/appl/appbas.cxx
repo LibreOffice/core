@@ -89,7 +89,7 @@
 
 #define ITEMID_SEARCH SID_SEARCH_ITEM
 
-#include <sfx2/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <vos/socket.hxx>
 
 #define SFX_TYPEMAP

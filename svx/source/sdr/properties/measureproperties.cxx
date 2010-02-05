@@ -34,7 +34,7 @@
 #include <svl/itemset.hxx>
 #include <svl/style.hxx>
 #include <svx/svddef.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/svdomeas.hxx>
 #include <svx/sxmsuitm.hxx>
 #include <svx/xlnstit.hxx>

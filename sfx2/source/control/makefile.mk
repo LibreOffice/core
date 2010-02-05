@@ -68,7 +68,6 @@ SLOFILES = \
         $(SLO)$/sfxstatuslistener.obj \
     $(SLO)$/shell.obj \
     $(SLO)$/sorgitm.obj \
-    $(SLO)$/srchitem.obj \
     $(SLO)$/statcach.obj \
         $(SLO)$/unoctitm.obj
 

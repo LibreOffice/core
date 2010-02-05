@@ -40,7 +40,7 @@
 #include <vcl/virdev.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdomedia.hxx>
-
+#include <svx/svdpool.hxx>
 #ifndef SVX_LIGHT
 #ifndef _SOT_CLSIDS_HXX
 #include <sot/clsids.hxx>
@@ -87,7 +87,7 @@ using namespace ::com::sun::star::beans;
 
 ///////////////////////////////////////////////////////////////////////
 SvxOle2Shape::SvxOle2Shape( SdrObject* pObject ) throw()
-: SvxShape( pObject, aSvxMapProvider.GetMap(SVXMAP_OLE2), aSvxMapProvider.GetPropertySet(SVXMAP_OLE2)  )
+: SvxShape( pObject, aSvxMapProvider.GetMap(SVXMAP_OLE2), aSvxMapProvider.GetPropertySet(SVXMAP_OLE2, SdrObject::GetGlobalDrawObjectItemPool())  )
 {
 }
 
@@ -212,7 +212,7 @@ bool SvxOle2Shape::setPropertyValueImpl( const ::rtl::OUString& rName, const Sfx
         OUString aURL;
         if( rValue >>= aURL )
         {
-            GraphicObject aGrafObj( CreateGraphicObjectFromURL( aURL ) );
+            GraphicObject aGrafObj( GraphicObject::CreateGraphicObjectFromURL( aURL ) );
             static_cast<SdrOle2Obj*>(mpObj.get())->SetGraphic( &aGrafObj.GetGraphic() );
             return true;
         }
@@ -632,7 +632,7 @@ const SvGlobalName SvxOle2Shape::GetClassName_Impl(rtl::OUString& rHexCLSID)
 ///////////////////////////////////////////////////////////////////////
 
 SvxAppletShape::SvxAppletShape( SdrObject* pObject ) throw()
-: SvxOle2Shape( pObject, aSvxMapProvider.GetMap(SVXMAP_APPLET), aSvxMapProvider.GetPropertySet(SVXMAP_APPLET)  )
+: SvxOle2Shape( pObject, aSvxMapProvider.GetMap(SVXMAP_APPLET), aSvxMapProvider.GetPropertySet(SVXMAP_APPLET, SdrObject::GetGlobalDrawObjectItemPool())  )
 {
     SetShapeType( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.AppletShape" ) ) );
 }
@@ -705,7 +705,7 @@ bool SvxAppletShape::getPropertyValueImpl( const ::rtl::OUString& rName, const S
 ///////////////////////////////////////////////////////////////////////
 
 SvxPluginShape::SvxPluginShape( SdrObject* pObject ) throw()
-: SvxOle2Shape( pObject, aSvxMapProvider.GetMap(SVXMAP_PLUGIN), aSvxMapProvider.GetPropertySet(SVXMAP_PLUGIN) )
+: SvxOle2Shape( pObject, aSvxMapProvider.GetMap(SVXMAP_PLUGIN), aSvxMapProvider.GetPropertySet(SVXMAP_PLUGIN, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
     SetShapeType( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.PluginShape" ) ) );
 }
@@ -778,7 +778,7 @@ bool SvxPluginShape::getPropertyValueImpl( const ::rtl::OUString& rName, const S
 ///////////////////////////////////////////////////////////////////////
 
 SvxFrameShape::SvxFrameShape( SdrObject* pObject ) throw()
-: SvxOle2Shape( pObject, aSvxMapProvider.GetMap(SVXMAP_FRAME), aSvxMapProvider.GetPropertySet(SVXMAP_FRAME)  )
+: SvxOle2Shape( pObject, aSvxMapProvider.GetMap(SVXMAP_FRAME), aSvxMapProvider.GetPropertySet(SVXMAP_FRAME, SdrObject::GetGlobalDrawObjectItemPool())  )
 {
     SetShapeType( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.FrameShape" ) ) );
 }
@@ -853,7 +853,7 @@ bool SvxFrameShape::getPropertyValueImpl( const ::rtl::OUString& rName, const Sf
 ***********************************************************************/
 
 SvxMediaShape::SvxMediaShape( SdrObject* pObj ) throw()
-:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_MEDIA), aSvxMapProvider.GetPropertySet(SVXMAP_MEDIA) )
+:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_MEDIA), aSvxMapProvider.GetPropertySet(SVXMAP_MEDIA, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
     SetShapeType( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.MediaShape" ) ) );
 }

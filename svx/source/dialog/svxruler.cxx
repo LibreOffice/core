@@ -52,9 +52,9 @@
 #include <svx/ruler.hxx>
 #include "rlrcitem.hxx"
 #include "rulritem.hxx"
-#include <svx/tstpitem.hxx>
-#include <svx/lrspitem.hxx>
-#include "protitem.hxx"
+#include <editeng/tstpitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include "editeng/protitem.hxx"
 #ifndef _APP_HXX
 #include <vcl/svapp.hxx>
 #endif

@@ -30,10 +30,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
-#include <svx/svdfield.hxx>
+#include <editeng/measfld.hxx>
 #include <svx/svdotext.hxx>
+#include <svx/svdfield.hxx>
 
 static BOOL bInit = FALSE;
 

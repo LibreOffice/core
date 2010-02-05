@@ -44,7 +44,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <svl/itempool.hxx>
-
+#include <editeng/memberids.hrc>
 #include <tools/stream.hxx>
 
 #include "unoapi.hxx"
@@ -58,7 +58,7 @@
 #include "xattr.hxx"
 #include <svx/xtable.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/itemtype.hxx>
+#include <editeng/itemtype.hxx>
 #include <svx/xdef.hxx>
 #include <svx/unomid.hxx>
 #include <svx/svdmodel.hxx>

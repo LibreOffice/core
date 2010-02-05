@@ -39,7 +39,7 @@
 #include <svx/svdoutl.hxx>
 #include <svx/svdpage.hxx>   // fuer Convert
 #include <svx/svdmodel.hxx>  // fuer Convert
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #include <svx/sdr/properties/itemsettools.hxx>
 #include <svx/sdr/properties/properties.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>

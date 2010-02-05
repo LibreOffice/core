@@ -84,8 +84,6 @@ public:
             LanguageType& eNumLang, const String& aValStr,
             const String& aNumStr, SvNumberFormatter& rFormatter );
 
-    static rtl_TextEncoding GetEncodingByHttpHeader( SvKeyValueIterator *pHTTPHeader );
-
 protected:
 
     // Start eines File-Downloads. Dieser erfolgt synchron oder asynchron.
@@ -124,9 +122,6 @@ protected:
     // Default (auch ohne Iterator) ist JavaScript
     ScriptType GetScriptType( SvKeyValueIterator* ) const;
     const String& GetScriptTypeString( SvKeyValueIterator* ) const;
-
-    BOOL SetEncodingByHTTPHeader( SvKeyValueIterator *pHTTPHeader );
-
 };
 
 inline BOOL SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const String& rBaseURL,

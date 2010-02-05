@@ -49,7 +49,6 @@ LIB1OBJFILES= \
         $(SLO)$/XPropertyTable.obj \
         $(SLO)$/UnoNameItemTable.obj \
         $(SLO)$/unoshape.obj	\
-        $(SLO)$/unoipset.obj	\
         $(SLO)$/unoshap2.obj	\
         $(SLO)$/unoshap3.obj	\
         $(SLO)$/unoshap4.obj	\
@@ -57,8 +56,6 @@ LIB1OBJFILES= \
         $(SLO)$/unoshtxt.obj	\
         $(SLO)$/unoprov.obj		\
         $(SLO)$/unomod.obj      \
-        $(SLO)$/unonrule.obj	\
-        $(SLO)$/unofdesc.obj	\
         $(SLO)$/unomlstr.obj	\
         $(SLO)$/unogtabl.obj	\
         $(SLO)$/unohtabl.obj	\

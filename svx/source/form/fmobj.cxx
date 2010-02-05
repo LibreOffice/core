@@ -38,7 +38,7 @@
 #include "svx/fmview.hxx"
 #include "svx/fmglob.hxx"
 #include "svx/fmpage.hxx"
-#include "svx/editeng.hxx"
+#include "editeng/editeng.hxx"
 #include "svx/svdovirt.hxx"
 #include "svx/fmmodel.hxx"
 #include "svx/dialmgr.hxx"

@@ -41,7 +41,7 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svxids.hrc>
-#include <svx/colritem.hxx>
+#include <editeng/colritem.hxx>
 #include <svx/xtable.hxx>
 #include <svx/svdview.hxx>
 #include <svx/dialogs.hrc>
@@ -697,7 +697,7 @@ void E3dView::ImpIsConvertTo3DPossible(SdrObject* pObj, BOOL& rAny3D,
 |* 3D-Konvertierung zu Extrude ausfuehren
 |*
 \************************************************************************/
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 void E3dView::ImpChangeSomeAttributesFor3DConversion(SdrObject* pObj)
 {

@@ -44,15 +44,15 @@
 #include <vcl/hatch.hxx>
 #include <svl/whiter.hxx>
 #include <svl/style.hxx>
-#include <editstat.hxx>
+#include <editeng/editstat.hxx>
 #include <tools/config.hxx>
 #include <vcl/cursor.hxx>
-#include <svx/unotext.hxx>
+#include <editeng/unotext.hxx>
 
-#include <svx/editeng.hxx>
-#include <svx/editobj.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include "svditext.hxx"
 #include <svx/svdoutl.hxx>
 #include <svx/sdtfchim.hxx>
@@ -73,8 +73,8 @@
 #include "svdstr.hrc"   // Namen aus der Resource
 #include "svdglob.hxx"  // StringCache
 #include "globl3d.hxx"
-#include <svx/outliner.hxx>
-#include <svx/adjitem.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/adjitem.hxx>
 
 // #98988#
 #include <svtools/colorcfg.hxx>

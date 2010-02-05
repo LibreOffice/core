@@ -36,11 +36,13 @@
 
 
 #include <svx/pageitem.hxx>
-#include <svx/itemtype.hxx>
+#include <editeng/itemtype.hxx>
 #include <svx/unomid.hxx>
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/style/BreakType.hpp>
 #include <svl/itemset.hxx>
+#include <svx/svxitems.hrc>
+#include <svx/dialmgr.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;

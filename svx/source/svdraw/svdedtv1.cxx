@@ -55,7 +55,7 @@
 #include <svx/svdopath.hxx>  // fuer Crook
 #include "svdstr.hrc"   // Namen aus der Resource
 #include "svdglob.hxx"  // StringCache
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svl/aeitem.hxx>
 #include <svl/whiter.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>

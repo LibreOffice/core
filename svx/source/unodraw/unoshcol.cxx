@@ -34,6 +34,7 @@
 
 #include "unoshcol.hxx"
 #include <svx/unoprov.hxx>
+#include <comphelper/serviceinfohelper.hxx>
 
 using namespace ::cppu;
 using namespace ::com::sun::star;
@@ -238,7 +239,7 @@ sal_Bool SAL_CALL SvxShapeCollection::hasElements() throw( uno::RuntimeException
 sal_Bool SAL_CALL SvxShapeCollection::supportsService( const ::rtl::OUString& ServiceName )
     throw( uno::RuntimeException )
 {
-    return SvxServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
 }
 
 uno::Sequence< ::rtl::OUString > SAL_CALL SvxShapeCollection::getSupportedServiceNames() throw( uno::RuntimeException )

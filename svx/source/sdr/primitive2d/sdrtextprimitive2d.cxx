@@ -35,9 +35,9 @@
 #include <basegfx/color/bcolor.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/editobj.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/flditem.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <unoapi.hxx>
 #include <svx/svdpage.hxx>

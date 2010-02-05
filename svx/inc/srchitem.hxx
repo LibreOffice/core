@@ -30,7 +30,7 @@
 #ifndef _SVX_SRCHITEM_HXX
 #define _SVX_SRCHITEM_HXX
 
-#include <sfx2/srchitem.hxx>
+#include <svl/srchitem.hxx>
 
 #endif
 

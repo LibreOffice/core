@@ -244,16 +244,6 @@ namespace migration
         }
     }
 
-    void ExtensionMigration::registerConfigurationPackage( const uno::Reference< deployment::XPackage > & xPkg)
-    {
-        const ::rtl::OUString sMediaType = xPkg->getPackageType()->getMediaType();
-        if ( (sMediaType.equals(sConfigurationDataType) || sMediaType.equals(sConfigurationSchemaType) ) )
-        {
-            xPkg->revokePackage(uno::Reference< task::XAbortChannel >(), uno::Reference< ucb::XCommandEnvironment> ());
-            xPkg->registerPackage(uno::Reference< task::XAbortChannel >(), uno::Reference< ucb::XCommandEnvironment> ());
-        }
-    }
-
     bool ExtensionMigration::processExtensions( const ::rtl::OUString& sSourceDir, const ::rtl::OUString& sTargetDir )
     {
         if (!copy(sSourceDir, sTargetDir))

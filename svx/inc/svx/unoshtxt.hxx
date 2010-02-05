@@ -32,7 +32,7 @@
 #define SVX_UNOSHTXT_HXX
 
 #include <memory>
-#include <svx/unoedsrc.hxx>
+#include <editeng/unoedsrc.hxx>
 #include "svx/svxdllapi.h"
 
 namespace com { namespace sun { namespace star {

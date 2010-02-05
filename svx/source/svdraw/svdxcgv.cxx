@@ -32,7 +32,7 @@
 #include "precompiled_svx.hxx"
 
 #include <vector>
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 #include "xexch.hxx"
 #include <svx/xflclit.hxx>
 #include <svx/svdxcgv.hxx>

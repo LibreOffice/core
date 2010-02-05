@@ -35,7 +35,7 @@
 #include <vcl/image.hxx>
 #include <svx/frmsel.hxx>
 #include <svx/framelinkarray.hxx>
-#include <svx/borderline.hxx>
+#include <editeng/borderline.hxx>
 
 namespace svx {
 

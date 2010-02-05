@@ -35,11 +35,11 @@
 
 #include "svx/svdotext.hxx"
 #include "svx/svdetc.hxx"
-#include "svx/outlobj.hxx"
+#include "editeng/outlobj.hxx"
 #include "svx/svdoutl.hxx"
 #include "svx/svdmodel.hxx"
-#include "svx/fhgtitem.hxx"
-#include <svx/eeitem.hxx>
+#include "editeng/fhgtitem.hxx"
+#include <editeng/eeitem.hxx>
 #include <svl/itemset.hxx>
 
 SdrText::SdrText( SdrTextObj& rObject, OutlinerParaObject* pOutlinerParaObject /* = 0 */ )

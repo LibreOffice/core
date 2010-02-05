@@ -149,7 +149,7 @@ bool LanguageSelection::prepareLanguage()
             xProp->getPropertyValue(OUString::createFromAscii("ooSetupSystemLocale")) >>= sLocale;
             if ( sLocale.getLength() )
             {
-                loc = LanguageSelection::IsoStringToLocale(aLocaleString);
+                loc = LanguageSelection::IsoStringToLocale(sLocale);
                 MsLangId::setConfiguredSystemLanguage( MsLangId::convertLocaleToLanguage(loc) );
             }
             else

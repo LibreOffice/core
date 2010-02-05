@@ -48,9 +48,9 @@
 #include <svx/svdoashp.hxx>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <sfx2/bindings.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/charscaleitem.hxx>
-#include <svx/kernitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/charscaleitem.hxx>
+#include <editeng/kernitem.hxx>
 #include <sdrpaintwindow.hxx>
 
 #include <svx/svxids.hrc>

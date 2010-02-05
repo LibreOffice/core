@@ -44,7 +44,7 @@
 #include <svl/eitem.hxx>
 #include <vcl/settings.hxx>
 #include <svl/intitem.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/colritem.hxx>
 #include "chrtitem.hxx"
 #include <tools/urlobj.hxx>
 

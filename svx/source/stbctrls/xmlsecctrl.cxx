@@ -61,7 +61,7 @@
 
 #define PAINT_OFFSET    5
 
-//#include <svx/sizeitem.hxx>
+//#include <editeng/sizeitem.hxx>
 //#include <svx/dialmgr.hxx>
 //#include "dlgutil.hxx"
 //#include "stbctrls.h"

@@ -33,21 +33,16 @@
 #include <svx/IAccessibleViewForwarderListener.hxx>
 #include <svx/IAccessibleParent.hxx>
 #include <svx/AccessibleShapeTreeInfo.hxx>
-#include <svx/AccessibleContextBase.hxx>
+#include <editeng/AccessibleContextBase.hxx>
 #include <cppuhelper/compbase2.hxx>
 #include <vos/mutex.hxx>
 #include <vector>
+#include <memory>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
-#ifndef _COM_SUN_STAR_DOCUMENT_XSELECTIONCHANGELISTENER_HPP_
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBLE_XACCESSIBLE_HPP_
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#endif
-#include <vector>
-
 
 using namespace ::com::sun::star;
 

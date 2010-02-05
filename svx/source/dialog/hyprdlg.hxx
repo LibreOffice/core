@@ -35,7 +35,7 @@
 #include <vcl/menu.hxx>
 #include <svtools/stdctrl.hxx>
 #include <sfx2/ctrlitem.hxx>
-#include "srchcfg.hxx"
+#include <svl/srchcfg.hxx>
 #include <sfx2/tbxctrl.hxx>
 
 class SvxHyperlinkDlg;

@@ -32,7 +32,7 @@
 #include "precompiled_svx.hxx"
 
 #include "svx/sdr/properties/textproperties.hxx"
-#include "svx/outlobj.hxx"
+#include "editeng/outlobj.hxx"
 
 #include "cell.hxx"
 #include "tableundo.hxx"

@@ -35,7 +35,7 @@
 
 SvxAbstractDialogFactory* SvxAbstractDialogFactory::Create()
 {
-    return (SvxAbstractDialogFactory*) VclAbstractDialogFactory::Create();
+    return dynamic_cast< SvxAbstractDialogFactory* >( VclAbstractDialogFactory::Create() );
 }
 
 SvxAbstractDialogFactory::~SvxAbstractDialogFactory()

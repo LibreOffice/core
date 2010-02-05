@@ -59,7 +59,6 @@ APP1STDLIBS=$(TOOLSLIB) 		\
             $(CPPULIB)		\
             $(CPPUHELPERLIB)		\
             $(SALLIB)		\
-            $(GOODIESLIB)		\
             $(SFXLIB)			\
             $(SOTLIB)			\
             $(VCLLIB)

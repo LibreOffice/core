@@ -52,7 +52,7 @@
 #include <svx/dialogs.hrc>
 #endif
 #include <svx/svdview.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/colritem.hxx>
 #include "chrtitem.hxx"
 
 #include <svx/extrusionbar.hxx>

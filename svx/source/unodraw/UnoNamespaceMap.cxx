@@ -45,7 +45,7 @@
 #include <comphelper/stl_types.hxx>
 #include <svl/itempool.hxx>
 #include "unoapi.hxx"
-#include "xmlcnitm.hxx"
+#include "editeng/xmlcnitm.hxx"
 
 
 using namespace ::comphelper;

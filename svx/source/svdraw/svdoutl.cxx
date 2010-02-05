@@ -31,11 +31,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <svx/svdoutl.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #include <svx/svdotext.hxx>
-#include <editstat.hxx>
+#include <editeng/editstat.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svl/itempool.hxx>
 
 DBG_NAME(SdrOutliner)

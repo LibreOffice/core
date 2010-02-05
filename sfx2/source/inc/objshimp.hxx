@@ -59,13 +59,11 @@ struct MarkData_Impl
 
 class SfxFrame;
 class SfxToolBoxConfig;
-class SfxAcceleratorManager;
 class SfxBasicManagerHolder;
 
 struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
 {
     ::comphelper::EmbeddedObjectContainer* mpObjectContainer;
-    SfxAcceleratorManager*  pAccMgr;
     SfxConfigManager*   pCfgMgr;
     SfxBasicManagerHolder*
                         pBasicManager;

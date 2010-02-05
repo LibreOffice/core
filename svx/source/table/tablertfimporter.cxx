@@ -39,19 +39,19 @@
 #include <tools/stream.hxx>
 #include <svtools/rtftoken.h>
 
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/svdetc.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/outlobj.hxx>
 
 #include "cell.hxx"
 #include "celltypes.hxx"
 #include "svx/svdotable.hxx"
 #include "svx/svdoutl.hxx"
-#include "svx/editeng.hxx"
-#include "svx/editdata.hxx"
+#include "editeng/editeng.hxx"
+#include "editeng/editdata.hxx"
 #include "svx/svdmodel.hxx"
-#include "svxrtf.hxx"
+#include "editeng/svxrtf.hxx"
 
 using ::rtl::OUString;
 using namespace ::com::sun::star::uno;

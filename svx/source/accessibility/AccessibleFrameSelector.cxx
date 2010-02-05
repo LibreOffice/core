@@ -51,7 +51,7 @@
 #include <vcl/svapp.hxx>
 #include <svx/frmsel.hxx>
 #include <svx/dialmgr.hxx>
-#include "unolingu.hxx"
+#include "editeng/unolingu.hxx"
 
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>

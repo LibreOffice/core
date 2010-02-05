@@ -33,7 +33,7 @@
 
 #include "cell.hxx"
 #include "celltypes.hxx"
-#include "svx/unoedsrc.hxx"
+#include "editeng/unoedsrc.hxx"
 
 class SvxTextForwarder;
 class SdrObject;

@@ -40,12 +40,12 @@
 #include "galtheme.hxx"
 #include "svx/galmisc.hxx"
 #include "galctrl.hxx"
-#include "AccessibleStringWrap.hxx"
-#include <svx/svxfont.hxx>
+#include "editeng/AccessibleStringWrap.hxx"
+#include <editeng/svxfont.hxx>
 #include "galobj.hxx"
 #include <avmedia/mediawindow.hxx>
 #include "gallery.hrc"
-#include <svx/impgrf.hxx>
+#include <svtools/filter.hxx>
 
 // -----------
 // - Defines -
@@ -97,7 +97,7 @@ bool GalleryPreview::SetGraphic( const INetURLObject& _aURL )
     }
     else
     {
-        GraphicFilter*  pFilter = GetGrfFilter();
+        GraphicFilter*  pFilter = GraphicFilter::GetGraphicFilter();
         GalleryProgress aProgress( pFilter );
         if( pFilter->ImportGraphic( aGraphic, _aURL, GRFILTER_FORMAT_DONTKNOW ) )
             bRet = false;

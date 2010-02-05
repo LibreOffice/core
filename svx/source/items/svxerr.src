@@ -31,6 +31,8 @@
 #define __RSC
 #include "svxerr.hxx"
 #include <svx/dialogs.hrc>
+#include <editeng/editerr.hxx>
+
  // pragma ----------------------------------------------------------------
 
  // Error-Context ---------------------------------------------------------

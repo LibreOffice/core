@@ -52,7 +52,7 @@
 #include <svx/svdview.hxx>  // Zum Draggen (Ortho)
 #include "svdglob.hxx"   // StringCache
 #include "svdstr.hrc"    // Objektname
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include "svdoimp.hxx"
 #include <svx/sdr/properties/circleproperties.hxx>
 #include <svx/sdr/contact/viewcontactofsdrcircobj.hxx>

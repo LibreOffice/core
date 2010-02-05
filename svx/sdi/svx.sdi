@@ -6870,31 +6870,6 @@ SfxBoolItem LastRecord SID_FM_RECORD_LAST
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem LaunchStarImage SID_SIM_START
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_APPLICATION;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem LeaveFMCreateMode SID_FM_LEAVE_CREATE
 (SfxBoolItem Leave SID_FM_LEAVE_CREATE)
 [

@@ -34,9 +34,9 @@
 #include <svx/sdr/attribute/sdrtextattribute.hxx>
 #include <svx/sdr/attribute/sdrformtextattribute.hxx>
 #include <svx/svdotext.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/editobj.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/flditem.hxx>
 #include <svx/sdr/properties/properties.hxx>
 
 //////////////////////////////////////////////////////////////////////////////

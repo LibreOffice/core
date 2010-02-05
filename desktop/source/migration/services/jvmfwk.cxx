@@ -241,15 +241,6 @@ css::uno::Sequence< OUString > jvmfwk_getSupportedServiceNames()
     return css::uno::Sequence< OUString >( &str_name, 1 );
 }
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL jvmfwk_create(
-    css::uno::Reference< css::uno::XComponentContext > const & )
-    throw (css::uno::Exception)
-{
-    return static_cast< ::cppu::OWeakObject * >(new JavaMigration);
-
-}
-
-
 // XServiceInfo
 OUString SAL_CALL JavaMigration::getImplementationName()
     throw (css::uno::RuntimeException)
