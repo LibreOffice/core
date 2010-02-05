@@ -136,15 +136,14 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
      * @param _aDoc
      * @param _xConnection
      */
-    private void initialize(Object _aDoc, XConnection _xConnection)
+    private void initialize(Object _aDoc)
     {
         m_aReportDocument = _aDoc;
 
         try
         {
             NamedValueCollection creationArgs = new NamedValueCollection();
-            creationArgs.put( "ActiveConnection", _xConnection );
-            creationArgs.put( "MediaType", "com.sun.star.report.ReportDefinition" );
+            creationArgs.put( "DocumentServiceName", "com.sun.star.report.ReportDefinition" );
             creationArgs.put( "Mode", "remote" );
 
             XComponent[] docDefinition = new XComponent[] { null };
@@ -249,7 +248,7 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
     {
         if (m_xFrame == null)
         {
-            initialize(getRecordParser().getReportDocuments(), getConnection());
+            initialize(getRecordParser().getReportDocuments());
             m_xFrame = getReportDefinition().getCurrentController().getFrame();
             setPageOrientation(m_nDefaultPageOrientation, true /* NO_LAYOUT*/);
         }
