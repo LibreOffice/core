@@ -242,10 +242,10 @@ uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues( sal_uInt32 nInde
         uno::Reference< ucb::XContent > xContent( queryContent( nIndex ) );
         if ( xContent.is() )
         {
-            uno::Reference< ucb::XCommandProcessor > xCmdProc( xContent,
-                                                               uno::UNO_QUERY );
-            if ( xCmdProc.is() )
+            try
             {
+                uno::Reference< ucb::XCommandProcessor > xCmdProc(
+                    xContent, uno::UNO_QUERY_THROW );
                 sal_Int32 nCmdId( xCmdProc->createCommandIdentifier() );
                 ucb::Command aCmd;
                 aCmd.Name = rtl::OUString::createFromAscii( "getPropertyValues" );
@@ -259,6 +259,9 @@ uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues( sal_uInt32 nInde
                     maResults[ nIndex ]->xRow = xRow;
                     return xRow;
                 }
+            }
+            catch ( uno::Exception const & )
+            {
             }
         }
     }
