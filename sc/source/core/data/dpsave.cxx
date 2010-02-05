@@ -1254,10 +1254,11 @@ void ScDPSaveData::BuildAllDimensionMembers(ScDPTableData* pData)
             continue;
 
         long nDimIndex = itr->second;
-        sal_Int32 mMemberCount = pData->GetMembersCount( nDimIndex );
-        for (sal_Int32 j = 0; j < mMemberCount; ++j)
+        const std::vector<SCROW>& rMembers = pData->GetColumnEntries(nDimIndex);
+        size_t mMemberCount = rMembers.size();
+        for (size_t j = 0; j < mMemberCount; ++j)
         {
-            const ScDPItemData* pMemberData = pData->GetMemberByIndex( nDimIndex, j );
+            const ScDPItemData* pMemberData = pData->GetMemberById( nDimIndex, rMembers[j] );
             String aMemName = pMemberData->GetString();
             if (pDim->GetExistingMemberByName(aMemName))
                 // this member instance already exists.  nothing to do.
