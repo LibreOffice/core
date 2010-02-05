@@ -101,7 +101,8 @@ protected:
     sal_Int32                   mnMaxImageResolution;
     sal_Bool                    mbUseTaggedPDF;
     sal_Int32                   mnPDFTypeSelection;
-    sal_Bool                    mbExportNotesBoth;
+    sal_Bool                    mbExportNotes;
+    sal_Bool                    mbExportNotesPages;
     sal_Bool                    mbUseTransitionEffects;
     sal_Bool                    mbIsSkipEmptyPages;
     sal_Bool                    mbAddStream;
@@ -201,6 +202,7 @@ class ImpPDFTabGeneralPage : public SfxTabPage
 
     CheckBox                    maCbExportBookmarks;
     CheckBox                    maCbExportNotes;
+    CheckBox                    maCbExportNotesPages;
 
     CheckBox                    maCbExportEmptyPages;
     CheckBox                    maCbAddStream;

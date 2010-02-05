@@ -85,7 +85,8 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
     mbReduceImageResolution( sal_False ),
     mnMaxImageResolution( 300 ),
     mbUseTaggedPDF( sal_False ),
-    mbExportNotesBoth( sal_True ),
+    mbExportNotes( sal_True ),
+    mbExportNotesPages( sal_False ),
     mbUseTransitionEffects( sal_False ),
     mbIsSkipEmptyPages( sal_True ),
     mnFormsType( 0 ),
@@ -189,9 +190,8 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
     mbUseTaggedPDF = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "UseTaggedPDF" ) ), sal_False );
     mnPDFTypeSelection =  maConfigItem.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "SelectPdfVersion" ) ), 0 );
     if ( mbIsPresentation )
-        mbExportNotesBoth = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotesPages"  ) ), sal_False );
-    else
-        mbExportNotesBoth = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotes"  ) ), sal_True );
+        mbExportNotesPages = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotesPages"  ) ), sal_False );
+    mbExportNotes = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotes"  ) ), sal_False );
 
     mbExportBookmarks = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportBookmarks" ) ), sal_True );
     mnOpenBookmarkLevels = maConfigItem.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenBookmarkLevels" ) ), -1 );
@@ -309,6 +309,14 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
 // updating the FilterData sequence and storing FilterData to configuration
     if( GetTabPage( RID_PDF_TAB_GENER ) )
         ( ( ImpPDFTabGeneralPage* )GetTabPage( RID_PDF_TAB_GENER ) )->GetFilterConfigItem( this );
+    if( GetTabPage( RID_PDF_TAB_VPREFER ) )
+        ( ( ImpPDFTabViewerPage* )GetTabPage( RID_PDF_TAB_VPREFER ) )->GetFilterConfigItem( this );
+    if( GetTabPage( RID_PDF_TAB_OPNFTR ) )
+        ( ( ImpPDFTabOpnFtrPage* )GetTabPage( RID_PDF_TAB_OPNFTR ) )->GetFilterConfigItem( this );
+    if( GetTabPage( RID_PDF_TAB_LINKS ) )
+        ( ( ImpPDFTabLinksPage* )GetTabPage( RID_PDF_TAB_LINKS ) )->GetFilterConfigItem( this );
+    if( GetTabPage( RID_PDF_TAB_SECURITY ) )
+        ( ( ImpPDFTabSecurityPage* )GetTabPage( RID_PDF_TAB_SECURITY ) )->GetFilterConfigItem( this );
 
 //prepare the items to be returned
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "UseLosslessCompression" ) ), mbUseLosslessCompression );
@@ -320,9 +328,8 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
     maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "SelectPdfVersion" ) ), mnPDFTypeSelection );
 
     if ( mbIsPresentation )
-        maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotesPages" ) ), mbExportNotesBoth );
-    else
-        maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotes" ) ), mbExportNotesBoth );
+        maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotesPages" ) ), mbExportNotesPages );
+    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotes" ) ), mbExportNotes );
 
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportBookmarks" ) ), mbExportBookmarks );
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "UseTransitionEffects" ) ), mbUseTransitionEffects );
@@ -336,12 +343,6 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
     maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "FormsType" ) ), mnFormsType );
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportFormFields" ) ), mbExportFormFields );
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "AllowDuplicateFieldNames" ) ), mbAllowDuplicateFieldNames );
-
-    if( GetTabPage( RID_PDF_TAB_VPREFER ) )
-        ( ( ImpPDFTabViewerPage* )GetTabPage( RID_PDF_TAB_VPREFER ) )->GetFilterConfigItem( this );
-
-    if( GetTabPage( RID_PDF_TAB_OPNFTR ) )
-        ( ( ImpPDFTabOpnFtrPage* )GetTabPage( RID_PDF_TAB_OPNFTR ) )->GetFilterConfigItem( this );
 
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "HideViewerToolbar" ) ), mbHideViewerToolbar );
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "HideViewerMenubar" ) ), mbHideViewerMenubar );
@@ -358,16 +359,10 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "FirstPageOnLeft" ) ), mbFirstPageLeft );
     maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenBookmarkLevels" ) ), mnOpenBookmarkLevels );
 
-    if( GetTabPage( RID_PDF_TAB_LINKS ) )
-        ( ( ImpPDFTabLinksPage* )GetTabPage( RID_PDF_TAB_LINKS ) )->GetFilterConfigItem( this );
-
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportLinksRelativeFsys" ) ), mbExportRelativeFsysLinks );
     maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "PDFViewSelection" ) ), mnViewPDFMode );
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ConvertOOoTargetToPDFTarget" ) ), mbConvertOOoTargets );
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportBookmarksToPDFDestination" ) ), mbExportBmkToPDFDestination );
-
-    if( GetTabPage( RID_PDF_TAB_SECURITY ) )
-        ( ( ImpPDFTabSecurityPage* )GetTabPage( RID_PDF_TAB_SECURITY ) )->GetFilterConfigItem( this );
 
     maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "Printing" ) ), mnPrint );
     maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "Changes" ) ), mnChangesAllowed );
@@ -449,6 +444,7 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage( Window* pParent,
 
     maCbExportBookmarks( this, PDFFilterResId( CB_EXPORTBOOKMARKS ) ),
     maCbExportNotes( this, PDFFilterResId( CB_EXPORTNOTES ) ),
+    maCbExportNotesPages( this, PDFFilterResId( CB_EXPORTNOTESPAGES ) ),
     maCbExportEmptyPages( this, PDFFilterResId( CB_EXPORTEMPTYPAGES ) ),
     maCbAddStream( this, PDFFilterResId( CB_ADDSTREAM ) ),
     mbIsPresentation( sal_False ),
@@ -497,9 +493,6 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( const ImpPDFTabDialog* paParent 
 
     maCbExportEmptyPages.Enable( mbIsWriter );
 
-//  SJ: Dont know if there are Notes available also for writer.
-//  maCbExportNotes.Enable( paParent->mbIsPresentation );
-
     maRbLosslessCompression.SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleCompressionHdl ) );
     const sal_Bool bUseLosslessCompression = paParent->mbUseLosslessCompression;
     if ( bUseLosslessCompression )
@@ -546,12 +539,27 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( const ImpPDFTabDialog* paParent 
     maCbAllowDuplicateFieldNames.Check( paParent->mbAllowDuplicateFieldNames );
     maCbAllowDuplicateFieldNames.Enable( paParent->mbExportFormFields );
 
-    if ( mbIsPresentation )
-        maCbExportNotes.Check( paParent->mbExportNotesBoth );
-    else
-        maCbExportNotes.Check( paParent->mbExportNotesBoth );
-
     maCbExportBookmarks.Check( paParent->mbExportBookmarks );
+
+    maCbExportNotes.Check( paParent->mbExportNotes );
+
+    if ( mbIsPresentation )
+    {
+        maCbExportNotesPages.Show( TRUE );
+        maCbExportNotesPages.Check( paParent->mbExportNotesPages );
+    }
+    else
+    {
+        long nCheckBoxHeight =
+            maCbExportNotesPages.LogicToPixel( Size( 13, 13 ), MAP_APPFONT ).Height();
+
+        Point aPos = maCbExportEmptyPages.GetPosPixel();
+        maCbExportEmptyPages.SetPosPixel( Point( aPos.X(), aPos.Y() - nCheckBoxHeight ) );
+        aPos = maCbAddStream.GetPosPixel();
+        maCbAddStream.SetPosPixel( Point( aPos.X(), aPos.Y() - nCheckBoxHeight ) );
+        maCbExportNotesPages.Show( FALSE );
+        maCbExportNotesPages.Check( FALSE );
+    }
 
     maCbExportEmptyPages.Check( !paParent->mbIsSkipEmptyPages );
 
@@ -584,7 +592,9 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* paParent )
     paParent->mnQuality = static_cast<sal_Int32>(maNfQuality.GetValue());
     paParent->mbReduceImageResolution = maCbReduceImageResolution.IsChecked();
     paParent->mnMaxImageResolution = maCoReduceImageResolution.GetText().ToInt32();
-    paParent->mbExportNotesBoth = maCbExportNotes.IsChecked();
+    paParent->mbExportNotes = maCbExportNotes.IsChecked();
+    if ( mbIsPresentation )
+        paParent->mbExportNotesPages = maCbExportNotesPages.IsChecked();
     paParent->mbExportBookmarks = maCbExportBookmarks.IsChecked();
 
     paParent->mbIsSkipEmptyPages =  !maCbExportEmptyPages.IsChecked();
