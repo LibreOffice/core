@@ -712,7 +712,7 @@ namespace
 
                     // if we have a none numeric field, the table alias could be in the name
                     // otherwise we are not allowed to do this (e.g. 0.1 * PRICE )
-                    if  ( !pEntryField->isNumeric() )
+                    if  ( !pEntryField->isOtherFunction() )
                     {
                         // we have to look if we have alias.* here but before we have to check if the column doesn't already exist
                         String sTemp = rFieldName;
@@ -1226,7 +1226,7 @@ namespace
                         if (pParseNode.get())
                         {
                             ::rtl::OUString sGroupBy;
-                            pParseNode->parseNodeToStr( sGroupBy,
+                            pParseNode->getChild(0)->parseNodeToStr(    sGroupBy,
                                                         xConnection,
                                                         &rController.getParser().getContext(),
                                                         sal_False,

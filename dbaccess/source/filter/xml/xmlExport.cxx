@@ -31,82 +31,37 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef DBA_XMLEXPORT_HXX
 #include "xmlExport.hxx"
-#endif
-#ifndef DBA_XMLAUTOSTYLE_HXX
 #include "xmlAutoStyle.hxx"
-#endif
-#ifndef _FLT_REGHELPER_HXX_
 #include "flt_reghelper.hxx"
-#endif
-#ifndef _XMLOFF_PROGRESSBARHELPER_HXX
 #include <xmloff/ProgressBarHelper.hxx>
-#endif
-#ifndef _XMLOFF_XMLTOKEN_HXX
 #include <xmloff/xmltoken.hxx>
-#endif
-#ifndef _XMLOFF_TEXTIMP_HXX_
 #include <xmloff/txtimp.hxx>
-#endif
-#ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
-#endif
-#ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
-#endif
-#ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
-#endif
-#ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
-#endif
-#ifndef DBACCESS_SHARED_XMLSTRINGS_HRC
 #include "xmlstrings.hrc"
-#endif
-#ifndef DBA_XMLENUMS_HXX
 #include "xmlEnums.hxx"
-#endif
-#ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XFORMDOCUMENTSSUPPLIER_HPP_
 #include <com/sun/star/sdb/XFormDocumentsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XOFFICEDATABASEDOCUMENT_HPP_
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XREPORTDOCUMENTSSUPPLIER_HPP_
 #include <com/sun/star/sdb/XReportDocumentsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XQUERYDEFINITIONSSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueryDefinitionsSupplier.hpp>
-#endif
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 
-#ifndef _COM_SUN_STAR_AWT_TEXTALIGN_HPP_
 #include <com/sun/star/awt/TextAlign.hpp>
-#endif
-#ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
-#endif
-#ifndef DBA_XMLHELPER_HXX
 #include "xmlHelper.hxx"
-#endif
-#ifndef _COM_SUN_STAR_AWT_FONTDESCRIPTOR_HPP_
 #include <com/sun/star/awt/FontDescriptor.hpp>
-#endif
 #include <svl/filenotation.hxx>
 #include <unotools/pathoptions.hxx>
 #include <tools/diagnose_ex.h>
 #include <connectivity/DriversConfig.hxx>
+#include <connectivity/dbtools.hxx>
 
 #include <boost/optional.hpp>
 
@@ -1110,47 +1065,68 @@ void ODBExport::exportColumns(const Reference<XColumnsSupplier>& _xColSup)
 // -----------------------------------------------------------------------------
 void ODBExport::exportForms()
 {
-    Reference<XFormDocumentsSupplier> xSup(GetModel(),UNO_QUERY);
-    if ( xSup.is() )
+    Any aValue;
+    ::rtl::OUString sService;
+    dbtools::getDataSourceSetting(getDataSource(),"ReportSupplier",aValue);
+    aValue >>= sService;
+    if ( !sService.getLength() )
     {
-        Reference< XNameAccess > xCollection = xSup->getFormDocuments();
-        if ( xCollection.is() && xCollection->hasElements() )
+        Reference<XFormDocumentsSupplier> xSup(GetModel(),UNO_QUERY);
+        if ( xSup.is() )
         {
-            ::comphelper::mem_fun1_t<ODBExport,XPropertySet* > aMemFunc(&ODBExport::exportComponent);
-            exportCollection(xCollection,XML_FORMS,XML_COMPONENT_COLLECTION,sal_True,aMemFunc);
+            Reference< XNameAccess > xCollection = xSup->getFormDocuments();
+            if ( xCollection.is() && xCollection->hasElements() )
+            {
+                ::comphelper::mem_fun1_t<ODBExport,XPropertySet* > aMemFunc(&ODBExport::exportComponent);
+                exportCollection(xCollection,XML_FORMS,XML_COMPONENT_COLLECTION,sal_True,aMemFunc);
+            }
         }
     }
 }
 // -----------------------------------------------------------------------------
 void ODBExport::exportReports()
 {
-    Reference<XReportDocumentsSupplier> xSup(GetModel(),UNO_QUERY);
-    if ( xSup.is() )
+    Any aValue;
+    ::rtl::OUString sService;
+    dbtools::getDataSourceSetting(getDataSource(),"ReportSupplier",aValue);
+    aValue >>= sService;
+    if ( !sService.getLength() )
     {
-        Reference< XNameAccess > xCollection = xSup->getReportDocuments();
-        if ( xCollection.is() && xCollection->hasElements() )
+        Reference<XReportDocumentsSupplier> xSup(GetModel(),UNO_QUERY);
+        if ( xSup.is() )
         {
-            ::comphelper::mem_fun1_t<ODBExport,XPropertySet* > aMemFunc(&ODBExport::exportComponent);
-            exportCollection(xCollection,XML_REPORTS,XML_COMPONENT_COLLECTION,sal_True,aMemFunc);
+            Reference< XNameAccess > xCollection = xSup->getReportDocuments();
+            if ( xCollection.is() && xCollection->hasElements() )
+            {
+                ::comphelper::mem_fun1_t<ODBExport,XPropertySet* > aMemFunc(&ODBExport::exportComponent);
+                exportCollection(xCollection,XML_REPORTS,XML_COMPONENT_COLLECTION,sal_True,aMemFunc);
+            }
         }
     }
 }
 // -----------------------------------------------------------------------------
 void ODBExport::exportQueries(sal_Bool _bExportContext)
 {
-    Reference<XQueryDefinitionsSupplier> xSup(getDataSource(),UNO_QUERY);
-    if ( xSup.is() )
+    Any aValue;
+    ::rtl::OUString sService;
+    dbtools::getDataSourceSetting(getDataSource(),"CommandDefinitionSupplier",aValue);
+    aValue >>= sService;
+    if ( !sService.getLength() )
     {
-        Reference< XNameAccess > xCollection = xSup->getQueryDefinitions();
-        if ( xCollection.is() && xCollection->hasElements() )
+        Reference<XQueryDefinitionsSupplier> xSup(getDataSource(),UNO_QUERY);
+        if ( xSup.is() )
         {
-            ::std::auto_ptr< ::comphelper::mem_fun1_t<ODBExport,XPropertySet* > > pMemFunc;
-            if ( _bExportContext )
-                pMemFunc.reset( new ::comphelper::mem_fun1_t<ODBExport,XPropertySet* >(&ODBExport::exportQuery) );
-            else
-                pMemFunc.reset( new ::comphelper::mem_fun1_t<ODBExport,XPropertySet* >(&ODBExport::exportAutoStyle) );
+            Reference< XNameAccess > xCollection = xSup->getQueryDefinitions();
+            if ( xCollection.is() && xCollection->hasElements() )
+            {
+                ::std::auto_ptr< ::comphelper::mem_fun1_t<ODBExport,XPropertySet* > > pMemFunc;
+                if ( _bExportContext )
+                    pMemFunc.reset( new ::comphelper::mem_fun1_t<ODBExport,XPropertySet* >(&ODBExport::exportQuery) );
+                else
+                    pMemFunc.reset( new ::comphelper::mem_fun1_t<ODBExport,XPropertySet* >(&ODBExport::exportAutoStyle) );
 
-            exportCollection(xCollection,XML_QUERIES,XML_QUERY_COLLECTION,_bExportContext,*pMemFunc);
+                exportCollection(xCollection,XML_QUERIES,XML_QUERY_COLLECTION,_bExportContext,*pMemFunc);
+            }
         }
     }
 }

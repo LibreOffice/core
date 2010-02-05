@@ -95,39 +95,6 @@ namespace dbaccess
         return xReturn;
     }
 
-    // -------------------------------------------------------------------------
-    bool getDataSourceSetting( const Reference< XInterface >& _rxDataSource, const sal_Char* _pAsciiSettingsName,
-        Any& /* [out] */ _rSettingsValue )
-    {
-        bool bIsPresent = false;
-        try
-        {
-            Reference< XPropertySet > xDataSource( _rxDataSource, UNO_QUERY );
-            OSL_ENSURE( xDataSource.is(), "getDataSourceSetting: invalid data source object!" );
-            if ( !xDataSource.is() )
-                return false;
-
-            Sequence< PropertyValue > aSettings;
-            OSL_VERIFY( xDataSource->getPropertyValue( PROPERTY_INFO ) >>= aSettings );
-            const PropertyValue* pSetting = aSettings.getConstArray();
-            const PropertyValue* pSettingEnd = aSettings.getConstArray() + aSettings.getLength();
-            for ( ; pSetting != pSettingEnd; ++pSetting )
-            {
-                if ( pSetting->Name.equalsAscii( _pAsciiSettingsName ) )
-                {
-                    _rSettingsValue = pSetting->Value;
-                    bIsPresent = true;
-                    break;
-                }
-            }
-        }
-        catch( const Exception& )
-        {
-            OSL_ENSURE( sal_False, "getDataSourceSetting: caught an exception!" );
-        }
-        return bIsPresent;
-    }
-
 // -----------------------------------------------------------------------------
     ::rtl::OUString extractExceptionMessage( const ::comphelper::ComponentContext& _rContext, const Any& _rError )
     {

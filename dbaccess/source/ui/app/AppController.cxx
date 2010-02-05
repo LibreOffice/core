@@ -80,7 +80,6 @@
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/container/XHierarchicalName.hpp>
 /** === end UNO includes === **/
-
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/string.hxx>

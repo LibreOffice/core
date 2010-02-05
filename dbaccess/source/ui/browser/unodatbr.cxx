@@ -519,6 +519,8 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
 
                 DBTreeListUserData* pData = static_cast<DBTreeListUserData*>(m_pCurrentlyDisplayed->GetUserData());
                 OSL_ENSURE( pData->xObjectProperties.is(), "SbaTableQueryBrowser::InitializeGridModel: No table available!" );
+                if ( !pData->xObjectProperties.is() )
+                    return sal_False;
 
                 ::rtl::OUString* pStringIter = aProperties.getArray();
                 Any* pValueIter = aValues.getArray();
@@ -732,7 +734,7 @@ Reference<XPropertySet> getColumnHelper(SvLBoxEntry* _pCurrentlyDisplayed,const 
         ::rtl::OUString aName;
         _rxSource->getPropertyValue(PROPERTY_NAME) >>= aName;
         if(xNames.is() && xNames->hasByName(aName))
-            ::cppu::extractInterface(xRet,xNames->getByName(aName));
+            xRet.set(xNames->getByName(aName),UNO_QUERY);
     }
     return xRet;
 }
@@ -1100,7 +1102,47 @@ SvLBoxEntry* SbaTableQueryBrowser::getObjectEntry(const ::rtl::OUString& _rDataS
                     m_pTreeView->getListBox().Expand(pCommandType);
 
                 // look for the object
-                pObject = m_pTreeView->getListBox().GetEntryPosByName(_rCommand, pCommandType);
+                ::rtl::OUString sCommand = _rCommand;
+                sal_Int32 nIndex = 0;
+                do
+                {
+                    ::rtl::OUString sPath = sCommand.getToken( 0, '/', nIndex );
+                    pObject = m_pTreeView->getListBox().GetEntryPosByName(sPath, pCommandType);
+                    pCommandType = pObject;
+                    if ( nIndex >= 0 )
+                    {
+                        if (ensureEntryObject(pObject))
+                        {
+                            DBTreeListUserData* pParentData = static_cast< DBTreeListUserData* >( pObject->GetUserData() );
+                            Reference< XNameAccess > xCollection( pParentData->xContainer, UNO_QUERY );
+                            sal_Int32 nIndex2 = nIndex;
+                            sPath = sCommand.getToken( 0, '/', nIndex2 );
+                            try
+                            {
+                                if ( xCollection->hasByName(sPath) )
+                                {
+                                    if(!m_pTreeView->getListBox().GetEntryPosByName(sPath,pObject))
+                                    {
+                                        Reference<XNameAccess> xChild(xCollection->getByName(sPath),UNO_QUERY);
+                                        DBTreeListUserData* pEntryData = new DBTreeListUserData;
+                                        pEntryData->eType = etQuery;
+                                        if ( xChild.is() )
+                                        {
+                                            pEntryData->eType = etQueryContainer;
+                                        }
+                                        implAppendEntry( pObject, sPath, pEntryData, pEntryData->eType );
+                                    }
+                                }
+                            }
+                            catch(Exception&)
+                            {
+                                DBG_ERROR("SbaTableQueryBrowser::populateTree: could not fill the tree");
+                            }
+                        }
+                    }
+                     //   m_pTreeView->getListBox().Expand(pCommandType);
+                }
+                while ( nIndex >= 0 );
             }
         }
     }
@@ -1987,7 +2029,7 @@ void SbaTableQueryBrowser::initializeTreeModel()
     }
 }
 // -------------------------------------------------------------------------
-sal_Bool SbaTableQueryBrowser::populateTree(const Reference<XNameAccess>& _xNameAccess,
+void SbaTableQueryBrowser::populateTree(const Reference<XNameAccess>& _xNameAccess,
                                             SvLBoxEntry* _pParent,
                                             EntryType _eEntryType)
 {
@@ -2004,34 +2046,39 @@ sal_Bool SbaTableQueryBrowser::populateTree(const Reference<XNameAccess>& _xName
         {
             if(!m_pTreeView->getListBox().GetEntryPosByName(*pIter,_pParent))
             {
+                Reference<XNameAccess> xChild(_xNameAccess->getByName(*pIter),UNO_QUERY);
                 DBTreeListUserData* pEntryData = new DBTreeListUserData;
                 pEntryData->eType = _eEntryType;
-                implAppendEntry( _pParent, *pIter, pEntryData, _eEntryType );
+                if ( _eEntryType == etQuery && xChild.is() )
+                {
+                    pEntryData->eType = etQueryContainer;
+                }
+                implAppendEntry( _pParent, *pIter, pEntryData, pEntryData->eType );
             }
         }
     }
     catch(Exception&)
     {
         DBG_ERROR("SbaTableQueryBrowser::populateTree: could not fill the tree");
-        return sal_False;
     }
-    return sal_True;
 }
 
 //------------------------------------------------------------------------------
-void SbaTableQueryBrowser::implAppendEntry( SvLBoxEntry* _pParent, const String& _rName, void* _pUserData, EntryType _eEntryType )
+SvLBoxEntry* SbaTableQueryBrowser::implAppendEntry( SvLBoxEntry* _pParent, const String& _rName, void* _pUserData, EntryType _eEntryType )
 {
     ::std::auto_ptr< ImageProvider > pImageProvider( getImageProviderFor( _pParent ) );
 
     Image aImage, aImageHC;
     pImageProvider->getImages( _rName, getDatabaseObjectType( _eEntryType ), aImage, aImageHC );
 
-    SvLBoxEntry* pNewEntry = m_pTreeView->getListBox().InsertEntry( _rName, _pParent, sal_False, LIST_APPEND, _pUserData );
+    SvLBoxEntry* pNewEntry = m_pTreeView->getListBox().InsertEntry( _rName, _pParent, _eEntryType == etQueryContainer , LIST_APPEND, _pUserData );
 
     m_pTreeView->getListBox().SetExpandedEntryBmp( pNewEntry, aImage, BMP_COLOR_NORMAL );
     m_pTreeView->getListBox().SetCollapsedEntryBmp( pNewEntry, aImage, BMP_COLOR_NORMAL );
     m_pTreeView->getListBox().SetExpandedEntryBmp( pNewEntry, aImageHC, BMP_COLOR_HIGHCONTRAST );
     m_pTreeView->getListBox().SetCollapsedEntryBmp( pNewEntry, aImageHC, BMP_COLOR_HIGHCONTRAST );
+
+    return pNewEntry;
 }
 
 //------------------------------------------------------------------------------
@@ -2162,28 +2209,53 @@ sal_Bool SbaTableQueryBrowser::ensureEntryObject( SvLBoxEntry* _pEntry )
                 break;
             }
 
-            try
             {
-                Reference< XQueryDefinitionsSupplier > xQuerySup;
-                m_xDatabaseContext->getByName( getDataSourceAcessor( pDataSourceEntry ) ) >>= xQuerySup;
-                if (xQuerySup.is())
+                SvLBoxEntry* pParent = m_pTreeView->getListBox().GetParent(_pEntry);
+                if ( pParent != pDataSourceEntry )
                 {
-                    Reference< XNameAccess > xQueryDefs = xQuerySup->getQueryDefinitions();
-                    Reference< XContainer > xCont(xQueryDefs, UNO_QUERY);
-                    if (xCont.is())
-                        // add as listener to get notified if elements are inserted or removed
-                        xCont->addContainerListener(this);
+                    SvLBoxString* pString = (SvLBoxString*)_pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
+                    OSL_ENSURE(pString,"There must be a string item!");
+                    ::rtl::OUString aName(pString->GetText());
+                    DBTreeListUserData* pData = static_cast<DBTreeListUserData*>(pParent->GetUserData());
+                    try
+                    {
+                        Reference< XNameAccess > xNameAccess(pData->xContainer,UNO_QUERY);
+                        if ( xNameAccess.is() )
+                            pEntryData->xContainer.set(xNameAccess->getByName(aName),UNO_QUERY);
+                    }
+                    catch(const Exception& )
+                    {
+                        DBG_UNHANDLED_EXCEPTION();
+                    }
 
-                    pEntryData->xContainer = xQueryDefs;
                     bSuccess = pEntryData->xContainer.is();
                 }
-                else {
-                    DBG_ERROR("SbaTableQueryBrowser::ensureEntryObject: no XQueryDefinitionsSupplier interface!");
+                else
+                {
+                    try
+                    {
+                        Reference< XQueryDefinitionsSupplier > xQuerySup;
+                        m_xDatabaseContext->getByName( getDataSourceAcessor( pDataSourceEntry ) ) >>= xQuerySup;
+                        if (xQuerySup.is())
+                        {
+                            Reference< XNameAccess > xQueryDefs = xQuerySup->getQueryDefinitions();
+                            Reference< XContainer > xCont(xQueryDefs, UNO_QUERY);
+                            if (xCont.is())
+                                // add as listener to get notified if elements are inserted or removed
+                                xCont->addContainerListener(this);
+
+                            pEntryData->xContainer = xQueryDefs;
+                            bSuccess = pEntryData->xContainer.is();
+                        }
+                        else {
+                            DBG_ERROR("SbaTableQueryBrowser::ensureEntryObject: no XQueryDefinitionsSupplier interface!");
+                        }
+                    }
+                    catch( const Exception& )
+                    {
+                        DBG_UNHANDLED_EXCEPTION();
+                    }
                 }
-            }
-            catch( const Exception& )
-            {
-                DBG_UNHANDLED_EXCEPTION();
             }
             break;
 
@@ -2339,7 +2411,18 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectionChange, void*, /*NOINTERESTEDIN*/)
 {
     return implSelect( m_pTreeView->getListBox().FirstSelected() ) ? 1L : 0L;
 }
-
+//------------------------------------------------------------------------------
+SvLBoxEntry* SbaTableQueryBrowser::implGetConnectionEntry(SvLBoxEntry* _pEntry) const
+{
+    SvLBoxEntry* pCurrentEntry = _pEntry;
+    DBTreeListUserData* pEntryData = static_cast< DBTreeListUserData* >( pCurrentEntry->GetUserData() );
+    while(pEntryData->eType != etDatasource )
+    {
+        pCurrentEntry = m_pTreeModel->GetParent(pCurrentEntry);
+        pEntryData = static_cast< DBTreeListUserData* >( pCurrentEntry->GetUserData() );
+    }
+    return pCurrentEntry;
+}
 //------------------------------------------------------------------------------
 bool SbaTableQueryBrowser::implSelect( SvLBoxEntry* _pEntry )
 {
@@ -2365,7 +2448,7 @@ bool SbaTableQueryBrowser::implSelect( SvLBoxEntry* _pEntry )
     DBTreeListUserData* pContainerData = static_cast<DBTreeListUserData*>(pContainer->GetUserData());
 
     // get the entry for the datasource
-    SvLBoxEntry* pConnection = m_pTreeModel->GetParent(pContainer);
+    SvLBoxEntry* pConnection = implGetConnectionEntry(pContainer);
     DBTreeListUserData* pConData = static_cast<DBTreeListUserData*>(pConnection->GetUserData());
 
     // reinitialize the rowset
@@ -2376,12 +2459,26 @@ bool SbaTableQueryBrowser::implSelect( SvLBoxEntry* _pEntry )
     xRowSetProps->getPropertyValue(PROPERTY_COMMAND) >>= aOldName;
     sal_Int32 nOldType = 0;
     xRowSetProps->getPropertyValue(PROPERTY_COMMAND_TYPE) >>= nOldType;
-    Reference<XConnection> xOldConnection;
-    ::cppu::extractInterface(xOldConnection,xRowSetProps->getPropertyValue(PROPERTY_ACTIVE_CONNECTION));
+    Reference<XConnection> xOldConnection(xRowSetProps->getPropertyValue(PROPERTY_ACTIVE_CONNECTION),UNO_QUERY);
+
     // the name of the table or query
     SvLBoxString* pString = (SvLBoxString*)_pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
     OSL_ENSURE(pString,"There must be a string item!");
-    ::rtl::OUString aName(pString->GetText().GetBuffer());
+    const ::rtl::OUString sSimpleName = pString->GetText();
+    ::rtl::OUStringBuffer sNameBuffer(sSimpleName);
+    if ( etQueryContainer == pContainerData->eType )
+    {
+        SvLBoxEntry* pTemp = pContainer;
+        while( m_pTreeModel->GetParent(pTemp) != pConnection )
+        {
+            sNameBuffer.insert(0,sal_Unicode('/'));
+            pString = (SvLBoxString*)pTemp->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
+            OSL_ENSURE(pString,"There must be a string item!");
+            sNameBuffer.insert(0,pString->GetText());
+            pTemp = m_pTreeModel->GetParent(pTemp);
+        }
+    }
+    ::rtl::OUString aName = sNameBuffer.makeStringAndClear();
 
     sal_Int32 nCommandType =    ( etTableContainer == pContainerData->eType)
                             ?   CommandType::TABLE
@@ -2439,9 +2536,14 @@ bool SbaTableQueryBrowser::implSelect( SvLBoxEntry* _pEntry )
                     break;
                 case CommandType::QUERY:
                     {
-                        Reference<XQueriesSupplier> xSup( pConData->xConnection, UNO_QUERY );
-                        if(xSup.is())
-                            xNameAccess = xSup->getQueries();
+                        if ( pContainerData->xContainer.is() )
+                            xNameAccess.set( pContainerData->xContainer, UNO_QUERY );
+                        else
+                        {
+                            Reference<XQueriesSupplier> xSup( pConData->xConnection, UNO_QUERY );
+                            if(xSup.is())
+                                xNameAccess = xSup->getQueries();
+                        }
                     }
                     break;
             }
@@ -2449,13 +2551,13 @@ bool SbaTableQueryBrowser::implSelect( SvLBoxEntry* _pEntry )
             sStatus.SearchAndReplaceAscii("$name$", aName);
             BrowserViewStatusDisplay aShowStatus(static_cast<UnoDataBrowserView*>(getView()), sStatus);
 
-            if(xNameAccess.is() && xNameAccess->hasByName(aName))
+            if(xNameAccess.is() && xNameAccess->hasByName(sSimpleName))
             {
                 DBTreeListUserData* pData = static_cast<DBTreeListUserData*>(_pEntry->GetUserData());
                 if ( !pData->xObjectProperties.is() )
                 {
                     Reference<XInterface> xObject;
-                    if(xNameAccess->getByName(aName) >>= xObject) // remember the table or query object
+                    if(xNameAccess->getByName(sSimpleName) >>= xObject) // remember the table or query object
                     {
                         pData->xObjectProperties = pData->xObjectProperties.query( xObject );
                         // if the query contains a parameterized statement and preview is enabled we won't get any data.
@@ -3495,7 +3597,7 @@ void SbaTableQueryBrowser::loadMenu(const Reference< XFrame >& _xFrame)
     {
         SvLBoxEntry* pContainer = m_pTreeModel->GetParent(m_pCurrentlyDisplayed);
         // get the entry for the datasource
-        SvLBoxEntry* pConnection = m_pTreeModel->GetParent(pContainer);
+        SvLBoxEntry* pConnection = implGetConnectionEntry(pContainer);
         ::rtl::OUString sName = m_pTreeView->getListBox().GetEntryText(m_pCurrentlyDisplayed);
         sTitle = GetEntryText( pConnection );
         INetURLObject aURL(sTitle);

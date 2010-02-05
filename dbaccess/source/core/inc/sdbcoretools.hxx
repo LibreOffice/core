@@ -58,25 +58,6 @@ namespace dbaccess
         getDataSource( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxDependentObject );
 
     // -----------------------------------------------------------------------------
-    /** retrieves a particular indirect data source setting
-
-        @param _rxDataSource
-            a data source component
-        @param _pAsciiSettingsName
-            the ASCII name of the setting to obtain
-        @param _rSettingsValue
-            the value of the setting, upon successfull return
-
-        @return
-            <FALSE/> if the setting is not present in the <member scope="com::sun::star::sdb">DataSource::Info</member>
-            member of the data source
-            <TRUE/> otherwise
-    */
-    bool    getDataSourceSetting(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxDataSource,
-        const sal_Char* _pAsciiSettingsName,
-        ::com::sun::star::uno::Any& /* [out] */ _rSettingsValue
-    );
 
     // -----------------------------------------------------------------------------
     /** retrieves a to-be-displayed string for a given caught exception;
@@ -103,7 +84,6 @@ namespace dbaccess
 
     }
 
-//.........................................................................
 }   // namespace dbaccess
 //.........................................................................
 

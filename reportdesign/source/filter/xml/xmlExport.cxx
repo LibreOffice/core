@@ -1117,6 +1117,13 @@ sal_Bool ORptExport::exportGroup(const Reference<XReportDefinition>& _xReportDef
                     ::rtl::OUString sExpression = xGroup->getExpression();
                     if ( sExpression.getLength() )
                     {
+                        static ::rtl::OUString s_sQuote(RTL_CONSTASCII_USTRINGPARAM("\"\""));
+                        sal_Int32 nIndex = sExpression.indexOf('"');
+                        while ( nIndex > -1 )
+                        {
+                            sExpression = sExpression.replaceAt(nIndex,1,s_sQuote);
+                            nIndex = sExpression.indexOf('"',nIndex+2);
+                        }
                         ::rtl::OUString sFormula(RTL_CONSTASCII_USTRINGPARAM("rpt:HASCHANGED(\""));
 
                         TGroupFunctionMap::iterator aGroupFind = m_aGroupFunctionMap.find(xGroup);
