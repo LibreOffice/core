@@ -79,8 +79,6 @@
 #include <stdlib.h>
 
 #include <iostream>
-
-using namespace std;
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
@@ -1871,9 +1869,6 @@ void SwXText::copyText(
     const uno::Reference< text::XTextCopy >& xSource )
         throw ( uno::RuntimeException )
 {
-#if DEBUG
-    clog << "TODO - SwXText::copyText()" << endl;
-#endif
     uno::Reference< lang::XUnoTunnel > xTTunnel( xSource, uno::UNO_QUERY_THROW );
     SwXText* pText = 0;
     pText = reinterpret_cast< SwXText* >(
