@@ -614,11 +614,6 @@ testcase tToolsOptionsInternet
         gefunden = FALSE
         Kontext "OptionenDlg"
         Optionsliste.TypeKeys "<Down>"
-        Kontext "ProxyWarnung"
-        if ProxyWarnung.Exists(1) then
-            NichtMehrAnzeigen.Check
-            ProxyWarnung.OK
-        endif
 
         select case i
         case 1 :

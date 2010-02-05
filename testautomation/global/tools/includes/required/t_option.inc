@@ -279,11 +279,6 @@ function hToolsOptions ( Applicationname as string, Tabpagename as string, OPTIO
                 Kontext "ExtrasOptionenDlg"
                 select case Tabpagename
                 case "PROXY"
-                    Kontext "ProxyWarnung"
-                    if ProxyWarnung.Exists then
-                        NichtMehrAnzeigen.Check
-                        ProxyWarnung.OK
-                    end if
                     Kontext "TabProxyServer"
                     if TabProxyServer.exists(2) then bCorPage = TRUE
                 case "SEARCH"
