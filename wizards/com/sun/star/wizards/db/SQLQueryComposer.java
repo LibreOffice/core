@@ -292,7 +292,7 @@ public class SQLQueryComposer
         return sFromClause;
     }
 
-    public boolean setQueryCommand(String QueryName, XWindow _xParentWindow, boolean _bincludeGrouping, boolean _baddAliasFieldNames)
+    public boolean setQueryCommand(XWindow _xParentWindow, boolean _bincludeGrouping, boolean _baddAliasFieldNames)
     {
         try
         {

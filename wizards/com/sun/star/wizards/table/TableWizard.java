@@ -288,7 +288,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener, 
         return bIsSuccessfull;
     }
 
-    public void finishWizard()
+    public boolean finishWizard()
     {
         super.switchToStep(super.getCurrentStep(), SOFINALPAGE);
         tablename = curFinalizer.getTableName(curScenarioSelector.getFirstTableName());
@@ -308,6 +308,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener, 
                     loadSubComponent( DatabaseObject.TABLE, curTableDescriptor.getComposedTableName(), editTableDesign );
                     m_tableName = curTableDescriptor.getComposedTableName();
                     super.xDialog.endExecute();
+                    return true;
                 }
             }
             else
@@ -317,6 +318,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener, 
                 curFinalizer.setFocusToTableNameControl();
             }
         }
+        return false;
     }
 
     private void callFormWizard()

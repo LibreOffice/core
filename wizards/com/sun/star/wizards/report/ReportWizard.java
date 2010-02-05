@@ -329,7 +329,7 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
         boolean bQueryCreated = false;
         if (this.CurDBCommandFieldSelection.getSelectedCommandType() == CommandType.TABLE)
         {
-            bQueryCreated = CurReportDocument.getRecordParser().oSQLQueryComposer.setQueryCommand(sMsgWizardName, this.xWindow, false, false);
+            bQueryCreated = CurReportDocument.getRecordParser().oSQLQueryComposer.setQueryCommand(this.xWindow, false, false);
 
             CurReportDocument.setCommandType(CommandType.COMMAND);
             String sQuery = CurReportDocument.getRecordParser().oSQLQueryComposer.getQuery();
@@ -520,7 +520,7 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
         enableNavigationButtons(false, false, false);
     }
 
-    public void finishWizard()
+    public boolean finishWizard()
     {
         final int ncurStep = getCurrentStep();
         if ((switchToStep(ncurStep, SOSTOREPAGE)) || (ncurStep == SOSTOREPAGE))
@@ -532,9 +532,11 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
                     nReportMode = CurReportFinalizer.getReportOpenMode();
                     m_sReportName = CurReportFinalizer.getStoreName();
                     xDialog.endExecute();
+                    return true;
                 }
             }
         }
+        return false;
     }
 
     public void cancelWizard()

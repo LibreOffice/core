@@ -942,9 +942,10 @@ public abstract class WWD_Events extends WWD_Startup
     /**
      * the user clicks the finish/create button.
      */
-    public void finishWizard()
+    public boolean finishWizard()
     {
         finishWizard(true);
+        return true;
     }
 
     /**

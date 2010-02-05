@@ -284,22 +284,22 @@ public class QueryWizard extends DatabaseObjectWizard
         }
     }
 
-    public void finishWizard()
+    public boolean finishWizard()
     {
         int ncurStep = getCurrentStep();
-        if ((switchToStep(ncurStep, SOSUMMARY_PAGE)) || (ncurStep == SOSUMMARY_PAGE))
+        if  (   ( ncurStep == SOSUMMARY_PAGE )
+            ||  ( switchToStep( ncurStep, SOSUMMARY_PAGE ) )
+            )
         {
             m_createdQuery = CurFinalizer.finish();
             if ( m_createdQuery.length() > 0 )
             {
                 loadSubComponent( CommandType.QUERY, m_createdQuery, CurFinalizer.displayQueryDesign() );
                 xDialog.endExecute();
-            }
-            else
-            {
-                setControlProperty("btnWizardFinish", "Enabled", false);
+                return true;
             }
         }
+        return false;
     }
 
     protected void enterStep(int nOldStep, int nNewStep)
