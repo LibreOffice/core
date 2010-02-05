@@ -60,7 +60,7 @@
 #include <com/sun/star/script/XInvocation.hpp>
 #include <comphelper/locale.hxx>
 
-#include <transex3/compilehelp.hxx>
+#include <l10ntools/compilehelp.hxx>
 #include <comphelper/storagehelper.hxx>
 
 #include "databases.hxx"
