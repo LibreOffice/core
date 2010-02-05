@@ -32,24 +32,15 @@ package com.sun.star.wizards.report;
 
 // import java.util.Vector;
 
-// import com.sun.star.wizards.reportbuilder.ReportBuilderImplementation;
-import com.sun.star.awt.Size;
 import com.sun.star.awt.TextEvent;
 import com.sun.star.awt.VclWindowPeerAttribute;
-import com.sun.star.awt.XControl;
-import com.sun.star.awt.XControlModel;
-import com.sun.star.awt.XFixedText;
-import com.sun.star.awt.XLayoutConstrains;
 import com.sun.star.awt.XTextListener;
-import com.sun.star.awt.XWindow;
 import com.sun.star.beans.PropertyValue;
 
-// import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XContentEnumerationAccess;
 import com.sun.star.deployment.XPackageInformationProvider;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XServiceInfo;
 import com.sun.star.logging.XLogger;
 import com.sun.star.logging.XLoggerPool;
 import com.sun.star.sdb.CommandType;
@@ -57,39 +48,40 @@ import com.sun.star.sdb.CommandType;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
-import com.sun.star.wizards.common.*;
-import com.sun.star.wizards.ui.*;
-import com.sun.star.wizards.db.*;
-import com.sun.star.lang.XComponent;
 
+import com.sun.star.logging.LogLevel;
+import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.JavaTools;
+import com.sun.star.wizards.common.Resource;
+import com.sun.star.wizards.common.SystemDialog;
+import com.sun.star.wizards.db.DBMetaData;
+import com.sun.star.wizards.db.DatabaseObjectWizard;
+import com.sun.star.wizards.db.SQLQueryComposer;
+import com.sun.star.wizards.ui.CommandFieldSelection;
+import com.sun.star.wizards.ui.FieldSelection;
+import com.sun.star.wizards.ui.SortingComponent;
+import com.sun.star.wizards.ui.TitlesComponent;
+import com.sun.star.wizards.ui.UIConsts;
+import com.sun.star.wizards.ui.UnoDialog;
+import com.sun.star.wizards.ui.XCompletion;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Map;
 
-public class ReportWizard extends WizardDialog implements XTextListener, XCompletion
+public class ReportWizard extends DatabaseObjectWizard implements XTextListener, XCompletion
 {
-    // XMultiServiceFactory xMSF;
-    // QueryMetaData CurDBMetaData;
     protected FieldSelection CurGroupFieldSelection;
     private SortingComponent CurSortingComponent;
-    // private UnoDialog CurUnoProgressDialog;
     private TitlesComponent CurTitlesComponent;
     private CommandFieldSelection CurDBCommandFieldSelection;
     private GroupFieldHandler CurGroupFieldHandler;
     private ReportLayouter CurReportLayouter;
     private ReportFinalizer CurReportFinalizer;
-    private PropertyValue[] DBGPROPERTYVALUE;
-    // private String sCommandName = "";
-    // private int nCommandType = -1;
     private int nReportMode = ReportFinalizer.SOCREATEDOCUMENT;
     private String m_sReportName = "";
     protected static final String SOREPORTFORMNAME = "ReportSource";
-    // private final int SOSELGROUPLST = 33;
-    // private final int SOTXTCOLTITLE = 48;
-    // private final int SOTITLESCROLLBAR = 49;
-    // private static final int SONULLPAGE = 0;
     private static final int SOMAINPAGE = 1;
     private static final int SOTITLEPAGE = 2;
     protected static final int SOGROUPPAGE = 3;
@@ -97,36 +89,21 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
     protected static final int SOTEMPLATEPAGE = 5;
     protected static final int SOSTOREPAGE = 6;
 
-    // ReportTextDocument CurReportDocument;
-    // ReportTextImplementation CurReportDocument;
-    protected IReportDocument CurReportDocument;
+    private IReportDocument m_reportDocument;
     private static String sMsgWizardName;
     private static String slblFields;
     private static String slblSelFields;
     private static String sShowBinaryFields;
-    // private static String sGroupings;
     private String[] WizardHeaderText = new String[6];
-    // private static String[] WizardTitle = new String[6];
-    // private static String sWriterFilterName;
-    private static String slstDatabasesDefaultText;
-    private static String slstTablesDefaultText;
-    private static String sMsgErrorOccured;
-    private static String sMsgSavingImpossible;
-    // private static String sMsgNoConnection;
-    // Progress display relevant Strings
     private static String slblColumnTitles;
     private static String slblColumnNames;
-    private static String sMsgNoConnectionforDataimport;
-    private static String sMsgQueryCreationImpossible;
-    private static String sMsgFilePathInvalid;
     private static String slblTables;
-//    public static String sBlindTextNote;
     protected static boolean bCloseDocument;
     private boolean bHasEscapeProcessing = true;
 
-    public ReportWizard(XMultiServiceFactory xMSF)
+    public ReportWizard( XMultiServiceFactory i_serviceFactory, final PropertyValue[] i_wizardContext )
     {
-        super(xMSF, 34320);
+        super(i_serviceFactory, 34320, i_wizardContext );
         super.addResourceHandler("Report Wizard", "dbw");
         if (getReportResources(false) == true)
         {
@@ -166,7 +143,7 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
         {
             // CurReportDocument.getDoc().oTextSectionHandler.removeTextSectionbyName("RecordSection");
             // CurReportDocument.getDoc().oTextTableHandler.removeTextTablebyName("Tbl_RecordSection");
-            CurReportDocument.removeTextTableAndTextSection();
+            m_reportDocument.removeTextTableAndTextSection();
         }
         switch (nNewStep)
         {
@@ -175,8 +152,8 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
                 break;
 
             case SOTITLEPAGE:
-                String[] aFieldNames = CurReportDocument.getRecordParser().getFieldNames();
-                Map aFieldTitleSet = CurReportDocument.getRecordParser().getFieldTitleSet();
+                String[] aFieldNames = m_reportDocument.getRecordParser().getFieldNames();
+                Map aFieldTitleSet = m_reportDocument.getRecordParser().getFieldTitleSet();
                 CurTitlesComponent.initialize(aFieldNames, aFieldTitleSet);
                 break;
 
@@ -185,10 +162,10 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
                 break;
 
             case SOSORTPAGE:
-                String[] aFieldNames2 = CurReportDocument.getRecordParser().getFieldNames();
-                String[][] aSortFieldNames = CurReportDocument.getRecordParser().getSortFieldNames();
+                String[] aFieldNames2 = m_reportDocument.getRecordParser().getFieldNames();
+                String[][] aSortFieldNames = m_reportDocument.getRecordParser().getSortFieldNames();
                 CurSortingComponent.initialize(aFieldNames2, aSortFieldNames);
-                int nLength = CurReportDocument.getRecordParser().GroupFieldNames.length;
+                int nLength = m_reportDocument.getRecordParser().GroupFieldNames.length;
                 CurSortingComponent.setReadOnlyUntil(nLength, false);
                 break;
 
@@ -197,7 +174,7 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
 
             case SOSTOREPAGE:
                 //TODO initialize with suitable PathName
-                CurReportFinalizer.initialize(CurReportDocument.getRecordParser());
+                CurReportFinalizer.initialize(m_reportDocument.getRecordParser());
                 break;
 
             default:
@@ -213,23 +190,13 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
             case SOMAINPAGE:
                 String[] aSelectedFieldNames = CurDBCommandFieldSelection.getSelectedFieldNames();
                 String aTableName = CurDBCommandFieldSelection.getSelectedCommandName();
-                // set all selected field names, DB Table name
-                // CurReportDocument.getRecordParser().initializeFieldColumns(aSelectedFieldNames, aTableName);
                 int nType = CurDBCommandFieldSelection.getSelectedCommandType();
-                // nType = com.sun.star.sdb.CommandType.TABLE;
-                CurReportDocument.initializeFieldColumns(nType, aTableName, aSelectedFieldNames);
-                // CurReportDocument.initializeFieldColumns(aSelectedFieldNames, aSelectedCommandName);
-                // CurReportDocument.getRecordParser().setAllIncludedFieldNames(false);
+                m_reportDocument.initializeFieldColumns(nType, aTableName, aSelectedFieldNames);
                 if (CurDBCommandFieldSelection.isModified())
                 {
                     // cleanup document
-                    CurReportDocument.clearDocument();
-                    // CurReportDocument.getDoc().oTextSectionHandler.removeAllTextSections();
-                    // CurReportDocument.getDoc().oTextTableHandler.removeAllTextTables();
-                    // CurReportDocument.getDoc().DBColumnsVector = new Vector();
-                    CurReportDocument.getRecordParser().setGroupFieldNames(new String[]
-                            {
-                            });
+                    m_reportDocument.clearDocument();
+                    m_reportDocument.getRecordParser().setGroupFieldNames(new String[]{});
                     CurGroupFieldHandler.removeGroupFieldNames();
                 }
                 break;
@@ -238,21 +205,21 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
                 String[] sFieldTitles = CurTitlesComponent.getFieldTitles();
                 // set new field name titles
                 // CurReportDocument.getRecordParser().setFieldTitles(sFieldTitles);
-                CurReportDocument.setFieldTitles(sFieldTitles);
+                m_reportDocument.setFieldTitles(sFieldTitles);
                 break;
 
             case SOGROUPPAGE:
                 // TODO: DESIGN!!! a getter should return a value!!!
-                CurGroupFieldHandler.getGroupFieldNames(CurReportDocument.getRecordParser());
-                String[] aGroupFieldNames = CurReportDocument.getRecordParser().GroupFieldNames;
+                CurGroupFieldHandler.getGroupFieldNames(m_reportDocument.getRecordParser());
+                String[] aGroupFieldNames = m_reportDocument.getRecordParser().GroupFieldNames;
                 // CurReportDocument.getRecordParser().prependSortFieldNames(aGroupFieldNames);
-                CurReportDocument.setGrouping(aGroupFieldNames);
+                m_reportDocument.setGrouping(aGroupFieldNames);
                 break;
 
             case SOSORTPAGE:
                 String[][] aSortFieldNames = CurSortingComponent.getSortFieldNames();
                 // CurReportDocument.getRecordParser().SortFieldNames = aSortFieldNames;
-                CurReportDocument.setSorting(aSortFieldNames);
+                m_reportDocument.setSorting(aSortFieldNames);
                 // TODO: why do we make a switch here
                 super.enablefromStep(SOTEMPLATEPAGE, true);
                 break;
@@ -270,58 +237,33 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
         if ((nOldStep < SOTEMPLATEPAGE) && (super.getNewStep() >= SOTEMPLATEPAGE))
         {
 // this is called before SOTEMPLATEPAGE, after SOGROUPPAGE
-            CurReportDocument.getRecordParser().createRecordFieldNames();
-            CurReportLayouter.initialize(CurReportDocument.getContentPath());
+            m_reportDocument.getRecordParser().createRecordFieldNames();
+            CurReportLayouter.initialize(m_reportDocument.getContentPath());
         }
     }
 
-    private XComponent[] dialogFinish(short RetValue)
+    private void dialogFinish()
     {
-        XComponent[] ret = null;
-        // Report Wizard Dialog is done.
-        boolean bdisposeDialog = true;
-        switch (RetValue)
+        this.xComponent.dispose();
+        if (bCloseDocument == true)
         {
-            case 0:
-                // via Cancelbutton or via sourceCode with "endExecute"
-                this.xComponent.dispose();
-                if (bCloseDocument == true)
-                {
-                    // OfficeDocument.dispose(xMSF, CurReportDocument.getDoc().xComponent);
-                    CurReportDocument.dispose();
-                    return ret;
-                }
-                if ((nReportMode == ReportFinalizer.SOCREATETEMPLATE) || (nReportMode == ReportFinalizer.SOUSETEMPLATE))
-                {
-                    bdisposeDialog = false;
-                    // Add Report to the DB View
-                    // old: CurReportDocument.getRecordParser().addReportDocument(CurReportDocument.getComponent(), true);
-                    CurReportDocument.addReportToDBView();
-                    boolean bOpenInDesign = (nReportMode == ReportFinalizer.SOCREATETEMPLATE);
-                    // Create Report
-                    // old: ret = CurReportDocument.getRecordParser().openReportDocument(sReportName, true, bOpenInDesign);
-                    ret = CurReportDocument.createFinalReportDocument(m_sReportName, true, bOpenInDesign);
-                }
-                else
-                {
-                    bdisposeDialog = false;
-                    CurReportDocument.importReportData(this);
-                    // Dataimport CurDataimport = new Dataimport(xMSF);
-                    // CurDataimport.CurReportDocument = CurReportDocument;
-                    // CurDataimport.showProgressDisplay(xMSF, false);
-                    // importReportData(xMSF, CurDataimport);
-                    // old: ret = CurReportDocument.getRecordParser().openReportDocument(sReportName, false, false);
-                    ret = CurReportDocument.createFinalReportDocument(m_sReportName, false, false);
-                }
-                return ret;
-            case 1:
-                if (bdisposeDialog == true)
-                {
-                    // CurReportDocument.getDoc().unlockallControllers();
-                }
-                break;
+            m_reportDocument.dispose();
+            return;
         }
-        return null;
+
+        if  (   ( nReportMode == ReportFinalizer.SOCREATETEMPLATE )
+            ||  ( nReportMode == ReportFinalizer.SOUSETEMPLATE )
+            )
+        {
+            m_reportDocument.addReportToDBView();
+            boolean bOpenInDesign = (nReportMode == ReportFinalizer.SOCREATETEMPLATE);
+            m_reportDocument.createAndOpenReportDocument( m_sReportName, true, bOpenInDesign);
+        }
+        else
+        {
+            m_reportDocument.importReportData(this);
+            m_reportDocument.createAndOpenReportDocument( m_sReportName, false, false );
+        }
     }
 
     private boolean executeQuery()
@@ -329,35 +271,35 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
         boolean bQueryCreated = false;
         if (this.CurDBCommandFieldSelection.getSelectedCommandType() == CommandType.TABLE)
         {
-            bQueryCreated = CurReportDocument.getRecordParser().oSQLQueryComposer.setQueryCommand(this.xWindow, false, false);
+            bQueryCreated = m_reportDocument.getRecordParser().oSQLQueryComposer.setQueryCommand(this.xWindow, false, false);
 
-            CurReportDocument.setCommandType(CommandType.COMMAND);
-            String sQuery = CurReportDocument.getRecordParser().oSQLQueryComposer.getQuery();
-            CurReportDocument.setCommand(sQuery);
+            m_reportDocument.setCommandType(CommandType.COMMAND);
+            String sQuery = m_reportDocument.getRecordParser().oSQLQueryComposer.getQuery();
+            m_reportDocument.setCommand(sQuery);
         }
         else
         {
             try
             {
                 String sQueryName = CurDBCommandFieldSelection.getSelectedCommandName();
-                DBMetaData.CommandObject oCommand = CurReportDocument.getRecordParser().getQueryByName(sQueryName);
-                bHasEscapeProcessing = CurReportDocument.getRecordParser().hasEscapeProcessing(oCommand.getPropertySet());
+                DBMetaData.CommandObject oCommand = m_reportDocument.getRecordParser().getQueryByName(sQueryName);
+                bHasEscapeProcessing = m_reportDocument.getRecordParser().hasEscapeProcessing(oCommand.getPropertySet());
                 String sCommand = (String) oCommand.getPropertySet().getPropertyValue("Command");
                 if (bHasEscapeProcessing)
                 {
                     // String sCommand = (String) oCommand.xPropertySet.getPropertyValue("Command");
                     bQueryCreated = (!sCommand.equals(""));
-                    CurReportDocument.getRecordParser().oSQLQueryComposer.m_xQueryAnalyzer.setQuery(sCommand);
-                    CurReportDocument.getRecordParser().oSQLQueryComposer.prependSortingCriteria();
+                    m_reportDocument.getRecordParser().oSQLQueryComposer.m_xQueryAnalyzer.setQuery(sCommand);
+                    m_reportDocument.getRecordParser().oSQLQueryComposer.prependSortingCriteria();
 // TODO: check with query
-                    CurReportDocument.setCommandType(CommandType.COMMAND);
-                    CurReportDocument.setCommand(CurReportDocument.getRecordParser().oSQLQueryComposer.getQuery());
+                    m_reportDocument.setCommandType(CommandType.COMMAND);
+                    m_reportDocument.setCommand(m_reportDocument.getRecordParser().oSQLQueryComposer.getQuery());
                     bQueryCreated = true;
                 }
                 else
                 {
-                    CurReportDocument.setCommandType(CommandType.COMMAND);
-                    CurReportDocument.setCommand(sCommand);
+                    m_reportDocument.setCommandType(CommandType.COMMAND);
+                    m_reportDocument.setCommand(sCommand);
                     bQueryCreated = true;
                 }
             }
@@ -372,124 +314,10 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
         }
         return bQueryCreated;
     }
-/*
-    public static void main(String args[])
-    {
-        String ConnectStr = "uno:socket,host=localhost,port=8107;urp;StarOffice.NamingService";   //localhost  ;Lo-1.Germany.sun.com; 10.16.65.155
-        try
-        {
-            XMultiServiceFactory xLocMSF = com.sun.star.wizards.common.Desktop.connect(ConnectStr);
-
-            tests(xLocMSF);
-
-            ReportWizard CurReportWizard = new ReportWizard(xLocMSF);
-            if (xLocMSF != null)
-            {
-                System.out.println("Connected to " + ConnectStr);
-                PropertyValue[] curproperties = new PropertyValue[1];
-                // curproperties[0] = Properties.createProperty(
-                // "DatabaseLocation",
-                // "file:///localhome/bc93774/NewDatabase2" +
-                // "C:/Documents and Settings/ll93751/My Documents/RptWizard01_DB.odb");
-                // "file://C:/Documents%20and%20Settings/ll93751/My%20Documents/RptWizard01_DB.odb");
-//                    "C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MyHSQL.odb"); //MyDocAssign.odb; baseLocation ); "DataSourceName", "db1");
-                // curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography");
-                curproperties[0] = Properties.createProperty("DataSourceName", "RptWizard01_DB");
-                CurReportWizard.startReportWizard(xLocMSF, curproperties, true);
-            }
-        }
-        catch (Exception exception)
-        {
-            exception.printStackTrace(System.out);
-        }
-        System.exit(1);
-    }
-*/
-/*
-    private static void tests(XMultiServiceFactory _xMSF)
-    {
-        try
-        {
-//                String[] sServices = _xMSF.getAvailableServiceNames();
-//                File aFile = new File("C:/temp/services.txt");
-//                aFile.delete();
-//                FileWriter aRAF = new FileWriter(aFile);
-//                for (int i=0;i<sServices.length;i++)
-//                {
-//                    aRAF.write(sServices[i]);
-//                    aRAF.write("\n");
-//                }
-//                aRAF.close();
-
-
-//                XServiceInfo xServiceInfo = (XServiceInfo)UnoRuntime.queryInterface(XServiceInfo.class, _xMSF);
-//                String[] sServices = xServiceInfo.getSupportedServiceNames();
-
-//                XControl xControl = (XControl)UnoRuntime.queryInterface(XControl.class, xFormattedField);
-//                Object aPeer = xControl.getPeer();
-//                XTextConstraints xTC = (XTextConstraints)UnoRuntime.queryInterface(XTextConstraints.class, aPeer);
-//                int nHeight = xTC.getTextHeight();
-//                int nWidth = xTC.getTextWidth("Blah Fasel");
-
-//                Object aTextShapeObj = _xMSF.createInstance("com.sun.star.drawing.TextShape");
-//                XText xText = (XText)UnoRuntime.queryInterface(XText.class, aTextShapeObj);
-//                xText.setString("Blah fasel");
-//
-//                XServiceInfo xServiceInfo2 = (XServiceInfo)UnoRuntime.queryInterface(XServiceInfo.class, aTextShapeObj);
-//                String[] sServices2 = xServiceInfo2.getSupportedServiceNames();
-
-//                Object aToolkitObj = _xMSF.createInstance("com.sun.star.awt.Toolkit");
-//                XToolkit xToolkit = (XToolkit)UnoRuntime.queryInterface(XToolkit.class, aToolkitObj);
-//                WindowDescriptor aDescriptor = new WindowDescriptor();
-//                aDescriptor.Bounds = new Rectangle(0,0,640,480);
-//
-//                XWindowPeer aWindowPeer = xToolkit.createWindow(aDescriptor);
-//                XWindow xWindow = (XWindow)UnoRuntime.queryInterface(XWindow.class, aWindowPeer);
-//                xWindow.setVisible(true);
-//                aWindowPeer.setBackground(0x00000000);
-
-            Object aControlContainer = _xMSF.createInstance("com.sun.star.awt.UnoControlContainer");
-            // XControlContainer xControlContainer = (XControlContainer)UnoRuntime.queryInterface(XControlContainer.class, aControlContainer);
-
-            Object aFixedTextModel = _xMSF.createInstance("com.sun.star.awt.UnoControlFixedTextModel");
-            XControlModel xFixedTextModel = (XControlModel) UnoRuntime.queryInterface(XControlModel.class, aFixedTextModel);
-// nicht das Model, sondern gleich den FixedText nehmen??
-
-//                XMultiServiceFactory xMSF = (XMultiServiceFactory)UnoRuntime.queryInterface(XMultiServiceFactory.class, xFixedTextModel);
-
-            Object aFixedText = _xMSF.createInstance("com.sun.star.awt.UnoControlFixedText");
-            XServiceInfo xServiceInfo2 = (XServiceInfo) UnoRuntime.queryInterface(XServiceInfo.class, aFixedText);
-            String[] sServices2 = xServiceInfo2.getSupportedServiceNames();
-
-            XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, aFixedText);
-            xWindow.setVisible(true);
-
-            XFixedText xFixedText = (XFixedText) UnoRuntime.queryInterface(XFixedText.class, aFixedText);
-            xFixedText.setText("Dies ist ein String");
-
-            XControl xControl = (XControl) UnoRuntime.queryInterface(XControl.class, xFixedText);
-            xControl.setModel(xFixedTextModel);
-
-            XLayoutConstrains xLayoutConstrains = (XLayoutConstrains) UnoRuntime.queryInterface(XLayoutConstrains.class, aFixedText);
-            Size aSize = xLayoutConstrains.getPreferredSize();
-
-            // xToolkit.createScreenCompatibleDevice(_nWidth, _nWidth).
-            // XWindow x = getReportDefinition().getCurrentController().getFrame().getContainerWindow();
-            // Object aObj = _xSection.getParent();
-            int dummy = 0;
-        }
-        catch (Exception e)
-        {
-            int dummy = 0;
-        }
-
-    }
-*/
-
     public void buildSteps()
     {
         // CurReportDocument.getDoc().xProgressBar.setValue(30);
-        CurDBCommandFieldSelection = new CommandFieldSelection(this, CurReportDocument.getRecordParser(), 100, slblFields, slblSelFields, slblTables, true, 34330);
+        CurDBCommandFieldSelection = new CommandFieldSelection(this, m_reportDocument.getRecordParser(), 100, slblFields, slblSelFields, slblTables, true, 34330);
         CurDBCommandFieldSelection.addFieldSelectionListener(new FieldSelectionListener());
         if ( !isReportBuilderInstalled() )
         {
@@ -507,13 +335,13 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
         CurTitlesComponent = new TitlesComponent(this, SOTITLEPAGE, 97, 37, 210, 7, slblColumnNames, slblColumnTitles, 34381);
         CurTitlesComponent.addTextListener(this);
         // CurReportDocument.getDoc().xProgressBar.setValue(50);
-        CurGroupFieldHandler = new GroupFieldHandler(CurReportDocument, this);
+        CurGroupFieldHandler = new GroupFieldHandler(m_reportDocument, this);
         // CurReportDocument.getDoc().xProgressBar.setValue(60);
         CurSortingComponent = new SortingComponent(this, SOSORTPAGE, 95, 30, 210, 34346);
         // CurReportDocument.getDoc().xProgressBar.setValue(70);
-        CurReportLayouter = new ReportLayouter(xMSF, CurReportDocument, this);
+        CurReportLayouter = new ReportLayouter(xMSF, m_reportDocument, this);
         // CurReportDocument.getDoc().xProgressBar.setValue(80);
-        CurReportFinalizer = new ReportFinalizer(xMSF, CurReportDocument, this);
+        CurReportFinalizer = new ReportFinalizer(xMSF, m_reportDocument, this);
         // CurReportDocument.getDoc().xProgressBar.setValue(100);
         bCloseDocument = true;
         // CurReportDocument.getDoc().xProgressBar.end();
@@ -563,7 +391,7 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
     private boolean isReportBuilderInstalled()
     {
         //! Check if the new Report Builder Extension is available
-        XContentEnumerationAccess a = (XContentEnumerationAccess) com.sun.star.uno.UnoRuntime.queryInterface(XContentEnumerationAccess.class, xMSF);
+        XContentEnumerationAccess a = com.sun.star.uno.UnoRuntime.queryInterface( XContentEnumerationAccess.class, xMSF );
         com.sun.star.container.XEnumeration e = a.createContentEnumeration("com.sun.star.report.pentaho.SOReportJobFactory");
         if (e == null)
         {
@@ -586,8 +414,7 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
         // Get the path to the extension and try to add the path to the class loader
         final XComponentContext xComponentContext = Helper.getComponentContext(_xMSF);
         final Object aSingleton = xComponentContext.getValueByName("/singletons/com.sun.star.deployment.PackageInformationProvider");
-        XPackageInformationProvider xProvider = (XPackageInformationProvider) UnoRuntime.queryInterface(XPackageInformationProvider.class, aSingleton);
-        // String[][] aStrListList = xProvider.getExtensionList();
+        XPackageInformationProvider xProvider = UnoRuntime.queryInterface( XPackageInformationProvider.class, aSingleton );
         final String sLocation = xProvider.getPackageLocation("com.sun.reportdesigner");
         return sLocation;
     }
@@ -603,7 +430,7 @@ private static void initializeLogger(XMultiServiceFactory _xMSF)
     {
         System.out.println("Can't get singleton from logging");
     }
-    final XLoggerPool xLoggerPool = (XLoggerPool)UnoRuntime.queryInterface(XLoggerPool.class, aLoggerPool);
+    final XLoggerPool xLoggerPool = UnoRuntime.queryInterface( XLoggerPool.class, aLoggerPool );
     m_xLogger = xLoggerPool.getNamedLogger("com.sun.star.wizards.ReportBuilder");
 }
 
@@ -612,120 +439,65 @@ public static XLogger getLogger()
     return m_xLogger;
 }
 
-    public XComponent[] startReportWizard(XMultiServiceFactory _xMSF, PropertyValue[] CurPropertyValue)
+    public void startReportWizard()
     {
-        return startReportWizard(_xMSF, CurPropertyValue, false);
-    }
+        initializeLogger(xMSF);
+        getLogger().log(LogLevel.SEVERE, "Start Report Wizard");
 
-    public XComponent[] startReportWizard(XMultiServiceFactory _xMSF, PropertyValue[] CurPropertyValue, boolean _bDebug)
-    {
-            initializeLogger(_xMSF);
-            getLogger().log(com.sun.star.logging.LogLevel.SEVERE, "Start Report Wizard");
-
-        XComponent[] ret = null;
-        this.xMSF = _xMSF;
-        DBGPROPERTYVALUE = CurPropertyValue;
-
-        // CurReportDocument = new ReportTextDocument(xMSF, ReportPath + "/stl-default.ott", m_oResource );
-        // if (isReportBuilderInstalled())
-        // {
-        //     CurReportDocument = ReportBuilderImplementation.create(xMSF, m_oResource);
-        // }
-        // else
-        // {
-        //     CurReportDocument = ReportTextImplementation.create(xMSF, m_oResource  );
-        // }
-        boolean bUseOld = false;
-        if (!isReportBuilderInstalled())
+        if ( isReportBuilderInstalled() )
         {
-            bUseOld = true;
-        }
-        if (_bDebug == true && !bUseOld)
-        {
-            try
+            // Get the path to the extension and try to add the path to the class loader
+            String sLocation = getPathToExtension(xMSF);
+            // TODO: Umlaut in filename!
+            if ( sLocation.length() > 0 )
             {
-                Class a = Class.forName("com.sun.star.wizards.reportbuilder.ReportBuilderImplementation");
-                Method aMethod = a.getMethod("create", new Class[]
-                        {
-                            XMultiServiceFactory.class, Resource.class
-                        });
-                CurReportDocument = (IReportDocument) aMethod.invoke(a, new Object[]
-                        {
-                            xMSF, m_oResource
-                        });
-            }
-            catch (Exception e)
-            {
-                int dummy = 0;
-            }
-        }
-        else
-        {
-            if (!bUseOld)
-            {
-                // debug == false
-
-                // Get the path to the extension and try to add the path to the class loader
-                String sLocation = getPathToExtension(xMSF);
-                // TODO: Umlaut in filename!
-                if (sLocation.length() > 0)
+                try
                 {
-                    try
-                    {
-                        URI aLocationURI = URI.create(sLocation + "/" + "reportbuilderwizard.jar");
+                    URI aLocationURI = URI.create(sLocation + "/" + "reportbuilderwizard.jar");
 
-                        URL[] aURLs = new URL[1];
-                        aURLs[0] = aLocationURI.toURL();
-                        URLClassLoader aClassLoader = new URLClassLoader(aURLs, this.getClass().getClassLoader());
-                        Class a = aClassLoader.loadClass("com.sun.star.wizards.reportbuilder.ReportBuilderImplementation");
-                        Method aMethod = a.getMethod("create", new Class[]
-                                {
-                                    XMultiServiceFactory.class, Resource.class
-                                });
-                        CurReportDocument = (IReportDocument) aMethod.invoke(a, new Object[]
-                                {
-                                    xMSF, m_oResource
-                                });
-                    }
-                    catch (Exception e)
-                    {
-                        // TODO: Exception not handled.
-                        int dummy = 0;
-                        // Maybe problems in URI create() if a wrong char is used like '[' ']', ...
-                        System.out.println("There could be a problem with the path '" + sLocation + "'");
-                    }
+                    URL[] aURLs = new URL[1];
+                    aURLs[0] = aLocationURI.toURL();
+                    URLClassLoader aClassLoader = new URLClassLoader(aURLs, this.getClass().getClassLoader());
+                    Class a = aClassLoader.loadClass("com.sun.star.wizards.reportbuilder.ReportBuilderImplementation");
+                    Method aMethod = a.getMethod("create", new Class[] { XMultiServiceFactory.class });
+                    m_reportDocument = (IReportDocument) aMethod.invoke(a, new Object[] { xMSF });
+                }
+                catch (Exception e)
+                {
+                    // Maybe problems in URI create() if a wrong char is used like '[' ']', ...
+                    System.out.println("There could be a problem with the path '" + sLocation + "'");
                 }
             }
         }
+
         try
         {
-            if (CurReportDocument == null)
+            if (m_reportDocument == null)
             {
                 // Fallback, if there is no reportbuilder wizard implementation, we use the old wizard
-                CurReportDocument = ReportTextImplementation.create(xMSF, m_oResource);
+                m_reportDocument = new ReportTextImplementation( xMSF );
             }
 
-            //        CurDBMetaData = CurReportDocument.getRecordParser();
-//                tests();
+            m_reportDocument.initialize( m_docUI, m_oResource );
 
-            if (CurReportDocument.getRecordParser().getConnection(CurPropertyValue))
+            if ( m_reportDocument.getRecordParser().getConnection( m_wizardContext ) )
             {
-                // CurReportDocument.getDoc().xProgressBar.setValue(20);
-                CurReportDocument.getRecordParser().oSQLQueryComposer = new SQLQueryComposer(CurReportDocument.getRecordParser());
+                m_reportDocument.getRecordParser().oSQLQueryComposer = new SQLQueryComposer(m_reportDocument.getRecordParser());
                 buildSteps();
 
-                CurReportDocument.checkInvariants();
+                m_reportDocument.checkInvariants();
 
-                this.CurDBCommandFieldSelection.preselectCommand(CurPropertyValue, false);
+                this.CurDBCommandFieldSelection.preselectCommand( m_wizardContext, false );
 
-                createWindowPeer(CurReportDocument.getWizardParent());
+                createWindowPeer(m_reportDocument.getWizardParent());
 
-                CurReportDocument.getRecordParser().setWindowPeer(this.xControl.getPeer());
+                m_reportDocument.getRecordParser().setWindowPeer(this.xControl.getPeer());
                 insertQueryRelatedSteps();
-                short RetValue = executeDialog(CurReportDocument.getFrame().getComponentWindow().getPosSize());
-                ret = dialogFinish(RetValue);
+                short RetValue = executeDialog(m_reportDocument.getFrame().getComponentWindow().getPosSize());
+                if ( RetValue == 0 )
+                    dialogFinish();
             }
-            CurReportDocument.getRecordParser().dispose();
+            m_reportDocument.getRecordParser().dispose();
         }
         catch (java.io.IOException e)
         {
@@ -744,7 +516,6 @@ public static XLogger getLogger()
         {
             jexception.printStackTrace(System.out);
         }
-        return ret;
     }
 
     public void importReportData(final XMultiServiceFactory xMSF, final Dataimport CurDataimport)
@@ -755,25 +526,25 @@ public static XLogger getLogger()
             boolean bexecute = false;
             if (!bHasEscapeProcessing)
             {
-                bexecute = CurReportDocument.getRecordParser().executeCommand(com.sun.star.sdb.CommandType.QUERY);   //            sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot))
+                bexecute = m_reportDocument.getRecordParser().executeCommand(com.sun.star.sdb.CommandType.QUERY);   //            sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot))
             }
             else
             {
-                bexecute = CurReportDocument.getRecordParser().executeCommand(com.sun.star.sdb.CommandType.COMMAND);   //            sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot))
+                bexecute = m_reportDocument.getRecordParser().executeCommand(com.sun.star.sdb.CommandType.COMMAND);   //            sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot))
             }
             if (bexecute)
             {
-                bexecute = CurReportDocument.getRecordParser().getFields(CurReportDocument.getRecordParser().getFieldNames(), false);
+                bexecute = m_reportDocument.getRecordParser().getFields(m_reportDocument.getRecordParser().getFieldNames(), false);
             }
             if (bexecute)
             {
                 // CurDataimport.insertDatabaseDatatoReportDocument(xMSF);
-                CurReportDocument.insertDatabaseDatatoReportDocument(xMSF);
+                m_reportDocument.insertDatabaseDatatoReportDocument(xMSF);
             }
 
             if (CurReportFinalizer.getReportOpenMode() == ReportFinalizer.SOCREATEDOCUMENT)
             {
-                bDocisStored = CurReportDocument.getRecordParser().storeDatabaseDocumentToTempPath(CurReportDocument.getComponent(), CurReportFinalizer.getStoreName());
+                bDocisStored = m_reportDocument.getRecordParser().storeDatabaseDocumentToTempPath(m_reportDocument.getComponent(), CurReportFinalizer.getStoreName());
             }
         }
         catch (com.sun.star.wizards.common.InvalidQueryException queryexception)
@@ -782,10 +553,10 @@ public static XLogger getLogger()
         CurDataimport.xComponent.dispose();
         if (bDocisStored)
         {
-            CurReportDocument.getRecordParser().addReportDocument(CurReportDocument.getComponent(), false);
+            m_reportDocument.getRecordParser().addReportDocument(m_reportDocument.getComponent(), false);
         }
 
-        CurReportDocument.getRecordParser().dispose();
+        m_reportDocument.getRecordParser().dispose();
     }
 
     public boolean getReportResources(boolean bgetProgressResourcesOnly)
@@ -794,9 +565,6 @@ public static XLogger getLogger()
         if (bgetProgressResourcesOnly == false)
         {
             sShowBinaryFields = m_oResource.getResText(UIConsts.RID_REPORT + 60);
-            slstDatabasesDefaultText = m_oResource.getResText(UIConsts.RID_DB_COMMON + 37);
-            slstTablesDefaultText = m_oResource.getResText(UIConsts.RID_DB_COMMON + 38);
-            sMsgErrorOccured = m_oResource.getResText(UIConsts.RID_DB_COMMON + 6);
             slblTables = m_oResource.getResText(UIConsts.RID_FORM + 6);
             slblFields = m_oResource.getResText(UIConsts.RID_FORM + 12);
             slblSelFields = m_oResource.getResText(UIConsts.RID_REPORT + 9);
@@ -806,13 +574,9 @@ public static XLogger getLogger()
             WizardHeaderText[3] = m_oResource.getResText(UIConsts.RID_REPORT + 30);
             WizardHeaderText[4] = m_oResource.getResText(UIConsts.RID_REPORT + 31);
             WizardHeaderText[5] = m_oResource.getResText(UIConsts.RID_REPORT + 32);
-            sMsgSavingImpossible = m_oResource.getResText(UIConsts.RID_DB_COMMON + 30);
         }
-        sMsgFilePathInvalid = m_oResource.getResText(UIConsts.RID_DB_COMMON + 36);
         slblColumnTitles = m_oResource.getResText(UIConsts.RID_REPORT + 70);
         slblColumnNames = m_oResource.getResText(UIConsts.RID_REPORT + 71);
-//            sBlindTextNote = m_oResource.getResText(UIConsts.RID_REPORT + 75);
-//            sBlindTextNote = JavaTools.replaceSubString( sBlindTextNote, String.valueOf((char)13), "<BR>");
         return true;
     }
 
@@ -873,7 +637,7 @@ public static XLogger getLogger()
             String sContent = (String) Helper.getUnoPropertyValue(oModel, "Text");
             String fieldname = this.CurTitlesComponent.getFieldNameByTitleControl(oModel);
             // CurReportDocument.getDoc().oTextFieldHandler.changeUserFieldContent(fieldname, sfieldtitle);
-            CurReportDocument.liveupdate_changeUserFieldContent(fieldname, sContent);
+            m_reportDocument.liveupdate_changeUserFieldContent(fieldname, sContent);
         }
         catch (Exception exception)
         {
@@ -903,8 +667,8 @@ public static XLogger getLogger()
         if (!bdoenable)
         {
             String sQueryName = CurDBCommandFieldSelection.getSelectedCommandName();
-            DBMetaData.CommandObject oCommand = CurReportDocument.getRecordParser().getQueryByName(sQueryName);
-            bdoenable = CurReportDocument.getRecordParser().hasEscapeProcessing(oCommand.getPropertySet());
+            DBMetaData.CommandObject oCommand = m_reportDocument.getRecordParser().getQueryByName(sQueryName);
+            bdoenable = m_reportDocument.getRecordParser().hasEscapeProcessing(oCommand.getPropertySet());
         }
         super.setStepEnabled(SOSORTPAGE, bdoenable);
 
