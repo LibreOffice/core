@@ -98,6 +98,10 @@ private:
     DECL_DLLPRIVATE_LINK(       ImplScrollBtnHdl, PushButton* pBtn );
     DECL_DLLPRIVATE_LINK(       ImplListBoxSelectHdl, ListBox* );
 
+public:
+    // just for dialog control
+    SAL_DLLPRIVATE bool         ImplHandleNotifyEvent( NotifyEvent& rEvt );
+
 protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void         ImplInit( Window* pParent, WinBits nStyle );

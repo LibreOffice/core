@@ -362,6 +362,7 @@ private:
     void ApplyXorContext();
     void Pattern50Fill();
     UInt32 getState( ControlState nState );
+    UInt32 getTrackState( ControlState nState );
 };
 
 class XorEmulation
