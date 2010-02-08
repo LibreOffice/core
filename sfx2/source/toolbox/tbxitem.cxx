@@ -323,6 +323,7 @@ IMPL_LINK( SfxToolBoxControl_Impl, AsyncEndPopupModeHdl, void*, EMPTYARG )
 
 IMPL_STATIC_LINK( SfxToolBoxControl_Impl, AsyncDeleteWindowHdl, Window*, pWindow )
 {
+    (void)*pThis;
     delete pWindow;
     return 0;
 }

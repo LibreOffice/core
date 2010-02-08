@@ -964,16 +964,16 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
                         aTmpPos.Y() = aPos.Y();
                         aTmpPos.Y() += (pEntry->maSize.Height()-pEntry->maImage.GetSizePixel().Height())/2;
 
-                        Rectangle aRect( aTmpPos, pEntry->maImage.GetSizePixel() );
-                        aRect.nLeft -= 2;
-                        aRect.nTop -= 2;
-                        aRect.nRight += 2;
-                        aRect.nBottom += 2;
-                        DrawSelectionBackground( aRect, false, true, TRUE, TRUE );
+                        Rectangle aSelRect( aTmpPos, pEntry->maImage.GetSizePixel() );
+                        aSelRect.nLeft -= 2;
+                        aSelRect.nTop -= 2;
+                        aSelRect.nRight += 2;
+                        aSelRect.nBottom += 2;
+                        DrawSelectionBackground( aSelRect, false, true, TRUE, TRUE );
                     }
                     else
                     {
-                        Rectangle aRect;
+                        Rectangle aSelRect;
                         SymbolType eSymbol;
                         aTmpPos.Y() = aPos.Y();
                         aTmpPos.Y() += nExtra/2;
@@ -983,16 +983,16 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
                             aTmpPos.X() = aPos.X() + mnCheckPos;
                             eSymbol = SYMBOL_RADIOCHECKMARK;
                             aTmpPos.Y() -= nFontHeight/4;
-                            aRect = Rectangle( aTmpPos, Size( nFontHeight/2, nFontHeight/2 ) );
+                            aSelRect = Rectangle( aTmpPos, Size( nFontHeight/2, nFontHeight/2 ) );
                         }
                         else
                         {
                             aTmpPos.X() = aPos.X() + mnCheckPos;
                             eSymbol = SYMBOL_CHECKMARK;
                             aTmpPos.Y() -= nFontHeight/4;
-                            aRect = Rectangle( aTmpPos, Size( (nFontHeight*25)/40, nFontHeight/2 ) );
+                            aSelRect = Rectangle( aTmpPos, Size( (nFontHeight*25)/40, nFontHeight/2 ) );
                         }
-                        aDecoView.DrawSymbol( aRect, eSymbol, GetTextColor(), nSymbolStyle );
+                        aDecoView.DrawSymbol( aSelRect, eSymbol, GetTextColor(), nSymbolStyle );
                     }
                 }
             }

@@ -412,7 +412,7 @@ void SAL_CALL FontWorkAlignmentWindow::statusChanged( const ::com::sun::star::fr
         }
         else
         {
-            sal_Int32 nValue;
+            sal_Int32 nValue = 0;
             if( Event.State >>= nValue )
                 implSetAlignment( nValue, true );
         }
