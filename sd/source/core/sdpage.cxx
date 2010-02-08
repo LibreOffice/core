@@ -2081,7 +2081,7 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
     const bool bUndo = pUndoManager && pUndoManager->isInListAction() && rPage.IsInserted();
 
     SdrObject* pNewObj = pSourceObj;
-    if((eObjKind == PRESOBJ_OUTLINE) && (pSourceObj->GetObjIdentifier() != OBJ_OUTLINETEXT) )
+    if((eObjKind == PRESOBJ_OUTLINE) && (pSourceObj->GetObjIdentifier() == OBJ_TEXT) )
     {
         pNewObj = rPage.CreatePresObj(PRESOBJ_OUTLINE, bVertical, aRect);
 
@@ -2140,7 +2140,7 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
                 SdrObject::Free( pSourceObj );
         }
     }
-    else if((eObjKind == PRESOBJ_TEXT) && (pSourceObj->GetObjIdentifier() != OBJ_TEXT) )
+    else if((eObjKind == PRESOBJ_TEXT) && (pSourceObj->GetObjIdentifier() == OBJ_OUTLINETEXT) )
     {
         // is there an outline shape we can use to replace empty subtitle shape?
         pNewObj = rPage.CreatePresObj(PRESOBJ_TEXT, bVertical, aRect);
@@ -2310,7 +2310,7 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
         }
     }
 
-    if( pObj )
+    if ( pObj && ( pObj->IsEmptyPresObj() || !pObj->ISA(SdrGrafObj) ) )
         pObj->SetLogicRect(aRect);
 
     return pObj;
