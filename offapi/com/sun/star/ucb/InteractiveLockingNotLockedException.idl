@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: AuthenticationRequest.idl,v $
- * $Revision: 1.6 $
+ * $RCSfile: $
+ * $Revision: $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,11 +27,11 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_ucb_URLAuthenticationRequest_idl__
-#define __com_sun_star_ucb_URLAuthenticationRequest_idl__
+#ifndef __com_sun_star_ucb_InteractiveLockingNotLockedException_idl__
+#define __com_sun_star_ucb_InteractiveLockingNotLockedException_idl__
 
-#ifndef __com_sun_star_ucb_AuthenticationRequest_idl__
-#include <com/sun/star/ucb/AuthenticationRequest.idl>
+#ifndef __com_sun_star_ucb_InteractiveLockingException_idl__
+#include <com/sun/star/ucb/InteractiveLockingException.idl>
 #endif
 
 
@@ -40,17 +40,16 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** An error specifing lack of correct authentication data (e.g., to log into
-    an account).
+/** An error indicating that the resource is not locked.
 
-    @since OOo 3.2
+    <p>This error for instance can occure when trying to unlock a resource
+       that is not locked.
+    </p>
+
+    @since OOo 3.3
 */
-/*published*/ exception URLAuthenticationRequest : AuthenticationRequest
+/*published*/ exception InteractiveLockingNotLockedException : com::sun::star::ucb::InteractiveLockingException
 {
-    //-------------------------------------------------------------------------
-    /** The URL for which authentication is requested.
-     */
-    string URL;
 };
 
 //=============================================================================
