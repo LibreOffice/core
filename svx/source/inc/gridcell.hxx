@@ -222,6 +222,7 @@ class DbCellControl
 {
 private:
     ::comphelper::OPropertyChangeMultiplexer*   m_pModelChangeBroadcaster;
+    ::comphelper::OPropertyChangeMultiplexer*   m_pFieldChangeBroadcaster;
 
 private:
     sal_Bool                    m_bTransparent : 1;
@@ -351,7 +352,7 @@ private:
     void implDoPropertyListening( const ::rtl::OUString& _rPropertyName, sal_Bool _bWarnIfNotExistent = sal_True );
 
     /// updates the "readonly" setting on m_pWindow, according to the respective property value in the given model
-    void implAdjustReadOnly( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
+    void implAdjustReadOnly( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel,bool i_bReadOnly );
 
     /// updates the "enabled" setting on m_pWindow, according to the respective property value in the given model
     void implAdjustEnabled( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
