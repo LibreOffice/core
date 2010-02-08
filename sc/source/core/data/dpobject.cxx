@@ -2467,6 +2467,12 @@ long ScDPObject::GetCacheId() const
 }
 ULONG ScDPObject::RefreshCache()
 {
+    if ( pServDesc )
+    {
+        // cache table isn't used for external service - do nothing, no error
+        return 0;
+    }
+
     CreateObjects();
     ULONG nErrId = 0;
     if ( pSheetDesc)
