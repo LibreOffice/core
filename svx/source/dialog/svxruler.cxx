@@ -1217,9 +1217,7 @@ void SvxRuler::UpdateTabs()
         long nRightFrameMargin = GetRightFrameMargin();
 
     //#i24363# tab stops relative to indent
-        const long nParaItemTxtLeft = pRuler_Imp->bIsTabsRelativeToIndent ?
-                                      pParaItem->GetTxtLeft() :
-                                      0;
+        const long nParaItemTxtLeft = pParaItem->GetTxtLeft();
 
         const long lParaIndent = nLeftFrameMargin + nParaItemTxtLeft;
 
@@ -1256,7 +1254,7 @@ void SvxRuler::UpdateTabs()
             const SvxTabStop *pTab = &(*pTabStopItem)[j];
             pTabs[nTabCount+TAB_GAP].nPos =
                 ConvertHPosPixel(
-                    lParaIndent + pTab->GetTabPos() + lAppNullOffset);
+                (pRuler_Imp->bIsTabsRelativeToIndent ? lParaIndent : 0 ) + pTab->GetTabPos() + lAppNullOffset);
             if(bRTL)
             {
                 pTabs[nTabCount+TAB_GAP].nPos = lParaIndentPix + lRightPixMargin - pTabs[nTabCount+TAB_GAP].nPos;
@@ -1289,13 +1287,37 @@ void SvxRuler::UpdateTabs()
         {
             for(j = 0; j < nDefTabBuf; ++j)
             {
-                pTabs[nTabCount + TAB_GAP].nPos =
-                    pTabs[nTabCount].nPos + nDefTabDist;
+                if( j == 0 )
+                {
+                    //set the first default tab stop
+                    if(pRuler_Imp->bIsTabsRelativeToIndent)
+                    {
+                        pTabs[nTabCount + TAB_GAP].nPos =
+                            (pTabs[nTabCount].nPos + nDefTabDist);
+                        pTabs[nTabCount + TAB_GAP].nPos -=
+                            ((pTabs[nTabCount + TAB_GAP].nPos - lParaIndentPix)
+                                % nDefTabDist );
+                    }
+                    else
+                    {
+                        if( pTabs[nTabCount].nPos < 0 )
+                        {
+                            pTabs[nTabCount + TAB_GAP].nPos = ( pTabs[nTabCount].nPos / nDefTabDist ) * nDefTabDist;
+                        }
+                        else
+                        {
+                            pTabs[nTabCount + TAB_GAP].nPos = ( pTabs[nTabCount].nPos / nDefTabDist + 1 ) * nDefTabDist;
+                        }
+                    }
 
-                if(j == 0 )
-                    pTabs[nTabCount + TAB_GAP].nPos -=
-                        ((pTabs[nTabCount + TAB_GAP].nPos - lParaIndentPix)
-                         % nDefTabDist );
+                }
+                else
+                {
+                    //simply add the default distance to the last position
+                    pTabs[nTabCount + TAB_GAP].nPos =
+                    pTabs[nTabCount].nPos + nDefTabDist;
+                }
+
                 if(pTabs[nTabCount+TAB_GAP].nPos >= lRightIndent)
                     break;
                 pTabs[nTabCount + TAB_GAP].nStyle = RULER_TAB_DEFAULT;
