@@ -746,7 +746,9 @@ ULONG  ScDBFunc::RecalcPivotTable()
         ULONG nErrId = RefreshDPObject( pDPObj, pDoc, pDocSh, TRUE, FALSE );//pDPObj->RefreshCache();
         if ( nErrId == 0 )
         {
-            GetViewData()->GetDocShell()->GetUndoManager()->Clear();
+            // There is no undo for the refresh of the cache table, but the undo history for cell changes
+            // remains valid and should be preserved, so the history isn't cleared here.
+            //GetViewData()->GetDocShell()->GetUndoManager()->Clear();
         }
         else
             ErrorMessage(nErrId);
