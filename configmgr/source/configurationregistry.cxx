@@ -578,7 +578,7 @@ sal_Int32 RegistryKey::getLongValue()
 {
     osl::MutexGuard g(service_.mutex_);
     service_.checkValid();
-    sal_Int32 v;
+    sal_Int32 v = 0;
     if (value_ >>= v) {
         return v;
     }
