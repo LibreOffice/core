@@ -240,7 +240,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     {
         Pos = MAP_APPFONT ( 12 , 163 ) ;
         Size = MAP_APPFONT ( 126 , 10 ) ;
-        Text [ en-US ] = "Current selection ~only" ;
+        Text [ en-US ] = "C~urrent selection only" ;
         TabStop = TRUE ;
         Hide = TRUE ;
     };
@@ -349,7 +349,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     {
         Pos = MAP_APPFONT ( 12 , 285 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ en-US ] = "~Search in" ;
+        Text [ en-US ] = "Search i~n" ;
         Hide = TRUE ;
     };
     ListBox LB_CALC_SEARCHIN
@@ -371,7 +371,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     {
         Pos = MAP_APPFONT ( 12 , 300 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ en-US ] = "~Search direction" ;
+        Text [ en-US ] = "Search ~direction" ;
         Hide = TRUE ;
     };
     RadioButton RB_CALC_ROWS
@@ -385,7 +385,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     {
         Pos = MAP_APPFONT ( 75 , 313 ) ;
         Size = MAP_APPFONT ( 63 , 10 ) ;
-        Text [ en-US ] = "Col~umns" ;
+        Text [ en-US ] = "Colu~mns" ;
         Hide = TRUE ;
     };
     CheckBox CB_ALL_SHEETS
