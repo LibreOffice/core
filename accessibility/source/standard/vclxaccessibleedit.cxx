@@ -70,6 +70,7 @@ using namespace ::comphelper;
 VCLXAccessibleEdit::VCLXAccessibleEdit( VCLXWindow* pVCLWindow )
     :VCLXAccessibleTextComponent( pVCLWindow )
 {
+    m_nSelectionStart = getSelectionStart();
     m_nCaretPosition = getCaretPosition();
 }
 
@@ -77,22 +78,6 @@ VCLXAccessibleEdit::VCLXAccessibleEdit( VCLXWindow* pVCLWindow )
 
 VCLXAccessibleEdit::~VCLXAccessibleEdit()
 {
-}
-
-// -----------------------------------------------------------------------------
-
-void VCLXAccessibleEdit::UpdateCaretPosition()
-{
-    sal_Int32 nCaretPosition = getCaretPosition();
-
-    if ( m_nCaretPosition != nCaretPosition )
-    {
-        Any aOldValue, aNewValue;
-        aOldValue <<= (sal_Int32) m_nCaretPosition;
-        aNewValue <<= (sal_Int32) nCaretPosition;
-        m_nCaretPosition = nCaretPosition;
-        NotifyAccessibleEvent( AccessibleEventId::CARET_CHANGED, aOldValue, aNewValue );
-    }
 }
 
 // -----------------------------------------------------------------------------
@@ -108,11 +93,31 @@ void VCLXAccessibleEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
         break;
         case VCLEVENT_EDIT_SELECTIONCHANGED:
         {
+            sal_Int32 nOldCaretPosition = m_nCaretPosition;
+            sal_Int32 nOldSelectionStart = m_nSelectionStart;
+
+            m_nCaretPosition = getCaretPosition();
+            m_nSelectionStart = getSelectionStart();
+
             Window* pWindow = GetWindow();
             if ( pWindow && pWindow->HasChildPathFocus() )
             {
-                NotifyAccessibleEvent( AccessibleEventId::TEXT_SELECTION_CHANGED, Any(), Any() );
-                UpdateCaretPosition();
+                if ( m_nCaretPosition != nOldCaretPosition )
+                {
+                    Any aOldValue, aNewValue;
+                    aOldValue <<= (sal_Int32) nOldCaretPosition;
+                    aNewValue <<= (sal_Int32) m_nCaretPosition;
+                    NotifyAccessibleEvent( AccessibleEventId::CARET_CHANGED, aOldValue, aNewValue );
+                }
+
+                // #i104470# VCL only has SELECTION_CHANGED, but UAA distinguishes between SELECTION_CHANGED and CARET_CHANGED
+                sal_Bool bHasSelection = ( m_nSelectionStart != m_nCaretPosition );
+                sal_Bool bHadSelection = ( nOldSelectionStart != nOldCaretPosition );
+                if ( ( bHasSelection != bHadSelection ) || ( bHasSelection && ( ( m_nCaretPosition != nOldCaretPosition ) || ( m_nSelectionStart != nOldSelectionStart ) ) ) )
+                {
+                    NotifyAccessibleEvent( AccessibleEventId::TEXT_SELECTION_CHANGED, Any(), Any() );
+                }
+
             }
         }
         break;
@@ -308,22 +313,13 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleEdit::getAccessibleActionKeyBin
 
 sal_Int32 VCLXAccessibleEdit::getCaretPosition(  ) throw (RuntimeException)
 {
-    OExternalLockGuard aGuard( this );
-
-    awt::Selection aSelection;
-    VCLXEdit* pVCLXEdit = static_cast< VCLXEdit* >( GetVCLXWindow() );
-    if ( pVCLXEdit )
-        aSelection = pVCLXEdit->getSelection();
-
-    return aSelection.Max;
+    return getSelectionEnd();
 }
 
 // -----------------------------------------------------------------------------
 
 sal_Bool VCLXAccessibleEdit::setCaretPosition( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
-    OExternalLockGuard aGuard( this );
-
     return setSelection( nIndex, nIndex );
 }
 
