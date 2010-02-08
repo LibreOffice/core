@@ -69,12 +69,6 @@ namespace rptui
     //= ReportFormula
     //====================================================================
     //--------------------------------------------------------------------
-    ReportFormula::ReportFormula()
-        :m_eType( Invalid )
-    {
-    }
-
-    //--------------------------------------------------------------------
     ReportFormula::ReportFormula( const ::rtl::OUString& _rFormula )
         :m_eType( Invalid )
     {

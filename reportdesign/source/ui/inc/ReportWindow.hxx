@@ -93,7 +93,6 @@ namespace rptui
         rtl::OUString   GetInsertObjString() const;
         void            setGridSnap(BOOL bOn);
         void            setDragStripes(BOOL bOn);
-        BOOL            isDragStripes() const;
 
         /** copies the current selection in this section
         */

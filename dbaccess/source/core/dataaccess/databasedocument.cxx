@@ -1613,8 +1613,7 @@ void SAL_CALL ODatabaseDocument::loadFromStorage( const Reference< XStorage >& /
     DocumentGuard aGuard( *this );
 
     throw Exception(
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Embedding of database documents is not supported." ) ),
-            // TODO: resource
+        DBACORE_RESSTRING( RID_STR_NO_EMBEDDING ),
         *this
     );
 }
