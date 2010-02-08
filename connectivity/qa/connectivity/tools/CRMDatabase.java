@@ -288,7 +288,7 @@ public class CRMDatabase
         m_database.getDataSource().createQuery( "parseable", "SELECT * FROM \"customers\"" );
         m_database.getDataSource().createQuery( "parseable native", "SELECT * FROM INFORMATION_SCHEMA.SYSTEM_VIEWS", false );
         m_database.getDataSource().createQuery( "unparseable",
-            "SELECT CAST( \"ID\" AS VARCHAR(3) ) AS \"ID_VARCHAR\" FROM \"products\"", false );
+            "SELECT {fn DAYOFMONTH ('2001-01-01')} AS \"ID_VARCHAR\" FROM \"products\"", false );
 
         validateUnparseable();
     }

@@ -43,12 +43,15 @@
 
 #include <map>
 #include <memory>
+#include <vector>
 
 namespace connectivity
 {
 
     class OSQLParseNode;
     class OSQLParser;
+
+    typedef ::std::pair<const OSQLParseNode*,const OSQLParseNode* > TNodePair;
 
     enum OSQLStatementType {
         SQL_STATEMENT_UNKNOWN,
@@ -282,6 +285,10 @@ namespace connectivity
 
         // tries to find the correct type of the function
         sal_Int32 getFunctionReturnType(const OSQLParseNode* _pNode );
+
+        // returns a lis of all joined columns
+        ::std::vector< TNodePair >& getJoinConditions() const;
+
     private:
         /** traverses the list of table names, and filles _rTables
         */
@@ -354,6 +361,7 @@ namespace connectivity
         {
             m_aErrors = ::com::sun::star::sdbc::SQLException();
         }
+        void impl_fillJoinConditions(const OSQLParseNode* i_pJoinCondition);
     };
 }
 

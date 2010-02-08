@@ -63,8 +63,10 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
+#include <com/sun/star/sdbcx/KeyType.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#include <com/sun/star/sdbcx/XKeysSupplier.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
@@ -530,6 +532,46 @@ Reference< XNameAccess> getTableFields(const Reference< XConnection>& _rxConn,co
 {
     Reference< XComponent > xDummy;
     return getFieldsByCommandDescriptor( _rxConn, CommandType::TABLE, _rName, xDummy );
+}
+//------------------------------------------------------------------------------
+Reference< XNameAccess> getPrimaryKeyColumns_throw(const Any& i_aTable)
+{
+    const Reference< XPropertySet > xTable(i_aTable,UNO_QUERY_THROW);
+    return getPrimaryKeyColumns_throw(xTable);
+}
+//------------------------------------------------------------------------------
+Reference< XNameAccess> getPrimaryKeyColumns_throw(const Reference< XPropertySet >& i_xTable)
+{
+    Reference<XNameAccess> xKeyColumns;
+    const Reference<XKeysSupplier> xKeySup(i_xTable,UNO_QUERY);
+    if ( xKeySup.is() )
+    {
+        const Reference<XIndexAccess> xKeys = xKeySup->getKeys();
+        if ( xKeys.is() )
+        {
+            ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
+            const ::rtl::OUString sPropName = rPropMap.getNameByIndex(PROPERTY_ID_TYPE);
+            Reference<XPropertySet> xProp;
+            const sal_Int32 nCount = xKeys->getCount();
+            for(sal_Int32 i = 0;i< nCount;++i)
+            {
+                xProp.set(xKeys->getByIndex(i),UNO_QUERY_THROW);
+                if ( xProp.is() )
+                {
+                    sal_Int32 nKeyType = 0;
+                    xProp->getPropertyValue(sPropName) >>= nKeyType;
+                    if(KeyType::PRIMARY == nKeyType)
+                    {
+                        const Reference<XColumnsSupplier> xKeyColsSup(xProp,UNO_QUERY_THROW);
+                        xKeyColumns = xKeyColsSup->getColumns();
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    return xKeyColumns;
 }
 
 //------------------------------------------------------------------------------
@@ -2054,7 +2096,7 @@ namespace connectivity
 
 void release(oslInterlockedCount& _refCount,
              ::cppu::OBroadcastHelper& rBHelper,
-             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
+             Reference< XInterface >& _xInterface,
              ::com::sun::star::lang::XComponent* _pObject)
 {
     if (osl_decrementInterlockedCount( &_refCount ) == 0)
@@ -2064,7 +2106,7 @@ void release(oslInterlockedCount& _refCount,
         if (!rBHelper.bDisposed && !rBHelper.bInDispose)
         {
             // remember the parent
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xParent;
+            Reference< XInterface > xParent;
             {
                 ::osl::MutexGuard aGuard( rBHelper.rMutex );
                 xParent = _xInterface;

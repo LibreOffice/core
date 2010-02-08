@@ -191,12 +191,13 @@ MacabCondition *MacabCommonStatement::analyseWhereClause(const OSQLParseNode *pP
             }
         }
     }
-    else if (pParseNode->count() == 4)
+    else if (SQL_ISRULE(pParseNode, test_for_null) || SQL_ISRULE(pParseNode, like_predicate))
     {
-        const OSQLParseNode *pLeft = pParseNode->getChild(0),
-                            *pMiddleLeft = pParseNode->getChild(1),
-                            *pMiddleRight = pParseNode->getChild(2),
-                            *pRight = pParseNode->getChild(3);
+        const OSQLParseNode *pLeft = pParseNode->getChild(0);
+        const OSQLParseNode* pPart2 = pParseNode->getChild(1);
+        const OSQLParseNode *pMiddleLeft = pPart2->getChild(0),
+                            *pMiddleRight = pPart2->getChild(1),
+                            *pRight = pPart2->getChild(2);
 
         if (SQL_ISRULE(pParseNode, test_for_null))
         {

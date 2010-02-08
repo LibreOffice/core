@@ -534,28 +534,7 @@ Reference<XPropertySet> createSDBCXColumn(const Reference<XPropertySet>& _xTable
     _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))  >>= aSchema;
     _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))        >>= aTable;
 
-    Reference<XKeysSupplier> xKeysSup(_xTable,UNO_QUERY);
-    Reference<XNameAccess> xPrimaryKeyColumns;
-    if ( xKeysSup.is() )
-    {
-        const Reference<XIndexAccess> xKeys = xKeysSup->getKeys();
-        if ( xKeys.is() )
-        {
-            const sal_Int32 nKeyCount = xKeys->getCount();
-            for(sal_Int32 nKeyIter = 0; nKeyIter < nKeyCount;++nKeyIter)
-            {
-                const Reference<XPropertySet> xKey(xKeys->getByIndex(nKeyIter),UNO_QUERY_THROW);
-                sal_Int32 nType = 0;
-                xKey->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_TYPE))   >>= nType;
-                if ( nType == KeyType::PRIMARY )
-                {
-                    const Reference<XColumnsSupplier> xColS(xKey,UNO_QUERY_THROW);
-                    xPrimaryKeyColumns = xColS->getColumns();
-                    break;
-                }
-            } // for(sal_Int32 nKeyIter = 0; nKeyIter < nKeyCount;++)
-        }
-    }
+    Reference<XNameAccess> xPrimaryKeyColumns = getPrimaryKeyColumns_throw(_xTable);
 
     xProp = lcl_createSDBCXColumn(xPrimaryKeyColumns,_xConnection,aCatalog, aSchema, aTable, _rName,_rName,_bCase,_bQueryForInfo,_bIsAutoIncrement,_bIsCurrency,_nDataType);
     if ( !xProp.is() )

@@ -885,7 +885,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
     }
     else if (SQL_ISRULE(parseTree,like_predicate))
     {
-        OSL_ENSURE(parseTree->count() >= 4, "Error parsing LIKE predicate");
+        OSL_ENSURE(parseTree->count() == 2, "Error parsing LIKE predicate");
 
         OSL_TRACE("analyseSQL : Got LIKE rule\n");
 
@@ -898,9 +898,11 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         OSQLParseNode *pColumn;
         OSQLParseNode *pAtom;
         OSQLParseNode *pOptEscape;
+        const OSQLParseNode* pPart2 = parseTree->getChild(1);
         pColumn     = parseTree->getChild(0);                        // Match Item
-        pAtom       = parseTree->getChild(parseTree->count()-2);     // Match String
-        pOptEscape  = parseTree->getChild(parseTree->count()-1);     // Opt Escape Rule
+        pAtom       = pPart2->getChild(parseTree->count()-2);     // Match String
+        pOptEscape  = pPart2->getChild(parseTree->count()-1);     // Opt Escape Rule
+        const bool bNot = SQL_ISTOKEN(pPart2->getChild(0), NOT);
 
         if (!(pAtom->getNodeType() == SQL_NODE_STRING ||
               pAtom->getNodeType() == SQL_NODE_NAME ||
@@ -948,7 +950,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
              matchString.indexOf ( MATCHCHAR ) == -1 )
         {
             // Simple string , eg. "to match"
-            if ( parseTree->count() == 5 )
+            if ( bNot )
                 op = MQueryOp::DoesNotContain;
             else
                 op = MQueryOp::Contains;
@@ -964,12 +966,12 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
             matchString = matchString.replaceAt( 0, 1, rtl::OUString() );
             matchString = matchString.replaceAt( matchString.getLength() -1 , 1, rtl::OUString() );
 
-            if ( parseTree->count() == 5 )
+            if (bNot)
                 op = MQueryOp::DoesNotContain;
             else
                 op = MQueryOp::Contains;
         }
-        else if ( parseTree->count() == 5 )
+        else if ( bNot )
         {
             // We currently can't handle a 'NOT LIKE' when there are '%' or
             // '_' dispersed throughout
@@ -1023,15 +1025,16 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
     }
     else if (SQL_ISRULE(parseTree,test_for_null))
     {
-        OSL_ENSURE(parseTree->count() >= 3,"Error in ParseTree");
-        OSL_ENSURE(SQL_ISTOKEN(parseTree->getChild(1),IS),"Error in ParseTree");
+        OSL_ENSURE(parseTree->count() == 2,"Error in ParseTree");
+        const OSQLParseNode* pPart2 = parseTree->getChild(1);
+        OSL_ENSURE(SQL_ISTOKEN(pPart2->getChild(0),IS),"Error in ParseTree");
 
         if (!SQL_ISRULE(parseTree->getChild(0),column_ref))
         {
             m_pStatement->getOwnConnection()->throwSQLException( STR_QUERY_INVALID_IS_NULL_COLUMN, *this );
         }
 
-        if (SQL_ISTOKEN(parseTree->getChild(2),NOT))
+        if (SQL_ISTOKEN(pPart2->getChild(1),NOT))
         {
             op = MQueryOp::Exists;
         }

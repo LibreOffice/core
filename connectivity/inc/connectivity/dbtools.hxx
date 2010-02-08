@@ -229,6 +229,15 @@ namespace dbtools
         const ::rtl::OUString& _rName
     );
 
+    /** returns the primary key columns of the table
+    */
+    OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getPrimaryKeyColumns_throw(
+        const ::com::sun::star::uno::Any& i_aTable
+    );
+    OOO_DLLPUBLIC_DBTOOLS ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getPrimaryKeyColumns_throw(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& i_xTable
+    );
+
     /** get fields for a result set given by a "command descriptor"
 
         <p>A command descriptor here means:

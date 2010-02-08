@@ -124,29 +124,7 @@ sdbcx::ObjectType OColumnsHelper::createObject(const ::rtl::OUString& _rName)
     if ( pColDesc )
     {
         Reference<XPropertySet> xPr = m_pTable;
-        Reference<XKeysSupplier> xKeysSup(xPr,UNO_QUERY);
-        Reference<XNameAccess> xPrimaryKeyColumns;
-        if ( xKeysSup.is() )
-        {
-            const Reference<XIndexAccess> xKeys = xKeysSup->getKeys();
-            if ( xKeys.is() )
-            {
-                ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
-                const sal_Int32 nKeyCount = xKeys->getCount();
-                for(sal_Int32 nKeyIter = 0; nKeyIter < nKeyCount;++nKeyIter)
-                {
-                    const Reference<XPropertySet> xKey(xKeys->getByIndex(nKeyIter),UNO_QUERY_THROW);
-                    sal_Int32 nType = 0;
-                    xKey->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_TYPE))   >>= nType;
-                    if ( nType == KeyType::PRIMARY )
-                    {
-                        const Reference<XColumnsSupplier> xColS(xKey,UNO_QUERY_THROW);
-                        xPrimaryKeyColumns = xColS->getColumns();
-                        break;
-                    }
-                } // for(sal_Int32 nKeyIter = 0; nKeyIter < nKeyCount;++)
-            }
-        }
+        const Reference<XNameAccess> xPrimaryKeyColumns = getPrimaryKeyColumns_throw(xPr);
         sal_Int32 nField11 = pColDesc->nField11;
         if ( nField11 != ColumnValue::NO_NULLS && xPrimaryKeyColumns.is() && xPrimaryKeyColumns->hasByName(_rName) )
         {
