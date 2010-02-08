@@ -91,7 +91,6 @@
 #include <viewsh.hxx>
 #include <doctxm.hxx>
 #include <shellres.hxx>
-#include <unoclbck.hxx>
 #include <breakit.hxx>
 #include <laycache.hxx>
 #include <mvsave.hxx>
@@ -278,7 +277,7 @@ SwDoc::SwDoc() :
     pStyleAccess( 0 ),
     // <--
     pLayoutCache( 0 ),
-    pUnoCallBack(new SwUnoCallBack(0)),
+    pUnoCallBack(new SwModify(0)),
     mpGrammarContact( 0 ),
     aChartDataProviderImplRef(),
     pChartControllerHelper( 0 ),
@@ -1435,7 +1434,7 @@ void SwDoc::Paste( const SwDoc& rSource )
                 if( bInsWithFmt  )
                 {
                     SwFmtAnchor aAnchor( rCpyFmt.GetAnchor() );
-                    if( FLY_PAGE == aAnchor.GetAnchorId() )
+                    if (FLY_AT_PAGE == aAnchor.GetAnchorId())
                     {
                         aAnchor.SetPageNum( aAnchor.GetPageNum() /*+ nStartPageNumber - */);
                     }

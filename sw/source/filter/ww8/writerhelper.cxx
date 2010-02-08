@@ -190,7 +190,7 @@ namespace sw
           meWriterType(eTxtBox),
           mpStartFrameContent(0),
           // --> OD 2007-04-19 #i43447# - move to initialization list
-          mbIsInline( (rFmt.GetAnchor().GetAnchorId() == FLY_IN_CNTNT) )
+          mbIsInline( (rFmt.GetAnchor().GetAnchorId() == FLY_AS_CHAR) )
           // <--
     {
         switch (rFmt.Which())

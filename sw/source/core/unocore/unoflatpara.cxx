@@ -46,7 +46,8 @@
 #include <viewimp.hxx>
 #include <breakit.hxx>
 #include <pam.hxx>
-#include <unoobj.hxx>
+#include <unobaseclass.hxx>
+#include <unotextrange.hxx>
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
 #include <rootfrm.hxx>
@@ -217,7 +218,9 @@ void SAL_CALL SwXFlatParagraph::changeText(::sal_Int32 nPos, ::sal_Int32 nLen, c
 
     UnoActionContext aAction( mpTxtNode->GetDoc() );
 
-    uno::Reference< text::XTextRange > xRange = SwXTextRange::CreateTextRangeFromPosition( mpTxtNode->GetDoc(), *aPaM.GetPoint(), aPaM.GetMark() );
+    const uno::Reference< text::XTextRange > xRange =
+        SwXTextRange::CreateXTextRange(
+            *mpTxtNode->GetDoc(), *aPaM.GetPoint(), aPaM.GetMark() );
     uno::Reference< beans::XPropertySet > xPropSet( xRange, uno::UNO_QUERY );
     if ( xPropSet.is() )
     {
@@ -245,7 +248,9 @@ void SAL_CALL SwXFlatParagraph::changeAttributes(::sal_Int32 nPos, ::sal_Int32 n
 
     UnoActionContext aAction( mpTxtNode->GetDoc() );
 
-    uno::Reference< text::XTextRange > xRange = SwXTextRange::CreateTextRangeFromPosition( mpTxtNode->GetDoc(), *aPaM.GetPoint(), aPaM.GetMark() );
+    const uno::Reference< text::XTextRange > xRange =
+        SwXTextRange::CreateXTextRange(
+            *mpTxtNode->GetDoc(), *aPaM.GetPoint(), aPaM.GetMark() );
     uno::Reference< beans::XPropertySet > xPropSet( xRange, uno::UNO_QUERY );
     if ( xPropSet.is() )
     {
