@@ -69,6 +69,10 @@ sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
     use "global\tools\includes\optional\t_locale_tools.inc"
+    use "global\tools\includes\optional\t_docfuncs.inc"
+    use "global\tools\includes\optional\t_control_objects.inc"
+    use "global\required\includes\g_printing.inc"
+    
     gApplication   = "CALC"
     GetUseFiles ()
 end sub

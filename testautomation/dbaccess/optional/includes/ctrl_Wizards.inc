@@ -96,7 +96,8 @@ testcase tGroupBoxWithDatasource
    	 '/// set the datasource TT
      printlog "set the datasource TT"
      DataSource.setText(sDSName)
-	 DataSource.TypeKeys "<RETURN>" , true
+     DataSource.TypeKeys "<RETURN>" , true
+     sleep(1)
      '/// insert password 'testtool' into login dialog
      printlog "insert password 'testtool' into login dialog"
      Kontext "LoginDialog"
@@ -581,7 +582,7 @@ testcase tListBox
 
     Kontext "FormControls"
     Listbox.Click
-    call hDrawingWithSelection ( 50, 20, 60, 30 )
+    call hDrawingWithSelection ( 50, 20, 60, 25 )
     sleep(3)
     Kontext "AutoPilotListComboBox"
     AutoPilotListComboBox.MouseDown(10,10)

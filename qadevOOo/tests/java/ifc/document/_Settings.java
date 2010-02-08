@@ -62,7 +62,7 @@ public class _Settings extends MultiPropertyTest {
             testProperty("PrinterIndependentLayout", oldVal, newVal);
 
         } catch (com.sun.star.beans.UnknownPropertyException e) {
-            throw new StatusException(Status.failed("the property 'PrinterIndependentLayout' is unkown."));
+            throw new StatusException(Status.failed("the property 'PrinterIndependentLayout' is unknown."));
         } catch (com.sun.star.lang.WrappedTargetException e) {
             throw new StatusException(Status.failed("the property 'PrinterIndependentLayout' could not be tested."));
         }
