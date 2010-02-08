@@ -43,6 +43,8 @@ class Pad {
 public:
     void add(char const * begin, sal_Int32 length);
 
+    void addEphemeral(char const * begin, sal_Int32 length);
+
     void clear();
 
     bool is() const;
@@ -50,6 +52,8 @@ public:
     Span get() const;
 
 private:
+    void flushSpan();
+
     Span span_;
     rtl::OStringBuffer buffer_;
 };

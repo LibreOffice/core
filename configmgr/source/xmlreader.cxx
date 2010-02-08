@@ -531,7 +531,7 @@ char const * XmlReader::handleReference(char const * position, char const * end)
             buf[3] = static_cast< char >((val & 0x3F) | 0x80);
             len = 4;
         }
-        pad_.add(buf, len);
+        pad_.addEphemeral(buf, len);
         return position;
     } else {
         struct EntityRef {
