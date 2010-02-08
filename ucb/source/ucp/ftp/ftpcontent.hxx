@@ -57,19 +57,6 @@ namespace ftp
 
 //=========================================================================
 
-    struct ContentProperties
-    {
-        ::rtl::OUString aTitle;         // Title
-        ::rtl::OUString aContentType;   // ContentType
-        sal_Bool        bIsDocument;    // IsDocument
-        sal_Bool        bIsFolder;      // IsFolder
-
-        ContentProperties()
-            : bIsDocument( sal_True ), bIsFolder( sal_False ) {}
-    };
-
-//=========================================================================
-
     class FTPContentProvider;
 
 //=========================================================================
@@ -79,12 +66,6 @@ namespace ftp
           public com::sun::star::ucb::XContentCreator
     {
     public:
-
-        FTPContent( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-                    FTPContentProvider* pProvider,
-                    const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::ucb::XContentIdentifier >& Identifier);
 
         FTPContent( const ::com::sun::star::uno::Reference<
                     ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
@@ -155,6 +136,11 @@ namespace ftp
             throw (::com::sun::star::lang::NoSupportException,
                    ::com::sun::star::uno::RuntimeException);
 
+
+        static com::sun::star::uno::Sequence<
+        com::sun::star::ucb::ContentInfo >
+        queryCreatableContentsInfo_Static(  )
+            throw (com::sun::star::uno::RuntimeException);
 
     private:
 
