@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -63,8 +63,8 @@ PATCH_FILES=neon.patch
 .ENDIF
 
 ADDITIONAL_FILES=src$/makefile.mk src$/config.h src$/ne_ntlm.h src$/ne_ntlm.c
-
 BUILD_DIR=src
+
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 
 OUT2INC= \
@@ -72,6 +72,7 @@ OUT2INC= \
     $(BUILD_DIR)$/ne_alloc.h \
     $(BUILD_DIR)$/ne_auth.h \
     $(BUILD_DIR)$/ne_basic.h \
+    $(BUILD_DIR)$/ne_compress.h \
     $(BUILD_DIR)$/ne_defs.h \
     $(BUILD_DIR)$/ne_locks.h \
     $(BUILD_DIR)$/ne_props.h \
