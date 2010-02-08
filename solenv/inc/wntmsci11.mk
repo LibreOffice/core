@@ -75,6 +75,11 @@ CXX+= /NMttNoLines
 NOLOGO*=-nologo
 .ENDIF
 
+.IF "$(VERBOSE)" != "TRUE"
+COMPILE_ECHO_SWITCH=-n
+COMPILE_ECHO_FILE=
+.ENDIF
+
 # Flags for COMEX == 11
 
 # disable "warning C4675: resolved overload was found by argument-dependent
