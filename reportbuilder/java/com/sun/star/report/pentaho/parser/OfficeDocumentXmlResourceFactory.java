@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.parser;
 
 import com.sun.star.report.pentaho.model.OfficeDocument;
@@ -44,13 +42,12 @@ import org.jfree.report.modules.factories.report.base.JFreeReportXmlResourceFact
 public class OfficeDocumentXmlResourceFactory extends JFreeReportXmlResourceFactory
 {
 
-  public OfficeDocumentXmlResourceFactory()
-  {
-  }
+    public OfficeDocumentXmlResourceFactory()
+    {
+    }
 
-  public Class getFactoryType()
-  {
-    return OfficeDocument.class;
-  }
-
+    public Class getFactoryType()
+    {
+        return OfficeDocument.class;
+    }
 }

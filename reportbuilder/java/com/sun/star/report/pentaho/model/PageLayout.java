@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.model;
 
 import org.jfree.report.structure.Section;
@@ -44,29 +42,29 @@ import com.sun.star.report.pentaho.OfficeNamespaces;
 public class PageLayout extends Section
 {
 
-  public PageLayout()
-  {
-    setNamespace(OfficeNamespaces.STYLE_NS);
-    setType("page-layout");
-  }
+    public PageLayout()
+    {
+        setNamespace(OfficeNamespaces.STYLE_NS);
+        setType("page-layout");
+    }
 
-  public String getStyleName()
-  {
-    return (String) getAttribute(OfficeNamespaces.STYLE_NS, "name");
-  }
+    public String getStyleName()
+    {
+        return (String) getAttribute(OfficeNamespaces.STYLE_NS, "name");
+    }
 
-  public void setStyleName(final String name)
-  {
-    setAttribute(OfficeNamespaces.STYLE_NS, "name", name);
-  }
+    public void setStyleName(final String name)
+    {
+        setAttribute(OfficeNamespaces.STYLE_NS, "name", name);
+    }
 
-  public Section getHeaderStyle ()
-  {
-    return (Section) findFirstChild(OfficeNamespaces.STYLE_NS, "header-style");
-  }
+    public Section getHeaderStyle()
+    {
+        return (Section) findFirstChild(OfficeNamespaces.STYLE_NS, "header-style");
+    }
 
-  public Section getFooterStyle ()
-  {
-    return (Section) findFirstChild(OfficeNamespaces.STYLE_NS, "footer-style");
-  }
+    public Section getFooterStyle()
+    {
+        return (Section) findFirstChild(OfficeNamespaces.STYLE_NS, "footer-style");
+    }
 }

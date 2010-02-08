@@ -27,8 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.model;
 
 import com.sun.star.report.pentaho.OfficeNamespaces;
@@ -54,73 +52,74 @@ import org.jfree.report.structure.Element;
  */
 public class OfficeStylesCollection extends Element
 {
-  // Font-face declarations are copied as is. We simply merge them by adding
-  // them all in one set. This may result in duplicate entries, but as the
-  // fileformat does not forbid that, it therefore must be ok.
-  private final FontFaceDeclsSection fontFaceDecls;
-  private final OfficeStyles automaticStyles;
-  private final OfficeStyles commonStyles;
-  private final OfficeMasterStyles masterStyles;
+    // Font-face declarations are copied as is. We simply merge them by adding
+    // them all in one set. This may result in duplicate entries, but as the
+    // fileformat does not forbid that, it therefore must be ok.
 
-  public OfficeStylesCollection()
-  {
-    fontFaceDecls = new FontFaceDeclsSection();
+    private final FontFaceDeclsSection fontFaceDecls;
+    private final OfficeStyles automaticStyles;
+    private final OfficeStyles commonStyles;
+    private final OfficeMasterStyles masterStyles;
 
-    automaticStyles = new OfficeStyles();
-    automaticStyles.setType("automatic-styles");
-    automaticStyles.setNamespace(OfficeNamespaces.OFFICE_NS);
-
-    commonStyles = new OfficeStyles();
-    commonStyles.setType("styles");
-    commonStyles.setNamespace(OfficeNamespaces.OFFICE_NS);
-
-    masterStyles = new OfficeMasterStyles();
-    masterStyles.setType("master-styles");
-    masterStyles.setNamespace(OfficeNamespaces.OFFICE_NS);
-  }
-
-  public OfficeStyle getStyle(final String family, final String name)
-  {
-    final OfficeStyle commonStyle = commonStyles.getStyle(family, name);
-    if (commonStyle != null)
+    public OfficeStylesCollection()
     {
-      return commonStyle;
-    }
-    final OfficeStyle autoStyle = automaticStyles.getStyle(family, name);
-    if (autoStyle != null)
-    {
-      return autoStyle;
+        fontFaceDecls = new FontFaceDeclsSection();
+
+        automaticStyles = new OfficeStyles();
+        automaticStyles.setType("automatic-styles");
+        automaticStyles.setNamespace(OfficeNamespaces.OFFICE_NS);
+
+        commonStyles = new OfficeStyles();
+        commonStyles.setType("styles");
+        commonStyles.setNamespace(OfficeNamespaces.OFFICE_NS);
+
+        masterStyles = new OfficeMasterStyles();
+        masterStyles.setType("master-styles");
+        masterStyles.setNamespace(OfficeNamespaces.OFFICE_NS);
     }
 
-    // And later: Autogenerate one of the default styles.
-    // However, at this moment, we dont have a clue about the default styles
-    // at all. Maybe we should add them to make this implementation more robust
-    // against invalid documents.
-    return null;
-  }
+    public OfficeStyle getStyle(final String family, final String name)
+    {
+        final OfficeStyle commonStyle = commonStyles.getStyle(family, name);
+        if (commonStyle != null)
+        {
+            return commonStyle;
+        }
+        final OfficeStyle autoStyle = automaticStyles.getStyle(family, name);
+        if (autoStyle != null)
+        {
+            return autoStyle;
+        }
 
-  public boolean containsStyle (final String family, final String name)
-  {
-    return (getStyle(family, name) != null);
-  }
+        // And later: Autogenerate one of the default styles.
+        // However, at this moment, we dont have a clue about the default styles
+        // at all. Maybe we should add them to make this implementation more robust
+        // against invalid documents.
+        return null;
+    }
 
-  public OfficeStyles getAutomaticStyles()
-  {
-    return automaticStyles;
-  }
+    public boolean containsStyle(final String family, final String name)
+    {
+        return (getStyle(family, name) != null);
+    }
 
-  public OfficeStyles getCommonStyles()
-  {
-    return commonStyles;
-  }
+    public OfficeStyles getAutomaticStyles()
+    {
+        return automaticStyles;
+    }
 
-  public OfficeMasterStyles getMasterStyles()
-  {
-    return masterStyles;
-  }
+    public OfficeStyles getCommonStyles()
+    {
+        return commonStyles;
+    }
 
-  public FontFaceDeclsSection getFontFaceDecls()
-  {
-    return fontFaceDecls;
-  }
+    public OfficeMasterStyles getMasterStyles()
+    {
+        return masterStyles;
+    }
+
+    public FontFaceDeclsSection getFontFaceDecls()
+    {
+        return fontFaceDecls;
+    }
 }
