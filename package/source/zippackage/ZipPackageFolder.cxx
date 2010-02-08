@@ -778,11 +778,18 @@ Any SAL_CALL ZipPackageFolder::getPropertyValue( const OUString& PropertyName )
 void ZipPackageFolder::doInsertByName ( ZipPackageEntry *pEntry, sal_Bool bSetParent )
         throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
 {
-    if ( pEntry->IsFolder() )
-        maContents[pEntry->getName()] = new ContentInfo ( static_cast < ZipPackageFolder *> ( pEntry ) );
-    else
-        maContents[pEntry->getName()] = new ContentInfo ( static_cast < ZipPackageStream *> ( pEntry ) );
-
+    try
+    {
+        if ( pEntry->IsFolder() )
+            maContents[pEntry->getName()] = new ContentInfo ( static_cast < ZipPackageFolder *> ( pEntry ) );
+        else
+            maContents[pEntry->getName()] = new ContentInfo ( static_cast < ZipPackageStream *> ( pEntry ) );
+    }
+    catch(const uno::Exception& rEx)
+    {
+        (void)rEx;
+        throw;
+    }
     if ( bSetParent )
         pEntry->setParent ( *this );
 }
