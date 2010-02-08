@@ -160,6 +160,7 @@ namespace dbaui
         OTableCopyHelper                    m_aTableCopyHelper;
 
         ::rtl::OUString         m_sQueryCommand;    // the command of the query currently loaded (if any)
+        ::rtl::OUString         m_sToBeLoaded;      // contains the element name which should be loaded if any
 
         DBTreeView*             m_pTreeView;
         Splitter*               m_pSplitter;

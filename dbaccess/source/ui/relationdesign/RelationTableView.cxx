@@ -228,9 +228,8 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
     ::rtl::OUString sDestFieldName = jxdDest.pListBox->GetEntryText(jxdDest.pEntry);
 
     // die Anzahl der PKey-Felder in der Quelle
-
-    ::std::vector< Reference< XNameAccess> > aPkeys = ::dbaui::getKeyColumns(pSourceWin->GetData()->getKeys(),KeyType::PRIMARY);
-    bool bAskUser = aPkeys.size() == 1 && Reference< XIndexAccess>(aPkeys[0],UNO_QUERY)->getCount() > 1;
+    const Reference< XNameAccess> xPrimaryKeyColumns = getPrimaryKeyColumns_throw(pSourceWin->GetData()->getTable());
+    bool bAskUser = xPrimaryKeyColumns.is() && Reference< XIndexAccess>(xPrimaryKeyColumns,UNO_QUERY)->getCount() > 1;
 
     pTabConnData->SetConnLine( 0, sSourceFieldName, sDestFieldName );
 

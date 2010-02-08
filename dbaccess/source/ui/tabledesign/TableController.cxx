@@ -971,39 +971,7 @@ void OTableController::loadData()
 // -----------------------------------------------------------------------------
 Reference<XNameAccess> OTableController::getKeyColumns() const
 {
-    // use keys and indexes for excat postioning
-    // first the keys
-    Reference<XKeysSupplier> xKeySup(m_xTable,UNO_QUERY);
-    Reference<XIndexAccess> xKeys;
-    if(xKeySup.is())
-        xKeys = xKeySup->getKeys();
-
-    Reference<XColumnsSupplier> xKeyColsSup;
-    Reference<XNameAccess> xKeyColumns;
-    if(xKeys.is())
-    {
-        Reference<XPropertySet> xProp;
-        sal_Int32 nCount = xKeys->getCount();
-        for(sal_Int32 i=0;i< nCount;++i)
-        {
-            xKeys->getByIndex(i) >>= xProp;
-            OSL_ENSURE(xProp.is(),"Key is invalid: NULL!");
-            if ( xProp.is() )
-            {
-                sal_Int32 nKeyType = 0;
-                xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
-                if(KeyType::PRIMARY == nKeyType)
-                {
-                    xKeyColsSup.set(xProp,UNO_QUERY);
-                    OSL_ENSURE(xKeyColsSup.is(),"Columnsupplier is null!");
-                    xKeyColumns = xKeyColsSup->getColumns();
-                    break;
-                }
-            }
-        }
-    }
-
-    return xKeyColumns;
+    return getPrimaryKeyColumns_throw(m_xTable);
 }
 // -----------------------------------------------------------------------------
 sal_Bool OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::sdbc::SQLException)
