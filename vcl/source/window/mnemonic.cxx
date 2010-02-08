@@ -335,39 +335,41 @@ BOOL MnemonicGenerator::CreateMnemonic( XubString& rKey )
         }
     }
 
-    if( ! bChanged )
-    {
-        /*
-         *  #97809# if all else fails use the first character of a word
-         *  anyway and live with duplicate mnemonics
-         */
-        nIndex = 0;
-        do
-        {
-            c = aKey.GetChar( nIndex );
-
-            nMnemonicIndex = ImplGetMnemonicIndex( c );
-            if ( nMnemonicIndex != MNEMONIC_INDEX_NOTFOUND )
-            {
-                maMnemonics[nMnemonicIndex] = 0;
-                rKey.Insert( MNEMONIC_CHAR, nIndex );
-                bChanged = TRUE;
-                break;
-            }
-
-            // Search for next word
-            do
-            {
-                nIndex++;
-                c = aKey.GetChar( nIndex );
-                if ( c == ' ' )
-                    break;
-            }
-            while ( nIndex < nLen );
-            nIndex++;
-        }
-        while ( nIndex < nLen );
-    }
+// #i87415# Duplicates mnemonics are bad for consistent keyboard accessibility
+// It's probably better to not have mnemonics for some widgets, than to have ambiguous ones.
+//    if( ! bChanged )
+//    {
+//        /*
+//         *  #97809# if all else fails use the first character of a word
+//         *  anyway and live with duplicate mnemonics
+//         */
+//        nIndex = 0;
+//        do
+//        {
+//            c = aKey.GetChar( nIndex );
+//
+//            nMnemonicIndex = ImplGetMnemonicIndex( c );
+//            if ( nMnemonicIndex != MNEMONIC_INDEX_NOTFOUND )
+//            {
+//                maMnemonics[nMnemonicIndex] = 0;
+//                rKey.Insert( MNEMONIC_CHAR, nIndex );
+//                bChanged = TRUE;
+//                break;
+//            }
+//
+//            // Search for next word
+//            do
+//            {
+//                nIndex++;
+//                c = aKey.GetChar( nIndex );
+//                if ( c == ' ' )
+//                    break;
+//            }
+//            while ( nIndex < nLen );
+//            nIndex++;
+//        }
+//        while ( nIndex < nLen );
+//    }
 
     return bChanged;
 }
