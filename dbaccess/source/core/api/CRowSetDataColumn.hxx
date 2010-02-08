@@ -83,7 +83,6 @@ namespace dbaccess
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue )throw (::com::sun::star::uno::Exception);
 
         virtual void fireValueChange(const ::connectivity::ORowSetValue& _rOldValue);
-
     protected:
         using ODataColumn::getFastPropertyValue;
     };
