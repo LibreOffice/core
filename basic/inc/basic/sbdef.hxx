@@ -32,7 +32,7 @@
 #define _SB_SBDEF_HXX
 
 #include <basic/sbxdef.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 #define _BASIC_TEXTPORTIONS
 

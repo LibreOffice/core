@@ -139,7 +139,7 @@ ________________________________________________________________________________
 //  define helper to get information about service environment
 //*****************************************************************************************************************
 #define COMPONENTGETIMPLEMENTATIONENVIRONMENT                                                                                           \
-    extern "C" void SAL_CALL component_getImplementationEnvironment( const  sal_Char**          ppEnvironmentTypeName   ,               \
+    extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( const sal_Char**          ppEnvironmentTypeName   ,               \
                                                                              uno_Environment**                          )               \
     {                                                                                                                                   \
         *ppEnvironmentTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;                                                                   \
@@ -150,7 +150,7 @@ ________________________________________________________________________________
 //  define registration of service
 //*****************************************************************************************************************
 #define COMPONENTWRITEINFO( INFOS )                                                                                                     \
-    extern "C" sal_Bool SAL_CALL component_writeInfo(   void* /*pServiceManager*/   ,                                                       \
+    extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(  void* /*pServiceManager*/   ,                                                       \
                                                         void*   pRegistryKey    )                                                       \
     {                                                                                                                                   \
         LOG_REGISTRATION_WRITEINFO( "\t[start]\n" )                                                                                     \
@@ -185,7 +185,7 @@ ________________________________________________________________________________
 //  define method to instanciate new services
 //*****************************************************************************************************************
 #define COMPONENTGETFACTORY( IFFACTORIES )                                                                                              \
-    extern "C" void* SAL_CALL component_getFactory( const   sal_Char*   pImplementationName ,                                           \
+    extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(    const   sal_Char*   pImplementationName ,                                           \
                                                             void*       pServiceManager     ,                                           \
                                                             void*     /*pRegistryKey*/      )                                           \
     {                                                                                                                                   \

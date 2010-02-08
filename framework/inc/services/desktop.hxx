@@ -80,7 +80,7 @@
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
-#include <svtools/cmdoptions.hxx>
+#include <unotools/cmdoptions.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/weak.hxx>

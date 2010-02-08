@@ -40,7 +40,7 @@ PACKAGE = complex$/sequence
 
 #----- compile .java files -----------------------------------------
 
-JARFILES = mysql.jar sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar CheckSequenceOfEnum.jar
+JARFILES = mysql.jar ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar CheckSequenceOfEnum.jar
 JAVAFILES       = CheckSequenceOfEnum.java
 
 ENUMSEQUENCEIDL =  com.sun.star.enumexample.XEnumSequence

@@ -66,12 +66,12 @@
 #include <sfx2/request.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/itempool.hxx>
+#include <svl/languageoptions.hxx>
 #include <svtools/stringtransfer.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/msgbox.hxx>
@@ -89,6 +89,7 @@ namespace svx
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::form;
+    using namespace ::com::sun::star::form::runtime;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::util;

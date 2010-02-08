@@ -116,7 +116,7 @@ OParseColumn* OParseColumn::createColumnForResultSet( const Reference< XResultSe
     const Reference< XDatabaseMetaData >& _rxDBMetaData, sal_Int32 _nColumnPos )
 {
     OParseColumn* pColumn = new OParseColumn(
-        _rxResMetaData->getColumnName( _nColumnPos ),
+        _rxResMetaData->getColumnLabel( _nColumnPos ),
         _rxResMetaData->getColumnTypeName( _nColumnPos ),
         ::rtl::OUString(),
         _rxResMetaData->isNullable( _nColumnPos ),
@@ -135,6 +135,7 @@ OParseColumn* OParseColumn::createColumnForResultSet( const Reference< XResultSe
         eComplete
     ) );
     pColumn->setIsSearchable( _rxResMetaData->isSearchable( _nColumnPos ) );
+    pColumn->setRealName(_rxResMetaData->getColumnName( _nColumnPos ));
     return pColumn;
 }
 

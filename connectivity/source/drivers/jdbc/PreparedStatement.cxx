@@ -45,7 +45,7 @@
 #include "resource/jdbc_log.hrc"
 #include "resource/common_res.hrc"
 #include "resource/sharedresources.hxx"
-
+#include "java/LocalRef.hxx"
 #include <string.h>
 
 using namespace connectivity;
@@ -138,10 +138,9 @@ void SAL_CALL java_sql_PreparedStatement::setString( sal_Int32 parameterIndex, c
         // Java-Call absetzen
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
-        jstring str = convertwchar_tToJavaString(t.pEnv,x);
-        t.pEnv->CallVoidMethod( object, mID, parameterIndex,str);
+        jdbc::LocalRef< jstring > str( t.env(),convertwchar_tToJavaString(t.pEnv,x));
+        t.pEnv->CallVoidMethod( object, mID, parameterIndex,str.get());
         // und aufraeumen
-        t.pEnv->DeleteLocalRef(str);
         ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
     } //t.pEnv
 }

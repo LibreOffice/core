@@ -35,6 +35,7 @@
 #include "fmgridif.hxx"
 #include "fmitems.hxx"
 #include "fmprop.hrc"
+#include "svx/fmtools.hxx"
 #include "fmresids.hrc"
 #include "fmservs.hxx"
 #include "fmurl.hxx"
@@ -70,7 +71,7 @@
 #ifndef _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 
 #include <comphelper/extract.hxx>
@@ -80,9 +81,9 @@
 #include <connectivity/dbtools.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <svtools/fmtfield.hxx>
-#include <svtools/numuno.hxx>
+#include <svl/numuno.hxx>
 #include <tools/multisel.hxx>
 #include <tools/shl.hxx>
 #include <tools/diagnose_ex.h>
@@ -435,6 +436,7 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
         // diese Datentypen koennen im Gridcontrol nicht verarbeitet werden
         switch (nDataType)
         {
+            case DataType::BLOB:
             case DataType::LONGVARBINARY:
             case DataType::BINARY:
             case DataType::VARBINARY:
@@ -892,7 +894,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if(pFact)
             {
-                AbstractFmShowColsDialog* pDlg = pFact->CreateFmShowColsDialog(NULL, RID_SVX_DLG_SHOWGRIDCOLUMNS);
+                AbstractFmShowColsDialog* pDlg = pFact->CreateFmShowColsDialog(NULL);
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 pDlg->SetColumns(xCols);
                 pDlg->Execute();
@@ -1724,6 +1726,7 @@ void FmGridControl::InitColumnByField(
         sal_Bool bIllegalType = sal_False;
         switch ( nDataType )
         {
+            case DataType::BLOB:
             case DataType::LONGVARBINARY:
             case DataType::BINARY:
             case DataType::VARBINARY:
@@ -1768,14 +1771,18 @@ void FmGridControl::InitColumnsByFields(const Reference< ::com::sun::star::conta
     Reference< XIndexContainer > xColumns( GetPeer()->getColumns() );
     Reference< XNameAccess > xFieldsAsNames( _rxFields, UNO_QUERY );
 
-    // Einfuegen mu� sich an den Column Positionen orientieren
+    // Einfuegen muss sich an den Column Positionen orientieren
     for (sal_Int32 i = 0; i < xColumns->getCount(); i++)
     {
         DbGridColumn* pCol = GetColumns().GetObject(i);
-        Reference< XPropertySet > xColumnModel;
-        ::cppu::extractInterface( xColumnModel, xColumns->getByIndex( i ) );
+        OSL_ENSURE(pCol,"No grid column!");
+        if ( pCol )
+        {
+            Reference< XPropertySet > xColumnModel;
+            ::cppu::extractInterface( xColumnModel, xColumns->getByIndex( i ) );
 
-        InitColumnByField( pCol, xColumnModel, xFieldsAsNames, _rxFields );
+            InitColumnByField( pCol, xColumnModel, xFieldsAsNames, _rxFields );
+        }
     }
 }
 

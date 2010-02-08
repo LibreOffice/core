@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <outl_pch.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 
 #define _OUTLINER_CXX
 #include <svx/outliner.hxx>
@@ -44,7 +44,7 @@
 #include <svx/eeitem.hxx>
 #include <svx/numitem.hxx>
 #include <vcl/window.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <editstat.hxx>
 
 
@@ -356,6 +356,18 @@ BOOL __EXPORT OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
         aDDStartPosPix = rMEvt.GetPosPixel();
         aDDStartPosRef=pEditView->GetWindow()->PixelToLogic( aDDStartPosPix,pOwner->GetRefMapMode());
         return TRUE;
+    }
+
+    // special case for outliner view in impress, check if double click hits the page icon for toggle
+    if( (nPara == EE_PARA_NOT_FOUND) && (pOwner->ImplGetOutlinerMode() == OUTLINERMODE_OUTLINEVIEW) && (eTarget == MouseText) && (rMEvt.GetClicks() == 2) )
+    {
+        ESelection aSel( pEditView->GetSelection() );
+        nPara = aSel.nStartPara;
+        Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
+        if( (pPara && pOwner->pParaList->HasChilds(pPara)) && pPara->HasFlag(PARAFLAG_ISPAGE) )
+        {
+            ImpToggleExpand( pPara );
+        }
     }
     return pEditView->MouseButtonDown( rMEvt );
 }

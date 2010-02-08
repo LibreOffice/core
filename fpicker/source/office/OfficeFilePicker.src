@@ -28,7 +28,7 @@
  *
  ************************************************************************/
 
-#include "svtools/svtools.hrc"
+#include "svl/svtools.hrc"
 
 String STR_SVT_FILEPICKER_AUTO_EXTENSION
 {

@@ -34,9 +34,9 @@
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
 #include <tools/zcodec.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -80,16 +80,15 @@
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/interaction.hxx>
 #include <svtools/sfxecode.hxx>
-#include <svtools/securityoptions.hxx>
+#include <unotools/securityoptions.hxx>
 #include <cppuhelper/weak.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/cachestr.hxx>
-#include <svtools/addxmltostorageoptions.hxx>
 #include <unotools/streamwrap.hxx>
 
-#include <svtools/saveopt.hxx>
-#include <svtools/useroptions.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/saveopt.hxx>
+#include <unotools/useroptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/localfilehelper.hxx>
@@ -870,7 +869,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
                         ::rtl::Reference< ::comphelper::OInteractionRequest > pRequest = new ::comphelper::OInteractionRequest( makeAny( aUpdateRequest ) );
                         pRequest->addContinuation( new ::comphelper::OInteractionApprove );
-                        pRequest->addContinuation( new ::comphelper::OInteractionDisapprove );
+                        pRequest->addContinuation( new ::comphelper::OInteractionAbort );
 
                         typedef ::comphelper::OInteraction< XInteractionAskLater > OInteractionAskLater;
                         OInteractionAskLater* pLater = new OInteractionAskLater;
@@ -953,27 +952,27 @@ sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDo
 
                                     if ( !pFORequest->isAbort() )
                                     {
-                                           SfxAllItemSet aNewParams( pDoc->GetPool() );
-                                           TransformParameters( SID_OPENDOC,
-                                                             pFORequest->getFilterOptions(),
-                                                             aNewParams,
-                                                             NULL );
+                                            SfxAllItemSet aNewParams( pDoc->GetPool() );
+                                            TransformParameters( SID_OPENDOC,
+                                                            pFORequest->getFilterOptions(),
+                                                            aNewParams,
+                                                            NULL );
 
-                                           SFX_ITEMSET_ARG( &aNewParams,
-                                                         pFilterOptions,
-                                                         SfxStringItem,
-                                                         SID_FILE_FILTEROPTIONS,
-                                                         sal_False );
-                                           if ( pFilterOptions )
-                                               pSet->Put( *pFilterOptions );
+                                            SFX_ITEMSET_ARG( &aNewParams,
+                                                        pFilterOptions,
+                                                        SfxStringItem,
+                                                        SID_FILE_FILTEROPTIONS,
+                                                        sal_False );
+                                            if ( pFilterOptions )
+                                                pSet->Put( *pFilterOptions );
 
-                                           SFX_ITEMSET_ARG( &aNewParams,
-                                                         pFilterData,
-                                                         SfxUnoAnyItem,
-                                                         SID_FILTER_DATA,
-                                                         sal_False );
-                                           if ( pFilterData )
-                                               pSet->Put( *pFilterData );
+                                            SFX_ITEMSET_ARG( &aNewParams,
+                                                        pFilterData,
+                                                        SfxUnoAnyItem,
+                                                        SID_FILTER_DATA,
+                                                        sal_False );
+                                            if ( pFilterData )
+                                                pSet->Put( *pFilterData );
                                     }
                                     else
                                         bAbort = TRUE;
@@ -1797,14 +1796,14 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 #define CHAR_POINTER(THE_OUSTRING) ::rtl::OUStringToOString (THE_OUSTRING, RTL_TEXTENCODING_UTF8).pData->buffer
             // Header for a single-valued ASCII EA data item
             typedef struct _EA_ASCII_header {
-            USHORT  usAttr;                 /* value: EAT_ASCII                        */
-            USHORT  usLen;                  /* length of data                          */
-            CHAR    szType[_MAX_PATH];  /* ASCII data fits in here ...             */
+            USHORT      usAttr;                 /* value: EAT_ASCII                        */
+            USHORT      usLen;                  /* length of data                          */
+            CHAR        szType[_MAX_PATH];      /* ASCII data fits in here ...             */
             } EA_ASCII_HEADER;
-            char    filePath[_MAX_PATH];
-            char    fileExt[_MAX_PATH];
-            char    docType[_MAX_PATH];
-            int rc;
+            char   filePath[_MAX_PATH];
+            char   fileExt[_MAX_PATH];
+            char   docType[_MAX_PATH];
+            int    rc;
             oslFileError eRet;
             ::rtl::OUString aSystemFileURL;
             const ::rtl::OUString aFileURL = rMedium.GetName();
@@ -1872,7 +1871,19 @@ sal_Bool SfxObjectShell::DisconnectStorage_Impl( SfxMedium& rSrcMedium, SfxMediu
         {
             uno::Reference< embed::XOptimizedStorage > xOptStorage( xStorage, uno::UNO_QUERY_THROW );
             ::rtl::OUString aBackupURL = rTargetMedium.GetBackup_Impl();
-            if ( aBackupURL.getLength() )
+            if ( !aBackupURL.getLength() )
+            {
+                // the backup could not be created, try to disconnect the storage and close the source SfxMedium
+                // in this case the optimization is not possible, connect storage to a temporary file
+                rTargetMedium.ResetError();
+                xOptStorage->writeAndAttachToStream( uno::Reference< io::XStream >() );
+                rSrcMedium.CanDisposeStorage_Impl( sal_False );
+                rSrcMedium.Close();
+
+                // now try to create the backup
+                rTargetMedium.GetBackup_Impl();
+            }
+            else
             {
                 // the following call will only compare stream sizes
                 // TODO/LATER: this is a very risky part, since if the URL contents are different from the storage
@@ -3424,7 +3435,7 @@ sal_Bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >&
 
 
 sal_Bool StoragesOfUnknownMediaTypeAreCopied_Impl( const uno::Reference< embed::XStorage >& xSource,
-                                                    const uno::Reference< embed::XStorage >& xTarget )
+                                                   const uno::Reference< embed::XStorage >& xTarget )
 {
     OSL_ENSURE( xSource.is() && xTarget.is(), "Source and/or target storages are not available!\n" );
     if ( !xSource.is() || !xTarget.is() || xSource == xTarget )

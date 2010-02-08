@@ -31,7 +31,7 @@
 #ifndef _SBX_SBXOBJECT_HXX
 #define _SBX_SBXOBJECT_HXX
 
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <basic/sbxvar.hxx>
 
 ///////////////////////////////////////////////////////////////////////////

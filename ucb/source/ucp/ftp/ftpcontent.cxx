@@ -106,19 +106,6 @@ using namespace com::sun::star::sdbc;
 
 FTPContent::FTPContent( const Reference< XMultiServiceFactory >& rxSMgr,
                         FTPContentProvider* pProvider,
-                        const Reference< XContentIdentifier >& Identifier)
-    : ContentImplHelper(rxSMgr,pProvider,Identifier),
-      m_pFCP(pProvider),
-      m_aFTPURL(Identifier->getContentIdentifier(),
-                pProvider),
-      m_bInserted(false),
-      m_bTitleSet(false)
-{
-}
-
-
-FTPContent::FTPContent( const Reference< XMultiServiceFactory >& rxSMgr,
-                        FTPContentProvider* pProvider,
                         const Reference< XContentIdentifier >& Identifier,
                         const FTPURL& aFTPURL)
     : ContentImplHelper(rxSMgr,pProvider,Identifier),
@@ -175,9 +162,9 @@ XINTERFACE_IMPL_6( FTPContent,
 //=========================================================================
 
 XTYPEPROVIDER_IMPL_6( FTPContent,
-                         XTypeProvider,
-                         XServiceInfo,
-                         XContent,
+                          XTypeProvider,
+                          XServiceInfo,
+                          XContent,
                       XCommandProcessor,
                       XContentCreator,
                       XChild);
@@ -231,7 +218,7 @@ void SAL_CALL FTPContent::abort( sal_Int32 /*CommandId*/ )
 
 /***************************************************************************/
 /*                                                                         */
-/*                           Interne Implklasse                            */
+/*                     Internal implementation class.                      */
 /*                                                                         */
 /***************************************************************************/
 
@@ -376,66 +363,85 @@ Any SAL_CALL FTPContent::execute(
 //                  return aRet;
 //              }
 
-            if(action == THROWAUTHENTICATIONREQUEST) {
+            switch (action)
+            {
+            case NOACTION:
+                break;
+
+            case THROWAUTHENTICATIONREQUEST:
                 ucbhelper::cancelCommandExecution(
                     aRet,
                     Reference<XCommandEnvironment>(0));
-            } else if(action == THROWACCESSDENIED) {
-                Sequence<Any> seq(1);
-                PropertyValue value;
-                value.Name =
-                    rtl::OUString::createFromAscii("Uri");
-                value.Handle = -1;
-                value.Value <<= m_aFTPURL.ident(false,false);
-                value.State = PropertyState_DIRECT_VALUE;
-                seq[0] <<= value;
-                ucbhelper::cancelCommandExecution(
-                    IOErrorCode_ACCESS_DENIED,
-                    seq,
-                    Environment);
-            } else if(action == THROWINTERACTIVECONNECT) {
-                InteractiveNetworkConnectException
-                    excep;
-                excep.Server = m_aFTPURL.host();
-                aRet <<= excep;
-                ucbhelper::cancelCommandExecution(
-                    aRet,
-                    Environment);
-            } else if(action == THROWRESOLVENAME) {
-                InteractiveNetworkResolveNameException
-                    excep;
-                excep.Server = m_aFTPURL.host();
-                aRet <<= excep;
-                ucbhelper::cancelCommandExecution(
-                    aRet,
-                    Environment);
-            } else if(action == THROWNOFILE) {
-                Sequence<Any> seq(1);
-                PropertyValue value;
-                value.Name =
-                    rtl::OUString::createFromAscii("Uri");
-                value.Handle = -1;
-                value.Value <<= m_aFTPURL.ident(false,false);
-                value.State = PropertyState_DIRECT_VALUE;
-                seq[0] <<= value;
-                ucbhelper::cancelCommandExecution(
-                    IOErrorCode_NO_FILE,
-                    seq,
-                    Environment);
-            } else if(action == THROWQUOTE ||
-                      action == THROWGENERAL) {
+                break;
+
+            case THROWACCESSDENIED:
+                {
+                    Sequence<Any> seq(1);
+                    PropertyValue value;
+                    value.Name = rtl::OUString::createFromAscii("Uri");
+                    value.Handle = -1;
+                    value.Value <<= m_aFTPURL.ident(false,false);
+                    value.State = PropertyState_DIRECT_VALUE;
+                    seq[0] <<= value;
+                    ucbhelper::cancelCommandExecution(
+                        IOErrorCode_ACCESS_DENIED,
+                        seq,
+                        Environment);
+                    break;
+                }
+            case THROWINTERACTIVECONNECT:
+                {
+                    InteractiveNetworkConnectException excep;
+                    excep.Server = m_aFTPURL.host();
+                    aRet <<= excep;
+                    ucbhelper::cancelCommandExecution(
+                        aRet,
+                        Environment);
+                    break;
+                }
+            case THROWRESOLVENAME:
+                {
+                    InteractiveNetworkResolveNameException excep;
+                    excep.Server = m_aFTPURL.host();
+                    aRet <<= excep;
+                    ucbhelper::cancelCommandExecution(
+                        aRet,
+                        Environment);
+                    break;
+                }
+            case THROWNOFILE:
+                {
+                    Sequence<Any> seq(1);
+                    PropertyValue value;
+                    value.Name = rtl::OUString::createFromAscii("Uri");
+                    value.Handle = -1;
+                    value.Value <<= m_aFTPURL.ident(false,false);
+                    value.State = PropertyState_DIRECT_VALUE;
+                    seq[0] <<= value;
+                    ucbhelper::cancelCommandExecution(
+                        IOErrorCode_NO_FILE,
+                        seq,
+                        Environment);
+                    break;
+                }
+            case THROWQUOTE:
+            case THROWGENERAL:
                 ucbhelper::cancelCommandExecution(
                     IOErrorCode_GENERAL,
                     Sequence<Any>(0),
                     Environment);
+                break;
             }
-
 
             if(aCommand.Name.compareToAscii("getPropertyValues") == 0) {
                 Sequence<Property> Properties;
                 if(!(aCommand.Argument >>= Properties))
                 {
-                    aRet <<= IllegalArgumentException();
+                    aRet <<= IllegalArgumentException(
+                                rtl::OUString::createFromAscii(
+                                    "Wrong argument type!" ),
+                                static_cast< cppu::OWeakObject * >(this),
+                                -1);
                     ucbhelper::cancelCommandExecution(aRet,Environment);
                 }
 
@@ -446,7 +452,11 @@ Any SAL_CALL FTPContent::execute(
                 Sequence<PropertyValue> propertyValues;
 
                 if( ! ( aCommand.Argument >>= propertyValues ) ) {
-                    aRet <<= IllegalArgumentException();
+                    aRet <<= IllegalArgumentException(
+                                rtl::OUString::createFromAscii(
+                                    "Wrong argument type!" ),
+                                static_cast< cppu::OWeakObject * >(this),
+                                -1);
                     ucbhelper::cancelCommandExecution(aRet,Environment);
                 }
 
@@ -464,7 +474,11 @@ Any SAL_CALL FTPContent::execute(
             {
                 InsertCommandArgument aInsertArgument;
                 if ( ! ( aCommand.Argument >>= aInsertArgument ) ) {
-                    aRet <<= IllegalArgumentException();
+                    aRet <<= IllegalArgumentException(
+                                rtl::OUString::createFromAscii(
+                                    "Wrong argument type!" ),
+                                static_cast< cppu::OWeakObject * >(this),
+                                -1);
                     ucbhelper::cancelCommandExecution(aRet,Environment);
                 }
                 insert(aInsertArgument,Environment);
@@ -476,7 +490,12 @@ Any SAL_CALL FTPContent::execute(
             else if(aCommand.Name.compareToAscii( "open" ) == 0) {
                 OpenCommandArgument2 aOpenCommand;
                 if ( !( aCommand.Argument >>= aOpenCommand ) ) {
-                    aRet <<= IllegalArgumentException();
+                    aRet <<= IllegalArgumentException(
+                                rtl::OUString::createFromAscii(
+                                    "Wrong argument type!" ),
+                                static_cast< cppu::OWeakObject * >(this),
+                                -1);
+
                     ucbhelper::cancelCommandExecution(aRet,Environment);
                 }
 
@@ -529,7 +548,10 @@ Any SAL_CALL FTPContent::execute(
                         }
                     }
                     else {
-                        aRet <<= UnsupportedDataSinkException();
+                        aRet <<= UnsupportedDataSinkException(
+                            rtl::OUString(),
+                            static_cast< cppu::OWeakObject * >(this),
+                            aOpenCommand.Sink);
                         ucbhelper::cancelCommandExecution(aRet,Environment);
                     }
                 }
@@ -557,17 +579,39 @@ Any SAL_CALL FTPContent::execute(
                         aOpenCommand.Mode ==
                         OpenMode::DOCUMENT_SHARE_DENY_WRITE) {
                     // Unsupported OpenMode
-                    aRet <<= UnsupportedOpenModeException();
+                    aRet <<= UnsupportedOpenModeException(
+                        rtl::OUString(),
+                        static_cast< cppu::OWeakObject * >(this),
+                        static_cast< sal_Int16 >(aOpenCommand.Mode));
                     ucbhelper::cancelCommandExecution(aRet,Environment);
                 }
                 else {
-                    // IllegalArgumentException:: No OpenMode
-                    aRet <<= IllegalArgumentException();
+                    aRet <<= IllegalArgumentException(
+                                rtl::OUString::createFromAscii(
+                                    "Unexpected OpenMode!" ),
+                                static_cast< cppu::OWeakObject * >(this),
+                                -1);
+
                     ucbhelper::cancelCommandExecution(aRet,Environment);
                 }
-            }
-            else {
-                aRet <<= UnsupportedCommandException();
+            } else if(aCommand.Name.compareToAscii("createNewContent") == 0) {
+                ContentInfo aArg;
+                if (!(aCommand.Argument >>= aArg)) {
+                    ucbhelper::cancelCommandExecution(
+                        makeAny(
+                            IllegalArgumentException(
+                                rtl::OUString::createFromAscii(
+                                    "Wrong argument type!" ),
+                                static_cast< cppu::OWeakObject * >(this),
+                                -1)),
+                        Environment);
+                    // Unreachable
+                }
+                aRet <<= createNewContent(aArg);
+            } else {
+                aRet <<= UnsupportedCommandException(
+                    aCommand.Name,
+                    static_cast< cppu::OWeakObject * >(this));
                 ucbhelper::cancelCommandExecution(aRet,Environment);
             }
 
@@ -578,8 +622,11 @@ Any SAL_CALL FTPContent::execute(
             else if(e.code() == CURLE_COULDNT_RESOLVE_HOST )
                 action = THROWRESOLVENAME;
             else if(e.code() == CURLE_FTP_USER_PASSWORD_INCORRECT ||
+#if LIBCURL_VERSION_NUM>=0x070d01 /* 7.13.1 */
+                    e.code() == CURLE_LOGIN_DENIED ||
+#endif
                     e.code() == CURLE_BAD_PASSWORD_ENTERED ||
-                    e.code() == CURLE_FTP_WEIRD_PASS_REPLY )
+                    e.code() == CURLE_FTP_WEIRD_PASS_REPLY)
                 action = THROWAUTHENTICATIONREQUEST;
             else if(e.code() == CURLE_FTP_ACCESS_DENIED)
                 action = THROWACCESSDENIED;
@@ -588,7 +635,7 @@ Any SAL_CALL FTPContent::execute(
             else if(e.code() == CURLE_FTP_COULDNT_RETR_FILE)
                 action = THROWNOFILE;
             else
-                // nothing known about the course of the error
+                // nothing known about the cause of the error
                 action = THROWGENERAL;
         }
 }
@@ -603,6 +650,14 @@ Any SAL_CALL FTPContent::execute(
 
 Sequence<ContentInfo > SAL_CALL
 FTPContent::queryCreatableContentsInfo(  )
+    throw (RuntimeException)
+{
+    return queryCreatableContentsInfo_Static();
+}
+
+// static
+Sequence<ContentInfo >
+FTPContent::queryCreatableContentsInfo_Static(  )
     throw (RuntimeException)
 {
     Sequence< ContentInfo > seq(2);
@@ -626,7 +681,6 @@ FTPContent::queryCreatableContentsInfo(  )
 
     return seq;
 }
-
 
 Reference<XContent > SAL_CALL
 FTPContent::createNewContent( const ContentInfo& Info )
@@ -697,7 +751,7 @@ sal_Int32 InsertData::read(sal_Int8 *dest,sal_Int32 nBytesRequested)
     sal_Int32 m = 0;
 
     if(m_xInputStream.is()) {
-           Sequence<sal_Int8> seq(nBytesRequested);
+            Sequence<sal_Int8> seq(nBytesRequested);
         m = m_xInputStream->readBytes(seq,nBytesRequested);
         rtl_copyMemory(dest,seq.getConstArray(),m);
     }
@@ -798,6 +852,9 @@ Reference< XRow > FTPContent::getPropertyValues(
         const rtl::OUString& Name = seqProp[i].Name;
         if(Name.compareToAscii("Title") == 0)
             xRow->appendString(seqProp[i],aDirEntry.m_aName);
+        else if(Name.compareToAscii("CreatableContentsInfo") == 0)
+            xRow->appendObject(seqProp[i],
+                               makeAny(queryCreatableContentsInfo()));
         else if(aDirEntry.m_nMode != INETCOREFTP_FILEMODE_UNKNOWN) {
             if(Name.compareToAscii("ContentType") == 0)
                 xRow->appendString(seqProp[i],
@@ -838,9 +895,6 @@ Reference< XRow > FTPContent::getPropertyValues(
 Sequence<Any> FTPContent::setPropertyValues(
     const Sequence<PropertyValue>& seqPropVal)
 {
-    Sequence<Property> props =
-        getProperties(Reference<XCommandEnvironment>(0));
-
     Sequence<Any> ret(seqPropVal.getLength());
     Sequence<PropertyChangeEvent > evt;
 
@@ -879,11 +933,20 @@ Sequence<Any> FTPContent::setPropertyValues(
                     ret[i] <<= excep;
                 }
         } else {
-            // either not unknown or illegal
+            Sequence<Property> props =
+                getProperties(Reference<XCommandEnvironment>(0));
+
+            // either unknown or read-only
             ret[i] <<= UnknownPropertyException();
             for(sal_Int32 j = 0; j < props.getLength(); ++j)
                 if(props[j].Name == seqPropVal[i].Name) {
-                    ret[i] <<= IllegalAccessException();
+                    ret[i] <<= IllegalAccessException(
+                        rtl::OUString::createFromAscii(
+                            "Property is read-only!"),
+                            //props[j].Attributes & PropertyAttribute::READONLY
+                            //    ? "Property is read-only!"
+                            //    : "Access denied!"),
+                        static_cast< cppu::OWeakObject * >( this ));
                     break;
                 }
         }

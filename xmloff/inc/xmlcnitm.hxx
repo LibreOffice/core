@@ -31,7 +31,7 @@
 #ifndef _XMLOFF_XMLCNITM_HXX
 #define _XMLOFF_XMLCNITM_HXX
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 
 class SvXMLNamespaceMap;
 namespace rtl { class OUString; }

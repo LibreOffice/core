@@ -46,10 +46,10 @@
 #include <com/sun/star/frame/FrameAction.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <cppuhelper/weak.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/visitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/visitem.hxx>
 #include <comphelper/processfactory.hxx>
 
 #ifndef GCC

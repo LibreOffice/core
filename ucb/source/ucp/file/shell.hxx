@@ -54,21 +54,18 @@
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_protected
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#endif
 #include <com/sun/star/beans/XPropertiesChangeNotifier.hpp>
 #include <com/sun/star/ucb/NumberedSortingInfo.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
-#ifndef _COM_SUN_STAR_UCB_XDYNAMICRESULTSET_HPP__
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
-#endif
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/ucb/XPropertySetRegistryFactory.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
+#include <com/sun/star/ucb/ContentInfo.hpp>
 #include "filtask.hxx"
 #include "filnot.hxx"
 
@@ -307,7 +304,7 @@ namespace fileaccess {
 
 
         /********************************************************************************/
-        /*                         transfer-commandos                                   */
+        /*                         transfer-commands                                    */
         /********************************************************************************/
 
         /**
@@ -398,6 +395,9 @@ namespace fileaccess {
 
         void SAL_CALL insertDefaultProperties( const rtl::OUString& aUnqPath );
 
+        com::sun::star::uno::Sequence< com::sun::star::ucb::ContentInfo >
+        queryCreatableContentsInfo();
+
 
         /******************************************************************************/
         /*                                                                            */
@@ -415,7 +415,6 @@ namespace fileaccess {
         FileProvider*                                                                   m_pProvider;
         com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >    m_xMultiServiceFactory;
         com::sun::star::uno::Reference< com::sun::star::ucb::XPropertySetRegistry >     m_xFileRegistry;
-
 
     private:
 
@@ -580,6 +579,7 @@ namespace fileaccess {
         const rtl::OUString IsHidden;
         const rtl::OUString ContentType;
         const rtl::OUString IsReadOnly;
+        const rtl::OUString CreatableContentsInfo;
 
     public:
 

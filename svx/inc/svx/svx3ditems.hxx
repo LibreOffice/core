@@ -30,8 +30,8 @@
 #ifndef _SVX3DITEMS_HXX
 #define _SVX3DITEMS_HXX
 
-#include <svtools/intitem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
 
 
 #include <svx/colritem.hxx>

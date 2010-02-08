@@ -39,6 +39,8 @@
 #include <svx/sdr/primitive2d/sdrcustomshapeprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <svx/obj3d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -66,11 +68,10 @@ namespace sdr
             // no need to correct if no extra text range
             if(aTextRange != aObjectRange)
             {
-                const double fExtraTextRotation(GetCustomShapeObj().GetExtraTextRotation());
                 const GeoStat& rGeoStat(GetCustomShapeObj().GetGeoStat());
 
                 // only correct when rotation and/or shear is used
-                if(rGeoStat.nShearWink || rGeoStat.nDrehWink || !basegfx::fTools::equalZero(fExtraTextRotation))
+                if(rGeoStat.nShearWink || rGeoStat.nDrehWink )
                 {
                     // text range needs to be corrected by
                     // aObjectRange.getCenter() - aRotObjectRange.getCenter() since it's
@@ -92,11 +93,6 @@ namespace sdr
                     if(rGeoStat.nDrehWink)
                     {
                         aRotMatrix.rotate((36000 - rGeoStat.nDrehWink) * F_PI18000);
-                    }
-
-                    if(!basegfx::fTools::equalZero(fExtraTextRotation))
-                    {
-                        aRotMatrix.rotate((360.0 - fExtraTextRotation) * F_PI180);
                     }
 
                     aRotMatrix.translate(aObjectRange.getMinimum().getX(), aObjectRange.getMinimum().getY());
@@ -134,6 +130,7 @@ namespace sdr
 
                 // create Primitive2DSequence from sub-geometry
                 const SdrObject* pSdrObjRepresentation = GetCustomShapeObj().GetSdrObjectFromCustomShape();
+                bool b3DShape(false);
 
                 if(pSdrObjRepresentation)
                 {
@@ -142,6 +139,12 @@ namespace sdr
                     while(aIterator.IsMore())
                     {
                         SdrObject& rCandidate = *aIterator.Next();
+
+                        if(!b3DShape && dynamic_cast< E3dObject* >(&rCandidate))
+                        {
+                            b3DShape = true;
+                        }
+
                         const drawinglayer::primitive2d::Primitive2DSequence xNew(rCandidate.GetViewContact().getViewIndependentPrimitive2DSequence());
                         drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xGroup, xNew);
                     }
@@ -180,6 +183,16 @@ namespace sdr
                                     aTextRange.getMinY() - aObjectRange.getMinimum().getY());
                             }
 
+                            if(!basegfx::fTools::equalZero(fExtraTextRotation))
+                            {
+                                basegfx::B2DVector aTranslation(
+                                    ( aTextRange.getWidth() / 2 ) + ( aTextRange.getMinX() - aObjectRange.getMinimum().getX() ),
+                                    ( aTextRange.getHeight() / 2 ) + ( aTextRange.getMinY() - aObjectRange.getMinimum().getY() ) );
+                                aTextBoxMatrix.translate( -aTranslation.getX(), -aTranslation.getY() );
+                                aTextBoxMatrix.rotate((360.0 - fExtraTextRotation) * F_PI180);
+                                aTextBoxMatrix.translate( aTranslation.getX(), aTranslation.getY() );
+                            }
+
                             if(rGeoStat.nShearWink)
                             {
                                 aTextBoxMatrix.shearX(tan((36000 - rGeoStat.nShearWink) * F_PI18000));
@@ -188,11 +201,6 @@ namespace sdr
                             if(rGeoStat.nDrehWink)
                             {
                                 aTextBoxMatrix.rotate((36000 - rGeoStat.nDrehWink) * F_PI18000);
-                            }
-
-                            if(!basegfx::fTools::equalZero(fExtraTextRotation))
-                            {
-                                aTextBoxMatrix.rotate((360.0 - fExtraTextRotation) * F_PI180);
                             }
 
                             // give text it's target position
@@ -215,12 +223,14 @@ namespace sdr
                     }
 
                     // create primitive
-                    const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::SdrCustomShapePrimitive2D(
-                        *pAttribute,
-                        xGroup,
-                        aTextBoxMatrix,
-                        bWordWrap,
-                        false));        // #SJ# New parameter to force to clipped BlockText for SC
+                    const drawinglayer::primitive2d::Primitive2DReference xReference(
+                        new drawinglayer::primitive2d::SdrCustomShapePrimitive2D(
+                            *pAttribute,
+                            xGroup,
+                            aTextBoxMatrix,
+                            bWordWrap,
+                            b3DShape,
+                            false));        // #SJ# New parameter to force to clipped BlockText for SC
                     xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
                 }
 

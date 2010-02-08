@@ -47,8 +47,8 @@
 // header for define RET_OK
 #include <vcl/msgbox.hxx>
 // header for class SvtLinguConfigItem
-#include <svtools/lingucfg.hxx>
-#include <svtools/linguprops.hxx>
+#include <unotools/lingucfg.hxx>
+#include <unotools/linguprops.hxx>
 // header for class IntlWrapper
 #include <unotools/intlwrapper.hxx>
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
@@ -444,14 +444,6 @@ DictionaryEntry::DictionaryEntry( const rtl::OUString& rTerm, const rtl::OUStrin
 {
     if( m_nConversionPropertyType == 0 )
         m_nConversionPropertyType = 1;
-}
-
-DictionaryEntry::DictionaryEntry()
-        : m_aTerm()
-        , m_aMapping()
-        , m_nConversionPropertyType( linguistic2::ConversionPropertyType::OTHER )
-        , m_bNewEntry( sal_True )
-{
 }
 
 DictionaryEntry::~DictionaryEntry()

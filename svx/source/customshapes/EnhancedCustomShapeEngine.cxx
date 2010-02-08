@@ -48,7 +48,7 @@
 #include <svx/outlobj.hxx>
 #include <svx/outliner.hxx>
 #include <svx/svdoutl.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
@@ -56,6 +56,7 @@
 #include "unopolyhelper.hxx"
 #include <uno/mapping.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <com/sun/star/document/XActionLockable.hpp>
 
 // ---------------------------
 // - EnhancedCustomShapeEngine -
@@ -360,7 +361,8 @@ com::sun::star::awt::Rectangle SAL_CALL EnhancedCustomShapeEngine::getTextBounds
 {
     com::sun::star::awt::Rectangle aTextRect;
     SdrObject* pSdrObjCustomShape( GetSdrObjectFromXShape( mxShape ) );
-    if ( pSdrObjCustomShape && pSdrObjCustomShape->GetModel() && !pSdrObjCustomShape->GetModel()->isLocked() )
+    ::com::sun::star::uno::Reference< ::com::sun::star::document::XActionLockable > xLockable( mxShape, ::com::sun::star::uno::UNO_QUERY );
+    if ( pSdrObjCustomShape && pSdrObjCustomShape->GetModel() && xLockable.is() && !xLockable->isActionLocked() )
     {
         if ( pSdrObjCustomShape )
         {

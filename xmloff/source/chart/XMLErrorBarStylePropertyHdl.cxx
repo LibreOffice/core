@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 #include "XMLErrorBarStylePropertyHdl.hxx"
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/uno/Any.hxx>

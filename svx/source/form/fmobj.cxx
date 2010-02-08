@@ -30,35 +30,35 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include <tools/resmgr.hxx>
-#include <tools/diagnose_ex.h>
 #include "fmobj.hxx"
 #include "fmprop.hrc"
 #include "fmvwimp.hxx"
-#include <svx/editeng.hxx>
-#include <svx/svdovirt.hxx>
+#include "fmpgeimp.hxx"
+#include "fmresids.hrc"
+#include "svx/fmview.hxx"
+#include "svx/fmglob.hxx"
+#include "svx/fmpage.hxx"
+#include "svx/editeng.hxx"
+#include "svx/svdovirt.hxx"
+#include "svx/fmmodel.hxx"
+#include "svx/dialmgr.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/io/XPersistObject.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
+#include <com/sun/star/util/XCloneable.hpp>
 /** === end UNO includes === **/
-#include <svx/fmmodel.hxx>
-#include "fmtools.hxx"
+#include "svx/fmtools.hxx"
+
 #include <tools/shl.hxx>
-#include <svx/dialmgr.hxx>
-
-#include "fmresids.hrc"
-#include <svx/fmview.hxx>
-#include <svx/fmglob.hxx>
-
-#include "fmpgeimp.hxx"
-#include <svx/fmpage.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/processfactory.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <vcl/svapp.hxx>
+#include <tools/resmgr.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
@@ -81,6 +81,10 @@ FmFormObj::FmFormObj(const ::rtl::OUString& rModelName,sal_Int32 _nType)
           ,m_pLastKnownRefDevice    ( NULL          )
 {
     DBG_CTOR(FmFormObj, NULL);
+
+    // normally, this is done in SetUnoControlModel, but if the call happened in the base class ctor,
+    // then our incarnation of it was not called (since we were not constructed at this time).
+    impl_checkRefDevice_nothrow( true );
 }
 
 //------------------------------------------------------------------
@@ -121,6 +125,45 @@ void FmFormObj::ClearObjEnv()
     m_xParent.clear();
     aEvts.realloc( 0 );
     m_nPos = -1;
+}
+
+//------------------------------------------------------------------
+void FmFormObj::impl_checkRefDevice_nothrow( bool _force )
+{
+    const FmFormModel* pFormModel = PTR_CAST( FmFormModel, GetModel() );
+    if ( !pFormModel || !pFormModel->ControlsUseRefDevice() )
+        return;
+
+    OutputDevice* pCurrentRefDevice = pFormModel ? pFormModel->GetRefDevice() : NULL;
+    if ( ( m_pLastKnownRefDevice == pCurrentRefDevice ) && !_force )
+        return;
+
+    Reference< XControlModel > xControlModel( GetUnoControlModel() );
+    if ( !xControlModel.is() )
+        return;
+
+    m_pLastKnownRefDevice = pCurrentRefDevice;
+    if ( m_pLastKnownRefDevice == NULL )
+        return;
+
+    try
+    {
+        Reference< XPropertySet > xModelProps( GetUnoControlModel(), UNO_QUERY_THROW );
+        Reference< XPropertySetInfo > xPropertyInfo( xModelProps->getPropertySetInfo(), UNO_SET_THROW );
+
+        static const ::rtl::OUString sRefDevicePropName( RTL_CONSTASCII_USTRINGPARAM( "ReferenceDevice" ) );
+        if ( xPropertyInfo->hasPropertyByName( sRefDevicePropName ) )
+        {
+            VCLXDevice* pUnoRefDevice = new VCLXDevice;
+            pUnoRefDevice->SetOutputDevice( m_pLastKnownRefDevice );
+            Reference< XDevice > xRefDevice( pUnoRefDevice );
+            xModelProps->setPropertyValue( sRefDevicePropName, makeAny( xRefDevice ) );
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }
 
 //------------------------------------------------------------------
@@ -360,38 +403,10 @@ SdrObject* FmFormObj::Clone() const
 }
 
 //------------------------------------------------------------------
-void FmFormObj::ReformatText()
+void FmFormObj::NbcReformatText()
 {
-    const FmFormModel* pFormModel = PTR_CAST( FmFormModel, GetModel() );
-    OutputDevice* pCurrentRefDevice = pFormModel ? pFormModel->GetRefDevice() : NULL;
-
-    if ( m_pLastKnownRefDevice != pCurrentRefDevice )
-    {
-        m_pLastKnownRefDevice = pCurrentRefDevice;
-
-        try
-        {
-            Reference< XPropertySet > xModelProps( GetUnoControlModel(), UNO_QUERY );
-            Reference< XPropertySetInfo > xPropertyInfo;
-            if ( xModelProps.is() )
-                xPropertyInfo = xModelProps->getPropertySetInfo();
-
-            const ::rtl::OUString sRefDevicePropName( RTL_CONSTASCII_USTRINGPARAM( "ReferenceDevice" ) );
-            if ( xPropertyInfo.is() && xPropertyInfo->hasPropertyByName( sRefDevicePropName ) )
-            {
-                VCLXDevice* pUnoRefDevice = new VCLXDevice;
-                pUnoRefDevice->SetOutputDevice( m_pLastKnownRefDevice );
-                Reference< XDevice > xRefDevice( pUnoRefDevice );
-                xModelProps->setPropertyValue( sRefDevicePropName, makeAny( xRefDevice ) );
-            }
-        }
-        catch( const Exception& )
-        {
-            OSL_ENSURE( sal_False, "FmFormObj::ReformatText: caught an exception!" );
-        }
-    }
-
-    SdrUnoObj::ReformatText();
+    impl_checkRefDevice_nothrow( false );
+    SdrUnoObj::NbcReformatText();
 }
 
 //------------------------------------------------------------------
@@ -422,10 +437,48 @@ void FmFormObj::operator= (const SdrObject& rObj)
 }
 
 //------------------------------------------------------------------
+namespace
+{
+    String lcl_getFormComponentAccessPath(const Reference< XInterface >& _xElement, Reference< XInterface >& _rTopLevelElement)
+    {
+        Reference< ::com::sun::star::form::XFormComponent> xChild(_xElement, UNO_QUERY);
+        Reference< ::com::sun::star::container::XIndexAccess> xParent;
+        if (xChild.is())
+            xParent = Reference< ::com::sun::star::container::XIndexAccess>(xChild->getParent(), UNO_QUERY);
+
+        // while the current content is a form
+        String sReturn;
+        String sCurrentIndex;
+        while (xChild.is())
+        {
+            // get the content's relative pos within it's parent container
+            sal_Int32 nPos = getElementPos(xParent, xChild);
+
+            // prepend this current relaive pos
+            sCurrentIndex = String::CreateFromInt32(nPos);
+            if (sReturn.Len() != 0)
+            {
+                sCurrentIndex += '\\';
+                sCurrentIndex += sReturn;
+            }
+
+            sReturn = sCurrentIndex;
+
+            // travel up
+            if (::comphelper::query_interface((Reference< XInterface >)xParent,xChild))
+                xParent = Reference< ::com::sun::star::container::XIndexAccess>(xChild->getParent(), UNO_QUERY);
+        }
+
+        _rTopLevelElement = xParent;
+        return sReturn;
+    }
+}
+
+//------------------------------------------------------------------
 Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface > & _rSourceContainer, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  _rTopLevelDestContainer)
 {
     Reference< XInterface >  xTopLevelSouce;
-    String sAccessPath = getFormComponentAccessPath(_rSourceContainer, xTopLevelSouce);
+    String sAccessPath = lcl_getFormComponentAccessPath(_rSourceContainer, xTopLevelSouce);
     if (!xTopLevelSouce.is())
         // somthing went wrong, maybe _rSourceContainer isn't part of a valid forms hierarchy
         return Reference< XInterface > ();
@@ -532,8 +585,8 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
                     DBG_ASSERT(xSourcePersist.is(), "FmFormObj::ensureModelEnv : invalid form (no persist object) !");
 
                     // create and insert (into the destination) a clone of the form
-                    xCurrentDestForm = Reference< XPropertySet > (cloneUsingProperties(xSourcePersist), UNO_QUERY);
-                    DBG_ASSERT(xCurrentDestForm.is(), "FmFormObj::ensureModelEnv : invalid cloned form !");
+                    Reference< XCloneable > xCloneable( xSourcePersist, UNO_QUERY_THROW );
+                    xCurrentDestForm.set( xCloneable->createClone(), UNO_QUERY_THROW );
 
                     DBG_ASSERT(nCurrentDestIndex == xDestContainer->getCount(), "FmFormObj::ensureModelEnv : something went wrong with the numbers !");
                     xDestContainer->insertByIndex(nCurrentDestIndex, makeAny(xCurrentDestForm));
@@ -561,6 +614,13 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
     }
 
     return Reference< XInterface > (xDestContainer, UNO_QUERY);
+}
+
+//------------------------------------------------------------------
+void FmFormObj::SetModel( SdrModel* _pNewModel )
+{
+    SdrUnoObj::SetModel( _pNewModel );
+    impl_checkRefDevice_nothrow();
 }
 
 //------------------------------------------------------------------
@@ -595,6 +655,8 @@ void FmFormObj::SetUnoControlModel( const Reference< com::sun::star::awt::XContr
     SdrUnoObj::SetUnoControlModel( _rxModel );
 
     // TODO: call something like formObjectInserted at the form page, to tell it the new model
+
+    impl_checkRefDevice_nothrow( true );
 }
 
 //------------------------------------------------------------------

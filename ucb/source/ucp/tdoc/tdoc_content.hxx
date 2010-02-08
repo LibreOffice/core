@@ -43,7 +43,8 @@ namespace com { namespace sun { namespace star {
     namespace sdbc  { class XRow; }
     namespace io    { class XInputStream; class XOutputStream; }
     namespace beans { struct PropertyValue; }
-    namespace ucb   { struct OpenCommandArgument2; struct TransferInfo; }
+    namespace ucb   { struct OpenCommandArgument2; struct TransferInfo;
+                      struct ContentInfo; }
 } } }
 
 namespace tdoc_ucp
@@ -94,6 +95,11 @@ public:
     const rtl::OUString & getTitle() const { return m_aTitle; }
     void setTitle( const rtl::OUString & rTitle ) { m_aTitle = rTitle; }
 
+    com::sun::star::uno::Sequence< com::sun::star::ucb::ContentInfo >
+    getCreatableContentsInfo() const;
+
+    bool isContentCreator() const;
+
 private:
     ContentType   m_eType;
     rtl::OUString m_aContentType;
@@ -106,7 +112,7 @@ class Content : public ::ucbhelper::ContentImplHelper,
                 public com::sun::star::ucb::XContentCreator
 {
     enum ContentState { TRANSIENT,  // created via createNewContent,
-                                       // but did not process "insert" yet
+                                        // but did not process "insert" yet
                         PERSISTENT, // processed "insert"
                         DEAD        // processed "delete" / document was closed
                       };
@@ -136,8 +142,6 @@ private:
     getCommands( const com::sun::star::uno::Reference<
                     com::sun::star::ucb::XCommandEnvironment > & xEnv );
     virtual ::rtl::OUString getParentURL();
-
-    bool isContentCreator();
 
     static bool hasData( ContentProvider* pProvider, const Uri & rUri );
     bool hasData( const Uri & rUri ) { return hasData( m_pProvider, rUri ); }
@@ -173,7 +177,7 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
     getPropertyValues( const ::com::sun::star::uno::Sequence<
-                             ::com::sun::star::beans::Property >& rProperties );
+                            ::com::sun::star::beans::Property >& rProperties );
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
     setPropertyValues(
             const ::com::sun::star::uno::Sequence<
@@ -294,7 +298,7 @@ public:
     execute( const com::sun::star::ucb::Command& aCommand,
              sal_Int32 CommandId,
              const com::sun::star::uno::Reference<
-                 com::sun::star::ucb::XCommandEnvironment >& Environment )
+                com::sun::star::ucb::XCommandEnvironment >& Environment )
         throw( com::sun::star::uno::Exception,
                com::sun::star::ucb::CommandAbortedException,
                com::sun::star::uno::RuntimeException );
