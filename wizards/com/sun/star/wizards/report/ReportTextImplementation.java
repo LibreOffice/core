@@ -480,7 +480,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
         return m_aDoc.xMSFDoc;
     }
 
-    public void store(String _sName, int _nOpenMode)
+    public void store(String _sName, int _nOpenMode) throws com.sun.star.uno.Exception
     {
         getDoc().createReportForm(ReportWizard.SOREPORTFORMNAME);
         // int nOpenMode = getReportOpenMode();
