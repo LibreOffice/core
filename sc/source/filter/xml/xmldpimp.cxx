@@ -1456,6 +1456,7 @@ ScXMLDataPilotSubTotalContext::ScXMLDataPilotSubTotalContext( ScXMLImport& rImpo
                 pDataPilotSubTotals->AddFunction( sal::static_int_cast<sal_Int16>(
                                 ScXMLConverter::GetFunctionFromString( sValue ) ) );
             }
+            break;
             case XML_TOK_DATA_PILOT_SUBTOTAL_ATTR_DISPLAY_NAME:
             case XML_TOK_DATA_PILOT_SUBTOTAL_ATTR_DISPLAY_NAME_EXT:
                 pDataPilotSubTotals->SetDisplayName(sValue);
