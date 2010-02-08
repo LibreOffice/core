@@ -59,7 +59,8 @@
 #include <com/sun/star/sheet/XLevelsSupplier.hpp>
 
 
-#define MAX_LABELS  (MAXCOL+1)
+// moved from fieldwnd.hxx, see also SC_DAPI_MAXFIELDS
+#define MAX_LABELS  256
 
 #define MAX_PAGEFIELDS 10   // maximum count of fields for page area
 
@@ -126,7 +127,7 @@ private:
 
     friend class ScDPTableDataCache;
 public:
-    ScDPItemData() : fValue(0.0), nNumFormat( 0 ), mbFlag( 0 ){}
+    ScDPItemData() : nNumFormat( 0 ), fValue(0.0), mbFlag( 0 ){}
     ScDPItemData( ULONG nNF, const String & rS, double fV, BYTE bF ):nNumFormat(nNF), aString(rS), fValue(fV), mbFlag( bF ){}
     ScDPItemData( const String& rS, double fV = 0.0, BOOL bHV = FALSE, const ULONG nNumFormat = 0 , BOOL bData = TRUE) ;
     ScDPItemData( ScDocument* pDoc, SCROW nRow, USHORT nCol, USHORT nDocTab );

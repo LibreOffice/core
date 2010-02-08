@@ -76,8 +76,8 @@ SLOFILES =  \
     $(SLO)$/document.obj \
         $(SLO)$/dpcachetable.obj \
         $(SLO)$/dpdimsave.obj \
-        $(SLO)$/dpgroup.obj \
     $(SLO)$/dpglobal.obj \
+        $(SLO)$/dpgroup.obj \
     $(SLO)$/dpobject.obj \
     $(SLO)$/dpoutput.obj \
     $(SLO)$/dpoutputgeometry.obj \
@@ -128,6 +128,7 @@ EXCEPTIONSFILES= \
     $(SLO)$/documen2.obj \
     $(SLO)$/document.obj \
     $(SLO)$/dpdimsave.obj \
+    $(SLO)$/dpglobal.obj \
     $(SLO)$/dpgroup.obj \
     $(SLO)$/dpshttab.obj \
     $(SLO)$/dptabres.obj \
@@ -142,8 +143,9 @@ EXCEPTIONSFILES= \
     $(SLO)$/documen5.obj \
     $(SLO)$/documen6.obj \
     $(SLO)$/documen9.obj \
-  $(SLO)$/dpcachetable.obj \
-  $(SLO)$/dptablecache.obj\
+    $(SLO)$/dpcachetable.obj \
+    $(SLO)$/dptablecache.obj \
+    $(SLO)$/scdpoutputimpl.obj \
     $(SLO)$/dpsdbtab.obj \
     $(SLO)$/dpobject.obj \
     $(SLO)$/dpoutput.obj \

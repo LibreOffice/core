@@ -976,7 +976,7 @@ ResultMembers* ScDPResultData::GetDimResultMembers( long nDim ,  ScDPDimension* 
       if ( mpDimMembers[ nDim ] == NULL )
         {
 
-                long nDimSource = pDim->GetDimension();
+                //long nDimSource = pDim->GetDimension();
 
                 ResultMembers* pResultMembers = new ResultMembers();
                 // global order is used to initialize aMembers, so it doesn't have to be looked at later
@@ -1014,8 +1014,8 @@ ScDPResultMember::ScDPResultMember(  const ScDPResultData* pData, const ScDPPare
     bForceSubTotal( bForceSub ),
     bHasHiddenDetails( FALSE ),
     bInitialized( FALSE ),
-    nMemberStep( 1 ),
-    bAutoHidden( FALSE )
+    bAutoHidden( FALSE ),
+    nMemberStep( 1 )
 {
     // pParentLevel/pMemberDesc is 0 for root members
 }
@@ -1029,8 +1029,8 @@ ScDPResultMember::ScDPResultMember(  const ScDPResultData* pData,
     bForceSubTotal( bForceSub ),
     bHasHiddenDetails( FALSE ),
     bInitialized( FALSE ),
-    nMemberStep( 1 ),
-    bAutoHidden( FALSE )
+    bAutoHidden( FALSE ),
+    nMemberStep( 1 )
 {
 }
 ScDPResultMember::~ScDPResultMember()
@@ -3022,7 +3022,7 @@ void ScDPResultDimension::ProcessData( const vector< SCROW >& aMembers,
         if (aMembers.size() > 1)
         {
             vector</*ScDPItemData*/SCROW >::const_iterator itr = aMembers.begin();
-            aChildMembers.assign(++itr, aMembers.end());
+            aChildMembers.insert(aChildMembers.begin(), ++itr, aMembers.end());
         }
         pMember->ProcessData( aChildMembers, pDataDim, aDataMembers, aValues );
         return;
@@ -3572,7 +3572,7 @@ void ScDPDataDimension::ProcessData( const vector< SCROW >& aDataMembers, const 
             if (aDataMembers.size() > 1)
             {
                 vector</*ScDPItemData*/SCROW >::const_iterator itr = aDataMembers.begin();
-                aChildDataMembers.assign(++itr, aDataMembers.end());
+                aChildDataMembers.insert(aChildDataMembers.begin(), ++itr, aDataMembers.end());
             }
             pMember->ProcessData( aChildDataMembers, aValues, rSubState );
             return;

@@ -37,7 +37,6 @@
 #include <vcl/fixed.hxx>
 #include <cppuhelper/weakref.hxx>
 
-#define MAX_LABELS  256
 #define PAGE_SIZE   16      // count of visible fields for scrollbar
 #define LINE_SIZE   8       // count of fields per column for scrollbar
 #define MAX_FIELDS  8       // maximum count of fields for row/col/data area

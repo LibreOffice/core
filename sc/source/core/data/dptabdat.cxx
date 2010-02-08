@@ -65,8 +65,8 @@ ScDPTableData::CalcInfo::CalcInfo() :
 // ---------------------------------------------------------------------------
 
 ScDPTableData::ScDPTableData(ScDocument* pDoc, long nCacheId ) :
-    mpDoc ( pDoc ),
-    mnCacheId( nCacheId )
+    mnCacheId( nCacheId ),
+    mpDoc ( pDoc )
 {
     nLastDateVal = nLastHier = nLastLevel = nLastRet = -1;      // invalid
 

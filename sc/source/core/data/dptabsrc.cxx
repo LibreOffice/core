@@ -2891,14 +2891,14 @@ const ScDPItemData& ScDPMember::GetItemData() const
 const ScDPItemData* ScDPSource::GetItemDataById(long nDim, long nId)
 {
     long nSrcDim = GetSourceDim( nDim );
-    const ScDPItemData* pData = GetData()->GetMemberById(  nSrcDim,  nId );
-    if ( !pData )
+    const ScDPItemData* pItemData = GetData()->GetMemberById(  nSrcDim,  nId );
+    if ( !pItemData )
    { //todo:
            ScDPItemData item;
            nId = GetCache()->GetAdditionalItemID( item );
-        pData = GetData()->GetMemberById(  nSrcDim,  nId );
+        pItemData = GetData()->GetMemberById(  nSrcDim,  nId );
     }
-   return pData;
+   return pItemData;
 }
 
 SCROW  ScDPSource::GetMemberId(  long  nDim, const ScDPItemData& rData )

@@ -108,7 +108,7 @@ namespace
                     fValue  = xRow->getBoolean(nCol) ? 1 : 0;
                     return new ScDPItemData( rStr, fValue,TRUE,nNumType);
                 }
-                break;
+                //break;
 
             case sdbc::DataType::TINYINT:
             case sdbc::DataType::SMALLINT:
@@ -124,7 +124,7 @@ namespace
                     fValue = xRow->getDouble(nCol);
                     return new ScDPItemData( rStr, fValue,TRUE);
                 }
-                break;
+                //break;
 
             case sdbc::DataType::DATE:
                 {
@@ -134,7 +134,7 @@ namespace
                     fValue = Date(aDate.Day, aDate.Month, aDate.Year) - rNullDate;
                     return new ScDPItemData( rStr, fValue, TRUE, nNumType );
                 }
-                break;
+                //break;
 
             case sdbc::DataType::TIME:
                 {
@@ -145,7 +145,7 @@ namespace
                         aTime.Seconds + aTime.HundredthSeconds / 100.0 ) / D_TIMEFACTOR;
                     return new ScDPItemData( rStr,fValue, TRUE, nNumType );
                 }
-                break;
+                //break;
 
             case sdbc::DataType::TIMESTAMP:
                 {
@@ -157,7 +157,7 @@ namespace
                         aStamp.Seconds + aStamp.HundredthSeconds / 100.0 ) / D_TIMEFACTOR;
                     return new ScDPItemData( rStr,fValue, TRUE, nNumType );
                 }
-                break;
+                //break;
             case sdbc::DataType::CHAR:
             case sdbc::DataType::VARCHAR:
             case sdbc::DataType::LONGVARCHAR:
@@ -167,7 +167,7 @@ namespace
             case sdbc::DataType::LONGVARBINARY:
             default:
                 return new ScDPItemData ( rStr );
-                break;
+                //break;
             }
         }
         catch (uno::Exception&)
@@ -183,13 +183,13 @@ namespace
 // Wang Xu Ming -- 12/23/2008
 //Refactor cache data
 ScDPItemData::ScDPItemData( const String& rS, double fV/* = 0.0*/, BOOL bHV/* = FALSE*/, const ULONG nNumFormatP /*= 0*/ , BOOL bData/* = TRUE*/) :
-aString(rS), fValue(fV), nNumFormat( nNumFormatP ),
+nNumFormat( nNumFormatP ), aString(rS), fValue(fV),
 mbFlag( (MK_VAL*!!bHV) | (MK_DATA*!!bData) | (MK_ERR*!!FALSE) | (MK_DATE*!!lcl_isDate( nNumFormat ) ) )
 {
 }
 
 ScDPItemData::ScDPItemData( ScDocument* pDoc, SCROW nRow, USHORT nCol, USHORT nDocTab  ):
-         fValue(0.0), nNumFormat( 0 ), mbFlag( 0 )
+        nNumFormat( 0 ), fValue(0.0), mbFlag( 0 )
 {
     String aDocStr;
     pDoc->GetString( nCol, nRow, nDocTab, aDocStr );
@@ -422,11 +422,11 @@ BOOL ScDPTableDataCache::operator== ( const ScDPTableDataCache& r ) const
 
 ScDPTableDataCache::ScDPTableDataCache(  ScDocument* pDoc  ) :
 mpDoc( pDoc ),
+mnColumnCount ( 0 ),
 mpTableDataValues ( NULL ),
 mpSourceData ( NULL ),
 mpGlobalOrder( NULL ),
-mpIndexOrder( NULL),
-mnColumnCount ( 0 )
+mpIndexOrder( NULL)
 {
     mnID = -1;
 }
@@ -874,7 +874,7 @@ BOOL ScDPTableDataCache::AddData(long nDim, ScDPItemData* pitemData)
 
 String ScDPTableDataCache::GetDimensionName( USHORT nColumn ) const
 {
-    DBG_ASSERT( nColumn>=0 && nColumn < mrLabelNames.size()-1 , "ScDPTableDataCache::GetDimensionName");
+    DBG_ASSERT( /* nColumn>=0 && */ nColumn < mrLabelNames.size()-1 , "ScDPTableDataCache::GetDimensionName");
     DBG_ASSERT( mrLabelNames.size() == static_cast <USHORT> (mnColumnCount+1), "ScDPTableDataCache::GetDimensionName");
     if ( static_cast<size_t>(nColumn+1) < mrLabelNames.size() )
     {
@@ -919,7 +919,7 @@ void ScDPTableDataCache::AddLabel(ScDPItemData *pData)
 SCROW ScDPTableDataCache::GetItemDataId(USHORT nDim, SCROW nRow, BOOL bRepeatIfEmpty) const
 { //
     DBG_ASSERT( IsValid(), "  IsValid() == false " );
-    DBG_ASSERT( nDim >= 0 && nDim < mnColumnCount, "ScDPTableDataCache::GetItemDataId " );
+    DBG_ASSERT( /* nDim >= 0 && */ nDim < mnColumnCount, "ScDPTableDataCache::GetItemDataId " );
 
     if ( bRepeatIfEmpty )
     {

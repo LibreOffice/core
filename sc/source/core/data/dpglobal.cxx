@@ -28,8 +28,14 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sc.hxx"
+
 #include "dpglobal.hxx"
 #include "document.hxx"
+
+#include <stdio.h>
 
 namespace ScDPGlobal
 {
@@ -97,8 +103,8 @@ ScDPItemDataPool::ScDPItemDataPool(void)
 }
 //
 ScDPItemDataPool::ScDPItemDataPool(const ScDPItemDataPool& r):
-    maItemIds( r.maItemIds),
-    maItems( r.maItems )
+    maItems(r.maItems),
+    maItemIds(r.maItemIds)
 {
 }
 

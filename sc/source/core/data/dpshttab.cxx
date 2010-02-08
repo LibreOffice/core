@@ -67,9 +67,9 @@ using ::std::hash_set;
 ScSheetDPData::ScSheetDPData( ScDocument* pD, const ScSheetSourceDesc& rDesc , long nCacheId) :
     ScDPTableData(pD, rDesc.GetCacheId( pD, nCacheId) ), // DataPilot Migration - Cache&&Performance
     aQuery ( rDesc.aQueryParam  ),
+    pSpecial(NULL),
     bIgnoreEmptyRows( FALSE ),
     bRepeatIfEmpty(FALSE),
-    pSpecial(NULL),
     aCacheTable( pD, rDesc.GetCacheId( pD, nCacheId))
 {
     SCSIZE nEntryCount( aQuery.GetEntryCount());
@@ -192,10 +192,10 @@ BOOL ScSheetDPData::getIsDataLayoutDimension(long nColumn)
     return (nColumn ==(long)( aCacheTable.getColSize()));
 }
 
-void ScSheetDPData::SetEmptyFlags( BOOL bIgnoreEmptyRows, BOOL bRepeatIfEmpty )
+void ScSheetDPData::SetEmptyFlags( BOOL bIgnoreEmptyRowsP, BOOL bRepeatIfEmptyP )
 {
-    bIgnoreEmptyRows = bIgnoreEmptyRows;
-    bRepeatIfEmpty   = bRepeatIfEmpty;
+    bIgnoreEmptyRows = bIgnoreEmptyRowsP;
+    bRepeatIfEmpty   = bRepeatIfEmptyP;
 }
 
 bool ScSheetDPData::IsRepeatIfEmpty()

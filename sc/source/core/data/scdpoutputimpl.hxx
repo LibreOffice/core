@@ -54,8 +54,8 @@ class OutputImpl
     SCROW   mnMemberStartRow;
 
     SCCOL   mnDataStartCol;
-    SCCOL   mnTabEndCol;
     SCROW   mnDataStartRow;
+    SCCOL   mnTabEndCol;
     SCROW   mnTabEndRow;
 
 public:
