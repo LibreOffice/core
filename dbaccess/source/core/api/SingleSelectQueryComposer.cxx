@@ -1067,16 +1067,16 @@ sal_Bool OSingleSelectQueryComposer::setANDCriteria( OSQLParseNode * pCondition,
             aItem.Name = getColumnName(pCondition->getChild(0),_rIterator);
             aItem.Value <<= aValue;
             aItem.Handle = 0; // just to know that this is not one the known ones
-            if (SQL_ISRULE(pCondition,like_predicate))
+            if ( SQL_ISRULE(pCondition,like_predicate) )
             {
-                if (pCondition->count() == 5)
+                if ( SQL_ISTOKEN(pCondition->getChild(1)->getChild(0),NOT) )
                     aItem.Handle = SQLFilterOperator::NOT_LIKE;
                 else
                     aItem.Handle = SQLFilterOperator::LIKE;
             }
             else if (SQL_ISRULE(pCondition,test_for_null))
             {
-                if (SQL_ISTOKEN(pCondition->getChild(2),NOT) )
+                if (SQL_ISTOKEN(pCondition->getChild(1)->getChild(2),NOT) )
                     aItem.Handle = SQLFilterOperator::NOT_SQLNULL;
                 else
                     aItem.Handle = SQLFilterOperator::SQLNULL;
@@ -1238,7 +1238,7 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
         aValue = aValue.copy(aColumnName.getLength());
         aValue.trim();
 
-        aItem.Name = UniString(getColumnName(pCondition->getChild(0),_rIterator));
+        aItem.Name = getColumnName(pCondition->getChild(0),_rIterator);
         aItem.Value <<= aValue;
         aItem.Handle = pCondition->getNodeType();
         rFilter.push_back(aItem);
