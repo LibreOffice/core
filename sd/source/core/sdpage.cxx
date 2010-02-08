@@ -188,6 +188,8 @@ SdrObject* SdPage::GetPresObj(PresObjKind eObjKind, int nIndex, bool bFuzzySearc
                 case PRESOBJ_IMAGE:
                     bFound = TRUE;
                     break;
+                default:
+                    break;
                 }
             }
             if( bFound )

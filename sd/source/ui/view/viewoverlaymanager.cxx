@@ -83,7 +83,7 @@ Image ViewOverlayManager::maLargeButtonImages[ViewOverlayManager::ButtonCount];
 
 static USHORT gButtonSlots[ViewOverlayManager::ButtonCount] = { SID_INSERT_TABLE, SID_INSERT_DIAGRAM, SID_INSERT_GRAPHIC, SID_INSERT_AVMEDIA };
 static USHORT gButtonResId[ViewOverlayManager::ButtonCount] = { BMP_PLACEHOLDER_TABLE_57X71, BMP_PLACEHOLDER_CHART_57X71, BMP_PLACEHOLDER_IMAGE_57X71, BMP_PLACEHOLDER_MOVIE_57X71 };
-static USHORT gButtonResIdHc[ViewOverlayManager::ButtonCount] = { BMP_PLACEHOLDER_TABLE_57X71_H, BMP_PLACEHOLDER_CHART_57X71_H, BMP_PLACEHOLDER_IMAGE_57X71_H, BMP_PLACEHOLDER_MOVIE_57X71_H };
+//static USHORT gButtonResIdHc[ViewOverlayManager::ButtonCount] = { BMP_PLACEHOLDER_TABLE_57X71_H, BMP_PLACEHOLDER_CHART_57X71_H, BMP_PLACEHOLDER_IMAGE_57X71_H, BMP_PLACEHOLDER_MOVIE_57X71_H };
 
 // --------------------------------------------------------------------
 
@@ -193,12 +193,12 @@ void ImageButtonHdl::CreateB2dIAObject()
     // first throw away old one
     GetRidOfIAObject();
 
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+//  const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
     const Point aTagPos( GetPos() );
     basegfx::B2DPoint aPosition( aTagPos.X(), aTagPos.Y() );
 
-    const bool bFocused = IsFocusHdl() && pHdlList && (pHdlList->GetFocusHdl() == this);
+//    const bool bFocused = IsFocusHdl() && pHdlList && (pHdlList->GetFocusHdl() == this);
 
     BitmapEx aBitmapEx( maImage.GetBitmapEx() );
 
@@ -273,7 +273,7 @@ ChangePlaceholderTag::~ChangePlaceholderTag()
 // --------------------------------------------------------------------
 
 /** returns true if the ChangePlaceholderTag handled the event. */
-bool ChangePlaceholderTag::MouseButtonDown( const MouseEvent& rMEvt, SmartHdl& rHdl )
+bool ChangePlaceholderTag::MouseButtonDown( const MouseEvent& /*rMEvt*/, SmartHdl& rHdl )
 {
     USHORT nSID = static_cast< ImageButtonHdl& >(rHdl).getSlotId();
 
@@ -420,14 +420,14 @@ void ChangePlaceholderTag::deselect()
 }
 
 // --------------------------------------------------------------------
-
+/*
 static Image lcl_getslotimage( ::com::sun::star::uno::Reference<com::sun::star::frame::XFrame>& xFrame, USHORT nSID, BOOL b1, BOOL b2 )
 {
     rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
     aSlotURL += rtl::OUString::valueOf( sal_Int32( nSID ));
     return ::GetImage( xFrame, aSlotURL, b1, b2 );
 }
-
+*/
 ViewOverlayManager::ViewOverlayManager( ViewShellBase& rViewShellBase )
 : mrBase( rViewShellBase )
 , mnUpdateTagsEvent( 0 )

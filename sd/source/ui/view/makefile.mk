@@ -119,7 +119,7 @@ SLOFILES =	\
         $(SLO)$/ViewShellHint.obj				\
         $(SLO)$/ViewTabBar.obj					\
         $(SLO)$/WindowUpdater.obj				\
-        $(SLO)$/ViewOverlayManager.obj
+        $(SLO)$/viewoverlaymanager.obj
 
 
 # --- Tagets -------------------------------------------------------

@@ -115,7 +115,7 @@ SfxPopupWindow* SdLayoutControl::CreatePopupWindow()
     sd::ViewShellBase* pViewShellBase = sd::ViewShellBase::GetViewShellBase( SfxViewFrame::Current() );
     if( pViewShellBase )
     {
-        pWin = pWin = new sd::SdLayoutDialogContent( *pViewShellBase, &rTbx, GetSlotId() == SID_INSERTPAGE );
+        pWin = new sd::SdLayoutDialogContent( *pViewShellBase, &rTbx, GetSlotId() == SID_INSERTPAGE );
         if( pWin )
             StartPopupMode( pWin );
      }
