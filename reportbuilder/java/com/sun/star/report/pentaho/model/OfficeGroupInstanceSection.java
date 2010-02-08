@@ -9,7 +9,8 @@ import org.jfree.report.structure.Group;
  */
 public class OfficeGroupInstanceSection extends Group
 {
-  public OfficeGroupInstanceSection()
-  {
-  }
+
+    public OfficeGroupInstanceSection()
+    {
+    }
 }

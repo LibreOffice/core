@@ -175,8 +175,7 @@ public class OfficeTableTemplateLayoutController extends SectionLayoutController
             if (node instanceof Element)
             {
                 final Element element = (Element) node;
-                if (OfficeNamespaces.TABLE_NS.equals(element.getNamespace()) &&
-                        "table".equals(element.getType()))
+                if (OfficeNamespaces.TABLE_NS.equals(element.getNamespace()) && "table".equals(element.getType()))
                 {
                     tables.add(element);
                 }
