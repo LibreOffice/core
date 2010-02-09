@@ -737,7 +737,7 @@ Reference < beans::XPropertySetInfo >  DrawController::getPropertySetInfo()
 }
 
 
-uno::Reference< form::XFormController > SAL_CALL DrawController::getFormController( const uno::Reference< form::XForm >& Form ) throw (uno::RuntimeException)
+uno::Reference< form::runtime::XFormController > SAL_CALL DrawController::getFormController( const uno::Reference< form::XForm >& Form ) throw (uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
@@ -746,7 +746,7 @@ uno::Reference< form::XFormController > SAL_CALL DrawController::getFormControll
     ::boost::shared_ptr<ViewShell> pViewShell = mpBase->GetMainViewShell();
     ::sd::Window* pWindow = pViewShell ? pViewShell->GetActiveWindow() : NULL;
 
-    uno::Reference< form::XFormController > xController( NULL );
+    uno::Reference< form::runtime::XFormController > xController( NULL );
     if ( pFormShell && pSdrView && pWindow )
         xController = pFormShell->GetFormController( Form, *pSdrView, *pWindow );
     return xController;

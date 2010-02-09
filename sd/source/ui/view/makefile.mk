@@ -29,6 +29,7 @@
 #
 #*************************************************************************
 
+
 PRJ=..$/..$/..
 
 PROJECTPCH=sd
@@ -46,6 +47,10 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
+
+SRS1NAME=$(TARGET)
+SRC1FILES =	\
+        DocumentRenderer.src
 
 SLOFILES =	\
         $(SLO)$/sdview.obj	\
@@ -94,6 +99,7 @@ SLOFILES =	\
         $(SLO)$/clview.obj  \
         $(SLO)$/zoomlist.obj	\
         $(SLO)$/unmodpg.obj	\
+        $(SLO)$/DocumentRenderer.obj			\
         $(SLO)$/FormShellManager.obj			\
         $(SLO)$/GraphicObjectBar.obj			\
         $(SLO)$/GraphicViewShellBase.obj		\
@@ -104,7 +110,6 @@ SLOFILES =	\
         $(SLO)$/OutlineViewShellBase.obj		\
         $(SLO)$/SlideSorterViewShellBase.obj	\
         $(SLO)$/PresentationViewShellBase.obj	\
-        $(SLO)$/PrintManager.obj				\
         $(SLO)$/ToolBarManager.obj				\
         $(SLO)$/UpdateLockManager.obj			\
         $(SLO)$/ViewClipboard.obj				\
@@ -114,7 +119,6 @@ SLOFILES =	\
         $(SLO)$/ViewShellHint.obj				\
         $(SLO)$/ViewTabBar.obj					\
         $(SLO)$/WindowUpdater.obj
-
 
 
 # --- Tagets -------------------------------------------------------
