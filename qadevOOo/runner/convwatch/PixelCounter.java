@@ -187,22 +187,23 @@ public class PixelCounter {
 
     // -----------------------------------------------------------------------------
 
-    public static void main(String[] args) {
+//    public static void main(String[] args) {
+//
+//        String a = helper.StringHelper.createValueString(10, 4);
+//        int dummy = 1;
+///*
+// BorderRemover a = new BorderRemover();
+//        try
+//        {
+//            a.createNewImageWithoutBorder(args[0], args[1]);
+//        }
+//        catch(java.io.IOException e)
+//        {
+//            System.out.println("Exception caught.");
+//        }
+// */
+//    }
 
-        String a = helper.StringHelper.createValueString(10, 4);
-        int dummy = 1;
-/*
- BorderRemover a = new BorderRemover();
-        try
-        {
-            a.createNewImageWithoutBorder(args[0], args[1]);
-        }
-        catch(java.io.IOException e)
-        {
-            System.out.println("Exception caught.");
-        }
- */
-    }
 }
 
 
