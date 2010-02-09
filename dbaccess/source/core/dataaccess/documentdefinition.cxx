@@ -569,6 +569,15 @@ namespace dbaccess
                 }
             }
         }
+#if OSL_DEBUG_LEVEL > 0
+        // alternative, shorter approach
+        const Sequence< NamedValue > aProps( aConfigHelper.GetObjectPropsByMediaType( _rMediaType ) );
+        const ::comphelper::NamedValueCollection aMediaTypeProps( aProps );
+        const ::rtl::OUString sAlternativeResult = aMediaTypeProps.getOrDefault( "ObjectDocumentServiceName", ::rtl::OUString() );
+        OSL_ENSURE( sAlternativeResult == sResult, "ODocumentDefinition::GetDocumentServiceFromMediaType: failed, this approach is *not* equivalent (1)!" );
+        const Sequence< sal_Int8 > aAlternativeClassID = aMediaTypeProps.getOrDefault( "ClassID", Sequence< sal_Int8 >() );
+        OSL_ENSURE( aAlternativeClassID == _rClassId, "ODocumentDefinition::GetDocumentServiceFromMediaType: failed, this approach is *not* equivalent (2)!" );
+#endif
     }
     catch ( Exception& )
     {
