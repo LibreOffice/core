@@ -202,7 +202,7 @@ void ORelationController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue
             }
             break;
         case SID_RELATION_ADD_RELATION:
-            static_cast<ORelationTableView*>(static_cast<ORelationDesignView*>(m_pView)->getTableView())->AddNewRelation();
+            static_cast<ORelationTableView*>(static_cast<ORelationDesignView*>( getView() )->getTableView())->AddNewRelation();
             break;
         default:
             OJoinController::Execute(_nId,aArgs);
@@ -263,10 +263,8 @@ void ORelationController::impl_initialize()
 // -----------------------------------------------------------------------------
 sal_Bool ORelationController::Construct(Window* pParent)
 {
-    m_pView = new ORelationDesignView( pParent, *this, getORB() );
+    setView( * new ORelationDesignView( pParent, *this, getORB() ) );
     OJoinController::Construct(pParent);
-//  m_pView->Construct();
-//  m_pView->Show();
     return sal_True;
 }
 // -----------------------------------------------------------------------------

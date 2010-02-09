@@ -207,7 +207,7 @@ void OTableController::stopTableListening()
 void OTableController::disposing()
 {
     OTableController_BASE::disposing();
-    m_pView     = NULL;
+    clearView();
 
     m_vRowList.clear();
 }
@@ -579,7 +579,7 @@ void OTableController::impl_initialize()
 // -----------------------------------------------------------------------------
 sal_Bool OTableController::Construct(Window* pParent)
 {
-    m_pView = new OTableDesignView( pParent, getORB(), *this );
+    setView( * new OTableDesignView( pParent, getORB(), *this ) );
     OTableController_BASE::Construct(pParent);
 //  m_pView->Construct();
 //  m_pView->Show();

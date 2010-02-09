@@ -60,7 +60,7 @@ namespace dbaui
         // execute a feature
         virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
 
-        ORelationDesignView*    getRelationView() { return static_cast<ORelationDesignView*>(m_pView); }
+        ORelationDesignView*    getRelationView() { return static_cast<ORelationDesignView*>( getView() ); }
         void loadData();
         TTableWindowData::value_type existsTable(const ::rtl::OUString& _rComposedTableName,sal_Bool _bCase) const;
 

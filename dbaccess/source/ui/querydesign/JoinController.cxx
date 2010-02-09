@@ -283,7 +283,7 @@ void OJoinController::disposing()
 
     OJoinController_BASE::disposing();
 
-    m_pView             = NULL;
+    clearView();
 
     m_vTableConnectionData.clear();
     m_vTableData.clear();

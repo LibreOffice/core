@@ -108,8 +108,7 @@ namespace rptui
 
         OXReportControllerObserver* m_pReportControllerObserver;
 
-        const ODesignView*  getDesignView() const   { return static_cast< const ODesignView* >( m_pView ); }
-              ODesignView*  getDesignView()         { return static_cast<       ODesignView* >( m_pView ); }
+        ODesignView*  getDesignView() const   { return static_cast< ODesignView* >( getView() ); }
 
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>          m_xReportDefinition;
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportEngine>              m_xReportEngine;

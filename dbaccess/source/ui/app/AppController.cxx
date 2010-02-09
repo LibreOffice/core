@@ -345,8 +345,8 @@ OApplicationController::~OApplicationController()
         osl_incrementInterlockedCount( &m_refCount );
         dispose();
     }
-    ::std::auto_ptr< Window> aTemp(m_pView);
-    m_pView = NULL;
+    ::std::auto_ptr< Window> aTemp( getView() );
+    clearView();
 
     DBG_DTOR(OApplicationController,NULL);
 }
@@ -455,15 +455,15 @@ void SAL_CALL OApplicationController::disposing()
         DBG_UNHANDLED_EXCEPTION();
     }
 
-    m_pView = NULL;
+    clearView();
     OApplicationController_CBASE::disposing(); // here the m_refCount must be equal 5
 }
 
 //--------------------------------------------------------------------
 sal_Bool OApplicationController::Construct(Window* _pParent)
 {
-    m_pView = new OApplicationView( _pParent, getORB(), *this, m_ePreviewMode );
-    m_pView->SetUniqueId(UID_APP_VIEW);
+    setView( * new OApplicationView( _pParent, getORB(), *this, m_ePreviewMode ) );
+    getView()->SetUniqueId(UID_APP_VIEW);
 
     // late construction
     sal_Bool bSuccess = sal_False;
@@ -482,8 +482,8 @@ sal_Bool OApplicationController::Construct(Window* _pParent)
 
     if ( !bSuccess )
     {
-        ::std::auto_ptr< Window> aTemp(m_pView);
-        m_pView = NULL;
+        ::std::auto_ptr< Window> aTemp( getView() );
+        clearView();
         return sal_False;
     }
 

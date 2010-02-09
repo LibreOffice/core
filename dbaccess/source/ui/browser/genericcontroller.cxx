@@ -251,6 +251,7 @@ DBG_NAME(OGenericUnoController)
 // -------------------------------------------------------------------------
 OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFactory >& _rM)
     :OGenericUnoController_Base( getMutex() )
+    ,m_pView(NULL)
 #ifdef DBG_UTIL
     ,m_bDescribingSupportedFeatures( false )
 #endif
@@ -258,7 +259,6 @@ OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFacto
     ,m_aAsyncCloseTask(LINK(this, OGenericUnoController, OnAsyncCloseTask))
     ,m_xServiceFactory(_rM)
     ,m_aCurrentFrame( *this )
-    ,m_pView(NULL)
     ,m_bPreview(sal_False)
     ,m_bReadOnly(sal_False)
     ,m_bCurrentlyModified(sal_False)
@@ -286,13 +286,13 @@ OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFacto
 // -----------------------------------------------------------------------------
 OGenericUnoController::OGenericUnoController()
     :OGenericUnoController_Base( getMutex() )
+    ,m_pView(NULL)
 #ifdef DBG_UTIL
     ,m_bDescribingSupportedFeatures( false )
 #endif
     ,m_aAsyncInvalidateAll(LINK(this, OGenericUnoController, OnAsyncInvalidateAll))
     ,m_aAsyncCloseTask(LINK(this, OGenericUnoController, OnAsyncCloseTask))
     ,m_aCurrentFrame( *this )
-    ,m_pView(NULL)
     ,m_bPreview(sal_False)
     ,m_bReadOnly(sal_False)
     ,m_bCurrentlyModified(sal_False)
@@ -415,7 +415,7 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
         // no one clears my view if I won't
         ::std::auto_ptr<Window> aTemp(m_pView);
         m_pView = NULL;
-        throw e;
+        throw;
     }
 }
 

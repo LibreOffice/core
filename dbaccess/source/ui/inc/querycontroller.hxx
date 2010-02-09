@@ -142,7 +142,7 @@ namespace dbaui
         virtual void            reconnect( sal_Bool _bUI );
         virtual ::rtl::OUString getPrivateTitle( ) const;
 
-        OQueryContainerWindow*  getContainer() const { return static_cast< OQueryContainerWindow* >( getView() ); }
+        OQueryContainerWindow* getContainer() const { return static_cast< OQueryContainerWindow* >( getView() ); }
 
     public:
         OQueryController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);

@@ -164,7 +164,7 @@ namespace dbaui
     public:
         SbaXDataBrowserController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
 
-        UnoDataBrowserView* getBrowserView() const { return static_cast< UnoDataBrowserView*>(m_pView); }
+        UnoDataBrowserView* getBrowserView() const { return static_cast< UnoDataBrowserView*>(getView()); }
         // late construction
         virtual sal_Bool Construct(Window* pParent);
 

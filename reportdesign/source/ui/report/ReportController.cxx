@@ -402,7 +402,7 @@ void OReportController::disposing()
     }
     if ( getDesignView() )
         EndListening( *getDesignView() );
-    m_pView     = NULL;
+    clearView();
 }
 // -----------------------------------------------------------------------------
 FeatureState OReportController::GetState(sal_uInt16 _nId) const
@@ -1825,7 +1825,7 @@ sal_Bool OReportController::Construct(Window* pParent)
 {
     ODesignView* pMyOwnView = new ODesignView( pParent, getORB(), *this );
     StartListening( *pMyOwnView );
-    m_pView = pMyOwnView;
+    setView( *pMyOwnView );
 
     // now that we have a view we can create the clipboard listener
     m_aSystemClipboard = TransferableDataHelper::CreateFromSystemClipboard( getView() );

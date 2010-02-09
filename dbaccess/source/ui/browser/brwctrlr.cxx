@@ -829,7 +829,7 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
 
     // ---------------
     // create the view
-    m_pView = new UnoDataBrowserView( pParent, *this, getORB() );
+    setView( * new UnoDataBrowserView( pParent, *this, getORB() ) );
     if (!getBrowserView())
         return sal_False;
 
@@ -1345,7 +1345,7 @@ void SbaXDataBrowserController::disposing()
     {
         removeControlListeners(getBrowserView()->getGridControl());
         // don't delete explicitly, this is done by the owner (and user) of this controller (me hopes ...)
-        m_pView = NULL;
+        clearView();
     }
 
     if(m_aInvalidateClipboard.IsActive())
