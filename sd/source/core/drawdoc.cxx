@@ -637,7 +637,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
 
             if( aName != pPage->GetName() )
                 pPage->SetName( aName );
-
+#ifndef NEWPBG
             SdrObject* pPresObj = pPage->GetPresObj( PRESOBJ_BACKGROUND ) ;
 
             if( pPage->GetPageKind() == PK_STANDARD )
@@ -656,6 +656,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
                     SdrObject::Free( pPresObj );
                 }
             }
+#endif
         }
 
         // Sprachabhaengige Namen der StandardLayer erzeugen
@@ -728,10 +729,12 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
 
             NewOrLoadCompleted( pPage, pSPool );
 
+#ifndef NEWPBG
             // BackgroundObjekt vor Selektion schuetzen #62144#
             SdrObject* pBackObj = pPage->GetPresObj(PRESOBJ_BACKGROUND);
             if(pBackObj)
                 pBackObj->SetMarkProtect(TRUE);
+#endif
         }
     }
 

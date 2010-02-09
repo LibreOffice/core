@@ -77,7 +77,9 @@ public:
 
     void    PresPaint(const Region& rRegion);
 
+#ifndef NEWPBG
     virtual SdrObject* GetMaxToBtmObj(SdrObject* pObj) const;
+#endif
 
     virtual void DeleteMarked(); // from SdrView
 protected:

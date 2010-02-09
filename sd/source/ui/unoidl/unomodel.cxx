@@ -455,7 +455,7 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         {
             if( hasEventListeners() )
             {
-
+#ifndef NEWPBG
                 bool bBackgroundShape = false;
 
                 // the background shape itself has no api representation, so filter all notifies for it
@@ -467,6 +467,7 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 }
 
                 if( !bBackgroundShape )
+#endif
                 {
                     document::EventObject aEvent;
                     if( SvxUnoDrawMSFactory::createEvent( mpDoc, pSdrHint, aEvent ) )
@@ -2705,13 +2706,19 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
         pMPage->SetLayoutName( aLayoutName );
         mpDoc->InsertMasterPage(pMPage,  (USHORT)nInsertPos);
 
-        { // insert background object
+        {
+#ifdef NEWPBG
+            // ensure default MasterPage fill
+            pMPage->EnsureMasterPageDefaultBackground();
+#else
+            // insert background object
             Point aBackgroundPos ( pMPage->GetLftBorder(), pMPage->GetUppBorder() );
             Size aBackgroundSize ( pMPage->GetSize() );
             aBackgroundSize.Width()  -= pMPage->GetLftBorder() + pMPage->GetRgtBorder() - 1;
             aBackgroundSize.Height() -= pMPage->GetUppBorder() + pMPage->GetLwrBorder() - 1;
             Rectangle aBackgroundRect (aBackgroundPos, aBackgroundSize);
             pMPage->CreatePresObj(PRESOBJ_BACKGROUND, FALSE, aBackgroundRect, sal_True );
+#endif
         }
 
         xDrawPage = uno::Reference< drawing::XDrawPage >::query( pMPage->getUnoPage() );

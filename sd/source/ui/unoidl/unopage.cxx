@@ -1392,9 +1392,11 @@ Reference< drawing::XShape >  SdGenericDrawPage::_CreateShape( SdrObject *pObj )
             case PRESOBJ_TABLE:
                 aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("TableShape") );
                 break;
+#ifndef NEWPBG
             case PRESOBJ_BACKGROUND:
                 DBG_ASSERT( sal_False, "Danger! Someone got hold of the horrible background shape!" );
                 break;
+#endif
             case PRESOBJ_PAGE:
                 aShapeType += String( RTL_CONSTASCII_USTRINGPARAM("PageShape") );
                 break;
@@ -2469,16 +2471,22 @@ void SdDrawPage::setBackground( const Any& rValue )
 
     if( !xSet.is() )
     {
+#ifdef NEWPBG
+        // the easy case, no background set. Set XFILL_NONE to represent this
+        GetPage()->getSdrPageProperties().PutItem(XFillStyleItem(XFILL_NONE));
+#else
         // the easy case, clear the background obj
         GetPage()->SetBackgroundObj( NULL );
 
         // #110094#-15
         // tell the page that it's visualization has changed
         GetPage()->ActionChanged();
+#endif
 
         return;
     }
 
+#ifndef NEWPBG
     // prepare background object
     SdrObject* pObj = GetPage()->GetBackgroundObj();
     if( NULL == pObj )
@@ -2502,6 +2510,7 @@ void SdDrawPage::setBackground( const Any& rValue )
     aSize.Height() -= nUpper + nLower - 1;
     Rectangle aRect( aPos, aSize );
     pObj->SetLogicRect( aRect );
+#endif
 
     // is it our own implementation?
     SdUnoPageBackground* pBack = SdUnoPageBackground::getImplementation( xSet );
@@ -2540,11 +2549,22 @@ void SdDrawPage::setBackground( const Any& rValue )
 //-/    pObj->NbcSetAttributes( aSet, sal_False );
     if( aSet.Count() == 0 )
     {
+#ifdef NEWPBG
+        // no background fill, represent by setting XFILL_NONE
+        GetPage()->getSdrPageProperties().PutItem(XFillStyleItem(XFILL_NONE));
+#else
         GetPage()->SetBackgroundObj( NULL );
+#endif
     }
     else
     {
+#ifdef NEWPBG
+        // background fill, set at page (not sure if ClearItem is needed)
+        GetPage()->getSdrPageProperties().ClearItem();
+        GetPage()->getSdrPageProperties().PutItemSet(aSet);
+#else
         pObj->SetMergedItemSet(aSet);
+#endif
     }
 
     // repaint only
@@ -2575,6 +2595,23 @@ Reference< XAnnotationEnumeration > SAL_CALL SdGenericDrawPage::createAnnotation
 
 void SdDrawPage::getBackground( Any& rValue ) throw()
 {
+#ifdef NEWPBG
+    const SfxItemSet& rFillAttributes = GetPage()->getSdrPageProperties().GetItemSet();
+
+       if(XFILL_NONE == ((const XFillStyleItem&)rFillAttributes.Get(XATTR_FILLSTYLE)).GetValue())
+    {
+        // no fill set (switched off by XFILL_NONE), clear rValue to represent this
+        rValue.clear();
+    }
+    else
+    {
+        // there is a fill set, export to rValue
+        Reference< beans::XPropertySet > xSet(new SdUnoPageBackground(
+            GetModel()->GetDoc(),
+            &GetPage()->getSdrPageProperties().GetItemSet()));
+        rValue <<= xSet;
+    }
+#else
     SdrObject* pObj = GetPage()->GetBackgroundObj();
     if( NULL == pObj )
     {
@@ -2585,6 +2622,7 @@ void SdDrawPage::getBackground( Any& rValue ) throw()
         Reference< beans::XPropertySet > xSet( new SdUnoPageBackground( GetModel()->GetDoc(), pObj ) );
         rValue <<= xSet;
     }
+#endif
 }
 
 void SdGenericDrawPage::setNavigationOrder( const Any& rValue )
@@ -2966,7 +3004,11 @@ void SdMasterPage::setBackground( const Any& rValue )
                 }
             }
 
-
+#ifdef NEWPBG
+            // if no background style is available, set at page directly. This
+            // is an error and should NOT happen (and will be asserted from the SdrPage)
+            GetPage()->getSdrPageProperties().PutItemSet(aSet);
+#else
             // if no background style is available, try the background object
             SdrObject* pObj = GetPage()->GetPresObj(PRESOBJ_BACKGROUND);
             if( pObj == NULL )
@@ -2976,6 +3018,7 @@ void SdMasterPage::setBackground( const Any& rValue )
 
             // repaint only
             SvxFmDrawPage::mpPage->ActionChanged();
+#endif
         }
     }
     catch( Exception& )
@@ -3018,6 +3061,21 @@ void SdMasterPage::getBackground( Any& rValue ) throw()
                 }
             }
 
+#ifdef NEWPBG
+            // No style found, use fill attributes from page background. This
+            // should NOT happen and is an error
+            const SfxItemSet& rFallbackItemSet(SvxFmDrawPage::mpPage->getSdrPageProperties().GetItemSet());
+
+            if(XFILL_NONE == ((const XFillStyleItem&)rFallbackItemSet.Get(XATTR_FILLSTYLE)).GetValue())
+            {
+                rValue <<= Reference< beans::XPropertySet >(
+                    new SdUnoPageBackground(GetModel()->GetDoc(), &rFallbackItemSet));
+            }
+            else
+            {
+                rValue.clear();
+            }
+#else
             // no stylesheet? try old fashion background rectangle
             SdrObject* pObj = NULL;
             if( SvxFmDrawPage::mpPage->GetObjCount() >= 1 )
@@ -3033,8 +3091,8 @@ void SdMasterPage::getBackground( Any& rValue ) throw()
                 return;
             }
 
-
             rValue.clear();
+#endif
         }
     }
     catch( Exception& )

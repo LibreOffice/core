@@ -180,6 +180,31 @@ SdrObject* SdPage::GetPresObj(PresObjKind eObjKind, int nIndex )
     return 0;
 }
 
+#ifdef NEWPBG
+/** create background properties */
+void SdPage::EnsureMasterPageDefaultBackground()
+{
+    if(mbMaster)
+    {
+        // no hard attributes on MasterPage attributes
+        getSdrPageProperties().ClearItem();
+        SfxStyleSheet* pSheetForPresObj = GetStyleSheetForMasterPageBackground();
+
+        if(pSheetForPresObj)
+        {
+            // set StyleSheet for background fill attributes
+            getSdrPageProperties().SetStyleSheet(pSheetForPresObj);
+        }
+        else
+        {
+            // no style found, assert and set at least XFILL_NONE
+            OSL_ENSURE(false, "No Style for MasterPageBackground fill found (!)");
+            getSdrPageProperties().PutItem(XFillStyleItem(XFILL_NONE));
+        }
+    }
+}
+#endif
+
 /** creates a presentation object with the given PresObjKind on this page. A user call will be set
 */
 SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rectangle& rRect, BOOL /* bInsert */ )
@@ -290,6 +315,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
         }
         break;
 
+#ifndef NEWPBG
         case PRESOBJ_BACKGROUND:
         {
             pSdrObj = new SdrRectObj();
@@ -298,6 +324,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
             pSdrObj->SetMarkProtect(TRUE);
         }
         break;
+#endif
 
         case PRESOBJ_HANDOUT:
         {
@@ -449,6 +476,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
         {
             SdrLayerAdmin& rLayerAdmin = pModel->GetLayerAdmin();
 
+#ifndef NEWPBG
             if (eObjKind == PRESOBJ_BACKGROUND)
             {
                 // Hintergrund der MasterPage
@@ -456,6 +484,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
                     GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE) );
             }
             else
+#endif
             {
                 // Hintergrundobjekte der MasterPage
                 pSdrObj->SetLayer( rLayerAdmin.
@@ -527,6 +556,27 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
 |*
 \************************************************************************/
 
+#ifdef NEWPBG
+SfxStyleSheet* SdPage::GetStyleSheetForMasterPageBackground() const
+{
+    String aName(GetLayoutName());
+    String aSep( RTL_CONSTASCII_USTRINGPARAM( SD_LT_SEPARATOR ));
+    USHORT nPos = aName.Search(aSep);
+
+    if (nPos != STRING_NOTFOUND)
+    {
+        nPos = nPos + aSep.Len();
+        aName.Erase(nPos);
+    }
+
+    aName += String(SdResId(STR_LAYOUT_BACKGROUND));
+
+    SfxStyleSheetBasePool* pStShPool = pModel->GetStyleSheetPool();
+    SfxStyleSheetBase*     pResult   = pStShPool->Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
+    return (SfxStyleSheet*)pResult;
+}
+#endif
+
 SfxStyleSheet* SdPage::GetStyleSheetForPresObj(PresObjKind eObjKind) const
 {
     String aName(GetLayoutName());
@@ -552,9 +602,11 @@ SfxStyleSheet* SdPage::GetStyleSheetForPresObj(PresObjKind eObjKind) const
             aName += String(SdResId(STR_LAYOUT_TITLE));
             break;
 
+#ifndef NEWPBG
         case PRESOBJ_BACKGROUND:
             aName += String(SdResId(STR_LAYOUT_BACKGROUND));
             break;
+#endif
 
         case PRESOBJ_NOTES:
             aName += String(SdResId(STR_LAYOUT_NOTES));
@@ -721,9 +773,13 @@ void SdPage::CreateTitleAndLayout(BOOL bInit, BOOL bCreate )
     **************************************************************************/
     if( mePageKind == PK_STANDARD )
     {
+#ifdef NEWPBG
+        pMasterPage->EnsureMasterPageDefaultBackground();
+#else
         SdrObject* pMasterBackground = pMasterPage->GetPresObj( PRESOBJ_BACKGROUND );
         if( pMasterBackground == NULL )
             pMasterPage->CreateDefaultPresObj(PRESOBJ_BACKGROUND, true);
+#endif
     }
 
     if( ( (SdDrawDocument*) GetModel() )->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
@@ -907,6 +963,7 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert)
             return NULL;
         }
     }
+#ifndef NEWPBG
     else if( eObjKind == PRESOBJ_BACKGROUND )
     {
         Point aBackgroundPos ( GetLftBorder(), GetUppBorder() );
@@ -916,6 +973,7 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert)
         Rectangle aBackgroundRect(aBackgroundPos, aBackgroundSize);
         return CreatePresObj( PRESOBJ_BACKGROUND, FALSE, aBackgroundRect, bInsert );
     }
+#endif
     else
     {
         DBG_ERROR("SdPage::CreateDefaultPresObj() - unknown PRESOBJ kind" );
@@ -1649,7 +1707,9 @@ void SdPage::SetSize(const Size& aSize)
     if (aSize != aOldSize)
     {
         FmFormPage::SetSize(aSize);
+#ifndef NEWPBG
         AdjustBackgroundSize();
+#endif
 
         if (aOldSize.Height() == 10 && aOldSize.Width() == 10)
         {
@@ -1680,7 +1740,9 @@ void SdPage::SetBorder(INT32 nLft, INT32 nUpp, INT32 nRgt, INT32 nLwr)
         nRgt != GetRgtBorder() || nLwr != GetLwrBorder() )
     {
         FmFormPage::SetBorder(nLft, nUpp, nRgt, nLwr);
+#ifndef NEWPBG
         AdjustBackgroundSize();
+#endif
     }
 }
 
@@ -1696,7 +1758,9 @@ void SdPage::SetLftBorder(INT32 nBorder)
     if (nBorder != GetLftBorder() )
     {
         FmFormPage::SetLftBorder(nBorder);
+#ifndef NEWPBG
         AdjustBackgroundSize();
+#endif
     }
 }
 
@@ -1712,7 +1776,9 @@ void SdPage::SetRgtBorder(INT32 nBorder)
     if (nBorder != GetRgtBorder() )
     {
         FmFormPage::SetRgtBorder(nBorder);
+#ifndef NEWPBG
         AdjustBackgroundSize();
+#endif
     }
 }
 
@@ -1728,7 +1794,9 @@ void SdPage::SetUppBorder(INT32 nBorder)
     if (nBorder != GetUppBorder() )
     {
         FmFormPage::SetUppBorder(nBorder);
+#ifndef NEWPBG
         AdjustBackgroundSize();
+#endif
     }
 }
 
@@ -1744,7 +1812,9 @@ void SdPage::SetLwrBorder(INT32 nBorder)
     if (nBorder != GetLwrBorder() )
     {
         FmFormPage::SetLwrBorder(nBorder);
+#ifndef NEWPBG
         AdjustBackgroundSize();
+#endif
     }
 }
 
@@ -1759,7 +1829,9 @@ void SdPage::SetBackgroundFullSize( BOOL bIn )
     if( bIn != mbBackgroundFullSize )
     {
         mbBackgroundFullSize = bIn;
+#ifndef NEWPBG
         AdjustBackgroundSize();
+#endif
     }
 }
 
@@ -1853,6 +1925,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
             // #88084# remember aTopLeft as original TopLeft
             Point aTopLeft(pObj->GetCurrentBoundRect().TopLeft());
 
+#ifndef NEWPBG
             if (bIsPresObjOnMaster && (pObj == GetPresObj(PRESOBJ_BACKGROUND, nIndexBackground)) )
             {
                 /**************************************************************
@@ -1860,7 +1933,9 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                 * 2. Hintergrundobjekt wird nicht skaliert
                 **************************************************************/
             }
-            else if (!pObj->IsEdgeObj())
+            else
+#endif
+                if (!pObj->IsEdgeObj())
             {
                 /**************************************************************
                 * Objekt skalieren
@@ -1975,7 +2050,6 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                                     }
 
                                     pOutlineSheet->GetItemSet().Put(aTempSet);
-
                                     pOutlineSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
                                 }
                             }
@@ -2580,6 +2654,7 @@ const String& SdPage::GetName() const
 |*
 \************************************************************************/
 
+#ifndef NEWPBG
 void SdPage::AdjustBackgroundSize()
 {
     SdrObject* pObj = GetPresObj(PRESOBJ_BACKGROUND);
@@ -2609,6 +2684,7 @@ void SdPage::AdjustBackgroundSize()
         pObj->SetResizeProtect(TRUE);
     }
 }
+#endif
 
 /*************************************************************************
 |*

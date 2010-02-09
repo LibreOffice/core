@@ -305,9 +305,14 @@ BOOL DrawView::SetAttributes(const SfxItemSet& rSet,
                     PresObjKind ePresObjKind = rPage.GetPresObjKind(pObject);
                     String aTemplateName(aLayoutName);
 
+#ifdef NEWPBG
+                    if (ePresObjKind == PRESOBJ_TITLE ||
+                        ePresObjKind == PRESOBJ_NOTES)
+#else
                     if (ePresObjKind == PRESOBJ_TITLE ||
                         ePresObjKind == PRESOBJ_NOTES ||
                         ePresObjKind == PRESOBJ_BACKGROUND)
+#endif
                     {
                         // Presentation object (except outline)
                         SfxStyleSheet* pSheet = rPage.GetStyleSheetForPresObj( ePresObjKind );
@@ -580,6 +585,7 @@ void DrawView::HideSdrPage()
     ::sd::View::HideSdrPage();
 }
 
+#ifndef NEWPBG
 SdrObject* DrawView::GetMaxToBtmObj(SdrObject* pObj) const
 {
     if( pObj )
@@ -590,6 +596,7 @@ SdrObject* DrawView::GetMaxToBtmObj(SdrObject* pObj) const
     }
     return NULL;
 }
+#endif
 
 void DrawView::DeleteMarked()
 {

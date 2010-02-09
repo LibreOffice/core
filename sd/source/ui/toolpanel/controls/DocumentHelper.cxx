@@ -46,7 +46,9 @@
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include "stlpool.hxx"
-
+#ifdef NEWPBG
+#include <svx/xfillit0.hxx>
+#endif
 using namespace ::com::sun::star;
 
 namespace sd { namespace toolpanel { namespace controls {
@@ -448,10 +450,18 @@ void DocumentHelper::AssignMasterPageToPage (
         // 1. Remove the background object (so that that, if it exists, does
         // not override the new master page) and assign the master page to
         // the regular slide.
+#ifdef NEWPBG
+        pDocument->GetDocSh()->GetUndoManager()->AddUndoAction(
+            new SdBackgroundObjUndoAction(
+                *pDocument, *pPage, pPage->getSdrPageProperties().GetItemSet()),
+            TRUE);
+        pPage->getSdrPageProperties().PutItem(XFillStyleItem(XFILL_NONE));
+#else
         pDocument->GetDocSh()->GetUndoManager()->AddUndoAction(
             new SdBackgroundObjUndoAction(*pDocument, *pPage, pPage->GetBackgroundObj()),
                 TRUE);
         pPage->SetBackgroundObj(NULL);
+#endif
 
         pDocument->SetMasterPage (
             (pPage->GetPageNum()-1)/2,

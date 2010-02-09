@@ -31,11 +31,18 @@
 #ifndef _SD_UNDOBACK_HXX
 #define _SD_UNDOBACK_HXX
 
+#define NEWPBG
+
 #include "sdundo.hxx"
 
 class SdDrawDocument;
 class SdPage;
+
+#ifdef NEWPBG
+class SfxItemSet;
+#else
 class SdrObject;
+#endif
 
 // -----------------------------
 // - SdBackgroundObjUndoAction -
@@ -46,7 +53,11 @@ class SdBackgroundObjUndoAction : public SdUndoAction
 private:
 
     SdPage&                 mrPage;
+#ifdef NEWPBG
+    SfxItemSet*             mpItemSet;
+#else
     SdrObject*              mpBackgroundObj;
+#endif
 
     void                    ImplRestoreBackgroundObj();
 
@@ -54,7 +65,14 @@ public:
 
                             TYPEINFO();
 
+#ifdef NEWPBG
+                            SdBackgroundObjUndoAction(
+                                SdDrawDocument& rDoc,
+                                SdPage& rPage,
+                                const SfxItemSet& rItenSet);
+#else
                             SdBackgroundObjUndoAction( SdDrawDocument& rDoc, SdPage& rPage, const SdrObject* pBackgroundObj );
+#endif
     virtual                 ~SdBackgroundObjUndoAction();
 
     virtual void            Undo();

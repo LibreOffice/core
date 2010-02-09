@@ -279,6 +279,31 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
         }
         else
         {
+#ifdef NEWPBG
+            // Only this page, get attributes for background fill
+            const SfxItemSet& rBackgroundAttributes = mpPage->getSdrPageProperties().GetItemSet();
+
+            if(XFILL_NONE != ((const XFillStyleItem&)rBackgroundAttributes.Get(XATTR_FILLSTYLE)).GetValue())
+            {
+                // page attributes are used, take them
+                aMergedAttr.Put(rBackgroundAttributes);
+            }
+            else
+            {
+                if(pStyleSheet
+                    && XFILL_NONE != ((const XFillStyleItem&)pStyleSheet->GetItemSet().Get(XATTR_FILLSTYLE)).GetValue())
+                {
+                    // if the page has no fill style, use the settings from the
+                    // background stylesheet (if used)
+                    mergeItemSetsImpl(aMergedAttr, pStyleSheet->GetItemSet());
+                }
+                else
+                {
+                    // no fill style from page, start with no fill style
+                    aMergedAttr.Put(XFillStyleItem(XFILL_NONE));
+                }
+            }
+#else
             // Only this page, check if there is a background-object on that page
             SdrObject* pObj = mpPage->GetBackgroundObj();
             if( pObj )
@@ -294,6 +319,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
                 else
                     aMergedAttr.Put( XFillStyleItem( XFILL_NONE ) );
             }
+#endif
         }
     }
 
@@ -374,12 +400,23 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
 
                 if( mbPageBckgrdDeleted )
                 {
+#ifdef NEWPBG
+                    mpBackgroundObjUndoAction = new SdBackgroundObjUndoAction(
+                        *mpDoc, *mpPage, mpPage->getSdrPageProperties().GetItemSet());
+
+                    if(!mpPage->IsMasterPage())
+                    {
+                        // on normal pages, switch off fill attribute usage
+                        mpPage->getSdrPageProperties().PutItem(XFillStyleItem(XFILL_NONE));
+                    }
+#else
                     mpBackgroundObjUndoAction = new SdBackgroundObjUndoAction( *mpDoc, *mpPage, mpPage->GetBackgroundObj() );
                     mpPage->SetBackgroundObj( NULL );
 
                     // #110094#-15
                     // tell the page that it's visualization has changed
                     mpPage->ActionChanged();
+#endif
                 }
             }
 
@@ -406,6 +443,14 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
 
             mpDoc->SetChanged(TRUE);
 
+#ifdef NEWPBG
+            // BackgroundFill of Masterpage: no hard attributes allowed
+            SdrPage& rUsedMasterPage = mpPage->IsMasterPage() ? *mpPage : mpPage->TRG_GetMasterPage();
+            OSL_ENSURE(rUsedMasterPage.IsMasterPage(), "No MasterPage (!)");
+            rUsedMasterPage.getSdrPageProperties().ClearItem();
+            OSL_ENSURE(0 != rUsedMasterPage.getSdrPageProperties().GetStyleSheet(),
+                "MasterPage without StyleSheet detected (!)");
+#else
             SdrObject* pObj = mpPage->IsMasterPage() ?
                 mpPage->GetPresObj( PRESOBJ_BACKGROUND ) :
                 ((SdPage&)(mpPage->TRG_GetMasterPage())).GetPresObj( PRESOBJ_BACKGROUND );
@@ -415,6 +460,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
                 SfxItemSet aSet( mpDoc->GetPool() );
                 pObj->SetMergedItemSet(aSet);
             }
+#endif
         }
 
         aNewAttr.Put(*(pTempSet.get()));
@@ -539,6 +585,13 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
         if( !mbMasterPage && !mbPageBckgrdDeleted )
         {
             // Only this page
+#ifdef NEWPBG
+            delete mpBackgroundObjUndoAction;
+            mpBackgroundObjUndoAction = new SdBackgroundObjUndoAction(
+                *mpDoc, *mpPage, mpPage->getSdrPageProperties().GetItemSet());
+            mpPage->getSdrPageProperties().ClearItem();
+            mpPage->getSdrPageProperties().PutItemSet(*pArgs);
+#else
             SdrObject* pObj = mpPage->GetBackgroundObj();
 
             delete mpBackgroundObjUndoAction;
@@ -561,6 +614,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
             // #110094#-15
             // tell the page that it's visualization has changed
             mpPage->ActionChanged();
+#endif
         }
     }
 

@@ -265,7 +265,9 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                 {
                     eKind = pObjectsSdPage ? pObjectsSdPage->GetPresObjKind(pObject) : PRESOBJ_NONE;
 
+#ifndef NEWPBG
                     if( eKind != PRESOBJ_BACKGROUND )
+#endif
                     {
                         bCreateOutline = true;
                     }
