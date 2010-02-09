@@ -40,6 +40,8 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdview.hxx>
 
+#include "fmobj.hxx"
+
 //////////////////////////////////////////////////////////////////////////////
 
 namespace sdr
@@ -91,8 +93,9 @@ namespace sdr
                 const bool bHideOle(rSdrView.getHideOle());
                 const bool bHideChart(rSdrView.getHideChart());
                 const bool bHideDraw(rSdrView.getHideDraw());
+                const bool bHideFormControl(rSdrView.getHideFormControl());
 
-                if(bHideOle || bHideChart || bHideDraw)
+                if(bHideOle || bHideChart || bHideDraw || bHideFormControl)
                 {
                     if(OBJ_OLE2 == rObject.GetObjIdentifier())
                     {
@@ -123,8 +126,13 @@ namespace sdr
                     }
                     else
                     {
+                        const bool bIsFormControl = dynamic_cast< const FmFormObj * >( &rObject ) != 0;
+                        if(bIsFormControl && bHideFormControl)
+                        {
+                            return false;
+                        }
                         // any other draw object
-                        if(bHideDraw)
+                        if(!bIsFormControl && bHideDraw)
                         {
                             return false;
                         }

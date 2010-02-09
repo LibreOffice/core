@@ -30,7 +30,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_ucb.hxx"
-#include "stream.hxx"
+#include "gvfs_stream.hxx"
 #include <rtl/memory.h>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 
@@ -187,9 +187,9 @@ sal_Int32 SAL_CALL Stream::available(  )
 }
 
 void SAL_CALL Stream::closeInput( void )
-         throw( NotConnectedException,
-                  IOException,
-                  RuntimeException )
+        throw( NotConnectedException,
+                   IOException,
+                   RuntimeException )
 {
     osl::MutexGuard aGuard( m_aMutex );
     m_bInputStreamCalled = false;

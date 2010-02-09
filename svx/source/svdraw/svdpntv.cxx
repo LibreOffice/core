@@ -275,7 +275,8 @@ SdrPaintView::SdrPaintView(SdrModel* pModel1, OutputDevice* pOut)
     mbPagePaintingAllowed(true),
     mbHideOle(false),
     mbHideChart(false),
-    mbHideDraw(false)
+    mbHideDraw(false),
+    mbHideFormControl(false)
 {
     DBG_CTOR(SdrPaintView,NULL);
     pMod=pModel1;

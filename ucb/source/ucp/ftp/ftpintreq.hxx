@@ -118,8 +118,6 @@ namespace ftp {
         virtual void SAL_CALL select()
             throw (com::sun::star::uno::RuntimeException);
 
-        bool isSelected() const;
-
     private:
 
         bool          m_bSelected;
@@ -165,8 +163,6 @@ namespace ftp {
             com::sun::star::task::XInteractionContinuation > > SAL_CALL
         getContinuations(  )
             throw (com::sun::star::uno::RuntimeException);
-
-        bool aborted() const;
 
         bool approved() const;
 
