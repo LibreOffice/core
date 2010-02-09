@@ -35,9 +35,7 @@
 #include <hintids.hxx>
 #include <hints.hxx>
 #include <tools/pstm.hxx>
-#ifndef _OUTDEV_HXX
 #include <vcl/outdev.hxx>
-#endif
 #include <svl/itemiter.hxx>
 #include <svx/brshitem.hxx>
 #include <svx/keepitem.hxx>
@@ -52,9 +50,7 @@
 #include <viewimp.hxx>
 #include <doc.hxx>
 #include <fesh.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <flyfrm.hxx>
 #include <frmtool.hxx>
 #include <ftninfo.hxx>
@@ -81,7 +77,9 @@
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
 
+
 using namespace ::com::sun::star;
+
 
 /*************************************************************************
 |*
@@ -101,6 +99,11 @@ SwFrm::SwFrm( SwModify *pMod ) :
     pNext( 0 ),
     pPrev( 0 ),
     pDrawObjs( 0 )
+    , bInfBody( FALSE )
+    , bInfTab ( FALSE )
+    , bInfFly ( FALSE )
+    , bInfFtn ( FALSE )
+    , bInfSct ( FALSE )
 {
 #ifdef DBG_UTIL
     bFlag01 = bFlag02 = bFlag03 = bFlag04 = bFlag05 = 0;
@@ -3999,8 +4002,8 @@ void SwRootFrm::InvalidateAllObjPos()
             {
                 SwAnchoredObject* pAnchoredObj = rObjs[i];
                 const SwFmtAnchor& rAnch = pAnchoredObj->GetFrmFmt().GetAnchor();
-                if ( rAnch.GetAnchorId() != FLY_AT_CNTNT &&
-                     rAnch.GetAnchorId() != FLY_AUTO_CNTNT )
+                if ((rAnch.GetAnchorId() != FLY_AT_PARA) &&
+                    (rAnch.GetAnchorId() != FLY_AT_CHAR))
                 {
                     // only to paragraph and to character anchored objects are considered.
                     continue;

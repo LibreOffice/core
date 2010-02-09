@@ -59,11 +59,12 @@
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <swmodule.hxx>
-#include <unoobj.hxx>
+#include <TextCursorHelper.hxx>
 #include <unocrsr.hxx>
 #include <doc.hxx>
 
 #include <unomid.h>
+
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;

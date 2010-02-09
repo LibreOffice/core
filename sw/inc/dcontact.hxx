@@ -191,11 +191,11 @@ public:
     }
 
     RndStdIds GetAnchorId() const { return GetAnchorFmt().GetAnchorId(); }
-    bool      ObjAnchoredAtPage() const { return GetAnchorId() == FLY_PAGE; }
-    bool      ObjAnchoredAtFly() const { return GetAnchorId() == FLY_AT_FLY; }
-    bool      ObjAnchoredAtPara() const { return GetAnchorId() == FLY_AT_CNTNT; }
-    bool      ObjAnchoredAtChar() const { return GetAnchorId() == FLY_AUTO_CNTNT; }
-    bool      ObjAnchoredAsChar() const { return GetAnchorId() == FLY_IN_CNTNT; }
+    bool      ObjAnchoredAtPage() const { return GetAnchorId() == FLY_AT_PAGE; }
+    bool      ObjAnchoredAtFly()  const { return GetAnchorId() == FLY_AT_FLY; }
+    bool      ObjAnchoredAtPara() const { return GetAnchorId() == FLY_AT_PARA; }
+    bool      ObjAnchoredAtChar() const { return GetAnchorId() == FLY_AT_CHAR; }
+    bool      ObjAnchoredAsChar() const { return GetAnchorId() == FLY_AS_CHAR; }
 
     const SwPosition&  GetCntntAnchor() const
     {
