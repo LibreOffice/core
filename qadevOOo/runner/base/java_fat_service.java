@@ -44,7 +44,6 @@ import com.sun.star.lang.XMultiServiceFactory;
 import share.DescEntry;
 import share.DescGetter;
 import helper.APIDescGetter;
-import base.TestBase;
 
 import share.LogWriter;
 import stats.Summarizer;
@@ -177,7 +176,11 @@ public class java_fat_service implements TestBase {
                                               entry.SubEntries[j].entryName);
                     if ((tEnv != null) && (ifc != null)) {
                         res = ifc.run(entry.SubEntries[j],tEnv,param);
-                    } else res = null;
+                    }
+                    else
+                    {
+                        res = null;
+                    }
                 }
                 if (res != null) {
                     for (int k=0;k<entry.SubEntries[j].SubEntryCount;k++) {
@@ -230,34 +233,38 @@ public class java_fat_service implements TestBase {
 
             TestCase tCase = null;
 
-            try {
-                tCase = (TestCase)
-                            dcl.getInstance("mod._"+entry.entryName);
-            } catch (java.lang.IllegalArgumentException ie) {
+            try
+            {
+                tCase = (TestCase) dcl.getInstance("mod._"+entry.entryName);
+            }
+            catch (java.lang.IllegalArgumentException ie)
+            {
                 entry.ErrorMsg=ie.getMessage();
                 entry.hasErrorMsg=true;
             }
 
             log.println("Creating: "+tCase.getObjectName());
-            LogWriter log = (LogWriter)dcl.getInstance(
-                                            (String)param.get("LogWriter"));
+            // LogWriter log = (LogWriter)dcl.getInstance( (String)param.get("LogWriter"));
             log.initialize(entry,true);
             entry.UserDefinedParams = param;
             tCase.setLogWriter((PrintWriter) log);
             TestEnvironment tEnv = null;
-            try {
+            try
+            {
                 tCase.initializeTestCase(param);
                 tEnv = tCase.getTestEnvironment(param);
-            } catch (com.sun.star.lang.DisposedException de) {
+            }
+            catch (com.sun.star.lang.DisposedException de)
+            {
                 log.println("Office disposed");
             }
             return tEnv;
     }
 
-    protected void shortWait(int millis) {
-        try {
-            Thread.sleep(millis);
-        } catch (java.lang.InterruptedException ie) {}
-    }
+//    protected void shortWait(int millis) {
+//        try {
+//            Thread.sleep(millis);
+//        } catch (java.lang.InterruptedException ie) {}
+//    }
 
 }
