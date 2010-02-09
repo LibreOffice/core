@@ -264,7 +264,7 @@ void OReportWindow::notifySizeChanged()
     m_pParent->setTotalSize(GetTotalWidth(),GetTotalHeight());
 }
 //----------------------------------------------------------------------------
-BOOL OReportWindow::HasSelection()
+BOOL OReportWindow::HasSelection() const
 {
     return m_aViewsWindow.HasSelection();
 }
@@ -287,7 +287,7 @@ void OReportWindow::Paste()
     m_aViewsWindow.Paste();
 }
 //----------------------------------------------------------------------------
-BOOL OReportWindow::IsPasteAllowed()
+BOOL OReportWindow::IsPasteAllowed() const
 {
     return m_aViewsWindow.IsPasteAllowed();
 }

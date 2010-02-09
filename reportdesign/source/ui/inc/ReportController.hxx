@@ -63,6 +63,7 @@
 #include <comphelper/propertystatecontainer.hxx>
 
 #include "RptDef.hxx"
+#include "DesignView.hxx"
 #include <functional>
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/util/XModeSelector.hpp>
@@ -73,7 +74,6 @@ class TransferableClipboardListener;
 class VclWindowEvent;
 namespace rptui
 {
-    class ODesignView;
     class OGroupsSortingDialog;
     class OPropertyMediator;
     class OReportModel;
@@ -101,13 +101,15 @@ namespace rptui
                                 m_aSelectionListeners;
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>
                                 m_aCollapsedSections;
-        ODesignView*            m_pMyOwnView;           // we want to avoid casts
         TransferableDataHelper  m_aSystemClipboard;     // content of the clipboard
         TransferableClipboardListener*
                                 m_pClipbordNotifier;    /// notifier for changes in the clipboard
         OGroupsSortingDialog*   m_pGroupsFloater;
 
         OXReportControllerObserver* m_pReportControllerObserver;
+
+        const ODesignView*  getDesignView() const   { return static_cast< const ODesignView* >( m_pView ); }
+              ODesignView*  getDesignView()         { return static_cast<       ODesignView* >( m_pView ); }
 
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>          m_xReportDefinition;
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportEngine>              m_xReportEngine;

@@ -404,13 +404,13 @@ void ODesignView::Delete()
     m_aScrollWindow.Delete();
 }
 //----------------------------------------------------------------------------
-BOOL ODesignView::HasSelection()
+BOOL ODesignView::HasSelection() const
 {
     return m_aScrollWindow.HasSelection();
 }
 //----------------------------------------------------------------------------
 
-BOOL ODesignView::IsPasteAllowed()
+BOOL ODesignView::IsPasteAllowed() const
 {
     return m_aScrollWindow.IsPasteAllowed();
 }

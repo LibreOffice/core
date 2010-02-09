@@ -241,7 +241,7 @@ void OScrollWindowHelper::SetMode( DlgEdMode _eNewMode )
     m_aReportWindow.SetMode(_eNewMode);
 }
 //------------------------------------------------------------------------------
-BOOL OScrollWindowHelper::HasSelection()
+BOOL OScrollWindowHelper::HasSelection() const
 {
     return m_aReportWindow.HasSelection();
 }
@@ -261,7 +261,7 @@ void OScrollWindowHelper::Paste()
     m_aReportWindow.Paste();
 }
 //----------------------------------------------------------------------------
-BOOL OScrollWindowHelper::IsPasteAllowed()
+BOOL OScrollWindowHelper::IsPasteAllowed() const
 {
     return m_aReportWindow.IsPasteAllowed();
 }
