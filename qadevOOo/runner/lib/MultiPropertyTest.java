@@ -158,7 +158,8 @@ public class MultiPropertyTest extends MultiMethodTest
 
             if (info != null)
             {
-                if (!info.hasPropertyByName(propName))
+                final boolean bHasProperty = info.hasPropertyByName(propName);
+                if (!bHasProperty)
                 {
                     if (isOptional(propName) || optionalService)
                     {
