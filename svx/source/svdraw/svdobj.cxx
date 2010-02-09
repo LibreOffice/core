@@ -375,6 +375,7 @@ sdr::contact::ViewContact& SdrObject::GetViewContact() const
 // DrawContact support: Methods for handling Object changes
 void SdrObject::ActionChanged() const
 {
+#ifndef NEWPBG
     // Forward change call to MasterPageDescriptor if BackgroundObject was changed
     const SdrPage* pObjectsPage = GetPage();
 
@@ -419,6 +420,7 @@ void SdrObject::ActionChanged() const
             }
         }
     }
+#endif
 
     // Do necessary ViewContact actions
     GetViewContact().ActionChanged();
@@ -3117,6 +3119,7 @@ void SdrObject::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const ba
     SetSnapRect(aBaseRect);
 }
 
+#ifndef NEWPBG
 // #111111#
 // Needed again and again i will now add a test for finding out if
 // this object is the BackgroundObject of the page.
@@ -3136,6 +3139,7 @@ sal_Bool SdrObject::IsMasterPageBackgroundObject() const
 
     return sal_False;
 }
+#endif
 
 // #116168#
 // Give info if object is in destruction

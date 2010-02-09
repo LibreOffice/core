@@ -587,6 +587,7 @@ namespace sdr
                 bHintUsed = sal_True;
             }
 
+#ifndef NEWPBG
             // #111111#
             // When it's the BackgroundObject, set the MasterPage to changed to
             // get a refresh for the evtl. changed BackgroundStyle
@@ -602,6 +603,7 @@ namespace sdr
             {
                 GetSdrObject().GetPage()->ActionChanged();
             }
+#endif
 
             if(!bHintUsed)
             {

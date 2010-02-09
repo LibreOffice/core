@@ -64,6 +64,33 @@ namespace sdr
         drawinglayer::primitive2d::Primitive2DSequence ViewContactOfMasterPageDescriptor::createViewIndependentPrimitive2DSequence() const
         {
             drawinglayer::primitive2d::Primitive2DSequence xRetval;
+
+#ifdef NEWPBG
+            // build primitive from page fill attributes
+            const SfxItemSet& rPageFillAttributes = GetMasterPageDescriptor().getCorrectFillAttributes();
+            const drawinglayer::attribute::SdrFillAttribute aFill(
+                drawinglayer::primitive2d::createNewSdrFillAttribute(rPageFillAttributes));
+
+            if(!aFill.isDefault())
+            {
+                // direct model data is the page size, get and use it
+                const SdrPage& rOwnerPage = GetMasterPageDescriptor().GetOwnerPage();
+                const basegfx::B2DRange aInnerRange(
+                    rOwnerPage.GetLftBorder(), rOwnerPage.GetUppBorder(),
+                    rOwnerPage.GetWdt() - rOwnerPage.GetRgtBorder(),
+                    rOwnerPage.GetHgt() - rOwnerPage.GetLwrBorder());
+                const basegfx::B2DPolygon aInnerPolgon(basegfx::tools::createPolygonFromRect(aInnerRange));
+                const basegfx::B2DHomMatrix aEmptyTransform;
+                const drawinglayer::primitive2d::Primitive2DReference xReference(
+                    drawinglayer::primitive2d::createPolyPolygonFillPrimitive(
+                        basegfx::B2DPolyPolygon(aInnerPolgon),
+                        aEmptyTransform,
+                        aFill,
+                        drawinglayer::attribute::FillGradientAttribute()));
+
+                xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+            }
+#else
             const SdrObject* pBackgroundCandidate = GetMasterPageDescriptor().GetBackgroundObject();
 
             if(pBackgroundCandidate)
@@ -93,6 +120,7 @@ namespace sdr
                     xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
                 }
             }
+#endif
 
             return xRetval;
         }
@@ -113,20 +141,24 @@ namespace sdr
         {
             sal_uInt32 nRetval(GetMasterPageDescriptor().GetUsedPage().GetObjCount());
 
+#ifndef NEWPBG
             if(nRetval && GetMasterPageDescriptor().GetUsedPage().GetObj(0)->IsMasterPageBackgroundObject())
             {
                 nRetval--;
             }
+#endif
 
             return nRetval;
         }
 
         ViewContact& ViewContactOfMasterPageDescriptor::GetViewContact(sal_uInt32 nIndex) const
         {
+#ifndef NEWPBG
             if(GetMasterPageDescriptor().GetUsedPage().GetObjCount() && GetMasterPageDescriptor().GetUsedPage().GetObj(0)->IsMasterPageBackgroundObject())
             {
                 nIndex++;
             }
+#endif
 
             return GetMasterPageDescriptor().GetUsedPage().GetObj(nIndex)->GetViewContact();
         }

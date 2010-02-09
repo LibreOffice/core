@@ -69,6 +69,7 @@
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <algorithm>
+#include <svl/smplhint.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1176,6 +1177,140 @@ sdr::contact::ViewContact& SdrPage::GetViewContact() const
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+#ifdef NEWPBG
+
+void SdrPageProperties::ImpRemoveStyleSheet()
+{
+    if(mpStyleSheet)
+    {
+        EndListening(*mpStyleSheet);
+        mpProperties->SetParent(0);
+        mpStyleSheet = 0;
+    }
+}
+
+void SdrPageProperties::ImpAddStyleSheet(SfxStyleSheet& rNewStyleSheet)
+{
+    if(mpStyleSheet != &rNewStyleSheet)
+    {
+        ImpRemoveStyleSheet();
+        mpStyleSheet = &rNewStyleSheet;
+        StartListening(rNewStyleSheet);
+        mpProperties->SetParent(&rNewStyleSheet.GetItemSet());
+    }
+}
+
+void ImpPageChange(SdrPage& rSdrPage)
+{
+    rSdrPage.ActionChanged();
+
+    if(rSdrPage.GetModel())
+    {
+        rSdrPage.GetModel()->SetChanged(true);
+        SdrHint aHint(HINT_PAGEORDERCHG);
+        aHint.SetPage(&rSdrPage);
+        rSdrPage.GetModel()->Broadcast(aHint);
+    }
+}
+
+SdrPageProperties::SdrPageProperties(SdrPage& rSdrPage)
+:   mpSdrPage(&rSdrPage),
+    mpStyleSheet(0),
+    mpProperties(new SfxItemSet(mpSdrPage->GetModel()->GetItemPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST))
+{
+    if(!rSdrPage.IsMasterPage())
+    {
+        mpProperties->Put(XFillStyleItem(XFILL_NONE));
+    }
+}
+
+SdrPageProperties::SdrPageProperties(const SdrPageProperties& rCandidate)
+:   mpSdrPage(rCandidate.mpSdrPage),
+    mpStyleSheet(0),
+    mpProperties(new SfxItemSet(*rCandidate.mpProperties))
+{
+    if(rCandidate.GetStyleSheet())
+    {
+        ImpAddStyleSheet(*rCandidate.GetStyleSheet());
+    }
+}
+
+SdrPageProperties::~SdrPageProperties()
+{
+    ImpRemoveStyleSheet();
+    delete mpProperties;
+}
+
+void SdrPageProperties::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
+{
+    const SfxSimpleHint* pSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
+
+    if(pSimpleHint)
+    {
+        switch(pSimpleHint->GetId())
+        {
+            case SFX_HINT_DATACHANGED :
+            {
+                // notify change, broadcast
+                ImpPageChange(*mpSdrPage);
+                break;
+            }
+            case SFX_HINT_DYING :
+            {
+                // Style needs to be forgotten
+                ImpRemoveStyleSheet();
+                break;
+            }
+        }
+    }
+}
+
+const SfxItemSet& SdrPageProperties::GetItemSet() const
+{
+    return *mpProperties;
+}
+
+void SdrPageProperties::PutItemSet(const SfxItemSet& rSet)
+{
+    OSL_ENSURE(!mpSdrPage->IsMasterPage(), "Item set at MasterPage Attributes (!)");
+    mpProperties->Put(rSet);
+    ImpPageChange(*mpSdrPage);
+}
+
+void SdrPageProperties::PutItem(const SfxPoolItem& rItem)
+{
+    OSL_ENSURE(!mpSdrPage->IsMasterPage(), "Item set at MasterPage Attributes (!)");
+    mpProperties->Put(rItem);
+    ImpPageChange(*mpSdrPage);
+}
+
+void SdrPageProperties::ClearItem(const sal_uInt16 nWhich)
+{
+    mpProperties->ClearItem(nWhich);
+    ImpPageChange(*mpSdrPage);
+}
+
+void SdrPageProperties::SetStyleSheet(SfxStyleSheet* pStyleSheet)
+{
+    if(pStyleSheet)
+    {
+        ImpAddStyleSheet(*pStyleSheet);
+    }
+    else
+    {
+        ImpRemoveStyleSheet();
+    }
+
+    ImpPageChange(*mpSdrPage);
+}
+
+SfxStyleSheet* SdrPageProperties::GetStyleSheet() const
+{
+    return mpStyleSheet;
+}
+
+#endif
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1(SdrPage,SdrObjList);
 DBG_NAME(SdrPage)
@@ -1189,7 +1324,11 @@ SdrPage::SdrPage(SdrModel& rNewModel, bool bMasterPage)
     nBordRgt(0L),
     nBordLwr(0L),
     pLayerAdmin(new SdrLayerAdmin(&rNewModel.GetLayerAdmin())),
+#ifndef NEWPBG
     pBackgroundObj(0L),
+#else
+    mpSdrPageProperties(0),
+#endif
     mpMasterPageDescriptor(0L),
     nPageNum(0L),
     mbMaster(bMasterPage),
@@ -1201,6 +1340,10 @@ SdrPage::SdrPage(SdrModel& rNewModel, bool bMasterPage)
     DBG_CTOR(SdrPage,NULL);
     aPrefVisiLayers.SetAll();
     eListKind = (bMasterPage) ? SDROBJLIST_MASTERPAGE : SDROBJLIST_DRAWPAGE;
+
+#ifdef NEWPBG
+    mpSdrPageProperties = new SdrPageProperties(*this);
+#endif
 }
 
 SdrPage::SdrPage(const SdrPage& rSrcPage)
@@ -1214,7 +1357,11 @@ SdrPage::SdrPage(const SdrPage& rSrcPage)
     nBordRgt(rSrcPage.nBordRgt),
     nBordLwr(rSrcPage.nBordLwr),
     pLayerAdmin(new SdrLayerAdmin(rSrcPage.pModel->GetLayerAdmin())),
+#ifndef NEWPBG
     pBackgroundObj(0L),
+#else
+    mpSdrPageProperties(0),
+#endif
     mpMasterPageDescriptor(0L),
     nPageNum(rSrcPage.nPageNum),
     mbMaster(rSrcPage.mbMaster),
@@ -1248,6 +1395,10 @@ SdrPage::SdrPage(const SdrPage& rSrcPage)
         mxUnoPage = NULL;
         xComponent->dispose();
     }
+
+#ifdef NEWPBG
+    mpSdrPageProperties = new SdrPageProperties(rSrcPage.getSdrPageProperties());
+#endif
 }
 
 SdrPage::~SdrPage()
@@ -1281,7 +1432,9 @@ SdrPage::~SdrPage()
     // when they get called from PageInDestruction().
     maPageUsers.clear();
 
+#ifndef NEWPBG
     SdrObject::Free( pBackgroundObj );
+#endif
     delete pLayerAdmin;
 
     TRG_ClearMasterPage();
@@ -1292,6 +1445,13 @@ SdrPage::~SdrPage()
         delete mpViewContact;
         mpViewContact = 0L;
     }
+
+#ifdef NEWPBG
+    {
+        delete mpSdrPageProperties;
+        mpSdrPageProperties = 0;
+    }
+#endif
 
     DBG_DTOR(SdrPage,NULL);
 }
@@ -1304,7 +1464,9 @@ void SdrPage::operator=(const SdrPage& rSrcPage)
         mpViewContact = 0L;
     }
 
+#ifndef NEWPBG
     SdrObject::Free( pBackgroundObj );
+#endif
 
     // Joe also sets some parameters for the class this one
     // is derived from. SdrObjList does the same bad handling of
@@ -1339,6 +1501,7 @@ void SdrPage::operator=(const SdrPage& rSrcPage)
 
     mbObjectsNotPersistent = rSrcPage.mbObjectsNotPersistent;
 
+#ifndef NEWPBG
     if(rSrcPage.pBackgroundObj)
     {
         pBackgroundObj = rSrcPage.pBackgroundObj->Clone();
@@ -1348,6 +1511,12 @@ void SdrPage::operator=(const SdrPage& rSrcPage)
         // #i62000# for single-page MPBGO, force no line
         pBackgroundObj->SetMergedItem(XLineStyleItem(XLINE_NONE));
     }
+#else
+    {
+        delete mpSdrPageProperties;
+        mpSdrPageProperties = new SdrPageProperties(rSrcPage.getSdrPageProperties());
+    }
+#endif
 
     // Now copy the contained obejcts (by cloning them)
     SdrObjList::operator=(rSrcPage);
@@ -1526,8 +1695,16 @@ void SdrPage::SetModel(SdrModel* pNewModel)
         }
         pLayerAdmin->SetModel(pNewModel);
 
+#ifndef NEWPBG
         if( pBackgroundObj )
             pBackgroundObj->SetModel( pNewModel );
+#else
+        {
+            SdrPageProperties *pNew = new SdrPageProperties(getSdrPageProperties());
+            delete mpSdrPageProperties;
+            mpSdrPageProperties = pNew;
+        }
+#endif
     }
 
     // update listeners at possible api wrapper object
@@ -1661,6 +1838,7 @@ XubString SdrPage::GetLayoutName() const
     return String();
 }
 
+#ifndef NEWPBG
 void SdrPage::SetBackgroundObj( SdrObject* pObj )
 {
     if ( pObj )
@@ -1676,6 +1854,7 @@ void SdrPage::SetBackgroundObj( SdrObject* pObj )
     SdrObject::Free( pBackgroundObj );
     pBackgroundObj = pObj;
 }
+#endif
 
 void SdrPage::SetInserted( bool bIns )
 {
@@ -1750,9 +1929,21 @@ Color SdrPage::GetPageBackgroundColor( SdrPageView* pView, bool bScreenDisplay )
         aColor = pView->GetApplicationDocumentColor();
     }
 
+#ifdef NEWPBG
+    const SfxItemSet* pBackgroundFill = &getSdrPageProperties().GetItemSet();
+
+    if(!IsMasterPage() && TRG_HasMasterPage())
+    {
+        if(XFILL_NONE == ((const XFillStyleItem&)pBackgroundFill->Get(XATTR_FILLSTYLE)).GetValue())
+        {
+            pBackgroundFill = &TRG_GetMasterPage().getSdrPageProperties().GetItemSet();
+        }
+    }
+
+    GetDraftFillColor(*pBackgroundFill, aColor);
+#else
     // first, see if we have a background object
     SdrObject* pBackgroundObj2 = NULL;
-
 
     if( IsMasterPage() )
     {
@@ -1782,6 +1973,7 @@ Color SdrPage::GetPageBackgroundColor( SdrPageView* pView, bool bScreenDisplay )
         const SfxItemSet& rSet = pBackgroundObj2->GetMergedItemSet();
         GetDraftFillColor( rSet, aColor );
     }
+#endif
 
     return aColor;
 }

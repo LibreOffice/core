@@ -335,7 +335,7 @@ void __EXPORT SdrPaintView::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint
             if (eKind==HINT_PAGEORDERCHG) {
                 const SdrPage* pPg=pSdrHint->GetPage();
 
-                if(!pPg->IsInserted())
+                if(pPg && !pPg->IsInserted())
                 {
                     if(mpPageView && mpPageView->GetPage() == pPg)
                     {

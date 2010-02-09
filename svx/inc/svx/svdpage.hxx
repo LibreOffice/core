@@ -31,59 +31,29 @@
 #ifndef _SVDPAGE_HXX
 #define _SVDPAGE_HXX
 
-#include <vcl/bitmap.hxx>
+#define NEWPBG
 
-#ifndef _PRINT_HXX //autogen
+#include <vcl/bitmap.hxx>
 #include <vcl/print.hxx>
-#endif
-#ifndef _GDIMTF_HXX //autogen
 #include <vcl/gdimtf.hxx>
-#endif
 #include <tools/weakbase.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <svx/svdtypes.hxx>
 #include <svx/svdlayer.hxx>
-
-//////////////////////////////////////////////////////////////////////////////
-// sdr::Comment interface
 #include <svx/sdrcomment.hxx>
-
-// #111111#
 #include <vector>
 #include <svx/sdrpageuser.hxx>
-
-// StandardCheckVisisbilityRedirector
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
 #include <svx/sdrmasterpagedescriptor.hxx>
 #include "svx/svxdllapi.h"
-
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <svx/svdobj.hxx>
 #include <boost/scoped_ptr.hpp>
 
-// #110094#
-namespace sdr
-{
-    namespace contact
-    {
-        class ViewContact;
-    } // end of namespace contact
-} // end of namespace sdr
+//////////////////////////////////////////////////////////////////////////////
+// predefines
 
-// ------------------------------
-// - intern benutzte Paint-Modi -
-// ------------------------------
-
-//#if 0 // _SOLAR__PRIVATE
-
-#define IMP_PAGEPAINT_NORMAL            0
-#define IMP_PAGEPAINT_PREPARE_CACHE     1
-#define IMP_PAGEPAINT_PAINT_CACHE       2
-#define IMP_PAGEPAINT_PREPARE_BG_CACHE  3
-#define IMP_PAGEPAINT_PAINT_BG_CACHE    4
-
-//#endif // __PRIVATE
-
+namespace sdr { namespace contact { class ViewContact; }}
 class SdrPage;
 class SdrModel;
 class SfxItemPool;
@@ -113,7 +83,11 @@ public:
     SdrInsertReasonKind GetReason() const         { return eReason; }
 };
 
-class SVX_DLLPUBLIC SdrObjList {
+//////////////////////////////////////////////////////////////////////////////
+// class SdrObjList
+
+class SVX_DLLPUBLIC SdrObjList
+{
 private:
     typedef ::std::vector<SdrObject*> SdrObjectContainerType;
     SdrObjectContainerType maList;
@@ -350,8 +324,12 @@ Objektes abgefragt sowie direkt gesetzt werden.
 // Used for all methods which return a page number
 #define SDRPAGE_NOTFOUND 0xFFFF
 
+//////////////////////////////////////////////////////////////////////////////
+// class SdrPageGridFrame
+
 // Fuer das Fangraster/Punkgitter im Writer
-class SdrPageGridFrame {
+class SdrPageGridFrame
+{
     Rectangle aPaper;
     Rectangle aUserArea;
 public:
@@ -383,8 +361,50 @@ public:
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+// class SdrPageProperties
 
-class SVX_DLLPUBLIC SdrPage: public SdrObjList, public tools::WeakBase< SdrPage >
+#ifdef NEWPBG
+
+class SVX_DLLPUBLIC SdrPageProperties : public SfxListener
+{
+private:
+    // data
+    SdrPage*                mpSdrPage;
+    SfxStyleSheet*          mpStyleSheet;
+    SfxItemSet*             mpProperties;
+
+    // internal helpers
+    void ImpRemoveStyleSheet();
+    void ImpAddStyleSheet(SfxStyleSheet& rNewStyleSheet);
+
+    // not implemented
+    SdrPageProperties& operator=(const SdrPageProperties& rCandidate);
+
+public:
+    // construct/destruct
+    SdrPageProperties(SdrPage& rSdrPage);
+    SdrPageProperties(const SdrPageProperties& rCandidate);
+    virtual ~SdrPageProperties();
+
+    // Notify(...) from baseclass SfxListener
+    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
+
+    // data read/write
+    const SfxItemSet& GetItemSet() const;
+    void PutItemSet(const SfxItemSet& rSet);
+    void PutItem(const SfxPoolItem& rItem);
+    void ClearItem(const sal_uInt16 nWhich = 0);
+
+    // StyleSheet access
+    void SetStyleSheet(SfxStyleSheet* pStyleSheet);
+    SfxStyleSheet* GetStyleSheet() const;
+};
+
+#endif
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// class SdrPage
+
+class SVX_DLLPUBLIC SdrPage : public SdrObjList, public tools::WeakBase< SdrPage >
 {
     ///////////////////////////////////////////////////////////////////////////////
     // start PageUser section
@@ -430,9 +450,19 @@ friend class ChXChartDocument;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxUnoPage;
 
 protected:
-    SdrLayerAdmin*  pLayerAdmin;
-    SdrObject*      pBackgroundObj;
+    SdrLayerAdmin*      pLayerAdmin;
+#ifndef NEWPBG
+    SdrObject*          pBackgroundObj;
+#else
+private:
+    SdrPageProperties*  mpSdrPageProperties;
 
+public:
+    SdrPageProperties& getSdrPageProperties() { return *mpSdrPageProperties; }
+    const SdrPageProperties& getSdrPageProperties() const { return *mpSdrPageProperties; }
+#endif
+
+protected:
     // new MasterPageDescriptorVector
     ::sdr::MasterPageDescriptor*                    mpMasterPageDescriptor;
 
@@ -537,8 +567,10 @@ public:
     bool IsSwappingLocked() const { return mbSwappingLocked; }
     void SetSwappingLocked(bool bLock) { mbSwappingLocked = bLock; }
 
+#ifndef NEWPBG
     SdrObject* GetBackgroundObj() const { return pBackgroundObj; }
     void       SetBackgroundObj( SdrObject* pObj );
+#endif
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoPage();
 
@@ -567,8 +599,8 @@ public:
     /** Check if page is the HandoutMasterPage (in SVX, no PK_HANDOUT available) */
     bool isHandoutMasterPage() const;
 
-//////////////////////////////////////////////////////////////////////////////
-// sdr::Comment interface
+    //////////////////////////////////////////////////////////////////////////////
+    // sdr::Comment interface
 private:
     sdr::CommentVector                                  maComments;
 
@@ -577,8 +609,6 @@ public:
     const sdr::Comment& GetCommentByIndex(sal_uInt32 nIndex);
     void AddComment(const sdr::Comment& rNew);
     void ReplaceCommentByIndex(sal_uInt32 nIndex, const sdr::Comment& rNew);
-
-//////////////////////////////////////////////////////////////////////////////
 };
 
 typedef tools::WeakReference< SdrPage > SdrPageWeakRef;

@@ -37,6 +37,11 @@
 // #i42075#
 #include <svx/svdobj.hxx>
 
+#ifdef NEWPBG
+#include <svx/xfillit0.hxx>
+#include <svl/itemset.hxx>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 namespace sdr
@@ -98,6 +103,7 @@ namespace sdr
             maVisibleLayers = rNew;
             GetViewContact().ActionChanged();
 
+#ifndef NEWPBG
             // #i42075# For AFs convenience, do a change notify at the MasterPageBackgroundObject, too
             SdrObject* pObject = GetBackgroundObject();
 
@@ -105,6 +111,7 @@ namespace sdr
             {
                 pObject->BroadcastObjectChange();
             }
+#endif
         }
     }
 
@@ -123,6 +130,19 @@ namespace sdr
             || maVisibleLayers != rCandidate.maVisibleLayers);
     }
 
+#ifdef NEWPBG
+    const SfxItemSet& MasterPageDescriptor::getCorrectFillAttributes() const
+    {
+        const SfxItemSet& rOwnerPageAtributes = GetOwnerPage().getSdrPageProperties().GetItemSet();
+
+        if(XFILL_NONE != ((const XFillStyleItem&)rOwnerPageAtributes.Get(XATTR_FILLSTYLE)).GetValue())
+        {
+            return rOwnerPageAtributes;
+        }
+
+        return GetUsedPage().getSdrPageProperties().GetItemSet();
+    }
+#else
     // #i42075# Get the correct BackgroundObject
     SdrObject* MasterPageDescriptor::GetBackgroundObject() const
     {
@@ -158,6 +178,7 @@ namespace sdr
 
         return pRetval;
     }
+#endif
 } // end of namespace sdr
 
 //////////////////////////////////////////////////////////////////////////////

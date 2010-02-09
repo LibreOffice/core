@@ -98,6 +98,18 @@ namespace sdr
             rDisplayInfo.SetProcessLayers(aPreprocessedLayers);
             rDisplayInfo.SetSubContentActive(true);
 
+#ifdef NEWPBG
+            // check layer visibility (traditionally was member of layer 1)
+            if(aPreprocessedLayers.IsSet(1))
+            {
+                // hide PageBackground for special DrawModes; historical reasons
+                if(!GetObjectContact().isDrawModeGray() && !GetObjectContact().isDrawModeHighContrast())
+                {
+                    // if visible, create the default background primitive sequence
+                    xRetval = static_cast< ViewContactOfMasterPageDescriptor& >(GetViewContact()).getViewIndependentPrimitive2DSequence();
+                }
+            }
+#else
             // check if there is a MasterPageBackgroundObject and if it's visible in the LayerSet
             const SdrObject* pBackgroundCandidate = rDescriptor.GetBackgroundObject();
 
@@ -110,6 +122,7 @@ namespace sdr
                     xRetval = static_cast< ViewContactOfMasterPageDescriptor& >(GetViewContact()).getViewIndependentPrimitive2DSequence();
                 }
             }
+#endif
 
             // hide MasterPage content? Test self here for hierarchy
             if(isPrimitiveVisible(rDisplayInfo))
