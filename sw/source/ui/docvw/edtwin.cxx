@@ -1083,11 +1083,13 @@ void SwEditWin::ChangeFly( BYTE nDir, BOOL bWeb )
         rSh.StartAllAction();
         if( bSet )
             rSh.SetFlyFrmAttr( aSet );
-        BOOL bSetPos = FLY_IN_CNTNT != eAnchorId;
+        BOOL bSetPos = (FLY_AS_CHAR != eAnchorId);
         if(bSetPos && bWeb)
         {
-            if(FLY_PAGE != eAnchorId)
+            if (FLY_AT_PAGE != eAnchorId)
+            {
                 bSetPos = FALSE;
+            }
             else
             {
                 bSetPos = (::GetHtmlMode(rView.GetDocShell()) & HTMLMODE_SOME_ABS_POS) ?
@@ -4224,7 +4226,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                     }
                                 }
                             }
-                else // if ( SwContentAtPos::SW_INETATTR == aCntntAtPos.eCntntAtPos )
+                            else // if ( SwContentAtPos::SW_INETATTR == aCntntAtPos.eCntntAtPos )
                             {
                                 if ( bExecHyperlinks )
                                     rSh.ClickToINetAttr( *(SwFmtINetFmt*)aCntntAtPos.aFnd.pAttr, nFilter );

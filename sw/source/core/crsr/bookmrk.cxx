@@ -271,17 +271,6 @@ namespace sw { namespace mark
 
     uno::Reference< rdf::XMetadatable > Bookmark::MakeUnoObject()
     {
-        // re-use existing SwXBookmark
-        SwClientIter iter( *this );
-        SwClient * pClient( iter.First( TYPE( SwXBookmark ) ) );
-        while (pClient) {
-            SwXBookmark *const pBookmark( dynamic_cast<SwXBookmark*>(pClient) );
-            if (pBookmark && pBookmark->GetCoreObject() == this) {
-                return pBookmark;
-            }
-            pClient = iter.Next();
-        }
-
         // create new SwXBookmark
         SwDoc *const pDoc( GetMarkPos().GetDoc() );
         OSL_ENSURE(pDoc, "Bookmark::MakeUnoObject: no doc?");
