@@ -159,11 +159,6 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
                     AddUndo( new sd::UndoObjectPresentationKind( *pNewGrafObj ) );
                 }
                 pPage->ReplacePresObj(pPickObj, pNewGrafObj, PRESOBJ_GRAPHIC);
-
-                if( !bUndo )
-                {
-                    SdrObject::Free( pPickObj );
-                }
             }
 
             if (pImageMap)
@@ -172,7 +167,13 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
             ReplaceObjectAtView(pPickObj, *pPV, pNewGrafObj); // maybe ReplaceObjectAtView
 
             if( bUndo )
+            {
                 EndUndo();
+            }
+            else
+            {
+                SdrObject::Free( pPickObj );
+            }
         }
         else if (pPickObj->IsClosedObj() && !pPickObj->ISA(SdrOle2Obj))
         {

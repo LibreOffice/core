@@ -1371,16 +1371,20 @@ void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDescripto
     for( i = 0; (i < PRESOBJ_MAX) && (rDescriptor.meKind[i] != PRESOBJ_NONE); i++ )
     {
         PresObjKind eKind = rDescriptor.meKind[i];
-        SdrObject* pObj = rPage.GetPresObj( eKind, PresObjIndex[eKind], true );
-        if( pObj )
+        SdrObject* pObj = 0;
+        while( (pObj = rPage.GetPresObj( eKind, PresObjIndex[eKind], true )) != 0 )
         {
             PresObjIndex[eKind]++; // on next search for eKind, find next shape with same eKind
-            rShapes[i] = pObj;
+
+            if( !pObj->IsEmptyPresObj() )
+            {
+                rShapes[i] = pObj;
+                break;
+            }
         }
-        else
-        {
+
+        if( !pObj )
             bMissing = true;
-        }
     }
 
     if( bMissing && bInit )
@@ -1421,7 +1425,9 @@ void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDescripto
                     bFound = eSdrObjKind == OBJ_TITLETEXT;
                     break;
                 case PRESOBJ_OUTLINE:
-                    bFound = (eSdrObjKind == OBJ_OUTLINETEXT) || ((eSdrObjKind == OBJ_TEXT) || (eSdrObjKind == OBJ_GRAF) || (eSdrObjKind == OBJ_OLE2) || (eSdrObjKind == OBJ_MEDIA) && bPresStyle);
+                    bFound = (eSdrObjKind == OBJ_OUTLINETEXT) ||
+                             ((eSdrObjKind == OBJ_TEXT) && bPresStyle) ||
+                             (eSdrObjKind == OBJ_TABLE) || (eSdrObjKind == OBJ_MEDIA) || (eSdrObjKind == OBJ_GRAF) || (eSdrObjKind == OBJ_OLE2);
                     break;
                 case PRESOBJ_GRAPHIC:
                     bFound = eSdrObjKind == OBJ_GRAF;
@@ -1480,6 +1486,10 @@ void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDescripto
                             }
                         }
                         break;
+                    }
+                    else if( eSdrObjKind == OBJ_TABLE )
+                    {
+                        bFound = true;
                     }
                     break;
                 case PRESOBJ_PAGE:
@@ -2189,6 +2199,23 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
     return pNewObj;
 }
 
+static void SetLogicRect( SdrObject* pObj, Rectangle& rLogicRect )
+{
+    if( pObj )
+    {
+        if( (pObj->GetObjInventor() == SdrInventor) && (pObj->GetObjIdentifier() == OBJ_TABLE) )
+        {
+            Rectangle aRect( rLogicRect );
+            aRect.setHeight( pObj->GetLogicRect().getHeight() );
+            pObj->SetLogicRect( aRect );
+        }
+        else
+        {
+            pObj->SetLogicRect( rLogicRect );
+        }
+    }
+}
+
 /** reuses or creates a presentation shape for an auto layout that fits the given parameter
 
     @param  eObjKind
@@ -2230,7 +2257,7 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
         if ( pObj->ISA(SdrGrafObj) && !pObj->IsEmptyPresObj() )
             ( (SdrGrafObj*) pObj)->AdjustToMaxRect( aRect, FALSE );
         else
-            pObj->SetLogicRect(aRect);
+            SetLogicRect( pObj, aRect );
 
         pObj->SetUserCall(this);
 
@@ -2247,7 +2274,7 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
                     pTextObject->SetMergedItem(SdrTextHorzAdjustItem( bVertical ? SDRTEXTHORZADJUST_RIGHT : SDRTEXTHORZADJUST_BLOCK ));
             }
 
-            if( !mbMaster )
+            if( !mbMaster && (pTextObject->GetObjIdentifier() != OBJ_TABLE) )
             {
                 if ( pTextObject->IsAutoGrowHeight() )
                 {
@@ -2311,7 +2338,7 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
     }
 
     if ( pObj && ( pObj->IsEmptyPresObj() || !pObj->ISA(SdrGrafObj) ) )
-        pObj->SetLogicRect(aRect);
+        SetLogicRect( pObj, aRect );
 
     return pObj;
 }

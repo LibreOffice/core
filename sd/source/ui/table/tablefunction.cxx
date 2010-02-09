@@ -73,6 +73,7 @@
 #include "Window.hxx"
 #include "drawview.hxx"
 #include "sdresid.hxx"
+#include "undo/undoobjects.hxx"
 
 using ::rtl::OUString;
 using namespace ::sd;
@@ -150,21 +151,70 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
             nRows = pDlg->getRows();
         }
 
-        Size aSize( 14100, 200 );
+        Rectangle aRect;
 
-        Point aPos;
-        Rectangle aWinRect(aPos, GetActiveWindow()->GetOutputSizePixel() );
-        aPos = aWinRect.Center();
-        aPos = GetActiveWindow()->PixelToLogic(aPos);
-        aPos.X() -= aSize.Width() / 2;
-        aPos.Y() -= aSize.Height() / 2;
-        Rectangle aRect (aPos, aSize);
+        SdrObject* pPickObj = mpView->GetEmptyPresentationObject( PRESOBJ_TABLE );
+        if( pPickObj )
+        {
+            aRect = pPickObj->GetLogicRect();
+            aRect.setHeight( 200 );
+        }
+        else
+        {
+            Size aSize( 14100, 200 );
+
+            Point aPos;
+            Rectangle aWinRect(aPos, GetActiveWindow()->GetOutputSizePixel() );
+            aPos = aWinRect.Center();
+            aPos = GetActiveWindow()->PixelToLogic(aPos);
+            aPos.X() -= aSize.Width() / 2;
+            aPos.Y() -= aSize.Height() / 2;
+            aRect = Rectangle(aPos, aSize);
+        }
 
         ::sdr::table::SdrTableObj* pObj = new ::sdr::table::SdrTableObj( GetDoc(), aRect, nColumns, nRows );
         pObj->NbcSetStyleSheet( GetDoc()->GetDefaultStyleSheet(), sal_True );
         apply_table_style( pObj, GetDoc(), sTableStyle );
         SdrPageView* pPV = mpView->GetSdrPageView();
-        mpView->InsertObjectAtView(pObj, *pPV, SDRINSERT_SETDEFLAYER);
+
+        bool bUndo = false;
+        // if we have a pick obj we need to make this new ole a pres obj replacing the current pick obj
+        if( pPickObj )
+        {
+            SdPage* pPage = static_cast< SdPage* >(pPickObj->GetPage());
+            if(pPage && pPage->IsPresObj(pPickObj))
+            {
+                bUndo = mpView->IsUndoEnabled();
+
+                if( bUndo )
+                    mpView->BegUndo( SdrUndoNewObj::GetComment(*pObj) );
+
+                // add new PresObj to the list
+                pObj->SetUserCall(pPickObj->GetUserCall());
+                if( bUndo )
+                {
+                    mpView->AddUndo( new sd::UndoObjectPresentationKind( *pPickObj ) );
+                    mpView->AddUndo( new sd::UndoObjectPresentationKind( *pObj ) );
+                }
+                pPage->ReplacePresObj(pPickObj, pObj, PRESOBJ_TABLE);
+            }
+        }
+
+        if( pPickObj )
+            mpView->ReplaceObjectAtView(pPickObj, *pPV, pObj, TRUE );
+        else
+            mpView->InsertObjectAtView(pObj, *pPV, SDRINSERT_SETDEFLAYER);
+
+        if( bUndo )
+        {
+            mpView->EndUndo();
+        }
+        else if( pPickObj )
+        {
+            // replaced object must be freed if there is no undo action owning it
+            SdrObject::Free( pPickObj );
+        }
+
         Invalidate(SID_DRAWTBX_INSERT);
         rReq.Ignore();
         break;
