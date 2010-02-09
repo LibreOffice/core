@@ -48,9 +48,6 @@ import util.utils;
 * @see ifc.connection._XAcceptor
 */
 public class Acceptor extends TestCase {
-
-    private XInterface acceptor = null ;
-
     /**
     * Acceptor chooses the first port after <code>basePort</code>
     * which is free.

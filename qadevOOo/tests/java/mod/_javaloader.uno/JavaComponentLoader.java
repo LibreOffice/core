@@ -87,7 +87,6 @@ public class JavaComponentLoader extends TestCase {
         tEnv.addObjRelation("ImplementationLoader",
                                 "com.sun.star.loader.JavaComponentLoader") ;
 
-        String jarname = "MyPersistentObjectImpl.jar";
         String implURL = utils.getFullTestURL("qadevlibs/MyPersistObjectImpl.jar");
         tEnv.addObjRelation("ImplementationUrl", implURL) ;
         log.println("looking for shared lib: " + implURL);

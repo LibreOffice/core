@@ -139,7 +139,6 @@ public class NestedRegistry extends TestCase {
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
         XInterface oObj = null;
         Object oInterface = null;
-        Object fileAcc = null;
 
         final String tmpDir = utils.getOfficeTempDirSys(
                                     (XMultiServiceFactory)Param.getMSF()) ;

@@ -113,9 +113,6 @@ public class MarkableInputStream extends TestCase {
         XActiveDataSource xdSmo = (XActiveDataSource)
             UnoRuntime.queryInterface(XActiveDataSource.class, mostream);
 
-        XOutputStream moStream = (XOutputStream)
-            UnoRuntime.queryInterface(XOutputStream.class, mostream);
-
         XOutputStream PipeOut = (XOutputStream)
             UnoRuntime.queryInterface(XOutputStream.class, aPipe);
         XInputStream PipeIn = (XInputStream)
