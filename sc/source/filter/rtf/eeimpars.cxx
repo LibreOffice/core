@@ -152,9 +152,10 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor, SvNu
     ScEEParseEntry* pE;
     if (!pFormatter)
         pFormatter = mpDoc->GetFormatTable();
-    bool bNumbersEnglishUS = (pFormatter->GetLanguage() != LANGUAGE_ENGLISH_US);
-    if (bNumbersEnglishUS)
+    bool bNumbersEnglishUS = false;
+    if (pFormatter->GetLanguage() == LANGUAGE_SYSTEM)
     {
+        // Automatic language option selected.  Check for the global 'use US English' option.
         SvxHtmlOptions aOpt;
         bNumbersEnglishUS = aOpt.IsNumbersEnglishUS();
     }
