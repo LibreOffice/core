@@ -42,7 +42,7 @@
 #include <svx/linkmgr.hxx>
 #include <swtypes.hxx>
 #include <undobj.hxx>
-#include <unoobj.hxx>
+#include <unobookmark.hxx>
 #include <rtl/random.h>
 #include <xmloff/odffields.hxx>
 
@@ -50,6 +50,7 @@
 SV_IMPL_REF( SwServerObject )
 
 using namespace ::sw::mark;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 namespace
@@ -166,6 +167,16 @@ namespace sw { namespace mark
     }
 
 
+    void MarkBase::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+    {
+        SwModify::Modify(pOld, pNew);
+        if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
+        {   // invalidate cached uno object
+            SetXBookmark(uno::Reference<text::XTextContent>(0));
+        }
+    }
+
+
     NavigatorReminder::NavigatorReminder(const SwPaM& rPaM)
         : MarkBase(rPaM, our_sNamePrefix)
     { }
@@ -258,8 +269,7 @@ namespace sw { namespace mark
         return !pDoc->IsInHeaderFooter( SwNodeIndex(GetMarkPos().nNode) );
     }
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::rdf::XMetadatable >
-        Bookmark::MakeUnoObject()
+    uno::Reference< rdf::XMetadatable > Bookmark::MakeUnoObject()
     {
         // re-use existing SwXBookmark
         SwClientIter iter( *this );
@@ -275,7 +285,9 @@ namespace sw { namespace mark
         // create new SwXBookmark
         SwDoc *const pDoc( GetMarkPos().GetDoc() );
         OSL_ENSURE(pDoc, "Bookmark::MakeUnoObject: no doc?");
-        return new SwXBookmark(this, pDoc);
+        const uno::Reference< rdf::XMetadatable> xMeta(
+                SwXBookmark::CreateXBookmark(*pDoc, *this), uno::UNO_QUERY);
+        return xMeta;
     }
 
 

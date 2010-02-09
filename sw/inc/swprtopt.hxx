@@ -34,10 +34,23 @@
 #include <tools/multisel.hxx>
 #include <printdata.hxx>
 
+#include <set>
+#include <map>
+#include <vector>
+#include <utility>
+
 #define POSTITS_NONE    0
 #define POSTITS_ONLY    1
 #define POSTITS_ENDDOC  2
 #define POSTITS_ENDPAGE 3
+
+
+class PrintDialog;
+class SfxPrinter;
+
+
+////////////////////////////////////////////////////////////
+
 
 class SwPrtOptions : public SwPrintData
 {
@@ -75,27 +88,18 @@ public:
 #endif
 
 
-        SwPrtOptions& operator=(const SwPrintData& rData)
-            {
-                SwPrintData::operator=(rData);
-                return *this;
-            }
+    SwPrtOptions& operator=(const SwPrintData& rData)
+        {
+            SwPrintData::operator=(rData);
+            return *this;
+        }
+
+    // get print options
+    void MakeOptions( BOOL bWeb );
 };
 
 
+////////////////////////////////////////////////////////////
+
 #endif //_SWPRTOPT_HXX
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

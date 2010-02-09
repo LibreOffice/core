@@ -78,7 +78,7 @@
 #include <svx/postitem.hxx>
 #include <filter/msfilter/msocximex.hxx>
 #include <errhdl.hxx>
-#include <unoobj.hxx>
+#include <unotextrange.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
 #include <docsh.hxx>

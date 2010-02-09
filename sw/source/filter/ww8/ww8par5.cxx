@@ -45,17 +45,11 @@
 #include <svl/zformat.hxx>
 #include <sfx2/linkmgr.hxx>
 
-#ifndef _UCBHELPER_CONTENT_HXX_
 #include <ucbhelper/content.hxx>
-#endif
-#ifndef _UCBHELPER_CONTENTBROKER_HXX_
 #include <ucbhelper/contentbroker.hxx>
-#endif
 #include <ucbhelper/commandenvironment.hxx>
 
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
-#endif
 #include <hintids.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/fhgtitem.hxx>
@@ -2299,7 +2293,7 @@ eF_ResT SwWW8ImplReader::Read_F_IncludePicture( WW8FieldDesc*, String& rStr )
         */
         SfxItemSet aFlySet( rDoc.GetAttrPool(), RES_FRMATR_BEGIN,
             RES_FRMATR_END-1 );
-        aFlySet.Put( SwFmtAnchor( FLY_IN_CNTNT ) );
+        aFlySet.Put( SwFmtAnchor( FLY_AS_CHAR ) );
         aFlySet.Put( SwFmtVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ));
         pFlyFmtOfJustInsertedGraphic = rDoc.Insert( *pPaM,
                                                     aGrfName,

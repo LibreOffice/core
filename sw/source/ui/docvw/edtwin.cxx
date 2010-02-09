@@ -50,16 +50,12 @@
 #include <sot/storage.hxx>
 #include <svl/macitem.hxx>
 #include <unotools/securityoptions.hxx>
-#ifndef __SBX_SBXVARIABLE_HXX //autogen
 #include <basic/sbxvar.hxx>
-#endif
 #include <svl/ctloptions.hxx>
 #include <basic/sbx.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
-#ifndef _SFX_CLIENTSH_HXX
 #include <sfx2/ipclient.hxx>
-#endif
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
@@ -69,9 +65,6 @@
 #include <svx/langitem.hxx>
 #include <svx/htmlmode.hxx>
 #include <svx/svdview.hxx>
-//#ifndef _SVDVMARK_HXX //autogen
-//#include <svx/svdvmark.hxx>
-//#endif
 #include <svx/svdhdl.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/editeng.hxx>
@@ -128,12 +121,8 @@
 #include <breakit.hxx>
 #include <checkit.hxx>
 
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #ifndef _DOCVW_HRC
 #include <docvw.hrc>
 #endif
@@ -1021,7 +1010,7 @@ void SwEditWin::ChangeFly( BYTE nDir, BOOL bWeb )
             default: ASSERT( TRUE, "ChangeFly: Unknown direction." );
         }
         BOOL bSet = FALSE;
-        if( FLY_IN_CNTNT == eAnchorId && ( nDir % 2 ) )
+        if ((FLY_AS_CHAR == eAnchorId) && ( nDir % 2 ))
         {
             long aDiff = aTmp.Top() - aRefPoint.Y();
             if( aDiff > 0 )
@@ -1066,7 +1055,8 @@ void SwEditWin::ChangeFly( BYTE nDir, BOOL bWeb )
             aSet.Put( aVert );
             bSet = TRUE;
         }
-        if( bWeb && FLY_AT_CNTNT == eAnchorId && ( nDir==MOVE_LEFT_SMALL || nDir==MOVE_RIGHT_BIG ) )
+        if (bWeb && (FLY_AT_PARA == eAnchorId)
+            && ( nDir==MOVE_LEFT_SMALL || nDir==MOVE_RIGHT_BIG ))
         {
             SwFmtHoriOrient aHori( (SwFmtHoriOrient&)aSet.Get(RES_HORI_ORIENT) );
             sal_Int16 eNew;
@@ -1187,7 +1177,8 @@ void SwEditWin::ChangeDrawing( BYTE nDir )
                 BOOL bDummy;
                 const bool bVertAnchor = rSh.IsFrmVertical( TRUE, bDummy );
                 const bool bHoriMove = !bVertAnchor == !( nDir % 2 );
-                const bool bMoveAllowed = !bHoriMove || rSh.GetAnchorId() != FLY_IN_CNTNT;
+                const bool bMoveAllowed =
+                    !bHoriMove || (rSh.GetAnchorId() != FLY_AS_CHAR);
                 if ( bMoveAllowed )
                 {
                 // <--

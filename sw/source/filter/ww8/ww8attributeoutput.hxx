@@ -57,8 +57,7 @@ public:
 
     /// Start of the text run.
     ///
-    /// No-op for binary filters.
-    virtual void StartRun( const SwRedlineData* /*pRedlineData*/ ) {}
+    virtual void StartRun( const SwRedlineData* pRedlineData );
 
     /// End of the text run.
     ///

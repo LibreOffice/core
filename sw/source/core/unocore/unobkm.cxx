@@ -31,12 +31,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
+#include <unobookmark.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <unoobj.hxx>
+
+#include <TextCursorHelper.hxx>
+#include <unotextrange.hxx>
 #include <unomap.hxx>
 #include <unoprnms.hxx>
+#include <unoevtlstnr.hxx>
 #include <IMark.hxx>
 #include <crossrefbookmark.hxx>
 #include <doc.hxx>
@@ -51,11 +54,6 @@
 
 using namespace ::sw::mark;
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::beans;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 
@@ -65,7 +63,7 @@ namespace
     {
         static const OUString sStart = OUString(String(SW_RES(STR_START_QUOTE)));
         static const OUString sEnd = OUString(String(SW_RES(STR_END_QUOTE)));
-        OUStringBuffer sBuf(64);
+        ::rtl::OUStringBuffer sBuf(64);
         return sBuf.append(sStart).append(rName).append(sEnd).makeStringAndClear();
     }
 }
@@ -73,7 +71,128 @@ namespace
 /******************************************************************
  * SwXBookmark
  ******************************************************************/
-TYPEINIT1(SwXBookmark, SwClient)
+
+class SwXBookmark::Impl
+    : public SwClient
+{
+
+public:
+    SwEventListenerContainer    m_ListenerContainer;
+    SwDoc *                     m_pDoc;
+    ::sw::mark::IMark *         m_pRegisteredBookmark;
+    ::rtl::OUString             m_sMarkName;
+
+
+    Impl(   SwXBookmark & rThis,
+            SwDoc *const pDoc, ::sw::mark::IMark *const /*pBookmark*/)
+        : SwClient()
+        , m_ListenerContainer(static_cast< ::cppu::OWeakObject* >(&rThis))
+        , m_pDoc(pDoc)
+        , m_pRegisteredBookmark(0)
+    {
+        // DO NOT regiserInMark here! (because SetXBookmark would delete rThis)
+    }
+
+    void registerInMark(SwXBookmark & rThis, ::sw::mark::IMark *const pBkmk);
+
+    // SwClient
+    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+
+};
+
+void SwXBookmark::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+{
+    ClientModify(this, pOld, pNew);
+    if (!GetRegisteredIn())
+    {
+        m_pRegisteredBookmark = NULL;
+        m_pDoc = NULL;
+        m_ListenerContainer.Disposing();
+    }
+}
+
+void SwXBookmark::Impl::registerInMark(SwXBookmark & rThis,
+        ::sw::mark::IMark *const pBkmk)
+{
+    if (pBkmk)
+    {
+        pBkmk->Add(this);
+        ::sw::mark::MarkBase *const pMarkBase(
+            dynamic_cast< ::sw::mark::MarkBase * >(pBkmk));
+        OSL_ENSURE(pMarkBase, "registerInMark: no MarkBase?");
+        if (pMarkBase)
+        {
+            const uno::Reference<text::XTextContent> xBookmark(& rThis);
+            pMarkBase->SetXBookmark(xBookmark);
+        }
+    }
+    else if (m_pRegisteredBookmark)
+    {
+        m_sMarkName = m_pRegisteredBookmark->GetName();
+        m_pRegisteredBookmark->Remove(this);
+    }
+    m_pRegisteredBookmark = pBkmk;
+}
+
+
+const ::sw::mark::IMark* SwXBookmark::GetBookmark() const
+{
+    return m_pImpl->m_pRegisteredBookmark;
+}
+
+SwXBookmark::SwXBookmark(::sw::mark::IMark *const pBkmk, SwDoc *const pDoc)
+    : m_pImpl( new SwXBookmark::Impl(*this, pDoc, pBkmk) )
+{
+}
+
+SwXBookmark::SwXBookmark()
+    : m_pImpl( new SwXBookmark::Impl(*this, 0, 0) )
+{
+}
+
+SwXBookmark::~SwXBookmark()
+{
+}
+
+uno::Reference<text::XTextContent>
+SwXBookmark::CreateXBookmark(SwDoc & rDoc, ::sw::mark::IMark & rBookmark)
+{
+    // #i105557#: do not iterate over the registered clients: race condition
+    ::sw::mark::MarkBase *const pMarkBase(
+        dynamic_cast< ::sw::mark::MarkBase * >(&rBookmark));
+    OSL_ENSURE(pMarkBase, "CreateXBookmark: no MarkBase?");
+    if (!pMarkBase) { return 0; }
+    uno::Reference<text::XTextContent> xBookmark(pMarkBase->GetXBookmark());
+    if (!xBookmark.is())
+    {
+        // FIXME: These belong in XTextFieldsSupplier
+        //if (dynamic_cast< ::sw::mark::TextFieldmark* >(&rBkmk))
+        //    pXBkmk = new SwXFieldmark(false, &rBkmk, pDoc);
+        //else if (dynamic_cast< ::sw::mark::CheckboxFieldmark* >(&rBkmk))
+        //    pXBkmk = new SwXFieldmark(true, &rBkmk, pDoc);
+        //else
+        OSL_ENSURE(
+            dynamic_cast< ::sw::mark::IBookmark* >(&rBookmark),
+            "<SwXBookmark::GetObject(..)>"
+            "SwXBookmark requested for non-bookmark mark.");
+        SwXBookmark *const pXBookmark = new SwXBookmark(&rBookmark, &rDoc);
+        xBookmark.set(pXBookmark);
+        pXBookmark->m_pImpl->registerInMark(*pXBookmark, pMarkBase);
+    }
+    return xBookmark;
+}
+
+::sw::mark::IMark const* SwXBookmark::GetBookmarkInDoc(SwDoc const*const pDoc,
+        const uno::Reference< lang::XUnoTunnel> & xUT)
+{
+    SwXBookmark *const pXBkm(
+            ::sw::UnoTunnelGetImplementation<SwXBookmark>(xUT));
+    if (pXBkm && (pDoc == pXBkm->m_pImpl->m_pDoc))
+    {
+        return pXBkm->m_pImpl->m_pRegisteredBookmark;
+    }
+    return 0;
+}
 
 const uno::Sequence< sal_Int8 > & SwXBookmark::getUnoTunnelId()
 {
@@ -81,51 +200,37 @@ const uno::Sequence< sal_Int8 > & SwXBookmark::getUnoTunnelId()
     return aSeq;
 }
 
-sal_Int64 SAL_CALL SwXBookmark::getSomething( const uno::Sequence< sal_Int8 >& rId )
+sal_Int64 SAL_CALL
+SwXBookmark::getSomething(const uno::Sequence< sal_Int8 >& rId)
     throw(uno::RuntimeException)
 {
-    if( rId.getLength() == 16
-        && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) )
-    {
-        return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >(this) );
+    return ::sw::UnoTunnelImpl<SwXBookmark>(rId, this);
     }
-    return 0;
-}
-
-SwXBookmark::SwXBookmark(::sw::mark::IMark* pBkmk, SwDoc* pDoc)
-    : m_aLstnrCntnr((text::XTextContent*)this)
-    , m_pDoc(pDoc)
-    , m_pRegisteredBookmark(NULL)
-{
-    registerInMark(pBkmk);
-}
-
-SwXBookmark::~SwXBookmark()
-{ }
 
 void SwXBookmark::attachToRangeEx(
     const uno::Reference< text::XTextRange > & xTextRange,
     IDocumentMarkAccess::MarkType eType)
         throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
-    if(m_pRegisteredBookmark)
+    if (m_pImpl->m_pRegisteredBookmark)
+    {
         throw uno::RuntimeException();
+    }
 
-    uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
+    const uno::Reference<lang::XUnoTunnel> xRangeTunnel(
+            xTextRange, uno::UNO_QUERY);
     SwXTextRange* pRange = 0;
     OTextCursorHelper* pCursor = 0;
     if(xRangeTunnel.is())
     {
-
-        pRange = reinterpret_cast< SwXTextRange * >(
-            sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextRange::getUnoTunnelId() )));
-        pCursor = reinterpret_cast< OTextCursorHelper * >(
-            sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId() )));
+        pRange = ::sw::UnoTunnelGetImplementation<SwXTextRange>(xRangeTunnel);
+        pCursor =
+            ::sw::UnoTunnelGetImplementation<OTextCursorHelper>(xRangeTunnel);
     }
 
-    SwDoc* pDc = pRange ? (SwDoc*)pRange->GetDoc() : pCursor ?
-        (SwDoc*)pCursor->GetDoc() : 0;
-    if(pDc)
+    SwDoc *const pDoc =
+        (pRange) ? pRange->GetDoc() : ((pCursor) ? pCursor->GetDoc() : 0);
+    if (!pDoc)
     {
         m_pDoc = pDc;
         SwUnoInternalPaM aPam(*m_pDoc);
@@ -443,19 +548,19 @@ IFieldmark::parameter_map_t* SwXFieldmarkParameters::getCoreParameters()
 }
 
 SwXFieldmark::SwXFieldmark(bool _isReplacementObject, ::sw::mark::IMark* pBkm, SwDoc* pDc)
-    : SwXFieldmark_BASE(pBkm, pDc)
+    : SwXFieldmark_Base(pBkm, pDc)
     , isReplacementObject(_isReplacementObject)
 { }
 
 void SwXFieldmark::attachToRange( const uno::Reference < text::XTextRange >& xTextRange )
-    throw(IllegalArgumentException, RuntimeException)
+    throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
     attachToRangeEx( xTextRange,
                      ( isReplacementObject ? IDocumentMarkAccess::CHECKBOX_FIELDMARK : IDocumentMarkAccess::TEXT_FIELDMARK ) );
 }
 
 ::rtl::OUString SwXFieldmark::getFieldType(void)
-    throw(RuntimeException)
+    throw(uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     const IFieldmark *pBkm = dynamic_cast<const IFieldmark*>(GetBookmark());
@@ -465,7 +570,7 @@ void SwXFieldmark::attachToRange( const uno::Reference < text::XTextRange >& xTe
 }
 
 void SwXFieldmark::setFieldType(const::rtl::OUString & fieldType)
-    throw(RuntimeException)
+    throw(uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     IFieldmark *pBkm = dynamic_cast<IFieldmark*>(GetBookmark());
@@ -475,7 +580,7 @@ void SwXFieldmark::setFieldType(const::rtl::OUString & fieldType)
 }
 
 Reference<XNameContainer> SwXFieldmark::getParameters()
-    throw (RuntimeException)
+    throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     IFieldmark *pBkm = dynamic_cast<IFieldmark*>(GetBookmark());

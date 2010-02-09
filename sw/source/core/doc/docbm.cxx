@@ -1290,7 +1290,6 @@ void _SaveCntntIdx(SwDoc* pDoc,
         SwCntntNode *pNode = pDoc->GetNodes()[nNode]->GetCntntNode();
         if( pNode )
         {
-            const SwPosition* pAPos;
 
             SwFrm* pFrm = pNode->GetFrm();
 #if OSL_DEBUG_LEVEL > 1
@@ -1308,16 +1307,18 @@ void _SaveCntntIdx(SwDoc* pDoc,
                         SwAnchoredObject* pObj = rDObj[ --n ];
                         const SwFrmFmt& rFmt = pObj->GetFrmFmt();
                         const SwFmtAnchor& rAnchor = rFmt.GetAnchor();
-                        if( ( ( nSaveFly && FLY_AT_CNTNT == rAnchor.GetAnchorId() ) ||
-                              FLY_AUTO_CNTNT == rAnchor.GetAnchorId() ) &&
-                            ( 0 != ( pAPos = rAnchor.GetCntntAnchor() ) ) )
+                        SwPosition const*const pAPos = rAnchor.GetCntntAnchor();
+                        if ( pAPos &&
+                             ( ( nSaveFly &&
+                                 FLY_AT_PARA == rAnchor.GetAnchorId() ) ||
+                               ( FLY_AT_CHAR == rAnchor.GetAnchorId() ) ) )
                         {
                             aSave.SetType( 0x2000 );
                             aSave.SetContent( pAPos->nContent.GetIndex() );
 
                             OSL_ENSURE( nNode == pAPos->nNode.GetIndex(),
                                     "_SaveCntntIdx: Wrong Node-Index" );
-                            if( FLY_AUTO_CNTNT == rAnchor.GetAnchorId() )
+                            if ( FLY_AT_CHAR == rAnchor.GetAnchorId() )
                             {
                                 if( nCntnt <= aSave.GetContent() )
                                 {
@@ -1352,14 +1353,14 @@ void _SaveCntntIdx(SwDoc* pDoc,
                         continue;
 
                     const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
-                    if( ( FLY_AT_CNTNT == rAnchor.GetAnchorId() ||
-                            FLY_AUTO_CNTNT == rAnchor.GetAnchorId() ) &&
-                        0 != ( pAPos = rAnchor.GetCntntAnchor()) &&
-                        nNode == pAPos->nNode.GetIndex() )
+                    SwPosition const*const pAPos = rAnchor.GetCntntAnchor();
+                    if ( pAPos && ( nNode == pAPos->nNode.GetIndex() ) &&
+                         ( FLY_AT_PARA == rAnchor.GetAnchorId() ||
+                           FLY_AT_CHAR == rAnchor.GetAnchorId() ) )
                     {
                         aSave.SetType( 0x2000 );
                         aSave.SetContent( pAPos->nContent.GetIndex() );
-                        if( FLY_AUTO_CNTNT == rAnchor.GetAnchorId() )
+                        if ( FLY_AT_CHAR == rAnchor.GetAnchorId() )
                         {
                             if( nCntnt <= aSave.GetContent() )
                             {
@@ -1475,11 +1476,15 @@ void _RestoreCntntIdx(SwDoc* pDoc,
                         SwFmtAnchor aNew( rFlyAnchor );
                         SwPosition aNewPos( *rFlyAnchor.GetCntntAnchor() );
                         aNewPos.nNode = *pCNd;
-                        if( FLY_AUTO_CNTNT == rFlyAnchor.GetAnchorId() )
+                        if ( FLY_AT_CHAR == rFlyAnchor.GetAnchorId() )
+                        {
                             aNewPos.nContent.Assign( pCNd,
                                                      aSave.GetContent() + nOffset );
+                        }
                         else
+                        {
                             aNewPos.nContent.Assign( 0, 0 );
+                        }
                         aNew.SetAnchor( &aNewPos );
                         pFrmFmt->SetFmtAttr( aNew );
                     }
@@ -1639,11 +1644,15 @@ void _RestoreCntntIdx(SvULongs& rSaveArr,
                         SwFmtAnchor aNew( rFlyAnchor );
                         SwPosition aNewPos( *rFlyAnchor.GetCntntAnchor() );
                         aNewPos.nNode = rNd;
-                        if( FLY_AUTO_CNTNT == rFlyAnchor.GetAnchorId() )
+                        if ( FLY_AT_CHAR == rFlyAnchor.GetAnchorId() )
+                        {
                             aNewPos.nContent.Assign( pCNd, Min(
                                                      aSave.GetContent(), nLen ) );
+                        }
                         else
+                        {
                             aNewPos.nContent.Assign( 0, 0 );
+                        }
                         aNew.SetAnchor( &aNewPos );
                         pFrmFmt->SetFmtAttr( aNew );
                     }

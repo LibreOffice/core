@@ -31,10 +31,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/text/XTextSection.hpp>
 
 #include <hintids.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <com/sun/star/text/XTextTable.hpp>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -44,9 +45,7 @@
 #include <svx/brshitem.hxx>
 #include <svx/boxitem.hxx>
 #include <fmtrowsplt.hxx>
-#ifndef _SVX_FRAMEDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
-#endif
 
 #include <list>
 #include "swtable.hxx"
@@ -62,7 +61,6 @@
 #include <ndole.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <sfx2/linkmgr.hxx>  // for cTokenSeperator
-#include "unoobj.hxx"
 #include "unotbl.hxx"
 #include "xmltexte.hxx"
 #include "xmlexp.hxx"

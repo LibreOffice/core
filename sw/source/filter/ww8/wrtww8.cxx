@@ -2898,7 +2898,7 @@ void MSWordExportBase::ExportDocument( bool bWriteAll )
 
     mpParentFrame = 0;
     pFlyOffset = 0;
-    eNewAnchorType = FLY_PAGE;
+    eNewAnchorType = FLY_AT_PAGE;
     nTxtTyp = TXT_MAINTEXT;
     // --> OD 2007-04-19 #i43447# - removed
 //    nFlyWidth = nFlyHeight = 0;
@@ -3040,7 +3040,7 @@ void WW8Export::ExportDocument_Impl()
 
     pFtn = new WW8_WrPlcFtnEdn( TXT_FTN );                      // Footnotes
     pEdn = new WW8_WrPlcFtnEdn( TXT_EDN );                      // Endnotes
-    pAtn = new WW8_WrPlcPostIt;                                 // PostIts
+    pAtn = new WW8_WrPlcAnnotations;                                 // PostIts
     pTxtBxs = new WW8_WrPlcTxtBoxes( TXT_TXTBOX );
     pHFTxtBxs = new WW8_WrPlcTxtBoxes( TXT_HFTXTBOX );
 
@@ -3449,7 +3449,7 @@ void WW8_WrPlcFtnEdn::WritePlc( WW8Export& rWrt ) const
 }
 
 
-bool WW8_WrPlcPostIt::WriteTxt( WW8Export& rWrt )
+bool WW8_WrPlcAnnotations::WriteTxt( WW8Export& rWrt )
 {
     bool bRet = WriteGenericTxt( rWrt, TXT_ATN, rWrt.pFib->ccpAtn );
     rWrt.pFldAtn->Finish( rWrt.Fc2Cp( rWrt.Strm().Tell() ),
@@ -3458,7 +3458,7 @@ bool WW8_WrPlcPostIt::WriteTxt( WW8Export& rWrt )
     return bRet;
 }
 
-void WW8_WrPlcPostIt::WritePlc( WW8Export& rWrt ) const
+void WW8_WrPlcAnnotations::WritePlc( WW8Export& rWrt ) const
 {
     WriteGenericPlc( rWrt, TXT_ATN, rWrt.pFib->fcPlcfandTxt,
         rWrt.pFib->lcbPlcfandTxt, rWrt.pFib->fcPlcfandRef,

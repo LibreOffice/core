@@ -116,11 +116,8 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
     // Only setup the printer if we need one:
     const IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
     const bool bBrowseMode = pIDSA->get(IDocumentSettingAccess::BROWSE_MODE);
-    const bool bCreatePrinter = !bBrowseMode &&
-                                !pIDSA->get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE);
-    SfxPrinter* pPrinter = getIDocumentDeviceAccess()->getPrinter( bCreatePrinter );
-    if( pPrinter )
-        InitPrt( pPrinter, pPDFOut );
+    if( pPDFOut )
+        InitPrt( pPDFOut );
     // <--
 
     // --> FME 2005-03-16 #i44963# Good occasion to check if page sizes in
