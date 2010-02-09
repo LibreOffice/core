@@ -512,8 +512,8 @@ void SAL_CALL OApplicationController::disposing(const EventObject& _rSource) thr
     Reference<XConnection> xCon(_rSource.Source, UNO_QUERY);
     if ( xCon.is() )
     {
-        DBG_ASSERT( ( m_xDataSourceConnection == xCon ) && getContainer() && ( getContainer()->getElementType() == E_TABLE ),
-            "OApplicationController::disposing: the below code will ignore this call - why?" );
+        DBG_ASSERT( m_xDataSourceConnection == xCon,
+            "OApplicationController::disposing: which connection does this come from?" );
 
         if ( getContainer() && getContainer()->getElementType() == E_TABLE )
             getContainer()->clearPages();
