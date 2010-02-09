@@ -368,11 +368,14 @@ void OReportController::disposing()
     {
         try
         {
-            ::boost::shared_ptr<OSectionWindow> pSectionWindow = getDesignView()->getMarkedSection();
+            ::boost::shared_ptr<OSectionWindow> pSectionWindow;
+            if ( getDesignView() )
+                pSectionWindow = getDesignView()->getMarkedSection();
             if ( pSectionWindow )
                 pSectionWindow->getReportSection().deactivateOle();
             getUndoMgr()->Clear();      // clear all undo redo things
-            listen(false);
+            if ( m_aReportModel )
+                listen(false);
             m_pReportControllerObserver->Clear();
             m_pReportControllerObserver->release();
         }
@@ -2616,16 +2619,6 @@ void OReportController::Notify(SfxBroadcaster & /* _rBc */, SfxHint const & _rHi
             ::boost::bind(&view::XSelectionChangeListener::selectionChanged,_1,boost::cref(aEvent)));
 
     }
-    // if (_rHint.ISA(SfxSimpleHint)
-    //     && (static_cast< SfxSimpleHint const & >(_rHint).GetId()
-    //         == SFX_HINT_COLORS_CHANGED))
-    // {
-    //     int dummy = 0;
-    // }
-    // if (m_pReportControllerObserver)
-    // {
-    //     m_pReportControllerObserver->Notify(_rBc, _rHint);
-    // }
 }
 // -----------------------------------------------------------------------------
 void OReportController::executeMethodWithUndo(USHORT _nUndoStrId,const ::std::mem_fun_t<void,ODesignView>& _pMemfun)
