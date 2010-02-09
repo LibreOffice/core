@@ -372,8 +372,8 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::InitNewDocument_Impl()
         {
             // init document as a new
             xLoadable->initNew();
-            xModel->attachResource( xModel->getURL(), m_aDocMediaDescriptor );
         }
+        xModel->attachResource( xModel->getURL(), m_aDocMediaDescriptor );
     }
     catch( uno::Exception& )
     {
