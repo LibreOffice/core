@@ -602,11 +602,12 @@ public class OpenOfficePostscriptCreator implements IOffice
                         {
                             XPropertySet xPropSet = (XPropertySet) UnoRuntime.queryInterface( XPropertySet.class, aSettings );
                             xPropSet.setPropertyValue( "PrintAllSheets", new Boolean( true ) );
+                            GlobalLogWriter.get().println("PrintAllSheets := true");
                         }
                     }
 
                     ArrayList aPrintProps = new ArrayList();
-                    GlobalLogWriter.get().println("Property FileName:=" + _sPrintFileURL);
+                    // GlobalLogWriter.get().println("Property FileName:=" + _sPrintFileURL);
 
                     // PropertyValue [] aPrintProps = new PropertyValue[nProperties];
                     PropertyValue Arg = new PropertyValue();
@@ -614,7 +615,7 @@ public class OpenOfficePostscriptCreator implements IOffice
                     Arg.Value = _sPrintFileURL;
                     // aPrintProps[nPropsCount ++] = Arg;
                     aPrintProps.add(Arg);
-                    // showProperty(Arg);
+                    showProperty(Arg);
 
 
                     // generate pages string
@@ -638,8 +639,8 @@ public class OpenOfficePostscriptCreator implements IOffice
                         Arg.Name = "Pages";
                         Arg.Value = sPages;
                         aPrintProps.add(Arg);
+                        showProperty(Arg);
                     }
-                    showProperty(Arg);
 
                     // GlobalLogWriter.get().println("Start printing.");
 
@@ -669,6 +670,8 @@ public class OpenOfficePostscriptCreator implements IOffice
                             throw new com.sun.star.uno.Exception("Convwatch exception, wait too long for printing.");
                         }
                     }
+                    // TimeHelper.waitInSeconds(40, "Start waiting after print ready.");
+
                     _aGTA.getPerformance().stopTime(PerformanceContainer.Print);
                     GlobalLogWriter.get().println(DateHelper.getDateTimeForHumanreadableLog() + " Print document done.");
 

@@ -983,8 +983,8 @@ public class MSOfficePostscriptCreator implements IOffice
         return sType;
     }
 
-    public static void main(String [] _args)
-    {
-        String sTest = getXMLDocumentFormat("c:/cws/temp/input/Blah Fasel.xml");
-    }
+//    public static void main(String [] _args)
+//    {
+//        String sTest = getXMLDocumentFormat("c:/cws/temp/input/Blah Fasel.xml");
+//    }
 }
