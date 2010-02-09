@@ -293,8 +293,8 @@ public:
     vector<ScSharedTokenRef>* getDataRowRanges(SCROW nRow) const;
 
 private:
-    SCROW mnDataColCount;
-    SCCOL mnDataRowCount;
+    SCCOL mnDataColCount;
+    SCROW mnDataRowCount;
 
     TokenTable maLeftUpperCorner; //nHeaderColCount*nHeaderRowCount
     TokenTable maColHeaders; //mnDataColCount*nHeaderRowCount
@@ -310,8 +310,8 @@ Chart2PositionMap::Chart2PositionMap(SCCOL nAllColCount,  SCROW nAllRowCount,
     // Likewise, if bFillColumnHeader is true, at least the first row serves as a column header.
     //  If more than one row is pure text all the first pure text rows are used as header.
 
-    SCCOL nHeaderRowCount = (bFillColumnHeader && nAllColCount && nAllRowCount) ? 1 : 0;
-    SCROW nHeaderColCount = (bFillRowHeader && nAllColCount && nAllRowCount) ? 1 : 0;
+    SCROW nHeaderRowCount = (bFillColumnHeader && nAllColCount && nAllRowCount) ? 1 : 0;
+    SCCOL nHeaderColCount = (bFillRowHeader && nAllColCount && nAllRowCount) ? 1 : 0;
 
     if( nHeaderColCount || nHeaderRowCount )
     {
@@ -1600,8 +1600,8 @@ public:
             bool& rbRowSourceAmbiguous ) const;
     bool inSameSingleRow( RangeAnalyzer& rOther );
     bool inSameSingleColumn( RangeAnalyzer& rOther );
-    sal_uInt32 getRowCount() { return mnRowCount; }
-    sal_uInt32 getColumnCount() { return mnColumnCount; }
+    SCROW getRowCount() { return static_cast<SCROW>(mnRowCount); }
+    SCCOL getColumnCount() { return static_cast<SCCOL>(mnColumnCount); }
 
 private:
     bool mbEmpty;
