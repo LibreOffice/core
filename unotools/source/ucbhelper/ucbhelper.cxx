@@ -46,15 +46,13 @@
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
+#include <com/sun/star/ucb/ContentInfo.hpp>
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
-#include <com/sun/star/ucb/XContentCreator.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 #include <com/sun/star/ucb/XSortedDynamicResultSetFactory.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/container/XChild.hpp>
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVEIODEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
-#endif
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <ucbhelper/commandenvironment.hxx>
 #include <ucbhelper/content.hxx>
@@ -489,11 +487,7 @@ sal_Bool UCBContentHelper::CanMakeFolder( const String& rFolder )
     try
     {
         Content aCnt( rFolder, uno::Reference< XCommandEnvironment > () );
-        uno::Reference< XContentCreator > xCreator = uno::Reference< XContentCreator >( aCnt.get(), UNO_QUERY );
-        if ( !xCreator.is() )
-            return sal_False;
-
-        Sequence< ContentInfo > aInfo = xCreator->queryCreatableContentsInfo();
+        Sequence< ContentInfo > aInfo = aCnt.queryCreatableContentsInfo();
         sal_Int32 nCount = aInfo.getLength();
         if ( nCount == 0 )
             return sal_False;
@@ -538,11 +532,7 @@ sal_Bool UCBContentHelper::MakeFolder( Content& aCnt, const String& aTitle, Cont
 
     try
     {
-        uno::Reference< XContentCreator > xCreator( aCnt.get(), UNO_QUERY );
-        if ( !xCreator.is() )
-            return sal_False;
-
-        Sequence< ContentInfo > aInfo = xCreator->queryCreatableContentsInfo();
+        Sequence< ContentInfo > aInfo = aCnt.queryCreatableContentsInfo();
         sal_Int32 nCount = aInfo.getLength();
         if ( nCount == 0 )
             return sal_False;

@@ -39,6 +39,7 @@
 #include "vcl/ppdparser.hxx"
 #include "vcl/strhelper.hxx"
 #include "vcl/helper.hxx"
+#include "vcl/svapp.hxx"
 #include "cupsmgr.hxx"
 #include "tools/debug.hxx"
 #include "tools/urlobj.hxx"
@@ -50,6 +51,202 @@
 #include "osl/thread.h"
 #include "rtl/strbuf.hxx"
 #include "rtl/ustrbuf.hxx"
+
+#include "com/sun/star/lang/Locale.hpp"
+
+namespace psp
+{
+    class PPDTranslator
+    {
+        struct LocaleEqual
+        {
+            bool operator()(const com::sun::star::lang::Locale& i_rLeft,
+                            const com::sun::star::lang::Locale& i_rRight) const
+            {
+                return i_rLeft.Language.equals( i_rRight.Language ) &&
+                i_rLeft.Country.equals( i_rRight.Country ) &&
+                i_rLeft.Variant.equals( i_rRight.Variant );
+            }
+        };
+
+        struct LocaleHash
+        {
+            size_t operator()(const com::sun::star::lang::Locale& rLocale) const
+            { return
+                  (size_t)rLocale.Language.hashCode()
+                ^ (size_t)rLocale.Country.hashCode()
+                ^ (size_t)rLocale.Variant.hashCode()
+                ;
+            }
+        };
+
+        typedef std::hash_map< com::sun::star::lang::Locale, rtl::OUString, LocaleHash, LocaleEqual > translation_map;
+        typedef std::hash_map< rtl::OUString, translation_map, rtl::OUStringHash > key_translation_map;
+
+        key_translation_map     m_aTranslations;
+        public:
+        PPDTranslator() {}
+        ~PPDTranslator() {}
+
+
+        void insertValue(
+            const rtl::OUString& i_rKey,
+            const rtl::OUString& i_rOption,
+            const rtl::OUString& i_rValue,
+            const rtl::OUString& i_rTranslation,
+            const com::sun::star::lang::Locale& i_rLocale = com::sun::star::lang::Locale()
+            );
+
+        void insertOption( const rtl::OUString& i_rKey,
+                           const rtl::OUString& i_rOption,
+                           const rtl::OUString& i_rTranslation,
+                           const com::sun::star::lang::Locale& i_rLocale = com::sun::star::lang::Locale() )
+        {
+            insertValue( i_rKey, i_rOption, rtl::OUString(), i_rTranslation, i_rLocale );
+        }
+
+        void insertKey( const rtl::OUString& i_rKey,
+                        const rtl::OUString& i_rTranslation,
+                        const com::sun::star::lang::Locale& i_rLocale = com::sun::star::lang::Locale() )
+        {
+            insertValue( i_rKey, rtl::OUString(), rtl::OUString(), i_rTranslation, i_rLocale );
+        }
+
+        rtl::OUString translateValue(
+            const rtl::OUString& i_rKey,
+            const rtl::OUString& i_rOption,
+            const rtl::OUString& i_rValue,
+            const com::sun::star::lang::Locale& i_rLocale = com::sun::star::lang::Locale()
+            ) const;
+
+        rtl::OUString translateOption( const rtl::OUString& i_rKey,
+                                       const rtl::OUString& i_rOption,
+                                       const com::sun::star::lang::Locale& i_rLocale = com::sun::star::lang::Locale() ) const
+        {
+            return translateValue( i_rKey, i_rOption, rtl::OUString(), i_rLocale );
+        }
+
+        rtl::OUString translateKey( const rtl::OUString& i_rKey,
+                                    const com::sun::star::lang::Locale& i_rLocale = com::sun::star::lang::Locale() ) const
+        {
+            return translateValue( i_rKey, rtl::OUString(), rtl::OUString(), i_rLocale );
+        }
+    };
+
+    static com::sun::star::lang::Locale normalizeInputLocale(
+        const com::sun::star::lang::Locale& i_rLocale,
+        bool bInsertDefault = false
+        )
+    {
+        com::sun::star::lang::Locale aLoc( i_rLocale );
+        if( bInsertDefault && aLoc.Language.getLength() == 0 )
+        {
+            // empty locale requested, fill in application UI locale
+            aLoc = Application::GetSettings().GetUILocale();
+
+            #if OSL_DEBUG_LEVEL > 1
+            static const char* pEnvLocale = getenv( "SAL_PPDPARSER_LOCALE" );
+            if( pEnvLocale && *pEnvLocale )
+            {
+                rtl::OString aStr( pEnvLocale );
+                sal_Int32 nLen = aStr.getLength();
+                aLoc.Language = rtl::OStringToOUString( aStr.copy( 0, nLen > 2 ? 2 : nLen ), RTL_TEXTENCODING_MS_1252 );
+                if( nLen >=5 && aStr.getStr()[2] == '_' )
+                    aLoc.Country = rtl::OStringToOUString( aStr.copy( 3, 2 ), RTL_TEXTENCODING_MS_1252 );
+                else
+                    aLoc.Country = rtl::OUString();
+                aLoc.Variant = rtl::OUString();
+            }
+            #endif
+        }
+        aLoc.Language = aLoc.Language.toAsciiLowerCase();
+        aLoc.Country  = aLoc.Country.toAsciiUpperCase();
+        aLoc.Variant  = aLoc.Variant.toAsciiUpperCase();
+
+        return aLoc;
+    }
+
+    void PPDTranslator::insertValue(
+        const rtl::OUString& i_rKey,
+        const rtl::OUString& i_rOption,
+        const rtl::OUString& i_rValue,
+        const rtl::OUString& i_rTranslation,
+        const com::sun::star::lang::Locale& i_rLocale
+        )
+    {
+        rtl::OUStringBuffer aKey( i_rKey.getLength() + i_rOption.getLength() + i_rValue.getLength() + 2 );
+        aKey.append( i_rKey );
+        if( i_rOption.getLength() || i_rValue.getLength() )
+        {
+            aKey.append( sal_Unicode( ':' ) );
+            aKey.append( i_rOption );
+        }
+        if( i_rValue.getLength() )
+        {
+            aKey.append( sal_Unicode( ':' ) );
+            aKey.append( i_rValue );
+        }
+        if( aKey.getLength() && i_rTranslation.getLength() )
+        {
+            rtl::OUString aK( aKey.makeStringAndClear() );
+            com::sun::star::lang::Locale aLoc;
+            aLoc.Language = i_rLocale.Language.toAsciiLowerCase();
+            aLoc.Country  = i_rLocale.Country.toAsciiUpperCase();
+            aLoc.Variant  = i_rLocale.Variant.toAsciiUpperCase();
+            m_aTranslations[ aK ][ aLoc ] = i_rTranslation;
+        }
+    }
+
+    rtl::OUString PPDTranslator::translateValue(
+        const rtl::OUString& i_rKey,
+        const rtl::OUString& i_rOption,
+        const rtl::OUString& i_rValue,
+        const com::sun::star::lang::Locale& i_rLocale
+        ) const
+    {
+        rtl::OUString aResult;
+
+        rtl::OUStringBuffer aKey( i_rKey.getLength() + i_rOption.getLength() + i_rValue.getLength() + 2 );
+        aKey.append( i_rKey );
+        if( i_rOption.getLength() || i_rValue.getLength() )
+        {
+            aKey.append( sal_Unicode( ':' ) );
+            aKey.append( i_rOption );
+        }
+        if( i_rValue.getLength() )
+        {
+            aKey.append( sal_Unicode( ':' ) );
+            aKey.append( i_rValue );
+        }
+        if( aKey.getLength() )
+        {
+            rtl::OUString aK( aKey.makeStringAndClear() );
+            key_translation_map::const_iterator it = m_aTranslations.find( aK );
+            if( it != m_aTranslations.end() )
+            {
+                const translation_map& rMap( it->second );
+
+                com::sun::star::lang::Locale aLoc( normalizeInputLocale( i_rLocale, true ) );
+                for( int nTry = 0; nTry < 4; nTry++ )
+                {
+                    translation_map::const_iterator tr = rMap.find( aLoc );
+                    if( tr != rMap.end() )
+                    {
+                        aResult = tr->second;
+                        break;
+                    }
+                    switch( nTry )
+                    {
+                    case 0: aLoc.Variant  = rtl::OUString();break;
+                    case 1: aLoc.Country  = rtl::OUString();break;
+                    case 2: aLoc.Language = rtl::OUString();break;
+                    }
+                }
+            }
+        }
+        return aResult;
+    }
+}
 
 using namespace psp;
 using namespace rtl;
@@ -481,7 +678,8 @@ PPDParser::PPDParser( const String& rFile ) :
         m_pResolutions( NULL ),
         m_pDefaultDuplexType( NULL ),
         m_pDuplexTypes( NULL ),
-        m_pFontList( NULL )
+        m_pFontList( NULL ),
+        m_pTranslator( new PPDTranslator() )
 {
     // read in the file
     std::list< ByteString > aLines;
@@ -648,6 +846,7 @@ PPDParser::~PPDParser()
 {
     for( PPDParser::hash_type::iterator it = m_aKeys.begin(); it != m_aKeys.end(); ++it )
         delete it->second;
+    delete m_pTranslator;
 }
 
 void PPDParser::insertKey( const String& rKey, PPDKey* pKey )
@@ -687,11 +886,11 @@ static sal_uInt8 getNibble( sal_Char cChar )
     return nRet;
 }
 
-String PPDParser::handleTranslation( const ByteString& rString )
+String PPDParser::handleTranslation( const ByteString& i_rString, bool bIsGlobalized )
 {
-    int nOrigLen = rString.Len();
+    int nOrigLen = i_rString.Len();
     OStringBuffer aTrans( nOrigLen );
-    const sal_Char* pStr = rString.GetBuffer();
+    const sal_Char* pStr = i_rString.GetBuffer();
     const sal_Char* pEnd = pStr + nOrigLen;
     while( pStr < pEnd )
     {
@@ -710,14 +909,11 @@ String PPDParser::handleTranslation( const ByteString& rString )
         else
             aTrans.append( *pStr++ );
     }
-    return OStringToOUString( aTrans.makeStringAndClear(), m_aFileEncoding );
+    return OStringToOUString( aTrans.makeStringAndClear(), bIsGlobalized ? RTL_TEXTENCODING_UTF8 : m_aFileEncoding );
 }
 
 void PPDParser::parse( ::std::list< ByteString >& rLines )
 {
-    PPDValue*   pValue  = NULL;
-    PPDKey*     pKey    = NULL;
-
     std::list< ByteString >::iterator line = rLines.begin();
     PPDParser::hash_type::const_iterator keyit;
     while( line != rLines.end() )
@@ -765,14 +961,25 @@ void PPDParser::parse( ::std::list< ByteString >& rLines )
         }
 
         String aUniKey( aKey, RTL_TEXTENCODING_MS_1252 );
-        keyit = m_aKeys.find( aUniKey );
-        if( keyit == m_aKeys.end() )
+        // handle CUPS extension for globalized PPDs
+        bool bIsGlobalizedLine = false;
+        com::sun::star::lang::Locale aTransLocale;
+        if( ( aUniKey.Len() > 3 && aUniKey.GetChar( 2 ) == '.' ) ||
+            ( aUniKey.Len() > 5 && aUniKey.GetChar( 2 ) == '_' && aUniKey.GetChar( 5 ) == '.' ) )
         {
-            pKey = new PPDKey( aUniKey );
-            insertKey( aUniKey, pKey );
+            if( aUniKey.GetChar( 2 ) == '.' )
+            {
+                aTransLocale.Language = aUniKey.Copy( 0, 2 );
+                aUniKey = aUniKey.Copy( 3 );
+            }
+            else
+            {
+                aTransLocale.Language = aUniKey.Copy( 0, 2 );
+                aTransLocale.Country = aUniKey.Copy( 3, 2 );
+                aUniKey = aUniKey.Copy( 6 );
+            }
+            bIsGlobalizedLine = true;
         }
-        else
-            pKey = keyit->second;
 
         String aOption;
         nPos = aCurrentLine.Search( ':' );
@@ -784,76 +991,125 @@ void PPDParser::parse( ::std::list< ByteString >& rLines )
             if( nTransPos != STRING_NOTFOUND )
                 aOption.Erase( nTransPos );
         }
-        pValue = pKey->insertValue( aOption );
-        if( ! pValue )
-            continue;
 
-        if( nPos == STRING_NOTFOUND )
+        PPDValueType eType = eNo;
+        String aValue;
+        rtl::OUString aOptionTranslation;
+        rtl::OUString aValueTranslation;
+        if( nPos != STRING_NOTFOUND )
         {
-            // have a single main keyword
-            pValue->m_eType = eNo;
-            if( bQuery )
-                pKey->eraseValue( aOption );
-            continue;
-        }
+            // found a colon, there may be an option
+            ByteString aLine = aCurrentLine.Copy( 1, nPos-1 );
+            aLine = WhitespaceToSpace( aLine );
+            int nTransPos = aLine.Search( '/' );
+            if( nTransPos != STRING_NOTFOUND )
+                aOptionTranslation = handleTranslation( aLine.Copy( nTransPos+1 ), bIsGlobalizedLine );
 
-        // found a colon, there may be an option
-        ByteString aLine = aCurrentLine.Copy( 1, nPos-1 );
-        aLine = WhitespaceToSpace( aLine );
-        int nTransPos = aLine.Search( '/' );
-        if( nTransPos != STRING_NOTFOUND )
-            pValue->m_aOptionTranslation = handleTranslation( aLine.Copy( nTransPos+1 ) );
+            // read in more lines if necessary for multiline values
+            aLine = aCurrentLine.Copy( nPos+1 );
+            if( aLine.Len() )
+            {
+                while( ! ( aLine.GetTokenCount( '"' ) & 1 ) &&
+                       line != rLines.end() )
+                    // while there is an even number of tokens; that means
+                    // an odd number of doubleqoutes
+                {
+                    // copy the newlines also
+                    aLine += '\n';
+                    aLine += *line;
+                    ++line;
+                }
+            }
+            aLine = WhitespaceToSpace( aLine );
 
-        // read in more lines if necessary for multiline values
-        aLine = aCurrentLine.Copy( nPos+1 );
-        while( ! ( aLine.GetTokenCount( '"' ) & 1 ) &&
-               line != rLines.end() )
-            // while there is an even number of tokens; that m_eans
-            // an odd number of doubleqoutes
-        {
-            // copy the newlines also
-            aLine += '\n';
-            aLine += *line;
-            ++line;
-        }
-        aLine = WhitespaceToSpace( aLine );
-
-        // check for invocation or quoted value
-        if( aLine.GetChar(0) == '"' )
-        {
-            aLine.Erase( 0, 1 );
-            nTransPos = aLine.Search( '"' );
-            pValue->m_aValue = String( aLine.Copy( 0, nTransPos ), RTL_TEXTENCODING_MS_1252 );
-            // after the second doublequote can follow a / and a translation
-            pValue->m_aValueTranslation = handleTranslation( aLine.Copy( nTransPos+2 ) );
-            // check for quoted value
-            if( pValue->m_aOption.Len() &&
-                aKey.CompareTo( "JCL", 3 ) != COMPARE_EQUAL )
-                pValue->m_eType = eInvocation;
+            // #i100644# handle a missing value (actually a broken PPD)
+            if( ! aLine.Len() )
+            {
+                if( aOption.Len() &&
+                    aUniKey.CompareToAscii( "JCL", 3 ) != COMPARE_EQUAL )
+                    eType = eInvocation;
+                else
+                    eType = eQuoted;
+            }
+            // check for invocation or quoted value
+            else if( aLine.GetChar(0) == '"' )
+            {
+                aLine.Erase( 0, 1 );
+                nTransPos = aLine.Search( '"' );
+                aValue = String( aLine.Copy( 0, nTransPos ), RTL_TEXTENCODING_MS_1252 );
+                // after the second doublequote can follow a / and a translation
+                aValueTranslation = handleTranslation( aLine.Copy( nTransPos+2 ), bIsGlobalizedLine );
+                // check for quoted value
+                if( aOption.Len() &&
+                    aUniKey.CompareToAscii( "JCL", 3 ) != COMPARE_EQUAL )
+                    eType = eInvocation;
+                else
+                    eType = eQuoted;
+            }
+            // check for symbol value
+            else if( aLine.GetChar(0) == '^' )
+            {
+                aLine.Erase( 0, 1 );
+                aValue = String( aLine, RTL_TEXTENCODING_MS_1252 );
+                eType = eSymbol;
+            }
             else
-                pValue->m_eType = eQuoted;
+            {
+                // must be a string value then
+                // strictly this is false because string values
+                // can contain any whitespace which is reduced
+                // to one space by now
+                // who cares ...
+                nTransPos = aLine.Search( '/' );
+                if( nTransPos == STRING_NOTFOUND )
+                    nTransPos = aLine.Len();
+                aValue = String( aLine.Copy( 0, nTransPos ), RTL_TEXTENCODING_MS_1252 );
+                aValueTranslation = handleTranslation( aLine.Copy( nTransPos+1 ), bIsGlobalizedLine );
+                eType = eString;
+            }
         }
-        // check for symbol value
-        else if( aLine.GetChar(0) == '^' )
+
+        // handle globalized PPD entries
+        if( bIsGlobalizedLine )
         {
-            aLine.Erase( 0, 1 );
-            pValue->m_aValue = String( aLine, RTL_TEXTENCODING_MS_1252 );
-            pValue->m_eType = eSymbol;
+            // handle main key translations of form:
+            // *ll_CC.Translation MainKeyword/translated text: ""
+            if( aUniKey.EqualsAscii( "Translation" ) )
+            {
+                m_pTranslator->insertKey( aOption, aOptionTranslation, aTransLocale );
+            }
+            // handle options translations of for:
+            // *ll_CC.MainKeyword OptionKeyword/translated text: ""
+            else
+            {
+                m_pTranslator->insertOption( aUniKey, aOption, aOptionTranslation, aTransLocale );
+            }
+            continue;
+        }
+
+        PPDKey* pKey = NULL;
+        keyit = m_aKeys.find( aUniKey );
+        if( keyit == m_aKeys.end() )
+        {
+            pKey = new PPDKey( aUniKey );
+            insertKey( aUniKey, pKey );
         }
         else
-        {
-            // must be a string value then
-            // strictly this is false because string values
-            // can contain any whitespace which is reduced
-            // to one space by now
-            // who cares ...
-            nTransPos = aLine.Search( '/' );
-            if( nTransPos == STRING_NOTFOUND )
-                nTransPos = aLine.Len();
-            pValue->m_aValue = String( aLine.Copy( 0, nTransPos ), RTL_TEXTENCODING_MS_1252 );
-            pValue->m_aValueTranslation = handleTranslation( aLine.Copy( nTransPos+1 ) );
-            pValue->m_eType = eString;
-        }
+            pKey = keyit->second;
+
+        if( eType == eNo && bQuery )
+            continue;
+
+        PPDValue* pValue = pKey->insertValue( aOption );
+        if( ! pValue )
+            continue;
+        pValue->m_eType = eType;
+        pValue->m_aValue = aValue;
+
+        if( aOptionTranslation.getLength() )
+            m_pTranslator->insertOption( aUniKey, aOption, aOptionTranslation, aTransLocale );
+        if( aValueTranslation.getLength() )
+            m_pTranslator->insertValue( aUniKey, aOption, aValue, aValueTranslation, aTransLocale );
 
         // eventually update query and remove from option list
         if( bQuery && pKey->m_bQueryValue == FALSE )
@@ -879,7 +1135,7 @@ void PPDParser::parse( ::std::list< ByteString >& rLines )
                 keyit = m_aKeys.find( aKey );
                 if( keyit != m_aKeys.end() )
                 {
-                    pKey = keyit->second;
+                    PPDKey* pKey = keyit->second;
                     const PPDValue* pDefValue = pKey->getValue( aOption );
                     if( pKey->m_pDefaultValue == NULL )
                         pKey->m_pDefaultValue = pDefValue;
@@ -890,7 +1146,7 @@ void PPDParser::parse( ::std::list< ByteString >& rLines )
                     // do not exist otherwise
                     // (example: DefaultResolution)
                     // so invent that key here and have a default value
-                    pKey = new PPDKey( aKey );
+                    PPDKey* pKey = new PPDKey( aKey );
                     PPDValue* pNewValue = pKey->insertValue( aOption );
                     pNewValue->m_eType = eInvocation; // or what ?
                     insertKey( aKey, pKey );
@@ -915,7 +1171,7 @@ void PPDParser::parseOpenUI( const ByteString& rLine )
     nPos = aKey.Search( '/' );
     if( nPos != STRING_NOTFOUND )
     {
-        aTranslation = handleTranslation( aKey.Copy( nPos + 1 ) );
+        aTranslation = handleTranslation( aKey.Copy( nPos + 1 ), false );
         aKey.Erase( nPos );
     }
     aKey = GetCommandLineToken( 1, aKey );
@@ -933,7 +1189,7 @@ void PPDParser::parseOpenUI( const ByteString& rLine )
         pKey = keyit->second;
 
     pKey->m_bUIOption = true;
-    pKey->m_aUITranslation = aTranslation;
+    m_pTranslator->insertKey( pKey->getKey(), aTranslation );
 
     ByteString aValue = WhitespaceToSpace( rLine.GetToken( 1, ':' ) );
     if( aValue.CompareIgnoreCaseToAscii( "boolean" ) == COMPARE_EQUAL )
@@ -1391,6 +1647,36 @@ const String& PPDParser::getFont( int nFont ) const
     if( nFont >=0 && nFont < m_pFontList->countValues() )
         return m_pFontList->getValue( nFont )->m_aOption;
     return aEmptyString;
+}
+
+rtl::OUString PPDParser::translateKey( const rtl::OUString& i_rKey,
+                                       const com::sun::star::lang::Locale& i_rLocale ) const
+{
+    rtl::OUString aResult( m_pTranslator->translateKey( i_rKey, i_rLocale ) );
+    if( aResult.getLength() == 0 )
+        aResult = i_rKey;
+    return aResult;
+}
+
+rtl::OUString PPDParser::translateOption( const rtl::OUString& i_rKey,
+                                          const rtl::OUString& i_rOption,
+                                          const com::sun::star::lang::Locale& i_rLocale ) const
+{
+    rtl::OUString aResult( m_pTranslator->translateOption( i_rKey, i_rOption, i_rLocale ) );
+    if( aResult.getLength() == 0 )
+        aResult = i_rOption;
+    return aResult;
+}
+
+rtl::OUString PPDParser::translateValue( const rtl::OUString& i_rKey,
+                                         const rtl::OUString& i_rOption,
+                                         const rtl::OUString& i_rValue,
+                                         const com::sun::star::lang::Locale& i_rLocale ) const
+{
+    rtl::OUString aResult( m_pTranslator->translateValue( i_rKey, i_rOption, i_rValue, i_rLocale ) );
+    if( aResult.getLength() == 0 )
+        aResult = i_rValue;
+    return aResult;
 }
 
 /*
