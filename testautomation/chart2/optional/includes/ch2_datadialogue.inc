@@ -111,6 +111,12 @@ testcase tChartDataDialogueButtons
         else
             printlog "   DeleteColumn was correctly disabled."
         end if
+        printlog "Check if the 'Insert Text Column'-button is enabled."
+        if InsertTextColumn.isEnabled then
+            printlog "   Insert Text Column was correctly enabled."
+        else
+            warnlog "   Insert Text Column wasnt enabled, but should have been."
+        end if
         '/// Press 'TAB' to enter the Data-fields, followed by 'SHIFT TAB' end up in the first field.
         printlog "Press 'TAB' to enter the Data-fields, followed by 'SHIFT TAB' end up in the first field."
         Kontext "Diagramdata"
@@ -210,6 +216,8 @@ testcase tChartDataDialogueButtons
         else
             warnlog "   Error when Swapping a Row."
         end if
+        printlog "Insert a text column"
+        InsertTextColumn.Click
         '/// Close the dialogue
         printlog "   Close the dialogue."
         Diagramdata.Close
