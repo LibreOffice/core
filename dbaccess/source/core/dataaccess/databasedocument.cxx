@@ -1023,6 +1023,12 @@ void ODatabaseDocument::impl_storeAs_throw( const ::rtl::OUString& _rURL, const 
 
             m_pImpl->disposeStorages();
 
+            // each and every document definition obtained via m_xForms and m_xReports depends
+            // on the sub storages which we just disposed. So, dispose the forms/reports collections, too.
+            // This ensures that they're re-created when needed.
+            clearObjectContainer( m_xForms );
+            clearObjectContainer( m_xReports );
+
             xNewRootStorage = m_pImpl->switchToStorage( xTargetStorage );
 
             m_pImpl->m_bDocumentReadOnly = sal_False;
