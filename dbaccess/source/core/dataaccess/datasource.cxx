@@ -1344,7 +1344,7 @@ Reference< XNameAccess > SAL_CALL ODatabaseSource::getQueryDefinitions( ) throw(
     {
         Any aValue;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xMy(*this);
-        if ( dbtools::getDataSourceSetting(xMy,"CommandDefinitionSupplier",aValue) )
+        if ( dbtools::getDataSourceSetting(xMy,"CommandDefinitions",aValue) )
         {
             ::rtl::OUString sSupportService;
             aValue >>= sSupportService;
