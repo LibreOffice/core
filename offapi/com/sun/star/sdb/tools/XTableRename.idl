@@ -34,7 +34,7 @@
 #ifndef __com_sun_star_sdbc_SQLException_idl__
 #include <com/sun/star/sdbc/SQLException.idl>
 #endif
-#include <com/sun/star/sdb/tools/XConnectionSupport.idl>
+#include <com/sun/star/sdb/tools/XConnectionSupplier.idl>
 #ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
 #endif
@@ -55,7 +55,7 @@ module com {  module sun {  module star {  module sdb { module tools {
 */
 interface XTableRename
 {
-    interface XConnectionSupport;
+    interface XConnectionSupplier;
 
     /** rename the given table to the new name
 
