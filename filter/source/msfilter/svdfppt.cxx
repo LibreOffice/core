@@ -3129,10 +3129,19 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
                         }
                         if ( rSlidePersist.pBObj )
                         {
+#ifdef NEWPBG
+                            // #i99386# transfer the attributes from the temporary BackgroundObject
+                            // to the Page and delete it. Maybe rSlidePersist.bBObjIsTemporary is
+                            // obsolete here, too.
+                            pRet->getSdrPageProperties().ClearItem();
+                            pRet->getSdrPageProperties().PutItemSet(rSlidePersist.pBObj->GetMergedItemSet());
+                            SdrObject::Free( rSlidePersist.pBObj );
+#else
                             if ( rSlidePersist.bBObjIsTemporary )
                                 SdrObject::Free( rSlidePersist.pBObj );
                             else
                                 pRet->SetBackgroundObj( rSlidePersist.pBObj );
+#endif
                         }
                     }
                 }
