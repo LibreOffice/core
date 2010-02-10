@@ -177,7 +177,7 @@ Interceptor::~Interceptor()
 void Interceptor::DisconnectDocHolder()
 {
     osl::MutexGuard aGuard(m_aMutex);
-    m_xDocHLocker = uno::Reference< uno::XInterface >();
+    m_xDocHLocker.clear();
     m_pDocH = NULL;
     m_xOleAccess = NULL;
 }
