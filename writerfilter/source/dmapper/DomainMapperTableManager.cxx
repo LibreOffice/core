@@ -322,6 +322,7 @@ void DomainMapperTableManager::endLevel( )
 {
     m_aTableGrid.pop_back( );
     m_aGridSpans.pop_back( );
+    m_nTableWidth = 0;
 
     DomainMapperTableManager_Base_t::endLevel( );
 #ifdef DEBUG_DOMAINMAPPER
