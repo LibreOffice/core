@@ -41,12 +41,8 @@
 #define _SVSTDARR_ULONGS
 #include <svl/svarray.hxx>
 #endif
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
 #include <unotools/charclass.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <doc.hxx>
@@ -69,14 +65,13 @@
 #include <chpfld.hxx>
 #include <reffld.hxx>
 #include <flddropdown.hxx>
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 #include <section.hxx>
 #include <cellatr.hxx>
 #include <docary.hxx>
 #include <authfld.hxx>
 #include <txtinet.hxx>
+#include <fmtcntnt.hxx>
 #ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>      // fuer InitFldTypes
 #endif

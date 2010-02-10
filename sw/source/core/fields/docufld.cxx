@@ -1368,7 +1368,8 @@ BOOL SwDocInfoField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 
 SwHiddenTxtFieldType::SwHiddenTxtFieldType( sal_Bool bSetHidden )
     : SwFieldType( RES_HIDDENTXTFLD ), bHidden( bSetHidden )
-{}
+{
+}
 
 SwFieldType* SwHiddenTxtFieldType::Copy() const
 {
