@@ -35,7 +35,7 @@
 
 /** === begin UNO includes === **/
 #include <com/sun/star/sdbcx/XAlterView.hpp>
-#include <com/sun/star/sdb/tools/XViewSupport.hpp>
+#include <com/sun/star/sdb/tools/XViewAccess.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/uno3.hxx>
@@ -78,7 +78,7 @@ namespace dbaccess
         virtual void SAL_CALL getFastPropertyValue( ::com::sun::star::uno::Any& _rValue, sal_Int32 _nHandle ) const;
 
     private:
-         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::tools::XViewSupport>     m_xViewSupport;
+         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::tools::XViewAccess>     m_xViewAccess;
         sal_Int32       m_nCommandHandle;
     private:
         using View_Base::getFastPropertyValue;

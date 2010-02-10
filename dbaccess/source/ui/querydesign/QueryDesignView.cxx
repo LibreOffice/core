@@ -2235,11 +2235,17 @@ namespace
                             SQL_ISRULEOR2(pColumnRef,length_exp,char_value_fct))
                     {
                         ::rtl::OUString aColumns;
-                        pColumnRef->parseNodeToStr( aColumns,
-                                                    xConnection,
-                                                    &rController.getParser().getContext(),
-                                                    sal_True,
-                                                    sal_True); // quote is to true because we need quoted elements inside the function
+                        pColumnRef->parseNodeToPredicateStr(aColumns,
+                                                            xConnection,
+                                                            rController.getNumberFormatter(),
+                                                            _pView->getLocale(),
+                                                            static_cast<sal_Char>(_pView->getDecimalSeparator().toChar()),
+                                                            &rController.getParser().getContext());
+                        //pColumnRef->parseNodeToStr(   aColumns,
+                        //                          xConnection,
+                        //                          &rController.getParser().getContext(),
+                        //                          sal_True,
+                        //                          sal_True); // quote is to true because we need quoted elements inside the function
 
                         sal_Int32 nFunctionType = FKT_NONE;
                         ::connectivity::OSQLParseNode* pParamRef = NULL;
