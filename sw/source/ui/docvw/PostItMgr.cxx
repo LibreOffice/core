@@ -671,7 +671,7 @@ void SwPostItMgr::LayoutPostIts()
                             if (!pPostIt)
                             {
                                 pPostIt = (*i)->GetSidebarWindow( mpView->GetEditWin(),
-                                                                  WINDOW_CONTROL|WB_NODIALOGCONTROL,
+                                                                  WB_DIALOGCONTROL,
                                                                   *this,
                                                                   0 );
                                 pPostIt->InitControls();

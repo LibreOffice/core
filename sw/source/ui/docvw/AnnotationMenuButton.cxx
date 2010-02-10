@@ -35,6 +35,7 @@
 
 #include <annotation.hrc>
 #include <app.hrc>
+#include <access.hrc>
 
 #include <svtools/useroptions.hxx>
 
@@ -62,6 +63,10 @@ AnnotationMenuButton::AnnotationMenuButton( sw::sidebarwindows::SwSidebarWin& rS
     , mrSidebarWin( rSidebarWin )
 {
     AddEventListener( LINK( &mrSidebarWin, sw::sidebarwindows::SwSidebarWin, WindowEventListener ) );
+
+    SetAccessibleName( SW_RES( STR_ACCESS_ANNOTATION_BUTTON_NAME ) );
+    SetAccessibleDescription( SW_RES( STR_ACCESS_ANNOTATION_BUTTON_DESC ) );
+    SetQuickHelpText( GetAccessibleDescription() );
 }
 
 AnnotationMenuButton::~AnnotationMenuButton()
@@ -195,6 +200,21 @@ void AnnotationMenuButton::Paint( const Rectangle& /*rRect*/ )
                               ( Application::GetSettings().GetStyleSettings().GetHighContrastMode()
                                 ? Color( COL_WHITE )
                                 : Color( COL_BLACK ) ) );
+    }
+}
+
+void AnnotationMenuButton::KeyInput( const KeyEvent& rKeyEvt )
+{
+    const KeyCode& rKeyCode = rKeyEvt.GetKeyCode();
+    const USHORT nKey = rKeyCode.GetCode();
+    if ( nKey == KEY_TAB )
+    {
+        mrSidebarWin.ActivatePostIt();
+        mrSidebarWin.GrabFocus();
+    }
+    else
+    {
+        MenuButton::KeyInput( rKeyEvt );
     }
 }
 

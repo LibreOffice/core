@@ -42,6 +42,7 @@
 #include <popup.hrc>
 #include <docvw.hrc>
 #include <app.hrc>
+#include <access.hrc>
 
 #include <viewopt.hxx>
 #include <cmdid.h>
@@ -140,6 +141,8 @@ SwSidebarWin::~SwSidebarWin()
     mrMgr.DisconnectSidebarWinFromFrm( *(mrSidebarItem.maLayoutInfo.mpAnchorFrm),
                                        *this );
 
+    Disable();
+
     if ( mpSidebarTxtControl )
     {
         if ( mpOutlinerView )
@@ -147,6 +150,7 @@ SwSidebarWin::~SwSidebarWin()
             mpOutlinerView->SetWindow( 0 );
         }
         delete mpSidebarTxtControl;
+        mpSidebarTxtControl = 0;
     }
 
     if ( mpOutlinerView )
@@ -158,18 +162,21 @@ SwSidebarWin::~SwSidebarWin()
     if (mpOutliner)
     {
         delete mpOutliner;
+        mpOutliner = 0;
     }
 
     if (mpMetadataAuthor)
     {
         mpMetadataAuthor->RemoveEventListener( LINK( this, SwSidebarWin, WindowEventListener ) );
         delete mpMetadataAuthor;
+        mpMetadataAuthor = 0;
     }
 
     if (mpMetadataDate)
     {
         mpMetadataDate->RemoveEventListener( LINK( this, SwSidebarWin, WindowEventListener ) );
         delete mpMetadataDate;
+        mpMetadataDate = 0;
     }
 
     if (mpVScrollbar)
@@ -186,6 +193,7 @@ SwSidebarWin::~SwSidebarWin()
     mpShadow = 0;
 
     delete mpMenuButton;
+    mpMenuButton = 0;
 
     if (mnEventId)
         Application::RemoveUserEvent( mnEventId );
@@ -280,6 +288,7 @@ void SwSidebarWin::InitControls()
 
     // window controls for author and date
     mpMetadataAuthor = new Edit( this, 0 );
+    mpMetadataAuthor->SetAccessibleName( SW_RES( STR_ACCESS_ANNOTATION_AUTHOR_NAME ) );
     mpMetadataAuthor->SetReadOnly();
     mpMetadataAuthor->AlwaysDisableInput(true);
     mpMetadataAuthor->SetCallHandlersOnInputDisabled(true);
@@ -297,6 +306,7 @@ void SwSidebarWin::InitControls()
     }
 
     mpMetadataDate = new Edit( this, 0 );
+    mpMetadataDate->SetAccessibleName( SW_RES( STR_ACCESS_ANNOTATION_DATE_NAME ) );
     mpMetadataDate->SetReadOnly();
     mpMetadataDate->AlwaysDisableInput(true);
     mpMetadataDate->SetCallHandlersOnInputDisabled(true);

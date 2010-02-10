@@ -52,6 +52,7 @@ class AnnotationMenuButton : public MenuButton
         // overloaded <Window> methods
         virtual void MouseButtonDown( const MouseEvent& rMEvt );
         virtual void Paint( const Rectangle& rRect );
+        virtual void KeyInput( const KeyEvent& rKeyEvt );
 
     private:
         sw::sidebarwindows::SwSidebarWin& mrSidebarWin;

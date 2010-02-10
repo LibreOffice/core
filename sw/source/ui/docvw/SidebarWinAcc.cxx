@@ -38,6 +38,8 @@
 #include <accmap.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
+
 namespace css = ::com::sun::star;
 
 namespace sw { namespace sidebarwindows {
@@ -55,7 +57,9 @@ class SidebarWinAccessibleContext : public VCLXAccessibleComponent
             , mrViewShell( rViewShell )
             , mpAnchorFrm( pAnchorFrm )
             , maMutex()
-        {}
+        {
+            rSidebarWin.SetAccessibleRole( css::accessibility::AccessibleRole::COMMENT );
+        }
 
         virtual ~SidebarWinAccessibleContext()
         {}
