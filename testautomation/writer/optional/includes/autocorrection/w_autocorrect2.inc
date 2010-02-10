@@ -71,7 +71,7 @@ testcase tToolsAutocorrectWordCompletion_1
     '/// - Check box "Append Space" (default: unchecked)
     '/// - Check box "Show as tip" (default: unchecked)
     '/// - Check box "Collect Words" (default: checked)
-    '/// - Check box "When closing a document, save the list for later use in other documents" (default: checked)
+    '/// - Check box "When closing a document, remove the words collected from it from the list" (default: unchecked)
     '/// - List box "Accept with" (Default = "Return")
     '/// - Spin box "minimal number of characters" default = 10
     '/// - Spin box "Max. entries" (default =500, minimum = 50)
@@ -92,7 +92,7 @@ testcase tToolsAutocorrectWordCompletion_1
     if VorschlaegeSammeln.IsChecked <> TRUE           then Warnlog "Collect suggestions should be checked ."
     if KeepList.IsChecked           = TRUE            then Warnlog "When closing a document, remove the words collected from it from the list should be unchecked ."
     if AnnehmenMit.GetSelIndex      <> iAcceptWith    then Warnlog "The Accept with should be 'Enter' ."
-    if MinWortlaenge.GetText        <> sMinWordLength then Warnlog "#i40540# Min word length should be " + sMinWordLength
+    if MinWortlaenge.GetText        <> sMinWordLength then Warnlog "Min word length should be " + sMinWordLength
     if MaxEintraege.GetText         <> sMaxEntries    then Warnlog "Max entries should be " + sMaxEntries
     if GesammelteWorte.GetItemCount <> iEntriesNumber then Warnlog "Entries number  should be " + iEntriesNumber
 
@@ -133,7 +133,8 @@ testcase tToolsAutocorrectWordCompletion_2
     '/// delete all entries
     '/// close and reopen dialog, check entries again
 
-    Call hNewDocument
+    Call hFileOpen ( gTesttoolPath + "writer\optional\input\autocorrection\01.odt" )
+    Call sMakeReadOnlyDocumentEditable
     'Delete all entries in the list
     Call fDeleteAllEntries()
 
@@ -141,7 +142,7 @@ testcase tToolsAutocorrectWordCompletion_2
     Kontext
     Active.Setpage TabWortergaenzung
     Kontext "TabWortergaenzung"
-    if GesammelteWorte.GetItemCount <> iDefaultEntriesNumber then
+    if GesammelteWorte.GetItemCount <> 0 then
         Warnlog "Entries number should be " + iDefaultEntriesNumber
         Warnlog "No test for this case"
         TabWortergaenzung.Cancel
@@ -150,14 +151,14 @@ testcase tToolsAutocorrectWordCompletion_2
     MinWortlaenge.SetText sMinWordLength
     TabWortergaenzung.OK
 
-    Call wTypeKeys "Hello World ! This is a StarOffice Test .<Return>"
+    Call wTypeKeys "Hello World ! This is a OpenOffice.org Test .<Return>"
     Sleep 3
 
     ToolsAutocorrect
     Kontext
     Active.Setpage TabWortergaenzung
     Kontext "TabWortergaenzung"
-    if GesammelteWorte.GetItemCount <> iEntriesNumber then Warnlog "Entries number should be " + iEntriesNumber
+    if GesammelteWorte.GetItemCount <> 3 then Warnlog "Entries number should be " + iEntriesNumber
     for i = 1 to GesammelteWorte.GetItemCount
         GesammelteWorte.Select 1
         if EintragLoeschen.IsEnabled then
@@ -173,7 +174,7 @@ testcase tToolsAutocorrectWordCompletion_2
     Kontext
     Active.Setpage TabWortergaenzung
     Kontext "TabWortergaenzung"
-    if GesammelteWorte.GetItemCount <> iDefaultEntriesNumber then Warnlog "Entries number should be " + iDefaultEntriesNumber
+    if GesammelteWorte.GetItemCount <> 0 then Warnlog "Entries number should be " + 0
     TabWortergaenzung.Cancel
 
     Call hCloseDocument
@@ -187,15 +188,10 @@ testcase tToolsAutocorrectWordCompletion_3
     Dim aTestWord() as String
     Dim sPartOfTestWord as String
     Dim i as Integer
-    Dim j as Integer
+    Dim j as integer
 
-    aTestWord = Array( _
-    "accessibility" , _
-    "accomplish"    , _
-    "account"       , _
-    )
-    j = UBound(aTestWord)
-
+    aTestWord = Array( "accessibility", "accomplish", "accounting" )
+    
     sPartOfTestWord = "acc"
 
     printLog "Check list of suggestions can be 'scrolled'"
@@ -206,58 +202,48 @@ testcase tToolsAutocorrectWordCompletion_3
     '/// backwards with <SHIFT-CTRL-Tab>
     '/// endless loop test
 
-    Call hNewDocument
+    Call hFileOpen ( gTesttoolPath + "writer\optional\input\autocorrection\01.odt" )
+    Call sMakeReadOnlyDocumentEditable
     'Delete all entries in the list
     Call fDeleteAllEntries()
 
     'forward with <CTRL-Tab>
-    For i = 0 to j
+    For i = 0 to 2
         Call wTypeKeys aTestWord(i)
         Call wTypeKeys "<Return>"
     next i
     Sleep 2
 
-    For i = 0 to j
+    For i = 0 to 2
         Call wTypeKeys sPartOfTestWord
-
         if i > 0 then Call wTypeKeys "<MOD1 TAB>", i
         Sleep 2
-
         Call wTypeKeys "<Return>"
-        Sleep 2
         Call wTypeKeys "<Shift Home>"
-        Sleep 2
         EditCopy
-        Sleep 2
         if GetClipboardText <> aTestWord(i) then Warnlog "#102535# Should be " +aTestWord(i) +" but get " +GetClipboardText
         Call wTypeKeys "<Delete>"
     next i
 
     'endless loop test
     Call wTypeKeys sPartOfTestWord
-    Call wTypeKeys "<MOD1 TAB>", j+1
-    Sleep 2
+    Call wTypeKeys "<MOD1 TAB>", 3
     Call wTypeKeys "<Return>"
-    Sleep 2
     Call wTypeKeys "<Shift Home>"
-    Sleep 2
     EditCopy
-    Sleep 2
     if GetClipboardText <> aTestWord(0) then Warnlog "#102535# Should be " +aTestWord(0) +" but get " +GetClipboardText
     Call wTypeKeys "<Delete>"
 
     'backwards with <SHIFT-CTRL-Tab>
+    j = UBound (aTestWord)
+
     For i = j to 0 step -1
         Call wTypeKeys sPartOfTestWord
         Call wTypeKeys "<MOD1 TAB>", j
         if i > 0 then Call wTypeKeys "<Shift MOD1 TAB>", i
-        Sleep 2
         Call wTypeKeys "<Return>"
-        Sleep 2
         Call wTypeKeys "<Shift Home>"
-        Sleep 2
         EditCopy
-        Sleep 2
         if GetClipboardText <> aTestWord(j-i) then Warnlog "#102535# Should be " +aTestWord(j-i) +" but get " +GetClipboardText
         Call wTypeKeys "<Delete>"
     next i
@@ -265,14 +251,10 @@ testcase tToolsAutocorrectWordCompletion_3
     'endless loop test
     Call wTypeKeys sPartOfTestWord
     Call wTypeKeys "<Shift MOD1 TAB>"
-    Sleep 2
     Call wTypeKeys "<Return>"
-    Sleep 2
     Call wTypeKeys "<Shift Home>"
-    Sleep 2
     EditCopy
-    Sleep 2
-    if GetClipboardText <> aTestWord(j) then Warnlog "#102535# Should be " +aTestWord(j) +" but get " +GetClipboardText
+    if GetClipboardText <> "accounting" then Warnlog "#102535# Should be 'accounting' but get " +GetClipboardText
 
     Call hCloseDocument
 
@@ -312,6 +294,7 @@ testcase tToolsAutocorrectWordCompletion_4
     TabWortergaenzung.OK
 
     Call hFileOpen ( gTesttoolPath + "writer\optional\input\advanced\" + sTestFile )
+    Call sMakeReadOnlyDocumentEditable
     Sleep 4
 
     ToolsAutocorrect
@@ -344,14 +327,14 @@ testcase tToolsAutocorrectWordCompletion_5
     iEntriesNumber_Checked   = 3
     iEntriesNumber_UnChecked = 1
 
-    printLog "Check 'When closing a document, save the list for later use in other documents'"
-    '/// Check 'When closing a document, save the list for later use in other documents'
+    printLog "Check 'When closing a document, remove the words collected from it from the list'"
+    '/// Check 'When closing a document, remove the words collected from it from the list'
     '/// delete all entries first.
-    '/// 1) check when the checkbox is checked
+    '/// 1) check when the checkbox is unchecked
     '///    a) Open a file, type "kilometer"
     '///    b) Open 2nd file, type "entertainment" and "education"
     '///    c) Close 2nd file, the number of entries in first file should be 3
-    '/// 2) check when the checkbox is Unchecked
+    '/// 2) check when the checkbox is checked
     '///    delete all entries , and Uncheck the testing checkbox
     '///    a) Open a file, type "kilometer"
     '///    b) Open 2nd file, type "entertainment" and "education"
@@ -360,7 +343,8 @@ testcase tToolsAutocorrectWordCompletion_5
     'Test when checkbox is checkec -- default
 
     'Open 1st file
-    Call hNewDocument
+    Call hFileOpen ( gTesttoolPath + "writer\optional\input\autocorrection\01.odt" )
+    Call sMakeReadOnlyDocumentEditable
 
     'Delete all entries in the list
     Call fDeleteAllEntries()
@@ -370,13 +354,15 @@ testcase tToolsAutocorrectWordCompletion_5
     Kontext
     Active.Setpage TabWortergaenzung
     Kontext "TabWortergaenzung"
+    MinWortlaenge.SetText 5
     KeepList.UnCheck
     TabWortergaenzung.Ok
 
     Call wTypeKeys sTestWord1
 
     'Open 2nd file
-    Call hNewDocument
+    Call hFileOpen ( gTesttoolPath + "writer\optional\input\autocorrection\01-01.odt" )
+    Call sMakeReadOnlyDocumentEditable
 
     Call wTypeKeys sTestWord2
     Call wTypeKeys sTestWord3
@@ -385,8 +371,8 @@ testcase tToolsAutocorrectWordCompletion_5
     Kontext
     Active.Setpage TabWortergaenzung
     Kontext "TabWortergaenzung"
-    if GesammelteWorte.GetItemCount <> iEntriesNumber_Checked then
-    Warnlog "Checked:Entries number should be equal " + iEntriesNumber_Checked + " in 2nd file ,but get " +GesammelteWorte.GetItemCount
+    if GesammelteWorte.GetItemCount <> 3 then
+        Warnlog "Checked:Entries number should be equal 3 in 2nd file ,but get " + GesammelteWorte.GetItemCount
     end if
     TabWortergaenzung.Cancel
 
@@ -397,16 +383,17 @@ testcase tToolsAutocorrectWordCompletion_5
     Kontext
     Active.Setpage TabWortergaenzung
     Kontext "TabWortergaenzung"
-    if GesammelteWorte.GetItemCount <> iEntriesNumber_Checked then
-    Warnlog "Checked:Entries number should be equal " + iEntriesNumber_Checked + " in 1st file ,but get " +GesammelteWorte.GetItemCount
+    if GesammelteWorte.GetItemCount <> 3 then
+        Warnlog "Checked:Entries number should be equal 3 in 1st file ,but get " + GesammelteWorte.GetItemCount
     end if
     TabWortergaenzung.Cancel
 
     Call hCloseDocument
 
-    'Test when checkbox is Unchecked
+    'Test when checkbox is Checked
     'Open 1st file
-    Call hNewDocument
+    Call hFileOpen ( gTesttoolPath + "writer\optional\input\autocorrection\01.odt" )
+    Call sMakeReadOnlyDocumentEditable
 
     'Delete all entries in the list
     fDeleteAllEntries()
@@ -422,7 +409,8 @@ testcase tToolsAutocorrectWordCompletion_5
     Call wTypeKeys sTestWord1
 
     'Open 2nd file
-    Call hNewDocument
+    Call hFileOpen ( gTesttoolPath + "writer\optional\input\autocorrection\01-01.odt" )
+    Call sMakeReadOnlyDocumentEditable
 
     Call wTypeKeys sTestWord2
     Call wTypeKeys sTestWord3
@@ -431,8 +419,8 @@ testcase tToolsAutocorrectWordCompletion_5
     Kontext
     Active.Setpage TabWortergaenzung
     Kontext "TabWortergaenzung"
-    if GesammelteWorte.GetItemCount <> iEntriesNumber_Checked then
-    Warnlog "UnChecked:Entries number should be equal " + iEntriesNumber_Checked + " in 2nd file ,but get " +GesammelteWorte.GetItemCount
+    if GesammelteWorte.GetItemCount <> 3 then
+        Warnlog "UnChecked:Entries number should be equal 3 in 2nd file ,but get " + GesammelteWorte.GetItemCount
     end if
     TabWortergaenzung.Cancel
 
@@ -443,8 +431,8 @@ testcase tToolsAutocorrectWordCompletion_5
     Kontext
     Active.Setpage TabWortergaenzung
     Kontext "TabWortergaenzung"
-    if GesammelteWorte.GetItemCount <> iEntriesNumber_UnChecked then
-    Warnlog "UnChecked:Entries number should be equal " + iEntriesNumber_UnChecked + " in 2nd file ,but get " +GesammelteWorte.GetItemCount
+    if GesammelteWorte.GetItemCount <> 1 then
+        Warnlog "UnChecked:Entries number should be equal 1 in 2nd file ,but get " +GesammelteWorte.GetItemCount
     end if
     TabWortergaenzung.Cancel
 
@@ -460,8 +448,8 @@ testcase tToolsAutocorrectWordCompletion_6
     Dim sTestWord as String
     Dim sPartOfTestWord as String
 
-    sTestWord       = "StarOffice"
-    sPartOfTestWord = "Sta"
+    sTestWord       = "OpenOffice.org"
+    sPartOfTestWord = "Ope"
 
     printLog "Check Show as Tip"
     '/// Check Show as Tip
@@ -471,7 +459,8 @@ testcase tToolsAutocorrectWordCompletion_6
     '/// and a help tip will appear       <--- no way to test yet
 
     'Show as Tip -- uncheck (default)
-    Call hNewDocument
+    Call hFileOpen ( gTesttoolPath + "writer\optional\input\autocorrection\01.odt" )
+    Call sMakeReadOnlyDocumentEditable
 
     Call wTypeKeys sTestWord
     Call wTypeKeys "<Return>"

@@ -120,19 +120,27 @@ testcase tToolsAutocorrectOptions_1
     Kuerzel.SetText "Aabbcc"
     ErsetzenDurch.SetText "Aaccbb"
     Sleep 1
-    Neu.Click
+    try
+        Neu.Click
+    catch
+        Warnlog "Seems settings are already made. Please remove entries from replacement table"
+    endcatch
     Sleep 1
     TabErsetzung.OK
     
-    '/// M:Y  T:Y (default)
+    printlog "- M:Y  T:Y (default)"
     ToolsAutoCorrect
     Kontext
     Active.SetPage TabOptionenAutokorrektur
     Kontext "TabOptionenAutokorrektur"
-    Einstellungen.Select 1
-    if Not Einstellungen.IsChecked then Warnlog "First Checkbox: " & Einstellungen.IsChecked
-    Einstellungen.TypeKeys "<Right>"
-    if Not Einstellungen.IsChecked then Warnlog "Second Checkbox: " & Einstellungen.IsChecked
+    if Einstellungen.IsChecked(1,2) = FALSE then
+        Warnlog "First Checkbox not checked by default"
+        Einstellungen.Check(1,2)
+    endif
+    if Einstellungen.IsChecked(1,3) = FALSE then
+        Warnlog "Second Checkbox not checked by default"
+        Einstellungen.Check(1,3)
+    endif
     TabOptionenAutokorrektur.Ok
     
     Call wTypeKeys "Aabbcc"
@@ -143,8 +151,8 @@ testcase tToolsAutocorrectOptions_1
     
     Call wTypeKeys "<DELETE>"
     
-    '/// M:Y  T:N
-    Call fAutocorrectOptions("UseReplacementTable")
+    printlog "- M:Y  T:N"
+    Call fAutocorrectOptions("UseReplacementTable", 1, 0)
     
     Call wTypeKeys "Aabbcc"
     Call wTypeKeys " "
@@ -166,8 +174,8 @@ testcase tToolsAutocorrectOptions_1
     
     Call wTypeKeys "<DELETE>"
     
-    '/// M:N  T:Y
-    Call fAutocorrectOptions("UseReplacementTable")
+    printlog "- M:N  T:Y"
+    Call fAutocorrectOptions("UseReplacementTable", 0, 1)
     
     Call wTypeKeys "Aabbcc"
     Call wTypeKeys " "
@@ -178,8 +186,8 @@ testcase tToolsAutocorrectOptions_1
     
     Call wTypeKeys "<DELETE>"
     
-    '/// M:N  T:N  
-    Call fAutocorrectOptions("UseReplacementTable")
+    printlog "- M:N  T:N"
+    Call fAutocorrectOptions("UseReplacementTable", 0, 0)
     
     Call wTypeKeys "Aabbcc"
     Call wTypeKeys " "
@@ -200,8 +208,8 @@ testcase tToolsAutocorrectOptions_1
         end if
     end if        
 
-    '/// Recover to the default  M:Y  T:Y
-     Call fAutocorrectOptions("UseReplacementTable")
+    printlog "- Recover to the default  M:Y  T:Y"
+     Call fAutocorrectOptions("UseReplacementTable", 1, 1)
 
     'remove the test words which you insert in the replacement table
     Dim i as Integer
@@ -252,7 +260,7 @@ testcase tToolsAutocorrectOptions_2
     hopeResultBeforeAutoformat  = "TEst"
     hopeResultAfterAutoformat   = "Test"
 
-    Call fAutocorrectOptions("CorrectTWoINitialCApitals")
+    Call fAutocorrectOptions("CorrectTWoINitialCApitals",1,0)
 
     Call wTypeKeys testContent
     Call wTypeKeys " "
@@ -279,7 +287,7 @@ testcase tToolsAutocorrectOptions_2
     testContent  = "TEst"
     hopeResult   = "Test"
 
-    Call fAutocorrectOptions("CorrectTWoINitialCApitals")
+    Call fAutocorrectOptions("CorrectTWoINitialCApitals",0,1)
 
     Call wTypeKeys testContent
     Call wTypeKeys " "
@@ -294,7 +302,7 @@ testcase tToolsAutocorrectOptions_2
     hopeResultBeforeAutoformat  = "TEst"
     hopeResultAfterAutoformat   = "TEst"
 
-    Call fAutocorrectOptions("CorrectTWoINitialCApitals")
+    Call fAutocorrectOptions("CorrectTWoINitialCApitals",0,0)
 
     Call wTypeKeys testContent
     Call wTypeKeys " "
@@ -314,7 +322,7 @@ testcase tToolsAutocorrectOptions_2
     end if
 
     '/// Recover to the default  M:Y  T:Y
-    Call fAutocorrectOptions("CorrectTWoINitialCApitals")
+    Call fAutocorrectOptions("CorrectTWoINitialCApitals",1,1)
 
     Call hCloseDocument
 
@@ -324,14 +332,14 @@ endcase
 
 testcase tToolsAutocorrectOptions_3
 
-   Dim testContent as String
-   Dim hopeResult as String
-   Dim hopeResultBeforeAutoformat as String
-   Dim hopeResultAfterAutoformat as String
+    Dim testContent as String
+    Dim hopeResult as String
+    Dim hopeResultBeforeAutoformat as String
+    Dim hopeResultAfterAutoformat as String
 
-  printLog "Test 'Capitalize first letter of every setence'"
-  '/// Test 'Capitalize first letter of every setence'
-   Call hNewDocument
+    printLog "Test 'Capitalize first letter of every setence'"
+    '/// Test 'Capitalize first letter of every setence'
+    Call hNewDocument
 
     '/// M:Y  T:Y (default)
      testContent = "the test for StarOffice automation. who is the author?"
@@ -348,7 +356,7 @@ testcase tToolsAutocorrectOptions_3
      hopeResultBeforeAutoformat  = "the test for StarOffice automation. who is the author?"
      hopeResultAfterAutoformat   = "The test for StarOffice automation. Who is the author?"
 
-     Call fAutocorrectOptions("CapitalizeFirstLetter")
+     Call fAutocorrectOptions("CapitalizeFirstLetter",1,0)
      Call wTypeKeys testContent
      Call wTypeKeys "<Shift Home>"
      EditCopy
@@ -372,7 +380,7 @@ GOING1:
      testContent  = "the test for StarOffice automation. who is the author?"
      hopeResult   = "The test for StarOffice automation. Who is the author?"
 
-     Call fAutocorrectOptions("CapitalizeFirstLetter")
+     Call fAutocorrectOptions("CapitalizeFirstLetter",0,1)
      Call wTypeKeys testContent
      Call wTypeKeys "<Shift Home>"
      EditCopy
@@ -385,7 +393,7 @@ GOING1:
      hopeResultBeforeAutoformat  = "the test for StarOffice automation. who is the author?"
      hopeResultAfterAutoformat   = "the test for StarOffice automation. who is the author?"
 
-     Call fAutocorrectOptions("CapitalizeFirstLetter")
+     Call fAutocorrectOptions("CapitalizeFirstLetter",0,0)
 
      Call wTypeKeys testContent
      Call wTypeKeys "<Shift Home>"
@@ -406,7 +414,7 @@ GOING1:
 testend:
 
     '/// Recover to the default
-     Call fAutocorrectOptions("CapitalizeFirstLetter")
+     Call fAutocorrectOptions("CapitalizeFirstLetter",1,1)
 
     Call hCloseDocument
 
@@ -417,16 +425,16 @@ endcase
 
 testcase tToolsAutocorrectOptions_4_1
 
-   Dim testContent as String
-   Dim hopeResult as String
-   Dim hopeResultBeforeAutoformat as String
-   Dim hopeResultAfterAutoformat as String
-   Dim getStyle as String
-   Dim hopeStyle as String
+    Dim testContent as String
+    Dim hopeResult as String
+    Dim hopeResultBeforeAutoformat as String
+    Dim hopeResultAfterAutoformat as String
+    Dim getStyle as String
+    Dim hopeStyle as String
 
-  printLog "Test 'Automatic bold and underline' --- bold  "
-  '/// Test 'Automatic bold'
-   Call hNewDocument
+    printLog "Test 'Automatic bold and underline' --- bold  "
+    '/// Test 'Automatic bold'
+    Call hNewDocument
 
     '/// M:Y  T:Y (default)
      testContent = "*Test*"
@@ -440,193 +448,193 @@ testcase tToolsAutocorrectOptions_4_1
      fFormatCharacter("TabFont")
 
     try
-     getStyle = Style.GetSelText
-     Style.Select 3
-     hopeStyle = Style.GetSelText
+        getStyle = Style.GetSelText
+        Style.Select 3
+        hopeStyle = Style.GetSelText
     catch
-     getStyle = StyleWest.GetSelText
-     StyleWest.Select 3
-     hopeStyle = StyleWest.GetSelText
+        getStyle = StyleWest.GetSelText
+        StyleWest.Select 3
+        hopeStyle = StyleWest.GetSelText
     endcatch
     Sleep 1
 
-     if getStyle <> hopeStyle then Warnlog "The style is NOT bold style when M:Y  T:Y"
+    if getStyle <> hopeStyle then Warnlog "The style is NOT bold style when M:Y  T:Y"
 
     try
-     Style.Select 1
+        Style.Select 1
     catch
-     StyleWest.Select 1
+        StyleWest.Select 1
     endcatch
     Sleep 1
 
-     TabFont.OK
-     Sleep 1
+    TabFont.OK
+    Sleep 1
 
-     Call wTypeKeys "<DELETE>"
+    Call wTypeKeys "<DELETE>"
 
     '/// M:Y  T:N
-     testContent                 = "*Test*"
-     hopeResultBeforeAutoformat  = "*Test*"
-     hopeResultAfterAutoformat   = "Test"
+    testContent                 = "*Test*"
+    hopeResultBeforeAutoformat  = "*Test*"
+    hopeResultAfterAutoformat   = "Test"
 
-     Call fAutocorrectOptions("AutomaticBoldAndUnderline")
+    Call fAutocorrectOptions("AutomaticBoldAndUnderline",1,0)
 
-     Call wTypeKeys testContent
-     Call wTypeKeys "<Shift Home>"
+    Call wTypeKeys testContent
+    Call wTypeKeys "<Shift Home>"
 
-     EditCopy
-     if GetClipboardText <> hopeResultBeforeAutoformat then
-        Warnlog "The content should NOT be changed before Autoformat! M:Y  T:N"
-        goto GOING1
-     end if
+    EditCopy
+    if GetClipboardText <> hopeResultBeforeAutoformat then
+    Warnlog "The content should NOT be changed before Autoformat! M:Y  T:N"
+    goto GOING1
+    end if
 
-     fFormatCharacter("TabFont")
+    fFormatCharacter("TabFont")
 
     try
-     getStyle = Style.GetSelText
-     Style.Select 1
-     hopeStyle = Style.GetSelText
+        getStyle = Style.GetSelText
+        Style.Select 1
+        hopeStyle = Style.GetSelText
     catch
-     getStyle = StyleWest.GetSelText
-     StyleWest.Select 1
-     hopeStyle = StyleWest.GetSelText
+        getStyle = StyleWest.GetSelText
+        StyleWest.Select 1
+        hopeStyle = StyleWest.GetSelText
     endcatch
     Sleep 1
 
-     if getStyle <> hopeStyle then Warnlog "The style should be standard style before autoformat!"
-     TabFont.Cancel
+    if getStyle <> hopeStyle then Warnlog "The style should be standard style before autoformat!"
+    TabFont.Cancel
 
-     Call wTypeKeys "<ESCAPE>"
-     FormatAutoformatApply
-     Call wTypeKeys "<Shift End>"
-     EditCopy
-     if GetClipboardText <> hopeResultAfterAutoformat then
+    Call wTypeKeys "<ESCAPE>"
+    FormatAutoformatApply
+    Call wTypeKeys "<Shift End>"
+    EditCopy
+    if GetClipboardText <> hopeResultAfterAutoformat then
         Warnlog "The content should be changed after Autoformat!M:Y  T:N"
-     end if
+    end if
 
-     fFormatCharacter("TabFont")
+    Call fFormatCharacter("TabFont")
 
     try
-     getStyle = Style.GetSelText
-     Style.Select 3
-     hopeStyle = Style.GetSelText
+        getStyle = Style.GetSelText
+        Style.Select 3
+        hopeStyle = Style.GetSelText
     catch
-     getStyle = StyleWest.GetSelText
-     StyleWest.Select 3
-     hopeStyle = StyleWest.GetSelText
+        getStyle = StyleWest.GetSelText
+        StyleWest.Select 3
+        hopeStyle = StyleWest.GetSelText
     endcatch
     Sleep 1
 
-     if getStyle <> hopeStyle then Warnlog "The style is NOT bold style when M:Y  T:Y"
+    if getStyle <> hopeStyle then Warnlog "The style is NOT bold style when M:Y  T:Y"
 
     try
-     Style.Select 1
+        Style.Select 1
     catch
-     StyleWest.Select 1
+        StyleWest.Select 1
     endcatch
-     Sleep 1
+    Sleep 1
 
-     TabFont.OK
-     Sleep 1
+    TabFont.OK
+    Sleep 1
 
-GOING1:
+    GOING1:
 
-     Call wTypeKeys "<DELETE>"
+    Call wTypeKeys "<DELETE>"
 
     '/// M:N  T:Y
-     testContent = "*Test*"
-     hopeResult  = "Test"
+    testContent = "*Test*"
+    hopeResult  = "Test"
 
-     Call fAutocorrectOptions("AutomaticBoldAndUnderline")
+    Call fAutocorrectOptions("AutomaticBoldAndUnderline",0,1)
 
-     Call wTypeKeys testContent
-     Call wTypeKeys "<Shift Home>"
-     EditCopy
-     if GetClipboardText <> hopeResult then Warnlog "Something wrong in Automatic bold when M:Y  T:Y"
+    Call wTypeKeys testContent
+    Call wTypeKeys "<Shift Home>"
+    EditCopy
+    if GetClipboardText <> hopeResult then Warnlog "Something wrong in Automatic bold when M:Y  T:Y"
 
-     fFormatCharacter("TabFont")
+    Call fFormatCharacter("TabFont")
 
     try
-     getStyle = Style.GetSelText
-     Style.Select 3
-     hopeStyle = Style.GetSelText
+        getStyle = Style.GetSelText
+        Style.Select 3
+        hopeStyle = Style.GetSelText
     catch
-     getStyle = StyleWest.GetSelText
-     StyleWest.Select 3
-     hopeStyle = StyleWest.GetSelText
+        getStyle = StyleWest.GetSelText
+        StyleWest.Select 3
+        hopeStyle = StyleWest.GetSelText
     endcatch
     Sleep 1
 
-     if getStyle <> hopeStyle then Warnlog "The style is NOT bold style when M:Y  T:Y"
+    if getStyle <> hopeStyle then Warnlog "The style is NOT bold style when M:Y  T:Y"
     try
-     Style.Select 1
+        Style.Select 1
     catch
-     StyleWest.Select 1
+        StyleWest.Select 1
     endcatch
-     TabFont.OK
-     Sleep 1
+    TabFont.OK
+    Sleep 1
 
-     Call wTypeKeys "<DELETE>"
+    Call wTypeKeys "<DELETE>"
 
     '/// M:N  T:N
-     testContent                 = "*Test*"
-     hopeResultBeforeAutoformat  = "*Test*"
-     hopeResultAfterAutoformat   = "*Test*"
+    testContent                 = "*Test*"
+    hopeResultBeforeAutoformat  = "*Test*"
+    hopeResultAfterAutoformat   = "*Test*"
 
-     Call fAutocorrectOptions("AutomaticBoldAndUnderline")
+    Call fAutocorrectOptions("AutomaticBoldAndUnderline",0,0)
 
-     Call wTypeKeys testContent
-     Call wTypeKeys "<Shift Home>"
-     EditCopy
-     if GetClipboardText <> hopeResultBeforeAutoformat then
+    Call wTypeKeys testContent
+    Call wTypeKeys "<Shift Home>"
+    EditCopy
+    if GetClipboardText <> hopeResultBeforeAutoformat then
         Warnlog "The content should NOT be changed before Autoformat! M:N  T:N"
         goto testend
-     end if
+    end if
 
-     fFormatCharacter("TabFont")
+    Call fFormatCharacter("TabFont")
 
     try
-     getStyle = Style.GetSelText
-     Style.Select 1
-     hopeStyle = Style.GetSelText
+        getStyle = Style.GetSelText
+        Style.Select 1
+        hopeStyle = Style.GetSelText
     catch
-     getStyle = StyleWest.GetSelText
-     StyleWest.Select 1
-     hopeStyle = StyleWest.GetSelText
+        getStyle = StyleWest.GetSelText
+        StyleWest.Select 1
+        hopeStyle = StyleWest.GetSelText
     endcatch
     Sleep 1
 
-     if getStyle <> hopeStyle then Warnlog "The style should be standard style before autoformat!"
-     TabFont.Cancel
+    if getStyle <> hopeStyle then Warnlog "The style should be standard style before autoformat!"
+    TabFont.Cancel
 
-     Call wTypeKeys "<ESCAPE>"
-     FormatAutoformatApply
-     Call wTypeKeys "<Shift End>"
-     EditCopy
-     if GetClipboardText <> hopeResultAfterAutoformat then
+    Call wTypeKeys "<ESCAPE>"
+    FormatAutoformatApply
+    Call wTypeKeys "<Shift End>"
+    EditCopy
+    if GetClipboardText <> hopeResultAfterAutoformat then
         Warnlog "The content should NOT be changed after Autoformat! M:N  T:N"
-     end if
+    end if
 
-     fFormatCharacter("TabFont")
+    Call fFormatCharacter("TabFont")
 
     try
-     getStyle = Style.GetSelText
-     Style.Select 1
-     hopeStyle = Style.GetSelText
+        getStyle = Style.GetSelText
+        Style.Select 1
+        hopeStyle = Style.GetSelText
     catch
-     getStyle = StyleWest.GetSelText
-     StyleWest.Select 1
-     hopeStyle = StyleWest.GetSelText
+        getStyle = StyleWest.GetSelText
+        StyleWest.Select 1
+        hopeStyle = StyleWest.GetSelText
     endcatch
     Sleep 1
 
-     if getStyle <> hopeStyle then Warnlog "The style should be standard style after autoformat!"
-     TabFont.OK
-     Sleep 1
+    if getStyle <> hopeStyle then Warnlog "The style should be standard style after autoformat!"
+    TabFont.OK
+    Sleep 1
 
-testend:
+    testend:
     '/// Recover to the default  M:Y  T:Y
-     Call fAutocorrectOptions("AutomaticBoldAndUnderline")
+    Call fAutocorrectOptions("AutomaticBoldAndUnderline",1,1)
 
     Call hCloseDocument
 
@@ -636,155 +644,155 @@ endcase
 
 testcase tToolsAutocorrectOptions_4_2
 
-   Dim testContent as String
-   Dim hopeResult as String
-   Dim hopeResultBeforeAutoformat as String
-   Dim hopeResultAfterAutoformat as String
-   Dim getUnderlineStatus as Integer
-   Dim hopeUnderlineStatus as Integer  ' 1 = without  , 2 = single
+    Dim testContent as String
+    Dim hopeResult as String
+    Dim hopeResultBeforeAutoformat as String
+    Dim hopeResultAfterAutoformat as String
+    Dim getUnderlineStatus as Integer
+    Dim hopeUnderlineStatus as Integer  ' 1 = without  , 2 = single
 
-  printLog "Test 'Automatic bold and underline' --- underline  "
-  '/// Test 'Automatic underline'
-   Call hNewDocument
+    printLog "Test 'Automatic bold and underline' --- underline  "
+    '/// Test 'Automatic underline'
+    Call hNewDocument
 
     '/// M:Y  T:Y (default)
-     testContent = "_Test_"
-     hopeResult  = "Test"
+    testContent = "_Test_"
+    hopeResult  = "Test"
 
-     Call wTypeKeys testContent
-     Call wTypeKeys "<Shift Home>"
-     EditCopy
-     if GetClipboardText <> hopeResult then Warnlog "Something wrong in Automatic underline when M:Y  T:Y"
+    Call wTypeKeys testContent
+    Call wTypeKeys "<Shift Home>"
+    EditCopy
+    if GetClipboardText <> hopeResult then Warnlog "Something wrong in Automatic underline when M:Y  T:Y"
 
-     fFormatCharacter("TabFontEffects")
+    Call fFormatCharacter("TabFontEffects")
 
-     getUnderlineStatus  = Underline.GetSelIndex
-     Underline.Select 2
-     hopeUnderlineStatus = Underline.GetSelIndex
+    getUnderlineStatus  = Underline.GetSelIndex
+    Underline.Select 2
+    hopeUnderlineStatus = Underline.GetSelIndex
 
-     if getUnderlineStatus <> hopeUnderlineStatus then Warnlog "The content is NOT underlined when M:Y  T:Y"
-     Underline.Select 1
-     TabFontEffects.OK
-     Sleep 1
+    if getUnderlineStatus <> hopeUnderlineStatus then Warnlog "The content is NOT underlined when M:Y  T:Y"
+    Underline.Select 1
+    TabFontEffects.OK
+    Sleep 1
 
-     Call wTypeKeys "<DELETE>"
+    Call wTypeKeys "<DELETE>"
 
     '/// M:Y  T:N
-     testContent                 = "_Test_"
-     hopeResultBeforeAutoformat  = "_Test_"
-     hopeResultAfterAutoformat   = "Test"
+    testContent                 = "_Test_"
+    hopeResultBeforeAutoformat  = "_Test_"
+    hopeResultAfterAutoformat   = "Test"
 
-     Call fAutocorrectOptions("AutomaticBoldAndUnderline")
+    Call fAutocorrectOptions("AutomaticBoldAndUnderline",1,0)
 
-     Call wTypeKeys testContent
-     Call wTypeKeys "<Shift Home>"
+    Call wTypeKeys testContent
+    Call wTypeKeys "<Shift Home>"
 
-     EditCopy
-     if GetClipboardText <> hopeResultBeforeAutoformat then
+    EditCopy
+    if GetClipboardText <> hopeResultBeforeAutoformat then
         Warnlog "The content should NOT be changed before Autoformat! M:Y  T:N"
         goto GOING1
-     end if
+    end if
 
-     fFormatCharacter("TabFontEffects")
+    Call fFormatCharacter("TabFontEffects")
 
-     getUnderlineStatus  = Underline.GetSelIndex
-     Underline.Select 1
-     Sleep 1
-     hopeUnderlineStatus = Underline.GetSelIndex
+    getUnderlineStatus  = Underline.GetSelIndex
+    Underline.Select 1
+    Sleep 1
+    hopeUnderlineStatus = Underline.GetSelIndex
 
-     if getUnderlineStatus <> hopeUnderlineStatus then Warnlog "The content should NOT be underlined when M:Y  T:N before autoformat!"
-     TabFontEffects.OK
-     Sleep 1
+    if getUnderlineStatus <> hopeUnderlineStatus then Warnlog "The content should NOT be underlined when M:Y  T:N before autoformat!"
+    TabFontEffects.OK
+    Sleep 1
 
-     Call wTypeKeys "<ESCAPE>"
-     FormatAutoformatApply
-     Call wTypeKeys "<Shift End>"
-     EditCopy
-     if GetClipboardText <> hopeResultAfterAutoformat then
+    Call wTypeKeys "<ESCAPE>"
+    FormatAutoformatApply
+    Call wTypeKeys "<Shift End>"
+    EditCopy
+    if GetClipboardText <> hopeResultAfterAutoformat then
         Warnlog "The content should be changed after Autoformat!M:Y  T:N"
-     end if
+    end if
 
-     fFormatCharacter("TabFontEffects")
-     getUnderlineStatus  = Underline.GetSelIndex
-     Underline.Select 2
-     hopeUnderlineStatus = Underline.GetSelIndex
+    Call fFormatCharacter("TabFontEffects")
+    getUnderlineStatus  = Underline.GetSelIndex
+    Underline.Select 2
+    hopeUnderlineStatus = Underline.GetSelIndex
 
-     if getUnderlineStatus <> hopeUnderlineStatus then Warnlog "The content should be underlined when M:Y  T:N"
-     Underline.Select 1
-     TabFontEffects.OK
-     Sleep 1
-GOING1:
-     Call wTypeKeys "<DELETE>"
+    if getUnderlineStatus <> hopeUnderlineStatus then Warnlog "The content should be underlined when M:Y  T:N"
+    Underline.Select 1
+    TabFontEffects.OK
+    Sleep 1
+    GOING1:
+    Call wTypeKeys "<DELETE>"
 
     '/// M:N  T:Y
-     testContent = "_Test_"
-     hopeResult  = "Test"
+    testContent = "_Test_"
+    hopeResult  = "Test"
 
-     Call fAutocorrectOptions("AutomaticBoldAndUnderline")
+    Call fAutocorrectOptions("AutomaticBoldAndUnderline",0,1)
 
-     Call wTypeKeys testContent
-     Call wTypeKeys "<Shift Home>"
-     EditCopy
-     if GetClipboardText <> hopeResult then Warnlog "Something wrong in Automatic bold when M:N  T:Y"
+    Call wTypeKeys testContent
+    Call wTypeKeys "<Shift Home>"
+    EditCopy
+    if GetClipboardText <> hopeResult then Warnlog "Something wrong in Automatic bold when M:N  T:Y"
 
-     fFormatCharacter("TabFontEffects")
-     getUnderlineStatus  = Underline.GetSelIndex
-     Underline.Select 2
-     Sleep 1
-     hopeUnderlineStatus = Underline.GetSelIndex
+    Call fFormatCharacter("TabFontEffects")
+    getUnderlineStatus  = Underline.GetSelIndex
+    Underline.Select 2
+    Sleep 1
+    hopeUnderlineStatus = Underline.GetSelIndex
 
-     if getUnderlineStatus <> hopeUnderlineStatus then Warnlog "The content is NOT underlined when M:N  T:Y"
-     Underline.Select 1
-     Sleep 1
-     TabFontEffects.OK
-     Sleep 1
+    if getUnderlineStatus <> hopeUnderlineStatus then Warnlog "The content is NOT underlined when M:N  T:Y"
+    Underline.Select 1
+    Sleep 1
+    TabFontEffects.OK
+    Sleep 1
 
-     Call wTypeKeys "<DELETE>"
+    Call wTypeKeys "<DELETE>"
 
     '/// M:N  T:N
-     testContent                 = "_Test_"
-     hopeResultBeforeAutoformat  = "_Test_"
-     hopeResultAfterAutoformat   = "_Test_"
+    testContent                 = "_Test_"
+    hopeResultBeforeAutoformat  = "_Test_"
+    hopeResultAfterAutoformat   = "_Test_"
 
-     Call fAutocorrectOptions("AutomaticBoldAndUnderline")
+    Call fAutocorrectOptions("AutomaticBoldAndUnderline",0,0)
 
-     Call wTypeKeys testContent
-     Call wTypeKeys "<Shift Home>"
-     EditCopy
-     if GetClipboardText <> hopeResultBeforeAutoformat then
+    Call wTypeKeys testContent
+    Call wTypeKeys "<Shift Home>"
+    EditCopy
+    if GetClipboardText <> hopeResultBeforeAutoformat then
         Warnlog "The content should NOT be changed before Autoformat! M:N  T:N"
         goto testend
-     end if
+    end if
 
-     fFormatCharacter("TabFontEffects")
-     getUnderlineStatus  = Underline.GetSelIndex
-     Underline.Select 1
-     hopeUnderlineStatus = Underline.GetSelIndex
+    Call fFormatCharacter("TabFontEffects")
+    getUnderlineStatus  = Underline.GetSelIndex
+    Underline.Select 1
+    hopeUnderlineStatus = Underline.GetSelIndex
 
-     if getUnderlineStatus <> hopeUnderlineStatus then Warnlog "The content should NOT be underlined before autoformat!M:N  T:N "
-     TabFontEffects.OK
+    if getUnderlineStatus <> hopeUnderlineStatus then Warnlog "The content should NOT be underlined before autoformat!M:N  T:N "
+    TabFontEffects.OK
 
-     Call wTypeKeys "<ESCAPE>"
-     FormatAutoformatApply
-     Call wTypeKeys "<Shift End>"
-     EditCopy
-     if GetClipboardText <> hopeResultAfterAutoformat then
-        Warnlog "The content should NOT be changed after Autoformat! M:N  T:N"
-     end if
+    Call wTypeKeys "<ESCAPE>"
+    FormatAutoformatApply
+    Call wTypeKeys "<Shift End>"
+    EditCopy
+    if GetClipboardText <> hopeResultAfterAutoformat then
+    Warnlog "The content should NOT be changed after Autoformat! M:N  T:N"
+    end if
 
-     fFormatCharacter("TabFontEffects")
-     getUnderlineStatus  = Underline.GetSelIndex
-     Underline.Select 1
-     Sleep 1
-     hopeUnderlineStatus = Underline.GetSelIndex
+    Call fFormatCharacter("TabFontEffects")
+    getUnderlineStatus  = Underline.GetSelIndex
+    Underline.Select 1
+    Sleep 1
+    hopeUnderlineStatus = Underline.GetSelIndex
 
-     if getUnderlineStatus <> hopeUnderlineStatus then Warnlog "The content should NOT be underlined after autoformat! M:N  T:N"
-     TabFontEffects.OK
-     Sleep 1
+    if getUnderlineStatus <> hopeUnderlineStatus then Warnlog "The content should NOT be underlined after autoformat! M:N  T:N"
+    TabFontEffects.OK
+    Sleep 1
 
-testend:
+    testend:
     '/// Recover to the default  M:Y  T:Y
-     Call fAutocorrectOptions("AutomaticBoldAndUnderline")
+    Call fAutocorrectOptions("AutomaticBoldAndUnderline",1,1)
 
     Call hCloseDocument
 
@@ -794,100 +802,100 @@ endcase
 
 testcase tToolsAutocorrectOptions_5
 
-   Dim testContent as String
-   Dim hopeResult as String
-   Dim hopeResultBeforeAutoformat as String
-   Dim hopeResultAfterAutoformat as String
+    Dim testContent as String
+    Dim hopeResult as String
+    Dim hopeResultBeforeAutoformat as String
+    Dim hopeResultAfterAutoformat as String
 
-  printLog "URL Recognition"
-  '/// URL Recognition
-   Call hNewDocument
+    printLog "URL Recognition"
+    '/// URL Recognition
+    Call hNewDocument
 
     '/// M:Y  T:Y (default)
-     testContent = "WWW.sun.com"
-     hopeResult  = "http://WWW.sun.com/"
+    testContent = "WWW.sun.com"
+    hopeResult  = "http://WWW.sun.com/"
 
-     Call wTypeKeys testContent
-     Call wTypeKeys " "
-     Call wTypeKeys "<Home>"
+    Call wTypeKeys testContent
+    Call wTypeKeys " "
+    Call wTypeKeys "<Home>"
 
-     fFormatCharacter("TabHyperlinkZeichen")
-     if URLName.GetText <> hopeResult then Warnlog "The URL is NOT appeared when M:Y  T:Y"
-     URLName.SetText ""
-     TabHyperlinkZeichen.OK
+    Call fFormatCharacter("TabHyperlinkZeichen")
+    if URLName.GetText <> hopeResult then Warnlog "The URL is NOT appeared when M:Y  T:Y"
+    URLName.SetText ""
+    TabHyperlinkZeichen.OK
 
     Call hCloseDocument
 
     Call hNewDocument
     '/// M:Y  T:N
-     testContent                 = "WWW.sun.com"
-     hopeResultBeforeAutoformat  = ""
-     hopeResultAfterAutoformat   = "http://WWW.sun.com/"
+    testContent                 = "WWW.sun.com"
+    hopeResultBeforeAutoformat  = ""
+    hopeResultAfterAutoformat   = "http://WWW.sun.com/"
 
-     Call fAutocorrectOptions("URLRecognition")
+    Call fAutocorrectOptions("URLRecognition",1,0)
 
-     Call wTypeKeys testContent
-     Call wTypeKeys " "
-     Call wTypeKeys "<Home>"
+    Call wTypeKeys testContent
+    Call wTypeKeys " "
+    Call wTypeKeys "<Home>"
 
-     fFormatCharacter("TabHyperlinkZeichen")
-     if URLName.GetText <> hopeResultBeforeAutoformat then Warnlog "The URL should NOT appeare when M:Y  T:N  before autoformat!"
-     URLName.SetText ""
-     TabHyperlinkZeichen.OK
+    Call fFormatCharacter("TabHyperlinkZeichen")
+    if URLName.GetText <> hopeResultBeforeAutoformat then Warnlog "The URL should NOT appeare when M:Y  T:N  before autoformat!"
+    URLName.SetText ""
+    TabHyperlinkZeichen.OK
 
-     FormatAutoformatApply
+    FormatAutoformatApply
 
-     fFormatCharacter("TabHyperlinkZeichen")
-     if URLName.GetText <> hopeResultAfterAutoformat then Warnlog "The URL should  appeare when M:Y  T:N  after autoformat!"
-     URLName.SetText ""
-     TabHyperlinkZeichen.OK
+    Call fFormatCharacter("TabHyperlinkZeichen")
+    if URLName.GetText <> hopeResultAfterAutoformat then Warnlog "The URL should  appeare when M:Y  T:N  after autoformat!"
+    URLName.SetText ""
+    TabHyperlinkZeichen.OK
 
     Call hCloseDocument
 
     Call hNewDocument
     '/// M:N  T:Y
-     testContent = "WWW.sun.com"
-     hopeResult  = "http://WWW.sun.com/"
+    testContent = "WWW.sun.com"
+    hopeResult  = "http://WWW.sun.com/"
 
-     Call fAutocorrectOptions("URLRecognition")
+    Call fAutocorrectOptions("URLRecognition",0,1)
 
-     Call wTypeKeys testContent
-     Call wTypeKeys " "
-     Call wTypeKeys "<Home>"
+    Call wTypeKeys testContent
+    Call wTypeKeys " "
+    Call wTypeKeys "<Home>"
 
-     fFormatCharacter("TabHyperlinkZeichen")
-     if URLName.GetText <> hopeResult then Warnlog "The URL is NOT appeared when M:N  T:Y"
-     URLName.SetText ""
-     TabHyperlinkZeichen.OK
+    Call fFormatCharacter("TabHyperlinkZeichen")
+    if URLName.GetText <> hopeResult then Warnlog "The URL is NOT appeared when M:N  T:Y"
+    URLName.SetText ""
+    TabHyperlinkZeichen.OK
 
     Call hCloseDocument
 
     Call hNewDocument
     '/// M:N  T:N
-     testContent                 = "WWW.sun.com"
-     hopeResultBeforeAutoformat  = ""
-     hopeResultAfterAutoformat   = ""
+    testContent                 = "WWW.sun.com"
+    hopeResultBeforeAutoformat  = ""
+    hopeResultAfterAutoformat   = ""
 
-     Call fAutocorrectOptions("URLRecognition")
+    Call fAutocorrectOptions("URLRecognition",0,0)
 
-     Call wTypeKeys testContent
-     Call wTypeKeys " "
-     Call wTypeKeys "<Home>"
+    Call wTypeKeys testContent
+    Call wTypeKeys " "
+    Call wTypeKeys "<Home>"
 
-     fFormatCharacter("TabHyperlinkZeichen")
-     if URLName.GetText <> hopeResultBeforeAutoformat then Warnlog "The URL should NOT appeare when M:N  T:N  before autoformat!"
-     URLName.SetText ""
-     TabHyperlinkZeichen.OK
+    Call fFormatCharacter("TabHyperlinkZeichen")
+    if URLName.GetText <> hopeResultBeforeAutoformat then Warnlog "The URL should NOT appeare when M:N  T:N  before autoformat!"
+    URLName.SetText ""
+    TabHyperlinkZeichen.OK
 
-     FormatAutoformatApply
+    FormatAutoformatApply
 
-     fFormatCharacter("TabHyperlinkZeichen")
-     if URLName.GetText <> hopeResultAfterAutoformat then Warnlog "The URL should NOT appeare when M:N  T:N  after autoformat!"
-     URLName.SetText ""
-     TabHyperlinkZeichen.OK
+    Call fFormatCharacter("TabHyperlinkZeichen")
+    if URLName.GetText <> hopeResultAfterAutoformat then Warnlog "The URL should NOT appeare when M:N  T:N  after autoformat!"
+    URLName.SetText ""
+    TabHyperlinkZeichen.OK
 
     '/// Recover to the default  M:Y  T:Y
-     Call fAutocorrectOptions("URLRecognition")
+    Call fAutocorrectOptions("URLRecognition",1,1)
 
     Call hCloseDocument
 
@@ -897,93 +905,93 @@ endcase
 
 testcase tToolsAutocorrectOptions_6
 
-   Dim testContent as String
-   Dim hopeResult as String
-   Dim hopeResultBeforeAutoformat
-   Dim hopeResultAfterAutoformat as String
+    Dim testContent as String
+    Dim hopeResult as String
+    Dim hopeResultBeforeAutoformat
+    Dim hopeResultAfterAutoformat as String
 
-  printLog "Replace dashes"
-  '/// Replace dashes
-   Call hNewDocument
+    printLog "Replace dashes"
+    '/// Replace dashes
+    Call hNewDocument
 
     '///  M:Y  T:Y (default)
-     testContent = "Bla - Bla"
-     hopeResult  = "Bla – Bla"
-     Call wTypeKeys testContent
-     Call wTypeKeys " "
-     Call wTypeKeys "<BACKSPACE><Shift Home>"
-     EditCopy
-     if GetClipboardText <> hopeResult then Warnlog "Something wrong in Replace dashes M:Y  T:Y"
+    testContent = "Bla - Bla"
+    hopeResult  = "Bla – Bla"
+    Call wTypeKeys testContent
+    Call wTypeKeys " "
+    Call wTypeKeys "<BACKSPACE><Shift Home>"
+    EditCopy
+    if GetClipboardText <> hopeResult then Warnlog "Something wrong in Replace dashes M:Y  T:Y"
 
-     Call wTypeKeys "<DELETE>"
+    Call wTypeKeys "<DELETE>"
 
     '///  M:Y  T:N
-     testContent                 = "Bla - Bla"
-     hopeResultBeforeAutoformat  = "Bla - Bla"
-     hopeResultAfterAutoformat   = "Bla – Bla"
+    testContent                 = "Bla - Bla"
+    hopeResultBeforeAutoformat  = "Bla - Bla"
+    hopeResultAfterAutoformat   = "Bla – Bla"
 
-     Call fAutocorrectOptions("ReplaceDashes")
-     Call wTypeKeys testContent
-     Call wTypeKeys " "
-     Call wTypeKeys "<BACKSPACE><Shift Home>"
-     EditCopy
-     if GetClipboardText <> hopeResultBeforeAutoformat then
+    Call fAutocorrectOptions("ReplaceDashes",1,0)
+    Call wTypeKeys testContent
+    Call wTypeKeys " "
+    Call wTypeKeys "<BACKSPACE><Shift Home>"
+    EditCopy
+    if GetClipboardText <> hopeResultBeforeAutoformat then
         Warnlog "The content should NOT be changed before Autoformat! M:Y  T:N"
         goto GOING1
-     end if
+    end if
 
-     Call wTypeKeys "<ESCAPE>"
-     FormatAutoformatApply
-     Call wTypeKeys "<Shift End>"
-     EditCopy
-     if GetClipboardText <> hopeResultAfterAutoformat then
+    Call wTypeKeys "<ESCAPE>"
+    FormatAutoformatApply
+    Call wTypeKeys "<Shift End>"
+    EditCopy
+    if GetClipboardText <> hopeResultAfterAutoformat then
         Warnlog "The content should be changed after Autoformat!M:Y  T:N"
-     end if
+    end if
 
-GOING1:
-     Call wTypeKeys "<DELETE>"
+    GOING1:
+    Call wTypeKeys "<DELETE>"
 
     '///  M:N  T:Y
-     testContent  = "Bla - Bla"
-     hopeResult   = "Bla – Bla"
+    testContent  = "Bla - Bla"
+    hopeResult   = "Bla – Bla"
 
-     Call fAutocorrectOptions("ReplaceDashes")
-     Call wTypeKeys testContent
-     Call wTypeKeys " "
-     Call wTypeKeys "<BACKSPACE><Shift Home>"
-     EditCopy
-     if GetClipboardText <> hopeResult then Warnlog "Something wrong in Replace dashes  when M:N  T:Y"
+    Call fAutocorrectOptions("ReplaceDashes",0,1)
+    Call wTypeKeys testContent
+    Call wTypeKeys " "
+    Call wTypeKeys "<BACKSPACE><Shift Home>"
+    EditCopy
+    if GetClipboardText <> hopeResult then Warnlog "Something wrong in Replace dashes  when M:N  T:Y"
 
-     Call wTypeKeys "<DELETE>"
+    Call wTypeKeys "<DELETE>"
 
     '///  M:N  T:N
-     testContent                 = "Bla - Bla"
-     hopeResultBeforeAutoformat  = "Bla - Bla"
-     hopeResultAfterAutoformat   = "Bla - Bla"
+    testContent                 = "Bla - Bla"
+    hopeResultBeforeAutoformat  = "Bla - Bla"
+    hopeResultAfterAutoformat   = "Bla - Bla"
 
-     Call fAutocorrectOptions("ReplaceDashes")
+    Call fAutocorrectOptions("ReplaceDashes",0,0)
 
-     Call wTypeKeys testContent
-     Call wTypeKeys " "
-     Call wTypeKeys "<BACKSPACE><Shift Home>"
-     EditCopy
-     if GetClipboardText <> hopeResultBeforeAutoformat then
+    Call wTypeKeys testContent
+    Call wTypeKeys " "
+    Call wTypeKeys "<BACKSPACE><Shift Home>"
+    EditCopy
+    if GetClipboardText <> hopeResultBeforeAutoformat then
         Warnlog "The content should NOT be changed before Autoformat! M:N  T:N"
         goto testend
-     end if
+    end if
 
-     Call wTypeKeys "<ESCAPE>"
-     FormatAutoformatApply
-     Call wTypeKeys "<Shift End>"
-     EditCopy
-     if GetClipboardText <> hopeResultAfterAutoformat then
+    Call wTypeKeys "<ESCAPE>"
+    FormatAutoformatApply
+    Call wTypeKeys "<Shift End>"
+    EditCopy
+    if GetClipboardText <> hopeResultAfterAutoformat then
         Warnlog "The content should NOT be changed after Autoformat! M:N  T:N"
-     end if
+    end if
 
-testend:
+    testend:
 
     '/// Recover to the default
-     Call fAutocorrectOptions("ReplaceDashes")
+    Call fAutocorrectOptions("ReplaceDashes",1,1)
 
     Call hCloseDocument
 
@@ -993,12 +1001,12 @@ endcase
 
 testcase tToolsAutocorrectOptions_7
 
-   Dim testContent as String
-   Dim hopeResult as String
+    Dim testContent as String
+    Dim hopeResult as String
 
-  printLog "Ignore double spaces"
-  '/// Ignore double spaces
-   Call hNewDocument
+    printLog "Ignore double spaces"
+    '/// Ignore double spaces
+    Call hNewDocument
 
     '/// + T:N (default)
      testContent = "Two  Space"
@@ -1014,7 +1022,7 @@ testcase tToolsAutocorrectOptions_7
      testContent = "Two  Space"
      hopeResult  = "Two Space"
 
-     Call fAutocorrectOptions("IgnoreDoulbeSpaces")
+     Call fAutocorrectOptions("IgnoreDoubleSpaces",1,1)
      Call wTypeKeys testContent
      Call wTypeKeys "<Shift Home>"
      EditCopy
@@ -1024,7 +1032,7 @@ testcase tToolsAutocorrectOptions_7
      Call wTypeKeys "<ESCAPE>"
 
     '/// Recover to the default
-     Call fAutocorrectOptions("IgnoreDoulbeSpaces")
+     Call fAutocorrectOptions("IgnoreDoubleSpaces",0,0)
 
     Call hCloseDocument
 
@@ -1034,47 +1042,52 @@ endcase
 
 testcase tToolsAutocorrectOptions_8
 
-  Dim firstLine as String
-  Dim testContent as String
-  Dim hopeResult as String
+    Dim firstLine as String
+    Dim testContent as String
+    Dim hopeResult as String
 
-  printLog "Apply numbering"
-  '/// Apply numbering
+    printLog "Apply numbering"
+    '/// Apply numbering
 
-   Call hNewDocument
+    Call hNewDocument
 
     '/// + T:Y (default)
 
-     firstLine   = "1. FirstLine"
-     testContent = "Test1"
-     hopeResult  = "1.Test1"
+    firstLine   = "1. FirstLine"
+    testContent = "Test1"    
+    hopeResult  = "1.Test1"
 
-     Call wTypeKeys firstLine
-     Call wTypeKeys "<Return>"
-     Call wTypeKeys testContent
-     Call wTypeKeys "<Return><Up><Home><Shift End>"
-     EditCopy
-     if GetClipboardText <> hopeResult then Warnlog "Should Apply numbering when T:Y "
+    Call wTypeKeys firstLine
+    Call wTypeKeys "<Return>"
+    Call wTypeKeys testContent
+    Call wTypeKeys "<Return>"
+    Call wTypeKeys "<Up><End>"
+    Call wTypeKeys "<Mod1 Shift Up>"
+    EditCopy
+    printlog GetClipBoardtext
+    if GetClipboardText <> hopeResult then Warnlog "Should Apply numbering when T:Y. Not " & hopeResult & " but " & GetClipboardtext
 
-     EditSelectAll
-     Call wTypeKeys "<DELETE>"
-     Call wTypeKeys "<BACKSPACE>",3
+    EditSelectAll
+    Call wTypeKeys "<DELETE>"
+    Call wTypeKeys "<BACKSPACE>",3
 
     '/// + T:N
-     testContent = "Test1"
-     hopeResult  = "Test1"
+    testContent = "Test1"
+    hopeResult  = "Test1"
 
-     Call fAutocorrectOptions("ApplyNumbering")
-     Call wTypeKeys firstLine
-     Call wTypeKeys "<Return>"
-     Call wTypeKeys testContent
-     Call wTypeKeys "<Return><Up><Home><Shift End>"
-     EditCopy
+    Call fAutocorrectOptions("ApplyNumbering",0,0)
+    Call wTypeKeys firstLine
+    Call wTypeKeys "<Return>"
+    Call wTypeKeys testContent
+    Call wTypeKeys "<Return>"
+    Call wTypeKeys "<Up><End>"
+    Call wTypeKeys "<Mod1 Shift Up>"
+    EditCopy
 
-     if GetClipboardText <> hopeResult then Warnlog "Should NOT Apply numbering when T:Y"
+    if GetClipboardText <> hopeResult then Warnlog "Should NOT Apply numbering when T:N. Not " & hopeResult & " but " & GetClipboardtext
 
     '/// Recover to the default
-     Call fAutocorrectOptions("ApplyNumbering")
+    Call fAutocorrectOptions("ApplyNumbering",1,1)
 
     Call hCloseDocument
 
@@ -1084,79 +1097,71 @@ endcase
 
 testcase tToolsAutocorrectOptions_9
 
-  Dim testList() as String
-  Dim testContent as String
-  Dim hopeResult as String
-  Dim i as String
-  Dim j as Integer
-  Dim bottom as String
+    Dim testList() as String
+    Dim testContent as String
+    Dim hopeResult as String
+    Dim i as integer
+    Dim bottom as String
 
-  bottom = "0" + gSeperator + "10" + gMeasurementUnit
+    bottom = "0" + gSeperator + "10" + gMeasurementUnit
 
-  testList   =  Array( _
-                            "---"             , _
-                            "___"             , _
-                            "==="             , _
-                            "***"             , _
-                            "~~~"             , _
-                            "###"             , _
-                      )
-  j = UBound(testList)
+    testList   =  Array( "---", "___", "===", "***", "~~~" , "###" )
 
-  '/// Apply border test , including
-  '/// + '---' , '___", "===", "***" , "~~~", "###"
-  printLog "Apply border"
+    '/// Apply border test , including
+    '/// + '---' , '___", "===", "***" , "~~~", "###"
+    printLog "Apply border"
 
-  Call hNewDocument
+    Call hNewDocument
 
-  For i = 0 to j
+    For i = 0 to 5
 
-    '/// + T:Y (default)
-     testContent = testlist(i)
+        printlog testlist(i)
+        printlog "- T:Y (default)"
+        testContent = testlist(i)
 
-     Call wTypeKeys testContent
-     Call wTypeKeys "<Return><Up><Home><Shift End>"
-     try
+        Call wTypeKeys testContent
+        Call wTypeKeys "<Return><Up><Home><Shift End>"
+        try
+            EditCopy
+            Warnlog "Apply border is NOT correct when T:Y " +testlist(i)
+        catch
+        endcatch
+
+        Call fFormatParagraph("TabUmrandung")
+        try
+            Unten.SetText  bottom
+        catch
+            Warnlog "Apply border is NOT correct when T:Y " +testlist(i)
+        endcatch
+        TabUmrandung.Cancel
+
+        Call wTypeKeys "<Down>"
+
+        printlog "- T:N"
+        testContent = testlist(i)
+        hopeResult  = testlist(i)
+
+        Call fAutocorrectOptions("ApplyBorder",0,0)
+        Call wTypeKeys testContent
+        Call wTypeKeys "<Return><Up><Home><Shift End>"
         EditCopy
-        Warnlog "Apply border is NOT correct when T:Y " +testlist(i)
-     catch
-     endcatch
 
-     fFormatParagraph("TabUmrandung")
-       try
-          Unten.SetText  bottom
-       catch
-          Warnlog "Apply border is NOT correct when T:Y " +testlist(i)
-       endcatch
-     TabUmrandung.Cancel
+        if GetClipboardText <> hopeResult then Warnlog "Something wrong  when T:N "+testlist(i)
 
-     Call wTypeKeys "<Down>"
+        Call fFormatParagraph("TabUmrandung")
+        try
+            Unten.SetText  bottom
+            Warnlog "Apply border is NOT correct when T:N "+testlist(i)
+        catch
+        endcatch
+        TabUmrandung.Cancel
 
-    '/// + T:N
-     testContent = testlist(i)
-     hopeResult  = testlist(i)
+        printlog "- Recover to the default"
+        Call fAutocorrectOptions("ApplyBorder",1,1)
 
-     Call fAutocorrectOptions("ApplyBorder")
-     Call wTypeKeys testContent
-     Call wTypeKeys "<Return><Up><Home><Shift End>"
-     EditCopy
+    next i
 
-     if GetClipboardText <> hopeResult then Warnlog "Something wrong  when T:N "+testlist(i)
-
-     fFormatParagraph("TabUmrandung")
-     try
-        Unten.SetText  bottom
-        Warnlog "Apply border is NOT correct when T:N "+testlist(i)
-     catch
-     endcatch
-     TabUmrandung.Cancel
-
-    '/// Recover to the default
-     Call fAutocorrectOptions("ApplyBorder")
-
-   next i
-
-   Call hCloseDocument
+    Call hCloseDocument
 
 endcase
 
@@ -1164,50 +1169,50 @@ endcase
 
 testcase tToolsAutocorrectOptions_10
 
-   Dim testContent as String
-   Dim hopeResult as String
+    Dim testContent as String
+    Dim hopeResult as String
 
-  printLog "Create Table"
-  '/// Create Table
-   Call hNewDocument
+    printLog "Create Table"
+    '/// Create Table
+    Call hNewDocument
 
     '/// + T:Y (default)
-     testContent = "+---+"
-     Call wTypeKeys testContent
-     Call wTypeKeys "<Return><Up><Home><Shift End>"
-     try
+    testContent = "+---+"
+    Call wTypeKeys testContent
+    Call wTypeKeys "<Return><Up><Home><Shift End>"
+    try
         EditCopy
         Warnlog "Something wrong in create table T:Y"
-     catch
-     endcatch
+    catch
+    endcatch
 
-     try
+    try
         FormatRowDelete
         Sleep 1
-     catch
+    catch
         Warnlog "Can't delete table ,T:Y"
-     endcatch
+    endcatch
 
     '/// + T:N
-     testContent = "+---+"
-     hopeResult  = "+---+"
+    testContent = "+---+"
+    hopeResult  = "+---+"
 
-     Call fAutocorrectOptions("CreateTable")
-     Call wTypeKeys testContent
-     Call wTypeKeys "<Return><Up><Home><Shift End>"
-     EditCopy
+    Call fAutocorrectOptions("CreateTable",0,0)
+    Call wTypeKeys testContent
+    Call wTypeKeys "<Return><Up><Home><Shift End>"
+    EditCopy
 
-     if GetClipboardText <> hopeResult then Warnlog "Something wrong  when T:N"
+    if GetClipboardText <> hopeResult then Warnlog "Something wrong  when T:N"
 
-     try
+    try
         FormatRowDelete
         Sleep 1
         Warnlog "Should NOT generate table when T:N"
-     catch
-     endcatch
+    catch
+    endcatch
 
     '/// Recover to the default
-     Call fAutocorrectOptions("CreateTable")
+    Call fAutocorrectOptions("CreateTable",1,1)
 
     Call hCloseDocument
 
@@ -1217,72 +1222,71 @@ endcase
 
 testcase tToolsAutocorrectOptions_11
 
-   Dim testContent1 as String
-   Dim testContent2 as String
-   Dim hopeResultAfterAutoformat1 as String
-   Dim hopeResultAfterAutoformat2 as String
+    Dim testContent1 as String
+    Dim testContent2 as String
+    Dim hopeResultAfterAutoformat1 as String
+    Dim hopeResultAfterAutoformat2 as String
 
-   testContent1                 = "ABCD1234"
-   testContent2                 = "EFGH5678"
+    testContent1                 = "ABCD1234"
+    testContent2                 = "EFGH5678"
 
-   hopeResultAfterAutoformat1   = "ABCD1234"
-   hopeResultAfterAutoformat2   = "EFGH5678"
+    hopeResultAfterAutoformat1   = "ABCD1234"
+    hopeResultAfterAutoformat2   = "EFGH5678"
 
+    printLog "Remove Blank Paragraphs"
+    '/// Remove Blank Paragraphs
 
-  printLog "Remove Blank Paragraphs"
-  '/// Remove Blank Paragraphs
-
-   Call hNewDocument
+    Call hNewDocument
 
     '///  M:N (default)
-     wTypeKeys testContent1
-     wTypeKeys "<Return>",2
-     wTypeKeys testContent2
+    Call wTypeKeys testContent1
+    Call wTypeKeys "<Return>",2
+    Call wTypeKeys testContent2
 
-     FormatAutoformatApply
+    FormatAutoformatApply
 
-     wTypeKeys "<Up><Up><Home><Shift End>"
-     wait 200
-     EditCopy
-     if GetClipboardText <> hopeResultAfterAutoformat1 then Warnlog "the first line's content is NOT correct when M:N"
+    Call wTypeKeys "<Up><Up><Home><Shift End>"
+    wait 200
+    EditCopy
+    if GetClipboardText <> hopeResultAfterAutoformat1 then Warnlog "the first line's content is NOT correct when M:N"
 
-     wTypeKeys "<Down><Home><Shift End>"
-     try
+    Call wTypeKeys "<Down><Home><Shift End>"
+    try
         EditCopy
         Warnlog "the second line's content is NOT correct when M:N"
-     catch
-     endcatch
+    catch
+    endcatch
 
-     wTypeKeys "<Down><Home><Shift End>"
-     wait 200
-     EditCopy
-     if GetClipboardText <> hopeResultAfterAutoformat2 then Warnlog "the third line's content is NOT correct when M:N"
+    Call wTypeKeys "<Down><Home><Shift End>"
+    wait 200
+    EditCopy
+    if GetClipboardText <> hopeResultAfterAutoformat2 then Warnlog "the third line's content is NOT correct when M:N"
 
     Call hCloseDocument
 
     Call hNewDocument
 
     '///  M:Y
-     Call fAutocorrectOptions("RemoveBlankParagraphs")
+    Call fAutocorrectOptions("RemoveBlankParagraphs",1,1)
 
-     wTypeKeys testContent1
-     wTypeKeys "<Return>",2
-     wTypeKeys testContent2
+    Call wTypeKeys testContent1
+    Call wTypeKeys "<Return>",2
+    Call wTypeKeys testContent2
 
-     FormatAutoformatApply
+    FormatAutoformatApply
 
-     wTypeKeys "<Up><Up><Home><Shift End>"
-     wait 200
-     EditCopy
-     if GetClipboardText <> hopeResultAfterAutoformat1 then Warnlog "the first line's content is NOT correct when M:Y"
+    Call wTypeKeys "<Up><Up><Home><Shift End>"
+    wait 200
+    EditCopy
+    if GetClipboardText <> hopeResultAfterAutoformat1 then Warnlog "the first line's content is NOT correct when M:Y"
 
-     wTypeKeys "<Down><Home><Shift End>"
-     wait 200
-     EditCopy
-     if GetClipboardText <> hopeResultAfterAutoformat2 then Warnlog "the second line's content is NOT correct when M:Y"
+    Call wTypeKeys "<Down><Home><Shift End>"
+    wait 200
+    EditCopy
+    if GetClipboardText <> hopeResultAfterAutoformat2 then Warnlog "the second line's content is NOT correct when M:Y"
 
     '/// Recover to the default
-     Call fAutocorrectOptions("RemoveBlankParagraphs")
+    Call fAutocorrectOptions("RemoveBlankParagraphs",0,0)
 
     Call hCloseDocument
 
@@ -1292,37 +1296,37 @@ endcase
 
 testcase tToolsAutocorrectOptions_12
 
-   Dim testContent as String
-   Dim hopeResultBeforeAutoformat as String
-   Dim hopeResultAfterAutoformat as String
+    Dim testContent as String
+    Dim hopeResultBeforeAutoformat as String
+    Dim hopeResultAfterAutoformat as String
 
-  printLog "Replace bullets with •"
-  '/// Replace bullets with •
+    printLog "Replace bullets with •"
+    '/// Replace bullets with •
 
-   Call hNewDocument
+    Call hNewDocument
 
     '///  M:Y (default)
     printLog "M:Y (default)"
-     testContent                 = "+ Hello"
-     hopeResultBeforeAutoformat  = "+ Hello"
-     hopeResultAfterAutoformat   = "•	Hello"
+    testContent                 = "+ Hello"
+    hopeResultBeforeAutoformat  = "+ Hello"
+    hopeResultAfterAutoformat   = "•	Hello"
 
-     wTypeKeys testContent
-     wait 100
-     wTypeKeys "<Shift Home>"
-     Sleep 1
-     GetClipboardText = ""
-     EditCopy
-     if GetClipboardText <> hopeResultBeforeAutoformat then Warnlog "should NOT change before autoformat "
+    Call wTypeKeys testContent
+    wait 100
+    Call wTypeKeys "<Shift Home>"
+    Sleep 1
+    GetClipboardText = ""
+    EditCopy
+    if GetClipboardText <> hopeResultBeforeAutoformat then Warnlog "should NOT change before autoformat "
 
-     FormatAutoformatApply
+    FormatAutoformatApply
 
-     wTypeKeys "<Home><Shift End>"
-     Sleep 1
-     GetClipboardText = ""
-     EditCopy
-     Sleep 1
-     if GetClipboardText <> hopeResultAfterAutoformat then Warnlog "should  change after autoformat "
+    Call wTypeKeys "<Home><Shift End>"
+    Sleep 1
+    GetClipboardText = ""
+    EditCopy
+    Sleep 1
+    if GetClipboardText <> hopeResultAfterAutoformat then Warnlog "should  change after autoformat "
 
     Call hCloseDocument
 
@@ -1330,30 +1334,30 @@ testcase tToolsAutocorrectOptions_12
 
     '///  M:N
     printLog "M:N"
-     testContent                 = "+ Hello"
-     hopeResultBeforeAutoformat  = "+ Hello"
-     hopeResultAfterAutoformat   = "+ Hello"
+    testContent                 = "+ Hello"
+    hopeResultBeforeAutoformat  = "+ Hello"
+    hopeResultAfterAutoformat   = "+ Hello"
 
-     Call fAutocorrectOptions("ReplaceBullets")
+    Call fAutocorrectOptions("ReplaceBullets",0,0)
 
-     wTypeKeys testContent
-     wait 100
-     wTypeKeys "<Shift Home>"
-     Sleep 1
-     GetClipboardText = ""
-     EditCopy
-     if GetClipboardText <> hopeResultBeforeAutoformat then Warnlog "Should NOT change before autoformat "
+    Call wTypeKeys testContent
+    wait 100
+    Call wTypeKeys "<Shift Home>"
+    Sleep 1
+    GetClipboardText = ""
+    EditCopy
+    if GetClipboardText <> hopeResultBeforeAutoformat then Warnlog "Should NOT change before autoformat "
 
-     FormatAutoformatApply
-     Sleep 1
-     wTypeKeys "<Home><Shift End>"
-     Sleep 1
-     GetClipboardText = ""
-     EditCopy
-     if GetClipboardText <> hopeResultAfterAutoformat then Warnlog "Should  NOT change after autoformat "
+    FormatAutoformatApply
+    Sleep 1
+    Call wTypeKeys "<Home><Shift End>"
+    Sleep 1
+    GetClipboardText = ""
+    EditCopy
+    if GetClipboardText <> hopeResultAfterAutoformat then Warnlog "Should  NOT change after autoformat "
 
     '/// Recover to the default
-     Call fAutocorrectOptions("ReplaceBullets")
+    Call fAutocorrectOptions("ReplaceBullets",1,1)
 
     Call hCloseDocument
 
@@ -1363,87 +1367,86 @@ endcase
 
 testcase tToolsAutocorrectOptions_13
 
-   Dim testContent as String
-   Dim hopeResultBeforeAutoformat as String
-   Dim hopeResultAfterAutoformat as String
+    Dim testContent as String
+    Dim hopeResultBeforeAutoformat as String
+    Dim hopeResultAfterAutoformat as String
 
-  printLog "Replace standard quotes with custom quotes"
-  '/// Replace standard quotes with custom quotes
+    printLog "Replace standard quotes with custom quotes"
+    '/// Replace standard quotes with custom quotes
 
-   Call hNewDocument
+    Call hNewDocument
 
     '///  M:Y (default)
-     testContent                 = "'"
-     hopeResultBeforeAutoformat  = "'"
-     hopeResultAfterAutoformat   = "["
+    testContent                 = "'"
+    hopeResultBeforeAutoformat  = "'"
+    hopeResultAfterAutoformat   = "["
 
-     ToolsAutoCorrect
-     Kontext
-     Active.SetPage TabLocalizedOptions
-     Kontext "TabLocalizedOptions"
-     SingleQuotesReplace.UnCheck
-     SingleQuotesStart.Click
-     Kontext "Sonderzeichen"
-     Schriftliste.TypeKeys "<PageUp><Home>"
-     Schriftliste.TypeKeys "<Right>", 59   ' is [
-     Schriftliste.TypeKeys "<Space>"
-     Sonderzeichen.OK
+    ToolsAutoCorrect
+    Kontext
+    Active.SetPage TabLocalizedOptions
+    Kontext "TabLocalizedOptions"
+    SingleQuotesReplace.UnCheck
+    SingleQuotesStart.Click
+    Kontext "Sonderzeichen"
+    Schriftliste.TypeKeys "<PageUp><Home>"
+    Schriftliste.TypeKeys "<Right>", 59   ' is [
+    Schriftliste.TypeKeys "<Space>"
+    Sonderzeichen.OK
 
-     Kontext "TabLocalizedOptions"
-     TabLocalizedOptions.OK
+    Kontext "TabLocalizedOptions"
+    TabLocalizedOptions.OK
 
-     wTypeKeys (testContent + "Hello")
-     wait 100
-     wTypeKeys "<Home><Shift Right>"
-     Sleep 1
-     EditCopy
-     if GetClipboardText <> hopeResultBeforeAutoformat then Warnlog "Should NOT change before autoformat "
+    Call wTypeKeys (testContent + "Hello")
+    wait 100
+    Call wTypeKeys "<Home><Shift Right>"
+    Sleep 1
+    EditCopy
+    if GetClipboardText <> hopeResultBeforeAutoformat then Warnlog "Should NOT change before autoformat "
 
-     FormatAutoformatApply
+    FormatAutoformatApply
 
-     wTypeKeys "<Home><Shift Right>"
-     Sleep 1
-     EditCopy
-     if GetClipboardText <> hopeResultAfterAutoformat then Warnlog "Should  change after autoformat "
+    Call wTypeKeys "<Home><Shift Right>"
+    Sleep 1
+    EditCopy
+    if GetClipboardText <> hopeResultBeforeAutoformat then Warnlog "Should  change after autoformat "
 
     Call hCloseDocument
 
     Call hNewDocument
 
     '///  M:N
-     testContent                 = "'"
-     hopeResultBeforeAutoformat  = "'"
-     hopeResultAfterAutoformat   = "'"
+    testContent                 = "'"
+    hopeResultBeforeAutoformat  = "'"
+    hopeResultAfterAutoformat   = "'"
 
-     Call fAutocorrectOptions("ReplaceQuotes")
+    Call fAutocorrectOptions("ReplaceQuotes",0,0)
 
-     wTypeKeys (testContent + "Hello")
-     wait 100
-     wTypeKeys "<Home><Shift Right>"
-     Sleep 1
-     EditCopy
-     if GetClipboardText <> hopeResultBeforeAutoformat then Warnlog "Should NOT change before autoformat "
+    Call wTypeKeys (testContent + "Hello")
+    wait 100
+    Call wTypeKeys "<Home><Shift Right>"
+    Sleep 1
+    EditCopy
+    if GetClipboardText <> hopeResultBeforeAutoformat then Warnlog "Should NOT change before autoformat "
 
-     FormatAutoformatApply
+    FormatAutoformatApply
 
-     wTypeKeys "<Home><Shift Right>"
-     Sleep 1
-     EditCopy
-     if GetClipboardText <> hopeResultAfterAutoformat then Warnlog "Should  NOT change after autoformat "
+    Call wTypeKeys "<Home><Shift Right>"
+    Sleep 1
+    EditCopy
+    if GetClipboardText <> hopeResultAfterAutoformat then Warnlog "Should  NOT change after autoformat "
 
     '/// Recover to the default
-     Call fAutocorrectOptions("ReplaceQuotes")
+    Call fAutocorrectOptions("ReplaceQuotes",1,1)
 
-     ToolsAutoCorrect
-     Kontext
-     Active.Setpage TabLocalizedOptions
-     Kontext "TabLocalizedOptions"
-     SingleQuotesReplace.Check
-     SingleQuotesDefault.Click
-     wait 100
-     TabLocalizedOptions.OK
+    ToolsAutoCorrect
+    Kontext
+    Active.Setpage TabLocalizedOptions
+    Kontext "TabLocalizedOptions"
+    SingleQuotesReplace.Check
+    SingleQuotesDefault.Click
+    wait 100
+    TabLocalizedOptions.OK
 
     Call hCloseDocument
 
 endcase
-
