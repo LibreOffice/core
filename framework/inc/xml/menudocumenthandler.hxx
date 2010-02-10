@@ -109,13 +109,14 @@ class ReadMenuDocumentHandlerBase : public ThreadHelpBase,  // Struct for right 
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler> m_xReader;
         void initPropertyCommon( com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > &rProps,
                                  const rtl::OUString &rCommandURL, const rtl::OUString &rHelpId,
-                                 const rtl::OUString &rLabel);
+                                 const rtl::OUString &rLabel, sal_Int16 nItemStyleBits );
     private:
         rtl::OUString m_aType;
         rtl::OUString m_aLabel;
         rtl::OUString m_aContainer;
         rtl::OUString m_aHelpURL;
         rtl::OUString m_aCommandURL;
+        rtl::OUString m_aStyle;
         ::com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > m_aItemProp;
 };
 
@@ -306,7 +307,7 @@ class OWriteMenuDocumentHandler
         virtual void WriteMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rSubMenuContainer ) throw
             ( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
 
-        virtual void WriteMenuItem( const rtl::OUString& aCommandURL, const rtl::OUString& aLabel, const rtl::OUString& aHelpURL );
+        virtual void WriteMenuItem( const rtl::OUString& aCommandURL, const rtl::OUString& aLabel, const rtl::OUString& aHelpURL, sal_Int16 nStyle = 0 );
         virtual void WriteMenuSeparator();
 
         com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > m_xMenuBarContainer;

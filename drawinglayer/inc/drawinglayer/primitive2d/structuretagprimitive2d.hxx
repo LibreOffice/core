@@ -45,30 +45,34 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        // This class is used to provode simple support for adding grouped
-        // pdf writer structured element information like used in sd from
-        // unomodel.cxx where a ViewObjectContactRedirector is used to add
-        // such information for diverse objects.
-        // This primitive encapsulates these and the VCLPdfRenderer uses it
-        // to apply the needed infos directly to the pdf export in a compatible
-        // way.
-        // If a renderer ignores this, it just decomposes to it's child
-        // content.
+        /** StructureTagPrimitive2D class
+
+            This class is used to provode simple support for adding grouped
+            pdf writer structured element information like used in sd from
+            unomodel.cxx where a ViewObjectContactRedirector is used to add
+            such information for diverse objects.
+            This primitive encapsulates these and the VCLPdfRenderer uses it
+            to apply the needed infos directly to the pdf export in a compatible
+            way.
+            If a renderer ignores this, it just decomposes to it's child
+            content.
+         */
         class StructureTagPrimitive2D : public GroupPrimitive2D
         {
         private:
-            // the PDF structure element this grouping represents
+            /// the PDF structure element this grouping represents
             vcl::PDFWriter::StructElement           maStructureElement;
 
         public:
+            /// constructor
             StructureTagPrimitive2D(
                 const vcl::PDFWriter::StructElement& rStructureElement,
                 const Primitive2DSequence& rChildren);
 
-            // data access
+            /// data read access
             const vcl::PDFWriter::StructElement& getStructureElement() const { return maStructureElement; }
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive2DIDBlock()
         };
     } // end of namespace primitive2d

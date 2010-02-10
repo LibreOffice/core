@@ -32,14 +32,13 @@
 #include "precompiled_scripting.hxx"
 #include "dlgevtatt.hxx"
 
-#ifndef SCRIPTING_DLGPROV_HXX
 #include "dlgprov.hxx"
-#endif
+
 #include <sfx2/sfx.hrc>
 #include <sfx2/app.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
+#include <tools/diagnose_ex.h>
+
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XDialogEventHandler.hpp>
 #include <com/sun/star/awt/XContainerWindowEventHandler.hpp>
@@ -53,6 +52,7 @@
 #include <com/sun/star/reflection/XIdlMethod.hpp>
 #include <com/sun/star/beans/MethodConcept.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
+
 #ifdef FAKE_VBA_EVENT_SUPPORT
 #include <ooo/vba/XVBAToOOEventDescGen.hpp>
 #endif
@@ -134,7 +134,10 @@ namespace dlgprov
             {
                 xProps->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name") ) ) >>= msDialogCodeName;
             }
-            catch ( Exception&  ) {}
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
         }
 
     }
@@ -149,7 +152,10 @@ namespace dlgprov
             {
                 mxListener->firing( aScriptEventCopy );
             }
-            catch( Exception& ) {}
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
         }
     }
 #endif
@@ -248,17 +254,9 @@ namespace dlgprov
                         if ( xListener_.is() )
                             bSuccess = true;
                     }
-                    catch ( IllegalArgumentException& )
+                    catch ( const Exception& )
                     {
-                    }
-                    catch ( IntrospectionException& )
-                    {
-                    }
-                    catch ( CannotCreateAdapterException& )
-                    {
-                    }
-                    catch ( ServiceNotRegisteredException& )
-                    {
+                        DBG_UNHANDLED_EXCEPTION();
                     }
 
                     try
@@ -271,17 +269,9 @@ namespace dlgprov
                                 aDesc.AddListenerParam, aDesc.EventMethod );
                         }
                     }
-                    catch( IllegalArgumentException& )
+                    catch ( const Exception& )
                     {
-                    }
-                    catch( IntrospectionException& )
-                    {
-                    }
-                    catch( CannotCreateAdapterException& )
-                    {
-                    }
-                    catch( ServiceNotRegisteredException& )
-                    {
+                        DBG_UNHANDLED_EXCEPTION();
                     }
                 }
             }
@@ -495,15 +485,9 @@ namespace dlgprov
                 }
             }
         }
-        catch ( RuntimeException& e )
+        catch ( const Exception& )
         {
-            OSL_TRACE( "DialogScriptListenerImpl::firing_impl: caught RuntimeException reason %s",
-                ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-        }
-        catch ( Exception& e )
-        {
-            OSL_TRACE( "DialogScriptListenerImpl::firing_impl: caught Exception reason %s",
-                ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -512,21 +496,21 @@ namespace dlgprov
         ::rtl::OUString sScriptURL;
         ::rtl::OUString sScriptCode( aScriptEvent.ScriptCode );
 
-    if ( aScriptEvent.ScriptType.compareToAscii( "StarBasic" ) == 0 )
-    {
-        // StarBasic script: convert ScriptCode to scriptURL
-        sal_Int32 nIndex = sScriptCode.indexOf( ':' );
-        if ( nIndex >= 0 && nIndex < sScriptCode.getLength() )
+        if ( aScriptEvent.ScriptType.compareToAscii( "StarBasic" ) == 0 )
         {
-            sScriptURL = ::rtl::OUString::createFromAscii( "vnd.sun.star.script:" );
-            sScriptURL += sScriptCode.copy( nIndex + 1 );
-            sScriptURL += ::rtl::OUString::createFromAscii( "?language=Basic&location=" );
-            sScriptURL += sScriptCode.copy( 0, nIndex );
+            // StarBasic script: convert ScriptCode to scriptURL
+            sal_Int32 nIndex = sScriptCode.indexOf( ':' );
+            if ( nIndex >= 0 && nIndex < sScriptCode.getLength() )
+            {
+                sScriptURL = ::rtl::OUString::createFromAscii( "vnd.sun.star.script:" );
+                sScriptURL += sScriptCode.copy( nIndex + 1 );
+                sScriptURL += ::rtl::OUString::createFromAscii( "?language=Basic&location=" );
+                sScriptURL += sScriptCode.copy( 0, nIndex );
+            }
+            ScriptEvent aSFScriptEvent( aScriptEvent );
+            aSFScriptEvent.ScriptCode = sScriptURL;
+            DialogSFScriptListenerImpl::firing_impl( aSFScriptEvent, pRet );
         }
-        ScriptEvent aSFScriptEvent( aScriptEvent );
-        aSFScriptEvent.ScriptCode = sScriptURL;
-        DialogSFScriptListenerImpl::firing_impl( aSFScriptEvent, pRet );
-    }
     }
 
     void DialogUnoScriptListenerImpl::firing_impl( const ScriptEvent& aScriptEvent, Any* pRet )
@@ -603,12 +587,10 @@ namespace dlgprov
                     bHandled = true;
                 }
             }
-            catch( com::sun::star::lang::IllegalArgumentException& )
-            {}
-            catch( com::sun::star::lang::NoSuchMethodException& )
-            {}
-            catch( com::sun::star::reflection::InvocationTargetException& )
-            {}
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
         }
 
         if( bHandled )
