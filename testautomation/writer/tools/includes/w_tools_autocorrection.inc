@@ -41,39 +41,62 @@
 '*
 '\***********************************************************************
 
-function fAutocorrectOptions(Options as String)
+function fAutocorrectOptions(Options as String, iModify as integer, iType as integer)
     '/// Open Tools/Autocorrect/Autoformat diglog with tab page Options
     '///+ then choose the relevant Options and press 'space bar'
+    Dim iDown as integer
 
     ToolsAutocorrect
     Kontext
     Active.Setpage TabOptionenAutokorrektur
     Kontext "TabOptionenAutokorrektur"
 
-    Einstellungen.TypeKeys "<Home>"
-
     Select case Options
-    case "UseReplacementTable"         : wait 500
-    case "CorrectTWoINitialCApitals"   : Einstellungen.TypeKeys "<Down>"
-    case "CapitalizeFirstLetter"       : Einstellungen.TypeKeys "<Down>",2
-    case "AutomaticBoldAndUnderline"   : Einstellungen.TypeKeys "<Down>",3
-    case "URLRecognition"              : Einstellungen.TypeKeys "<Down>",4
-    case "ReplaceDashes"               : Einstellungen.TypeKeys "<Down>",5
-    case "DeleteSpaceParagraph"        : Einstellungen.TypeKeys "<Down>",6
-    case "DeleteSpaceLine"             : Einstellungen.TypeKeys "<Down>",7
-    case "IgnoreDoulbeSpaces"          : Einstellungen.TypeKeys "<Down>",8
-    case "ApplyNumbering"              : Einstellungen.TypeKeys "<Down>",9
-    case "ApplyBorder"                 : Einstellungen.TypeKeys "<Down>",10
-    case "CreateTable"                 : Einstellungen.TypeKeys "<Down>",11
-    case "ApplyStyles"                 : Einstellungen.TypeKeys "<Down>",12
-    case "RemoveBlankParagraphs"       : Einstellungen.TypeKeys "<Down>",13
-    case "ReplaceCustomStyles"         : Einstellungen.TypeKeys "<Down>",14
-    case "ReplaceBullets"              : Einstellungen.TypeKeys "<Down>",15
-    case "CombineSingleLine"           : Einstellungen.TypeKeys "<End>"
-
+        case "UseReplacementTable"         : iDown = 1
+        case "CorrectTWoINitialCApitals"   : iDown = 2
+        case "CapitalizeFirstLetter"       : iDown = 3
+        case "AutomaticBoldAndUnderline"   : iDown = 4
+        case "URLRecognition"              : iDown = 5
+        case "ReplaceDashes"               : iDown = 6
+        case "DeleteSpaceParagraph"        : iDown = 7
+        case "DeleteSpaceLine"             : iDown = 8
+        case "IgnoreDoubleSpaces"          : iDown = 9
+        case "ApplyNumbering"              : iDown = 10
+        case "ApplyBorder"                 : iDown = 11
+        case "CreateTable"                 : iDown = 12
+        case "ApplyStyles"                 : iDown = 13
+        case "RemoveBlankParagraphs"       : iDown = 14
+        case "ReplaceCustomStyles"         : iDown = 15
+        case "ReplaceBullets"              : iDown = 16
+        case "CombineSingleLine"           : iDown = 17
     end select
 
-    Einstellungen.TypeKeys "<SPACE>"
+    ' *** Set requested state ***
+    ' ### Modify
+    Select Case iDown
+        Case 1,2,3,4,5,6,7,8,14,15,16,17
+            if iModify = 1 then
+                Einstellungen.Check(iDown,2)
+            else
+                Einstellungen.UnCheck(iDown,2)
+            endif
+            if iDown < 9 then
+                ' ### Type
+                if iType = 1 then
+                    Einstellungen.Check(iDown,3)
+                else
+                    Einstellungen.UnCheck(iDown,3)
+                endif
+            endif
+        Case 9,10,11,12,13
+        ' ### Type
+        if iType = 1 then
+            Einstellungen.Check(iDown,3)
+        else
+            Einstellungen.UnCheck(iDown,3)
+        endif
+    end select
+    wait 100
     TabOptionenAutokorrektur.OK
 
 end function
