@@ -1793,11 +1793,11 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
             {
                 // create a temporary target storage
                 const ::rtl::OUStringBuffer aTempTargetNameBase = maLibrariesDir + ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_temp_" ) );
+                sal_Int32 index = 0;
                 do
                 {
                     ::rtl::OUStringBuffer aTempTargetName( aTempTargetNameBase );
-                    sal_Int32 index = 0;
-                    aTempTargetName.append( index );
+                    aTempTargetName.append( index++ );
 
                     sTargetLibrariesStoreName = aTempTargetName.makeStringAndClear();
                     if ( !i_rStorage->hasByName( sTargetLibrariesStoreName ) )
@@ -1826,6 +1826,8 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
         {
             if ( mxStorage->hasByName( maLibrariesDir ) )
                 xSourceLibrariesStor = mxStorage->openStorageElement( maLibrariesDir, bInplaceStorage ? embed::ElementModes::READWRITE : embed::ElementModes::READ );
+            else if ( bInplaceStorage )
+                xSourceLibrariesStor = mxStorage->openStorageElement( maLibrariesDir, embed::ElementModes::READWRITE );
         }
         catch( const uno::Exception& )
         {
@@ -1939,6 +1941,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
     // then we need to clean up the temporary storage we used for this
     if ( bInplaceStorage && sTempTargetStorName.getLength() )
     {
+        OSL_ENSURE( xSourceLibrariesStor.is(), "SfxLibrariesContainer::storeLibraries_impl: unexpected: we should have a source storage here!" );
         try
         {
             // for this, we first remove everything from the source storage, then copy the complete content
@@ -1948,24 +1951,27 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
             // (We cannot simply remove the storage, denoted by maLibrariesDir, from i_rStorage - there might be
             // open references to it.)
 
-            // remove
-            const Sequence< ::rtl::OUString > aRemoveNames( xTargetLibrariesStor->getElementNames() );
-            for (   const ::rtl::OUString* pRemoveName = aRemoveNames.getConstArray();
-                    pRemoveName != aRemoveNames.getConstArray() + aRemoveNames.getLength();
-                    ++pRemoveName
-                )
+            if ( xSourceLibrariesStor.is() )
             {
-                xSourceLibrariesStor->removeElement( *pRemoveName );
-            }
+                // remove
+                const Sequence< ::rtl::OUString > aRemoveNames( xSourceLibrariesStor->getElementNames() );
+                for (   const ::rtl::OUString* pRemoveName = aRemoveNames.getConstArray();
+                        pRemoveName != aRemoveNames.getConstArray() + aRemoveNames.getLength();
+                            ++pRemoveName
+                    )
+                {
+                    xSourceLibrariesStor->removeElement( *pRemoveName );
+                }
 
-            // copy
-            const Sequence< ::rtl::OUString > aCopyNames( xTargetLibrariesStor->getElementNames() );
-            for (   const ::rtl::OUString* pCopyName = aCopyNames.getConstArray();
-                    pCopyName != aCopyNames.getConstArray() + aCopyNames.getLength();
-                    ++pCopyName
-                )
-            {
-                xTargetLibrariesStor->copyElementTo( *pCopyName, xSourceLibrariesStor, *pCopyName );
+                // copy
+                const Sequence< ::rtl::OUString > aCopyNames( xTargetLibrariesStor->getElementNames() );
+                for (   const ::rtl::OUString* pCopyName = aCopyNames.getConstArray();
+                        pCopyName != aCopyNames.getConstArray() + aCopyNames.getLength();
+                        ++pCopyName
+                    )
+                {
+                    xTargetLibrariesStor->copyElementTo( *pCopyName, xSourceLibrariesStor, *pCopyName );
+                }
             }
 
             // close and remove temp target
