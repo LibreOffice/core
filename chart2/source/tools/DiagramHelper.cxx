@@ -1016,17 +1016,9 @@ Sequence< rtl::OUString > DiagramHelper::getExplicitSimpleCategories(
     uno::Reference< frame::XModel > xChartModel( xChartDoc, uno::UNO_QUERY );
     if(xChartModel.is())
     {
-        uno::Reference< chart2::XDiagram > xDia( xChartDoc->getFirstDiagram() );
         uno::Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( xChartModel ) );
-        if(xDia.is())
-        {
-            Reference< data::XLabeledDataSequence > xCategories( DiagramHelper::getCategoriesFromDiagram( xDia ) );
-            if( xCategories.is() )
-            {
-                ExplicitCategoriesProvider aExplicitCategoriesProvider( xCooSys, xChartModel );
-                aRet = aExplicitCategoriesProvider.getSimpleCategories();
-            }
-        }
+        ExplicitCategoriesProvider aExplicitCategoriesProvider( xCooSys, xChartModel );
+        aRet = aExplicitCategoriesProvider.getSimpleCategories();
     }
     return aRet;
 }
