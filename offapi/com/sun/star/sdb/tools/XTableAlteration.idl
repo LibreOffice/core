@@ -34,7 +34,7 @@
 #ifndef __com_sun_star_sdbc_SQLException_idl__
 #include <com/sun/star/sdbc/SQLException.idl>
 #endif
-#include <com/sun/star/sdb/tools/XConnectionSupport.idl>
+#include <com/sun/star/sdb/tools/XConnectionSupplier.idl>
 #ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
 #endif
@@ -47,7 +47,7 @@ module com {  module sun {  module star {  module sdb { module tools {
 //=============================================================================
 
 //-----------------------------------------------------------------------------
-/** allows to alter table.
+/** allows to alter a table.
 
     @see com::sun::star::sdb::DataSource::Settings
     @see com::sun::star::sdbcx::ColumnDescriptor
@@ -59,9 +59,9 @@ module com {  module sun {  module star {  module sdb { module tools {
 */
 interface XTableAlteration
 {
-    interface XConnectionSupport;
+    interface XConnectionSupplier;
 
-    /** rename the given table to the new name
+    /** alter the column defined by name
 
         @param table
             the table to be altered
@@ -73,6 +73,7 @@ interface XTableAlteration
             the column descriptor with the information of the new column definition
 
         @throws com::sun::star::sdbc::SQLException
+        @see com::sun::star::sdbcx::XAlterTable
     */
     void  alterColumnByName( [in] com::sun::star::beans::XPropertySet table, [in] string columnName, [in] com::sun::star::beans::XPropertySet columnDescriptor)
         raises ( com::sun::star::sdbc::SQLException );
@@ -89,6 +90,7 @@ interface XTableAlteration
             the descriptor which should be serve to append a new object
         @throws com::sun::star::sdbc::SQLException
             if a database access error occurs.
+        @see com::sun::star::sdbcx::XAppend
      */
     void addColumn([in] com::sun::star::beans::XPropertySet table,[in]com::sun::star::beans::XPropertySet descriptor)
         raises (com::sun::star::sdbc::SQLException);
@@ -100,6 +102,7 @@ interface XTableAlteration
             the name of the column to be dropped
         @throws com::sun::star::sdbc::SQLException
             if a database access error occurs.
+        @see com::sun::star::sdbcx::XDrop
      */
     void dropColumn([in] com::sun::star::beans::XPropertySet table,[in]string columnName)
         raises ( com::sun::star::sdbc::SQLException);
