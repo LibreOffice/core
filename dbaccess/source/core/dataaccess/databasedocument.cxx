@@ -1381,14 +1381,14 @@ Reference< XNameAccess > ODatabaseDocument::impl_getDocumentContainer_throw( ODa
     {
         Any aValue;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xMy(*this);
-        if ( dbtools::getDataSourceSetting(xMy,bFormsContainer ? "FormSupplier" : "ReportSupplier",aValue) )
+        if ( dbtools::getDataSourceSetting(xMy,bFormsContainer ? "Forms" : "Reports",aValue) )
         {
             ::rtl::OUString sSupportService;
             aValue >>= sSupportService;
             if ( sSupportService.getLength() )
             {
                 Sequence<Any> aArgs(1);
-                aArgs[0] <<= NamedValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataSource")),makeAny(xMy));
+                aArgs[0] <<= NamedValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DatabaseDocument")),makeAny(xMy));
                 xContainer.set(m_pImpl->m_aContext.createComponentWithArguments(sSupportService,aArgs),UNO_QUERY);
                 rContainerRef = xContainer;
             }

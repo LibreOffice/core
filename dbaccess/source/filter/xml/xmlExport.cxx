@@ -1067,7 +1067,7 @@ void ODBExport::exportForms()
 {
     Any aValue;
     ::rtl::OUString sService;
-    dbtools::getDataSourceSetting(getDataSource(),"ReportSupplier",aValue);
+    dbtools::getDataSourceSetting(getDataSource(),"Forms",aValue);
     aValue >>= sService;
     if ( !sService.getLength() )
     {
@@ -1088,7 +1088,7 @@ void ODBExport::exportReports()
 {
     Any aValue;
     ::rtl::OUString sService;
-    dbtools::getDataSourceSetting(getDataSource(),"ReportSupplier",aValue);
+    dbtools::getDataSourceSetting(getDataSource(),"Reports",aValue);
     aValue >>= sService;
     if ( !sService.getLength() )
     {
@@ -1109,7 +1109,7 @@ void ODBExport::exportQueries(sal_Bool _bExportContext)
 {
     Any aValue;
     ::rtl::OUString sService;
-    dbtools::getDataSourceSetting(getDataSource(),"CommandDefinitionSupplier",aValue);
+    dbtools::getDataSourceSetting(getDataSource(),"CommandDefinitions",aValue);
     aValue >>= sService;
     if ( !sService.getLength() )
     {
