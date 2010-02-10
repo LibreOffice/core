@@ -6,7 +6,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: XViewSupport.idl,v $
+ * $RCSfile: XConnectionSupplier.idl,v $
  * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
@@ -28,13 +28,10 @@
  *
  ************************************************************************/
 
-#ifndef __com_sun_star_sdb_tools_XViewSupport_idl__
-#define __com_sun_star_sdb_tools_XViewSupport_idl__
+#ifndef __com_sun_star_sdb_tools_XConnectionSupplier_idl__
+#define __com_sun_star_sdb_tools_XConnectionSupplier_idl__
 
-#ifndef __com_sun_star_sdbc_SQLException_idl__
-#include <com/sun/star/sdbc/SQLException.idl>
-#endif
-#include <com/sun/star/sdb/tools/XConnectionSupport.idl>
+#include <com/sun/star/sdbc/XConnection.idl>
 #ifndef __com_sun_star_lang_XInitialization_idl__
 #include <com/sun/star/lang/XInitialization.idl>
 #endif
@@ -47,38 +44,20 @@ module com {  module sun {  module star {  module sdb { module tools {
 //=============================================================================
 
 //-----------------------------------------------------------------------------
-/** allows to fetch the sql statements of views
+/** allows to access the active connection
 
-    @see com::sun::star::sdb::DataSource::Settings
-    @see com::sun::star::sdbcx::View
+    @see com::sun::star::sdbcx::XConnection
 
     @since OOo 3.3
 */
-interface XViewSupport
+interface XConnectionSupplier
 {
-    interface XConnectionSupport;
-
-    /** returns the SQL statement of the view
-
-        @param view
-            the table to be renamed
-        @throws com::sun::star::sdbc::SQLException
+    /** returns the source connection.
     */
-    string getCommand( [in] com::sun::star::beans::XPropertySet view)
-        raises ( com::sun::star::sdbc::SQLException );
+    [attribute, readonly] com::sun::star::sdbc::XConnection ActiveConnection;
 
-    /** rename the given table to the new name
+    interface com::sun::star::lang::XInitialization;
 
-        @param view
-            the view to be altered
-
-        @param command
-            the new SQL statement
-
-        @throws com::sun::star::sdbc::SQLException
-    */
-    void  alterCommand( [in] com::sun::star::beans::XPropertySet view, [in] string command)
-        raises ( com::sun::star::sdbc::SQLException );
 };
 //=============================================================================
 }; }; }; }; };
