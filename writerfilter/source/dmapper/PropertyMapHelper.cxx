@@ -39,10 +39,10 @@ namespace dmapper
 
 using namespace ::com::sun::star;
 
-XMLTag::Pointer_t lcl_TableColumnSeparatorsToTag(PropertyMap::iterator aIter)
+    XMLTag::Pointer_t lcl_TableColumnSeparatorsToTag(uno::Any & rTableColumnSeparators)
 {
     uno::Sequence<text::TableColumnSeparator> aSeq;
-    aIter->second >>= aSeq;
+    rTableColumnSeparators >>= aSeq;
 
     XMLTag::Pointer_t pResult(new XMLTag("property.TableColumnSeparators"));
 
@@ -55,6 +55,61 @@ XMLTag::Pointer_t lcl_TableColumnSeparatorsToTag(PropertyMap::iterator aIter)
         pTagSeparator->addAttr("visible", aSeq[n].IsVisible);
 
         pResult->addTag(pTagSeparator);
+    }
+
+    return pResult;
+}
+
+XMLTag::Pointer_t lcl_PropertyValuesToTag(beans::PropertyValues & rValues)
+{
+    XMLTag::Pointer_t pResult(new XMLTag("propertyValues"));
+
+    beans::PropertyValue * pValues = rValues.getArray();
+
+    for (sal_Int32 n = 0; n < rValues.getLength(); ++n)
+    {
+        XMLTag::Pointer_t pTag(new XMLTag("propertyValue"));
+
+        pTag->addAttr("name", pValues[n].Name);
+
+        if (pValues[n].Name.equalsAscii("TableColumnSeparators"))
+        {
+            pTag->addTag(lcl_TableColumnSeparatorsToTag(pValues[n].Value));
+        }
+
+        pResult->addTag(pTag);
+    }
+
+    return pResult;
+}
+
+XMLTag::Pointer_t lcl_PropertyValueSeqToTag(PropertyValueSeq_t & rPropValSeq)
+{
+    XMLTag::Pointer_t pResult(new XMLTag("PropertyValueSeq"));
+
+    beans::PropertyValues * pValues = rPropValSeq.getArray();
+
+    for (sal_Int32 n = 0; n < rPropValSeq.getLength(); ++n)
+    {
+        XMLTag::Pointer_t pTag(lcl_PropertyValuesToTag(pValues[n]));
+
+        pResult->addTag(pTag);
+    }
+
+    return pResult;
+}
+
+XMLTag::Pointer_t lcl_PropertyValueSeqSeqToTag(PropertyValueSeqSeq_t rPropValSeqSeq)
+{
+    XMLTag::Pointer_t pResult(new XMLTag("PropertyValueSeq"));
+
+    PropertyValueSeq_t * pValues = rPropValSeqSeq.getArray();
+
+    for (sal_Int32 n = 0; n < rPropValSeqSeq.getLength(); ++n)
+    {
+        XMLTag::Pointer_t pTag(lcl_PropertyValueSeqToTag(pValues[n]));
+
+        pResult->addTag(pTag);
     }
 
     return pResult;

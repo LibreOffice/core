@@ -147,7 +147,7 @@ XMLTag::Pointer_t PropertyMap::toTag()
         switch (aMapIter->first.eId)
         {
             case PROP_TABLE_COLUMN_SEPARATORS:
-                pTag->addTag(lcl_TableColumnSeparatorsToTag(aMapIter));
+                pTag->addTag(lcl_TableColumnSeparatorsToTag(aMapIter->second));
                 break;
             default:
                 break;

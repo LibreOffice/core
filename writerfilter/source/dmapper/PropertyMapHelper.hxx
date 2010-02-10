@@ -29,13 +29,20 @@
  ************************************************************************/
 
 #include "PropertyMap.hxx"
+#include <com/sun/star/beans/PropertyValues.hpp>
 
 namespace writerfilter
 {
 namespace dmapper
 {
 
-XMLTag::Pointer_t lcl_TableColumnSeparatorsToTag(PropertyMap::iterator aIter);
+XMLTag::Pointer_t lcl_TableColumnSeparatorsToTag(uno::Any & rTableColumnSeparators);
+XMLTag::Pointer_t lcl_PropertyValuesToTag(beans::PropertyValues & rValues);
 
+typedef uno::Sequence<beans::PropertyValues> PropertyValueSeq_t;
+XMLTag::Pointer_t lcl_PropertyValueSeqToTag(PropertyValueSeq_t & rPropValSeq);
+
+typedef uno::Sequence<PropertyValueSeq_t> PropertyValueSeqSeq_t;
+XMLTag::Pointer_t lcl_PropertyValueSeqSeqToTag(PropertyValueSeqSeq_t & rPropValSeqSeq);
 }
 }

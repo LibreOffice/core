@@ -35,6 +35,10 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <dmapperLoggers.hxx>
 
+#ifdef DEBUG_DOMAINMAPPER
+#include <PropertyMapHelper.hxx>
+#endif
+
 namespace writerfilter {
 namespace dmapper {
 
@@ -688,49 +692,8 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
         ++nRow;
         ++aRowOfCellsIterator;
     }
+
 #ifdef DEBUG_DOMAINMAPPER
-    //-->debug cell properties of all rows
-    {
-        dmapper_logger->startElement("cellProps.table");
-        ::rtl::OUString sNames;
-        for( sal_Int32  nDebugRow = 0; nDebugRow < aCellProperties.getLength(); ++nDebugRow)
-        {
-            dmapper_logger->startElement("cellProps.row");
-            dmapper_logger->attribute("n", nDebugRow);
-
-            const uno::Sequence< beans::PropertyValues > aDebugCurrentRow = aCellProperties[nDebugRow];
-            sal_Int32 nDebugCells = aDebugCurrentRow.getLength();
-            (void) nDebugCells;
-            for( sal_Int32  nDebugCell = 0; nDebugCell < nDebugCells; ++nDebugCell)
-            {
-                dmapper_logger->startElement("cellProps.cell");
-                dmapper_logger->attribute("n", nDebugCell);
-
-                const uno::Sequence< beans::PropertyValue >& aDebugCellProperties = aDebugCurrentRow[nDebugCell];
-                sal_Int32 nDebugCellProperties = aDebugCellProperties.getLength();
-                for( sal_Int32  nDebugProperty = 0; nDebugProperty < nDebugCellProperties; ++nDebugProperty)
-                {
-                    const ::rtl::OUString sName = aDebugCellProperties[nDebugProperty].Name;
-                    dmapper_logger->startElement("cellProps.property");
-                    dmapper_logger->attribute("name", sName);
-                    dmapper_logger->endElement("cellProps.property");
-                    sNames += sName;
-                    sNames += ::rtl::OUString('-');
-                }
-                sNames += ::rtl::OUString('+');
-
-                dmapper_logger->endElement("cellProps.cell");
-            }
-            sNames += ::rtl::OUString('|');
-
-            dmapper_logger->endElement("cellProps.row");
-        }
-
-        dmapper_logger->endElement("cellProps.table");
-        (void)sNames;
-    }
-    //--<
-
     dmapper_logger->endElement("getCellProperties");
 #endif
 
@@ -739,12 +702,19 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
 
 RowPropertyValuesSeq_t DomainMapperTableHandler::endTableGetRowProperties()
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("getRowProperties");
+#endif
+
     RowPropertyValuesSeq_t aRowProperties( m_aRowProperties.size() );
     PropertyMapVector1::const_iterator aRowIter = m_aRowProperties.begin();
     PropertyMapVector1::const_iterator aRowIterEnd = m_aRowProperties.end();
     sal_Int32 nRow = 0;
     while( aRowIter != aRowIterEnd )
     {
+#ifdef DEBUG_DOMAINMAPPER
+        dmapper_logger->startElement("rowProps.row");
+#endif
         if( aRowIter->get() )
         {
             //set default to 'break across pages"
@@ -752,10 +722,21 @@ RowPropertyValuesSeq_t DomainMapperTableHandler::endTableGetRowProperties()
                 aRowIter->get()->Insert( PROP_IS_SPLIT_ALLOWED, false, uno::makeAny(sal_True ) );
 
             aRowProperties[nRow] = aRowIter->get()->GetPropertyValues();
+#ifdef DEBUG_DOMAINMAPPER
+            dmapper_logger->addTag((*aRowIter)->toTag());
+            dmapper_logger->addTag(lcl_PropertyValuesToTag(aRowProperties[nRow]));
+#endif
         }
         ++nRow;
         ++aRowIter;
+#ifdef DEBUG_DOMAINMAPPER
+        dmapper_logger->endElement("rowProps.row");
+#endif
     }
+
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->endElement("getRowProperties");
+#endif
 
     return aRowProperties;
 }
@@ -773,22 +754,15 @@ void DomainMapperTableHandler::endTable()
     CellPropertyValuesSeq_t aCellProperties = endTableGetCellProperties(aTableInfo);
 
     RowPropertyValuesSeq_t aRowProperties = endTableGetRowProperties();
+
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->addTag(lcl_PropertyValueSeqToTag(aRowProperties));
+#endif
+
     if (m_pTableSeq->getLength() > 0)
     {
         try
         {
-#ifdef DEBUG_DOMAINMAPPER
-    {
-        sal_Int32 nCellPropertiesRows = aCellProperties.getLength();
-        sal_Int32 nCellPropertiesCells = aCellProperties[0].getLength();
-        sal_Int32 nCellPropertiesProperties = aCellProperties[0][0].getLength();
-        (void) nCellPropertiesRows;
-        (void) nCellPropertiesCells;
-        (void) nCellPropertiesProperties;
-        ++nCellPropertiesProperties;
-    }
-#endif
-
             uno::Reference<text::XTextTable> xTable = m_xText->convertToTable(*m_pTableSeq,
                                     aCellProperties,
                                     aRowProperties,
