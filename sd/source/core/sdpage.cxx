@@ -1921,7 +1921,9 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
 
         if (pObj)
         {
+#ifndef NEWPBG
             USHORT nIndexBackground = 0;
+#endif
             // #88084# remember aTopLeft as original TopLeft
             Point aTopLeft(pObj->GetCurrentBoundRect().TopLeft());
 
