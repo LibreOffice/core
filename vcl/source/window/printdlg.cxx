@@ -1654,6 +1654,12 @@ void PrintDialog::setupOptionalUI()
         maJobPage.maLayout.setBorders( nIndex-1, 0, 0, 0, aBorder.Width()  );
 #endif
 
+    // create auto mnemomnics now so they can be calculated in layout
+    ImplWindowAutoMnemonic( &maJobPage );
+    ImplWindowAutoMnemonic( &maNUpPage );
+    ImplWindowAutoMnemonic( &maOptionsPage );
+    ImplWindowAutoMnemonic( this );
+
     // calculate job page
     Size aMaxSize = maJobPage.maLayout.getOptimalSize( WINDOWSIZE_PREFERRED );
     // and layout page
