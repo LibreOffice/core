@@ -809,8 +809,15 @@ void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
     /* #i100116# metacity has a peculiar behavior regarding WM_HINT accept focus and _NET_WM_USER_TIME
         at some point that may be fixed in metacity and we will have to revisit this
     */
-    bool bMetaCityToolWindowHack = getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("Metacity") &&
-                                   (nStyle & SAL_FRAME_STYLE_TOOLWINDOW );
+
+    // MT/PL 2010/02: #i102694# and #i102803# have been introduced by this hack
+    // Nowadays the original issue referenced above doesn't seem to exist anymore, tested different szenarious described in the issues
+    // If some older versions of MetaCity are still in use somewhere, they need to be updated, instead of using strange hacks in OOo.
+    // As a work around for such old systems, people might consider to not use the GTK plugin.
+
+    bool bMetaCityToolWindowHack = false;
+    // bMetaCityToolWindowHack = getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("Metacity") && (nStyle & SAL_FRAME_STYLE_TOOLWINDOW );
+
     if( bDecoHandling )
     {
         bool bNoDecor = ! (nStyle & (SAL_FRAME_STYLE_MOVEABLE | SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_CLOSEABLE ) );
