@@ -39,7 +39,7 @@
 #include <drawinglayer/processor3d/shadow3dextractor.hxx>
 #include <drawinglayer/primitive3d/shadowprimitive3d.hxx>
 #include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
-#include <drawinglayer/primitive2d/UnifiedTransparencePrimitive2D.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive3d/transformprimitive3d.hxx>
 #include <drawinglayer/primitive3d/polygonprimitive3d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

@@ -1214,7 +1214,8 @@ void ImpPageChange(SdrPage& rSdrPage)
 }
 
 SdrPageProperties::SdrPageProperties(SdrPage& rSdrPage)
-:   mpSdrPage(&rSdrPage),
+:   SfxListener(),
+    mpSdrPage(&rSdrPage),
     mpStyleSheet(0),
     mpProperties(new SfxItemSet(mpSdrPage->GetModel()->GetItemPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST))
 {
@@ -1225,7 +1226,8 @@ SdrPageProperties::SdrPageProperties(SdrPage& rSdrPage)
 }
 
 SdrPageProperties::SdrPageProperties(const SdrPageProperties& rCandidate)
-:   mpSdrPage(rCandidate.mpSdrPage),
+:   SfxListener(),
+    mpSdrPage(rCandidate.mpSdrPage),
     mpStyleSheet(0),
     mpProperties(new SfxItemSet(*rCandidate.mpProperties))
 {
@@ -1241,7 +1243,7 @@ SdrPageProperties::~SdrPageProperties()
     delete mpProperties;
 }
 
-void SdrPageProperties::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
+void SdrPageProperties::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
     const SfxSimpleHint* pSimpleHint = dynamic_cast< const SfxSimpleHint* >(&rHint);
 

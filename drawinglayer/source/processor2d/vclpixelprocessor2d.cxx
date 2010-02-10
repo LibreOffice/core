@@ -54,7 +54,7 @@
 #include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
 #include <drawinglayer/primitive2d/controlprimitive2d.hxx>
 #include <com/sun/star/awt/XWindow2.hpp>
-#include <drawinglayer/primitive2d/UnifiedTransparencePrimitive2D.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #include <drawinglayer/primitive2d/chartprimitive2d.hxx>
 #include <helperchartrenderer.hxx>

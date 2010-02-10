@@ -70,7 +70,7 @@
 #include <com/sun/star/rendering/PathJoinType.hpp>
 #include <drawinglayer/primitive2d/fillbitmapprimitive2d.hxx>
 #include <com/sun/star/rendering/TexturingMode.hpp>
-#include <drawinglayer/primitive2d/UnifiedTransparencePrimitive2D.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <vclhelperbufferdevice.hxx>
 #include <drawinglayer/primitive2d/chartprimitive2d.hxx>
 #include <helperchartrenderer.hxx>

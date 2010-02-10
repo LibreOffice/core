@@ -42,7 +42,7 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <basegfx/tools/canvastools.hxx>
 #include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
-#include <drawinglayer/primitive2d/UnifiedTransparencePrimitive2D.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
