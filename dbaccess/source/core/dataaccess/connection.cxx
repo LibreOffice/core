@@ -732,24 +732,17 @@ Reference< XInterface > SAL_CALL OConnection::createInstance( const ::rtl::OUStr
     }
     else
     {
-        Reference<XInterface> xDs = dbaccess::getDataSource(*this);
-        Any aValue;
-        if ( dbtools::getDataSourceSetting(xDs,_sServiceSpecifier,aValue) )
+        if ( _sServiceSpecifier.getLength() )
         {
-            ::rtl::OUString sSupportService;
-            aValue >>= sSupportService;
-            if ( sSupportService.getLength() )
+            TSupportServices::iterator aFind = m_aSupportServices.find(_sServiceSpecifier);
+            if ( aFind == m_aSupportServices.end() )
             {
-                TSupportServices::iterator aFind = m_aSupportServices.find(sSupportService);
-                if ( aFind == m_aSupportServices.end())
-                {
-                    Sequence<Any> aArgs(1);
-                    Reference<XConnection> xMy(this);
-                    aArgs[0] <<= NamedValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ActiveConnection")),makeAny(xMy));
-                    aFind = m_aSupportServices.insert(TSupportServices::value_type(sSupportService,m_aContext.createComponentWithArguments(sSupportService,aArgs))).first;
-                }
-                return aFind->second;
+                Sequence<Any> aArgs(1);
+                Reference<XConnection> xMy(this);
+                aArgs[0] <<= NamedValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ActiveConnection")),makeAny(xMy));
+                aFind = m_aSupportServices.insert(TSupportServices::value_type(_sServiceSpecifier,m_aContext.createComponentWithArguments(_sServiceSpecifier,aArgs))).first;
             }
+            return aFind->second;
         }
     }
     return Reference< XInterface >(xRet,UNO_QUERY);
