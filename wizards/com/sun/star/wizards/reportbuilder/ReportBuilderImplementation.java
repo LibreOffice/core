@@ -37,7 +37,7 @@ import com.sun.star.wizards.report.*;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.container.XNameAccess;
+import com.sun.star.container.XHierarchicalNameContainer;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XDispatch;
@@ -340,7 +340,7 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public void store(String Name, int OpenMode)
+    public void store(String Name, int OpenMode) throws com.sun.star.uno.Exception
     {
         // throw new UnsupportedOperationException("Not supported yet.");
         // getReportBuilderLayouter().store(Name);
@@ -351,27 +351,14 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
             return;
         }
 
-        try
-        {
-            final XNameAccess aNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, m_aReportDocument);
-            final String[] aNames = aNameAccess.getElementNames();
+        final XCommandProcessor xProcessor = UnoRuntime.queryInterface(XCommandProcessor.class, m_aDocumentDefinition);
+        final com.sun.star.ucb.Command aCommand = new com.sun.star.ucb.Command();
+        aCommand.Name = "storeOwn";
 
-//            m_xReportDefinition.storeToStorage(m_xReportDefinition.getDocumentStorage(), m_xReportDefinition.getArgs());
+        final Object aObj2 = xProcessor.execute(aCommand, xProcessor.createCommandIdentifier(), null);
 
-            final XCommandProcessor xProcessor = (XCommandProcessor) UnoRuntime.queryInterface(XCommandProcessor.class, m_aDocumentDefinition);
-            com.sun.star.ucb.Command aCommand = new com.sun.star.ucb.Command();
-            aCommand.Name = "storeOwn";
-
-            final Object aObj2 = xProcessor.execute(aCommand, xProcessor.createCommandIdentifier(), null);
-
-            final XNameContainer aNameContainer = (XNameContainer) UnoRuntime.queryInterface(XNameContainer.class, m_aReportDocument);
-//             aNameContainer.insertByName(Name, m_xReportDefinition);
-            aNameContainer.insertByName(Name, m_aDocumentDefinition);
-        }
-        catch (Exception e)
-        {
-            int dummy = 0;
-        }
+        final XHierarchicalNameContainer aNameContainer = UnoRuntime.queryInterface(XHierarchicalNameContainer.class, m_aReportDocument);
+        aNameContainer.insertByHierarchicalName(Name, m_aDocumentDefinition);
     }
 
     public boolean liveupdate_addGroupNametoDocument(String[] GroupNames, String CurGroupTitle, Vector GroupFieldVector, ArrayList ReportPath, int iSelCount)
