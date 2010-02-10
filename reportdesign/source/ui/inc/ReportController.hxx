@@ -353,7 +353,7 @@ namespace rptui
         // SfxListener
         virtual void Notify(SfxBroadcaster & rBc, SfxHint const & rHint);
 
-        virtual void setModified(sal_Bool _bModified=sal_True);
+        virtual void impl_onModifyChanged();
 
         //  const ::connectivity::OSQLParseNode* getParseTree() const { return m_aSqlIterator.getParseTree();}
         // need for undo's and redo's

@@ -97,6 +97,7 @@ namespace dbaui
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
     using ::com::sun::star::frame::XUntitledNumbers;
+    using ::com::sun::star::beans::PropertyVetoException;
     /** === end UNO using === **/
 
     class DataSourceHolder
@@ -143,6 +144,9 @@ namespace dbaui
         OModuleClient                   m_aModuleClient;
         ::dbtools::SQLExceptionInfo     m_aCurrentError; // contains the current error which can be set through IEnvironment
 
+        ::cppu::OInterfaceContainerHelper
+                                        m_aModifyListeners;
+
         // <properties>
         SharedConnection                m_xConnection;
         ::dbtools::DatabaseMetaData     m_aSdbMetaData;
@@ -157,8 +161,9 @@ namespace dbaui
         sal_Bool                        m_bModified;    // is the data modified
         bool                            m_bNotAttached;
 
-        OSingleDocumentControllerImpl()
-            :m_aDocScriptSupport()
+        OSingleDocumentControllerImpl( ::osl::Mutex& i_rMutex )
+            :m_aModifyListeners( i_rMutex )
+            ,m_aDocScriptSupport()
             ,m_nDocStartNumber(0)
             ,m_bSuspended( sal_False )
             ,m_bEditable(sal_True)
@@ -188,7 +193,7 @@ namespace dbaui
     //--------------------------------------------------------------------
     OSingleDocumentController::OSingleDocumentController(const Reference< XMultiServiceFactory >& _rxORB)
         :OSingleDocumentController_Base( _rxORB )
-        ,m_pImpl(new OSingleDocumentControllerImpl())
+        ,m_pImpl( new OSingleDocumentControllerImpl( getMutex() ) )
     {
     }
 
@@ -543,15 +548,6 @@ namespace dbaui
         InvalidateFeature(ID_BROWSER_UNDO);
         InvalidateFeature(ID_BROWSER_REDO);
     }
-    // -----------------------------------------------------------------------------
-    void OSingleDocumentController::setModified(sal_Bool _bModified)
-    {
-        m_pImpl->m_bModified = _bModified;
-        InvalidateFeature(ID_BROWSER_SAVEDOC);
-
-        if ( isFeatureSupported( ID_BROWSER_SAVEASDOC ) )
-            InvalidateFeature(ID_BROWSER_SAVEASDOC);
-    }
 
     // -----------------------------------------------------------------------------
     ::rtl::OUString OSingleDocumentController::getDataSourceName() const
@@ -591,12 +587,6 @@ namespace dbaui
     sal_Bool OSingleDocumentController::isEditable() const
     {
         return m_pImpl->m_bEditable;
-    }
-
-    // -----------------------------------------------------------------------------
-    sal_Bool OSingleDocumentController::isModified() const
-    {
-        return m_pImpl->m_bModified;
     }
 
     // -----------------------------------------------------------------------------
@@ -703,6 +693,57 @@ namespace dbaui
             return NULL;
 
         return Reference< XEmbeddedScripts >( getDatabaseDocument(), UNO_QUERY_THROW );
+    }
+
+    // -----------------------------------------------------------------------------
+    void SAL_CALL OSingleDocumentController::addModifyListener( const Reference< XModifyListener >& i_Listener ) throw (RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( getMutex() );
+        m_pImpl->m_aModifyListeners.addInterface( i_Listener );
+    }
+
+    // -----------------------------------------------------------------------------
+    void SAL_CALL OSingleDocumentController::removeModifyListener( const Reference< XModifyListener >& i_Listener ) throw (RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( getMutex() );
+        m_pImpl->m_aModifyListeners.removeInterface( i_Listener );
+    }
+
+    // -----------------------------------------------------------------------------
+    ::sal_Bool SAL_CALL OSingleDocumentController::isModified(  ) throw (RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( getMutex() );
+        return impl_isModified();
+    }
+
+    // -----------------------------------------------------------------------------
+    void SAL_CALL OSingleDocumentController::setModified( ::sal_Bool i_bModified ) throw (PropertyVetoException, RuntimeException)
+    {
+        ::osl::ClearableMutexGuard aGuard( getMutex() );
+
+        if ( m_pImpl->m_bModified == i_bModified )
+            return;
+
+        m_pImpl->m_bModified = i_bModified;
+        impl_onModifyChanged();
+
+        EventObject aEvent( *this );
+        aGuard.clear();
+        m_pImpl->m_aModifyListeners.notifyEach( &XModifyListener::modified, aEvent );
+    }
+
+    // -----------------------------------------------------------------------------
+    sal_Bool OSingleDocumentController::impl_isModified() const
+    {
+        return m_pImpl->m_bModified;
+    }
+
+    // -----------------------------------------------------------------------------
+    void OSingleDocumentController::impl_onModifyChanged()
+    {
+        InvalidateFeature( ID_BROWSER_SAVEDOC );
+        if ( isFeatureSupported( ID_BROWSER_SAVEASDOC ) )
+            InvalidateFeature( ID_BROWSER_SAVEASDOC );
     }
 
 //........................................................................

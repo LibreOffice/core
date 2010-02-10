@@ -784,7 +784,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
             aReturn.aValue <<= getSplitPos();
             break;
         case SID_SAVEDOC:
-            aReturn.bEnabled = isModified() && isEditable();
+            aReturn.bEnabled = impl_isModified() && isEditable();
             break;
         case SID_SAVEASDOC:
             aReturn.bEnabled = isConnected() && isEditable();
@@ -2127,17 +2127,18 @@ SfxUndoManager* OReportController::getUndoMgr()
     return &m_aUndoManager;
 }
 // -----------------------------------------------------------------------------
-void OReportController::setModified(sal_Bool _bModified)
+void OReportController::impl_onModifyChanged()
 {
-    ::osl::MutexGuard aGuard( getMutex() );
     try
     {
         if ( m_xReportDefinition.is() )
-            m_xReportDefinition->setModified(_bModified);
-        OSingleDocumentController::setModified(_bModified);
+            m_xReportDefinition->setModified( impl_isModified() );
+        OSingleDocumentController::impl_onModifyChanged();
     }
     catch(uno::Exception)
-    {}
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }
 // -----------------------------------------------------------------------------
 void OReportController::losingConnection( )

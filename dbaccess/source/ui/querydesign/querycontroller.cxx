@@ -448,7 +448,7 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId) const
             aReturn.bEnabled = !editingCommand() && !editingView() && (!m_bGraphicalDesign || !(m_vTableFieldDesc.empty() || m_vTableData.empty()));
             break;
         case ID_BROWSER_SAVEDOC:
-            aReturn.bEnabled = isModified() && (!m_bGraphicalDesign || !(m_vTableFieldDesc.empty() || m_vTableData.empty()));
+            aReturn.bEnabled = impl_isModified() && (!m_bGraphicalDesign || !(m_vTableFieldDesc.empty() || m_vTableData.empty()));
             break;
         case SID_PRINTDOCDIRECT:
             break;
@@ -1046,9 +1046,9 @@ void OQueryController::describeSupportedFeatures()
 #endif
 }
 // -----------------------------------------------------------------------------
-void OQueryController::setModified(sal_Bool _bModified)
+void OQueryController::impl_onModifyChanged()
 {
-    OJoinController::setModified(_bModified);
+    OJoinController::impl_onModifyChanged();
     InvalidateFeature(SID_BROWSER_CLEAR_QUERY);
     InvalidateFeature(ID_BROWSER_SAVEASDOC);
     InvalidateFeature(ID_BROWSER_QUERY_EXECUTE);
@@ -1097,8 +1097,10 @@ void OQueryController::reconnect(sal_Bool _bUI)
     }
 }
 // -----------------------------------------------------------------------------
-void OQueryController::saveViewSettings(Sequence<PropertyValue>& _rViewProps)
+void OQueryController::saveViewSettings( Sequence< PropertyValue >& o_rViewData )
 {
+    saveTableWindows( o_rViewData );
+
     OTableFields::const_iterator aFieldIter = m_vTableFieldDesc.begin();
     OTableFields::const_iterator aFieldEnd = m_vTableFieldDesc.end();
     sal_Int32 nCount = 0;
@@ -1108,15 +1110,9 @@ void OQueryController::saveViewSettings(Sequence<PropertyValue>& _rViewProps)
             ++nCount;
     }
 
-    sal_Int32 nLen = _rViewProps.getLength();
-
-    _rViewProps.realloc( nLen + 2 + (nCount != 0 ? 1 : 0) );
-    PropertyValue *pIter = _rViewProps.getArray() + nLen;
-
+    ::comphelper::NamedValueCollection aViewData( o_rViewData );
     if ( nCount != 0 )
     {
-        pIter->Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Fields"));
-
         Sequence<PropertyValue> aFields(nCount);
         PropertyValue *pFieldsIter = aFields.getArray();
         // the fielddata
@@ -1129,36 +1125,21 @@ void OQueryController::saveViewSettings(Sequence<PropertyValue>& _rViewProps)
                 (*aFieldIter)->Save(*pFieldsIter++);
             }
         }
-        pIter->Value <<= aFields;
-        ++pIter;
+
+        aViewData.put( "Fields", aFields );
     }
 
-    pIter->Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SplitterPosition"));
-    pIter->Value <<= m_nSplitPos;
-    ++pIter;
-    pIter->Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VisibleRows"));
-    pIter->Value <<= m_nVisibleRows;
+    aViewData.put( "SplitterPosition", m_nSplitPos );
+    aViewData.put( "VisibleRows", m_nVisibleRows );
+    o_rViewData = aViewData.getPropertyValues();
 }
 // -----------------------------------------------------------------------------
-void OQueryController::loadViewSettings(const Sequence<PropertyValue>& _rViewProps)
+void OQueryController::loadViewSettings( const Sequence< PropertyValue >& i_rViewData )
 {
-    const PropertyValue *pIter = _rViewProps.getConstArray();
-    const PropertyValue *pEnd = pIter + _rViewProps.getLength();
-    for (; pIter != pEnd; ++pIter)
-    {
-        if ( pIter->Name.equalsAscii("SplitterPosition") )
-        {
-            pIter->Value >>= m_nSplitPos;
-        }
-        else if ( pIter->Name.equalsAscii("VisibleRows") )
-        {
-            pIter->Value >>= m_nVisibleRows;
-        }
-        else if ( pIter->Name.equalsAscii("Fields") )
-        {
-            pIter->Value >>= m_aFieldInformation;
-        }
-    }
+    const ::comphelper::NamedValueCollection aViewData( i_rViewData );
+    m_nSplitPos = aViewData.getOrDefault( "SplitterPosition", m_nSplitPos );
+    m_nVisibleRows = aViewData.getOrDefault( "VisibleRows", m_nVisibleRows );
+    m_aFieldInformation = aViewData.getOrDefault( "Fields", m_aFieldInformation );
 }
 // -----------------------------------------------------------------------------
 sal_Int32 OQueryController::getColWidth(sal_uInt16 _nColPos)  const
@@ -1438,12 +1419,7 @@ bool OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
                 xQuery->setPropertyValue( PROPERTY_UPDATE_TABLENAME, makeAny( m_sUpdateTableName ) );
                 xQuery->setPropertyValue( PROPERTY_ESCAPE_PROCESSING,::cppu::bool2any( m_bEscapeProcessing ) );
 
-                // layout information
-                getContainer()->SaveUIConfig();
-                Sequence< PropertyValue > aLayout;
-                saveTableWindows( aLayout );
-                saveViewSettings( aLayout );
-                xQuery->setPropertyValue( PROPERTY_LAYOUTINFORMATION, makeAny( aLayout ) );
+                xQuery->setPropertyValue( PROPERTY_LAYOUTINFORMATION, getViewData() );
             }
         }
 
@@ -1776,6 +1752,22 @@ bool OQueryController::allowQueries() const
 }
 
 // -----------------------------------------------------------------------------
+Any SAL_CALL OQueryController::getViewData() throw( RuntimeException )
+{
+    ::osl::MutexGuard aGuard( getMutex() );
+
+    getContainer()->SaveUIConfig();
+
+    Sequence< PropertyValue > aLayout;
+    saveViewSettings( aLayout );
+    return makeAny( aLayout );
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OQueryController::restoreViewData(const Any& /*Data*/) throw( RuntimeException )
+{
+    // TODO
+}
+
 // -----------------------------------------------------------------------------
 } // namespace dbaui
 // -----------------------------------------------------------------------------

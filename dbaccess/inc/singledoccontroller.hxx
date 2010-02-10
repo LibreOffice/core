@@ -40,13 +40,14 @@
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include <connectivity/dbmetadata.hxx>
-#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <svl/undo.hxx>
 
 #include <memory>
@@ -61,8 +62,9 @@ namespace dbaui
     //====================================================================
     class OSingleDocumentController;
 
-    typedef ::cppu::ImplInheritanceHelper1  <   OGenericUnoController
+    typedef ::cppu::ImplInheritanceHelper2  <   OGenericUnoController
                                             ,   ::com::sun::star::document::XScriptInvocationContext
+                                            ,   ::com::sun::star::util::XModifiable
                                             >   OSingleDocumentController_Base;
 
     struct OSingleDocumentControllerImpl;
@@ -93,15 +95,14 @@ namespace dbaui
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > getPrivateModel() const;
 
+                sal_Bool impl_isModified() const;
+        virtual void     impl_onModifyChanged();
+
     public:
 
         sal_Bool        isReadOnly()            const;
         sal_Bool        isEditable()            const;
         void            setEditable(sal_Bool _bEditable);
-        sal_Bool        isModified()            const;
-
-        virtual void setModified(sal_Bool _bModified=sal_True);
-
 
         // need for undo's and redo's
         SfxUndoManager* getUndoMgr();
@@ -180,6 +181,14 @@ namespace dbaui
 
         // XScriptInvocationContext
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedScripts > SAL_CALL getScriptContainer() throw (::com::sun::star::uno::RuntimeException);
+
+        // XModifiable
+        virtual ::sal_Bool SAL_CALL isModified(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setModified( ::sal_Bool bModified ) throw (::com::sun::star::beans::PropertyVetoException, ::com::sun::star::uno::RuntimeException);
+
+        // XModifyBroadcaster
+        virtual void SAL_CALL addModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL removeModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 
         // XTitle
         virtual ::rtl::OUString SAL_CALL getTitle(  ) throw (::com::sun::star::uno::RuntimeException);

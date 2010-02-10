@@ -160,7 +160,7 @@ FeatureState ORelationController::GetState(sal_uInt16 _nId) const
             aReturn.bChecked = false;
             break;
         case ID_BROWSER_SAVEDOC:
-            aReturn.bEnabled = haveDataSource() && isModified();
+            aReturn.bEnabled = haveDataSource() && impl_isModified();
             break;
         default:
             aReturn = OJoinController::GetState(_nId);

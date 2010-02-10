@@ -2599,7 +2599,7 @@ IMPL_LINK( OQueryDesignView, SplitHdl, void*, /*p*/ )
         m_bInSplitHandler = sal_True;
         m_aSplitter.SetPosPixel( Point( m_aSplitter.GetPosPixel().X(),m_aSplitter.GetSplitPosPixel() ) );
         static_cast<OQueryController&>(getController()).setSplitPos(m_aSplitter.GetSplitPosPixel());
-        static_cast<OQueryController&>(getController()).setModified();
+        static_cast<OQueryController&>(getController()).setModified( sal_True );
         Resize();
         m_bInSplitHandler = sal_True;
     }

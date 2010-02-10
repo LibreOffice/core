@@ -297,10 +297,10 @@ void OJoinController::reconnect( sal_Bool _bUI )
 }
 
 // -----------------------------------------------------------------------------
-void OJoinController::setModified(sal_Bool _bModified)
+void OJoinController::impl_onModifyChanged()
 {
-    OJoinController_BASE::setModified(_bModified);
-    InvalidateFeature(SID_RELATION_ADD_RELATION);
+    OJoinController_BASE::impl_onModifyChanged();
+    InvalidateFeature( SID_RELATION_ADD_RELATION );
 }
 // -----------------------------------------------------------------------------
 void OJoinController::SaveTabWinPosSize(OTableWindow* pTabWin, long nOffsetX, long nOffsetY)
@@ -328,9 +328,6 @@ FeatureState OJoinController::GetState(sal_uInt16 _nId) const
     {
         case ID_BROWSER_EDITDOC:
             aReturn.bChecked = isEditable();
-            break;
-        case ID_BROWSER_SAVEDOC:
-            aReturn.bEnabled = isConnected() && isModified();
             break;
         case ID_BROWSER_ADDTABLE:
             aReturn.bEnabled = ( getView() != NULL )

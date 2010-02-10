@@ -125,8 +125,8 @@ namespace dbaui
         void executeQuery();
         bool doSaveAsDoc(sal_Bool _bSaveAs);
 
-        void saveViewSettings(::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _rViewProps);
-        void loadViewSettings(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _rViewProps);
+        void saveViewSettings( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& o_rViewData );
+        void loadViewSettings( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_rViewData );
         ::rtl::OUString translateStatement( bool _bFireStatementChange = true );
 
         ::rtl::OUString getDefaultName() const;
@@ -153,7 +153,7 @@ namespace dbaui
 
         void            clearFields();
 
-        virtual void    setModified(sal_Bool _bModified=sal_True);
+        virtual void impl_onModifyChanged();
 
         // should the statement be parsed by our own sql parser
         sal_Bool        isEsacpeProcessing()    const { return m_bEscapeProcessing; }
@@ -194,6 +194,10 @@ namespace dbaui
         static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
         static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                 SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
+
+        // XController
+        virtual ::com::sun::star::uno::Any SAL_CALL getViewData(void) throw( ::com::sun::star::uno::RuntimeException );
+        virtual void SAL_CALL restoreViewData(const ::com::sun::star::uno::Any& Data) throw( ::com::sun::star::uno::RuntimeException );
 
     private:
         virtual void    onLoadedMenu(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager);

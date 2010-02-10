@@ -130,7 +130,7 @@ namespace dbaui
         inline sal_Bool                 isAutoIncrementValueEnabled()   const { return m_bAllowAutoIncrementValue; }
         inline const ::rtl::OUString&   getAutoIncrementValue()         const { return m_sAutoIncrementValue; }
 
-        virtual void setModified(sal_Bool _bModified=sal_True);
+        virtual void impl_onModifyChanged();
 
         //  const ::connectivity::OSQLParseNode* getParseTree() const { return m_aSqlIterator.getParseTree();}
         // need for undo's and redo's

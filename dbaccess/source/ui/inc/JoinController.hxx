@@ -112,7 +112,7 @@ namespace dbaui
         // ---------------------------------------------------------------
         // OSingleDocumentController overridables
         virtual void        reconnect( sal_Bool _bUI );
-        virtual void        setModified( sal_Bool _bModified = sal_True );
+        virtual void        impl_onModifyChanged();
 
         // ---------------------------------------------------------------
         // own overridables
