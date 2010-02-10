@@ -32,7 +32,7 @@
 #define _BGFX_POLYGON_B2DTRAPEZOID_HXX
 
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/polygon/b2dPolypolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <vector>
 
 //////////////////////////////////////////////////////////////////////////////
