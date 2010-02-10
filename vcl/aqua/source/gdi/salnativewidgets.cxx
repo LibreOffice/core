@@ -569,7 +569,7 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
                 // the Aqua grey theme when the item is selected is drawn here.
                 aMenuItemDrawInfo.itemType = kThemeMenuItemPlain;
 
-                if ((nPart == PART_MENU_ITEM ))
+                if ((nPart == PART_MENU_ITEM ) && (nState & CTRL_STATE_SELECTED))
                 {
                     // the blue theme when the item is selected is drawn here.
                     aMenuItemDrawInfo.state = kThemeMenuSelected;
