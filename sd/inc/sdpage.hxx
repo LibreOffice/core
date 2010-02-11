@@ -160,10 +160,6 @@ protected:
     /** a helper class to manipulate effects inside the main sequence */
     boost::shared_ptr< sd::MainSequence > mpMainSequence;
 
-#ifndef NEWPBG
-    void        AdjustBackgroundSize();
-#endif
-
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage();
 
     SfxItemSet* mpItems;
@@ -199,17 +195,13 @@ public:
 
     sd::ShapeList&  GetPresentationShapeList() { return maPresentationShapeList; }
 
-#ifdef NEWPBG
     void EnsureMasterPageDefaultBackground();
-#endif
     SdrObject*      CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rectangle& rRect, BOOL bInsert=FALSE);
     SdrObject*      CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert);
     SdrObject*      GetPresObj(PresObjKind eObjKind, int nIndex = 1 );
     PresObjKind     GetPresObjKind(SdrObject* pObj) const;
     String          GetPresObjText(PresObjKind eObjKind) const;
-#ifdef NEWPBG
     SfxStyleSheet* GetStyleSheetForMasterPageBackground() const;
-#endif
     SfxStyleSheet*  GetStyleSheetForPresObj(PresObjKind eObjKind) const;
     bool            RestoreDefaultText( SdrObject* pObj );
 

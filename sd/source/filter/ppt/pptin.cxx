@@ -864,7 +864,6 @@ sal_Bool ImplSdPPTImport::Import()
                 {
                     if ( pMPage->GetPageKind() == PK_STANDARD )
                     {
-#ifdef NEWPBG
                         // transform data from imported background object to new form
                         // and delete the object. It was used as container to transport
                         // the attributes of the MasterPage background fill
@@ -888,37 +887,6 @@ sal_Bool ImplSdPPTImport::Import()
 
                         pMPage->RemoveObject(pObj->GetOrdNum());
                         SdrObject::Free(pObj);
-#else
-                        // Hintergrundobjekt gefunden (erstes Objekt der MasterPage)
-                        pObj->SetEmptyPresObj( TRUE );
-                        pObj->SetUserCall( pMPage );
-                        pObj->SetLayer( mnBackgroundLayerID );
-
-                        // Schatten am ersten Objekt (Hintergrundobjekt) entfernen (#57918#)
-                        SfxItemSet aTempAttr( mpDoc->GetPool() );
-                        aTempAttr.Put( pObj->GetMergedItemSet() );
-
-                        BOOL bShadowIsOn = ( (SdrShadowItem&)( aTempAttr.Get( SDRATTR_SHADOW ) ) ).GetValue();
-                        if( bShadowIsOn )
-                        {
-                            aTempAttr.Put( SdrShadowItem( FALSE ) );
-                            pObj->SetMergedItemSet( aTempAttr );
-                        }
-                        SfxStyleSheet* pSheet = pMPage->GetStyleSheetForPresObj( PRESOBJ_BACKGROUND );
-                        if ( pSheet )
-                        {   // StyleSheet fuellen und dem Objekt zuweisen
-                            pSheet->GetItemSet().ClearItem();
-                            pSheet->GetItemSet().Put( pObj->GetMergedItemSet() );
-                            aTempAttr.ClearItem();
-                            pObj->SetMergedItemSet( aTempAttr );
-                            pObj->SetStyleSheet( pSheet, FALSE );
-                        }
-                        pMPage->InsertPresObj( pObj, PRESOBJ_BACKGROUND );
-
-                        // #110094#-15
-                        // tell the page that it's visualization has changed
-                        pMPage->ActionChanged();
-#endif
                     }
                 }
             }

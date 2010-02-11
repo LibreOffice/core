@@ -264,13 +264,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                 if( !bSubContentProcessing || !pObject->IsNotVisibleAsMaster() )
                 {
                     eKind = pObjectsSdPage ? pObjectsSdPage->GetPresObjKind(pObject) : PRESOBJ_NONE;
-
-#ifndef NEWPBG
-                    if( eKind != PRESOBJ_BACKGROUND )
-#endif
-                    {
-                        bCreateOutline = true;
-                    }
+                    bCreateOutline = true;
                 }
             }
             else if( ( pObject->GetObjInventor() == SdrInventor ) && ( pObject->GetObjIdentifier() == OBJ_TEXT ) )

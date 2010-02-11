@@ -637,26 +637,6 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
 
             if( aName != pPage->GetName() )
                 pPage->SetName( aName );
-#ifndef NEWPBG
-            SdrObject* pPresObj = pPage->GetPresObj( PRESOBJ_BACKGROUND ) ;
-
-            if( pPage->GetPageKind() == PK_STANDARD )
-            {
-                DBG_ASSERT( pPresObj, "Masterpage without a background object!" );
-                if (pPresObj && pPresObj->GetOrdNum() != 0 )
-                    pPage->NbcSetObjectOrdNum(pPresObj->GetOrdNum(),0);
-            }
-            else
-            {
-                DBG_ASSERT( pPresObj == NULL, "Non Standard Masterpage with a background object!\n(This assertion is ok for old binary files)" );
-                if( pPresObj )
-                {
-                    pPage->RemoveObject( pPresObj->GetOrdNum() );
-                    pPage->RemovePresObj(pPresObj);
-                    SdrObject::Free( pPresObj );
-                }
-            }
-#endif
         }
 
         // Sprachabhaengige Namen der StandardLayer erzeugen
@@ -728,13 +708,6 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
             SdPage* pPage = (SdPage*)GetMasterPage(nPage);
 
             NewOrLoadCompleted( pPage, pSPool );
-
-#ifndef NEWPBG
-            // BackgroundObjekt vor Selektion schuetzen #62144#
-            SdrObject* pBackObj = pPage->GetPresObj(PRESOBJ_BACKGROUND);
-            if(pBackObj)
-                pBackObj->SetMarkProtect(TRUE);
-#endif
         }
     }
 

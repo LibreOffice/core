@@ -67,28 +67,9 @@ const SvxItemPropertySet* ImplGetPageBackgroundPropertySet()
 
 UNO3_GETIMPLEMENTATION_IMPL( SdUnoPageBackground );
 
-#ifndef NEWPBG
-SdUnoPageBackground::SdUnoPageBackground( SdDrawDocument* pDoc /* = NULL */, SdrObject* pObj /* = NULL */ ) throw()
-: mpPropSet( ImplGetPageBackgroundPropertySet() ), mpSet( NULL ), mpDoc( pDoc )
-{
-    if( pDoc )
-    {
-        StartListening( *pDoc );
-        mpSet = new SfxItemSet( pDoc->GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST );
-
-        if( pObj )
-            mpSet->Put(pObj->GetMergedItemSet());
-    }
-}
-#endif
-
-#ifdef NEWPBG
 SdUnoPageBackground::SdUnoPageBackground(
     SdDrawDocument* pDoc /* = NULL */,
     const SfxItemSet* pSet /* = NULL */) throw()
-#else
-SdUnoPageBackground::SdUnoPageBackground( SdDrawDocument* pDoc, const SfxItemSet* pSet ) throw()
-#endif
 :   mpPropSet(ImplGetPageBackgroundPropertySet()),
     mpSet(NULL),
     mpDoc(pDoc)

@@ -460,24 +460,9 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         {
             if( hasEventListeners() )
             {
-#ifndef NEWPBG
-                bool bBackgroundShape = false;
-
-                // the background shape itself has no api representation, so filter all notifies for it
-                const SdrObject* pSdrObj = pSdrHint->GetObject();
-                if( pSdrObj && (pSdrObj->GetObjInventor() == SdrInventor) && (pSdrObj->GetObjIdentifier() == OBJ_RECT) )
-                {
-                    SdPage* pPage = (SdPage*)pSdrObj->GetPage();
-                    bBackgroundShape = pPage && (pPage->GetPresObjKind(const_cast<SdrObject*>(pSdrObj)) == PRESOBJ_BACKGROUND);
-                }
-
-                if( !bBackgroundShape )
-#endif
-                {
-                    document::EventObject aEvent;
-                    if( SvxUnoDrawMSFactory::createEvent( mpDoc, pSdrHint, aEvent ) )
-                        notifyEvent( aEvent );
-                }
+                document::EventObject aEvent;
+                if( SvxUnoDrawMSFactory::createEvent( mpDoc, pSdrHint, aEvent ) )
+                    notifyEvent( aEvent );
             }
 
             if( pSdrHint->GetKind() == HINT_MODELCLEARED )
@@ -2750,18 +2735,8 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
         mpDoc->InsertMasterPage(pMPage,  (USHORT)nInsertPos);
 
         {
-#ifdef NEWPBG
             // ensure default MasterPage fill
             pMPage->EnsureMasterPageDefaultBackground();
-#else
-            // insert background object
-            Point aBackgroundPos ( pMPage->GetLftBorder(), pMPage->GetUppBorder() );
-            Size aBackgroundSize ( pMPage->GetSize() );
-            aBackgroundSize.Width()  -= pMPage->GetLftBorder() + pMPage->GetRgtBorder() - 1;
-            aBackgroundSize.Height() -= pMPage->GetUppBorder() + pMPage->GetLwrBorder() - 1;
-            Rectangle aBackgroundRect (aBackgroundPos, aBackgroundSize);
-            pMPage->CreatePresObj(PRESOBJ_BACKGROUND, FALSE, aBackgroundRect, sal_True );
-#endif
         }
 
         xDrawPage = uno::Reference< drawing::XDrawPage >::query( pMPage->getUnoPage() );
