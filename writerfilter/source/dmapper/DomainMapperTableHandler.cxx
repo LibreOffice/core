@@ -691,7 +691,6 @@ RowPropertyValuesSeq_t DomainMapperTableHandler::endTableGetRowProperties()
             if( aRowIter->get()->find( PropertyDefinition( PROP_IS_SPLIT_ALLOWED, false )) == aRowIter->get()->end())
                 aRowIter->get()->Insert( PROP_IS_SPLIT_ALLOWED, false, uno::makeAny(sal_True ) );
 
-            (*aRowIter)->Invalidate();
             aRowProperties[nRow] = (*aRowIter)->GetPropertyValues();
 #ifdef DEBUG_DOMAINMAPPER
             dmapper_logger->addTag((*aRowIter)->toTag());

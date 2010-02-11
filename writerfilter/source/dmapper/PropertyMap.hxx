@@ -106,9 +106,16 @@ class PropertyMap : public _PropertyMap
     ::rtl::OUString                                                             m_sFootnoteFontName;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote >       m_xFootnote;
 
-    public:
-        PropertyMap();
-        virtual ~PropertyMap();
+protected:
+    void Invalidate()
+    {
+        if(m_aValues.getLength())
+            m_aValues.realloc( 0 );
+    }
+
+public:
+    PropertyMap();
+    virtual ~PropertyMap();
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetPropertyValues();
     bool hasEmptyPropertyValues() const {return !m_aValues.getLength();}
@@ -117,12 +124,6 @@ class PropertyMap : public _PropertyMap
     void Insert( PropertyIds eId, bool bIsTextProperty, const ::com::sun::star::uno::Any& rAny, bool bOverwrite = true );
     using _PropertyMap::insert;
     void insert(const boost::shared_ptr<PropertyMap> pMap, bool bOverwrite = true);
-
-    void Invalidate()
-        {
-            if(m_aValues.getLength())
-                m_aValues.realloc( 0 );
-        }
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote>&  GetFootnote() const;
     void SetFootnote( ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote> xF ) { m_xFootnote = xF; }

@@ -198,6 +198,8 @@ void PropertyMap::insert( const PropertyMapPtr pMap, bool bOverwrite )
             ::std::for_each( pMap->begin(), pMap->end(), removeExistingElements<PropertyMap::value_type>(*this) );
         _PropertyMap::insert(pMap->begin(), pMap->end());
         insertTableProperties(pMap.get());
+
+        Invalidate();
     }
 }
 /*-- 06.06.2007 15:49:09---------------------------------------------------
