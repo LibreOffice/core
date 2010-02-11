@@ -102,11 +102,13 @@ public:
 ////////////////////////////////////////////////////////////
 
 
-#include <svx/impgrf.hxx>
+// taken from #include <svx/impgrf.hxx> :
 
 //!! temporary implemented locally:
 //!! once MBAs latest CWS is integrated this functions are available in svtools
 //!! under a slightly different name
+class GraphicFilter;
+class Graphic;
 GraphicFilter* lcl_GetGrfFilter();
 int   lcl_LoadGraphic( const String& rPath, const String& rFilter,
                      Graphic& rGraphic,

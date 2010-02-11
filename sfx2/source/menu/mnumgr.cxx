@@ -63,7 +63,6 @@
 #include <osl/file.hxx>
 #include <vcl/graph.hxx>
 #include <svtools/filter.hxx>
-#include <svx/impgrf.hxx>
 
 #include <sfx2/mnumgr.hxx>
 

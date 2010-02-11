@@ -39,6 +39,9 @@
 #include <comphelper/processfactory.hxx>
 #include <svl/stritem.hxx>
 #include <tools/debug.hxx>
+#include <vcl/graph.hxx>
+#include <svtools/filter.hxx>
+
 
 #include <vector>
 
