@@ -39,6 +39,7 @@
 #include "vcl/timer.hxx"
 #include "svl/zforlist.hxx"
 #include "scmatrix.hxx"
+#include "rangelst.hxx"
 
 #include <hash_map>
 #include <hash_set>
@@ -129,6 +130,15 @@ public:
     class Table;
     friend class ScExternalRefCache::Table;
 
+    /**
+     * Represents a single cached table in an external document.  It only
+     * stores non-empty cells; empty cells should never be stored in the data
+     * cache. Instead, cached ranges should be used to determine whether or
+     * not a cell is empty or needs fetching from the source document.  If a
+     * cell's value is not stored but its address is within the cached ranges,
+     * that cell is already queried in the source document and we know it's
+     * empty.
+     */
     class Table
     {
     public:
@@ -143,7 +153,7 @@ public:
         Table();
         ~Table();
 
-        SC_DLLPUBLIC void setCell(SCCOL nCol, SCROW nRow, TokenRef pToken, sal_uInt32 nFmtIndex = 0);
+        SC_DLLPUBLIC void setCell(SCCOL nCol, SCROW nRow, TokenRef pToken, sal_uInt32 nFmtIndex = 0, bool bSetCacheRange = true);
         TokenRef getCell(SCCOL nCol, SCROW nRow, sal_uInt32* pnFmtIndex = NULL) const;
         bool hasRow( SCROW nRow ) const;
         /** Set/clear referenced status flag only if current status is not
@@ -154,14 +164,35 @@ public:
         ReferencedFlag getReferencedFlag() const;
         bool isReferenced() const;
         /// Obtain a sorted vector of rows.
-        void getAllRows(::std::vector<SCROW>& rRows) const;
+        void getAllRows(::std::vector<SCROW>& rRows, SCROW nLow = 0, SCROW nHigh = MAXROW) const;
         /// Obtain a sorted vector of columns.
-        void getAllCols(SCROW nRow, ::std::vector<SCCOL>& rCols) const;
+        void getAllCols(SCROW nRow, ::std::vector<SCCOL>& rCols, SCCOL nLow = 0, SCCOL nHigh = MAXCOL) const;
         void getAllNumberFormats(::std::vector<sal_uInt32>& rNumFmts) const;
+        const ScRangeList& getCachedRanges() const;
+        bool isRangeCached(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
+
+        void setCachedCell(SCCOL nCol, SCROW nRow);
+        void setCachedCellRange(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
+
+        /**
+         * Call this to mark the entire table "cached".  This will prevent all
+         * future attempts to access the source document even when non-cached
+         * cells are queried.  In such case, non-cached cells are treated as
+         * empty cells.  Useful when loading a document with own external data
+         * cache.
+         */
+        SC_DLLPUBLIC void setWholeTableCached();
+    private:
+        bool isInCachedRanges(SCCOL nCol, SCROW nRow) const;
+        TokenRef getEmptyOrNullToken(SCCOL nCol, SCROW nRow) const;
 
     private:
-        RowsDataType   maRows;
-        ReferencedFlag meReferenced;
+        /** Data cache */
+        RowsDataType                    maRows;
+        /** Collection of individual cached ranges.  The table ranges are
+         *  not used & always zero. */
+        ScRangeList                     maCachedRanges;
+        ReferencedFlag                  meReferenced;
     };
 
     typedef ::boost::shared_ptr<Table>      TableTypeRef;
@@ -184,8 +215,7 @@ public:
      * @return pointer to the token instance in the cache.
      */
     ScExternalRefCache::TokenRef getCellData(
-        sal_uInt16 nFileId, const String& rTabName, SCCOL nCol, SCROW nRow,
-        bool bEmptyCellOnNull, bool bWriteEmpty, sal_uInt32* pnFmtIndex);
+        sal_uInt16 nFileId, const String& rTabName, SCCOL nCol, SCROW nRow, sal_uInt32* pnFmtIndex);
 
     /**
      * Get a cached cell range data.
@@ -195,12 +225,12 @@ public:
      *         guaranteed if the TokenArrayRef is properly used..
      */
     ScExternalRefCache::TokenArrayRef getCellRangeData(
-        sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange, bool bEmptyCellOnNull, bool bWriteEmpty);
+        sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange);
 
     ScExternalRefCache::TokenArrayRef getRangeNameTokens(sal_uInt16 nFileId, const String& rName);
     void setRangeNameTokens(sal_uInt16 nFileId, const String& rName, TokenArrayRef pArray);
 
-    void setCellData(sal_uInt16 nFileId, const String& rTabName, SCROW nRow, SCCOL nCol, TokenRef pToken, sal_uInt32 nFmtIndex);
+    void setCellData(sal_uInt16 nFileId, const String& rTabName, SCCOL nCol, SCROW nRow, TokenRef pToken, sal_uInt32 nFmtIndex);
 
     struct SingleRangeData
     {

@@ -663,6 +663,10 @@ bool ScDocument::ShrinkToDataArea(SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow
     if (nRow2 < rEndRow)
         rEndRow = nRow2;
 
+    if (rStartCol > rEndCol || rStartRow > rEndRow)
+        // invalid range.
+        return false;
+
     return true;  // success!
 }
 

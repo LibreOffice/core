@@ -930,6 +930,9 @@ void ScDocument::UpdateChartListenerCollection()
                 SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
                 DBG_ASSERT(pPage,"Page ?");
 
+                if (!pPage)
+                    continue;
+
                 SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
                 SdrObject* pObject = aIter.Next();
                 while (pObject)

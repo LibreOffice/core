@@ -570,6 +570,7 @@ void XclImpSupbook::LoadCachedValues()
         const String& rTabName = pTab->GetTabName();
         ScExternalRefCache::TableTypeRef pCacheTable = pRefMgr->getCacheTable(nFileId, rTabName, true);
         pTab->LoadCachedValues(pCacheTable);
+        pCacheTable->setWholeTableCached();
     }
 }
 
