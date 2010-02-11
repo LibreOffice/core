@@ -32,10 +32,6 @@
 
 .IF "$(SOLAR_JAVA)"!=""
 
-.IF "$(ANT_HOME)" == ""
-ANT_HOME*:=$(COMMON_BUILD_TOOLS)/apache-ant-1.7.0
-.EXPORT : ANT_HOME
-.ENDIF
 ANT_LIB*:=$(ANT_HOME)/lib
 
 ANT_CLASSPATH:=$(ANT_LIB)/xercesImpl.jar$(PATH_SEPERATOR)$(ANT_LIB)/xml-apis.jar$(PATH_SEPERATOR)$(ANT_LIB)/ant.jar
