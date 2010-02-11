@@ -105,7 +105,6 @@ class OGroupsSortingDialog :    public FloatingWindow
     ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                       m_pReportListener;
     ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroups>            m_xGroups;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xColumns;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >          m_xHoldAlive;
     sal_Bool                                m_bReadOnly;
 private:
     DECL_LINK( OnControlFocusLost, Control* );

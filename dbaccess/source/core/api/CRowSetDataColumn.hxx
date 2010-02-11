@@ -51,6 +51,7 @@ namespace dbaccess
         ORowSetCacheIterator        m_aColumnValue;
         ::com::sun::star::uno::Any  m_aOldValue;
 
+        ::rtl::OUString             m_sLabel;
         ::rtl::OUString             m_aDescription;     // description
         ORowSetBase*                m_pRowSet;
 
@@ -62,6 +63,7 @@ namespace dbaccess
                           sal_Int32 _nPos,
                           const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxDBMeta,
                           const ::rtl::OUString& _rDescription,
+                          const ::rtl::OUString& i_sLabel,
                           const ORowSetCacheIterator& _rColumnValue);
 
 

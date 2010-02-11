@@ -459,7 +459,7 @@ uno::Reference< report::XReportDefinition > SAL_CALL OSection::getReportDefiniti
     uno::Reference< report::XGroup > xGroup = m_xGroup;
     if ( !xRet.is() && xGroup.is() )
     {
-        uno::Reference< report::XGroups> xGroups(xGroup->getParent(),uno::UNO_QUERY);
+        uno::Reference< report::XGroups> xGroups(xGroup->getGroups());
         if ( xGroups.is() )
             xRet = xGroups->getReportDefinition();
     }

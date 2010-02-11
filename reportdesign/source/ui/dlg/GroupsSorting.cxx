@@ -52,6 +52,7 @@
 #include "UndoActions.hxx"
 #include "uistrings.hrc"
 #include "ReportController.hxx"
+#include "ColumnInfo.hxx"
 
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/property.hxx>
@@ -73,6 +74,25 @@ using namespace ::com::sun::star;
 using namespace svt;
 using namespace ::comphelper;
 
+    void lcl_addToList_throw( ComboBoxControl& _rListBox, ::std::vector<ColumnInfo>& o_aColumnList,const uno::Reference< container::XNameAccess>& i_xColumns )
+    {
+        uno::Sequence< ::rtl::OUString > aEntries = i_xColumns->getElementNames();
+        const ::rtl::OUString* pEntries = aEntries.getConstArray();
+        sal_Int32 nEntries = aEntries.getLength();
+        for ( sal_Int32 i = 0; i < nEntries; ++i, ++pEntries )
+        {
+            uno::Reference< beans::XPropertySet> xColumn(i_xColumns->getByName(*pEntries),uno::UNO_QUERY_THROW);
+            ::rtl::OUString sLabel;
+            if ( xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_LABEL) )
+                xColumn->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
+            o_aColumnList.push_back( ColumnInfo(*pEntries,sLabel) );
+            if ( sLabel.getLength() )
+                _rListBox.InsertEntry( sLabel );
+            else
+                _rListBox.InsertEntry( *pEntries );
+        }
+    }
+
 typedef ::svt::EditBrowseBox OFieldExpressionControl_Base;
 typedef ::cppu::WeakImplHelper1< container::XContainerListener > TContainerListenerBase;
 class OFieldExpressionControl : public TContainerListenerBase
@@ -80,6 +100,7 @@ class OFieldExpressionControl : public TContainerListenerBase
 {
     ::osl::Mutex                    m_aMutex;
     ::std::vector<sal_Int32>        m_aGroupPositions;
+    ::std::vector<ColumnInfo>       m_aColumnInfo;
     ::svt::ComboBoxControl*         m_pComboCell;
     sal_Int32                       m_nDataPos;
     sal_Int32                       m_nCurrentPos;
@@ -335,13 +356,7 @@ void OFieldExpressionControl::fillColumns(const uno::Reference< container::XName
 {
     m_pComboCell->Clear();
     if ( _xColumns.is() )
-    {
-        uno::Sequence< ::rtl::OUString> aColumnNames = _xColumns->getElementNames();
-        const ::rtl::OUString* pIter = aColumnNames.getConstArray();
-        const ::rtl::OUString* pEnd   = pIter + aColumnNames.getLength();
-        for(;pIter != pEnd;++pIter)
-            m_pComboCell->InsertEntry(*pIter);
-    } // if ( _xColumns.is() )
+        lcl_addToList_throw(*m_pComboCell,m_aColumnInfo,_xColumns);
 }
 //------------------------------------------------------------------------------
 void OFieldExpressionControl::lateInit()
@@ -480,7 +495,7 @@ BOOL OFieldExpressionControl::SaveModified(bool _bAppendRow)
                     sExpression = m_pComboCell->GetText();
                 else
                 {
-                    sExpression = m_pComboCell->GetEntry(nPos);
+                    sExpression = m_aColumnInfo[nPos].sColumnName;
                 }
                 xGroup->setExpression( sExpression );
 
@@ -519,7 +534,18 @@ String OFieldExpressionControl::GetCellText( long nRow, USHORT /*nColId*/ ) cons
         try
         {
             uno::Reference< report::XGroup> xGroup = m_pParent->getGroup(m_aGroupPositions[nRow]);
-            sText  = xGroup->getExpression();
+            ::rtl::OUString sExpression = xGroup->getExpression();
+
+            for(::std::vector<ColumnInfo>::const_iterator aIter = m_aColumnInfo.begin(); aIter != m_aColumnInfo.end();++aIter)
+            {
+                if ( aIter->sColumnName == sExpression )
+                {
+                    if ( aIter->sLabel.getLength() )
+                        sExpression = aIter->sLabel;
+                    break;
+                }
+            }
+            sText  = sExpression;
         }
         catch(uno::Exception&)
         {
@@ -1311,10 +1337,7 @@ void OGroupsSortingDialog::_propertyChanged(const beans::PropertyChangeEvent& _r
 // -----------------------------------------------------------------------------
 void OGroupsSortingDialog::fillColumns()
 {
-    m_xColumns.clear();
-    uno::Reference< report::XReportDefinition> xReport = m_pController->getReportDefinition();
-    if ( xReport->getCommand().getLength() )
-        m_xColumns = dbtools::getFieldsByCommandDescriptor(m_pController->getConnection(),xReport->getCommandType(),xReport->getCommand(),m_xHoldAlive);
+    m_xColumns = m_pController->getColumns();
     m_pFieldExpression->fillColumns(m_xColumns);
 }
 // -----------------------------------------------------------------------------

@@ -34,6 +34,11 @@
 #include "DbAdminImpl.hxx"
 #include "dsmeta.hxx"
 
+#include <svl/poolitem.hxx>
+#include <svl/itempool.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
 #include "DriverSettings.hxx"
 #include "IItemSetHelper.hxx"
 #include "UITools.hxx"

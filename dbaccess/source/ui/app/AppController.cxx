@@ -85,7 +85,6 @@
 
 #include <svl/urihelper.hxx>
 #include <svl/filenotation.hxx>
-
 #include <svtools/svtreebx.hxx>
 #include <svtools/transfer.hxx>
 #include <svtools/cliplistener.hxx>
@@ -127,7 +126,6 @@
 #include <svx/svxdlg.hxx>
 
 #include <vos/mutex.hxx>
-
 #include "AppView.hxx"
 #include "browserids.hxx"
 #include "dbu_reghelper.hxx"

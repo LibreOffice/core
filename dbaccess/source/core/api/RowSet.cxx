@@ -201,6 +201,7 @@ ORowSet::ORowSet( const Reference< ::com::sun::star::lang::XMultiServiceFactory 
     registerProperty(PROPERTY_PRIVILEGES,           PROPERTY_ID_PRIVILEGES,             nRT,                            &m_nPrivileges,         ::getCppuType(reinterpret_cast< sal_Int32*>(NULL)));
     registerProperty(PROPERTY_ISMODIFIED,           PROPERTY_ID_ISMODIFIED,             nBT,                            &m_bModified,           ::getBooleanCppuType());
     registerProperty(PROPERTY_ISNEW,                PROPERTY_ID_ISNEW,                  nRBT,                           &m_bNew,                ::getBooleanCppuType());
+    registerProperty(PROPERTY_SINGLESELECTQUERYCOMPOSER,PROPERTY_ID_SINGLESELECTQUERYCOMPOSER,  nRT,                    &m_xComposer,   ::getCppuType(reinterpret_cast< Reference< XSingleSelectQueryComposer >* >(NULL)));
 
     // sdbcx.ResultSet Properties
     registerProperty(PROPERTY_ISBOOKMARKABLE,       PROPERTY_ID_ISBOOKMARKABLE,         nRT,                            &m_bIsBookmarable,      ::getBooleanCppuType());
@@ -993,7 +994,7 @@ void SAL_CALL ORowSet::updateRow(  ) throw(SQLException, RuntimeException)
                 fireProperty(PROPERTY_ID_ISMODIFIED,sal_False,sal_True);
             OSL_ENSURE( !m_bModified, "ORowSet::updateRow: just updated, but _still_ modified?" );
         }
-        else // the update went rong
+        else if ( !m_bAfterLast ) // the update went rong
         {
             ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_UPDATE_FAILED ), SQL_INVALID_CURSOR_POSITION, *this );
         }
@@ -1778,7 +1779,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
 
         {
             RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "frank.schoenheit@sun.com", "ORowSet::execute_NoApprove_NoNewConn: creating cache" );
-            m_pCache = new ORowSetCache( xResultSet, m_xComposer.get(), m_aContext, aComposedUpdateTableName, m_bModified, m_bNew,m_aParameterValueForCache );
+            m_pCache = new ORowSetCache( xResultSet, m_xComposer.get(), m_aContext, aComposedUpdateTableName, m_bModified, m_bNew,m_aParameterValueForCache,m_aFilter );
             if ( m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY )
             {
                 m_nPrivileges = Privilege::SELECT;
@@ -1842,6 +1843,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                                                                             i+1,
                                                                             m_xActiveConnection->getMetaData(),
                                                                             aDescription,
+                                                                            ::rtl::OUString(),
                                                                             m_aCurrentRow);
                         aColumnMap.insert(StringMap::value_type(sName,0));
                         aColumns->get().push_back(pColumn);
@@ -1900,6 +1902,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                     {
                         xColumn = NULL;
                         bReFetchName = sal_True;
+                        sColumnLabel = ::rtl::OUString();
                     }
                     if(!xColumn.is())
                     {
@@ -1931,14 +1934,22 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                     if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_DESCRIPTION))
                         aDescription = comphelper::getString(xColumn->getPropertyValue(PROPERTY_DESCRIPTION));
 
+                    ::rtl::OUString sParseLabel;
+                    if ( xColumn.is() )
+                    {
+                        xColumn->getPropertyValue(PROPERTY_LABEL) >>= sParseLabel;
+                    }
                     ORowSetDataColumn* pColumn = new ORowSetDataColumn( getMetaData(),
                                                                         this,
                                                                         this,
                                                                         i,
                                                                         m_xActiveConnection->getMetaData(),
                                                                         aDescription,
+                                                                        sParseLabel,
                                                                         m_aCurrentRow);
                     aColumns->get().push_back(pColumn);
+
+
                     if(!sColumnLabel.getLength())
                     {
                         if(xColumn.is())
@@ -2225,7 +2236,8 @@ sal_Bool ORowSet::impl_initComposer_throw( ::rtl::OUString& _out_rCommandToExecu
     if ( !m_xComposer.is() )
         m_xComposer = new OSingleSelectQueryComposer( impl_getTables_throw(), m_xActiveConnection, m_aContext );
 
-    m_xComposer->setElementaryQuery( m_aActiveCommand );
+    m_xComposer->setCommand( m_aCommand,m_nCommandType );
+    m_aActiveCommand = m_xComposer->getQuery();
 
     m_xComposer->setFilter( m_bApplyFilter ? m_aFilter : ::rtl::OUString() );
     m_xComposer->setHavingClause( m_bApplyFilter ? m_aHavingClause : ::rtl::OUString() );
@@ -2251,6 +2263,7 @@ sal_Bool ORowSet::impl_initComposer_throw( ::rtl::OUString& _out_rCommandToExecu
     impl_initParametersContainer_nothrow();
 
     _out_rCommandToExecute = m_xComposer->getQueryWithSubstitution();
+
     return bUseEscapeProcessing;
 }
 
@@ -2273,40 +2286,51 @@ sal_Bool ORowSet::impl_buildActiveCommand_throw()
         case CommandType::TABLE:
         {
             impl_resetTables_nothrow();
-
-            Reference< XNameAccess > xTables( impl_getTables_throw() );
-            if ( xTables->hasByName(m_aCommand) )
+            if ( bDoEscapeProcessing )
             {
-                Reference< XPropertySet > xTable;
-                try
+                Reference< XNameAccess > xTables( impl_getTables_throw() );
+                if ( xTables->hasByName(m_aCommand) )
                 {
-                    xTables->getByName( m_aCommand ) >>= xTable;
-                }
-                catch(const WrappedTargetException& e)
-                {
-                    SQLException e2;
-                    if ( e.TargetException >>= e2 )
-                        throw e2;
-                }
-                catch(Exception&)
-                {
-                    DBG_UNHANDLED_EXCEPTION();
-                }
+/*
+                    Reference< XPropertySet > xTable;
+                    try
+                    {
+                        xTables->getByName( m_aCommand ) >>= xTable;
+                    }
+                    catch(const WrappedTargetException& e)
+                    {
+                        SQLException e2;
+                        if ( e.TargetException >>= e2 )
+                            throw e2;
+                    }
+                    catch(Exception&)
+                    {
+                        DBG_UNHANDLED_EXCEPTION();
+                    }
 
-                Reference<XColumnsSupplier> xSup(xTable,UNO_QUERY);
-                if ( xSup.is() )
-                    m_xColumns = xSup->getColumns();
+                    Reference<XColumnsSupplier> xSup(xTable,UNO_QUERY);
+                    if ( xSup.is() )
+                        m_xColumns = xSup->getColumns();
 
+                    sCommand = rtl::OUString::createFromAscii("SELECT * FROM ");
+                    ::rtl::OUString sCatalog, sSchema, sTable;
+                    ::dbtools::qualifiedNameComponents( m_xActiveConnection->getMetaData(), m_aCommand, sCatalog, sSchema, sTable, ::dbtools::eInDataManipulation );
+                    sCommand += ::dbtools::composeTableNameForSelect( m_xActiveConnection, sCatalog, sSchema, sTable );
+*/
+                }
+                else
+                {
+                    String sMessage( DBACORE_RESSTRING( RID_STR_TABLE_DOES_NOT_EXIST ) );
+                    sMessage.SearchAndReplaceAscii( "$table$", m_aCommand );
+                    throwGenericSQLException(sMessage,*this);
+                }
+            }
+            else
+            {
                 sCommand = rtl::OUString::createFromAscii("SELECT * FROM ");
                 ::rtl::OUString sCatalog, sSchema, sTable;
                 ::dbtools::qualifiedNameComponents( m_xActiveConnection->getMetaData(), m_aCommand, sCatalog, sSchema, sTable, ::dbtools::eInDataManipulation );
                 sCommand += ::dbtools::composeTableNameForSelect( m_xActiveConnection, sCatalog, sSchema, sTable );
-            }
-            else
-            {
-                String sMessage( DBACORE_RESSTRING( RID_STR_TABLE_DOES_NOT_EXIST ) );
-                sMessage.SearchAndReplaceAscii( "$table$", m_aCommand );
-                throwGenericSQLException(sMessage,*this);
             }
         }
         break;
@@ -2338,10 +2362,11 @@ sal_Bool ORowSet::impl_buildActiveCommand_throw()
                         xQuery->getPropertyValue(PROPERTY_UPDATE_TABLENAME)     >>= aTable;
                         if(aTable.getLength())
                             m_aUpdateTableName = composeTableName( m_xActiveConnection->getMetaData(), aCatalog, aSchema, aTable, sal_False, ::dbtools::eInDataManipulation );
-
+/*
                         Reference<XColumnsSupplier> xSup(xQuery,UNO_QUERY);
                         if(xSup.is())
                             m_xColumns = xSup->getColumns();
+*/
                     }
                 }
                 else
@@ -2363,7 +2388,7 @@ sal_Bool ORowSet::impl_buildActiveCommand_throw()
 
     m_aActiveCommand = sCommand;
 
-    if ( !m_aActiveCommand.getLength() )
+    if ( !m_aActiveCommand.getLength() && !bDoEscapeProcessing )
         ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_NO_SQL_COMMAND ), SQL_FUNCTION_SEQUENCE_ERROR, *this );
 
     return bDoEscapeProcessing;
@@ -2745,11 +2770,15 @@ ORowSetClone::ORowSetClone( const ::comphelper::ComponentContext& _rContext, ORo
             rParent.m_pColumns->getByName(*pIter) >>= xColumn;
             if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DESCRIPTION))
                 aDescription = comphelper::getString(xColumn->getPropertyValue(PROPERTY_DESCRIPTION));
+
+            ::rtl::OUString sParseLabel;
+            xColumn->getPropertyValue(PROPERTY_LABEL) >>= sParseLabel;
             ORowSetColumn* pColumn = new ORowSetColumn( rParent.getMetaData(),
                                                                 this,
                                                                 i,
                                                                 rParent.m_xActiveConnection->getMetaData(),
                                                                 aDescription,
+                                                                sParseLabel,
                                                                 m_aCurrentRow);
             aColumns->get().push_back(pColumn);
             pColumn->setName(*pIter);

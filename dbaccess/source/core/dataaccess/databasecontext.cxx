@@ -77,6 +77,7 @@
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/confignode.hxx>
+#include <unotools/pathoptions.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <list>
 #include <boost/bind.hpp>

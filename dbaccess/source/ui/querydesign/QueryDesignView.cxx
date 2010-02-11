@@ -610,14 +610,16 @@ namespace
     //------------------------------------------------------------------------------
     SqlParseError InsertJoinConnection( const OQueryDesignView* _pView,
                                     const ::connectivity::OSQLParseNode *pNode,
-                                    const EJoinType& _eJoinType)
+                                    const EJoinType& _eJoinType,
+                                    const ::connectivity::OSQLParseNode *pLeftTable,
+                                    const ::connectivity::OSQLParseNode *pRightTable)
     {
         SqlParseError eErrorCode = eOk;
         if (pNode->count() == 3 &&  // Ausdruck is geklammert
             SQL_ISPUNCTUATION(pNode->getChild(0),"(") &&
             SQL_ISPUNCTUATION(pNode->getChild(2),")"))
         {
-            eErrorCode = InsertJoinConnection(_pView,pNode->getChild(1), _eJoinType);
+            eErrorCode = InsertJoinConnection(_pView,pNode->getChild(1), _eJoinType,pLeftTable,pRightTable);
         }
         else if (SQL_ISRULEOR2(pNode,search_condition,boolean_term) &&          // AND/OR-Verknuepfung:
                  pNode->count() == 3)
@@ -625,8 +627,8 @@ namespace
             // nur AND Verknüpfung zulassen
             if (!SQL_ISTOKEN(pNode->getChild(1),AND))
                 eErrorCode = eIllegalJoinCondition;
-            else if ( eOk == (eErrorCode = InsertJoinConnection(_pView,pNode->getChild(0), _eJoinType)) )
-                    eErrorCode = InsertJoinConnection(_pView,pNode->getChild(2), _eJoinType);
+            else if ( eOk == (eErrorCode = InsertJoinConnection(_pView,pNode->getChild(0), _eJoinType,pLeftTable,pRightTable)) )
+                    eErrorCode = InsertJoinConnection(_pView,pNode->getChild(2), _eJoinType,pLeftTable,pRightTable);
         }
         else if (SQL_ISRULE(pNode,comparison_predicate))
         {
@@ -647,7 +649,17 @@ namespace
                 eOk != ( eErrorCode = FillDragInfo(_pView,pNode->getChild(2),aDragRight)))
                 return eErrorCode;
 
-            insertConnection(_pView,_eJoinType,aDragLeft,aDragRight);
+            if ( pLeftTable )
+            {
+                OQueryTableWindow*  pLeftWindow = static_cast<OQueryTableView*>(_pView->getTableView())->FindTable( getTableRange(_pView,pLeftTable->getByRule(OSQLParseNode::table_ref) ));
+                // OQueryTableWindow*   pRightWindow = static_cast<OQueryTableView*>(_pView->getTableView())->FindTable( getTableRange(_pView,pRightTable->getByRule(OSQLParseNode::table_ref) ));
+                if ( pLeftWindow == aDragLeft->GetTabWindow() )
+                    insertConnection(_pView,_eJoinType,aDragLeft,aDragRight);
+                else
+                    insertConnection(_pView,_eJoinType,aDragRight,aDragLeft);
+            }
+            else
+                insertConnection(_pView,_eJoinType,aDragLeft,aDragRight);
         }
         else
             eErrorCode = eIllegalJoin;
@@ -657,7 +669,7 @@ namespace
     sal_Bool GetInnerJoinCriteria(  const OQueryDesignView* _pView,
                                     const ::connectivity::OSQLParseNode *pCondition)
     {
-        return InsertJoinConnection(_pView,pCondition, INNER_JOIN) != eOk;
+        return InsertJoinConnection(_pView,pCondition, INNER_JOIN,NULL,NULL) != eOk;
     }
     //------------------------------------------------------------------------------
     ::rtl::OUString GenerateSelectList( const OQueryDesignView* _pView,
@@ -1099,53 +1111,76 @@ namespace
         {
             ::std::vector<OTableConnection*>::const_iterator aIter = pConnList->begin();
             ::std::vector<OTableConnection*>::const_iterator aEnd = pConnList->end();
-            for(;aIter != aEnd;++aIter)
-                static_cast<OQueryTableConnection*>(*aIter)->SetVisited(sal_False);
-
-            aIter = pConnList->begin();
-            const sal_Bool bUseEscape = ::dbtools::getBooleanDataSourceSetting( _xConnection, PROPERTY_OUTERJOINESCAPE );
+            ::std::map<OTableWindow*,sal_Int32> aConnectionCount;
             for(;aIter != aEnd;++aIter)
             {
-                OQueryTableConnection* pEntryConn = static_cast<OQueryTableConnection*>(*aIter);
-                if(!pEntryConn->IsVisited())
+                static_cast<OQueryTableConnection*>(*aIter)->SetVisited(sal_False);
+                if ( aConnectionCount.find((*aIter)->GetSourceWin()) == aConnectionCount.end() )
+                    aConnectionCount.insert(::std::map<OTableWindow*,sal_Int32>::value_type((*aIter)->GetSourceWin(),0));
+                else
+                    aConnectionCount[(*aIter)->GetSourceWin()]++;
+                if ( aConnectionCount.find((*aIter)->GetDestWin()) == aConnectionCount.end() )
+                    aConnectionCount.insert(::std::map<OTableWindow*,sal_Int32>::value_type((*aIter)->GetDestWin(),0));
+                else
+                    aConnectionCount[(*aIter)->GetDestWin()]++;
+            }
+            ::std::multimap<sal_Int32 , OTableWindow*> aMulti;
+            ::std::map<OTableWindow*,sal_Int32>::iterator aCountIter = aConnectionCount.begin();
+            ::std::map<OTableWindow*,sal_Int32>::iterator aCountEnd = aConnectionCount.end();
+            for(;aCountIter != aCountEnd;++aCountIter)
+            {
+                aMulti.insert(::std::multimap<sal_Int32 , OTableWindow*>::value_type(aCountIter->second,aCountIter->first));
+            }
+
+            const sal_Bool bUseEscape = ::dbtools::getBooleanDataSourceSetting( _xConnection, PROPERTY_OUTERJOINESCAPE );
+            ::std::multimap<sal_Int32 , OTableWindow*>::reverse_iterator aRIter = aMulti.rbegin();
+            ::std::multimap<sal_Int32 , OTableWindow*>::reverse_iterator aREnd = aMulti.rend();
+            for(;aRIter != aREnd;++aRIter)
+            {
+                ::std::vector<OTableConnection*>::const_iterator aConIter = aRIter->second->getTableView()->getTableConnections(aRIter->second);
+                for(;aConIter != aEnd;++aConIter)
                 {
-                    ::rtl::OUString aJoin;
-                    GetNextJoin(_xConnection,pEntryConn,static_cast<OQueryTableWindow*>(pEntryConn->GetDestWin()),aJoin);
-
-                    if(aJoin.getLength())
+                    OQueryTableConnection* pEntryConn = static_cast<OQueryTableConnection*>(*aConIter);
+                    if(!pEntryConn->IsVisited() && pEntryConn->GetSourceWin() == aRIter->second )
                     {
-                        // insert tables into table list to avoid double entries
-                        OQueryTableWindow* pEntryTabFrom = static_cast<OQueryTableWindow*>(pEntryConn->GetSourceWin());
-                        OQueryTableWindow* pEntryTabTo = static_cast<OQueryTableWindow*>(pEntryConn->GetDestWin());
+                        ::rtl::OUString aJoin;
+                        GetNextJoin(_xConnection,pEntryConn,static_cast<OQueryTableWindow*>(pEntryConn->GetDestWin()),aJoin);
 
-                        ::rtl::OUString sTabName(BuildTable(_xConnection,pEntryTabFrom));
-                        if(aTableNames.find(sTabName) == aTableNames.end())
-                            aTableNames[sTabName] = sal_True;
-                        sTabName = BuildTable(_xConnection,pEntryTabTo);
-                        if(aTableNames.find(sTabName) == aTableNames.end())
-                            aTableNames[sTabName] = sal_True;
-
-                        ::rtl::OUString aStr;
-                        switch(static_cast<OQueryTableConnectionData*>(pEntryConn->GetData().get())->GetJoinType())
+                        if(aJoin.getLength())
                         {
-                            case LEFT_JOIN:
-                            case RIGHT_JOIN:
-                            case FULL_JOIN:
-                                {
-                                    // create outer join
-                                    if ( bUseEscape )
-                                        aStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("{ OJ "));
+                            // insert tables into table list to avoid double entries
+                            OQueryTableWindow* pEntryTabFrom = static_cast<OQueryTableWindow*>(pEntryConn->GetSourceWin());
+                            OQueryTableWindow* pEntryTabTo = static_cast<OQueryTableWindow*>(pEntryConn->GetDestWin());
+
+                            ::rtl::OUString sTabName(BuildTable(_xConnection,pEntryTabFrom));
+                            if(aTableNames.find(sTabName) == aTableNames.end())
+                                aTableNames[sTabName] = sal_True;
+                            sTabName = BuildTable(_xConnection,pEntryTabTo);
+                            if(aTableNames.find(sTabName) == aTableNames.end())
+                                aTableNames[sTabName] = sal_True;
+
+                            ::rtl::OUString aStr;
+                            switch(static_cast<OQueryTableConnectionData*>(pEntryConn->GetData().get())->GetJoinType())
+                            {
+                                case LEFT_JOIN:
+                                case RIGHT_JOIN:
+                                case FULL_JOIN:
+                                    {
+                                        // create outer join
+                                        if ( bUseEscape )
+                                            aStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("{ OJ "));
+                                        aStr += aJoin;
+                                        if ( bUseEscape )
+                                            aStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" }"));
+                                    }
+                                    break;
+                                default:
                                     aStr += aJoin;
-                                    if ( bUseEscape )
-                                        aStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" }"));
-                                }
-                                break;
-                            default:
-                                aStr += aJoin;
-                                break;
+                                    break;
+                            }
+                            aStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
+                            aTableListStr += aStr;
                         }
-                        aStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
-                        aTableListStr += aStr;
                     }
                 }
             }
@@ -1943,7 +1978,7 @@ namespace
             }
             if ( SQL_ISRULE(pNode->getChild(4),join_condition) )
             {
-                if ( InsertJoinConnection(_pView,pNode->getChild(4)->getChild(1), eJoinType) != eOk )
+                if ( InsertJoinConnection(_pView,pNode->getChild(4)->getChild(1), eJoinType,pNode->getChild(0),pRightTableRef) != eOk )
                     return sal_False;
             }
         }
@@ -3128,6 +3163,7 @@ OSQLParseNode* OQueryDesignView::getPredicateTreeFromEntry(OTableFieldDescRef pE
 
         Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
         parse::OParseColumn* pColumn = new parse::OParseColumn( pEntry->GetField(),
+                                                                ::rtl::OUString(),
                                                                 ::rtl::OUString(),
                                                                 ::rtl::OUString(),
                                                                 ColumnValue::NULLABLE_UNKNOWN,

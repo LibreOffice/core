@@ -106,9 +106,13 @@ String STR_TAB_FIELD_LENGTH
 {
     Text [ en-US ] = "Field length" ;
 };
-String STR_TAB_FIELD_DESCR
+String STR_TAB_HELP_TEXT
 {
     Text [ en-US ] = "Description" ;
+};
+String STR_COLUMN_DESCRIPTION
+{
+    Text [ en-US ] = "Column Description" ;
 };
 String STR_TAB_FIELD_NULLABLE
 {

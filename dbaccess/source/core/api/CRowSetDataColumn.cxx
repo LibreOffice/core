@@ -74,9 +74,11 @@ ORowSetDataColumn::ORowSetDataColumn(   const Reference < XResultSetMetaData >& 
                                       sal_Int32 _nPos,
                                       const Reference< XDatabaseMetaData >& _rxDBMeta,
                                       const ::rtl::OUString& _rDescription,
+                                      const ::rtl::OUString& i_sLabel,
                                       const ORowSetCacheIterator& _rColumnValue)
     :ODataColumn(_xMetaData,_xRow,_xRowUpdate,_nPos,_rxDBMeta)
     ,m_aColumnValue(_rColumnValue)
+    ,m_sLabel(i_sLabel)
     ,m_aDescription(_rDescription)
 {
     DBG_CTOR(ORowSetDataColumn,NULL);
@@ -149,6 +151,8 @@ void SAL_CALL ORowSetDataColumn::getFastPropertyValue( Any& rValue, sal_Int32 nH
             rValue = ((*m_aColumnValue)->get())[m_nPos].makeAny();
         }
     }
+    else if ( PROPERTY_ID_LABEL == nHandle && m_sLabel.getLength() )
+        rValue <<= m_sLabel;
     else
         ODataColumn::getFastPropertyValue( rValue, nHandle );
 }

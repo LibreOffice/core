@@ -1167,6 +1167,7 @@ const AsciiPropertyValue* ODatabaseModelImpl::getDefaultDataSourceSettings()
         AsciiPropertyValue( "ImplicitCatalogRestriction", ::cppu::UnoType< ::rtl::OUString >::get() ),
         AsciiPropertyValue( "ImplicitSchemaRestriction",  ::cppu::UnoType< ::rtl::OUString >::get() ),
         AsciiPropertyValue( "PrimaryKeySupport",          ::cppu::UnoType< sal_Bool >::get() ),
+        AsciiPropertyValue( "ShowColumnDescription",      makeAny( (sal_Bool)sal_False ) ),
         // known SDB level settings
         AsciiPropertyValue( "NoNameLengthLimit",          makeAny( (sal_Bool)sal_False ) ),
         AsciiPropertyValue( "AppendTableAliasName",       makeAny( (sal_Bool)sal_False ) ),

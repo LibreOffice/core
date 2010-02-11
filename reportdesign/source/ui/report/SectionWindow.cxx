@@ -32,7 +32,6 @@
 #include "ReportWindow.hxx"
 #include "ReportRuler.hxx"
 #include "rptui_slotid.hrc"
-#include <svtools/colorcfg.hxx>
 #include "ReportController.hxx"
 #include "SectionView.hxx"
 #include "RptDef.hxx"
@@ -41,13 +40,16 @@
 #include "uistrings.hrc"
 #include "helpids.hrc"
 #include "RptResId.hrc"
+#include "StartMarker.hxx"
+#include "EndMarker.hxx"
+#include "ViewsWindow.hxx"
+
+#include <svtools/colorcfg.hxx>
 #include <boost/bind.hpp>
 #include <functional>
 #include <algorithm>
 #include <vcl/svapp.hxx>
-#include "StartMarker.hxx"
-#include "EndMarker.hxx"
-#include "ViewsWindow.hxx"
+#include <connectivity/dbtools.hxx>
 
 namespace rptui
 {
@@ -195,8 +197,15 @@ bool OSectionWindow::setGroupSectionTitle(const uno::Reference< report::XGroup>&
     const bool bRet = _pIsSectionOn(&aGroupHelper) && _pGetSection(&aGroupHelper) == m_aReportSection.getSection() ;
     if ( bRet )
     {
+        ::rtl::OUString sExpression = _xGroup->getExpression();
+        ::rtl::OUString sLabel = getViewsWindow()->getView()->getReportView()->getController().getColumnLabel_throw(sExpression);
+        if ( sLabel.getLength() )
+        {
+            sExpression = sLabel;
+        }
+
         String sTitle = String(ModuleRes(_nResId));
-        sTitle.SearchAndReplace('#',_xGroup->getExpression());
+        sTitle.SearchAndReplace('#',sExpression);
         m_aStartMarker.setTitle(sTitle);
         m_aStartMarker.Invalidate(INVALIDATE_CHILDREN);
     } // if ( _pIsSectionOn(&aGroupHelper) )

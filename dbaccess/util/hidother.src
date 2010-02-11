@@ -149,6 +149,8 @@ hidspecial HID_CTL_TABLEEDIT                            { HelpId = HID_CTL_TABLE
 hidspecial HID_TABDESIGN_NAMECELL                       { HelpId = HID_TABDESIGN_NAMECELL; };
 hidspecial HID_TABDESIGN_TYPECELL                       { HelpId = HID_TABDESIGN_TYPECELL; };
 hidspecial HID_TABDESIGN_COMMENTCELL                    { HelpId = HID_TABDESIGN_COMMENTCELL; };
+hidspecial HID_TABDESIGN_HELPTEXT                       { HelpId = HID_TABDESIGN_HELPTEXT; };
+
 hidspecial SID_TABLEDESIGN_INSERTROWS                   { HelpId = SID_TABLEDESIGN_INSERTROWS; };
 hidspecial SID_TABLEDESIGN_TABED_PRIMARYKEY             { HelpId = SID_TABLEDESIGN_TABED_PRIMARYKEY; };
 hidspecial HID_TLB_TABLEDESIGN                          { HelpId = HID_TLB_TABLEDESIGN; };

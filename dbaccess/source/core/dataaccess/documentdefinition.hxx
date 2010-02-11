@@ -200,7 +200,7 @@ public:
 private:
     /** does necessary initializations after our embedded object has been switched to ACTIVE
     */
-    void impl_onActivateEmbeddedObject_nothrow();
+    void impl_onActivateEmbeddedObject_nothrow( const bool i_bReactivated );
 
     /** initializes a newly created view/controller of a form which is displaying our embedded object
 

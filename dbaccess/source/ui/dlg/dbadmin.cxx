@@ -38,6 +38,9 @@
 #include "dbadmin.hrc"
 #include "dbadmin.hxx"
 #include "dbu_dlg.hrc"
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
 #include "dbustrings.hrc"
 #include "dsitems.hxx"
 #include "dsnItem.hxx"

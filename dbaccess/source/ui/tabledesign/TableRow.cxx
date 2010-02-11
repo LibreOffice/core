@@ -140,6 +140,7 @@ namespace dbaui
             _rStr << (sal_Int32)1;
             _rStr.WriteByteString(pFieldDesc->GetName());
             _rStr.WriteByteString(pFieldDesc->GetDescription());
+            _rStr.WriteByteString(pFieldDesc->GetHelpText());
             double nValue = 0.0;
             Any aValue = pFieldDesc->GetControlDefault();
             if ( aValue >>= nValue )
@@ -184,6 +185,8 @@ namespace dbaui
 
             _rStr.ReadByteString(sValue);
             pFieldDesc->SetDescription(sValue);
+            _rStr.ReadByteString(sValue);
+            pFieldDesc->SetHelpText(sValue);
 
             _rStr >> nValue;
             Any aControlDefault;
