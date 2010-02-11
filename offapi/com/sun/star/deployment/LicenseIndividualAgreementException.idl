@@ -45,6 +45,13 @@ exception LicenseIndividualAgreementException : com::sun::star::uno::Exception
         Contains the file name only.
      */
     string ExtensionName;
+    /** indicates if the user can prevent to show the license
+
+    Represents the attribute value
+    /description/registration/simple-license/@suppress-if-required
+    from the description.xml
+    */
+    boolean SuppressIfRequired;
 };
 
 }; }; }; };
