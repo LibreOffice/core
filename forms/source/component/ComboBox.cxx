@@ -535,26 +535,11 @@ void OComboBoxModel::loadData( bool _bForce )
                 else
                 {
                     // otherwise look for the alias
-                    Reference<XSQLQueryComposerFactory> xFactory(xConnection, UNO_QUERY);
-                    if (!xFactory.is())
-                        break;
-
-                    Reference<XSQLQueryComposer> xComposer = xFactory->createQueryComposer();
-                    try
-                    {
-                        Reference<XPropertySet> xFormAsSet(xForm, UNO_QUERY);
-                        ::rtl::OUString aStatement;
-                        xFormAsSet->getPropertyValue(PROPERTY_ACTIVECOMMAND) >>= aStatement;
-                        xComposer->setQuery(aStatement);
-                    }
-                    catch(Exception&)
-                    {
-                        disposeComponent(xComposer);
-                        break;
-                    }
+                    Reference<XPropertySet> xFormProp(xForm,UNO_QUERY);
+                    Reference< XColumnsSupplier > xSupplyFields;
+                    xFormProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SingleSelectQueryComposer"))) >>= xSupplyFields;
 
                     // search the field
-                    Reference< XColumnsSupplier > xSupplyFields(xComposer, UNO_QUERY);
                     DBG_ASSERT(xSupplyFields.is(), "OComboBoxModel::loadData : invalid query composer !");
 
                     Reference< XNameAccess > xFieldNames = xSupplyFields->getColumns();
@@ -565,8 +550,6 @@ void OComboBoxModel::loadData( bool _bForce )
                         if (hasProperty(PROPERTY_FIELDSOURCE, xComposerFieldAsSet))
                             xComposerFieldAsSet->getPropertyValue(PROPERTY_FIELDSOURCE) >>= aFieldName;
                     }
-
-                    disposeComponent(xComposer);
                 }
 
                 if (!aFieldName.getLength())

@@ -41,8 +41,9 @@
 #include <comphelper/processfactory.hxx>
 #include <svl/eitem.hxx>
 #include <svl/itemset.hxx>
-#include <tools/diagnose_ex.h>
+#include <unotools/pathoptions.hxx>
 #include <unotools/confignode.hxx>
+#include <tools/diagnose_ex.h>
 
 //........................................................................
 namespace svx
