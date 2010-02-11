@@ -1600,14 +1600,14 @@ public:
             bool& rbRowSourceAmbiguous ) const;
     bool inSameSingleRow( RangeAnalyzer& rOther );
     bool inSameSingleColumn( RangeAnalyzer& rOther );
-    SCROW getRowCount() { return static_cast<SCROW>(mnRowCount); }
-    SCCOL getColumnCount() { return static_cast<SCCOL>(mnColumnCount); }
+    SCROW getRowCount() { return mnRowCount; }
+    SCCOL getColumnCount() { return mnColumnCount; }
 
 private:
     bool mbEmpty;
     bool mbAmbiguous;
-    sal_uInt32 mnRowCount;
-    sal_uInt32 mnColumnCount;
+    SCROW mnRowCount;
+    SCCOL mnColumnCount;
 
     SCCOL mnStartColumn;
     SCROW mnStartRow;
@@ -1627,40 +1627,60 @@ void RangeAnalyzer::initRangeAnalyzer( const vector<ScSharedTokenRef>& rTokens )
 {
     mnRowCount=0;
     mnColumnCount=0;
+    mnStartColumn = -1;
+    mnStartRow = -1;
+    mbAmbiguous=false;
     if( rTokens.empty() )
     {
         mbEmpty=true;
-        mbAmbiguous=false;
         return;
     }
     mbEmpty=false;
-    mbAmbiguous=true;
-    if( rTokens.size()!=1 )
-        return;
 
-    ScSharedTokenRef aRefToken=rTokens[0];
-    StackVar eVar = aRefToken->GetType();
-    if (eVar == svDoubleRef || eVar == svExternalDoubleRef)
+    vector<ScSharedTokenRef>::const_iterator itr = rTokens.begin(), itrEnd = rTokens.end();
+    for (; itr != itrEnd ; ++itr)
     {
-        const ScComplexRefData& r = aRefToken->GetDoubleRef();
-        if (r.Ref1.nTab == r.Ref2.nTab)
+        ScSharedTokenRef aRefToken = *itr;
+        StackVar eVar = aRefToken->GetType();
+        if (eVar == svDoubleRef || eVar == svExternalDoubleRef)
         {
-            mbAmbiguous=false;
-            mnColumnCount = abs(r.Ref2.nCol - r.Ref1.nCol)+1;
-            mnRowCount = abs(r.Ref2.nRow - r.Ref1.nRow)+1;
-
-            mnStartColumn = r.Ref1.nCol;
-            mnStartRow = r.Ref1.nRow;
+            const ScComplexRefData& r = aRefToken->GetDoubleRef();
+            if (r.Ref1.nTab == r.Ref2.nTab)
+            {
+                mnColumnCount = std::max<SCCOL>( mnColumnCount, abs(r.Ref2.nCol - r.Ref1.nCol)+1 );
+                mnRowCount = std::max<SCROW>( mnRowCount, abs(r.Ref2.nRow - r.Ref1.nRow)+1 );
+                if( mnStartColumn == -1 )
+                {
+                    mnStartColumn = r.Ref1.nCol;
+                    mnStartRow = r.Ref1.nRow;
+                }
+                else
+                {
+                    if( mnStartColumn != r.Ref1.nCol && mnStartRow != r.Ref1.nRow )
+                        mbAmbiguous=true;
+                }
+            }
+            else
+                mbAmbiguous=true;
         }
-    }
-    else if (eVar == svSingleRef || eVar == svExternalSingleRef)
-    {
-        const ScSingleRefData& r = aRefToken->GetSingleRef();
-        mbAmbiguous=false;
-        mnColumnCount = 1;
-        mnRowCount = 1;
-        mnStartColumn = r.nCol;
-        mnStartRow = r.nRow;
+        else if (eVar == svSingleRef || eVar == svExternalSingleRef)
+        {
+            const ScSingleRefData& r = aRefToken->GetSingleRef();
+            mnColumnCount = std::max<SCCOL>( mnColumnCount, 1);
+            mnRowCount = std::max<SCROW>( mnRowCount, 1);
+            if( mnStartColumn == -1 )
+            {
+                mnStartColumn = r.nCol;
+                mnStartRow = r.nRow;
+            }
+            else
+            {
+                if( mnStartColumn != r.nCol && mnStartRow != r.nRow )
+                    mbAmbiguous=true;
+            }
+        }
+        else
+            mbAmbiguous=true;
     }
 }
 
