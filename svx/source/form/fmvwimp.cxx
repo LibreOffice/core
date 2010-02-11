@@ -1593,7 +1593,13 @@ bool FmXFormView::createControlLabelPair( const ::comphelper::ComponentContext& 
         xLabelModel.set( pLabel->GetUnoControlModel(), UNO_QUERY );
         if ( xLabelModel.is() )
         {
-            xLabelModel->setPropertyValue( FM_PROP_LABEL, makeAny( sFieldName + _rFieldPostfix ) );
+            ::rtl::OUString sLabel;
+            if ( _rxField.is() && _rxField->getPropertySetInfo()->hasPropertyByName(FM_PROP_LABEL) )
+                _rxField->getPropertyValue(FM_PROP_LABEL) >>= sLabel;
+            if ( !sLabel.getLength() )
+                sLabel = sFieldName;
+
+            xLabelModel->setPropertyValue( FM_PROP_LABEL, makeAny( sLabel + _rFieldPostfix ) );
             String sObjectLabel( SVX_RES( RID_STR_OBJECT_LABEL ) );
             sObjectLabel.SearchAndReplaceAllAscii( "#object#", sFieldName );
             xLabelModel->setPropertyValue( FM_PROP_NAME, makeAny( ::rtl::OUString( sObjectLabel ) ) );

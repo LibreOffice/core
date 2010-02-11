@@ -207,7 +207,7 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
 {
     const Reference< XConnection > xConnection = static_cast<OMySQLCatalog&>(m_rParent).getConnection();
     static const ::rtl::OUString s_sCreatePattern(RTL_CONSTASCII_USTRINGPARAM("(M,D)"));
-    const ::rtl::OUString aSql = adjustSQL(::dbtools::createSqlCreateTableStatement(descriptor,xConnection,s_sCreatePattern));
+    const ::rtl::OUString aSql = adjustSQL(::dbtools::createSqlCreateTableStatement(descriptor,xConnection,this,s_sCreatePattern));
     Reference< XStatement > xStmt = xConnection->createStatement(  );
     if ( xStmt.is() )
     {
@@ -233,4 +233,14 @@ void OTables::appendNew(const ::rtl::OUString& _rsNewTable)
     return ::dbtools::composeTableName( m_xMetaData, _xObject, ::dbtools::eInDataManipulation, false, false, false );
 }
 // -----------------------------------------------------------------------------
-
+void OTables::addComment(const Reference< XPropertySet >& descriptor,::rtl::OUStringBuffer& _rOut)
+{
+    ::rtl::OUString sDesc;
+    descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DESCRIPTION))     >>= sDesc;
+    if ( sDesc.getLength() )
+    {
+        _rOut.appendAscii(" COMMENT '");
+        _rOut.append(sDesc);
+        _rOut.appendAscii("'");
+    }
+}

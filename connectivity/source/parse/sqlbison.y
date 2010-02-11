@@ -149,7 +149,7 @@ using namespace connectivity;
 %union {
 	connectivity::OSQLParseNode * pParseNode;
 }
-%type <pParseNode> '(' ')' ',' ':' ';' '?' '[' ']' '{' '}' '.'
+%type <pParseNode> '(' ')' ',' ':' ';' '?' '[' ']' '{' '}' '.' 'K' 'M' 'G' 'T' 'P'
 
 %token <pParseNode> SQL_TOKEN_STRING SQL_TOKEN_ACCESS_DATE SQL_TOKEN_INT SQL_TOKEN_REAL_NUM
 %token <pParseNode> SQL_TOKEN_INTNUM SQL_TOKEN_APPROXNUM SQL_TOKEN_NOT SQL_TOKEN_NAME
@@ -192,7 +192,7 @@ using namespace connectivity;
 /* ODBC KEYWORDS */
 %token <pParseNode> SQL_TOKEN_CALL SQL_TOKEN_D SQL_TOKEN_FN SQL_TOKEN_T SQL_TOKEN_TS SQL_TOKEN_OJ
 /* string functions */
-%token <pParseNode> SQL_TOKEN_ASCII SQL_TOKEN_BIT_LENGTH  SQL_TOKEN_CHAR  SQL_TOKEN_CHAR_LENGTH  SQL_TOKEN_CHARACTER_LENGTH
+%token <pParseNode> SQL_TOKEN_ASCII SQL_TOKEN_BIT_LENGTH  SQL_TOKEN_CHAR  SQL_TOKEN_CHAR_LENGTH  SQL_TOKEN_SQL_TOKEN_INTNUM
 %token <pParseNode> SQL_TOKEN_CONCAT          
 %token <pParseNode> SQL_TOKEN_DIFFERENCE  SQL_TOKEN_INSERT SQL_TOKEN_LCASE  SQL_TOKEN_LEFT SQL_TOKEN_LENGTH  SQL_TOKEN_LOCATE          
 %token <pParseNode> SQL_TOKEN_LOCATE_2 SQL_TOKEN_LTRIM SQL_TOKEN_POSITION SQL_TOKEN_REPEAT SQL_TOKEN_REPLACE         
@@ -214,6 +214,13 @@ using namespace connectivity;
 %token <pParseNode> SQL_TOKEN_EVERY SQL_TOKEN_INTERSECTION SQL_TOKEN_FUSION SQL_TOKEN_COLLECT SQL_TOKEN_VAR_POP SQL_TOKEN_VAR_SAMP 
 %token <pParseNode> SQL_TOKEN_STDDEV_SAMP SQL_TOKEN_STDDEV_POP
 
+%token <pParseNode> SQL_TOKEN_RANK SQL_TOKEN_DENSE_RANK	SQL_TOKEN_PERCENT_RANK	SQL_TOKEN_CUME_DIST SQL_TOKEN_PERCENTILE_CONT SQL_TOKEN_PERCENTILE_DISC SQL_TOKEN_WITHIN SQL_TOKEN_ARRAY_AGG
+%token <pParseNode> SQL_TOKEN_CASE SQL_TOKEN_THEN SQL_TOKEN_END SQL_TOKEN_NULLIF SQL_TOKEN_COALESCE SQL_TOKEN_WHEN SQL_TOKEN_ELSE
+%token <pParseNode> SQL_TOKEN_BEFORE SQL_TOKEN_AFTER SQL_TOKEN_INSTEAD SQL_TOKEN_EACH SQL_TOKEN_REFERENCING SQL_TOKEN_BEGIN SQL_TOKEN_ATOMIC SQL_TOKEN_TRIGGER SQL_TOKEN_ROW SQL_TOKEN_STATEMENT
+%token <pParseNode> SQL_TOKEN_NEW SQL_TOKEN_OLD
+%token <pParseNode> SQL_TOKEN_VALUE SQL_TOKEN_CURRENT_CATALOG SQL_TOKEN_CURRENT_DEFAULT_TRANSFORM_GROUP SQL_TOKEN_CURRENT_PATH SQL_TOKEN_CURRENT_ROLE SQL_TOKEN_CURRENT_SCHEMA SQL_TOKEN_CURRENT_USER
+%token <pParseNode> SQL_TOKEN_SESSION_USER SQL_TOKEN_SYSTEM_USER SQL_TOKEN_VARCHAR SQL_TOKEN_VARBINARY SQL_TOKEN_VARYING SQL_TOKEN_OBJECT SQL_TOKEN_NCLOB SQL_TOKEN_NATIONAL
+%token <pParseNode> SQL_TOKEN_LARGE SQL_TOKEN_CLOB SQL_TOKEN_BLOB SQL_TOKEN_BIGINT SQL_TOKEN_BINARY SQL_TOKEN_WITHOUT SQL_TOKEN_BOOLEAN SQL_TOKEN_INTERVAL
 	/* operators */
 %left SQL_TOKEN_NAME
 %left <pParseNode> SQL_TOKEN_OR
@@ -246,10 +253,10 @@ using namespace connectivity;
 %type <pParseNode> update_statement_searched target_commalist target opt_where_clause
 %type <pParseNode> select_statement selection table_exp from_clause table_ref_commalist table_ref
 %type <pParseNode> where_clause opt_group_by_clause column_ref_commalist opt_having_clause
-%type <pParseNode> search_condition predicate comparison_predicate between_predicate
-%type <pParseNode> like_predicate opt_escape test_for_null in_predicate
-%type <pParseNode> all_or_any_predicate any_all_some existence_test subquery
-%type <pParseNode> scalar_exp_commalist parameter_ref literal
+%type <pParseNode> search_condition predicate comparison_predicate comparison_predicate_part_2 between_predicate between_predicate_part_2
+%type <pParseNode> like_predicate opt_escape test_for_null null_predicate_part_2 in_predicate in_predicate_part_2 character_like_predicate_part_2 other_like_predicate_part_2
+%type <pParseNode> all_or_any_predicate any_all_some existence_test subquery quantified_comparison_predicate_part_2 
+%type <pParseNode> scalar_exp_commalist parameter_ref literal parenthesized_boolean_value_expression 
 %type <pParseNode> column_ref data_type column cursor parameter range_variable user /*like_check*/
 /* neue Regeln bei OJ */
 %type <pParseNode> derived_column as_clause table_name num_primary term num_value_exp
@@ -261,8 +268,8 @@ using namespace connectivity;
 %type <pParseNode> qualified_join value_exp query_term join_type outer_join_type join_condition boolean_term
 %type <pParseNode> boolean_factor truth_value boolean_test boolean_primary named_columns_join join_spec
 %type <pParseNode> cast_operand cast_target factor datetime_value_exp /*interval_value_exp*/ datetime_term datetime_factor
-%type <pParseNode> datetime_primary datetime_value_fct time_zone time_zone_specifier /*interval_term*/ /*interval_qualifier*/
-%type <pParseNode> /*start_field*/ non_second_datetime_field /*end_field*/ /*single_datetime_field*/ extract_field datetime_field time_zone_field
+%type <pParseNode> datetime_primary datetime_value_fct time_zone time_zone_specifier /*interval_term*/ interval_qualifier
+%type <pParseNode> start_field non_second_datetime_field end_field single_datetime_field extract_field datetime_field time_zone_field
 %type <pParseNode> extract_source char_length_exp octet_length_exp bit_length_exp select_sublist string_value_exp
 %type <pParseNode> char_value_exp concatenation char_factor char_primary string_value_fct char_substring_fct fold
 %type <pParseNode> form_conversion char_translation trim_fct trim_operands trim_spec bit_value_fct bit_substring_fct op_column_commalist
@@ -274,6 +281,15 @@ using namespace connectivity;
 %type <pParseNode> column_def odbc_fct_spec	odbc_call_spec odbc_fct_type op_parameter union_statement
 %type <pParseNode> op_odbc_call_parameter odbc_parameter_commalist odbc_parameter function_args_commalist function_arg
 %type <pParseNode> catalog_name schema_name table_node numeric_function string_function function_name date_function table_primary_as_range_column opt_as
+%type <pParseNode> ordered_set_function inverse_distribution_function hypothetical_set_function hypothetical_set_function_value_expression_list rank_function_type within_group_specification inverse_distribution_function_type array_aggregate_function inverse_distribution_function_argument
+%type <pParseNode> case_expression else_clause result_expression result case_abbreviation case_specification searched_when_clause simple_when_clause searched_case simple_case
+%type <pParseNode> when_operand_list when_operand case_operand
+%type <pParseNode> trigger_definition trigger_name trigger_action_time trigger_event transition_table_or_variable_list triggered_action trigger_column_list triggered_when_clause triggered_SQL_statement SQL_procedure_statement old_transition_variable_name new_transition_variable_name 
+%type <pParseNode> op_referencing op_trigger_columnlist op_triggered_action_for opt_row trigger_for SQL_procedure_statement_list transition_table_or_variable old_transition_table_name new_transition_table_name transition_table_name
+%type <pParseNode> searched_when_clause_list simple_when_clause_list predefined_type opt_char_set_spec opt_collate_clause character_string_type national_character_string_type
+%type <pParseNode> binary_string_type numeric_type boolean_type datetime_type interval_type opt_paren_precision paren_char_length opt_paren_char_large_length paren_character_large_object_length
+%type <pParseNode> large_object_length opt_multiplier character_large_object_type national_character_large_object_type binary_large_object_string_type opt_with_or_without_time_zone
+%type <pParseNode> approximate_numeric_type exact_numeric_type opt_paren_precision_scale
 %%
 
 /* Parse Tree an OSQLParser zurueckliefern
@@ -286,25 +302,20 @@ sql_single_statement:
 	|	sql ';'
 		{ xxx_pGLOBAL_SQLPARSER->setParseTree( $1 ); }
 	;
-/*
-sql_list:
-		sql_ ';'
-			{$$ = SQL_NEW_LISTRULE;
-			$$->append($1);
-			pSqlParseTreeRoot = $1; -- obsolete - Ergebnis in yyval! rdm }
-	|	sql_list sql ';'
-			{$1->append($2);
-			$$ = $1;}
-	;
-*/
-
 
 	/* schema definition language */
 	/* Note: other ``sql:sal_Unicode() rules appear later in the grammar */
-/***
+	
 sql:
-	schema
+		manipulative_statement
+	|	schema_element
+           {
+                $$ = SQL_NEW_RULE;
+		$$->append($1);
+	   }
 	;
+	
+/***
 
 op_authorization:
 		{$$ = SQL_NEW_RULE;}
@@ -340,7 +351,7 @@ schema:
 	;
 
 opt_schema_element_list:
-		/* empty * /     {$$ = SQL_NEW_RULE;}
+			{$$ = SQL_NEW_RULE;}
 	|       schema_glement_list
 	;
 
@@ -353,17 +364,12 @@ schema_element_list:
 			$$ = $1;}
 	;
 */
-sql:
-		schema_element
-		{$$ = SQL_NEW_RULE;
-			$$->append($1);
-			}
-	;
 
 schema_element:
 			base_table_def
 	|       view_def
 	|       privilege_def
+	|		trigger_definition
 	;
 
 base_table_def:
@@ -680,9 +686,6 @@ sql_not:
 
 /* manipulative statements */
 
-sql:    manipulative_statement
-	;
-
 manipulative_statement:
 			commit_statement
 /*	|       delete_statement_positioned*/
@@ -957,6 +960,10 @@ opt_as:
 		/* empty */ {$$ = SQL_NEW_RULE;}
 	|	SQL_TOKEN_AS
 	;
+opt_row:
+		/* empty */ {$$ = SQL_NEW_RULE;}
+	|	SQL_TOKEN_ROW
+	;
 table_primary_as_range_column:
         {$$ = SQL_NEW_RULE;}
 	|   opt_as SQL_TOKEN_NAME op_column_commalist
@@ -1077,7 +1084,15 @@ boolean_primary:
 				YYERROR;
 		}
 	;
-
+parenthesized_boolean_value_expression:
+   '(' search_condition ')'
+	{ // boolean_primary: rule 2
+		$$ = SQL_NEW_RULE;
+		$$->append($1 = newNode("(", SQL_NODE_PUNCTUATION));
+		$$->append($2);
+		$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));
+	}
+	;
 boolean_test:
 		boolean_primary
 	|	boolean_primary SQL_TOKEN_IS sql_not truth_value
@@ -1128,7 +1143,13 @@ predicate:
 	|       in_predicate
 	|       like_predicate
 	;
-
+comparison_predicate_part_2:	
+		comparison row_value_constructor
+		{
+			$$ = SQL_NEW_RULE; // comparison_predicate: rule 1
+			$$->append($1);
+			$$->append($2);
+		}
 comparison_predicate:
 		row_value_constructor comparison row_value_constructor
 		{
@@ -1169,23 +1190,14 @@ comparison:
 	  | SQL_LESSEQ
 	  | SQL_GREATEQ
 	;
-between_predicate:
-		row_value_constructor sql_not SQL_TOKEN_BETWEEN row_value_constructor SQL_TOKEN_AND row_value_constructor
-		{$$ = SQL_NEW_RULE; // between_predicate: rule 1
-			$$->append($1);
-			$$->append($2);
-			$$->append($3);
-			$$->append($4);
-			$$->append($5);
-			$$->append($6);
-		}
-	|	sql_not SQL_TOKEN_BETWEEN row_value_constructor SQL_TOKEN_AND row_value_constructor
+between_predicate_part_2:
+	sql_not SQL_TOKEN_BETWEEN row_value_constructor SQL_TOKEN_AND row_value_constructor
 		{
 			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck()) // between_predicate: rule 2 
 			{
 				$$ = SQL_NEW_RULE;
 				
-				sal_Int16 nErg = xxx_pGLOBAL_SQLPARSER->buildPredicateRule($$,$3,$2,$5);
+				sal_Int16 nErg = xxx_pGLOBAL_SQLPARSER->buildPredicateRule($$,$2,$1,$4);
 				if(nErg == 1)
 				{
 					OSQLParseNode* pTemp = $$;
@@ -1201,46 +1213,58 @@ between_predicate:
 				}
 			}
 			else
-				YYERROR;
+			{
+				$$ = SQL_NEW_RULE; // between_predicate: rule 1
+				$$->append($1);
+				$$->append($2);
+				$$->append($3);
+				$$->append($4);
+				$$->append($5);
+			}
 		}
+between_predicate:
+		row_value_constructor between_predicate_part_2
+		{	
+			$$ = SQL_NEW_RULE; // between_predicate: rule 1
+			$$->append($1);
+			$$->append($2);
+		}
+	|	between_predicate_part_2
 	;
-
-like_predicate:
-		row_value_constructor SQL_TOKEN_NOT SQL_TOKEN_LIKE string_value_exp opt_escape
+character_like_predicate_part_2:
+	sql_not SQL_TOKEN_LIKE string_value_exp opt_escape
 		{
 			$$ = SQL_NEW_RULE; // like_predicate: rule 1
 			$$->append($1);
 			$$->append($2);
 			$$->append($3);
 			$$->append($4);
-			$$->append($5);
 		}
-	|	row_value_constructor SQL_TOKEN_LIKE string_value_exp opt_escape
+	;
+other_like_predicate_part_2:
+	sql_not SQL_TOKEN_LIKE value_exp_primary opt_escape
 		{
-			$$ = SQL_NEW_RULE; // like_predicate: rule 2
+			$$ = SQL_NEW_RULE; // like_predicate: rule 1
 			$$->append($1);
 			$$->append($2);
 			$$->append($3);
 			$$->append($4);
 		}
-	|	row_value_constructor SQL_TOKEN_NOT SQL_TOKEN_LIKE value_exp_primary opt_escape
+	;
+like_predicate:
+		row_value_constructor character_like_predicate_part_2
+		{
+			$$ = SQL_NEW_RULE; // like_predicate: rule 1
+			$$->append($1);
+			$$->append($2);
+		}
+	|	row_value_constructor other_like_predicate_part_2
 		{
 			$$ = SQL_NEW_RULE;  // like_predicate: rule 3
 			$$->append($1);
 			$$->append($2);
-			$$->append($3);
-			$$->append($4);
-			$$->append($5);
 		}
-	|	row_value_constructor SQL_TOKEN_LIKE value_exp_primary opt_escape
-		{
-			$$ = SQL_NEW_RULE;  // like_predicate: rule 4
-			$$->append($1);
-			$$->append($2);
-			$$->append($3);
-			$$->append($4);
-		}
-	|	sql_not SQL_TOKEN_LIKE string_value_exp opt_escape
+	|	character_like_predicate_part_2
 		{
 			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck())  // like_predicate: rule 5
 			{
@@ -1250,10 +1274,8 @@ like_predicate:
 				$$ = SQL_NEW_RULE;
 				$$->append(pColumnRef);
 				$$->append($1);
-				$$->append($2);
-				if (xxx_pGLOBAL_SQLPARSER->buildLikeRule($$,$3,$4))
-					$$->append($4);
-				else
+				OSQLParseNode* p2nd = $1->getChild(2);
+				if ( !xxx_pGLOBAL_SQLPARSER->buildLikeRule($1,p2nd,$1->getChild(3)) )
 				{
 					delete $$;
 					YYABORT;
@@ -1262,7 +1284,7 @@ like_predicate:
 			else
 				YYERROR;
 		}
-	|	sql_not SQL_TOKEN_LIKE value_exp_primary opt_escape
+	|	other_like_predicate_part_2
 		{
 			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck()) // like_predicate: rule 6
 			{
@@ -1272,10 +1294,8 @@ like_predicate:
 				$$ = SQL_NEW_RULE;
 				$$->append(pColumnRef);
 				$$->append($1);
-				$$->append($2);
-				if (xxx_pGLOBAL_SQLPARSER->buildLikeRule($$,$3,$4))
-					$$->append($4);
-				else
+				OSQLParseNode* p2nd = $1->getChild(2);
+				if ( !xxx_pGLOBAL_SQLPARSER->buildLikeRule($1,p2nd,$1->getChild(3)) )
 				{
 					delete $$;
 					YYABORT;
@@ -1302,16 +1322,23 @@ opt_escape:
 		}
 	;
 
+null_predicate_part_2:
+	SQL_TOKEN_IS sql_not SQL_TOKEN_NULL
+	{
+		$$ = SQL_NEW_RULE; // test_for_null: rule 1
+		$$->append($1);
+		$$->append($2);
+		$$->append($3);
+	}
+	;
 test_for_null:
-		row_value_constructor SQL_TOKEN_IS sql_not truth_value
+		row_value_constructor null_predicate_part_2
 		{
 			$$ = SQL_NEW_RULE; // test_for_null: rule 1
 			$$->append($1);
 			$$->append($2);
-			$$->append($3);
-			$$->append($4);
 		}
-	|	SQL_TOKEN_IS sql_not truth_value
+	|	null_predicate_part_2
 		{
 			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck())// test_for_null: rule 2
 			{
@@ -1321,8 +1348,6 @@ test_for_null:
 				$$ = SQL_NEW_RULE;
 				$$->append(pColumnRef);
 				$$->append($1);
-				$$->append($2);
-				$$->append($3);
 			}
 			else
 				YYERROR;
@@ -1340,16 +1365,23 @@ in_predicate_value:
 			$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	;
+in_predicate_part_2:
+	sql_not SQL_TOKEN_IN in_predicate_value
+	{
+		$$ = SQL_NEW_RULE;// in_predicate: rule 1
+		$$->append($1);
+		$$->append($2);
+		$$->append($3);
+	}
+	;
 in_predicate:
-		row_value_constructor sql_not SQL_TOKEN_IN in_predicate_value
+		row_value_constructor in_predicate_part_2
 		{
 			$$ = SQL_NEW_RULE;// in_predicate: rule 1
 			$$->append($1);
 			$$->append($2);
-			$$->append($3);
-			$$->append($4);
 		}
-	|	sql_not SQL_TOKEN_IN in_predicate_value
+	|	in_predicate_part_2
 		{
 			if ( xxx_pGLOBAL_SQLPARSER->inPredicateCheck() )// in_predicate: rule 2
 			{
@@ -1359,24 +1391,28 @@ in_predicate:
 				$$ = SQL_NEW_RULE;
 				$$->append(pColumnRef);
 				$$->append($1);
-				$$->append($2);
-				$$->append($3);
-				// hello
 			}
 			else
 				YYERROR;
 		}
 	;
+quantified_comparison_predicate_part_2:
+	comparison any_all_some subquery
+	{
+		$$ = SQL_NEW_RULE;
+		$$->append($1);
+		$$->append($2);
+		$$->append($3);
+	}
+	;
 all_or_any_predicate:
-		row_value_constructor comparison any_all_some subquery
+		row_value_constructor quantified_comparison_predicate_part_2
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
 			$$->append($2);
-			$$->append($3);
-			$$->append($4);
 		}
-	|	comparison any_all_some subquery
+	|	quantified_comparison_predicate_part_2
 		{
 			if(xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
 			{
@@ -1386,8 +1422,6 @@ all_or_any_predicate:
 				$$ = SQL_NEW_RULE;
 				$$->append(pColumnRef);
 				$$->append($1);
-				$$->append($2);
-				$$->append($3);
 			}
 			else
 				YYERROR;
@@ -1580,7 +1614,7 @@ char_length_exp:
 			$$->append($3);
 			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
 		}
-	|	SQL_TOKEN_CHARACTER_LENGTH '(' value_exp ')'
+	|	SQL_TOKEN_SQL_TOKEN_INTNUM '(' value_exp ')'
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
@@ -1686,10 +1720,19 @@ unsigned_value_spec:
 	;
 general_value_spec:
 		parameter
-	  | SQL_TOKEN_USER
-	  | SQL_TOKEN_NULL
-	  | SQL_TOKEN_FALSE
-	  | SQL_TOKEN_TRUE
+	| SQL_TOKEN_USER
+	/*	  | SQL_TOKEN_NULL*/
+	| SQL_TOKEN_FALSE
+	| SQL_TOKEN_TRUE
+	| SQL_TOKEN_VALUE
+	| SQL_TOKEN_CURRENT_CATALOG
+	| SQL_TOKEN_CURRENT_DEFAULT_TRANSFORM_GROUP
+	| SQL_TOKEN_CURRENT_PATH
+	| SQL_TOKEN_CURRENT_ROLE
+	| SQL_TOKEN_CURRENT_SCHEMA
+	| SQL_TOKEN_CURRENT_USER
+	| SQL_TOKEN_SESSION_USER
+	| SQL_TOKEN_SYSTEM_USER
 	;
 set_fct_spec:
 		general_set_fct
@@ -1966,7 +2009,7 @@ odbc_fct_type:
 	;
 
 general_set_fct:
-		set_fct_type '(' opt_all_distinct value_exp ')'
+		set_fct_type '(' opt_all_distinct function_arg ')'
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
@@ -1983,7 +2026,7 @@ general_set_fct:
 			$$->append($3 = newNode("*", SQL_NODE_PUNCTUATION));
 			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
 		}
-	|	SQL_TOKEN_COUNT '(' opt_all_distinct value_exp ')'
+	|	SQL_TOKEN_COUNT '(' opt_all_distinct function_arg ')'
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
@@ -1992,6 +2035,8 @@ general_set_fct:
 			$$->append($4);
 			$$->append($5 = newNode(")", SQL_NODE_PUNCTUATION));
 		}
+	|	ordered_set_function
+	|	array_aggregate_function
 	;
 set_fct_type:
 		SQL_TOKEN_AVG
@@ -2010,6 +2055,87 @@ set_fct_type:
 	|   SQL_TOKEN_INTERSECTION
 	;
 
+ordered_set_function:	
+		hypothetical_set_function
+	|	inverse_distribution_function
+	;
+hypothetical_set_function:
+		rank_function_type '('	hypothetical_set_function_value_expression_list ')'	within_group_specification
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append($3);
+			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append($5);
+		}
+	|	rank_function_type '('	hypothetical_set_function_value_expression_list SQL_TOKEN_BY value_exp_commalist ')'	within_group_specification
+	{
+		$$ = SQL_NEW_RULE;
+		$$->append($1);
+		$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+		$$->append($3);
+		$$->append($4);
+		$$->append($5);
+		$$->append($6 = newNode(")", SQL_NODE_PUNCTUATION));
+		$$->append($7);
+	}
+	;
+
+within_group_specification:
+	{
+		$$ = SQL_NEW_RULE;
+	}
+	|	SQL_TOKEN_WITHIN SQL_TOKEN_GROUP '(' opt_order_by_clause ')'
+	{
+		$$ = SQL_NEW_RULE;
+		$$->append($1);
+		$$->append($2);
+		$$->append($3 = newNode("(", SQL_NODE_PUNCTUATION));
+		$$->append($4);
+		$$->append($5 = newNode(")", SQL_NODE_PUNCTUATION));
+	}
+	;
+hypothetical_set_function_value_expression_list:
+	value_exp_commalist
+	; 
+	
+inverse_distribution_function:
+	inverse_distribution_function_type '('inverse_distribution_function_argument ')' within_group_specification
+	{
+		$$ = SQL_NEW_RULE;
+		$$->append($1);
+		$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+		$$->append($3);
+		$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+	}
+	;
+inverse_distribution_function_argument:
+		num_value_exp
+	;
+inverse_distribution_function_type:
+		SQL_TOKEN_PERCENTILE_CONT
+	|	SQL_TOKEN_PERCENTILE_DISC
+	;
+	
+array_aggregate_function:
+	SQL_TOKEN_ARRAY_AGG '(' value_exp opt_order_by_clause ')'
+	{
+		$$ = SQL_NEW_RULE;
+		$$->append($1);
+		$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+		$$->append($3);
+		$$->append($4);
+		$$->append($5 = newNode(")", SQL_NODE_PUNCTUATION));
+	}
+	;
+	
+rank_function_type:
+		SQL_TOKEN_RANK
+	|	SQL_TOKEN_DENSE_RANK
+	|	SQL_TOKEN_PERCENT_RANK
+	|	SQL_TOKEN_CUME_DIST
+	;
 outer_join_type:
 		SQL_TOKEN_LEFT %prec SQL_TOKEN_LEFT
 		{
@@ -2055,7 +2181,7 @@ join_type:
 		}
 	;
 cross_union:
-		table_ref /*[SQL_TOKEN_CROSS]*/ SQL_TOKEN_CROSS SQL_TOKEN_JOIN table_ref
+		table_ref SQL_TOKEN_CROSS SQL_TOKEN_JOIN table_ref
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
@@ -2067,7 +2193,7 @@ cross_union:
 
 qualified_join:
 		/* wenn SQL_TOKEN_NATURAL, dann keine join_spec */
-		table_ref /*[SQL_TOKEN_NATURAL]*/ SQL_TOKEN_NATURAL join_type SQL_TOKEN_JOIN table_ref
+		table_ref SQL_TOKEN_NATURAL join_type SQL_TOKEN_JOIN table_ref
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
@@ -2182,6 +2308,7 @@ value_exp_primary:
 	  | column_ref
 	  | set_fct_spec
 	  | scalar_subquery
+	  | case_expression
 	  | '(' value_exp ')'
 		{
 			$$ = SQL_NEW_RULE;
@@ -2405,83 +2532,39 @@ non_second_datetime_field:
 	|	SQL_TOKEN_HOUR
 	|	SQL_TOKEN_MINUTE
 	;
-/*start_field:
-		non_second_datetime_field
+start_field:
+		non_second_datetime_field opt_paren_precision
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-		}
-	|	non_second_datetime_field '(' SQL_TOKEN_INTNUM ')'
-		{
-			$$ = SQL_NEW_RULE;
-			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
-			$$->append($3);
-			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append($2);
 		}
 	;
 end_field:
 		non_second_datetime_field
+	|	SQL_TOKEN_SECOND opt_paren_precision
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-		}
-	  | SQL_TOKEN_SECOND
-		{
-			$$ = SQL_NEW_RULE;
-			$$->append($1);
-		}
-	  | SQL_TOKEN_SECOND '(' SQL_TOKEN_INTNUM ')'
-		{
-			$$ = SQL_NEW_RULE;
-			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
-			$$->append($3);
-			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append($2);
 		}
 	;
-*/
-/*
+
 single_datetime_field:
-		non_second_datetime_field
+		non_second_datetime_field opt_paren_precision
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
+			$$->append($2);
 		}
-	|	non_second_datetime_field '(' SQL_TOKEN_INTNUM ')'
+	|	SQL_TOKEN_SECOND opt_paren_precision_scale
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
-			$$->append($3);
-			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
-		}
-	|	SQL_TOKEN_SECOND
-		{
-			$$ = SQL_NEW_RULE;
-			$$->append($1);
-		}
-	|	SQL_TOKEN_SECOND '(' SQL_TOKEN_INTNUM ')'
-		{
-			$$ = SQL_NEW_RULE;
-			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
-			$$->append($3);
-			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
-		}
-	|	SQL_TOKEN_SECOND '(' SQL_TOKEN_INTNUM ',' SQL_TOKEN_INTNUM ')'
-		{
-			$$ = SQL_NEW_RULE;
-			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
-			$$->append($3);
-			$$->append($4 = newNode(",", SQL_NODE_PUNCTUATION));
-			$$->append($5);
-			$$->append($6 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append($2);
 		}
 	;
-*/
-/*
+
 interval_qualifier:
 		start_field SQL_TOKEN_TO end_field
 		{
@@ -2490,13 +2573,9 @@ interval_qualifier:
 			$$->append($2);
 			$$->append($3);
 		}
-	  | single_datetime_field
-		{
-			$$ = SQL_NEW_RULE;
-			$$->append($1);
-		}
+	|	single_datetime_field
 	;
-*/
+
 function_arg_commalist2:
 	    function_arg ',' function_arg
 			{$$ = SQL_NEW_COMMALISTRULE;
@@ -2544,6 +2623,21 @@ value_exp_commalist:
 function_arg:
 		value_exp 
 	|	value_exp comparison value_exp
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+			$$->append($3);
+		}
+	|	value_exp SQL_TOKEN_USING value_exp comparison value_exp
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+			$$->append($3);
+			$$->append($4);
+		}
+	|	value_exp SQL_TOKEN_BY value_exp_commalist
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
@@ -2956,59 +3050,384 @@ column_val:
 		}
 	;
 data_type:
-			SQL_TOKEN_CHARACTER
-	|       SQL_TOKEN_CHARACTER '(' SQL_TOKEN_INTNUM ')'
-			{$$ = SQL_NEW_RULE;
-			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
-			$$->append($3);
-			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));}
-	|       SQL_TOKEN_NUMERIC
-	|       SQL_TOKEN_NUMERIC '(' SQL_TOKEN_INTNUM ')'
-			{$$ = SQL_NEW_RULE;
-			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
-			$$->append($3);
-			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));}
-	|       SQL_TOKEN_NUMERIC '(' SQL_TOKEN_INTNUM ',' SQL_TOKEN_INTNUM ')'
-			{$$ = SQL_NEW_RULE;
-			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
-			$$->append($3);
-			$$->append($4 = newNode(",", SQL_NODE_PUNCTUATION));
-			$$->append($5);
-			$$->append($6 = newNode(")", SQL_NODE_PUNCTUATION));}
-	|       SQL_TOKEN_DECIMAL
-	|       SQL_TOKEN_DECIMAL '(' SQL_TOKEN_INTNUM ')'
-			{$$ = SQL_NEW_RULE;
-			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
-			$$->append($3);
-			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));}
-	|       SQL_TOKEN_DECIMAL '(' SQL_TOKEN_INTNUM ',' SQL_TOKEN_INTNUM ')'
-			{$$ = SQL_NEW_RULE;
-			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
-			$$->append($3);
-			$$->append($4 = newNode(",", SQL_NODE_PUNCTUATION));
-			$$->append($5);
-			$$->append($6 = newNode(")", SQL_NODE_PUNCTUATION));}
-	|       SQL_TOKEN_INTEGER
-	|       SQL_TOKEN_SMALLINT
-	|       SQL_TOKEN_FLOAT
-	|       SQL_TOKEN_FLOAT '(' SQL_TOKEN_INTNUM ')'
-			{$$ = SQL_NEW_RULE;
-			$$->append($1);
-			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
-			$$->append($3);
-			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));}
-	|       SQL_TOKEN_REAL
-	|       SQL_TOKEN_DOUBLE SQL_TOKEN_PRECISION
-			{$$ = SQL_NEW_RULE;
-			$$->append($1);
-			$$->append($2);}
+	predefined_type
 	;
-
+opt_char_set_spec:	
+	{$$ = SQL_NEW_RULE;}
+	|	SQL_TOKEN_CHARACTER SQL_TOKEN_SET SQL_TOKEN_NAME
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+			$$->append($3);
+		}	
+	;
+opt_collate_clause:
+	{$$ = SQL_NEW_RULE;}
+	| collate_clause
+	;
+predefined_type:
+		character_string_type opt_char_set_spec	opt_collate_clause
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+			$$->append($3);
+		}
+	|	national_character_string_type opt_collate_clause
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+		}
+	|	binary_string_type
+	|	numeric_type
+	|	boolean_type
+	|	datetime_type
+	|	interval_type
+	;
+character_string_type:
+		SQL_TOKEN_CHARACTER opt_paren_precision
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+		}
+	|	SQL_TOKEN_CHAR opt_paren_precision
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+		}
+	|	SQL_TOKEN_CHARACTER SQL_TOKEN_VARYING paren_char_length
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+			$$->append($3);
+		}
+	|	SQL_TOKEN_CHAR SQL_TOKEN_VARYING paren_char_length
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+			$$->append($3);
+		}
+	|	SQL_TOKEN_VARCHAR paren_char_length
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+		}
+	| character_large_object_type
+	;
+opt_paren_precision:
+		{$$ = SQL_NEW_RULE;}
+	|	paren_char_length
+	;
+paren_char_length:
+	'(' SQL_TOKEN_INTNUM ')'
+	{
+		$$ = SQL_NEW_RULE;
+		$$->append($1 = newNode("(", SQL_NODE_PUNCTUATION));
+		$$->append($2);
+		$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));
+	}
+	;
+opt_paren_char_large_length:
+		{$$ = SQL_NEW_RULE;}
+	|	paren_character_large_object_length
+	;
+paren_character_large_object_length:	
+	'(' large_object_length ')'
+	{
+		$$ = SQL_NEW_RULE;
+		$$->append($1 = newNode("(", SQL_NODE_PUNCTUATION));
+		$$->append($2);
+		$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));
+	}
+	;
+	
+large_object_length:
+	SQL_TOKEN_INTNUM opt_multiplier
+	{
+		$$ = SQL_NEW_RULE;
+		$$->append($1);
+		$$->append($2);
+	}
+	;
+opt_multiplier:
+	{$$ = SQL_NEW_RULE;}
+	|	'K'
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1 = newNode("K", SQL_NODE_PUNCTUATION));
+		}
+	|	'M'
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1 = newNode("M", SQL_NODE_PUNCTUATION));
+		}
+	|	'G'
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1 = newNode("G", SQL_NODE_PUNCTUATION));
+		}
+	|	'T'
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1 = newNode("T", SQL_NODE_PUNCTUATION));
+		}
+	|	'P'
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1 = newNode("P", SQL_NODE_PUNCTUATION));
+		}
+	;
+character_large_object_type:
+		SQL_TOKEN_CHARACTER SQL_TOKEN_LARGE SQL_TOKEN_OBJECT opt_paren_char_large_length
+	{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+			$$->append($3);
+			$$->append($4);
+		}
+	|	SQL_TOKEN_CHAR SQL_TOKEN_LARGE SQL_TOKEN_OBJECT opt_paren_char_large_length
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+			$$->append($3);
+			$$->append($4);
+		}
+	|	SQL_TOKEN_CLOB opt_paren_char_large_length
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+		}
+	;
+national_character_string_type:
+		SQL_TOKEN_NATIONAL SQL_TOKEN_CHARACTER opt_paren_precision
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+			$$->append($3);
+		}
+	|	SQL_TOKEN_NATIONAL SQL_TOKEN_CHAR opt_paren_precision
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+			$$->append($3);
+		}
+	|	SQL_TOKEN_NCHAR opt_paren_precision
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+		}
+	|	SQL_TOKEN_NATIONAL SQL_TOKEN_CHARACTER SQL_TOKEN_VARYING paren_char_length
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+			$$->append($3);
+			$$->append($4);
+		}
+	|	SQL_TOKEN_NATIONAL SQL_TOKEN_CHAR SQL_TOKEN_VARYING paren_char_length
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+			$$->append($3);
+			$$->append($4);
+		}
+	|	SQL_TOKEN_NCHAR SQL_TOKEN_VARYING paren_char_length
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+			$$->append($3);
+		}
+	|	national_character_large_object_type
+	;
+national_character_large_object_type:
+		SQL_TOKEN_NATIONAL SQL_TOKEN_CHARACTER SQL_TOKEN_LARGE SQL_TOKEN_OBJECT opt_paren_char_large_length
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+			$$->append($3);
+			$$->append($4);
+			$$->append($5);
+		}
+	|	SQL_TOKEN_NCHAR SQL_TOKEN_LARGE SQL_TOKEN_OBJECT opt_paren_char_large_length
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+			$$->append($3);
+			$$->append($4);
+		}
+	|	SQL_TOKEN_NCLOB opt_paren_char_large_length
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+		}
+	;
+binary_string_type:
+		SQL_TOKEN_BINARY opt_paren_precision
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+		}
+	|	SQL_TOKEN_BINARY SQL_TOKEN_VARYING paren_char_length
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+			$$->append($3);
+		}
+	|	SQL_TOKEN_VARBINARY paren_char_length
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+		}
+	|	binary_large_object_string_type
+	;
+binary_large_object_string_type:
+		SQL_TOKEN_BINARY SQL_TOKEN_LARGE SQL_TOKEN_OBJECT opt_paren_char_large_length
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+			$$->append($3);
+			$$->append($4);
+		}
+	|	SQL_TOKEN_BLOB opt_paren_char_large_length
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+		}
+	;
+numeric_type:
+		exact_numeric_type
+	|	approximate_numeric_type
+	;
+opt_paren_precision_scale:
+	{$$ = SQL_NEW_RULE;}
+	|	'(' SQL_TOKEN_INTNUM ')'
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append($2);
+			$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));
+		}
+	|	'(' SQL_TOKEN_INTNUM ',' SQL_TOKEN_INTNUM ')'
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append($2);
+			$$->append($3 = newNode(",", SQL_NODE_PUNCTUATION));
+			$$->append($4);
+			$$->append($5 = newNode(")", SQL_NODE_PUNCTUATION));
+		}
+	;
+exact_numeric_type:
+		SQL_TOKEN_NUMERIC opt_paren_precision_scale
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+		}
+	|	SQL_TOKEN_DECIMAL opt_paren_precision_scale
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+		}
+	|	SQL_TOKEN_DEC opt_paren_precision_scale
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+		}
+	|	SQL_TOKEN_SMALLINT
+	|	SQL_TOKEN_INTEGER
+	|	SQL_TOKEN_INT
+	|	SQL_TOKEN_BIGINT
+	;
+approximate_numeric_type:
+		SQL_TOKEN_FLOAT '(' SQL_TOKEN_INTNUM ')'
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append($3);
+			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+		}
+	|	SQL_TOKEN_FLOAT
+	|	SQL_TOKEN_REAL
+	|	SQL_TOKEN_DOUBLE
+	|	SQL_TOKEN_DOUBLE SQL_TOKEN_PRECISION
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+		}
+	;
+boolean_type:
+	SQL_TOKEN_BOOLEAN
+;
+datetime_type:
+		SQL_TOKEN_DATE
+	|	SQL_TOKEN_TIME opt_paren_precision opt_with_or_without_time_zone
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+			$$->append($3);
+		}
+	|	SQL_TOKEN_TIMESTAMP opt_paren_precision opt_with_or_without_time_zone
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+			$$->append($3);
+		}
+	;
+opt_with_or_without_time_zone:
+		{$$ = SQL_NEW_RULE;}
+	|	SQL_TOKEN_WITH SQL_TOKEN_TIME SQL_TOKEN_ZONE
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+			$$->append($3);
+		}
+	|	SQL_TOKEN_WITHOUT SQL_TOKEN_TIME SQL_TOKEN_ZONE
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+			$$->append($3);
+		}
+	;
+interval_type:
+	SQL_TOKEN_INTERVAL interval_qualifier
+	{
+		$$ = SQL_NEW_RULE;
+		$$->append($1);
+		$$->append($2);
+	}
+	;
 	/* the various things you can name */
 
 column:
@@ -3032,7 +3451,141 @@ column:
 			$$ = newNode(xxx_pGLOBAL_SQLPARSER->TokenIDToStr(nNod), SQL_NODE_NAME);
 		}
 	;
-
+case_expression:
+		case_abbreviation
+	|	case_specification
+	;
+case_abbreviation:
+		SQL_TOKEN_NULLIF '(' value_exp_commalist ')'
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append($3);
+			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+		}
+	|	SQL_TOKEN_COALESCE '(' value_exp ')'
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append($3);
+			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+		}
+	|	SQL_TOKEN_COALESCE '(' value_exp_commalist ')'
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append($3);
+			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+		}
+	;
+case_specification:
+		simple_case
+	|	searched_case
+	;
+simple_case:
+	SQL_TOKEN_CASE case_operand simple_when_clause_list else_clause SQL_TOKEN_END
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+			$$->append($3);
+			$$->append($4);
+			$$->append($5);
+		}
+	;
+searched_case:
+	SQL_TOKEN_CASE searched_when_clause_list else_clause SQL_TOKEN_END
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+			$$->append($3);
+			$$->append($4);
+		}
+	;
+simple_when_clause_list:
+		simple_when_clause
+		{
+			$$ = SQL_NEW_LISTRULE;
+			$$->append($1);
+		}
+	|   searched_when_clause_list simple_when_clause
+		{
+			$1->append($2);
+			$$ = $1;
+		}
+	;
+simple_when_clause:
+	SQL_TOKEN_WHEN when_operand_list SQL_TOKEN_THEN result
+	{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+			$$->append($3);
+			$$->append($4);
+		}
+	;
+when_operand_list:
+		when_operand
+		{$$ = SQL_NEW_COMMALISTRULE;
+		$$->append($1);}
+	|   when_operand_list ',' when_operand
+		{$1->append($3);
+		$$ = $1;}
+	;
+when_operand:
+		row_value_constructor_elem
+	|	comparison_predicate_part_2
+	|	between_predicate_part_2
+	|	in_predicate_part_2
+	|	character_like_predicate_part_2
+	|	null_predicate_part_2
+;
+searched_when_clause_list:
+		searched_when_clause
+		{
+			$$ = SQL_NEW_LISTRULE;
+			$$->append($1);
+		}
+	|   searched_when_clause_list searched_when_clause
+		{
+			$1->append($2);
+			$$ = $1;
+		}
+	;
+searched_when_clause:
+	SQL_TOKEN_WHEN search_condition SQL_TOKEN_THEN result
+	{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+			$$->append($3);
+			$$->append($4);
+		}
+	;
+else_clause:
+		{$$ = SQL_NEW_RULE;}
+	|	SQL_TOKEN_ELSE result
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+		}
+	;
+result:
+		result_expression
+	|	SQL_TOKEN_NULL
+	;
+result_expression:
+	value_exp
+	;
+case_operand:
+	row_value_constructor_elem
+	;
+	
 cursor:	SQL_TOKEN_NAME
 			{$$ = SQL_NEW_RULE;
 			$$->append($1);}
@@ -3097,6 +3650,195 @@ sql:
 		}
 	|   '(' sql ')' /* checking predicats */
     ;
+trigger_definition:
+	SQL_TOKEN_CREATE SQL_TOKEN_TRIGGER trigger_name trigger_action_time trigger_event SQL_TOKEN_ON table_name op_referencing triggered_action
+	{
+		$$ = SQL_NEW_RULE;
+        $$->append($1);
+        $$->append($2);
+        $$->append($3);
+        $$->append($4);
+        $$->append($5);
+        $$->append($6);
+        $$->append($7);
+        $$->append($8);
+        $$->append($9);
+    }
+	;
+op_referencing:
+	{
+		$$ = SQL_NEW_RULE;
+	}
+	|	SQL_TOKEN_REFERENCING transition_table_or_variable_list
+	{
+		$$ = SQL_NEW_RULE;
+        $$->append($1);
+        $$->append($2);
+    }
+	;
+trigger_action_time:
+		SQL_TOKEN_BEFORE
+	|	SQL_TOKEN_AFTER
+	|	SQL_TOKEN_INSTEAD SQL_TOKEN_OF
+	{
+		$$ = SQL_NEW_RULE;
+        $$->append($1);
+        $$->append($2);
+    }
+;
+trigger_event:
+		SQL_TOKEN_INSERT
+	|	SQL_TOKEN_DELETE
+	|	SQL_TOKEN_UPDATE op_trigger_columnlist
+	{
+		$$ = SQL_NEW_RULE;
+        $$->append($1);
+        $$->append($2);
+    }
+	;
+op_trigger_columnlist:
+	{
+		$$ = SQL_NEW_RULE;
+	}
+	|	SQL_TOKEN_OF trigger_column_list
+	{
+		$$ = SQL_NEW_RULE;
+        $$->append($1);
+        $$->append($2);
+    }
+	;
+trigger_column_list:
+	column_commalist
+	;
+triggered_action:
+	op_triggered_action_for triggered_when_clause triggered_SQL_statement
+	{
+		$$ = SQL_NEW_RULE;
+        $$->append($1);
+        $$->append($2);
+        $$->append($3);
+    }
+	;
+op_triggered_action_for:
+		{
+		$$ = SQL_NEW_RULE;
+		}
+	|	SQL_TOKEN_FOR SQL_TOKEN_EACH trigger_for
+	{
+		$$ = SQL_NEW_RULE;
+        $$->append($1);
+        $$->append($2);
+        $$->append($3);
+    }
+	;
+trigger_for:
+		SQL_TOKEN_ROW 
+	|	SQL_TOKEN_STATEMENT
+	;
+triggered_when_clause:
+	{
+		$$ = SQL_NEW_RULE;
+	}
+	|	SQL_TOKEN_WHEN parenthesized_boolean_value_expression
+	{
+		$$ = SQL_NEW_RULE;
+        $$->append($1);
+        $$->append($2);
+    }
+	;
+triggered_SQL_statement:
+		SQL_procedure_statement
+	|	SQL_TOKEN_BEGIN SQL_TOKEN_ATOMIC SQL_procedure_statement_list ';' SQL_TOKEN_END
+	{
+		$$ = SQL_NEW_RULE;
+        $$->append($1);
+        $$->append($2);
+        $$->append($3);
+        $$->append($4 = newNode(";", SQL_NODE_PUNCTUATION));
+        $$->append($5);
+    }
+	;
+SQL_procedure_statement_list:
+		SQL_procedure_statement 
+		{
+			$$ = SQL_NEW_LISTRULE;
+			$$->append($1);
+		}
+	|	SQL_procedure_statement_list ';' SQL_procedure_statement 
+		{
+			$1->append($3);
+			$$ = $1;
+		}
+	;
+SQL_procedure_statement:
+	sql
+	;
+	
+transition_table_or_variable_list:
+		transition_table_or_variable
+		{
+			$$ = SQL_NEW_LISTRULE;
+			$$->append($1);
+		}
+	|   transition_table_or_variable_list transition_table_or_variable
+		{
+			$1->append($2);
+			$$ = $1;
+		}
+	;
+
+transition_table_or_variable:
+		SQL_TOKEN_OLD opt_row opt_as old_transition_variable_name
+	{
+		$$ = SQL_NEW_RULE;
+        $$->append($1);
+        $$->append($2);
+        $$->append($3);
+        $$->append($4);
+    }
+	|	SQL_TOKEN_NEW opt_row opt_as new_transition_variable_name
+	{
+		$$ = SQL_NEW_RULE;
+        $$->append($1);
+        $$->append($2);
+        $$->append($3);
+        $$->append($4);
+    }
+	|	SQL_TOKEN_OLD SQL_TOKEN_TABLE opt_as old_transition_table_name
+	{
+		$$ = SQL_NEW_RULE;
+        $$->append($1);
+        $$->append($2);
+        $$->append($3);
+        $$->append($4);
+    }
+	|	SQL_TOKEN_NEW SQL_TOKEN_TABLE opt_as new_transition_table_name
+	{
+		$$ = SQL_NEW_RULE;
+        $$->append($1);
+        $$->append($2);
+        $$->append($3);
+        $$->append($4);
+    }
+;
+old_transition_table_name:
+	transition_table_name
+;
+new_transition_table_name:
+	transition_table_name
+;
+transition_table_name:
+	SQL_TOKEN_NAME
+;
+old_transition_variable_name:
+	SQL_TOKEN_NAME
+;
+new_transition_variable_name:
+	SQL_TOKEN_NAME
+;
+trigger_name:
+	SQL_TOKEN_NAME
+;
 %%
 
 

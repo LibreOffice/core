@@ -90,6 +90,7 @@ namespace rtl
 //.........................................................................
 namespace dbtools
 {
+    class ISQLStatementHelper;
     typedef ::utl::SharedUNOComponent< ::com::sun::star::sdbc::XConnection > SharedConnection;
 
     enum EComposeRule
@@ -664,6 +665,7 @@ namespace dbtools
     OOO_DLLPUBLIC_DBTOOLS
     ::rtl::OUString createStandardCreateStatement(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor,
                                                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
+                                                    ISQLStatementHelper* _pHelper,
                                                     const ::rtl::OUString& _sCreatePattern = ::rtl::OUString());
 
     /** creates the standard sql statement for the key part of a create table statement.
@@ -677,32 +679,39 @@ namespace dbtools
                                                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection);
 
     /** creates the standard sql statement for the column part of a create table statement.
+        @param  _pHelper
+            Allow to add special SQL constructs.
         @param  descriptor
             The descriptor of the column.
         @param  _xConnection
             The connection.
-        @param  _bAddScale
-            The scale will also be added when the value is 0.
+        @param  _pHelper
+            Allow to add special SQL constructs.
     */
     OOO_DLLPUBLIC_DBTOOLS
-    ::rtl::OUString createStandardColumnPart(   const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor,
-                                                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
-                                                const ::rtl::OUString& _sCreatePattern = ::rtl::OUString());
+    ::rtl::OUString createStandardColumnPart(   const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor
+                                                ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection
+                                                ,ISQLStatementHelper* _pHelper = NULL
+                                                ,const ::rtl::OUString& _sCreatePattern = ::rtl::OUString());
 
     /** creates a SQL CREATE TABLE statement
+
         @param  descriptor
             The descriptor of the new table.
         @param  _xConnection
             The connection.
-        @param  _bAddScale
-            The scale will also be added when the value is 0.
+        @param  _pHelper
+            Allow to add special SQL constructs.
+        @param  _sCreatePattern
+
         @return
             The CREATE TABLE statement.
     */
     OOO_DLLPUBLIC_DBTOOLS
-    ::rtl::OUString createSqlCreateTableStatement(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor,
-                                                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
-                                                    const ::rtl::OUString& _sCreatePattern = ::rtl::OUString());
+    ::rtl::OUString createSqlCreateTableStatement(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor
+                                                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection
+                                                    ,ISQLStatementHelper* _pHelper = NULL
+                                                    ,const ::rtl::OUString& _sCreatePattern = ::rtl::OUString());
 
     /** creates a SDBC column with the help of getColumns.
         @param  _xTable

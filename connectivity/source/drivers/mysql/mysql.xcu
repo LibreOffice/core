@@ -48,6 +48,11 @@
             <value>com.mysql.jdbc.Driver</value>
           </prop>
         </node>
+        <node oor:name="AddIndexAppendix" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>true</value>
+          </prop>
+        </node>
       </node>
       <node oor:name="Features">
         <node oor:name="UseKeywordAsBeforeAlias" oor:op="replace">
@@ -97,6 +102,11 @@
             <value>UserPassword</value>
           </prop>
         </node>
+        <node oor:name="SupportsColumnDescription" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>true</value>
+          </prop>
+        </node>
       </node>
     </node>
     <node oor:name="sdbc:mysql:odbc:*" oor:op="replace">
@@ -110,6 +120,11 @@
         <node oor:name="CharSet" oor:op="replace">
           <prop oor:name="Value" oor:type="xs:string">
             <value></value>
+          </prop>
+        </node>
+        <node oor:name="AddIndexAppendix" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>true</value>
           </prop>
         </node>
       </node>
@@ -186,6 +201,11 @@
             <value></value>
           </prop>
         </node>
+        <node oor:name="AddIndexAppendix" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>true</value>
+          </prop>
+        </node>
       </node>
       <node oor:name="Features">
         <node oor:name="UseKeywordAsBeforeAlias" oor:op="replace">
@@ -228,6 +248,11 @@
         <node oor:name="Authentication" oor:op="replace">
           <prop oor:name="Value" oor:type="xs:string">
             <value>UserPassword</value>
+          </prop>
+        </node>
+        <node oor:name="SupportsColumnDescription" oor:op="replace">
+          <prop oor:name="Value" oor:type="xs:boolean">
+            <value>true</value>
           </prop>
         </node>
       </node>

@@ -75,6 +75,8 @@
 /** === end UNO includes === **/
 
 #include <basic/sbxvar.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <comphelper/container.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
