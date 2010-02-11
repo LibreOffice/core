@@ -39,7 +39,7 @@ PACKAGE = com$/sun$/star$/report$/util
 #----- compile .java files -----------------------------------------
 
 .IF "$(SYSTEM_JFREEREPORT)" == "YES"
-CLASSPATH!:=$(CLASSPATH)$(PATH_SEPERATOR)$(LIBBASE_JAR)$(PATH_SEPERATOR)$(LIBXML_JAR)$(PATH_SEPERATOR)$(JFREEREPORT_JAR)
+EXTRAJARFILES   = $(LIBBASE_JAR) $(LIBXML_JAR) $(JFREEREPORT_JAR)
 .ELSE
 JARFILES        = libbase-1.0.0.jar libxml-1.0.0.jar flow-engine-0.9.2.jar
 .ENDIF

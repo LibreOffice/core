@@ -39,9 +39,9 @@ PACKAGE = com$/sun$/star$/report$/function$/metadata
 #----- compile .java files -----------------------------------------
 
 .IF "$(SYSTEM_JFREEREPORT)" == "YES"
-CLASSPATH!:==$(CLASSPATH)$(PATH_SEPERATOR)$(LIBBASE_JAR)$(PATH_SEPERATOR)$(LIBFORMULA_JAR)
+EXTRAJARFILES = $(LIBBASE_JAR) $(LIBFORMULA_JAR)
 .ELSE
-JARFILES += libbase-1.0.0.jar libformula-0.2.0.jar
+JARFILES = libbase-1.0.0.jar libformula-0.2.0.jar
 .ENDIF
 
 JAVAFILES       :=	AuthorFunction.java \

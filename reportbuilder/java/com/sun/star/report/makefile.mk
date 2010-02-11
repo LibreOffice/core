@@ -40,7 +40,7 @@ PACKAGE = com$/sun$/star$/report
 
 JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar
 .IF "$(SYSTEM_APACHE_COMMONS)" == "YES"
-XCLASSPATH!:==$(XCLASSPATH)$(PATH_SEPERATOR)$(COMMONS_LOGGING_JAR)
+EXTRAJARFILES = $(COMMONS_LOGGING_JAR)
 .ELSE
 JARFILES += commons-logging-1.1.1.jar
 .ENDIF
