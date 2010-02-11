@@ -31,8 +31,6 @@
 #ifndef _SVDOBJ_HXX
 #define _SVDOBJ_HXX
 
-#define NEWPBG
-
 #include <memory>
 #include <cppuhelper/weakref.hxx>
 #include <vcl/mapmod.hxx>
@@ -1103,13 +1101,6 @@ public:
     virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon);
 
     sal_Bool IsTransparent( BOOL bCheckForAlphaChannel = FALSE ) const;
-
-#ifndef NEWPBG
-    // #111111#
-    // Needed again and again i will now add a test for finding out if
-    // this object is the BackgroundObject of the page.
-    sal_Bool IsMasterPageBackgroundObject() const;
-#endif
 
     // #116168#
     // Give info if object is in destruction

@@ -1177,7 +1177,6 @@ sdr::contact::ViewContact& SdrPage::GetViewContact() const
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#ifdef NEWPBG
 
 void SdrPageProperties::ImpRemoveStyleSheet()
 {
@@ -1311,7 +1310,6 @@ SfxStyleSheet* SdrPageProperties::GetStyleSheet() const
     return mpStyleSheet;
 }
 
-#endif
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1(SdrPage,SdrObjList);
@@ -1326,11 +1324,7 @@ SdrPage::SdrPage(SdrModel& rNewModel, bool bMasterPage)
     nBordRgt(0L),
     nBordLwr(0L),
     pLayerAdmin(new SdrLayerAdmin(&rNewModel.GetLayerAdmin())),
-#ifndef NEWPBG
-    pBackgroundObj(0L),
-#else
     mpSdrPageProperties(0),
-#endif
     mpMasterPageDescriptor(0L),
     nPageNum(0L),
     mbMaster(bMasterPage),
@@ -1343,9 +1337,7 @@ SdrPage::SdrPage(SdrModel& rNewModel, bool bMasterPage)
     aPrefVisiLayers.SetAll();
     eListKind = (bMasterPage) ? SDROBJLIST_MASTERPAGE : SDROBJLIST_DRAWPAGE;
 
-#ifdef NEWPBG
     mpSdrPageProperties = new SdrPageProperties(*this);
-#endif
 }
 
 SdrPage::SdrPage(const SdrPage& rSrcPage)
@@ -1359,11 +1351,7 @@ SdrPage::SdrPage(const SdrPage& rSrcPage)
     nBordRgt(rSrcPage.nBordRgt),
     nBordLwr(rSrcPage.nBordLwr),
     pLayerAdmin(new SdrLayerAdmin(rSrcPage.pModel->GetLayerAdmin())),
-#ifndef NEWPBG
-    pBackgroundObj(0L),
-#else
     mpSdrPageProperties(0),
-#endif
     mpMasterPageDescriptor(0L),
     nPageNum(rSrcPage.nPageNum),
     mbMaster(rSrcPage.mbMaster),
@@ -1398,9 +1386,7 @@ SdrPage::SdrPage(const SdrPage& rSrcPage)
         xComponent->dispose();
     }
 
-#ifdef NEWPBG
     mpSdrPageProperties = new SdrPageProperties(rSrcPage.getSdrPageProperties());
-#endif
 }
 
 SdrPage::~SdrPage()
@@ -1434,9 +1420,6 @@ SdrPage::~SdrPage()
     // when they get called from PageInDestruction().
     maPageUsers.clear();
 
-#ifndef NEWPBG
-    SdrObject::Free( pBackgroundObj );
-#endif
     delete pLayerAdmin;
 
     TRG_ClearMasterPage();
@@ -1448,12 +1431,10 @@ SdrPage::~SdrPage()
         mpViewContact = 0L;
     }
 
-#ifdef NEWPBG
     {
         delete mpSdrPageProperties;
         mpSdrPageProperties = 0;
     }
-#endif
 
     DBG_DTOR(SdrPage,NULL);
 }
@@ -1465,10 +1446,6 @@ void SdrPage::operator=(const SdrPage& rSrcPage)
         delete mpViewContact;
         mpViewContact = 0L;
     }
-
-#ifndef NEWPBG
-    SdrObject::Free( pBackgroundObj );
-#endif
 
     // Joe also sets some parameters for the class this one
     // is derived from. SdrObjList does the same bad handling of
@@ -1503,22 +1480,10 @@ void SdrPage::operator=(const SdrPage& rSrcPage)
 
     mbObjectsNotPersistent = rSrcPage.mbObjectsNotPersistent;
 
-#ifndef NEWPBG
-    if(rSrcPage.pBackgroundObj)
-    {
-        pBackgroundObj = rSrcPage.pBackgroundObj->Clone();
-          pBackgroundObj->SetPage( this );
-        pBackgroundObj->SetModel( pModel );
-
-        // #i62000# for single-page MPBGO, force no line
-        pBackgroundObj->SetMergedItem(XLineStyleItem(XLINE_NONE));
-    }
-#else
     {
         delete mpSdrPageProperties;
         mpSdrPageProperties = new SdrPageProperties(rSrcPage.getSdrPageProperties());
     }
-#endif
 
     // Now copy the contained obejcts (by cloning them)
     SdrObjList::operator=(rSrcPage);
@@ -1697,16 +1662,9 @@ void SdrPage::SetModel(SdrModel* pNewModel)
         }
         pLayerAdmin->SetModel(pNewModel);
 
-#ifndef NEWPBG
-        if( pBackgroundObj )
-            pBackgroundObj->SetModel( pNewModel );
-#else
-        {
-            SdrPageProperties *pNew = new SdrPageProperties(getSdrPageProperties());
-            delete mpSdrPageProperties;
-            mpSdrPageProperties = pNew;
-        }
-#endif
+        SdrPageProperties *pNew = new SdrPageProperties(getSdrPageProperties());
+        delete mpSdrPageProperties;
+        mpSdrPageProperties = pNew;
     }
 
     // update listeners at possible api wrapper object
@@ -1840,24 +1798,6 @@ XubString SdrPage::GetLayoutName() const
     return String();
 }
 
-#ifndef NEWPBG
-void SdrPage::SetBackgroundObj( SdrObject* pObj )
-{
-    if ( pObj )
-    {
-        pObj->SetPage( this );
-        pObj->SetModel( pModel );
-        pObj->SetLayer( 1 );        // Nothing known about the backgroundlayer...
-
-        // #i62000# for single-page MPBGO, force no line
-        pObj->SetMergedItem(XLineStyleItem(XLINE_NONE));
-    }
-
-    SdrObject::Free( pBackgroundObj );
-    pBackgroundObj = pObj;
-}
-#endif
-
 void SdrPage::SetInserted( bool bIns )
 {
     if( mbInserted != bIns )
@@ -1931,7 +1871,6 @@ Color SdrPage::GetPageBackgroundColor( SdrPageView* pView, bool bScreenDisplay )
         aColor = pView->GetApplicationDocumentColor();
     }
 
-#ifdef NEWPBG
     const SfxItemSet* pBackgroundFill = &getSdrPageProperties().GetItemSet();
 
     if(!IsMasterPage() && TRG_HasMasterPage())
@@ -1943,39 +1882,6 @@ Color SdrPage::GetPageBackgroundColor( SdrPageView* pView, bool bScreenDisplay )
     }
 
     GetDraftFillColor(*pBackgroundFill, aColor);
-#else
-    // first, see if we have a background object
-    SdrObject* pBackgroundObj2 = NULL;
-
-    if( IsMasterPage() )
-    {
-        if( GetObjCount() )
-            pBackgroundObj2 = GetObj( 0 );
-    }
-    else
-    {
-        pBackgroundObj2 = GetBackgroundObj();
-        if( NULL == pBackgroundObj2 )
-        {
-            // if not, see if we have a masterpage and get that background object
-            if(TRG_HasMasterPage())
-            {
-                SdrPage& rMasterPage = TRG_GetMasterPage();
-
-                if(rMasterPage.GetObjCount())
-                {
-                    pBackgroundObj2 = rMasterPage.GetObj( 0 );
-                }
-            }
-        }
-    }
-
-    if( pBackgroundObj2 )
-    {
-        const SfxItemSet& rSet = pBackgroundObj2->GetMergedItemSet();
-        GetDraftFillColor( rSet, aColor );
-    }
-#endif
 
     return aColor;
 }

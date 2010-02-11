@@ -31,8 +31,6 @@
 #ifndef _SVDPAGE_HXX
 #define _SVDPAGE_HXX
 
-#define NEWPBG
-
 #include <vcl/bitmap.hxx>
 #include <vcl/print.hxx>
 #include <vcl/gdimtf.hxx>
@@ -363,8 +361,6 @@ public:
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // class SdrPageProperties
 
-#ifdef NEWPBG
-
 class SVX_DLLPUBLIC SdrPageProperties : public SfxListener
 {
 private:
@@ -400,7 +396,6 @@ public:
     SfxStyleSheet* GetStyleSheet() const;
 };
 
-#endif
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // class SdrPage
 
@@ -451,16 +446,12 @@ friend class ChXChartDocument;
 
 protected:
     SdrLayerAdmin*      pLayerAdmin;
-#ifndef NEWPBG
-    SdrObject*          pBackgroundObj;
-#else
 private:
     SdrPageProperties*  mpSdrPageProperties;
 
 public:
     SdrPageProperties& getSdrPageProperties() { return *mpSdrPageProperties; }
     const SdrPageProperties& getSdrPageProperties() const { return *mpSdrPageProperties; }
-#endif
 
 protected:
     // new MasterPageDescriptorVector
@@ -566,11 +557,6 @@ public:
     // Fuer die MasterPage(s) der Page muss dies ggf. separat gemacht werden.
     bool IsSwappingLocked() const { return mbSwappingLocked; }
     void SetSwappingLocked(bool bLock) { mbSwappingLocked = bLock; }
-
-#ifndef NEWPBG
-    SdrObject* GetBackgroundObj() const { return pBackgroundObj; }
-    void       SetBackgroundObj( SdrObject* pObj );
-#endif
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoPage();
 

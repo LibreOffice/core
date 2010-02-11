@@ -618,41 +618,17 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
     VirtualDevice       aVDev;
     const MapMode       aMap( mpDoc->GetScaleUnit(), Point(), rSettings.maScaleX, rSettings.maScaleY );
 
-#ifndef NEWPBG
-    // create a view
-    SdrView*        pView;
-
-    if( PTR_CAST( FmFormModel, mpDoc ) )
-    {
-        pView = new FmFormView( PTR_CAST( FmFormModel, mpDoc ), &aVDev );
-    }
-    else
-    {
-        pView = new SdrView( mpDoc, &aVDev );
-    }
-
-    pView->SetBordVisible( FALSE );
-    pView->SetPageVisible( FALSE );
-    pView->ShowSdrPage( pPage );
-#endif
-
     SdrOutliner& rOutl=mpDoc->GetDrawOutliner(NULL);
     maOldCalcFieldValueHdl = rOutl.GetCalcFieldValueHdl();
     rOutl.SetCalcFieldValueHdl( LINK(this, GraphicExporter, CalcFieldValueHdl) );
-#ifdef NEWPBG
     rOutl.SetBackgroundColor( pPage->GetPageBackgroundColor() );
-#else
-    rOutl.SetBackgroundColor( pPage->GetPageBackgroundColor(pView->GetSdrPageView()) );
-#endif
 
     // #i102251#
     const sal_uInt32 nOldCntrl(rOutl.GetControlWord());
     sal_uInt32 nCntrl = nOldCntrl & ~EE_CNTRL_ONLINESPELLING;
     rOutl.SetControlWord(nCntrl);
 
-#ifdef NEWPBG
     SdrObject* pTempBackgroundShape = 0;
-#endif
     std::vector< SdrObject* > aShapes;
     bool bRet = true;
 
@@ -661,26 +637,10 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
     {
         if( rSettings.mbExportOnlyBackground )
         {
-#ifdef NEWPBG
             pTempBackgroundShape = new SdrRectObj(Rectangle(Point(0,0), pPage->GetSize()));
             pTempBackgroundShape->SetMergedItemSet(pPage->getSdrPageProperties().GetItemSet());
             pTempBackgroundShape->SetMergedItem(XLineStyleItem(XLINE_NONE));
             aShapes.push_back(pTempBackgroundShape);
-#else
-            SdrObject* pShape = 0;
-            if( pPage->IsMasterPage() )
-            {
-                if( pPage->GetObjCount() > 0 )
-                    pShape = pPage->GetObj(0);
-            }
-            else
-            {
-                pShape = pPage->GetBackgroundObj();
-            }
-
-            if( pShape )
-                aShapes.push_back( pShape );
-#endif
         }
         else
         {
@@ -759,7 +719,6 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                 aMtf.Record( &aVDev );
                 Size aNewSize;
 
-#ifdef NEWPBG
                 // create a view
                 SdrView*        pView;
 
@@ -775,7 +734,6 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                 pView->SetBordVisible( FALSE );
                 pView->SetPageVisible( FALSE );
                 pView->ShowSdrPage( pPage );
-#endif
 
                 if ( pView && pPage )
                 {
@@ -817,13 +775,12 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                     aGraphic = Graphic(aMtf);
                 }
 
-#ifdef NEWPBG
                 if ( pView )
                 {
                     pView->HideSdrPage();
                     delete pView;
                 }
-#endif
+
                 if( rSettings.mbTranslucent )
                 {
                     Size aOutSize;
@@ -948,17 +905,6 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
             // calculate bound rect for all shapes
             Rectangle aBound;
 
-#ifndef NEWPBG
-            if(rSettings.mbExportOnlyBackground)
-            {
-                // shape is MPBGO and if it's not yet set, it's size will
-                // be empty when using GetCurrentBoundRect(). Since anyways
-                // the page size is used by MPBGO and MPBGO is EOLd, get
-                // the wanted size from the page model directly
-                aBound = Rectangle(Point(0,0), pPage->GetSize());
-            }
-            else
-#endif
             {
                 std::vector< SdrObject* >::iterator aIter = aShapes.begin();
                 const std::vector< SdrObject* >::iterator aEnd = aShapes.end();
@@ -1032,20 +978,10 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
         }
     }
 
-#ifndef NEWPBG
-    if ( pView )
-    {
-        pView->HideSdrPage();
-        delete pView;
-    }
-#endif
-
-#ifdef NEWPBG
     if(pTempBackgroundShape)
     {
         SdrObject::Free(pTempBackgroundShape);
     }
-#endif
 
     rOutl.SetCalcFieldValueHdl( maOldCalcFieldValueHdl );
 

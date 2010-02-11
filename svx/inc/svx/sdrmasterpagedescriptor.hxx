@@ -34,8 +34,6 @@
 #include <svx/sdrpageuser.hxx>
 #include <svx/svdsob.hxx>
 
-#define NEWPBG
-
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
 class SdrObject;
@@ -95,12 +93,7 @@ namespace sdr
         sal_Bool operator==(const MasterPageDescriptor& rCandidate) const;
         sal_Bool operator!=(const MasterPageDescriptor& rCandidate) const;
 
-#ifdef NEWPBG
         const SfxItemSet& getCorrectFillAttributes() const;
-#else
-        // #i42075# Get the correct BackgroundObject
-        SdrObject* GetBackgroundObject() const;
-#endif
     };
 } // end of namespace sdr
 

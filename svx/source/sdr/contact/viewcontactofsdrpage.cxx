@@ -206,7 +206,6 @@ namespace sdr
                 }
                 else
                 {
-#ifdef NEWPBG
                     // build primitive from pObject's attributes
                     const SfxItemSet& rFillAttributes = rPage.getSdrPageProperties().GetItemSet();
                     const drawinglayer::attribute::SdrFillAttribute aFill(
@@ -229,42 +228,6 @@ namespace sdr
 
                         xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
                     }
-
-#else
-                    OSL_ENSURE(0 != rPage.GetObjCount(), "MasterPage without MPBGO detected (!)");
-
-                    if(rPage.GetObjCount())
-                    {
-                        SdrObject* pObject = rPage.GetObj(0);
-                        OSL_ENSURE(pObject && pObject->IsMasterPageBackgroundObject(), "MasterPage with wrong MPBGO detected (!)");
-
-                        if(pObject && pObject->IsMasterPageBackgroundObject())
-                        {
-                            // build primitive from pObject's attributes
-                            const SfxItemSet& rFillProperties = pObject->GetMergedItemSet();
-                            const drawinglayer::attribute::SdrFillAttribute aFill(
-                                drawinglayer::primitive2d::createNewSdrFillAttribute(rFillProperties));
-
-                            if(!aFill.isDefault() && 1.0 != aFill.getTransparence())
-                            {
-                                // direct model data is the page size, get and use it
-                                const basegfx::B2DRange aInnerRange(
-                                    rPage.GetLftBorder(), rPage.GetUppBorder(),
-                                    rPage.GetWdt() - rPage.GetRgtBorder(), rPage.GetHgt() - rPage.GetLwrBorder());
-                                const basegfx::B2DPolygon aInnerPolgon(basegfx::tools::createPolygonFromRect(aInnerRange));
-                                const basegfx::B2DHomMatrix aEmptyTransform;
-                                const drawinglayer::primitive2d::Primitive2DReference xReference(
-                                    drawinglayer::primitive2d::createPolyPolygonFillPrimitive(
-                                        basegfx::B2DPolyPolygon(aInnerPolgon),
-                                        aEmptyTransform,
-                                        aFill,
-                                        drawinglayer::attribute::FillGradientAttribute()));
-
-                                xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
-                            }
-                        }
-                    }
-#endif
                 }
             }
 
@@ -485,27 +448,11 @@ namespace sdr
 
         sal_uInt32 ViewContactOfPageHierarchy::GetObjectCount() const
         {
-            sal_uInt32 nSubObjectCount(getPage().GetObjCount());
-
-#ifndef NEWPBG
-            if(nSubObjectCount && getPage().GetObj(0L)->IsMasterPageBackgroundObject())
-            {
-                nSubObjectCount--;
-            }
-#endif
-
-            return nSubObjectCount;
+            return getPage().GetObjCount();
         }
 
         ViewContact& ViewContactOfPageHierarchy::GetViewContact(sal_uInt32 nIndex) const
         {
-#ifndef NEWPBG
-            if(getPage().GetObjCount() && getPage().GetObj(0L)->IsMasterPageBackgroundObject())
-            {
-                nIndex++;
-            }
-#endif
-
             SdrObject* pObj = getPage().GetObj(nIndex);
             DBG_ASSERT(pObj, "ViewContactOfPageHierarchy::GetViewContact: Corrupt SdrObjList (!)");
             return pObj->GetViewContact();
