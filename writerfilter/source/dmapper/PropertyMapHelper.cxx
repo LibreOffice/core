@@ -72,6 +72,16 @@ XMLTag::Pointer_t lcl_PropertyValuesToTag(beans::PropertyValues & rValues)
 
         pTag->addAttr("name", pValues[n].Name);
 
+        try
+        {
+            sal_Int32 aInt;
+            pValues[n].Value >>= aInt;
+            pTag->addAttr("value", aInt);
+        }
+        catch (...)
+        {
+        }
+
         if (pValues[n].Name.equalsAscii("TableColumnSeparators"))
         {
             pTag->addTag(lcl_TableColumnSeparatorsToTag(pValues[n].Value));

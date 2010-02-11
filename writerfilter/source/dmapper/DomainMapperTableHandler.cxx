@@ -505,39 +505,9 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         rInfo.aTableProperties = m_aTableProperties->GetPropertyValues();
 
 #ifdef DEBUG_DOMAINMAPPER
-        {
-            sal_uInt32 nCells = 0;
-            sal_uInt32 nRows = m_aRowProperties.size();
-            if( nRows == m_aCellProperties.size() )
-            {
-                for( sal_uInt32 nRow = 0; nRow < nRows; ++nRow )
-                    nCells += m_aCellProperties[nRow].size();
-            }
-            sal_uInt32 nTblPropSize = m_aTableProperties.get() ? m_aTableProperties->size() : 0;
-            (void)nTblPropSize;
-
-            if( nTblPropSize )
-            {
-                dmapper_logger->startElement("debug.tableprops");
-                const beans::PropertyValues aDebugTbl = m_aTableProperties->GetPropertyValues();
-                for( sal_uInt32 nDebug = 0; nDebug < nTblPropSize; ++nDebug)
-                {
-                    dmapper_logger->startElement("property");
-
-                    const ::rtl::OUString sName = aDebugTbl[nDebug].Name;
-                    dmapper_logger->attribute("name", sName);
-
-                    ::rtl::OUString sValue;
-                    aDebugTbl[nDebug].Value >>= sValue;
-                    dmapper_logger->chars(sValue);
-
-                    dmapper_logger->endElement("property");
-                }
-                m_aTableProperties->Invalidate();
-
-                dmapper_logger->endElement("debug.tableprops");
-            }
-        }
+        dmapper_logger->startElement("debug.tableprops");
+        dmapper_logger->addTag(m_aTableProperties->toTag());
+        dmapper_logger->endElement("debug.tableprops");
 #endif
 
     }

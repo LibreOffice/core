@@ -84,7 +84,8 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
 {
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("tablemanager.sprm");
-    dmapper_logger->chars(rSprm.toString());
+    string sSprm = rSprm.toString();
+    dmapper_logger->chars(sSprm);
     dmapper_logger->endElement("tablemanager.sprm");
 #endif
     bool bRet = DomainMapperTableManager_Base_t::sprm(rSprm);
@@ -127,6 +128,9 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                         if( m_nTableWidth )
                             pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, m_nTableWidth );
                     }
+#ifdef DEBUG_DOMAINMAPPER
+                    dmapper_logger->addTag(pPropMap->toTag());
+#endif
                     insertTableProps(pPropMap);
                 }
             }
