@@ -938,7 +938,7 @@ BOOL ScDPResultData::IsNumOrDateGroup( long nDim ) const
 }
 
 BOOL ScDPResultData::IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex,
-                                SCROW nBaseDataId, long nBaseIndex ) const
+                                long nBaseDataId, long nBaseIndex ) const
 {
     const ScDPItemData* pData = pSource->GetItemDataById( nGroupIndex , nBaseDataId);
     if ( pData )

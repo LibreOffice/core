@@ -698,10 +698,10 @@ ULONG RefreshDPObject( ScDPObject *pDPObj, ScDocument *pDoc, ScDocShell *pDocSh,
         return STR_PIVOT_NOTFOUND;
 
     if( !pDoc  )
-        return -1;
+        return static_cast<ULONG>(-1);
 
     if( !pDocSh && ( pDocSh = PTR_CAST( ScDocShell, pDoc->GetDocumentShell() ) ) == NULL )
-        return -1;
+        return static_cast<ULONG>(-1);
 
     if( ULONG nErrId = pDPObj->RefreshCache() )
         return nErrId;
@@ -750,8 +750,8 @@ ULONG  ScDBFunc::RecalcPivotTable()
             // remains valid and should be preserved, so the history isn't cleared here.
             //GetViewData()->GetDocShell()->GetUndoManager()->Clear();
         }
-        else
-            ErrorMessage(nErrId);
+        else if (nErrId <= USHRT_MAX)
+            ErrorMessage(static_cast<USHORT>(nErrId));
       return nErrId;
       // End Comments
     }
