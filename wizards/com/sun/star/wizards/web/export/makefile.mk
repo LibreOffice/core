@@ -42,7 +42,7 @@ PACKAGE = com$/sun$/star$/wizards$/web$/export
 JARFILES= unoil.jar jurt.jar ridl.jar juh.jar java_uno.jar java_uno_accessbridge commonwizards.jar 
 
 .IF "$(SYSTEM_SAXON)" == "YES"
-XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(SAXON_JAR)
+EXTRAJARFILES = $(SAXON_JAR)
 .ELSE
 JARFILES += saxon9.jar
 .ENDIF
