@@ -48,7 +48,7 @@
 #undef HAVE_POLL_H
 #endif
 
-#if defined(LINUX) || defined (IRIX) || defined(NETBSD) || defined ( FREEBSD ) || defined (MACOSX)
+#if defined(LINUX) || defined(NETBSD) || defined ( FREEBSD ) || defined (MACOSX)
 #include <sys/poll.h>
 #define HAVE_POLL_H
 #endif /* HAVE_POLL_H */

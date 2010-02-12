@@ -46,6 +46,8 @@ module com { module sun { module star { module task {
 //=============================================================================
 /** Allows to store and retrieve URLs. URLs can be stored persistently or
     until end of OOo session.
+
+    @since OOo 3.2
 */
 /*published*/ interface XUrlContainer : com::sun::star::uno::XInterface
 {
@@ -63,7 +65,7 @@ module com { module sun { module star { module task {
     /** Lookup a URL in the container.
 
         @param Url     URL to lookup.
-         @returns       Best matched URL or empty string.
+        @returns       Best matched URL or empty string.
     */
     string findUrl( [in] string Url );
 
