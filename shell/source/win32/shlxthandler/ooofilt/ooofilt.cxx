@@ -725,40 +725,40 @@ SCODE STDMETHODCALLTYPE COooFilter::SaveCompleted(LPCWSTR /*pszFileName*/)
 //
 //  Arguments:  pStm
 //                  [in] Pointer to stream from which object should be loaded
-//                    
+//
 //
 //  Returns:    S_OK
 //              E_OUTOFMEMORY
 //              E_FAIL
-//                 
+//
 //
 //--------------------------------------------------------------------------
 SCODE STDMETHODCALLTYPE COooFilter::Load(IStream *pStm)
 {
 
     // These next few lines work around the "Seek pointer" bug found on Vista.
-    
+
     char buf[20];
     unsigned long count;
     HRESULT hr;
     ULARGE_INTEGER NewPosition;
-    LARGE_INTEGER Move; 
-    Move.QuadPart = 0;  
-    hr = pStm->Seek (Move, STREAM_SEEK_SET, &NewPosition);  
+    LARGE_INTEGER Move;
+    Move.QuadPart = 0;
+    hr = pStm->Seek (Move, STREAM_SEEK_SET, &NewPosition);
     hr = pStm->Read (buf, 20, &count);
-                
+
     zlib_filefunc_def z_filefunc;
     fill_stream_filefunc (&z_filefunc);
     z_filefunc.opaque = (void*)pStm;
 
     m_pStream = pStm;
-  
+
     try
     {
         if (m_pMetaInfoReader)
-            delete m_pMetaInfoReader;             
+            delete m_pMetaInfoReader;
         m_pMetaInfoReader = new CMetaInfoReader((void*)m_pStream, &z_filefunc);
-        
+
         if (m_pContentReader)
             delete m_pContentReader;
         m_pContentReader = new CContentReader((void*)m_pStream, m_pMetaInfoReader->getDefaultLocale(), &z_filefunc);
@@ -777,15 +777,15 @@ SCODE STDMETHODCALLTYPE COooFilter::Load(IStream *pStm)
 //  Summary:    Returns the size in bytes of the stream neede to save the object.
 //
 //  Arguments:  pcbSize
-//                  [out] Pointer to a 64 bit unsigned int indicating the size needed 
+//                  [out] Pointer to a 64 bit unsigned int indicating the size needed
 //
 //  Returns:    E_NOTIMPL
-//                  
+//
 //
 //--------------------------------------------------------------------------
 SCODE STDMETHODCALLTYPE COooFilter::GetSizeMax(ULARGE_INTEGER * /*pcbSize*/)
 {
-    // 
+    //
     return E_NOTIMPL;
 }
 
@@ -800,14 +800,14 @@ SCODE STDMETHODCALLTYPE COooFilter::GetSizeMax(ULARGE_INTEGER * /*pcbSize*/)
 //
 //              fClearDirty
 //                  [in] Indicates whether to clear dirty flag
-//              
+//
 //  Returns:    E_NOTIMPL
-//                 
+//
 //
 //--------------------------------------------------------------------------
 SCODE STDMETHODCALLTYPE COooFilter::Save(IStream * /*pStm*/, BOOL )
 {
-    // 
+    //
     return E_NOTIMPL;
 }
 
@@ -1244,11 +1244,11 @@ namespace /* private */
         if (!SetRegistryKey(HKEY_CLASSES_ROOT, ClsidEntry_Persist.c_str(), "", "OpenOffice.org Persistent Handler"))
             return E_FAIL;
 
-        // Add missing entry 
+        // Add missing entry
         std::string ClsidEntry_Persist_Entry = CLSID_PERSIST_ENTRY;
-        SubstitutePlaceholder(ClsidEntry_Persist_Entry, 
-                              GUID_PLACEHOLDER, 
-                              ClsidToString(PersistentGuid));       
+        SubstitutePlaceholder(ClsidEntry_Persist_Entry,
+                              GUID_PLACEHOLDER,
+                              ClsidToString(PersistentGuid));
 
         if (!SetRegistryKey(HKEY_CLASSES_ROOT, ClsidEntry_Persist_Entry.c_str(), "", ClsidToString(PersistentGuid).c_str()));
 
@@ -1505,19 +1505,19 @@ STDAPI DllUnregisterServer()
 extern "C" {
 
     // IStream callback
-    voidpf ZCALLBACK cb_sopen (voidpf opaque, const char* filename, int mode) {     
+    voidpf ZCALLBACK cb_sopen (voidpf opaque, const char* filename, int mode) {
         return opaque;
     }
 
     uLong ZCALLBACK cb_sread (voidpf opaque, voidpf stream, void* buf, uLong size) {
         unsigned long newsize;
         HRESULT hr;
-    
+
         hr = ((IStream *)stream)->Read (buf, size, &newsize);
         if (hr == S_OK){
             return (unsigned long)newsize;
         }
-        else {          
+        else {
             return (uLong)0;
         }
     }
@@ -1526,8 +1526,8 @@ extern "C" {
         // IStream::Seek parameters
         HRESULT hr;
         LARGE_INTEGER Move;
-        DWORD dwOrigin;     
-        Move.QuadPart = (__int64)offset;    
+        DWORD dwOrigin;
+        Move.QuadPart = (__int64)offset;
 
         switch (origin) {
             case SEEK_CUR:
@@ -1542,12 +1542,12 @@ extern "C" {
             default:
                 return -1;
         }
-    
+
         hr = ((IStream*)stream)->Seek (Move, dwOrigin, NULL);
-        if (hr == S_OK){    
+        if (hr == S_OK){
             return 0;
         }
-        else {          
+        else {
             return -1;
         }
     }
@@ -1559,9 +1559,9 @@ extern "C" {
         ULARGE_INTEGER NewPosition;
         Move.QuadPart = 0;
         NewPosition.QuadPart = 0;
-        
+
         hr = ((IStream*)stream)->Seek (Move, STREAM_SEEK_CUR, &NewPosition);
-        if (hr == S_OK){            
+        if (hr == S_OK){
             return (long) NewPosition.QuadPart;
         }
         else {
@@ -1594,7 +1594,7 @@ extern "C" {
         pzlib_filefunc_def->ztell_file = cb_stell;
         pzlib_filefunc_def->zseek_file = cb_sseek;
         pzlib_filefunc_def->zclose_file = cb_sclose;
-        pzlib_filefunc_def->zerror_file = cb_serror;        
+        pzlib_filefunc_def->zerror_file = cb_serror;
     }
 }
 

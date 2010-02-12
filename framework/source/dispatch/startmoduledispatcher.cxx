@@ -165,24 +165,24 @@ void SAL_CALL StartModuleDispatcher::removeStatusListener(const css::uno::Refere
 {
     if ( ! SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE))
         return sal_False;
-    
+
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
-    
+
     css::uno::Reference< css::frame::XFramesSupplier > xDesktop(
         xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY);
-    
+
     FrameListAnalyzer aCheck(
         xDesktop,
         css::uno::Reference< css::frame::XFrame >(),
         FrameListAnalyzer::E_HELP | FrameListAnalyzer::E_BACKINGCOMPONENT);
-    
+
     ::sal_Bool  bIsPossible    = sal_False;
     ::sal_Int32 nVisibleFrames = aCheck.m_lOtherVisibleFrames.getLength ();
-    
+
     if (
         ( ! aCheck.m_xBackingComponent.is ()) &&
         (   nVisibleFrames < 1              )
@@ -190,7 +190,7 @@ void SAL_CALL StartModuleDispatcher::removeStatusListener(const css::uno::Refere
     {
         bIsPossible = sal_True;
     }
-    
+
     return bIsPossible;
 }
 

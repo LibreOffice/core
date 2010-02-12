@@ -92,7 +92,7 @@ namespace
 
         // #SJ# ClipRange for BlockText decomposition; only text portions completely
         // inside are to be accepted, so this is different from geometric clipping
-        // (which would allow e.g. upper parts of portions to remain). Only used for 
+        // (which would allow e.g. upper parts of portions to remain). Only used for
         // BlockText (see there)
         basegfx::B2DRange                                           maClipRange;
 

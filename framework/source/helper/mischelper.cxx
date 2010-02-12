@@ -63,7 +63,7 @@ uno::Reference< linguistic2::XLanguageGuessing > LanguageGuessingHelper::GetGues
         {
             (void) r;
             DBG_ASSERT( 0, "failed to get language guessing component" );
-        }    
+        }
     }
     return m_xLanguageGuesser;
 }
@@ -137,6 +137,6 @@ uno::Reference< linguistic2::XLanguageGuessing > LanguageGuessingHelper::GetGues
 
     return aLabel;
 }
-    
+
 } // namespace framework
 

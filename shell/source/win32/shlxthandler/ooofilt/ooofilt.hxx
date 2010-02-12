@@ -227,8 +227,8 @@ extern "C" {
     int ZCALLBACK cb_sclose OF((voidpf opaque, voidpf stream));
     int ZCALLBACK cb_serror OF((voidpf opaque, voidpf stream));
 
-    void fill_stream_filefunc (zlib_filefunc_def* pzlib_filefunc_def);  
-    
+    void fill_stream_filefunc (zlib_filefunc_def* pzlib_filefunc_def);
+
 }
 
 

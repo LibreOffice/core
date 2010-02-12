@@ -117,7 +117,7 @@ namespace drawinglayer
             mbContainsOtherFields(false)
         {
             const EditTextObject& rETO = maOutlinerParaObject.GetTextObject();
-            
+
             mbContainsPageField = rETO.HasField(SvxPageField::StaticType());
             mbContainsPageCountField = rETO.HasField(SvxPagesField::StaticType());
             mbContainsOtherFields = rETO.HasField(SvxHeaderField::StaticType())

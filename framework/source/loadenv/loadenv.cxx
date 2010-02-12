@@ -1758,7 +1758,7 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
 
         pWindow->Show(sal_True, (bForceFrontAndFocus || bForceToFront) ? SHOW_FOREGROUNDTASK : 0 );
     }
-    
+
 /* #i19976#
     We tried to prevent a toFront() call in case the user putted the
     loading document into the background ..

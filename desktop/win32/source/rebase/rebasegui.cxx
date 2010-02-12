@@ -61,7 +61,7 @@ static void failPath(wchar_t* pszAppTitle, wchar_t* pszMsg)
     TerminateProcess(GetCurrentProcess(), 255);
 }
 
-static void fail() 
+static void fail()
 {
     LPWSTR buf = NULL;
     FormatMessageW(
@@ -80,23 +80,23 @@ static LPVOID getVirtualBaseAddress( wchar_t* pszFilePath )
     PIMAGE_DOS_HEADER     lpDosHeader;
     PIMAGE_NT_HEADERS     lpNTHeader;
 
-    hFile = CreateFile(pszFilePath, 
+    hFile = CreateFile(pszFilePath,
                        GENERIC_READ, FILE_SHARE_READ, NULL,
                        OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,
                        0);
-                    
+
     if ( hFile == INVALID_HANDLE_VALUE )
-    {   
+    {
         return NULL;
     }
-    
+
     hFileMapping = CreateFileMapping(hFile, NULL, PAGE_READONLY, 0, 0, NULL);
     if ( hFileMapping == 0 )
-    {   
+    {
         CloseHandle(hFile);
         return NULL;
     }
-    
+
     lpFileBase = MapViewOfFile(hFileMapping, FILE_MAP_READ, 0, 0, 0);
     if ( lpFileBase == 0 )
     {
@@ -107,16 +107,16 @@ static LPVOID getVirtualBaseAddress( wchar_t* pszFilePath )
 
     lpDosHeader = (PIMAGE_DOS_HEADER)lpFileBase;
     if ( lpDosHeader->e_magic == IMAGE_DOS_SIGNATURE )
-    { 
+    {
         lpNTHeader = (PIMAGE_NT_HEADERS)((char*)lpDosHeader + lpDosHeader->e_lfanew);
         if (lpNTHeader->Signature == PE_Signature )
             lpFileBase = reinterpret_cast<LPVOID>( lpNTHeader->OptionalHeader.ImageBase );
     }
-    
+
     UnmapViewOfFile(lpFileBase);
     CloseHandle(hFileMapping);
     CloseHandle(hFile);
-    
+
     return lpFileBase;
 }
 
@@ -155,16 +155,16 @@ extern "C" int APIENTRY WinMain( HINSTANCE hInst, HINSTANCE, LPSTR, int )
     wchar_t* pTextNoInstallation = new wchar_t[ MAX_TEXT_LENGTH ];
              pTextNoInstallation[0]  = '\0';
     LoadString( hInst, IDS_MSG_NO_INSTALLATION_FOUND, pTextNoInstallation, MAX_TEXT_LENGTH );
-    
+
     LPVOID  VBA = (void*)0x10000000;
     wchar_t path[MAX_PATH];
-    
+
     wchar_t * pathEnd = getBrandPath(path);
-    
+
     if (tools::buildPath(path, path, pathEnd, MY_STRING(L"libxml2.dll")) == NULL)
         fail();
     bool bFast = checkImageVirtualBaseAddress(path, VBA);
-    
+
     if (tools::buildPath(path, path, pathEnd, MY_STRING(L"..\\basis-link")) == NULL)
         fail();
     pathEnd = tools::resolveLink(path);
@@ -179,10 +179,10 @@ extern "C" int APIENTRY WinMain( HINSTANCE hInst, HINSTANCE, LPSTR, int )
     if (tools::buildPath(path, path, pathEnd, MY_STRING(L"\\ure-link")) == NULL)
         fail();
     pathEnd = tools::resolveLink(path);
-    
+
     if (pathEnd == NULL)
         failPath(pAppTitle, pTextNoInstallation);
-    
+
     if (tools::buildPath(path, path, pathEnd, MY_STRING(L"\\bin\\sal3.dll")) == NULL)
         fail();
     bFast &= checkImageVirtualBaseAddress(path, VBA);
@@ -190,8 +190,8 @@ extern "C" int APIENTRY WinMain( HINSTANCE hInst, HINSTANCE, LPSTR, int )
     const wchar_t* pOutput = pTextClient;
     if (!bFast)
         pOutput = pTextServer;
-        
+
     MessageBoxW( NULL, pOutput, pAppTitle, MB_OK );
-    
+
     return 0;
 }

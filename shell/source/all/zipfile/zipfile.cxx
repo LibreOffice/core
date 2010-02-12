@@ -128,7 +128,7 @@ ZipFile::ZipFile(const std::string& FileName)
         throw IOException(-1);
 }
 
-ZipFile::ZipFile(void* stream, zlib_filefunc_def* fa) 
+ZipFile::ZipFile(void* stream, zlib_filefunc_def* fa)
 {
     fa->opaque = stream;
     m_uzFile = unzOpen2((const char *)NULL, fa);

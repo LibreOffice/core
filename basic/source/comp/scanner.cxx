@@ -476,15 +476,15 @@ PrevLineCommentLbl:
 eoln:
     if( nCol && *--pLine == '_' )
     {
-        pLine = NULL; 
+        pLine = NULL;
         bool bRes = NextSym();
         if( bVBASupportOn && aSym.GetBuffer()[0] == '.' )
         {
             // object _
             //    .Method
             // ^^^  <- spaces is legal in MSO VBA
-            OSL_TRACE("*** resetting bSpaces***"); 
-            bSpaces = FALSE; 
+            OSL_TRACE("*** resetting bSpaces***");
+            bSpaces = FALSE;
         }
         return bRes;
     }

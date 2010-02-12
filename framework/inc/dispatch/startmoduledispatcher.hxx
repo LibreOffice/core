@@ -90,7 +90,7 @@ class StartModuleDispatcher : public css::lang::XTypeProvider
         //---------------------------------------
         /** @short  the original queryDispatch() target. */
         ::rtl::OUString m_sDispatchTarget;
-    
+
         //---------------------------------------
         /** @short  list of registered status listener */
         ListenerHash m_lStatusListener;

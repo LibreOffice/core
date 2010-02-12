@@ -183,7 +183,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
 
                     aParamsSeq[0] = uno::makeAny( rtl::OUString::createFromAscii( "-lang" ) );
                     aParamsSeq[1] = uno::makeAny( m_aURLParameter.get_language() );
-                    
+
                     aParamsSeq[2] = uno::makeAny( rtl::OUString::createFromAscii( "-index" ) );
                     rtl::OUString aSystemPath;
                     osl::FileBase::getSystemPathFromFileURL( idxDir, aSystemPath );

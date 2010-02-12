@@ -837,7 +837,7 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     ::rtl::OUString aAdjustToType;
 
     // bSetStandardName == true means that user agreed to store document in the default (default default ;-)) format
-    if ( !(( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED )) && 
+    if ( !(( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED )) &&
         ( bSetStandardName || GetStorable()->hasLocation() ))
     {
         uno::Sequence< beans::PropertyValue > aOldFilterProps;

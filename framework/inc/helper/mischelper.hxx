@@ -43,12 +43,12 @@ inline bool IsScriptTypeMatchingToLanguage( sal_Int16 nScriptType, LanguageType 
     return 0 != (nScriptType & SvtLanguageOptions::GetScriptTypeOfLanguage( nLang ));
 }
 
-    
+
 class LanguageGuessingHelper
 {
     mutable ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XLanguageGuessing >    m_xLanguageGuesser;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
-    
+
 public:
     LanguageGuessingHelper(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceManager) : m_xServiceManager(_xServiceManager){}
 

@@ -745,7 +745,7 @@ bool isDocumentGeneratedWithOpenOfficeOlderThan2_3( const uno::Reference< frame:
             aGenerator = lcl_getGeneratorFromModel( uno::Reference< frame::XModel >( xChild->getParent(), uno::UNO_QUERY) );
             if( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org_project") ) ) != -1 )
             {
-                //the chart application has not created files without a meta stream since OOo 2.3 (OOo 2.3 has written a metastream already) 
+                //the chart application has not created files without a meta stream since OOo 2.3 (OOo 2.3 has written a metastream already)
                 //only the report builder extension has created some files with OOo 3.1 that do not have a meta stream
                 if( aGenerator.indexOf( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org_project/31") ) ) != -1 )
                     bResult = false;//#i100102# probably generated with OOo 3.1 by the report designer
