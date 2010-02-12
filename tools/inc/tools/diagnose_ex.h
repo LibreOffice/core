@@ -134,5 +134,16 @@
     ENSURE_OR_RETURN(c, m, false)
 
 
+/** This macro asserts the given condition (in debug mode), and
+    returns afterwards, without return value "void".
+ */
+#define ENSURE_OR_RETURN_VOID( c, m ) \
+    if( !(c) )  \
+    { \
+        OSL_ENSURE( c, m ); \
+        return;   \
+    }
+
+
 
 #endif // TOOLS_DIAGNOSE_EX_H
