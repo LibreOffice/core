@@ -49,7 +49,8 @@ namespace sd { namespace slidesorter { namespace controller {
 FocusManager::FocusManager (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
       mnPageIndex(0),
-      mbPageIsFocused(false)
+      mbPageIsFocused(false),
+      mbIsVerticalWrapActive(false)
 {
     if (mrSlideSorter.GetModel().GetPageCount() > 0)
         mnPageIndex = 0;
@@ -71,65 +72,95 @@ void FocusManager::MoveFocus (FocusMoveDirection eDirection)
     {
         HideFocusIndicator (GetFocusedPageDescriptor());
 
-        int nColumnCount (mrSlideSorter.GetView().GetLayouter().GetColumnCount());
+        const sal_Int32 nColumnCount (mrSlideSorter.GetView().GetLayouter().GetColumnCount());
+        const sal_Int32 nPageCount (mrSlideSorter.GetModel().GetPageCount());
         switch (eDirection)
         {
             case FMD_NONE:
-                if (mnPageIndex >= mrSlideSorter.GetModel().GetPageCount())
-                    mnPageIndex = mrSlideSorter.GetModel().GetPageCount() - 1;
+                // Nothing to be done.
                 break;
 
             case FMD_LEFT:
-                mnPageIndex -= 1;
-                if (mnPageIndex < 0)
-                {
-                    mnPageIndex = mrSlideSorter.GetModel().GetPageCount() - 1;
-                    SetFocusToToolBox();
-                }
+                if (mnPageIndex > 0)
+                    mnPageIndex -= 1;
+                else if (mbIsVerticalWrapActive)
+                    mnPageIndex = nPageCount-1;
                 break;
 
             case FMD_RIGHT:
-                mnPageIndex += 1;
-                if (mnPageIndex >= mrSlideSorter.GetModel().GetPageCount())
-                {
+                if (mnPageIndex < nPageCount-1)
+                    mnPageIndex += 1;
+                else if (mbIsVerticalWrapActive)
                     mnPageIndex = 0;
-                    SetFocusToToolBox();
-                }
                 break;
 
             case FMD_UP:
             {
-                int nColumn = mnPageIndex % nColumnCount;
-                mnPageIndex -= nColumnCount;
-                if (mnPageIndex < 0)
+                const sal_Int32 nCandidate (mnPageIndex - nColumnCount);
+                if (nCandidate < 0)
                 {
-                    // Wrap arround to the bottom row or the one above and
-                    // go to the correct column.
-                    int nCandidate = mrSlideSorter.GetModel().GetPageCount()-1;
-                    int nCandidateColumn = nCandidate % nColumnCount;
-                    if (nCandidateColumn > nColumn)
-                        mnPageIndex = nCandidate - (nCandidateColumn-nColumn);
-                    else if (nCandidateColumn < nColumn)
-                        mnPageIndex = nCandidate
-                            - nColumnCount
-                            + (nColumn - nCandidateColumn);
-                    else
-                        mnPageIndex = nCandidate;
+                    if (mbIsVerticalWrapActive)
+                    {
+                        // Wrap arround to the bottom row or the one above
+                        // and go to the correct column.
+                        const sal_Int32 nLastIndex (nPageCount-1);
+                        const sal_Int32 nLastColumn (nLastIndex % nColumnCount);
+                        const sal_Int32 nCurrentColumn (mnPageIndex%nColumnCount);
+                        if (nLastColumn >= nCurrentColumn)
+                        {
+                            // The last row contains the current column.
+                            mnPageIndex = nLastIndex - (nLastColumn-nCurrentColumn);
+                        }
+                        else
+                        {
+                            // Only the second to last row contains the current column.
+                            mnPageIndex = nLastIndex - nLastColumn
+                                - nColumnCount
+                                + nCurrentColumn;
+                        }
+                    }
+                }
+                else
+                {
+                    // Move the focus the previous row.
+                    mnPageIndex = nCandidate;
                 }
             }
             break;
 
             case FMD_DOWN:
             {
-                int nColumn = mnPageIndex % nColumnCount;
-                mnPageIndex += nColumnCount;
-                if (mnPageIndex >= mrSlideSorter.GetModel().GetPageCount())
+                const sal_Int32 nCandidate (mnPageIndex + nColumnCount);
+                if (nCandidate >= nPageCount)
                 {
-                    // Wrap arround to the correct column.
-                    mnPageIndex = nColumn;
+                    if (mbIsVerticalWrapActive)
+                    {
+                        // Wrap arround to the correct column.
+                        mnPageIndex = mnPageIndex % nColumnCount;
+                    }
+                    else
+                    {
+                        // Do not move the focus.
+                    }
+                }
+                else
+                {
+                    // Move the focus to the next row.
+                    mnPageIndex = nCandidate;
                 }
             }
             break;
+        }
+
+        if (mnPageIndex < 0)
+        {
+            OSL_ASSERT(mnPageIndex>=0);
+            mnPageIndex = 0;
+        }
+        else if (mnPageIndex >= nPageCount)
+        {
+            OSL_ASSERT(mnPageIndex<nPageCount);
+            mnPageIndex = nPageCount - 1;
         }
 
         if (mbPageIsFocused)

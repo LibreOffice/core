@@ -33,6 +33,7 @@
 #define SD_SLIDESORTER_VIEW_LAYERED_DEVICE_HXX
 
 #include "view/SlsILayerPainter.hxx"
+#include "SlideSorter.hxx"
 
 #include <tools/gen.hxx>
 #include <vcl/region.hxx>
@@ -53,7 +54,7 @@ class LayeredDevice
 
 {
 public:
-    LayeredDevice (const ::boost::shared_ptr< ::Window>& rpTargetWindow);
+    LayeredDevice (const SharedSdWindow& rpTargetWindow);
     ~LayeredDevice (void);
 
     void Invalidate (
@@ -78,33 +79,10 @@ public:
 
     void Dispose (void);
 
-    class Layer
-    {
-    public:
-        Layer (void);
-
-        void Initialize (const ::boost::shared_ptr< ::Window>& rpTargetWindow);
-        void Invalidate (const Rectangle& rInvalidationBox);
-        void Validate (const MapMode& rMapMode);
-        void Repaint (
-            OutputDevice& rTargetDevice,
-            const Rectangle& rRepaintRectangle);
-        void Resize (const Size& rSize);
-        void AddPainter (const SharedILayerPainter& rpPainter);
-        void RemovePainter (const SharedILayerPainter& rpPainter);
-        bool HasPainter (void) const;
-        void Dispose (void);
-
-    private:
-        ::boost::shared_ptr<VirtualDevice> mpLayerDevice;
-        ::std::vector<SharedILayerPainter> maPainters;
-        Region maInvalidationRegion;
-        void ValidateRectangle (const Rectangle& rBox);
-    };
-
 private:
-    const ::boost::shared_ptr< ::Window> mpTargetWindow;
-    ::std::vector<Layer> maLayers;
+    SharedSdWindow mpTargetWindow;
+    class LayerContainer;
+    ::boost::scoped_ptr<LayerContainer> mpLayers;
     ::boost::scoped_ptr<VirtualDevice> mpBackBuffer;
     MapMode maSavedMapMode;
 

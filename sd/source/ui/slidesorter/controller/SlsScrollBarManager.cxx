@@ -244,7 +244,7 @@ void ScrollBarManager::AdaptWindowSize (const Rectangle& rArea)
 void ScrollBarManager::UpdateScrollBars (bool bResetThumbPosition, bool bUseScrolling)
 {
     Rectangle aModelArea (mrSlideSorter.GetView().GetModelArea());
-    ::boost::shared_ptr<sd::Window> pWindow (mrSlideSorter.GetContentWindow());
+    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
     Size aWindowModelSize (pWindow->PixelToLogic(pWindow->GetSizePixel()));
 
     // The horizontal scroll bar is only shown when the window is
@@ -336,6 +336,11 @@ IMPL_LINK(ScrollBarManager, VerticalScrollBarHandler, ScrollBar*, pScrollBar)
         mrSlideSorter.GetContentWindow()->SetVisibleXY (
             -1,
             nRelativePosition);
+        /*
+        mrSlideSorter.GetView().UpdatePageUnderMouse(
+            aMousePosition,
+            (rEvent.GetButtons() & MOUSE_LEFT)!=0);
+        */
     }
     return TRUE;
 }
@@ -368,7 +373,7 @@ void ScrollBarManager::SetWindowOrigin (
     mnHorizontalPosition = nHorizontalPosition;
     mnVerticalPosition = nVerticalPosition;
 
-    ::boost::shared_ptr<sd::Window> pWindow (mrSlideSorter.GetContentWindow());
+    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
     Size aViewSize (pWindow->GetViewSize());
     Point aOrigin (
         (long int) (mnHorizontalPosition * aViewSize.Width()),
@@ -569,7 +574,7 @@ int ScrollBarManager::GetHorizontalScrollBarHeight (void) const
 
 void ScrollBarManager::CalcAutoScrollOffset (const Point& rMouseWindowPosition)
 {
-    ::boost::shared_ptr<sd::Window> pWindow (mrSlideSorter.GetContentWindow());
+    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
 
     int nDx = 0;
     int nDy = 0;

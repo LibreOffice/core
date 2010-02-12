@@ -56,11 +56,12 @@ public:
             The page count is used to determine how wide the page number
             area has to be, how many digits to except for the largest page number.
     */
-    PageObjectLayouter (
+    PageObjectLayouter(
         const Size& rPageObjectWindowSize,
         const Size& rPreviewModelSize,
-        const ::boost::shared_ptr< ::Window>& rpWindow,
-        const int nPageCount);
+        const SharedSdWindow& rpWindow,
+        const sal_Int32 nPageCount);
+    ~PageObjectLayouter(void);
 
     enum Part {
         // This is the outer bounding box that includes the preview, page
@@ -70,10 +71,6 @@ public:
         Preview,
         // Bounding box of the mouse indicator indicator frame.
         MouseOverIndicator,
-        // Bounding box of the focus indicator frame.
-        FocusIndicator,
-        // Bounding box of the selection indicator frame.
-        SelectionIndicator,
         // Bounding box of the page number.
         PageNumber,
         // Bounding box of the pane name.
@@ -107,7 +104,9 @@ public:
             This device is used to translate between model and window
             coordinates.
         @param rpPageDescriptor
-            The page for which to calculate the bounding box.
+            The page for which to calculate the bounding box.  This may be
+            NULL.  When it is NULL then a generic bounding box is calculated
+            for the location (0,0).
         @param ePart
             The part of the page object for which to return the bounding
             box.
@@ -141,26 +140,19 @@ public:
         const Point& rWindowLocation);
 
 private:
-    /// Gap between border of page object and inside of selection rectangle.
-    static const sal_Int32 mnSelectionIndicatorOffset;
-    /// Thickness of the selection rectangle.
-    static const sal_Int32 mnSelectionIndicatorThickness;
-    /// Gap between border of page object and inside of focus rectangle.
-    static const sal_Int32 mnFocusIndicatorOffset;
     /// Minimal border around the page number area.
     static const sal_Int32 mnPageNumberOffset;
     static const sal_Int32 mnOuterBorderWidth;
+    static const sal_Int32 mnInfoAreaMinWidth;
     static const Size maButtonSize;
     static const sal_Int32 mnButtonGap;
 
-    const ::boost::shared_ptr< ::Window> mpWindow;
+    SharedSdWindow mpWindow;
     Size maPageObjectSize;
     double mnModelToWindowScale;
     Rectangle maPageObjectBoundingBox;
     Rectangle maPageNumberAreaBoundingBox;
     Rectangle maPreviewBoundingBox;
-    Rectangle maFocusIndicatorBoundingBox;
-    Rectangle maSelectionIndicatorBoundingBox;
     Rectangle maTransitionEffectBoundingBox;
     Rectangle maButtonAreaBoundingBox;
     const Image maTransitionEffectIcon;
@@ -169,7 +161,7 @@ private:
     Rectangle CalculatePreviewBoundingBox (
         Size& rPageObjectSize,
         const Size& rPreviewModelSize,
-        const Size& rPageNumberAreaSize);
+        const sal_Int32 nInfoAreaWidth);
 };
 
 

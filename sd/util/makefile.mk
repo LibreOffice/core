@@ -90,7 +90,7 @@ SHL1STDLIBS+= \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
     $(VOSLIB) \
-    $(CANVASLIB) \
+    $(CANVASTOOLSLIB) \
     $(SALLIB) \
     $(AVMEDIALIB)
 

@@ -31,6 +31,8 @@
 #ifndef SD_SLIDESORTER_SLIDE_SORTER_SCROLL_BAR_MANAGER_HXX
 #define SD_SLIDESORTER_SLIDE_SORTER_SCROLL_BAR_MANAGER_HXX
 
+#include "SlideSorter.hxx"
+
 #include <tools/link.hxx>
 #include <tools/gen.hxx>
 #include <vcl/timer.hxx>
@@ -216,7 +218,7 @@ private:
     /** The content window is the one whose view port is controlled by the
         scroll bars.
     */
-    ::boost::shared_ptr<sd::Window> mpContentWindow;
+    SharedSdWindow mpContentWindow;
 
     ::boost::function<void(void)> maAutoScrollFunctor;
 

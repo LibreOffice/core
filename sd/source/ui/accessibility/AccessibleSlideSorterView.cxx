@@ -809,10 +809,9 @@ AccessibleSlideSorterView::Implementation::~Implementation (void)
 
 void AccessibleSlideSorterView::Implementation::UpdateVisibility (void)
 {
-    ::sd::slidesorter::view::SlideSorterView::PageRange aRange (
-        mrSlideSorter.GetView().GetVisiblePageRange());
-    mnFirstVisibleChild = aRange.first;
-    mnLastVisibleChild = aRange.second;
+    Pair aRange (mrSlideSorter.GetView().GetVisiblePageRange());
+    mnFirstVisibleChild = aRange.A();
+    mnLastVisibleChild = aRange.B();
 }
 
 
@@ -850,7 +849,7 @@ void AccessibleSlideSorterView::Implementation::Clear (void)
 
 sal_Int32 AccessibleSlideSorterView::Implementation::GetVisibleChildCount (void) const
 {
-    if (mnFirstVisibleChild <= mnLastVisibleChild)
+    if (mnFirstVisibleChild <= mnLastVisibleChild && mnFirstVisibleChild>=0)
         return mnLastVisibleChild - mnFirstVisibleChild + 1;
     else
         return 0;

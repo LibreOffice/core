@@ -62,4 +62,8 @@ Resource IMG_ICONS
         ImageBitmap = Bitmap { File = "commandimagelist/lc_insertpage.png" ; };
     };
 
+    Image IMAGE_SHADOW
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_shadow.png" ; };
+    };
 };

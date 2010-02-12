@@ -35,7 +35,6 @@
 #include "controller/SlsFocusManager.hxx"
 #include "fupoor.hxx"
 #include <svtools/transfer.hxx>
-//#include <memory>
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 
@@ -94,6 +93,8 @@ public:
 
     void MouseDragged (const AcceptDropEvent& rEvent);
 
+    class MouseMultiSelector;
+
 protected:
     SlideSorter& mrSlideSorter;
     SlideSorterController& mrController;
@@ -106,7 +107,6 @@ protected:
 
 private:
     class SubstitutionHandler;
-    class RectangleSelector;
     class EventDescriptor;
 
     /// Set in MouseButtonDown this flag indicates that a page has been hit.
@@ -128,7 +128,7 @@ private:
     bool mbProcessingMouseButtonDown;
 
     ::boost::scoped_ptr<SubstitutionHandler> mpSubstitutionHandler;
-    ::boost::scoped_ptr<RectangleSelector> mpRectangleSelector;
+    ::boost::scoped_ptr<MouseMultiSelector> mpMouseMultiSelector;
 
     /** Remember where the left mouse button was pressed.
     */

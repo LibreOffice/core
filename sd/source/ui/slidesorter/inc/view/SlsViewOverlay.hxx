@@ -235,10 +235,7 @@ private:
         index.
     */
     bool mbIsBeforePage;
-    ImageList maIcons;
-    Image maIconWithBorder;
-    Image maIcon;
-    Image maMask;
+    BitmapEx maIcon;
     void SetPositionAndSize (const Rectangle& rBoundingBox);
 };
 

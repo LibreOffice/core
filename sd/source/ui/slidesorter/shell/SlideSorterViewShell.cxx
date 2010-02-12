@@ -191,7 +191,7 @@ void SlideSorterViewShell::Initialize (void)
     // the new view shell.  (One is created earlier while the construtor
     // of the base class is executed.  At that time the correct
     // accessibility object can not be constructed.)
-    ::boost::shared_ptr<sd::Window> pWindow (mpSlideSorter->GetContentWindow());
+    SharedSdWindow pWindow (mpSlideSorter->GetContentWindow());
     if (pWindow)
     {
         pWindow->Hide();
@@ -544,6 +544,23 @@ void SlideSorterViewShell::ArrangeGUIElements (void)
     mpSlideSorter->ArrangeGUIElements(
         maViewPos,
         maViewSize);
+}
+
+
+
+
+bool SlideSorterViewShell::HandleScrollCommand (const CommandEvent& rEvent, ::sd::Window* pWindow)
+{
+    bool bDone = ViewShell::HandleScrollCommand(rEvent, pWindow);
+
+    if (bDone)
+    {
+        OSL_ASSERT(mpSlideSorter.get()!=NULL);
+        if (rEvent.GetCommand() == COMMAND_WHEEL)
+            mpSlideSorter->GetView().UpdatePageUnderMouse(rEvent.GetMousePosPixel(), false);
+    }
+
+    return bDone;
 }
 
 

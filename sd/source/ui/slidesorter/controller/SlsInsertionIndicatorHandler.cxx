@@ -51,7 +51,8 @@ InsertionIndicatorHandler::InsertionIndicatorHandler (SlideSorter& rSlideSorter)
           mrSlideSorter.GetView().GetOverlay().GetInsertionIndicatorOverlay()),
       mnInsertionIndex(-1),
       mbIsBeforePage(false),
-      mbIsActive(false)
+      mbIsActive(false),
+      mbIsReadOnly(mrSlideSorter.GetModel().IsReadOnly())
 {
 }
 
@@ -72,7 +73,8 @@ void InsertionIndicatorHandler::Start (const Point& rMouseModelPosition)
         OSL_ASSERT(!mbIsActive);
     }
 
-    if (mrSlideSorter.GetProperties()->IsUIReadOnly())
+    mbIsReadOnly = mrSlideSorter.GetModel().IsReadOnly();
+    if (mbIsReadOnly)
         return;
 
     SetPosition(rMouseModelPosition);
@@ -85,9 +87,10 @@ void InsertionIndicatorHandler::Start (const Point& rMouseModelPosition)
 
 void InsertionIndicatorHandler::UpdatePosition (const Point& rMouseModelPosition)
 {
-    OSL_ASSERT(mbIsActive);
+    if ( ! mbIsActive)
+        return;
 
-    if (mrSlideSorter.GetProperties()->IsUIReadOnly())
+    if (mbIsReadOnly)
         return;
 
     SetPosition(rMouseModelPosition);
@@ -98,7 +101,12 @@ void InsertionIndicatorHandler::UpdatePosition (const Point& rMouseModelPosition
 
 void InsertionIndicatorHandler::End (void)
 {
-    OSL_ASSERT(mbIsActive);
+    if ( ! mbIsActive)
+        return;
+
+    if (mbIsReadOnly)
+        return;
+
     GetInsertAnimator()->SetInsertPosition(-1, false);
 
     mbIsActive = false;
@@ -119,7 +127,10 @@ bool InsertionIndicatorHandler::IsActive (void) const
 
 sal_Int32 InsertionIndicatorHandler::GetInsertionPageIndex (void) const
 {
-    return mnInsertionIndex;
+    if (mbIsReadOnly)
+        return -1;
+    else
+        return mnInsertionIndex;
 }
 
 

@@ -39,6 +39,8 @@
 #include "SlideSorter.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "view/SlsLayouter.hxx"
+#include "view/SlsTheme.hxx"
+#include <boost/scoped_ptr.hpp>
 
 namespace sd { namespace slidesorter { namespace cache { class PageCache; } } }
 
@@ -47,24 +49,35 @@ namespace sd { namespace slidesorter { namespace view {
 class Layouter;
 class PageObjectLayouter;
 
+namespace { class FramePainter;  }
+
+
 class PageObjectPainter
 {
 public:
     PageObjectPainter (const SlideSorter& rSlideSorter);
+    ~PageObjectPainter (void);
 
     void PaintPageObject (
         OutputDevice& rDevice,
         const model::SharedPageDescriptor& rpDescriptor);
+
+    void NotifyResize (void);
 
 private:
     const Layouter& mrLayouter;
     ::boost::shared_ptr<PageObjectLayouter> mpPageObjectLayouter;
     ::boost::shared_ptr<cache::PageCache> mpCache;
     ::boost::shared_ptr<controller::Properties> mpProperties;
-    ::boost::scoped_ptr<Font> mpFont;
+    ::boost::shared_ptr<view::Theme> mpTheme;
+    ::boost::shared_ptr<Font> mpPageNumberFont;
     BitmapEx maStartPresentationIcon;
     BitmapEx maShowSlideIcon;
     BitmapEx maNewSlideIcon;
+    ::boost::scoped_ptr<FramePainter> mpShadowPainter;
+    Bitmap maNormalBackground;
+    Bitmap maSelectionBackground;
+    Bitmap maMouseOverBackground;
 
     void PaintBackground (
         OutputDevice& rDevice,
@@ -81,8 +94,10 @@ private:
     void PaintButtons (
         OutputDevice& rDevice,
         const model::SharedPageDescriptor& rpDescriptor) const;
-
-    ColorData GetColorForVisualState (const model::SharedPageDescriptor& rpDescriptor) const;
+    void PrepareBackgrounds (OutputDevice& rDevice);
+    Bitmap CreateBackgroundBitmap(
+        const OutputDevice& rReferenceDevice,
+        const Theme::ColorType eType) const;
 };
 
 } } } // end of namespace sd::slidesorter::view

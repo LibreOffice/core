@@ -70,8 +70,8 @@ namespace sd { namespace slidesorter { namespace view {
 class LayeredDevice;
 class Layouter;
 class PageObjectPainter;
+class SelectionPainter;
 class ViewOverlay;
-
 
 class SlideSorterView
     : public sd::View,
@@ -87,6 +87,7 @@ public:
 
     */
     SlideSorterView (SlideSorter& rSlideSorter);
+    void Init (void);
 
     virtual ~SlideSorterView (void);
     void Dispose (void);
@@ -179,20 +180,22 @@ public:
     */
     void SetSelectionRectangleVisibility (bool bVisible);
 
-    typedef ::std::pair<sal_Int32,sal_Int32> PageRange;
     /** Return the range of currently visible page objects including the
         first and last one in that range.
         @return
             The returned pair of page object indices is empty when the
             second index is lower than the first.
     */
-    PageRange GetVisiblePageRange (void);
+    Pair GetVisiblePageRange (void);
 
     /** Add a shape to the page.  Typically used from inside
         PostModelChange().
     */
     void AddSdrObject (SdrObject& rObject);
 
+    void UpdatePageUnderMouse (
+        const Point& rMousePosition,
+        const bool bIsMouseButtonDown);
     void SetPageUnderMouse (const model::SharedPageDescriptor& rpDescriptor);
     void SetButtonUnderMouse (const sal_Int32 nButtonIndex);
 
@@ -220,13 +223,13 @@ protected:
 private:
     SlideSorter& mrSlideSorter;
     model::SlideSorterModel& mrModel;
+    bool mbIsDisposed;
     ::std::auto_ptr<Layouter> mpLayouter;
     bool mbPageObjectVisibilitiesValid;
     ::boost::shared_ptr<cache::PageCache> mpPreviewCache;
     ::boost::shared_ptr<LayeredDevice> mpLayeredDevice;
     ::boost::shared_ptr<ViewOverlay> mpViewOverlay;
-    int mnFirstVisiblePageIndex;
-    int mnLastVisiblePageIndex;
+    Range maVisiblePageRange;
     bool mbModelChangedWhileModifyEnabled;
     Size maPreviewSize;
     bool mbPreciousFlagUpdatePending;
@@ -235,6 +238,7 @@ private:
     model::SharedPageDescriptor mpPageUnderMouse;
     sal_Int32 mnButtonUnderMouse;
     ::boost::shared_ptr<PageObjectPainter> mpPageObjectPainter;
+    ::boost::shared_ptr<SelectionPainter> mpSelectionPainter;
 
     /** Determine the visibility of all page objects.
     */

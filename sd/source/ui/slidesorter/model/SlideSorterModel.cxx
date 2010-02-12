@@ -48,6 +48,7 @@
 
 #include "ViewShellBase.hxx"
 #include "DrawViewShell.hxx"
+#include "DrawDocShell.hxx"
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include "FrameView.hxx"
@@ -88,6 +89,13 @@ SlideSorterModel::SlideSorterModel (SlideSorter& rSlideSorter)
 SlideSorterModel::~SlideSorterModel (void)
 {
     ClearDescriptorList ();
+}
+
+
+
+
+void SlideSorterModel::Init (void)
+{
 }
 
 
@@ -492,5 +500,19 @@ void SlideSorterModel::AdaptSize (void)
     else
         maPageDescriptors.resize(0);
 }
+
+
+
+
+bool SlideSorterModel::IsReadOnly (void) const
+{
+    if (mrSlideSorter.GetViewShellBase() != NULL
+        && mrSlideSorter.GetViewShellBase()->GetDocShell())
+        return mrSlideSorter.GetViewShellBase()->GetDocShell()->IsReadOnly();
+    else
+        return true;
+}
+
+
 
 } } } // end of namespace ::sd::slidesorter::model

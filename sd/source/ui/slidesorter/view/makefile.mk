@@ -52,15 +52,17 @@ SRS1NAME=$(TARGET)
 SRC1FILES =	\
     SlsIcons.src
 
-SLOFILES =      								\
-    $(SLO)$/SlideSorterView.obj					\
-    $(SLO)$/SlsFontProvider.obj					\
-    $(SLO)$/SlsInsertAnimator.obj				\
-    $(SLO)$/SlsLayeredDevice.obj				\
-    $(SLO)$/SlsLayouter.obj						\
-    $(SLO)$/SlsPageObjectLayouter.obj			\
-    $(SLO)$/SlsPageObjectPainter.obj			\
-    $(SLO)$/SlsViewCacheContext.obj				\
+SLOFILES =      							\
+    $(SLO)$/SlideSorterView.obj				\
+    $(SLO)$/SlsFontProvider.obj				\
+    $(SLO)$/SlsInsertAnimator.obj			\
+    $(SLO)$/SlsLayeredDevice.obj			\
+    $(SLO)$/SlsLayouter.obj					\
+    $(SLO)$/SlsPageObjectLayouter.obj		\
+    $(SLO)$/SlsPageObjectPainter.obj		\
+    $(SLO)$/SlsSelectionPainter.obj			\
+    $(SLO)$/SlsTheme.obj					\
+    $(SLO)$/SlsViewCacheContext.obj			\
     $(SLO)$/SlsViewOverlay.obj
 
 # --- Tagets -------------------------------------------------------

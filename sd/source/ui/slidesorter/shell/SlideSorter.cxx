@@ -38,6 +38,7 @@
 #include "controller/SlsScrollBarManager.hxx"
 #include "controller/SlsProperties.hxx"
 #include "view/SlideSorterView.hxx"
+#include "view/SlsTheme.hxx"
 #include "model/SlideSorterModel.hxx"
 
 #include "glob.hrc"
@@ -136,11 +137,13 @@ SlideSorter::SlideSorter (
       mpViewShell(&rViewShell),
       mpViewShellBase(&rViewShell.GetViewShellBase()),
       mpContentWindow(rpContentWindow),
+      mbOwnesContentWindow(false),
       mpHorizontalScrollBar(rpHorizontalScrollBar),
       mpVerticalScrollBar(rpVerticalScrollBar),
       mpScrollBarBox(rpScrollBarBox),
       mbLayoutPending(true),
-      mpProperties(new controller::Properties())
+      mpProperties(new controller::Properties()),
+      mpTheme(new view::Theme(mpProperties))
 {
 }
 
@@ -159,11 +162,13 @@ SlideSorter::SlideSorter (
       mpViewShell(pViewShell),
       mpViewShellBase(&rBase),
       mpContentWindow(new ContentWindow(rParentWindow,*this )),
+      mbOwnesContentWindow(true),
       mpHorizontalScrollBar(new ScrollBar(&rParentWindow,WinBits(WB_HSCROLL | WB_DRAG))),
       mpVerticalScrollBar(new ScrollBar(&rParentWindow,WinBits(WB_VSCROLL | WB_DRAG))),
       mpScrollBarBox(new ScrollBarBox(&rParentWindow)),
       mbLayoutPending(true),
-      mpProperties(new controller::Properties())
+      mpProperties(new controller::Properties()),
+      mpTheme(new view::Theme(mpProperties))
 {
 }
 
@@ -194,7 +199,7 @@ void SlideSorter::Init (void)
     SetupListeners ();
 
     // Initialize the window.
-    ::boost::shared_ptr<sd::Window> pWindow (GetContentWindow());
+    SharedSdWindow pWindow (GetContentWindow());
     if (pWindow != NULL)
     {
         ::Window* pParentWindow = pWindow->GetParent();
@@ -213,6 +218,7 @@ void SlideSorter::Init (void)
 
         mbIsValid = true;
     }
+
 }
 
 
@@ -238,8 +244,17 @@ SlideSorter::~SlideSorter (void)
     mpHorizontalScrollBar.reset();
     mpVerticalScrollBar.reset();
     mpScrollBarBox.reset();
-    OSL_ASSERT(mpContentWindow.unique());
-    OSL_ASSERT(mpContentWindow.use_count()==1);
+
+    if (mbOwnesContentWindow)
+    {
+        OSL_ASSERT(mpContentWindow.unique());
+    }
+    else
+    {
+        // Assume that outside this class only the owner holds a reference
+        // to the content window.
+        OSL_ASSERT(mpContentWindow.use_count()==2);
+    }
     mpContentWindow.reset();
 }
 
@@ -325,7 +340,7 @@ void SlideSorter::Paint (const Rectangle& rRepaintArea)
 
 
 
-::boost::shared_ptr<sd::Window> SlideSorter::GetContentWindow (void) const
+::SharedSdWindow SlideSorter::GetContentWindow (void) const
 {
     return mpContentWindow;
 }
@@ -360,7 +375,7 @@ void SlideSorter::SetupControls (::Window* )
 
 void SlideSorter::SetupListeners (void)
 {
-    ::boost::shared_ptr<sd::Window> pWindow (GetContentWindow());
+    SharedSdWindow pWindow (GetContentWindow());
     if (pWindow)
     {
         ::Window* pParentWindow = pWindow->GetParent();
@@ -392,7 +407,7 @@ void SlideSorter::ReleaseListeners (void)
 {
     mpSlideSorterController->GetScrollBarManager().Disconnect();
 
-    ::boost::shared_ptr<sd::Window> pWindow (GetContentWindow());
+    SharedSdWindow pWindow (GetContentWindow());
     if (pWindow)
     {
 
@@ -430,7 +445,12 @@ void SlideSorter::CreateModelViewController (void)
     mpSlideSorterController.reset(CreateController());
     DBG_ASSERT (mpSlideSorterController.get()!=NULL,
         "Can not create controller for slide browser");
+
+    // Now that model, view, and controller are constructed, do the
+    // initialization that relies on all three being in place.
+    mpSlideSorterModel->Init();
     mpSlideSorterController->Init();
+    mpSlideSorterView->Init();
 }
 
 
@@ -551,9 +571,8 @@ void SlideSorter::SetCurrentFunction (const FunctionReference& rpFunction)
     }
     else
     {
-        ::boost::shared_ptr<ContentWindow> pWindow
-            = ::boost::dynamic_pointer_cast<ContentWindow>(GetContentWindow());
-        if (pWindow.get() != NULL)
+        ContentWindow* pWindow = dynamic_cast<ContentWindow*>(GetContentWindow().get());
+        if (pWindow != NULL)
             pWindow->SetCurrentFunction(rpFunction);
     }
 }
@@ -563,7 +582,17 @@ void SlideSorter::SetCurrentFunction (const FunctionReference& rpFunction)
 
 ::boost::shared_ptr<controller::Properties> SlideSorter::GetProperties (void) const
 {
+    OSL_ASSERT(mpProperties);
     return mpProperties;
+}
+
+
+
+
+::boost::shared_ptr<view::Theme> SlideSorter::GetTheme (void) const
+{
+    OSL_ASSERT(mpTheme);
+    return mpTheme;
 }
 
 
@@ -665,6 +694,9 @@ long ContentWindow::Notify (NotifyEvent& rEvent)
 
 
 } // end of anonymous namespace
+
+
+
 
 
 } } // end of namespace ::sd::slidesorter

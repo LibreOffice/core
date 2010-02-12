@@ -39,6 +39,7 @@
 #include "view/SlideSorterView.hxx"
 #include "view/SlsPageObjectLayouter.hxx"
 #include "view/SlsLayouter.hxx"
+#include "view/SlsTheme.hxx"
 #include "SlsIcons.hxx"
 #include "cache/SlsPageCache.hxx"
 #include "controller/SlsProperties.hxx"
@@ -54,6 +55,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/bmpacc.hxx>
+#include <vcl/virdev.hxx>
+#include <canvas/elapsedtime.hxx>
 
 using namespace ::drawinglayer::primitive2d;
 using namespace ::basegfx;
@@ -62,29 +65,6 @@ namespace sd { namespace slidesorter { namespace view {
 
 namespace {
 
-// Reds
-#define Amber 0xff7e00
-
-// Greens
-#define AndroidGreen 0xa4c639
-#define AppleGreen 0x8db600
-#define Asparagus 0x87a96b
-
-// Blues
-#define Azure 0x000fff
-#define DarkCerulean 0x08457e
-#define StellaBlue 0x009ee1
-#define AirForceBlue 0x5d8aa8
-
-// Off white
-#define OldLace 0xfdf5e6
-
-// Off grays
-#define Arsenic 0x3b444b
-
-#define MouseOverColor (0x59000000 | StellaBlue)
-
-#define CornerRadius 4.0
 
 UINT8 Blend (
     const UINT8 nValue1,
@@ -150,9 +130,95 @@ void AdaptTransparency (AlphaMask& rMask, const double nAlpha)
 }
 
 
+/** Bitmap with offset that is used when the bitmap is painted.  The bitmap
+*/
+class OffsetBitmap
+{
+public:
+    /** Create one of the eight shadow bitmaps from one that combines them
+        all.  This larger bitmap is expected to have dimension NxN with
+        N=1+2*M.  Of this larger bitmap there are created four corner
+        bitmaps of size 2*M x 2*M and four side bitmaps of sizes 1xM (top
+        and bottom) and Mx1 (left and right).  The corner bitmaps have each
+        one quadrant of size MxM that is painted under the interior of the
+        frame.
+        @param rBitmap
+            The larger bitmap of which the eight shadow bitmaps are cut out
+            from.
+        @param nHorizontalPosition
+            Valid values are -1 (left), 0 (center), and +1 (right).
+        @param nVerticalPosition
+            Valid values are -1 (top), 0 (center), and +1 (bottom).
+    */
+    OffsetBitmap (
+        const BitmapEx& rBitmap,
+        const sal_Int32 nHorizontalPosition,
+        const sal_Int32 nVerticalPosition);
+
+    /** Create bitmap and offset from the given values.  Corner bitmaps are
+        constructed with the given width and height.  Side bitmaps are
+        stretched along one axis to reduce the paint calls when the sides of
+        a frame are painted.
+        @param rBitmap
+            The larger bitmap that contains the four corner bitmaps and the
+            four side bitmaps.
+    */
+    void SetBitmap (
+        const BitmapEx& rBitmap,
+        const sal_Int32 nOriginX,
+        const sal_Int32 nOriginY,
+        const sal_Int32 nWidth,
+        const sal_Int32 nHeight,
+        const sal_Int32 nOffsetX,
+        const sal_Int32 nOffsetY);
+
+    /** Use the given device to paint the bitmap at the location that is the
+        sum of the given anchor and the internal offset.
+    */
+    void PaintCorner (OutputDevice& rDevice, const Point& rAnchor) const;
+
+    /** Use the given device to paint the bitmap stretched between the two
+        given locations.  Offsets of the adjacent corner bitmaps and the
+        offset of the side bitmap are used to determine the area that is to
+        be filled with the side bitmap.
+    */
+    void PaintSide (
+        OutputDevice& rDevice,
+        const Point& rAnchor1,
+        const Point& rAnchor2,
+        const OffsetBitmap& rCornerBitmap1,
+        const OffsetBitmap& rCornerBitmap2) const;
+
+private:
+    BitmapEx maBitmap;
+    Point maOffset;
+};
+
+class FramePainter
+{
+public:
+    FramePainter (const BitmapEx& rBitmap);
+    ~FramePainter (void);
+    void PaintFrame (OutputDevice&rDevice, const Rectangle aBox) const;
+
+private:
+    OffsetBitmap maShadowTopLeft;
+    OffsetBitmap maShadowTop;
+    OffsetBitmap maShadowTopRight;
+    OffsetBitmap maShadowLeft;
+    OffsetBitmap maShadowRight;
+    OffsetBitmap maShadowBottomLeft;
+    OffsetBitmap maShadowBottom;
+    OffsetBitmap maShadowBottomRight;
+    bool mbIsValid;
+};
+
+
 } // end of anonymous namespace
 
 
+
+//===== PageObjectPainter =====================================================
 
 PageObjectPainter::PageObjectPainter (
     const SlideSorter& rSlideSorter)
@@ -160,15 +226,30 @@ PageObjectPainter::PageObjectPainter (
       mpPageObjectLayouter(),
       mpCache(rSlideSorter.GetView().GetPreviewCache()),
       mpProperties(rSlideSorter.GetProperties()),
-      mpFont(),
+      mpTheme(rSlideSorter.GetTheme()),
+      mpPageNumberFont(),
       maStartPresentationIcon(),
       maShowSlideIcon(),
-      maNewSlideIcon()
+      maNewSlideIcon(),
+      mpShadowPainter(),
+      maNormalBackground(),
+      maSelectionBackground(),
+      maMouseOverBackground()
 {
     LocalResource aResource (IMG_ICONS);
+
     maStartPresentationIcon = Image(SdResId(IMAGE_PRESENTATION)).GetBitmapEx();
     maShowSlideIcon = Image(SdResId(IMAGE_SHOW_SLIDE)).GetBitmapEx();
     maNewSlideIcon = Image(SdResId(IMAGE_NEW_SLIDE)).GetBitmapEx();
+
+    mpShadowPainter.reset(new FramePainter(mpTheme->GetIcon(Theme::RawShadow)));
+}
+
+
+
+
+PageObjectPainter::~PageObjectPainter (void)
+{
 }
 
 
@@ -187,20 +268,32 @@ void PageObjectPainter::PaintPageObject (
         return;
     }
 
-    if ( ! mpFont)
-    {
-        mpFont.reset(new Font(rDevice.GetFont()));
-        mpFont->SetWeight(WEIGHT_BOLD);
-    }
-    if (mpFont)
-        rDevice.SetFont(*mpFont);
+    if ( ! mpPageNumberFont)
+        mpPageNumberFont = mpTheme->CreateFont(Theme::PageNumberFont, rDevice);
+    PrepareBackgrounds(rDevice);
+
+    // Turn off antialiasing to avoid the bitmaps from being shifted by
+    // fractions of a pixel and thus show blurry edges.
+    const USHORT nSavedAntialiasingMode (rDevice.GetAntialiasing());
+    rDevice.SetAntialiasing(nSavedAntialiasingMode & ~ANTIALIASING_ENABLE_B2DDRAW);
 
     PaintBackground(rDevice, rpDescriptor);
     PaintPreview(rDevice, rpDescriptor);
     PaintPageNumber(rDevice, rpDescriptor);
     PaintTransitionEffect(rDevice, rpDescriptor);
     PaintButtons(rDevice, rpDescriptor);
-    //    PaintBorder(rDevice, rpDescriptor);
+
+    rDevice.SetAntialiasing(nSavedAntialiasingMode);
+}
+
+
+
+
+void PageObjectPainter::NotifyResize (void)
+{
+    maNormalBackground.SetEmpty();
+    maSelectionBackground.SetEmpty();
+    maMouseOverBackground.SetEmpty();
 }
 
 
@@ -215,36 +308,24 @@ void PageObjectPainter::PaintBackground (
         PageObjectLayouter::PageObject,
         PageObjectLayouter::WindowCoordinateSystem));
 
-    rDevice.SetLineColor();
-    const USHORT nSavedAntialiasingMode (rDevice.GetAntialiasing());
-    rDevice.SetAntialiasing(nSavedAntialiasingMode | ANTIALIASING_ENABLE_B2DDRAW);
-
-    const ColorData nColor (GetColorForVisualState(rpDescriptor));
-    rDevice.SetFillColor(Color(nColor & 0x00ffffff));
-    double nTransparency (COLORDATA_TRANSPARENCY(nColor)/255.0);
-    rDevice.DrawTransparent(
-        ::basegfx::B2DPolyPolygon(
-            ::basegfx::tools::createPolygonFromRect(
-                ::basegfx::B2DRectangle(aBox.Left(), aBox.Top(), aBox.Right(), aBox.Bottom()),
-                CornerRadius/aBox.GetWidth(),
-                CornerRadius/aBox.GetHeight())),
-        nTransparency);
-
     if (rpDescriptor->HasState(model::PageDescriptor::ST_MouseOver))
     {
-        rDevice.SetFillColor(Color(MouseOverColor & 0x00ffffff));
-        nTransparency = COLORDATA_TRANSPARENCY(MouseOverColor)/255.0;
-        nTransparency *= 1-rpDescriptor->GetVisualState().GetVisualStateBlend();
-        rDevice.DrawTransparent(
-            ::basegfx::B2DPolyPolygon(
-                ::basegfx::tools::createPolygonFromRect(
-                    ::basegfx::B2DRectangle(aBox.Left(), aBox.Top(), aBox.Right(), aBox.Bottom()),
-                    CornerRadius/aBox.GetWidth(),
-                    CornerRadius/aBox.GetHeight())),
-            nTransparency);
+        rDevice.DrawBitmap(
+            aBox.TopLeft(),
+            maMouseOverBackground);
     }
-
-    rDevice.SetAntialiasing(nSavedAntialiasingMode);
+    else if (rpDescriptor->HasState(model::PageDescriptor::ST_Selected))
+    {
+        rDevice.DrawBitmap(
+            aBox.TopLeft(),
+            maSelectionBackground);
+    }
+    else
+    {
+        rDevice.DrawBitmap(
+            aBox.TopLeft(),
+            maNormalBackground);
+    }
 }
 
 
@@ -254,7 +335,7 @@ void PageObjectPainter::PaintPreview (
     OutputDevice& rDevice,
     const model::SharedPageDescriptor& rpDescriptor) const
 {
-    const Rectangle aBox (mpPageObjectLayouter->GetBoundingBox(
+    Rectangle aBox (mpPageObjectLayouter->GetBoundingBox(
         rpDescriptor,
         PageObjectLayouter::Preview,
         PageObjectLayouter::WindowCoordinateSystem));
@@ -276,6 +357,11 @@ void PageObjectPainter::PaintPreview (
         rDevice.DrawBitmapEx(aBox.TopLeft(), aBitmap);
     }
 
+    // Draw border around preview.
+    --aBox.Left();
+    --aBox.Top();
+    ++aBox.Right();
+    ++aBox.Bottom();
     rDevice.SetLineColor(Color(0,0,0));
     rDevice.SetFillColor();
     rDevice.DrawRect(aBox);
@@ -297,6 +383,7 @@ void PageObjectPainter::PaintPageNumber (
     OSL_ASSERT(rpDescriptor->GetPage()!=NULL);
     const sal_Int32 nPageNumber ((rpDescriptor->GetPage()->GetPageNum() - 1) / 2 + 1);
     const String sPageNumber (String::CreateFromInt32(nPageNumber));
+    rDevice.SetFont(*mpPageNumberFont);
     rDevice.SetTextColor(Color(0x0848a8f));
     rDevice.DrawText(aBox.TopLeft(), sPageNumber);
 
@@ -308,7 +395,7 @@ void PageObjectPainter::PaintPageNumber (
         aBox.Top() -= 1;
         aBox.Right() += 2;
         aBox.Bottom() += 1;
-        rDevice.SetLineColor(Color(Azure));
+        rDevice.SetLineColor(Color(mpTheme->GetColor(Theme::PageNumberBorder)));
         rDevice.SetFillColor();
         rDevice.DrawRect(aBox);
 
@@ -323,14 +410,18 @@ void PageObjectPainter::PaintTransitionEffect (
     OutputDevice& rDevice,
     const model::SharedPageDescriptor& rpDescriptor) const
 {
-    const Rectangle aBox (mpPageObjectLayouter->GetBoundingBox(
-        rpDescriptor,
-        PageObjectLayouter::TransitionEffectIndicator,
-        PageObjectLayouter::WindowCoordinateSystem));
+    const SdPage* pPage = rpDescriptor->GetPage();
+    if (pPage!=NULL && pPage->getTransitionType() > 0)
+    {
+        const Rectangle aBox (mpPageObjectLayouter->GetBoundingBox(
+            rpDescriptor,
+            PageObjectLayouter::TransitionEffectIndicator,
+            PageObjectLayouter::WindowCoordinateSystem));
 
-    rDevice.DrawBitmapEx(
-        aBox.TopLeft(),
-        mpPageObjectLayouter->GetTransitionEffectIcon().GetBitmapEx());
+        rDevice.DrawBitmapEx(
+            aBox.TopLeft(),
+            mpPageObjectLayouter->GetTransitionEffectIcon().GetBitmapEx());
+    }
 }
 
 
@@ -351,12 +442,12 @@ void PageObjectPainter::PaintButtons (
     const USHORT nSavedAntialiasingMode (rDevice.GetAntialiasing());
     rDevice.SetAntialiasing(nSavedAntialiasingMode | ANTIALIASING_ENABLE_B2DDRAW);
 
-    rDevice.SetLineColor(Color(Arsenic));
+    rDevice.SetLineColor();
 
     const double nCornerRadius(3);
     for (int nButtonIndex=0; nButtonIndex<3; ++nButtonIndex)
     {
-        Color aButtonFillColor (AirForceBlue);
+        Color aButtonFillColor (mpTheme->GetColor(Theme::ButtonBackground));
         const Rectangle aBox (
             mpPageObjectLayouter->GetBoundingBox(
                 rpDescriptor,
@@ -421,36 +512,267 @@ void PageObjectPainter::PaintButtons (
 
 
 
-ColorData PageObjectPainter::GetColorForVisualState (
-    const model::SharedPageDescriptor& rpDescriptor) const
+void PageObjectPainter::PrepareBackgrounds (OutputDevice& rDevice)
 {
-    ColorData nColor;
-    switch (rpDescriptor->GetVisualState().GetCurrentVisualState())
+    if (maNormalBackground.IsEmpty())
     {
-        case model::VisualState::VS_Selected:
-            nColor = 0x80000000 | StellaBlue;
-            break;
-
-        case model::VisualState::VS_Focused:
-            nColor = AndroidGreen;
-            break;
-
-        case model::VisualState::VS_Current:
-            nColor = 0x80000000 | StellaBlue;
-            //            aColor = mpProperties->GetSelectionColor();
-            break;
-
-        case model::VisualState::VS_Excluded:
-            nColor = 0xcc929ca2;
-            break;
-
-        case model::VisualState::VS_None:
-        default:
-            nColor = OldLace;//0x80000000 | OldLace;
-            break;
+        maNormalBackground = CreateBackgroundBitmap(rDevice, Theme::NormalPage);
+        maSelectionBackground = CreateBackgroundBitmap(rDevice, Theme::SelectedPage);
+        maMouseOverBackground = CreateBackgroundBitmap(rDevice, Theme::MouseOverPage);
     }
+}
 
-    return nColor;
+
+
+
+Bitmap PageObjectPainter::CreateBackgroundBitmap(
+    const OutputDevice& rReferenceDevice,
+    const Theme::ColorType eColorType) const
+{
+    ::canvas::tools::ElapsedTime aTimer;
+    const double nStartTime (aTimer.getElapsedTime());
+
+    const Size aSize (mpPageObjectLayouter->GetPageObjectSize());
+    VirtualDevice aBitmapDevice (rReferenceDevice);
+    aBitmapDevice.SetOutputSizePixel(aSize);
+
+    OSL_TRACE("created bitmap after  %fms",(aTimer.getElapsedTime() - nStartTime)*1000);
+
+    // Paint the background with a linear gradient that starts some pixels
+    // below the top and ends some pixels above the bottom.
+#if 1
+    const sal_Int32 nDefaultConstantSize(aSize.Height()/4);
+    const sal_Int32 nMinimalGradientSize(40);
+    const sal_Int32 nHeight (aSize.Height());
+    const sal_Int32 nY1 (
+        ::std::max<sal_Int32>(
+            0,
+            ::std::min<sal_Int32>(
+                nDefaultConstantSize,
+                (nHeight - nMinimalGradientSize)/2)));
+    const sal_Int32 nY2 (nHeight-nY1);
+    const Color aTopColor(mpTheme->GetColor(eColorType, Theme::Fill1));
+    const Color aBottomColor(mpTheme->GetColor(eColorType, Theme::Fill2));
+    for (sal_Int32 nY=0; nY<nHeight; ++nY)
+    {
+        if (nY<=nY1)
+            aBitmapDevice.SetLineColor(aTopColor);
+        else if (nY>=nY2)
+            aBitmapDevice.SetLineColor(aBottomColor);
+        else
+        {
+            Color aColor (aTopColor);
+            aColor.Merge(aBottomColor, 255 * (nY2-nY) / (nY2-nY1));
+            aBitmapDevice.SetLineColor(aColor);
+        }
+        aBitmapDevice.DrawLine(Point(0,nY), Point(aSize.Width(),nY));
+    }
+#else
+    const Color aTopColor(mpTheme->GetColor(eColorType, Theme::Fill1));
+    const Color aBottomColor(mpTheme->GetColor(eColorType, Theme::Fill2));
+    Color aColor (aTopColor);
+    aColor.Merge(aBottomColor, 128);
+    aBitmapDevice.SetFillColor(aColor);
+    aBitmapDevice.SetLineColor(aColor);
+    aBitmapDevice.DrawRect(Rectangle(Point(0,0), aSize));
+#endif
+
+    OSL_TRACE("filled background after  %fms",(aTimer.getElapsedTime() - nStartTime)*1000);
+
+    // Paint the border.
+    aBitmapDevice.SetFillColor();
+    aBitmapDevice.SetLineColor(mpTheme->GetColor(eColorType, Theme::Border2));
+    aBitmapDevice.DrawRect(Rectangle(Point(0,0),aSize));
+    aBitmapDevice.SetLineColor(mpTheme->GetColor(eColorType, Theme::Border1));
+    aBitmapDevice.DrawLine(Point(0,0),Point(aSize.Width()-1,0));
+
+    OSL_TRACE("painted border after  %fms",(aTimer.getElapsedTime() - nStartTime)*1000);
+
+    // Get bounding box of the preview around which a shadow is painted.
+    // Compensate for the border around the preview.
+    Rectangle aBox (mpPageObjectLayouter->GetBoundingBox(
+        model::SharedPageDescriptor(),
+        PageObjectLayouter::Preview,
+        PageObjectLayouter::WindowCoordinateSystem));
+    aBox.Left() -= 1;
+    aBox.Top() -= 1;
+    aBox.Right() += 1;
+    aBox.Bottom() += 1;
+    mpShadowPainter->PaintFrame(aBitmapDevice, aBox);
+
+    OSL_TRACE("painted shadow border after  %fms",(aTimer.getElapsedTime() - nStartTime)*1000);
+
+    return aBitmapDevice.GetBitmap (Point(0,0),aSize);
+}
+
+
+
+
+//===== FramePainter ==========================================================
+
+FramePainter::FramePainter (const BitmapEx& rShadowBitmap)
+    : maShadowTopLeft(rShadowBitmap,-1,-1),
+      maShadowTop(rShadowBitmap,0,-1),
+      maShadowTopRight(rShadowBitmap,+1,-1),
+      maShadowLeft(rShadowBitmap,-1,0),
+      maShadowRight(rShadowBitmap,+1,0),
+      maShadowBottomLeft(rShadowBitmap,-1,+1),
+      maShadowBottom(rShadowBitmap,0,+1),
+      maShadowBottomRight(rShadowBitmap,+1,+1),
+      mbIsValid(false)
+{
+    if (rShadowBitmap.GetSizePixel().Width() == rShadowBitmap.GetSizePixel().Height()
+        && (rShadowBitmap.GetSizePixel().Width()-1)%2 == 0
+        && ((rShadowBitmap.GetSizePixel().Width()-1)/2)%2 == 0)
+    {
+        mbIsValid = true;
+    }
+    else
+    {
+        OSL_ASSERT(rShadowBitmap.GetSizePixel().Width() == rShadowBitmap.GetSizePixel().Height());
+        OSL_ASSERT((rShadowBitmap.GetSizePixel().Width()-1)%2 == 0);
+        OSL_ASSERT(((rShadowBitmap.GetSizePixel().Width()-1)/2)%2 == 0);
+    }
+}
+
+
+
+
+FramePainter::~FramePainter (void)
+{
+}
+
+
+
+
+void FramePainter::PaintFrame (
+    OutputDevice& rDevice,
+    const Rectangle aBox) const
+{
+    // Paint the shadow.
+    maShadowTopLeft.PaintCorner(rDevice, aBox.TopLeft());
+    maShadowTopRight.PaintCorner(rDevice, aBox.TopRight());
+    maShadowBottomLeft.PaintCorner(rDevice, aBox.BottomLeft());
+    maShadowBottomRight.PaintCorner(rDevice, aBox.BottomRight());
+    maShadowLeft.PaintSide(rDevice,
+        aBox.TopLeft(), aBox.BottomLeft(),
+        maShadowTopLeft, maShadowBottomLeft);
+    maShadowRight.PaintSide(rDevice,
+        aBox.TopRight(), aBox.BottomRight(),
+        maShadowTopRight, maShadowBottomRight);
+    maShadowTop.PaintSide(rDevice,
+        aBox.TopLeft(), aBox.TopRight(),
+        maShadowTopLeft, maShadowTopRight);
+    maShadowBottom.PaintSide(rDevice,
+        aBox.BottomLeft(), aBox.BottomRight(),
+        maShadowBottomLeft, maShadowBottomRight);
+}
+
+
+
+
+//===== OffsetBitmap ==========================================================
+
+OffsetBitmap::OffsetBitmap (
+    const BitmapEx& rBitmap,
+    const sal_Int32 nHorizontalPosition,
+    const sal_Int32 nVerticalPosition)
+    : maBitmap(),
+      maOffset()
+{
+    OSL_ASSERT(nHorizontalPosition>=-1 && nHorizontalPosition<=+1);
+    OSL_ASSERT(nVerticalPosition>=-1 && nVerticalPosition<=+1);
+
+    const sal_Int32 nS (1);
+    const sal_Int32 nC (::std::max<sal_Int32>(0,(rBitmap.GetSizePixel().Width()-nS)/2));
+    const sal_Int32 nO (nC/2);
+
+    const Point aOrigin(
+        nHorizontalPosition<0 ? 0 : (nHorizontalPosition == 0 ? nC : nC+nS),
+        nVerticalPosition<0 ? 0 : (nVerticalPosition == 0 ? nC : nC+nS));
+    const Size aSize(
+        nHorizontalPosition==0 ? nS : nC,
+        nVerticalPosition==0 ? nS : nC);
+    maBitmap = BitmapEx(rBitmap, aOrigin, aSize);
+    maOffset = Point(
+        nHorizontalPosition<0 ? -nO : nHorizontalPosition>0 ? -nO+1 : 0,
+        nVerticalPosition<0 ? -nO : nVerticalPosition>0 ? -nO+1 : 0);
+
+    // Enlarge the side bitmaps so that painting the frame requires less
+    // paint calls.
+    const sal_Int32 nSideBitmapSize (64);
+    if (nHorizontalPosition == 0)
+    {
+        maBitmap.Scale(Size(nSideBitmapSize,aSize.Height()), BMP_SCALE_FAST);
+    }
+    else if (nVerticalPosition == 0)
+    {
+        maBitmap.Scale(Size(aSize.Width(), nSideBitmapSize), BMP_SCALE_FAST);
+    }
+}
+
+
+
+
+void OffsetBitmap::PaintCorner (
+    OutputDevice& rDevice,
+    const Point& rAnchor) const
+{
+    rDevice.DrawBitmapEx(rAnchor+maOffset, maBitmap);
+}
+
+
+
+
+void OffsetBitmap::PaintSide (
+    OutputDevice& rDevice,
+    const Point& rAnchor1,
+    const Point& rAnchor2,
+    const OffsetBitmap& rCornerBitmap1,
+    const OffsetBitmap& rCornerBitmap2) const
+{
+    const Size aBitmapSize (maBitmap.GetSizePixel());
+    if (rAnchor1.Y() == rAnchor2.Y())
+    {
+        // Side is horizontal.
+        const sal_Int32 nY (rAnchor1.Y() + maOffset.Y());
+        const sal_Int32 nLeft (
+            rAnchor1.X()
+            + rCornerBitmap1.maBitmap.GetSizePixel().Width()
+            + rCornerBitmap1.maOffset.X());
+        const sal_Int32 nRight (
+            rAnchor2.X()
+            + rCornerBitmap2.maOffset.X()\
+            - 1);
+        for (sal_Int32 nX=nLeft; nX<=nRight; nX+=aBitmapSize.Width())
+            rDevice.DrawBitmapEx(
+                Point(nX,nY),
+                Size(std::min(aBitmapSize.Width(), nRight-nX+1),aBitmapSize.Height()),
+                maBitmap);
+    }
+    else if (rAnchor1.X() == rAnchor2.X())
+    {
+        // Side is vertical.
+        const sal_Int32 nX (rAnchor1.X() + maOffset.X());
+        const sal_Int32 nTop (
+            rAnchor1.Y()
+            + rCornerBitmap1.maBitmap.GetSizePixel().Height()
+            + rCornerBitmap1.maOffset.Y());
+        const sal_Int32 nBottom (
+            rAnchor2.Y()
+            + rCornerBitmap2.maOffset.Y()
+            - 1);
+        for (sal_Int32 nY=nTop; nY<=nBottom; nY+=aBitmapSize.Height())
+            rDevice.DrawBitmapEx(
+                Point(nX,nY),
+                Size(aBitmapSize.Width(), std::min(aBitmapSize.Height(), nBottom-nY+1)),
+                maBitmap);
+    }
+    else
+    {
+        // Diagonal sides indicatee an error.
+        OSL_ASSERT(false);
+    }
 }
 
 

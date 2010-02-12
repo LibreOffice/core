@@ -38,7 +38,7 @@
 
 namespace sd { namespace slidesorter { namespace view {
 
-Layouter::Layouter (const ::boost::shared_ptr< ::Window>& rpWindow)
+Layouter::Layouter (const SharedSdWindow& rpWindow)
     : mpWindow(rpWindow),
       mnRequestedLeftBorder(35),
       mnRequestedRightBorder(35),
@@ -58,7 +58,8 @@ Layouter::Layouter (const ::boost::shared_ptr< ::Window>& rpWindow)
       mnPageCount(0),
       mnColumnCount(1),
       mnRowCount(0),
-      maPageObjectSize(1,1)
+      maPageObjectSize(1,1),
+      mbIsVertical(true)
 {
 }
 
@@ -150,6 +151,7 @@ bool Layouter::RearrangeHorizontal (
 {
     OSL_ASSERT(mpWindow);
 
+    mbIsVertical = false;
     mnPageCount = nPageCount;
 
     if (rWindowSize.Width() > 0
@@ -225,6 +227,7 @@ bool Layouter::RearrangeVertical (
 {
     OSL_ASSERT(mpWindow);
 
+    mbIsVertical = true;
     mnPageCount = nPageCount;
 
     if (rWindowSize.Width() > 0
@@ -489,22 +492,69 @@ Point Layouter::GetInsertionMarkerLocation (
 
 
 
-sal_Int32 Layouter::GetIndexOfFirstVisiblePageObject (
-    const Rectangle& aVisibleArea) const
+Range Layouter::GetRangeOfVisiblePageObjects (const Rectangle& aVisibleArea) const
 {
-    sal_Int32 nRow = GetRowAtPosition (aVisibleArea.Top(), true, GM_BOTH);
-    return nRow * mnColumnCount;
+    sal_Int32 nRow0 = GetRowAtPosition (aVisibleArea.Top(), true, GM_BOTH);
+    sal_Int32 nRow1 = GetRowAtPosition (aVisibleArea.Bottom(),
+        true, GM_BOTH);
+    return Range(
+        ::std::min(nRow0 * mnColumnCount, mnPageCount-1),
+        ::std::min((nRow1+1) * mnColumnCount - 1, mnPageCount-1));
 }
 
 
 
 
-sal_Int32 Layouter::GetIndexOfLastVisiblePageObject (
-    const Rectangle& aVisibleArea) const
+Range Layouter::GetSelectionRange (
+    const Point& rAnchor,
+    const Point& rOther,
+    const Range& rCurrentSelectionRange) const
 {
-    sal_Int32 nRow = GetRowAtPosition (aVisibleArea.Bottom(),
-        true, GM_BOTH);
-    return (nRow+1) * mnColumnCount - 1;
+    sal_Int32 nIndexA (GetInsertionIndex(rAnchor, true));
+    sal_Int32 nIndexB (GetInsertionIndex(rOther, true));
+
+    // When either of the locations does not lie over a page then we may
+    // have to adapt the start or end index.
+    Rectangle aBoxA (GetPageObjectBox(nIndexA));
+    Rectangle aBoxB (GetPageObjectBox(nIndexB));
+    if (nIndexA > nIndexB)
+    {
+        ::std::swap(nIndexA,nIndexB);
+        ::std::swap(aBoxA, aBoxB);
+    }
+
+    if (mnColumnCount == 1)
+    {
+        // Vertical arrangement of pages.
+        if (nIndexA <= nIndexB)
+        {
+            if (rOther.Y() < aBoxB.Top())
+                --nIndexB;
+        }
+        else
+        {
+            if (rOther.Y() > aBoxB.Bottom())
+                --nIndexA;
+        }
+    }
+    else
+    {
+        // Horizontal arrangement of pages.
+        if (nIndexA <= nIndexB)
+        {
+            if (rOther.X() < aBoxB.Left())
+                --nIndexB;
+        }
+        else
+        {
+            if (rOther.X() > aBoxB.Right())
+                --nIndexA;
+        }
+    }
+
+    return Range(
+        ::std::min(nIndexA, nIndexB),
+        ::std::min(mnPageCount-1, ::std::max(nIndexA, nIndexB)));
 }
 
 
@@ -556,6 +606,14 @@ sal_Int32 Layouter::GetInsertionIndex (
         nIndex = nRow * mnColumnCount + nColumn;
 
     return nIndex;
+}
+
+
+
+
+bool Layouter::IsVertical (void) const
+{
+    return mbIsVertical;
 }
 
 

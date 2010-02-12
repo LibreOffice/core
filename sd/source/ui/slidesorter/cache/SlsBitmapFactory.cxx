@@ -42,6 +42,10 @@
 #include <svx/svdtypes.hxx>
 #include <svx/svdpage.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/bmpacc.hxx>
+
+
+const static sal_Int32 gnSuperSampleFactor (2);
 
 namespace sd { namespace slidesorter { namespace view {
 class SlideSorterView;
@@ -51,7 +55,8 @@ class PageObjectViewObjectContact;
 namespace sd { namespace slidesorter { namespace cache {
 
 BitmapFactory::BitmapFactory (void)
-    : maRenderer(NULL, false)
+    : maRenderer(NULL, false),
+      mbRemoveBorder(true)
 {
 }
 
@@ -71,17 +76,57 @@ BitmapFactory::~BitmapFactory (void)
     const bool bDoSuperSampling)
 {
     Size aSize (rPixelSize);
-    if (bDoSuperSampling)
+    bool bDo (true);
+    if (bDo)
     {
-        aSize.Width() *= 2;
-        aSize.Height() *= 2;
+        aSize.Width() *= gnSuperSampleFactor;
+        aSize.Height() *= gnSuperSampleFactor;
+    }
+    if (mbRemoveBorder)
+    {
+        aSize.Width() += 2;
+        aSize.Height() += 2;
     }
 
     const Image aPreview (maRenderer.RenderPage (&rPage, aSize, String()));
 
     ::boost::shared_ptr<BitmapEx> pPreview (new BitmapEx(aPreview.GetBitmapEx()));
-    if (bDoSuperSampling)
+    if (mbRemoveBorder)
+        pPreview->Crop(Rectangle(1,1,aSize.Width()-2,aSize.Height()-2));
+    if (bDo)
+    {
+#if 1
+        const sal_Int32 nSuperSampleCount (gnSuperSampleFactor * gnSuperSampleFactor);
+        BitmapReadAccess* pRA = pPreview->GetBitmap().AcquireReadAccess();
+        Bitmap aBitmap (rPixelSize, pPreview->GetBitCount());
+        BitmapWriteAccess* pWA = aBitmap.AcquireWriteAccess();
+        const sal_Int32 nWidth (pRA->Width());
+        const sal_Int32 nHeight (pRA->Height());
+        for (sal_Int32 nY=0; nY<nHeight; nY+=gnSuperSampleFactor)
+            for (sal_Int32 nX=0; nX<nWidth; nX+=gnSuperSampleFactor)
+            {
+                sal_Int32 nRed (0);
+                sal_Int32 nGreen (0);
+                sal_Int32 nBlue (0);
+                for (sal_Int32 nV=0; nV<gnSuperSampleFactor; ++nV)
+                    for (sal_Int32 nU=0; nU<gnSuperSampleFactor; ++nU)
+                    {
+                        const BitmapColor aColor (pRA->GetColor(nY+nV, nX+nU));
+                        nRed += aColor.GetRed();
+                        nGreen += aColor.GetGreen();
+                        nBlue += aColor.GetBlue();
+                    }
+                pWA->SetPixel(nY/gnSuperSampleFactor, nX/gnSuperSampleFactor,
+                    BitmapColor(
+                        nRed/nSuperSampleCount,
+                        nGreen/nSuperSampleCount,
+                        nBlue/nSuperSampleCount));
+            }
+        pPreview.reset(new BitmapEx(aBitmap));
+#else
         pPreview->Scale(rPixelSize, BMP_SCALE_INTERPOLATE);
+#endif
+    }
 
     return pPreview;
 }

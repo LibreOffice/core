@@ -50,7 +50,7 @@ class LayerInvalidator : public ILayerInvalidator
 public:
     LayerInvalidator (
         const ::boost::shared_ptr<LayeredDevice>& rpLayeredDevice,
-        const ::boost::shared_ptr< ::Window>& rpTargetWindow,
+        const SharedSdWindow& rpTargetWindow,
         const int nLayer)
         : mpLayeredDevice(rpLayeredDevice),
           mpTargetWindow(rpTargetWindow),
@@ -66,7 +66,7 @@ public:
 
 private:
     const ::boost::shared_ptr<LayeredDevice> mpLayeredDevice;
-    const ::boost::shared_ptr< ::Window> mpTargetWindow;
+    SharedSdWindow mpTargetWindow;
     const int mnLayer;
 };
 
@@ -103,18 +103,56 @@ void ForAllRectangles (const Region& rRegion, ::boost::function<void(const Recta
     }
 }
 
+class Layer : private ::boost::noncopyable
+{
+public:
+    Layer (void);
+    ~Layer (void);
+
+    void Initialize (const SharedSdWindow& rpTargetWindow);
+    void Invalidate (const Rectangle& rInvalidationBox);
+    void Validate (const MapMode& rMapMode);
+    void Repaint (
+        OutputDevice& rTargetDevice,
+        const Rectangle& rRepaintRectangle);
+    void Resize (const Size& rSize);
+    void AddPainter (const SharedILayerPainter& rpPainter);
+    void RemovePainter (const SharedILayerPainter& rpPainter);
+    bool HasPainter (void) const;
+    void Dispose (void);
+
+private:
+    ::boost::shared_ptr<VirtualDevice> mpLayerDevice;
+    ::std::vector<SharedILayerPainter> maPainters;
+    Region maInvalidationRegion;
+
+    void ValidateRectangle (const Rectangle& rBox);
+};
+typedef ::boost::shared_ptr<Layer> SharedLayer;
+
 
 } // end of anonymous namespace
 
 
+class LayeredDevice::LayerContainer : public ::std::vector<SharedLayer>
+{
+public:
+    LayerContainer (void) { OSL_TRACE("created layer container at %x", this); }
+    ~LayerContainer (void) { OSL_TRACE("destroyed layer container at %x", this); }
+};
 
 
-LayeredDevice::LayeredDevice (const ::boost::shared_ptr< ::Window>& rpTargetWindow)
+
+
+//===== LayeredDevice =========================================================
+
+LayeredDevice::LayeredDevice (const SharedSdWindow& rpTargetWindow)
     : mpTargetWindow(rpTargetWindow),
-      maLayers(1),
+      mpLayers(new LayerContainer()),
       mpBackBuffer(new VirtualDevice(*mpTargetWindow)),
       maSavedMapMode(rpTargetWindow->GetMapMode())
 {
+    OSL_TRACE("layered device created at %x", this);
     mpBackBuffer->SetOutputSizePixel(mpTargetWindow->GetSizePixel());
 }
 
@@ -123,6 +161,7 @@ LayeredDevice::LayeredDevice (const ::boost::shared_ptr< ::Window>& rpTargetWind
 
 LayeredDevice::~LayeredDevice (void)
 {
+    OSL_TRACE("layered device destroyed at %x", this);
 }
 
 
@@ -132,13 +171,13 @@ void LayeredDevice::Invalidate (
     const Rectangle& rInvalidationArea,
     const sal_Int32 nLayer)
 {
-    if (nLayer<0 || sal_uInt32(nLayer)>=maLayers.size())
+    if (nLayer<0 || sal_uInt32(nLayer)>=mpLayers->size())
     {
-        OSL_ASSERT(nLayer>=0 && nLayer<maLayers.size());
+        OSL_ASSERT(nLayer>=0 && nLayer<mpLayers->size());
         return;
     }
 
-    maLayers[nLayer].Invalidate(rInvalidationArea);
+    (*mpLayers)[nLayer]->Invalidate(rInvalidationArea);
 }
 
 
@@ -146,8 +185,8 @@ void LayeredDevice::Invalidate (
 
 void LayeredDevice::InvalidateAllLayers (const Rectangle& rInvalidationArea)
 {
-    for (sal_uInt32 nLayer=0; nLayer<maLayers.size(); ++nLayer)
-        maLayers[nLayer].Invalidate(rInvalidationArea);
+    for (sal_uInt32 nLayer=0; nLayer<mpLayers->size(); ++nLayer)
+        (*mpLayers)[nLayer]->Invalidate(rInvalidationArea);
 }
 
 
@@ -157,6 +196,8 @@ void LayeredDevice::RegisterPainter (
     const SharedILayerPainter& rpPainter,
     const sal_Int32 nLayer)
 {
+    OSL_TRACE("layered device registering painter at %x", this);
+    OSL_ASSERT(mpLayers);
     if ( ! rpPainter)
     {
         OSL_ASSERT(rpPainter);
@@ -168,11 +209,19 @@ void LayeredDevice::RegisterPainter (
         return;
     }
 
-    if (sal_uInt32(nLayer) >= maLayers.size())
-        maLayers.resize(nLayer+1);
-    maLayers[nLayer].AddPainter(rpPainter);
+    // Provide the layers.
+    if (sal_uInt32(nLayer) >= mpLayers->size())
+    {
+        const sal_Int32 nOldLayerCount (mpLayers->size());
+        mpLayers->resize(nLayer+1);
+
+        for (sal_Int32 nIndex=nOldLayerCount; nIndex<mpLayers->size(); ++nIndex)
+            (*mpLayers)[nIndex].reset(new Layer());
+    }
+
+    (*mpLayers)[nLayer]->AddPainter(rpPainter);
     if (nLayer == 0)
-        maLayers[nLayer].Initialize(mpTargetWindow);
+        (*mpLayers)[nLayer]->Initialize(mpTargetWindow);
 
     rpPainter->SetLayerInvalidator(
         SharedILayerInvalidator(new LayerInvalidator(shared_from_this(),mpTargetWindow,nLayer)));
@@ -190,19 +239,19 @@ void LayeredDevice::RemovePainter (
         OSL_ASSERT(rpPainter);
         return;
     }
-    if (nLayer<0 || sal_uInt32(nLayer)>=maLayers.size())
+    if (nLayer<0 || sal_uInt32(nLayer)>=mpLayers->size())
     {
-        OSL_ASSERT(nLayer>=0 && nLayer<maLayers.size());
+        OSL_ASSERT(nLayer>=0 && nLayer<mpLayers->size());
         return;
     }
 
     rpPainter->SetLayerInvalidator(SharedILayerInvalidator());
 
-    maLayers[nLayer].RemovePainter(rpPainter);
+    (*mpLayers)[nLayer]->RemovePainter(rpPainter);
 
     // Remove top most layers that do not contain any painters.
-    while ( ! maLayers.empty() && ! maLayers.back().HasPainter())
-        maLayers.erase(maLayers.end()-1);
+    while ( ! mpLayers->empty() && ! mpLayers->back()->HasPainter())
+        mpLayers->erase(mpLayers->end()-1);
 }
 
 
@@ -211,8 +260,8 @@ void LayeredDevice::RemovePainter (
 bool LayeredDevice::HasPainter (const sal_Int32 nLayer)
 {
     return nLayer>=0
-        && sal_uInt32(nLayer)<maLayers.size()
-        && maLayers[nLayer].HasPainter();
+        && sal_uInt32(nLayer)<mpLayers->size()
+        && (*mpLayers)[nLayer]->HasPainter();
 }
 
 
@@ -224,8 +273,8 @@ void LayeredDevice::Repaint (const Region& rRepaintRegion)
 
     // Validate the contents of all layers (that have their own devices.)
     ::std::for_each(
-        maLayers.begin(),
-        maLayers.end(),
+        mpLayers->begin(),
+        mpLayers->end(),
         ::boost::bind(&Layer::Validate, _1, mpTargetWindow->GetMapMode()));
 
     ForAllRectangles(rRepaintRegion, ::boost::bind(&LayeredDevice::RepaintRectangle, this, _1));
@@ -236,10 +285,10 @@ void LayeredDevice::Repaint (const Region& rRepaintRegion)
 
 void LayeredDevice::RepaintRectangle (const Rectangle& rRepaintRectangle)
 {
-    if (maLayers.size() <= 1)
+    if (mpLayers->size() <= 1)
     {
         // Just copy the main layer into the target device.
-        maLayers[0].Repaint(*mpTargetWindow, rRepaintRectangle);
+        (*mpLayers)[0]->Repaint(*mpTargetWindow, rRepaintRectangle);
     }
     else
     {
@@ -248,8 +297,8 @@ void LayeredDevice::RepaintRectangle (const Rectangle& rRepaintRectangle)
         // device.
         mpBackBuffer->SetMapMode(mpTargetWindow->GetMapMode());
         ::std::for_each(
-            maLayers.begin(),
-            maLayers.end(),
+            mpLayers->begin(),
+            mpLayers->end(),
             ::boost::bind(&Layer::Repaint, _1, ::boost::ref(*mpBackBuffer), rRepaintRectangle));
 
         DeviceCopy(*mpTargetWindow, *mpBackBuffer, rRepaintRectangle);
@@ -263,7 +312,7 @@ void LayeredDevice::Resize (void)
 {
     const Size aSize (mpTargetWindow->GetSizePixel());
     mpBackBuffer->SetOutputSizePixel(aSize);
-    ::std::for_each(maLayers.begin(), maLayers.end(), ::boost::bind(&Layer::Resize, _1, aSize));
+    ::std::for_each(mpLayers->begin(), mpLayers->end(), ::boost::bind(&Layer::Resize, _1, aSize));
 }
 
 
@@ -271,8 +320,8 @@ void LayeredDevice::Resize (void)
 
 void LayeredDevice::Dispose (void)
 {
-    ::std::for_each(maLayers.begin(), maLayers.end(), ::boost::bind(&Layer::Dispose, _1));
-    maLayers.clear();
+    ::std::for_each(mpLayers->begin(), mpLayers->end(), ::boost::bind(&Layer::Dispose, _1));
+    mpLayers->clear();
 }
 
 
@@ -292,8 +341,8 @@ void LayeredDevice::HandleMapModeChange (void)
     {
         // When the scale has changed then we have to paint everything.
         ::std::for_each(
-            maLayers.begin(),
-            maLayers.end(),
+            mpLayers->begin(),
+            mpLayers->end(),
             ::boost::bind(&Layer::Invalidate, _1, ::boost::cref(aLogicWindowBox)));
     }
     else if (maSavedMapMode.GetOrigin() != rMapMode.GetOrigin())
@@ -330,9 +379,9 @@ void LayeredDevice::HandleMapModeChange (void)
 
 
 
-//===== LayeredDevice::Layer ==================================================
+//===== Layer =================================================================
 
-LayeredDevice::Layer::Layer (void)
+Layer::Layer (void)
     : mpLayerDevice(),
       maPainters(),
       maInvalidationRegion()
@@ -342,7 +391,14 @@ LayeredDevice::Layer::Layer (void)
 
 
 
-void LayeredDevice::Layer::Initialize (const ::boost::shared_ptr< ::Window>& rpTargetWindow)
+Layer::~Layer (void)
+{
+}
+
+
+
+
+void Layer::Initialize (const SharedSdWindow& rpTargetWindow)
 {
     if ( ! mpLayerDevice)
     {
@@ -354,7 +410,7 @@ void LayeredDevice::Layer::Initialize (const ::boost::shared_ptr< ::Window>& rpT
 
 
 
-void LayeredDevice::Layer::Invalidate (const Rectangle& rInvalidationBox)
+void Layer::Invalidate (const Rectangle& rInvalidationBox)
 {
     maInvalidationRegion.Union(rInvalidationBox);
 }
@@ -362,7 +418,7 @@ void LayeredDevice::Layer::Invalidate (const Rectangle& rInvalidationBox)
 
 
 
-void LayeredDevice::Layer::Validate (const MapMode& rMapMode)
+void Layer::Validate (const MapMode& rMapMode)
 {
     if (mpLayerDevice && ! maInvalidationRegion.IsEmpty())
     {
@@ -370,7 +426,7 @@ void LayeredDevice::Layer::Validate (const MapMode& rMapMode)
 
         ForAllRectangles(
             maInvalidationRegion,
-            ::boost::bind(&LayeredDevice::Layer::ValidateRectangle, this, _1));
+            ::boost::bind(&Layer::ValidateRectangle, this, _1));
     }
     // else nothing to do now.  The painting is done in Repaint() directly
     // into the back buffer.
@@ -381,7 +437,7 @@ void LayeredDevice::Layer::Validate (const MapMode& rMapMode)
 
 
 
-void LayeredDevice::Layer::ValidateRectangle (const Rectangle& rBox)
+void Layer::ValidateRectangle (const Rectangle& rBox)
 {
     const Region aSavedClipRegion (mpLayerDevice->GetClipRegion());
     mpLayerDevice->SetClipRegion(Region(rBox));
@@ -401,7 +457,7 @@ void LayeredDevice::Layer::ValidateRectangle (const Rectangle& rBox)
 
 
 
-void LayeredDevice::Layer::Repaint (
+void Layer::Repaint (
     OutputDevice& rTargetDevice,
     const Rectangle& rRepaintRectangle)
 {
@@ -424,7 +480,7 @@ void LayeredDevice::Layer::Repaint (
 
 
 
-void LayeredDevice::Layer::Resize (const Size& rSize)
+void Layer::Resize (const Size& rSize)
 {
     if (mpLayerDevice)
     {
@@ -436,7 +492,7 @@ void LayeredDevice::Layer::Resize (const Size& rSize)
 
 
 
-void LayeredDevice::Layer::AddPainter (const SharedILayerPainter& rpPainter)
+void Layer::AddPainter (const SharedILayerPainter& rpPainter)
 {
     OSL_ASSERT(::std::find(maPainters.begin(), maPainters.end(), rpPainter) == maPainters.end());
 
@@ -446,7 +502,7 @@ void LayeredDevice::Layer::AddPainter (const SharedILayerPainter& rpPainter)
 
 
 
-void LayeredDevice::Layer::RemovePainter (const SharedILayerPainter& rpPainter)
+void Layer::RemovePainter (const SharedILayerPainter& rpPainter)
 {
     const ::std::vector<SharedILayerPainter>::iterator iPainter (
         ::std::find(maPainters.begin(), maPainters.end(), rpPainter));
@@ -463,7 +519,7 @@ void LayeredDevice::Layer::RemovePainter (const SharedILayerPainter& rpPainter)
 
 
 
-bool LayeredDevice::Layer::HasPainter (void) const
+bool Layer::HasPainter (void) const
 {
     return !maPainters.empty();
 }
@@ -471,7 +527,7 @@ bool LayeredDevice::Layer::HasPainter (void) const
 
 
 
-void LayeredDevice::Layer::Dispose (void)
+void Layer::Dispose (void)
 {
     maPainters.clear();
 }

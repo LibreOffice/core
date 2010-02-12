@@ -206,6 +206,12 @@ private:
 
     ::std::vector<Link> maFocusChangeListeners;
 
+    /** When vertical wrap is active then pressing UP in the top row moves
+        the focus to the bottom row, DOWN in the bottom row moves the focus
+        to the top row.
+    */
+    bool mbIsVerticalWrapActive;
+
     /** Reset the focus state of the given descriptor and request a repaint
         so that the focus indicator is hidden.
         @param pDescriptor

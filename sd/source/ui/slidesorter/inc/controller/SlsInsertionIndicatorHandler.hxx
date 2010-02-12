@@ -88,6 +88,7 @@ private:
     bool mbIsBeforePage;
     bool mbIsInsertionTrivial;
     bool mbIsActive;
+    bool mbIsReadOnly;
 
     void SetPosition (const Point& rPoint);
     ::boost::shared_ptr<view::InsertAnimator> GetInsertAnimator (void);

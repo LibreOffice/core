@@ -39,11 +39,9 @@
 
 namespace sd { namespace slidesorter { namespace view {
 
-const sal_Int32 PageObjectLayouter::mnSelectionIndicatorOffset = 0;
-const sal_Int32 PageObjectLayouter::mnSelectionIndicatorThickness = 3;
-const sal_Int32 PageObjectLayouter::mnFocusIndicatorOffset = 3;
 const sal_Int32 PageObjectLayouter::mnPageNumberOffset = 9;
-const sal_Int32 PageObjectLayouter::mnOuterBorderWidth = 5;
+const sal_Int32 PageObjectLayouter::mnOuterBorderWidth = 6;
+const sal_Int32 PageObjectLayouter::mnInfoAreaMinWidth = 26;
 const Size PageObjectLayouter::maButtonSize (32,32);
 const sal_Int32 PageObjectLayouter::mnButtonGap (5);
 
@@ -51,23 +49,23 @@ const sal_Int32 PageObjectLayouter::mnButtonGap (5);
 PageObjectLayouter::PageObjectLayouter (
     const Size& rPageObjectWindowSize,
     const Size& rPageSize,
-    const ::boost::shared_ptr< ::Window>& rpWindow,
-    const int nPageCount)
+    const SharedSdWindow& rpWindow,
+    const sal_Int32 nPageCount)
     : mpWindow(rpWindow),
       maPageObjectSize(rPageObjectWindowSize.Width(), rPageObjectWindowSize.Height()),
       mnModelToWindowScale(1),
       maPageObjectBoundingBox(),
       maPageNumberAreaBoundingBox(),
       maPreviewBoundingBox(),
-      maFocusIndicatorBoundingBox(),
-      maSelectionIndicatorBoundingBox(),
       maTransitionEffectBoundingBox(),
       maButtonAreaBoundingBox(),
       maTransitionEffectIcon(IconCache::Instance().GetIcon(BMP_FADE_EFFECT_INDICATOR))
 {
     const Size aPageNumberAreaSize (GetPageNumberAreaSize(nPageCount));
 
-    const int nMaximumBorderWidth (mnSelectionIndicatorOffset + mnOuterBorderWidth);
+    const int nMaximumBorderWidth (mnOuterBorderWidth);
+
+    // Set up some bounding boxes relative to the page object origin.
 
     maPageNumberAreaBoundingBox = Rectangle(
         mnPageNumberOffset,
@@ -78,20 +76,8 @@ PageObjectLayouter::PageObjectLayouter (
     maPreviewBoundingBox = CalculatePreviewBoundingBox(
         maPageObjectSize,
         Size(rPageSize.Width(), rPageSize.Height()),
-        aPageNumberAreaSize);
+        ::std::min(aPageNumberAreaSize.Width(), mnInfoAreaMinWidth));
     maPageObjectBoundingBox = Rectangle(Point(0,0), maPageObjectSize);
-
-    maFocusIndicatorBoundingBox = maPreviewBoundingBox;
-    maFocusIndicatorBoundingBox.Left() -= mnFocusIndicatorOffset;
-    maFocusIndicatorBoundingBox.Top() -= mnFocusIndicatorOffset;
-    maFocusIndicatorBoundingBox.Right() += mnFocusIndicatorOffset;
-    maFocusIndicatorBoundingBox.Bottom() += mnFocusIndicatorOffset;
-
-    maSelectionIndicatorBoundingBox = maPreviewBoundingBox;
-    maSelectionIndicatorBoundingBox.Left() -= mnSelectionIndicatorOffset;
-    maSelectionIndicatorBoundingBox.Top() -= mnSelectionIndicatorOffset;
-    maSelectionIndicatorBoundingBox.Right() += mnSelectionIndicatorOffset;
-    maSelectionIndicatorBoundingBox.Bottom() += mnSelectionIndicatorOffset;
 
     const Size aIconSize (maTransitionEffectIcon.GetSizePixel());
     const int nLeft (maPreviewBoundingBox.Left()
@@ -113,16 +99,23 @@ PageObjectLayouter::PageObjectLayouter (
 
 
 
+PageObjectLayouter::~PageObjectLayouter(void)
+{
+}
+
+
+
+
 Rectangle PageObjectLayouter::CalculatePreviewBoundingBox (
     Size& rPageObjectSize,
     const Size& rPageSize,
-    const Size& rPageNumberAreaSize)
+    const sal_Int32 nInfoAreaWidth)
 {
-    const int nMaximumBorderWidth (mnSelectionIndicatorOffset + mnOuterBorderWidth);
+    const int nMaximumBorderWidth (mnOuterBorderWidth);
     const int nLeftAreaWidth (
         2*mnPageNumberOffset
             + ::std::max(
-                rPageNumberAreaSize.Width(),
+                nInfoAreaWidth,
                 maTransitionEffectIcon.GetSizePixel().Width()));
     int nPreviewWidth;
     int nPreviewHeight;
@@ -178,12 +171,6 @@ Rectangle PageObjectLayouter::GetBoundingBox (
     const CoordinateSystem eCoordinateSystem,
     const sal_Int32 nIndex)
 {
-    if ( ! rpPageDescriptor)
-    {
-        OSL_ASSERT(rpPageDescriptor);
-        return Rectangle();
-    }
-
     Rectangle aBoundingBox;
     switch (ePart)
     {
@@ -194,14 +181,6 @@ Rectangle PageObjectLayouter::GetBoundingBox (
 
         case Preview:
             aBoundingBox = maPreviewBoundingBox;
-            break;
-
-        case FocusIndicator:
-            aBoundingBox = maFocusIndicatorBoundingBox;
-            break;
-
-        case SelectionIndicator:
-            aBoundingBox = maSelectionIndicatorBoundingBox;
             break;
 
         case PageNumber:
@@ -230,7 +209,7 @@ Rectangle PageObjectLayouter::GetBoundingBox (
             break;
     }
 
-    Point aLocation (rpPageDescriptor->GetLocation());
+    Point aLocation (rpPageDescriptor ? rpPageDescriptor->GetLocation() : Point(0,0));
     if (eCoordinateSystem == ScreenCoordinateSystem)
         aLocation += mpWindow->GetMapMode().GetOrigin();
 

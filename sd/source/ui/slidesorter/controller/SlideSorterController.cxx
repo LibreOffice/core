@@ -131,7 +131,7 @@ SlideSorterController::SlideSorterController (SlideSorter& rSlideSorter)
       mnPaintEntranceCount(0),
       mbIsContextMenuOpen(false)
 {
-    ::boost::shared_ptr<sd::Window> pWindow (mrSlideSorter.GetContentWindow());
+    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
     OSL_ASSERT(pWindow);
     if (pWindow)
     {
@@ -156,8 +156,6 @@ SlideSorterController::SlideSorterController (SlideSorter& rSlideSorter)
 
 void SlideSorterController::Init (void)
 {
-    mrView.HandleModelChange();
-
     mpCurrentSlideManager.reset(new CurrentSlideManager(mrSlideSorter));
     mpPageSelector.reset(new PageSelector(mrSlideSorter));
     mpFocusManager.reset(new FocusManager(mrSlideSorter));
@@ -208,6 +206,7 @@ SlideSorterController::~SlideSorterController (void)
 
 void SlideSorterController::Dispose (void)
 {
+    mpInsertionIndicatorHandler->End();
     mpAnimator->Dispose();
 }
 
@@ -554,7 +553,7 @@ void SlideSorterController::PostModelChange (void)
     mbPostModelChangePending = false;
     mrModel.Resync();
 
-    ::boost::shared_ptr<sd::Window> pWindow (mrSlideSorter.GetContentWindow());
+    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
     if (pWindow)
     {
         GetCurrentSlideManager()->HandleModelChange();
@@ -601,7 +600,7 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
     if (pEvent != NULL)
     {
         ::Window* pWindow = pEvent->GetWindow();
-        ::boost::shared_ptr<sd::Window> pActiveWindow (mrSlideSorter.GetContentWindow());
+        SharedSdWindow pActiveWindow (mrSlideSorter.GetContentWindow());
         switch (pEvent->GetId())
         {
             case VCLEVENT_WINDOW_ACTIVATE:
@@ -777,7 +776,7 @@ Rectangle  SlideSorterController::Rearrange (bool bForce)
 {
     Rectangle aNewContentArea (maTotalWindowArea);
 
-    const ::boost::shared_ptr<sd::Window> pWindow (mrSlideSorter.GetContentWindow());
+    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
     if (pWindow)
     {
         // Place the scroll bars.
@@ -813,7 +812,7 @@ Rectangle  SlideSorterController::Rearrange (bool bForce)
 
 void SlideSorterController::SetZoom (long int nZoom)
 {
-    ::boost::shared_ptr<sd::Window> pWindow (mrSlideSorter.GetContentWindow());
+    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
     long int nCurrentZoom ((long int)(
         pWindow->GetMapMode().GetScaleX().operator double() * 100));
 
@@ -960,7 +959,7 @@ void SlideSorterController::PageNameHasChanged (int nPageIndex, const String& rs
     // that of the name change.
     do
     {
-        ::boost::shared_ptr<sd::Window> pWindow (mrSlideSorter.GetContentWindow());
+        SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
         if ( ! pWindow)
             break;
 

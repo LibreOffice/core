@@ -69,6 +69,7 @@ class SlideSorterModel
 {
 public:
     SlideSorterModel (SlideSorter& rSlideSorter);
+    void Init (void);
 
     virtual ~SlideSorterModel (void);
     void Dispose (void);
@@ -192,6 +193,8 @@ public:
         from the model of the XController.
     */
     void UpdatePageList (void);
+
+    bool IsReadOnly (void) const;
 
 private:
     mutable ::osl::Mutex maMutex;

@@ -356,7 +356,7 @@ void SelectionManager::ResetMakeSelectionVisiblePending (void)
 */
 Size SelectionManager::MakeSelectionVisible (const SelectionHint eSelectionHint)
 {
-    ::boost::shared_ptr<sd::Window> pWindow (mrSlideSorter.GetContentWindow());
+    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
     if (pWindow == NULL)
         return Size(0,0);
 
@@ -403,7 +403,7 @@ Size SelectionManager::MakeSelectionVisible (const SelectionHint eSelectionHint)
 
 Size SelectionManager::MakeRectangleVisible (const Rectangle& rBox)
 {
-    ::boost::shared_ptr<sd::Window> pWindow (mrSlideSorter.GetContentWindow());
+    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
     if (pWindow == NULL)
         return Size(0,0);
 
@@ -519,7 +519,7 @@ void SelectionManager::RemoveSelectionChangeListener(const Link&rListener)
 
 bool SelectionManager::DoesSelectionExceedVisibleArea (const Rectangle& rSelectionBox) const
 {
-    ::boost::shared_ptr<sd::Window> pWindow (mrSlideSorter.GetContentWindow());
+    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
     if (pWindow == NULL)
         return true;
 

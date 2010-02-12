@@ -71,7 +71,7 @@ namespace sd { namespace slidesorter { namespace view {
 class Layouter
 {
 public:
-    Layouter (const ::boost::shared_ptr< ::Window>& rpWindow);
+    Layouter (const SharedSdWindow& rpWindow);
     ~Layouter (void);
 
     ::boost::shared_ptr<PageObjectLayouter> GetPageObjectLayouter (void) const;
@@ -216,16 +216,30 @@ public:
 
     /** Return the index of the first fully or partially visible page
         object.  This takes into account only the vertical dimension.
-    */
-    sal_Int32 GetIndexOfFirstVisiblePageObject (const Rectangle& rVisibleArea) const;
-
-    /** Return the index of the last fully or partially visible page
-        object.  This takes into account only the vertical dimension.
         @return
-            The returned index may be larger than the number of existing
+            The second index may be larger than the number of existing
             page objects.
     */
-    sal_Int32 GetIndexOfLastVisiblePageObject (const Rectangle& rVisibleArea) const;
+    Range GetRangeOfVisiblePageObjects (const Rectangle& rVisibleArea) const;
+
+    /** Return a pair of indices that point to the first and last slide in
+        the selection delimited by the two given points.  The second point
+        may be located above and/or left of the anchor.
+        @param rAnchor
+            Location where the mouse button was pressed and the range
+            selection started.
+        @param rOther
+            Current location of the mouse.
+        @param rCurrentSelectionRange
+            Current range of the selection.
+        @return
+            The indices are sorted.  When the first index is -1 then the
+            range is empty.
+    */
+    Range GetSelectionRange (
+        const Point& rAnchor,
+        const Point& rOther,
+        const Range& rCurrentSelectionRange) const;
 
     /** Return the index of the page object that is rendered at the given
         point.
@@ -272,8 +286,13 @@ public:
         const Point& rModelPosition,
         bool bAllowVerticalPosition) const;
 
+    /** Return whether the main orientation of the slides in the slide
+        sorter is vertical, i.e. all slides are arranged in one column.
+    */
+    bool IsVertical (void) const;
+
 private:
-    ::boost::shared_ptr< ::Window> mpWindow;
+    SharedSdWindow mpWindow;
     sal_Int32 mnRequestedLeftBorder;
     sal_Int32 mnRequestedRightBorder;
     sal_Int32 mnRequestedTopBorder;
@@ -293,6 +312,7 @@ private:
     sal_Int32 mnColumnCount;
     sal_Int32 mnRowCount;
     Size maPageObjectSize;
+    bool mbIsVertical;
 
     ::boost::shared_ptr<PageObjectLayouter> mpPageObjectLayouter;
 

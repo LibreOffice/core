@@ -40,7 +40,7 @@
 #include "model/SlsPageEnumeration.hxx"
 #include "view/SlideSorterView.hxx"
 #include "view/SlsLayouter.hxx"
-#include "SlsIcons.hxx"
+#include "view/SlsTheme.hxx"
 #include "cache/SlsPageCache.hxx"
 #include "ViewShell.hxx"
 #include "ViewShellBase.hxx"
@@ -112,9 +112,9 @@ ViewOverlay::ViewOverlay (
     const ::boost::shared_ptr<LayeredDevice>& rpLayeredDevice)
     : mrSlideSorter(rSlideSorter),
       mpLayeredDevice(rpLayeredDevice),
-      mpSelectionRectangleOverlay(new SelectionRectangleOverlay(*this, 2)),
-      mpInsertionIndicatorOverlay(new InsertionIndicatorOverlay(*this, 3)),
-      mpSubstitutionOverlay(new SubstitutionOverlay(*this, 2))
+      mpSelectionRectangleOverlay(new SelectionRectangleOverlay(*this, 3)),
+      mpInsertionIndicatorOverlay(new InsertionIndicatorOverlay(*this, 4)),
+      mpSubstitutionOverlay(new SubstitutionOverlay(*this, 3))
 {
 }
 
@@ -551,14 +551,8 @@ InsertionIndicatorOverlay::InsertionIndicatorOverlay (
     const sal_Int32 nLayerIndex)
     : OverlayBase (rViewOverlay, nLayerIndex),
       maLocation(),
-      maIconWithBorder(),
-      maIcon(),
-      maMask()
+      maIcon(rViewOverlay.GetSlideSorter().GetTheme()->GetIcon(Theme::InsertionIndicator))
 {
-    LocalResource aResource (IMG_ICONS);
-    maIconWithBorder = Image(SdResId(IMAGE_INSERTION_INDICATOR_SELECT));
-    maIcon = Image(SdResId(IMAGE_INSERTION_INDICATOR_NORMAL));
-    maMask = Image(SdResId(IMAGE_INSERTION_INDICATOR_MASK));
 }
 
 
@@ -568,8 +562,8 @@ void InsertionIndicatorOverlay::SetLocation (const Point& rLocation)
 {
     const Point  aTopLeft (
         rLocation - Point(
-            maIconWithBorder.GetSizePixel().Width()/2,
-            maIconWithBorder.GetSizePixel().Height()/2));
+            maIcon.GetSizePixel().Width()/2,
+            maIcon.GetSizePixel().Height()/2));
     if (maLocation != aTopLeft)
     {
         Invalidator aInvalidator (*this);
@@ -589,9 +583,7 @@ void InsertionIndicatorOverlay::Paint (
     if ( ! IsVisible())
         return;
 
-    rDevice.DrawImage(
-        maLocation,
-        maIconWithBorder);
+    rDevice.DrawImage(maLocation, maIcon);
 }
 
 
@@ -599,7 +591,7 @@ void InsertionIndicatorOverlay::Paint (
 
 Rectangle InsertionIndicatorOverlay::GetBoundingBox (void) const
 {
-    return Rectangle(maLocation, maIconWithBorder.GetSizePixel());
+    return Rectangle(maLocation, maIcon.GetSizePixel());
 }
 
 

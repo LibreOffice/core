@@ -216,7 +216,7 @@ public:
     virtual BOOL RequestHelp( const HelpEvent& rEvt, ::sd::Window* pWin );
     virtual long Notify( NotifyEvent& rNEvt, ::sd::Window* pWin );
 
-    BOOL HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWin);
+    virtual bool HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWin);
 
     virtual void Draw(OutputDevice &rDev, const Region &rReg);
 

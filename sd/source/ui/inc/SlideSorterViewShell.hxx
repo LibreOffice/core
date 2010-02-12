@@ -129,6 +129,8 @@ public:
     */
     virtual void ArrangeGUIElements (void);
 
+    virtual bool HandleScrollCommand (const CommandEvent& rEvent, ::sd::Window* pWindow);
+
     //===== Drag and Drop =====================================================
 
     virtual void StartDrag (

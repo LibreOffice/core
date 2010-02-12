@@ -53,7 +53,14 @@ public:
         const Animator::AnimationId nAnimationId,
         const Animator::FinishFunctor& rFinishFunctor);
     ~Animation (void);
+    /** Run next animation step.  If animation has reached its end it is
+        expired.
+    */
     bool Run (void);
+    /** Typically called when an animation has finished, but also from
+        Animator::Disposed().  The finish functor is called and the
+        animation is marked as expired to prevent another run.
+    */
     void Expire (void);
     bool IsExpired (void);
 
@@ -99,6 +106,12 @@ Animator::~Animator (void)
 void Animator::Dispose (void)
 {
     mbIsDisposed = true;
+
+    AnimationList aCopy (maAnimations);
+    AnimationList::const_iterator iAnimation;
+    for (iAnimation=aCopy.begin(); iAnimation!=aCopy.end(); ++iAnimation)
+        (*iAnimation)->Expire();
+
     maTimer.Stop();
     mpDrawLock.reset();
 }
@@ -111,7 +124,11 @@ Animator::AnimationId Animator::AddAnimation (
     const sal_Int32 nDuration,
     const FinishFunctor& rFinishFunctor)
 {
+    // When the animator is already disposed then ignore this call
+    // silently (well, we show an assertion, but do not throw an exception.)
     OSL_ASSERT( ! mbIsDisposed);
+    if (mbIsDisposed)
+        return -1;
 
     const double nDelta = double(gnResolution) / double(nDuration);
     boost::shared_ptr<Animation> pAnimation (
@@ -134,7 +151,11 @@ Animator::AnimationId Animator::AddInfiniteAnimation (
     const AnimationFunctor& rAnimation,
     const double nDelta)
 {
+    // When the animator is already disposed then ignore this call
+    // silently (well, we show an assertion, but do not throw an exception.)
     OSL_ASSERT( ! mbIsDisposed);
+    if (mbIsDisposed)
+        return -1;
 
     boost::shared_ptr<Animation> pAnimation (
         new Animation(rAnimation, nDelta, -1.0, mnNextAnimationId++, FinishFunctor()));
@@ -180,9 +201,12 @@ void Animator::RemoveAnimation (const Animator::AnimationId nId)
 
 bool Animator::ProcessAnimations (void)
 {
-    OSL_ASSERT( ! mbIsDisposed);
-
     bool bExpired (false);
+
+    OSL_ASSERT( ! mbIsDisposed);
+    if (mbIsDisposed)
+        return bExpired;
+
 
     AnimationList aCopy (maAnimations);
     AnimationList::const_iterator iAnimation;
@@ -200,6 +224,8 @@ bool Animator::ProcessAnimations (void)
 void Animator::CleanUpAnimationList (void)
 {
     OSL_ASSERT( ! mbIsDisposed);
+    if (mbIsDisposed)
+        return;
 
     AnimationList aActiveAnimations;
 
@@ -221,6 +247,8 @@ IMPL_LINK(Animator, TimeoutHandler, Timer*, EMPTYARG)
     if (mbIsDisposed)
         return 0;
 
+    OSL_TRACE("Animator timeout start");
+
     if (ProcessAnimations())
         CleanUpAnimationList();
 
@@ -232,6 +260,8 @@ IMPL_LINK(Animator, TimeoutHandler, Timer*, EMPTYARG)
         mpDrawLock.reset(new view::SlideSorterView::DrawLock(mrSlideSorter));
         maTimer.Start();
     }
+
+    OSL_TRACE("Animator timeout end");
 
     return 0;
 }
