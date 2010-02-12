@@ -41,7 +41,7 @@
 #include "svl/inettype.hxx"
 #include "unotools/pathoptions.hxx"
 
-#include <transex3/compilehelp.hxx>
+#include <l10ntools/compilehelp.hxx>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
