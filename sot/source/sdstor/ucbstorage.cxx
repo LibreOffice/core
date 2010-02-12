@@ -43,21 +43,17 @@
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/ucb/ResultSetException.hpp>
 #include <com/sun/star/uno/Sequence.h>
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HDL_
 #include <com/sun/star/sdbc/XResultSet.hdl>
-#endif
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
-#include <com/sun/star/ucb/XContentCreator.hpp>
+#include <com/sun/star/ucb/ContentInfo.hpp>
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/packages/manifest/XManifestWriter.hpp>
 #include <com/sun/star/packages/manifest/XManifestReader.hpp>
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVEIODEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
-#endif
 
 #include <rtl/digest.h>
 #include <tools/ref.hxx>
@@ -113,11 +109,11 @@ public:
     virtual void SAL_CALL seek( sal_Int64 _nLocation ) throw ( IllegalArgumentException, IOException, RuntimeException);
     virtual sal_Int64 SAL_CALL getPosition(  ) throw ( IOException, RuntimeException);
     virtual sal_Int64 SAL_CALL getLength(  ) throw ( IOException, RuntimeException);
-    virtual sal_Int32   SAL_CALL    readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead) throw( NotConnectedException, BufferSizeExceededException, RuntimeException );
-    virtual sal_Int32   SAL_CALL    readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) throw( NotConnectedException, BufferSizeExceededException, RuntimeException );
-    virtual void        SAL_CALL    skipBytes(sal_Int32 nBytesToSkip) throw( NotConnectedException, BufferSizeExceededException, RuntimeException);
-    virtual sal_Int32   SAL_CALL    available() throw( NotConnectedException, RuntimeException );
-    virtual void        SAL_CALL    closeInput() throw( NotConnectedException, RuntimeException );
+    virtual sal_Int32 SAL_CALL readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead) throw( NotConnectedException, BufferSizeExceededException, RuntimeException );
+    virtual sal_Int32 SAL_CALL readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) throw( NotConnectedException, BufferSizeExceededException, RuntimeException );
+    virtual void      SAL_CALL skipBytes(sal_Int32 nBytesToSkip) throw( NotConnectedException, BufferSizeExceededException, RuntimeException);
+    virtual sal_Int32 SAL_CALL available() throw( NotConnectedException, RuntimeException );
+    virtual void      SAL_CALL closeInput() throw( NotConnectedException, RuntimeException );
 
 protected:
     void checkConnected();
@@ -540,7 +536,7 @@ public:
                                                 // this means that the root storage does an autocommit when its external
                                                 // reference is destroyed
     BOOL                        m_bIsRoot;      // marks this storage as root storages that manages all oommits and reverts
-    BOOL                        m_bDirty;       // ???
+    BOOL                        m_bDirty;           // ???
     BOOL                        m_bIsLinked;
     BOOL                        m_bListCreated;
     ULONG                       m_nFormat;
@@ -575,12 +571,12 @@ public:
                                   ReadContent();
                                   if ( m_nMode & STREAM_WRITE )
                                   {
-                                      m_nError = nError;
-                                      if ( m_pAntiImpl )
-                                      {
-                                          m_pAntiImpl->ResetError();
-                                          m_pAntiImpl->SetError( nError );
-                                      }
+                                    m_nError = nError;
+                                    if ( m_pAntiImpl )
+                                    {
+                                        m_pAntiImpl->ResetError();
+                                        m_pAntiImpl->SetError( nError );
+                                    }
                                   }
 
                                   return m_aChildrenList;
@@ -867,7 +863,7 @@ BOOL UCBStorageStream_Impl::Init()
             // usually means that stream could not be opened
         }
 
-           if( m_rSource.is() )
+            if( m_rSource.is() )
         {
             m_pStream->Seek( STREAM_SEEK_TO_END );
 
@@ -894,7 +890,7 @@ BOOL UCBStorageStream_Impl::Init()
         {
             // if the new file is edited than no source exist
             m_bSourceRead = FALSE;
-               //SetError( SVSTREAM_CANNOT_MAKE );
+                //SetError( SVSTREAM_CANNOT_MAKE );
         }
     }
 
@@ -1107,7 +1103,7 @@ ULONG UCBStorageStream_Impl::SeekPos( ULONG nPos )
         else
         {
             // the temp stream pointer points to the end now
-                aResult = m_pStream->Tell();
+            aResult = m_pStream->Tell();
 
             if( aResult < nPos )
             {
@@ -1886,7 +1882,7 @@ void UCBStorage_Impl::Init()
                     {
                         if ( !pStream->GetError() )
                         {
-                              ::utl::OInputStreamWrapper* pHelper = new ::utl::OInputStreamWrapper( *pStream );
+                            ::utl::OInputStreamWrapper* pHelper = new ::utl::OInputStreamWrapper( *pStream );
                             com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > xInputStream( pHelper );
 
                             // create a manifest reader object that will read in the manifest from the stream
@@ -2042,8 +2038,8 @@ void UCBStorage_Impl::ReadContent()
                     if ( m_bRepairPackage )
                     {
                         xComEnv = new ::ucbhelper::CommandEnvironment( Reference< ::com::sun::star::task::XInteractionHandler >(),
-                                                                 m_xProgressHandler );
-                           aName += String( RTL_CONSTASCII_USTRINGPARAM( "?repairpackage" ) );
+                                                                m_xProgressHandler );
+                            aName += String( RTL_CONSTASCII_USTRINGPARAM( "?repairpackage" ) );
                     }
 
                     ::ucbhelper::Content aContent( aName, xComEnv );
@@ -2281,13 +2277,10 @@ BOOL UCBStorage_Impl::Insert( ::ucbhelper::Content *pContent )
     // a new substorage is inserted into a UCBStorage ( given by the parameter pContent )
     // it must be inserted with a title and a type
     BOOL bRet = FALSE;
-    Reference< XContentCreator > xCreator = Reference< XContentCreator >( pContent->get(), UNO_QUERY );
-    if ( !xCreator.is() )
-        return sal_False;
 
     try
     {
-        Sequence< ContentInfo > aInfo = xCreator->queryCreatableContentsInfo();
+        Sequence< ContentInfo > aInfo = pContent->queryCreatableContentsInfo();
         sal_Int32 nCount = aInfo.getLength();
         if ( nCount == 0 )
             return sal_False;
@@ -2639,7 +2632,7 @@ BOOL UCBStorage_Impl::Revert()
             }
             else if ( pElement->m_xStorage.Is() )
             {
-                 pElement->m_xStorage->m_bCommited = sal_False;
+                pElement->m_xStorage->m_bCommited = sal_False;
                 pElement->m_xStorage->Revert();
             }
 
@@ -2655,7 +2648,7 @@ BOOL UCBStorage_Impl::Revert()
 
 const String& UCBStorage::GetName() const
 {
-    return pImp->m_aName;               // pImp->m_aURL ?!
+    return pImp->m_aName; // pImp->m_aURL ?!
 }
 
 BOOL UCBStorage::IsRoot() const
@@ -2893,7 +2886,7 @@ BOOL UCBStorage::CopyTo( const String& rElemName, BaseStorage* pDest, const Stri
     else
     {
         // for copying no optimization is usefull, because in every case the stream data must be copied
-           UCBStorageElement_Impl* pElement = FindElement_Impl( rElemName );
+            UCBStorageElement_Impl* pElement = FindElement_Impl( rElemName );
         if ( pElement )
             return CopyStorageElement_Impl( *pElement, pDest, rNew );
         else
@@ -3256,10 +3249,10 @@ BOOL UCBStorage::MoveTo( const String& rEleName, BaseStorage* pNewSt, const Stri
         {
             // because the element is moved, not copied, a special optimization is possible :
             // first copy the UCBStorageElement; flag old element as "Removed" and new as "Inserted",
-             // clear original name/type of the new element
-             // if moved element is open: copy content, but change absolute URL ( and those of all children of the element! ),
+            // clear original name/type of the new element
+            // if moved element is open: copy content, but change absolute URL ( and those of all children of the element! ),
             // clear original name/type of new content, keep the old original stream/storage, but forget its working streams,
-               // close original UCBContent and original stream, only the TempFile and its stream may remain unchanged, but now
+                // close original UCBContent and original stream, only the TempFile and its stream may remain unchanged, but now
             // belong to the new content
             // if original and editable stream are identical ( readonly element ), it has to be copied to the editable
             // stream of the destination object

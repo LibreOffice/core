@@ -91,7 +91,7 @@ private:            // private methods
 
     bool            writeFeatureList( osl::File* pFile, const JobData&, bool bDocumentSetup );
     bool            writeSetup( osl::File* pFile, const JobData& );
-    bool            writePageSetup( osl::File* pFile, const JobData& );
+    bool            writePageSetup( osl::File* pFile, const JobData&, bool bWriteFeatures = true );
     void            writeJobPatch( osl::File* File, const JobData& );
     bool            writeProlog (osl::File* pFile, const JobData& );
 
