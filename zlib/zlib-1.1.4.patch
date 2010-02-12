@@ -1,14 +1,8 @@
 --- misc/zlib-1.1.4/makefile.mk	Fri Mar 14 10:17:06 2008
 +++ misc/build/zlib-1.1.4/makefile.mk	Fri Mar 14 10:16:56 2008
-@@ -1 +1,79 @@
+@@ -1 +1,73 @@
 -dummy
 +#*************************************************************************
-+#
-+#   $RCSfile: makefile.mk,v $
-+#
-+#   $Revision: 1.8 $
-+#
-+#   last change: $Author: mtg $ $Date: 2000/11/09 10:19:32 $
 +#
 +#   Copyright according the GNU Public License.
 +#
