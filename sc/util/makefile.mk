@@ -41,10 +41,6 @@ USE_DEFFILE=TRUE
 
 .INCLUDE :  settings.mk
 
-.IF "$(OS)"=="IRIX"
-LINKFLAGS+=-Wl,-LD_LAYOUT:lgot_buffer=30
-.ENDIF
-
 # --- Resourcen ----------------------------------------------------
 
 RESLIB1LIST=\
@@ -58,6 +54,7 @@ RESLIB1LIST=\
     $(SRS)$/formdlgs.srs \
     $(SRS)$/pagedlg.srs	\
     $(SRS)$/navipi.srs	\
+    $(SRS)$/cctrl.srs	\
     $(SOLARCOMMONRESDIR)$/sfx.srs
 
 RESLIB1NAME=sc
