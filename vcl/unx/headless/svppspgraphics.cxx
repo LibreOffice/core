@@ -1366,7 +1366,3 @@ SystemGraphicsData PspGraphics::GetGraphicsData() const
     return aRes;
 }
 
-void PspGraphics::GetFontHints( const ImplFontAttributes& , int , ImplFontHints& ) const
-{
-}
-

@@ -7,7 +7,6 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svppspgraphics.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -190,7 +189,7 @@ public:
 
     virtual SystemGraphicsData      GetGraphicsData() const;
     virtual SystemFontData          GetSysFontData( int nFallbacklevel ) const;
-    virtual void                    GetFontHints( const ImplFontAttributes& rFontAttributes, int nSize, ImplFontHints& rFontHints) const;
 };
 
 #endif // _SVP_PSPGRAPHICS_HXX
+

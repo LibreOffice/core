@@ -7,7 +7,6 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salgdi.h,v $
- * $Revision: 1.30.20.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -286,7 +285,6 @@ public:
     virtual USHORT         SetFont( ImplFontSelectData*, int nFallbackLevel );
     // get the current font's etrics
     virtual void            GetFontMetric( ImplFontMetricData* );
-    virtual void                        GetFontHints( const ImplFontAttributes& rFontAttributes, int nHints, ImplFontHints& rFontHints);
     // get kernign pairs of the current font
     // return only PairCount if (pKernPairs == NULL)
     virtual ULONG           GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs );

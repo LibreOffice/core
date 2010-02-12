@@ -7,7 +7,6 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: svpgdi.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -588,6 +587,3 @@ bool SvpSalGraphics::supportsOperation( OutDevSupportType ) const
     return false;
 }
 
-void SvpSalGraphics::GetFontHints( const ImplFontAttributes& , int , ImplFontHints& ) const
-{
-}

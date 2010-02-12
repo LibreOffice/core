@@ -7157,14 +7157,6 @@ BOOL OutputDevice::IsFontAvailable( const String& rFontName ) const
 
 // -----------------------------------------------------------------------
 
-void OutputDevice::ImplGetFontHints( const ImplFontAttributes& rFontAttributes, int nSize, ImplFontHints &rHints) const
-{
-    if ( mpGraphics )
-        mpGraphics->GetFontHints( rFontAttributes, nSize, rHints );
-}
-
-// -----------------------------------------------------------------------
-
 FontMetric OutputDevice::GetFontMetric() const
 {
     DBG_TRACE( "OutputDevice::GetFontMetric()" );
