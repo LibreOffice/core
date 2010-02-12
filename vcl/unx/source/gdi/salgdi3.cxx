@@ -1738,47 +1738,10 @@ bool GetFCFontOptions( const ImplFontAttributes& rFontAttributes, int nSize,
             break;
     }
 
-    psp::FontConfigHints aHints(psp::PrintFontManager::get().getFontConfigHints(aInfo, nSize,
-    cairosubcallback));
+    const psp::PrintFontManager& rPFM = psp::PrintFontManager::get();
+    bool bOK = rPFM.getFontOptions( aInfo, nSize, cairosubcallback, rFontOptions);
 
-    switch (aHints.m_eEmbeddedbitmap)
-    {
-        default: rFontOptions.meEmbeddedBitmap = EMBEDDEDBITMAP_DONTKNOW; break;
-        case psp::fcstatus::istrue: rFontOptions.meEmbeddedBitmap = EMBEDDEDBITMAP_TRUE; break;
-        case psp::fcstatus::isfalse: rFontOptions.meEmbeddedBitmap = EMBEDDEDBITMAP_FALSE; break;
-    }
-
-    switch (aHints.m_eAntialias)
-    {
-        default: rFontOptions.meAntiAlias = ANTIALIAS_DONTKNOW; break;
-        case psp::fcstatus::istrue: rFontOptions.meAntiAlias = ANTIALIAS_TRUE; break;
-        case psp::fcstatus::isfalse: rFontOptions.meAntiAlias = ANTIALIAS_FALSE; break;
-    }
-
-    switch (aHints.m_eAutoHint)
-    {
-        default: rFontOptions.meAutoHint = AUTOHINT_DONTKNOW; break;
-        case psp::fcstatus::istrue: rFontOptions.meAutoHint = AUTOHINT_TRUE; break;
-        case psp::fcstatus::isfalse: rFontOptions.meAutoHint = AUTOHINT_FALSE; break;
-    }
-
-    switch (aHints.m_eHinting)
-    {
-        default: rFontOptions.meHinting = HINTING_DONTKNOW; break;
-        case psp::fcstatus::istrue:  rFontOptions.meHinting = HINTING_TRUE; break;
-        case psp::fcstatus::isfalse: rFontOptions.meHinting = HINTING_FALSE; break;
-    }
-
-    switch (aHints.m_eHintStyle)
-    {
-        case psp::fchint::Nohint: rFontOptions.meHintStyle = HINT_NONE; break;
-        case psp::fchint::Slight: rFontOptions.meHintStyle = HINT_SLIGHT; break;
-        case psp::fchint::Medium: rFontOptions.meHintStyle = HINT_MEDIUM; break;
-        default: // fall through
-        case psp::fchint::Full:   rFontOptions.meHintStyle = HINT_FULL; break;
-    }
-
-    return true;
+    return bOK;
 }
 
 // ----------------------------------------------------------------------------

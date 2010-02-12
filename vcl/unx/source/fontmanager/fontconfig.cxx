@@ -1027,14 +1027,16 @@ rtl::OUString PrintFontManager::Substitute(const rtl::OUString& rFontName,
     return aName;
 }
 
-FontConfigHints PrintFontManager::getFontConfigHints(
-    const FastPrintFontInfo& rInfo, int nSize, void (*subcallback)(void *) )
+bool PrintFontManager::getFontOptions(
+    const FastPrintFontInfo& rInfo, int nSize, void (*subcallback)(void*),
+    ImplFontOptions& rOptions) const
 {
-    FontConfigHints aHints;
-#ifdef ENABLE_FONTCONFIG
+#ifndef ENABLE_FONTCONFIG
+    return false;
+#else // ENABLE_FONTCONFIG
     FontCfgWrapper& rWrapper = FontCfgWrapper::get();
     if( ! rWrapper.isValid() )
-        return aHints;
+        return false;
 
     FcConfig* pConfig = rWrapper.FcConfigGetCurrent();
     FcPattern* pPattern = rWrapper.FcPatternCreate();
@@ -1058,9 +1060,9 @@ FontConfigHints PrintFontManager::getFontConfigHints(
     rWrapper.FcDefaultSubstitute( pPattern );
 
     FcResult eResult = FcResultNoMatch;
-    FcFontSet *pFontSet = rWrapper.getFontSet();
+    FcFontSet* pFontSet = rWrapper.getFontSet();
     FcPattern* pResult = rWrapper.FcFontSetMatch( pConfig, &pFontSet, 1, pPattern, &eResult );
-    if( pResult )
+    if( !pResult )
     {
         FcFontSet* pSet = rWrapper.FcFontSetCreate();
         rWrapper.FcFontSetAdd( pSet, pResult );
@@ -1074,37 +1076,24 @@ FontConfigHints PrintFontManager::getFontConfigHints(
                 FC_AUTOHINT, 0, &autohint);
             FcResult eHinting = rWrapper.FcPatternGetBool(pSet->fonts[0],
                 FC_HINTING, 0, &hinting);
-            FcResult eHintStyle = rWrapper.FcPatternGetInteger(pSet->fonts[0],
+            /*FcResult eHintStyle =*/ rWrapper.FcPatternGetInteger( pSet->fonts[0],
                 FC_HINT_STYLE, 0, &hintstyle);
 
             if( eEmbeddedBitmap == FcResultMatch )
-                aHints.m_eEmbeddedbitmap = embitmap ? fcstatus::istrue : fcstatus::isfalse;
+                rOptions.meEmbeddedBitmap = embitmap ? EMBEDDEDBITMAP_TRUE : EMBEDDEDBITMAP_FALSE;
             if( eAntialias == FcResultMatch )
-                aHints.m_eAntialias = antialias ? fcstatus::istrue : fcstatus::isfalse;
+                rOptions.meAntiAlias = antialias ? ANTIALIAS_TRUE : ANTIALIAS_FALSE;
             if( eAutoHint == FcResultMatch )
-                aHints.m_eAutoHint = autohint ? fcstatus::istrue : fcstatus::isfalse;
+                rOptions.meAutoHint = autohint ? AUTOHINT_TRUE : AUTOHINT_FALSE;
             if( eHinting == FcResultMatch )
-                aHints.m_eHinting = hinting ? fcstatus::istrue : fcstatus::isfalse;
-            if (eHintStyle != FcResultMatch)
-                aHints.m_eHintStyle = fchint::Full;
-            else
+                rOptions.meHinting = hinting ? HINTING_TRUE : HINTING_FALSE;
+            switch (hintstyle)
             {
-                switch (hintstyle)
-                {
-                    case FC_HINT_NONE:
-                        aHints.m_eHintStyle = fchint::Nohint;
-                        break;
-                    case FC_HINT_SLIGHT:
-                        aHints.m_eHintStyle = fchint::Slight;
-                        break;
-                    case FC_HINT_MEDIUM:
-                        aHints.m_eHintStyle = fchint::Medium;
-                        break;
-                    case FC_HINT_FULL:
-                    default:
-                        aHints.m_eHintStyle = fchint::Full;
-                        break;
-                }
+                case FC_HINT_NONE:   rOptions.meHintStyle = HINT_NONE; break;
+                case FC_HINT_SLIGHT: rOptions.meHintStyle = HINT_SLIGHT; break;
+                case FC_HINT_MEDIUM: rOptions.meHintStyle = HINT_MEDIUM; break;
+                default: // fall through
+                case FC_HINT_FULL:   rOptions.meHintStyle = HINT_FULL; break;
             }
         }
         // info: destroying the pSet destroys pResult implicitly
@@ -1115,8 +1104,10 @@ FontConfigHints PrintFontManager::getFontConfigHints(
     // cleanup
     rWrapper.FcPatternDestroy( pPattern );
 
+    // TODO: return true only if non-default font options are set
+    const bool bOK = (pResult != NULL);
+    return bOK;
 #endif
-    return aHints;
 }
 
 bool PrintFontManager::matchFont( FastPrintFontInfo& rInfo, const com::sun::star::lang::Locale& rLocale )

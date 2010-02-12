@@ -35,6 +35,7 @@
 
 #include "vcl/dllapi.h"
 #include "vcl/helper.hxx"
+#include "vcl/impfont.hxx"
 
 #include "com/sun/star/lang/Locale.hpp"
 
@@ -136,33 +137,6 @@ enum type {
     isfalse
 };
 }
-
-namespace fchint
-{
-enum type {
-    Nohint = 0,
-    Slight = 1,
-    Medium = 2,
-    Full = 3
-};
-}
-
-struct FontConfigHints
-{
-    fcstatus::type m_eEmbeddedbitmap;
-    fcstatus::type m_eAntialias;
-    fcstatus::type m_eAutoHint;
-    fcstatus::type m_eHinting;
-    fchint::type m_eHintStyle;
-
-    FontConfigHints() :
-        m_eEmbeddedbitmap( fcstatus::isunset ),
-        m_eAntialias( fcstatus::isunset ),
-        m_eAutoHint( fcstatus::isunset ),
-        m_eHinting( fcstatus::isunset ),
-        m_eHintStyle( fchint::Full )
-        {}
-};
 
 /*
  *  the difference between FastPrintFontInfo and PrintFontInfo
@@ -756,7 +730,7 @@ public:
     false else
      */
     bool matchFont( FastPrintFontInfo& rInfo, const com::sun::star::lang::Locale& rLocale );
-    FontConfigHints getFontConfigHints(const FastPrintFontInfo& rInfo, int nSize, void (*subcallback)(void *));
+    bool getFontOptions( const FastPrintFontInfo&, int nSize, void (*subcallback)(void*), ImplFontOptions& rResult ) const;
 
     rtl::OUString Substitute( const rtl::OUString& rFontName, rtl::OUString& rMissingCodes,
         const rtl::OString& rLangAttrib, italic::type& rItalic, weight::type& rWeight,
