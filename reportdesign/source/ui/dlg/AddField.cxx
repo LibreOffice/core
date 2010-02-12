@@ -238,7 +238,7 @@ OAddFieldWindow::~OAddFieldWindow()
         ULONG nCount = pModel->GetEntryCount();
         for(ULONG i = 0; i< nCount;++i)
         {
-            delete pModel->GetEntry(i)->GetUserData();
+            delete static_cast<ColumnInfo*>(pModel->GetEntry(i)->GetUserData());
         }
     }
     if (m_pChangeListener.is())
