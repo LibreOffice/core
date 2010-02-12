@@ -169,3 +169,24 @@
  endif
  endif
  endif
+--- misc/mozilla/security/nss/cmd/shlibsign/Makefile	Fri Aug  7 21:06:37 2009
++++ misc/build/mozilla/security/nss/cmd/shlibsign/Makefile	Fri Nov 27 13:07:52 2009
+@@ -78,10 +78,15 @@
+ 
+ # sign any and all shared libraries that contain the word freebl
+ 
+-CHECKLIBS = $(DIST)/lib/$(DLL_PREFIX)softokn3.$(DLL_SUFFIX)
+-CHECKLIBS += $(wildcard $(DIST)/lib/$(DLL_PREFIX)freebl*3.$(DLL_SUFFIX))
++# Signing causes loading of some system library which in turn loads
++# libsqlite3. Then it loads libsqulite3 from nss, which does not have the proper
++# version. Therefore signing fails.
++# We cannot build with the system sqlite3, because it is too old (SDK
++# 10.4). Otherwise one could set NSS_USE_SYSTEM_SQLITE=1 and use the system lib. 
++#CHECKLIBS = $(DIST)/lib/$(DLL_PREFIX)softokn3.$(DLL_SUFFIX)
++#CHECKLIBS += $(wildcard $(DIST)/lib/$(DLL_PREFIX)freebl*3.$(DLL_SUFFIX))
+ ifndef NSS_DISABLE_DBM
+-CHECKLIBS += $(DIST)/lib/$(DLL_PREFIX)nssdbm3.$(DLL_SUFFIX)
++#CHECKLIBS += $(DIST)/lib/$(DLL_PREFIX)nssdbm3.$(DLL_SUFFIX)
+ endif
+ CHECKLOC = $(CHECKLIBS:.$(DLL_SUFFIX)=.chk)
+ 
