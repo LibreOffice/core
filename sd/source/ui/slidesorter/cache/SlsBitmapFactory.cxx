@@ -76,7 +76,7 @@ BitmapFactory::~BitmapFactory (void)
     const bool bDoSuperSampling)
 {
     Size aSize (rPixelSize);
-    bool bDo (true);
+    bool bDo (bDoSuperSampling);
     if (bDo)
     {
         aSize.Width() *= gnSuperSampleFactor;

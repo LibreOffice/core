@@ -510,6 +510,7 @@ Range Layouter::GetSelectionRange (
     const Point& rOther,
     const Range& rCurrentSelectionRange) const
 {
+    (void)rCurrentSelectionRange;
     sal_Int32 nIndexA (GetInsertionIndex(rAnchor, true));
     sal_Int32 nIndexB (GetInsertionIndex(rOther, true));
 

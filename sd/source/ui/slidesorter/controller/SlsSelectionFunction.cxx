@@ -353,7 +353,6 @@ BOOL SelectionFunction::MouseMove (const MouseEvent& rEvent)
             (rEvent.GetButtons() & MOUSE_LEFT)!=0);
     }
 
-    view::ViewOverlay& rOverlay (mrSlideSorter.GetView().GetOverlay());
     Rectangle aRectangle (Point(0,0),mpWindow->GetOutputSizePixel());
     if ( ! aRectangle.IsInside(aMousePosition)
         && mpSubstitutionHandler)
@@ -952,7 +951,6 @@ sal_uInt32 SelectionFunction::EncodeState (
     }
 
     // Detect whether we are dragging pages or dragging a selection rectangle.
-    view::ViewOverlay& rOverlay (mrSlideSorter.GetView().GetOverlay());
     if (mpSubstitutionHandler)
         nEventCode |= SUBSTITUTION_VISIBLE;
     if (mpMouseMultiSelector)
@@ -1569,6 +1567,7 @@ SelectionFunction::MouseMultiSelector::MouseMultiSelector (
       meSelectionMode(SM_Normal),
       maInitialSelection()
 {
+    (void)rMouseModelPosition;
     // Remember the current selection.
     model::PageEnumeration aPages (
         model::PageEnumerationProvider::CreateAllPagesEnumeration(
@@ -1835,8 +1834,6 @@ void RangeSelector::UpdateSelection (void)
 {
     view::SlideSorterView::DrawLock aLock (mrSlideSorter);
 
-    PageSelector& rSelector (mrSlideSorter.GetController().GetPageSelector());
-
     const sal_Int32 nIndexUnderMouse (
         mrSlideSorter.GetView().GetLayouter().GetIndexAtPoint (
             maSecondCorner,
@@ -1854,10 +1851,6 @@ void RangeSelector::UpdateSelection (void)
         for (sal_Int32 nIndex=0,nCount(rModel.GetPageCount()); nIndex<nCount; ++nIndex)
         {
             model::SharedPageDescriptor pDescriptor (rModel.GetPageDescriptor(nIndex));
-
-            // Determine whether the page was selected before the rectangle
-            // selection was started.
-            const bool bWasSelected (pDescriptor->HasState(model::PageDescriptor::ST_WasSelected));
 
             UpdateSelectionState(pDescriptor, aRange.IsInside(nIndex));
         }

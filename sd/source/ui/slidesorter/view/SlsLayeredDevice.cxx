@@ -215,7 +215,7 @@ void LayeredDevice::RegisterPainter (
         const sal_Int32 nOldLayerCount (mpLayers->size());
         mpLayers->resize(nLayer+1);
 
-        for (sal_Int32 nIndex=nOldLayerCount; nIndex<mpLayers->size(); ++nIndex)
+        for (size_t nIndex=nOldLayerCount; nIndex<mpLayers->size(); ++nIndex)
             (*mpLayers)[nIndex].reset(new Layer());
     }
 

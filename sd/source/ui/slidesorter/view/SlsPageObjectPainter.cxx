@@ -194,7 +194,12 @@ private:
     Point maOffset;
 };
 
-class FramePainter
+} // end of anonymous namespace
+
+
+
+
+class PageObjectPainter::FramePainter
 {
 public:
     FramePainter (const BitmapEx& rBitmap);
@@ -212,10 +217,6 @@ private:
     OffsetBitmap maShadowBottomRight;
     bool mbIsValid;
 };
-
-
-} // end of anonymous namespace
-
 
 
 //===== PageObjectPainter =====================================================
@@ -599,7 +600,7 @@ Bitmap PageObjectPainter::CreateBackgroundBitmap(
 
 //===== FramePainter ==========================================================
 
-FramePainter::FramePainter (const BitmapEx& rShadowBitmap)
+PageObjectPainter::FramePainter::FramePainter (const BitmapEx& rShadowBitmap)
     : maShadowTopLeft(rShadowBitmap,-1,-1),
       maShadowTop(rShadowBitmap,0,-1),
       maShadowTopRight(rShadowBitmap,+1,-1),
@@ -627,14 +628,14 @@ FramePainter::FramePainter (const BitmapEx& rShadowBitmap)
 
 
 
-FramePainter::~FramePainter (void)
+PageObjectPainter::FramePainter::~FramePainter (void)
 {
 }
 
 
 
 
-void FramePainter::PaintFrame (
+void PageObjectPainter::FramePainter::PaintFrame (
     OutputDevice& rDevice,
     const Rectangle aBox) const
 {

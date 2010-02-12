@@ -49,8 +49,6 @@ namespace sd { namespace slidesorter { namespace view {
 class Layouter;
 class PageObjectLayouter;
 
-namespace { class FramePainter;  }
-
 
 class PageObjectPainter
 {
@@ -74,6 +72,7 @@ private:
     BitmapEx maStartPresentationIcon;
     BitmapEx maShowSlideIcon;
     BitmapEx maNewSlideIcon;
+    class FramePainter;
     ::boost::scoped_ptr<FramePainter> mpShadowPainter;
     Bitmap maNormalBackground;
     Bitmap maSelectionBackground;
