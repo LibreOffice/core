@@ -56,6 +56,7 @@
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlnumfe.hxx>
 #include <xmloff/xmlmetae.hxx>
+#include <xmloff/XMLSettingsExportContext.hxx>
 #include <xmloff/families.hxx>
 #include <xmloff/XMLEventExport.hxx>
 #include "XMLStarBasicExportHandler.hxx"
@@ -157,6 +158,72 @@ const XMLServiceMapEntry_Impl aServiceMap[] =
     SERVICE_MAP_ENTRY( CHART ),
     { 0, 0, 0, 0 }
 };
+
+//==============================================================================
+
+class SAL_DLLPRIVATE SettingsExportFacade : public ::xmloff::XMLSettingsExportContext
+{
+public:
+    SettingsExportFacade( SvXMLExport& i_rExport )
+        :m_rExport( i_rExport )
+    {
+    }
+
+    virtual ~SettingsExportFacade()
+    {
+    }
+
+    virtual void    AddAttribute( enum ::xmloff::token::XMLTokenEnum i_eName,
+                                  const ::rtl::OUString& i_rValue );
+    virtual void    AddAttribute( enum ::xmloff::token::XMLTokenEnum i_eName,
+                                  enum ::xmloff::token::XMLTokenEnum i_eValue );
+
+    virtual void    StartElement( enum ::xmloff::token::XMLTokenEnum i_eName,
+                                  const sal_Bool i_bIgnoreWhitespace );
+    virtual void    EndElement(   const sal_Bool i_bIgnoreWhitespace );
+
+    virtual void    Characters( const ::rtl::OUString& i_rCharacters );
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+                    GetServiceFactory() const;
+private:
+    SvXMLExport&                    m_rExport;
+    ::std::stack< ::rtl::OUString > m_aElements;
+};
+
+void SettingsExportFacade::AddAttribute( enum ::xmloff::token::XMLTokenEnum i_eName, const ::rtl::OUString& i_rValue )
+{
+    m_rExport.AddAttribute( XML_NAMESPACE_CONFIG, i_eName, i_rValue );
+}
+
+void SettingsExportFacade::AddAttribute( enum ::xmloff::token::XMLTokenEnum i_eName, enum ::xmloff::token::XMLTokenEnum i_eValue )
+{
+    m_rExport.AddAttribute( XML_NAMESPACE_CONFIG, i_eName, i_eValue );
+}
+
+void SettingsExportFacade::StartElement( enum ::xmloff::token::XMLTokenEnum i_eName, const sal_Bool i_bIgnoreWhitespace )
+{
+    const ::rtl::OUString sElementName( m_rExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_CONFIG, GetXMLToken( i_eName ) ) );
+    m_rExport.StartElement( sElementName, i_bIgnoreWhitespace );
+    m_aElements.push( sElementName );
+}
+
+void SettingsExportFacade::EndElement( const sal_Bool i_bIgnoreWhitespace )
+{
+    const ::rtl::OUString sElementName( m_aElements.top() );
+    m_rExport.EndElement( sElementName, i_bIgnoreWhitespace );
+    m_aElements.pop();
+}
+
+void SettingsExportFacade::Characters( const ::rtl::OUString& i_rCharacters )
+{
+    m_rExport.GetDocHandler()->characters( i_rCharacters );
+}
+
+Reference< XMultiServiceFactory > SettingsExportFacade::GetServiceFactory() const
+{
+    return m_rExport.getServiceFactory();
+}
 
 //==============================================================================
 
@@ -1103,7 +1170,9 @@ void SvXMLExport::ImplExportSettings()
                                 nSettingsCount != 0,
                                 XML_NAMESPACE_OFFICE, XML_SETTINGS,
                                 sal_True, sal_True );
-        XMLSettingsExportHelper aSettingsExportHelper(*this);
+
+        SettingsExportFacade aSettingsExportContext( *this );
+        XMLSettingsExportHelper aSettingsExportHelper( aSettingsExportContext );
 
         for (   ::std::list< SettingsGroup >::const_iterator settings = aSettings.begin();
                 settings != aSettings.end();
@@ -1114,7 +1183,8 @@ void SvXMLExport::ImplExportSettings()
                 continue;
 
             OUString sSettingsName( GetXMLToken( settings->eGroupName ) );
-            aSettingsExportHelper.exportSettings( settings->aSettings, sSettingsName );
+            OUString sQName = GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OOO, sSettingsName );
+            aSettingsExportHelper.exportAllSettings( settings->aSettings, sQName );
         }
     }
 }

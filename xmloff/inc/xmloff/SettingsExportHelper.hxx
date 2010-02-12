@@ -43,9 +43,15 @@ namespace com
         namespace util { struct DateTime; }
     } }
 }
+
+namespace xmloff
+{
+    class XMLSettingsExportContext;
+}
+
 class XMLSettingsExportHelper
 {
-    SvXMLExport&    rExport;
+    ::xmloff::XMLSettingsExportContext& m_rContext;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XStringSubstitution > mxStringSubsitution;
 
@@ -94,10 +100,10 @@ class XMLSettingsExportHelper
                     const rtl::OUString rName) const;
 
 public:
-    XMLSettingsExportHelper(SvXMLExport& rExport);
+    XMLSettingsExportHelper( ::xmloff::XMLSettingsExportContext& i_rContext );
     ~XMLSettingsExportHelper();
 
-    void exportSettings(
+    void exportAllSettings(
         const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
         const rtl::OUString& rName) const;
 };
