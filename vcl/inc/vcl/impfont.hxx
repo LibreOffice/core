@@ -137,7 +137,7 @@ public:
 // - ImplFontHints -
 // ------------------
 
-class ImplFontHints
+class ImplFontOptions
 {
 public:
     FontEmbeddedBitmap meEmbeddedBitmap; // whether the embedded bitmaps should be used
@@ -146,14 +146,14 @@ public:
     FontHinting        meHinting;        // whether the font should be hinted
     FontHintStyle      meHintStyle;      // type of font hinting to be used
 public:
-    ImplFontHints() :
+    ImplFontOptions() :
         meEmbeddedBitmap(EMBEDDEDBITMAP_DONTKNOW),
         meAntiAlias(ANTIALIAS_DONTKNOW),
         meAutoHint(AUTOHINT_DONTKNOW),
         meHinting(HINTING_DONTKNOW),
         meHintStyle(HINT_SLIGHT)
     {}
-    ImplFontHints(FontEmbeddedBitmap eEmbeddedBitmap, FontAntiAlias eAntiAlias,
+    ImplFontOptions( FontEmbeddedBitmap eEmbeddedBitmap, FontAntiAlias eAntiAlias,
         FontAutoHint eAutoHint, FontHinting eHinting, FontHintStyle eHintStyle) :
         meEmbeddedBitmap(eEmbeddedBitmap),
         meAntiAlias(eAntiAlias),
@@ -167,7 +167,6 @@ public:
     bool DontUseAntiAlias() const { return meAntiAlias == ANTIALIAS_FALSE; }
     bool DontUseHinting() const { return (meHinting == HINTING_FALSE) || (GetHintStyle() == HINT_NONE); }
 };
-
 
 // -------------------
 // - ImplFontCharMap -
