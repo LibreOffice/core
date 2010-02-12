@@ -979,7 +979,7 @@ namespace vclcanvas
                     ::canvas::tools::appendToRenderState(aLocalState,
                                                          aScaleCorrection);
 
-                    return drawBitmap( pCanvas, 
+                    return drawBitmap( pCanvas,
                                        textures[0].Bitmap,
                                        viewState,
                                        aLocalState );
