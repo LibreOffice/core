@@ -27,15 +27,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-//=========================================================================
-//
-// UCB Explorer ( resources )
-//
-// (C) 2000 StarOffice Entwicklungs GmbH, Hamburg, Germany
-//
-// $Author: rt $ $Date: 2008-04-10 16:20:05 $Revision$
-//
-//=========================================================================
 
 #include "ucbexplorer.hrc"
 
@@ -91,6 +82,7 @@ Menu MENU_POPUP
     };
 };
 
+/*
 Bitmap BMP_FOLDER_CLOSED
 {
     File = "bmp/fldclose.bmp" ;
@@ -107,6 +99,7 @@ Bitmap BMP_LINK
 {
     File = "bmp/link.bmp" ;
 };
+*/
 
 ModalDialog DLG_STRINGINPUT
 {
