@@ -185,8 +185,7 @@ public class Runner
         }
     }
 
-    public static void main(String[] args)
-    {
+    public static boolean run(String... args) {
         System.out.println("OOoRunner Main() version from 20090825 (yyyymmdd)");
 
         setStartTime(getTime());
@@ -249,12 +248,16 @@ public class Runner
         if (!worked)
         {
             System.out.println("Job " + param.get("TestJob") + " failed");
-            System.exit(-1);
         }
         else
         {
             System.out.println("Job " + param.get("TestJob") + " done");
-            System.exit(0);
         }
+        return worked;
+    }
+
+    public static void main(String[] args)
+    {
+        System.exit(run(args) ? 0 : -1);
     }
 }

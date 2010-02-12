@@ -1,13 +1,9 @@
 #*************************************************************************
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile,v $
-#
-# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -27,31 +23,16 @@
 # for a copy of the LGPLv3 License.
 #***********************************************************************/
 
-PRJ = .
-PRJNAME = smoketestoo_native
-TARGET = smoketest
+PRJ = ..
+PRJNAME = test
+TARGET = inc
 
 ENABLE_EXCEPTIONS = TRUE
+VISIBILITY_HIDDEN = TRUE
 
 .INCLUDE: settings.mk
-
-SLOFILES = $(SHL1OBJS)
-
-SHL1TARGET = smoketest
-SHL1OBJS = $(SLO)/smoketest.obj
-SHL1RPATH = NONE
-SHL1STDLIBS = $(CPPUHELPERLIB) $(CPPULIB) $(CPPUNITLIB) $(SALLIB) $(TESTLIB)
-SHL1VERSIONMAP = version.map
-DEF1NAME = $(SHL1TARGET)
-
 .INCLUDE: target.mk
-.INCLUDE: installationtest.mk
 
-ALLTAR : cpptest
-
-cpptest : $(SHL1TARGETN) $(BIN)/smoketestdoc.sxw
-
-OOO_CPPTEST_ARGS = $(SHL1TARGETN) -env:arg-doc=$(BIN)/smoketestdoc.sxw
-
-$(BIN)/smoketestdoc.sxw: data/smoketestdoc.sxw
-    $(COPY) $< $@
+.IF "$(ENABLE_PCH)" != ""
+ALLTAR: $(SLO)/precompiled.pch $(SLO)/precompiled_ex.pch
+.ENDIF
