@@ -39,7 +39,7 @@ namespace dmapper
 
 using namespace ::com::sun::star;
 
-    XMLTag::Pointer_t lcl_TableColumnSeparatorsToTag(uno::Any & rTableColumnSeparators)
+    XMLTag::Pointer_t lcl_TableColumnSeparatorsToTag(const uno::Any & rTableColumnSeparators)
 {
     uno::Sequence<text::TableColumnSeparator> aSeq;
     rTableColumnSeparators >>= aSeq;

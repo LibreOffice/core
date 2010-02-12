@@ -140,7 +140,7 @@ public:
     virtual void insertTableProperties( const PropertyMap* );
 
 #ifdef DEBUG_DOMAINMAPPER
-    virtual XMLTag::Pointer_t toTag();
+    virtual XMLTag::Pointer_t toTag() const;
 #endif
 
 };

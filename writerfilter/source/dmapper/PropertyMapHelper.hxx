@@ -36,7 +36,7 @@ namespace writerfilter
 namespace dmapper
 {
 
-XMLTag::Pointer_t lcl_TableColumnSeparatorsToTag(uno::Any & rTableColumnSeparators);
+XMLTag::Pointer_t lcl_TableColumnSeparatorsToTag(const uno::Any & rTableColumnSeparators);
 XMLTag::Pointer_t lcl_PropertyValuesToTag(beans::PropertyValues & rValues);
 
 typedef uno::Sequence<beans::PropertyValues> PropertyValueSeq_t;

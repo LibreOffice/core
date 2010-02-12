@@ -42,6 +42,7 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include "dmapperLoggers.hxx"
 #include "PropertyMapHelper.hxx"
 
 using namespace ::com::sun::star;
@@ -132,12 +133,12 @@ void PropertyMap::Insert( PropertyIds eId, bool bIsTextProperty, const uno::Any&
 }
 
 #ifdef DEBUG_DOMAINMAPPER
-XMLTag::Pointer_t PropertyMap::toTag()
+XMLTag::Pointer_t PropertyMap::toTag() const
 {
     XMLTag::Pointer_t pResult(new XMLTag("PropertyMap"));
 
     PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
-    PropertyMap::iterator aMapIter = begin();
+    PropertyMap::const_iterator aMapIter = begin();
     while (aMapIter != end())
     {
         XMLTag::Pointer_t pTag(new XMLTag("property"));
@@ -214,6 +215,9 @@ const uno::Reference< text::XFootnote>&  PropertyMap::GetFootnote() const
   -----------------------------------------------------------------------*/
 void PropertyMap::insertTableProperties( const PropertyMap* )
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->element("PropertyMap.insertTableProperties");
+#endif
 }
 /*-- 24.07.2006 08:29:01---------------------------------------------------
 
@@ -1091,6 +1095,11 @@ void TablePropertyMap::setValue( TablePropertyMapTarget eWhich, sal_Int32 nSet )
   -----------------------------------------------------------------------*/
 void TablePropertyMap::insertTableProperties( const PropertyMap* pMap )
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("TablePropertyMap.insertTableProperties");
+    dmapper_logger->addTag(pMap->toTag());
+#endif
+
     const TablePropertyMap* pSource = dynamic_cast< const TablePropertyMap* >(pMap);
     if( pSource )
     {
@@ -1104,6 +1113,10 @@ void TablePropertyMap::insertTableProperties( const PropertyMap* pMap )
             }
         }
     }
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->addTag(toTag());
+    dmapper_logger->endElement("TablePropertyMap.insertTableProperties");
+#endif
 }
 
 

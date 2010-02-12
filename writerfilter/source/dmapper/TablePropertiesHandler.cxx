@@ -220,6 +220,19 @@ namespace dmapper {
                 }
             }
             break;
+           case NS_ooxml::LN_CT_TblPrBase_tblInd:
+           {
+               writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+               if (pProperties.get())
+               {
+                   MeasureHandlerPtr pHandler(new MeasureHandler);
+                   TablePropertyMapPtr pTblIndMap(new TablePropertyMap);
+                   sal_uInt32 nTblInd = pHandler->getMeasureValue();
+                   pTblIndMap->Insert( TablePropertyMap::LEFT_MARGIN, nTblInd);
+                   insertTableProps(pTblIndMap);
+               }
+           }
+            break;
             default: bRet = false;
         }
 
