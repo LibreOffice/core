@@ -34,7 +34,7 @@ import com.sun.star.io.IOException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.XOfficeDatabaseDocument;
 import com.sun.star.sdbc.SQLException;
-import com.sun.star.sdbc.XConnection;
+import connectivity.tools.sdb.Connection;
 
 /**
  *
@@ -42,7 +42,7 @@ import com.sun.star.sdbc.XConnection;
  */
 public interface DatabaseAccess
 {
-    XConnection defaultConnection() throws SQLException;
+    Connection defaultConnection() throws SQLException;
 
     void executeSQL(final String statementString) throws SQLException;
 

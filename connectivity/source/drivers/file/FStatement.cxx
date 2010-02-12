@@ -497,13 +497,16 @@ void OStatement_Base::construct(const ::rtl::OUString& sql)  throw(SQLException,
             // SELECT statement without columns -> error
             m_pConnection->throwGenericSQLException(STR_QUERY_NO_COLUMN,*this);
 
-        if ( m_aSQLIterator.getStatementType() == SQL_STATEMENT_CREATE_TABLE )
-            // CREATE TABLE is not supported at all
-            m_pConnection->throwGenericSQLException(STR_QUERY_TOO_COMPLEX,*this);
-
-        if ( ( m_aSQLIterator.getStatementType() == SQL_STATEMENT_ODBC_CALL ) || ( m_aSQLIterator.getStatementType() == SQL_STATEMENT_UNKNOWN ) )
-            // ODBC call or unknown statement type -> error
-            m_pConnection->throwGenericSQLException(STR_QUERY_TOO_COMPLEX,*this);
+        switch(m_aSQLIterator.getStatementType())
+        {
+            case SQL_STATEMENT_CREATE_TABLE:
+            case SQL_STATEMENT_ODBC_CALL:
+            case SQL_STATEMENT_UNKNOWN:
+                m_pConnection->throwGenericSQLException(STR_QUERY_TOO_COMPLEX,*this);
+                break;
+            default:
+                break;
+        }
 
         // at this moment we support only one table per select statement
         Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(xTabs.begin()->second,UNO_QUERY);
