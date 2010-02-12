@@ -41,23 +41,23 @@ import java.util.Hashtable;
  * @see TestCase
  */
 
-public class TestEnvironment {
+public final class TestEnvironment {
     /**
      * Contains object relations - auxiliary objects associated with the
      * tested object and required for testing.
      */
-    protected Hashtable relations = new Hashtable(10);
+    private final Hashtable relations = new Hashtable(10);
 
     /**
      * An instance of the tested implementation object.
      */
-    protected XInterface testObject;
+    private final XInterface testObject;
 
     /**
      * Indicates that the testObject is in invalid state and should notbe
      * used for testing anymore.
      */
-    protected boolean disposed = false;
+    private boolean disposed = false;
 
     /**
      * A reference to TestCase which has created the test environment.

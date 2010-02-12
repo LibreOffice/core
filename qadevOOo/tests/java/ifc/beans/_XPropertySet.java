@@ -67,7 +67,7 @@ public class _XPropertySet extends MultiMethodTest {
     /**
     * Flag that indicates change listener was called.
     */
-    boolean propertyChanged = false;
+    private boolean propertyChanged = false;
 
     /**
     * Listener that must be called on bound property changing.
@@ -82,12 +82,12 @@ public class _XPropertySet extends MultiMethodTest {
          public void disposing (EventObject obj) {}
     };
 
-    XPropertyChangeListener PClistener = new MyChangeListener();
+    private final XPropertyChangeListener PClistener = new MyChangeListener();
 
     /**
     * Flag that indicates veto listener was called.
     */
-    boolean vetoableChanged = false;
+    private boolean vetoableChanged = false;
 
     /**
     * Listener that must be called on constrained property changing.
@@ -102,19 +102,19 @@ public class _XPropertySet extends MultiMethodTest {
          public void disposing (EventObject obj) {}
     };
 
-    XVetoableChangeListener VClistener = new MyVetoListener();
+    private final XVetoableChangeListener VClistener = new MyVetoListener();
 
     /**
     * Structure that collects three properties of each type to test :
     * Constrained, Bound and Normal.
     */
-    public class PropsToTest {
+    private final class PropsToTest {
            String constrained = null;
            String bound = null;
            String normal = null;
     }
 
-    PropsToTest PTT = new PropsToTest();
+    private final PropsToTest PTT = new PropsToTest();
 
     /**
     * Tests method <code>getPropertySetInfo</code>. After test completed
@@ -473,7 +473,7 @@ public class _XPropertySet extends MultiMethodTest {
     * Gets the properties being tested. Searches and stores by one
     * property of each kind (Bound, Vetoable, Normal).
     */
-    public PropsToTest getPropsToTest(XPropertySetInfo xPSI) {
+    public void getPropsToTest(XPropertySetInfo xPSI) {
 
         Property[] properties = xPSI.getProperties();
         String bound = "";
@@ -547,9 +547,6 @@ public class _XPropertySet extends MultiMethodTest {
 
         //get a random normal property
         PTT.normal=getRandomString(normal);
-
-        return PTT;
-
     }
 
     /**
