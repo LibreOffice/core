@@ -38,9 +38,6 @@
 #include "vcl/svapp.hxx"
 #include "vcl/outfont.hxx"
 #include "vcl/impfont.hxx"
-#include "vcl/bitmap.hxx"
-#include "vcl/bmpacc.hxx"
-#include "vcl/virdev.hxx"
 
 #include "tools/poly.hxx"
 #include "basegfx/matrix/b2dhommatrix.hxx"
@@ -80,7 +77,7 @@ typedef FT_Vector* FT_Vector_CPtr;
 // TODO: move file mapping stuff to OSL
 #if defined(UNX)
     #if !defined(HPUX)
-        // PORTERS: dlfcn is used for code dependend on FT version
+        // PORTERS: dlfcn is used for getting symbols from FT versions newer than baseline
         #include <dlfcn.h>
     #endif
     #include <unistd.h>
@@ -92,10 +89,6 @@ typedef FT_Vector* FT_Vector_CPtr;
     #include <io.h>
     #define strncasecmp strnicmp
 #endif
-
-#include "vcl/svapp.hxx"
-#include "vcl/settings.hxx"
-#include "i18npool/lang.h"
 
 typedef const unsigned char* CPU8;
 inline sal_uInt16 NEXT_U16( CPU8& p ) { p+=2; return (p[-2]<<8)|p[-1]; }
