@@ -97,7 +97,7 @@ private:
     void PrepareBackgrounds (OutputDevice& rDevice);
     Bitmap CreateBackgroundBitmap(
         const OutputDevice& rReferenceDevice,
-        const Theme::ColorType eType) const;
+        const Theme::GradientColorType eType) const;
 };
 
 } } } // end of namespace sd::slidesorter::view

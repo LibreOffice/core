@@ -150,9 +150,7 @@ ColorData Theme::GetColorForVisualState (const model::VisualState::State eState)
 
 
 
-ColorData Theme::GetColor (
-    const ColorType eType,
-    const ColorClass eClass)
+ColorData Theme::GetColor (const ColorType eType)
 {
     switch(eType)
     {
@@ -170,7 +168,19 @@ ColorData Theme::GetColor (
 
         case Selection:
             return StellaBlue;
+    }
+    return 0;
+}
 
+
+
+
+ColorData Theme::GetGradientColor (
+    const GradientColorType eType,
+    const GradientColorClass eClass)
+{
+    switch(eType)
+    {
         case NormalPage:
             switch (eClass)
             {

@@ -38,7 +38,6 @@
 #include "ViewShell.hxx"
 #include "SlsViewCacheContext.hxx"
 #include "SlsLayeredDevice.hxx"
-#include "SlsSelectionPainter.hxx"
 #include "view/SlsLayouter.hxx"
 #include "view/SlsPageObjectLayouter.hxx"
 #include "view/SlsPageObjectPainter.hxx"
@@ -975,32 +974,6 @@ void SlideSorterView::SetButtonUnderMouse (const sal_Int32 nButtonIndex)
 
 
 
-void SlideSorterView::AddVisualStateAnimation (const model::SharedPageDescriptor& rpDescriptor)
-{
-    // Stop a state animation for the given descriptor that is still running.
-    const Animator::AnimationId nId (rpDescriptor->GetVisualState().GetStateAnimationId());
-    if (nId != Animator::NotAnAnimationId)
-    {
-        mrSlideSorter.GetController().GetAnimator()->RemoveAnimation(nId);
-    }
-
-    rpDescriptor->GetVisualState().SetStateAnimationId(
-        mrSlideSorter.GetController().GetAnimator()->AddAnimation(
-            ::boost::bind(
-                controller::AnimationFunction::ApplyVisualStateChange,
-                rpDescriptor,
-                ::boost::ref(*this),
-                ::boost::bind(AnimationFunction::FastInSlowOut_Sine, _1)),
-            350,
-            ::boost::bind(
-                &VisualState::SetStateAnimationId,
-                ::boost::ref(rpDescriptor->GetVisualState()),
-                controller::Animator::NotAnAnimationId)));
-}
-
-
-
-
 bool SlideSorterView::SetState (
     const model::SharedPageDescriptor& rpDescriptor,
     const PageDescriptor::State eState,
@@ -1013,15 +986,12 @@ bool SlideSorterView::SetState (
     switch(eState)
     {
         case PageDescriptor::ST_Visible:
-            RequestRepaint(rpDescriptor);
-            break;
-
         case PageDescriptor::ST_Selected:
         case PageDescriptor::ST_Focused:
         case PageDescriptor::ST_MouseOver:
         case PageDescriptor::ST_Current:
         case PageDescriptor::ST_Excluded:
-            AddVisualStateAnimation(rpDescriptor);
+            RequestRepaint(rpDescriptor);
             break;
 
         case PageDescriptor::ST_WasSelected:

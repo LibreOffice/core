@@ -76,15 +76,27 @@ public:
         ButtonBackground,
         MouseOverColor,
         PageNumberBorder,
-        Selection,
+        Selection
+    };
+    ColorData GetColor (const ColorType eType);
+
+    enum GradientColorType {
         NormalPage,
         SelectedPage,
         MouseOverPage
     };
-    enum ColorClass { Border1, Border2, Fill1, Fill2, Other };
-    ColorData GetColor (const ColorType eType, const ColorClass eClass = Other);
+    enum GradientColorClass {
+        Border1,
+        Border2,
+        Fill1,
+        Fill2
+    };
+    ColorData GetGradientColor (
+        const GradientColorType eType,
+        const GradientColorClass eClass);
 
-    enum IconType {
+    enum IconType
+    {
         InsertionIndicator,
         RawShadow
     };

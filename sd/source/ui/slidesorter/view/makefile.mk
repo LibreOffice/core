@@ -60,7 +60,6 @@ SLOFILES =      							\
     $(SLO)$/SlsLayouter.obj					\
     $(SLO)$/SlsPageObjectLayouter.obj		\
     $(SLO)$/SlsPageObjectPainter.obj		\
-    $(SLO)$/SlsSelectionPainter.obj			\
     $(SLO)$/SlsTheme.obj					\
     $(SLO)$/SlsViewCacheContext.obj			\
     $(SLO)$/SlsViewOverlay.obj

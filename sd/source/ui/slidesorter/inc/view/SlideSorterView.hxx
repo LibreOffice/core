@@ -199,7 +199,6 @@ public:
     void SetPageUnderMouse (const model::SharedPageDescriptor& rpDescriptor);
     void SetButtonUnderMouse (const sal_Int32 nButtonIndex);
 
-    void AddVisualStateAnimation (const model::SharedPageDescriptor& rpDescriptor);
     bool SetState (
         const model::SharedPageDescriptor& rpDescriptor,
         const model::PageDescriptor::State eState,

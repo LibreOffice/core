@@ -328,7 +328,6 @@ void PageCacheManager::ReleaseCache (const ::boost::shared_ptr<Cache>& rpCache)
             mpPageCaches->begin(),
             mpPageCaches->end(),
             PageCacheContainer::CompareWithCache(rpCache)));
-        OSL_ASSERT(iCacheToChange != mpPageCaches->end());
         if (iCacheToChange != mpPageCaches->end())
         {
             OSL_ASSERT(iCacheToChange->second == rpCache);
@@ -344,6 +343,10 @@ void PageCacheManager::ReleaseCache (const ::boost::shared_ptr<Cache>& rpCache)
                 rpCache));
 
             pResult = rpCache;
+        }
+        else
+        {
+            OSL_ASSERT(iCacheToChange != mpPageCaches->end());
         }
     }
 

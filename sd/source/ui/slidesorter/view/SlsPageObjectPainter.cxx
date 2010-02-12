@@ -527,16 +527,11 @@ void PageObjectPainter::PrepareBackgrounds (OutputDevice& rDevice)
 
 Bitmap PageObjectPainter::CreateBackgroundBitmap(
     const OutputDevice& rReferenceDevice,
-    const Theme::ColorType eColorType) const
+    const Theme::GradientColorType eColorType) const
 {
-    ::canvas::tools::ElapsedTime aTimer;
-    const double nStartTime (aTimer.getElapsedTime());
-
     const Size aSize (mpPageObjectLayouter->GetPageObjectSize());
     VirtualDevice aBitmapDevice (rReferenceDevice);
     aBitmapDevice.SetOutputSizePixel(aSize);
-
-    OSL_TRACE("created bitmap after  %fms",(aTimer.getElapsedTime() - nStartTime)*1000);
 
     // Paint the background with a linear gradient that starts some pixels
     // below the top and ends some pixels above the bottom.
@@ -551,8 +546,8 @@ Bitmap PageObjectPainter::CreateBackgroundBitmap(
                 nDefaultConstantSize,
                 (nHeight - nMinimalGradientSize)/2)));
     const sal_Int32 nY2 (nHeight-nY1);
-    const Color aTopColor(mpTheme->GetColor(eColorType, Theme::Fill1));
-    const Color aBottomColor(mpTheme->GetColor(eColorType, Theme::Fill2));
+    const Color aTopColor(mpTheme->GetGradientColor(eColorType, Theme::Fill1));
+    const Color aBottomColor(mpTheme->GetGradientColor(eColorType, Theme::Fill2));
     for (sal_Int32 nY=0; nY<nHeight; ++nY)
     {
         if (nY<=nY1)
@@ -577,16 +572,12 @@ Bitmap PageObjectPainter::CreateBackgroundBitmap(
     aBitmapDevice.DrawRect(Rectangle(Point(0,0), aSize));
 #endif
 
-    OSL_TRACE("filled background after  %fms",(aTimer.getElapsedTime() - nStartTime)*1000);
-
     // Paint the border.
     aBitmapDevice.SetFillColor();
-    aBitmapDevice.SetLineColor(mpTheme->GetColor(eColorType, Theme::Border2));
+    aBitmapDevice.SetLineColor(mpTheme->GetGradientColor(eColorType, Theme::Border2));
     aBitmapDevice.DrawRect(Rectangle(Point(0,0),aSize));
-    aBitmapDevice.SetLineColor(mpTheme->GetColor(eColorType, Theme::Border1));
+    aBitmapDevice.SetLineColor(mpTheme->GetGradientColor(eColorType, Theme::Border1));
     aBitmapDevice.DrawLine(Point(0,0),Point(aSize.Width()-1,0));
-
-    OSL_TRACE("painted border after  %fms",(aTimer.getElapsedTime() - nStartTime)*1000);
 
     // Get bounding box of the preview around which a shadow is painted.
     // Compensate for the border around the preview.
@@ -599,8 +590,6 @@ Bitmap PageObjectPainter::CreateBackgroundBitmap(
     aBox.Right() += 1;
     aBox.Bottom() += 1;
     mpShadowPainter->PaintFrame(aBitmapDevice, aBox);
-
-    OSL_TRACE("painted shadow border after  %fms",(aTimer.getElapsedTime() - nStartTime)*1000);
 
     return aBitmapDevice.GetBitmap (Point(0,0),aSize);
 }
