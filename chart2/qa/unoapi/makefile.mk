@@ -1,14 +1,9 @@
 #*************************************************************************
-#
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
-# Copyright 2008 by Sun Microsystems, Inc.
+#
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -26,21 +21,26 @@
 # version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
-#
-#*************************************************************************
+#***********************************************************************/
 
-EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
+.ELSE
 
-PRJ=..$/..
+PRJ = ../..
+PRJNAME = chart2
+TARGET = qa_unoapi
 
-PRJNAME=sch
-TARGET=qa_unoapi
+PACKAGE = org/openoffice/chart2/qa/unoapi
+JAVATESTFILES = Test.java
+JAVAFILES = $(JAVATESTFILES)
+JARFILES = OOoRunner.jar ridl.jar test.jar
+EXTRAJARFILES = $(OOO_JUNIT_JAR)
 
 .INCLUDE: settings.mk
-
 .INCLUDE: target.mk
+.INCLUDE: installationtest.mk
 
-ALLTAR : UNOAPI_TEST
+ALLTAR : javatest
 
-UNOAPI_TEST:
-    +$(SOLARENV)$/bin$/checkapi -sce sch.sce -xcl knownissues.xcl -tdoc $(PWD)$/testdocuments
+.END
