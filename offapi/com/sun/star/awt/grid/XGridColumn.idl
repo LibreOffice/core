@@ -33,6 +33,8 @@
 #ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
 #endif
+#include <com/sun/star/style/HorizontalAlignment.idl>
+
 
 //=============================================================================
 
@@ -49,20 +51,31 @@ interface XGridColumn: com::sun::star::uno::XInterface
 
     /** Specifies the default column witdth. **/
     [attribute] long ColumnWidth;
-    /*
+
+    /** Specifies the preferred column witdth. **/
     [attribute] long PreferredWidth;
 
+    /** Specifies the min column witdth. **/
     [attribute] long MinWidth;
 
+    /** Specifies the max column witdth. **/
     [attribute] long MaxWidth;
 
-    [attribute] boolean Resizable;
-    */
+    /** Specifies whether column has fixed size or not. **/
+    [attribute] boolean Resizeable;
+
+    /** Specifies the horizontal alignment of the content in the control.
+
+        <pre>
+            LEFT
+            CENTER
+            RIGHT
+        </pre>
+     */
+    [attribute] ::com::sun::star::style::HorizontalAlignment HorizontalAlign;
 
     /** A title is displayed in the colum header row if <method>UnoControlGridModel::ShowRowHeader</method> is set to <true/>**/
     [attribute] string Title;
-
-
 };
 
 //=============================================================================

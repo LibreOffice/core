@@ -61,7 +61,9 @@ IDLFILES=\
     ScrollBarMode.idl\
     XGridControl.idl\
     UnoControlGrid.idl\
-    UnoControlGridModel.idl
+    UnoControlGridModel.idl\
+    GridInvalidDataException.idl\
+    GridInvalidModelException.idl
 # ------------------------------------------------------------------
 
 .INCLUDE :  target.mk

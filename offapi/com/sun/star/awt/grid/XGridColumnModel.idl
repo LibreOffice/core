@@ -52,6 +52,10 @@ interface XGridColumnModel: com::sun::star::uno::XInterface
     */
     [attribute] boolean ColumnSelectionAllowed;
 
+    /**Specifies the height of column header.
+    */
+    [attribute] long ColumnHeaderHeight;
+
     /** Returns the number of columns.
         @returns
                 the number of columns.
@@ -84,11 +88,17 @@ interface XGridColumnModel: com::sun::star::uno::XInterface
 
     /** Returns a specific column.
         @param index
-                the position of the reuquested column.
+                the position of the requested column.
         @returns
                  the requested column.
     */
     XGridColumn getColumn( [in] long index);
+
+    /** Sets default columns to the column model.
+        @param elements
+            the number of default columns that should be set.
+    */
+    void setDefaultColumns([in] long elements);
 
     /*
     long getTotalColumnWidth();
