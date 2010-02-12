@@ -140,7 +140,6 @@ SLOFILES =  \
         $(SLO)$/dbfunc2.obj     \
         $(SLO)$/tabvwsh2.obj
 .ELSE
-
     NOOPTFILES=\
         $(SLO)$/drawview.obj	\
         $(SLO)$/dbfunc2.obj     \
@@ -157,7 +156,8 @@ EXCEPTIONSFILES= \
     $(SLO)$/cellsh1.obj \
     $(SLO)$/drawvie4.obj \
     $(SLO)$/formatsh.obj \
-        $(SLO)$/scextopt.obj \
+    $(SLO)$/gridwin2.obj \
+    $(SLO)$/scextopt.obj \
     $(SLO)$/tabvwshb.obj \
     $(SLO)$/viewdata.obj \
     $(SLO)$/viewfun5.obj \

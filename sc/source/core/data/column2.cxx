@@ -1376,13 +1376,13 @@ SCSIZE ScColumn::GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirecti
     return nLines;
 }
 
-//UNUSED2009-05 SCROW ScColumn::GetFirstDataPos() const
-//UNUSED2009-05 {
-//UNUSED2009-05     if (nCount)
-//UNUSED2009-05         return pItems[0].nRow;
-//UNUSED2009-05     else
-//UNUSED2009-05         return 0;
-//UNUSED2009-05 }
+SCROW ScColumn::GetFirstDataPos() const
+{
+    if (nCount)
+        return pItems[0].nRow;
+    else
+        return 0;
+}
 
 SCROW ScColumn::GetLastDataPos() const
 {
