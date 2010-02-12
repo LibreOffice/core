@@ -134,12 +134,12 @@ BOOL KillAppFromWindow(
         printf("App %s: window not found.\n,", appName);
 #endif
         bRet = FALSE;
-    } else {        
+    } else {
         DWORD pid;  // Variable to hold the process ID.
         DWORD dThread;  // Variable to hold (unused) thread ID.
         dThread = GetWindowThreadProcessId(hWnd, &pid);
         HANDLE hProcess; // Handle to existing process
-        
+
         hProcess = OpenProcess(SYNCHRONIZE | PROCESS_ALL_ACCESS, TRUE, pid);
         if (hProcess == NULL) {
 #ifdef _DEBUG
@@ -149,7 +149,7 @@ BOOL KillAppFromWindow(
         } else {
             if (!TerminateProcess(hProcess, 0)) {
                 LPTSTR lpMsgBuf;
-                FormatMessage( 
+                FormatMessage(
                     FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
                     NULL, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
                     (LPTSTR) &lpMsgBuf, 0, NULL );
@@ -184,19 +184,19 @@ BOOL CloseActiveDialogs() {
 }
 
 /*--------------------------------------------------------------
-  Callback for EnumChildWindows that sends close message to 
+  Callback for EnumChildWindows that sends close message to
   any dialogs that match window class of MSO dialogs
 
   --------------------------------------------------------------*/
-BOOL CALLBACK CloseOfficeDlgProc(HWND hwndChild, LPARAM) 
-{ 
+BOOL CALLBACK CloseOfficeDlgProc(HWND hwndChild, LPARAM)
+{
     //bosa_sdm_Microsoft Word 9.0
     //bosa_sdm_XL9
     //#32770 (Dialog)
 
      char szBuff[4096];
     if (GetClassName(hwndChild, szBuff, 4096) == 0) {
-        
+
     } else {
         if ((strcmpi(szBuff, pWordDlg2k) == 0) || (strcmpi(szBuff, pWordDlg2k3) == 0)) {
             gWDDlgCount++;
@@ -214,21 +214,21 @@ BOOL CALLBACK CloseOfficeDlgProc(HWND hwndChild, LPARAM)
             SendMessage(hwndChild, WM_CLOSE, 0, 0);
         }
     }
- 
-    return TRUE; 
-} 
+
+    return TRUE;
+}
 
 
 /*--------------------------------------------------------------
-  Callback for EnumChildWindows that counts numnnber of  
+  Callback for EnumChildWindows that counts numnnber of
   dialogs that match window class of MSO dialogs
 
   --------------------------------------------------------------*/
-BOOL CALLBACK CountOfficeDlgProc(HWND hwndChild, LPARAM) 
+BOOL CALLBACK CountOfficeDlgProc(HWND hwndChild, LPARAM)
 {
      char szBuff[4096];
     if (GetClassName(hwndChild, szBuff, 4096) == 0) {
-        
+
     } else {
         if ((strcmpi(szBuff, pWordDlg2k) == 0) || (strcmpi(szBuff, pWordDlg2k3) == 0)) {
             gWDDlgCount++;
@@ -241,12 +241,12 @@ BOOL CALLBACK CountOfficeDlgProc(HWND hwndChild, LPARAM)
         }
     }
 
-    return TRUE; 
-} 
+    return TRUE;
+}
 
 /*--------------------------------------------------------------
   Simple usage message...
- 
+
   -------------------------------------------------------------*/
 void printUsage() {
     printf("Recovery Assistant Utility - try and put MSO apps in a recoverable state\n");

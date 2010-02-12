@@ -62,7 +62,7 @@ if ( $help ) {
 
 open IN, "<$in_name" or die "Could not open $in_name for reading $! $^E";
 
-foreach $lang ( keys %files ) 
+foreach $lang ( keys %files )
 {
     open "F_$lang",">$files{$lang}" or die "Could not open $files{$lang} for writing $! $^E";
     binmode "F_$lang";
@@ -80,7 +80,7 @@ while ( <IN> )
     if ( $line =~ /^\[(.*)\]$/ )
     {
         $new_ID = $1;
-        
+
         write_transunit();
         $ID = $new_ID;
         %transunit = ();
@@ -117,11 +117,11 @@ sub write_transunit
         {
             $string = $transunit{ "en-US" };
         }
-        
+
         my $dat_line = "$ID=$string";
         Encode::from_to( $dat_line, "utf8", "UTF-16LE");
         print { $files{$lang} } "$dat_line\015\000\012\000";
-    }       
+    }
 }
 
 
@@ -131,7 +131,7 @@ sub get_options {
     while ($arg = shift @ARGV) {
         $arg =~ /^-i$/  and $in_name = shift @ARGV and next;
         $arg =~ /^-help$/  and $help = 1 and next; #show help
-        
+
         $arg =~ /.*[\/\\]([^\/\\]*)\.dat$/;
 #       $arg =~ /.*[/\]([^/\]*)\.dat$/;
         $lang = $1;
