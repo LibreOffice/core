@@ -262,8 +262,7 @@ struct EventMultiplexerImpl
         std::vector<ShapeCursorEventHandlerSharedPtr> >   ImplShapeCursorHandlers;
     typedef ThreadUnsafeListenerContainer<
         PrioritizedHandlerEntry<HyperlinkHandler>,
-        std::vector<
-            PrioritizedHandlerEntry<HyperlinkHandler> > > ImplHyperLinkHandlers;
+        std::vector<PrioritizedHandlerEntry<HyperlinkHandler> > > ImplHyperLinkHandlers;
 
     template <typename XSlideShowViewFunc>
     void forEachView( XSlideShowViewFunc pViewMethod );
@@ -1078,10 +1077,46 @@ bool EventMultiplexer::notifyUserPaintColor( RGBColor const& rUserColor )
                     boost::cref(rUserColor)));
 }
 
+bool EventMultiplexer::notifyUserPaintStrokeWidth( double rUserStrokeWidth )
+{
+    return mpImpl->maUserPaintEventHandlers.applyAll(
+        boost::bind(&UserPaintEventHandler::widthChanged,
+            _1,
+                    rUserStrokeWidth));
+}
+
 bool EventMultiplexer::notifyUserPaintDisabled()
 {
     return mpImpl->maUserPaintEventHandlers.applyAll(
         boost::mem_fn(&UserPaintEventHandler::disable));
+}
+
+bool EventMultiplexer::notifySwitchPenMode(){
+    return mpImpl->maUserPaintEventHandlers.applyAll(
+        boost::mem_fn(&UserPaintEventHandler::switchPenMode));
+}
+
+bool EventMultiplexer::notifySwitchEraserMode(){
+    return mpImpl->maUserPaintEventHandlers.applyAll(
+        boost::mem_fn(&UserPaintEventHandler::switchEraserMode));
+}
+
+//adding erasing all ink features with UserPaintOverlay
+bool EventMultiplexer::notifyEraseAllInk( bool const& rEraseAllInk )
+{
+    return mpImpl->maUserPaintEventHandlers.applyAll(
+        boost::bind(&UserPaintEventHandler::eraseAllInkChanged,
+                    _1,
+                    boost::cref(rEraseAllInk)));
+}
+
+//adding erasing features with UserPaintOverlay
+bool EventMultiplexer::notifyEraseInkWidth( sal_Int32 rEraseInkSize )
+{
+    return mpImpl->maUserPaintEventHandlers.applyAll(
+        boost::bind(&UserPaintEventHandler::eraseInkWidthChanged,
+                    _1,
+                    boost::cref(rEraseInkSize)));
 }
 
 bool EventMultiplexer::notifyNextEffect()
