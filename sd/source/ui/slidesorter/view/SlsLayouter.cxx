@@ -452,9 +452,9 @@ Rectangle Layouter::GetPageBox (const sal_Int32 nObjectCount) const
 
 
 Point Layouter::GetInsertionMarkerLocation (
-    sal_Int32 nIndex,
-    bool bVertical,
-    bool bLeftOrTop) const
+    const sal_Int32 nIndex,
+    const bool bVertical,
+    const bool bLeftOrTop) const
 {
     Rectangle aBox (GetPageObjectBox (nIndex));
     Point aLocation = aBox.Center();

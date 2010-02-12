@@ -284,7 +284,7 @@ public:
     */
     sal_Int32 GetInsertionIndex (
         const Point& rModelPosition,
-        bool bAllowVerticalPosition) const;
+        const bool bAllowVerticalPosition) const;
 
     /** Return whether the main orientation of the slides in the slide
         sorter is vertical, i.e. all slides are arranged in one column.
