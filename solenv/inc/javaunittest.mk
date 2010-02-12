@@ -84,8 +84,9 @@ $(TESTS): $(JAVACLASSFILES)
 .ENDIF
 
 %.test .PHONY: %.java
-    $(JAVAI) $(JAVACPS) $(CLASSPATH) org.openoffice.Runner -TestBase java_complex \
-        -NoOffice yes -o $(subst,/,. $(subst,.test, $(PACKAGE).$@))
+    $(JAVAI) $(JAVAIFLAGS) $(JAVACPS) $(CLASSPATH) org.openoffice.Runner \
+        -TestBase java_complex -NoOffice yes \
+        -o $(subst,/,. $(subst,.test, $(PACKAGE).$@))
 
 .IF "$(IDLTESTFILES)" != ""
 

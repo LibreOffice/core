@@ -74,6 +74,7 @@ SOLAR_JAVA*=TRUE
     JAVADEF=-DSOLAR_JAVA
     JAVAFLAGSDEBUG=-g
     JAVA_RUNTIME=-framework JavaVM
+    JAVAIFLAGS=-d32
 .ENDIF
 
 # architecture dependent flags for the C and C++ compiler that can be changed by

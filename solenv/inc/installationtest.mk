@@ -106,7 +106,8 @@ $(MISC)/$(TARGET)/services.rdb :
 javatest .PHONY : $(MISC)/$(TARGET)/installation.flag $(JAVATARGET)
     $(RM) -r $(MISC)/$(TARGET)/user
     $(MKDIR) $(MISC)/$(TARGET)/user
-    $(JAVAI) $(JAVACPS) $(OOO_JUNIT_JAR)$(PATH_SEPARATOR)$(CLASSPATH) \
+    $(JAVAI) $(JAVAIFLAGS) $(JAVACPS) \
+        $(OOO_JUNIT_JAR)$(PATH_SEPARATOR)$(CLASSPATH) \
         -Dorg.openoffice.test.arg.path=$(my_soffice) \
         -Dorg.openoffice.test.arg.user=$(my_file)$(PWD)/$(MISC)/$(TARGET)/user \
         $(my_javaenv) org.junit.runner.JUnitCore \
