@@ -47,7 +47,7 @@ namespace css = ::com::sun::star;
 using rtl::OUString;
 
 
-namespace 
+namespace
 {
 ::rtl::OUString getElement(::rtl::OUString const & version, ::sal_Int32 * index)
 {
@@ -69,7 +69,7 @@ int compareVersions(
         ::rtl::OUString e2(getElement(version2, &i2));
         if (e1.getLength() < e2.getLength()) {
             return -1;
-        } else if (e1.getLength() > e2.getLength()) {            
+        } else if (e1.getLength() > e2.getLength()) {
             return 1;
         } else if (e1 < e2) {
             return -1;
@@ -83,14 +83,14 @@ int compareVersions(
 //If the OOo 3.0 mode is used then we exclude
 //'mimetype' and all content of 'META-INF'.
 //If the argument 'bSigning' is true then the element list is created for a signing
-//operation in which case we use the latest signing algorithm. That is all elements 
+//operation in which case we use the latest signing algorithm. That is all elements
 //we find in the zip storage are added to the list. We do not support the old signatures
 //which did not contain all files.
 //If 'bSigning' is false, then we validate. If the user enabled validating according to OOo 3.0
 //then mimetype and all content of META-INF must be excluded.
-void ImplFillElementList( 
-    std::vector< rtl::OUString >& rList, const Reference < css::embed::XStorage >& rxStore, 
-    const ::rtl::OUString rRootStorageName, const bool bRecursive, 
+void ImplFillElementList(
+    std::vector< rtl::OUString >& rList, const Reference < css::embed::XStorage >& rxStore,
+    const ::rtl::OUString rRootStorageName, const bool bRecursive,
     const DocumentSignatureAlgorithm mode)
 {
     ::rtl::OUString aMetaInfName( RTL_CONSTASCII_USTRINGPARAM( "META-INF" ) );
@@ -104,7 +104,7 @@ void ImplFillElementList(
 
     for ( sal_Int32 n = 0; n < nElements; n++ )
     {
-        if (mode != OOo3_2Document 
+        if (mode != OOo3_2Document
             && (pNames[n] == aMetaInfName
             || pNames[n] == sMimeTypeName))
         {
@@ -154,7 +154,7 @@ bool DocumentSignatureHelper::isOOo3_2_Signature(const SignatureInformation & si
     ::rtl::OUString sManifestURI(RTL_CONSTASCII_USTRINGPARAM("META-INF/manifest.xml"));
     bool bOOo3_2 = false;
     typedef ::std::vector< SignatureReferenceInformation >::const_iterator CIT;
-    for (CIT i = sigInfo.vSignatureReferenceInfors.begin(); 
+    for (CIT i = sigInfo.vSignatureReferenceInfors.begin();
         i < sigInfo.vSignatureReferenceInfors.end(); i++)
     {
         if (i->ouURI.equals(sManifestURI))
@@ -166,7 +166,7 @@ bool DocumentSignatureHelper::isOOo3_2_Signature(const SignatureInformation & si
     return  bOOo3_2;
 }
 
-DocumentSignatureAlgorithm 
+DocumentSignatureAlgorithm
 DocumentSignatureHelper::getDocumentAlgorithm(
     const ::rtl::OUString & sODFVersion, const SignatureInformation & sigInfo)
 {
@@ -183,24 +183,24 @@ DocumentSignatureHelper::getDocumentAlgorithm(
 }
 
 //The function creates a list of files which are to be signed or for which
-//the signature is to be validated. The strings are UTF8 encoded URIs which 
+//the signature is to be validated. The strings are UTF8 encoded URIs which
 //contain '/' as path separators.
 //
-//The algorithm how document signatures are created and validated has 
+//The algorithm how document signatures are created and validated has
 //changed over time. The change affects only which files within the document
 //are changed. Document signatures created by OOo 2.x only used particular files. Since
-//OOo 3.0 everything except "mimetype" and "META-INF" are signed. As of OOo 3.2 everything 
+//OOo 3.0 everything except "mimetype" and "META-INF" are signed. As of OOo 3.2 everything
 //except META-INF/documentsignatures.xml is signed.
 //Signatures are validated according to the algorithm which was then used for validation.
-//That is, when validating a signature which was created by OOo 3.0, then mimetype and 
+//That is, when validating a signature which was created by OOo 3.0, then mimetype and
 //META-INF are not used.
 //
 //When a signature is created then we always use the latest algorithm. That is, we use
 //that of OOo 3.2
-std::vector< rtl::OUString > 
-DocumentSignatureHelper::CreateElementList( 
-    const Reference < css::embed::XStorage >& rxStore, 
-    const ::rtl::OUString /*rRootStorageName*/, DocumentSignatureMode eMode, 
+std::vector< rtl::OUString >
+DocumentSignatureHelper::CreateElementList(
+    const Reference < css::embed::XStorage >& rxStore,
+    const ::rtl::OUString /*rRootStorageName*/, DocumentSignatureMode eMode,
     const DocumentSignatureAlgorithm mode)
 {
     std::vector< rtl::OUString > aElements;
@@ -310,7 +310,7 @@ DocumentSignatureHelper::CreateElementList(
     return aElements;
 }
 
-SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream( 
+SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream(
     const Reference < css::embed::XStorage >& rxStore, sal_Int32 nOpenMode, DocumentSignatureMode eDocSigMode )
 {
     sal_Int32 nSubStorageOpenMode = css::embed::ElementModes::READ;
@@ -319,7 +319,7 @@ SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream(
 
     SignatureStreamHelper aHelper;
 
-    try 
+    try
     {
         ::rtl::OUString aSIGStoreName( RTL_CONSTASCII_USTRINGPARAM( "META-INF" ) );
         aHelper.xSignatureStorage = rxStore->openStorageElement( aSIGStoreName, nSubStorageOpenMode );
@@ -347,11 +347,11 @@ SignatureStreamHelper DocumentSignatureHelper::OpenSignatureStream(
 
 //sElementList contains all files which are expected to be signed. Only those files must me signed,
 //no more, no less.
-//The DocumentSignatureAlgorithm indicates if the document was created with OOo 2.x. Then 
+//The DocumentSignatureAlgorithm indicates if the document was created with OOo 2.x. Then
 //the uri s in the Reference elements in the signature, were not properly encoded.
 // For example: <Reference URI="ObjectReplacements/Object 1">
-bool DocumentSignatureHelper::checkIfAllFilesAreSigned( 
-    const ::std::vector< ::rtl::OUString > & sElementList, 
+bool DocumentSignatureHelper::checkIfAllFilesAreSigned(
+    const ::std::vector< ::rtl::OUString > & sElementList,
     const SignatureInformation & sigInfo,
     const DocumentSignatureAlgorithm alg)
 {
@@ -381,7 +381,7 @@ bool DocumentSignatureHelper::checkIfAllFilesAreSigned(
                 ::rtl::OUString sElementListURI = *aIter;
                 if (alg == OOo2Document)
                 {
-                    sElementListURI = 
+                    sElementListURI =
                         ::rtl::Uri::encode(
                         sElementListURI, rtl_UriCharClassPchar,
                         rtl_UriEncodeCheckEscapes, RTL_TEXTENCODING_UTF8);
@@ -429,7 +429,7 @@ bool DocumentSignatureHelper::equalsReferenceUriManifestPath(
     {
         retVal = true;
         typedef std::vector<OUString>::const_iterator CIT;
-        for (CIT i = vUriSegments.begin(), j = vPathSegments.begin(); 
+        for (CIT i = vUriSegments.begin(), j = vPathSegments.begin();
             i != vUriSegments.end(); i++, j++)
         {
             //Decode the uri segment, so that %20 becomes ' ', etc.
@@ -445,7 +445,7 @@ bool DocumentSignatureHelper::equalsReferenceUriManifestPath(
 
     return retVal;
 }
-    
+
 ::rtl::OUString DocumentSignatureHelper::GetDocumentContentSignatureDefaultStreamName()
 {
     return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "documentsignatures.xml" ) );
