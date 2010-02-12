@@ -79,7 +79,8 @@ SHL1STDLIBS+=\
     $(SHELL32LIB)\
     $(KERNEL32LIB)\
     $(GDI32LIB)\
-    $(GDIPLUSLIB)
+    $(GDIPLUSLIB)\
+    msvcprt.lib
 
 SHL1LIBS+=$(SLB)$/util.lib\
     $(SLB)$/ooofilereader.lib
@@ -143,5 +144,7 @@ DEF1EXPORTFILE_X64=exports.dxp
 
 .INCLUDE :	set_wntx64.mk
 .INCLUDE :	target.mk
+INCLUDE!:=$(subst,/stl, $(INCLUDE))
+.EXPORT : INCLUDE
 .INCLUDE :	tg_wntx64.mk
 

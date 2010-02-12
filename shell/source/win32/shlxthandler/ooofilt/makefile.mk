@@ -37,7 +37,7 @@ ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
 
 # Do not use the dynamic STLport library.
-# NO_DEFAULT_STL=YES
+NO_DEFAULT_STL=YES
 
 # Do not use the uwinapi library
 UWINAPILIB=
@@ -76,7 +76,8 @@ SHL1STDLIBS+=$(OLE32LIB)\
      $(UUIDLIB)\
      $(SHELL32LIB)\
      $(KERNEL32LIB)\
-     $(OLDNAMESLIB)
+     $(OLDNAMESLIB)\
+     msvcprt.lib 
      
 #     $(LIBSTLPORTST)
      
@@ -129,4 +130,6 @@ DEF1EXPORTFILE_X64=exports.dxp
 
 .INCLUDE :	set_wntx64.mk
 .INCLUDE :	target.mk
+INCLUDE!:=$(subst,/stl, $(INCLUDE))
+.EXPORT : INCLUDE
 .INCLUDE :	tg_wntx64.mk

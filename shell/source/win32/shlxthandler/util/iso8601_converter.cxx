@@ -149,7 +149,7 @@ std::wstring iso8601_duration_to_local_duration(const std::wstring& iso8601durat
         hours = buff;
     }
 
-#if defined(_MSC_VER) && defined(_M_X64)
+#if defined(_MSC_VER) //&& defined(_M_X64)
     std::wostringstream oss;
     oss << std::setw(2) << std::setfill(wchar_t('0')) << hours   << L":" <<
            std::setw(2) << std::setfill(wchar_t('0')) << minutes << L":" <<
@@ -172,12 +172,14 @@ std::wstring iso8601_duration_to_local_duration(const std::wstring& iso8601durat
 
     return result;
 #undef ADD_AS_PREFILLED
+/*
 #else
     std::wostringstream oss;
     oss << std::setw(2) << std::setfill('0') << hours   << L":" <<
            std::setw(2) << std::setfill('0') << minutes << L":" <<
            std::setw(2) << std::setfill('0') << seconds;
     return oss.str();
+*/
 #endif
 }
 

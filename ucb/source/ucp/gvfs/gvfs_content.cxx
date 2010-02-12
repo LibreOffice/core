@@ -629,38 +629,38 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             else
                 xRow->appendVoid( rProp );
         }
-
         else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) ) {
             if (m_info.valid_fields & GNOME_VFS_FILE_INFO_FIELDS_TYPE)
                 xRow->appendBoolean( rProp, ( m_info.type == GNOME_VFS_FILE_TYPE_DIRECTORY ) );
             else
                 xRow->appendVoid( rProp );
         }
+        else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsReadOnly" ) ) ) {
 
+            GnomeVFSFileInfo* fileInfo = gnome_vfs_file_info_new ();
+
+            ::rtl::OString aURI = getOURI();
+            gnome_vfs_get_file_info
+                ( (const sal_Char *)aURI, fileInfo,
+                        GNOME_VFS_FILE_INFO_GET_ACCESS_RIGHTS );
+
+            if (fileInfo->valid_fields & GNOME_VFS_FILE_INFO_FIELDS_ACCESS) {
+                bool read_only = true;
+
+                if (fileInfo->permissions & GNOME_VFS_PERM_ACCESS_WRITABLE)
+                                        read_only = false;
+
+                xRow->appendBoolean( rProp, read_only );
+            } else
+                xRow->appendVoid( rProp );
+            gnome_vfs_file_info_unref (fileInfo);
+        }
         else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Size" ) ) ) {
             if (m_info.valid_fields & GNOME_VFS_FILE_INFO_FIELDS_SIZE)
                 xRow->appendLong( rProp, m_info.size );
             else
                 xRow->appendVoid( rProp );
         }
-
-        else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsReadOnly" ) ) ) {
-            if (m_info.valid_fields & GNOME_VFS_FILE_INFO_FIELDS_PERMISSIONS) {
-                bool read_only = true;
-
-                if (m_info.uid == getuid () &&
-                    m_info.permissions & GNOME_VFS_PERM_USER_WRITE)
-                    read_only = false;
-                else if (m_info.gid == getgid () &&
-                    m_info.permissions & GNOME_VFS_PERM_GROUP_WRITE)
-                    read_only = false;
-                else if (m_info.permissions & GNOME_VFS_PERM_OTHER_WRITE)
-                    read_only = false;
-                xRow->appendBoolean( rProp, read_only );
-            } else
-                xRow->appendVoid( rProp );
-        }
-
         else if (rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsHidden" ) ) )
             xRow->appendBoolean( rProp, ( m_info.name && m_info.name[0] == '.' ) );
 
