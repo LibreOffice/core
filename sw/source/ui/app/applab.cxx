@@ -39,15 +39,9 @@
 
 #include <hintids.hxx>
 
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/printer.hxx>
@@ -71,21 +65,13 @@
 #include <frmatr.hxx>
 #include <paratr.hxx>
 #include <swmodule.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <fldbas.hxx>
 #include <swundo.hxx>
 #include <wrtsh.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 #include <fmtcol.hxx>
 #include <expfld.hxx>
 #include <fldmgr.hxx>
@@ -126,7 +112,7 @@ const SwFrmFmt *lcl_InsertBCText( SwWrtShell& rSh, const SwLabItem& rItem,
     sal_uInt16 nPhyPageNum, nVirtPageNum;
     rSh.GetPageNum( nPhyPageNum, nVirtPageNum );
 
-    aSet.Put(SwFmtAnchor(bPage ? FLY_IN_CNTNT : FLY_PAGE, nPhyPageNum));
+    aSet.Put(SwFmtAnchor(bPage ? FLY_AS_CHAR : FLY_AT_PAGE, nPhyPageNum));
     if (!bPage)
     {
         aSet.Put(SwFmtHoriOrient(rItem.lLeft + nCol * rItem.lHDist,
@@ -166,7 +152,7 @@ const SwFrmFmt *lcl_InsertLabText( SwWrtShell& rSh, const SwLabItem& rItem,
     sal_uInt16 nPhyPageNum, nVirtPageNum;
     rSh.GetPageNum( nPhyPageNum, nVirtPageNum );
 
-    aSet.Put(SwFmtAnchor(bPage ? FLY_IN_CNTNT : FLY_PAGE, nPhyPageNum));
+    aSet.Put(SwFmtAnchor(bPage ? FLY_AS_CHAR : FLY_AT_PAGE, nPhyPageNum));
     if (!bPage)
     {
         aSet.Put(SwFmtHoriOrient(rItem.lLeft + nCol * rItem.lHDist,
