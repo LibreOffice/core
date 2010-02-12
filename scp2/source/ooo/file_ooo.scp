@@ -163,7 +163,7 @@ End
 File gid_File_Profile_Gengal
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
-    Styles = (PACKED, PATCH);
+    Styles = (PACKED);
     Name = PROFILENAME(gengal);
 End
 
@@ -173,7 +173,7 @@ File gid_File_Bin_Pluginapp
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = "pluginapp.bin";
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 #endif
@@ -348,7 +348,7 @@ End
 
 STD_FILTER_FILE( gid_File_Filter_Eme, eme)
 
-STD_FILTER_FILE_PATCH( gid_File_Filter_Sdfilt, sdfilt)
+STD_FILTER_FILE( gid_File_Filter_Sdfilt, sdfilt)
 
 STD_FILTER_FILE( gid_File_Filter_Icg, icg)
 
@@ -515,7 +515,7 @@ File gid_File_Jar_Unoil
     TXT_FILE_BODY;
     Name = "unoil.jar";
     Dir = gid_Dir_Classes;
-    Styles = (PACKED,DONT_OVERWRITE,PATCH);
+    Styles = (PACKED,DONT_OVERWRITE);
 End
 
 #endif
@@ -1662,7 +1662,7 @@ End
 
 File gid_File_Oo_Office_Ui_Genericcommands_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
     Name = "/registry/data/org/openoffice/Office/UI/GenericCommands.xcu";
 End
@@ -1725,7 +1725,7 @@ End
 
 File gid_File_Oo_Office_Linguistic_Xcs
     TXT_FILE_BODY;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/Linguistic.xcs";
 End
@@ -2121,7 +2121,7 @@ End
 File gid_File_Rdb_Offapi
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
     Name = "offapi.rdb";
 End
 
@@ -2719,7 +2719,7 @@ File gid_Starregistry_Services_Rdb
     TXT_FILE_BODY;
     Name = "services.rdb";
     Dir = gid_Dir_Program;
-    Styles = (PACKED, STARREGISTRY, PATCH);
+    Styles = (PACKED, STARREGISTRY);
 #if defined WNT
     NativeServicesURLPrefix = "vnd.sun.star.expand:$BRAND_BASE_DIR/program/";
 #else
@@ -2888,7 +2888,7 @@ File gid_File_Images_Zip
     TXT_FILE_BODY;
     Dir = gid_Dir_Share_Config;
     Name = "images.zip";
-    Styles = (PACKED,PATCH);
+    Styles = (PACKED);
 End
 
 File gid_File_ImagesCrystal_Zip
@@ -2966,6 +2966,15 @@ End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Ca
+    Dir = gid_Brand_Dir_Share_Extension_Install;
+    Name = "dict-ca.oxt";
+    Styles = (PACKED, FORCELANGUAGEPACK);
+    UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Cs
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-cs.oxt";
@@ -2984,11 +2993,29 @@ End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
-File gid_File_Extension_Dictionary_De
+File gid_File_Extension_Dictionary_De_AT
 	Dir = gid_Brand_Dir_Share_Extension_Install;
-	Name = "dict-de.oxt";
+    Name = "dict-de-AT.oxt";
 	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_De_CH
+    Dir = gid_Brand_Dir_Share_Extension_Install;
+    Name = "dict-de-CH.oxt";
+    Styles = (PACKED, FORCELANGUAGEPACK);
+    UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_De_DE
+    Dir = gid_Brand_Dir_Share_Extension_Install;
+    Name = "dict-de-DE.oxt";
+    Styles = (PACKED, FORCELANGUAGEPACK);
+    UnixRights = 444;
 End
 #endif
 
@@ -3092,6 +3119,15 @@ End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_No
+    Dir = gid_Brand_Dir_Share_Extension_Install;
+    Name = "dict-no.oxt";
+    Styles = (PACKED, FORCELANGUAGEPACK);
+    UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Pl
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-pl.oxt";
@@ -3106,6 +3142,15 @@ File gid_File_Extension_Dictionary_Pt
 	Name = "dict-pt.oxt";
 	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
+End
+#endif
+
+#ifndef WITHOUT_MYSPELL_DICTS
+File gid_File_Extension_Dictionary_Ro
+    Dir = gid_Brand_Dir_Share_Extension_Install;
+    Name = "dict-ro.oxt";
+    Styles = (PACKED, FORCELANGUAGEPACK);
+    UnixRights = 444;
 End
 #endif
 
