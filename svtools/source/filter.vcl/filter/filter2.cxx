@@ -471,7 +471,8 @@ BOOL GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  BOOL bExtendedInfo )
 
                 // Groesse des verbleibenden Puffers ermitteln
                 if ( bLinked )
-                    nMax = ( (SvMemoryStream&) rStm ).GetSize() - 16;
+                    nMax = static_cast< SvMemoryStream& >(rStm).GetEndOfData()
+                                - 16;
                 else
                     nMax = DATA_SIZE - 16;
 

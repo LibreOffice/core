@@ -160,6 +160,7 @@ namespace toolkit
         ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
         ImplRegisterProperty( BASEPROPERTY_HIDEINACTIVESELECTION );
         ImplRegisterProperty( BASEPROPERTY_ENFORCE_FORMAT );
+        ImplRegisterProperty( BASEPROPERTY_VERTICALALIGN );
         ImplRegisterProperty( BASEPROPERTY_WRITING_MODE );
         ImplRegisterProperty( BASEPROPERTY_CONTEXT_WRITING_MODE );
         ImplRegisterProperty( BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR );

@@ -31,6 +31,7 @@ PRJNAME=vcl
 TARGET=vcl
 TARGETTYPE=GUI
 USE_DEFFILE=TRUE
+GEN_HID_OTHER=TRUE
 
 .IF "$(SNDFILE_LIBS)"!=""
 SNDFILELIB=$(SNDFILE_LIBS)
@@ -302,6 +303,7 @@ SHL2STDLIBS=\
             $(VOSLIB)           \
             $(BASEGFXLIB)	\
             $(UNOTOOLSLIB) \
+            $(COMPHELPERLIB)	\
             $(CPPUHELPERLIB) \
             $(CPPULIB) \
             $(SALLIB)
