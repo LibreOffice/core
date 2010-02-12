@@ -36,7 +36,7 @@
 #include <i18nutil/unicode.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <tools/debug.hxx>
+#include <osl/diagnose.hxx>
 
 
 #include "characterclassificationImpl.hxx"
@@ -99,7 +99,7 @@ static sal_uInt8 lcl_getMappingTypeForToggleCase( sal_uInt8 nMappingType, sal_Un
             nRes = MappingTypeLowerToUpper;
         else
         {
-            DBG_ASSERT( nType & 0x01 /* upper case */, "uppercase character expected! 'Toggle case' failed?" );
+            OSL_ENSURE( nType & 0x01 /* upper case */, "uppercase character expected! 'Toggle case' failed?" );
             nRes = MappingTypeUpperToLower;
         }
     }
