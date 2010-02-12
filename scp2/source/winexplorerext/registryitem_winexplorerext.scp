@@ -127,8 +127,8 @@ RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262_InProcServer
     ModuleID = gid_Module_Root;
     Subkey = "CLSID\{7BC0E710-5703-45BE-A29D-5D46D8B39262}\InprocServer32";
     Styles = (X64); // Values: X64 / X64_ONLY
-    Value = "[BASISINSTALLLOCATION]program\shlxthdl\ooofiltproxy.dll";
-    Val64 = "[BASISINSTALLLOCATION]program\shlxthdl\ooofiltproxy_x64.dll";
+    Value = "[BASISINSTALLLOCATION]program\shlxthdl\ooofilt.dll";
+    Val64 = "[BASISINSTALLLOCATION]program\shlxthdl\ooofilt_x64.dll";
 End
 
 RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262_InProcServer32_ThreadingModel
