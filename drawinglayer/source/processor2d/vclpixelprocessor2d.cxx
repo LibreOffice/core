@@ -67,6 +67,11 @@
 #include <drawinglayer/primitive2d/invertprimitive2d.hxx>
 #include <cstdio>
 #include <drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <drawinglayer/primitive2d/epsprimitive2d.hxx>
+
+#include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/window.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -111,7 +116,7 @@ namespace drawinglayer
 
         void VclPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
         {
-            switch(rCandidate.getPrimitiveID())
+            switch(rCandidate.getPrimitive2DID())
             {
                 case PRIMITIVE2D_ID_WRONGSPELLPRIMITIVE2D :
                 {
@@ -204,18 +209,8 @@ namespace drawinglayer
                 }
                 case PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D :
                 {
-                    if(getOptionsDrawinglayer().IsAntiAliasing())
-                    {
-                        // For AA, direct render has to be avoided since it uses XOR maskings which will not
-                        // work with AA. Instead, the decompose which uses MaskPrimitive2D with fillings is
-                        // used
-                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
-                    }
-                    else
-                    {
-                        // direct draw of gradient
-                        RenderPolyPolygonGradientPrimitive2D(static_cast< const primitive2d::PolyPolygonGradientPrimitive2D& >(rCandidate));
-                    }
+                    // direct draw of gradient
+                    RenderPolyPolygonGradientPrimitive2D(static_cast< const primitive2d::PolyPolygonGradientPrimitive2D& >(rCandidate));
                     break;
                 }
                 case PRIMITIVE2D_ID_POLYPOLYGONBITMAPPRIMITIVE2D :
@@ -241,8 +236,17 @@ namespace drawinglayer
                         mpOutputDevice->SetAntialiasing(nOldAntiAliase | ANTIALIASING_PIXELSNAPHAIRLINE);
                     }
 
-                    // direct draw of MetaFile
-                    RenderMetafilePrimitive2D(static_cast< const primitive2d::MetafilePrimitive2D& >(rCandidate));
+                    static bool bTestMetaFilePrimitiveDecomposition(true);
+                    if(bTestMetaFilePrimitiveDecomposition)
+                    {
+                        // use new Metafile decomposition
+                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                    }
+                    else
+                    {
+                        // direct draw of MetaFile
+                        RenderMetafilePrimitive2D(static_cast< const primitive2d::MetafilePrimitive2D& >(rCandidate));
+                    }
 
                     if(bForceLineSnap)
                     {
@@ -280,7 +284,7 @@ namespace drawinglayer
                         const primitive2d::Primitive2DReference xReference(rContent[0]);
                         const primitive2d::PolyPolygonColorPrimitive2D* pPoPoColor = dynamic_cast< const primitive2d::PolyPolygonColorPrimitive2D* >(xReference.get());
 
-                        if(pPoPoColor && PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D == pPoPoColor->getPrimitiveID())
+                        if(pPoPoColor && PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D == pPoPoColor->getPrimitive2DID())
                         {
                             // single transparent PolyPolygon identified, use directly
                             const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(pPoPoColor->getBColor()));
@@ -528,7 +532,6 @@ namespace drawinglayer
 
                     // restore AA setting
                     mpOutputDevice->SetAntialiasing(nOriginalAA);
-
                     break;
                 }
                 case PRIMITIVE2D_ID_TEXTHIERARCHYEDITPRIMITIVE2D :
@@ -545,23 +548,23 @@ namespace drawinglayer
                 case PRIMITIVE2D_ID_INVERTPRIMITIVE2D :
                 {
                     // invert primitive (currently only used for HighContrast fallback for selection in SW and SC).
-                    // Set OutDev to XOR
+                    // Set OutDev to XOR and switch AA off (XOR does not work with AA)
                     mpOutputDevice->Push();
                     mpOutputDevice->SetRasterOp( ROP_XOR );
-
-                    // force paint color to white by using ColorModifierStack
-                    const basegfx::BColor aColWhite(1.0, 1.0, 1.0);
-                    const basegfx::BColorModifier aColorModifier(aColWhite, 0.0, basegfx::BCOLORMODIFYMODE_REPLACE);
-                    maBColorModifierStack.push(aColorModifier);
+                    const sal_uInt16 nAntiAliasing(mpOutputDevice->GetAntialiasing());
+                    mpOutputDevice->SetAntialiasing(nAntiAliasing & ~ANTIALIASING_ENABLE_B2DDRAW);
 
                     // process content recursively
                     process(rCandidate.get2DDecomposition(getViewInformation2D()));
 
-                    // restore ColorModifierStack
-                    maBColorModifierStack.pop();
-
                     // restore OutDev
                     mpOutputDevice->Pop();
+                    mpOutputDevice->SetAntialiasing(nAntiAliasing);
+                    break;
+                }
+                case PRIMITIVE2D_ID_EPSPRIMITIVE2D :
+                {
+                    RenderEpsPrimitive2D(static_cast< const primitive2d::EpsPrimitive2D& >(rCandidate));
                     break;
                 }
                 default :

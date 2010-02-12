@@ -32,7 +32,7 @@
 #ifndef INCLUDED_SDR_PRIMITIVE2D_SDROLE2PRIMITIVE2D_HXX
 #define INCLUDED_SDR_PRIMITIVE2D_SDROLE2PRIMITIVE2D_HXX
 
-#include <drawinglayer/primitive2d/groupprimitive2d.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/attribute/sdrattribute.hxx>
 #include <svx/sdr/attribute/sdrallattribute.hxx>
@@ -46,28 +46,29 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrOle2Primitive2D : public GroupPrimitive2D
+        class SdrOle2Primitive2D : public BasePrimitive2D
         {
         private:
-            ::basegfx::B2DHomMatrix                     maTransform;
+            Primitive2DSequence                         maOLEContent;
+            basegfx::B2DHomMatrix                       maTransform;
             attribute::SdrLineFillShadowTextAttribute   maSdrLFSTAttribute;
-
-        protected:
-            // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
 
         public:
             SdrOle2Primitive2D(
-                const Primitive2DSequence& rChildren,
-                const ::basegfx::B2DHomMatrix& rTransform,
+                const Primitive2DSequence& rOLEContent,
+                const basegfx::B2DHomMatrix& rTransform,
                 const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute);
 
             // data access
-            const ::basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
+            const Primitive2DSequence& getOLEContent() const { return maOLEContent; }
+            const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
             const attribute::SdrLineFillShadowTextAttribute& getSdrLFSTAttribute() const { return maSdrLFSTAttribute; }
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
+
+            // local decomposition.
+            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
 
             // provide unique ID
             DeclPrimitrive2DIDBlock()

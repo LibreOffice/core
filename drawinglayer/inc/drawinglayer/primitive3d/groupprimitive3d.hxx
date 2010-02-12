@@ -44,27 +44,45 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
+        /** GroupPrimitive3D class
+
+            Baseclass for all grouping 3D primitives
+
+            The description/functionality is identical with the 2D case in groupprimitive2d.hxx,
+            please see there for detailed information.
+
+            Current Basic 3D StatePrimitives are:
+
+            - ModifiedColorPrimitive3D (for a stack of color modifications)
+            - ShadowPrimitive3D (for 3D objects with shadow; this is a special case
+              since the shadow of a 3D primitive is a 2D primitive set)
+            - TexturePrimitive3D (with the following variations)
+                - GradientTexturePrimitive3D (for 3D gradient fill)
+                - BitmapTexturePrimitive3D (for 3D Bitmap fill)
+                - AlphaTexturePrimitive3D (for 3D transparence)
+                - HatchTexturePrimitive3D (for 3D hatch fill)
+            - TransformPrimitive3D (for a transformation stack)
+         */
         class GroupPrimitive3D : public BasePrimitive3D
         {
         private:
-            // the children. Declared private since this shall never be changed at all after construction
+            /// the children. Declared private since this shall never be changed at all after construction
             Primitive3DSequence                             maChildren;
 
-        protected:
-            // local decomposition. Implementation will just return children
-            virtual Primitive3DSequence createLocalDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
-
         public:
-            // constructor
+            /// constructor
             GroupPrimitive3D(const Primitive3DSequence& rChildren);
 
-            // data access
+            /// data read access
             Primitive3DSequence getChildren() const { return maChildren; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==( const BasePrimitive3D& rPrimitive ) const;
 
-            // provide unique ID
+            /// local decomposition. Implementation will just return children
+            virtual Primitive3DSequence get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
+
+            /// provide unique ID
             DeclPrimitrive3DIDBlock()
         };
     } // end of namespace primitive3d
