@@ -630,12 +630,26 @@ bool X11SalGraphics::setFont( const ImplFontSelectData *pEntry, int nFallbackLev
     ServerFont* pServerFont = GlyphCache::GetInstance().CacheFont( *pEntry );
     if( pServerFont != NULL )
     {
+        // ignore fonts with e.g. corrupted font files
         if( !pServerFont->TestFont() )
         {
             GlyphCache::GetInstance().UncacheFont( *pServerFont );
             return false;
         }
+
+        // register to use the font
         mpServerFont[ nFallbackLevel ] = pServerFont;
+
+        // apply font specific-hint settings if needed
+    if( !bPrinter_ )
+    {
+            // TODO: is it worth it to cache the hint settings, e.g. in the ImplFontEntry?
+            ImplFontOptions aFontOptions;
+            bool GetFCFontOptions( const ImplFontAttributes&, int nSize, ImplFontOptions&);
+            if( GetFCFontOptions( *pEntry->mpFontData, pEntry->mnHeight, aFontOptions ) )
+                pServerFont->SetFontOptions( aFontOptions );
+        }
+
         return true;
     }
 
@@ -1616,19 +1630,22 @@ void X11SalGraphics::GetDevFontSubstList( OutputDevice* )
 
 // ----------------------------------------------------------------------------
 
-void cairosubcallback(void *pPattern)
+void cairosubcallback( void* pPattern )
 {
-    CairoWrapper &rCairo = CairoWrapper::get();
-    if (rCairo.isValid())
+    CairoWrapper& rCairo = CairoWrapper::get();
+    if( rCairo.isValid() )
     {
-        rCairo.ft_font_options_substitute(
-            Application::GetSettings().GetStyleSettings().GetCairoFontOptions(),
-            pPattern);
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+        rCairo.ft_font_options_substitute( rStyleSettings.GetCairoFontOptions(), pPattern);
     }
 }
 
-void X11SalGraphics::GetFontHints( const ImplFontAttributes& rFontAttributes, int nSize, ImplFontHints& rFontHints) const
+bool GetFCFontOptions( const ImplFontAttributes& rFontAttributes, int nSize,
+    ImplFontOptions& rFontOptions)
 {
+    // TODO: get rid of these insane enum-conversions
+    // e.g. by using the classic vclenum values inside VCL
+
     psp::FastPrintFontInfo aInfo;
     // set family name
     aInfo.m_aFamilyName = rFontAttributes.GetFamilyName();
@@ -1726,73 +1743,42 @@ void X11SalGraphics::GetFontHints( const ImplFontAttributes& rFontAttributes, in
 
     switch (aHints.m_eEmbeddedbitmap)
     {
-        default:
-            rFontHints.meEmbeddedBitmap = EMBEDDEDBITMAP_DONTKNOW;
-            break;
-        case psp::fcstatus::istrue:
-            rFontHints.meEmbeddedBitmap = EMBEDDEDBITMAP_TRUE;
-            break;
-        case psp::fcstatus::isfalse:
-            rFontHints.meEmbeddedBitmap = EMBEDDEDBITMAP_FALSE;
-            break;
+        default: rFontOptions.meEmbeddedBitmap = EMBEDDEDBITMAP_DONTKNOW; break;
+        case psp::fcstatus::istrue: rFontOptions.meEmbeddedBitmap = EMBEDDEDBITMAP_TRUE; break;
+        case psp::fcstatus::isfalse: rFontOptions.meEmbeddedBitmap = EMBEDDEDBITMAP_FALSE; break;
     }
 
     switch (aHints.m_eAntialias)
     {
-        default:
-            rFontHints.meAntiAlias = ANTIALIAS_DONTKNOW;
-            break;
-        case psp::fcstatus::istrue:
-            rFontHints.meAntiAlias = ANTIALIAS_TRUE;
-            break;
-        case psp::fcstatus::isfalse:
-            rFontHints.meAntiAlias = ANTIALIAS_FALSE;
-            break;
+        default: rFontOptions.meAntiAlias = ANTIALIAS_DONTKNOW; break;
+        case psp::fcstatus::istrue: rFontOptions.meAntiAlias = ANTIALIAS_TRUE; break;
+        case psp::fcstatus::isfalse: rFontOptions.meAntiAlias = ANTIALIAS_FALSE; break;
     }
 
     switch (aHints.m_eAutoHint)
     {
-        default:
-            rFontHints.meAutoHint = AUTOHINT_DONTKNOW;
-            break;
-        case psp::fcstatus::istrue:
-            rFontHints.meAutoHint = AUTOHINT_TRUE;
-            break;
-        case psp::fcstatus::isfalse:
-            rFontHints.meAutoHint = AUTOHINT_FALSE;
-            break;
+        default: rFontOptions.meAutoHint = AUTOHINT_DONTKNOW; break;
+        case psp::fcstatus::istrue: rFontOptions.meAutoHint = AUTOHINT_TRUE; break;
+        case psp::fcstatus::isfalse: rFontOptions.meAutoHint = AUTOHINT_FALSE; break;
     }
 
     switch (aHints.m_eHinting)
     {
-        default:
-            rFontHints.meHinting = HINTING_DONTKNOW;
-            break;
-        case psp::fcstatus::istrue:
-            rFontHints.meHinting = HINTING_TRUE;
-            break;
-        case psp::fcstatus::isfalse:
-            rFontHints.meHinting = HINTING_FALSE;
-            break;
+        default: rFontOptions.meHinting = HINTING_DONTKNOW; break;
+        case psp::fcstatus::istrue:  rFontOptions.meHinting = HINTING_TRUE; break;
+        case psp::fcstatus::isfalse: rFontOptions.meHinting = HINTING_FALSE; break;
     }
 
     switch (aHints.m_eHintStyle)
     {
-        case psp::fchint::Nohint:
-            rFontHints.meHintStyle = HINT_NONE;
-            break;
-        case psp::fchint::Slight:
-            rFontHints.meHintStyle = HINT_SLIGHT;
-            break;
-        case psp::fchint::Medium:
-            rFontHints.meHintStyle = HINT_MEDIUM;
-            break;
-        default:
-        case psp::fchint::Full:
-            rFontHints.meHintStyle = HINT_FULL;
-            break;
+        case psp::fchint::Nohint: rFontOptions.meHintStyle = HINT_NONE; break;
+        case psp::fchint::Slight: rFontOptions.meHintStyle = HINT_SLIGHT; break;
+        case psp::fchint::Medium: rFontOptions.meHintStyle = HINT_MEDIUM; break;
+        default: // fall through
+        case psp::fchint::Full:   rFontOptions.meHintStyle = HINT_FULL; break;
     }
 
+    return true;
 }
 
 // ----------------------------------------------------------------------------
