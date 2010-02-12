@@ -94,7 +94,7 @@ void ViewShell::AdjustOptionsForPagePreview( const SwPrtOptions &_rPrintOptions 
 // print brochure
 // OD 05.05.2003 #i14016# - consider empty pages on calculation of the scaling
 // for a page to be printed.
-void ViewShell::PrintProspect( 
+void ViewShell::PrintProspect(
     OutputDevice *pOutDev,
     const SwPrintData &rPrintData,
     sal_Int32 nRenderer // the index in the vector of prospect pages to be printed

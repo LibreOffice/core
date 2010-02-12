@@ -510,10 +510,10 @@ BOOL SwFlowFrm::PasteTree( SwFrm *pStart, SwLayoutFrm *pParent, SwFrm *pSibling,
             pParent->pLower = pStart;
         else
         //Modified for #i100782#,04/03/2009
-        //If the pParent has more than 1 child nodes, former design will 
-        //ignore them directly without any collection work. It will make some 
+        //If the pParent has more than 1 child nodes, former design will
+        //ignore them directly without any collection work. It will make some
         //dangling pointers. This lead the crash...
-        //The new design will find the last child of pParent in loop way, and 
+        //The new design will find the last child of pParent in loop way, and
         //add the pStart after the last child.
         //  pParent->Lower()->pNext = pStart;
         {
