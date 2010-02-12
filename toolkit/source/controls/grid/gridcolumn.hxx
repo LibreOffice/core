@@ -39,6 +39,7 @@
 #include <rtl/ref.hxx>
 #include <vector>
 #include <toolkit/helper/mutexandbroadcasthelper.hxx>
+#include <com/sun/star/style/HorizontalAlignment.hpp>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -62,9 +63,18 @@ public:
     virtual void SAL_CALL setIdentifier(const ::com::sun::star::uno::Any & value) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getColumnWidth() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setColumnWidth(::sal_Int32 the_value) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getPreferredWidth() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setPreferredWidth(::sal_Int32 the_value) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getMaxWidth() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setMaxWidth(::sal_Int32 the_value) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getMinWidth() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setMinWidth(::sal_Int32 the_value) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL getResizeable() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setResizeable(::sal_Bool the_value) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getTitle() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setTitle(const ::rtl::OUString & value) throw (::com::sun::star::uno::RuntimeException);
-
+    virtual ::com::sun::star::style::HorizontalAlignment SAL_CALL getHorizontalAlign() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setHorizontalAlign(::com::sun::star::style::HorizontalAlignment align) throw (::com::sun::star::uno::RuntimeException);
     // XComponent
     virtual void SAL_CALL dispose(  ) throw (RuntimeException);
     virtual void SAL_CALL addEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException);
@@ -79,7 +89,12 @@ public:
 private:
     Any identifier;
     sal_Int32 columnWidth;
+    sal_Int32 preferredWidth;
+    sal_Int32 maxWidth;
+    sal_Int32 minWidth;
+    sal_Bool  bResizeable;
     ::rtl::OUString title;
+    ::com::sun::star::style::HorizontalAlignment horizontalAlign;
 };
 
 }

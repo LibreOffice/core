@@ -6,7 +6,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: treedatamodel.cxx,v $
+ * $RCSfile: defaultgriddatamodel.cxx,v $
  * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
@@ -30,10 +30,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_toolkit.hxx"
-#include "defaultgriddatamodel.hxx"
+#include "DefaultGridDataModel.hxx"
 #include <comphelper/sequence.hxx>
 #include <toolkit/helper/servicenames.hxx>
 #include <rtl/ref.hxx>
+
+#include <com/sun/star/awt/XFixedText.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -41,6 +44,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::awt::grid;
 using namespace ::com::sun::star::lang;
+//using namespace ::com::sun::star::style;
 
 #define ROWHEIGHT ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "RowHeight" ))
 #define ROWHEADERS ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "RowHeaders" ))
@@ -53,8 +57,9 @@ namespace toolkit
 ///////////////////////////////////////////////////////////////////////
 
 DefaultGridDataModel::DefaultGridDataModel()
-: rowHeight(0),
-  rowHeaders(std::vector< ::rtl::OUString >())
+: rowHeight(10),
+  rowHeaders(std::vector< ::rtl::OUString >()),
+  m_nRowHeaderWidth(7)
 {
 }
 
@@ -64,7 +69,7 @@ DefaultGridDataModel::~DefaultGridDataModel()
 {
 }
 
-void DefaultGridDataModel::broadcast( broadcast_type eType, const GridDataEvent& aEvent )
+void DefaultGridDataModel::broadcast( broadcast_type eType, const GridDataEvent& aEvent ) throw (::com::sun::star::uno::RuntimeException)
 {
     ::cppu::OInterfaceContainerHelper* pIter = BrdcstHelper.getContainer( XGridDataListener::static_type() );
     if( pIter )
@@ -85,25 +90,28 @@ void DefaultGridDataModel::broadcast( broadcast_type eType, const GridDataEvent&
 
 //---------------------------------------------------------------------
 
-void DefaultGridDataModel::broadcast_changed( ::rtl::OUString name, Any oldValue, Any newValue )
+void DefaultGridDataModel::broadcast_changed( ::rtl::OUString name, Any oldValue, Any newValue ) throw (::com::sun::star::uno::RuntimeException)
 {
     Reference< XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
-    GridDataEvent aEvent( xSource, name, oldValue, newValue, 0, ::rtl::OUString(), Sequence< ::rtl::OUString>() );
+    GridDataEvent aEvent( xSource, name, oldValue, newValue, 0, ::rtl::OUString(),
+        Sequence< Any >() );
     broadcast( data_changed, aEvent);
 }
 
 //---------------------------------------------------------------------
 
-void DefaultGridDataModel::broadcast_add( sal_Int32 index, const ::rtl::OUString & headerName, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rowData )
+void DefaultGridDataModel::broadcast_add( sal_Int32 index, const ::rtl::OUString & headerName,
+                                         ::com::sun::star::uno::Sequence< Any > rowData ) throw (::com::sun::star::uno::RuntimeException)
 {
     Reference< XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
-    GridDataEvent aEvent( xSource, ::rtl::OUString(), Any(), Any(), index, headerName, rowData );
+    GridDataEvent aEvent( xSource, ::rtl::OUString(), Any(), Any(), index, headerName, (const ::com::sun::star::uno::Sequence< Any >&)rowData );
     broadcast( row_added, aEvent);
 }
 
 //---------------------------------------------------------------------
 
-void DefaultGridDataModel::broadcast_remove( sal_Int32 index, const ::rtl::OUString & headerName, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rowData )
+void DefaultGridDataModel::broadcast_remove( sal_Int32 index, const ::rtl::OUString & headerName,
+                                            ::com::sun::star::uno::Sequence< Any > rowData ) throw (::com::sun::star::uno::RuntimeException)
 {
     Reference< XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
     GridDataEvent aEvent( xSource, ::rtl::OUString(), Any(), Any(), index, headerName, rowData );
@@ -168,19 +176,33 @@ void SAL_CALL DefaultGridDataModel::setRowHeaders(const ::com::sun::star::uno::S
 
 //---------------------------------------------------------------------
 
-void SAL_CALL DefaultGridDataModel::addRow(const ::rtl::OUString & headername, const ::com::sun::star::uno::Sequence< ::rtl::OUString > & rRowdata) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL DefaultGridDataModel::addRow(const ::rtl::OUString & headername, const ::com::sun::star::uno::Sequence< Any > & rRowdata) throw (::com::sun::star::uno::RuntimeException)
 {
     // store header name
     rowHeaders.push_back(headername);
 
-
     // store row data
-    std::vector< rtl::OUString > newRow(
-        comphelper::sequenceToContainer< std::vector<rtl::OUString > >(rRowdata));
+    std::vector< Any > newRow;
+    for ( int i = 0; i < rRowdata.getLength();i++)
+    {
+        //OUString title(rRowdata[i]);
+
+        // create and use interal a UnoControlFixedText for text content
+        //Reference< XFixedText > xFixedText( m_xFactory->createInstance ( OUString::createFromAscii( "com.sun.star.awt.UnoControlFixedText"    ) ), UNO_QUERY_THROW );
+        //Reference< XControl > xFixedTextControl( xFixedText , UNO_QUERY );
+        //
+        //Reference< XControlModel > xFixedTextModel( m_xFactory->createInstance ( OUString::createFromAscii( "com.sun.star.awt.UnoControlFixedTextModel"   ) ), UNO_QUERY );
+        //Reference< ::com::sun::star::beans::XPropertySet > xFixedTextModelPropSet( xFixedTextModel, UNO_QUERY );
+        //xFixedTextModelPropSet->setPropertyValue( OUString::createFromAscii( "Label"), makeAny( title ) );
+
+        //xFixedTextControl->setModel( xFixedTextModel );
+
+        newRow.push_back(rRowdata[i]);
+    }
 
     data.push_back( newRow );
 
-    broadcast_add( data.size()-1, headername, rRowdata);
+    broadcast_add( data.size()-1, headername, comphelper::containerToSequence(newRow));
 
 }
 
@@ -199,7 +221,7 @@ void SAL_CALL DefaultGridDataModel::removeRow(::sal_Int32 index) throw (::com::s
         ::rtl::OUString headerName( (::rtl::OUString) rowHeaders[index] );
         rowHeaders.erase(rowHeaders.begin() + index);
 
-        Sequence< ::rtl::OUString >& rowData ( (Sequence< ::rtl::OUString >&)data[index] );
+        Sequence< Any >& rowData ( (Sequence< Any >&)data[index] );
         data.erase(data.begin() + index);
         broadcast_remove( index, headerName, rowData);
     }
@@ -207,19 +229,19 @@ void SAL_CALL DefaultGridDataModel::removeRow(::sal_Int32 index) throw (::com::s
         return;
 }
 //---------------------------------------------------------------------
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::rtl::OUString > > SAL_CALL DefaultGridDataModel::getData() throw (::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< Any > > SAL_CALL DefaultGridDataModel::getData() throw (::com::sun::star::uno::RuntimeException)
 {
 
-    std::vector< std::vector< ::rtl::OUString > >::iterator iterator;
-    std::vector< Sequence< ::rtl::OUString > > dummyContainer(0);
+    std::vector< std::vector< Any > >::iterator iterator;
+    std::vector< Sequence< Any  > > dummyContainer(0);
 
 
     for(iterator = data.begin(); iterator != data.end(); iterator++)
     {
-        Sequence< ::rtl::OUString > cols(comphelper::containerToSequence(*iterator));
+        Sequence< Any > cols(comphelper::containerToSequence(*iterator));
         dummyContainer.push_back( cols );
     }
-    Sequence< Sequence< ::rtl::OUString > > dataSequence(comphelper::containerToSequence(dummyContainer));
+    Sequence< Sequence< Any  > > dataSequence(comphelper::containerToSequence(dummyContainer));
 
     return dataSequence;
 }
@@ -237,14 +259,23 @@ void SAL_CALL DefaultGridDataModel::removeDataListener( const Reference< XGridDa
 {
     BrdcstHelper.removeListener( XGridDataListener::static_type(), xListener );
 }
-
+//---------------------------------------------------------------------
 void SAL_CALL DefaultGridDataModel::removeAll() throw (RuntimeException)
 {
     rowHeaders.clear();
     data.clear();
     broadcast_remove( -1, ::rtl::OUString(), 0);
 }
-
+//---------------------------------------------------------------------
+void SAL_CALL DefaultGridDataModel::setRowHeaderWidth(sal_Int32 _value) throw (::com::sun::star::uno::RuntimeException)
+{
+    m_nRowHeaderWidth = _value;
+}
+//---------------------------------------------------------------------
+sal_Int32 SAL_CALL DefaultGridDataModel::getRowHeaderWidth() throw (::com::sun::star::uno::RuntimeException)
+{
+    return m_nRowHeaderWidth;
+}
 //---------------------------------------------------------------------
 // XComponent
 //---------------------------------------------------------------------
@@ -305,6 +336,5 @@ sal_Bool SAL_CALL DefaultGridDataModel::supportsService( const ::rtl::OUString& 
 
 Reference< XInterface > SAL_CALL DefaultGridDataModel_CreateInstance( const Reference< XMultiServiceFactory >& )
 {
-    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new ::toolkit::DefaultGridDataModel );
+    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new ::toolkit::DefaultGridDataModel() );
 }
-

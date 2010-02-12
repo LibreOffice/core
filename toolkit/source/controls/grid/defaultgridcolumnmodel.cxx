@@ -41,7 +41,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::awt::grid;
 using namespace ::com::sun::star::lang;
-
+using namespace ::com::sun::star::style;
 #define COLUMNSELECTIONALLOWED ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ColumnSelectionAllowed" ))
 
 namespace toolkit
@@ -51,8 +51,10 @@ namespace toolkit
 // class DefaultGridColumnModel
 ///////////////////////////////////////////////////////////////////////
 
-DefaultGridColumnModel::DefaultGridColumnModel()
+DefaultGridColumnModel::DefaultGridColumnModel(const Reference< XMultiServiceFactory >& xFactory)
 : columns(std::vector< Reference< XGridColumn > >())
+ ,m_nColumnHeaderHeight(10)
+ ,m_xFactory(xFactory)
 {
 }
 
@@ -107,7 +109,7 @@ void DefaultGridColumnModel::broadcast_remove( sal_Int32 index, const ::com::sun
 {
     Reference< XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
     GridColumnEvent aEvent( xSource, ::rtl::OUString(), Any(), Any(), index, rColumn );
-    broadcast( column_changed, aEvent);
+    broadcast( column_removed, aEvent);
 }
 
 //---------------------------------------------------------------------
@@ -141,7 +143,6 @@ void SAL_CALL DefaultGridColumnModel::setColumnSelectionAllowed(::sal_Bool value
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     columns.push_back(column);
-
     sal_Int32 index = columns.size() - 1;
     broadcast_add(index, column );
     return index;
@@ -163,7 +164,7 @@ void SAL_CALL DefaultGridColumnModel::setColumnSelectionAllowed(::sal_Bool value
     else
         return Reference< XGridColumn >();
 }
-
+//---------------------------------------------------------------------
 void SAL_CALL DefaultGridColumnModel::addColumnListener( const Reference< XGridColumnListener >& xListener ) throw (RuntimeException)
 {
     BrdcstHelper.addListener( XGridColumnListener::static_type(), xListener );
@@ -176,6 +177,26 @@ void SAL_CALL DefaultGridColumnModel::removeColumnListener( const Reference< XGr
     BrdcstHelper.removeListener( XGridColumnListener::static_type(), xListener );
 }
 
+//---------------------------------------------------------------------
+void SAL_CALL DefaultGridColumnModel::setColumnHeaderHeight(sal_Int32 _value) throw (::com::sun::star::uno::RuntimeException)
+{
+    m_nColumnHeaderHeight = _value;
+}
+//---------------------------------------------------------------------
+sal_Int32 SAL_CALL DefaultGridColumnModel::getColumnHeaderHeight() throw (::com::sun::star::uno::RuntimeException)
+{
+    return m_nColumnHeaderHeight;
+}
+
+//---------------------------------------------------------------------
+void SAL_CALL DefaultGridColumnModel::setDefaultColumns(sal_Int32 rowElements) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
+
+    Reference<XGridColumn> xColumn( m_xFactory->createInstance ( OUString::createFromAscii( "com.sun.star.awt.grid.GridColumn"  ) ), UNO_QUERY );
+    for(sal_Int32 i=0;i<rowElements;i++)
+        columns.push_back(xColumn);
+}
 //---------------------------------------------------------------------
 // XComponent
 //---------------------------------------------------------------------
@@ -235,8 +256,8 @@ sal_Bool SAL_CALL DefaultGridColumnModel::supportsService( const ::rtl::OUString
 
 }
 
-Reference< XInterface > SAL_CALL DefaultGridColumnModel_CreateInstance( const Reference< XMultiServiceFactory >& )
+Reference< XInterface > SAL_CALL DefaultGridColumnModel_CreateInstance( const Reference< XMultiServiceFactory >& _rFactory)
 {
-    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new ::toolkit::DefaultGridColumnModel );
+    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new ::toolkit::DefaultGridColumnModel( _rFactory ) );
 }
 

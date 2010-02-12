@@ -33,10 +33,11 @@
 
 #include <com/sun/star/awt/grid/XGridControl.hpp>
 #include <com/sun/star/view/SelectionType.hpp>
-#include <toolkit/controls/unocontrols.hxx>
+#include <toolkit/controls/unocontrolbase.hxx>
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <toolkit/helper/servicenames.hxx>
 #include <cppuhelper/implbase1.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <toolkit/helper/listenermultiplexer.hxx>
 
@@ -90,11 +91,9 @@ public:
     void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::grid::XGridControl
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumnModel > SAL_CALL getColumnModel() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setColumnModel(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumnModel > & model) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridDataModel > SAL_CALL getDataModel() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setDataModel(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridDataModel > & model) throw (::com::sun::star::uno::RuntimeException);
+
     virtual ::sal_Int32 SAL_CALL getItemIndexAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setToolTip(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& text, const ::com::sun::star::uno::Sequence< ::sal_Int32 >& columns) throw (::com::sun::star::uno::RuntimeException);
     //virtual void SAL_CALL addMouseListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener > & listener) throw (::com::sun::star::uno::RuntimeException);
     //virtual void SAL_CALL removeMouseListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener > & listener) throw (::com::sun::star::uno::RuntimeException);
 

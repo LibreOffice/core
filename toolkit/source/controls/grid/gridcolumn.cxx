@@ -41,6 +41,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::awt::grid;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::style;
 
 namespace toolkit
 {
@@ -51,6 +52,9 @@ namespace toolkit
 
 GridColumn::GridColumn()
 : identifier(Any())
+,horizontalAlign(HorizontalAlignment(0))
+,columnWidth(4)
+,bResizeable(true)
 {
 }
 
@@ -91,6 +95,45 @@ void SAL_CALL GridColumn::setColumnWidth(::sal_Int32 value) throw (::com::sun::s
 {
     columnWidth = value;
 }
+//--------------------------------------------------------------------
+
+::sal_Int32 SAL_CALL GridColumn::getPreferredWidth() throw (::com::sun::star::uno::RuntimeException)
+{
+    return preferredWidth;
+}
+
+//--------------------------------------------------------------------
+
+void SAL_CALL GridColumn::setPreferredWidth(::sal_Int32 value) throw (::com::sun::star::uno::RuntimeException)
+{
+    preferredWidth = value;
+}
+//--------------------------------------------------------------------
+
+::sal_Int32 SAL_CALL GridColumn::getMaxWidth() throw (::com::sun::star::uno::RuntimeException)
+{
+    return maxWidth;
+}
+
+//--------------------------------------------------------------------
+
+void SAL_CALL GridColumn::setMaxWidth(::sal_Int32 value) throw (::com::sun::star::uno::RuntimeException)
+{
+    maxWidth = value;
+}
+//--------------------------------------------------------------------
+
+::sal_Int32 SAL_CALL GridColumn::getMinWidth() throw (::com::sun::star::uno::RuntimeException)
+{
+    return minWidth;
+}
+
+//--------------------------------------------------------------------
+
+void SAL_CALL GridColumn::setMinWidth(::sal_Int32 value) throw (::com::sun::star::uno::RuntimeException)
+{
+    minWidth = value;
+}
 
 //--------------------------------------------------------------------
 
@@ -104,6 +147,30 @@ void SAL_CALL GridColumn::setColumnWidth(::sal_Int32 value) throw (::com::sun::s
 void SAL_CALL GridColumn::setTitle(const ::rtl::OUString & value) throw (::com::sun::star::uno::RuntimeException)
 {
     title = value;
+}
+//--------------------------------------------------------------------
+
+sal_Bool SAL_CALL GridColumn::getResizeable() throw (::com::sun::star::uno::RuntimeException)
+{
+    return bResizeable;
+}
+
+//--------------------------------------------------------------------
+
+void SAL_CALL GridColumn::setResizeable(sal_Bool value) throw (::com::sun::star::uno::RuntimeException)
+{
+    bResizeable = value;
+}
+//---------------------------------------------------------------------
+HorizontalAlignment SAL_CALL GridColumn::getHorizontalAlign()
+{
+    return horizontalAlign;
+}
+//---------------------------------------------------------------------
+
+void SAL_CALL GridColumn::setHorizontalAlign(HorizontalAlignment align)
+{
+    horizontalAlign = align;
 }
 
 //---------------------------------------------------------------------

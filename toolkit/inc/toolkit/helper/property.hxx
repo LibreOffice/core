@@ -198,6 +198,9 @@ namespace rtl {
 #define BASEPROPERTY_GRID_SELECTIONMODE             144
 #define BASEPROPERTY_ENABLEVISIBLE                  145  // sal_Bool
 #define BASEPROPERTY_REFERENCE_DEVICE               146
+#define BASEPROPERTY_GRID_EVEN_ROW_BACKGROUND       147
+#define BASEPROPERTY_GRID_HEADER_BACKGROUND         148
+#define BASEPROPERTY_GRID_LINE_COLOR                149
 
 
 // Keine gebundenen Properties, werden immer aus der Property BASEPROPERTY_FONTDESCRIPTOR entnommen.
