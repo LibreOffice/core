@@ -1,11 +1,5 @@
 /*************************************************************************
  *
- *  $RCSfile: OS2Bitmap.cxx,v $
- *
- *  $Revision: 1.2 $
- *
- *  last change: $Author: obo $ $Date: 2008-07-22 17:53:52 $
- *
  *  This code is property of Serenity Systems Intl
  *  All rights reserverd.
  *
