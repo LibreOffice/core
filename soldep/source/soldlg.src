@@ -355,7 +355,7 @@ ToolBox TID_SOLDEP_MAIN
                         Type            = TOOLBOXITEM_BUTTON;
                         Text            = "Create MetaFile";
                         Checkable       = TRUE;
-                };                
+                };
         };
 };
 

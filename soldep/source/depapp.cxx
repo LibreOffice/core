@@ -46,7 +46,7 @@ void MyApp::Main()
     pSolDep->Init();
     aMainWin.SetText( String::CreateFromAscii( SOLDEPL_NAME ));
     pSolDep->Hide();
-    aMainWin.Show();    
+    aMainWin.Show();
     Help aHelp;
     SetHelp(&aHelp);
     aHelp.EnableContextHelp();

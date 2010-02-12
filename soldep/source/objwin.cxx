@@ -484,7 +484,7 @@ void ObjectWin::DrawOutput( OutputDevice* pDevice, const Point& rOffset )
 {
     Size aWinSize  = PixelToLogic( GetSizePixel() );
     Size aTextSize;
-    ByteString sbt = msBodyText;                      
+    ByteString sbt = msBodyText;
     aTextSize.Width() = GetTextWidth( String( msBodyText, RTL_TEXTENCODING_UTF8 ));
     aTextSize.Height() = GetTextHeight();
     Point aPos = GetPosPixel();
@@ -493,7 +493,7 @@ void ObjectWin::DrawOutput( OutputDevice* pDevice, const Point& rOffset )
     aTextPos += aPos;
     aPos = pDevice->PixelToLogic( aPos ) - rOffset;
     aTextPos = pDevice->PixelToLogic( aTextPos ) - rOffset;
-    if ( msBodyText !="null" ) 
+    if ( msBodyText !="null" )
     {
         pDevice->SetFillColor( GetBackground().GetColor() );
         pDevice->DrawRect( Rectangle( aPos, pDevice->PixelToLogic( GetSizePixel() ) ) );
