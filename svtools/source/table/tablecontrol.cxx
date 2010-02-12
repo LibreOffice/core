@@ -67,6 +67,8 @@ namespace svt { namespace table
     TableControl::TableControl( Window* _pParent, WinBits _nStyle )
         :Control( _pParent, _nStyle )
         ,m_pImpl( new TableControl_Impl( *this ) )
+        ,m_nCols(*( new ::com::sun::star::uno::Sequence< sal_Int32 >(0) ))
+        ,m_aText(*( new ::com::sun::star::uno::Sequence< ::rtl::OUString >(0) ))
     {
         m_pImpl->getDataWindow()->SetMouseButtonDownHdl( LINK( this, TableControl, ImplMouseButtonDownHdl ) );
         m_pImpl->getDataWindow()->SetMouseButtonUpHdl( LINK( this, TableControl, ImplMouseButtonUpHdl ) );
@@ -239,6 +241,7 @@ namespace svt { namespace table
     ::rtl::OUString TableControl::GetAccessibleObjectName( AccessibleTableControlObjType eObjType, sal_Int32 _nRow, sal_Int32 _nCol) const
     {
         ::rtl::OUString aRetText;
+        //Window* pWin;
         switch( eObjType )
         {
             case TCTYPE_GRIDCONTROL:
@@ -254,7 +257,8 @@ namespace svt { namespace table
                 aRetText = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ColumnHeaderBar" ) );
                 break;
             case TCTYPE_TABLECELL:
-                aRetText = GetCellContent(_nRow, _nCol);
+                //Window* pWin = GetCellContent(_nRow, _nCol);
+                aRetText = GetRowName(_nRow);
                 break;
             case TCTYPE_ROWHEADERCELL:
                 aRetText = GetRowName(_nRow);
@@ -327,13 +331,13 @@ namespace svt { namespace table
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString TableControl::GetCellContent( sal_Int32 _nRowPos, sal_Int32 _nColPos) const
+::com::sun::star::uno::Any TableControl::GetCellContent( sal_Int32 _nRowPos, sal_Int32 _nColPos) const
 {
-    ::rtl::OUString cellContent = ::rtl::OUString::createFromAscii("");
-    std::vector<std::vector<rtl::OUString> >& aTableContent = GetModel()->getCellContent();
+    ::com::sun::star::uno::Any cellContent = ::com::sun::star::uno::Any(::rtl::OUString::createFromAscii(""));
+    std::vector<std::vector< ::com::sun::star::uno::Any > >& aTableContent = GetModel()->getCellContent();
     if(&aTableContent)
     {
-        std::vector<rtl::OUString>& aRowContent = aTableContent[_nRowPos];
+        std::vector< ::com::sun::star::uno::Any >& aRowContent = aTableContent[_nRowPos];
         if(&aRowContent)
             cellContent = aRowContent[_nColPos];
     }
@@ -532,6 +536,22 @@ Rectangle TableControl::calcTableRect(BOOL _bOnScreen)
     Rectangle aRect;
     m_pImpl->impl_getAllVisibleDataCellArea(aRect);
     return aRect;
+}
+//--------------------------------------------------------------------
+::com::sun::star::uno::Sequence< sal_Int32 >& TableControl::getColumnsForTooltip()
+{
+    return  m_nCols;
+}
+//--------------------------------------------------------------------
+::com::sun::star::uno::Sequence< ::rtl::OUString >& TableControl::getTextForTooltip()
+{
+    return  m_aText;
+}
+//--------------------------------------------------------------------
+void TableControl::setTooltip(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aText, const ::com::sun::star::uno::Sequence< sal_Int32 >& nCols )
+{
+    m_aText = aText;
+    m_nCols = nCols;
 }
 
 //........................................................................

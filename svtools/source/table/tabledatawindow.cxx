@@ -44,9 +44,6 @@ namespace svt { namespace table
         :Window( &_rTableControl.getAntiImpl() )
         ,m_rTableControl        ( _rTableControl )
     {
-        Color backgroundColor = m_rTableControl.getAntiImpl().GetSettings().GetStyleSettings().GetFieldColor();
-        SetBackground( backgroundColor );
-        SetControlBackground( backgroundColor );
     }
 
     //--------------------------------------------------------------------
@@ -56,8 +53,22 @@ namespace svt { namespace table
     }
     void TableDataWindow::MouseMove( const MouseEvent& rMEvt )
     {
+        Point aPoint = rMEvt.GetPosPixel();
         if ( !m_rTableControl.getInputHandler()->MouseMove( m_rTableControl, rMEvt ) )
-            Window::MouseMove( rMEvt );
+        {
+            if(m_rTableControl.getCurrentRow(aPoint)>=0 &&
+                (!m_rTableControl.getAntiImpl().getColumnsForTooltip().getLength()==0 || !m_rTableControl.getAntiImpl().getTextForTooltip().getLength()==0))
+            {
+                m_rTableControl.setTooltip(aPoint);
+                SetPointer(POINTER_ARROW);
+            }
+            else if(m_rTableControl.getCurrentRow(aPoint) == -1)
+            {
+                m_rTableControl.resizeColumn(aPoint);
+            }
+            else
+                Window::MouseMove( rMEvt );
+        }
     }
     void TableDataWindow::MouseButtonDown( const MouseEvent& rMEvt )
     {
@@ -75,7 +86,18 @@ namespace svt { namespace table
             m_aMouseButtonUpHdl.Call( (MouseEvent*) &rMEvt);
         m_rTableControl.getAntiImpl().GetFocus();
     }
-
+    void TableDataWindow::SetPointer( const Pointer& rPointer )
+    {
+        Window::SetPointer(rPointer);
+    }
+    void TableDataWindow::CaptureMouse()
+    {
+        Window::CaptureMouse();
+    }
+    void TableDataWindow::ReleaseMouse(  )
+    {
+        Window::ReleaseMouse();
+    }
 //........................................................................
 } } // namespace svt::table
 //........................................................................

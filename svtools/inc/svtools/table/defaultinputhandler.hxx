@@ -43,6 +43,7 @@ namespace svt { namespace table
             friend class TableDataWindow;
     private:
         DefaultInputHandler_Impl*   m_pImpl;
+        bool                        m_bResize;
 
     public:
         DefaultInputHandler();

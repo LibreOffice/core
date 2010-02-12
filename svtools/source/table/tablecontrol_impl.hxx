@@ -38,6 +38,7 @@
 #include <vector>
 #include <vcl/seleng.hxx>
 
+
 class ScrollBar;
 class ScrollBarBox;
 
@@ -75,6 +76,8 @@ namespace svt { namespace table
             <strong<not</strong> counting the space for a possible row header column
         */
         ArrayOfLong         m_aAccColumnWidthsPixel;
+
+        ArrayOfLong         m_aVisibleColumnWidthsPixel;
         /// the height of a single row in the table, measured in pixels
         long                m_nRowHeightPixel;
         /// the height of the column header row in the table, measured in pixels
@@ -113,8 +116,8 @@ namespace svt { namespace table
         TableFunctionSet*   m_pTableFunctionSet;
         //part of selection engine
         RowPos              m_nAnchor;
-
-
+        bool                m_bResizing;
+        ColPos              m_nResizingColumn;
 
 #if DBG_UTIL
     #define INV_SCROLL_POSITION     1
@@ -145,7 +148,6 @@ namespace svt { namespace table
 
         inline  const TableControl&   getAntiImpl() const { return m_rAntiImpl; }
         inline        TableControl&   getAntiImpl()       { return m_rAntiImpl; }
-        void setCellContent(CellEntryType* pCellEntryType);
 
     public:
         TableControl_Impl( TableControl& _rAntiImpl );
@@ -181,7 +183,7 @@ namespace svt { namespace table
         */
         void    ensureVisible( ColPos _nColumn, RowPos _nRow, bool _bAcceptPartialVisibility );
         /** returns the row, which contains the input point*/
-        RowPos  getCurrentRow (const Point& rPoint);
+        virtual RowPos  getCurrentRow (const Point& rPoint);
 
         void setCursorAtCurrentCell(const Point& rPoint);
         /** proves whether the vector with the selected rows contains the current row*/
@@ -206,8 +208,11 @@ namespace svt { namespace table
         virtual void    hideCursor();
         virtual void    showCursor();
         virtual bool    dispatchAction( TableControlAction _eAction );
-        virtual bool    isClickInVisibleArea(const Point& rPoint);
         virtual SelectionEngine* getSelEngine();
+        virtual void setTooltip(const Point& rPoint );
+        virtual void resizeColumn(const Point& rPoint);
+        virtual bool startResizeColumn(const Point& rPoint);
+        virtual bool endResizeColumn(const Point& rPoint);
 
         TableDataWindow* getDataWindow();
         /** retrieves the area occupied by the totality of (at least partially) visible cells
@@ -311,6 +316,10 @@ namespace svt { namespace table
                 column range were reached.
         */
         TableSize   impl_ni_ScrollColumns( TableSize _nRowDelta );
+
+        void impl_ni_getAccVisibleColWidths();
+        void impl_updateLeftColumn();
+        ::rtl::OUString impl_convertToString(::com::sun::star::uno::Any _value);
 
         DECL_LINK( OnScroll, ScrollBar* );
     };

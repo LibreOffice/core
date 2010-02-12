@@ -32,6 +32,7 @@
 #include <svtools/table/tabledatawindow.hxx>
 #include <svtools/accessibletable.hxx>
 #include "svtaccessiblefactory.hxx"
+#include <com/sun/star/util/Color.hpp>
 //........................................................................
 
 namespace svt { namespace table
@@ -70,6 +71,8 @@ namespace svt { namespace table
         DECL_LINK( ImplMouseButtonUpHdl, MouseEvent* );
 
         TableControl_Impl*  m_pImpl;
+        ::com::sun::star::uno::Sequence< sal_Int32 >& m_nCols;
+        ::com::sun::star::uno::Sequence< ::rtl::OUString >& m_aText;
     public:
         ::std::auto_ptr< AccessibleTableControl_Impl > m_pAccessTable;
 
@@ -201,12 +204,15 @@ namespace svt { namespace table
         virtual ::rtl::OUString GetRowName(sal_Int32 _nIndex) const;
         virtual ::rtl::OUString GetColumnDescription( sal_uInt16 _nColumnPos ) const;
         virtual ::rtl::OUString GetColumnName( sal_Int32 _nIndex ) const;
-        virtual ::rtl::OUString GetCellContent( sal_Int32 _nRowPos, sal_Int32 _nColPos) const;
+        virtual ::com::sun::star::uno::Any GetCellContent( sal_Int32 _nRowPos, sal_Int32 _nColPos) const;
         virtual sal_Bool HasRowHeader();
         virtual sal_Bool HasColHeader();
         virtual sal_Bool isAccessibleAlive( ) const;
         virtual void commitGridControlEvent( sal_Int16 _nEventId, const com::sun::star::uno::Any& _rNewValue, const com::sun::star::uno::Any& _rOldValue );
 
+        ::com::sun::star::uno::Sequence< sal_Int32 >& getColumnsForTooltip();
+        ::com::sun::star::uno::Sequence< ::rtl::OUString >& getTextForTooltip();
+        void setTooltip(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aText, const ::com::sun::star::uno::Sequence< sal_Int32 >& nCols);
 
     protected:
     /// retrieves the XAccessible implementation associated with the GridControl instance

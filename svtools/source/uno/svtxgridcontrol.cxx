@@ -40,12 +40,16 @@
 #include <rtl/ref.hxx>
 #include <tools/debug.hxx>
 #include <toolkit/helper/property.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/awt/grid/XGridColumn.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-
+#include <com/sun/star/awt/XControl.hpp>
+#include <com/sun/star/awt/grid/GridInvalidDataException.hpp>
+#include <com/sun/star/awt/grid/GridInvalidModelException.hpp>
+#include <com/sun/star/util/Color.hpp>
 
 using ::rtl::OUString;
 using namespace ::svt::table;
@@ -93,26 +97,18 @@ IMPL_XTYPEPROVIDER_START( SVTXGridControl )
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumnModel > SAL_CALL SVTXGridControl::getColumnModel(  ) throw (::com::sun::star::uno::RuntimeException)
-{
-    return NULL;
-}
-void SAL_CALL SVTXGridControl::setColumnModel( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumnModel >& model ) throw (::com::sun::star::uno::RuntimeException)
-{
-    (void)model;
-}
-::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridDataModel > SAL_CALL SVTXGridControl::getDataModel(  ) throw (::com::sun::star::uno::RuntimeException)
-{
-    return NULL;
-}
-void SAL_CALL SVTXGridControl::setDataModel( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridDataModel >& model ) throw (::com::sun::star::uno::RuntimeException)
-{
-    (void)model;
-}
 sal_Int32 SAL_CALL SVTXGridControl::getItemIndexAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (::com::sun::star::uno::RuntimeException)
 {
     TableControl* pTable = (TableControl*)GetWindow();
     return pTable->GetCurrentRow( Point(x,y) );
+}
+
+void SAL_CALL SVTXGridControl::setToolTip(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& text, const com::sun::star::uno::Sequence< sal_Int32 >& columns) throw (::com::sun::star::uno::RuntimeException)
+{
+    TableControl* pTable = (TableControl*)GetWindow();
+    /*std::vector< sal_Int32 > newCols(
+            comphelper::sequenceToContainer< std::vector< sal_Int32 > >(columns));*/
+    pTable->setTooltip(text, columns);
 }
 
 void SAL_CALL SVTXGridControl::addSelectionListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridSelectionListener > & listener) throw (::com::sun::star::uno::RuntimeException)
@@ -158,6 +154,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
             if( aValue >>= bHScroll )
             {
                 m_bHScroll = bHScroll;
+                m_pTableModel->setHorizontalScrollbarVisibility(bHScroll);
             }
             break;
         }
@@ -167,15 +164,77 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
             if( aValue >>= bVScroll )
             {
                 m_bVScroll = bVScroll;
+                m_pTableModel->setVerticalScrollbarVisibility(bVScroll);
             }
             break;
         }
+
         case BASEPROPERTY_GRID_SHOWROWHEADER:
         {
             sal_Bool rowHeader = true;
             if( aValue >>= rowHeader )
             {
                 m_pTableModel->setRowHeaders(rowHeader);
+            }
+            break;
+        }
+        case BASEPROPERTY_GRID_HEADER_BACKGROUND:
+        {
+            sal_Int32 colorHeader = 0x000000;
+            if( aValue >>= colorHeader )
+            {
+                m_pTableModel->setHeaderBackgroundColor(colorHeader);
+            }
+            break;
+        }
+        case BASEPROPERTY_GRID_LINE_COLOR:
+        {
+            sal_Int32 colorLine = 0x000000;
+            if( aValue >>= colorLine )
+            {
+                m_pTableModel->setLineColor(colorLine);
+            }
+            break;
+        }
+        case BASEPROPERTY_GRID_EVEN_ROW_BACKGROUND:
+        {
+            sal_Int32 colorEvenRow = 0x000000;
+            if( aValue >>= colorEvenRow )
+            {
+                m_pTableModel->setEvenRowBackgroundColor(colorEvenRow);
+            }
+            break;
+        }
+        case BASEPROPERTY_BACKGROUNDCOLOR:
+        {
+            sal_Int32 colorBackground = 0x000000;
+            if( aValue >>= colorBackground )
+            {
+                m_pTableModel->setOddRowBackgroundColor(colorBackground);
+            }
+            break;
+        }
+        case BASEPROPERTY_TEXTCOLOR:
+        {
+            com::sun::star::util::Color colorText;
+            if( aValue >>= colorText )
+            {
+                m_pTableModel->setTextColor(colorText);
+            }
+            break;
+        }
+        case BASEPROPERTY_VERTICALALIGN:
+        {
+            com::sun::star::style::VerticalAlignment vAlign;
+            if( aValue >>= vAlign )
+            {
+                switch( vAlign )
+                {
+                case com::sun::star::style::VerticalAlignment_TOP:  m_pTableModel->setVerticalAlign(com::sun::star::style::VerticalAlignment(0)); break;
+                case com::sun::star::style::VerticalAlignment_MIDDLE:   m_pTableModel->setVerticalAlign(com::sun::star::style::VerticalAlignment(1)); break;
+                case com::sun::star::style::VerticalAlignment_BOTTOM: m_pTableModel->setVerticalAlign(com::sun::star::style::VerticalAlignment(2)); break;
+                default: m_pTableModel->setVerticalAlign(com::sun::star::style::VerticalAlignment(0)); break;
+                }
             }
             break;
         }
@@ -191,40 +250,97 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
         }
         case BASEPROPERTY_GRID_DATAMODEL:
         {
-            m_xDataModel = Reference< XGridDataModel >( aValue, UNO_QUERY );
-            Sequence<Sequence< ::rtl::OUString > > cellData = m_xDataModel->getData();
-            Sequence<rtl::OUString> rowData(0);
-            std::vector< std::vector< rtl::OUString > > aCellContent(0);
-            for(int i = 0; i< m_xDataModel->getRowCount();++i)
+            //m_xDataModel = Reference< XGridDataModel >( aValue, UNO_QUERY );
+            //Sequence<Sequence< ::com::sun::star::awt::XControl > > cellData = m_xDataModel->getData();
+            //Sequence<Window*> rowData(0);
+            //std::vector< std::vector< Window* > > aCellContent(0);
+            //for(int i = 0; i< m_xDataModel->getRowCount();++i)
+            //{
+            //  rowData = cellData[i];
+            //  std::vector<Window*> newRow(
+            //      comphelper::sequenceToContainer< std::vector<Window* > >(rowData));
+            //  if(newRow.size() < (unsigned)m_pTableModel->getColumnCount())
+            //      newRow.resize( m_pTableModel->getColumnCount(),rtl::OUString::createFromAscii(""));
+            //  aCellContent.push_back(newRow);
+            //}
+            //m_pTableModel->setCellContent(aCellContent);
+            //Sequence< ::rtl::OUString > rowHeaders = m_xDataModel->getRowHeaders();
+            //std::vector< rtl::OUString > newRow(
+            //  comphelper::sequenceToContainer< std::vector<rtl::OUString > >(rowHeaders));
+            //m_pTableModel->setRowCount(m_xDataModel->getRowCount());
+            //m_pTableModel->setRowHeaderName(newRow);
+            //break;
             {
-                rowData = cellData[i];
-                std::vector<rtl::OUString> newRow(
-                    comphelper::sequenceToContainer< std::vector<rtl::OUString > >(rowData));
-                if(newRow.size() < (unsigned)m_pTableModel->getColumnCount())
-                    newRow.resize( m_pTableModel->getColumnCount(),rtl::OUString::createFromAscii(""));
-                aCellContent.push_back(newRow);
+                m_xDataModel = Reference< XGridDataModel >( aValue, UNO_QUERY );
+                if(m_xDataModel != NULL)
+                {
+                    Sequence<Sequence< Any > > cellData = m_xDataModel->getData();
+                    if(cellData.getLength()!= 0)
+                    {
+                        for (int i = 0; i < cellData.getLength(); i++)
+                        {
+                            std::vector< Any > newRow;
+                            Sequence< Any > rawRowData = cellData[i];
+                            //check whether the data row vector length matches with the column count,
+                            //all cells must have some content even if it is empty string
+                            //preventing errors
+                            if(m_xColumnModel->getColumnCount() == 0)
+                            {
+                                for ( ::svt::table::ColPos col = 0; col < rawRowData.getLength(); ++col )
+                                {
+                                    UnoControlTableColumn* tableColumn = new UnoControlTableColumn();
+                                    m_pTableModel->getColumnModel().push_back((PColumnModel)tableColumn);
+                                }
+                                m_xColumnModel->setDefaultColumns(rawRowData.getLength());
+                            }
+                            if((unsigned int)rawRowData.getLength()!=(unsigned)m_pTableModel->getColumnCount())
+                                throw GridInvalidDataException(rtl::OUString::createFromAscii("The column count doesn't match with the length of row data"), m_xDataModel);
+
+                            for ( int k = 0; k < rawRowData.getLength(); k++)
+                            {
+                                newRow.push_back(rawRowData[k]);
+                            }
+                            m_pTableModel->getCellContent().push_back(newRow);
+                        }
+
+                        Sequence< ::rtl::OUString > rowHeaders = m_xDataModel->getRowHeaders();
+                        std::vector< rtl::OUString > newRow(
+                            comphelper::sequenceToContainer< std::vector<rtl::OUString > >(rowHeaders));
+                        m_pTableModel->setRowCount(m_xDataModel->getRowCount());
+                        m_pTableModel->setRowHeaderName(newRow);
+                        m_pTableModel->setRowHeight(m_xDataModel->getRowHeight());
+                        m_pTableModel->setRowHeaderWidth(m_xDataModel->getRowHeaderWidth());
+                    }
+                }
+                else
+                    throw GridInvalidDataException(rtl::OUString::createFromAscii("The data model isn't set!"), m_xDataModel);
             }
-            m_pTableModel->setCellContent(aCellContent);
-            Sequence< ::rtl::OUString > rowHeaders = m_xDataModel->getRowHeaders();
-            std::vector< rtl::OUString > newRow(
-                comphelper::sequenceToContainer< std::vector<rtl::OUString > >(rowHeaders));
-            m_pTableModel->setRowCount(m_xDataModel->getRowCount());
-            m_pTableModel->setRowHeaderName(newRow);
             break;
         }
         case BASEPROPERTY_GRID_COLUMNMODEL:
         {
             m_xColumnModel = Reference< XGridColumnModel >( aValue, UNO_QUERY );
-            Sequence<Reference< XGridColumn > > columns = m_xColumnModel->getColumns();
-            std::vector<Reference< XGridColumn > > aNewColumns(
-                comphelper::sequenceToContainer<std::vector<Reference< XGridColumn > > >(columns));
-        /*  if(m_pTable->GetColumnCount().size()>0)
-                m_pTable->GetColumnName.clear();*/
-            for ( ::svt::table::ColPos col = 0; col < m_xColumnModel->getColumnCount(); ++col )
+            if(m_xColumnModel != NULL)
             {
-                UnoControlTableColumn* tableColumn = new UnoControlTableColumn(aNewColumns[col]);
-                m_pTableModel->getColumnModel().push_back((PColumnModel)tableColumn);
+                if(m_xColumnModel->getColumnCount() != 0)
+                {
+                    Sequence<Reference< XGridColumn > > columns = m_xColumnModel->getColumns();
+                    std::vector<Reference< XGridColumn > > aNewColumns(
+                        comphelper::sequenceToContainer<std::vector<Reference< XGridColumn > > >(columns));
+                    m_pTableModel->setColumnHeaderHeight(m_xColumnModel->getColumnHeaderHeight());
+                    for ( ::svt::table::ColPos col = 0; col < m_xColumnModel->getColumnCount(); ++col )
+                    {
+                        UnoControlTableColumn* tableColumn = new UnoControlTableColumn(aNewColumns[col]);
+                        m_pTableModel->getColumnModel().push_back((PColumnModel)tableColumn);
+                        m_pTableModel->getColumnModel()[col]->setHorizontalAlign(m_xColumnModel->getColumn(col)->getHorizontalAlign());
+                        m_pTableModel->getColumnModel()[col]->setWidth(m_xColumnModel->getColumn(col)->getColumnWidth());
+                        m_pTableModel->getColumnModel()[col]->setResizable(m_xColumnModel->getColumn(col)->getResizeable());
+                    }
+                }
             }
+            else
+                throw GridInvalidModelException(rtl::OUString::createFromAscii("The column model isn't set!"), m_xColumnModel);
+
             break;
         }
         default:
@@ -268,6 +384,7 @@ Any SVTXGridControl::getProperty( const ::rtl::OUString& PropertyName ) throw(Ru
                 return Any ( m_xDataModel );
             case BASEPROPERTY_GRID_COLUMNMODEL:
                 return Any ( m_xColumnModel);
+            case BASEPROPERTY_TABSTOP:
             case BASEPROPERTY_HSCROLL:
                 return Any ( m_bHScroll);
             case BASEPROPERTY_VSCROLL:
@@ -285,6 +402,9 @@ void SVTXGridControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_GRID_DATAMODEL,
                      BASEPROPERTY_GRID_COLUMNMODEL,
                      BASEPROPERTY_GRID_SELECTIONMODE,
+                     BASEPROPERTY_GRID_EVEN_ROW_BACKGROUND,
+                     BASEPROPERTY_GRID_HEADER_BACKGROUND,
+                     BASEPROPERTY_GRID_LINE_COLOR,
                      0);
     VCLXWindow::ImplGetPropertyIds( rIds, true );
 }
@@ -294,8 +414,18 @@ void SAL_CALL SVTXGridControl::setVisible( sal_Bool bVisible ) throw(::com::sun:
     if ( pTable )
     {
         pTable->SetModel(PTableModel(m_pTableModel));
-        //m_pTable->SetPosSizePixel( Point( nPosX, nPosY ), Size(nWidth, nHeight) );
         pTable->Show( bVisible );
+        if(m_xColumnModel != NULL)
+        {
+            for ( ::svt::table::ColPos col = 0; col < m_xColumnModel->getColumnCount(); ++col )
+            {
+                //set the new widths, which are computed to fill the width of grid, back to uno awt gridcolumn
+                //so funktioniert es nicht!!! Die Toolkit Klassen müssen notifiziert werden, sonst kommt es nicht an
+                //herausfinden wie es gehen soll!
+                m_xColumnModel->getColumn(col)->setColumnWidth(m_pTableModel->getColumnModel()[col]->getWidth());
+            }
+        }
+        //TO DO: notify uno awt GridModel about hor. /vert. scrollbars
     }
 }
 void SAL_CALL SVTXGridControl::setFocus() throw(::com::sun::star::uno::RuntimeException)
@@ -306,17 +436,51 @@ void SAL_CALL SVTXGridControl::setFocus() throw(::com::sun::star::uno::RuntimeEx
 }
 void SAL_CALL SVTXGridControl::rowAdded(const ::com::sun::star::awt::grid::GridDataEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
 {
-    std::vector<OUString> aNewRow(
-        comphelper::sequenceToContainer< std::vector<rtl::OUString > >(Event.rowData));
-    if(aNewRow.size()< (unsigned)m_pTableModel->getColumnCount())
-        aNewRow.resize(m_pTableModel->getColumnCount(),rtl::OUString::createFromAscii(""));
-    m_pTableModel->getCellContent().push_back(aNewRow);
+    std::vector< Any > newRow;
+    Sequence< Any > rawRowData = Event.rowData;
+    if(m_xColumnModel->getColumnCount() == 0)
+    {
+        for ( ::svt::table::ColPos col = 0; col < rawRowData.getLength(); ++col )
+        {
+            UnoControlTableColumn* tableColumn = new UnoControlTableColumn();
+            m_pTableModel->getColumnModel().push_back((PColumnModel)tableColumn);
+        }
+        m_xColumnModel->setDefaultColumns(rawRowData.getLength());
+    }
+    else if((unsigned int)rawRowData.getLength()!=(unsigned)m_xColumnModel->getColumnCount())
+        throw GridInvalidDataException(rtl::OUString::createFromAscii("The column count doesn't match with the length of row data"), m_xDataModel);
+    for ( int k = 0; k < rawRowData.getLength(); k++)
+    {
+        ::rtl::OUString xCellType;
+        ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic> xGraphic;
+        /*if(xCellType.CellControl!= NULL)
+        {
+            xCellType.CellControl->createPeer( getToolkit(), this);
+            Window* pVclPeer = VCLUnoHelper::GetWindow( xCellType.CellControl->getPeer() );
+            xTableCellType->pWindow = pVclPeer;
+            xTableCellType->pWindow->Hide();
+            newRow.push_back(xTableCellType);
+        }
+        else
+        {*/
+        newRow.push_back(rawRowData[k]);
+        //}
+    }
+    m_pTableModel->getCellContent().push_back(newRow);
     if(m_pTableModel->hasRowHeaders())
         m_pTableModel->getRowHeaderName().push_back(Event.headerName);
-    m_pTableModel->setRowCount(m_pTableModel->getRowHeaderName().size());
+    m_pTableModel->setRowCount(m_pTableModel->getCellContent().size());
+    //if(m_pTableModel->hasVerticalScrollbar())
+    m_bVScroll = m_pTableModel->hasVerticalScrollbar();
+    com::sun::star::uno::Any aAny;
+    aAny <<= m_bVScroll;
+    setProperty(rtl::OUString::createFromAscii("VScroll"),aAny);
+   //Reference < XGridControl >( getPeer(), UNO_QUERY_THROW )->ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_VSCROLL ), aAny, sal_True );
+
+
+    m_bHScroll = m_pTableModel->hasHorizontalScrollbar();
     TableControl* pTable = (TableControl*)GetWindow();
-    pTable->InvalidateDataWindow(m_pTableModel->getRowHeaderName().size()-1, false);
-    //pTable->GrabFocus();
+    pTable->InvalidateDataWindow(m_pTableModel->getCellContent().size()-1, false);
     if(pTable->isAccessibleAlive())
     {
         pTable->commitGridControlEvent(TABLE_MODEL_CHANGED,
@@ -337,39 +501,72 @@ void SAL_CALL SVTXGridControl::rowAdded(const ::com::sun::star::awt::grid::GridD
 
 void SAL_CALL SVTXGridControl::rowRemoved(const ::com::sun::star::awt::grid::GridDataEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
 {
+    //TableControl* pTable = (TableControl*)GetWindow();
+    ////unsigned int rows =m_pImpl->aCellContent.size()-1;
+    //if(Event.index == -1)
+    //{
+    //  if(m_pTableModel->hasRowHeaders())
+    //      m_pTableModel->getRowHeaderName().clear();
+    //  m_pTableModel->getCellContent().clear();
+    //  if(pTable->isAccessibleAlive())
+    //  {
+    //      pTable->commitGridControlEvent(TABLE_MODEL_CHANGED,
+ //             makeAny( AccessibleTableModelChange(DELETE, 0, m_pTableModel->getColumnCount(), 0, m_pTableModel->getColumnCount())),
+    //          Any());
+    //  }
+    //}
+    //else
+    //{
+    //  pTable->removeSelectedRow(Event.index);
+    //  if(m_pTableModel->getCellContent().size()>1)
+    //  {
+    //      if(m_pTableModel->hasRowHeaders())
+    //          m_pTableModel->getRowHeaderName().erase(m_pTableModel->getRowHeaderName().begin()+Event.index);
+    //      m_pTableModel->getCellContent().erase(m_pTableModel->getCellContent().begin()+Event.index);
+    //
+    //  }
+    //  else
+    //  {
+    //      if(m_pTableModel->hasRowHeaders())
+    //          m_pTableModel->getRowHeaderName().clear();
+    //      m_pTableModel->getCellContent().clear();
+    //      //m_pImpl->nRowCount=0;
+    //  }
+    //}
+    ////pTable->InvalidateDataWindow(Event.index, true);
+    //m_pTableModel->setRowCount(m_pTableModel->getCellContent().size());
+    //pTable->InvalidateDataWindow(Event.index, true);
     TableControl* pTable = (TableControl*)GetWindow();
-    //unsigned int rows =m_pImpl->aCellContent.size()-1;
     if(Event.index == -1)
     {
         if(m_pTableModel->hasRowHeaders())
             m_pTableModel->getRowHeaderName().clear();
+        //::std::vector<std::vector<Any> >::iterator iter = m_pTableModel->getCellContent().begin();
+        //for(;iter!=m_pTableModel->getCellContent().end();++iter)
+        //{
+        //  std::vector<Any> vectIn = *iter;
+        //  std::vector<Any>::iterator iterIn = vectIn.begin();
+        //  for(;iterIn!=vectIn.end();++iterIn)
+        //      DELETEZ(*iterIn);
+        //}
         m_pTableModel->getCellContent().clear();
-        if(pTable->isAccessibleAlive())
-        {
-            pTable->commitGridControlEvent(TABLE_MODEL_CHANGED,
-                 makeAny( AccessibleTableModelChange(DELETE, 0, m_pTableModel->getColumnCount(), 0, m_pTableModel->getColumnCount())),
-                Any());
-        }
     }
-    else
+    else if(Event.index >= 0 && Event.index < m_pTableModel->getRowCount())
     {
         pTable->removeSelectedRow(Event.index);
-        if(m_pTableModel->getCellContent().size()>1)
-        {
-            if(m_pTableModel->hasRowHeaders())
-                m_pTableModel->getRowHeaderName().erase(m_pTableModel->getRowHeaderName().begin()+Event.index);
-            m_pTableModel->getCellContent().erase(m_pTableModel->getCellContent().begin()+Event.index);
 
-        }
-        else
-        {
-            if(m_pTableModel->hasRowHeaders())
-                m_pTableModel->getRowHeaderName().clear();
-            m_pTableModel->getCellContent().clear();
-            //m_pImpl->nRowCount=0;
-        }
+        if(m_pTableModel->hasRowHeaders())
+            m_pTableModel->getRowHeaderName().erase(m_pTableModel->getRowHeaderName().begin()+Event.index);
+        std::vector<std::vector<Any> >::iterator rowPos =m_pTableModel->getCellContent().begin() + Event.index;
+        //for ( std::vector<TableContentType*>::iterator iterIn = rowPos->begin();
+        //      iterIn != rowPos->end();
+        //      ++iterIn
+        //  )
+        //{
+        //  DELETEZ(*iterIn);
+        //}
+        m_pTableModel->getCellContent().erase( rowPos );
     }
-    //pTable->InvalidateDataWindow(Event.index, true);
     m_pTableModel->setRowCount(m_pTableModel->getCellContent().size());
     pTable->InvalidateDataWindow(Event.index, true);
     if(pTable->isAccessibleAlive())

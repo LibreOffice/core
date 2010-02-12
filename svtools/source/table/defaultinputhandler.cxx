@@ -49,6 +49,7 @@ namespace svt { namespace table
     //--------------------------------------------------------------------
     DefaultInputHandler::DefaultInputHandler()
         :m_pImpl( new DefaultInputHandler_Impl )
+        ,m_bResize(false)
     {
     }
 
@@ -61,8 +62,12 @@ namespace svt { namespace table
     //--------------------------------------------------------------------
     bool DefaultInputHandler::MouseMove( IAbstractTableControl& _rControl, const MouseEvent& _rMEvt )
     {
-        (void)_rControl;
-        (void)_rMEvt;
+        Point aPoint = _rMEvt.GetPosPixel();
+        if(m_bResize)
+        {
+            _rControl.resizeColumn(aPoint);
+            return true;
+        }
         return false;
     }
 
@@ -71,7 +76,12 @@ namespace svt { namespace table
     {
         bool bHandled = false;
         Point aPoint = _rMEvt.GetPosPixel();
-        if(_rControl.isClickInVisibleArea(aPoint))
+        if(_rControl.getCurrentRow(aPoint) == -1)
+        {
+            m_bResize = _rControl.startResizeColumn(aPoint);
+            bHandled = true;
+        }
+        else if(_rControl.getCurrentRow(aPoint) >= 0)
         {
             if(_rControl.getSelEngine()->GetSelectionMode() == NO_SELECTION)
             {
@@ -92,9 +102,14 @@ namespace svt { namespace table
     {
         bool bHandled = false;
         Point aPoint = _rMEvt.GetPosPixel();
-        if(_rControl.isClickInVisibleArea(aPoint))
+        if(_rControl.getCurrentRow(aPoint) >= 0)
         {
-            if(_rControl.getSelEngine()->GetSelectionMode() == NO_SELECTION)
+            if(m_bResize)
+            {
+                m_bResize = _rControl.endResizeColumn(aPoint);
+                bHandled = true;
+            }
+            else if(_rControl.getSelEngine()->GetSelectionMode() == NO_SELECTION)
             {
                 GetFocus(_rControl);
                 _rControl.setCursorAtCurrentCell(aPoint);
@@ -102,6 +117,14 @@ namespace svt { namespace table
             }
             else
                 bHandled = _rControl.getSelEngine()->SelMouseButtonUp(_rMEvt);
+        }
+        else
+        {
+            if(m_bResize)
+            {
+                m_bResize = _rControl.endResizeColumn(aPoint);
+                bHandled = true;
+            }
         }
         return bHandled;
     }

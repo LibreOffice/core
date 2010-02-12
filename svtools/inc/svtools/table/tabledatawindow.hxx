@@ -66,6 +66,9 @@ namespace svt { namespace table
         virtual void        MouseMove( const MouseEvent& rMEvt);
         virtual void        MouseButtonDown( const MouseEvent& rMEvt);
         virtual void        MouseButtonUp( const MouseEvent& rMEvt);
+        virtual void        SetPointer( const Pointer& rPointer );
+        virtual void        CaptureMouse();
+        virtual void        ReleaseMouse();
 
     };
 //........................................................................

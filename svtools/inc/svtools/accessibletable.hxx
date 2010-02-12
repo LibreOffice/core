@@ -34,6 +34,7 @@
 #include <vcl/window.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <svtools/table/tablemodel.hxx>
 
 // ============================================================================
 
@@ -125,7 +126,7 @@ public:
     virtual ::rtl::OUString GetRowName(sal_Int32 _nIndex) const = 0;
     virtual ::rtl::OUString GetColumnDescription( sal_uInt16 _nColumnPos ) const = 0;
     virtual ::rtl::OUString GetColumnName( sal_Int32 _nIndex ) const = 0;
-    virtual ::rtl::OUString GetCellContent( sal_Int32 _nRowPos, sal_Int32 _nColPos) const = 0;
+    virtual ::com::sun::star::uno::Any GetCellContent( sal_Int32 _nRowPos, sal_Int32 _nColPos) const = 0;
     virtual std::vector<sal_Int32>& GetSelectedRows() = 0;
 };
 

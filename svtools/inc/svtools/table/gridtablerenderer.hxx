@@ -89,7 +89,11 @@ namespace svt { namespace table
                             bool _bActive, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rArea,
                             const StyleSettings& _rStyle, rtl::OUString& _rText );
-        virtual void    PaintCell( ColPos _nColumn,
+        virtual void    PaintCellImage( ColPos _nColumn,
+                            bool _bActive, bool _bSelected,
+                            OutputDevice& _rDevice, const Rectangle& _rArea,
+                            const StyleSettings& _rStyle, Image* _pCellData );
+        virtual void    PaintCellString( ColPos _nColumn,
                             bool _bActive, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rArea,
                             const StyleSettings& _rStyle, rtl::OUString& _rText );

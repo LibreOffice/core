@@ -29,10 +29,12 @@
 #include <svtools/table/tabletypes.hxx>
 #include <svtools/table/tablerenderer.hxx>
 #include <svtools/table/tableinputhandler.hxx>
-
+#include <rtl/ref.hxx>
 #include <sal/types.h>
-
+#include <com/sun/star/util/Color.hpp>
 #include <boost/shared_ptr.hpp>
+#include <com/sun/star/style/VerticalAlignment.hpp>
+#include <com/sun/star/style/HorizontalAlignment.hpp>
 
 //........................................................................
 namespace svt { namespace table
@@ -43,21 +45,16 @@ namespace svt { namespace table
     //====================================================================
     //= cell data
     //====================================================================
-    struct CellEntryType
+    struct TableContentType
     {
-         String m_aStr;
-         //Image        m_aImage;
-        //Control   m_aControl;
-        CellEntryType( const String& _rStr ) :
-            m_aStr( _rStr )
-            {}
+        ::rtl::OUString sContent;
+        Image*  pImage;
+        TableContentType() :
+            sContent(),
+            pImage(  )
+            {
+            }
      };
-
-    //typedef ::std::vector<CellEntryType*> CellColumnContent;
-    //vector, which contains text data for each cell
-    typedef ::std::vector<String> CellColumnContent;
-    //vector, which contains data for rows
-    typedef ::std::vector<CellColumnContent> CellContent;
     //====================================================================
     //= ScrollbarVisibility
     //====================================================================
@@ -284,7 +281,24 @@ namespace svt { namespace table
         */
         virtual void            setMaxWidth( TableMetrics _nMaxWidth ) = 0;
 
+        /** returns the preferred width of the column,  or 0 if the column
+            does not have a preferred width.
 
+            @see setMaxWidth
+            @see getMinWidth
+            @see getWidth
+        */
+        virtual TableMetrics    getPreferredWidth() const = 0;
+         /** sets the preferred width of the column, to be used when user resizes column
+
+            @see getMaxWidth
+            @see setMinWidth
+            @see setWidth
+        */
+        virtual void            setPreferredWidth( TableMetrics _nPrefWidth ) = 0;
+
+        virtual ::com::sun::star::style::HorizontalAlignment getHorizontalAlign() = 0;
+        virtual void setHorizontalAlign(::com::sun::star::style::HorizontalAlignment _xAlign) = 0;
         /// deletes the column model instance
         virtual ~IColumnModel() { }
     };
@@ -429,18 +443,33 @@ namespace svt { namespace table
         */
         virtual ScrollbarVisibility getHorizontalScrollbarVisibility(int overAllWidth, int actWidth) const = 0;
 
+        virtual bool hasVerticalScrollbar() =0;
+        virtual bool hasHorizontalScrollbar() = 0;
         /** fills cells with content
         */
-        virtual void                setCellContent(std::vector<std::vector<rtl::OUString> > cellContent)=0;
+        virtual void setCellContent(std::vector< std::vector< ::com::sun::star::uno::Any > > cellContent)=0;
         /** gets the content of the cells
         */
-        virtual std::vector<std::vector<rtl::OUString> >&           getCellContent() = 0;
+        virtual std::vector< std::vector< ::com::sun::star::uno::Any > >&   getCellContent() = 0;
         /**sets title of header rows
         */
-        virtual void                setRowHeaderName(std::vector<rtl::OUString> cellColumnContent)=0;
+        virtual void setRowHeaderName(std::vector<rtl::OUString> cellColumnContent)=0;
         /** gets title of header rows
         */
         virtual std::vector<rtl::OUString>&   getRowHeaderName() = 0;
+
+        virtual ::com::sun::star::util::Color getLineColor() = 0;
+        virtual void setLineColor(::com::sun::star::util::Color _rColor) = 0;
+        virtual ::com::sun::star::util::Color getHeaderBackgroundColor() = 0;
+        virtual void setHeaderBackgroundColor(::com::sun::star::util::Color _rColor) = 0;
+        virtual ::com::sun::star::util::Color getTextColor() = 0;
+        virtual void setTextColor(::com::sun::star::util::Color _rColor) = 0;
+        virtual ::com::sun::star::util::Color getOddRowBackgroundColor() = 0;
+        virtual void setOddRowBackgroundColor(::com::sun::star::util::Color _rColor) = 0;
+        virtual ::com::sun::star::util::Color getEvenRowBackgroundColor() = 0;
+        virtual void setEvenRowBackgroundColor(::com::sun::star::util::Color _rColor) = 0;
+        virtual ::com::sun::star::style::VerticalAlignment getVerticalAlign() = 0;
+        virtual void setVerticalAlign(::com::sun::star::style::VerticalAlignment _xAlign) = 0;
 
         /// destroys the table model instance
         virtual ~ITableModel() { }
