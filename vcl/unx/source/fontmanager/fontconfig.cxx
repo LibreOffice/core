@@ -1062,7 +1062,7 @@ bool PrintFontManager::getFontOptions(
     FcResult eResult = FcResultNoMatch;
     FcFontSet* pFontSet = rWrapper.getFontSet();
     FcPattern* pResult = rWrapper.FcFontSetMatch( pConfig, &pFontSet, 1, pPattern, &eResult );
-    if( !pResult )
+    if( pResult )
     {
         FcFontSet* pSet = rWrapper.FcFontSetCreate();
         rWrapper.FcFontSetAdd( pSet, pResult );
