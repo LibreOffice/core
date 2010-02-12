@@ -203,7 +203,10 @@ for a rng:define
   </xsl:for-each>
   
   <xsl:for-each select=".//rng:ref[not(ancestor::rng:element or ancestor::rng:attribute)]">
-    <xsl:call-template name="factoryattributetoresourcemapinner"/>
+    <xsl:variable name="name" select="@name"/>
+    <xsl:for-each select="ancestor::namespace/rng:grammar/rng:define[@name=$name]">
+        <xsl:call-template name="factoryattributetoresourcemapinner"/>
+    </xsl:for-each>
   </xsl:for-each>
 </xsl:template>
 
