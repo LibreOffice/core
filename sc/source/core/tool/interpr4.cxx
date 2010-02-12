@@ -68,15 +68,18 @@
 #include "jumpmatrix.hxx"
 #include "parclass.hxx"
 #include "externalrefmgr.hxx"
+#include "doubleref.hxx"
 
 #include <math.h>
 #include <float.h>
 #include <map>
 #include <algorithm>
 #include <functional>
+#include <memory>
 
 using namespace com::sun::star;
 using namespace formula;
+using ::std::auto_ptr;
 
 #define ADDIN_MAXSTRLEN 256
 
@@ -1222,6 +1225,42 @@ void ScInterpreter::DoubleRefToVars( const ScToken* p,
     }
 }
 
+ScDBRangeBase* ScInterpreter::PopDoubleRef()
+{
+    if (!sp)
+    {
+        SetError(errUnknownStackVariable);
+        return NULL;
+    }
+
+    --sp;
+    FormulaToken* p = pStack[sp];
+    switch (p->GetType())
+    {
+        case svError:
+            nGlobalError = p->GetError();
+        break;
+        case svDoubleRef:
+        {
+            SCCOL nCol1, nCol2;
+            SCROW nRow1, nRow2;
+            SCTAB nTab1, nTab2;
+            DoubleRefToVars(static_cast<ScToken*>(p),
+                            nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, false);
+
+            return new ScDBInternalRange(pDok,
+                ScRange(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2));
+        }
+        case svMatrix:
+        {
+            ScMatrixRef pMat = static_cast<ScToken*>(p)->GetMatrix();
+            return new ScDBExternalRange(pDok, pMat);
+        }
+        default:
+            SetError( errIllegalParameter);
+    }
+    return NULL;
+}
 
 void ScInterpreter::PopDoubleRef(SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
                                  SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2,
@@ -2055,78 +2094,37 @@ ScMatValType ScInterpreter::GetDoubleOrStringFromMatrix( double& rDouble,
 void ScInterpreter::ScDBGet()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScDBGet" );
-    SCTAB nTab;
-    ScQueryParam aQueryParam;
     BOOL bMissingField = FALSE;
-    if (GetDBParams( nTab, aQueryParam, bMissingField))
+    auto_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
+    if (!pQueryParam.get())
     {
-        ScBaseCell* pCell;
-        ScQueryCellIterator aCellIter(pDok, nTab, aQueryParam);
-        if ( (pCell = aCellIter.GetFirst()) != NULL )
-        {
-            if (aCellIter.GetNext())
-                PushIllegalArgument();
-            else
-            {
-                switch (pCell->GetCellType())
-                {
-                    case CELLTYPE_VALUE:
-                    {
-                        double rValue = ((ScValueCell*)pCell)->GetValue();
-                        if ( bCalcAsShown )
-                        {
-                            ULONG nFormat;
-                            nFormat = aCellIter.GetNumberFormat();
-                            rValue = pDok->RoundValueAsShown( rValue, nFormat );
-                        }
-                        PushDouble(rValue);
-                    }
-                    break;
-                    case CELLTYPE_STRING:
-                    {
-                        String rString;
-                        ((ScStringCell*)pCell)->GetString(rString);
-                        PushString(rString);
-                    }
-                    break;
-                    case CELLTYPE_EDIT:
-                    {
-                        String rString;
-                        ((ScEditCell*)pCell)->GetString(rString);
-                        PushString(rString);
-                    }
-                    break;
-                    case CELLTYPE_FORMULA:
-                    {
-                        USHORT rErr = ((ScFormulaCell*)pCell)->GetErrCode();
-                        if (rErr)
-                            PushError(rErr);
-                        else if (((ScFormulaCell*)pCell)->IsValue())
-                        {
-                            double rValue = ((ScFormulaCell*)pCell)->GetValue();
-                            PushDouble(rValue);
-                        }
-                        else
-                        {
-                            String rString;
-                            ((ScFormulaCell*)pCell)->GetString(rString);
-                            PushString(rString);
-                        }
-                    }
-                    break;
-                    case CELLTYPE_NONE:
-                    case CELLTYPE_NOTE:
-                    default:
-                        PushIllegalArgument();
-                    break;
-                }
-            }
-        }
-        else
-            PushNoValue();
-    }
-    else
+        // Failed to create query param.
         PushIllegalParameter();
+        return;
+    }
+
+    pQueryParam->mbSkipString = false;
+    ScDBQueryDataIterator aValIter(pDok, pQueryParam.release());
+    ScDBQueryDataIterator::Value aValue;
+    if (!aValIter.GetFirst(aValue) || aValue.mnError)
+    {
+        // No match found.
+        PushNoValue();
+        return;
+    }
+
+    ScDBQueryDataIterator::Value aValNext;
+    if (aValIter.GetNext(aValNext) && !aValNext.mnError)
+    {
+        // There should be only one unique match.
+        PushIllegalArgument();
+        return;
+    }
+
+    if (aValue.mbIsNumber)
+        PushDouble(aValue.mfValue);
+    else
+        PushString(aValue.maString);
 }
 
 

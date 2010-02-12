@@ -162,7 +162,7 @@ private:
 friend class ScDocument;                    // fuer FillInfo
 friend class ScDocumentIterator;
 friend class ScValueIterator;
-friend class ScQueryValueIterator;
+friend class ScDBQueryDataIterator;
 friend class ScCellIterator;
 friend class ScQueryCellIterator;
 friend class ScHorizontalCellIterator;
@@ -178,6 +178,7 @@ public:
 
     ScOutlineTable* GetOutlineTable()               { return pOutlineTable; }
 
+    SCSIZE      GetCellCount(SCCOL nCol) const;
     ULONG       GetCellCount() const;
     ULONG       GetWeightedCount() const;
     ULONG       GetCodeCount() const;       // RPN-Code in Formeln

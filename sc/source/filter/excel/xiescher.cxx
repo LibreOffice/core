@@ -105,6 +105,7 @@
 #include "convuno.hxx"
 #include "postit.hxx"
 #include "globstr.hrc"
+#include "chartlis.hxx"
 
 #include "fprogressbar.hxx"
 #include "xltracer.hxx"
@@ -1662,7 +1663,7 @@ SdrObject* XclImpChartObj::DoCreateSdrObj( const Rectangle& rAnchorRect, ScfProg
         if( svt::EmbeddedObjectRef::TryRunningState( xEmbObj ) )
         {
             Reference< XModel > xModel( xEmbObj->getComponent(), UNO_QUERY );
-            mxChart->Convert( xModel, rProgress );
+            mxChart->Convert( xModel, rProgress, aEmbObjName );
 
             Reference< XEmbedPersist > xPers( xEmbObj, UNO_QUERY );
             if( xPers.is() )
@@ -3838,6 +3839,9 @@ void XclImpObjectManager::ConvertObjects()
                     rDffManager.ProcessDrawing( maDffStrm, *aPIt );
         }
     }
+    ScChartListenerCollection* pChartListeners = GetDoc().GetChartListenerCollection();
+    if (pChartListeners && pChartListeners->GetCount())
+        pChartListeners->SetDirty();
 }
 
 String XclImpObjectManager::GetDefaultObjName( const XclImpDrawObjBase& rDrawObj ) const

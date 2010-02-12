@@ -76,6 +76,7 @@ SLOFILES =  \
         $(SLO)$/detdata.obj  \
         $(SLO)$/detfunc.obj  \
         $(SLO)$/docoptio.obj \
+        $(SLO)$/doubleref.obj \
         $(SLO)$/editutil.obj \
         $(SLO)$/filtopt.obj \
         $(SLO)$/formulaparserpool.obj \
@@ -95,6 +96,7 @@ SLOFILES =  \
         $(SLO)$/printopt.obj \
         $(SLO)$/prnsave.obj \
         $(SLO)$/progress.obj \
+        $(SLO)$/queryparam.obj \
         $(SLO)$/rangelst.obj \
         $(SLO)$/rangenam.obj \
         $(SLO)$/rangeseq.obj \
@@ -122,6 +124,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/chartlock.obj \
         $(SLO)$/chgtrack.obj \
         $(SLO)$/compiler.obj \
+        $(SLO)$/doubleref.obj \
         $(SLO)$/formulaparserpool.obj \
         $(SLO)$/interpr1.obj \
         $(SLO)$/interpr2.obj \
@@ -130,6 +133,7 @@ EXCEPTIONSFILES= \
         $(SLO)$/interpr5.obj \
         $(SLO)$/lookupcache.obj \
         $(SLO)$/prnsave.obj \
+        $(SLO)$/queryparam.obj \
         $(SLO)$/reftokenhelper.obj \
         $(SLO)$/token.obj
 

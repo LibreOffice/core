@@ -32,8 +32,8 @@
 #define SC_DATAUNO_HXX
 
 #include "global.hxx"
-#include <svl/itemprop.hxx>
-#include <svl/lstner.hxx>
+#include "queryparam.hxx"
+
 #include <com/sun/star/sheet/TableFilterField.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
@@ -56,6 +56,8 @@
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/implbase6.hxx>
+#include "svl/itemprop.hxx"
+#include "svl/lstner.hxx"
 
 class ScDBData;
 class ScDocShell;

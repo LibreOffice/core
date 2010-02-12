@@ -35,6 +35,7 @@
 #include "global.hxx"
 #include "address.hxx"
 #include "scdllapi.h"
+#include "queryparam.hxx"
 
 #include <vector>
 

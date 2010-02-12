@@ -43,6 +43,7 @@
 #include "xltable.hxx"
 #include "xistream.hxx"
 #include "xistyle.hxx"
+#include "queryparam.hxx"
 
 // for filter manager
 #include "excimp8.hxx"

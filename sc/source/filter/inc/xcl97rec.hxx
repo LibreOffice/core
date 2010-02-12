@@ -570,6 +570,19 @@ private:
 
 // ============================================================================
 
+/** End of User Interface Records */
+class XclExpInterfaceEnd : public XclExpRecord
+{
+public:
+    explicit XclExpInterfaceEnd();
+    virtual ~XclExpInterfaceEnd();
+
+private:
+    virtual void WriteBody( XclExpStream& rStrm );
+};
+
+// ============================================================================
+
 /** Write Access User Name - This record contains the user name, which is
     the name you type when you install Excel. */
 class XclExpWriteAccess : public XclExpRecord

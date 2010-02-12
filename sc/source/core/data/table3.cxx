@@ -60,6 +60,7 @@
 #include "progress.hxx"
 #include "cellform.hxx"
 #include "postit.hxx"
+#include "queryparam.hxx"
 
 #include <vector>
 
@@ -1816,6 +1817,11 @@ void ScTable::GetFilteredFilterEntries( SCCOL nCol, SCROW nRow1, SCROW nRow2, co
 BOOL ScTable::GetDataEntries(SCCOL nCol, SCROW nRow, TypedScStrCollection& rStrings, BOOL bLimit)
 {
     return aCol[nCol].GetDataEntries( nRow, rStrings, bLimit );
+}
+
+SCSIZE ScTable::GetCellCount(SCCOL nCol) const
+{
+    return aCol[nCol].GetCellCount();
 }
 
 ULONG ScTable::GetCellCount() const

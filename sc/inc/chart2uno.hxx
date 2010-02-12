@@ -533,6 +533,14 @@ private:
     };
 
     ::std::list<Item>           m_aDataArray;
+
+    /**
+     * Cached data for getData.  We may also need to cache data for the
+     * numerical and textural data series if they turn out to be bottlenecks
+     * under certain scenarios.
+     */
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > m_aMixedDataCache;
+
     ::com::sun::star::uno::Sequence<sal_Int32>  m_aHiddenValues;
 
     // properties
