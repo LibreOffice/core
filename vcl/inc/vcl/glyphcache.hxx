@@ -7,7 +7,6 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: glyphcache.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +41,7 @@ class ServerFontLayoutEngine;
 class ServerFontLayout;
 class ExtraKernInfo;
 struct ImplKernPairData;
+class ImplFontOptions;
 
 #include <tools/gen.hxx>
 #include <hash_map>
@@ -183,6 +183,7 @@ public:
     virtual bool                TestFont() const            { return true; }
     virtual void*               GetFtFace() const { return 0; }
     virtual int                 GetLoadFlags() const { return 0; }
+    virtual void                SetFontOptions( const ImplFontOptions&) {}
     virtual bool                NeedsArtificialBold() const { return false; }
     virtual bool                NeedsArtificialItalic() const { return false; }
 
@@ -212,7 +213,7 @@ public:
 protected:
     friend class GlyphCache;
     friend class ServerFontLayout;
-                                ServerFont( const ImplFontSelectData& );
+    explicit                    ServerFont( const ImplFontSelectData& );
     virtual                     ~ServerFont();
 
     void                        AddRef() const      { ++mnRefCount; }

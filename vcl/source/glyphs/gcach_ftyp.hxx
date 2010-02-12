@@ -33,6 +33,7 @@
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
+
 class FreetypeServerFont;
 struct FT_GlyphRec_;
 
@@ -174,6 +175,7 @@ public:
     virtual int                 GetFontFaceNum() const { return mpFontInfo->GetFaceNum(); }
     virtual bool                TestFont() const;
     virtual void*               GetFtFace() const;
+    virtual void                SetFontOptions( const ImplFontOptions&);
     virtual int                 GetLoadFlags() const { return (mnLoadFlags & ~FT_LOAD_IGNORE_TRANSFORM); }
     virtual bool                NeedsArtificialBold() const { return mbArtBold; }
     virtual bool                NeedsArtificialItalic() const { return mbArtItalic; }

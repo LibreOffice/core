@@ -837,7 +837,7 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
     mbArtItalic = (rFSD.meItalic != ITALIC_NONE && pFI->GetFontAttributes().GetSlant() == ITALIC_NONE);
     mbArtBold = (rFSD.meWeight > WEIGHT_MEDIUM && pFI->GetFontAttributes().GetWeight() <= WEIGHT_MEDIUM);
     mbUseGamma = false;
-    if (mbArtBold)
+    if( mbArtBold )
     {
         //static const int TT_CODEPAGE_RANGE_874  = (1L << 16); // Thai
         //static const int TT_CODEPAGE_RANGE_932  = (1L << 17); // JIS/Japan
@@ -852,26 +852,28 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
         mbUseGamma = true;
     }
 
-    ImplFontHints aHints;
-    VirtualDevice vdev( 1 );
-    vdev.ImplGetFontHints( pFI->GetFontAttributes(), mnWidth, aHints );
+    if( ((mnCos != 0) && (mnSin != 0)) || (mnPrioEmbedded <= 0) )
+        mnLoadFlags |= FT_LOAD_NO_BITMAP;
+}
 
-    FontAutoHint eHint = aHints.GetUseAutoHint();
-    if (eHint == AUTOHINT_DONTKNOW)
+void FreetypeServerFont::SetFontOptions( const ImplFontOptions& rFontOptions)
+{
+    FontAutoHint eHint = rFontOptions.GetUseAutoHint();
+    if( eHint == AUTOHINT_DONTKNOW )
         eHint = mbUseGamma ? AUTOHINT_TRUE : AUTOHINT_FALSE;
 
-    if (eHint == AUTOHINT_TRUE)
+    if( eHint == AUTOHINT_TRUE )
         mnLoadFlags |= FT_LOAD_FORCE_AUTOHINT;
 
     if( (mnSin != 0) && (mnCos != 0) ) // hinting for 0/90/180/270 degrees only
         mnLoadFlags |= FT_LOAD_NO_HINTING;
     mnLoadFlags |= FT_LOAD_IGNORE_GLOBAL_ADVANCE_WIDTH; //#88334#
 
-    if (aHints.DontUseAntiAlias())
+    if( rFontOptions.DontUseAntiAlias() )
       mnPrioAntiAlias = 0;
-    if (aHints.DontUseEmbeddedBitmaps())
+    if( rFontOptions.DontUseEmbeddedBitmaps() )
       mnPrioEmbedded = 0;
-    if (aHints.DontUseHinting())
+    if( rFontOptions.DontUseHinting() )
       mnPrioAutoHint = 0;
 
 #if (FTVERSION >= 2005) || defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
@@ -883,7 +885,7 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
     if( !(mnLoadFlags & FT_LOAD_NO_HINTING) && (nFTVERSION >= 2103))
     {
        mnLoadFlags |= FT_LOAD_TARGET_NORMAL;
-       switch (aHints.GetHintStyle())
+       switch( rFontOptions.GetHintStyle() )
        {
            case HINT_NONE:
                 mnLoadFlags |= FT_LOAD_NO_HINTING;
@@ -898,11 +900,7 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
                 break;
        }
     }
-
 #endif
-
-    if( ((mnCos != 0) && (mnSin != 0)) || (mnPrioEmbedded <= 0) )
-        mnLoadFlags |= FT_LOAD_NO_BITMAP;
 }
 
 // -----------------------------------------------------------------------
@@ -1404,7 +1402,7 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
         nLoadFlags |= FT_LOAD_NO_BITMAP;
 
 #if (FTVERSION >= 2002)
-    // for 0/90/180/270 degree fonts enable autohinting even if not advisable
+    // for 0/90/180/270 degree fonts enable hinting even if not advisable
     // non-hinted and non-antialiased bitmaps just look too ugly
     if( (mnCos==0 || mnSin==0) && (mnPrioAutoHint > 0) )
         nLoadFlags &= ~FT_LOAD_NO_HINTING;
