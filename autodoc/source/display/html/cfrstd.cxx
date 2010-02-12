@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: cfrstd.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -341,10 +338,7 @@ MakeCopyRight()
 
     cr  << "Copyright &copy; "
         << year
-        << " Sun Microsystems, Inc.";
+        << " Oracle";
     return String(cr.c_str());
 
-//  return "Copyright &copy; 2003 Sun Microsystems, Inc.";
-//  return "Copyright &copy; 2002 Sun Microsystems, Inc., 901 San Antonio Road, Palo Alto, CA 94303 USA.";
-//  return "Copyright 2001 OpenOffice.org Foundation. All Rights Reserved.";
 }
