@@ -289,6 +289,9 @@ namespace slideshow
         /** Convert a plain UNO API 32 bit int to RGBColor
          */
         RGBColor unoColor2RGBColor( sal_Int32 );
+        /** Convert an IntSRGBA to plain UNO API 32 bit int
+         */
+        sal_Int32 RGBAColor2UnoColor( cppcanvas::Color::IntSRGBA );
 
         /** Fill a plain rectangle on the given canvas with the given color
          */
