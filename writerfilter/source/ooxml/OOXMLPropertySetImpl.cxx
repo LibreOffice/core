@@ -443,6 +443,7 @@ void OOXMLPropertySetImpl::resolve(Properties & rHandler)
             debug_logger->startElement("error");
             debug_logger->chars("zero-property");
             debug_logger->endElement("error");
+        }
 #endif
 
         aIt++;
