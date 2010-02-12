@@ -417,7 +417,7 @@ BibGeneralPage::BibGeneralPage(Window* pParent, BibDataManager* pMan):
     uno::Reference< sdbc::XRowSet >  xRowSet(pDatMan->getForm(), UNO_QUERY);
     if(xRowSet.is())
         xRowSet->addRowSetListener(xPosListener);
-    uno::Reference< form::XFormController > xFormCtrl = pDatMan->GetFormController();
+    uno::Reference< form::runtime::XFormController > xFormCtrl = pDatMan->GetFormController();
     xFormCtrl->setContainer(xCtrlContnr);
     xFormCtrl->activateTabOrder();
 
@@ -454,7 +454,7 @@ BibGeneralPage::~BibGeneralPage()
  ---------------------------------------------------------------------------*/
 void BibGeneralPage::CommitActiveControl()
 {
-    uno::Reference< form::XFormController > xFormCtrl = pDatMan->GetFormController();
+    uno::Reference< form::runtime::XFormController > xFormCtrl = pDatMan->GetFormController();
     uno::Reference< awt::XControl >  xCurr = xFormCtrl->getCurrentControl();
     if(xCurr.is())
     {

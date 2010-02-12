@@ -298,6 +298,7 @@ namespace pcr
             _rxInspectorUI->enablePropertyUI( PROPERTY_DEFAULT_TEXT,    nTextType != TEXTTYPE_RICHTEXT );
             _rxInspectorUI->enablePropertyUI( PROPERTY_SHOW_SCROLLBARS, nTextType != TEXTTYPE_SINGLELINE );
             _rxInspectorUI->enablePropertyUI( PROPERTY_LINEEND_FORMAT,  nTextType != TEXTTYPE_SINGLELINE );
+            _rxInspectorUI->enablePropertyUI( PROPERTY_VERTICAL_ALIGN,  nTextType == TEXTTYPE_SINGLELINE );
 
             _rxInspectorUI->showCategory( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Data" ) ), nTextType != TEXTTYPE_RICHTEXT );
         }
