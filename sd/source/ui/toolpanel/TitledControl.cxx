@@ -335,7 +335,7 @@ bool TitledControl::IsExpanded (void) const
         return false;
 }
 
-void TitledControl::SetEnabledState(bool bFlag) 
+void TitledControl::SetEnabledState(bool bFlag)
 {
     if (!bFlag)
     {
@@ -344,13 +344,13 @@ void TitledControl::SetEnabledState(bool bFlag)
             ControlContainer::ES_COLLAPSE);
         Disable();
     }
-    else 
+    else
     {
-/*    
+/*
         GetParentNode()->GetControlContainer().SetExpansionState (
             this,
             ControlContainer::ES_EXPAND);
-*/         
+*/
         Enable();
     }
 

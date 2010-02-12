@@ -461,9 +461,9 @@ USHORT TitleBar::GetTextStyle (void)
 {
      if(IsEnabled())
      {
-         return TEXT_DRAW_LEFT 
+         return TEXT_DRAW_LEFT
              | TEXT_DRAW_TOP
-             | TEXT_DRAW_MULTILINE 
+             | TEXT_DRAW_MULTILINE
              | TEXT_DRAW_WORDBREAK;
      }
      else

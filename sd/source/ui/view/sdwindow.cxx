@@ -35,7 +35,7 @@
 #include <sfx2/viewfrm.hxx>
 
 #include <svx/outliner.hxx>
- 
+
 #include <svx/editview.hxx>
 
 #include "app.hrc"
