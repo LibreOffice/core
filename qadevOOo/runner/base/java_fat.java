@@ -277,6 +277,7 @@ public class java_fat implements TestBase
                     {
                         closeExistingOffice();
                         tEnv = getEnv(entry, param);
+                        tCase = tEnv.getTestCase();
                     }
 
                     // MultiMethodTest ifc = null;
@@ -309,6 +310,7 @@ public class java_fat implements TestBase
                         {
                             closeExistingOffice();
                             tEnv = getEnv(entry, param);
+                            tCase = tEnv.getTestCase();
                             if (countInterfaceTestRun < 2)
                             {
                                 finished = false;
