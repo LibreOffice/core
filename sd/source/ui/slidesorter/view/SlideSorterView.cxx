@@ -950,6 +950,28 @@ void SlideSorterView::SetPageUnderMouse (const model::SharedPageDescriptor& rpDe
 
         if (mpPageUnderMouse)
             SetState(mpPageUnderMouse, PageDescriptor::ST_MouseOver, true);
+
+        SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
+        if (pWindow)
+        {
+            ::rtl::OUString sText;
+            if (mpPageUnderMouse)
+            {
+                SdPage* pPage = mpPageUnderMouse->GetPage();
+                if (pPage != NULL)
+                    sText = pPage->GetName();
+                else
+                {
+                    OSL_ASSERT(mpPageUnderMouse->GetPage() != NULL);
+                }
+                if (sText.getLength() == 0)
+                {
+                    sText = String(SdResId(STR_PAGE));
+                    sText += String::CreateFromInt32(mpPageUnderMouse->GetPageIndex()+1);
+                }
+            }
+            pWindow->SetQuickHelpText(sText);
+        }
     }
 }
 

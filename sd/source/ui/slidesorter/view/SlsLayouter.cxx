@@ -563,7 +563,7 @@ Range Layouter::GetSelectionRange (
 
 sal_Int32 Layouter::GetIndexAtPoint (
     const Point& rPosition,
-    bool bIncludePageBorders) const
+    const bool bIncludePageBorders) const
 {
     sal_Int32 nRow = GetRowAtPosition (rPosition.Y(),
         bIncludePageBorders,
