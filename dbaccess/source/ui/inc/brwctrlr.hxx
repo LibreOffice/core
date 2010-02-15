@@ -105,6 +105,8 @@ namespace dbaui
         mutable ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >
                                                                                         m_xParser;      // for sorting 'n filtering
 
+        sal_Int32               m_nRowSetPrivileges;    // cached Privileges property of m_xRowSet
+
         AutoTimer               m_aInvalidateClipboard;             // for testing the state of the CUT/COPY/PASTE-slots
 
         TransferableDataHelper  m_aSystemClipboard;     // content of the clipboard
