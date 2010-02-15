@@ -98,6 +98,16 @@ public:
 }
 namespace connectivity
 {
+    ::rtl::OUString lcl_getServiceNameForSetting(const Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,const ::rtl::OUString& i_sSetting)
+    {
+        ::rtl::OUString sSupportService;
+        Any aValue;
+        if ( ::dbtools::getDataSourceSetting(_xConnection,i_sSetting,aValue) )
+        {
+            aValue >>= sSupportService;
+        }
+        return sSupportService;
+    }
     struct OTableHelperImpl
     {
         TKeyMap  m_aKeys;
@@ -122,13 +132,13 @@ namespace connectivity
                 if ( xFac.is() )
                 {
                     static const ::rtl::OUString s_sTableRename(RTL_CONSTASCII_USTRINGPARAM("TableRenameServiceName"));
-                    m_xRename.set(xFac->createInstance(s_sTableRename),UNO_QUERY);
+                    m_xRename.set(xFac->createInstance(lcl_getServiceNameForSetting(m_xConnection,s_sTableRename)),UNO_QUERY);
                     static const ::rtl::OUString s_sTableAlteration(RTL_CONSTASCII_USTRINGPARAM("TableAlterationServiceName"));
-                    m_xAlter.set(xFac->createInstance(s_sTableAlteration),UNO_QUERY);
+                    m_xAlter.set(xFac->createInstance(lcl_getServiceNameForSetting(m_xConnection,s_sTableAlteration)),UNO_QUERY);
                     static const ::rtl::OUString s_sKeyAlteration(RTL_CONSTASCII_USTRINGPARAM("KeyAlterationServiceName"));
-                    m_xKeyAlter.set(xFac->createInstance(s_sKeyAlteration),UNO_QUERY);
+                    m_xKeyAlter.set(xFac->createInstance(lcl_getServiceNameForSetting(m_xConnection,s_sKeyAlteration)),UNO_QUERY);
                     static const ::rtl::OUString s_sIndexAlteration(RTL_CONSTASCII_USTRINGPARAM("IndexAlterationServiceName"));
-                    m_xIndexAlter.set(xFac->createInstance(s_sIndexAlteration),UNO_QUERY);
+                    m_xIndexAlter.set(xFac->createInstance(lcl_getServiceNameForSetting(m_xConnection,s_sIndexAlteration)),UNO_QUERY);
                 }
             }
             catch(const Exception&)
