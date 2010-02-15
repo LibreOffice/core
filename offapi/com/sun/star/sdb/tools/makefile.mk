@@ -50,11 +50,11 @@ IDLFILES=\
     XObjectNames.idl \
     XTableName.idl \
     XTableRename.idl \
-    XViewSupport.idl \
+    XViewAccess.idl \
     XTableAlteration.idl \
     XKeyAlteration.idl \
     XIndexAlteration.idl \
-    XConnectionSupport.idl
+    XConnectionSupplier.idl
 
 # ------------------------------------------------------------------
 .INCLUDE :  target.mk
