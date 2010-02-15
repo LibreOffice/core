@@ -843,7 +843,7 @@ void SwXTextCursor::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
 
     if (!GetRegisteredIn() ||
         // if the cursor leaves its designated section, it becomes invalid
-        (pOld != NULL) && (pOld->Which() == RES_UNOCURSOR_LEAVES_SECTION))
+        ((pOld != NULL) && (pOld->Which() == RES_UNOCURSOR_LEAVES_SECTION)))
     {
         Invalidate();
     }

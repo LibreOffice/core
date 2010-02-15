@@ -1298,7 +1298,7 @@ BOOL SwSetExpField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         break;
     case FIELD_PROP_DOUBLE:
         {
-             double fVal;
+             double fVal = 0.0;
              rAny >>= fVal;
              SetValue(fVal);
         }

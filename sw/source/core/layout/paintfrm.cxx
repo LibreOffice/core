@@ -557,7 +557,7 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
                    (nL1b <= nL2b && nL1c + nAdd > nL2b)) )
             {
                 SwLineRect *pMSC = &rL2;
-                aCheck.Insert( (void*&)pMSC, aCheck.Count() );
+                aCheck.Insert( pMSC, aCheck.Count() );
             }
         }
         if ( aCheck.Count() < 2 )
