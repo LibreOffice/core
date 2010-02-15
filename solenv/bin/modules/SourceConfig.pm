@@ -490,6 +490,7 @@ sub generate_config_file {
     };
     if ($self->{VERBOSE}) {
         print $_ foreach (@{$self->{WARNINGS}});
+        $self->{VERBOSE} = 0;
     };
     $self->{WARNINGS} = [];
     print $_ foreach (@{$self->{REPORT_MESSAGES}});
