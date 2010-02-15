@@ -580,6 +580,13 @@ AC_ARG_WITH(ant-home,
  
                           Usage: --with-ant-home=<absolute path to Ant home>
 ],,)
+AC_ARG_WITH(junit,
+[  --with-junit            Specifies the JUnit 4 jar file to use for JUnit-based
+                          tests.  --without-junit disables those tests.  Not
+                          relevant in the --without-java case.
+
+                          Usage: --with-junit=<absolute path to JUnit 4 jar>
+],,with_junit=yes)
 AC_ARG_WITH(perl-home,
 [  --with-perl-home        If you have installed the Perl 5 Distribution, on your
                           system, please supply the path here.
@@ -6453,6 +6460,22 @@ EOF
   fi
 fi
 rm -f conftest* core core.* *.core
+
+OOO_JUNIT_JAR=
+if test "$SOLAR_JAVA" != "" && test "$with_junit" != "no"; then
+    AC_MSG_CHECKING([for JUnit 4])
+    if test "$with_junit" == "yes"; then
+        OOO_JUNIT_JAR=/usr/share/java/junit4.jar
+    else
+        OOO_JUNIT_JAR=$with_junit
+    fi
+    if test -e "$OOO_JUNIT_JAR"; then
+        AC_MSG_RESULT([$OOO_JUNIT_JAR])
+    else
+        AC_MSG_ERROR([cannot find JUnit 4 jar at $OOO_JUNIT_JAR; please install one and/or specify its pathname as --with-junit=...])
+    fi
+fi
+AC_SUBST(OOO_JUNIT_JAR)
 
 AC_MSG_CHECKING([which languages to be built])
 WITH_LANG="$with_lang"

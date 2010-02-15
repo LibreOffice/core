@@ -649,6 +649,7 @@ INTRO_BITMAPS
 WITH_DICT
 WITH_POOR_HELP_LOCALIZATIONS
 WITH_LANG
+OOO_JUNIT_JAR
 ANT_LIB
 ANT_HOME
 ANT
@@ -1162,6 +1163,7 @@ with_gxx_include_path
 with_java
 enable_gcjaot
 with_ant_home
+with_junit
 with_perl_home
 with_cl_home
 with_mspdb_path
@@ -2239,6 +2241,12 @@ Optional Packages:
                           but the location of the entire distribution.
 
                           Usage: --with-ant-home=<absolute path to Ant home>
+
+  --with-junit            Specifies the JUnit 4 jar file to use for JUnit-based
+                          tests.  --without-junit disables those tests.  Not
+                          relevant in the --without-java case.
+
+                          Usage: --with-junit=<absolute path to JUnit 4 jar>
 
   --with-perl-home        If you have installed the Perl 5 Distribution, on your
                           system, please supply the path here.
@@ -3686,6 +3694,14 @@ fi
 # Check whether --with-ant-home was given.
 if test "${with_ant_home+set}" = set; then
   withval=$with_ant_home;
+fi
+
+
+# Check whether --with-junit was given.
+if test "${with_junit+set}" = set; then
+  withval=$with_junit;
+else
+  with_junit=yes
 fi
 
 
@@ -29287,6 +29303,26 @@ $as_echo "$as_me: error: no. Did you install ant-apache-regexp?" >&2;}
   fi
 fi
 rm -f conftest* core core.* *.core
+
+OOO_JUNIT_JAR=
+if test "$SOLAR_JAVA" != "" && test "$with_junit" != "no"; then
+    { $as_echo "$as_me:$LINENO: checking for JUnit 4" >&5
+$as_echo_n "checking for JUnit 4... " >&6; }
+    if test "$with_junit" == "yes"; then
+        OOO_JUNIT_JAR=/usr/share/java/junit4.jar
+    else
+        OOO_JUNIT_JAR=$with_junit
+    fi
+    if test -e "$OOO_JUNIT_JAR"; then
+        { $as_echo "$as_me:$LINENO: result: $OOO_JUNIT_JAR" >&5
+$as_echo "$OOO_JUNIT_JAR" >&6; }
+    else
+        { { $as_echo "$as_me:$LINENO: error: cannot find JUnit 4 jar at $OOO_JUNIT_JAR; please install one and/or specify its pathname as --with-junit=..." >&5
+$as_echo "$as_me: error: cannot find JUnit 4 jar at $OOO_JUNIT_JAR; please install one and/or specify its pathname as --with-junit=..." >&2;}
+   { (exit 1); exit 1; }; }
+    fi
+fi
+
 
 { $as_echo "$as_me:$LINENO: checking which languages to be built" >&5
 $as_echo_n "checking which languages to be built... " >&6; }
