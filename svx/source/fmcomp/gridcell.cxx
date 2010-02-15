@@ -1050,7 +1050,7 @@ double DbCellControl::GetValue(const Reference< ::com::sun::star::sdb::XColumn >
 //------------------------------------------------------------------------------
 void DbCellControl::invalidatedController()
 {
-    m_rColumn.GetParent().refreshController(m_rColumn.GetId(), DbGridControl::GrantCellControlAccess());
+    m_rColumn.GetParent().refreshController(m_rColumn.GetId(), DbGridControl::GrantControlAccess());
 }
 
 /*************************************************************************/
