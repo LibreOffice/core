@@ -81,6 +81,7 @@
 
 #include <comphelper/basicio.hxx>
 #include <comphelper/extract.hxx>
+#include <comphelper/property.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/streamsection.hxx>
 #include <comphelper/types.hxx>
@@ -374,6 +375,49 @@ Reference< XPropertySetInfo > SAL_CALL OQueryController::getPropertySetInfo() th
 }
 
 //-------------------------------------------------------------------------
+sal_Bool SAL_CALL OQueryController::convertFastPropertyValue( Any& o_rConvertedValue, Any& o_rOldValue, sal_Int32 i_nHandle, const Any& i_rValue ) throw (IllegalArgumentException)
+{
+    return OPropertyContainer::convertFastPropertyValue( o_rConvertedValue, o_rOldValue, i_nHandle, i_rValue );
+}
+
+//-------------------------------------------------------------------------
+void SAL_CALL OQueryController::setFastPropertyValue_NoBroadcast( sal_Int32 i_nHandle, const Any& i_rValue ) throw ( Exception )
+{
+    OPropertyContainer::setFastPropertyValue_NoBroadcast( i_nHandle, i_rValue );
+}
+
+//-------------------------------------------------------------------------
+void SAL_CALL OQueryController::getFastPropertyValue( Any& o_rValue, sal_Int32 i_nHandle ) const
+{
+    switch ( i_nHandle )
+    {
+    case PROPERTY_ID_CURRENT_QUERY_DESIGN:
+    {
+        ::comphelper::NamedValueCollection aCurrentDesign;
+        aCurrentDesign.put( "GraphicalDesign", isGraphicalDesign() );
+        aCurrentDesign.put( (::rtl::OUString)PROPERTY_ESCAPE_PROCESSING, m_bEscapeProcessing );
+
+        if ( isGraphicalDesign() )
+        {
+            getContainer()->SaveUIConfig();
+            saveViewSettings( aCurrentDesign, true );
+        }
+        else
+        {
+            aCurrentDesign.put( "Statement", getContainer()->getStatement() );
+        }
+
+        o_rValue <<= aCurrentDesign.getPropertyValues();
+    }
+    break;
+
+    default:
+        OPropertyContainer::getFastPropertyValue( o_rValue, i_nHandle );
+        break;
+    }
+}
+
+//-------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper& OQueryController::getInfoHelper()
 {
     return *const_cast< OQueryController* >( this )->getArrayHelper();
@@ -383,7 +427,24 @@ Reference< XPropertySetInfo > SAL_CALL OQueryController::getPropertySetInfo() th
 ::cppu::IPropertyArrayHelper* OQueryController::createArrayHelper( ) const
 {
     Sequence< Property > aProps;
-    describeProperties(aProps);
+    describeProperties( aProps );
+
+    // one additional property:
+    const sal_Int32 nLength = aProps.getLength();
+    aProps.realloc( nLength + 1 );
+    aProps[ nLength ] = Property(
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CurrentQueryDesign" ) ),
+        PROPERTY_ID_CURRENT_QUERY_DESIGN,
+        ::cppu::UnoType< Sequence< PropertyValue > >::get(),
+        PropertyAttribute::READONLY
+    );
+
+    ::std::sort(
+        aProps.getArray(),
+        aProps.getArray() + aProps.getLength(),
+        ::comphelper::PropertyCompareByName()
+    );
+
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
@@ -1096,42 +1157,53 @@ void OQueryController::reconnect(sal_Bool _bUI)
         InvalidateAll();
     }
 }
+
 // -----------------------------------------------------------------------------
-void OQueryController::saveViewSettings( Sequence< PropertyValue >& o_rViewData )
+void OQueryController::saveViewSettings( ::comphelper::NamedValueCollection& o_rViewSettings, const bool i_includngCriteria ) const
 {
-    saveTableWindows( o_rViewData );
+    saveTableWindows( o_rViewSettings );
 
-    OTableFields::const_iterator aFieldIter = m_vTableFieldDesc.begin();
-    OTableFields::const_iterator aFieldEnd = m_vTableFieldDesc.end();
-    sal_Int32 nCount = 0;
-    for(;aFieldIter != aFieldEnd;++aFieldIter)
-    {
-        if(!(*aFieldIter)->IsEmpty())
-            ++nCount;
-    }
+    OTableFields::const_iterator field = m_vTableFieldDesc.begin();
+    OTableFields::const_iterator fieldEnd = m_vTableFieldDesc.end();
 
-    ::comphelper::NamedValueCollection aViewData( o_rViewData );
-    if ( nCount != 0 )
+    ::comphelper::NamedValueCollection aAllFieldsData;
+    ::comphelper::NamedValueCollection aFieldData;
+    for ( sal_Int32 i = 1; field != fieldEnd; ++field, ++i )
     {
-        Sequence<PropertyValue> aFields(nCount);
-        PropertyValue *pFieldsIter = aFields.getArray();
-        // the fielddata
-        aFieldIter = m_vTableFieldDesc.begin();
-        for(sal_Int32 i = 1;aFieldIter !=aFieldEnd;++aFieldIter,++i)
+        if ( !(*field)->IsEmpty() )
         {
-            if ( !(*aFieldIter)->IsEmpty() )
-            {
-                pFieldsIter->Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Field")) + ::rtl::OUString::valueOf(i);
-                (*aFieldIter)->Save(*pFieldsIter++);
-            }
-        }
+            const ::rtl::OUString sFieldSettingName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Field" ) ) + ::rtl::OUString::valueOf( i );
 
-        aViewData.put( "Fields", aFields );
+            aFieldData.clear();
+            (*field)->Save( aFieldData );
+
+            if ( i_includngCriteria )
+            {
+                const ::std::vector< ::rtl::OUString >& rCriteria( (*field)->GetCriteria() );
+                if ( !rCriteria.empty() )
+                {
+                    sal_Int32 c = 0;
+                    ::comphelper::NamedValueCollection aCriteria;
+                    for (   ::std::vector< ::rtl::OUString >::const_iterator crit = rCriteria.begin();
+                            crit != rCriteria.end();
+                            ++crit, ++c
+                        )
+                    {
+                        const ::rtl::OUString sCritName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Criterion_" ) ) + ::rtl::OUString::valueOf( c );
+                        aCriteria.put( sCritName, *crit );
+                    }
+
+                    aFieldData.put( "Criteria", aCriteria.getPropertyValues() );
+                }
+            }
+
+            aAllFieldsData.put( sFieldSettingName, aFieldData.getPropertyValues() );
+        }
     }
 
-    aViewData.put( "SplitterPosition", m_nSplitPos );
-    aViewData.put( "VisibleRows", m_nVisibleRows );
-    o_rViewData = aViewData.getPropertyValues();
+    o_rViewSettings.put( "Fields", aAllFieldsData.getPropertyValues() );
+    o_rViewSettings.put( "SplitterPosition", m_nSplitPos );
+    o_rViewSettings.put( "VisibleRows", m_nVisibleRows );
 }
 // -----------------------------------------------------------------------------
 void OQueryController::loadViewSettings( const Sequence< PropertyValue >& i_rViewData )
@@ -1758,9 +1830,10 @@ Any SAL_CALL OQueryController::getViewData() throw( RuntimeException )
 
     getContainer()->SaveUIConfig();
 
-    Sequence< PropertyValue > aLayout;
-    saveViewSettings( aLayout );
-    return makeAny( aLayout );
+    ::comphelper::NamedValueCollection aViewSettings;
+    saveViewSettings( aViewSettings, false );
+
+    return makeAny( aViewSettings.getPropertyValues() );
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OQueryController::restoreViewData(const Any& /*Data*/) throw( RuntimeException )

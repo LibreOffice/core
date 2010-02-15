@@ -184,6 +184,7 @@
 #define PROPERTY_ID_ENCODING                141
 #define PROPERTY_ID_HELP_URL                142
 #define PROPERTY_ID_PERSISTENT_PATH         143
+#define PROPERTY_ID_CURRENT_QUERY_DESIGN    144
 
 //============================================================
 //= property names

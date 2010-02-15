@@ -189,14 +189,15 @@ void ORelationController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue
                     {
                         if ( haveDataSource() && getDataSource()->getPropertySetInfo()->hasPropertyByName(PROPERTY_LAYOUTINFORMATION) )
                         {
-                            Sequence<PropertyValue> aWindows;
-                            saveTableWindows(aWindows);
-                            getDataSource()->setPropertyValue(PROPERTY_LAYOUTINFORMATION,makeAny(aWindows));
+                            ::comphelper::NamedValueCollection aWindowsData;
+                            saveTableWindows( aWindowsData );
+                            getDataSource()->setPropertyValue( PROPERTY_LAYOUTINFORMATION, makeAny( aWindowsData.getPropertyValues() ) );
                             setModified(sal_False);
                         }
                     }
-                    catch(Exception&)
+                    catch ( const Exception& )
                     {
+                        DBG_UNHANDLED_EXCEPTION();
                     }
                 }
             }

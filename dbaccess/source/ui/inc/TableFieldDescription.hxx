@@ -47,6 +47,11 @@
 #include <vos/ref.hxx>
 #endif
 
+namespace comphelper
+{
+    class NamedValueCollection;
+}
+
 class Window;
 namespace dbaui
 {
@@ -142,7 +147,7 @@ namespace dbaui
         const ::std::vector< ::rtl::OUString>&  GetCriteria() const { return m_vecCriteria;}
 
         void Load(const ::com::sun::star::beans::PropertyValue& _rProperty);
-        void Save(::com::sun::star::beans::PropertyValue& _rProperty);
+        void Save( ::comphelper::NamedValueCollection& o_rSettings );
     };
 
     //------------------------------------------------------------------

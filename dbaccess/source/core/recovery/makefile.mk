@@ -45,7 +45,10 @@ ENABLE_EXCEPTIONS=TRUE
 
 SLOFILES=	\
         $(SLO)$/dbdocrecovery.obj \
-        $(SLO)$/subcomponentloader.obj
+        $(SLO)$/subcomponentloader.obj \
+        $(SLO)$/storagestream.obj \
+        $(SLO)$/storagexmlstream.obj \
+        $(SLO)$/storagetextstream.obj
 
 # --- Targets ----------------------------------
 

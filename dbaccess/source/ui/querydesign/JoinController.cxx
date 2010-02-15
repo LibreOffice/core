@@ -536,56 +536,31 @@ void OJoinController::loadTableWindow(const Sequence<PropertyValue>& _rTable)
     }
 }
 // -----------------------------------------------------------------------------
-void OJoinController::saveTableWindows(Sequence<PropertyValue>& _rViewProps)
+void OJoinController::saveTableWindows( ::comphelper::NamedValueCollection& o_rViewSettings ) const
 {
     if ( !m_vTableData.empty() )
     {
-        PropertyValue *pViewIter = _rViewProps.getArray();
-        PropertyValue *pEnd = pViewIter + _rViewProps.getLength();
-        const static ::rtl::OUString s_sTables(RTL_CONSTASCII_USTRINGPARAM("Tables"));
-        for (; pViewIter != pEnd && pViewIter->Name != s_sTables; ++pViewIter)
-            ;
+        ::comphelper::NamedValueCollection aAllTablesData;
 
-        if ( pViewIter == pEnd )
+        TTableWindowData::const_iterator aIter = m_vTableData.begin();
+        TTableWindowData::const_iterator aEnd = m_vTableData.end();
+        for ( sal_Int32 i = 1; aIter != aEnd; ++aIter, ++i )
         {
-            sal_Int32 nLen = _rViewProps.getLength();
-            _rViewProps.realloc( nLen + 1 );
-            pViewIter = _rViewProps.getArray() + nLen;
-            pViewIter->Name = s_sTables;
+            ::comphelper::NamedValueCollection aWindowData;
+            aWindowData.put( "ComposedName", (*aIter)->GetComposedName() );
+            aWindowData.put( "TableName", (*aIter)->GetTableName() );
+            aWindowData.put( "WindowName", (*aIter)->GetWinName() );
+            aWindowData.put( "WindowTop", (*aIter)->GetPosition().Y() );
+            aWindowData.put( "WindowLeft", (*aIter)->GetPosition().X() );
+            aWindowData.put( "WindowWidth", (*aIter)->GetSize().Width() );
+            aWindowData.put( "WindowHeight", (*aIter)->GetSize().Height() );
+            aWindowData.put( "ShowAll", (*aIter)->IsShowAll() );
+
+            const ::rtl::OUString sTableName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Table" ) ) + ::rtl::OUString::valueOf( i ) );
+            aAllTablesData.put( sTableName, aWindowData.getPropertyValues() );
         }
 
-        Sequence<PropertyValue> aTables(m_vTableData.size());
-        PropertyValue *pIter = aTables.getArray();
-
-        Sequence<PropertyValue> aWindow(8);
-
-        TTableWindowData::iterator aIter = m_vTableData.begin();
-        TTableWindowData::iterator aEnd = m_vTableData.end();
-        for(sal_Int32 i = 1;aIter != aEnd;++aIter,++pIter,++i)
-        {
-            pIter->Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Table")) + ::rtl::OUString::valueOf(i);
-
-            sal_Int32 nPos = 0;
-            aWindow[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ComposedName"));
-            aWindow[nPos++].Value <<= (*aIter)->GetComposedName();
-            aWindow[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TableName"));
-            aWindow[nPos++].Value <<= (*aIter)->GetTableName();
-            aWindow[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WindowName"));
-            aWindow[nPos++].Value <<= (*aIter)->GetWinName();
-            aWindow[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WindowTop"));
-            aWindow[nPos++].Value <<= (*aIter)->GetPosition().Y();
-            aWindow[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WindowLeft"));
-            aWindow[nPos++].Value <<= (*aIter)->GetPosition().X();
-            aWindow[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WindowWidth"));
-            aWindow[nPos++].Value <<= (*aIter)->GetSize().Width();
-            aWindow[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WindowHeight"));
-            aWindow[nPos++].Value <<= (*aIter)->GetSize().Height();
-            aWindow[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowAll"));
-            aWindow[nPos++].Value <<= (*aIter)->IsShowAll();
-
-            pIter->Value <<= aWindow;
-        }
-        pViewIter->Value <<= aTables;
+        o_rViewSettings.put( "Tables", aAllTablesData.getPropertyValues() );
     }
 }
 // -----------------------------------------------------------------------------

@@ -52,6 +52,11 @@
 #endif
 #include <boost/shared_ptr.hpp>
 
+namespace comphelper
+{
+    class NamedValueCollection;
+}
+
 class VCLXWindow;
 namespace dbaui
 {
@@ -97,7 +102,7 @@ namespace dbaui
             @param  _rViewProps
                 Contains the new sequence.
         */
-        void saveTableWindows(::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _rViewProps);
+        void saveTableWindows( ::comphelper::NamedValueCollection& o_rViewSettings ) const;
 
         virtual ~OJoinController();
     public:

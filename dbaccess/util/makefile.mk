@@ -72,7 +72,8 @@ SHL1STDLIBS= \
         $(SFXLIB) \
         $(BASICLIB) \
         $(FWELIB) \
-        $(SALHELPERLIB)
+        $(SALHELPERLIB) \
+        $(XMLOFFLIB)
 
 SHL1DEPN=
 SHL1IMPLIB=i$(TARGET)

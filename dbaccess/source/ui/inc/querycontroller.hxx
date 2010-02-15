@@ -56,6 +56,11 @@
 #include <connectivity/sqlparse.hxx>
 #include <svl/undo.hxx>
 
+namespace comphelper
+{
+    class NamedValueCollection;
+}
+
 class VCLXWindow;
 namespace dbaui
 {
@@ -125,7 +130,7 @@ namespace dbaui
         void executeQuery();
         bool doSaveAsDoc(sal_Bool _bSaveAs);
 
-        void saveViewSettings( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& o_rViewData );
+        void saveViewSettings( ::comphelper::NamedValueCollection& o_rViewSettings, const bool i_includngCriteria ) const;
         void loadViewSettings( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_rViewData );
         ::rtl::OUString translateStatement( bool _bFireStatementChange = true );
 
@@ -203,6 +208,22 @@ namespace dbaui
         virtual void    onLoadedMenu(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager);
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
+
+        // OPropertySetHelper
+        virtual sal_Bool SAL_CALL convertFastPropertyValue(
+                                    ::com::sun::star::uno::Any& rConvertedValue,
+                                    ::com::sun::star::uno::Any& rOldValue,
+                                    sal_Int32 nHandle,
+                                    const ::com::sun::star::uno::Any& rValue
+                                ) throw (::com::sun::star::lang::IllegalArgumentException);
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
+                                    sal_Int32 nHandle,
+                                    const ::com::sun::star::uno::Any& rValue
+                                ) throw (::com::sun::star::uno::Exception );
+        virtual void SAL_CALL getFastPropertyValue(
+                                    ::com::sun::star::uno::Any& rValue,
+                                    sal_Int32 nHandle
+                                ) const;
 
         virtual OJoinDesignView*  getJoinView();
         // ask the user if the design should be saved when it is modified
