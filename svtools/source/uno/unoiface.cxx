@@ -1053,7 +1053,7 @@ void SVTXFormattedField::setProperty( const ::rtl::OUString& PropertyName, const
         case ::com::sun::star::uno::TypeClass_DOUBLE:
             if (pField->TreatingAsNumber())
             {
-                double d;
+                double d = 0.0;
                 rValue >>= d;
                 aReturn <<= d;
             }
@@ -1065,7 +1065,7 @@ void SVTXFormattedField::setProperty( const ::rtl::OUString& PropertyName, const
                     // should never fail
 
                 Color* pDum;
-                double d;
+                double d = 0.0;
                 rValue >>= d;
                 String sConverted;
                 pFormatter->GetOutputString(d, 0, sConverted, &pDum);
