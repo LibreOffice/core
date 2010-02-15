@@ -424,7 +424,7 @@ void XMLSettingsExportHelper::exportIndexAccess(
 {
     DBG_ASSERT(rName.getLength(), "no name");
     DBG_ASSERT(aIndexed->getElementType().equals(getCppuType( (uno::Sequence<beans::PropertyValue> *)0 ) ),
-                "wrong NameAccess" );
+                "wrong IndexAccess" );
     rtl::OUString sEmpty;// ( RTLCONSTASCII_USTRINGPARAM( "View" ) );
     if(aIndexed->hasElements())
     {

@@ -31,6 +31,8 @@
 #ifndef _XMLOFF_SETTINGSEXPORTHELPER_HXX
 #define _XMLOFF_SETTINGSEXPORTHELPER_HXX
 
+#include "xmloff/dllapi.h"
+
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/formula/SymbolDescriptor.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
@@ -49,7 +51,7 @@ namespace xmloff
     class XMLSettingsExportContext;
 }
 
-class XMLSettingsExportHelper
+class XMLOFF_DLLPUBLIC XMLSettingsExportHelper
 {
     ::xmloff::XMLSettingsExportContext& m_rContext;
 
