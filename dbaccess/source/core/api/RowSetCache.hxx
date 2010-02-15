@@ -122,6 +122,7 @@ namespace dbaccess
 
         typedef ::std::vector< TORowSetOldRowHelperRef >    TOldRowSetRows;
 
+        ::std::map<sal_Int32,sal_Int32> m_aKeyColumns;
         //the set can be static, bookmarkable or keyset
         ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet>       m_xSet;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xMetaData; // must be before m_aInsertRow
@@ -169,7 +170,15 @@ namespace dbaccess
         void firePropertyChange(sal_Int32 _nColumnIndex,const ::connectivity::ORowSetValue& _rOldValue);
 
         void rotateCacheIterator(ORowSetMatrix::difference_type _nDist);
-        void updateValue(sal_Int32 columnIndex,const connectivity::ORowSetValue& x);
+        void updateValue(sal_Int32 columnIndex
+                        ,const connectivity::ORowSetValue& x
+                        ,ORowSetValueVector::Vector& io_aRow
+                        ,::std::vector<sal_Int32>& o_ChangedColumns
+                        );
+
+        void impl_updateRowFromCache_throw(ORowSetValueVector::Vector& io_aRow
+                                   ,::std::vector<sal_Int32>& o_ChangedColumns
+                                   );
         // checks and set the flags isAfterLast isLast and position when afterlast is true
         void checkPositionFlags();
         void checkUpdateConditions(sal_Int32 columnIndex);
@@ -222,11 +231,14 @@ namespace dbaccess
         sal_Int32 hashBookmark( const ::com::sun::star::uno::Any& bookmark );
 
     // ::com::sun::star::sdbc::XRowUpdate
-        void updateBinaryStream( sal_Int32 columnIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length );
-        void updateCharacterStream( sal_Int32 columnIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length );
-        void updateObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x );
-        void updateNumericObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x, sal_Int32 scale );
-        void updateNull(sal_Int32 columnIndex);
+        void updateCharacterStream( sal_Int32 columnIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length,ORowSetValueVector::Vector& io_aRow,::std::vector<sal_Int32>& o_ChangedColumns
+             );
+        void updateObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x,ORowSetValueVector::Vector& io_aRow ,::std::vector<sal_Int32>& o_ChangedColumns);
+        void updateNumericObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x, sal_Int32 scale,ORowSetValueVector::Vector& io_aRow ,::std::vector<sal_Int32>& o_ChangedColumns);
+        void updateNull(sal_Int32 columnIndex
+                        ,ORowSetValueVector::Vector& io_aRow
+                        ,::std::vector<sal_Int32>& o_ChangedColumns
+                        );
 
     // ::com::sun::star::sdbc::XResultSet
         sal_Bool next(  );
@@ -247,14 +259,17 @@ namespace dbaccess
         sal_Bool rowInserted(  );
 
     // ::com::sun::star::sdbc::XResultSetUpdate
-        sal_Bool insertRow();
+        sal_Bool insertRow(::std::vector< ::com::sun::star::uno::Any >& o_aBookmarks);
         void resetInsertRow(sal_Bool _bClearInsertRow);
 
-        void updateRow();
-        void updateRow( ORowSetMatrix::iterator& _rUpdateRow );
+        void updateRow( ORowSetMatrix::iterator& _rUpdateRow,::std::vector< ::com::sun::star::uno::Any >& o_aBookmarks );
         bool deleteRow();
         void cancelRowUpdates(  );
         void moveToInsertRow(  );
+
+        const ::std::map<sal_Int32,sal_Int32>& getKeyColumns() const { return m_aKeyColumns; }
+        bool isResultSetChanged() const;
+        void reset(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet);
     };
 }
 #endif

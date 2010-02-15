@@ -70,18 +70,11 @@
 #ifndef DBACCESS_CORE_API_ROWSETBASE_HXX
 #include "RowSetBase.hxx"
 #endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
-#endif
-#ifndef _CONNECTIVITY_SQLPARSE_HXX
 #include <connectivity/sqlparse.hxx>
-#endif
-#ifndef _CONNECTIVITY_SQLNODE_HXX
 #include <connectivity/sqlnode.hxx>
-#endif
-#ifndef _CONNECTIVITY_PARSE_SQLITERATOR_HXX_
+#include <connectivity/dbtools.hxx>
 #include <connectivity/sqliterator.hxx>
-#endif
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
 #endif
@@ -114,6 +107,8 @@
 #ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
 #endif
+#include "WrappedResultSet.hxx"
+#include "OptimisticSet.hxx"
 
 using namespace dbaccess;
 using namespace dbtools;
@@ -162,9 +157,33 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
 {
     DBG_CTOR(ORowSetCache,NULL);
 
+    // first try if the result can be used to do inserts and updates
+    try
+    {
+        Reference< XResultSetUpdate> xUp(_xRs,UNO_QUERY_THROW);
+        xUp->moveToInsertRow();
+        xUp->cancelRowUpdates();
+        _xRs->beforeFirst();
+        m_nPrivileges = Privilege::SELECT|Privilege::DELETE|Privilege::INSERT|Privilege::UPDATE;
+        m_pCacheSet = new WrappedResultSet();
+        m_xCacheSet = m_pCacheSet;
+        m_pCacheSet->construct(_xRs,i_sRowSetFilter);
+        return;
+    }
+    catch(const Exception&)
+    {
+    }
+
     // check if all keys of the updateable table are fetched
     sal_Bool bAllKeysFound = sal_False;
     sal_Int32 nTablesCount = 0;
+
+    Reference< XPropertySet> xProp(_xRs,UNO_QUERY);
+    Reference< XPropertySetInfo > xPropInfo = xProp->getPropertySetInfo();
+    sal_Bool bNeedKeySet = !(xPropInfo->hasPropertyByName(PROPERTY_ISBOOKMARKABLE) &&
+                             any2bool(xProp->getPropertyValue(PROPERTY_ISBOOKMARKABLE)) && Reference< XRowLocate >(_xRs, UNO_QUERY).is() );
+    bNeedKeySet = bNeedKeySet || (xPropInfo->hasPropertyByName(PROPERTY_RESULTSETCONCURRENCY) &&
+                            ::comphelper::getINT32(xProp->getPropertyValue(PROPERTY_RESULTSETCONCURRENCY)) == ResultSetConcurrency::READ_ONLY);
 
     Reference< XIndexAccess> xUpdateTableKeys;
     ::rtl::OUString aUpdateTableName = _rUpdateTableName;
@@ -186,58 +205,54 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
             Reference<XTablesSupplier> xTabSup(_xAnalyzer,UNO_QUERY);
             OSL_ENSURE(xTabSup.is(),"ORowSet::execute composer isn't a tablesupplier!");
             Reference<XNameAccess> xTables = xTabSup->getTables();
-
-
-            if(_rUpdateTableName.getLength() && xTables->hasByName(_rUpdateTableName))
-                xTables->getByName(_rUpdateTableName) >>= m_aUpdateTable;
-            else if(xTables->getElementNames().getLength())
-            {
-                aUpdateTableName = xTables->getElementNames()[0];
-                xTables->getByName(aUpdateTableName) >>= m_aUpdateTable;
-            }
-            Reference<XIndexAccess> xIndexAccess(xTables,UNO_QUERY);
-            if(xIndexAccess.is())
-                nTablesCount = xIndexAccess->getCount();
-            else
-                nTablesCount = xTables->getElementNames().getLength();
-
-            if(m_aUpdateTable.is() && nTablesCount < 3) // for we can't handle more than 2 tables in our keyset
-            {
-                Reference<XKeysSupplier> xKeys(m_aUpdateTable,UNO_QUERY);
-                if(xKeys.is())
+            Sequence< ::rtl::OUString> aTableNames = xTables->getElementNames();
+            if ( aTableNames.getLength() > 1 && !_rUpdateTableName.getLength() && bNeedKeySet )
+            {// here we have a join or union and nobody told us which table to update, so we update them all
+                m_nPrivileges = Privilege::SELECT|Privilege::DELETE|Privilege::INSERT|Privilege::UPDATE;
+                OptimisticSet* pCursor = new OptimisticSet(m_aContext,xConnection,_xAnalyzer,_aParameterValueForCache);
+                m_pCacheSet = pCursor;
+                m_xCacheSet = m_pCacheSet;
+                try
                 {
-                    xUpdateTableKeys = xKeys->getKeys();
-                    if ( xUpdateTableKeys.is() )
+                    m_pCacheSet->construct(_xRs,i_sRowSetFilter);
+                    if ( pCursor->isReadOnly() )
+                        m_nPrivileges = Privilege::SELECT;
+                    m_aKeyColumns = pCursor->getJoinedKeyColumns();
+                    return;
+                }
+                catch(const Exception&)
+                {
+                }
+            }
+            else
+            {
+                if(_rUpdateTableName.getLength() && xTables->hasByName(_rUpdateTableName))
+                    xTables->getByName(_rUpdateTableName) >>= m_aUpdateTable;
+                else if(xTables->getElementNames().getLength())
+                {
+                    aUpdateTableName = xTables->getElementNames()[0];
+                    xTables->getByName(aUpdateTableName) >>= m_aUpdateTable;
+                }
+                Reference<XIndexAccess> xIndexAccess(xTables,UNO_QUERY);
+                if(xIndexAccess.is())
+                    nTablesCount = xIndexAccess->getCount();
+                else
+                    nTablesCount = xTables->getElementNames().getLength();
+
+                if(m_aUpdateTable.is() && nTablesCount < 3) // for we can't handle more than 2 tables in our keyset
+                {
+                    Reference<XPropertySet> xSet(m_aUpdateTable,UNO_QUERY);
+                    const Reference<XNameAccess> xPrimaryKeyColumns = dbtools::getPrimaryKeyColumns_throw(xSet);
+                    if ( xPrimaryKeyColumns.is() )
                     {
-                        Reference<XColumnsSupplier> xColumnsSupplier;
-                        // search the one and only primary key
-                        const sal_Int32 nCount = xUpdateTableKeys->getCount();
-                        for(sal_Int32 i = 0 ; i < nCount ; ++i)
+                        Reference<XColumnsSupplier> xColSup(_xAnalyzer,UNO_QUERY);
+                        if ( xColSup.is() )
                         {
-                            Reference<XPropertySet> xProp(xUpdateTableKeys->getByIndex(i),UNO_QUERY);
-                            sal_Int32 nKeyType = 0;
-                            xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
-                            if(KeyType::PRIMARY == nKeyType)
-                            {
-                                xColumnsSupplier.set(xProp,UNO_QUERY);
-                                break;
-                            }
-                        }
-
-                        if(xColumnsSupplier.is())
-                        {
-
-
-                            Reference<XNameAccess> xColumns = xColumnsSupplier->getColumns();
-                            Reference<XColumnsSupplier> xColSup(_xAnalyzer,UNO_QUERY);
-                            if ( xColSup.is() )
-                            {
-                                Reference<XNameAccess> xSelColumns = xColSup->getColumns();
-                                Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
-                                SelectColumnsMetaData aColumnNames(xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers() ? true : false);
-                                ::dbaccess::getColumnPositions(xSelColumns,xColumns->getElementNames(),aUpdateTableName,aColumnNames);
-                                bAllKeysFound = !aColumnNames.empty() && sal_Int32(aColumnNames.size()) == xColumns->getElementNames().getLength();
-                            }
+                            Reference<XNameAccess> xSelColumns = xColSup->getColumns();
+                            Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
+                            SelectColumnsMetaData aColumnNames(xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers() ? true : false);
+                            ::dbaccess::getColumnPositions(xSelColumns,xPrimaryKeyColumns->getElementNames(),aUpdateTableName,aColumnNames);
+                            bAllKeysFound = !aColumnNames.empty() && sal_Int32(aColumnNames.size()) == xPrimaryKeyColumns->getElementNames().getLength();
                         }
                     }
                 }
@@ -247,12 +262,6 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
         {
         }
     }
-    Reference< XPropertySet> xProp(_xRs,UNO_QUERY);
-
-    sal_Bool bNeedKeySet = !(xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_ISBOOKMARKABLE) &&
-                             any2bool(xProp->getPropertyValue(PROPERTY_ISBOOKMARKABLE)) && Reference< XRowLocate >(_xRs, UNO_QUERY).is() );
-    bNeedKeySet = bNeedKeySet || (xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_RESULTSETCONCURRENCY) &&
-                            ::comphelper::getINT32(xProp->getPropertyValue(PROPERTY_RESULTSETCONCURRENCY)) == ResultSetConcurrency::READ_ONLY);
 
     // first check if resultset is bookmarkable
     if(!bNeedKeySet)
@@ -316,8 +325,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
             const ::rtl::OUString* pEnd     = pIter + aNames.getLength();
             for(;pIter != pEnd;++pIter)
             {
-                Reference<XPropertySet> xColumn;
-                ::cppu::extractInterface(xColumn,xColumns->getByName(*pIter));
+                Reference<XPropertySet> xColumn(xColumns->getByName(*pIter),UNO_QUERY);
                 OSL_ENSURE(xColumn.is(),"Column in table is null!");
                 if(xColumn.is())
                 {
@@ -473,6 +481,21 @@ Reference< XResultSetMetaData > ORowSetCache::getMetaData(  )
     return m_xMetaData;
 }
 // -------------------------------------------------------------------------
+Any lcl_getBookmark(ORowSetValue& i_aValue,OCacheSet* i_pCacheSet)
+{
+    switch ( i_aValue.getTypeKind() )
+    {
+        case DataType::TINYINT:
+        case DataType::SMALLINT:
+        case DataType::INTEGER:
+            return makeAny((sal_Int32)i_aValue);
+        default:
+            if ( i_pCacheSet && i_aValue.isNull())
+                i_aValue = i_pCacheSet->getBookmark();
+            return i_aValue.getAny();
+    }
+}
+// -------------------------------------------------------------------------
 // ::com::sun::star::sdbcx::XRowLocate
 Any ORowSetCache::getBookmark(  )
 {
@@ -485,17 +508,7 @@ Any ORowSetCache::getBookmark(  )
         return Any(); // this is allowed here because the rowset knowns what it is doing
     }
 
-    switch(((*m_aMatrixIter)->get())[0].getTypeKind())
-    {
-        case DataType::TINYINT:
-        case DataType::SMALLINT:
-        case DataType::INTEGER:
-            return makeAny((sal_Int32)((*m_aMatrixIter)->get())[0]);
-        default:
-            if(((*m_aMatrixIter)->get())[0].isNull())
-                ((*m_aMatrixIter)->get())[0] = m_pCacheSet->getBookmark();
-            return ((*m_aMatrixIter)->get())[0].getAny();
-    }
+    return lcl_getBookmark(((*m_aMatrixIter)->get())[0],m_pCacheSet);
 }
 // -------------------------------------------------------------------------
 sal_Bool ORowSetCache::moveToBookmark( const Any& bookmark )
@@ -550,84 +563,106 @@ sal_Int32 ORowSetCache::compareBookmarks( const Any& _first, const Any& _second 
 // -------------------------------------------------------------------------
 sal_Bool ORowSetCache::hasOrderedBookmarks(  )
 {
-
     return m_pCacheSet->hasOrderedBookmarks();
 }
 // -------------------------------------------------------------------------
 sal_Int32 ORowSetCache::hashBookmark( const Any& bookmark )
 {
-
     return m_pCacheSet->hashBookmark(bookmark);
 }
-// -------------------------------------------------------------------------
 // XRowUpdate
 // -----------------------------------------------------------------------------
-void ORowSetCache::updateNull(sal_Int32 columnIndex)
+void ORowSetCache::updateNull(sal_Int32 columnIndex,ORowSetValueVector::Vector& io_aRow
+                              ,::std::vector<sal_Int32>& o_ChangedColumns
+                              )
 {
     checkUpdateConditions(columnIndex);
 
-    ((*m_aInsertRow)->get())[columnIndex].setBound(sal_True);
-    ((*m_aInsertRow)->get())[columnIndex].setNull();
-    ((*m_aInsertRow)->get())[columnIndex].setModified();
+    ORowSetValueVector::Vector& rInsert = ((*m_aInsertRow)->get());
+    rInsert[columnIndex].setBound(sal_True);
+    rInsert[columnIndex].setNull();
+    rInsert[columnIndex].setModified();
+    io_aRow[columnIndex].setNull();
+
+    m_pCacheSet->mergeColumnValues(columnIndex,rInsert,io_aRow,o_ChangedColumns);
+    impl_updateRowFromCache_throw(io_aRow,o_ChangedColumns);
 }
 // -----------------------------------------------------------------------------
-void ORowSetCache::updateValue(sal_Int32 columnIndex,const ORowSetValue& x)
+void ORowSetCache::updateValue(sal_Int32 columnIndex,const ORowSetValue& x
+                               ,ORowSetValueVector::Vector& io_aRow
+                               ,::std::vector<sal_Int32>& o_ChangedColumns
+                               )
 {
     checkUpdateConditions(columnIndex);
 
-    ((*m_aInsertRow)->get())[columnIndex].setBound(sal_True);
-    ((*m_aInsertRow)->get())[columnIndex] = x;
-    ((*m_aInsertRow)->get())[columnIndex].setModified();
+    ORowSetValueVector::Vector& rInsert = ((*m_aInsertRow)->get());
+    rInsert[columnIndex].setBound(sal_True);
+    rInsert[columnIndex] = x;
+    rInsert[columnIndex].setModified();
+    io_aRow[columnIndex] = rInsert[columnIndex];
+
+    m_pCacheSet->mergeColumnValues(columnIndex,rInsert,io_aRow,o_ChangedColumns);
+    impl_updateRowFromCache_throw(io_aRow,o_ChangedColumns);
 }
 // -------------------------------------------------------------------------
-void ORowSetCache::updateBinaryStream( sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length )
+void ORowSetCache::updateCharacterStream( sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x
+                                         , sal_Int32 length,ORowSetValueVector::Vector& io_aRow
+                                         ,::std::vector<sal_Int32>& o_ChangedColumns
+                                         )
 {
     checkUpdateConditions(columnIndex);
-
 
     Sequence<sal_Int8> aSeq;
     if(x.is())
         x->readBytes(aSeq,length);
-    updateValue(columnIndex,aSeq);
+
+    ORowSetValueVector::Vector& rInsert = ((*m_aInsertRow)->get());
+    rInsert[columnIndex].setBound(sal_True);
+    rInsert[columnIndex] = aSeq;
+    rInsert[columnIndex].setModified();
+    io_aRow[columnIndex] = makeAny(x);
+
+    m_pCacheSet->mergeColumnValues(columnIndex,rInsert,io_aRow,o_ChangedColumns);
+    impl_updateRowFromCache_throw(io_aRow,o_ChangedColumns);
 }
 // -------------------------------------------------------------------------
-void ORowSetCache::updateCharacterStream( sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length )
+void ORowSetCache::updateObject( sal_Int32 columnIndex, const Any& x
+                                ,ORowSetValueVector::Vector& io_aRow
+                                ,::std::vector<sal_Int32>& o_ChangedColumns
+                                )
 {
     checkUpdateConditions(columnIndex);
 
+    ORowSetValueVector::Vector& rInsert = ((*m_aInsertRow)->get());
+    rInsert[columnIndex].setBound(sal_True);
+    rInsert[columnIndex] = x;
+    rInsert[columnIndex].setModified();
+    io_aRow[columnIndex] = rInsert[columnIndex];
 
-    Sequence<sal_Int8> aSeq;
-    if(x.is())
-        x->readBytes(aSeq,length);
-
-    updateValue(columnIndex,aSeq);
+    m_pCacheSet->mergeColumnValues(columnIndex,rInsert,io_aRow,o_ChangedColumns);
+    impl_updateRowFromCache_throw(io_aRow,o_ChangedColumns);
 }
 // -------------------------------------------------------------------------
-void ORowSetCache::updateObject( sal_Int32 columnIndex, const Any& x )
+void ORowSetCache::updateNumericObject( sal_Int32 columnIndex, const Any& x, sal_Int32 /*scale*/
+                                       ,ORowSetValueVector::Vector& io_aRow
+                                       ,::std::vector<sal_Int32>& o_ChangedColumns
+                                       )
 {
     checkUpdateConditions(columnIndex);
 
+    ORowSetValueVector::Vector& rInsert = ((*m_aInsertRow)->get());
+    rInsert[columnIndex].setBound(sal_True);
+    rInsert[columnIndex] = x;
+    rInsert[columnIndex].setModified();
+    io_aRow[columnIndex] = rInsert[columnIndex];
 
-    ((*m_aInsertRow)->get())[columnIndex].setBound(sal_True);
-    ((*m_aInsertRow)->get())[columnIndex] = x;
-    ((*m_aInsertRow)->get())[columnIndex].setModified();
-}
-// -------------------------------------------------------------------------
-void ORowSetCache::updateNumericObject( sal_Int32 columnIndex, const Any& x, sal_Int32 /*scale*/ )
-{
-    checkUpdateConditions(columnIndex);
-
-
-    ((*m_aInsertRow)->get())[columnIndex].setBound(sal_True);
-    ((*m_aInsertRow)->get())[columnIndex] = x;
-    ((*m_aInsertRow)->get())[columnIndex].setModified();
+    m_pCacheSet->mergeColumnValues(columnIndex,rInsert,io_aRow,o_ChangedColumns);
+    impl_updateRowFromCache_throw(io_aRow,o_ChangedColumns);
 }
 // -------------------------------------------------------------------------
 // XResultSet
 sal_Bool ORowSetCache::next(  )
 {
-
-
     if(!isAfterLast())
     {
         m_bBeforeFirst = sal_False;
@@ -1226,7 +1261,7 @@ sal_Bool ORowSetCache::rowInserted(  )
 }
 // -------------------------------------------------------------------------
 // XResultSetUpdate
-sal_Bool ORowSetCache::insertRow(  )
+sal_Bool ORowSetCache::insertRow(::std::vector< Any >& o_aBookmarks)
 {
     if ( !m_bNew || !m_aInsertRow->isValid() )
         throw SQLException(DBACORE_RESSTRING(RID_STR_NO_MOVETOINSERTROW_CALLED),NULL,SQLSTATE_GENERAL,1000,Any() );
@@ -1240,7 +1275,19 @@ sal_Bool ORowSetCache::insertRow(  )
         Any aBookmark = ((*m_aInsertRow)->get())[0].makeAny();
         m_bAfterLast = m_bBeforeFirst = sal_False;
         if(aBookmark.hasValue())
+        {
             moveToBookmark(aBookmark);
+            // update the cached values
+            ORowSetValueVector::Vector& rCurrentRow = ((*m_aMatrixIter))->get();
+            ORowSetMatrix::iterator aIter = m_pMatrix->begin();
+            for(;aIter != m_pMatrix->end();++aIter)
+            {
+                if ( m_aMatrixIter != aIter && aIter->isValid() && m_pCacheSet->columnValuesUpdated((*aIter)->get(),rCurrentRow) )
+                {
+                    o_aBookmarks.push_back(lcl_getBookmark((*aIter)->get()[0],m_pCacheSet));
+                }
+            }
+        }
         else
         {
             OSL_ENSURE(0,"There must be a bookmark after the row was inserted!");
@@ -1270,7 +1317,7 @@ void ORowSetCache::cancelRowModification()
     resetInsertRow(sal_False);
 }
 // -------------------------------------------------------------------------
-void ORowSetCache::updateRow( ORowSetMatrix::iterator& _rUpdateRow )
+void ORowSetCache::updateRow( ORowSetMatrix::iterator& _rUpdateRow,::std::vector< Any >& o_aBookmarks )
 {
     if(isAfterLast() || isBeforeFirst())
         throw SQLException(DBACORE_RESSTRING(RID_STR_NO_UPDATEROW),NULL,SQLSTATE_GENERAL,1000,Any() );
@@ -1281,16 +1328,23 @@ void ORowSetCache::updateRow( ORowSetMatrix::iterator& _rUpdateRow )
     // the row was already fetched
     moveToBookmark(aBookmark);
     m_pCacheSet->updateRow(*_rUpdateRow,*m_aMatrixIter,m_aUpdateTable);
-    //  *(*m_aMatrixIter) = *(*_rUpdateRow);
     // refetch the whole row
     (*m_aMatrixIter) = NULL;
 
-    moveToBookmark(aBookmark);
-    //  moveToBookmark((*(*m_aInsertRow))[0].makeAny());
-//  if(m_pCacheSet->rowUpdated())
-//      *m_aMatrixIter = m_aInsertRow;
+    if ( moveToBookmark(aBookmark) )
+    {
+        // update the cached values
+        ORowSetValueVector::Vector& rCurrentRow = ((*m_aMatrixIter))->get();
+        ORowSetMatrix::iterator aIter = m_pMatrix->begin();
+        for(;aIter != m_pMatrix->end();++aIter)
+        {
+            if ( m_aMatrixIter != aIter && aIter->isValid() && m_pCacheSet->columnValuesUpdated((*aIter)->get(),rCurrentRow) )
+            {
+                o_aBookmarks.push_back(lcl_getBookmark((*aIter)->get()[0],m_pCacheSet));
+            }
+        }
+    }
     m_bModified = sal_False;
-    //  refreshRow(  );
 }
 // -------------------------------------------------------------------------
 bool ORowSetCache::deleteRow(  )
@@ -1307,8 +1361,6 @@ bool ORowSetCache::deleteRow(  )
     OSL_ENSURE(((m_nPosition - m_nStartPos) - 1) < (sal_Int32)m_pMatrix->size(),"Position is behind end()!");
     ORowSetMatrix::iterator aPos = calcPosition();
     (*aPos)   = NULL;
-    //  (*m_pMatrix)[(m_nPosition - m_nStartPos)] = NULL; // set the deleted row to NULL
-
 
     ORowSetMatrix::iterator aEnd = m_pMatrix->end();
     for(++aPos;aPos != aEnd && aPos->isValid();++aPos)
@@ -1625,8 +1677,39 @@ sal_Bool ORowSetCache::fill(ORowSetMatrix::iterator& _aIter,const ORowSetMatrix:
     return _bCheck;
 }
 // -----------------------------------------------------------------------------
+bool ORowSetCache::isResultSetChanged() const
+{
+    return m_pCacheSet->isResultSetChanged();
+}
+// -----------------------------------------------------------------------------
+void ORowSetCache::reset(const Reference< XResultSet>& _xDriverSet)
+{
+    m_xMetaData.set(Reference< XResultSetMetaDataSupplier >(_xDriverSet,UNO_QUERY)->getMetaData());
+    m_pCacheSet->reset(_xDriverSet);
 
+    m_bRowCountFinal = sal_False;
+    m_nRowCount = 0;
+    reFillMatrix(m_nStartPos+1,m_nEndPos+1);
+}
+// -----------------------------------------------------------------------------
+void ORowSetCache::impl_updateRowFromCache_throw(ORowSetValueVector::Vector& io_aRow
+                                           ,::std::vector<sal_Int32>& o_ChangedColumns)
+{
+    if ( o_ChangedColumns.size() > 1 )
+    {
+        ORowSetMatrix::iterator aIter = m_pMatrix->begin();
+        for(;aIter != m_pMatrix->end();++aIter)
+        {
+            if ( aIter->isValid() && m_pCacheSet->updateColumnValues((*aIter)->get(),io_aRow,o_ChangedColumns))
+            {
+                break;
+            }
+        }
 
-
-
-
+        if ( aIter == m_pMatrix->end() )
+        {
+            m_pCacheSet->fillMissingValues(io_aRow);
+        }
+    }
+}
+// -----------------------------------------------------------------------------

@@ -75,6 +75,8 @@ SLOFILES=	\
         $(SLO)$/HelperCollections.obj			\
         $(SLO)$/datasettings.obj                \
         $(SLO)$/View.obj						\
+        $(SLO)$/WrappedResultSet.obj			\
+        $(SLO)$/OptimisticSet.obj				\
         $(SLO)$/columnsettings.obj
 
 # --- Targets ----------------------------------

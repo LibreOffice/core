@@ -1297,7 +1297,12 @@ void ORowSetBase::firePropertyChange(const ORowSetRow& _rOldRow)
     }
     DBG_TRACE2("DBACCESS ORowSetBase::firePropertyChange() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
 }
-
+// -------------------------------------------------------------------------
+void ORowSetBase::firePropertyChange(sal_Int32 _nPos,const ::connectivity::ORowSetValue& _rOldValue)
+{
+    OSL_ENSURE(_nPos < (sal_Int32)m_aDataColumns.size(),"nPos is invalid!");
+    m_aDataColumns[_nPos]->fireValueChange(_rOldValue);
+}
 // -----------------------------------------------------------------------------
 void ORowSetBase::fireRowcount()
 {
@@ -1475,6 +1480,13 @@ sal_Int32 ORowSetBase::impl_getRowCount() const
     return nRowCount;
 }
 // =============================================================================
+struct ORowSetNotifierImpl
+{
+    ::std::vector<sal_Int32>    aChangedColumns;
+    ::std::vector<Any>          aChangedBookmarks;
+    ORowSetValueVector::Vector  aRow;
+
+};
 DBG_NAME(ORowSetNotifier)
 // -----------------------------------------------------------------------------
 ORowSetNotifier::ORowSetNotifier( ORowSetBase* _pRowSet )
@@ -1497,7 +1509,21 @@ ORowSetNotifier::ORowSetNotifier( ORowSetBase* _pRowSet )
     if ( m_pRowSet->isModification( ORowSetBase::GrantNotifierAccess() ) )
         m_pRowSet->doCancelModification( ORowSetBase::GrantNotifierAccess() );
 }
+// -----------------------------------------------------------------------------
+ORowSetNotifier::ORowSetNotifier( ORowSetBase* _pRowSet,const ORowSetValueVector::Vector& i_aRow )
+    :m_pImpl(new ORowSetNotifierImpl)
+    ,m_pRowSet( _pRowSet )
+    ,m_bWasNew( sal_False )
+    ,m_bWasModified( sal_False )
+#ifdef DBG_UTIL
+    ,m_bNotifyCalled( sal_False )
+#endif
+{
+    DBG_CTOR(ORowSetNotifier,NULL);
 
+    OSL_ENSURE( m_pRowSet, "ORowSetNotifier::ORowSetNotifier: invalid row set. This wil crash." );
+    m_pImpl->aRow = i_aRow; // yes, create a copy to store the old values
+}
 // -----------------------------------------------------------------------------
 ORowSetNotifier::~ORowSetNotifier( )
 {
@@ -1525,5 +1551,30 @@ void ORowSetNotifier::fire()
     m_bNotifyCalled = sal_True;
 #endif
 }
-
+// -----------------------------------------------------------------------------
+::std::vector<sal_Int32>& ORowSetNotifier::getChangedColumns() const
+{
+    OSL_ENSURE(m_pImpl.get(),"Illegal CTor call, use the other one!");
+    return m_pImpl->aChangedColumns;
+}
+// -----------------------------------------------------------------------------
+::std::vector<Any>& ORowSetNotifier::getChangedBookmarks() const
+{
+    OSL_ENSURE(m_pImpl.get(),"Illegal CTor call, use the other one!");
+    return m_pImpl->aChangedBookmarks;
+}
+// -----------------------------------------------------------------------------
+void ORowSetNotifier::firePropertyChange()
+{
+    OSL_ENSURE(m_pImpl.get(),"Illegal CTor call, use the other one!");
+    if( m_pImpl.get() )
+    {
+        ::std::vector<sal_Int32>::iterator aIter = m_pImpl->aChangedColumns.begin();
+        for(;aIter != m_pImpl->aChangedColumns.end();++aIter)
+        {
+            m_pRowSet->firePropertyChange((*aIter)-1 ,m_pImpl->aRow[(*aIter)-1], ORowSetBase::GrantNotifierAccess());
+        }
+        m_pRowSet->fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False, ORowSetBase::GrantNotifierAccess());
+    }
+}
 }   // namespace dbaccess

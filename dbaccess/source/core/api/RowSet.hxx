@@ -35,68 +35,36 @@
 #include "RowSetBase.hxx"
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_SDBC_XPREPAREDSTATEMENT_HPP_
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYCOMPOSER_HPP_
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XRESULTSETACCESS_HPP_
 #include <com/sun/star/sdb/XResultSetAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROWSETLISTENER_HPP_
 #include <com/sun/star/sdbc/XRowSetListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROWUPDATE_HPP_
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSETUPDATE_HPP_
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XPARAMETERS_HPP_
 #include <com/sun/star/sdbc/XParameters.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XROWSETAPPROVEBROADCASTER_HPP_
 #include <com/sun/star/sdb/XRowSetApproveBroadcaster.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_RESULTSETTYPE_HPP_
 #include <com/sun/star/sdbc/ResultSetType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XCANCELLABLE_HPP_
 #include <com/sun/star/util/XCancellable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XDELETEROWS_HPP_
 #include <com/sun/star/sdbcx/XDeleteRows.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XCOMPLETEDEXECUTION_HPP_
 #include <com/sun/star/sdb/XCompletedExecution.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_ROWSETVETOEXCEPTION_HPP_
 #include <com/sun/star/sdb/RowSetVetoException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYANALYZER_HPP_
 #include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYCOMPOSER_HPP_
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XPARAMETERSSUPPLIER_HPP_
 #include <com/sun/star/sdb/XParametersSupplier.hpp>
-#endif
+#include <com/sun/star/sdb/XRowsChangeBroadcaster.hpp>
 /** === end UNO includes === **/
 
-#include <cppuhelper/compbase11.hxx>
+#include <cppuhelper/compbase12.hxx>
 #include <connectivity/paramwrapper.hxx>
 #include <connectivity/FValue.hxx>
 #include <connectivity/warningscontainer.hxx>
 
 namespace dbaccess
 {
-    typedef ::cppu::WeakAggComponentImplHelper11    <   ::com::sun::star::sdb::XResultSetAccess
+    typedef ::cppu::WeakAggComponentImplHelper12    <   ::com::sun::star::sdb::XResultSetAccess
                                                     ,   ::com::sun::star::sdb::XRowSetApproveBroadcaster
+                                                    ,   ::com::sun::star::sdb::XRowsChangeBroadcaster
                                                     ,   ::com::sun::star::sdbcx::XDeleteRows
                                                     ,   ::com::sun::star::sdbc::XParameters
                                                     ,   ::com::sun::star::lang::XEventListener
@@ -135,9 +103,11 @@ namespace dbaccess
         ORowSetValueVector                          m_aPrematureParamValues;
         ORowSetValueVector                          m_aParameterValueForCache;
         ::std::bit_vector                           m_aParametersSet;
+        ::std::bit_vector                           m_aReadOnlyDataColumns;
 
         ::cppu::OInterfaceContainerHelper           m_aRowsetListeners;
         ::cppu::OInterfaceContainerHelper           m_aApproveListeners;
+        ::cppu::OInterfaceContainerHelper           m_aRowsChangeListener;
 
         ::dbtools::WarningsContainer                m_aWarnings;
 
@@ -245,10 +215,6 @@ namespace dbaccess
         // free clones and ParseTree. Plus, if _bComplete is <TRUE/>, *all* other associated resources
         void freeResources( bool _bComplete );
 
-        // fire a change for one column
-        // _nPos starts at zero
-        void firePropertyChange(sal_Int32 _nPos,const ::connectivity::ORowSetValue& _rNewValue);
-
         /// informs the clones (and ourself) that we are going to delete a record with a given bookmark
         void notifyRowSetAndClonesRowDelete( const ::com::sun::star::uno::Any& _rBookmark );
 
@@ -263,6 +229,11 @@ namespace dbaccess
 
         void updateValue(sal_Int32 columnIndex,const connectivity::ORowSetValue& x);
         void checkUpdateConditions(sal_Int32 columnIndex);
+        void impl_rebuild_throw(::osl::ResettableMutexGuard& _rGuard);
+        // set all data columns to writeable
+        void impl_setDataColumnsWriteable_throw();
+        // restore the old state of the data column read-only state
+        void impl_restoreDataColumnsWriteable_throw();
 
     protected:
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue) throw (::com::sun::star::uno::Exception);
@@ -271,7 +242,7 @@ namespace dbaccess
 
         virtual void fireRowcount();
                 void notifyAllListenersRowBeforeChange(::osl::ResettableMutexGuard& _rGuard,const ::com::sun::star::sdb::RowChangeEvent &rEvt);
-                void notifyAllListenersRowChanged(::osl::ResettableMutexGuard& _rGuard,const ::com::sun::star::lang::EventObject& rEvt);
+                void notifyAllListenersRowChanged(::osl::ResettableMutexGuard& _rGuard,const ::com::sun::star::sdb::RowsChangeEvent& rEvt);
         virtual sal_Bool notifyAllListenersCursorBeforeMove(::osl::ResettableMutexGuard& _rGuard);
         virtual void notifyAllListenersCursorMoved(::osl::ResettableMutexGuard& _rGuard);
         virtual void notifyAllListeners(::osl::ResettableMutexGuard& _rGuard);
@@ -394,6 +365,10 @@ namespace dbaccess
     // ::com::sun::star::sdb::XRowSetApproveBroadcaster
         virtual void SAL_CALL addRowSetApproveListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XRowSetApproveListener >& listener ) throw(::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL removeRowSetApproveListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XRowSetApproveListener >& listener ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::sdb::XRowsChangeBroadcaster
+        virtual void SAL_CALL addRowsChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XRowsChangeListener >& listener ) throw(::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL removeRowsChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XRowsChangeListener >& listener ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::sdb::XResultSetAccess
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL createResultSet(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
