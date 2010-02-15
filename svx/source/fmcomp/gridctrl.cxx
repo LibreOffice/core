@@ -47,6 +47,8 @@
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/sdb/XResultSetAccess.hpp>
+#include <com/sun/star/sdb/RowChangeAction.hpp>
+#include <com/sun/star/sdb/XRowsChangeBroadcaster.hpp>
 #include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #include <com/sun/star/container/XChild.hpp>
@@ -105,6 +107,39 @@ using namespace com::sun::star::accessibility;
             | BROWSER_VLINESFULL        \
             | BROWSER_HEADERBAR_NEW     \
 
+class RowSetEventListener : public ::cppu::WeakImplHelper1<XRowsChangeListener>
+{
+    DbGridControl* m_pControl;
+public:
+    RowSetEventListener(DbGridControl* i_pControl) : m_pControl(i_pControl)
+    {
+    }
+private:
+    // XEventListener
+    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& /*i_aEvt*/)
+    {
+    }
+    virtual void SAL_CALL rowsChanged(const ::com::sun::star::sdb::RowsChangeEvent& i_aEvt)
+    {
+        if ( i_aEvt.Action == RowChangeAction::UPDATE )
+        {
+            ::DbGridControl::GrantControlAccess aAccess;
+            CursorWrapper* pSeek = m_pControl->GetSeekCursor(aAccess);
+            const DbGridRowRef& rSeekRow = m_pControl->GetSeekRow(aAccess);
+            const Any* pIter = i_aEvt.Bookmarks.getConstArray();
+            const Any* pEnd  = pIter + i_aEvt.Bookmarks.getLength();
+            for(;pIter != pEnd;++pIter)
+            {
+                pSeek->moveToBookmark(*pIter);
+                // get the data
+                rSeekRow->SetState(pSeek, sal_True);
+                sal_Int32 nSeekPos = pSeek->getRow() - 1;
+                m_pControl->SetSeekPos(nSeekPos,aAccess);
+                m_pControl->RowModified(nSeekPos);
+            }
+        }
+    }
+};
 //==============================================================================
 
 class GridFieldValueListener;
@@ -990,6 +1025,7 @@ DbGridControl::~DbGridControl()
         m_pDataSourcePropMultiplexer = NULL;
         m_pDataSourcePropListener = NULL;
     }
+    m_xRowSetListener.clear();
 
     delete m_pDataCursor;
     delete m_pSeekCursor;
@@ -1380,7 +1416,7 @@ sal_Bool DbGridControl::IsPermanentCursorEnabled() const
 }
 
 //------------------------------------------------------------------------------
-void DbGridControl::refreshController(sal_uInt16 _nColId, GrantCellControlAccess /*_aAccess*/)
+void DbGridControl::refreshController(sal_uInt16 _nColId, GrantControlAccess /*_aAccess*/)
 {
     if ((GetCurColumnId() == _nColId) && IsEditing())
     {   // the controller which is currently active needs to be refreshed
@@ -1415,6 +1451,7 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
         m_pDataSourcePropMultiplexer = NULL;
         m_pDataSourcePropListener = NULL;
     }
+    m_xRowSetListener.clear();
 
     // is the new cursor valid ?
     // the cursor is only valid if it contains some columns
@@ -1506,7 +1543,7 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
             Reference< XPropertySet >  xSet(_xCursor, UNO_QUERY);
             if (xSet.is())
             {
-                // feststellen welche Updatem�glichkeiten bestehen
+                // feststellen welche Updatemoeglichkeiten bestehen
                 sal_Int32 nConcurrency = ResultSetConcurrency::READ_ONLY;
                 xSet->getPropertyValue(FM_PROP_RESULTSET_CONCURRENCY) >>= nConcurrency;
 
@@ -1567,6 +1604,12 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
         Reference< XPropertySet > xSet = m_pDataCursor->getPropertySet();
         xSet->getPropertyValue(FM_PROP_ROWCOUNT) >>= nRecordCount;
         m_bRecordCountFinal = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ROWCOUNTFINAL));
+
+        m_xRowSetListener = new RowSetEventListener(this);
+        Reference< XRowsChangeBroadcaster> xChangeBroad(xSet,UNO_QUERY);
+        if ( xChangeBroad.is( ) )
+            xChangeBroad->addRowsChangeListener(m_xRowSetListener);
+
 
         // insert the currently known rows
         // and one row if we are able to insert rows

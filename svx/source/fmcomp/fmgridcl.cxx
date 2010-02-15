@@ -1741,11 +1741,12 @@ void FmGridControl::InitColumnByField(
             _pColumn->SetObject( (sal_Int16)nFieldPos );
             return;
         }
-
+/*
         // handle readonly columns
         sal_Bool bReadOnly = sal_True;
         xField->getPropertyValue( FM_PROP_ISREADONLY ) >>= bReadOnly;
         _pColumn->SetReadOnly( bReadOnly );
+*/
     }
 
     // the control type is determined by the ColumnServiceName

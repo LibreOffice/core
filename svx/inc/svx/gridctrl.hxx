@@ -32,6 +32,8 @@
 
 #include <tools/list.hxx>
 #include <com/sun/star/sdbc/XRowSet.hpp>
+#include <com/sun/star/sdbc/XRowSetListener.hpp>
+#include <com/sun/star/sdb/XRowsChangeListener.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/util/Date.hpp>
@@ -250,6 +252,8 @@ private:
     // For that reason we have to listen to some properties of our data source.
     ::comphelper::OPropertyChangeMultiplexer*       m_pDataSourcePropMultiplexer;
     FmXGridSourcePropListener*                      m_pDataSourcePropListener;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XRowsChangeListener>
+                                                    m_xRowSetListener; // get notification when rows were changed
 
     void*                                           m_pFieldListeners;
         // property listeners for field values
@@ -526,15 +530,20 @@ public:
     void                        setGridListener( FmGridListener* _pListener ) { m_pGridListener = _pListener; }
 
     // helper class to grant access to selected methods from within the DbCellControl class
-    struct GrantCellControlAccess
+    struct GrantControlAccess
     {
         friend class DbCellControl;
+        friend class RowSetEventListener;
     protected:
-        GrantCellControlAccess() { }
+        GrantControlAccess() { }
     };
 
     /// called when a controller needs to be re-initialized
-    void refreshController(sal_uInt16 _nColId, GrantCellControlAccess _aAccess);
+    void refreshController(sal_uInt16 _nColId, GrantControlAccess _aAccess);
+
+    CursorWrapper* GetSeekCursor(GrantControlAccess /*_aAccess*/) const    { return m_pSeekCursor; }
+    const DbGridRowRef& GetSeekRow(GrantControlAccess /*_aAccess*/) const  { return m_xSeekRow;    }
+    void  SetSeekPos(sal_Int32 nPos,GrantControlAccess /*_aAccess*/) {m_nSeekPos = nPos;}
 
     /**
         @return
@@ -588,6 +597,7 @@ protected:
     const DbGridRowRef& GetSeekRow() const  { return m_xSeekRow;    }
     const DbGridRowRef& GetPaintRow() const { return m_xPaintRow;   }
     CursorWrapper* GetSeekCursor() const    { return m_pSeekCursor; }
+
 
     void ConnectToFields();
     void DisconnectFromFields();

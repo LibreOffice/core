@@ -680,7 +680,7 @@ void OSQLParseNode::impl_parseTableRangeNodeToString_throw(::rtl::OUStringBuffer
 void OSQLParseNode::impl_parseLikeNodeToString_throw( ::rtl::OUStringBuffer& rString, const SQLParseNodeParameter& rParam ) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::impl_parseLikeNodeToString_throw" );
-    OSL_ENSURE(count() >= 4,"count != 5: Prepare for GPF");
+    OSL_ENSURE(count() == 2,"count != 2: Prepare for GPF");
 
     const OSQLParseNode* pEscNode = NULL;
     const OSQLParseNode* pParaNode = NULL;
@@ -717,13 +717,14 @@ void OSQLParseNode::impl_parseLikeNodeToString_throw( ::rtl::OUStringBuffer& rSt
     if (bAddName)
         m_aChildren[0]->impl_parseNodeToString_throw( rString, aNewParam );
 
-    m_aChildren[1]->impl_parseNodeToString_throw( rString, aNewParam );
-    if(count() == 5)
-        m_aChildren[2]->impl_parseNodeToString_throw( rString, aNewParam );
+    const OSQLParseNode* pPart2 = m_aChildren[1];
+    pPart2->getChild(1)->impl_parseNodeToString_throw( rString, aNewParam );
+    if (SQL_ISTOKEN(pPart2->getChild(0), NOT))
+        pPart2->getChild(2)->impl_parseNodeToString_throw( rString, aNewParam );
 
-    sal_Int32 nCurentPos = m_aChildren.size()-2;
-    pParaNode = m_aChildren[nCurentPos];
-    pEscNode = m_aChildren[nCurentPos+1];
+    sal_Int32 nCurentPos = pPart2->count() - 2;
+    pParaNode = pPart2->getChild(nCurentPos);
+    pEscNode  = pPart2->getChild(nCurentPos+1);
 
     if (pParaNode->isToken())
     {
@@ -1428,7 +1429,9 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
             { OSQLParseNode::bit_value_fct, "bit_value_fct" },
             { OSQLParseNode::comparison_predicate_part_2, "comparison_predicate_part_2" },
             { OSQLParseNode::parenthesized_boolean_value_expression, "parenthesized_boolean_value_expression" },
-            { OSQLParseNode::character_string_type, "character_string_type" }
+            { OSQLParseNode::character_string_type, "character_string_type" },
+            { OSQLParseNode::other_like_predicate_part_2, "other_like_predicate_part_2" },
+            { OSQLParseNode::between_predicate_part_2, "between_predicate_part_2" }
         };
         size_t nRuleMapCount = sizeof( aRuleDescriptions ) / sizeof( aRuleDescriptions[0] );
         OSL_ENSURE( nRuleMapCount == size_t( OSQLParseNode::rule_count ), "OSQLParser::OSQLParser: added a new rule? Adjust this map!" );
@@ -1990,39 +1993,34 @@ void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition,sal_B
     else if(bNegate && (SQL_ISRULE(pSearchCondition,test_for_null) || SQL_ISRULE(pSearchCondition,in_predicate) ||
                         SQL_ISRULE(pSearchCondition,between_predicate) || SQL_ISRULE(pSearchCondition,boolean_test) ))
     {
+        OSQLParseNode* pPart2 = pSearchCondition;
+        if ( !SQL_ISRULE(pSearchCondition,boolean_test) )
+            pPart2 = pSearchCondition->getChild(1);
         sal_uInt32 nNotPos = 0;
-        // row_value_constructor not SQL_TOKEN_IN in_predicate_value
-        // row_value_constructor not SQL_TOKEN_BETWEEN row_value_constructor SQL_TOKEN_AND row_value_constructor
-        if  (   SQL_ISRULE( pSearchCondition, in_predicate )
-            ||  SQL_ISRULE( pSearchCondition, between_predicate )
-            )
+        if  ( SQL_ISRULE( pSearchCondition, test_for_null ) )
             nNotPos = 1;
-        // row_value_constructor SQL_TOKEN_IS not SQL_TOKEN_NULL
-        // boolean_primary SQL_TOKEN_IS not truth_value
-        else if (   SQL_ISRULE( pSearchCondition, test_for_null )
-                ||  SQL_ISRULE( pSearchCondition, boolean_test )
-                )
+        else if ( SQL_ISRULE( pSearchCondition, boolean_test ) )
             nNotPos = 2;
 
-        OSQLParseNode* pNot = pSearchCondition->getChild(nNotPos);
+        OSQLParseNode* pNot = pPart2->getChild(nNotPos);
         OSQLParseNode* pNotNot = NULL;
         if(pNot->isRule())
             pNotNot = new OSQLParseNode(::rtl::OUString::createFromAscii("NOT"),SQL_NODE_KEYWORD,SQL_TOKEN_NOT);
         else
             pNotNot = new OSQLParseNode(::rtl::OUString(),SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::sql_not));
-        pSearchCondition->replace(pNot, pNotNot);
+        pPart2->replace(pNot, pNotNot);
         delete pNot;
     }
     else if(bNegate && (SQL_ISRULE(pSearchCondition,like_predicate)))
     {
-        OSQLParseNode* pCheckForNOT = pSearchCondition->getChild( 1 );
-        if ( SQL_ISTOKEN(pCheckForNOT,NOT) )
-            delete pSearchCondition->removeAt( 1 );
+        OSQLParseNode* pNot = pSearchCondition->getChild( 1 )->getChild( 0 );
+        OSQLParseNode* pNotNot = NULL;
+        if(pNot->isRule())
+            pNotNot = new OSQLParseNode(::rtl::OUString::createFromAscii("NOT"),SQL_NODE_KEYWORD,SQL_TOKEN_NOT);
         else
-        {
-            OSQLParseNode* pNot = new OSQLParseNode( ::rtl::OUString::createFromAscii( "NOT" ), SQL_NODE_KEYWORD, SQL_TOKEN_NOT );
-            pSearchCondition->insert( 1, pNot );
-        }
+            pNotNot = new OSQLParseNode(::rtl::OUString(),SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::sql_not));
+        pSearchCondition->getChild( 1 )->replace(pNot, pNotNot);
+        delete pNot;
     }
 }
 //-----------------------------------------------------------------------------

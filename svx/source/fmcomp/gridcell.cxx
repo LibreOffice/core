@@ -557,6 +557,7 @@ TYPEINIT1( DbFilterField, DbCellControl )
 //------------------------------------------------------------------------------
 DbCellControl::DbCellControl( DbGridColumn& _rColumn, sal_Bool /*_bText*/ )
     :OPropertyChangeListener(m_aMutex)
+    ,m_pFieldChangeBroadcaster(NULL)
     ,m_bTransparent( sal_False )
     ,m_bAlignedController( sal_True )
     ,m_bAccessingValueProperty( sal_False )
@@ -580,6 +581,31 @@ DbCellControl::DbCellControl( DbGridColumn& _rColumn, sal_Bool /*_bText*/ )
         implDoPropertyListening( FM_PROP_STATE, sal_False );
         implDoPropertyListening( FM_PROP_TEXT, sal_False );
         implDoPropertyListening( FM_PROP_EFFECTIVE_VALUE, sal_False );
+
+        // be listener at the bound field as well
+        try
+        {
+            Reference< XPropertySet > xColModelProps( m_rColumn.getModel(), UNO_QUERY );
+            Reference< XPropertySetInfo > xPSI;
+            if ( xColModelProps.is() )
+                xPSI = xColModelProps->getPropertySetInfo();
+
+            if ( xPSI.is() && xPSI->hasPropertyByName( FM_PROP_BOUNDFIELD ) )
+            {
+                Reference< XPropertySet > xField;
+                xColModelProps->getPropertyValue( FM_PROP_BOUNDFIELD ) >>= xField;
+                if ( xField.is() )
+                {
+                    m_pFieldChangeBroadcaster = new ::comphelper::OPropertyChangeMultiplexer(this, xField);
+                    m_pFieldChangeBroadcaster->acquire();
+                    m_pFieldChangeBroadcaster->addProperty( FM_PROP_ISREADONLY );
+                }
+            }
+        }
+        catch( const Exception& )
+        {
+            DBG_ERROR( "DbCellControl::doPropertyListening: caught an exception!" );
+        }
     }
 }
 
@@ -611,17 +637,22 @@ void DbCellControl::doPropertyListening( const ::rtl::OUString& _rPropertyName )
 {
     implDoPropertyListening( _rPropertyName );
 }
-
+//------------------------------------------------------------------------------
+void lcl_clearBroadCaster(::comphelper::OPropertyChangeMultiplexer*& _pBroadcaster)
+{
+    if ( _pBroadcaster )
+    {
+        _pBroadcaster->dispose();
+        _pBroadcaster->release();
+        _pBroadcaster = NULL;
+        // no delete, this is done implicitly
+    }
+}
 //------------------------------------------------------------------------------
 DbCellControl::~DbCellControl()
 {
-    if ( m_pModelChangeBroadcaster )
-    {
-        m_pModelChangeBroadcaster->dispose();
-        m_pModelChangeBroadcaster->release();
-        m_pModelChangeBroadcaster = NULL;
-        // no delete, this is done implicitly
-    }
+    lcl_clearBroadCaster(m_pModelChangeBroadcaster);
+    lcl_clearBroadCaster(m_pFieldChangeBroadcaster);
 
     delete m_pWindow;
     delete m_pPainter;
@@ -666,7 +697,14 @@ void DbCellControl::_propertyChanged(const PropertyChangeEvent& _rEvent) throw(R
     }
     else if ( _rEvent.PropertyName.equals( FM_PROP_READONLY ) )
     {
-        implAdjustReadOnly( xSourceProps );
+        implAdjustReadOnly( xSourceProps, true);
+    }
+    else if ( _rEvent.PropertyName.equals( FM_PROP_ISREADONLY ) )
+    {
+        sal_Bool bReadOnly = sal_True;
+        _rEvent.NewValue >>= bReadOnly;
+        m_rColumn.SetReadOnly(bReadOnly);
+        implAdjustReadOnly( xSourceProps, false);
     }
     else if ( _rEvent.PropertyName.equals( FM_PROP_ENABLED ) )
     {
@@ -804,7 +842,7 @@ void DbCellControl::ImplInitWindow( Window& rParent, const InitWindowFacet _eIni
 }
 
 //------------------------------------------------------------------------------
-void DbCellControl::implAdjustReadOnly( const Reference< XPropertySet >& _rxModel )
+void DbCellControl::implAdjustReadOnly( const Reference< XPropertySet >& _rxModel,bool i_bReadOnly )
 {
     DBG_ASSERT( m_pWindow, "DbCellControl::implAdjustReadOnly: not to be called without window!" );
     DBG_ASSERT( _rxModel.is(), "DbCellControl::implAdjustReadOnly: invalid model!" );
@@ -813,9 +851,12 @@ void DbCellControl::implAdjustReadOnly( const Reference< XPropertySet >& _rxMode
         Edit* pEditWindow = dynamic_cast< Edit* >( m_pWindow );
         if ( pEditWindow )
         {
-            sal_Bool bReadOnly = sal_True;
-            _rxModel->getPropertyValue( FM_PROP_READONLY ) >>= bReadOnly;
-            static_cast< Edit* >( m_pWindow )->SetReadOnly( m_rColumn.IsReadOnly() || bReadOnly );
+            sal_Bool bReadOnly = m_rColumn.IsReadOnly();
+            if ( !bReadOnly )
+            {
+                _rxModel->getPropertyValue( i_bReadOnly ? FM_PROP_READONLY : FM_PROP_ISREADONLY) >>= bReadOnly;
+            }
+            static_cast< Edit* >( m_pWindow )->SetReadOnly( bReadOnly );
         }
     }
 }
@@ -852,7 +893,7 @@ void DbCellControl::Init( Window& rParent, const Reference< XRowSet >& _rxCursor
 
             if ( xModelPSI->hasPropertyByName( FM_PROP_READONLY ) )
             {
-                implAdjustReadOnly( xModel );
+                implAdjustReadOnly( xModel,true );
             }
 
             if ( xModelPSI->hasPropertyByName( FM_PROP_ENABLED ) )
@@ -1009,7 +1050,7 @@ double DbCellControl::GetValue(const Reference< ::com::sun::star::sdb::XColumn >
 //------------------------------------------------------------------------------
 void DbCellControl::invalidatedController()
 {
-    m_rColumn.GetParent().refreshController(m_rColumn.GetId(), DbGridControl::GrantCellControlAccess());
+    m_rColumn.GetParent().refreshController(m_rColumn.GetId(), DbGridControl::GrantControlAccess());
 }
 
 /*************************************************************************/
