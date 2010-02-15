@@ -2679,7 +2679,10 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         {
             ::comphelper::MediaDescriptor lPatchDescriptor(rInfo.Document->getArgs());
             lPatchDescriptor[::comphelper::MediaDescriptor::PROP_FILTERNAME()] <<= rInfo.RealFilter;
-            rInfo.Document->attachResource(sURL, lPatchDescriptor.getAsConstPropertyValueList());
+            rInfo.Document->attachResource(rInfo.Document->getURL(), lPatchDescriptor.getAsConstPropertyValueList());
+                // do *not* use sURL here. In case this points to the recovery file, it has already been passed
+                // to recoverFromFile. Also, passing it here is logically wrong, as attachResource is intended
+                // to take the logical file URL.
         }
 
         css::uno::Reference< css::util::XModifiable > xModify(rInfo.Document, css::uno::UNO_QUERY);
