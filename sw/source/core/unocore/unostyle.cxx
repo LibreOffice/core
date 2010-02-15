@@ -1257,6 +1257,7 @@ sal_Bool SwStyleProperties_Impl::GetProperty(const ::rtl::OUString& rName, uno::
             bRet = sal_True;
             break;
         }
+        ++nPos;
         ++aIt;
     }
 
