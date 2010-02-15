@@ -6,7 +6,7 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: XRowSetListener.idl,v $
+ * $RCSfile: XRowsChangeListener.idl,v $
  * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
@@ -27,44 +27,28 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdbc_XRowSetListener_idl__
-#define __com_sun_star_sdbc_XRowSetListener_idl__
+#ifndef __com_sun_star_sdb_XRowsChangeListener_idl__
+#define __com_sun_star_sdb_XRowsChangeListener_idl__
 
 #ifndef __com_sun_star_lang_XEventListener_idl__
 #include <com/sun/star/lang/XEventListener.idl>
 #endif
+#include <com/sun/star/sdb/RowsChangeEvent.idl>
 
- module com {  module sun {  module star {  module sdbc {
+ module com {  module sun {  module star {  module sdb {
 
 
-/** is used for receiving "cursorMoved", "rowChanged", and "rowSetChanged" events
+/** is used for receiving "rowsChanged" events
     posted by, for example, a rowset.
  */
-published interface XRowSetListener: com::sun::star::lang::XEventListener
+interface XRowsChangeListener: com::sun::star::lang::XEventListener
 {
 
-    /** is called when a rowset's cursor is moved.
+    /** is called when rows are inserted, updated, or deleted.
         @param event
             contains information about the event
      */
-    [oneway] void cursorMoved([in]com::sun::star::lang::EventObject event);
-    //-------------------------------------------------------------------------
-
-    /** is called when a row is inserted, updated, or deleted.
-        @param event
-            contains information about the event
-        @deprecated
-        @see com.sun.star.sdb.XRowsChangeListener
-     */
-    [oneway] void rowChanged([in]com::sun::star::lang::EventObject event);
-    //-------------------------------------------------------------------------
-
-    /** is called when the row set has changed, or in other words, when the row set has
-        been reexecuted.
-        @param event
-            contains information about the event
-     */
-    [oneway] void rowSetChanged([in]com::sun::star::lang::EventObject event);
+    [oneway] void rowsChanged([in]com::sun::star::sdb::RowsChangeEvent event);
 };
 
 //=============================================================================
