@@ -354,7 +354,7 @@ testcase tToolsAutocorrectWordCompletion_5
     Kontext
     Active.Setpage TabWortergaenzung
     Kontext "TabWortergaenzung"
-    MinWortlaenge.SetText 5
+    MinWortlaenge.SetText "5"
     KeepList.UnCheck
     TabWortergaenzung.Ok
 
