@@ -36,7 +36,7 @@
 #include <i18nutil/unicode.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <osl/diagnose.hxx>
+#include <osl/diagnose.h>
 
 
 #include "characterclassificationImpl.hxx"
