@@ -111,7 +111,7 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XTableUIProvider >    m_xTableUIProvider;
 
     // defines the helper services for example to query the command of a view
-    // @ see com.sun.star.sdb.tools.XViewSupport
+    // @ see com.sun.star.sdb.tools.XViewAccess
     DECLARE_STL_USTRINGACCESS_MAP( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>, TSupportServices);
     TSupportServices                m_aSupportServices;
 

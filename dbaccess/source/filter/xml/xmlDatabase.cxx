@@ -88,7 +88,7 @@ SvXMLImportContext* OXMLDatabase::CreateChildContext(
                 GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 Any aValue;
                 ::rtl::OUString sService;
-                dbtools::getDataSourceSetting(GetOwnImport().getDataSource(),"FormSupplier",aValue);
+                dbtools::getDataSourceSetting(GetOwnImport().getDataSource(),"Forms",aValue);
                 aValue >>= sService;
                 if ( !sService.getLength() )
                 {
@@ -103,7 +103,7 @@ SvXMLImportContext* OXMLDatabase::CreateChildContext(
                 GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 Any aValue;
                 ::rtl::OUString sService;
-                dbtools::getDataSourceSetting(GetOwnImport().getDataSource(),"ReportSupplier",aValue);
+                dbtools::getDataSourceSetting(GetOwnImport().getDataSource(),"Reports",aValue);
                 aValue >>= sService;
                 if ( !sService.getLength() )
                 {
@@ -118,7 +118,7 @@ SvXMLImportContext* OXMLDatabase::CreateChildContext(
                 GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
                 Any aValue;
                 ::rtl::OUString sService;
-                dbtools::getDataSourceSetting(GetOwnImport().getDataSource(),"CommandDefinitionSupplier",aValue);
+                dbtools::getDataSourceSetting(GetOwnImport().getDataSource(),"CommandDefinitions",aValue);
                 aValue >>= sService;
                 if ( !sService.getLength() )
                 {

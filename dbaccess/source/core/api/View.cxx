@@ -65,6 +65,16 @@ namespace dbaccess
     using ::com::sun::star::sdbc::XRow;
     /** === end UNO using === **/
 
+    ::rtl::OUString lcl_getServiceNameForSetting(const Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,const ::rtl::OUString& i_sSetting)
+    {
+        ::rtl::OUString sSupportService;
+        Any aValue;
+        if ( dbtools::getDataSourceSetting(_xConnection,i_sSetting,aValue) )
+        {
+            aValue >>= sSupportService;
+        }
+        return sSupportService;
+    }
     //====================================================================
     //= View
     //====================================================================
@@ -77,8 +87,8 @@ namespace dbaccess
         try
         {
             Reference<XMultiServiceFactory> xFac(_rxConnection,UNO_QUERY_THROW);
-            static const ::rtl::OUString s_sViewSupport(RTL_CONSTASCII_USTRINGPARAM("ViewSupportServiceName"));
-            m_xViewSupport.set(xFac->createInstance(s_sViewSupport),UNO_QUERY);
+            static const ::rtl::OUString s_sViewAccess(RTL_CONSTASCII_USTRINGPARAM("ViewAccessServiceName"));
+            m_xViewAccess.set(xFac->createInstance(lcl_getServiceNameForSetting(_rxConnection,s_sViewAccess)),UNO_QUERY);
         }
         catch(const Exception& )
         {
@@ -97,7 +107,7 @@ namespace dbaccess
     // -------------------------------------------------------------------------
     Any SAL_CALL View::queryInterface( const Type & _rType ) throw(RuntimeException)
     {
-        if(_rType == getCppuType( (Reference<XAlterView>*)0) && !m_xViewSupport.is() )
+        if(_rType == getCppuType( (Reference<XAlterView>*)0) && !m_xViewAccess.is() )
             return Any();
         Any aReturn = View_Base::queryInterface( _rType );
         if ( !aReturn.hasValue() )
@@ -117,7 +127,7 @@ namespace dbaccess
         const Type* pEnd = pIter + aTypes.getLength();
         for(;pIter != pEnd ;++pIter)
         {
-            if( (*pIter != aAlterType || m_xViewSupport.is()) )
+            if( (*pIter != aAlterType || m_xViewAccess.is()) )
                 aOwnTypes.push_back(*pIter);
         }
 
@@ -128,18 +138,18 @@ namespace dbaccess
     //--------------------------------------------------------------------
     void SAL_CALL View::alterCommand( const ::rtl::OUString& _rNewCommand ) throw (SQLException, RuntimeException)
     {
-        OSL_ENSURE(m_xViewSupport.is(),"Illegal call to AlterView!");
-        m_xViewSupport->alterCommand(this,_rNewCommand);
+        OSL_ENSURE(m_xViewAccess.is(),"Illegal call to AlterView!");
+        m_xViewAccess->alterCommand(this,_rNewCommand);
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL View::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
     {
-        if ( _nHandle == m_nCommandHandle && m_xViewSupport.is() )
+        if ( _nHandle == m_nCommandHandle && m_xViewAccess.is() )
         {
             // retrieve the very current command, don't rely on the base classes cached value
             // (which we initialized empty, anyway)
-            _rValue <<= m_xViewSupport->getCommand(const_cast<View*>(this));
+            _rValue <<= m_xViewAccess->getCommand(const_cast<View*>(this));
             return;
         }
 
