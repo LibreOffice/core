@@ -42,10 +42,12 @@ package SourceConfig;
 use strict;
 
 use constant SOURCE_CONFIG_FILE_NAME => 'source_config';
+use constant SOURCE_CONFIG_VERSION => 2;
 
 use Carp;
 use Cwd;
 use File::Basename;
+use File::Temp qw(tmpnam);
 
 my $debug = 0;
 
@@ -64,17 +66,26 @@ sub new {
         $source_root =~ s/\\|\/$//;
         $source_root .= '/..';
     } else {
-        $source_root = $ENV{SOURCE_ROOT_DIR};
+        $source_root = $ENV{SOURCE_ROOT} . '/' . $ENV{WORK_STAMP};
     };
     $source_root = Cwd::realpath($source_root);
     $self->{DEBUG} = 0;
+    $self->{VERBOSE} = 0;
     $self->{SOURCE_ROOT} = $source_root;
     $self->{REPOSITORIES} = {};
+    $self->{ACTIVATED_REPOSITORIES} = {};
     $self->{MODULE_PATHS} = {};
     $self->{MODULE_BUILD_LIST_PATHS} = {};
     $self->{ACTIVATED_MODULES} = {};
     $self->{MODULE_REPOSITORY} = {};
     $self->{REAL_MODULES} = {};
+    $self->{NEW_MODULES} = [];
+    $self->{REMOVE_MODULES} = {};
+    $self->{REMOVE_REPOSITORIES} = {};
+    $self->{NEW_REPOSITORIES} = [];
+    $self->{WARNINGS} = [];
+    $self->{REPORT_MESSAGES} = [];
+    $self->{CONFIG_FILE_CONTENT} = [];
     if (defined $self->{USER_SOURCE_ROOT}) {
         ${$self->{REPOSITORIES}}{File::Basename::basename($self->{USER_SOURCE_ROOT})} = $self->{USER_SOURCE_ROOT};
     };
@@ -86,6 +97,10 @@ sub new {
 }
 
 ##### methods #####
+
+sub get_version {
+    return SOURCE_CONFIG_VERSION;
+};
 
 sub get_repositories
 {
@@ -253,8 +268,11 @@ sub read_config_file {
     my $repository_section = 0;
     my $module_section = 0;
     my $line = 0;
+    my @file_content = ();
+
     if (open(SOURCE_CONFIG_FILE, $self->{SOURCE_CONFIG_FILE})) {
         foreach (<SOURCE_CONFIG_FILE>) {
+            push (@{$self->{CONFIG_FILE_CONTENT}}, $_);
             $line++;
             chomp;
             next if (!/^\S+/);
@@ -274,6 +292,10 @@ sub read_config_file {
             if (/\s*(\S+)=active\s*(\s+#)*/) {
                 if ($repository_section) {
                     ${$self->{REPOSITORIES}}{$1} = $self->{SOURCE_ROOT} . "/$1";
+                    ${$self->{ACTIVATED_REPOSITORIES}}{$1}++;
+                    if (defined $ENV{UPDMINOREXT}) {
+                        ${$self->{REPOSITORIES}}{$1} .= $ENV{UPDMINOREXT};
+                    };
                     next;
                 }
                 if ($module_section) {
@@ -292,6 +314,186 @@ sub read_config_file {
     } else {
         croak('Cannot open ' . $self->{SOURCE_CONFIG_FILE} . 'for reading');
     };
+};
+
+sub remove_all_activated_repositories {
+    my $self = shift;
+    $self->remove_activated_repositories([keys %{$self->{ACTIVATED_REPOSITORIES}}]);
+};
+
+sub remove_activated_repositories {
+    my $self = shift;
+    my $new_repositories_ref = shift;
+    push(@{$self->{WARNINGS}}, "\nWARNING: Empty repository list passed for removing from source_config\n") if (!scalar @$new_repositories_ref);
+    $self->{VERBOSE} = shift;
+    $self->{REMOVE_REPOSITORIES} = {};
+    foreach (@$new_repositories_ref) {
+        if (!defined ${$self->{ACTIVATED_REPOSITORIES}}{$_}) {
+            push (@{$self->{WARNINGS}}, "\nWARNING: repository $_ is not activated in ". $self->get_config_file_default_path()."\n");
+        } else {
+            ${$self->{REMOVE_REPOSITORIES}}{$_}++;
+            delete ${$self->{ACTIVATED_REPOSITORIES}}{$_};
+        };
+    };
+    generate_config_file($self);
+};
+
+sub remove_all_activated_modules {
+    my $self = shift;
+    $self->remove_activated_modules([keys %{$self->{ACTIVATED_MODULES}}]);
+};
+
+sub remove_activated_modules {
+    my $self = shift;
+    my $new_modules_ref = shift;
+    push(@{$self->{WARNINGS}}, "\nWARNING: Empty module list passed for removing from source_config\n") if (!scalar @$new_modules_ref);
+    $self->{VERBOSE} = shift;
+    $self->{REMOVE_MODULES} = {};
+    foreach (@$new_modules_ref) {
+        if (!defined ${$self->{ACTIVATED_MODULES}}{$_}) {
+            push (@{$self->{WARNINGS}}, "\nWARNING: module $_ is not activated in ". $self->get_config_file_default_path()."\n");
+        } else {
+            ${$self->{REMOVE_MODULES}}{$_}++;
+            delete ${$self->{ACTIVATED_MODULES}}{$_};
+        };
+    };
+    generate_config_file($self);
+};
+
+sub add_active_repositories {
+    my $self = shift;
+    $self->{NEW_REPOSITORIES} = shift;
+    croak('Empty module list passed for adding to source_config') if (!scalar @{$self->{NEW_REPOSITORIES}});
+    $self->{VERBOSE} = shift;
+    generate_config_file($self);
+};
+
+sub add_active_modules {
+    my $self = shift;
+    $self->{NEW_MODULES} = shift;
+    croak('Empty module list passed for adding to source_config') if (!scalar @{$self->{NEW_MODULES}});
+    $self->{VERBOSE} = shift;
+    generate_config_file($self);
+};
+
+sub add_content {
+    my $self = shift;
+    my $content = shift;
+    my $entries_to_add = shift;
+    return if (!scalar @$entries_to_add);
+    my $message;
+    my $message_part1;
+    my $warning_message;
+    my $activated_entries;
+
+    if ($entries_to_add == $self->{NEW_MODULES}) {
+        $self->{NEW_MODULES} = [];
+        $message_part1 = "Module(s):\n";
+        $activated_entries = $self->{ACTIVATED_MODULES};
+    } elsif ($entries_to_add == $self->{NEW_REPOSITORIES}) {
+        $self->{NEW_REPOSITORIES} = [];
+        $message_part1 = "Repositories:\n";
+        $activated_entries = $self->{ACTIVATED_REPOSITORIES};
+    };
+    foreach my $entry (@$entries_to_add) {
+        if (defined $$activated_entries{$entry}) {
+            $warning_message .= "$entry "
+        } else {
+            push(@$content, "$entry=active\n");
+            ${$activated_entries}{$entry}++;
+            $message .= "$entry "
+        };
+    };
+
+    push(@{$self->{REPORT_MESSAGES}}, "\n$message_part1 $message\nhave been added to the ". $self->get_config_file_default_path()."\n") if ($message);
+    push (@{$self->{WARNINGS}}, "\nWARNING: $message_part1 $warning_message\nare already added to the ". $self->get_config_file_default_path()."\n") if ($warning_message);
+};
+
+sub generate_config_file {
+    my $self = shift;
+    my @config_content_new = ();
+    my ($module_section, $repository_section);
+    my %removed_modules = ();
+    my %removed_repositories = ();
+    foreach (@{$self->{CONFIG_FILE_CONTENT}}) {
+        if (/^\[repositories\]\s*(\s+#)*/) {
+            if ($module_section) {
+                $self->add_content(\@config_content_new, $self->{NEW_MODULES});
+            };
+            $module_section = 0;
+            $repository_section = 1;
+        };
+        if (/^\[modules\]\s*(\s+#)*/) {
+            if ($repository_section) {
+                $self->add_content(\@config_content_new, $self->{NEW_REPOSITORIES});
+            };
+            $module_section = 1;
+            $repository_section = 0;
+        };
+        if ($module_section && /\s*(\S+)=active\s*(\s+#)*/) {
+            if (defined ${$self->{REMOVE_MODULES}}{$1}) {
+                $removed_modules{$1}++;
+                next;
+            };
+        }
+        if ($repository_section && /\s*(\S+)=active\s*(\s+#)*/) {
+            if (defined ${$self->{REMOVE_REPOSITORIES}}{$1}) {
+                $removed_repositories{$1}++;
+                next;
+            };
+        }
+        push(@config_content_new, $_);
+    };
+    if (scalar @{$self->{NEW_MODULES}}) {
+        push(@config_content_new, "[modules]\n") if (!$module_section);
+        $self->add_content(\@config_content_new, $self->{NEW_MODULES});
+    };
+    if (scalar @{$self->{NEW_REPOSITORIES}}) {
+        push(@config_content_new, "[repositories]\n") if (!$repository_section);
+        $self->add_content(\@config_content_new, $self->{NEW_REPOSITORIES});
+    };
+    if (scalar keys %removed_modules) {
+        my @deleted_modules = keys %removed_modules;
+        push(@{$self->{REPORT_MESSAGES}}, "\nModules: @deleted_modules\nhave been removed from the ". $self->get_config_file_default_path()."\n");
+
+    };
+    if (scalar keys %removed_repositories) {
+        my @deleted_repositories = keys %removed_repositories;
+        push(@{$self->{REPORT_MESSAGES}}, "\nRepositories: @deleted_repositories\nhave been removed from the ". $self->get_config_file_default_path()."\n");
+
+    };
+
+    # Writing file, printing warnings and reports
+
+    #check if we need to write a new file
+    my $write_needed = 0;
+    if ((scalar @{$self->{CONFIG_FILE_CONTENT}}) != (scalar @config_content_new)) {
+        $write_needed++;
+    } else {
+        foreach my $i (0 .. $#{$self->{CONFIG_FILE_CONTENT}}) {
+            if (${$self->{CONFIG_FILE_CONTENT}}[$i] ne $config_content_new[$i]) {
+                $write_needed++;
+                last;
+            };
+        };
+    };
+    if ($write_needed) {
+        my $temp_config_file = File::Temp::tmpnam($ENV{TMP});
+        die("Cannot open $temp_config_file") if (!open(NEW_CONFIG, ">$temp_config_file"));
+        print NEW_CONFIG $_ foreach (@config_content_new);
+        close NEW_CONFIG;
+        rename($temp_config_file, $self->get_config_file_default_path()) or  system("mv", $temp_config_file, $self->get_config_file_default_path());
+        if (-e $temp_config_file) {
+            system("rm -rf $temp_config_file") if (!unlink $temp_config_file);
+        };
+        $self->{CONFIG_FILE_CONTENT} = \@config_content_new;
+    };
+    if ($self->{VERBOSE}) {
+        print $_ foreach (@{$self->{WARNINGS}});
+    };
+    $self->{WARNINGS} = [];
+    print $_ foreach (@{$self->{REPORT_MESSAGES}});
+    $self->{REPORT_MESSAGES} = [];
 };
 
 ##### finish #####
@@ -328,6 +530,10 @@ Methods:
 SourceConfig::new()
 
 Creates a new instance of SourceConfig. Can't fail.
+
+SourceConfig::get_version()
+
+Returns version number of the module. Can't fail.
 
 
 SourceConfig::get_repositories()
@@ -368,9 +574,35 @@ SourceConfig::is_active()
 Returns 1 (TRUE) if a module is active
 Returns 0 (FALSE) if a module is not active
 
+SourceConfig::add_active_modules($module_array_ref)
+
+Adds modules from the @$module_array_ref as active to the source_config file
+
+SourceConfig::add_active_repositories($repository_array_ref)
+
+Adds repositories from the @$repository_array_ref as active to the source_config file
+
+SourceConfig::remove_activated_modules($module_array_ref)
+
+Removes modules from the @$module_array_ref from the source_config file
+
+SourceConfig::remove_all_activated_modules()
+
+Removes all activated modules from the source_config file
+
+SourceConfig::remove_activated_repositories($repository_array_ref)
+
+Removes repositories from the @$repository_array_ref from the source_config file
+
+SourceConfig::remove_all_activated_repositories()
+
+Removes all activated repositories from the source_config file
+
+
 =head2 EXPORT
 
 SourceConfig::new()
+SourceConfig::get_version()
 SourceConfig::get_repositories()
 SourceConfig::get_active_modules()
 SourceConfig::get_all_modules()
@@ -380,6 +612,12 @@ SourceConfig::get_module_repository($module)
 SourceConfig::get_config_file_path()
 SourceConfig::get_config_file_default_path()
 SourceConfig::is_active($module)
+SourceConfig::add_active_modules($module_array_ref)
+SourceConfig::add_active_repositories($repository_array_ref)
+SourceConfig::remove_activated_modules($module_array_ref)
+SourceConfig::remove_all_activated_modules()
+SourceConfig::remove_activated_repositories($repository_array_ref)
+SourceConfig::remove_all_activated_repositories()
 
 =head1 AUTHOR
 

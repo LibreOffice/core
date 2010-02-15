@@ -346,102 +346,19 @@ sub rename_file {
 };
 
 sub generate_config_file {
-    my $source_config = SourceConfig -> new();
-    $source_config_file = $source_config->get_config_file_path();
-    my $temp_config_file = File::Temp::tmpnam($ENV{TMP});
-    my @config_content_new = ();
-    my $addition_message;
-    my $removal_message;
-    my %present_modules = ();
-    if ($source_config_file) {
-        open(SOURCE_CONFIG_FILE, $source_config_file);
-        my @config_content = <SOURCE_CONFIG_FILE>;
-        close SOURCE_CONFIG_FILE;
-        my ($module_section, $repository_section);
-        foreach (@config_content) {
-            if ((!/^\S+/)||(/^\s*#+/)) {
-                push(@config_content_new, $_);
-                next;
-            }
-            if (/^\[repositories\]\s*(\s+#)*/) {
-                if ($module_section) {
-                    $addition_message = add_modules_to_source_config(\%add_to_config, \@config_content_new);
-                };
-                $module_section = 0;
-                $repository_section = 1;
-                push(@config_content_new, $_);
-                next;
-            };
-            if (/^\[modules\]\s*(\s+#)*/) {
-                $module_section = 1;
-                $repository_section = 0;
-                push(@config_content_new, $_);
-                next;
-            };
-            if ($module_section && /\s*(\S+)=active\s*(\s+#)*/) {
-                if ($clear_config || defined $remove_from_config{$1}) {
-                    delete $remove_from_config{$1};
-                    $removal_message .= "$1 ";
-                } else {
-                    push(@config_content_new, $_);
-                    if (defined $add_to_config{$1} && !$prepare) {
-                        push(@warnings, "Module $1 already activated in $source_config_file\n");
-                        delete $add_to_config{$1};
-                    }
-                };
-            } else {
-                push(@config_content_new, $_);
-            };
-        };
-                if (keys %add_to_config) {
-                    if (!$module_section) {
-                        push(@config_content_new, "[modules]\n");
-                    };
-                    $addition_message = add_modules_to_source_config(\%add_to_config, \@config_content_new);
-                };
-    } else {
-        if ($clear_config || scalar %remove_from_config) {
-            print_error('No source config file found');
-        };
-        $source_config_file = $source_config->get_config_file_default_path();
-        push(@config_content_new, "[modules]\n");
-        $addition_message = add_modules_to_source_config(\%add_to_config, \@config_content_new);
-    };
-    die("Cannot open $temp_config_file") if (!open(NEW_CONFIG, ">$temp_config_file"));
-    print NEW_CONFIG $_ foreach (@config_content_new);
-    close NEW_CONFIG;
-    rename_file($temp_config_file, $source_config_file, 1);
-    foreach (keys %remove_from_config) {
-        push(@warnings, "Module(s) $_ not found in " . $source_config_file . "\n");
-    };
-    print_warnings();
-    print $addition_message if ($addition_message);
-    print "Module(s):\n$removal_message\nremoved from $source_config_file\n" if ($removal_message);
+    my $source_config = SourceConfig->new();
+    $source_config->add_active_modules([keys %add_to_config], 1) if (scalar %add_to_config);
+    $source_config->remove_activated_modules([keys %remove_from_config], 1) if (scalar %remove_from_config);
+    $source_config->remove_all_activated_modules() if ($clear_config);
 };
 
-#
-# Add modules from the passed hash to the array of config strigns
-#
-sub add_modules_to_source_config {
-    my ($modules_hash_ref, $config_content_new) = @_;
-    my $message;
-    foreach (keys %$modules_hash_ref) {
-        push(@$config_content_new, "$_=active\n");
-        $message .= "$_ ";
-    };
-    if ($message) {
-        return "Module(s):\n" .$message . "\nare added to the " . $source_config_file . "\n\n";
-    } else {
-        return '';
-    };
-};
 
 sub start_interactive {
     $pid = open(HTML_PIPE, "-|");
     print "Pipe is open\n";
 
     if ($pid) {   # parent
-        # make file handle non-bloking
+        # make file handle non-blocking
         my $flags = '';
         fcntl(HTML_PIPE, F_GETFL, $flags);
         $flags |= O_NONBLOCK;
@@ -2375,7 +2292,9 @@ sub prepare_incompatible_build {
     @modules_built = keys %$deps_hash;
     %add_to_config = %$deps_hash;
     if ($prepare) {
-        generate_config_file() if ((!defined $ENV{UPDATER}) || (defined $ENV{CWS_WORK_STAMP}));
+        if ((!defined $ENV{UPDATER}) || (defined $ENV{CWS_WORK_STAMP})) {
+            SourceConfig->new()->add_active_modules([keys %add_to_config], 0);
+        }
         clear_delivered();
     }
     my $old_output_tree = '';
