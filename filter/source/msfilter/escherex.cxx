@@ -2140,7 +2140,7 @@ sal_Bool EscherPropertyContainer::GetAdjustmentValue( const com::sun::star::draw
     sal_Bool bUseFixedFloat = ( nAdjustmentsWhichNeedsToBeConverted & ( 1 << nIndex ) ) != 0;
     if ( rkProp.Value.getValueTypeClass() == uno::TypeClass_DOUBLE )
     {
-    double fValue;
+    double fValue(0.0);
     rkProp.Value >>= fValue;
     if ( bUseFixedFloat )
         fValue *= 65536.0;
