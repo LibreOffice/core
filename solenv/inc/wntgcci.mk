@@ -218,3 +218,4 @@ UNICOWSLIB=$(PSDK_HOME)$/lib$/unicows.lib
 WININETLIB=-lwininet
 OLDNAMESLIB=-lmoldname
 MSIMG32LIB=$(PSDK_HOME)$/lib$/msimg32.lib
+PROPSYSLIB=-lpropsys

@@ -72,6 +72,24 @@ End
 
 #endif
 
+File gid_File_Lib_PropertyHdl
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Shlxthdl;
+    Name = "propertyhdl.dll";
+End
+
+#ifdef BUILD_X64
+	File gid_File_Lib_PropertyHdl64
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Shlxthdl;
+    Name = "propertyhdl_x64.dll";
+    ComponentCondition = "VersionNT64";
+End
+
+#endif
+
 #if defined M1310
 File gid_File_Lib_Shlxthdl_Msvcr71
     TXT_FILE_BODY;
