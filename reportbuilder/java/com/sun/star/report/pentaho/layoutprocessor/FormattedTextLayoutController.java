@@ -29,14 +29,16 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.layoutprocessor;
 
-import com.sun.star.report.pentaho.OfficeNamespaces;
 import com.sun.star.report.OfficeToken;
+import com.sun.star.report.pentaho.OfficeNamespaces;
 import com.sun.star.report.pentaho.model.FormattedTextElement;
 import com.sun.star.report.pentaho.model.OfficeDocument;
 import com.sun.star.report.pentaho.model.OfficeStyle;
-import org.pentaho.reporting.libraries.formula.Formula;
-import org.pentaho.reporting.libraries.formula.lvalues.LValue;
-import org.pentaho.reporting.libraries.formula.parser.ParseException;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import org.jfree.layouting.util.AttributeMap;
 import org.jfree.report.DataFlags;
 import org.jfree.report.DataSourceException;
 import org.jfree.report.JFreeReportInfo;
@@ -46,9 +48,10 @@ import org.jfree.report.expressions.FormulaExpression;
 import org.jfree.report.flow.ReportTarget;
 import org.jfree.report.flow.layoutprocessor.LayoutController;
 import org.jfree.report.structure.Element;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.jfree.layouting.util.AttributeMap;
+
+import org.pentaho.reporting.libraries.formula.Formula;
+import org.pentaho.reporting.libraries.formula.lvalues.LValue;
+import org.pentaho.reporting.libraries.formula.parser.ParseException;
 
 /**
  * Todo: Document me!

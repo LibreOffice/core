@@ -32,11 +32,12 @@ package com.sun.star.report.pentaho;
 
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.lang.XServiceInfo;
-import com.sun.star.report.meta.XFunctionDescription;
-import com.sun.star.uno.XComponentContext;
 import com.sun.star.lib.uno.helper.ComponentBase;
 import com.sun.star.report.meta.XFunctionCategory;
+import com.sun.star.report.meta.XFunctionDescription;
 import com.sun.star.report.meta.XFunctionManager;
+import com.sun.star.uno.XComponentContext;
+
 import org.pentaho.reporting.libraries.formula.DefaultFormulaContext;
 import org.pentaho.reporting.libraries.formula.function.FunctionCategory;
 import org.pentaho.reporting.libraries.formula.function.FunctionDescription;

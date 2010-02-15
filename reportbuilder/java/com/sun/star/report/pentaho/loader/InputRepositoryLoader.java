@@ -29,11 +29,13 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.loader;
 
-import java.net.URL;
-import java.util.Map;
-import java.util.HashMap;
-
 import com.sun.star.report.InputRepository;
+
+import java.net.URL;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import org.pentaho.reporting.libraries.resourceloader.ResourceData;
 import org.pentaho.reporting.libraries.resourceloader.ResourceKey;
 import org.pentaho.reporting.libraries.resourceloader.ResourceKeyCreationException;
@@ -41,6 +43,7 @@ import org.pentaho.reporting.libraries.resourceloader.ResourceLoader;
 import org.pentaho.reporting.libraries.resourceloader.ResourceLoadingException;
 import org.pentaho.reporting.libraries.resourceloader.ResourceManager;
 import org.pentaho.reporting.libraries.resourceloader.loader.LoaderUtils;
+
 
 public class InputRepositoryLoader implements ResourceLoader
 {

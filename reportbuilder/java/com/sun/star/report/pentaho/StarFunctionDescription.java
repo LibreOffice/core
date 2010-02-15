@@ -30,17 +30,18 @@
  ************************************************************************/
 package com.sun.star.report.pentaho;
 
-import com.sun.star.uno.XComponentContext;
-import com.sun.star.lib.uno.helper.WeakBase;
-import com.sun.star.uno.Type;
 import com.sun.star.lib.uno.helper.PropertySetMixin;
+import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.report.meta.XFunctionCategory;
 import com.sun.star.sheet.FunctionArgument;
+import com.sun.star.uno.Type;
+import com.sun.star.uno.XComponentContext;
+
 import java.util.Locale;
 import java.util.MissingResourceException;
+
 import org.pentaho.reporting.libraries.formula.DefaultFormulaContext;
 import org.pentaho.reporting.libraries.formula.function.FunctionDescription;
-import org.pentaho.reporting.libraries.formula.function.FunctionRegistry;
 
 public final class StarFunctionDescription extends WeakBase
         implements com.sun.star.report.meta.XFunctionDescription

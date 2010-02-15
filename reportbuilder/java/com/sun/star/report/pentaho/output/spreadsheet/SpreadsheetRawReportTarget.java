@@ -30,48 +30,51 @@
 package com.sun.star.report.pentaho.output.spreadsheet;
 
 import com.sun.star.report.DataSourceFactory;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-
-import com.sun.star.report.InputRepository;
-import com.sun.star.report.OutputRepository;
 import com.sun.star.report.ImageService;
-import com.sun.star.report.pentaho.OfficeNamespaces;
+import com.sun.star.report.InputRepository;
 import com.sun.star.report.OfficeToken;
+import com.sun.star.report.OutputRepository;
+import com.sun.star.report.pentaho.OfficeNamespaces;
 import com.sun.star.report.pentaho.PentahoReportEngineMetaData;
+import com.sun.star.report.pentaho.model.OfficeMasterPage;
+import com.sun.star.report.pentaho.model.OfficeMasterStyles;
 import com.sun.star.report.pentaho.model.OfficeStyle;
 import com.sun.star.report.pentaho.model.OfficeStyles;
 import com.sun.star.report.pentaho.model.OfficeStylesCollection;
-import com.sun.star.report.pentaho.model.OfficeMasterPage;
-import com.sun.star.report.pentaho.model.OfficeMasterStyles;
 import com.sun.star.report.pentaho.model.PageSection;
 import com.sun.star.report.pentaho.output.OfficeDocumentReportTarget;
 import com.sun.star.report.pentaho.output.StyleUtilities;
 import com.sun.star.report.pentaho.output.text.MasterPageFactory;
 import com.sun.star.report.pentaho.styles.LengthCalculator;
+
+import java.io.IOException;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-import org.jfree.layouting.util.AttributeMap;
-import org.jfree.layouting.input.style.values.CSSNumericValue;
+
 import org.jfree.layouting.input.style.values.CSSNumericType;
+import org.jfree.layouting.input.style.values.CSSNumericValue;
+import org.jfree.layouting.util.AttributeMap;
 import org.jfree.report.DataFlags;
 import org.jfree.report.DataSourceException;
-import org.jfree.report.ReportProcessingException;
 import org.jfree.report.JFreeReportInfo;
+import org.jfree.report.ReportProcessingException;
 import org.jfree.report.flow.ReportJob;
 import org.jfree.report.flow.ReportStructureRoot;
 import org.jfree.report.flow.ReportTargetUtil;
 import org.jfree.report.structure.Element;
 import org.jfree.report.structure.Section;
 import org.jfree.report.util.IntegerCache;
-import org.jfree.report.util.TextUtilities;
+
 import org.pentaho.reporting.libraries.resourceloader.ResourceKey;
 import org.pentaho.reporting.libraries.resourceloader.ResourceManager;
 import org.pentaho.reporting.libraries.xmlns.common.AttributeList;
 import org.pentaho.reporting.libraries.xmlns.writer.XmlWriter;
 import org.pentaho.reporting.libraries.xmlns.writer.XmlWriterSupport;
+
 
 /**
  * Creation-Date: 03.11.2007

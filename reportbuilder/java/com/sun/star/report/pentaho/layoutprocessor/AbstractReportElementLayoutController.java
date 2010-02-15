@@ -29,15 +29,14 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.layoutprocessor;
 
-import com.sun.star.report.pentaho.model.ReportElement;
 import com.sun.star.report.pentaho.model.OfficeGroupSection;
+import com.sun.star.report.pentaho.model.ReportElement;
+
+import org.jfree.report.DataFlags;
+import org.jfree.report.DataRow;
 import org.jfree.report.DataSourceException;
 import org.jfree.report.ReportDataFactoryException;
 import org.jfree.report.ReportProcessingException;
-import org.jfree.report.DataRow;
-import org.jfree.report.DataFlags;
-import org.jfree.report.structure.Element;
-import org.jfree.report.structure.Group;
 import org.jfree.report.expressions.Expression;
 import org.jfree.report.flow.FlowController;
 import org.jfree.report.flow.ReportTarget;
@@ -45,8 +44,11 @@ import org.jfree.report.flow.layoutprocessor.AbstractLayoutController;
 import org.jfree.report.flow.layoutprocessor.LayoutController;
 import org.jfree.report.flow.layoutprocessor.LayoutControllerUtil;
 import org.jfree.report.flow.layoutprocessor.SectionLayoutController;
-import org.pentaho.reporting.libraries.formula.lvalues.LValue;
+import org.jfree.report.structure.Element;
+import org.jfree.report.structure.Group;
+
 import org.pentaho.reporting.libraries.formula.lvalues.ContextLookup;
+import org.pentaho.reporting.libraries.formula.lvalues.LValue;
 
 /**
  * Todo: Document me!

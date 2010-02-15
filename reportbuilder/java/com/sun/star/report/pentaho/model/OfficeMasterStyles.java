@@ -30,10 +30,11 @@
 package com.sun.star.report.pentaho.model;
 
 import java.util.HashMap;
-
 import java.util.Map;
+
 import org.jfree.report.structure.Element;
 import org.jfree.report.structure.Section;
+
 
 /**
  * The master-styles section can have either a master-page, handout-master

@@ -30,6 +30,7 @@
 package com.sun.star.report.pentaho.parser.stylemapper.style;
 
 import com.sun.star.report.pentaho.parser.stylemapper.OneOfConstantsMapper;
+
 import org.jfree.layouting.input.style.CSSDeclarationRule;
 import org.jfree.layouting.input.style.keys.border.BorderWidth;
 import org.jfree.layouting.input.style.keys.text.TextDecorationWidth;

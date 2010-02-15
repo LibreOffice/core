@@ -29,9 +29,10 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.model;
 
-import org.jfree.report.expressions.FormulaExpression;
-import com.sun.star.report.pentaho.OfficeNamespaces;
 import com.sun.star.report.OfficeToken;
+import com.sun.star.report.pentaho.OfficeNamespaces;
+
+import org.jfree.report.expressions.FormulaExpression;
 
 /**
  * Todo: Document me!

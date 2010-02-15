@@ -31,6 +31,7 @@ package com.sun.star.report.pentaho.layoutprocessor;
 
 import com.sun.star.report.pentaho.model.OfficeGroup;
 import com.sun.star.report.pentaho.model.OfficeGroupSection;
+
 import org.jfree.layouting.util.AttributeMap;
 import org.jfree.report.DataSourceException;
 import org.jfree.report.JFreeReportInfo;

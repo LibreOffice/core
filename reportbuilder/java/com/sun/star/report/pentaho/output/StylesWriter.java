@@ -29,23 +29,25 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.output;
 
+import com.sun.star.report.pentaho.OfficeNamespaces;
+import com.sun.star.report.pentaho.model.DataStyle;
+import com.sun.star.report.pentaho.model.FontFaceDeclsSection;
+import com.sun.star.report.pentaho.model.FontFaceElement;
+import com.sun.star.report.pentaho.model.OfficeMasterPage;
+import com.sun.star.report.pentaho.model.OfficeMasterStyles;
+import com.sun.star.report.pentaho.model.OfficeStyle;
+import com.sun.star.report.pentaho.model.OfficeStyles;
+import com.sun.star.report.pentaho.model.OfficeStylesCollection;
+import com.sun.star.report.pentaho.model.PageLayout;
+import com.sun.star.report.pentaho.model.RawText;
+
 import java.io.IOException;
 import java.io.Writer;
+
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.sun.star.report.pentaho.OfficeNamespaces;
-import com.sun.star.report.pentaho.model.FontFaceDeclsSection;
-import com.sun.star.report.pentaho.model.FontFaceElement;
-import com.sun.star.report.pentaho.model.OfficeStyle;
-import com.sun.star.report.pentaho.model.OfficeStyles;
-import com.sun.star.report.pentaho.model.OfficeStylesCollection;
-import com.sun.star.report.pentaho.model.OfficeMasterStyles;
-import com.sun.star.report.pentaho.model.OfficeMasterPage;
-import com.sun.star.report.pentaho.model.DataStyle;
-import com.sun.star.report.pentaho.model.PageLayout;
-import com.sun.star.report.pentaho.model.RawText;
 import org.jfree.layouting.namespace.Namespaces;
 import org.jfree.layouting.util.AttributeMap;
 import org.jfree.report.JFreeReportBoot;
@@ -55,10 +57,12 @@ import org.jfree.report.structure.Element;
 import org.jfree.report.structure.Node;
 import org.jfree.report.structure.Section;
 import org.jfree.report.structure.StaticText;
+
 import org.pentaho.reporting.libraries.xmlns.common.AttributeList;
 import org.pentaho.reporting.libraries.xmlns.writer.DefaultTagDescription;
 import org.pentaho.reporting.libraries.xmlns.writer.XmlWriter;
 import org.pentaho.reporting.libraries.xmlns.writer.XmlWriterSupport;
+
 
 /**
  * This class writes the style collection into a 'styles.xml' document.

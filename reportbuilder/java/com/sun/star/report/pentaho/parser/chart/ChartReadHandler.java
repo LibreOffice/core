@@ -30,19 +30,24 @@
 package com.sun.star.report.pentaho.parser.chart;
 
 import com.sun.star.report.pentaho.OfficeNamespaces;
-import java.lang.Object;
-import java.util.ArrayList;
-
 import com.sun.star.report.pentaho.parser.ElementReadHandler;
 import com.sun.star.report.pentaho.parser.rpt.DetailRootTableReadHandler;
 import com.sun.star.report.pentaho.parser.rpt.ReportReadHandler;
 import com.sun.star.report.pentaho.parser.text.TextContentReadHandler;
+
+import java.lang.Object;
+
+import java.util.ArrayList;
 import java.util.List;
+
 import org.jfree.report.structure.Element;
 import org.jfree.report.structure.Section;
+
 import org.pentaho.reporting.libraries.xmlns.parser.XmlReadHandler;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
+
 
 /**
  *

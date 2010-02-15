@@ -29,13 +29,16 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.parser.rpt;
 
+import com.sun.star.report.OfficeToken;
+import com.sun.star.report.pentaho.OfficeNamespaces;
 import com.sun.star.report.pentaho.model.FormatCondition;
 import com.sun.star.report.pentaho.model.ReportElement;
-import com.sun.star.report.pentaho.OfficeNamespaces;
-import com.sun.star.report.OfficeToken;
+
 import org.jfree.report.expressions.FormulaExpression;
+
 import org.pentaho.reporting.libraries.xmlns.parser.AbstractXmlReadHandler;
 import org.pentaho.reporting.libraries.xmlns.parser.ParseException;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 

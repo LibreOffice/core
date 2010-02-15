@@ -29,19 +29,23 @@
  ************************************************************************/
 package com.sun.star.report.util;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Iterator;
-import java.io.OutputStreamWriter;
+import com.sun.star.report.OutputRepository;
+
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 
-import org.pentaho.reporting.libraries.xmlns.writer.XmlWriterSupport;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import org.jfree.report.JFreeReportBoot;
+
+import org.pentaho.reporting.libraries.xmlns.common.AttributeList;
 import org.pentaho.reporting.libraries.xmlns.writer.DefaultTagDescription;
 import org.pentaho.reporting.libraries.xmlns.writer.XmlWriter;
-import org.pentaho.reporting.libraries.xmlns.common.AttributeList;
-import org.jfree.report.JFreeReportBoot;
-import com.sun.star.report.OutputRepository;
+import org.pentaho.reporting.libraries.xmlns.writer.XmlWriterSupport;
+
 
 /**
  * Creation-Date: 24.07.2007, 18:16:52

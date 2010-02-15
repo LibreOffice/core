@@ -29,8 +29,9 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.parser.style;
 
-import com.sun.star.report.pentaho.parser.ElementReadHandler;
 import com.sun.star.report.pentaho.model.FontFaceElement;
+import com.sun.star.report.pentaho.parser.ElementReadHandler;
+
 import org.jfree.report.structure.Element;
 
 /**

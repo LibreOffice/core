@@ -29,15 +29,19 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.parser.style;
 
-import java.util.ArrayList;
-
-import com.sun.star.report.pentaho.parser.ElementReadHandler;
 import com.sun.star.report.pentaho.model.OfficeStyle;
+import com.sun.star.report.pentaho.parser.ElementReadHandler;
+
+import java.util.ArrayList;
 import java.util.List;
+
 import org.jfree.report.structure.Element;
+
 import org.pentaho.reporting.libraries.xmlns.parser.XmlReadHandler;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
+
 
 /**
  * This class reads a single style rule. The resulting 'office-style' element

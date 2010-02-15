@@ -30,9 +30,12 @@
 package com.sun.star.report.pentaho.parser.rpt;
 
 import com.sun.star.report.pentaho.OfficeNamespaces;
+
 import org.jfree.report.expressions.FormulaFunction;
 import org.jfree.report.structure.Element;
+
 import org.pentaho.reporting.libraries.xmlns.parser.AbstractXmlReadHandler;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 

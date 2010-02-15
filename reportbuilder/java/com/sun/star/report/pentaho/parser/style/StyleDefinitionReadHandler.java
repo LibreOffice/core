@@ -29,15 +29,19 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.parser.style;
 
-import java.util.ArrayList;
-
 import com.sun.star.report.pentaho.parser.ElementReadHandler;
+
+import java.util.ArrayList;
 import java.util.List;
+
 import org.jfree.report.structure.Element;
 import org.jfree.report.structure.Section;
+
 import org.pentaho.reporting.libraries.xmlns.parser.XmlReadHandler;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
+
 
 /**
  * Reads all childs of a style-definition. This simply copies everything that

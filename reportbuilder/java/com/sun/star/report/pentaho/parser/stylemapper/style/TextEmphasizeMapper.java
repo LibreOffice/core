@@ -30,6 +30,7 @@
 package com.sun.star.report.pentaho.parser.stylemapper.style;
 
 import com.sun.star.report.pentaho.parser.StyleMapper;
+
 import org.jfree.layouting.input.style.CSSDeclarationRule;
 
 public class TextEmphasizeMapper implements StyleMapper

@@ -29,8 +29,9 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.model;
 
-import org.jfree.report.structure.Section;
 import com.sun.star.report.pentaho.OfficeNamespaces;
+
+import org.jfree.report.structure.Section;
 
 /**
  * A page layout describes the physical properties of a page. It is equal to

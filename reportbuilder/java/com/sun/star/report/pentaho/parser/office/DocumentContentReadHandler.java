@@ -33,9 +33,12 @@ import com.sun.star.report.pentaho.OfficeNamespaces;
 import com.sun.star.report.pentaho.model.OfficeDocument;
 import com.sun.star.report.pentaho.model.OfficeStylesCollection;
 import com.sun.star.report.pentaho.parser.style.OfficeStylesReadHandler;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 import org.jfree.report.JFreeReport;
+
 import org.pentaho.reporting.libraries.resourceloader.Resource;
 import org.pentaho.reporting.libraries.resourceloader.ResourceException;
 import org.pentaho.reporting.libraries.resourceloader.ResourceKey;
@@ -43,6 +46,7 @@ import org.pentaho.reporting.libraries.resourceloader.ResourceKeyCreationExcepti
 import org.pentaho.reporting.libraries.resourceloader.ResourceManager;
 import org.pentaho.reporting.libraries.xmlns.parser.AbstractXmlReadHandler;
 import org.pentaho.reporting.libraries.xmlns.parser.XmlReadHandler;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 

@@ -31,6 +31,7 @@ package com.sun.star.report.pentaho.parser.text;
 
 import org.jfree.report.structure.Section;
 import org.jfree.report.structure.StaticText;
+
 import org.xml.sax.SAXException;
 
 /**

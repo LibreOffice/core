@@ -29,9 +29,10 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.model;
 
-import org.jfree.report.structure.Section;
-import com.sun.star.report.pentaho.OfficeNamespaces;
 import com.sun.star.report.OfficeToken;
+import com.sun.star.report.pentaho.OfficeNamespaces;
+
+import org.jfree.report.structure.Section;
 
 /**
  * A group header or footer. If such a section is marked as sticky, it will be

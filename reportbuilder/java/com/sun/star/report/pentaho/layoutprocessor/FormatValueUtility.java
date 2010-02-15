@@ -29,13 +29,16 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.layoutprocessor;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import com.sun.star.report.OfficeToken;
+import com.sun.star.report.pentaho.OfficeNamespaces;
+import com.sun.star.report.pentaho.model.FormattedTextElement;
+
 import java.sql.Time;
 
-import com.sun.star.report.pentaho.OfficeNamespaces;
-import com.sun.star.report.OfficeToken;
-import com.sun.star.report.pentaho.model.FormattedTextElement;
+import java.text.SimpleDateFormat;
+
+import java.util.Date;
+
 import org.jfree.layouting.util.AttributeMap;
 import org.jfree.report.DataFlags;
 import org.jfree.report.DataSourceException;
@@ -43,8 +46,9 @@ import org.jfree.report.data.DefaultDataFlags;
 import org.jfree.report.expressions.FormulaExpression;
 import org.jfree.report.flow.FlowController;
 import org.jfree.report.flow.layoutprocessor.LayoutControllerUtil;
-import org.pentaho.reporting.libraries.formula.util.DateUtil;
+
 import org.pentaho.reporting.libraries.formula.util.HSSFDateUtil;
+
 
 /**
  * Creation-Date: 06.06.2007, 17:03:30

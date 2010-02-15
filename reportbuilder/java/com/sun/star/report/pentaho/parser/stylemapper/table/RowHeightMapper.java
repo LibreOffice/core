@@ -30,6 +30,7 @@
 package com.sun.star.report.pentaho.parser.stylemapper.table;
 
 import com.sun.star.report.pentaho.parser.StyleMapper;
+
 import org.jfree.layouting.input.style.CSSDeclarationRule;
 import org.jfree.layouting.input.style.keys.box.BoxStyleKeys;
 

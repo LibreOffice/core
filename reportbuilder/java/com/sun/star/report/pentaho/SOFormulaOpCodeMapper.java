@@ -31,12 +31,12 @@
 package com.sun.star.report.pentaho;
 
 import com.sun.star.lang.XServiceInfo;
-import com.sun.star.uno.XComponentContext;
 import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.sheet.FormulaLanguage;
 import com.sun.star.sheet.FormulaMapGroup;
 import com.sun.star.sheet.FormulaOpCodeMapEntry;
 import com.sun.star.sheet.FormulaToken;
+
 import java.util.ArrayList;
 import java.util.Map;
 

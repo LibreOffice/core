@@ -33,6 +33,7 @@ import com.sun.star.report.DataSourceFactory;
 import com.sun.star.report.ImageService;
 import com.sun.star.report.InputRepository;
 import com.sun.star.report.OutputRepository;
+
 import org.jfree.report.DataSourceException;
 import org.jfree.report.ReportDataFactoryException;
 import org.jfree.report.ReportProcessingException;
@@ -40,6 +41,7 @@ import org.jfree.report.flow.ReportJob;
 import org.jfree.report.flow.ReportStructureRoot;
 import org.jfree.report.flow.ReportTarget;
 import org.jfree.report.flow.SinglePassReportProcessor;
+
 import org.pentaho.reporting.libraries.resourceloader.ResourceManager;
 
 /**

@@ -30,20 +30,24 @@
 package com.sun.star.report.pentaho.parser.rpt;
 
 import com.sun.star.report.OfficeToken;
-import java.util.ArrayList;
-
 import com.sun.star.report.pentaho.OfficeNamespaces;
 import com.sun.star.report.pentaho.model.OfficeGroup;
 import com.sun.star.report.pentaho.model.OfficeGroupInstanceSection;
 import com.sun.star.report.pentaho.parser.ElementReadHandler;
+
+import java.util.ArrayList;
 import java.util.List;
+
 import org.jfree.report.JFreeReportInfo;
 import org.jfree.report.expressions.FormulaExpression;
 import org.jfree.report.structure.Element;
 import org.jfree.report.structure.Section;
+
 import org.pentaho.reporting.libraries.xmlns.parser.XmlReadHandler;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
+
 
 public class GroupReadHandler extends ElementReadHandler
 {

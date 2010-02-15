@@ -29,9 +29,10 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.styles;
 
-import org.pentaho.reporting.libraries.xmlns.parser.AbstractXmlResourceFactory;
 import org.jfree.report.JFreeReportBoot;
+
 import org.pentaho.reporting.libraries.base.config.Configuration;
+import org.pentaho.reporting.libraries.xmlns.parser.AbstractXmlResourceFactory;
 
 /**
  * Todo: Document me!

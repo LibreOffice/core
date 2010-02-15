@@ -35,15 +35,21 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.embed.ElementModes;
 import com.sun.star.embed.InvalidStorageException;
-import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.WrappedTargetException;
-import java.io.*;
 import com.sun.star.embed.XStorage;
 import com.sun.star.embed.XTransactedObject;
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.io.XStream;
+import com.sun.star.lang.IllegalArgumentException;
+import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lib.uno.adapter.XInputStreamToInputStreamAdapter;
 import com.sun.star.lib.uno.adapter.XOutputStreamToOutputStreamAdapter;
+import com.sun.star.uno.UnoRuntime;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

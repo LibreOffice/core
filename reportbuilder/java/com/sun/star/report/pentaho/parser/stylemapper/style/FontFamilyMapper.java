@@ -30,12 +30,13 @@
 package com.sun.star.report.pentaho.parser.stylemapper.style;
 
 import com.sun.star.report.pentaho.parser.StyleMapper;
+
 import org.jfree.layouting.input.style.CSSDeclarationRule;
-import org.jfree.layouting.input.style.values.CSSStringValue;
+import org.jfree.layouting.input.style.keys.font.FontStyleKeys;
 import org.jfree.layouting.input.style.values.CSSStringType;
+import org.jfree.layouting.input.style.values.CSSStringValue;
 import org.jfree.layouting.input.style.values.CSSValue;
 import org.jfree.layouting.input.style.values.CSSValueList;
-import org.jfree.layouting.input.style.keys.font.FontStyleKeys;
 
 public class FontFamilyMapper implements StyleMapper
 {

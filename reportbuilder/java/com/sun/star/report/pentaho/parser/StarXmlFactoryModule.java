@@ -29,8 +29,9 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.parser;
 
-import com.sun.star.report.pentaho.parser.office.DocumentContentReadHandler;
 import com.sun.star.report.pentaho.OfficeNamespaces;
+import com.sun.star.report.pentaho.parser.office.DocumentContentReadHandler;
+
 import org.pentaho.reporting.libraries.xmlns.parser.XmlDocumentInfo;
 import org.pentaho.reporting.libraries.xmlns.parser.XmlFactoryModule;
 import org.pentaho.reporting.libraries.xmlns.parser.XmlReadHandler;

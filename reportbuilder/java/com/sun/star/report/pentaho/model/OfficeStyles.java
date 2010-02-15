@@ -30,12 +30,14 @@
 package com.sun.star.report.pentaho.model;
 
 import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import java.util.List;
 import java.util.Map;
+
 import org.jfree.report.structure.Element;
+
 
 /**
  * Holds one style type, either an automatic, common or master style. This is a
