@@ -279,9 +279,9 @@ SvStream* SimpleCommunicationLinkViaSocket::GetBestCommunicationStream()
 BOOL SimpleCommunicationLinkViaSocket::DoReceiveDataStream()
 {
     BOOL bWasError = FALSE;
-    char* pBuffer = NULL;
+    void* pBuffer = NULL;
     comm_UINT32 nLen;
-    bWasError = pPacketHandler->ReceiveData( (void* &)pBuffer, nLen ) != C_ERROR_NONE;
+    bWasError = pPacketHandler->ReceiveData( pBuffer, nLen ) != C_ERROR_NONE;
     if ( !bWasError )
     {
         pReceiveStream = GetBestCommunicationStream();
