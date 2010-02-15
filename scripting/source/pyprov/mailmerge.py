@@ -37,6 +37,7 @@ from email import Encoders
 from email.Header import Header
 from email.MIMEMultipart import MIMEMultipart
 from email.Utils import formatdate
+from email.Utils import formataddr
 
 import sys, smtplib, imaplib, poplib
 
@@ -123,8 +124,8 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 		bccrecipients = xMailMessage.getBccRecipients()
 		if dbg:
 			print >> sys.stderr, "PyMailSMPTService subject", subject
-			print >> sys.stderr, "PyMailSMPTService from", sendername.encode('utf-8')
-                        print >> sys.stderr, "PyMailSMTPService from", sendermail
+			print >> sys.stderr, "PyMailSMPTService from", sendername.encode('utf-8'), sendermail
+                        print >> sys.stderr, "PyMailSMTPService from", formataddr((sendername.encode('utf-8'), sendermail))
 			print >> sys.stderr, "PyMailSMPTService send to", recipients
 
 		attachments = xMailMessage.getAttachments()
@@ -149,10 +150,8 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 		else:
 			msg = textmsg
 
-		hdr = Header(sendername, 'utf-8')
-                hdr.append('<'+sendermail+'>','us-ascii')
                 msg['Subject'] = subject
-		msg['From'] = hdr
+		msg['From'] = formataddr((sendername.encode('utf-8'), sendermail))
 		msg['To'] = COMMASPACE.join(recipients)
 		if len(ccrecipients):
 			msg['Cc'] = COMMASPACE.join(ccrecipients)

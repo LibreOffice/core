@@ -764,7 +764,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
                                 break;
                             case TypeClass_BYTE:
                                 {
-                                    sal_Int8 nValue;
+                                    sal_Int8 nValue(0);
                                     *pRowIter >>= nValue;
                                     aValue = new ORowSetValueDecorator(ORowSetValue(nValue));
                                 }
@@ -772,7 +772,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
                             case TypeClass_SHORT:
                             case TypeClass_UNSIGNED_SHORT:
                                 {
-                                    sal_Int16 nValue;
+                                    sal_Int16 nValue(0);
                                     *pRowIter >>= nValue;
                                     aValue = new ORowSetValueDecorator(ORowSetValue(nValue));
                                 }
@@ -780,7 +780,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
                             case TypeClass_LONG:
                             case TypeClass_UNSIGNED_LONG:
                                 {
-                                    sal_Int32 nValue;
+                                    sal_Int32 nValue(0);
                                     *pRowIter >>= nValue;
                                     aValue = new ORowSetValueDecorator(ORowSetValue(nValue));
                                 }
@@ -788,21 +788,21 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
                             case TypeClass_HYPER:
                             case TypeClass_UNSIGNED_HYPER:
                                 {
-                                    sal_Int64 nValue;
+                                    sal_Int64 nValue(0);
                                     *pRowIter >>= nValue;
                                     aValue = new ORowSetValueDecorator(ORowSetValue(nValue));
                                 }
                                 break;
                             case TypeClass_FLOAT:
                                 {
-                                    float nValue;
+                                    float nValue(0.0);
                                     *pRowIter >>= nValue;
                                     aValue = new ORowSetValueDecorator(ORowSetValue(nValue));
                                 }
                                 break;
                             case TypeClass_DOUBLE:
                                 {
-                                    double nValue;
+                                    double nValue(0.0);
                                     *pRowIter >>= nValue;
                                     aValue = new ORowSetValueDecorator(ORowSetValue(nValue));
                                 }
