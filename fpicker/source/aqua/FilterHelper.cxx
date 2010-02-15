@@ -404,7 +404,7 @@ sal_Bool FilterHelper::filenameMatchesFilter(NSString* sFilename)
     if( pAttribs )
     {
         NSObject* pType = [pAttribs objectForKey: NSFileType];
-        if( pType && [pType isMemberOfClass: [NSString class]] )
+        if( pType && [pType isKindOfClass: [NSString class]] )
         {
             NSString* pT = (NSString*)pType;
             if( [pT isEqualToString: NSFileTypeDirectory]    ||
