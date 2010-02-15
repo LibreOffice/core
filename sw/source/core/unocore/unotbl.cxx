@@ -3362,8 +3362,8 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
                             pUnoCrsr->Move( fnMoveForward, fnGoNode );
                             pUnoCrsr->SetRemainInSection( sal_False );
 
-                            SwTableLine* pLastLine = rLines[rLines.Count() - 1];
-                            SwTableBoxes &rBoxes = pLastLine->GetTabBoxes();
+
+
                             const SwTableBox* pBRBox = lcl_FindCornerTableBox(rLines, false);
                             pUnoCrsr->SetMark();
                             pUnoCrsr->GetPoint()->nNode = *pBRBox->GetSttNd();
