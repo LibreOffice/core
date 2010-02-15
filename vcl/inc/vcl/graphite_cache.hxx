@@ -58,10 +58,11 @@ public:
     void clear();
 #ifdef GRCACHE_REUSE_VECTORS
     void setGlyphVectors(long nWidth, GraphiteLayout::Glyphs & vGlyphs, std::vector<int> vCharDxs,
-                         std::vector<int> & vChar2Base, std::vector<int> & vGlyph2Char)
+                         std::vector<int> & vChar2Base, std::vector<int> & vGlyph2Char, float fScale)
     {
         clearVectors();
         mnWidth = nWidth;
+        m_fontScale = fScale;
         mvGlyphs.insert(mvGlyphs.begin(), vGlyphs.begin(), vGlyphs.end());
         mvCharDxs.insert(mvCharDxs.begin(),vCharDxs.begin(),vCharDxs.end());
         mvChar2BaseGlyph.insert(mvChar2BaseGlyph.begin(),vChar2Base.begin(),vChar2Base.end());
@@ -78,6 +79,7 @@ public:
     const std::vector<int> & charDxs() const { return mvCharDxs; }
     const std::vector<int> & char2BaseGlyph() const { return mvChar2BaseGlyph; }
     const std::vector<int> & glyph2Char() const { return mvGlyph2Char; }
+    float & fontScale() { return m_fontScale; }
 #endif
 private:
     rtl::OUString * m_rope;

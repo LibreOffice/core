@@ -2978,6 +2978,11 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
         aStyleSettings.SetCheckedColor( Color( nRed, nGreen, nBlue ) );
     }
 
+    // caret width
+    DWORD nCaretWidth = 2;
+    if( SystemParametersInfo( SPI_GETCARETWIDTH, 0, &nCaretWidth, 0 ) )
+        aStyleSettings.SetCursorSize( nCaretWidth );
+
     // High contrast
     HIGHCONTRAST hc;
     hc.cbSize = sizeof( HIGHCONTRAST );

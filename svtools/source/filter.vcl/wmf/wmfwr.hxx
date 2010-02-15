@@ -65,6 +65,9 @@ struct WMFWriterAttrStackMember
 // -------------
 
 class StarSymbolToMSMultiFont;
+class LineInfo;
+namespace basegfx { class B2DPolygon; }
+
 class WMFWriter
 {
 private:
@@ -127,6 +130,8 @@ private:
     ULONG nWrittenActions;  // Anzahl der bereits verarbeiteten Actions beim Schreiben der Orders
     ULONG nWrittenBitmaps;  // Anzahl der bereits geschriebenen Bitmaps
     ULONG nActBitmapPercent; // Wieviel Prozent die naechste Bitmap schon geschrieben ist.
+
+    BOOL bEmbedEMF; // optionally embedd EMF data into WMF
 
     void MayCallback();
         // Berechnet anhand der obigen 5 Parameter eine Prozentzahl
@@ -202,10 +207,18 @@ private:
     void SetLineAndFillAttr();
     void SetAllAttr();
 
+    void HandleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx::B2DPolygon& rLinePolygon);
     void WriteRecords(const GDIMetaFile & rMTF);
 
     void WriteHeader(const GDIMetaFile & rMTF, BOOL bPlaceable);
     void UpdateHeader();
+
+    void WriteEmbeddedEMF( const GDIMetaFile& rMTF );
+    void WriteEMFRecord( SvMemoryStream& rStream, sal_uInt32 nCurSize,
+                            sal_uInt32 nRemainingSize,
+                            sal_uInt32 nTotalSize,
+                            sal_uInt32 nRecCounts,
+                            sal_uInt16 nCheckSum );
 
     USHORT CalcSaveTargetMapMode(MapMode& rMapMode, const Size& rPrefSize);
 
