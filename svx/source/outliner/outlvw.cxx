@@ -1726,3 +1726,4 @@ void SVX_DLLPUBLIC ReplaceTextWithSynonym( EditView &rEditView, const String &rS
     rEditView.ShowCursor( sal_True, sal_False );
 }
 
+
