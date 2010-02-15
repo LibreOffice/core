@@ -1995,7 +1995,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
     mnCharHeight = 24;
     if ( GetPropertyValue( mAny, mXPropSet, aCharHeightName, sal_False ) )
     {
-        float fVal;
+        float fVal(0.0);
         if ( mAny >>= fVal )
         {
             mnCharHeight = (sal_uInt16)( fVal + 0.5 );
@@ -2004,7 +2004,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
     }
     if ( GetPropertyValue( mAny, mXPropSet, aCharWeightName, sal_False ) )
     {
-        float fFloat;
+        float fFloat(0.0);
         if ( mAny >>= fFloat )
         {
             if ( fFloat >= ::com::sun::star::awt::FontWeight::SEMIBOLD )
@@ -2040,7 +2040,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
 
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharUnderline" ) ), bGetPropStateValue ) )
     {
-        sal_Int16 nVal;
+        sal_Int16 nVal(0);
         mAny >>= nVal;
         switch ( nVal )
         {
@@ -2055,7 +2055,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
 
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharShadowed" ) ), bGetPropStateValue ) )
     {
-        sal_Bool bBool;
+        sal_Bool bBool(sal_False);
         mAny >>= bBool;
         if ( bBool )
             mnCharAttr |= 0x10;
@@ -2065,7 +2065,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
 
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharRelief" ) ), bGetPropStateValue ) )
     {
-        sal_Int16 nVal;
+        sal_Int16 nVal(0);
         mAny >>= nVal;
         if ( nVal != ::com::sun::star::text::FontRelief::NONE )
             mnCharAttr |= 512;
