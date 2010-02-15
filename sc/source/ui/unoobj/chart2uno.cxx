@@ -1647,8 +1647,8 @@ void RangeAnalyzer::initRangeAnalyzer( const vector<ScSharedTokenRef>& rTokens )
             const ScComplexRefData& r = aRefToken->GetDoubleRef();
             if (r.Ref1.nTab == r.Ref2.nTab)
             {
-                mnColumnCount = std::max<SCCOL>( mnColumnCount, abs(r.Ref2.nCol - r.Ref1.nCol)+1 );
-                mnRowCount = std::max<SCROW>( mnRowCount, abs(r.Ref2.nRow - r.Ref1.nRow)+1 );
+                mnColumnCount = std::max<SCCOL>( mnColumnCount, static_cast<SCCOL>(abs(r.Ref2.nCol - r.Ref1.nCol)+1) );
+                mnRowCount = std::max<SCROW>( mnRowCount, static_cast<SCROW>(abs(r.Ref2.nRow - r.Ref1.nRow)+1) );
                 if( mnStartColumn == -1 )
                 {
                     mnStartColumn = r.Ref1.nCol;
