@@ -171,6 +171,9 @@ namespace dbaccess
 
         // fire a notification for all that are listening on column::VALUE property
         void firePropertyChange(const ORowSetRow& _rOldRow);
+        // fire a change for one column
+        // _nPos starts at zero
+        void firePropertyChange(sal_Int32 _nPos,const ::connectivity::ORowSetValue& _rNewValue);
 
         // fire if rowcount changed
         virtual void fireRowcount();
@@ -388,6 +391,10 @@ namespace dbaccess
         {
             fireProperty( _nProperty, _bNew, _bOld );
         }
+        inline  void firePropertyChange(sal_Int32 _nPos,const ::connectivity::ORowSetValue& _rNewValue, const GrantNotifierAccess& )
+        {
+            firePropertyChange(_nPos,_rNewValue);
+        }
         using ::comphelper::OPropertyStateContainer::getFastPropertyValue;
 
         ::osl::Mutex*   getMutex() const { return m_pMutex; }
@@ -398,14 +405,17 @@ namespace dbaccess
 
         <p>The class can only be used on the stack, within a method of ORowSetBase (or derivees)</p>
     */
+    struct ORowSetNotifierImpl;
     class ORowSetNotifier
     {
     private:
+        ::std::auto_ptr<ORowSetNotifierImpl> m_pImpl;
         ORowSetBase*    m_pRowSet;
             // not aquired! This is not necessary because this class here is to be used on the stack within
             // a method of ORowSetBase (or derivees)
         sal_Bool        m_bWasNew;
         sal_Bool        m_bWasModified;
+
 #ifdef DBG_UTIL
         sal_Bool        m_bNotifyCalled;
 #endif
@@ -416,6 +426,10 @@ namespace dbaccess
             @see ORowSetBase::doCancelModification
         */
         ORowSetNotifier( ORowSetBase* m_pRowSet );
+
+        /** use this one to consturct an vector for change value notification
+        */
+        ORowSetNotifier( ORowSetBase* m_pRowSet,const ORowSetValueVector::Vector& i_aRow );
 
         // destructs the object. <member>fire</member> has to be called before.
         ~ORowSetNotifier( );
@@ -431,6 +445,19 @@ namespace dbaccess
             @see ORowSetBase::notifyCancelInsert
         */
         void    fire();
+
+        /** notifies value change events and notifies IsModified
+            @param  i_aChangedColumns   the index of the changed value columns
+            @param  i_aRow              the old values
+            @see ORowSetBase::notifyCancelInsert
+        */
+        void    firePropertyChange();
+
+        /** use this one to store the inde of the changed column values
+        */
+        ::std::vector<sal_Int32>& getChangedColumns() const;
+        ::std::vector<com::sun::star::uno::Any>& getChangedBookmarks() const;
+
     };
 
 } // end of namespace

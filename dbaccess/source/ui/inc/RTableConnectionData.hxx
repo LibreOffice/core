@@ -64,9 +64,9 @@ namespace dbaui
         sal_Int32 m_nDeleteRules;
         sal_Int32 m_nCardinality;
 
-        BOOL checkPrimaryKey(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xKeys,EConnectionSide _eEConnectionSide) const;
-        BOOL IsSourcePrimKey()  const { return checkPrimaryKey(getReferencingTable()->getKeys(),JTCS_FROM); }
-        BOOL IsDestPrimKey()    const { return checkPrimaryKey(getReferencedTable()->getKeys(),JTCS_TO);        }
+        BOOL checkPrimaryKey(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& i_xTable,EConnectionSide _eEConnectionSide) const;
+        BOOL IsSourcePrimKey()  const { return checkPrimaryKey(getReferencingTable()->getTable(),JTCS_FROM);    }
+        BOOL IsDestPrimKey()    const { return checkPrimaryKey(getReferencedTable()->getTable(),JTCS_TO);       }
 
     protected:
         virtual OConnectionLineDataRef CreateLineDataObj();

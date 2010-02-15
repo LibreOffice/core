@@ -73,7 +73,7 @@ ORowSetColumn::ORowSetColumn(   const Reference < XResultSetMetaData >& _xMetaDa
     DECL_PROP1_BOOL( ISCURRENCY,                                READONLY );
     DECL_PROP1_BOOL( ISDEFINITELYWRITABLE,                      READONLY );
     DECL_PROP1( ISNULLABLE,                 sal_Int32,          READONLY );
-    DECL_PROP1_BOOL( ISREADONLY,                                READONLY );
+    DECL_PROP1_BOOL( ISREADONLY,                                BOUND );
     DECL_PROP1_BOOL( ISROWVERSION,                              READONLY );
     DECL_PROP1_BOOL( ISSEARCHABLE,                              READONLY );
     DECL_PROP1_BOOL( ISSIGNED,                                  READONLY );

@@ -183,30 +183,6 @@ public:
         return 0L;
     }
 
-    // -----------------------------------------------------------------------------
-    void OXReportControllerObserver::switchListening(const uno::Reference< uno::XInterface >& _rxObject, sal_Bool _bStartListening)
-    {
-        try
-        {
-            uno::Reference< beans::XPropertySet > xProps( _rxObject, uno::UNO_QUERY );
-            if ( xProps.is() )
-            {
-                if ( _bStartListening )
-                {
-                    xProps->addPropertyChangeListener( ::rtl::OUString(), this );
-                }
-                else
-                {
-                    xProps->removePropertyChangeListener( ::rtl::OUString(), this );
-                }
-            }
-        }
-        catch( const uno::Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-    }
-
     // XEventListener
     void SAL_CALL OXReportControllerObserver::disposing(const lang::EventObject& e) throw( uno::RuntimeException )
     {

@@ -274,32 +274,8 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::fillParameters" );
     // use keys and indexes for excat postioning
     // first the keys
-    Reference<XKeysSupplier> xKeySup(_xTable,UNO_QUERY);
-    Reference<XIndexAccess> xKeys;
-    if(xKeySup.is())
-        xKeys = xKeySup->getKeys();
-
-    Reference<XColumnsSupplier> xKeyColsSup;
-    Reference<XNameAccess> xKeyColumns;
-    if(xKeys.is() && xKeys->getCount())
-    {
-        Reference<XPropertySet> xProp;
-        Reference<XColumnsSupplier> xColumnsSupplier;
-        // search the one and only primary key
-        for(sal_Int32 i=0;i< xKeys->getCount();++i)
-        {
-            ::cppu::extractInterface(xProp,xKeys->getByIndex(i));
-            sal_Int32 nKeyType = 0;
-            xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
-            if(KeyType::PRIMARY == nKeyType)
-            {
-                xKeyColsSup.set(xProp,UNO_QUERY);
-                break;
-            }
-        }
-        if(xKeyColsSup.is())
-            xKeyColumns = xKeyColsSup->getColumns();
-    }
+    Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
+    const Reference<XNameAccess> xPrimaryKeyColumns = getPrimaryKeyColumns_throw(xSet);
     // second the indexes
     Reference<XIndexesSupplier> xIndexSup(_xTable,UNO_QUERY);
     Reference<XIndexAccess> xIndexes;
@@ -314,7 +290,7 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
     {
         for(sal_Int32 j=0;j<xIndexes->getCount();++j)
         {
-            ::cppu::extractInterface(xIndexColsSup,xIndexes->getByIndex(j));
+            xIndexColsSup.set(xIndexes->getByIndex(j),UNO_QUERY);
             if( xIndexColsSup.is()
                 && comphelper::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISUNIQUE))
                 && !comphelper::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISPRIMARYKEYINDEX))
@@ -340,7 +316,7 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
     for(; aIter != aEnd;++aIter,++nCheckCount,++i)
     {
         aColumnName = m_xSetMetaData->getColumnName(i);
-        if(xKeyColumns.is() && xKeyColumns->hasByName(aColumnName))
+        if(xPrimaryKeyColumns.is() && xPrimaryKeyColumns->hasByName(aColumnName))
         {
             _sCondition.append(::dbtools::quoteName( aQuote,aColumnName));
             if(aIter->isNull())
@@ -350,7 +326,7 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
             _sCondition.append(aAnd);
             _rOrgValues.push_back(nCheckCount);
 
-        } // if(xKeyColumns.is() && xKeyColumns->hasByName(aColumnName))
+        } // if(xPrimaryKeyColumns.is() && xPrimaryKeyColumns->hasByName(aColumnName))
         ::std::vector< Reference<XNameAccess> >::const_iterator aIndexEnd = aAllIndexColumns.end();
         for( ::std::vector< Reference<XNameAccess> >::const_iterator aIndexIter = aAllIndexColumns.begin();
                 aIndexIter != aIndexEnd;++aIndexIter)
@@ -439,32 +415,7 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
 
     // use keys and indexes for excat postioning
     // first the keys
-    Reference<XKeysSupplier> xKeySup(_xTable,UNO_QUERY);
-    Reference<XIndexAccess> xKeys;
-    if(xKeySup.is())
-        xKeys = xKeySup->getKeys();
-
-    Reference<XColumnsSupplier> xKeyColsSup;
-    Reference<XNameAccess> xKeyColumns;
-    if(xKeys.is() && xKeys->getCount())
-    {
-        Reference<XPropertySet> xProp;
-        Reference<XColumnsSupplier> xColumnsSupplier;
-        // search the one and only primary key
-        for(sal_Int32 i=0;i< xKeys->getCount();++i)
-        {
-            ::cppu::extractInterface(xProp,xKeys->getByIndex(i));
-            sal_Int32 nKeyType = 0;
-            xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
-            if(KeyType::PRIMARY == nKeyType)
-            {
-                xKeyColsSup.set(xProp,UNO_QUERY);
-                break;
-            }
-        }
-        if(xKeyColsSup.is())
-            xKeyColumns = xKeyColsSup->getColumns();
-    }
+    const Reference<XNameAccess> xPrimaryKeyColumns = getPrimaryKeyColumns_throw(xSet);
     // second the indexes
     Reference<XIndexesSupplier> xIndexSup(_xTable,UNO_QUERY);
     Reference<XIndexAccess> xIndexes;
@@ -511,7 +462,7 @@ void OCacheSet::setParameter(sal_Int32 nPos
                              ,const Reference< XParameters >& _xParameter
                              ,const ORowSetValue& _rValue
                              ,sal_Int32 _nType
-                             ,sal_Int32 _nScale)
+                             ,sal_Int32 _nScale) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::setParameter" );
     sal_Int32 nType = ( _nType != DataType::OTHER ) ? _nType : _rValue.getTypeKind();
@@ -773,3 +724,33 @@ Reference< XInterface > SAL_CALL OCacheSet::getStatement(  ) throw(SQLException,
     return m_xDriverSet->getStatement();
 }
 // -----------------------------------------------------------------------------
+bool OCacheSet::isResultSetChanged() const
+{
+    return false;
+}
+// -----------------------------------------------------------------------------
+void OCacheSet::reset(const Reference< XResultSet>& /*_xDriverSet*/)
+{
+    OSL_ENSURE(0,"Illegal call!");
+}
+// -----------------------------------------------------------------------------
+void OCacheSet::mergeColumnValues(sal_Int32 i_nColumnIndex,ORowSetValueVector::Vector& /*io_aInsertRow*/,ORowSetValueVector::Vector& /*io_aRow*/,::std::vector<sal_Int32>& o_aChangedColumns)
+{
+    o_aChangedColumns.push_back(i_nColumnIndex);
+}
+// -----------------------------------------------------------------------------
+bool OCacheSet::columnValuesUpdated(ORowSetValueVector::Vector& /*io_aCachedRow*/,const ORowSetValueVector::Vector& /*io_aRow*/)
+{
+    return false;
+}
+// -----------------------------------------------------------------------------
+bool OCacheSet::updateColumnValues(const ORowSetValueVector::Vector& /*io_aCachedRow*/,ORowSetValueVector::Vector& /*io_aRow*/,const ::std::vector<sal_Int32>& /*i_aChangedColumns*/)
+{
+    return true;
+}
+// -----------------------------------------------------------------------------
+void OCacheSet::fillMissingValues(ORowSetValueVector::Vector& /*io_aRow*/) const
+{
+}
+// -----------------------------------------------------------------------------
+

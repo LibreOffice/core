@@ -45,6 +45,7 @@
 #include "UITools.hxx"
 #include "moduledbu.hxx"
 #include <connectivity/dbexception.hxx>
+#include <connectivity/dbtools.hxx>
 
 using namespace dbaui;
 using namespace ::com::sun::star::sdbc;
@@ -176,35 +177,29 @@ void ORelationTableConnectionData::SetCardinality()
 
 }
 // -----------------------------------------------------------------------------
-BOOL ORelationTableConnectionData::checkPrimaryKey(const Reference< XIndexAccess>& _xKeys,EConnectionSide _eEConnectionSide) const
+BOOL ORelationTableConnectionData::checkPrimaryKey(const Reference< XPropertySet>& i_xTable,EConnectionSide _eEConnectionSide) const
 {
     // check if Table has the primary key column dependig on _eEConnectionSide
     USHORT  nPrimKeysCount      = 0,
             nValidLinesCount    = 0;
-    ::std::vector<Reference<XNameAccess> > vKeyColumns  = ::dbaui::getKeyColumns(_xKeys,KeyType::PRIMARY);
-    if ( vKeyColumns.size() == 1 )
+    const Reference< XNameAccess> xKeyColumns = dbtools::getPrimaryKeyColumns_throw(i_xTable);
+    if ( xKeyColumns.is() )
     {
-//      OSL_ENSURE(vKeyColumns.size()==1,"There can be only one primary key in a table!");
-        Sequence< ::rtl::OUString> aKeyColumns;
-        Reference<XNameAccess> xKeyColumns = *vKeyColumns.begin();
-        if ( xKeyColumns.is() )
-        {
-            aKeyColumns = xKeyColumns->getElementNames();
-            const ::rtl::OUString* pKeyIter = aKeyColumns.getConstArray();
-            const ::rtl::OUString* pKeyEnd  = pKeyIter + aKeyColumns.getLength();
+        Sequence< ::rtl::OUString> aKeyColumns = xKeyColumns->getElementNames();
+        const ::rtl::OUString* pKeyIter = aKeyColumns.getConstArray();
+        const ::rtl::OUString* pKeyEnd  = pKeyIter + aKeyColumns.getLength();
 
-            for(;pKeyIter != pKeyEnd;++pKeyIter)
+        for(;pKeyIter != pKeyEnd;++pKeyIter)
+        {
+            OConnectionLineDataVec::const_iterator aIter = m_vConnLineData.begin();
+            OConnectionLineDataVec::const_iterator aEnd = m_vConnLineData.end();
+            for(;aIter != aEnd;++aIter)
             {
-                OConnectionLineDataVec::const_iterator aIter = m_vConnLineData.begin();
-                OConnectionLineDataVec::const_iterator aEnd = m_vConnLineData.end();
-                for(;aIter != aEnd;++aIter)
+                ++nValidLinesCount;
+                if ( (*aIter)->GetFieldName(_eEConnectionSide) == *pKeyIter )
                 {
-                    ++nValidLinesCount;
-                    if ( (*aIter)->GetFieldName(_eEConnectionSide) == *pKeyIter )
-                    {
-                        ++nPrimKeysCount;
-                        break;
-                    }
+                    ++nPrimKeysCount;
+                    break;
                 }
             }
         }

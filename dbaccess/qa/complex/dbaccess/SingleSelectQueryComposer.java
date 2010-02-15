@@ -55,6 +55,7 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
     {
         return new String[]
                 {
+                    "testSetCommand",
                     "testAttributes",
                     "testSubQueries",
                     "testParameters",
@@ -131,6 +132,31 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
         log.println("  (results in " + (String) m_composer.getQuery() + ")");
     }
 
+    /** tests setCommand of the composer
+     */
+    public void testSetCommand()
+    {
+        log.println("testing SingleSelectQueryComposer's setCommand");
+
+        try
+        {
+            final String table = "SELECT * FROM \"customers\"";
+            m_composer.setCommand("customers",CommandType.TABLE);
+            assure("setCommand/getQuery TABLE inconsistent", m_composer.getQuery().equals(table));
+
+            m_database.getDatabase().getDataSource().createQuery("set command test", "SELECT * FROM \"orders for customer\" \"a\", \"customers\" \"b\" WHERE \"a\".\"Product Name\" = \"b\".\"Name\"");
+            m_composer.setCommand("set command test",CommandType.QUERY);
+            assure("setCommand/getQuery QUERY inconsistent", m_composer.getQuery().equals(m_database.getDatabase().getDataSource().getQueryDefinition("set command test").getCommand()));
+
+            final String sql = "SELECT * FROM \"orders for customer\" WHERE \"Product Name\" = 'test'";
+            m_composer.setCommand(sql,CommandType.COMMAND);
+            assure("setCommand/getQuery COMMAND inconsistent", m_composer.getQuery().equals(sql));
+        }
+        catch (Exception e)
+        {
+            assure("Exception caught: " + e, false);
+        }
+    }
     /** tests accessing attributes of the composer (order, filter, group by, having)
      */
     public void testAttributes()
@@ -139,6 +165,11 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
 
         try
         {
+            log.println("check setElementaryQuery");
+            final String simpleQuery2 = "SELECT * FROM \"customers\" WHERE \"Name\" = 'oranges'";
+            m_composer.setElementaryQuery(simpleQuery2);
+            assure("setElementaryQuery/getQuery inconsistent", m_composer.getQuery().equals(simpleQuery2));
+
             log.println("check setQuery");
             final String simpleQuery = "SELECT * FROM \"customers\"";
             m_composer.setQuery(simpleQuery);

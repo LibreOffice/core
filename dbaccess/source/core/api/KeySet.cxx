@@ -225,7 +225,6 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet,const ::rtl::O
         xPara->getPropertyValue(PROPERTY_REALNAME) >>= aParameterColumns[i];
     }
 
-
     ::rtl::OUString sCatalog,sSchema,sTable;
 
     Reference<XPropertySet> xTableProp(m_xTable,UNO_QUERY);
@@ -987,9 +986,9 @@ Reference<XNameAccess> OKeySet::getKeyColumns() const
     Reference<XIndexAccess> xKeys = m_xTableKeys;
     if ( !xKeys.is() )
     {
-        Reference<XKeysSupplier> xKeySup(m_xTable,UNO_QUERY);
-        if(xKeySup.is())
-            xKeys = xKeySup->getKeys();
+        Reference<XPropertySet> xSet(m_xTable,UNO_QUERY);
+        const Reference<XNameAccess> xPrimaryKeyColumns = getPrimaryKeyColumns_throw(xSet);
+        return xPrimaryKeyColumns;
     }
 
     Reference<XColumnsSupplier> xKeyColsSup;
@@ -1477,49 +1476,62 @@ namespace dbaccess
     void getColumnPositions(const Reference<XNameAccess>& _rxQueryColumns,
                             const Sequence< ::rtl::OUString>& _aColumnNames,
                             const ::rtl::OUString& _rsUpdateTableName,
-                            SelectColumnsMetaData& _rColumnNames)
+                            SelectColumnsMetaData& o_rColumnNames,
+                            bool i_bAppendTableName)
     {
         // get the real name of the columns
         Sequence< ::rtl::OUString> aSelNames(_rxQueryColumns->getElementNames());
-        const ::rtl::OUString* pSelBegin    = aSelNames.getConstArray();
-        const ::rtl::OUString* pSelEnd      = pSelBegin + aSelNames.getLength();
+        const ::rtl::OUString* pSelIter     = aSelNames.getConstArray();
+        const ::rtl::OUString* pSelEnd      = pSelIter + aSelNames.getLength();
 
-        const ::rtl::OUString* pColumnIter  = _aColumnNames.getConstArray();
-        const ::rtl::OUString* pColumnEnd   = pColumnIter + _aColumnNames.getLength();
+        const ::rtl::OUString* pTblColumnIter   = _aColumnNames.getConstArray();
+        const ::rtl::OUString* pTblColumnEnd    = pTblColumnIter + _aColumnNames.getLength();
 
-        ::comphelper::UStringMixLess aTmp(_rColumnNames.key_comp());
+        ::comphelper::UStringMixLess aTmp(o_rColumnNames.key_comp());
         ::comphelper::UStringMixEqual bCase(static_cast< ::comphelper::UStringMixLess*>(&aTmp)->isCaseSensitive());
 
-        for(sal_Int32 nPos = 1;pSelBegin != pSelEnd;++pSelBegin,++nPos)
+        for(sal_Int32 nPos = 1;pSelIter != pSelEnd;++pSelIter,++nPos)
         {
-            Reference<XPropertySet> xColumnProp(_rxQueryColumns->getByName(*pSelBegin),UNO_QUERY);
+            Reference<XPropertySet> xQueryColumnProp(_rxQueryColumns->getByName(*pSelIter),UNO_QUERY_THROW);
             ::rtl::OUString sRealName,sTableName;
-            OSL_ENSURE(xColumnProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_REALNAME),"Property REALNAME not available!");
-            OSL_ENSURE(xColumnProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_TABLENAME),"Property TABLENAME not available!");
-            xColumnProp->getPropertyValue(PROPERTY_REALNAME)    >>= sRealName;
-            xColumnProp->getPropertyValue(PROPERTY_TABLENAME)   >>= sTableName;
+            OSL_ENSURE(xQueryColumnProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_REALNAME),"Property REALNAME not available!");
+            OSL_ENSURE(xQueryColumnProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_TABLENAME),"Property TABLENAME not available!");
+            xQueryColumnProp->getPropertyValue(PROPERTY_REALNAME)   >>= sRealName;
+            xQueryColumnProp->getPropertyValue(PROPERTY_TABLENAME)  >>= sTableName;
 
-            for(;pColumnIter != pColumnEnd;++pColumnIter)
+            for(;pTblColumnIter != pTblColumnEnd;++pTblColumnIter)
             {
-                if(bCase(sRealName,*pColumnIter) && bCase(_rsUpdateTableName,sTableName) && _rColumnNames.find(*pColumnIter) == _rColumnNames.end())
+                if(bCase(sRealName,*pTblColumnIter) && bCase(_rsUpdateTableName,sTableName) && o_rColumnNames.find(*pTblColumnIter) == o_rColumnNames.end())
                 {
                     sal_Int32 nType = 0;
-                    xColumnProp->getPropertyValue(PROPERTY_TYPE)    >>= nType;
+                    xQueryColumnProp->getPropertyValue(PROPERTY_TYPE)   >>= nType;
                     sal_Int32 nScale = 0;
-                    xColumnProp->getPropertyValue(PROPERTY_SCALE)   >>= nScale;
+                    xQueryColumnProp->getPropertyValue(PROPERTY_SCALE)  >>= nScale;
                     ::rtl::OUString sColumnDefault;
-                    if ( xColumnProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_DEFAULTVALUE) )
-                        xColumnProp->getPropertyValue(PROPERTY_DEFAULTVALUE) >>= sColumnDefault;
+                    if ( xQueryColumnProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_DEFAULTVALUE) )
+                        xQueryColumnProp->getPropertyValue(PROPERTY_DEFAULTVALUE) >>= sColumnDefault;
 
-                    sal_Int32 bNullable = sal_False;
-                    xColumnProp->getPropertyValue(PROPERTY_ISNULLABLE)  >>= bNullable;
+                    sal_Int32 nNullable = ColumnValue::NULLABLE_UNKNOWN;
+                    OSL_VERIFY( xQueryColumnProp->getPropertyValue( PROPERTY_ISNULLABLE ) >>= nNullable );
 
+                    if ( i_bAppendTableName )
+                    {
+                        ::rtl::OUStringBuffer sName;
+                        sName.append(sTableName);
+                        sName.appendAscii(".");
+                        sName.append(sRealName);
+                        SelectColumnDescription aColDesc( nPos, nType,nScale,nNullable != sdbc::ColumnValue::NO_NULLS, sColumnDefault );
+                        aColDesc.sRealName = sRealName;
+                        aColDesc.sTableName = sTableName;
+                        o_rColumnNames[sName.makeStringAndClear()] = aColDesc;
+                    }
+                    else
+                        o_rColumnNames[sRealName] = SelectColumnDescription( nPos, nType,nScale,nNullable != sdbc::ColumnValue::NO_NULLS, sColumnDefault );
 
-                    _rColumnNames[sRealName] = SelectColumnDescription( nPos, nType,nScale,bNullable != sdbc::ColumnValue::NO_NULLS, sColumnDefault );
                     break;
                 }
             }
-            pColumnIter = _aColumnNames.getConstArray();
+            pTblColumnIter = _aColumnNames.getConstArray();
         }
     }
 }

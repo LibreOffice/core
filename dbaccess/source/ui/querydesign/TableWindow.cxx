@@ -62,8 +62,6 @@
 #endif
 
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <com/sun/star/sdbcx/XKeysSupplier.hpp>
-#include <com/sun/star/sdbcx/KeyType.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
@@ -76,6 +74,7 @@
 #include "UITools.hxx"
 #include "TableWindowAccess.hxx"
 #include "browserids.hxx"
+#include <connectivity/dbtools.hxx>
 
 
 using namespace dbaui;
@@ -224,30 +223,7 @@ BOOL OTableWindow::FillListBox()
     Reference<XNameAccess> xPKeyColumns;
     try
     {
-        // first we need the keys from the table
-        Reference< XIndexAccess> xKeyIndex = m_pData->getKeys();
-        // search the one and only primary key
-        if ( xKeyIndex.is() )
-        {
-            Reference<XColumnsSupplier> xColumnsSupplier;
-            for(sal_Int32 i=0;i< xKeyIndex->getCount();++i)
-            {
-                Reference<XPropertySet> xProp;
-                xKeyIndex->getByIndex(i) >>= xProp;
-                if ( xProp.is() )
-                {
-                    sal_Int32 nKeyType = 0;
-                    xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
-                    if(KeyType::PRIMARY == nKeyType)
-                    {
-                        xColumnsSupplier.set(xProp,UNO_QUERY);
-                        break;
-                    }
-                }
-            }
-            if ( xColumnsSupplier.is() )
-                xPKeyColumns = xColumnsSupplier->getColumns();
-        }
+        xPKeyColumns = dbtools::getPrimaryKeyColumns_throw(m_pData->getTable());
     }
     catch(Exception&)
     {
