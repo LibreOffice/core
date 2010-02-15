@@ -109,6 +109,11 @@ namespace comphelper
             impl_assign( _rArguments );
         }
 
+        inline void clear()
+        {
+            impl_assign( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >() );
+        }
+
         /// returns the number of elements in the collection
         size_t  size() const;
 
