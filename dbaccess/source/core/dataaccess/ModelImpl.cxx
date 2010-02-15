@@ -811,37 +811,37 @@ const Reference< XNumberFormatsSupplier > & ODatabaseModelImpl::getNumberFormats
     }
     return m_xNumberFormatsSupplier;
 }
+
 // -----------------------------------------------------------------------------
-void ODatabaseModelImpl::attachResource( const ::rtl::OUString& _rURL, const Sequence< PropertyValue >& _rArgs )
+void ODatabaseModelImpl::setDocFileLocation( const ::rtl::OUString& i_rLoadedFrom )
 {
+    ENSURE_OR_THROW( i_rLoadedFrom.getLength(), "invalid URL" );
+    m_sDocFileLocation = i_rLoadedFrom;
+}
+
+// -----------------------------------------------------------------------------
+void ODatabaseModelImpl::setResource( const ::rtl::OUString& i_rDocumentURL, const Sequence< PropertyValue >& _rArgs )
+{
+    ENSURE_OR_THROW( i_rDocumentURL.getLength(), "invalid URL" );
+
+#if OSL_DEBUG_LEVEL > 0
     ::comphelper::NamedValueCollection aMediaDescriptor( _rArgs );
-    ENSURE_OR_THROW( _rURL.getLength(), "invalid URL" );
-
-    ::rtl::OUString sDocumentLocation( _rURL );
-    ::rtl::OUString sDocumentURL( _rURL );
-
     if ( aMediaDescriptor.has( "SalvagedFile" ) )
     {
-        const ::rtl::OUString sSalvagedFile( aMediaDescriptor.getOrDefault( "SalvagedFile", ::rtl::OUString() ) );
-        // If SalvagedFile is an empty string, this indicates "the document is being recovered, but _rURL already
+        ::rtl::OUString sSalvagedFile( aMediaDescriptor.getOrDefault( "SalvagedFile", ::rtl::OUString() ) );
+        // If SalvagedFile is an empty string, this indicates "the document is being recovered, but i_rDocumentURL already
         // is the real document URL, not the temporary document location"
-        if ( sSalvagedFile.getLength() )
-        {
-            // otherwise, SalvagedFile is the URL of the document which we should mimic, though we're loaded from
-            // the file denoted by _rURL.
-            sDocumentLocation = _rURL;
-            sDocumentURL = sSalvagedFile;
-        }
+        if ( !sSalvagedFile.getLength() )
+            sSalvagedFile = i_rDocumentURL;
 
-        if ( sSalvagedFile == _rURL )
-            // SalvagedFile doesn't carry any information anymore
-            aMediaDescriptor.remove( "SalvagedFile" );
-
+        OSL_ENSURE( sSalvagedFile == i_rDocumentURL, "ODatabaseModelImpl::setResource: inconsistency!" );
+            // nowadays, setResource should only be called with the logical URL of the document
     }
+#endif
 
     m_aMediaDescriptor = stripLoadArguments( aMediaDescriptor );
 
-    switchToURL( sDocumentLocation, sDocumentURL );
+    impl_switchToLogicalURL( i_rDocumentURL );
 }
 
 // -----------------------------------------------------------------------------
@@ -1045,7 +1045,7 @@ Reference< XModel > ODatabaseModelImpl::createNewModel_deliverOwnership( bool _b
             // then nobody would call the doc's attachResource. So, we do it here, to ensure it's in a proper
             // state, fires all events, and so on.
             // #i105505# / 2009-10-02 / frank.schoenheit@sun.com
-            xModel->attachResource( ::rtl::OUString(), m_aMediaDescriptor.getPropertyValues() );
+            xModel->attachResource( xModel->getURL(), m_aMediaDescriptor.getPropertyValues() );
         }
 
         if ( _bInitialize )
@@ -1340,31 +1340,34 @@ Reference< XStorage > ODatabaseModelImpl::impl_switchToStorage_throw( const Refe
 }
 
 // -----------------------------------------------------------------------------
-void ODatabaseModelImpl::switchToURL( const ::rtl::OUString& _rDocumentLocation, const ::rtl::OUString& _rDocumentURL )
+void ODatabaseModelImpl::impl_switchToLogicalURL( const ::rtl::OUString& i_rDocumentURL )
 {
-    // register at the database context, or change registration
-    const bool bURLChanged = ( _rDocumentURL != m_sDocumentURL );
+    if ( i_rDocumentURL == m_sDocumentURL )
+        return;
+
     const ::rtl::OUString sOldURL( m_sDocumentURL );
-    if ( bURLChanged )
+    // update our name, if necessary
+    if  (   ( m_sName == m_sDocumentURL )   // our name is our old URL
+        ||  ( !m_sName.getLength() )        // we do not have a name, yet (i.e. are not registered at the database context)
+        )
     {
-        if  (   ( m_sName == m_sDocumentURL )   // our name is our old URL
-            ||  ( !m_sName.getLength() )        // we do not have a name, yet (i.e. are not registered at the database context)
-            )
+        INetURLObject aURL( i_rDocumentURL );
+        if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
         {
-            INetURLObject aURL( _rDocumentURL );
-            if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
-            {
-                m_sName = _rDocumentURL;
-                // TODO: our data source must broadcast the change of the Name property
-            }
+            m_sName = i_rDocumentURL;
+            // TODO: our data source must broadcast the change of the Name property
         }
     }
 
-    // remember both
-    m_sDocFileLocation = _rDocumentLocation.getLength() ? _rDocumentLocation : _rDocumentURL;
-    m_sDocumentURL = _rDocumentURL;
+    // remember URL
+    m_sDocumentURL = i_rDocumentURL;
 
-    if ( bURLChanged && m_pDBContext )
+    // update our location, if necessary
+    if  ( m_sDocFileLocation.getLength() == 0 )
+        m_sDocFileLocation = m_sDocumentURL;
+
+    // register at the database context, or change registration
+    if ( m_pDBContext )
     {
         if ( sOldURL.getLength() )
             m_pDBContext->databaseDocumentURLChange( sOldURL, m_sDocumentURL );
@@ -1404,10 +1407,13 @@ sal_Bool ODatabaseModelImpl::setCurrentMacroExecMode( sal_uInt16 nMacroMode )
 // -----------------------------------------------------------------------------
 ::rtl::OUString ODatabaseModelImpl::getDocumentLocation() const
 {
-    // don't return getURL() (or m_sDocumentURL, which is the same). In case we were recovered
-    // after a previous crash of OOo, m_sDocFileLocation points to the file which were loaded from,
-    // and this is the one we need for security checks.
-    return getDocFileLocation();
+    return getURL();
+    // formerly, we returned getDocFileLocation here, which is the location of the file from which we
+    // recovered the "real" document.
+    // However, during CWS autorecovery evolving, we clarified (with MAV/MT) the role of XModel::getURL and
+    // XStorable::getLocation. In this course, we agreed that for a macro security check, the *document URL*
+    // (not the recovery file URL) is to be used: The recovery file lies in the backup folder, and by definition,
+    // this folder is considered to be secure. So, the document URL needs to be used to decide about the security.
 }
 
 // -----------------------------------------------------------------------------

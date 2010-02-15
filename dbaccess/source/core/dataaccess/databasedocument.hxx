@@ -613,8 +613,8 @@ private:
 
     /** impl-version of attachResource
 
-        @param  i_rURL
-            denotes the URL the document was loaded from
+        @param  i_rLogicalDocumentURL
+            denotes the logical URL of the document, to be reported by getURL/getLocation
         @param  i_rMediaDescriptor
             denotes additional document parameters
         @param  _rDocGuard
@@ -622,7 +622,7 @@ private:
 
     */
     sal_Bool    impl_attachResource(
-                    const ::rtl::OUString& i_rURL,
+                    const ::rtl::OUString& i_rLogicalDocumentURL,
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_rMediaDescriptor,
                     DocumentGuard& _rDocGuard
                 );

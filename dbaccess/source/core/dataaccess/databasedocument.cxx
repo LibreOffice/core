@@ -662,6 +662,10 @@ void SAL_CALL ODatabaseDocument::storeToRecoveryFile( const ::rtl::OUString& i_T
 void SAL_CALL ODatabaseDocument::recoverFromFile( const ::rtl::OUString& i_SourceLocation, const ::rtl::OUString& i_SalvagedFile, const Sequence< PropertyValue >& i_MediaDescriptor ) throw ( RuntimeException, IOException, WrappedTargetException )
 {
     DocumentGuard aGuard( *this, DocumentGuard::InitMethod );
+
+    if ( i_SourceLocation.getLength() == 0 )
+        throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
+
     try
     {
         // load the document itself, by simply delegating to our "load" method
@@ -678,9 +682,12 @@ void SAL_CALL ODatabaseDocument::recoverFromFile( const ::rtl::OUString& i_Sourc
         // So, everything else is done when the first controller is connected.
         m_bHasBeenRecovered = true;
 
+        // tell the impl that we've been loaded from the given location
+        m_pImpl->setDocFileLocation( i_SourceLocation );
+
         // by definition (of XDocumentRecovery), we're responsible for delivering a fully-initialized document,
         // which includes an attachResource call.
-        impl_attachResource( i_SourceLocation, aMediaDescriptor.getPropertyValues(), aGuard );
+        impl_attachResource( i_SalvagedFile, aMediaDescriptor.getPropertyValues(), aGuard );
         // <- SYNCHRONIZED
     }
     catch( const Exception& )
@@ -708,10 +715,10 @@ sal_Bool SAL_CALL ODatabaseDocument::attachResource( const ::rtl::OUString& _rUR
 }
 
 // -----------------------------------------------------------------------------
-sal_Bool ODatabaseDocument::impl_attachResource( const ::rtl::OUString& i_rURL, const Sequence< PropertyValue >& i_rMediaDescriptor,
-            DocumentGuard& _rDocGuard )
+sal_Bool ODatabaseDocument::impl_attachResource( const ::rtl::OUString& i_rLogicalDocumentURL,
+            const Sequence< PropertyValue >& i_rMediaDescriptor, DocumentGuard& _rDocGuard )
 {
-    if  (   ( i_rURL == getURL() )
+    if  (   ( i_rLogicalDocumentURL == getURL() )
         &&  ( i_rMediaDescriptor.getLength() == 1 )
         &&  ( i_rMediaDescriptor[0].Name.compareToAscii( "BreakMacroSignature" ) == 0 )
         )
@@ -722,14 +729,14 @@ sal_Bool ODatabaseDocument::impl_attachResource( const ::rtl::OUString& i_rURL, 
             // (we do not support macro signatures, so we can ignore this call)
     }
 
-    // if no URL has been provided, the caller was lazy enough to not call our getLocation/getURL - which is allowed ...
-    ::rtl::OUString sURL( i_rURL );
-    if ( !sURL.getLength() )
-        sURL = getLocation();
-    if ( !sURL.getLength() )
-        sURL = getURL();
+    // if no URL has been provided, the caller was lazy enough to not call our getURL - which is not allowed anymore,
+    // now since getURL and getLocation both return the same, so calling one of those should be simple.
+    ::rtl::OUString sDocumentURL( i_rLogicalDocumentURL );
+    OSL_ENSURE( sDocumentURL.getLength(), "ODatabaseDocument::impl_attachResource: invalid URL!" );
+    if ( !sDocumentURL.getLength() )
+        sDocumentURL = getURL();
 
-    m_pImpl->attachResource( sURL, i_rMediaDescriptor );
+    m_pImpl->setResource( sDocumentURL, i_rMediaDescriptor );
 
     if ( impl_isInitializing() )
     {   // this means we've just been loaded, and this is the attachResource call which follows
@@ -918,7 +925,9 @@ sal_Bool SAL_CALL ODatabaseDocument::hasLocation(  ) throw (RuntimeException)
 ::rtl::OUString SAL_CALL ODatabaseDocument::getLocation(  ) throw (RuntimeException)
 {
     DocumentGuard aGuard( *this, DocumentGuard::MethodWithoutInit );
-    return m_pImpl->getDocFileLocation();
+    return m_pImpl->getURL();
+        // both XStorable::getLocation and XModel::getURL have to return the URL of the document, *not*
+        // the location of the file which the docunment was possibly recovered from (which would be getDocFileLocation)
 }
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseDocument::isReadonly(  ) throw (RuntimeException)
@@ -1040,7 +1049,8 @@ void ODatabaseDocument::impl_storeAs_throw( const ::rtl::OUString& _rURL, const 
         impl_storeToStorage_throw( xCurrentStorage, aMediaDescriptor, _rGuard );
 
         // success - tell our impl
-        m_pImpl->attachResource( _rURL, aMediaDescriptor );
+        m_pImpl->setDocFileLocation( _rURL );
+        m_pImpl->setResource( _rURL, aMediaDescriptor );
 
         // if we are in an initialization process, then this is finished, now that we stored the document
         if ( bIsInitializationProcess )
