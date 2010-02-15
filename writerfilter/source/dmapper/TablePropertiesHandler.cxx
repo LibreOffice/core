@@ -228,7 +228,7 @@ namespace dmapper {
                    MeasureHandlerPtr pHandler(new MeasureHandler);
                    TablePropertyMapPtr pTblIndMap(new TablePropertyMap);
                    sal_uInt32 nTblInd = pHandler->getMeasureValue();
-                   pTblIndMap->Insert( TablePropertyMap::LEFT_MARGIN, nTblInd);
+                   pTblIndMap->setValue( TablePropertyMap::LEFT_MARGIN, nTblInd);
                    insertTableProps(pTblIndMap);
                }
            }
