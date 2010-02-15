@@ -550,53 +550,16 @@ testcase tCreateNewLineChart
     end if    
     printlog "Format / Data Ranges"   
     FormatDataRanges
-    Kontext
-    Active.SetPage TabChartTypeDataRange        
-    Kontext "TabChartTypeDataRange"
-    if TabChartTypeDataRange.Exists(2) then        
-        printlog "Check substrings '$A$2:$C$13', '$A$19', '$B$1:$C$13', '$E$1:$F$13' and '$B$17:$E$17' in Data Range"        
-        sControlString = DataRange.GetText
-        printlog "Data Range is: " & sControlString
-        if instr ( sControlString , "$A$2:$C$13" ) = 0 Then
-            warnlog "Data range wasn't correctly preserved after save and reload: $A$2:$C$13"
-        endif
-        if instr ( sControlString , "$A$19" ) = 0 Then
-            warnlog "Data range wasn't correctly preserved after save and reload: $A$19"
-        endif
-        if instr ( sControlString , "$B$1:$C$13" ) = 0 Then
-           QAErrorlog "#i100780#Data range wasn't correctly preserved after save and reload: $B$1:$C$13"
-        endif
-        if instr ( sControlString , "$E$1:$F$13" ) = 0 Then
-            warnlog "Data range wasn't correctly preserved after save and reload: $E$1:$F$13"
-        endif
-        if instr ( sControlString , "$B$17:$E$17" ) = 0 Then
-            warnlog "Data range wasn't correctly preserved after save and reload: $B$17:$E$17"
-        endif        
-        printlog "Check if Radio Button ROWS is checked"
-        if Rows.IsChecked then
-            warnlog "Radio Button ROWS (disabled) wasn't preserved after save and reload."
-        endif        
-        printlog "Check if Radio Button COLUMNS is unchecked"
-        if NOT Columns.IsChecked then
-            warnlog "Radio Button COLUMNS (enabled) wasn't preserved after save and reload."
-        endif        
-        printlog "Check if 'First row as label' box is unchecked"
-        if NOT FirstRowAsLabel.IsChecked then
-            warnlog "Check box 'First row as label' (enabled) wasn't preserved after save and reload."
-        endif        
-        printlog "Check if 'First column as label' box is checked"
-        if NOT FirstColumnAsLabel.IsChecked then
-            warnlog "Check box 'First column as label' (enabled) wasn't preserved after save and reload."
-        endif
-    else
-        warnlog "Tab page Data Range was not up!"
-        FormatDataRanges        
-    end if    
     printlog "Switch to tab page Data Series"
     Kontext
+    Active.SetPage TabFormatDataRangesDataRange 'Due to bug #i77237# the tabpage has to be switched once before 'OK' or 'Cancel' can be used
     Active.SetPage TabFormatDataRangesDataSeries 
     Kontext "TabChartTypeDataSeries"
-    if TabChartTypeDataSeries.Exists(2) then        
+    if TabChartTypeDataSeries.Exists(2) then
+        printlog "Verify that there are 4 data series"
+        if DataSeries.GetItemCount <> 4 then
+            warnlog "There should be 4 dataseries, but there are " & DataSeries.GetItemCount
+        end if
         printlog "Select 4th entry in Data Series"
         if fSetListBoxByItem ( DataSeries , 4 ) > 0 then
             warnlog "Selecting 4th item in Data Series failed. EXITING!"
