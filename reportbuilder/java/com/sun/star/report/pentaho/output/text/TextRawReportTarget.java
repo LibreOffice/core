@@ -30,18 +30,11 @@
 package com.sun.star.report.pentaho.output.text;
 
 import com.sun.star.report.DataSourceFactory;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.util.Iterator;
-import java.util.Map;
-
 import com.sun.star.report.ImageService;
 import com.sun.star.report.InputRepository;
+import com.sun.star.report.OfficeToken;
 import com.sun.star.report.OutputRepository;
 import com.sun.star.report.pentaho.OfficeNamespaces;
-import com.sun.star.report.OfficeToken;
 import com.sun.star.report.pentaho.PentahoReportEngineMetaData;
 import com.sun.star.report.pentaho.layoutprocessor.FormatValueUtility;
 import com.sun.star.report.pentaho.model.OfficeMasterPage;
@@ -53,7 +46,16 @@ import com.sun.star.report.pentaho.model.PageSection;
 import com.sun.star.report.pentaho.output.OfficeDocumentReportTarget;
 import com.sun.star.report.pentaho.output.StyleUtilities;
 import com.sun.star.report.pentaho.styles.LengthCalculator;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
+
 import org.jfree.layouting.input.style.values.CSSNumericValue;
 import org.jfree.layouting.util.AttributeMap;
 import org.jfree.report.DataSourceException;
@@ -66,6 +68,7 @@ import org.jfree.report.structure.Element;
 import org.jfree.report.structure.Section;
 import org.jfree.report.util.AttributeNameGenerator;
 import org.jfree.report.util.IntegerCache;
+
 import org.pentaho.reporting.libraries.base.util.FastStack;
 import org.pentaho.reporting.libraries.base.util.IOUtils;
 import org.pentaho.reporting.libraries.base.util.ObjectUtilities;
@@ -74,6 +77,7 @@ import org.pentaho.reporting.libraries.resourceloader.ResourceManager;
 import org.pentaho.reporting.libraries.xmlns.common.AttributeList;
 import org.pentaho.reporting.libraries.xmlns.writer.XmlWriter;
 import org.pentaho.reporting.libraries.xmlns.writer.XmlWriterSupport;
+
 
 /**
  * Creation-Date: 03.07.2006, 16:28:00

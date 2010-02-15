@@ -29,10 +29,8 @@
  ************************************************************************/
 package com.sun.star.report.pentaho;
 
-import java.io.IOException;
-import java.lang.Integer;import java.util.ArrayList;
-
 import com.sun.star.report.DataSourceFactory;
+import com.sun.star.report.ImageService;
 import com.sun.star.report.InputRepository;
 import com.sun.star.report.JobDefinitionException;
 import com.sun.star.report.JobProgressIndicator;
@@ -43,7 +41,6 @@ import com.sun.star.report.ReportEngineParameterNames;
 import com.sun.star.report.ReportExecutionException;
 import com.sun.star.report.ReportJob;
 import com.sun.star.report.ReportJobDefinition;
-import com.sun.star.report.ImageService;
 import com.sun.star.report.SDBCReportDataFactory;
 import com.sun.star.report.pentaho.loader.InputRepositoryLoader;
 import com.sun.star.report.pentaho.model.OfficeDetailSection;
@@ -51,15 +48,19 @@ import com.sun.star.report.pentaho.model.OfficeDocument;
 import com.sun.star.report.pentaho.model.OfficeGroup;
 import com.sun.star.report.pentaho.model.OfficeReport;
 import com.sun.star.report.pentaho.output.chart.ChartRawReportProcessor;
-import com.sun.star.report.pentaho.output.text.TextRawReportProcessor;
 import com.sun.star.report.pentaho.output.spreadsheet.SpreadsheetRawReportProcessor;
+import com.sun.star.report.pentaho.output.text.TextRawReportProcessor;
+
+import java.io.IOException;
+
+import java.lang.Integer;
+
+import java.util.ArrayList;
 import java.util.List;
-import org.pentaho.reporting.libraries.formula.lvalues.ContextLookup;
-import org.pentaho.reporting.libraries.formula.lvalues.FormulaFunction;
-import org.pentaho.reporting.libraries.formula.lvalues.LValue;
-import org.pentaho.reporting.libraries.formula.lvalues.Term;
-import org.pentaho.reporting.libraries.formula.parser.FormulaParser;
-import org.pentaho.reporting.libraries.formula.parser.ParseException;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import org.jfree.report.expressions.Expression;
 import org.jfree.report.expressions.FormulaExpression;
 import org.jfree.report.flow.DefaultReportJob;
@@ -68,11 +69,17 @@ import org.jfree.report.flow.raw.XmlPrintReportProcessor;
 import org.jfree.report.structure.Node;
 import org.jfree.report.structure.Section;
 import org.jfree.report.util.ReportParameters;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+
+import org.pentaho.reporting.libraries.formula.lvalues.ContextLookup;
+import org.pentaho.reporting.libraries.formula.lvalues.FormulaFunction;
+import org.pentaho.reporting.libraries.formula.lvalues.LValue;
+import org.pentaho.reporting.libraries.formula.lvalues.Term;
+import org.pentaho.reporting.libraries.formula.parser.FormulaParser;
+import org.pentaho.reporting.libraries.formula.parser.ParseException;
 import org.pentaho.reporting.libraries.resourceloader.Resource;
 import org.pentaho.reporting.libraries.resourceloader.ResourceException;
 import org.pentaho.reporting.libraries.resourceloader.ResourceManager;
+
 
 /**
  * ToDo: Allow interrupting of jobs and report the report progress

@@ -38,6 +38,7 @@
 package com.sun.star.report.pentaho.parser.stylemapper.fo;
 
 import com.sun.star.report.pentaho.parser.StyleMapper;
+
 import org.jfree.layouting.input.style.CSSDeclarationRule;
 
 /**

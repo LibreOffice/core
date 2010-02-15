@@ -29,13 +29,15 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.parser.stylemapper;
 
-import java.util.HashMap;
-
 import com.sun.star.report.pentaho.parser.StyleMapper;
+
+import java.util.HashMap;
 import java.util.Map;
+
 import org.jfree.layouting.input.style.CSSDeclarationRule;
 import org.jfree.layouting.input.style.StyleKey;
 import org.jfree.layouting.input.style.values.CSSValue;
+
 
 public abstract class OneOfConstantsMapper implements StyleMapper
 {

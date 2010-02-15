@@ -29,9 +29,10 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.model;
 
-import org.jfree.report.structure.Section;
-import org.jfree.layouting.util.AttributeMap;
 import com.sun.star.report.pentaho.OfficeNamespaces;
+
+import org.jfree.layouting.util.AttributeMap;
+import org.jfree.report.structure.Section;
 
 /**
  * This represents either a page header or page footer.

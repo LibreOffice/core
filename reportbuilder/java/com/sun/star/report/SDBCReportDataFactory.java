@@ -34,42 +34,41 @@ import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.container.XIndexAccess;
+import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.IndexOutOfBoundsException;
 import com.sun.star.lang.WrappedTargetException;
-import com.sun.star.sdbc.XConnection;
-import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.CommandType;
 import com.sun.star.sdb.XCompletedExecution;
 import com.sun.star.sdb.XParametersSupplier;
 import com.sun.star.sdb.XQueriesSupplier;
-import com.sun.star.sdb.XResultSetAccess;
 import com.sun.star.sdb.XSingleSelectQueryComposer;
 import com.sun.star.sdb.tools.XConnectionTools;
 import com.sun.star.sdbc.SQLException;
+import com.sun.star.sdbc.XConnection;
 import com.sun.star.sdbc.XParameters;
-import com.sun.star.sdbc.XPreparedStatement;
-import com.sun.star.uno.Exception;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.sun.star.sdbc.XRowSet;
-import com.sun.star.sdbcx.XColumnsSupplier;
-import com.sun.star.sdbcx.XTablesSupplier;
 import com.sun.star.task.XInteractionHandler;
+import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
+
 import java.lang.reflect.Method;
+
 import java.math.BigDecimal;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 
 /**
  * Very primitive implementation, just to show how this could be used ...

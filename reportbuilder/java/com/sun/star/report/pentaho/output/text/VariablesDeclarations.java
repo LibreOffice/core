@@ -30,10 +30,11 @@
 package com.sun.star.report.pentaho.output.text;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.jfree.report.util.AttributeNameGenerator;
+
 
 /**
  * A collection that holds all used variables. A variable is primarily keyed by

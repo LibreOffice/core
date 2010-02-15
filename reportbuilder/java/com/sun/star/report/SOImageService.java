@@ -29,9 +29,6 @@
  ************************************************************************/
 package com.sun.star.report;
 
-import java.awt.Dimension;
-import java.io.InputStream;
-
 import com.sun.star.awt.Size;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.UnknownPropertyException;
@@ -46,6 +43,11 @@ import com.sun.star.lib.uno.adapter.ByteArrayToXInputStreamAdapter;
 import com.sun.star.lib.uno.adapter.InputStreamToXInputStreamAdapter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
+
+import java.awt.Dimension;
+
+import java.io.InputStream;
+
 
 /**
  * @author oj93728

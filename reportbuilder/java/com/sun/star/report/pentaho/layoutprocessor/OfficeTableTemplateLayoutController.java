@@ -29,12 +29,13 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.layoutprocessor;
 
-import java.util.ArrayList;
-
 import com.sun.star.report.pentaho.OfficeNamespaces;
 import com.sun.star.report.pentaho.model.OfficeGroup;
 import com.sun.star.report.pentaho.model.OfficeReport;
+
+import java.util.ArrayList;
 import java.util.List;
+
 import org.jfree.report.DataSourceException;
 import org.jfree.report.JFreeReportInfo;
 import org.jfree.report.ReportDataFactoryException;
@@ -45,6 +46,7 @@ import org.jfree.report.flow.layoutprocessor.SectionLayoutController;
 import org.jfree.report.structure.Element;
 import org.jfree.report.structure.Node;
 import org.jfree.report.structure.Section;
+
 
 /**
  * Creation-Date: 24.04.2007, 16:06:52

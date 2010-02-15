@@ -29,12 +29,13 @@
  ************************************************************************/
 package com.sun.star.report.util;
 
-import java.util.HashMap;
-
+import com.sun.star.report.JobDefinitionException;
 import com.sun.star.report.JobProperties;
 import com.sun.star.report.ReportEngineMetaData;
-import com.sun.star.report.JobDefinitionException;
+
+import java.util.HashMap;
 import java.util.Map;
+
 
 public class DefaultJobProperties implements JobProperties
 {

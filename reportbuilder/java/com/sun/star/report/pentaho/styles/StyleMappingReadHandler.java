@@ -31,6 +31,7 @@ package com.sun.star.report.pentaho.styles;
 
 import org.pentaho.reporting.libraries.xmlns.parser.AbstractXmlReadHandler;
 import org.pentaho.reporting.libraries.xmlns.parser.ParseException;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 

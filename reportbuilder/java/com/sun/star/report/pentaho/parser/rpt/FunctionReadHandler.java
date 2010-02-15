@@ -29,15 +29,18 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.parser.rpt;
 
+import com.sun.star.report.OfficeToken;
+import com.sun.star.report.pentaho.OfficeNamespaces;
+
+import org.jfree.report.expressions.Expression;
+import org.jfree.report.expressions.FormulaExpression;
+import org.jfree.report.expressions.FormulaFunction;
+
 import org.pentaho.reporting.libraries.xmlns.parser.AbstractXmlReadHandler;
 import org.pentaho.reporting.libraries.xmlns.parser.ParseException;
-import org.jfree.report.expressions.Expression;
-import org.jfree.report.expressions.FormulaFunction;
-import org.jfree.report.expressions.FormulaExpression;
-import org.xml.sax.SAXException;
+
 import org.xml.sax.Attributes;
-import com.sun.star.report.pentaho.OfficeNamespaces;
-import com.sun.star.report.OfficeToken;
+import org.xml.sax.SAXException;
 
 /**
  * Parses a named expression. These expressions are encountered on reports and

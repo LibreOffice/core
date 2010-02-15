@@ -30,27 +30,31 @@
  ************************************************************************/
 package com.sun.star.report.pentaho;
 
+
 import com.sun.star.lang.XServiceInfo;
-import com.sun.star.sheet.XFormulaOpCodeMapper;
-import com.sun.star.uno.Exception;
-import com.sun.star.uno.XComponentContext;
 import com.sun.star.lib.uno.helper.ComponentBase;
-import com.sun.star.uno.Type;
 import com.sun.star.lib.uno.helper.PropertySetMixin;
 import com.sun.star.sheet.FormulaLanguage;
 import com.sun.star.sheet.FormulaMapGroup;
 import com.sun.star.sheet.FormulaMapGroupSpecialOffset;
 import com.sun.star.sheet.FormulaOpCodeMapEntry;
 import com.sun.star.sheet.FormulaToken;
+import com.sun.star.sheet.XFormulaOpCodeMapper;
 import com.sun.star.uno.Any;
+import com.sun.star.uno.Exception;
+import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
+
 import java.io.StringReader;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
+
+import org.pentaho.reporting.libraries.base.config.Configuration;
 import org.pentaho.reporting.libraries.formula.DefaultFormulaContext;
 import org.pentaho.reporting.libraries.formula.function.FunctionRegistry;
 import org.pentaho.reporting.libraries.formula.parser.FormulaParser;
@@ -60,7 +64,7 @@ import org.pentaho.reporting.libraries.formula.parser.JavaCharStream;
 import org.pentaho.reporting.libraries.formula.parser.ParseException;
 import org.pentaho.reporting.libraries.formula.parser.Token;
 import org.pentaho.reporting.libraries.formula.parser.TokenMgrError;
-import org.pentaho.reporting.libraries.base.config.Configuration;
+
 
 public final class SOFormulaParser extends ComponentBase
         implements com.sun.star.report.meta.XFormulaParser, XServiceInfo

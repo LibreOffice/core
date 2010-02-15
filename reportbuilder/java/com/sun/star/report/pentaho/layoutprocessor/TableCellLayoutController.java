@@ -29,14 +29,15 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.layoutprocessor;
 
-import com.sun.star.report.pentaho.OfficeNamespaces;
 import com.sun.star.report.OfficeToken;
+import com.sun.star.report.pentaho.OfficeNamespaces;
 import com.sun.star.report.pentaho.model.FormatCondition;
 import com.sun.star.report.pentaho.model.FormattedTextElement;
 import com.sun.star.report.pentaho.model.ReportElement;
+
 import org.jfree.layouting.util.AttributeMap;
-import org.jfree.report.DataSourceException;
 import org.jfree.report.DataFlags;
+import org.jfree.report.DataSourceException;
 import org.jfree.report.expressions.Expression;
 import org.jfree.report.flow.FlowController;
 import org.jfree.report.flow.ReportTarget;
@@ -45,6 +46,7 @@ import org.jfree.report.flow.layoutprocessor.SectionLayoutController;
 import org.jfree.report.structure.Element;
 import org.jfree.report.structure.Node;
 import org.jfree.report.structure.Section;
+
 import org.pentaho.reporting.libraries.base.util.ObjectUtilities;
 
 /**

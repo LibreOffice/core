@@ -36,8 +36,6 @@ import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.IndexOutOfBoundsException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.sdb.XParametersSupplier;
-import java.sql.Timestamp;
-
 import com.sun.star.sdbc.DataType;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XResultSetMetaData;
@@ -49,6 +47,9 @@ import com.sun.star.uno.Any;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.DateTime;
 import com.sun.star.util.Time;
+
+import java.sql.Timestamp;
+
 
 public class SDBCReportData implements DataSource
 {

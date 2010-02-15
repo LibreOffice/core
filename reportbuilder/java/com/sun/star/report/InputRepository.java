@@ -29,8 +29,8 @@
  ************************************************************************/
 package com.sun.star.report;
 
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * This allows the job processor to load data from a repository. It is assumed,

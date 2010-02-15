@@ -30,26 +30,13 @@
 package com.sun.star.report.pentaho.output;
 
 import com.sun.star.report.DataSourceFactory;
-import java.awt.Image;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.zip.DeflaterOutputStream;
-import java.util.zip.InflaterInputStream;
-import com.sun.star.report.ReportEngineParameterNames;
 import com.sun.star.report.ImageService;
 import com.sun.star.report.InputRepository;
+import com.sun.star.report.OfficeToken;
 import com.sun.star.report.OutputRepository;
+import com.sun.star.report.ReportEngineParameterNames;
 import com.sun.star.report.SDBCReportDataFactory;
 import com.sun.star.report.pentaho.OfficeNamespaces;
-import com.sun.star.report.OfficeToken;
 import com.sun.star.report.pentaho.layoutprocessor.ImageElementContext;
 import com.sun.star.report.pentaho.model.OfficeDocument;
 import com.sun.star.report.pentaho.model.OfficeStyle;
@@ -57,15 +44,33 @@ import com.sun.star.report.pentaho.model.OfficeStyles;
 import com.sun.star.report.pentaho.model.OfficeStylesCollection;
 import com.sun.star.report.pentaho.styles.LengthCalculator;
 import com.sun.star.report.pentaho.styles.StyleMapper;
+
+import java.awt.Image;
+
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
 import java.io.StringReader;
+import java.io.StringWriter;
+import java.io.Writer;
+
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.zip.DeflaterOutputStream;
+import java.util.zip.InflaterInputStream;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 import org.jfree.layouting.input.style.parser.CSSValueFactory;
 import org.jfree.layouting.input.style.parser.StyleSheetParserUtil;
-import org.jfree.layouting.input.style.values.CSSNumericValue;
 import org.jfree.layouting.input.style.values.CSSNumericType;
+import org.jfree.layouting.input.style.values.CSSNumericValue;
 import org.jfree.layouting.layouter.style.CSSValueResolverUtility;
 import org.jfree.layouting.namespace.NamespaceDefinition;
 import org.jfree.layouting.namespace.Namespaces;
@@ -85,6 +90,7 @@ import org.jfree.report.structure.Section;
 import org.jfree.report.util.AttributeNameGenerator;
 import org.jfree.report.util.IntegerCache;
 import org.jfree.report.util.MemoryByteArrayOutputStream;
+
 import org.pentaho.reporting.libraries.base.util.FastStack;
 import org.pentaho.reporting.libraries.base.util.IOUtils;
 import org.pentaho.reporting.libraries.resourceloader.ResourceException;
@@ -94,6 +100,7 @@ import org.pentaho.reporting.libraries.xmlns.common.AttributeList;
 import org.pentaho.reporting.libraries.xmlns.writer.DefaultTagDescription;
 import org.pentaho.reporting.libraries.xmlns.writer.XmlWriter;
 import org.pentaho.reporting.libraries.xmlns.writer.XmlWriterSupport;
+
 import org.w3c.css.sac.LexicalUnit;
 
 /**

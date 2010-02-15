@@ -31,6 +31,7 @@ package com.sun.star.report.pentaho.model;
 
 import com.sun.star.report.OfficeToken;
 import com.sun.star.report.pentaho.OfficeNamespaces;
+
 import org.jfree.report.structure.Element;
 import org.jfree.report.structure.Section;
 

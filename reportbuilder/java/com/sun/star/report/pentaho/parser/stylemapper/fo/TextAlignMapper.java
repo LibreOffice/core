@@ -30,6 +30,7 @@
 package com.sun.star.report.pentaho.parser.stylemapper.fo;
 
 import com.sun.star.report.pentaho.parser.stylemapper.OneOfConstantsMapper;
+
 import org.jfree.layouting.input.style.keys.text.TextAlign;
 import org.jfree.layouting.input.style.keys.text.TextStyleKeys;
 

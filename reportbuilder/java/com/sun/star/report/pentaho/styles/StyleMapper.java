@@ -30,11 +30,12 @@
 package com.sun.star.report.pentaho.styles;
 
 import java.util.HashMap;
-
 import java.util.Map;
+
 import org.pentaho.reporting.libraries.resourceloader.Resource;
 import org.pentaho.reporting.libraries.resourceloader.ResourceException;
 import org.pentaho.reporting.libraries.resourceloader.ResourceManager;
+
 
 /**
  * The style-mapper holds all information about the OpenOffice style mapping

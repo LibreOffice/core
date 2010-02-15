@@ -29,9 +29,10 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.expressions;
 
+import com.sun.star.report.ReportExpressionMetaData;
+
 import java.util.Locale;
 
-import com.sun.star.report.ReportExpressionMetaData;
 
 public class SumExpressionMetaData implements ReportExpressionMetaData
 {

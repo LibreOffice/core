@@ -30,18 +30,18 @@
 package com.sun.star.report.pentaho;
 
 import com.sun.star.beans.NamedValue;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.PropertyVetoException;
+import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertyChangeListener;
+import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.XVetoableChangeListener;
 import com.sun.star.container.XChild;
 import com.sun.star.embed.XStorage;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.IllegalArgumentException;
+import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XInitialization;
 import com.sun.star.lang.XServiceInfo;
-import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.lib.uno.helper.Factory;
 import com.sun.star.lib.uno.helper.PropertySetMixin;
@@ -61,7 +61,6 @@ import com.sun.star.report.SDBCReportDataFactory;
 import com.sun.star.report.SOImageService;
 import com.sun.star.report.StorageRepository;
 import com.sun.star.report.XReportDefinition;
-import com.sun.star.report.pentaho.SOReportJobFactory._SOReportJobFactory;
 import com.sun.star.sdb.XDocumentDataSource;
 import com.sun.star.sdbc.XConnection;
 import com.sun.star.sdbc.XRowSet;
@@ -70,8 +69,10 @@ import com.sun.star.uno.Exception;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

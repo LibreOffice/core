@@ -29,10 +29,11 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.layoutprocessor;
 
-import java.util.ArrayList;
-
 import com.sun.star.report.pentaho.model.FormattedTextElement;
+
+import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * A variables collection is used to collect all FormattedTextElement objects

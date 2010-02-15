@@ -29,10 +29,11 @@
  ************************************************************************/
 package com.sun.star.report.util;
 
-import java.util.HashMap;
-
 import com.sun.star.report.ParameterMap;
+
+import java.util.HashMap;
 import java.util.Map;
+
 
 public class DefaultParameterMap implements ParameterMap
 {

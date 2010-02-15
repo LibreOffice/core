@@ -29,8 +29,6 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.output;
 
-import java.util.HashSet;
-
 import com.sun.star.report.pentaho.OfficeNamespaces;
 import com.sun.star.report.pentaho.model.DataStyle;
 import com.sun.star.report.pentaho.model.FontFaceDeclsSection;
@@ -38,14 +36,19 @@ import com.sun.star.report.pentaho.model.FontFaceElement;
 import com.sun.star.report.pentaho.model.OfficeStyle;
 import com.sun.star.report.pentaho.model.OfficeStyles;
 import com.sun.star.report.pentaho.model.OfficeStylesCollection;
+
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import org.jfree.report.ReportProcessingException;
 import org.jfree.report.structure.Element;
 import org.jfree.report.structure.Section;
 import org.jfree.report.util.AttributeNameGenerator;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+
 
 /**
  * Todo: Document me!

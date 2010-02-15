@@ -29,14 +29,16 @@
  ************************************************************************/
 package com.sun.star.report.pentaho;
 
-import java.util.HashMap;
-
-import org.jfree.report.ReportDataFactory;
-import org.jfree.report.ReportData;
-import org.jfree.report.DataSet;
-import org.jfree.report.ReportDataFactoryException;
 import com.sun.star.report.DataSourceException;
 import com.sun.star.report.DataSourceFactory;
+
+import java.util.HashMap;
+
+import org.jfree.report.DataSet;
+import org.jfree.report.ReportData;
+import org.jfree.report.ReportDataFactory;
+import org.jfree.report.ReportDataFactoryException;
+
 
 public class StarReportDataFactory implements ReportDataFactory, Cloneable
 {

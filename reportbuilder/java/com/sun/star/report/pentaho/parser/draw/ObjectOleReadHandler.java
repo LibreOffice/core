@@ -32,7 +32,9 @@ package com.sun.star.report.pentaho.parser.draw;
 import com.sun.star.report.pentaho.OfficeNamespaces;
 import com.sun.star.report.pentaho.model.ObjectOleElement;
 import com.sun.star.report.pentaho.parser.ElementReadHandler;
+
 import org.jfree.report.structure.Element;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 

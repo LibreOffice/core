@@ -30,12 +30,14 @@
 package com.sun.star.report.pentaho.styles;
 
 import java.util.ArrayList;
-
 import java.util.List;
+
 import org.pentaho.reporting.libraries.xmlns.parser.AbstractXmlReadHandler;
 import org.pentaho.reporting.libraries.xmlns.parser.XmlReadHandler;
-import org.xml.sax.SAXException;
+
 import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+
 
 /**
  * Todo: Document me!
