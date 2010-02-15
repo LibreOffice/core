@@ -138,7 +138,7 @@ sal_Bool SampleAddIn::getLogicalPosition( uno::Reference< drawing::XShape >& xAx
         {
             try
             {
-                double fMin, fMax;
+                double fMin(0.0), fMax(0.0);
                 uno::Any aAny = xProp->getPropertyValue( OUString::createFromAscii( "Min" ));
                 aAny >>= fMin;
                 aAny = xProp->getPropertyValue( OUString::createFromAscii( "Max" ));

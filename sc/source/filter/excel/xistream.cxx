@@ -678,56 +678,56 @@ XclImpStream& XclImpStream::operator>>( double& rfValue )
 
 sal_Int8 XclImpStream::ReadInt8()
 {
-    sal_Int8 nValue;
+    sal_Int8 nValue(0);
     operator>>( nValue );
     return nValue;
 }
 
 sal_uInt8 XclImpStream::ReaduInt8()
 {
-    sal_uInt8 nValue;
+    sal_uInt8 nValue(0);
     operator>>( nValue );
     return nValue;
 }
 
 sal_Int16 XclImpStream::ReadInt16()
 {
-    sal_Int16 nValue;
+    sal_Int16 nValue(0);
     operator>>( nValue );
     return nValue;
 }
 
 sal_uInt16 XclImpStream::ReaduInt16()
 {
-    sal_uInt16 nValue;
+    sal_uInt16 nValue(0);
     operator>>( nValue );
     return nValue;
 }
 
 sal_Int32 XclImpStream::ReadInt32()
 {
-    sal_Int32 nValue;
+    sal_Int32 nValue(0);
     operator>>( nValue );
     return nValue;
 }
 
 sal_uInt32 XclImpStream::ReaduInt32()
 {
-    sal_uInt32 nValue;
+    sal_uInt32 nValue(0);
     operator>>( nValue );
     return nValue;
 }
 
 float XclImpStream::ReadFloat()
 {
-    float fValue;
+    float fValue(0.0);
     operator>>( fValue );
     return fValue;
 }
 
 double XclImpStream::ReadDouble()
 {
-    double fValue;
+    double fValue(0.0);
     operator>>( fValue );
     return fValue;
 }
