@@ -29,6 +29,8 @@
 #
 #*************************************************************************
 
+EXTENSION_TARGET:=$(ZIP9TARGETN)
+
 .SOURCE.xcu : $(MISC)/$(EXTNAME)/merge $(MISC)/$(EXTNAME)/registry/data $(MISC)/$(COMPONENT_SHARED_CONFIG)_in/merge $(MISC)/$(COMPONENT_SHARED_CONFIG)_in/registry/data $(COMPONENT_CONFIGDIR) .
 .SOURCE.xcs : $(MISC)/$(EXTNAME)/registry $(MISC)/$(EXTNAME)/registry/schema .
 
@@ -129,12 +131,18 @@ PHONYDESC=.PHONY
 .IF "$(DESCRIPTION)"!=""
 $(DESCRIPTION) $(PHONYDESC) : $(DESCRIPTION_SRC)
     @@-$(MKDIRHIER) $(@:d)
-    $(COMMAND_ECHO)$(PERL) $(SOLARENV)/bin/licinserter.pl $(DESCRIPTION_SRC) $(COMPONENT_LIC_TEMPL) $@.$(EXTNAME)
     @echo LAST_WITH_LANG=$(WITH_LANG) > $(MISC)/$(TARGET)_lang_track.mk
-    $(COMMAND_ECHO)$(TYPE) $@.$(EXTNAME) | sed s/UPDATED_IDENTIFIER/$(IMPLEMENTATION_IDENTIFIER)/ >  $(MISC)/desc.tmp.$(EXTNAME)
-    @@-$(RM) $@.$(EXTNAME)
-    $(COMMAND_ECHO)$(TYPE) $(MISC)/desc.tmp.$(EXTNAME) | sed s/UPDATED_SUPPORTED_PLATFORM/$(PLATFORMID)/ > $@
-    @@-$(RM) $(MISC)/desc.tmp.$(EXTNAME)
+
+    $(COMMAND_ECHO)$(PERL) $(SOLARENV)/bin/licinserter.pl $(DESCRIPTION_SRC) $(COMPONENT_LIC_TEMPL) $@.1.$(EXTNAME)
+
+    $(COMMAND_ECHO)$(PERL) $(SOLARENV)/bin/transform_description.pl $@.1.$(EXTNAME) $@.2.$(EXTNAME)
+    @@-$(RM) $@.1.$(EXTNAME)
+
+    $(COMMAND_ECHO)$(TYPE) $@.2.$(EXTNAME) | sed s/UPDATED_IDENTIFIER/$(IMPLEMENTATION_IDENTIFIER)/ >  $@.3.$(EXTNAME)
+    @@-$(RM) $@.2.$(EXTNAME)
+
+    $(COMMAND_ECHO)$(TYPE) $@.3.$(EXTNAME) | sed s/UPDATED_SUPPORTED_PLATFORM/$(PLATFORMID)/ > $@
+    @@-$(RM) $@.3.$(EXTNAME)
 
 .ENDIF			# "$(DESCRIPTION)"!=""
 # default OOo license text!!!
