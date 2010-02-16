@@ -300,7 +300,7 @@ OpenOffice_SDK
             PACK_INSTALLED 1
             POOLPRODUCT 0
             DMG_VOLUMEEXTENSION SDK
-            DATABASENAME openofficeorg32sdk
+            DATABASENAME openofficeorg33sdk
             NO_README_IN_ROOTDIR 1
             LICENSENAME LGPL
             IGNOREDIRECTORYLAYER 1
@@ -349,7 +349,7 @@ OpenOffice_Dev_SDK
             PACK_INSTALLED 1
             POOLPRODUCT 0
             DMG_VOLUMEEXTENSION SDK
-            DATABASENAME openofficeorg32devsdk
+            DATABASENAME openofficeorg33devsdk
             NO_README_IN_ROOTDIR 1
             LICENSENAME LGPL
             IGNOREDIRECTORYLAYER 1
