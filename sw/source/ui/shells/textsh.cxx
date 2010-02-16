@@ -196,7 +196,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             SvxAutoCorrect* pACorr = pACfg->GetAutoCorrect();
             if( pACorr && pACfg->IsAutoFmtByInput() &&
                     pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
-                                ChgFractionSymbol | ChgOrdinalNumber |
+                                AddNonBrkSpace | ChgOrdinalNumber |
                                 ChgToEnEmDash | SetINetAttr | Autocorrect ))
                 rSh.AutoCorrect( *pACorr, cIns );
             else
