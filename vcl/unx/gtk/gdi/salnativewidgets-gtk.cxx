@@ -7,7 +7,6 @@
  * OpenOffice.org - a multi-platform office productivity suite
  *
  * $RCSfile: salnativewidgets-gtk.cxx,v $
- * $Revision: 1.47.32.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,7 +47,7 @@
 #include "saldisp.hxx"
 #include "vcl/svapp.hxx"
 
-#include "cairo/cairo.h"
+typedef struct _cairo_font_options cairo_font_options_t;
 
 // initialize statics
 BOOL GtkSalGraphics::bThemeChanged = TRUE;
