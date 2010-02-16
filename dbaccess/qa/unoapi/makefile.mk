@@ -1,14 +1,9 @@
 #*************************************************************************
-#
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
-# Copyright 2008 by Sun Microsystems, Inc.
+#
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -26,28 +21,28 @@
 # version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
-#
-#*************************************************************************
+#***********************************************************************/
 
-PRJ=..$/..
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
+.ELSE
 
-PRJNAME=dbaccess
-TARGET=qa_unoapi
+PRJ = ../..
+PRJNAME = dbaccess
+TARGET = qa_unoapi
+
+.IF "$(OOO_JUNIT_JAR)" != ""
+PACKAGE = org/openoffice/dbaccess/qa/unoapi
+JAVATESTFILES = Test.java
+JAVAFILES = $(JAVATESTFILES)
+JARFILES = OOoRunner.jar ridl.jar test.jar
+EXTRAJARFILES = $(OOO_JUNIT_JAR)
+.END
 
 .INCLUDE: settings.mk
-
 .INCLUDE: target.mk
+.INCLUDE: installationtest.mk
 
+ALLTAR : javatest
 
-ALLTAR : UNOAPI_TEST
-
-UNOAPI_TEST:	
-    +$(SOLARENV)$/bin$/checkapi -sce dbaccess.sce -ini dbaccess.props -xcl knownissues.xcl -tdoc $(PWD)$/testdocuments
-    @echo =======================================================================
-    @echo In case of problems make sure that you put valid values in the dbaccess.props and added an appropriate jdbc-driver to your office installation
-    @echo =======================================================================
-    @echo In case of problems with TableWindowAccessibility or JoinViewAccessibility this might be because of connection problems, just re-run the testcases 
-    @echo =======================================================================		
-
-run_%:
-    +$(SOLARENV)$/bin$/checkapi -o dbaccess.$(@:s/run_//) -ini dbaccess.props -xcl knownissues.xcl -tdoc $(PWD)$/testdocuments
+.END
