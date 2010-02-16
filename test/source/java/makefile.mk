@@ -27,6 +27,8 @@ PRJ = ../..
 PRJNAME = test
 TARGET = java
 
+.IF "$(OOO_JUNIT_JAR)" != ""
+
 PACKAGE = org/openoffice/test
 JAVAFILES = OfficeConnection.java
 JARFILES = juh.jar ridl.jar unoil.jar
@@ -35,6 +37,8 @@ EXTRAJARFILES = $(OOO_JUNIT_JAR)
 JARTARGET = test.jar
 JARCLASSDIRS = $(PACKAGE)
 JARCLASSPATH = $(JARFILES) $(EXTRAJARFILES)
+
+.END
 
 .INCLUDE: settings.mk
 .INCLUDE: target.mk
