@@ -31,11 +31,13 @@ PRJ = ../..
 PRJNAME = sw
 TARGET = qa_unoapi
 
+.IF "$(OOO_JUNIT_JAR)" != ""
 PACKAGE = org/openoffice/sw/qa/unoapi
 JAVATESTFILES = Test.java
 JAVAFILES = $(JAVATESTFILES)
 JARFILES = OOoRunner.jar ridl.jar test.jar
 EXTRAJARFILES = $(OOO_JUNIT_JAR)
+.END
 
 .INCLUDE: settings.mk
 .INCLUDE: target.mk
