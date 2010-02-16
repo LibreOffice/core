@@ -29318,7 +29318,7 @@ $as_echo_n "checking for JUnit 4... " >&6; }
         OOO_JUNIT_JAR=$with_junit
     fi
     "$JAVA_HOME/bin/jar" tf "$OOO_JUNIT_JAR" 2> /dev/null | \
-        grep -F org/junit/Before.class 2>&1 > /dev/null
+        grep org/junit/Before.class 2>&1 > /dev/null
     if test $? -eq 0; then
         { $as_echo "$as_me:$LINENO: result: $OOO_JUNIT_JAR" >&5
 $as_echo "$OOO_JUNIT_JAR" >&6; }
