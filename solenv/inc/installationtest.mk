@@ -102,7 +102,7 @@ $(MISC)/$(TARGET)/services.rdb :
     $(REGCOMP) -register -r $@ -wop -c bridgefac.uno -c connector.uno \
         -c remotebridge.uno -c uuresolver.uno
 
-.IF "$(SOLAR_JAVA)" == "TRUE"
+.IF "$(SOLAR_JAVA)" == "TRUE" && "$(OOO_JUNIT_JAR)" != ""
 javatest .PHONY : $(MISC)/$(TARGET)/installation.flag $(JAVATARGET)
     $(RM) -r $(MISC)/$(TARGET)/user
     $(MKDIR) $(MISC)/$(TARGET)/user
@@ -118,5 +118,5 @@ javatest .PHONY : $(MISC)/$(TARGET)/installation.flag $(JAVATARGET)
 .END
 .ELSE
 javatest .PHONY :
-    echo 'javatest needs SOLAR_JAVA=TRUE'
+    echo 'javatest needs SOLAR_JAVA=TRUE and OOO_JUNIT_JAR'
 .END
