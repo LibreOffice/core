@@ -1040,7 +1040,7 @@ void  TableManager<T, PropertiesPointer>::openCell
 {
 #ifdef DEBUG_TABLE
     mpTableLogger->startElement("tablemanager.openCell");
-    mpTableLogger->chars(toString(handle));
+    mpTableLogger->chars(toString(rHandle));
     mpTableLogger->endElement("tablemanager.openCell");
 #endif
 
@@ -1059,7 +1059,7 @@ void  TableManager<T, PropertiesPointer>::closeCell
 {
 #ifdef DEBUG_TABLE
     mpTableLogger->startElement("tablemanager.closeCell");
-    mpTableLogger->chars(toString(handle));
+    mpTableLogger->chars(toString(rHandle));
     mpTableLogger->endElement("tablemanager.closeCell");
 #endif
 
