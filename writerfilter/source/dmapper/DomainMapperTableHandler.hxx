@@ -80,7 +80,7 @@ class DomainMapperTableHandler : public TableDataHandler<Handle_t , TablePropert
 
     TableStyleSheetEntry * endTableGetTableStyle(TableInfo & rInfo);
     CellPropertyValuesSeq_t endTableGetCellProperties(TableInfo & rInfo);
-    RowPropertyValuesSeq_t DomainMapperTableHandler::endTableGetRowProperties();
+    RowPropertyValuesSeq_t endTableGetRowProperties();
 
 public:
     typedef boost::shared_ptr<DomainMapperTableHandler> Pointer_t;

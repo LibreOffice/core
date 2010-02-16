@@ -93,5 +93,6 @@ rtl::OUString </xsl:text>
     <xsl:text>
 #include "OOXMLFactory_values.hxx"</xsl:text>
 <xsl:call-template name="valueconstants"/>
+<xsl:text>&#xa;</xsl:text>
   </xsl:template>
 </xsl:stylesheet>

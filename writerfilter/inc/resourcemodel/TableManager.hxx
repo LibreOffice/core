@@ -1036,7 +1036,7 @@ void  TableManager<T, PropertiesPointer>::clearData()
 
 template <typename T, typename PropertiesPointer>
 void  TableManager<T, PropertiesPointer>::openCell
-(const T & handle, PropertiesPointer pProps)
+(const T & rHandle, PropertiesPointer pProps)
 {
 #ifdef DEBUG_TABLE
     mpTableLogger->startElement("tablemanager.openCell");
@@ -1049,13 +1049,13 @@ void  TableManager<T, PropertiesPointer>::openCell
         typename TableData<T, PropertiesPointer>::Pointer_t
         pTableData = mTableDataStack.top();
 
-        pTableData->addCell(handle, pProps);
+        pTableData->addCell(rHandle, pProps);
     }
 }
 
 template <typename T, typename PropertiesPointer>
 void  TableManager<T, PropertiesPointer>::closeCell
-(const T & handle)
+(const T & rHandle)
 {
 #ifdef DEBUG_TABLE
     mpTableLogger->startElement("tablemanager.closeCell");
@@ -1068,7 +1068,7 @@ void  TableManager<T, PropertiesPointer>::closeCell
         typename TableData<T, PropertiesPointer>::Pointer_t
         pTableData = mTableDataStack.top();
 
-        pTableData->endCell(handle);
+        pTableData->endCell(rHandle);
     }
 }
 
