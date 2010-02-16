@@ -723,7 +723,7 @@ OOXMLTableImpl::~OOXMLTableImpl()
 void OOXMLTableImpl::resolve(Table & rTable)
 {
 #ifdef DEBUG_PROTOCOL
-    Table * pTable = new TableProtocol(&rTable, debug_logger);
+    Table::Pointer_t pTable(new TableProtocol(&rTable, debug_logger));
 #else
     Table * pTable = &rTable;
 #endif
