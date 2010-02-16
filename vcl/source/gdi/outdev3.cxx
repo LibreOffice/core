@@ -68,6 +68,9 @@
 #ifdef ENABLE_GRAPHITE
 #include <vcl/graphite_features.hxx>
 #endif
+#ifdef USE_BUILTIN_RASTERIZER
+#include <vcl/glyphcache.hxx>
+#endif
 
 #include <vcl/unohelp.hxx>
 #include <pdfwriter_impl.hxx>
@@ -2780,6 +2783,11 @@ void ImplFontCache::Invalidate()
     maFontInstanceList.clear();
 
     DBG_ASSERT( (mnRef0Count==0), "ImplFontCache::Invalidate() - mnRef0Count non-zero" );
+
+#ifdef USE_BUILTIN_RASTERIZER
+    // TODO: eventually move into SalGraphics layer
+    GlyphCache::GetInstance().InvalidateAllGlyphs();
+#endif
 }
 
 // =======================================================================
