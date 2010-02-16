@@ -174,7 +174,9 @@ void OOXMLPropertyImpl::resolve(writerfilter::Properties & rProperties)
 {
     writerfilter::Properties * pProperties = NULL;
 #ifdef DEBUG_PROTOCOL
-    pProperties = new writerfilter::PropertiesProtocol(&rProperties, debug_logger);
+    writerfilter::PropertiesProtocol::Pointer_t pProtocol
+        (new writerfilter::PropertiesProtocol(&rProperties, debug_logger));
+    pProperties = pProtocol.get();
 #else
     pProperties = &rProperties;
 #endif
