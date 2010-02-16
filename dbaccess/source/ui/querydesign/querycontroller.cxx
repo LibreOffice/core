@@ -1664,13 +1664,13 @@ short OQueryController::saveModified()
     return nRet;
 }
 // -----------------------------------------------------------------------------
-void OQueryController::impl_reset( const bool i_bIgnoreQuerySettings )
+void OQueryController::impl_reset( const bool i_bForceCurrentControllerSettings )
 {
     bool bValid = false;
 
     Sequence< PropertyValue > aLayoutInformation;
     // get command from the query if a query name was supplied
-    if ( !i_bIgnoreQuerySettings && !editingCommand() )
+    if ( !i_bForceCurrentControllerSettings && !editingCommand() )
     {
         if ( m_sName.getLength() )
         {
@@ -1751,7 +1751,7 @@ void OQueryController::impl_reset( const bool i_bIgnoreQuerySettings )
                     m_pSqlIterator->traverseAll();
                     if ( m_pSqlIterator->hasErrors() )
                     {
-                        if ( !editingView() )
+                        if ( !i_bForceCurrentControllerSettings && !editingView() )
                         {
                             impl_showAutoSQLViewError( makeAny( m_pSqlIterator->getErrors() ) );
                         }
@@ -1760,7 +1760,7 @@ void OQueryController::impl_reset( const bool i_bIgnoreQuerySettings )
                 }
                 else
                 {
-                    if ( !editingView() )
+                    if ( !i_bForceCurrentControllerSettings && !editingView() )
                     {
                         String aTitle(ModuleRes(STR_SVT_SQL_SYNTAX_ERROR));
                         OSQLMessageBox aDlg(getView(),aTitle,aErrorMsg);
