@@ -269,17 +269,23 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter() thro
     // object already disposed?
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    // Printer beschaffen
-    SfxViewFrame *pViewFrm = m_pData->m_pObjectShell.Is() ?
-                                SfxViewFrame::GetFirst( m_pData->m_pObjectShell, 0, sal_False ) : 0;
-    if ( !pViewFrm )
-        return uno::Sequence< beans::PropertyValue >();
+    // search for any view of this document that is currently printing
+    const Printer *pPrinter = NULL;
+    SfxViewFrame *pViewFrm = m_pData->m_pObjectShell.Is() ? SfxViewFrame::GetFirst( m_pData->m_pObjectShell, 0, sal_False ) : 0;
+    SfxViewFrame* pFirst = pViewFrm;
+    while ( pViewFrm && !pPrinter )
+    {
+        pPrinter = pViewFrm->GetViewShell()->GetActivePrinter();
+        pViewFrm = SfxViewFrame::GetNext( *pViewFrm, m_pData->m_pObjectShell, 0, sal_False );
+    }
 
-    const SfxPrinter *pPrinter = pViewFrm->GetViewShell()->GetPrinter(sal_True);
+    // if no view is printing currently, use the permanent SfxPrinter instance
+    if ( !pPrinter && pFirst )
+        pPrinter = pFirst->GetViewShell()->GetPrinter(sal_True);
+
     if ( !pPrinter )
         return uno::Sequence< beans::PropertyValue >();
 
-    // Printer Eigenschaften uebertragen
     uno::Sequence< beans::PropertyValue > aPrinter(8);
 
     aPrinter.getArray()[7].Name = DEFINE_CONST_UNICODE( "CanSetPaperSize" );
