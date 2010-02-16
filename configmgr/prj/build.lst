@@ -15,4 +15,4 @@ cg	configmgr\source\registry				nmake	-	all	cg_reg cg_inc NULL
 cg	configmgr\source\platformbe				nmake	-	all	cg_platformbe cg_inc NULL
 cg	configmgr\util							nmake	-	all	cg_util cg_platformbe cg_api cg_api2 cg_misc cg_reg cg_trcache cg_data cg_tree cg_treemgr cg_xml cg_backend cg_localbe NULL
 cg	configmgr\source\localbe				nmake	-	all	cg_localbe cg_inc NULL
-
+cg configmgr\qa\unoapi nmake - all cg_qa_unoapi NULL
