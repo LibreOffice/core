@@ -87,16 +87,16 @@ namespace dbaui
         virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
 
         /** loads the information for the windows.
-            @param  _aViewProps
+            @param  i_rViewSettings
                 The properties which comes from the layout information.
         */
-        void loadTableWindows(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _aViewProps);
+        void loadTableWindows( const ::comphelper::NamedValueCollection& i_rViewSettings );
 
         /** loads the information for one window.
             @param  _rTable
                 The properties which comes from the layout information.
         */
-        void loadTableWindow(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _rTable);
+        void loadTableWindow( const ::comphelper::NamedValueCollection& i_rTableWindowSettings );
 
         /** saves the TableWindows structure in a sequence of property values
             @param  _rViewProps

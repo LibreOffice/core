@@ -58,7 +58,8 @@ namespace dbaui
     class OTableFieldDesc : public ::vos::OReference
     {
     private:
-        ::std::vector< ::rtl::OUString> m_vecCriteria;
+       ::std::vector< ::rtl::OUString >
+                                    m_aCriteria;
 
         ::rtl::OUString             m_aTableName;
         ::rtl::OUString             m_aAliasName;       // table range
@@ -136,18 +137,18 @@ namespace dbaui
 
         sal_Bool                HasCriteria()       const
         {
-            ::std::vector< ::rtl::OUString>::const_iterator aIter = m_vecCriteria.begin();
-            ::std::vector< ::rtl::OUString>::const_iterator aEnd = m_vecCriteria.end();
+            ::std::vector< ::rtl::OUString>::const_iterator aIter = m_aCriteria.begin();
+            ::std::vector< ::rtl::OUString>::const_iterator aEnd = m_aCriteria.end();
             for(;aIter != aEnd;++aIter)
                 if(aIter->getLength())
                     break;
             return aIter != aEnd;
         }
 
-        const ::std::vector< ::rtl::OUString>&  GetCriteria() const { return m_vecCriteria;}
+        const ::std::vector< ::rtl::OUString>&  GetCriteria() const { return m_aCriteria; }
 
-        void Load(const ::com::sun::star::beans::PropertyValue& _rProperty);
-        void Save( ::comphelper::NamedValueCollection& o_rSettings );
+        void Load( const ::com::sun::star::beans::PropertyValue& i_rSettings, const bool i_bIncludingCriteria );
+        void Save( ::comphelper::NamedValueCollection& o_rSettings, const bool i_bIncludingCriteria );
     };
 
     //------------------------------------------------------------------

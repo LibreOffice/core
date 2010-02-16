@@ -636,10 +636,40 @@ namespace dbaccess
         aDesignInput.import( pDocHandler.get() );
 
         const ::comphelper::NamedValueCollection& rSettings( pDocHandler->getSettings() );
+        const Any aCurrentQueryDesign = rSettings.get( lcl_getCurrentQueryDesignName() );
+#if OSL_DEBUG_LEVEL > 0
+        Sequence< PropertyValue > aQueryDesignLayout;
+        OSL_VERIFY( aCurrentQueryDesign >>= aQueryDesignLayout );
+#endif
 
-        // TODO
-        (void)i_rComponentName;
-        (void)i_bForEditing;
+        // then load the query designer
+        ::comphelper::NamedValueCollection aLoadArgs;
+        aLoadArgs.put( "CurrentQueryDesign", aCurrentQueryDesign );
+
+        // TODO: load the thing hidden, and show when the main doc window is shown
+
+        if ( i_rComponentName.getLength() )
+        {
+            xSubComponent.set( m_xDocumentUI->loadComponentWithArguments(
+                    m_eType,
+                    i_rComponentName,
+                    i_bForEditing,
+                    aLoadArgs.getPropertyValues()
+                ),
+                UNO_SET_THROW
+            );
+        }
+        else
+        {
+            Reference< XComponent > xDummy;
+            xSubComponent.set( m_xDocumentUI->createComponentWithArguments(
+                    m_eType,
+                    aLoadArgs.getPropertyValues(),
+                    xDummy
+                ),
+                UNO_SET_THROW
+            );
+        }
 
         return xSubComponent;
     }

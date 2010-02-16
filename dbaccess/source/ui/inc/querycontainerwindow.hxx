@@ -118,6 +118,7 @@ namespace dbaui
         bool    reset( ::dbtools::SQLExceptionInfo* _pErrorInfo )           { return m_pViewSwitch->reset( _pErrorInfo ); }
 
         bool    switchView( ::dbtools::SQLExceptionInfo* _pErrorInfo );
+        void    forceInitialView();
 
         virtual void GetFocus();
 

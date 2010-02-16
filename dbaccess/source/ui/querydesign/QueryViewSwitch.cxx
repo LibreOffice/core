@@ -208,37 +208,68 @@ OQueryContainerWindow* OQueryViewSwitch::getContainer() const
 }
 
 // -----------------------------------------------------------------------------
+void OQueryViewSwitch::impl_forceSQLView()
+{
+    OAddTableDlg* pAddTabDialog( getAddTableDialog() );
+
+    // hide the "Add Table" dialog
+    m_bAddTableDialogWasVisible = pAddTabDialog ? pAddTabDialog->IsVisible() : false;
+    if ( m_bAddTableDialogWasVisible )
+        pAddTabDialog->Hide();
+
+    // tell the views they're in/active
+    m_pDesignView->stopTimer();
+    m_pTextView->getSqlEdit()->startTimer();
+
+    // set the most recent statement at the text view
+    m_pTextView->clear();
+    m_pTextView->setStatement(static_cast<OQueryController&>(m_pDesignView->getController()).getStatement());
+}
+
+// -----------------------------------------------------------------------------
+void OQueryViewSwitch::forceInitialView()
+{
+    OQueryController& rQueryController( static_cast< OQueryController& >( m_pDesignView->getController() ) );
+    const sal_Bool bGraphicalDesign = rQueryController.isGraphicalDesign();
+    if ( !bGraphicalDesign )
+        impl_forceSQLView();
+    else
+    {
+        // tell the text view it's inactive now
+        m_pTextView->getSqlEdit()->stopTimer();
+
+        // update the "Add Table" dialog
+        OAddTableDlg* pAddTabDialog( getAddTableDialog() );
+        if ( pAddTabDialog )
+            pAddTabDialog->Update();
+
+        // initialize the design view
+        m_pDesignView->initByFieldDescriptions( rQueryController.getFieldInformation() );
+
+        // tell the design view it's active now
+        m_pDesignView->startTimer();
+    }
+
+    impl_postViewSwitch( bGraphicalDesign, true );
+}
+
+// -----------------------------------------------------------------------------
 bool OQueryViewSwitch::switchView( ::dbtools::SQLExceptionInfo* _pErrorInfo )
 {
     sal_Bool bRet = sal_True;
     sal_Bool bGraphicalDesign = static_cast<OQueryController&>(m_pDesignView->getController()).isGraphicalDesign();
 
-    OAddTableDlg* pAddTabDialog( getAddTableDialog() );
-
-    OQueryContainerWindow* pContainer = getContainer();
     if ( !bGraphicalDesign )
     {
-        // hide the "Add Table" dialog
-        m_bAddTableDialogWasVisible = pAddTabDialog ? pAddTabDialog->IsVisible() : false;
-        if ( m_bAddTableDialogWasVisible )
-            pAddTabDialog->Hide();
-
-        // tell the views they're in/active
-        m_pDesignView->stopTimer();
-        m_pTextView->getSqlEdit()->startTimer();
-
-        // set the most recent statement at the text view
-        m_pTextView->clear();
-        m_pTextView->setStatement(static_cast<OQueryController&>(m_pDesignView->getController()).getStatement());
+        impl_forceSQLView();
     }
     else
     {
         // tell the text view it's inactive now
         m_pTextView->getSqlEdit()->stopTimer();
 
-        ::rtl::OUString sOldStatement = static_cast<OQueryController&>(m_pDesignView->getController()).getStatement();
-
         // update the "Add Table" dialog
+        OAddTableDlg* pAddTabDialog( getAddTableDialog() );
         if ( pAddTabDialog )
             pAddTabDialog->Update();
 
@@ -249,24 +280,34 @@ bool OQueryViewSwitch::switchView( ::dbtools::SQLExceptionInfo* _pErrorInfo )
         m_pDesignView->startTimer();
     }
 
-    if ( bRet )
+    return impl_postViewSwitch( bGraphicalDesign, bRet );
+}
+
+// -----------------------------------------------------------------------------
+bool OQueryViewSwitch::impl_postViewSwitch( const bool i_bGraphicalDesign, const bool i_bSuccess )
+{
+    if ( i_bSuccess )
     {
-        m_pTextView->Show   ( !bGraphicalDesign );
-        m_pDesignView->Show ( bGraphicalDesign );
-        if ( bGraphicalDesign && m_bAddTableDialogWasVisible && pAddTabDialog )
-            pAddTabDialog->Show();
+        m_pTextView->Show   ( !i_bGraphicalDesign );
+        m_pDesignView->Show ( i_bGraphicalDesign );
+        OAddTableDlg* pAddTabDialog( getAddTableDialog() );
+        if ( pAddTabDialog )
+            if ( i_bGraphicalDesign && m_bAddTableDialogWasVisible )
+                pAddTabDialog->Show();
 
         GrabFocus();
     }
 
+    OQueryContainerWindow* pContainer = getContainer();
     if ( pContainer )
         pContainer->Resize();
 
     m_pDesignView->getController().getUndoMgr()->Clear();
     m_pDesignView->getController().InvalidateAll();
 
-    return bRet;
+    return i_bSuccess;
 }
+
 // -----------------------------------------------------------------------------
 OAddTableDlg* OQueryViewSwitch::getAddTableDialog()
 {

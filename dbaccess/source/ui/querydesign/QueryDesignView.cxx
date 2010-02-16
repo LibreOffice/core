@@ -1992,6 +1992,7 @@ namespace
                 (*aIter) = NULL;
         OTableFields().swap( rUnUsedFields );
     }
+
     //------------------------------------------------------------------------------
     SqlParseError InitFromParseNodeImpl(OQueryDesignView* _pView,OSelectionBrowseBox* _pSelectionBrw)
     {
@@ -3180,6 +3181,30 @@ void OQueryDesignView::setNoneVisbleRow(sal_Int32 _nRows)
 {
     m_pSelectionBox->SetNoneVisbleRow(_nRows);
 }
+
+// -----------------------------------------------------------------------------
+void OQueryDesignView::initByFieldDescriptions( const Sequence< PropertyValue >& i_rFieldDescriptions )
+{
+    OQueryController& rController = static_cast< OQueryController& >( getController() );
+
+    m_pSelectionBox->PreFill();
+    m_pSelectionBox->SetReadOnly( rController.isReadOnly() );
+    m_pSelectionBox->Fill();
+
+    for (   const PropertyValue* field = i_rFieldDescriptions.getConstArray();
+            field != i_rFieldDescriptions.getConstArray() + i_rFieldDescriptions.getLength();
+            ++field
+        )
+    {
+        ::vos::ORef< OTableFieldDesc > pField( new OTableFieldDesc() );
+        pField->Load( *field, true );
+        InsertField( pField, sal_True, sal_False );
+    }
+
+    rController.getUndoMgr()->Clear();
+    m_pSelectionBox->Invalidate();
+}
+
 // -----------------------------------------------------------------------------
 bool OQueryDesignView::initByParseIterator( ::dbtools::SQLExceptionInfo* _pErrorInfo )
 {
