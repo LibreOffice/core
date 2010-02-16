@@ -2282,8 +2282,6 @@ void ViewShell::ApplyViewOptions( const SwViewOption &rOpt )
 
 void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
 {
-    ASSERT( !(*pOpt == rOpt), "ViewShell::ApplyViewOptions: ");
-
     Window *pMyWin = GetWin();
     if( !pMyWin )
     {
