@@ -49,7 +49,8 @@ SLOFILES=	\
         $(SLO)$/storagestream.obj \
         $(SLO)$/storagexmlstream.obj \
         $(SLO)$/storagetextstream.obj \
-        $(SLO)$/subcomponentrecovery.obj
+        $(SLO)$/subcomponentrecovery.obj \
+        $(SLO)$/settingsimport.obj
 
 # --- Targets ----------------------------------
 

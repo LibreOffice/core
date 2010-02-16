@@ -30,6 +30,7 @@
 
 /** === begin UNO includes === **/
 #include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 /** === end UNO includes === **/
 
 #include <memory>
@@ -76,6 +77,33 @@ namespace dbaccess
 
     private:
         ::std::auto_ptr< StorageXMLOutputStream_Data >   m_pData;
+    };
+
+    //====================================================================
+    //= StorageXMLInputStream
+    //====================================================================
+    struct StorageXMLInputStream_Data;
+    class DBACCESS_DLLPRIVATE StorageXMLInputStream : public StorageInputStream
+    {
+    public:
+        StorageXMLInputStream(
+            const ::comphelper::ComponentContext& i_rContext,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& i_rParentStorage,
+            const ::rtl::OUString& i_rStreamName
+        );
+        ~StorageXMLInputStream();
+
+        void    import(
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >& i_rHandler
+                );
+
+    private:
+        StorageXMLInputStream();                                            // never implemented
+        StorageXMLInputStream( const StorageXMLInputStream& );              // never implemented
+        StorageXMLInputStream& operator=( const StorageXMLInputStream& );   // never implemented
+
+    private:
+        ::std::auto_ptr< StorageXMLInputStream_Data >   m_pData;
     };
 
 //........................................................................

@@ -30,6 +30,7 @@
 #include "sdbcoretools.hxx"
 #include "storagexmlstream.hxx"
 #include "subcomponentloader.hxx"
+#include "settingsimport.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -39,6 +40,7 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/sdb/XFormDocumentsSupplier.hpp>
 #include <com/sun/star/sdb/XReportDocumentsSupplier.hpp>
+#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/namedvaluecollection.hxx>
@@ -79,6 +81,10 @@ namespace dbaccess
     using ::com::sun::star::container::XHierarchicalNameAccess;
     using ::com::sun::star::sdb::XFormDocumentsSupplier;
     using ::com::sun::star::sdb::XReportDocumentsSupplier;
+    using ::com::sun::star::xml::sax::SAXException;
+    using ::com::sun::star::xml::sax::XLocator;
+    using ::com::sun::star::xml::sax::XDocumentHandler;
+    using ::com::sun::star::xml::sax::XAttributeList;
     /** === end UNO using === **/
 
     namespace ElementModes = ::com::sun::star::embed::ElementModes;
@@ -274,6 +280,125 @@ namespace dbaccess
     Reference< XMultiServiceFactory > SettingsExportContext::GetServiceFactory() const
     {
         return m_rContext.getLegacyServiceFactory();
+    }
+
+    //==================================================================================================================
+    //= SettingsDocumentHandler
+    //==================================================================================================================
+    typedef ::cppu::WeakImplHelper1 <   XDocumentHandler
+                                    >   SettingsDocumentHandler_Base;
+    class DBACCESS_DLLPRIVATE SettingsDocumentHandler : public SettingsDocumentHandler_Base
+    {
+    public:
+        SettingsDocumentHandler()
+        {
+        }
+
+    protected:
+        virtual ~SettingsDocumentHandler()
+        {
+        }
+
+    public:
+        // XDocumentHandler
+        virtual void SAL_CALL startDocument(  ) throw (SAXException, RuntimeException);
+        virtual void SAL_CALL endDocument(  ) throw (SAXException, RuntimeException);
+        virtual void SAL_CALL startElement( const ::rtl::OUString& aName, const Reference< XAttributeList >& xAttribs ) throw (SAXException, RuntimeException);
+        virtual void SAL_CALL endElement( const ::rtl::OUString& aName ) throw (SAXException, RuntimeException);
+        virtual void SAL_CALL characters( const ::rtl::OUString& aChars ) throw (SAXException, RuntimeException);
+        virtual void SAL_CALL ignorableWhitespace( const ::rtl::OUString& aWhitespaces ) throw (SAXException, RuntimeException);
+        virtual void SAL_CALL processingInstruction( const ::rtl::OUString& aTarget, const ::rtl::OUString& aData ) throw (SAXException, RuntimeException);
+        virtual void SAL_CALL setDocumentLocator( const Reference< XLocator >& xLocator ) throw (SAXException, RuntimeException);
+
+        const ::comphelper::NamedValueCollection&   getSettings() const { return m_aSettings; }
+
+    private:
+        ::std::stack< ::rtl::Reference< SettingsImport > >  m_aStates;
+        ::comphelper::NamedValueCollection                  m_aSettings;
+    };
+
+    //--------------------------------------------------------------------
+    void SAL_CALL SettingsDocumentHandler::startDocument(  ) throw (SAXException, RuntimeException)
+    {
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL SettingsDocumentHandler::endDocument(  ) throw (SAXException, RuntimeException)
+    {
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL SettingsDocumentHandler::startElement( const ::rtl::OUString& i_Name, const Reference< XAttributeList >& i_Attribs ) throw (SAXException, RuntimeException)
+    {
+        ::rtl::Reference< SettingsImport >  pNewState;
+
+        if ( m_aStates.empty() )
+        {
+            if ( i_Name.equalsAscii( "office:settings" ) )
+            {
+                pNewState = new OfficeSettingsImport( m_aSettings );
+            }
+            else
+            {
+                OSL_ENSURE( false, "SettingsDocumentHandler::startElement: invalid settings file!" );
+                // Yes, that's not correct. Somebody could, in theory, give us a document which starts with "foo:settings",
+                // where "foo" is mapped to the proper namespace URL.
+                // However, there's no need to bother with this. The "recovery" sub storage we're recovering from is
+                // not part of ODF, so we can impose any format restrictions on it ...
+            }
+        }
+        else
+        {
+            ::rtl::Reference< SettingsImport > pCurrentState( m_aStates.top() );
+            pNewState = pCurrentState->nextState( i_Name );
+        }
+
+        ENSURE_OR_THROW( pNewState.is(), "no new state - aborting import" );
+        pNewState->startElement( i_Attribs );
+
+        m_aStates.push( pNewState );
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL SettingsDocumentHandler::endElement( const ::rtl::OUString& i_Name ) throw (SAXException, RuntimeException)
+    {
+        ENSURE_OR_THROW( !m_aStates.empty(), "no active element" );
+        (void)i_Name;
+
+        ::rtl::Reference< SettingsImport > pCurrentState( m_aStates.top() );
+        pCurrentState->endElement();
+        m_aStates.pop();
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL SettingsDocumentHandler::characters( const ::rtl::OUString& i_Chars ) throw (SAXException, RuntimeException)
+    {
+        ENSURE_OR_THROW( !m_aStates.empty(), "no active element" );
+
+        ::rtl::Reference< SettingsImport > pCurrentState( m_aStates.top() );
+        pCurrentState->characters( i_Chars );
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL SettingsDocumentHandler::ignorableWhitespace( const ::rtl::OUString& aWhitespaces ) throw (SAXException, RuntimeException)
+    {
+        // ignore them - that's why they're called "ignorable"
+        (void)aWhitespaces;
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL SettingsDocumentHandler::processingInstruction( const ::rtl::OUString& i_Target, const ::rtl::OUString& i_Data ) throw (SAXException, RuntimeException)
+    {
+        OSL_ENSURE( false, "SettingsDocumentHandler::processingInstruction: unexpected ..." );
+        (void)i_Target;
+        (void)i_Data;
+    }
+
+    //--------------------------------------------------------------------
+    void SAL_CALL SettingsDocumentHandler::setDocumentLocator( const Reference< XLocator >& i_Locator ) throw (SAXException, RuntimeException)
+    {
+        // TODO: place your code here
+        (void)i_Locator;
     }
 
     //====================================================================
@@ -499,6 +624,27 @@ namespace dbaccess
     }
 
     //--------------------------------------------------------------------
+    Reference< XComponent > SubComponentRecovery::impl_recoverQueryDesign_throw( const Reference< XStorage >& i_rRecoveryStorage,
+        const ::rtl::OUString& i_rComponentName,  const bool i_bForEditing )
+    {
+        Reference< XComponent > xSubComponent;
+
+        // first read the settings query design settings from the storage
+        StorageXMLInputStream aDesignInput( m_rContext, i_rRecoveryStorage, lcl_getSettingsStreamName() );
+
+        ::rtl::Reference< SettingsDocumentHandler > pDocHandler( new SettingsDocumentHandler );
+        aDesignInput.import( pDocHandler.get() );
+
+        const ::comphelper::NamedValueCollection& rSettings( pDocHandler->getSettings() );
+
+        // TODO
+        (void)i_rComponentName;
+        (void)i_bForEditing;
+
+        return xSubComponent;
+    }
+
+    //--------------------------------------------------------------------
     Reference< XComponent > SubComponentRecovery::recoverFromStorage( const Reference< XStorage >& i_rRecoveryStorage,
             const ::rtl::OUString& i_rComponentName, const bool i_bForEditing )
     {
@@ -510,7 +656,8 @@ namespace dbaccess
             xSubComponent = impl_recoverSubDocument_throw( i_rRecoveryStorage, i_rComponentName, i_bForEditing );
             break;
         case QUERY:
-            // TODO
+            xSubComponent = impl_recoverQueryDesign_throw( i_rRecoveryStorage, i_rComponentName, i_bForEditing );
+            break;
         default:
             OSL_ENSURE( false, "SubComponentRecovery::recoverFromStorage: unimplemented case!" );
             break;

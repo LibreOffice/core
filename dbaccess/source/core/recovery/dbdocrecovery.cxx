@@ -382,12 +382,6 @@ namespace dbaccess
             )
         {
             const SubComponentType eComponentType = map->first;
-            if ( ( eComponentType != FORM ) && ( eComponentType != REPORT ) )
-            {
-                // nobody saves tables/queries/relations at the moment, so encountering those is worth an assertion
-                OSL_ENSURE( false, "DatabaseDocumentRecovery::recoverSubDocuments: only embedded objects can be recovered currently!" );
-                continue;
-            }
 
             // the storage for all components of the current type
             Reference< XStorage > xComponentsStor( xRecoveryStorage->openStorageElement(

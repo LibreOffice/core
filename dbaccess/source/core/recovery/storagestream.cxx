@@ -88,6 +88,39 @@ namespace dbaccess
         // (legitimately) do not call this method here.
     }
 
+    //====================================================================
+    //= StorageInputStream
+    //====================================================================
+    //--------------------------------------------------------------------
+    StorageInputStream::StorageInputStream( const ::comphelper::ComponentContext& i_rContext,
+                                            const Reference< XStorage >& i_rParentStorage,
+                                            const ::rtl::OUString& i_rStreamName
+                                          )
+        :m_rContext( i_rContext )
+    {
+        ENSURE_OR_THROW( i_rParentStorage.is(), "illegal stream" );
+
+        const Reference< XStream > xStream(
+            i_rParentStorage->openStreamElement( i_rStreamName, ElementModes::READ ), UNO_QUERY_THROW );
+        m_xInputStream.set( xStream->getInputStream(), UNO_SET_THROW );
+    }
+
+    //--------------------------------------------------------------------
+    StorageInputStream::~StorageInputStream()
+    {
+    }
+
+    //--------------------------------------------------------------------
+    void StorageInputStream::close()
+    {
+        ENSURE_OR_RETURN_VOID( m_xInputStream.is(), "already closed" );
+        m_xInputStream->closeInput();
+        m_xInputStream.clear();
+
+        // if you add additional functionality here, be aware that there are derived classes which
+        // (legitimately) do not call this method here.
+    }
+
 //........................................................................
 } // namespace dbaccess
 //........................................................................

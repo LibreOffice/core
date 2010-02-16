@@ -30,9 +30,11 @@
 /** === begin UNO includes === **/
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
+#include <com/sun/star/xml/sax/XParser.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include <rtl/ref.hxx>
 #include <tools/diagnose_ex.h>
 #include <xmloff/attrlist.hxx>
@@ -62,6 +64,8 @@ namespace dbaccess
     using ::com::sun::star::io::XStream;
     using ::com::sun::star::io::XOutputStream;
     using ::com::sun::star::io::XActiveDataSource;
+    using ::com::sun::star::xml::sax::XParser;
+    using ::com::sun::star::xml::sax::InputSource;
     /** === end UNO using === **/
 
     //==================================================================================================================
@@ -148,6 +152,44 @@ namespace dbaccess
         ENSURE_OR_RETURN_VOID( m_pData->xHandler.is(), "no document handler" );
 
         m_pData->xHandler->characters( i_rCharacters );
+    }
+
+    //==================================================================================================================
+    //= StorageXMLInputStream_Data
+    //==================================================================================================================
+    struct StorageXMLInputStream_Data
+    {
+        Reference< XParser >    xParser;
+    };
+
+    //==================================================================================================================
+    //= StorageXMLInputStream
+    //==================================================================================================================
+    //------------------------------------------------------------------------------------------------------------------
+    StorageXMLInputStream::StorageXMLInputStream( const ::comphelper::ComponentContext& i_rContext,
+                                                  const Reference< XStorage >& i_rParentStorage,
+                                                  const ::rtl::OUString& i_rStreamName )
+        :StorageInputStream( i_rContext, i_rParentStorage, i_rStreamName )
+        ,m_pData( new StorageXMLInputStream_Data )
+    {
+        m_pData->xParser.set( i_rContext.createComponent( "com.sun.star.xml.sax.Parser" ), UNO_QUERY_THROW );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void StorageXMLInputStream::import( const Reference< XDocumentHandler >& i_rHandler )
+    {
+        ENSURE_OR_THROW( i_rHandler.is(), "illegal document handler (NULL)" );
+
+        InputSource aInputSource;
+        aInputSource.aInputStream = getInputStream();
+
+        m_pData->xParser->setDocumentHandler( i_rHandler );
+        m_pData->xParser->parseStream( aInputSource );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    StorageXMLInputStream::~StorageXMLInputStream()
+    {
     }
 
 //......................................................................................................................

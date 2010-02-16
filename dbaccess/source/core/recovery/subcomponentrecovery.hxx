@@ -99,6 +99,13 @@ namespace dbaccess
                     const bool i_bForEditing
                 );
 
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
+                impl_recoverQueryDesign_throw(
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& i_rRecoveryStorage,
+                    const ::rtl::OUString& i_rComponentName,
+                    const bool i_bForEditing
+                );
+
         void    impl_identifyComponent_throw();
 
     private:
