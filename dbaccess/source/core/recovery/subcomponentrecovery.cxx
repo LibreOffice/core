@@ -397,7 +397,6 @@ namespace dbaccess
     //--------------------------------------------------------------------
     void SAL_CALL SettingsDocumentHandler::setDocumentLocator( const Reference< XLocator >& i_Locator ) throw (SAXException, RuntimeException)
     {
-        // TODO: place your code here
         (void)i_Locator;
     }
 
@@ -645,8 +644,7 @@ namespace dbaccess
         // then load the query designer
         ::comphelper::NamedValueCollection aLoadArgs;
         aLoadArgs.put( "CurrentQueryDesign", aCurrentQueryDesign );
-
-        // TODO: load the thing hidden, and show when the main doc window is shown
+        aLoadArgs.put( "Hidden", true );
 
         if ( i_rComponentName.getLength() )
         {
@@ -670,6 +668,10 @@ namespace dbaccess
                 UNO_SET_THROW
             );
         }
+
+        Reference< XController > xController( m_xDocumentUI, UNO_QUERY_THROW );
+        Reference< XInterface > xLoader( *new SubComponentLoader( xController, xSubComponent ) );
+        (void)xLoader;
 
         return xSubComponent;
     }
