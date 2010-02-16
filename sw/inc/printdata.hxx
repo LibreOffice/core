@@ -233,6 +233,9 @@ class SwRenderData
     std::set< sal_Int32 >                       m_aValidPages;          // the set of possible pages (see StringRangeEnumerator::getRangesFromString )
     std::map< sal_Int32, const SwPageFrm * >    m_aValidStartFrames;    // the map of start frames for those pages
 
+    // printer paper tray to use for each of the m_aValidPages above
+    std::map< sal_Int32, sal_Int32 >            m_aPrinterPaperTrays;
+
     // vector of pages and their order to be printed (duplicates and any order allowed!)
     // (see 'render' in unotxdoc.cxx)
     std::vector< sal_Int32 >                    m_aPagesToPrint;
@@ -287,6 +290,11 @@ public:
     const std::set< sal_Int32 > &       GetValidPagesSet() const    { return m_aValidPages; }
     ValidStartFramesMap_t &             GetValidStartFrames()       { return m_aValidStartFrames; }
     const ValidStartFramesMap_t &       GetValidStartFrames() const { return m_aValidStartFrames; }
+
+    // a map for printer paper tray numbers to use for each document page
+    // a value of -1 for the tray means that there is no specific tray defined
+    std::map< sal_Int32, sal_Int32 >        GetPrinterPaperTrays()          { return m_aPrinterPaperTrays; }
+    const std::map< sal_Int32, sal_Int32 >  GetPrinterPaperTrays() const    { return m_aPrinterPaperTrays; }
 
     // used for 'normal' printing
     // A page value of 0 as entry indicates that this page is not from the document but

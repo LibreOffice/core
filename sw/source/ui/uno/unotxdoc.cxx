@@ -2818,6 +2818,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     m_pPrintUIOptions->processProperties( rxOptions );
     const bool bPrintProspect    = m_pPrintUIOptions->getBoolValue( "PrintProspect", false );
     const bool bIsSkipEmptyPages = !m_pPrintUIOptions->IsPrintEmptyPages( bIsPDFExport );
+    const bool bPrintPaperFromSetup = m_pPrintUIOptions->getBoolValue( "PrintPaperFromSetup", false );
 
     SwDoc *pDoc = GetRenderDoc( pView, rSelection, bIsPDFExport );
     DBG_ASSERT( pDoc && pView, "doc or view shell missing!" );
@@ -2845,6 +2846,26 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     uno::Sequence< beans::PropertyValue > aRenderer;
     if (m_pRenderData)
     {
+        const USHORT nPage = nRenderer + 1;
+
+        // get paper tray to use ...
+        sal_Int32 nPrinterPaperTray = -1;
+        if (bPrintPaperFromSetup)
+        {
+            // ... from printer setup
+            Printer *pPrinter = dynamic_cast< Printer * >(lcl_GetOutputDevice( *m_pPrintUIOptions ));
+            if (pPrinter)
+                nPrinterPaperTray = pPrinter->GetPaperBin();
+        }
+        else
+        {
+            // ... from individual page style (see the page tab in Format/Page dialog)
+            const std::map< sal_Int32, sal_Int32 > &rPaperTrays = m_pRenderData->GetPrinterPaperTrays();
+            std::map< sal_Int32, sal_Int32 >::const_iterator aIt( rPaperTrays.find( nPage ) );
+            if (aIt != rPaperTrays.end())
+                nPrinterPaperTray = aIt->second;
+        }
+
         awt::Size aPageSize;
         awt::Size aPreferredPageSize;
         Size aTmpSize;
@@ -2874,7 +2895,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
                     // we just state what output size we would need
                     // which may cause vcl to set that page size on the printer
                     // (if available and not overriden by the user)
-                    aTmpSize = pDoc->GetPageSize( USHORT(nRenderer + 1), bIsSkipEmptyPages );
+                    aTmpSize = pDoc->GetPageSize( nPage, bIsSkipEmptyPages );
                     aPreferredPageSize = awt::Size ( TWIP_TO_MM100( 2 * aTmpSize.Width() ),
                                                      TWIP_TO_MM100( aTmpSize.Height() ));
                 }
@@ -2882,21 +2903,30 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
         }
         else
         {
-            aTmpSize = pDoc->GetPageSize( USHORT(nRenderer + 1), bIsSkipEmptyPages );
+            aTmpSize = pDoc->GetPageSize( nPage, bIsSkipEmptyPages );
             aPageSize = awt::Size ( TWIP_TO_MM100( aTmpSize.Width() ),
                                     TWIP_TO_MM100( aTmpSize.Height() ));
         }
 
+        sal_Int32 nLen = 2;
         aRenderer.realloc(2);
         aRenderer[0].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) );
         aRenderer[0].Value <<= aPageSize;
         aRenderer[1].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageIncludesNonprintableArea" ) );
         aRenderer[1].Value <<= sal_True;
-        if( aPreferredPageSize.Width && aPreferredPageSize.Height )
+        if (aPreferredPageSize.Width && aPreferredPageSize.Height)
         {
-            aRenderer.realloc(3);
-            aRenderer[2].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "PreferredPageSize" ) );
-            aRenderer[2].Value <<= aPreferredPageSize;
+            ++nLen;
+            aRenderer.realloc( nLen );
+            aRenderer[ nLen - 1 ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "PreferredPageSize" ) );
+            aRenderer[ nLen - 1 ].Value <<= aPreferredPageSize;
+        }
+        if (nPrinterPaperTray >= 0)
+        {
+            ++nLen;
+            aRenderer.realloc( nLen );
+            aRenderer[ nLen - 1 ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "PrinterPaperTray" ) );
+            aRenderer[ nLen - 1 ].Value <<= nPrinterPaperTray;
         }
     }
 

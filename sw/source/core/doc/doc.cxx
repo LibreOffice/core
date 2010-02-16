@@ -50,6 +50,7 @@
 #include <rtl/ustring.hxx>
 #include <vcl/virdev.hxx>
 #include <svl/itemiter.hxx>
+#include <svl/poolitem.hxx>
 #include <unotools/syslocale.hxx>
 #include <sfx2/printer.hxx>
 #include <svx/keepitem.hxx>
@@ -58,9 +59,11 @@
 #include <svx/linkmgr.hxx>
 #include <svx/forbiddencharacterstable.hxx>
 #include <svx/svdmodel.hxx>
+#include <svx/pbinitem.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/localedatawrapper.hxx>
 
+#include <swatrset.hxx>
 #include <swmodule.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtanchr.hxx>
@@ -1180,6 +1183,23 @@ static void lcl_FormatPostIt(
 }
 
 
+// provide the paper tray to use according to the page style in use,
+// but do that only if the respective item is NOT just the default item
+static sal_Int32 lcl_GetPaperBin( const SwPageFrm *pStartFrm )
+{
+    sal_Int32 nRes = -1;
+
+    const SwFrmFmt &rFmt = pStartFrm->GetPageDesc()->GetMaster();
+    const SfxPoolItem *pItem = NULL;
+    SfxItemState eState = rFmt.GetItemState( RES_PAPER_BIN, FALSE, &pItem );
+    const SvxPaperBinItem *pPaperBinItem = dynamic_cast< const SvxPaperBinItem * >(pItem);
+    if (eState > SFX_ITEM_DEFAULT && pPaperBinItem)
+        nRes = pPaperBinItem->GetValue();
+
+    return nRes;
+}
+
+
 void SwDoc::CalculatePagesForPrinting(
     /* out */ SwRenderData &rData,
     const SwPrintUIOptions &rOptions,
@@ -1256,6 +1276,7 @@ void SwDoc::CalculatePagesForPrinting(
 
         nPageNo = nFirstPageNo;
 
+        std::map< sal_Int32, sal_Int32 > &rPrinterPaperTrays = rData.GetPrinterPaperTrays();
         std::set< sal_Int32 > &rValidPages = rData.GetValidPagesSet();
         std::map< sal_Int32, const SwPageFrm * > &rValidStartFrms = rData.GetValidStartFrames();
         rValidPages.clear();
@@ -1271,9 +1292,10 @@ void SwDoc::CalculatePagesForPrinting(
                 if ( bPrintEmptyPages || pStPage->Frm().Height() )
                 // <--
                 {
-                    // pStPage->GetUpper()->Paint( pStPage->Frm() );
                     rValidPages.insert( nPageNo );
                     rValidStartFrms[ nPageNo ] = pStPage;
+
+                    rPrinterPaperTrays[ nPageNo ] = lcl_GetPaperBin( pStPage );
                 }
             }
 
@@ -1529,8 +1551,9 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     const SwPrintUIOptions &rOptions,
     sal_Int32 nDocPageCount )
 {
-    std::set< sal_Int32 > &rValidPagesSet   = rData.GetValidPagesSet();
-    std::map< sal_Int32, const SwPageFrm * > &rValidStartFrms  = rData.GetValidStartFrames();
+    std::map< sal_Int32, sal_Int32 > &rPrinterPaperTrays = rData.GetPrinterPaperTrays();
+    std::set< sal_Int32 > &rValidPagesSet = rData.GetValidPagesSet();
+    std::map< sal_Int32, const SwPageFrm * > &rValidStartFrms = rData.GetValidStartFrames();
     std::vector< std::pair< sal_Int32, sal_Int32 > > &rPagePairs = rData.GetPagePairsForProspectPrinting();
 
     rPagePairs.clear();
@@ -1562,6 +1585,8 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
         rValidPagesSet.insert( nPageNum );
         rValidStartFrms[ nPageNum ] = pPageFrm;
         pPageFrm = (SwPageFrm*)pPageFrm->GetNext();
+
+        rPrinterPaperTrays[ nPageNum ] = lcl_GetPaperBin( pStPage );
     }
     DBG_ASSERT( nPageNum == nDocPageCount, "unexpected number of pages" );
 

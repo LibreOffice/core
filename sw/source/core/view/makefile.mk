@@ -48,10 +48,13 @@ SLOFILES =  \
     $(SLO)$/vdraw.obj \
     $(SLO)$/viewimp.obj \
     $(SLO)$/viewsh.obj \
-        $(SLO)$/viewpg.obj \
-        $(SLO)$/vnew.obj \
-        $(SLO)$/vprint.obj \
-        $(SLO)$/pagepreviewlayout.obj
+    $(SLO)$/pagepreviewlayout.obj \
+    $(SLO)$/printdata.obj \
+    $(SLO)$/viewpg.obj \
+    $(SLO)$/vnew.obj \
+    $(SLO)$/vprint.obj
+
+
     
 EXCEPTIONSFILES = \
         $(SLO)$/pagepreviewlayout.obj
