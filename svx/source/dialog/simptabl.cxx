@@ -291,7 +291,7 @@ void SvxSimpleTable::ShowTable()
 
 void SvxSimpleTable::HideTable()
 {
-    aPrivContainer.Show();
+    aPrivContainer.Hide();
 }
 
 BOOL SvxSimpleTable::IsVisible() const

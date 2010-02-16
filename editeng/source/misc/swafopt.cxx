@@ -44,14 +44,13 @@ SvxSwAutoFmtFlags::SvxSwAutoFmtFlags()
                         RTL_CONSTASCII_STRINGPARAM( "StarSymbol" )),
                     Size( 0, 14 ) )
 {
-    bReplaceQuote =
     bAutoCorrect =
     bCptlSttSntnc =
     bCptlSttWrd =
     bChkFontAttr =
     bChgUserColl =
     bChgEnumNum =
-    bChgFracionSymbol =
+    bAddNonBrkSpace =
     bChgOrdinalNumber =
     bChgToEnEmDash =
     bChgWeightUnderl =
@@ -104,7 +103,6 @@ SvxSwAutoFmtFlags::SvxSwAutoFmtFlags()
 SvxSwAutoFmtFlags& SvxSwAutoFmtFlags::operator=( const SvxSwAutoFmtFlags& rAFFlags )
 {
     bAutoCorrect = rAFFlags.bAutoCorrect;
-    bReplaceQuote = rAFFlags.bReplaceQuote;
     bCptlSttSntnc = rAFFlags.bCptlSttSntnc;
     bCptlSttWrd = rAFFlags.bCptlSttWrd;
     bChkFontAttr = rAFFlags.bChkFontAttr;
@@ -115,7 +113,7 @@ SvxSwAutoFmtFlags& SvxSwAutoFmtFlags::operator=( const SvxSwAutoFmtFlags& rAFFla
     bSetNumRule = rAFFlags.bSetNumRule;
     bAFmtByInput = rAFFlags.bAFmtByInput;
 
-    bChgFracionSymbol = rAFFlags.bChgFracionSymbol;
+    bAddNonBrkSpace = rAFFlags.bAddNonBrkSpace;
     bChgOrdinalNumber = rAFFlags.bChgOrdinalNumber;
     bChgToEnEmDash = rAFFlags.bChgToEnEmDash;
     bChgWeightUnderl = rAFFlags.bChgWeightUnderl;

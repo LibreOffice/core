@@ -4392,17 +4392,6 @@
 						</info>
 						<value>true</value>
 					</prop>
-					<prop oor:name="ChangeFraction" oor:type="xs:boolean">
-						<!-- OldPath: Writer/AutoFormat/Options -->
-						<!-- OldLocation: Soffice.cfg -->
-						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace 1/2... -->
-						<info>
-							<author>OS</author>
-							<desc>Specifies if character combinations for fractions are replaced with a corresponding single character.</desc>
-							<label>Replace fractions</label>
-						</info>
-						<value>true</value>
-					</prop>
 					<prop oor:name="ChangeDash" oor:type="xs:boolean">
 						<!-- OldPath: Writer/AutoFormat/Options -->
 						<!-- OldLocation: Soffice.cfg -->
@@ -4411,6 +4400,17 @@
 							<author>OS</author>
 							<desc>Specifies if dashes are replaced automatically.</desc>
 							<label>Replace dashes</label>
+						</info>
+						<value>true</value>
+					</prop>
+					<prop oor:name="AddNonBreakingSpace" oor:type="xs:boolean">
+						<!-- OldPath: Writer/AutoFormat/Options -->
+						<!-- OldLocation: Soffice.cfg -->
+						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Add non-breaking space -->
+						<info>
+							<author>cedricbosdo</author>
+							<desc>Adds a non-breaking space before the characters :!;? in french.</desc>
+							<label>Add non-breaking space</label>
 						</info>
 						<value>true</value>
 					</prop>
@@ -4433,17 +4433,6 @@
 							<author>OS</author>
 							<desc>Specifies if user-defined styles applied in the document are replaced by predefined text document styles.</desc>
 							<label>Replace user-defined styles</label>
-						</info>
-						<value>true</value>
-					</prop>
-					<prop oor:name="ReplaceQuote" oor:type="xs:boolean">
-						<!-- OldPath: Writer/AutoFormat/Options -->
-						<!-- OldLocation: Soffice.cfg -->
-						<!-- UIHints: Tools  AutoCorrect/AutoFormat  Options  Replace Standard Quotes... -->
-						<info>
-							<author>OS</author>
-							<desc>Specifies if standard quotes are replaced with custom quotes.</desc>
-							<label>Replace standard quotes with custom quotes</label>
 						</info>
 						<value>true</value>
 					</prop>

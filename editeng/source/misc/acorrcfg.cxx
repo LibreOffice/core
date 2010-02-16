@@ -113,7 +113,7 @@ Sequence<OUString>  SvxBaseAutoCorrCfg::GetPropertyNames()
         "ChangeUnderlineWeight",                //  5
         "SetInetAttribute",                     //  6
         "ChangeOrdinalNumber",                  //  7
-        "ChangeFraction",                       //  8
+        "AddNonBreakingSpace",                  //  8
         "ChangeDash",                           //  9
         "RemoveDoubleSpaces",                   // 10
         "ReplaceSingleQuote",                   // 11
@@ -183,17 +183,17 @@ void SvxBaseAutoCorrCfg::Load(sal_Bool bInit)
                         if(*(sal_Bool*)pValues[nProp].getValue())
                             nFlags |= ChgOrdinalNumber;
                     break;//"ChangeOrdinalNumber",
-                    case  8:
+                    case 8:
                         if(*(sal_Bool*)pValues[nProp].getValue())
-                            nFlags |= ChgFractionSymbol;
-                    break;//"ChangeFraction",
+                             nFlags |= AddNonBrkSpace;
+                    break;//"AddNonBreakingSpace"
                     case  9:
                         if(*(sal_Bool*)pValues[nProp].getValue())
                             nFlags |= ChgToEnEmDash;
                     break;//"ChangeDash",
                     case 10:
                         if(*(sal_Bool*)pValues[nProp].getValue())
-                            nFlags |= IngnoreDoubleSpace;
+                            nFlags |= IgnoreDoubleSpace;
                     break;//"RemoveDoubleSpaces",
                     case 11:
                         if(*(sal_Bool*)pValues[nProp].getValue())
@@ -295,16 +295,16 @@ void SvxBaseAutoCorrCfg::Commit()
                 bVal = 0 != (nFlags & ChgOrdinalNumber);
                 pValues[nProp].setValue(&bVal, rType);
             break;//"ChangeOrdinalNumber",
-            case  8:
-                bVal = 0 != (nFlags & ChgFractionSymbol);
+            case 8:
+                bVal = 0 != (nFlags & AddNonBrkSpace);
                 pValues[nProp].setValue(&bVal, rType);
-            break;//"ChangeFraction",
+            break;//"AddNonBreakingSpace"
             case  9:
                 bVal = 0 != (nFlags & ChgToEnEmDash);
                 pValues[nProp].setValue(&bVal, rType);
             break;//"ChangeDash",
             case 10:
-                bVal = 0 != (nFlags & IngnoreDoubleSpace);
+                bVal = 0 != (nFlags & IgnoreDoubleSpace);
                 pValues[nProp].setValue(&bVal, rType);
             break;//"RemoveDoubleSpaces",
             case 11:
@@ -356,7 +356,7 @@ Sequence<OUString>  SvxSwAutoCorrCfg::GetPropertyNames()
         "Format/Option/ChangeUnderlineWeight",                          // 8
         "Format/Option/SetInetAttribute",                               // 9
         "Format/Option/ChangeOrdinalNumber",                            //10
-        "Format/Option/ChangeFraction",                                 //11
+        "Format/Option/AddNonBreakingSpace",                            //11
         "Format/Option/ChangeDash",                                     //12
         "Format/Option/DelEmptyParagraphs",                             //13
         "Format/Option/ReplaceUserStyle",                               //14
@@ -366,35 +366,34 @@ Sequence<OUString>  SvxSwAutoCorrCfg::GetPropertyNames()
         "Format/Option/ChangeToBullets/SpecialCharacter/FontFamily",    //18
         "Format/Option/ChangeToBullets/SpecialCharacter/FontCharset",   //19
         "Format/Option/ChangeToBullets/SpecialCharacter/FontPitch",     //20
-        "Format/Option/ReplaceQuote",                                   //21
-        "Format/Option/CombineParagraphs",                              //22
-        "Format/Option/CombineValue",                                   //23
-        "Format/Option/DelSpacesAtStartEnd",                            //24
-        "Format/Option/DelSpacesBetween",                               //25
-        "Format/ByInput/Enable",                                        //26
-        "Format/ByInput/ChangeDash",                                    //27
-        "Format/ByInput/ApplyNumbering/Enable",                         //28
-        "Format/ByInput/ChangeToBorders",                               //29
-        "Format/ByInput/ChangeToTable",                                 //30
-        "Format/ByInput/ReplaceStyle",                                  //31
-        "Format/ByInput/DelSpacesAtStartEnd",                           //32
-        "Format/ByInput/DelSpacesBetween",                              //33
-        "Completion/Enable",                                            //34
-        "Completion/MinWordLen",                                        //35
-        "Completion/MaxListLen",                                        //36
-        "Completion/CollectWords",                                      //37
-        "Completion/EndlessList",                                       //38
-        "Completion/AppendBlank",                                       //39
-        "Completion/ShowAsTip",                                         //40
-        "Completion/AcceptKey",                                         //41
-        "Completion/KeepList",                                          //42
-        "Format/ByInput/ApplyNumbering/SpecialCharacter/Char",          //43
-        "Format/ByInput/ApplyNumbering/SpecialCharacter/Font",          //44
-        "Format/ByInput/ApplyNumbering/SpecialCharacter/FontFamily",    //45
-        "Format/ByInput/ApplyNumbering/SpecialCharacter/FontCharset",   //46
-        "Format/ByInput/ApplyNumbering/SpecialCharacter/FontPitch",     //47
+        "Format/Option/CombineParagraphs",                              //21
+        "Format/Option/CombineValue",                                   //22
+        "Format/Option/DelSpacesAtStartEnd",                            //23
+        "Format/Option/DelSpacesBetween",                               //24
+        "Format/ByInput/Enable",                                        //25
+        "Format/ByInput/ChangeDash",                                    //26
+        "Format/ByInput/ApplyNumbering/Enable",                         //27
+        "Format/ByInput/ChangeToBorders",                               //28
+        "Format/ByInput/ChangeToTable",                                 //29
+        "Format/ByInput/ReplaceStyle",                                  //30
+        "Format/ByInput/DelSpacesAtStartEnd",                           //31
+        "Format/ByInput/DelSpacesBetween",                              //32
+        "Completion/Enable",                                            //33
+        "Completion/MinWordLen",                                        //34
+        "Completion/MaxListLen",                                        //35
+        "Completion/CollectWords",                                      //36
+        "Completion/EndlessList",                                       //37
+        "Completion/AppendBlank",                                       //38
+        "Completion/ShowAsTip",                                         //39
+        "Completion/AcceptKey",                                         //40
+        "Completion/KeepList",                                          //41
+        "Format/ByInput/ApplyNumbering/SpecialCharacter/Char",          //42
+        "Format/ByInput/ApplyNumbering/SpecialCharacter/Font",          //43
+        "Format/ByInput/ApplyNumbering/SpecialCharacter/FontFamily",    //44
+        "Format/ByInput/ApplyNumbering/SpecialCharacter/FontCharset",   //45
+        "Format/ByInput/ApplyNumbering/SpecialCharacter/FontPitch"      //46
     };
-    const int nCount = 48;
+    const int nCount = 47;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -432,7 +431,7 @@ void SvxSwAutoCorrCfg::Load(sal_Bool bInit)
                     case   8: rSwFlags.bChgWeightUnderl = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/ChangeUnderlineWeight",
                     case   9: rSwFlags.bSetINetAttr = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/SetInetAttribute",
                     case  10: rSwFlags.bChgOrdinalNumber = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/ChangeOrdinalNumber",
-                    case  11: rSwFlags.bChgFracionSymbol = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/ChangeFraction",
+                    case  11: rSwFlags.bAddNonBrkSpace = *(sal_Bool*)pValues[nProp].getValue( ); break; // "Format/Option/AddNonBreakingSpace",
 // it doesn't exist here - the common flags are used for that -> LM
 //                  case  12: rSwFlags.bChgToEnEmDash = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/ChangeDash",
                     case  13: rSwFlags.bDelEmptyNode = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/DelEmptyParagraphs",
@@ -469,78 +468,77 @@ void SvxSwAutoCorrCfg::Load(sal_Bool bInit)
                         rSwFlags.aBulletFont.SetPitch(FontPitch(nVal));
                     }
                     break; // "Format/Option/ChangeToBullets/SpecialCharacter/FontPitch",
-                    case  21: rSwFlags.bReplaceQuote = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/ReplaceQuote",
-                    case  22: rSwFlags.bRightMargin = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/CombineParagraphs",
-                    case  23:
+                    case  21: rSwFlags.bRightMargin = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/CombineParagraphs",
+                    case  22:
                     {
                         sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
                         rSwFlags.nRightMargin =
                             sal::static_int_cast< BYTE >(nVal);
                     }
                     break; // "Format/Option/CombineValue",
-                    case  24: rSwFlags.bAFmtDelSpacesAtSttEnd =  *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/DelSpacesAtStartEnd",
-                    case  25: rSwFlags.bAFmtDelSpacesBetweenLines = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/DelSpacesBetween",
-                    case  26: rParent.bAutoFmtByInput = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/ByInput/Enable",
-                    case  27: rSwFlags.bChgToEnEmDash = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/ByInput/ChangeDash",
-                    case  28: rSwFlags.bSetNumRule = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/ByInput/ApplyNumbering/Enable",
-                    case  29: rSwFlags.bSetBorder = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/ByInput/ChangeToBorders",
-                    case  30: rSwFlags.bCreateTable = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/ByInput/ChangeToTable",
-                    case  31: rSwFlags.bReplaceStyles =  *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/ByInput/ReplaceStyle",
-                    case  32: rSwFlags.bAFmtByInpDelSpacesAtSttEnd =  *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/ByInput/DelSpacesAtStartEnd",
-                    case  33: rSwFlags.bAFmtByInpDelSpacesBetweenLines = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/ByInput/DelSpacesBetween",
-                    case  34: rSwFlags.bAutoCompleteWords = *(sal_Bool*)pValues[nProp].getValue(); break; // "Completion/Enable",
-                    case  35:
+                    case  23: rSwFlags.bAFmtDelSpacesAtSttEnd =  *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/DelSpacesAtStartEnd",
+                    case  24: rSwFlags.bAFmtDelSpacesBetweenLines = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/DelSpacesBetween",
+                    case  25: rParent.bAutoFmtByInput = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/ByInput/Enable",
+                    case  26: rSwFlags.bChgToEnEmDash = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/ByInput/ChangeDash",
+                    case  27: rSwFlags.bSetNumRule = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/ByInput/ApplyNumbering/Enable",
+                    case  28: rSwFlags.bSetBorder = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/ByInput/ChangeToBorders",
+                    case  29: rSwFlags.bCreateTable = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/ByInput/ChangeToTable",
+                    case  30: rSwFlags.bReplaceStyles =  *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/ByInput/ReplaceStyle",
+                    case  31: rSwFlags.bAFmtByInpDelSpacesAtSttEnd =  *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/ByInput/DelSpacesAtStartEnd",
+                    case  32: rSwFlags.bAFmtByInpDelSpacesBetweenLines = *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/ByInput/DelSpacesBetween",
+                    case  33: rSwFlags.bAutoCompleteWords = *(sal_Bool*)pValues[nProp].getValue(); break; // "Completion/Enable",
+                    case  34:
                     {
                         sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
                         rSwFlags.nAutoCmpltWordLen =
                             sal::static_int_cast< USHORT >(nVal);
                     }
                     break; // "Completion/MinWordLen",
-                    case  36:
+                    case  35:
                     {
                         sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
                         rSwFlags.nAutoCmpltListLen =
                             sal::static_int_cast< USHORT >(nVal);
                     }
                     break; // "Completion/MaxListLen",
-                    case  37: rSwFlags.bAutoCmpltCollectWords = *(sal_Bool*)pValues[nProp].getValue(); break; // "Completion/CollectWords",
-                    case  38: rSwFlags.bAutoCmpltEndless = *(sal_Bool*)pValues[nProp].getValue(); break; // "Completion/EndlessList",
-                    case  39: rSwFlags.bAutoCmpltAppendBlanc = *(sal_Bool*)pValues[nProp].getValue(); break; // "Completion/AppendBlank",
-                    case  40: rSwFlags.bAutoCmpltShowAsTip = *(sal_Bool*)pValues[nProp].getValue(); break; // "Completion/ShowAsTip",
-                    case  41:
+                    case  36: rSwFlags.bAutoCmpltCollectWords = *(sal_Bool*)pValues[nProp].getValue(); break; // "Completion/CollectWords",
+                    case  37: rSwFlags.bAutoCmpltEndless = *(sal_Bool*)pValues[nProp].getValue(); break; // "Completion/EndlessList",
+                    case  38: rSwFlags.bAutoCmpltAppendBlanc = *(sal_Bool*)pValues[nProp].getValue(); break; // "Completion/AppendBlank",
+                    case  39: rSwFlags.bAutoCmpltShowAsTip = *(sal_Bool*)pValues[nProp].getValue(); break; // "Completion/ShowAsTip",
+                    case  40:
                     {
                         sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
                         rSwFlags.nAutoCmpltExpandKey =
                             sal::static_int_cast< USHORT >(nVal);
                     }
                     break; // "Completion/AcceptKey"
-                    case 42 :rSwFlags.bAutoCmpltKeepList = *(sal_Bool*)pValues[nProp].getValue(); break;//"Completion/KeepList"
-                    case 43 :
+                    case 41 :rSwFlags.bAutoCmpltKeepList = *(sal_Bool*)pValues[nProp].getValue(); break;//"Completion/KeepList"
+                    case 42 :
                     {
                         sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
                         rSwFlags.cByInputBullet =
                             sal::static_int_cast< sal_Unicode >(nVal);
                     }
                     break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/Char",
-                    case 44 :
+                    case 43 :
                     {
                         OUString sTemp; pValues[nProp] >>= sTemp;
                         rSwFlags.aByInputBulletFont.SetName(sTemp);
                     }
                     break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/Font",
-                    case 45 :
+                    case 44 :
                     {
                         sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
                         rSwFlags.aByInputBulletFont.SetFamily(FontFamily(nVal));
                     }
                     break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/FontFamily",
-                    case 46 :
+                    case 45 :
                     {
                         sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
                         rSwFlags.aByInputBulletFont.SetCharSet(CharSet(nVal));
                     }
                     break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/FontCharset",
-                    case 47 :
+                    case 46 :
                     {
                         sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
                         rSwFlags.aByInputBulletFont.SetPitch(FontPitch(nVal));
@@ -593,7 +591,7 @@ void SvxSwAutoCorrCfg::Commit()
             case   8: bVal = rSwFlags.bChgWeightUnderl; pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/ChangeUnderlineWeight",
             case   9: bVal = rSwFlags.bSetINetAttr; pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/SetInetAttribute",
             case  10: bVal = rSwFlags.bChgOrdinalNumber; pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/ChangeOrdinalNumber",
-            case  11: bVal = rSwFlags.bChgFracionSymbol; pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/ChangeFraction",
+            case  11: bVal = rSwFlags.bAddNonBrkSpace;  pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/AddNonBreakingSpace",
 // it doesn't exist here - the common flags are used for that -> LM
             case  12:
                 bVal = sal_True;  pValues[nProp].setValue(&bVal, rType);
@@ -616,49 +614,48 @@ void SvxSwAutoCorrCfg::Commit()
             case  20:
                 pValues[nProp] <<= (sal_Int32)rSwFlags.aBulletFont.GetPitch();
             break; // "Format/Option/ChangeToBullets/SpecialCharacter/FontPitch",
-            case  21: bVal = rSwFlags.bReplaceQuote; pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/ReplaceQuote",
-            case  22: bVal = rSwFlags.bRightMargin; pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/CombineParagraphs",
-            case  23:
+            case  21: bVal = rSwFlags.bRightMargin; pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/CombineParagraphs",
+            case  22:
                 pValues[nProp] <<= (sal_Int32)rSwFlags.nRightMargin;
             break; // "Format/Option/CombineValue",
-            case  24: bVal = rSwFlags.bAFmtDelSpacesAtSttEnd; pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/DelSpacesAtStartEnd",
-            case  25: bVal = rSwFlags.bAFmtDelSpacesBetweenLines; pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/DelSpacesBetween",
-            case  26: bVal = rParent.bAutoFmtByInput; pValues[nProp].setValue(&bVal, rType); break; // "Format/ByInput/Enable",
-            case  27: bVal = rSwFlags.bChgToEnEmDash; pValues[nProp].setValue(&bVal, rType); break; // "Format/ByInput/ChangeDash",
-            case  28: bVal = rSwFlags.bSetNumRule; pValues[nProp].setValue(&bVal, rType); break; // "Format/ByInput/ApplyNumbering/Enable",
-            case  29: bVal = rSwFlags.bSetBorder; pValues[nProp].setValue(&bVal, rType); break; // "Format/ByInput/ChangeToBorders",
-            case  30: bVal = rSwFlags.bCreateTable; pValues[nProp].setValue(&bVal, rType); break; // "Format/ByInput/ChangeToTable",
-            case  31: bVal = rSwFlags.bReplaceStyles; pValues[nProp].setValue(&bVal, rType); break; // "Format/ByInput/ReplaceStyle",
-            case  32: bVal = rSwFlags.bAFmtByInpDelSpacesAtSttEnd; pValues[nProp].setValue(&bVal, rType); break; // "Format/ByInput/DelSpacesAtStartEnd",
-            case  33: bVal = rSwFlags.bAFmtByInpDelSpacesBetweenLines; pValues[nProp].setValue(&bVal, rType); break; // "Format/ByInput/DelSpacesBetween",
-            case  34: bVal = rSwFlags.bAutoCompleteWords; pValues[nProp].setValue(&bVal, rType); break; // "Completion/Enable",
-            case  35:
+            case  23: bVal = rSwFlags.bAFmtDelSpacesAtSttEnd; pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/DelSpacesAtStartEnd",
+            case  24: bVal = rSwFlags.bAFmtDelSpacesBetweenLines; pValues[nProp].setValue(&bVal, rType); break; // "Format/Option/DelSpacesBetween",
+            case  25: bVal = rParent.bAutoFmtByInput; pValues[nProp].setValue(&bVal, rType); break; // "Format/ByInput/Enable",
+            case  26: bVal = rSwFlags.bChgToEnEmDash; pValues[nProp].setValue(&bVal, rType); break; // "Format/ByInput/ChangeDash",
+            case  27: bVal = rSwFlags.bSetNumRule; pValues[nProp].setValue(&bVal, rType); break; // "Format/ByInput/ApplyNumbering/Enable",
+            case  28: bVal = rSwFlags.bSetBorder; pValues[nProp].setValue(&bVal, rType); break; // "Format/ByInput/ChangeToBorders",
+            case  29: bVal = rSwFlags.bCreateTable; pValues[nProp].setValue(&bVal, rType); break; // "Format/ByInput/ChangeToTable",
+            case  30: bVal = rSwFlags.bReplaceStyles; pValues[nProp].setValue(&bVal, rType); break; // "Format/ByInput/ReplaceStyle",
+            case  31: bVal = rSwFlags.bAFmtByInpDelSpacesAtSttEnd; pValues[nProp].setValue(&bVal, rType); break; // "Format/ByInput/DelSpacesAtStartEnd",
+            case  32: bVal = rSwFlags.bAFmtByInpDelSpacesBetweenLines; pValues[nProp].setValue(&bVal, rType); break; // "Format/ByInput/DelSpacesBetween",
+            case  33: bVal = rSwFlags.bAutoCompleteWords; pValues[nProp].setValue(&bVal, rType); break; // "Completion/Enable",
+            case  34:
                 pValues[nProp] <<= (sal_Int32)rSwFlags.nAutoCmpltWordLen;
             break; // "Completion/MinWordLen",
-            case  36:
+            case  35:
                 pValues[nProp] <<= (sal_Int32)rSwFlags.nAutoCmpltListLen;
             break; // "Completion/MaxListLen",
-            case  37: bVal = rSwFlags.bAutoCmpltCollectWords; pValues[nProp].setValue(&bVal, rType); break; // "Completion/CollectWords",
-            case  38: bVal = rSwFlags.bAutoCmpltEndless; pValues[nProp].setValue(&bVal, rType); break; // "Completion/EndlessList",
-            case  39: bVal = rSwFlags.bAutoCmpltAppendBlanc; pValues[nProp].setValue(&bVal, rType); break; // "Completion/AppendBlank",
-            case  40: bVal = rSwFlags.bAutoCmpltShowAsTip; pValues[nProp].setValue(&bVal, rType); break; // "Completion/ShowAsTip",
-            case  41:
+            case  36: bVal = rSwFlags.bAutoCmpltCollectWords; pValues[nProp].setValue(&bVal, rType); break; // "Completion/CollectWords",
+            case  37: bVal = rSwFlags.bAutoCmpltEndless; pValues[nProp].setValue(&bVal, rType); break; // "Completion/EndlessList",
+            case  38: bVal = rSwFlags.bAutoCmpltAppendBlanc; pValues[nProp].setValue(&bVal, rType); break; // "Completion/AppendBlank",
+            case  39: bVal = rSwFlags.bAutoCmpltShowAsTip; pValues[nProp].setValue(&bVal, rType); break; // "Completion/ShowAsTip",
+            case  40:
                 pValues[nProp] <<= (sal_Int32)rSwFlags.nAutoCmpltExpandKey;
             break; // "Completion/AcceptKey"
-            case 42 :bVal = rSwFlags.bAutoCmpltKeepList; pValues[nProp].setValue(&bVal, rType); break;// "Completion/KeepList"
-            case 43 :
+            case 41 :bVal = rSwFlags.bAutoCmpltKeepList; pValues[nProp].setValue(&bVal, rType); break;// "Completion/KeepList"
+            case 42 :
                 pValues[nProp] <<= (sal_Int32)rSwFlags.cByInputBullet;
             break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/Char",
-            case 44 :
+            case 43 :
                 pValues[nProp] <<= OUString(rSwFlags.aByInputBulletFont.GetName());
             break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/Font",
-            case 45 :
+            case 44 :
                 pValues[nProp] <<= (sal_Int32)rSwFlags.aByInputBulletFont.GetFamily();
             break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/FontFamily",
-            case 46 :
+            case 45 :
                 pValues[nProp] <<= (sal_Int32)rSwFlags.aByInputBulletFont.GetCharSet();
             break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/FontCharset",
-            case 47 :
+            case 46 :
                 pValues[nProp] <<= (sal_Int32)rSwFlags.aByInputBulletFont.GetPitch();
             break;// "Format/ByInput/ApplyNumbering/SpecialCharacter/FontPitch",
         }

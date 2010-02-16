@@ -32,6 +32,9 @@
 #include <svx/svxids.hrc>
 #include "../inc/fmhelp.hrc"
 
+/* #define HID_AUTOCORR_HELP_CHGNONBRKSPACE        HID_AUTOCORR_HELP_START+20 */
+/* hidspecial HID_AUTOCORR_HELP_CHGNONBRKSPACE     { HelpID =  HID_AUTOCORR_HELP_CHGNONBRKSPACE;}; */
+
 hidspecial HID_FIELD_SEL                    { HelpID =HID_FIELD_SEL             ;};
 hidspecial HID_FIELD_SEL_WIN                { HelpID =HID_FIELD_SEL_WIN         ;};
 hidspecial HID_FILL_ATTR_LISTBOX                { HelpID = HID_FILL_ATTR_LISTBOX ;};

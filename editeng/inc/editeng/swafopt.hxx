@@ -52,7 +52,6 @@ struct EDITENG_DLLPUBLIC SvxSwAutoFmtFlags
 
     BYTE nRightMargin;
 
-    BOOL bReplaceQuote : 1;
     BOOL bAutoCorrect : 1;
     BOOL bCptlSttSntnc : 1;
     BOOL bCptlSttWrd : 1;
@@ -65,9 +64,9 @@ struct EDITENG_DLLPUBLIC SvxSwAutoFmtFlags
     BOOL bDelEmptyNode : 1;
     BOOL bSetNumRule : 1;
 
-    BOOL bChgFracionSymbol : 1;
     BOOL bChgOrdinalNumber : 1;
     BOOL bChgToEnEmDash : 1;
+    BOOL bAddNonBrkSpace : 1;
     BOOL bChgWeightUnderl : 1;
     BOOL bSetINetAttr : 1;
 

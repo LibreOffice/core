@@ -33,6 +33,7 @@
 
 
 #include <com/sun/star/io/XStream.hpp>
+#include <com/sun/star/lang/Locale.hpp>
 #include <tools/urlobj.hxx>
 #include <tools/table.hxx>
 #include <i18npool/mslangid.hxx>
@@ -75,6 +76,8 @@
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <xmloff/xmltoken.hxx>
 #include <vcl/help.hxx>
+
+#define CHAR_HARDBLANK      ((sal_Unicode)0x00A0)
 
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
@@ -312,7 +315,13 @@ sal_Bool SvxAutoCorrect::IsAutoCorrectChar( sal_Unicode cChar )
             cChar == ' '  || cChar == '\'' || cChar == '\"' ||
             cChar == '*'  || cChar == '_'  ||
             cChar == '.'  || cChar == ','  || cChar == ';' ||
-            cChar == ':'  || cChar == '?' || cChar == '!';
+            cChar == ':'  || cChar == '?' || cChar == '!' || cChar == '/';
+}
+
+sal_Bool SvxAutoCorrect::NeedsHardspaceAutocorr( sal_Unicode cChar )
+{
+    return cChar == ';' || cChar == ':'  || cChar == '?' || cChar == '!' ||
+        cChar == '/' /*case for the urls exception*/;
 }
 
 /* -----------------19.11.98 10:15-------------------
@@ -323,9 +332,9 @@ long SvxAutoCorrect::GetDefaultFlags()
     long nRet = Autocorrect
                     | CptlSttSntnc
                     | CptlSttWrd
-                    | ChgFractionSymbol
                     | ChgOrdinalNumber
                     | ChgToEnEmDash
+                    | AddNonBrkSpace
                     | ChgWeightUnderl
                     | SetINetAttr
                     | ChgQuotes
@@ -362,9 +371,6 @@ SvxAutoCorrect::SvxAutoCorrect( const String& rShareAutocorrFile,
 {
     nFlags = SvxAutoCorrect::GetDefaultFlags();
 
-    c1Div2 = ByteString::ConvertToUnicode( '\xBD', RTL_TEXTENCODING_MS_1252 );
-    c1Div4 = ByteString::ConvertToUnicode( '\xBC', RTL_TEXTENCODING_MS_1252 );
-    c3Div4 = ByteString::ConvertToUnicode( '\xBE', RTL_TEXTENCODING_MS_1252 );
     cEmDash = ByteString::ConvertToUnicode( '\x97', RTL_TEXTENCODING_MS_1252 );
     cEnDash = ByteString::ConvertToUnicode( '\x96', RTL_TEXTENCODING_MS_1252 );
 }
@@ -382,7 +388,6 @@ SvxAutoCorrect::SvxAutoCorrect( const SvxAutoCorrect& rCpy )
     nFlags( rCpy.nFlags & ~(ChgWordLstLoad|CplSttLstLoad|WrdSttLstLoad)),
     cStartDQuote( rCpy.cStartDQuote ), cEndDQuote( rCpy.cEndDQuote ),
     cStartSQuote( rCpy.cStartSQuote ), cEndSQuote( rCpy.cEndSQuote ),
-    c1Div2( rCpy.c1Div2 ), c1Div4( rCpy.c1Div4 ), c3Div4( rCpy.c3Div4 ),
     cEmDash( rCpy.cEmDash ), cEnDash( rCpy.cEnDash )
 {
 }
@@ -463,40 +468,6 @@ BOOL SvxAutoCorrect::FnCptlSttWrd( SvxAutoCorrDoc& rDoc, const String& rTxt,
         }
     }
     return bRet;
-}
-
-
-BOOL SvxAutoCorrect::FnChgFractionSymbol(
-                                SvxAutoCorrDoc& rDoc, const String& rTxt,
-                                xub_StrLen nSttPos, xub_StrLen nEndPos )
-{
-    sal_Unicode cChar = 0;
-
-    for( ; nSttPos < nEndPos; ++nSttPos )
-        if( !lcl_IsInAsciiArr( sImplSttSkipChars, rTxt.GetChar( nSttPos ) ))
-            break;
-    for( ; nSttPos < nEndPos; --nEndPos )
-        if( !lcl_IsInAsciiArr( sImplEndSkipChars, rTxt.GetChar( nEndPos - 1 ) ))
-            break;
-
-    // 1/2, 1/4, ... ersetzen durch das entsprechende Zeichen vom Font
-    if( 3 == nEndPos - nSttPos && '/' == rTxt.GetChar( nSttPos+1 ))
-    {
-        switch( ( rTxt.GetChar( nSttPos )) * 256 + rTxt.GetChar( nEndPos-1 ))
-        {
-        case '1' * 256 + '2':       cChar = c1Div2;     break;
-        case '1' * 256 + '4':       cChar = c1Div4;     break;
-        case '3' * 256 + '4':       cChar = c3Div4;     break;
-        }
-
-        if( cChar )
-        {
-            // also austauschen:
-            rDoc.Delete( nSttPos+1, nEndPos );
-            rDoc.Replace( nSttPos, cChar );
-        }
-    }
-    return 0 != cChar;
 }
 
 
@@ -671,6 +642,80 @@ BOOL SvxAutoCorrect::FnChgToEnEmDash(
     return bRet;
 }
 
+BOOL SvxAutoCorrect::FnAddNonBrkSpace(
+                                SvxAutoCorrDoc& rDoc, const String& rTxt,
+                                xub_StrLen, xub_StrLen nEndPos,
+                                LanguageType eLang )
+{
+    bool bRet = false;
+
+    CharClass& rCC = GetCharClass( eLang );
+    const lang::Locale rLocale = rCC.getLocale( );
+
+    if ( rLocale.Language == OUString::createFromAscii( "fr" ) )
+    {
+        bool bFrCA = rLocale.Country == OUString::createFromAscii( "CA" );
+        OUString allChars = OUString::createFromAscii( ":;!?" );
+        OUString chars( allChars );
+        if ( bFrCA )
+            chars = OUString::createFromAscii( ":" );
+
+        sal_Unicode cChar = rTxt.GetChar( nEndPos );
+        bool bHasSpace = chars.indexOf( sal_Unicode( cChar ) ) != -1;
+        bool bIsSpecial = allChars.indexOf( sal_Unicode( cChar ) ) != -1;
+        if ( bIsSpecial )
+        {
+            // Get the last word delimiter position
+            xub_StrLen nSttWdPos = nEndPos;
+            while( nSttWdPos && !IsWordDelim( rTxt.GetChar( --nSttWdPos )))
+                ;
+
+            // Check the presence of "://" in the word
+            xub_StrLen nStrPos = rTxt.Search( String::CreateFromAscii( "://" ), nSttWdPos + 1 );
+            if ( STRING_NOTFOUND == nStrPos )
+            {
+                // Check the previous char
+                sal_Unicode cPrevChar = rTxt.GetChar( nEndPos - 1 );
+                if ( ( chars.indexOf( sal_Unicode( cPrevChar ) ) == -1 ) && cPrevChar != '\t' )
+                {
+                    // Remove any previous normal space
+                    xub_StrLen nPos = nEndPos - 1;
+                    while ( cPrevChar == ' ' || cPrevChar == CHAR_HARDBLANK )
+                    {
+                        if ( nPos == 0 ) break;
+                        nPos--;
+                        cPrevChar = rTxt.GetChar( nPos );
+                    }
+
+                    if ( nPos != 0 )
+                    {
+                        nPos++;
+                        if ( nEndPos - nPos > 0 )
+                            rDoc.Delete( nPos, nEndPos );
+
+                        // Add the non-breaking space at the end pos
+                        if ( bHasSpace )
+                            rDoc.Insert( nPos, CHAR_HARDBLANK );
+                        bRet = true;
+                    }
+                }
+            }
+        }
+        else if ( cChar == '/' )
+        {
+            // Remove the hardspace right before to avoid formatting URLs
+            sal_Unicode cPrevChar = rTxt.GetChar( nEndPos - 1 );
+            sal_Unicode cMaybeSpaceChar = rTxt.GetChar( nEndPos - 2 );
+            if ( cPrevChar == ':' && cMaybeSpaceChar == CHAR_HARDBLANK )
+            {
+                rDoc.Delete( nEndPos - 2, nEndPos - 1 );
+                bRet = true;
+            }
+        }
+    }
+
+    return bRet;
+}
 
 BOOL SvxAutoCorrect::FnSetINetAttr( SvxAutoCorrDoc& rDoc, const String& rTxt,
                                     xub_StrLen nSttPos, xub_StrLen nEndPos,
@@ -1152,10 +1197,10 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
         {
             //JP 10.02.97: doppelte Spaces verhindern
             if( nInsPos && ' ' == cChar &&
-                IsAutoCorrFlag( IngnoreDoubleSpace ) &&
+                IsAutoCorrFlag( IgnoreDoubleSpace ) &&
                 ' ' == rTxt.GetChar( nInsPos - 1 ) )
             {
-                nRet = IngnoreDoubleSpace;
+                nRet = IgnoreDoubleSpace;
                 break;
             }
 
@@ -1183,6 +1228,13 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
                 rDoc.Insert( nInsPos, cChar );
             else
                 rDoc.Replace( nInsPos, cChar );
+
+            // Hardspaces autocorrection
+            if ( NeedsHardspaceAutocorr( cChar ) && IsAutoCorrFlag( AddNonBrkSpace ) &&
+                FnAddNonBrkSpace( rDoc, rTxt, 0, nInsPos, rDoc.GetLanguage( nInsPos, FALSE ) ) )
+            {
+                nRet = AddNonBrkSpace;
+            }
         }
 
         if( !nInsPos )
@@ -1277,9 +1329,7 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
             }
         }
 
-        if( ( IsAutoCorrFlag( nRet = ChgFractionSymbol ) &&
-                FnChgFractionSymbol( rDoc, rTxt, nCapLttrPos, nInsPos ) ) ||
-            ( IsAutoCorrFlag( nRet = ChgOrdinalNumber ) &&
+        if( ( IsAutoCorrFlag( nRet = ChgOrdinalNumber ) &&
                 FnChgOrdinalNumber( rDoc, rTxt, nCapLttrPos, nInsPos, eLang ) ) ||
             ( IsAutoCorrFlag( nRet = SetINetAttr ) &&
                 ( ' ' == cChar || '\t' == cChar || 0x0a == cChar || !cChar ) &&
@@ -1325,9 +1375,9 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
                  if( nRet & ChgQuotes)          nHelpId = 16;
             else if( nRet & ChgSglQuotes)       nHelpId = 17;
             else if( nRet & SetINetAttr)        nHelpId = 18;
-            else if( nRet & IngnoreDoubleSpace) nHelpId = 19;
+            else if( nRet & IgnoreDoubleSpace)  nHelpId = 19;
             else if( nRet & ChgWeightUnderl)    nHelpId = 20;
-            else if( nRet & ChgFractionSymbol ) nHelpId = 21;
+            else if( nRet & AddNonBrkSpace)     nHelpId = 21;
             else if( nRet & ChgOrdinalNumber)   nHelpId = 22;
         }
 

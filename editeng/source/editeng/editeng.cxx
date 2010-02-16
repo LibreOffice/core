@@ -1148,9 +1148,7 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                     pEditView->pImpEditView->DrawSelection();
                     // Autokorrektur ?
                     if ( ( pImpEditEngine->GetStatus().DoAutoCorrect() ) &&
-                         (  ( nCharCode == ' ' ) || ( nCharCode == '*' ) ||
-                             ( nCharCode == '\"' ) || ( nCharCode == '\'' ) ||
-                            ( nCharCode == '_' )  ))
+                        SvxAutoCorrect::IsAutoCorrectChar( nCharCode ) )
                     {
                         aCurSel = pImpEditEngine->AutoCorrect( aCurSel, nCharCode, !pEditView->IsInsertMode() );
                     }
