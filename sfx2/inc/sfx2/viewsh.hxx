@@ -62,6 +62,7 @@ class SfxTabPage;
 class SfxPrintMonitor;
 class SfxFrameSetDescriptor;
 class PrintDialog;
+class Printer;
 class SfxPrinter;
 class SfxProgress;
 class SvStringsDtor;
@@ -168,6 +169,7 @@ friend class SfxInternalFrame;
 friend class SfxExternalTopViewFrame_Impl;
 friend class SfxOfficeDocController;
 friend class SfxBaseController;
+friend class SfxPrinterController;
 #endif
 
     struct SfxViewShell_Impl*   pImp;
@@ -206,10 +208,6 @@ public:
 
                                 SfxViewShell( SfxViewFrame *pFrame, USHORT nFlags = 0 );
     virtual                     ~SfxViewShell();
-
-    // In-Place
-    // should be superfluous
-    //virtual SfxInPlaceClient* CreateIPClient( WorkWindow * pTop, WorkWindow * pDoc, Window * pDraw );
 
     SfxInPlaceClient*           GetIPClient() const;
     SfxInPlaceClient*           GetUIActiveClient() const;
@@ -272,6 +270,7 @@ public:
     void                        LockPrinter( BOOL bLock = TRUE );
     BOOL                        IsPrinterLocked() const;
     virtual JobSetup            GetJobSetup() const;
+    Printer*                    GetActivePrinter() const;
 
     // Workingset
     virtual void                WriteUserData( String&, BOOL bBrowse = FALSE );
