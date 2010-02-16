@@ -199,35 +199,35 @@ testcase tiToolsAutoCorrect
     Kontext "TabOptionen"
     Call DialogTest ( TabOptionen )
     Kontext
-    Messagebox.SetPage TabTypografisch
-    Kontext "TabTypografisch"  ' 1a
-    EinfacheErsetzen.Check
-    EinfachWortAnfang.Click
+    Messagebox.SetPage TabLocalizedOptions
+    Kontext "TabLocalizedOptions"  ' 1a
+    SingleQuotesReplace.Check
+    SingleQuotesStart.Click
     Kontext "Sonderzeichen"
     Call DialogTest ( Sonderzeichen, 1 )
     Sonderzeichen.Cancel
-    Kontext "TabTypografisch"  ' 1b
-    EinfachWortEnde.Click
+    Kontext "TabLocalizedOptions"  ' 1b
+    SingleQuotesEnd.Click
     Kontext "Sonderzeichen"
     Call DialogTest ( Sonderzeichen, 2 )
     Sonderzeichen.Cancel
-    Kontext "TabTypografisch"  ' 1s
-    EinfachStandard.Click
+    Kontext "TabLocalizedOptions"  ' 1s
+    SingleQuotesDefault.Click
 
-    Kontext "TabTypografisch"  ' 2a
-    DoppeltWortAnfang.Click
+    Kontext "TabLocalizedOptions"  ' 2a
+    DoubleQuotesStart.Click
     Kontext "Sonderzeichen"
     Call DialogTest ( Sonderzeichen, 3 )
     Sonderzeichen.Cancel
-    Kontext "TabTypografisch"  ' 2b
-    DoppeltWortEnde.Click
+    Kontext "TabLocalizedOptions"  ' 2b
+    DoubleQuotesEnd.Click
     Kontext "Sonderzeichen"
     Call DialogTest ( Sonderzeichen, 4 )
     Sonderzeichen.Cancel
-    Kontext "TabTypografisch"  ' 2s
-    DoppeltStandard.Click
-    EinfacheErsetzen.UnCheck
-    TabTypografisch.cancel
+    Kontext "TabLocalizedOptions"  ' 2s
+    DoubleQuotesDefault.Click
+    SingleQuotesReplace.UnCheck
+    TabLocalizedOptions.cancel
     Call hCloseDocument
 endcase
 

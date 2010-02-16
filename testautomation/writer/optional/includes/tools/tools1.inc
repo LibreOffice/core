@@ -319,7 +319,7 @@ function fToolsAutocorrect(Options as string)
     case "TabErsetzung"                : active.SetPage TabErsetzung
     case "TabAusnahmen"                : active.SetPage TabAusnahmen
     case "TabOptionenAutokorrektur"    : active.SetPage TabOptionenAutokorrektur
-    case "TabTypografisch"             : active.SetPage TabTypografisch
+    case "TabLocalizedOptions"         : active.SetPage TabLocalizedOptions
     case "TabWortergaenzung"           : active.SetPage TabWortergaenzung
   end Select
 

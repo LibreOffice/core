@@ -64,7 +64,7 @@ sub OptionenAufrufen(Seite as string)
     case "TabErsetzung"   : active.SetPage TabErsetzung
     case "TabAusnahmen"   : active.SetPage TabAusnahmen
     case "TabOptionen"    : active.SetPage TabOptionen
-    case "TabTypografisch": active.SetPage TabTypografisch
+    case "TabLocalizedOptions": active.SetPage TabLocalizedOptions
     end select
     for i = 1 to 5
         Kontext "Active"

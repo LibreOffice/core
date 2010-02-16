@@ -142,8 +142,8 @@ sub sCheckCheck (i, Pruefung$, bEnabled)
     select case i
 ' Disabled sCheckUnderlined due to start of external program (web-browser) - FHA
         case 5: bEnabled 'sCheckUnderlined (bEnabled)
-        case 6: sCheckSupperscript (bEnabled)
-        case 8: sCheckDash (bEnabled)
+        case 6: sCheckDash (bEnabled)
+        case 8: sCheckSupperscript (bEnabled)
         case else:
             hTypeKeys "<Home><Shift End>"
             EditCopy
