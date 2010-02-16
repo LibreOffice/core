@@ -116,8 +116,8 @@ private:
     String      sBoldUnderline;
     String      sURL;
     String      sNoDblSpaces;
-    String      sHalf;
     String      sDash;
+    String      sNonBrkSpace;
     String      sFirst;
 
 public:
@@ -151,15 +151,14 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
     String          sUseReplaceTbl;
     String          sCptlSttWord;
     String          sCptlSttSent;
-    String          sTypo;
     String          sUserStyle;
     String          sBullet;
     String          sByInputBullet;
     String          sBoldUnder;
     String          sNoDblSpaces;
-    String          sFraction;
     String          sDetectURL;
     String          sDash;
+    String          sNonBrkSpace;
     String          sOrdinal;
     String          sRightMargin;
     String          sNum;
@@ -334,6 +333,18 @@ class OfaQuoteTabPage : public SfxTabPage
     using TabPage::ActivatePage;
 
 private:
+    // For anything but writer
+    SvxCheckListBox aCheckLB;
+
+    // Just for writer
+    OfaACorrCheckListBox    aSwCheckLB;
+    String          sHeader1;
+    String          sHeader2;
+
+    String          sNonBrkSpace;
+    String          sOrdinal;
+
+    SvLBoxButtonData*   pCheckButtonData;
 
     FixedLine   aSingleFL;
     CheckBox    aSingleTypoCB;
@@ -371,6 +382,8 @@ private:
     DECL_LINK( StdQuoteHdl, PushButton* );
 
     String              ChangeStringExt_Impl( sal_UCS4 );
+
+    SvLBoxEntry* CreateEntry(String& rTxt, USHORT nCol);
 
                         OfaQuoteTabPage( Window* pParent, const SfxItemSet& rSet );
 public:

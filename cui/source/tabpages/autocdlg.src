@@ -73,7 +73,7 @@ TabDialog RID_OFA_AUTOCORR_DLG
             PageItem
             {
                 Identifier = RID_OFAPAGE_AUTOCORR_QUOTE ;
-                Text [ en-US ] = "Custom Quotes" ;
+                Text [ en-US ] = "Localized Options" ;
             };
             PageItem
             {
@@ -128,14 +128,6 @@ TabDialog RID_OFA_AUTOCORR_DLG
     String ST_DETECT_URL \
     { \
         Text [ en-US ] = "URL Recognition" ; \
-    }; \
-    String ST_ORDINAL \
-    { \
-        Text [ en-US ] = "Replace 1st... with 1^st..." ; \
-    }; \
-    String ST_FRACTION \
-    { \
-        Text [ en-US ] = "Replace 1/2 ... with Â½ ..." ; \
     }; \
     String ST_DASH \
     { \
@@ -214,10 +206,6 @@ TabPage RID_OFAPAGE_AUTOFMT_APPLY
     {
         /* ### ACHTUNG: Neuer Text in Resource? Leere Absätze entfernen : Leere Absõtze entfernen */
         Text [ en-US ] = "Remove blank paragraphs" ;
-    };
-    String ST_TYPO
-    {
-        Text [ en-US ] = "Replace \"standard\" quotes with %1custom%2 quotes" ;
     };
     String ST_USER_STYLE
     {
@@ -494,114 +482,137 @@ TabPage RID_OFAPAGE_AUTOCORR_QUOTE
     Size = MAP_APPFONT ( 260 , 185 ) ;
     SVLook = TRUE ;
     Hide = TRUE ;
-    Text [ en-US ] = "Custom Quotes" ;
-    FixedLine FL_SINGLE
+    Text [ en-US ] = "Localized Options" ;
+    Control CLB_SETTINGS
     {
         Pos = MAP_APPFONT ( 4 , 3 ) ;
-        Size = MAP_APPFONT ( 252 , 8 ) ;
+        Size = MAP_APPFONT ( 252 , 85 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+    String STR_HEADER1
+    {
+        Text [ en-US ] = "[M]" ;
+    };
+    String STR_HEADER2
+    {
+        Text [ en-US ] = "[T]" ;
+    };
+    String ST_NON_BREAK_SPACE
+    {
+       Text [ en-US ] = "Add non breaking space before specific punctuation marks in french text" ;
+    };
+    String ST_ORDINAL
+    {
+        Text [ en-US ] = "Format ordinal numbers suffixes (1st -> 1^st)" ;
+    };
+    FixedLine FL_SINGLE
+    {
+        Pos = MAP_APPFONT ( 4 , 90 ) ;
+        Size = MAP_APPFONT ( 122 , 8 ) ;
         Text [ en-US ] = "Single quotes" ;
     };
     Checkbox CB_SGL_TYPO
     {
-        Pos = MAP_APPFONT ( 7 , 14 ) ;
+        Pos = MAP_APPFONT ( 7 , 101 ) ;
         Size = MAP_APPFONT ( 86 , 10 ) ;
         Text [ en-US ] = "Repla~ce" ;
     };
     FixedText FT_SGL_STARTQUOTE
     {
-        Pos = MAP_APPFONT ( 7 , 30 ) ;
+        Pos = MAP_APPFONT ( 7 , 114 ) ;
         Size = MAP_APPFONT ( 86 , 8 ) ;
         Text [ en-US ] = "~Start quote:" ;
     };
     PushButton PB_SGL_STARTQUOTE
     {
-        Pos = MAP_APPFONT ( 105 , 28 ) ;
+        Pos = MAP_APPFONT ( 10 , 125 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         Text = "\'" ;
         TabStop = TRUE ;
     };
     FixedText FT_SGSTEX
     {
-        Pos = MAP_APPFONT ( 124 , 30 ) ;
+        Pos = MAP_APPFONT ( 26 , 127 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
     };
     FixedText FT_SGL_ENDQUOTE
     {
-        Pos = MAP_APPFONT ( 7 , 46 ) ;
+        Pos = MAP_APPFONT ( 7 , 139 ) ;
         Size = MAP_APPFONT ( 86 , 8 ) ;
         Text [ en-US ] = "~End quote:" ;
     };
     PushButton PB_SGL_ENDQUOTE
     {
-        Pos = MAP_APPFONT ( 105 , 44 ) ;
+        Pos = MAP_APPFONT ( 10 , 151 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         Text = "\'" ;
         TabStop = TRUE ;
     };
     FixedText FT_SGENEX
     {
-        Pos = MAP_APPFONT ( 124 , 46 ) ;
+        Pos = MAP_APPFONT ( 26 , 153 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
     };
     PushButton PB_SGL_STD
     {
-        Pos = MAP_APPFONT ( 198 , 63 ) ;
+        Pos = MAP_APPFONT ( 7 , 167 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Default" ;
     };
     FixedLine FL_DOUBLE
     {
-        Pos = MAP_APPFONT ( 4 , 83 ) ;
-        Size = MAP_APPFONT ( 252 , 8 ) ;
+        Pos = MAP_APPFONT ( 134 , 90 ) ;
+        Size = MAP_APPFONT ( 122 , 8 ) ;
         Text [ en-US ] = "Double quotes" ;
     };
     CheckBox CB_TYPO
     {
-        Pos = MAP_APPFONT ( 7 , 94 ) ;
+        Pos = MAP_APPFONT ( 137 , 101 ) ;
         Size = MAP_APPFONT ( 86 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Repl~ace" ;
     };
     FixedText FT_STARTQUOTE
     {
-        Pos = MAP_APPFONT ( 7 , 110 ) ;
+        Pos = MAP_APPFONT ( 137 , 114 ) ;
         Size = MAP_APPFONT ( 86 , 8 ) ;
         Text [ en-US ] = "Start q~uote:" ;
     };
     PushButton PB_STARTQUOTE
     {
-        Pos = MAP_APPFONT ( 105 , 108 ) ;
+        Pos = MAP_APPFONT ( 140 , 125 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         Text = "\"" ;
         TabStop = TRUE ;
     };
     FixedText FT_DBSTEX
     {
-        Pos = MAP_APPFONT ( 124 , 110 ) ;
+        Pos = MAP_APPFONT ( 156 , 127 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
     };
     FixedText FT_ENDQUOTE
     {
-        Pos = MAP_APPFONT ( 7 , 126 ) ;
+        Pos = MAP_APPFONT ( 137 , 139 ) ;
         Size = MAP_APPFONT ( 86 , 10 ) ;
         Text [ en-US ] = "E~nd quote:" ;
     };
     PushButton PB_ENDQUOTE
     {
-        Pos = MAP_APPFONT ( 105 , 124 ) ;
+        Pos = MAP_APPFONT ( 140 , 151 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         Text = "\"" ;
         TabStop = TRUE ;
     };
     FixedText FT_DBECEX
     {
-        Pos = MAP_APPFONT ( 124 , 126 ) ;
+        Pos = MAP_APPFONT ( 156 , 153 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
     };
     PushButton PB_DBL_STD
     {
-        Pos = MAP_APPFONT ( 195 , 143 ) ;
+        Pos = MAP_APPFONT ( 137 , 167 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "De~fault" ;

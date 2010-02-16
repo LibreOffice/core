@@ -227,9 +227,7 @@ OfaAutocorrOptionsPage::OfaAutocorrOptionsPage( Window* pParent,
     sBoldUnderline      (CUI_RES(ST_BOLD_UNDER        )),
     sURL                (CUI_RES(ST_DETECT_URL        )),
     sNoDblSpaces        (CUI_RES(STR_NO_DBL_SPACES    )),
-    sHalf               (CUI_RES(ST_FRACTION          )),
-    sDash               (CUI_RES(ST_DASH                )),
-    sFirst              (CUI_RES(ST_ORDINAL           ))
+    sDash               (CUI_RES(ST_DASH                ))
 {
     FreeResource();
 
@@ -271,10 +269,8 @@ BOOL OfaAutocorrOptionsPage::FillItemSet( SfxItemSet& )
     pAutoCorrect->SetAutoCorrFlag(CptlSttSntnc,         aCheckLB.IsChecked(nPos++));
     pAutoCorrect->SetAutoCorrFlag(ChgWeightUnderl,      aCheckLB.IsChecked(nPos++));
     pAutoCorrect->SetAutoCorrFlag(SetINetAttr,          aCheckLB.IsChecked(nPos++));
-    pAutoCorrect->SetAutoCorrFlag(ChgOrdinalNumber,     aCheckLB.IsChecked(nPos++));
-    pAutoCorrect->SetAutoCorrFlag(ChgFractionSymbol,    aCheckLB.IsChecked(nPos++));
     pAutoCorrect->SetAutoCorrFlag(ChgToEnEmDash,        aCheckLB.IsChecked(nPos++));
-    pAutoCorrect->SetAutoCorrFlag(IngnoreDoubleSpace,   aCheckLB.IsChecked(nPos++));
+    pAutoCorrect->SetAutoCorrFlag(IgnoreDoubleSpace,    aCheckLB.IsChecked(nPos++));
 
     BOOL bReturn = nFlags != pAutoCorrect->GetFlags();
     if(bReturn )
@@ -312,8 +308,6 @@ void OfaAutocorrOptionsPage::Reset( const SfxItemSet& )
     aCheckLB.InsertEntry(sStartCap);
     aCheckLB.InsertEntry(sBoldUnderline);
     aCheckLB.InsertEntry(sURL);
-    aCheckLB.InsertEntry(sFirst);
-    aCheckLB.InsertEntry(sHalf);
     aCheckLB.InsertEntry(sDash);
     aCheckLB.InsertEntry(sNoDblSpaces);
 
@@ -323,10 +317,8 @@ void OfaAutocorrOptionsPage::Reset( const SfxItemSet& )
     aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & CptlSttSntnc) );
     aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & ChgWeightUnderl) );
     aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & SetINetAttr) );
-    aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & ChgOrdinalNumber) );
-    aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & ChgFractionSymbol) );
     aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & ChgToEnEmDash) );
-    aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & IngnoreDoubleSpace) );
+    aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & IgnoreDoubleSpace) );
 
     aCheckLB.SetUpdateMode(TRUE);
 }
@@ -453,8 +445,6 @@ enum OfaAutoFmtOptions
     BEGIN_UPPER,
     BOLD_UNDERLINE,
     DETECT_URL,
-    REPLACE_1ST,
-    REPLACE_HALF,
     REPLACE_DASHES,
     DEL_SPACES_AT_STT_END,
     DEL_SPACES_BETWEEN_LINES,
@@ -466,7 +456,6 @@ enum OfaAutoFmtOptions
     DEL_EMPTY_NODE,
     REPLACE_USER_COLL,
     REPLACE_BULLETS,
-    REPLACE_QUOTATION,
     MERGE_SINGLE_LINE_PARA
 };
 
@@ -483,15 +472,12 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage( Window* pParent,
     sUseReplaceTbl      (CUI_RES(   ST_USE_REPLACE  )),
     sCptlSttWord        (CUI_RES(   ST_CPTL_STT_WORD)),
     sCptlSttSent        (CUI_RES(   ST_CPTL_STT_SENT)),
-    sTypo               (CUI_RES(   ST_TYPO         )),
     sUserStyle          (CUI_RES(   ST_USER_STYLE   )),
     sBullet             (CUI_RES(   ST_BULLET       )),
     sBoldUnder          (CUI_RES(   ST_BOLD_UNDER   )),
     sNoDblSpaces        (CUI_RES(   STR_NO_DBL_SPACES)),
-    sFraction           (CUI_RES(   ST_FRACTION     )),
     sDetectURL          (CUI_RES(   ST_DETECT_URL   )),
     sDash               (CUI_RES(   ST_DASH         )),
-    sOrdinal            (CUI_RES(   ST_ORDINAL      )),
     sRightMargin        (CUI_RES(   ST_RIGHT_MARGIN )),
     sNum                (CUI_RES(   STR_NUM         )),
     sBorder             (CUI_RES(   STR_BORDER      )),
@@ -508,11 +494,6 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage( Window* pParent,
 
     //typ. Anfuehrungszeichen einsetzen
     SvtSysLocale aSysLcl;
-    const LocaleDataWrapper& rLcl = aSysLcl.GetLocaleData();
-    sTypo.SearchAndReplace( String::CreateFromAscii("%1"),
-                                        rLcl.getDoubleQuotationMarkStart());
-    sTypo.SearchAndReplace( String::CreateFromAscii("%2"),
-                                        rLcl.getDoubleQuotationMarkEnd());
 
     aCheckLB.SetHelpId(HID_OFAPAGE_AUTOFORMAT_CLB);
     aCheckLB.SetWindowBits(WB_HSCROLL| WB_VSCROLL);
@@ -625,7 +606,7 @@ BOOL OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet&  )
     pAutoCorrect->SetAutoCorrFlag(ChgWeightUnderl,
                         aCheckLB.IsChecked(BOLD_UNDERLINE, CBCOL_SECOND));
 
-    pAutoCorrect->SetAutoCorrFlag(IngnoreDoubleSpace,
+    pAutoCorrect->SetAutoCorrFlag(IgnoreDoubleSpace,
                         aCheckLB.IsChecked(IGNORE_DBLSPACE, CBCOL_SECOND));
 
     bCheck = aCheckLB.IsChecked(DETECT_URL, CBCOL_FIRST);
@@ -634,19 +615,9 @@ BOOL OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet&  )
     pAutoCorrect->SetAutoCorrFlag(SetINetAttr,
                         aCheckLB.IsChecked(DETECT_URL, CBCOL_SECOND));
 
-    bCheck = aCheckLB.IsChecked(REPLACE_1ST, CBCOL_FIRST);
-    bModified |= pOpt->bChgOrdinalNumber != bCheck;
-    pOpt->bChgOrdinalNumber = bCheck;
-    pAutoCorrect->SetAutoCorrFlag(ChgOrdinalNumber,
-                        aCheckLB.IsChecked(REPLACE_1ST, CBCOL_SECOND));
-
     bCheck = aCheckLB.IsChecked(DEL_EMPTY_NODE, CBCOL_FIRST);
     bModified |= pOpt->bDelEmptyNode != bCheck;
     pOpt->bDelEmptyNode = bCheck;
-
-    bCheck = aCheckLB.IsChecked(REPLACE_QUOTATION, CBCOL_FIRST);
-    bModified |= pOpt->bReplaceQuote != bCheck;
-    pOpt->bReplaceQuote = bCheck;
 
     bCheck = aCheckLB.IsChecked(REPLACE_USER_COLL, CBCOL_FIRST);
     bModified |= pOpt->bChgUserColl != bCheck;
@@ -686,12 +657,6 @@ BOOL OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet&  )
     bCheck = aCheckLB.IsChecked(REPLACE_STYLES, CBCOL_SECOND);
     bModified |= pOpt->bReplaceStyles != bCheck;
     pOpt->bReplaceStyles = bCheck;
-
-    bCheck = aCheckLB.IsChecked(REPLACE_HALF, CBCOL_FIRST);
-    bModified |= pOpt->bChgFracionSymbol != bCheck;
-    pOpt->bChgFracionSymbol = bCheck;
-    pAutoCorrect->SetAutoCorrFlag(ChgFractionSymbol,
-                        aCheckLB.IsChecked(REPLACE_HALF, CBCOL_SECOND));
 
     bCheck = aCheckLB.IsChecked(REPLACE_DASHES, CBCOL_FIRST);
     bModified |= pOpt->bChgToEnEmDash != bCheck;
@@ -752,8 +717,6 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet& )
     aCheckLB.GetModel()->Insert(CreateEntry(sCptlSttSent,       CBCOL_BOTH  ));
     aCheckLB.GetModel()->Insert(CreateEntry(sBoldUnder,         CBCOL_BOTH  ));
     aCheckLB.GetModel()->Insert(CreateEntry(sDetectURL,         CBCOL_BOTH  ));
-    aCheckLB.GetModel()->Insert(CreateEntry(sOrdinal,           CBCOL_BOTH  ));
-    aCheckLB.GetModel()->Insert(CreateEntry(sFraction,          CBCOL_BOTH  ));
     aCheckLB.GetModel()->Insert(CreateEntry(sDash,              CBCOL_BOTH  ));
     aCheckLB.GetModel()->Insert(CreateEntry(sDelSpaceAtSttEnd,  CBCOL_BOTH  ));
     aCheckLB.GetModel()->Insert(CreateEntry(sDelSpaceBetweenLines, CBCOL_BOTH  ));
@@ -766,7 +729,6 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet& )
     aCheckLB.GetModel()->Insert(CreateEntry(sDeleteEmptyPara,   CBCOL_FIRST ));
     aCheckLB.GetModel()->Insert(CreateEntry(sUserStyle,         CBCOL_FIRST ));
     aCheckLB.GetModel()->Insert(CreateEntry(sBullet,            CBCOL_FIRST ));
-    aCheckLB.GetModel()->Insert(CreateEntry(sTypo,              CBCOL_FIRST ));
     aCheckLB.GetModel()->Insert(CreateEntry(sRightMargin,       CBCOL_FIRST ));
 
     aCheckLB.CheckEntryPos( USE_REPLACE_TABLE,  CBCOL_FIRST,    pOpt->bAutoCorrect );
@@ -777,13 +739,9 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet& )
     aCheckLB.CheckEntryPos( BEGIN_UPPER,        CBCOL_SECOND,   0 != (nFlags & CptlSttSntnc) );
     aCheckLB.CheckEntryPos( BOLD_UNDERLINE,     CBCOL_FIRST,    pOpt->bChgWeightUnderl );
     aCheckLB.CheckEntryPos( BOLD_UNDERLINE,     CBCOL_SECOND,   0 != (nFlags & ChgWeightUnderl) );
-    aCheckLB.CheckEntryPos( IGNORE_DBLSPACE,    CBCOL_SECOND,   0 != (nFlags & IngnoreDoubleSpace) );
+    aCheckLB.CheckEntryPos( IGNORE_DBLSPACE,    CBCOL_SECOND,   0 != (nFlags & IgnoreDoubleSpace) );
     aCheckLB.CheckEntryPos( DETECT_URL,         CBCOL_FIRST,    pOpt->bSetINetAttr );
     aCheckLB.CheckEntryPos( DETECT_URL,         CBCOL_SECOND,   0 != (nFlags & SetINetAttr) );
-    aCheckLB.CheckEntryPos( REPLACE_1ST,        CBCOL_FIRST,    pOpt->bChgOrdinalNumber );
-    aCheckLB.CheckEntryPos( REPLACE_1ST,        CBCOL_SECOND,   0 != (nFlags & ChgOrdinalNumber) );
-    aCheckLB.CheckEntryPos( REPLACE_HALF,       CBCOL_FIRST,    pOpt->bChgFracionSymbol );
-    aCheckLB.CheckEntryPos( REPLACE_HALF,       CBCOL_SECOND,   0 != (nFlags & ChgFractionSymbol) );
     aCheckLB.CheckEntryPos( REPLACE_DASHES,     CBCOL_FIRST,    pOpt->bChgToEnEmDash );
     aCheckLB.CheckEntryPos( REPLACE_DASHES,     CBCOL_SECOND,   0 != (nFlags & ChgToEnEmDash) );
     aCheckLB.CheckEntryPos( DEL_SPACES_AT_STT_END,      CBCOL_FIRST,    pOpt->bAFmtDelSpacesAtSttEnd );
@@ -791,7 +749,6 @@ void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet& )
     aCheckLB.CheckEntryPos( DEL_SPACES_BETWEEN_LINES,   CBCOL_FIRST,    pOpt->bAFmtDelSpacesBetweenLines );
     aCheckLB.CheckEntryPos( DEL_SPACES_BETWEEN_LINES,   CBCOL_SECOND,   pOpt->bAFmtByInpDelSpacesBetweenLines );
     aCheckLB.CheckEntryPos( DEL_EMPTY_NODE,     CBCOL_FIRST,    pOpt->bDelEmptyNode );
-    aCheckLB.CheckEntryPos( REPLACE_QUOTATION,  CBCOL_FIRST,    pOpt->bReplaceQuote );
     aCheckLB.CheckEntryPos( REPLACE_USER_COLL,  CBCOL_FIRST,    pOpt->bChgUserColl );
     aCheckLB.CheckEntryPos( REPLACE_BULLETS,    CBCOL_FIRST,    pOpt->bChgEnumNum );
 
@@ -2035,8 +1992,50 @@ void AutoCorrEdit::KeyInput( const KeyEvent& rKEvt )
 
 --------------------------------------------------*/
 
+enum OfaQuoteOptions
+{
+    ADD_NONBRK_SPACE,
+    REPLACE_1ST
+};
+
+SvLBoxEntry* OfaQuoteTabPage::CreateEntry(String& rTxt, USHORT nCol)
+{
+    SvLBoxEntry* pEntry = new SvLBoxEntry;
+
+    if ( !pCheckButtonData )
+    {
+        pCheckButtonData = new SvLBoxButtonData( &aSwCheckLB );
+        aSwCheckLB.SetCheckButtonData( pCheckButtonData );
+    }
+
+    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));    // Sonst Puff!
+
+    String sEmpty;
+    if (nCol == CBCOL_SECOND)
+        pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );    // Leerspalte
+    else
+        pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData ) );
+
+    if (nCol == CBCOL_FIRST)
+        pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty) );    // Leerspalte
+    else
+        pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox, 0, pCheckButtonData ) );
+
+    pEntry->AddItem( new OfaImpBrwString( pEntry, 0, rTxt ) );
+
+    return pEntry;
+}
+
 OfaQuoteTabPage::OfaQuoteTabPage( Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage(pParent, CUI_RES( RID_OFAPAGE_AUTOCORR_QUOTE ), rSet),
+    aCheckLB            (this, CUI_RES(CLB_SETTINGS     )),
+    aSwCheckLB          (this, CUI_RES(CLB_SETTINGS     )),
+    sHeader1            (CUI_RES( STR_HEADER1           )),
+    sHeader2            (CUI_RES( STR_HEADER2           )),
+    sNonBrkSpace        (CUI_RES( ST_NON_BREAK_SPACE    )),
+    sOrdinal            (CUI_RES( ST_ORDINAL            )),
+    pCheckButtonData    ( NULL ),
+
     aSingleFL           (this, CUI_RES(FL_SINGLE         )),
     aSingleTypoCB       (this, CUI_RES(CB_SGL_TYPO     )),
     aSglStartQuoteFT    (this, CUI_RES(FT_SGL_STARTQUOTE )),
@@ -2064,6 +2063,38 @@ OfaQuoteTabPage::OfaQuoteTabPage( Window* pParent, const SfxItemSet& rSet ) :
 {
     FreeResource();
 
+    BOOL bShowSWOptions = FALSE;
+
+    aCheckLB.SetHelpId( HID_OFAPAGE_QUOTE_CLB );
+    aSwCheckLB.SetHelpId( HID_OFAPAGE_QUOTE_SW_CLB );
+
+    SFX_ITEMSET_ARG( &rSet, pItem, SfxBoolItem, SID_AUTO_CORRECT_DLG, FALSE );
+    if ( pItem && pItem->GetValue() )
+        bShowSWOptions = TRUE;
+
+    if ( bShowSWOptions )
+    {
+        static long aStaticTabs[]=
+        {
+            3, 0, 20, 40
+        };
+
+        aSwCheckLB.SetWindowBits(WB_HSCROLL| WB_VSCROLL);
+
+        aSwCheckLB.SvxSimpleTable::SetTabs(aStaticTabs);
+        String sHeader( sHeader1 );
+        sHeader += '\t';
+        sHeader += sHeader2;
+        sHeader += '\t';
+        aSwCheckLB.InsertHeaderEntry( sHeader, HEADERBAR_APPEND,
+                        HIB_CENTER | HIB_VCENTER | HIB_FIXEDPOS | HIB_FIXED);
+        aCheckLB.Hide( TRUE );
+    }
+    else
+    {
+        aSwCheckLB.HideTable( );
+    }
+
     aStartQuotePB.SetClickHdl(LINK(this,    OfaQuoteTabPage, QuoteHdl));
     aEndQuotePB.SetClickHdl(LINK(this,      OfaQuoteTabPage, QuoteHdl));
     aSglStartQuotePB.SetClickHdl(LINK(this, OfaQuoteTabPage, QuoteHdl));
@@ -2077,6 +2108,7 @@ OfaQuoteTabPage::OfaQuoteTabPage( Window* pParent, const SfxItemSet& rSet ) :
 --------------------------------------------------*/
 OfaQuoteTabPage::~OfaQuoteTabPage()
 {
+    delete( pCheckButtonData );
 }
 /*-----------------03.07.97 13:17-------------------
 
@@ -2094,6 +2126,32 @@ BOOL OfaQuoteTabPage::FillItemSet( SfxItemSet&  )
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
 
     long nFlags = pAutoCorrect->GetFlags();
+
+    if ( aCheckLB.IsVisible( ) )
+    {
+        USHORT nPos = 0;
+        pAutoCorrect->SetAutoCorrFlag(AddNonBrkSpace,       aCheckLB.IsChecked(nPos++));
+        pAutoCorrect->SetAutoCorrFlag(ChgOrdinalNumber,     aCheckLB.IsChecked(nPos++));
+    }
+
+    BOOL bModified = FALSE;
+    if ( aSwCheckLB.IsVisible( ) )
+    {
+        SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
+
+        BOOL bCheck = aSwCheckLB.IsChecked(ADD_NONBRK_SPACE, CBCOL_FIRST);
+        bModified |= pOpt->bAddNonBrkSpace != bCheck;
+        pOpt->bAddNonBrkSpace = bCheck;
+        pAutoCorrect->SetAutoCorrFlag(AddNonBrkSpace,
+                            aSwCheckLB.IsChecked(ADD_NONBRK_SPACE, CBCOL_SECOND));
+
+        bCheck = aSwCheckLB.IsChecked(REPLACE_1ST, CBCOL_FIRST);
+        bModified |= pOpt->bChgOrdinalNumber != bCheck;
+        pOpt->bChgOrdinalNumber = bCheck;
+        pAutoCorrect->SetAutoCorrFlag(ChgOrdinalNumber,
+                        aSwCheckLB.IsChecked(REPLACE_1ST, CBCOL_SECOND));
+    }
+
     pAutoCorrect->SetAutoCorrFlag(ChgQuotes,        aTypoCB.IsChecked());
     pAutoCorrect->SetAutoCorrFlag(ChgSglQuotes,     aSingleTypoCB.IsChecked());
     BOOL bReturn = nFlags != pAutoCorrect->GetFlags();
@@ -2122,7 +2180,7 @@ BOOL OfaQuoteTabPage::FillItemSet( SfxItemSet&  )
         pAutoCorrect->SetEndSingleQuote(cUCS2);
     }
 
-    if(bReturn )
+    if( bModified || bReturn )
     {
         SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
         pCfg->SetModified();
@@ -2145,6 +2203,42 @@ void OfaQuoteTabPage::Reset( const SfxItemSet& )
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get()->GetAutoCorrect();
     const long nFlags = pAutoCorrect->GetFlags();
 
+    // Initialize the Sw options
+    if ( aSwCheckLB.IsVisible( ) )
+    {
+        SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
+
+        aSwCheckLB.SetUpdateMode( FALSE );
+        aSwCheckLB.Clear();
+
+        aSwCheckLB.GetModel()->Insert(CreateEntry(sNonBrkSpace,       CBCOL_BOTH ));
+        aSwCheckLB.GetModel()->Insert(CreateEntry(sOrdinal,           CBCOL_BOTH ));
+
+        aSwCheckLB.CheckEntryPos( ADD_NONBRK_SPACE, CBCOL_FIRST,    pOpt->bAddNonBrkSpace );
+        aSwCheckLB.CheckEntryPos( ADD_NONBRK_SPACE, CBCOL_SECOND,   0 != (nFlags & AddNonBrkSpace) );
+        aSwCheckLB.CheckEntryPos( REPLACE_1ST,      CBCOL_FIRST,    pOpt->bChgOrdinalNumber );
+        aSwCheckLB.CheckEntryPos( REPLACE_1ST,      CBCOL_SECOND,   0 != (nFlags & ChgOrdinalNumber) );
+
+        aSwCheckLB.SetUpdateMode( TRUE );
+    }
+
+    // Initialize the non Sw options
+    if ( aCheckLB.IsVisible( ) )
+    {
+        aCheckLB.SetUpdateMode( FALSE );
+        aCheckLB.Clear( );
+
+        aCheckLB.InsertEntry( sNonBrkSpace );
+        aCheckLB.InsertEntry( sOrdinal );
+
+        USHORT nPos = 0;
+        aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & AddNonBrkSpace) );
+        aCheckLB.CheckEntryPos( nPos++, 0 != (nFlags & ChgOrdinalNumber) );
+
+        aCheckLB.SetUpdateMode( TRUE );
+    }
+
+    // Initialize the quote stuffs
     aTypoCB             .Check(0 != (nFlags & ChgQuotes));
     aSingleTypoCB       .Check(0 != (nFlags & ChgSglQuotes));
     aTypoCB             .SaveValue();
