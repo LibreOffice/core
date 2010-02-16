@@ -262,13 +262,6 @@ namespace dbaccess
         }
 
         // .........................................................................
-        static const ::rtl::OUString& lcl_getStatementStreamName()
-        {
-            static const ::rtl::OUString s_sStatementStreamName( RTL_CONSTASCII_USTRINGPARAM( "statement.txt" ) );
-            return s_sStatementStreamName;
-        }
-
-        // .........................................................................
         static const ::rtl::OUString& lcl_getSettingsStreamName()
         {
             static const ::rtl::OUString s_sStatementStreamName( RTL_CONSTASCII_USTRINGPARAM( "settings.xml" ) );
