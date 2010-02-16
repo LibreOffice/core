@@ -162,8 +162,8 @@ namespace dbaui
         bool                            m_bNotAttached;
 
         OSingleDocumentControllerImpl( ::osl::Mutex& i_rMutex )
-            :m_aModifyListeners( i_rMutex )
-            ,m_aDocScriptSupport()
+            :m_aDocScriptSupport()
+            ,m_aModifyListeners( i_rMutex )
             ,m_nDocStartNumber(0)
             ,m_bSuspended( sal_False )
             ,m_bEditable(sal_True)
