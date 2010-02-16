@@ -243,12 +243,12 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
     if( bUnLockView )
         pWrtShell->LockView( FALSE );
 
-    if ( mpPostItMgr )
-    {
-        mpPostItMgr->Rescale();
-        mpPostItMgr->CalcRects();
-        mpPostItMgr->LayoutPostIts();
-    }
+//    if ( mpPostItMgr )
+//    {
+//        mpPostItMgr->Rescale();
+//        mpPostItMgr->CalcRects();
+//        mpPostItMgr->LayoutPostIts();
+//    }
 
 //  eZoom = eZoomType;
 }

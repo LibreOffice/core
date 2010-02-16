@@ -175,8 +175,7 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrm *pFrm,
                                             const SwRect& rOldVisArea )
 {
     const SwRect& rNewVisArea = GetVisArea();
-    SwAccessibleChild aFrm( pFrm );
-    bool bVisibleOnly = aFrm.IsVisibleChildrenOnly();
+    const bool bVisibleChildrenOnly = SwAccessibleChild( pFrm ).IsVisibleChildrenOnly();
 
     const SwAccessibleChildSList aList( *pFrm, *(GetMap()) );
     SwAccessibleChildSList::const_iterator aIter( aList.begin() );
@@ -195,20 +194,31 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrm *pFrm,
                 }
                 else
                 {
-                    if( bVisibleOnly )
+                    if ( bVisibleChildrenOnly &&
+                         !rLower.AlwaysIncludeAsChild() )
+                    {
                         eAction = SCROLLED_IN;
+                    }
                     else
+                    {
                         eAction = SCROLLED;
+                    }
                 }
             }
             else if( aBox.IsOver( rOldVisArea ) )
             {
-                if( bVisibleOnly )
+                if ( bVisibleChildrenOnly &&
+                     !rLower.AlwaysIncludeAsChild() )
+                {
                     eAction = SCROLLED_OUT;
+                }
                 else
+                {
                     eAction = SCROLLED;
+                }
             }
-            else if( !bVisibleOnly )
+            else if( !bVisibleChildrenOnly ||
+                     rLower.AlwaysIncludeAsChild() )
             {
                 // This wouldn't be required if the SwAccessibleFrame,
                 // wouldn't know about the vis area.
@@ -218,6 +228,8 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrm *pFrm,
             {
                 if ( rLower.GetSwFrm() )
                 {
+                    ASSERT( !rLower.AlwaysIncludeAsChild(),
+                            "<SwAccessibleContext::ChildrenScrolled(..)> - always included child not considered!" );
                     const SwFrm* pLower( rLower.GetSwFrm() );
                     ::vos::ORef< SwAccessibleContext > xAccImpl =
                         GetMap()->GetContextImpl( pLower, SCROLLED_OUT == eAction ||
@@ -249,6 +261,8 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrm *pFrm,
                 }
                 else if ( rLower.GetDrawObject() )
                 {
+                    ASSERT( !rLower.AlwaysIncludeAsChild(),
+                            "<SwAccessibleContext::ChildrenScrolled(..)> - always included child not considered!" );
                     ::vos::ORef< ::accessibility::AccessibleShape > xAccImpl =
                         GetMap()->GetContextImpl( rLower.GetDrawObject(),
                                                   this,
@@ -284,33 +298,14 @@ void SwAccessibleContext::ChildrenScrolled( const SwFrm *pFrm,
                 }
                 else if ( rLower.GetWindow() )
                 {
-                    switch( eAction )
-                    {
-                    case SCROLLED:
-                    case SCROLLED_WITHIN:
-                        // nothing to do
-                        break;
-                    case SCROLLED_IN:
-                        {
-                            AccessibleEventObject aEvent;
-                            aEvent.EventId = AccessibleEventId::CHILD;
-                            uno::Reference< XAccessible > xAcc =
-                                            rLower.GetWindow()->GetAccessible();
-                            aEvent.NewValue <<= xAcc;
-                            FireAccessibleEvent( aEvent );
-                        }
-                        break;
-                    case SCROLLED_OUT:
-                        DisposeChild( rLower, sal_False );
-                        break;
-                    case NONE:
-                        break;
-                    }
+                    // nothing to do - as such children are always included as children.
+                    ASSERT( rLower.AlwaysIncludeAsChild(),
+                            "<SwAccessibleContext::ChildrenScrolled(..)> - not always included child not considered!" );
                 }
             }
         }
         else if ( rLower.GetSwFrm() &&
-                  ( !bVisibleOnly ||
+                  ( !bVisibleChildrenOnly ||
                     aBox.IsOver( rOldVisArea ) ||
                     aBox.IsOver( rNewVisArea ) ) )
         {
@@ -1141,8 +1136,9 @@ void SwAccessibleContext::DisposeChild( const SwAccessibleChild& rChildFrmOrObj,
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    if( IsShowing( *(GetMap()), rChildFrmOrObj ) ||
-        !SwAccessibleChild( GetFrm() ).IsVisibleChildrenOnly() )
+    if ( IsShowing( *(GetMap()), rChildFrmOrObj ) ||
+         rChildFrmOrObj.AlwaysIncludeAsChild() ||
+         !SwAccessibleChild( GetFrm() ).IsVisibleChildrenOnly() )
     {
         // If the object could have existed before, than there is nothing to do,
         // because no wrapper exists now and therefor no one is interested to
@@ -1168,7 +1164,7 @@ void SwAccessibleContext::DisposeChild( const SwAccessibleChild& rChildFrmOrObj,
             aEvent.EventId = AccessibleEventId::CHILD;
             uno::Reference< XAccessible > xAcc =
                                     rChildFrmOrObj.GetWindow()->GetAccessible();
-            aEvent.NewValue <<= xAcc;
+            aEvent.OldValue <<= xAcc;
             FireAccessibleEvent( aEvent );
         }
     }
@@ -1201,8 +1197,8 @@ void SwAccessibleContext::InvalidatePosOrSize( const SwRect& )
         FireVisibleDataEvent();
     }
 
-    SwAccessibleChild aParent( GetParent() );
-    if( !bIsNewShowingState && aParent.IsVisibleChildrenOnly() )
+    if( !bIsNewShowingState &&
+        SwAccessibleChild( GetParent() ).IsVisibleChildrenOnly() )
     {
         // The frame is now invisible -> dispose it
         Dispose( sal_True );
@@ -1223,7 +1219,13 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
             !rChildFrmOrObj.GetSwFrm()->Frm().IsEmpty(),
             "child context should have a size" );
 
-    SwAccessibleChild aFrm( GetFrm() );
+    if ( rChildFrmOrObj.AlwaysIncludeAsChild() )
+    {
+        // nothing to do;
+        return;
+    }
+
+    const bool bVisibleChildrenOnly = SwAccessibleChild( GetFrm() ).IsVisibleChildrenOnly();
     const bool bNew = rOldFrm.IsEmpty() ||
                      ( rOldFrm.Left() == 0 && rOldFrm.Top() == 0 );
     if( IsShowing( *(GetMap()), rChildFrmOrObj ) )
@@ -1231,7 +1233,7 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
         // If the object could have existed before, than there is nothing to do,
         // because no wrapper exists now and therefor no one is interested to
         // get notified of the movement.
-        if( bNew || (aFrm.IsVisibleChildrenOnly() && !IsShowing( rOldFrm )) )
+        if( bNew || (bVisibleChildrenOnly && !IsShowing( rOldFrm )) )
         {
             if( rChildFrmOrObj.GetSwFrm() )
             {
@@ -1274,7 +1276,7 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
         // needs to be send. However, there is no wrapper existing, and so
         // no notifications for grandchildren are required. If the are
         // grandgrandchildren, they would be notified by the layout.
-        if( aFrm.IsVisibleChildrenOnly() &&
+        if( bVisibleChildrenOnly &&
             !bNew && IsShowing( rOldFrm ) )
         {
             if( rChildFrmOrObj.GetSwFrm() )

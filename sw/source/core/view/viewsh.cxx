@@ -1314,6 +1314,15 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
     GetWin()->Update();
     Imp()->bPaintInScroll = FALSE;
 
+    // --> OD 2010-02-11 #i88070#
+    if ( pPostItMgr )
+    {
+        pPostItMgr->Rescale();
+        pPostItMgr->CalcRects();
+        pPostItMgr->LayoutPostIts();
+    }
+    // <--
+
     if ( !bScrolled && pPostItMgr && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes() )
         pPostItMgr->CorrectPositions();
 

@@ -55,13 +55,14 @@ SwAccessibleChildMap::SwAccessibleChildMap( const SwRect& rVisArea,
     : nHellId( rAccMap.GetShell()->GetDoc()->GetHellId() )
     , nControlsId( rAccMap.GetShell()->GetDoc()->GetControlsId() )
 {
-    const bool bVisibleOnly = SwAccessibleChild( &rFrm ).IsVisibleChildrenOnly();
+    const bool bVisibleChildrenOnly = SwAccessibleChild( &rFrm ).IsVisibleChildrenOnly();
 
     sal_uInt32 nPos = 0;
     SwAccessibleChild aLower( rFrm.GetLower() );
     while( aLower.GetSwFrm() )
     {
-        if ( !bVisibleOnly ||
+        if ( !bVisibleChildrenOnly ||
+             aLower.AlwaysIncludeAsChild() ||
              aLower.GetBox( rAccMap ).IsOver( rVisArea ) )
         {
             insert( nPos++, SwAccessibleChildMapKey::TEXT, aLower );
@@ -72,7 +73,7 @@ SwAccessibleChildMap::SwAccessibleChildMap( const SwRect& rVisArea,
 
     if ( rFrm.IsPageFrm() )
     {
-        ASSERT( bVisibleOnly, "page frame within tab frame???" );
+        ASSERT( bVisibleChildrenOnly, "page frame within tab frame???" );
         const SwPageFrm *pPgFrm =
             static_cast< const SwPageFrm * >( &rFrm );
         const SwSortedObjs *pObjs = pPgFrm->GetSortedObjs();
@@ -97,7 +98,8 @@ SwAccessibleChildMap::SwAccessibleChildMap( const SwRect& rVisArea,
             {
                 aLower = (*pObjs)[i]->GetDrawObj();
                 if ( aLower.IsBoundAsChar() &&
-                     ( !bVisibleOnly ||
+                     ( !bVisibleChildrenOnly ||
+                       aLower.AlwaysIncludeAsChild() ||
                        aLower.GetBox( rAccMap ).IsOver( rVisArea ) ) )
                 {
                     insert( aLower.GetDrawObject(), aLower );

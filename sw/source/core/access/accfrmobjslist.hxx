@@ -89,7 +89,7 @@ class SwAccessibleChildSList
 {
     const SwRect maVisArea;
     const SwFrm& mrFrm;
-    const sal_Bool mbVisibleOnly;
+    const sal_Bool mbVisibleChildrenOnly;
     SwAccessibleMap& mrAccMap;
 
 public:
@@ -100,7 +100,7 @@ public:
                                    SwAccessibleMap& rAccMap )
         : maVisArea()
         , mrFrm( rFrm )
-        , mbVisibleOnly( sal_False )
+        , mbVisibleChildrenOnly( sal_False )
         , mrAccMap( rAccMap )
     {}
 
@@ -109,7 +109,7 @@ public:
                                    SwAccessibleMap& rAccMap )
         : maVisArea( rVisArea )
         , mrFrm( rFrm )
-        , mbVisibleOnly( sw::access::SwAccessibleChild( &rFrm ).IsVisibleChildrenOnly() )
+        , mbVisibleChildrenOnly( sw::access::SwAccessibleChild( &rFrm ).IsVisibleChildrenOnly() )
         , mrAccMap( rAccMap )
     {
     }
@@ -129,9 +129,9 @@ public:
         return mrFrm;
     }
 
-    inline sal_Bool IsVisibleOnly() const
+    inline sal_Bool IsVisibleChildrenOnly() const
     {
-        return mbVisibleOnly;
+        return mbVisibleChildrenOnly;
     }
 
     inline const SwRect& GetVisArea() const

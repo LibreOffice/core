@@ -196,7 +196,6 @@ class SwPostItMgr: public SfxListener
                     DECL_LINK( CalcHdl, void*);
 
         sw::sidebarwindows::SwSidebarWin* GetSidebarWin(const SfxBroadcaster* pBroadcaster) const;
-        sw::annotation::SwAnnotationWin* GetAnnotationWin(const SwPostItField* pFld) const;
 
         void InsertItem( SfxBroadcaster* pItem, bool bCheckExistance, bool bFocus);
         void RemoveItem( SfxBroadcaster* pBroadcast );
@@ -247,6 +246,8 @@ class SwPostItMgr: public SfxListener
 
             bool IsHit(const Point &aPointPixel);
             Color GetArrowColor(USHORT aDirection,unsigned long aPage) const;
+
+            sw::annotation::SwAnnotationWin* GetAnnotationWin(const SwPostItField* pFld) const;
 
             sw::sidebarwindows::SwSidebarWin* GetNextPostIt( USHORT aDirection,
                                                              sw::sidebarwindows::SwSidebarWin* aPostIt);

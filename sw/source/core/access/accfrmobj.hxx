@@ -75,6 +75,13 @@ class SwAccessibleChild
         SwRect GetBox( const SwAccessibleMap& rAccMap ) const;
         SwRect GetBounds( const SwAccessibleMap& rAccMap ) const;
 
+        /** indicating, if accessible child is included even, if the corresponding
+            object is not visible.
+
+            @author OD
+        */
+        bool AlwaysIncludeAsChild() const;
+
     private:
         const SwFrm* mpFrm;
         const SdrObject* mpDrawObj;

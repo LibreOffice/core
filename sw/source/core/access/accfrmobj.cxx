@@ -290,10 +290,10 @@ SwRect SwAccessibleChild::GetBox( const SwAccessibleMap& rAccMap ) const
     }
     else if ( mpWindow )
     {
-        MapMode aDest( MAP_TWIP );
-        aBox = SwRect( rAccMap.GetShell()->GetWin()->PixelToLogic( mpWindow->GetPosPixel(), aDest ),
-                       rAccMap.GetShell()->GetWin()->PixelToLogic( mpWindow->GetSizePixel(), aDest ) );
-    }
+        aBox = SwRect( rAccMap.GetShell()->GetWin()->PixelToLogic(
+                                        Rectangle( mpWindow->GetPosPixel(),
+                                                   mpWindow->GetSizePixel() ) ) );
+}
 
     return aBox;
 }
@@ -322,6 +322,18 @@ SwRect SwAccessibleChild::GetBounds( const SwAccessibleMap& rAccMap ) const
     }
 
     return aBound;
+}
+
+bool SwAccessibleChild::AlwaysIncludeAsChild() const
+{
+    bool bAlwaysIncludedAsChild( false );
+
+    if ( mpWindow )
+    {
+        bAlwaysIncludedAsChild = true;
+    }
+
+    return bAlwaysIncludedAsChild;
 }
 
 const SwFrm* SwAccessibleChild::GetParent( const sal_Bool bInPagePreview ) const

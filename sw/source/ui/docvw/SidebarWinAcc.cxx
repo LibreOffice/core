@@ -71,7 +71,7 @@ class SidebarWinAccessibleContext : public VCLXAccessibleComponent
             mpAnchorFrm = pAnchorFrm;
         }
 
-        css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
+        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
             getAccessibleParent() throw (css::uno::RuntimeException)
         {
             vos::OGuard aGuard(maMutex);
@@ -87,7 +87,7 @@ class SidebarWinAccessibleContext : public VCLXAccessibleComponent
             return xAccParent;
         }
 
-        sal_Int32 SAL_CALL getAccessibleIndexInParent() throw (css::uno::RuntimeException)
+        virtual sal_Int32 SAL_CALL getAccessibleIndexInParent() throw (css::uno::RuntimeException)
         {
             vos::OGuard aGuard(maMutex);
 

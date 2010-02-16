@@ -87,10 +87,11 @@ SwAccessibleChildSList_const_iterator::SwAccessibleChildSList_const_iterator(
         }
     }
 
-    if( rList.IsVisibleOnly() )
+    if( rList.IsVisibleChildrenOnly() )
     {
         // Find the first visible
         while( aCurr.IsValid() &&
+               !aCurr.AlwaysIncludeAsChild() &&
                !aCurr.GetBox( rAccMap ).IsOver( rList.GetVisArea() ) )
         {
             next();
@@ -159,6 +160,7 @@ SwAccessibleChildSList_const_iterator& SwAccessibleChildSList_const_iterator::ne
 {
     next();
     while( aCurr.IsValid() &&
+           !aCurr.AlwaysIncludeAsChild() &&
            !aCurr.GetBox( rList.GetAccMap() ).IsOver( rList.GetVisArea() ) )
     {
         next();
@@ -169,6 +171,6 @@ SwAccessibleChildSList_const_iterator& SwAccessibleChildSList_const_iterator::ne
 
 SwAccessibleChildSList_const_iterator& SwAccessibleChildSList_const_iterator::operator++()
 {
-    return rList.IsVisibleOnly() ? next_visible() : next();
+    return rList.IsVisibleChildrenOnly() ? next_visible() : next();
 }
 
