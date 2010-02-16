@@ -29309,16 +29309,28 @@ if test "$SOLAR_JAVA" != "" && test "$with_junit" != "no"; then
     { $as_echo "$as_me:$LINENO: checking for JUnit 4" >&5
 $as_echo_n "checking for JUnit 4... " >&6; }
     if test "$with_junit" == "yes"; then
-        OOO_JUNIT_JAR=/usr/share/java/junit4.jar
+        if test -e /usr/share/java/junit4.jar; then
+            OOO_JUNIT_JAR=/usr/share/java/junit4.jar
+        else
+            OOO_JUNIT_JAR=/usr/share/java/junit.jar
+        fi
     else
         OOO_JUNIT_JAR=$with_junit
     fi
-    if test -e "$OOO_JUNIT_JAR"; then
+    "$JAVA_HOME/bin/jar" tf "$OOO_JUNIT_JAR" 2> /dev/null | \
+        grep -F org/junit/Before.class 2>&1 > /dev/null
+    if test $? -eq 0; then
         { $as_echo "$as_me:$LINENO: result: $OOO_JUNIT_JAR" >&5
 $as_echo "$OOO_JUNIT_JAR" >&6; }
     else
-        { { $as_echo "$as_me:$LINENO: error: cannot find JUnit 4 jar at $OOO_JUNIT_JAR; please install one and/or specify its pathname as --with-junit=..." >&5
-$as_echo "$as_me: error: cannot find JUnit 4 jar at $OOO_JUNIT_JAR; please install one and/or specify its pathname as --with-junit=..." >&2;}
+        { $as_echo "$as_me:$LINENO: result: no" >&5
+$as_echo "no" >&6; }
+        { { $as_echo "$as_me:$LINENO: error: cannot find JUnit 4 jar at $OOO_JUNIT_JAR;
+please install one and/or specify its pathname via --with-junit=...,
+or disable it via --without-junit" >&5
+$as_echo "$as_me: error: cannot find JUnit 4 jar at $OOO_JUNIT_JAR;
+please install one and/or specify its pathname via --with-junit=...,
+or disable it via --without-junit" >&2;}
    { (exit 1); exit 1; }; }
     fi
 fi

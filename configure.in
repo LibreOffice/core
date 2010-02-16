@@ -6465,14 +6465,23 @@ OOO_JUNIT_JAR=
 if test "$SOLAR_JAVA" != "" && test "$with_junit" != "no"; then
     AC_MSG_CHECKING([for JUnit 4])
     if test "$with_junit" == "yes"; then
-        OOO_JUNIT_JAR=/usr/share/java/junit4.jar
+        if test -e /usr/share/java/junit4.jar; then
+            OOO_JUNIT_JAR=/usr/share/java/junit4.jar
+        else
+            OOO_JUNIT_JAR=/usr/share/java/junit.jar
+        fi
     else
         OOO_JUNIT_JAR=$with_junit
     fi
-    if test -e "$OOO_JUNIT_JAR"; then
+    "$JAVA_HOME/bin/jar" tf "$OOO_JUNIT_JAR" 2> /dev/null | \
+        grep -F org/junit/Before.class 2>&1 > /dev/null
+    if test $? -eq 0; then
         AC_MSG_RESULT([$OOO_JUNIT_JAR])
     else
-        AC_MSG_ERROR([cannot find JUnit 4 jar at $OOO_JUNIT_JAR; please install one and/or specify its pathname as --with-junit=...])
+        AC_MSG_RESULT([no])
+        AC_MSG_ERROR([cannot find JUnit 4 jar at $OOO_JUNIT_JAR;
+please install one and/or specify its pathname via --with-junit=...,
+or disable it via --without-junit])
     fi
 fi
 AC_SUBST(OOO_JUNIT_JAR)
