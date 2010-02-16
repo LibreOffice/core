@@ -42,10 +42,9 @@ namespace dmapper
 
 struct FontTable_Impl
 {
-    std::vector< FontEntry >    aFontEntries;
-    FontEntry*                  pCurrentEntry;
-    FontTable_Impl() :
-            pCurrentEntry(0){}
+    std::vector< FontEntry > aFontEntries;
+    FontEntry::Pointer_t pCurrentEntry;
+    FontTable_Impl() {}
 };
 /*-- 19.06.2006 12:04:32---------------------------------------------------
 
@@ -569,11 +568,11 @@ void FontTable::entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_
 {
     //create a new font entry
     OSL_ENSURE( !m_pImpl->pCurrentEntry, "current entry has to be NULL here");
-    m_pImpl->pCurrentEntry = new FontEntry ;
+    m_pImpl->pCurrentEntry.reset(new FontEntry);
     ref->resolve(*this);
     //append it to the table
     m_pImpl->aFontEntries.push_back( *m_pImpl->pCurrentEntry );
-    m_pImpl->pCurrentEntry = 0;
+    m_pImpl->pCurrentEntry.reset();
 }
 /*-- 19.06.2006 12:04:34---------------------------------------------------
 
@@ -659,12 +658,12 @@ void FontTable::endShape( )
 /*-- 21.06.2006 11:21:38---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-const FontEntry* FontTable::getFontEntry(sal_uInt32 nIndex)
+const FontEntry::Pointer_t FontTable::getFontEntry(sal_uInt32 nIndex)
 {
-    const FontEntry* pRet = 0;
+    FontEntry::Pointer_t pRet;
     if(m_pImpl->aFontEntries.size() > nIndex)
     {
-        pRet = &m_pImpl->aFontEntries[nIndex];
+        pRet.reset(&m_pImpl->aFontEntries[nIndex]);
     }
     return pRet;
 }

@@ -3044,7 +3044,7 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
                     eFontPitch =    PROP_CHAR_FONT_PITCH_COMPLEX;
                     break;
                 }
-                const FontEntry* pFontEntry = pFontTable->getFontEntry(sal_uInt32(nIntValue));
+                const FontEntry::Pointer_t pFontEntry(pFontTable->getFontEntry(sal_uInt32(nIntValue)));
                 rContext->Insert(eFontName, true, uno::makeAny( pFontEntry->sFontName  ));
                 //                rContext->Insert(eFontStyle, uno::makeAny( pFontEntry->  ));
                 //                rContext->Insert(eFontFamily, uno::makeAny( pFontEntry->  ));

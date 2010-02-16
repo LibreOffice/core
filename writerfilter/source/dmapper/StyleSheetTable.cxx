@@ -862,18 +862,18 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
     //                      font size to 240 twip (12 pts) for all if not set
                             pEntry->pProperties->Insert(PROP_CHAR_HEIGHT, true, aTwoHundredFortyTwip, false);
     //                      western font not already set -> apply first font
-                            const FontEntry* pWesternFontEntry = rFontTable->getFontEntry( 0 );
+                            const FontEntry::Pointer_t pWesternFontEntry(rFontTable->getFontEntry( 0 ));
                             rtl::OUString sWesternFontName = pWesternFontEntry->sFontName;
                             pEntry->pProperties->Insert(PROP_CHAR_FONT_NAME, true, uno::makeAny( sWesternFontName ), false);
 
     //                      CJK  ... apply second font
-                            const FontEntry* pCJKFontEntry  = rFontTable->getFontEntry( 2 );
+                            const FontEntry::Pointer_t pCJKFontEntry(rFontTable->getFontEntry( 2 ));
                             pEntry->pProperties->Insert(PROP_CHAR_FONT_NAME_ASIAN, true, uno::makeAny( pCJKFontEntry->sFontName ), false);
                             pEntry->pProperties->Insert(PROP_CHAR_HEIGHT_ASIAN, true, aTwoHundredFortyTwip, false);
     //                      CTL  ... apply third font, if available
                             if( nFontCount > 3 )
                             {
-                                const FontEntry* pCTLFontEntry  = rFontTable->getFontEntry( 3 );
+                                const FontEntry::Pointer_t pCTLFontEntry(rFontTable->getFontEntry( 3 ));
                                 pEntry->pProperties->Insert(PROP_CHAR_FONT_NAME_COMPLEX, true, uno::makeAny( pCTLFontEntry->sFontName ), false);
                                 pEntry->pProperties->Insert(PROP_CHAR_HEIGHT_COMPLEX, true, aTwoHundredFortyTwip, false);
                             }

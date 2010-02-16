@@ -1370,7 +1370,7 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
         uno::Sequence< beans::PropertyValue > aFontProperties;
         if( pFontTable && pTopContext->GetFootnoteFontId() >= 0 && pFontTable->size() > (size_t)pTopContext->GetFootnoteFontId() )
         {
-            const FontEntry* pFontEntry = pFontTable->getFontEntry(sal_uInt32(pTopContext->GetFootnoteFontId()));
+            const FontEntry::Pointer_t pFontEntry(pFontTable->getFontEntry(sal_uInt32(pTopContext->GetFootnoteFontId())));
             PropertyMapPtr aFontProps( new PropertyMap );
             aFontProps->Insert(PROP_CHAR_FONT_NAME, true, uno::makeAny( pFontEntry->sFontName  ));
             aFontProps->Insert(PROP_CHAR_FONT_CHAR_SET, true, uno::makeAny( (sal_Int16)pFontEntry->nTextEncoding  ));
