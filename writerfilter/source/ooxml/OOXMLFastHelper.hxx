@@ -78,7 +78,6 @@ OOXMLFastHelper<T>::createAndSetParent
 (OOXMLFastContextHandler * pHandler, sal_uInt32 nToken, Id nId)
 {
     OOXMLFastContextHandler * pTmp = new T(pHandler);
-    OOXMLFastContextHandler::RefAndPointer_t aResult(pTmp);
 
     pTmp->setToken(nToken);
     pTmp->setId(nId);
@@ -97,6 +96,8 @@ OOXMLFastHelper<T>::createAndSetParent
     debug_logger->endElement("createAndSetParent");
 #endif
 
+    uno::Reference<XFastContextHandler> aResult(pTmp);
+
     return aResult;
 }
 
@@ -106,7 +107,6 @@ OOXMLFastHelper<T>::createAndSetParentAndDefine
 (OOXMLFastContextHandler * pHandler, sal_uInt32 nToken, Id nId, Id nDefine)
 {
     OOXMLFastContextHandler * pTmp = new T(pHandler);
-    OOXMLFastContextHandler::RefAndPointer_t aResult(pTmp);
 
     pTmp->setToken(nToken);
     pTmp->setId(nId);
@@ -130,6 +130,8 @@ OOXMLFastHelper<T>::createAndSetParentAndDefine
     debug_logger->endElement("created");
     debug_logger->endElement("createAndSetParentAndDefine");
 #endif
+
+    uno::Reference<XFastContextHandler> aResult(pTmp);
 
     return aResult;
 }
