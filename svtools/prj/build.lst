@@ -26,3 +26,4 @@ st  svtools\util                        nmake   -   all st_util st__brw st__ctr 
 st	svtools\source\hatchwindow			nmake	-	all	st_hatchwin st_inc NULL
 st	svtools\source\productregistration	nmake	-	all	st_prodreg st_util st_inc NULL
 st  svtools\workben\unodialog           nmake   -   all st_workben_udlg st_util NULL
+st svtools\qa\unoapi nmake - all st_qa_unoapi NULL
