@@ -59,6 +59,11 @@ namespace dbaccess
             const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandProcessor >& i_rSubDocumentDefinition
         );
 
+        SubComponentLoader(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& i_rApplicationController,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& i_rNonDocumentComponent
+        );
+
         // XWindowListener
         virtual void SAL_CALL windowResized( const ::com::sun::star::awt::WindowEvent& e ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL windowMoved( const ::com::sun::star::awt::WindowEvent& e ) throw (::com::sun::star::uno::RuntimeException);

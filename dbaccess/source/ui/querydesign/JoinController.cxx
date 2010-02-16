@@ -455,73 +455,45 @@ sal_Bool SAL_CALL OJoinController::suspend(sal_Bool _bSuspend) throw( RuntimeExc
     return bCheck;
 }
 // -----------------------------------------------------------------------------
-void OJoinController::loadTableWindows(const Sequence<PropertyValue>& aViewProps)
+void OJoinController::loadTableWindows( const ::comphelper::NamedValueCollection& i_rViewSettings )
 {
     m_vTableData.clear();
 
-    const PropertyValue *pIter = aViewProps.getConstArray();
-    const PropertyValue *pEnd = pIter + aViewProps.getLength();
-    for (; pIter != pEnd; ++pIter)
+    m_aMinimumTableViewSize = Point();
+
+    Sequence< PropertyValue > aWindowData;
+    aWindowData = i_rViewSettings.getOrDefault( "Tables", aWindowData );
+
+    const PropertyValue* pTablesIter = aWindowData.getConstArray();
+    const PropertyValue* pTablesEnd = pTablesIter + aWindowData.getLength();
+    for ( ; pTablesIter != pTablesEnd; ++pTablesIter )
     {
-        if ( pIter->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "Tables" ) ) )
-        {
-            m_aMinimumTableViewSize = Point();
-            Sequence<PropertyValue> aWindow;
-            pIter->Value >>= aWindow;
-            const PropertyValue *pTablesIter = aWindow.getConstArray();
-            const PropertyValue *pTablesEnd = pTablesIter + aWindow.getLength();
-            for (; pTablesIter != pTablesEnd; ++pTablesIter)
-            {
-                Sequence<PropertyValue> aTable;
-                pTablesIter->Value >>= aTable;
-                loadTableWindow(aTable);
-            }
-            if ( m_aMinimumTableViewSize != Point() )
-            {
-                getJoinView()->getScrollHelper()->resetRange(m_aMinimumTableViewSize);
-            }
-            break;
-        }
+        ::comphelper::NamedValueCollection aSingleTableData( pTablesIter->Value );
+        loadTableWindow( aSingleTableData );
+    }
+    if ( m_aMinimumTableViewSize != Point() )
+    {
+        getJoinView()->getScrollHelper()->resetRange( m_aMinimumTableViewSize );
     }
 }
+
 // -----------------------------------------------------------------------------
-void OJoinController::loadTableWindow(const Sequence<PropertyValue>& _rTable)
+void OJoinController::loadTableWindow( const ::comphelper::NamedValueCollection& i_rTableWindowSettings )
 {
     sal_Int32 nX = -1, nY = -1, nHeight = -1, nWidth = -1;
 
     ::rtl::OUString sComposedName,sTableName,sWindowName;
     sal_Bool bShowAll = false;
-    const PropertyValue *pIter = _rTable.getConstArray();
-    const PropertyValue *pEnd = pIter + _rTable.getLength();
-    for (; pIter != pEnd; ++pIter)
-    {
-        if ( pIter->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ComposedName" ) ) )
-            pIter->Value >>= sComposedName;
-        else if ( pIter->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "TableName" ) ) )
-            pIter->Value >>= sTableName;
-        else if ( pIter->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "WindowName" ) ) )
-            pIter->Value >>= sWindowName;
-        else if ( pIter->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "WindowTop" ) ) )
-        {
-            pIter->Value >>= nY;
-        }
-        else if ( pIter->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "WindowLeft" ) ) )
-        {
-            pIter->Value >>= nX;
-        }
-        else if ( pIter->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "WindowWidth" ) ) )
-        {
-            pIter->Value >>= nWidth;
-        }
-        else if ( pIter->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "WindowHeight" ) ) )
-        {
-            pIter->Value >>= nHeight;
-        }
-        else if ( pIter->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ShowAll" ) ) )
-        {
-            pIter->Value >>= bShowAll;
-        }
-    }
+
+    sComposedName = i_rTableWindowSettings.getOrDefault( "ComposedName", sComposedName );
+    sTableName = i_rTableWindowSettings.getOrDefault( "TableName", sTableName );
+    sWindowName = i_rTableWindowSettings.getOrDefault( "WindowName", sWindowName );
+    nY = i_rTableWindowSettings.getOrDefault( "WindowTop", nY );
+    nX = i_rTableWindowSettings.getOrDefault( "WindowLeft", nX );
+    nWidth = i_rTableWindowSettings.getOrDefault( "WindowWidth", nWidth );
+    nHeight = i_rTableWindowSettings.getOrDefault( "WindowHeight", nHeight );
+    bShowAll = i_rTableWindowSettings.getOrDefault( "ShowAll", bShowAll );
+
     TTableWindowData::value_type pData = createTableWindowData(sComposedName,sTableName,sWindowName);
     if ( pData )
     {

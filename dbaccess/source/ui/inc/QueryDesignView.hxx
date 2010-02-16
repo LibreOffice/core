@@ -167,6 +167,10 @@ namespace dbaui
         */
         bool    initByParseIterator( ::dbtools::SQLExceptionInfo* _pErrorInfo );
 
+        void    initByFieldDescriptions(
+                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_rFieldDescriptions
+                );
+
         ::connectivity::OSQLParseNode* getPredicateTreeFromEntry(   OTableFieldDescRef pEntry,
                                                                     const String& _sCriteria,
                                                                     ::rtl::OUString& _rsErrorMessage,

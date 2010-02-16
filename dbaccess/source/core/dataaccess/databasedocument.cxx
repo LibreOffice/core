@@ -145,7 +145,7 @@ bool ViewMonitor::onControllerConnected( const Reference< XController >& _rxCont
 }
 
 //--------------------------------------------------------------------------
-void ViewMonitor::onSetCurrentController( const Reference< XController >& _rxController )
+bool ViewMonitor::onSetCurrentController( const Reference< XController >& _rxController )
 {
     // we interpret this as "loading the document (including UI) is finished",
     // if and only if this is the controller which was last connected, and it was the
@@ -155,6 +155,8 @@ void ViewMonitor::onSetCurrentController( const Reference< XController >& _rxCon
     // notify the respective events
     if ( bLoadFinished )
         m_rEventNotifier.notifyDocumentEventAsync( m_bIsNewDocument ? "OnNew" : "OnLoad" );
+
+    return bLoadFinished;
 }
 
 //============================================================
@@ -795,25 +797,6 @@ void SAL_CALL ODatabaseDocument::connectController( const Reference< XController
 
     // check/adjust our macro mode.
     m_pImpl->checkMacrosOnLoading();
-
-    // check if there are sub components to recover from our document storage
-    bool bAttemptRecovery = m_bHasBeenRecovered;
-    if ( !bAttemptRecovery && m_pImpl->getMediaDescriptor().has( "ForceRecovery" ) )
-        // do not use getOrDefault, it will throw for invalid types, which is not desired here
-        m_pImpl->getMediaDescriptor().get( "ForceRecovery" ) >>= bAttemptRecovery;
-
-    if ( !bAttemptRecovery )
-        return;
-
-    try
-    {
-        DatabaseDocumentRecovery aDocRecovery( m_pImpl->m_aContext );
-        aDocRecovery.recoverSubDocuments( m_pImpl->getRootStorage(), _xController );
-    }
-    catch( const Exception& )
-    {
-        DBG_UNHANDLED_EXCEPTION();
-    }
 }
 
 // -----------------------------------------------------------------------------
@@ -900,8 +883,29 @@ void SAL_CALL ODatabaseDocument::setCurrentController( const Reference< XControl
 
     m_xCurrentController = _xController;
 
-    m_aViewMonitor.onSetCurrentController( _xController );
+    if ( !m_aViewMonitor.onSetCurrentController( _xController ) )
+        return;
+
+    // check if there are sub components to recover from our document storage
+    bool bAttemptRecovery = m_bHasBeenRecovered;
+    if ( !bAttemptRecovery && m_pImpl->getMediaDescriptor().has( "ForceRecovery" ) )
+        // do not use getOrDefault, it will throw for invalid types, which is not desired here
+        m_pImpl->getMediaDescriptor().get( "ForceRecovery" ) >>= bAttemptRecovery;
+
+    if ( !bAttemptRecovery )
+        return;
+
+    try
+    {
+        DatabaseDocumentRecovery aDocRecovery( m_pImpl->m_aContext );
+        aDocRecovery.recoverSubDocuments( m_pImpl->getRootStorage(), _xController );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }
+
 // -----------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL ODatabaseDocument::getCurrentSelection(  ) throw (RuntimeException)
 {

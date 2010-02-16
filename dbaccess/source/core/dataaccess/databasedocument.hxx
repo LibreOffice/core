@@ -125,8 +125,12 @@ public:
              );
 
     /**  to be called when a controller is set as current controller
+        @return <TRUE/>
+            if and only if the controller connection indicates that loading the document is finished. This
+            is the case if the given controller has previously been connected, and it was the first controller
+            ever for which this happened.
     */
-    void    onSetCurrentController(
+    bool    onSetCurrentController(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& _rxController
              );
 

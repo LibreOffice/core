@@ -72,6 +72,36 @@ namespace dbaccess
                                                 m_xOutputStream;
     };
 
+    //====================================================================
+    //= StorageInputStream
+    //====================================================================
+    /** convenience wrapper around a stream living in a storage
+    */
+    class DBACCESS_DLLPRIVATE StorageInputStream
+    {
+    public:
+        StorageInputStream(
+            const ::comphelper::ComponentContext& i_rContext,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& i_rParentStorage,
+            const ::rtl::OUString& i_rStreamName
+        );
+        virtual ~StorageInputStream();
+
+        /** simply calls closeInput on our input stream, override to extend/modify this behavior
+        */
+        virtual void close();
+
+    protected:
+        const ::comphelper::ComponentContext&   getContext() const { return m_rContext; }
+        const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >&
+                                                getInputStream() const { return m_xInputStream; }
+
+    private:
+        const ::comphelper::ComponentContext&   m_rContext;
+              ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
+                                                m_xInputStream;
+    };
+
 //........................................................................
 } // namespace dbaccess
 //........................................................................

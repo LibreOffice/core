@@ -59,6 +59,7 @@ namespace dbaccess
     using ::com::sun::star::ucb::Command;
     using ::com::sun::star::ucb::XCommandProcessor;
     using ::com::sun::star::frame::XController2;
+    using ::com::sun::star::lang::XComponent;
     /** === end UNO using === **/
 
     //====================================================================
@@ -67,10 +68,18 @@ namespace dbaccess
     struct DBACCESS_DLLPRIVATE SubComponentLoader_Data
     {
         const Reference< XCommandProcessor >    xDocDefCommands;
+        const Reference< XComponent >           xNonDocComponent;
         Reference< XWindow >                    xAppComponentWindow;
 
         SubComponentLoader_Data( const Reference< XCommandProcessor >& i_rDocumentDefinition )
             :xDocDefCommands( i_rDocumentDefinition, UNO_SET_THROW )
+            ,xNonDocComponent()
+        {
+        }
+
+        SubComponentLoader_Data( const Reference< XComponent >& i_rNonDocumentComponent )
+            :xDocDefCommands()
+            ,xNonDocComponent( i_rNonDocumentComponent, UNO_SET_THROW )
         {
         }
     };
@@ -85,11 +94,21 @@ namespace dbaccess
         {
             try
             {
-                Command aCommandOpen;
-                aCommandOpen.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "show" ) );
+                if ( i_rData.xDocDefCommands.is() )
+                {
+                    Command aCommandOpen;
+                    aCommandOpen.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "show" ) );
 
-                const sal_Int32 nCommandIdentifier = i_rData.xDocDefCommands->createCommandIdentifier();
-                i_rData.xDocDefCommands->execute( aCommandOpen, nCommandIdentifier, NULL );
+                    const sal_Int32 nCommandIdentifier = i_rData.xDocDefCommands->createCommandIdentifier();
+                    i_rData.xDocDefCommands->execute( aCommandOpen, nCommandIdentifier, NULL );
+                }
+                else
+                {
+                    const Reference< XController > xController( i_rData.xNonDocComponent, UNO_QUERY_THROW );
+                    const Reference< XFrame > xFrame( xController->getFrame(), UNO_SET_THROW );
+                    const Reference< XWindow > xWindow( xFrame->getContainerWindow(), UNO_SET_THROW );
+                    xWindow->setVisible( sal_True );
+                }
             }
             catch( const Exception& )
             {
@@ -105,6 +124,22 @@ namespace dbaccess
     SubComponentLoader::SubComponentLoader( const Reference< XController >& i_rApplicationController,
             const Reference< XCommandProcessor >& i_rSubDocumentDefinition )
         :m_pData( new SubComponentLoader_Data( i_rSubDocumentDefinition ) )
+    {
+        // add as window listener to the controller's container window, so we get notified when it is shown
+        Reference< XController2 > xController( i_rApplicationController, UNO_QUERY_THROW );
+        m_pData->xAppComponentWindow.set( xController->getComponentWindow(), UNO_SET_THROW );
+
+        osl_incrementInterlockedCount( &m_refCount );
+        {
+            m_pData->xAppComponentWindow->addWindowListener( this );
+        }
+        osl_decrementInterlockedCount( &m_refCount );
+    }
+
+    //--------------------------------------------------------------------
+    SubComponentLoader::SubComponentLoader( const Reference< XController >& i_rApplicationController,
+            const Reference< XComponent >& i_rNonDocumentComponent )
+        :m_pData( new SubComponentLoader_Data( i_rNonDocumentComponent ) )
     {
         // add as window listener to the controller's container window, so we get notified when it is shown
         Reference< XController2 > xController( i_rApplicationController, UNO_QUERY_THROW );

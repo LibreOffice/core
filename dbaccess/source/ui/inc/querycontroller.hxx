@@ -130,8 +130,8 @@ namespace dbaui
         void executeQuery();
         bool doSaveAsDoc(sal_Bool _bSaveAs);
 
-        void saveViewSettings( ::comphelper::NamedValueCollection& o_rViewSettings, const bool i_includngCriteria ) const;
-        void loadViewSettings( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_rViewData );
+        void saveViewSettings( ::comphelper::NamedValueCollection& o_rViewSettings, const bool i_includingCriteria ) const;
+        void loadViewSettings( const ::comphelper::NamedValueCollection& o_rViewSettings );
         ::rtl::OUString translateStatement( bool _bFireStatementChange = true );
 
         ::rtl::OUString getDefaultName() const;
@@ -174,6 +174,9 @@ namespace dbaui
         void            setVisibleRows(sal_Int32 _nVisibleRows) { m_nVisibleRows = _nVisibleRows;}
 
         sal_Int32       getColWidth(sal_uInt16 _nColPos) const;
+
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&
+                        getFieldInformation() const { return m_aFieldInformation; }
 
         ::connectivity::OSQLParser&             getParser()         { return m_aSqlParser;  }
         ::connectivity::OSQLParseTreeIterator&  getParseIterator()  { return *m_pSqlIterator; }
@@ -231,7 +234,7 @@ namespace dbaui
         virtual void reset();
         virtual void impl_initialize();
 
-        void    impl_reset();
+        void    impl_reset( const bool i_bIgnoreQuerySettings = false );
         /// tells the user that we needed to switch to SQL view automatically
         void    impl_showAutoSQLViewError( const ::com::sun::star::uno::Any& _rErrorDetails );
 

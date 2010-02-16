@@ -401,6 +401,7 @@ void SAL_CALL OQueryController::getFastPropertyValue( Any& o_rValue, sal_Int32 i
         {
             getContainer()->SaveUIConfig();
             saveViewSettings( aCurrentDesign, true );
+            aCurrentDesign.put( "Statement", m_sStatement );
         }
         else
         {
@@ -858,6 +859,9 @@ void OQueryController::impl_initialize()
     ::rtl::OUString sCommand;
     m_nCommandType = CommandType::QUERY;
 
+    // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같�
+    // � reading parameters
+    // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같�
     // legacy parameters first (later overwritten by regular parameters)
     ::rtl::OUString sIndependentSQLCommand;
     if ( rArguments.get_ensureType( "IndependentSQLCommand", sIndependentSQLCommand ) )
@@ -927,6 +931,37 @@ void OQueryController::impl_initialize()
             m_bGraphicalDesign = false;
     }
 
+    // .................................................................................................................
+    // . initial design
+    bool bForceInitialDesign = false;
+    Sequence< PropertyValue > aCurrentQueryDesignProps;
+    aCurrentQueryDesignProps = rArguments.getOrDefault( "CurrentQueryDesign", aCurrentQueryDesignProps );
+
+    if ( aCurrentQueryDesignProps.getLength() )
+    {
+        ::comphelper::NamedValueCollection aCurrentQueryDesign( aCurrentQueryDesignProps );
+        if ( aCurrentQueryDesign.has( (::rtl::OUString)PROPERTY_GRAPHICAL_DESIGN ) )
+        {
+            aCurrentQueryDesign.get_ensureType( (::rtl::OUString)PROPERTY_GRAPHICAL_DESIGN, m_bGraphicalDesign );
+        }
+        if ( aCurrentQueryDesign.has( (::rtl::OUString)PROPERTY_ESCAPE_PROCESSING ) )
+        {
+            aCurrentQueryDesign.get_ensureType( (::rtl::OUString)PROPERTY_ESCAPE_PROCESSING, m_bEscapeProcessing );
+        }
+        if ( aCurrentQueryDesign.has( "Statement" ) )
+        {
+            ::rtl::OUString sStatement;
+            aCurrentQueryDesign.get_ensureType( "Statement", sStatement );
+            aCurrentQueryDesign.remove( "Statement" );
+            setStatement_fireEvent( sStatement );
+        }
+
+        loadViewSettings( aCurrentQueryDesign );
+
+        bForceInitialDesign = true;
+    }
+
+    // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같�
     if ( !ensureConnected( sal_False ) )
     {   // we have no connection so what else should we do
         m_bGraphicalDesign = sal_False;
@@ -981,19 +1016,29 @@ void OQueryController::impl_initialize()
     try
     {
         getContainer()->initialize();
-        impl_reset();
+        impl_reset( bForceInitialDesign );
 
-        bool bAttemptedGraphicalDesign = m_bGraphicalDesign;
         SQLExceptionInfo aError;
-        impl_setViewMode( &aError );
+        const bool bAttemptedGraphicalDesign = m_bGraphicalDesign;
+
+        if ( bForceInitialDesign )
+        {
+            getContainer()->forceInitialView();
+        }
+        else
+        {
+            impl_setViewMode( &aError );
+        }
+
         if ( aError.isValid() && bAttemptedGraphicalDesign && !m_bGraphicalDesign )
         {
+            // we tried initializing the graphical view, this failed, and we were automatically switched to SQL
+            // view => tell this to the user
             if ( !editingView() )
             {
                 impl_showAutoSQLViewError( aError.get() );
             }
         }
-
 
         getUndoMgr()->Clear();
 
@@ -1159,7 +1204,7 @@ void OQueryController::reconnect(sal_Bool _bUI)
 }
 
 // -----------------------------------------------------------------------------
-void OQueryController::saveViewSettings( ::comphelper::NamedValueCollection& o_rViewSettings, const bool i_includngCriteria ) const
+void OQueryController::saveViewSettings( ::comphelper::NamedValueCollection& o_rViewSettings, const bool i_includingCriteria ) const
 {
     saveTableWindows( o_rViewSettings );
 
@@ -1172,31 +1217,10 @@ void OQueryController::saveViewSettings( ::comphelper::NamedValueCollection& o_r
     {
         if ( !(*field)->IsEmpty() )
         {
-            const ::rtl::OUString sFieldSettingName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Field" ) ) + ::rtl::OUString::valueOf( i );
-
             aFieldData.clear();
-            (*field)->Save( aFieldData );
+            (*field)->Save( aFieldData, i_includingCriteria );
 
-            if ( i_includngCriteria )
-            {
-                const ::std::vector< ::rtl::OUString >& rCriteria( (*field)->GetCriteria() );
-                if ( !rCriteria.empty() )
-                {
-                    sal_Int32 c = 0;
-                    ::comphelper::NamedValueCollection aCriteria;
-                    for (   ::std::vector< ::rtl::OUString >::const_iterator crit = rCriteria.begin();
-                            crit != rCriteria.end();
-                            ++crit, ++c
-                        )
-                    {
-                        const ::rtl::OUString sCritName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Criterion_" ) ) + ::rtl::OUString::valueOf( c );
-                        aCriteria.put( sCritName, *crit );
-                    }
-
-                    aFieldData.put( "Criteria", aCriteria.getPropertyValues() );
-                }
-            }
-
+            const ::rtl::OUString sFieldSettingName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Field" ) ) + ::rtl::OUString::valueOf( i );
             aAllFieldsData.put( sFieldSettingName, aFieldData.getPropertyValues() );
         }
     }
@@ -1206,12 +1230,13 @@ void OQueryController::saveViewSettings( ::comphelper::NamedValueCollection& o_r
     o_rViewSettings.put( "VisibleRows", m_nVisibleRows );
 }
 // -----------------------------------------------------------------------------
-void OQueryController::loadViewSettings( const Sequence< PropertyValue >& i_rViewData )
+void OQueryController::loadViewSettings( const ::comphelper::NamedValueCollection& o_rViewSettings )
 {
-    const ::comphelper::NamedValueCollection aViewData( i_rViewData );
-    m_nSplitPos = aViewData.getOrDefault( "SplitterPosition", m_nSplitPos );
-    m_nVisibleRows = aViewData.getOrDefault( "VisibleRows", m_nVisibleRows );
-    m_aFieldInformation = aViewData.getOrDefault( "Fields", m_aFieldInformation );
+    loadTableWindows( o_rViewSettings );
+
+    m_nSplitPos = o_rViewSettings.getOrDefault( "SplitterPosition", m_nSplitPos );
+    m_nVisibleRows = o_rViewSettings.getOrDefault( "VisibleRows", m_nVisibleRows );
+    m_aFieldInformation = o_rViewSettings.getOrDefault( "Fields", m_aFieldInformation );
 }
 // -----------------------------------------------------------------------------
 sal_Int32 OQueryController::getColWidth(sal_uInt16 _nColPos)  const
@@ -1219,7 +1244,7 @@ sal_Int32 OQueryController::getColWidth(sal_uInt16 _nColPos)  const
     if ( _nColPos < m_aFieldInformation.getLength() )
     {
         ::std::auto_ptr<OTableFieldDesc> pField( new OTableFieldDesc());
-        pField->Load(m_aFieldInformation[_nColPos]);
+        pField->Load( m_aFieldInformation[ _nColPos ], false );
         return pField->GetColWidth();
     }
     return 0;
@@ -1639,13 +1664,13 @@ short OQueryController::saveModified()
     return nRet;
 }
 // -----------------------------------------------------------------------------
-void OQueryController::impl_reset()
+void OQueryController::impl_reset( const bool i_bForceCurrentControllerSettings )
 {
     bool bValid = false;
 
     Sequence< PropertyValue > aLayoutInformation;
     // get command from the query if a query name was supplied
-    if ( !editingCommand() )
+    if ( !i_bForceCurrentControllerSettings && !editingCommand() )
     {
         if ( m_sName.getLength() )
         {
@@ -1695,15 +1720,14 @@ void OQueryController::impl_reset()
         {
             try
             {
-                // load the layoutInformation
-                loadTableWindows(aLayoutInformation);
-                loadViewSettings(aLayoutInformation);
+                loadViewSettings( aLayoutInformation );
             }
             catch( const Exception& )
             {
                 DBG_UNHANDLED_EXCEPTION();
             }
         }
+
         if ( m_sStatement.getLength() )
         {
             setQueryComposer();
@@ -1727,7 +1751,7 @@ void OQueryController::impl_reset()
                     m_pSqlIterator->traverseAll();
                     if ( m_pSqlIterator->hasErrors() )
                     {
-                        if ( !editingView() )
+                        if ( !i_bForceCurrentControllerSettings && !editingView() )
                         {
                             impl_showAutoSQLViewError( makeAny( m_pSqlIterator->getErrors() ) );
                         }
@@ -1736,7 +1760,7 @@ void OQueryController::impl_reset()
                 }
                 else
                 {
-                    if ( !editingView() )
+                    if ( !i_bForceCurrentControllerSettings && !editingView() )
                     {
                         String aTitle(ModuleRes(STR_SVT_SQL_SYNTAX_ERROR));
                         OSQLMessageBox aDlg(getView(),aTitle,aErrorMsg);

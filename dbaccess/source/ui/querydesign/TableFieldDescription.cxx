@@ -97,7 +97,7 @@ OTableFieldDesc& OTableFieldDesc::operator=( const OTableFieldDesc& rRS )
     if (&rRS == this)
         return *this;
 
-    m_vecCriteria = rRS.m_vecCriteria;
+    m_aCriteria = rRS.GetCriteria();
     m_aTableName = rRS.GetTable();
     m_aAliasName = rRS.GetAlias();      // table range
     m_aFieldName = rRS.GetField();      // column
@@ -128,7 +128,7 @@ sal_Bool OTableFieldDesc::operator==( const OTableFieldDesc& rDesc )
                 m_aFieldName != rDesc.GetField()        ||
                 m_aTableName != rDesc.GetTable()        ||
                 m_bGroupBy != rDesc.IsGroupBy()         ||
-                m_vecCriteria != rDesc.GetCriteria()    ||
+                m_aCriteria != rDesc.GetCriteria()  ||
                 m_bVisible != rDesc.IsVisible() );
 
 }
@@ -137,13 +137,13 @@ sal_Bool OTableFieldDesc::operator==( const OTableFieldDesc& rDesc )
 void OTableFieldDesc::SetCriteria( sal_uInt16 nIdx, const ::rtl::OUString& rCrit)
 {
     DBG_CHKTHIS(OTableFieldDesc,NULL);
-    if (nIdx < m_vecCriteria.size())
-        m_vecCriteria[nIdx] = rCrit;
+    if (nIdx < m_aCriteria.size())
+        m_aCriteria[nIdx] = rCrit;
     else
     {
-        for(sal_Int32 i=m_vecCriteria.size();i<nIdx;++i)
-            m_vecCriteria.push_back( ::rtl::OUString());
-        m_vecCriteria.push_back(rCrit);
+        for(sal_Int32 i=m_aCriteria.size();i<nIdx;++i)
+            m_aCriteria.push_back( ::rtl::OUString());
+        m_aCriteria.push_back(rCrit);
     }
 }
 
@@ -152,60 +152,60 @@ void OTableFieldDesc::SetCriteria( sal_uInt16 nIdx, const ::rtl::OUString& rCrit
 {
     DBG_CHKTHIS(OTableFieldDesc,NULL);
     ::rtl::OUString aRetStr;
-    if( nIdx < m_vecCriteria.size())
-        aRetStr = m_vecCriteria[nIdx];
+    if( nIdx < m_aCriteria.size())
+        aRetStr = m_aCriteria[nIdx];
 
     return aRetStr;
 }
 
 // -----------------------------------------------------------------------------
-void OTableFieldDesc::Load(const ::com::sun::star::beans::PropertyValue& _rProperty)
+namespace
+{
+    struct SelectPropertyValueAsString : public ::std::unary_function< PropertyValue, ::rtl::OUString >
+    {
+        ::rtl::OUString operator()( const PropertyValue& i_rPropValue ) const
+        {
+            ::rtl::OUString sValue;
+            OSL_VERIFY( i_rPropValue.Value >>= sValue );
+            return sValue;
+        }
+    };
+}
+
+// -----------------------------------------------------------------------------
+void OTableFieldDesc::Load( const ::com::sun::star::beans::PropertyValue& i_rSettings, const bool i_bIncludingCriteria )
 {
     DBG_CHKTHIS(OTableFieldDesc,NULL);
-    Sequence<PropertyValue> aFieldDesc;
-    _rProperty.Value >>= aFieldDesc;
-    //if ( aFieldDesc.getLength() == 12 )
+
+    ::comphelper::NamedValueCollection aFieldDesc( i_rSettings.Value );
+    m_aAliasName = aFieldDesc.getOrDefault( "AliasName", m_aAliasName );
+    m_aTableName = aFieldDesc.getOrDefault( "TableName", m_aTableName );
+    m_aFieldName = aFieldDesc.getOrDefault( "FieldName", m_aFieldName );
+    m_aFieldAlias = aFieldDesc.getOrDefault( "FieldAlias", m_aFieldAlias );
+    m_aFunctionName = aFieldDesc.getOrDefault( "FunctionName", m_aFunctionName );
+    m_eDataType = aFieldDesc.getOrDefault( "DataType", m_eDataType );
+    m_eFunctionType = aFieldDesc.getOrDefault( "FunctionType", m_eFunctionType );
+    m_nColWidth = aFieldDesc.getOrDefault( "ColWidth", m_nColWidth );
+    m_bGroupBy = aFieldDesc.getOrDefault( "GroupBy", m_bGroupBy );
+    m_bVisible = aFieldDesc.getOrDefault( "Visible", m_bVisible );
+
+    m_eFieldType = static_cast< ETableFieldType >( aFieldDesc.getOrDefault( "FieldType", static_cast< sal_Int32 >( m_eFieldType ) ) );
+    m_eOrderDir = static_cast< EOrderDir >( aFieldDesc.getOrDefault( "OrderDir", static_cast< sal_Int32 >( m_eOrderDir ) ) );
+
+    if ( i_bIncludingCriteria )
     {
-        sal_Int32 nCount = aFieldDesc.getLength();
-        for (sal_Int32 nPos = 0; nPos < nCount; ++nPos)
-        {
-            if ( aFieldDesc[nPos].Name.equalsAscii("AliasName") )
-                aFieldDesc[nPos].Value >>= m_aAliasName;
-            else if ( aFieldDesc[nPos].Name.equalsAscii("TableName") )
-                aFieldDesc[nPos].Value >>= m_aTableName;
-            else if ( aFieldDesc[nPos].Name.equalsAscii("FieldName") )
-                aFieldDesc[nPos].Value >>= m_aFieldName;
-            else if ( aFieldDesc[nPos].Name.equalsAscii("FieldAlias") )
-                aFieldDesc[nPos].Value >>= m_aFieldAlias;
-            else if ( aFieldDesc[nPos].Name.equalsAscii("FunctionName") )
-                aFieldDesc[nPos].Value >>= m_aFunctionName;
-            else if ( aFieldDesc[nPos].Name.equalsAscii("DataType") )
-                aFieldDesc[nPos].Value >>= m_eDataType;
-            else if ( aFieldDesc[nPos].Name.equalsAscii("FunctionType") )
-                aFieldDesc[nPos].Value >>= m_eFunctionType;
-            else if ( aFieldDesc[nPos].Name.equalsAscii("FieldType") )
-            {
-                sal_Int32 nTemp = 0;
-                aFieldDesc[nPos].Value >>= nTemp;
-                m_eFieldType = static_cast<ETableFieldType>(nTemp);
-            }
-            else if ( aFieldDesc[nPos].Name.equalsAscii("OrderDir") )
-            {
-                sal_Int32 nTemp = 0;
-                aFieldDesc[nPos].Value >>= nTemp;
-                m_eOrderDir = static_cast<EOrderDir>(nTemp);
-            }
-            else if ( aFieldDesc[nPos].Name.equalsAscii("ColWidth") )
-                aFieldDesc[nPos].Value >>= m_nColWidth;
-            else if ( aFieldDesc[nPos].Name.equalsAscii("GroupBy") )
-                aFieldDesc[nPos].Value >>= m_bGroupBy;
-            else if ( aFieldDesc[nPos].Name.equalsAscii("Visible") )
-                aFieldDesc[nPos].Value >>= m_bVisible;
-        }
+        const Sequence< PropertyValue > aCriteria( aFieldDesc.getOrDefault( "Criteria", Sequence< PropertyValue >() ) );
+        m_aCriteria.resize( aCriteria.getLength() );
+        ::std::transform(
+            aCriteria.getConstArray(),
+            aCriteria.getConstArray() + aCriteria.getLength(),
+            m_aCriteria.begin(),
+            SelectPropertyValueAsString()
+        );
     }
 }
 //------------------------------------------------------------------------------
-void OTableFieldDesc::Save( ::comphelper::NamedValueCollection& o_rSettings )
+void OTableFieldDesc::Save( ::comphelper::NamedValueCollection& o_rSettings, const bool i_bIncludingCriteria )
 {
     DBG_CHKTHIS(OTableFieldDesc,NULL);
 
@@ -221,6 +221,25 @@ void OTableFieldDesc::Save( ::comphelper::NamedValueCollection& o_rSettings )
     o_rSettings.put( "ColWidth", m_nColWidth );
     o_rSettings.put( "GroupBy", m_bGroupBy );
     o_rSettings.put( "Visible", m_bVisible );
+
+    if ( i_bIncludingCriteria )
+    {
+        if ( !m_aCriteria.empty() )
+        {
+            sal_Int32 c = 0;
+            Sequence< PropertyValue > aCriteria( m_aCriteria.size() );
+            for (   ::std::vector< ::rtl::OUString >::const_iterator crit = m_aCriteria.begin();
+                    crit != m_aCriteria.end();
+                    ++crit, ++c
+                )
+            {
+                aCriteria[c].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Criterion_" ) ) + ::rtl::OUString::valueOf( c );
+                aCriteria[c].Value <<= *crit;
+            }
+
+            o_rSettings.put( "Criteria", aCriteria );
+        }
+    }
 }
 // -----------------------------------------------------------------------------
 
