@@ -88,7 +88,7 @@ SmPrintUIOptions::SmPrintUIOptions()
     if( aLocalizedStrings.Count() < 18 ) // bad resource ?
         return;
 
-    SmModule *pp = SM_MOD1();
+    SmModule *pp = SM_MOD();
     SmConfig *pConfig = pp->GetConfig();
     DBG_ASSERT( pConfig, "SmConfig not found" );
     if (!pConfig)
