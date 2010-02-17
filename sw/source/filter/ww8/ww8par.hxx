@@ -1099,7 +1099,7 @@ private:
                             //     the very 1st Line Numbering and ignore the rest)
 
     bool bFirstPara;        // first paragraph?
-
+    bool bFirstParaOfPage;//cs2c--xushanchuan add for bug11210
     bool bParaAutoBefore;
     bool bParaAutoAfter;
 
