@@ -974,18 +974,6 @@ sal_Bool FTPDirectoryParser::parseUNIX (
 }
 
 /*
- * parseUNKNOWN.
- */
-sal_Bool FTPDirectoryParser::parseUNKNOWN (
-    FTPDirentry &rEntry,
-    const sal_Char  *pBuffer,
-    sal_uInt32       nLength)
-{
-    setPath (rEntry.m_aName, pBuffer,sal_Int32 (nLength));
-    return sal_True;
-}
-
-/*
  * parseUNIX_isSizeField.
  */
 sal_Bool FTPDirectoryParser::parseUNIX_isSizeField (

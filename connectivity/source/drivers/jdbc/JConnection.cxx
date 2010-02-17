@@ -56,6 +56,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <jni.h>
 #include "resource/common_res.hrc"
+#include <unotools/confignode.hxx>
 
 #include <list>
 #include <memory>
@@ -553,10 +554,9 @@ Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareCall( const
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         // Parameter konvertieren
-        jstring str = convertwchar_tToJavaString(t.pEnv,sql);
+        jdbc::LocalRef< jstring > str( t.env(),convertwchar_tToJavaString(t.pEnv,sql));
 
-        jobject out = t.pEnv->CallObjectMethod( object, mID, str );
-        t.pEnv->DeleteLocalRef(str);
+        jobject out = t.pEnv->CallObjectMethod( object, mID, str.get() );
         aStr = JavaString2String(t.pEnv, (jstring)out );
         ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
     } //t.pEnv
@@ -767,7 +767,20 @@ void java_sql_Connection::loadDriverFromProperties( const ::rtl::OUString& _sDri
     enableAutoRetrievingEnabled( bAutoRetrievingEnabled );
     setAutoRetrievingStatement( sGeneratedValueStatement );
 }
-
+// -----------------------------------------------------------------------------
+::rtl::OUString java_sql_Connection::impl_getJavaDriverClassPath_nothrow(const ::rtl::OUString& _sDriverClass)
+{
+    static const ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.DataAccess/JDBC/DriverClassPaths"));
+    ::utl::OConfigurationTreeRoot aNamesRoot = ::utl::OConfigurationTreeRoot::createWithServiceFactory(
+        m_pDriver->getContext().getLegacyServiceFactory(), s_sNodeName, -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
+    ::rtl::OUString sURL;
+    if ( aNamesRoot.isValid() && aNamesRoot.hasByName( _sDriverClass ) )
+    {
+        ::utl::OConfigurationNode aRegisterObj = aNamesRoot.openNode( _sDriverClass );
+        OSL_VERIFY( aRegisterObj.getNodeValue( "Path" ) >>= sURL );
+    }
+    return sURL;
+}
 // -----------------------------------------------------------------------------
 sal_Bool java_sql_Connection::construct(const ::rtl::OUString& url,
                                     const Sequence< PropertyValue >& info)
@@ -790,6 +803,8 @@ sal_Bool java_sql_Connection::construct(const ::rtl::OUString& url,
     ::comphelper::NamedValueCollection aSettings( info );
     sDriverClass = aSettings.getOrDefault( "JavaDriverClass", sDriverClass );
     sDriverClassPath = aSettings.getOrDefault( "JavaDriverClassPath", sDriverClassPath);
+    if ( !sDriverClassPath.getLength() )
+        sDriverClassPath = impl_getJavaDriverClassPath_nothrow(sDriverClass);
     bAutoRetrievingEnabled = aSettings.getOrDefault( "IsAutoRetrievingEnabled", bAutoRetrievingEnabled );
     sGeneratedValueStatement = aSettings.getOrDefault( "AutoRetrievingStatement", sGeneratedValueStatement );
     m_bParameterSubstitution = aSettings.getOrDefault( "ParameterNameSubstitution", m_bParameterSubstitution );
@@ -810,7 +825,7 @@ sal_Bool java_sql_Connection::construct(const ::rtl::OUString& url,
         static const char * cSignature = "(Ljava/lang/String;Ljava/util/Properties;)Ljava/sql/Connection;";
         static const char * cMethodName = "connect";
         // Java-Call absetzen
-        jmethodID mID = NULL;
+        static jmethodID mID = NULL;
         if ( !mID  )
             mID  = t.pEnv->GetMethodID( m_Driver_theClass, cMethodName, cSignature );
         if ( mID )

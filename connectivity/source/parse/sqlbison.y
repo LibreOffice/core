@@ -107,7 +107,6 @@ static connectivity::OSQLInternalNode* newNode(const sal_Char* pNewValue,
 							     const connectivity::SQLNodeType eNodeType,
 								 const sal_uInt32 nNodeID = 0)
 {
-    OSL_TRACE("connectivity: Rule Number: %d,%d",eNodeType,nNodeID);
 	return new connectivity::OSQLInternalNode(pNewValue, eNodeType, nNodeID);
 }
 
@@ -115,7 +114,6 @@ static connectivity::OSQLInternalNode* newNode(const ::rtl::OString& _NewValue,
 							    const connectivity::SQLNodeType eNodeType,
 								const sal_uInt32 nNodeID = 0)
 {
-    OSL_TRACE("connectivity: Rule Number: %d,%d",eNodeType,nNodeID);
 	return new connectivity::OSQLInternalNode(_NewValue, eNodeType, nNodeID);
 }
 
@@ -123,7 +121,6 @@ static connectivity::OSQLInternalNode* newNode(const ::rtl::OUString& _NewValue,
 							    const connectivity::SQLNodeType eNodeType,
 								const sal_uInt32 nNodeID = 0)
 {
-    OSL_TRACE("connectivity: Rule Number: %d,%d",eNodeType,nNodeID);
 	return new connectivity::OSQLInternalNode(_NewValue, eNodeType, nNodeID);
 }
 
@@ -2043,7 +2040,8 @@ join_spec:
 	  | named_columns_join
 	  ;
 join_type:
-		SQL_TOKEN_INNER
+		/* empty */ 	{$$ = SQL_NEW_RULE;}
+	  | SQL_TOKEN_INNER
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
