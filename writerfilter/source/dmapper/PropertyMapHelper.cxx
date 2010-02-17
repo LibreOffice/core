@@ -74,7 +74,7 @@ XMLTag::Pointer_t lcl_PropertyValuesToTag(beans::PropertyValues & rValues)
 
         try
         {
-            sal_Int32 aInt;
+            sal_Int32 aInt = 0;
             pValues[n].Value >>= aInt;
             pTag->addAttr("value", aInt);
         }
