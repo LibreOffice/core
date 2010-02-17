@@ -325,6 +325,7 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                 }
                 else
                     m_pImpl->m_aTitle.SetText(m_pImpl->m_aName);
+                m_pImpl->m_aTitle.SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
 
                 m_pImpl->m_aPB_OK.SetPosPixel(Point(m_pImpl->m_aPB_OK.GetPosPixel().X(),aPos.Y()));
                 m_pImpl->m_aPB_CANCEL.SetPosPixel(Point(m_pImpl->m_aPB_CANCEL.GetPosPixel().X(),aPos.Y()));
