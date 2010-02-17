@@ -493,9 +493,17 @@ void VCLXAccessibleComponent::FillAccessibleStateSet( utl::AccessibleStateSetHel
                getAccessibleRole() == accessibility::AccessibleRole::DIALOG ) )  // #i18891#
             rStateSet.AddState( accessibility::AccessibleStateType::ACTIVE );
 
+        // #104290# MT: This way, a ComboBox doesn't get state FOCUSED.
+        // I also don't understand
+        // a) why WINDOW_FIRSTCHILD is used here (which btw is a border window in the case of a combo box)
+        // b) why HasFocus() is nout "enough" for a compound control
+        /*
         Window* pChild = pWindow->GetWindow( WINDOW_FIRSTCHILD );
         if ( ( !pWindow->IsCompoundControl() && pWindow->HasFocus() ) ||
              ( pWindow->IsCompoundControl() && pChild && pChild->HasFocus() ) )
+            rStateSet.AddState( accessibility::AccessibleStateType::FOCUSED );
+        */
+        if ( pWindow->HasFocus() || ( pWindow->IsCompoundControl() && pWindow->HasChildPathFocus() ) )
             rStateSet.AddState( accessibility::AccessibleStateType::FOCUSED );
 
         if ( pWindow->IsWait() )
