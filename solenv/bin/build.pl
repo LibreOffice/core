@@ -1596,7 +1596,7 @@ sub get_options {
 };
 
 sub get_module_and_buildlist_paths {
-    if ($build_all_parents) {
+    if ($build_all_parents || $checkparents) {
         my $source_config = SourceConfig -> new($StandDir);
         $source_config_file = $source_config->get_config_file_path();
         $active_modules{$_}++ foreach ($source_config->get_active_modules());
