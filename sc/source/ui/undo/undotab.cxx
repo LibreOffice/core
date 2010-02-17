@@ -793,12 +793,12 @@ ScUndoSetTabBgColor::ScUndoSetTabBgColor( ScDocShell* pNewDocShell,
                                         const Color& aOTabBgColor,
                                         const Color& aNTabBgColor) :
     ScSimpleUndo( pNewDocShell ),
+    aUndoSetTabBgColorInfoList ( NULL ),
     nTab     ( nT ),
-    bIsMultipleUndo ( FALSE ),
-    aUndoSetTabBgColorInfoList ( NULL )
+    aOldTabBgColor( aOTabBgColor ),
+    aNewTabBgColor( aNTabBgColor ),
+    bIsMultipleUndo ( FALSE )
 {
-    aOldTabBgColor = aOTabBgColor;
-    aNewTabBgColor = aNTabBgColor;
 }
 
 ScUndoSetTabBgColor::ScUndoSetTabBgColor( ScDocShell* pNewDocShell,
@@ -809,11 +809,11 @@ ScUndoSetTabBgColor::ScUndoSetTabBgColor( ScDocShell* pNewDocShell,
     aUndoSetTabBgColorInfoList = pUndoSetTabBgColorInfoList;
 }
 
-__EXPORT ScUndoSetTabBgColor::~ScUndoSetTabBgColor()
+ScUndoSetTabBgColor::~ScUndoSetTabBgColor()
 {
 }
 
-String __EXPORT ScUndoSetTabBgColor::GetComment() const
+String ScUndoSetTabBgColor::GetComment() const
 {
     if (bIsMultipleUndo && aUndoSetTabBgColorInfoList && aUndoSetTabBgColorInfoList->Count() > 1)
         return ScGlobal::GetRscString( STR_UNDO_SET_MULTI_TAB_BG_COLOR );
@@ -865,7 +865,7 @@ void ScUndoSetTabBgColor::DoChange(BOOL bUndoType) const
     }
 }
 
-void __EXPORT ScUndoSetTabBgColor::Undo()
+void ScUndoSetTabBgColor::Undo()
 {
     if ( bIsMultipleUndo )
         DoChange(TRUE);
@@ -873,7 +873,7 @@ void __EXPORT ScUndoSetTabBgColor::Undo()
         DoChange(nTab, aOldTabBgColor);
 }
 
-void __EXPORT ScUndoSetTabBgColor::Redo()
+void ScUndoSetTabBgColor::Redo()
 {
     if ( bIsMultipleUndo )
         DoChange(FALSE);
@@ -881,12 +881,12 @@ void __EXPORT ScUndoSetTabBgColor::Redo()
         DoChange(nTab, aNewTabBgColor);
 }
 
-void __EXPORT ScUndoSetTabBgColor::Repeat(SfxRepeatTarget& /* rTarget */)
+void ScUndoSetTabBgColor::Repeat(SfxRepeatTarget& /* rTarget */)
 {
     //  No Repeat
 }
 
-BOOL __EXPORT ScUndoSetTabBgColor::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+BOOL ScUndoSetTabBgColor::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return FALSE;
 }

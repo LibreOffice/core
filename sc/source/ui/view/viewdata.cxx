@@ -286,7 +286,7 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
         {
             sal_Int32 nColor = COL_AUTO;
             aSettings[i].Value >>= nColor;
-            if (nColor != COL_AUTO)
+            if (static_cast<ColorData>(nColor) != COL_AUTO)
                 aTabBgColor.SetColor(static_cast<ColorData>(nColor));
         }
     }
