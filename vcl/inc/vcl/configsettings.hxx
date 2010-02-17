@@ -54,7 +54,6 @@ namespace vcl
         std::hash_map< rtl::OUString, SmallOUStrMap, rtl::OUStringHash > m_aSettings;
 
         virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& rPropertyNames );
-        virtual void Commit();
 
         void getValues();
         SettingsConfigItem();
@@ -65,6 +64,8 @@ namespace vcl
 
         const rtl::OUString& getValue( const rtl::OUString& rGroup, const rtl::OUString& rKey ) const;
         void setValue( const rtl::OUString& rGroup, const rtl::OUString& rKey, const rtl::OUString& rValue );
+
+        virtual void Commit();
     };
 
 //........................................................................

@@ -990,7 +990,8 @@ namespace cairocanvas
                         aEdge.setNextControlPoint(0, aCandidate.getNextControlPoint(a));
                         aEdge.setPrevControlPoint(1, aCandidate.getPrevControlPoint(nNextIndex));
 
-                        doPolyPolygonImplementation( aEdge, aOperation,
+                        doPolyPolygonImplementation( basegfx::B2DPolyPolygon(aEdge),
+                                                     aOperation,
                                                      pCairo, pTextures,
                                                      mpSurfaceProvider,
                                                      xPolyPolygon->getFillRule() );
@@ -1187,7 +1188,7 @@ namespace cairocanvas
         cairo_save( mpCairo.get() );
 
         useStates( viewState, renderState, true );
-        doPolyPolygonPath( xPolyPolygon, Fill, &textures );
+        doPolyPolygonPath( xPolyPolygon, Fill, false, &textures );
 
         cairo_restore( mpCairo.get() );
     }

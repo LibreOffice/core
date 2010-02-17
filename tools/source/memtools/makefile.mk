@@ -47,6 +47,8 @@ SLOFILES=	$(SLO)$/contnr.obj	\
             $(SLO)$/mempool.obj \
             $(SLO)$/multisel.obj
 
+EXCEPTIONSFILES= $(SLO)$/multisel.obj $(OBJ)$/multisel.obj
+
 OBJFILES=	$(OBJ)$/contnr.obj	 \
             $(OBJ)$/table.obj	 \
             $(OBJ)$/unqidx.obj	 \
