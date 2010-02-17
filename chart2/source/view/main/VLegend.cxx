@@ -261,10 +261,11 @@ void lcl_placeLegendEntries(
     double fViewFontSize = lcl_CalcViewFontSize( xProperties, rPageSize );
 
     // padding as percentage of the font height
-    double fXPadding = (1.0 / 5.0);
-    double fYPadding = (1.0 / 3.0);
-    double fXOffset  = (1.0 / 5.0);
-    double fYOffset  = (1.0 / 5.0);
+    // #i109336# Improve auto positioning in chart
+    double fXPadding = 0.1;
+    double fYPadding = 0.2;
+    double fXOffset  = 0.15;
+    double fYOffset  = 0.15;
 
     const sal_Int32 nXPadding = static_cast< sal_Int32 >( fViewFontSize * fXPadding );
     const sal_Int32 nYPadding = static_cast< sal_Int32 >( fViewFontSize * fYPadding );
@@ -276,8 +277,11 @@ void lcl_placeLegendEntries(
         rEntries, xShapeFactory, xTarget, aTextShapes, rTextProperties );
     OSL_ASSERT( aTextShapes.size() == rEntries.size());
 
-    awt::Size aMaxSymbolExtent( static_cast< sal_Int32 >( fViewFontSize * 3.0 / 2.0 ),
-                                static_cast< sal_Int32 >( fViewFontSize ));
+    // #i109336# Improve auto positioning in chart
+    double fSymbolSizeFraction = 0.8;
+    awt::Size aMaxSymbolExtent( static_cast< sal_Int32 >( fViewFontSize * fSymbolSizeFraction * 3.0 / 2.0 ),
+                                static_cast< sal_Int32 >( fViewFontSize * fSymbolSizeFraction ) );
+
     sal_Int32 nCurrentXPos = nXPadding;
     sal_Int32 nCurrentYPos = nYPadding;
     sal_Int32 nMaxEntryWidth = 2 * nXOffset + aMaxSymbolExtent.Width + aMaxEntryExtent.Width;
@@ -394,8 +398,13 @@ void lcl_placeLegendEntries(
                 sal_Int32 nSymbolXPos = nCurrentXPos + ((aMaxSymbolExtent.Width - aSymbolSize.Width) / 2);
                 if( !bSymbolsLeftSide )
                     nSymbolXPos = nSymbolXPos - aMaxSymbolExtent.Width;
-                xSymbol->setPosition( awt::Point( nSymbolXPos,
-                        nCurrentYPos + ((aMaxSymbolExtent.Height - aSymbolSize.Height) / 2)));
+
+                // #i109336# Improve auto positioning in chart
+                sal_Int32 nTextHeight = nMaxHeights[ nRow ] - nYOffset;
+                sal_Int32 nFontSize = static_cast< sal_Int32 >( fViewFontSize );
+                sal_Int32 nMaxRowHeight = ( ( ( nTextHeight / nFontSize ) <= 1 ) ? nTextHeight : nFontSize );
+                sal_Int32 nSymbolYPos = nCurrentYPos + ( ( nMaxRowHeight - aSymbolSize.Height ) / 2 );
+                xSymbol->setPosition( awt::Point( nSymbolXPos, nSymbolYPos ) );
             }
 
             // position text shape
@@ -438,37 +447,60 @@ void lcl_placeLegendEntries(
     rOutLegendSize.Height = nMaxYPos + nYPadding;
 }
 
-double lcl_getPageLayoutDistancePercentage()
+// #i109336# Improve auto positioning in chart
+sal_Int32 lcl_getLegendLeftRightMargin()
 {
-    return 0.02;
+    return 210;  // 1/100 mm
+}
+
+// #i109336# Improve auto positioning in chart
+sal_Int32 lcl_getLegendTopBottomMargin()
+{
+    return 185;  // 1/100 mm
 }
 
 chart2::RelativePosition lcl_getDefaultPosition( LegendPosition ePos, const awt::Rectangle& rOutAvailableSpace, const awt::Size & rPageSize )
 {
-    // shift legend about 2% of page size into the primary direction by default
-    const double fDefaultDistance = lcl_getPageLayoutDistancePercentage();
     chart2::RelativePosition aResult;
 
     switch( ePos )
     {
         case LegendPosition_LINE_START:
-            aResult = chart2::RelativePosition(
-                fDefaultDistance, 0.5, drawing::Alignment_LEFT );
+            {
+                // #i109336# Improve auto positioning in chart
+                const double fDefaultDistance = ( static_cast< double >( lcl_getLegendLeftRightMargin() ) /
+                    static_cast< double >( rPageSize.Width ) );
+                aResult = chart2::RelativePosition(
+                    fDefaultDistance, 0.5, drawing::Alignment_LEFT );
+            }
             break;
         case LegendPosition_LINE_END:
-            aResult = chart2::RelativePosition(
-                1.0 - fDefaultDistance, 0.5, drawing::Alignment_RIGHT );
+            {
+                // #i109336# Improve auto positioning in chart
+                const double fDefaultDistance = ( static_cast< double >( lcl_getLegendLeftRightMargin() ) /
+                    static_cast< double >( rPageSize.Width ) );
+                aResult = chart2::RelativePosition(
+                    1.0 - fDefaultDistance, 0.5, drawing::Alignment_RIGHT );
+            }
             break;
         case LegendPosition_PAGE_START:
             {
+                // #i109336# Improve auto positioning in chart
+                const double fDefaultDistance = ( static_cast< double >( lcl_getLegendTopBottomMargin() ) /
+                    static_cast< double >( rPageSize.Height ) );
                 double fDistance = (static_cast<double>(rOutAvailableSpace.Y)/static_cast<double>(rPageSize.Height)) + fDefaultDistance;
                 aResult = chart2::RelativePosition(
                     0.5, fDistance, drawing::Alignment_TOP );
             }
             break;
         case LegendPosition_PAGE_END:
-            aResult = chart2::RelativePosition(
-                0.5, 1.0 - fDefaultDistance, drawing::Alignment_BOTTOM );
+            {
+                // #i109336# Improve auto positioning in chart
+                const double fDefaultDistance = ( static_cast< double >( lcl_getLegendTopBottomMargin() ) /
+                    static_cast< double >( rPageSize.Height ) );
+                aResult = chart2::RelativePosition(
+                    0.5, 1.0 - fDefaultDistance, drawing::Alignment_BOTTOM );
+            }
             break;
 
         case LegendPosition_CUSTOM:
@@ -501,31 +533,34 @@ awt::Point lcl_calculatePositionAndRemainingSpace(
         aResult, aLegendSize, aRelPos.Anchor );
 
     // adapt rRemainingSpace if LegendPosition is not CUSTOM
-    sal_Int32 nYDistance = static_cast<sal_Int32>(rPageSize.Height*lcl_getPageLayoutDistancePercentage());
-    sal_Int32 nXDistance = static_cast<sal_Int32>(rPageSize.Width*lcl_getPageLayoutDistancePercentage());
-    rRemainingSpace.Width-=nXDistance;
-    rRemainingSpace.Height-=nYDistance;
+    // #i109336# Improve auto positioning in chart
+    sal_Int32 nXDistance = lcl_getLegendLeftRightMargin();
+    sal_Int32 nYDistance = lcl_getLegendTopBottomMargin();
     switch( ePos )
     {
         case LegendPosition_LINE_START:
-        {
-            sal_Int32 nExtent = aLegendSize.Width;
-            rRemainingSpace.Width -= nExtent;
-            rRemainingSpace.X += ( nExtent + nXDistance );
-        }
+            {
+                sal_Int32 nExtent = aLegendSize.Width;
+                rRemainingSpace.Width -= ( nExtent + nXDistance );
+                rRemainingSpace.X += ( nExtent + nXDistance );
+            }
         break;
         case LegendPosition_LINE_END:
-            rRemainingSpace.Width -= ( aLegendSize.Width );
+            {
+                rRemainingSpace.Width -= ( aLegendSize.Width + nXDistance );
+            }
             break;
         case LegendPosition_PAGE_START:
-        {
-            sal_Int32 nExtent = aLegendSize.Height;
-            rRemainingSpace.Height -= nExtent;
-            rRemainingSpace.Y += ( nExtent + nYDistance );
-        }
+            {
+                sal_Int32 nExtent = aLegendSize.Height;
+                rRemainingSpace.Height -= ( nExtent + nYDistance );
+                rRemainingSpace.Y += ( nExtent + nYDistance );
+            }
         break;
         case LegendPosition_PAGE_END:
-            rRemainingSpace.Height -= ( aLegendSize.Height );
+            {
+                rRemainingSpace.Height -= ( aLegendSize.Height + nYDistance );
+            }
             break;
 
         default:
@@ -675,8 +710,9 @@ void VLegend::createShapes(
             tPropertyValues aLineFillProperties;
             tPropertyValues aTextProperties;
 
-            // limit the width of texts to 20% of the total available width
-            sal_Int32 nMaxLabelWidth = rAvailableSpace.Width / 5;
+            // limit the width of texts to 30% of the total available width
+            // #i109336# Improve auto positioning in chart
+            sal_Int32 nMaxLabelWidth = rAvailableSpace.Width * 3 / 10;
             Reference< beans::XPropertySet > xLegendProp( m_xLegend, uno::UNO_QUERY );
             LegendExpansion eExpansion = LegendExpansion_HIGH;
             if( xLegendProp.is())

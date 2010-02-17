@@ -2151,7 +2151,7 @@ void changePositionOfAxisTitle( VTitle* pVTitle, TitleAlignment eAlignment
     pVTitle->changePosition( aNewPosition );
 }
 
-std::auto_ptr<VTitle> lcl_createTitle( const uno::Reference< XTitle >& xTitle
+std::auto_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
                 , const uno::Reference< drawing::XShapes>& xPageShapes
                 , const uno::Reference< lang::XMultiServiceFactory>& xShapeFactory
                 , const uno::Reference< frame::XModel >& xChartModel
@@ -2161,10 +2161,32 @@ std::auto_ptr<VTitle> lcl_createTitle( const uno::Reference< XTitle >& xTitle
                 , bool& rbAutoPosition )
 {
     std::auto_ptr<VTitle> apVTitle;
+
+    // #i109336# Improve auto positioning in chart
+    double fPercentage = lcl_getPageLayoutDistancePercentage();
+    sal_Int32 nXDistance = static_cast< sal_Int32 >( rPageSize.Width * fPercentage );
+    sal_Int32 nYDistance = static_cast< sal_Int32 >( rPageSize.Height * fPercentage );
+    if ( eType == TitleHelper::MAIN_TITLE )
+    {
+        sal_Int32 nYOffset = 135;  // 1/100 mm
+        nYDistance += nYOffset;
+    }
+    else if ( eType == TitleHelper::TITLE_AT_STANDARD_X_AXIS_POSITION )
+    {
+        sal_Int32 nYOffset = 420;  // 1/100 mm
+        nYDistance = nYOffset;
+    }
+    else if ( eType == TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION )
+    {
+        sal_Int32 nXOffset = 450;  // 1/100 mm
+        nXDistance = nXOffset;
+    }
+
+    uno::Reference< XTitle > xTitle( TitleHelper::getTitle( eType, xChartModel ) );
     if(xTitle.is())
     {
         rtl::OUString aCompleteString( TitleHelper::getCompleteString( xTitle ) );
-        if( aCompleteString.getLength()==0 )
+        if ( aCompleteString.getLength() == 0 )
             return apVTitle;//don't create empty titles as the resulting diagram position is wrong then
 
         //create title
@@ -2178,8 +2200,6 @@ std::auto_ptr<VTitle> lcl_createTitle( const uno::Reference< XTitle >& xTitle
         //position
         rbAutoPosition=true;
         awt::Point aNewPosition(0,0);
-        sal_Int32 nYDistance = static_cast<sal_Int32>(rPageSize.Height*lcl_getPageLayoutDistancePercentage());
-        sal_Int32 nXDistance = static_cast<sal_Int32>(rPageSize.Width*lcl_getPageLayoutDistancePercentage());
         chart2::RelativePosition aRelativePosition;
         uno::Reference< beans::XPropertySet > xProp(xTitle, uno::UNO_QUERY);
         if( xProp.is() && (xProp->getPropertyValue( C2U( "RelativePosition" ) )>>=aRelativePosition) )
@@ -2238,6 +2258,37 @@ std::auto_ptr<VTitle> lcl_createTitle( const uno::Reference< XTitle >& xTitle
                 break;
             case ALIGN_RIGHT:
                 rRemainingSpace.Width -= ( aTitleSize.Width + nXDistance );
+                break;
+            default:
+                break;
+        }
+    }
+    else
+    {
+        // #i109336# Improve auto positioning in chart
+        switch ( eAlignment )
+        {
+            case ALIGN_TOP:
+                {
+                    rRemainingSpace.Y += nYDistance;
+                    rRemainingSpace.Height -= nYDistance;
+                }
+                break;
+            case ALIGN_BOTTOM:
+                {
+                    rRemainingSpace.Height -= nYDistance;
+                }
+                break;
+            case ALIGN_LEFT:
+                {
+                    rRemainingSpace.X += nXDistance;
+                    rRemainingSpace.Width -= nXDistance;
+                }
+                break;
+            case ALIGN_RIGHT:
+                {
+                    rRemainingSpace.Width -= nXDistance;
+                }
                 break;
             default:
                 break;
@@ -2470,13 +2521,13 @@ void ChartView::createShapes()
         bool bAutoPositionDummy = true;
 
         //------------ create main title shape
-        lcl_createTitle( TitleHelper::getTitle( TitleHelper::MAIN_TITLE, m_xChartModel ), xPageShapes, m_xShapeFactory, m_xChartModel
+        lcl_createTitle( TitleHelper::MAIN_TITLE, xPageShapes, m_xShapeFactory, m_xChartModel
                     , aRemainingSpace, aPageSize, ALIGN_TOP, bAutoPositionDummy );
         if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
             return;
 
         //------------ create sub title shape
-        lcl_createTitle( TitleHelper::getTitle( TitleHelper::SUB_TITLE, m_xChartModel ), xPageShapes, m_xShapeFactory, m_xChartModel
+        lcl_createTitle( TitleHelper::SUB_TITLE, xPageShapes, m_xShapeFactory, m_xChartModel
                     , aRemainingSpace, aPageSize, ALIGN_TOP, bAutoPositionDummy );
         if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
             return;
@@ -2500,7 +2551,7 @@ void ChartView::createShapes()
         bool bAutoPosition_XTitle = true;
         std::auto_ptr<VTitle> apVTitle_X;
         if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 0 ) )
-            apVTitle_X = lcl_createTitle( TitleHelper::getTitle( TitleHelper::TITLE_AT_STANDARD_X_AXIS_POSITION, m_xChartModel ), xPageShapes, m_xShapeFactory, m_xChartModel
+            apVTitle_X = lcl_createTitle( TitleHelper::TITLE_AT_STANDARD_X_AXIS_POSITION, xPageShapes, m_xShapeFactory, m_xChartModel
                     , aRemainingSpace, aPageSize, ALIGN_BOTTOM, bAutoPosition_XTitle );
         if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
             return;
@@ -2509,7 +2560,7 @@ void ChartView::createShapes()
         bool bAutoPosition_YTitle = true;
         std::auto_ptr<VTitle> apVTitle_Y;
         if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 1 ) )
-            apVTitle_Y = lcl_createTitle( TitleHelper::getTitle( TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION, m_xChartModel ), xPageShapes, m_xShapeFactory, m_xChartModel
+            apVTitle_Y = lcl_createTitle( TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION, xPageShapes, m_xShapeFactory, m_xChartModel
                     , aRemainingSpace, aPageSize, ALIGN_LEFT, bAutoPosition_YTitle );
         if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
             return;
@@ -2518,7 +2569,7 @@ void ChartView::createShapes()
         bool bAutoPosition_ZTitle = true;
         std::auto_ptr<VTitle> apVTitle_Z;
         if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 2 ) )
-            apVTitle_Z = lcl_createTitle( TitleHelper::getTitle( TitleHelper::Z_AXIS_TITLE, m_xChartModel ), xPageShapes, m_xShapeFactory, m_xChartModel
+            apVTitle_Z = lcl_createTitle( TitleHelper::Z_AXIS_TITLE, xPageShapes, m_xShapeFactory, m_xChartModel
                     , aRemainingSpace, aPageSize, ALIGN_RIGHT, bAutoPosition_ZTitle );
         if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
             return;
@@ -2530,7 +2581,7 @@ void ChartView::createShapes()
         bool bAutoPosition_SecondXTitle = true;
         std::auto_ptr<VTitle> apVTitle_SecondX;
         if( ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimension, 0 ) )
-            apVTitle_SecondX = lcl_createTitle( TitleHelper::getTitle( TitleHelper::SECONDARY_X_AXIS_TITLE, m_xChartModel ), xPageShapes, m_xShapeFactory, m_xChartModel
+            apVTitle_SecondX = lcl_createTitle( TitleHelper::SECONDARY_X_AXIS_TITLE, xPageShapes, m_xShapeFactory, m_xChartModel
                     , aRemainingSpace, aPageSize, bIsVertical? ALIGN_RIGHT : ALIGN_TOP, bAutoPosition_SecondXTitle );
         if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
             return;
@@ -2539,7 +2590,7 @@ void ChartView::createShapes()
         bool bAutoPosition_SecondYTitle = true;
         std::auto_ptr<VTitle> apVTitle_SecondY;
         if( ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimension, 1 ) )
-            apVTitle_SecondY = lcl_createTitle( TitleHelper::getTitle( TitleHelper::SECONDARY_Y_AXIS_TITLE, m_xChartModel ), xPageShapes, m_xShapeFactory, m_xChartModel
+            apVTitle_SecondY = lcl_createTitle( TitleHelper::SECONDARY_Y_AXIS_TITLE, xPageShapes, m_xShapeFactory, m_xChartModel
                     , aRemainingSpace, aPageSize, bIsVertical? ALIGN_TOP : ALIGN_RIGHT, bAutoPosition_SecondYTitle );
         if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
             return;
