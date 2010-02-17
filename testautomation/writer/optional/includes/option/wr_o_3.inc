@@ -935,8 +935,16 @@ testcase tToolsOptionsWriterCompatibility1
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.Ok
 
-    '/// restart the office
+    printlog "- save document"
+    Call hFileSaveAsKill (gOfficePath + "user\work\tToolsOptionsWriterCompatibility1.odt")
+    Call hCloseDocument
+
+    printlog "- restart the office"
     Call wOfficeRestart
+
+    printlog "- load previously saved document"
+    Call hNewDocument
+    Call hFileOpen (gOfficePath + "user\work\tToolsOptionsWriterCompatibility1.odt")
 
     Printlog "check state of all checkboxes and uncheck all checkboxes"
     ToolsOptions
@@ -959,6 +967,8 @@ testcase tToolsOptionsWriterCompatibility1
     end if
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.Ok
+
+    Call hCloseDocument
 
     '/// restart the office
     Call wOfficeRestart
