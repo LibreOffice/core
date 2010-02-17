@@ -48,7 +48,9 @@
 #include "dpdimsave.hxx"
 #include "dpobject.hxx"
 #include "dpshttab.hxx"
+#include "dpoutputgeometry.hxx"
 #include "scitems.hxx"
+#include "attrib.hxx"
 
 #include "xltracer.hxx"
 #include "xistream.hxx"
@@ -60,13 +62,17 @@
 #include "excform.hxx"
 #include "xltable.hxx"
 
+#include <vector>
+
 using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 using ::com::sun::star::sheet::DataPilotFieldOrientation;
 using ::com::sun::star::sheet::DataPilotFieldOrientation_DATA;
 using ::com::sun::star::sheet::DataPilotFieldSortInfo;
 using ::com::sun::star::sheet::DataPilotFieldAutoShowInfo;
 using ::com::sun::star::sheet::DataPilotFieldLayoutInfo;
 using ::com::sun::star::sheet::DataPilotFieldReference;
+using ::std::vector;
 
 // ============================================================================
 // Pivot cache
@@ -847,6 +853,11 @@ void XclImpPivotCache::ReadPivotCacheStream( XclImpStream& rStrm )
     }
 }
 
+bool XclImpPivotCache::IsRefreshOnLoad() const
+{
+    return static_cast<bool>(maPCInfo.mnFlags & 0x0004);
+}
+
 // ============================================================================
 // Pivot table
 // ============================================================================
@@ -882,6 +893,8 @@ void XclImpPTItem::ConvertItem( ScDPSaveDimension& rSaveDim ) const
         ScDPSaveMember& rMember = *rSaveDim.GetMemberByName( *pItemName );
         rMember.SetIsVisible( !::get_flag( maItemInfo.mnFlags, EXC_SXVI_HIDDEN ) );
         rMember.SetShowDetails( !::get_flag( maItemInfo.mnFlags, EXC_SXVI_HIDEDETAIL ) );
+        if (maItemInfo.HasVisName())
+            rMember.SetLayoutName(*maItemInfo.GetVisName());
     }
 }
 
@@ -1022,6 +1035,28 @@ void XclImpPTField::ConvertDataField( ScDPSaveData& rSaveData ) const
 
 // private --------------------------------------------------------------------
 
+/**
+ * Convert Excel-encoded subtotal name to a Calc-encoded one.
+ */
+static OUString lcl_convertExcelSubtotalName(const OUString& rName)
+{
+    OUStringBuffer aBuf;
+    const sal_Unicode* p = rName.getStr();
+    sal_Int32 n = rName.getLength();
+    for (sal_Int32 i = 0; i < n; ++i)
+    {
+        const sal_Unicode c = p[i];
+        if (c == sal_Unicode('\\'))
+        {
+            aBuf.append(c);
+            aBuf.append(c);
+        }
+        else
+            aBuf.append(c);
+    }
+    return aBuf.makeStringAndClear();
+}
+
 ScDPSaveDimension* XclImpPTField::ConvertRCPField( ScDPSaveData& rSaveData ) const
 {
     const String& rFieldName = GetFieldName();
@@ -1043,7 +1078,7 @@ ScDPSaveDimension* XclImpPTField::ConvertRCPField( ScDPSaveData& rSaveData ) con
     // visible name
     if( const String* pVisName = maFieldInfo.GetVisName() )
         if( pVisName->Len() > 0 )
-            rSaveDim.SetLayoutName( pVisName );
+            rSaveDim.SetLayoutName( *pVisName );
 
     // subtotal function(s)
     XclPTSubtotalVec aSubtotalVec;
@@ -1075,6 +1110,13 @@ ScDPSaveDimension* XclImpPTField::ConvertRCPField( ScDPSaveData& rSaveData ) con
     // grouping info
     pCacheField->ConvertGroupField( rSaveData, mrPTable.GetVisFieldNames() );
 
+    // custom subtotal name
+    if (maFieldExtInfo.mpFieldTotalName.get())
+    {
+        OUString aSubName = lcl_convertExcelSubtotalName(*maFieldExtInfo.mpFieldTotalName);
+        rSaveDim.SetSubtotalName(aSubName);
+    }
+
     return &rSaveDim;
 }
 
@@ -1099,7 +1141,7 @@ void XclImpPTField::ConvertDataFieldInfo( ScDPSaveDimension& rSaveDim, const Xcl
     // visible name
     if( const String* pVisName = rDataInfo.GetVisName() )
         if( pVisName->Len() > 0 )
-            rSaveDim.SetLayoutName( pVisName );
+            rSaveDim.SetLayoutName( *pVisName );
 
     // aggregation function
     rSaveDim.SetFunction( static_cast< USHORT >( rDataInfo.GetApiAggFunc() ) );
@@ -1134,7 +1176,8 @@ void XclImpPTField::ConvertItems( ScDPSaveDimension& rSaveDim ) const
 
 XclImpPivotTable::XclImpPivotTable( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
-    maDataOrientField( *this, EXC_SXIVD_DATA )
+    maDataOrientField( *this, EXC_SXIVD_DATA ),
+    mpDPObj(NULL)
 {
 }
 
@@ -1296,6 +1339,11 @@ void XclImpPivotTable::ReadSxex( XclImpStream& rStrm )
     rStrm >> maPTExtInfo;
 }
 
+void XclImpPivotTable::ReadSxViewEx9( XclImpStream& rStrm )
+{
+    rStrm >> maPTViewEx9Info;
+}
+
 // ----------------------------------------------------------------------------
 
 void XclImpPivotTable::Convert()
@@ -1331,6 +1379,10 @@ void XclImpPivotTable::Convert()
         if( const XclImpPTField* pField = GetField( *aIt ) )
             pField->ConvertPageField( aSaveData );
 
+    // We need to import hidden fields because hidden fields may contain
+    // special settings for subtotals (aggregation function, filters, custom
+    // name etc.) and members (hidden, custom name etc.).
+
     // hidden fields
     for( sal_uInt16 nField = 0, nCount = GetFieldCount(); nField < nCount; ++nField )
         if( const XclImpPTField* pField = GetField( nField ) )
@@ -1359,11 +1411,112 @@ void XclImpPivotTable::Convert()
     // create the DataPilot
     ScDPObject* pDPObj = new ScDPObject( GetDocPtr() );
     pDPObj->SetName( maPTInfo.maTableName );
+    if (maPTInfo.maDataName.Len() > 0)
+        aSaveData.GetDataLayoutDimension()->SetLayoutName(maPTInfo.maDataName);
+
+    if (maPTViewEx9Info.maGrandTotalName.Len() > 0)
+        aSaveData.SetGrandTotalName(maPTViewEx9Info.maGrandTotalName);
+
     pDPObj->SetSaveData( aSaveData );
     pDPObj->SetSheetDesc( aDesc );
     pDPObj->SetOutRange( aOutRange );
     pDPObj->SetAlive( TRUE );
-    GetDoc().GetDPCollection()->Insert( pDPObj );
+    pDPObj->SetHeaderLayout( maPTViewEx9Info.mnGridLayout == 0 );
+
+    GetDoc().GetDPCollection()->InsertNewTable(pDPObj);
+    mpDPObj = pDPObj;
+
+    ApplyMergeFlags(aOutRange, aSaveData);
+}
+
+void XclImpPivotTable::MaybeRefresh()
+{
+    if (mpDPObj && mxPCache->IsRefreshOnLoad())
+    {
+        // 'refresh table on load' flag is set.  Refresh the table now.  Some
+        // Excel files contain partial table output when this flag is set.
+        ScRange aOutRange = mpDPObj->GetOutRange();
+        mpDPObj->Output(aOutRange.aStart);
+    }
+}
+
+void XclImpPivotTable::ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveData& rSaveData)
+{
+    // Apply merge flags for varoius datapilot controls.
+
+    ScDPOutputGeometry aGeometry(rOutRange, false, ScDPOutputGeometry::XLS);
+    aGeometry.setColumnFieldCount(maPTInfo.mnColFields);
+    aGeometry.setPageFieldCount(maPTInfo.mnPageFields);
+    aGeometry.setDataFieldCount(maPTInfo.mnDataFields);
+
+    // Excel includes data layout field in the row field count.  We need to
+    // subtract it.
+    bool bDataLayout = maPTInfo.mnDataFields > 1;
+    aGeometry.setRowFieldCount(maPTInfo.mnRowFields - static_cast<sal_uInt32>(bDataLayout));
+
+    ScDocument& rDoc = GetDoc();
+
+    vector<ScAddress> aPageBtns;
+    aGeometry.getPageFieldPositions(aPageBtns);
+    vector<ScAddress>::const_iterator itr = aPageBtns.begin(), itrEnd = aPageBtns.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        sal_uInt16 nMFlag = SC_MF_BUTTON;
+        String aName;
+        rDoc.GetString(itr->Col(), itr->Row(), itr->Tab(), aName);
+        if (rSaveData.HasInvisibleMember(aName))
+            nMFlag |= SC_MF_HIDDEN_MEMBER;
+
+        rDoc.ApplyFlagsTab(itr->Col(), itr->Row(), itr->Col(), itr->Row(), itr->Tab(), nMFlag);
+        rDoc.ApplyFlagsTab(itr->Col()+1, itr->Row(), itr->Col()+1, itr->Row(), itr->Tab(), SC_MF_AUTO);
+    }
+
+    vector<ScAddress> aColBtns;
+    aGeometry.getColumnFieldPositions(aColBtns);
+    itr    = aColBtns.begin();
+    itrEnd = aColBtns.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        sal_Int16 nMFlag = SC_MF_BUTTON | SC_MF_BUTTON_POPUP;
+        String aName;
+        rDoc.GetString(itr->Col(), itr->Row(), itr->Tab(), aName);
+        if (rSaveData.HasInvisibleMember(aName))
+            nMFlag |= SC_MF_HIDDEN_MEMBER;
+        rDoc.ApplyFlagsTab(itr->Col(), itr->Row(), itr->Col(), itr->Row(), itr->Tab(), nMFlag);
+    }
+
+    vector<ScAddress> aRowBtns;
+    aGeometry.getRowFieldPositions(aRowBtns);
+    if (aRowBtns.empty())
+    {
+        if (bDataLayout)
+        {
+            // No row fields, but the data layout button exists.
+            SCROW nRow = aGeometry.getRowFieldHeaderRow();
+            SCCOL nCol = rOutRange.aStart.Col();
+            SCTAB nTab = rOutRange.aStart.Tab();
+            rDoc.ApplyFlagsTab(nCol, nRow, nCol, nRow, nTab, SC_MF_BUTTON);
+        }
+    }
+    else
+    {
+        itr    = aRowBtns.begin();
+        itrEnd = aRowBtns.end();
+        for (; itr != itrEnd; ++itr)
+        {
+            sal_Int16 nMFlag = SC_MF_BUTTON | SC_MF_BUTTON_POPUP;
+            String aName;
+            rDoc.GetString(itr->Col(), itr->Row(), itr->Tab(), aName);
+            if (rSaveData.HasInvisibleMember(aName))
+                nMFlag |= SC_MF_HIDDEN_MEMBER;
+            rDoc.ApplyFlagsTab(itr->Col(), itr->Row(), itr->Col(), itr->Row(), itr->Tab(), nMFlag);
+        }
+        if (bDataLayout)
+        {
+            --itr; // move back to the last row field position.
+            rDoc.ApplyFlagsTab(itr->Col(), itr->Row(), itr->Col(), itr->Row(), itr->Tab(), SC_MF_BUTTON);
+        }
+    }
 }
 
 // ============================================================================
@@ -1458,6 +1611,12 @@ void XclImpPivotTableManager::ReadSxex( XclImpStream& rStrm )
         maPTables.back()->ReadSxex( rStrm );
 }
 
+void XclImpPivotTableManager::ReadSxViewEx9( XclImpStream& rStrm )
+{
+    if( !maPTables.empty() )
+        maPTables.back()->ReadSxViewEx9( rStrm );
+}
+
 // ----------------------------------------------------------------------------
 
 void XclImpPivotTableManager::ReadPivotCaches( XclImpStream& rStrm )
@@ -1470,6 +1629,12 @@ void XclImpPivotTableManager::ConvertPivotTables()
 {
     for( XclImpPivotTableVec::iterator aIt = maPTables.begin(), aEnd = maPTables.end(); aIt != aEnd; ++aIt )
         (*aIt)->Convert();
+}
+
+void XclImpPivotTableManager::MaybeRefreshPivotTables()
+{
+    for( XclImpPivotTableVec::iterator aIt = maPTables.begin(), aEnd = maPTables.end(); aIt != aEnd; ++aIt )
+        (*aIt)->MaybeRefresh();
 }
 
 // ============================================================================

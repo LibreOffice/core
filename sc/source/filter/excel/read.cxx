@@ -1192,9 +1192,8 @@ FltError ImportExcel8::Read( void )
                     case EXC_ID_SXDI:           rPTableMgr.ReadSxdi( maStrm );      break;
                     case EXC_ID_SXVDEX:         rPTableMgr.ReadSxvdex( maStrm );    break;
                     case EXC_ID_SXEX:           rPTableMgr.ReadSxex( maStrm );      break;
-
-                    // 0x0862 (SHEETEXT)
                     case EXC_ID_SHEETEXT:       rTabViewSett.ReadTabBgColor( maStrm, rPal );    break;
+                    case EXC_ID_SXVIEWEX9:      rPTableMgr.ReadSxViewEx9( maStrm ); break;
                 }
             }
             break;
@@ -1229,6 +1228,9 @@ FltError ImportExcel8::Read( void )
             eLastErr = SCWARN_IMPORT_ROW_OVERFLOW;
         else if( rAddrConv.IsColTruncated() )
             eLastErr = SCWARN_IMPORT_COLUMN_OVERFLOW;
+
+        if( GetBiff() == EXC_BIFF8 )
+            GetPivotTableManager().MaybeRefreshPivotTables();
     }
 
     return eLastErr;
