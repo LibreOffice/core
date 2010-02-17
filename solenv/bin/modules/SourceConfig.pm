@@ -66,12 +66,15 @@ sub new {
         $source_root =~ s/\\|\/$//;
         $source_root .= '/..';
     } else {
-        $source_root = $ENV{SOURCE_ROOT} . '/' . $ENV{WORK_STAMP};
+        $source_root = $ENV{SOURCE_ROOT_DIR};
+        if (defined $ENV{SOURCE_ROOT}) {
+            $self->{SOURCE_ROOT} = Cwd::realpath($ENV{SOURCE_ROOT} . '/' . $ENV{WORK_STAMP});
+        };
     };
     $source_root = Cwd::realpath($source_root);
     $self->{DEBUG} = 0;
     $self->{VERBOSE} = 0;
-    $self->{SOURCE_ROOT} = $source_root;
+    $self->{SOURCE_ROOT} = $source_root if (!defined $self->{SOURCE_ROOT});
     $self->{REPOSITORIES} = {};
     $self->{ACTIVATED_REPOSITORIES} = {};
     $self->{MODULE_PATHS} = {};
