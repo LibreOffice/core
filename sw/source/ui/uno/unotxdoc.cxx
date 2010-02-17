@@ -38,6 +38,7 @@
 #include <vcl/print.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxbasecontroller.hxx>
+#include <sfx2/docfile.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <cmdid.h>
@@ -3115,6 +3116,12 @@ void SAL_CALL SwXTextDocument::render(
                         {
                             lcl_DisposeView( m_pHiddenViewFrame, pDocShell );
                             m_pHiddenViewFrame = 0;
+
+                            // prevent crash described in #i108805
+                            SwDocShell *pRenderDocShell = pDoc->GetDocShell();
+                            SfxItemSet *pSet = pRenderDocShell->GetMedium()->GetItemSet();
+                            pSet->Put( SfxBoolItem( SID_HIDDEN, sal_False ) );
+
                         }
                     }
                 }
