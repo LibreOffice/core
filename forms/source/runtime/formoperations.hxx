@@ -71,16 +71,16 @@ namespace frm
         class MethodGuard;
 
     private:
-        ::comphelper::ComponentContext                                                  m_aContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >     m_xController;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >             m_xCursor;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >    m_xUpdateCursor;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xCursorProperties;
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >           m_xLoadableForm;
+        ::comphelper::ComponentContext                                                          m_aContext;
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >    m_xController;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >                     m_xCursor;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >            m_xUpdateCursor;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >               m_xCursorProperties;
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >                   m_xLoadableForm;
         ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFeatureInvalidation >
-                                                                                        m_xFeatureInvalidation;
+                                                                                                m_xFeatureInvalidation;
         mutable ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >
-                                                                                        m_xParser;
+                                                                                                m_xParser;
 
         bool    m_bInitializedParser;
         bool    m_bActiveControlModified;
@@ -132,7 +132,7 @@ namespace frm
         // XFormOperations
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > SAL_CALL getCursor() throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate > SAL_CALL getUpdateCursor() throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > SAL_CALL getController() throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > SAL_CALL getController() throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFeatureInvalidation > SAL_CALL getFeatureInvalidation() throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setFeatureInvalidation(const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFeatureInvalidation > & the_value) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::form::runtime::FeatureState SAL_CALL getState(::sal_Int16 Feature) throw (::com::sun::star::uno::RuntimeException);
@@ -163,7 +163,7 @@ namespace frm
 
     private:
         // service constructors
-        void    createWithFormController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >& _rxController );
+        void    createWithFormController( const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >& _rxController );
         void    createWithForm( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& _rxForm );
 
         /** determines whether or not we're already disposed
