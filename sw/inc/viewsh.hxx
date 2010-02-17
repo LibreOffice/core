@@ -560,9 +560,11 @@ public:
     */
     void InvalidateAccessibleParaTextSelection();
 
-    /** invalidate attributes for paragraphs
+    /** invalidate attributes for paragraphs and paragraph's characters
 
         OD 2009-01-06 #i88069#
+        OD 2010-02-16 #i104008# - usage also for changes of the attributes of
+        paragraph's characters.
 
         @author OD
 

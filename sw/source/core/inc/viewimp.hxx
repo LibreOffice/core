@@ -194,7 +194,7 @@ private:
     */
     void _InvalidateAccessibleParaTextSelection();
 
-    /** invalidate attributes for paragraphs
+    /** invalidate attributes for paragraphs and paragraph's characters
 
         OD 2009-01-06 #i88069#
         implementation for wrapper method
