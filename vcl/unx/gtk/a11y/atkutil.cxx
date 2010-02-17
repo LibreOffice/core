@@ -503,6 +503,7 @@ static void handle_toolbox_buttonchange(VclWindowEvent const *pEvent)
 
 /*****************************************************************************/
 
+/* currently not needed anymore...
 static void create_wrapper_for_children(Window *pWindow)
 {
     if( pWindow && pWindow->IsReallyVisible() )
@@ -520,6 +521,7 @@ static void create_wrapper_for_children(Window *pWindow)
         }
     }
 }
+*/
 
 /*****************************************************************************/
 
@@ -689,7 +691,11 @@ long WindowEventHandler(void *, ::VclSimpleEvent const * pEvent)
         break;
 
     case VCLEVENT_COMBOBOX_SETTEXT:
-        create_wrapper_for_children(static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
+        // MT 2010/02: This looks quite strange to me. Stumbled over this when fixing #i104290#.
+        // This kicked in when leaving the combobox in the toolbar, after that the events worked.
+        // I guess this was a try to work around missing combobox events, which didn't do the full job, and shouldn't be necessary anymore.
+        // Fix for #i104290# was done in toolkit/source/awt/vclxaccessiblecomponent, FOCUSED state for compound controls in general.
+        // create_wrapper_for_children(static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
         break;
 
     default:
