@@ -133,8 +133,7 @@ public final class OfficeConnection {
                 public void run() {
                     try {
                         Thread.currentThread().sleep(millis);
-                    } catch (InterruptedException e) {
-}
+                    } catch (InterruptedException e) {}
                     t1.interrupt();
                 }
             };
@@ -146,8 +145,7 @@ public final class OfficeConnection {
         try {
             n = process.waitFor();
             done = true;
-        } catch (InterruptedException e) {
-}
+        } catch (InterruptedException e) {}
         t2.interrupt();
         try {
             t2.join();
