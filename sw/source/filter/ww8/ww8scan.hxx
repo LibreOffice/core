@@ -223,7 +223,7 @@ private:
     long nStru;
 public:
     WW8PLCFspecial( SvStream* pSt, long nFilePos, long nPLCF,
-        long nStruct, long nStartPos = -1, bool bNoEnd = false);
+        long nStruct, long nStartPos = -1 );
     ~WW8PLCFspecial() { delete[] pPLCF_PosArray; }
     long GetIdx() const { return nIdx; }
     void SetIdx( long nI ) { nIdx = nI; }
