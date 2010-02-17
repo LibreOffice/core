@@ -39,6 +39,7 @@
 #include "controller/SlsPageSelector.hxx"
 #include "controller/SlsCurrentSlideManager.hxx"
 #include "model/SlideSorterModel.hxx"
+#include "model/SlsPageEnumerationProvider.hxx"
 #include "view/SlideSorterView.hxx"
 #include "cache/SlsPageCache.hxx"
 #include "drawdoc.hxx"
@@ -437,16 +438,8 @@ IMPL_LINK(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexerEvent
         case tools::EventMultiplexerEvent::EID_SHAPE_CHANGED:
         case tools::EventMultiplexerEvent::EID_SHAPE_INSERTED:
         case tools::EventMultiplexerEvent::EID_SHAPE_REMOVED:
-        {
-            const SdrPage* pPage = static_cast<const SdrPage*>(pEvent->mpUserData);
-            if (pPage != NULL)
-            {
-                mrSlideSorter.GetView().GetPreviewCache()->InvalidatePreviewBitmap(
-                    pPage,
-                    true);
-            }
-        }
-        break;
+            HandleShapeModification(static_cast<const SdrPage*>(pEvent->mpUserData));
+            break;
 
         default:
             break;
@@ -624,6 +617,39 @@ void Listener::UpdateEditMode (void)
     }
     mrController.ChangeEditMode (
         bIsMasterPageMode ? EM_MASTERPAGE : EM_PAGE);
+}
+
+
+
+
+void Listener::HandleShapeModification (const SdrPage* pPage)
+{
+    if (pPage == NULL)
+        return;
+
+    if (pPage->IsMasterPage())
+    {
+        // Invalidate the bitmaps of all pages that are linked to
+        // this master page.
+        model::PageEnumeration aAllPages (
+            model::PageEnumerationProvider::CreateAllPagesEnumeration(
+                mrSlideSorter.GetModel()));
+        while (aAllPages.HasMoreElements())
+        {
+            model::SharedPageDescriptor pDescriptor (aAllPages.GetNextElement());
+            SdrPage* pCandidate = pDescriptor->GetPage();
+            if (pCandidate!=NULL && &pCandidate->TRG_GetMasterPage() == pPage)
+                mrSlideSorter.GetView().GetPreviewCache()->InvalidatePreviewBitmap(
+                    pCandidate,
+                    true);
+        }
+    }
+    else
+    {
+        mrSlideSorter.GetView().GetPreviewCache()->InvalidatePreviewBitmap(
+            pPage,
+            true);
+    }
 }
 
 

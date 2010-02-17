@@ -174,6 +174,12 @@ private:
     */
     void UpdateEditMode (void);
 
+    /** Handle a modification to a shape on the given page.
+        When this is a regular page then update its preview.  When it is a
+        master page then update the previews of all pages linked to it.
+    */
+    void HandleShapeModification (const SdrPage* pPage);
+
     /** This method throws a DisposedException when the object has already been
         disposed.
     */
