@@ -62,6 +62,13 @@ public:
 
     void NotifyResize (void);
 
+    /** Called when the theme changes, either because it is replaced with
+        another or because the system colors have changed.  So, even when
+        the given theme is the same object as the one already in use by this
+        painter everything that depends on the theme is updated.
+    */
+    void SetTheme (const ::boost::shared_ptr<view::Theme>& rpTheme);
+
 private:
     const Layouter& mrLayouter;
     ::boost::shared_ptr<PageObjectLayouter> mpPageObjectLayouter;

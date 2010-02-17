@@ -33,6 +33,7 @@
 #define SD_SLIDESORTER_CONTROLLER_SELECTION_MANAGER_HXX
 
 #include "model/SlsSharedPageDescriptor.hxx"
+#include "controller/SlsAnimator.hxx"
 #include <sal/types.h>
 #include <tools/gen.hxx>
 #include <basegfx/range/b2irectangle.hxx>
@@ -174,6 +175,8 @@ private:
         case GetInsertionPosition() calculates it from the current selection.
     */
     sal_Int32 mnInsertionPosition;
+
+    Animator::AnimationId mnAnimationId;
 
     /** Delete the given list of normal pages.  This method is a helper
         function for DeleteSelectedPages().

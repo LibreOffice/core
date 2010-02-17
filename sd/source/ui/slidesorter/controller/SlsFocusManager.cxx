@@ -35,6 +35,7 @@
 #include "PaneDockingWindow.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsSelectionManager.hxx"
+#include "controller/SlsCurrentSlideManager.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "view/SlideSorterView.hxx"
@@ -43,6 +44,8 @@
 
 #include "Window.hxx"
 #include "sdpage.hxx"
+
+#define UNIFY_FOCUS_AND_CURRENT_PAGE
 
 namespace sd { namespace slidesorter { namespace controller {
 
@@ -164,7 +167,11 @@ void FocusManager::MoveFocus (FocusMoveDirection eDirection)
         }
 
         if (mbPageIsFocused)
+        {
+#ifndef UNIFY_FOCUS_AND_CURRENT_PAGE
             ShowFocusIndicator(GetFocusedPageDescriptor(), true);
+#endif
+        }
     }
 }
 
@@ -288,6 +295,7 @@ void FocusManager::ShowFocusIndicator (
     const model::SharedPageDescriptor& rpDescriptor,
     const bool bScrollToFocus)
 {
+#ifndef UNIFY_FOCUS_AND_CURRENT_PAGE
     if (rpDescriptor.get() != NULL)
     {
         mrSlideSorter.GetView().SetState(rpDescriptor, model::PageDescriptor::ST_Focused, true);
@@ -303,6 +311,7 @@ void FocusManager::ShowFocusIndicator (
         mrSlideSorter.GetView().RequestRepaint (rpDescriptor);
         NotifyFocusChangeListeners();
     }
+#endif
 }
 
 

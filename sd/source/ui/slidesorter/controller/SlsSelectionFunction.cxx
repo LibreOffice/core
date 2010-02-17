@@ -353,16 +353,16 @@ BOOL SelectionFunction::MouseMove (const MouseEvent& rEvent)
             (rEvent.GetButtons() & MOUSE_LEFT)!=0);
     }
 
-    Rectangle aRectangle (Point(0,0),mpWindow->GetOutputSizePixel());
-    if ( ! aRectangle.IsInside(aMousePosition)
-        && mpSubstitutionHandler)
+    if (rEvent.IsLeaveWindow())
     {
-        // Mouse left the window with pressed left button.  Make it a drag.
-        StartDrag(aMousePosition);
-        // Mouse motion events are not sent to us while the mouse is outside
-        // the window and drag&drop is active.  Therefore hide the
-        // substitution.
-        //        mpSubstitutionHandler->Hide();
+        //    Rectangle aRectangle (Point(0,0),mpWindow->GetOutputSizePixel());
+        //    if ( ! aRectangle.IsInside(aMousePosition)
+        if (mpSubstitutionHandler)
+        {
+            // Mouse left the window with pressed left button.  Make it a drag.
+            StartDrag(aMousePosition);
+        }
+        mrSlideSorter.GetView().SetPageUnderMouse(model::SharedPageDescriptor());
     }
     else
     {

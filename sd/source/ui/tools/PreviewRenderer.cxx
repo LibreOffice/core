@@ -418,8 +418,8 @@ void PreviewRenderer::ProvideView (DrawDocShell* pDocShell)
     }
     mpView->SetPreviewRenderer( sal_True );
     mpView->SetBordVisible(FALSE);
-    mpView->SetPageBorderVisible(FALSE);
-    mpView->SetPageVisible(TRUE);
+    mpView->SetPageBorderVisible(TRUE);
+    mpView->SetPageVisible(FALSE);
 }
 
 

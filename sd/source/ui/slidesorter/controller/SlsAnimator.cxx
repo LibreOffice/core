@@ -48,15 +48,16 @@ class Animator::Animation
 public:
     Animation (
         const Animator::AnimationFunctor& rAnimation,
-        const double nDelta,
-        const double nEnd,
+        const double nDuration,
+        const double nGlobalTime,
         const Animator::AnimationId nAnimationId,
         const Animator::FinishFunctor& rFinishFunctor);
     ~Animation (void);
     /** Run next animation step.  If animation has reached its end it is
         expired.
     */
-    bool Run (void);
+    bool Run (const double nGlobalTime);
+
     /** Typically called when an animation has finished, but also from
         Animator::Disposed().  The finish functor is called and the
         animation is marked as expired to prevent another run.
@@ -67,9 +68,9 @@ public:
     Animator::AnimationFunctor maAnimation;
     Animator::FinishFunctor maFinishFunctor;
     const Animator::AnimationId mnAnimationId;
-    double mnValue;
+    const double mnDuration;
     const double mnEnd;
-    const double mnDelta;
+    const double mnGlobalTimeAtStart;
     bool mbIsExpired;
 };
 
@@ -82,7 +83,8 @@ Animator::Animator (SlideSorter& rSlideSorter)
       mbIsDisposed(false),
       maAnimations(),
       mpDrawLock(),
-      mnNextAnimationId(0)
+      mnNextAnimationId(0),
+      maElapsedTime()
 {
     maTimer.SetTimeout(gnResolution);
     maTimer.SetTimeoutHdl(LINK(this,Animator,TimeoutHandler));
@@ -130,16 +132,16 @@ Animator::AnimationId Animator::AddAnimation (
     if (mbIsDisposed)
         return -1;
 
-    const double nDelta = double(gnResolution) / double(nDuration);
     boost::shared_ptr<Animation> pAnimation (
-        new Animation(rAnimation, nDelta, 1.0,  ++mnNextAnimationId, rFinishFunctor));
+        new Animation(
+            rAnimation,
+            nDuration / 1000.0,
+            maElapsedTime.getElapsedTime(),
+            ++mnNextAnimationId,
+            rFinishFunctor));
     maAnimations.push_back(pAnimation);
 
-    // Prevent redraws except for the ones in TimeoutHandler.
-    // While the Animator is active it will schedule repaints regularly.
-    // Repaints in between would only lead to visual artifacts.
-    mpDrawLock.reset(new view::SlideSorterView::DrawLock(mrSlideSorter));
-    maTimer.Start();
+    RequestNextFrame();
 
     return pAnimation->mnAnimationId;
 }
@@ -158,14 +160,15 @@ Animator::AnimationId Animator::AddInfiniteAnimation (
         return -1;
 
     boost::shared_ptr<Animation> pAnimation (
-        new Animation(rAnimation, nDelta, -1.0, mnNextAnimationId++, FinishFunctor()));
+        new Animation(
+            rAnimation,
+            -1,
+            maElapsedTime.getElapsedTime(),
+            mnNextAnimationId++,
+            FinishFunctor()));
     maAnimations.push_back(pAnimation);
 
-    // Prevent redraws except for the ones in TimeoutHandler.
-    // While the Animator is active it will schedule repaints regularly.
-    // Repaints in between would only lead to visual artifacts.
-    mpDrawLock.reset(new view::SlideSorterView::DrawLock(mrSlideSorter));
-    maTimer.Start();
+    RequestNextFrame();
 
     return pAnimation->mnAnimationId;
 }
@@ -199,7 +202,7 @@ void Animator::RemoveAnimation (const Animator::AnimationId nId)
 
 
 
-bool Animator::ProcessAnimations (void)
+bool Animator::ProcessAnimations (const double nTime)
 {
     bool bExpired (false);
 
@@ -212,7 +215,7 @@ bool Animator::ProcessAnimations (void)
     AnimationList::const_iterator iAnimation;
     for (iAnimation=aCopy.begin(); iAnimation!=aCopy.end(); ++iAnimation)
     {
-        bExpired |= (*iAnimation)->Run();
+        bExpired |= (*iAnimation)->Run(nTime);
     }
 
     return bExpired;
@@ -242,26 +245,34 @@ void Animator::CleanUpAnimationList (void)
 
 
 
+void Animator::RequestNextFrame (const double nFrameStart)
+{
+    if ( ! maTimer.IsActive())
+    {
+        // Prevent redraws except for the ones in TimeoutHandler.  While the
+        // Animator is active it will schedule repaints regularly.  Repaints
+        // in between would only lead to visual artifacts.
+        mpDrawLock.reset(new view::SlideSorterView::DrawLock(mrSlideSorter));
+        maTimer.Start();
+    }
+}
+
+
+
+
 IMPL_LINK(Animator, TimeoutHandler, Timer*, EMPTYARG)
 {
     if (mbIsDisposed)
         return 0;
 
-    OSL_TRACE("Animator timeout start");
-
-    if (ProcessAnimations())
+    if (ProcessAnimations(maElapsedTime.getElapsedTime()))
         CleanUpAnimationList();
 
     // Unlock the draw lock.  This should lead to a repaint.
     mpDrawLock.reset();
 
     if (maAnimations.size() > 0)
-    {
-        mpDrawLock.reset(new view::SlideSorterView::DrawLock(mrSlideSorter));
-        maTimer.Start();
-    }
-
-    OSL_TRACE("Animator timeout end");
+        RequestNextFrame();
 
     return 0;
 }
@@ -273,20 +284,26 @@ IMPL_LINK(Animator, TimeoutHandler, Timer*, EMPTYARG)
 
 Animator::Animation::Animation (
     const Animator::AnimationFunctor& rAnimation,
-    const double nDelta,
-    const double nEnd,
+    const double nDuration,
+    const double nGlobalTime,
     const Animator::AnimationId nId,
     const Animator::FinishFunctor& rFinishFunctor)
     : maAnimation(rAnimation),
       maFinishFunctor(rFinishFunctor),
       mnAnimationId(nId),
-      mnValue(0),
-      mnEnd(nEnd),
-      mnDelta(nDelta),
+      mnDuration(nDuration),
+      mnEnd(nGlobalTime + nDuration),
+      mnGlobalTimeAtStart(nGlobalTime),
       mbIsExpired(false)
 {
-    maAnimation(mnValue);
-    mnValue = mnDelta;
+    if (mnDuration > 0)
+        maAnimation(0.0);
+    else if (mnDuration < 0)
+        maAnimation(nGlobalTime);
+    else
+    {
+        OSL_ASSERT(mnDuration != 0);
+    }
 }
 
 
@@ -299,25 +316,30 @@ Animator::Animation::~Animation (void)
 
 
 
-bool Animator::Animation::Run (void)
+bool Animator::Animation::Run (const double nGlobalTime)
 {
     if ( ! mbIsExpired)
     {
-        if (mnEnd>=0 && mnValue>=mnEnd)
+        if (mnDuration > 0)
         {
-            maAnimation(mnEnd);
-            Expire();
-            return true;
+            if (nGlobalTime >= mnEnd)
+            {
+                maAnimation(1.0);
+                Expire();
+            }
+            else
+            {
+                maAnimation((nGlobalTime - mnGlobalTimeAtStart) / mnDuration);
+            }
         }
-        else
+        else if (mnDuration < 0)
         {
-            maAnimation(mnValue);
-            mnValue += mnDelta;
-            return false;
+            // Animations without end have to be expired by their owner.
+            maAnimation(nGlobalTime);
         }
     }
-    else
-        return true;
+
+    return mbIsExpired;
 }
 
 

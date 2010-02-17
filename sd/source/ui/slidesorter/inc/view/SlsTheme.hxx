@@ -76,7 +76,9 @@ public:
         ButtonBackground,
         MouseOverColor,
         PageNumberBorder,
-        Selection
+        PageNumberColor,
+        Selection,
+        PreviewBorder
     };
     ColorData GetColor (const ColorType eType);
 
@@ -103,7 +105,18 @@ public:
     BitmapEx GetIcon (const IconType eType);
 
 private:
+    class GradientDescriptor
+    {
+    public:
+        ColorData maFillColor1;
+        ColorData maFillColor2;
+        ColorData maBorderColor1;
+        ColorData maBorderColor2;
+    };
     ColorData maBackgroundColor;
+    GradientDescriptor maNormalGradient;
+    GradientDescriptor maSelectedGradient;
+    GradientDescriptor maMouseOverGradient;
     BitmapEx maRawShadow;
     BitmapEx maInsertionIndicator;
 };

@@ -44,6 +44,11 @@ public:
     Properties (void);
     ~Properties (void);
 
+    /** Call this method after receiving a VCLEVENT_APPLICATION_DATACHANGED
+        event.
+    */
+    void HandleDataChangeEvent (void);
+
     /** When this method returns <TRUE/> then the current slide is
         highlighted in the view.  The default value is <FALSE/>.
     */

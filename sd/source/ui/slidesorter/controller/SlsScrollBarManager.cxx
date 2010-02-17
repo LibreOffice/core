@@ -500,10 +500,11 @@ void ScrollBarManager::SetTop (const sal_Int32 nNewTop)
         // Flush pending repaints before scrolling to avoid temporary artifacts.
         mrSlideSorter.GetContentWindow()->Update();
 
+        OSL_TRACE("setting top of vertical scroll bar to %d", nNewTop);
         mpVerticalScrollBar->SetThumbPos(nNewTop);
         mnVerticalPosition = double(nNewTop) / double(mpVerticalScrollBar->GetRange().Len());
-        mrSlideSorter.GetContentWindow()->SetVisibleXY (
-            mnHorizontalPosition, mnVerticalPosition);
+        mrSlideSorter.GetContentWindow()->SetVisibleXY (mnHorizontalPosition, mnVerticalPosition);
+        mrSlideSorter.GetView().InvalidatePageObjectVisibilities();
     }
 }
 

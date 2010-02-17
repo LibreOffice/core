@@ -34,6 +34,7 @@
 
 #include "SlideSorter.hxx"
 #include "view/SlideSorterView.hxx"
+#include <canvas/elapsedtime.hxx>
 #include <vcl/timer.hxx>
 #include <sal/types.h>
 #include <vector>
@@ -99,6 +100,7 @@ private:
     class Animation;
     typedef ::std::vector<boost::shared_ptr<Animation> > AnimationList;
     AnimationList maAnimations;
+    ::canvas::tools::ElapsedTime maElapsedTime;
 
     ::boost::scoped_ptr<view::SlideSorterView::DrawLock> mpDrawLock;
 
@@ -107,15 +109,19 @@ private:
     DECL_LINK(TimeoutHandler, Timer*);
 
     /** Execute one step of every active animation.
+        @param nTime
+            Time measured in milli seconds with some arbitrary reference point.
         @return
             When one or more animation has finished then <TRUE/> is
             returned.  Call CleanUpAnimationList() in this case.
     */
-    bool ProcessAnimations (void);
+    bool ProcessAnimations (const double nTime);
 
     /** Remove animations that have expired.
     */
     void CleanUpAnimationList (void);
+
+    void RequestNextFrame (const double nFrameStart = 0);
 };
 
 

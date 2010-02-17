@@ -89,7 +89,8 @@
 #ifdef SHOW_TEST_PANEL
 #include "TestPanel.hxx"
 #endif
-//#define SHOW_COLOR_MENU
+
+#define SHOW_COLOR_MENU
 #ifdef SHOW_COLOR_MENU
 #include "TestMenu.hxx"
 #endif
@@ -191,6 +192,7 @@ public:
 class ResourceActivationClickHandler
 {
 public:
+    ResourceActivationClickHandler (void);
     ResourceActivationClickHandler (
         const ::boost::shared_ptr<FrameworkHelper>& rpFrameworkHelper,
         const Reference<drawing::framework::XResourceId>& rxResourceId,
@@ -200,7 +202,7 @@ public:
 private:
     ::boost::shared_ptr<FrameworkHelper> mpFrameworkHelper;
     Reference<drawing::framework::XResourceId> mxResourceId;
-    ControlContainer& mrControlContainer;
+    ControlContainer* mpControlContainer;
 };
 
 } // end of anonymouse namespace
@@ -299,7 +301,8 @@ void TaskPaneViewShell::Implementation::Setup (
     pToolPanel->AddControl (
         ColorMenu::CreateControlFactory(),
         String::CreateFromAscii ("Color Test Menu"),
-        0);
+        0,
+        ResourceActivationClickHandler());
 #endif
 
 #ifdef SHOW_TEST_PANEL
@@ -866,13 +869,23 @@ void PanelActivation::operator() (bool)
 
 //===== ResourceActivationClickHandler ========================================
 
+ResourceActivationClickHandler::ResourceActivationClickHandler (void)
+    : mpFrameworkHelper(),
+      mxResourceId(),
+      mpControlContainer(NULL)
+{
+}
+
+
+
+
 ResourceActivationClickHandler::ResourceActivationClickHandler (
     const ::boost::shared_ptr<FrameworkHelper>& rpFrameworkHelper,
     const Reference<drawing::framework::XResourceId>& rxResourceId,
     ControlContainer& rControlContainer)
     : mpFrameworkHelper(rpFrameworkHelper),
       mxResourceId(rxResourceId),
-      mrControlContainer(rControlContainer)
+      mpControlContainer(&rControlContainer)
 {
 }
 
@@ -881,11 +894,14 @@ ResourceActivationClickHandler::ResourceActivationClickHandler (
 
 void ResourceActivationClickHandler::operator () (TitledControl& rTitledControl)
 {
-    mrControlContainer.SetExpansionState (
-        &rTitledControl,
-        ControlContainer::ES_EXPAND);
-    mpFrameworkHelper->GetConfigurationController()->requestResourceActivation(
-        mxResourceId, drawing::framework::ResourceActivationMode_REPLACE);
+    if (mxResourceId.is() && mpFrameworkHelper && mpControlContainer!=NULL)
+    {
+        mpControlContainer->SetExpansionState (
+            &rTitledControl,
+            ControlContainer::ES_EXPAND);
+        mpFrameworkHelper->GetConfigurationController()->requestResourceActivation(
+            mxResourceId, drawing::framework::ResourceActivationMode_REPLACE);
+    }
 }
 
 

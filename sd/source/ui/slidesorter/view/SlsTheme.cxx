@@ -37,6 +37,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/image.hxx>
 
+#define USE_SYSTEM_SELECTION_COLOR
 
 namespace sd { namespace slidesorter { namespace view {
 
@@ -61,14 +62,6 @@ namespace sd { namespace slidesorter { namespace view {
 // Off grays
 #define Arsenic 0x3b444b
 
-const static ColorData SelectionFill1ColorData = 0xb7daf0;
-const static ColorData SelectionFill2ColorData = 0x6db5e1;
-
-const static ColorData MouseOverFill1ColorData = 0x0e85cd;
-const static ColorData MouseOverFill2ColorData = 0x044c99;
-
-const static ColorData Border1ColorData = 0x6db5e1;
-const static ColorData Border2ColorData = 0x0e85cd;
 
 const static ColorData BackgroundColorData = 0xffffff;
 
@@ -76,8 +69,25 @@ const static ColorData gnMouseOverColor = 0x59000000 | StellaBlue;
 
 const static double gnCornerRadius = 4.0;
 
+
+ColorData ChangeLuminance (const ColorData aColorData, const int nValue)
+{
+    Color aColor (aColorData);
+    if (nValue > 0)
+        aColor.IncreaseLuminance(nValue);
+    else
+        aColor.DecreaseLuminance(-nValue);
+    return aColor.GetColor();
+}
+
+
+
+
 Theme::Theme (const ::boost::shared_ptr<controller::Properties>& rpProperties)
     : maBackgroundColor(rpProperties->GetBackgroundColor().GetColor()),
+      maNormalGradient(),
+      maSelectedGradient(),
+      maMouseOverGradient(),
       maRawShadow(),
       maInsertionIndicator()
 {
@@ -85,6 +95,8 @@ Theme::Theme (const ::boost::shared_ptr<controller::Properties>& rpProperties)
 
     maRawShadow = Image(SdResId(IMAGE_SHADOW)).GetBitmapEx();
     maInsertionIndicator = Image(SdResId(IMAGE_INSERTION_INDICATOR_SELECT)).GetBitmapEx();
+
+    Update(rpProperties);
 }
 
 
@@ -93,7 +105,38 @@ Theme::Theme (const ::boost::shared_ptr<controller::Properties>& rpProperties)
 void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpProperties)
 {
     maBackgroundColor = rpProperties->GetBackgroundColor().GetColor();
+#ifdef USE_SYSTEM_SELECTION_COLOR
+    const ColorData aSelectionColor (rpProperties->GetSelectionColor().GetColor());
+    maSelectedGradient.maFillColor1 = ChangeLuminance(aSelectionColor, +50);
+    maSelectedGradient.maFillColor2 = ChangeLuminance(aSelectionColor, -10);
+    maSelectedGradient.maBorderColor1 = ChangeLuminance(aSelectionColor, -10);
+    maSelectedGradient.maBorderColor2 = ChangeLuminance(aSelectionColor, -30);
+
+    maMouseOverGradient.maFillColor1 = ChangeLuminance(aSelectionColor, -30);
+    maMouseOverGradient.maFillColor2 = ChangeLuminance(aSelectionColor, -90);
+    maMouseOverGradient.maBorderColor1 = ChangeLuminance(aSelectionColor, -30);
+    maMouseOverGradient.maBorderColor2 = ChangeLuminance(aSelectionColor, -10);
+
+#else
+
+    maSelectedGradient.maFillColor1 = 0xb7daf0;
+    maSelectedGradient.maFillColor2 = 0x6db5e1;
+    maSelectedGradient.maBorderColor1 = 0x6db5e1;
+    maSelectedGradient.maBorderColor2 = 0x0e85cd;
+
+    maMouseOverGradient.maFillColor1 = 0x0e85cd;
+    maMouseOverGradient.maFillColor2 = 0x044c99;
+    maMouseOverGradient.maBorderColor1 = 0x6db5e1;
+    maMouseOverGradient.maBorderColor2 = 0x0e85cd;
+#endif
+
+    maNormalGradient.maFillColor1 = maBackgroundColor;
+    maNormalGradient.maFillColor2 = maBackgroundColor;
+    maNormalGradient.maBorderColor1 = maBackgroundColor;
+    maNormalGradient.maBorderColor2 = maBackgroundColor;
 }
+
+
 
 
 ::boost::shared_ptr<Font> Theme::CreateFont (
@@ -166,8 +209,14 @@ ColorData Theme::GetColor (const ColorType eType)
         case PageNumberBorder:
             return Azure;
 
+        case PageNumberColor:
+            return 0x0848a8f;
+
         case Selection:
             return StellaBlue;
+
+        case PreviewBorder:
+            return 0x000000;
     }
     return 0;
 }
@@ -179,54 +228,39 @@ ColorData Theme::GetGradientColor (
     const GradientColorType eType,
     const GradientColorClass eClass)
 {
+    GradientDescriptor* pDescriptor = NULL;
     switch(eType)
     {
         case NormalPage:
-            switch (eClass)
-            {
-                case Border1:
-                case Border2:
-                    return maBackgroundColor;
-
-                case Fill1:
-                case Fill2:
-                    return maBackgroundColor;
-            }
+            pDescriptor = &maNormalGradient;
             break;
 
         case SelectedPage:
-            switch (eClass)
-            {
-                case Border1:
-                    return Border1ColorData;
-
-                case Border2:
-                    return Border2ColorData;
-
-                case Fill1:
-                    return SelectionFill1ColorData;
-
-                case Fill2:
-                    return SelectionFill2ColorData;
-            }
+            pDescriptor = &maSelectedGradient;
             break;
 
         case MouseOverPage:
-            switch (eClass)
-            {
-                case Border1:
-                    return Border1ColorData;
-
-                case Border2:
-                    return Border2ColorData;
-
-                case Fill1:
-                    return MouseOverFill1ColorData;
-
-                case Fill2:
-                    return MouseOverFill2ColorData;
-            }
+            pDescriptor = &maMouseOverGradient;
             break;
+
+        default:
+            OSL_ASSERT(false);
+            break;
+    }
+
+    if (pDescriptor != NULL)
+    {
+        switch (eClass)
+        {
+            case Border1: return pDescriptor->maBorderColor1;
+            case Border2: return pDescriptor->maBorderColor2;
+            case Fill1: return pDescriptor->maFillColor1;
+            case Fill2: return pDescriptor->maFillColor2;
+
+            default:
+                OSL_ASSERT(false);
+                break;
+        }
     }
     return 0;
 }

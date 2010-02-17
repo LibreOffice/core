@@ -45,7 +45,7 @@ Properties::Properties (void)
       mbIsSuspendPreviewUpdatesDuringFullScreenPresentation(true),
       maBackgroundColor(Application::GetSettings().GetStyleSettings().GetWindowColor()),
       maTextColor(Application::GetSettings().GetStyleSettings().GetActiveTextColor()),
-      maSelectionColor(Application::GetSettings().GetStyleSettings().GetMenuHighlightColor()),
+      maSelectionColor(Application::GetSettings().GetStyleSettings().GetHighlightColor()),
       maHighlightColor(Application::GetSettings().GetStyleSettings().GetMenuHighlightColor()),
       mbIsUIReadOnly(false)
 {
@@ -56,6 +56,17 @@ Properties::Properties (void)
 
 Properties::~Properties (void)
 {
+}
+
+
+
+
+void Properties::HandleDataChangeEvent (void)
+{
+    maBackgroundColor = Application::GetSettings().GetStyleSettings().GetWindowColor();
+    maTextColor = Application::GetSettings().GetStyleSettings().GetActiveTextColor();
+    maSelectionColor = Application::GetSettings().GetStyleSettings().GetHighlightColor();
+    maHighlightColor = Application::GetSettings().GetStyleSettings().GetMenuHighlightColor();
 }
 
 

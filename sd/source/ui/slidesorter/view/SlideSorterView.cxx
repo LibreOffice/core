@@ -525,7 +525,8 @@ void SlideSorterView::PostModelChange (void)
         model::PageEnumerationProvider::CreateAllPagesEnumeration(mrModel));
 
     // The new page objects have to be scaled and positioned.
-    Layout ();
+    Layout();
+    RequestRepaint();
 }
 
 
@@ -792,9 +793,9 @@ void SlideSorterView::CompleteRedraw (
     sdr::contact::ViewObjectContactRedirector* pRedirector)
 {
     const double nStartTime (gaTimer.getElapsedTime());
-    OSL_TRACE("SlideSorterView::CompleteRedraw start at %f, %d",
+    OSL_TRACE("SlideSorterView::CompleteRedraw start at %f, %s",
         nStartTime,
-        mnLockRedrawSmph);
+        mnLockRedrawSmph ? "locked" : "");
 
     if (pDevice == NULL || pDevice!=mrSlideSorter.GetContentWindow().get())
         return;

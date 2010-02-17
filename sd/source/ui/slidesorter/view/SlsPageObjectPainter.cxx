@@ -300,6 +300,15 @@ void PageObjectPainter::NotifyResize (void)
 
 
 
+void PageObjectPainter::SetTheme (const ::boost::shared_ptr<view::Theme>& rpTheme)
+{
+    mpTheme = rpTheme;
+    NotifyResize();
+}
+
+
+
+
 void PageObjectPainter::PaintBackground (
     OutputDevice& rDevice,
     const model::SharedPageDescriptor& rpDescriptor) const
@@ -357,15 +366,6 @@ void PageObjectPainter::PaintPreview (
 
         rDevice.DrawBitmapEx(aBox.TopLeft(), aBitmap);
     }
-
-    // Draw border around preview.
-    --aBox.Left();
-    --aBox.Top();
-    ++aBox.Right();
-    ++aBox.Bottom();
-    rDevice.SetLineColor(Color(0,0,0));
-    rDevice.SetFillColor();
-    rDevice.DrawRect(aBox);
 }
 
 
@@ -375,7 +375,7 @@ void PageObjectPainter::PaintPageNumber (
     OutputDevice& rDevice,
     const model::SharedPageDescriptor& rpDescriptor) const
 {
-    Rectangle aBox (mpPageObjectLayouter->GetBoundingBox(
+    const Rectangle aBox (mpPageObjectLayouter->GetBoundingBox(
         rpDescriptor,
         PageObjectLayouter::PageNumber,
         PageObjectLayouter::WindowCoordinateSystem));
@@ -385,22 +385,22 @@ void PageObjectPainter::PaintPageNumber (
     const sal_Int32 nPageNumber ((rpDescriptor->GetPage()->GetPageNum() - 1) / 2 + 1);
     const String sPageNumber (String::CreateFromInt32(nPageNumber));
     rDevice.SetFont(*mpPageNumberFont);
-    rDevice.SetTextColor(Color(0x0848a8f));
-    rDevice.DrawText(aBox.TopLeft(), sPageNumber);
+    rDevice.SetTextColor(Color(mpTheme->GetColor(Theme::PageNumberColor)));
+    rDevice.DrawText(aBox, sPageNumber, TEXT_DRAW_RIGHT | TEXT_DRAW_VCENTER);
 
     if (rpDescriptor->GetVisualState().GetCurrentVisualState()
         == model::VisualState::VS_Excluded)
     {
         // Paint border around the number.
-        aBox.Left()-= 2;
-        aBox.Top() -= 1;
-        aBox.Right() += 2;
-        aBox.Bottom() += 1;
+        const Rectangle aFrameBox (mpPageObjectLayouter->GetBoundingBox(
+            rpDescriptor,
+            PageObjectLayouter::PageNumberFrame,
+            PageObjectLayouter::WindowCoordinateSystem));
         rDevice.SetLineColor(Color(mpTheme->GetColor(Theme::PageNumberBorder)));
         rDevice.SetFillColor();
-        rDevice.DrawRect(aBox);
+        rDevice.DrawRect(aFrameBox);
 
-        rDevice.DrawLine(aBox.TopLeft(), aBox.BottomRight());
+        rDevice.DrawLine(aFrameBox.TopLeft(), aBox.BottomRight());
     }
 }
 
@@ -536,7 +536,6 @@ Bitmap PageObjectPainter::CreateBackgroundBitmap(
 
     // Paint the background with a linear gradient that starts some pixels
     // below the top and ends some pixels above the bottom.
-#if 1
     const sal_Int32 nDefaultConstantSize(aSize.Height()/4);
     const sal_Int32 nMinimalGradientSize(40);
     const sal_Int32 nHeight (aSize.Height());
@@ -563,15 +562,6 @@ Bitmap PageObjectPainter::CreateBackgroundBitmap(
         }
         aBitmapDevice.DrawLine(Point(0,nY), Point(aSize.Width(),nY));
     }
-#else
-    const Color aTopColor(mpTheme->GetColor(eColorType, Theme::Fill1));
-    const Color aBottomColor(mpTheme->GetColor(eColorType, Theme::Fill2));
-    Color aColor (aTopColor);
-    aColor.Merge(aBottomColor, 128);
-    aBitmapDevice.SetFillColor(aColor);
-    aBitmapDevice.SetLineColor(aColor);
-    aBitmapDevice.DrawRect(Rectangle(Point(0,0), aSize));
-#endif
 
     // Paint the border.
     aBitmapDevice.SetFillColor();
@@ -582,15 +572,17 @@ Bitmap PageObjectPainter::CreateBackgroundBitmap(
 
     // Get bounding box of the preview around which a shadow is painted.
     // Compensate for the border around the preview.
-    Rectangle aBox (mpPageObjectLayouter->GetBoundingBox(
+    const Rectangle aBox (mpPageObjectLayouter->GetBoundingBox(
         model::SharedPageDescriptor(),
         PageObjectLayouter::Preview,
         PageObjectLayouter::WindowCoordinateSystem));
-    aBox.Left() -= 1;
-    aBox.Top() -= 1;
-    aBox.Right() += 1;
-    aBox.Bottom() += 1;
-    mpShadowPainter->PaintFrame(aBitmapDevice, aBox);
+    Rectangle aFrameBox (aBox.Left()-1,aBox.Top()-1,aBox.Right()+1,aBox.Bottom()+1);
+    mpShadowPainter->PaintFrame(aBitmapDevice, aFrameBox);
+
+    // Clear the area where the preview will later be painted.
+    aBitmapDevice.SetFillColor(mpTheme->GetColor(Theme::Background));
+    aBitmapDevice.SetLineColor(mpTheme->GetColor(Theme::PreviewBorder));
+    aBitmapDevice.DrawRect(aFrameBox);
 
     return aBitmapDevice.GetBitmap (Point(0,0),aSize);
 }

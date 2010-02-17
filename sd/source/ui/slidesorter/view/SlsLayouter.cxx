@@ -48,8 +48,8 @@ Layouter::Layouter (const SharedSdWindow& rpWindow)
       mnRightBorder(30),
       mnTopBorder(10),
       mnBottomBorder(10),
-      mnVerticalGap (20),
-      mnHorizontalGap (20),
+      mnVerticalGap (10),
+      mnHorizontalGap (10),
       mnMinimalWidth (100),
       mnPreferredWidth (200),
       mnMaximalWidth (300),
@@ -477,7 +477,7 @@ Point Layouter::GetInsertionMarkerLocation (
         if (bLeftOrTop)
         {
             // Above.
-            aLocation.setY(aBox.Top() - mnVerticalGap/2);
+            aLocation.setY(aBox.Top() - (mnVerticalGap+1)/2 - 1);
         }
         else
         {

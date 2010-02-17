@@ -105,7 +105,9 @@ SelectionManager::SelectionManager (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
       mrController(rSlideSorter.GetController()),
       maSelectionBeforeSwitch(),
-      mbIsMakeSelectionVisiblePending(true)
+      mbIsMakeSelectionVisiblePending(true),
+      mnInsertionPosition(-1),
+      mnAnimationId(Animator::NotAnAnimationId)
 {
 }
 
@@ -440,9 +442,13 @@ Size SelectionManager::MakeRectangleVisible (const Rectangle& rBox)
         if (nNewTop != aVisibleArea.Top())
         {
             if (mrSlideSorter.GetProperties()->IsSmoothSelectionScrolling())
-                mrController.GetAnimator()->AddAnimation(
+            {
+                if (mnAnimationId != Animator::NotAnAnimationId)
+                    mrController.GetAnimator()->RemoveAnimation(mnAnimationId);
+                mnAnimationId = mrController.GetAnimator()->AddAnimation(
                     VerticalVisibleAreaScroller(mrSlideSorter, aVisibleArea.Top(), nNewTop),
                     300);
+            }
             else
                 VerticalVisibleAreaScroller(mrSlideSorter, aVisibleArea.Top(), nNewTop)(1.0);
         }
@@ -644,10 +650,13 @@ void VerticalVisibleAreaScroller::operator() (const double nTime)
 {
     const double nLocalTime (maAccelerationFunction(nTime));
     const sal_Int32 nNewTop (mnStart * (1.0 - nLocalTime) + mnEnd * nLocalTime);
+    mrSlideSorter.GetController().GetScrollBarManager().SetTop(nNewTop);
+    /*
     mrSlideSorter.GetViewShell()->Scroll(
         0,
         nNewTop - mrSlideSorter.GetController().GetScrollBarManager().GetTop());
     mrSlideSorter.GetView().InvalidatePageObjectVisibilities();
+    */
 }
 
 
