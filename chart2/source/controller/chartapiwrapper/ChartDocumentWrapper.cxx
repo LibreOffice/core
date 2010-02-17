@@ -48,6 +48,8 @@
 #include "DataSourceHelper.hxx"
 #include "ChartModelHelper.hxx"
 #include "ContainerHelper.hxx"
+#include "AxisHelper.hxx"
+#include "ThreeDHelper.hxx"
 
 #include "TitleWrapper.hxx"
 #include "ChartDataWrapper.hxx"
@@ -66,6 +68,8 @@
 #include <svx/unoshcol.hxx>
 // header for define DBG_ASSERT
 #include <tools/debug.hxx>
+#include <vcl/svapp.hxx>
+
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -1422,8 +1426,19 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                 if( xDia.is())
                 {
                     // /-- locked controllers
-                    ControllerLockGuard aCtrlLockGuard( Reference< frame::XModel >( xChartDoc, uno::UNO_QUERY ));
-                    xTemplate->changeDiagram( xDia );
+                    Reference< frame::XModel > xModel( xChartDoc, uno::UNO_QUERY );
+                    ControllerLockGuard aCtrlLockGuard( xModel );
+                    Reference< chart2::XDiagram > xDiagram = ChartModelHelper::findDiagram( xModel );
+                    ThreeDLookScheme e3DScheme = ThreeDHelper::detectScheme( xDiagram );
+                    Reference< lang::XMultiServiceFactory > xTemplateManager( xChartDoc->getChartTypeManager(), uno::UNO_QUERY );
+                    DiagramHelper::tTemplateWithServiceName aTemplateWithService(
+                        DiagramHelper::getTemplateForDiagram( xDiagram, xTemplateManager ));
+                    if( aTemplateWithService.first.is())
+                        aTemplateWithService.first->resetStyles( xDiagram );//#i109371#
+                    xTemplate->changeDiagram( xDiagram );
+                    if( Application::GetSettings().GetLayoutRTL() )
+                        AxisHelper::setRTLAxisLayout( AxisHelper::getCoordinateSystemByIndex( xDiagram, 0 ) );
+                    ThreeDHelper::setScheme( xDiagram, e3DScheme );
                     // \-- locked controllers
                 }
                 else
