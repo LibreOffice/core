@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdotextdecomposition.cxx,v $
- *
- * $Revision: 1.2.18.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -96,7 +92,7 @@ namespace
 
         // #SJ# ClipRange for BlockText decomposition; only text portions completely
         // inside are to be accepted, so this is different from geometric clipping
-        // (which would allow e.g. upper parts of portions to remain). Only used for 
+        // (which would allow e.g. upper parts of portions to remain). Only used for
         // BlockText (see there)
         basegfx::B2DRange                                           maClipRange;
 

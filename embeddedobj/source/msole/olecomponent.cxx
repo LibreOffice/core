@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: olecomponent.cxx,v $
- * $Revision: 1.42 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1420,7 +1417,7 @@ void OleComponent::OnViewChange_Impl( sal_uInt32 dwAspect )
 
     if ( xLockObject.is() )
     {
-        uno::Reference < awt::XRequestCallback > xRequestCallback( 
+        uno::Reference < awt::XRequestCallback > xRequestCallback(
             m_xFactory->createInstance(
              ::rtl::OUString::createFromAscii("com.sun.star.awt.AsyncCallback") ),
              uno::UNO_QUERY );
@@ -1441,7 +1438,7 @@ void OleComponent::OnClose_Impl()
 
     if ( xLockObject.is() )
     {
-        uno::Reference < awt::XRequestCallback > xRequestCallback( 
+        uno::Reference < awt::XRequestCallback > xRequestCallback(
             m_xFactory->createInstance(
              ::rtl::OUString::createFromAscii("com.sun.star.awt.AsyncCallback") ),
              uno::UNO_QUERY );

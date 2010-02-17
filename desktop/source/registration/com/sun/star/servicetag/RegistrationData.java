@@ -49,8 +49,8 @@ import java.util.Set;
 import static com.sun.star.servicetag.RegistrationDocument.*;
 
 /**
- * A {@code RegistrationData} object is a container of one or more 
- * {@link #getServiceTags service tags} that identify the 
+ * A {@code RegistrationData} object is a container of one or more
+ * {@link #getServiceTags service tags} that identify the
  * components for product registration.
  * Each {@code RegistrationData} object has a {@link #getRegistrationURN
  * uniform resource name} (URN) as its identifier.
@@ -118,20 +118,20 @@ import static com.sun.star.servicetag.RegistrationDocument.*;
  * <a name="XMLSchema">
  * <b>Registration XML Schema</b></a>
  * <p>
- * A {@code RegistrationData} object can be {@link #loadFromXML loaded} from 
- * and {@link #storeToXML stored} into an XML file in the format described 
+ * A {@code RegistrationData} object can be {@link #loadFromXML loaded} from
+ * and {@link #storeToXML stored} into an XML file in the format described
  * by the
  * <a href="https://sn-tools.central.sun.com/twiki/pub/ServiceTags/RegistrationRelayService/product_registration.xsd">
- * registration data schema</a>.  The registration data schema is defined by the 
+ * registration data schema</a>.  The registration data schema is defined by the
  * Service Tags Technology.
  * <p>
  * Typically the registration data is constructed at installation time
  * and stored in an XML file for later service tag lookup or registration.
- * 
+ *
  * <p>
  * <b>Example Usage</b>
  * <p>
- * The examples below show how the {@code RegistrationData} can be 
+ * The examples below show how the {@code RegistrationData} can be
  * used for product registration.
  * Exception handling is not shown in these examples for clarity.
  * <ol>
@@ -146,22 +146,22 @@ import static com.sun.star.servicetag.RegistrationDocument.*;
  *   if (Registry.isSupported()) {
  *       Registry.getSystemRegistry().addServiceTag(st);
  *   }
- * 
+ *
  *   // add to the registration data
  *   RegistrationData registration  = new RegistrationData();
- *   registration.addServiceTag(st); 
+ *   registration.addServiceTag(st);
  * </pre></blockquote>
  * </li>
- * <li>At this point, the registration data is ready to 
- * send to Sun Connection for registration. This example shows how to register 
+ * <li>At this point, the registration data is ready to
+ * send to Sun Connection for registration. This example shows how to register
  * the JDK via the <i>Registration Relay Service</i>.
  * <p>
  * There are several registration services for Sun Connection. For example,
  * the <a href="https://sn-tools.central.sun.com/twiki/bin/view/ServiceTags/RegistrationRelayService">
  * Registration Relay Service</a> is a web application interface that
  * processes the registration data payload sent via HTTP post
- * and hosts the registration user interface for a specified 
- * registration URL.  Refer to the 
+ * and hosts the registration user interface for a specified
+ * registration URL.  Refer to the
  * Registration Relay Service Specification for details.
  * <p>
  * <blockquote><pre>
@@ -190,10 +190,10 @@ import static com.sun.star.servicetag.RegistrationDocument.*;
  *   registration.storeToXML(out);
  *   out.close();
  * </pre></blockquote>
- * </li> 
- * <li>This example shows how to install service tags that are in the 
+ * </li>
+ * <li>This example shows how to install service tags that are in the
  * registration data in the system service tag registry when determined
- * to be available.  The system service tag registry might not have existed 
+ * to be available.  The system service tag registry might not have existed
  * when the registration data was constructed.
  * <br>
  * <blockquote><pre>
@@ -206,7 +206,7 @@ import static com.sun.star.servicetag.RegistrationDocument.*;
  * </pre></blockquote>
  * </li>
  * </ol>
- * 
+ *
  * @see <a href="https://sunconnection.sun.com/inventory">Sun Connection Inventory Channel</a>
  */
 public class RegistrationData {
@@ -219,7 +219,7 @@ public class RegistrationData {
      * Creates a {@code RegistrationData} object with a generated
      * {@link #getRegistrationURN registration URN}.
      * The following keys in the {@link #getEnvironmentMap environment map}
-     * will be initialized for the configuration of the 
+     * will be initialized for the configuration of the
      * running system:
      * <blockquote>
      * <tt>hostname</tt>, <tt>osName</tt>,  <tt>osVersion</tt> and
@@ -230,7 +230,7 @@ public class RegistrationData {
     public RegistrationData() {
         this(Util.generateURN());
     }
-    
+
     // package private
     RegistrationData(String urn) {
         this.urn = urn;
@@ -239,7 +239,7 @@ public class RegistrationData {
         this.cpuInfo = initCpuInfo(sysEnv);
         this.svcTagMap = new LinkedHashMap<String, ServiceTag>();
     }
-    
+
     private Map<String, String> initEnvironment(SystemEnvironment sysEnv) {
         Map<String, String> map = new LinkedHashMap<String, String>();
         map.put(ST_NODE_HOSTNAME, sysEnv.getHostname());
@@ -253,7 +253,7 @@ public class RegistrationData {
         map.put(ST_NODE_SERIAL_NUMBER, sysEnv.getSerialNumber());
         map.put(ST_NODE_PHYS_MEM, sysEnv.getPhysMem());
         return map;
-    }  
+    }
 
     private Map<String, String> initCpuInfo(SystemEnvironment sysEnv) {
         Map<String, String> map = new LinkedHashMap<String, String>();
@@ -263,13 +263,13 @@ public class RegistrationData {
         map.put(ST_NODE_CPU_NAME, sysEnv.getCpuName());
         map.put(ST_NODE_CLOCK_RATE, sysEnv.getClockRate());
         return map;
-    }  
-    
+    }
+
     /**
      * Returns the uniform resource name of this registration data
      * in this format:
      * <tt>urn:st:&lt;32-char {@link java.util.UUID uuid}&gt;</tt>
-     * 
+     *
      * @return the URN of this registration data.
      */
     public String getRegistrationURN() {
@@ -282,8 +282,8 @@ public class RegistrationData {
      * in the environment map. Subsequent update to the environment
      * map via the {@link #setEnvironment setEnvironment} method will not be reflected
      * in the returned map.
-     * 
-     * @return an environment map for this registration data. 
+     *
+     * @return an environment map for this registration data.
      */
     public Map<String, String> getEnvironmentMap() {
         return new LinkedHashMap<String,String>(environment);
@@ -302,13 +302,13 @@ public class RegistrationData {
     }
 
     /**
-     * Sets an element of the specified {@code name} in the environment map 
+     * Sets an element of the specified {@code name} in the environment map
      * with the given {@code value}.
-     * 
+     *
      * @throws IllegalArgumentException if {@code name} is not a valid key
      * in the environment map, or {@code value} is not valid.
      */
-    public void setEnvironment(String name, String value) {    
+    public void setEnvironment(String name, String value) {
         if (name == null) {
             throw new NullPointerException("name is null");
         }
@@ -326,7 +326,7 @@ public class RegistrationData {
         } else {
             throw new IllegalArgumentException("\"" +
                  name + "\" is not an environment element.");
-        }   
+        }
     }
 
     /**
@@ -336,7 +336,7 @@ public class RegistrationData {
      * @throws IllegalArgumentException if {@code name} is not a valid key
      * in the cpu info map, or {@code value} is not valid.
      */
-    public void setCpuInfo(String name, String value) {    
+    public void setCpuInfo(String name, String value) {
         if (name == null) {
             throw new NullPointerException("name is null");
         }
@@ -348,12 +348,12 @@ public class RegistrationData {
         } else {
             throw new IllegalArgumentException("\"" +
                  name + "\" is not an cpuinfo element.");
-        }   
+        }
     }
 
     /**
      * Returns all service tags in this registration data.
-     * 
+     *
      * @return  a {@link Set Set} of the service tags
      * in this registration data.
      */
@@ -362,23 +362,23 @@ public class RegistrationData {
     }
 
     /**
-     * Adds a service tag to this registration data. 
+     * Adds a service tag to this registration data.
      * If the given service tag has an empty <tt>instance_urn</tt>,
-     * this method will generate a URN and place it in the copy 
-     * of the service tag in this registration data. 
+     * this method will generate a URN and place it in the copy
+     * of the service tag in this registration data.
      * This method will return the {@code ServiceTag} object
      * added to this registration data.
-     * 
+     *
      * @param st {@code ServiceTag} object to be added.
      * @return a {@code ServiceTag} object added to this registration data.
-     * 
-     * @throws IllegalArgumentException if 
-     *   a service tag of the same {@link ServiceTag#getInstanceURN 
+     *
+     * @throws IllegalArgumentException if
+     *   a service tag of the same {@link ServiceTag#getInstanceURN
      *   <tt>instance_urn</tt>} already exists in the registry.
      */
     public synchronized ServiceTag addServiceTag(ServiceTag st) {
         ServiceTag svcTag = ServiceTag.newInstanceWithUrnTimestamp(st);
-        
+
         String instanceURN = svcTag.getInstanceURN();
         if (svcTagMap.containsKey(instanceURN)) {
             throw new IllegalArgumentException("Instance_urn = " + instanceURN +
@@ -405,14 +405,14 @@ public class RegistrationData {
     }
 
     /**
-     * Removes a service tag of the given <tt>instance_urn</tt> from this 
+     * Removes a service tag of the given <tt>instance_urn</tt> from this
      * registration data.
      *
-     * @param instanceURN the <tt>instance_urn</tt> of 
+     * @param instanceURN the <tt>instance_urn</tt> of
      * the service tag to be removed.
      *
      * @return the removed {@code ServiceTag} object;
-     * or {@code null} if the service tag does not exist in this 
+     * or {@code null} if the service tag does not exist in this
      * registration data.
      */
     public synchronized ServiceTag removeServiceTag(String instanceURN) {
@@ -428,15 +428,15 @@ public class RegistrationData {
     }
 
      /**
-     * Updates the <tt>product_defined_instance_id</tt> in the service tag 
+     * Updates the <tt>product_defined_instance_id</tt> in the service tag
      * of the given <tt>instance_urn</tt> in this registration data.
-     * 
+     *
      * @param instanceURN the <tt>instance_urn</tt> of the service tag to be updated.
      * @param productDefinedInstanceID the value of the
      * <tt>product_defined_instance_id</tt> to be set.
-     * 
+     *
      * @return the updated {@code ServiceTag} object;
-     * or {@code null} if the service tag does not exist in this 
+     * or {@code null} if the service tag does not exist in this
      * registration data.
      */
     public synchronized ServiceTag updateServiceTag(String instanceURN,
@@ -452,21 +452,21 @@ public class RegistrationData {
         svcTagMap.put(instanceURN, svcTag);
         return svcTag;
     }
-    
+
     /**
-     * Reads the registration data from the XML document on the 
-     * specified input stream.  The XML document must be 
+     * Reads the registration data from the XML document on the
+     * specified input stream.  The XML document must be
      * in the format described by the <a href="#XMLSchema">
      * registration data schema</a>.
      * The specified stream is closed after this method returns.
-     * 
+     *
      * @param in the input stream from which to read the XML document.
      * @return a {@code RegistrationData} object read from the input
      * stream.
-     * 
-     * @throws IllegalArgumentException if the input stream 
+     *
+     * @throws IllegalArgumentException if the input stream
      * contains an invalid registration data.
-     * 
+     *
      * @throws IOException if an error occurred when reading from the input stream.
      */
     public static RegistrationData loadFromXML(InputStream in) throws IOException {
@@ -476,15 +476,15 @@ public class RegistrationData {
             in.close();
         }
     }
-    
+
     /**
-     * Writes the registration data to the specified output stream 
+     * Writes the registration data to the specified output stream
      * in the format described by the <a href="#XMLSchema">
      * registration data schema</a> with "UTF-8" encoding.
      * The specified stream remains open after this method returns.
-     * 
+     *
      * @param os the output stream on which to write the XML document.
-     * 
+     *
      * @throws IOException if an error occurred when writing to the output stream.
      */
     public void storeToXML(OutputStream os) throws IOException {
@@ -492,7 +492,7 @@ public class RegistrationData {
         os.flush();
     }
 
-    /** 
+    /**
      * Returns a newly allocated byte array containing the registration
      * data in XML format.
      *
@@ -513,7 +513,7 @@ public class RegistrationData {
     /**
      * Returns a string representation of this registration data in XML
      * format.
-     * 
+     *
      * @return a string representation of this registration data in XML
      *         format.
      */
