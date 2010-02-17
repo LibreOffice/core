@@ -51,6 +51,7 @@ PageDescriptor::PageDescriptor (
     const sal_Int32 nIndex)
     : mpPage(pPage),
       mxPage(rxPage),
+      mpMasterPage(NULL),
       mnIndex(nIndex),
       mbIsSelected(false),
       mbWasSelected(false),
@@ -61,7 +62,10 @@ PageDescriptor::PageDescriptor (
       maBoundingBox(),
       maVisualState(nIndex)
 {
+    OSL_ASSERT(mpPage);
     OSL_ASSERT(mpPage == SdPage::getImplementation(rxPage));
+    if (mpPage != NULL)
+        mpMasterPage = &mpPage->TRG_GetMasterPage();
 }
 
 
@@ -93,6 +97,23 @@ Reference<drawing::XDrawPage> PageDescriptor::GetXDrawPage (void) const
 sal_Int32 PageDescriptor::GetPageIndex (void) const
 {
     return mnIndex;
+}
+
+
+
+
+bool PageDescriptor::UpdateMasterPage (void)
+{
+    const SdrPage* pMaster = NULL;
+    if (mpPage != NULL)
+        pMaster = &mpPage->TRG_GetMasterPage();
+    if (mpMasterPage != pMaster)
+    {
+        mpMasterPage = pMaster;
+        return true;
+    }
+    else
+        return false;
 }
 
 

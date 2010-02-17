@@ -42,6 +42,7 @@
 #include "view/SlideSorterView.hxx"
 #include "cache/SlsPageCache.hxx"
 #include "drawdoc.hxx"
+#include "DrawDocShell.hxx"
 
 #include "glob.hrc"
 #include "ViewShellBase.hxx"
@@ -78,7 +79,8 @@ Listener::Listener (
       mxFrameWeak(),
       mpModelChangeLock()
 {
-    StartListening (*mrSlideSorter.GetModel().GetDocument());
+    StartListening(*mrSlideSorter.GetModel().GetDocument());
+    StartListening(*mrSlideSorter.GetModel().GetDocument()->GetDocSh());
     mbListeningToDocument = true;
 
     // Connect to the UNO document.
@@ -160,7 +162,8 @@ void Listener::ReleaseListeners (void)
 {
     if (mbListeningToDocument)
     {
-        EndListening (*mrSlideSorter.GetModel().GetDocument());
+        EndListening(*mrSlideSorter.GetModel().GetDocument()->GetDocSh());
+        EndListening(*mrSlideSorter.GetModel().GetDocument());
         mbListeningToDocument = false;
     }
 
@@ -370,6 +373,16 @@ void Listener::Notify (
                 break;
         }
     }
+    else if (rHint.ISA(SfxSimpleHint))
+    {
+        SfxSimpleHint& rSfxSimpleHint (*PTR_CAST(SfxSimpleHint,&rHint));
+        switch (rSfxSimpleHint.GetId())
+        {
+            case SFX_HINT_DOCCHANGED:
+                mrController.CheckForMasterPageAssignment();
+                break;
+        }
+    }
 }
 
 
@@ -420,6 +433,20 @@ IMPL_LINK(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexerEvent
         case tools::EventMultiplexerEvent::EID_CONTROLLER_DETACHED:
             DisconnectFromController();
             break;
+
+        case tools::EventMultiplexerEvent::EID_SHAPE_CHANGED:
+        case tools::EventMultiplexerEvent::EID_SHAPE_INSERTED:
+        case tools::EventMultiplexerEvent::EID_SHAPE_REMOVED:
+        {
+            const SdrPage* pPage = static_cast<const SdrPage*>(pEvent->mpUserData);
+            if (pPage != NULL)
+            {
+                mrSlideSorter.GetView().GetPreviewCache()->InvalidatePreviewBitmap(
+                    pPage,
+                    true);
+            }
+        }
+        break;
 
         default:
             break;

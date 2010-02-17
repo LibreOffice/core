@@ -42,6 +42,7 @@
 #include <boost/enable_shared_from_this.hpp>
 
 class SdPage;
+class SdrPage;
 
 namespace sdr { namespace contact {
 class ObjectContact;
@@ -110,6 +111,8 @@ public:
     */
     sal_Int32 GetPageIndex (void) const;
 
+    bool UpdateMasterPage (void);
+
     enum State { ST_Visible, ST_Selected, ST_WasSelected,
                  ST_Focused, ST_MouseOver, ST_Current, ST_Excluded };
 
@@ -137,6 +140,7 @@ public:
 private:
     SdPage* mpPage;
     css::uno::Reference<css::drawing::XDrawPage> mxPage;
+    SdrPage const* mpMasterPage;
     /** This index is displayed as page number in the view.  It may or may
         not be the actual page index.
     */

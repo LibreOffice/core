@@ -252,6 +252,8 @@ public:
     */
     ::boost::shared_ptr<Animator> GetAnimator (void) const;
 
+    void CheckForMasterPageAssignment (void);
+
 private:
     SlideSorter& mrSlideSorter;
     model::SlideSorterModel& mrModel;
