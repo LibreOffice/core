@@ -429,6 +429,7 @@ void SelectionFunction::MouseDragged (const AcceptDropEvent& rEvent)
 
 BOOL SelectionFunction::KeyInput (const KeyEvent& rEvent)
 {
+    PageSelector::UpdateLock aLock (mrSlideSorter);
     FocusManager& rFocusManager (mrController.GetFocusManager());
     BOOL bResult = FALSE;
 
@@ -596,15 +597,15 @@ void SelectionFunction::MoveFocus (
 
     mrController.GetFocusManager().MoveFocus(eDirection);
 
-    // When shift is pressed then select all pages in the range between the
-    // currently and the previously focused pages, including them.
+    PageSelector& rSelector (mrController.GetPageSelector());
+    model::SharedPageDescriptor pFocusedDescriptor (
+        mrController.GetFocusManager().GetFocusedPageDescriptor());
     if (bIsShiftDown)
     {
-        model::SharedPageDescriptor pFocusedDescriptor (
-            mrController.GetFocusManager().GetFocusedPageDescriptor());
+        // When shift is pressed then select all pages in the range between
+        // the currently and the previously focused pages, including them.
         if (pFocusedDescriptor)
         {
-            PageSelector& rSelector (mrController.GetPageSelector());
             sal_Int32 nPageRangeEnd (pFocusedDescriptor->GetPageIndex());
             model::PageEnumeration aPages (
                 model::PageEnumerationProvider::CreateAllPagesEnumeration(
@@ -627,6 +628,12 @@ void SelectionFunction::MoveFocus (
                 }
             }
         }
+    }
+    else
+    {
+        // Without shift just select the focused page.
+        rSelector.DeselectAllPages();
+        mrController.GetPageSelector().SelectPage(pFocusedDescriptor);
     }
 }
 
@@ -762,6 +769,7 @@ void SelectionFunction::DeselectAllPages (void)
 
 void SelectionFunction::RangeSelect (const model::SharedPageDescriptor& rpDescriptor)
 {
+    PageSelector::UpdateLock aLock (mrSlideSorter);
     PageSelector& rSelector (mrController.GetPageSelector());
 
     model::SharedPageDescriptor pAnchor (rSelector.GetSelectionAnchor());
@@ -1028,6 +1036,7 @@ bool SelectionFunction::EventProcessing (const EventDescriptor& rDescriptor)
     bool bMakeSelectionVisible (true);
 
     mrController.GetPageSelector().DisableBroadcasting();
+    PageSelector::UpdateLock aLock (mrSlideSorter);
 
     // 2b. With the event code determine the type of operation with which to
     // react to the event.
@@ -1298,6 +1307,7 @@ void SelectionFunction::ProcessButtonClick (
 {
     OSL_ASSERT(rpDescriptor);
 
+    PageSelector::UpdateLock aLock (mrSlideSorter);
     PageSelector& rSelector (mrSlideSorter.GetController().GetPageSelector());
     switch (nButtonIndex)
     {
@@ -1759,7 +1769,8 @@ void RectangleSelector::UpdateSelection (void)
     view::ViewOverlay& rOverlay (mrSlideSorter.GetView().GetOverlay());
     if (rOverlay.GetSelectionRectangleOverlay()->IsVisible())
     {
-        view::SlideSorterView::DrawLock aLock (mrSlideSorter);
+        view::SlideSorterView::DrawLock aDrawLock (mrSlideSorter);
+        PageSelector::UpdateLock aPageSelectorUpdateLock (mrSlideSorter);
 
         // Select all pages whose page object lies completly or partially
         // inside the selection rectangle.

@@ -37,6 +37,7 @@
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsSelectionManager.hxx"
 #include "controller/SlsAnimator.hxx"
+#include "controller/SlsCurrentSlideManager.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "model/SlsPageEnumerationProvider.hxx"
 #include "model/SlideSorterModel.hxx"
@@ -66,7 +67,9 @@ PageSelector::PageSelector (SlideSorter& rSlideSorter)
       mnBroadcastDisableLevel(0),
       mbSelectionChangeBroadcastPending(false),
       mpMostRecentlySelectedPage(),
-      mpSelectionAnchor()
+      mpSelectionAnchor(),
+      mpCurrentPage(),
+      mnUpdateLockCount(0)
 {
     CountSelectedPages ();
 }
@@ -79,6 +82,7 @@ void PageSelector::SelectAllPages (void)
     int nPageCount = mrModel.GetPageCount();
     for (int nPageIndex=0; nPageIndex<nPageCount; nPageIndex++)
         SelectPage (nPageIndex);
+    UpdateCurrentPage();
 }
 
 
@@ -125,6 +129,8 @@ void PageSelector::UpdateAllPages (void)
         else
             mrController.GetSelectionManager()->SelectionHasChanged();
     }
+
+    UpdateCurrentPage();
 }
 
 
@@ -167,6 +173,7 @@ void PageSelector::SelectPage (const SharedPageDescriptor& rpDescriptor)
             mbSelectionChangeBroadcastPending = true;
         else
             mrController.GetSelectionManager()->SelectionHasChanged();
+        UpdateCurrentPage();
     }
 }
 
@@ -207,6 +214,7 @@ void PageSelector::DeselectPage (const SharedPageDescriptor& rpDescriptor)
             mbSelectionChangeBroadcastPending = true;
         else
             mrController.GetSelectionManager()->SelectionHasChanged();
+        UpdateCurrentPage();
     }
 }
 
@@ -329,11 +337,68 @@ void PageSelector::DisableBroadcasting (void)
 
 
 
-void PageSelector::SetPageSelection (const ::boost::shared_ptr<PageSelection>& rpSelection)
+void PageSelector::SetPageSelection (
+    const ::boost::shared_ptr<PageSelection>& rpSelection,
+    const bool bUpdateCurrentPage)
 {
     PageSelection::const_iterator iPage;
     for (iPage=rpSelection->begin(); iPage!=rpSelection->end(); ++iPage)
         SelectPage(*iPage);
+    if (bUpdateCurrentPage)
+        UpdateCurrentPage();
+}
+
+
+
+
+void PageSelector::UpdateCurrentPage (void)
+{
+    // Make the first selected page the current page.
+    if (mnUpdateLockCount == 0)
+    {
+        const sal_Int32 nPageCount (GetPageCount());
+        for (sal_Int32 nIndex=0; nIndex<nPageCount; ++nIndex)
+        {
+            SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nIndex));
+            if (pDescriptor && pDescriptor->HasState(PageDescriptor::ST_Selected))
+            {
+                // Switching the current slide normally sets also the
+                // selection to just the new current slide.  To prevent that
+                // here we store and at the end of this scope restore the
+                // current selection.
+                ::boost::shared_ptr<PageSelection> pSelection (GetPageSelection());
+                mrController.GetCurrentSlideManager()->SwitchCurrentSlide(pDescriptor);
+                // Restore the selection and prevent a recursive call to
+                // UpdateCurrentPage().
+                SetPageSelection(pSelection, false);
+                return;
+            }
+        }
+    }
+
+    // No page is selected.  Do not change the current slide.
+}
+
+
+
+
+//===== PageSelector::UpdateLock ==============================================
+
+PageSelector::UpdateLock::UpdateLock (SlideSorter& rSlideSorter)
+    : mrSelector(rSlideSorter.GetController().GetPageSelector())
+{
+    ++mrSelector.mnUpdateLockCount;
+}
+
+
+
+
+PageSelector::UpdateLock::~UpdateLock (void)
+{
+    --mrSelector.mnUpdateLockCount;
+    OSL_ASSERT(mrSelector.mnUpdateLockCount >= 0);
+    if (mrSelector.mnUpdateLockCount == 0)
+        mrSelector.UpdateCurrentPage();
 }
 
 

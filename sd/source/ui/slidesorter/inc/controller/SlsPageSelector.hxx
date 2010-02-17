@@ -160,10 +160,29 @@ public:
             the last call to GetPageSelection() it is still valid to call
             this method with the selection.  When pages have been inserted
             or removed the result may be unexpected.
+        @param bUpdateCurrentPage
+            When <TRUE/> (the default value) then after setting the
+            selection update the current page to the first page of the
+            selection.
+            When called from withing UpdateCurrentPage() then this flag is
+            used to prevent a recursion loop.
     */
-    void SetPageSelection (const ::boost::shared_ptr<PageSelection>& rSelection);
+    void SetPageSelection (
+        const ::boost::shared_ptr<PageSelection>& rSelection,
+        const bool bUpdateCurrentPage = true);
 
-    void UpdateCurrentPage (const model::SharedPageDescriptor& rCurrentPageDescriptor);
+    /** Use the UpdateLock whenever you do a complex selection, i.e. call
+        more than one method in a row.  An active lock prevents intermediate
+        changes of the current slide.
+    */
+    class UpdateLock
+    {
+    public:
+        UpdateLock (SlideSorter& rSlideSorter);
+        ~UpdateLock (void);
+    private:
+        PageSelector& mrSelector;
+    };
 
 private:
     model::SlideSorterModel& mrModel;
@@ -176,8 +195,10 @@ private:
     /// Anchor for a range selection.
     model::SharedPageDescriptor mpSelectionAnchor;
     model::SharedPageDescriptor mpCurrentPage;
+    sal_Int32 mnUpdateLockCount;
 
     void CountSelectedPages (void);
+    void UpdateCurrentPage (void);
 };
 
 } } } // end of namespace ::sd::slidesorter::controller
