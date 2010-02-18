@@ -720,7 +720,7 @@ Reference< XDriver > OSDBCDriverManager::implGetDriverForURL(const ::rtl::OUStri
         }
 
         // found something?
-        if ( m_aDriversBS.end() != aFind )
+        if ( m_aDriversBS.end() != aFind && aFind->xDriver.is() && aFind->xDriver->acceptsURL(_rURL) )
             xReturn = aFind->xDriver;
     }
 
