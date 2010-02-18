@@ -42,6 +42,8 @@
 #endif
 #include <comphelper/namedvaluecollection.hxx>
 
+#include <functional>
+
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
