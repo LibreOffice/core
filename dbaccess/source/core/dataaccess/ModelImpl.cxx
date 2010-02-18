@@ -824,8 +824,8 @@ void ODatabaseModelImpl::setResource( const ::rtl::OUString& i_rDocumentURL, con
 {
     ENSURE_OR_THROW( i_rDocumentURL.getLength(), "invalid URL" );
 
-#if OSL_DEBUG_LEVEL > 0
     ::comphelper::NamedValueCollection aMediaDescriptor( _rArgs );
+#if OSL_DEBUG_LEVEL > 0
     if ( aMediaDescriptor.has( "SalvagedFile" ) )
     {
         ::rtl::OUString sSalvagedFile( aMediaDescriptor.getOrDefault( "SalvagedFile", ::rtl::OUString() ) );
