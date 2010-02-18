@@ -44,7 +44,7 @@
 
 #include <svl/languageoptions.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
-#include <tools/String.hxx>
+#include <tools/string.hxx>
 #include <tools/debug.hxx>
 #include <tools/resary.hxx>
 #include <unotools/moduleoptions.hxx>
