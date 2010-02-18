@@ -220,13 +220,12 @@ SvxPathTabPage::SvxPathTabPage( Window* pParent, const SfxItemSet& rSet ) :
 
     SfxTabPage( pParent, CUI_RES( RID_SFXPAGE_PATH ), rSet ),
 
+    aStdBox         ( this, CUI_RES( GB_STD ) ),
     aTypeText       ( this, CUI_RES( FT_TYPE ) ),
     aPathText       ( this, CUI_RES( FT_PATH ) ),
     aPathCtrl       ( this, CUI_RES( LB_PATH ) ),
     aStandardBtn    ( this, CUI_RES( BTN_STANDARD ) ),
     aPathBtn        ( this, CUI_RES( BTN_PATH ) ),
-    aStdBox         ( this, CUI_RES( GB_STD ) ),
-
     pHeaderBar      ( NULL ),
     pPathBox        ( NULL ),
     pImpl           ( new OptPath_Impl( CUI_RES(IMG_LOCK), CUI_RES(IMG_LOCK_HC) ) ),
