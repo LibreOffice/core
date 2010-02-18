@@ -75,7 +75,7 @@
 #include <svx/sdtfchim.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/editstat.hxx>
+#include <editstat.hxx>
 #include <drawinglayer/attribute/fillhatchattribute.hxx>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
 #include <svx/sdr/attribute/sdrshadowtextattribute.hxx>
