@@ -71,7 +71,6 @@ my @valid_commands = (
                         'create',
                         'fetch',  'f',
                         'rebase', 'rb',
-                        'analyze', 'an',
                         'query', 'q',
                         'task', 't',
                         'integrate',
@@ -87,7 +86,6 @@ my %valid_options_hash = (
                             'fetch'      => ['help', 'switch', 'milestone', 'childworkspace','platforms','quiet',
                                             'onlysolver'],
                             'rebase'     => ['help', 'milestone','commit'],
-                            'analyze'    => ['help'],
                             'query'      => ['help', 'milestone','masterworkspace','childworkspace'],
                             'task'       => ['help'],
                             'integrate'  => ['help', 'childworkspace'],
@@ -158,9 +156,6 @@ sub parse_command_line
     }
     elsif ($command eq 'rb') {
         $command = 'rebase';
-    }
-    elsif ($command eq 'an') {
-        $command = 'analyze';
     }
     elsif ($command eq 'q') {
         $command = 'query';
@@ -1535,11 +1530,10 @@ sub do_help
         print STDERR "\thelp (h,?)\n";
         print STDERR "\tcreate\n";
         print STDERR "\tfetch (f)\n";
-        print STDERR "\trebase (rb)\n";
-        print STDERR "\tanalyze (an)\n";
+        print STDERR "\trebase (rb) (SVN only)\n";
         print STDERR "\tquery (q)\n";
         print STDERR "\ttask (t)\n";
-        print STDERR "\tcdiff (cd)\n";
+        print STDERR "\tcdiff (cd) (SVN only)\n";
         print STDERR "\tsetcurrent\n";
         print STDERR "\tintegrate *** release engineers only ***\n";
         print STDERR "\teisclone *** release engineers only ***\n";
@@ -1609,7 +1603,6 @@ sub do_help
 
      }
     elsif ($arg eq 'fetch') {
-        print STDERR "THE USER-INTERFACE TO THIS SUBCOMMAND IS LIKELY TO CHANGE IN FUTURE\n";
         print STDERR "fetch: fetch a milestone or CWS\n";
         print STDERR "usage: fetch [-q] [-s] [-p platforms] [-o] <-m milestone> <workspace>\n";
         print STDERR "usage: fetch [-q] [-s] [-p platforms] [-o] <-c cws> <workspace>\n";
@@ -1632,7 +1625,7 @@ sub do_help
         print STDERR "\t--quiet:                Same as -q\n";
     }
     elsif ($arg eq 'rebase') {
-        print STDERR "rebase: Rebase a child workspace to a new milestone\n";
+        print STDERR "rebase: Rebase a child workspace to a new milestone (SVN only)\n";
         print STDERR "usage: rebase <-m milestone> <workspace>\n";
         print STDERR "usage: rebase <-C> <workspace>\n";
         print STDERR "\t-m milestone:          Merge changes on MWS into CWS up to and including milestone <milestone>\n";
@@ -1652,7 +1645,7 @@ sub do_help
         print STDERR "\t--commit:               Same as -C\n"
     }
     elsif ($arg eq 'cdiff') {
-        print STDERR "cdiff: Show changes on CWS relative to current milestone\n";
+        print STDERR "cdiff: Show changes on CWS relative to current milestone (SVN only)\n";
         print STDERR "usage: cdiff [-M master] [-c child] [--files] [--modules]\n";
         print STDERR "\t-M master:\t\toverride MWS specified in environment\n";
         print STDERR "\t-c child:\t\toverride CWS specified in environment\n";
@@ -2066,14 +2059,6 @@ sub do_rebase
         # write out the rebase configuration to store new milestone and master information
         write_rebase_configuration($workspace, $cwsname, $new_masterws, $new_milestone);
     }
-}
-
-sub do_analyze
-{
-    my $args_ref    = shift;
-    my $options_ref = shift;
-
-    print_error("not yet implemented.", 2);
 }
 
 sub do_integrate
@@ -2522,6 +2507,9 @@ sub do_cdiff
         print_error("'$childws' is not a valid CWS name.\n", 30);
     }
 
+    if ( $cws->get_scm() eq 'HG' ) {
+        print_error("cws cdiff is not supported for mercurial based childworkspaces", 80);
+    }
     my $milestone = $cws->milestone();
 
     my $config = CwsConfig->new();
