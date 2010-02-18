@@ -23,4 +23,4 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
-#include "precompiled_configmgr.hxx"
+#include "precompiled_test.hxx"
