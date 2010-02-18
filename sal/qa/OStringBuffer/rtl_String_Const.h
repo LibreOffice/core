@@ -545,7 +545,6 @@ static const sal_Int32  expValStrLastNormal[nStrLastNormalCount] =
             0,-1,0,4,-1,-1,-1,-1,-1,3,15,11
         };
 //------------------------------------------------------------------------
-static const sal_Int32 kNonSInt64Max = LONG_MIN;
 static const sal_Int32 kNonSInt32Max = INT_MIN;
 static const sal_Int32 kNonSInt16Max = SHRT_MIN;
 //------------------------------------------------------------------------
