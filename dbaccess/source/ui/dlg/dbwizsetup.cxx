@@ -945,8 +945,15 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     {
         ::rtl::OUString sEmbeddedURL = m_pCollection->getEmbeddedDatabase();
         ::connectivity::DriversConfig aDriverConfig(getORB());
+        try
+        {
         if ( !aDriverConfig.getDriverFactoryName(sEmbeddedURL).getLength() || !m_pImpl->getDriver(sEmbeddedURL).is() )
             sEmbeddedURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:dbase:"));
+        }
+        catch(const Exception&)
+        {
+            sEmbeddedURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:dbase:"));
+        }
 
         return sEmbeddedURL;
     }
