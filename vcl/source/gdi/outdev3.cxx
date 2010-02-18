@@ -5893,14 +5893,15 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
         ImplInitFont();
 
     // check string index and length
-    String aStr = rOrigStr;
-    if( (ULONG)nMinIndex + nLen >= aStr.Len() )
+    if( (unsigned)nMinIndex + nLen > rOrigStr.Len() )
     {
-        if( nMinIndex < aStr.Len() )
-            nLen = aStr.Len() - nMinIndex;
-        else
+        const int nNewLen = (int)rOrigStr.Len() - nMinIndex;
+        if( nNewLen <= 0 )
             return NULL;
+        nLen = static_cast<xub_StrLen>(nNewLen);
     }
+
+    String aStr = rOrigStr;
 
     // filter out special markers
     if( bFilter )
