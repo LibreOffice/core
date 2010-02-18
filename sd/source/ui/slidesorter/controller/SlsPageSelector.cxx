@@ -273,6 +273,14 @@ SharedPageDescriptor PageSelector::GetMostRecentlySelectedPage (void) const
 
 
 
+void PageSelector::SetMostRecentlySelectedPage (const model::SharedPageDescriptor& rpDescriptor)
+{
+    mpMostRecentlySelectedPage = rpDescriptor;
+}
+
+
+
+
 SharedPageDescriptor PageSelector::GetSelectionAnchor (void) const
 {
     return mpSelectionAnchor;
@@ -367,10 +375,16 @@ void PageSelector::UpdateCurrentPage (void)
                 // here we store and at the end of this scope restore the
                 // current selection.
                 ::boost::shared_ptr<PageSelection> pSelection (GetPageSelection());
+                SharedPageDescriptor pRecentSelection (GetMostRecentlySelectedPage());
+
                 mrController.GetCurrentSlideManager()->SwitchCurrentSlide(pDescriptor);
+
                 // Restore the selection and prevent a recursive call to
                 // UpdateCurrentPage().
                 SetPageSelection(pSelection, false);
+                // Restore the most recently selected page.  Important for
+                // making the right part of the selection visible.
+                mpMostRecentlySelectedPage = pRecentSelection;
                 return;
             }
         }

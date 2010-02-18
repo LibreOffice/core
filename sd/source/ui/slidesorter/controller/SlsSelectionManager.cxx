@@ -578,7 +578,9 @@ Rectangle SelectionManager::ResolveLargeSelection (
     }
     OSL_ASSERT(pRepresentative.get() != NULL);
 
-    return pRepresentative->GetBoundingBox();
+    return mrSlideSorter.GetView().GetLayouter().GetPageObjectBox(
+        pRepresentative->GetPageIndex(),
+        true);
 }
 
 

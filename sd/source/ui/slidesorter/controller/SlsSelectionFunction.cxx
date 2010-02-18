@@ -635,6 +635,10 @@ void SelectionFunction::MoveFocus (
         rSelector.DeselectAllPages();
         mrController.GetPageSelector().SelectPage(pFocusedDescriptor);
     }
+
+    // Mark the currently focused page as last selected so that it is made
+    // visible on the next paint.
+    mrController.GetPageSelector().SetMostRecentlySelectedPage(pFocusedDescriptor);
 }
 
 

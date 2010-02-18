@@ -134,6 +134,11 @@ public:
     */
     model::SharedPageDescriptor GetMostRecentlySelectedPage (void) const;
 
+    /** Mark the given page as the most recently selected.  Use this method
+        when the selection does not really change but the focus does.
+    */
+    void SetMostRecentlySelectedPage (const model::SharedPageDescriptor& rpDescriptor);
+
     /** Return the anchor for a range selection.  This usually is the first
         selected page after all pages have been deselected.
         @return

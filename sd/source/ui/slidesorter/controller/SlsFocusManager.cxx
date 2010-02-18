@@ -168,9 +168,7 @@ void FocusManager::MoveFocus (FocusMoveDirection eDirection)
 
         if (mbPageIsFocused)
         {
-#ifndef UNIFY_FOCUS_AND_CURRENT_PAGE
             ShowFocusIndicator(GetFocusedPageDescriptor(), true);
-#endif
         }
     }
 }
@@ -295,7 +293,6 @@ void FocusManager::ShowFocusIndicator (
     const model::SharedPageDescriptor& rpDescriptor,
     const bool bScrollToFocus)
 {
-#ifndef UNIFY_FOCUS_AND_CURRENT_PAGE
     if (rpDescriptor.get() != NULL)
     {
         mrSlideSorter.GetView().SetState(rpDescriptor, model::PageDescriptor::ST_Focused, true);
@@ -308,10 +305,11 @@ void FocusManager::ShowFocusIndicator (
                 GetFocusedPageDescriptor()->GetBoundingBox());
         }
 
+#ifndef UNIFY_FOCUS_AND_CURRENT_PAGE
         mrSlideSorter.GetView().RequestRepaint (rpDescriptor);
+#endif
         NotifyFocusChangeListeners();
     }
-#endif
 }
 
 

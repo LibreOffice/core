@@ -46,6 +46,9 @@
 #include <tools/link.hxx>
 #include <vcl/svapp.hxx>
 
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+
 
 namespace sd {
 
@@ -301,7 +304,7 @@ void PreviewRenderer::PaintPage (const SdPage* pPage)
 
     try
     {
-        mpView->CompleteRedraw (mpPreviewDevice.get(), aRegion);
+        mpView->CompleteRedraw(mpPreviewDevice.get(), aRegion);
     }
     catch (const ::com::sun::star::uno::Exception&)
     {
@@ -416,10 +419,8 @@ void PreviewRenderer::ProvideView (DrawDocShell* pDocShell)
     {
         mpView.reset (new DrawView (pDocShell, mpPreviewDevice.get(), NULL));
     }
-    mpView->SetPreviewRenderer( sal_True );
-    mpView->SetBordVisible(FALSE);
-    mpView->SetPageBorderVisible(TRUE);
-    mpView->SetPageVisible(FALSE);
+    mpView->SetPreviewRenderer(true);
+    mpView->SetPagePaintingAllowed(false);
 }
 
 
