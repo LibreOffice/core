@@ -4781,6 +4781,30 @@ void SwRowFrm::Cut()
     {
         pTab->FindMaster()->InvalidatePos();
     }
+
+    // --> OD 2010-02-17 #i103961#
+    // notification for accessibility
+    {
+        SwRootFrm *pRootFrm = FindRootFrm();
+        if( pRootFrm && pRootFrm->IsAnyShellAccessible() )
+        {
+            ViewShell* pVSh = pRootFrm->GetCurrShell();
+            if ( pVSh && pVSh->Imp() )
+            {
+                SwFrm* pCellFrm( GetLower() );
+                while ( pCellFrm )
+                {
+                    ASSERT( pCellFrm->IsCellFrm(),
+                            "<SwRowFrm::Cut()> - unexpected type of SwRowFrm lower." );
+                    pVSh->Imp()->DisposeAccessibleFrm( pCellFrm );
+
+                    pCellFrm = pCellFrm->GetNext();
+                }
+            }
+        }
+    }
+    // <--
+
     SwLayoutFrm::Cut();
 }
 
@@ -5660,15 +5684,25 @@ long SwCellFrm::GetLayoutRowSpan() const
     return  nRet;
 }
 
-/*************************************************************************
-|*
-|*    SwCellFrm::Modify()
-|*
-|*    Ersterstellung    MA 20. Dec. 96
-|*    Letzte Aenderung  MA 20. Dec. 96
-|*
-|*************************************************************************/
+// --> OD 2010-02-17 #i103961#
+void SwCellFrm::Cut()
+{
+    // notification for accessibility
+    {
+        SwRootFrm *pRootFrm = FindRootFrm();
+        if( pRootFrm && pRootFrm->IsAnyShellAccessible() )
+        {
+            ViewShell* pVSh = pRootFrm->GetCurrShell();
+            if ( pVSh && pVSh->Imp() )
+            {
+                pVSh->Imp()->DisposeAccessibleFrm( this );
+            }
+        }
+    }
 
+    SwLayoutFrm::Cut();
+}
+// <--
 
 //
 // Helper functions for repeated headlines:

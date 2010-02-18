@@ -1360,15 +1360,9 @@ void SwAccessibleTable::InvalidateChildPosOrSize( const SwAccessibleChild& rChil
         }
     }
 
-    // There are two reason why this method has been called. The first one
-    // is there is no context for pFrm. The method is them called by
-    // the map, and we have to call our superclass.
-    // The other situation is that we have been call by a call to get notified
-    // about its change. We then must not call the superclass
-    ASSERT( rChildFrmOrObj.GetSwFrm(), "frame expected" );
-    uno::Reference< XAccessible > xAcc( GetMap()->GetContext( rChildFrmOrObj.GetSwFrm(), sal_False ) );
-    if( !xAcc.is() )
-        SwAccessibleContext::InvalidateChildPosOrSize( rChildFrmOrObj, rOldBox );
+    // --> OD 2010-02-18 #i013961# - always call super class method
+    SwAccessibleContext::InvalidateChildPosOrSize( rChildFrmOrObj, rOldBox );
+    // <--
 }
 
 
