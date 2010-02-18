@@ -743,6 +743,7 @@ PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( cons
     PrinterController::PageSize aPageSize;
     aPageSize.aSize = mpPrinter->GetPaperSize();
     awt::Size aSetSize, aIsSize;
+    sal_Int32 nPaperBin = -1;
     for( sal_Int32 nProperty = 0, nPropertyCount = i_rProps.getLength(); nProperty < nPropertyCount; ++nProperty )
     {
         if( i_rProps[ nProperty ].Name.equalsAscii( "PreferredPageSize" ) )
@@ -758,6 +759,10 @@ PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( cons
             sal_Bool bVal = sal_False;
             i_rProps[ nProperty ].Value >>= bVal;
             aPageSize.bFullPaper = static_cast<bool>(bVal);
+        }
+        else if( i_rProps[ nProperty ].Name.equalsAscii( "PrinterPaperTray" ) )
+        {
+            i_rProps[ nProperty ].Value >>= nPaperBin;
         }
     }
 
@@ -779,6 +784,10 @@ PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( cons
         if( aRealPaperSize != aCurSize )
             mpPrinter->SetPaperSizeUser( aRealPaperSize, ! isFixedPageSize() );
     }
+
+    if( nPaperBin != -1 && nPaperBin != mpPrinter->GetPaperBin() )
+        mpPrinter->SetPaperBin( nPaperBin );
+
     return aPageSize;
 }
 
