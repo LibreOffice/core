@@ -103,8 +103,6 @@ enum x86_64_reg_class
 
 #define MAX_CLASSES 4
 
-#define ALIGN(v, a) (((((size_t) (v))-1) | ((a)-1))+1)
-
 /* x86-64 register passing implementation.  See x86-64 ABI for details.  Goal
    of this code is to classify each 8bytes of incoming argument by the register
    class and assign registers accordingly.  */
@@ -156,11 +154,8 @@ merge_classes (enum x86_64_reg_class class1, enum x86_64_reg_class class2)
    See the x86-64 PS ABI for details.
 */
 static int
-classify_argument( typelib_TypeDescriptionReference *pTypeRef, enum x86_64_reg_class classes[], int &rByteOffset )
+classify_argument( typelib_TypeDescriptionReference *pTypeRef, enum x86_64_reg_class classes[], int byteOffset )
 {
-    /* First, align to the right place.  */
-    rByteOffset = ALIGN( rByteOffset, pTypeRef->pType->nAlignment );
-
     switch ( pTypeRef->eTypeClass )
     {
         case typelib_TypeClass_VOID:
@@ -176,13 +171,13 @@ classify_argument( typelib_TypeDescriptionReference *pTypeRef, enum x86_64_reg_c
         case typelib_TypeClass_HYPER:
         case typelib_TypeClass_UNSIGNED_HYPER:
         case typelib_TypeClass_ENUM:
-            if ( ( rByteOffset % 8 + pTypeRef->pType->nSize ) <= 4 )
+            if ( ( byteOffset % 8 + pTypeRef->pType->nSize ) <= 4 )
                 classes[0] = X86_64_INTEGERSI_CLASS;
             else
                 classes[0] = X86_64_INTEGER_CLASS;
             return 1;
         case typelib_TypeClass_FLOAT:
-            if ( ( rByteOffset % 8 ) == 0 )
+            if ( ( byteOffset % 8 ) == 0 )
                 classes[0] = X86_64_SSESF_CLASS;
             else
                 classes[0] = X86_64_SSE_CLASS;
@@ -229,9 +224,9 @@ classify_argument( typelib_TypeDescriptionReference *pTypeRef, enum x86_64_reg_c
                 for ( sal_Int32 nMember = 0; nMember < pStruct->nMembers; ++nMember )
                 {
                     typelib_TypeDescriptionReference *pTypeInStruct = pStruct->ppTypeRefs[ nMember ];
-                    rByteOffset = pStruct->pMemberOffsets[ nMember ];
+                    int offset = byteOffset + pStruct->pMemberOffsets[ nMember ];
 
-                    int num = classify_argument( pTypeInStruct, subclasses, rByteOffset );
+                    int num = classify_argument( pTypeInStruct, subclasses, offset );
 
                     if ( num == 0 )
                     {
@@ -241,7 +236,7 @@ classify_argument( typelib_TypeDescriptionReference *pTypeRef, enum x86_64_reg_c
 
                     for ( int i = 0; i < num; i++ )
                     {
-                        int pos = rByteOffset / 8;
+                        int pos = offset / 8;
                         classes[i + pos] = merge_classes( subclasses[i], classes[i + pos] );
                     }
                 }
@@ -284,10 +279,9 @@ classify_argument( typelib_TypeDescriptionReference *pTypeRef, enum x86_64_reg_c
 bool x86_64::examine_argument( typelib_TypeDescriptionReference *pTypeRef, bool bInReturn, int &nUsedGPR, int &nUsedSSE )
 {
     enum x86_64_reg_class classes[MAX_CLASSES];
-    int offset = 0;
     int n;
 
-    n = classify_argument( pTypeRef, classes, offset );
+    n = classify_argument( pTypeRef, classes, 0 );
 
     if ( n == 0 )
         return false;
@@ -333,10 +327,9 @@ bool x86_64::return_in_hidden_param( typelib_TypeDescriptionReference *pTypeRef 
 void x86_64::fill_struct( typelib_TypeDescriptionReference *pTypeRef, const sal_uInt64 *pGPR, const double *pSSE, void *pStruct )
 {
     enum x86_64_reg_class classes[MAX_CLASSES];
-    int offset = 0;
     int n;
 
-    n = classify_argument( pTypeRef, classes, offset );
+    n = classify_argument( pTypeRef, classes, 0 );
 
     sal_uInt64 *pStructAlign = reinterpret_cast<sal_uInt64 *>( pStruct );
     for ( n--; n >= 0; n-- )
@@ -444,10 +437,10 @@ ffi_prep_args (stackLayout *stack, extended_cif *ecif)
       /* All easy cases are eliminated. Now fire the big guns.  */
 
       enum x86_64_reg_class classes[MAX_CLASSES];
-      int offset = 0, j, num;
+      int j, num;
       void *a;
 
-      num = classify_argument (*p_arg, classes, &offset);
+      num = classify_argument (*p_arg, classes, 0);
       for (j=0, a=*p_argv; j<num; j++, a+=8)
         {
           switch (classes[j])
@@ -574,7 +567,7 @@ ffi_fill_return_value (return_value *rv, extended_cif *ecif)
             ;
     }
 
-    num = classify_argument (ecif->cif->rtype, classes, &i);
+    num = classify_argument (ecif->cif->rtype, classes, 0);
 
     if (num == 0)
         /* Return in memory.  */
