@@ -35,7 +35,6 @@
 
 #include "vcl/dllapi.h"
 #include "vcl/helper.hxx"
-#include "vcl/impfont.hxx"
 
 #include "com/sun/star/lang/Locale.hpp"
 
@@ -50,6 +49,7 @@
 // forward declarations
 namespace utl { class MultiAtomProvider; } // see unotools/atom.hxx
 class FontSubsetInfo;
+class ImplFontOptions;
 
 namespace psp {
 class PPDParser; // see ppdparser.hxx

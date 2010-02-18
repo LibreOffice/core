@@ -32,6 +32,7 @@
 
 #include "vcl/fontmanager.hxx"
 #include "vcl/fontcache.hxx"
+#include "vcl/impfont.hxx"
 
 using namespace psp;
 
