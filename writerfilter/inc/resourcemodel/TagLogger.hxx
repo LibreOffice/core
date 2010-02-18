@@ -96,6 +96,7 @@ namespace writerfilter
         stack<XMLTag::Pointer_t> mTags;
         XMLTag::Pointer_t currentTag() const;
         XMLTag::Pointer_t mpRoot;
+        string mFileName;
 
         TagLogger();
 
@@ -103,6 +104,8 @@ namespace writerfilter
         ~TagLogger();
 
         static Pointer_t getInstance(const char * name);
+
+        void setFileName(const string & rName);
 
         void startDocument();
         void element(const string & name);
