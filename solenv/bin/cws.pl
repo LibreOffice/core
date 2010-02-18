@@ -62,7 +62,7 @@ use Cws;
 # TODO: replace dummy vales with actual SVN->hg and source_config migration milestones
 my $dev300_migration_milestone = 'm64';
 my $dev300_source_config_milestone = 'm65';
-my $ooo320_migration_milestone = 'm999';
+my $ooo320_migration_milestone = 'm13';
 my $ooo320_source_config_milestone = 'm999';
 
 # valid command with possible abbreviations
@@ -477,19 +477,7 @@ sub hgrc_append_push_path_and_hooks
     close(HGRC);
 }
 
-sub is_hg_strip_available
-{
-    my $profile = hg_show();
-
-    foreach (@{$profile}) {
-        if ( $_ =~ /hgext.mq=/ ) {
-            return 1;
-        }
-    }
-    return 0;
-}
-
-sub hg_clone_repository
+sub hg_clone_cws_or_milestone
 {
     my $rep_type             = shift;
     my $cws                  = shift;
@@ -510,6 +498,7 @@ sub hg_clone_repository
     }
 
     my $masterws = $cws->master();
+    my $milestone = $cws->milestone();
     my $master_local_source = "$hg_local_source/" . $masterws;
     my $master_lan_source = "$hg_lan_source/" . $masterws;
 
@@ -530,74 +519,75 @@ sub hg_clone_repository
         }
     }
 
-    # clone from local source if possible, otherwise from LAN source
-    if ( -d $master_local_source && can_use_hardlinks($master_local_source, dirname($target)) ) {
-        hg_local_clone_repository($master_local_source, $target, $milestone_tag);
-    }
-    else {
-        hg_lan_clone_repository($master_lan_source, $target, $milestone_tag);
-    }
-
-    # now pull from the remote cws outgoing repository if it already contains something
+    my $pull_from_remote = 0;
+    my $cws_remote_source;
     if ( !$clone_milestone_only ) {
-        my $cws_remote_source = "$hg_remote_source/cws/" . $cws->child();
+        $cws_remote_source = "$hg_remote_source/cws/" . $cws->child();
 
         # The outgoing repository might not yet be available. Which is not
         # an error. Since pulling from the cws outgoing URL results in an ugly
-        # and hardly understandable error message, we check for the availaility
+        # and hardly understandable error message, we check for availibility
         # first. TODO: incorporate configured proxy instead of env_proxy. Use
         # a dedicated request and content-type to find out if the repo is there
         # instead of parsing the content of the page
+        print_message("... check availibility of 'outgoing' repository '$cws_remote_source'.");
         require LWP::Simple;
         my $content = LWP::Simple::get($cws_remote_source);
         my $pattern = "<title>cws/". $cws->child();
         if ( $content =~ /$pattern/ ) {
-            hg_remote_pull_repository($cws_remote_source, $target);
+            $pull_from_remote = 1;
         }
         else {
-            print_message("The 'outgoing' repository '$cws_remote_source' is not accessible/available");
+            print_message("... 'outgoing' repository '$cws_remote_source' is not accessible/available yet.");
         }
+    }
+
+    # clone repository (without working tree if we still need to pull from remote)
+    my $clone_with_update = !$pull_from_remote;
+    hg_clone_repository($master_local_source, $master_lan_source, $target, $milestone_tag, $clone_with_update);
+
+    # now pull from the remote cws outgoing repository if its already available
+    if ( !$pull_from_remote ) {
+        hg_remote_pull_repository($cws_remote_source, $target);
+    }
+
+    # if we fetched a CWS adorn the result with push-path and hooks
+    if ( $cws_remote_source ) {
         hgrc_append_push_path_and_hooks($target, $cws_remote_source);
     }
 
-    # update the result
-    hg_update_repository($target);
-
-}
-
-sub hg_local_clone_repository
-{
-    my $local_source  = shift;
-    my $dest          = shift;
-    my $milestone_tag = shift;
-
-    # fastest way to clone a repository up to a certain milestone
-    # 1) clone w/o -r options (hard links!)
-    # 2) find (local) revision which corresponds to milestone
-    # 3) strip revision+1
-
-    my $t1 = Benchmark->new();
-    print_message("... clone LOCAL repository '$local_source' to '$dest'");
-    hg_clone($local_source, $dest, '-U');
-    my $id_option = "-n -r $milestone_tag";
-    my $revision = hg_ident($dest, $milestone_tag);
-    if ( defined($revision) ) {
-        my $strip_revision = $revision+1;
-        hg_strip($dest, $revision);
+    # update the result if necessary
+    if ( !$clone_with_update ) {
+        hg_update_repository($target);
     }
-    my $t2 = Benchmark->new();
-    print_time_elapsed($t1, $t2) if $profile;
+
 }
 
-sub hg_lan_clone_repository
+sub hg_clone_repository
 {
+    my $local_source    = shift;
     my $lan_source    = shift;
     my $dest          = shift;
     my $milestone_tag = shift;
+    my $update        = shift;
 
     my $t1 = Benchmark->new();
-    print_message("... clone LAN repository '$lan_source' to '$dest'");
-    hg_clone($lan_source, $dest, "-U -r $milestone_tag");
+    my $source;
+    my $clone_option = $update ? '' : '-U ';
+    if ( -d $local_source && can_use_hardlinks($local_source, $dest) ) {
+        $source = $local_source;
+        if ( !hg_milestone_is_latest_in_repository($local_source, $milestone_tag) ) {
+                $clone_option .= "-r $milestone_tag";
+        }
+        print_message("... clone LOCAL repository '$local_source' to '$dest'");
+    }
+    else {
+        $source = $lan_source;
+        $clone_option .= "-r $milestone_tag";
+        print_message("... clone LAN repository '$lan_source' to '$dest'");
+    }
+    hg_clone($source, $dest, $clone_option);
+
     my $t2 = Benchmark->new();
     print_time_elapsed($t1, $t2) if $profile;
 }
@@ -625,6 +615,21 @@ sub hg_update_repository
     print_time_elapsed($t1, $t2) if $profile;
 }
 
+sub hg_milestone_is_latest_in_repository
+{
+    my $repository = shift;
+    my $milestone_tag = shift;
+
+    # Our milestone is the lastest thing in the repository
+    # if the parent of the repository tip is adorned
+    # with the milestone tag.
+    my $tags_of_parent_of_tip = hg_parent($repository, 'tip', "--template='{tags}\\n'");
+    if ( $tags_of_parent_of_tip =~ /\b$milestone_tag\b/ ) {
+        return 1;
+    }
+    return 0;
+}
+
 # Check if clone source and destination are on the same filesystem,
 # in that case hg clone can employ hard links.
 sub can_use_hardlinks
@@ -638,12 +643,14 @@ sub can_use_hardlinks
     }
     # st_dev is the first field return by stat()
     my @stat_source = stat($source);
-    my @stat_dest = stat($dest);
+    my @stat_dest = stat(dirname($dest));
 
     if ( $debug ) {
-        print STDERR "can_use_hardlinks(): source device: '$stat_source[0]', destination device: '$stat_dest[0]'\n";
+        my $source_result = defined($stat_source[0]) ? $stat_source[0] : 'stat failed';
+        my $dest_result = defined($stat_dest[0]) ? $stat_dest[0] : 'stat failed';
+        print STDERR "CWS-DEBUG: can_use_hardlinks(): source device: '$stat_source[0]', destination device: '$stat_dest[0]'\n";
     }
-    if ( $stat_source[0] == $stat_dest[0] ) {
+    if ( defined($stat_source[0]) && defined($stat_dest[0]) && $stat_source[0] == $stat_dest[0] ) {
         return 1;
     }
     return 0;
@@ -2163,15 +2170,6 @@ sub do_fetch
         print STDERR "CWS-DEBUG: SCM: $scm\n";
     }
 
-    if ( $scm eq 'HG' ) {
-        if ( !is_hg_strip_available() ) {
-            print_error("The 'cws fetch' command requires that 'hg strip' is enabled", 0);
-            print_error("Please add the following lines to your hg profile (\$HOME/.hgrc)", 0);
-            print_error("[extensions]", 0);
-            print_error("hgext.mq=", 33);
-        }
-    }
-
     my $config = CwsConfig->new();
     my $ooo_svn_server = $config->get_ooo_svn_server();
     my $so_svn_server = $config->get_so_svn_server();
@@ -2303,8 +2301,8 @@ sub do_fetch
                     svn_checkout($so_url, "$work_master/sun", $quiet);
                 }
                 else{
-                    hg_clone_repository('ooo', $cws, "$work_master/ooo", $clone_milestone_only);
-                    hg_clone_repository('so', $cws, "$work_master/sun", $clone_milestone_only);
+                    hg_clone_cws_or_milestone('ooo', $cws, "$work_master/ooo", $clone_milestone_only);
+                    hg_clone_cws_or_milestone('so', $cws, "$work_master/sun", $clone_milestone_only);
                 }
                 if ( get_source_config_for_milestone($masterws, $milestone) ) {
                     # write source_config file
@@ -2331,7 +2329,7 @@ sub do_fetch
                     svn_checkout($ooo_url, $workspace, $quiet);
                 }
                 else {
-                    hg_clone_repository('ooo', $cws, $workspace, $clone_milestone_only);
+                    hg_clone_cws_or_milestone('ooo', $cws, $workspace, $clone_milestone_only);
                 }
             }
         }
@@ -3005,44 +3003,20 @@ sub hg_clone
     return @result;
 }
 
-sub hg_ident
+sub hg_parent
 {
     my $repository  = shift;
     my $rev_id = shift;
+    my $options = shift;
 
     if ( $debug ) {
-        print STDERR "CWS-DEBUG: ... hg ident: 'repository', revision: '$rev_id'\n";
+        print STDERR "CWS-DEBUG: ... hg parent: 'repository', revision: '$rev_id', options: $options\n";
     }
 
-    my @result = execute_hg_command(0, 'ident', "--cwd $repository", "-n -r $rev_id");
+    my @result = execute_hg_command(0, 'parent', "--cwd $repository", "-r $rev_id", $options);
     my $line = $result[0];
-    if ($line =~ /abort: unknown revision/) {
-        return undef;
-    }
-    else {
-        chomp($line);
-        return $line;
-    }
-}
-
-sub hg_strip
-{
-    my $repository  = shift;
-    my $rev_id = shift;
-
-    if ( $debug ) {
-        print STDERR "CWS-DEBUG: ... hg strip: 'repository', revision: '$rev_id'\n";
-    }
-
-    my @result = execute_hg_command(1, 'strip', "--cwd $repository", '-n', $rev_id);
-    my $line = $result[0];
-    if ($line =~ /abort: unknown revision/) {
-        return undef;
-    }
-    else {
-        chomp($line);
-        return $line;
-    }
+    chomp($line);
+    return $line;
 }
 
 sub hg_pull
