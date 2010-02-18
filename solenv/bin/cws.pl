@@ -2195,8 +2195,8 @@ sub do_fetch
                     $nonproduct = 1;
                 }
             }
-            push(@platforms, 'common.pro') if ($product && !$added_product);
-            push(@platforms, 'common') if ($nonproduct && !$added_nonproduct);
+            unshift(@platforms, 'common.pro') if ($product && !$added_product);
+            unshift(@platforms, 'common') if ($nonproduct && !$added_nonproduct);
         }
 
         foreach(@platforms) {
