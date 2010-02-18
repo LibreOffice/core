@@ -160,14 +160,6 @@ ScrollBtn framework:PushButton:DLG_LICENSE:PB_PAGEDOWN
 DeclineBtn framework:PushButton:DLG_LICENSE:PB_DECLINE
 AcceptBtn framework:PushButton:DLG_LICENSE:PB_ACCEPT
 
-*LoginDialog svtools:ModalDialog:DLG_LOGIN
-Path svtools:Edit:DLG_LOGIN:ED_LOGIN_PATH
-BrowsePath svtools:PushButton:DLG_LOGIN:BTN_LOGIN_PATH
-Username svtools:Edit:DLG_LOGIN:ED_LOGIN_USERNAME
-Password svtools:Edit:DLG_LOGIN:ED_LOGIN_PASSWORD
-Accountname svtools:Edit:DLG_LOGIN:ED_LOGIN_ACCOUNT
-Remember svtools:CheckBox:DLG_LOGIN:CB_LOGIN_SAVEPASSWORD
-
 *FormLinkDialog extensions:ModalDialog:RID_DLG_FORMLINKS
 LinkDetail1 UID_FIELDLINK_DETAIL1
 LinkMaster1 UID_FIELDLINK_MASTER1

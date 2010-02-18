@@ -100,7 +100,7 @@ function fConnectToDatasourceInBeamer(sDSName , sPWD, optional bNewDoc)
         DatabaseSelection.TypeKeys "<ADD>"                
         Kontext "LoginDialog"
             if LoginDialog.Exists(3) then
-                Password.SetText sPWD
+                LoginPassword.SetText sPWD
                 LoginDialog.OK                
             end if
         bConnect = true    
