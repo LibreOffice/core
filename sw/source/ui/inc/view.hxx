@@ -597,6 +597,7 @@ public:
                  SwDocShell     *GetDocShell();
     inline const SwDocShell     *GetDocShell() const;
     inline       FmFormShell    *GetFormShell() { return pFormShell; }
+    inline const FmFormShell    *GetFormShell() const { return pFormShell; }
 
     //damit in DToren der SubShells ggf. pShell zurueckgesetzt werden kann
     void ResetSubShell()    { pShell = 0; }

@@ -713,7 +713,7 @@ uno::Reference< form::runtime::XFormController > SAL_CALL SwXTextView::getFormCo
     FmFormShell* pFormShell = pView2 ? pView2->GetFormShell() : NULL;
     SdrView* pDrawView = pView2 ? pView2->GetDrawView() : NULL;
     Window* pWindow = pView2 ? pView2->GetWrtShell().GetWin() : NULL;
-    DBG_ASSERT( pFormShell && pDrawView && pWindow, "SwXTextView::GetControl: how could I?" );
+    DBG_ASSERT( pFormShell && pDrawView && pWindow, "SwXTextView::getFormController: how could I?" );
 
     uno::Reference< form::runtime::XFormController > xController;
     if ( pFormShell && pDrawView && pWindow )

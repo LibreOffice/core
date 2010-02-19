@@ -475,6 +475,11 @@ interface BaseText
      //
      // Goto - Methoden
      //
+    SID_FM_TOGGLECONTROLFOCUS
+    [
+        ExecMethod = ExecMoveMisc ;
+        StateMethod = NoState ;
+    ]
     FN_CNTNT_TO_NEXT_FRAME // status(final|play)
     [
         ExecMethod = ExecMoveMisc ;
