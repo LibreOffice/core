@@ -175,13 +175,15 @@ public:
     // set by user through printer config dialog
     // if set, pages are centered and trimmed onto the fixed page
     Size                                                        maFixedPageSize;
+    sal_Int32                                                   mnDefaultPaperBin;
 
     ImplPrinterControllerData() :
         mbFirstPage( sal_True ),
         mbLastPage( sal_False ),
         mbReversePageOrder( sal_False ),
         meJobState( view::PrintableState_JOB_STARTED ),
-        mpProgress( NULL )
+        mpProgress( NULL ),
+        mnDefaultPaperBin( -1 )
     {}
     ~ImplPrinterControllerData() { delete mpProgress; }
 
@@ -708,6 +710,7 @@ void PrinterController::setPrinter( const boost::shared_ptr<Printer>& i_rPrinter
     mpImplData->mpPrinter = i_rPrinter;
     setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ) ),
               makeAny( rtl::OUString( i_rPrinter->GetName() ) ) );
+    mpImplData->mnDefaultPaperBin = mpImplData->mpPrinter->GetPaperBin();
 }
 
 bool PrinterController::setupPrinter( Window* i_pParent )
@@ -743,7 +746,7 @@ PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( cons
     PrinterController::PageSize aPageSize;
     aPageSize.aSize = mpPrinter->GetPaperSize();
     awt::Size aSetSize, aIsSize;
-    sal_Int32 nPaperBin = -1;
+    sal_Int32 nPaperBin = mnDefaultPaperBin;
     for( sal_Int32 nProperty = 0, nPropertyCount = i_rProps.getLength(); nProperty < nPropertyCount; ++nProperty )
     {
         if( i_rProps[ nProperty ].Name.equalsAscii( "PreferredPageSize" ) )
@@ -762,7 +765,10 @@ PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( cons
         }
         else if( i_rProps[ nProperty ].Name.equalsAscii( "PrinterPaperTray" ) )
         {
-            i_rProps[ nProperty ].Value >>= nPaperBin;
+            sal_Int32 nBin = -1;
+            i_rProps[ nProperty ].Value >>= nBin;
+            if( nBin >= 0 && nBin < mpPrinter->GetPaperBinCount() )
+                nPaperBin = nBin;
         }
     }
 
