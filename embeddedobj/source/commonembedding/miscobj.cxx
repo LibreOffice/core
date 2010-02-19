@@ -66,6 +66,7 @@ OCommonEmbeddedObject::OCommonEmbeddedObject( const uno::Reference< lang::XMulti
 , m_xFactory( xFactory )
 , m_nMiscStatus( 0 )
 , m_bEmbeddedScriptSupport( sal_True )
+, m_bDocumentRecoverySupport( sal_True )
 , m_bWaitSaveCompleted( sal_False )
 , m_bIsLink( sal_False )
 , m_bLinkHasPassword( sal_False )
@@ -92,6 +93,7 @@ OCommonEmbeddedObject::OCommonEmbeddedObject(
 , m_xFactory( xFactory )
 , m_nMiscStatus( 0 )
 , m_bEmbeddedScriptSupport( sal_True )
+, m_bDocumentRecoverySupport( sal_True )
 , m_bWaitSaveCompleted( sal_False )
 , m_bIsLink( sal_True )
 , m_bLinkHasPassword( sal_False )
@@ -644,7 +646,8 @@ void SAL_CALL OCommonEmbeddedObject::close( sal_Bool bDeliverOwnership )
             } catch ( uno::Exception& ) {}
         }
 
-        m_xObjectStorage = uno::Reference< embed::XStorage >();
+        m_xObjectStorage.clear();
+        m_xRecoveryStorage.clear();
     }
 
     m_bClosed = sal_True; // the closing succeeded

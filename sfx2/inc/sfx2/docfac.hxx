@@ -85,6 +85,7 @@ public:
     const SvGlobalName& GetClassId() const;
     SfxObjectShellFlags GetFlags() { return nFlags; }
     const char*     GetShortName() const { return pShortName; }
+    String          GetFactoryURL() const;  // shortcut for "private:factory/GetShortName()"
     String          GetFactoryName() const { return String::CreateFromAscii( pShortName ); }
     String          GetModuleName() const;
     void            SetDocumentTypeNameResource( const ResId& rId );
@@ -95,6 +96,9 @@ public:
     void            RegisterViewFactory(SfxViewFactory &rFactory);
     USHORT          GetViewFactoryCount() const;
     SfxViewFactory& GetViewFactory(USHORT i = 0) const;
+
+    /// returns the view factory whose GetViewName delivers the requested logical name
+    SfxViewFactory* GetViewFactoryByViewName( const String& i_rViewName ) const;
 
     // Filter
     const SfxFilter* GetTemplateFilter() const;
@@ -109,6 +113,7 @@ public:
 //#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE void SetModule_Impl( SfxModule* );
     SAL_DLLPRIVATE static void UpdateFilterContainers_Impl();
+    SAL_DLLPRIVATE sal_uInt16 GetViewNo_Impl( const sal_uInt16 i_nViewId, const sal_uInt16 i_nFallback ) const;
 //#endif
 
 private:

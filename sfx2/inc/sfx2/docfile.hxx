@@ -51,7 +51,6 @@
 #include <svl/lstner.hxx>
 
 #include <tools/globname.hxx>
-#include <svl/cancel.hxx>
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/content.hxx>
 
@@ -67,16 +66,6 @@ class SfxItemSet;
 class DateTime;
 class SvStringsDtor;
 class SvEaMgr;
-class SfxPoolCancelManager_Impl;
-
-#define SFX_TFPRIO_SYNCHRON                        0
-#define SFX_TFPRIO_DOC                            10
-#define SFX_TFPRIO_VISIBLE_LOWRES_GRAPHIC         20
-#define SFX_TFPRIO_VISIBLE_HIGHRES_GRAPHIC        21
-#define SFX_TFPRIO_PLUGINS                        40
-#define SFX_TFPRIO_INVISIBLE_LOWRES_GRAPHIC       50
-#define SFX_TFPRIO_INVISIBLE_HIGHRES_GRAPHIC      51
-#define SFX_TFPRIO_DOWNLOADS                      60
 
 #define S2BS(s) ByteString( s, RTL_TEXTENCODING_MS_1252 )
 
@@ -160,7 +149,6 @@ public:
 
     void                SetLoadTargetFrame(SfxFrame* pFrame );
     SfxFrame*           GetLoadTargetFrame() const;
-    void                CancelTransfers();
 
     void                SetReferer( const String& rRefer );
     const String&       GetReferer( ) const;
@@ -238,7 +226,6 @@ public:
     void                SetUsesCache( sal_Bool );
     sal_Bool            IsExpired() const;
     void                SetName( const String& rName, sal_Bool bSetOrigURL = sal_False );
-    void                SetDontCreateCancellable();
     sal_Bool            IsAllowedForExternalBrowser() const;
     long                GetFileVersion() const;
 
@@ -276,8 +263,6 @@ public:
     SAL_DLLPRIVATE sal_Bool TransferVersionList_Impl( SfxMedium& rMedium );
     SAL_DLLPRIVATE sal_Bool SaveVersionList_Impl( sal_Bool bUseXML );
     SAL_DLLPRIVATE sal_Bool RemoveVersion_Impl( const ::rtl::OUString& rVersion );
-    SAL_DLLPRIVATE SfxPoolCancelManager_Impl* GetCancelManager_Impl() const;
-    SAL_DLLPRIVATE void SetCancelManager_Impl( SfxPoolCancelManager_Impl* pMgr );
 
     SAL_DLLPRIVATE void SetExpired_Impl( const DateTime& rDateTime );
     SAL_DLLPRIVATE SvKeyValueIterator* GetHeaderAttributes_Impl();

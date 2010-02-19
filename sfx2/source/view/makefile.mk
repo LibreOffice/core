@@ -49,17 +49,17 @@ SRC1FILES = \
                 view.src
 
 SLOFILES =	\
-                $(SLO)$/ipclient.obj \
+        $(SLO)$/ipclient.obj \
         $(SLO)$/viewsh.obj \
         $(SLO)$/frmload.obj \
         $(SLO)$/frame.obj \
+        $(SLO)$/frame2.obj \
         $(SLO)$/printer.obj \
         $(SLO)$/viewprn.obj \
         $(SLO)$/viewfac.obj \
         $(SLO)$/orgmgr.obj \
         $(SLO)$/viewfrm.obj \
-        $(SLO)$/impframe.obj \
-        $(SLO)$/topfrm.obj \
+        $(SLO)$/viewfrm2.obj \
         $(SLO)$/sfxbasecontroller.obj \
         $(SLO)$/userinputinterception.obj
 

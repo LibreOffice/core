@@ -35,6 +35,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
@@ -72,6 +73,10 @@ namespace com { namespace sun { namespace star {
 
 namespace cppu {
     class OMultiTypeInterfaceContainerHelper;
+}
+
+namespace comphelper {
+    class NamedValueCollection;
 }
 
 #define NUM_SUPPORTED_STATES 5
@@ -129,6 +134,7 @@ protected:
     ::rtl::OUString m_aDefaultParentBaseURL;
     ::rtl::OUString m_aModuleName;
     sal_Bool        m_bEmbeddedScriptSupport;
+    sal_Bool        m_bDocumentRecoverySupport;
 
     Interceptor* m_pInterceptor;
 
@@ -149,6 +155,7 @@ protected:
     ::rtl::OUString m_aEntryName;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xParentStorage;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xObjectStorage;
+    ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > m_xRecoveryStorage;
 
     // link related stuff
     ::rtl::OUString m_aLinkURL;
@@ -180,8 +187,8 @@ private:
                 const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xNewParentStorage,
                 const ::rtl::OUString& aNewName );
 
-    ::rtl::OUString GetDocumentServiceName() { return m_aDocServiceName; }
-    ::rtl::OUString GetPresetFilterName() { return m_aPresetFilterName; }
+    ::rtl::OUString GetDocumentServiceName() const { return m_aDocServiceName; }
+    ::rtl::OUString GetPresetFilterName() const { return m_aPresetFilterName; }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
         StoreDocumentToTempStream_Impl( sal_Int32 nStorageFormat,
@@ -198,9 +205,8 @@ private:
 
     ::com::sun::star::uno::Sequence< sal_Int32 > GetIntermediateStatesSequence_Impl( sal_Int32 nNewState );
 
-    ::rtl::OUString GetFilterName( sal_Int32 nVersion );
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > LoadDocumentFromStorage_Impl(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+    ::rtl::OUString GetFilterName( sal_Int32 nVersion ) const;
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > LoadDocumentFromStorage_Impl();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > LoadLink_Impl();
 
@@ -212,12 +218,25 @@ private:
                                 const ::rtl::OUString& aHierarchName,
                                 sal_Bool bAttachToStorage );
 
+    void SwitchDocToStorage_Impl(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::document::XStorageBasedDocument >& xDoc,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
+
+    void FillDefaultLoadArgs_Impl(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& i_rxStorage,
+                  ::comphelper::NamedValueCollection& o_rLoadArgs
+        ) const;
+
+    void EmbedAndReparentDoc_Impl(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable >& i_rxDocument
+        ) const;
+
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > CreateDocFromMediaDescr_Impl(
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aMedDescr );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > CreateTempDocFromLink_Impl();
 
-    ::rtl::OUString GetBaseURL_Impl();
+    ::rtl::OUString GetBaseURL_Impl() const;
     ::rtl::OUString GetBaseURLFrom_Impl(
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments,
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lObjArgs );

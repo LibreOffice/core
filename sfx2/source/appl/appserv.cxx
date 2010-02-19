@@ -71,7 +71,6 @@
 #include <tools/config.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/msgbox.hxx>
-#include <svl/cancel.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
@@ -96,9 +95,11 @@
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
+#include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include "about.hxx"
+#include "frmload.hxx"
 #include "referers.hxx"
 #include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
@@ -132,7 +133,7 @@
 #include "minfitem.hxx"
 #include <sfx2/event.hxx>
 #include <sfx2/module.hxx>
-#include <sfx2/topfrm.hxx>
+#include <sfx2/viewfrm.hxx>
 #include "sfxpicklist.hxx"
 #include "imestatuswindow.hxx"
 #include <sfx2/sfxdlg.hxx>
@@ -265,9 +266,9 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
                 Reference< XFrame > xFrame;
                 const SfxItemSet* pIntSet = rReq.GetInternalArgs_Impl();
-                SFX_ITEMSET_ARG( pIntSet, pFrame, SfxUnoAnyItem, SID_FILLFRAME, FALSE );
-                if (pFrame)
-                    pFrame->GetValue() >>= xFrame;
+                SFX_ITEMSET_ARG( pIntSet, pFrameItem, SfxUnoFrameItem, SID_FILLFRAME, FALSE );
+                if ( pFrameItem )
+                    xFrame = pFrameItem->GetFrame();
 
                 SfxAbstractTabDialog* pDlg = pFact->CreateTabDialog(
                     RID_SVXDLG_CUSTOMIZE,
@@ -823,6 +824,60 @@ namespace
         }
         return _pFallback;
     }
+
+    const ::rtl::OUString& lcl_getBasicIDEServiceName()
+    {
+        static const ::rtl::OUString s_sBasicName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.BasicIDE" ) );
+        return s_sBasicName;
+    }
+
+    SfxViewFrame* lcl_getBasicIDEViewFrame( SfxObjectShell* i_pBasicIDE )
+    {
+        SfxViewFrame* pView = SfxViewFrame::GetFirst( i_pBasicIDE );
+        while ( pView )
+        {
+            if ( pView->GetObjectShell()->GetFactory().GetDocumentServiceName() == lcl_getBasicIDEServiceName() )
+                break;
+            pView = SfxViewFrame::GetNext( *pView, i_pBasicIDE );
+        }
+        return pView;
+    }
+    Reference< XFrame > lcl_findStartModuleFrame( const ::comphelper::ComponentContext& i_rContext )
+    {
+        try
+        {
+            Reference < XFramesSupplier > xSupplier( i_rContext.createComponent( "com.sun.star.frame.Desktop" ), UNO_QUERY_THROW );
+            Reference < XIndexAccess > xContainer( xSupplier->getFrames(), UNO_QUERY_THROW );
+
+            Reference< XModuleManager > xCheck( i_rContext.createComponent( "com.sun.star.frame.ModuleManager" ), UNO_QUERY_THROW );
+
+            sal_Int32 nCount = xContainer->getCount();
+            for ( sal_Int32 i=0; i<nCount; ++i )
+            {
+                try
+                {
+                    Reference < XFrame > xFrame( xContainer->getByIndex(i), UNO_QUERY_THROW );
+                    ::rtl::OUString sModule = xCheck->identify( xFrame );
+                    if ( sModule.equalsAscii( "com.sun.star.frame.StartModule" ) )
+                        return xFrame;
+                }
+                catch( const UnknownModuleException& )
+                {
+                    // silence
+                }
+                catch(const Exception&)
+                {
+                    // re-throw, caught below
+                    throw;
+                }
+            }
+        }
+        catch( const Exception& )
+        {
+               DBG_UNHANDLED_EXCEPTION();
+        }
+        return NULL;
+    }
 }
 
 void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
@@ -840,7 +895,10 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             const SfxPoolItem* pItem = NULL;
             Reference < XFrame > xFrame;
             if ( pArgs && pArgs->GetItemState( SID_FILLFRAME, sal_False, &pItem ) == SFX_ITEM_SET )
-                 ( (SfxUnoAnyItem*)pItem )->GetValue() >>= xFrame;
+            {
+                OSL_ENSURE( pItem->ISA( SfxUnoFrameItem ), "SfxApplication::OfaExec_Impl: XFrames are to be transported via SfxUnoFrameItem by now!" );
+                xFrame = static_cast< const SfxUnoFrameItem*>( pItem )->GetFrame();
+            }
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
             if ( pFact )
             {
@@ -903,26 +961,46 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
         case SID_BASICIDE_APPEAR:
         {
-            SfxViewFrame* pView = SfxViewFrame::GetFirst();
-            ::rtl::OUString aBasicName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.BasicIDE" ) );
-            while ( pView )
-            {
-                if ( pView->GetObjectShell()->GetFactory().GetDocumentServiceName() == aBasicName )
-                    break;
-                pView = SfxViewFrame::GetNext( *pView );
-            }
-
+            SfxViewFrame* pView = lcl_getBasicIDEViewFrame( NULL );
             if ( !pView )
             {
-                SfxObjectShell* pDocShell = SfxObjectShell::CreateObject( aBasicName );
-                pDocShell->DoInitNew( 0 );
-                pDocShell->SetModified( FALSE );
-                pView = SfxViewFrame::CreateViewFrame( *pDocShell, 0 );
-                pView->SetName( String( RTL_CONSTASCII_USTRINGPARAM( "BASIC:1" ) ) );
+                SfxObjectShell* pBasicIDE = SfxObjectShell::CreateObject( lcl_getBasicIDEServiceName() );
+                pBasicIDE->DoInitNew( 0 );
+                pBasicIDE->SetModified( FALSE );
+                try
+                {
+                    // load the Basic IDE via direct access to the SFX frame loader. A generic loadComponentFromURL
+                    // (which could be done via SfxViewFrame::LoadDocumentIntoFrame) is not feasible here, since the Basic IDE
+                    // does not really play nice with the framework's concept. For instance, it is a "singleton document",
+                    // which conflicts, at the latest, with the framework's concept of loading into _blank frames.
+                    // So, since we know that our frame loader can handle it, we skip the generic framework loader
+                    // mechanism, and the type detection (which doesn't know about the Basic IDE).
+                    ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+                    Reference< XSynchronousFrameLoader > xLoader( aContext.createComponent(
+                        SfxFrameLoader_Impl::impl_getStaticImplementationName() ), UNO_QUERY_THROW );
+                    ::comphelper::NamedValueCollection aLoadArgs;
+                    aLoadArgs.put( "Model", pBasicIDE->GetModel() );
+                    aLoadArgs.put( "URL", ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:factory/sbasic" ) ) );
+
+                    Reference< XFrame > xTargetFrame( lcl_findStartModuleFrame( aContext ) );
+                    if ( !xTargetFrame.is() )
+                        xTargetFrame = SfxFrame::CreateBlankFrame();
+                    ENSURE_OR_THROW( xTargetFrame.is(), "could not obtain a frameto load the Basic IDE into!" );
+
+                    xLoader->load( aLoadArgs.getPropertyValues(), xTargetFrame );
+                }
+                catch( const Exception& )
+                {
+                    DBG_UNHANDLED_EXCEPTION();
+                }
+
+                pView = lcl_getBasicIDEViewFrame( pBasicIDE );
+                if ( pView )
+                    pView->SetName( String( RTL_CONSTASCII_USTRINGPARAM( "BASIC:1" ) ) );
             }
 
             if ( pView )
-                pView->GetFrame()->Appear();
+                pView->GetFrame().Appear();
 
             const SfxItemSet* pArgs = rReq.GetArgs();
             if ( pArgs && pView )
@@ -989,16 +1067,15 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
             Reference< XFrame > xFrame;
             const SfxItemSet* pIntSet = rReq.GetInternalArgs_Impl();
-            SFX_ITEMSET_ARG( pIntSet, pFrameItem, SfxUnoAnyItem, SID_FILLFRAME, FALSE );
+            SFX_ITEMSET_ARG( pIntSet, pFrameItem, SfxUnoFrameItem, SID_FILLFRAME, FALSE );
             if ( pFrameItem )
-                pFrameItem->GetValue() >>= xFrame;
+                xFrame = pFrameItem->GetFrame();
 
             if ( !xFrame.is() )
             {
                 const SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-                const SfxFrame* pFrame = pViewFrame ? pViewFrame->GetFrame() : NULL;
-                if ( pFrame )
-                    xFrame = pFrame->GetFrameInterface();
+                if ( pViewFrame )
+                    xFrame = pViewFrame->GetFrame().GetFrameInterface();
             }
 
             do  // artificial loop for flow control

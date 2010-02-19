@@ -63,8 +63,11 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/mimeconfighelper.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 
 #include <rtl/logfile.hxx>
+
+#include <tools/diagnose_ex.h>
 
 #define USE_STORAGEBASED_DOCUMENT
 
@@ -198,23 +201,34 @@ uno::Reference< io::XInputStream > createTempInpStreamFromStor(
 }
 
 //------------------------------------------------------
-static uno::Reference< util::XCloseable > CreateDocument( const uno::Reference< lang::XMultiServiceFactory >& _rxFactory,
-    const ::rtl::OUString& _rDocumentServiceName, bool _bEmbeddedScriptSupport )
+static void TransferMediaType( const uno::Reference< embed::XStorage >& i_rSource, const uno::Reference< embed::XStorage >& i_rTarget )
 {
-    uno::Sequence< uno::Any > aArguments(2);
-    aArguments[0] <<= beans::NamedValue(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EmbeddedObject" ) ),
-                        uno::makeAny( (sal_Bool)sal_True )
-                      );
-    aArguments[1] <<= beans::NamedValue(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EmbeddedScriptSupport" ) ),
-                        uno::makeAny( (sal_Bool)_bEmbeddedScriptSupport )
-                      );
+    try
+    {
+        const uno::Reference< beans::XPropertySet > xSourceProps( i_rSource, uno::UNO_QUERY_THROW );
+        const uno::Reference< beans::XPropertySet > xTargetProps( i_rTarget, uno::UNO_QUERY_THROW );
+        const ::rtl::OUString sMediaTypePropName( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) );
+        xTargetProps->setPropertyValue( sMediaTypePropName, xSourceProps->getPropertyValue( sMediaTypePropName ) );
+    }
+    catch( const uno::Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+}
+
+//------------------------------------------------------
+static uno::Reference< util::XCloseable > CreateDocument( const uno::Reference< lang::XMultiServiceFactory >& _rxFactory,
+    const ::rtl::OUString& _rDocumentServiceName, bool _bEmbeddedScriptSupport, const bool i_bDocumentRecoverySupport )
+{
+    ::comphelper::NamedValueCollection aArguments;
+    aArguments.put( "EmbeddedObject", (sal_Bool)sal_True );
+    aArguments.put( "EmbeddedScriptSupport", (sal_Bool)_bEmbeddedScriptSupport );
+    aArguments.put( "DocumentRecoverySupport", (sal_Bool)i_bDocumentRecoverySupport );
 
     uno::Reference< uno::XInterface > xDocument;
     try
     {
-        xDocument = _rxFactory->createInstanceWithArguments( _rDocumentServiceName, aArguments );
+        xDocument = _rxFactory->createInstanceWithArguments( _rDocumentServiceName, aArguments.getWrappedPropertyValues() );
     }
     catch( const uno::Exception& )
     {
@@ -276,7 +290,7 @@ void OCommonEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::X
     {
         uno::Reference< document::XStorageBasedDocument > xDoc( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
         if ( xDoc.is() )
-            xDoc->switchToStorage( m_xObjectStorage );
+            SwitchDocToStorage_Impl( xDoc, m_xObjectStorage );
     }
 #endif
 
@@ -305,10 +319,27 @@ void OCommonEmbeddedObject::SwitchOwnPersistence( const uno::Reference< embed::X
 }
 
 //------------------------------------------------------
+void OCommonEmbeddedObject::EmbedAndReparentDoc_Impl( const uno::Reference< util::XCloseable >& i_rxDocument ) const
+{
+    SetDocToEmbedded( uno::Reference< frame::XModel >( i_rxDocument, uno::UNO_QUERY ), m_aModuleName );
+
+    try
+    {
+        uno::Reference < container::XChild > xChild( i_rxDocument, uno::UNO_QUERY );
+        if ( xChild.is() )
+            xChild->setParent( m_xParent );
+    }
+    catch( const lang::NoSupportException & )
+    {
+        OSL_ENSURE( false, "OCommonEmbeddedObject::EmbedAndReparentDoc: cannot set parent at document!" );
+    }
+}
+
+//------------------------------------------------------
 uno::Reference< util::XCloseable > OCommonEmbeddedObject::InitNewDocument_Impl()
 {
     uno::Reference< util::XCloseable > xDocument( CreateDocument( m_xFactory, GetDocumentServiceName(),
-                                                m_bEmbeddedScriptSupport ) );
+                                                m_bEmbeddedScriptSupport, m_bDocumentRecoverySupport ) );
 
     uno::Reference< frame::XModel > xModel( xDocument, uno::UNO_QUERY );
     uno::Reference< frame::XLoadable > xLoadable( xModel, uno::UNO_QUERY );
@@ -318,22 +349,31 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::InitNewDocument_Impl()
     try
     {
         // set the document mode to embedded as the first action on document!!!
-        SetDocToEmbedded( xModel, m_aModuleName );
+        EmbedAndReparentDoc_Impl( xDocument );
 
-        try
+        // if we have a storage to recover the document from, do not use initNew, but instead load from that storage
+        bool bInitNew = true;
+        if ( m_xRecoveryStorage.is() )
         {
-            uno::Reference < container::XChild > xChild( xDocument, uno::UNO_QUERY );
-            if ( xChild.is() )
-                xChild->setParent( m_xParent );
-        }
-        catch( const lang::NoSupportException & )
-        {
-            OSL_ENSURE( false, "Cannot set parent at document" );
+            uno::Reference< document::XStorageBasedDocument > xDoc( xLoadable, uno::UNO_QUERY );
+            OSL_ENSURE( xDoc.is(), "OCommonEmbeddedObject::InitNewDocument_Impl: cannot recover from a storage when the document is not storage based!" );
+            if ( xDoc.is() )
+            {
+                ::comphelper::NamedValueCollection aLoadArgs;
+                FillDefaultLoadArgs_Impl( m_xRecoveryStorage, aLoadArgs );
+
+                xDoc->loadFromStorage( m_xRecoveryStorage, aLoadArgs.getPropertyValues() );
+                SwitchDocToStorage_Impl( xDoc, m_xObjectStorage );
+                bInitNew = false;
+            }
         }
 
-        // init document as a new
-        xLoadable->initNew();
-        xModel->attachResource( xModel->getURL(),m_aDocMediaDescriptor);
+        if ( bInitNew )
+        {
+            // init document as a new
+            xLoadable->initNew();
+        }
+        xModel->attachResource( xModel->getURL(), m_aDocMediaDescriptor );
     }
     catch( uno::Exception& )
     {
@@ -359,7 +399,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::InitNewDocument_Impl()
 uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
 {
     uno::Reference< util::XCloseable > xDocument( CreateDocument( m_xFactory, GetDocumentServiceName(),
-                                                m_bEmbeddedScriptSupport ) );
+                                                m_bEmbeddedScriptSupport, m_bDocumentRecoverySupport ) );
 
     uno::Reference< frame::XLoadable > xLoadable( xDocument, uno::UNO_QUERY );
     if ( !xLoadable.is() )
@@ -388,18 +428,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
     try
     {
         // the document is not really an embedded one, it is a link
-        SetDocToEmbedded( uno::Reference < frame::XModel >( xDocument, uno::UNO_QUERY ), m_aModuleName );
-
-        try
-        {
-            uno::Reference < container::XChild > xChild( xDocument, uno::UNO_QUERY );
-            if ( xChild.is() )
-                xChild->setParent( m_xParent );
-        }
-        catch( const lang::NoSupportException & )
-        {
-            OSL_ENSURE( false, "Cannot set parent at document" );
-        }
+        EmbedAndReparentDoc_Impl( xDocument );
 
         // load the document
         xLoadable->load( aArgs );
@@ -440,7 +469,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
 }
 
 //------------------------------------------------------
-::rtl::OUString OCommonEmbeddedObject::GetFilterName( sal_Int32 nVersion )
+::rtl::OUString OCommonEmbeddedObject::GetFilterName( sal_Int32 nVersion ) const
 {
     ::rtl::OUString aFilterName = GetPresetFilterName();
     if ( !aFilterName.getLength() )
@@ -456,13 +485,30 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
 }
 
 //------------------------------------------------------
-uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorage_Impl(
-                                                            const uno::Reference< embed::XStorage >& xStorage )
+void OCommonEmbeddedObject::FillDefaultLoadArgs_Impl( const uno::Reference< embed::XStorage >& i_rxStorage,
+        ::comphelper::NamedValueCollection& o_rLoadArgs ) const
 {
-    OSL_ENSURE( xStorage.is(), "The storage can not be empty!" );
+    o_rLoadArgs.put( "DocumentBaseURL", GetBaseURL_Impl() );
+    o_rLoadArgs.put( "HierarchicalDocumentName", m_aEntryName );
+    o_rLoadArgs.put( "ReadOnly", m_bReadOnly );
+
+    ::rtl::OUString aFilterName = GetFilterName( ::comphelper::OStorageHelper::GetXStorageFormat( i_rxStorage ) );
+    OSL_ENSURE( aFilterName.getLength(), "OCommonEmbeddedObject::FillDefaultLoadArgs_Impl: Wrong document service name!" );
+    if ( !aFilterName.getLength() )
+        throw io::IOException();    // TODO: error message/code
+
+    o_rLoadArgs.put( "FilterName", aFilterName );
+}
+
+//------------------------------------------------------
+uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorage_Impl()
+{
+    ENSURE_OR_THROW( m_xObjectStorage.is(), "no object storage" );
+
+    const uno::Reference< embed::XStorage > xSourceStorage( m_xRecoveryStorage.is() ? m_xRecoveryStorage : m_xObjectStorage );
 
     uno::Reference< util::XCloseable > xDocument( CreateDocument( m_xFactory, GetDocumentServiceName(),
-                                                m_bEmbeddedScriptSupport ) );
+                                                m_bEmbeddedScriptSupport, m_bDocumentRecoverySupport ) );
 
     //#i103460# ODF: take the size given from the parent frame as default
     uno::Reference< chart2::XChartDocument > xChart( xDocument, uno::UNO_QUERY );
@@ -482,28 +528,13 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
     if ( !xDoc.is() && !xLoadable.is() ) ///BUG: This should be || instead of && ?
         throw uno::RuntimeException();
 
-    ::rtl::OUString aFilterName = GetFilterName( ::comphelper::OStorageHelper::GetXStorageFormat( xStorage ) );
-
-    OSL_ENSURE( aFilterName.getLength(), "Wrong document service name!" );
-    if ( !aFilterName.getLength() )
-        throw io::IOException();
-
-    sal_Int32 nLen = xDoc.is() ? 4 : 6;
-    uno::Sequence< beans::PropertyValue > aArgs( nLen );
-
-    aArgs[0].Name = ::rtl::OUString::createFromAscii( "DocumentBaseURL" );
-    aArgs[0].Value <<= GetBaseURL_Impl();
-    aArgs[1].Name = ::rtl::OUString::createFromAscii( "HierarchicalDocumentName" );
-    aArgs[1].Value <<= m_aEntryName;
-    aArgs[2].Name = ::rtl::OUString::createFromAscii( "ReadOnly" );
-    aArgs[2].Value <<= m_bReadOnly;
-    aArgs[3].Name = ::rtl::OUString::createFromAscii( "FilterName" );
-    aArgs[3].Value <<= aFilterName;
+    ::comphelper::NamedValueCollection aLoadArgs;
+    FillDefaultLoadArgs_Impl( xSourceStorage, aLoadArgs );
 
     uno::Reference< io::XInputStream > xTempInpStream;
     if ( !xDoc.is() )
     {
-        xTempInpStream = createTempInpStreamFromStor( xStorage, m_xFactory );
+        xTempInpStream = createTempInpStreamFromStor( xSourceStorage, m_xFactory );
         if ( !xTempInpStream.is() )
             throw uno::RuntimeException();
 
@@ -521,42 +552,27 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
 
         OSL_ENSURE( aTempFileURL.getLength(), "Coudn't retrieve temporary file URL!\n" );
 
-        aArgs[4].Name = ::rtl::OUString::createFromAscii( "URL" );
-        aArgs[4].Value <<= aTempFileURL; // ::rtl::OUString::createFromAscii( "private:stream" );
-        aArgs[5].Name = ::rtl::OUString::createFromAscii( "InputStream" );
-        aArgs[5].Value <<= xTempInpStream;
+        aLoadArgs.put( "URL", aTempFileURL );
+        aLoadArgs.put( "InputStream", xTempInpStream );
     }
 
-    // aArgs[4].Name = ::rtl::OUString::createFromAscii( "AsTemplate" );
-    // aArgs[4].Value <<= sal_True;
+    // aLoadArgs.put( "AsTemplate", sal_True );
 
-    aArgs.realloc( m_aDocMediaDescriptor.getLength() + nLen );
-    for ( sal_Int32 nInd = 0; nInd < m_aDocMediaDescriptor.getLength(); nInd++ )
-    {
-        aArgs[nInd+nLen].Name = m_aDocMediaDescriptor[nInd].Name;
-        aArgs[nInd+nLen].Value = m_aDocMediaDescriptor[nInd].Value;
-    }
+    aLoadArgs.merge( m_aDocMediaDescriptor, true );
 
     try
     {
         // set the document mode to embedded as the first step!!!
-        SetDocToEmbedded( uno::Reference < frame::XModel >( xDocument, uno::UNO_QUERY ), m_aModuleName );
-
-        try
-        {
-            uno::Reference < container::XChild > xChild( xDocument, uno::UNO_QUERY );
-            if ( xChild.is() )
-                xChild->setParent( m_xParent );
-        }
-        catch( const lang::NoSupportException & )
-        {
-            OSL_ENSURE( false, "Cannot set parent at document" );
-        }
+        EmbedAndReparentDoc_Impl( xDocument );
 
         if ( xDoc.is() )
-            xDoc->loadFromStorage( xStorage, aArgs );
+        {
+            xDoc->loadFromStorage( xSourceStorage, aLoadArgs.getPropertyValues() );
+            if ( xSourceStorage != m_xObjectStorage )
+                SwitchDocToStorage_Impl( xDoc, m_xObjectStorage );
+        }
         else
-            xLoadable->load( aArgs );
+            xLoadable->load( aLoadArgs.getPropertyValues() );
     }
     catch( uno::Exception& )
     {
@@ -569,6 +585,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
             }
             catch( uno::Exception& )
             {
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
 
@@ -658,7 +675,7 @@ void OCommonEmbeddedObject::SaveObject_Impl()
 }
 
 //------------------------------------------------------
-::rtl::OUString OCommonEmbeddedObject::GetBaseURL_Impl()
+::rtl::OUString OCommonEmbeddedObject::GetBaseURL_Impl() const
 {
     ::rtl::OUString aBaseURL;
     sal_Int32 nInd = 0;
@@ -730,6 +747,19 @@ void OCommonEmbeddedObject::SaveObject_Impl()
 
 
 //------------------------------------------------------
+void OCommonEmbeddedObject::SwitchDocToStorage_Impl( const uno::Reference< document::XStorageBasedDocument >& xDoc, const uno::Reference< embed::XStorage >& xStorage )
+{
+    xDoc->switchToStorage( xStorage );
+
+    uno::Reference< util::XModifiable > xModif( xDoc, uno::UNO_QUERY );
+    if ( xModif.is() )
+        xModif->setModified( sal_False );
+
+    if ( m_xRecoveryStorage.is() )
+        m_xRecoveryStorage.clear();
+}
+
+//------------------------------------------------------
 void OCommonEmbeddedObject::StoreDocToStorage_Impl( const uno::Reference< embed::XStorage >& xStorage,
                                                     sal_Int32 nStorageFormat,
                                                     const ::rtl::OUString& aBaseURL,
@@ -767,12 +797,7 @@ void OCommonEmbeddedObject::StoreDocToStorage_Impl( const uno::Reference< embed:
 
         xDoc->storeToStorage( xStorage, aArgs );
         if ( bAttachToTheStorage )
-        {
-            xDoc->switchToStorage( xStorage );
-            uno::Reference< util::XModifiable > xModif( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
-            if ( xModif.is() )
-                xModif->setModified( sal_False );
-        }
+            SwitchDocToStorage_Impl( xDoc, xStorage );
     }
     else
 #endif
@@ -804,7 +829,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::CreateDocFromMediaDesc
                                         const uno::Sequence< beans::PropertyValue >& aMedDescr )
 {
     uno::Reference< util::XCloseable > xDocument( CreateDocument( m_xFactory, GetDocumentServiceName(),
-                                                m_bEmbeddedScriptSupport ) );
+                                                m_bEmbeddedScriptSupport, m_bDocumentRecoverySupport ) );
 
     uno::Reference< frame::XLoadable > xLoadable( xDocument, uno::UNO_QUERY );
     if ( !xLoadable.is() )
@@ -813,18 +838,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::CreateDocFromMediaDesc
     try
     {
         // set the document mode to embedded as the first action on the document!!!
-        SetDocToEmbedded( uno::Reference < frame::XModel >( xDocument, uno::UNO_QUERY ), m_aModuleName );
-
-        try
-        {
-            uno::Reference < container::XChild > xChild( xDocument, uno::UNO_QUERY );
-            if ( xChild.is() )
-                xChild->setParent( m_xParent );
-        }
-        catch( const lang::NoSupportException & )
-        {
-            OSL_ENSURE( false, "Cannot set parent at document" );
-        }
+        EmbedAndReparentDoc_Impl( xDocument );
 
         xLoadable->load( addAsTemplate( aMedDescr ) );
     }
@@ -1063,6 +1077,14 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
         {
             OSL_VERIFY( lObjArgs[nObjInd].Value >>= m_bEmbeddedScriptSupport );
         }
+        else if ( lObjArgs[nObjInd].Name.equalsAscii( "DocumentRecoverySupport" ) )
+        {
+            OSL_VERIFY( lObjArgs[nObjInd].Value >>= m_bDocumentRecoverySupport );
+        }
+        else if ( lObjArgs[nObjInd].Name.equalsAscii( "RecoveryStorage" ) )
+        {
+            OSL_VERIFY( lObjArgs[nObjInd].Value >>= m_xRecoveryStorage );
+        }
 
 
     sal_Int32 nStorageMode = m_bReadOnly ? embed::ElementModes::READ : embed::ElementModes::READWRITE;
@@ -1098,6 +1120,9 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
         }
         else if ( nEntryConnectionMode == embed::EntryInitModes::TRUNCATE_INIT )
         {
+            if ( m_xRecoveryStorage.is() )
+                TransferMediaType( m_xRecoveryStorage, m_xObjectStorage );
+
             // TODO:
             m_pDocHolder->SetComponent( InitNewDocument_Impl(), m_bReadOnly );
 

@@ -471,12 +471,6 @@
     HelpID = SID_LOGOUT ; \
     Text [ en-US ] = "Logout" ; \
 
-#define ITEM_FILE_BACKTOWEBTOP \
-    Identifier = SID_BACKTOWEBTOP ; \
-    Command = ".uno:BackToWebtop" ; \
-    HelpID = SID_BACKTOWEBTOP ; \
-    Text [ en-US ] = "Back to Webtop";  \
-
 #define ITEM_EDIT_UNDO \
     Identifier = SID_UNDO ; \
     Command = ".uno:UndoAction" ; \

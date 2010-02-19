@@ -175,11 +175,11 @@ class LoadEnvException
             @param  exUno
                     the original catched uno exception.
          */
-        LoadEnvException(      sal_Int32            nID  ,
-                         const css::uno::Exception& exUno)
+        LoadEnvException(      sal_Int32        nID  ,
+                         const css::uno::Any&   exUno)
         {
-            m_nID          = nID  ;
-            m_exOriginal <<= exUno;
+            m_nID        = nID  ;
+            m_exOriginal = exUno;
         }
 
         //_______________________________________

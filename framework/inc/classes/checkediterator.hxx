@@ -141,7 +141,7 @@ class CheckedIterator
 
             if( m_eEndState == E_UNKNOWN )
             {
-                // Set new container and actualize other member.
+                // Set new container and update other member.
                 m_pContainer = &rContainer          ;
                 m_eEndState  = E_BEFOREEND          ;
                 m_pPosition  = m_pContainer->begin();

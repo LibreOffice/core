@@ -41,7 +41,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/app.hxx>
 #include "workwin.hxx"
-#include <sfx2/topfrm.hxx>
+#include <sfx2/viewfrm.hxx>
 #include "arrdecl.hxx"
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/module.hxx>
@@ -1434,8 +1434,8 @@ sal_Bool SfxWorkWindow::IsPluginMode( SfxObjectShell* pObjShell )
     if ( pDispatcher )
     {
         SfxViewFrame* pFrame = pDispatcher->GetFrame();
-        if ( pFrame && pFrame->GetFrame() )
-           xFrame = pFrame->GetFrame()->GetFrameInterface();
+        if ( pFrame )
+           xFrame = pFrame->GetFrame().GetFrameInterface();
     }
 
     return xFrame;

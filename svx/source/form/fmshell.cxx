@@ -301,9 +301,6 @@ sal_uInt16 FmFormShell::PrepareClose(sal_Bool bUI, sal_Bool bForBrowsing)
         m_pFormView && m_pFormView->GetActualOutDev() &&
         m_pFormView->GetActualOutDev()->GetOutDevType() == OUTDEV_WINDOW)
     {
-        if (GetImpl()->HasAnyPendingCursorAction())
-            GetImpl()->CancelAnyPendingCursorAction();
-
         SdrPageView* pCurPageView = m_pFormView->GetSdrPageView();
 
         // sal_uInt16 nPos = pCurPageView ? pCurPageView->GetWinList().Find((OutputDevice*)m_pFormView->GetActualOutDev()) : SDRPAGEVIEWWIN_NOTFOUND;
@@ -1131,8 +1128,8 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
         ||  m_bDesignMode
         ||  !GetImpl()->getActiveForm().is()
         ||  GetImpl()->isInFilterMode()
-        ||  (   GetImpl()->HasPendingCursorAction(GetImpl()->getNavController())
-            &&  (SID_FM_RECORD_TOTAL != nWhich)
+        ||  (   /*GetImpl()->HasPendingCursorAction(GetImpl()->getNavController())
+            &&  */(SID_FM_RECORD_TOTAL != nWhich)
             )
         )
         rSet.DisableItem(nWhich);
@@ -1419,11 +1416,6 @@ void FmFormShell::SetDesignMode( sal_Bool _bDesignMode )
 {
     if ( _bDesignMode == m_bDesignMode )
         return;
-
-    // if we are moving our data source cursor currently ....
-    if ( GetImpl()->HasAnyPendingCursorAction() )
-        // ... cancel this
-        GetImpl()->CancelAnyPendingCursorAction();
 
     FmFormModel* pModel = GetFormModel();
     if (pModel)

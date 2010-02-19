@@ -322,7 +322,7 @@ SfxPrintProgress::~SfxPrintProgress()
         pImp->pViewShell->GetPrinter()->EnablePrintFile( pImp->bOldEnablePrintFile );
 
     // EndPrint-Notification an Frame
-    //pImp->pViewShell->GetViewFrame()->GetFrame()->Lock_Impl(FALSE);
+    //pImp->pViewShell->GetViewFrame()->GetFrame().Lock_Impl(FALSE);
     pImp->EndListening( *(pImp->pViewShell->GetObjectShell()) );
 
     // the following call might destroy the view or even the document

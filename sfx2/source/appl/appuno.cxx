@@ -147,54 +147,53 @@ using namespace ::com::sun::star::io;
 #define FRAMELOADER_SERVICENAME         "com.sun.star.frame.FrameLoader"
 #define PROTOCOLHANDLER_SERVICENAME     "com.sun.star.frame.ProtocolHandler"
 
-static const String sTemplateRegionName   = String::CreateFromAscii( "TemplateRegionName"   );
-static const String sTemplateName   = String::CreateFromAscii( "TemplateName"   );
-static const String sAsTemplate     = String::CreateFromAscii( "AsTemplate"     );
-static const String sOpenNewView    = String::CreateFromAscii( "OpenNewView"    );
-static const String sViewId         = String::CreateFromAscii( "ViewId"         );
-static const String sPluginMode     = String::CreateFromAscii( "PluginMode"     );
-static const String sReadOnly       = String::CreateFromAscii( "ReadOnly"       );
-static const String sStartPresentation = String::CreateFromAscii( "StartPresentation"       );
-static const String sFrameName      = String::CreateFromAscii( "FrameName"      );
-static const String sMediaType      = String::CreateFromAscii( "MediaType"    );
-static const String sPostData       = String::CreateFromAscii( "PostData"       );
-static const String sCharacterSet   = String::CreateFromAscii( "CharacterSet"   );
-static const String sInputStream    = String::CreateFromAscii( "InputStream"    );
-static const String sStream         = String::CreateFromAscii( "Stream"    );
-static const String sOutputStream   = String::CreateFromAscii( "OutputStream"    );
-static const String sHidden         = String::CreateFromAscii( "Hidden"         );
-static const String sPreview        = String::CreateFromAscii( "Preview"        );
-static const String sViewOnly       = String::CreateFromAscii( "ViewOnly"       );
-static const String sDontEdit       = String::CreateFromAscii( "DontEdit"       );
-static const String sSilent         = String::CreateFromAscii( "Silent"         );
-static const String sJumpMark       = String::CreateFromAscii( "JumpMark"       );
-static const String sFileName       = String::CreateFromAscii( "FileName"       );
-static const String sSalvageURL     = String::CreateFromAscii( "SalvagedFile"   );
-static const String sStatusInd      = String::CreateFromAscii( "StatusIndicator" );
-static const String sModel          = String::CreateFromAscii( "Model" );
-static const String sFrame          = String::CreateFromAscii( "Frame" );
-static const String sViewData       = String::CreateFromAscii( "ViewData" );
-static const String sFilterData     = String::CreateFromAscii( "FilterData" );
-static const String sSelectionOnly  = String::CreateFromAscii( "SelectionOnly" );
-static const String sFilterFlags    = String::CreateFromAscii( "FilterFlags" );
-static const String sMacroExecMode  = String::CreateFromAscii( "MacroExecutionMode" );
-static const String sUpdateDocMode  = String::CreateFromAscii( "UpdateDocMode" );
-static const String sMinimized      = String::CreateFromAscii( "Minimized" );
-static const String sInteractionHdl = String::CreateFromAscii( "InteractionHandler" );
-static const String sWindowState    = String::CreateFromAscii( "WindowState" );
-static const String sUCBContent     = String::CreateFromAscii( "UCBContent" );
-static const String sRepairPackage  = String::CreateFromAscii( "RepairPackage" );
-static const String sDocumentTitle  = String::CreateFromAscii( "DocumentTitle" );
-static const String sComponentData  = String::CreateFromAscii( "ComponentData" );
-static const String sComponentContext = String::CreateFromAscii( "ComponentContext" );
-static const String sDocumentBaseURL = String::CreateFromAscii( "DocumentBaseURL" );
-static const String sHierarchicalDocumentName = String::CreateFromAscii( "HierarchicalDocumentName" );
-static const String sCopyStreamIfPossible = String::CreateFromAscii( "CopyStreamIfPossible" );
-static const String sNoAutoSave     = String::CreateFromAscii( "NoAutoSave" );
-static const String sFolderName     = String::CreateFromAscii( "FolderName"   );
-static const String sUseSystemDialog   = String::CreateFromAscii( "UseSystemDialog"   );
-static const String sStandardDir   = String::CreateFromAscii( "StandardDir"   );
-static const String sBlackList   = String::CreateFromAscii( "BlackList"   );
+static const String sTemplateRegionName         = String::CreateFromAscii( "TemplateRegionName"         );
+static const String sTemplateName               = String::CreateFromAscii( "TemplateName"               );
+static const String sAsTemplate                 = String::CreateFromAscii( "AsTemplate"                 );
+static const String sOpenNewView                = String::CreateFromAscii( "OpenNewView"                );
+static const String sViewId                     = String::CreateFromAscii( "ViewId"                     );
+static const String sPluginMode                 = String::CreateFromAscii( "PluginMode"                 );
+static const String sReadOnly                   = String::CreateFromAscii( "ReadOnly"                   );
+static const String sStartPresentation          = String::CreateFromAscii( "StartPresentation"          );
+static const String sFrameName                  = String::CreateFromAscii( "FrameName"                  );
+static const String sMediaType                  = String::CreateFromAscii( "MediaType"                  );
+static const String sPostData                   = String::CreateFromAscii( "PostData"                   );
+static const String sCharacterSet               = String::CreateFromAscii( "CharacterSet"               );
+static const String sInputStream                = String::CreateFromAscii( "InputStream"                );
+static const String sStream                     = String::CreateFromAscii( "Stream"                     );
+static const String sOutputStream               = String::CreateFromAscii( "OutputStream"               );
+static const String sHidden                     = String::CreateFromAscii( "Hidden"                     );
+static const String sPreview                    = String::CreateFromAscii( "Preview"                    );
+static const String sViewOnly                   = String::CreateFromAscii( "ViewOnly"                   );
+static const String sDontEdit                   = String::CreateFromAscii( "DontEdit"                   );
+static const String sSilent                     = String::CreateFromAscii( "Silent"                     );
+static const String sJumpMark                   = String::CreateFromAscii( "JumpMark"                   );
+static const String sFileName                   = String::CreateFromAscii( "FileName"                   );
+static const String sSalvageURL                 = String::CreateFromAscii( "SalvagedFile"               );
+static const String sStatusInd                  = String::CreateFromAscii( "StatusIndicator"            );
+static const String sModel                      = String::CreateFromAscii( "Model"                      );
+static const String sFrame                      = String::CreateFromAscii( "Frame"                      );
+static const String sViewData                   = String::CreateFromAscii( "ViewData"                   );
+static const String sFilterData                 = String::CreateFromAscii( "FilterData"                 );
+static const String sSelectionOnly              = String::CreateFromAscii( "SelectionOnly"              );
+static const String sFilterFlags                = String::CreateFromAscii( "FilterFlags"                );
+static const String sMacroExecMode              = String::CreateFromAscii( "MacroExecutionMode"         );
+static const String sUpdateDocMode              = String::CreateFromAscii( "UpdateDocMode"              );
+static const String sMinimized                  = String::CreateFromAscii( "Minimized"                  );
+static const String sInteractionHdl             = String::CreateFromAscii( "InteractionHandler"         );
+static const String sUCBContent                 = String::CreateFromAscii( "UCBContent"                 );
+static const String sRepairPackage              = String::CreateFromAscii( "RepairPackage"              );
+static const String sDocumentTitle              = String::CreateFromAscii( "DocumentTitle"              );
+static const String sComponentData              = String::CreateFromAscii( "ComponentData"              );
+static const String sComponentContext           = String::CreateFromAscii( "ComponentContext"           );
+static const String sDocumentBaseURL            = String::CreateFromAscii( "DocumentBaseURL"            );
+static const String sHierarchicalDocumentName   = String::CreateFromAscii( "HierarchicalDocumentName"   );
+static const String sCopyStreamIfPossible       = String::CreateFromAscii( "CopyStreamIfPossible"       );
+static const String sNoAutoSave                 = String::CreateFromAscii( "NoAutoSave"                 );
+static const String sFolderName                 = String::CreateFromAscii( "FolderName"                 );
+static const String sUseSystemDialog            = String::CreateFromAscii( "UseSystemDialog"            );
+static const String sStandardDir                = String::CreateFromAscii( "StandardDir"                );
+static const String sBlackList                  = String::CreateFromAscii( "BlackList"                  );
 
 void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs, SfxAllItemSet& rSet, const SfxSlot* pSlot )
 {
@@ -471,7 +470,11 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[n];
                 String aName = rProp.Name;
                 if ( aName == sFrame )
-                    rSet.Put( SfxUnoAnyItem( SID_FILLFRAME, rProp.Value ) );
+                {
+                    Reference< XFrame > xFrame;
+                    OSL_VERIFY( rProp.Value >>= xFrame );
+                    rSet.Put( SfxUnoFrameItem( SID_FILLFRAME, xFrame ) );
+                }
                 else
                 if ( aName == sHidden )
                 {
@@ -563,11 +566,11 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 }
                 else if ( aName == sFrame )
                 {
-                    Reference< XFrame > xVal;
-                    sal_Bool bOK = (rProp.Value >>= xVal);
+                    Reference< XFrame > xFrame;
+                    sal_Bool bOK = (rProp.Value >>= xFrame);
                     DBG_ASSERT( bOK, "invalid type for Frame" );
                     if (bOK)
-                        rSet.Put( SfxUnoAnyItem( SID_FILLFRAME, rProp.Value ) );
+                        rSet.Put( SfxUnoFrameItem( SID_FILLFRAME, xFrame ) );
                 }
                 else if ( aName == sAsTemplate )
                 {
@@ -740,14 +743,6 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     DBG_ASSERT( bOK, "invalid type or value for MediaType" );
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_CONTENTTYPE, sVal ) );
-                }
-                else if ( aName == sWindowState )
-                {
-                    ::rtl::OUString sVal;
-                    sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
-                    DBG_ASSERT( bOK, "invalid type or value for WindowState" );
-                    if (bOK)
-                        rSet.Put( SfxStringItem( SID_WIN_POSSIZE, sVal ) );
                 }
                 else if ( aName == sTemplateName )
                 {
@@ -1018,10 +1013,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 nAdditional++;
             if ( rSet.GetItemState( SID_CONTENTTYPE ) == SFX_ITEM_SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_WIN_POSSIZE ) == SFX_ITEM_SET )
-                nAdditional++;
-    //        if ( rSet.GetItemState( SID_VIEW_POS_SIZE ) == SFX_ITEM_SET )
-    //            nAdditional++;
             if ( rSet.GetItemState( SID_POSTDATA ) == SFX_ITEM_SET )
                 nAdditional++;
             if ( rSet.GetItemState( SID_FILLFRAME ) == SFX_ITEM_SET )
@@ -1176,8 +1167,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     if ( nId == SID_BLACK_LIST )
                         continue;
                     if ( nId == SID_CONTENTTYPE )
-                        continue;
-                    if ( nId == SID_WIN_POSSIZE )
                         continue;
                     if ( nId == SID_TEMPLATE_NAME )
                         continue;
@@ -1395,7 +1384,15 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             if ( rSet.GetItemState( SID_FILLFRAME, sal_False, &pItem ) == SFX_ITEM_SET )
             {
                 pValue[nActProp].Name = sFrame;
-                pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+                if ( pItem->ISA( SfxUsrAnyItem ) )
+                {
+                    OSL_ENSURE( false, "TransformItems: transporting an XFrame via an SfxUsrAnyItem is not deprecated!" );
+                    pValue[nActProp++].Value = static_cast< const SfxUsrAnyItem* >( pItem )->GetValue();
+                }
+                else if ( pItem->ISA( SfxUnoFrameItem ) )
+                    pValue[nActProp++].Value <<= static_cast< const SfxUnoFrameItem* >( pItem )->GetFrame();
+                else
+                    OSL_ENSURE( false, "TransformItems: invalid item type for SID_FILLFRAME!" );
             }
             if ( rSet.GetItemState( SID_TEMPLATE, sal_False, &pItem ) == SFX_ITEM_SET )
             {
@@ -1500,11 +1497,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 pValue[nActProp].Name = sMediaType;
                 pValue[nActProp++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
             }
-            if ( rSet.GetItemState( SID_WIN_POSSIZE, sal_False, &pItem ) == SFX_ITEM_SET )
-            {
-                pValue[nActProp].Name = sWindowState;
-                pValue[nActProp++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
-            }
             if ( rSet.GetItemState( SID_TEMPLATE_NAME, sal_False, &pItem ) == SFX_ITEM_SET )
             {
                 pValue[nActProp].Name = sTemplateName;
@@ -1519,12 +1511,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             {
                 pValue[nActProp].Name = sJumpMark;
                 pValue[nActProp++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
-            }
-
-            SFX_ITEMSET_ARG( &rSet, pRectItem, SfxRectangleItem, SID_VIEW_POS_SIZE, sal_False );
-            if ( pRectItem )
-            {
-                DBG_ERROR("PosSizeItem not supported yet!");
             }
 
             if ( rSet.GetItemState( SID_CHARSET, sal_False, &pItem ) == SFX_ITEM_SET )

@@ -61,7 +61,6 @@ class AppSettings;
 struct SfxChildWinContextFactory;
 class SfxAppData_Impl;
 class SfxBindings;
-class SfxCancelManager;
 class SfxChildWinFactArr_Impl;
 class SfxChildWindow;
 class SfxDispatcher;
@@ -221,7 +220,6 @@ public:
 
     // members
     SfxFilterMatcher&           GetFilterMatcher();
-    SfxCancelManager*           GetCancelManager() const;
     SfxMacroConfig*             GetMacroConfig() const;
     SfxProgress*                GetProgress() const;
     const String&               GetLastSaveDirectory() const;
@@ -267,7 +265,6 @@ public:
     SAL_DLLPRIVATE SfxDispatcher* GetAppDispatcher_Impl();
     SAL_DLLPRIVATE SfxDispatcher* GetDispatcher_Impl();
 
-    SAL_DLLPRIVATE SfxObjectShellLock NewDoc_Impl( const String& rFactory, const SfxItemSet* pSet = NULL );
     SAL_DLLPRIVATE BOOL         QueryExit_Impl();
     SAL_DLLPRIVATE void         SetOptions_Impl(const SfxItemSet &);
     SAL_DLLPRIVATE FASTBOOL     Initialize_Impl();
@@ -293,7 +290,6 @@ public:
     // TODO/CLEANUP: still needed?
     SAL_DLLPRIVATE void         NewDocDirectExec_Impl(SfxRequest &);
     SAL_DLLPRIVATE void         NewDocExec_Impl(SfxRequest &);
-    SAL_DLLPRIVATE const SfxPoolItem* NewDocDirectExec_ImplOld(SfxRequest &); // used by FrameLoader to work with the old behaviour ...
     SAL_DLLPRIVATE void         OpenDocExec_Impl(SfxRequest &);
     SAL_DLLPRIVATE void         MiscExec_Impl(SfxRequest &);
     SAL_DLLPRIVATE void         MiscState_Impl(SfxItemSet &);

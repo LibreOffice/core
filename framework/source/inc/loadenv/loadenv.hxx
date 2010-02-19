@@ -420,6 +420,7 @@ class LoadEnv : private ThreadHelpBase
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
             throw(css::uno::RuntimeException);
 */
+
     //___________________________________________
     // static interface
 
@@ -458,6 +459,14 @@ class LoadEnv : private ThreadHelpBase
                                             const css::uno::Sequence< css::beans::PropertyValue >& lMediaDescriptor);
 
         /** TODO document me ... */
+        static  void initializeUIDefaults(
+                    const css::uno::Reference< css::lang::XMultiServiceFactory >& i_rSMGR,
+                    ::comphelper::MediaDescriptor& io_lMediaDescriptor,
+                    const bool _bUIMode,
+                    QuietInteraction** o_ppQuiteInteraction
+                );
+
+        /** TODO document me ... */
         void impl_setResult(sal_Bool bResult);
 
         /** TODO document me ... */
@@ -487,7 +496,7 @@ class LoadEnv : private ThreadHelpBase
 
         /** @short  tries to detect the type and the filter of the specified content.
 
-            @descr  This method actualize the available media descriptor of this instance,
+            @descr  This method update the available media descriptor of this instance,
                     so it contains the right type, a corresponding filter, may a
                     valid frame loader etc. In case detection failed, this descriptor
                     is corrected first, before a suitable exception will be thrown.

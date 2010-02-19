@@ -345,7 +345,7 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
             else if ( rDispat.GetFrame() )
             {
                 ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatchProvider > xFrameProv(
-                        rDispat.GetFrame()->GetFrame()->GetFrameInterface(), ::com::sun::star::uno::UNO_QUERY );
+                        rDispat.GetFrame()->GetFrame().GetFrameInterface(), ::com::sun::star::uno::UNO_QUERY );
                 if ( xFrameProv != xProv )
                     return GetSlotServer( rDispat, xFrameProv );
             }
