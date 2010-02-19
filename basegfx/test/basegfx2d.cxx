@@ -283,8 +283,11 @@ public:
         // depending on float precision and the getContinuity() implemetation using
         // fTools::equal, linux and mac produce more 'C' than 'S' statements, while WIN32
         // uses more 'S' statements (as it should be for circles)
-        CPPUNIT_ASSERT_MESSAGE("exporting to circle does not produce the expected number of coordinates",
-                               nCount==67 || nCount==50);
+#ifdef S390X
+         CPPUNIT_ASSERT_MESSAGE("exporting to circle does not produce the expected number of coordinates", nCount==61 );
+#else
+          CPPUNIT_ASSERT_MESSAGE("exporting to circle does not produce the expected number of coordinates", nCount==67 || nCount==50 );
+#endif
 
         const B2DPolygon aRect(
             tools::createPolygonFromRect( B2DRange(0.0,0.0,4000.0,4000.0) ));

@@ -108,6 +108,7 @@ void ListBox::ImplInitListBoxData()
     mnDDHeight      = 0;
     mbDDAutoSize    = TRUE;
     mnSaveValue     = LISTBOX_ENTRY_NOTFOUND;
+    mnLineCount     = 0;
 }
 
 // -----------------------------------------------------------------------
@@ -1209,12 +1210,33 @@ void ListBox::SetTopEntry( USHORT nPos )
 
 // -----------------------------------------------------------------------
 
+void ListBox::ShowProminentEntry( USHORT nPos )
+{
+    mpImplLB->ShowProminentEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
+}
+
+// -----------------------------------------------------------------------
+
 USHORT ListBox::GetTopEntry() const
 {
     USHORT nPos = GetEntryCount() ? mpImplLB->GetTopEntry() : LISTBOX_ENTRY_NOTFOUND;
     if ( nPos < mpImplLB->GetEntryList()->GetMRUCount() )
         nPos = 0;
     return nPos;
+}
+
+// -----------------------------------------------------------------------
+
+void ListBox::SetProminentEntryType( ProminentEntry eType )
+{
+    mpImplLB->SetProminentEntryType( eType );
+}
+
+// -----------------------------------------------------------------------
+
+ProminentEntry ListBox::GetProminentEntryType() const
+{
+    return mpImplLB->GetProminentEntryType();
 }
 
 // -----------------------------------------------------------------------
@@ -1286,31 +1308,47 @@ Size ListBox::CalcMinimumSize() const
     else
     {
         aSz.Height() = mpImplLB->CalcSize( 1 ).Height();
-        if( aSz.Height() < mnDDHeight )
+        aSz.Height() += 4; // add a space between entry and border
+        // size to maxmimum entry width and add a little breathing space
+        aSz.Width() = mpImplLB->GetMaxEntryWidth() + 4;
+        // do not create ultrathin ListBoxes, it doesn't look good
+        if( aSz.Width() < GetSettings().GetStyleSettings().GetScrollBarSize() )
+            aSz.Width() = GetSettings().GetStyleSettings().GetScrollBarSize();
+
+        // try native borders; scrollbar size may not be a good indicator
+        // see how large the edit area inside is to estimate what is needed for the dropdown
+        ImplControlValue aControlValue;
+        Point aPoint;
+        Region aContent, aBound;
+        Size aTestSize( 100, 20 );
+        Region aArea( Rectangle( aPoint, aTestSize ) );
+        if( const_cast<ListBox*>(this)->GetNativeControlRegion(
+                       CTRL_LISTBOX, PART_SUB_EDIT, aArea, 0, aControlValue, rtl::OUString(), aBound, aContent) )
         {
-            aSz.Height() = mnDDHeight;
-            // FIXME: this is currently only on mac/aqua
-            if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
-                IsNativeWidgetEnabled() &&
-                const_cast<ListBox*>(this)->IsNativeControlSupported( CTRL_LISTBOX, PART_ENTIRE_CONTROL ) )
-            {
-                ImplControlValue aControlValue;
-                Region aCtrlRegion( Rectangle( (const Point&)Point(), Size( 20, mnDDHeight ) ) );
-                Region aBoundingRgn( aCtrlRegion );
-                Region aContentRgn( aCtrlRegion );
-                // adjust the size of the edit field
-                if( const_cast<ListBox*>(this)->GetNativeControlRegion( CTRL_LISTBOX, PART_ENTIRE_CONTROL,
-                                   aCtrlRegion, 0, aControlValue, rtl::OUString(), aBoundingRgn, aContentRgn) )
-                {
-                    aSz.Height() = aContentRgn.GetBoundRect().GetHeight();
-                }
-            }
+            // use the themes drop down size
+            Rectangle aContentRect = aContent.GetBoundRect();
+            aSz.Width() += aTestSize.Width() - aContentRect.GetWidth();
         }
-        aSz.Width() = mpImplLB->GetMaxEntryWidth();
-        aSz.Width() += GetSettings().GetStyleSettings().GetScrollBarSize();
+        else
+            aSz.Width() += GetSettings().GetStyleSettings().GetScrollBarSize();
     }
 
     aSz = CalcWindowSize( aSz );
+
+    if ( IsDropDownBox() ) // check minimum height of dropdown box
+    {
+        ImplControlValue aControlValue;
+        Rectangle aRect( Point( 0, 0 ), aSz );
+        Region aContent, aBound;
+        if( const_cast<ListBox*>(this)->GetNativeControlRegion(
+                       CTRL_LISTBOX, PART_ENTIRE_CONTROL, aRect, 0, aControlValue, rtl::OUString(), aBound, aContent) )
+        {
+            Rectangle aBoundRect( aBound.GetBoundRect() );
+            if( aBoundRect.GetHeight() > aSz.Height() )
+                aSz.Height() = aBoundRect.GetHeight();
+        }
+    }
+
     return aSz;
 }
 

@@ -171,7 +171,7 @@ GraphiteFontAdaptor::~GraphiteFontAdaptor() throw()
     mpFeatures = NULL;
 }
 
-void GraphiteFontAdaptor::UniqueCacheInfo(std::wstring & face_name_out, bool & bold_out, bool & italic_out)
+void GraphiteFontAdaptor::UniqueCacheInfo(sil_std::wstring & face_name_out, bool & bold_out, bool & italic_out)
 {
     face_name_out = maFontProperties.szFaceName;
     bold_out = maFontProperties.fBold;

@@ -136,6 +136,7 @@ protected:
 
     Type                              m_eType;
     bool                              m_bUseIncludeFeature;
+    bool                              m_bUseJobPatch;
     rtl::OUString                     m_aSystemDefaultPaper;
 
     bool                              m_bDisableCUPS;
@@ -226,6 +227,7 @@ public:
     virtual bool addOrRemovePossible() const;
 
     bool getUseIncludeFeature() const { return m_bUseIncludeFeature; }
+    bool getUseJobPatch() const { return m_bUseJobPatch; }
 
     // check whether a printer's feature string contains a subfeature
     bool checkFeatureToken( const rtl::OUString& rPrinterName, const char* pToken ) const;
