@@ -30,10 +30,6 @@
 
 package com.sun.star.wizards.db;
 
-import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XSingleServiceFactory;
-import com.sun.star.wizards.common.Properties;
-import com.sun.star.wizards.common.*;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbcx.KeyType;
@@ -41,29 +37,31 @@ import com.sun.star.sdbcx.XColumnsSupplier;
 import com.sun.star.sdbcx.XKeysSupplier;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.awt.VclWindowPeerAttribute;
-import com.sun.star.beans.*;
 import com.sun.star.uno.UnoRuntime;
-import java.util.*;
 import com.sun.star.lang.Locale;
-import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.embed.EntryInitModes;
-import com.sun.star.frame.*;
+import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.JavaTools;
+import com.sun.star.wizards.common.NumberFormatter;
+import com.sun.star.wizards.common.Resource;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Vector;
 
 public class CommandMetaData extends DBMetaData
 {
     public Map FieldTitleSet = new HashMap();
     public String[] m_aAllFieldNames = new String[]{};
     public FieldColumn[] FieldColumns = new FieldColumn[]{};
-//  public String[] FieldNames = new String[] {};
     public String[] GroupFieldNames = new String[] {};
     private String[][] SortFieldNames = new String[][] {};
     private String[] RecordFieldNames = new String[] {};
     public String[][] AggregateFieldNames = new String[][] {};
     public String[] NumericFieldNames = new String[] {};
     public String[] NonAggregateFieldNames;
-    // private int[] FieldTypes;
     private int CommandType;
     private String Command;
     boolean bCatalogAtStart = true;
@@ -154,7 +152,7 @@ public class CommandMetaData extends DBMetaData
                 String CurCommandName = CurFieldColumn.getCommandName();
                 CommandObject oCommand = getTableByName(CurCommandName);
                 Object oColumn = oCommand.getColumns().getByName(CurFieldColumn.getFieldName());
-                XPropertySet xColumn = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oColumn);
+                XPropertySet xColumn = UnoRuntime.queryInterface( XPropertySet.class, oColumn );
                 return xColumn;
             }
             catch (Exception exception)
@@ -616,64 +614,6 @@ public class CommandMetaData extends DBMetaData
             return RecordFieldNames[i];
         }
 
-    public XComponent[] switchtoDesignmode(String _commandname, int _commandtype,XFrame parentFrame)
-        {
-            XComponent[] ret = null;
-            PropertyValue[] rDispatchArguments = new PropertyValue[_commandtype == com.sun.star.sdb.CommandType.QUERY ? 5 : 3];
-            rDispatchArguments[0] = Properties.createProperty("DataSourceName", this.DataSourceName);
-            rDispatchArguments[1] = Properties.createProperty("ActiveConnection", this.DBConnection);
-            if (_commandtype == com.sun.star.sdb.CommandType.QUERY)
-            {
-                rDispatchArguments[2] = Properties.createProperty("GraphicalDesign", Boolean.TRUE);
-                rDispatchArguments[3] = Properties.createProperty("Command", _commandname);
-                rDispatchArguments[4] = Properties.createProperty("CommandType", new Integer(_commandtype));
-                ret = showCommandView(".component:DB/QueryDesign", rDispatchArguments,parentFrame);
-            }
-            else
-            {
-                rDispatchArguments[2] = Properties.createProperty("CurrentTable", _commandname);
-                ret = showCommandView(".component:DB/TableDesign", rDispatchArguments,parentFrame);
-            }
-            return ret;
-        }
-
-    public XComponent[] switchtoDataViewmode(String _commandname, int _commandtype,XFrame parentFrame)
-        {
-            PropertyValue[] rDispatchArguments = new PropertyValue[7];
-            rDispatchArguments[0] = Properties.createProperty("DataSourceName", this.DataSourceName);
-            rDispatchArguments[1] = Properties.createProperty("ActiveConnection", this.DBConnection);
-            rDispatchArguments[2] = Properties.createProperty("Command", _commandname);
-            rDispatchArguments[3] = Properties.createProperty("CommandType", new Integer(_commandtype));
-            rDispatchArguments[4] = Properties.createProperty("ShowBrowser", Boolean.FALSE);
-            rDispatchArguments[5] = Properties.createProperty("EnableBrowser", Boolean.FALSE);
-            rDispatchArguments[6] = Properties.createProperty("ShowMenu", Boolean.TRUE);
-            return showCommandView(".component:DB/DataSourceBrowser", rDispatchArguments,parentFrame);
-        }
-
-    //
-    public XComponent[] showCommandView(String surl, PropertyValue[] _rArgs,XFrame parentFrame)
-        {
-            XComponent[] ret = new XComponent[2];
-            try
-            {
-                XSingleServiceFactory xFac = (XSingleServiceFactory) UnoRuntime.queryInterface(XSingleServiceFactory.class,xMSF.createInstance("com.sun.star.frame.TaskCreator"));
-                Object[] args = new Object[2];
-                args[0] = Properties.createProperty("ParentFrame",parentFrame);
-                args[1] = Properties.createProperty("TopWindow",Boolean.TRUE);
-
-                XComponentLoader xLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class,xFac.createInstanceWithArguments(args));
-                ret[0] = xLoader.loadComponentFromURL(surl, "_self", 0, _rArgs);
-                if ( ret[0] != null)
-                {
-                    ret[0] = (XComponent)UnoRuntime.queryInterface(XComponent.class,xLoader);
-                }
-            }
-            catch (Exception exception)
-            {
-                exception.printStackTrace(System.out);
-            }
-            return ret;
-        }
     /**@deprecated use 'RelationController' class instead
      *
      * @param _stablename
@@ -691,11 +631,11 @@ public class CommandMetaData extends DBMetaData
                     {
                         java.util.Vector<String> TableVector = new java.util.Vector<String>();
                         Object oTable = getTableNamesAsNameAccess().getByName(_stablename);
-                        XKeysSupplier xKeysSupplier = (XKeysSupplier) UnoRuntime.queryInterface(XKeysSupplier.class, oTable);
+                        XKeysSupplier xKeysSupplier = UnoRuntime.queryInterface( XKeysSupplier.class, oTable );
                         xIndexKeys = xKeysSupplier.getKeys();
                         for (int i = 0; i < xIndexKeys.getCount(); i++)
                         {
-                            XPropertySet xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xIndexKeys.getByIndex(i) );
+                            XPropertySet xPropertySet = UnoRuntime.queryInterface( XPropertySet.class, xIndexKeys.getByIndex( i ) );
                             int curtype = AnyConverter.toInt(xPropertySet.getPropertyValue("Type"));
                             if (curtype == KeyType.FOREIGN)
                             {
@@ -734,7 +674,7 @@ public class CommandMetaData extends DBMetaData
             {
                 for (int i = 0; i < xIndexKeys.getCount(); i++)
                 {
-                    XPropertySet xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xIndexKeys.getByIndex(i) );
+                    XPropertySet xPropertySet = UnoRuntime.queryInterface( XPropertySet.class, xIndexKeys.getByIndex( i ) );
                     int curtype = AnyConverter.toInt(xPropertySet.getPropertyValue("Type"));
                     if (curtype == KeyType.FOREIGN)
                     {
@@ -743,14 +683,14 @@ public class CommandMetaData extends DBMetaData
                         {
                             if (scurreftablename.equals(_sreferencedtablename))
                             {
-                                XColumnsSupplier xColumnsSupplier = (XColumnsSupplier) UnoRuntime.queryInterface(XColumnsSupplier.class, xPropertySet);
+                                XColumnsSupplier xColumnsSupplier = UnoRuntime.queryInterface( XColumnsSupplier.class, xPropertySet );
                                 String[] smastercolnames = xColumnsSupplier.getColumns().getElementNames();
                                 skeycolumnnames = new String[2][smastercolnames.length];
                                 skeycolumnnames[0] = smastercolnames;
                                 skeycolumnnames[1] = new String[smastercolnames.length];
                                 for (int n = 0; n < smastercolnames.length; n++)
                                 {
-                                    XPropertySet xcolPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xColumnsSupplier.getColumns().getByName(smastercolnames[n]));
+                                    XPropertySet xcolPropertySet = UnoRuntime.queryInterface( XPropertySet.class, xColumnsSupplier.getColumns().getByName( smastercolnames[n] ) );
                                     skeycolumnnames[1][n] = AnyConverter.toString(xcolPropertySet.getPropertyValue("RelatedColumn"));
                                 }
                                 return skeycolumnnames;

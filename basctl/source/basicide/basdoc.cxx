@@ -38,6 +38,7 @@
 #define GLOBALOVERFLOW2
 
 #include <sfx2/docfac.hxx>
+#include <sfx2/sfxmodelfactory.hxx>
 #include <vcl/status.hxx>
 
 #include <svx/xmlsecctrl.hxx>
@@ -60,12 +61,12 @@ SFX_IMPL_INTERFACE( BasicDocShell, SfxObjectShell, IDEResId( 0 ) )
     SFX_STATUSBAR_REGISTRATION( IDEResId( SID_BASICIDE_STATUSBAR ) );
 }
 
-BasicDocShell::BasicDocShell( SfxObjectCreateMode eMode ) : SfxObjectShell( eMode )
+BasicDocShell::BasicDocShell()
+    :SfxObjectShell( SFXMODEL_DISABLE_EMBEDDED_SCRIPTS | SFXMODEL_DISABLE_DOCUMENT_RECOVERY )
 {
     pPrinter = 0;
     SetPool( &SFX_APP()->GetPool() );
-    SetHasNoBasic();
-    SetModel( new SIDEModel(this) );
+    SetBaseModel( new SIDEModel(this) );
 }
 
 __EXPORT BasicDocShell::~BasicDocShell()

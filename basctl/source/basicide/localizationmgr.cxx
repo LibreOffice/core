@@ -80,7 +80,7 @@ void LocalizationMgr::handleTranslationbar( void )
         ::rtl::OUString::createFromAscii( "private:resource/toolbar/translationbar" );
 
     Reference< beans::XPropertySet > xFrameProps
-        ( m_pIDEShell->GetViewFrame()->GetFrame()->GetFrameInterface(), uno::UNO_QUERY );
+        ( m_pIDEShell->GetViewFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY );
     if ( xFrameProps.is() )
     {
         Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
