@@ -54,20 +54,19 @@ namespace svx
     class DbRegistrationOptionsPage : public SfxTabPage
     {
     private:
+        FixedLine           aStdBox;
         FixedText           aTypeText;
         FixedText           aPathText;
         SvxControlFocusHelper   aPathCtrl;
         PushButton          m_aNew;
         PushButton          m_aEdit;
         PushButton          m_aDelete;
-        FixedLine           aStdBox;
 
         HeaderBar*          pHeaderBar;
         ::svx::OptHeaderTabListBox* pPathBox;
         SvLBoxEntry*        m_pCurEntry;
         ULONG               m_nOldCount;
         BOOL                m_bModified;
-
 
 #ifdef SVX_DBREGISTER_HXX
         DECL_LINK( NewHdl, void * );

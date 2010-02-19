@@ -121,13 +121,13 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( Window* pParent, const Sfx
 
     SfxTabPage( pParent, CUI_RES( RID_SFXPAGE_DBREGISTER), rSet ),
 
+    aStdBox         ( this, CUI_RES( GB_STD ) ),
     aTypeText       ( this, CUI_RES( FT_TYPE ) ),
     aPathText       ( this, CUI_RES( FT_PATH ) ),
     aPathCtrl       ( this, CUI_RES( LB_PATH ) ),
     m_aNew          ( this, CUI_RES( BTN_NEW ) ),
     m_aEdit         ( this, CUI_RES( BTN_EDIT ) ),
     m_aDelete       ( this, CUI_RES( BTN_DELETE ) ),
-    aStdBox         ( this, CUI_RES( GB_STD ) ),
     pHeaderBar      ( NULL ),
     pPathBox        ( NULL ),
     m_pCurEntry     ( NULL ),

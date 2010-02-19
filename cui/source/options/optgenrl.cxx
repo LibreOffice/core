@@ -96,6 +96,7 @@ SvxGeneralTabPage::SvxGeneralTabPage( Window* pParent, const SfxItemSet& rCoreSe
 
     SfxTabPage( pParent, CUI_RES(RID_SFXPAGE_GENERAL), rCoreSet ),
 
+    aAddrFrm        ( this, CUI_RES( GB_ADDRESS ) ),
     aCompanyLbl     ( this, CUI_RES( FT_COMPANY ), true ),
     aCompanyEdit    ( this, CUI_RES( ED_COMPANY ), INDEX_NOTSET, &aCompanyLbl ),
     aNameLbl        ( this, CUI_RES( FT_NAME ), true ),
@@ -126,9 +127,7 @@ SvxGeneralTabPage::SvxGeneralTabPage( Window* pParent, const SfxItemSet& rCoreSe
     aFaxMailLbl     ( this, CUI_RES( FT_FAXMAIL ), true ),
     aFaxEdit        ( this, CUI_RES( ED_FAX ), 0, &aFaxMailLbl ),
     aEmailEdit      ( this, CUI_RES( ED_EMAIL ), 1, &aFaxMailLbl ),
-    aAddrFrm        ( this, CUI_RES( GB_ADDRESS ) ),
     aUseDataCB      ( this, CUI_RES( CB_USEDATA ) ),
-
     pImpl           ( new GeneralTabPage_Impl )
 
 {
