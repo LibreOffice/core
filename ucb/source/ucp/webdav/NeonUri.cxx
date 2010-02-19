@@ -42,11 +42,6 @@
 
 using namespace webdav_ucp;
 
-    char *scheme;
-    char *host, *userinfo;
-    unsigned int port;
-    char *path, *query, *fragment;
-
 # if defined __SUNPRO_CC
 // FIXME: not sure whether initializing a ne_uri statically is supposed to work
 // the string fields of ne_uri are char*, not const char*

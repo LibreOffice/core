@@ -238,6 +238,8 @@ namespace sdr { namespace contact {
                         getGraphics() const { return m_xControlView->getGraphics(); }
         inline void     draw( const Point& _rTopLeft ) const { m_xControlView->draw( _rTopLeft.X(), _rTopLeft.Y() ); }
 
+               void     invalidate() const;
+
     public:
         inline  const Reference< XControl >&    getControl() const  { return m_xControl; }
     };
@@ -298,13 +300,22 @@ namespace sdr { namespace contact {
     }
 
     //--------------------------------------------------------------------
+    void ControlHolder::invalidate() const
+    {
+        Window* pWindow = VCLUnoHelper::GetWindow( m_xControl->getPeer() );
+        OSL_ENSURE( pWindow, "ControlHolder::invalidate: no implementation access!" );
+        if ( pWindow )
+            pWindow->Invalidate();
+    }
+
+    //--------------------------------------------------------------------
     ::basegfx::B2DVector ControlHolder::getZoom() const
     {
         // no check whether we're valid, this is the responsibility of the caller
 
         // Argh. Why does XView have a setZoom only, but not a getZoom?
-        Window* pWindow = VCLUnoHelper::GetWindow( m_xControlWindow );
-        OSL_ENSURE( pWindow, "ControlHolder::setZoom: no implementation access!" );
+        Window* pWindow = VCLUnoHelper::GetWindow( m_xControl->getPeer() );
+        OSL_ENSURE( pWindow, "ControlHolder::getZoom: no implementation access!" );
 
         ::basegfx::B2DVector aZoom( 1, 1 );
         if ( pWindow )
@@ -350,6 +361,12 @@ namespace sdr { namespace contact {
         OSL_PRECOND( _rControl.is(), "UnoControlContactHelper::adjustControlGeometry_throw: illegal control!" );
         if ( !_rControl.is() )
             return;
+
+    #if OSL_DEBUG_LEVEL > 0
+        ::basegfx::B2DTuple aViewScale, aViewTranslate;
+        double nViewRotate(0), nViewShearX(0);
+        _rViewTransformation.decompose( aViewScale, aViewTranslate, nViewRotate, nViewShearX );
+    #endif
 
         // transform the logic bound rect, using the view transformation, to pixel coordinates
         ::basegfx::B2DPoint aTopLeft( _rLogicBoundingRect.Left(), _rLogicBoundingRect.Top() );
@@ -615,7 +632,7 @@ namespace sdr { namespace contact {
 
             Failure of this method will be reported via an assertion in a non-product version.
         */
-        bool    ensureControl();
+        bool    ensureControl( const basegfx::B2DHomMatrix* _pInitialViewTransformationOrNULL );
 
         /** returns our XControl, if it already has been created
 
@@ -652,20 +669,14 @@ namespace sdr { namespace contact {
         */
         bool    isControlVisible() const { return impl_isControlVisible_nofail(); }
 
-        /** determines whether the instance belongs to a given OutputDevice
-            @precond
-                The instance knows the device it belongs to, or can determine it.
-                If this is not the case, you will notice an assertion, and the method will
-                return false.
-        */
-        bool    belongsToDevice( const OutputDevice* _pDevice ) const;
-
         /// creates an XControl for the given device and SdrUnoObj
         static bool
                 createControlForDevice(
                     IPageViewAccess& _rPageView,
                     const OutputDevice& _rDevice,
                     const SdrUnoObj& _rUnoObject,
+                    const basegfx::B2DHomMatrix& _rInitialViewTransformation,
+                    const basegfx::B2DHomMatrix& _rInitialZoomNormalization,
                     ControlHolder& _out_rControl
                 );
 
@@ -840,7 +851,11 @@ namespace sdr { namespace contact {
 
         /** ensures that we have a control for the given PageView/OutputDevice
         */
-        bool impl_ensureControl_nothrow( IPageViewAccess& _rPageView, const OutputDevice& _rDevice );
+        bool impl_ensureControl_nothrow(
+                IPageViewAccess& _rPageView,
+                const OutputDevice& _rDevice,
+                const basegfx::B2DHomMatrix& _rInitialViewTransformation
+             );
 
         /** retrieves the device which a PageView belongs to, starting from its ObjectContactOfPageView
 
@@ -1026,8 +1041,8 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     void ViewObjectContactOfUnoControl_Impl::positionAndZoomControl( const basegfx::B2DHomMatrix& _rViewTransformation ) const
     {
-        OSL_PRECOND( ( m_pOutputDeviceForWindow != NULL ) && m_aControl.is(), "ViewObjectContactOfUnoControl_Impl::positionAndZoomControl: no output device or no control!" );
-        if ( ( m_pOutputDeviceForWindow == NULL ) || !m_aControl.is() )
+        OSL_PRECOND( m_aControl.is(), "ViewObjectContactOfUnoControl_Impl::positionAndZoomControl: no output device or no control!" );
+        if ( !m_aControl.is() )
             return;
 
         try
@@ -1047,7 +1062,7 @@ namespace sdr { namespace contact {
     }
 
     //--------------------------------------------------------------------
-    bool ViewObjectContactOfUnoControl_Impl::ensureControl()
+    bool ViewObjectContactOfUnoControl_Impl::ensureControl( const basegfx::B2DHomMatrix* _pInitialViewTransformationOrNULL )
     {
         OSL_PRECOND( !impl_isDisposed_nofail(), "ViewObjectContactOfUnoControl_Impl::ensureControl: already disposed()" );
         if ( impl_isDisposed_nofail() )
@@ -1057,16 +1072,20 @@ namespace sdr { namespace contact {
         if ( pPageViewContact )
         {
             SdrPageViewAccess aPVAccess( pPageViewContact->GetPageWindow().GetPageView() );
+            const OutputDevice& rDevice( impl_getPageViewOutputDevice_nothrow( *pPageViewContact ) );
             return impl_ensureControl_nothrow(
                 aPVAccess,
-                impl_getPageViewOutputDevice_nothrow( *pPageViewContact )
+                rDevice,
+                _pInitialViewTransformationOrNULL ? *_pInitialViewTransformationOrNULL : rDevice.GetViewTransformation()
             );
         }
 
         DummyPageViewAccess aNoPageView;
+        const OutputDevice& rDevice( impl_getOutputDevice_throw() );
         return impl_ensureControl_nothrow(
             aNoPageView,
-            impl_getOutputDevice_throw()
+            rDevice,
+            _pInitialViewTransformationOrNULL ? *_pInitialViewTransformationOrNULL : rDevice.GetViewTransformation()
         );
     }
 
@@ -1109,7 +1128,8 @@ namespace sdr { namespace contact {
     }
 
     //--------------------------------------------------------------------
-    bool ViewObjectContactOfUnoControl_Impl::impl_ensureControl_nothrow( IPageViewAccess& _rPageView, const OutputDevice& _rDevice )
+    bool ViewObjectContactOfUnoControl_Impl::impl_ensureControl_nothrow( IPageViewAccess& _rPageView, const OutputDevice& _rDevice,
+        const basegfx::B2DHomMatrix& _rInitialViewTransformation )
     {
         if ( m_bCreatingControl )
         {
@@ -1153,7 +1173,7 @@ namespace sdr { namespace contact {
             return false;
 
         ControlHolder aControl;
-        if ( !createControlForDevice( _rPageView, _rDevice, *pUnoObject, aControl ) )
+        if ( !createControlForDevice( _rPageView, _rDevice, *pUnoObject, _rInitialViewTransformation, m_aZoomLevelNormalization, aControl ) )
             return false;
 
         m_pOutputDeviceForWindow = &_rDevice;
@@ -1188,7 +1208,8 @@ namespace sdr { namespace contact {
 
     //--------------------------------------------------------------------
     bool ViewObjectContactOfUnoControl_Impl::createControlForDevice( IPageViewAccess& _rPageView,
-        const OutputDevice& _rDevice, const SdrUnoObj& _rUnoObject, ControlHolder& _out_rControl )
+        const OutputDevice& _rDevice, const SdrUnoObj& _rUnoObject, const basegfx::B2DHomMatrix& _rInitialViewTransformation,
+        const basegfx::B2DHomMatrix& _rInitialZoomNormalization, ControlHolder& _out_rControl )
     {
         _out_rControl.clear();
 
@@ -1212,8 +1233,8 @@ namespace sdr { namespace contact {
             UnoControlContactHelper::adjustControlGeometry_throw(
                 _out_rControl,
                 _rUnoObject.GetLogicRect(),
-                _rDevice.GetViewTransformation(),
-                _rDevice.GetInverseViewTransformation()
+                _rInitialViewTransformation,
+                _rInitialZoomNormalization
             );
 
             // #107049# set design mode before peer is created,
@@ -1532,31 +1553,33 @@ namespace sdr { namespace contact {
         VOCGuard aGuard( *this );
         DBG_ASSERT( Event.Source == m_xContainer, "ViewObjectContactOfUnoControl_Impl::elementReplaced: where did this come from?" );
 
-        if ( m_aControl == Event.ReplacedElement )
-        {
-            Reference< XControl > xNewControl( Event.Element, UNO_QUERY );
-            DBG_ASSERT( xNewControl.is(), "ViewObjectContactOfUnoControl_Impl::elementReplaced: invalid new control!" );
-            if ( !xNewControl.is() )
-                return;
+        if ( ! ( m_aControl == Event.ReplacedElement ) )
+            return;
 
-            ENSURE_OR_THROW( m_pOutputDeviceForWindow, "calling this without /me having an output device should be impossible." );
+        Reference< XControl > xNewControl( Event.Element, UNO_QUERY );
+        DBG_ASSERT( xNewControl.is(), "ViewObjectContactOfUnoControl_Impl::elementReplaced: invalid new control!" );
+        if ( !xNewControl.is() )
+            return;
 
-            DBG_ASSERT( xNewControl->getModel() == m_aControl.getModel(), "ViewObjectContactOfUnoControl_Impl::elementReplaced: another model at the new control?" );
-            // another model should - in the drawing layer - also imply another SdrUnoObj, which
-            // should also result in new ViewContact, and thus in new ViewObjectContacts
+        ENSURE_OR_THROW( m_pOutputDeviceForWindow, "calling this without /me having an output device should be impossible." );
 
-            impl_switchControlListening_nothrow( false );
+        DBG_ASSERT( xNewControl->getModel() == m_aControl.getModel(), "ViewObjectContactOfUnoControl_Impl::elementReplaced: another model at the new control?" );
+        // another model should - in the drawing layer - also imply another SdrUnoObj, which
+        // should also result in new ViewContact, and thus in new ViewObjectContacts
 
-            ControlHolder aNewControl( xNewControl );
-            aNewControl.setZoom( m_aControl.getZoom() );
-            aNewControl.setPosSize( m_aControl.getPosSize() );
-            aNewControl.setDesignMode( impl_isControlDesignMode_nothrow() );
+        impl_switchControlListening_nothrow( false );
 
-            m_aControl = xNewControl;
-            m_bControlIsVisible = m_aControl.isVisible();
+        ControlHolder aNewControl( xNewControl );
+        aNewControl.setZoom( m_aControl.getZoom() );
+        aNewControl.setPosSize( m_aControl.getPosSize() );
+        aNewControl.setDesignMode( impl_isControlDesignMode_nothrow() );
 
-            impl_switchControlListening_nothrow( true );
-        }
+        m_aControl = xNewControl;
+        m_bControlIsVisible = m_aControl.isVisible();
+
+        impl_switchControlListening_nothrow( true );
+
+        m_pAntiImpl->onControlChangedOrModified( ViewObjectContactOfUnoControl::ImplAccess() );
     }
 
     //--------------------------------------------------------------------
@@ -1654,15 +1677,20 @@ namespace sdr { namespace contact {
         double fRotate, fShearX;
         _rViewInformation.getObjectToViewTransformation().decompose( aScale, aTranslate, fRotate, fShearX );
     #endif
+        const bool bHadControl = m_pVOCImpl->getExistentControl().is();
+
         // force control here to make it a VCL ChildWindow. Will be fetched
         // and used below by getExistentControl()
-        m_pVOCImpl->ensureControl();
+        m_pVOCImpl->ensureControl( &_rViewInformation.getObjectToViewTransformation() );
         impl_positionAndZoomControl( _rViewInformation );
 
         // get needed data
         const ViewContactOfUnoControl& rViewContactOfUnoControl( m_pVOCImpl->getViewContact() );
         Reference< XControlModel > xControlModel( rViewContactOfUnoControl.GetSdrUnoObj().GetUnoControlModel() );
         const ControlHolder& rControl( m_pVOCImpl->getExistentControl() );
+
+        if ( !bHadControl && rControl.is() && rControl.isVisible() )
+            rControl.invalidate();
 
         // check if we already have an XControl.
         if ( !xControlModel.is() || !rControl.is() )
@@ -1715,7 +1743,7 @@ namespace sdr { namespace contact {
     Reference< XControl > ViewObjectContactOfUnoControl::getControl()
     {
         VOCGuard aGuard( *m_pImpl );
-        m_pImpl->ensureControl();
+        m_pImpl->ensureControl( NULL );
         return m_pImpl->getExistentControl().getControl();
     }
 
@@ -1726,7 +1754,8 @@ namespace sdr { namespace contact {
         ControlHolder aControl;
 
         InvisibleControlViewAccess aSimulatePageView( _inout_ControlContainer );
-        OSL_VERIFY( ViewObjectContactOfUnoControl_Impl::createControlForDevice( aSimulatePageView, _rWindow, _rUnoObject, aControl ) );
+        OSL_VERIFY( ViewObjectContactOfUnoControl_Impl::createControlForDevice( aSimulatePageView, _rWindow, _rUnoObject,
+            _rWindow.GetViewTransformation(), _rWindow.GetInverseViewTransformation(), aControl ) );
         return aControl.getControl();
     }
 
@@ -1819,14 +1848,7 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     void ViewObjectContactOfUnoControl::propertyChange()
     {
-        // graphical invalidate at all views
-        ActionChanged();
-
-        // #i93318# flush Primitive2DSequence to force recreation with updated XControlModel
-        // since e.g. background color has changed and existing decompositions are possibly no
-        // longer valid. Unfortunately this is not detected from ControlPrimitive2D::operator==
-        // since it only has a uno reference to the XControlModel
-        flushPrimitive2DSequence();
+        impl_onControlChangedOrModified();
     }
 
     //--------------------------------------------------------------------
@@ -1852,6 +1874,19 @@ namespace sdr { namespace contact {
                 }
             }
         }
+    }
+
+    //--------------------------------------------------------------------
+    void ViewObjectContactOfUnoControl::impl_onControlChangedOrModified()
+    {
+        // graphical invalidate at all views
+        ActionChanged();
+
+        // #i93318# flush Primitive2DSequence to force recreation with updated XControlModel
+        // since e.g. background color has changed and existing decompositions are possibly no
+        // longer valid. Unfortunately this is not detected from ControlPrimitive2D::operator==
+        // since it only has a uno reference to the XControlModel
+        flushPrimitive2DSequence();
     }
 
     //====================================================================
