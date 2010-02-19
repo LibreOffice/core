@@ -131,6 +131,7 @@ xmlsec_CFLAGS+=$(C_RESTRICTIONFLAGS)
 .ENDIF			# "$(COMNAME)"=="sunpro5"
 .IF "$(EXTRA_CFLAGS)"!=""
 xmlsec_CFLAGS+=$(EXTRA_CFLAGS)
+xmlsec_CPPFLAGS+=$(EXTRA_CFLAGS)
 .ENDIF # "$(EXTRA_CFLAGS)"!=""
 xmlsec_LDFLAGS+=-L$(SYSBASE)$/usr$/lib
 .ELIF "$(OS)"=="MACOSX" # "$(SYSBASE)"!=""
