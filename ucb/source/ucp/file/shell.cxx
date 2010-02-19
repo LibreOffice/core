@@ -46,23 +46,18 @@
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#ifndef _COM_SUN_STAR_UCB_XCONTENTACCESS_
 #include <com/sun/star/ucb/XContentAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument.hpp>
 #include <com/sun/star/ucb/XPropertySetRegistryFactory.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
+#include <com/sun/star/ucb/ContentInfoAttribute.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/beans/XPropertiesChangeListener.hpp>
 #include <rtl/string.hxx>
-#ifndef _FILERROR_HXX_
 #include "filerror.hxx"
-#endif
 #include "filglob.hxx"
 #include "filcmd.hxx"
 #include "filinpstr.hxx"
@@ -188,9 +183,10 @@ shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceF
       IsHidden( rtl::OUString::createFromAscii( "IsHidden" ) ),
       ContentType( rtl::OUString::createFromAscii( "ContentType" ) ),
       IsReadOnly( rtl::OUString::createFromAscii( "IsReadOnly" ) ),
+      CreatableContentsInfo( rtl::OUString::createFromAscii( "CreatableContentsInfo" ) ),
       FolderContentType( rtl::OUString::createFromAscii( "application/vnd.sun.staroffice.fsys-folder" ) ),
       FileContentType( rtl::OUString::createFromAscii( "application/vnd.sun.staroffice.fsys-file" ) ),
-      m_sCommandInfo( 8 )
+      m_sCommandInfo( 9 )
 {
     // Title
     m_aDefaultProperties.insert( MyProperty( true,
@@ -294,7 +290,7 @@ shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceF
                                              | beans::PropertyAttribute::BOUND
                                              | beans::PropertyAttribute::READONLY ) );
 
-    // Remote
+    // Hidden
     m_aDefaultProperties.insert(
         MyProperty(
             true,
@@ -310,7 +306,6 @@ shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceF
 #else
     | beans::PropertyAttribute::READONLY)); // under unix/linux only readable
 #endif
-
 
 
     // ContentType
@@ -358,6 +353,17 @@ shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceF
                                              | beans::PropertyAttribute::BOUND ) );
 
 
+    // CreatableContentsInfo
+    m_aDefaultProperties.insert( MyProperty( true,
+                                             CreatableContentsInfo,
+                                             -1 ,
+                                             getCppuType( static_cast< const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
+                                             uno::Any(),
+                                             beans::PropertyState_DEFAULT_VALUE,
+                                             beans::PropertyAttribute::MAYBEVOID
+                                             | beans::PropertyAttribute::BOUND
+                                             | beans::PropertyAttribute::READONLY ) );
+
     // Commands
     m_sCommandInfo[0].Name = rtl::OUString::createFromAscii( "getCommandInfo" );
     m_sCommandInfo[0].Handle = -1;
@@ -391,6 +397,9 @@ shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceF
     m_sCommandInfo[7].Handle = -1;
     m_sCommandInfo[7].ArgType = getCppuType( static_cast< InsertCommandArgument* > ( 0 ) );
 
+    m_sCommandInfo[7].Name = rtl::OUString::createFromAscii( "createNewContent" );
+    m_sCommandInfo[7].Handle = -1;
+    m_sCommandInfo[7].ArgType = getCppuType( static_cast< ucb::ContentInfo * > ( 0 ) );
 
     if(m_bWithConfig)
     {
@@ -1597,7 +1606,7 @@ shell::remove( sal_Int32 CommandId,
         nError = aDirectory.getNextItem( aItem );
         while( nError == osl::FileBase::E_None )
         {
-              nError = aItem.getFileStatus( aStatus );
+            nError = aItem.getFileStatus( aStatus );
             if( nError != osl::FileBase::E_None || ! aStatus.isValid( nMask ) )
             {
                 installError( CommandId,
@@ -1623,7 +1632,7 @@ shell::remove( sal_Int32 CommandId,
             nError = aDirectory.getNextItem( aItem );
         }
 
-          aDirectory.close();
+        aDirectory.close();
 
         if( ! whileSuccess )
             return sal_False;     // error code is installed
@@ -2346,17 +2355,17 @@ shell::commit( const shell::ContentMap::iterator& it,
                 osl::FileStatus::Regular == aFileStatus.getFileType();
         }
 
-        aAny <<= isVolume;
         it1 = properties.find( MyProperty( IsVolume ) );
-        if( it1 != properties.end() ) it1->setValue( aAny );
+        if( it1 != properties.end() )
+            it1->setValue( uno::makeAny( isVolume ) );
 
-        aAny <<= isDirectory;
         it1 = properties.find( MyProperty( IsFolder ) );
-        if( it1 != properties.end() ) it1->setValue( aAny );
+        if( it1 != properties.end() )
+            it1->setValue( uno::makeAny( isDirectory ) );
 
-        aAny <<= isFile;
         it1 = properties.find( MyProperty( IsDocument ) );
-        if( it1 != properties.end() ) it1->setValue( aAny );
+        if( it1 != properties.end() )
+            it1->setValue( uno::makeAny( isFile ) );
 
         osl::VolumeInfo aVolumeInfo( VolumeInfoMask_Attributes );
         if( isVolume &&
@@ -2369,44 +2378,51 @@ shell::commit( const shell::ContentMap::iterator& it,
             isCompactDisc = aVolumeInfo.getCompactDiscFlag();
             isFloppy = aVolumeInfo.getFloppyDiskFlag();
 
-            aAny <<= isRemote;
             it1 = properties.find( MyProperty( IsRemote ) );
-            if( it1 != properties.end() ) it1->setValue( aAny );
+            if( it1 != properties.end() )
+                it1->setValue( uno::makeAny( isRemote ) );
 
-            aAny <<= isRemoveable;
             it1 = properties.find( MyProperty( IsRemoveable ) );
-            if( it1 != properties.end() ) it1->setValue( aAny );
+            if( it1 != properties.end() )
+                it1->setValue( uno::makeAny( isRemoveable ) );
 
-            aAny <<= isCompactDisc;
             it1 = properties.find( MyProperty( IsCompactDisc ) );
-            if( it1 != properties.end() ) it1->setValue( aAny );
+            if( it1 != properties.end() )
+                it1->setValue( uno::makeAny( isCompactDisc ) );
 
-            aAny <<= isFloppy;
             it1 = properties.find( MyProperty( IsFloppy ) );
-            if( it1 != properties.end() ) it1->setValue( aAny );
+            if( it1 != properties.end() )
+                it1->setValue( uno::makeAny( isFloppy ) );
         }
         else
         {
             sal_Bool dummy = false;
             aAny <<= dummy;
             it1 = properties.find( MyProperty( IsRemote ) );
-            if( it1 != properties.end() ) it1->setValue( aAny );
+            if( it1 != properties.end() )
+                it1->setValue( aAny );
+
             it1 = properties.find( MyProperty( IsRemoveable ) );
-            if( it1 != properties.end() ) it1->setValue( aAny );
+            if( it1 != properties.end() )
+                it1->setValue( aAny );
+
             it1 = properties.find( MyProperty( IsCompactDisc ) );
-            if( it1 != properties.end() ) it1->setValue( aAny );
+            if( it1 != properties.end() )
+                it1->setValue( aAny );
+
             it1 = properties.find( MyProperty( IsFloppy ) );
-            if( it1 != properties.end() ) it1->setValue( aAny );
+            if( it1 != properties.end() )
+                it1->setValue( aAny );
         }
+    }
+    else
+    {
+        isDirectory = sal_False;
     }
 
     it1 = properties.find( MyProperty( Size ) );
     if( it1 != properties.end() )
-    {
-        aAny <<= dirSize;
-        it1->setValue( aAny );
-    }
-
+        it1->setValue( uno::makeAny( dirSize ) );
 
     it1 = properties.find( MyProperty( IsReadOnly ) );
     if( it1 != properties.end() )
@@ -2415,8 +2431,7 @@ shell::commit( const shell::ContentMap::iterator& it,
         {
             sal_uInt64 Attr = aFileStatus.getAttributes();
             sal_Bool readonly = ( Attr & Attribute_ReadOnly ) != 0;
-            aAny <<= readonly;
-            it1->setValue( aAny );
+            it1->setValue( uno::makeAny( readonly ) );
         }
     }
 
@@ -2427,13 +2442,11 @@ shell::commit( const shell::ContentMap::iterator& it,
         {
             sal_uInt64 Attr = aFileStatus.getAttributes();
             sal_Bool ishidden = ( Attr & Attribute_Hidden ) != 0;
-            aAny <<= ishidden;
-            it1->setValue( aAny );
+            it1->setValue( uno::makeAny( ishidden ) );
         }
     }
 
     it1 = properties.find( MyProperty( DateModified ) );
-
     if( it1 != properties.end() )
     {
         if( aFileStatus.isValid( FileStatusMask_ModifyTime ) )
@@ -2441,7 +2454,7 @@ shell::commit( const shell::ContentMap::iterator& it,
             TimeValue temp = aFileStatus.getModifyTime();
 
             // Convert system time to local time (for EA)
-            TimeValue   myLocalTime;
+            TimeValue myLocalTime;
             osl_getLocalTimeFromSystemTime( &temp, &myLocalTime );
 
             oslDateTime myDateTime;
@@ -2455,11 +2468,16 @@ shell::commit( const shell::ContentMap::iterator& it,
             aDateTime.Day = myDateTime.Day;
             aDateTime.Month = myDateTime.Month;
             aDateTime.Year = myDateTime.Year;
-            aAny <<= aDateTime;
-            it1->setValue( aAny );
+            it1->setValue( uno::makeAny( aDateTime ) );
         }
     }
 
+    it1 = properties.find( MyProperty( CreatableContentsInfo ) );
+    if( it1 != properties.end() )
+        it1->setValue( uno::makeAny(
+            isDirectory || !aFileStatus.isValid( FileStatusMask_Type )
+                ? queryCreatableContentsInfo()
+                : uno::Sequence< ucb::ContentInfo >() ) );
 }
 
 
@@ -2494,8 +2512,8 @@ shell::getv(
     {
         // Assume failure
         aIsRegular = false;
-        osl::FileBase::RC   result = osl::FileBase::E_INVAL;
-        osl::DirectoryItem  aTargetItem;
+        osl::FileBase::RC result = osl::FileBase::E_INVAL;
+        osl::DirectoryItem aTargetItem;
         osl::DirectoryItem::get( aFileStatus.getLinkTargetURL(), aTargetItem );
         if ( aTargetItem.is() )
         {
@@ -2998,6 +3016,31 @@ shell::copyPersistentSet( const rtl::OUString& srcUnqPath,
             }
         }
     }         // end for( sal_Int...
+}
+
+uno::Sequence< ucb::ContentInfo > shell::queryCreatableContentsInfo()
+{
+    uno::Sequence< ucb::ContentInfo > seq(2);
+
+    // file
+    seq[0].Type       = FileContentType;
+    seq[0].Attributes = ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM
+                        | ucb::ContentInfoAttribute::KIND_DOCUMENT;
+
+    uno::Sequence< beans::Property > props( 1 );
+    props[0] = beans::Property(
+        rtl::OUString::createFromAscii( "Title" ),
+        -1,
+        getCppuType( static_cast< rtl::OUString* >( 0 ) ),
+        beans::PropertyAttribute::MAYBEVOID
+        | beans::PropertyAttribute::BOUND );
+    seq[0].Properties = props;
+
+    // folder
+    seq[1].Type       = FolderContentType;
+    seq[1].Attributes = ucb::ContentInfoAttribute::KIND_FOLDER;
+    seq[1].Properties = props;
+    return seq;
 }
 
 /*******************************************************************************/

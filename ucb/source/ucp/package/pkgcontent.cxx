@@ -55,9 +55,7 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVEBADTRANSFRERURLEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
-#endif
 #include <com/sun/star/ucb/MissingInputStreamException.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/NameClashException.hpp>
@@ -105,14 +103,57 @@ ContentProperties::ContentProperties( const rtl::OUString& rContentType )
   bEncrypted( sal_False ),
   bHasEncryptedEntries( sal_False )
 {
-    bIsFolder = rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( PACKAGE_FOLDER_CONTENT_TYPE ) )
-                || rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( PACKAGE_ZIP_FOLDER_CONTENT_TYPE ) );
+    bIsFolder = rContentType.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM( PACKAGE_FOLDER_CONTENT_TYPE ) )
+                || rContentType.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM( PACKAGE_ZIP_FOLDER_CONTENT_TYPE ) );
     bIsDocument = !bIsFolder;
 
     OSL_ENSURE( bIsFolder ||
-                rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( PACKAGE_STREAM_CONTENT_TYPE ) ) ||
-                rContentType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( PACKAGE_ZIP_STREAM_CONTENT_TYPE ) ),
+                rContentType.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM( PACKAGE_STREAM_CONTENT_TYPE ) )
+                || rContentType.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM( PACKAGE_ZIP_STREAM_CONTENT_TYPE ) ),
                 "ContentProperties::ContentProperties - Unknown type!" );
+}
+
+//=========================================================================
+
+uno::Sequence< ucb::ContentInfo >
+ContentProperties::getCreatableContentsInfo( PackageUri const & rUri ) const
+{
+    if ( bIsFolder )
+    {
+        uno::Sequence< beans::Property > aProps( 1 );
+        aProps.getArray()[ 0 ] = beans::Property(
+                    rtl::OUString::createFromAscii( "Title" ),
+                    -1,
+                    getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+                    beans::PropertyAttribute::BOUND );
+
+        uno::Sequence< ucb::ContentInfo > aSeq( 2 );
+
+        // Folder.
+        aSeq.getArray()[ 0 ].Type
+            = Content::getContentType( rUri.getScheme(), sal_True );
+        aSeq.getArray()[ 0 ].Attributes
+            = ucb::ContentInfoAttribute::KIND_FOLDER;
+        aSeq.getArray()[ 0 ].Properties = aProps;
+
+        // Stream.
+        aSeq.getArray()[ 1 ].Type
+            = Content::getContentType( rUri.getScheme(), sal_False );
+        aSeq.getArray()[ 1 ].Attributes
+            = ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM
+              | ucb::ContentInfoAttribute::KIND_DOCUMENT;
+        aSeq.getArray()[ 1 ].Properties = aProps;
+
+        return aSeq;
+    }
+    else
+    {
+        return uno::Sequence< ucb::ContentInfo >( 0 );
+    }
 }
 
 //=========================================================================
@@ -166,9 +207,9 @@ Content* Content::create(
 
         ucb::ContentInfo aInfo;
         if ( bFolder || aURI.isRootFolder() )
-            aInfo.Type = GetContentType( aURI.getScheme(), sal_True );
+            aInfo.Type = getContentType( aURI.getScheme(), sal_True );
         else
-            aInfo.Type = GetContentType( aURI.getScheme(), sal_False );
+            aInfo.Type = getContentType( aURI.getScheme(), sal_False );
 
         return new Content( rxSMgr, pProvider, xId, xPackage, aURI, aInfo );
     }
@@ -188,9 +229,9 @@ Content* Content::create(
     PackageUri aURI( Identifier->getContentIdentifier() );
 
     if ( !Info.Type.equalsIgnoreAsciiCase(
-                GetContentType( aURI.getScheme(), sal_True ) ) &&
+                getContentType( aURI.getScheme(), sal_True ) ) &&
          !Info.Type.equalsIgnoreAsciiCase(
-                GetContentType( aURI.getScheme(), sal_False ) ) )
+                getContentType( aURI.getScheme(), sal_False ) ) )
         return 0;
 
     uno::Reference< container::XHierarchicalNameAccess > xPackage;
@@ -210,7 +251,7 @@ Content* Content::create(
 
 //=========================================================================
 // static
-::rtl::OUString Content::GetContentType(
+::rtl::OUString Content::getContentType(
     const ::rtl::OUString& aScheme, sal_Bool bFolder )
 {
     return ( rtl::OUString::createFromAscii( "application/" )
@@ -294,7 +335,7 @@ uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
         aRet = cppu::queryInterface(
                 rType, static_cast< ucb::XContentCreator * >( this ) );
 
-     return aRet.hasValue() ? aRet : ContentImplHelper::queryInterface( rType );
+    return aRet.hasValue() ? aRet : ContentImplHelper::queryInterface( rType );
 }
 
 //=========================================================================
@@ -609,7 +650,7 @@ uno::Any SAL_CALL Content::execute(
     {
         //////////////////////////////////////////////////////////////////
         // transfer
-        //  ( Not available at stream objects )
+        //      ( Not available at stream objects )
         //////////////////////////////////////////////////////////////////
 
         ucb::TransferInfo aInfo;
@@ -628,11 +669,36 @@ uno::Any SAL_CALL Content::execute(
         transfer( aInfo, Environment );
     }
     else if ( aCommand.Name.equalsAsciiL(
+                  RTL_CONSTASCII_STRINGPARAM( "createNewContent" ) ) &&
+              isFolder() )
+    {
+        //////////////////////////////////////////////////////////////////
+        // createNewContent
+        //      ( Not available at stream objects )
+        //////////////////////////////////////////////////////////////////
+
+        ucb::ContentInfo aInfo;
+        if ( !( aCommand.Argument >>= aInfo ) )
+        {
+            OSL_ENSURE( sal_False, "Wrong argument type!" );
+            ucbhelper::cancelCommandExecution(
+                uno::makeAny( lang::IllegalArgumentException(
+                                    rtl::OUString::createFromAscii(
+                                        "Wrong argument type!" ),
+                                    static_cast< cppu::OWeakObject * >( this ),
+                                    -1 ) ),
+                Environment );
+            // Unreachable
+        }
+
+        aRet <<= createNewContent( aInfo );
+    }
+    else if ( aCommand.Name.equalsAsciiL(
                 RTL_CONSTASCII_STRINGPARAM( "flush" ) ) )
     {
         //////////////////////////////////////////////////////////////////
         // flush
-        //  ( Not available at stream objects )
+        //      ( Not available at stream objects )
         //////////////////////////////////////////////////////////////////
 
         if( !flushData() )
@@ -693,43 +759,7 @@ uno::Sequence< ucb::ContentInfo > SAL_CALL
 Content::queryCreatableContentsInfo()
     throw( uno::RuntimeException )
 {
-    if ( isFolder() )
-    {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
-        uno::Sequence< beans::Property > aProps( 1 );
-        aProps.getArray()[ 0 ] = beans::Property(
-                    rtl::OUString::createFromAscii( "Title" ),
-                    -1,
-                    getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
-                    beans::PropertyAttribute::BOUND );
-
-        uno::Sequence< ucb::ContentInfo > aSeq( 2 );
-
-        // Folder.
-        aSeq.getArray()[ 0 ].Type
-            = GetContentType( m_aUri.getScheme(), sal_True );
-        aSeq.getArray()[ 0 ].Attributes
-            = ucb::ContentInfoAttribute::KIND_FOLDER;
-        aSeq.getArray()[ 0 ].Properties = aProps;
-
-        // Stream.
-        aSeq.getArray()[ 1 ].Type
-            = GetContentType( m_aUri.getScheme(), sal_False );
-        aSeq.getArray()[ 1 ].Attributes
-            = ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM
-              | ucb::ContentInfoAttribute::KIND_DOCUMENT;
-        aSeq.getArray()[ 1 ].Properties = aProps;
-
-        return aSeq;
-    }
-    else
-    {
-        OSL_ENSURE( sal_False,
-                    "queryCreatableContentsInfo called on non-folder object!" );
-
-        return uno::Sequence< ucb::ContentInfo >( 0 );
-    }
+    return m_aProps.getCreatableContentsInfo( m_aUri );
 }
 
 //=========================================================================
@@ -746,16 +776,16 @@ Content::createNewContent( const ucb::ContentInfo& Info )
             return uno::Reference< ucb::XContent >();
 
         if ( !Info.Type.equalsIgnoreAsciiCase(
-                GetContentType( m_aUri.getScheme(), sal_True ) ) &&
+                getContentType( m_aUri.getScheme(), sal_True ) ) &&
              !Info.Type.equalsIgnoreAsciiCase(
-                GetContentType( m_aUri.getScheme(), sal_False ) ) )
+                getContentType( m_aUri.getScheme(), sal_False ) ) )
             return uno::Reference< ucb::XContent >();
 
         rtl::OUString aURL = m_aUri.getUri();
         aURL += rtl::OUString::createFromAscii( "/" );
 
         if ( Info.Type.equalsIgnoreAsciiCase(
-                GetContentType( m_aUri.getScheme(), sal_True ) ) )
+                getContentType( m_aUri.getScheme(), sal_True ) ) )
             aURL += rtl::OUString::createFromAscii( "New_Folder" );
         else
             aURL += rtl::OUString::createFromAscii( "New_Stream" );
@@ -871,6 +901,14 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 xRow->appendBoolean( rProp, rData.bIsFolder );
             }
             else if ( rProp.Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM( "CreatableContentsInfo" ) ) )
+            {
+                xRow->appendObject(
+                    rProp, uno::makeAny(
+                        rData.getCreatableContentsInfo(
+                            PackageUri( rContentId ) ) ) );
+            }
+            else if ( rProp.Name.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
             {
                 xRow->appendString ( rProp, rData.aMediaType );
@@ -978,6 +1016,16 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY ),
             rData.bIsFolder );
+        xRow->appendObject(
+            beans::Property(
+                rtl::OUString::createFromAscii( "CreatableContentsInfo" ),
+                -1,
+                getCppuType( static_cast<
+                        const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
+                beans::PropertyAttribute::BOUND
+                | beans::PropertyAttribute::READONLY ),
+            uno::makeAny(
+                rData.getCreatableContentsInfo( PackageUri( rContentId ) ) ) );
         xRow->appendString(
             beans::Property(
                 rtl::OUString::createFromAscii( "MediaType" ),
@@ -1069,10 +1117,10 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     beans::PropertyChangeEvent aEvent;
     aEvent.Source         = static_cast< cppu::OWeakObject * >( this );
     aEvent.Further        = sal_False;
-//  aEvent.PropertyName   =
+//    aEvent.PropertyName   =
     aEvent.PropertyHandle = -1;
-//  aEvent.OldValue       =
-//  aEvent.NewValue       =
+//    aEvent.OldValue       =
+//    aEvent.NewValue       =
 
     const beans::PropertyValue* pValues = rValues.getConstArray();
     sal_Int32 nCount = rValues.getLength();
@@ -1108,6 +1156,15 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         }
         else if ( rValue.Name.equalsAsciiL(
                     RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
+        {
+            // Read-only property!
+            aRet[ n ] <<= lang::IllegalAccessException(
+                            rtl::OUString::createFromAscii(
+                                "Property is read-only!" ),
+                            static_cast< cppu::OWeakObject * >( this ) );
+        }
+        else if ( rValue.Name.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM( "CreatableContentsInfo" ) ) )
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
@@ -1181,7 +1238,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                     aEvent.NewValue     = uno::makeAny( aNewValue );
 
                     m_aProps.aMediaType = aNewValue;
-                      nChanged++;
+                    nChanged++;
                     bStore = sal_True;
                     m_nModifiedProps |= MEDIATYPE_MODIFIED;
                 }
@@ -1219,7 +1276,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                         aEvent.NewValue = uno::makeAny( bNewValue );
 
                         m_aProps.bCompressed = bNewValue;
-                          nChanged++;
+                        nChanged++;
                         bStore = sal_True;
                         m_nModifiedProps |= COMPRESSED_MODIFIED;
                     }
@@ -1256,7 +1313,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                         aEvent.NewValue = uno::makeAny( bNewValue );
 
                         m_aProps.bEncrypted = bNewValue;
-                          nChanged++;
+                        nChanged++;
                         bStore = sal_True;
                         m_nModifiedProps |= ENCRYPTED_MODIFIED;
                     }
@@ -1483,7 +1540,7 @@ uno::Any Content::open(
         uno::Reference< ucb::XDynamicResultSet > xSet
             = new DynamicResultSet( m_xSMgr, this, rArg, xEnv );
         return uno::makeAny( xSet );
-      }
+    }
     else
     {
         //////////////////////////////////////////////////////////////////
@@ -1506,7 +1563,7 @@ uno::Any Content::open(
         rtl::OUString aURL = m_xIdentifier->getContentIdentifier();
         uno::Reference< io::XOutputStream > xOut( rArg.Sink, uno::UNO_QUERY );
         if ( xOut.is() )
-          {
+        {
             // PUSH: write data into xOut
 
             uno::Reference< io::XInputStream > xIn = getInputStream();
@@ -1560,14 +1617,14 @@ uno::Any Content::open(
             {
                 // closeOutput, readSomeBytes, writeBytes
             }
-          }
+        }
         else
-          {
+        {
             uno::Reference< io::XActiveDataSink > xDataSink(
                                             rArg.Sink, uno::UNO_QUERY );
-              if ( xDataSink.is() )
+            if ( xDataSink.is() )
             {
-                  // PULL: wait for client read
+                // PULL: wait for client read
 
                 uno::Reference< io::XInputStream > xIn = getInputStream();
                 if ( !xIn.is() )
@@ -1598,7 +1655,7 @@ uno::Any Content::open(
                 // Done.
                 xDataSink->setInputStream( xIn );
             }
-              else
+            else
             {
                 // Note: aOpenCommand.Sink may contain an XStream
                 //       implementation. Support for this type of
@@ -1612,7 +1669,7 @@ uno::Any Content::open(
                     xEnv );
                 // Unreachable
             }
-          }
+        }
     }
 
     return uno::Any();
@@ -1931,8 +1988,8 @@ void Content::transfer(
     //////////////////////////////////////////////////////////////////////
 
     rtl::OUString aType = xSource->isFolder()
-            ? GetContentType( m_aUri.getScheme(), sal_True )
-            : GetContentType( m_aUri.getScheme(), sal_False );
+            ? getContentType( m_aUri.getScheme(), sal_True )
+            : getContentType( m_aUri.getScheme(), sal_False );
     ucb::ContentInfo aContentInfo;
     aContentInfo.Type = aType;
     aContentInfo.Attributes = 0;
@@ -2413,14 +2470,14 @@ sal_Bool Content::loadData(
             if ( xEnumAccess.is() )
             {
                 // folder
-                rProps.aContentType = GetContentType( rURI.getScheme(), sal_True );
+                rProps.aContentType = getContentType( rURI.getScheme(), sal_True );
                 rProps.bIsDocument = sal_False;
                 rProps.bIsFolder = sal_True;
             }
             else
             {
                 // stream
-                rProps.aContentType = GetContentType( rURI.getScheme(), sal_False );
+                rProps.aContentType = getContentType( rURI.getScheme(), sal_False );
                 rProps.bIsDocument = sal_True;
                 rProps.bIsFolder = sal_False;
             }
@@ -2611,8 +2668,8 @@ sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
 
     if ( !xNA->hasByHierarchicalName( m_aUri.getPath() ) )
     {
-//      if ( !bCreate )
-//          return sal_True;
+//        if ( !bCreate )
+//            return sal_True;
 
         try
         {
@@ -2956,4 +3013,3 @@ uno::Reference< container::XEnumeration > Content::getIterator()
 
     return xIter;
 }
-
