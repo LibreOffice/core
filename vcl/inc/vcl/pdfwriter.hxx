@@ -201,7 +201,7 @@ public:
 
     enum WidgetType
     {
-        PushButton, RadioButton, CheckBox, Edit, ListBox, ComboBox
+        PushButton, RadioButton, CheckBox, Edit, ListBox, ComboBox, Hierarchy
     };
 
     enum WidgetState

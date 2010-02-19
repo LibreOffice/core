@@ -1059,7 +1059,7 @@ i12626
     void createDefaultListBoxAppearance( PDFWidget&, const PDFWriter::ListBoxWidget& rWidget );
 
     /* ensure proper escapement and uniqueness of field names */
-    rtl::OString convertWidgetFieldName( const rtl::OUString& rString );
+    void createWidgetFieldName( sal_Int32 i_nWidgetsIndex, const PDFWriter::AnyWidget& i_rInWidget );
     /* adds an entry to m_aObjects and returns its index+1,
      * sets the offset to ~0
      */

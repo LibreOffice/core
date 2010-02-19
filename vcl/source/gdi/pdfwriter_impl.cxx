@@ -652,30 +652,25 @@ static void appendUnicodeTextString( const rtl::OUString& rString, OStringBuffer
     }
 }
 
-OString PDFWriterImpl::convertWidgetFieldName( const rtl::OUString& rString )
+void PDFWriterImpl::createWidgetFieldName( sal_Int32 i_nWidgetIndex, const PDFWriter::AnyWidget& i_rControl )
 {
-    OStringBuffer aBuffer( rString.getLength()+64 );
-
     /* #i80258# previously we use appendName here
        however we need a slightly different coding scheme than the normal
        name encoding for field names
-
-       also replace all '.' by '_' as '.' indicates a hierarchy level which
-       we do not have here
     */
-
-    OString aStr( OUStringToOString( rString, RTL_TEXTENCODING_UTF8 ) );
+    const OUString& rName = (m_aContext.Version > PDFWriter::PDF_1_2) ? i_rControl.Name : i_rControl.Text;
+    OString aStr( OUStringToOString( rName, RTL_TEXTENCODING_UTF8 ) );
     const sal_Char* pStr = aStr.getStr();
     int nLen = aStr.getLength();
+
+    OStringBuffer aBuffer( rName.getLength()+64 );
     for( int i = 0; i < nLen; i++ )
     {
         /*  #i16920# PDF recommendation: output UTF8, any byte
-         *  outside the interval [33(=ASCII'!');126(=ASCII'~')]
+         *  outside the interval [32(=ASCII' ');126(=ASCII'~')]
          *  should be escaped hexadecimal
          */
-        if( pStr[i] == '.' )
-            aBuffer.append( '_' );
-        else if( (pStr[i] >= 33 && pStr[i] <= 126 ) )
+        if( (pStr[i] >= 32 && pStr[i] <= 126 ) )
             aBuffer.append( pStr[i] );
         else
         {
@@ -684,31 +679,135 @@ OString PDFWriterImpl::convertWidgetFieldName( const rtl::OUString& rString )
         }
     }
 
-    OString aRet = aBuffer.makeStringAndClear();
+    OString aFullName( aBuffer.makeStringAndClear() );
+
+    /* #i82785# create hierarchical fields down to the for each dot in i_rName */
+    sal_Int32 nTokenIndex = 0, nLastTokenIndex = 0;
+    OString aPartialName;
+    OString aDomain;
+    do
+    {
+        nLastTokenIndex = nTokenIndex;
+        aPartialName = aFullName.getToken( 0, '.', nTokenIndex );
+        if( nTokenIndex != -1 )
+        {
+            // find or create a hierarchical field
+            // first find the fully qualified name up to this field
+            aDomain = aFullName.copy( 0, nTokenIndex-1 );
+            std::hash_map< rtl::OString, sal_Int32, rtl::OStringHash >::const_iterator it = m_aFieldNameMap.find( aDomain );
+            if( it == m_aFieldNameMap.end() )
+            {
+                 // create new hierarchy field
+                sal_Int32 nNewWidget = m_aWidgets.size();
+                m_aWidgets.push_back( PDFWidget() );
+                m_aWidgets[nNewWidget].m_nObject = createObject();
+                m_aWidgets[nNewWidget].m_eType = PDFWriter::Hierarchy;
+                m_aWidgets[nNewWidget].m_aName = aPartialName;
+                m_aWidgets[i_nWidgetIndex].m_nParent = m_aWidgets[nNewWidget].m_nObject;
+                m_aFieldNameMap[aDomain] = nNewWidget;
+                m_aWidgets[i_nWidgetIndex].m_nParent = m_aWidgets[nNewWidget].m_nObject;
+                if( nLastTokenIndex > 0 )
+                {
+                    // this field is not a root field and
+                    // needs to be inserted to its parent
+                    OString aParentDomain( aDomain.copy( 0, nLastTokenIndex-1 ) );
+                    it = m_aFieldNameMap.find( aParentDomain );
+                    OSL_ENSURE( it != m_aFieldNameMap.end(), "field name not found" );
+                    if( it != m_aFieldNameMap.end()  )
+                    {
+                        OSL_ENSURE( it->second < sal_Int32(m_aWidgets.size()), "invalid field number entry" );
+                        if( it->second < sal_Int32(m_aWidgets.size()) )
+                        {
+                            PDFWidget& rParentField( m_aWidgets[it->second] );
+                            rParentField.m_aKids.push_back( m_aWidgets[nNewWidget].m_nObject );
+                            rParentField.m_aKidsIndex.push_back( nNewWidget );
+                            m_aWidgets[nNewWidget].m_nParent = rParentField.m_nObject;
+                        }
+                    }
+                }
+            }
+            else if( m_aWidgets[it->second].m_eType != PDFWriter::Hierarchy )
+            {
+                // this is invalid, someone tries to have a terminal field as parent
+                // example: a button with the name foo.bar exists and
+                // another button is named foo.bar.no
+                // workaround: put the second terminal field as much up in the hierarchy as
+                // necessary to have a non-terminal field as parent (or none at all)
+                // since it->second already is terminal, we just need to use its parent
+                aDomain = OString();
+                aPartialName = aFullName.copy( aFullName.lastIndexOf( '.' )+1 );
+                if( nLastTokenIndex > 0 )
+                {
+                    aDomain = aFullName.copy( 0, nLastTokenIndex-1 );
+                    OStringBuffer aBuf( aDomain.getLength() + 1 + aPartialName.getLength() );
+                    aBuf.append( aDomain );
+                    aBuf.append( '.' );
+                    aBuf.append( aPartialName );
+                    aFullName = aBuf.makeStringAndClear();
+                }
+                else
+                    aFullName = aPartialName;
+                break;
+            }
+        }
+    } while( nTokenIndex != -1 );
+
+    // insert widget into its hierarchy field
+    if( aDomain.getLength() )
+    {
+        std::hash_map< rtl::OString, sal_Int32, rtl::OStringHash >::const_iterator it = m_aFieldNameMap.find( aDomain );
+        if( it != m_aFieldNameMap.end() )
+        {
+            OSL_ENSURE( it->second >= 0 && it->second < sal_Int32( m_aWidgets.size() ), "invalid field index" );
+            if( it->second >= 0 && it->second < sal_Int32(m_aWidgets.size()) )
+            {
+                m_aWidgets[i_nWidgetIndex].m_nParent = m_aWidgets[it->second].m_nObject;
+                m_aWidgets[it->second].m_aKids.push_back( m_aWidgets[i_nWidgetIndex].m_nObject);
+                m_aWidgets[it->second].m_aKidsIndex.push_back( i_nWidgetIndex );
+            }
+        }
+    }
+
+    if( aPartialName.getLength() == 0 )
+    {
+        // how funny, an empty field name
+        if( i_rControl.getType() == PDFWriter::RadioButton )
+        {
+            aPartialName  = "RadioGroup";
+            aPartialName += OString::valueOf( static_cast<const PDFWriter::RadioButtonWidget&>(i_rControl).RadioGroup );
+        }
+        else
+            aPartialName = OString( "Widget" );
+    }
+
     if( ! m_aContext.AllowDuplicateFieldNames )
     {
-        std::hash_map<OString, sal_Int32, OStringHash>::iterator it = m_aFieldNameMap.find( aRet );
+        std::hash_map<OString, sal_Int32, OStringHash>::iterator it = m_aFieldNameMap.find( aFullName );
 
         if( it != m_aFieldNameMap.end() ) // not unique
         {
             std::hash_map< OString, sal_Int32, OStringHash >::const_iterator check_it;
             OString aTry;
+            sal_Int32 nTry = 2;
             do
             {
-                OStringBuffer aUnique( aRet.getLength() + 16 );
-                aUnique.append( aRet );
+                OStringBuffer aUnique( aFullName.getLength() + 16 );
+                aUnique.append( aFullName );
                 aUnique.append( '_' );
-                aUnique.append( it->second );
-                it->second++;
+                aUnique.append( nTry++ );
                 aTry = aUnique.makeStringAndClear();
                 check_it = m_aFieldNameMap.find( aTry );
             } while( check_it != m_aFieldNameMap.end() );
-            aRet = aTry;
+            aFullName = aTry;
+            m_aFieldNameMap[ aFullName ] = i_nWidgetIndex;
+            aPartialName = aFullName.copy( aFullName.lastIndexOf( '.' )+1 );
         }
         else
-            m_aFieldNameMap[ aRet ] = 2;
+            m_aFieldNameMap[ aFullName ] = i_nWidgetIndex;
     }
-    return aRet;
+
+    // finally
+    m_aWidgets[i_nWidgetIndex].m_aName = aPartialName;
 }
 
 static void appendFixedInt( sal_Int32 nValue, OStringBuffer& rBuffer, sal_Int32 nPrecision = nLog10Divisor )
@@ -5305,78 +5404,82 @@ bool PDFWriterImpl::emitWidgetAnnotations()
         aLine.append( rWidget.m_nObject );
         aLine.append( " 0 obj\n"
                       "<<" );
-        // emit widget annotation only for terminal fields
-        if( rWidget.m_aKids.empty() )
+        if( rWidget.m_eType != PDFWriter::Hierarchy )
         {
-            aLine.append( "/Type/Annot/Subtype/Widget/F 4\n"
-                          "/Rect[" );
-            appendFixedInt( rWidget.m_aRect.Left()-1, aLine );
-            aLine.append( ' ' );
-            appendFixedInt( rWidget.m_aRect.Top()+1, aLine );
-            aLine.append( ' ' );
-            appendFixedInt( rWidget.m_aRect.Right()+1, aLine );
-            aLine.append( ' ' );
-            appendFixedInt( rWidget.m_aRect.Bottom()-1, aLine );
-            aLine.append( "]\n" );
-        }
-        aLine.append( "/FT/" );
-        switch( rWidget.m_eType )
-        {
-            case PDFWriter::RadioButton:
-            case PDFWriter::CheckBox:
-                // for radio buttons only the RadioButton field, not the
-                // CheckBox children should have a value, else acrobat reader
-                // does not always check the right button
-                // of course real check boxes (not belonging to a readio group)
-                // need their values, too
-                if( rWidget.m_eType == PDFWriter::RadioButton || rWidget.m_nRadioGroup < 0 )
-                {
-                    aValue.append( "/" );
-                    // check for radio group with all buttons unpressed
-                    if( rWidget.m_aValue.getLength() == 0 )
-                        aValue.append( "Off" );
-                    else
-                        appendName( rWidget.m_aValue, aValue );
-                }
-            case PDFWriter::PushButton:
-                aLine.append( "Btn" );
-                break;
-            case PDFWriter::ListBox:
-                if( rWidget.m_nFlags & 0x200000 ) // multiselect
-                {
-                    aValue.append( "[" );
-                    for( unsigned int i = 0; i < rWidget.m_aSelectedEntries.size(); i++ )
+            // emit widget annotation only for terminal fields
+            if( rWidget.m_aKids.empty() )
+            {
+                aLine.append( "/Type/Annot/Subtype/Widget/F 4\n"
+                              "/Rect[" );
+                appendFixedInt( rWidget.m_aRect.Left()-1, aLine );
+                aLine.append( ' ' );
+                appendFixedInt( rWidget.m_aRect.Top()+1, aLine );
+                aLine.append( ' ' );
+                appendFixedInt( rWidget.m_aRect.Right()+1, aLine );
+                aLine.append( ' ' );
+                appendFixedInt( rWidget.m_aRect.Bottom()-1, aLine );
+                aLine.append( "]\n" );
+            }
+            aLine.append( "/FT/" );
+            switch( rWidget.m_eType )
+            {
+                case PDFWriter::RadioButton:
+                case PDFWriter::CheckBox:
+                    // for radio buttons only the RadioButton field, not the
+                    // CheckBox children should have a value, else acrobat reader
+                    // does not always check the right button
+                    // of course real check boxes (not belonging to a readio group)
+                    // need their values, too
+                    if( rWidget.m_eType == PDFWriter::RadioButton || rWidget.m_nRadioGroup < 0 )
                     {
-                        sal_Int32 nEntry = rWidget.m_aSelectedEntries[i];
-                        if( nEntry >= 0 && nEntry < sal_Int32(rWidget.m_aListEntries.size()) )
-                            appendUnicodeTextStringEncrypt( rWidget.m_aListEntries[ nEntry ], rWidget.m_nObject, aValue );
+                        aValue.append( "/" );
+                        // check for radio group with all buttons unpressed
+                        if( rWidget.m_aValue.getLength() == 0 )
+                            aValue.append( "Off" );
+                        else
+                            appendName( rWidget.m_aValue, aValue );
                     }
-                    aValue.append( "]" );
-                }
-                else if( rWidget.m_aSelectedEntries.size() > 0 &&
-                         rWidget.m_aSelectedEntries[0] >= 0 &&
-                         rWidget.m_aSelectedEntries[0] < sal_Int32(rWidget.m_aListEntries.size()) )
-                {
-                    appendUnicodeTextStringEncrypt( rWidget.m_aListEntries[ rWidget.m_aSelectedEntries[0] ], rWidget.m_nObject, aValue );
-                }
-                else
-                    appendUnicodeTextStringEncrypt( rtl::OUString(), rWidget.m_nObject, aValue );
-                aLine.append( "Ch" );
-                break;
-            case PDFWriter::ComboBox:
-                appendUnicodeTextStringEncrypt( rWidget.m_aValue, rWidget.m_nObject, aValue );
-                aLine.append( "Ch" );
-                break;
-            case PDFWriter::Edit:
-                aLine.append( "Tx" );
-                appendUnicodeTextStringEncrypt( rWidget.m_aValue, rWidget.m_nObject, aValue );
-                break;
+                case PDFWriter::PushButton:
+                    aLine.append( "Btn" );
+                    break;
+                case PDFWriter::ListBox:
+                    if( rWidget.m_nFlags & 0x200000 ) // multiselect
+                    {
+                        aValue.append( "[" );
+                        for( unsigned int i = 0; i < rWidget.m_aSelectedEntries.size(); i++ )
+                        {
+                            sal_Int32 nEntry = rWidget.m_aSelectedEntries[i];
+                            if( nEntry >= 0 && nEntry < sal_Int32(rWidget.m_aListEntries.size()) )
+                                appendUnicodeTextStringEncrypt( rWidget.m_aListEntries[ nEntry ], rWidget.m_nObject, aValue );
+                        }
+                        aValue.append( "]" );
+                    }
+                    else if( rWidget.m_aSelectedEntries.size() > 0 &&
+                             rWidget.m_aSelectedEntries[0] >= 0 &&
+                             rWidget.m_aSelectedEntries[0] < sal_Int32(rWidget.m_aListEntries.size()) )
+                    {
+                        appendUnicodeTextStringEncrypt( rWidget.m_aListEntries[ rWidget.m_aSelectedEntries[0] ], rWidget.m_nObject, aValue );
+                    }
+                    else
+                        appendUnicodeTextStringEncrypt( rtl::OUString(), rWidget.m_nObject, aValue );
+                    aLine.append( "Ch" );
+                    break;
+                case PDFWriter::ComboBox:
+                    appendUnicodeTextStringEncrypt( rWidget.m_aValue, rWidget.m_nObject, aValue );
+                    aLine.append( "Ch" );
+                    break;
+                case PDFWriter::Edit:
+                    aLine.append( "Tx" );
+                    appendUnicodeTextStringEncrypt( rWidget.m_aValue, rWidget.m_nObject, aValue );
+                    break;
+                case PDFWriter::Hierarchy: // make the compiler happy
+                    break;
+            }
+            aLine.append( "\n" );
+            aLine.append( "/P " );
+            aLine.append( m_aPages[ rWidget.m_nPage ].m_nPageObject );
+            aLine.append( " 0 R\n" );
         }
-        aLine.append( "\n" );
-        aLine.append( "/P " );
-        aLine.append( m_aPages[ rWidget.m_nPage ].m_nPageObject );
-        aLine.append( " 0 R\n" );
-
         if( rWidget.m_nParent )
         {
             aLine.append( "/Parent " );
@@ -5400,7 +5503,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
             appendLiteralStringEncrypt( rWidget.m_aName, rWidget.m_nObject, aLine );
             aLine.append( "\n" );
         }
-        if( m_aContext.Version > PDFWriter::PDF_1_2 )
+        if( m_aContext.Version > PDFWriter::PDF_1_2 && rWidget.m_aDescription.getLength() )
         {
             // the alternate field name should be unicode able since it is
             // supposed to be used in UI
@@ -5462,7 +5565,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
             if(!m_bIsPDF_A1)
             {
                 OStringBuffer aDest;
-                if( appendDest( rWidget.m_nDest, aDest ) )
+                if( rWidget.m_nDest != -1 && appendDest( rWidget.m_nDest, aDest ) )
                 {
                     aLine.append( "/AA<</D<</Type/Action/S/GoTo/D " );
                     aLine.append( aDest.makeStringAndClear() );
@@ -6495,16 +6598,19 @@ void PDFWriterImpl::sortWidgets()
     for( int nW = 0; nW < nWidgets; nW++ )
     {
         const PDFWidget& rWidget = m_aWidgets[nW];
-        AnnotSortContainer& rCont = sorted[ rWidget.m_nPage ];
-        // optimize vector allocation
-        if( rCont.aSortedAnnots.empty() )
-            rCont.aSortedAnnots.reserve( m_aPages[ rWidget.m_nPage ].m_aAnnotations.size() );
-        // insert widget to tab sorter
-        // RadioButtons are not page annotations, only their individual check boxes are
-        if( rWidget.m_eType != PDFWriter::RadioButton )
+        if( rWidget.m_nPage >= 0 )
         {
-            rCont.aObjects.insert( rWidget.m_nObject );
-            rCont.aSortedAnnots.push_back( AnnotationSortEntry( rWidget.m_nTabOrder, rWidget.m_nObject, nW ) );
+            AnnotSortContainer& rCont = sorted[ rWidget.m_nPage ];
+            // optimize vector allocation
+            if( rCont.aSortedAnnots.empty() )
+                rCont.aSortedAnnots.reserve( m_aPages[ rWidget.m_nPage ].m_aAnnotations.size() );
+            // insert widget to tab sorter
+            // RadioButtons are not page annotations, only their individual check boxes are
+            if( rWidget.m_eType != PDFWriter::RadioButton )
+            {
+                rCont.aObjects.insert( rWidget.m_nObject );
+                rCont.aSortedAnnots.push_back( AnnotationSortEntry( rWidget.m_nTabOrder, rWidget.m_nObject, nW ) );
+            }
         }
     }
     for( std::hash_map< sal_Int32, AnnotSortContainer >::iterator it = sorted.begin(); it != sorted.end(); ++it )
@@ -11629,18 +11735,7 @@ sal_Int32 PDFWriterImpl::findRadioGroupWidget( const PDFWriter::RadioButtonWidge
         m_aWidgets.back().m_nRadioGroup = rBtn.RadioGroup;
         m_aWidgets.back().m_nFlags |= 0x00008000;
 
-        // create radio button field name
-        const rtl::OUString& rName = (m_aContext.Version > PDFWriter::PDF_1_2) ?
-                                     rBtn.Name : rBtn.Text;
-        if( rName.getLength() )
-        {
-            m_aWidgets.back().m_aName   = convertWidgetFieldName( rName );
-        }
-        else
-        {
-            m_aWidgets.back().m_aName   = "RadioGroup";
-            m_aWidgets.back().m_aName  += OString::valueOf( rBtn.RadioGroup );
-        }
+        createWidgetFieldName( sal_Int32(m_aWidgets.size()-1), rBtn );
     }
     else
         nRadioGroupWidget = it->second;
@@ -11656,44 +11751,27 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
     if( nPageNr < 0 || nPageNr >= (sal_Int32)m_aPages.size() )
         return -1;
 
+    sal_Int32 nNewWidget = m_aWidgets.size();
     m_aWidgets.push_back( PDFWidget() );
-    sal_Int32 nNewWidget = m_aWidgets.size()-1;
 
-    // create eventual radio button before getting any references
-    // from m_aWidgets as the push_back operation potentially assigns new
-    // memory to the vector and thereby invalidates the reference
-    int nRadioGroupWidget = -1;
-    if( rControl.getType() == PDFWriter::RadioButton )
-        nRadioGroupWidget = findRadioGroupWidget( static_cast<const PDFWriter::RadioButtonWidget&>(rControl) );
+    m_aWidgets.back().m_nObject         = createObject();
+    m_aWidgets.back().m_aRect               = rControl.Location;
+    m_aWidgets.back().m_nPage               = nPageNr;
+    m_aWidgets.back().m_eType               = rControl.getType();
 
-    PDFWidget& rNewWidget           = m_aWidgets[nNewWidget];
-    rNewWidget.m_nObject            = createObject();
-    rNewWidget.m_aRect              = rControl.Location;
-    rNewWidget.m_nPage              = nPageNr;
-    rNewWidget.m_eType              = rControl.getType();
-
+    sal_Int32 nRadioGroupWidget = -1;
     // for unknown reasons the radio buttons of a radio group must not have a
     // field name, else the buttons are in fact check boxes -
     // that is multiple buttons of the radio group can be selected
-    if( rControl.getType() != PDFWriter::RadioButton )
+    if( rControl.getType() == PDFWriter::RadioButton )
+        nRadioGroupWidget = findRadioGroupWidget( static_cast<const PDFWriter::RadioButtonWidget&>(rControl) );
+    else
     {
-        // acrobat reader since 3.0 does not support unicode text
-        // strings for the field name; so we need to encode unicodes
-        // larger than 255
-
-        rNewWidget.m_aName          =
-            convertWidgetFieldName( (m_aContext.Version > PDFWriter::PDF_1_2) ?
-                                    rControl.Name : rControl.Text );
-        // #i88040# acrobat reader crashes on empty field names,
-        // so always create one
-        if( rNewWidget.m_aName.getLength() == 0 )
-        {
-            OUStringBuffer aBuf( 32 );
-            aBuf.appendAscii( "Widget" );
-            aBuf.append( nNewWidget );
-            rNewWidget.m_aName = convertWidgetFieldName( aBuf.makeStringAndClear() );
-        }
+        createWidgetFieldName( nNewWidget, rControl );
     }
+
+    // caution: m_aWidgets must not be changed after here or rNewWidget may be invalid
+    PDFWidget& rNewWidget           = m_aWidgets[nNewWidget];
     rNewWidget.m_aDescription       = rControl.Description;
     rNewWidget.m_aText              = rControl.Text;
     rNewWidget.m_nTextStyle         = rControl.TextStyle &
@@ -11924,6 +12002,7 @@ bool PDFWriterImpl::endControlAppearance( PDFWriter::WidgetState eState )
                 break;
             case PDFWriter::ListBox:
             case PDFWriter::ComboBox:
+            case PDFWriter::Hierarchy:
                 break;
         }
         if( aState.getLength() && aStyle.getLength() )
