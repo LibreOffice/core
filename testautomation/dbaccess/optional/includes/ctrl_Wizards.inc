@@ -102,7 +102,7 @@ testcase tGroupBoxWithDatasource
      printlog "insert password 'testtool' into login dialog"
      Kontext "LoginDialog"
         if LoginDialog.Exists then
-         	Password.setText "testtool"
+         	LoginPassword.setText "testtool"
          	LoginDialog.OK
             sleep(1)
         else
@@ -110,7 +110,7 @@ testcase tGroupBoxWithDatasource
         endif
      Kontext "LoginDialog"
         if LoginDialog.Exists then
-         	Password.setText "testtool"
+         	LoginPassword.setText "testtool"
          	LoginDialog.OK
             sleep(1)
         else
@@ -118,9 +118,10 @@ testcase tGroupBoxWithDatasource
         endif
     Kontext "TabDataForm"         
     '/// set the table TT_Control
-     printlog "set the table TT_Control"    
-	 Content.setText("TT_Control")
-     Content.TypeKeys "<RETURN>" , true       
+    printlog "set the table TT_Control"    
+    Content.setText("TT_Control")
+    Content.TypeKeys "<RETURN>" , true
+    sleep(1)
   	Kontext "ControlPropertiesDialog"
    	 ControlPropertiesDialog.Close
    	sleep(3)
@@ -596,7 +597,7 @@ testcase tListBox
 		Kontext "LoginDialog"
         if LoginDialog.Exists(3) then
         	printlog "login dialog"
-            Password.SetText "testtool"
+                LoginPassword.SetText "testtool"
 	        LoginDialog.OK
 	        sleep 1
         end if	    
@@ -820,7 +821,7 @@ testcase tTableControl
 		Kontext "LoginDialog"
         if LoginDialog.Exists(3) then
         	printlog "login dialog"
-            Password.SetText "testtool"
+                LoginPassword.SetText "testtool"
 	        LoginDialog.OK
 	        sleep (1)
         end if	    

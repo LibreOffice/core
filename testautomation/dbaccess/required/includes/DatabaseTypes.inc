@@ -56,15 +56,15 @@ sub DatabaseTypes
 
     printlog "------------------ DatabaseTypes.inc ---------------------"
     
-  '  call tMySQLODBCProperties
-   ' call tMySQLJDBCProperties
-    'call tAdabasProperties
-    'call tOracleJDBCProperties
-    'call tJDBCProperties
-    'call tODBCProperties
-    'call tdBaseProperties
-    'call tTextProperties
-    'call tSpreadsheetProperties
+    call tMySQLODBCProperties
+    call tMySQLJDBCProperties
+    call tAdabasProperties
+    call tOracleJDBCProperties
+    call tJDBCProperties
+    call tODBCProperties
+    call tdBaseProperties
+    call tTextProperties
+    call tSpreadsheetProperties
     call tMozillaProperties
     call tLDAPProperties
     call tEvolutionProperties
