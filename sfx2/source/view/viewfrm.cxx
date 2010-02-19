@@ -2205,8 +2205,7 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
         if ( pOldSh )
         {
             // ask wether it can be closed
-            Reference< XController > xController( pOldSh->GetController(), UNO_SET_THROW );
-            if ( !xController->suspend( sal_True ) )
+            if ( !pOldSh->PrepareClose( TRUE ) )
                 return sal_False;
 
             // remove sub shells from Dispatcher before switching to new ViewShell
