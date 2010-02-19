@@ -994,6 +994,54 @@ namespace canvas
             return aPolyPoly;
         }
 
+        int calcGradientStepCount( ::basegfx::B2DHomMatrix&      rTotalTransform,
+                                   const rendering::ViewState&   viewState,
+                                   const rendering::RenderState& renderState,
+                                   const rendering::Texture&     texture,
+                                   int                           nColorSteps )
+        {
+            // calculate overall texture transformation (directly from
+            // texture to device space).
+            ::basegfx::B2DHomMatrix aMatrix;
+
+            rTotalTransform.identity();
+            ::basegfx::unotools::homMatrixFromAffineMatrix( rTotalTransform,
+                                                            texture.AffineTransform );
+            ::canvas::tools::mergeViewAndRenderTransform(aMatrix,
+                                                         viewState,
+                                                         renderState);
+            rTotalTransform *= aMatrix; // prepend total view/render transformation
+
+            // determine size of gradient in device coordinate system
+            // (to e.g. determine sensible number of gradient steps)
+            ::basegfx::B2DPoint aLeftTop( 0.0, 0.0 );
+            ::basegfx::B2DPoint aLeftBottom( 0.0, 1.0 );
+            ::basegfx::B2DPoint aRightTop( 1.0, 0.0 );
+            ::basegfx::B2DPoint aRightBottom( 1.0, 1.0 );
+
+            aLeftTop    *= rTotalTransform;
+            aLeftBottom *= rTotalTransform;
+            aRightTop   *= rTotalTransform;
+            aRightBottom*= rTotalTransform;
+
+            // longest line in gradient bound rect
+            const int nGradientSize(
+                static_cast<int>(
+                    ::std::max(
+                        ::basegfx::B2DVector(aRightBottom-aLeftTop).getLength(),
+                        ::basegfx::B2DVector(aRightTop-aLeftBottom).getLength() ) + 1.0 ) );
+
+            // typical number for pixel of the same color (strip size)
+            const int nStripSize( nGradientSize < 50 ? 2 : 4 );
+
+            // use at least three steps, and at utmost the number of color
+            // steps
+            return ::std::max( 3,
+                               ::std::min(
+                                   nGradientSize / nStripSize,
+                                   nColorSteps ) );
+        }
+
     } // namespace tools
 
 } // namespace canvas

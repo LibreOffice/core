@@ -199,7 +199,7 @@ namespace dxcanvas
             {
                 const sal_uInt32 nPoints( rPoly.count() );
 
-                if( !nPoints )
+                if( nPoints < 2 )
                     return;
 
                 rOutput->StartFigure();

@@ -562,61 +562,26 @@ namespace vclcanvas
             // deadlocks, canvashelper calls this method with locked own
             // mutex.
 
-            // calculate overall texture transformation (directly from
-            // texture to device space).
-            ::basegfx::B2DHomMatrix aMatrix;
-            ::basegfx::B2DHomMatrix aTextureTransform;
-
-            ::basegfx::unotools::homMatrixFromAffineMatrix( aTextureTransform,
-                                                            texture.AffineTransform );
-            ::canvas::tools::mergeViewAndRenderTransform(aMatrix,
-                                                         viewState,
-                                                         renderState);
-            aTextureTransform *= aMatrix; // prepend total view/render transformation
-
-            // determine maximal bound rect of gradient-filled polygon
-            const ::Rectangle aPolygonDeviceRectOrig(
-                rPoly.GetBoundRect() );
-
-            // determine size of gradient in device coordinate system
-            // (to e.g. determine sensible number of gradient steps)
-            ::basegfx::B2DPoint aLeftTop( 0.0, 0.0 );
-            ::basegfx::B2DPoint aLeftBottom( 0.0, 1.0 );
-            ::basegfx::B2DPoint aRightTop( 1.0, 0.0 );
-            ::basegfx::B2DPoint aRightBottom( 1.0, 1.0 );
-
-            aLeftTop    *= aTextureTransform;
-            aLeftBottom *= aTextureTransform;
-            aRightTop   *= aTextureTransform;
-            aRightBottom*= aTextureTransform;
-
-
             // calc step size
             // --------------
             int nColorSteps = 0;
             for( size_t i=0; i<rColors.size()-1; ++i )
                 nColorSteps += numColorSteps(rColors[i],rColors[i+1]);
 
-            // longest line in gradient bound rect
-            const int nGradientSize(
-                static_cast<int>(
-                    ::std::max(
-                        ::basegfx::B2DVector(aRightBottom-aLeftTop).getLength(),
-                        ::basegfx::B2DVector(aRightTop-aLeftBottom).getLength() ) + 1.0 ) );
-
-            // typical number for pixel of the same color (strip size)
-            const int nStripSize( nGradientSize < 50 ? 2 : 4 );
-
-            // use at least three steps, and at utmost the number of color
-            // steps
-            const int nStepCount(
-                ::std::max(
-                    3,
-                    ::std::min(
-                        nGradientSize / nStripSize,
-                        nColorSteps ) ) );
+            ::basegfx::B2DHomMatrix aTotalTransform;
+            const int nStepCount=
+                ::canvas::tools::calcGradientStepCount(aTotalTransform,
+                                                       viewState,
+                                                       renderState,
+                                                       texture,
+                                                       nColorSteps);
 
             rOutDev.SetLineColor();
+
+            // determine maximal bound rect of texture-filled
+            // polygon
+            const ::Rectangle aPolygonDeviceRectOrig(
+                rPoly.GetBoundRect() );
 
             if( tools::isRectangle( rPoly ) )
             {
@@ -635,7 +600,7 @@ namespace vclcanvas
                 doGradientFill( rOutDev,
                                 rValues,
                                 rColors,
-                                aTextureTransform,
+                                aTotalTransform,
                                 aPolygonDeviceRectOrig,
                                 nStepCount,
                                 false );
@@ -648,7 +613,7 @@ namespace vclcanvas
                     doGradientFill( *p2ndOutDev,
                                     rValues,
                                     rColors,
-                                    aTextureTransform,
+                                    aTotalTransform,
                                     aPolygonDeviceRectOrig,
                                     nStepCount,
                                     false );
@@ -666,7 +631,7 @@ namespace vclcanvas
                 doGradientFill( rOutDev,
                                 rValues,
                                 rColors,
-                                aTextureTransform,
+                                aTotalTransform,
                                 aPolygonDeviceRectOrig,
                                 nStepCount,
                                 false );
@@ -679,7 +644,7 @@ namespace vclcanvas
                     doGradientFill( *p2ndOutDev,
                                     rValues,
                                     rColors,
-                                    aTextureTransform,
+                                    aTotalTransform,
                                     aPolygonDeviceRectOrig,
                                     nStepCount,
                                     false );
@@ -694,7 +659,7 @@ namespace vclcanvas
                 doGradientFill( rOutDev,
                                 rValues,
                                 rColors,
-                                aTextureTransform,
+                                aTotalTransform,
                                 aPolygonDeviceRectOrig,
                                 nStepCount,
                                 true );
@@ -705,7 +670,7 @@ namespace vclcanvas
                 doGradientFill( rOutDev,
                                 rValues,
                                 rColors,
-                                aTextureTransform,
+                                aTotalTransform,
                                 aPolygonDeviceRectOrig,
                                 nStepCount,
                                 true );
@@ -718,7 +683,7 @@ namespace vclcanvas
                     doGradientFill( *p2ndOutDev,
                                     rValues,
                                     rColors,
-                                    aTextureTransform,
+                                    aTotalTransform,
                                     aPolygonDeviceRectOrig,
                                     nStepCount,
                                     true );
@@ -729,7 +694,7 @@ namespace vclcanvas
                     doGradientFill( *p2ndOutDev,
                                     rValues,
                                     rColors,
-                                    aTextureTransform,
+                                    aTotalTransform,
                                     aPolygonDeviceRectOrig,
                                     nStepCount,
                                     true );

@@ -69,6 +69,7 @@ namespace com { namespace sun { namespace star { namespace rendering
     struct ViewState;
     struct IntegerBitmapLayout;
     class  XCanvas;
+    struct Texture;
     class  XIntegerBitmapColorSpace;
     class  XPolyPolygon2D;
 
@@ -499,6 +500,18 @@ namespace canvas
          */
         ::basegfx::B2DPolyPolygon getBoundMarksPolyPolygon( const ::basegfx::B2DRange& rRange );
 
+        /** Calculate number of gradient "strips" to generate (takes
+           into account device resolution)
+
+           @param nColorSteps
+           Maximal integer difference between all color stops, needed
+           for smooth gradient color differences
+         */
+        int calcGradientStepCount( ::basegfx::B2DHomMatrix&                        rTotalTransform,
+                                   const ::com::sun::star::rendering::ViewState&   viewState,
+                                   const ::com::sun::star::rendering::RenderState& renderState,
+                                   const ::com::sun::star::rendering::Texture&     texture,
+                                   int                                             nColorSteps );
 
         /** A very simplistic map for ASCII strings and arbitrary value
             types.
