@@ -1279,7 +1279,7 @@
           <value xml:lang="x-no-translate"></value><value xml:lang="en-US">Can't Undo</value>
         </prop>
       </node>
-      <node oor:name=".uno:GrabControlFocus" oor:op="replace">
+      <node oor:name=".uno:ToggleControlFocus" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="x-no-translate"></value><value xml:lang="en-US">Control Focus</value>
         </prop>

@@ -81,6 +81,7 @@
 #include <svx/fmglob.hxx>
 #include <svl/eitem.hxx>
 #include <tools/shl.hxx>
+#include <tools/diagnose_ex.h>
 #include <svx/svdpage.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/dialmgr.hxx>
@@ -100,6 +101,8 @@
 
 #include <svx/svxdlg.hxx> //CHINA001
 #include <svx/dialogs.hrc> //CHINA001
+
+#include "svx/sdrobjectfilter.hxx"
 
 #define HANDLE_SQL_ERRORS( action, successflag, context, message )          \
     try                                                                     \
@@ -550,7 +553,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_SCROLLBAR:
         case SID_FM_SPINBUTTON:
         {
-            SFX_REQUEST_ARG( rReq, pGrabFocusItem, SfxBoolItem, SID_FM_GRABCONTROLFOCUS, sal_False );
+            SFX_REQUEST_ARG( rReq, pGrabFocusItem, SfxBoolItem, SID_FM_TOGGLECONTROLFOCUS, sal_False );
             if ( pGrabFocusItem && pGrabFocusItem->GetValue() )
             {   // see below
                 SfxViewShell* pShell = GetViewShell();
@@ -578,9 +581,9 @@ void FmFormShell::Execute(SfxRequest &rReq)
             {
                 //  #99013# if selected with control key, return focus to current view
                 // do this asynchron, so that the creation can be finished first
-                // reusing the SID_FM_GRABCONTROLFOCUS is somewhat hacky ... which it wouldn't if it would have another
+                // reusing the SID_FM_TOGGLECONTROLFOCUS is somewhat hacky ... which it wouldn't if it would have another
                 // name, so I do not really have a big problem with this ....
-                SfxBoolItem aGrabFocusIndicatorItem( SID_FM_GRABCONTROLFOCUS, sal_True );
+                SfxBoolItem aGrabFocusIndicatorItem( SID_FM_TOGGLECONTROLFOCUS, sal_True );
                 GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( nSlot, SFX_CALLMODE_ASYNCHRON,
                                           &aGrabFocusIndicatorItem, NULL );
             }
@@ -601,11 +604,27 @@ void FmFormShell::Execute(SfxRequest &rReq)
         }
         break;
 
-        case SID_FM_GRABCONTROLFOCUS:
+        case SID_FM_TOGGLECONTROLFOCUS:
         {
             FmFormView* pFormView = GetFormView();
-            if ( pFormView )
+            if ( !pFormView )
+                break;
+
+            // if we execute this ourself, then either the application does not implement an own handling for this,
+            // of we're on the top of the dispatcher stack, which means a control has the focus.
+            // In the latter case, we put the focus to the document window, otherwise, we focus the first control
+            const bool bHasControlFocus = GetImpl()->HasControlFocus();
+            if ( bHasControlFocus )
+            {
+                const OutputDevice* pDevice = GetCurrentViewDevice();
+                Window* pWindow = static_cast< Window* >( const_cast< OutputDevice* >( pDevice ) );
+                if ( pWindow )
+                    pWindow->GrabFocus();
+            }
+            else
+            {
                 pFormView->GrabFirstControlFocus( );
+            }
         }
         break;
 
@@ -1359,6 +1378,78 @@ namespace
         }
         return NULL;
     }
+}
+
+//------------------------------------------------------------------------
+void FmFormShell::ToggleControlFocus( const SdrUnoObj& i_rUnoObject, const SdrView& i_rView, OutputDevice& i_rDevice ) const
+{
+    try
+    {
+        // check if the focus currently is in a control
+        // Well, okay, do it the other way 'round: Check whether the current control of the active controller
+        // actually has the focus. This should be equivalent.
+        const bool bHasControlFocus = GetImpl()->HasControlFocus();
+
+        if ( bHasControlFocus )
+        {
+            Window* pWindow( dynamic_cast< Window* >( &i_rDevice ) );
+            OSL_ENSURE( pWindow, "FmFormShell::ToggleControlFocus: I need a Window, really!" );
+            if ( pWindow )
+                pWindow->GrabFocus();
+        }
+        else
+        {
+            Reference< XControl > xControl;
+            GetFormControl( i_rUnoObject.GetUnoControlModel(), i_rView, i_rDevice, xControl );
+            Reference< XWindow > xControlWindow( xControl, UNO_QUERY );
+            if ( xControlWindow.is() )
+                xControlWindow->setFocus();
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+}
+
+//------------------------------------------------------------------------
+namespace
+{
+    class FocusableControlsFilter : public ::svx::ISdrObjectFilter
+    {
+    public:
+        FocusableControlsFilter( const SdrView& i_rView, const OutputDevice& i_rDevice )
+            :m_rView( i_rView )
+            ,m_rDevice( i_rDevice )
+        {
+        }
+
+    public:
+        virtual bool    includeObject( const SdrObject& i_rObject ) const
+        {
+            const SdrUnoObj* pUnoObj = dynamic_cast< const SdrUnoObj* >( &i_rObject );
+            if ( !pUnoObj )
+                return false;
+
+            Reference< XControl > xControl = pUnoObj->GetUnoControl( m_rView, m_rDevice );
+            return FmXFormView::isFocusable( xControl );
+        }
+
+    private:
+        const SdrView&      m_rView;
+        const OutputDevice& m_rDevice;
+    };
+}
+
+//------------------------------------------------------------------------
+::std::auto_ptr< ::svx::ISdrObjectFilter > FmFormShell::CreateFocusableControlFilter( const SdrView& i_rView, const OutputDevice& i_rDevice ) const
+{
+    ::std::auto_ptr< ::svx::ISdrObjectFilter > pFilter;
+
+    if ( !i_rView.IsDesignMode() )
+        pFilter.reset( new FocusableControlsFilter( i_rView, i_rDevice ) );
+
+    return pFilter;
 }
 
 //------------------------------------------------------------------------

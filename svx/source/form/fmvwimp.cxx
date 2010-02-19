@@ -826,6 +826,48 @@ void FmXFormView::AutoFocus( sal_Bool _bSync )
     else
         m_nAutoFocusEvent = Application::PostUserEvent(LINK(this, FmXFormView, OnAutoFocus));
 }
+
+// -----------------------------------------------------------------------------
+bool FmXFormView::isFocusable( const Reference< XControl >& i_rControl )
+{
+    if ( !i_rControl.is() )
+        return false;
+
+    try
+    {
+        Reference< XPropertySet > xModelProps( i_rControl->getModel(), UNO_QUERY_THROW );
+
+        // only enabled controls are allowed to participate
+        sal_Bool bEnabled = sal_False;
+        OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_ENABLED ) >>= bEnabled );
+        if ( !bEnabled )
+            return false;
+
+        // check the class id of the control model
+        sal_Int16 nClassId = FormComponentType::CONTROL;
+        OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_CLASSID ) >>= nClassId );
+
+        // controls which are not focussable
+        if  (   ( FormComponentType::CONTROL != nClassId )
+            &&  ( FormComponentType::IMAGEBUTTON != nClassId )
+            &&  ( FormComponentType::GROUPBOX != nClassId )
+            &&  ( FormComponentType::FIXEDTEXT != nClassId )
+            &&  ( FormComponentType::HIDDENCONTROL != nClassId )
+            &&  ( FormComponentType::IMAGECONTROL != nClassId )
+            &&  ( FormComponentType::SCROLLBAR != nClassId )
+            &&  ( FormComponentType::SPINBUTTON!= nClassId )
+            )
+        {
+            return true;
+        }
+    }
+    catch( const Exception& e )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    return false;
+}
+
 // -----------------------------------------------------------------------------
 static Reference< XControl > lcl_firstFocussableControl( const Sequence< Reference< XControl > >& _rControls )
 {
@@ -836,46 +878,18 @@ static Reference< XControl > lcl_firstFocussableControl( const Sequence< Referen
     const Reference< XControl >* pControlsEnd = _rControls.getConstArray() + _rControls.getLength();
     for ( ; pControls != pControlsEnd; ++pControls )
     {
-        try
+        if ( !pControls->is() )
+            continue;
+
+        if ( FmXFormView::isFocusable( *pControls ) )
         {
-            if ( !pControls->is() )
-                continue;
-
-            Reference< XPropertySet > xModelProps( (*pControls)->getModel(), UNO_QUERY_THROW );
-
-            // only enabled controls are allowed to participate
-            sal_Bool bEnabled = sal_False;
-            OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_ENABLED ) >>= bEnabled );
-            if ( !bEnabled )
-                continue;
-
-            // check the class id of the control model
-            sal_Int16 nClassId = FormComponentType::CONTROL;
-            OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_CLASSID ) >>= nClassId );
-
-            // controls which are not focussable
-            if  (   ( FormComponentType::CONTROL != nClassId )
-                &&  ( FormComponentType::IMAGEBUTTON != nClassId )
-                &&  ( FormComponentType::GROUPBOX != nClassId )
-                &&  ( FormComponentType::FIXEDTEXT != nClassId )
-                &&  ( FormComponentType::HIDDENCONTROL != nClassId )
-                &&  ( FormComponentType::IMAGECONTROL != nClassId )
-                &&  ( FormComponentType::SCROLLBAR != nClassId )
-                &&  ( FormComponentType::SPINBUTTON!= nClassId )
-                )
-            {
-                xReturn = *pControls;
-                break;
-            }
+            xReturn = *pControls;
+            break;
         }
-        catch( const Exception& e )
-        {
-            (void)e;    // make compiler happy
-        }
-
-        if ( !xReturn.is() && _rControls.getLength() )
-            xReturn = _rControls[0];
     }
+
+    if ( !xReturn.is() && _rControls.getLength() )
+        xReturn = _rControls[0];
 
     return xReturn;
 }
@@ -1008,11 +1022,6 @@ IMPL_LINK(FmXFormView, OnAutoFocus, void*, /*EMPTYTAG*/)
     while ( false );
 
     return 1L;
-}
-
-// -----------------------------------------------------------------------------
-namespace
-{
 }
 
 // -----------------------------------------------------------------------------

@@ -59,6 +59,7 @@
 #include "svx/svxids.hrc"
 
 /** === begin UNO includes === **/
+#include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XCheckBox.hpp>
 #include <com/sun/star/awt/XListBox.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
@@ -4506,6 +4507,31 @@ void FmXFormShell::handleMouseButtonDown( const SdrViewEvent& _rViewEvent )
                 ShowSelectionProperties( sal_True );
         }
     }
+}
+
+//------------------------------------------------------------------------------
+bool FmXFormShell::HasControlFocus() const
+{
+    bool bHasControlFocus = false;
+
+    try
+    {
+        Reference< XFormController > xController( getActiveController() );
+        Reference< XControl > xCurrentControl;
+        if ( xController.is() )
+            xCurrentControl.set( xController->getCurrentControl() );
+        if ( xCurrentControl.is() )
+        {
+            Reference< XWindow2 > xPeerWindow( xCurrentControl->getPeer(), UNO_QUERY_THROW );
+            bHasControlFocus = xPeerWindow->hasFocus();
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
+    return bHasControlFocus;
 }
 
 //==============================================================================

@@ -243,6 +243,11 @@ public:
 
     void    onCreatedFormObject( FmFormObj& _rFormObject );
 
+    static bool
+            isFocusable(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& i_rControl
+            );
+
 private:
     FmWinRecList::iterator findWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _rxCC );
     //void addWindow(const SdrPageViewWinRec*);

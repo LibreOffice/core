@@ -1102,7 +1102,7 @@
 #define SID_DSBROWSER_EXPLORER                          ( SID_SVX_START + 764 )
 #define SID_FM_CREATE_FIELDCONTROL                      ( SID_SVX_START + 765 )
 #define SID_FM_DATACCESS_DESCRIPTOR                     ( SID_SVX_START + 766 )
-#define SID_FM_GRABCONTROLFOCUS                         ( SID_SVX_START + 767 )
+#define SID_FM_TOGGLECONTROLFOCUS                       ( SID_SVX_START + 767 )
 #define SID_FM_SCROLLBAR                                ( SID_SVX_START + 768 )
 #define SID_FM_SPINBUTTON                               ( SID_SVX_START + 769 )
 #define SID_FM_CONVERTTO_SCROLLBAR                      ( SID_SVX_START + 770 )

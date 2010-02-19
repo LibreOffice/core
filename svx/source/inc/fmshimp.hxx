@@ -508,6 +508,9 @@ public:
         // if the form belongs to the controller (extern) displaying a grid, the according internal form will
         // be displayed, _xForm else
 
+    // check if the current control of the active controler has the focus
+    bool    HasControlFocus() const;
+
 private:
     DECL_LINK(OnFoundData, FmFoundRecordInformation*);
     DECL_LINK(OnCanceledNotFound, FmFoundRecordInformation*);

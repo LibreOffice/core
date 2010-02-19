@@ -660,7 +660,7 @@ shell FmFormShell
     [
         ExecMethod = Execute ;
     ]
-    SID_FM_GRABCONTROLFOCUS
+    SID_FM_TOGGLECONTROLFOCUS
     [
         ExecMethod = Execute ;
     ]

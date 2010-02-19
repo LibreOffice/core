@@ -23,6 +23,6 @@
     <accel:item accel:code="KEY_F" accel:mod1="true" xlink:href=".uno:SearchDialog"/>
     <accel:item accel:code="KEY_Q" accel:shift="true" accel:mod1="true" xlink:href=".uno:BasicBreak"/>
     <accel:item accel:code="KEY_F4" xlink:href=".uno:ViewDataSourceBrowser"/>
-    <accel:item accel:code="KEY_F5" accel:mod1="true" xlink:href=".uno:GrabControlFocus"/>
+    <accel:item accel:code="KEY_F5" accel:mod1="true" xlink:href=".uno:ToggleControlFocus"/>
     <accel:item accel:code="KEY_F7" accel:shift="true" accel:mod1="true" xlink:href=".uno:HangulHanjaConversion"/>
 </accel:acceleratorlist>

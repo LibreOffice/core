@@ -577,6 +577,7 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\svx\databaselocationinput.hxx %_DEST%\inc%_EXT%\svx\databaselocationinput.hxx
 ..\inc\svx\dbcharsethelper.hxx %_DEST%\inc%_EXT%\svx\dbcharsethelper.hxx
 ..\inc\svx\dbtoolsclient.hxx %_DEST%\inc%_EXT%\svx\dbtoolsclient.hxx
+..\inc\svx\sdrobjectfilter.hxx %_DEST%\inc%_EXT%\svx\sdrobjectfilter.hxx
 
 ..\inc\svx\subtoolboxcontrol.hxx %_DEST%\inc%_EXT%\svx\subtoolboxcontrol.hxx
 ..\inc\svx\svdtext.hxx %_DEST%\inc%_EXT%\svx\svdtext.hxx
