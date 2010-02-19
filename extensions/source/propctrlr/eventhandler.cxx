@@ -626,7 +626,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( false, "EventHandler::EventHandler: caught an exception while classifying the component!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -857,7 +857,7 @@ namespace pcr
             }
             catch( const Exception& )
             {
-                DBG_ERROR( "EventHandler::getSupportedProperties: caught an exception !" );
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
 
@@ -1080,7 +1080,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( false, "EventHandler::impl_getFormComponentScriptEvents_nothrow: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -1112,7 +1112,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( false, "EventHandler::impl_getCopmonentListenerTypes_nothrow: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -1137,7 +1137,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( false, "EventHandler::impl_getDialogElementScriptEvents_nothrow: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -1152,7 +1152,7 @@ namespace pcr
         {
             Reference< XTabControllerModel > xComponentAsTCModel( m_xComponent, UNO_QUERY_THROW );
             Reference< XFormController > xController(
-                m_aContext.createComponent( (const rtl::OUString&)SERVICE_FORMCONTROLLER ), UNO_QUERY_THROW );
+                m_aContext.createComponent( "com.sun.star.form.runtime.FormController" ), UNO_QUERY_THROW );
             xController->setModel( xComponentAsTCModel );
 
             xReturn = xController;
@@ -1244,7 +1244,7 @@ namespace pcr
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( false, "EventHandler::impl_setFormComponentScriptEvent_nothrow: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 

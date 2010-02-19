@@ -41,9 +41,6 @@ namespace pcr
     // properties
     PCR_CONSTASCII_STRING( PROPERTY_TABBINGMODEL,           "TabbingModel" );
 
-    // services
-    PCR_CONSTASCII_STRING( SERVICE_FORMCONTROLLER,          "com.sun.star.form.FormController" );
-
 //............................................................................
 } // namespace pcr
 //............................................................................
