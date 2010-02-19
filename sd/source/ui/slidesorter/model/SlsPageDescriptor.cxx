@@ -64,7 +64,7 @@ PageDescriptor::PageDescriptor (
 {
     OSL_ASSERT(mpPage);
     OSL_ASSERT(mpPage == SdPage::getImplementation(rxPage));
-    if (mpPage != NULL)
+    if (mpPage!=NULL && !mpPage->IsMasterPage())
         mpMasterPage = &mpPage->TRG_GetMasterPage();
 }
 
@@ -105,7 +105,7 @@ sal_Int32 PageDescriptor::GetPageIndex (void) const
 bool PageDescriptor::UpdateMasterPage (void)
 {
     const SdrPage* pMaster = NULL;
-    if (mpPage != NULL)
+    if (mpPage!=NULL && !mpPage->IsMasterPage())
         pMaster = &mpPage->TRG_GetMasterPage();
     if (mpMasterPage != pMaster)
     {

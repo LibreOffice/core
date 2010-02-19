@@ -420,7 +420,16 @@ void PreviewRenderer::ProvideView (DrawDocShell* pDocShell)
         mpView.reset (new DrawView (pDocShell, mpPreviewDevice.get(), NULL));
     }
     mpView->SetPreviewRenderer(true);
+#if 1
+    mpView->SetPageVisible(false);
+    mpView->SetPageBorderVisible(true);
+    mpView->SetBordVisible(false);
+#else
+    // This works in the slide sorter but prevents the master page
+    // background being painted in the list of current master pages in the
+    // task manager.
     mpView->SetPagePaintingAllowed(false);
+#endif
 }
 
 

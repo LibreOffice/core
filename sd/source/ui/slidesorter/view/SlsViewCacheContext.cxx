@@ -102,7 +102,8 @@ bool ViewCacheContext::IsIdle (void)
 
 bool ViewCacheContext::IsVisible (cache::CacheKey aKey)
 {
-    return GetDescriptor(aKey)->HasState(model::PageDescriptor::ST_Visible);
+    const model::SharedPageDescriptor pDescriptor (GetDescriptor(aKey));
+    return pDescriptor && pDescriptor->HasState(model::PageDescriptor::ST_Visible);
 }
 
 

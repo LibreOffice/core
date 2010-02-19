@@ -580,9 +580,11 @@ Bitmap PageObjectPainter::CreateBackgroundBitmap(
     mpShadowPainter->PaintFrame(aBitmapDevice, aFrameBox);
 
     // Clear the area where the preview will later be painted.
+    /*
     aBitmapDevice.SetFillColor(mpTheme->GetColor(Theme::Background));
     aBitmapDevice.SetLineColor(mpTheme->GetColor(Theme::PreviewBorder));
     aBitmapDevice.DrawRect(aFrameBox);
+    */
 
     return aBitmapDevice.GetBitmap (Point(0,0),aSize);
 }
@@ -605,7 +607,7 @@ PageObjectPainter::FramePainter::FramePainter (const BitmapEx& rShadowBitmap)
 {
     if (rShadowBitmap.GetSizePixel().Width() == rShadowBitmap.GetSizePixel().Height()
         && (rShadowBitmap.GetSizePixel().Width()-1)%2 == 0
-        && ((rShadowBitmap.GetSizePixel().Width()-1)/2)%2 == 0)
+        && ((rShadowBitmap.GetSizePixel().Width()-1)/2)%2 == 1)
     {
         mbIsValid = true;
     }
@@ -613,7 +615,7 @@ PageObjectPainter::FramePainter::FramePainter (const BitmapEx& rShadowBitmap)
     {
         OSL_ASSERT(rShadowBitmap.GetSizePixel().Width() == rShadowBitmap.GetSizePixel().Height());
         OSL_ASSERT((rShadowBitmap.GetSizePixel().Width()-1)%2 == 0);
-        OSL_ASSERT(((rShadowBitmap.GetSizePixel().Width()-1)/2)%2 == 0);
+        OSL_ASSERT(((rShadowBitmap.GetSizePixel().Width()-1)/2)%2 == 1);
     }
 }
 
@@ -677,8 +679,8 @@ OffsetBitmap::OffsetBitmap (
         nVerticalPosition==0 ? nS : nC);
     maBitmap = BitmapEx(rBitmap, aOrigin, aSize);
     maOffset = Point(
-        nHorizontalPosition<0 ? -nO : nHorizontalPosition>0 ? -nO+1 : 0,
-        nVerticalPosition<0 ? -nO : nVerticalPosition>0 ? -nO+1 : 0);
+        nHorizontalPosition<0 ? -nO : nHorizontalPosition>0 ? -nO : 0,
+        nVerticalPosition<0 ? -nO : nVerticalPosition>0 ? -nO : 0);
 
     // Enlarge the side bitmaps so that painting the frame requires less
     // paint calls.
