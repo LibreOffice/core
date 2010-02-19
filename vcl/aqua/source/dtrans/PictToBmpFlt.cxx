@@ -28,8 +28,6 @@
  *
  ************************************************************************/
 
-#include "PictToBmpFlt.hxx"
-
 /* This is a work-around to prevent 'deprecated' warning for 'KillPicture' API
    Hopefully we can get rid of this whole code again when the OOo PICT filter
    are good enough to be used see #i78953 thus this hack would vanish to again.
@@ -42,6 +40,8 @@
 #include <Carbon/Carbon.h>
 #include <QuickTime/QuickTime.h>
 #include <postmac.h>
+
+#include "PictToBmpFlt.hxx"
 
 bool PICTtoBMP(com::sun::star::uno::Sequence<sal_Int8>& aPict,
                com::sun::star::uno::Sequence<sal_Int8>& aBmp)
