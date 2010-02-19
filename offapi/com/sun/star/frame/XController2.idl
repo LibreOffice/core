@@ -32,6 +32,7 @@
 
 #include <com/sun/star/frame/XController.idl>
 #include <com/sun/star/awt/XWindow.idl>
+#include <com/sun/star/beans/PropertyValue.idl>
 
 //=============================================================================
 
@@ -61,6 +62,16 @@ interface XController2 : XController
         - if it's passed there, a view/controller pair of the same type will be created.</p>
     */
     [readonly, attribute] string                            ViewControllerName;
+
+    /** denotes the arguments used to create the instance.
+
+        <p>Usually, controllers are created via <member>XModel2::createViewController</member>, where the
+        caller can pass not only a controller name, but also arguments parametrizing the to-be-created instance.
+        Those arguments used at creation time can subsequently be retrieved using the <code>CreationArguments</code>
+        member.</p>
+    */
+    [readonly, attribute] sequence< ::com::sun::star::beans::PropertyValue >
+                                                            CreationArguments;
 };
 
 //=============================================================================

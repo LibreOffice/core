@@ -51,7 +51,8 @@ exception DocumentMacroConfirmationRequest : ClassifiedInteractionRequest
     */
     string  DocumentURL;
 
-    /** refers to the storage which the document was last committed to.
+    /** refers to the storage related to the last commited version of the
+        document.
 
         This storage is necessary e.g. for displaying the existing signatures to
         the user, to allow him a decision whether or not to trust those signatures
@@ -61,6 +62,10 @@ exception DocumentMacroConfirmationRequest : ClassifiedInteractionRequest
     */
     ::com::sun::star::embed::XStorage
             DocumentStorage;
+
+    /** contains informations about the ODF version of the document
+    */
+    string DocumentVersion;
 
     /** contains informations about the signatures in the document
     */

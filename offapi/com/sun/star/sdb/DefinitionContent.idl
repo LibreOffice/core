@@ -30,9 +30,8 @@
 #ifndef __com_sun_star_sdb_DefinitionContent_idl__
 #define __com_sun_star_sdb_DefinitionContent_idl__
 
-#ifndef __com_sun_star_ucb_Content_idl__
 #include <com/sun/star/ucb/Content.idl>
-#endif
+#include <com/sun/star/container/XHierarchicalName.idl>
 
 //=============================================================================
 
@@ -63,6 +62,11 @@ service DefinitionContent
         <p>Additional commands might be supported by derived services.</p>
     */
     service ::com::sun::star::ucb::Content;
+
+    /** provides access to the complete name of the content within its hierarchy
+        @since OOo 3.3
+    */
+    interface ::com::sun::star::container::XHierarchicalName;
 };
 
 //=============================================================================

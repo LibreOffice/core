@@ -31,30 +31,15 @@
 #ifndef __com_sun_star_sdb_application_XDatabaseDocumentUI_idl__
 #define __com_sun_star_sdb_application_XDatabaseDocumentUI_idl__
 
-#ifndef __com_sun_star_sdbc_XDataSource_idl__
 #include <com/sun/star/sdbc/XDataSource.idl>
-#endif
-#ifndef __com_sun_star_sdbc_SQLException_idl__
 #include <com/sun/star/sdbc/SQLException.idl>
-#endif
-#ifndef __com_sun_star_sdbc_XConnection_idl__
 #include <com/sun/star/sdbc/XConnection.idl>
-#endif
-#ifndef __com_sun_star_awt_XWindow_idl__
 #include <com/sun/star/awt/XWindow.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
 #include <com/sun/star/container/NoSuchElementException.idl>
-#endif
-#ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
-#endif
-#ifndef __com_sun_star_beans_PropertyValue_idl__
 #include <com/sun/star/beans/PropertyValue.idl>
-#endif
+#include <com/sun/star/beans/Pair.idl>
 
 //=============================================================================
 
@@ -135,6 +120,29 @@ interface XDatabaseDocumentUI
     */
     [attribute, readonly] sequence< ::com::sun::star::lang::XComponent >
             SubComponents;
+
+    /** identifies the given sub component
+
+        @param SubComponent
+            the component to identify. Must be one of the components in <member>SubComponents</member>.
+
+        @return
+            a record describing the sub component. The first element of the returned pair is the type
+            of the component, denoted by one of the <type>DatabaseObject</type> constants. The second
+            element is the name of the component. For object types which support nested structures (forms
+            and reports, actually), this might be a hierachical name. If the sub component has been newly created,
+            and not yet saved, this name is empty.
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if the given component is not one of the controller's sub components
+    */
+    ::com::sun::star::beans::Pair< long, string >
+            identifySubComponent(
+                [in] ::com::sun::star::lang::XComponent SubComponent
+            )
+            raises (
+                ::com::sun::star::lang::IllegalArgumentException
+            );
 
     /** closes all sub components of the database document.
 
@@ -266,6 +274,52 @@ interface XDatabaseDocumentUI
                     [in] sequence< ::com::sun::star::beans::PropertyValue > Arguments )
         raises ( ::com::sun::star::lang::IllegalArgumentException,
                  ::com::sun::star::container::NoSuchElementException,
+                 ::com::sun::star::sdbc::SQLException );
+
+    /** creates a new sub component of the given type
+
+        @param ObjectType
+            specifies the type of the object, must be one of the <type>DatabaseObject</type>
+            constants.
+
+        @param DocumentDefinition
+            Upon successful return, and if and only if <arg>ObjectType</arg> equals <member>DatabaseObject::FORM</member>
+            or <member>DatabaseObject::REPORT</member>, this will contain the <type scope="com::sun::star::sdb">DocumentDefinition</type>
+            object which controls the sub component.
+    */
+    ::com::sun::star::lang::XComponent createComponent(
+                    [in] long ObjectType,
+                    [out] ::com::sun::star::lang::XComponent DocumentDefinition )
+        raises ( ::com::sun::star::lang::IllegalArgumentException,
+                 ::com::sun::star::sdbc::SQLException );
+
+    /** creates a new sub component of the given type
+
+        <p>In opposite to <member>createComponent</member>, this method allows you to specify
+        additional arguments which are passed to the to-be-loaded component.</p>
+
+        <p>The meaning of the the arguments is defined at the service which is effectively
+        created. See the <a href="#component_types">above table</a> for a list of those
+        services.</p>
+
+        @param ObjectType
+            specifies the type of the object, must be one of the <type>DatabaseObject</type>
+            constants.
+
+        @param DocumentDefinition
+            Upon successful return, and if and only if <arg>ObjectType</arg> equals <member>DatabaseObject::FORM</member>
+            or <member>DatabaseObject::REPORT</member>, this will contain the <type scope="com::sun::star::sdb">DocumentDefinition</type>
+            object which controls the sub component.<br/>
+            You can use this object to control various aspects of the sub component. For instance, you could decide
+            to create the component hidden, by passing a <code>Hidden</code> flag (set to <TRUE/>) in <arg>Arguments</arg>,
+            manipulate the component, and then finally show it by invoking the <code>show</code> command at the
+            definition object.
+    */
+    ::com::sun::star::lang::XComponent createComponentWithArguments(
+                    [in] long ObjectType,
+                    [in] sequence< ::com::sun::star::beans::PropertyValue > Arguments,
+                    [out] ::com::sun::star::lang::XComponent DocumentDefinition )
+        raises ( ::com::sun::star::lang::IllegalArgumentException,
                  ::com::sun::star::sdbc::SQLException );
 };
 
