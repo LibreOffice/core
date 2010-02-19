@@ -2851,14 +2851,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
 
         // get paper tray to use ...
         sal_Int32 nPrinterPaperTray = -1;
-        if (bPrintPaperFromSetup)
-        {
-            // ... from printer setup
-            Printer *pPrinter = dynamic_cast< Printer * >(lcl_GetOutputDevice( *m_pPrintUIOptions ));
-            if (pPrinter)
-                nPrinterPaperTray = pPrinter->GetPaperBin();
-        }
-        else
+        if (! bPrintPaperFromSetup)
         {
             // ... from individual page style (see the page tab in Format/Page dialog)
             const std::map< sal_Int32, sal_Int32 > &rPaperTrays = m_pRenderData->GetPrinterPaperTrays();
