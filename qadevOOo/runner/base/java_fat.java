@@ -372,6 +372,9 @@ public class java_fat implements TestBase
                 }
 
                 System.out.println(counter + " of " + entries.length + " tests failed");
+                if (counter != 0) {
+                    retValue = false;
+                }
             }
 
             closeExistingOffice();

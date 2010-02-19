@@ -162,11 +162,6 @@ public class BasicTestCase extends TestCase {
         return tEnv;
     }
 
-
-    protected void cleanupTestEnvironment(TestParameters tParam,
-            TestEnvironment tEnv, LogWriter log) {
-    }
-
     /**
      * BASIC is told to dispose the test object.
      * @param tParam The test parameters.

@@ -41,6 +41,8 @@ import java.util.ArrayList;
 import java.io.RandomAccessFile;
 import java.net.Socket;
 import java.net.ServerSocket;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.Property;
@@ -367,18 +369,13 @@ public class utils {
      *
      */
     public static String getOfficeTemp(XMultiServiceFactory msf) {
-        String tmpDir = util.utils.getUsersTempDir();
+        String url = getOfficeUserPath(msf) + "/test-temp/";
         try {
-            String tmp = (String) getOfficeSettingsValue(msf, "Temp");
-            if (!tmp.endsWith(System.getProperty("file.separator"))) {
-                tmp += System.getProperty("file.separator");
-            }
-            tmpDir = getFullURL(tmp);
-        } catch (Exception e) {
-            System.out.println("Couldn't get Office TEMP");
-            e.printStackTrace();
+            new File(new URI(url)).mkdir();
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
         }
-        return tmpDir;
+        return url;
     }
 
     /**
