@@ -1345,6 +1345,8 @@ public:
                                tools::rgb2hsl(maMagenta) == BColor(300,1,0.5));
         CPPUNIT_ASSERT_MESSAGE("cyan",
                                tools::rgb2hsl(maCyan) == BColor(180,1,0.5));
+        CPPUNIT_ASSERT_MESSAGE("third hue case",
+                               tools::rgb2hsl(BColor(0,0.5,1)) == BColor(210,1,0.5));
 
         CPPUNIT_ASSERT_MESSAGE("roundtrip white",
                                tools::hsl2rgb(tools::rgb2hsl(maWhite)) == maWhite);
