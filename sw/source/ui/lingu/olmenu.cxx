@@ -279,7 +279,7 @@ USHORT SwSpellPopup::fillLangPopupMenu(
 
     //6--all languages used in current document
     uno::Reference< com::sun::star::frame::XModel > xModel;
-    uno::Reference< com::sun::star::frame::XController > xController( pWrtSh->GetView().GetViewFrame()->GetFrame()->GetFrameInterface()->getController(), uno::UNO_QUERY );
+    uno::Reference< com::sun::star::frame::XController > xController( pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface()->getController(), uno::UNO_QUERY );
     if ( xController.is() )
         xModel = xController->getModel();
 
@@ -580,7 +580,7 @@ bGrammarResults(false)
     nNumLanguageDocEntries = fillLangPopupMenu( pMenu, MN_LANGUAGE_ALL_TEXT_START, aSeq, pWrtSh, 2 );
     EnableItem( MN_LANGUAGE_ALL_TEXT, true );
 */
-    uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame()->GetFrameInterface();
+    uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
     Image rImg = ::GetImage( xFrame,
             ::rtl::OUString::createFromAscii(".uno:SpellingAndGrammarDialog"), sal_False,
             Application::GetSettings().GetStyleSettings().GetHighContrastMode() );
@@ -714,7 +714,7 @@ aInfo16( SW_RES(IMG_INFO_16) )
     nNumLanguageDocEntries = fillLangPopupMenu( pMenu, MN_LANGUAGE_ALL_TEXT_START, aSeq, pWrtSh, 2 );
     EnableItem( MN_LANGUAGE_ALL_TEXT, true );
 */
-    uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame()->GetFrameInterface();
+    uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
     Image rImg = ::GetImage( xFrame,
             ::rtl::OUString::createFromAscii(".uno:SpellingAndGrammarDialog"), sal_False,
             Application::GetSettings().GetStyleSettings().GetHighContrastMode() );

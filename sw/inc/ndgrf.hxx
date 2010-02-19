@@ -211,10 +211,6 @@ public:
     BOOL GetFileFilterNms( String* pFileNm, String* pFilterNm ) const;
     void ReleaseLink();
 
-        // Prioritaet beim Laden der Grafik setzen. Geht nur, wenn der Link
-        // ein FileObject gesetzt hat
-    void SetTransferPriority( USHORT nPrio );
-
     // Skalieren einer Image-Map: Die Image-Map wird um den Faktor
     // zwischen Grafik-Groesse und Rahmen-Groesse vergroessert/verkleinert
     void ScaleImageMap();

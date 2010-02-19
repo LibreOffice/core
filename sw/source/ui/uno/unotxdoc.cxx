@@ -223,7 +223,6 @@ void lcl_DisposeView( SfxViewFrame* pToClose, SwDocShell* pDocShell )
 {
     // check if the view frame still exists
     SfxViewFrame* pFound = SfxViewFrame::GetFirst( pDocShell,
-                                0,
                                 FALSE );
     while(pFound)
     {
@@ -234,7 +233,6 @@ void lcl_DisposeView( SfxViewFrame* pToClose, SwDocShell* pDocShell )
         }
         pFound = SfxViewFrame::GetNext( *pFound,
                                 pDocShell,
-                                0,
                                 FALSE );
     }
 }
@@ -1226,7 +1224,7 @@ void SwXTextDocument::printPages(const Sequence< beans::PropertyValue >& xOption
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     if(IsValid())
     {
-        SfxViewFrame* pFrame = SfxViewFrame::CreateViewFrame( *pDocShell, 7, sal_True );
+        SfxViewFrame* pFrame = SfxViewFrame::LoadHiddenDocument( *pDocShell, 7 );
         SfxRequest aReq(FN_PRINT_PAGEPREVIEW, SFX_CALLMODE_SYNCHRON,
                                     pDocShell->GetDoc()->GetAttrPool());
             aReq.AppendItem(SfxBoolItem(FN_PRINT_PAGEPREVIEW, sal_True));
@@ -2701,7 +2699,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             if (!pWrtShell)
             {
                 //create a hidden view to be able to export as PDF also in print preview
-                m_pHiddenViewFrame = SfxViewFrame::CreateViewFrame( *pRenderDocShell, 2, TRUE );
+                m_pHiddenViewFrame = SfxViewFrame::LoadHiddenDocument( *pRenderDocShell, 2 );
                 SwView* pSwView = (SwView*) m_pHiddenViewFrame->GetViewShell();
                 pWrtShell = pSwView->GetWrtShellPtr();
             }
@@ -2911,7 +2909,7 @@ SfxViewShell * SwXTextDocument::GuessViewShell(
     SwView          *pSwView = 0;
     SwPagePreView   *pSwPagePreView = 0;
     SwSrcView       *pSwSrcView = 0;
-    SfxViewFrame    *pFrame = SfxViewFrame::GetFirst( pDocShell, 0, sal_False );
+    SfxViewFrame    *pFrame = SfxViewFrame::GetFirst( pDocShell, sal_False );
 
     // look for the view shell with the same controller in use,
     // otherwise look for a suitable view, preferably a SwView,
@@ -2930,7 +2928,7 @@ SfxViewShell * SwXTextDocument::GuessViewShell(
         }
         else if (pSwView || pSwSrcView)
             break;
-        pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell, 0, sal_False );
+        pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell,  sal_False );
     }
 
     DBG_ASSERT( pSwView || pSwPagePreView || pSwSrcView, "failed to get view shell" );

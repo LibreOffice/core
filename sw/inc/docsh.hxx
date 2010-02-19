@@ -154,7 +154,8 @@ public:
     static rtl::OUString GetEventName( sal_Int32 nId );
 
     //Das Doc wird fuer SO-Datenaustausch benoetigt!
-    SwDocShell( SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED, sal_Bool _bScriptingSupport = sal_True );
+    SwDocShell( SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED );
+    SwDocShell( const sal_uInt64 i_nSfxCreationFlags );
     SwDocShell( SwDoc *pDoc, SfxObjectCreateMode eMode = SFX_CREATE_MODE_STANDARD );
     ~SwDocShell();
 

@@ -812,7 +812,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
         // Wenn Zeichen selektiert ist kann es angezeigt werden
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( rView.GetWindow(), aAllSet,
-            rView.GetViewFrame()->GetFrame()->GetFrameInterface(), RID_SVXDLG_CHARMAP );
+            rView.GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP );
         USHORT nResult = pDlg->Execute();
         if( nResult == RET_OK )
         {

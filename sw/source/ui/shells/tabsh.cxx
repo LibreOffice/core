@@ -732,7 +732,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
                 SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( GetView().GetWindow(),aCoreSet,
-                    pView->GetViewFrame()->GetFrame()->GetFrameInterface(),
+                    pView->GetViewFrame()->GetFrame().GetFrameInterface(),
                     RC_DLG_SWNUMFMTDLG );
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");
 

@@ -641,7 +641,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
             const SfxPoolItem* pItem;
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             SfxAbstractDialog* pMacroDlg = pFact->CreateSfxDialog( this, aSet,
-                pSh->GetView().GetViewFrame()->GetFrame()->GetFrameInterface(), SID_EVENTCONFIG );
+                pSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface(), SID_EVENTCONFIG );
             if ( pMacroDlg && pMacroDlg->Execute() == RET_OK &&
                 SFX_ITEM_SET == pMacroDlg->GetOutputItemSet()->GetItemState( RES_FRMMACRO, sal_False, &pItem ) )
             {

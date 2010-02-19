@@ -171,7 +171,7 @@ public:
     using SotObject::GetInterface;
     SFX_DECL_OBJECTFACTORY();
 
-                SmDocShell(SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED, const sal_Bool _bScriptSupport = sal_True);
+                SmDocShell( const sal_uInt64 i_nSfxCreationFlags );
     virtual     ~SmDocShell();
 
     void        LoadSymbols();

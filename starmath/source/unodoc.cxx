@@ -64,10 +64,7 @@ uno::Reference< uno::XInterface > SAL_CALL SmDocument_createInstance(
     if ( !SM_MOD() )
         SmDLL::Init();
 
-    const SfxObjectCreateMode eCreateMode = ( _nCreationFlags & SFXMODEL_EMBEDDED_OBJECT ) ? SFX_CREATE_MODE_EMBEDDED : SFX_CREATE_MODE_STANDARD;
-    const bool bScriptSupport = ( _nCreationFlags & SFXMODEL_DISABLE_EMBEDDED_SCRIPTS ) == 0;
-
-    SfxObjectShell* pShell = new SmDocShell( eCreateMode, bScriptSupport );
+    SfxObjectShell* pShell = new SmDocShell( _nCreationFlags );
     if( pShell )
         return uno::Reference< uno::XInterface >( pShell->GetModel() );
 

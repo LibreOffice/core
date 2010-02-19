@@ -583,7 +583,7 @@ void SwAddressListDialog::DetectTablesAndQueries(
 
             uno::Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
             uno::Reference< XInteractionHandler > xHandler(
-                xMgr->createInstance( C2U( "com.sun.star.sdb.InteractionHandler" )), UNO_QUERY);
+                xMgr->createInstance( C2U( "com.sun.star.task.InteractionHandler" )), UNO_QUERY);
             pUserData->xConnection = SharedConnection( xComplConnection->connectWithCompletion( xHandler ) );
         }
         if(pUserData->xConnection.is())

@@ -4703,7 +4703,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
 {
     SwWrtShell &rSh = rView.GetWrtShell();
 
-    if ( !rView.GetViewFrame() || !rView.GetViewFrame()->GetFrame() )
+    if ( !rView.GetViewFrame() )
     {
         //Wenn der ViewFrame in Kuerze stirbt kein Popup mehr!
         Window::Command(rCEvt);

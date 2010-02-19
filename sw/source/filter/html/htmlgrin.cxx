@@ -807,7 +807,6 @@ IMAGE_SETEVENT:
     // gleich (synchron) angepasst wird (war bug #40983#)
     if( bRequestGrfNow )
     {
-        pGrfNd->SetTransferPriority( SFX_TFPRIO_VISIBLE_LOWRES_GRAPHIC );
         pGrfNd->SwapIn();
     }
 

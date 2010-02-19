@@ -114,9 +114,7 @@ using ::rtl::OUString;
 using ::com::sun::star::util::SearchOptions;
 
 
-#define SWSRCVIEWFLAGS ( SFX_VIEW_MAXIMIZE_FIRST|           \
-                      SFX_VIEW_OBJECTSIZE_EMBEDDED|     \
-                      SFX_VIEW_CAN_PRINT|\
+#define SWSRCVIEWFLAGS ( SFX_VIEW_CAN_PRINT|\
                       SFX_VIEW_NO_NEWWINDOW )
 
 #define SRC_SEARCHOPTIONS (0xFFFF & ~(SEARCH_OPTIONS_FORMAT|SEARCH_OPTIONS_FAMILIES|SEARCH_OPTIONS_SEARCH_ALL))

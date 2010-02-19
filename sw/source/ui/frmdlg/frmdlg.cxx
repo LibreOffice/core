@@ -196,7 +196,7 @@ void SwFrmDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
         aNewSet.Put( SwMacroAssignDlg::AddEvents(
             DLG_FRM_GRF == m_nDlgType ? MACASSGN_GRAPHIC : DLG_FRM_OLE == m_nDlgType ? MACASSGN_OLE : MACASSGN_FRMURL ) );
         if ( m_pWrtShell )
-            rPage.SetFrame( m_pWrtShell->GetView().GetViewFrame()->GetFrame()->GetFrameInterface() );
+            rPage.SetFrame( m_pWrtShell->GetView().GetViewFrame()->GetFrame().GetFrameInterface() );
         rPage.PageCreated(aNewSet);
         break;
         }
