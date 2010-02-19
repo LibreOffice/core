@@ -118,7 +118,7 @@ class GridFieldValidator implements XUpdateListener
             XInteractionHandler xHandler = (XInteractionHandler)UnoRuntime.queryInterface(
                 XInteractionHandler.class,
                 m_xCtx.getServiceManager().createInstanceWithContext(
-                    "com.sun.star.sdb.InteractionHandler", m_xCtx ) );
+                    "com.sun.star.task.InteractionHandler", m_xCtx ) );
 
             // create a new request and execute it
             InteractionRequest aRequest = new InteractionRequest( aError );
