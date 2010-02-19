@@ -46,7 +46,6 @@ SLOFILES =	\
         $(SLO)$/hint.obj \
         $(SLO)$/lstner.obj \
         $(SLO)$/isethint.obj \
-        $(SLO)$/cancel.obj \
         $(SLO)$/brdcst.obj \
         $(SLO)$/listener.obj \
         $(SLO)$/listenerbase.obj \

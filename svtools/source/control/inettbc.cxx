@@ -69,7 +69,6 @@
 #include <unotools/historyoptions.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
-#include <svl/cancel.hxx>
 #include <svl/itemset.hxx>
 #include "svl/urihelper.hxx"
 #include <unotools/pathoptions.hxx>

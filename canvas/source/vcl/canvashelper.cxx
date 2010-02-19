@@ -1390,7 +1390,7 @@ namespace vclcanvas
                                 const ::Size&                   rSz,
                                 const GraphicAttr&              rAttr ) const
     {
-        ENSURE_OR_RETURN( rGrf,
+        ENSURE_OR_RETURN_FALSE( rGrf,
                           "Invalid Graphic" );
 
         if( !mpOutDev )
