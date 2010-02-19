@@ -253,6 +253,9 @@ namespace dbaui
 
     private:
         DECL_LINK( OnExecuteAddTable, void* );
+
+    private:
+        using OQueryController_PBase::getFastPropertyValue;
     };
 }
 #endif // DBAUI_QUERYCONTROLLER_HXX
