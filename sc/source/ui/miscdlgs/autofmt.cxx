@@ -47,10 +47,10 @@
 #include <svx/shdditem.hxx>
 #include <svx/udlnitem.hxx>
 #include <svx/wghtitem.hxx>
-#include <sfx2/topfrm.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/zforlist.hxx>
 #include <vcl/msgbox.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include "sc.hrc"

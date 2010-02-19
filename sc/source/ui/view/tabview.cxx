@@ -1172,7 +1172,7 @@ BOOL ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
     const CommandWheelData* pData = rCEvt.GetWheelData();
     if ( pData && pData->GetMode() == COMMAND_WHEEL_ZOOM )
     {
-        if ( !aViewData.GetViewShell()->GetViewFrame()->GetFrame()->IsInPlace() )
+        if ( !aViewData.GetViewShell()->GetViewFrame()->GetFrame().IsInPlace() )
         {
             //  for ole inplace editing, the scale is defined by the visarea and client size
             //  and can't be changed directly
@@ -1629,7 +1629,7 @@ void ScTabView::UpdateHeaderWidth( const ScVSplitPos* pWhich, const SCROW* pPosY
         return;
 
     SCROW nEndPos = MAXROW;
-    if ( !aViewData.GetViewShell()->GetViewFrame()->GetFrame()->IsInPlace() )
+    if ( !aViewData.GetViewShell()->GetViewFrame()->GetFrame().IsInPlace() )
     {
         //  fuer OLE Inplace immer MAXROW
 
@@ -2458,16 +2458,13 @@ void ScTabView::SetNewVisArea()
     SfxViewFrame* pViewFrame = aViewData.GetViewShell()->GetViewFrame();
     if (pViewFrame)
     {
-        SfxFrame* pFrame = pViewFrame->GetFrame();
-        if (pFrame)
+        SfxFrame& rFrame = pViewFrame->GetFrame();
+        com::sun::star::uno::Reference<com::sun::star::frame::XController> xController = rFrame.GetController();
+        if (xController.is())
         {
-            com::sun::star::uno::Reference<com::sun::star::frame::XController> xController = pFrame->GetController();
-            if (xController.is())
-            {
-                ScTabViewObj* pImp = ScTabViewObj::getImplementation( xController );
-                if (pImp)
-                    pImp->VisAreaChanged();
-            }
+            ScTabViewObj* pImp = ScTabViewObj::getImplementation( xController );
+            if (pImp)
+                pImp->VisAreaChanged();
         }
     }
     if (aViewData.GetViewShell()->HasAccessibilityObjects())

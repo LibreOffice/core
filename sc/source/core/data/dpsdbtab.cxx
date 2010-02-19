@@ -72,7 +72,7 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::UNO_QUERY;
 
 #define SC_SERVICE_ROWSET           "com.sun.star.sdb.RowSet"
-#define SC_SERVICE_INTHANDLER       "com.sun.star.sdb.InteractionHandler"
+#define SC_SERVICE_INTHANDLER       "com.sun.star.task.InteractionHandler"
 
 //! move to a header file?
 #define SC_DBPROP_DATASOURCENAME    "DataSourceName"

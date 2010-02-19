@@ -59,7 +59,7 @@ using namespace com::sun::star;
 //-------------------------------------------------------------------------
 
 #define DP_SERVICE_DBCONTEXT        "com.sun.star.sdb.DatabaseContext"
-#define SC_SERVICE_INTHANDLER       "com.sun.star.sdb.InteractionHandler"
+#define SC_SERVICE_INTHANDLER       "com.sun.star.task.InteractionHandler"
 
 //  entries in the "type" ListBox
 #define DP_TYPELIST_TABLE   0

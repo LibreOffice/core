@@ -966,18 +966,14 @@ void ScChildrenShapes::FillSelectionSupplier() const
         SfxViewFrame* pViewFrame = mpViewShell->GetViewFrame();
         if (pViewFrame)
         {
-            SfxFrame* pFrame = pViewFrame->GetFrame();
-            if (pFrame)
+            xSelectionSupplier = uno::Reference<view::XSelectionSupplier>(pViewFrame->GetFrame().GetController(), uno::UNO_QUERY);
+            if (xSelectionSupplier.is())
             {
-                xSelectionSupplier = uno::Reference<view::XSelectionSupplier>(pFrame->GetController(), uno::UNO_QUERY);
-                if (xSelectionSupplier.is())
-                {
-                    if (mpAccessibleDocument)
-                        xSelectionSupplier->addSelectionChangeListener(mpAccessibleDocument);
-                    uno::Reference<drawing::XShapes> xShapes (xSelectionSupplier->getSelection(), uno::UNO_QUERY);
-                    if (xShapes.is())
-                        mnShapesSelected = xShapes->getCount();
-                }
+                if (mpAccessibleDocument)
+                    xSelectionSupplier->addSelectionChangeListener(mpAccessibleDocument);
+                uno::Reference<drawing::XShapes> xShapes (xSelectionSupplier->getSelection(), uno::UNO_QUERY);
+                if (xShapes.is())
+                    mnShapesSelected = xShapes->getCount();
             }
         }
     }

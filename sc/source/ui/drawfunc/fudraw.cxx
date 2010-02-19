@@ -313,7 +313,7 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
                 const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                 if( !pView->IsTextEdit() && 1 == rMarkList.GetMarkCount() )
                 {
-                    BOOL bOle = pViewShell->GetViewFrame()->GetFrame()->IsInPlace();
+                    BOOL bOle = pViewShell->GetViewFrame()->GetFrame().IsInPlace();
                     SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
                     if( pObj && pObj->ISA( SdrOle2Obj ) && !bOle )
                     {

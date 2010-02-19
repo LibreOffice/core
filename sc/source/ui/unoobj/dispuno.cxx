@@ -68,9 +68,7 @@ uno::Reference<view::XSelectionSupplier> lcl_GetSelectionSupplier( SfxViewShell*
         SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
         if (pViewFrame)
         {
-            SfxFrame* pFrame = pViewFrame->GetFrame();
-            if (pFrame)
-                return uno::Reference<view::XSelectionSupplier>( pFrame->GetController(), uno::UNO_QUERY );
+            return uno::Reference<view::XSelectionSupplier>( pViewFrame->GetFrame().GetController(), uno::UNO_QUERY );
         }
     }
     return uno::Reference<view::XSelectionSupplier>();
@@ -84,8 +82,7 @@ ScDispatchProviderInterceptor::ScDispatchProviderInterceptor(ScTabViewShell* pVi
 {
     if ( pViewShell )
     {
-        SfxFrame* pFrame = pViewShell->GetViewFrame()->GetFrame();
-        m_xIntercepted.set(uno::Reference<frame::XDispatchProviderInterception>(pFrame->GetFrameInterface(), uno::UNO_QUERY));
+        m_xIntercepted.set(uno::Reference<frame::XDispatchProviderInterception>(pViewShell->GetViewFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY));
         if (m_xIntercepted.is())
         {
             comphelper::increment( m_refCount );

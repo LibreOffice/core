@@ -521,7 +521,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
     // removed: SID_BORDER_OBJECT (old Basic)
 
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
-//     BOOL bOle = pTabViewShell->GetViewFrame()->GetFrame()->IsInPlace();
+//     BOOL bOle = pTabViewShell->GetViewFrame()->GetFrame().IsInPlace();
 //  BOOL bTabProt = GetViewData()->GetDocument()->IsTabProtected(GetViewData()->GetTabNo());
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScViewData* pData       = GetViewData();

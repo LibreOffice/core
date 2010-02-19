@@ -72,7 +72,7 @@
 using namespace com::sun::star;
 
 #define SC_SERVICE_ROWSET           "com.sun.star.sdb.RowSet"
-#define SC_SERVICE_INTHANDLER       "com.sun.star.sdb.InteractionHandler"
+#define SC_SERVICE_INTHANDLER       "com.sun.star.task.InteractionHandler"
 
 //! move to a header file?
 #define SC_DBPROP_DATASOURCENAME    "DataSourceName"
@@ -89,7 +89,7 @@ void ScDBDocFunc::ShowInBeamer( const ScImportParam& rParam, SfxViewFrame* pFram
     if ( !pFrame || !rParam.bImport )
         return;
 
-    uno::Reference<frame::XFrame> xFrame = pFrame->GetFrame()->GetFrameInterface();
+    uno::Reference<frame::XFrame> xFrame = pFrame->GetFrame().GetFrameInterface();
     uno::Reference<frame::XDispatchProvider> xDP(xFrame, uno::UNO_QUERY);
 
     uno::Reference<frame::XFrame> xBeamerFrame = xFrame->findFrame(
