@@ -36,7 +36,12 @@ EXTRAJARFILES = $(OOO_JUNIT_JAR)
 
 JARTARGET = test.jar
 JARCLASSDIRS = $(PACKAGE)
-JARCLASSPATH = $(JARFILES) $(EXTRAJARFILES)
+JARCLASSPATH = $(JARFILES)
+ # expect $(OOO_JUNIT_JAR) to be on CLASSPATH wherever test.jar is used (also,
+ # on Windows, $(OOO_JUNIT_JAR) could be an absolute pathname with drive letter
+ # like X:/path and some JVMs would refuse to load test.jar if its MANIFEST.MF
+ # Class-Path contained such a pathname that looks like an unknown URL with
+ # scheme X)
 
 .END
 
