@@ -6,8 +6,8 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: XDatabaseAccessListener.idl,v $
- * $Revision: 1.11 $
+ * $RCSfile: $
+ * $Revision: $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,30 +27,30 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_sdb_XDatabaseAccessListener_idl__
-#define __com_sun_star_sdb_XDatabaseAccessListener_idl__
+#ifndef __com_sun_star_ucb_InteractiveLockingLockExpiredException_idl__
+#define __com_sun_star_ucb_InteractiveLockingLockExpiredException_idl__
 
-#ifndef __com_sun_star_lang_XEventListener_idl__
-#include <com/sun/star/lang/XEventListener.idl>
+#ifndef __com_sun_star_ucb_InteractiveLockingException_idl__
+#include <com/sun/star/ucb/InteractiveLockingException.idl>
 #endif
 
- module com {  module sun {  module star {  module sdb {
 
+//=============================================================================
 
-/** is not to be used anymore
-    @deprecated
- */
-published interface XDatabaseAccessListener: com::sun::star::lang::XEventListener
+module com { module sun { module star { module ucb {
+
+//=============================================================================
+/** An error indicating that a lock that has been previously obtained by this
+    OOo session has expired.
+
+    @since OOo 3.3
+*/
+/*published*/ exception InteractiveLockingLockExpiredException : com::sun::star::ucb::InteractiveLockingException
 {
-    [oneway] void connectionChanged([in]com::sun::star::lang::EventObject event);
-    boolean approveConnectionClosing([in]com::sun::star::lang::EventObject event);
-    [oneway] void connectionClosing([in]com::sun::star::lang::EventObject event);
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*===========================================================================
-===========================================================================*/
 #endif
