@@ -71,7 +71,6 @@ Menu SD_MENU_PORTAL
                     MI ( ITEM_FILE_PRINTDOC )
                     MI ( ITEM_FILE_SETUPPRINTER )
                     SEPARATOR
-                    MI ( ITEM_FILE_BACKTOWEBTOP )
                     MI ( ITEM_FILE_LOGOUT )
                 };
             };

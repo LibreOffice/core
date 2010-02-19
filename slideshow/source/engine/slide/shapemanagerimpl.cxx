@@ -342,7 +342,7 @@ bool ShapeManagerImpl::listenerAdded(
     if( (aIter = mrGlobalListenersMap.find( xShape )) ==
         mrGlobalListenersMap.end() )
     {
-        ENSURE_OR_RETURN(false,
+        ENSURE_OR_RETURN_FALSE(false,
                           "ShapeManagerImpl::listenerAdded(): global "
                           "shape listener map inconsistency!");
     }

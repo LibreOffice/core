@@ -674,7 +674,7 @@ bool BaseNode::registerDeactivatingListener(
     if (! checkValidNode())
         return false;
 
-    ENSURE_OR_RETURN(
+    ENSURE_OR_RETURN_FALSE(
         rNotifee,
         "BaseNode::registerDeactivatingListener(): invalid notifee" );
     maDeactivatingListeners.push_back( rNotifee );

@@ -68,7 +68,7 @@ namespace slideshow
 
         bool SlideBitmap::draw( const ::cppcanvas::CanvasSharedPtr& rCanvas ) const
         {
-            ENSURE_OR_RETURN( rCanvas && rCanvas->getUNOCanvas().is(),
+            ENSURE_OR_RETURN_FALSE( rCanvas && rCanvas->getUNOCanvas().is(),
                                "SlideBitmap::draw(): Invalid canvas" );
 
             // selectively only copy the transformation from current viewstate,

@@ -81,7 +81,7 @@ namespace slideshow
                                   const ShapeAttributeLayerSharedPtr&   rAttr ) const
         {
             RTL_LOGFILE_CONTEXT( aLog, "::presentation::internal::ViewShape::prefetch()" );
-            ENSURE_OR_RETURN( rMtf,
+            ENSURE_OR_RETURN_FALSE( rMtf,
                                "ViewShape::prefetch(): no valid metafile!" );
 
             if( rMtf != io_rCacheEntry.mpMtf ||
@@ -207,7 +207,7 @@ namespace slideshow
             ::cppcanvas::RendererSharedPtr pRenderer(
                 getRenderer( rDestinationCanvas, rMtf, rAttr ) );
 
-            ENSURE_OR_RETURN( pRenderer, "ViewShape::draw(): Invalid renderer" );
+            ENSURE_OR_RETURN_FALSE( pRenderer, "ViewShape::draw(): Invalid renderer" );
 
             pRenderer->setTransformation( rTransform );
 #if defined(VERBOSE) && OSL_DEBUG_LEVEL > 0
@@ -399,7 +399,7 @@ namespace slideshow
                 mpSprite->resize( rSpriteSizePixel );
             }
 
-            ENSURE_OR_RETURN( mpSprite, "ViewShape::renderSprite(): No sprite" );
+            ENSURE_OR_RETURN_FALSE( mpSprite, "ViewShape::renderSprite(): No sprite" );
 
             VERBOSE_TRACE( "ViewShape::renderSprite(): Rendering sprite 0x%X",
                            mpSprite.get() );
@@ -873,7 +873,7 @@ namespace slideshow
                                 bool                        bIsVisible ) const
         {
             RTL_LOGFILE_CONTEXT( aLog, "::presentation::internal::ViewShape::update()" );
-            ENSURE_OR_RETURN( mpViewLayer->getCanvas(), "ViewShape::update(): Invalid layer canvas" );
+            ENSURE_OR_RETURN_FALSE( mpViewLayer->getCanvas(), "ViewShape::update(): Invalid layer canvas" );
 
             // Shall we render to a sprite, or to a plain canvas?
             if( isBackgroundDetached() )

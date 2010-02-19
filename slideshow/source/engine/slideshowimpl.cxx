@@ -1405,8 +1405,8 @@ sal_Bool SlideShowImpl::addView(
     DBG_TESTSOLARMUTEX();
 
     // first of all, check if view has a valid canvas
-    ENSURE_OR_RETURN( xView.is(), "addView(): Invalid view" );
-    ENSURE_OR_RETURN( xView->getCanvas().is(),
+    ENSURE_OR_RETURN_FALSE( xView.is(), "addView(): Invalid view" );
+    ENSURE_OR_RETURN_FALSE( xView->getCanvas().is(),
                        "addView(): View does not provide a valid canvas" );
 
     UnoViewSharedPtr const pView( createSlideView(
@@ -1449,7 +1449,7 @@ sal_Bool SlideShowImpl::removeView(
     // precondition: must only be called from the main thread!
     DBG_TESTSOLARMUTEX();
 
-    ENSURE_OR_RETURN( xView.is(), "removeView(): Invalid view" );
+    ENSURE_OR_RETURN_FALSE( xView.is(), "removeView(): Invalid view" );
 
     UnoViewSharedPtr const pView( maViewContainer.removeView( xView ) );
     if( !pView )
