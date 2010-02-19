@@ -1289,15 +1289,11 @@ void OAppDetailPageHelper::showPreview( const ::rtl::OUString& _sDataSourceName,
         ) );
         pDispatcher->setTargetFrame( m_xFrame );
 
-        Sequence < PropertyValue > aArgs( 4 );
-        aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Preview"));
-        aArgs[0].Value <<= sal_True;
-        aArgs[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
-        aArgs[1].Value <<= sal_True;
-        aArgs[2].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AsTemplate"));
-        aArgs[2].Value <<= sal_False;
-        aArgs[3].Name = PROPERTY_SHOWMENU;
-        aArgs[3].Value <<= sal_False;
+        ::comphelper::NamedValueCollection aArgs;
+        aArgs.put( "Preview", sal_True );
+        aArgs.put( "ReadOnly", sal_True );
+        aArgs.put( "AsTemplate", sal_False );
+        aArgs.put( (::rtl::OUString)PROPERTY_SHOWMENU, sal_False );
 
         Reference< XController > xPreview( pDispatcher->openExisting( makeAny( _sDataSourceName ), _sName, aArgs ), UNO_QUERY );
         sal_Bool bClearPreview = !xPreview.is();

@@ -90,6 +90,7 @@ namespace dbaui
 using namespace ::dbtools;
 using namespace ::connectivity;
 using namespace ::svx;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::util;
@@ -107,6 +108,7 @@ using namespace ::com::sun::star::ucb;
 using ::com::sun::star::util::XCloseable;
 using ::com::sun::star::ui::XContextMenuInterceptor;
 /** === end UNO using === **/
+
 namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;
 namespace ErrorCondition = ::com::sun::star::sdb::ErrorCondition;
 
@@ -328,15 +330,22 @@ void SAL_CALL OApplicationController::propertyChange( const PropertyChangeEvent&
             ::rtl::OUString sOldName,sNewName;
             evt.OldValue >>= sOldName;
             evt.NewValue >>= sNewName;
-            Reference<XChild> xChild(evt.Source,UNO_QUERY);
-            if ( xChild.is() )
-            {
-                Reference<XContent> xContent(xChild->getParent(),UNO_QUERY);
-                if ( xContent.is() )
-                    sOldName = xContent->getIdentifier()->getContentIdentifier() + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + sOldName;
-            }
 
-            getContainer()->elementReplaced( eType , sOldName, sNewName );
+            // if the old name is empty, then this is a newly inserted content. We're notified of it via the
+            // elementInserted method, so there's no need to handle it here.
+
+            if ( sOldName.getLength() )
+            {
+                Reference<XChild> xChild(evt.Source,UNO_QUERY);
+                if ( xChild.is() )
+                {
+                    Reference<XContent> xContent(xChild->getParent(),UNO_QUERY);
+                    if ( xContent.is() )
+                        sOldName = xContent->getIdentifier()->getContentIdentifier() + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + sOldName;
+                }
+
+                getContainer()->elementReplaced( eType , sOldName, sNewName );
+            }
         }
     }
 
@@ -385,6 +394,8 @@ Reference< XConnection > SAL_CALL OApplicationController::getActiveConnection() 
 // -----------------------------------------------------------------------------
 void SAL_CALL OApplicationController::connect(  ) throw (SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( getMutex() );
+
     SQLExceptionInfo aError;
     SharedConnection xConnection = ensureConnection( &aError );
     if ( !xConnection.is() )
@@ -400,8 +411,28 @@ void SAL_CALL OApplicationController::connect(  ) throw (SQLException, RuntimeEx
 }
 
 // -----------------------------------------------------------------------------
+beans::Pair< ::sal_Int32, ::rtl::OUString > SAL_CALL OApplicationController::identifySubComponent( const Reference< XComponent >& i_rSubComponent ) throw (IllegalArgumentException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard( getMutex() );
+
+    sal_Int32 nType = -1;
+    ::rtl::OUString sName;
+
+    if ( !m_pSubComponentManager->lookupSubComponent( i_rSubComponent, sName, nType ) )
+        throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
+
+    if ( nType == SID_DB_APP_DSRELDESIGN )
+        // this is somewhat hacky ... we're expected to return a DatabaseObject value. However, there is no such
+        // value for the relation design. /me thinks we should change the API definition here ...
+        nType = -1;
+
+    return beans::Pair< ::sal_Int32, ::rtl::OUString >( nType, sName );
+}
+
+// -----------------------------------------------------------------------------
 ::sal_Bool SAL_CALL OApplicationController::closeSubComponents(  ) throw (RuntimeException)
 {
+    ::osl::MutexGuard aGuard( getMutex() );
     return m_pSubComponentManager->closeSubComponents();
 }
 
@@ -427,7 +458,7 @@ namespace
 }
 
 // -----------------------------------------------------------------------------
-void OApplicationController::impl_validateObjectTypeAndName_throw( const sal_Int32 _nObjectType, const ::rtl::OUString& _rObjectName )
+void OApplicationController::impl_validateObjectTypeAndName_throw( const sal_Int32 _nObjectType, const ::boost::optional< ::rtl::OUString >& i_rObjectName )
 {
     // ensure we're connected
     if ( !isConnected() )
@@ -444,6 +475,9 @@ void OApplicationController::impl_validateObjectTypeAndName_throw( const sal_Int
         )
         throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
 
+    if ( !i_rObjectName )
+        return;
+
     // ensure an existing object
     Reference< XNameAccess > xContainer( getElements( lcl_objectType2ElementType( _nObjectType ) ) );
     if ( !xContainer.is() )
@@ -456,19 +490,19 @@ void OApplicationController::impl_validateObjectTypeAndName_throw( const sal_Int
     {
     case DatabaseObject::TABLE:
     case DatabaseObject::QUERY:
-        bExistentObject = xContainer->hasByName( _rObjectName );
+        bExistentObject = xContainer->hasByName( *i_rObjectName );
         break;
     case DatabaseObject::FORM:
     case DatabaseObject::REPORT:
     {
         Reference< XHierarchicalNameAccess > xHierarchy( xContainer, UNO_QUERY_THROW );
-        bExistentObject = xHierarchy->hasByHierarchicalName( _rObjectName );
+        bExistentObject = xHierarchy->hasByHierarchicalName( *i_rObjectName );
     }
     break;
     }
 
     if ( !bExistentObject )
-        throw NoSuchElementException( _rObjectName, *this );
+        throw NoSuchElementException( *i_rObjectName, *this );
 }
 
 // -----------------------------------------------------------------------------
@@ -493,6 +527,29 @@ Reference< XComponent > SAL_CALL OApplicationController::loadComponentWithArgume
         _ForEditing ? E_OPEN_DESIGN : E_OPEN_NORMAL,
         _ForEditing ? SID_DB_APP_EDIT : SID_DB_APP_OPEN,
         ::comphelper::NamedValueCollection( _Arguments )
+    ) );
+
+    return xComponent;
+}
+
+// -----------------------------------------------------------------------------
+Reference< XComponent > SAL_CALL OApplicationController::createComponent( ::sal_Int32 i_nObjectType, Reference< XComponent >& o_DocumentDefinition  ) throw (IllegalArgumentException, SQLException, RuntimeException)
+{
+    return createComponentWithArguments( i_nObjectType, Sequence< PropertyValue >(), o_DocumentDefinition );
+}
+
+// -----------------------------------------------------------------------------
+Reference< XComponent > SAL_CALL OApplicationController::createComponentWithArguments( ::sal_Int32 i_nObjectType, const Sequence< PropertyValue >& i_rArguments, Reference< XComponent >& o_DocumentDefinition ) throw (IllegalArgumentException, SQLException, RuntimeException)
+{
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    ::osl::MutexGuard aGuard( getMutex() );
+
+    impl_validateObjectTypeAndName_throw( i_nObjectType, ::boost::optional< ::rtl::OUString >() );
+
+    Reference< XComponent > xComponent( newElement(
+        lcl_objectType2ElementType( i_nObjectType ),
+        ::comphelper::NamedValueCollection( i_rArguments ),
+        o_DocumentDefinition
     ) );
 
     return xComponent;

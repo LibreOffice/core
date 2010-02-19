@@ -34,8 +34,8 @@
 #ifndef _CPPUHELPER_PROPSHLP_HXX
 #include <cppuhelper/propshlp.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
-#include <cppuhelper/implbase3.hxx>
+#ifndef _CPPUHELPER_IMPLBASE4_HXX_
+#include <cppuhelper/implbase4.hxx>
 #endif
 #ifndef DBA_CONTENTHELPER_HXX
 #include "ContentHelper.hxx"
@@ -66,6 +66,12 @@
 #endif
 #include <com/sun/star/sdb/XSubDocument.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
+#include <com/sun/star/container/XHierarchicalName.hpp>
+
+namespace comphelper
+{
+    class NamedValueCollection;
+}
 
 //........................................................................
 namespace dbaccess
@@ -79,9 +85,10 @@ namespace dbaccess
 //=                   document
 //==========================================================================
 
-typedef ::cppu::ImplHelper3 <   ::com::sun::star::embed::XComponentSupplier
+typedef ::cppu::ImplHelper4 <   ::com::sun::star::embed::XComponentSupplier
                             ,   ::com::sun::star::sdb::XSubDocument
                             ,   ::com::sun::star::util::XCloseListener
+                            ,   ::com::sun::star::container::XHierarchicalName
                             >   ODocumentDefinition_Base;
 
 class ODocumentDefinition
@@ -107,13 +114,17 @@ protected:
 public:
 
     ODocumentDefinition(
-             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContainer
-            ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
-            ,const TContentPtr& _pImpl
-            ,sal_Bool _bForm
-            ,const ::com::sun::star::uno::Sequence< sal_Int8 >& _aClassID = ::com::sun::star::uno::Sequence< sal_Int8 >()
-            ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection = ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>()
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContainer,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&,
+            const TContentPtr& _pImpl,
+            sal_Bool _bForm
         );
+
+    void    initialLoad(
+                const ::com::sun::star::uno::Sequence< sal_Int8 >& i_rClassID,
+                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_rCreationArgs,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& i_rConnection
+            );
 
 // com::sun::star::lang::XTypeProvider
     DECLARE_TYPEPROVIDER( );
@@ -127,6 +138,12 @@ public:
 // ::com::sun::star::beans::XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
+    // OPropertySetHelper
+    virtual void SAL_CALL getFastPropertyValue(
+                                ::com::sun::star::uno::Any& o_rValue,
+                                sal_Int32 i_nHandle
+                            ) const;
+
     // XComponentSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > SAL_CALL getComponent(  ) throw (::com::sun::star::uno::RuntimeException);
 
@@ -135,6 +152,10 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL openDesign(  ) throw (::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL store(  ) throw (::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL close(  ) throw (::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    // XHierarchicalName
+    virtual ::rtl::OUString SAL_CALL getHierarchicalName(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL composeHierarchicalName( const ::rtl::OUString& aRelativeName ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
 
 // OPropertySetHelper
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
@@ -197,10 +218,20 @@ public:
         ::com::sun::star::uno::Sequence< sal_Int8 >& _rClassId
     );
 
+    struct NotifierAccess { friend class NameChangeNotifier; private: NotifierAccess() { } };
+    const ::rtl::OUString& getCurrentName() const { return m_pImpl->m_aProps.aTitle; }
+    void firePropertyChange(
+                  sal_Int32 i_nHandle,
+            const ::com::sun::star::uno::Any& i_rNewValue,
+            const ::com::sun::star::uno::Any& i_rOldValue,
+                  sal_Bool i_bVetoable,
+            const NotifierAccess
+        );
+
 private:
     /** does necessary initializations after our embedded object has been switched to ACTIVE
     */
-    void impl_onActivateEmbeddedObject_nothrow();
+    void    impl_onActivateEmbeddedObject_nothrow( const bool i_bReactivated );
 
     /** initializes a newly created view/controller of a form which is displaying our embedded object
 
@@ -223,19 +254,27 @@ private:
     /** opens the UI for this sub document
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
-        impl_openUI_nolck_throw( bool _bForEditing );
+            impl_openUI_nolck_throw( bool _bForEditing );
 
     /** stores our document, if it's already loaded
     */
-    void
-        impl_store_throw();
+    void    impl_store_throw();
 
     /** closes our document, if it's open
     */
-    bool
-        impl_close_throw();
+    bool    impl_close_throw();
 
-private:
+    /** returns our component, creates it if necessary
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable >
+            impl_getComponent_throw( const bool i_ForceCreate = true );
+
+    /** shows or hides our component
+
+        The embedded object must exist, and be in state LOADED, at least.
+    */
+    void    impl_showOrHideComponent_throw( const bool i_bShow );
+
     // OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
@@ -247,7 +286,6 @@ private:
     // OContentHelper overridables
     virtual ::rtl::OUString determineContentType() const;
 
-private:
     /** fills the load arguments
     */
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
@@ -255,8 +293,28 @@ private:
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
             const bool _bSuppressMacros,
             const bool _bReadOnly,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rAdditionalArgs,
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_rOpenCommandArguments,
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _out_rEmbeddedObjectDescriptor
+        );
+
+    /** splits the given arguments to an "open*" command into arguments for loading the document, and arguments to be
+        put into the EmbeddedObjectDescriptor
+
+        Any values already present in <code>o_rDocumentLoadArgs</code> and <code>o_rEmbeddedObjectDescriptor</code>
+        will be overwritten by values from <code>i_rOpenCommandArguments</code>, if applicable, otherwise they will
+        be preserved.
+
+        @param i_rOpenCommandArguments
+            the arguments passed to the "open*" command at the content
+        @param o_rDocumentLoadArgs
+            the arguments to be passed when actually loading the embedded document.
+        @param o_rEmbeddedObjectDescriptor
+            the EmbeddedObjectDescriptor to be passed when initializing the embedded object
+    */
+    void separateOpenCommandArguments(
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&    i_rOpenCommandArguments,
+            ::comphelper::NamedValueCollection&                                                 o_rDocumentLoadArgs,
+            ::comphelper::NamedValueCollection&                                                 o_rEmbeddedObjectDescriptor
         );
 
     /** loads the EmbeddedObject if not already loaded
@@ -324,6 +382,27 @@ private:
             const bool _bActivate,
             const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& _rxEnvironment
         );
+private:
+    using ::cppu::OPropertySetHelper::getFastPropertyValue;
+};
+
+class NameChangeNotifier
+{
+public:
+    NameChangeNotifier(
+        ODocumentDefinition& i_rDocumentDefinition,
+        const ::rtl::OUString& i_rNewName,
+        ::osl::ResettableMutexGuard& i_rClearForNotify
+    );
+    ~NameChangeNotifier();
+
+private:
+            ODocumentDefinition&            m_rDocumentDefinition;
+    const   ::com::sun::star::uno::Any      m_aOldValue;
+    const   ::com::sun::star::uno::Any      m_aNewValue;
+    mutable ::osl::ResettableMutexGuard&    m_rClearForNotify;
+
+    void    impl_fireEvent_throw( const sal_Bool i_bVetoable );
 };
 
 //........................................................................

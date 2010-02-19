@@ -56,7 +56,6 @@
 #include <svtools/transfer.hxx>
 #include <osl/mutex.hxx>
 #include <vos/thread.hxx>
-#include <svl/cancel.hxx>
 #include <cppuhelper/implbase9.hxx>
 #include <svtools/cliplistener.hxx>
 
@@ -122,7 +121,6 @@ namespace dbaui
         ::rtl::OUString         m_sModuleIdentifier;
 
         // members for asynchronous load operations
-        ::vos::OThread*         m_pLoadThread;          // the thread wherein the form is loaded
         FormControllerImpl*     m_pFormControllerImpl;  // implementing the XFormController
 
         ULONG                   m_nPendingLoadFinished;         // the event used to tell ourself that the load is finished
@@ -166,7 +164,7 @@ namespace dbaui
     public:
         SbaXDataBrowserController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
 
-        UnoDataBrowserView* getBrowserView() const { return static_cast< UnoDataBrowserView*>(m_pView); }
+        UnoDataBrowserView* getBrowserView() const { return static_cast< UnoDataBrowserView*>(getView()); }
         // late construction
         virtual sal_Bool Construct(Window* pParent);
 
@@ -319,9 +317,6 @@ namespace dbaui
             // a PropertySet corresponding to the cursor field a column is bound to
             // if nViewPos is (sal_uInt16)-1 (the default) then the field for the current column will be retrieved
 
-        sal_Bool PendingLoad() const { return m_pLoadThread != NULL; }
-            // is there an asyncronous load operation in progress ?
-
         void enterFormAction();
         void leaveFormAction();
 
@@ -362,73 +357,9 @@ namespace dbaui
         DECL_LINK(OnFoundData, FmFoundRecordInformation*);
         DECL_LINK(OnCanceledNotFound, FmFoundRecordInformation*);
 
-        // callbacks for the completed loading process
-        DECL_LINK(OnOpenFinished, void*);
-        DECL_LINK(OnOpenFinishedMainThread, void*);
-            // OnOpenFinsihed is called in a foreign thread (the one which does the loading) so it simply posts the
-            // OnOpenFinishedMainThread-link (which will be called in the main thread, then) as user event.
-            // (the alternative would be to lock the SolarMutex in OnOpenFinished to avoid problems with the needed updates,
-            // but playing with this mutex seems very hazardous to me ....)
         DECL_LINK(OnAsyncGetCellFocus, void*);
 
         DECL_LINK( OnAsyncDisplayError, void* );
-    };
-
-    //==================================================================
-    // LoadFormThread - a thread for asynchronously loading a form
-    //==================================================================
-    class LoadFormThread : public ::vos::OThread
-    {
-        ::osl::Mutex    m_aAccessSafety;        // for securing the multi-thread access
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >                 m_xRowSet;          // the data source to be loaded
-
-        Link                    m_aTerminationHandler;  // the handler to be called upon termination
-        sal_Bool                    m_bCanceled;            // StopIt has been called ?
-        String                  m_sStopperCaption;      // the caption for the ThreadStopper
-
-        // a ThreadStopper will be instantiated so that the open can be canceled via the UI
-        class ThreadStopper : protected SfxCancellable
-        {
-            LoadFormThread* m_pOwner;
-
-        public:
-            ThreadStopper(LoadFormThread* pOwner, const String& rTitle);
-            virtual ~ThreadStopper() { }
-
-            virtual void    Cancel();
-
-            virtual void    OwnerTerminated();
-            // Normally the Owner (a LoadFormThread) would delete the stopper when terminated.
-            // Unfortunally the application doesn't remove the 'red light' when a SfxCancellable is deleted
-            // if it (the app) can't acquire the solar mutex. The deletion is IGNORED then. So we have to make
-            // sure that a) the stopper is deleted from inside the main thread (where the solar mutex is locked)
-            // and b) that in the time between the termination of the thread and the deletion of the stopper
-            // the latter doesn't access the former.
-            // The OwnerTerminated cares for both aspects.
-            // SO DON'T DELETE THE STOPPER EXPLICITLY !
-
-        protected:
-            // HACK HACK HACK HACK HACK : this should be private, but MSVC doesn't accept the LINK-macro then ....
-            DECL_LINK(OnDeleteInMainThread, ThreadStopper*);
-        };
-        friend class LoadFormThread::ThreadStopper;
-
-    public:
-        LoadFormThread(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > & _xRowSet, const String& _rStopperCaption) : m_xRowSet(_xRowSet), m_sStopperCaption(_rStopperCaption) { }
-
-        virtual void SAL_CALL run();
-        virtual void SAL_CALL onTerminated();
-
-        void SetTerminationHdl(const Link& aTermHdl) { m_aTerminationHandler = aTermHdl; }
-            // the handler will be called synchronously (the parameter is a pointer to the thread)
-            // if no termination handler is set, the thread disposes the data source and deletes
-            // itself upon termination
-
-        // cancels the process. to be called from another thread (of course ;)
-        void StopIt();
-
-        // ask if the load canceled
-        sal_Bool WasCanceled() const { return m_bCanceled; }
     };
 }
 

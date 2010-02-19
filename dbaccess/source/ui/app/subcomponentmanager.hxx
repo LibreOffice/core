@@ -33,7 +33,7 @@
 #include "AppElementType.hxx"
 
 /** === begin UNO includes === **/
-#include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/frame/XController.hpp>
 /** === end UNO includes === **/
 
@@ -53,7 +53,7 @@ namespace dbaui
     //====================================================================
     //= SubComponentManager
     //====================================================================
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::lang::XEventListener
+    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::beans::XPropertyChangeListener
                                     >   SubComponentManager_Base;
     class SubComponentManager : public SubComponentManager_Base
     {
@@ -62,6 +62,9 @@ namespace dbaui
         virtual ~SubComponentManager();
 
         void    disposing();
+
+        // XPropertyChangeListener
+        virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException);
 
         // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
@@ -106,6 +109,24 @@ namespace dbaui
                         const ::rtl::OUString& _rName,
                         const sal_Int32 _nComponentType
                     );
+
+        /** searches for the given sub component
+
+            @param i_rComponent
+                the sub component to look up
+            @param o_rName
+                contains, upon successful return, the name of the sub component
+            @param o_nComponentType
+                contains, upon successful return, the type of the sub component
+            @return
+                <TRUE/> if and only if the component was found
+        */
+        bool        lookupSubComponent(
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& i_rComponent,
+                              ::rtl::OUString&  o_rName,
+                              sal_Int32&        o_rComponentType
+                    );
+
     private:
         ::std::auto_ptr< SubComponentManager_Data > m_pData;
     };

@@ -78,6 +78,7 @@
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
 #include <com/sun/star/sdb/application/DatabaseObjectContainer.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
+#include <com/sun/star/container/XHierarchicalName.hpp>
 /** === end UNO includes === **/
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
@@ -344,8 +345,8 @@ OApplicationController::~OApplicationController()
         osl_incrementInterlockedCount( &m_refCount );
         dispose();
     }
-    ::std::auto_ptr< Window> aTemp(m_pView);
-    m_pView = NULL;
+    ::std::auto_ptr< Window> aTemp( getView() );
+    clearView();
 
     DBG_DTOR(OApplicationController,NULL);
 }
@@ -444,7 +445,8 @@ void SAL_CALL OApplicationController::disposing()
                 }
             }
 
-            m_aModelConnector.clear();
+            m_xModel->disconnectController( this );
+
             m_xModel.clear();
         }
     }
@@ -453,15 +455,15 @@ void SAL_CALL OApplicationController::disposing()
         DBG_UNHANDLED_EXCEPTION();
     }
 
-    m_pView = NULL;
+    clearView();
     OApplicationController_CBASE::disposing(); // here the m_refCount must be equal 5
 }
 
 //--------------------------------------------------------------------
 sal_Bool OApplicationController::Construct(Window* _pParent)
 {
-    m_pView = new OApplicationView( _pParent, getORB(), *this, m_ePreviewMode );
-    m_pView->SetUniqueId(UID_APP_VIEW);
+    setView( * new OApplicationView( _pParent, getORB(), *this, m_ePreviewMode ) );
+    getView()->SetUniqueId(UID_APP_VIEW);
 
     // late construction
     sal_Bool bSuccess = sal_False;
@@ -480,8 +482,8 @@ sal_Bool OApplicationController::Construct(Window* _pParent)
 
     if ( !bSuccess )
     {
-        ::std::auto_ptr< Window> aTemp(m_pView);
-        m_pView = NULL;
+        ::std::auto_ptr< Window> aTemp( getView() );
+        clearView();
         return sal_False;
     }
 
@@ -510,8 +512,8 @@ void SAL_CALL OApplicationController::disposing(const EventObject& _rSource) thr
     Reference<XConnection> xCon(_rSource.Source, UNO_QUERY);
     if ( xCon.is() )
     {
-        DBG_ASSERT( ( m_xDataSourceConnection == xCon ) && getContainer() && ( getContainer()->getElementType() == E_TABLE ),
-            "OApplicationController::disposing: the below code will ignore this call - why?" );
+        DBG_ASSERT( m_xDataSourceConnection == xCon,
+            "OApplicationController::disposing: which connection does this come from?" );
 
         if ( getContainer() && getContainer()->getElementType() == E_TABLE )
             getContainer()->clearPages();
@@ -524,7 +526,6 @@ void SAL_CALL OApplicationController::disposing(const EventObject& _rSource) thr
     else if ( _rSource.Source == m_xModel )
     {
         m_xModel.clear();
-        m_aModelConnector.clear();
     }
     else if ( _rSource.Source == m_xDataSource )
     {
@@ -1244,7 +1245,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                 {
                     ElementType eType = E_TABLE;
                     sal_Bool bAutoPilot = sal_False;
-                    sal_Bool bSQLView = sal_False;
+                    ::comphelper::NamedValueCollection aCreationArgs;
 
                     switch( _nId )
                     {
@@ -1267,10 +1268,10 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                             bAutoPilot = sal_True;
                             eType = E_QUERY;
                             break;
-                        case ID_NEW_QUERY_SQL:
-                            bSQLView = sal_True;
-                            // run through
                         case ID_NEW_QUERY_DESIGN:
+                            aCreationArgs.put( (::rtl::OUString)PROPERTY_GRAPHICAL_DESIGN, sal_True );
+                            // run through
+                        case ID_NEW_QUERY_SQL:
                             eType = E_QUERY;
                             break;
                          case ID_NEW_TABLE_DESIGN_AUTO_PILOT:
@@ -1284,7 +1285,10 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     if ( bAutoPilot )
                         getContainer()->PostUserEvent( LINK( this, OApplicationController, OnCreateWithPilot ), reinterpret_cast< void* >( eType ) );
                     else
-                        newElement( eType, bSQLView );
+                    {
+                        Reference< XComponent > xDocDefinition;
+                        newElement( eType, aCreationArgs, xDocDefinition );
+                    }
                 }
                 break;
             case SID_APP_NEW_FOLDER:
@@ -1300,10 +1304,13 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     SharedConnection xConnection( ensureConnection() );
                     if ( xConnection.is() )
                     {
-                        QueryDesigner aDesigner( getORB(), this, getFrame(), true, SID_DB_NEW_VIEW_SQL == _nId );
+                        QueryDesigner aDesigner( getORB(), this, getFrame(), true );
+
+                        ::comphelper::NamedValueCollection aCreationArgs;
+                        aCreationArgs.put( (::rtl::OUString)PROPERTY_GRAPHICAL_DESIGN, ID_NEW_VIEW_DESIGN == _nId );
 
                         Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
-                        Reference< XComponent > xComponent( aDesigner.createNew( xDataSource ), UNO_QUERY );
+                        Reference< XComponent > xComponent( aDesigner.createNew( xDataSource, aCreationArgs ), UNO_QUERY );
                         onDocumentOpened( ::rtl::OUString(), E_QUERY, E_OPEN_DESIGN, xComponent, NULL );
                     }
                 }
@@ -1842,14 +1849,17 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
     case E_REPORT:
     case E_FORM:
     {
-        ::std::auto_ptr< OLinkedDocumentsAccess > aHelper = getDocumentsAccess( _eType );
-        if ( !aHelper->isConnected() )
-            break;
+        if ( !m_pSubComponentManager->activateSubFrame( _sName, _eType, _eOpenMode ) )
+        {
+            ::std::auto_ptr< OLinkedDocumentsAccess > aHelper = getDocumentsAccess( _eType );
+            if ( !aHelper->isConnected() )
+                break;
 
-        Reference< XComponent > xDefinition;
-        xRet = aHelper->open( _sName, xDefinition, _eOpenMode, _rAdditionalArguments );
+            Reference< XComponent > xDefinition;
+            xRet = aHelper->open( _sName, xDefinition, _eOpenMode, _rAdditionalArguments );
 
-        onDocumentOpened( _sName, _eType, _eOpenMode, xRet, xDefinition );
+            onDocumentOpened( _sName, _eType, _eOpenMode, xRet, xDefinition );
+        }
     }
     break;
 
@@ -1868,20 +1878,33 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
             Any aDataSource;
             if ( _eOpenMode == E_OPEN_DESIGN )
             {
-                sal_Bool bQuerySQLMode =( _nInstigatorCommand == SID_DB_APP_EDIT_SQL_VIEW );
+                bool bAddViewTypeArg = false;
 
                 if ( _eType == E_TABLE )
                 {
                     if ( impl_isAlterableView_nothrow( _sName ) )
-                        pDesigner.reset( new QueryDesigner( getORB(), this, m_aCurrentFrame.getFrame(), true, bQuerySQLMode ) );
+                    {
+                        pDesigner.reset( new QueryDesigner( getORB(), this, m_aCurrentFrame.getFrame(), true ) );
+                        bAddViewTypeArg = true;
+                    }
                     else
+                    {
                         pDesigner.reset( new TableDesigner( getORB(), this, m_aCurrentFrame.getFrame() ) );
+                    }
                 }
                 else if ( _eType == E_QUERY )
                 {
-                    pDesigner.reset( new QueryDesigner( getORB(), this, m_aCurrentFrame.getFrame(), false, bQuerySQLMode ) );
+                    pDesigner.reset( new QueryDesigner( getORB(), this, m_aCurrentFrame.getFrame(), false ) );
+                    bAddViewTypeArg = true;
                 }
                 aDataSource <<= m_xDataSource;
+
+                if ( bAddViewTypeArg )
+                {
+                    const bool bQueryGraphicalMode =( _nInstigatorCommand != SID_DB_APP_EDIT_SQL_VIEW );
+                    aArguments.put( (::rtl::OUString)PROPERTY_GRAPHICAL_DESIGN, bQueryGraphicalMode );
+                }
+
             }
             else
             {
@@ -1893,7 +1916,7 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
                 aDataSource <<= getDatabaseName();
             }
 
-            xRet.set( pDesigner->openExisting( aDataSource, _sName, aArguments.getPropertyValues() ) );
+            xRet.set( pDesigner->openExisting( aDataSource, _sName, aArguments ) );
             onDocumentOpened( _sName, _eType, _eOpenMode, xRet, NULL );
         }
     }
@@ -1934,14 +1957,11 @@ void OApplicationController::newElementWithPilot( ElementType _eType )
             if ( aHelper->isConnected() )
             {
                 sal_Int32 nCommandType = -1;
-                const ::rtl::OUString sName(getCurrentlySelectedName(nCommandType));
-                Reference< XComponent > xComponent,xDefinition;
+                const ::rtl::OUString sCurrentSelected( getCurrentlySelectedName( nCommandType ) );
                 if ( E_REPORT == _eType )
-                    xComponent = aHelper->newReportWithPilot(xDefinition,nCommandType,sName);
+                    aHelper->newReportWithPilot( nCommandType, sCurrentSelected );
                 else
-                    xComponent = aHelper->newFormWithPilot(xDefinition,nCommandType,sName);
-
-                onDocumentOpened( ::rtl::OUString(), _eType, E_OPEN_DESIGN, xComponent, xDefinition );
+                    aHelper->newFormWithPilot( nCommandType, sCurrentSelected );
             }
         }
         break;
@@ -1951,68 +1971,76 @@ void OApplicationController::newElementWithPilot( ElementType _eType )
             ::std::auto_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess(_eType);
             if ( aHelper->isConnected() )
             {
-                Reference< XComponent > xComponent;
                 if ( E_QUERY == _eType )
-                    xComponent = aHelper->newQueryWithPilot();
+                    aHelper->newQueryWithPilot();
                 else
-                    xComponent = aHelper->newTableWithPilot();
-
-                onDocumentOpened( ::rtl::OUString(), _eType, E_OPEN_DESIGN, xComponent, NULL );
+                    aHelper->newTableWithPilot();
             }
          }
          break;
         case E_NONE:
             break;
     }
+
+    // no need for onDocumentOpened, the table wizard opens the created table by using
+    // XDatabaseDocumentUI::loadComponent method.
 }
 
 // -----------------------------------------------------------------------------
-void OApplicationController::newElement( ElementType _eType, sal_Bool _bSQLView )
+Reference< XComponent > OApplicationController::newElement( ElementType _eType, const ::comphelper::NamedValueCollection& i_rAdditionalArguments,
+                                                           Reference< XComponent >& o_rDocumentDefinition )
 {
     OSL_ENSURE(getContainer(),"View is NULL! -> GPF");
+
+    Reference< XComponent > xComponent;
+    o_rDocumentDefinition.clear();
 
     switch ( _eType )
     {
         case E_FORM:
         case E_REPORT:
-            {
-                ::std::auto_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess(_eType);
-                if ( aHelper->isConnected() )
-                {
-                    Reference< XComponent > xComponent,xDefinition;
-                    sal_Int32 nCommandType = -1;
-                    const ::rtl::OUString sName(getCurrentlySelectedName(nCommandType));
-                    xComponent = aHelper->newDocument(_eType == E_FORM ? ID_FORM_NEW_TEXT : ID_REPORT_NEW_TEXT,xDefinition,nCommandType,sName);
-                    onDocumentOpened( ::rtl::OUString(), _eType, E_OPEN_DESIGN, xComponent, xDefinition );
-                }
-            }
-            break;
+        {
+            ::std::auto_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess( _eType );
+            if ( !aHelper->isConnected() )
+                break;
+
+            xComponent = aHelper->newDocument( _eType == E_FORM ? ID_FORM_NEW_TEXT : ID_REPORT_NEW_TEXT, i_rAdditionalArguments, o_rDocumentDefinition );
+        }
+        break;
+
         case E_QUERY:
         case E_TABLE:
-            {
-                ::std::auto_ptr< DatabaseObjectView > pDesigner;
-                SharedConnection xConnection( ensureConnection() );
-                if ( xConnection.is() )
-                {
-                    if ( _eType == E_TABLE )
-                    {
-                        pDesigner.reset( new TableDesigner( getORB(), this, getFrame() ) );
-                    }
-                    else if ( _eType == E_QUERY )
-                    {
-                        pDesigner.reset( new QueryDesigner( getORB(), this, getFrame(), false, _bSQLView ) );
-                    }
+        {
+            ::std::auto_ptr< DatabaseObjectView > pDesigner;
+            SharedConnection xConnection( ensureConnection() );
+            if ( !xConnection.is() )
+                break;
 
-                    Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
-                    Reference< XComponent > xComponent( pDesigner->createNew( xDataSource ), UNO_QUERY );
-                    onDocumentOpened( ::rtl::OUString(), _eType, E_OPEN_DESIGN, xComponent, NULL );
-                }
+            if ( _eType == E_TABLE )
+            {
+                pDesigner.reset( new TableDesigner( getORB(), this, getFrame() ) );
             }
-            break;
+            else if ( _eType == E_QUERY )
+            {
+                pDesigner.reset( new QueryDesigner( getORB(), this, getFrame(), false ) );
+            }
+
+            Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
+            xComponent.set( pDesigner->createNew( xDataSource, i_rAdditionalArguments ), UNO_QUERY );
+        }
+        break;
+
         default:
+            OSL_ENSURE( false, "OApplicationController::newElement: illegal type!" );
             break;
     }
+
+    if ( xComponent.is() )
+        onDocumentOpened( ::rtl::OUString(), _eType, E_OPEN_DESIGN, xComponent, o_rDocumentDefinition );
+
+    return xComponent;
 }
+
 // -----------------------------------------------------------------------------
 void OApplicationController::addContainerListener(const Reference<XNameAccess>& _xCollection)
 {
@@ -2585,7 +2613,7 @@ Reference< XModel >  SAL_CALL OApplicationController::getModel(void) throw( Runt
 }
 
 // -----------------------------------------------------------------------------
-void OApplicationController::onConnectedModel()
+void OApplicationController::onAttachedFrame()
 {
     sal_Int32 nConnectedControllers( 0 );
     try
@@ -2614,9 +2642,15 @@ void OApplicationController::onConnectedModel()
 // -----------------------------------------------------------------------------
 IMPL_LINK( OApplicationController, OnFirstControllerConnected, void*, /**/ )
 {
+    ::osl::MutexGuard aGuard( getMutex() );
+
+    if ( !m_xModel.is() )
+    {
+        OSL_ENSURE( false, "OApplicationController::OnFirstControllerConnected: too late!" );
+    }
+
     // if we have forms or reports which contain macros/scripts, then show a warning
     // which suggests the user to migrate them to the database document
-
     Reference< XEmbeddedScripts > xDocumentScripts( m_xModel, UNO_QUERY );
     if ( xDocumentScripts.is() )
     {
@@ -2662,6 +2696,14 @@ IMPL_LINK( OApplicationController, OnFirstControllerConnected, void*, /**/ )
 }
 
 // -----------------------------------------------------------------------------
+void SAL_CALL OApplicationController::attachFrame( const Reference< XFrame > & i_rxFrame ) throw( RuntimeException )
+{
+    OApplicationController_CBASE::attachFrame( i_rxFrame );
+    if ( getFrame().is() )
+        onAttachedFrame();
+}
+
+// -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > & _rxModel) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard( getMutex() );
@@ -2677,16 +2719,13 @@ sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > 
         // at least: remove as property change listener from the old model/data source
 
     m_xModel = _rxModel;
-    if ( _rxModel.is() )
+    if ( m_xModel.is() )
     {
         m_xDocumentModify.set( m_xModel, UNO_QUERY_THROW );
-        m_aModelConnector.connect( _rxModel, this );
-        onConnectedModel();
     }
     else
     {
         m_xDocumentModify.clear();
-        m_aModelConnector.clear();
     }
 
     m_xDataSource.set(xOfficeDoc.is() ? xOfficeDoc->getDataSource() : Reference<XDataSource>(),UNO_QUERY);
@@ -2762,7 +2801,7 @@ void OApplicationController::containerFound( const Reference< XContainer >& _xCo
         try
         {
             sName = getContainer()->getQualifiedName( NULL );
-            OSL_ENSURE( sName.getLength(), "OApplicationController::newElementWithPilot: no name given!" );
+            OSL_ENSURE( sName.getLength(), "OApplicationController::getCurrentlySelectedName: no name given!" );
         }
         catch( const Exception& )
         {

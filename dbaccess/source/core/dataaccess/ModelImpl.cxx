@@ -41,6 +41,7 @@
 #include "dbastrings.hrc"
 #include "ModelImpl.hxx"
 #include "userinformation.hxx"
+#include "sdbcoretools.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/container/XSet.hpp>
@@ -56,7 +57,6 @@
 
 #include <comphelper/interaction.hxx>
 #include <comphelper/mediadescriptor.hxx>
-#include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
 #include <connectivity/dbexception.hxx>
@@ -299,7 +299,7 @@ void DocumentStorageAccess::commitStorages() SAL_THROW(( IOException, RuntimeExc
                 ++aIter
             )
         {
-            m_pModelImplementation->commitStorageIfWriteable( aIter->second );
+            tools::stor::commitStorageIfWriteable( aIter->second );
         }
     }
     catch(const WrappedTargetException&)
@@ -320,7 +320,7 @@ bool DocumentStorageAccess::commitEmbeddedStorage( bool _bPreventRootCommits )
     {
         NamedStorages::const_iterator pos = m_aExposedStorages.find( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "database" ) ) );
         if ( pos != m_aExposedStorages.end() )
-            bSuccess = m_pModelImplementation->commitStorageIfWriteable( pos->second );
+            bSuccess = tools::stor::commitStorageIfWriteable( pos->second );
     }
     catch( Exception& )
     {
@@ -811,27 +811,41 @@ const Reference< XNumberFormatsSupplier > & ODatabaseModelImpl::getNumberFormats
     }
     return m_xNumberFormatsSupplier;
 }
+
 // -----------------------------------------------------------------------------
-void ODatabaseModelImpl::attachResource( const ::rtl::OUString& _rURL, const Sequence< PropertyValue >& _rArgs )
+void ODatabaseModelImpl::setDocFileLocation( const ::rtl::OUString& i_rLoadedFrom )
 {
-    ::comphelper::NamedValueCollection aMediaDescriptor( _rArgs );
-
-    ::rtl::OUString sDocumentLocation( aMediaDescriptor.getOrDefault( "SalvagedFile", _rURL ) );
-    if ( !sDocumentLocation.getLength() )
-        // this indicates "the document is being recovered, but _rURL already is the real document URL,
-        // not the temporary document location"
-        sDocumentLocation = _rURL;
-
-    if ( aMediaDescriptor.has( "SalvagedFile" ) )
-        aMediaDescriptor.remove( "SalvagedFile" );
-
-    m_aArgs = stripLoadArguments( aMediaDescriptor );
-
-    switchToURL( sDocumentLocation, _rURL );
+    ENSURE_OR_THROW( i_rLoadedFrom.getLength(), "invalid URL" );
+    m_sDocFileLocation = i_rLoadedFrom;
 }
 
 // -----------------------------------------------------------------------------
-Sequence< PropertyValue > ODatabaseModelImpl::stripLoadArguments( const ::comphelper::NamedValueCollection& _rArguments )
+void ODatabaseModelImpl::setResource( const ::rtl::OUString& i_rDocumentURL, const Sequence< PropertyValue >& _rArgs )
+{
+    ENSURE_OR_THROW( i_rDocumentURL.getLength(), "invalid URL" );
+
+    ::comphelper::NamedValueCollection aMediaDescriptor( _rArgs );
+#if OSL_DEBUG_LEVEL > 0
+    if ( aMediaDescriptor.has( "SalvagedFile" ) )
+    {
+        ::rtl::OUString sSalvagedFile( aMediaDescriptor.getOrDefault( "SalvagedFile", ::rtl::OUString() ) );
+        // If SalvagedFile is an empty string, this indicates "the document is being recovered, but i_rDocumentURL already
+        // is the real document URL, not the temporary document location"
+        if ( !sSalvagedFile.getLength() )
+            sSalvagedFile = i_rDocumentURL;
+
+        OSL_ENSURE( sSalvagedFile == i_rDocumentURL, "ODatabaseModelImpl::setResource: inconsistency!" );
+            // nowadays, setResource should only be called with the logical URL of the document
+    }
+#endif
+
+    m_aMediaDescriptor = stripLoadArguments( aMediaDescriptor );
+
+    impl_switchToLogicalURL( i_rDocumentURL );
+}
+
+// -----------------------------------------------------------------------------
+::comphelper::NamedValueCollection ODatabaseModelImpl::stripLoadArguments( const ::comphelper::NamedValueCollection& _rArguments )
 {
     OSL_ENSURE( !_rArguments.has( "Model" ), "ODatabaseModelImpl::stripLoadArguments: this is suspicious (1)!" );
     OSL_ENSURE( !_rArguments.has( "ViewName" ), "ODatabaseModelImpl::stripLoadArguments: this is suspicious (2)!" );
@@ -839,7 +853,7 @@ Sequence< PropertyValue > ODatabaseModelImpl::stripLoadArguments( const ::comphe
     ::comphelper::NamedValueCollection aMutableArgs( _rArguments );
     aMutableArgs.remove( "Model" );
     aMutableArgs.remove( "ViewName" );
-    return aMutableArgs.getPropertyValues();
+    return aMutableArgs;
 }
 
 // -----------------------------------------------------------------------------
@@ -873,11 +887,9 @@ Reference< XStorage > ODatabaseModelImpl::getOrCreateRootStorage()
         if ( xStorageFactory.is() )
         {
             Any aSource;
-            ::comphelper::NamedValueCollection aArgs( m_aArgs );
-
-            aSource = aArgs.get( "Stream" );
+            aSource = m_aMediaDescriptor.get( "Stream" );
             if ( !aSource.hasValue() )
-                aSource = aArgs.get( "InputStream" );
+                aSource = m_aMediaDescriptor.get( "InputStream" );
             if ( !aSource.hasValue() && m_sDocFileLocation.getLength() )
                 aSource <<= m_sDocFileLocation;
             // TODO: shouldn't we also check URL?
@@ -953,48 +965,12 @@ bool ODatabaseModelImpl::commitEmbeddedStorage( bool _bPreventRootCommits )
 }
 
 // -----------------------------------------------------------------------------
-namespace
-{
-    bool lcl_storageIsWritable_nothrow( const Reference< XStorage >& _rxStorage )
-    {
-        if ( !_rxStorage.is() )
-            return false;
-
-        sal_Int32 nMode = ElementModes::READ;
-        try
-        {
-            Reference< XPropertySet > xStorageProps( _rxStorage, UNO_QUERY_THROW );
-            xStorageProps->getPropertyValue(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenMode" ) ) ) >>= nMode;
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-        return ( nMode & ElementModes::WRITE ) != 0;
-    }
-}
-
-// -----------------------------------------------------------------------------
-bool ODatabaseModelImpl::commitStorageIfWriteable( const Reference< XStorage >& _rxStorage ) SAL_THROW(( IOException, WrappedTargetException, RuntimeException ))
-{
-    bool bSuccess = false;
-    Reference<XTransactedObject> xTrans( _rxStorage, UNO_QUERY );
-    if ( xTrans.is() )
-    {
-        if ( lcl_storageIsWritable_nothrow( _rxStorage ) )
-            xTrans->commit();
-        bSuccess = true;
-    }
-    return bSuccess;
-}
-// -----------------------------------------------------------------------------
 bool ODatabaseModelImpl::commitStorageIfWriteable_ignoreErrors( const Reference< XStorage >& _rxStorage ) SAL_THROW(())
 {
     bool bSuccess = false;
     try
     {
-        bSuccess = commitStorageIfWriteable( _rxStorage );
+        bSuccess = tools::stor::commitStorageIfWriteable( _rxStorage );
     }
     catch( const Exception& )
     {
@@ -1069,7 +1045,7 @@ Reference< XModel > ODatabaseModelImpl::createNewModel_deliverOwnership( bool _b
             // then nobody would call the doc's attachResource. So, we do it here, to ensure it's in a proper
             // state, fires all events, and so on.
             // #i105505# / 2009-10-02 / frank.schoenheit@sun.com
-            xModel->attachResource( xModel->getURL(), m_aArgs );
+            xModel->attachResource( xModel->getURL(), m_aMediaDescriptor.getPropertyValues() );
         }
 
         if ( _bInitialize )
@@ -1230,9 +1206,8 @@ bool ODatabaseModelImpl::adjustMacroMode_AutoReject()
 // -----------------------------------------------------------------------------
 bool ODatabaseModelImpl::checkMacrosOnLoading()
 {
-    ::comphelper::NamedValueCollection aArgs( m_aArgs );
     Reference< XInteractionHandler > xInteraction;
-    xInteraction = aArgs.getOrDefault( "InteractionHandler", xInteraction );
+    xInteraction = m_aMediaDescriptor.getOrDefault( "InteractionHandler", xInteraction );
     return m_aMacroMode.checkMacrosOnLoading( xInteraction );
 }
 
@@ -1358,38 +1333,41 @@ Reference< XStorage > ODatabaseModelImpl::impl_switchToStorage_throw( const Refe
     lcl_rebaseScriptStorage_throw( m_xBasicLibraries, m_xDocumentStorage.getTyped() );
     lcl_rebaseScriptStorage_throw( m_xDialogLibraries, m_xDocumentStorage.getTyped() );
 
-    m_bReadOnly = !lcl_storageIsWritable_nothrow( m_xDocumentStorage.getTyped() );
+    m_bReadOnly = !tools::stor::storageIsWritable_nothrow( m_xDocumentStorage.getTyped() );
     // TODO: our data source, if it exists, must broadcast the change of its ReadOnly property
 
     return m_xDocumentStorage.getTyped();
 }
 
 // -----------------------------------------------------------------------------
-void ODatabaseModelImpl::switchToURL( const ::rtl::OUString& _rDocumentLocation, const ::rtl::OUString& _rDocumentURL )
+void ODatabaseModelImpl::impl_switchToLogicalURL( const ::rtl::OUString& i_rDocumentURL )
 {
-    // register at the database context, or change registration
-    const bool bURLChanged = ( _rDocumentURL != m_sDocumentURL );
+    if ( i_rDocumentURL == m_sDocumentURL )
+        return;
+
     const ::rtl::OUString sOldURL( m_sDocumentURL );
-    if ( bURLChanged )
+    // update our name, if necessary
+    if  (   ( m_sName == m_sDocumentURL )   // our name is our old URL
+        ||  ( !m_sName.getLength() )        // we do not have a name, yet (i.e. are not registered at the database context)
+        )
     {
-        if  (   ( m_sName == m_sDocumentURL )   // our name is our old URL
-            ||  ( !m_sName.getLength() )        // we do not have a name, yet (i.e. are not registered at the database context)
-            )
+        INetURLObject aURL( i_rDocumentURL );
+        if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
         {
-            INetURLObject aURL( _rDocumentURL );
-            if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
-            {
-                m_sName = _rDocumentURL;
-                // TODO: our data source must broadcast the change of the Name property
-            }
+            m_sName = i_rDocumentURL;
+            // TODO: our data source must broadcast the change of the Name property
         }
     }
 
-    // remember both
-    m_sDocFileLocation = _rDocumentLocation.getLength() ? _rDocumentLocation : _rDocumentURL;
-    m_sDocumentURL = _rDocumentURL;
+    // remember URL
+    m_sDocumentURL = i_rDocumentURL;
 
-    if ( bURLChanged && m_pDBContext )
+    // update our location, if necessary
+    if  ( m_sDocFileLocation.getLength() == 0 )
+        m_sDocFileLocation = m_sDocumentURL;
+
+    // register at the database context, or change registration
+    if ( m_pDBContext )
     {
         if ( sOldURL.getLength() )
             m_pDBContext->databaseDocumentURLChange( sOldURL, m_sDocumentURL );
@@ -1410,8 +1388,7 @@ sal_Int16 ODatabaseModelImpl::getCurrentMacroExecMode() const
     sal_Int16 nCurrentMode = MacroExecMode::NEVER_EXECUTE;
     try
     {
-        ::comphelper::NamedValueCollection aArgs( m_aArgs );
-        nCurrentMode = aArgs.getOrDefault( "MacroExecutionMode", nCurrentMode );
+        nCurrentMode = m_aMediaDescriptor.getOrDefault( "MacroExecutionMode", nCurrentMode );
     }
     catch( const Exception& )
     {
@@ -1423,28 +1400,20 @@ sal_Int16 ODatabaseModelImpl::getCurrentMacroExecMode() const
 // -----------------------------------------------------------------------------
 sal_Bool ODatabaseModelImpl::setCurrentMacroExecMode( sal_uInt16 nMacroMode )
 {
-    try
-    {
-        ::comphelper::NamedValueCollection aArgs( m_aArgs );
-        aArgs.put( "MacroExecutionMode", nMacroMode );
-        aArgs >>= m_aArgs;
-        return sal_True;
-    }
-    catch( const Exception& )
-    {
-        DBG_UNHANDLED_EXCEPTION();
-    }
-
-    return sal_False;
+    m_aMediaDescriptor.put( "MacroExecutionMode", nMacroMode );
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------------
 ::rtl::OUString ODatabaseModelImpl::getDocumentLocation() const
 {
-    // don't return getURL() (or m_sDocumentURL, which is the same). In case we were recovered
-    // after a previous crash of OOo, m_sDocFileLocation points to the file which were loaded from,
-    // and this is the one we need for security checks.
-    return getDocFileLocation();
+    return getURL();
+    // formerly, we returned getDocFileLocation here, which is the location of the file from which we
+    // recovered the "real" document.
+    // However, during CWS autorecovery evolving, we clarified (with MAV/MT) the role of XModel::getURL and
+    // XStorable::getLocation. In this course, we agreed that for a macro security check, the *document URL*
+    // (not the recovery file URL) is to be used: The recovery file lies in the backup folder, and by definition,
+    // this folder is considered to be secure. So, the document URL needs to be used to decide about the security.
 }
 
 // -----------------------------------------------------------------------------

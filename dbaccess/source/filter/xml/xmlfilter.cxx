@@ -117,6 +117,7 @@
 #endif
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
@@ -133,6 +134,7 @@
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/uno3.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <osl/thread.hxx>
 #include <connectivity/CommonTools.hxx>
 #include <connectivity/DriversConfig.hxx>
@@ -514,72 +516,64 @@ sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         SfxMediumRef pMedium = new SfxMedium(
                 sFileName, ( STREAM_READ | STREAM_NOCREATE ), FALSE, 0 );
         uno::Reference< embed::XStorage > xStorage;
-        if( pMedium )
+        try
         {
-            try
-            {
-                xStorage = pMedium->GetStorage( sal_False );
-                //  nError = pMedium->GetError();
-            }
-            catch(const Exception&)
-            {
-            }
+            xStorage.set( pMedium->GetStorage( sal_False ), UNO_QUERY_THROW );
+        }
+        catch( const Exception& )
+        {
+            Any aError = ::cppu::getCaughtException();
+            if  ( aError.isExtractableTo( ::cppu::UnoType< RuntimeException >::get() ) )
+                throw;
+            throw lang::WrappedTargetRuntimeException( ::rtl::OUString(), *this, aError );
         }
 
-        OSL_ENSURE(xStorage.is(),"No Storage for read!");
-        if ( xStorage.is() )
+        uno::Reference<sdb::XOfficeDatabaseDocument> xOfficeDoc(GetModel(),UNO_QUERY_THROW);
+        m_xDataSource.set(xOfficeDoc->getDataSource(),UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertyChangeListener> xListener = new DatasourceURLListener(getServiceFactory());
+        m_xDataSource->addPropertyChangeListener(PROPERTY_URL,xListener);
+        uno::Reference< XNumberFormatsSupplier > xNum(m_xDataSource->getPropertyValue(PROPERTY_NUMBERFORMATSSUPPLIER),UNO_QUERY);
+        SetNumberFormatsSupplier(xNum);
+
+        uno::Reference<XComponent> xModel(GetModel(),UNO_QUERY);
+        sal_Int32 nRet = ReadThroughComponent( xStorage
+                                    ,xModel
+                                    ,"settings.xml"
+                                    ,"Settings.xml"
+                                    ,getServiceFactory()
+                                    ,this
+                                    );
+
+        if ( nRet == 0 )
+            nRet = ReadThroughComponent( xStorage
+                                    ,xModel
+                                    ,"content.xml"
+                                    ,"Content.xml"
+                                    ,getServiceFactory()
+                                    ,this
+                                    );
+
+        bRet = nRet == 0;
+
+        if ( bRet )
         {
-            uno::Reference<sdb::XOfficeDatabaseDocument> xOfficeDoc(GetModel(),UNO_QUERY_THROW);
-            m_xDataSource.set(xOfficeDoc->getDataSource(),UNO_QUERY_THROW);
-            uno::Reference<beans::XPropertyChangeListener> xListener = new DatasourceURLListener(getServiceFactory());
-            m_xDataSource->addPropertyChangeListener(PROPERTY_URL,xListener);
-            uno::Reference< XNumberFormatsSupplier > xNum(m_xDataSource->getPropertyValue(PROPERTY_NUMBERFORMATSSUPPLIER),UNO_QUERY);
-            SetNumberFormatsSupplier(xNum);
-
-            uno::Reference<XComponent> xModel(GetModel(),UNO_QUERY);
-            sal_Int32 nRet = ReadThroughComponent( xStorage
-                                        ,xModel
-                                        ,"settings.xml"
-                                        ,"Settings.xml"
-                                        ,getServiceFactory()
-                                        ,this
-                                        );
-
-            if ( nRet == 0 )
-                nRet = ReadThroughComponent( xStorage
-                                        ,xModel
-                                        ,"content.xml"
-                                        ,"Content.xml"
-                                        ,getServiceFactory()
-                                        ,this
-                                        );
-
-            bRet = nRet == 0;
-
-            if ( bRet )
+            uno::Reference< XModifiable > xModi(GetModel(),UNO_QUERY);
+            if ( xModi.is() )
+                xModi->setModified(sal_False);
+        }
+        else
+        {
+            switch( nRet )
             {
-                uno::Reference< XModifiable > xModi(GetModel(),UNO_QUERY);
-                if ( xModi.is() )
-                    xModi->setModified(sal_False);
-            }
-            else
-            {
-                switch( nRet )
+                case ERRCODE_IO_BROKENPACKAGE:
+                    // TODO/LATER: no way to transport the error outside from the filter!
+                    break;
+                default:
                 {
-                    case ERRCODE_IO_BROKENPACKAGE:
-                        if( xStorage.is() )
-                        {
-                            // TODO/LATER: no way to transport the error outside from the filter!
-                            break;
-                        }
-                        // fall through intented
-                    default:
-                        {
-                            // TODO/LATER: this is completely wrong! Filter code should never call ErrorHandler directly! But for now this is the only way!
-                            ErrorHandler::HandleError( nRet );
-                            if( nRet & ERRCODE_WARNING_MASK )
-                                bRet = sal_True;
-                        }
+                    // TODO/LATER: this is completely wrong! Filter code should never call ErrorHandler directly! But for now this is the only way!
+                    ErrorHandler::HandleError( nRet );
+                    if( nRet & ERRCODE_WARNING_MASK )
+                        bRet = sal_True;
                 }
             }
         }

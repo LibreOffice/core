@@ -213,7 +213,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
             try
             {
                 m_defaultHandler = (XInteractionHandler) UnoRuntime.queryInterface(XInteractionHandler.class,
-                        _factory.createInstance("com.sun.star.sdb.InteractionHandler"));
+                        _factory.createInstance("com.sun.star.task.InteractionHandler"));
             }
             catch (Exception ex)
             {

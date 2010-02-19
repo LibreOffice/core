@@ -81,6 +81,7 @@
 
 #include <comphelper/basicio.hxx>
 #include <comphelper/extract.hxx>
+#include <comphelper/property.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/streamsection.hxx>
 #include <comphelper/types.hxx>
@@ -374,6 +375,50 @@ Reference< XPropertySetInfo > SAL_CALL OQueryController::getPropertySetInfo() th
 }
 
 //-------------------------------------------------------------------------
+sal_Bool SAL_CALL OQueryController::convertFastPropertyValue( Any& o_rConvertedValue, Any& o_rOldValue, sal_Int32 i_nHandle, const Any& i_rValue ) throw (IllegalArgumentException)
+{
+    return OPropertyContainer::convertFastPropertyValue( o_rConvertedValue, o_rOldValue, i_nHandle, i_rValue );
+}
+
+//-------------------------------------------------------------------------
+void SAL_CALL OQueryController::setFastPropertyValue_NoBroadcast( sal_Int32 i_nHandle, const Any& i_rValue ) throw ( Exception )
+{
+    OPropertyContainer::setFastPropertyValue_NoBroadcast( i_nHandle, i_rValue );
+}
+
+//-------------------------------------------------------------------------
+void SAL_CALL OQueryController::getFastPropertyValue( Any& o_rValue, sal_Int32 i_nHandle ) const
+{
+    switch ( i_nHandle )
+    {
+    case PROPERTY_ID_CURRENT_QUERY_DESIGN:
+    {
+        ::comphelper::NamedValueCollection aCurrentDesign;
+        aCurrentDesign.put( "GraphicalDesign", isGraphicalDesign() );
+        aCurrentDesign.put( (::rtl::OUString)PROPERTY_ESCAPE_PROCESSING, m_bEscapeProcessing );
+
+        if ( isGraphicalDesign() )
+        {
+            getContainer()->SaveUIConfig();
+            saveViewSettings( aCurrentDesign, true );
+            aCurrentDesign.put( "Statement", m_sStatement );
+        }
+        else
+        {
+            aCurrentDesign.put( "Statement", getContainer()->getStatement() );
+        }
+
+        o_rValue <<= aCurrentDesign.getPropertyValues();
+    }
+    break;
+
+    default:
+        OPropertyContainer::getFastPropertyValue( o_rValue, i_nHandle );
+        break;
+    }
+}
+
+//-------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper& OQueryController::getInfoHelper()
 {
     return *const_cast< OQueryController* >( this )->getArrayHelper();
@@ -383,7 +428,24 @@ Reference< XPropertySetInfo > SAL_CALL OQueryController::getPropertySetInfo() th
 ::cppu::IPropertyArrayHelper* OQueryController::createArrayHelper( ) const
 {
     Sequence< Property > aProps;
-    describeProperties(aProps);
+    describeProperties( aProps );
+
+    // one additional property:
+    const sal_Int32 nLength = aProps.getLength();
+    aProps.realloc( nLength + 1 );
+    aProps[ nLength ] = Property(
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CurrentQueryDesign" ) ),
+        PROPERTY_ID_CURRENT_QUERY_DESIGN,
+        ::cppu::UnoType< Sequence< PropertyValue > >::get(),
+        PropertyAttribute::READONLY
+    );
+
+    ::std::sort(
+        aProps.getArray(),
+        aProps.getArray() + aProps.getLength(),
+        ::comphelper::PropertyCompareByName()
+    );
+
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
 
@@ -448,7 +510,7 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId) const
             aReturn.bEnabled = !editingCommand() && !editingView() && (!m_bGraphicalDesign || !(m_vTableFieldDesc.empty() || m_vTableData.empty()));
             break;
         case ID_BROWSER_SAVEDOC:
-            aReturn.bEnabled = isModified() && (!m_bGraphicalDesign || !(m_vTableFieldDesc.empty() || m_vTableData.empty()));
+            aReturn.bEnabled = impl_isModified() && (!m_bGraphicalDesign || !(m_vTableFieldDesc.empty() || m_vTableData.empty()));
             break;
         case SID_PRINTDOCDIRECT:
             break;
@@ -797,6 +859,9 @@ void OQueryController::impl_initialize()
     ::rtl::OUString sCommand;
     m_nCommandType = CommandType::QUERY;
 
+    // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같�
+    // � reading parameters
+    // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같�
     // legacy parameters first (later overwritten by regular parameters)
     ::rtl::OUString sIndependentSQLCommand;
     if ( rArguments.get_ensureType( "IndependentSQLCommand", sIndependentSQLCommand ) )
@@ -866,6 +931,37 @@ void OQueryController::impl_initialize()
             m_bGraphicalDesign = false;
     }
 
+    // .................................................................................................................
+    // . initial design
+    bool bForceInitialDesign = false;
+    Sequence< PropertyValue > aCurrentQueryDesignProps;
+    aCurrentQueryDesignProps = rArguments.getOrDefault( "CurrentQueryDesign", aCurrentQueryDesignProps );
+
+    if ( aCurrentQueryDesignProps.getLength() )
+    {
+        ::comphelper::NamedValueCollection aCurrentQueryDesign( aCurrentQueryDesignProps );
+        if ( aCurrentQueryDesign.has( (::rtl::OUString)PROPERTY_GRAPHICAL_DESIGN ) )
+        {
+            aCurrentQueryDesign.get_ensureType( (::rtl::OUString)PROPERTY_GRAPHICAL_DESIGN, m_bGraphicalDesign );
+        }
+        if ( aCurrentQueryDesign.has( (::rtl::OUString)PROPERTY_ESCAPE_PROCESSING ) )
+        {
+            aCurrentQueryDesign.get_ensureType( (::rtl::OUString)PROPERTY_ESCAPE_PROCESSING, m_bEscapeProcessing );
+        }
+        if ( aCurrentQueryDesign.has( "Statement" ) )
+        {
+            ::rtl::OUString sStatement;
+            aCurrentQueryDesign.get_ensureType( "Statement", sStatement );
+            aCurrentQueryDesign.remove( "Statement" );
+            setStatement_fireEvent( sStatement );
+        }
+
+        loadViewSettings( aCurrentQueryDesign );
+
+        bForceInitialDesign = true;
+    }
+
+    // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같�
     if ( !ensureConnected( sal_False ) )
     {   // we have no connection so what else should we do
         m_bGraphicalDesign = sal_False;
@@ -920,19 +1016,29 @@ void OQueryController::impl_initialize()
     try
     {
         getContainer()->initialize();
-        impl_reset();
+        impl_reset( bForceInitialDesign );
 
-        bool bAttemptedGraphicalDesign = m_bGraphicalDesign;
         SQLExceptionInfo aError;
-        impl_setViewMode( &aError );
+        const bool bAttemptedGraphicalDesign = m_bGraphicalDesign;
+
+        if ( bForceInitialDesign )
+        {
+            getContainer()->forceInitialView();
+        }
+        else
+        {
+            impl_setViewMode( &aError );
+        }
+
         if ( aError.isValid() && bAttemptedGraphicalDesign && !m_bGraphicalDesign )
         {
+            // we tried initializing the graphical view, this failed, and we were automatically switched to SQL
+            // view => tell this to the user
             if ( !editingView() )
             {
                 impl_showAutoSQLViewError( aError.get() );
             }
         }
-
 
         getUndoMgr()->Clear();
 
@@ -1014,7 +1120,7 @@ sal_Bool OQueryController::Construct(Window* pParent)
 {
     // TODO: we have to check if we should create the text- or the design- view
 
-    m_pView = new OQueryContainerWindow( pParent, *this, getORB() );
+    setView( * new OQueryContainerWindow( pParent, *this, getORB() ) );
 
     return OJoinController::Construct(pParent);
 }
@@ -1046,9 +1152,9 @@ void OQueryController::describeSupportedFeatures()
 #endif
 }
 // -----------------------------------------------------------------------------
-void OQueryController::setModified(sal_Bool _bModified)
+void OQueryController::impl_onModifyChanged()
 {
-    OJoinController::setModified(_bModified);
+    OJoinController::impl_onModifyChanged();
     InvalidateFeature(SID_BROWSER_CLEAR_QUERY);
     InvalidateFeature(ID_BROWSER_SAVEASDOC);
     InvalidateFeature(ID_BROWSER_QUERY_EXECUTE);
@@ -1096,69 +1202,41 @@ void OQueryController::reconnect(sal_Bool _bUI)
         InvalidateAll();
     }
 }
+
 // -----------------------------------------------------------------------------
-void OQueryController::saveViewSettings(Sequence<PropertyValue>& _rViewProps)
+void OQueryController::saveViewSettings( ::comphelper::NamedValueCollection& o_rViewSettings, const bool i_includingCriteria ) const
 {
-    OTableFields::const_iterator aFieldIter = m_vTableFieldDesc.begin();
-    OTableFields::const_iterator aFieldEnd = m_vTableFieldDesc.end();
-    sal_Int32 nCount = 0;
-    for(;aFieldIter != aFieldEnd;++aFieldIter)
+    saveTableWindows( o_rViewSettings );
+
+    OTableFields::const_iterator field = m_vTableFieldDesc.begin();
+    OTableFields::const_iterator fieldEnd = m_vTableFieldDesc.end();
+
+    ::comphelper::NamedValueCollection aAllFieldsData;
+    ::comphelper::NamedValueCollection aFieldData;
+    for ( sal_Int32 i = 1; field != fieldEnd; ++field, ++i )
     {
-        if(!(*aFieldIter)->IsEmpty())
-            ++nCount;
-    }
-
-    sal_Int32 nLen = _rViewProps.getLength();
-
-    _rViewProps.realloc( nLen + 2 + (nCount != 0 ? 1 : 0) );
-    PropertyValue *pIter = _rViewProps.getArray() + nLen;
-
-    if ( nCount != 0 )
-    {
-        pIter->Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Fields"));
-
-        Sequence<PropertyValue> aFields(nCount);
-        PropertyValue *pFieldsIter = aFields.getArray();
-        // the fielddata
-        aFieldIter = m_vTableFieldDesc.begin();
-        for(sal_Int32 i = 1;aFieldIter !=aFieldEnd;++aFieldIter,++i)
+        if ( !(*field)->IsEmpty() )
         {
-            if ( !(*aFieldIter)->IsEmpty() )
-            {
-                pFieldsIter->Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Field")) + ::rtl::OUString::valueOf(i);
-                (*aFieldIter)->Save(*pFieldsIter++);
-            }
+            aFieldData.clear();
+            (*field)->Save( aFieldData, i_includingCriteria );
+
+            const ::rtl::OUString sFieldSettingName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Field" ) ) + ::rtl::OUString::valueOf( i );
+            aAllFieldsData.put( sFieldSettingName, aFieldData.getPropertyValues() );
         }
-        pIter->Value <<= aFields;
-        ++pIter;
     }
 
-    pIter->Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SplitterPosition"));
-    pIter->Value <<= m_nSplitPos;
-    ++pIter;
-    pIter->Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VisibleRows"));
-    pIter->Value <<= m_nVisibleRows;
+    o_rViewSettings.put( "Fields", aAllFieldsData.getPropertyValues() );
+    o_rViewSettings.put( "SplitterPosition", m_nSplitPos );
+    o_rViewSettings.put( "VisibleRows", m_nVisibleRows );
 }
 // -----------------------------------------------------------------------------
-void OQueryController::loadViewSettings(const Sequence<PropertyValue>& _rViewProps)
+void OQueryController::loadViewSettings( const ::comphelper::NamedValueCollection& o_rViewSettings )
 {
-    const PropertyValue *pIter = _rViewProps.getConstArray();
-    const PropertyValue *pEnd = pIter + _rViewProps.getLength();
-    for (; pIter != pEnd; ++pIter)
-    {
-        if ( pIter->Name.equalsAscii("SplitterPosition") )
-        {
-            pIter->Value >>= m_nSplitPos;
-        }
-        else if ( pIter->Name.equalsAscii("VisibleRows") )
-        {
-            pIter->Value >>= m_nVisibleRows;
-        }
-        else if ( pIter->Name.equalsAscii("Fields") )
-        {
-            pIter->Value >>= m_aFieldInformation;
-        }
-    }
+    loadTableWindows( o_rViewSettings );
+
+    m_nSplitPos = o_rViewSettings.getOrDefault( "SplitterPosition", m_nSplitPos );
+    m_nVisibleRows = o_rViewSettings.getOrDefault( "VisibleRows", m_nVisibleRows );
+    m_aFieldInformation = o_rViewSettings.getOrDefault( "Fields", m_aFieldInformation );
 }
 // -----------------------------------------------------------------------------
 sal_Int32 OQueryController::getColWidth(sal_uInt16 _nColPos)  const
@@ -1166,7 +1244,7 @@ sal_Int32 OQueryController::getColWidth(sal_uInt16 _nColPos)  const
     if ( _nColPos < m_aFieldInformation.getLength() )
     {
         ::std::auto_ptr<OTableFieldDesc> pField( new OTableFieldDesc());
-        pField->Load(m_aFieldInformation[_nColPos]);
+        pField->Load( m_aFieldInformation[ _nColPos ], false );
         return pField->GetColWidth();
     }
     return 0;
@@ -1438,12 +1516,7 @@ bool OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
                 xQuery->setPropertyValue( PROPERTY_UPDATE_TABLENAME, makeAny( m_sUpdateTableName ) );
                 xQuery->setPropertyValue( PROPERTY_ESCAPE_PROCESSING,::cppu::bool2any( m_bEscapeProcessing ) );
 
-                // layout information
-                getContainer()->SaveUIConfig();
-                Sequence< PropertyValue > aLayout;
-                saveTableWindows( aLayout );
-                saveViewSettings( aLayout );
-                xQuery->setPropertyValue( PROPERTY_LAYOUTINFORMATION, makeAny( aLayout ) );
+                xQuery->setPropertyValue( PROPERTY_LAYOUTINFORMATION, getViewData() );
             }
         }
 
@@ -1591,13 +1664,13 @@ short OQueryController::saveModified()
     return nRet;
 }
 // -----------------------------------------------------------------------------
-void OQueryController::impl_reset()
+void OQueryController::impl_reset( const bool i_bForceCurrentControllerSettings )
 {
     bool bValid = false;
 
     Sequence< PropertyValue > aLayoutInformation;
     // get command from the query if a query name was supplied
-    if ( !editingCommand() )
+    if ( !i_bForceCurrentControllerSettings && !editingCommand() )
     {
         if ( m_sName.getLength() )
         {
@@ -1647,15 +1720,14 @@ void OQueryController::impl_reset()
         {
             try
             {
-                // load the layoutInformation
-                loadTableWindows(aLayoutInformation);
-                loadViewSettings(aLayoutInformation);
+                loadViewSettings( aLayoutInformation );
             }
             catch( const Exception& )
             {
                 DBG_UNHANDLED_EXCEPTION();
             }
         }
+
         if ( m_sStatement.getLength() )
         {
             setQueryComposer();
@@ -1679,7 +1751,7 @@ void OQueryController::impl_reset()
                     m_pSqlIterator->traverseAll();
                     if ( m_pSqlIterator->hasErrors() )
                     {
-                        if ( !editingView() )
+                        if ( !i_bForceCurrentControllerSettings && !editingView() )
                         {
                             impl_showAutoSQLViewError( makeAny( m_pSqlIterator->getErrors() ) );
                         }
@@ -1688,7 +1760,7 @@ void OQueryController::impl_reset()
                 }
                 else
                 {
-                    if ( !editingView() )
+                    if ( !i_bForceCurrentControllerSettings && !editingView() )
                     {
                         String aTitle(ModuleRes(STR_SVT_SQL_SYNTAX_ERROR));
                         OSQLMessageBox aDlg(getView(),aTitle,aErrorMsg);
@@ -1776,6 +1848,23 @@ bool OQueryController::allowQueries() const
 }
 
 // -----------------------------------------------------------------------------
+Any SAL_CALL OQueryController::getViewData() throw( RuntimeException )
+{
+    ::osl::MutexGuard aGuard( getMutex() );
+
+    getContainer()->SaveUIConfig();
+
+    ::comphelper::NamedValueCollection aViewSettings;
+    saveViewSettings( aViewSettings, false );
+
+    return makeAny( aViewSettings.getPropertyValues() );
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OQueryController::restoreViewData(const Any& /*Data*/) throw( RuntimeException )
+{
+    // TODO
+}
+
 // -----------------------------------------------------------------------------
 } // namespace dbaui
 // -----------------------------------------------------------------------------

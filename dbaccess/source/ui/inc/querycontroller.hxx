@@ -56,6 +56,11 @@
 #include <connectivity/sqlparse.hxx>
 #include <svl/undo.hxx>
 
+namespace comphelper
+{
+    class NamedValueCollection;
+}
+
 class VCLXWindow;
 namespace dbaui
 {
@@ -125,8 +130,8 @@ namespace dbaui
         void executeQuery();
         bool doSaveAsDoc(sal_Bool _bSaveAs);
 
-        void saveViewSettings(::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _rViewProps);
-        void loadViewSettings(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _rViewProps);
+        void saveViewSettings( ::comphelper::NamedValueCollection& o_rViewSettings, const bool i_includingCriteria ) const;
+        void loadViewSettings( const ::comphelper::NamedValueCollection& o_rViewSettings );
         ::rtl::OUString translateStatement( bool _bFireStatementChange = true );
 
         ::rtl::OUString getDefaultName() const;
@@ -142,7 +147,7 @@ namespace dbaui
         virtual void            reconnect( sal_Bool _bUI );
         virtual ::rtl::OUString getPrivateTitle( ) const;
 
-        OQueryContainerWindow*  getContainer() const { return static_cast< OQueryContainerWindow* >( getView() ); }
+        OQueryContainerWindow* getContainer() const { return static_cast< OQueryContainerWindow* >( getView() ); }
 
     public:
         OQueryController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
@@ -153,7 +158,7 @@ namespace dbaui
 
         void            clearFields();
 
-        virtual void    setModified(sal_Bool _bModified=sal_True);
+        virtual void impl_onModifyChanged();
 
         // should the statement be parsed by our own sql parser
         sal_Bool        isEsacpeProcessing()    const { return m_bEscapeProcessing; }
@@ -169,6 +174,9 @@ namespace dbaui
         void            setVisibleRows(sal_Int32 _nVisibleRows) { m_nVisibleRows = _nVisibleRows;}
 
         sal_Int32       getColWidth(sal_uInt16 _nColPos) const;
+
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&
+                        getFieldInformation() const { return m_aFieldInformation; }
 
         ::connectivity::OSQLParser&             getParser()         { return m_aSqlParser;  }
         ::connectivity::OSQLParseTreeIterator&  getParseIterator()  { return *m_pSqlIterator; }
@@ -195,10 +203,30 @@ namespace dbaui
         static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                 SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
+        // XController
+        virtual ::com::sun::star::uno::Any SAL_CALL getViewData(void) throw( ::com::sun::star::uno::RuntimeException );
+        virtual void SAL_CALL restoreViewData(const ::com::sun::star::uno::Any& Data) throw( ::com::sun::star::uno::RuntimeException );
+
     private:
         virtual void    onLoadedMenu(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager);
         // OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
+
+        // OPropertySetHelper
+        virtual sal_Bool SAL_CALL convertFastPropertyValue(
+                                    ::com::sun::star::uno::Any& rConvertedValue,
+                                    ::com::sun::star::uno::Any& rOldValue,
+                                    sal_Int32 nHandle,
+                                    const ::com::sun::star::uno::Any& rValue
+                                ) throw (::com::sun::star::lang::IllegalArgumentException);
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
+                                    sal_Int32 nHandle,
+                                    const ::com::sun::star::uno::Any& rValue
+                                ) throw (::com::sun::star::uno::Exception );
+        virtual void SAL_CALL getFastPropertyValue(
+                                    ::com::sun::star::uno::Any& rValue,
+                                    sal_Int32 nHandle
+                                ) const;
 
         virtual OJoinDesignView*  getJoinView();
         // ask the user if the design should be saved when it is modified
@@ -206,7 +234,7 @@ namespace dbaui
         virtual void reset();
         virtual void impl_initialize();
 
-        void    impl_reset();
+        void    impl_reset( const bool i_bIgnoreQuerySettings = false );
         /// tells the user that we needed to switch to SQL view automatically
         void    impl_showAutoSQLViewError( const ::com::sun::star::uno::Any& _rErrorDetails );
 
@@ -225,6 +253,9 @@ namespace dbaui
 
     private:
         DECL_LINK( OnExecuteAddTable, void* );
+
+    private:
+        using OQueryController_PBase::getFastPropertyValue;
     };
 }
 #endif // DBAUI_QUERYCONTROLLER_HXX

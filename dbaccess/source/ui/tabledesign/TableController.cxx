@@ -207,7 +207,7 @@ void OTableController::stopTableListening()
 void OTableController::disposing()
 {
     OTableController_BASE::disposing();
-    m_pView     = NULL;
+    clearView();
 
     m_vRowList.clear();
 }
@@ -227,7 +227,7 @@ FeatureState OTableController::GetState(sal_uInt16 _nId) const
             aReturn.bEnabled = m_bNew || isEditable();// the editable flag is set through this one -> || isAddAllowed() || isDropAllowed() || isAlterAllowed();
             break;
         case ID_BROWSER_SAVEDOC:
-            aReturn.bEnabled = isModified();
+            aReturn.bEnabled = impl_isModified();
             if ( aReturn.bEnabled )
             {
                 ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aIter = ::std::find_if(m_vRowList.begin(),m_vRowList.end(),
@@ -256,7 +256,7 @@ FeatureState OTableController::GetState(sal_uInt16 _nId) const
             break;
         case SID_INDEXDESIGN:
             aReturn.bEnabled =
-                (   (   ((!m_bNew && isModified()) || isModified())
+                (   (   ((!m_bNew && impl_isModified()) || impl_isModified())
                     ||  Reference< XIndexesSupplier >(m_xTable, UNO_QUERY).is()
                     )
                 &&  isConnected()
@@ -579,7 +579,7 @@ void OTableController::impl_initialize()
 // -----------------------------------------------------------------------------
 sal_Bool OTableController::Construct(Window* pParent)
 {
-    m_pView = new OTableDesignView( pParent, getORB(), *this );
+    setView( * new OTableDesignView( pParent, getORB(), *this ) );
     OTableController_BASE::Construct(pParent);
 //  m_pView->Construct();
 //  m_pView->Show();
@@ -671,10 +671,10 @@ SfxUndoManager* OTableController::getUndoMgr()
     return &m_aUndoManager;
 }
 // -----------------------------------------------------------------------------
-void OTableController::setModified(sal_Bool _bModified)
+void OTableController::impl_onModifyChanged()
 {
-    OSingleDocumentController::setModified(_bModified);
-    InvalidateFeature(SID_INDEXDESIGN);
+    OSingleDocumentController::impl_onModifyChanged();
+    InvalidateFeature( SID_INDEXDESIGN );
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OTableController::disposing( const EventObject& _rSource ) throw(RuntimeException)

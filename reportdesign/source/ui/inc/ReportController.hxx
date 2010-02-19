@@ -63,6 +63,7 @@
 #include <comphelper/propertystatecontainer.hxx>
 
 #include "RptDef.hxx"
+#include "DesignView.hxx"
 #include <functional>
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/util/XModeSelector.hpp>
@@ -73,7 +74,6 @@ class TransferableClipboardListener;
 class VclWindowEvent;
 namespace rptui
 {
-    class ODesignView;
     class OGroupsSortingDialog;
     class OPropertyMediator;
     class OReportModel;
@@ -101,13 +101,14 @@ namespace rptui
                                 m_aSelectionListeners;
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>
                                 m_aCollapsedSections;
-        ODesignView*            m_pMyOwnView;           // we want to avoid casts
         TransferableDataHelper  m_aSystemClipboard;     // content of the clipboard
         TransferableClipboardListener*
                                 m_pClipbordNotifier;    /// notifier for changes in the clipboard
         OGroupsSortingDialog*   m_pGroupsFloater;
 
         OXReportControllerObserver* m_pReportControllerObserver;
+
+        ODesignView*  getDesignView() const   { return static_cast< ODesignView* >( getView() ); }
 
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>          m_xReportDefinition;
         ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportEngine>              m_xReportEngine;
@@ -352,7 +353,7 @@ namespace rptui
         // SfxListener
         virtual void Notify(SfxBroadcaster & rBc, SfxHint const & rHint);
 
-        virtual void setModified(sal_Bool _bModified=sal_True);
+        virtual void impl_onModifyChanged();
 
         //  const ::connectivity::OSQLParseNode* getParseTree() const { return m_aSqlIterator.getParseTree();}
         // need for undo's and redo's

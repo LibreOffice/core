@@ -102,7 +102,7 @@ namespace rptui
         *
         * \return <TRUE/> if paste is allowed
         */
-        BOOL IsPasteAllowed();
+        BOOL IsPasteAllowed() const;
 
         /** paste a new control in this section
         */
@@ -119,7 +119,7 @@ namespace rptui
 
         /** returns <TRUE/> when a object is marked
         */
-        BOOL HasSelection();
+        BOOL HasSelection() const;
 
         Point           getThumbPos() const;
 

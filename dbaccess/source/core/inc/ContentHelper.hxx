@@ -110,10 +110,12 @@ namespace dbaccess
         sal_Bool        bAsTemplate;    // AsTemplate
         ::rtl::OUString sPersistentName;// persistent name of the document
 
-        // @@@ Add other properties supported by your content.
-
         ContentProperties()
-        : bIsDocument( sal_True ), bIsFolder( sal_False ), bAsTemplate( sal_False ) {}
+            :bIsDocument( sal_True )
+            ,bIsFolder( sal_False )
+            ,bAsTemplate( sal_False )
+        {
+        }
     };
 
     class OContentHelper_Impl

@@ -145,7 +145,7 @@ namespace rptui
         *
         * \return <TRUE/> if paste is allowed
         */
-        BOOL IsPasteAllowed();
+        BOOL IsPasteAllowed() const;
 
         /** paste a new control in this section
         */
@@ -171,7 +171,7 @@ namespace rptui
         void            SelectAll(const sal_uInt16 _nObjectType);
 
         /// checks if a selection exists
-        BOOL            HasSelection();
+        BOOL            HasSelection() const;
 
         void            UpdatePropertyBrowserDelayed(OSectionView& _rView);
 

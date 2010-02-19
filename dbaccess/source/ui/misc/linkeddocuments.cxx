@@ -67,8 +67,8 @@
 #ifndef _COM_SUN_STAR_UCB_XCOMMANDPROCESSOR_HPP_
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UCB_OPENCOMMANDARGUMENT2_HPP_
-#include <com/sun/star/ucb/OpenCommandArgument2.hpp>
+#ifndef _COM_SUN_STAR_UCB_OPENCOMMANDARGUMENT_HPP_
+#include <com/sun/star/ucb/OpenCommandArgument.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_OPENMODE_HPP_
 #include <com/sun/star/ucb/OpenMode.hpp>
@@ -155,6 +155,7 @@ namespace dbaui
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::ucb;
     using namespace ::com::sun::star::sdbc;
+    using namespace ::com::sun::star::sdb::application;
     using namespace ::com::sun::star::task;
     using namespace ::svt;
 
@@ -192,17 +193,13 @@ namespace dbaui
     //==================================================================
     DBG_NAME(OLinkedDocumentsAccess)
     //------------------------------------------------------------------
-    OLinkedDocumentsAccess::OLinkedDocumentsAccess(Window* _pDialogParent
-                                                    , const Reference< XFrame >& _rxParentFrame
-                                                    , const Reference< XMultiServiceFactory >& _rxORB
-                                                    , const Reference< XNameAccess >& _rxContainer
-                                                    , const Reference< XConnection>& _xConnection
-                                                    , const ::rtl::OUString& _sDataSourceName
-                                                    )
+    OLinkedDocumentsAccess::OLinkedDocumentsAccess( Window* _pDialogParent, const Reference< XDatabaseDocumentUI >& i_rDocumentUI,
+        const Reference< XMultiServiceFactory >& _rxORB, const Reference< XNameAccess >& _rxContainer,
+        const Reference< XConnection>& _xConnection, const ::rtl::OUString& _sDataSourceName )
         :m_xORB(_rxORB)
         ,m_xDocumentContainer(_rxContainer)
         ,m_xConnection(_xConnection)
-        ,m_xParentFrame(_rxParentFrame)
+        ,m_xDocumentUI( i_rDocumentUI )
         ,m_pDialogParent(_pDialogParent)
         ,m_sDataSourceName(_sDataSourceName)
     {
@@ -271,112 +268,101 @@ namespace dbaui
         return xRet;
     }
     //------------------------------------------------------------------
-    Reference< XComponent> OLinkedDocumentsAccess::impl_newWithPilot( const char* _pWizardService,
-        Reference< XComponent >& _xDefinition, const sal_Int32 _nCommandType, const ::rtl::OUString& _rObjectName )
+    void OLinkedDocumentsAccess::impl_newWithPilot( const char* _pWizardService,
+        const sal_Int32 _nCommandType, const ::rtl::OUString& _rObjectName )
     {
-        Reference< XComponent> xRet;
         try
         {
-            ::svx::ODataAccessDescriptor aDesc;
-            aDesc.setDataSource(m_sDataSourceName);
+            ::comphelper::NamedValueCollection aArgs;
+            aArgs.put( "DataSourceName", m_sDataSourceName );
+
+            if ( m_xConnection.is() )
+                aArgs.put( "ActiveConnection", m_xConnection );
+
             if ( _rObjectName.getLength() && ( _nCommandType != -1 ) )
             {
-                aDesc[::svx::daCommandType] <<= _nCommandType;
-                aDesc[::svx::daCommand] <<= _rObjectName;
+                aArgs.put( "CommandType", _nCommandType );
+                aArgs.put( "Command", _rObjectName );
             }
-            if ( m_xConnection.is() )
-                aDesc[::svx::daConnection] <<= m_xConnection;
 
-            Sequence<Any> aSeq = aDesc.createAnySequence();
-            const sal_Int32 nLength = aSeq.getLength();
-            aSeq.realloc(nLength + 1 );
-            PropertyValue aVal;
-            aVal.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentFrame"));
-            aVal.Value <<= m_xParentFrame;
-            aSeq[nLength] <<= aVal;
+            aArgs.put( "DocumentUI", m_xDocumentUI );
 
-            Reference< XJobExecutor > xFormWizard;
+            Reference< XJobExecutor > xWizard;
             {
                 WaitObject aWaitCursor( m_pDialogParent );
-                xFormWizard.set(m_xORB->createInstanceWithArguments(::rtl::OUString::createFromAscii(_pWizardService),aSeq),UNO_QUERY);
+                xWizard.set( m_xORB->createInstanceWithArguments(
+                    ::rtl::OUString::createFromAscii( _pWizardService ),
+                    aArgs.getWrappedPropertyValues()
+                    ), UNO_QUERY_THROW );
             }
-            if ( xFormWizard.is() )
-            {
-                xFormWizard->trigger(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("start")));
-                Reference<XPropertySet> xProp(xFormWizard,UNO_QUERY);
-                if ( xProp.is() )
-                {
-                    Reference<XPropertySetInfo> xInfo = xProp->getPropertySetInfo();
-                    if ( xInfo->hasPropertyByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Document"))) )
-                    {
-                        _xDefinition.set(xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentDefinition"))),UNO_QUERY);
-                        xRet.set(xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Document"))),UNO_QUERY);
-                    }
-                }
-                xFormWizard->trigger(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("end")));
-                ::comphelper::disposeComponent(xFormWizard);
-            }
+
+            xWizard->trigger( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "start" ) ) );
+            ::comphelper::disposeComponent( xWizard );
         }
         catch(const Exception& e)
         {
-            (void) e;
-            OSL_ENSURE(sal_False, "OLinkedDocumentsAccess::newWithPilot: caught an exception while loading the object!");
+            DBG_UNHANDLED_EXCEPTION();
         }
-        return xRet;
     }
     //------------------------------------------------------------------
-    Reference< XComponent> OLinkedDocumentsAccess::newFormWithPilot(Reference< XComponent >& _xDefinition,const sal_Int32 _nCommandType,const ::rtl::OUString& _rObjectName)
+    void OLinkedDocumentsAccess::newFormWithPilot( const sal_Int32 _nCommandType,const ::rtl::OUString& _rObjectName )
     {
-        return impl_newWithPilot( "com.sun.star.wizards.form.CallFormWizard", _xDefinition, _nCommandType, _rObjectName );
+        impl_newWithPilot( "com.sun.star.wizards.form.CallFormWizard", _nCommandType, _rObjectName );
     }
 
     //------------------------------------------------------------------
-    Reference< XComponent> OLinkedDocumentsAccess::newReportWithPilot( Reference< XComponent >& _xDefinition, const sal_Int32 _nCommandType, const ::rtl::OUString& _rObjectName )
+    void OLinkedDocumentsAccess::newReportWithPilot( const sal_Int32 _nCommandType, const ::rtl::OUString& _rObjectName )
     {
-        return impl_newWithPilot( "com.sun.star.wizards.report.CallReportWizard", _xDefinition, _nCommandType, _rObjectName );
+        impl_newWithPilot( "com.sun.star.wizards.report.CallReportWizard", _nCommandType, _rObjectName );
     }
     //------------------------------------------------------------------
-    Reference< XComponent> OLinkedDocumentsAccess::newTableWithPilot()
+    void OLinkedDocumentsAccess::newTableWithPilot()
     {
-        Reference< XComponent > xDefinition;
-        return impl_newWithPilot( "com.sun.star.wizards.table.CallTableWizard", xDefinition, -1, ::rtl::OUString() );
+        impl_newWithPilot( "com.sun.star.wizards.table.CallTableWizard", -1, ::rtl::OUString() );
     }
     //------------------------------------------------------------------
-    Reference< XComponent> OLinkedDocumentsAccess::newQueryWithPilot()
+    void OLinkedDocumentsAccess::newQueryWithPilot()
     {
-        Reference< XComponent > xDefinition;
-        return impl_newWithPilot( "com.sun.star.wizards.query.CallQueryWizard", xDefinition, -1, ::rtl::OUString() );
+        impl_newWithPilot( "com.sun.star.wizards.query.CallQueryWizard", -1, ::rtl::OUString() );
     }
     //------------------------------------------------------------------
-    Reference< XComponent > OLinkedDocumentsAccess::newDocument( sal_Int32 _nNewFormId, Reference< XComponent >& _xDefinition, const sal_Int32 _nCommandType, const ::rtl::OUString& _sObjectName )
+    Reference< XComponent > OLinkedDocumentsAccess::newDocument( sal_Int32 i_nActionID,
+        const ::comphelper::NamedValueCollection& i_rCreationArgs, Reference< XComponent >& o_rDefinition )
     {
         OSL_ENSURE(m_xDocumentContainer.is(), "OLinkedDocumentsAccess::newDocument: invalid document container!");
-        // determine the URL to use for the new document
+        // determine the class ID to use for the new document
         Sequence<sal_Int8> aClassId;
-        switch (_nNewFormId)
+        if  (   !i_rCreationArgs.has( "ClassID" )
+            &&  !i_rCreationArgs.has( "MediaType" )
+            &&  !i_rCreationArgs.has( "DocumentServiceName" )
+            )
         {
-            case ID_FORM_NEW_TEXT:
-                aClassId = lcl_GetSequenceClassID(SO3_SW_CLASSID);
-                OSL_ENSURE(aClassId == comphelper::MimeConfigurationHelper::GetSequenceClassID(SO3_SW_CLASSID),"Not equal");
-                break;
+            switch ( i_nActionID )
+            {
+                case ID_FORM_NEW_TEXT:
+                    aClassId = lcl_GetSequenceClassID(SO3_SW_CLASSID);
+                    OSL_ENSURE(aClassId == comphelper::MimeConfigurationHelper::GetSequenceClassID(SO3_SW_CLASSID),"Not equal");
+                    break;
 
-            case ID_FORM_NEW_CALC:
-                aClassId = lcl_GetSequenceClassID(SO3_SC_CLASSID);
-                break;
+                case ID_FORM_NEW_CALC:
+                    aClassId = lcl_GetSequenceClassID(SO3_SC_CLASSID);
+                    break;
 
-            case ID_FORM_NEW_IMPRESS:
-                aClassId = lcl_GetSequenceClassID(SO3_SIMPRESS_CLASSID);
-                break;
-            case ID_REPORT_NEW_TEXT:
-                aClassId = comphelper::MimeConfigurationHelper::GetSequenceClassID(SO3_RPT_CLASSID_90);
-                break;
+                case ID_FORM_NEW_IMPRESS:
+                    aClassId = lcl_GetSequenceClassID(SO3_SIMPRESS_CLASSID);
+                    break;
 
-            case SID_DB_FORM_NEW_PILOT:
-            default:
-                OSL_ENSURE(sal_False, "OLinkedDocumentsAccess::newDocument: please use newFormWithPilot!");
-                return Reference< XComponent >();
+                case ID_REPORT_NEW_TEXT:
+                    aClassId = comphelper::MimeConfigurationHelper::GetSequenceClassID(SO3_RPT_CLASSID_90);
+                    break;
 
+                default:
+                    OSL_ENSURE( sal_False, "OLinkedDocumentsAccess::newDocument: please use newFormWithPilot!" );
+                    return Reference< XComponent >();
+
+            }
         }
+
         // load the document as template
         Reference< XComponent > xNewDocument;
         try
@@ -385,36 +371,37 @@ namespace dbaui
             Reference<XMultiServiceFactory> xORB(m_xDocumentContainer,UNO_QUERY);
             if ( xORB.is() )
             {
-                Sequence< Any > aArguments(2);
+                ::comphelper::NamedValueCollection aCreationArgs( i_rCreationArgs );
+                if ( aClassId.getLength() )
+                    aCreationArgs.put( "ClassID", aClassId );
+                aCreationArgs.put( (::rtl::OUString)PROPERTY_ACTIVE_CONNECTION, m_xConnection );
 
-                PropertyValue aValue;
-
-                aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ClassID"));
-                aValue.Value <<= aClassId;
-                aArguments[0] <<= aValue;
-
-                aValue.Name = PROPERTY_ACTIVE_CONNECTION;
-                aValue.Value <<= m_xConnection;
-                aArguments[1] <<= aValue;
-
-                Reference<XCommandProcessor> xContent(xORB->createInstanceWithArguments(SERVICE_SDB_DOCUMENTDEFINITION,aArguments),UNO_QUERY);
-                if ( xContent.is() )
+                // separate values which are real creation args from args relevant for opening the doc
+                ::comphelper::NamedValueCollection aCommandArgs;
+                if ( aCreationArgs.has( "Hidden" ) )
                 {
-                    _xDefinition.set(xContent,UNO_QUERY);
-                    Command aCommand;
-                    aCommand.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("openDesign"));
-                    OpenCommandArgument2 aOpenCommand;
-                    aOpenCommand.Mode = OpenMode::DOCUMENT;
-                    aCommand.Argument <<= aOpenCommand;
-                    WaitObject aWaitCursor( m_pDialogParent );
-                    xNewDocument.set(xContent->execute(aCommand,xContent->createCommandIdentifier(),Reference< XCommandEnvironment >()),UNO_QUERY);
-                    Reference<XPropertySet> xProp(xNewDocument,UNO_QUERY);
-                    if ( xProp.is() && _sObjectName.getLength() )
-                    {
-                        xProp->setPropertyValue(PROPERTY_COMMAND_TYPE,makeAny(_nCommandType));
-                        xProp->setPropertyValue(PROPERTY_COMMAND,makeAny(_sObjectName));
-                    }
+                    aCommandArgs.put( "Hidden", aCreationArgs.get( "Hidden" ) );
+                    aCreationArgs.remove( "Hidden" );
                 }
+
+                Reference< XCommandProcessor > xContent( xORB->createInstanceWithArguments(
+                        SERVICE_SDB_DOCUMENTDEFINITION,
+                        aCreationArgs.getWrappedPropertyValues()
+                    ),
+                    UNO_QUERY_THROW
+                );
+                o_rDefinition.set( xContent, UNO_QUERY );
+
+                // put the OpenMode into the OpenArgs
+                OpenCommandArgument aOpenModeArg;
+                aOpenModeArg.Mode = OpenMode::DOCUMENT;
+                aCommandArgs.put( "OpenMode", aOpenModeArg );
+
+                Command aCommand;
+                aCommand.Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "openDesign" ) );
+                aCommand.Argument <<= aCommandArgs.getPropertyValues();
+                WaitObject aWaitCursor( m_pDialogParent );
+                xNewDocument.set( xContent->execute( aCommand, xContent->createCommandIdentifier(), NULL ), UNO_QUERY );
             }
         }
         catch(const Exception& )

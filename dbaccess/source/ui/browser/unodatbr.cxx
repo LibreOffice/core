@@ -1661,10 +1661,6 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
         if (isValid() && !isValidCursor() && nId != ID_BROWSER_CLOSE)
             return aReturn;
 
-        // no chance while loading the form
-        if (PendingLoad())
-            return aReturn;
-
         switch (nId)
         {
             case ID_BROWSER_INSERTCOLUMNS:
@@ -3384,7 +3380,7 @@ void SbaTableQueryBrowser::implAdministrate( SvLBoxEntry* _pApplyTo )
             {
                 Reference< XInteractionHandler > xInteractionHandler(
                     getORB()->createInstance(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.InteractionHandler" ) ) ),
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.InteractionHandler" ) ) ),
                         UNO_QUERY );
                 OSL_ENSURE( xInteractionHandler.is(), "SbaTableQueryBrowser::implAdministrate: no interaction handler available!" );
 

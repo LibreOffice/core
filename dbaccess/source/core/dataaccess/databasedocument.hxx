@@ -60,11 +60,12 @@
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
+#include <com/sun/star/document/XDocumentRecovery.hpp>
 /** === end UNO includes === **/
 
-#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_16)
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_16
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 16
+#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_17)
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_17
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 17
 #include <comphelper/implbase_var.hxx>
 #endif
 
@@ -124,8 +125,12 @@ public:
              );
 
     /**  to be called when a controller is set as current controller
+        @return <TRUE/>
+            if and only if the controller connection indicates that loading the document is finished. This
+            is the case if the given controller has previously been connected, and it was the first controller
+            ever for which this happened.
     */
-    void    onSetCurrentController(
+    bool    onSetCurrentController(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& _rxController
              );
 
@@ -143,7 +148,7 @@ private:
 //============================================================
 //= ODatabaseDocument
 //============================================================
-typedef ::comphelper::WeakComponentImplHelper16 <   ::com::sun::star::frame::XModel2
+typedef ::comphelper::WeakComponentImplHelper17 <   ::com::sun::star::frame::XModel2
                                                 ,   ::com::sun::star::util::XModifiable
                                                 ,   ::com::sun::star::frame::XStorable
                                                 ,   ::com::sun::star::document::XEventBroadcaster
@@ -159,6 +164,7 @@ typedef ::comphelper::WeakComponentImplHelper16 <   ::com::sun::star::frame::XMo
                                                 ,   ::com::sun::star::script::provider::XScriptProviderSupplier
                                                 ,   ::com::sun::star::document::XEventsSupplier
                                                 ,   ::com::sun::star::frame::XLoadable
+                                                ,   ::com::sun::star::document::XDocumentRecovery
                                                 >   ODatabaseDocument_OfficeDocument;
 
 typedef ::cppu::ImplHelper3<    ::com::sun::star::frame::XTitle
@@ -207,6 +213,7 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
     InitState                                                                                   m_eInitState;
     bool                                                                                        m_bClosing;
     bool                                                                                        m_bAllowDocumentScripting;
+    bool                                                                                        m_bHasBeenRecovered;
 
     enum StoreType { SAVE, SAVE_AS };
     /** stores the document to the given URL, rebases it to the respective new storage, if necessary, resets
@@ -224,7 +231,7 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
     */
     void impl_storeAs_throw(
             const ::rtl::OUString& _rURL,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _rArguments,
+            const ::comphelper::NamedValueCollection& _rArguments,
             const StoreType _eType,
             DocumentGuard& _rGuard
          )
@@ -425,6 +432,11 @@ public:
     virtual void SAL_CALL initNew(  ) throw (::com::sun::star::frame::DoubleInitializationException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL load( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArguments ) throw (::com::sun::star::frame::DoubleInitializationException, ::com::sun::star::io::IOException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
+    // css.document.XDocumentRecovery
+    virtual ::sal_Bool SAL_CALL wasModifiedSinceLastSave() throw ( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL storeToRecoveryFile( const ::rtl::OUString& i_TargetLocation, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_MediaDescriptor ) throw ( ::com::sun::star::uno::RuntimeException, ::com::sun::star::io::IOException, ::com::sun::star::lang::WrappedTargetException );
+    virtual void SAL_CALL recoverFromFile( const ::rtl::OUString& i_SourceLocation, const ::rtl::OUString& i_SalvagedFile, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_MediaDescriptor ) throw ( ::com::sun::star::uno::RuntimeException, ::com::sun::star::io::IOException, ::com::sun::star::lang::WrappedTargetException );
+
     // XTitle
     virtual ::rtl::OUString SAL_CALL getTitle(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setTitle( const ::rtl::OUString& sTitle ) throw (::com::sun::star::uno::RuntimeException);
@@ -601,6 +613,31 @@ private:
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rMediaDescriptor,
                 DocumentGuard& _rDocGuard
             ) const;
+
+
+    /** impl-version of attachResource
+
+        @param  i_rLogicalDocumentURL
+            denotes the logical URL of the document, to be reported by getURL/getLocation
+        @param  i_rMediaDescriptor
+            denotes additional document parameters
+        @param  _rDocGuard
+            is the guard which currently protects the document instance
+
+    */
+    sal_Bool    impl_attachResource(
+                    const ::rtl::OUString& i_rLogicalDocumentURL,
+                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& i_rMediaDescriptor,
+                    DocumentGuard& _rDocGuard
+                );
+
+    /** throws an IOException with the message as defined in the RID_STR_ERROR_WHILE_SAVING resource, wrapping
+        the given caught non-IOException error
+    */
+    void        impl_throwIOExceptionCausedBySave_throw(
+                    const ::com::sun::star::uno::Any& i_rError,
+                    const ::rtl::OUString& i_rTargetURL
+                ) const;
 };
 
 /** an extended version of the ModelMethodGuard, which also cares for the initialization state

@@ -1128,7 +1128,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
                 m_xFrameLoader.set( m_xDesktop, UNO_QUERY_THROW );
                 m_xInteractionHandler.set(
                     _rxORB->createInstance(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.InteractionHandler" ) )
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.InteractionHandler" ) )
                     ),
                     UNO_QUERY_THROW );
             }

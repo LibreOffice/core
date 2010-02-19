@@ -35,7 +35,6 @@
 #include "AppElementType.hxx"
 #include "callbacks.hxx"
 #include "commontypes.hxx"
-#include "documentcontroller.hxx"
 #include "dsntypes.hxx"
 #include "genericcontroller.hxx"
 #include "linkeddocuments.hxx"
@@ -123,8 +122,6 @@ namespace dbaui
         ::cppu::OInterfaceContainerHelper
                                 m_aContextMenuInterceptors;
 
-        ModelControllerConnector
-                                m_aModelConnector;
         TContainerVector        m_aCurrentContainers;       // the containers where we are listener on
         ::rtl::Reference< SubComponentManager >
                                 m_pSubComponentManager;
@@ -200,10 +197,15 @@ namespace dbaui
         /** opens a new frame for creation or auto pilot
             @param  _eType
                 Defines the type to open
-            @param  _bSQLView
-                If <TRUE/> the query design will be opened in SQL view, otherwise not.
+            @param  i_rAdditionalArguments
+                Additional arguments to pass when creating the component
         */
-        void newElement( ElementType _eType , sal_Bool _bSQLView );
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
+            newElement(
+                ElementType _eType,
+                const ::comphelper::NamedValueCollection& i_rAdditionalArguments,
+                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& o_rDocumentDefinition
+            );
 
         /** creates a new database object, using an auto pilot
             @param _eType
@@ -387,12 +389,12 @@ namespace dbaui
         */
         void showPreviewFor( const ElementType _eType,const ::rtl::OUString& _sName );
 
-        /** called when we just connected to a new, non-NULL model
+        /** called we were attached to a frame
 
             In particular, this is called *after* the controller has been announced to the model
             (XModel::connectController)
         */
-        void onConnectedModel();
+        void onAttachedFrame();
 
         /// determines whether the given table name denotes a view which can be altered
         bool    impl_isAlterableView_nothrow( const ::rtl::OUString& _rTableOrViewName ) const;
@@ -405,7 +407,7 @@ namespace dbaui
         /** verifies the object type denotes a valid DatabaseObject, and the object name denotes an existing
             object of this type. Throws if not.
         */
-        void    impl_validateObjectTypeAndName_throw( const sal_Int32 _nObjectType, const ::rtl::OUString& _rObjectName );
+        void    impl_validateObjectTypeAndName_throw( const sal_Int32 _nObjectType, const ::boost::optional< ::rtl::OUString >& i_rObjectName );
 
     protected:
         // ----------------------------------------------------------------
@@ -446,6 +448,7 @@ namespace dbaui
                 SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
         // ::com::sun::star::frame::XController
+        virtual void SAL_CALL attachFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > & xFrame) throw( ::com::sun::star::uno::RuntimeException );
         virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) throw( ::com::sun::star::uno::RuntimeException );
         virtual sal_Bool SAL_CALL attachModel(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xModel) throw( ::com::sun::star::uno::RuntimeException );
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >  SAL_CALL getModel(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -465,9 +468,12 @@ namespace dbaui
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > > SAL_CALL getSubComponents() throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL isConnected(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL connect(  ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::beans::Pair< ::sal_Int32, ::rtl::OUString > SAL_CALL identifySubComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& SubComponent ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL closeSubComponents(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL loadComponent( ::sal_Int32 ObjectType, const ::rtl::OUString& ObjectName, ::sal_Bool ForEditing ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL loadComponentWithArguments( ::sal_Int32 ObjectType, const ::rtl::OUString& ObjectName, ::sal_Bool ForEditing, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL createComponent( ::sal_Int32 ObjectType, ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& o_DocumentDefinition ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > SAL_CALL createComponentWithArguments( ::sal_Int32 ObjectType, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments, ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& o_DocumentDefinition ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
         // XContextMenuInterception
         virtual void SAL_CALL registerContextMenuInterceptor( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XContextMenuInterceptor >& Interceptor ) throw (::com::sun::star::uno::RuntimeException);

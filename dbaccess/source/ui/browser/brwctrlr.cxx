@@ -630,7 +630,6 @@ SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun
     ,m_sStateSaveRecord(ModuleRes(RID_STR_SAVE_CURRENT_RECORD))
     ,m_sStateUndoRecord(ModuleRes(RID_STR_UNDO_MODIFY_RECORD))
     ,m_sModuleIdentifier( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.DataSourceBrowser" ) ) )
-    ,m_pLoadThread(NULL)
     ,m_pFormControllerImpl(NULL)
     ,m_nPendingLoadFinished(0)
     ,m_nFormActionNestingLevel(0)
@@ -830,7 +829,7 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
 
     // ---------------
     // create the view
-    m_pView = new UnoDataBrowserView( pParent, *this, getORB() );
+    setView( * new UnoDataBrowserView( pParent, *this, getORB() ) );
     if (!getBrowserView())
         return sal_False;
 
@@ -1292,45 +1291,6 @@ void SbaXDataBrowserController::elementReplaced(const ::com::sun::star::containe
 sal_Bool SbaXDataBrowserController::suspend(sal_Bool /*bSuspend*/) throw( RuntimeException )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::suspend" );
-    // have a pending open operation ?
-    if (PendingLoad())
-    {
-        ::vos::OGuard aGuard(Application::GetSolarMutex());
-        if (m_nPendingLoadFinished != 0)
-        {   // clean up directly. Otherwise there may be a pending asynchronous call
-            // to OnOpenFinishedMainThread, which won't be executed before we leave
-            // this method. Sounds like a classic infinite loop.
-            Application::RemoveUserEvent(m_nPendingLoadFinished);
-            LINK(this, SbaXDataBrowserController, OnOpenFinishedMainThread).Call(NULL);
-        }
-        else
-        {   // set m_bClosingKillOpen to ensure that the our termination handler reacts according
-            // it's context
-            m_bClosingKillOpen = sal_True;
-
-            // normally we would now just wait for termination of the load thread, but there is a small problem :
-            // In the current thread the global solar mutex is locked (that's for sure). If the loading of the
-            // form tries to acquire (blocking) the solar mutex, too, and we loop waiting for the other thread
-            // we have a classic deadlock. And bet your ass that ANYBODY in the foreign thread tries to lock
-            // the solar mutex. Almost all the UNO-capsules around normal C++ classes use the solar mutex for
-            // "thread safety" (which doesn't deserve that name anymore ;), e.g. the XNumberFormatter-implementation
-            // does.
-            // So we have to do a fake : we tell the loading thread that we aren't interested in the results anymore
-            // and the thread deletes itself (and the data source) as soon as it is done. As it holds the last
-            // references to the form (and thus, indirectly, to the grid) they will be cleared as soon as the thread dies.
-            // So all is fine. Except the small flaw that the form is still loading in the background while the
-            // window that should display it is already dead.
-            // If we could release the solar mutex in this thread and block it 'til the loader is finished we could
-            // solve it in a less dirty way, but uinfortunatelly we don't know how often this thread acquired the mutex.
-            // With high effort we could reach this with releasing the mutex until a third thread - which has to be
-            // created - can acquire it.Then we block, the third thread releases the mutex (and dies) and the loader
-            // thread would be able to finish. But that sounds difficult and fault-prone, so I think it's not worth it ...
-            ((LoadFormThread*)m_pLoadThread)->SetTerminationHdl(Link());
-            // and of course we tell the thread to stop ....
-            ((LoadFormThread*)m_pLoadThread)->StopIt();
-        }
-
-    }
     DBG_ASSERT(m_nPendingLoadFinished == 0, "SbaXDataBrowserController::suspend : there shouldn't be a pending load !");
 
     m_aAsyncGetCellFocus.CancelCall();
@@ -1346,42 +1306,30 @@ void SbaXDataBrowserController::disposing()
     // the base class
     SbaXDataBrowserController_Base::OGenericUnoController::disposing();
 
-    if (!PendingLoad())
+    // the data source
+    Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
+    if (xFormSet.is())
     {
-        // don't do the removeXxxListener calls if there is a pending load, this may lead to a deadlock :
-        // as in this thread the SolarMutex is locked (that's for sure) and removeXxxListener locks
-        // the form's mutex. But in the loading thread both mutexes are acquired in reverse order.
-        // That's no problem that we don't remove ourself here, as the load thread is responsible for the form
-        // at the moment. So if the loading is finished, the form will be disposed (by the load thread), and
-        // we get the "disposing" event where we can do the removeXxxListener calls.
-        // The alternative for this handling would be that the form has two mutexes : one for handling it's
-        // listeners and properties and so on, on for it's pure cursor actions
-
-        // the data source
-        Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
-        if (xFormSet.is())
-        {
-            xFormSet->removePropertyChangeListener(PROPERTY_ISNEW, static_cast<XPropertyChangeListener*>(this));
-            xFormSet->removePropertyChangeListener(PROPERTY_ISMODIFIED, static_cast<XPropertyChangeListener*>(this));
-            xFormSet->removePropertyChangeListener(PROPERTY_ROWCOUNT, static_cast<XPropertyChangeListener*>(this));
-            xFormSet->removePropertyChangeListener(PROPERTY_ACTIVECOMMAND, static_cast<XPropertyChangeListener*>(this));
-            xFormSet->removePropertyChangeListener(PROPERTY_ORDER, static_cast<XPropertyChangeListener*>(this));
-            xFormSet->removePropertyChangeListener(PROPERTY_FILTER, static_cast<XPropertyChangeListener*>(this));
-            xFormSet->removePropertyChangeListener(PROPERTY_HAVING_CLAUSE, static_cast<XPropertyChangeListener*>(this));
-            xFormSet->removePropertyChangeListener(PROPERTY_APPLYFILTER, static_cast<XPropertyChangeListener*>(this));
-        }
-
-        Reference< ::com::sun::star::sdb::XSQLErrorBroadcaster >  xFormError(getRowSet(), UNO_QUERY);
-        if (xFormError.is())
-            xFormError->removeSQLErrorListener((::com::sun::star::sdb::XSQLErrorListener*)this);
-
-        if (m_xLoadable.is())
-            m_xLoadable->removeLoadListener(this);
-
-        Reference< ::com::sun::star::form::XDatabaseParameterBroadcaster >  xFormParameter(getRowSet(), UNO_QUERY);
-        if (xFormParameter.is())
-            xFormParameter->removeParameterListener((::com::sun::star::form::XDatabaseParameterListener*)this);
+        xFormSet->removePropertyChangeListener(PROPERTY_ISNEW, static_cast<XPropertyChangeListener*>(this));
+        xFormSet->removePropertyChangeListener(PROPERTY_ISMODIFIED, static_cast<XPropertyChangeListener*>(this));
+        xFormSet->removePropertyChangeListener(PROPERTY_ROWCOUNT, static_cast<XPropertyChangeListener*>(this));
+        xFormSet->removePropertyChangeListener(PROPERTY_ACTIVECOMMAND, static_cast<XPropertyChangeListener*>(this));
+        xFormSet->removePropertyChangeListener(PROPERTY_ORDER, static_cast<XPropertyChangeListener*>(this));
+        xFormSet->removePropertyChangeListener(PROPERTY_FILTER, static_cast<XPropertyChangeListener*>(this));
+        xFormSet->removePropertyChangeListener(PROPERTY_HAVING_CLAUSE, static_cast<XPropertyChangeListener*>(this));
+        xFormSet->removePropertyChangeListener(PROPERTY_APPLYFILTER, static_cast<XPropertyChangeListener*>(this));
     }
+
+    Reference< ::com::sun::star::sdb::XSQLErrorBroadcaster >  xFormError(getRowSet(), UNO_QUERY);
+    if (xFormError.is())
+        xFormError->removeSQLErrorListener((::com::sun::star::sdb::XSQLErrorListener*)this);
+
+    if (m_xLoadable.is())
+        m_xLoadable->removeLoadListener(this);
+
+    Reference< ::com::sun::star::form::XDatabaseParameterBroadcaster >  xFormParameter(getRowSet(), UNO_QUERY);
+    if (xFormParameter.is())
+        xFormParameter->removeParameterListener((::com::sun::star::form::XDatabaseParameterListener*)this);
 
     removeModelListeners(getControlModel());
 
@@ -1397,29 +1345,24 @@ void SbaXDataBrowserController::disposing()
     {
         removeControlListeners(getBrowserView()->getGridControl());
         // don't delete explicitly, this is done by the owner (and user) of this controller (me hopes ...)
-        m_pView = NULL;
+        clearView();
     }
 
     if(m_aInvalidateClipboard.IsActive())
         m_aInvalidateClipboard.Stop();
 
-    // dispose the data source
-    // if there is a pending load we decided to give the responsibility for the data source to the open thread
-    // (see ::suspend)
-    if (!PendingLoad())
+    // dispose the row set
+    try
     {
-        try
-        {
-            ::comphelper::disposeComponent(m_xRowSet);
+        ::comphelper::disposeComponent(m_xRowSet);
 
-            m_xRowSet           = NULL;
-            m_xColumnsSupplier  = NULL;
-            m_xLoadable         = NULL;
-        }
-        catch(Exception&)
-        {
-            OSL_ENSURE(0,"Exception thrown by dispose");
-        }
+        m_xRowSet           = NULL;
+        m_xColumnsSupplier  = NULL;
+        m_xLoadable         = NULL;
+    }
+    catch(Exception&)
+    {
+        OSL_ENSURE(0,"Exception thrown by dispose");
     }
     try
     {
@@ -1539,7 +1482,7 @@ sal_Bool SbaXDataBrowserController::approveParameter(const ::com::sun::star::for
         pParamRequest->addContinuation(pAbort);
 
         // create the handler, let it handle the request
-        Reference< XInteractionHandler > xHandler(getORB()->createInstance(SERVICE_SDB_INTERACTION_HANDLER), UNO_QUERY);
+        Reference< XInteractionHandler > xHandler(getORB()->createInstance(SERVICE_TASK_INTERACTION_HANDLER), UNO_QUERY);
         if (xHandler.is())
             xHandler->handle(xParamRequest);
 
@@ -1637,9 +1580,6 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                 aReturn.bEnabled = m_xParser->getFilter().getLength() || m_xParser->getHavingClause().getLength() || m_xParser->getOrder().getLength();
                 return aReturn;
         }
-        // no chance while loading the form
-        if (PendingLoad())
-            return aReturn;
         // no chance without valid models
         if (isValid() && !isValidCursor())
             return aReturn;
@@ -2641,45 +2581,6 @@ IMPL_LINK(SbaXDataBrowserController, OnCanceledNotFound, FmFoundRecordInformatio
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK(SbaXDataBrowserController, OnOpenFinishedMainThread, void*, EMPTYARG)
-{
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
-    if (!m_nPendingLoadFinished)
-        // it's possible that the direct call of this link from within suspend caused this method to be executed
-        // in another thread while we were waiting for the mutex in this thread
-        return 0;
-    m_nPendingLoadFinished = 0;
-
-    if ( static_cast< LoadFormThread* >( m_pLoadThread )->WasCanceled() )
-        setLoadingCancelled();
-
-    delete m_pLoadThread;
-    m_pLoadThread = NULL;
-
-    LoadFinished(sal_False);
-
-    return 0L;
-}
-
-//------------------------------------------------------------------------------
-IMPL_LINK(SbaXDataBrowserController, OnOpenFinished, void*, EMPTYARG)
-{
-    ::osl::MutexGuard aCheckGuard(m_aAsyncLoadSafety);
-
-    if (m_bClosingKillOpen)
-    {
-        delete m_pLoadThread;
-        m_pLoadThread = NULL;
-    }
-    else
-        // all cleaning has to run in the main thread, not here (this is called synchronously from the LoadThread)
-        // so we use an user event
-        m_nPendingLoadFinished = Application::PostUserEvent(LINK(this, SbaXDataBrowserController, OnOpenFinishedMainThread));
-
-    return 0L;
-}
-
-//------------------------------------------------------------------------------
 IMPL_LINK(SbaXDataBrowserController, OnAsyncGetCellFocus, void*, EMPTYARG)
 {
     SbaGridControl* pVclGrid = getBrowserView() ? getBrowserView()->getVclControl() : NULL;
@@ -3035,171 +2936,6 @@ bool LoadFormHelper::WaitUntilReallyLoaded(bool _bOnlyIfLoaded)
     return true;
 }
 
-//==================================================================
-// LoadFormThread - a thread for asynchronously loading a form
-//==================================================================
-//------------------------------------------------------------------------------
-void LoadFormThread::run()
-{
-    // On instantiation of a SfxCancellable the application is notified and 'switches on' the red stop button.
-    // Unfortunally this is conditioned with the acquirement of the solar mutex, and the application tries
-    // only once and ignores the notification if it fails.
-    // To prevent that we get the solar mutex and _block_ 'til we got it.
-    // As we are in the 'top level execution' of this thread (with a rather small stack and no other mutexes locked)
-    // we shouldn't experience problems with deadlocks ...
-    ::vos::OClearableGuard aSolarGuard(Application::GetSolarMutex());
-    ThreadStopper* pStopper = new ThreadStopper(this, m_sStopperCaption);
-    aSolarGuard.clear();
-
-    // we're not canceled yet
-    ::osl::ClearableMutexGuard aResetGuard(m_aAccessSafety);
-    m_bCanceled = sal_False;
-    aResetGuard.clear();
-
-    LoadFormHelper* pHelper = new LoadFormHelper(m_xRowSet);
-    pHelper->acquire();
-
-    // start it
-    bool bErrorOccured = false;
-    Reference< XLoadable > xLoadable(m_xRowSet, UNO_QUERY);
-    try
-    {
-        Reference< XRowSet >  xMove(m_xRowSet, UNO_QUERY);
-        DBG_ASSERT(xLoadable.is() && xMove.is(), "LoadFormThread::run : invalid cursor !");
-        xLoadable->load();
-        // go to the first record if the load was successfull.
-        Reference< XColumnsSupplier > xColumnsSupplier(m_xRowSet, UNO_QUERY);
-        Reference< ::com::sun::star::container::XNameAccess >  xCols = xColumnsSupplier.is() ? xColumnsSupplier->getColumns() : Reference< ::com::sun::star::container::XNameAccess > ();
-        if (xCols.is() && xCols->hasElements())
-            xMove->first();
-        else
-            bErrorOccured = true;
-    }
-    catch(Exception&)
-    {
-        bErrorOccured = true;
-    }
-
-    // check if we were canceled
-    ::osl::ClearableMutexGuard aTestGuard(m_aAccessSafety);
-    bool bReallyCanceled = m_bCanceled ? true : false;;
-    aTestGuard.clear();
-
-    bReallyCanceled |= bErrorOccured;
-
-    // the load on the form is "slightly asyncronous" (which isn't covered by it's specification, anyway), so wait
-    // some time ....
-    // (though me thinks that the load of the new api is synchronous, so we won't need this LoadFormHelper anymore ...)
-    if (!bReallyCanceled)
-        pHelper->WaitUntilReallyLoaded(true);
-
-    pHelper->cancel();
-    pHelper->release();
-
-    // yes, we were, but eventually the cancel request didn't reach the data source in time
-    if (bReallyCanceled && xLoadable.is() && xLoadable->isLoaded())
-        xLoadable->unload();
-
-    pStopper->OwnerTerminated();
-        // this will cause the stopper to delete itself (in the main thread) so we don't have to take care of the
-        // solar mutex
-}
-
-//------------------------------------------------------------------------------
-void LoadFormThread::onTerminated()
-{
-    ::osl::ClearableMutexGuard aGuard(m_aAccessSafety);
-    if (m_aTerminationHandler.IsSet())
-    {
-        // within the call of our termination handler we may be deleted, so do anything which is a member
-        // access before the call ...
-        // FS - #69801# - 02.12.99
-        Link aHandler(m_aTerminationHandler);
-        aGuard.clear();
-        aHandler.Call(this);
-    }
-    else
-    {
-        // we are fully responsible for the data source and for ourself, so dispose the former ...
-        try
-        {
-            ::comphelper::disposeComponent(m_xRowSet);
-
-            m_xRowSet           = NULL;
-        }
-        catch(Exception&)
-        {
-            OSL_ENSURE(0,"Exception thrown by dispose");
-        }
-        // ... and delete the latter
-        aGuard.clear();     // like above - releasing the mutex is a member access ...
-        delete this;
-    }
-}
-
-//------------------------------------------------------------------------------
-void LoadFormThread::StopIt()
-{
-    ::osl::ClearableMutexGuard aResetGuard(m_aAccessSafety);
-    m_bCanceled = sal_True;
-    aResetGuard.clear();
-
-    Reference< XColumnsSupplier > xColumnsSupplier(m_xRowSet, UNO_QUERY);
-    if (!xColumnsSupplier.is())
-    {
-        DBG_ERROR("LoadFormThread::StopIt : invalid data source !");
-        return;
-    }
-    Reference< ::com::sun::star::container::XNameAccess >  xCols(xColumnsSupplier->getColumns(), UNO_QUERY);
-    if (!xCols.is() || !xCols->hasElements())
-        // the cursor isn't alive, don't need to cancel
-        return;
-
-    Reference< ::com::sun::star::util::XCancellable >  xCancel(m_xRowSet, UNO_QUERY);
-    if (xCancel.is())
-    {
-        try  { xCancel->cancel(); } catch(SQLException&) {}
-        // with this the cursor returns from it's load call, this terminates our run, this get's our termination handler to
-        // be called
-        // (the try-catch is just in case the cancel wasn't neccessary anymore)
-    }
-}
-
-//------------------------------------------------------------------------------
-LoadFormThread::ThreadStopper::ThreadStopper(LoadFormThread* pOwner, const String& rTitle)
-    :SfxCancellable(SFX_APP()->GetCancelManager(), rTitle)
-    ,m_pOwner(pOwner)
-{
-}
-
-//------------------------------------------------------------------------------
-void LoadFormThread::ThreadStopper::Cancel()
-{
-    if (!m_pOwner)
-        return;
-
-    ::osl::MutexGuard aGuard(m_pOwner->m_aAccessSafety);
-    if (IsCancelled())
-        // we already did pass this to our owner
-        return;
-
-    SfxCancellable::Cancel();
-    m_pOwner->StopIt();
-}
-
-//------------------------------------------------------------------------------
-void LoadFormThread::ThreadStopper::OwnerTerminated()
-{
-    m_pOwner = NULL;
-    Application::PostUserEvent(LINK(this, LoadFormThread::ThreadStopper, OnDeleteInMainThread), this);
-}
-
-//------------------------------------------------------------------------------
-IMPL_LINK(LoadFormThread::ThreadStopper, OnDeleteInMainThread, LoadFormThread::ThreadStopper*, pThis)
-{
-    delete pThis;
-    return 0L;
-}
 // -----------------------------------------------------------------------------
 sal_Int16 SbaXDataBrowserController::getCurrentColumnPosition()
 {

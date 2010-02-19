@@ -222,9 +222,10 @@ namespace dbaui
 
         ::std::auto_ptr< OGenericUnoController_Data >
                                         m_pData;
+        ODataView*                      m_pView;                // our (VCL) "main window"
 
 #ifdef DBG_UTIL
-        bool    m_bDescribingSupportedFeatures;
+        bool                            m_bDescribingSupportedFeatures;
 #endif
 
     protected:
@@ -258,7 +259,6 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >        m_xDatabaseContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTitle >                 m_xTitleHelper;
 
-        ODataView*              m_pView;                // our (VCL) "main window"
         sal_Bool                m_bPreview;
         sal_Bool                m_bReadOnly;
 
@@ -416,7 +416,9 @@ namespace dbaui
 
     public:
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  getORB() const { return m_xServiceFactory; }
-        ODataView* getView() const { return m_pView; }
+        ODataView*  getView() const { return m_pView; }
+        void        setView( ODataView& i_rView ) { m_pView = &i_rView; }
+        void        clearView() { m_pView = NULL; }
         // shows a error box if the SQLExceptionInfo is valid
         void showError(const ::dbtools::SQLExceptionInfo& _rInfo);
 
@@ -471,8 +473,9 @@ namespace dbaui
         // ::com::sun::star::frame::XController2
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL getComponentWindow() throw (::com::sun::star::uno::RuntimeException);
         virtual ::rtl::OUString SAL_CALL getViewControllerName() throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getCreationArguments() throw (::com::sun::star::uno::RuntimeException);
 
-        // ::com::sun::star::frame::XController2
+        // ::com::sun::star::frame::XController
         virtual void SAL_CALL attachFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > & xFrame) throw( ::com::sun::star::uno::RuntimeException );
         virtual sal_Bool SAL_CALL attachModel(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & xModel) throw( ::com::sun::star::uno::RuntimeException );
         virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) throw( ::com::sun::star::uno::RuntimeException ) = 0;

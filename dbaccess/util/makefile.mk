@@ -50,6 +50,7 @@ LIB1TARGET=$(SLB)$/$(TARGET).lib
 LIB1FILES=\
         $(SLB)$/api.lib	\
         $(SLB)$/dataaccess.lib	\
+        $(SLB)$/recovery.lib	\
         $(SLB)$/misc.lib	\
         $(SLB)$/core_resource.lib
 
@@ -71,7 +72,8 @@ SHL1STDLIBS= \
         $(SFXLIB) \
         $(BASICLIB) \
         $(FWELIB) \
-        $(SALHELPERLIB)
+        $(SALHELPERLIB) \
+        $(XMLOFFLIB)
 
 SHL1DEPN=
 SHL1IMPLIB=i$(TARGET)

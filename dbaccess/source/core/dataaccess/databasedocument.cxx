@@ -41,6 +41,7 @@
 #include "databasecontext.hxx"
 #include "documentcontainer.hxx"
 #include "sdbcoretools.hxx"
+#include "recovery/dbdocrecovery.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/beans/Optional.hpp>
@@ -63,6 +64,8 @@
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/ucb/XContent.hpp>
+#include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/documentconstants.hxx>
@@ -118,6 +121,8 @@ using namespace ::cppu;
 using namespace ::osl;
 
 using ::com::sun::star::awt::XWindow;
+using ::com::sun::star::ucb::XContent;
+using ::com::sun::star::sdb::application::XDatabaseDocumentUI;
 
 //........................................................................
 namespace dbaccess
@@ -140,7 +145,7 @@ bool ViewMonitor::onControllerConnected( const Reference< XController >& _rxCont
 }
 
 //--------------------------------------------------------------------------
-void ViewMonitor::onSetCurrentController( const Reference< XController >& _rxController )
+bool ViewMonitor::onSetCurrentController( const Reference< XController >& _rxController )
 {
     // we interpret this as "loading the document (including UI) is finished",
     // if and only if this is the controller which was last connected, and it was the
@@ -150,6 +155,8 @@ void ViewMonitor::onSetCurrentController( const Reference< XController >& _rxCon
     // notify the respective events
     if ( bLoadFinished )
         m_rEventNotifier.notifyDocumentEventAsync( m_bIsNewDocument ? "OnNew" : "OnLoad" );
+
+    return bLoadFinished;
 }
 
 //============================================================
@@ -176,6 +183,7 @@ ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>&
             ,m_eInitState( NotInitialized )
             ,m_bClosing( false )
             ,m_bAllowDocumentScripting( false )
+            ,m_bHasBeenRecovered( false )
 {
     DBG_CTOR(ODatabaseDocument,NULL);
     OSL_TRACE( "DD: ctor: %p: %p", this, m_pImpl.get() );
@@ -380,15 +388,15 @@ namespace
     }
 
     // -----------------------------------------------------------------------------
-    static Sequence< PropertyValue > lcl_appendFileNameToDescriptor( const Sequence< PropertyValue >& _rDescriptor, const ::rtl::OUString _rURL )
+    static Sequence< PropertyValue > lcl_appendFileNameToDescriptor( const ::comphelper::NamedValueCollection& _rDescriptor, const ::rtl::OUString _rURL )
     {
-        ::comphelper::NamedValueCollection aMediaDescriptor( _rDescriptor );
+        ::comphelper::NamedValueCollection aMutableDescriptor( _rDescriptor );
         if ( _rURL.getLength() )
         {
-            aMediaDescriptor.put( "FileName", _rURL );
-            aMediaDescriptor.put( "URL", _rURL );
+            aMutableDescriptor.put( "FileName", _rURL );
+            aMutableDescriptor.put( "URL", _rURL );
         }
-        return aMediaDescriptor.getPropertyValues();
+        return aMutableDescriptor.getPropertyValues();
     }
 }
 
@@ -430,9 +438,9 @@ void ODatabaseDocument::impl_reset_nothrow()
 void ODatabaseDocument::impl_import_nolck_throw( const ::comphelper::ComponentContext _rContext, const Reference< XInterface >& _rxTargetComponent,
                                                  const ::comphelper::NamedValueCollection& _rResource )
 {
-    Sequence< Any > aFilterArgs;
+    Sequence< Any > aFilterCreationArgs;
     Reference< XStatusIndicator > xStatusIndicator;
-    lcl_extractAndStartStatusIndicator( _rResource, xStatusIndicator, aFilterArgs );
+    lcl_extractAndStartStatusIndicator( _rResource, xStatusIndicator, aFilterCreationArgs );
 
     /** property map for import info set */
     comphelper::PropertyMapEntry aExportInfoMap[] =
@@ -445,19 +453,20 @@ void ODatabaseDocument::impl_import_nolck_throw( const ::comphelper::ComponentCo
     xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BaseURI")), uno::makeAny(_rResource.getOrDefault("URL",::rtl::OUString())));
     xInfoSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StreamName")), uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("content.xml"))));
 
-    const sal_Int32 nCount = aFilterArgs.getLength();
-    aFilterArgs.realloc(nCount + 1);
-    aFilterArgs[nCount] <<= xInfoSet;
+    const sal_Int32 nCount = aFilterCreationArgs.getLength();
+    aFilterCreationArgs.realloc(nCount + 1);
+    aFilterCreationArgs[nCount] <<= xInfoSet;
 
     Reference< XImporter > xImporter(
-        _rContext.createComponentWithArguments( "com.sun.star.comp.sdb.DBFilter", aFilterArgs ),
+        _rContext.createComponentWithArguments( "com.sun.star.comp.sdb.DBFilter", aFilterCreationArgs ),
         UNO_QUERY_THROW );
 
     Reference< XComponent > xComponent( _rxTargetComponent, UNO_QUERY_THROW );
     xImporter->setTargetDocument( xComponent );
 
     Reference< XFilter > xFilter( xImporter, UNO_QUERY_THROW );
-    xFilter->filter( ODatabaseModelImpl::stripLoadArguments( _rResource ) );
+    Sequence< PropertyValue > aFilterArgs( ODatabaseModelImpl::stripLoadArguments( _rResource ).getPropertyValues() );
+    xFilter->filter( aFilterArgs );
 
     if ( xStatusIndicator.is() )
         xStatusIndicator->end();
@@ -545,14 +554,175 @@ void SAL_CALL ODatabaseDocument::load( const Sequence< PropertyValue >& _Argumen
 }
 
 // -----------------------------------------------------------------------------
+namespace
+{
+    // .........................................................................
+    bool lcl_hasAnyModifiedSubComponent_throw( const Reference< XController >& i_rController )
+    {
+        Reference< XDatabaseDocumentUI > xDatabaseUI( i_rController, UNO_QUERY_THROW );
+
+        Sequence< Reference< XComponent > > aComponents( xDatabaseUI->getSubComponents() );
+        const Reference< XComponent >* component = aComponents.getConstArray();
+        const Reference< XComponent >* componentsEnd = aComponents.getConstArray() + aComponents.getLength();
+
+        bool isAnyModified = false;
+        for ( ; component != componentsEnd; ++component )
+        {
+            Reference< XModifiable > xModify( *component, UNO_QUERY );
+            if ( xModify.is() )
+            {
+                isAnyModified = xModify->isModified();
+                continue;
+            }
+
+            // TODO: clarify: anything else to care for? Both the sub componbents with and without model
+            // should support the XModifiable interface, so I think nothing more is needed here.
+            OSL_ENSURE( false, "lcl_hasAnyModifiedSubComponent_throw: anything left to do here?" );
+        }
+
+        return isAnyModified;
+    }
+}
+
+// -----------------------------------------------------------------------------
+::sal_Bool SAL_CALL ODatabaseDocument::wasModifiedSinceLastSave() throw ( RuntimeException )
+{
+    DocumentGuard aGuard( *this );
+
+    // The implementation here is somewhat sloppy, in that it returns whether *any* part of the whole
+    // database document, including opened sub components, is modified. This is more than what is requested:
+    // We need to return <TRUE/> if the doc itself, or any of the opened sub components, has been modified
+    // since the last call to any of the save* methods, or since the document has been loaded/created.
+    // However, the API definition explicitly allows to be that sloppy ...
+
+    if ( isModified() )
+        return sal_True;
+
+    // auto recovery is an "UI feature", it is to restore the UI the user knows. Thus,
+    // we ask our connected controllers, not simply our existing form/report definitions.
+    // (There is some information which even cannot be obtained without asking the controller.
+    // For instance, newly created, but not yet saved, forms/reports are acessible via the
+    // controller only, but not via the model.)
+
+    try
+    {
+        for (   Controllers::const_iterator ctrl = m_aControllers.begin();
+                ctrl != m_aControllers.end();
+                ++ctrl
+            )
+        {
+            if ( lcl_hasAnyModifiedSubComponent_throw( *ctrl ) )
+                return sal_True;
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
+    return sal_False;
+}
+
+// -----------------------------------------------------------------------------
+void SAL_CALL ODatabaseDocument::storeToRecoveryFile( const ::rtl::OUString& i_TargetLocation, const Sequence< PropertyValue >& i_MediaDescriptor ) throw ( RuntimeException, IOException, WrappedTargetException )
+{
+    DocumentGuard aGuard( *this );
+    ModifyLock aLock( *this );
+
+    try
+    {
+        // create a storage for the target location
+        Reference< XStorage > xTargetStorage( impl_createStorageFor_throw( i_TargetLocation ) );
+
+        // first store the document as a whole into this storage
+        impl_storeToStorage_throw( xTargetStorage, i_MediaDescriptor, aGuard );
+
+        // save the sub components which need saving
+        DatabaseDocumentRecovery aDocRecovery( m_pImpl->m_aContext);
+        aDocRecovery.saveModifiedSubComponents( xTargetStorage, m_aControllers );
+
+        // commit the root storage
+        tools::stor::commitStorageIfWriteable( xTargetStorage );
+    }
+    catch( const Exception& )
+    {
+        Any aError = ::cppu::getCaughtException();
+        if  (   aError.isExtractableTo( ::cppu::UnoType< IOException >::get() )
+            ||  aError.isExtractableTo( ::cppu::UnoType< RuntimeException >::get() )
+            ||  aError.isExtractableTo( ::cppu::UnoType< WrappedTargetException >::get() )
+            )
+        {
+            // allowed to leave
+            throw;
+        }
+
+        throw WrappedTargetException( ::rtl::OUString(), *this, aError );
+    }
+}
+
+// -----------------------------------------------------------------------------
+void SAL_CALL ODatabaseDocument::recoverFromFile( const ::rtl::OUString& i_SourceLocation, const ::rtl::OUString& i_SalvagedFile, const Sequence< PropertyValue >& i_MediaDescriptor ) throw ( RuntimeException, IOException, WrappedTargetException )
+{
+    DocumentGuard aGuard( *this, DocumentGuard::InitMethod );
+
+    if ( i_SourceLocation.getLength() == 0 )
+        throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
+
+    try
+    {
+        // load the document itself, by simply delegating to our "load" method
+
+        // our load implementation expects the SalvagedFile and URL to be in the media descriptor
+        ::comphelper::NamedValueCollection aMediaDescriptor( i_MediaDescriptor );
+        aMediaDescriptor.put( "SalvagedFile", i_SalvagedFile );
+        aMediaDescriptor.put( "URL", i_SourceLocation );
+
+        aGuard.clear(); // (load has an own guarding scheme)
+        load( aMediaDescriptor.getPropertyValues() );
+
+        // Without a controller, we are unable to recover the sub components, as they're always tied to a controller.
+        // So, everything else is done when the first controller is connected.
+        m_bHasBeenRecovered = true;
+
+        // tell the impl that we've been loaded from the given location
+        m_pImpl->setDocFileLocation( i_SourceLocation );
+
+        // by definition (of XDocumentRecovery), we're responsible for delivering a fully-initialized document,
+        // which includes an attachResource call.
+        impl_attachResource( i_SalvagedFile, aMediaDescriptor.getPropertyValues(), aGuard );
+        // <- SYNCHRONIZED
+    }
+    catch( const Exception& )
+    {
+        Any aError = ::cppu::getCaughtException();
+        if  (   aError.isExtractableTo( ::cppu::UnoType< IOException >::get() )
+            ||  aError.isExtractableTo( ::cppu::UnoType< RuntimeException >::get() )
+            ||  aError.isExtractableTo( ::cppu::UnoType< WrappedTargetException >::get() )
+            )
+        {
+            // allowed to leave
+            throw;
+        }
+
+        throw WrappedTargetException( ::rtl::OUString(), *this, aError );
+    }
+}
+
+// -----------------------------------------------------------------------------
 // XModel
 sal_Bool SAL_CALL ODatabaseDocument::attachResource( const ::rtl::OUString& _rURL, const Sequence< PropertyValue >& _rArguments ) throw (RuntimeException)
 {
     DocumentGuard aGuard( *this, DocumentGuard::MethodUsedDuringInit );
+    return impl_attachResource( _rURL, _rArguments, aGuard );
+}
 
-    if  (   ( _rURL == getURL() )
-        &&  ( _rArguments.getLength() == 1 )
-        &&  ( _rArguments[0].Name.compareToAscii( "BreakMacroSignature" ) == 0 )
+// -----------------------------------------------------------------------------
+sal_Bool ODatabaseDocument::impl_attachResource( const ::rtl::OUString& i_rLogicalDocumentURL,
+            const Sequence< PropertyValue >& i_rMediaDescriptor, DocumentGuard& _rDocGuard )
+{
+    if  (   ( i_rLogicalDocumentURL == getURL() )
+        &&  ( i_rMediaDescriptor.getLength() == 1 )
+        &&  ( i_rMediaDescriptor[0].Name.compareToAscii( "BreakMacroSignature" ) == 0 )
         )
     {
         // this is a BAD hack of the Basic importer code ... there should be a dedicated API for this,
@@ -561,7 +731,14 @@ sal_Bool SAL_CALL ODatabaseDocument::attachResource( const ::rtl::OUString& _rUR
             // (we do not support macro signatures, so we can ignore this call)
     }
 
-    m_pImpl->attachResource( _rURL, _rArguments );
+    // if no URL has been provided, the caller was lazy enough to not call our getURL - which is not allowed anymore,
+    // now since getURL and getLocation both return the same, so calling one of those should be simple.
+    ::rtl::OUString sDocumentURL( i_rLogicalDocumentURL );
+    OSL_ENSURE( sDocumentURL.getLength(), "ODatabaseDocument::impl_attachResource: invalid URL!" );
+    if ( !sDocumentURL.getLength() )
+        sDocumentURL = getURL();
+
+    m_pImpl->setResource( sDocumentURL, i_rMediaDescriptor );
 
     if ( impl_isInitializing() )
     {   // this means we've just been loaded, and this is the attachResource call which follows
@@ -573,7 +750,7 @@ sal_Bool SAL_CALL ODatabaseDocument::attachResource( const ::rtl::OUString& _rUR
         // should know this before anybody actually uses the object.
         m_bAllowDocumentScripting = ( m_pImpl->determineEmbeddedMacros() != ODatabaseModelImpl::eSubDocumentMacros );
 
-        aGuard.clear();
+        _rDocGuard.clear();
         // <- SYNCHRONIZED
         m_aEventNotifier.notifyDocumentEvent( "OnLoadFinished" );
     }
@@ -592,13 +769,23 @@ sal_Bool SAL_CALL ODatabaseDocument::attachResource( const ::rtl::OUString& _rUR
 Sequence< PropertyValue > SAL_CALL ODatabaseDocument::getArgs(  ) throw (RuntimeException)
 {
     DocumentGuard aGuard( *this, DocumentGuard::MethodWithoutInit );
-    return m_pImpl->getResource();
+    return m_pImpl->getMediaDescriptor().getPropertyValues();
 }
 
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseDocument::connectController( const Reference< XController >& _xController ) throw (RuntimeException)
 {
     DocumentGuard aGuard( *this );
+
+#if OSL_DEBUG_LEVEL > 0
+    for (   Controllers::const_iterator controller = m_aControllers.begin();
+            controller != m_aControllers.end();
+            ++controller
+        )
+    {
+        OSL_ENSURE( *controller != _xController, "ODatabaseDocument::connectController: this controller is already connected!" );
+    }
+#endif
 
     m_aControllers.push_back( _xController );
 
@@ -696,8 +883,29 @@ void SAL_CALL ODatabaseDocument::setCurrentController( const Reference< XControl
 
     m_xCurrentController = _xController;
 
-    m_aViewMonitor.onSetCurrentController( _xController );
+    if ( !m_aViewMonitor.onSetCurrentController( _xController ) )
+        return;
+
+    // check if there are sub components to recover from our document storage
+    bool bAttemptRecovery = m_bHasBeenRecovered;
+    if ( !bAttemptRecovery && m_pImpl->getMediaDescriptor().has( "ForceRecovery" ) )
+        // do not use getOrDefault, it will throw for invalid types, which is not desired here
+        m_pImpl->getMediaDescriptor().get( "ForceRecovery" ) >>= bAttemptRecovery;
+
+    if ( !bAttemptRecovery )
+        return;
+
+    try
+    {
+        DatabaseDocumentRecovery aDocRecovery( m_pImpl->m_aContext );
+        aDocRecovery.recoverSubDocuments( m_pImpl->getRootStorage(), _xController );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }
+
 // -----------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL ODatabaseDocument::getCurrentSelection(  ) throw (RuntimeException)
 {
@@ -722,6 +930,8 @@ sal_Bool SAL_CALL ODatabaseDocument::hasLocation(  ) throw (RuntimeException)
 {
     DocumentGuard aGuard( *this, DocumentGuard::MethodWithoutInit );
     return m_pImpl->getURL();
+        // both XStorable::getLocation and XModel::getURL have to return the URL of the document, *not*
+        // the location of the file which the docunment was possibly recovered from (which would be getDocFileLocation)
 }
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseDocument::isReadonly(  ) throw (RuntimeException)
@@ -734,15 +944,53 @@ void SAL_CALL ODatabaseDocument::store(  ) throw (IOException, RuntimeException)
 {
     DocumentGuard aGuard( *this );
 
-    if ( m_pImpl->getDocFileLocation() == m_pImpl->getURL() )
-        if ( m_pImpl->m_bDocumentReadOnly )
-            throw IOException();
+    ::rtl::OUString sDocumentURL( m_pImpl->getURL() );
+    if ( sDocumentURL.getLength() )
+    {
+        if ( m_pImpl->getDocFileLocation() == m_pImpl->getURL() )
+            if ( m_pImpl->m_bDocumentReadOnly )
+                throw IOException();
 
-    impl_storeAs_throw( m_pImpl->getURL(), m_pImpl->getResource(), SAVE, aGuard );
+        impl_storeAs_throw( m_pImpl->getURL(), m_pImpl->getMediaDescriptor(), SAVE, aGuard );
+        return;
+    }
+
+    // if we have no URL, but did survive the DocumentGuard above, then we've been inited via XLoadable::initNew,
+    // i.e. we're based on a temporary storage
+    OSL_ENSURE( m_pImpl->getDocFileLocation().getLength() == 0, "ODatabaseDocument::store: unexpected URL inconsistency!" );
+
+    try
+    {
+        impl_storeToStorage_throw( m_pImpl->getRootStorage(), m_pImpl->getMediaDescriptor().getPropertyValues(), aGuard );
+    }
+    catch( const Exception& )
+    {
+        Any aError = ::cppu::getCaughtException();
+        if  (   aError.isExtractableTo( ::cppu::UnoType< IOException >::get() )
+            ||  aError.isExtractableTo( ::cppu::UnoType< RuntimeException >::get() )
+            )
+        {
+            // allowed to leave
+            throw;
+        }
+        impl_throwIOExceptionCausedBySave_throw( aError, ::rtl::OUString() );
+    }
 }
 
 // -----------------------------------------------------------------------------
-void ODatabaseDocument::impl_storeAs_throw( const ::rtl::OUString& _rURL, const Sequence< PropertyValue>& _rArguments,
+void ODatabaseDocument::impl_throwIOExceptionCausedBySave_throw( const Any& i_rError, const ::rtl::OUString& i_rTargetURL ) const
+{
+    ::rtl::OUString sErrorMessage = extractExceptionMessage( m_pImpl->m_aContext, i_rError );
+    sErrorMessage = ResourceManager::loadString(
+        RID_STR_ERROR_WHILE_SAVING,
+        "$location$", i_rTargetURL,
+        "$message$", sErrorMessage
+    );
+    throw IOException( sErrorMessage, *const_cast< ODatabaseDocument* >( this ) );
+}
+
+// -----------------------------------------------------------------------------
+void ODatabaseDocument::impl_storeAs_throw( const ::rtl::OUString& _rURL, const ::comphelper::NamedValueCollection& _rArguments,
     const StoreType _eType, DocumentGuard& _rGuard ) throw ( IOException, RuntimeException )
 {
     OSL_PRECOND( ( _eType == SAVE ) || ( _eType == SAVE_AS ),
@@ -788,6 +1036,12 @@ void ODatabaseDocument::impl_storeAs_throw( const ::rtl::OUString& _rURL, const 
 
             m_pImpl->disposeStorages();
 
+            // each and every document definition obtained via m_xForms and m_xReports depends
+            // on the sub storages which we just disposed. So, dispose the forms/reports collections, too.
+            // This ensures that they're re-created when needed.
+            clearObjectContainer( m_xForms );
+            clearObjectContainer( m_xReports );
+
             xNewRootStorage = m_pImpl->switchToStorage( xTargetStorage );
 
             m_pImpl->m_bDocumentReadOnly = sal_False;
@@ -799,7 +1053,8 @@ void ODatabaseDocument::impl_storeAs_throw( const ::rtl::OUString& _rURL, const 
         impl_storeToStorage_throw( xCurrentStorage, aMediaDescriptor, _rGuard );
 
         // success - tell our impl
-        m_pImpl->attachResource( _rURL, aMediaDescriptor );
+        m_pImpl->setDocFileLocation( _rURL );
+        m_pImpl->setResource( _rURL, aMediaDescriptor );
 
         // if we are in an initialization process, then this is finished, now that we stored the document
         if ( bIsInitializationProcess )
@@ -821,13 +1076,7 @@ void ODatabaseDocument::impl_storeAs_throw( const ::rtl::OUString& _rURL, const 
             throw;
         }
 
-        ::rtl::OUString sErrorMessage = extractExceptionMessage( m_pImpl->m_aContext, aError );
-        sErrorMessage = ResourceManager::loadString(
-            RID_STR_ERROR_WHILE_SAVING,
-            "$location$", _rURL,
-            "$message$", sErrorMessage
-        );
-        throw IOException( sErrorMessage, *this );
+        impl_throwIOExceptionCausedBySave_throw( aError, _rURL );
     }
 
     // notify the document event
@@ -942,7 +1191,7 @@ void ODatabaseDocument::impl_storeToStorage_throw( const Reference< XStorage >& 
         lcl_triggerStatusIndicator_throw( aWriteArgs, _rDocGuard, false );
 
         // commit target storage
-        OSL_VERIFY( ODatabaseModelImpl::commitStorageIfWriteable( _rxTargetStorage ) );
+        OSL_VERIFY( tools::stor::commitStorageIfWriteable( _rxTargetStorage ) );
     }
     catch( const IOException& ) { throw; }
     catch( const RuntimeException& ) { throw; }
@@ -988,16 +1237,7 @@ void SAL_CALL ODatabaseDocument::storeToURL( const ::rtl::OUString& _rURL, const
             throw;
         }
 
-        Exception aExcept;
-        aError >>= aExcept;
-
-        ::rtl::OUString sErrorMessage = extractExceptionMessage( m_pImpl->m_aContext, aError );
-        sErrorMessage = ResourceManager::loadString(
-            RID_STR_ERROR_WHILE_SAVING,
-            "$location$", _rURL,
-            "$message$", sErrorMessage
-        );
-        throw IOException( sErrorMessage, *this );
+        impl_throwIOExceptionCausedBySave_throw( aError, _rURL );
     }
 
     m_aEventNotifier.notifyDocumentEventAsync( "OnSaveToDone", NULL, makeAny( _rURL ) );

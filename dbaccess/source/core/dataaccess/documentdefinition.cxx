@@ -252,6 +252,7 @@
 #include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
+#include <com/sun/star/util/XModifiable2.hpp>
 
 using namespace ::com::sun::star;
 using namespace view;
@@ -418,6 +419,40 @@ namespace dbaccess
     };
 
     //==================================================================
+    // LockModifiable
+    //==================================================================
+    class LockModifiable
+    {
+    public:
+        LockModifiable( const Reference< XInterface >& i_rModifiable )
+            :m_xModifiable( i_rModifiable, UNO_QUERY )
+        {
+            OSL_ENSURE( m_xModifiable.is(), "LockModifiable::LockModifiable: invalid component!" );
+            if ( m_xModifiable.is() )
+            {
+                if ( !m_xModifiable->isSetModifiedEnabled() )
+                {
+                    // somebody already locked that, no need to lock it, again, and no need to unlock it later
+                    m_xModifiable.clear();
+                }
+                else
+                {
+                    m_xModifiable->disableSetModified();
+                }
+            }
+        }
+
+        ~LockModifiable()
+        {
+            if ( m_xModifiable.is() )
+                m_xModifiable->enableSetModified();
+        }
+
+    private:
+        Reference< XModifiable2 >   m_xModifiable;
+    };
+
+    //==================================================================
     // LifetimeCoupler
     //==================================================================
     typedef ::cppu::WeakImplHelper1 <   css::lang::XEventListener
@@ -534,6 +569,15 @@ namespace dbaccess
                 }
             }
         }
+#if OSL_DEBUG_LEVEL > 0
+        // alternative, shorter approach
+        const Sequence< NamedValue > aProps( aConfigHelper.GetObjectPropsByMediaType( _rMediaType ) );
+        const ::comphelper::NamedValueCollection aMediaTypeProps( aProps );
+        const ::rtl::OUString sAlternativeResult = aMediaTypeProps.getOrDefault( "ObjectDocumentServiceName", ::rtl::OUString() );
+        OSL_ENSURE( sAlternativeResult == sResult, "ODocumentDefinition::GetDocumentServiceFromMediaType: failed, this approach is *not* equivalent (1)!" );
+        const Sequence< sal_Int8 > aAlternativeClassID = aMediaTypeProps.getOrDefault( "ClassID", Sequence< sal_Int8 >() );
+        OSL_ENSURE( aAlternativeClassID == _rClassId, "ODocumentDefinition::GetDocumentServiceFromMediaType: failed, this approach is *not* equivalent (2)!" );
+#endif
     }
     catch ( Exception& )
     {
@@ -548,14 +592,9 @@ namespace dbaccess
 DBG_NAME(ODocumentDefinition)
 
 //--------------------------------------------------------------------------
-ODocumentDefinition::ODocumentDefinition(const Reference< XInterface >& _rxContainer
-                                         , const Reference< XMultiServiceFactory >& _xORB
-                                         ,const TContentPtr& _pImpl
-                                         , sal_Bool _bForm
-                                         , const Sequence< sal_Int8 >& _aClassID
-                                         ,const Reference<XConnection>& _xConnection
-                                         )
-                                         :OContentHelper(_xORB,_rxContainer,_pImpl)
+ODocumentDefinition::ODocumentDefinition( const Reference< XInterface >& _rxContainer, const Reference< XMultiServiceFactory >& _xORB,
+                                          const TContentPtr& _pImpl, sal_Bool _bForm )
+    :OContentHelper(_xORB,_rxContainer,_pImpl)
     ,OPropertyStateContainer(OContentHelper::rBHelper)
     ,m_pInterceptor(NULL)
     ,m_bForm(_bForm)
@@ -566,9 +605,19 @@ ODocumentDefinition::ODocumentDefinition(const Reference< XInterface >& _rxConta
 {
     DBG_CTOR(ODocumentDefinition, NULL);
     registerProperties();
-    if ( _aClassID.getLength() )
-        loadEmbeddedObject( _xConnection, _aClassID, Sequence< PropertyValue >(), false, false );
 }
+
+//--------------------------------------------------------------------------
+void ODocumentDefinition::initialLoad( const Sequence< sal_Int8 >& i_rClassID, const Sequence< PropertyValue >& i_rCreationArgs,
+                                       const Reference< XConnection >& i_rConnection )
+{
+    OSL_ENSURE( i_rClassID.getLength(), "ODocumentDefinition::initialLoad: illegal class ID!" );
+    if ( !i_rClassID.getLength() )
+        return;
+
+    loadEmbeddedObject( i_rConnection, i_rClassID, i_rCreationArgs, false, false );
+}
+
 //--------------------------------------------------------------------------
 ODocumentDefinition::~ODocumentDefinition()
 {
@@ -631,15 +680,39 @@ IMPLEMENT_SERVICE_INFO1(ODocumentDefinition,"com.sun.star.comp.dba.ODocumentDefi
 //--------------------------------------------------------------------------
 void ODocumentDefinition::registerProperties()
 {
-    registerProperty(PROPERTY_NAME, PROPERTY_ID_NAME, PropertyAttribute::BOUND | PropertyAttribute::READONLY | PropertyAttribute::CONSTRAINED,
-                    &m_pImpl->m_aProps.aTitle, ::getCppuType(&m_pImpl->m_aProps.aTitle));
-    registerProperty(PROPERTY_AS_TEMPLATE, PROPERTY_ID_AS_TEMPLATE, PropertyAttribute::BOUND | PropertyAttribute::READONLY | PropertyAttribute::CONSTRAINED,
-                    &m_pImpl->m_aProps.bAsTemplate, ::getCppuType(&m_pImpl->m_aProps.bAsTemplate));
-    registerProperty(PROPERTY_PERSISTENT_NAME, PROPERTY_ID_PERSISTENT_NAME, PropertyAttribute::BOUND | PropertyAttribute::READONLY | PropertyAttribute::CONSTRAINED,
-                    &m_pImpl->m_aProps.sPersistentName, ::getCppuType(&m_pImpl->m_aProps.sPersistentName));
-    registerProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsForm")), PROPERTY_ID_IS_FORM, PropertyAttribute::BOUND | PropertyAttribute::READONLY | PropertyAttribute::CONSTRAINED,
-                    &m_bForm, ::getCppuType(&m_bForm));
+#define REGISTER_PROPERTY( name, location ) \
+    registerProperty(   PROPERTY_##name, PROPERTY_ID_##name, PropertyAttribute::READONLY, &location, ::getCppuType( &location ) );
+
+#define REGISTER_PROPERTY_BV( name, location ) \
+    registerProperty(   PROPERTY_##name, PROPERTY_ID_##name, PropertyAttribute::CONSTRAINED | PropertyAttribute::BOUND | PropertyAttribute::READONLY, &location, ::getCppuType( &location ) );
+
+    REGISTER_PROPERTY_BV( NAME,            m_pImpl->m_aProps.aTitle            );
+    REGISTER_PROPERTY   ( AS_TEMPLATE,     m_pImpl->m_aProps.bAsTemplate       );
+    REGISTER_PROPERTY   ( PERSISTENT_NAME, m_pImpl->m_aProps.sPersistentName   );
+    REGISTER_PROPERTY   ( IS_FORM,         m_bForm                             );
 }
+
+// -----------------------------------------------------------------------------
+void SAL_CALL ODocumentDefinition::getFastPropertyValue( Any& o_rValue, sal_Int32 i_nHandle ) const
+{
+    if ( i_nHandle == PROPERTY_ID_PERSISTENT_PATH )
+    {
+        ::rtl::OUString sPersistentPath;
+        if ( m_pImpl->m_aProps.sPersistentName.getLength() )
+        {
+            ::rtl::OUStringBuffer aBuffer;
+            aBuffer.append( ODatabaseModelImpl::getObjectContainerStorageName( m_bForm ? ODatabaseModelImpl::E_FORM : ODatabaseModelImpl::E_REPORT ) );
+            aBuffer.append( sal_Unicode( '/' ) );
+            aBuffer.append( m_pImpl->m_aProps.sPersistentName );
+            sPersistentPath = aBuffer.makeStringAndClear();
+        }
+        o_rValue <<= sPersistentPath;
+        return;
+    }
+
+    OPropertyStateContainer::getFastPropertyValue( o_rValue, i_nHandle );
+}
+
 // -----------------------------------------------------------------------------
 Reference< XPropertySetInfo > SAL_CALL ODocumentDefinition::getPropertySetInfo(  ) throw(RuntimeException)
 {
@@ -657,10 +730,21 @@ IPropertyArrayHelper& ODocumentDefinition::getInfoHelper()
 //--------------------------------------------------------------------------
 IPropertyArrayHelper* ODocumentDefinition::createArrayHelper( ) const
 {
+    // properties maintained by our base class (see registerProperties)
     Sequence< Property > aProps;
-    describeProperties(aProps);
-    return new OPropertyArrayHelper(aProps);
+    describeProperties( aProps );
+
+    // properties not maintained by our base class
+    Sequence< Property > aManualProps( 1 );
+    aManualProps[0].Name = PROPERTY_PERSISTENT_PATH;
+    aManualProps[0].Handle = PROPERTY_ID_PERSISTENT_PATH;
+    aManualProps[0].Type = ::getCppuType( static_cast< const ::rtl::OUString* >( NULL ) );
+    aManualProps[0].Attributes = PropertyAttribute::READONLY;
+
+    return new OPropertyArrayHelper( ::comphelper::concatSequences( aProps, aManualProps ) );
 }
+
+// -----------------------------------------------------------------------------
 class OExecuteImpl
 {
     sal_Bool& m_rbSet;
@@ -668,6 +752,7 @@ public:
     OExecuteImpl(sal_Bool& _rbSet) : m_rbSet(_rbSet){ m_rbSet=sal_True; }
     ~OExecuteImpl(){ m_rbSet = sal_False; }
 };
+
 // -----------------------------------------------------------------------------
 namespace
 {
@@ -697,7 +782,7 @@ void ODocumentDefinition::impl_removeFrameFromDesktop_throw( const ::comphelper:
 }
 
 // -----------------------------------------------------------------------------
-void ODocumentDefinition::impl_onActivateEmbeddedObject_nothrow()
+void ODocumentDefinition::impl_onActivateEmbeddedObject_nothrow( const bool i_bReactivated )
 {
     try
     {
@@ -724,7 +809,7 @@ void ODocumentDefinition::impl_onActivateEmbeddedObject_nothrow()
         LifetimeCoupler::couple( *this, xFrame.get() );
 
         // init the edit view
-        if ( m_bForm && m_bOpenInDesign )
+        if ( m_bForm && m_bOpenInDesign && !i_bReactivated )
             impl_initFormEditView( xController );
     }
     catch( const RuntimeException& )
@@ -834,6 +919,9 @@ void ODocumentDefinition::impl_initFormEditView( const Reference< XController >&
         Reference< XViewSettingsSupplier > xSettingsSupplier( _rxController, UNO_QUERY_THROW );
         Reference< XPropertySet > xViewSettings( xSettingsSupplier->getViewSettings(), UNO_QUERY_THROW );
 
+        // the below code could indirectly tamper with the "modified" flag of the model, temporarily disable this
+        LockModifiable aLockModify( _rxController->getModel() );
+
         // The visual area size can be changed by the setting of the following properties
         // so it should be restored later
         PreserveVisualAreaSize aPreserveVisAreaSize( _rxController->getModel() );
@@ -851,13 +939,43 @@ void ODocumentDefinition::impl_initFormEditView( const Reference< XController >&
         xViewSettings->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowOnlineLayout")),makeAny(sal_True));
         xViewSettings->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RasterSubdivisionX")),makeAny(sal_Int32(5)));
         xViewSettings->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RasterSubdivisionY")),makeAny(sal_Int32(5)));
-
-        Reference< XModifiable > xModifiable( _rxController->getModel(), UNO_QUERY_THROW );
-        xModifiable->setModified( sal_False );
     }
     catch( const Exception& )
     {
         DBG_UNHANDLED_EXCEPTION();
+    }
+}
+
+// -----------------------------------------------------------------------------
+void ODocumentDefinition::impl_showOrHideComponent_throw( const bool i_bShow )
+{
+    const sal_Int32 nCurrentState = m_xEmbeddedObject.is() ? m_xEmbeddedObject->getCurrentState() : EmbedStates::LOADED;
+    switch ( nCurrentState )
+    {
+    default:
+    case EmbedStates::LOADED:
+        throw embed::WrongStateException( ::rtl::OUString(), *this );
+
+    case EmbedStates::RUNNING:
+        if ( !i_bShow )
+            // fine, a running (and not yet active) object is never visible
+            return;
+        {
+            LockModifiable aLockModify( impl_getComponent_throw() );
+            m_xEmbeddedObject->changeState( EmbedStates::ACTIVE );
+            impl_onActivateEmbeddedObject_nothrow( false );
+        }
+        break;
+
+    case EmbedStates::ACTIVE:
+    {
+        Reference< XModel > xEmbeddedDoc( impl_getComponent_throw( true ), UNO_QUERY_THROW );
+        Reference< XController > xEmbeddedController( xEmbeddedDoc->getCurrentController(), UNO_SET_THROW );
+        Reference< XFrame > xEmbeddedFrame( xEmbeddedController->getFrame(), UNO_SET_THROW );
+        Reference< XWindow > xEmbeddedWindow( xEmbeddedFrame->getContainerWindow(), UNO_SET_THROW );
+        xEmbeddedWindow->setVisible( i_bShow );
+    }
+    break;
     }
 }
 
@@ -874,7 +992,7 @@ Any ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, cons
 
     // for the document, default to the interaction handler as used for loading the DB doc
     // This might be overwritten below, when examining _rOpenArgument.
-    ::comphelper::NamedValueCollection aDBDocArgs( m_pImpl->m_pDataSource->getResource() );
+    const ::comphelper::NamedValueCollection& aDBDocArgs( m_pImpl->m_pDataSource->getMediaDescriptor() );
     Reference< XInteractionHandler > xHandler( aDBDocArgs.getOrDefault( "InteractionHandler", Reference< XInteractionHandler >() ) );
     if ( xHandler.is() )
         aDocumentArgs.put( "InteractionHandler", xHandler );
@@ -966,10 +1084,6 @@ Any ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, cons
     }
     aDocumentArgs.put( "MacroExecutionMode", *aDocumentMacroMode );
 
-
-    if ( xConnection.is() )
-        m_xLastKnownConnection = xConnection;
-
     if  (   ( nOpenMode == OpenMode::ALL )
         ||  ( nOpenMode == OpenMode::FOLDERS )
         ||  ( nOpenMode == OpenMode::DOCUMENTS )
@@ -1033,8 +1147,9 @@ Any ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, cons
 
     if ( _bActivate && !bOpenHidden )
     {
+        LockModifiable aLockModify( impl_getComponent_throw() );
         m_xEmbeddedObject->changeState( EmbedStates::ACTIVE );
-        ODocumentDefinition::impl_onActivateEmbeddedObject_nothrow();
+        impl_onActivateEmbeddedObject_nothrow( false );
     }
     else
     {
@@ -1085,14 +1200,17 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
             sal_Int32 nCurrentState = m_xEmbeddedObject->getCurrentState();
             bool bIsActive = ( nCurrentState == EmbedStates::ACTIVE );
 
-            // exception: new-style reports always create a new document when "open" is executed
-            Reference< report::XReportDefinition > xReportDefinition( getComponent(), UNO_QUERY );
-            bool bIsAliveNewStyleReport = ( xReportDefinition.is() && ( bOpen || bOpenForMail ) );
-
-            if ( bIsActive && !bIsAliveNewStyleReport )
+            if ( bIsActive )
             {
-                ODocumentDefinition::impl_onActivateEmbeddedObject_nothrow();
-                return makeAny( getComponent() );
+                // exception: new-style reports always create a new document when "open" is executed
+                Reference< report::XReportDefinition > xReportDefinition( impl_getComponent_throw( false ), UNO_QUERY );
+                bool bIsAliveNewStyleReport = ( xReportDefinition.is() && ( bOpen || bOpenForMail ) );
+
+                if ( !bIsAliveNewStyleReport )
+                {
+                    impl_onActivateEmbeddedObject_nothrow( true );
+                    return makeAny( getComponent() );
+                }
             }
         }
 
@@ -1125,16 +1243,6 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
         Reference< XStorage> xStorage = getContainerStorage();
         // -----------------------------------------------------------------------------
         xStorage->copyElementTo(m_pImpl->m_aProps.sPersistentName,xDest,sPersistentName);
-        /*loadEmbeddedObject( true );
-        Reference<XEmbedPersist> xPersist(m_xEmbeddedObject,UNO_QUERY);
-        if ( xPersist.is() )
-        {
-            xPersist->storeToEntry(xStorage,sPersistentName,Sequence<PropertyValue>(),Sequence<PropertyValue>());
-            xPersist->storeOwn();
-            m_xEmbeddedObject->changeState(EmbedStates::LOADED);
-        }
-        else
-            throw CommandAbortedException();*/
     }
     else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "preview" ) ) )
     {
@@ -1189,6 +1297,14 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
             )
     {
         aRet <<= impl_close_throw();
+    }
+    else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "show" ) ) )
+    {
+        impl_showOrHideComponent_throw( true );
+    }
+    else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "hide" ) ) )
+    {
+        impl_showOrHideComponent_throw( false );
     }
     else
     {
@@ -1369,7 +1485,7 @@ sal_Bool ODocumentDefinition::save(sal_Bool _bApprove)
             pRequest->addContinuation(pAbort);
 
             // create the handler, let it handle the request
-            Reference< XInteractionHandler > xHandler( m_aContext.createComponent( (::rtl::OUString)SERVICE_SDB_INTERACTION_HANDLER ), UNO_QUERY );
+            Reference< XInteractionHandler > xHandler( m_aContext.createComponent( (::rtl::OUString)SERVICE_TASK_INTERACTION_HANDLER ), UNO_QUERY );
             if ( xHandler.is() )
                 xHandler->handle(xRequest);
 
@@ -1379,16 +1495,16 @@ sal_Bool ODocumentDefinition::save(sal_Bool _bApprove)
                 return sal_True;
             if ( pDocuSave && pDocuSave->wasSelected() )
             {
-                ::osl::MutexGuard aGuard(m_aMutex);
-                Reference<XNameContainer> xNC(pDocuSave->getContent(),UNO_QUERY);
-                if ( xNC.is() )
-                {
-                    m_pImpl->m_aProps.aTitle = pDocuSave->getName();
-                    Reference< XContent> xContent = this;
-                    xNC->insertByName(pDocuSave->getName(),makeAny(xContent));
+                Reference<XNameContainer> xNC( pDocuSave->getContent(), UNO_QUERY_THROW );
 
-                    updateDocumentTitle();
-                }
+                ::osl::ResettableMutexGuard aGuard( m_aMutex );
+                NameChangeNotifier aNameChangeAndNotify( *this, pDocuSave->getName(), aGuard );
+                m_pImpl->m_aProps.aTitle = pDocuSave->getName();
+
+                Reference< XContent> xContent = this;
+                xNC->insertByName(pDocuSave->getName(),makeAny(xContent));
+
+                updateDocumentTitle();
             }
         }
 
@@ -1444,7 +1560,7 @@ sal_Bool ODocumentDefinition::saveAs()
             pRequest->addContinuation(pAbort);
 
             // create the handler, let it handle the request
-            Reference< XInteractionHandler > xHandler(m_aContext.createComponent(::rtl::OUString(SERVICE_SDB_INTERACTION_HANDLER)), UNO_QUERY);
+            Reference< XInteractionHandler > xHandler(m_aContext.createComponent(::rtl::OUString(SERVICE_TASK_INTERACTION_HANDLER)), UNO_QUERY);
             if ( xHandler.is() )
                 xHandler->handle(xRequest);
 
@@ -1586,8 +1702,30 @@ sal_Bool ODocumentDefinition::objectSupportsEmbeddedScripts() const
 }
 
 // -----------------------------------------------------------------------------
+void ODocumentDefinition::separateOpenCommandArguments( const Sequence< PropertyValue >& i_rOpenCommandArguments,
+        ::comphelper::NamedValueCollection& o_rDocumentLoadArgs, ::comphelper::NamedValueCollection& o_rEmbeddedObjectDescriptor )
+{
+    ::comphelper::NamedValueCollection aOpenCommandArguments( i_rOpenCommandArguments );
+
+    const sal_Char* pObjectDescriptorArgs[] =
+    {
+        "RecoveryStorage"
+    };
+    for ( size_t i=0; i < sizeof( pObjectDescriptorArgs ) / sizeof( pObjectDescriptorArgs[0] ); ++i )
+    {
+        if ( aOpenCommandArguments.has( pObjectDescriptorArgs[i] ) )
+        {
+            o_rEmbeddedObjectDescriptor.put( pObjectDescriptorArgs[i], aOpenCommandArguments.get( pObjectDescriptorArgs[i] ) );
+            aOpenCommandArguments.remove( pObjectDescriptorArgs[i] );
+        }
+    }
+
+    o_rDocumentLoadArgs.merge( aOpenCommandArguments, false );
+}
+
+// -----------------------------------------------------------------------------
 Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XConnection>& _xConnection, const bool _bSuppressMacros, const bool _bReadOnly,
-        const Sequence< PropertyValue >& _rAdditionalArgs, Sequence< PropertyValue >& _out_rEmbeddedObjectDescriptor )
+        const Sequence< PropertyValue >& i_rOpenCommandArguments, Sequence< PropertyValue >& _out_rEmbeddedObjectDescriptor )
 {
     // .........................................................................
     // (re-)create interceptor, and put it into the descriptor of the embedded object
@@ -1604,6 +1742,10 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
 
     ::comphelper::NamedValueCollection aEmbeddedDescriptor;
     aEmbeddedDescriptor.put( "OutplaceDispatchInterceptor", xInterceptor );
+
+    // .........................................................................
+    ::comphelper::NamedValueCollection aMediaDesc;
+    separateOpenCommandArguments( i_rOpenCommandArguments, aMediaDesc, aEmbeddedDescriptor );
 
     // .........................................................................
     // create the OutplaceFrameProperties, and put them into the descriptor of the embedded object
@@ -1638,11 +1780,12 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
     aEmbeddedDescriptor.put( "EmbeddedScriptSupport", (sal_Bool)objectSupportsEmbeddedScripts() );
 
     // .........................................................................
-    // pass the descriptor of the embedded object to the caller
-    aEmbeddedDescriptor >>= _out_rEmbeddedObjectDescriptor;
+    // tell the embedded object to not participate in the document recovery game - the DB doc will handle it
+    aEmbeddedDescriptor.put( "DocumentRecoverySupport", (sal_Bool)sal_False );
 
     // .........................................................................
-    ::comphelper::NamedValueCollection aMediaDesc( _rAdditionalArgs );
+    // pass the descriptor of the embedded object to the caller
+    aEmbeddedDescriptor >>= _out_rEmbeddedObjectDescriptor;
 
     // .........................................................................
     // create the ComponentData, and put it into the document's media descriptor
@@ -1665,8 +1808,8 @@ Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XC
     return aMediaDesc.getPropertyValues();
 }
 // -----------------------------------------------------------------------------
-void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& _xConnection, const Sequence< sal_Int8 >& _aClassID,
-        const Sequence< PropertyValue >& _rAdditionalArgs, const bool _bSuppressMacros, const bool _bReadOnly )
+void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& i_rConnection, const Sequence< sal_Int8 >& _aClassID,
+        const Sequence< PropertyValue >& i_rOpenCommandArguments, const bool _bSuppressMacros, const bool _bReadOnly )
 {
     if ( !m_xEmbeddedObject.is() )
     {
@@ -1692,7 +1835,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& _x
                     // the com.sun.star.report.pentaho.SOReportJobFactory is not present.
                     if ( !m_bForm && !sDocumentService.equalsAscii("com.sun.star.text.TextDocument"))
                     {
-                        // we seems to be a new report, check if report extension is present.
+                        // we seem to be a "new style" report, check if report extension is present.
                         Reference< XContentEnumerationAccess > xEnumAccess( m_aContext.getLegacyServiceFactory(), UNO_QUERY );
                         const ::rtl::OUString sReportEngineServiceName = ::dbtools::getDefaultReportEngineServiceName(m_aContext.getLegacyServiceFactory());
                         Reference< XEnumeration > xEnumDrivers = xEnumAccess->createContentEnumeration(sReportEngineServiceName);
@@ -1718,7 +1861,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& _x
 
                 Sequence< PropertyValue > aEmbeddedObjectDescriptor;
                 Sequence< PropertyValue > aLoadArgs( fillLoadArgs(
-                    _xConnection, _bSuppressMacros, _bReadOnly, _rAdditionalArgs, aEmbeddedObjectDescriptor ) );
+                    i_rConnection, _bSuppressMacros, _bReadOnly, i_rOpenCommandArguments, aEmbeddedObjectDescriptor ) );
 
                 m_xEmbeddedObject.set(xEmbedFactory->createInstanceUserInit(aClassID
                                                                             ,sDocumentService
@@ -1740,8 +1883,9 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& _x
                     m_xEmbeddedObject->changeState(EmbedStates::RUNNING);
                     if ( bSetSize )
                     {
-                        awt::Size aSize( DEFAULT_WIDTH, DEFAULT_HEIGHT );
+                        LockModifiable aLockModify( impl_getComponent_throw( false ) );
 
+                        awt::Size aSize( DEFAULT_WIDTH, DEFAULT_HEIGHT );
                         m_xEmbeddedObject->setVisualAreaSize(Aspects::MSOLE_CONTENT,aSize);
                     }
                 }
@@ -1763,7 +1907,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& _x
 
             Sequence< PropertyValue > aEmbeddedObjectDescriptor;
             Sequence< PropertyValue > aLoadArgs( fillLoadArgs(
-                _xConnection, _bSuppressMacros, _bReadOnly, _rAdditionalArgs, aEmbeddedObjectDescriptor ) );
+                i_rConnection, _bSuppressMacros, _bReadOnly, i_rOpenCommandArguments, aEmbeddedObjectDescriptor ) );
 
             Reference<XCommonEmbedPersist> xCommon(m_xEmbeddedObject,UNO_QUERY);
             OSL_ENSURE(xCommon.is(),"unsupported interface!");
@@ -1780,21 +1924,25 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& _x
             // then just re-set some model parameters
             try
             {
-                Reference< XModel > xModel( getComponent(), UNO_QUERY_THROW );
-                Sequence< PropertyValue > aArgs = xModel->getArgs();
+                // ensure the media descriptor doesn't contain any values which are intended for the
+                // EmbeddedObjectDescriptor only
+                ::comphelper::NamedValueCollection aEmbeddedObjectDescriptor;
+                ::comphelper::NamedValueCollection aNewMediaDesc;
+                separateOpenCommandArguments( i_rOpenCommandArguments, aNewMediaDesc, aEmbeddedObjectDescriptor );
 
-                ::comphelper::NamedValueCollection aMediaDesc( aArgs );
-                ::comphelper::NamedValueCollection aArguments( _rAdditionalArgs );
-                aMediaDesc.merge( aArguments, sal_False );
+                // merge the new media descriptor into the existing media descriptor
+                const Reference< XModel > xModel( getComponent(), UNO_QUERY_THROW );
+                const Sequence< PropertyValue > aArgs = xModel->getArgs();
+                ::comphelper::NamedValueCollection aExistentMediaDesc( aArgs );
+                aExistentMediaDesc.merge( aNewMediaDesc, sal_False );
 
-                lcl_putLoadArgs( aMediaDesc, optional_bool(), optional_bool() );
+                lcl_putLoadArgs( aExistentMediaDesc, optional_bool(), optional_bool() );
                     // don't put _bSuppressMacros and _bReadOnly here - if the document was already
                     // loaded, we should not tamper with its settings.
                     // #i88977# / 2008-05-05 / frank.schoenheit@sun.com
                     // #i86872# / 2008-03-13 / frank.schoenheit@sun.com
 
-                aMediaDesc >>= aArgs;
-                xModel->attachResource( xModel->getURL(), aArgs );
+                xModel->attachResource( xModel->getURL(), aExistentMediaDesc.getPropertyValues() );
             }
             catch( const Exception& )
             {
@@ -1820,6 +1968,9 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& _x
             DBG_UNHANDLED_EXCEPTION();
         }
     }
+
+    if ( i_rConnection.is() )
+        m_xLastKnownConnection = i_rConnection;
 }
 
 // -----------------------------------------------------------------------------
@@ -1871,18 +2022,18 @@ void ODocumentDefinition::onCommandGetDocumentProperties( Any& _rProps )
     }
 }
 // -----------------------------------------------------------------------------
-Reference< util::XCloseable> ODocumentDefinition::getComponent() throw (RuntimeException)
+Reference< util::XCloseable > ODocumentDefinition::impl_getComponent_throw( const bool i_ForceCreate )
 {
     OSL_ENSURE(m_xEmbeddedObject.is(),"Illegal call for embeddedObject");
-    Reference< util::XCloseable> xComp;
+    Reference< util::XCloseable > xComp;
     if ( m_xEmbeddedObject.is() )
     {
-        int nOldState = m_xEmbeddedObject->getCurrentState();
-        int nState = nOldState;
-        if ( nOldState == EmbedStates::LOADED )
+        int nState = m_xEmbeddedObject->getCurrentState();
+        if ( ( nState == EmbedStates::LOADED ) && i_ForceCreate )
         {
             m_xEmbeddedObject->changeState( EmbedStates::RUNNING );
-            nState = EmbedStates::RUNNING;
+            nState = m_xEmbeddedObject->getCurrentState();
+            OSL_ENSURE( nState == EmbedStates::RUNNING, "ODocumentDefinition::impl_getComponent_throw: could not switch to RUNNING!" );
         }
 
         if ( nState == EmbedStates::ACTIVE || nState == EmbedStates::RUNNING )
@@ -1896,6 +2047,13 @@ Reference< util::XCloseable> ODocumentDefinition::getComponent() throw (RuntimeE
         }
     }
     return xComp;
+}
+
+// -----------------------------------------------------------------------------
+Reference< util::XCloseable > ODocumentDefinition::getComponent() throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    return impl_getComponent_throw( true );
 }
 
 // -----------------------------------------------------------------------------
@@ -2019,13 +2177,29 @@ void SAL_CALL ODocumentDefinition::store(  ) throw (WrappedTargetException, Runt
     return bSuccess;
 }
 
+// -----------------------------------------------------------------------------
+::rtl::OUString SAL_CALL ODocumentDefinition::getHierarchicalName() throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    return impl_getHierarchicalName( false );
+}
+
+// -----------------------------------------------------------------------------
+::rtl::OUString SAL_CALL ODocumentDefinition::composeHierarchicalName( const ::rtl::OUString& i_rRelativeName ) throw (IllegalArgumentException, NoSupportException, RuntimeException)
+{
+    ::rtl::OUStringBuffer aBuffer;
+    aBuffer.append( getHierarchicalName() );
+    aBuffer.append( sal_Unicode( '/' ) );
+    aBuffer.append( i_rRelativeName );
+    return aBuffer.makeStringAndClear();
+}
 
 // -----------------------------------------------------------------------------
 void SAL_CALL ODocumentDefinition::rename( const ::rtl::OUString& _rNewName ) throw (SQLException, ElementExistException, RuntimeException)
 {
     try
     {
-        osl::ClearableGuard< osl::Mutex > aGuard(m_aMutex);
+        ::osl::ResettableMutexGuard aGuard(m_aMutex);
         if ( _rNewName.equals( m_pImpl->m_aProps.aTitle ) )
             return;
 
@@ -2034,16 +2208,9 @@ void SAL_CALL ODocumentDefinition::rename( const ::rtl::OUString& _rNewName ) th
         if ( _rNewName.indexOf( '/' ) != -1 )
             m_aErrorHelper.raiseException( ErrorCondition::DB_OBJECT_NAME_WITH_SLASHES, *this );
 
-        sal_Int32 nHandle = PROPERTY_ID_NAME;
-        Any aOld = makeAny( m_pImpl->m_aProps.aTitle );
-        Any aNew = makeAny( _rNewName );
-
-        aGuard.clear();
-        fire(&nHandle, &aNew, &aOld, 1, sal_True );
+        NameChangeNotifier aNameChangeAndNotify( *this, _rNewName, aGuard );
         m_pImpl->m_aProps.aTitle = _rNewName;
-        fire(&nHandle, &aNew, &aOld, 1, sal_False );
 
-        ::osl::ClearableGuard< ::osl::Mutex > aGuard2( m_aMutex );
         if ( m_xEmbeddedObject.is() && m_xEmbeddedObject->getCurrentState() == EmbedStates::ACTIVE )
             updateDocumentTitle();
     }
@@ -2084,7 +2251,11 @@ bool ODocumentDefinition::prepareClose()
         // by the embedding component. Thus, we do the suspend call here.
         // #i49370# / 2005-06-09 / frank.schoenheit@sun.com
 
-        Reference< XModel > xModel( getComponent(), UNO_QUERY );
+        Reference< util::XCloseable > xComponent( impl_getComponent_throw( false ) );
+        if ( !xComponent.is() )
+            return true;
+
+        Reference< XModel > xModel( xComponent, UNO_QUERY );
         Reference< XController > xController;
         if ( xModel.is() )
             xController = xModel->getCurrentController();
@@ -2198,6 +2369,43 @@ void SAL_CALL ODocumentDefinition::notifyClosing( const lang::EventObject& /*Sou
 void SAL_CALL ODocumentDefinition::disposing( const lang::EventObject& /*Source*/ ) throw (uno::RuntimeException)
 {
 }
+
+// -----------------------------------------------------------------------------
+void ODocumentDefinition::firePropertyChange( sal_Int32 i_nHandle, const Any& i_rNewValue, const Any& i_rOldValue,
+        sal_Bool i_bVetoable, const NotifierAccess )
+{
+    fire( &i_nHandle, &i_rNewValue, &i_rOldValue, 1, i_bVetoable );
+}
+
+// =============================================================================
+// NameChangeNotifier
+// =============================================================================
+// -----------------------------------------------------------------------------
+NameChangeNotifier::NameChangeNotifier( ODocumentDefinition& i_rDocumentDefinition, const ::rtl::OUString& i_rNewName,
+                                  ::osl::ResettableMutexGuard& i_rClearForNotify )
+    :m_rDocumentDefinition( i_rDocumentDefinition )
+    ,m_aOldValue( makeAny( i_rDocumentDefinition.getCurrentName() ) )
+    ,m_aNewValue( makeAny( i_rNewName ) )
+    ,m_rClearForNotify( i_rClearForNotify )
+{
+    impl_fireEvent_throw( sal_True );
+}
+
+// -----------------------------------------------------------------------------
+NameChangeNotifier::~NameChangeNotifier()
+{
+    impl_fireEvent_throw( sal_False );
+}
+
+// -----------------------------------------------------------------------------
+void NameChangeNotifier::impl_fireEvent_throw( const sal_Bool i_bVetoable )
+{
+    m_rClearForNotify.clear();
+    m_rDocumentDefinition.firePropertyChange(
+        PROPERTY_ID_NAME, m_aNewValue, m_aOldValue, i_bVetoable, ODocumentDefinition::NotifierAccess() );
+    m_rClearForNotify.reset();
+}
+
 //........................................................................
 }   // namespace dbaccess
 //........................................................................

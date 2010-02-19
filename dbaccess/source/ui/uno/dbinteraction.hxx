@@ -35,30 +35,17 @@
 #include <cppuhelper/implbase2.hxx>
 #endif
 
-#ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
-#include <com/sun/star/task/XInteractionHandler.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_AUTHENTICATIONREQUEST_HPP_
-#include <com/sun/star/ucb/AuthenticationRequest.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_PARAMETERSREQUEST_HPP_
-#include <com/sun/star/sdb/ParametersRequest.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_DOCUMENTSAVEREQUEST_HPP_
-#include <com/sun/star/sdb/DocumentSaveRequest.hpp>
-#endif
-#ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
-#endif
+
+/** === begin UNO includes === **/
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/task/XInteractionHandler2.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/ucb/AuthenticationRequest.hpp>
+#include <com/sun/star/sdb/ParametersRequest.hpp>
+#include <com/sun/star/sdb/DocumentSaveRequest.hpp>
+/** === end UNO includes === **/
 
 namespace dbtools
 {
@@ -71,11 +58,11 @@ namespace dbaui
 //.........................................................................
 
     //=========================================================================
-    //= OInteractionHandler
+    //= BasicInteractionHandler
     //=========================================================================
     typedef ::cppu::WeakImplHelper2 <   ::com::sun::star::lang::XServiceInfo
-                                    ,   ::com::sun::star::task::XInteractionHandler
-                                    >   OInteractionHandler_Base;
+                                    ,   ::com::sun::star::task::XInteractionHandler2
+                                    >   BasicInteractionHandler_Base;
     /** implements an <type scope="com.sun.star.task">XInteractionHandler</type> for
         database related interaction requests.
         <p/>
@@ -87,22 +74,30 @@ namespace dbaui
                     standard error dialog for the (maybe chained) exception given</li>
             </ul>
     */
-    class OInteractionHandler
-                :public OInteractionHandler_Base
+    class BasicInteractionHandler
+                :public BasicInteractionHandler_Base
     {
-        OModuleClient m_aModuleClient;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                m_xORB;
+        const OModuleClient m_aModuleClient;
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+                            m_xORB;
+        const bool          m_bFallbackToGeneric;
+
     public:
-        OInteractionHandler(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
+        BasicInteractionHandler(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_rORB,
+            const bool i_bFallbackToGeneric
+        );
 
-    // XServiceInfo
-        DECLARE_SERVICE_INFO_STATIC();
+        // XInteractionHandler2
+        virtual ::sal_Bool SAL_CALL handleInteractionRequest( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& Request ) throw (::com::sun::star::uno::RuntimeException);
 
-    // XInteractionHandler
+        // XInteractionHandler
         virtual void SAL_CALL handle( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& Request ) throw(::com::sun::star::uno::RuntimeException);
 
     protected:
+        sal_Bool
+                impl_handle_throw( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& i_Request );
+
         /// handle SQLExceptions (and derived classes)
         void    implHandle(
                     const ::dbtools::SQLExceptionInfo& _rSqlInfo,
@@ -139,6 +134,53 @@ namespace dbaui
         sal_Int32 getContinuation(
             Continuation _eCont,
             const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >& _rContinuations);
+    };
+
+    //=========================================================================
+    //= SQLExceptionInteractionHandler
+    //=========================================================================
+    class SQLExceptionInteractionHandler : public BasicInteractionHandler
+    {
+    public:
+        SQLExceptionInteractionHandler(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_rORB
+            )
+            :BasicInteractionHandler( i_rORB, false )
+        {
+        }
+
+        // XServiceInfo
+        DECLARE_SERVICE_INFO_STATIC();
+    };
+
+    //=========================================================================
+    //= SQLExceptionInteractionHandler
+    //=========================================================================
+    /** an implementation for the legacy css.sdb.InteractionHandler
+
+        css.sdb.InteractionHandler is deprecated, as it does not only handle database related interactions,
+        but also delegates all kind of unknown requests to a css.task.InteractionHandler.
+
+        In today's architecture, there's only one central css.task.InteractionHandler, which is to be used
+        for all requests. Depending on configuration information, it decides which handler implementation
+        to delegate a request to.
+
+        SQLExceptionInteractionHandler is the delegatee which handles only database related interactions.
+        LegacyInteractionHandler is the version which first checks for a database related interaction, and
+        forwards everything else to the css.task.InteractionHandler.
+    */
+    class LegacyInteractionHandler : public BasicInteractionHandler
+    {
+    public:
+        LegacyInteractionHandler(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_rORB
+            )
+            :BasicInteractionHandler( i_rORB, true )
+        {
+        }
+
+        // XServiceInfo
+        DECLARE_SERVICE_INFO_STATIC();
     };
 
 //.........................................................................
