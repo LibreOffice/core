@@ -382,6 +382,8 @@ private:
             const bool _bActivate,
             const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& _rxEnvironment
         );
+private:
+    using ::cppu::OPropertySetHelper::getFastPropertyValue;
 };
 
 class NameChangeNotifier
