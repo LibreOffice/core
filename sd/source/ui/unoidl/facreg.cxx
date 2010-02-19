@@ -270,10 +270,8 @@ static ::boost::shared_ptr<FactoryMap> spFactoryMap;
 } // end of anonymous namespace
 
 
-#ifdef __cplusplus
 extern "C"
 {
-#endif
 
 SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char  ** ppEnvTypeName,
