@@ -302,10 +302,14 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     void ControlHolder::invalidate() const
     {
-        Window* pWindow = VCLUnoHelper::GetWindow( m_xControl->getPeer() );
-        OSL_ENSURE( pWindow, "ControlHolder::invalidate: no implementation access!" );
-        if ( pWindow )
-            pWindow->Invalidate();
+        Reference< XWindowPeer > xPeer( m_xControl->getPeer() );
+        if ( xPeer.is() )
+        {
+            Window* pWindow = VCLUnoHelper::GetWindow( xPeer );
+            OSL_ENSURE( pWindow, "ControlHolder::invalidate: no implementation access!" );
+            if ( pWindow )
+                pWindow->Invalidate();
+        }
     }
 
     //--------------------------------------------------------------------
