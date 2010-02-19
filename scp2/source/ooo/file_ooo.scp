@@ -2034,6 +2034,20 @@ File gid_File_Oo_Ucb_InteractionHandler_Xcs
     Name = "/registry/schema/org/openoffice/ucb/InteractionHandler.xcs";
 End
 
+File gid_File_Oo_Interaction_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice;
+    Name = "/registry/schema/org/openoffice/Interaction.xcs";
+End
+
+File gid_File_Oo_Interaction_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice;
+    Name = "/registry/data/org/openoffice/Interaction.xcu";
+End
+
 File gid_File_Oo_Ucb_Configuration_Xcu
     TXT_FILE_BODY;
     Styles = (PACKED);
