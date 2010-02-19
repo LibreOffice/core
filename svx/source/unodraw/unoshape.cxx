@@ -607,6 +607,37 @@ void SvxShape::ForceMetricToItemPoolMetric(Pair& rPoint) const throw()
 }
 
 //----------------------------------------------------------------------
+// --> OD 2010-02-19 #i108851# - reintroduction of fix for issue i59051
+void SvxShape::ForceMetricToItemPoolMetric(basegfx::B2DPolyPolygon& rPolyPolygon) const throw()
+{
+    DBG_TESTSOLARMUTEX();
+    if(mpModel)
+    {
+        SfxMapUnit eMapUnit = mpModel->GetItemPool().GetMetric(0);
+        if(eMapUnit != SFX_MAPUNIT_100TH_MM)
+        {
+            switch(eMapUnit)
+            {
+                case SFX_MAPUNIT_TWIP :
+                {
+                    basegfx::B2DHomMatrix aTransform;
+                    const double fMMToTWIPS(72.0 / 127.0);
+
+                    aTransform.scale(fMMToTWIPS, fMMToTWIPS);
+                    rPolyPolygon.transform(aTransform);
+                    break;
+                }
+                default:
+                {
+                    DBG_ERROR("Missing unit translation to PoolMetric!");
+                }
+            }
+        }
+    }
+}
+// <--
+
+//----------------------------------------------------------------------
 void SvxShape::ForceMetricTo100th_mm(Pair& rPoint) const throw()
 {
     DBG_TESTSOLARMUTEX();
@@ -633,6 +664,37 @@ void SvxShape::ForceMetricTo100th_mm(Pair& rPoint) const throw()
     }
 }
 
+//----------------------------------------------------------------------
+// --> OD 2010-02-19 #i108851# - reintroduction of fix for issue i59051
+void SvxShape::ForceMetricTo100th_mm(basegfx::B2DPolyPolygon& rPolyPolygon) const throw()
+{
+    DBG_TESTSOLARMUTEX();
+    SfxMapUnit eMapUnit = SFX_MAPUNIT_100TH_MM;
+    if(mpModel)
+    {
+        eMapUnit = mpModel->GetItemPool().GetMetric(0);
+        if(eMapUnit != SFX_MAPUNIT_100TH_MM)
+        {
+            switch(eMapUnit)
+            {
+                case SFX_MAPUNIT_TWIP :
+                {
+                    basegfx::B2DHomMatrix aTransform;
+                    const double fTWIPSToMM(127.0 / 72.0);
+
+                    aTransform.scale(fTWIPSToMM, fTWIPSToMM);
+                    rPolyPolygon.transform(aTransform);
+                    break;
+                }
+                default:
+                {
+                    DBG_ERROR("Missing unit translation to 100th mm!");
+                }
+            }
+        }
+    }
+}
+// <--
 //----------------------------------------------------------------------
 void SvxShape::ObtainSettingsFromPropertySet(const SvxItemPropertySet& rPropSet)
 {
@@ -2489,10 +2551,15 @@ bool SvxShape::setPropertyValueImpl( const ::rtl::OUString&, const SfxItemProper
                     if( rValue >>= aUnoPoint )
                     {
                         Point aPoint( aUnoPoint.X, aUnoPoint.Y );
+
+                        // --> OD 2010-02-19 #i108851# - reintroduction of fix for issue i59051
+                        // perform metric change before applying anchor position,
+                        // because the anchor position is in pool metric.
+                        ForceMetricToItemPoolMetric( aPoint );
+                        // <--
                         if( mpModel->IsWriter() )
                             aPoint += mpObj->GetAnchorPos();
 
-                        ForceMetricToItemPoolMetric( aPoint );
                         pEdgeObj->SetTailPoint( pProperty->nWID == OWN_ATTR_EDGE_START_POS, aPoint );
                         return true;
                     }
@@ -2516,6 +2583,9 @@ bool SvxShape::setPropertyValueImpl( const ::rtl::OUString&, const SfxItemProper
                     if ( rValue >>= aPolyPoly )
                     {
                         basegfx::B2DPolyPolygon aNewPolyPolygon( SvxConvertPolyPolygonBezierToB2DPolyPolygon( &aPolyPoly ) );
+                        // --> OD 2010-02-19 #i108851# - reintroduction of fix for issue i59051
+                        ForceMetricToItemPoolMetric( aNewPolyPolygon );
+                        // <--
                         if( mpModel->IsWriter() )
                         {
                             Point aPoint( mpObj->GetAnchorPos() );
@@ -2538,6 +2608,9 @@ bool SvxShape::setPropertyValueImpl( const ::rtl::OUString&, const SfxItemProper
         {
             Point aPoint( aUnoPoint.X, aUnoPoint.Y );
 
+            // --> OD 2010-02-19 #i108851# - reintroduction of fix for issue i59051
+            ForceMetricToItemPoolMetric( aPoint );
+            // <--
             if( mpModel->IsWriter() )
                 aPoint += mpObj->GetAnchorPos();
 
@@ -2954,6 +3027,9 @@ bool SvxShape::getPropertyValueImpl( const ::rtl::OUString&, const SfxItemProper
                         Point aPoint( mpObj->GetAnchorPos() );
                         aPolyPoly.transform(basegfx::tools::createTranslateB2DHomMatrix(-aPoint.X(), -aPoint.Y()));
                     }
+                    // --> OD 2010-02-19 #i108851# - reintroduction of fix for issue 59051
+                    ForceMetricTo100th_mm( aPolyPoly );
+                    // <--
                     drawing::PolyPolygonBezierCoords aRetval;
                     SvxConvertB2DPolyPolygonToPolyPolygonBezier( aPolyPoly, aRetval);
                     rValue <<= aRetval;
@@ -2974,6 +3050,9 @@ bool SvxShape::getPropertyValueImpl( const ::rtl::OUString&, const SfxItemProper
             if( mpModel->IsWriter() )
                 aPoint -= mpObj->GetAnchorPos();
 
+            // --> OD 2010-02-19 #i108851# - reintroduction of fix for issue 59051
+            ForceMetricTo100th_mm( aPoint );
+            // <--
             awt::Point aUnoPoint( aPoint.X(), aPoint.Y() );
 
             rValue <<= aUnoPoint;
