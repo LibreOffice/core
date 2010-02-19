@@ -670,6 +670,7 @@ void OUnoObject::impl_initializeModel_nothrow()
             const Reference< XPropertySet > xModelProps( GetUnoControlModel(), UNO_QUERY_THROW );
             const ::rtl::OUString sTreatAsNumberProperty = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TreatAsNumber" ) );
             xModelProps->setPropertyValue( sTreatAsNumberProperty, makeAny( sal_False ) );
+            xModelProps->setPropertyValue( PROPERTY_VERTICALALIGN,m_xReportComponent->getPropertyValue(PROPERTY_VERTICALALIGN));
         }
     }
     catch( const Exception& )
