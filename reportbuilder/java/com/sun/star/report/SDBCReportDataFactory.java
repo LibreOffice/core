@@ -77,6 +77,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class SDBCReportDataFactory implements DataSourceFactory
 {
+
     private static final String ESCAPEPROCESSING = "EscapeProcessing";
 
     private class RowSetProperties
@@ -96,7 +97,6 @@ public class SDBCReportDataFactory implements DataSourceFactory
             this.filter = filter;
             this.maxRows = maxRows;
         }
-
 
         public boolean equals(Object obj)
         {
@@ -143,8 +143,10 @@ public class SDBCReportDataFactory implements DataSourceFactory
             return hash;
         }
     }
+
     class ParameterDefinition
     {
+
         int parameterCount = 0;
         private ArrayList parameterIndex = new ArrayList();
     }
@@ -210,14 +212,14 @@ public class SDBCReportDataFactory implements DataSourceFactory
             final Integer maxRows = (Integer) parameters.get("MaxRows");
             RowSetProperties rowSetProps = new RowSetProperties(escapeProcessing, commandType, command, filter, maxRows);
 
-            final Object[] p = createRowSet(rowSetProps,parameters);
-            final XRowSet rowSet = (XRowSet)p[0];
+            final Object[] p = createRowSet(rowSetProps, parameters);
+            final XRowSet rowSet = (XRowSet) p[0];
 
-            if (command.length() != 0 )
+            if (command.length() != 0)
             {
-                final ParameterDefinition paramDef = (ParameterDefinition)p[1];
-                fillParameter(parameters, rowSet,paramDef);
-                rowSetCreated = rowSetCreated && ( maxRows == null || maxRows.intValue() == 0);
+                final ParameterDefinition paramDef = (ParameterDefinition) p[1];
+                fillParameter(parameters, rowSet, paramDef);
+                rowSetCreated = rowSetCreated && (maxRows == null || maxRows == 0);
 
                 final XCompletedExecution execute = (XCompletedExecution) UnoRuntime.queryInterface(XCompletedExecution.class, rowSet);
                 if (rowSetCreated && execute != null && paramDef.parameterCount > 0)
@@ -521,7 +523,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
                     {
                         final XPropertySet prop = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, queries.getByName(command));
                         final Boolean escape = (Boolean) prop.getPropertyValue(ESCAPEPROCESSING);
-                        if (escape.booleanValue())
+                        if (escape)
                         {
                             statement = (String) prop.getPropertyValue(UNO_COMMAND);
                             final XSingleSelectQueryComposer composer = getComposer(tools, statement, CommandType.COMMAND);
@@ -533,7 +535,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
                                     composer.setOrder(order);
                                 }
                                 final Boolean applyFilter = (Boolean) prop.getPropertyValue(UNO_APPLY_FILTER);
-                                if (applyFilter.booleanValue())
+                                if (applyFilter)
                                 {
                                     final String filter = (String) prop.getPropertyValue(UNO_FILTER);
                                     if (filter != null && filter.length() != 0)
@@ -561,7 +563,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
     }
 
     private void fillParameter(final Map parameters,
-            final XRowSet rowSet,final ParameterDefinition paramDef)
+            final XRowSet rowSet, final ParameterDefinition paramDef)
             throws SQLException,
             UnknownPropertyException,
             PropertyVetoException,
@@ -582,19 +584,22 @@ public class SDBCReportDataFactory implements DataSourceFactory
                 {
                     object = ((BigDecimal) object).toString();
                 }
-                final Integer pos = (Integer)paramDef.parameterIndex.get(i);
+                final Integer pos = (Integer) paramDef.parameterIndex.get(i);
                 para.setObject(pos + 1, object);
             }
         }
     }
 
-    private final Object[] createRowSet(final RowSetProperties rowSetProps,final Map parameters)
+    private final Object[] createRowSet(final RowSetProperties rowSetProps, final Map parameters)
             throws Exception
     {
         final ArrayList detailColumns = (ArrayList) parameters.get(DETAIL_COLUMNS);
-        if (rowSetProperties.containsKey(rowSetProps) && detailColumns != null && !detailColumns.isEmpty() )
+        if (rowSetProperties.containsKey(rowSetProps) && detailColumns != null && !detailColumns.isEmpty())
         {
-            return new Object[]{ rowSetProperties.get(rowSetProps),parameterMap.get(rowSetProps)};
+            return new Object[]
+                    {
+                        rowSetProperties.get(rowSetProps), parameterMap.get(rowSetProps)
+                    };
         }
 
         rowSetCreated = true;
@@ -628,7 +633,10 @@ public class SDBCReportDataFactory implements DataSourceFactory
         rowSetProperties.put(rowSetProps, rowSet);
         parameterMap.put(rowSetProps, paramDef);
 
-        return new Object[]{rowSet,paramDef};
+        return new Object[]
+                {
+                    rowSet, paramDef
+                };
     }
 
     private ParameterDefinition createParameter(final Map parameters,
@@ -645,7 +653,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
         if (composer != null)
         {
             final XPropertySet rowSetProp = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, rowSet);
-            if (((Boolean) rowSetProp.getPropertyValue(APPLY_FILTER)).booleanValue())
+            if ((Boolean) rowSetProp.getPropertyValue(APPLY_FILTER))
             {
                 composer.setFilter((String) rowSetProp.getPropertyValue("Filter"));
             }
@@ -660,7 +668,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
                 {
                     final int oldParameterCount = params.getCount();
                     paramDef.parameterCount = oldParameterCount;
-                    if ( detailColumns != null )
+                    if (detailColumns != null)
                     {
                         for (int i = 0; i < oldParameterCount; i++)
                         {
@@ -672,10 +680,10 @@ public class SDBCReportDataFactory implements DataSourceFactory
                                     final String name = (String) parameter.getPropertyValue("Name");
                                     for (int j = 0; j < detailColumns.size(); j++)
                                     {
-                                        if ( name.equals(detailColumns.get(j) ) )
+                                        if (name.equals(detailColumns.get(j)))
                                         {
                                             handledColumns.add(name);
-                                            paramDef.parameterIndex.add(Integer.valueOf(i));
+                                            paramDef.parameterIndex.add(i);
                                             --paramDef.parameterCount;
                                             break;
                                         }
@@ -691,7 +699,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
                 }
             }
             final ArrayList masterValues = (ArrayList) parameters.get(MASTER_VALUES);
-            if (masterValues != null && !masterValues.isEmpty() && paramDef.parameterIndex.size() != detailColumns.size() )
+            if (masterValues != null && !masterValues.isEmpty() && paramDef.parameterIndex.size() != detailColumns.size())
             {
                 // Vector masterColumns = (Vector) parameters.get("master-columns");
 
@@ -708,7 +716,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
                         ++newParamterCounter)
                 {
                     final String detail = (String) it.next();
-                    if ( !handledColumns.contains(detail) )
+                    if (!handledColumns.contains(detail))
                     {
                         //String master = (String) masterIt.next();
                         oldFilter.append(quote);
@@ -720,7 +728,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
                         {
                             oldFilter.append(" AND ");
                         }
-                        paramDef.parameterIndex.add(Integer.valueOf(newParamterCounter + paramDef.parameterCount - 1));
+                        paramDef.parameterIndex.add(newParamterCounter + paramDef.parameterCount - 1);
                     }
                 }
 
@@ -728,7 +736,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
 
                 final String sQuery = composer.getQuery();
                 rowSetProp.setPropertyValue(UNO_COMMAND, sQuery);
-                rowSetProp.setPropertyValue(UNO_COMMAND_TYPE,Integer.valueOf(CommandType.COMMAND));
+                rowSetProp.setPropertyValue(UNO_COMMAND_TYPE, Integer.valueOf(CommandType.COMMAND));
             }
         }
         return paramDef;
@@ -773,7 +781,7 @@ public class SDBCReportDataFactory implements DataSourceFactory
                     {
                         final XPropertySet prop = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, queries.getByName(command));
                         final Boolean escape = (Boolean) prop.getPropertyValue(ESCAPEPROCESSING);
-                        rowSetProp.setPropertyValue( ESCAPEPROCESSING, escape);
+                        rowSetProp.setPropertyValue(ESCAPEPROCESSING, escape);
                         final String queryCommand = (String) prop.getPropertyValue(UNO_COMMAND);
                         statement = "SELECT * FROM (" + queryCommand + ")";
                     }
