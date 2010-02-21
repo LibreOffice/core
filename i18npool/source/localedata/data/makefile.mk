@@ -199,6 +199,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_or_IN.cxx  \
     $(MISC)$/localedata_pa_IN.cxx  \
     $(MISC)$/localedata_pl_PL.cxx  \
+    $(MISC)$/localedata_plt_MG.cxx  \
     $(MISC)$/localedata_pt_BR.cxx  \
     $(MISC)$/localedata_pt_PT.cxx  \
     $(MISC)$/localedata_ro_RO.cxx  \
@@ -461,6 +462,7 @@ SHL4OBJS= \
     $(SLO)$/localedata_om_ET.obj \
     $(SLO)$/localedata_or_IN.obj \
     $(SLO)$/localedata_pa_IN.obj \
+    $(SLO)$/localedata_plt_MG.obj \
     $(SLO)$/localedata_rw_RW.obj \
     $(SLO)$/localedata_sg_CF.obj \
     $(SLO)$/localedata_shs_CA.obj \

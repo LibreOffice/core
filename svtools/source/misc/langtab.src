@@ -314,6 +314,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Maore" ; LANGUAGE_USER_MAORE ; > ;
         < "Bushi" ; LANGUAGE_USER_BUSHI ; > ;
         < "Tahitian" ; LANGUAGE_USER_TAHITIAN ; > ;
+        < "Malagasy, Plateau" ; LANGUAGE_USER_MALAGASY_PLATEAU ; > ;
     };
 };
 

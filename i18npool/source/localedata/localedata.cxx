@@ -249,6 +249,7 @@ static const struct {
     { "ar_OM",  lcl_DATA_OTHERS },
     { "ug_CN",  lcl_DATA_OTHERS },
     { "om_ET",  lcl_DATA_OTHERS },
+    { "plt_MG", lcl_DATA_OTHERS },
 };
 
 static const sal_Unicode under = sal_Unicode('_');
