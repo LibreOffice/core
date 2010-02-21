@@ -311,6 +311,9 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Sorbian, Upper" ; LANGUAGE_UPPER_SORBIAN_GERMANY ; > ;
         < "Sorbian, Lower" ; LANGUAGE_LOWER_SORBIAN_GERMANY ; > ;
         < "Latgalian" ; LANGUAGE_USER_LATGALIAN ; > ;
+        < "Maore" ; LANGUAGE_USER_MAORE ; > ;
+        < "Bushi" ; LANGUAGE_USER_BUSHI ; > ;
+        < "Tahitian" ; LANGUAGE_USER_TAHITIAN ; > ;
     };
 };
 

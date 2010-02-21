@@ -504,5 +504,8 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_ANCIENT_GREEK         0x0649
 #define LANGUAGE_USER_ASTURIAN              0x064A
 #define LANGUAGE_USER_LATGALIAN             0x064B
+#define LANGUAGE_USER_MAORE                 0x064C
+#define LANGUAGE_USER_BUSHI                 0x064D
+#define LANGUAGE_USER_TAHITIAN              0x064E
 
 #endif /* INCLUDED_I18NPOOL_LANG_H */
