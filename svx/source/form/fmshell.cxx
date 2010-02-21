@@ -617,7 +617,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             if ( bHasControlFocus )
             {
                 const OutputDevice* pDevice = GetCurrentViewDevice();
-                Window* pWindow = static_cast< Window* >( const_cast< OutputDevice* >( pDevice ) );
+                Window* pWindow = dynamic_cast< Window* >( const_cast< OutputDevice* >( pDevice ) );
                 if ( pWindow )
                     pWindow->GrabFocus();
             }
