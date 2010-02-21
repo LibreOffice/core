@@ -170,6 +170,7 @@ static const struct {
     { "mt_MT",  lcl_DATA_EURO },
     { "sc_IT",  lcl_DATA_EURO },
     { "ast_ES", lcl_DATA_EURO },
+    { "ltg_LV", lcl_DATA_EURO },
 
     { "ja_JP",  lcl_DATA_OTHERS },
     { "ko_KR",  lcl_DATA_OTHERS },
