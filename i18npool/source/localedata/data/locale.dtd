@@ -19,7 +19,7 @@
 
     A second possiblity is:
 
-    - temporarily change the DOCTYPE of your file to read (all on one line)
+    - temporarily (!) change the DOCTYPE of your file to read (all on one line)
       <!DOCTYPE Locale SYSTEM "http://hg.services.openoffice.org/DEV300/raw-file/tip/i18npool/source/localedata/data/locale.dtd">
 
     - upload it to the form available at http://www.validome.org/
@@ -59,16 +59,22 @@
 
 <!ENTITY % UNOModule
         'unoid                  CDATA           #IMPLIED'>
+
 <!ENTITY % MessageID
         'msgid                  CDATA           #REQUIRED'>
+
 <!ENTITY % RefLocale
         'ref                    CDATA           #IMPLIED'>
+<!-- Where given, an element can be inherited from another locale, e.g.
+     ref="en_US" -->
+
 <!ENTITY % LIBModule
         'module                 CDATA           #IMPLIED'>
-<!-- The locale referred to for the sub categories -->
+<!-- The locale referred to for the sub categories, implementation detail. -->
 
 <!ENTITY % replaceFrom  'replaceFrom    CDATA #IMPLIED'>
 <!ENTITY % replaceTo    'replaceTo      CDATA #IMPLIED'>
+<!-- See below for the LC_FORMAT element. -->
 
 <!ELEMENT DefaultName  (#PCDATA)>
 
@@ -87,28 +93,35 @@
 -->
 <!ATTLIST Locale allowUpdateFromCLDR (yes|no) #REQUIRED>
 <!-- Whether some data elements may be (automatically) updated from the Common
-     Locale Data Repository, see http://www.unicode.org/cldr/
+     Locale Data Repository, see http://cldr.unicode.org/
+     Note: This mechanism currently (2010-02-21) is outdated.
 -->
 <!ATTLIST Locale  version CDATA #REQUIRED>
 <!-- Valid number, may designate versioned data -->
+
 
 <!ELEMENT LC_INFO (Language, Country, Platform?, Variant?)>
 
 <!ELEMENT Language (LangID, DefaultName) >
 <!ELEMENT LangID (#PCDATA) >
-<!-- LangID must be valid two or three letter language identifier defined by ISO-639
-     Use ISO 639-1 two letter code where available, else ISO 639-2 three letter code.
+<!-- LangID must be a valid two or three letter language identifier defined by
+     ISO 639. Use ISO 639-1 two letter code where available, else ISO 639-2 or
+     639-3 three letter code.
 -->
 
 <!ELEMENT Country (CountryID, DefaultName) >
 <!ELEMENT CountryID (#PCDATA) >
-<!-- CountryID must be valid two letter country identifier defined by ISO-3166 -->
+<!-- CountryID must be a valid two letter country identifier defined by ISO 3166. -->
 
 <!ELEMENT Platform (PlatformID) >
 <!ELEMENT PlatformID (#PCDATA) >
-<!-- can be generic|unix|win32|macos -->
+<!-- Unused, deprecated, can be generic|unix|win32|macos, best Platform element
+     be absent.
+-->
 
 <!ELEMENT Variant (#PCDATA) >
+<!-- Reserved for future use, currently unused. -->
+
 
 <!-- The LC_FORMAT element contains number format codes and may actually appear
      twice (with the second ocurrence named LC_FORMAT_1). One section is
@@ -125,18 +138,22 @@
 
 -->
 <!ELEMENT LC_FORMAT (FormatElement*) >
+<!-- All FormatElement elements must be given if the RefLocale mechanism is not used! -->
 <!ATTLIST LC_FORMAT %RefLocale;>
 <!ATTLIST LC_FORMAT %replaceFrom;>
-<!-- Define placeholder for currency code -->
+<!-- Define placeholder for currency code, usually "[CURRENCY]" -->
 <!ATTLIST LC_FORMAT %replaceTo;>
-<!-- Currency code to be used to replace the placeholder -->
+<!-- Currency code to be used to replace the placeholder, e.g. "[$R-1C09]".
+     Note: The brackets and the leading $ character are mandatory, the
+     hyphen-minus separates the currency symbol from the hexagesimal MS-LCID,
+     letters contained in the LCID have to be in upper case, leading zeros are
+     to be omitted. LCIDs are defined in i18npool/inc/i18npool/lang.h
+-->
 
 <!ELEMENT LC_FORMAT_1 (FormatElement*) >
 <!ATTLIST LC_FORMAT_1 %RefLocale;>
 <!ATTLIST LC_FORMAT_1 %replaceFrom;>
-<!-- Define placeholder for currency code -->
 <!ATTLIST LC_FORMAT_1 %replaceTo;>
-<!-- Currency code to be used to replace the placeholder -->
 
 <!ELEMENT FormatElement   ( FormatCode, DefaultName?)>
 <!ATTLIST FormatElement    %MessageID;>
@@ -237,34 +254,54 @@
 <!ELEMENT FormatCode      (#PCDATA)>
 
 
+<!-- The LC_CALENDAR element defines calendars used with a locale. -->
 <!ELEMENT LC_CALENDAR (Calendar* ) >
+<!-- At least one Calendar element must be given if the RefLocale mechanism is not used! -->
 <!ATTLIST LC_CALENDAR %RefLocale;>
+
 <!ELEMENT Calendar (DaysOfWeek, MonthsOfYear, Eras, StartDayOfWeek, MinimalDaysInFirstWeek) >
 <!ATTLIST Calendar %UNOModule;>
-<!-- the unoid of a gregorian calendar MUST be lower case "gregorian" -->
+<!-- The unoid of a gregorian calendar MUST be lower case "gregorian",
+     calendars MUST match the names defined in the OASIS OpenDocument Format
+     (ODF) 1.2 or later specification. The implementation name registered with
+     the OOo service resgistry MUST match, e.g.
+     com.sun.star.i18n.Calendar_gregorian
+-->
 <!ATTLIST Calendar default (true|false) #REQUIRED >
+<!-- Exactly one Calendar element has to be the default calendar. -->
+
 <!ELEMENT DaysOfWeek (Day*)>
+<!-- All Day elements of a Calendar must be given if the RefLocale mechanism is not used! -->
 <!ATTLIST DaysOfWeek %RefLocale;>
-<!-- Sequence of days is important, MUST start with Sunday -->
+<!-- Sequence of days is important, MUST start with Sunday. -->
 <!ELEMENT Day (DayID, DefaultAbbrvName, DefaultFullName)>
 <!ELEMENT DayID (#PCDATA)>
-<!-- DayID is preferably the lower case abbreviated English name like sun for Sunday -->
+<!-- Preferably the lower case abbreviated English name like sun for Sunday. -->
 <!ELEMENT DefaultAbbrvName (#PCDATA)>
+<!-- The abbreviated day name, e.g. Sun for Sunday. -->
 <!ELEMENT DefaultFullName (#PCDATA)>
+<!-- The full day name, e.g. Sunday for Sunday. -->
+
 <!ELEMENT MonthsOfYear (Month*)>
+<!-- All Month elements of a Calendar must be given if the RefLocale mechanism is not used! -->
 <!ATTLIST MonthsOfYear %RefLocale;>
+<!-- Sequence of months is important, MUST start with the first month of a
+     year, e.g. January in a Gregorian calendar.
+ -->
 <!ELEMENT Month (MonthID, DefaultAbbrvName, DefaultFullName)>
 <!ELEMENT MonthID (#PCDATA)>
-<!-- preferably the lower case abbreviated English name like jan for January -->
+<!-- Preferably the lower case abbreviated English name like jan for January. -->
+
 <!ELEMENT Eras (Era*)>
-<!-- The eras MUST be in chronological order, e.g. first BC then AC -->
+<!-- All Era elements of a Calendar must be given if the RefLocale mechanism is not used! -->
 <!ATTLIST Eras %RefLocale;>
+<!-- The eras MUST be in chronological order, e.g. first BC then AC. -->
 <!ELEMENT Era (EraID, DefaultAbbrvName, DefaultFullName)>
 <!ELEMENT EraID (#PCDATA)>
 <!-- If a calendar has special eras (like zh_TW ROC or ja_JP Gengou calendar)
      and a date before those eras is undefined, a leading (first) dummy era
      with EraID="Dummy" has to be defined to enable the number formatter to
-     fall back to a gregorian calendar for those date values if the XCalendar
+     fall back to a Gregorian calendar for those date values if the XCalendar
      implementation returns an era value of 0.
 -->
 
@@ -279,10 +316,14 @@
      is in the new year.
 -->
 
+
+<!-- The LC_CURRENCY element defines currencies used with a locale. -->
 <!ELEMENT LC_CURRENCY (Currency* ) >
+<!-- At least one Currency element must be given if the RefLocale mechanism is not used! -->
 <!ATTLIST LC_CURRENCY %RefLocale;>
 <!ELEMENT Currency (CurrencyID, CurrencySymbol, BankSymbol, CurrencyName, DecimalPlaces)>
 <!ATTLIST Currency  default (true|false) #REQUIRED >
+<!-- Exactly one Currency element has to be the default currency. -->
 <!ATTLIST Currency  usedInCompatibleFormatCodes (true|false) #REQUIRED >
 <!-- If this currency is the one used in compatible number format codes with
      <member>FormatElement::formatIndex</member> values in the range 12..17.
@@ -299,35 +340,49 @@
      'usedInCompatibleFormatCodes' must both be "false".
 -->
 <!ELEMENT CurrencyID (#PCDATA)>
+<!-- The ISO 4217 three letter currency code, e.g. USD or EUR. -->
 <!ELEMENT CurrencySymbol (#PCDATA)>
+<!-- The currency symbol, e.g. $ or €. -->
 <!ELEMENT BankSymbol (#PCDATA)>
+<!-- The ISO 4217 three letter currency code, e.g. USD or EUR. -->
 <!ELEMENT CurrencyName (#PCDATA)>
+<!-- The native currency name, e.g. Dollar or Euro. -->
 <!ELEMENT DecimalPlaces (#PCDATA)>
+<!-- Number of decimal places used with the currency, usually 2 or 0, e.g. 2
+     for cents.
+-->
+
 
 <!ELEMENT LC_CTYPE (Separators?, Markers?, TimeAM?, TimePM?,  MeasurementSystem?)>
+<!-- All elements must be given if the RefLocale mechanism is not used! -->
 <!ATTLIST LC_CTYPE  %RefLocale;>
 <!ATTLIST LC_CTYPE  %UNOModule;>
+
 <!ELEMENT Separators (DateSeparator, ThousandSeparator, DecimalSeparator, TimeSeparator, Time100SecSeparator, ListSeparator, LongDateDayOfWeekSeparator, LongDateDaySeparator, LongDateMonthSeparator, LongDateYearSeparator)>
-<!ELEMENT Markers (QuotationStart, QuotationEnd, DoubleQuotationStart, DoubleQuotationEnd)>
 <!ELEMENT DateSeparator (#PCDATA)>
 <!ELEMENT ThousandSeparator (#PCDATA)>
 <!ELEMENT DecimalSeparator (#PCDATA)>
 <!ELEMENT TimeSeparator (#PCDATA)>
 <!ELEMENT Time100SecSeparator (#PCDATA)>
-<!ELEMENT TimeAM (#PCDATA)>
-<!ELEMENT TimePM (#PCDATA)>
 <!ELEMENT ListSeparator (#PCDATA)>
-<!ELEMENT QuotationStart (#PCDATA)>
-<!ELEMENT QuotationEnd  (#PCDATA)>
-<!ELEMENT DoubleQuotationStart (#PCDATA)>
-<!ELEMENT DoubleQuotationEnd (#PCDATA)>
-<!ELEMENT MeasurementSystem  (#PCDATA)>
 <!ELEMENT LongDateDayOfWeekSeparator (#PCDATA)>
 <!ELEMENT LongDateDaySeparator (#PCDATA)>
 <!ELEMENT LongDateMonthSeparator (#PCDATA)>
 <!ELEMENT LongDateYearSeparator (#PCDATA)>
 
+<!ELEMENT Markers (QuotationStart, QuotationEnd, DoubleQuotationStart, DoubleQuotationEnd)>
+<!ELEMENT QuotationStart (#PCDATA)>
+<!ELEMENT QuotationEnd  (#PCDATA)>
+<!ELEMENT DoubleQuotationStart (#PCDATA)>
+<!ELEMENT DoubleQuotationEnd (#PCDATA)>
+
+<!ELEMENT TimeAM (#PCDATA)>
+<!ELEMENT TimePM (#PCDATA)>
+<!ELEMENT MeasurementSystem  (#PCDATA)>
+
+
 <!ELEMENT LC_COLLATION (Collator*, CollationOptions?)>
+<!-- All elements must be given if the RefLocale mechanism is not used! -->
 <!ATTLIST LC_COLLATION %RefLocale;>
 <!--
 	Optional ICU tailoring.
@@ -348,13 +403,21 @@
 <!ELEMENT CollationOptions (TransliterationModules+)>
 <!ELEMENT TransliterationModules (#PCDATA)>
 
+
 <!ELEMENT LC_SEARCH (SearchOptions?)>
+<!-- All elements must be given if the RefLocale mechanism is not used! -->
 <!ATTLIST LC_SEARCH %RefLocale;>
 <!ELEMENT SearchOptions (TransliterationModules+)>
 
+
 <!ELEMENT LC_INDEX (IndexKey*, UnicodeScript*, FollowPageWord*)>
 <!ATTLIST LC_INDEX %RefLocale;>
+
 <!--
+    The IndexKey element is optional, but should be given if the locale
+    requires a specific sort order in Writer's index tables or entries are to
+    be combined under keys.
+
     Index key for the algorithm and language, like >A-Z< for English => A, B,
     C, ..., Y, Z. The letters specify under which key an entry goes and the
     order the keys are sorted. Keys may be reordered or letters inserted to
@@ -394,16 +457,22 @@
 <!ATTLIST IndexKey  %LIBModule;>
 <!ATTLIST IndexKey  default (true|false) #REQUIRED >
 <!ATTLIST IndexKey  phonetic (true|false) #REQUIRED >
+
 <!--
     The Unicode script types are those of
     offapi/com/sun/star/i18n/UnicodeScript.idl, they define the code range for
     the language.
 -->
 <!ELEMENT UnicodeScript (#PCDATA)>
+
 <!--
     The FollowPageWord entries were originally hard-coded in
     ../../indexentry/indexentrysupplier.cxx, most locales used the English
     ``p.'' and ``pp.'', valid data should be provided by native speakers.
+    These words or abbreviations are used in the Writer's index table. The
+    first FollowPageWord element is the abbreviation for "page" (p.), the
+    second FollowPageWord element the abbreviation for "page and following
+    pages" (pp.).
 -->
 <!ELEMENT FollowPageWord (#PCDATA)>
 
