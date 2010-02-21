@@ -352,6 +352,7 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_YORUBA,                      "yo", "NG" },
     { LANGUAGE_SOMALI,                      "so", "SO" },
     { LANGUAGE_PAPIAMENTU,                 "pap", "AN" },
+    { LANGUAGE_USER_PAPIAMENTU_ARUBA,      "pap", "AW" },
     { LANGUAGE_ENGLISH_SINGAPORE,           "en", "SG" },
     { LANGUAGE_YIDDISH,                     "yi", "IL" },   // new: old was "ji"
     { LANGUAGE_YIDDISH,                     "ji", "IL" },   // old: new is "yi"

@@ -67,9 +67,10 @@
    Language Identifier Constants and Strings
    http://msdn2.microsoft.com/en-us/library/ms776294.aspx
 
-   Lists for 2003, XP and Vista, overview with URLs pointing to regional settings:
-   NLS information page
-   http://www.microsoft.com/globaldev/nlsweb/default.mspx
+   Hey, yet another list, maybe this one will not move around? It seems to be
+   quite complete..
+   Language Identifier Constants and Strings (Windows)
+   http://msdn.microsoft.com/en-us/library/dd318693(VS.85).aspx
 
    List of supported locale identifiers in Word
    http://support.microsoft.com/default.aspx?scid=KB;en-us;q221435
@@ -508,5 +509,6 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_BUSHI                 0x064D
 #define LANGUAGE_USER_TAHITIAN              0x064E
 #define LANGUAGE_USER_MALAGASY_PLATEAU      0x064F
+#define LANGUAGE_USER_PAPIAMENTU_ARUBA      0x8079  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_PAPIAMENTU)) */
 
 #endif /* INCLUDED_I18NPOOL_LANG_H */

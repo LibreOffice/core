@@ -315,6 +315,8 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Bushi" ; LANGUAGE_USER_BUSHI ; > ;
         < "Tahitian" ; LANGUAGE_USER_TAHITIAN ; > ;
         < "Malagasy, Plateau" ; LANGUAGE_USER_MALAGASY_PLATEAU ; > ;
+        < "Papiamentu (Netherlands Antilles)" ; LANGUAGE_PAPIAMENTU ; > ;
+        < "Papiamento (Aruba)" ; LANGUAGE_USER_PAPIAMENTU_ARUBA ; > ;
     };
 };
 
