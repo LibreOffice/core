@@ -155,6 +155,7 @@ MY_MISC_CXXFILES = \
     $(MISC)$/localedata_hi_IN.cxx  \
     $(MISC)$/localedata_hil_PH.cxx  \
     $(MISC)$/localedata_hr_HR.cxx  \
+    $(MISC)$/localedata_hsb_DE.cxx  \
     $(MISC)$/localedata_hu_HU.cxx  \
     $(MISC)$/localedata_hy_AM.cxx  \
     $(MISC)$/localedata_ia.cxx     \
@@ -359,6 +360,7 @@ SHL3OBJS=	\
     $(SLO)$/localedata_ga_IE.obj	\
     $(SLO)$/localedata_gsc_FR.obj	\
     $(SLO)$/localedata_hr_HR.obj	\
+    $(SLO)$/localedata_hsb_DE.obj	\
     $(SLO)$/localedata_is_IS.obj	\
     $(SLO)$/localedata_it_CH.obj	\
     $(SLO)$/localedata_it_IT.obj	\
