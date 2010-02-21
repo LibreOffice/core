@@ -405,7 +405,11 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_KURDISH_SYRIA,          "ku", "SY" },
     { LANGUAGE_USER_KURDISH_IRAQ,           "ku", "IQ" },
     { LANGUAGE_USER_KURDISH_IRAN,           "ku", "IR" },
-    { LANGUAGE_USER_SARDINIAN,              "sc", "IT" },
+    { LANGUAGE_USER_SARDINIAN,              "sc", "IT" },   // macrolanguage code
+    { LANGUAGE_USER_SARDINIAN_CAMPIDANESE, "sro", "IT" },
+    { LANGUAGE_USER_SARDINIAN_GALLURESE,   "sdn", "IT" },
+    { LANGUAGE_USER_SARDINIAN_LOGUDORESE,  "src", "IT" },
+    { LANGUAGE_USER_SARDINIAN_SASSARESE,   "sdc", "IT" },
     { LANGUAGE_BRETON_FRANCE,               "br", "FR" },
     { LANGUAGE_OBSOLETE_USER_BRETON,        "br", "FR" },
     { LANGUAGE_KALAALLISUT_GREENLAND,       "kl", "GL" },

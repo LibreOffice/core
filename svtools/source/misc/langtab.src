@@ -317,6 +317,10 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Malagasy, Plateau" ; LANGUAGE_USER_MALAGASY_PLATEAU ; > ;
         < "Papiamentu (Netherlands Antilles)" ; LANGUAGE_PAPIAMENTU ; > ;
         < "Papiamento (Aruba)" ; LANGUAGE_USER_PAPIAMENTU_ARUBA ; > ;
+        < "Sardinian, Campidanese" ; LANGUAGE_USER_SARDINIAN_CAMPIDANESE ; > ;
+        < "Sardinian, Gallurese" ; LANGUAGE_USER_SARDINIAN_GALLURESE ; > ;
+        < "Sardinian, Logudorese" ; LANGUAGE_USER_SARDINIAN_LOGUDORESE ; > ;
+        < "Sardinian, Sassarese" ; LANGUAGE_USER_SARDINIAN_SASSARESE ; > ;
     };
 };
 
