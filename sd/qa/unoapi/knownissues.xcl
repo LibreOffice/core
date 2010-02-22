@@ -50,3 +50,7 @@ sd.DrawController_OutlineView::com::sun::star::beans::XPropertySet
 
 ### i88537 ###
 sd.DrawController_PresentationView::com::sun::star::beans::XPropertySet
+
+### i109518 ###
+sd.SdXPresentation::com::sun::star::presentation::XPresentation
+sd.SdXPresentation::com::sun::star::beans::XPropertySet
