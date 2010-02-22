@@ -1,6 +1,6 @@
 --- misc/neon-0.29.3/src/exports.map	2009-09-29 10:28:13.531250000 +0200
 +++ misc/build/neon-0.29.3/src/exports.map	2009-09-21 12:16:53.453125000 +0200
-@@ -0,0 +1,293 @@
+@@ -0,0 +1,294 @@
 +NEON_0_29_3 {
 +	global:
 +		ne_sspi_authenticate;
@@ -282,6 +282,7 @@
 +		ne_realloc;
 +		ne_strdup;
 +		ne_strndup;
++		ne_free;
 +		ne_acl3744_set;
 +		ne_207_create;
 +		ne_207_destroy;
