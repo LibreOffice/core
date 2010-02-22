@@ -283,6 +283,19 @@ void ScDocument::SetScenarioData( SCTAB nTab, const String& rComment,
     }
 }
 
+Color ScDocument::GetTabColor( SCTAB nTab ) const
+{
+    if (ValidTab(nTab) && pTab[nTab])
+        return pTab[nTab]->GetTabColor();
+    return Color(COL_AUTO);
+}
+
+void ScDocument::SetTabColor( SCTAB nTab, const Color& rColor )
+{
+    if (ValidTab(nTab) && pTab[nTab])
+        pTab[nTab]->SetTabColor(rColor);
+}
+
 void ScDocument::GetScenarioData( SCTAB nTab, String& rComment,
                                         Color& rColor, USHORT& rFlags ) const
 {

@@ -588,6 +588,8 @@ public:
                                         Color& rColor, USHORT& rFlags ) const;
     SC_DLLPUBLIC void           SetScenarioData( SCTAB nTab, const String& rComment,
                                         const Color& rColor, USHORT nFlags );
+    Color           GetTabColor( SCTAB nTab ) const;
+    void            SetTabColor( SCTAB nTab, const Color& rColor );
     void            GetScenarioFlags( SCTAB nTab, USHORT& rFlags ) const;
     SC_DLLPUBLIC BOOL           IsActiveScenario( SCTAB nTab ) const;
     SC_DLLPUBLIC void           SetActiveScenario( SCTAB nTab, BOOL bActive );      // nur fuer Undo etc.
