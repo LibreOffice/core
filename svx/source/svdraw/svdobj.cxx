@@ -1733,6 +1733,11 @@ void SdrObject::NbcSetLogicRect(const Rectangle& rRect)
     NbcSetSnapRect(rRect);
 }
 
+void SdrObject::AdjustToMaxRect( const Rectangle& rMaxRect, bool /* bShrinkOnly = false */ )
+{
+    SetLogicRect( rMaxRect );
+}
+
 void SdrObject::SetSnapRect(const Rectangle& rRect)
 {
     Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();

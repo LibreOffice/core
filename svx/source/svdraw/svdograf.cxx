@@ -1029,7 +1029,7 @@ void SdrGrafObj::ImpSetGrafInfoToAttr()
 
 // -----------------------------------------------------------------------------
 
-void SdrGrafObj::AdjustToMaxRect( const Rectangle& rMaxRect, BOOL bShrinkOnly )
+void SdrGrafObj::AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly )
 {
     Size aSize;
     Size aMaxSize( rMaxRect.GetSize() );

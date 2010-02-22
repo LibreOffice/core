@@ -114,7 +114,8 @@ enum XmlShapeType
     XmlShapeTypePresPageShape,                      // "com.sun.star.presentation.PageShape"
     XmlShapeTypePresOLE2Shape,                      // "com.sun.star.presentation.OLE2Shape"
     XmlShapeTypePresChartShape,                     // "com.sun.star.presentation.ChartShape"
-    XmlShapeTypePresSheetShape,                     // "com.sun.star.presentation.OLE2Shape"
+    XmlShapeTypePresSheetShape,                     // "com.sun.star.presentation.CalcShape"
+    XmlShapeTypePresTableShape,                     // "com.sun.star.presentation.TableShape"
     XmlShapeTypePresOrgChartShape,                  // "com.sun.star.presentation.OrgChartShape"
     XmlShapeTypePresNotesShape,                     // "com.sun.star.presentation.NotesShape"
     XmlShapeTypeHandoutShape,                       // "com.sun.star.presentation.HandoutShape"
@@ -124,8 +125,9 @@ enum XmlShapeType
     XmlShapeTypePresSlideNumberShape,               // "com.sun.star.presentation.SlideNumberShape"
     XmlShapeTypePresDateTimeShape,                  // "com.sun.star.presentation.DateTimeShape"
 
-    XmlShapeTypeDrawCustomShape,                    // "com.sun.star.draw.CustomShape"
-    XmlShapeTypeDrawMediaShape,                     // "com.sun.star.draw.MediaShape"
+    XmlShapeTypeDrawCustomShape,                    // "com.sun.star.drawing.CustomShape"
+    XmlShapeTypeDrawMediaShape,                     // "com.sun.star.drawing.MediaShape"
+    XmlShapeTypePresMediaShape,                     // "com.sun.star.presentation.MediaShape"
 
     XmlShapeTypeDrawTableShape,                     // "com.sun.star.drawing.TableShape"
 

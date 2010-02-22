@@ -66,6 +66,8 @@ public:
 
         virtual void                operator=(const SdrObject& rObj);
 
+        virtual void                AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly = false );
+
 public:
 
         void                        setURL( const ::rtl::OUString& rURL );

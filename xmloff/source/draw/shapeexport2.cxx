@@ -1999,13 +1999,16 @@ void XMLShapeExport::ImpExportPluginShape(
 
 void XMLShapeExport::ImpExportMediaShape(
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType, sal_Int32 nFeatures, com::sun::star::awt::Point* pRefPoint)
+    XmlShapeType eShapeType, sal_Int32 nFeatures, com::sun::star::awt::Point* pRefPoint)
 {
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
     {
         // Transformation
         ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
+
+        if(eShapeType == XmlShapeTypePresMediaShape)
+            ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_OBJECT) );
 
         sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
         SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW,

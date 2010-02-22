@@ -31,6 +31,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
+#include <vcl/svapp.hxx>
+
 #include <svx/svdomedia.hxx>
 #include "svdglob.hxx"
 #include "svdstr.hrc"
@@ -145,6 +147,53 @@ void SdrMediaObj::operator=(const SdrObject& rObj)
 
         setMediaProperties( rMediaObj.getMediaProperties() );
         setGraphic( rMediaObj.mapGraphic.get() );
+    }
+}
+
+// ------------------------------------------------------------------------------
+
+void SdrMediaObj::AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly /* = false */ )
+{
+    Size aSize( Application::GetDefaultDevice()->PixelToLogic( getPreferredSize(), MAP_100TH_MM ) );
+    Size aMaxSize( rMaxRect.GetSize() );
+
+    if( aSize.Height() != 0 && aSize.Width() != 0 )
+    {
+        Point aPos( rMaxRect.TopLeft() );
+
+        // Falls Grafik zu gross, wird die Grafik
+        // in die Seite eingepasst
+        if ( (!bShrinkOnly                          ||
+             ( aSize.Height() > aMaxSize.Height() ) ||
+             ( aSize.Width()  > aMaxSize.Width()  ) )&&
+             aSize.Height() && aMaxSize.Height() )
+        {
+            float fGrfWH =  (float)aSize.Width() /
+                            (float)aSize.Height();
+            float fWinWH =  (float)aMaxSize.Width() /
+                            (float)aMaxSize.Height();
+
+            // Grafik an Pagesize anpassen (skaliert)
+            if ( fGrfWH < fWinWH )
+            {
+                aSize.Width() = (long)(aMaxSize.Height() * fGrfWH);
+                aSize.Height()= aMaxSize.Height();
+            }
+            else if ( fGrfWH > 0.F )
+            {
+                aSize.Width() = aMaxSize.Width();
+                aSize.Height()= (long)(aMaxSize.Width() / fGrfWH);
+            }
+
+            aPos = rMaxRect.Center();
+        }
+
+        if( bShrinkOnly )
+            aPos = aRect.TopLeft();
+
+        aPos.X() -= aSize.Width() / 2;
+        aPos.Y() -= aSize.Height() / 2;
+        SetLogicRect( Rectangle( aPos, aSize ) );
     }
 }
 

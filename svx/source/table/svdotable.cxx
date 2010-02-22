@@ -2181,6 +2181,16 @@ void SdrTableObj::NbcSetLogicRect(const Rectangle& rRect)
     SetRectsDirty();
 }
 
+
+// --------------------------------------------------------------------
+
+void SdrTableObj::AdjustToMaxRect( const Rectangle& rMaxRect, bool /* bShrinkOnly = false */ )
+{
+    Rectangle aRect( rMaxRect );
+    aRect.setHeight( GetLogicRect().getHeight() );
+    SetLogicRect( aRect );
+}
+
 // --------------------------------------------------------------------
 
 void SdrTableObj::NbcMove(const Size& rSiz)

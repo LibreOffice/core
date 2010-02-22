@@ -1098,7 +1098,7 @@ void XMLShapeExport::ImpExportCustomShape(
     }
 }
 
-void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape >& xShape, XmlShapeType /*eShapeType*/, sal_Int32 nFeatures, com::sun::star::awt::Point* pRefPoint )
+void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape >& xShape, XmlShapeType eShapeType, sal_Int32 nFeatures, com::sun::star::awt::Point* pRefPoint )
 {
     uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     uno::Reference< container::XNamed > xNamed(xShape, uno::UNO_QUERY);
@@ -1112,8 +1112,8 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
         sal_Bool bIsEmptyPresObj = sal_False;
 
         // presentation settings
-//      if(eShapeType == XmlShapeTypePresTableShape)
-//          bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_TABLE) );
+        if(eShapeType == XmlShapeTypePresTableShape)
+            bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_TABLE) );
 
         const bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 );
         const bool bExportEmbedded(0 != (mrExport.getExportFlags() & EXPORT_EMBEDDED));

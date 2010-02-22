@@ -237,6 +237,7 @@ public:
 
     virtual const Rectangle& GetLogicRect() const;
     virtual void NbcSetLogicRect(const Rectangle& rRect);
+    virtual void AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly = false );
 
     virtual sal_uInt32 GetSnapPointCount() const;
     virtual Point GetSnapPoint(sal_uInt32 i) const;

@@ -1361,6 +1361,10 @@ SdrViewContext SdrView::GetContext() const
         for( ULONG nMarkNum = 0; nMarkNum < nMarkAnz && ( bGraf || bMedia ); nMarkNum++ )
         {
             const SdrObject* pMarkObj = GetMarkedObjectByIndex( nMarkNum );
+            DBG_ASSERT( pMarkObj, "SdrView::GetContext(), null pointer in mark list!" );
+
+            if( !pMarkObj )
+                continue;
 
             if( !pMarkObj->ISA( SdrGrafObj ) )
                 bGraf = FALSE;

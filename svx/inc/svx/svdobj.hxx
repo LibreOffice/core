@@ -811,6 +811,14 @@ public:
     virtual void SetLogicRect(const Rectangle& rRect);
     virtual void NbcSetLogicRect(const Rectangle& rRect);
 
+    /** the defaul is to set the logic rect to the given rectangle rMaxRect. If the shape
+        has an intrinsic aspect ratio it may set the logic rect so the aspect
+        ratio is kept but still inside the rectangle rMaxRect.
+
+        If bShrinkOnly is set to true, the size of the current logic rect will not
+        be changed if it is smaller than the given rectangle rMaxRect. */
+    virtual void AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly = false );
+
     // Drehwinkel und Shear
     virtual long GetRotateAngle() const;
     virtual long GetShearAngle(FASTBOOL bVertical=FALSE) const;

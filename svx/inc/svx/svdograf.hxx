@@ -211,7 +211,7 @@ public:
 
     virtual SdrObject*      DoConvertToPolyObj(BOOL bBezier) const;
 
-    void                    AdjustToMaxRect( const Rectangle& rMaxRect, BOOL bShrinkOnly );
+    virtual void            AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly = false );
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
