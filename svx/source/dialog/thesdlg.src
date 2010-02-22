@@ -39,7 +39,7 @@ ModalDialog RID_SVXDLG_THESAURUS
 {
     HelpId = SID_THESAURUS ;
     OutputSize = TRUE ;
-    Size = MAP_APPFONT ( 265, 230 ) ;
+    Size = MAP_APPFONT ( 235, 230 ) ;
     Text [ en-US ] = "Thesaurus" ;
     SvLook = TRUE ;
     Moveable = TRUE ;
@@ -47,7 +47,7 @@ ModalDialog RID_SVXDLG_THESAURUS
     FixedImage IMG_VENDOR
     {
         Pos = MAP_APPFONT ( 0, 0 ) ;
-        Size = MAP_APPFONT ( 265, 0  ) ;    // correct size will be applied at runtime
+        Size = MAP_APPFONT ( 235, 0  ) ;    // correct size will be applied at runtime
         Hide = TRUE;
     };
 
@@ -69,13 +69,13 @@ ModalDialog RID_SVXDLG_THESAURUS
     {
         DropDown = TRUE ;
         Pos = MAP_APPFONT ( 24 , 16 ) ;
-        Size = MAP_APPFONT ( 171 , 60 ) ;   // have drop down space for several lines
+        Size = MAP_APPFONT ( 141 , 60 ) ;   // have drop down space for several lines
     };
-    PushButton BTN_LOOKUP
+    MenuButton MB_LANGUAGE
     {
-        Pos = MAP_APPFONT ( 200 , 16 ) ;
+        Pos = MAP_APPFONT ( 170 , 16 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ en-US ] = "Look ~Up" ;
+        Text [ en-US ] = "~Language" ;
     };
 
     FixedText FT_THES_ALTERNATIVES
@@ -89,7 +89,7 @@ ModalDialog RID_SVXDLG_THESAURUS
     {
         HelpID = HID_CT_THES_ALTERNATIVES ;
         Pos = MAP_APPFONT ( 5 , 45 ) ;
-        Size = MAP_APPFONT ( 255 , 121 ) ;
+        Size = MAP_APPFONT ( 225 , 121 ) ;
         Border = TRUE;
         TabStop = TRUE ;
     };
@@ -105,13 +105,13 @@ ModalDialog RID_SVXDLG_THESAURUS
     {
         BORDER = TRUE ;
         Pos = MAP_APPFONT ( 5 , 184 ) ;
-        Size = MAP_APPFONT ( 255 , 12 ) ;
+        Size = MAP_APPFONT ( 225 , 12 ) ;
         LEFT = TRUE ;
     };
     FixedLine FL_VAR
     {
         Pos = MAP_APPFONT ( 0 , 200 ) ;
-        Size = MAP_APPFONT ( 265 , 8 ) ;
+        Size = MAP_APPFONT ( 235 , 8 ) ;
     };
 
     HelpButton BTN_THES_HELP
@@ -119,28 +119,22 @@ ModalDialog RID_SVXDLG_THESAURUS
         Pos = MAP_APPFONT ( 5 , 210 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
     };
-    MenuButton MB_LANGUAGE
-    {
-        Pos = MAP_APPFONT ( 70 , 210 ) ;
-        Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ en-US ] = "~Language" ;
-    };
     OkButton BTN_THES_OK
     {
-        Pos = MAP_APPFONT ( 135 , 210 ) ;
+        Pos = MAP_APPFONT ( 105 , 210 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "~Replace" ;
         DefButton = TRUE ;
     };
     CancelButton BTN_THES_CANCEL
     {
-        Pos = MAP_APPFONT ( 200 , 210 ) ;
+        Pos = MAP_APPFONT ( 170 , 210 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
     };
 
-    String STR_ERR_WORDNOTFOUND
+    String STR_ERR_TEXTNOTFOUND
     {
-        Text [ en-US ] = "Word not found in thesaurus" ;
+        Text [ en-US ] = "Text not found" ;
     };
 
     Image IMG_DEFAULT_VENDOR
