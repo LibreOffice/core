@@ -165,3 +165,27 @@ sc.ScAccessibleCsvGrid
 ### i91045 ###
 sc.ScAccessibleDocumentPagePreview
 #-> disabled in sc.sce
+
+### i109517 ###
+sc.ScAnnotationObj::com::sun::star::text::XSimpleText
+sc.ScAnnotationObj::com::sun::star::text::XTextRange
+sc.ScAnnotationObj::com::sun::star::sheet::XSheetAnnotation
+sc.ScAnnotationShapeObj::com::sun::star::style::CharacterPropertiesAsian
+sc.ScAnnotationShapeObj::com::sun::star::drawing::Shape
+sc.ScAnnotationShapeObj::com::sun::star::style::CharacterPropertiesComplex
+sc.ScAnnotationShapeObj::com::sun::star::drawing::XShapeDescriptor
+sc.ScAnnotationShapeObj::com::sun::star::drawing::RotationDescriptor
+sc.ScAnnotationShapeObj::com::sun::star::drawing::LineProperties
+sc.ScAnnotationShapeObj::com::sun::star::text::XSimpleText
+sc.ScAnnotationShapeObj::com::sun::star::drawing::ShadowProperties
+sc.ScAnnotationShapeObj::com::sun::star::text::XTextRange
+sc.ScAnnotationShapeObj::com::sun::star::drawing::CaptionShape
+sc.ScAnnotationShapeObj::com::sun::star::style::CharacterProperties
+sc.ScAnnotationShapeObj::com::sun::star::drawing::XShape
+sc.ScAnnotationShapeObj::com::sun::star::style::ParagraphPropertiesAsian
+sc.ScAnnotationShapeObj::com::sun::star::style::ParagraphPropertiesComplex
+sc.ScAnnotationShapeObj::com::sun::star::lang::XComponent
+sc.ScAnnotationShapeObj::com::sun::star::beans::XPropertySet
+sc.ScAnnotationsObj::com::sun::star::container::XElementAccess
+sc.ScCellObj::com::sun::star::sheet::XSheetAnnotationAnchor
+sc.ScDataPilotFieldObj::com::sun::star::sheet::XDataPilotFieldGrouping
