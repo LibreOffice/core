@@ -47,11 +47,15 @@
 #include "vcl/fontsubset.hxx"
 #include "vcl/sallayout.hxx"
 
+#include "vcl/outdev.h"         // for ImplGlyphFallbackFontSubstitution
+#include "unotools/fontcfg.hxx" // for IMPL_FONT_ATTR_SYMBOL
+
 #include "rtl/logfile.hxx"
 #include "rtl/tencinfo.h"
 #include "rtl/textcvt.h"
 #include "rtl/bootstrap.hxx"
 
+#include "i18npool/mslangid.hxx"
 
 #include "osl/module.h"
 #include "osl/file.hxx"
@@ -81,7 +85,6 @@
 #include <vector>
 #include <set>
 #include <map>
-
 
 using namespace vcl;
 
@@ -312,6 +315,208 @@ RawFontData::RawFontData( HDC hDC, DWORD nTableTag )
         delete[] mpRawBytes;
         mpRawBytes = NULL;
     }
+}
+
+// ===========================================================================
+// platform specific font substitution hooks for glyph fallback enhancement
+// TODO: move into i18n module (maybe merge with svx/ucsubset.*)
+struct Unicode2LangType
+{
+    sal_UCS4 mnMinCode;
+    sal_UCS4 mnMaxCode;
+    LanguageType mnLangID;
+};
+
+// map unicode ranges to languages supported by OOo
+// NOTE: due to the binary search used this list must be sorted by mnMinCode
+static const Unicode2LangType aLangFromCodeChart[]= {
+    {0x0000, 0x007f, LANGUAGE_ENGLISH},             // Basic Latin
+    {0x0080, 0x024f, LANGUAGE_ENGLISH},             // Latin Extended-A and Latin Extended-B
+    {0x0250, 0x02af, LANGUAGE_SYSTEM},              // IPA Extensions
+    {0x0370, 0x03ff, LANGUAGE_GREEK},               // Greek
+    {0x0590, 0x05ff, LANGUAGE_HEBREW},              // Hebrew
+    {0x0600, 0x06ff, LANGUAGE_ARABIC_PRIMARY_ONLY}, // Arabic
+    {0x0900, 0x097f, LANGUAGE_HINDI},               // Devanagari
+    {0x0980, 0x09ff, LANGUAGE_BENGALI},             // Bengali
+    {0x0a80, 0x0aff, LANGUAGE_GUJARATI},            // Gujarati
+    {0x0b00, 0x0b7f, LANGUAGE_ORIYA},               // Oriya
+    {0x0b80, 0x0bff, LANGUAGE_TAMIL},               // Tamil
+    {0x0e00, 0x0e7f, LANGUAGE_THAI},                // Thai
+    {0x0e80, 0x0eff, LANGUAGE_LAO},                 // Lao
+    {0x1000, 0x109f, LANGUAGE_BURMESE},             // Burmese
+    {0x1100, 0x11ff, LANGUAGE_KOREAN},              // Hangul Jamo, Korean-specific
+    {0x1780, 0x17ff, LANGUAGE_KHMER},               // Khmer
+    {0x1e00, 0x1eff, LANGUAGE_ENGLISH},             // Latin Extended Additional
+    {0x2c60, 0x2c7f, LANGUAGE_ENGLISH},             // Latin Extended-C
+    {0x2e80, 0x2fff, LANGUAGE_CHINESE_SIMPLIFIED},  // CJK Radicals Supplement + Kangxi Radical + Ideographic Description Characters
+    {0x3000, 0x303F, LANGUAGE_CHINESE_SIMPLIFIED},  // CJK Symbols and punctuation
+    {0x3040, 0x30FF, LANGUAGE_JAPANESE},            // Japanese Hiragana + Katakana
+    {0x3100, 0x312f, LANGUAGE_CHINESE_TRADITIONAL}, // Bopomofo
+    {0x3130, 0x318f, LANGUAGE_KOREAN},              // Hangul Compatibility Jamo, Kocrean-specific
+    {0x3190, 0x319f, LANGUAGE_JAPANESE},            // Kanbun
+    {0x31a0, 0x31bf, LANGUAGE_CHINESE_TRADITIONAL}, // Bopomofo Extended
+    {0x31c0, 0x31ef, LANGUAGE_CHINESE_SIMPLIFIED},  // CJK Strokes
+    {0x31f0, 0x31ff, LANGUAGE_JAPANESE},            // Japanese Katakana Phonetic Extensions
+    {0x3400, 0x4dbf, LANGUAGE_CHINESE_SIMPLIFIED},  // CJK Unified Ideographs Extension A
+    {0x4e00, 0x9fcf, LANGUAGE_CHINESE_SIMPLIFIED},  // Unified CJK Ideographs
+    {0xa720, 0xa7ff, LANGUAGE_ENGLISH},             // Latin Extended-D
+    {0xac00, 0xd7af, LANGUAGE_KOREAN},              // Hangul Syllables, Kocrean-specific
+    {0xF900, 0xFAFF, LANGUAGE_CHINESE_SIMPLIFIED},  // CJK Compatibility Ideographs
+    {0xfb00, 0xfb4f, LANGUAGE_HEBREW},              // Hibrew present forms
+    {0xfb50, 0xfdff, LANGUAGE_ARABIC_PRIMARY_ONLY}, // Arabic Presentation Forms-A
+    {0xfe70, 0xfefe, LANGUAGE_ARABIC_PRIMARY_ONLY}, // Arabic Presentation Forms-B
+    {0xff65, 0xff9f, LANGUAGE_JAPANESE},            // Japanese Halfwidth Katakana variant
+    {0xffa0, 0xffDC, LANGUAGE_KOREAN},              // Kocrean halfwidth hangual variant
+    {0x10140, 0x1018f, LANGUAGE_GREEK},             // Ancient Greak numbers
+    {0x1d200, 0x1d24f, LANGUAGE_GREEK},             // Ancient Greek Musical
+    {0x20000, 0x2a6df, LANGUAGE_CHINESE},           // CJK Unified Ideographs Extension B
+    {0x2f800, 0x2fa1f, LANGUAGE_CHINESE}            // CJK Compatibility Ideographs Supplement
+};
+
+// get language type in accordance of a missing char
+const LanguageType MapCharToLanguage( sal_UCS4 uChar )
+{
+    // binary search
+    int nLow = 0;
+    int nHigh = (sizeof(aLangFromCodeChart) / sizeof(*aLangFromCodeChart)) - 1;
+    while( nLow <= nHigh )
+    {
+        int nMiddle = (nHigh + nLow) / 2;
+        if( uChar < aLangFromCodeChart[ nMiddle].mnMinCode )
+            nHigh = nMiddle - 1;
+        else if( uChar > aLangFromCodeChart[ nMiddle].mnMaxCode )
+            nLow = nMiddle + 1;
+        else
+            return aLangFromCodeChart[ nMiddle].mnLangID;
+    }
+
+    return LANGUAGE_DONTKNOW;
+}
+
+//class ImplWinFontData;
+void ImplGetLogFontFromFontSelect( HDC hDC,
+                                   const ImplFontSelectData* pFont,
+                                   LOGFONTW& rLogFont,
+                                   bool /*bTestVerticalAvail*/ );
+
+class WinGlyphFallbackSubstititution
+:    public ImplGlyphFallbackFontSubstitution
+{
+public:
+    WinGlyphFallbackSubstititution( HDC hDC, ImplDevFontList* pDFL );
+
+//  void SetHDC( HDC hDC ) { mhDC = hDC; }
+//  void SetFontList( ImplDevFontList* pFontLiest ) { mpFontList = pFontList; }
+    bool FindFontSubstitute( ImplFontSelectData&, rtl::OUString& rMissingChars ) const;
+private:
+    HDC mhDC;
+    ImplDevFontList* mpFontList;
+    bool HasMissingChars( const ImplFontData*, const rtl::OUString& rMissingChars ) const;
+};
+
+inline WinGlyphFallbackSubstititution::WinGlyphFallbackSubstititution( HDC hDC, ImplDevFontList* pDFL )
+:   mhDC( hDC )
+,   mpFontList( pDFL )
+{}
+
+// does a font face hold the given missing characters?
+bool WinGlyphFallbackSubstititution::HasMissingChars( const ImplFontData* pFace, const rtl::OUString& rMissingChars ) const
+{
+    const ImplWinFontData* pWinFont = static_cast<const ImplWinFontData*>(pFace);
+    if( !pWinFont->GetImplFontCharMap() )
+    {
+        // construct a Size structure as the parameter of constructor of class ImplFontSelectData
+        const Size aSize( pFace->GetWidth(), pFace->GetHeight() );
+        // create a ImplFontSelectData object for getting s LOGFONT
+        const ImplFontSelectData aFSD( *pFace, aSize, (float)aSize.Height(), 0, false );
+        // construct log font
+        LOGFONTW aLogFont;
+        ImplGetLogFontFromFontSelect( mhDC, &aFSD, aLogFont, true );
+
+        // create HFONT from log font
+        HFONT hNewFont = ::CreateFontIndirectW( &aLogFont );
+        // select the new font into device
+        HFONT hOldFont = ::SelectFont( mhDC, hNewFont );
+
+        // read CMAP table
+        pWinFont->UpdateFromHDC( mhDC );;
+
+        ::SelectFont( mhDC, hOldFont );
+        ::DeleteFont( hNewFont );
+    }
+
+    sal_Int32 nStrIndex = 0; // TODO: check more missing characters?
+    const sal_UCS4 uChar = rMissingChars.iterateCodePoints( &nStrIndex );
+    const bool bHasChar = pWinFont->HasChar( uChar );
+    return bHasChar;
+}
+
+//get fallback font for missing characters
+bool WinGlyphFallbackSubstititution::FindFontSubstitute( ImplFontSelectData& rFontSelData, rtl::OUString& rMissingChars ) const
+{
+    //g et locale by the language type of missing string
+    com::sun::star::lang::Locale aLocale;
+
+    // what are langauge and mapping locale of the missing characters?
+    sal_Int32 nStrIdx = 0;
+    const sal_Int32 nStrLen = rMissingChars.getLength();
+    while( nStrIdx < nStrLen )
+    {
+        const sal_UCS4 uChar = rMissingChars.iterateCodePoints( &nStrIdx );
+        const LanguageType eLang = MapCharToLanguage( uChar );
+        if( eLang == LANGUAGE_DONTKNOW )
+            continue;
+        MsLangId::convertLanguageToLocale( eLang, aLocale );
+        break;
+    }
+
+    // fall back to default UI locale
+    if( nStrIdx >= nStrLen )
+        aLocale = Application::GetSettings().GetUILocale();
+
+    // first level fallback, get font type face by locale
+    /*const*/ ImplDevFontListData* pDevFont = mpFontList->ImplFindByLocale( aLocale );
+    if( pDevFont )
+    {
+//      const ImplFontData* pFace = pDevFont->FindBestFontFace( rFontSelData );
+//      if( HasMissingChas( pFace, MissingChars) ) {
+            rFontSelData.maSearchName = pDevFont->GetSearchName();
+            return true;
+//      }
+    }
+
+    // are the missing characters symbols?
+    pDevFont = mpFontList->ImplFindByAttributes( IMPL_FONT_ATTR_SYMBOL,
+                    rFontSelData.meWeight, rFontSelData.meWidthType,
+                    rFontSelData.meFamily, rFontSelData.meItalic, rFontSelData.maSearchName );
+    if( pDevFont )
+    {
+        const ImplFontData* pFace = pDevFont->FindBestFontFace( rFontSelData );
+        if( HasMissingChars( pFace, rMissingChars ) )
+        {
+            rFontSelData.maSearchName = pDevFont->GetSearchName();
+            return true;
+        }
+    }
+
+    // last level fallback, check each font type face one by one
+    const ImplGetDevFontList* pTestFontList = mpFontList->GetDevFontList();
+    // limit the count of fonts to be checked to prevent hangs
+    static const int MAX_GFBFONT_COUNT = 600;
+    int nTestFontCount = pTestFontList->Count();
+    if( nTestFontCount > MAX_GFBFONT_COUNT )
+        nTestFontCount = MAX_GFBFONT_COUNT;
+
+    for( int i = 0; i < nTestFontCount; ++i )
+    {
+        const ImplFontData* pFace = pTestFontList->Get( i );
+        if( !HasMissingChars( pFace, rMissingChars ) )
+            continue;
+        rFontSelData.maSearchName = pFace->maName;
+        return true;
+    }
+
+    return false;
 }
 
 // =======================================================================
@@ -910,6 +1115,8 @@ bool ImplWinFontData::IsGSUBstituted( sal_UCS4 cChar ) const
 
 ImplFontCharMap* ImplWinFontData::GetImplFontCharMap() const
 {
+    if(!mpUnicodeMap)
+        return 0;
     mpUnicodeMap->AddReference();
     return mpUnicodeMap;
 }
@@ -2248,6 +2455,11 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
         bImplSalCourierScalable = aInfo.mbImplSalCourierScalable;
         bImplSalCourierNew      = aInfo.mbImplSalCourierNew;
     }
+
+    //set font fallback hook
+    static WinGlyphFallbackSubstititution aSubstFallback(mhDC, pFontList);
+    //aSubstFallback.SetHDC(mhDC);
+    pFontList->SetFallbackHook( &aSubstFallback );
 }
 
 // ----------------------------------------------------------------------------

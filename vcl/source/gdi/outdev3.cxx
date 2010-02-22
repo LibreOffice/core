@@ -1661,6 +1661,18 @@ void ImplDevFontList::InitMatchData() const
     }
 }
 
+//----------------------------------------------------------------------------
+ImplDevFontListData* ImplDevFontList::ImplFindByLocale(com::sun::star::lang::Locale lc) const
+{
+    // get the default font for a specified locale
+    const DefaultFontConfiguration& rDefaults = *DefaultFontConfiguration::get();
+    String aDefault = rDefaults.getUserInterfaceFont( lc );
+    ImplDevFontListData* pFontData = ImplFindByTokenNames( aDefault );
+    if( pFontData )
+        return pFontData;
+    return 0;
+}
+
 // -----------------------------------------------------------------------
 
 ImplDevFontListData* ImplDevFontList::ImplFindByAttributes( ULONG nSearchType,

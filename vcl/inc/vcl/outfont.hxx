@@ -39,6 +39,8 @@
 
 #include <hash_map>
 
+#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
+
 class ImplDevFontListData;
 class ImplGetDevFontList;
 class ImplGetDevSizeList;
@@ -190,6 +192,7 @@ public: // TODO: change to private
 class VCL_DLLPUBLIC ImplDevFontList
 {
 private:
+    friend class WinGlyphFallbackSubstititution;
     mutable bool            mbMatchData;    // true if matching attributes are initialized
     bool                    mbMapNames;     // true if MapNames are available
 
@@ -225,6 +228,9 @@ public:
     ImplDevFontList*        Clone( bool bScalable, bool bEmbeddable ) const;
     ImplGetDevFontList*     GetDevFontList() const;
     ImplGetDevSizeList*     GetDevSizeList( const String& rFontName ) const;
+
+    //used by 2-level font fallback
+    ImplDevFontListData* ImplFindByLocale(com::sun::star::lang::Locale lc) const;
 
 protected:
     void                    InitMatchData() const;
