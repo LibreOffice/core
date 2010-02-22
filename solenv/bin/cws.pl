@@ -38,6 +38,7 @@ use strict;
 use Getopt::Long;
 use File::Basename;
 use File::Path;
+use File::Copy;
 use Cwd;
 use Benchmark;
 
@@ -493,7 +494,6 @@ sub hg_clone_cws_or_milestone
     }
 
     my $masterws = $cws->master();
-    my $milestone = $cws->milestone();
     my $master_local_source = "$hg_local_source/" . $masterws;
     my $master_lan_source = "$hg_lan_source/" . $masterws;
 
@@ -542,7 +542,7 @@ sub hg_clone_cws_or_milestone
     hg_clone_repository($master_local_source, $master_lan_source, $target, $milestone_tag, $clone_with_update);
 
     # now pull from the remote cws outgoing repository if its already available
-    if ( !$pull_from_remote ) {
+    if ( $pull_from_remote ) {
         hg_remote_pull_repository($cws_remote_source, $target);
     }
 
@@ -1320,6 +1320,57 @@ sub relink_workspace {
     if ( !chdir($savedir) ) {
         print_error("Can't chdir() to directory '$linkdir': $!.", 44);
     }
+}
+
+sub fetch_external_tarballs
+{
+    my $source_root_dir = shift;
+    my $external_tarballs_source = shift;
+
+    my $ooo_external_file = "$source_root_dir/ooo/ooo.lst";
+    my $sun_external_file = "$source_root_dir/sun/sun.lst";
+    my $sun_path          = "$source_root_dir/sun";
+
+    my @external_sources_list;
+    push(@external_sources_list, read_external_file($ooo_external_file));
+    if ( -d $sun_path ) {
+        if ( -e $sun_external_file ) {
+            push(@external_sources_list, read_external_file($sun_external_file));
+        }
+        else {
+            print_error("Can't find external file list '$sun_external_file'.", 8);
+        }
+    }
+
+    my $ext_sources_dir = "$source_root_dir/ext_sources";
+    print_message("Copy external tarballs to '$ext_sources_dir'");
+    if ( ! -d $ext_sources_dir) {
+        if ( !mkdir($ext_sources_dir) ) {
+            print_error("Can't create directory '$ext_sources_dir': $!.", 44);
+        }
+    }
+    foreach (@external_sources_list) {
+        if ( ! copy("$external_tarballs_source/$_", $ext_sources_dir) ) {
+            print_error("Can't copy file '$external_tarballs_source' -> '$ext_sources_dir': $!", 0);
+        }
+    }
+    return;
+}
+
+sub read_external_file
+{
+    my $external_file = shift;
+
+    my @external_sources;
+    open(EXT, "<$external_file") or print_error("Can't open file '$external_file' for reading: $!", 98);
+    while(<EXT>) {
+        if ( !/^http:/ ) {
+            chomp;
+            push(@external_sources, $_);
+        }
+    }
+    close(EXT);
+    return @external_sources;
 }
 
 sub update_solver
@@ -2158,14 +2209,15 @@ sub do_fetch
     my $config = CwsConfig->new();
     my $ooo_svn_server = $config->get_ooo_svn_server();
     my $so_svn_server = $config->get_so_svn_server();
+    my $prebuild_dir = $config->get_prebuild_binaries_location();
     # Check early for platforms so we can bail out before anything time consuming is done
     # in case of a missing platform
     my @platforms;
-    my $prebuild_dir;
     if ( defined($platforms) ) {
         use Archive::Zip; # warn early if module is missing
-        $prebuild_dir = $config->get_prebuild_binaries_location();
-        $masterws = $cws->master();
+        if ( !defined($prebuild_dir ) ) {
+            print_error("PREBUILD_BINARIES not configured, can't find platform solvers", 99);
+        }
         $prebuild_dir = "$prebuild_dir/$masterws";
 
         @platforms = split(/,/, $platforms);
@@ -2317,6 +2369,14 @@ sub do_fetch
                     hg_clone_cws_or_milestone('ooo', $cws, $workspace, $clone_milestone_only);
                 }
             }
+        }
+    }
+
+    if ( !$onlysolver ) {
+        my $source_root_dir = "$workspace/$masterws";
+        my $external_tarball_source = "$prebuild_dir/$masterws/ext_sources";
+        if ( -e "$source_root_dir/ooo/ooo.lst" && defined($prebuild_dir) && -d $external_tarball_source ) {
+            fetch_external_tarballs($source_root_dir, $external_tarball_source);
         }
     }
 
