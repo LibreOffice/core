@@ -3671,7 +3671,7 @@ void SdXMLTableShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::
 
 SvXMLImportContext* SdXMLTableShapeContext::CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName, const uno::Reference<xml::sax::XAttributeList>& xAttrList )
 {
-    if( mxTableImportContext.Is() )
+    if( mxTableImportContext.Is() && (nPrefix == XML_NAMESPACE_TABLE) )
         return mxTableImportContext->CreateChildContext(nPrefix, rLocalName, xAttrList);
     else
         return SdXMLShapeContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
