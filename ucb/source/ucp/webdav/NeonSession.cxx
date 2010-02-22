@@ -437,7 +437,7 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
     char * dn = ne_ssl_readable_dname( ne_ssl_cert_subject( cert ) );
     rtl::OUString cert_subject( dn, strlen( dn ), RTL_TEXTENCODING_UTF8, 0 );
 
-    free( dn );
+    ne_free( dn );
 
     security::CertificateContainerStatus certificateContainer(
         xCertificateContainer->hasCertificate(
