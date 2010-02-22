@@ -43,6 +43,7 @@
 #include <vcl/menubtn.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/timer.hxx>
 #include <vcl/wrkwin.hxx>
 
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
@@ -54,23 +55,48 @@
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
-// class LookUpComboBox --------------------------------------------------
+// class LookUpComboBox_Impl --------------------------------------------------
 
-class LookUpComboBox : public ComboBox
+class LookUpComboBox_Impl : public ComboBox
 {
-    Button *    m_pBtn;
+    Timer                       m_aModifyTimer;
+    Selection                   m_aSelection;
+    Button *                    m_pBtn;
+    SvxThesaurusDialog_Impl &   m_rDialogImpl;
 
     // disable copy c-tor and assignment operator
-    LookUpComboBox( const LookUpComboBox & );
-    LookUpComboBox & operator = ( const LookUpComboBox & );
+    LookUpComboBox_Impl( const LookUpComboBox_Impl & );
+    LookUpComboBox_Impl & operator = ( const LookUpComboBox_Impl & );
 
 public:
-    LookUpComboBox( Window *pParent, const ResId &rResId );
-    virtual ~LookUpComboBox();
+    LookUpComboBox_Impl( Window *pParent, const ResId &rResId, SvxThesaurusDialog_Impl &rImpl );
+    virtual ~LookUpComboBox_Impl();
+
+    DECL_LINK( ModifyTimer_Hdl, Timer * );
 
     void SetButton( Button *pBtn )  { m_pBtn = pBtn; }
 
     // ComboBox
+    virtual void        Modify();
+};
+
+// class ReplaceEdit_Impl --------------------------------------------------
+
+class ReplaceEdit_Impl : public Edit
+{
+    Button *                    m_pBtn;
+
+    // disable copy c-tor and assignment operator
+    ReplaceEdit_Impl( const ReplaceEdit_Impl & );
+    ReplaceEdit_Impl & operator = ( const ReplaceEdit_Impl & );
+
+public:
+    ReplaceEdit_Impl( Window *pParent, const ResId &rResId );
+    virtual ~ReplaceEdit_Impl();
+
+    void SetButton( Button *pBtn )  { m_pBtn = pBtn; }
+
+    // Edit
     virtual void        Modify();
     virtual void        SetText( const XubString& rStr );
     virtual void        SetText( const XubString& rStr, const Selection& rNewSelection );
@@ -127,7 +153,8 @@ public:
     SvLBoxEntry *   AddEntry( sal_Int32 nVal, const String &rText, bool bIsHeader );
     void            ClearUserData();
 
-    virtual void KeyInput( const KeyEvent& rKEvt );
+    virtual void    KeyInput( const KeyEvent& rKEvt );
+    virtual void    Paint( const Rectangle& rRect );
 };
 
 
@@ -135,31 +162,31 @@ public:
 
 struct SvxThesaurusDialog_Impl
 {
-    Window*         m_pParent;
+    Window *        m_pParent;
 
-    FixedImage      aVendorImageFI;
-    ImageButton     aLeftBtn;
-    FixedText       aWordText;
-    LookUpComboBox  aWordCB;
-    PushButton      aLookUpBtn;
-    FixedText       m_aAlternativesText;
+    FixedImage              aVendorImageFI;
+    ImageButton             aLeftBtn;
+    FixedText               aWordText;
+    LookUpComboBox_Impl     aWordCB;
+    FixedText               m_aAlternativesText;
     boost::shared_ptr< ThesaurusAlternativesCtrl_Impl > m_pAlternativesCT;
-    FixedText       aReplaceText;
-    Edit            aReplaceEdit;
-    FixedLine       aFL;
-    HelpButton      aHelpBtn;
-    MenuButton      aLangMBtn;
-    OKButton        aOkBtn;
-    CancelButton    aCancelBtn;
+    FixedText               aReplaceText;
+    ReplaceEdit_Impl        aReplaceEdit;
+    FixedLine               aFL;
+    HelpButton              aHelpBtn;
+    MenuButton              aLangMBtn;
+    OKButton                aReplaceBtn;
+    CancelButton            aCancelBtn;
 
     String          aErrStr;
     Image           aVendorDefaultImage;
     Image           aVendorDefaultImageHC;
 
     uno::Reference< linguistic2::XThesaurus >   xThesaurus;
-    OUString        aLookUpText;
-    LanguageType    nLookUpLanguage;
+    OUString                aLookUpText;
+    LanguageType            nLookUpLanguage;
     std::stack< OUString >  aLookUpHistory;
+    bool                    m_bWordFound;
 
     SfxErrorContext*    pErrContext;    // error context while dfalog is opened
 
@@ -185,6 +212,8 @@ struct SvxThesaurusDialog_Impl
     bool    UpdateAlternativesBox_Impl();
     void    UpdateVendorImage();
     void    SetWindowTitle( LanguageType nLanguage );
+    void    LookUp( const String &rText );
+    void    LookUp_Impl();
 };
 
 #endif

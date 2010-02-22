@@ -56,7 +56,7 @@ namespace framework
 // menu ids for language status bar control
 enum LangMenuIDs
 {
-    MID_LANG_SEL_1,
+    MID_LANG_SEL_1 = 1,     // need to start with 1 since xPopupMenu->execute will return 0 if the menu is cancelled
     MID_LANG_SEL_2,
     MID_LANG_SEL_3,
     MID_LANG_SEL_4,
