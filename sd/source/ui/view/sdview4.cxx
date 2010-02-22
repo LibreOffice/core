@@ -145,20 +145,11 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
                 pNewGrafObj->SetEmptyPresObj(FALSE);
             }
 
-            const bool bUndo = IsUndoEnabled();
-            if( bUndo )
-                BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
-
             if (pPage && pPage->IsPresObj(pPickObj))
             {
                 // Neues PresObj in die Liste eintragen
+                pPage->InsertPresObj( pNewGrafObj, PRESOBJ_GRAPHIC );
                 pNewGrafObj->SetUserCall(pPickObj->GetUserCall());
-                if( bUndo )
-                {
-                    AddUndo( new sd::UndoObjectPresentationKind( *pPickObj ) );
-                    AddUndo( new sd::UndoObjectPresentationKind( *pNewGrafObj ) );
-                }
-                pPage->ReplacePresObj(pPickObj, pNewGrafObj, PRESOBJ_GRAPHIC);
             }
 
             if (pImageMap)
@@ -166,11 +157,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
 
             ReplaceObjectAtView(pPickObj, *pPV, pNewGrafObj); // maybe ReplaceObjectAtView
 
-            if( bUndo )
-            {
-                EndUndo();
-            }
-            else
+            if( !IsUndoEnabled() && pPickObj )
             {
                 SdrObject::Free( pPickObj );
             }
@@ -310,7 +297,7 @@ SdrMediaObj* View::InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAc
 
     SdrMediaObj*    pNewMediaObj = NULL;
     SdrPageView*    pPV = GetSdrPageView();
-    SdrObject*      pPickObj = NULL;
+    SdrObject*      pPickObj = GetEmptyPresentationObject( PRESOBJ_MEDIA );
 
     if(pPV && this->ISA(::sd::slidesorter::view::SlideSorterView ))
     {
@@ -335,10 +322,35 @@ SdrMediaObj* View::InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAc
     }
     else if( pPV )
     {
-        pNewMediaObj = new SdrMediaObj( Rectangle( rPos, rSize ) );
+        Rectangle aRect( rPos, rSize );
+        if( pPickObj )
+            aRect = pPickObj->GetLogicRect();
 
-        if( pPV && InsertObjectAtView( pNewMediaObj, *pPV, SDRINSERT_SETDEFLAYER ) )
-            pNewMediaObj->setURL( rMediaURL );
+
+        pNewMediaObj = new SdrMediaObj( aRect );
+
+        if( pPickObj )
+        {
+            SdPage* pPage = static_cast< SdPage* >(pPickObj->GetPage());
+            if(pPage && pPage->IsPresObj(pPickObj))
+            {
+                pPage->InsertPresObj( pNewMediaObj, PRESOBJ_MEDIA );
+                pNewMediaObj->SetUserCall(pPickObj->GetUserCall());
+            }
+        }
+
+        if( pPickObj )
+            ReplaceObjectAtView(pPickObj, *pPV, pNewMediaObj);
+        else
+            InsertObjectAtView( pNewMediaObj, *pPV, SDRINSERT_SETDEFLAYER );
+
+        pNewMediaObj->setURL( rMediaURL );
+
+        if( pPickObj )
+            pNewMediaObj->AdjustToMaxRect( pPickObj->GetLogicRect() );
+
+        if( !IsUndoEnabled() )
+            SdrObject::Free( pPickObj );
     }
 
     rAction = mnAction;

@@ -368,19 +368,8 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                 SdPage* pPage = static_cast< SdPage* >(pPickObj->GetPage());
                 if(pPage && pPage->IsPresObj(pPickObj))
                 {
-                    bUndo = mpView->IsUndoEnabled();
-
-                    if( bUndo )
-                        mpView->BegUndo( SdrUndoNewObj::GetComment(*pOleObj) );
-
-                    // add new PresObj to the list
+                    pPage->InsertPresObj( pOleObj, ePresObjKind );
                     pOleObj->SetUserCall(pPickObj->GetUserCall());
-                    if( bUndo )
-                    {
-                        mpView->AddUndo( new sd::UndoObjectPresentationKind( *pPickObj ) );
-                        mpView->AddUndo( new sd::UndoObjectPresentationKind( *pOleObj ) );
-                    }
-                    pPage->ReplacePresObj(pPickObj, pOleObj, ePresObjKind);
                 }
             }
 
@@ -423,11 +412,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                 }
             }
 
-            if( bUndo )
-            {
-                mpView->EndUndo();
-            }
-            else if( pPickObj )
+            if( !mpView->IsUndoEnabled() && pPickObj )
             {
                 // replaced object must be freed if there is no undo action owning it
                 SdrObject::Free( pPickObj );

@@ -161,10 +161,20 @@ SdPage::~SdPage()
         delete mpItems;
 }
 
+struct OrdNumSorter
+{
+    bool operator()( SdrObject* p1, SdrObject* p2 )
+    {
+        return p1->GetOrdNum() < p2->GetOrdNum();
+    }
+};
+
 /** returns the nIndex'th object from the given PresObjKind, index starts with 1 */
 SdrObject* SdPage::GetPresObj(PresObjKind eObjKind, int nIndex, bool bFuzzySearch /* = false */ )
 {
-    int nObjFound = 0;          // index of the searched object
+    // first sort all matching shapes with z-order
+    std::vector< SdrObject* > aMatches;
+
     SdrObject* pObj = 0;
     while( (pObj = maPresentationShapeList.getNextShape(pObj)) != 0 )
     {
@@ -185,7 +195,9 @@ SdrObject* SdPage::GetPresObj(PresObjKind eObjKind, int nIndex, bool bFuzzySearc
                 case PRESOBJ_CHART:
                 case PRESOBJ_ORGCHART:
                 case PRESOBJ_TABLE:
+                case PRESOBJ_CALC:
                 case PRESOBJ_IMAGE:
+                case PRESOBJ_MEDIA:
                     bFound = TRUE;
                     break;
                 default:
@@ -194,12 +206,22 @@ SdrObject* SdPage::GetPresObj(PresObjKind eObjKind, int nIndex, bool bFuzzySearc
             }
             if( bFound )
             {
-                nObjFound++;    // found one
-                if( nObjFound == nIndex )
-                    return pObj;
+                aMatches.push_back( pObj );
             }
         }
     }
+
+    if( aMatches.size() > 1 )
+    {
+        OrdNumSorter aSortHelper;
+        std::sort( aMatches.begin(), aMatches.end(), aSortHelper );
+    }
+
+    if( nIndex > 0 )
+        nIndex--;
+
+    if( aMatches.size() > nIndex )
+        return aMatches[nIndex];
 
     return 0;
 }
@@ -276,6 +298,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
         }
         break;
 
+        case PRESOBJ_MEDIA:
         case PRESOBJ_OBJECT:
         {
             pSdrObj = new SdrOle2Obj();
@@ -305,6 +328,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
         }
 
         case PRESOBJ_TABLE:
+        case PRESOBJ_CALC:
         {
             pSdrObj = new SdrOle2Obj();
             ( (SdrOle2Obj*) pSdrObj)->SetProgName( String( RTL_CONSTASCII_USTRINGPARAM( "StarCalc" )));
@@ -514,7 +538,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
         if ( eObjKind == PRESOBJ_OBJECT   ||
              eObjKind == PRESOBJ_CHART    ||
              eObjKind == PRESOBJ_ORGCHART ||
-             eObjKind == PRESOBJ_TABLE    ||
+             eObjKind == PRESOBJ_CALC    ||
              eObjKind == PRESOBJ_GRAPHIC )
         {
             SfxItemSet aSet( ((SdDrawDocument*) pModel)->GetPool() );
@@ -1424,6 +1448,12 @@ void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDescripto
                 case PRESOBJ_TITLE:
                     bFound = eSdrObjKind == OBJ_TITLETEXT;
                     break;
+                case PRESOBJ_TABLE:
+                    bFound = eSdrObjKind == OBJ_TABLE;
+                    break;
+                case PRESOBJ_MEDIA:
+                    bFound = eSdrObjKind == OBJ_MEDIA;
+                    break;
                 case PRESOBJ_OUTLINE:
                     bFound = (eSdrObjKind == OBJ_OUTLINETEXT) ||
                              ((eSdrObjKind == OBJ_TEXT) && bPresStyle) ||
@@ -1469,7 +1499,7 @@ void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDescripto
                     }
                     break;
                 case PRESOBJ_CHART:
-                case PRESOBJ_TABLE:
+                case PRESOBJ_CALC:
                     if( eSdrObjKind == OBJ_OLE2 )
                     {
                         SdrOle2Obj* pOle2 = dynamic_cast< SdrOle2Obj* >( pObj );
@@ -1479,7 +1509,7 @@ void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDescripto
                                 ((eKind == PRESOBJ_CHART) &&
                                     ( pOle2->GetProgName().EqualsAscii( "StarChart" ) || pOle2->IsChart() ) )
                                 ||
-                                ((eKind == PRESOBJ_TABLE) &&
+                                ((eKind == PRESOBJ_CALC) &&
                                     ( pOle2->GetProgName().EqualsAscii( "StarCalc" ) || pOle2->IsCalc() ) ) )
                             {
                                 bFound = true;
@@ -2199,23 +2229,6 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
     return pNewObj;
 }
 
-static void SetLogicRect( SdrObject* pObj, Rectangle& rLogicRect )
-{
-    if( pObj )
-    {
-        if( (pObj->GetObjInventor() == SdrInventor) && (pObj->GetObjIdentifier() == OBJ_TABLE) )
-        {
-            Rectangle aRect( rLogicRect );
-            aRect.setHeight( pObj->GetLogicRect().getHeight() );
-            pObj->SetLogicRect( aRect );
-        }
-        else
-        {
-            pObj->SetLogicRect( rLogicRect );
-        }
-    }
-}
-
 /** reuses or creates a presentation shape for an auto layout that fits the given parameter
 
     @param  eObjKind
@@ -2254,10 +2267,10 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
             pUndoManager->AddUndoAction( new UndoObjectUserCall( *pObj ) );
         }
 
-        if ( pObj->ISA(SdrGrafObj) && !pObj->IsEmptyPresObj() )
-            ( (SdrGrafObj*) pObj)->AdjustToMaxRect( aRect, FALSE );
-        else
-            SetLogicRect( pObj, aRect );
+//      if ( pObj->ISA(SdrGrafObj) && !pObj->IsEmptyPresObj() )
+            ( /*(SdrGrafObj*)*/ pObj)->AdjustToMaxRect( aRect );
+//      else
+//          SetLogicRect( pObj, aRect );
 
         pObj->SetUserCall(this);
 
@@ -2338,7 +2351,7 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
     }
 
     if ( pObj && ( pObj->IsEmptyPresObj() || !pObj->ISA(SdrGrafObj) ) )
-        SetLogicRect( pObj, aRect );
+        pObj->AdjustToMaxRect( aRect );
 
     return pObj;
 }
@@ -2389,25 +2402,6 @@ void SdPage::InsertPresObj(SdrObject* pObj, PresObjKind eKind )
         if( pInfo )
             pInfo->mePresObjKind = eKind;
         maPresentationShapeList.addShape(*pObj);
-    }
-}
-
-void SdPage::ReplacePresObj(SdrObject* pOldObj, SdrObject* pNewObj, PresObjKind eNewKind )
-{
-    if( !pNewObj )
-    {
-        RemovePresObj( pOldObj );
-    }
-    else if( pOldObj )
-    {
-        SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(*pNewObj, true);
-        if( pInfo )
-            pInfo->mePresObjKind = eNewKind;
-        maPresentationShapeList.replaceShape(*pOldObj, *pNewObj);
-    }
-    else
-    {
-        InsertPresObj( pNewObj, eNewKind );
     }
 }
 
@@ -2775,7 +2769,7 @@ String SdPage::GetPresObjText(PresObjKind eObjKind) const
     {
         aString = String ( SdResId( STR_PRESOBJ_ORGCHART ) );
     }
-    else if (eObjKind == PRESOBJ_TABLE)
+    else if (eObjKind == PRESOBJ_CALC)
     {
         aString = String ( SdResId( STR_PRESOBJ_TABLE ) );
     }

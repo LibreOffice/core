@@ -214,9 +214,6 @@ public:
     /** inserts the given SdrObject into the presentation object list */
     void            InsertPresObj(SdrObject* pObj, PresObjKind eKind );
 
-    /** replace the given SdrObject with the new SdrObject in the presentation object list */
-    void            ReplacePresObj(SdrObject* pOldObj, SdrObject* pNewObj, PresObjKind eNewKind );
-
     void            SetAutoLayout(AutoLayout eLayout, BOOL bInit=FALSE, BOOL bCreate=FALSE);
     AutoLayout      GetAutoLayout() const { return meAutoLayout; }
     void            CreateTitleAndLayout(BOOL bInit=FALSE, BOOL bCreate=FALSE);

@@ -627,7 +627,9 @@ void DrawView::DeleteMarked()
                     case PRESOBJ_CHART:
                     case PRESOBJ_ORGCHART:
                     case PRESOBJ_TABLE:
+                    case PRESOBJ_CALC:
                     case PRESOBJ_IMAGE:
+                    case PRESOBJ_MEDIA:
                         ePresObjKind = PRESOBJ_OUTLINE;
                         break;
                     default:
@@ -639,8 +641,6 @@ void DrawView::DeleteMarked()
                     SdrObject* pNewObj = pPage->InsertAutoLayoutShape( 0, ePresObjKind, bVertical, aRect, true );
 
                     pPage->SetObjectOrdNum( pNewObj->GetOrdNum(), pObj->GetOrdNum() );
-
-                    pPage->ReplacePresObj( pObj, pNewObj, ePresObjKind );
 
                     bResetLayout = true;
                 }

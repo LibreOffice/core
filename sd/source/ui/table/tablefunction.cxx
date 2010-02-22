@@ -177,26 +177,14 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
         apply_table_style( pObj, GetDoc(), sTableStyle );
         SdrPageView* pPV = mpView->GetSdrPageView();
 
-        bool bUndo = false;
         // if we have a pick obj we need to make this new ole a pres obj replacing the current pick obj
         if( pPickObj )
         {
             SdPage* pPage = static_cast< SdPage* >(pPickObj->GetPage());
             if(pPage && pPage->IsPresObj(pPickObj))
             {
-                bUndo = mpView->IsUndoEnabled();
-
-                if( bUndo )
-                    mpView->BegUndo( SdrUndoNewObj::GetComment(*pObj) );
-
-                // add new PresObj to the list
-                pObj->SetUserCall(pPickObj->GetUserCall());
-                if( bUndo )
-                {
-                    mpView->AddUndo( new sd::UndoObjectPresentationKind( *pPickObj ) );
-                    mpView->AddUndo( new sd::UndoObjectPresentationKind( *pObj ) );
-                }
-                pPage->ReplacePresObj(pPickObj, pObj, PRESOBJ_TABLE);
+                pObj->SetUserCall( pPickObj->GetUserCall() );
+                pPage->InsertPresObj( pObj, PRESOBJ_TABLE );
             }
         }
 
@@ -205,11 +193,7 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
         else
             mpView->InsertObjectAtView(pObj, *pPV, SDRINSERT_SETDEFLAYER);
 
-        if( bUndo )
-        {
-            mpView->EndUndo();
-        }
-        else if( pPickObj )
+        if( !mpView->IsUndoEnabled() && pPickObj )
         {
             // replaced object must be freed if there is no undo action owning it
             SdrObject::Free( pPickObj );
