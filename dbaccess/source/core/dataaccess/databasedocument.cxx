@@ -689,7 +689,8 @@ void SAL_CALL ODatabaseDocument::recoverFromFile( const ::rtl::OUString& i_Sourc
 
         // by definition (of XDocumentRecovery), we're responsible for delivering a fully-initialized document,
         // which includes an attachResource call.
-        impl_attachResource( i_SalvagedFile, aMediaDescriptor.getPropertyValues(), aGuard );
+        const ::rtl::OUString sLogicalDocumentURL( i_SalvagedFile.getLength() ? i_SalvagedFile : i_SourceLocation );
+        impl_attachResource( sLogicalDocumentURL, aMediaDescriptor.getPropertyValues(), aGuard );
         // <- SYNCHRONIZED
     }
     catch( const Exception& )
