@@ -254,21 +254,21 @@ void ThesaurusAlternativesCtrl_Impl::Paint( const Rectangle& rRect )
 {
     if (!m_rDialogImpl.m_bWordFound)
     {
-        Push( PUSH_FONT );
+/*        Push( PUSH_FONT );
 
-        Font aFont(GetFont() );
+        Font aFont( GetFont() );
         aFont.SetHeight( 2 * aFont.GetHeight() );
         SetFont( aFont );
-
+*/
         Size aTextSize( GetTextWidth( m_rDialogImpl.aErrStr ), GetTextHeight() );
         aTextSize  = LogicToPixel( aTextSize );
-        Point aPos = GetPosPixel();
-        aPos.X() += GetSizePixel().Width() / 2 - aTextSize.Width() / 2;
-        aPos.Y() += /*GetSizePixel().Height() / 2 - */aTextSize.Height() / 2;
+        Point aPos;
+        aPos.X() += GetSizePixel().Width() / 2  - aTextSize.Width() / 2;
+        aPos.Y() += GetSizePixel().Height() / 2 /*- aTextSize.Height() / 2*/;
         aPos = PixelToLogic( aPos );
         DrawText( aPos, m_rDialogImpl.aErrStr );
 
-        Pop();
+//        Pop();
     }
     else
         SvxCheckListBox::Paint( rRect );
