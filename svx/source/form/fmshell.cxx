@@ -1128,9 +1128,6 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
         ||  m_bDesignMode
         ||  !GetImpl()->getActiveForm().is()
         ||  GetImpl()->isInFilterMode()
-        ||  (   /*GetImpl()->HasPendingCursorAction(GetImpl()->getNavController())
-            &&  */(SID_FM_RECORD_TOTAL != nWhich)
-            )
         )
         rSet.DisableItem(nWhich);
     else
