@@ -104,8 +104,7 @@ ScViewDataTable::ScViewDataTable() :
                 nFixPosY( 0 ),
                 nCurX( 0 ),
                 nCurY( 0 ),
-                bOldCurValid( FALSE ),
-                aTabBgColor( Color(COL_AUTO) )
+                bOldCurValid( FALSE )
 {
     nPosX[0]=nPosX[1]=0;
     nPosY[0]=nPosY[1]=0;
@@ -164,14 +163,6 @@ void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>
         pSettings[SC_TABLE_ZOOM_VALUE].Value <<= nZoomValue;
         pSettings[SC_TABLE_PAGE_VIEW_ZOOM_VALUE].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_PAGEVIEWZOOMVALUE));
         pSettings[SC_TABLE_PAGE_VIEW_ZOOM_VALUE].Value <<= nPageZoomValue;
-
-        if ( !IsDefaultTabBgColor() )
-        {
-            pSettings[SC_TABLE_TAB_BG_COLOR].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_TABCOLOR));
-            pSettings[SC_TABLE_TAB_BG_COLOR].Value <<= static_cast<sal_Int32>(aTabBgColor.GetColor());
-        }
-//        pSettings[SC_TABLE_SELECTED].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_TABLESELECTED));
-//        pSettings[SC_TABLE_SELECTED].Value <<= bool(rViewData.GetMarkData().GetTableSelect( nTab ));
     }
 }
 
@@ -284,10 +275,13 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
         }
         else if (sName.compareToAscii(SC_UNO_TABCOLOR) == 0)
         {
+            fprintf(stdout, "ScViewDataTable::ReadUserDataSequence:   TODO: Route this to ScDocument::SetTabBgColor().\n");
+#if 0 // TODO: Route this to ScDocument somehow.
             sal_Int32 nColor = COL_AUTO;
             aSettings[i].Value >>= nColor;
             if (static_cast<ColorData>(nColor) != COL_AUTO)
                 aTabBgColor.SetColor(static_cast<ColorData>(nColor));
+#endif
         }
     }
     if (eHSplitMode == SC_SPLIT_FIX)
@@ -590,36 +584,6 @@ void ScViewData::MoveTab( SCTAB nSrcTab, SCTAB nDestTab )
     UpdateThis();
     aMarkData.DeleteTab( nSrcTab );
     aMarkData.InsertTab( nInsTab );         // ggf. angepasst
-}
-
-void ScViewData::SetTabBgColor( Color rTabBgColor, SCTAB nTab )
-{
-    if ( rTabBgColor != Color(COL_AUTO) )
-    {
-        if ( !pTabData[nTab] )
-            CreateTabData( nTab );
-        pTabData[nTab]->aTabBgColor = rTabBgColor;
-    }
-    else
-    {
-        if ( pTabData[nTab] )
-            pTabData[nTab]->aTabBgColor = Color( COL_AUTO );
-    }
-}
-
-Color ScViewData::GetTabBgColor( SCTAB nTab ) const
-{
-    if ( !pTabData[nTab] )
-        return Color(COL_AUTO);
-    return pTabData[nTab]->aTabBgColor;
-}
-
-BOOL ScViewData::IsDefaultTabBgColor( SCTAB nTab ) const
-{
-    if ( !pTabData[nTab] )
-        return true;
-    BOOL bResult = pTabData[nTab]->aTabBgColor==Color( COL_AUTO ) ? TRUE : FALSE;
-    return bResult;
 }
 
 //UNUSED2008-05  void ScViewData::UpdateOle( ScSplitPos /* eWhich */ )
@@ -2568,7 +2532,7 @@ void ScViewData::WriteExtOptions( ScExtDocOptions& rDocOpt ) const
             rTabSett.mnPageZoom = static_cast< long >( pViewTab->aPageZoomY * Fraction( 100.0 ) );
 
             // Tab Bg Color
-            rTabSett.maTabBgColor = pViewTab->aTabBgColor;
+//          rTabSett.maTabBgColor = pViewTab->aTabBgColor;
         }
     }
 }
@@ -2726,7 +2690,9 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
 
             // Tab Bg Color
             if( !rTabSett.IsDefaultTabBgColor() )
-                rViewTab.aTabBgColor = rTabSett.maTabBgColor;
+            {
+//              rViewTab.aTabBgColor = rTabSett.maTabBgColor;
+            }
         }
     }
 

@@ -155,7 +155,7 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const String& rNewName,
     nLockCount( 0 ),
     pScenarioRanges( NULL ),
     aScenarioColor( COL_LIGHTGRAY ),
-    aTabColor( COL_AUTO ),
+    aTabBgColor( COL_AUTO ),
     nScenarioFlags( 0 ),
     bActiveScenario( FALSE )
 {
@@ -279,14 +279,14 @@ void ScTable::SetLoadingRTL( BOOL bSet )
     bLoadingRTL = bSet;
 }
 
-const Color& ScTable::GetTabColor() const
+const Color& ScTable::GetTabBgColor() const
 {
-    return aTabColor;
+    return aTabBgColor;
 }
 
-void ScTable::SetTabColor(const Color& rColor)
+void ScTable::SetTabBgColor(const Color& rColor)
 {
-    aTabColor = rColor;
+    aTabBgColor = rColor;
 }
 
 void ScTable::SetScenario( BOOL bFlag )

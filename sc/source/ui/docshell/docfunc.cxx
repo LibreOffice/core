@@ -2868,14 +2868,12 @@ bool ScDocFunc::SetTabBgColor( SCTAB nTab, const Color& rColor, bool bRecord, bo
         return false;
     }
 
-    ScViewData* pViewData = rDocShell.GetViewData();
-
     Color aOldTabBgColor;
-    aOldTabBgColor = pViewData->GetTabBgColor(nTab);
+    aOldTabBgColor = pDoc->GetTabBgColor(nTab);
 
     bool bSuccess = false;
-    pViewData->SetTabBgColor(rColor, nTab);
-    if ( pViewData->GetTabBgColor( nTab ) == rColor)
+    pDoc->SetTabBgColor(nTab, rColor);
+    if ( pDoc->GetTabBgColor(nTab) == rColor)
         bSuccess = true;
     if (bSuccess)
     {
@@ -2919,9 +2917,9 @@ bool ScDocFunc::SetTabBgColor( ScUndoSetTabBgColorInfoList* rUndoSetTabBgColorIn
         if ( !pDoc->IsTabProtected(nTab) )
         {
             aNewTabBgColor = rUndoSetTabBgColorInfo->aNewTabBgColor;
-            rUndoSetTabBgColorInfo->aOldTabBgColor = pViewData->GetTabBgColor(nTab);
-            pViewData->SetTabBgColor(aNewTabBgColor, nTab);
-            if ( pViewData->GetTabBgColor( nTab ) != aNewTabBgColor)
+            rUndoSetTabBgColorInfo->aOldTabBgColor = pDoc->GetTabBgColor(nTab);
+            pDoc->SetTabBgColor(nTab, aNewTabBgColor);
+            if ( pDoc->GetTabBgColor(nTab) != aNewTabBgColor)
             {
                 bSuccess = false;
                 break;

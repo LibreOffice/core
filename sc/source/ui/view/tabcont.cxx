@@ -81,10 +81,9 @@ ScTabControl::ScTabControl( Window* pParent, ScViewData* pData ) :
                     InsertPage( static_cast<sal_uInt16>(i)+1, aString, TPB_SPECIAL );
                 else
                     InsertPage( static_cast<sal_uInt16>(i)+1, aString );
-                if ( !pViewData->IsDefaultTabBgColor(i) )
+                if ( !pDoc->IsDefaultTabBgColor(i) )
                 {
-                    aTabBgColor = pViewData->GetTabBgColor(i);
-                    /*SetTabBgColor(static_cast<sal_uInt16>(i)+1, aTabBgColor, pViewData->IsDefaultTabBgColor(i) );*/
+                    aTabBgColor = pDoc->GetTabBgColor(i);
                     SetTabBgColor( static_cast<sal_uInt16>(i)+1, aTabBgColor );
                 }
             }
@@ -307,7 +306,7 @@ void ScTabControl::UpdateStatus()
         if (pDoc->IsVisible(i))
         {
             pDoc->GetName(i,aString);
-            aTabBgColor = pViewData->GetTabBgColor(i);
+            aTabBgColor = pDoc->GetTabBgColor(i);
         }
         else
         {
@@ -331,9 +330,9 @@ void ScTabControl::UpdateStatus()
                         InsertPage( static_cast<sal_uInt16>(i)+1, aString, TPB_SPECIAL );
                     else
                         InsertPage( static_cast<sal_uInt16>(i)+1, aString );
-                    if ( !pViewData->IsDefaultTabBgColor(i) )
+                    if ( !pDoc->IsDefaultTabBgColor(i) )
                     {
-                        aTabBgColor = pViewData->GetTabBgColor(i);
+                        aTabBgColor = pDoc->GetTabBgColor(i);
                         SetTabBgColor( static_cast<sal_uInt16>(i)+1, aTabBgColor );
                     }
                 }

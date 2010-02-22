@@ -751,7 +751,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     Color       aTabBgColor;
                     Color       aNewTabBgColor;
 
-                    aTabBgColor = pViewData->GetTabBgColor( nCurrentTab );
+                    aTabBgColor = pDoc->GetTabBgColor( nCurrentTab );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
                     AbstractScTabBgColorDlg* pDlg = pFact->CreateScTabBgColorDlg(
@@ -935,7 +935,7 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
             case FID_TAB_SET_TAB_BG_COLOR:
                 {
                     Color aColor;
-                    aColor = pViewData->GetTabBgColor( nTab );
+                    aColor = pDoc->GetTabBgColor( nTab );
                     rSet.Put( SvxColorItem( aColor, nWhich ) );
                 }
                 break;

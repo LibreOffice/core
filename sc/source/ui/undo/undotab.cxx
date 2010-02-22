@@ -824,45 +824,41 @@ void ScUndoSetTabBgColor::DoChange( SCTAB nTabP, const Color& rTabBgColor ) cons
 {
     if (bIsMultipleUndo)
         return;
+
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-    if (pViewShell)
-    {
-        ScViewData* pViewData = pViewShell->GetViewData();
-        if (pViewData)
-        {
-            pViewData->SetTabBgColor( rTabBgColor, nTabP );
-            pDocShell->PostPaintExtras();
-            pDocShell->PostDataChanged();
-            SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
-            pViewShell->UpdateInputHandler();
-        }
-    }
+    ScDocument* pDoc = pDocShell->GetDocument();
+    if (!pDoc)
+        return;
+
+    pDoc->SetTabBgColor(nTabP, rTabBgColor);
+    pDocShell->PostPaintExtras();
+    pDocShell->PostDataChanged();
+    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
+    pViewShell->UpdateInputHandler();
 }
 
 void ScUndoSetTabBgColor::DoChange(BOOL bUndoType) const
 {
     if (!bIsMultipleUndo)
         return;
+
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-    if (pViewShell)
+    ScDocument* pDoc = pDocShell->GetDocument();
+    if (!pDoc)
+        return;
+
+    ScUndoSetTabBgColorInfo* aUndoSetTabBgColorInfo = NULL;
+    for (USHORT i=0; i < aUndoSetTabBgColorInfoList->Count(); ++i)
     {
-        ScViewData* pViewData = pViewShell->GetViewData();
-        if (pViewData)
-        {
-            ScUndoSetTabBgColorInfo* aUndoSetTabBgColorInfo=NULL;
-            for (USHORT i=0; i < aUndoSetTabBgColorInfoList->Count(); i++)
-            {
-                aUndoSetTabBgColorInfo = aUndoSetTabBgColorInfoList->GetObject(i);
-                pViewData->SetTabBgColor(
-                    bUndoType ? aUndoSetTabBgColorInfo->aOldTabBgColor : aUndoSetTabBgColorInfo->aNewTabBgColor,
-                    aUndoSetTabBgColorInfo->nTabId);
-            }
-            pDocShell->PostPaintExtras();
-            pDocShell->PostDataChanged();
-            SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
-            pViewShell->UpdateInputHandler();
-        }
+        aUndoSetTabBgColorInfo = aUndoSetTabBgColorInfoList->GetObject(i);
+        pDoc->SetTabBgColor(
+            aUndoSetTabBgColorInfo->nTabId,
+            bUndoType ? aUndoSetTabBgColorInfo->aOldTabBgColor : aUndoSetTabBgColorInfo->aNewTabBgColor);
     }
+    pDocShell->PostPaintExtras();
+    pDocShell->PostDataChanged();
+    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
+    pViewShell->UpdateInputHandler();
 }
 
 void ScUndoSetTabBgColor::Undo()
