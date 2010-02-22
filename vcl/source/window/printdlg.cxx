@@ -1133,8 +1133,15 @@ static void setSmartId( Window* i_pWindow, const char* i_pType, sal_Int32 i_nId 
 
 static void setHelpText( Window* i_pWindow, const Sequence< rtl::OUString >& i_rHelpTexts, sal_Int32 i_nIndex )
 {
+    // without a help text set and the correct smartID,
+    // help texts will be retrieved from the online help system
+
+    // passed help texts for optional UI is used only for native dialogs which currently
+    // cannot access the same (rather implicit) mechanism
+    #if 0
     if( i_nIndex >= 0 && i_nIndex < i_rHelpTexts.getLength() )
         i_pWindow->SetHelpText( i_rHelpTexts.getConstArray()[i_nIndex] );
+    #endif
 }
 
 void updateMaxSize( const Size& i_rCheckSize, Size& o_rMaxSize )
