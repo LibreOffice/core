@@ -35,6 +35,7 @@
 #include <rtl/uri.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
+#include "ne_alloc.h"
 #include "NeonUri.hxx"
 #include "DAVException.hxx"
 
