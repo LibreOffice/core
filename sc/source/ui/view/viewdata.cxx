@@ -275,13 +275,13 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
         }
         else if (sName.compareToAscii(SC_UNO_TABCOLOR) == 0)
         {
-            fprintf(stdout, "ScViewDataTable::ReadUserDataSequence:   TODO: Route this to ScDocument::SetTabBgColor().\n");
-#if 0 // TODO: Route this to ScDocument somehow.
             sal_Int32 nColor = COL_AUTO;
             aSettings[i].Value >>= nColor;
             if (static_cast<ColorData>(nColor) != COL_AUTO)
-                aTabBgColor.SetColor(static_cast<ColorData>(nColor));
-#endif
+            {
+                ScDocument* pDoc = rViewData.GetDocument();
+                pDoc->SetTabBgColor(nTab, Color(static_cast<ColorData>(nColor)));
+            }
         }
     }
     if (eHSplitMode == SC_SPLIT_FIX)
