@@ -40,7 +40,7 @@ String STR_LOCKFAILED_TITLE
 };
 String STR_LOCKFAILED_MSG
 {
-    Text [ en-US ] = "The file could not be locked for exclusive access by %PRODUCTNAME, due to missing permission to created a lock file on that file location.";
+    Text [ en-US ] = "The file could not be locked for exclusive access by %PRODUCTNAME, due to missing permission to create a lock file on that file location.";
 };
 String STR_LOCKFAILED_DONTSHOWAGAIN
 {
