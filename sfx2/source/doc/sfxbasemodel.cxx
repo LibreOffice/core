@@ -824,7 +824,6 @@ void SAL_CALL SfxBaseModel::addEventListener( const uno::Reference< XEVENTLISTEN
     throw(::com::sun::star::uno::RuntimeException)
 {
     SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
-
     m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const uno::Reference< XEVENTLISTENER >*)0), aListener );
 }
 
@@ -835,7 +834,7 @@ void SAL_CALL SfxBaseModel::addEventListener( const uno::Reference< XEVENTLISTEN
 void SAL_CALL SfxBaseModel::removeEventListener( const uno::Reference< XEVENTLISTENER >& aListener )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    SfxModelGuard aGuard( *this );
+    SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
     m_pData->m_aInterfaceContainer.removeInterface( ::getCppuType((const uno::Reference< XEVENTLISTENER >*)0), aListener );
 }
 
