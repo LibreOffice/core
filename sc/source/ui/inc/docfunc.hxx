@@ -121,9 +121,9 @@ public:
     BOOL            RenameTable( SCTAB nTab, const String& rName, BOOL bRecord, BOOL bApi );
     BOOL            DeleteTable( SCTAB nTab, BOOL bRecord, BOOL bApi );
 
-    BOOL            SetTabBgColor( SCTAB nTab, const Color& rColor, BOOL bRecord, BOOL bApi );
-    BOOL            SetTabBgColor( ScUndoSetTabBgColorInfoList* rUndoSetTabBgColorInfoList,
-                                    BOOL bRecord, BOOL bApi );
+    bool            SetTabBgColor( SCTAB nTab, const Color& rColor, bool bRecord, bool bApi );
+    bool            SetTabBgColor( ScUndoSetTabBgColorInfoList* rUndoSetTabBgColorInfoList,
+                                   bool bRecord, bool bApi );
 
     BOOL            SetTableVisible( SCTAB nTab, BOOL bVisible, BOOL bApi );
 

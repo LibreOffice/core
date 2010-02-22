@@ -2855,17 +2855,17 @@ BOOL ScDocFunc::RenameTable( SCTAB nTab, const String& rName, BOOL bRecord, BOOL
     return bSuccess;
 }
 
-BOOL ScDocFunc::SetTabBgColor( SCTAB nTab, const Color& rColor, BOOL bRecord, BOOL bApi )
+bool ScDocFunc::SetTabBgColor( SCTAB nTab, const Color& rColor, bool bRecord, bool bApi )
 {
 
     ScDocument* pDoc = rDocShell.GetDocument();
     if (bRecord && !pDoc->IsUndoEnabled())
-        bRecord = FALSE;
+        bRecord = false;
     if ( !pDoc->IsDocEditable() || pDoc->IsTabProtected(nTab) )
     {
         if (!bApi)
             rDocShell.ErrorMessage(STR_PROTECTIONERR); //TODO Check to see what this string is...
-        return FALSE;
+        return false;
     }
 
     ScViewData* pViewData = rDocShell.GetViewData();
@@ -2873,10 +2873,10 @@ BOOL ScDocFunc::SetTabBgColor( SCTAB nTab, const Color& rColor, BOOL bRecord, BO
     Color aOldTabBgColor;
     aOldTabBgColor = pViewData->GetTabBgColor(nTab);
 
-    BOOL bSuccess = FALSE;
+    bool bSuccess = false;
     pViewData->SetTabBgColor(rColor, nTab);
     if ( pViewData->GetTabBgColor( nTab ) == rColor)
-        bSuccess = TRUE;
+        bSuccess = true;
     if (bSuccess)
     {
         if (bRecord)
@@ -2889,28 +2889,28 @@ BOOL ScDocFunc::SetTabBgColor( SCTAB nTab, const Color& rColor, BOOL bRecord, BO
         aModificator.SetDocumentModified();
         SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
 
-        bSuccess = TRUE;
+        bSuccess = true;
     }
     return bSuccess;
 }
 
-BOOL ScDocFunc::SetTabBgColor( ScUndoSetTabBgColorInfoList* rUndoSetTabBgColorInfoList, BOOL bRecord, BOOL bApi )
+bool ScDocFunc::SetTabBgColor( ScUndoSetTabBgColorInfoList* rUndoSetTabBgColorInfoList, bool bRecord, bool bApi )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
     if (bRecord && !pDoc->IsUndoEnabled())
-        bRecord = FALSE;
+        bRecord = false;
     if ( !pDoc->IsDocEditable() )
     {
         if (!bApi)
             rDocShell.ErrorMessage(STR_PROTECTIONERR); //TODO Get a better String Error...
-        return FALSE;
+        return false;
     }
 
     ScViewData* pViewData = rDocShell.GetViewData();
     USHORT nTab;
     Color aNewTabBgColor;
     ScUndoSetTabBgColorInfo* rUndoSetTabBgColorInfo;
-    BOOL bSuccess = TRUE;
+    bool bSuccess = true;
     USHORT nTabProtectCount = 0;
     for ( USHORT i=0; i < rUndoSetTabBgColorInfoList->Count(); i++ )
     {
@@ -2923,7 +2923,7 @@ BOOL ScDocFunc::SetTabBgColor( ScUndoSetTabBgColorInfoList* rUndoSetTabBgColorIn
             pViewData->SetTabBgColor(aNewTabBgColor, nTab);
             if ( pViewData->GetTabBgColor( nTab ) != aNewTabBgColor)
             {
-                bSuccess = FALSE;
+                bSuccess = false;
                 break;
             }
         }
