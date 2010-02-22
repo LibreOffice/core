@@ -374,6 +374,7 @@ Reference< XWindow > SAL_CALL OApplicationController::getApplicationMainWindow()
 // -----------------------------------------------------------------------------
 Sequence< Reference< XComponent > > SAL_CALL OApplicationController::getSubComponents() throw (RuntimeException)
 {
+    ::osl::MutexGuard aGuard( getMutex() );
     return m_pSubComponentManager->getSubComponents();
 }
 
@@ -394,6 +395,7 @@ Reference< XConnection > SAL_CALL OApplicationController::getActiveConnection() 
 // -----------------------------------------------------------------------------
 void SAL_CALL OApplicationController::connect(  ) throw (SQLException, RuntimeException)
 {
+    ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
     ::osl::MutexGuard aGuard( getMutex() );
 
     SQLExceptionInfo aError;
@@ -432,6 +434,7 @@ beans::Pair< ::sal_Int32, ::rtl::OUString > SAL_CALL OApplicationController::ide
 // -----------------------------------------------------------------------------
 ::sal_Bool SAL_CALL OApplicationController::closeSubComponents(  ) throw (RuntimeException)
 {
+    ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
     ::osl::MutexGuard aGuard( getMutex() );
     return m_pSubComponentManager->closeSubComponents();
 }
