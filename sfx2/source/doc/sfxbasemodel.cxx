@@ -1355,9 +1355,8 @@ void SAL_CALL SfxBaseModel::close( sal_Bool bDeliverOwnership ) throw (util::Clo
 {
     static ::rtl::OUString MSG_1 = ::rtl::OUString::createFromAscii("Cant close while saving.");
 
-    SfxModelGuard aGuard( *this );
-
-    if ( m_pData->m_bClosed || m_pData->m_bClosing )
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() || m_pData->m_bClosed || m_pData->m_bClosing )
         return;
 
     uno::Reference< uno::XInterface > xSelfHold( static_cast< ::cppu::OWeakObject* >(this) );
@@ -1706,10 +1705,7 @@ void SAL_CALL SfxBaseModel::initNew()
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception)
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-        // do not use the SfxModelGuard, it would throw, since we're not yet initialized
-    if ( IsDisposed() )
-        throw ::com::sun::star::lang::DisposedException( ::rtl::OUString(), *this );
+    SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
     if ( IsInitialized() )
         throw ::com::sun::star::frame::DoubleInitializationException( ::rtl::OUString(), *this );
 
@@ -3419,10 +3415,7 @@ void SAL_CALL SfxBaseModel::loadFromStorage( const uno::Reference< XSTORAGE >& x
             EXCEPTION,
             uno::RuntimeException )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-        // do not use the SfxModelGuard, it would throw, since we're not yet initialized
-    if ( IsDisposed() )
-        throw ::com::sun::star::lang::DisposedException( ::rtl::OUString(), *this );
+    SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
     if ( IsInitialized() )
         throw ::com::sun::star::frame::DoubleInitializationException( ::rtl::OUString(), *this );
 
