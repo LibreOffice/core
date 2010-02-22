@@ -159,7 +159,7 @@ void ReplaceEdit_Impl::SetText( const XubString& rStr )
 
 void ReplaceEdit_Impl::SetText( const XubString& rStr, const Selection& rNewSelection )
 {
-    Edit::SetText( rStr );
+    Edit::SetText( rStr, rNewSelection );
     Modify();
 }
 
@@ -228,7 +228,7 @@ SvLBoxEntry * ThesaurusAlternativesCtrl_Impl::AddEntry( sal_Int32 nVal, const St
 
     AlternativesUserData_Impl* pUserData = new AlternativesUserData_Impl( rText, bIsHeader );
     pEntry->SetUserData( pUserData );
-    USHORT nPos = GetModel()->Insert( pEntry );
+    GetModel()->Insert( pEntry );
 
     if (bIsHeader)
         GetViewDataEntry( pEntry )->SetSelectable( false );
@@ -516,6 +516,7 @@ IMPL_LINK( SvxThesaurusDialog_Impl, AlternativesDoubleClickHdl_Impl, SvxCheckLis
 
 IMPL_STATIC_LINK( SvxThesaurusDialog_Impl, SelectFirstHdl_Impl, SvxCheckListBox *, pBox )
 {
+    (void) pThis;
     if (pBox && pBox->GetEntryCount() > 0)
         pBox->SelectEntryPos( 0 );
     return 0;
