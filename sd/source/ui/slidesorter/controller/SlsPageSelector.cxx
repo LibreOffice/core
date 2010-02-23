@@ -57,6 +57,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::sd::slidesorter::model;
 using namespace ::sd::slidesorter::view;
 
+
 namespace sd { namespace slidesorter { namespace controller {
 
 PageSelector::PageSelector (SlideSorter& rSlideSorter)
@@ -69,7 +70,8 @@ PageSelector::PageSelector (SlideSorter& rSlideSorter)
       mpMostRecentlySelectedPage(),
       mpSelectionAnchor(),
       mpCurrentPage(),
-      mnUpdateLockCount(0)
+      mnUpdateLockCount(0),
+      mbIsUpdateCurrentPagePending(false)
 {
     CountSelectedPages ();
 }
@@ -82,7 +84,6 @@ void PageSelector::SelectAllPages (void)
     int nPageCount = mrModel.GetPageCount();
     for (int nPageIndex=0; nPageIndex<nPageCount; nPageIndex++)
         SelectPage (nPageIndex);
-    UpdateCurrentPage();
 }
 
 
@@ -359,34 +360,41 @@ void PageSelector::SetPageSelection (
 
 
 
-void PageSelector::UpdateCurrentPage (void)
+void PageSelector::UpdateCurrentPage (const bool bUpdateOnlyWhenPending)
 {
-    // Make the first selected page the current page.
-    if (mnUpdateLockCount == 0)
+    if (mnUpdateLockCount > 0)
     {
-        const sal_Int32 nPageCount (GetPageCount());
-        for (sal_Int32 nIndex=0; nIndex<nPageCount; ++nIndex)
+        mbIsUpdateCurrentPagePending = true;
+        return;
+    }
+
+    if ( ! mbIsUpdateCurrentPagePending && bUpdateOnlyWhenPending)
+        return;
+
+    mbIsUpdateCurrentPagePending = false;
+
+    // Make the first selected page the current page.
+    const sal_Int32 nPageCount (GetPageCount());
+    for (sal_Int32 nIndex=0; nIndex<nPageCount; ++nIndex)
+    {
+        SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nIndex));
+        if (pDescriptor && pDescriptor->HasState(PageDescriptor::ST_Selected))
         {
-            SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nIndex));
-            if (pDescriptor && pDescriptor->HasState(PageDescriptor::ST_Selected))
-            {
-                // Switching the current slide normally sets also the
-                // selection to just the new current slide.  To prevent that
-                // here we store and at the end of this scope restore the
-                // current selection.
-                ::boost::shared_ptr<PageSelection> pSelection (GetPageSelection());
-                SharedPageDescriptor pRecentSelection (GetMostRecentlySelectedPage());
+            // Switching the current slide normally sets also the selection
+            // to just the new current slide.  To prevent that here we store
+            // and at the end of this scope restore the current selection.
+            ::boost::shared_ptr<PageSelection> pSelection (GetPageSelection());
+            SharedPageDescriptor pRecentSelection (GetMostRecentlySelectedPage());
 
-                mrController.GetCurrentSlideManager()->SwitchCurrentSlide(pDescriptor);
+            mrController.GetCurrentSlideManager()->SwitchCurrentSlide(pDescriptor);
 
-                // Restore the selection and prevent a recursive call to
-                // UpdateCurrentPage().
-                SetPageSelection(pSelection, false);
-                // Restore the most recently selected page.  Important for
-                // making the right part of the selection visible.
-                mpMostRecentlySelectedPage = pRecentSelection;
-                return;
-            }
+            // Restore the selection and prevent a recursive call to
+            // UpdateCurrentPage().
+            SetPageSelection(pSelection, false);
+            // Restore the most recently selected page.  Important for
+            // making the right part of the selection visible.
+            mpMostRecentlySelectedPage = pRecentSelection;
+            return;
         }
     }
 
@@ -412,7 +420,7 @@ PageSelector::UpdateLock::~UpdateLock (void)
     --mrSelector.mnUpdateLockCount;
     OSL_ASSERT(mrSelector.mnUpdateLockCount >= 0);
     if (mrSelector.mnUpdateLockCount == 0)
-        mrSelector.UpdateCurrentPage();
+        mrSelector.UpdateCurrentPage(true);
 }
 
 

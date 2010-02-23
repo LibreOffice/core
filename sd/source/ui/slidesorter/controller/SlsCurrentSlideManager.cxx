@@ -134,7 +134,7 @@ void CurrentSlideManager::SwitchCurrentSlide (const sal_Int32 nSlideIndex)
 
 void CurrentSlideManager::SwitchCurrentSlide (const SharedPageDescriptor& rpDescriptor)
 {
-    if (rpDescriptor.get() != NULL)
+    if (rpDescriptor.get() != NULL && mpCurrentSlide!=rpDescriptor)
     {
         ReleaseCurrentSlide();
         AcquireCurrentSlide((rpDescriptor->GetPage()->GetPageNum()-1)/2);

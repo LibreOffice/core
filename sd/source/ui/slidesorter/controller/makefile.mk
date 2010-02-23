@@ -62,10 +62,8 @@ SLOFILES =      							\
     $(SLO)$/SlsSelectionFunction.obj		\
     $(SLO)$/SlsSelectionManager.obj	    	\
     $(SLO)$/SlsSlotManager.obj				\
+    $(SLO)$/SlsSubstitutionHandler.obj		\
     $(SLO)$/SlsTransferable.obj
-
-EXCEPTIONSFILES=							\
-    $(SLO)$/SlideSorterController.obj
 
 # --- Tagets -------------------------------------------------------
 

@@ -194,9 +194,15 @@ void Animator::RemoveAnimation (const Animator::AnimationId nId)
         maAnimations.erase(iAnimation);
     }
 
-    // Reset the animation id when we can.
     if (maAnimations.empty())
+    {
+        // Reset the animation id when we can.
         mnNextAnimationId = 0;
+
+        // No more animations => we do not have to suppress painting
+        // anymore.
+        mpDrawLock.reset();
+    }
 }
 
 

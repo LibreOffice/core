@@ -40,22 +40,11 @@
 
 #include <memory>
 #include <boost/enable_shared_from_this.hpp>
+#include <boost/scoped_ptr.hpp>
+
 
 class SdPage;
 class SdrPage;
-
-namespace sdr { namespace contact {
-class ObjectContact;
-} }
-
-namespace sd { namespace slidesorter { namespace view {
-class PageObject;
-class PageObjectViewObjectContact;
-} } }
-
-namespace sd { namespace slidesorter { namespace controller {
-class PageObjectFactory;
-} } }
 
 namespace sd { namespace slidesorter { namespace model {
 
@@ -141,6 +130,7 @@ private:
     SdPage* mpPage;
     css::uno::Reference<css::drawing::XDrawPage> mxPage;
     SdrPage const* mpMasterPage;
+
     /** This index is displayed as page number in the view.  It may or may
         not be the actual page index.
     */

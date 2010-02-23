@@ -68,6 +68,7 @@ class InsertionIndicatorHandler;
 class Listener;
 class PageSelector;
 class ScrollBarManager;
+class SelectionFunction;
 class SelectionManager;
 class SlotManager;
 
@@ -206,6 +207,12 @@ public:
     /** This factory method creates a selection function.
     */
     virtual FunctionReference CreateSelectionFunction (SfxRequest& rRequest);
+
+    /** When the current function of the view shell is the slide sorter
+        selection function then return a reference to it.  Otherwise return
+        an empty reference.
+    */
+    ::rtl::Reference<SelectionFunction> GetCurrentSelectionFunction (void);
 
     /** Prepare for a change of the edit mode.  Depending on the current
         edit mode we may save the selection so that it can be restored when

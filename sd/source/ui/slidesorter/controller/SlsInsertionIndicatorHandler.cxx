@@ -37,9 +37,11 @@
 #include "view/SlsLayouter.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageEnumerationProvider.hxx"
+#include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 
 #include "SlideSorter.hxx"
 
+using namespace ::com::sun::star::datatransfer::dnd::DNDConstants;
 
 namespace sd { namespace slidesorter { namespace controller {
 
@@ -51,8 +53,10 @@ InsertionIndicatorHandler::InsertionIndicatorHandler (SlideSorter& rSlideSorter)
           mrSlideSorter.GetView().GetOverlay().GetInsertionIndicatorOverlay()),
       mnInsertionIndex(-1),
       mbIsBeforePage(false),
+      meMode(MoveMode),
       mbIsActive(false),
-      mbIsReadOnly(mrSlideSorter.GetModel().IsReadOnly())
+      mbIsReadOnly(mrSlideSorter.GetModel().IsReadOnly()),
+      mbIsOverSourceView(true)
 {
 }
 
@@ -66,7 +70,10 @@ InsertionIndicatorHandler::~InsertionIndicatorHandler (void)
 
 
 
-void InsertionIndicatorHandler::Start (const Point& rMouseModelPosition)
+void InsertionIndicatorHandler::Start (
+    const Point& rMouseModelPosition,
+    const Mode eMode,
+    const bool bIsOverSourceView)
 {
     if (mbIsActive)
     {
@@ -77,15 +84,32 @@ void InsertionIndicatorHandler::Start (const Point& rMouseModelPosition)
     if (mbIsReadOnly)
         return;
 
-    SetPosition(rMouseModelPosition);
+    SetPosition(rMouseModelPosition, eMode);
 
     mbIsActive = true;
+    mbIsOverSourceView = bIsOverSourceView;
 }
 
 
 
 
-void InsertionIndicatorHandler::UpdatePosition (const Point& rMouseModelPosition)
+InsertionIndicatorHandler::Mode InsertionIndicatorHandler::GetModeFromDndAction (
+    const sal_Int8 nDndAction)
+{
+    switch (nDndAction & (ACTION_COPY | ACTION_MOVE | ACTION_LINK))
+    {
+        case ACTION_COPY: return CopyMode;
+        case ACTION_MOVE: return MoveMode;
+        default: return UnknownMode;
+    }
+}
+
+
+
+
+void InsertionIndicatorHandler::UpdatePosition (
+    const Point& rMouseModelPosition,
+    const Mode eMode)
 {
     if ( ! mbIsActive)
         return;
@@ -93,7 +117,17 @@ void InsertionIndicatorHandler::UpdatePosition (const Point& rMouseModelPosition
     if (mbIsReadOnly)
         return;
 
-    SetPosition(rMouseModelPosition);
+    SetPosition(rMouseModelPosition, eMode);
+}
+
+
+
+
+void InsertionIndicatorHandler::UpdatePosition (
+    const Point& rMouseModelPosition,
+    const sal_Int8 nDndAction)
+{
+    UpdatePosition(rMouseModelPosition, GetModeFromDndAction(nDndAction));
 }
 
 
@@ -136,7 +170,9 @@ sal_Int32 InsertionIndicatorHandler::GetInsertionPageIndex (void) const
 
 
 
-void InsertionIndicatorHandler::SetPosition (const Point& rPoint)
+void InsertionIndicatorHandler::SetPosition (
+    const Point& rPoint,
+    const Mode eMode)
 {
     static const bool bAllowHorizontalInsertMarker = true;
     view::Layouter& rLayouter (mrSlideSorter.GetView().GetLayouter());
@@ -183,11 +219,14 @@ void InsertionIndicatorHandler::SetPosition (const Point& rPoint)
             nInsertionIndex += 1;
     }
 
-    if (mnInsertionIndex!=nInsertionIndex || mbIsBeforePage!=bIsBeforePage)
+    if (mnInsertionIndex!=nInsertionIndex
+        || mbIsBeforePage!=bIsBeforePage
+        || meMode!=eMode)
     {
         mnInsertionIndex = nInsertionIndex;
         mbIsBeforePage = bIsBeforePage;
-        mbIsInsertionTrivial = IsInsertionTrivial();
+        meMode = eMode;
+        mbIsInsertionTrivial = IsInsertionTrivial(eMode);
 
         mpInsertionIndicatorOverlay->SetLocation(
             rLayouter.GetInsertionMarkerLocation (
@@ -223,8 +262,16 @@ void InsertionIndicatorHandler::SetPosition (const Point& rPoint)
 
 
 
-bool InsertionIndicatorHandler::IsInsertionTrivial (void) const
+bool InsertionIndicatorHandler::IsInsertionTrivial (const Mode eMode) const
 {
+    if (eMode == CopyMode)
+        return false;
+    else if (eMode == UnknownMode)
+        return true;
+
+    if ( ! mbIsOverSourceView)
+        return false;
+
     // Iterate over all selected pages and check whether there are
     // holes.  While we do this we remember the indices of the first and
     // last selected page as preparation for the next step.

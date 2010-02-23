@@ -105,6 +105,41 @@ Rectangle ConvertRectangle (const B2DRectangle& rBox)
 
 namespace sd { namespace slidesorter { namespace view {
 
+//===== SubstitutionOverlay::InternalState ====================================
+
+class ItemDescriptor
+{
+public:
+    BitmapEx maImage;
+    Point maLocation;
+    double mnTransparency;
+    basegfx::B2DPolygon maShape;
+};
+
+class SubstitutionOverlay::InternalState
+{
+public:
+    /** The set of items that is displayed as substitution of the selected
+        pages.  Note that the number of items may differ from the number of
+        selected pages because only the selected pages in the neighborhood
+        of the anchor page are included.
+    */
+    ::std::vector<ItemDescriptor> maItems;
+
+    /** Bounding box of all items in maItems at their original location.
+    */
+    Rectangle maBoundingBox;
+
+    /** The anchor position of the substitution is the paint that, after
+        translation, is mapped onto the current position.
+    */
+    Point maAnchor;
+
+};
+
+
+
+
 //=====  ViewOverlay  =========================================================
 
 ViewOverlay::ViewOverlay (
@@ -293,9 +328,7 @@ SubstitutionOverlay::SubstitutionOverlay (
     const sal_Int32 nLayerIndex)
     : OverlayBase(rViewOverlay, nLayerIndex),
       maPosition(0,0),
-      maTranslation(0,0),
-      maItems(),
-      maBoundingBox()
+      mpState(new InternalState())
 {
 }
 
@@ -311,11 +344,13 @@ SubstitutionOverlay::~SubstitutionOverlay (void)
 
 void SubstitutionOverlay::Create (
     model::PageEnumeration& rSelection,
-    const Point& rPosition,
+    const Point& rAnchor,
     const model::SharedPageDescriptor& rpHitDescriptor)
 {
-    maPosition = rPosition;
-    maTranslation = Point(0,0);
+    OSL_ASSERT(mpState);
+
+    mpState->maAnchor = rAnchor;
+    maPosition = rAnchor;
 
     ::boost::shared_ptr<cache::PageCache> pPreviewCache (
         mrViewOverlay.GetSlideSorter().GetView().GetPreviewCache());
@@ -330,7 +365,7 @@ void SubstitutionOverlay::Create (
         ? rLayouter.GetColumn(rpHitDescriptor->GetPageIndex())
         : -1);
 
-    maItems.clear();
+    mpState->maItems.clear();
     while (rSelection.HasMoreElements())
     {
         model::SharedPageDescriptor pDescriptor (rSelection.GetNextElement());
@@ -357,7 +392,7 @@ void SubstitutionOverlay::Create (
         }
 
         const Rectangle aBox (pDescriptor->GetBoundingBox());
-        maBoundingBox.Union(aBox);
+        mpState->maBoundingBox.Union(aBox);
         basegfx::B2DRectangle aB2DBox(
             aBox.Left(),
             aBox.Top(),
@@ -367,19 +402,20 @@ void SubstitutionOverlay::Create (
         const Bitmap aBitmap (pPreviewCache->GetPreviewBitmap(pDescriptor->GetPage()).GetBitmap());
         AlphaMask aMask (aBitmap.GetSizePixel());
         aMask.Erase(nTransparency);
-        maItems.push_back(ItemDescriptor());
-        maItems.back().maImage = BitmapEx(
+        mpState->maItems.push_back(ItemDescriptor());
+        ItemDescriptor& rNewItem (mpState->maItems.back());
+        rNewItem.maImage = BitmapEx(
             aBitmap,
             aMask);
-        maItems.back().maLocation = pPageObjectLayouter->GetBoundingBox(
+        rNewItem.maLocation = pPageObjectLayouter->GetBoundingBox(
             pDescriptor,
             PageObjectLayouter::Preview,
             PageObjectLayouter::WindowCoordinateSystem).TopLeft();
-        maItems.back().mnTransparency = nTransparency/255.0;
-        maItems.back().maShape = basegfx::tools::createPolygonFromRect(aB2DBox);
+        rNewItem.mnTransparency = nTransparency/255.0;
+        rNewItem.maShape = basegfx::tools::createPolygonFromRect(aB2DBox);
     }
 
-    SetIsVisible(maItems.size() > 0);
+    SetIsVisible(mpState->maItems.size() > 0);
 }
 
 
@@ -388,7 +424,20 @@ void SubstitutionOverlay::Create (
 void SubstitutionOverlay::Clear (void)
 {
     SetIsVisible(false);
-    maItems.clear();
+    mpState.reset(new InternalState());
+}
+
+
+
+
+void SubstitutionOverlay::SetAnchor (const Point& rAnchor)
+{
+    OSL_ASSERT(mpState);
+    if (mpState->maAnchor != rAnchor)
+    {
+        Invalidator aInvalidator (*this);
+        mpState->maAnchor = rAnchor;
+    }
 }
 
 
@@ -396,11 +445,11 @@ void SubstitutionOverlay::Clear (void)
 
 void SubstitutionOverlay::Move (const Point& rOffset)
 {
-    Invalidator aInvalidator (*this);
-
-    maPosition += rOffset;
-    maTranslation += rOffset;
-    maBoundingBox.Move(rOffset.X(), rOffset.Y());
+    if (rOffset != Point(0,0))
+    {
+        Invalidator aInvalidator (*this);
+        maPosition += rOffset;
+    }
 }
 
 
@@ -408,7 +457,11 @@ void SubstitutionOverlay::Move (const Point& rOffset)
 
 void SubstitutionOverlay::SetPosition (const Point& rPosition)
 {
-    Move(rPosition - GetPosition());
+    if (maPosition != rPosition)
+    {
+        Invalidator aInvalidator (*this);
+        maPosition = rPosition;
+    }
 }
 
 
@@ -427,26 +480,28 @@ void SubstitutionOverlay::Paint (
     const Rectangle& rRepaintArea)
 {
     (void)rRepaintArea;
+    OSL_ASSERT(mpState);
 
     if ( ! IsVisible())
         return;
 
+    const Point aOffset (maPosition - mpState->maAnchor);
     basegfx::B2DHomMatrix aTranslation;
-    aTranslation.translate(maTranslation.X(), maTranslation.Y());
+    aTranslation.translate(aOffset.X(), aOffset.Y());
 
     rDevice.SetFillColor(Color(AirForceBlue));
     rDevice.SetLineColor();
 
     for (::std::vector<ItemDescriptor>::const_iterator
-             iItem(maItems.begin()),
-             iEnd(maItems.end());
+             iItem(mpState->maItems.begin()),
+             iEnd(mpState->maItems.end());
          iItem!=iEnd;
          ++iItem)
     {
         ::basegfx::B2DPolyPolygon aPolygon (iItem->maShape);
         aPolygon.transform(aTranslation);
         rDevice.DrawTransparent(aPolygon, iItem->mnTransparency);
-        rDevice.DrawBitmapEx(iItem->maLocation+maTranslation, iItem->maImage);
+        rDevice.DrawBitmapEx(iItem->maLocation+aOffset, iItem->maImage);
     }
 }
 
@@ -455,7 +510,28 @@ void SubstitutionOverlay::Paint (
 
 Rectangle SubstitutionOverlay::GetBoundingBox (void) const
 {
-    return maBoundingBox;
+    OSL_ASSERT(mpState);
+
+    Rectangle aBox (mpState->maBoundingBox);
+    aBox.Move(maPosition.X() - mpState->maAnchor.X(), maPosition.Y() - mpState->maAnchor.Y());
+    return aBox;
+}
+
+
+
+
+SubstitutionOverlay::SharedInternalState SubstitutionOverlay::GetInternalState (void) const
+{
+    return mpState;
+}
+
+
+
+
+void SubstitutionOverlay::SetInternalState (const SharedInternalState& rpState)
+{
+    if (rpState)
+        mpState = rpState;
 }
 
 

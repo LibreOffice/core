@@ -367,11 +367,17 @@ void Clipboard::CreateSlideTransferable (
     {
         mrSlideSorter.GetView().BrkAction();
         SdDrawDocument* pDocument = mrSlideSorter.GetModel().GetDocument();
+        ::boost::shared_ptr<SubstitutionHandler> pSubstitutionHandler;
+        ::rtl::Reference<SelectionFunction> pSelectionFunction (
+            mrSlideSorter.GetController().GetCurrentSelectionFunction());
+        if (pSelectionFunction.is())
+            pSubstitutionHandler = pSelectionFunction->GetSubstitutionHandler();
         SdTransferable* pTransferable = new Transferable (
             pDocument,
             NULL,
             FALSE,
-            dynamic_cast<SlideSorterViewShell*>(mrSlideSorter.GetViewShell()));
+            dynamic_cast<SlideSorterViewShell*>(mrSlideSorter.GetViewShell()),
+            pSubstitutionHandler);
 
         if (bDrag)
             SD_MOD()->pTransferDrag = pTransferable;
@@ -433,7 +439,9 @@ void Clipboard::StartDrag (
     mbUpdateSelectionPending = false;
     CreateSlideTransferable(pWindow, TRUE);
 
-    mrController.GetInsertionIndicatorHandler()->UpdatePosition(rPosition);
+    mrController.GetInsertionIndicatorHandler()->UpdatePosition(
+        rPosition,
+        InsertionIndicatorHandler::UnknownMode);
 }
 
 
@@ -442,8 +450,9 @@ void Clipboard::StartDrag (
 void Clipboard::DragFinished (sal_Int8 nDropAction)
 {
     // Hide the substitution display and insertion indicator.
-    mrSlideSorter.GetView().GetOverlay().GetSubstitutionOverlay()->SetIsVisible(false);
-    mrSlideSorter.GetController().GetInsertionIndicatorHandler()->End();
+    ::rtl::Reference<SelectionFunction> pFunction (mrController.GetCurrentSelectionFunction());
+    if (pFunction.is())
+        pFunction->NotifyDragFinished();
 
     SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
 
@@ -467,7 +476,8 @@ void Clipboard::DragFinished (sal_Int8 nDropAction)
         mrController.GetSelectionManager()->DeleteSelectedPages ();
     }
 
-    SelectPages();
+    if (nDropAction != DND_ACTION_NONE)
+        SelectPages();
 }
 
 
@@ -527,7 +537,9 @@ sal_Int8 Clipboard::AcceptDrop (
             // Show the insertion marker and the substitution for a drop.
             Point aPosition = pTargetWindow->PixelToLogic (rEvent.maPosPixel);
             view::ViewOverlay& rOverlay (mrSlideSorter.GetView().GetOverlay());
-            mrController.GetInsertionIndicatorHandler()->UpdatePosition(aPosition);
+            mrController.GetInsertionIndicatorHandler()->UpdatePosition(
+                aPosition,
+                rEvent.maDragEvent.DropAction);
             rOverlay.GetSubstitutionOverlay()->SetPosition(aPosition);
 
             // Scroll the window when the mouse reaches the window border.
@@ -580,10 +592,10 @@ sal_Int8 Clipboard::ExecuteDrop (
                 || ( nXOffset >= 2 && nYOffset >= 2 );
 
             // Get insertion position and then turn off the insertion indicator.
-            mrController.GetInsertionIndicatorHandler()->UpdatePosition(aEventModelPosition);
+            mrController.GetInsertionIndicatorHandler()->UpdatePosition(
+                aEventModelPosition,
+                rEvent.mnAction);
             USHORT nIndex = DetermineInsertPosition(*pDragTransferable);
-            OSL_TRACE ("Clipboard::AcceptDrop() called for index %d",
-                nIndex);
             mrController.GetInsertionIndicatorHandler()->End();
 
             if (bContinue)
@@ -617,6 +629,13 @@ sal_Int8 Clipboard::ExecuteDrop (
                     nResult = rEvent.mnAction;
                 }
             }
+
+            // Notify the receiving selection function that drag-and-drop is
+            // finished and the substitution handler can be released.
+            ::rtl::Reference<SelectionFunction> pFunction (
+                mrController.GetCurrentSelectionFunction());
+            if (pFunction.is())
+                pFunction->NotifyDragFinished();
         }
         break;
 

@@ -77,8 +77,7 @@ public:
         MouseOverColor,
         PageNumberBorder,
         PageNumberColor,
-        Selection,
-        PreviewBorder
+        Selection
     };
     ColorData GetColor (const ColorType eType);
 

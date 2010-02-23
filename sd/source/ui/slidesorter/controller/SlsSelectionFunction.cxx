@@ -34,6 +34,8 @@
 
 #include "SlideSorter.hxx"
 #include "SlideSorterViewShell.hxx"
+#include "SlsSubstitutionHandler.hxx"
+#include "SlsTransferable.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsPageSelector.hxx"
 #include "controller/SlsFocusManager.hxx"
@@ -42,6 +44,7 @@
 #include "controller/SlsCurrentSlideManager.hxx"
 #include "controller/SlsInsertionIndicatorHandler.hxx"
 #include "controller/SlsSelectionManager.hxx"
+#include "controller/SlsProperties.hxx"
 #include "controller/SlsProperties.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageDescriptor.hxx"
@@ -57,6 +60,8 @@
 #include "Window.hxx"
 #include "sdpage.hxx"
 #include "drawdoc.hxx"
+#include "DrawDocShell.hxx"
+#include "sdxfer.hxx"
 #include "ViewShell.hxx"
 #include "ViewShellBase.hxx"
 #include "FrameView.hxx"
@@ -107,49 +112,6 @@ static const sal_uInt32 MODIFIER_MASK            (SHIFT_MODIFIER | CONTROL_MODIF
 
 
 namespace sd { namespace slidesorter { namespace controller {
-
-/** A SubstitutionHandler object handles the display of a number of selected
-    slides at the mouse position and the insertion or (with or without
-    removing the pages at their original position) when the object is
-    destoyed.
-*/
-class SelectionFunction::SubstitutionHandler
-{
-public:
-    /** Create a substitution display of the currently selected pages and
-        use the given position as the anchor point.
-    */
-    SubstitutionHandler (
-        SlideSorter& rSlideSorter,
-        const model::SharedPageDescriptor& rpHitDescriptor,
-        const Point& rMouseModelPosition);
-    ~SubstitutionHandler (void);
-
-    /** Call this method (for example as reaction to ESC key press) to avoid
-        processing (ie moving or inserting) the substition when the called
-        SubstitutionHandler object is destroyed.
-    */
-    void Dispose (void);
-
-    /** Move the substitution display by the distance the mouse has
-        travelled since the last call to this method or to
-        CreateSubstitution().  The given point becomes the new anchor.
-    */
-    void UpdatePosition (
-        const Point& rMousePosition,
-        const bool bAllowAutoScroll = true);
-
-private:
-    SlideSorter& mrSlideSorter;
-    model::SharedPageDescriptor mpHitDescriptor;
-    sal_Int32 mnInsertionIndex;
-
-    /** Move the substitution display of the currently selected pages.
-    */
-    void Process (void);
-};
-
-
 
 
 class SelectionFunction::MouseMultiSelector
@@ -241,13 +203,13 @@ namespace {
 class SelectionFunction::EventDescriptor
 {
 public:
-
     Point maMousePosition;
     Point maMouseModelPosition;
     ::boost::weak_ptr<model::PageDescriptor> mpHitDescriptor;
     SdrPage* mpHitPage;
     sal_uInt32 mnEventCode;
     sal_Int32 mnButtonIndex;
+    InsertionIndicatorHandler::Mode meDragMode;
 
     EventDescriptor (
         sal_uInt32 nEventType,
@@ -260,6 +222,8 @@ public:
         const AcceptDropEvent& rEvent,
         SlideSorter& rSlideSorter);
     EventDescriptor (const EventDescriptor& rDescriptor);
+
+    void SetDragMode (const InsertionIndicatorHandler::Mode eMode);
 };
 
 
@@ -289,6 +253,9 @@ SelectionFunction::SelectionFunction (
 {
     aDragTimer.SetTimeoutHdl(LINK(this, SelectionFunction, DragSlideHdl));
 }
+
+
+
 
 SelectionFunction::~SelectionFunction (void)
 {
@@ -353,14 +320,18 @@ BOOL SelectionFunction::MouseMove (const MouseEvent& rEvent)
             (rEvent.GetButtons() & MOUSE_LEFT)!=0);
     }
 
-    if (rEvent.IsLeaveWindow())
+    // Detect the mouse leaving the window.  When not button is pressed then
+    // we can call IsLeaveWindow at the event.  Otherwise we have to make an
+    // explicit test.
+    if (rEvent.IsLeaveWindow()
+        || ! Rectangle(Point(0,0),mpWindow->GetOutputSizePixel()).IsInside(aMousePosition))
     {
-        //    Rectangle aRectangle (Point(0,0),mpWindow->GetOutputSizePixel());
-        //    if ( ! aRectangle.IsInside(aMousePosition)
         if (mpSubstitutionHandler)
         {
             // Mouse left the window with pressed left button.  Make it a drag.
-            StartDrag(aMousePosition);
+            StartDrag(aMousePosition, InsertionIndicatorHandler::MoveMode);
+            mpSubstitutionHandler->Hide();
+            mpSubstitutionHandler.reset();
         }
         mrSlideSorter.GetView().SetPageUnderMouse(model::SharedPageDescriptor());
     }
@@ -404,24 +375,86 @@ BOOL SelectionFunction::MouseButtonUp (const MouseEvent& rEvent)
 
 void SelectionFunction::MouseDragged (const AcceptDropEvent& rEvent)
 {
+    if (rEvent.mbLeaving)
+    {
+        if (mpSubstitutionHandler)
+        {
+            // Disconnect the substitution handler from this selection function.
+            mpSubstitutionHandler->Hide();
+            mpSubstitutionHandler->SetTargetSlideSorter();
+            mpSubstitutionHandler.reset();
+        }
+    }
+    else if ( ! mpSubstitutionHandler)
+    {
+        const SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
+        const Transferable* pSlideSorterTransferable
+            = dynamic_cast<const Transferable*>(pDragTransferable);
+        if (pSlideSorterTransferable != NULL)
+        {
+            // Connect the substitution handler to this selection function.
+            mpSubstitutionHandler = pSlideSorterTransferable->GetSubstitutionHandler();
+            if (mpSubstitutionHandler)
+            {
+                mpSubstitutionHandler->SetTargetSlideSorter(
+                    &mrSlideSorter,
+                    rEvent.maPosPixel,
+                    InsertionIndicatorHandler::GetModeFromDndAction(rEvent.mnAction),
+                pSlideSorterTransferable->GetView() == &mrSlideSorter.GetView());
+                mpSubstitutionHandler->Show();
+            }
+        }
+        else
+            mpSubstitutionHandler.reset(
+                new SubstitutionHandler(
+                    mrSlideSorter,
+                    mrSlideSorter.GetController().GetPageAt(rEvent.maPosPixel),
+                    rEvent.maPosPixel));
+    }
+
     // 1. Compute some frequently used values relating to the event.
     ::std::auto_ptr<EventDescriptor> pEventDescriptor (
         new EventDescriptor(rEvent, mrSlideSorter));
 
     // 2. Detect whether we are dragging pages or dragging a selection rectangle.
     view::ViewOverlay& rOverlay (mrSlideSorter.GetView().GetOverlay());
-    if (rOverlay.GetSubstitutionOverlay()->IsVisible())
+    if (mpSubstitutionHandler)
         pEventDescriptor->mnEventCode |= SUBSTITUTION_VISIBLE;
     if (mpMouseMultiSelector)
         pEventDescriptor->mnEventCode |= RECTANGLE_VISIBLE;
 
-    // 3. Process the event.
+    // 3. Set the drag mode.
+    pEventDescriptor->SetDragMode(
+        InsertionIndicatorHandler::GetModeFromDndAction(rEvent.mnAction));
+
+    // 4. Process the event.
     EventPreprocessing(*pEventDescriptor);
     if ( ! EventProcessing(*pEventDescriptor))
     {
         OSL_TRACE ("can not handle event code %x", pEventDescriptor->mnEventCode);
     }
     EventPostprocessing(*pEventDescriptor);
+}
+
+
+
+
+void SelectionFunction::NotifyDragFinished (void)
+{
+    if (mpSubstitutionHandler)
+    {
+        mpSubstitutionHandler->Dispose();
+        mpSubstitutionHandler.reset();
+    }
+    mrController.GetInsertionIndicatorHandler()->End();
+}
+
+
+
+
+::boost::shared_ptr<SubstitutionHandler> SelectionFunction::GetSubstitutionHandler (void) const
+{
+    return mpSubstitutionHandler;
 }
 
 
@@ -717,14 +750,16 @@ void SelectionFunction::StartDragTimer (void)
 
 IMPL_LINK( SelectionFunction, DragSlideHdl, Timer*, EMPTYARG )
 {
-    StartDrag(aMDPos);
+    StartDrag(aMDPos, InsertionIndicatorHandler::MoveMode);
     return 0;
 }
 
 
 
 
-void SelectionFunction::StartDrag (const Point& rMousePosition)
+void SelectionFunction::StartDrag (
+    const Point& rMousePosition,
+    const InsertionIndicatorHandler::Mode eMode)
 {
     if (mbPageHit
         &&  ! mrSlideSorter.GetProperties()->IsUIReadOnly())
@@ -736,7 +771,9 @@ void SelectionFunction::StartDrag (const Point& rMousePosition)
                     mrSlideSorter.GetController().GetPageAt(rMousePosition),
                     rMousePosition));
         else
-            mpSubstitutionHandler->UpdatePosition(rMousePosition);
+            mpSubstitutionHandler->UpdatePosition(
+                rMousePosition,
+                eMode);
         mbPageHit = false;
         mpWindow->ReleaseMouse();
 
@@ -1053,16 +1090,21 @@ bool SelectionFunction::EventProcessing (const EventDescriptor& rDescriptor)
     switch (rDescriptor.mnEventCode & (SUBSTITUTION_VISIBLE | RECTANGLE_VISIBLE))
     {
         case SUBSTITUTION_VISIBLE:
+            OSL_ASSERT(mpSubstitutionHandler);
             // The substitution is visible.  Handle events accordingly.
             if (Match(rDescriptor.mnEventCode, MOUSE_MOTION | LEFT_BUTTON | SINGLE_CLICK))
             {
                 if ((rDescriptor.mnEventCode & CONTROL_MODIFIER) != 0)
-                    StartDrag(rDescriptor.maMousePosition);
-                mpSubstitutionHandler->UpdatePosition(rDescriptor.maMousePosition);
+                    StartDrag(rDescriptor.maMousePosition, InsertionIndicatorHandler::CopyMode);
+                mpSubstitutionHandler->UpdatePosition(
+                    rDescriptor.maMousePosition,
+                    rDescriptor.meDragMode);
             }
             else if (Match(rDescriptor.mnEventCode, MOUSE_DRAG))
             {
-                mpSubstitutionHandler->UpdatePosition(rDescriptor.maMousePosition);
+                mpSubstitutionHandler->UpdatePosition(
+                    rDescriptor.maMousePosition,
+                    rDescriptor.meDragMode);
             }
             else if (Match(rDescriptor.mnEventCode, BUTTON_UP | LEFT_BUTTON))
             {
@@ -1395,7 +1437,8 @@ SelectionFunction::EventDescriptor::EventDescriptor (
       mpHitDescriptor(),
       mpHitPage(),
       mnEventCode(0),
-      mnButtonIndex(-1)
+      mnButtonIndex(-1),
+      meDragMode(InsertionIndicatorHandler::MoveMode)
 {
     model::SharedPageDescriptor pHitDescriptor (
         rSlideSorter.GetController().GetFocusManager().GetFocusedPageDescriptor());
@@ -1418,7 +1461,8 @@ SelectionFunction::EventDescriptor::EventDescriptor (
       mpHitDescriptor(),
       mpHitPage(),
       mnEventCode(MOUSE_DRAG),
-      mnButtonIndex(-1)
+      mnButtonIndex(-1),
+      meDragMode(InsertionIndicatorHandler::MoveMode)
 {
     SharedSdWindow pWindow (rSlideSorter.GetContentWindow());
 
@@ -1441,132 +1485,17 @@ SelectionFunction::EventDescriptor::EventDescriptor (const EventDescriptor& rDes
       mpHitDescriptor(rDescriptor.mpHitDescriptor),
       mpHitPage(rDescriptor.mpHitPage),
       mnEventCode(rDescriptor.mnEventCode),
-      mnButtonIndex(rDescriptor.mnButtonIndex)
+      mnButtonIndex(rDescriptor.mnButtonIndex),
+      meDragMode(InsertionIndicatorHandler::MoveMode)
 {
 }
 
 
 
 
-//===== SubstitutionHandler ===================================================
-
-SelectionFunction::SubstitutionHandler::SubstitutionHandler (
-    SlideSorter& rSlideSorter,
-    const model::SharedPageDescriptor& rpHitDescriptor,
-    const Point& rMouseModelPosition)
-    : mrSlideSorter(rSlideSorter),
-      mpHitDescriptor(rpHitDescriptor),
-      mnInsertionIndex(-1)
+void SelectionFunction::EventDescriptor::SetDragMode (const InsertionIndicatorHandler::Mode eMode)
 {
-    mnInsertionIndex = -1;
-
-    // No Drag-and-Drop for master pages.
-    if (mrSlideSorter.GetModel().GetEditMode() != EM_PAGE)
-        return;
-
-    if (mrSlideSorter.GetProperties()->IsUIReadOnly())
-        return;
-
-    view::ViewOverlay& rOverlay (mrSlideSorter.GetView().GetOverlay());
-
-    if ( ! rOverlay.GetSubstitutionOverlay()->IsVisible())
-    {
-        // Show a new substitution for the selected page objects.
-        model::PageEnumeration aSelectedPages(
-            model::PageEnumerationProvider::CreateSelectedPagesEnumeration(
-                mrSlideSorter.GetModel()));
-        rOverlay.GetSubstitutionOverlay()->Create(
-            aSelectedPages,
-            rMouseModelPosition,
-            mpHitDescriptor);
-        rOverlay.GetSubstitutionOverlay()->SetIsVisible(true);
-        mrSlideSorter.GetController().GetInsertionIndicatorHandler()->Start(rMouseModelPosition);
-    }
-}
-
-
-
-
-SelectionFunction::SubstitutionHandler::~SubstitutionHandler (void)
-{
-    Process();
-
-    view::ViewOverlay& rOverlay (mrSlideSorter.GetView().GetOverlay());
-    rOverlay.GetSubstitutionOverlay()->SetIsVisible(false);
-    rOverlay.GetSubstitutionOverlay()->Clear();
-    mrSlideSorter.GetController().GetInsertionIndicatorHandler()->End();
-    mpHitDescriptor.reset();
-}
-
-
-
-
-void SelectionFunction::SubstitutionHandler::Dispose (void)
-{
-    mnInsertionIndex = -1;
-}
-
-
-
-
-void SelectionFunction::SubstitutionHandler::UpdatePosition (
-    const Point& rMousePosition,
-    const bool bAllowAutoScroll)
-{
-    if (mrSlideSorter.GetProperties()->IsUIReadOnly())
-        return;
-
-    // Convert window coordinates into model coordinates (we need the
-    // window coordinates for auto-scrolling because that remains
-    // constant while scrolling.)
-    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
-    const Point aMouseModelPosition (pWindow->PixelToLogic(rMousePosition));
-
-    if ( ! (bAllowAutoScroll && mrSlideSorter.GetController().GetScrollBarManager().AutoScroll(
-        rMousePosition,
-        ::boost::bind(
-            &SelectionFunction::SubstitutionHandler::UpdatePosition,
-            this,
-            rMousePosition,
-            false))))
-    {
-        view::ViewOverlay& rOverlay (mrSlideSorter.GetView().GetOverlay());
-
-        // Move the existing substitution to the new position.
-        rOverlay.GetSubstitutionOverlay()->SetPosition(aMouseModelPosition);
-
-        mrSlideSorter.GetController().GetInsertionIndicatorHandler()->UpdatePosition(
-            aMouseModelPosition);
-
-        // Remember the new insertion index.
-        if (mrSlideSorter.GetController().GetInsertionIndicatorHandler()->IsInsertionTrivial())
-            mnInsertionIndex = -1;
-        else
-            mnInsertionIndex = mrSlideSorter.GetController().GetInsertionIndicatorHandler()
-                ->GetInsertionPageIndex();
-    }
-}
-
-
-
-
-void SelectionFunction::SubstitutionHandler::Process (void)
-{
-    if (mrSlideSorter.GetProperties()->IsUIReadOnly())
-        return;
-
-    if (mnInsertionIndex >= 0)
-    {
-        // Tell the model to move the selected pages behind the one with the
-        // index mnInsertionIndex which first has to transformed into an index
-        // understandable by the document.
-        USHORT nDocumentIndex = (USHORT)mnInsertionIndex-1;
-        mrSlideSorter.GetController().GetSelectionManager()->MoveSelectedPages(nDocumentIndex);
-
-        ViewShell* pViewShell = mrSlideSorter.GetViewShell();
-        if (pViewShell != NULL)
-            pViewShell->GetViewFrame()->GetBindings().Invalidate(SID_STATUS_PAGE);
-    }
+    meDragMode = eMode;
 }
 
 
@@ -1849,11 +1778,14 @@ void RangeSelector::UpdateSelection (void)
 {
     view::SlideSorterView::DrawLock aLock (mrSlideSorter);
 
+    model::SlideSorterModel& rModel (mrSlideSorter.GetModel());
+    const sal_Int32 nPageCount (rModel.GetPageCount());
+
     const sal_Int32 nIndexUnderMouse (
         mrSlideSorter.GetView().GetLayouter().GetIndexAtPoint (
             maSecondCorner,
             false));
-    if (nIndexUnderMouse >= 0)
+    if (nIndexUnderMouse>=0 && nIndexUnderMouse<nPageCount)
     {
         if (mnAnchorIndex < 0)
             mnAnchorIndex = nIndexUnderMouse;
@@ -1862,8 +1794,7 @@ void RangeSelector::UpdateSelection (void)
         Range aRange (mnAnchorIndex, mnSecondIndex);
         aRange.Justify();
 
-        model::SlideSorterModel& rModel (mrSlideSorter.GetModel());
-        for (sal_Int32 nIndex=0,nCount(rModel.GetPageCount()); nIndex<nCount; ++nIndex)
+        for (sal_Int32 nIndex=0; nIndex<nPageCount; ++nIndex)
         {
             model::SharedPageDescriptor pDescriptor (rModel.GetPageDescriptor(nIndex));
 

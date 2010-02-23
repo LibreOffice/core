@@ -42,13 +42,16 @@ Transferable::Transferable (
     SdDrawDocument* pSrcDoc,
     ::sd::View* pWorkView,
     BOOL bInitOnGetData,
-    SlideSorterViewShell* pViewShell)
+    SlideSorterViewShell* pViewShell,
+    const ::boost::shared_ptr<SubstitutionHandler>& rpSubstitutionHandler)
     : SdTransferable (pSrcDoc, pWorkView, bInitOnGetData),
-      mpViewShell(pViewShell)
+      mpViewShell(pViewShell),
+      mpSubstitutionHandler(rpSubstitutionHandler)
 {
     if (mpViewShell != NULL)
         StartListening(*mpViewShell);
 }
+
 
 
 
@@ -65,6 +68,7 @@ void Transferable::DragFinished (sal_Int8 nDropAction)
 {
     if (mpViewShell != NULL)
         mpViewShell->DragFinished(nDropAction);
+    mpSubstitutionHandler.reset();
 }
 
 
@@ -89,6 +93,13 @@ void Transferable::Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint)
     SdTransferable::Notify(rBroadcaster, rHint);
 }
 
+
+
+
+::boost::shared_ptr<SubstitutionHandler> Transferable::GetSubstitutionHandler (void) const
+{
+    return mpSubstitutionHandler;
+}
 
 
 

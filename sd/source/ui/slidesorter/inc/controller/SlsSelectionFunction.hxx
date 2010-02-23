@@ -33,6 +33,7 @@
 
 #include "model/SlsSharedPageDescriptor.hxx"
 #include "controller/SlsFocusManager.hxx"
+#include "controller/SlsInsertionIndicatorHandler.hxx"
 #include "fupoor.hxx"
 #include <svtools/transfer.hxx>
 #include <boost/noncopyable.hpp>
@@ -51,6 +52,8 @@ class SlideSorter;
 namespace sd { namespace slidesorter { namespace controller {
 
 class SlideSorterController;
+class SubstitutionHandler;
+
 
 class SelectionFunction
     : public FuPoor,
@@ -93,6 +96,12 @@ public:
 
     void MouseDragged (const AcceptDropEvent& rEvent);
 
+    /** Turn of substitution display and insertion indicator.
+    */
+    void NotifyDragFinished (void);
+
+    ::boost::shared_ptr<SubstitutionHandler> GetSubstitutionHandler (void) const;
+
     class MouseMultiSelector;
 
 protected:
@@ -106,7 +115,6 @@ protected:
     virtual ~SelectionFunction();
 
 private:
-    class SubstitutionHandler;
     class EventDescriptor;
 
     /// Set in MouseButtonDown this flag indicates that a page has been hit.
@@ -127,7 +135,7 @@ private:
     */
     bool mbProcessingMouseButtonDown;
 
-    ::boost::scoped_ptr<SubstitutionHandler> mpSubstitutionHandler;
+    ::boost::shared_ptr<SubstitutionHandler> mpSubstitutionHandler;
     ::boost::scoped_ptr<MouseMultiSelector> mpMouseMultiSelector;
 
     /** Remember where the left mouse button was pressed.
@@ -143,7 +151,9 @@ private:
     sal_Int32 mnShiftKeySelectionAnchor;
 
     DECL_LINK( DragSlideHdl, Timer* );
-    void StartDrag (const Point& rMousePosition);
+    void StartDrag (
+        const Point& rMousePosition,
+        const InsertionIndicatorHandler::Mode eMode);
 
     /** Set the selection to exactly the specified page and also set it as
         the current page.

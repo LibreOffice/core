@@ -580,11 +580,9 @@ Bitmap PageObjectPainter::CreateBackgroundBitmap(
     mpShadowPainter->PaintFrame(aBitmapDevice, aFrameBox);
 
     // Clear the area where the preview will later be painted.
-    /*
     aBitmapDevice.SetFillColor(mpTheme->GetColor(Theme::Background));
-    aBitmapDevice.SetLineColor(mpTheme->GetColor(Theme::PreviewBorder));
-    aBitmapDevice.DrawRect(aFrameBox);
-    */
+    aBitmapDevice.SetLineColor(mpTheme->GetColor(Theme::Background));
+    aBitmapDevice.DrawRect(aBox);
 
     return aBitmapDevice.GetBitmap (Point(0,0),aSize);
 }

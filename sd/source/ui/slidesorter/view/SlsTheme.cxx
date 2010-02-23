@@ -214,9 +214,6 @@ ColorData Theme::GetColor (const ColorType eType)
 
         case Selection:
             return StellaBlue;
-
-        case PreviewBorder:
-            return 0x000000;
     }
     return 0;
 }

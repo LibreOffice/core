@@ -52,13 +52,24 @@ public:
     InsertionIndicatorHandler (SlideSorter& rSlideSorter);
     ~InsertionIndicatorHandler (void);
 
+    enum Mode { CopyMode, MoveMode, UnknownMode };
+    static Mode GetModeFromDndAction (const sal_Int8 nMode);
+
     /** Activate the insertion marker at the given coordinates.
     */
-    void Start (const Point& rMouseModelPosition);
+    void Start (
+        const Point& rMouseModelPosition,
+        const Mode eMode,
+        const bool bIsOverSourceView);
 
     /** Set the position of the insertion marker to the given coordinates.
     */
-    void UpdatePosition (const Point& rMouseModelPosition);
+    void UpdatePosition (
+        const Point& rMouseModelPosition,
+        const Mode eMode);
+    void UpdatePosition (
+        const Point& rMouseModelPosition,
+        const sal_Int8 nDndAction);
 
     /** Deactivate the insertion marker.
     */
@@ -73,12 +84,13 @@ public:
     */
     sal_Int32 GetInsertionPageIndex (void) const;
 
+
     /** Determine whether moving the current selection to the current
         position of the insertion marker would alter the document.  This
         would be the case when the selection is not consecutive or would be
         moved to a position outside and not adjacent to the selection.
     */
-    bool IsInsertionTrivial (void) const;
+    bool IsInsertionTrivial (const Mode eMode) const;
 
 private:
     SlideSorter& mrSlideSorter;
@@ -86,11 +98,15 @@ private:
     ::boost::shared_ptr<view::InsertionIndicatorOverlay> mpInsertionIndicatorOverlay;
     sal_Int32 mnInsertionIndex;
     bool mbIsBeforePage;
+    Mode meMode;
     bool mbIsInsertionTrivial;
     bool mbIsActive;
     bool mbIsReadOnly;
+    bool mbIsOverSourceView;
 
-    void SetPosition (const Point& rPoint);
+    void SetPosition (
+        const Point& rPoint,
+        const Mode eMode);
     ::boost::shared_ptr<view::InsertAnimator> GetInsertAnimator (void);
 };
 

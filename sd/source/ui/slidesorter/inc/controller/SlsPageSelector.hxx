@@ -201,9 +201,10 @@ private:
     model::SharedPageDescriptor mpSelectionAnchor;
     model::SharedPageDescriptor mpCurrentPage;
     sal_Int32 mnUpdateLockCount;
+    bool mbIsUpdateCurrentPagePending;
 
     void CountSelectedPages (void);
-    void UpdateCurrentPage (void);
+    void UpdateCurrentPage (const bool bUpdateOnlyWhenPending = false);
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

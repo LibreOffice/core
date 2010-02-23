@@ -43,7 +43,7 @@ namespace {
 const static sal_Int32 gnPageNumberOffset = 5;
 const static sal_Int32 gnPageNumberFrameHorizontalOffset = 2;
 const static sal_Int32 gnPageNumberFrameVerticalOffset = 1;
-const static sal_Int32 gnOuterBorderWidth = 6;
+const static sal_Int32 gnOuterBorderWidth = 5;
 const static sal_Int32 gnInfoAreaMinWidth = 26;
 const static Size gaButtonSize (32,32);
 const static sal_Int32 gnButtonGap (5);

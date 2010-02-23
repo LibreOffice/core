@@ -45,6 +45,9 @@ namespace sd
 
 namespace sd { namespace slidesorter { namespace controller {
 
+class SubstitutionHandler;
+
+
 /** This class exists to have DragFinished call the correct object: the
     SlideSorterViewShell instead of the old SlideView.
 */
@@ -56,14 +59,18 @@ public:
         SdDrawDocument* pSrcDoc,
         ::sd::View* pWorkView,
         BOOL bInitOnGetData,
-        SlideSorterViewShell* pViewShell);
+        SlideSorterViewShell* pViewShell,
+        const ::boost::shared_ptr<SubstitutionHandler>& rpSubstitutionHandler);
 
     virtual ~Transferable (void);
 
     virtual void DragFinished (sal_Int8 nDropAction);
 
+    ::boost::shared_ptr<SubstitutionHandler> GetSubstitutionHandler (void) const;
+
 private:
     SlideSorterViewShell* mpViewShell;
+    ::boost::shared_ptr<SubstitutionHandler> mpSubstitutionHandler;
 
     virtual void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint);
 };

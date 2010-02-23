@@ -601,7 +601,7 @@ void SlideSorterViewShell::ReadFrameViewData (FrameView* pFrameView)
             // sorter is displayed in a side pane then we ignore the value
             // of the frame view and adapt the number of columns
             // automatically to the window width.
-            rView.GetLayouter().SetColumnCount(1,5);
+            rView.GetLayouter().SetColumnCount(1,1);
         }
         else
             rView.GetLayouter().SetColumnCount(nSlidesPerRow,nSlidesPerRow);

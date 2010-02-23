@@ -126,8 +126,10 @@ public:
     */
     void Create (
         model::PageEnumeration& rSelection,
-        const Point& rPosition,
+        const Point& rAnchor,
         const model::SharedPageDescriptor& rpHitDescriptor);
+
+    void SetAnchor (const Point& rAnchor);
 
     /** Clear the substitution display.  Until the next call of Create() no
         substution is painted.
@@ -136,7 +138,7 @@ public:
 
     /** Move the substitution display by the given amount of pixels.
     */
-    void Move (const Point& rOffset);
+    void Move (const Point& rPositionOffset);
     void SetPosition (const Point& rPosition);
     Point GetPosition (void) const;
 
@@ -144,12 +146,19 @@ public:
         OutputDevice& rDevice,
         const Rectangle& rRepaintArea);
 
+    class InternalState;
+    typedef ::boost::shared_ptr<InternalState> SharedInternalState;
+    SharedInternalState GetInternalState (void) const;
+    void SetInternalState (const SharedInternalState& rpState);
+
 protected:
     virtual Rectangle GetBoundingBox (void) const;
 
 private:
+    /** The current position can be set by calling SetPosition() or Move().
+    */
     Point maPosition;
-    Point maTranslation;
+
     /** The substitution paints only the page object under the mouse and the
         8-neighborhood around it.  It uses different levels of transparency
         for the center and the four elements at its sides and the four
@@ -160,16 +169,7 @@ private:
     static const sal_Int32 mnSideTransparency;
     static const sal_Int32 mnCornerTransparency;
 
-    class ItemDescriptor
-    {
-    public:
-        BitmapEx maImage;
-        Point maLocation;
-        double mnTransparency;
-        basegfx::B2DPolygon maShape;
-    };
-    ::std::vector<ItemDescriptor> maItems;
-    Rectangle maBoundingBox;
+    SharedInternalState mpState;
 };
 
 

@@ -440,7 +440,9 @@ bool SlideSorterController::Command (
                 // indicator so that the user knows where a page insertion
                 // would take place.
                 GetInsertionIndicatorHandler()->Start(
-                    pWindow->PixelToLogic(rEvent.GetMousePosPixel()));
+                    pWindow->PixelToLogic(rEvent.GetMousePosPixel()),
+                    InsertionIndicatorHandler::MoveMode,
+                    false);
             }
 
             pWindow->ReleaseMouse();
@@ -863,6 +865,15 @@ FunctionReference SlideSorterController::CreateSelectionFunction (SfxRequest& rR
 
 
 
+::rtl::Reference<SelectionFunction> SlideSorterController::GetCurrentSelectionFunction (void)
+{
+    FunctionReference pFunction (mrSlideSorter.GetViewShell()->GetCurrentFunction());
+    return ::rtl::Reference<SelectionFunction>(dynamic_cast<SelectionFunction*>(pFunction.get()));
+}
+
+
+
+
 void SlideSorterController::PrepareEditModeChange (void)
 {
     //  Before we throw away the page descriptors we prepare for selecting
@@ -1041,6 +1052,8 @@ void SlideSorterController::SetDocumentSlides (const Reference<container::XIndex
 
 void SlideSorterController::CheckForMasterPageAssignment (void)
 {
+    if (mrModel.GetPageCount()%2==0)
+        return;
     PageEnumeration aAllPages (PageEnumerationProvider::CreateAllPagesEnumeration(mrModel));
     while (aAllPages.HasMoreElements())
     {

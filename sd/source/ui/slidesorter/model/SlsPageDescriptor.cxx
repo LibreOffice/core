@@ -39,11 +39,13 @@
 #include <svx/svdopage.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
+#include <svx/sdr/contact/viewobjectcontact.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
 namespace sd {  namespace slidesorter { namespace model {
+
 
 PageDescriptor::PageDescriptor (
     const Reference<drawing::XDrawPage>& rxPage,
@@ -64,7 +66,7 @@ PageDescriptor::PageDescriptor (
 {
     OSL_ASSERT(mpPage);
     OSL_ASSERT(mpPage == SdPage::getImplementation(rxPage));
-    if (mpPage!=NULL && !mpPage->IsMasterPage())
+    if (mpPage!=NULL && mpPage->TRG_HasMasterPage())
         mpMasterPage = &mpPage->TRG_GetMasterPage();
 }
 
@@ -105,7 +107,7 @@ sal_Int32 PageDescriptor::GetPageIndex (void) const
 bool PageDescriptor::UpdateMasterPage (void)
 {
     const SdrPage* pMaster = NULL;
-    if (mpPage!=NULL && !mpPage->IsMasterPage())
+    if (mpPage!=NULL && mpPage->TRG_HasMasterPage())
         pMaster = &mpPage->TRG_GetMasterPage();
     if (mpMasterPage != pMaster)
     {
