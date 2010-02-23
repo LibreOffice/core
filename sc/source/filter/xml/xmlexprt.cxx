@@ -87,6 +87,7 @@
 #include <rtl/ustring.hxx>
 
 #include <tools/debug.hxx>
+#include "tools/color.hxx"
 #include <rtl/math.hxx>
 #include <svl/zforlist.hxx>
 #include <svx/unoshape.hxx>
@@ -127,6 +128,7 @@
 #include <com/sun/star/form/XFormsSupplier2.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
@@ -164,6 +166,7 @@ using namespace formula;
 using namespace com::sun::star;
 using namespace xmloff::token;
 using ::std::vector;
+using ::com::sun::star::uno::UNO_QUERY;
 
 //----------------------------------------------------------------------------
 
@@ -529,6 +532,7 @@ ScXMLExport::ScXMLExport(
 
         sAttrName = GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_TABLE, GetXMLToken(XML_NAME));
         sAttrStyleName = GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_TABLE, GetXMLToken(XML_STYLE_NAME));
+        sAttrTabColor = GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_TABLE, GetXMLToken(XML_TAB_COLOR));
         sAttrColumnsRepeated = GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_TABLE, GetXMLToken(XML_NUMBER_COLUMNS_REPEATED));
         sAttrFormula = GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_TABLE, GetXMLToken(XML_FORMULA));
         sAttrStringValue = GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OFFICE, GetXMLToken(XML_STRING_VALUE));
@@ -1708,131 +1712,143 @@ void ScXMLExport::_ExportContent()
             }
             else
             {
-                //! indent after rebasing to m52
-
-            uno::Reference<sheet::XSpreadsheet> xTable(xIndex->getByIndex(nTable), uno::UNO_QUERY);
-            if (xTable.is())
-            {
-                xCurrentTable.set(xTable);
-                xCurrentTableCellRange.set(xTable, uno::UNO_QUERY);
-                uno::Reference<container::XNamed> xName (xTable, uno::UNO_QUERY );
-                if ( xName.is() )
+                uno::Reference<sheet::XSpreadsheet> xTable(xIndex->getByIndex(nTable), uno::UNO_QUERY);
+                if (xTable.is())
                 {
-                    nCurrentTable = sal::static_int_cast<sal_uInt16>( nTable );
-                    rtl::OUString sOUTableName(xName->getName());
-                    AddAttribute(sAttrName, sOUTableName);
-                    AddAttribute(sAttrStyleName, aTableStyles[nTable]);
-                    uno::Reference<util::XProtectable> xProtectable (xTable, uno::UNO_QUERY);
-                    if (xProtectable.is() && xProtectable->isProtected())
+                    xCurrentTable.set(xTable);
+                    xCurrentTableCellRange.set(xTable, uno::UNO_QUERY);
+                    uno::Reference<container::XNamed> xName (xTable, uno::UNO_QUERY );
+                    if ( xName.is() )
                     {
-                        AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTED, XML_TRUE);
-                        rtl::OUStringBuffer aBuffer;
-                        if (pDoc)
+                        nCurrentTable = sal::static_int_cast<sal_uInt16>( nTable );
+                        rtl::OUString sOUTableName(xName->getName());
+                        AddAttribute(sAttrName, sOUTableName);
+                        AddAttribute(sAttrStyleName, aTableStyles[nTable]);
+
+                        uno::Reference<beans::XPropertySet> xPropSet(xTable, UNO_QUERY);
+                        if (xPropSet.is())
                         {
-                            ScTableProtection* pProtect = pDoc->GetTabProtection(static_cast<SCTAB>(nTable));
-                            if (pProtect)
-                                SvXMLUnitConverter::encodeBase64(aBuffer, pProtect->getPasswordHash(PASSHASH_OOO));
-                        }
-                        if (aBuffer.getLength())
-                            AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY, aBuffer.makeStringAndClear());
-                    }
-                    rtl::OUString sPrintRanges;
-                    table::CellRangeAddress aColumnHeaderRange;
-                    sal_Bool bHasColumnHeader;
-                    GetColumnRowHeader(bHasColumnHeader, aColumnHeaderRange, bHasRowHeader, aRowHeaderRange, sPrintRanges);
-                    if( sPrintRanges.getLength() )
-                        AddAttribute( XML_NAMESPACE_TABLE, XML_PRINT_RANGES, sPrintRanges );
-                    else if (!pDoc->IsPrintEntireSheet(static_cast<SCTAB>(nTable)))
-                        AddAttribute( XML_NAMESPACE_TABLE, XML_PRINT, XML_FALSE);
-                    SvXMLElementExport aElemT(*this, sElemTab, sal_True, sal_True);
-                    CheckAttrList();
-                    WriteTableSource();
-                    WriteScenario();
-                    uno::Reference<drawing::XDrawPage> xDrawPage;
-                    if (pSharedData->HasForm(nTable, xDrawPage) && xDrawPage.is())
-                    {
-                        ::xmloff::OOfficeFormsExport aForms(*this);
-                        GetFormExport()->exportForms( xDrawPage );
-                        sal_Bool bRet(GetFormExport()->seekPage( xDrawPage ));
-                        DBG_ASSERT( bRet, "OFormLayerXMLExport::seekPage failed!" );
-                        (void)bRet;     // avoid warning in product version
-                    }
-                    if (pSharedData->HasDrawPage())
-                    {
-                        GetShapeExport()->seekShapes(uno::Reference<drawing::XShapes>(pSharedData->GetDrawPage(nTable), uno::UNO_QUERY));
-                        WriteTableShapes();
-                    }
-                    table::CellRangeAddress aRange(GetEndAddress(xTable, nTable));
-                    pSharedData->SetLastColumn(nTable, aRange.EndColumn);
-                    pSharedData->SetLastRow(nTable, aRange.EndRow);
-                    pCellsItr->SetCurrentTable(static_cast<SCTAB>(nTable), xCurrentTable);
-                    pGroupColumns->NewTable();
-                    pGroupRows->NewTable();
-                    FillColumnRowGroups();
-                    if (bHasColumnHeader)
-                        pSharedData->SetLastColumn(nTable, aColumnHeaderRange.EndColumn);
-                    bRowHeaderOpen = sal_False;
-                    if (bHasRowHeader)
-                        pSharedData->SetLastRow(nTable, aRowHeaderRange.EndRow);
-                    pDefaults->FillDefaultStyles(nTable, pSharedData->GetLastRow(nTable),
-                        pSharedData->GetLastColumn(nTable), pCellStyles, pDoc);
-                    pRowFormatRanges->SetRowDefaults(pDefaults->GetRowDefaults());
-                    pRowFormatRanges->SetColDefaults(pDefaults->GetColDefaults());
-                    pCellStyles->SetRowDefaults(pDefaults->GetRowDefaults());
-                    pCellStyles->SetColDefaults(pDefaults->GetColDefaults());
-                    ExportColumns(nTable, aColumnHeaderRange, bHasColumnHeader);
-                    sal_Bool bIsFirst(sal_True);
-                    sal_Int32 nEqualCells(0);
-                    ScMyCell aCell;
-                    ScMyCell aPrevCell;
-                    while(pCellsItr->GetNext(aCell, pCellStyles))
-                    {
-                        if (bIsFirst)
-                        {
-                            ExportFormatRanges(0, 0, aCell.aCellAddress.Column - 1, aCell.aCellAddress.Row, nTable);
-                            aPrevCell = aCell;
-                            bIsFirst = sal_False;
-                        }
-                        else
-                        {
-                            if ((aPrevCell.aCellAddress.Row == aCell.aCellAddress.Row) &&
-                                (aPrevCell.aCellAddress.Column + nEqualCells + 1 == aCell.aCellAddress.Column))
+                            // Tab color for this table, if exists.
+                            uno::Any any;
+                            any = xPropSet->getPropertyValue(OUString::createFromAscii(SC_UNO_TABCOLOR));
+                            sal_Int32 nColor;
+                            if (any >>= nColor)
                             {
-                                if(IsCellEqual(aPrevCell, aCell))
-                                    ++nEqualCells;
+                                if (static_cast<ColorData>(nColor) != COL_AUTO)
+                                    AddAttribute(sAttrTabColor, OUString::valueOf(nColor));
+                            }
+                        }
+
+                        uno::Reference<util::XProtectable> xProtectable (xTable, uno::UNO_QUERY);
+                        if (xProtectable.is() && xProtectable->isProtected())
+                        {
+                            AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTED, XML_TRUE);
+                            rtl::OUStringBuffer aBuffer;
+                            if (pDoc)
+                            {
+                                ScTableProtection* pProtect = pDoc->GetTabProtection(static_cast<SCTAB>(nTable));
+                                if (pProtect)
+                                    SvXMLUnitConverter::encodeBase64(aBuffer, pProtect->getPasswordHash(PASSHASH_OOO));
+                            }
+                            if (aBuffer.getLength())
+                                AddAttribute(XML_NAMESPACE_TABLE, XML_PROTECTION_KEY, aBuffer.makeStringAndClear());
+                        }
+                        rtl::OUString sPrintRanges;
+                        table::CellRangeAddress aColumnHeaderRange;
+                        sal_Bool bHasColumnHeader;
+                        GetColumnRowHeader(bHasColumnHeader, aColumnHeaderRange, bHasRowHeader, aRowHeaderRange, sPrintRanges);
+                        if( sPrintRanges.getLength() )
+                            AddAttribute( XML_NAMESPACE_TABLE, XML_PRINT_RANGES, sPrintRanges );
+                        else if (!pDoc->IsPrintEntireSheet(static_cast<SCTAB>(nTable)))
+                            AddAttribute( XML_NAMESPACE_TABLE, XML_PRINT, XML_FALSE);
+                        SvXMLElementExport aElemT(*this, sElemTab, sal_True, sal_True);
+                        CheckAttrList();
+                        WriteTableSource();
+                        WriteScenario();
+                        uno::Reference<drawing::XDrawPage> xDrawPage;
+                        if (pSharedData->HasForm(nTable, xDrawPage) && xDrawPage.is())
+                        {
+                            ::xmloff::OOfficeFormsExport aForms(*this);
+                            GetFormExport()->exportForms( xDrawPage );
+                            sal_Bool bRet(GetFormExport()->seekPage( xDrawPage ));
+                            DBG_ASSERT( bRet, "OFormLayerXMLExport::seekPage failed!" );
+                            (void)bRet;     // avoid warning in product version
+                        }
+                        if (pSharedData->HasDrawPage())
+                        {
+                            GetShapeExport()->seekShapes(uno::Reference<drawing::XShapes>(pSharedData->GetDrawPage(nTable), uno::UNO_QUERY));
+                            WriteTableShapes();
+                        }
+                        table::CellRangeAddress aRange(GetEndAddress(xTable, nTable));
+                        pSharedData->SetLastColumn(nTable, aRange.EndColumn);
+                        pSharedData->SetLastRow(nTable, aRange.EndRow);
+                        pCellsItr->SetCurrentTable(static_cast<SCTAB>(nTable), xCurrentTable);
+                        pGroupColumns->NewTable();
+                        pGroupRows->NewTable();
+                        FillColumnRowGroups();
+                        if (bHasColumnHeader)
+                            pSharedData->SetLastColumn(nTable, aColumnHeaderRange.EndColumn);
+                        bRowHeaderOpen = sal_False;
+                        if (bHasRowHeader)
+                            pSharedData->SetLastRow(nTable, aRowHeaderRange.EndRow);
+                        pDefaults->FillDefaultStyles(nTable, pSharedData->GetLastRow(nTable),
+                            pSharedData->GetLastColumn(nTable), pCellStyles, pDoc);
+                        pRowFormatRanges->SetRowDefaults(pDefaults->GetRowDefaults());
+                        pRowFormatRanges->SetColDefaults(pDefaults->GetColDefaults());
+                        pCellStyles->SetRowDefaults(pDefaults->GetRowDefaults());
+                        pCellStyles->SetColDefaults(pDefaults->GetColDefaults());
+                        ExportColumns(nTable, aColumnHeaderRange, bHasColumnHeader);
+                        sal_Bool bIsFirst(sal_True);
+                        sal_Int32 nEqualCells(0);
+                        ScMyCell aCell;
+                        ScMyCell aPrevCell;
+                        while(pCellsItr->GetNext(aCell, pCellStyles))
+                        {
+                            if (bIsFirst)
+                            {
+                                ExportFormatRanges(0, 0, aCell.aCellAddress.Column - 1, aCell.aCellAddress.Row, nTable);
+                                aPrevCell = aCell;
+                                bIsFirst = sal_False;
+                            }
+                            else
+                            {
+                                if ((aPrevCell.aCellAddress.Row == aCell.aCellAddress.Row) &&
+                                    (aPrevCell.aCellAddress.Column + nEqualCells + 1 == aCell.aCellAddress.Column))
+                                {
+                                    if(IsCellEqual(aPrevCell, aCell))
+                                        ++nEqualCells;
+                                    else
+                                    {
+                                        SetRepeatAttribute(nEqualCells);
+                                        WriteCell(aPrevCell);
+                                        nEqualCells = 0;
+                                        aPrevCell = aCell;
+                                    }
+                                }
                                 else
                                 {
                                     SetRepeatAttribute(nEqualCells);
                                     WriteCell(aPrevCell);
+                                    ExportFormatRanges(aPrevCell.aCellAddress.Column + nEqualCells + 1, aPrevCell.aCellAddress.Row,
+                                        aCell.aCellAddress.Column - 1, aCell.aCellAddress.Row, nTable);
                                     nEqualCells = 0;
                                     aPrevCell = aCell;
                                 }
                             }
-                            else
-                            {
-                                SetRepeatAttribute(nEqualCells);
-                                WriteCell(aPrevCell);
-                                ExportFormatRanges(aPrevCell.aCellAddress.Column + nEqualCells + 1, aPrevCell.aCellAddress.Row,
-                                    aCell.aCellAddress.Column - 1, aCell.aCellAddress.Row, nTable);
-                                nEqualCells = 0;
-                                aPrevCell = aCell;
-                            }
                         }
+                        if (!bIsFirst)
+                        {
+                            SetRepeatAttribute(nEqualCells);
+                            WriteCell(aPrevCell);
+                            ExportFormatRanges(aPrevCell.aCellAddress.Column + nEqualCells + 1, aPrevCell.aCellAddress.Row,
+                                pSharedData->GetLastColumn(nTable), pSharedData->GetLastRow(nTable), nTable);
+                        }
+                        else
+                            ExportFormatRanges(0, 0, pSharedData->GetLastColumn(nTable), pSharedData->GetLastRow(nTable), nTable);
+                        CloseRow(pSharedData->GetLastRow(nTable));
+                        nEqualCells = 0;
                     }
-                    if (!bIsFirst)
-                    {
-                        SetRepeatAttribute(nEqualCells);
-                        WriteCell(aPrevCell);
-                        ExportFormatRanges(aPrevCell.aCellAddress.Column + nEqualCells + 1, aPrevCell.aCellAddress.Row,
-                            pSharedData->GetLastColumn(nTable), pSharedData->GetLastRow(nTable), nTable);
-                    }
-                    else
-                        ExportFormatRanges(0, 0, pSharedData->GetLastColumn(nTable), pSharedData->GetLastRow(nTable), nTable);
-                    CloseRow(pSharedData->GetLastRow(nTable));
-                    nEqualCells = 0;
                 }
-            }
-
             }
             IncrementProgressBar(sal_False);
         }
