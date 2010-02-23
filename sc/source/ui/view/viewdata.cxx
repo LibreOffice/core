@@ -2687,12 +2687,6 @@ void ScViewData::ReadExtOptions( const ScExtDocOptions& rDocOpt )
                     update map modes that are needed to draw text correctly. */
                 SetPagebreakMode( rTabSett.mbPageMode );
             }
-
-            // Tab Bg Color
-            if( !rTabSett.IsDefaultTabBgColor() )
-            {
-//              rViewTab.aTabBgColor = rTabSett.maTabBgColor;
-            }
         }
     }
 
