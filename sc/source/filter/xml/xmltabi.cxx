@@ -198,6 +198,7 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
                     }
                     break;
                 case XML_TOK_TABLE_TAB_COLOR:
+                case XML_TOK_TABLE_TAB_COLOR_EXT:
                     nTabColor = sValue.toInt32();
                     break;
             }
