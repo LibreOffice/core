@@ -2217,9 +2217,6 @@ IMPL_LINK( ScModule, CalcFieldValueHdl, EditFieldInfo*, pInfo )
     return 0;
 }
 
-
-
-//<!--Added by PengYunQuan for Validity Cell Range Picker
 BOOL ScModule::RegisterRefWindow( USHORT nSlotId, Window *pWnd )
 {
     std::list<Window*> & rlRefWindow = m_mapRefWindow[nSlotId];
@@ -2300,4 +2297,4 @@ Window *  ScModule::Find1RefWindow( Window *pWndAncestor )
 
     return NULL;
 }
-//<!--Added by PengYunQuan for Validity Cell Range Picker
+
