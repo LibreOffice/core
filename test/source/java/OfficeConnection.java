@@ -74,11 +74,7 @@ public final class OfficeConnection {
                         "uno:" + description +
                         ";urp;StarOffice.ServiceManager"));
                 break;
-            } catch (NoConnectException e) {
-                if (i == 600) { // 600 sec
-                    throw e;
-                }
-            }
+            } catch (NoConnectException e) {}
             assertNull(waitForProcess(process, 1000)); // 1 sec
         }
     }
@@ -99,15 +95,14 @@ public final class OfficeConnection {
                 // receiving the response of the terminate call
             desktop = null;
         }
-        Integer code = 0;
+        int code = 0;
         if (process != null) {
-            code = waitForProcess(process, 600000); // 600 sec
-            process.destroy();
+            code = process.waitFor();
         }
         boolean outTerminated = outForward == null || outForward.terminated();
         boolean errTerminated = errForward == null || errForward.terminated();
         assertTrue(desktopTerminated);
-        assertEquals(new Integer(0), code);
+        assertEquals(0, code);
         assertTrue(outTerminated);
         assertTrue(errTerminated);
     }

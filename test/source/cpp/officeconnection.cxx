@@ -100,38 +100,26 @@ void OfficeConnection::setUp() {
             toAbsoluteFileUrl(argPath).pData, args,
             sizeof args / sizeof args[0], 0, 0, 0, envs, envs == 0 ? 0 : 1,
             &process_));
-    try {
-        css::uno::Reference< css::bridge::XUnoUrlResolver > resolver(
-            css::bridge::UnoUrlResolver::create(
-                cppu::defaultBootstrap_InitialComponentContext()));
-        for (int i = 0;; ++i) {
-            try {
-                factory_ =
-                    css::uno::Reference< css::lang::XMultiServiceFactory >(
-                        resolver->resolve(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("uno:")) +
-                            desc +
-                            rtl::OUString(
-                                RTL_CONSTASCII_USTRINGPARAM(
-                                    ";StarOffice.ServiceManager"))),
-                        css::uno::UNO_QUERY_THROW);
-                break;
-            } catch (css::connection::NoConnectException &) {
-                if (i == 600) { // 600 sec
-                    throw;
-                }
-            }
-            TimeValue delay = { 1, 0 }; // 1 sec
-            CPPUNIT_ASSERT_EQUAL(
-                osl_Process_E_TimedOut,
-                osl_joinProcessWithTimeout(process_, &delay));
-        }
-    } catch (...) {
+    css::uno::Reference< css::bridge::XUnoUrlResolver > resolver(
+        css::bridge::UnoUrlResolver::create(
+            cppu::defaultBootstrap_InitialComponentContext()));
+    for (int i = 0;; ++i) {
+        try {
+            factory_ =
+                css::uno::Reference< css::lang::XMultiServiceFactory >(
+                    resolver->resolve(
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("uno:")) +
+                        desc +
+                        rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM(
+                                ";StarOffice.ServiceManager"))),
+                    css::uno::UNO_QUERY_THROW);
+            break;
+        } catch (css::connection::NoConnectException &) {}
+        TimeValue delay = { 1, 0 }; // 1 sec
         CPPUNIT_ASSERT_EQUAL(
-            osl_Process_E_None, osl_terminateProcess(process_));
-        osl_freeProcessHandle(process_);
-        process_ = 0;
-        throw;
+            osl_Process_E_TimedOut,
+            osl_joinProcessWithTimeout(process_, &delay));
     }
 }
 
