@@ -46,9 +46,7 @@
 #include <svx/brshitem.hxx>
 #include <svx/colritem.hxx>
 #include <svx/boxitem.hxx>
-#ifndef _SVX_TSTPITEM_HXX //autogen
 #include <svx/tstpitem.hxx>
-#endif
 #include <svx/ulspitem.hxx>
 #include <svx/lrspitem.hxx>
 #include <svx/frmdiritem.hxx>
@@ -84,6 +82,7 @@
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+
 
 #if defined(UNX)
 const sal_Char SwRTFWriter::sNewLine = '\012';
@@ -1129,7 +1128,7 @@ bool ExportAsInline(const SwFlyFrmFmt& rFlyFrmFmt)
 {
     //if not an inline element (hack in our limitations here as to only
     //graphics like this!!!!
-    return rFlyFrmFmt.GetAnchor().GetAnchorId() == FLY_IN_CNTNT;
+    return rFlyFrmFmt.GetAnchor().GetAnchorId() == FLY_AS_CHAR;
 }
 
 void SwRTFWriter::OutRTFFlyFrms(const SwFlyFrmFmt& rFlyFrmFmt)
@@ -1788,7 +1787,7 @@ short SwRTFWriter::TrueFrameDirection(const SwFrmFmt &rFlyFmt) const
         {
             pItem = 0;
             const SwFmtAnchor* pAnchor = &pFlyFmt2->GetAnchor();
-            if( FLY_PAGE != pAnchor->GetAnchorId() &&
+            if ((FLY_AT_PAGE != pAnchor->GetAnchorId()) &&
                 pAnchor->GetCntntAnchor() )
             {
                 pFlyFmt2 = pAnchor->GetCntntAnchor()->nNode.

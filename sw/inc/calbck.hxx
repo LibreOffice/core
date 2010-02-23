@@ -202,7 +202,7 @@ class SwClientIter
     friend SwClient* SwModify::_Remove(SwClient *); // fuer Ptr-Korrektur
     friend void SwModify::Add(SwClient *);          // nur fuer ASSERT !
 
-    SwModify& rRoot;
+    SwModify const& rRoot;
     SwClient *pAkt, *pDelNext;
     // fuers Updaten der aller Iteratoren beim Einfuegen/Loeschen von
     // Clients, wenn der Iterator gerade draufsteht.
@@ -213,11 +213,10 @@ class SwClientIter
     TypeId aSrchId;             // fuer First/Next - suche diesen Type
 
 public:
-    SW_DLLPUBLIC SwClientIter( SwModify& );
+    SW_DLLPUBLIC SwClientIter( SwModify const& );
     SW_DLLPUBLIC ~SwClientIter();
 
     const SwModify& GetModify() const       { return rRoot; }
-          SwModify& GetModify()             { return rRoot; }
 
 #ifndef CFRONT
     SwClient* operator++(int);  // zum Naechsten
