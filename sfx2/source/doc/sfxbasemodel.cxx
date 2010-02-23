@@ -764,7 +764,7 @@ void SAL_CALL SfxBaseModel::setParent(const uno::Reference< uno::XInterface >& P
 
 void SAL_CALL SfxBaseModel::dispose() throw(::com::sun::star::uno::RuntimeException)
 {
-    SfxModelGuard aGuard( *this );
+    SfxModelGuard aGuard( *this, SfxModelGuard::E_INITIALIZING );
 
     if  ( !m_pData->m_bClosed )
     {
