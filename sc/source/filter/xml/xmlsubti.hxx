@@ -147,7 +147,7 @@ public:
                                         ScMyTables(ScXMLImport& rImport);
                                         ~ScMyTables();
     void                                NewSheet(const rtl::OUString& sTableName, const rtl::OUString& sStyleName,
-                                                const sal_Bool bProtection, const rtl::OUString& sPassword);
+                                                const sal_Bool bProtection, const rtl::OUString& sPassword, sal_Int32 nTabColor);
     void                                AddRow();
     void                                SetRowStyle(const rtl::OUString& rCellStyleName);
     void                                AddColumn(sal_Bool bIsCovered);

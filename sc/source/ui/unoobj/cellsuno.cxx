@@ -8471,6 +8471,15 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
                     pDoc->ClearPrintRanges( nTab ); // if this flag is true, there are no PrintRanges, so Clear clears only the flag.
             }
         }
+        else if ( pEntry->nWID == SC_WID_UNO_TABCOLOR )
+        {
+            sal_Int32 nColor;
+            if (aValue >>= nColor)
+            {
+                if (static_cast<ColorData>(nColor) != COL_AUTO)
+                    pDoc->SetTabBgColor(nTab, Color(static_cast<ColorData>(nColor)));
+            }
+        }
         else
             ScCellRangeObj::SetOnePropertyValue(pEntry, aValue);        // base class, no Item WID
     }

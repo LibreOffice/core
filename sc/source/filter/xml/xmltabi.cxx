@@ -52,6 +52,8 @@
 #include "externalrefmgr.hxx"
 #include "sheetdata.hxx"
 
+#include "tools/color.hxx"
+
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/formsimp.hxx>
@@ -161,6 +163,7 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
         rtl::OUString sName;
         rtl::OUString sStyleName;
         rtl::OUString sPassword;
+        sal_Int32 nTabColor = static_cast<sal_Int32>(COL_AUTO);
         sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
         const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableAttrTokenMap();
         for( sal_Int16 i=0; i < nAttrCount; ++i )
@@ -194,6 +197,9 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
                             bPrintEntireSheet = sal_False;
                     }
                     break;
+                case XML_TOK_TABLE_TAB_COLOR:
+                    nTabColor = sValue.toInt32();
+                    break;
             }
         }
 
@@ -214,7 +220,7 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
         else
         {
             // This is a regular table.
-            GetScImport().GetTables().NewSheet(sName, sStyleName, bProtection, sPassword);
+            GetScImport().GetTables().NewSheet(sName, sStyleName, bProtection, sPassword, nTabColor);
         }
     }
     else

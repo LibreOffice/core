@@ -40,6 +40,7 @@
 #include "document.hxx"
 #include "markdata.hxx"
 #include "XMLConverter.hxx"
+#include "unonames.hxx"
 #include "docuno.hxx"
 #include "cellsuno.hxx"
 #include "XMLStylesImportHelper.hxx"
@@ -64,6 +65,10 @@
 
 #include <memory>
 
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Any;
+using ::rtl::OUString;
 using ::std::auto_ptr;
 
 //------------------------------------------------------------------
@@ -176,7 +181,7 @@ ScMyTables::~ScMyTables()
 }
 
 void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& sStyleName,
-                        const sal_Bool bTempProtection, const rtl::OUString& sTempPassword)
+                          const sal_Bool bTempProtection, const rtl::OUString& sTempPassword, sal_Int32 nTabColor)
 {
     if (rImport.GetModel().is())
     {
@@ -251,19 +256,19 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
                         }
                         rImport.SetTableStyle(sStyleName);
 
-                        if ( sStyleName.getLength() )
+                        Reference<beans::XPropertySet> xProperties(xCurrentSheet, UNO_QUERY);
+                        if (xProperties.is())
                         {
-                            // #i57869# All table style properties for all sheets are now applied here,
-                            // before importing the contents.
-                            // This is needed for the background color.
-                            // Sheet visibility has special handling in ScDocFunc::SetTableVisible to
-                            // allow hiding the first sheet.
-                            // RTL layout is only remembered, not actually applied, so the shapes can
-                            // be loaded before mirroring.
-
-                            uno::Reference <beans::XPropertySet> xProperties(xCurrentSheet, uno::UNO_QUERY);
-                            if (xProperties.is())
+                            if ( sStyleName.getLength() )
                             {
+                                // #i57869# All table style properties for all sheets are now applied here,
+                                // before importing the contents.
+                                // This is needed for the background color.
+                                // Sheet visibility has special handling in ScDocFunc::SetTableVisible to
+                                // allow hiding the first sheet.
+                                // RTL layout is only remembered, not actually applied, so the shapes can
+                                // be loaded before mirroring.
+
                                 XMLTableStylesContext *pStyles = (XMLTableStylesContext *)rImport.GetAutoStyles();
                                 if (pStyles)
                                 {
@@ -277,6 +282,14 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
                                         pSheetData->AddTableStyle( sStyleName, ScAddress( 0, 0, (SCTAB)nCurrentSheet ) );
                                     }
                                 }
+                            }
+
+                            if (static_cast<ColorData>(nTabColor) != COL_AUTO)
+                            {
+                                // Set tab color.
+                                Any any;
+                                any <<= nTabColor;
+                                xProperties->setPropertyValue(OUString::createFromAscii(SC_UNO_TABCOLOR), any);
                             }
                         }
                     }
