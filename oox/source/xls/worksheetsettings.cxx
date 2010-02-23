@@ -34,9 +34,9 @@
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/pagesettings.hxx"
 #include "oox/xls/workbooksettings.hxx"
+#include "properties.hxx"
 
 #include <com/sun/star/util/XProtectable.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 
 using ::rtl::OUString;
 using ::com::sun::star::beans::XPropertySet;
@@ -319,16 +319,8 @@ void WorksheetSettings::finalizeImport()
     if (!maSheetSettings.maTabColor.isAuto())
     {
         sal_Int32 nColor = maSheetSettings.maTabColor.getColor(getBaseFilter());
-        try
-        {
-            Reference< XPropertySet > xPropSet( getSheet(), UNO_QUERY_THROW );
-            Any any;
-            any <<= nColor;
-            xPropSet->setPropertyValue( CREATE_OUSTRING("TabColor"), any );
-        }
-        catch ( Exception& )
-        {
-        }
+        PropertySet aSheetProp(getSheet());
+        aSheetProp.setProperty(PROP_TabColor, nColor);
     }
 }
 
