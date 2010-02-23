@@ -68,10 +68,9 @@ sub new {
     } else {
         $source_root = $ENV{SOURCE_ROOT_DIR};
     };
-    $source_root = Cwd::realpath($source_root);
+    $self->{SOURCE_ROOT} = Cwd::realpath($source_root);
     $self->{DEBUG} = 0;
     $self->{VERBOSE} = 0;
-    $self->{SOURCE_ROOT} = $source_root if (!defined $self->{SOURCE_ROOT});
     $self->{REPOSITORIES} = {};
     $self->{ACTIVATED_REPOSITORIES} = {};
     $self->{MODULE_PATHS} = {};
@@ -89,8 +88,8 @@ sub new {
     if (defined $self->{USER_SOURCE_ROOT}) {
         ${$self->{REPOSITORIES}}{File::Basename::basename($self->{USER_SOURCE_ROOT})} = $self->{USER_SOURCE_ROOT};
     };
-    $self->{SOURCE_CONFIG_FILE} = get_config_file($source_root);
-    $self->{SOURCE_CONFIG_DEFAULT} = $source_root .'/'.SOURCE_CONFIG_FILE_NAME;
+    $self->{SOURCE_CONFIG_FILE} = get_config_file($self->{SOURCE_ROOT});
+    $self->{SOURCE_CONFIG_DEFAULT} = $self->{SOURCE_ROOT} .'/'.SOURCE_CONFIG_FILE_NAME;
     read_config_file($self);
     bless($self, $class);
     return $self;
