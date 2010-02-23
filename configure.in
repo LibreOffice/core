@@ -6473,6 +6473,9 @@ if test "$SOLAR_JAVA" != "" && test "$with_junit" != "no"; then
     else
         OOO_JUNIT_JAR=$with_junit
     fi
+    if test "$_os" = "WINNT"; then
+        OOO_JUNIT_JAR=`cygpath -m "$OOO_JUNIT_JAR"`
+    fi
     "$JAVA_HOME/bin/jar" tf "$OOO_JUNIT_JAR" 2>&5 | \
         grep org/junit/Before.class > /dev/null 2>&5
     if test $? -eq 0; then
