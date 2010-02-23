@@ -1565,6 +1565,18 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     rValidStartFrms.clear();
 
     rtl::OUString aPageRange = rOptions.getStringValue( "PageRange", rtl::OUString() );
+    // PageContent :
+    // 0 -> print all pages (default if aPageRange is empty)
+    // 1 -> print range according to PageRange
+    // 2 -> print selection
+    const sal_Int32 nContent = rOptions.getIntValue( "PrintContent", 0 );
+    if (0 == nContent)
+    {
+        // set page range to print to 'all pages'
+        aPageRange = OUString::valueOf( (sal_Int32)1 );
+        aPageRange += OUString::valueOf( (sal_Unicode)'-');
+        aPageRange += OUString::valueOf( nDocPageCount );
+    }
     StringRangeEnumerator aRange( aPageRange, 1, nDocPageCount, 0 );
 
     DBG_ASSERT( pLayout, "no layout present" );

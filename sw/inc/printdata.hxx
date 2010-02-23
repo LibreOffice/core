@@ -293,8 +293,8 @@ public:
 
     // a map for printer paper tray numbers to use for each document page
     // a value of -1 for the tray means that there is no specific tray defined
-    std::map< sal_Int32, sal_Int32 >        GetPrinterPaperTrays()          { return m_aPrinterPaperTrays; }
-    const std::map< sal_Int32, sal_Int32 >  GetPrinterPaperTrays() const    { return m_aPrinterPaperTrays; }
+    std::map< sal_Int32, sal_Int32 >&        GetPrinterPaperTrays()          { return m_aPrinterPaperTrays; }
+    const std::map< sal_Int32, sal_Int32 >&  GetPrinterPaperTrays() const    { return m_aPrinterPaperTrays; }
 
     // used for 'normal' printing
     // A page value of 0 as entry indicates that this page is not from the document but
