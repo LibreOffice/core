@@ -66,11 +66,6 @@ sub w_002_
     Call tEditImageMap
     Call tEditObjectEdit
 
-    'Writer Web
-    gApplication = "HTML"
-    Call tHtmlDocEditFields
-    gApplication = "WRITER"
-
     'Writer Master Document
     gApplication = "MASTERDOCUMENT"
     Call tMasterDocEditNavigator
@@ -984,148 +979,51 @@ endcase
 '----------------------------------------------------------------
 
 testcase tEditFields
-    PrintLog "- Edit/Fields"
 
-    PrintLog "Open new document"
-    Call hNewDocument
+    PrintLog( "Edit/Fields: Edit Fields dialog: " & gApplication )
 
-    PrintLog "Select Insert / Fields Other"
-    InsertFieldsOther
-    Kontext
-    Active.Setpage TabDokumentFeldbefehle
-    Kontext "TabDokumentFeldbefehle"
-    Sleep 1
-    PrintLog "Insert Field 'Sender -> Company'"
-    Select Case gApplication
-    Case "HTML"
-        Select case iSprache
-        case 01 : Feldtyp.Select 5  'Sender
-            Auswahl.Select 1  'Company
-        case 03 : Feldtyp.Select 8
-            Auswahl.Select 1
-        case 07 : Feldtyp.Select 5
-            Auswahl.Select 1
-        case 31 : Feldtyp.Select 1
-            Auswahl.Select 1
-        case 33 : Feldtyp.Select 2
-            Auswahl.Select 1
-        case 34 : Feldtyp.Select 6
-            Auswahl.Select 1
-        case 36 : Feldtyp.Select 3
-            Auswahl.Select 1
-        case 39 : Feldtyp.Select 3
-            Auswahl.Select 1
-        case 45 : Feldtyp.Select 1
-            Auswahl.Select 1
-        case 46 : Feldtyp.Select 2
-            Auswahl.Select 1
-        case 48 : Feldtyp.Select 3
-            Auswahl.Select 1
-        case 49 : Feldtyp.Select 1
-            Auswahl.Select 1
-        case 51 : Feldtyp.Select 5 
-            Auswahl.Select 1
-        case 52 : Feldtyp.Select 5
-            Auswahl.Select 1			
-        case 55 : Feldtyp.Select 7
-            Auswahl.Select 1
-        case 81 : Feldtyp.Select 4
-            Auswahl.Select 1
-        case 82 : Feldtyp.Select 2
-            Auswahl.Select 1
-        case 84 : Feldtyp.Select 3
-            Auswahl.Select 1
-        case 86 : Feldtyp.Select 1
-            Auswahl.Select 1
-        case 88 : Feldtyp.Select 2
-            Auswahl.Select 1
+    PrintLog( "Open new document" )
+    Call hNewDocument()
 
-        case else :  Warnlog "Missing language support!"
-            TabDokumentFeldbefehle.Cancel
-            PrintLog "Close active document"
-            Call hCloseDocument
-            goto endsub
-        end select
-    Case else
-        Select case iSprache
-        case 01 : Feldtyp.Select 6  'Sender
-            Auswahl.Select 1  'Company
-        case 03 : Feldtyp.Select 9
-            Auswahl.Select 1
-        case 07 : Feldtyp.Select 6
-            Auswahl.Select 1
-        case 31 : Feldtyp.Select 1
-            Auswahl.Select 1
-        case 33 : Feldtyp.Select 3
-            Auswahl.Select 1
-        case 34 : Feldtyp.Select 8
-            Auswahl.Select 1
-        case 36 : Feldtyp.Select 4
-            Auswahl.Select 1
-        case 39 : Feldtyp.Select 4
-            Auswahl.Select 1
-        case 45 : Feldtyp.Select 1
-            Auswahl.Select 1
-        case 46 : Feldtyp.Select 2
-            Auswahl.Select 1
-        case 48 : Feldtyp.Select 3
-            Auswahl.Select 1
-        case 49 : Feldtyp.Select 1
-            Auswahl.Select 1
-        case 51 : Feldtyp.Select 6
-            Auswahl.Select 1
-		case 52 : Feldtyp.Select 6
-            Auswahl.Select 1			
-        case 55 : Feldtyp.Select 9
-            Auswahl.Select 1
-        case 81 : Feldtyp.Select 5
-            Auswahl.Select 1
-        case 82 : Feldtyp.Select 2
-            Auswahl.Select 2
-        case 84 : Feldtyp.Select 5
-            Auswahl.Select 1
-        case 86 : Feldtyp.Select 1
-            Auswahl.Select 1
-        case 88 : Feldtyp.Select 2
-            Auswahl.Select 1
+    InsertFieldsTime
+    WaitSlot()
 
-        case else : Warnlog "Missing language support!"
-            TabDokumentFeldbefehle.Cancel
-            PrintLog "Close active document"
-            Call hCloseDocument
-            goto endsub
-        end select
-    end select
-
-    Einfuegen.Click
-    Wait (400)
-    PrintLog "Close Fields dialog"
-    Schliessen.Click
-
-    PrintLog "Put cursor in front of field"
+    PrintLog( "Move cursor infront of field (start of document)" )
     Call wTypeKeys("<Home>")
 
-    PrintLog "Edit / Fields"
+    PrintLog( "Edit / Fields" )
     EditFields
-    WaitSlot (2000)
-
+    
     Kontext "FeldbefehlBearbeitenDokument"
-    Call DialogTest ( FeldbefehlBearbeitenDokument )
+    if ( FeldbefehlBearbeitenDokument.exists( 2 ) ) then
+        Call DialogTest ( FeldbefehlBearbeitenDokument )
 
-    PrintLog "In 'Edit Fields' dialog select 'Edit'"
-    if Bearbeiten.IsVisible and Bearbeiten.IsEnabled then
-        Bearbeiten.Click
-        Kontext "TabBenutzerdaten"
-        TabBenutzerdaten.Cancel
+        PrintLog( "In 'Edit Fields' dialog select 'Edit'" )
+        if ( Bearbeiten.IsVisible() and Bearbeiten.IsEnabled() ) then
+            Bearbeiten.Click()
+
+            Kontext "TabBenutzerdaten"
+            if ( TabBenutzerdaten.exists( 2 ) ) then
+                printlog( "<TabBenutzerdaten> is open. Good." )
+                call DialogTest( TabBenutzerdaten )
+                hCloseDialog( TabBenutzerdaten, "cancel", 1 )
+            else
+                warnlog( "<TabBenutzerdaten> did not open" )
+            endif
+        else
+            Warnlog( "Button 'Edit' in Dialog disabled!" )
+        endif
+
+        PrintLog( "Close dialog" )
         Kontext "FeldbefehlBearbeitenDokument"
+        hCloseDialog( FeldbefehlBearbeitenDokument, "cancel", 1 )
     else
-        Warnlog "Button 'Edit' in Dialog disabled!"
-    end if
+        warnlog( "<FeldbefehlBearbeitenDokument> did not open" )
+    endif
 
-    PrintLog "Close dialog"
-    FeldbefehlBearbeitenDokument.Cancel
-    PrintLog "Close active document"
-    Call hCloseDocument
+    PrintLog( "Close active document" )
+    Call hCloseDocument()
+
 endcase
 
 '----------------------------------------------------------------
@@ -1376,103 +1274,6 @@ testcase tEditObjectEdit
 
     PrintLog "Close active document"
     Call hCloseDocument
-endcase
-
-'----------------------------------------------------------------
-
-testcase tHtmlDocEditFields
-    PrintLog "- Edit/Fields"
-
-    gApplication = "HTML"
-    PrintLog "Open new document"
-    Call hNewDocument
-
-    PrintLog "Select Insert / Fields Other"
-    InsertFieldsOther
-    Kontext
-    Active.Setpage TabDokumentFeldbefehle
-    Kontext "TabDokumentFeldbefehle"
-    Sleep 1
-    PrintLog "Insert Field 'Sender -> Company'"
-    Select case iSprache
-    case 01 : Feldtyp.Select 5  'Sender
-        Auswahl.Select 1  'Company
-    case 03 : Feldtyp.Select 8
-        Auswahl.Select 1
-    case 07 : Feldtyp.Select 5
-        Auswahl.Select 1
-    case 31 : Feldtyp.Select 1
-        Auswahl.Select 1
-    case 33 : Feldtyp.Select 2
-        Auswahl.Select 1
-    case 34 : Feldtyp.Select 6
-        Auswahl.Select 1
-    case 36 : Feldtyp.Select 3
-        Auswahl.Select 1
-    case 39 : Feldtyp.Select 3
-        Auswahl.Select 1
-    case 45 : Feldtyp.Select 1
-        Auswahl.Select 1
-    case 46 : Feldtyp.Select 2
-        Auswahl.Select 1
-    case 48 : Feldtyp.Select 3
-        Auswahl.Select 1
-    case 49 : Feldtyp.Select 1
-        Auswahl.Select 1
-    case 51 : Feldtyp.Select 5
-        Auswahl.Select 1
-    case 52 : Feldtyp.Select 5
-        Auswahl.Select 1		
-    case 55 : Feldtyp.Select 7
-        Auswahl.Select 1
-    case 81 : Feldtyp.Select 4
-        Auswahl.Select 1
-    case 82 : Feldtyp.Select 2
-        Auswahl.Select 1
-    case 84 : Feldtyp.Select 3
-        Auswahl.Select 1
-    case 86 : Feldtyp.Select 1
-        Auswahl.Select 1
-    case 88 : Feldtyp.Select 2
-        Auswahl.Select 1
-
-    case else :  Warnlog "Missing language support!"
-        TabDokumentFeldbefehle.Cancel
-        PrintLog "Close active document"
-        Call hCloseDocument
-        goto endsub
-    end select
-
-    Einfuegen.Click
-    Wait (400)
-    PrintLog "Close Fields dialog"
-    Schliessen.Click
-
-    PrintLog "Put cursor in front of field"
-    Call wTypeKeys("<Home>")
-
-    PrintLog "Edit / Fields"
-    EditFields
-    WaitSlot (2000)
-
-    Kontext "FeldbefehlBearbeitenDokument"
-    Call DialogTest ( FeldbefehlBearbeitenDokument )
-
-    PrintLog "In 'Edit Fields' dialog select 'Edit'"
-    if Bearbeiten.IsVisible and Bearbeiten.IsEnabled then
-        Bearbeiten.Click
-        Kontext "TabBenutzerdaten"
-        TabBenutzerdaten.Cancel
-        Kontext "FeldbefehlBearbeitenDokument"
-    else
-        Warnlog "Button 'Edit' in Dialog disabled!"
-    end if
-
-    PrintLog "Close dialog"
-    FeldbefehlBearbeitenDokument.Cancel
-    PrintLog "Close active document"
-    Call hCloseDocument
-    gApplication = "WRITER"
 endcase
 
 '----------------------------------------------------------------
