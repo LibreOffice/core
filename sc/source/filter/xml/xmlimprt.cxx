@@ -707,8 +707,6 @@ const SvXMLTokenMap& ScXMLImport::GetTableAttrTokenMap()
             { XML_NAMESPACE_TABLE,     XML_PRINT_RANGES,   XML_TOK_TABLE_PRINT_RANGES  },
             { XML_NAMESPACE_TABLE,     XML_PROTECTION_KEY, XML_TOK_TABLE_PASSWORD      },
             { XML_NAMESPACE_TABLE,     XML_PRINT,          XML_TOK_TABLE_PRINT         },
-            { XML_NAMESPACE_TABLE,     XML_TAB_COLOR,      XML_TOK_TABLE_TAB_COLOR     },
-            { XML_NAMESPACE_TABLE_EXT, XML_TAB_COLOR,      XML_TOK_TABLE_TAB_COLOR_EXT },
             XML_TOKEN_MAP_END
         };
 

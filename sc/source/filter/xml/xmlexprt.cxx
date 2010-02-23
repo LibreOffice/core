@@ -532,7 +532,6 @@ ScXMLExport::ScXMLExport(
 
         sAttrName = GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_TABLE, GetXMLToken(XML_NAME));
         sAttrStyleName = GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_TABLE, GetXMLToken(XML_STYLE_NAME));
-        sAttrTabColor = GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_TABLE_EXT, GetXMLToken(XML_TAB_COLOR));
         sAttrColumnsRepeated = GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_TABLE, GetXMLToken(XML_NUMBER_COLUMNS_REPEATED));
         sAttrFormula = GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_TABLE, GetXMLToken(XML_FORMULA));
         sAttrStringValue = GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OFFICE, GetXMLToken(XML_STRING_VALUE));
@@ -1724,24 +1723,6 @@ void ScXMLExport::_ExportContent()
                         rtl::OUString sOUTableName(xName->getName());
                         AddAttribute(sAttrName, sOUTableName);
                         AddAttribute(sAttrStyleName, aTableStyles[nTable]);
-
-                        if (getDefaultVersion() == SvtSaveOptions::ODFVER_LATEST)
-                        {
-                            // Save only for the extended ODF 1.2 and beyond.
-                            uno::Reference<beans::XPropertySet> xPropSet(xTable, UNO_QUERY);
-                            if (xPropSet.is())
-                            {
-                                // Tab color for this table, if exists.
-                                uno::Any any;
-                                any = xPropSet->getPropertyValue(OUString::createFromAscii(SC_UNO_TABCOLOR));
-                                sal_Int32 nColor;
-                                if (any >>= nColor)
-                                {
-                                    if (static_cast<ColorData>(nColor) != COL_AUTO)
-                                        AddAttribute(sAttrTabColor, OUString::valueOf(nColor));
-                                }
-                            }
-                        }
 
                         uno::Reference<util::XProtectable> xProtectable (xTable, uno::UNO_QUERY);
                         if (xProtectable.is() && xProtectable->isProtected())

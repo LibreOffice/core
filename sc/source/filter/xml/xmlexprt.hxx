@@ -113,7 +113,6 @@ class ScXMLExport : public SvXMLExport
     rtl::OUString               sExternalRefTabStyleName;
     rtl::OUString               sAttrName;
     rtl::OUString               sAttrStyleName;
-    rtl::OUString               sAttrTabColor;
     rtl::OUString               sAttrColumnsRepeated;
     rtl::OUString               sAttrFormula;
     rtl::OUString               sAttrValueType;
