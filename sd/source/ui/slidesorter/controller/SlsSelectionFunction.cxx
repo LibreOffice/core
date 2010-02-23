@@ -466,7 +466,8 @@ BOOL SelectionFunction::KeyInput (const KeyEvent& rEvent)
     FocusManager& rFocusManager (mrController.GetFocusManager());
     BOOL bResult = FALSE;
 
-    switch (rEvent.GetKeyCode().GetCode())
+    const KeyCode& rCode (rEvent.GetKeyCode());
+    switch (rCode.GetCode())
     {
         case KEY_RETURN:
             if (rFocusManager.HasFocus())
@@ -485,7 +486,7 @@ BOOL SelectionFunction::KeyInput (const KeyEvent& rEvent)
             if ( ! rFocusManager.IsFocusShowing())
                 rFocusManager.ShowFocus();
             else
-                if (rEvent.GetKeyCode().IsShift())
+                if (rCode.IsShift())
                     rFocusManager.MoveFocus (FocusManager::FMD_LEFT);
                 else
                     rFocusManager.MoveFocus (FocusManager::FMD_RIGHT);
@@ -527,25 +528,25 @@ BOOL SelectionFunction::KeyInput (const KeyEvent& rEvent)
 
         // Move the focus indicator left.
         case KEY_LEFT:
-            MoveFocus(FocusManager::FMD_LEFT, rEvent.GetKeyCode().IsShift());
+            MoveFocus(FocusManager::FMD_LEFT, rCode.IsShift(), rCode.IsMod1());
             bResult = TRUE;
             break;
 
         // Move the focus indicator right.
         case KEY_RIGHT:
-            MoveFocus(FocusManager::FMD_RIGHT, rEvent.GetKeyCode().IsShift());
+            MoveFocus(FocusManager::FMD_RIGHT, rCode.IsShift(), rCode.IsMod1());
             bResult = TRUE;
             break;
 
         // Move the focus indicator up.
         case KEY_UP:
-            MoveFocus(FocusManager::FMD_UP, rEvent.GetKeyCode().IsShift());
+            MoveFocus(FocusManager::FMD_UP, rCode.IsShift(), rCode.IsMod1());
             bResult = TRUE;
             break;
 
         // Move the focus indicator down.
         case KEY_DOWN:
-            MoveFocus(FocusManager::FMD_DOWN, rEvent.GetKeyCode().IsShift());
+            MoveFocus(FocusManager::FMD_DOWN, rCode.IsShift(), rCode.IsMod1());
             bResult = TRUE;
             break;
 
@@ -590,7 +591,7 @@ BOOL SelectionFunction::KeyInput (const KeyEvent& rEvent)
         break;
 
         case KEY_F10:
-            if (rEvent.GetKeyCode().IsShift())
+            if (rCode.IsShift())
             {
                 DeselectAllPages();
                 mrController.GetPageSelector().SelectPage(
@@ -613,7 +614,8 @@ BOOL SelectionFunction::KeyInput (const KeyEvent& rEvent)
 
 void SelectionFunction::MoveFocus (
     const FocusManager::FocusMoveDirection eDirection,
-    const bool bIsShiftDown)
+    const bool bIsShiftDown,
+    const bool bIsControlDown)
 {
     // Remember the anchor of shift key multi selection.
     if (bIsShiftDown)
@@ -661,6 +663,11 @@ void SelectionFunction::MoveFocus (
                 }
             }
         }
+    }
+    else if (bIsControlDown)
+    {
+        // When control is pressed then do not alter the selection or the
+        // current page, just move the focus.
     }
     else
     {

@@ -84,6 +84,7 @@ public:
     enum GradientColorType {
         NormalPage,
         SelectedPage,
+        SelectedAndFocusedPage,
         MouseOverPage
     };
     enum GradientColorClass {
@@ -115,6 +116,7 @@ private:
     ColorData maBackgroundColor;
     GradientDescriptor maNormalGradient;
     GradientDescriptor maSelectedGradient;
+    GradientDescriptor maSelectedAndFocusedGradient;
     GradientDescriptor maMouseOverGradient;
     BitmapEx maRawShadow;
     BitmapEx maInsertionIndicator;

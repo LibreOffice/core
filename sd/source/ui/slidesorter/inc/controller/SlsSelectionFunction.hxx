@@ -233,7 +233,8 @@ private:
 
     void MoveFocus (
         const FocusManager::FocusMoveDirection eDirection,
-        const bool bIsShiftDown);
+        const bool bIsShiftDown,
+        const bool bIsControlDown);
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

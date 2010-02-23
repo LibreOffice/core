@@ -235,6 +235,7 @@ PageObjectPainter::PageObjectPainter (
       mpShadowPainter(),
       maNormalBackground(),
       maSelectionBackground(),
+      maFocusedSelectionBackground(),
       maMouseOverBackground()
 {
     LocalResource aResource (IMG_ICONS);
@@ -294,6 +295,7 @@ void PageObjectPainter::NotifyResize (void)
 {
     maNormalBackground.SetEmpty();
     maSelectionBackground.SetEmpty();
+    maFocusedSelectionBackground.SetEmpty();
     maMouseOverBackground.SetEmpty();
 }
 
@@ -326,15 +328,22 @@ void PageObjectPainter::PaintBackground (
     }
     else if (rpDescriptor->HasState(model::PageDescriptor::ST_Selected))
     {
-        rDevice.DrawBitmap(
-            aBox.TopLeft(),
-            maSelectionBackground);
+        if (rpDescriptor->HasState(model::PageDescriptor::ST_Focused))
+            rDevice.DrawBitmap(
+                aBox.TopLeft(),
+                maFocusedSelectionBackground);
+        else
+            rDevice.DrawBitmap(
+                aBox.TopLeft(),
+                maSelectionBackground);
     }
     else
     {
         rDevice.DrawBitmap(
             aBox.TopLeft(),
             maNormalBackground);
+        if (rpDescriptor->HasState(model::PageDescriptor::ST_Focused))
+            PaintBorder(rDevice, Theme::SelectedPage, aBox);
     }
 }
 
@@ -519,6 +528,8 @@ void PageObjectPainter::PrepareBackgrounds (OutputDevice& rDevice)
     {
         maNormalBackground = CreateBackgroundBitmap(rDevice, Theme::NormalPage);
         maSelectionBackground = CreateBackgroundBitmap(rDevice, Theme::SelectedPage);
+        maFocusedSelectionBackground = CreateBackgroundBitmap(
+            rDevice, Theme::SelectedAndFocusedPage);
         maMouseOverBackground = CreateBackgroundBitmap(rDevice, Theme::MouseOverPage);
     }
 }
@@ -563,12 +574,7 @@ Bitmap PageObjectPainter::CreateBackgroundBitmap(
         aBitmapDevice.DrawLine(Point(0,nY), Point(aSize.Width(),nY));
     }
 
-    // Paint the border.
-    aBitmapDevice.SetFillColor();
-    aBitmapDevice.SetLineColor(mpTheme->GetGradientColor(eColorType, Theme::Border2));
-    aBitmapDevice.DrawRect(Rectangle(Point(0,0),aSize));
-    aBitmapDevice.SetLineColor(mpTheme->GetGradientColor(eColorType, Theme::Border1));
-    aBitmapDevice.DrawLine(Point(0,0),Point(aSize.Width()-1,0));
+    PaintBorder(aBitmapDevice, eColorType, Rectangle(Point(0,0), aSize));
 
     // Get bounding box of the preview around which a shadow is painted.
     // Compensate for the border around the preview.
@@ -585,6 +591,22 @@ Bitmap PageObjectPainter::CreateBackgroundBitmap(
     aBitmapDevice.DrawRect(aBox);
 
     return aBitmapDevice.GetBitmap (Point(0,0),aSize);
+}
+
+
+
+
+void PageObjectPainter::PaintBorder (
+    OutputDevice& rDevice,
+    const Theme::GradientColorType eColorType,
+    const Rectangle& rBox) const
+{
+    const Size aSize (mpPageObjectLayouter->GetPageObjectSize());
+    rDevice.SetFillColor();
+    rDevice.SetLineColor(mpTheme->GetGradientColor(eColorType, Theme::Border2));
+    rDevice.DrawRect(rBox);
+    rDevice.SetLineColor(mpTheme->GetGradientColor(eColorType, Theme::Border1));
+    rDevice.DrawLine(rBox.TopLeft(), rBox.TopRight());
 }
 
 

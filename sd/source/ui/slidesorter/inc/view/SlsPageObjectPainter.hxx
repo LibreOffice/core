@@ -83,6 +83,7 @@ private:
     ::boost::scoped_ptr<FramePainter> mpShadowPainter;
     Bitmap maNormalBackground;
     Bitmap maSelectionBackground;
+    Bitmap maFocusedSelectionBackground;
     Bitmap maMouseOverBackground;
 
     void PaintBackground (
@@ -101,6 +102,10 @@ private:
         OutputDevice& rDevice,
         const model::SharedPageDescriptor& rpDescriptor) const;
     void PrepareBackgrounds (OutputDevice& rDevice);
+    void PaintBorder (
+        OutputDevice& rDevice,
+        const Theme::GradientColorType eColorType,
+        const Rectangle& rBox) const;
     Bitmap CreateBackgroundBitmap(
         const OutputDevice& rReferenceDevice,
         const Theme::GradientColorType eType) const;

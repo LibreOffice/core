@@ -302,12 +302,12 @@ void FocusManager::ShowFocusIndicator (
             // Scroll the focused page object into the visible area and repaint
             // it, so that the focus indicator becomes visible.
             mrSlideSorter.GetController().GetSelectionManager()->MakeRectangleVisible (
-                GetFocusedPageDescriptor()->GetBoundingBox());
+                mrSlideSorter.GetView().GetLayouter().GetPageObjectBox(
+                    rpDescriptor->GetPageIndex(), true));
         }
 
-#ifndef UNIFY_FOCUS_AND_CURRENT_PAGE
-        mrSlideSorter.GetView().RequestRepaint (rpDescriptor);
-#endif
+        mrSlideSorter.GetView().RequestRepaint(rpDescriptor);
+
         NotifyFocusChangeListeners();
     }
 }

@@ -87,6 +87,7 @@ Theme::Theme (const ::boost::shared_ptr<controller::Properties>& rpProperties)
     : maBackgroundColor(rpProperties->GetBackgroundColor().GetColor()),
       maNormalGradient(),
       maSelectedGradient(),
+      maSelectedAndFocusedGradient(),
       maMouseOverGradient(),
       maRawShadow(),
       maInsertionIndicator()
@@ -107,15 +108,21 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
     maBackgroundColor = rpProperties->GetBackgroundColor().GetColor();
 #ifdef USE_SYSTEM_SELECTION_COLOR
     const ColorData aSelectionColor (rpProperties->GetSelectionColor().GetColor());
+
     maSelectedGradient.maFillColor1 = ChangeLuminance(aSelectionColor, +50);
     maSelectedGradient.maFillColor2 = ChangeLuminance(aSelectionColor, -10);
     maSelectedGradient.maBorderColor1 = ChangeLuminance(aSelectionColor, -10);
     maSelectedGradient.maBorderColor2 = ChangeLuminance(aSelectionColor, -30);
 
-    maMouseOverGradient.maFillColor1 = ChangeLuminance(aSelectionColor, -30);
-    maMouseOverGradient.maFillColor2 = ChangeLuminance(aSelectionColor, -90);
-    maMouseOverGradient.maBorderColor1 = ChangeLuminance(aSelectionColor, -30);
-    maMouseOverGradient.maBorderColor2 = ChangeLuminance(aSelectionColor, -10);
+    maSelectedAndFocusedGradient.maFillColor1 = ChangeLuminance(aSelectionColor, +30);
+    maSelectedAndFocusedGradient.maFillColor2 = ChangeLuminance(aSelectionColor, -30);
+    maSelectedAndFocusedGradient.maBorderColor1 = ChangeLuminance(aSelectionColor, -30);
+    maSelectedAndFocusedGradient.maBorderColor2 = ChangeLuminance(aSelectionColor, -50);
+
+    maMouseOverGradient.maFillColor1 = ChangeLuminance(aSelectionColor, +90);
+    maMouseOverGradient.maFillColor2 = ChangeLuminance(aSelectionColor, +30);
+    maMouseOverGradient.maBorderColor1 = ChangeLuminance(aSelectionColor, +10);
+    maMouseOverGradient.maBorderColor2 = ChangeLuminance(aSelectionColor, +30);
 
 #else
 
@@ -123,6 +130,11 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
     maSelectedGradient.maFillColor2 = 0x6db5e1;
     maSelectedGradient.maBorderColor1 = 0x6db5e1;
     maSelectedGradient.maBorderColor2 = 0x0e85cd;
+
+    maSelectedAndFocusedGradient.maFillColor1 = 0xb7daf0;
+    maSelectedAndFocusedGradient.maFillColor2 = 0x6db5e1;
+    maSelectedAndFocusedGradient.maBorderColor1 = 0x6db5e1;
+    maSelectedAndFocusedGradient.maBorderColor2 = 0x0e85cd;
 
     maMouseOverGradient.maFillColor1 = 0x0e85cd;
     maMouseOverGradient.maFillColor2 = 0x044c99;
@@ -234,6 +246,10 @@ ColorData Theme::GetGradientColor (
 
         case SelectedPage:
             pDescriptor = &maSelectedGradient;
+            break;
+
+        case SelectedAndFocusedPage:
+            pDescriptor = &maSelectedAndFocusedGradient;
             break;
 
         case MouseOverPage:
