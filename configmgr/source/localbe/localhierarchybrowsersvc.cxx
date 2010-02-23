@@ -527,7 +527,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL
             }
         }
 
-        return uno::Sequence< rtl::OUString >(&components.front(),components.size());
+        return components.empty() ? uno::Sequence< rtl::OUString >() : uno::Sequence< rtl::OUString >(&components.front(),components.size());
     }
 //------------------------------------------------------------------------------
 
