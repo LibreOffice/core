@@ -2266,10 +2266,13 @@ BOOL  ScModule::IsAliveRefDlg( USHORT nSlotId, Window *pWnd )
 
 Window *  ScModule::Find1RefWindow( USHORT nSlotId, Window *pWndAncestor )
 {
+    if (!pWndAncestor)
+        return NULL;
+
     std::map<USHORT, std::list<Window*> >::iterator iSlot = m_mapRefWindow.find( nSlotId );
 
     if( iSlot == m_mapRefWindow.end() )
-        return FALSE;
+        return NULL;
 
     std::list<Window*> & rlRefWindow = iSlot->second;
 
