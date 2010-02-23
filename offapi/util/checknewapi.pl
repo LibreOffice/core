@@ -3,7 +3,7 @@
 # using two outputs from regview and dump the interscetion
 # of new types
 #
-# Copyright (c) 2005 Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 
 if($#ARGV != 3)

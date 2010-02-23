@@ -41,7 +41,7 @@ ServerSupportFiles=0
 VersionComments="A tool for analyzing issues and working around some of them when migrating documents from Microsoft Office"
 VersionCompanyName="OpenOffice.org"
 VersionFileDescription="ProAnalysisWizard.exe"
-VersionLegalCopyright="Copyright 2005-2008 Sun Microsystems, Inc."
+VersionLegalCopyright="Copyright 2000, 2010 Oracle and/or its affiliates."
 VersionProductName="ProAnalysisWizard"
 CondComp="VB5 = 1 : PREPARATION = 1"
 CompilationType=-1

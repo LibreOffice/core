@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: document.cxx,v $
- * $Revision: 1.94.26.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,17 +68,17 @@
 #include <svl/undo.hxx>
 #include <svl/urihelper.hxx>
 #include <svl/whiter.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editstat.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/unolingu.hxx>
 #include <ucbhelper/content.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/mapunit.hxx>
 #include <vcl/msgbox.hxx>
-
+#include <sfx2/sfx.hrc>
 #include <document.hxx>
 #include <action.hxx>
 #include <config.hxx>
@@ -97,8 +94,8 @@
 #include "mathtype.hxx"
 #include "mathmlimport.hxx"
 #include "mathmlexport.hxx"
-
-
+#include <sfx2/sfxsids.hrc>
+#include <svx/svxids.hrc>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;

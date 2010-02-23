@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ww8par6.cxx,v $
- * $Revision: 1.188.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,50 +34,50 @@
 
 
 #include <hintids.hxx>
-#include <svx/lspcitem.hxx>
-#include <svx/wrlmitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/kernitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/cmapitem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/cntritem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/spltitem.hxx>
-#include <svx/keepitem.hxx>
-#include <svx/orphitem.hxx>
-#include <svx/widwitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/tstpitem.hxx>
-#include <svx/akrnitem.hxx>
-#include <svx/paperinf.hxx>
-#include <svx/emphitem.hxx>
-#include <svx/forbiddenruleitem.hxx>
-#include <svx/twolinesitem.hxx>
-#include <svx/scriptspaceitem.hxx>
-#include <svx/hngpnctitem.hxx>
-#include <svx/pbinitem.hxx>
-#include <svx/charscaleitem.hxx>
-#include <svx/charrotateitem.hxx>
-#include <svx/charreliefitem.hxx>
-#include <svx/blnkitem.hxx>
-#include <svx/hyznitem.hxx>
-#include <svx/paravertalignitem.hxx>
-#include <svx/pgrditem.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/charhiddenitem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/wrlmitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/kernitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/cmapitem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/spltitem.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/orphitem.hxx>
+#include <editeng/widwitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/akrnitem.hxx>
+#include <editeng/paperinf.hxx>
+#include <editeng/emphitem.hxx>
+#include <editeng/forbiddenruleitem.hxx>
+#include <editeng/twolinesitem.hxx>
+#include <editeng/scriptspaceitem.hxx>
+#include <editeng/hngpnctitem.hxx>
+#include <editeng/pbinitem.hxx>
+#include <editeng/charscaleitem.hxx>
+#include <editeng/charrotateitem.hxx>
+#include <editeng/charreliefitem.hxx>
+#include <editeng/blnkitem.hxx>
+#include <editeng/hyznitem.hxx>
+#include <editeng/paravertalignitem.hxx>
+#include <editeng/pgrditem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/charhiddenitem.hxx>
 #include <fmtpdsc.hxx>
 #include <node.hxx>
 #include <ndtxt.hxx> // SwTxtNode, siehe unten: JoinNode()

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unotxvw.cxx,v $
- * $Revision: 1.71 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,10 +53,10 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svdogrp.hxx>
-#include <svx/pbinitem.hxx>
+#include <editeng/pbinitem.hxx>
 #include <pagedesc.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <frmatr.hxx>
@@ -77,12 +74,12 @@
 #include <SwStyleNameMapper.hxx>
 #include <crsskip.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <editeng/outliner.hxx>
+#include <editeng/editview.hxx>
 #include <unobookmark.hxx>
 #include <unoparagraph.hxx>
 #include <unocrsrhelper.hxx>
 #include <unotextrange.hxx>
-
-#include <svx/editview.hxx>
 #include <sfx2/docfile.hxx>
 
 #include "swdtflvr.hxx"

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: filedlg.cxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,14 +47,11 @@
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/filedlghelper.hxx>
-
-#include <svx/impgrf.hxx>
-
 #include <avmedia/mediawindow.hxx>
 #include "filedlg.hxx"
 #include "sdresid.hxx"
 #include "strings.hrc"
-
+#include <svtools/filter.hxx>
 
 
 //-----------------------------------------------------------------------------
@@ -352,7 +346,7 @@ SdExportFileDialog::SdExportFileDialog(BOOL bHaveCheckbox) :
 {
     // setup filter
     const String    aHTMLFilter( SdResId( STR_EXPORT_HTML_NAME ) );
-    GraphicFilter*  pFilter = GetGrfFilter();
+    GraphicFilter*  pFilter = GraphicFilter::GetGraphicFilter();
     const USHORT    nFilterCount = pFilter->GetExportFormatCount();
 
     // add HTML filter

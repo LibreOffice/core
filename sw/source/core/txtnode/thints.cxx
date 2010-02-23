@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: thints.cxx,v $
- * $Revision: 1.65.62.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,17 +31,17 @@
 
 #include <hintids.hxx>
 #include <sot/factory.hxx>
-#include <svx/xmlcnitm.hxx>
+#include <editeng/xmlcnitm.hxx>
 #include <svl/whiter.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/stylepool.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/emphitem.hxx>
-#include <svx/charscaleitem.hxx>
-#include <svx/charrotateitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/emphitem.hxx>
+#include <editeng/charscaleitem.hxx>
+#include <editeng/charrotateitem.hxx>
 // --> OD 2008-01-16 #newlistlevelattrs#
-#include <svx/lrspitem.hxx>
+#include <editeng/lrspitem.hxx>
 // <--
 #include <txtinet.hxx>
 #include <txtflcnt.hxx>

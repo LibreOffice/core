@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: toolboxcontroller.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,10 +48,10 @@
 #define ITEMID_BRUSH        2
 #define ITEMID_FONT         3
 #define ITEMID_FONTHEIGHT   4
-#include <svx/fontitem.hxx>
-#include <svx/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <svx/tbcontrl.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/colritem.hxx>
 #include <svx/tbxcustomshapes.hxx>
 
 #include <comphelper/sequence.hxx>

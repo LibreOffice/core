@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmltble.cxx,v $
- * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,11 +39,10 @@
 #include <xmloff/numehelp.hxx>
 #include <svl/cntnrsrt.hxx>
 #include <svl/zforlist.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <fmtrowsplt.hxx>
-#include <svx/frmdiritem.hxx>
-
+#include <editeng/frmdiritem.hxx>
 #include <list>
 #include "swtable.hxx"
 #include "doc.hxx"

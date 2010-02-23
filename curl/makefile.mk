@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.25 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -45,12 +41,18 @@ all:
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=curl-7.12.2
-PATCH_FILES=curl-7.12.2.patch
-CONVERTFILES= \
+TARFILE_NAME=curl-7.19.7
+PATCH_FILES=curl-7.19.7.patch
+
+.IF "$(GUI)"=="WNT"
+    PATCH_FILES+=curl-7.19.7_win.patch
+.ENDIF
+
+
+#CONVERTFILES= \
     lib$/Makefile.vc6
 
-ADDITIONAL_FILES= lib$/config-os2.h lib$/Makefile.os2
+#ADDITIONAL_FILES= lib$/config-os2.h lib$/Makefile.os2
 
 .IF "$(GUI)"=="UNX"
 
@@ -77,7 +79,7 @@ BUILD_DIR=$(CONFIGURE_DIR)$/lib
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 
-OUT2LIB=$(BUILD_DIR)$/.libs$/libcurl$(DLLPOST).3
+OUT2LIB=$(BUILD_DIR)$/.libs$/libcurl$(DLLPOST).4
 .ENDIF			# "$(GUI)"=="UNX"
 
 
@@ -111,9 +113,9 @@ EXCFLAGS="/EHsc /YX"
 
 BUILD_DIR=.$/lib
 .IF "$(debug)"==""
-BUILD_ACTION=nmake -f Makefile.vc6 cfg=release-dll EXCFLAGS=$(EXCFLAGS)
+BUILD_ACTION=nmake -f Makefile.vc9 cfg=release-dll EXCFLAGS=$(EXCFLAGS)
 .ELSE
-BUILD_ACTION=nmake -f Makefile.vc6 cfg=debug-dll EXCFLAGS=$(EXCFLAGS)
+BUILD_ACTION=nmake -f Makefile.vc9 cfg=debug-dll EXCFLAGS=$(EXCFLAGS)
 .ENDIF
 
 OUT2BIN=$(BUILD_DIR)$/libcurl.dll
@@ -145,7 +147,9 @@ OUT2INC= \
     include$/curl$/curlver.h  		\
     include$/curl$/types.h  		\
     include$/curl$/stdcheaders.h  	\
-    include$/curl$/mprintf.h
+    include$/curl$/mprintf.h	    \
+    include$/curl$/curlbuild.h		\
+    include$/curl$/curlrules.h
 
 # --- Targets ------------------------------------------------------
 

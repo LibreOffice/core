@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: appopt.cxx,v $
- * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,9 +46,9 @@
 #include <sfx2/printer.hxx>
 #include <svx/htmlmode.hxx>
 #include <sfx2/bindings.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #ifndef _SVX_TSTPITEM_HXX //autogen
-#include <svx/tstpitem.hxx>
+#include <editeng/tstpitem.hxx>
 #endif
 #include <svx/optgrid.hxx>
 #include <svx/svxdlg.hxx>
@@ -86,9 +83,9 @@
 #endif
 #include <glosdoc.hxx>
 #include <uiitems.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <unotools/lingucfg.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>

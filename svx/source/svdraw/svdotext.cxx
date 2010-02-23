@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdotext.cxx,v $
- * $Revision: 1.90.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,25 +39,25 @@
 #include <svx/svdmodel.hxx>  // OutlinerDefaults
 #include "svdglob.hxx"  // Stringcache
 #include "svdstr.hrc"   // Objektname
-#include <svx/writingmodeitem.hxx>
+#include <editeng/writingmodeitem.hxx>
 #include <svx/sdtfchim.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svx/eeitem.hxx>
-#include <editstat.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/editobj.hxx>
-#include <svx/outliner.hxx>
-#include <svx/fhgtitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <svl/itempool.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/flditem.hxx>
 #include <svx/xftouit.hxx>
 #include <vcl/salbtype.hxx>     // FRound
 #include <svx/xflgrit.hxx>
 #include <svx/svdpool.hxx>
 #include <svx/xflclit.hxx>
 #include <svl/style.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 #include <svl/itemiter.hxx>
 #include <svx/sdr/properties/textproperties.hxx>
 #include <vcl/metaact.hxx>

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tablink.cxx,v $
- * $Revision: 1.31.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,7 +44,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/transliterationwrapper.hxx>
 
@@ -146,7 +143,7 @@ void __EXPORT ScTableLink::Edit( Window* pParent, const Link& rEndEditHdl )
 void __EXPORT ScTableLink::DataChanged( const String&,
                                         const ::com::sun::star::uno::Any& )
 {
-    SvxLinkManager* pLinkManager=pImpl->m_pDocSh->GetDocument()->GetLinkManager();
+    sfx2::LinkManager* pLinkManager=pImpl->m_pDocSh->GetDocument()->GetLinkManager();
     if (pLinkManager!=NULL)
     {
         String aFile;

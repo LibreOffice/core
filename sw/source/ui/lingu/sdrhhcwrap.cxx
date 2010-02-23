@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdrhhcwrap.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,17 +30,17 @@
 #include <hintids.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdotext.hxx>
-#include <svx/editdata.hxx>
+#include <editeng/editdata.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdogrp.hxx>
 #include <sfx2/printer.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <linguistic/lngprops.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <svx/svdview.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <sdrhhcwrap.hxx>
 #include <frmfmt.hxx>

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: itrcrsr.cxx,v $
- * $Revision: 1.81.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,10 +37,10 @@
 #include "pam.hxx"
 #include "swselectionlist.hxx"
 #include <sortedobjs.hxx>
-#include <svx/protitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/lspcitem.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/protitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <frmatr.hxx>
 #include <pagedesc.hxx> // SwPageDesc
 #include <tgrditem.hxx>

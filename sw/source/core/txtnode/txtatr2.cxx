@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: txtatr2.cxx,v $
- * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,8 +31,8 @@
 #include <hintids.hxx>
 #include <hints.hxx>
 #include <sfx2/objsh.hxx>
-#include <svx/xmlcnitm.hxx>
-#include <svx/twolinesitem.hxx>
+#include <editeng/xmlcnitm.hxx>
+#include <editeng/twolinesitem.hxx>
 #include <txtinet.hxx>
 #include <txtatr.hxx>
 #include <fchrfmt.hxx>

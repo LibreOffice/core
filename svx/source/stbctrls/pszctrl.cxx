@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pszctrl.cxx,v $
- * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,12 +32,8 @@
 
 #include <limits.h>
 #include <tools/shl.hxx>
-#ifndef _STATUS_HXX //autogen
 #include <vcl/status.hxx>
-#endif
-#ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
 #include <vcl/image.hxx>
 #include <svl/stritem.hxx>
 #include <svl/ptitem.hxx>
@@ -49,17 +42,18 @@
 #include <sfx2/module.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
-
+#include <svl/intitem.hxx>
 #define _SVX_PSZCTRL_CXX
 
 #include "pszctrl.hxx"
 
 #define PAINT_OFFSET    5
 
-#include <svx/sizeitem.hxx>
+#include <editeng/sizeitem.hxx>
 #include <svx/dialmgr.hxx>
 #include "dlgutil.hxx"
 #include "stbctrls.h"
+#include "sfx2/module.hxx"
 
 #include <svx/dialogs.hrc>
 #include <unotools/localedatawrapper.hxx>
@@ -81,10 +75,10 @@
     <SvxPosSizeStatusBarControl::Paint(const UserDrawEvent&)>
 */
 
-String GetMetricStr_Impl( long nVal )
+String SvxPosSizeStatusBarControl::GetMetricStr_Impl( long nVal )
 {
     // Applikations-Metrik besorgen und setzen
-    FieldUnit eOutUnit = GetModuleFieldUnit( NULL );
+    FieldUnit eOutUnit = SfxModule::GetCurrentFieldUnit();
     FieldUnit eInUnit = FUNIT_100TH_MM;
 
     String sMetric;

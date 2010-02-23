@@ -1,14 +1,10 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
- * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dp_gui_dialog2.cxx,v $
- *
- * $Revision: 1.8.4.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -145,14 +141,14 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
     Image           m_aDefaultImage;
     Image           m_aDefaultImageHC;
     Link            m_aClickHdl;
-    
+
     ScrollBar      *m_pScrollBar;
 
     com::sun::star::uno::Reference< ExtensionRemovedListener > m_xRemoveListener;
 
     TheExtensionManager      *m_pManager;
     //This mutex is used for synchronizing access to m_vEntries.
-    //Currently it is used to synchronize adding, removing entries and 
+    //Currently it is used to synchronize adding, removing entries and
     //functions like getItemName, getItemDescription, etc. to prevent
     //that m_vEntries is accessed at an invalid index.
     //ToDo: There are many more places where m_vEntries is read and which may
@@ -194,7 +190,7 @@ public:
 
     const Size      GetMinOutputSizePixel() const;
     void            SetExtraSize( long nSize ) { m_nExtraHeight = nSize; }
-    TEntry_Impl     GetEntryData( long nPos ) { return m_vEntries[ nPos ]; } 
+    TEntry_Impl     GetEntryData( long nPos ) { return m_vEntries[ nPos ]; }
     long            GetEntryCount() { return (long) m_vEntries.size(); }
     Rectangle       GetEntryRect( const long nPos ) const;
     bool            HasActive() { return m_bHasActive; }

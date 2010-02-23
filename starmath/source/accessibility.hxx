@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: accessibility.hxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,8 +51,8 @@
 #include <cppuhelper/implbase6.hxx>
 #include <svl/brdcst.hxx>
 
-#include <svx/editeng.hxx>
-#include <svx/unoedsrc.hxx> // SvxEditSource, SvxTextForwarder, SvxViewForwarder, SvxEditViewForwarder
+#include <editeng/editeng.hxx>
+#include <editeng/unoedsrc.hxx> // SvxEditSource, SvxTextForwarder, SvxViewForwarder, SvxEditViewForwarder
 #include <svx/AccessibleTextHelper.hxx>
 #include <edit.hxx>
 

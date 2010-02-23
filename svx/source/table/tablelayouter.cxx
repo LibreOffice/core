@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tablelayouter.cxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,8 +41,8 @@
 #include "tablecolumns.hxx"
 #include "tablelayouter.hxx"
 #include "svx/svdotable.hxx"
-#include "svx/borderline.hxx"
-#include "svx/boxitem.hxx"
+#include "editeng/borderline.hxx"
+#include "editeng/boxitem.hxx"
 #include "svx/svdmodel.hxx"
 #include "svdstr.hrc"
 #include "svdglob.hxx"

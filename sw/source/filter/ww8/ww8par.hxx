@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ww8par.hxx,v $
- * $Revision: 1.159.12.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #include <tools/string.hxx>
 #include <filter/msfilter/msdffimp.hxx>
 #include <filter/msfilter/msocximex.hxx>
-#include <svx/frmdir.hxx>
+#include <editeng/frmdir.hxx>
 #include <fltshell.hxx>         // fuer den Attribut Stack
 
 #ifndef __SGI_STL_VECTOR

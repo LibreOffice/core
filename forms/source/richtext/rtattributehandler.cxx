@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: rtattributehandler.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
 #include <vcl/mapunit.hxx>
@@ -43,18 +40,18 @@
 #include <vcl/outdev.hxx>
 
 #define ITEMID_ADJUST       EE_PARA_JUST
-#include <svx/adjitem.hxx>
+#include <editeng/adjitem.hxx>
 #define ITEMID_WEIGHT       EE_CHAR_WEIGHT
-#include <svx/wghtitem.hxx>
+#include <editeng/wghtitem.hxx>
 #define ITEMID_ESCAPEMENT   EE_CHAR_ESCAPEMENT
-#include <svx/escpitem.hxx>
+#include <editeng/escpitem.hxx>
 #define ITEMID_LINESPACING  EE_PARA_SBL
-#include <svx/lspcitem.hxx>
+#include <editeng/lspcitem.hxx>
 #define ITEMID_FONTHEIGHT   EE_CHAR_FONTHEIGHT
-#include <svx/fhgtitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #define ITEMID_FRAMEDIR     EE_PARA_WRITINGDIR
-#include <svx/frmdiritem.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/scripttypeitem.hxx>
 
 //........................................................................
 namespace frm

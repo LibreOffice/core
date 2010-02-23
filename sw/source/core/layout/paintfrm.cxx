@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: paintfrm.cxx,v $
- * $Revision: 1.121.110.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,11 +41,11 @@
 #include <svl/svstdarr.hxx>
 #include <svx/xoutbmp.hxx>
 #include <sfx2/progress.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/prntitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/shaditem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/prntitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/shaditem.hxx>
 // --> collapsing borders FME 2005-05-27 #i29550#
 #include <svx/framelink.hxx>
 // <--
@@ -557,7 +554,7 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
                    (nL1b <= nL2b && nL1c + nAdd > nL2b)) )
             {
                 SwLineRect *pMSC = &rL2;
-                aCheck.Insert( (void*&)pMSC, aCheck.Count() );
+                aCheck.Insert( pMSC, aCheck.Count() );
             }
         }
         if ( aCheck.Count() < 2 )
@@ -1639,8 +1636,7 @@ void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
 
     //Hier kein Link, wir wollen die Grafik synchron laden!
     ((SvxBrushItem&)rBrush).SetDoneLink( Link() );
-    GraphicObject *pGrf = (GraphicObject*)rBrush.GetGraphicObject(
-                                                    GETOBJSHELL() );
+    GraphicObject *pGrf = (GraphicObject*)rBrush.GetGraphicObject();
 
     /// OD 17.10.2002 #103876# - outsourcing drawing of background with a background color.
     ::lcl_DrawGraphicBackgrd( rBrush, pOut, aAlignedGrfRect, *pGrf, bGrfNum, bBackgrdAlreadyDrawn );
@@ -1686,8 +1682,8 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush,
             else
                 ((SvxBrushItem*)pBrush)->SetDoneLink( STATIC_LINK(
                                     rSh.GetDoc(), SwDoc, BackgroundDone ) );
-            SfxObjectShell &rObjSh = *GETOBJSHELL();
-            const Graphic* pGrf = pBrush->GetGraphic( &rObjSh );
+            //SfxObjectShell &rObjSh = *GETOBJSHELL();
+            const Graphic* pGrf = pBrush->GetGraphic();
             if( pGrf && GRAPHIC_NONE != pGrf->GetType() )
             {
                 ePos = pBrush->GetGraphicPos();
@@ -1767,7 +1763,7 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush,
             // OD 17.10.2002 #103876# - draw background of tiled graphic
             // before drawing tiled graphic in loop
             // determine graphic object
-            GraphicObject* pGraphicObj = const_cast< GraphicObject* >(pBrush->GetGraphicObject( GETOBJSHELL() ));
+            GraphicObject* pGraphicObj = const_cast< GraphicObject* >(pBrush->GetGraphicObject());
             // calculate aligned paint rectangle
             SwRect aAlignedPaintRect = rOut;
             ::SwAlignRect( aAlignedPaintRect, &rSh );
@@ -1857,8 +1853,7 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush,
              (ePos != GPOS_TILED) && (ePos != GPOS_AREA)
            )
         {
-            GraphicObject *pGrf = (GraphicObject*)pBrush->GetGraphicObject(
-                                                    GETOBJSHELL() );
+            GraphicObject *pGrf = (GraphicObject*)pBrush->GetGraphicObject();
             if ( bConsiderBackgroundTransparency )
             {
                 GraphicAttr pGrfAttr = pGrf->GetAttr();

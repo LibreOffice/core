@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fudraw.cxx,v $
- * $Revision: 1.25.128.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,8 +30,8 @@
 
 //------------------------------------------------------------------------
 
-#include <svx/editeng.hxx>  // EditEngine::IsSimpleCharInput
-#include <svx/outlobj.hxx>
+#include <editeng/editeng.hxx>  // EditEngine::IsSimpleCharInput
+#include <editeng/outlobj.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdouno.hxx>

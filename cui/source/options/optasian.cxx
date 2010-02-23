@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: optasian.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,14 +29,14 @@
 #include "precompiled_cui.hxx"
 
 #include <optasian.hxx>
-#include <svx/langitem.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/unolingu.hxx>
 #include <optasian.hrc>
 #include <dialmgr.hxx>
 #include <cuires.hrc>
 #include <tools/table.hxx>
 #include <tools/shl.hxx>
-#include <svx/asiancfg.hxx>
+#include <svl/asiancfg.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>

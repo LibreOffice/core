@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: printfun.cxx,v $
- * $Revision: 1.58.50.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,25 +31,25 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include "printfun.hxx"
 
 #include <svx/svxids.hrc>
-#include <svx/adjitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svx/editstat.hxx>     // EE_CNTRL_RTFSTYLESHEETS
+#include <editeng/editstat.hxx>     // EE_CNTRL_RTFSTYLESHEETS
 #include <svx/fmview.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/paperinf.hxx>
-#include <svx/pbinitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/sizeitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/paperinf.hxx>
+#include <editeng/pbinitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/sizeitem.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/ulspitem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/progress.hxx>

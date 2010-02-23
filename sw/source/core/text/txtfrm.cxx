@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: txtfrm.cxx,v $
- * $Revision: 1.108.30.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,12 +32,12 @@
 #include <svl/ctloptions.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/sfxuno.hxx>
-#include <svx/langitem.hxx>
-#include <svx/lspcitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/pgrditem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/pgrditem.hxx>
 #include <swmodule.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <doc.hxx>      // GetDoc()

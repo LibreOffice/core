@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: impop.cxx,v $
- * $Revision: 1.95.36.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,15 +33,15 @@
 #include <filter/msfilter/countryid.hxx>
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
-#include <svx/editdata.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editobj.hxx>
-#include <svx/editstat.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/flditem.hxx>
 #include <svx/pageitem.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/colritem.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/docfile.hxx>
 #include <svl/zforlist.hxx>

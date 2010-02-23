@@ -3,13 +3,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: LocaleCodes.java,v $
- *
- * $Revision: 1.7.52.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +41,7 @@ public class LocaleCodes extends Resource
     public LocaleCodes(XMultiServiceFactory xmsf)
     {
         super(xmsf, UNIT_NAME, MODULE_NAME);
-        allLanguageStrings = getStringList(16300);  // STR_ARR_SVT_LANGUAGE_TABLE from svtools/source/misc/langtab.src
+        allLanguageStrings = getStringList(16750);  // STR_ARR_SVT_LANGUAGE_TABLE from svtools/source/misc/langtab.src
     }
 
     public String getLanguageString(String MSID)

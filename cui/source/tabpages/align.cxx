@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: align.cxx,v $
- * $Revision: 1.26.272.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,14 +32,14 @@
 
 #include "align.hxx"
 
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include <svx/dialogs.hrc>
 #include <cuires.hrc>
 #include "align.hrc"
 #include <svx/rotmodit.hxx>
 
 #include <svx/algitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <tools/shl.hxx>

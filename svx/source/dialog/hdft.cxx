@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: hdft.cxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,17 +39,7 @@
 
 #include <svx/dialogs.hrc>
 #include "hdft.hrc"
-
-
-
-
-
-
-
-
-
-
-
+#include <svl/intitem.hxx>
 
 #define _SVX_HDFT_CXX
 
@@ -63,12 +50,12 @@
 #include <svx/dialmgr.hxx>
 #include "htmlmode.hxx"
 
-#include <svx/brshitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/boxitem.hxx>
 
 #include <svx/svxdlg.hxx> //CHINA001
 #include <svx/dialogs.hrc> //CHINA001
@@ -188,7 +175,7 @@ SvxHFPage::SvxHFPage( Window* pParent, USHORT nResId, const SfxItemSet& rAttr, U
     FreeResource();
 
     // Metrik einstellen
-    FieldUnit eFUnit = GetModuleFieldUnit( &rAttr );
+    FieldUnit eFUnit = GetModuleFieldUnit( rAttr );
     SetFieldUnit( aDistEdit, eFUnit );
     SetFieldUnit( aHeightEdit, eFUnit );
     SetFieldUnit( aLMEdit, eFUnit );

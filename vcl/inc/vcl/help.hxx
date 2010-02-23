@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: help.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,6 +72,7 @@ public:
 
     virtual BOOL        Start( ULONG nHelpId, const Window* pWindow  );
     virtual BOOL        Start( const XubString& rKeyWord, const Window* pWindow );
+    virtual void        OpenHelpAgent( ULONG nHelpId );
     virtual XubString   GetHelpText( ULONG nHelpId, const Window* pWindow );
     virtual XubString   GetHelpText( const String& aHelpURL, const Window* pWindow );
 

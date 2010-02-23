@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlimp.cxx,v $
- * $Revision: 1.107 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,7 +54,7 @@
 #include "xmlimp.hxx"
 #include <xmloff/DocumentSettingsContext.hxx>
 #include <docsh.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/xmlgrhlp.hxx>
 #include <svx/xmleohlp.hxx>

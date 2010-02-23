@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sfxhtml.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,8 +81,6 @@ public:
             LanguageType& eNumLang, const String& aValStr,
             const String& aNumStr, SvNumberFormatter& rFormatter );
 
-    static rtl_TextEncoding GetEncodingByHttpHeader( SvKeyValueIterator *pHTTPHeader );
-
 protected:
 
     // Start eines File-Downloads. Dieser erfolgt synchron oder asynchron.
@@ -124,9 +119,6 @@ protected:
     // Default (auch ohne Iterator) ist JavaScript
     ScriptType GetScriptType( SvKeyValueIterator* ) const;
     const String& GetScriptTypeString( SvKeyValueIterator* ) const;
-
-    BOOL SetEncodingByHTTPHeader( SvKeyValueIterator *pHTTPHeader );
-
 };
 
 inline BOOL SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const String& rBaseURL,

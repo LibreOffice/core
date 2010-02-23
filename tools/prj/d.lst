@@ -112,6 +112,7 @@ mkdir: %_DEST%\inc%_EXT%\bootstrp
 ..\inc\tools\testtoolloader.hxx %_DEST%\inc%_EXT%\tools\testtoolloader.hxx
 ..\inc\tools\svborder.hxx %_DEST%\inc%_EXT%\tools\svborder.hxx
 ..\inc\tools\getprocessworkingdir.hxx %_DEST%\inc%_EXT%\tools\getprocessworkingdir.hxx
+..\inc\tools\b3dtrans.hxx %_DEST%\inc%_EXT%\tools\b3dtrans.hxx
 
 ..\%__SRC%\bin\rscdep.exe %_DEST%\bin%_EXT%\rscdep.exe
 ..\%__SRC%\bin\rscdep %_DEST%\bin%_EXT%\rscdep

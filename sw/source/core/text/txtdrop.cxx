@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: txtdrop.cxx,v $
- * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,9 +47,9 @@
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
 #include <com/sun/star/i18n/WordType.hpp>
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <charatr.hxx>
-#include <svx/fhgtitem.hxx>
+#include <editeng/fhgtitem.hxx>
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star;

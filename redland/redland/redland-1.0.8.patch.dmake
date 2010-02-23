@@ -1,18 +1,14 @@
 --- misc/redland-1.0.8/librdf/makefile.mk	Mon Jun 16 19:32:46 2008
 +++ misc/build/redland-1.0.8/librdf/makefile.mk	Mon Jun 16 19:26:20 2008
-@@ -1,1 +1,115 @@
+@@ -1,1 +1,111 @@
 -dummy
 +#*************************************************************************
 +#
 +# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 +#
-+# Copyright 2008 by Sun Microsystems, Inc.
++# Copyright 2000, 2010 Oracle and/or its affiliates.
 +#
 +# OpenOffice.org - a multi-platform office productivity suite
-+#
-+# $RCSfile: redland-1.0.8.patch,v $
-+#
-+# $Revision: 1.1.2.1 $
 +#
 +# This file is part of OpenOffice.org.
 +#

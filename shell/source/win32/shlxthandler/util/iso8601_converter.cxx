@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: iso8601_converter.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -149,7 +146,7 @@ std::wstring iso8601_duration_to_local_duration(const std::wstring& iso8601durat
         hours = buff;
     }
 
-#if defined(_MSC_VER) && defined(_M_X64)
+#if defined(_MSC_VER) //&& defined(_M_X64)
     std::wostringstream oss;
     oss << std::setw(2) << std::setfill(wchar_t('0')) << hours   << L":" <<
            std::setw(2) << std::setfill(wchar_t('0')) << minutes << L":" <<
@@ -172,12 +169,14 @@ std::wstring iso8601_duration_to_local_duration(const std::wstring& iso8601durat
 
     return result;
 #undef ADD_AS_PREFILLED
+/*
 #else
     std::wostringstream oss;
     oss << std::setw(2) << std::setfill('0') << hours   << L":" <<
            std::setw(2) << std::setfill('0') << minutes << L":" <<
            std::setw(2) << std::setfill('0') << seconds;
     return oss.str();
+*/
 #endif
 }
 

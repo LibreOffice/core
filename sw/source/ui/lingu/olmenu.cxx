@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: olmenu.cxx,v $
- * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,8 +37,7 @@
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
 #include <svtools/filter.hxx>
-#include <svx/impgrf.hxx>
-#include <svx/svxacorr.hxx>
+#include <editeng/svxacorr.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/imagemgr.hxx>
 #include <osl/file.hxx>
@@ -51,7 +47,7 @@
 #include <linguistic/lngprops.hxx>
 #include <linguistic/misc.hxx>
 #include <comphelper/processfactory.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
@@ -65,12 +61,12 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <svx/dlgutil.hxx>
 #include <svl/itemset.hxx>
-#include <svx/langitem.hxx>
-#include <svx/splwrap.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/splwrap.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <unotools/lingucfg.hxx>
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 #include <swmodule.hxx>
 #include <cmdid.h>
 #include <helpid.h>
@@ -100,7 +96,7 @@
 #include <sfx2/sfxdlg.hxx>
 #include "swabstdlg.hxx"
 #include "chrdlg.hrc"
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <svl/stritem.hxx>
 #include <viewopt.hxx>
 #include <uitool.hxx>
@@ -358,7 +354,7 @@ static Image lcl_GetImageFromPngUrl( const OUString &rFileUrl )
 #endif
     Graphic aGraphic;
     const String aFilterName( RTL_CONSTASCII_USTRINGPARAM( IMP_PNG ) );
-    if( GRFILTER_OK == LoadGraphic( aTmp, aFilterName, aGraphic ) )
+    if( GRFILTER_OK == GraphicFilter::LoadGraphic( aTmp, aFilterName, aGraphic ) )
     {
         aRes = Image( aGraphic.GetBitmapEx() );
     }

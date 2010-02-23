@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ooofilt.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -219,26 +216,3 @@ private:
 
     long m_lRefs;           // Reference count
 };
-
-extern "C" {
-
-    voidpf ZCALLBACK cb_sopen OF((voidpf opaque, const char * filename, int mode));
-    uLong ZCALLBACK cb_sread OF((voidpf opaque, voidpf stream, void* vuf, uLong size));
-    uLong ZCALLBACK cb_swrite OF((voidpf opaque, voidpf stream, const void* buf, uLong size));
-    long ZCALLBACK cb_stell OF((voidpf opaque, voidpf stream));
-    long ZCALLBACK cb_sseek OF((voidpf opaque, voidpf stream, uLong offset, int origin));
-    int ZCALLBACK cb_sclose OF((voidpf opaque, voidpf stream));
-    int ZCALLBACK cb_serror OF((voidpf opaque, voidpf stream));
-
-    void fill_stream_filefunc (zlib_filefunc_def* pzlib_filefunc_def);  
-    
-}
-
-
-
-
-
-
-
-
-

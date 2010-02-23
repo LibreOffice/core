@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: areasave.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +34,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <tools/debug.hxx>
 
 #include "areasave.hxx"
@@ -100,7 +97,7 @@ void ScAreaLinkSaver::InsertNewLink( ScDocument* pDoc ) const
 {
     // (see ScUndoRemoveAreaLink::Undo)
 
-    SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
+    sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
     SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
 
     if ( pLinkManager && pObjSh )
@@ -140,7 +137,7 @@ BOOL ScAreaLinkSaveCollection::IsEqual( const ScDocument* pDoc ) const
     // IsEqual can be checked in sequence.
     // Neither ref-update nor removing links will change the order.
 
-    SvxLinkManager* pLinkManager = const_cast<ScDocument*>(pDoc)->GetLinkManager();
+    sfx2::LinkManager* pLinkManager = const_cast<ScDocument*>(pDoc)->GetLinkManager();
     if (pLinkManager)
     {
         USHORT nPos = 0;
@@ -186,7 +183,7 @@ void ScAreaLinkSaveCollection::Restore( ScDocument* pDoc ) const
     // Entries from the save collection must be searched via source data, as the order
     // of links changes if deleted entries are re-added to the link manager (always at the end).
 
-    SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
+    sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
     if (pLinkManager)
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
@@ -208,7 +205,7 @@ ScAreaLinkSaveCollection* ScAreaLinkSaveCollection::CreateFromDoc( const ScDocum
 {
     ScAreaLinkSaveCollection* pColl = NULL;
 
-    SvxLinkManager* pLinkManager = const_cast<ScDocument*>(pDoc)->GetLinkManager();
+    sfx2::LinkManager* pLinkManager = const_cast<ScDocument*>(pDoc)->GetLinkManager();
     if (pLinkManager)
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();

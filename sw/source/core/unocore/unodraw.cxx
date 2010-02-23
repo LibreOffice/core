@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unodraw.cxx,v $
- * $Revision: 1.82 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,7 +38,7 @@
 #include <unoparagraph.hxx>
 #include <unotextrange.hxx>
 #include <unoprnms.hxx>
-#include <svx/unoprnms.hxx>
+#include <editeng/unoprnms.hxx>
 #include <swunohelper.hxx>
 #include <doc.hxx>
 #include <fmtcntnt.hxx>
@@ -65,8 +62,8 @@
 // OD 2004-04-21 #i26791#
 #include <fmtfollowtextflow.hxx>
 #include <rootfrm.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <svx/shapepropertynotifier.hxx>
 #include <crstate.hxx>
 #include <vos/mutex.hxx>

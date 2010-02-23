@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: table.hxx,v $
- * $Revision: 1.35.126.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -89,6 +86,7 @@ private:
     ScColumn        aCol[MAXCOLCOUNT];
 
     String          aName;
+    String          aCodeName;
     String          aComment;
     BOOL            bScenario;
     BOOL            bLayoutRTL;
@@ -161,7 +159,7 @@ private:
 friend class ScDocument;                    // fuer FillInfo
 friend class ScDocumentIterator;
 friend class ScValueIterator;
-friend class ScQueryValueIterator;
+friend class ScDBQueryDataIterator;
 friend class ScCellIterator;
 friend class ScQueryCellIterator;
 friend class ScHorizontalCellIterator;
@@ -177,6 +175,7 @@ public:
 
     ScOutlineTable* GetOutlineTable()               { return pOutlineTable; }
 
+    SCSIZE      GetCellCount(SCCOL nCol) const;
     ULONG       GetCellCount() const;
     ULONG       GetWeightedCount() const;
     ULONG       GetCodeCount() const;       // RPN-Code in Formeln
@@ -228,6 +227,9 @@ public:
 
     void        GetName( String& rName ) const;
     void        SetName( const String& rNewName );
+
+    void        GetCodeName( String& rName ) const {  rName = aCodeName; }
+    void        SetCodeName( const String& rNewName ) { aCodeName = rNewName; }
 
     const String&   GetUpperName() const;
 

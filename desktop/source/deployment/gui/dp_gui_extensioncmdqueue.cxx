@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dp_gui_extensioncmdqueue.cxx,v $
- *
- * $Revision: 1.7.4.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -252,7 +248,6 @@ public:
                           const bool bEnable );
     void checkForUpdates( const std::vector< TUpdateListEntry > &vExtensionList );
     void stop();
-    bool hasTerminated();
     bool isBusy();
 
     static OUString searchAndReplaceAll( const OUString &rSource,
@@ -745,13 +740,6 @@ void ExtensionCmdQueue::Thread::stop()
 }
 
 //------------------------------------------------------------------------------
-bool ExtensionCmdQueue::Thread::hasTerminated()
-{
-    osl::MutexGuard aGuard( m_mutex );
-    return m_bTerminated;
-}
-
-//------------------------------------------------------------------------------
 bool ExtensionCmdQueue::Thread::isBusy()
 {
     osl::MutexGuard aGuard( m_mutex );
@@ -1159,17 +1147,6 @@ void ExtensionCmdQueue::checkForUpdates( const std::vector< TUpdateListEntry > &
 void ExtensionCmdQueue::stop()
 {
     m_thread->stop();
-}
-
-void ExtensionCmdQueue::stopAndWait()
-{
-    m_thread->stop();
-    m_thread->join();
-}
-
-bool ExtensionCmdQueue::hasTerminated()
-{
-    return m_thread->hasTerminated();
 }
 
 bool ExtensionCmdQueue::isBusy()

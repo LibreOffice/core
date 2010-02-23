@@ -286,15 +286,15 @@ Groesse svtools:RadioButton:DLG_EXPORT_VEC:RB_SIZE_VEC
 Breite svtools:MetricField:DLG_EXPORT_VEC:MTF_SIZEX_VEC
 Hoehe svtools:MetricField:DLG_EXPORT_VEC:MTF_SIZEY_VEC
 
-*EPSOptionen goodies:ModalDialog:DLG_EXPORT_EPS
-VorschauTif goodies:CheckBox:DLG_EXPORT_EPS:CB_PREVIEW_TIFF
-InterchangeEPSI goodies:CheckBox:DLG_EXPORT_EPS:CB_PREVIEW_EPSI
-Level1 goodies:RadioButton:DLG_EXPORT_EPS:RB_LEVEL1
-Level2 goodies:RadioButton:DLG_EXPORT_EPS:RB_LEVEL2
-Farbe goodies:RadioButton:DLG_EXPORT_EPS:RB_COLOR
-Graustufen goodies:RadioButton:DLG_EXPORT_EPS:RB_GRAYSCALE
-LZWKodierung goodies:RadioButton:DLG_EXPORT_EPS:RB_COMPRESSION_LZW
-Keine goodies:RadioButton:DLG_EXPORT_EPS:RB_COMPRESSION_NONE
+*EPSOptionen filter:ModalDialog:DLG_EXPORT_EPS
+VorschauTif filter:CheckBox:DLG_EXPORT_EPS:CB_PREVIEW_TIFF
+InterchangeEPSI filter:CheckBox:DLG_EXPORT_EPS:CB_PREVIEW_EPSI
+Level1 filter:RadioButton:DLG_EXPORT_EPS:RB_LEVEL1
+Level2 filter:RadioButton:DLG_EXPORT_EPS:RB_LEVEL2
+Farbe filter:RadioButton:DLG_EXPORT_EPS:RB_COLOR
+Graustufen filter:RadioButton:DLG_EXPORT_EPS:RB_GRAYSCALE
+LZWKodierung filter:RadioButton:DLG_EXPORT_EPS:RB_COMPRESSION_LZW
+Keine filter:RadioButton:DLG_EXPORT_EPS:RB_COMPRESSION_NONE
 
 *EtikettenSynchronisieren HID_SYNC_BTN
 Synchronisieren SW:PUSHBUTTON:DLG_SYNC_BTN:BTN_SYNC
@@ -489,9 +489,9 @@ Aktualisieren HID_TEMPLDLG_UPDATEBYEXAMPLE
 Vorlagenliste HID_TEMPLATE_FMT
 Gruppenliste HID_TEMPLATE_FILTER
 
-*GifOptionen goodies:ModalDialog:DLG_EXPORT_GIF
-Interlace goodies:CheckBox:DLG_EXPORT_GIF:CBX_INTERLACED
-TransparentSpeichern goodies:CheckBox:DLG_EXPORT_GIF:CBX_TRANSLUCENT
+*GifOptionen filter:ModalDialog:DLG_EXPORT_GIF
+Interlace filter:CheckBox:DLG_EXPORT_GIF:CBX_INTERLACED
+TransparentSpeichern filter:CheckBox:DLG_EXPORT_GIF:CBX_TRANSLUCENT
 
 *GroupingDlg HID_SC_DPDATEGROUP
 AutoStart sc:RadioButton:RID_SCDLG_DPNUMGROUP:RB_AUTOSTART

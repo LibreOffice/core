@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unoobj.cxx,v $
- * $Revision: 1.111.80.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -96,7 +93,7 @@
 #include <unofield.hxx>
 #include <unometa.hxx>
 #include <fmtanchr.hxx>
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
 #include <svtools/ctrltool.hxx>
 #include <flypos.hxx>
 #include <txtftn.hxx>
@@ -116,8 +113,8 @@
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_USHORTSSORT
 #include <svl/svstdarr.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/unolingu.hxx>
 #include <fmtclds.hxx>
 #include <dcontact.hxx>
 #include <SwStyleNameMapper.hxx>
@@ -843,7 +840,7 @@ void SwXTextCursor::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
 
     if (!GetRegisteredIn() ||
         // if the cursor leaves its designated section, it becomes invalid
-        (pOld != NULL) && (pOld->Which() == RES_UNOCURSOR_LEAVES_SECTION))
+        ((pOld != NULL) && (pOld->Which() == RES_UNOCURSOR_LEAVES_SECTION)))
     {
         Invalidate();
     }

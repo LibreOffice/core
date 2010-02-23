@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: notesuno.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,8 +31,9 @@
 
 
 #include "rangelst.hxx"
-#include <svx/unotext.hxx>
-
+#include <editeng/unotext.hxx>
+#include <svx/svdpool.hxx>
+#include <svx/svdobj.hxx>
 #include "notesuno.hxx"
 #include "textuno.hxx"
 #include "cellsuno.hxx"     // getParent
@@ -52,7 +50,7 @@
 #include "undocell.hxx"
 #include "unoguard.hxx"
 #include "userdat.hxx"
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svditer.hxx>
@@ -70,7 +68,7 @@ const SvxItemPropertySet* lcl_GetAnnotationPropertySet()
     {
         {0,0,0,0,0,0}
     };
-    static SvxItemPropertySet aAnnotationPropertySet_Impl( aAnnotationPropertyMap_Impl );
+    static SvxItemPropertySet aAnnotationPropertySet_Impl( aAnnotationPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
     return &aAnnotationPropertySet_Impl;
 }
 

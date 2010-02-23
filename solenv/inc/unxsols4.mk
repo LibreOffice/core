@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: unxsols4.mk,v $
-#
-# $Revision: 1.53 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -33,7 +29,6 @@
 ASM=/usr/ccs/bin/as
 # needs -D__sparcv8plus because it's not defined by the assembler with -xarch=v8plus
 AFLAGS=-P -xarch=v8plus -D__sparcv8plus
-
 
 CDEFS+=-D_PTHREADS -DSYSV -DSUN -DSUN4 -D_REENTRANT -D_POSIX_PTHREAD_SEMANTICS -DSTLPORT_VERSION=$(STLPORT_VER)
 

@@ -150,15 +150,9 @@
  
 --- misc/jpeg-6b/makefile.mk	2009-03-19 11:30:46.000000000 +0100
 +++ misc/build/jpeg-6b/makefile.mk	2009-03-19 11:30:30.000000000 +0100
-@@ -1 +1,82 @@
+@@ -1 +1,76 @@
 -dummy
 +#*************************************************************************
-+#
-+#   $RCSfile: makefile.mk,v $
-+#
-+#   $Revision: 1.5 $
-+#
-+#   last change: $Author: thb $ $Date: 2001/08/14 12:53:46 $
 +#
 +#   Copyright according the GNU Public License.
 +#

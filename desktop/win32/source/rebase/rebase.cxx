@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: md5.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,7 +60,7 @@ bool IsValidHandle( HANDLE handle )
     return ((NULL != handle) && (INVALID_HANDLE_VALUE != handle));
 }
 
-void fail() 
+void fail()
 {
     LPWSTR buf = NULL;
     FormatMessageW(
@@ -82,10 +79,10 @@ bool rebaseImage( wchar_t* pszFilePath, ULONG nNewImageBase)
     ULONG_PTR lpNewImageBase  = nNewImageBase;
     ULONG     ulDateTimeStamp = 0;
     bool      bResult(false);
-    
+
     char cszFilePath[_MAX_PATH+1] = {0};
     int nResult = WideCharToMultiByte(CP_ACP, 0, pszFilePath, -1, cszFilePath, _MAX_PATH, NULL, NULL);
-    
+
     if (nResult != 0)
     {
         BOOL bResult = ReBaseImage(
@@ -157,31 +154,31 @@ void rebaseImagesInFolder( wchar_t* pszFolder, DWORD nNewImageBase )
 extern "C" int APIENTRY WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
 {
     wchar_t path[MAX_PATH];
-    
+
     wchar_t * pathEnd = getBrandPath(path);
-    
+
     if (tools::buildPath(path, path, pathEnd, MY_STRING(L"")) == NULL)
         fail();
     rebaseImagesInFolder(path, BASEVIRTUALADDRESS);
-    
+
     if (tools::buildPath(path, path, pathEnd, MY_STRING(L"..\\basis-link")) == NULL)
         fail();
     pathEnd = tools::resolveLink(path);
-    
+
     if ( pathEnd == NULL )
         return 0;
 
     if (tools::buildPath(path, path, pathEnd, MY_STRING(L"\\program\\")) == NULL)
         fail();
     rebaseImagesInFolder(path, BASEVIRTUALADDRESS);
-    
+
     if (tools::buildPath(path, path, pathEnd, MY_STRING(L"\\ure-link")) == NULL)
         fail();
     pathEnd = tools::resolveLink(path);
-    
+
     if ( pathEnd == NULL )
         return 0;
-    
+
     if (tools::buildPath(path, path, pathEnd, MY_STRING(L"\\bin\\")) == NULL)
         fail();
     rebaseImagesInFolder(path, BASEVIRTUALADDRESS);

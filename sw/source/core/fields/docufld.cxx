@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docufld.cxx,v $
- * $Revision: 1.51.16.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,7 +52,7 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Duration.hpp>
 #include <unotools/localedatawrapper.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/string.hxx>
@@ -104,8 +101,8 @@
 #include <swunohelper.hxx>
 #include <comcore.hrc>
 
-#include <svx/outliner.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/outlobj.hxx>
 
 #define URL_DECODE  INetURLObject::DECODE_UNAMBIGUOUS
 

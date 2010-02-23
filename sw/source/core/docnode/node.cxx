@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: node.cxx,v $
- * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,9 +32,9 @@
 #include <hintids.hxx>
 
 // --> OD 2005-02-21 #i42921#
-#include <svx/frmdiritem.hxx>
+#include <editeng/frmdiritem.hxx>
 // <--
-#include <svx/protitem.hxx>
+#include <editeng/protitem.hxx>
 #include <com/sun/star/i18n/CharacterIteratorMode.hdl>
 #include <fmtcntnt.hxx>
 #include <fmtanchr.hxx>

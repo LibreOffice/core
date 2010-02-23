@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: srchdlg.cxx,v $
- * $Revision: 1.46 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,6 +50,7 @@
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <comphelper/processfactory.hxx>
 #include <svl/itempool.hxx>
+#include <svl/intitem.hxx>
 
 #include <sfx2/app.hxx>
 #include <toolkit/unohlp.hxx>
@@ -67,13 +65,13 @@
 
 #define ITEMID_SETITEM      0
 
-#include <sfx2/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/pageitem.hxx>
 #include "srchctrl.hxx"
 #include <svx/dialmgr.hxx>
 #include "dlgutil.hxx"
-#include <svx/brshitem.hxx>
-
+#include <editeng/brshitem.hxx>
+#include <tools/resary.hxx>
 #include <svx/svxdlg.hxx> //CHINA001
 
 #include <sfx2/layout-pre.hxx>
@@ -81,6 +79,7 @@
 using namespace com::sun::star::i18n;
 using namespace com::sun::star;
 using namespace comphelper;
+
 // -----------------------------------------------------------------------
 
 #define REMEMBER_SIZE       10
@@ -2320,8 +2319,7 @@ String& SvxSearchDialog::BuildAttrText_Impl( String& rStr,
 
     // Metrik abfragen
     SfxMapUnit eMapUnit = SFX_MAPUNIT_CM;
-    FieldUnit eFieldUnit = GetModuleFieldUnit();
-
+    FieldUnit eFieldUnit = pSh->GetModule()->GetFieldUnit();
     switch ( eFieldUnit )
     {
         case FUNIT_MM:          eMapUnit = SFX_MAPUNIT_MM; break;
@@ -2338,6 +2336,8 @@ String& SvxSearchDialog::BuildAttrText_Impl( String& rStr,
         default: ;//prevent warning
     }
 
+    ResStringArray aAttrNames( SVX_RES( RID_ATTR_NAMES ) );
+
     for ( USHORT i = 0; i < pList->Count(); ++i )
     {
         const SearchAttrItem& rItem = pList->GetObject(i);
@@ -2353,13 +2353,16 @@ String& SvxSearchDialog::BuildAttrText_Impl( String& rStr,
                                     eMapUnit, aStr );
             rStr += aStr;
         }
-        else
+        else if ( rItem.nSlot == SID_ATTR_BRUSH_CHAR )
         {
             //Sonderbehandlung fuer Zeichenhintergrund
-            USHORT nId = rItem.nSlot == SID_ATTR_BRUSH_CHAR ?
-                                RID_SVXITEMS_BRUSH_CHAR :
-                                    rItem.nSlot - SID_SVX_START + RID_ATTR_BEGIN;
-            rStr += SVX_RESSTR( nId );
+            rStr += SVX_RESSTR( RID_SVXITEMS_BRUSH_CHAR );
+        }
+        else
+        {
+            sal_uInt32 nId  = aAttrNames.FindIndex( rItem.nSlot );
+            if ( RESARRAY_INDEX_NOTFOUND != nId )
+                rStr += aAttrNames.GetString( nId );
         }
     }
     return rStr;

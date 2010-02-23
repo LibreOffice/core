@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: optlingu.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,7 +40,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include "svx/svxdllapi.h"
 
 namespace com{namespace sun{namespace star{
 namespace beans{
@@ -110,7 +106,7 @@ public:
 
 // class SvxLinguTabPage -------------------------------------------------
 
-class SVX_DLLPUBLIC SvxLinguTabPage : public SfxTabPage
+class SvxLinguTabPage : public SfxTabPage
 {
 private:
     FixedLine           aLinguisticFL;
@@ -152,11 +148,11 @@ private:
 
     SvxLinguData_Impl*  pLinguData;
 
-    SVX_DLLPRIVATE SvxLinguTabPage( Window* pParent, const SfxItemSet& rCoreSet );
-    SVX_DLLPRIVATE SvLBoxEntry* CreateEntry(String& rTxt, USHORT nCol);
+    SvxLinguTabPage( Window* pParent, const SfxItemSet& rCoreSet );
+    SvLBoxEntry*    CreateEntry(String& rTxt, USHORT nCol);
 
-    SVX_DLLPRIVATE void    AddDicBoxEntry( const com::sun::star::uno::Reference< com::sun::star::linguistic2::XDictionary > &rxDic, USHORT nIdx );
-    SVX_DLLPRIVATE ULONG   GetDicUserData( const com::sun::star::uno::Reference< com::sun::star::linguistic2::XDictionary > &rxDic, USHORT nIdx );
+    void    AddDicBoxEntry( const com::sun::star::uno::Reference< com::sun::star::linguistic2::XDictionary > &rxDic, USHORT nIdx );
+    ULONG   GetDicUserData( const com::sun::star::uno::Reference< com::sun::star::linguistic2::XDictionary > &rxDic, USHORT nIdx );
 
 #ifdef _SVX_OPTLINGU_CXX
     DECL_LINK( SelectHdl_Impl, SvxCheckListBox * );
@@ -166,8 +162,8 @@ private:
     DECL_LINK( PostDblClickHdl_Impl, SvTreeListBox * );
     DECL_LINK( OpenURLHdl_Impl, svt::FixedHyperlink* );
 
-    SVX_DLLPRIVATE void                UpdateModulesBox_Impl();
-    SVX_DLLPRIVATE void                UpdateDicBox_Impl();
+    void                UpdateModulesBox_Impl();
+    void                UpdateDicBox_Impl();
 #endif
 
 public:

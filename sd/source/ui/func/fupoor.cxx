@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fupoor.cxx,v $
- * $Revision: 1.50.74.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,7 +71,7 @@
 #include <svx/svditer.hxx>
 
 // #98533#
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;

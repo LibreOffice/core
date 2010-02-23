@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: regionsw.hxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,7 +38,7 @@
 #include <svtools/svtreebx.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 
 #include <condedit.hxx>
 #include <section.hxx>
@@ -49,10 +46,10 @@
 #include <fmtftntx.hxx>
 #include <fmtclbl.hxx>
 #include <numberingtypelistbox.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <vcl/image.hxx>
 #include <svx/paraprev.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/lrspitem.hxx>
 
 
 class SwWrtShell;

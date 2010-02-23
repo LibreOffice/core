@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: inputhdl.hxx,v $
- * $Revision: 1.15.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #include "address.hxx"
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 
 class ScDocument;
 class ScTabView;

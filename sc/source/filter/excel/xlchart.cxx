@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xlchart.cxx,v $
- * $Revision: 1.11.62.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,7 +53,7 @@
 #include <svx/xbtmpit.hxx>
 #include <svx/unomid.hxx>
 #include <filter/msfilter/escherex.hxx>
-
+#include <editeng/memberids.hrc>
 #include "global.hxx"
 #include "xlconst.hxx"
 #include "xlstyle.hxx"

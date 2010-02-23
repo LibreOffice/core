@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: cuigaldlg.cxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,8 +35,8 @@
 #include <vcl/msgbox.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <unotools/pathoptions.hxx>
-#include <svx/opengrf.hxx>
-#include <svx/impgrf.hxx>
+#include <sfx2/opengrf.hxx>
+#include <svtools/filter.hxx>
 #include <svx/gallery1.hxx>
 #include <svx/galtheme.hxx>
 #include "cuigaldlg.hxx"
@@ -856,7 +853,7 @@ SfxTabPage* TPGalleryThemeProperties::Create( Window* pParent, const SfxItemSet&
 
 void TPGalleryThemeProperties::FillFilterList()
 {
-    GraphicFilter*      pFilter = GetGrfFilter();
+    GraphicFilter*      pFilter = GraphicFilter::GetGraphicFilter();
     String              aExt;
     String              aName;
     FilterEntry*        pFilterEntry;

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pglink.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +29,7 @@
 #include "precompiled_sd.hxx"
 
 #ifndef _SVXLINK_HXX
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #endif
 
 #include "pglink.hxx"
@@ -77,7 +74,7 @@ void SdPageLink::DataChanged( const String& ,
                                        const ::com::sun::star::uno::Any& )
 {
     SdDrawDocument* pDoc = (SdDrawDocument*) pPage->GetModel();
-    SvxLinkManager* pLinkManager = pDoc!=NULL ? pDoc->GetLinkManager() : NULL;
+    sfx2::LinkManager* pLinkManager = pDoc!=NULL ? pDoc->GetLinkManager() : NULL;
 
     if (pLinkManager)
     {

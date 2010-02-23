@@ -1,7 +1,7 @@
 #
 # configure.pl - a perl script to set a minimal environment for the SDK.
 #
-# Copyright (c) 2000 Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 
 use IO::File;

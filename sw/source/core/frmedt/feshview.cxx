@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: feshview.cxx,v $
- * $Revision: 1.61.136.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,9 +44,9 @@
 #include <svx/xfillit.hxx>
 #include <svx/svdocapt.hxx>
 #include <sfx2/app.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/protitem.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
 

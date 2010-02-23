@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: EnhancedCustomShapeEngine.cxx,v $
- * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,8 +42,8 @@
 #include <svx/svdoashp.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdorect.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/outliner.hxx>
 #include <svx/svdoutl.hxx>
 #include <svl/itemset.hxx>
 #include <svx/svdopath.hxx>

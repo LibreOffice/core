@@ -1,14 +1,10 @@
 /**************************************************************************
  *
- *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vprint.cxx,v $
- * $Revision: 1.46 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,8 +45,8 @@
 #include <sfx2/progress.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/prnmon.hxx>
-#include <svx/paperinf.hxx>
-#include <svx/pbinitem.hxx>
+#include <editeng/paperinf.hxx>
+#include <editeng/pbinitem.hxx>
 #include <svx/svdview.hxx>
 #include <unotools/localedatawrapper.hxx>
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: textapi.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,8 +31,8 @@
 #include <textapi.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/editeng.hxx>
 
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -57,7 +54,7 @@ static const SvxItemPropertySet* ImplGetSvxTextPortionPropertySet()
         {MAP_CHAR_LEN("ParaUserDefinedAttributes"),     EE_PARA_XMLATTRIBS,     &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
         {0,0,0,0,0,0}
     };
-    static SvxItemPropertySet aSvxTextPortionPropertySet( aSvxTextPortionPropertyMap );
+    static SvxItemPropertySet aSvxTextPortionPropertySet( aSvxTextPortionPropertyMap, EditEngine::GetGlobalItemPool() );
     return &aSvxTextPortionPropertySet;
 }
 

@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.17 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -49,7 +45,6 @@ LIB1OBJFILES= \
         $(SLO)$/XPropertyTable.obj \
         $(SLO)$/UnoNameItemTable.obj \
         $(SLO)$/unoshape.obj	\
-        $(SLO)$/unoipset.obj	\
         $(SLO)$/unoshap2.obj	\
         $(SLO)$/unoshap3.obj	\
         $(SLO)$/unoshap4.obj	\
@@ -57,8 +52,6 @@ LIB1OBJFILES= \
         $(SLO)$/unoshtxt.obj	\
         $(SLO)$/unoprov.obj		\
         $(SLO)$/unomod.obj      \
-        $(SLO)$/unonrule.obj	\
-        $(SLO)$/unofdesc.obj	\
         $(SLO)$/unomlstr.obj	\
         $(SLO)$/unogtabl.obj	\
         $(SLO)$/unohtabl.obj	\

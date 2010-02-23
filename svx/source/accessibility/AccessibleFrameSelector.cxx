@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessibleFrameSelector.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,7 +48,7 @@
 #include <vcl/svapp.hxx>
 #include <svx/frmsel.hxx>
 #include <svx/dialmgr.hxx>
-#include "unolingu.hxx"
+#include "editeng/unolingu.hxx"
 
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>

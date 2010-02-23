@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: number.cxx,v $
- * $Revision: 1.53.76.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,9 +33,9 @@
 
 #include <string.h>
 #include <vcl/font.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/numitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/numitem.hxx>
 #include <fmtornt.hxx>
 #include <doc.hxx>
 #include <pam.hxx>

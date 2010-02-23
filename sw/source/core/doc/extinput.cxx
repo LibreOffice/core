@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: extinput.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,8 +38,8 @@
 #include <ndtxt.hxx>
 #include <txtfrm.hxx>
 #include <swundo.hxx>
-#include <svx/langitem.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 
 using namespace ::com::sun::star;

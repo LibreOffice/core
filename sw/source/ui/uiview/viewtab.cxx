@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewtab.cxx,v $
- * $Revision: 1.44 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,16 +35,16 @@
 #include "uitool.hxx"
 #include <sfx2/app.hxx>
 #include <svx/rulritem.hxx>
-#include <svx/tstpitem.hxx>
+#include <editeng/tstpitem.hxx>
 #include <sfx2/request.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
 #include <svx/ruler.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/protitem.hxx>
 #include <svl/rectitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <fmtfsize.hxx>

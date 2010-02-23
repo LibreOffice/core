@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dp_persmap.h,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,8 +52,6 @@ public:
     PersistentMap( ::rtl::OUString const & url, bool readOnly );
     /** in mem db */
     PersistentMap();
-
-    void flush() const;
 
     bool has( ::rtl::OString const & key ) const;
     bool get( ::rtl::OString * value, ::rtl::OString const & key ) const;

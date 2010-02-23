@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: module.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,9 +33,10 @@
 #include <sfx2/shell.hxx>
 #include <sfx2/imgdef.hxx>
 #include <sal/types.h>
+#include <vcl/fldunit.hxx>
+
 class ImageList;
 
-class SfxAcceleratorManager;
 class SfxBindings;
 class SfxObjectFactory;
 class ModalDialog;
@@ -96,6 +94,8 @@ public:
     BOOL                        IsActive() const;
 
     static SfxModule*           GetActiveModule( SfxViewFrame* pFrame=NULL );
+    static FieldUnit            GetCurrentFieldUnit();
+    FieldUnit                   GetFieldUnit() const;
 
 //#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE static SfxModuleArr_Impl& GetModules_Impl();

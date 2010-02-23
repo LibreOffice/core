@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdotxln.cxx,v $
- * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,24 +30,16 @@
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/localfilehelper.hxx>
-
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/contentbroker.hxx>
 #include <unotools/datetime.hxx>
-
 #include <svx/svdotext.hxx>
 #include "svditext.hxx"
 #include <svx/svdmodel.hxx>
-#include <svx/editdata.hxx>
-
-#ifndef SVX_LIGHT
-#ifndef _LNKBASE_HXX //autogen
+#include <editeng/editdata.hxx>
 #include <sfx2/lnkbase.hxx>
-#endif
-#endif
-#include <linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <tools/urlobj.hxx>
-
 #include <svl/urihelper.hxx>
 
 // #90477#
@@ -114,7 +103,7 @@ void ImpSdrObjTextLink::DataChanged( const String& /*rMimeType*/,
 {
     FASTBOOL bForceReload=FALSE;
     SdrModel* pModel = pSdrObj ? pSdrObj->GetModel() : 0;
-    SvxLinkManager* pLinkManager= pModel ? pModel->GetLinkManager() : 0;
+    sfx2::LinkManager* pLinkManager= pModel ? pModel->GetLinkManager() : 0;
     if( pLinkManager )
     {
         ImpSdrObjTextLinkUserData* pData=pSdrObj->GetLinkUserData();
@@ -331,9 +320,8 @@ ImpSdrObjTextLinkUserData* SdrTextObj::GetLinkUserData() const
 
 void SdrTextObj::ImpLinkAnmeldung()
 {
-#ifndef SVX_LIGHT
     ImpSdrObjTextLinkUserData* pData=GetLinkUserData();
-    SvxLinkManager* pLinkManager=pModel!=NULL ? pModel->GetLinkManager() : NULL;
+    sfx2::LinkManager* pLinkManager=pModel!=NULL ? pModel->GetLinkManager() : NULL;
     if (pLinkManager!=NULL && pData!=NULL && pData->pLink==NULL) { // Nicht 2x Anmelden
         pData->pLink=new ImpSdrObjTextLink(this);
 #ifdef GCC
@@ -347,19 +335,16 @@ void SdrTextObj::ImpLinkAnmeldung()
 #endif
         pData->pLink->Connect();
     }
-#endif // SVX_LIGHT
 }
 
 void SdrTextObj::ImpLinkAbmeldung()
 {
-#ifndef SVX_LIGHT
     ImpSdrObjTextLinkUserData* pData=GetLinkUserData();
-    SvxLinkManager* pLinkManager=pModel!=NULL ? pModel->GetLinkManager() : NULL;
+    sfx2::LinkManager* pLinkManager=pModel!=NULL ? pModel->GetLinkManager() : NULL;
     if (pLinkManager!=NULL && pData!=NULL && pData->pLink!=NULL) { // Nicht 2x Abmelden
         // Bei Remove wird *pLink implizit deleted
         pLinkManager->Remove( pData->pLink );
         pData->pLink=NULL;
     }
-#endif // SVX_LIGHT
 }
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ww8par5.cxx,v $
- * $Revision: 1.110.40.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,9 +48,9 @@
 
 #include <com/sun/star/i18n/ScriptType.hdl>
 #include <hintids.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/langitem.hxx>
 #include <fmtfld.hxx>
 #include <fmtanchr.hxx>
 #include <pam.hxx>              // fuer SwPam

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: directory.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -360,25 +357,24 @@ sal_Bool DataSupplier::getData()
             g_free( uri );
         }
 
+        GnomeVFSFileInfo* fileInfo = gnome_vfs_file_info_new ();
 
-        GnomeVFSFileInfo fileInfo;
-        fileInfo.name = 0;
-        while ((result = gnome_vfs_directory_read_next (dirHandle, &fileInfo)) == GNOME_VFS_OK) {
-            if( fileInfo.name && fileInfo.name[0] == '.' &&
-                ( fileInfo.name[1] == '\0' ||
-                  ( fileInfo.name[1] == '.' && fileInfo.name[2] == '\0' ) ) )
+        while ((result = gnome_vfs_directory_read_next (dirHandle, fileInfo)) == GNOME_VFS_OK) {
+            if( fileInfo->name && fileInfo->name[0] == '.' &&
+                ( fileInfo->name[1] == '\0' ||
+                  ( fileInfo->name[1] == '.' && fileInfo->name[2] == '\0' ) ) )
                 continue;
 
             switch ( m_pImpl->m_nOpenMode ) {
             case ucb::OpenMode::FOLDERS:
-                if ( !(fileInfo.valid_fields & GNOME_VFS_FILE_INFO_FIELDS_TYPE) ||
-                     fileInfo.type != GNOME_VFS_FILE_TYPE_DIRECTORY )
+                if ( !(fileInfo->valid_fields & GNOME_VFS_FILE_INFO_FIELDS_TYPE) ||
+                     fileInfo->type != GNOME_VFS_FILE_TYPE_DIRECTORY )
                     continue;
                 break;
 
             case ucb::OpenMode::DOCUMENTS:
-                if ( !(fileInfo.valid_fields & GNOME_VFS_FILE_INFO_FIELDS_TYPE) ||
-                     fileInfo.type != GNOME_VFS_FILE_TYPE_REGULAR )
+                if ( !(fileInfo->valid_fields & GNOME_VFS_FILE_INFO_FIELDS_TYPE) ||
+                     fileInfo->type != GNOME_VFS_FILE_TYPE_REGULAR )
                     continue;
                 break;
 
@@ -387,8 +383,11 @@ sal_Bool DataSupplier::getData()
                 break;
             }
 
-            m_pImpl->m_aResults.push_back( new ResultListEntry( &fileInfo ) );
+            m_pImpl->m_aResults.push_back( new ResultListEntry( fileInfo ) );
         }
+
+        gnome_vfs_file_info_unref (fileInfo);
+
 #ifdef DEBUG
         g_warning ("Got %d directory entries", result);
 #endif

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: extrusionbar.cxx,v $
- * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,7 +49,7 @@
 #include <svx/dialogs.hrc>
 #endif
 #include <svx/svdview.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/colritem.hxx>
 #include "chrtitem.hxx"
 
 #include <svx/extrusionbar.hxx>

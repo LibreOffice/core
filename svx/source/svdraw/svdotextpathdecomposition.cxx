@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdotextpathdecomposition.cxx,v $
- *
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,7 +46,7 @@
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/i18n/CharacterIteratorMode.hdl>
-#include <unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <basegfx/color/bcolor.hxx>
@@ -67,7 +63,7 @@
 #include <svx/xlndsit.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
-#include <editstat.hxx>
+#include <editeng/editstat.hxx>
 #include <unoapi.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <svx/sdr/attribute/sdrformtextoutlineattribute.hxx>

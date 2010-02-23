@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Outliner.hxx,v $
- * $Revision: 1.16.14.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #include <svx/svdoutl.hxx>
 #include "pres.hxx"
 #include "OutlinerIterator.hxx"
-#include <svx/SpellPortions.hxx>
+#include <editeng/SpellPortions.hxx>
 #include <memory>
 #include <boost/shared_ptr.hpp>
 
@@ -121,7 +118,7 @@ public:
             <const>OUTLINERMODE_TITLEOBJECT</const>,
             <const>OUTLINERMODE_OUTLINEOBJECT</const>, and
             <const>OUTLINERMODE_OUTLINEVIEW</const> are defined in
-            svx/outliner.hxx.
+            editeng/outliner.hxx.
     */
     Outliner( SdDrawDocument* pDoc, USHORT nMode );
     virtual ~Outliner();

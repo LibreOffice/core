@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: view3d.cxx,v $
- * $Revision: 1.32.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,7 +38,7 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svxids.hrc>
-#include <svx/colritem.hxx>
+#include <editeng/colritem.hxx>
 #include <svx/xtable.hxx>
 #include <svx/svdview.hxx>
 #include <svx/dialogs.hrc>
@@ -697,7 +694,7 @@ void E3dView::ImpIsConvertTo3DPossible(SdrObject* pObj, BOOL& rAny3D,
 |* 3D-Konvertierung zu Extrude ausfuehren
 |*
 \************************************************************************/
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 void E3dView::ImpChangeSomeAttributesFor3DConversion(SdrObject* pObj)
 {

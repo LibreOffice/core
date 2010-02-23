@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Copyright (c) 2007 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 # All rights reserved.
 #
 

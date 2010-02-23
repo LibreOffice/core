@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tabledesign.cxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +37,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
+#include <comphelper/serviceinfohelper.hxx>
 
 #include <osl/mutex.hxx>
 #include <vos/mutex.hxx>
@@ -237,7 +235,7 @@ OUString SAL_CALL TableDesignStyle::getImplementationName() throw(RuntimeExcepti
 
 sal_Bool SAL_CALL TableDesignStyle::supportsService( const OUString& ServiceName ) throw(RuntimeException)
 {
-    return SvxServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
 }
 
 // ----------------------------------------------------------
@@ -515,7 +513,7 @@ OUString SAL_CALL TableDesignFamily::getImplementationName() throw(RuntimeExcept
 
 sal_Bool SAL_CALL TableDesignFamily::supportsService( const OUString& ServiceName ) throw(RuntimeException)
 {
-    return SvxServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
 }
 
 // ----------------------------------------------------------

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: prevwsh.cxx,v $
- * $Revision: 1.44.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,11 +33,11 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/srchitem.hxx>
+#include <editeng/sizeitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <svx/svdview.hxx>
 //CHINA001 #include <svx/zoom.hxx>

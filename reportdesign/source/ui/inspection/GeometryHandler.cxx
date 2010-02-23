@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: GeometryHandler.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -111,7 +108,7 @@
 #define ITEMID_LINEEND_LIST     SID_LINEEND_LIST
 #include <svx/drawitem.hxx>
 #define ITEMID_BRUSH            SID_ATTR_BRUSH
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <sfx2/docfilt.hxx>
 
 #include "dlgpage.hxx"

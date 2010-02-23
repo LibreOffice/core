@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vbaapplication.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +37,7 @@
 #include "vbaaddins.hxx"
 #include "vbadialogs.hxx"
 #include <ooo/vba/word/WdEnableCancelKey.hpp>
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 #include "wordvbahelper.hxx"
 #include <docsh.hxx>
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: res_DataLabel.cxx,v $
- * $Revision: 1.5.72.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,8 +46,8 @@
 #include <svl/stritem.hxx>
 //SfxIntegerListItem
 #include <svl/ilstitem.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/frmdiritem.hxx>
 
 // header for define RET_OK
 #include <vcl/msgbox.hxx>

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tabstpge.cxx,v $
- * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,7 +40,7 @@
 
 #include <cuires.hrc>
 #include "tabstpge.hrc"
-#include <svx/lrspitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include "tabstpge.hxx"
 #include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
@@ -153,7 +150,7 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent,
 
 
     // Metrik einstellen
-    FieldUnit eFUnit = GetModuleFieldUnit( &rAttr );
+    FieldUnit eFUnit = GetModuleFieldUnit( rAttr );
     SetFieldUnit( aTabBox, eFUnit );
 
     // Buttons initialisieren

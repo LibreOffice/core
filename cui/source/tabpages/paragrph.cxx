@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: paragrph.cxx,v $
- * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,27 +38,27 @@
 #define _SVX_PARAGRPH_CXX   0
 
 #include <svl/languageoptions.hxx>
-#include <svx/pgrditem.hxx>
+#include <editeng/pgrditem.hxx>
 #include <cuires.hrc>
 #include "paragrph.hrc"
 #include "paragrph.hxx"
-#include <svx/frmdiritem.hxx>
-#include <svx/lspcitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/orphitem.hxx>
-#include <svx/widwitem.hxx>
-#include <svx/tstpitem.hxx>
-#include <svx/pmdlitem.hxx>
-#include <svx/spltitem.hxx>
-#include <svx/hyznitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/keepitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/orphitem.hxx>
+#include <editeng/widwitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/pmdlitem.hxx>
+#include <editeng/spltitem.hxx>
+#include <editeng/hyznitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/keepitem.hxx>
 #include "svx/dlgutil.hxx"
 #include <dialmgr.hxx>
 #include "svx/htmlmode.hxx"
-#include <svx/paravertalignitem.hxx>
+#include <editeng/paravertalignitem.hxx>
 #include <svl/eitem.hxx> //add CHINA001
 #include <sfx2/request.hxx> //add CHINA001
 #include <svl/intitem.hxx> //add CHINA001
@@ -440,7 +437,7 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet& rSet )
     String aEmpty;
 
     // Metrik einstellen
-    FieldUnit eFUnit = GetModuleFieldUnit( &rSet );
+    FieldUnit eFUnit = GetModuleFieldUnit( rSet );
     SetFieldUnit( aLeftIndent, eFUnit );
     SetFieldUnit( aRightIndent, eFUnit );
     SetFieldUnit( aFLineIndent, eFUnit );

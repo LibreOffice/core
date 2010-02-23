@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: grfsh.cxx,v $
- * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,10 +44,10 @@
 #include <sfx2/dispatch.hxx>
 
 #include <sfx2/objface.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/protitem.hxx>
 #include <sfx2/request.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/htmlmode.hxx>
 #include <svx/sdgluitm.hxx>
 #include <svx/sdgcoitm.hxx>
@@ -58,7 +55,7 @@
 #include <svx/sdgtritm.hxx>
 #include <svx/sdginitm.hxx>
 #include <svx/sdgmoitm.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <svx/grfflt.hxx>
 #include <svx/tbxcolor.hxx>
 #include <fmturl.hxx>

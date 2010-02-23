@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: langbox.hxx,v $
- * $Revision: 1.4.242.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,6 +56,9 @@ class SvtLanguageTable;
                                             // locale, such as Arabic as
                                             // opposed to Arabic-Egypt.
 
+
+// load language strings from resource
+SVX_DLLPUBLIC String    GetDicInfoStr( const String& rName, const USHORT nLang, BOOL bNeg );
 
 class SVX_DLLPUBLIC SvxLanguageBox : public ListBox
 {

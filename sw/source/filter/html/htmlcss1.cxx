@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: htmlcss1.cxx,v $
- * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,18 +37,18 @@
 #include <i18npool/mslangid.hxx>
 #include <sfx2/docfile.hxx>
 #include <vcl/svapp.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/flstitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/keepitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/flstitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
 #include <fmtpdsc.hxx>
@@ -62,7 +59,7 @@
 #include "frmatr.hxx"
 #include <charfmt.hxx>
 #include <docary.hxx>
-
+#include <svx/svxids.hrc>
 
 #include "doc.hxx"
 #include "pam.hxx"

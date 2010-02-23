@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drwtrans.cxx,v $
- * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,10 +73,10 @@
 #include "scitems.hxx"
 
 // #108584#
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 // #108584#
-#include <svx/fhgtitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace com::sun::star;

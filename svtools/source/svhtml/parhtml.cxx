@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: parhtml.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2340,4 +2337,39 @@ rtl_TextEncoding HTMLParser::GetEncodingByMIME( const String& rMime )
     }
     return RTL_TEXTENCODING_DONTKNOW;
 }
+
+rtl_TextEncoding HTMLParser::GetEncodingByHttpHeader( SvKeyValueIterator *pHTTPHeader )
+{
+    rtl_TextEncoding eRet = RTL_TEXTENCODING_DONTKNOW;
+    if( pHTTPHeader )
+    {
+        SvKeyValue aKV;
+        for( BOOL bCont = pHTTPHeader->GetFirst( aKV ); bCont;
+             bCont = pHTTPHeader->GetNext( aKV ) )
+        {
+            if( aKV.GetKey().EqualsIgnoreCaseAscii( OOO_STRING_SVTOOLS_HTML_META_content_type ) )
+            {
+                if( aKV.GetValue().Len() )
+                {
+                    eRet = HTMLParser::GetEncodingByMIME( aKV.GetValue() );
+                }
+            }
+        }
+    }
+    return eRet;
+}
+
+BOOL HTMLParser::SetEncodingByHTTPHeader(
+                                SvKeyValueIterator *pHTTPHeader )
+{
+    BOOL bRet = FALSE;
+    rtl_TextEncoding eEnc = HTMLParser::GetEncodingByHttpHeader( pHTTPHeader );
+    if(RTL_TEXTENCODING_DONTKNOW != eEnc)
+    {
+        SetSrcEncoding( eEnc );
+        bRet = TRUE;
+    }
+    return bRet;
+}
+
 

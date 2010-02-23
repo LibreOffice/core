@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: linkdlg.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,7 +45,7 @@
 *************************************************************************/
 namespace sfx2
 {
-    class SvLinkManager;
+    class LinkManager;
     class SvBaseLink;
 }
 
@@ -83,7 +80,7 @@ class SvBaseLinksDlg : public ModalDialog
     String aStrCloselinkmsg;
     String aStrCloselinkmsgMulti;
     String aStrWaitinglink;
-    sfx2::SvLinkManager*  pLinkMgr;
+    sfx2::LinkManager*  pLinkMgr;
     BOOL            bHtmlMode;
     SvTabListBox aTbLinks;
     Timer aUpdateTimer;
@@ -126,10 +123,10 @@ class SvBaseLinksDlg : public ModalDialog
     String&         Closelinkmsg()  { return aStrCloselinkmsg; }
     String&         CloselinkmsgMulti() { return aStrCloselinkmsgMulti; }
     String&         Waitinglink()   { return aStrWaitinglink; }
-    void SetManager( sfx2::SvLinkManager* );
+    void SetManager( sfx2::LinkManager* );
 
 public:
-    SvBaseLinksDlg( Window * pParent, sfx2::SvLinkManager*, BOOL bHtml = FALSE );
+    SvBaseLinksDlg( Window * pParent, sfx2::LinkManager*, BOOL bHtml = FALSE );
     ~SvBaseLinksDlg();
     void SetActLink( sfx2::SvBaseLink * pLink );
 };

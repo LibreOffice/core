@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: optimprove.hxx,v $
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,8 +28,6 @@
 #define _SVX_OPTIMPROVE_HXX
 
 // include ---------------------------------------------------------------
-
-#include "svx/svxdllapi.h"
 
 #include <vcl/tabpage.hxx>
 #include <vcl/fixed.hxx>

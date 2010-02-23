@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unoshcol.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +31,7 @@
 
 #include "unoshcol.hxx"
 #include <svx/unoprov.hxx>
+#include <comphelper/serviceinfohelper.hxx>
 
 using namespace ::cppu;
 using namespace ::com::sun::star;
@@ -238,7 +236,7 @@ sal_Bool SAL_CALL SvxShapeCollection::hasElements() throw( uno::RuntimeException
 sal_Bool SAL_CALL SvxShapeCollection::supportsService( const ::rtl::OUString& ServiceName )
     throw( uno::RuntimeException )
 {
-    return SvxServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
 }
 
 uno::Sequence< ::rtl::OUString > SAL_CALL SvxShapeCollection::getSupportedServiceNames() throw( uno::RuntimeException )

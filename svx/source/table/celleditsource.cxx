@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: celleditsource.cxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,17 +44,17 @@
 #include "svx/svdmodel.hxx"
 #include "svx/svdoutl.hxx"
 #include "svx/svdobj.hxx"
-#include "unoedhlp.hxx"
+#include "editeng/unoedhlp.hxx"
 #include "svx/svdview.hxx"
 #include "svx/svdetc.hxx"
-#include "svx/outliner.hxx"
-#include "svx/unoforou.hxx"
-#include "svx/unoviwou.hxx"
-#include "svx/outlobj.hxx"
+#include "editeng/outliner.hxx"
+#include "editeng/unoforou.hxx"
+#include "editeng/unoviwou.hxx"
+#include "editeng/outlobj.hxx"
 #include "svx/svdotext.hxx"
 #include "svx/svdpage.hxx"
-#include "svx/editeng.hxx"
-#include "svx/unotext.hxx"
+#include "editeng/editeng.hxx"
+#include "editeng/unotext.hxx"
 #include "sdrpaintwindow.hxx"
 
 //------------------------------------------------------------------------

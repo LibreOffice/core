@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fusel.cxx,v $
- * $Revision: 1.23.128.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,8 +32,8 @@
 
 #include <com/sun/star/embed/EmbedStates.hpp>
 
-#include <svx/eeitem.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/flditem.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdotext.hxx>
 #include <sfx2/dispatch.hxx>
@@ -44,7 +41,7 @@
 #include <svx/svdouno.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/svdocapt.hxx>
 #include <sfx2/app.hxx>
 

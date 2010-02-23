@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.25 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -33,7 +29,6 @@ PRJ=..$/..
 
 PRJNAME=svx
 TARGET=accessibility
-LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
@@ -43,21 +38,13 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-LIB1TARGET= $(SLB)$/$(TARGET)-core.lib
-LIB1OBJFILES= \
-    $(SLO)$/AccessibleStringWrap.obj
-
-LIB2TARGET= $(SLB)$/$(TARGET).lib
-LIB2OBJFILES= \
+SLOFILES= \
     $(SLO)$/charmapacc.obj						\
     $(SLO)$/svxrectctaccessiblecontext.obj		\
     $(SLO)$/GraphCtlAccessibleContext.obj		\
     $(SLO)$/ChildrenManager.obj 				\
     $(SLO)$/ChildrenManagerImpl.obj 			\
     $(SLO)$/DescriptionGenerator.obj 			\
-    $(SLO)$/AccessibleContextBase.obj			\
-    $(SLO)$/AccessibleComponentBase.obj			\
-    $(SLO)$/AccessibleSelectionBase.obj			\
     $(SLO)$/AccessibleShape.obj					\
     $(SLO)$/AccessibleGraphicShape.obj			\
     $(SLO)$/AccessibleOLEShape.obj				\
@@ -66,18 +53,12 @@ LIB2OBJFILES= \
     $(SLO)$/AccessibleTextHelper.obj			\
     $(SLO)$/AccessibleEmptyEditSource.obj		\
     $(SLO)$/AccessibleTextEventQueue.obj		\
-    $(SLO)$/AccessibleStaticTextBase.obj		\
-    $(SLO)$/AccessibleParaManager.obj			\
-    $(SLO)$/AccessibleEditableTextPara.obj		\
-    $(SLO)$/AccessibleImageBullet.obj			\
     $(SLO)$/ShapeTypeHandler.obj				\
     $(SLO)$/SvxShapeTypes.obj					\
     $(SLO)$/AccessibleControlShape.obj			\
     $(SLO)$/DGColorNameLookUp.obj				\
     $(SLO)$/AccessibleFrameSelector.obj
     
-SLOFILES = $(LIB1OBJFILES) $(LIB2OBJFILES)
-
 SRS2NAME = accessibility
 SRC2FILES = accessibility.src
 

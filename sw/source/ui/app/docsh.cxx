@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docsh.cxx,v $
- * $Revision: 1.79.188.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +39,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
-#include <svx/adjitem.hxx>
+#include <editeng/adjitem.hxx>
 #include <basic/sbx.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/misccfg.hxx>
@@ -53,15 +50,14 @@
 #include <sfx2/evntconf.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/printer.hxx>
-#include <svx/linkmgr.hxx>
-#include <svx/srchitem.hxx>
-#include <svx/flstitem.hxx>
+#include <sfx2/linkmgr.hxx>
+#include <svl/srchitem.hxx>
+#include <editeng/flstitem.hxx>
 #include <svx/htmlmode.hxx>
 #include <svtools/soerr.hxx>
 #include <sot/clsids.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>
-//#include <basic/sbjsmod.hxx>
 #include <swevent.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtfsize.hxx>
@@ -111,7 +107,7 @@
 #include <cfgid.h>
 #include <unotools/moduleoptions.hxx>
 #include <unotools/fltrcfg.hxx>
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/objface.hxx>
 #include <comphelper/storagehelper.hxx>

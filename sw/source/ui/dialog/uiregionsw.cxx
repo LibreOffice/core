@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: uiregionsw.cxx,v $
- * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,8 +46,8 @@
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/docinsert.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/htmlcfg.hxx>
+#include <editeng/sizeitem.hxx>
+#include <svtools/htmlcfg.hxx>
 
 #include <comphelper/storagehelper.hxx>
 #include <uitool.hxx>

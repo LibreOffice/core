@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tblrwcl.cxx,v $
- * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,10 +33,10 @@
 #include <hintids.hxx>
 
 #define _ZFORLIST_DECLARE_TABLE
-#include <svx/brshitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/protitem.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/protitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <tools/fract.hxx>
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>

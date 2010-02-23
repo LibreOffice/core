@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dispatch.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,7 +48,7 @@ class SfxViewFrame;
 class SfxBindings;
 class SfxItemSet;
 class SfxPopupMenuManager;
-
+class SfxModule;
 struct SfxDispatcher_Impl;
 struct SfxPlugInInfo_Impl;
 
@@ -202,7 +199,7 @@ public:
 
     SfxShell*           GetShell(USHORT nIdx) const;
     SfxViewFrame*       GetFrame() const;
-
+    SfxModule*      GetModule() const;
     // caller has to clean up the Manager on his own
     static SfxPopupMenuManager* Popup( sal_uInt16 nConfigId,Window *pWin, const Point *pPos );
 

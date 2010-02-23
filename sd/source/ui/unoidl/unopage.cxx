@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unopage.cxx,v $
- * $Revision: 1.96 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,23 +41,17 @@
 #include <rtl/ustrbuf.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/metaact.hxx>
-#ifndef _TOOLKIT_UNOIFACE_HXX
 #include <toolkit/unohlp.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <unomodel.hxx>
 #include <unopage.hxx>
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <svl/itemset.hxx>
 #include <svx/svdmodel.hxx>
 #include <sdresid.hxx>
 #include <glob.hrc>
-#ifndef _SD_PAGE_HXX //autogen
 #include <sdpage.hxx>
-#endif
 #include <unoprnms.hxx>
 #include <sdattr.hxx>
 #include <drawdoc.hxx>
@@ -71,13 +62,14 @@
 #include <svl/style.hxx>
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
+#include <comphelper/serviceinfohelper.hxx>
 
 #include <comphelper/extract.hxx>
 #include <list>
 #include <svx/svditer.hxx>
 #include <svtools/wmf.hxx>
 #include <svx/svdoole2.hxx>
-
+#include <svx/svdpool.hxx>
 #include <svx/svdview.hxx>
 #include "misc.hxx"
 #include "View.hxx"
@@ -259,19 +251,19 @@ const SvxItemPropertySet* ImplGetDrawPagePropertySet( sal_Bool bImpress, PageKin
         if( ePageKind == PK_STANDARD )
         {
             //PK_STANDARD always has a background property
-            static SvxItemPropertySet aDrawPagePropertySet_Impl( aDrawPagePropertyMap_Impl );
+            static SvxItemPropertySet aDrawPagePropertySet_Impl( aDrawPagePropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
             pRet = &aDrawPagePropertySet_Impl;
         }
         else
         {
             if(bWithoutBackground)
             {
-                static SvxItemPropertySet aDrawPageNotesHandoutPropertyNoBackSet_Impl( aDrawPageNotesHandoutPropertyNoBackMap_Impl );
+                static SvxItemPropertySet aDrawPageNotesHandoutPropertyNoBackSet_Impl( aDrawPageNotesHandoutPropertyNoBackMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
                 pRet = &aDrawPageNotesHandoutPropertyNoBackSet_Impl;
             }
             else
             {
-                static SvxItemPropertySet aDrawPageNotesHandoutPropertySet_Impl( aDrawPageNotesHandoutPropertyMap_Impl );
+                static SvxItemPropertySet aDrawPageNotesHandoutPropertySet_Impl( aDrawPageNotesHandoutPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
                 pRet = &aDrawPageNotesHandoutPropertySet_Impl;
             }
         }
@@ -280,12 +272,12 @@ const SvxItemPropertySet* ImplGetDrawPagePropertySet( sal_Bool bImpress, PageKin
     {
             if(bWithoutBackground)
             {
-                static SvxItemPropertySet aGraphicPagePropertyNoBackSet_Impl( aGraphicPagePropertyNoBackMap_Impl );
+                static SvxItemPropertySet aGraphicPagePropertyNoBackSet_Impl( aGraphicPagePropertyNoBackMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
                 pRet = &aGraphicPagePropertyNoBackSet_Impl;
             }
             else
             {
-                static SvxItemPropertySet aGraphicPagePropertySet_Impl( aGraphicPagePropertyMap_Impl );
+                static SvxItemPropertySet aGraphicPagePropertySet_Impl( aGraphicPagePropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
                 pRet = &aGraphicPagePropertySet_Impl;
             }
     }
@@ -342,12 +334,12 @@ const SvxItemPropertySet* ImplGetMasterPagePropertySet( PageKind ePageKind )
     const SvxItemPropertySet* pRet = 0;
     if( ePageKind == PK_HANDOUT )
     {
-        static SvxItemPropertySet aHandoutMasterPagePropertySet_Impl( aHandoutMasterPagePropertyMap_Impl );
+        static SvxItemPropertySet aHandoutMasterPagePropertySet_Impl( aHandoutMasterPagePropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
         pRet = &aHandoutMasterPagePropertySet_Impl;
     }
     else
     {
-        static SvxItemPropertySet aMasterPagePropertySet_Impl( aMasterPagePropertyMap_Impl );
+        static SvxItemPropertySet aMasterPagePropertySet_Impl( aMasterPagePropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
         pRet = &aMasterPagePropertySet_Impl;
     }
     return pRet;
@@ -1447,7 +1439,7 @@ Sequence< OUString > SAL_CALL SdGenericDrawPage::getSupportedServiceNames()
     throw(uno::RuntimeException)
 {
     Sequence< OUString > aSeq( SvxFmDrawPage::getSupportedServiceNames() );
-    SvxServiceInfoHelper::addToSequence( aSeq, 3, "com.sun.star.drawing.GenericDrawPage",
+    comphelper::ServiceInfoHelper::addToSequence( aSeq, 3, "com.sun.star.drawing.GenericDrawPage",
                                                   "com.sun.star.document.LinkTarget",
                                                   "com.sun.star.document.LinkTargetSupplier");
     return aSeq;
@@ -1987,7 +1979,7 @@ OUString SAL_CALL SdPageLinkTargets::getImplementationName()
 sal_Bool SAL_CALL SdPageLinkTargets::supportsService( const OUString& ServiceName )
     throw(uno::RuntimeException)
 {
-    return SvxServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
 }
 
 Sequence< OUString > SAL_CALL SdPageLinkTargets::getSupportedServiceNames()
@@ -2219,10 +2211,10 @@ Sequence< OUString > SAL_CALL SdDrawPage::getSupportedServiceNames() throw(uno::
     throwIfDisposed();
 
     Sequence< OUString > aSeq( SdGenericDrawPage::getSupportedServiceNames() );
-    SvxServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.drawing.DrawPage" );
+    comphelper::ServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.drawing.DrawPage" );
 
     if( mbIsImpressDocument )
-        SvxServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.presentation.DrawPage" );
+        comphelper::ServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.presentation.DrawPage" );
 
     return aSeq;
 }
@@ -2807,10 +2799,10 @@ Sequence< OUString > SAL_CALL SdMasterPage::getSupportedServiceNames() throw(uno
     throwIfDisposed();
 
     Sequence< OUString > aSeq( SdGenericDrawPage::getSupportedServiceNames() );
-    SvxServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.drawing.MasterPage" );
+    comphelper::ServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.drawing.MasterPage" );
 
     if( SvxFmDrawPage::mpPage && ((SdPage*)SvxFmDrawPage::mpPage)->GetPageKind() == PK_HANDOUT )
-        SvxServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.presentation.HandoutMasterPage" );
+        comphelper::ServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.presentation.HandoutMasterPage" );
 
     return aSeq;
 }

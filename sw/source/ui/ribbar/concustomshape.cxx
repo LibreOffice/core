@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: concustomshape.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +39,7 @@
 #include <svx/sdtaaitm.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdocapt.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #ifndef _CMDID_H
 #include <cmdid.h>
 #endif
@@ -64,7 +61,7 @@
 #include <svl/itempool.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdoashp.hxx>
-#include <svx/adjitem.hxx>
+#include <editeng/adjitem.hxx>
 
 #include <math.h>
 

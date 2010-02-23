@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fuexpand.cxx,v $
- * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +36,7 @@
 #include <svx/xlineit0.hxx>
 #include <svx/svdundo.hxx>
 #include <sfx2/printer.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/svdetc.hxx>
 
 #include "app.hrc"
@@ -56,7 +53,7 @@
 #include "optsitem.hxx"
 #include "sdmod.hxx"
 #include <sfx2/dispatch.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 namespace sd {
 

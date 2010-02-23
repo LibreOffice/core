@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: itrform2.cxx,v $
- * $Revision: 1.107.20.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,12 +33,12 @@
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
-#include <svx/lspcitem.hxx>
+#include <editeng/lspcitem.hxx>
 #include <txtftn.hxx>
 #include <fmtftn.hxx>
 #include <ftninfo.hxx>
 #include <charfmt.hxx>
-#include <svx/charrotateitem.hxx>
+#include <editeng/charrotateitem.hxx>
 #include <layfrm.hxx>       // GetFrmRstHeight, etc
 #include <viewsh.hxx>
 #include <viewopt.hxx>      // SwViewOptions

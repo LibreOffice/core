@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewpg.cxx,v $
- * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -97,7 +94,7 @@ void ViewShell::AdjustOptionsForPagePreview( const SwPrtOptions &_rPrintOptions 
 // print brochure
 // OD 05.05.2003 #i14016# - consider empty pages on calculation of the scaling
 // for a page to be printed.
-void ViewShell::PrintProspect( 
+void ViewShell::PrintProspect(
     OutputDevice *pOutDev,
     const SwPrintData &rPrintData,
     sal_Int32 nRenderer // the index in the vector of prospect pages to be printed

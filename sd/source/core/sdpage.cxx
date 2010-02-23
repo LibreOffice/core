@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdpage.cxx,v $
- * $Revision: 1.69 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,34 +34,34 @@
 
 #include <vcl/svapp.hxx>
 #include "eetext.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/svdoutl.hxx>
-#include <svx/editdata.hxx>
+#include <editeng/editdata.hxx>
 #include <svx/pageitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/bulitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/bulitem.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/svdopage.hxx>
 #include <sfx2/printer.hxx>
 #include <basic/basmgr.hxx>
-#include <svx/pbinitem.hxx>
+#include <editeng/pbinitem.hxx>
 #include <svx/svdundo.hxx>
 #include <svl/smplhint.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/editobj.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/editobj.hxx>
 #ifndef _SVX_SRIPTTYPEITEM_HXX
-#include <svx/scripttypeitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #endif
 #include <svx/unopage.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 
-#include <svx/adjitem.hxx>
+#include <editeng/adjitem.hxx>
 
 #include "../ui/inc/DrawDocShell.hxx"
 #include "Outliner.hxx"

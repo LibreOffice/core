@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: float3d.cxx,v $
- * $Revision: 1.27.226.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,9 +46,9 @@
 #include <svx/fmmodel.hxx>
 #include <svx/fmpage.hxx>
 #include <svx/polysc3d.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svl/style.hxx>
-
+#include <dlgutil.hxx>
 
 #include <dlgutil.hxx>
 #include <svx/dialmgr.hxx>
@@ -60,7 +57,7 @@
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
 
-#include <svx/colritem.hxx>
+#include <editeng/colritem.hxx>
 #include <svx/e3ditem.hxx>
 
 #include <gallery.hxx>
@@ -307,7 +304,8 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
     FreeResource();
 
     // Metrik einstellen
-    eFUnit = GetModuleFieldUnit( NULL );
+    eFUnit = pInBindings->GetDispatcher()->GetModule()->GetFieldUnit();
+
     aMtrDepth.SetUnit( eFUnit );
     aMtrDistance.SetUnit( eFUnit );
     aMtrFocalLength.SetUnit( eFUnit );
@@ -509,7 +507,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         DBG_ASSERT( mpImpl->pPool, "Wo ist der Pool?" );
         ePoolUnit = mpImpl->pPool->GetMetric( SID_ATTR_LINE_WIDTH );
     }
-    eFUnit = GetModuleFieldUnit( &rAttrs );
+    eFUnit = GetModuleFieldUnit( rAttrs );
 
 
 // Segmentanzahl aenderbar ? und andere Stati
@@ -1754,7 +1752,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         DBG_ASSERT( mpImpl->pPool, "Wo ist der Pool?" );
         ePoolUnit = mpImpl->pPool->GetMetric( SID_ATTR_LINE_WIDTH );
 
-        eFUnit = GetModuleFieldUnit( &rAttrs );
+        eFUnit = GetModuleFieldUnit( rAttrs );
     }
 
     // Anzahl Segmente (horizontal)

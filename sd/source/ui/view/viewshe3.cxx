@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewshe3.cxx,v $
- * $Revision: 1.59.38.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,8 +55,8 @@
 #include <sfx2/bindings.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdetc.hxx>
-#include <svx/outliner.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/editstat.hxx>
 #include <tools/multisel.hxx>
 #include <svl/intitem.hxx>
 #include <svl/style.hxx>

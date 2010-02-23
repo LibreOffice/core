@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: accpara.cxx,v $
- * $Revision: 1.78 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,7 +83,7 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 // <--
 // --> OD 2007-01-17 #i71385#
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <viewimp.hxx>
 // <--
 // --> OD 2007-11-12 #i82637#

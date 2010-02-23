@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: txtattr.cxx,v $
- * $Revision: 1.28.140.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,14 +41,14 @@
 #include <swmodule.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/lspcitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/escpitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/escpitem.hxx>
 #include <svx/htmlmode.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include "paratr.hxx"
 
 #include <fmtinfmt.hxx>

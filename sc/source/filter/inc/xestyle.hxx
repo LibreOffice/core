@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xestyle.hxx,v $
- * $Revision: 1.20.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +33,7 @@
 #include <tools/string.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/nfkeytab.hxx>
-#include <svx/svxfont.hxx>
+#include <editeng/svxfont.hxx>
 #include "xerecord.hxx"
 #include "xlstyle.hxx"
 #include "xeroot.hxx"

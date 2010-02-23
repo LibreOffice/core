@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xepage.cxx,v $
- * $Revision: 1.15.90.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,10 +34,10 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svx/pageitem.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/brshitem.hxx>
 #include "document.hxx"
 #include "stlpool.hxx"
 #include "stlsheet.hxx"

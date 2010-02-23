@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fuinsert.cxx,v $
- * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,9 +49,8 @@
 #include <svl/globalnameitem.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svx/pfiledlg.hxx>
-#include <svx/impgrf.hxx>
 #include <svx/dialogs.hrc>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <svx/svdetc.hxx>
 #include <avmedia/mediawindow.hxx>
 #ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
@@ -70,7 +66,7 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdomedia.hxx>
 #ifndef _EDITENG_HXX //autogen
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 #endif
 #include <sot/storage.hxx>
 #include <sot/formats.hxx>
@@ -78,7 +74,7 @@
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#include <svx/opengrf.hxx>
+#include <sfx2/opengrf.hxx>
 
 #include <sfx2/viewfrm.hxx>
 
@@ -187,7 +183,7 @@ void FuInsertGraphic::DoExecute( SfxRequest&  )
         }
         else
         {
-            SdGRFFilter::HandleGraphicFilterError( (USHORT)nError, GetGrfFilter()->GetLastError().nStreamError );
+            SdGRFFilter::HandleGraphicFilterError( (USHORT)nError, GraphicFilter::GetGraphicFilter()->GetLastError().nStreamError );
         }
     }
 }

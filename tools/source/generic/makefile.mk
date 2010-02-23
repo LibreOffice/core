@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.15 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -44,6 +40,7 @@ TARGET=gen
 EXCEPTIONSFILES = $(SLO)$/poly.obj $(OBJ)$/poly.obj
 
 SLOFILES=       $(SLO)$/toolsin.obj     \
+            $(SLO)$/b3dtrans.obj                \
             $(SLO)$/link.obj                \
             $(SLO)$/bigint.obj              \
             $(SLO)$/fract.obj               \
@@ -56,6 +53,7 @@ SLOFILES=       $(SLO)$/toolsin.obj     \
             $(SLO)$/line.obj
 
 OBJFILES=       $(OBJ)$/toolsin.obj     \
+            $(OBJ)$/b3dtrans.obj                \
             $(OBJ)$/link.obj                \
             $(OBJ)$/bigint.obj              \
             $(OBJ)$/fract.obj               \

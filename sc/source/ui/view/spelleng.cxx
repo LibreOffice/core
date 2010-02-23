@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: spelleng.cxx,v $
- * $Revision: 1.18.128.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,12 +33,12 @@
 #include <memory>
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 
-#include <svx/langitem.hxx>
-#include <svx/editobj.hxx>
-#include <svx/editview.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/editview.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>

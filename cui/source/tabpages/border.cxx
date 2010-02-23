@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: border.cxx,v $
- * $Revision: 1.39 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,8 +44,8 @@
 
 #include <svx/xtable.hxx>               // XColorTable
 #include <svx/drawitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/shaditem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/shaditem.hxx>
 #include "border.hxx"
 #include <svx/dlgutil.hxx>
 #include <dialmgr.hxx>
@@ -239,7 +236,7 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
     mbUseMarginItem = rCoreAttrs.GetItemState(GetWhich(SID_ATTR_ALIGN_MARGIN),TRUE) != SFX_ITEM_UNKNOWN;
 
     // Metrik einstellen
-    FieldUnit eFUnit = GetModuleFieldUnit( &rCoreAttrs );
+    FieldUnit eFUnit = GetModuleFieldUnit( rCoreAttrs );
 
     if( mbUseMarginItem )
     {

@@ -260,8 +260,8 @@ main( int argc, char* argv[])
     
 	pOutput = GetOutputFile( argc, argv );
 	if( !isQuiet() ){ 
-        fprintf( stdout, "\nTransEx 3.1 Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.\n" );
-	    fprintf( stdout, "========================================================================\n" );
+        fprintf( stdout, "\nTransEx 3.1 Copyright 2000, 2010 Oracle and/or its affiliates. All Rights Reserved.\n" );
+	    fprintf( stdout, "=====================================================================================\n" );
     }
 
     if ( !pOutput ) {

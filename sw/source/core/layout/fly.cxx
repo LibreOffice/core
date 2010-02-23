@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fly.cxx,v $
- * $Revision: 1.92.110.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,12 +33,12 @@
 #include <vcl/graph.hxx>
 #include <tools/poly.hxx>
 #include <svx/contdlg.hxx>
-#include <svx/protitem.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/keepitem.hxx>
+#include <editeng/protitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/keepitem.hxx>
 #include <fmtanchr.hxx>
 #include <fmtfsize.hxx>
 #include <fmtclds.hxx>

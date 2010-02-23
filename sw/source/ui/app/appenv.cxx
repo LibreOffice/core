@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: appenv.cxx,v $
- * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,12 +47,12 @@
 #include <sfx2/printer.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/pbinitem.hxx>
-#include <svx/paperinf.hxx>
-#include <svx/brkitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/pbinitem.hxx>
+#include <editeng/paperinf.hxx>
+#include <editeng/brkitem.hxx>
 #include <fmthdft.hxx>
 #include <swwait.hxx>
 #include <paratr.hxx>

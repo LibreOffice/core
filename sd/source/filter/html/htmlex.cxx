@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: htmlex.cxx,v $
- * $Revision: 1.34.80.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,8 +54,8 @@
 #include <svtools/imappoly.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/app.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/editobj.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/editobj.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/xoutbmp.hxx>
 #include <svtools/htmlout.hxx>
@@ -66,28 +63,23 @@
 #include <vcl/cvtgrf.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/filter.hxx>
-#include <svx/colritem.hxx>
-#include <svx/editeng.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/flditem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <svl/style.hxx>
 #define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>
-//#ifndef _SVDETC_HXX
-//#include <svx/svdetc.hxx>
-//#endif
-#include <svx/frmdiritem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <svx/svdoutl.hxx>
-#include <svx/impgrf.hxx>               // FillFilter()
 #include <tools/urlobj.hxx>               // INetURLObject
 #include <vcl/bmpacc.hxx>
 #include <svtools/sfxecode.hxx>
-#include <svx/impgrf.hxx>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <tools/resmgr.hxx>
 #include "comphelper/anytostring.hxx"

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ui_pch.hxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -239,7 +236,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/animate.hxx>
 #include <vcl/graph.h>
-#include <svx/editdata.hxx>
+#include <editeng/editdata.hxx>
 #include <svtools/stdctrl.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <conditio.hxx>
@@ -248,7 +245,7 @@
 #include <uiitems.hxx>
 #include <svx/svdmodel.hxx>
 #include <vcl/gdiobj.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 #include <svx/pageitem.hxx>
 #include <anyrefdg.hxx>
 #include <basic/sbxcore.hxx>
@@ -304,10 +301,9 @@
 #include <drawview.hxx>
 #include <svx/view3d.hxx>
 #include <svx/def3d.hxx>
-#include <goodies/vector3d.hxx>
 #include <vcl/floatwin.hxx>
 #include <basic/sbxobj.hxx>
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include <svx/xtextit0.hxx>
 #include <svx/svdtrans.hxx>
 #include <svl/style.hxx>
@@ -324,11 +320,11 @@
 #include <fupoor.hxx>
 #include <docpool.hxx>
 #include <vcl/button.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/svdorect.hxx>
 #include <svl/whiter.hxx>
 #include <stlpool.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <inputhdl.hxx>
 #include <svx/svdpage.hxx>
 

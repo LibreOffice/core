@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: srchxtra.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,12 +40,13 @@
 #include "srchxtra.hrc"
 #include <svx/svxitems.hrc> // RID_ATTR_BEGIN
 #include <svx/dialmgr.hxx>  // item resources
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
 #include "chardlg.hxx"
 #include "paragrph.hxx"
 #include <dialmgr.hxx>
 #include "backgrnd.hxx"
 #include <svx/dialogs.hrc> // RID_SVXPAGE_...
+#include <tools/resary.hxx>
 
 // class SvxSearchFormatDialog -------------------------------------------
 
@@ -161,6 +159,7 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog( Window* pParent,
     SfxObjectShell* pSh = SfxObjectShell::Current();
     DBG_ASSERT( pSh, "No DocShell" );
 
+    ResStringArray aAttrNames( SVX_RES( RID_ATTR_NAMES ) );
     SfxItemPool& rPool = pSh->GetPool();
     SfxItemSet aSet( rPool, pWhRanges );
     SfxWhichIter aIter( aSet );
@@ -183,18 +182,14 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog( Window* pParent,
             }
 
             // item resources are in svx
-            USHORT nResId = nSlot - SID_SVX_START + RID_ATTR_BEGIN;
+            sal_uInt32 nId  = aAttrNames.FindIndex( nSlot );
             SvLBoxEntry* pEntry = NULL;
-            ResId aId( nResId, DIALOG_MGR() );
-            aId.SetRT( RSC_STRING );
-            if ( DIALOG_MGR().IsAvailable( aId ) )
-                pEntry = aAttrLB.SvTreeListBox::InsertEntry( CUI_RESSTR( nResId ) );
+            if ( RESARRAY_INDEX_NOTFOUND != nId )
+                pEntry = aAttrLB.SvTreeListBox::InsertEntry( aAttrNames.GetString(nId) );
             else
             {
                 ByteString sError( "no resource for slot id\nslot = " );
                 sError += ByteString::CreateFromInt32( nSlot );
-                sError += ByteString( "\nresid = " );
-                sError += ByteString::CreateFromInt32( nResId );
                 DBG_ERRORFILE( sError.GetBuffer() );
             }
 

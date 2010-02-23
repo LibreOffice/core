@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: textfld.cxx,v $
- * $Revision: 1.38.190.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,7 +46,7 @@
 #include <svx/hlnkitem.hxx>
 
 #include <svx/svxdlg.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <sfx2/dispatch.hxx>
 #include <fmtinfmt.hxx>

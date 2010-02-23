@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: textuno.cxx,v $
- * $Revision: 1.25.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,21 +31,21 @@
 
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
-
-
-#include <svx/editeng.hxx>
-#include <svx/editobj.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/eeitem.hxx>
+#include <svx/svdpool.hxx>
+#include <svx/svdobj.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/flditem.hxx>
 #include <svx/unomid.hxx>
-#include <svx/unoprnms.hxx>
-#include <svx/unofored.hxx>
+#include <editeng/unoprnms.hxx>
+#include <editeng/unofored.hxx>
 #include <rtl/uuid.h>
 #include <vcl/virdev.hxx>
 #include <com/sun/star/awt/FontSlant.hpp>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-
+#include <editeng/unoipset.hxx>
 #include "textuno.hxx"
 #include "fielduno.hxx"
 #include "servuno.hxx"
@@ -100,7 +97,7 @@ const SvxItemPropertySet * lcl_GetHdFtPropertySet()
         }
         bTwipsSet = TRUE;
     }
-    static SvxItemPropertySet aHdFtPropertySet_Impl( aHdFtPropertyMap_Impl );
+    static SvxItemPropertySet aHdFtPropertySet_Impl( aHdFtPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
     return &aHdFtPropertySet_Impl;
 }
 

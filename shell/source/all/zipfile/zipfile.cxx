@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: zipfile.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -131,7 +128,7 @@ ZipFile::ZipFile(const std::string& FileName)
         throw IOException(-1);
 }
 
-ZipFile::ZipFile(void* stream, zlib_filefunc_def* fa) 
+ZipFile::ZipFile(void* stream, zlib_filefunc_def* fa)
 {
     fa->opaque = stream;
     m_uzFile = unzOpen2((const char *)NULL, fa);

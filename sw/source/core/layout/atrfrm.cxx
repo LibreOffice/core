@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: atrfrm.cxx,v $
- * $Revision: 1.72.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,8 +51,8 @@
 #include <basic/sbxvar.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/imapobj.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <unosett.hxx>
@@ -104,8 +101,8 @@
 /// OD 22.08.2002 #99657#
 ///     include definition of class SvxBrushItem and GraphicObject
 ///     in order to determine, if background is transparent.
-#include <svx/brshitem.hxx>
-#include <goodies/grfmgr.hxx>
+#include <editeng/brshitem.hxx>
+#include <svtools/grfmgr.hxx>
 
 #include <cmdid.h>
 #include <unomid.h>

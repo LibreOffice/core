@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  * 
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: registryitem_base.scp,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -97,6 +94,14 @@ RegistryItem gid_Regitem_Openoffice_Databasedocument_1_Defaulticon
     Value = "<progpath>\program\soffice.exe,13";
 End
 
+RegistryItem gid_Regitem_odb_FullDetails
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl;
+    Subkey = "opendocument.DatabaseDocument.1";
+    Name = "FullDetails";
+    Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
+End
+
 RegistryItem gid_Regitem_Openoffice_Databasedocument_1_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = "opendocument.DatabaseDocument.1\shell";
@@ -152,3 +157,7 @@ RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Apppaths_Sbas
     Name = "Path";
     Value = "<progpath>";
 End
+
+// registering the property handler for the supported file types
+
+REGISTER_PROPERTY_HANDLER_FOR_EXTENSION( odb )

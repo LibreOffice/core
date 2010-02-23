@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdotxat.cxx,v $
- * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,30 +36,30 @@
 #include <svx/svdorect.hxx> // fuer SetDirty bei NbcAdjustTextFrameWidthAndHeight
 #include <svx/svdocapt.hxx> // fuer SetDirty bei NbcAdjustTextFrameWidthAndHeight
 #include <svx/svdetc.hxx>
-#include <svx/writingmodeitem.hxx>
-#include <svx/editeng.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/writingmodeitem.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/flditem.hxx>
 #include <svx/sdtfchim.hxx>
 
 
-#include <svx/editview.hxx>
+#include <editeng/editview.hxx>
 #include <svl/smplhint.hxx>
 #include <svl/whiter.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/outliner.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/editobj.hxx>
-#include <svx/fhgtitem.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/fhgtitem.hxx>
 
-#include <svx/charscaleitem.hxx>
+#include <editeng/charscaleitem.hxx>
 #include <svl/style.hxx>
 #include <svl/itemiter.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <svl/itempool.hxx>
-#include <svx/numitem.hxx>
-#include <svx/editeng.hxx>
-#include <svx/postitem.hxx>
+#include <editeng/numitem.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/postitem.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
