@@ -360,7 +360,8 @@ uno::Reference< drawing::XShape > BarChart::createDataPoint3D_Bar(
             xShape = m_pShapeFactory->createCone( xTarget, rPosition, rSize, fTopHeight, nRotateZAngleHundredthDegree );
             break;
         case DataPointGeometry3D::PYRAMID:
-            xShape = m_pShapeFactory->createPyramid( xTarget, rPosition, rSize, fTopHeight, nRotateZAngleHundredthDegree );
+            xShape = m_pShapeFactory->createPyramid( xTarget, rPosition, rSize, fTopHeight, nRotateZAngleHundredthDegree>0
+                , xObjectProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
             break;
         case DataPointGeometry3D::CUBOID:
         default:
@@ -369,7 +370,8 @@ uno::Reference< drawing::XShape > BarChart::createDataPoint3D_Bar(
                     , PropertyMapper::getPropertyNameMapForFilledSeriesProperties(), bRoundedEdges );
             return xShape;
     }
-    this->setMappedProperties( xShape, xObjectProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
+    if( nGeometry3D != DataPointGeometry3D::PYRAMID )
+        this->setMappedProperties( xShape, xObjectProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
     return xShape;
 }
 

@@ -93,7 +93,11 @@ public:
                                 ::com::sun::star::drawing::XShapes >& xTarget
                         , const ::com::sun::star::drawing::Position3D& rPosition
                         , const ::com::sun::star::drawing::Direction3D& rSize
-                        , double fTopHeight, sal_Int32 nRotateZAngleHundredthDegree );
+                        , double fTopHeight
+                        , bool bRotateZ
+                        , const ::com::sun::star::uno::Reference<
+                            ::com::sun::star::beans::XPropertySet >& xSourceProp
+                        , const tPropertyNameMap& rPropertyNameMap);
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         createCone(       const ::com::sun::star::uno::Reference<
@@ -122,7 +126,9 @@ public:
                     , const Stripe& rStripe
                     , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSourceProp
                     , const tPropertyNameMap& rPropertyNameMap
-                    , sal_Bool bDoubleSided = true, bool bRotatedTexture=false );
+                    , sal_Bool bDoubleSided = true
+                    , bool bRotatedTexture=false
+                    , bool bFlatNormals=true );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         createArea3D( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
@@ -238,7 +244,6 @@ private:
                     , const ::com::sun::star::drawing::Position3D& rPosition
                     , const ::com::sun::star::drawing::Direction3D& rSize
                     , double fTopHeight, sal_Int32 nRotateZAngleHundredthDegree
-                    , sal_Int32 nSegments
                     , bool bCylinder = false);
 
     //member:

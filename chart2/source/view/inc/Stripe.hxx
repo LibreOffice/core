@@ -56,12 +56,13 @@ public:
         , const ::com::sun::star::drawing::Position3D& rPoint2
         , double fDepth );
 
-/*
     Stripe( const ::com::sun::star::drawing::Position3D& rPoint1
         , const ::com::sun::star::drawing::Position3D& rPoint2
         , const ::com::sun::star::drawing::Position3D& rPoint3
-        , const ::com::sun::star::drawing::Position3D& rPoint4 );*/
+        , const ::com::sun::star::drawing::Position3D& rPoint4 );
 
+    void SetManualNormal( const ::com::sun::star::drawing::Direction3D& rNormal );
+    ::com::sun::star::drawing::Direction3D getNormal() const;
 
     ::com::sun::star::uno::Any      getPolyPolygonShape3D() const;
     ::com::sun::star::uno::Any      getNormalsPolygon() const;
@@ -78,8 +79,8 @@ private:
     ::com::sun::star::drawing::Position3D m_aPoint3;
     ::com::sun::star::drawing::Position3D m_aPoint4;
 
-    ::com::sun::star::drawing::Direction3D
-                                    getNormal() const;
+    bool m_bManualNormalSet;
+    ::com::sun::star::drawing::Direction3D m_aManualNormal;
 };
 
 //.............................................................................

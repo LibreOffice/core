@@ -70,6 +70,7 @@
 #include <algorithm>
 
 using namespace ::com::sun::star;
+using ::com::sun::star::uno::Reference;
 
 //.............................................................................
 namespace chart
@@ -271,110 +272,99 @@ uno::Any createPolyPolygon_Cube(
 uno::Any createPolyPolygon_Cylinder(
              double fHeight
            , double fRadius
-           , double fRoundedEdge
            , sal_Int32& nVerticalSegmentCount )
 {
-    //@todo consider offset if Height is negative
-
-//    DBG_ASSERT(fHeight>0, "The height of a cylinder needs to be > 0");
+    //fHeight may be negative
     DBG_ASSERT(fRadius>0, "The radius of a cylinder needs to be > 0");
-    DBG_ASSERT(fRoundedEdge>=0, "fRoundedEdge needs to be >= 0");
-
-    // always use extra points, so set percent diagonal to 0.4 which is 0% in the UI (old Chart comment)
-    if( fRoundedEdge == 0.0 )
-        fRoundedEdge = 0.4 / 200.0;
-
-//     const double fWidth = fRadius;
-
-    fRoundedEdge = 0.0;
-    const double fOffset = (fRadius * 2.0 * fRoundedEdge) * 1.05;   // increase by 5% for safety
-    const bool bRoundEdges = fRoundedEdge && fOffset < fRadius && 2.0 * fOffset < fHeight;
-    const sal_Int32 nPointCount = bRoundEdges ? 8 : 4;
-    nVerticalSegmentCount = nPointCount-1;
 
     //--------------------------------------
     drawing::PolyPolygonShape3D aPP;
 
-    aPP.SequenceX.realloc(1);
-    aPP.SequenceY.realloc(1);
-    aPP.SequenceZ.realloc(1);
+    nVerticalSegmentCount=1;
+
+    aPP.SequenceX.realloc(3);
+    aPP.SequenceY.realloc(3);
+    aPP.SequenceZ.realloc(3);
 
     drawing::DoubleSequence* pOuterSequenceX = aPP.SequenceX.getArray();
     drawing::DoubleSequence* pOuterSequenceY = aPP.SequenceY.getArray();
     drawing::DoubleSequence* pOuterSequenceZ = aPP.SequenceZ.getArray();
 
-    pOuterSequenceX->realloc(nPointCount);
-    pOuterSequenceY->realloc(nPointCount);
-    pOuterSequenceZ->realloc(nPointCount);
+    pOuterSequenceX->realloc(2);
+    pOuterSequenceY->realloc(2);
+    pOuterSequenceZ->realloc(2);
 
     double* pInnerSequenceX = pOuterSequenceX->getArray();
     double* pInnerSequenceY = pOuterSequenceY->getArray();
     double* pInnerSequenceZ = pOuterSequenceZ->getArray();
 
-    for(sal_Int32 nN = nPointCount; nN--;)
+    double fY1 = 0.0;
+    double fY2 = fHeight;
+
+    if( fHeight<0.0 )
+        ::std::swap(fY1,fY2);
+
+    //----------------------------
+    for(sal_Int32 nN = 2; nN--;)
         *pInnerSequenceZ++ = 0.0;
 
-    if(nPointCount == 4)
-    {
-        *pInnerSequenceY++ = 0.0;
-        *pInnerSequenceY++ = 0.0;
-        *pInnerSequenceY++ = fHeight;
-        *pInnerSequenceY++ = fHeight;
+    *pInnerSequenceX++ = 0.0;
+    *pInnerSequenceY++ = fY1;
 
-        *pInnerSequenceX++ = 0.0;
-        *pInnerSequenceX++ = fRadius;
-        *pInnerSequenceX++ = fRadius;
-        *pInnerSequenceX++ = 0.0;
-    }
-    else
-    {
-        *pInnerSequenceY++ = 0.0; //1.
-        *pInnerSequenceY++ = 0.0;
-        *pInnerSequenceY++ = 0.0;
-        *pInnerSequenceY++ = fOffset;
-        *pInnerSequenceY++ = fHeight - fOffset;
-        *pInnerSequenceY++ = fHeight; //6.
-        *pInnerSequenceY++ = fHeight;
-        *pInnerSequenceY++ = fHeight;
+    *pInnerSequenceX++ = fRadius;
+    *pInnerSequenceY++ = fY1;
+    //----------------------------
 
-        *pInnerSequenceX++ = 0.0; //1.
-        *pInnerSequenceX++ = fRadius - fOffset;
-        *pInnerSequenceX++ = fRadius;
-        *pInnerSequenceX++ = fRadius;
-        *pInnerSequenceX++ = fRadius;
-        *pInnerSequenceX++ = fRadius; //6.
-        *pInnerSequenceX++ = fRadius - fOffset;
-        *pInnerSequenceX++ = 0.0;
-    }
+    pOuterSequenceX++;pOuterSequenceY++;pOuterSequenceZ++;
+    pOuterSequenceX->realloc(2);
+    pOuterSequenceY->realloc(2);
+    pOuterSequenceZ->realloc(2);
+
+    pInnerSequenceX = pOuterSequenceX->getArray();
+    pInnerSequenceY = pOuterSequenceY->getArray();
+    pInnerSequenceZ = pOuterSequenceZ->getArray();
+
+    //----------------------------
+    for(sal_Int32 nN = 2; nN--;)
+        *pInnerSequenceZ++ = 0.0;
+
+    *pInnerSequenceX++ = fRadius;
+    *pInnerSequenceY++ = fY1;
+
+    *pInnerSequenceX++ = fRadius;
+    *pInnerSequenceY++ = fY2;
+    //----------------------------
+
+    pOuterSequenceX++;pOuterSequenceY++;pOuterSequenceZ++;
+    pOuterSequenceX->realloc(2);
+    pOuterSequenceY->realloc(2);
+    pOuterSequenceZ->realloc(2);
+
+    pInnerSequenceX = pOuterSequenceX->getArray();
+    pInnerSequenceY = pOuterSequenceY->getArray();
+    pInnerSequenceZ = pOuterSequenceZ->getArray();
+
+    //----------------------------
+    for(sal_Int32 nN = 2; nN--;)
+        *pInnerSequenceZ++ = 0.0;
+
+    *pInnerSequenceX++ = fRadius;
+    *pInnerSequenceY++ = fY2;
+
+    *pInnerSequenceX++ = 0.0;
+    *pInnerSequenceY++ = fY2;
+    //----------------------------
+
     return uno::Any( &aPP, ::getCppuType((const drawing::PolyPolygonShape3D*)0) );
 }
 
-uno::Any createPolyPolygon_Cone(
-              double fHeight
-            , double fRadius
-            , double fTopHeight
-            , double fRoundedEdge
+uno::Any createPolyPolygon_Cone( double fHeight, double fRadius, double fTopHeight
             , sal_Int32& nVerticalSegmentCount )
 {
-    //@todo consider offset if Height is negative
-/*
-    DBG_ASSERT(fHeight>0, "The height of a cone needs to be > 0");
-    DBG_ASSERT(fTopHeight>=0, "The height of the cutted top of a cone needs to be >= 0");
-*/
-
     DBG_ASSERT(fRadius>0, "The radius of a cone needs to be > 0");
-    DBG_ASSERT(fRoundedEdge>=0, "fRoundedEdge needs to be >= 0");
 
     //for stacked charts we need cones without top -> fTopHeight != 0 resp. bTopless == true
     //fTopHeight indicates the high of the cutted top only (not the full height)
-
-    // always use extra points, so set percent diagonal to 0.4 which is 0% in the UI (old Chart comment)
-    if( fRoundedEdge == 0.0 )
-        fRoundedEdge = 0.4 / 200.0;
-
-    fRoundedEdge = 0.0;
-
-    // ::rtl::math::approxEqual cannot compare to 0.0
     bool bTopless = !::rtl::math::approxEqual( fHeight, fHeight + fTopHeight );
 
     double r1= 0.0, r2 = fRadius;
@@ -382,82 +372,69 @@ uno::Any createPolyPolygon_Cone(
         // #i63212# fHeight may be negative, fTopHeight is always positive -> use fabs(fHeight)
         r1 = fRadius * (fTopHeight)/(fabs(fHeight)+fTopHeight);
 
-    const double fMinimumDimension = ::std::min(r2*2.0,fHeight);
-    const double fOffset = (fMinimumDimension * fRoundedEdge) * 1.05;   // increase by 5% for safety
-    const bool   bRoundEdges = fRoundedEdge && fOffset < r2 && 2.0 * fOffset < fHeight
-                            && ( bTopless ? fOffset < r1 : true );
-    sal_Int32 nPointCount = 8;
-    if(bTopless)
-    {
-        if(!bRoundEdges)
-            nPointCount = 4;
-    }
-    else
-    {
-        if(bRoundEdges)
-            nPointCount = 6;
-        else
-            nPointCount = 3;
-    }
-    nVerticalSegmentCount = nPointCount-1;
-
-    //--------------------------------------
+    nVerticalSegmentCount=1;
     drawing::PolyPolygonShape3D aPP;
 
-    aPP.SequenceX.realloc(1);
-    aPP.SequenceY.realloc(1);
-    aPP.SequenceZ.realloc(1);
+    aPP.SequenceX.realloc(2);
+    aPP.SequenceY.realloc(2);
+    aPP.SequenceZ.realloc(2);
 
     drawing::DoubleSequence* pOuterSequenceX = aPP.SequenceX.getArray();
     drawing::DoubleSequence* pOuterSequenceY = aPP.SequenceY.getArray();
     drawing::DoubleSequence* pOuterSequenceZ = aPP.SequenceZ.getArray();
 
-    pOuterSequenceX->realloc(nPointCount);
-    pOuterSequenceY->realloc(nPointCount);
-    pOuterSequenceZ->realloc(nPointCount);
+    pOuterSequenceX->realloc(2);
+    pOuterSequenceY->realloc(2);
+    pOuterSequenceZ->realloc(2);
 
     double* pInnerSequenceX = pOuterSequenceX->getArray();
     double* pInnerSequenceY = pOuterSequenceY->getArray();
     double* pInnerSequenceZ = pOuterSequenceZ->getArray();
 
-    for(sal_Int32 nN = nPointCount; nN--;)
+    double fX1 = 0.0;
+    double fX2 = r2;
+    double fX3 = r1;
+
+    double fY1 = 0.0;
+    double fY2 = 0.0;
+    double fY3 = fHeight;
+
+    if( fHeight<0.0 )
+    {
+        ::std::swap(fX1,fX3);
+        ::std::swap(fY1,fY3);
+    }
+
+    //----------------------------
+    for(sal_Int32 nN = 2; nN--;)
         *pInnerSequenceZ++ = 0.0;
 
-    if(bTopless)
-    {
-        *pInnerSequenceY++ = fHeight; //1.
-        *pInnerSequenceX++ = 0.0; //1.
+    *pInnerSequenceY++ = fY1;
+    *pInnerSequenceX++ = fX1;
 
-        if(bRoundEdges)
-        {
-            *pInnerSequenceY++ = fHeight; //2.
-            *pInnerSequenceX++ = r1 - fOffset; //2.
-        }
-    }
+    *pInnerSequenceY++ = fY2;
+    *pInnerSequenceX++ = fX2;
+    //----------------------------
 
-    *pInnerSequenceY++ = fHeight; //3.
-    *pInnerSequenceX++ = r1; //3.
+    pOuterSequenceX++;pOuterSequenceY++;pOuterSequenceZ++;
+    pOuterSequenceX->realloc(2);
+    pOuterSequenceY->realloc(2);
+    pOuterSequenceZ->realloc(2);
 
-    if(bRoundEdges)
-    {
-        *pInnerSequenceY++ = fHeight - fOffset; //4.
-        *pInnerSequenceX++ = r1 + fOffset; //4.
+    pInnerSequenceX = pOuterSequenceX->getArray();
+    pInnerSequenceY = pOuterSequenceY->getArray();
+    pInnerSequenceZ = pOuterSequenceZ->getArray();
 
-        *pInnerSequenceY++ = fOffset; //5.
-        *pInnerSequenceX++ = r2 - fOffset; //5.
-    }
+    //----------------------------
+    for(sal_Int32 nN = 2; nN--;)
+        *pInnerSequenceZ++ = 0.0;
 
-    *pInnerSequenceY++ = 0.0; //6.
-    *pInnerSequenceX++ = r2; //6.
+    *pInnerSequenceY++ = fY2;
+    *pInnerSequenceX++ = fX2;
 
-    if(bRoundEdges)
-    {
-        *pInnerSequenceY++ = 0.0; //7.
-        *pInnerSequenceX++ = r2 - fOffset; //7.
-    }
-
-    *pInnerSequenceY++ = 0.0; //8.
-    *pInnerSequenceX++ = 0.0; //8.
+    *pInnerSequenceY++ = fY3;
+    *pInnerSequenceX++ = fX3;
+    //----------------------------
 
     return uno::Any( &aPP, ::getCppuType((const drawing::PolyPolygonShape3D*)0) );
 }
@@ -570,16 +547,141 @@ uno::Reference<drawing::XShape>
           , sal_Int32 nRotateZAngleHundredthDegree )
 {
     return impl_createConeOrCylinder(
-              xTarget, rPosition, rSize, 0.0, nRotateZAngleHundredthDegree, CHART_3DOBJECT_SEGMENTCOUNT, true );
+              xTarget, rPosition, rSize, 0.0, nRotateZAngleHundredthDegree, true );
 }
 
 uno::Reference<drawing::XShape>
         ShapeFactory::createPyramid(
             const uno::Reference<drawing::XShapes>& xTarget
           , const drawing::Position3D& rPosition, const drawing::Direction3D& rSize
-          , double fTopHeight, sal_Int32 nRotateZAngleHundredthDegree )
+          , double fTopHeight, bool bRotateZ
+          , const uno::Reference< beans::XPropertySet >& xSourceProp
+          , const tPropertyNameMap& rPropertyNameMap )
 {
-    return impl_createConeOrCylinder( xTarget, rPosition, rSize, fTopHeight, nRotateZAngleHundredthDegree, 4 );
+    if( !xTarget.is() )
+        return 0;
+
+    Reference< drawing::XShapes > xGroup( ShapeFactory::createGroup3D( xTarget, rtl::OUString() ) );
+
+    sal_Bool bDoubleSided = true;
+    bool bRotatedTexture = false;
+
+    const double fWidth = rSize.DirectionX;
+    const double fDepth = rSize.DirectionZ;
+    const double fHeight = rSize.DirectionY;
+
+    drawing::Position3D aBottomP1( rPosition.PositionX, rPosition.PositionY, rPosition.PositionZ - fDepth/2.0  );
+    if(bRotateZ)
+        aBottomP1.PositionY -= fWidth/2.0;
+    else
+        aBottomP1.PositionX -= fWidth/2.0;
+    drawing::Position3D aBottomP2( aBottomP1 );
+    if(bRotateZ)
+        aBottomP2.PositionY += fWidth;
+    else
+        aBottomP2.PositionX += fWidth;
+    drawing::Position3D aBottomP3( aBottomP2 );
+    drawing::Position3D aBottomP4( aBottomP1 );
+    aBottomP3.PositionZ += fDepth;
+    aBottomP4.PositionZ += fDepth;
+
+    const double fTopFactor = (fTopHeight)/(fabs(fHeight)+fTopHeight);
+    drawing::Position3D aTopP1( rPosition.PositionX, rPosition.PositionY, rPosition.PositionZ - fDepth*fTopFactor/2.0  );
+    if(bRotateZ)
+    {
+        aTopP1.PositionY -= fWidth*fTopFactor/2.0;
+        aTopP1.PositionX += fHeight;
+    }
+    else
+    {
+        aTopP1.PositionX -= fWidth*fTopFactor/2.0;
+        aTopP1.PositionY += fHeight;
+    }
+    drawing::Position3D aTopP2( aTopP1 );
+    if(bRotateZ)
+        aTopP2.PositionY += fWidth*fTopFactor;
+    else
+        aTopP2.PositionX += fWidth*fTopFactor;
+    drawing::Position3D aTopP3( aTopP2 );
+    drawing::Position3D aTopP4( aTopP1 );
+    aTopP3.PositionZ += fDepth*fTopFactor;
+    aTopP4.PositionZ += fDepth*fTopFactor;
+
+    Stripe aStripeBottom( aBottomP1, aBottomP4, aBottomP3, aBottomP2 );
+
+    drawing::Position3D aNormalsBottomP1( aBottomP1 );
+    drawing::Position3D aNormalsBottomP2( aBottomP2 );
+    drawing::Position3D aNormalsBottomP3( aBottomP3 );
+    drawing::Position3D aNormalsBottomP4( aBottomP4 );
+    drawing::Position3D aNormalsTopP1( aBottomP1 );
+    drawing::Position3D aNormalsTopP2( aBottomP2 );
+    drawing::Position3D aNormalsTopP3( aBottomP3 );
+    drawing::Position3D aNormalsTopP4( aBottomP4 );
+    if( bRotateZ )
+    {
+        aNormalsTopP1.PositionX += fHeight;
+        aNormalsTopP2.PositionX += fHeight;
+        aNormalsTopP3.PositionX += fHeight;
+        aNormalsTopP4.PositionX += fHeight;
+    }
+    else
+    {
+        aNormalsTopP1.PositionY += fHeight;
+        aNormalsTopP2.PositionY += fHeight;
+        aNormalsTopP3.PositionY += fHeight;
+        aNormalsTopP4.PositionY += fHeight;
+    }
+
+    if(fHeight<0.0)
+    {
+        std::swap( aBottomP1, aTopP1);
+        std::swap( aBottomP2, aTopP2);
+        std::swap( aBottomP3, aTopP3);
+        std::swap( aBottomP4, aTopP4);
+
+        std::swap( aNormalsBottomP1, aNormalsTopP1);
+        std::swap( aNormalsBottomP2, aNormalsTopP2);
+        std::swap( aNormalsBottomP3, aNormalsTopP3);
+        std::swap( aNormalsBottomP4, aNormalsTopP4);
+    }
+
+    Stripe aStripe1( aTopP2, aTopP1, aBottomP1, aBottomP2 );
+    Stripe aStripe2( aTopP3, aTopP2, aBottomP2, aBottomP3 );
+    Stripe aStripe3( aTopP4, aTopP3, aBottomP3, aBottomP4 );
+    Stripe aStripe4( aTopP1, aTopP4, aBottomP4, aBottomP1 );
+
+    Stripe aNormalsStripe1( aNormalsBottomP2, aNormalsBottomP1, aNormalsTopP1, aNormalsTopP2   );
+    Stripe aNormalsStripe2( aNormalsBottomP3, aNormalsBottomP2, aNormalsTopP2, aNormalsTopP3 );
+    Stripe aNormalsStripe3( aNormalsBottomP4, aNormalsBottomP3, aNormalsTopP3, aNormalsTopP4 );
+    Stripe aNormalsStripe4( aNormalsBottomP1, aNormalsBottomP4, aNormalsTopP4, aNormalsTopP1 );
+
+    if(bRotateZ)
+    {
+        bRotatedTexture = true;
+        aStripe1 = Stripe( aTopP1, aTopP2, aBottomP2, aBottomP1 );
+        aStripe2 = Stripe( aTopP2, aTopP3, aBottomP3, aBottomP2  );
+        aStripe3 = Stripe( aTopP3, aTopP4, aBottomP4, aBottomP3  );
+        aStripe4 = Stripe( aTopP4, aTopP1, aBottomP1, aBottomP4  );
+
+        aNormalsStripe1 = Stripe( aNormalsBottomP1, aNormalsBottomP2, aNormalsTopP2, aNormalsTopP1   );
+        aNormalsStripe2 = Stripe( aNormalsBottomP2, aNormalsBottomP3, aNormalsTopP3, aNormalsTopP2 );
+        aNormalsStripe3 = Stripe( aNormalsBottomP3, aNormalsBottomP4, aNormalsTopP4, aNormalsTopP3 );
+        aNormalsStripe4 = Stripe( aNormalsBottomP4, aNormalsBottomP1, aNormalsTopP1, aNormalsTopP4 );
+    }
+
+    aStripe1.SetManualNormal( aNormalsStripe1.getNormal() );
+    aStripe2.SetManualNormal( aNormalsStripe2.getNormal() );
+    aStripe3.SetManualNormal( aNormalsStripe3.getNormal() );
+    aStripe4.SetManualNormal( aNormalsStripe4.getNormal() );
+
+    const bool bFlatNormals = false;
+    ShapeFactory::createStripe( xGroup, aStripe1, xSourceProp, rPropertyNameMap, bDoubleSided, bRotatedTexture, bFlatNormals );
+    ShapeFactory::createStripe( xGroup, aStripe2, xSourceProp, rPropertyNameMap, bDoubleSided, bRotatedTexture, bFlatNormals );
+    ShapeFactory::createStripe( xGroup, aStripe3, xSourceProp, rPropertyNameMap, bDoubleSided, bRotatedTexture, bFlatNormals );
+    ShapeFactory::createStripe( xGroup, aStripe4, xSourceProp, rPropertyNameMap, bDoubleSided, bRotatedTexture, bFlatNormals );
+    ShapeFactory::createStripe( xGroup, aStripeBottom, xSourceProp, rPropertyNameMap, bDoubleSided, bRotatedTexture );
+
+    return Reference< drawing::XShape >( xGroup, uno::UNO_QUERY );
 }
 
 uno::Reference<drawing::XShape>
@@ -588,7 +690,7 @@ uno::Reference<drawing::XShape>
           , const drawing::Position3D& rPosition, const drawing::Direction3D& rSize
           , double fTopHeight, sal_Int32 nRotateZAngleHundredthDegree )
 {
-    return impl_createConeOrCylinder( xTarget, rPosition, rSize, fTopHeight, nRotateZAngleHundredthDegree, CHART_3DOBJECT_SEGMENTCOUNT );
+    return impl_createConeOrCylinder( xTarget, rPosition, rSize, fTopHeight, nRotateZAngleHundredthDegree );
 }
 
 uno::Reference<drawing::XShape>
@@ -596,7 +698,6 @@ uno::Reference<drawing::XShape>
               const uno::Reference<drawing::XShapes>& xTarget
             , const drawing::Position3D& rPosition, const drawing::Direction3D& rSize
             , double fTopHeight, sal_Int32 nRotateZAngleHundredthDegree
-            , sal_Int32 nSegments
             , bool bCylinder )
 {
     if( !xTarget.is() )
@@ -608,19 +709,8 @@ uno::Reference<drawing::XShape>
             "com.sun.star.drawing.Shape3DLatheObject") ), uno::UNO_QUERY );
     xTarget->add(xShape);
 
-
-    double fYRotateAnglePi = -ZDIRECTION*(F_PI/2.0 - F_PI/(double)nSegments); // alwayas rotate edge to front (important for pyramids)
-                           //or:  ZDIRECTION*(F_PI/2.0 - F_PI/(double)nSegments); // rotate edge to front for even segment count otherwise rotate corner to front
-    double fAngle = fYRotateAnglePi;
-    {
-        while(fAngle<0.0)
-            fAngle+=F_PI/2.0;
-        while(fAngle>F_PI/2.0)
-            fAngle-=F_PI/2.0;
-    }
-    double fWidth      = rSize.DirectionX/2.0; //The depth will be corrrected within Matrix
+    double fWidth      = rSize.DirectionX*0.6; //The depth will be corrrected within Matrix
     double fRadius     = fWidth; //!!!!!!!! problem in drawing layer: rotation object calculates wrong needed size -> wrong camera (it's a problem with bounding boxes)
-//    double fRadius     = fWidth/cos(fAngle); llllllllllllllllllll
     double fHeight     = rSize.DirectionY;
 
     //set properties
@@ -638,15 +728,14 @@ uno::Reference<drawing::XShape>
             //Polygon
             sal_Int32 nVerticalSegmentCount = 0;
             uno::Any aPPolygon = bCylinder ? createPolyPolygon_Cylinder(
-                                                fHeight, fRadius, double(nPercentDiagonal)/200.0, nVerticalSegmentCount)
+                                                fHeight, fRadius, nVerticalSegmentCount)
                                            : createPolyPolygon_Cone(
-                                                fHeight, fRadius, fTopHeight, double(nPercentDiagonal)/200.0, nVerticalSegmentCount);
+                                                fHeight, fRadius, fTopHeight, nVerticalSegmentCount);
             xProp->setPropertyValue( C2U( UNO_NAME_3D_POLYPOLYGON3D ), aPPolygon );
 
             //Matrix for position
             {
                 ::basegfx::B3DHomMatrix aM;
-                //aM.RotateY( fYRotateAnglePi );
                 if(nRotateZAngleHundredthDegree!=0)
                     aM.rotate(0.0,0.0,-nRotateZAngleHundredthDegree/18000.00*F_PI);
                 //stretch the symmetric objects to given depth
@@ -659,7 +748,7 @@ uno::Reference<drawing::XShape>
 
             //Segments
             xProp->setPropertyValue( C2U( UNO_NAME_3D_HORZ_SEGS )
-                , uno::makeAny(nSegments) );
+                , uno::makeAny(CHART_3DOBJECT_SEGMENTCOUNT) );
             xProp->setPropertyValue( C2U( UNO_NAME_3D_VERT_SEGS )
                 , uno::makeAny((sal_Int32)nVerticalSegmentCount) );//depends on point count of the used polygon
 
@@ -1024,7 +1113,8 @@ uno::Reference< drawing::XShape >
                     , const uno::Reference< beans::XPropertySet >& xSourceProp
                     , const tPropertyNameMap& rPropertyNameMap
                     , sal_Bool bDoubleSided
-                    , bool bRotatedTexture )
+                    , bool bRotatedTexture
+                    , bool bFlatNormals )
 {
     if( !xTarget.is() )
         return 0;
@@ -1050,14 +1140,13 @@ uno::Reference< drawing::XShape >
             xProp->setPropertyValue( C2U( UNO_NAME_3D_TEXTUREPOLYGON3D )
                 , rStripe.getTexturePolygon( bRotatedTexture ) );
 
-
             //Normals Polygon
             xProp->setPropertyValue( C2U( UNO_NAME_3D_NORMALSPOLYGON3D )
                 , rStripe.getNormalsPolygon() );
-
             //NormalsKind
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_NORMALS_KIND )
-                , uno::makeAny( drawing::NormalsKind_FLAT ) );
+            if(bFlatNormals)
+                xProp->setPropertyValue( C2U( UNO_NAME_3D_NORMALS_KIND )
+                    , uno::makeAny( drawing::NormalsKind_FLAT ) );
 
             //LineOnly
             xProp->setPropertyValue( C2U( UNO_NAME_3D_LINEONLY )
