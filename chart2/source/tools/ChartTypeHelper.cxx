@@ -444,44 +444,45 @@ bool ChartTypeHelper::noBordersForSimpleScheme( const uno::Reference< chart2::XC
 //static
 sal_Int32 ChartTypeHelper::getDefaultDirectLightColor( bool bSimple, const uno::Reference< chart2::XChartType >& xChartType )
 {
-    if( bSimple )
+    sal_Int32 nRet = static_cast< sal_Int32 >( 0x808080 ); // grey
+    if( xChartType .is() )
     {
-        sal_Int32 nRet = static_cast< sal_Int32 >( 0x999999 ); // grey40
-        if( xChartType .is() )
+        rtl::OUString aChartType = xChartType->getChartType();
+        if( aChartType.equals(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
         {
-            rtl::OUString aChartType = xChartType->getChartType();
-            if( aChartType.equals(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
+            if( bSimple )
                 nRet = static_cast< sal_Int32 >( 0x333333 ); // grey80
-            else if( aChartType.equals(CHART2_SERVICE_NAME_CHARTTYPE_LINE)
-                || aChartType.equals(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER) )
-                nRet = static_cast< sal_Int32 >( 0x666666 ); // grey60
+            else
+                nRet = static_cast< sal_Int32 >( 0xb3b3b3 ); // grey30
         }
-        return nRet;
+        else if( aChartType.equals(CHART2_SERVICE_NAME_CHARTTYPE_LINE)
+            || aChartType.equals(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER) )
+            nRet = static_cast< sal_Int32 >( 0x666666 ); // grey60
     }
-    return static_cast< sal_Int32 >( 0xb3b3b3 ); // grey30
+    return nRet;
 }
 
 //static
 sal_Int32 ChartTypeHelper::getDefaultAmbientLightColor( bool bSimple, const uno::Reference< chart2::XChartType >& xChartType )
 {
-    if( bSimple )
+    sal_Int32 nRet = static_cast< sal_Int32 >( 0x999999 ); // grey40
+    if( xChartType .is() )
     {
-        sal_Int32 nRet = static_cast< sal_Int32 >( 0x999999 ); // grey40
-        if( xChartType .is() )
+        rtl::OUString aChartType = xChartType->getChartType();
+        if( aChartType.equals(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
         {
-            rtl::OUString aChartType = xChartType->getChartType();
-            if( aChartType.equals(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
+            if( bSimple )
                 nRet = static_cast< sal_Int32 >( 0xcccccc ); // grey20
+            else
+                nRet = static_cast< sal_Int32 >( 0x666666 ); // grey60
         }
-        return nRet;
     }
-    return static_cast< sal_Int32 >( 0x666666 ); // grey60
+    return nRet;
 }
 
 drawing::Direction3D ChartTypeHelper::getDefaultSimpleLightDirection( const uno::Reference< chart2::XChartType >& xChartType )
 {
-    //drawing::Direction3D aRet(0.0, 0.0, 1.0);
-    drawing::Direction3D aRet(-0.2, 0.7, 0.6);
+    drawing::Direction3D aRet(0.0, 0.0, 1.0);
     if( xChartType .is() )
     {
         rtl::OUString aChartType = xChartType->getChartType();
@@ -496,7 +497,7 @@ drawing::Direction3D ChartTypeHelper::getDefaultSimpleLightDirection( const uno:
 
 drawing::Direction3D ChartTypeHelper::getDefaultRealisticLightDirection( const uno::Reference< chart2::XChartType >& xChartType )
 {
-    drawing::Direction3D aRet(-0.1, 0.6, 0.8);
+    drawing::Direction3D aRet(0.0, 0.0, 1.0);
     if( xChartType .is() )
     {
         rtl::OUString aChartType = xChartType->getChartType();
