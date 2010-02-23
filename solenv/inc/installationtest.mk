@@ -105,7 +105,7 @@ javatest .PHONY : $(JAVATARGET)
     $(RM) -r $(MISC)/$(TARGET)/user
     $(MKDIRHIER) $(MISC)/$(TARGET)/user
     $(JAVAI) $(JAVAIFLAGS) $(JAVACPS) \
-        $(OOO_JUNIT_JAR)$(PATH_SEPARATOR)$(CLASSPATH) \
+        '$(OOO_JUNIT_JAR)$(PATH_SEPERATOR)$(CLASSPATH)' \
         -Dorg.openoffice.test.arg.path=$(my_soffice) \
         -Dorg.openoffice.test.arg.user=$(my_file)$(PWD)/$(MISC)/$(TARGET)/user \
         $(my_javaenv) org.junit.runner.JUnitCore \
