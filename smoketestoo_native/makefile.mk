@@ -55,3 +55,16 @@ OOO_CPPTEST_ARGS = $(SHL1TARGETN) -env:arg-doc=$(BIN)/smoketestdoc.sxw
 
 $(BIN)/smoketestdoc.sxw: data/smoketestdoc.sxw
     $(COPY) $< $@
+
+.IF "$(OS)" != "WNT"
+$(installationtest_instpath).flag : \
+        $(shell ls $(installationtest_instset)/OOo_*_install.tar.gz)
+    $(RM) -r $(installationtest_instpath)
+    $(MKDIRHIER) $(installationtest_instpath)
+    cd $(installationtest_instpath) && \
+        $(GNUTAR) xfz $(installationtest_instset)/OOo_*_install.tar.gz
+    $(MV) $(installationtest_instpath)/OOo_*_install \
+        $(installationtest_instpath)/opt
+    $(TOUCH) $@
+cpptest : $(installationtest_instpath).flag
+.END
