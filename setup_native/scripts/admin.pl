@@ -1071,7 +1071,7 @@ sub register_one_extension
         $executable = "./" . $executable;
     }
 
-    my $systemcall = $executable . " add --shared --verbose " . "\"" . $localextension . "\"" . " -env:UserInstallation=file://" . $temppath . " 2\>\&1 |";
+    my $systemcall = $executable . " add --shared --verbose --suppress-license " . "\"" . $localextension . "\"" . " -env:UserInstallation=file://" . $temppath . " 2\>\&1 |";
 
     print "... $systemcall\n";
 
