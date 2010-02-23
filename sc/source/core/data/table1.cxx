@@ -286,7 +286,13 @@ const Color& ScTable::GetTabBgColor() const
 
 void ScTable::SetTabBgColor(const Color& rColor)
 {
-    aTabBgColor = rColor;
+    if (aTabBgColor != rColor)
+    {
+        // The tab color has changed.  Set this table 'modified'.
+        aTabBgColor = rColor;
+        if (IsStreamValid())
+            SetStreamValid(false);
+    }
 }
 
 void ScTable::SetScenario( BOOL bFlag )
