@@ -125,7 +125,12 @@ SHL1STDLIBS_X64+=\
     $(GDIPLUSLIB_X64) \
     $(MSVCRT_X64)   \
     $(MSVCPRT_X64)  \
-    $(OLDNAMESLIB_X64)
+    $(OLDNAMESLIB_X64) \
+    msvcprt.lib
+
+.IF "$(PRODUCT)"!="full"
+SHL1STDLIBS+=msvcrt.lib
+.ENDIF
 
 SHL1LIBS_X64+=$(SLB_X64)$/util.lib\
     $(SLB_X64)$/ooofilereader.lib
