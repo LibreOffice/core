@@ -1210,11 +1210,15 @@ void SwDoc::CalculatePagesForPrinting(
     if (!pLayout)
         return;
 
+    const sal_Int32 nContent = rOptions.getIntValue( "PrintContent", 0 );
+    const bool bPrintSelection = nContent == 2;
+
     // properties to take into account when calcualting the set of pages
     // (PDF export UI does not allow for selecting left or right pages only)
     bool bPrintLeftPages    = bIsPDFExport ? true : rOptions.IsPrintLeftPages();
     bool bPrintRightPages   = bIsPDFExport ? true : rOptions.IsPrintRightPages();
-    bool bPrintEmptyPages   = rOptions.IsPrintEmptyPages( bIsPDFExport );
+    // #i103700# printing selections should not allow for automatic inserting empty pages
+    bool bPrintEmptyPages   = bPrintSelection ? false : rOptions.IsPrintEmptyPages( bIsPDFExport );
 
     Range aPages( 1, nDocPageCount );
 
