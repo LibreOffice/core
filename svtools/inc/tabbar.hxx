@@ -323,9 +323,6 @@ typedef USHORT TabBarPageBits;
 // - TabBar-Types -
 // ----------------
 
-#define TABBAR_APPEND          ((USHORT)0xFFFF)
-#define TABBAR_PAGE_NOTFOUND   ((USHORT)0xFFFF)
-
 #define TABBAR_RENAMING_YES    ((long)TRUE)
 #define TABBAR_RENAMING_NO     ((long)FALSE)
 #define TABBAR_RENAMING_CANCEL ((long)2)
@@ -403,6 +400,9 @@ private:
                     DECL_DLLPRIVATE_LINK( ImplClickHdl, ImplTabButton* );
 
 public:
+    static const sal_uInt16 APPEND;
+    static const sal_uInt16 PAGE_NOT_FOUND;
+
                     TabBar( Window* pParent, WinBits nWinStyle = WB_STDTABBAR );
     virtual         ~TabBar();
 
@@ -427,7 +427,7 @@ public:
 
     void            InsertPage( USHORT nPageId, const XubString& rText,
                                 TabBarPageBits nBits = 0,
-                                USHORT nPos = TABBAR_APPEND );
+                                USHORT nPos = TabBar::APPEND );
     void            RemovePage( USHORT nPageId );
     void            MovePage( USHORT nPageId, USHORT nNewPos );
 
@@ -461,7 +461,7 @@ public:
     void            SelectPage( USHORT nPageId, BOOL bSelect = TRUE );
     void            SelectPageRange( BOOL bSelect = FALSE,
                                      USHORT nStartPos = 0,
-                                     USHORT nEndPos = TABBAR_APPEND );
+                                     USHORT nEndPos = TabBar::APPEND );
     USHORT          GetSelectPage( USHORT nSelIndex = 0 ) const;
     USHORT          GetSelectPageCount() const;
     BOOL            IsPageSelected( USHORT nPageId ) const;

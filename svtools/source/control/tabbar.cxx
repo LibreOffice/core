@@ -357,6 +357,9 @@ struct TabBar_Impl
 
 // =======================================================================
 
+const sal_uInt16 TabBar::APPEND         = ::std::numeric_limits<sal_uInt16>::max();
+const sal_uInt16 TabBar::PAGE_NOT_FOUND = ::std::numeric_limits<sal_uInt16>::max();
+
 void TabBar::ImplInit( WinBits nWinStyle )
 {
     mpItemList      = new ImplTabBarList;
@@ -1594,7 +1597,7 @@ void TabBar::InsertPage( USHORT nPageId, const XubString& rText,
                          TabBarPageBits nBits, USHORT nPos )
 {
     DBG_ASSERT( nPageId, "TabBar::InsertPage(): PageId == 0" );
-    DBG_ASSERT( GetPagePos( nPageId ) == TABBAR_PAGE_NOTFOUND,
+    DBG_ASSERT( GetPagePos( nPageId ) == PAGE_NOT_FOUND,
                 "TabBar::InsertPage(): PageId already exists" );
     DBG_ASSERT( nBits <= TPB_SPECIAL, "TabBar::InsertPage(): nBits is wrong" );
 
@@ -1620,7 +1623,7 @@ Color TabBar::GetTabBgColor( USHORT nPageId ) const
 {
     USHORT nPos = GetPagePos( nPageId );
 
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
         return mpItemList->GetObject( nPos )->maTabBgColor;
     else
         return Color( COL_AUTO );
@@ -1630,7 +1633,7 @@ void TabBar::SetTabBgColor( USHORT nPageId, const Color& aTabBgColor )
 {
     USHORT nPos = GetPagePos( nPageId );
     ImplTabBarItem* pItem;
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
     {
         pItem = mpItemList->GetObject( nPos );
         // TODO: Need to take the text color specification out of this code!
@@ -1657,7 +1660,7 @@ void TabBar::RemovePage( USHORT nPageId )
     USHORT nPos = GetPagePos( nPageId );
 
     // Existiert Item
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
     {
         if ( mnCurPageId == nPageId )
             mnCurPageId = 0;
@@ -1692,7 +1695,7 @@ void TabBar::MovePage( USHORT nPageId, USHORT nNewPos )
         return;
 
     // Existiert Item
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
     {
         // TabBar-Item in der Liste verschieben
         ImplTabBarItem* pItem = mpItemList->Remove( nPos );
@@ -1730,7 +1733,7 @@ void TabBar::Clear()
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
 
-    CallEventListeners( VCLEVENT_TABBAR_PAGEREMOVED, (void*) TABBAR_PAGE_NOTFOUND );
+    CallEventListeners( VCLEVENT_TABBAR_PAGEREMOVED, (void*) PAGE_NOT_FOUND );
 }
 
 // -----------------------------------------------------------------------
@@ -1739,7 +1742,7 @@ void TabBar::EnablePage( USHORT nPageId, BOOL bEnable )
 {
     USHORT nPos = GetPagePos( nPageId );
 
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
     {
         ImplTabBarItem* pItem = mpItemList->GetObject( nPos );
 
@@ -1762,7 +1765,7 @@ BOOL TabBar::IsPageEnabled( USHORT nPageId ) const
 {
     USHORT nPos = GetPagePos( nPageId );
 
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
         return mpItemList->GetObject( nPos )->mbEnable;
     else
         return FALSE;
@@ -1774,7 +1777,7 @@ void TabBar::SetPageBits( USHORT nPageId, TabBarPageBits nBits )
 {
     USHORT nPos = GetPagePos( nPageId );
 
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
     {
         ImplTabBarItem* pItem = mpItemList->GetObject( nPos );
 
@@ -1795,7 +1798,7 @@ TabBarPageBits TabBar::GetPageBits( USHORT nPageId ) const
 {
     USHORT nPos = GetPagePos( nPageId );
 
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
         return mpItemList->GetObject( nPos )->mnBits;
     else
         return FALSE;
@@ -1832,7 +1835,7 @@ USHORT TabBar::GetPagePos( USHORT nPageId ) const
         pItem = mpItemList->Next();
     }
 
-    return TABBAR_PAGE_NOTFOUND;
+    return PAGE_NOT_FOUND;
 }
 
 // -----------------------------------------------------------------------
@@ -1857,7 +1860,7 @@ Rectangle TabBar::GetPageRect( USHORT nPageId ) const
 {
     USHORT nPos = GetPagePos( nPageId );
 
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
         return mpItemList->GetObject( nPos )->maRect;
     else
         return Rectangle();
@@ -1870,7 +1873,7 @@ void TabBar::SetCurPageId( USHORT nPageId )
     USHORT nPos = GetPagePos( nPageId );
 
     // Wenn Item nicht existiert, dann nichts machen
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
     {
         // Wenn sich aktuelle Page nicht geaendert hat, dann muessen wir
         // jetzt nichts mehr machen
@@ -1962,7 +1965,7 @@ void TabBar::MakeVisible( USHORT nPageId )
     USHORT nPos = GetPagePos( nPageId );
 
     // Wenn Item nicht existiert, dann nichts machen
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
     {
         if ( nPos < mnFirstPos )
             SetFirstPageId( nPageId );
@@ -2011,7 +2014,7 @@ void TabBar::SetFirstPageId( USHORT nPageId )
     USHORT nPos = GetPagePos( nPageId );
 
     // Wenn Item nicht existiert, dann FALSE zurueckgeben
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
     {
         if ( nPos != mnFirstPos )
         {
@@ -2045,7 +2048,7 @@ void TabBar::SelectPage( USHORT nPageId, BOOL bSelect )
 {
     USHORT nPos = GetPagePos( nPageId );
 
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
     {
         ImplTabBarItem* pItem = mpItemList->GetObject( nPos );
 
@@ -2126,7 +2129,7 @@ USHORT TabBar::GetSelectPageCount() const
 BOOL TabBar::IsPageSelected( USHORT nPageId ) const
 {
     USHORT nPos = GetPagePos( nPageId );
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
         return mpItemList->GetObject( nPos )->mbSelect;
     else
         return FALSE;
@@ -2137,7 +2140,7 @@ BOOL TabBar::IsPageSelected( USHORT nPageId ) const
 BOOL TabBar::StartEditMode( USHORT nPageId )
 {
     USHORT nPos = GetPagePos( nPageId );
-    if ( mpEdit || (nPos == TABBAR_PAGE_NOTFOUND) || (mnLastOffX < 8) )
+    if ( mpEdit || (nPos == PAGE_NOT_FOUND) || (mnLastOffX < 8) )
         return FALSE;
 
     mnEditId = nPageId;
@@ -2358,7 +2361,7 @@ void TabBar::SetSelectTextColor( const Color& rColor )
 void TabBar::SetPageText( USHORT nPageId, const XubString& rText )
 {
     USHORT nPos = GetPagePos( nPageId );
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
     {
         mpItemList->GetObject( nPos )->maText = rText;
         mbSizeFormat = TRUE;
@@ -2376,7 +2379,7 @@ void TabBar::SetPageText( USHORT nPageId, const XubString& rText )
 XubString TabBar::GetPageText( USHORT nPageId ) const
 {
     USHORT nPos = GetPagePos( nPageId );
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
         return mpItemList->GetObject( nPos )->maText;
     else
         return XubString();
@@ -2387,7 +2390,7 @@ XubString TabBar::GetPageText( USHORT nPageId ) const
 void TabBar::SetHelpText( USHORT nPageId, const XubString& rText )
 {
     USHORT nPos = GetPagePos( nPageId );
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
         mpItemList->GetObject( nPos )->maHelpText = rText;
 }
 
@@ -2396,7 +2399,7 @@ void TabBar::SetHelpText( USHORT nPageId, const XubString& rText )
 XubString TabBar::GetHelpText( USHORT nPageId ) const
 {
     USHORT nPos = GetPagePos( nPageId );
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
     {
         ImplTabBarItem* pItem = mpItemList->GetObject( nPos );
         if ( !pItem->maHelpText.Len() && pItem->mnHelpId )
@@ -2417,7 +2420,7 @@ XubString TabBar::GetHelpText( USHORT nPageId ) const
 void TabBar::SetHelpId( USHORT nPageId, ULONG nHelpId )
 {
     USHORT nPos = GetPagePos( nPageId );
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
         mpItemList->GetObject( nPos )->mnHelpId = nHelpId;
 }
 
@@ -2426,7 +2429,7 @@ void TabBar::SetHelpId( USHORT nPageId, ULONG nHelpId )
 ULONG TabBar::GetHelpId( USHORT nPageId ) const
 {
     USHORT nPos = GetPagePos( nPageId );
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
         return mpItemList->GetObject( nPos )->mnHelpId;
     else
         return 0;
