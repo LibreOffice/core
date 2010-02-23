@@ -1000,6 +1000,8 @@ void WorksheetData::finalizeWorksheetImport()
     maCondFormats.finalizeImport();
     maPageSett.finalizeImport();
     maSheetViewSett.finalizeImport();
+    maSheetSett.finalizeImport();
+
     lclUpdateProgressBar( mxFinalProgress, 0.5 );
     convertColumns();
     convertRows();
