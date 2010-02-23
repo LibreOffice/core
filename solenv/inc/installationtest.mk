@@ -73,7 +73,7 @@ my_javaenv = \
 .IF "$(OS)" == "WNT"
 $(MISC)/$(TARGET)/installation.flag : \
         $(shell ls $(installationtest_instset)/OOo_*_install.zip)
-    $(MKDIR) $(@:d)
+    $(MKDIRHIER) $(@:d)
     my_tmp=$$(cygpath -m $$(mktemp -dt ooosmoke.XXXXXX)) && \
     unzip $(installationtest_instset)/OOo_*_install.zip -d "$$my_tmp" && \
     mv "$$my_tmp"/OOo_*_install "$$my_tmp"/opt && \
