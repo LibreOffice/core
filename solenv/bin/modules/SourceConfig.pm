@@ -67,9 +67,6 @@ sub new {
         $source_root .= '/..';
     } else {
         $source_root = $ENV{SOURCE_ROOT_DIR};
-        if (defined $ENV{SOURCE_ROOT}) {
-            $self->{SOURCE_ROOT} = Cwd::realpath($ENV{SOURCE_ROOT} . '/' . $ENV{WORK_STAMP});
-        };
     };
     $source_root = Cwd::realpath($source_root);
     $self->{DEBUG} = 0;
