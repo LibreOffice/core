@@ -76,7 +76,7 @@ SHL1STDLIBS+=\
     $(KERNEL32LIB)\
     $(GDI32LIB)\
     $(GDIPLUSLIB)\
-    msvcprt.lib
+    msvcprt.lib \
     $(SHLWAPILIB)
 
 SHL1LIBS+=$(SLB)$/util.lib\

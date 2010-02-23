@@ -74,7 +74,12 @@ SHL1STDLIBS+=$(OLE32LIB)\
      $(SHELL32LIB)\
      $(KERNEL32LIB)\
      $(OLDNAMESLIB)\
-     msvcprt.lib 
+     msvcprt.lib
+
+.IF "$(PRODUCT)"!="full"
+SHL1STDLIBS+=msvcrt.lib
+.ENDIF
+
      
 #     $(LIBSTLPORTST)
      

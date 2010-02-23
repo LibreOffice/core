@@ -30,6 +30,7 @@ PRJNAME=shell
 TARGET=propertyhdl
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
+NO_DEFAULT_STL=YES
 USE_DEFFILE=TRUE
 .IF "$(BUILD_X64)"!=""
 USE_DEFFILE_X64=TRUE
@@ -43,7 +44,7 @@ UWINAPILIB =
 UWINAPILIB_X64 =
 
 CFLAGS+=-DISOLATION_AWARE_ENABLED -DWIN32_LEAN_AND_MEAN -DXML_UNICODE -D_NTSDK -DUNICODE -D_UNICODE -D_WIN32_WINNT=0x0501
-CFLAGS+=-wd4710 -wd4711 -wd4514 -wd4619 -wd4217 -wd4820
+CFLAGS+=-wd4710 -wd4711 -wd4514 -wd4619 -wd4217 -wd4820 -wd4100
 CDEFS+=-D_WIN32_IE=0x501
 
 # --- Files --------------------------------------------------------
@@ -72,7 +73,12 @@ SHL1STDLIBS+=\
     $(GDI32LIB)\
     $(GDIPLUSLIB)\
     $(SHLWAPILIB)\
-    $(PROPSYSLIB)
+    $(PROPSYSLIB) \
+    msvcprt.lib
+
+.IF "$(PRODUCT)"!="full"
+SHL1STDLIBS+=msvcrt.lib
+.ENDIF
 
 SHL1LIBS+=$(SLB)$/util.lib\
     $(SLB)$/ooofilereader.lib
@@ -127,4 +133,6 @@ DEF1EXPORTFILE_X64=exports.dxp
 # --- Targets ------------------------------------------------------
 .INCLUDE :  set_wntx64.mk
 .INCLUDE :	target.mk
+INCLUDE!:=$(subst,/stl, $(INCLUDE))
+.EXPORT : INCLUDE
 .INCLUDE :  tg_wntx64.mk
