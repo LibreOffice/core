@@ -2287,6 +2287,9 @@ Window *  ScModule::Find1RefWindow( USHORT nSlotId, Window *pWndAncestor )
 
 Window *  ScModule::Find1RefWindow( Window *pWndAncestor )
 {
+    if (!pWndAncestor)
+        return NULL;
+
     while( Window *pParent = pWndAncestor->GetParent() ) pWndAncestor = pParent;
 
     for( std::map<USHORT, std::list<Window*> >::iterator i = m_mapRefWindow.begin();
