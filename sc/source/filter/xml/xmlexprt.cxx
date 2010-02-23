@@ -2637,6 +2637,7 @@ void ScXMLExport::_ExportAutoStyles()
             SvXMLElementExport aElemStyleTabProps(*this, XML_NAMESPACE_STYLE, XML_TABLE_PROPERTIES, sal_True, sal_True);
         }
     }
+
     if (getExportFlags() & EXPORT_MASTERSTYLES)
     {
         GetPageExport()->collectAutoStyles(sal_True);
