@@ -6473,8 +6473,8 @@ if test "$SOLAR_JAVA" != "" && test "$with_junit" != "no"; then
     else
         OOO_JUNIT_JAR=$with_junit
     fi
-    "$JAVA_HOME/bin/jar" tf "$OOO_JUNIT_JAR" 2> /dev/null | \
-        grep org/junit/Before.class 2>&1 > /dev/null
+    "$JAVA_HOME/bin/jar" tf "$OOO_JUNIT_JAR" 2>&5 | \
+        grep org/junit/Before.class > /dev/null 2>&5
     if test $? -eq 0; then
         AC_MSG_RESULT([$OOO_JUNIT_JAR])
     else
