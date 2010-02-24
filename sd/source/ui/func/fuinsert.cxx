@@ -361,7 +361,6 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
             SdrOle2Obj* pOleObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aObjName, aRect );
             SdrPageView* pPV = mpView->GetSdrPageView();
 
-            bool bUndo = false;
             // if we have a pick obj we need to make this new ole a pres obj replacing the current pick obj
             if( pPickObj )
             {

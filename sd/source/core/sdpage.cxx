@@ -220,7 +220,7 @@ SdrObject* SdPage::GetPresObj(PresObjKind eObjKind, int nIndex, bool bFuzzySearc
     if( nIndex > 0 )
         nIndex--;
 
-    if( aMatches.size() > nIndex )
+    if( (nIndex >= 0) && ( aMatches.size() > static_cast<unsigned int>(nIndex)) )
         return aMatches[nIndex];
 
     return 0;
