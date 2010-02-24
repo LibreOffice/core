@@ -2530,9 +2530,6 @@ void ScViewData::WriteExtOptions( ScExtDocOptions& rDocOpt ) const
             rTabSett.mbPageMode = bPagebreak;
             rTabSett.mnNormalZoom = static_cast< long >( pViewTab->aZoomY * Fraction( 100.0 ) );
             rTabSett.mnPageZoom = static_cast< long >( pViewTab->aPageZoomY * Fraction( 100.0 ) );
-
-            // Tab Bg Color
-//          rTabSett.maTabBgColor = pViewTab->aTabBgColor;
         }
     }
 }

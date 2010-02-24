@@ -2949,7 +2949,6 @@ bool ScDocFunc::SetTabBgColor(
         rDocShell.PostPaintExtras();
         ScDocShellModificator aModificator( rDocShell );
         aModificator.SetDocumentModified();
-        SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
     }
     return bSuccess;
 }

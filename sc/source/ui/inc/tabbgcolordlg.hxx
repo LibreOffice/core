@@ -41,40 +41,40 @@
 class ScTabBgColorDlg : public ModalDialog
 {
 public:
-        ScTabBgColorDlg(    Window* pParent,
-                            const String& rTitle,
-                            const String& rTabBgColorNoColorText,
-                            const Color& rDefaultColor,
-                            ULONG nHelpId );
-        ~ScTabBgColorDlg();
+    ScTabBgColorDlg( Window* pParent,
+                     const String& rTitle,
+                     const String& rTabBgColorNoColorText,
+                     const Color& rDefaultColor,
+                     ULONG nHelpId );
+    ~ScTabBgColorDlg();
 
-        void GetSelectedColor( Color& rColor ) const;
-        //void SelectColor( const Color& rColor2 ) const;
+    void GetSelectedColor( Color& rColor ) const;
+
 private:
     class ScTabBgColorValueSet : public ValueSet
     {
-
     public:
-            ScTabBgColorValueSet(Control* pParent, const ResId& rResId, ScTabBgColorDlg* pTabBgColorDlg);
+        ScTabBgColorValueSet(Control* pParent, const ResId& rResId, ScTabBgColorDlg* pTabBgColorDlg);
 
-            virtual void KeyInput( const KeyEvent& rKEvt );
+        virtual void KeyInput( const KeyEvent& rKEvt );
     private:
         ScTabBgColorDlg* aTabBgColorDlg;
     };
-        Control                 aBorderWin;
-        ScTabBgColorValueSet    aTabBgColorSet;
-        FixedLine               aTabBgColorBox;
-        OKButton                aBtnOk;
-        CancelButton            aBtnCancel;
-        HelpButton              aBtnHelp;
-        Color                   aTabBgColor;
-        const String            aTabBgColorNoColorText;
-        ULONG                   aHelpId;
 
-        void            FillColorValueSets_Impl();
+    Control                 aBorderWin;
+    ScTabBgColorValueSet    aTabBgColorSet;
+    FixedLine               aTabBgColorBox;
+    OKButton                aBtnOk;
+    CancelButton            aBtnCancel;
+    HelpButton              aBtnHelp;
+    Color                   aTabBgColor;
+    const String            aTabBgColorNoColorText;
+    ULONG                   mnHelpId;
 
-        DECL_LINK( TabBgColorDblClickHdl_Impl, ValueSet* );
-        DECL_LINK( TabBgColorOKHdl_Impl, OKButton* pBtn );
+    void            FillColorValueSets_Impl();
+
+    DECL_LINK( TabBgColorDblClickHdl_Impl, ValueSet* );
+    DECL_LINK( TabBgColorOKHdl_Impl, OKButton* pBtn );
 };
 
 #endif // SC_TABBGCOLORDLG_HXX

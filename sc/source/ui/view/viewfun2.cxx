@@ -88,8 +88,7 @@
 #include "inputwin.hxx"
 #include "funcdesc.hxx"
 #include "docuno.hxx"
-
-#include "tabbgcolor.hxx" //DBW
+#include "tabbgcolor.hxx"
 
 // STATIC DATA ---------------------------------------------------------------
 

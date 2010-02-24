@@ -35,6 +35,10 @@
 
 //------------------------------------------------------------------
 
+#include "tabbgcolordlg.hxx"
+#include "scresid.hxx"
+#include "miscdlgs.hrc"
+
 #include <tools/debug.hxx>
 #include <tools/color.hxx>
 #include <sfx2/objsh.hxx>
@@ -42,20 +46,19 @@
 #include <svx/drawitem.hxx>
 #include <unotools/pathoptions.hxx>
 #include <tools/resid.hxx>
-#include "tabbgcolordlg.hxx"
-#include "scresid.hxx"
-#include "miscdlgs.hrc"
 #include <svx/svxitems.hrc>
+
+#include <boost/scoped_ptr.hpp>
 
 //==================================================================
 
 #define HDL(hdl) LINK(this,ScTabBgColorDlg,hdl)
 
-__EXPORT ScTabBgColorDlg::ScTabBgColorDlg( Window*         pParent,
-                                    const String&   rTitle,
-                                    const String&   rTabBgColorNoColorText,
-                                    const Color&    rDefaultColor,
-                                    ULONG nHelpId ) :
+ScTabBgColorDlg::ScTabBgColorDlg( Window*         pParent,
+                                  const String&   rTitle,
+                                  const String&   rTabBgColorNoColorText,
+                                  const Color&    rDefaultColor,
+                                  ULONG nHelpId ) :
     ModalDialog    ( pParent, ScResId( RID_SCDLG_TAB_BG_COLOR ) ),
     aBorderWin              ( this, ScResId( TAB_BG_COLOR_CT_BORDER ) ),
     aTabBgColorSet          ( &aBorderWin, ScResId( TAB_BG_COLOR_SET_BGDCOLOR ), this ),
@@ -65,13 +68,13 @@ __EXPORT ScTabBgColorDlg::ScTabBgColorDlg( Window*         pParent,
     aBtnHelp                ( this, ScResId( BTN_HELP ) ),
     aTabBgColor             ( rDefaultColor ),
     aTabBgColorNoColorText  ( rTabBgColorNoColorText ),
-    aHelpId                 ( nHelpId )
+    mnHelpId                ( nHelpId )
 
 {
     SetHelpId( nHelpId );
     this->SetText( rTitle );
     this->SetStyle(GetStyle() | WB_BORDER | WB_STDFLOATWIN | WB_3DLOOK | WB_DIALOGCONTROL | WB_SYSTEMWINDOW | WB_STANDALONE | WB_HIDE);
-    //TODO: Assign Help ID's to all controls...
+
     aTabBgColorBox.SetText(rTitle);
     FillColorValueSets_Impl();
     aTabBgColorSet.SetDoubleClickHdl( HDL(TabBgColorDblClickHdl_Impl) );
@@ -86,7 +89,7 @@ void ScTabBgColorDlg::GetSelectedColor( Color& rColor ) const
     rColor = this->aTabBgColor;
 }
 
-__EXPORT ScTabBgColorDlg::~ScTabBgColorDlg()
+ScTabBgColorDlg::~ScTabBgColorDlg()
 {
 }
 
@@ -95,20 +98,21 @@ void ScTabBgColorDlg::FillColorValueSets_Impl()
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     const SfxPoolItem* pItem = NULL;
     XColorTable* pColorTable = NULL;
+    ::boost::scoped_ptr<XColorTable> pOwnColorTable; // locally instantiated in case the doc shell doesn't have one.
+
     const Size aSize15x15 = Size( 15, 15 );
     const Size aSize10x10 = Size( 10, 10 );
     const Size aSize5x5 = Size( 5, 5 );
     USHORT nSelectedItem = 0;
-    FASTBOOL bOwn = FALSE;
 
     DBG_ASSERT( pDocSh, "DocShell not found!" );
 
-    if ( pDocSh && ( 0 != ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) ) )
+    if ( pDocSh && ( 0 != ( pItem = pDocSh->GetItem(SID_COLOR_TABLE) ) ) )
         pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
     if ( !pColorTable )
     {
-        bOwn = TRUE;
-        pColorTable = new XColorTable( SvtPathOptions().GetPalettePath() );
+        pOwnColorTable.reset(new XColorTable(SvtPathOptions().GetPalettePath()));
+        pColorTable = pOwnColorTable.get();
     }
     if ( pColorTable )
     {
@@ -145,8 +149,6 @@ void ScTabBgColorDlg::FillColorValueSets_Impl()
     aTabBgColorSet.Format();
     aTabBgColorSet.SelectItem(nSelectedItem);
     aTabBgColorSet.Resize();
-    if ( bOwn )
-        delete pColorTable;
 }
 
 IMPL_LINK( ScTabBgColorDlg, TabBgColorDblClickHdl_Impl, ValueSet*, EMPTYARG )
@@ -173,7 +175,7 @@ IMPL_LINK( ScTabBgColorDlg, TabBgColorOKHdl_Impl, OKButton*, EMPTYARG )
     return 0;
 }
 
-__EXPORT ScTabBgColorDlg::ScTabBgColorValueSet::ScTabBgColorValueSet( Control* pParent, const ResId& rResId, ScTabBgColorDlg* pTabBgColorDlg ) :
+ScTabBgColorDlg::ScTabBgColorValueSet::ScTabBgColorValueSet( Control* pParent, const ResId& rResId, ScTabBgColorDlg* pTabBgColorDlg ) :
     ValueSet(pParent, rResId)
 {
     aTabBgColorDlg = pTabBgColorDlg;
