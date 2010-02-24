@@ -372,7 +372,7 @@ testcase tEditCompareDocument
 
     PrintLog "- Edit/Compare Document"
 
-    if ( gAppliction <> "WRITER" ) then
+    if ( gApplication <> "WRITER" ) then
         printlog( "Test only designed for WRITER, skipping" )
         goto endsub
     endif
