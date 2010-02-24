@@ -79,8 +79,8 @@ function hUseImpressAutopilot( bEnable as boolean ) as boolean
 
     '///+<li>Close Tools/Options</li>
     Kontext "OptionenDlg"
-    OptionenDlg.OK()
-
+    hCloseDialog( OptioneDlg, "ok" )
+    
     '///+<li>Close IMPRESS document</li>
     hDestroyDocument()
 
@@ -100,21 +100,7 @@ function hCloseNavigator() as boolean
     if ( VERBOSE ) then printlog( CFN & "Enter" )
     
     Kontext "Navigator"
-    if ( Navigator.Exists() ) then
-        Navigator.Close()
-        Navigator.notExists( 2 )
-        if ( VERBOSE ) then printlog( CFN & "Closed Navigator" )
-    else
-        if ( VERBOSE ) then printlog( CFN & "Navigator not present" )
-    endif
-    
-    Kontext "Navigator"
-    if ( Navigator.exists() ) then
-        hCloseNavigator() = false
-        warnlog( CFN & "Failed to close Navigator, it is still open." )
-    else
-        hCloseNavigator() = true
-    endif
+    hCloseNavigator() = hCloseDialog( Navigator , "close" )
     
     if ( VERBOSE ) then printlog( CFN & "Exit" )
 

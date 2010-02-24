@@ -995,12 +995,14 @@ function hCloseDialog( oDialog as object, sMethod as string ) as boolean
 
     printlog( "Closing dialog <" & oDialog.name() & "." & sClosingMethod )
 
-    select case( sClosingMethod )
-    case "close" : oDialog.close()
-    case "cancel": oDialog.cancel()
-    case "ok"    : oDialog.ok()
-    case else    : warnlog( CFN & " Script error: Allowed closing methods are <cancel>, <close> and <ok>" )
-    end select
+    if ( oDialog.exists() ) then
+        select case( sClosingMethod )
+        case "close" : oDialog.close()
+        case "cancel": oDialog.cancel()
+        case "ok"    : oDialog.ok()
+        case else    : warnlog( CFN & " Script error: Allowed closing methods are <cancel>, <close> and <ok>" )
+        end select
+    endif
 
     if ( oDialog.notExists( TIMEOUT ) ) then hCloseDialog() = TRUE
 
