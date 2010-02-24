@@ -381,7 +381,7 @@ testcase tEditCompareDocument
     EditCompareDocumentCalc
 
     Kontext "OeffnenDlg"
-    if ( OeffnenDlg.exists( 2 ) then
+    if ( OeffnenDlg.exists( 2 ) ) then
     
         Dateiname.SetText ConvertPath ( gTesttoolPath & "writer\required\input\bt.sxw" )
         PrintLog "in File-Open-dialog load ..\writer\required\input\bt.sxw"
@@ -391,7 +391,7 @@ testcase tEditCompareDocument
         if Filterauswahl.Exists( 2 ) then
             Filterauswahl.OK()
         else
-            qaerrorlog( "Dialog <Filteraswahl> did not open. Good or bad?" )
+            qaerrorlog( "Dialog <Filterauswahl> did not open. Good or bad?" )
         endif
         
         Kontext "Active"
