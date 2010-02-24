@@ -37,16 +37,26 @@
 
 #include "tabbgcolor.hxx"
 
-ScUndoSetTabBgColorInfo::ScUndoSetTabBgColorInfo(SCTAB nTab) :
-    nTabId(nTab),
-    aOldTabBgColor(COL_AUTO),
-    aNewTabBgColor(COL_AUTO)
+bool ScUndoTabColorInfo::IsDefaultOldTabBgColor() const
+{
+    return maOldTabBgColor == Color(COL_AUTO);
+}
+
+bool ScUndoTabColorInfo::IsDefaultNewTabBgColor() const
+{
+    return maOldTabBgColor == Color(COL_AUTO);
+}
+
+ScUndoTabColorInfo::ScUndoTabColorInfo(SCTAB nTab) :
+    mnTabId(nTab),
+    maOldTabBgColor(COL_AUTO),
+    maNewTabBgColor(COL_AUTO)
 {
 }
 
-ScUndoSetTabBgColorInfo::ScUndoSetTabBgColorInfo(const ScUndoSetTabBgColorInfo& r) :
-    nTabId(r.nTabId),
-    aOldTabBgColor(r.aOldTabBgColor),
-    aNewTabBgColor(r.aNewTabBgColor)
+ScUndoTabColorInfo::ScUndoTabColorInfo(const ScUndoTabColorInfo& r) :
+    mnTabId(r.mnTabId),
+    maOldTabBgColor(r.maOldTabBgColor),
+    maNewTabBgColor(r.maNewTabBgColor)
 {
 }

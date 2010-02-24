@@ -27,6 +27,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef SC_TABBGCOLOR_HXX
 #define SC_TABBGCOLOR_HXX
 
@@ -35,19 +36,19 @@
 
 #include <vector>
 
-struct ScUndoSetTabBgColorInfo
+struct ScUndoTabColorInfo
 {
-public:
-    SCTAB nTabId;
-    Color aOldTabBgColor;
-    Color aNewTabBgColor;
-    bool IsDefaultOldTabBgColor() const { return aOldTabBgColor == Color(COL_AUTO) ? true : false; }
-    bool IsDefaultNewTabBgColor() const { return aOldTabBgColor == Color(COL_AUTO) ? true : false; }
+    SCTAB mnTabId;
+    Color maOldTabBgColor;
+    Color maNewTabBgColor;
 
-    explicit ScUndoSetTabBgColorInfo(SCTAB nTab);
-    ScUndoSetTabBgColorInfo(const ScUndoSetTabBgColorInfo& r);
+    bool IsDefaultOldTabBgColor() const;
+    bool IsDefaultNewTabBgColor() const;
+
+    explicit ScUndoTabColorInfo(SCTAB nTab);
+    ScUndoTabColorInfo(const ScUndoTabColorInfo& r);
+
+    typedef ::std::vector<ScUndoTabColorInfo> List;
 };
-
-typedef ::std::vector<ScUndoSetTabBgColorInfo> ScUndoSetTabBgColorInfoList;
 
 #endif

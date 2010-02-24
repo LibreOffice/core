@@ -723,14 +723,14 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                     if ( nTabSelCount > 1 )
                     {
-                        scoped_ptr<ScUndoSetTabBgColorInfoList>
-                            pTabColorList(new ScUndoSetTabBgColorInfoList);
+                        scoped_ptr<ScUndoTabColorInfo::List>
+                            pTabColorList(new ScUndoTabColorInfo::List);
                         for (SCTAB nTab=0; nTab<nTabCount; nTab++)
                         {
                             if ( rMark.GetTableSelect(nTab) && !pDoc->IsTabProtected(nTab) )
                             {
-                                ScUndoSetTabBgColorInfo aTabColorInfo(nTab);
-                                aTabColorInfo.aNewTabBgColor = aColor;
+                                ScUndoTabColorInfo aTabColorInfo(nTab);
+                                aTabColorInfo.maNewTabBgColor = aColor;
                                 pTabColorList->push_back(aTabColorInfo);
                             }
                         }
@@ -768,16 +768,16 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         {
                             Color aSelectedColor;
                             pDlg->GetSelectedColor(aSelectedColor);
-                            scoped_ptr<ScUndoSetTabBgColorInfoList>
-                                pTabColorList(new ScUndoSetTabBgColorInfoList);
+                            scoped_ptr<ScUndoTabColorInfo::List>
+                                pTabColorList(new ScUndoTabColorInfo::List);
                             if ( nTabSelCount > 1 )
                             {
                                 for  (SCTAB nTab=0; nTab<nTabCount; nTab++)
                                 {
                                     if ( rMark.GetTableSelect(nTab) && !pDoc->IsTabProtected(nTab) )
                                     {
-                                        ScUndoSetTabBgColorInfo aTabColorInfo(nTab);
-                                        aTabColorInfo.aNewTabBgColor = aSelectedColor;
+                                        ScUndoTabColorInfo aTabColorInfo(nTab);
+                                        aTabColorInfo.maNewTabBgColor = aSelectedColor;
                                         pTabColorList->push_back(aTabColorInfo);
                                     }
                                 }

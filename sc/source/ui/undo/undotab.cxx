@@ -802,7 +802,7 @@ ScUndoSetTabBgColor::ScUndoSetTabBgColor( ScDocShell* pNewDocShell,
 
 ScUndoSetTabBgColor::ScUndoSetTabBgColor(
     ScDocShell* pNewDocShell,
-    const ScUndoSetTabBgColorInfoList& rUndoTabColorList) :
+    const ScUndoTabColorInfo::List& rUndoTabColorList) :
     ScSimpleUndo(pNewDocShell),
     aTabColorList(rUndoTabColorList),
     bIsMultipleUndo (true)
@@ -850,9 +850,9 @@ void ScUndoSetTabBgColor::DoChange(BOOL bUndoType) const
     size_t nTabColorCount = aTabColorList.size();
     for (size_t i=0; i < nTabColorCount; ++i)
     {
-        const ScUndoSetTabBgColorInfo& rTabColor = aTabColorList[i];
-        pDoc->SetTabBgColor(rTabColor.nTabId,
-            bUndoType ? rTabColor.aOldTabBgColor : rTabColor.aNewTabBgColor);
+        const ScUndoTabColorInfo& rTabColor = aTabColorList[i];
+        pDoc->SetTabBgColor(rTabColor.mnTabId,
+            bUndoType ? rTabColor.maOldTabBgColor : rTabColor.maNewTabBgColor);
     }
     pDocShell->PostPaintExtras();
     pDocShell->PostDataChanged();

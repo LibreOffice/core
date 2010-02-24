@@ -279,7 +279,7 @@ public:
                                     BOOL bLink,SCTAB nTab);
 
     bool            SetTabBgColor( const Color& rColor, SCTAB nTabNr );
-    bool            SetTabBgColor( ScUndoSetTabBgColorInfoList& rUndoSetTabBgColorInfoList );
+    bool            SetTabBgColor( ScUndoTabColorInfo::List& rUndoSetTabBgColorInfoList );
 
     void            InsertTableLink( const String& rFile,
                                         const String& rFilter, const String& rOptions,

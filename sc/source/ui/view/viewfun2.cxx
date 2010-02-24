@@ -2287,7 +2287,7 @@ bool ScViewFunc::SetTabBgColor( const Color& rColor, SCTAB nTab )
     return bSuccess;
 }
 
-bool ScViewFunc::SetTabBgColor( ScUndoSetTabBgColorInfoList& rUndoSetTabBgColorInfoList )
+bool ScViewFunc::SetTabBgColor( ScUndoTabColorInfo::List& rUndoSetTabBgColorInfoList )
 {
     bool bSuccess = GetViewData()->GetDocShell()->GetDocFunc().SetTabBgColor( rUndoSetTabBgColorInfoList, TRUE, FALSE );
     if (bSuccess)

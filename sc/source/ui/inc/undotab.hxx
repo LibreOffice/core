@@ -238,7 +238,7 @@ public:
                             const Color& aNTabBgColor);
                     ScUndoSetTabBgColor(
                             ScDocShell* pNewDocShell,
-                            const ScUndoSetTabBgColorInfoList& rUndoTabColorList);
+                            const ScUndoTabColorInfo::List& rUndoTabColorList);
     virtual         ~ScUndoSetTabBgColor();
 
     virtual void    Undo();
@@ -249,7 +249,7 @@ public:
 virtual String  GetComment() const;
 
 private:
-    ScUndoSetTabBgColorInfoList aTabColorList;
+    ScUndoTabColorInfo::List aTabColorList;
     SCTAB   nTab;
     Color   aOldTabBgColor;
     Color   aNewTabBgColor;

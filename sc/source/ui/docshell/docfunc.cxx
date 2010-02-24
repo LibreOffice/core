@@ -2893,7 +2893,7 @@ bool ScDocFunc::SetTabBgColor( SCTAB nTab, const Color& rColor, bool bRecord, bo
 }
 
 bool ScDocFunc::SetTabBgColor(
-    ScUndoSetTabBgColorInfoList& rUndoTabColorList, bool bRecord, bool bApi )
+    ScUndoTabColorInfo::List& rUndoTabColorList, bool bRecord, bool bApi )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
     if (bRecord && !pDoc->IsUndoEnabled())
@@ -2913,12 +2913,12 @@ bool ScDocFunc::SetTabBgColor(
     size_t nTabListCount = rUndoTabColorList.size();
     for ( size_t i = 0; i < nTabListCount; ++i )
     {
-        ScUndoSetTabBgColorInfo& rInfo = rUndoTabColorList[i];
-        nTab = rInfo.nTabId;
+        ScUndoTabColorInfo& rInfo = rUndoTabColorList[i];
+        nTab = rInfo.mnTabId;
         if ( !pDoc->IsTabProtected(nTab) )
         {
-            aNewTabBgColor = rInfo.aNewTabBgColor;
-            rInfo.aOldTabBgColor = pDoc->GetTabBgColor(nTab);
+            aNewTabBgColor = rInfo.maNewTabBgColor;
+            rInfo.maOldTabBgColor = pDoc->GetTabBgColor(nTab);
             pDoc->SetTabBgColor(nTab, aNewTabBgColor);
             if ( pDoc->GetTabBgColor(nTab) != aNewTabBgColor)
             {
