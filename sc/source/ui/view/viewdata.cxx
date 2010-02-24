@@ -273,8 +273,9 @@ void ScViewDataTable::ReadUserDataSequence(const uno::Sequence <beans::PropertyV
             aSettings[i].Value >>= bSelected;
             rViewData.GetMarkData().SelectTable( nTab, bSelected );
         }
-        else if (sName.compareToAscii(SC_UNO_TABCOLOR) == 0)
+        else if (sName.compareToAscii(SC_UNONAME_TABCOLOR) == 0)
         {
+            // There are documents out there that have their tab color defined as a view setting.
             sal_Int32 nColor = COL_AUTO;
             aSettings[i].Value >>= nColor;
             if (static_cast<ColorData>(nColor) != COL_AUTO)
