@@ -344,16 +344,7 @@
       <quarter4Abbreviation>C4</quarter4Abbreviation>
     </ReservedWords>
   </LC_MISC>
-  <LC_NumberingLevel>
-    <NumberingLevel NumType="4" Prefix=" "  Suffix="."/>
-    <NumberingLevel NumType="4" Prefix=" "  Suffix=")"/>
-    <NumberingLevel NumType="4" Prefix="("  Suffix=")"/>
-    <NumberingLevel NumType="2" Prefix=" "  Suffix="."/>
-    <NumberingLevel NumType="0" Prefix=" "  Suffix=")"/>
-    <NumberingLevel NumType="1" Prefix=" "  Suffix=")"/>
-    <NumberingLevel NumType="1" Prefix="("  Suffix=")"/>
-    <NumberingLevel NumType="3" Prefix=" "  Suffix="."/>
-  </LC_NumberingLevel>
-  <LC_OutLineNumberingLevel ref="en_US"/>
+  <LC_NumberingLevel ref="lv_LV"/>
+  <LC_OutLineNumberingLevel ref="lv_LV"/>
 </Locale>
 <!--Version 1.0  -->
