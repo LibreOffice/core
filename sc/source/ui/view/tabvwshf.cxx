@@ -64,6 +64,8 @@
 
 #include <boost/scoped_ptr.hpp>
 
+using ::boost::scoped_ptr;
+
 #define IS_AVAILABLE(WhichId,ppItem) \
     (pReqArgs->GetItemState((WhichId), TRUE, ppItem ) == SFX_ITEM_SET)
 
@@ -702,8 +704,6 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 ScMarkData& rMark = pViewData->GetMarkData();
                 SCTAB nTabSelCount = rMark.GetSelectCount();
 
-                ::boost::scoped_ptr<ScUndoSetTabBgColorInfoList> pTabColorList;
-
                 if ( !pDoc->IsDocEditable() )
                     break;
 
@@ -723,7 +723,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                     if ( nTabSelCount > 1 )
                     {
-                        pTabColorList.reset(new ScUndoSetTabBgColorInfoList);
+                        scoped_ptr<ScUndoSetTabBgColorInfoList>
+                            pTabColorList(new ScUndoSetTabBgColorInfoList);
                         for (SCTAB nTab=0; nTab<nTabCount; nTab++)
                         {
                             if ( rMark.GetTableSelect(nTab) && !pDoc->IsTabProtected(nTab) )
@@ -767,7 +768,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         {
                             Color aSelectedColor;
                             pDlg->GetSelectedColor(aSelectedColor);
-                            pTabColorList.reset(new ScUndoSetTabBgColorInfoList);
+                            scoped_ptr<ScUndoSetTabBgColorInfoList>
+                                pTabColorList(new ScUndoSetTabBgColorInfoList);
                             if ( nTabSelCount > 1 )
                             {
                                 for  (SCTAB nTab=0; nTab<nTabCount; nTab++)
