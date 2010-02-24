@@ -990,7 +990,7 @@ function hCloseDialog( oDialog as object, sMethod as string ) as boolean
     const CFN = "global::tools::includes::required::t_tools3.inc:hCloseDialog"
     const TIMEOUT = 2 ' Maximum time to wait for a dialog to close
 
-    dim sClosingMethod as string : sClosingMethod = lcase( _sMethod )
+    dim sClosingMethod as string : sClosingMethod = lcase( sMethod )
     hCloseDialog() = FALSE ' Set default returnvalue, assume failure
 
     printlog( "Closing dialog <" & oDialog.name() & "." & sClosingMethod )
