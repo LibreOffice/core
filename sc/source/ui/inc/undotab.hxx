@@ -238,7 +238,7 @@ public:
                             const Color& aNTabBgColor);
                     ScUndoSetTabBgColor(
                             ScDocShell* pNewDocShell,
-                            ScUndoSetTabBgColorInfoList* pUndoSetTabBgColorInfoList);
+                            const ScUndoSetTabBgColorInfoList& rUndoTabColorList);
     virtual         ~ScUndoSetTabBgColor();
 
     virtual void    Undo();
@@ -249,11 +249,11 @@ public:
 virtual String  GetComment() const;
 
 private:
-    ScUndoSetTabBgColorInfoList* aUndoSetTabBgColorInfoList;
+    ScUndoSetTabBgColorInfoList aTabColorList;
     SCTAB   nTab;
     Color   aOldTabBgColor;
     Color   aNewTabBgColor;
-    BOOL    bIsMultipleUndo;
+    bool    bIsMultipleUndo;
 
     void DoChange( SCTAB nTab, const Color& rTabBgColor ) const;
     void DoChange( BOOL bUndoType ) const;

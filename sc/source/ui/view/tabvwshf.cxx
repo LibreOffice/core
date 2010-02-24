@@ -58,9 +58,11 @@
 
 #include "scabstdlg.hxx" //CHINA001
 
-#include "tabbgcolor.hxx" //DBW
-#include "tabbgcolordlg.hxx" //DBW
-#include <svx/colritem.hxx> //DBW
+#include "tabbgcolor.hxx"
+#include "tabbgcolordlg.hxx"
+#include "svx/colritem.hxx"
+
+#include <boost/scoped_ptr.hpp>
 
 #define IS_AVAILABLE(WhichId,ppItem) \
     (pReqArgs->GetItemState((WhichId), TRUE, ppItem ) == SFX_ITEM_SET)
@@ -700,8 +702,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 ScMarkData& rMark = pViewData->GetMarkData();
                 SCTAB nTabSelCount = rMark.GetSelectCount();
 
-                ScUndoSetTabBgColorInfo*     aTabBgColorUndoInfo=NULL;
-                ScUndoSetTabBgColorInfoList* aTabBgColorUndoInfoList =NULL;
+                ::boost::scoped_ptr<ScUndoSetTabBgColorInfoList> pTabColorList;
 
                 if ( !pDoc->IsDocEditable() )
                     break;
@@ -722,18 +723,17 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                     if ( nTabSelCount > 1 )
                     {
-                        aTabBgColorUndoInfoList = new ScUndoSetTabBgColorInfoList();
+                        pTabColorList.reset(new ScUndoSetTabBgColorInfoList);
                         for (SCTAB nTab=0; nTab<nTabCount; nTab++)
                         {
                             if ( rMark.GetTableSelect(nTab) && !pDoc->IsTabProtected(nTab) )
                             {
-                                aTabBgColorUndoInfo = new ScUndoSetTabBgColorInfo();
-                                aTabBgColorUndoInfo->nTabId = nTab;
-                                aTabBgColorUndoInfo->aNewTabBgColor = aColor;
-                                aTabBgColorUndoInfoList->Insert(aTabBgColorUndoInfo);
+                                ScUndoSetTabBgColorInfo aTabColorInfo(nTab);
+                                aTabColorInfo.aNewTabBgColor = aColor;
+                                pTabColorList->push_back(aTabColorInfo);
                             }
                         }
-                        bDone = SetTabBgColor( aTabBgColorUndoInfoList );
+                        bDone = SetTabBgColor( *pTabColorList );
                     }
                     else
                     {
@@ -767,20 +767,19 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         {
                             Color aSelectedColor;
                             pDlg->GetSelectedColor(aSelectedColor);
-                            aTabBgColorUndoInfoList = new ScUndoSetTabBgColorInfoList();
+                            pTabColorList.reset(new ScUndoSetTabBgColorInfoList);
                             if ( nTabSelCount > 1 )
                             {
                                 for  (SCTAB nTab=0; nTab<nTabCount; nTab++)
                                 {
                                     if ( rMark.GetTableSelect(nTab) && !pDoc->IsTabProtected(nTab) )
                                     {
-                                        aTabBgColorUndoInfo = new ScUndoSetTabBgColorInfo();
-                                        aTabBgColorUndoInfo->nTabId = nTab;
-                                        aTabBgColorUndoInfo->aNewTabBgColor = aSelectedColor;
-                                        aTabBgColorUndoInfoList->Insert(aTabBgColorUndoInfo);
+                                        ScUndoSetTabBgColorInfo aTabColorInfo(nTab);
+                                        aTabColorInfo.aNewTabBgColor = aSelectedColor;
+                                        pTabColorList->push_back(aTabColorInfo);
                                     }
                                 }
-                                bDone = SetTabBgColor( aTabBgColorUndoInfoList );
+                                bDone = SetTabBgColor( *pTabColorList );
                             }
                             else
                             {

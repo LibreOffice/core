@@ -27,27 +27,26 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef SC_TABBGCOLOR_HXX
-#define SC_TABBGCOLOR_HXX
 
-#include "tools/color.hxx"
-#include "address.hxx"
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sc.hxx"
 
-#include <vector>
 
-struct ScUndoSetTabBgColorInfo
+
+// INCLUDE ---------------------------------------------------------------
+
+#include "tabbgcolor.hxx"
+
+ScUndoSetTabBgColorInfo::ScUndoSetTabBgColorInfo(SCTAB nTab) :
+    nTabId(nTab),
+    aOldTabBgColor(COL_AUTO),
+    aNewTabBgColor(COL_AUTO)
 {
-public:
-    SCTAB nTabId;
-    Color aOldTabBgColor;
-    Color aNewTabBgColor;
-    bool IsDefaultOldTabBgColor() const { return aOldTabBgColor == Color(COL_AUTO) ? true : false; }
-    bool IsDefaultNewTabBgColor() const { return aOldTabBgColor == Color(COL_AUTO) ? true : false; }
+}
 
-    explicit ScUndoSetTabBgColorInfo(SCTAB nTab);
-    ScUndoSetTabBgColorInfo(const ScUndoSetTabBgColorInfo& r);
-};
-
-typedef ::std::vector<ScUndoSetTabBgColorInfo> ScUndoSetTabBgColorInfoList;
-
-#endif
+ScUndoSetTabBgColorInfo::ScUndoSetTabBgColorInfo(const ScUndoSetTabBgColorInfo& r) :
+    nTabId(r.nTabId),
+    aOldTabBgColor(r.aOldTabBgColor),
+    aNewTabBgColor(r.aNewTabBgColor)
+{
+}

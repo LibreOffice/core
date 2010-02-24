@@ -793,7 +793,6 @@ ScUndoSetTabBgColor::ScUndoSetTabBgColor( ScDocShell* pNewDocShell,
                                         const Color& aOTabBgColor,
                                         const Color& aNTabBgColor) :
     ScSimpleUndo( pNewDocShell ),
-    aUndoSetTabBgColorInfoList ( NULL ),
     nTab     ( nT ),
     aOldTabBgColor( aOTabBgColor ),
     aNewTabBgColor( aNTabBgColor ),
@@ -801,12 +800,13 @@ ScUndoSetTabBgColor::ScUndoSetTabBgColor( ScDocShell* pNewDocShell,
 {
 }
 
-ScUndoSetTabBgColor::ScUndoSetTabBgColor( ScDocShell* pNewDocShell,
-                                        ScUndoSetTabBgColorInfoList* pUndoSetTabBgColorInfoList) :
-    ScSimpleUndo( pNewDocShell ),
-    bIsMultipleUndo ( TRUE )
+ScUndoSetTabBgColor::ScUndoSetTabBgColor(
+    ScDocShell* pNewDocShell,
+    const ScUndoSetTabBgColorInfoList& rUndoTabColorList) :
+    ScSimpleUndo(pNewDocShell),
+    aTabColorList(rUndoTabColorList),
+    bIsMultipleUndo (true)
 {
-    aUndoSetTabBgColorInfoList = pUndoSetTabBgColorInfoList;
 }
 
 ScUndoSetTabBgColor::~ScUndoSetTabBgColor()
@@ -815,7 +815,7 @@ ScUndoSetTabBgColor::~ScUndoSetTabBgColor()
 
 String ScUndoSetTabBgColor::GetComment() const
 {
-    if (bIsMultipleUndo && aUndoSetTabBgColorInfoList && aUndoSetTabBgColorInfoList->Count() > 1)
+    if (bIsMultipleUndo && aTabColorList.size() > 1)
         return ScGlobal::GetRscString( STR_UNDO_SET_MULTI_TAB_BG_COLOR );
     return ScGlobal::GetRscString( STR_UNDO_SET_TAB_BG_COLOR );
 }
@@ -847,13 +847,12 @@ void ScUndoSetTabBgColor::DoChange(BOOL bUndoType) const
     if (!pDoc)
         return;
 
-    ScUndoSetTabBgColorInfo* aUndoSetTabBgColorInfo = NULL;
-    for (USHORT i=0; i < aUndoSetTabBgColorInfoList->Count(); ++i)
+    size_t nTabColorCount = aTabColorList.size();
+    for (size_t i=0; i < nTabColorCount; ++i)
     {
-        aUndoSetTabBgColorInfo = aUndoSetTabBgColorInfoList->GetObject(i);
-        pDoc->SetTabBgColor(
-            aUndoSetTabBgColorInfo->nTabId,
-            bUndoType ? aUndoSetTabBgColorInfo->aOldTabBgColor : aUndoSetTabBgColorInfo->aNewTabBgColor);
+        const ScUndoSetTabBgColorInfo& rTabColor = aTabColorList[i];
+        pDoc->SetTabBgColor(rTabColor.nTabId,
+            bUndoType ? rTabColor.aOldTabBgColor : rTabColor.aNewTabBgColor);
     }
     pDocShell->PostPaintExtras();
     pDocShell->PostDataChanged();

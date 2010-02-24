@@ -2892,11 +2892,13 @@ bool ScDocFunc::SetTabBgColor( SCTAB nTab, const Color& rColor, bool bRecord, bo
     return bSuccess;
 }
 
-bool ScDocFunc::SetTabBgColor( ScUndoSetTabBgColorInfoList* rUndoSetTabBgColorInfoList, bool bRecord, bool bApi )
+bool ScDocFunc::SetTabBgColor(
+    ScUndoSetTabBgColorInfoList& rUndoTabColorList, bool bRecord, bool bApi )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = false;
+
     if ( !pDoc->IsDocEditable() )
     {
         if (!bApi)
@@ -2904,20 +2906,19 @@ bool ScDocFunc::SetTabBgColor( ScUndoSetTabBgColorInfoList* rUndoSetTabBgColorIn
         return false;
     }
 
-    ScViewData* pViewData = rDocShell.GetViewData();
     USHORT nTab;
     Color aNewTabBgColor;
-    ScUndoSetTabBgColorInfo* rUndoSetTabBgColorInfo;
     bool bSuccess = true;
-    USHORT nTabProtectCount = 0;
-    for ( USHORT i=0; i < rUndoSetTabBgColorInfoList->Count(); i++ )
+    size_t nTabProtectCount = 0;
+    size_t nTabListCount = rUndoTabColorList.size();
+    for ( size_t i = 0; i < nTabListCount; ++i )
     {
-        rUndoSetTabBgColorInfo = rUndoSetTabBgColorInfoList->GetObject(i);
-        nTab = rUndoSetTabBgColorInfo->nTabId;
+        ScUndoSetTabBgColorInfo& rInfo = rUndoTabColorList[i];
+        nTab = rInfo.nTabId;
         if ( !pDoc->IsTabProtected(nTab) )
         {
-            aNewTabBgColor = rUndoSetTabBgColorInfo->aNewTabBgColor;
-            rUndoSetTabBgColorInfo->aOldTabBgColor = pDoc->GetTabBgColor(nTab);
+            aNewTabBgColor = rInfo.aNewTabBgColor;
+            rInfo.aOldTabBgColor = pDoc->GetTabBgColor(nTab);
             pDoc->SetTabBgColor(nTab, aNewTabBgColor);
             if ( pDoc->GetTabBgColor(nTab) != aNewTabBgColor)
             {
@@ -2930,18 +2931,20 @@ bool ScDocFunc::SetTabBgColor( ScUndoSetTabBgColorInfoList* rUndoSetTabBgColorIn
             nTabProtectCount++;
         }
     }
-    if ( nTabProtectCount == rUndoSetTabBgColorInfoList->Count() )
+
+    if ( nTabProtectCount == nTabListCount )
     {
         if (!bApi)
             rDocShell.ErrorMessage(STR_PROTECTIONERR); //TODO Get a better String Error...
-        return FALSE;
+        return false;
     }
+
     if (bSuccess)
     {
         if (bRecord)
         {
             rDocShell.GetUndoManager()->AddUndoAction(
-                new ScUndoSetTabBgColor( &rDocShell, rUndoSetTabBgColorInfoList));
+                new ScUndoSetTabBgColor( &rDocShell, rUndoTabColorList));
         }
         rDocShell.PostPaintExtras();
         ScDocShellModificator aModificator( rDocShell );

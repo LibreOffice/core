@@ -278,8 +278,8 @@ public:
                                     SCTAB nCount, const SCTAB* pSrcTabs,
                                     BOOL bLink,SCTAB nTab);
 
-    BOOL            SetTabBgColor( const Color& rColor, SCTAB nTabNr );
-    BOOL            SetTabBgColor( ScUndoSetTabBgColorInfoList* rUndoSetTabBgColorInfoList );
+    bool            SetTabBgColor( const Color& rColor, SCTAB nTabNr );
+    bool            SetTabBgColor( ScUndoSetTabBgColorInfoList& rUndoSetTabBgColorInfoList );
 
     void            InsertTableLink( const String& rFile,
                                         const String& rFilter, const String& rOptions,
