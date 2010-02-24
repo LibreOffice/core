@@ -164,7 +164,7 @@ BOOL lcl_GetSortParam( const ScViewData* pData, ScSortParam& rSortParam )
     SCCOL nStartCol = aExternalRange.aStart.Col();
     SCROW nEndRow   = aExternalRange.aEnd.Row();
     SCCOL nEndCol   = aExternalRange.aEnd.Col();
-    pDoc->GetDataArea( aExternalRange.aStart.Tab(), nStartCol, nStartRow, nEndCol, nEndRow, FALSE );
+    pDoc->GetDataArea( aExternalRange.aStart.Tab(), nStartCol, nStartRow, nEndCol, nEndRow, FALSE, false );
     aExternalRange.aStart.SetRow( nStartRow );
     aExternalRange.aStart.SetCol( nStartCol );
     aExternalRange.aEnd.SetRow( nEndRow );

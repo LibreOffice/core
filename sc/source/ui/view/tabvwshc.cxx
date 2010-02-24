@@ -178,7 +178,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
                                      SCITEM_QUERYDATA,
                                      SCITEM_QUERYDATA );
 
-            ScDBData* pDBData = GetDBData();
+            ScDBData* pDBData = GetDBData( TRUE, SC_DB_MAKE, SC_DBSEL_ROW_DOWN);
             pDBData->GetQueryParam( aQueryParam );
 
             ScQueryItem aItem( SCITEM_QUERYDATA, GetViewData(), &aQueryParam );
@@ -203,7 +203,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
                                      SCITEM_QUERYDATA,
                                      SCITEM_QUERYDATA );
 
-            ScDBData* pDBData = GetDBData();
+            ScDBData* pDBData = GetDBData( TRUE, SC_DB_MAKE, SC_DBSEL_ROW_DOWN);
             pDBData->GetQueryParam( aQueryParam );
 
             aArgSet.Put( ScQueryItem( SCITEM_QUERYDATA,

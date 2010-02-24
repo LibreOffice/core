@@ -192,7 +192,7 @@ BOOL ScDBDocFunc::DoImportUno( const ScAddress& rPos,
         //  create database range
         //! merge this with SID_SBA_IMPORT execute in docsh4.cxx
 
-        ScDBData* pDBData = rDocShell.GetDBData( ScRange(rPos), SC_DB_IMPORT, FALSE );
+        ScDBData* pDBData = rDocShell.GetDBData( ScRange(rPos), SC_DB_IMPORT, SC_DBSEL_KEEP );
         DBG_ASSERT(pDBData, "can't create DB data");
         String sTarget = pDBData->GetName();
 

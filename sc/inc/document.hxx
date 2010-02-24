@@ -866,10 +866,17 @@ public:
 
     USHORT          GetErrCode( const ScAddress& ) const;
 
-    bool            ShrinkToDataArea(SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow) const;
+                    /** Shrink a range to only include data area.
+                        This is not the actually used area within the
+                        selection, but the bounds of the sheet's data area
+                        instead. */
+    bool            ShrinkToDataArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow ) const;
+
+                    /** Shrink a range to only include used data area. */
+    bool            ShrinkToUsedDataArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly ) const;
 
     void            GetDataArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
-                                    SCCOL& rEndCol, SCROW& rEndRow, BOOL bIncludeOld );
+                                    SCCOL& rEndCol, SCROW& rEndRow, BOOL bIncludeOld, bool bOnlyDown );
     SC_DLLPUBLIC BOOL           GetCellArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) const;
     SC_DLLPUBLIC BOOL           GetTableArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow ) const;
     SC_DLLPUBLIC BOOL           GetPrintArea( SCTAB nTab, SCCOL& rEndCol, SCROW& rEndRow,

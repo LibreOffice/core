@@ -666,14 +666,22 @@ bool ScDocument::ShrinkToDataArea(SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow
     return true;  // success!
 }
 
+bool ScDocument::ShrinkToUsedDataArea( SCTAB nTab, SCCOL& rStartCol,
+        SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly ) const
+{
+    if (!ValidTab(nTab) || !pTab[nTab])
+        return false;
+    return pTab[nTab]->ShrinkToUsedDataArea( rStartCol, rStartRow, rEndCol, rEndRow, bColumnsOnly);
+}
+
 //  zusammenhaengender Bereich
 
 void ScDocument::GetDataArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
-                                SCCOL& rEndCol, SCROW& rEndRow, BOOL bIncludeOld )
+                                SCCOL& rEndCol, SCROW& rEndRow, BOOL bIncludeOld, bool bOnlyDown )
 {
     if (VALIDTAB(nTab))
         if (pTab[nTab])
-            pTab[nTab]->GetDataArea( rStartCol, rStartRow, rEndCol, rEndRow, bIncludeOld );
+            pTab[nTab]->GetDataArea( rStartCol, rStartRow, rEndCol, rEndRow, bIncludeOld, bOnlyDown );
 }
 
 

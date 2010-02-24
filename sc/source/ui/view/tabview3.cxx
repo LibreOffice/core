@@ -1430,7 +1430,7 @@ void ScTabView::MarkDataArea( BOOL bIncludeCursor )
     SCCOL nEndCol = nStartCol;
     SCROW nEndRow = nStartRow;
 
-    pDoc->GetDataArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow, bIncludeCursor );
+    pDoc->GetDataArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow, bIncludeCursor, false );
 
     HideAllCursors();
     DoneBlockMode();

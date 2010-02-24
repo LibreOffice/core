@@ -80,7 +80,7 @@ public:
     void            GotoDBArea( const String& rDBName );
 
                     // DB-Bereich vom Cursor
-    ScDBData*       GetDBData( BOOL bMarkArea = TRUE, ScGetDBMode eMode = SC_DB_MAKE, bool bShrinkToData = false );
+    ScDBData*       GetDBData( BOOL bMarkArea = TRUE, ScGetDBMode eMode = SC_DB_MAKE, ScGetDBSelection eSel = SC_DBSEL_KEEP );
 
     void            NotifyCloseDbNameDlg( const ScDBCollection& rNewColl, const List& rDelAreaList );
 

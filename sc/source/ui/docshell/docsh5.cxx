@@ -151,7 +151,7 @@ ScDBData* lcl_GetDBNearCursor( ScDBCollection* pColl, SCCOL nCol, SCROW nRow, SC
     return pNoNameData;                 // "unbenannt" nur zurueck, wenn sonst nichts gefunden
 }
 
-ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, BOOL bForceMark )
+ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGetDBSelection eSel )
 {
     SCCOL nCol = rMarked.aStart.Col();
     SCROW nRow = rMarked.aStart.Row();
@@ -172,7 +172,9 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, BOOL
     if (!pData)
         pData = lcl_GetDBNearCursor( aDocument.GetDBCollection(), nCol, nRow, nTab );
 
-    BOOL bSelected = ( bForceMark || rMarked.aStart != rMarked.aEnd );
+    BOOL bSelected = ( eSel == SC_DBSEL_FORCE_MARK ||
+            (rMarked.aStart != rMarked.aEnd && eSel != SC_DBSEL_ROW_DOWN) );
+    bool bOnlyDown = (!bSelected && eSel == SC_DBSEL_ROW_DOWN && rMarked.aStart.Row() == rMarked.aEnd.Row());
 
     BOOL bUseThis = FALSE;
     if (pData)
@@ -192,12 +194,21 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, BOOL
             bUseThis = TRUE;
             if ( bIsNoName && eMode == SC_DB_MAKE )
             {
-                //  wenn nichts markiert, "unbenannt" auf zusammenhaengenden Bereich anpassen
+                // If nothing marked or only one row marked, adapt
+                // "unbenannt"/"unnamed" to contiguous area.
                 nStartCol = nCol;
                 nStartRow = nRow;
-                nEndCol = nStartCol;
-                nEndRow = nStartRow;
-                aDocument.GetDataArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow, FALSE );
+                if (bOnlyDown)
+                {
+                    nEndCol = rMarked.aEnd.Col();
+                    nEndRow = rMarked.aEnd.Row();
+                }
+                else
+                {
+                    nEndCol = nStartCol;
+                    nEndRow = nStartRow;
+                }
+                aDocument.GetDataArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow, FALSE, bOnlyDown );
                 if ( nOldCol1 != nStartCol || nOldCol2 != nEndCol || nOldRow1 != nStartRow )
                     bUseThis = FALSE;               // passt gar nicht
                 else if ( nOldRow2 != nEndRow )
@@ -245,9 +256,17 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, BOOL
         {                                       // zusammenhaengender Bereich
             nStartCol = nCol;
             nStartRow = nRow;
-            nEndCol = nStartCol;
-            nEndRow = nStartRow;
-            aDocument.GetDataArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow, FALSE );
+            if (bOnlyDown)
+            {
+                nEndCol = rMarked.aEnd.Col();
+                nEndRow = rMarked.aEnd.Row();
+            }
+            else
+            {
+                nEndCol = nStartCol;
+                nEndRow = nStartRow;
+            }
+            aDocument.GetDataArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow, FALSE, bOnlyDown );
         }
 
         BOOL bHasHeader = aDocument.HasColHeader( nStartCol,nStartRow, nEndCol,nEndRow, nTab );

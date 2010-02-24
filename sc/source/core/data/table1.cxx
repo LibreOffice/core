@@ -685,7 +685,7 @@ BOOL ScTable::GetDataStart( SCCOL& rStartCol, SCROW& rStartRow ) const
 }
 
 void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow,
-                            BOOL bIncludeOld )
+                            BOOL bIncludeOld, bool bOnlyDown ) const
 {
     BOOL bLeft       = FALSE;
     BOOL bRight  = FALSE;
@@ -700,26 +700,44 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
     {
         bChanged = FALSE;
 
-        SCROW nStart = rStartRow;
-        SCROW nEnd = rEndRow;
-        if (nStart>0) --nStart;
-        if (nEnd<MAXROW) ++nEnd;
+        if (!bOnlyDown)
+        {
+            SCROW nStart = rStartRow;
+            SCROW nEnd = rEndRow;
+            if (nStart>0) --nStart;
+            if (nEnd<MAXROW) ++nEnd;
 
-        if (rEndCol < MAXCOL)
-            if (!aCol[rEndCol+1].IsEmptyBlock(nStart,nEnd))
-            {
-                ++rEndCol;
-                bChanged = TRUE;
-                bRight = TRUE;
-            }
+            if (rEndCol < MAXCOL)
+                if (!aCol[rEndCol+1].IsEmptyBlock(nStart,nEnd))
+                {
+                    ++rEndCol;
+                    bChanged = TRUE;
+                    bRight = TRUE;
+                }
 
-        if (rStartCol > 0)
-            if (!aCol[rStartCol-1].IsEmptyBlock(nStart,nEnd))
+            if (rStartCol > 0)
+                if (!aCol[rStartCol-1].IsEmptyBlock(nStart,nEnd))
+                {
+                    --rStartCol;
+                    bChanged = TRUE;
+                    bLeft = TRUE;
+                }
+
+            if (rStartRow > 0)
             {
-                --rStartCol;
-                bChanged = TRUE;
-                bLeft = TRUE;
+                nTest = rStartRow-1;
+                bFound = FALSE;
+                for (i=rStartCol; i<=rEndCol && !bFound; i++)
+                    if (aCol[i].HasDataAt(nTest))
+                        bFound = TRUE;
+                if (bFound)
+                {
+                    --rStartRow;
+                    bChanged = TRUE;
+                    bTop = TRUE;
+                }
             }
+        }
 
         if (rEndRow < MAXROW)
         {
@@ -733,21 +751,6 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
                 ++rEndRow;
                 bChanged = TRUE;
                 bBottom = TRUE;
-            }
-        }
-
-        if (rStartRow > 0)
-        {
-            nTest = rStartRow-1;
-            bFound = FALSE;
-            for (i=rStartCol; i<=rEndCol && !bFound; i++)
-                if (aCol[i].HasDataAt(nTest))
-                    bFound = TRUE;
-            if (bFound)
-            {
-                --rStartRow;
-                bChanged = TRUE;
-                bTop = TRUE;
             }
         }
     }
@@ -781,6 +784,77 @@ void ScTable::GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, S
         }
     }
 }
+
+
+bool ScTable::ShrinkToUsedDataArea( SCCOL& rStartCol, SCROW& rStartRow,
+        SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly ) const
+{
+    bool bRet = false;
+    bool bChanged;
+
+    do
+    {
+        bChanged = false;
+
+        bool bCont = true;
+        while (rEndCol > 0 && bCont && rStartCol < rEndCol)
+        {
+            if (aCol[rEndCol].IsEmptyBlock( rStartRow, rEndRow))
+            {
+                --rEndCol;
+                bChanged = true;
+            }
+            else
+                bCont = false;
+        }
+
+        bCont = true;
+        while (rStartCol < MAXCOL && bCont && rStartCol < rEndCol)
+        {
+            if (aCol[rStartCol].IsEmptyBlock( rStartRow, rEndRow))
+            {
+                ++rStartCol;
+                bChanged = true;
+            }
+            else
+                bCont = false;
+        }
+
+        if (!bColumnsOnly)
+        {
+            if (rStartRow < MAXROW && rStartRow < rEndRow)
+            {
+                bool bFound = false;
+                for (SCCOL i=rStartCol; i<=rEndCol && !bFound; i++)
+                    if (aCol[i].HasDataAt( rStartRow))
+                        bFound = true;
+                if (!bFound)
+                {
+                    ++rStartRow;
+                    bChanged = true;
+                }
+            }
+
+            if (rEndRow > 0 && rStartRow < rEndRow)
+            {
+                bool bFound = false;
+                for (SCCOL i=rStartCol; i<=rEndCol && !bFound; i++)
+                    if (aCol[i].HasDataAt( rEndRow))
+                        bFound = true;
+                if (!bFound)
+                {
+                    --rEndRow;
+                    bChanged = true;
+                }
+            }
+        }
+
+        if (bChanged)
+            bRet = true;
+    } while( bChanged );
+    return bRet;
+}
+
 
 SCSIZE ScTable::GetEmptyLinesInBlock( SCCOL nStartCol, SCROW nStartRow,
                                         SCCOL nEndCol, SCROW nEndRow, ScDirection eDir )

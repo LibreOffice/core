@@ -3120,7 +3120,7 @@ void ScInterpreter::ScColRowNameAuto()
                             (SCROW&) aRefData.Ref1.nRow,
                             (SCCOL&) aRefData.Ref2.nCol,
                             (SCROW&) aRefData.Ref2.nRow,
-                            TRUE );
+                            TRUE, false );
         // DataArea im Ursprung begrenzen
         aRefData.Ref1.nCol = nStartCol;
         aRefData.Ref1.nRow = nStartRow;
