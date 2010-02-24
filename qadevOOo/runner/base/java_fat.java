@@ -445,17 +445,16 @@ public class java_fat implements TestBase
             log.initialize(entry, logging);
             tCase.setLogWriter((PrintWriter) log);
 
-            TestEnvironment tEnv = null;
-
             try
             {
                 tCase.initializeTestCase(param);
-                tEnv = tCase.getTestEnvironment(param);
+                return tCase.getTestEnvironment(param);
             }
             catch (com.sun.star.lang.DisposedException de)
             {
                 System.out.println("Office disposed");
                 closeExistingOffice();
+                throw de;
             }
             catch (lib.StatusException e)
             {
@@ -465,9 +464,8 @@ public class java_fat implements TestBase
 
                 entry.ErrorMsg = e.getMessage();
                 entry.hasErrorMsg = true;
+                throw e;
             }
-
-            return tEnv;
         }
 
     private void closeExistingOffice()

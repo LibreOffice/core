@@ -54,18 +54,7 @@ public class AccessibilityTools {
     }
 
     public static XAccessible getAccessibleObject(XInterface xObject) {
-        XAccessible xAccessible = null;
-
-        try {
-            xAccessible = (XAccessible) UnoRuntime.queryInterface(
-                XAccessible.class, xObject);
-        } catch (Exception e) {
-            System.out.println(
-                "caught exception while getting accessible object" + e);
-            e.printStackTrace();
-        }
-
-        return xAccessible;
+        return UnoRuntime.queryInterface(XAccessible.class, xObject);
     }
 
     public static XWindow getCurrentContainerWindow(XMultiServiceFactory msf,
