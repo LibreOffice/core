@@ -1006,7 +1006,7 @@ testcase tEditFields
             if ( TabBenutzerdaten.exists( 2 ) ) then
                 printlog( "<TabBenutzerdaten> is open. Good." )
                 call DialogTest( TabBenutzerdaten )
-                hCloseDialog( TabBenutzerdaten, "cancel", 1 )
+                hCloseDialog( TabBenutzerdaten, "cancel" )
             else
                 warnlog( "<TabBenutzerdaten> did not open" )
             endif
@@ -1016,7 +1016,7 @@ testcase tEditFields
 
         PrintLog( "Close dialog" )
         Kontext "FeldbefehlBearbeitenDokument"
-        hCloseDialog( FeldbefehlBearbeitenDokument, "cancel", 1 )
+        hCloseDialog( FeldbefehlBearbeitenDokument, "cancel" )
     else
         warnlog( "<FeldbefehlBearbeitenDokument> did not open" )
     endif

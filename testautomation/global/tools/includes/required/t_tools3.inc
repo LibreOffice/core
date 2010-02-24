@@ -982,31 +982,26 @@ end function
 
 '-------------------------------------------------------------------------------
 
-function hCloseDialog( oDialog as object, sMethod as string, iTimeout as integer ) as boolean
+function hCloseDialog( oDialog as object, sMethod as string ) as boolean
 
     ' this function closes a dialog providing three different methods while
     ' removing the need for static sleep statements
 
     const CFN = "global::tools::includes::required::t_tools3.inc:hCloseDialog"
+    const TIMEOUT = 2 ' Maximum time to wait for a dialog to close
 
     dim sClosingMethod as string : sClosingMethod = lcase( _sMethod )
     hCloseDialog() = FALSE ' Set default returnvalue, assume failure
 
     printlog( "Closing dialog <" & oDialog.name() & "." & sClosingMethod )
 
-    ' prevent misuse
-    if ( iTimeout < 1 or iTimeout > 10 ) then
-        warnlog( CFN & "Please select a timeout between 1 and 10 seconds" )
-        exit function
-    endif
-
     select case( sClosingMethod )
     case "close" : oDialog.close()
     case "cancel": oDialog.cancel()
     case "ok"    : oDialog.ok()
-    case else    : warnlog( CFN & " Allowed closing methods are <cancel>, <close> and <ok>" )
+    case else    : warnlog( CFN & " Script error: Allowed closing methods are <cancel>, <close> and <ok>" )
     end case
 
-    if ( oDialog.notExists( iTimeout ) ) then hCloseDialog() = TRUE
+    if ( oDialog.notExists( TIMEOUT ) ) then hCloseDialog() = TRUE
 
 end function
