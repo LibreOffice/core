@@ -1000,7 +1000,7 @@ function hCloseDialog( oDialog as object, sMethod as string ) as boolean
     case "cancel": oDialog.cancel()
     case "ok"    : oDialog.ok()
     case else    : warnlog( CFN & " Script error: Allowed closing methods are <cancel>, <close> and <ok>" )
-    end case
+    end select
 
     if ( oDialog.notExists( TIMEOUT ) ) then hCloseDialog() = TRUE
 
