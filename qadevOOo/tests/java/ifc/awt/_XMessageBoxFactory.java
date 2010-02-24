@@ -120,6 +120,11 @@ public class _XMessageBoxFactory extends MultiMethodTest {
                 }
             }
         }
+        try {
+            Thread.currentThread().sleep(500);
+        } catch(InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         UITools oUITools = new UITools(
             (XMultiServiceFactory) tParam.getMSF(),
             UnoRuntime.queryInterface(XWindow.class, messageBox));
