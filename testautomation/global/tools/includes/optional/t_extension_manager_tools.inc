@@ -286,7 +286,7 @@ function hExtensionAddGUI( _path as string, _flags as string ) as integer
     hExtensionAddGUI() = BrowsePackages.getItemCount()
     
     '///+<li>Close the Extension Manager</li>
-    PackageManager.close()
+    hCloseDialog( PackageManager , "close" )
     
     if ( bLogs ) then 
         printlog( "**********  Installing extension end  **********" )
@@ -355,7 +355,7 @@ function hExtensionRemoveGUI( cExtensionName as string ) as integer
         endcatch
         
         kontext "PackageManager"
-        PackageManager.close()
+        hCloseDialog( PackageManager , "close" )
     else
         hExtensionRemoveGUI() = 1
     endif
@@ -462,7 +462,7 @@ function hExtensionGetItemList( cItemList() as string ) as integer
 
         hExtensionGetItemList() = iItemCount
         cItemList( 0 ) = iItemCount
-        PackageManager.close()
+        hCloseDialog( PackageManager , "close" )
 
     else
     
@@ -502,7 +502,7 @@ function hSelectExtensionID( iPos as integer ) as string
         catch
             hSelectExtensionID() = ""
         endcatch
-        PackageManager.close()
+        hCloseDialog( PackageManager , "close" )
     else
         hSelectExtensionID() = ""
     endif
@@ -547,7 +547,7 @@ function hSelectExtensionName( cName as string ) as integer
         catch
             hSelectExtensionName() = 0
         endcatch
-        PackageManager.close()
+        hCloseDialog( PackageManager , "close" )
     else
         hSelectExtensionName() = -1
     endif
@@ -697,7 +697,7 @@ function hIsExtensionAlreadyInstalled( cName as string ) as boolean
         endif
     next
     
-    PackageManager.close()
+    hCloseDialog( PackageManager , "close" )
         
 end function
 
@@ -747,7 +747,7 @@ function hDisableUserExtensionGUI( extension_name as string ) as integer
             else
                 hDisableUserExtensionGUI() = 2
             endif
-            PackageManager.close()
+            hCloseDialog( PackageManager , "close" )
         catch
             hDisableUserExtensionGUI() = 1
         endcatch
@@ -768,7 +768,7 @@ function hGetExtensionCount() as integer
     if ( PackageManager.exists( 2 ) ) then
         try
             hGetExtensionCount() = BrowsePackages.getItemCount()
-            PackageManager.close()  
+            hCloseDialog( PackageManager , "close" )  
         catch
             hGetExtensionCount() = -2
         endcatch
