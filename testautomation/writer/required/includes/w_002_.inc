@@ -369,49 +369,52 @@ endcase
 '----------------------------------------------------
 
 testcase tEditCompareDocument
-    PrintLog "- Edit/Compare Document"
-    Select Case gApplication
-    Case "WRITER"
-        Call hNewDocument
-        PrintLog "Open new document"
-        EditCompareDocumentCalc
-        PrintLog "Edit / Compare document"
-    Case "MASTERDOCUMENT"
-        printlog "Comparing documents not in Masterdocument!"
-        goto endsub
-    Case "HTML"
-        printlog "Comparing documents not in WriterWeb!"
-        goto endsub
-    end select
 
-    if gUseSysDlg = False then
-        Kontext "OeffnenDlg"
+    PrintLog "- Edit/Compare Document"
+
+    if ( gAppliction <> "WRITER" ) then
+        printlog( "Test only designed for WRITER, skipping" )
+        goto endsub
+    endif
+
+    printlog( "Open test document")    
+    EditCompareDocumentCalc
+
+    Kontext "OeffnenDlg"
+    if ( OeffnenDlg.exists( 2 ) then
+    
         Dateiname.SetText ConvertPath ( gTesttoolPath & "writer\required\input\bt.sxw" )
         PrintLog "in File-Open-dialog load ..\writer\required\input\bt.sxw"
-        Oeffnen.Click
-    end if
-    Kontext "FilterAuswahl"
-    if Filterauswahl.Exists then Filterauswahl.OK
-    Sleep 1
-    Kontext "Active"
-    if Active.Exists then
-        Warnlog Active.Gettext
-        Active.Ok
-    end if
+        Oeffnen.Click()
 
-    Kontext "Redlining"
-    PrintLog "Dialog 'Accept and Reject changes' has to come up"
-    if Redlining.Exists then
-        TabControl.SetPage TabListe
-        wait 200
+        Kontext "FilterAuswahl"
+        if Filterauswahl.Exists( 2 ) then
+            Filterauswahl.OK()
+        else
+            qaerrorlog( "Dialog <Filteraswahl> did not open. Good or bad?" )
+        endif
+        
+        Kontext "Active"
+        if Active.Exists( 1 ) then
+            Warnlog Active.Gettext()
+            Active.Ok()
+        end if
+
         Kontext "Redlining"
-        TabControl.SetPage TabFilter
-        Kontext "Redlining"
-        Redlining.Close
-        PrintLog "Close dialog"
+        PrintLog "Dialog 'Accept and Reject changes' has to come up"
+        if Redlining.Exists( 1 ) then
+            TabControl.SetPage TabListe
+            wait 200
+            Kontext "Redlining"
+            TabControl.SetPage TabFilter
+            Kontext "Redlining"
+            hCloseDialog( Redlining, "close" )
+        else
+            Warnlog "- Dialog 'Redlining' does not exist!"
+        end if
     else
-        Warnlog "- Dialog 'Redlining' does not exist!"
-    end if
+        warnlog( "Dialog <FileOpen> did not open")
+    endif
 
     Call hCloseDocument
     PrintLog "Close active document"
