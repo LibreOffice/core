@@ -982,26 +982,45 @@ end function
 
 '-------------------------------------------------------------------------------
 
-function hCloseDialog( oDialog as object, sMethod as string ) as boolean
+function hCloseDialog( oDialog as object, sUserFlags as string ) as boolean
 
     ' this function closes a dialog providing three different methods while
     ' removing the need for static sleep statements
 
     const CFN = "global::tools::includes::required::t_tools3.inc:hCloseDialog"
-    const TIMEOUT = 2 ' Maximum time to wait for a dialog to close
+    const METHOD_CLOSE  = 1
+    const METHOD_CANCEL = 2
+    const METHOD_OK     = 3
+    const TIMEOUT       = 2 ' Maximum time to wait for a dialog to close
 
-    dim sClosingMethod as string : sClosingMethod = lcase( sMethod )
+    dim sFlags as string : sFlagList = lcase( sUserFlags )
+    dim iClosingMethod as integer
+    dim bDialogMustExist as boolean : bDialogMustExist = TRUE
+    
     hCloseDialog() = FALSE ' Set default returnvalue, assume failure
 
-    printlog( "Closing dialog <" & oDialog.name() & ">." & sClosingMethod )
+    ' Find out which closing method was provided
+    if     ( instr( sFlags, "close"  ) > 0 ) then iClosingMethod = METHOD_CLOSE
+    elseif ( instr( sFlags, "cancel" ) > 0 ) then iClosingMethod = METHOD_CANCEL
+    else   ( instr( sFlags, "ok"     ) > 0 ) then iClosingMethod = METHOD_OK
+    endif
+
+    ' Find out whether the dialog must exist or is just closed as a precaution (optional))
+    if ( instr( sFlags, "optional") > 0 ) then bDialogMustExist = FALSE
+
+    printlog( CFN & "Closing dialog <" & oDialog.name() & "> using flags<" & sClosingMethod & ">.")
 
     if ( oDialog.exists() ) then
-        select case( sClosingMethod )
-        case "close" : oDialog.close()
-        case "cancel": oDialog.cancel()
-        case "ok"    : oDialog.ok()
-        case else    : warnlog( CFN & " Script error: Allowed closing methods are <cancel>, <close> and <ok>" )
+        select case( iClosingMethod )
+        case METHOD_CLOSE  : oDialog.close()
+        case METHOD_CANCEL : oDialog.cancel()
+        case METHOD_OK     : oDialog.ok()
+        case else    : warnlog( CFN & " Script error: Allowed closing methods are <cancel>, <close> and <ok>." )
         end select
+    else
+        if ( bDialogMustExist ) then
+            warnlog( CFN & "The requested dialog is not available, no action taken" )
+        endif
     endif
 
     if ( oDialog.notExists( TIMEOUT ) ) then hCloseDialog() = TRUE

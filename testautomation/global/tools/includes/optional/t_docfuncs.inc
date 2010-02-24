@@ -100,7 +100,7 @@ function hCloseNavigator() as boolean
     if ( VERBOSE ) then printlog( CFN & "Enter" )
     
     Kontext "Navigator"
-    hCloseNavigator() = hCloseDialog( Navigator , "close" )
+    hCloseNavigator() = hCloseDialog( Navigator , "close, optional" )
     
     if ( VERBOSE ) then printlog( CFN & "Exit" )
 
