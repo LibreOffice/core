@@ -90,11 +90,6 @@ toolkit.AccessibleRadioButton
 toolkit.AccessibleToolBox
 # -> disabled in toolkit.sce
 
-### i80788 ### 
-toolkit.Toolkit
-toolkit.UnoControlDialog
-# -> disabled in toolkit.sce
-
 ### i86011 ###
 toolkit.UnoControlFileControl
 # -> disabled in toolkit.sce

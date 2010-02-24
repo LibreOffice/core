@@ -26,7 +26,7 @@
 -o toolkit.MutableTreeNode
 -o toolkit.TabController
 -o toolkit.TabControllerModel
-#i80788 -o toolkit.Toolkit
+-o toolkit.Toolkit
 -o toolkit.UnoControlButton
 -o toolkit.UnoControlButtonModel
 -o toolkit.UnoControlCheckBox
@@ -39,7 +39,7 @@
 -o toolkit.UnoControlCurrencyFieldModel
 -o toolkit.UnoControlDateField
 -o toolkit.UnoControlDateFieldModel
-#i80788 -o toolkit.UnoControlDialog
+#allegedly was i80788, but still broken: -o toolkit.UnoControlDialog
 -o toolkit.UnoControlDialogModel
 -o toolkit.UnoControlEdit
 -o toolkit.UnoControlEditModel
