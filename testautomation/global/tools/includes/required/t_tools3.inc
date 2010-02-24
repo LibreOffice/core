@@ -999,16 +999,19 @@ function hCloseDialog( oDialog as object, sUserFlags as string ) as boolean
     
     hCloseDialog() = FALSE ' Set default returnvalue, assume failure
 
-    ' Find out which closing method was provided
-    if     ( instr( sFlags, "close"  ) > 0 ) then iClosingMethod = METHOD_CLOSE
-    elseif ( instr( sFlags, "cancel" ) > 0 ) then iClosingMethod = METHOD_CANCEL
-    else   ( instr( sFlags, "ok"     ) > 0 ) then iClosingMethod = METHOD_OK
+    ' Find out which closing method was provided, "close" ist the default
+    if     ( instr( sFlags, "cancel" ) > 0 ) then
+        iClosingMethod = METHOD_CANCEL
+    elseif ( instr( sFlags, "ok"     ) > 0 ) then
+        iClosingMethod = METHOD_OK
+    else
+        iClosingMethod = METHOD_CLOSE
     endif
 
-    ' Find out whether the dialog must exist or is just closed as a precaution (optional))
+    ' Find out whether the dialog must exist (default) or is just closed as a precaution ("optional")
     if ( instr( sFlags, "optional") > 0 ) then bDialogMustExist = FALSE
 
-    printlog( CFN & "Closing dialog <" & oDialog.name() & "> using flags<" & sClosingMethod & ">.")
+    printlog( CFN & "Closing dialog <" & oDialog.name() & "> using flags <" & sFlags & ">.")
 
     if ( oDialog.exists() ) then
         select case( iClosingMethod )
@@ -1020,6 +1023,8 @@ function hCloseDialog( oDialog as object, sUserFlags as string ) as boolean
     else
         if ( bDialogMustExist ) then
             warnlog( CFN & "The requested dialog is not available, no action taken" )
+            hCloseDialog() = FALSE
+            exit function
         endif
     endif
 
