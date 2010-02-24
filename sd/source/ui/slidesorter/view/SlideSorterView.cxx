@@ -476,14 +476,6 @@ void SlideSorterView::ModelHasChanged (void)
 {
     // Ignore this call.  Rely on hints sent by the model to get informed of
     // model changes.
-    /*
-    if (mbModelChangedWhileModifyEnabled)
-    {
-        controller::SlideSorterController::ModelChangeLock alock( mrSlideSorter.GetController() );
-        mrSlideSorter.GetController().HandleModelChange();
-        LocalModelHasChanged();
-    }
-    */
 }
 
 
@@ -507,8 +499,7 @@ void SlideSorterView::LocalModelHasChanged(void)
 
 void SlideSorterView::PreModelChange (void)
 {
-    // Reset the slide under the mouse.  It will be set to the correct slide
-    // on the next mouse motion.
+    // Reset the slide under the mouse.  It will be re-set in PostModelChange().
     SetPageUnderMouse(SharedPageDescriptor());
 }
 
@@ -527,6 +518,16 @@ void SlideSorterView::PostModelChange (void)
     // The new page objects have to be scaled and positioned.
     Layout();
     RequestRepaint();
+
+    // Restore the mouse over state.
+    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
+    if (pWindow)
+    {
+        const Window::PointerState aPointerState (pWindow->GetPointerState());
+        UpdatePageUnderMouse (
+            aPointerState.maPos,
+            (aPointerState.mnState & MOUSE_LEFT)!=0);
+    }
 }
 
 
