@@ -442,18 +442,17 @@ testcase tFormatAutoFormat
     '/// Select second entry in 'Format' – listbox
     printlog " Select second entry in 'Format' – listbox"
     FormatListe.Select 2
-    qaerrorlog "Due to i85043 the rename button and the rename dialog are not testable"
-'    '/// Click on 'Rename' – button
-'    printlog " Click on 'Rename' – button"
-'    AutoFormatRenameCalc.Click
-'    Kontext "AutoFormatRenameCalc"
-'    Call DialogTest ( AutoFormatRenameCalc )
-'    '/// Set format name to 'Newformat'
-'    printlog " Set format name to 'Newformat'"
-'    FormatName.SetText "Newformat"
-'    '/// Close 'Rename AutoFormat' – dialog with 'Cancel'
-'    printlog " Close 'Rename AutoFormat' – dialog with 'Cancel'"    
-'    AutoFormatRenameCalc.Cancel
+    '/// Click on 'Rename' – button
+    printlog " Click on 'Rename' – button"
+    Umbenennen.Click
+    Kontext "RenameAutoFormat"
+    Call DialogTest ( RenameAutoFormat )
+    '/// Set format name to 'Newformat'
+    printlog " Set format name to 'Newformat'"
+    RenameAutoFormatName.SetText "Newformat"
+    '/// Close 'Rename AutoFormat' – dialog with 'Cancel'
+    printlog " Close 'Rename AutoFormat' – dialog with 'Cancel'"    
+    RenameAutoFormat.Cancel
     Kontext "AutoformatCalc"
     '/// Click on 'Delete' – button
     printlog " Click on 'Delete' – button"
