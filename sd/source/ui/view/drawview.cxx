@@ -1,4 +1,4 @@
-/*************************************************************************
+    /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -650,7 +650,7 @@ void DrawView::DeleteMarked()
 
     ::sd::View::DeleteMarked();
 
-    if( pPage &&& bResetLayout )
+    if( pPage && bResetLayout )
         pPage->SetAutoLayout( pPage->GetAutoLayout() );
 
     if( pUndoManager )
