@@ -1420,8 +1420,8 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
                 {
                 case FRM_TXT:
                     mnPara++;
-                    pAcc = new SwAccessibleParagraph( this,
-                                    static_cast< const SwTxtFrm * >( pFrm ) );
+                    pAcc = new SwAccessibleParagraph( *this,
+                                    static_cast< const SwTxtFrm& >( *pFrm ) );
                     break;
                 case FRM_HEADER:
                     pAcc = new SwAccessibleHeaderFooter( this,

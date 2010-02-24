@@ -67,7 +67,8 @@ SLOFILES =	\
         $(SLO)$/accselectionhelper.obj \
         $(SLO)$/acctable.obj \
                 $(SLO)$/acctextframe.obj \
-                $(SLO)$/textmarkuphelper.obj
+                $(SLO)$/textmarkuphelper.obj \
+                $(SLO)$/parachangetrackinginfo.obj
 
 EXCEPTIONSFILES=	\
         $(SLO)$/acccell.obj \
