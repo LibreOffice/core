@@ -819,7 +819,6 @@ String ScUndoTabColor::GetComment() const
 
 void ScUndoTabColor::DoChange(bool bUndoType) const
 {
-    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     ScDocument* pDoc = pDocShell->GetDocument();
     if (!pDoc)
         return;
