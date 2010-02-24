@@ -96,7 +96,7 @@ TYPEINIT1(ScUndoScenarioFlags,  SfxUndoAction);
 TYPEINIT1(ScUndoRenameObject,   SfxUndoAction);
 TYPEINIT1(ScUndoLayoutRTL,      SfxUndoAction);
 //UNUSED2009-05 TYPEINIT1(ScUndoSetGrammar,     SfxUndoAction);
-TYPEINIT1(ScUndoSetTabBgColor,  SfxUndoAction);
+TYPEINIT1(ScUndoTabColor,  SfxUndoAction);
 
 
 // -----------------------------------------------------------------------
@@ -788,60 +788,37 @@ BOOL ScUndoCopyTab::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 //      Tab Bg Color
 //
 
-ScUndoSetTabBgColor::ScUndoSetTabBgColor( ScDocShell* pNewDocShell,
-                                        SCTAB nT,
-                                        const Color& aOTabBgColor,
-                                        const Color& aNTabBgColor) :
-    ScSimpleUndo( pNewDocShell ),
-    nTab     ( nT ),
-    aOldTabBgColor( aOTabBgColor ),
-    aNewTabBgColor( aNTabBgColor ),
-    bIsMultipleUndo ( FALSE )
+ScUndoTabColor::ScUndoTabColor(
+    ScDocShell* pNewDocShell, SCTAB nT, const Color& aOTabBgColor, const Color& aNTabBgColor) :
+    ScSimpleUndo( pNewDocShell )
 {
+    ScUndoTabColorInfo aInfo(nT);
+    aInfo.maOldTabBgColor = aOTabBgColor;
+    aInfo.maNewTabBgColor = aNTabBgColor;
+    aTabColorList.push_back(aInfo);
 }
 
-ScUndoSetTabBgColor::ScUndoSetTabBgColor(
+ScUndoTabColor::ScUndoTabColor(
     ScDocShell* pNewDocShell,
     const ScUndoTabColorInfo::List& rUndoTabColorList) :
     ScSimpleUndo(pNewDocShell),
-    aTabColorList(rUndoTabColorList),
-    bIsMultipleUndo (true)
+    aTabColorList(rUndoTabColorList)
 {
 }
 
-ScUndoSetTabBgColor::~ScUndoSetTabBgColor()
+ScUndoTabColor::~ScUndoTabColor()
 {
 }
 
-String ScUndoSetTabBgColor::GetComment() const
+String ScUndoTabColor::GetComment() const
 {
-    if (bIsMultipleUndo && aTabColorList.size() > 1)
-        return ScGlobal::GetRscString( STR_UNDO_SET_MULTI_TAB_BG_COLOR );
-    return ScGlobal::GetRscString( STR_UNDO_SET_TAB_BG_COLOR );
+    if (aTabColorList.size() > 1)
+        return ScGlobal::GetRscString(STR_UNDO_SET_MULTI_TAB_BG_COLOR);
+    return ScGlobal::GetRscString(STR_UNDO_SET_TAB_BG_COLOR);
 }
 
-void ScUndoSetTabBgColor::DoChange( SCTAB nTabP, const Color& rTabBgColor ) const
+void ScUndoTabColor::DoChange(bool bUndoType) const
 {
-    if (bIsMultipleUndo)
-        return;
-
-    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-    ScDocument* pDoc = pDocShell->GetDocument();
-    if (!pDoc)
-        return;
-
-    pDoc->SetTabBgColor(nTabP, rTabBgColor);
-    pDocShell->PostPaintExtras();
-    pDocShell->PostDataChanged();
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
-    pViewShell->UpdateInputHandler();
-}
-
-void ScUndoSetTabBgColor::DoChange(BOOL bUndoType) const
-{
-    if (!bIsMultipleUndo)
-        return;
-
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     ScDocument* pDoc = pDocShell->GetDocument();
     if (!pDoc)
@@ -860,28 +837,22 @@ void ScUndoSetTabBgColor::DoChange(BOOL bUndoType) const
     pViewShell->UpdateInputHandler();
 }
 
-void ScUndoSetTabBgColor::Undo()
+void ScUndoTabColor::Undo()
 {
-    if ( bIsMultipleUndo )
-        DoChange(TRUE);
-    else
-        DoChange(nTab, aOldTabBgColor);
+    DoChange(true);
 }
 
-void ScUndoSetTabBgColor::Redo()
+void ScUndoTabColor::Redo()
 {
-    if ( bIsMultipleUndo )
-        DoChange(FALSE);
-    else
-        DoChange(nTab, aNewTabBgColor);
+    DoChange(false);
 }
 
-void ScUndoSetTabBgColor::Repeat(SfxRepeatTarget& /* rTarget */)
+void ScUndoTabColor::Repeat(SfxRepeatTarget& /* rTarget */)
 {
     //  No Repeat
 }
 
-BOOL ScUndoSetTabBgColor::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+BOOL ScUndoTabColor::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return FALSE;
 }
