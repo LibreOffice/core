@@ -824,7 +824,7 @@ void ScUndoTabColor::DoChange(bool bUndoType) const
         return;
 
     size_t nTabColorCount = aTabColorList.size();
-    for (size_t i=0; i < nTabColorCount; ++i)
+    for (size_t i = 0; i < nTabColorCount; ++i)
     {
         const ScUndoTabColorInfo& rTabColor = aTabColorList[i];
         pDoc->SetTabBgColor(rTabColor.mnTabId,
@@ -832,7 +832,6 @@ void ScUndoTabColor::DoChange(bool bUndoType) const
     }
 
     pDocShell->PostPaintExtras();
-
     ScDocShellModificator aModificator( *pDocShell );
     aModificator.SetDocumentModified();
 }
