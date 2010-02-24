@@ -831,10 +831,11 @@ void ScUndoTabColor::DoChange(bool bUndoType) const
         pDoc->SetTabBgColor(rTabColor.mnTabId,
             bUndoType ? rTabColor.maOldTabBgColor : rTabColor.maNewTabBgColor);
     }
+
     pDocShell->PostPaintExtras();
-    pDocShell->PostDataChanged();
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
-    pViewShell->UpdateInputHandler();
+
+    ScDocShellModificator aModificator( *pDocShell );
+    aModificator.SetDocumentModified();
 }
 
 void ScUndoTabColor::Undo()
