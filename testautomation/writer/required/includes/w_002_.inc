@@ -985,40 +985,51 @@ testcase tEditFields
     PrintLog( "Open new document" )
     Call hNewDocument()
 
-    InsertFieldsTime
-    WaitSlot()
+    InsertFieldsOther
 
-    PrintLog( "Move cursor infront of field (start of document)" )
-    Call wTypeKeys("<Home>")
+    printlog( "Insert a field from the user data" )
+    kontext "TabDokumentFeldbefehle"
+    if ( TabDokumentFeldbefehle.exists( 2 ) ) then
+        Feldtyp.select( 1 )
+        Auswahl.select( 1 )
+        Einfuegen.click()
+        hCloseDialog( TabDokumentFeldbefehle , "close" )
+        
 
-    PrintLog( "Edit / Fields" )
-    EditFields
-    
-    Kontext "FeldbefehlBearbeitenDokument"
-    if ( FeldbefehlBearbeitenDokument.exists( 2 ) ) then
-        Call DialogTest ( FeldbefehlBearbeitenDokument )
+        PrintLog( "Move cursor infront of field (start of document)" )
+        Call wTypeKeys("<Home>")
 
-        PrintLog( "In 'Edit Fields' dialog select 'Edit'" )
-        if ( Bearbeiten.IsVisible() and Bearbeiten.IsEnabled() ) then
-            Bearbeiten.Click()
-
-            Kontext "TabBenutzerdaten"
-            if ( TabBenutzerdaten.exists( 2 ) ) then
-                printlog( "<TabBenutzerdaten> is open. Good." )
-                call DialogTest( TabBenutzerdaten )
-                hCloseDialog( TabBenutzerdaten, "cancel" )
-            else
-                warnlog( "<TabBenutzerdaten> did not open" )
-            endif
-        else
-            Warnlog( "Button 'Edit' in Dialog disabled!" )
-        endif
-
-        PrintLog( "Close dialog" )
+        PrintLog( "Edit / Fields" )
+        EditFields
+        
         Kontext "FeldbefehlBearbeitenDokument"
-        hCloseDialog( FeldbefehlBearbeitenDokument, "cancel" )
+        if ( FeldbefehlBearbeitenDokument.exists( 2 ) ) then
+            Call DialogTest ( FeldbefehlBearbeitenDokument )
+
+            PrintLog( "In 'Edit Fields' dialog select 'Edit'" )
+            if ( Bearbeiten.IsVisible() and Bearbeiten.IsEnabled() ) then
+                Bearbeiten.Click()
+
+                Kontext "TabBenutzerdaten"
+                if ( TabBenutzerdaten.exists( 2 ) ) then
+                    printlog( "<TabBenutzerdaten> is open. Good." )
+                    call DialogTest( TabBenutzerdaten )
+                    hCloseDialog( TabBenutzerdaten, "cancel" )
+                else
+                    warnlog( "<TabBenutzerdaten> did not open" )
+                endif
+            else
+                Warnlog( "Button 'Edit' in Dialog disabled!" )
+            endif
+
+            PrintLog( "Close dialog" )
+            Kontext "FeldbefehlBearbeitenDokument"
+            hCloseDialog( FeldbefehlBearbeitenDokument, "cancel" )
+        else
+            warnlog( "<FeldbefehlBearbeitenDokument> did not open" )
+        endif
     else
-        warnlog( "<FeldbefehlBearbeitenDokument> did not open" )
+        warnlog( "Unable to open <InsertFieldsOther>")
     endif
 
     PrintLog( "Close active document" )

@@ -993,7 +993,7 @@ function hCloseDialog( oDialog as object, sMethod as string ) as boolean
     dim sClosingMethod as string : sClosingMethod = lcase( sMethod )
     hCloseDialog() = FALSE ' Set default returnvalue, assume failure
 
-    printlog( "Closing dialog <" & oDialog.name() & "." & sClosingMethod )
+    printlog( "Closing dialog <" & oDialog.name() & ">." & sClosingMethod )
 
     if ( oDialog.exists() ) then
         select case( sClosingMethod )
