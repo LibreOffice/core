@@ -356,6 +356,8 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
             // get the current row
             Reference< XCellRange > xCellRange( xIndexAccess->getByIndex(rowIndex), UNO_QUERY_THROW );
 
+            OUString sDefaultCellStyle;
+
             // table:style-name
             if( pTableInfo.get() )
             {
@@ -363,11 +365,11 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
                 const OUString sStyleName( pTableInfo->maRowStyleMap[xKey] );
                 if( sStyleName.getLength() )
                     mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_STYLE_NAME, sStyleName );
-            }
 
-            const OUString sDefaultCellStyle( pTableInfo->maDefaultRowCellStyles[rowIndex] );
-            if( sDefaultCellStyle.getLength() )
-                mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DEFAULT_CELL_STYLE_NAME, sDefaultCellStyle );
+                sDefaultCellStyle = pTableInfo->maDefaultRowCellStyles[rowIndex];
+                if( sDefaultCellStyle.getLength() )
+                    mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DEFAULT_CELL_STYLE_NAME, sDefaultCellStyle );
+            }
 
             // write row element
             SvXMLElementExport tableRowElement( mrExport, XML_NAMESPACE_TABLE, XML_TABLE_ROW, sal_True, sal_True );

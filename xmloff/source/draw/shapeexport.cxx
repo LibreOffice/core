@@ -470,6 +470,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                 mrExport.getInterfaceToIdentifierMapper().registerReference( xConnection );
             break;
         }
+        case XmlShapeTypePresTableShape:
         case XmlShapeTypeDrawTableShape:
         {
             try
