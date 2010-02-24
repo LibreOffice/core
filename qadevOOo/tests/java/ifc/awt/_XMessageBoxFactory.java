@@ -33,11 +33,12 @@ package ifc.awt;
 import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.UnoRuntime;
 import lib.MultiMethodTest;
 
+import com.sun.star.awt.XMessageBox;
 import com.sun.star.awt.XMessageBoxFactory;
 import com.sun.star.awt.XWindow;
-import com.sun.star.frame.XModel;
 import java.io.PrintWriter;
 import lib.Status;
 import lib.StatusException;
@@ -56,7 +57,6 @@ public class _XMessageBoxFactory extends MultiMethodTest {
 
     public XMessageBoxFactory oObj = null;
     private XWindowPeer the_win = null;
-    private XModel xModel = null;
 
     /**
      * Retrieves object relation.
@@ -66,10 +66,6 @@ public class _XMessageBoxFactory extends MultiMethodTest {
         the_win = (XWindowPeer) tEnv.getObjRelation("WINPEER");
         if (the_win == null)
             throw new StatusException(Status.failed("Relation 'WINPEER' not found")) ;
-        xModel = (XModel) tEnv.getObjRelation("XModel");
-        if (xModel == null)
-            throw new StatusException(Status.failed("Relation 'xModel' not found")) ;
-
     }
 
 
@@ -83,9 +79,15 @@ public class _XMessageBoxFactory extends MultiMethodTest {
             new Runnable() {
         public void run() {
             Rectangle rect = new Rectangle(0,0,100,100);
-            oObj.createMessageBox(the_win, rect, "errorbox", 1, "The Title", "The Message") ;
+            XMessageBox mb = oObj.createMessageBox(the_win, rect, "errorbox", 1, "The Title", "The Message") ;
+            synchronized (this) {
+                messageBox = mb;
+                notifyAll();
+            }
+            mb.execute();
         }
     }) ;
+    private XMessageBox messageBox = null;
 
 
     /**
@@ -109,12 +111,19 @@ public class _XMessageBoxFactory extends MultiMethodTest {
         }
         result &= execThread.isAlive() ;
 
-        UITools oUITools = new UITools((XMultiServiceFactory) tParam.getMSF(), xModel);
-
-        XWindow xWindow = null;
+        synchronized (execThread) {
+            while (messageBox == null) {
+                try {
+                    execThread.wait();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        UITools oUITools = new UITools(
+            (XMultiServiceFactory) tParam.getMSF(),
+            UnoRuntime.queryInterface(XWindow.class, messageBox));
         try{
-            xWindow = oUITools.getActiveTopWindow();
-
             oUITools.printAccessibleTree(log, tParam.getBool("DebugIsActive"));
 
             oUITools.clickButton("OK");
