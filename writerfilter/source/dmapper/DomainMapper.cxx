@@ -2245,8 +2245,9 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
         break;  // sprmPFSideBySide
 
     case NS_sprm::LN_PFKeep:   // sprmPFKeep
-        /* WRITERFILTERSTATUS: done: 0, planned: 3, spent: 0 */
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         /* WRITERFILTERSTATUS: comment: */
+        rContext->Insert(PROP_PARA_SPLIT, true, uno::makeAny(nIntValue ? false : true));
         break;
     case NS_sprm::LN_PFKeepFollow:   // sprmPFKeepFollow
         /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 1 */
@@ -2602,7 +2603,7 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
         break;  // sprmPFLocked
     case NS_sprm::LN_PFWidowControl:
     case NS_ooxml::LN_CT_PPrBase_widowControl:
-        /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
+        /* WRITERFILTERSTATUS: done: 100, planned: 2, spent: 0 */
     {
         uno::Any aVal( uno::makeAny( sal_Int8(nIntValue ? 2 : 0 )));
         rContext->Insert( PROP_PARA_WIDOWS, true, aVal );
