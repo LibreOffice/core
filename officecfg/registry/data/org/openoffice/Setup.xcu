@@ -793,6 +793,10 @@
                 com.sun.star.PDFImport.*
                 com.sun.star.PresentationMinimizer.*
                 com.sun.PresenterScreen.*
+                Sun-Presentation-Minimizer.*
+                com.sun.reportdesigner
+                com.sun.star.mysql-connector.*
+                com.sun.star.ichitaro.*
               </value>
             </prop>
           </node>
@@ -839,6 +843,10 @@
                 com.sun.star.PDFImport.*
                 com.sun.star.PresentationMinimizer.*
                 com.sun.PresenterScreen.*
+                Sun-Presentation-Minimizer.*
+                com.sun.reportdesigner
+                com.sun.star.mysql-connector.*
+                com.sun.star.ichitaro.*
               </value>
             </prop>
           </node>
