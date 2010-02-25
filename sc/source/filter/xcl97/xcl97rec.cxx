@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xcl97rec.cxx,v $
- * $Revision: 1.87.30.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,14 +31,14 @@
 #include <svx/svdpool.hxx>
 #include <svx/sdtaitm.hxx>
 #include <svx/svdotext.hxx>
-#include <svx/editobj.hxx>
+#include <editeng/editobj.hxx>
 #include <svx/svdoole2.hxx>
 #include <sot/storage.hxx>
 #include <svl/itemset.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/unoapi.hxx>
-#include <svx/writingmodeitem.hxx>
+#include <editeng/writingmodeitem.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/math.hxx>
 #include <svl/zformat.hxx>
@@ -58,11 +55,11 @@
 #include "scitems.hxx"
 
 #include <unotools/fltrcfg.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <filter/msfilter/msoleexp.hxx>
 
 #include <unotools/localedatawrapper.hxx>
@@ -1455,6 +1452,19 @@ void XclExpInterfaceHdr::WriteBody( XclExpStream& rStrm )
 {
     rStrm.DisableEncryption();
     rStrm << GetValue();
+}
+
+// ============================================================================
+
+XclExpInterfaceEnd::XclExpInterfaceEnd() :
+    XclExpRecord(0x00E2, 0) {}
+
+XclExpInterfaceEnd::~XclExpInterfaceEnd() {}
+
+void XclExpInterfaceEnd::WriteBody( XclExpStream& rStrm )
+{
+    // Don't forget to re-enable encryption.
+    rStrm.EnableEncryption();
 }
 
 // ============================================================================

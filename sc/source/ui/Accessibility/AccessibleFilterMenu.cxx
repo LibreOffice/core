@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessibleDataPilotControl.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,9 +37,9 @@
 #include "docpool.hxx"
 
 #include "tools/gen.hxx"
-#include "svx/unoedsrc.hxx"
-#include "svx/editdata.hxx"
-#include "svx/outliner.hxx"
+#include "editeng/unoedsrc.hxx"
+#include "editeng/editdata.hxx"
+#include "editeng/outliner.hxx"
 #include "vcl/unohelp.hxx"
 #include "dpcontrol.hxx"
 

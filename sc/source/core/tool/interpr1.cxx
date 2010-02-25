@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: interpr1.cxx,v $
- * $Revision: 1.61 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svx/algitem.hxx>
 #include <unotools/textsearch.hxx>
 #include <svl/zforlist.hxx>
@@ -68,11 +65,14 @@
 #include <string.h>
 #include <math.h>
 #include <vector>
+#include <memory>
 #include "cellkeytranslator.hxx"
 #include "lookupcache.hxx"
 #include "rangenam.hxx"
 #include "compiler.hxx"
 #include "externalrefmgr.hxx"
+#include "doubleref.hxx"
+#include "queryparam.hxx"
 
 #define SC_DOUBLE_MAXVALUE  1.7e307
 
@@ -83,6 +83,8 @@ ScTokenStack* ScInterpreter::pGlobalStack = NULL;
 BOOL ScInterpreter::bGlobalStackInUse = FALSE;
 
 using namespace formula;
+using ::std::auto_ptr;
+
 //-----------------------------------------------------------------------------
 // Funktionen
 //-----------------------------------------------------------------------------
@@ -5828,11 +5830,9 @@ void ScInterpreter::ScSubTotal()
 #endif
 
 
-BOOL ScInterpreter::GetDBParams(SCTAB& rTab, ScQueryParam& rParam,
-        BOOL& rMissingField )
+ScDBQueryParamBase* ScInterpreter::GetDBParams( BOOL& rMissingField )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetDBParams" );
-    BOOL bRet = FALSE;
     BOOL bAllowMissingField = FALSE;
     if ( rMissingField )
     {
@@ -5841,14 +5841,10 @@ BOOL ScInterpreter::GetDBParams(SCTAB& rTab, ScQueryParam& rParam,
     }
     if ( GetByte() == 3 )
     {
-
-        SCCOL nQCol1;
-        SCROW nQRow1;
-        SCTAB nQTab1;
-        SCCOL nQCol2;
-        SCROW nQRow2;
-        SCTAB nQTab2;
-        PopDoubleRef(nQCol1, nQRow1, nQTab1, nQCol2, nQRow2, nQTab2);
+        // First, get the query criteria range.
+        ::std::auto_ptr<ScDBRangeBase> pQueryRef( PopDoubleRef() );
+        if (!pQueryRef.get())
+            return NULL;
 
         BOOL    bByVal = TRUE;
         double  nVal = 0.0;
@@ -5904,116 +5900,85 @@ BOOL ScInterpreter::GetDBParams(SCTAB& rTab, ScQueryParam& rParam,
                 SetError( errIllegalParameter );
         }
 
-        SCCOL nDBCol1;
-        SCROW nDBRow1;
-        SCTAB nDBTab1;
-        SCCOL nDBCol2;
-        SCROW nDBRow2;
-        SCTAB nDBTab2;
-        PopDoubleRef(nDBCol1, nDBRow1, nDBTab1, nDBCol2, nDBRow2, nDBTab2);
+        auto_ptr<ScDBRangeBase> pDBRef( PopDoubleRef() );
 
-        if ( nGlobalError == 0 && bRangeFake )
+        if (nGlobalError || !pDBRef.get())
+            return NULL;
+
+        if ( bRangeFake )
         {
             // range parameter must match entire database range
-            if ( aMissingRange == ScRange( nDBCol1, nDBRow1, nDBTab1, nDBCol2,
-                        nDBRow2, nDBTab2) )
+            if (pDBRef->isRangeEqual(aMissingRange))
                 rMissingField = TRUE;
             else
                 SetError( errIllegalParameter );
         }
 
-        if (nGlobalError == 0)
-        {
-            SCCOL   nField = nDBCol1;
-            BOOL    bFound = TRUE;
-            if ( rMissingField )
-                ;   // special case
-            else if ( bByVal )
-            {
-                if ( nVal <= 0 || nVal > (nDBCol2 - nDBCol1 + 1) )
-                    bFound = FALSE;
-                else
-                    nField = Min(nDBCol2, (SCCOL)(nDBCol1 + (SCCOL)nVal - 1));
-            }
-            else
-            {
-                bFound = FALSE;
-                String aCellStr;
-                ScAddress aLook( nDBCol1, nDBRow1, nDBTab1 );
-                while (!bFound && (aLook.Col() <= nDBCol2))
-                {
-                    ScBaseCell* pCell = GetCell( aLook );
-                    GetCellString( aCellStr, pCell );
-                    bFound = ScGlobal::GetpTransliteration()->isEqual( aCellStr, aStr );
-                    if (!bFound)
-                        aLook.IncCol();
-                }
-                nField = aLook.Col();
-            }
-            if (bFound)
-            {
-                rParam.nCol1 = nDBCol1;
-                rParam.nRow1 = nDBRow1;
-                rParam.nCol2 = nDBCol2;
-                rParam.nRow2 = nDBRow2;
-                rParam.nTab  = nDBTab1;
-                rParam.bHasHeader = TRUE;
-                rParam.bByRow = TRUE;
-                rParam.bInplace = TRUE;
-                rParam.bCaseSens = FALSE;
-                rParam.bRegExp = FALSE;
-                rParam.bDuplicate = TRUE;
-                if (pDok->CreateQueryParam(nQCol1, nQRow1, nQCol2, nQRow2, nQTab1, rParam))
-                {
-                    // An allowed missing field parameter sets the result field
-                    // to any of the query fields, just to be able to return
-                    // some cell from the iterator.
-                    if ( rMissingField )
-                        nField = static_cast<SCCOL>(rParam.GetEntry(0).nField);
+        if (nGlobalError)
+            return NULL;
 
-                    rParam.nCol1 = nField;
-                    rParam.nCol2 = nField;
-                    rTab = nDBTab1;
-                    bRet = TRUE;
-                    SCSIZE nCount = rParam.GetEntryCount();
-                    for ( SCSIZE i=0; i < nCount; i++ )
-                    {
-                        ScQueryEntry& rEntry = rParam.GetEntry(i);
-                        if ( rEntry.bDoQuery )
-                        {
-                            sal_uInt32 nIndex = 0;
-                            rEntry.bQueryByString = !pFormatter->IsNumberFormat(
-                                *rEntry.pStr, nIndex, rEntry.nVal );
-                            if ( rEntry.bQueryByString && !rParam.bRegExp )
-                                rParam.bRegExp = MayBeRegExp( *rEntry.pStr, pDok );
-                        }
-                        else
-                            break;  // for
-                    }
+        SCCOL nField = pDBRef->getFirstFieldColumn();
+        if (rMissingField)
+            ; // special case
+        else if (bByVal)
+            nField = pDBRef->findFieldColumn(static_cast<SCCOL>(nVal));
+        else
+        {
+            sal_uInt16 nErr = 0;
+            nField = pDBRef->findFieldColumn(aStr, &nErr);
+            SetError(nErr);
+        }
+
+        if (!ValidCol(nField))
+            return NULL;
+
+        auto_ptr<ScDBQueryParamBase> pParam( pDBRef->createQueryParam(pQueryRef.get()) );
+
+        if (pParam.get())
+        {
+            // An allowed missing field parameter sets the result field
+            // to any of the query fields, just to be able to return
+            // some cell from the iterator.
+            if ( rMissingField )
+                nField = static_cast<SCCOL>(pParam->GetEntry(0).nField);
+            pParam->mnField = nField;
+
+            SCSIZE nCount = pParam->GetEntryCount();
+            for ( SCSIZE i=0; i < nCount; i++ )
+            {
+                ScQueryEntry& rEntry = pParam->GetEntry(i);
+                if ( rEntry.bDoQuery )
+                {
+                    sal_uInt32 nIndex = 0;
+                    rEntry.bQueryByString = !pFormatter->IsNumberFormat(
+                        *rEntry.pStr, nIndex, rEntry.nVal );
+                    if ( rEntry.bQueryByString && !pParam->bRegExp )
+                        pParam->bRegExp = MayBeRegExp( *rEntry.pStr, pDok );
                 }
+                else
+                    break;  // for
             }
+            return pParam.release();
         }
     }
-    return bRet;
+    return false;
 }
 
 
 void ScInterpreter::DBIterator( ScIterFunc eFunc )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::DBIterator" );
-    SCTAB nTab1;
     double nErg = 0.0;
     double fMem = 0.0;
     BOOL bNull = TRUE;
     ULONG nCount = 0;
-    ScQueryParam aQueryParam;
     BOOL bMissingField = FALSE;
-    if ( GetDBParams( nTab1, aQueryParam, bMissingField) )
+    auto_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
+    if (pQueryParam.get())
     {
-        double nVal;
-        USHORT nErr;
-        ScQueryValueIterator aValIter(pDok, nTab1, aQueryParam);
-        if ( aValIter.GetFirst(nVal, nErr) && !nErr )
+        ScDBQueryDataIterator aValIter(pDok, pQueryParam.release());
+        ScDBQueryDataIterator::Value aValue;
+        if ( aValIter.GetFirst(aValue) && !aValue.mnError )
         {
             switch( eFunc )
             {
@@ -6029,24 +5994,24 @@ void ScInterpreter::DBIterator( ScIterFunc eFunc )
                 {
                     case ifAVERAGE:
                     case ifSUM:
-                        if ( bNull && nVal != 0.0 )
+                        if ( bNull && aValue.mfValue != 0.0 )
                         {
                             bNull = FALSE;
-                            fMem = nVal;
+                            fMem = aValue.mfValue;
                         }
                         else
-                            nErg += nVal;
+                            nErg += aValue.mfValue;
                         break;
-                    case ifSUMSQ:   nErg += nVal * nVal; break;
-                    case ifPRODUCT: nErg *= nVal; break;
-                    case ifMAX:     if( nVal > nErg ) nErg = nVal; break;
-                    case ifMIN:     if( nVal < nErg ) nErg = nVal; break;
+                    case ifSUMSQ:   nErg += aValue.mfValue * aValue.mfValue; break;
+                    case ifPRODUCT: nErg *= aValue.mfValue; break;
+                    case ifMAX:     if( aValue.mfValue > nErg ) nErg = aValue.mfValue; break;
+                    case ifMIN:     if( aValue.mfValue < nErg ) nErg = aValue.mfValue; break;
                     default: ; // nothing
                 }
             }
-            while ( aValIter.GetNext(nVal, nErr) && !nErr );
+            while ( aValIter.GetNext(aValue) && !aValue.mnError );
         }
-        SetError(nErr);
+        SetError(aValue.mnError);
     }
     else
         SetError( errIllegalParameter);
@@ -6071,13 +6036,12 @@ void ScInterpreter::ScDBSum()
 void ScInterpreter::ScDBCount()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScDBCount" );
-    SCTAB nTab;
-    ScQueryParam aQueryParam;
     BOOL bMissingField = TRUE;
-    if ( GetDBParams( nTab, aQueryParam, bMissingField) )
+    auto_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
+    if (pQueryParam.get())
     {
         ULONG nCount = 0;
-        if ( bMissingField )
+        if ( bMissingField && pQueryParam->GetType() == ScDBQueryParamBase::INTERNAL )
         {   // count all matching records
             // TODO: currently the QueryIterators only return cell pointers of
             // existing cells, so if a query matches an empty cell there's
@@ -6087,7 +6051,9 @@ void ScInterpreter::ScDBCount()
             // have to live with it until we reimplement the iterators to also
             // return empty cells, which would mean to adapt all callers of
             // iterators.
-            ScQueryCellIterator aCellIter( pDok, nTab, aQueryParam);
+            ScDBQueryParamInternal* p = static_cast<ScDBQueryParamInternal*>(pQueryParam.get());
+            SCTAB nTab = p->nTab;
+            ScQueryCellIterator aCellIter( pDok, nTab, *p);
             if ( aCellIter.GetFirst() )
             {
                 do
@@ -6098,17 +6064,17 @@ void ScInterpreter::ScDBCount()
         }
         else
         {   // count only matching records with a value in the "result" field
-            double nVal;
-            USHORT nErr = 0;
-            ScQueryValueIterator aValIter( pDok, nTab, aQueryParam);
-            if ( aValIter.GetFirst( nVal, nErr) && !nErr )
+            ScDBQueryDataIterator aValIter( pDok, pQueryParam.release());
+            ScDBQueryDataIterator::Value aValue;
+            if ( aValIter.GetFirst(aValue) && !aValue.mnError )
             {
                 do
                 {
                     nCount++;
-                } while ( aValIter.GetNext( nVal, nErr) && !nErr );
+                }
+                while ( aValIter.GetNext(aValue) && !aValue.mnError );
             }
-            SetError( nErr );
+            SetError(aValue.mnError);
         }
         PushDouble( nCount );
     }
@@ -6120,21 +6086,24 @@ void ScInterpreter::ScDBCount()
 void ScInterpreter::ScDBCount2()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScDBCount2" );
-    SCTAB nTab;
-    ScQueryParam aQueryParam;
     BOOL bMissingField = TRUE;
-    if (GetDBParams( nTab, aQueryParam, bMissingField))
+    auto_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
+    if (pQueryParam.get())
     {
         ULONG nCount = 0;
-        ScQueryCellIterator aCellIter(pDok, nTab, aQueryParam);
-        if ( aCellIter.GetFirst() )
+        pQueryParam->mbSkipString = false;
+        ScDBQueryDataIterator aValIter( pDok, pQueryParam.release());
+        ScDBQueryDataIterator::Value aValue;
+        if ( aValIter.GetFirst(aValue) && !aValue.mnError )
         {
             do
             {
                 nCount++;
-            } while ( aCellIter.GetNext() );
+            }
+            while ( aValIter.GetNext(aValue) && !aValue.mnError );
         }
-        PushDouble(nCount);
+        SetError(aValue.mnError);
+        PushDouble( nCount );
     }
     else
         PushIllegalParameter();
@@ -6178,25 +6147,23 @@ void ScInterpreter::GetDBStVarParams( double& rVal, double& rValCount )
 
     rValCount = 0.0;
     double fSum    = 0.0;
-    SCTAB nTab;
-    ScQueryParam aQueryParam;
     BOOL bMissingField = FALSE;
-    if (GetDBParams( nTab, aQueryParam, bMissingField))
+    auto_ptr<ScDBQueryParamBase> pQueryParam( GetDBParams(bMissingField) );
+    if (pQueryParam.get())
     {
-        double fVal;
-        USHORT nErr;
-        ScQueryValueIterator aValIter(pDok, nTab, aQueryParam);
-        if (aValIter.GetFirst(fVal, nErr) && !nErr)
+        ScDBQueryDataIterator aValIter(pDok, pQueryParam.release());
+        ScDBQueryDataIterator::Value aValue;
+        if (aValIter.GetFirst(aValue) && !aValue.mnError)
         {
             do
             {
                 rValCount++;
-                values.push_back(fVal);
-                fSum += fVal;
+                values.push_back(aValue.mfValue);
+                fSum += aValue.mfValue;
             }
-            while ((nErr == 0) && aValIter.GetNext(fVal, nErr));
+            while ((aValue.mnError == 0) && aValIter.GetNext(aValue));
         }
-        SetError(nErr);
+        SetError(aValue.mnError);
     }
     else
         SetError( errIllegalParameter);
