@@ -646,44 +646,13 @@ void VDiagram::createShapes_3d()
         if( m_xDiagram.is() )
             xFloorProp=uno::Reference< beans::XPropertySet >( m_xDiagram->getFloor());
 
-        uno::Reference< drawing::XShape > xShape(
-                m_xShapeFactory->createInstance( C2U(
-                    "com.sun.star.drawing.Shape3DExtrudeObject") ), uno::UNO_QUERY );
-        xOuterGroup_Shapes->add(xShape);
-        uno::Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
-        if( xShapeProp.is())
-        {
-            //depth
-            xShapeProp->setPropertyValue( C2U( UNO_NAME_3D_EXTRUDE_DEPTH )
-                , uno::makeAny((sal_Int32)FLOOR_THICKNESS) );
-            //PercentDiagonal
-            xShapeProp->setPropertyValue( C2U( UNO_NAME_3D_PERCENT_DIAGONAL )
-                , uno::makeAny( sal_Int32(0) ) );
+        Stripe aStripe( drawing::Position3D(0,0,0)
+            , drawing::Direction3D(FIXED_SIZE_FOR_3D_CHART_VOLUME,0,0)
+            , drawing::Direction3D(0,0,FIXED_SIZE_FOR_3D_CHART_VOLUME) );
 
-            drawing::Direction3D aSize(FIXED_SIZE_FOR_3D_CHART_VOLUME,FIXED_SIZE_FOR_3D_CHART_VOLUME,FLOOR_THICKNESS);
-
-            //Polygon
-            drawing::PolyPolygonShape3D aPoly;
-            AddPointToPoly( aPoly, drawing::Position3D(0,0,0) );
-            AddPointToPoly( aPoly, drawing::Position3D(FIXED_SIZE_FOR_3D_CHART_VOLUME,0,0) );
-            AddPointToPoly( aPoly, drawing::Position3D(FIXED_SIZE_FOR_3D_CHART_VOLUME,FIXED_SIZE_FOR_3D_CHART_VOLUME,0) );
-            AddPointToPoly( aPoly, drawing::Position3D(0,FIXED_SIZE_FOR_3D_CHART_VOLUME,0) );
-            AddPointToPoly( aPoly, drawing::Position3D(0,0,0) );
-            xShapeProp->setPropertyValue( C2U( UNO_NAME_3D_POLYPOLYGON3D ), uno::makeAny( aPoly ) );
-
-            //Matrix for position
-            {
-                ::basegfx::B3DHomMatrix aM;
-                aM.rotate(F_PI/2.0,0.0,0.0);
-                aM.translate(0.0,FLOOR_THICKNESS, 0.0);
-                drawing::HomogenMatrix aHM = B3DHomMatrixToHomogenMatrix(aM);
-                E3DModifySceneSnapRectUpdater aUpdater(lcl_getE3dScene( m_xOuterGroupShape ));
-                xShapeProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )
-                    , uno::makeAny(aHM) );
-            }
-
-            PropertyMapper::setMappedProperties( xShapeProp, xFloorProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties() );
-        }
+        uno::Reference< drawing::XShape > xShape =
+            m_pShapeFactory->createStripe(xOuterGroup_Shapes, aStripe
+                , xFloorProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), true );
 
         CuboidPlanePosition eBottomPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBottom( uno::Reference< beans::XPropertySet >( m_xDiagram, uno::UNO_QUERY ) ) );
         if( !bAddFloorAndWall || (CuboidPlanePosition_Bottom!=eBottomPos) )
@@ -712,11 +681,11 @@ void VDiagram::createShapes_3d()
             try
             {
                 double fXScale = (FIXED_SIZE_FOR_3D_CHART_VOLUME -GRID_TO_WALL_DISTANCE) /FIXED_SIZE_FOR_3D_CHART_VOLUME;
-                double fYScale = (FIXED_SIZE_FOR_3D_CHART_VOLUME -FLOOR_THICKNESS-GRID_TO_WALL_DISTANCE      ) /FIXED_SIZE_FOR_3D_CHART_VOLUME;
+                double fYScale = (FIXED_SIZE_FOR_3D_CHART_VOLUME -GRID_TO_WALL_DISTANCE) /FIXED_SIZE_FOR_3D_CHART_VOLUME;
                 double fZScale = (FIXED_SIZE_FOR_3D_CHART_VOLUME -GRID_TO_WALL_DISTANCE) /FIXED_SIZE_FOR_3D_CHART_VOLUME;
 
                 ::basegfx::B3DHomMatrix aM;
-                aM.translate(GRID_TO_WALL_DISTANCE/fXScale, (FLOOR_THICKNESS+GRID_TO_WALL_DISTANCE)/fYScale, GRID_TO_WALL_DISTANCE/fZScale);
+                aM.translate(GRID_TO_WALL_DISTANCE/fXScale, GRID_TO_WALL_DISTANCE/fYScale, GRID_TO_WALL_DISTANCE/fZScale);
                 aM.scale( fXScale, fYScale, fZScale );
                 E3DModifySceneSnapRectUpdater aUpdater(lcl_getE3dScene( m_xOuterGroupShape ));
                 xShapeProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )
