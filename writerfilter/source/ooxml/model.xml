@@ -15750,15 +15750,15 @@
       </define>
       <define name="CT_DocGrid">
         <attribute name="type">
-          <text/>
+          <ref name="ST_DocGrid"/>
           <xs:documentation>Document Grid Type</xs:documentation>
         </attribute>
         <attribute name="linePitch">
-          <text/>
+          <ref name="ST_DecimalNumber"/>
           <xs:documentation>Document Grid Line Pitch</xs:documentation>
         </attribute>
         <attribute name="charSpace">
-          <text/>
+          <ref name="ST_DecimalNumber"/>
           <xs:documentation>Document Grid Character Pitch</xs:documentation>
         </attribute>
       </define>
@@ -22208,6 +22208,11 @@
       <value name="lines" tokenid="ooxml:Value_wordprocessingml_ST_DocGrid_lines">lines</value>
       <value name="linesAndChars" tokenid="ooxml:Value_wordprocessingml_ST_DocGrid_linesAndChars">linesAndChars</value>
       <value name="snapToChars" tokenid="ooxml:Value_wordprocessingml_ST_DocGrid_snapToChars">snapToChars</value>
+    </resource>
+    <resource name="CT_DocGrid" resource="Properties">
+      <attribute name="type" tokenid="ooxml:CT_DocGrid_type"/>
+      <attribute name="linePitch" tokenid="ooxml:CT_DocGrid_linePitch"/>
+      <attribute name="charSpace" tokenid="ooxml:CT_DocGrid_charSpace"/>
     </resource>
     <resource name="ST_HdrFtr" resource="List">
       <value tokenid="ooxml:Value_ST_HrdFtr_even">even</value>

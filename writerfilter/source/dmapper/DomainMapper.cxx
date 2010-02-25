@@ -201,6 +201,9 @@ void DomainMapper::attribute(Id nName, Value & val)
     static ::rtl::OUString sLocalBookmarkName;
     sal_Int32 nIntValue = val.getInt();
     rtl::OUString sStringValue = val.getString();
+
+    SectionPropertyMap * pSectionContext = m_pImpl->GetSectionContext();
+
     // printf ( "DomainMapper::attribute(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)nName, (unsigned int)nIntValue, ::rtl::OUStringToOString(sStringValue, RTL_TEXTENCODING_DONTKNOW).getStr());
     if( nName >= NS_rtf::LN_WIDENT && nName <= NS_rtf::LN_LCBSTTBFUSSR )
         m_pImpl->GetFIB().SetData( nName, nIntValue );
@@ -2131,6 +2134,26 @@ void DomainMapper::attribute(Id nName, Value & val)
     case NS_ooxml::LN_endtrackchange:
         m_pImpl->RemoveCurrentRedline( );
     break;
+    case NS_ooxml::LN_CT_DocGrid_linePitch:
+            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
+            {
+                //see SwWW8ImplReader::SetDocumentGrid
+                OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+                if(pSectionContext)
+                {
+                    pSectionContext->SetGridLinePitch( ConversionHelper::convertTwipToMM100( nIntValue ) );
+                }
+            }
+        break;
+            case NS_ooxml::LN_CT_DocGrid_charSpace:
+                /* WRITERFILTERSTATUS: done: 100, planned: 2, spent: 0 */
+            {
+                OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
+                if(pSectionContext)
+                {
+                    pSectionContext->SetDxtCharSpace( nIntValue );
+                }
+            }
         default:
             {
 #if OSL_DEBUG_LEVEL > 0
@@ -2174,14 +2197,7 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
 
     sal_uInt32 nSprmId = rSprm.getId();
     //needed for page properties
-    SectionPropertyMap* pSectionContext = 0;
-    //the section context is not availabe before the first call of startSectionGroup()
-    if( !m_pImpl->IsAnyTableImport() )
-    {
-        PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_SECTION);
-        OSL_ENSURE(pContext.get(), "Section context is not in the stack!");
-        pSectionContext = dynamic_cast< SectionPropertyMap* >( pContext.get() );
-    }
+    SectionPropertyMap * pSectionContext = m_pImpl->GetSectionContext();
 
     //TODO: In rtl-paragraphs the meaning of left/right are to be exchanged
     bool bExchangeLeftRight = false;
@@ -3507,7 +3523,7 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
         break;
     case NS_sprm::LN_SDxtCharSpace:
     {
-        /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
+        /* WRITERFILTERSTATUS: done: 100, planned: 2, spent: 0 */
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
         if(pSectionContext)
         {
@@ -3517,7 +3533,7 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
     break;  // sprmSDxtCharSpace
     case NS_sprm::LN_SDyaLinePitch:   // sprmSDyaLinePitch
     {
-        /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+        /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
         //see SwWW8ImplReader::SetDocumentGrid
         OSL_ENSURE(pSectionContext, "SectionContext unavailable!");
         if(pSectionContext)
@@ -3899,6 +3915,9 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
             }
         }
     }
+    break;
+    case NS_ooxml::LN_EG_SectPrContents_docGrid:
+        resolveSprmProps(rSprm);
     break;
     case NS_ooxml::LN_EG_SectPrContents_pgBorders:
     {

@@ -539,7 +539,7 @@ public:
     void ResetParaRedline( );
 
     void ApplySettingsTable();
-
+    SectionPropertyMap * GetSectionContext();
 };
 } //namespace dmapper
 } //namespace writerfilter
