@@ -2154,6 +2154,16 @@ void DomainMapper::attribute(Id nName, Value & val)
                     pSectionContext->SetDxtCharSpace( nIntValue );
                 }
             }
+            break;
+            case NS_ooxml::LN_CT_DocGrid_type:
+                /* WRITERFILTERSTATUS: done: 100, planned: 2, spent: 0 */
+            {
+                if (pSectionContext != NULL)
+                {
+                    pSectionContext->SetGridType(nIntValue);
+                }
+            }
+            break;
         default:
             {
 #if OSL_DEBUG_LEVEL > 0
