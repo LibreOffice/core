@@ -2078,7 +2078,7 @@ void SdrObjCustomShape::ImpCheckCustomGluePointsAreAdded()
                     sal_Int32 nXDiff = aBoundRect.Left() - aRect.Left();
                     sal_Int32 nYDiff = aBoundRect.Top() - aRect.Top();
 
-                    if (nShearWink&&(bMirroredX&&!bMirroredY)||(bMirroredY&&!bMirroredX))
+                    if (nShearWink&&((bMirroredX&&!bMirroredY)||(bMirroredY&&!bMirroredX)))
                     {
                         nShearWink = -nShearWink;
                         fTan = -fTan;
