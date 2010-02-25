@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.10 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -47,6 +43,10 @@ CFLAGS+=-Od
 .ENDIF
 .ENDIF
 
+.IF "$(COM)"=="GCC"
+CFLAGS+=-O0
+.ENDIF
+
 # --- Files --------------------------------------------------------
 
 SLOFILES = \
@@ -64,7 +64,6 @@ SLOFILES = \
         $(SLO)$/sfxstatuslistener.obj \
     $(SLO)$/shell.obj \
     $(SLO)$/sorgitm.obj \
-    $(SLO)$/srchitem.obj \
     $(SLO)$/statcach.obj \
         $(SLO)$/unoctitm.obj
 

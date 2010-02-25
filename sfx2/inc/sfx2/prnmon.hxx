@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: prnmon.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,17 +30,13 @@
 #include "sal/config.h"
 #include "sfx2/dllapi.h"
 
-#ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
-#ifndef _DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
-#endif
 #include <sfx2/printer.hxx>
-#include <sfx2/progress.hxx>
+//#include <sfx2/progress.hxx>
 
 class SfxViewShell;
-class SfxProgress;
+//class SfxProgress;
 struct SfxPrintProgress_Impl;
 
 // ------------------------------------------------------------------------
@@ -51,7 +44,7 @@ struct SfxPrintProgress_Impl;
 #define PAGE_MAX    9999        //max. Anzahl der Seiten die gedruckt werden
 
 //--------------------------------------------------------------------
-
+/*
 class SFX2_DLLPUBLIC SfxPrintProgress: public SfxProgress
 {
     SfxPrintProgress_Impl*  pImp;
@@ -78,7 +71,7 @@ public:
     void                    SetCancelHdl( const Link& aCancelHdl );
     BOOL                    IsAborted() const;
 };
-
+*/
 // ------------------------------------------------------------------------
 
 struct SfxPrintOptDlg_Impl;

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: postuhdl.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +33,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/awt/FontSlant.hpp>
-#include <vcl/vclenum.hxx>
+#include <tools/fontenum.hxx>
 
 #ifndef _XMLOFF_XMLEMENT_HXX
 #include <xmloff/xmlelement.hxx>

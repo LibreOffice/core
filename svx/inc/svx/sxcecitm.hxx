@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sxcecitm.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +27,7 @@
 #ifndef _SXCECITM_HXX
 #define _SXCECITM_HXX
 
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <svx/svddef.hxx>
 #include <svx/sdynitm.hxx>
 #include <svx/sdmetitm.hxx>

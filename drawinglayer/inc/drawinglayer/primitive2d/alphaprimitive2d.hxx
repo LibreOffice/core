@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: alphaprimitive2d.hxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.3 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:16 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -44,23 +36,52 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        /** AlphaPrimitive2D class
+
+            This is the basic primitive for applying freely defined transparence
+            to freely defined content. The basic idea is to associate a content
+            which is defined as a sequence of primitives and hold as child content
+            in the GroupPrimitive2D with an alpha channel also defined as a sequence
+            of primitives and hold in the Alpha member.
+
+            The basic definition is to use the Alpha content as Alpha-Mask by
+            interpreting the Alpha-content not as RGB, but as Luminance alpha mask
+            using the common RGB_to_luminance definition as e.g. used by VCL.
+
+            The defining geometry is the Range of the child primitive sequence,
+            this means the renderers will/shall use this geometric information for
+            rendering, not the alpha one. The alpha one should/will be clipped
+            accordingly.
+         */
         class AlphaPrimitive2D : public GroupPrimitive2D
         {
         private:
-            Primitive2DSequence                     maAlpha; // transparence sequence
+            /// The Alpha-Mask who's RGB-Values are interpreted as Luminance
+            Primitive2DSequence                     maAlpha;
 
         public:
+            /** constructor
+
+                @param rChildren
+                The content which is defined to have a transparency. The
+                range of this primitive is defined by this content
+
+                @param rAlpha
+                The definition of the Alpha-channel for this primitive. It
+                will be interpreted as mask by interpreting as gray values
+                using the common RGB_to_luminance definitions
+             */
             AlphaPrimitive2D(
                 const Primitive2DSequence& rChildren,
                 const Primitive2DSequence& rAlpha);
 
-            // get data
+            /// data read access
             const Primitive2DSequence& getAlpha() const { return maAlpha; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive2DIDBlock()
         };
     } // end of namespace primitive2d

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: virtmenu.cxx,v $
- * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 #include <sot/factory.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/imagemgr.hxx>
-#include <svtools/imageitm.hxx>
+#include <svl/imageitm.hxx>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
@@ -284,7 +281,7 @@ SfxVirtualMenu::~SfxVirtualMenu()
     DBG_DTOR(SfxVirtualMenu, 0);
 
     DELETEZ( pImageControl );
-    SvtMenuOptions().RemoveListener( LINK( this, SfxVirtualMenu, SettingsChanged ) );
+    SvtMenuOptions().RemoveListenerLink( LINK( this, SfxVirtualMenu, SettingsChanged ) );
 
     if ( bIsActive )
     {
@@ -396,7 +393,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
     const int bOleServer = FALSE;
     const int bMac = FALSE;
     SvtMenuOptions aOptions;
-    aOptions.AddListener( LINK( this, SfxVirtualMenu, SettingsChanged ) );
+    aOptions.AddListenerLink( LINK( this, SfxVirtualMenu, SettingsChanged ) );
 
     // iterate through the items
     pBindings->ENTERREGISTRATIONS(); ++nLocks;
@@ -1254,36 +1251,6 @@ String SfxVirtualMenu::GetItemHelpText( USHORT nSlotId ) const
         return (pItems+nPos)->GetHelpText();
     return String();
 }
-
-//--------------------------------------------------------------------
-/*
-void SfxVirtualMenu::InvalidateKeyCodes()
-{
-    DBG_ASSERT( pSVMenu, "invalidating key of incomplete menu" );
-
-    SfxApplication* pSfxApp = SFX_APP();
-    SfxViewFrame *pViewFrame = pBindings->GetDispatcher()->GetFrame();
-    SfxAcceleratorManager* pAccMgr = pViewFrame->GetViewShell()->GetAccMgr_Impl();
-    SfxAcceleratorManager* pAppAccel = pSfxApp->GetAppAccel_Impl();
-    if ( !pAccMgr )
-        pAccMgr = pAppAccel;
-
-    for ( USHORT nPos = 0; nPos < pSVMenu->GetItemCount(); ++nPos )
-    {
-        USHORT nId = pSVMenu->GetItemId(nPos);
-        SfxVirtualMenu *pPopup = GetPopupMenu(nId);
-//        if ( pPopup )
-//            pPopup->InvalidateKeyCodes();
-//        else if ( nId )
-        if ( nId && !pSVMenu->GetPopupMenu( nId ) )
-        {
-            KeyCode aCode = pAccMgr->GetKeyCode( nId );
-            if ( !aCode.GetCode() && pAccMgr != pAppAccel )
-                aCode = pAppAccel->GetKeyCode( nId );
-            pSVMenu->SetAccelKey( nId, aCode );
-        }
-    }
-} */
 
 //--------------------------------------------------------------------
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: basmgr.cxx,v $
- * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,14 +30,14 @@
 #include <tools/stream.hxx>
 #include <sot/storage.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/msgbox.hxx>
 #include <basic/sbx.hxx>
 #include <sot/storinfo.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <basic/sbmod.hxx>

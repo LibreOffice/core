@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: misc.cxx,v $
- * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,8 +30,8 @@
 #include <tools/string.hxx>
 #include <tools/fsys.hxx>
 #include <tools/debug.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/lngmisc.hxx>
+#include <unotools/pathoptions.hxx>
+#include <svl/lngmisc.hxx>
 #include <ucbhelper/content.hxx>
 #include <i18npool/mslangid.hxx>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
@@ -52,6 +49,7 @@
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <unotools/processfactory.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <unotools/syslocale.hxx>
 
 #include <rtl/instance.hxx>
 
@@ -59,7 +57,7 @@
 #include "defs.hxx"
 #include "lngprops.hxx"
 #include "hyphdta.hxx"
-
+#include <i18npool/mslangid.hxx>
 
 using namespace utl;
 using namespace osl;
@@ -92,7 +90,7 @@ LocaleDataWrapper & GetLocaleDataWrapper( INT16 nLang )
 {
     static LocaleDataWrapper aLclDtaWrp(
                 getProcessServiceFactory(),
-                CreateLocale( Application::GetSettings().GetUILanguage() ) );
+                CreateLocale( SvtSysLocale().GetUILanguage() ) );
 
     const Locale &rLcl = aLclDtaWrp.getLoadedLocale();
     Locale aLcl( CreateLocale( nLang ) );

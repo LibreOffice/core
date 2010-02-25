@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sbxmod.cxx,v $
- * $Revision: 1.44.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +33,7 @@
 #include <vos/macros.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/stream.hxx>
-#include <svtools/brdcst.hxx>
+#include <svl/brdcst.hxx>
 #include <tools/shl.hxx>
 #include <basic/sbx.hxx>
 #include "sb.hxx"

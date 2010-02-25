@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: misc.hxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,13 +41,12 @@
 
 #include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
 #include <cppuhelper/implbase1.hxx> // helper for implementations
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <i18npool/lang.h>
 #include <tools/string.hxx>
 #include <unotools/charclass.hxx>
 #include <osl/thread.h>
 #include <osl/mutex.hxx>
-#include <vcl/svapp.hxx>
 
 namespace com { namespace sun { namespace star { namespace beans {
     class XPropertySet;

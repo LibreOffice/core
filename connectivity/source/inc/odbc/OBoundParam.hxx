@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: OBoundParam.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -119,6 +116,11 @@ namespace connectivity
                 paramInputStreamLen = len;
             }
 
+            void setSequence(const ::com::sun::star::uno::Sequence< sal_Int8 >& _aSequence)
+            {
+                aSequence = _aSequence;
+            }
+
             //--------------------------------------------------------------------
             // getInputStream
             // Gets the input stream for the bound parameter
@@ -191,6 +193,7 @@ namespace connectivity
                                         // data is in native format.
 
             ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream> paramInputStream;
+            ::com::sun::star::uno::Sequence< sal_Int8 > aSequence;
                                         // When an input stream is
                                         // bound to a parameter, the
                                         // input stream is saved

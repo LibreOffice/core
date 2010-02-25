@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dp_manager.cxx,v $
- * $Revision: 1.33.8.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,7 +46,7 @@
 #include "comphelper/servicedecl.hxx"
 #include "comphelper/sequence.hxx"
 #include "xmlscript/xml_helper.hxx"
-#include "svtools/inettype.hxx"
+#include "svl/inettype.hxx"
 #include "com/sun/star/lang/DisposedException.hpp"
 #include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
 #include "com/sun/star/beans/UnknownPropertyException.hpp"

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fontworkgallery.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +29,7 @@
 #include "precompiled_svx.hxx"
 #include <com/sun/star/text/WritingMode.hpp>
 #include <sfx2/app.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <svx/fmmodel.hxx>
 #include <sfx2/dispatch.hxx>
 #include <dlgutil.hxx>
@@ -45,8 +42,8 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdoutl.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include "toolbarmenu.hxx"
 
 #include "fontworkgallery.hxx"

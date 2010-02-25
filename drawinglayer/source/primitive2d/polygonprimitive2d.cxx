@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: polygonprimitive2d.cxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.12 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:20 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -110,7 +102,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence PolygonMarkerPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence PolygonMarkerPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             // calculate logic DashLength
             const basegfx::B2DVector aDashVector(rViewInformation.getInverseObjectToViewTransformation() * basegfx::B2DVector(getDiscreteDashLength(), 0.0));
@@ -147,7 +139,7 @@ namespace drawinglayer
             const basegfx::BColor& rRGBColorA,
             const basegfx::BColor& rRGBColorB,
             double fDiscreteDashLength)
-        :   BasePrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maPolygon(rPolygon),
             maRGBColorA(rRGBColorA),
             maRGBColorB(rRGBColorB),
@@ -158,7 +150,7 @@ namespace drawinglayer
 
         bool PolygonMarkerPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const PolygonMarkerPrimitive2D& rCompare = (PolygonMarkerPrimitive2D&)rPrimitive;
 
@@ -198,7 +190,7 @@ namespace drawinglayer
             ::osl::MutexGuard aGuard( m_aMutex );
             bool bNeedNewDecomposition(false);
 
-            if(getLocalDecomposition().hasElements())
+            if(getBuffered2DDecomposition().hasElements())
             {
                 if(rViewInformation.getInverseObjectToViewTransformation() != maLastInverseObjectToViewTransformation)
                 {
@@ -209,10 +201,10 @@ namespace drawinglayer
             if(bNeedNewDecomposition)
             {
                 // conditions of last local decomposition have changed, delete
-                const_cast< PolygonMarkerPrimitive2D* >(this)->setLocalDecomposition(Primitive2DSequence());
+                const_cast< PolygonMarkerPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DSequence());
             }
 
-            if(!getLocalDecomposition().hasElements())
+            if(!getBuffered2DDecomposition().hasElements())
             {
                 // remember last used InverseObjectToViewTransformation
                 PolygonMarkerPrimitive2D* pThat = const_cast< PolygonMarkerPrimitive2D* >(this);
@@ -220,7 +212,7 @@ namespace drawinglayer
             }
 
             // use parent implementation
-            return BasePrimitive2D::get2DDecomposition(rViewInformation);
+            return BufferedDecompositionPrimitive2D::get2DDecomposition(rViewInformation);
         }
 
         // provide unique ID
@@ -235,7 +227,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence PolygonStrokePrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence PolygonStrokePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             if(getB2DPolygon().count())
             {
@@ -307,7 +299,7 @@ namespace drawinglayer
             const basegfx::B2DPolygon& rPolygon,
             const attribute::LineAttribute& rLineAttribute,
             const attribute::StrokeAttribute& rStrokeAttribute)
-        :   BasePrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maPolygon(rPolygon),
             maLineAttribute(rLineAttribute),
             maStrokeAttribute(rStrokeAttribute)
@@ -317,7 +309,7 @@ namespace drawinglayer
         PolygonStrokePrimitive2D::PolygonStrokePrimitive2D(
             const basegfx::B2DPolygon& rPolygon,
             const attribute::LineAttribute& rLineAttribute)
-        :   BasePrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maPolygon(rPolygon),
             maLineAttribute(rLineAttribute),
             maStrokeAttribute()
@@ -326,7 +318,7 @@ namespace drawinglayer
 
         bool PolygonStrokePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const PolygonStrokePrimitive2D& rCompare = (PolygonStrokePrimitive2D&)rPrimitive;
 
@@ -348,7 +340,7 @@ namespace drawinglayer
                 {
                     // if line is mitered, use parent call since mitered line
                     // geometry may use more space than the geometry grown by half line width
-                    aRetval = BasePrimitive2D::getB2DRange(rViewInformation);
+                    aRetval = BufferedDecompositionPrimitive2D::getB2DRange(rViewInformation);
                 }
                 else
                 {
@@ -392,7 +384,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence PolygonWavePrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence PolygonWavePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             Primitive2DSequence aRetval;
 
@@ -505,7 +497,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence PolygonStrokeArrowPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence PolygonStrokeArrowPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // copy local polygon, it may be changed
             basegfx::B2DPolygon aLocalPolygon(getB2DPolygon());
@@ -614,7 +606,7 @@ namespace drawinglayer
             if(getStart().isActive() || getEnd().isActive())
             {
                 // use decomposition when line start/end is used
-                return BasePrimitive2D::getB2DRange(rViewInformation);
+                return BufferedDecompositionPrimitive2D::getB2DRange(rViewInformation);
             }
             else
             {

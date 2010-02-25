@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docfac.cxx,v $
- * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,8 +32,8 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <comphelper/processfactory.hxx>
 #include <tools/config.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/sequenceashashmap.hxx>

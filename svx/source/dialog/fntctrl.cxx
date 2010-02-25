@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fntctrl.cxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 
 // include ---------------------------------------------------------------
 #include <sfx2/viewsh.hxx>      // SfxViewShell
-#include <sfx2/printer.hxx>     // SfxPrinter
+#include <sfx2/printer.hxx>     // Printer
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
 #include <unicode/uchar.h>
@@ -50,7 +47,7 @@
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_ULONGS
 #define _SVSTDARR_XUB_STRLEN
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 #include <svtools/colorcfg.hxx>
 

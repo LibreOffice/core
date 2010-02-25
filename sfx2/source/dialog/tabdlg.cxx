@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tabdlg.cxx,v $
- * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,10 +31,10 @@
 #include <limits.h>
 #include <stdlib.h>
 #include <vcl/msgbox.hxx>
-#include <svtools/viewoptions.hxx>
+#include <unotools/viewoptions.hxx>
 
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #include "appdata.hxx"
 #include "sfxtypes.hxx"

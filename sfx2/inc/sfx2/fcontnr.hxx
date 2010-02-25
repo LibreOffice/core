@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fcontnr.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +33,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <vcl/window.hxx>
 
 #include <sfx2/docfilt.hxx>

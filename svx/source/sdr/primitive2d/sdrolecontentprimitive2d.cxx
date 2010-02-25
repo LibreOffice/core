@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdrcaptionprimitive2d.cxx,v $
- *
- * $Revision: 1.2.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +35,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -46,7 +43,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence SdrOleContentPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
+        Primitive2DSequence SdrOleContentPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
             Primitive2DSequence aRetval;
             const SdrOle2Obj* pSource = (mpSdrOle2Obj.is() ? static_cast< SdrOle2Obj* >(mpSdrOle2Obj.get()) : 0);
@@ -105,13 +102,10 @@ namespace drawinglayer
                     if(basegfx::fTools::moreOrEqual(fOffsetX, 0.0) && basegfx::fTools::moreOrEqual(fOffsetY, 0.0))
                     {
                         // if content fits into frame, create it
-                        basegfx::B2DHomMatrix aInnerObjectMatrix;
-
-                        aInnerObjectMatrix.scale(aPrefSize.getWidth(), aPrefSize.getHeight());
-                        aInnerObjectMatrix.translate(fOffsetX, fOffsetY);
-                        aInnerObjectMatrix.shearX(fShearX);
-                        aInnerObjectMatrix.rotate(fRotate);
-                        aInnerObjectMatrix.translate(aTranslate.getX(), aTranslate.getY());
+                        basegfx::B2DHomMatrix aInnerObjectMatrix(basegfx::tools::createScaleTranslateB2DHomMatrix(
+                            aPrefSize.getWidth(), aPrefSize.getHeight(), fOffsetX, fOffsetY));
+                        aInnerObjectMatrix = basegfx::tools::createShearXRotateTranslateB2DHomMatrix(fShearX, fRotate, aTranslate)
+                            * aInnerObjectMatrix;
 
                         const drawinglayer::primitive2d::Primitive2DReference aGraphicPrimitive(
                             new drawinglayer::primitive2d::GraphicPrimitive2D(
@@ -159,7 +153,7 @@ namespace drawinglayer
             const basegfx::B2DHomMatrix& rObjectTransform,
             sal_uInt32 nGraphicVersion,
             bool bHighContrast)
-        :   BasePrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             mpSdrOle2Obj(const_cast< SdrOle2Obj* >(&rSdrOle2Obj)),
             maObjectTransform(rObjectTransform),
             mnGraphicVersion(nGraphicVersion),
@@ -169,7 +163,7 @@ namespace drawinglayer
 
         bool SdrOleContentPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const SdrOleContentPrimitive2D& rCompare = (SdrOleContentPrimitive2D&)rPrimitive;
                 const bool bBothNot(!mpSdrOle2Obj.is() && !rCompare.mpSdrOle2Obj.is());

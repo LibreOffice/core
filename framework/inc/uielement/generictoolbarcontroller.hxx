@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: generictoolbarcontroller.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +34,9 @@
 
 #include <svtools/toolboxcontroller.hxx>
 #include <vcl/toolbox.hxx>
+#include <memory>
+
+class PopupMenu;
 
 namespace framework
 {
@@ -64,12 +64,34 @@ class GenericToolbarController : public svt::ToolboxController
 
          DECL_STATIC_LINK( GenericToolbarController, ExecuteHdl_Impl, ExecuteInfo* );
 
-    private:
+    protected:
         ToolBox*        m_pToolbar;
         sal_uInt16      m_nID;
         sal_Bool        m_bEnumCommand : 1,
                         m_bMadeInvisible : 1;
         rtl::OUString   m_aEnumCommand;
+};
+
+class MenuToolbarController : public GenericToolbarController
+{
+    com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess > m_xMenuDesc;
+    PopupMenu* pMenu;
+    com::sun::star::uno::Reference< com::sun::star::lang::XComponent > m_xMenuManager;
+    rtl::OUString m_aModuleIdentifier;
+    public:
+        MenuToolbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
+                                  const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
+                                  ToolBox* pToolBar,
+                                  USHORT   nID,
+                                  const rtl::OUString& aCommand,
+                                  const rtl::OUString& aModuleIdentifier,
+                                  const com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >& xMenuDesc );
+
+    ~MenuToolbarController();
+    // XToolbarController
+    virtual void SAL_CALL click() throw ( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL createPopupWindow() throw (::com::sun::star::uno::RuntimeException);
+
 };
 
 }

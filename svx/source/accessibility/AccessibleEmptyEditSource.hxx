@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessibleEmptyEditSource.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,11 +28,11 @@
 #ifndef _SVX_ACCESSIBLEEMPTYEDITSOURCE_HXX
 #define _SVX_ACCESSIBLEEMPTYEDITSOURCE_HXX
 
-#include <svtools/brdcst.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/brdcst.hxx>
+#include <svl/lstner.hxx>
 
 #include <memory>
-#include <svx/unoedsrc.hxx>
+#include <editeng/unoedsrc.hxx>
 
 class SdrObject;
 class SdrView;

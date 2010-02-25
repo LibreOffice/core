@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: menudocumenthandler.cxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,6 +44,7 @@
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/ui/ItemType.hpp>
+#include <com/sun/star/ui/ItemStyle.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
@@ -80,11 +78,13 @@
 #define ATTRIBUTE_LABEL             "http://openoffice.org/2001/menu^label"
 #define ATTRIBUTE_HELPID            "http://openoffice.org/2001/menu^helpid"
 #define ATTRIBUTE_LINEBREAK         "http://openoffice.org/2001/menu^linebreak"
+#define ATTRIBUTE_STYLE         "http://openoffice.org/2001/menu^style"
 
 #define ATTRIBUTE_NS_ID             "menu:id"
 #define ATTRIBUTE_NS_LABEL          "menu:label"
 #define ATTRIBUTE_NS_HELPID         "menu:helpid"
 #define ATTRIBUTE_NS_LINEBREAK      "menu:linebreak"
+#define ATTRIBUTE_NS_STYLE          "menu:style"
 
 #define ATTRIBUTE_XMLNS_MENU        "xmlns:menu"
 
@@ -92,12 +92,16 @@
 
 #define MENUBAR_DOCTYPE             "<!DOCTYPE menu:menubar PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"menubar.dtd\">"
 
+#define ATTRIBUTE_ITEMSTYLE_TEXT    "text"
+#define ATTRIBUTE_ITEMSTYLE_IMAGE    "image"
+
 // Property names of a menu/menu item ItemDescriptor
 static const char ITEM_DESCRIPTOR_COMMANDURL[]  = "CommandURL";
 static const char ITEM_DESCRIPTOR_HELPURL[]     = "HelpURL";
 static const char ITEM_DESCRIPTOR_CONTAINER[]   = "ItemDescriptorContainer";
 static const char ITEM_DESCRIPTOR_LABEL[]       = "Label";
 static const char ITEM_DESCRIPTOR_TYPE[]        = "Type";
+static const char ITEM_DESCRIPTOR_STYLE[]       = "Style";
 
 // special popup menus (filled during runtime) must be saved as an empty popup menu or menuitem!!!
 static const sal_Int32 CMD_PROTOCOL_SIZE        = 5;
@@ -121,12 +125,27 @@ using namespace ::com::sun::star::ui;
 namespace framework
 {
 
+struct MenuStyleItem
+{
+    sal_Int16 nBit;
+    const char* attrName;
+};
+
+MenuStyleItem MenuItemStyles[ ] = {
+    { ::com::sun::star::ui::ItemStyle::ICON, ATTRIBUTE_ITEMSTYLE_IMAGE },
+    { ::com::sun::star::ui::ItemStyle::TEXT, ATTRIBUTE_ITEMSTYLE_TEXT },
+};
+
+
+sal_Int32 nMenuStyleItemEntries = sizeof( MenuItemStyles ) / sizeof( MenuItemStyles[ 0 ] );
+
 static void ExtractMenuParameters( const Sequence< PropertyValue > rProp,
                                    ::rtl::OUString&                       rCommandURL,
                                    ::rtl::OUString&                       rLabel,
                                    ::rtl::OUString&                       rHelpURL,
                                    Reference< XIndexAccess >&      rSubMenu,
-                                   sal_Int16&                      rType )
+                                   sal_Int16&                      rType,
+                                   sal_Int16&                      rStyle )
 {
     for ( sal_Int32 i = 0; i < rProp.getLength(); i++ )
     {
@@ -151,6 +170,10 @@ static void ExtractMenuParameters( const Sequence< PropertyValue > rProp,
         {
             rProp[i].Value >>= rType;
         }
+        else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_STYLE ))
+        {
+            rProp[i].Value >>= rStyle;
+        }
     }
 }
 
@@ -165,7 +188,8 @@ ReadMenuDocumentHandlerBase::ReadMenuDocumentHandlerBase() :
     m_aLabel( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_LABEL )),
     m_aContainer( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_CONTAINER )),
     m_aHelpURL( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_HELPURL )),
-    m_aCommandURL( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_COMMANDURL ))
+    m_aCommandURL( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_COMMANDURL )),
+    m_aStyle( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_STYLE ))
 {
 }
 
@@ -207,20 +231,22 @@ throw(  SAXException, RuntimeException )
 
 void ReadMenuDocumentHandlerBase::initPropertyCommon(
     Sequence< PropertyValue > &rProps, const rtl::OUString &rCommandURL,
-    const rtl::OUString &rHelpId, const rtl::OUString &rLabel)
+    const rtl::OUString &rHelpId, const rtl::OUString &rLabel, sal_Int16 nItemStyleBits )
 {
     rProps[0].Name = m_aCommandURL;
     rProps[1].Name = m_aHelpURL;
     rProps[2].Name = m_aContainer;
     rProps[3].Name = m_aLabel;
-    rProps[4].Name = m_aType;
+    rProps[4].Name = m_aStyle;
+    rProps[5].Name = m_aType;
 
     // Common values
     rProps[0].Value <<= rCommandURL.intern();
     rProps[1].Value <<= rHelpId;
     rProps[2].Value <<= Reference< XIndexContainer >();
     rProps[3].Value <<= rLabel;
-    rProps[4].Value <<= ::com::sun::star::ui::ItemType::DEFAULT;
+    rProps[4].Value <<= nItemStyleBits;
+    rProps[5].Value <<= ::com::sun::star::ui::ItemType::DEFAULT;
 }
 
 // -----------------------------------------------------------------------------
@@ -373,6 +399,7 @@ throw( SAXException, RuntimeException )
         ::rtl::OUString aHelpId;
         ::rtl::OUString aCommandId;
         ::rtl::OUString aLabel;
+        sal_Int16 nItemBits(0);
 
         m_bMenuMode = sal_True;
 
@@ -399,12 +426,29 @@ throw( SAXException, RuntimeException )
                     aLabel = aValue;
                 else if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_HELPID )))
                     aHelpId = aValue;
+                else if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_STYLE )))
+                {
+                    ::rtl::OUString aTemp( aValue );
+                    sal_Int32 nIndex = 0;
+                    do
+                    {
+                        ::rtl::OUString aToken = aTemp.getToken( 0, '+', nIndex );
+                        if ( aToken.getLength() > 0 )
+                        {
+                            if ( aToken.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ITEMSTYLE_TEXT ) ) )
+                                nItemBits |= ::com::sun::star::ui::ItemStyle::TEXT;
+                            if ( aToken.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ITEMSTYLE_IMAGE ) ) )
+                                nItemBits |= ::com::sun::star::ui::ItemStyle::ICON;
+                        }
+                    }
+                    while ( nIndex >= 0 );
+                }
             }
 
             if ( aCommandId.getLength() > 0 )
             {
-                Sequence< PropertyValue > aSubMenuProp( 5 );
-                initPropertyCommon( aSubMenuProp, aCommandId, aHelpId, aLabel );
+                Sequence< PropertyValue > aSubMenuProp( 6 );
+                initPropertyCommon( aSubMenuProp, aCommandId, aHelpId, aLabel, nItemBits );
                 aSubMenuProp[2].Value <<= xSubItemContainer;
 
                 m_xMenuBarContainer->insertByIndex( m_xMenuBarContainer->getCount(), makeAny( aSubMenuProp ) );
@@ -589,6 +633,7 @@ throw( SAXException, RuntimeException )
         ::rtl::OUString aHelpId;
         ::rtl::OUString aCommandId;
         ::rtl::OUString aLabel;
+        sal_Int16 nItemBits(0);
 
         m_bMenuMode = sal_True;
 
@@ -614,12 +659,30 @@ throw( SAXException, RuntimeException )
                 aLabel = aValue;
             else if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_HELPID )))
                 aHelpId = aValue;
+            else if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_STYLE )))
+            {
+                ::rtl::OUString aTemp( aValue );
+                sal_Int32 nIndex = 0;
+                do
+                {
+                    ::rtl::OUString aToken = aTemp.getToken( 0, '+', nIndex );
+                    if ( aToken.getLength() > 0 )
+                    {
+                        if ( aToken.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ITEMSTYLE_TEXT ) ) )
+                            nItemBits |= ::com::sun::star::ui::ItemStyle::TEXT;
+                        if ( aToken.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ITEMSTYLE_IMAGE ) ) )
+                            nItemBits |= ::com::sun::star::ui::ItemStyle::ICON;
+                    }
+                }
+                while ( nIndex >= 0 );
+            }
+
         }
 
         if ( aCommandId.getLength() > 0 )
         {
-            Sequence< PropertyValue > aSubMenuProp( 5 );
-            initPropertyCommon( aSubMenuProp, aCommandId, aHelpId, aLabel );
+            Sequence< PropertyValue > aSubMenuProp( 6 );
+            initPropertyCommon( aSubMenuProp, aCommandId, aHelpId, aLabel, nItemBits );
             aSubMenuProp[2].Value <<= xSubItemContainer;
 
             m_xMenuContainer->insertByIndex( m_xMenuContainer->getCount(), makeAny( aSubMenuProp ) );
@@ -639,7 +702,7 @@ throw( SAXException, RuntimeException )
         ::rtl::OUString aHelpId;
         ::rtl::OUString aCommandId;
         ::rtl::OUString aLabel;
-
+        sal_Int16 nItemBits(0);
         // read attributes for menu item
         for ( sal_Int16 i=0; i< xAttrList->getLength(); i++ )
         {
@@ -651,12 +714,30 @@ throw( SAXException, RuntimeException )
                 aLabel = aValue;
             else if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_HELPID )))
                 aHelpId = aValue;
+            else if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_STYLE )))
+            {
+                ::rtl::OUString aTemp( aValue );
+                sal_Int32 nIndex = 0;
+                do
+                {
+                    ::rtl::OUString aToken = aTemp.getToken( 0, '+', nIndex );
+                    if ( aToken.getLength() > 0 )
+                    {
+                        if ( aToken.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ITEMSTYLE_TEXT ) ) )
+                            nItemBits |= ::com::sun::star::ui::ItemStyle::TEXT;
+                        if ( aToken.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ATTRIBUTE_ITEMSTYLE_IMAGE ) ) )
+                            nItemBits |= ::com::sun::star::ui::ItemStyle::ICON;
+                    }
+                }
+                while ( nIndex >= 0 );
+            }
+
         }
 
         if ( aCommandId.getLength() > 0 )
         {
-            Sequence< PropertyValue > aMenuItem( 5 );
-            initPropertyCommon( aMenuItem, aCommandId, aHelpId, aLabel );
+            Sequence< PropertyValue > aMenuItem( 6 );
+            initPropertyCommon( aMenuItem, aCommandId, aHelpId, aLabel, nItemBits );
             aMenuItem[2].Value <<= Reference< XIndexContainer >();
 
             m_xMenuContainer->insertByIndex( m_xMenuContainer->getCount(), makeAny( aMenuItem ) );
@@ -809,15 +890,16 @@ throw ( SAXException, RuntimeException )
             ::rtl::OUString    aLabel;
             ::rtl::OUString    aHelpURL;
             sal_Int16   nType( ::com::sun::star::ui::ItemType::DEFAULT );
+            sal_Int16   nItemBits( 0 );
             Reference< XIndexAccess > xSubMenu;
 
-            ExtractMenuParameters( aProps, aCommandURL, aLabel, aHelpURL, xSubMenu, nType );
+            ExtractMenuParameters( aProps, aCommandURL, aLabel, aHelpURL, xSubMenu, nType, nItemBits );
             if ( xSubMenu.is() )
             {
                 if ( aCommandURL.equalsAscii( ADDDIRECT_CMD ) ||
                     aCommandURL.equalsAscii( AUTOPILOTMENU_CMD ))
                 {
-                    WriteMenuItem( aCommandURL, aLabel, aHelpURL );
+                    WriteMenuItem( aCommandURL, aLabel, aHelpURL, nItemBits );
                     bSeparator = sal_False;
                 }
                 else if (( aCommandURL.getLength() > 0 ) && !AddonPopupMenu::IsCommandURLPrefix ( aCommandURL ))
@@ -857,7 +939,7 @@ throw ( SAXException, RuntimeException )
                     if ( aCommandURL.getLength() > 0 )
                     {
                         bSeparator = FALSE;
-                        WriteMenuItem( aCommandURL, aLabel, aHelpURL );
+                        WriteMenuItem( aCommandURL, aLabel, aHelpURL, nItemBits );
                     }
                 }
                 else if ( !bSeparator )
@@ -872,7 +954,7 @@ throw ( SAXException, RuntimeException )
 }
 
 
-void OWriteMenuDocumentHandler::WriteMenuItem( const ::rtl::OUString& aCommandURL, const ::rtl::OUString& aLabel, const ::rtl::OUString& aHelpURL)
+void OWriteMenuDocumentHandler::WriteMenuItem( const ::rtl::OUString& aCommandURL, const ::rtl::OUString& aLabel, const ::rtl::OUString& aHelpURL, sal_Int16 nStyle )
 {
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
     Reference< XAttributeList > xList( (XAttributeList *) pList , UNO_QUERY );
@@ -893,6 +975,24 @@ void OWriteMenuDocumentHandler::WriteMenuItem( const ::rtl::OUString& aCommandUR
         pList->AddAttribute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_LABEL )),
                                 m_aAttributeType,
                                 aLabel );
+    }
+    if (( nStyle > 0 ) && !( aCommandURL.copy( CMD_PROTOCOL_SIZE ).equalsAscii( CMD_PROTOCOL )))
+    {
+        rtl::OUString aValue;
+        MenuStyleItem* pStyle = MenuItemStyles;
+
+        for ( sal_Int32 nIndex = 0; nIndex < nMenuStyleItemEntries; ++nIndex, ++pStyle )
+        {
+            if ( nStyle & pStyle->nBit )
+            {
+                if ( aValue.getLength() )
+                    aValue = aValue.concat( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("+") ) );
+                aValue += rtl::OUString::createFromAscii( pStyle->attrName );
+            }
+        }
+        pList->AddAttribute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_STYLE )),
+                                m_aAttributeType,
+                                aValue );
     }
 
     m_xWriteDocumentHandler->ignorableWhitespace( ::rtl::OUString() );

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewobjectcontactofunocontrol.hxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,7 +63,6 @@ namespace sdr { namespace contact {
 
     public:
         ViewObjectContactOfUnoControl( ObjectContact& _rObjectContact, ViewContactOfUnoControl& _rViewContact );
-
         /// determines whether an XControl already exists, and is currently visible
         bool    isControlVisible() const;
 
@@ -99,6 +95,11 @@ namespace sdr { namespace contact {
         */
         virtual void ActionChanged();
 
+        /** to be called when any aspect of the control which requires view updates changed
+        */
+        struct ImplAccess { friend class ViewObjectContactOfUnoControl_Impl; friend class ViewObjectContactOfUnoControl; private: ImplAccess() { } };
+        void onControlChangedOrModified( ImplAccess ) { impl_onControlChangedOrModified(); }
+
     protected:
         ~ViewObjectContactOfUnoControl();
 
@@ -107,6 +108,8 @@ namespace sdr { namespace contact {
 
         // visibility check
         virtual bool isPrimitiveVisible( const DisplayInfo& _rDisplayInfo ) const;
+        /// to be called when any aspect of the control which requires view updates changed
+        void impl_onControlChangedOrModified();
 
     private:
         ViewObjectContactOfUnoControl();                                                    // never implemented

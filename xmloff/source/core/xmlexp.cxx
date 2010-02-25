@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlexp.cxx,v $
- * $Revision: 1.143 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,7 +83,7 @@
 #include <comphelper/extract.hxx>
 #include "PropertySetMerger.hxx"
 
-#include "svtools/urihelper.hxx"
+#include "svl/urihelper.hxx"
 #include "xformsexport.hxx"
 
 #include <unotools/docinfohelper.hxx>
@@ -322,6 +319,12 @@ void SvXMLExport::_InitCtor()
         mpNamespaceMap->Add( GetXMLToken(XML_NP_OOOW),  GetXMLToken(XML_N_OOOW),    XML_NAMESPACE_OOOW );
         mpNamespaceMap->Add( GetXMLToken(XML_NP_OOOC),  GetXMLToken(XML_N_OOOC),    XML_NAMESPACE_OOOC );
         mpNamespaceMap->Add( GetXMLToken(XML_NP_OF),    GetXMLToken(XML_N_OF),      XML_NAMESPACE_OF );
+
+        if (getDefaultVersion() == SvtSaveOptions::ODFVER_LATEST)
+        {
+            mpNamespaceMap->Add(
+                GetXMLToken(XML_NP_TABLE_EXT), GetXMLToken(XML_N_TABLE_EXT), XML_NAMESPACE_TABLE_EXT);
+        }
     }
     if( (getExportFlags() & (EXPORT_MASTERSTYLES|EXPORT_CONTENT) ) != 0 )
     {
@@ -1055,7 +1058,7 @@ void SvXMLExport::ClearAttrList()
     mpAttrList->Clear();
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 void SvXMLExport::CheckAttrList()
 {
     DBG_ASSERT( !mpAttrList->getLength(),

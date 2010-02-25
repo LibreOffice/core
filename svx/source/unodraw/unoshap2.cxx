@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unoshap2.cxx,v $
- * $Revision: 1.70 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,15 +44,15 @@
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
 #include <svtools/fltcall.hxx>
-#include "impgrf.hxx"
+#include <svtools/filter.hxx>
 
 #include <boost/scoped_ptr.hpp>
-
+#include <svx/svdpool.hxx>
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
 #include <tools/urlobj.hxx>
 
-#include <svx/unoprnms.hxx>
+#include <editeng/unoprnms.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/unopage.hxx>
 #include <svx/svdobj.hxx>
@@ -101,7 +98,7 @@ sal_Bool ConvertGDIMetaFileToWMF( const GDIMetaFile & rMTF, SvStream & rTargetSt
 ***********************************************************************/
 
 SvxShapeGroup::SvxShapeGroup( SdrObject* pObj, SvxDrawPage* pDrawPage  )  throw() :
-    SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_GROUP), aSvxMapProvider.GetPropertySet(SVXMAP_GROUP) ),
+    SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_GROUP), aSvxMapProvider.GetPropertySet(SVXMAP_GROUP, SdrObject::GetGlobalDrawObjectItemPool()) ),
     mxPage( pDrawPage )
 {
 }
@@ -384,7 +381,7 @@ uno::Sequence< OUString > SAL_CALL SvxShapeGroup::getSupportedServiceNames()
 ***********************************************************************/
 
 SvxShapeConnector::SvxShapeConnector( SdrObject* pObj )  throw() :
-    SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_CONNECTOR), aSvxMapProvider.GetPropertySet(SVXMAP_CONNECTOR) )
+    SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_CONNECTOR), aSvxMapProvider.GetPropertySet(SVXMAP_CONNECTOR, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
 }
 
@@ -551,7 +548,7 @@ uno::Sequence< OUString > SAL_CALL SvxShapeConnector::getSupportedServiceNames()
 DBG_NAME(SvxShapeControl)
 
 SvxShapeControl::SvxShapeControl( SdrObject* pObj )  throw() :
-    SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_CONTROL), aSvxMapProvider.GetPropertySet(SVXMAP_CONTROL) )
+    SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_CONTROL), aSvxMapProvider.GetPropertySet(SVXMAP_CONTROL, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
     DBG_CTOR(SvxShapeControl,NULL);
     setShapeKind( OBJ_UNO );
@@ -1014,7 +1011,7 @@ uno::Any SAL_CALL SvxShapeControl::getPropertyDefault( const ::rtl::OUString& aP
 
 //----------------------------------------------------------------------
 SvxShapeDimensioning::SvxShapeDimensioning( SdrObject* pObj ) throw()
-:   SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_DIMENSIONING), aSvxMapProvider.GetPropertySet(SVXMAP_DIMENSIONING) )
+:   SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_DIMENSIONING), aSvxMapProvider.GetPropertySet(SVXMAP_DIMENSIONING, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
 }
 
@@ -1035,7 +1032,7 @@ uno::Sequence< OUString > SAL_CALL SvxShapeDimensioning::getSupportedServiceName
 
 //----------------------------------------------------------------------
 SvxShapeCircle::SvxShapeCircle( SdrObject* pObj ) throw()
-:   SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_CIRCLE), aSvxMapProvider.GetPropertySet(SVXMAP_CIRCLE) )
+:   SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_CIRCLE), aSvxMapProvider.GetPropertySet(SVXMAP_CIRCLE, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
 }
 
@@ -1060,7 +1057,7 @@ uno::Sequence< OUString > SAL_CALL SvxShapeCircle::getSupportedServiceNames() th
 //----------------------------------------------------------------------
 SvxShapePolyPolygon::SvxShapePolyPolygon( SdrObject* pObj , drawing::PolygonKind eNew )
  throw( com::sun::star::beans::PropertyVetoException, com::sun::star::lang::IllegalArgumentException)
-: SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_POLYPOLYGON), aSvxMapProvider.GetPropertySet(SVXMAP_POLYPOLYGON) )
+: SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_POLYPOLYGON), aSvxMapProvider.GetPropertySet(SVXMAP_POLYPOLYGON, SdrObject::GetGlobalDrawObjectItemPool()) )
 , mePolygonKind( eNew )
 {
 }
@@ -1327,7 +1324,7 @@ uno::Sequence< OUString > SAL_CALL SvxShapePolyPolygon::getSupportedServiceNames
 #include <com/sun/star/drawing/FlagSequence.hpp>
 //----------------------------------------------------------------------
 SvxShapePolyPolygonBezier::SvxShapePolyPolygonBezier( SdrObject* pObj , drawing::PolygonKind eNew ) throw()
-:   SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_POLYPOLYGONBEZIER), aSvxMapProvider.GetPropertySet(SVXMAP_POLYPOLYGONBEZIER) )
+:   SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_POLYPOLYGONBEZIER), aSvxMapProvider.GetPropertySet(SVXMAP_POLYPOLYGONBEZIER, SdrObject::GetGlobalDrawObjectItemPool()) )
 ,   mePolygonKind( eNew )
 {
 }
@@ -1635,7 +1632,7 @@ uno::Sequence< OUString > SAL_CALL SvxShapePolyPolygonBezier::getSupportedServic
 
 //----------------------------------------------------------------------
 SvxGraphicObject::SvxGraphicObject( SdrObject* pObj ) throw()
-:   SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_GRAPHICOBJECT), aSvxMapProvider.GetPropertySet(SVXMAP_GRAPHICOBJECT) )
+:   SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_GRAPHICOBJECT), aSvxMapProvider.GetPropertySet(SVXMAP_GRAPHICOBJECT, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
 }
 
@@ -1738,7 +1735,7 @@ bool SvxGraphicObject::setPropertyValueImpl( const ::rtl::OUString& rName, const
 
                     if( aURLObj.GetProtocol() != INET_PROT_NOT_VALID )
                     {
-                        GraphicFilter* pGrfFilter = GetGrfFilter();
+                        GraphicFilter* pGrfFilter = GraphicFilter::GetGraphicFilter();
                         aFilterName = pGrfFilter->GetImportFormatName( pGrfFilter->GetImportFormatNumberForShortName( aURLObj.getExtension() ) );
                     }
                 }
@@ -1820,7 +1817,9 @@ bool SvxGraphicObject::getPropertyValueImpl( const ::rtl::OUString& rName, const
             SvMemoryStream aDestStrm( 65535, 65535 );
 
             ConvertGDIMetaFileToWMF( rGraphic.GetGDIMetaFile(), aDestStrm, NULL, sal_False );
-            uno::Sequence<sal_Int8> aSeq((sal_Int8*)aDestStrm.GetData(), aDestStrm.GetSize());
+            const uno::Sequence<sal_Int8> aSeq(
+                static_cast< const sal_Int8* >(aDestStrm.GetData()),
+                aDestStrm.GetEndOfData());
             rValue <<= aSeq;
         }
         break;
@@ -1872,7 +1871,7 @@ bool SvxGraphicObject::getPropertyValueImpl( const ::rtl::OUString& rName, const
 ///////////////////////////////////////////////////////////////////////
 
 SvxShapeCaption::SvxShapeCaption( SdrObject* pObj ) throw()
-: SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_CAPTION), aSvxMapProvider.GetPropertySet(SVXMAP_CAPTION) )
+: SvxShapeText( pObj, aSvxMapProvider.GetMap(SVXMAP_CAPTION), aSvxMapProvider.GetPropertySet(SVXMAP_CAPTION, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
 }
 
@@ -1885,7 +1884,7 @@ SvxShapeCaption::~SvxShapeCaption() throw()
 ***********************************************************************/
 
 SvxCustomShape::SvxCustomShape( SdrObject* pObj )  throw() :
-    SvxShapeText( pObj, aSvxMapProvider.GetMap( SVXMAP_CUSTOMSHAPE ), aSvxMapProvider.GetPropertySet(SVXMAP_CUSTOMSHAPE) )
+    SvxShapeText( pObj, aSvxMapProvider.GetMap( SVXMAP_CUSTOMSHAPE ), aSvxMapProvider.GetPropertySet(SVXMAP_CUSTOMSHAPE, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
 }
 

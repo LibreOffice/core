@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: OResultSet.cxx,v $
- * $Revision: 1.66 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -223,9 +220,11 @@ SQLRETURN OResultSet::unbind(sal_Bool _bUnbindHandle)
                     delete static_cast< double* >(reinterpret_cast< void * >(pValue->first));
                     break;
                 case DataType::LONGVARCHAR:
+                case DataType::CLOB:
                     delete [] static_cast< char* >(reinterpret_cast< void * >(pValue->first));
                     break;
                 case DataType::LONGVARBINARY:
+                case DataType::BLOB:
                     delete [] static_cast< char* >(reinterpret_cast< void * >(pValue->first));
                     break;
                 case DataType::DATE:
@@ -284,9 +283,11 @@ TVoidPtr OResultSet::allocBindColumn(sal_Int32 _nType,sal_Int32 _nColumnIndex)
             aPair = TVoidPtr(reinterpret_cast< sal_Int64 >(new double(0.0)),_nType);
             break;
         case DataType::LONGVARCHAR:
+        case DataType::CLOB:
             aPair = TVoidPtr(reinterpret_cast< sal_Int64 >(new char[2]),_nType);  // dient nur zum auffinden
             break;
         case DataType::LONGVARBINARY:
+        case DataType::BLOB:
             aPair = TVoidPtr(reinterpret_cast< sal_Int64 >(new char[2]),_nType);  // dient nur zum auffinden
             break;
         case DataType::DATE:
@@ -1499,6 +1500,7 @@ void OResultSet::fillRow(sal_Int32 _nToColumn)
             case DataType::DECIMAL:
             case DataType::NUMERIC:
             case DataType::LONGVARCHAR:
+            case DataType::CLOB:
                 {
                     ::std::map<sal_Int32,SWORD>::iterator aFind = m_aODBCColumnTypes.find(nColumn);
                     if ( aFind == m_aODBCColumnTypes.end() )
@@ -1514,6 +1516,7 @@ void OResultSet::fillRow(sal_Int32 _nToColumn)
                 *pColumn = getDouble(nColumn);
                 break;
             case DataType::LONGVARBINARY:
+            case DataType::BLOB:
                 *pColumn = getBytes(nColumn);
                 break;
             case DataType::DATE:
@@ -1719,6 +1722,7 @@ void OResultSet::fillNeededData(SQLRETURN _nRet)
                 case DataType::BINARY:
                 case DataType::VARBINARY:
                 case DataType::LONGVARBINARY:
+                case DataType::BLOB:
                     aSeq = m_aRow[nColumnIndex];
                     N3SQLPutData (m_aStatementHandle, aSeq.getArray(), aSeq.getLength());
                     break;
@@ -1730,6 +1734,7 @@ void OResultSet::fillNeededData(SQLRETURN _nRet)
                     break;
                 }
                 case DataType::LONGVARCHAR:
+                case DataType::CLOB:
                 {
                     ::rtl::OUString sRet;
                     sRet = m_aRow[nColumnIndex].getString();

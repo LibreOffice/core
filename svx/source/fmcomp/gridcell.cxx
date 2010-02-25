@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: gridcell.cxx,v $
- * $Revision: 1.66 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 
 #include "fmprop.hrc"
 #include "fmresids.hrc"
-#include "fmtools.hxx"
+#include "svx/fmtools.hxx"
 #include "gridcell.hxx"
 #include "gridcols.hxx"
 #include "sdbdatacolumn.hxx"
@@ -66,7 +63,7 @@
 #include <rtl/math.hxx>
 #include <svtools/calendar.hxx>
 #include <svtools/fmtfield.hxx>
-#include <svtools/numuno.hxx>
+#include <svl/numuno.hxx>
 #include <svtools/svmedit.hxx>
 #include <svx/dialmgr.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -679,7 +676,15 @@ sal_Bool DbCellControl::Commit()
     // lock the listening for value property changes
     lockValueProperty();
     // commit the content of the control into the model's value property
-    sal_Bool bReturn = commitControl();
+    sal_Bool bReturn = sal_False;
+    try
+    {
+        bReturn = commitControl();
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
     // unlock the listening for value property changes
     unlockValueProperty();
     // outta here

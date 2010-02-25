@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: animatedprimitive2d.hxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.4 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:16 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -38,6 +30,7 @@
 
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -51,50 +44,59 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        /** AnimatedSwitchPrimitive2D class
+
+            This is the basic class for simple, animated primitives. The basic idea
+            is to have an animation definition (AnimationEntry) who's basic
+            functionality is to return a state value for any given animation time in
+            the range of [0.0 .. 1.0]. Depending on the state, the decomposition
+            calculates an index, which of the members of the child vector is to
+            be visualized.
+
+            An example: For blinking, the Child vector should exist of two entries;
+            for values of [0.0 .. 0.5] the first, else the last entry will be used.
+            This mechanism is not limited to two entries, though.
+         */
         class AnimatedSwitchPrimitive2D : public GroupPrimitive2D
         {
         private:
-            // the animation definition which allows translation of a point in time
-            // to an animation state [0.0 .. 1.0]. This member contains a cloned
-            // definition and is owned by this implementation
+            /**
+                The animation definition which allows translation of a point in time
+                to an animation state [0.0 .. 1.0]. This member contains a cloned
+                definition and is owned by this implementation.
+             */
             animation::AnimationEntry*                      mpAnimationEntry;
 
-            // the last remembered decompose time, created and used by getDecomposition() for
-            // buffering purposes
-            double                                          mfDecomposeViewTime;
-
-            // bitfield
-            // flag if this is a text or graphic animation. Necessary since SdrViews need to differentiate
-            // between both types if they are on/off
+            /// bitfield
+            /** flag if this is a text or graphic animation. Necessary since SdrViews need to differentiate
+                between both types if they are on/off
+             */
             unsigned                                        mbIsTextAnimation : 1;
 
-        protected:
-            // create local decomposition
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
-
         public:
+            /// constructor
             AnimatedSwitchPrimitive2D(
                 const animation::AnimationEntry& rAnimationEntry,
                 const Primitive2DSequence& rChildren,
                 bool bIsTextAnimation);
+
+            /// destructor - needed due to mpAnimationEntry
             virtual ~AnimatedSwitchPrimitive2D();
 
-            // get data
+            /// data read access
             const animation::AnimationEntry& getAnimationEntry() const { return *mpAnimationEntry; }
             bool isTextAnimation() const { return mbIsTextAnimation; }
             bool isGraphicAnimation() const { return !isTextAnimation(); }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
-            // get range
-            virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
-
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive2DIDBlock()
 
-            // The getDecomposition is overloaded here since the decompose is dependent of the point in time,
-            // so the default implementation is nut useful here, it needs to be handled locally
+            /** The getDecomposition is overloaded here since the decompose is dependent of the point in time,
+                so the default implementation is nut useful here, it needs to be handled locally
+             */
             virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
         };
     } // end of namespace primitive2d
@@ -106,84 +108,63 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
+        /** AnimatedBlinkPrimitive2D class
+
+            Basically the same mechanism as in AnimatedSwitchPrimitive2D, but the
+            decomposition is specialized in delivering the children in the
+            range [0.0.. 0.5] and an empty sequence else
+         */
         class AnimatedBlinkPrimitive2D : public AnimatedSwitchPrimitive2D
         {
         protected:
-            // create local decomposition
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
-
         public:
+            /// constructor
             AnimatedBlinkPrimitive2D(
                 const animation::AnimationEntry& rAnimationEntry,
                 const Primitive2DSequence& rChildren,
                 bool bIsTextAnimation);
 
-            // provide unique ID
+            /// create local decomposition
+            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+
+            /// provide unique ID
             DeclPrimitrive2DIDBlock()
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
-// helper class for AnimatedInterpolatePrimitive2D
 
 namespace drawinglayer
 {
     namespace primitive2d
     {
-        class BufferedMatrixDecompose
-        {
-        private:
-            // the matrix itself
-            basegfx::B2DHomMatrix                       maB2DHomMatrix;
+        /** AnimatedInterpolatePrimitive2D class
 
-            // the decomposition
-            basegfx::B2DVector                          maScale;
-            basegfx::B2DVector                          maTranslate;
-            double                                      mfRotate;
-            double                                      mfShearX;
-
-            // flag if already decomposed, used by ensureDecompose()
-            bool                                        mbDecomposed;
-
-        public:
-            BufferedMatrixDecompose(const basegfx::B2DHomMatrix& rMatrix);
-            void ensureDecompose() const;
-
-            // data access
-            const basegfx::B2DHomMatrix& getB2DHomMatrix() const { return maB2DHomMatrix; }
-            const basegfx::B2DVector& getScale() const { return maScale; }
-            const basegfx::B2DVector& getTranslate() const { return maTranslate; }
-            double getRotate() const { return mfRotate; }
-            double getShearX() const { return mfShearX; }
-        };
-    } // end of anonymous namespace
-} // end of namespace drawinglayer
-
-//////////////////////////////////////////////////////////////////////////////
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
+            Specialized on multi-step animations based on matrix transformations. The
+            Child sequelce will be embedded in a matrix transformation. That transformation
+            will be linearly combined from the decomposed values and the animation value
+            to allow a smooth animation.
+         */
         class AnimatedInterpolatePrimitive2D : public AnimatedSwitchPrimitive2D
         {
         private:
-            // the transformations
-            std::vector< BufferedMatrixDecompose >      maMatrixStack;
+            /// the transformations
+            std::vector< basegfx::tools::B2DHomMatrixBufferedDecompose >        maMatrixStack;
 
         protected:
-            // create local decomposition
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
-
         public:
+            /// constructor
             AnimatedInterpolatePrimitive2D(
                 const std::vector< basegfx::B2DHomMatrix >& rmMatrixStack,
                 const animation::AnimationEntry& rAnimationEntry,
                 const Primitive2DSequence& rChildren,
                 bool bIsTextAnimation);
 
-            // provide unique ID
+            /// create local decomposition
+            virtual Primitive2DSequence get2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+
+            /// provide unique ID
             DeclPrimitrive2DIDBlock()
         };
     } // end of namespace primitive2d

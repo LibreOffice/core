@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdrpathprimitive2d.cxx,v $
- *
- * $Revision: 1.2.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,7 +43,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence SdrPathPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
+        Primitive2DSequence SdrPathPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
         {
             Primitive2DSequence aRetval;
 
@@ -105,7 +101,7 @@ namespace drawinglayer
             const basegfx::B2DHomMatrix& rTransform,
             const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute,
             const basegfx::B2DPolyPolygon& rUnitPolyPolygon)
-        :   BasePrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             maTransform(rTransform),
             maSdrLFSTAttribute(rSdrLFSTAttribute),
             maUnitPolyPolygon(rUnitPolyPolygon)
@@ -114,7 +110,7 @@ namespace drawinglayer
 
         bool SdrPathPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const SdrPathPrimitive2D& rCompare = (SdrPathPrimitive2D&)rPrimitive;
 

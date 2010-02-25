@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tbxitem.cxx,v $
- * $Revision: 1.70.80.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,14 +55,14 @@
 #include <com/sun/star/ui/XUIFunctionListener.hpp>
 #include <com/sun/star/frame/status/Visibility.hpp>
 #include <com/sun/star/document/CorruptedFilterConfigurationException.hpp>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/imageitm.hxx>
-#include <svtools/visitem.hxx>
-#include <svtools/urlbmk.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/imageitm.hxx>
+#include <svl/visitem.hxx>
+#include <svl/urlbmk.hxx>
 #include <vcl/toolbox.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 
 #include <svtools/imagemgr.hxx>
 #include <comphelper/processfactory.hxx>

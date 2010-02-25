@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlexp.hxx,v $
- * $Revision: 1.11.48.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +42,7 @@
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <rtl/ustring.hxx>
-#include <vcl/mapunit.hxx>
+#include <tools/mapunit.hxx>
 #include <xmloff/txtparae.hxx>
 #include <xmloff/formlayerexport.hxx>
 #include <xmloff/xmlnumfe.hxx>
@@ -68,7 +65,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 
 #include <xmloff/XMLPageExport.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
@@ -87,7 +84,7 @@ class XMLImageMapExport;
 class XMLErrors;
 
 // --> OD 2006-03-14 #i51726#
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 // <--
 
 namespace rtl { class OUString; }
@@ -380,7 +377,7 @@ public:
         = ::rtl::OUString::createFromAscii("gen") );
 
     // Check if common attribute list is empty.
-#ifdef PRODUCT
+#ifndef DBG_UTIL
     void CheckAttrList() {}
 #else
     void CheckAttrList();

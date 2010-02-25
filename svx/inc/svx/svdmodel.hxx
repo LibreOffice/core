@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdmodel.hxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,15 +34,13 @@
 #include <tools/link.hxx>
 #include <tools/contnr.hxx>
 #include <tools/weakbase.hxx>
-#ifndef _MAPMOD_HXX //autogen
 #include <vcl/mapmod.hxx>
-#endif
-#include <svtools/brdcst.hxx>
+#include <svl/brdcst.hxx>
 #include <tools/string.hxx>
 #include <tools/datetime.hxx>
-#include <svtools/hint.hxx>
+#include <svl/hint.hxx>
 
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <svx/pageitem.hxx>
 #include <vcl/field.hxx>
 
@@ -86,7 +81,6 @@ class SfxRepeatTarget;
 class SfxStyleSheet;
 class SfxUndoAction;
 class SfxUndoManager;
-class SvxLinkManager;
 class XBitmapList;
 class XBitmapTable;
 class XColorTable;
@@ -106,6 +100,9 @@ class SotStorageRef;
 class SdrUndoFactory;
 namespace comphelper{
     class IEmbeddedHelper;
+}
+namespace sfx2{
+    class LinkManager;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -215,7 +212,7 @@ protected:
     ULONG           nProgressOfs;   // -Handler
     rtl::Reference< SfxStyleSheetBasePool > mxStyleSheetPool;
     SfxStyleSheet*  pDefaultStyleSheet;
-    SvxLinkManager* pLinkManager;   // LinkManager
+    sfx2::LinkManager* pLinkManager;   // LinkManager
     Container*      pUndoStack;
     Container*      pRedoStack;
     SdrUndoGroup*   pAktUndoGroup;  // Fuer mehrstufige
@@ -403,8 +400,8 @@ public:
     SfxStyleSheet*       GetDefaultStyleSheet() const             { return pDefaultStyleSheet; }
     void                 SetDefaultStyleSheet(SfxStyleSheet* pDefSS) { pDefaultStyleSheet = pDefSS; }
 
-    SvxLinkManager*      GetLinkManager()                         { return pLinkManager; }
-    void                 SetLinkManager(SvxLinkManager* pLinkMgr) { pLinkManager = pLinkMgr; }
+    sfx2::LinkManager*      GetLinkManager()                         { return pLinkManager; }
+    void                 SetLinkManager( sfx2::LinkManager* pLinkMgr ) { pLinkManager = pLinkMgr; }
 
     ::comphelper::IEmbeddedHelper*     GetPersist() const               { return m_pEmbeddedHelper; }
     void                 ClearPersist()                                 { m_pEmbeddedHelper = 0; }

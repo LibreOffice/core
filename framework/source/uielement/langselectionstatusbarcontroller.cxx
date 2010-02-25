@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: langselectionstatusbarcontroller.cxx,v $
- * $Revision: 1.6.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,7 +68,7 @@
 #include <toolkit/unohlp.hxx>
 #include <tools/gen.hxx>
 #include <com/sun/star/awt/Command.hpp>
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
 #include <dispatch/uieventloghelper.hxx>
 
@@ -337,7 +334,7 @@ void LangSelectionStatusbarController::LangMenu()throw (::com::sun::star::uno::R
     mRectangle.Y = mMousePos.Y();
     sal_Int16 nId = xPopupMenu->execute( xParent, mRectangle, com::sun::star::awt::PopupMenuDirection::EXECUTE_UP+16 );
     //click "More..."
-    if ( m_xFrame.is() )
+    if ( nId && m_xFrame.is() )
     {
         uno::Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
         util::URL aURL;

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fmshell.cxx,v $
- * $Revision: 1.81 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +29,7 @@
 #include "precompiled_svx.hxx"
 #include "fmvwimp.hxx"
 #include <svx/fmshell.hxx>
-#include "fmtools.hxx"
+#include "svx/fmtools.hxx"
 #include "fmservs.hxx"
 #ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
@@ -56,11 +53,11 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/visitem.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <svl/intitem.hxx>
+#include <svl/visitem.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
@@ -79,7 +76,7 @@
 #endif
 #include "fmexch.hxx"
 #include <svx/fmglob.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <tools/shl.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/fmmodel.hxx>
@@ -91,7 +88,7 @@
 #include <vcl/sound.hxx>
 #include "fmexpl.hxx"
 #include "formcontrolling.hxx"
-#include <svtools/numuno.hxx>
+#include <svl/numuno.hxx>
 #include <connectivity/dbtools.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/processfactory.hxx>
@@ -685,7 +682,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_FILTER_NAVIGATOR:
         case SID_FM_SHOW_DATANAVIGATOR :
         {
-            GetViewShell()->GetViewFrame()->ChildWindowExecute(rReq);
+            GetViewShell()->GetViewFrame()->ChildWindowExecute( rReq );
             rReq.Done();
         }   break;
         case SID_FM_SHOW_FMEXPLORER:
@@ -795,7 +792,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 DBG_ASSERT( pFact, "no dialog factory!" );
                 if ( pFact )
                 {
-                    ::std::auto_ptr< AbstractFmInputRecordNoDialog > dlg( pFact->CreateFmInputRecordNoDialog( NULL, RID_SVX_DLG_INPUTRECORDNO ) );
+                    ::std::auto_ptr< AbstractFmInputRecordNoDialog > dlg( pFact->CreateFmInputRecordNoDialog( NULL ) );
                     DBG_ASSERT( dlg.get(), "Dialogdiet fail!" );
                     dlg->SetValue( rController->getCursor()->getRow() );
                     if ( dlg->Execute() == RET_OK )
@@ -827,7 +824,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                         bReopenNavigator = sal_True;
                     }
 
-                Reference< XFormController >  xController( GetImpl()->getActiveController() );
+                Reference< runtime::XFormController >  xController( GetImpl()->getActiveController() );
 
                 if  (   GetViewShell()->GetViewFrame()->HasChildWindow( SID_FM_FILTER_NAVIGATOR )
                         // closing the window was denied, for instance because of a invalid criterion
@@ -857,6 +854,11 @@ void FmFormShell::Execute(SfxRequest &rReq)
         {
             GetImpl()->startFiltering();
             rReq.Done();
+
+            // initially open the filter navigator, the whole form based filter is pretty useless without it
+            SfxBoolItem aIdentifierItem( SID_FM_FILTER_NAVIGATOR, TRUE );
+            GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( SID_FM_FILTER_NAVIGATOR, SFX_CALLMODE_ASYNCHRON,
+                &aIdentifierItem, NULL );
         }   break;
     }
 }
@@ -1400,7 +1402,7 @@ SdrUnoObj* FmFormShell::GetFormControl( const Reference< XControlModel >& _rxMod
 }
 
 //------------------------------------------------------------------------
-Reference< XFormController > FmFormShell::GetFormController( const Reference< XForm >& _rxForm, const SdrView& _rView, const OutputDevice& _rDevice ) const
+Reference< runtime::XFormController > FmFormShell::GetFormController( const Reference< XForm >& _rxForm, const SdrView& _rView, const OutputDevice& _rDevice ) const
 {
     const FmFormView* pFormView = dynamic_cast< const FmFormView* >( &_rView );
     if ( !pFormView )

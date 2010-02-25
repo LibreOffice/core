@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: txtflde.cxx,v $
- * $Revision: 1.84.102.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -707,6 +704,7 @@ sal_Bool XMLTextFieldExport::IsStringField(
     case FIELD_ID_PAGENUMBER:
     case FIELD_ID_REFPAGE_SET:
     case FIELD_ID_REFPAGE_GET:
+    case FIELD_ID_DOCINFO_CUSTOM:
         // always number
         return sal_False;
 
@@ -727,7 +725,6 @@ sal_Bool XMLTextFieldExport::IsStringField(
     case FIELD_ID_HIDDEN_PARAGRAPH:
     case FIELD_ID_DOCINFO_CREATION_AUTHOR:
     case FIELD_ID_DOCINFO_DESCRIPTION:
-    case FIELD_ID_DOCINFO_CUSTOM:
     case FIELD_ID_DOCINFO_PRINT_AUTHOR:
     case FIELD_ID_DOCINFO_TITLE:
     case FIELD_ID_DOCINFO_SUBJECT:
@@ -880,6 +877,7 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
     case FIELD_ID_USER_GET:
     case FIELD_ID_EXPRESSION:
     case FIELD_ID_TABLE_FORMULA:
+    case FIELD_ID_DOCINFO_CUSTOM:
         // register number format, if this is a numeric field
         if (! IsStringField(nToken, xPropSet)) {
 
@@ -943,7 +941,6 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
     case FIELD_ID_HIDDEN_PARAGRAPH:
     case FIELD_ID_DOCINFO_CREATION_AUTHOR:
     case FIELD_ID_DOCINFO_DESCRIPTION:
-    case FIELD_ID_DOCINFO_CUSTOM:
     case FIELD_ID_DOCINFO_PRINT_AUTHOR:
     case FIELD_ID_DOCINFO_TITLE:
     case FIELD_ID_DOCINFO_SUBJECT:
@@ -1503,6 +1500,13 @@ void XMLTextFieldExport::ExportFieldHelper(
 
     case FIELD_ID_DOCINFO_CUSTOM:
     {
+        ProcessValueAndType(sal_False,  // doesn't happen for text
+                                GetIntProperty(sPropertyNumberFormat,rPropSet),
+                                sEmpty, sEmpty, 0.0, // not used
+                                sal_False, sal_False, sal_True,
+                                ! GetOptionalBoolProperty(
+                                    sPropertyIsFixedLanguage,
+                                    rPropSet, xPropSetInfo, sal_False ));
         uno::Any aAny = rPropSet->getPropertyValue( sPropertyName );
         ::rtl::OUString sName;
         aAny >>= sName;
@@ -2866,7 +2870,7 @@ sal_Bool XMLTextFieldExport::ExplodeFieldMasterName(
     sal_Int32 nSeparator = sMasterName.indexOf('.', nLength);
     sal_Bool bReturn = sal_True;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     // check for service name
     bReturn &= (0 == sFieldMasterPrefix.compareTo(sMasterName, nLength));
 #endif

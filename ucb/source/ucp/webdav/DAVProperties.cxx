@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DAVProperties.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -137,6 +134,26 @@ void DAVProperties::createUCBPropName( const char * nspace,
     rtl::OUString aName
         = rtl::OStringToOUString( name,   RTL_TEXTENCODING_UTF8 );
 
+    if ( !aNameSpace.getLength() )
+    {
+        // Some servers send XML without proper namespaces. Assume "DAV:"
+        // in this case, if name is a well-known dav property name.
+        // Although this is not 100% correct, it solves many problems.
+
+        if ( DAVProperties::RESOURCETYPE.matchIgnoreAsciiCase( aName, 4 )  ||
+             DAVProperties::SUPPORTEDLOCK.matchIgnoreAsciiCase( aName, 4 ) ||
+             DAVProperties::LOCKDISCOVERY.matchIgnoreAsciiCase( aName, 4 ) ||
+             DAVProperties::CREATIONDATE.matchIgnoreAsciiCase( aName, 4 ) ||
+             DAVProperties::DISPLAYNAME.matchIgnoreAsciiCase( aName, 4 ) ||
+             DAVProperties::GETCONTENTLANGUAGE.matchIgnoreAsciiCase( aName, 4 ) ||
+             DAVProperties::GETCONTENTLENGTH.matchIgnoreAsciiCase( aName, 4 ) ||
+             DAVProperties::GETCONTENTTYPE.matchIgnoreAsciiCase( aName, 4 ) ||
+             DAVProperties::GETETAG.matchIgnoreAsciiCase( aName, 4 ) ||
+             DAVProperties::GETLASTMODIFIED.matchIgnoreAsciiCase( aName, 4 ) ||
+             DAVProperties::SOURCE.matchIgnoreAsciiCase( aName, 4 ) )
+            aNameSpace = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DAV:" ) );
+    }
+
     // Note: Concatenating strings BEFORE comparing against known namespaces
     //       is important. See RFC 2815 ( 23.4.2 Meaning of Qualified Names ).
     rFullName  = aNameSpace;
@@ -175,6 +192,8 @@ void DAVProperties::createUCBPropName( const char * nspace,
 // static
 bool DAVProperties::isUCBDeadProperty( const NeonPropName & rName )
 {
-    return ( rtl_str_compareIgnoreAsciiCase(
-                rName.nspace, "http://ucb.openoffice.org/dav/props/" ) == 0 );
+    return ( rName.nspace &&
+             ( rtl_str_compareIgnoreAsciiCase(
+                 rName.nspace, "http://ucb.openoffice.org/dav/props/" )
+               == 0 ) );
 }

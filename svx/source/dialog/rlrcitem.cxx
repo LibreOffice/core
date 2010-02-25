@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: rlrcitem.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +29,7 @@
 #include "precompiled_svx.hxx"
 
 // INCLUDE ---------------------------------------------------------------
-#include <svtools/rectitem.hxx>
+#include <svl/rectitem.hxx>
 
 
 
@@ -42,13 +39,13 @@
 #include <svx/dialogs.hrc>
 
 #include <svx/ruler.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/tstpitem.hxx>
-#include "protitem.hxx"
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include "editeng/protitem.hxx"
 #include "rlrcitem.hxx"
 #include "rulritem.hxx"
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 
 // class SvxRulerItem ----------------------------------------------------
 

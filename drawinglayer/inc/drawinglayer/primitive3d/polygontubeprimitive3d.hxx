@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: polygontubeprimitive3d.hxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.8 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-06-10 09:29:21 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -52,19 +44,38 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
+        /** PolygonStrokePrimitive3D class
+
+            This 3D primitive extends a 3D hairline to a 3D tube which is
+            e.g. used for fat lines in 3D. It's decomposition will create all
+            3D objects needed for the line tubes and the edge roundings
+            in full 3D.
+         */
         class PolygonTubePrimitive3D : public PolygonHairlinePrimitive3D
         {
         private:
+            /// hold the last decompositon since it's expensive
+            Primitive3DSequence                         maLast3DDecomposition;
+
+            /// visualisation parameters
             double                                      mfRadius;
             double                                      mfDegreeStepWidth;
             double                                      mfMiterMinimumAngle;
             basegfx::B2DLineJoin                        maLineJoin;
 
         protected:
-            // local decomposition.
-            virtual Primitive3DSequence createLocalDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
+            /** access methods to maLast3DDecomposition. The usage of this methods may allow
+                later thread-safe stuff to be added if needed. Only to be used by getDecomposition()
+                implementations for buffering the last decomposition.
+             */
+            const Primitive3DSequence& getLast3DDecomposition() const { return maLast3DDecomposition; }
+            void setLast3DDecomposition(const Primitive3DSequence& rNew) { maLast3DDecomposition = rNew; }
+
+            /// local decomposition.
+            Primitive3DSequence impCreate3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
 
         public:
+            /// constructor
             PolygonTubePrimitive3D(
                 const basegfx::B3DPolygon& rPolygon,
                 const basegfx::BColor& rBColor,
@@ -72,16 +83,21 @@ namespace drawinglayer
                 double fDegreeStepWidth = 10.0 * F_PI180,
                 double fMiterMinimumAngle = 15.0 * F_PI180);
 
-            // get data
+            /// data read access
             double getRadius() const { return mfRadius; }
             double getDegreeStepWidth() const { return mfDegreeStepWidth; }
             double getMiterMinimumAngle() const { return mfMiterMinimumAngle; }
             basegfx::B2DLineJoin getLineJoin() const { return maLineJoin; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
-            // provide unique ID
+            /** local decomposition. Use own buffering since we are not derived from
+                BufferedDecompositionPrimitive3D
+             */
+            virtual Primitive3DSequence get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
+
+            /// provide unique ID
             DeclPrimitrive3DIDBlock()
         };
     } // end of namespace primitive3d

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sbx.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,9 +29,9 @@
 #define _SBXCLASS_HXX
 
 #include "tools/ref.hxx"
-#include "svtools/svarray.hxx"
-#include "svtools/smplhint.hxx"
-#include "svtools/lstner.hxx"
+#include "svl/svarray.hxx"
+#include "svl/smplhint.hxx"
+#include "svl/lstner.hxx"
 #include <basic/sbxdef.hxx>
 #include <basic/sbxform.hxx>
 

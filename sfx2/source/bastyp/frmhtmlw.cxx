@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: frmhtmlw.cxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +29,7 @@
 #include "precompiled_sfx2.hxx"
 
 #ifndef _INETDEF_HXX
-#include <svtools/inetdef.hxx>
+#include <svl/inetdef.hxx>
 #endif
 #include "svtools/htmlkywd.hxx"
 
@@ -40,7 +37,7 @@
 #include <rtl/tencinfo.h>
 
 #include <unotools/configmgr.hxx>
-#include "svtools/urihelper.hxx"
+#include "svl/urihelper.hxx"
 #include <tools/datetime.hxx>
 
 #include <sfx2/frmhtmlw.hxx>

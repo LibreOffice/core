@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: databases.cxx,v $
- * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +37,6 @@
 #include <rtl/memory.h>
 #include <com/sun/star/lang/Locale.hpp>
 #include <rtl/ustrbuf.hxx>
-#include <svtools/miscopt.hxx>
 #include "inputstream.hxx"
 #include <algorithm>
 #include <string.h>
@@ -52,6 +48,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/beans/Optional.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
@@ -60,7 +57,7 @@
 #include <com/sun/star/script/XInvocation.hpp>
 #include <comphelper/locale.hxx>
 
-#include <transex3/compilehelp.hxx>
+#include <l10ntools/compilehelp.hxx>
 #include <comphelper/storagehelper.hxx>
 
 #include "databases.hxx"
@@ -149,7 +146,6 @@ struct ImplPackageSequenceHolder
 
 static ImplPackageSequenceHolder* GpPackageSequenceHolder = NULL;
 
-
 Databases::Databases( sal_Bool showBasic,
                       const rtl::OUString& instPath,
                       const com::sun::star::uno::Sequence< rtl::OUString >& imagesZipPaths,
@@ -200,7 +196,6 @@ Databases::Databases( sal_Bool showBasic,
     m_xSFA = Reference< ucb::XSimpleFileAccess >(
         m_xSMgr->createInstanceWithContext( rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ),
         m_xContext ), UNO_QUERY_THROW );
-
     GpPackageSequenceHolder = new ImplPackageSequenceHolder();
 }
 
@@ -281,41 +276,70 @@ static bool impl_getZipFile(
 
 rtl::OString Databases::getImagesZipFileURL()
 {
-    sal_Int16 nSymbolsStyle = SvtMiscOptions().GetCurrentSymbolsStyle();
-    if ( !m_aImagesZipFileURL.getLength() || ( m_nSymbolsStyle != nSymbolsStyle ) )
+    //sal_Int16 nSymbolsStyle = SvtMiscOptions().GetCurrentSymbolsStyle();
+    sal_Int16 nSymbolsStyle = 0;
+    try
     {
-        m_nSymbolsStyle = nSymbolsStyle;
+        uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
+            m_xSMgr ->createInstanceWithContext(::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider"), m_xContext), uno::UNO_QUERY_THROW);
 
-        rtl::OUString aImageZip;
-        rtl::OUString aSymbolsStyleName = SvtMiscOptions().GetCurrentSymbolsStyleName();
-        bool bFound = false;
+        // set root path
+        uno::Sequence < uno::Any > lParams(1);
+        beans::PropertyValue                       aParam ;
+        aParam.Name    = ::rtl::OUString::createFromAscii("nodepath");
+        aParam.Value <<= ::rtl::OUString::createFromAscii("org.openoffice.Office.Common");
+        lParams[0] = uno::makeAny(aParam);
 
-        if ( aSymbolsStyleName.getLength() != 0 )
+        // open it
+        uno::Reference< uno::XInterface > xCFG( xConfigProvider->createInstanceWithArguments(
+                    ::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess"),
+                    lParams) );
+
+        bool bChanged = false;
+        uno::Reference< container::XHierarchicalNameAccess > xAccess(xCFG, uno::UNO_QUERY_THROW);
+        uno::Any aResult = xAccess->getByHierarchicalName(::rtl::OUString::createFromAscii("Misc/SymbolSet"));
+        if ( (aResult >>= nSymbolsStyle) && m_nSymbolsStyle != nSymbolsStyle )
         {
-            rtl::OUString aZipName = rtl::OUString::createFromAscii( "images_" );
-            aZipName += aSymbolsStyleName;
-            aZipName += rtl::OUString::createFromAscii( ".zip" );
-
-            bFound = impl_getZipFile( m_aImagesZipPaths, aZipName, aImageZip );
+            m_nSymbolsStyle = nSymbolsStyle;
+            bChanged = true;
         }
 
-        if ( ! bFound )
-            bFound = impl_getZipFile( m_aImagesZipPaths, rtl::OUString::createFromAscii( "images.zip" ), aImageZip );
+        if ( !m_aImagesZipFileURL.getLength() || bChanged )
+        {
+            rtl::OUString aImageZip, aSymbolsStyleName;
+            aResult = xAccess->getByHierarchicalName(::rtl::OUString::createFromAscii("Misc/SymbolStyle"));
+            aResult >>= aSymbolsStyleName;
 
-        if ( ! bFound )
-            aImageZip = rtl::OUString();
+            bool bFound = false;
+            if ( aSymbolsStyleName.getLength() != 0 )
+            {
+                rtl::OUString aZipName = rtl::OUString::createFromAscii( "images_" );
+                aZipName += aSymbolsStyleName;
+                aZipName += rtl::OUString::createFromAscii( ".zip" );
 
-        m_aImagesZipFileURL = rtl::OUStringToOString(
-                    rtl::Uri::encode(
-                        aImageZip,
-                        rtl_UriCharClassPchar,
-                        rtl_UriEncodeIgnoreEscapes,
-                        RTL_TEXTENCODING_UTF8 ), RTL_TEXTENCODING_UTF8 );
+                bFound = impl_getZipFile( m_aImagesZipPaths, aZipName, aImageZip );
+            }
+
+            if ( ! bFound )
+                bFound = impl_getZipFile( m_aImagesZipPaths, rtl::OUString::createFromAscii( "images.zip" ), aImageZip );
+
+            if ( ! bFound )
+                aImageZip = rtl::OUString();
+
+            m_aImagesZipFileURL = rtl::OUStringToOString(
+                        rtl::Uri::encode(
+                            aImageZip,
+                            rtl_UriCharClassPchar,
+                            rtl_UriEncodeIgnoreEscapes,
+                            RTL_TEXTENCODING_UTF8 ), RTL_TEXTENCODING_UTF8 );
+        }
+    }
+    catch ( NoSuchElementException const & )
+    {
     }
 
     return m_aImagesZipFileURL;
 }
-
 
 void Databases::replaceName( rtl::OUString& oustring ) const
 {
@@ -818,10 +842,6 @@ void KeywordInfo::KeywordElement::init( Databases *pDatabases,Db* pDb,const rtl:
 
     for( sal_uInt32 i = 0; i < id.size(); ++i )
     {
-        // the following object must live longer than the
-        // pointer returned by aDBData.getData()
-        DBData aDBData;
-
         listId[i] = id[i];
         listAnchor[i] = anchor[i];
 
@@ -833,6 +853,7 @@ void KeywordInfo::KeywordElement::init( Databases *pDatabases,Db* pDb,const rtl:
             DBHelp* pDBHelp = pDb->getDBHelp();
             if( pDBHelp != NULL )
             {
+                DBData aDBData;
                 bool bSuccess = pDBHelp->getValueForKey( idi, aDBData );
                 if( bSuccess )
                 {

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdotxed.cxx,v $
- * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,10 +32,10 @@
 #include "svditext.hxx"
 #include <svx/svdmodel.hxx> // fuer GetMaxObjSize
 #include <svx/svdoutl.hxx>
-#include <svx/outliner.hxx>
-#include <editstat.hxx>
-#include <svtools/itemset.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/editstat.hxx>
+#include <svl/itemset.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/sdtfchim.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

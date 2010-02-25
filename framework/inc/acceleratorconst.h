@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: acceleratorconst.h,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,10 +45,6 @@ namespace framework{
 
 #define ATTRIBUTE_TYPE_CDATA            DECLARE_ASCII("CDATA")
 
-// items without any namespace value!
-#define ELEMENT_ACCELERATORLIS          DECLARE_ASCII("acceleratorlist")
-#define ELEMENT_ITEM                    DECLARE_ASCII("item"           )
-
 #define XMLNS_ACCEL                     DECLARE_ASCII("accel")
 #define XMLNS_XLINK                     DECLARE_ASCII("xlink")
 
@@ -89,10 +82,6 @@ namespace framework{
 #define NS_ATTRIBUTE_MOD_MOD1           DECLARE_ASCII("http://openoffice.org/2001/accel^mod1" )
 #define NS_ATTRIBUTE_MOD_MOD2           DECLARE_ASCII("http://openoffice.org/2001/accel^mod2" )
 #define NS_ATTRIBUTE_MOD_MOD3           DECLARE_ASCII("http://openoffice.org/2001/accel^mod3" )
-
-// some storage related values (pathes, names of sub storages etcpp).
-#define PRESET_DEFAULT_XML              DECLARE_ASCII("default.xml")
-#define PRESET_CURRENT_XML              DECLARE_ASCII("current.xml")
 
 } // namespace framework
 

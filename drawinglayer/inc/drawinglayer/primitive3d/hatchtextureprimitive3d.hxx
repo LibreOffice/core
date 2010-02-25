@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: hatchtextureprimitive3d.hxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.7 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-06-10 09:29:21 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -44,16 +36,32 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
+        /** HatchTexturePrimitive3D class
+
+            HatchTexturePrimitive3D is derived from GroupPrimitive3D, but implements
+            a decomposition which is complicated enough for buffering. Since the group
+            primitive has no default buffering, it is necessary here to add a local
+            buffering mechanism for the decomposition
+         */
         class HatchTexturePrimitive3D : public TexturePrimitive3D
         {
         private:
+            /// the hatch definition
             attribute::FillHatchAttribute                   maHatch;
 
+            /// the buffered decomposed hatch
+            Primitive3DSequence                             maBuffered3DDecomposition;
+
         protected:
-            // local decomposition.
-            virtual Primitive3DSequence createLocalDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
+            /// helper: local decomposition
+            Primitive3DSequence impCreate3DDecomposition() const;
+
+            /// local access methods to maBufferedDecomposition
+            const Primitive3DSequence& getBuffered3DDecomposition() const { return maBuffered3DDecomposition; }
+            void setBuffered3DDecomposition(const Primitive3DSequence& rNew) { maBuffered3DDecomposition = rNew; }
 
         public:
+            /// constructor
             HatchTexturePrimitive3D(
                 const attribute::FillHatchAttribute& rHatch,
                 const Primitive3DSequence& rChildren,
@@ -61,13 +69,16 @@ namespace drawinglayer
                 bool bModulate,
                 bool bFilter);
 
-            // get data
+            /// data read access
             const attribute::FillHatchAttribute& getHatch() const { return maHatch; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const;
 
-            // provide unique ID
+            /// local decomposition.
+            virtual Primitive3DSequence get3DDecomposition(const geometry::ViewInformation3D& rViewInformation) const;
+
+            /// provide unique ID
             DeclPrimitrive3DIDBlock()
         };
     } // end of namespace primitive3d

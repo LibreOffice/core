@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xattr.cxx,v $
- * $Revision: 1.42 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,22 +40,22 @@
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <svtools/itempool.hxx>
-
+#include <svl/itempool.hxx>
+#include <editeng/memberids.hrc>
 #include <tools/stream.hxx>
 
 #include "unoapi.hxx"
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include "unopolyhelper.hxx"
 
 #include <tools/bigint.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/dialogs.hrc>
 #include "svdstr.hrc"
 #include "xattr.hxx"
 #include <svx/xtable.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/itemtype.hxx>
+#include <editeng/itemtype.hxx>
 #include <svx/xdef.hxx>
 #include <svx/unomid.hxx>
 #include <svx/svdmodel.hxx>

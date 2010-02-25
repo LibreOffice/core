@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: closedispatcher.cxx,v $
- * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,7 +57,7 @@
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 
 //_______________________________________________
 // namespace
@@ -168,24 +165,24 @@ void SAL_CALL StartModuleDispatcher::removeStatusListener(const css::uno::Refere
 {
     if ( ! SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE))
         return sal_False;
-    
+
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
-    
+
     css::uno::Reference< css::frame::XFramesSupplier > xDesktop(
         xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY);
-    
+
     FrameListAnalyzer aCheck(
         xDesktop,
         css::uno::Reference< css::frame::XFrame >(),
         FrameListAnalyzer::E_HELP | FrameListAnalyzer::E_BACKINGCOMPONENT);
-    
+
     ::sal_Bool  bIsPossible    = sal_False;
     ::sal_Int32 nVisibleFrames = aCheck.m_lOtherVisibleFrames.getLength ();
-    
+
     if (
         ( ! aCheck.m_xBackingComponent.is ()) &&
         (   nVisibleFrames < 1              )
@@ -193,7 +190,7 @@ void SAL_CALL StartModuleDispatcher::removeStatusListener(const css::uno::Refere
     {
         bIsPossible = sal_True;
     }
-    
+
     return bIsPossible;
 }
 

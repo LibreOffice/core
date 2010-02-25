@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdobj.cxx,v $
- * $Revision: 1.99.16.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,9 +65,6 @@
 #include <svx/svdattrx.hxx> // NotPersistItems
 #include <svx/svdoashp.hxx>
 #include <svx/svdomedia.hxx>
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 #include <svx/xlnwtit.hxx>
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnedwit.hxx>
@@ -86,18 +80,18 @@
 #include <svx/xfltrit.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xflftrit.hxx>
-#include "xlinjoit.hxx"
+#include "svx/xlinjoit.hxx"
 #include <svx/unopage.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/xenum.hxx>
 #include <svx/xgrad.hxx>
 #include <svx/xhatch.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/svdpool.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 #include <vcl/salbtype.hxx>     // FRound
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 
 // #97849#
 #include <svx/fmmodel.hxx>
@@ -107,8 +101,6 @@
 #include <vcl/graphictools.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svx/sdr/properties/emptyproperties.hxx>
-
-// #110094#
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
 #include <svx/sdr/contact/viewcontactofgraphic.hxx>
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
@@ -120,7 +112,6 @@
 #include <basegfx/range/b2drange.hxx>
 #include <svx/unoshape.hxx>
 #include <vcl/virdev.hxx>
-
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <drawinglayer/processor2d/contourextractor2d.hxx>
 #include <drawinglayer/processor2d/linegeometryextractor2d.hxx>
@@ -128,10 +119,8 @@
 #include "svx/svdotable.hxx"
 #include "svx/shapepropertynotifier.hxx"
 #include <svx/sdrhittesthelper.hxx>
-
-// --> OD 2009-07-10 #i73249#
 #include <svx/svdundo.hxx>
-// <--
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 using namespace ::com::sun::star;
 
@@ -3056,17 +3045,7 @@ sal_Bool SdrObject::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B
     }
 
     // build matrix
-    rMatrix.identity();
-
-    if(1.0 != aScale.getX() || 1.0 != aScale.getY())
-    {
-        rMatrix.scale(aScale.getX(), aScale.getY());
-    }
-
-    if(0.0 != aTranslate.getX() || 0.0 != aTranslate.getY())
-    {
-        rMatrix.translate(aTranslate.getX(), aTranslate.getY());
-    }
+    rMatrix = basegfx::tools::createScaleTranslateB2DHomMatrix(aScale, aTranslate);
 
     return sal_False;
 }

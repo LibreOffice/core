@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: appbas.cxx,v $
- * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,15 +33,15 @@
 #include <com/sun/star/uno/Reference.h>
 #include <basic/basrdll.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #include <basic/sbxfac.hxx>
 #include <basic/sbx.hxx>
 #include <vcl/gradient.hxx>
-#include <svtools/rectitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/rectitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
 #include <basic/sbmod.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sbstar.hxx>
 #include <vcl/wrkwin.hxx>
@@ -53,9 +50,9 @@
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 
-#include <svtools/undoopt.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/undoopt.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <unotools/bootstrap.hxx>
 
 #include <sfx2/appuno.hxx>
@@ -89,7 +86,7 @@
 
 #define ITEMID_SEARCH SID_SEARCH_ITEM
 
-#include <sfx2/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <vos/socket.hxx>
 
 #define SFX_TYPEMAP

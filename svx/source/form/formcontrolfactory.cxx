@@ -1,30 +1,27 @@
 /*************************************************************************
-* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-*
-* Copyright 2008 by Sun Microsystems, Inc.
-*
-* OpenOffice.org - a multi-platform office productivity suite
-*
-* $RCSfile: formcontrolfactory.cxx,v $
-*
-* $Revision: 1.1.2.3 $
-*
-* This file is part of OpenOffice.org.
-*
-* OpenOffice.org is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Lesser General Public License version 3
-* only, as published by the Free Software Foundation.
-*
-* OpenOffice.org is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU Lesser General Public License version 3 for more details
-* (a copy is included in the LICENSE file that accompanied this code).
-*
-* You should have received a copy of the GNU Lesser General Public License
-* version 3 along with OpenOffice.org.  If not, see
-* <http://www.openoffice.org/license.html>
-* for a copy of the LGPLv3 License.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
 ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
@@ -56,7 +53,7 @@
 
 #include <comphelper/componentcontext.hxx>
 #include <comphelper/numbers.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <tools/gen.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -432,7 +429,8 @@ namespace svxform
                 case FormComponentType::COMBOBOX:
                 {
                     sal_Bool bDropDown = !_rControlBoundRect.IsEmpty() && ( _rControlBoundRect.GetWidth() >= 3 * _rControlBoundRect.GetHeight() );
-                    _rxControlModel->setPropertyValue( FM_PROP_DROPDOWN, makeAny( (sal_Bool)bDropDown ) );
+                    if ( xPSI->hasPropertyByName( FM_PROP_DROPDOWN ) )
+                        _rxControlModel->setPropertyValue( FM_PROP_DROPDOWN, makeAny( (sal_Bool)bDropDown ) );
                     _rxControlModel->setPropertyValue( FM_PROP_LINECOUNT, makeAny( sal_Int16( 20 ) ) );
                 }
                 break;

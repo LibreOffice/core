@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SfxDocumentMetaData.cxx,v $
- * $Revision: 1.10.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,6 +63,7 @@
 #include "com/sun/star/xml/xpath/XXPathAPI.hpp"
 #include "com/sun/star/util/Date.hpp"
 #include "com/sun/star/util/Time.hpp"
+#include "com/sun/star/util/Duration.hpp"
 
 #include "SfxDocumentMetaData.hxx"
 #include "rtl/ustrbuf.hxx"
@@ -469,6 +467,11 @@ const char* s_nsODFMeta = "urn:oasis:names:tc:opendocument:xmlns:meta:1.0";
 const char* s_metaXml = "meta.xml";
 
 
+bool isValidDate(const css::util::Date & i_rDate)
+{
+    return i_rDate.Month > 0;
+}
+
 bool isValidDateTime(const css::util::DateTime & i_rDateTime)
 {
     return i_rDateTime.Month > 0;
@@ -500,16 +503,25 @@ getQualifier(const char* i_name) {
     return ::rtl::OUString::createFromAscii(ns);
 }
 
+bool SAL_CALL
+textToDateOrDateTime(css::util::Date & io_rd, css::util::DateTime & io_rdt,
+        bool & o_rIsDateTime, ::rtl::OUString i_text) throw ()
+{
+    if (::sax::Converter::convertDateOrDateTime(
+                io_rd, io_rdt, o_rIsDateTime, i_text)) {
+        return true;
+    } else {
+        DBG_WARNING1("SfxDocumentMetaData: invalid date: %s",
+            OUStringToOString(i_text, RTL_TEXTENCODING_UTF8).getStr());
+        return false;
+    }
+}
+
 // convert string to date/time
 bool SAL_CALL
 textToDateTime(css::util::DateTime & io_rdt, ::rtl::OUString i_text) throw ()
 {
     if (::sax::Converter::convertDateTime(io_rdt, i_text)) {
-        // NB: there may be rounding errors; handle these here
-        if (io_rdt.HundredthSeconds > 0) {
-                io_rdt.Seconds++;
-                io_rdt.HundredthSeconds = 0;
-        }
         return true;
     } else {
         DBG_WARNING1("SfxDocumentMetaData: invalid date: %s",
@@ -528,6 +540,20 @@ textToDateTimeDefault(::rtl::OUString i_text) throw ()
     return dt;
 }
 
+// convert date to string
+::rtl::OUString SAL_CALL
+dateToText(css::util::Date const& i_rd) throw ()
+{
+    if (isValidDate(i_rd)) {
+        ::rtl::OUStringBuffer buf;
+        ::sax::Converter::convertDate(buf, i_rd);
+        return buf.makeStringAndClear();
+    } else {
+        return ::rtl::OUString();
+    }
+}
+
+
 // convert date/time to string
 ::rtl::OUString SAL_CALL
 dateTimeToText(css::util::DateTime const& i_rdt) throw ()
@@ -542,60 +568,48 @@ dateTimeToText(css::util::DateTime const& i_rdt) throw ()
 }
 
 // convert string to duration
-bool SAL_CALL
-textToDuration(css::util::Time& io_rut, ::rtl::OUString i_text) throw ()
+bool
+textToDuration(css::util::Duration& io_rDur, ::rtl::OUString const& i_rText)
+throw ()
 {
-    css::util::DateTime dt;
-    if (::sax::Converter::convertTime(dt, i_text)) {
-        // NB: there may be rounding errors; handle these here
-        if (dt.HundredthSeconds > 0) {
-                dt.Seconds++;
-                dt.HundredthSeconds = 0;
-        }
-        io_rut.Hours = dt.Hours;
-        io_rut.Minutes = dt.Minutes;
-        io_rut.Seconds = dt.Seconds;
-        io_rut.HundredthSeconds = dt.HundredthSeconds;
+    if (::sax::Converter::convertDuration(io_rDur, i_rText)) {
         return true;
     } else {
         DBG_WARNING1("SfxDocumentMetaData: invalid duration: %s",
-            OUStringToOString(i_text, RTL_TEXTENCODING_UTF8).getStr());
+            OUStringToOString(i_rText, RTL_TEXTENCODING_UTF8).getStr());
         return false;
     }
 }
 
-sal_Int32 SAL_CALL textToDuration(::rtl::OUString i_text) throw ()
+sal_Int32 textToDuration(::rtl::OUString const& i_rText) throw ()
 {
-    css::util::Time t;
-    if (textToDuration(t, i_text)) {
-        return t.Hours * 3600 + t.Minutes * 60 + t.Seconds;
+    css::util::Duration d;
+    if (textToDuration(d, i_rText)) {
+        return (d.Days * (24*3600))
+                + (d.Hours * 3600) + (d.Minutes * 60) + d.Seconds;
     } else {
         return 0; // default
     }
 }
 
 // convert duration to string
-::rtl::OUString SAL_CALL durationToText(css::util::Time const& i_rut) throw ()
+::rtl::OUString durationToText(css::util::Duration const& i_rDur) throw ()
 {
-    css::util::DateTime dt;
-    dt.Hours   = i_rut.Hours;
-    dt.Minutes = i_rut.Minutes;
-    dt.Seconds = i_rut.Seconds;
-    dt.HundredthSeconds = i_rut.HundredthSeconds;
     ::rtl::OUStringBuffer buf;
-    ::sax::Converter::convertTime(buf, dt);
+    ::sax::Converter::convertDuration(buf, i_rDur);
     return buf.makeStringAndClear();
 }
 
 // convert duration to string
 ::rtl::OUString SAL_CALL durationToText(sal_Int32 i_value) throw ()
 {
-    css::util::Time ut;
-    ut.Hours   = static_cast<sal_Int16>(i_value / 3600);
-    ut.Minutes = static_cast<sal_Int16>((i_value % 3600) / 60);
-    ut.Seconds = static_cast<sal_Int16>(i_value % 60);
-    ut.HundredthSeconds = 0;
-    return durationToText(ut);
+    css::util::Duration ud;
+    ud.Days    = static_cast<sal_Int16>(i_value / (24 * 3600));
+    ud.Hours   = static_cast<sal_Int16>((i_value % (24 * 3600)) / 3600);
+    ud.Minutes = static_cast<sal_Int16>((i_value % 3600) / 60);
+    ud.Seconds = static_cast<sal_Int16>(i_value % 60);
+    ud.HundredthSeconds = 0;
+    return durationToText(ud);
 }
 
 // extract base URL (necessary for converting relative links)
@@ -922,17 +936,26 @@ propsToStrings(css::uno::Reference<css::beans::XPropertySet> const & i_xPropSet)
         } else if (type == ::cppu::UnoType<css::util::Date>::get()) {
             css::util::Date d;
             any >>= d;
-            css::util::DateTime dt;
-            dt.Year = d.Year;
-            dt.Month = d.Month;
-            dt.Day = d.Day;
-            values.push_back(dateTimeToText(dt));
+            values.push_back(dateToText(d));
             as.push_back(std::make_pair(vt,
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("date"))));
         } else if (type == ::cppu::UnoType<css::util::Time>::get()) {
+            // #i97029#: replaced by Duration
+            // Time is supported for backward compatibility with OOo 3.x, x<=2
             css::util::Time ut;
             any >>= ut;
-            values.push_back(durationToText(ut));
+            css::util::Duration ud;
+            ud.Hours   = ut.Hours;
+            ud.Minutes = ut.Minutes;
+            ud.Seconds = ut.Seconds;
+            ud.HundredthSeconds = ut.HundredthSeconds;
+            values.push_back(durationToText(ud));
+            as.push_back(std::make_pair(vt,
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("time"))));
+        } else if (type == ::cppu::UnoType<css::util::Duration>::get()) {
+            css::util::Duration ud;
+            any >>= ud;
+            values.push_back(durationToText(ud));
             as.push_back(std::make_pair(vt,
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("time"))));
         } else if (::cppu::UnoType<double>::get().isAssignableFrom(type)) {
@@ -1250,18 +1273,24 @@ void SAL_CALL SfxDocumentMetaData::init(
                 continue;
             }
         } else if (type.equalsAscii("date")) {
+            bool isDateTime;
+            css::util::Date d;
             css::util::DateTime dt;
-            if (textToDateTime(dt, text)) {
-                any <<= dt;
+            if (textToDateOrDateTime(d, dt, isDateTime, text)) {
+                if (isDateTime) {
+                    any <<= dt;
+                } else {
+                    any <<= d;
+                }
             } else {
                 DBG_WARNING1("SfxDocumentMetaData: invalid date: %s",
                     OUStringToOString(text, RTL_TEXTENCODING_UTF8).getStr());
                 continue;
             }
         } else if (type.equalsAscii("time")) {
-            css::util::Time ut;
-            if (textToDuration(ut, text)) {
-                any <<= ut;
+            css::util::Duration ud;
+            if (textToDuration(ud, text)) {
+                any <<= ud;
             } else {
                 DBG_WARNING1("SfxDocumentMetaData: invalid time: %s",
                     OUStringToOString(text, RTL_TEXTENCODING_UTF8).getStr());
@@ -2251,17 +2280,19 @@ void SfxDocumentMetaData::createUserDefined()
     // values of allowed types
     if ( !m_xUserDefined.is() )
     {
-        css::uno::Sequence<css::uno::Type> types(10);
+        css::uno::Sequence<css::uno::Type> types(11);
         types[0] = ::cppu::UnoType<bool>::get();
         types[1] = ::cppu::UnoType< ::rtl::OUString>::get();
         types[2] = ::cppu::UnoType<css::util::DateTime>::get();
         types[3] = ::cppu::UnoType<css::util::Date>::get();
-        types[4] = ::cppu::UnoType<css::util::Time>::get();
+        types[4] = ::cppu::UnoType<css::util::Duration>::get();
         types[5] = ::cppu::UnoType<float>::get();
         types[6] = ::cppu::UnoType<double>::get();
         types[7] = ::cppu::UnoType<sal_Int16>::get();
         types[8] = ::cppu::UnoType<sal_Int32>::get();
         types[9] = ::cppu::UnoType<sal_Int64>::get();
+        // Time is supported for backward compatibility with OOo 3.x, x<=2
+        types[10] = ::cppu::UnoType<css::util::Time>::get();
         css::uno::Sequence<css::uno::Any> args(2);
         args[0] <<= css::beans::NamedValue(
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllowedTypes")),

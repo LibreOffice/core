@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xattrbmp.cxx,v $
- * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,14 +34,15 @@
 #include <vcl/virdev.hxx>
 #include <vcl/bitmapex.hxx>
 #include <toolkit/unohlp.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
+#include <editeng/memberids.hrc>
 
 #include <svx/dialogs.hrc>
 #include "xattr.hxx"
 #include <svx/xtable.hxx>
 #include <svx/xdef.hxx>
 #include <svx/unomid.hxx>
-#include <svx/unoprnms.hxx>
+#include <editeng/unoprnms.hxx>
 
 #include "unoapi.hxx"
 #include <svx/svdmodel.hxx>
@@ -832,7 +830,7 @@ sal_Bool XFillBitmapItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE
     }
     if( bSetURL )
     {
-        GraphicObject aGrafObj( CreateGraphicObjectFromURL( aURL ) );
+        GraphicObject aGrafObj( GraphicObject::CreateGraphicObjectFromURL( aURL ) );
         XOBitmap aBMP( aGrafObj );
         SetBitmapValue( aBMP );
     }

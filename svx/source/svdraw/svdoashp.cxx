@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdoashp.cxx,v $
- * $Revision: 1.51.52.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,7 +43,7 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include "unopolyhelper.hxx"
 #include <comphelper/processfactory.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <svx/svdogrp.hxx>
 #include <vcl/salbtype.hxx>     // FRound
@@ -63,10 +60,10 @@
 #include <svx/svdoedge.hxx>  // #32383# Die Verbinder nach Move nochmal anbroadcasten
 #include "svdglob.hxx"   // StringCache
 #include "svdstr.hrc"    // Objektname
-#include <svx/eeitem.hxx>
-#include "editstat.hxx"
+#include <editeng/eeitem.hxx>
+#include "editeng/editstat.hxx"
 #include <svx/svdoutl.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/sdtfchim.hxx>
 #include "../customshapes/EnhancedCustomShapeGeometry.hxx"
 #include "../customshapes/EnhancedCustomShapeTypeNames.hxx"
@@ -77,10 +74,10 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
-#include <svx/writingmodeitem.hxx>
+#include <editeng/writingmodeitem.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/svxids.hrc>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/sdr/properties/customshapeproperties.hxx>
 #include <svx/sdr/contact/viewcontactofsdrobjcustomshape.hxx>
 #include <svx/xlnclit.hxx>
@@ -94,6 +91,7 @@
 #include <svx/svdview.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 // #104018# replace macros above with type-safe methods
 inline double ImplTwipsToMM(double fVal) { return (fVal * (127.0 / 72.0)); }
@@ -3444,31 +3442,11 @@ sal_Bool SdrObjCustomShape::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, ba
     }
 
     // build matrix
-    rMatrix.identity();
-
-    if(!basegfx::fTools::equal(aScale.getX(), 1.0) || !basegfx::fTools::equal(aScale.getY(), 1.0))
-    {
-        rMatrix.scale(aScale.getX(), aScale.getY());
-    }
-
-    if(!basegfx::fTools::equalZero(fShearX))
-    {
-        rMatrix.shearX(tan(fShearX));
-    }
-
-    if(!basegfx::fTools::equalZero(fRotate))
-    {
-        // #i78696#
-        // fRotate is from the old GeoStat struct and thus mathematically wrong orientated. For
-        // the linear combination of matrices it needed to be fixed in the API, so it needs to
-        // be mirrored here
-        rMatrix.rotate(-fRotate);
-    }
-
-    if(!aTranslate.equalZero())
-    {
-        rMatrix.translate(aTranslate.getX(), aTranslate.getY());
-    }
+    rMatrix = basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+        aScale,
+        basegfx::fTools::equalZero(fShearX) ? 0.0 : tan(fShearX),
+        basegfx::fTools::equalZero(fRotate) ? 0.0 : -fRotate,
+        aTranslate);
 
     return sal_False;
 }

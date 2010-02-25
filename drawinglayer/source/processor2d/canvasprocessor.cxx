@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: canvasprocessor.cxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.8 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-07-21 17:41:18 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -46,7 +38,7 @@
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <canvas/canvastools.hxx>
-#include <svtools/ctloptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <vcl/svapp.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
@@ -76,6 +68,7 @@
 #include <helperchartrenderer.hxx>
 #include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
 #include <helperwrongspellrenderer.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -675,7 +668,7 @@ using namespace com::sun::star;
         // directdraw of text simple portion
         void canvasProcessor::impRender_STXP(const textSimplePortionPrimitive& rTextCandidate)
         {
-            const fontAttributes&  rFontAttrs( rTextCandidate.getFontAttributes() );
+            const fontAttributes&  rFontAttrs( rTextCandidate.getFontAttribute() );
             rendering::FontRequest aFontRequest;
 
             aFontRequest.FontDescription.FamilyName   = rFontAttrs.maFamilyName;
@@ -1341,10 +1334,9 @@ namespace drawinglayer
 
                                 // prepare discrete offset for XBitmap, do not forget that the buffer bitmap
                                 // may be truncated to discrete visible pixels
-                                basegfx::B2DHomMatrix aDiscreteOffset;
-                                aDiscreteOffset.translate(
+                                const basegfx::B2DHomMatrix aDiscreteOffset(basegfx::tools::createTranslateB2DHomMatrix(
                                     aDiscreteRange.getMinX() > 0.0 ? -aDiscreteRange.getMinX() : 0.0,
-                                    aDiscreteRange.getMinY() > 0.0 ? -aDiscreteRange.getMinY() : 0.0);
+                                    aDiscreteRange.getMinY() > 0.0 ? -aDiscreteRange.getMinY() : 0.0));
 
                                 // create new local ViewInformation2D with new transformation
                                 const geometry::ViewInformation2D aViewInformation2D(
@@ -1517,16 +1509,16 @@ namespace drawinglayer
                 }
                 else
                 {
-                    const primitive2d::FontAttributes& rFontAttrs(rTextCandidate.getFontAttributes());
+                    const attribute::FontAttribute& rFontAttr(rTextCandidate.getFontAttribute());
                     rendering::FontRequest aFontRequest;
 
-                    aFontRequest.FontDescription.FamilyName = rFontAttrs.getFamilyName();
-                    aFontRequest.FontDescription.StyleName = rFontAttrs.getStyleName();
-                    aFontRequest.FontDescription.IsSymbolFont = rFontAttrs.getSymbol() ? util::TriState_YES : util::TriState_NO;
-                    aFontRequest.FontDescription.IsVertical = rFontAttrs.getVertical() ? util::TriState_YES : util::TriState_NO;
+                    aFontRequest.FontDescription.FamilyName = rFontAttr.getFamilyName();
+                    aFontRequest.FontDescription.StyleName = rFontAttr.getStyleName();
+                    aFontRequest.FontDescription.IsSymbolFont = rFontAttr.getSymbol() ? util::TriState_YES : util::TriState_NO;
+                    aFontRequest.FontDescription.IsVertical = rFontAttr.getVertical() ? util::TriState_YES : util::TriState_NO;
                     // TODO(F2): improve vclenum->panose conversion
-                    aFontRequest.FontDescription.FontDescription.Weight = static_cast< sal_uInt8 >(rFontAttrs.getWeight());
-                    aFontRequest.FontDescription.FontDescription.Letterform = rFontAttrs.getItalic() ? 9 : 0;
+                    aFontRequest.FontDescription.FontDescription.Weight = static_cast< sal_uInt8 >(rFontAttr.getWeight());
+                    aFontRequest.FontDescription.FontDescription.Letterform = rFontAttr.getItalic() ? 9 : 0;
 
                     // init CellSize to 1.0, else a default font height will be used
                     aFontRequest.CellSize = 1.0;
@@ -1600,16 +1592,14 @@ namespace drawinglayer
                 // adapt object's transformation to the correct scale
                 basegfx::B2DVector aScale, aTranslate;
                 double fRotate, fShearX;
-                basegfx::B2DHomMatrix aNewMatrix;
                 const Size aSizePixel(aModifiedBitmapEx.GetSizePixel());
 
                 if(0 != aSizePixel.Width() && 0 != aSizePixel.Height())
                 {
                     rBitmapCandidate.getTransform().decompose(aScale, aTranslate, fRotate, fShearX);
-                    aNewMatrix.scale(aScale.getX() / aSizePixel.Width(), aScale.getY() / aSizePixel.Height());
-                    aNewMatrix.shearX(fShearX);
-                    aNewMatrix.rotate(fRotate);
-                    aNewMatrix.translate(aTranslate.getX(), aTranslate.getY());
+                    const basegfx::B2DHomMatrix aNewMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                        aScale.getX() / aSizePixel.Width(), aScale.getY() / aSizePixel.Height(),
+                        fShearX, fRotate, aTranslate.getX(), aTranslate.getY()));
 
                     canvas::tools::setRenderStateTransform(maRenderState,
                         getViewInformation2D().getObjectTransformation() * aNewMatrix);
@@ -1658,10 +1648,9 @@ namespace drawinglayer
 
                         // prepare discrete offset for XBitmap, do not forget that the buffer bitmap
                         // may be truncated to discrete visible pixels
-                        basegfx::B2DHomMatrix aDiscreteOffset;
-                        aDiscreteOffset.translate(
+                        const basegfx::B2DHomMatrix aDiscreteOffset(basegfx::tools::createTranslateB2DHomMatrix(
                             aDiscreteRange.getMinX() > 0.0 ? -aDiscreteRange.getMinX() : 0.0,
-                            aDiscreteRange.getMinY() > 0.0 ? -aDiscreteRange.getMinY() : 0.0);
+                            aDiscreteRange.getMinY() > 0.0 ? -aDiscreteRange.getMinY() : 0.0));
 
                         // create new local ViewInformation2D with new transformation
                         const geometry::ViewInformation2D aViewInformation2D(
@@ -1798,7 +1787,7 @@ namespace drawinglayer
                 if(rFillBitmapAttribute.getTiling())
                 {
                     // apply possible color modification to Bitmap
-                    const BitmapEx aChangedBitmapEx(impModifyBitmapEx(maBColorModifierStack, BitmapEx(rFillBitmapAttribute.getBitmap())));
+                    const BitmapEx aChangedBitmapEx(impModifyBitmapEx(maBColorModifierStack, rFillBitmapAttribute.getBitmapEx()));
 
                     if(aChangedBitmapEx.IsEmpty())
                     {
@@ -1821,13 +1810,9 @@ namespace drawinglayer
                         {
                             // create texture matrix from texture to object (where object is unit square here),
                             // so use values directly
-                            basegfx::B2DHomMatrix aTextureMatrix;
-                            aTextureMatrix.scale(
-                                rFillBitmapAttribute.getSize().getX(),
-                                rFillBitmapAttribute.getSize().getY());
-                            aTextureMatrix.translate(
-                                rFillBitmapAttribute.getTopLeft().getX(),
-                                rFillBitmapAttribute.getTopLeft().getY());
+                            const basegfx::B2DHomMatrix aTextureMatrix(basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                rFillBitmapAttribute.getSize().getX(), rFillBitmapAttribute.getSize().getY(),
+                                rFillBitmapAttribute.getTopLeft().getX(), rFillBitmapAttribute.getTopLeft().getY()));
 
                             // create and fill texture
                             rendering::Texture aTexture;
@@ -1883,7 +1868,7 @@ namespace drawinglayer
                     const primitive2d::Primitive2DReference xReference(rChildren[0]);
                     const primitive2d::PolyPolygonColorPrimitive2D* pPoPoColor = dynamic_cast< const primitive2d::PolyPolygonColorPrimitive2D* >(xReference.get());
 
-                    if(pPoPoColor && PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D == pPoPoColor->getPrimitiveID())
+                    if(pPoPoColor && PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D == pPoPoColor->getPrimitive2DID())
                     {
                         // direct draw of PolyPolygon with color and transparence
                         const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(pPoPoColor->getBColor()));
@@ -1922,7 +1907,7 @@ namespace drawinglayer
 
         void canvasProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
         {
-            switch(rCandidate.getPrimitiveID())
+            switch(rCandidate.getPrimitive2DID())
             {
                 case PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D :
                 {

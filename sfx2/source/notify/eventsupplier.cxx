@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: eventsupplier.cxx,v $
- * $Revision: 1.36.12.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,14 +39,14 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #endif
 #include <tools/urlobj.hxx>
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #include <sfx2/appuno.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <sfx2/evntconf.hxx>
-#include <svtools/eventcfg.hxx>
+#include <unotools/eventcfg.hxx>
 
-#include <svtools/securityoptions.hxx>
+#include <unotools/securityoptions.hxx>
 #include <comphelper/processfactory.hxx>
 #include "eventsupplier.hxx"
 

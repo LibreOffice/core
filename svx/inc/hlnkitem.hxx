@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: hlnkitem.hxx,v $
- * $Revision: 1.6.216.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,9 +28,9 @@
 #define _SVX_HLNKITEM_HXX
 
 #include <tools/string.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #include "svx/svxdllapi.h"
 
 #define HYPERDLG_EVENT_MOUSEOVER_OBJECT     0x0001

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: lngsvcmgr.cxx,v $
- * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +37,7 @@
 #include <com/sun/star/linguistic2/LinguServiceEventFlags.hpp>
 
 #include <tools/solar.h>
-#include <svtools/lingucfg.hxx>
+#include <unotools/lingucfg.hxx>
 #include <unotools/processfactory.hxx>
 #include <i18npool/lang.h>
 #include <i18npool/mslangid.hxx>
@@ -288,7 +285,7 @@ class LngSvcMgrListenerHelper :
     >
 {
     LngSvcMgr  &rMyManager;
-    Timer       aLaunchTimer;
+//    Timer       aLaunchTimer;
 
     //cppu::OMultiTypeInterfaceContainerHelper  aListeners;
     ::cppu::OInterfaceContainerHelper           aLngSvcMgrListeners;
@@ -304,7 +301,8 @@ class LngSvcMgrListenerHelper :
 
     void    LaunchEvent( INT16 nLngSvcEvtFlags );
 
-    DECL_LINK( TimeOut, Timer* );
+//  DECL_LINK( TimeOut, Timer* );
+    long Timeout();
 
 public:
     LngSvcMgrListenerHelper( LngSvcMgr &rLngSvcMgr,
@@ -363,8 +361,8 @@ LngSvcMgrListenerHelper::LngSvcMgrListenerHelper(
     //! listeners, and each of them is launching an event of it's own!)
     //! Thus this behaviour is necessary to avoid unecessary actions of
     //! this objects listeners!
-    aLaunchTimer.SetTimeout( 2000 );
-    aLaunchTimer.SetTimeoutHdl( LINK( this, LngSvcMgrListenerHelper, TimeOut ) );
+//  aLaunchTimer.SetTimeout( 2000 );
+//  aLaunchTimer.SetTimeoutHdl( LINK( this, LngSvcMgrListenerHelper, TimeOut ) );
     nCombinedLngSvcEvt = 0;
 }
 
@@ -385,11 +383,12 @@ void SAL_CALL LngSvcMgrListenerHelper::disposing( const lang::EventObject& rSour
 }
 
 
-IMPL_LINK( LngSvcMgrListenerHelper, TimeOut, Timer*, pTimer )
+//IMPL_LINK( LngSvcMgrListenerHelper, TimeOut, Timer*, pTimer )
+long LngSvcMgrListenerHelper::Timeout()
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
-    if (&aLaunchTimer == pTimer)
+//  if (&aLaunchTimer == pTimer)
     {
         // change event source to LinguServiceManager since the listeners
         // probably do not know (and need not to know) about the specific
@@ -416,7 +415,8 @@ IMPL_LINK( LngSvcMgrListenerHelper, TimeOut, Timer*, pTimer )
 void LngSvcMgrListenerHelper::AddLngSvcEvt( INT16 nLngSvcEvt )
 {
     nCombinedLngSvcEvt |= nLngSvcEvt;
-    aLaunchTimer.Start();
+//  aLaunchTimer.Start();
+    Timeout();
 }
 
 

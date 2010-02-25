@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: layoutmanager.cxx,v $
- * $Revision: 1.72 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,7 +98,7 @@
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/uno3.hxx>
 #include <rtl/logfile.hxx>
-#include <svtools/cmdoptions.hxx>
+#include <unotools/cmdoptions.hxx>
 
 #include <algorithm>
 #include <boost/bind.hpp>
@@ -245,6 +242,7 @@ bool LayoutManager::UIElement::operator< ( const LayoutManager::UIElement& aUIEl
 
 LayoutManager::UIElement& LayoutManager::UIElement::operator= ( const LayoutManager::UIElement& rUIElement )
 {
+    if (this == &rUIElement) { return *this; }
     m_aType             = rUIElement.m_aType;
     m_aName             = rUIElement.m_aName;
     m_aUIName           = rUIElement.m_aUIName;
@@ -419,7 +417,7 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
 
     m_pMiscOptions = new SvtMiscOptions();
 
-    m_pMiscOptions->AddListener( LINK( this, LayoutManager, OptionsChanged ) );
+    m_pMiscOptions->AddListenerLink( LINK( this, LayoutManager, OptionsChanged ) );
     Application::AddEventListener( LINK( this, LayoutManager, SettingsChanged ) );
     m_eSymbolsSize = m_pMiscOptions->GetSymbolsSize();
     m_eSymbolsStyle = m_pMiscOptions->GetCurrentSymbolsStyle();
@@ -442,7 +440,7 @@ LayoutManager::~LayoutManager()
     Application::RemoveEventListener( LINK( this, LayoutManager, SettingsChanged ) );
     if ( m_pMiscOptions )
     {
-        m_pMiscOptions->RemoveListener( LINK( this, LayoutManager, OptionsChanged ) );
+        m_pMiscOptions->RemoveListenerLink( LINK( this, LayoutManager, OptionsChanged ) );
         delete m_pMiscOptions;
         m_pMiscOptions = 0;
     }
@@ -6184,16 +6182,6 @@ sal_Bool LayoutManager::implts_resetMenuBar()
     return sal_False;
 }
 
-void LayoutManager::implts_setMenuBarCloser(sal_Bool bCloserState)
-{
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    WriteGuard aWriteLock( m_aLock );
-    m_bMenuBarCloser = bCloserState;
-    aWriteLock.unlock();
-
-    implts_updateMenuBarClose();
-}
-
 sal_Int16 LayoutManager::implts_getCurrentSymbolsSize()
 {
     sal_Int16 eOptSymbolsSize( 0 );
@@ -7191,7 +7179,7 @@ throw( RuntimeException )
         Application::RemoveEventListener( LINK( this, LayoutManager, SettingsChanged ) );
         if ( m_pMiscOptions )
         {
-            m_pMiscOptions->RemoveListener( LINK( this, LayoutManager, OptionsChanged ) );
+            m_pMiscOptions->RemoveListenerLink( LINK( this, LayoutManager, OptionsChanged ) );
             delete m_pMiscOptions;
             m_pMiscOptions = 0;
         }

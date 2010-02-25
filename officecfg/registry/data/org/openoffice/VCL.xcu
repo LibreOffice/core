@@ -3,7 +3,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -47,6 +47,14 @@
       <prop oor:name="SuppressAccelerators" oor:type="xs:string" oor:op="replace">
         <value>false</value>
       </prop>
+    </node>
+    <node oor:name="PrintDialog" oor:op="replace">
+        <prop oor:name="Collate" oor:op="replace" oor:type="xs:string">
+            <value>true</value>
+        </prop>
+        <prop oor:name="CollateBox" oor:op="replace" oor:type="xs:string">
+            <value>Default</value>
+        </prop>
     </node>
   </node>
   <node oor:name="DefaultFonts">

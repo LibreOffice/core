@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdotextpathdecomposition.cxx,v $
- *
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +34,7 @@
 #include <svx/sdr/primitive2d/sdrtextprimitive2d.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <vcl/salbtype.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <algorithm>
@@ -50,7 +46,7 @@
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/i18n/CharacterIteratorMode.hdl>
-#include <unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <basegfx/color/bcolor.hxx>
@@ -63,11 +59,11 @@
 #include <svx/xlnclit.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xlnwtit.hxx>
-#include <xlinjoit.hxx>
+#include <svx/xlinjoit.hxx>
 #include <svx/xlndsit.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
-#include <editstat.hxx>
+#include <editeng/editstat.hxx>
 #include <unoapi.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <svx/sdr/attribute/sdrformtextoutlineattribute.hxx>
@@ -366,8 +362,8 @@ namespace
             {
                 const impPathTextPortion* pCandidate = rTextPortions[a];
                 basegfx::B2DVector aFontScaling;
-                const drawinglayer::primitive2d::FontAttributes aCandidateFontAttributes(
-                    drawinglayer::primitive2d::getFontAttributesFromVclFont(
+                const drawinglayer::attribute::FontAttribute aCandidateFontAttribute(
+                    drawinglayer::primitive2d::getFontAttributeFromVclFont(
                         aFontScaling,
                         pCandidate->getFont(),
                         pCandidate->isRTL(),
@@ -520,7 +516,7 @@ namespace
                                         nPortionIndex,
                                         nNextGlyphLen,
                                         aNewDXArray,
-                                        aCandidateFontAttributes,
+                                        aCandidateFontAttribute,
                                         pCandidate->getLocale(),
                                         aRGBShadowColor);
 
@@ -545,7 +541,7 @@ namespace
                                     nPortionIndex,
                                     nNextGlyphLen,
                                     aNewDXArray,
-                                    aCandidateFontAttributes,
+                                    aCandidateFontAttribute,
                                     pCandidate->getLocale(),
                                     aRGBColor);
 

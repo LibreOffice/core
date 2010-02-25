@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: StyleOOoTContext.cxx,v $
- * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -352,7 +349,7 @@ XMLTypedPropertiesOOoTContext_Impl
         ++i;
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     if( !( XML_NAMESPACE_NONE == nPrefix ||
                 (XML_NAMESPACE_UNKNOWN_FLAG & nPrefix) ||
                 XML_PROP_TYPE_END==m_aPropTypes[1] ||

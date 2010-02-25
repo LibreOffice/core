@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: iodlg.cxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,23 +41,23 @@
 #include <unotools/ucbhelper.hxx>
 #include <ucbhelper/contentbroker.hxx>
 #include "svtools/ehdl.hxx"
-#include "svtools/urihelper.hxx"
-#include "svtools/pathoptions.hxx"
-#include "svtools/viewoptions.hxx"
+#include "svl/urihelper.hxx"
+#include "unotools/pathoptions.hxx"
+#include "unotools/viewoptions.hxx"
 #include "svtools/fileview.hxx"
-#include "svtools/inetoptions.hxx"
+#include "unotools/inetoptions.hxx"
 #include "svtools/sfxecode.hxx"
-#include "svtools/svarray.hxx"
+#include "svl/svarray.hxx"
 #include "svtools/svtabbx.hxx"
 
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_STRINGSDTOR
-#include "svtools/svstdarr.hxx"
+#include "svl/svstdarr.hxx"
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/localfilehelper.hxx>
 
 #ifndef _SVTOOLS_HRC
-#include "svtools/svtools.hrc"
+#include "svl/svtools.hrc"
 #endif
 #ifndef _SVT_HELPID_HRC
 #include "svtools/helpid.hrc"
@@ -72,7 +69,7 @@
 #include "asyncfilepicker.hxx"
 #include "iodlgimp.hxx"
 #include "svtools/inettbc.hxx"
-#include "svtools/syslocale.hxx"
+#include "unotools/syslocale.hxx"
 #include "svtools/QueryFolderName.hxx"
 #ifndef  _RTL_USTRING_HXX
 #include <rtl/ustring.hxx>
