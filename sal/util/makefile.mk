@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.51 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -127,9 +123,6 @@ SHL1STDLIBS= -Bdynamic -ldl -lpthread -lposix4 -lsocket -lnsl
 SHL1STDLIBS+= -z allextract -staticlib=Crun -z defaultextract
 .ENDIF # C50
 .ENDIF # SOLARIS
-.IF "$(OS)"=="IRIX"
-SHL1STDLIBS= -lexc
-.ENDIF
 .ENDIF # UNX
 
 .IF "$(GUI)"=="OS2"
@@ -162,6 +155,12 @@ SHL1STDLIBS+=-lpam
 SHL1STDLIBS+=-lcrypt
 .ENDIF
 .ENDIF
+
+# #i105898# required for LD_PRELOAD libsalalloc_malloc.so
+#           if sal is linked with -Bsymbolic-functions
+.IF "$(HAVE_LD_BSYMBOLIC_FUNCTIONS)" == "TRUE"
+SHL1LINKFLAGS+=-Wl,--dynamic-list=salalloc.list
+.ENDIF # .IF "$(HAVE_LD_BSYMBOLIC_FUNCTIONS)" == "TRUE"
 
 SHL1LIBS+=$(SLB)$/$(TARGET).lib
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: urp_reader.cxx,v $
- * $Revision: 1.18.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -372,8 +369,8 @@ inline sal_Bool OReaderThread::readFlags( struct MessageFlags *pFlags )
                 }
                 pFlags->bSynchronous = ( HDRFLAG_SYNCHRONOUS & moreFlags );
                 pFlags->bMustReply = ( HDRFLAG_MUSTREPLY & moreFlags );
-                OSL_ENSURE( pFlags->bSynchronous && pFlags->bMustReply ||
-                            ! pFlags->bSynchronous && !pFlags->bMustReply,
+                OSL_ENSURE( (pFlags->bSynchronous && pFlags->bMustReply) ||
+                            (!pFlags->bSynchronous && !pFlags->bMustReply),
                             "urp-bridge : customized calls currently not supported !");
             }
 

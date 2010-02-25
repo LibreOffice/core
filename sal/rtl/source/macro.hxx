@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: macro.hxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,8 +46,6 @@
 #define THIS_OS "NetBSD"
 #elif defined FREEBSD
 #define THIS_OS "FreeBSD"
-#elif defined IRIX
-#define THIS_OS "Irix"
 #endif
 
 #if ! defined THIS_OS
@@ -76,8 +71,6 @@ this is inserted for the case that the preprocessor ignores error
 #else
 #    define THIS_ARCH "SPARC"
 #endif
-#elif defined IRIX
-#    define THIS_ARCH "MIPS"
 #elif defined MIPS
 #    ifdef OSL_BIGENDIAN
 #        define THIS_ARCH "MIPS_EB"

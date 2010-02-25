@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: testoffice.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,10 +27,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_bridges.hxx"
-#if OSL_DEBUG_LEVEL == 0
-#define NDEBUG
-#endif
-#include <assert.h>
 #include <osl/time.h>
 
 #include <osl/mutex.hxx>
@@ -96,7 +89,7 @@ void testPipe( const Reference < XMultiServiceFactory > & rSmgr )
         rSmgr->createInstance( OUString::createFromAscii( "com.sun.star.io.Pipe" ) ),
         UNO_QUERY );
 
-    assert( rOut.is() );
+    OSL_ASSERT( rOut.is() );
 
     {
         Sequence < sal_Int8 > seq( 10 );
@@ -115,7 +108,7 @@ void testPipe( const Reference < XMultiServiceFactory > & rSmgr )
         if( ! ( 42 == seq.getArray()[0] ) )
             printf( "wrong element in sequence\n" );
 
-//          assert( 0 );
+//          OSL_ASSERT( 0 );
     }
 }
 #include<stdio.h>
@@ -155,7 +148,7 @@ void testDocument( const Reference < XMultiServiceFactory > & rSmgr )
         rSmgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop" ))),
         UNO_QUERY );
 
-    assert( rLoader.is() );
+    OSL_ASSERT( rLoader.is() );
 
     sal_Char *urls[] = {
         "private:factory/swriter",

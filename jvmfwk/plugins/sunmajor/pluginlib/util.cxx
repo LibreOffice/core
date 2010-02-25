@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: util.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -300,13 +297,14 @@ class AsynchReader: public Thread
 public:
 
     AsynchReader(oslFileHandle & rHandle);
-
+#if OSL_DEBUG_LEVEL >= 2
     /** only call this function after this thread has finished.
 
         That is, call join on this instance and then call getData.
 
      */
     OString getData();
+#endif
 };
 
 AsynchReader::AsynchReader(oslFileHandle & rHandle):
@@ -314,11 +312,13 @@ AsynchReader::AsynchReader(oslFileHandle & rHandle):
 {
 }
 
+#if OSL_DEBUG_LEVEL >= 2
 OString AsynchReader::getData()
 {
     OSL_ASSERT(isRunning() == sal_False );
     return OString(m_arData.get(), m_nDataSize);
 }
+#endif
 
 void AsynchReader::run()
 {

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: socket.c,v $
- * $Revision: 1.29.60.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,7 +45,7 @@
 #undef HAVE_POLL_H
 #endif
 
-#if defined(LINUX) || defined (IRIX) || defined(NETBSD) || defined ( FREEBSD ) || defined (MACOSX)
+#if defined(LINUX) || defined(NETBSD) || defined ( FREEBSD ) || defined (MACOSX)
 #include <sys/poll.h>
 #define HAVE_POLL_H
 #endif /* HAVE_POLL_H */
@@ -1869,10 +1866,13 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
     if ( pSocket->m_bIsAccepting == sal_True )
     {
         int nConnFD;
-        struct sockaddr aSockAddr;
-        socklen_t nSockLen = sizeof(aSockAddr);
+        union {
+            struct sockaddr aSockAddr;
+            struct sockaddr_in aSockAddrIn;
+        } s;
+        socklen_t nSockLen = sizeof(s.aSockAddr);
 
-        nRet = getsockname(nFD, &aSockAddr, &nSockLen);
+        nRet = getsockname(nFD, &s.aSockAddr, &nSockLen);
 #if OSL_DEBUG_LEVEL > 1
         if ( nRet < 0 )
         {
@@ -1880,13 +1880,11 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
         }
 #endif /* OSL_DEBUG_LEVEL */
 
-        if ( aSockAddr.sa_family == AF_INET )
+        if ( s.aSockAddr.sa_family == AF_INET )
         {
-            struct sockaddr_in* pSockAddrIn = (struct sockaddr_in*) &aSockAddr;
-
-            if ( pSockAddrIn->sin_addr.s_addr == htonl(INADDR_ANY) )
+            if ( s.aSockAddrIn.sin_addr.s_addr == htonl(INADDR_ANY) )
             {
-                pSockAddrIn->sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+                s.aSockAddrIn.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
             }
 
             nConnFD = socket(AF_INET, SOCK_STREAM, 0);
@@ -1897,7 +1895,7 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
             }
 #endif /* OSL_DEBUG_LEVEL */
 
-            nRet = connect(nConnFD, &aSockAddr, sizeof(aSockAddr));
+            nRet = connect(nConnFD, &s.aSockAddr, sizeof(s.aSockAddr));
 #if OSL_DEBUG_LEVEL > 1
             if ( nRet < 0 )
             {

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: bootstrap.cxx,v $
- * $Revision: 1.43.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -820,8 +817,8 @@ void SAL_CALL rtl_bootstrap_set (
     rtl_uString * pValue
 ) SAL_THROW_EXTERN_C()
 {
-    OUString const & name = *reinterpret_cast< OUString const * >( &pName );
-    OUString const & value = *reinterpret_cast< OUString const * >( &pValue );
+    const OUString name( pName );
+    const OUString value( pValue );
 
     osl::MutexGuard guard( osl::Mutex::getGlobalMutex() );
 

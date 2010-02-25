@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.36 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -55,7 +51,8 @@ CXXFLAGS+= $(LFS_CFLAGS)
 
 # --- Files --------------------------------------------------------
 
-SLOFILES=   $(SLO)$/conditn.obj  \
+SLOFILES= \
+            $(SLO)$/conditn.obj  \
             $(SLO)$/diagnose.obj \
             $(SLO)$/semaphor.obj \
             $(SLO)$/socket.obj   \
@@ -74,7 +71,7 @@ SLOFILES=   $(SLO)$/conditn.obj  \
             $(SLO)$/util.obj	 \
             $(SLO)$/tempfile.obj\
             $(SLO)$/file.obj     \
-            $(SLO)$/file_misc.obj \
+            $(SLO)$/file_misc.obj\
             $(SLO)$/file_url.obj\
             $(SLO)$/file_error_transl.obj\
             $(SLO)$/file_path_helper.obj\
@@ -83,6 +80,7 @@ SLOFILES=   $(SLO)$/conditn.obj  \
             $(SLO)$/uunxapi.obj\
             $(SLO)$/process_impl.obj\
             $(SLO)$/salinit.obj
+
 
 #.IF "$(UPDATER)"=="YES"
 OBJFILES=   $(OBJ)$/conditn.obj  \
@@ -104,7 +102,7 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/util.obj	 \
             $(OBJ)$/tempfile.obj\
             $(OBJ)$/file.obj     \
-            $(OBJ)$/file_misc.obj \
+            $(OBJ)$/file_misc.obj\
             $(OBJ)$/file_url.obj\
             $(OBJ)$/file_error_transl.obj\
             $(OBJ)$/file_path_helper.obj\

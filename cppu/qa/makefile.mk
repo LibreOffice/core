@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.6.14.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -43,28 +39,28 @@ INCPRE += $(MISC)$/$(TARGET)$/inc
 
 SHL1TARGET = $(TARGET)_any
 SHL1OBJS = $(SLO)$/test_any.obj
-SHL1STDLIBS = $(CPPULIB) $(CPPUNITLIB) $(SALLIB)
+SHL1STDLIBS = $(CPPULIB) $(CPPUNITLIB) $(TESTSHL2LIB) $(SALLIB)
 SHL1VERSIONMAP = version.map
 SHL1IMPLIB = i$(SHL1TARGET)
 DEF1NAME = $(SHL1TARGET)
 
 SHL2TARGET = $(TARGET)_unotype
 SHL2OBJS = $(SLO)$/test_unotype.obj
-SHL2STDLIBS = $(CPPULIB) $(CPPUNITLIB) $(SALLIB)
+SHL2STDLIBS = $(CPPULIB) $(CPPUNITLIB) $(TESTSHL2LIB) $(SALLIB)
 SHL2VERSIONMAP = version.map
 SHL2IMPLIB = i$(SHL2TARGET)
 DEF2NAME = $(SHL2TARGET)
 
 SHL3TARGET = $(TARGET)_reference
 SHL3OBJS = $(SLO)$/test_reference.obj
-SHL3STDLIBS = $(CPPULIB) $(CPPUNITLIB) $(SALLIB)
+SHL3STDLIBS = $(CPPULIB) $(CPPUNITLIB) $(TESTSHL2LIB) $(SALLIB)
 SHL3VERSIONMAP = version.map
 SHL3IMPLIB = i$(SHL3TARGET)
 DEF3NAME = $(SHL3TARGET)
 
 SHL4TARGET = $(TARGET)_recursion
 SHL4OBJS = $(SLO)$/test_recursion.obj
-SHL4STDLIBS = $(CPPULIB) $(CPPUNITLIB) $(SALLIB)
+SHL4STDLIBS = $(CPPULIB) $(CPPUNITLIB) $(TESTSHL2LIB) $(SALLIB)
 SHL4VERSIONMAP = version.map
 SHL4IMPLIB = i$(SHL4TARGET)
 DEF4NAME = $(SHL4TARGET)
@@ -92,7 +88,7 @@ $(MISC)$/$(TARGET)$/types.urd: types.idl
     $(IDLC) -O$(MISC)$/$(TARGET) -I$(SOLARIDLDIR) -cid -we $<
 
 test .PHONY: $(SHL1TARGETN) $(SHL2TARGETN) $(SHL3TARGETN) $(SHL4TARGETN)
-    testshl2 $(SHL1TARGETN)
-    testshl2 $(SHL2TARGETN)
-    testshl2 $(SHL3TARGETN)
-    testshl2 $(SHL4TARGETN)
+    $(TESTSHL2) $(SHL1TARGETN)
+    $(TESTSHL2) $(SHL2TARGETN)
+    $(TESTSHL2) $(SHL3TARGETN)
+    $(TESTSHL2) $(SHL4TARGETN)

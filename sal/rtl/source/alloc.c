@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: alloc.c,v $
- * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,7 +75,7 @@ static sal_Size __rtl_memory_vmpagesize (void)
     /* xBSD */
     return (sal_Size)(getpagesize());
 }
-#elif defined(IRIX) || defined(LINUX) || defined(SOLARIS)
+#elif defined(LINUX) || defined(SOLARIS)
 static sal_Size __rtl_memory_vmpagesize (void)
 {
     /* POSIX */
@@ -90,7 +87,7 @@ static sal_Size __rtl_memory_vmpagesize (void)
     /* other */
     return (sal_Size)(0x2000);
 }
-#endif /* FREEBSD || NETBSD || MACOSX || IRIX || LINUX || SOLARIS */
+#endif /* FREEBSD || NETBSD || MACOSX || LINUX || SOLARIS */
 
 #ifndef PROT_HEAP
 #define PROT_HEAP (PROT_READ | PROT_WRITE | PROT_EXEC)

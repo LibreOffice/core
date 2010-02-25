@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: math.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -357,17 +354,28 @@ inline bool isSignBitSet(double d)
  */
 inline void setInf(double * pd, bool bNegative)
 {
-    reinterpret_cast< sal_math_Double * >(pd)->w32_parts.msw
-        = bNegative ? 0xFFF00000 : 0x7FF00000;
-    reinterpret_cast< sal_math_Double * >(pd)->w32_parts.lsw = 0;
+    union
+    {
+        double sd;
+        sal_math_Double md;
+    };
+    md.w32_parts.msw = bNegative ? 0xFFF00000 : 0x7FF00000;
+    md.w32_parts.lsw = 0;
+    *pd = sd;
 }
 
 /** Set a QNAN.
  */
 inline void setNan(double * pd)
 {
-    reinterpret_cast< sal_math_Double * >(pd)->w32_parts.msw = 0x7FFFFFFF;
-    reinterpret_cast< sal_math_Double * >(pd)->w32_parts.lsw = 0xFFFFFFFF;
+    union
+    {
+        double sd;
+        sal_math_Double md;
+    };
+    md.w32_parts.msw = 0x7FFFFFFF;
+    md.w32_parts.lsw = 0xFFFFFFFF;
+    *pd = sd;
 }
 
 /** If a value is a valid argument for sin(), cos(), tan().

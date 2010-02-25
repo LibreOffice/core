@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: XFormOperations.idl,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,8 +41,8 @@
 #ifndef __com_sun_star_sdbc_XResultSetUpdate_idl__
 #include <com/sun/star/sdbc/XResultSetUpdate.idl>
 #endif
-#ifndef __com_sun_star_form_XFormController_idl__
-#include <com/sun/star/form/XFormController.idl>
+#ifndef __com_sun_star_form_runtime_XFormController_idl__
+#include <com/sun/star/form/runtime/XFormController.idl>
 #endif
 #ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
@@ -115,7 +112,7 @@ interface XFormOperations : ::com::sun::star::lang::XComponent
         case some functionality will not be available. In particular, every feature
         which relies on the active control of the controller might be of limited use.</p>
     */
-    [attribute, readonly]   ::com::sun::star::form::XFormController     Controller;
+    [attribute, readonly]   ::com::sun::star::form::runtime::XFormController    Controller;
 
     /** retrieves the current state of the given feature
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: file.cxx,v $
- * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -466,6 +463,7 @@ oslFileError FileHandle_Impl::readFileAt (
                 oslFileError result = syncFile();
                 if (result != osl_File_E_None)
                     return (result);
+                m_bufptr = -1, m_buflen = 0;
 
                 if (nBytesRequested >= m_bufsiz)
                 {
@@ -535,6 +533,7 @@ oslFileError FileHandle_Impl::writeFileAt (
                 oslFileError result = syncFile();
                 if (result != osl_File_E_None)
                     return (result);
+                m_bufptr = -1, m_buflen = 0;
 
                 if (nBytesToWrite >= m_bufsiz)
                 {
@@ -1009,7 +1008,7 @@ SAL_CALL osl_syncFile(oslFileHandle Handle)
 
     FileHandle_Impl::Guard lock (&(pImpl->m_mutex));
 
-    OSL_FILE_TRACE("osl_syncFile(%d)", pImpl->m_fd);
+    OSL_TRACE("osl_syncFile(%d)", pImpl->m_fd);
     oslFileError result = pImpl->syncFile();
     if (result != osl_File_E_None)
         return (result);

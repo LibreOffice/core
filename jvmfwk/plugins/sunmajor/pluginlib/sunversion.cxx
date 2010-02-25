@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sunversion.cxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,13 +50,6 @@ public:
     SelfTest();
 } test;
 #endif
-
-SunVersion::SunVersion():  m_nUpdateSpecial(0),
-                           m_preRelease(Rel_NONE),
-                           m_bValid(false)
-{
-    memset(m_arVersionParts, 0, sizeof(m_arVersionParts));
-}
 
 SunVersion::SunVersion(const rtl::OUString &usVer):
     m_nUpdateSpecial(0), m_preRelease(Rel_NONE),

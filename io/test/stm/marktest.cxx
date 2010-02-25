@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: marktest.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,12 +42,6 @@
 
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
-
-#if OSL_DEBUG_LEVEL == 0
-#define NDEBUG
-#endif
-#include <assert.h>
-#include <string.h>
 
 using namespace ::rtl;
 using namespace ::osl;
@@ -159,8 +150,8 @@ sal_Int32 OMarkableOutputStreamTest::test(
 
                 Reference< XOutputStream > rOutput( TestObject , UNO_QUERY );
 
-                assert( rPipeInput.is() );
-                assert( rOutput.is() );
+                OSL_ASSERT( rPipeInput.is() );
+                OSL_ASSERT( rOutput.is() );
                 if( 1 == hTestHandle ) {
                     // checks usual streaming
                     testSimple( rOutput , rPipeInput );
@@ -526,8 +517,8 @@ sal_Int32 OMarkableInputStreamTest::test(
 
                 Reference < XInputStream > rInput( TestObject , UNO_QUERY );
 
-                assert( rPipeOutput.is() );
-                assert( rInput.is() );
+                OSL_ASSERT( rPipeOutput.is() );
+                OSL_ASSERT( rInput.is() );
                 if( 1 == hTestHandle ) {
                     // checks usual streaming
                     testSimple( rPipeOutput , rInput );

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: remote.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,12 +27,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_bridges.hxx"
-#if OSL_DEBUG_LEVEL == 0
-#  ifndef NDEBUG
-#    define NDEBUG
-#  endif
-#endif
-#include <assert.h>
 #include <bridges/remote/remote.hxx>
 #include <bridges/remote/counter.hxx>
 
@@ -90,7 +81,7 @@ void acquireRemote2RemoteStub( remote_Interface *pThis )
             freeRemote2RemoteStub,
             p->m_sOid.pData,
             p->m_pType );
-        assert( (remote_Interface *)p == pThis );
+        OSL_ASSERT( (remote_Interface *)p == pThis );
     }
 }
 
