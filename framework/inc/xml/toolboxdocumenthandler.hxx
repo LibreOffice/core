@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: toolboxdocumenthandler.hxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,6 +74,7 @@ class OReadToolBoxDocumentHandler : private ThreadHelpBase, // Struct for right 
             TB_ATTRIBUTE_HELPID,
             TB_ATTRIBUTE_STYLE,
             TB_ATTRIBUTE_UINAME,
+            TB_ATTRIBUTE_TOOLTIP,
             TB_XML_ENTRY_COUNT
         };
 
@@ -159,10 +157,13 @@ class OReadToolBoxDocumentHandler : private ThreadHelpBase, // Struct for right 
         sal_Int32                                                                       m_nHashCode_Style_DropDown;
         sal_Int32                                                                       m_nHashCode_Style_Repeat;
         sal_Int32                                                                       m_nHashCode_Style_DropDownOnly;
+        sal_Int32                                                                       m_nHashCode_Style_Text;
+        sal_Int32                                                                       m_nHashCode_Style_Image;
         rtl::OUString                                                                   m_aType;
         rtl::OUString                                                                   m_aLabel;
         rtl::OUString                                                                   m_aStyle;
         rtl::OUString                                                                   m_aHelpURL;
+        rtl::OUString                                                                   m_aTooltip;
         rtl::OUString                                                                   m_aIsVisible;
         rtl::OUString                                                                   m_aCommandURL;
 };
@@ -181,7 +182,7 @@ class OWriteToolBoxDocumentHandler : private ThreadHelpBase // Struct for right 
               ::com::sun::star::uno::RuntimeException );
 
     protected:
-        virtual void WriteToolBoxItem( const rtl::OUString& aCommandURL, const rtl::OUString& aLabel, const rtl::OUString& aHelpURL,
+        virtual void WriteToolBoxItem( const rtl::OUString& aCommandURL, const rtl::OUString& aLabel, const rtl::OUString& aHelpURL, const rtl::OUString& aTooltip, sal_Int16 nStyle,
                                        sal_Int16 nWidth, sal_Bool bVisible ) throw
             ( ::com::sun::star::xml::sax::SAXException,
               ::com::sun::star::uno::RuntimeException );

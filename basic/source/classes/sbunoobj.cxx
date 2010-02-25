@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sbunoobj.cxx,v $
- * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +33,7 @@
 #ifndef _TOOLERR_HXX //autogen
 #include <tools/errcode.hxx>
 #endif
-#include <svtools/hint.hxx>
+#include <svl/hint.hxx>
 
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -750,7 +747,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
             // SbUnoObject instanzieren
             String aName;
             SbUnoObject* pSbUnoObject = new SbUnoObject( aName, aValue );
-            //If this is called externally e.g. from the scripting 
+            //If this is called externally e.g. from the scripting
             //framework then there is no 'active' runtime the default property will not be set up
             //only a vba object will have XDefaultProp set anyway so... this
             //test seems a bit of overkill
@@ -3377,9 +3374,10 @@ SbxVariable* SbUnoService::Find( const String& rName, SbxClassType )
                     // Create and insert SbUnoServiceCtor
                     SbxVariableRef xSbCtorRef = new SbUnoServiceCtor( aName, xCtor );
                     QuickInsert( (SbxVariable*)xSbCtorRef );
-                    pRes = xSbCtorRef;
                 }
             }
+
+            pRes = SbxObject::Find( rName, SbxCLASS_METHOD );
         }
     }
 

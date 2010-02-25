@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -26,7 +22,7 @@
 # version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
-#     
+#
 #**************************************************************************
 
 # Builds the Java Canvas implementation.
@@ -51,7 +47,7 @@ JAVAFILES  = \
     FrameGrabber.java       \
     x11$/SystemWindowAdapter.java   
 
-JARFILES        = sandbox.jar jurt.jar unoil.jar ridl.jar juh.jar java_uno.jar jmf.jar
+JARFILES        = jurt.jar unoil.jar ridl.jar juh.jar java_uno.jar jmf.jar
 JAVACLASSFILES  = $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:s/.java//).class)
 
 JARTARGET               = $(TARGET).jar

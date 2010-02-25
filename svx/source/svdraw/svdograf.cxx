@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdograf.cxx,v $
- * $Revision: 1.84.18.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,13 +38,13 @@
 #include <sot/storage.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <svtools/filter.hxx>
-#include <svtools/urihelper.hxx>
-#include <goodies/grfmgr.hxx>
+#include <svl/urihelper.hxx>
+#include <svtools/grfmgr.hxx>
 #include <vcl/svapp.hxx>
 
-#include "linkmgr.hxx"
+#include <sfx2/linkmgr.hxx>
 #include <svx/svdetc.hxx>
 #include "svdglob.hxx"
 #include "svdstr.hrc"
@@ -58,7 +55,7 @@
 #include <svx/svdpagv.hxx>
 #include "svdviter.hxx"
 #include <svx/svdview.hxx>
-#include "impgrf.hxx"
+#include "svtools/filter.hxx"
 #include <svx/svdograf.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/xbitmap.hxx>
@@ -67,7 +64,7 @@
 #include <svx/svdundo.hxx>
 #include "svdfmtf.hxx"
 #include <svx/sdgcpitm.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/sdr/properties/graphicproperties.hxx>
 #include <svx/sdr/contact/viewcontactofgraphic.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -124,26 +121,19 @@ void SdrGraphicLink::DataChanged( const String& rMimeType,
                                 const ::com::sun::star::uno::Any & rValue )
 {
     SdrModel*       pModel      = pGrafObj ? pGrafObj->GetModel() : 0;
-    SvxLinkManager* pLinkManager= pModel  ? pModel->GetLinkManager() : 0;
+    sfx2::LinkManager* pLinkManager= pModel  ? pModel->GetLinkManager() : 0;
 
     if( pLinkManager && rValue.hasValue() )
     {
         pLinkManager->GetDisplayNames( this, 0, &pGrafObj->aFileName, 0, &pGrafObj->aFilterName );
 
         Graphic aGraphic;
-        if( SvxLinkManager::GetGraphicFromAny( rMimeType, rValue, aGraphic ))
+        if( sfx2::LinkManager::GetGraphicFromAny( rMimeType, rValue, aGraphic ))
         {
-            GraphicType eOldGraphicType = pGrafObj->GetGraphicType();  // kein Hereinswappen
-            const sal_Bool bIsChanged = pModel->IsChanged();
-
-            pGrafObj->SetGraphic( aGraphic );
-            if( GRAPHIC_NONE != eOldGraphicType )
-                pGrafObj->SetChanged();
-            else
-                pModel->SetChanged( bIsChanged );
+               pGrafObj->NbcSetGraphic( aGraphic );
+            pGrafObj->ActionChanged();
         }
-        else if( SotExchange::GetFormatIdFromMimeType( rMimeType ) !=
-                    SvxLinkManager::RegisterStatusInfoId() )
+        else if( SotExchange::GetFormatIdFromMimeType( rMimeType ) != sfx2::LinkManager::RegisterStatusInfoId() )
         {
             // only repaint, no objectchange
             pGrafObj->ActionChanged();
@@ -303,11 +293,16 @@ const GraphicObject& SdrGrafObj::GetGraphicObject(bool bForceSwapIn) const
 
 // -----------------------------------------------------------------------------
 
-void SdrGrafObj::SetGraphic( const Graphic& rGrf )
+void SdrGrafObj::NbcSetGraphic( const Graphic& rGrf )
 {
     pGraphic->SetGraphic( rGrf );
     pGraphic->SetUserData();
     mbIsPreview = sal_False;
+}
+
+void SdrGrafObj::SetGraphic( const Graphic& rGrf )
+{
+    NbcSetGraphic(rGrf);
     SetChanged();
     BroadcastObjectChange();
 }
@@ -476,7 +471,7 @@ void SdrGrafObj::ForceSwapOut() const
 
 void SdrGrafObj::ImpLinkAnmeldung()
 {
-    SvxLinkManager* pLinkManager = pModel != NULL ? pModel->GetLinkManager() : NULL;
+    sfx2::LinkManager* pLinkManager = pModel != NULL ? pModel->GetLinkManager() : NULL;
 
     if( pLinkManager != NULL && pGraphicLink == NULL )
     {
@@ -493,7 +488,7 @@ void SdrGrafObj::ImpLinkAnmeldung()
 
 void SdrGrafObj::ImpLinkAbmeldung()
 {
-    SvxLinkManager* pLinkManager = pModel != NULL ? pModel->GetLinkManager() : NULL;
+    sfx2::LinkManager* pLinkManager = pModel != NULL ? pModel->GetLinkManager() : NULL;
 
     if( pLinkManager != NULL && pGraphicLink!=NULL)
     {
@@ -682,7 +677,7 @@ void SdrGrafObj::operator=( const SdrObject& rObj )
 
     const SdrGrafObj& rGraf = (SdrGrafObj&) rObj;
 
-    pGraphic->SetGraphic( rGraf.GetGraphic() );
+    pGraphic->SetGraphic( rGraf.GetGraphic(), &rGraf.GetGraphicObject() );
     aCropRect = rGraf.aCropRect;
     aFileName = rGraf.aFileName;
     aFilterName = rGraf.aFilterName;
@@ -1158,7 +1153,7 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
                         mbIsPreview = sal_True;
                     }
 
-                    if( !GetGrfFilter()->ImportGraphic( aGraphic, String(), *pStream,
+                    if( !GraphicFilter::GetGraphicFilter()->ImportGraphic( aGraphic, String(), *pStream,
                                                         GRFILTER_FORMAT_DONTKNOW, NULL, 0, pFilterData ) )
                     {
                         const String aUserData( pGraphic->GetUserData() );

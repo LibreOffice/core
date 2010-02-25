@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: shell.cxx,v $
- * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,13 +30,13 @@
 #include <com/sun/star/embed/VerbDescriptor.hpp>
 #include <com/sun/star/embed/VerbAttributes.hpp>
 #include <basic/sbstar.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/undo.hxx>
+#include <svl/itempool.hxx>
+#include <svl/undo.hxx>
 #include <svtools/itemdel.hxx>
 #include <svtools/asynclink.hxx>
 #include <basic/sbx.hxx>
 
-#include <svtools/undoopt.hxx>
+#include <unotools/undoopt.hxx>
 
 #ifndef GCC
 #endif
@@ -659,7 +656,7 @@ void SfxShell::DoActivate_Impl( SfxViewFrame *pFrame, BOOL bMDI )
 */
 
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     const SfxInterface *p_IF = GetInterface();
     if ( !p_IF )
         return;
@@ -702,7 +699,7 @@ void SfxShell::DoDeactivate_Impl( SfxViewFrame *pFrame, BOOL bMDI )
 */
 
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     const SfxInterface *p_IF = GetInterface();
     if ( !p_IF )
         return;
@@ -1260,7 +1257,7 @@ long DispatcherUpdate_Impl( void*, void* pArg )
 void SfxShell::UIFeatureChanged()
 {
     SfxViewFrame *pFrame = GetFrame();
-    if ( pFrame && pFrame->IsVisible_Impl() )
+    if ( pFrame && pFrame->IsVisible() )
     {
         // Auch dann Update erzwingen, wenn Dispatcher schon geupdated ist,
         // sonst bleibt evtl. irgendwas in den gebunkerten Tools stecken.

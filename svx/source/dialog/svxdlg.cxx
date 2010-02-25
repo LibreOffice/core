@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svxdlg.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,12 +29,13 @@
 #include "precompiled_svx.hxx"
 
 #include <svx/svxdlg.hxx>
-#include "cuilib.hxx"
-
-#include <osl/module.hxx>
-#include <tools/string.hxx>
 
 SvxAbstractDialogFactory* SvxAbstractDialogFactory::Create()
 {
-    return (SvxAbstractDialogFactory*) VclAbstractDialogFactory::Create();
+    return dynamic_cast< SvxAbstractDialogFactory* >( VclAbstractDialogFactory::Create() );
 }
+
+SvxAbstractDialogFactory::~SvxAbstractDialogFactory()
+{
+}
+

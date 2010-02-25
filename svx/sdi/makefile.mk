@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -47,10 +43,11 @@ SDI1EXPORT=svx
 # --- Files --------------------------------------------------------
 
 SVSDI1DEPEND= \
+        $(SOLARINCXDIR)$/sfx2/sfx.sdi \
+        $(SOLARINCXDIR)$/sfx2/sfxitems.sdi \
         svxitems.sdi \
     fmslots.sdi \
     svx.sdi	\
-    $(SOLARINCXDIR)$/sfxslots.ilb	\
     xoitems.sdi \
     svxitems.sdi
 

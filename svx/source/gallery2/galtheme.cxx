@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: galtheme.cxx,v $
- * $Revision: 1.50 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +42,7 @@
 #include <sot/filelist.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/cvtgrf.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <sfx2/docfile.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <svx/svdograf.hxx>
@@ -54,12 +51,15 @@
 #include <svx/unomodel.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/fmview.hxx>
-#include "galmisc.hxx"
+#include "svx/galmisc.hxx"
 #include "galtheme.hxx"
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-
+#include "galobj.hxx"
+#include <svx/gallery1.hxx>
+#include "galtheme.hrc"
+#include <vcl/lstbox.hxx>
 #include "gallerydrawmodel.hxx"
 
 // --------------
@@ -1574,3 +1574,26 @@ SvStream& operator>>( SvStream& rIn, GalleryTheme& rTheme )
 {
     return rTheme.ReadData( rIn );
 }
+
+void GalleryTheme::ImplSetModified( BOOL bModified )
+{ pThm->SetModified( bModified ); }
+
+const String& GalleryTheme::GetRealName() const { return pThm->GetThemeName(); }
+const INetURLObject& GalleryTheme::GetThmURL() const { return pThm->GetThmURL(); }
+const INetURLObject& GalleryTheme::GetSdgURL() const { return pThm->GetSdgURL(); }
+const INetURLObject& GalleryTheme::GetSdvURL() const { return pThm->GetSdvURL(); }
+UINT32 GalleryTheme::GetId() const { return pThm->GetId(); }
+void GalleryTheme::SetId( UINT32 nNewId, BOOL bResetThemeName ) { pThm->SetId( nNewId, bResetThemeName ); }
+BOOL GalleryTheme::IsThemeNameFromResource() const { return pThm->IsNameFromResource(); }
+BOOL GalleryTheme::IsImported() const { return pThm->IsImported(); }
+BOOL GalleryTheme::IsReadOnly() const { return pThm->IsReadOnly(); }
+BOOL GalleryTheme::IsDefault() const { return pThm->IsDefault(); }
+BOOL GalleryTheme::IsModified() const { return pThm->IsModified(); }
+const String& GalleryTheme::GetName() const { return IsImported() ? aImportName : pThm->GetThemeName(); }
+
+void GalleryTheme::InsertAllThemes( ListBox& rListBox )
+{
+    for( USHORT i = RID_GALLERYSTR_THEME_FIRST; i <= RID_GALLERYSTR_THEME_LAST; i++ )
+        rListBox.InsertEntry( String( GAL_RESID( i ) ) );
+}
+

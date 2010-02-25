@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TransformerBase.cxx,v $
- * $Revision: 1.23.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -337,7 +334,7 @@ void SAL_CALL XMLTransformerBase::startElement( const OUString& rName,
 }
 
 void SAL_CALL XMLTransformerBase::endElement( const OUString&
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 rName
 #endif
 )
@@ -348,7 +345,7 @@ rName
         // Get topmost context
         ::rtl::Reference< XMLTransformerContext > xContext = m_pContexts->back();
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         OSL_ENSURE( xContext->GetQName() == rName,
                 "XMLTransformerBase::endElement: popped context has wrong lname" );
 #endif

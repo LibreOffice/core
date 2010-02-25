@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fmtextcontrolshell.cxx,v $
- * $Revision: 1.16.86.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,14 +33,14 @@
 #include "fmtextcontroldialogs.hxx"
 #include "fmtextcontrolfeature.hxx"
 #include "fmtextcontrolshell.hxx"
-#include "svx/crsditem.hxx"
+#include "editeng/crsditem.hxx"
 #include "svx/dialmgr.hxx"
-#include "svx/editeng.hxx"
-#include "svx/eeitem.hxx"
+#include "editeng/editeng.hxx"
+#include "editeng/eeitem.hxx"
 #include "svx/fmglob.hxx"
-#include "svx/scriptspaceitem.hxx"
+#include "editeng/scriptspaceitem.hxx"
 #include "svx/svxids.hrc"
-#include "svx/udlnitem.hxx"
+#include "editeng/udlnitem.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -66,12 +63,12 @@
 #include <sfx2/request.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/itempool.hxx>
+#include <svl/languageoptions.hxx>
 #include <svtools/stringtransfer.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/msgbox.hxx>
@@ -89,6 +86,7 @@ namespace svx
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::form;
+    using namespace ::com::sun::star::form::runtime;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::util;

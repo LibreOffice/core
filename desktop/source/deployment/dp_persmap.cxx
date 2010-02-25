@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dp_persmap.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,19 +78,6 @@ PersistentMap::~PersistentMap()
 }
 
 //______________________________________________________________________________
-void PersistentMap::flush() const
-{
-    try {
-        int err = m_db.sync(0);
-        if (err != 0)
-            throw_rtexc(err);
-    }
-    catch (DbException & exc) {
-        throw_rtexc( exc.get_errno(), exc.what() );
-    }
-}
-
-//______________________________________________________________________________
 PersistentMap::PersistentMap( OUString const & url_, bool readOnly )
     : m_db( 0, 0 )
 {
@@ -104,7 +88,7 @@ PersistentMap::PersistentMap( OUString const & url_, bool readOnly )
             OSL_ASSERT( false );
         }
         OString cstr_sysPath(
-            OUStringToOString( m_sysPath, osl_getThreadTextEncoding() ) );
+            OUStringToOString( m_sysPath, RTL_TEXTENCODING_UTF8 ) );
         char const * pcstr_sysPath = cstr_sysPath.getStr();
 
         u_int32_t flags = DB_CREATE;

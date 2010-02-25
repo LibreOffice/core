@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ODatabaseMetaData.cxx,v $
- * $Revision: 1.35.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -921,6 +918,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsConvert( sal_Int32 fromType, sal_In
             OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_VARCHAR,nValue,*this);
             break;
         case DataType::LONGVARCHAR:
+        case DataType::CLOB:
             OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_LONGVARCHAR,nValue,*this);
             break;
         case DataType::DATE:
@@ -939,6 +937,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsConvert( sal_Int32 fromType, sal_In
             OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_VARBINARY,nValue,*this);
             break;
         case DataType::LONGVARBINARY:
+        case DataType::BLOB:
             OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CONVERT_LONGVARBINARY,nValue,*this);
             break;
         case DataType::SQLNULL:
@@ -957,12 +956,6 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsConvert( sal_Int32 fromType, sal_In
             //  OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
             break;
         case DataType::ARRAY:
-            //  OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
-            break;
-        case DataType::BLOB:
-            //  OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
-            break;
-        case DataType::CLOB:
             //  OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CORRELATION_NAME,nValue,*this);
             break;
         case DataType::REF:
@@ -1009,6 +1002,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsConvert( sal_Int32 fromType, sal_In
             bConvert = (nValue & SQL_CVT_VARCHAR) == SQL_CVT_VARCHAR;
             break;
         case DataType::LONGVARCHAR:
+        case DataType::CLOB:
             bConvert = (nValue & SQL_CVT_LONGVARCHAR) == SQL_CVT_LONGVARCHAR;
             break;
         case DataType::DATE:
@@ -1027,6 +1021,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsConvert( sal_Int32 fromType, sal_In
             bConvert = (nValue & SQL_CVT_VARBINARY) == SQL_CVT_VARBINARY;
             break;
         case DataType::LONGVARBINARY:
+        case DataType::BLOB:
             bConvert = (nValue & SQL_CVT_LONGVARBINARY) == SQL_CVT_LONGVARBINARY;
             break;
     }

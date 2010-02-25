@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: lboxctrl.cxx,v $
- * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,11 +40,11 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewsh.hxx>
 #include <tools/gen.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
 #include <svtools/stdctrl.hxx>
-#include <svtools/slstitm.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/slstitm.hxx>
+#include <svl/stritem.hxx>
 #include <svx/dialmgr.hxx>
 #include <lboxctrl.hxx>
 #ifndef _VCL_MNEMONIC_HXX_

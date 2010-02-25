@@ -1,33 +1,39 @@
-/*************************************************************************
+
+/*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * Copyright 1997-2008 Sun Microsystems, Inc. All rights reserved.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * The contents of this file are subject to the terms of either the GNU
+ * General Public License Version 2 only ("GPL") or the Common Development
+ * and Distribution License("CDDL") (collectively, the "License").  You
+ * may not use this file except in compliance with the License. You can obtain
+ * a copy of the License at https://glassfish.dev.java.net/public/CDDL+GPL.html
+ * or glassfish/bootstrap/legal/LICENSE.txt.  See the License for the specific
+ * language governing permissions and limitations under the License.
  *
- * OpenOffice.org - a multi-platform office productivity suite
+ * When distributing the software, include this License Header Notice in each
+ * file and include the License file at glassfish/bootstrap/legal/LICENSE.txt.
+ * Sun designates this particular file as subject to the "Classpath" exception
+ * as provided by Sun in the GPL Version 2 section of the License file that
+ * accompanied this code.  If applicable, add the following below the License
+ * Header, with the fields enclosed by brackets [] replaced by your own
+ * identifying information: "Portions Copyrighted [year]
+ * [name of copyright owner]"
  *
- * $RCSfile: RegistrationData.java,v $
+ * Contributor(s):
  *
- * $Revision: 1.2 $
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ * If you wish your version of this file to be governed by only the CDDL or
+ * only the GPL Version 2, indicate your decision by adding "[Contributor]
+ * elects to include this software in this distribution under the [CDDL or GPL
+ * Version 2] license."  If you don't indicate a single choice of license, a
+ * recipient has the option to distribute your version of this file under
+ * either the CDDL, the GPL Version 2 or to extend the choice of license to
+ * its licensees as provided above.  However, if you add GPL Version 2 code
+ * and therefore, elected the GPL Version 2 license, then the option applies
+ * only if the new code is made subject to such option by the copyright
+ * holder.
+ */
 
 package com.sun.star.servicetag;
 
@@ -97,6 +103,11 @@ import static com.sun.star.servicetag.RegistrationDocument.*;
  *          <td><tt>serialNumber</tt></td>
  *          <td>System serial number</td>
  *          <td> e.g. BEL078932</td>
+ *       </tr>
+ *       <tr>
+ *          <td><tt>physmem</tt></td>
+ *          <td>Physical memory for the system (in MB)</td>
+ *          <td> e.g. 4096</td>
  *       </tr>
  *       </table>
  *  </blockquote>
@@ -200,6 +211,7 @@ import static com.sun.star.servicetag.RegistrationDocument.*;
  */
 public class RegistrationData {
     private final Map<String, String> environment;
+    private final Map<String, String> cpuInfo;
     private final Map<String, ServiceTag> svcTagMap;
     private final String urn;
 
@@ -222,13 +234,14 @@ public class RegistrationData {
     // package private
     RegistrationData(String urn) {
         this.urn = urn;
-        this.environment = initEnvironment();
+        SystemEnvironment sysEnv = SystemEnvironment.getSystemEnvironment();
+        this.environment = initEnvironment(sysEnv);
+        this.cpuInfo = initCpuInfo(sysEnv);
         this.svcTagMap = new LinkedHashMap<String, ServiceTag>();
     }
 
-    private Map<String, String> initEnvironment() {
+    private Map<String, String> initEnvironment(SystemEnvironment sysEnv) {
         Map<String, String> map = new LinkedHashMap<String, String>();
-        SystemEnvironment sysEnv = SystemEnvironment.getSystemEnvironment();
         map.put(ST_NODE_HOSTNAME, sysEnv.getHostname());
         map.put(ST_NODE_HOST_ID, sysEnv.getHostId());
         map.put(ST_NODE_OS_NAME, sysEnv.getOsName());
@@ -238,6 +251,17 @@ public class RegistrationData {
         map.put(ST_NODE_SYSTEM_MANUFACTURER, sysEnv.getSystemManufacturer());
         map.put(ST_NODE_CPU_MANUFACTURER, sysEnv.getCpuManufacturer());
         map.put(ST_NODE_SERIAL_NUMBER, sysEnv.getSerialNumber());
+        map.put(ST_NODE_PHYS_MEM, sysEnv.getPhysMem());
+        return map;
+    }
+
+    private Map<String, String> initCpuInfo(SystemEnvironment sysEnv) {
+        Map<String, String> map = new LinkedHashMap<String, String>();
+        map.put(ST_NODE_SOCKETS, sysEnv.getSockets());
+        map.put(ST_NODE_CORES, sysEnv.getCores());
+        map.put(ST_NODE_VIRT_CPUS, sysEnv.getVirtCpus());
+        map.put(ST_NODE_CPU_NAME, sysEnv.getCpuName());
+        map.put(ST_NODE_CLOCK_RATE, sysEnv.getClockRate());
         return map;
     }
 
@@ -266,6 +290,18 @@ public class RegistrationData {
     }
 
     /**
+     * Returns a map containing the cpu information for this
+     * registration data.  Subsequent update to the cpu info
+     * map via the {@link #setCpuInfo setCpuInfo} method will not be reflected
+     * in the returned map.
+     *
+     * @return a cpu info map for this registration data.
+     */
+    public Map<String, String> getCpuInfoMap() {
+        return new LinkedHashMap<String,String>(cpuInfo);
+    }
+
+    /**
      * Sets an element of the specified {@code name} in the environment map
      * with the given {@code value}.
      *
@@ -290,6 +326,28 @@ public class RegistrationData {
         } else {
             throw new IllegalArgumentException("\"" +
                  name + "\" is not an environment element.");
+        }
+    }
+
+    /**
+     * Sets an element of the specified {@code name} in the cpu info map
+     * with the given {@code value}.
+     *
+     * @throws IllegalArgumentException if {@code name} is not a valid key
+     * in the cpu info map, or {@code value} is not valid.
+     */
+    public void setCpuInfo(String name, String value) {
+        if (name == null) {
+            throw new NullPointerException("name is null");
+        }
+        if (value == null) {
+            throw new NullPointerException("value is null");
+        }
+        if (cpuInfo.containsKey(name)) {
+            cpuInfo.put(name, value);
+        } else {
+            throw new IllegalArgumentException("\"" +
+                 name + "\" is not an cpuinfo element.");
         }
     }
 

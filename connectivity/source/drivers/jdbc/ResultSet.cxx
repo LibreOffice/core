@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ResultSet.cxx,v $
- * $Revision: 1.36.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,10 +27,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
+#include "java/lang/String.hxx"
+#include "java/lang/Boolean.hxx"
 #include "java/sql/ResultSet.hxx"
 #include "java/math/BigDecimal.hxx"
 #include "java/sql/JStatement.hxx"
 #include "java/sql/SQLWarning.hxx"
+#include "java/sql/Timestamp.hxx"
 #include "java/sql/Array.hxx"
 #include "java/sql/Ref.hxx"
 #include "java/sql/Clob.hxx"
@@ -54,6 +54,7 @@
 #include "connectivity/dbexception.hxx"
 #include "resource/common_res.hrc"
 #include "resource/sharedresources.hxx"
+#include "java/LocalRef.hxx"
 
 #include <rtl/logfile.hxx>
 #include <string.h>
@@ -324,6 +325,7 @@ Any SAL_CALL java_sql_ResultSet::getObject( sal_Int32 columnIndex, const Referen
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getObject" );
     jobject out(0);
+    Any aRet;
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     {
         jvalue args[2];
@@ -341,15 +343,43 @@ Any SAL_CALL java_sql_ResultSet::getObject( sal_Int32 columnIndex, const Referen
             obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         }
 
-            out = t.pEnv->CallObjectMethodA( object, mID, args);
-            t.pEnv->DeleteLocalRef((jstring)args[1].l);
-            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
-            // und aufraeumen
-
+        out = t.pEnv->CallObjectMethodA( object, mID, args);
+        t.pEnv->DeleteLocalRef((jstring)args[1].l);
+        ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
+        // und aufraeumen
+        if ( out )
+        {
+            if ( t.pEnv->IsInstanceOf(out,java_lang_String::st_getMyClass()) )
+            {
+                java_lang_String aVal(t.pEnv,out);
+                aRet <<= (::rtl::OUString)aVal;
+            }
+            else if ( t.pEnv->IsInstanceOf(out,java_lang_Boolean::st_getMyClass()) )
+            {
+                java_lang_Boolean aVal(t.pEnv,out);
+                static jmethodID methodID = NULL;
+                aRet <<= aVal.callBooleanMethod("booleanValue",methodID);
+            }
+            else if ( t.pEnv->IsInstanceOf(out,java_sql_Date::st_getMyClass()) )
+            {
+                java_sql_Date aVal(t.pEnv,out);
+                aRet <<= (::com::sun::star::util::Date)aVal;
+            }
+            else if ( t.pEnv->IsInstanceOf(out,java_sql_Time::st_getMyClass()) )
+            {
+                java_sql_Time aVal(t.pEnv,out);
+                aRet <<= (::com::sun::star::util::Time)aVal;
+            }
+            else if ( t.pEnv->IsInstanceOf(out,java_sql_Timestamp::st_getMyClass()) )
+            {
+                java_sql_Timestamp aVal(t.pEnv,out);
+                aRet <<= (::com::sun::star::util::DateTime)aVal;
+            }
+            else
+                t.pEnv->DeleteLocalRef(out);
+        }
     } //t.pEnv
-    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
-    ::dbtools::throwFunctionNotSupportedException( "XRow::getObject", *this );
-    return out==0 ? Any() : Any();//new java_lang_Object( t.pEnv, out );
+    return aRet;
 }
 // -------------------------------------------------------------------------
 
@@ -689,9 +719,8 @@ void SAL_CALL java_sql_ResultSet::updateString( sal_Int32 columnIndex, const ::r
 
         {
             // Parameter konvertieren
-            jstring str = convertwchar_tToJavaString(t.pEnv,x);
-            t.pEnv->CallVoidMethod( object, mID,columnIndex,str);
-            t.pEnv->DeleteLocalRef(str);
+            jdbc::LocalRef< jstring > str( t.env(),convertwchar_tToJavaString(t.pEnv,x));
+            t.pEnv->CallVoidMethod( object, mID,columnIndex,str.get());
             ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
         }
     }
@@ -754,16 +783,68 @@ void SAL_CALL java_sql_ResultSet::updateTimestamp( sal_Int32 columnIndex, const 
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL java_sql_ResultSet::updateBinaryStream( sal_Int32 /*columnIndex*/, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& /*x*/, sal_Int32 /*length*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL java_sql_ResultSet::updateBinaryStream( sal_Int32 columnIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::updateBinaryStream" );
-    ::dbtools::throwFeatureNotImplementedException( "XParameters::updateBinaryStream", *this );
+    try
+    {
+        SDBThreadAttach t;
+        {
+
+            // temporaere Variable initialisieren
+            // Java-Call absetzen
+            static jmethodID mID(NULL);
+            if ( !mID  )
+            {
+                static const char * cSignature = "(ILjava/io/InputStream;I)V";
+                static const char * cMethodName = "updateBinaryStream";
+                obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
+            }
+
+            {
+                // Parameter konvertieren
+                jobject obj = createByteInputStream(x,length);
+                t.pEnv->CallVoidMethod( object, mID, columnIndex,obj,length);
+                ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
+            }
+        }
+    }
+    catch(Exception)
+    {
+        ::dbtools::throwFeatureNotImplementedException( "XRowUpdate::updateBinaryStream", *this );
+    }
 }
 // -------------------------------------------------------------------------
-void SAL_CALL java_sql_ResultSet::updateCharacterStream( sal_Int32 /*columnIndex*/, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& /*x*/, sal_Int32 /*length*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL java_sql_ResultSet::updateCharacterStream( sal_Int32 columnIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::updateCharacterStream" );
-    ::dbtools::throwFeatureNotImplementedException( "XRowUpdate::updateCharacterStream", *this );
+    try
+    {
+        SDBThreadAttach t;
+        {
+
+            // temporaere Variable initialisieren
+            // Java-Call absetzen
+            static jmethodID mID(NULL);
+            if ( !mID  )
+            {
+                static const char * cSignature = "(ILjava/io/Reader;I)V";
+                static const char * cMethodName = "updateCharacterStream";
+                obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
+            }
+
+            {
+                // Parameter konvertieren
+                jobject obj = createCharArrayReader(x,length);
+                t.pEnv->CallVoidMethod( object, mID, columnIndex,obj,length);
+                ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
+            }
+        }
+    }
+    catch(Exception)
+    {
+        ::dbtools::throwFeatureNotImplementedException( "XRowUpdate::updateCharacterStream", *this );
+    }
 }
 // -------------------------------------------------------------------------
 void SAL_CALL java_sql_ResultSet::updateObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)

@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: textlayoutdevice.cxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.10 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-05-27 14:11:20 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -167,14 +159,14 @@ namespace drawinglayer
             mrDevice.SetFont( rFont );
         }
 
-        void TextLayouterDevice::setFontAttributes(
-            const FontAttributes& rFontAttributes,
+        void TextLayouterDevice::setFontAttribute(
+            const attribute::FontAttribute& rFontAttribute,
             double fFontScaleX,
             double fFontScaleY,
             const ::com::sun::star::lang::Locale& rLocale)
         {
-            setFont(getVclFontFromFontAttributes(
-                rFontAttributes,
+            setFont(getVclFontFromFontAttribute(
+                rFontAttribute,
                 fFontScaleX,
                 fFontScaleY,
                 0.0,
@@ -297,6 +289,28 @@ namespace drawinglayer
 
             return basegfx::B2DRange();
         }
+
+        double TextLayouterDevice::getFontAscent() const
+        {
+            const ::FontMetric& rMetric = mrDevice.GetFontMetric();
+            return rMetric.GetAscent();
+        }
+
+        double TextLayouterDevice::getFontDescent() const
+        {
+            const ::FontMetric& rMetric = mrDevice.GetFontMetric();
+            return rMetric.GetDescent();
+        }
+
+        void TextLayouterDevice::addTextRectActions(
+            const Rectangle& rRectangle,
+            const String& rText,
+            sal_uInt16 nStyle,
+            GDIMetaFile& rGDIMetaFile)
+        {
+            mrDevice.AddTextRectActions(
+                rRectangle, rText, nStyle, rGDIMetaFile);
+        }
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
@@ -307,8 +321,8 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Font getVclFontFromFontAttributes(
-            const FontAttributes& rFontAttributes,
+        Font getVclFontFromFontAttribute(
+            const attribute::FontAttribute& rFontAttribute,
             double fFontScaleX,
             double fFontScaleY,
             double fFontRotation,
@@ -324,8 +338,8 @@ namespace drawinglayer
             // is wanted, that width needs to be adapted using FontMetric again to get a
             // width of the unscaled font
             Font aRetval(
-                rFontAttributes.getFamilyName(),
-                rFontAttributes.getStyleName(),
+                rFontAttribute.getFamilyName(),
+                rFontAttribute.getStyleName(),
                 Size(0, nHeight));
 #else
             // for non-WIN32 systems things are easier since these accept a Font creation
@@ -334,17 +348,17 @@ namespace drawinglayer
             // Font would be recorded in a MetaFile (The MetaFile FontAction WILL record a
             // set FontWidth; import that in a WIN32 system, and trouble is there)
             Font aRetval(
-                rFontAttributes.getFamilyName(),
-                rFontAttributes.getStyleName(),
+                rFontAttribute.getFamilyName(),
+                rFontAttribute.getStyleName(),
                 Size(bFontIsScaled ? nWidth : 0, nHeight));
 #endif
-            // define various other FontAttributes
+            // define various other FontAttribute
             aRetval.SetAlign(ALIGN_BASELINE);
-            aRetval.SetCharSet(rFontAttributes.getSymbol() ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE);
-            aRetval.SetVertical(rFontAttributes.getVertical() ? TRUE : FALSE);
-            aRetval.SetWeight(static_cast<FontWeight>(rFontAttributes.getWeight()));
-            aRetval.SetItalic(rFontAttributes.getItalic() ? ITALIC_NORMAL : ITALIC_NONE);
-            aRetval.SetOutline(rFontAttributes.getOutline());
+            aRetval.SetCharSet(rFontAttribute.getSymbol() ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE);
+            aRetval.SetVertical(rFontAttribute.getVertical() ? TRUE : FALSE);
+            aRetval.SetWeight(static_cast<FontWeight>(rFontAttribute.getWeight()));
+            aRetval.SetItalic(rFontAttribute.getItalic() ? ITALIC_NORMAL : ITALIC_NONE);
+            aRetval.SetOutline(rFontAttribute.getOutline());
             aRetval.SetLanguage(MsLangId::convertLocaleToLanguage(rLocale));
 
 #ifdef WIN32
@@ -371,13 +385,13 @@ namespace drawinglayer
             return aRetval;
         }
 
-        FontAttributes getFontAttributesFromVclFont(
+        attribute::FontAttribute getFontAttributeFromVclFont(
             basegfx::B2DVector& o_rSize,
             const Font& rFont,
             bool bRTL,
             bool bBiDiStrong)
         {
-            const FontAttributes aRetval(
+            const attribute::FontAttribute aRetval(
                 rFont.GetName(),
                 rFont.GetStyleName(),
                 static_cast<sal_uInt16>(rFont.GetWeight()),

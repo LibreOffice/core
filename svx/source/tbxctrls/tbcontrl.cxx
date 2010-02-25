@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tbcontrl.cxx,v $
- * $Revision: 1.84 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,35 +33,33 @@
 
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 #include <tools/shl.hxx>
-#include <svtools/poolitem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/poolitem.hxx>
+#include <svl/eitem.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/bmpacc.hxx>
 #include <svtools/valueset.hxx>
 #include <svtools/ctrlbox.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <svtools/ctrltool.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/pathoptions.hxx>
+#include <svl/stritem.hxx>
+#include <unotools/pathoptions.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/templdlg.hxx>
-#include <svtools/isethint.hxx>
+#include <svl/isethint.hxx>
 #include <sfx2/querystatus.hxx>
 #include <sfx2/sfxstatuslistener.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svtools/fontoptions.hxx>
-#ifndef _VCL_MNEMONIC_HXX_
+#include <unotools/fontoptions.hxx>
 #include <vcl/mnemonic.hxx>
-#endif
 
 #include <vcl/svapp.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 #define _SVX_TBCONTRL_CXX
 #include <svtools/colorcfg.hxx>
@@ -79,13 +74,13 @@
 #include "helpid.hrc"
 #include "htmlmode.hxx"
 #include <svx/xtable.hxx>
-#include "fontitem.hxx"
-#include <svx/fhgtitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/colritem.hxx>
-#include "flstitem.hxx"
-#include "bolnitem.hxx"
+#include "editeng/fontitem.hxx"
+#include <editeng/fhgtitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/colritem.hxx>
+#include "editeng/flstitem.hxx"
+#include "editeng/bolnitem.hxx"
 #include "drawitem.hxx"
 #include <svx/tbcontrl.hxx>
 #include "dlgutil.hxx"
@@ -94,6 +89,8 @@
 #include <memory>
 
 #include <svx/tbxcolorupdate.hxx>
+#include <editeng/eerdll.hxx>
+#include <editeng/editrids.hrc>
 
 // ------------------------------------------------------------------------
 
@@ -882,7 +879,7 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
         long nCount = pColorTable->Count();
         XColorEntry* pEntry = NULL;
         ::Color aColWhite( COL_WHITE );
-        String aStrWhite( SVX_RES(RID_SVXITEMS_COLOR_WHITE) );
+        String aStrWhite( EditResId(RID_SVXITEMS_COLOR_WHITE) );
 
         if ( nCount > PALETTE_SIZE )
             // Show scrollbar if more than PALLETTE_SIZE colors are available

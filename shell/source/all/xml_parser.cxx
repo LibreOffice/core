@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xml_parser.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -83,14 +80,6 @@ namespace /* private */
 
 //###################################################
 xml_parser::xml_parser(const XML_Char* EncodingName) :
-    document_handler_(0),
-    xml_parser_(XML_ParserCreate(EncodingName))
-{
-    init();
-}
-
-//###################################################
-xml_parser::xml_parser(const XML_Char* EncodingName, XML_Char /*NamespaceSeparator*/) :
     document_handler_(0),
     xml_parser_(XML_ParserCreate(EncodingName))
 {
@@ -223,10 +212,4 @@ void xml_parser::set_document_handler(
 i_xml_parser_event_handler* xml_parser::get_document_handler() const
 {
     return document_handler_;
-}
-
-//###################################################
-void xml_parser::set_encoding(const XML_Char* Encoding)
-{
-    XML_SetEncoding(xml_parser_, Encoding);
 }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fmtextcontrolshell.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +33,7 @@
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/awt/XMouseListener.hpp>
-#include <com/sun/star/form/XFormController.hpp>
+#include <com/sun/star/form/runtime/XFormController.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 /** === end UNO includes === **/
@@ -92,10 +89,10 @@ namespace svx
                              ,public IContextRequestObserver
     {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > m_xURLTransformer;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >         m_xActiveControl;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent >   m_xActiveTextComponent;
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > m_xActiveController;
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >             m_xURLTransformer;
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >                     m_xActiveControl;
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent >               m_xActiveTextComponent;
+        ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >    m_xActiveController;
 #ifndef DONT_REMEMBER_LAST_CONTROL
         // without this define, m_xActiveControl remembers the *last* active control, even
         // if it, in the meantime, already lost the focus
@@ -144,10 +141,10 @@ namespace svx
 
         /** to be called when a form in our document has been activated
         */
-        void    formActivated( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >& _rxController );
+        void    formActivated( const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >& _rxController );
         /** to be called when a form in our document has been deactivated
         */
-        void    formDeactivated( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >& _rxController );
+        void    formDeactivated( const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >& _rxController );
 
         /** notifies the instance that the design mode has changed
         */
@@ -205,7 +202,7 @@ namespace svx
         @precond
             we don't have an active controller currently
         */
-        void    startControllerListening( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >& _rxController );
+        void    startControllerListening( const ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController >& _rxController );
         /** stops listening at the active controller
         @precond
             we have an active controller currently

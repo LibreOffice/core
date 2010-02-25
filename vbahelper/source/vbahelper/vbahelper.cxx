@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vbahelper.cxx,v $
- * $Revision: 1.5.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,11 +44,10 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/itemset.hxx>
-//#include <svtools/itempool.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/itemset.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/viewfac.hxx>
 
@@ -536,7 +532,7 @@ XLRGBToOORGB( sal_Int32 nCol )
 uno::Any
 OORGBToXLRGB( const uno::Any& aCol )
 {
-    sal_Int32 nCol;
+    sal_Int32 nCol(0);
     aCol >>= nCol;
     nCol = OORGBToXLRGB( nCol );
     return uno::makeAny( nCol );
@@ -544,7 +540,7 @@ OORGBToXLRGB( const uno::Any& aCol )
 uno::Any
 XLRGBToOORGB(  const uno::Any& aCol )
 {
-    sal_Int32 nCol;
+    sal_Int32 nCol(0);
     aCol >>= nCol;
     nCol = XLRGBToOORGB( nCol );
     return uno::makeAny( nCol );

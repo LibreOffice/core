@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: userinstall.cxx,v $
- * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,9 +47,9 @@
 #include <tools/resmgr.hxx>
 #endif
 #include <unotools/bootstrap.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #ifndef _SVTOOLS_SYSLOCALEOPTIONSOPTIONS_HXX
-#include <svtools/syslocaleoptions.hxx>
+#include <unotools/syslocaleoptions.hxx>
 #endif
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>

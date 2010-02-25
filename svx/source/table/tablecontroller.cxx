@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tablecontroller.cxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,32 +40,32 @@
 #include <sal/config.h>
 
 #include <vcl/svapp.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 
 #include <sfx2/request.hxx>
 
-#include <svx/scripttypeitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/sdr/overlay/overlayobjectcell.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/svxids.hrc>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdetc.hxx>
-#include <svx/editobj.hxx>
-#include "editstat.hxx"
-#include "unolingu.hxx"
+#include <editeng/editobj.hxx>
+#include "editeng/editstat.hxx"
+#include "editeng/unolingu.hxx"
 #include "svx/sdrpagewindow.hxx"
 #include <svx/selectioncontroller.hxx>
 #include <svx/svdmodel.hxx>
 #include "sdrpaintwindow.hxx"
 #include <svx/svxdlg.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/boxitem.hxx>
 #include "cell.hxx"
-#include <svx/borderline.hxx>
-#include <svx/colritem.hxx>
-#include "bolnitem.hxx"
+#include <editeng/borderline.hxx>
+#include <editeng/colritem.hxx>
+#include "editeng/bolnitem.hxx"
 #include "svdstr.hrc"
 #include "svdglob.hxx"
 #include "svx/svdpage.hxx"

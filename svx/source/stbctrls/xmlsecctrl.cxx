@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlsecctrl.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,7 +38,7 @@
 #endif
 #include <vcl/image.hxx>
 //#ifndef _SFXITEMPOOL_HXX
-//#include <svtools/itempool.hxx>
+//#include <svl/itempool.hxx>
 //#endif
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/app.hxx>
@@ -50,9 +47,9 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxsids.hrc>
 
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
@@ -61,7 +58,7 @@
 
 #define PAINT_OFFSET    5
 
-//#include <svx/sizeitem.hxx>
+//#include <editeng/sizeitem.hxx>
 //#include <svx/dialmgr.hxx>
 //#include "dlgutil.hxx"
 //#include "stbctrls.h"

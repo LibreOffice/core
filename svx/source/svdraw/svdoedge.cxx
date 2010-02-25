@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdoedge.cxx,v $
- * $Revision: 1.45.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,9 +45,9 @@
 #include <svx/svdetc.hxx>
 #include "svdglob.hxx"   // StringCache
 #include "svdstr.hrc"    // Objektname
-#include <svtools/style.hxx>
-#include <svtools/smplhint.hxx>
-#include <svx/eeitem.hxx>
+#include <svl/style.hxx>
+#include <svl/smplhint.hxx>
+#include <editeng/eeitem.hxx>
 #include "svdoimp.hxx"
 #include <svx/sdr/properties/connectorproperties.hxx>
 #include <svx/sdr/contact/viewcontactofsdredgeobj.hxx>
@@ -1041,7 +1038,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                             if (bCase29) {
                                 // und nun noch dafuer sorgen, dass das
                                 // umzingelte Obj nicht durchquert wird
-                                if (aBewR1.Center().Y()<aBewR2.Center().Y() != bObenLang) {
+                                if ((aBewR1.Center().Y()<aBewR2.Center().Y()) != bObenLang) {
                                     aMeeting.X()=aBewR2.Right();
                                 } else {
                                     aMeeting.X()=aBewR1.Left();
@@ -1101,7 +1098,7 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                             if (bCase29) {
                                 // und nun noch dafuer sorgen, dass das
                                 // umzingelte Obj nicht durchquert wird
-                                if (aBewR1.Center().X()<aBewR2.Center().X() != bLinksLang) {
+                                if ((aBewR1.Center().X()<aBewR2.Center().X()) != bLinksLang) {
                                     aMeeting.Y()=aBewR2.Bottom();
                                 } else {
                                     aMeeting.Y()=aBewR1.Top();
@@ -1277,10 +1274,10 @@ XPolygon SdrEdgeObj::ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rec
                 Point aP3(aXP1[3]);
                 Point aP4(aXP1[4]);
                 if (aP1.Y()==aP2.Y()) { // beide Linien Horz
-                    if (aP1.X()<aP2.X()==aP3.X()<aP4.X()) cForm='S';
+                    if ((aP1.X()<aP2.X())==(aP3.X()<aP4.X())) cForm='S';
                     else cForm='C';
                 } else { // sonst beide Linien Vert
-                    if (aP1.Y()<aP2.Y()==aP3.Y()<aP4.Y()) cForm='S';
+                    if ((aP1.Y()<aP2.Y())==(aP3.Y()<aP4.Y())) cForm='S';
                     else cForm='C';
                 }
             } else cForm='4'; // sonst der 3. Fall mit 5 Linien

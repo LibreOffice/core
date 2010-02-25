@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: request.cxx,v $
- * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,10 +36,10 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 
 #ifndef _ARGS_HXX //autogen
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #endif
 #include <svtools/itemdel.hxx>
 
@@ -51,7 +48,7 @@
 #ifndef GCC
 #endif
 
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>

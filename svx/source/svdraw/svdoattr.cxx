@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdoattr.cxx,v $
- * $Revision: 1.53.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,8 +43,8 @@
 #include <svx/svdorect.hxx>
 #include <svx/svdocirc.hxx>
 #include <svx/svdomeas.hxx>
-#include <svtools/smplhint.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/smplhint.hxx>
+#include <svl/itemiter.hxx>
 #include <svx/xenum.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xlnstwit.hxx>
@@ -60,22 +57,22 @@
 #include <svx/xftshit.hxx>
 
 
-#include <svx/colritem.hxx>
-#include "fontitem.hxx"
-#include <svx/fhgtitem.hxx>
+#include <editeng/colritem.hxx>
+#include "editeng/fontitem.hxx"
+#include <editeng/fhgtitem.hxx>
 
-//#include <svx/charscaleitem.hxx>
+//#include <editeng/charscaleitem.hxx>
 #include <svx/xlnstcit.hxx>
 #include <svx/xlnwtit.hxx>
-#include <svtools/style.hxx>
-#include <svtools/style.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/style.hxx>
+#include <svl/style.hxx>
+#include <svl/whiter.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xlnedcit.hxx>
-#include <svx/adjitem.hxx>
+#include <editeng/adjitem.hxx>
 #include <svx/xflbckit.hxx>
 #include <svx/xtable.hxx>
 #include <svx/xbtmpit.hxx>
@@ -87,7 +84,7 @@
 #include <svx/xlnstit.hxx>
 #include <svx/sdr/properties/attributeproperties.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include "xlinjoit.hxx"
+#include "svx/xlinjoit.hxx"
 #include <svdoimp.hxx>
 
 //////////////////////////////////////////////////////////////////////////////

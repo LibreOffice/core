@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdedtv1.cxx,v $
- * $Revision: 1.30.146.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +35,7 @@
 #define _MATH_H
 #endif
 #include <tools/bigint.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <vcl/msgbox.hxx>
 #include <svx/rectenum.hxx>
 #include <svx/svxids.hrc>   // fuer SID_ATTR_TRANSFORM_...
@@ -55,9 +52,9 @@
 #include <svx/svdopath.hxx>  // fuer Crook
 #include "svdstr.hrc"   // Namen aus der Resource
 #include "svdglob.hxx"  // StringCache
-#include <svx/eeitem.hxx>
-#include <svtools/aeitem.hxx>
-#include <svtools/whiter.hxx>
+#include <editeng/eeitem.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/whiter.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/e3dsceneupdater.hxx>

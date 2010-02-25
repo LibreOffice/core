@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdundo.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,9 +29,9 @@
 #define _SVDUNDO_HXX
 
 #ifndef _SOLAR_HRC
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 #endif
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 #include <tools/contnr.hxx>
 #include <tools/gen.hxx>
 #include <svx/svdtypes.hxx> // fuer enum RepeatFuncts

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sbxscan.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 #include <basic/sbx.hxx>
 #include "sbxconv.hxx"
 
-#include "svtools/syslocale.hxx"
+#include "unotools/syslocale.hxx"
 
 #if defined ( UNX )
 #include <stdlib.h>
@@ -50,12 +47,12 @@
 #include "sbxres.hxx"
 #include <basic/sbxbase.hxx>
 #include <basic/sbxform.hxx>
-#include <svtools/svtools.hrc>
+#include <svl/svtools.hrc>
 
 #include "basrid.hxx"
 #include "runtime.hxx"
 
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <comphelper/processfactory.hxx>
 
 

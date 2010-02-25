@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: XMLErrorBarStylePropertyHdl.cxx,v $
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 #include "XMLErrorBarStylePropertyHdl.hxx"
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/uno/Any.hxx>

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: UnoNamespaceMap.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,9 +40,9 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <comphelper/stl_types.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include "unoapi.hxx"
-#include "xmlcnitm.hxx"
+#include "editeng/xmlcnitm.hxx"
 
 
 using namespace ::comphelper;

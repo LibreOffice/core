@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: vclpixelprocessor2d.cxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.16 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-06-26 16:21:48 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -67,6 +59,11 @@
 #include <drawinglayer/primitive2d/invertprimitive2d.hxx>
 #include <cstdio>
 #include <drawinglayer/primitive2d/backgroundcolorprimitive2d.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <drawinglayer/primitive2d/epsprimitive2d.hxx>
+
+#include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/window.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -111,7 +108,7 @@ namespace drawinglayer
 
         void VclPixelProcessor2D::processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate)
         {
-            switch(rCandidate.getPrimitiveID())
+            switch(rCandidate.getPrimitive2DID())
             {
                 case PRIMITIVE2D_ID_WRONGSPELLPRIMITIVE2D :
                 {
@@ -204,18 +201,8 @@ namespace drawinglayer
                 }
                 case PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D :
                 {
-                    if(getOptionsDrawinglayer().IsAntiAliasing())
-                    {
-                        // For AA, direct render has to be avoided since it uses XOR maskings which will not
-                        // work with AA. Instead, the decompose which uses MaskPrimitive2D with fillings is
-                        // used
-                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
-                    }
-                    else
-                    {
-                        // direct draw of gradient
-                        RenderPolyPolygonGradientPrimitive2D(static_cast< const primitive2d::PolyPolygonGradientPrimitive2D& >(rCandidate));
-                    }
+                    // direct draw of gradient
+                    RenderPolyPolygonGradientPrimitive2D(static_cast< const primitive2d::PolyPolygonGradientPrimitive2D& >(rCandidate));
                     break;
                 }
                 case PRIMITIVE2D_ID_POLYPOLYGONBITMAPPRIMITIVE2D :
@@ -241,8 +228,17 @@ namespace drawinglayer
                         mpOutputDevice->SetAntialiasing(nOldAntiAliase | ANTIALIASING_PIXELSNAPHAIRLINE);
                     }
 
-                    // direct draw of MetaFile
-                    RenderMetafilePrimitive2D(static_cast< const primitive2d::MetafilePrimitive2D& >(rCandidate));
+                    static bool bTestMetaFilePrimitiveDecomposition(true);
+                    if(bTestMetaFilePrimitiveDecomposition)
+                    {
+                        // use new Metafile decomposition
+                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                    }
+                    else
+                    {
+                        // direct draw of MetaFile
+                        RenderMetafilePrimitive2D(static_cast< const primitive2d::MetafilePrimitive2D& >(rCandidate));
+                    }
 
                     if(bForceLineSnap)
                     {
@@ -280,7 +276,7 @@ namespace drawinglayer
                         const primitive2d::Primitive2DReference xReference(rContent[0]);
                         const primitive2d::PolyPolygonColorPrimitive2D* pPoPoColor = dynamic_cast< const primitive2d::PolyPolygonColorPrimitive2D* >(xReference.get());
 
-                        if(pPoPoColor && PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D == pPoPoColor->getPrimitiveID())
+                        if(pPoPoColor && PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D == pPoPoColor->getPrimitive2DID())
                         {
                             // single transparent PolyPolygon identified, use directly
                             const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(pPoPoColor->getBColor()));
@@ -528,7 +524,6 @@ namespace drawinglayer
 
                     // restore AA setting
                     mpOutputDevice->SetAntialiasing(nOriginalAA);
-
                     break;
                 }
                 case PRIMITIVE2D_ID_TEXTHIERARCHYEDITPRIMITIVE2D :
@@ -545,23 +540,23 @@ namespace drawinglayer
                 case PRIMITIVE2D_ID_INVERTPRIMITIVE2D :
                 {
                     // invert primitive (currently only used for HighContrast fallback for selection in SW and SC).
-                    // Set OutDev to XOR
+                    // Set OutDev to XOR and switch AA off (XOR does not work with AA)
                     mpOutputDevice->Push();
                     mpOutputDevice->SetRasterOp( ROP_XOR );
-
-                    // force paint color to white by using ColorModifierStack
-                    const basegfx::BColor aColWhite(1.0, 1.0, 1.0);
-                    const basegfx::BColorModifier aColorModifier(aColWhite, 0.0, basegfx::BCOLORMODIFYMODE_REPLACE);
-                    maBColorModifierStack.push(aColorModifier);
+                    const sal_uInt16 nAntiAliasing(mpOutputDevice->GetAntialiasing());
+                    mpOutputDevice->SetAntialiasing(nAntiAliasing & ~ANTIALIASING_ENABLE_B2DDRAW);
 
                     // process content recursively
                     process(rCandidate.get2DDecomposition(getViewInformation2D()));
 
-                    // restore ColorModifierStack
-                    maBColorModifierStack.pop();
-
                     // restore OutDev
                     mpOutputDevice->Pop();
+                    mpOutputDevice->SetAntialiasing(nAntiAliasing);
+                    break;
+                }
+                case PRIMITIVE2D_ID_EPSPRIMITIVE2D :
+                {
+                    RenderEpsPrimitive2D(static_cast< const primitive2d::EpsPrimitive2D& >(rCandidate));
                     break;
                 }
                 default :

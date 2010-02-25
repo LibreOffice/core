@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: kfields.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,7 @@
 #ifndef _CONNECTIVITY_KAB_FIELDS_HXX_
 #define _CONNECTIVITY_KAB_FIELDS_HXX_
 
-#include <vcl/kde_headers.h>
+#include <shell/kde_headers.h>
 #include <connectivity/dbexception.hxx>
 #include <rtl/ustring.hxx>
 

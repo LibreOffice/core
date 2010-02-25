@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unogaltheme.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,15 +33,15 @@
 #include "unogaltheme.hxx"
 #include "unogalitem.hxx"
 #include "galtheme.hxx"
-#include "gallery1.hxx"
-#include "galmisc.hxx"
+#include "svx/gallery1.hxx"
+#include "svx/galmisc.hxx"
 #include <svx/fmmodel.hxx>
 #include <rtl/uuid.h>
 #include <vos/mutex.hxx>
 #ifndef _SV_SVAPP_HXX_
 #include <vcl/svapp.hxx>
 #endif
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 
 using namespace ::com::sun::star;
 

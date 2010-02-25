@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: langselect.cxx,v $
- * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +36,7 @@
 #include <rtl/string.hxx>
 #endif
 #ifndef _SVTOOLS_PATHOPTIONS_HXX
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #endif
 #include <tools/resid.hxx>
 #include <i18npool/mslangid.hxx>
@@ -142,6 +139,18 @@ bool LanguageSelection::prepareLanguage()
             Reference< XPropertySet > xProp(getConfigAccess("org.openoffice.Setup/L10N/", sal_True), UNO_QUERY_THROW);
             xProp->setPropertyValue(OUString::createFromAscii("ooLocale"), makeAny(aLocaleString));
             Reference< XChangesBatch >(xProp, UNO_QUERY_THROW)->commitChanges();
+
+            MsLangId::setConfiguredSystemUILanguage( MsLangId::convertLocaleToLanguage(loc) );
+
+            OUString sLocale;
+            xProp->getPropertyValue(OUString::createFromAscii("ooSetupSystemLocale")) >>= sLocale;
+            if ( sLocale.getLength() )
+            {
+                loc = LanguageSelection::IsoStringToLocale(sLocale);
+                MsLangId::setConfiguredSystemLanguage( MsLangId::convertLocaleToLanguage(loc) );
+            }
+            else
+                MsLangId::setConfiguredSystemLanguage( MsLangId::getSystemLanguage() );
 
             bSuccess = sal_True;
         }

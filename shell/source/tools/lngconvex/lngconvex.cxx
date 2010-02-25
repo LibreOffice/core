@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: lngconvex.cxx,v $
- * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,12 +27,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_shell.hxx"
-
-#if OSL_DEBUG_LEVEL == 0
-#ifndef NDEBUG
-#define NDEBUG
-#endif
-#endif
 
 #include <tools/presys.h>
 #if defined _MSC_VER
@@ -60,7 +51,6 @@
 
 #include <iostream>
 #include <fstream>
-#include <assert.h>
 #include <map>
 #include <sstream>
 #include <iterator>
@@ -283,7 +273,7 @@ public:
     void substitute(std::string& Text)
     {
         replacement_table_t* prt = get_replacement_table(active_iso_lang_.make_std_string());
-        assert(prt);
+        OSL_ASSERT(prt);
         replacement_table_t::iterator iter = prt->find(Text);
         if (iter != prt->end())
             Text = iter->second;
@@ -293,7 +283,7 @@ public:
         const std::string& Placeholder, const std::string& Substitute)
     {
         replacement_table_t* prt = get_replacement_table(active_iso_lang_.make_std_string());
-        assert(prt);
+        OSL_ASSERT(prt);
         prt->insert(std::make_pair(Placeholder, Substitute));
     }
 
@@ -333,7 +323,7 @@ void add_group_entries(
     const ByteString& GroupName,
     Substitutor& Substitutor)
 {
-    assert(aConfig.HasGroup(GroupName));
+    OSL_ASSERT(aConfig.HasGroup(GroupName));
 
     aConfig.SetGroup(GroupName);
     size_t key_count = aConfig.GetKeyCount();

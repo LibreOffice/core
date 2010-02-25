@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fmsrcimp.cxx,v $
- * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 #ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
 #endif
-#include "fmtools.hxx"
+#include "svx/fmtools.hxx"
 #include "fmsrccfg.hxx"
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
@@ -69,11 +66,8 @@
 #include "fmsrcimp.hxx"
 #include <svx/fmsearch.hxx>
 
-#ifndef _FMSEARCH_HRC
-#include "fmsearch.hrc"
-#endif
 #include <comphelper/numbers.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 
 #define EQUAL_BOOKMARKS(a, b) a == b
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sqliterator.hxx,v $
- * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -279,6 +276,9 @@ namespace connectivity
 
         // return true when the tableNode is a rule like catalog_name, schema_name or table_name
         sal_Bool isTableNode(const OSQLParseNode* _pTableNode) const;
+
+        // tries to find the correct type of the function
+        sal_Int32 getFunctionReturnType(const OSQLParseNode* _pNode );
     private:
         /** traverses the list of table names, and filles _rTables
         */

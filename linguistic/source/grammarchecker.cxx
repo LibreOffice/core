@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: grammarchecker.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,6 @@
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/linguistic2/XGrammarChecker.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
-#include <vcl/unohelp.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

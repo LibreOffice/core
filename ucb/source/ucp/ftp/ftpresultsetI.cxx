@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ftpresultsetI.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +35,7 @@
 #include "com/sun/star/ucb/XCommandProcessor.hpp"
 #include "com/sun/star/sdbc/XRow.hpp"
 #include "ftpresultsetI.hxx"
-
+#include "ftpcontent.hxx"
 
 
 using namespace std;
@@ -96,6 +93,10 @@ ResultSetI::ResultSetI(const Reference<XMultiServiceFactory>&  xMSF,
             else if(Name.compareToAscii("DateCreated") == 0)
                 xRow->appendTimestamp(seqProp[i],
                                       dirvec[n].m_aDate);
+            else if(Name.compareToAscii("CreatableContentsInfo") == 0)
+                xRow->appendObject(
+                    seqProp[i],
+                    makeAny(FTPContent::queryCreatableContentsInfo_Static()));
             else
                 xRow->appendVoid(seqProp[i]);
         }

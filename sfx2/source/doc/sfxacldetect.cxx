@@ -1,13 +1,10 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
- * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: shutdowniconw32.cxx,v $
- * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +29,7 @@
 
 // necessary to include system headers without warnings
 #ifdef _MSC_VER
-#pragma warning(disable:4668 4917) 
+#pragma warning(disable:4668 4917)
 #endif
 
 #include <windows.h>
@@ -44,11 +41,11 @@ sal_Bool IsReadonlyAccordingACL( const sal_Unicode* pFilePath )
     sal_Bool bResult = sal_False;
 
     sal_uInt32 nFDSize = 0;
-    GetFileSecurityW( pFilePath, DACL_SECURITY_INFORMATION|GROUP_SECURITY_INFORMATION|OWNER_SECURITY_INFORMATION, NULL, 0, &nFDSize );
+    GetFileSecurityW( reinterpret_cast< LPCWSTR >(pFilePath), DACL_SECURITY_INFORMATION|GROUP_SECURITY_INFORMATION|OWNER_SECURITY_INFORMATION, NULL, 0, &nFDSize );
     if ( nFDSize )
     {
         PSECURITY_DESCRIPTOR pFileDescr = reinterpret_cast< PSECURITY_DESCRIPTOR >( malloc( nFDSize ) );
-        if ( GetFileSecurityW( pFilePath, DACL_SECURITY_INFORMATION|GROUP_SECURITY_INFORMATION|OWNER_SECURITY_INFORMATION, pFileDescr, nFDSize, &nFDSize ) )
+        if ( GetFileSecurityW( reinterpret_cast< LPCWSTR >(pFilePath), DACL_SECURITY_INFORMATION|GROUP_SECURITY_INFORMATION|OWNER_SECURITY_INFORMATION, pFileDescr, nFDSize, &nFDSize ) )
         {
             HANDLE hToken = NULL;
             if ( OpenThreadToken( GetCurrentThread(), TOKEN_DUPLICATE|TOKEN_QUERY, TRUE, &hToken )
@@ -72,7 +69,7 @@ sal_Bool IsReadonlyAccordingACL( const sal_Unicode* pFilePath )
                                       &aGenericMapping,
                                       &aPrivilegeSet,
                                       &nPrivilegeSetSize,
-                                      &nGrantedAccess, 
+                                      &nGrantedAccess,
                                       &bAccessible ) )
                     {
                         bResult = !bAccessible;

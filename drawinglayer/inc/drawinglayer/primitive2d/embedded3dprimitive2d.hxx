@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: embedded3dprimitive2d.hxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.6 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-06-24 15:30:17 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -42,52 +34,65 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
-// BackgroundColorPrimitive2D class
+// Embedded3DPrimitive2D class
 
 namespace drawinglayer
 {
     namespace primitive2d
     {
-        class Embedded3DPrimitive2D : public BasePrimitive2D
+        /** Embedded3DPrimitive2D class
+
+            This is a helper primitive which allows embedding of single 3D
+            primitives to the 2D primitive logic. It will get the scene it's
+            involved and thus the 3D transformation. With this information it
+            is able to provide 2D range data for a 3D primitive.
+
+            This primitive will not be visualized and decomposes to a yellow
+            2D rectangle to visualize that this should never be visualized
+         */
+        class Embedded3DPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
-            // the sequence of 3d primitives
+            /// the sequence of 3d primitives
             primitive3d::Primitive3DSequence                    mxChildren3D;
 
-            // the 2D scene object transformation
+            /// the 2D scene object transformation
             basegfx::B2DHomMatrix                               maObjectTransformation;
 
-            // the 3D transformations
+            /// the 3D transformations
             geometry::ViewInformation3D                         maViewInformation3D;
 
-            // if the embedded 3D primitives contain shadow, these parameters are needed
-            // to extract the shadow wich is a sequence od 2D primitives and may expand
-            // the 2D range. Since every single 3D object in a scene may individually
-            // have shadow or not, these values need to be provided and prepared. The shadow
-            // distance itself (a 2D transformation) is part of the 3D shadow definition
+            /** if the embedded 3D primitives contain shadow, these parameters are needed
+                to extract the shadow wich is a sequence od 2D primitives and may expand
+                the 2D range. Since every single 3D object in a scene may individually
+                have shadow or not, these values need to be provided and prepared. The shadow
+                distance itself (a 2D transformation) is part of the 3D shadow definition
+             */
             basegfx::B3DVector                                  maLightNormal;
             double                                              mfShadowSlant;
             basegfx::B3DRange                                   maScene3DRange;
 
-            // the primitiveSequence for on-demand created shadow primitives (see mbShadow3DChecked)
+            /// the primitiveSequence for on-demand created shadow primitives (see mbShadow3DChecked)
             Primitive2DSequence                                 maShadowPrimitives;
 
-            // #i96669# add simple range buffering for this primitive
+            /// #i96669# add simple range buffering for this primitive
             basegfx::B2DRange                                   maB2DRange;
 
-            // bitfield
-            // flag if given 3D geometry is already cheched for shadow definitions and 2d shadows
-            // are created in maShadowPrimitives
+            /// bitfield
+            /** flag if given 3D geometry is already cheched for shadow definitions and 2d shadows
+                are created in maShadowPrimitives
+             */
             unsigned                                            mbShadow3DChecked : 1;
 
-            // private helpers
+            /// private helpers
             bool impGetShadow3D(const geometry::ViewInformation2D& rViewInformation) const;
 
         protected:
-            // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            /// local decomposition.
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
+            /// constructor
             Embedded3DPrimitive2D(
                 const primitive3d::Primitive3DSequence& rxChildren3D,
                 const basegfx::B2DHomMatrix& rObjectTransformation,
@@ -96,7 +101,7 @@ namespace drawinglayer
                 double fShadowSlant,
                 const basegfx::B3DRange& rScene3DRange);
 
-            // get data
+            /// get data
             const primitive3d::Primitive3DSequence& getChildren3D() const { return mxChildren3D; }
             const basegfx::B2DHomMatrix& getObjectTransformation() const { return maObjectTransformation; }
             const geometry::ViewInformation3D& getViewInformation3D() const { return maViewInformation3D; }
@@ -104,13 +109,13 @@ namespace drawinglayer
             double getShadowSlant() const { return mfShadowSlant; }
             const basegfx::B3DRange& getScene3DRange() const { return maScene3DRange; }
 
-            // compare operator
+            /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
 
-            // get range
+            /// get range
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
 
-            // provide unique ID
+            /// provide unique ID
             DeclPrimitrive2DIDBlock()
         };
     } // end of namespace primitive2d

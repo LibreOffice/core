@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dlgctl3d.cxx,v $
- * $Revision: 1.20.226.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #include <svx/dialogs.hrc>
 #include <svx/view3d.hxx>
 #include <svx/fmmodel.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <svx/fmpage.hxx>
 #include <svx/polysc3d.hxx>
 #include <svx/sphere3d.hxx>

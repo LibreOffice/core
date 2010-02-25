@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SystemEnvironment.java,v $
- *
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,6 +53,12 @@ public class SystemEnvironment {
     private String systemManufacturer;
     private String cpuManufacturer;
     private String serialNumber;
+    private String physmem;
+    private String sockets;
+    private String cores;
+    private String virtcpus;
+    private String cpuname;
+    private String clockrate;
     private static SystemEnvironment sysEnv = null;
 
     public static synchronized SystemEnvironment getSystemEnvironment() {
@@ -90,6 +92,12 @@ public class SystemEnvironment {
         this.systemManufacturer = "";
         this.cpuManufacturer = "";
         this.serialNumber = "";
+        this.physmem = "0";
+        this.sockets = "0";
+        this.cores = "0";
+        this.virtcpus = "0";
+        this.cpuname = "";
+        this.clockrate = "0";
     }
 
 
@@ -155,6 +163,69 @@ public class SystemEnvironment {
      */
     public void setSerialNumber(String serialNumber) {
         this.serialNumber = serialNumber;
+    }
+
+    /**
+     * Sets the physmem
+     * @param physmem The physmem to set.
+     */
+    public void setPhysMem(String physmem) {
+        if (physmem.length() == 0)
+            physmem = "0";
+        this.physmem = physmem;
+    }
+
+    /**
+     * Sets the sockets
+     * @param sockets The sockets to set.
+     */
+    public void setSockets(String sockets) {
+        if (sockets.length() == 0)
+            sockets = "0";
+        this.sockets = sockets;
+    }
+
+    /**
+     * Sets the cores
+     * @param cores The cores to set.
+     */
+    public void setCores(String cores) {
+        if (cores.length() == 0)
+            cores ="0";
+        this.cores = cores;
+    }
+
+    /**
+     * Sets the virtcpus
+     * @param virtcpus The virtcpus to set.
+     */
+    public void setVirtCpus(String virtcpus) {
+        if (virtcpus.length() == 0)
+            virtcpus = "0";
+        this.virtcpus = virtcpus;
+    }
+
+    /**
+     * Sets the cpuname
+     * @param cpuname The cpuname to set.
+     */
+    public void setCpuName(String cpuname) {
+        this.cpuname = cpuname;
+    }
+
+    /**
+     * Sets the clockrate
+     * @param clockrate The clockrate to set.
+     */
+    public void setClockRate(String clockrate) {
+        if (clockrate.length() == 0)
+            this.clockrate = "0";
+        else
+        {
+            Float f = Float.parseFloat(clockrate);
+            Integer nClockrate = f.intValue();
+            this.clockrate = nClockrate.toString();
+        }
     }
 
     /**
@@ -225,6 +296,30 @@ public class SystemEnvironment {
      */
     public String getSerialNumber() {
         return serialNumber;
+    }
+
+    public String getPhysMem() {
+        return physmem;
+    }
+
+    public String getSockets() {
+        return sockets;
+    }
+
+    public String getCores() {
+        return cores;
+    }
+
+    public String getVirtCpus() {
+        return virtcpus;
+    }
+
+    public String getCpuName() {
+        return cpuname;
+    }
+
+    public String getClockRate() {
+        return clockrate;
     }
 
     /**

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sfxbasemodel.cxx,v $
- * $Revision: 1.139.2.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,9 +70,9 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/processfactory.hxx>  // can be removed when this is a "real" service
 #include <comphelper/componentcontext.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/itemset.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbuno.hxx>
 #include <tools/urlobj.hxx>
