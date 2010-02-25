@@ -2,15 +2,9 @@
 '*******************************************************************************
 '* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 '* 
-'* Copyright 2008 by Sun Microsystems, Inc.
+'* Copyright 2000, 2010 Oracle and/or its affiliates.
 '*
 '* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: basic_delete_modules.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:18:13 $
 '*
 '* This file is part of OpenOffice.org.
 '*
