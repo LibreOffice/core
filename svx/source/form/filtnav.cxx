@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: filtnav.cxx,v $
- * $Revision: 1.48.216.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -374,10 +371,12 @@ void FmFilterAdapter::AddOrRemoveListener( const Reference< XIndexAccess >& _rxC
         Reference< XFilterController > xController( xElement, UNO_QUERY );
         OSL_ENSURE( xController.is(), "FmFilterAdapter::InsertElements: no XFilterController, cannot sync data!" );
         if ( xController.is() )
+        {
             if ( _bAdd )
                 xController->addFilterControllerListener( this );
             else
                 xController->removeFilterControllerListener( this );
+        }
     }
 }
 

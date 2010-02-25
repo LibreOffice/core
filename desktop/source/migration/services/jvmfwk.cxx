@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: jvmfwk.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -240,15 +237,6 @@ css::uno::Sequence< OUString > jvmfwk_getSupportedServiceNames()
     OUString str_name = OUSTR(SERVICE_NAME);
     return css::uno::Sequence< OUString >( &str_name, 1 );
 }
-
-css::uno::Reference< css::uno::XInterface > SAL_CALL jvmfwk_create(
-    css::uno::Reference< css::uno::XComponentContext > const & )
-    throw (css::uno::Exception)
-{
-    return static_cast< ::cppu::OWeakObject * >(new JavaMigration);
-
-}
-
 
 // XServiceInfo
 OUString SAL_CALL JavaMigration::getImplementationName()
