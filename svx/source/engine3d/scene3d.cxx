@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: scene3d.cxx,v $
- * $Revision: 1.34.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +42,7 @@
 #include <svx/e3dundo.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svxids.hrc>
-#include <svx/colritem.hxx>
+#include <editeng/colritem.hxx>
 #include <svx/e3ditem.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xfltrit.hxx>

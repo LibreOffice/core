@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: XPropertyTable.cxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,7 +43,7 @@
 #include <svx/xdef.hxx>
 
 #include "unoapi.hxx"
-#include <svx/unoprnms.hxx>
+#include <editeng/unoprnms.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 using namespace com::sun::star;
@@ -718,7 +715,7 @@ XPropertyEntry* SvxUnoXBitmapTable::getEntry( const OUString& rName, const uno::
     if(!(rAny >>= aURL))
         return NULL;
 
-    GraphicObject aGrafObj( CreateGraphicObjectFromURL( aURL ) );
+    GraphicObject aGrafObj( GraphicObject::CreateGraphicObjectFromURL( aURL ) );
     XOBitmap aBMP( aGrafObj );
 
     const String aName( rName );

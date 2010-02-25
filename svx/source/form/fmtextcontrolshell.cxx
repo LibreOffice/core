@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fmtextcontrolshell.cxx,v $
- * $Revision: 1.16.86.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,14 +33,14 @@
 #include "fmtextcontroldialogs.hxx"
 #include "fmtextcontrolfeature.hxx"
 #include "fmtextcontrolshell.hxx"
-#include "svx/crsditem.hxx"
+#include "editeng/crsditem.hxx"
 #include "svx/dialmgr.hxx"
-#include "svx/editeng.hxx"
-#include "svx/eeitem.hxx"
+#include "editeng/editeng.hxx"
+#include "editeng/eeitem.hxx"
 #include "svx/fmglob.hxx"
-#include "svx/scriptspaceitem.hxx"
+#include "editeng/scriptspaceitem.hxx"
 #include "svx/svxids.hrc"
-#include "svx/udlnitem.hxx"
+#include "editeng/udlnitem.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/beans/XPropertySet.hpp>

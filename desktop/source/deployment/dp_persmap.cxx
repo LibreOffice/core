@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dp_persmap.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,19 +74,6 @@ PersistentMap::~PersistentMap()
     catch (DbException & exc) {
         (void) exc; // avoid warnings
         OSL_ENSURE( 0, DbEnv::strerror( exc.get_errno() ) );
-    }
-}
-
-//______________________________________________________________________________
-void PersistentMap::flush() const
-{
-    try {
-        int err = m_db.sync(0);
-        if (err != 0)
-            throw_rtexc(err);
-    }
-    catch (DbException & exc) {
-        throw_rtexc( exc.get_errno(), exc.what() );
     }
 }
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdocirc.cxx,v $
- * $Revision: 1.37.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,7 +49,7 @@
 #include <svx/svdview.hxx>  // Zum Draggen (Ortho)
 #include "svdglob.hxx"   // StringCache
 #include "svdstr.hrc"    // Objektname
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include "svdoimp.hxx"
 #include <svx/sdr/properties/circleproperties.hxx>
 #include <svx/sdr/contact/viewcontactofsdrcircobj.hxx>

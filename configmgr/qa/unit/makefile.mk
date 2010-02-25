@@ -1,19 +1,10 @@
 #*************************************************************************
+#
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-<<<<<<< local
-# Copyright 2009 by Sun Microsystems, Inc.
-=======
-# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
-# Copyright 2008 by Sun Microsystems, Inc.
->>>>>>> other
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile,v $
-#
-# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -31,6 +22,7 @@
 # version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
+#
 #***********************************************************************/
 
 PRJ = ../..
@@ -43,22 +35,15 @@ ENABLE_EXCEPTIONS = TRUE
 
 SLOFILES = $(SLO)/test.obj
 
-<<<<<<< local
 SHL1OBJS = $(SLOFILES)
 SHL1STDLIBS = \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
     $(CPPUNITLIB) \
-    $(SALLIB)
+    $(SALLIB) \
+    $(TESTSHL2LIB)
 SHL1TARGET = unit
 SHL1VERSIONMAP = version.map
-=======
-SHL1TARGET = $(TARGET)
-SHL1OBJS = $(SLO)$/performance.obj $(SLO)$/threading.obj $(SLO)$/ubootstrap.obj
-SHL1STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(CPPUNITLIB) $(TESTSHL2LIB) $(SALLIB)
-SHL1VERSIONMAP = export.map
-SHL1IMPLIB = i$(SHL1TARGET)
->>>>>>> other
 DEF1NAME = $(SHL1TARGET)
 
 .INCLUDE: target.mk
