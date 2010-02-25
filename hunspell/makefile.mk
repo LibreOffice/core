@@ -36,17 +36,10 @@ TARGET=hunspell
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=hunspell-1.2.8
-TARFILE_ROOTDIR=hunspell-1.2.8
-
-#ADDITIONAL_FILES += src/hunspell/makefile.mk
-
-PATCH_FILES=\
-    hunspell-1.2.8.patch \
-    hunspell-consts-1.2.8.patch # hunspell#2064983
+TARFILE_NAME=hunspell-1.2.9
+TARFILE_ROOTDIR=hunspell-1.2.9
 
 .IF "$(GUI)"=="UNX"
-#CONFIGURE_DIR=$(BUILD_DIR)
 
 #relative to CONFIGURE_DIR
 CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) configure
