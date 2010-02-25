@@ -170,11 +170,11 @@ testcase tiToolsHyphenation1
    printlog "   - Hyphenation without any text"
    Call hNewDocument									'/// New impress document ///'
    sleep 3
-   ExtrasSilbentrennungDraw								'/// Try Silbentrennung with empty document ///'
-   Kontext "Silbentrennung"
-    if Silbentrennung.Exists(1) = True Then
+   ToolsLanguageHyphenationDraw								'/// Try  with empty document ///'
+   Kontext "Hyphenation"
+    if Hyphenation.Exists(1) = True Then
        Warnlog "  - Dialog ist da"
-       Silbentrennung.Cancel
+       Hyphenation.Cancel
     else
        Printlog "  - Hyphenation activated"
     end if
@@ -206,11 +206,11 @@ testcase tiToolsHyphenation1
                   endif
    end select
    hTypeKeys "<Home>"
-   ExtrasSilbentrennungDraw								'/// Try Silbentrennung ///'
-   Kontext "Silbentrennung"
-   if Silbentrennung.Exists =True Then
+   ToolsLanguageHyphenationDraw								'/// Try  ///'
+   Kontext "Hyphenation"
+   if Hyphenation.Exists =True Then
       Warnlog "Dialog exists"
-      Silbentrennung.Cancel
+      Hyphenation.Cancel
    else
       Kontext "Active"
       if Active.Exists then Active.OK
@@ -281,7 +281,7 @@ testcase tiToolsHyphenation2
    EditCopy
    sDraw = GetClipboardText()
    EditSelectAll						'/// Select whole text ///'
-   ExtrasSilbentrennungDraw					'/// Run Hyphenation ///'
+   ToolsLanguageHyphenationDraw					'/// Run Hyphenation ///'
    gMouseClick 50,50
    hTypeKeys "<MOD1 END><HOME><MOD1 SHIFT RIGHT>"		'/// Select part of text and compare it with original text at this place ///'
    sleep 3

@@ -161,9 +161,9 @@ testcase tToolsSpellcheck
         if OptionenBearbeiten.IsEnabled then
             OptionenBearbeiten.Click
             wait 500
-            Kontext "SilbentrennungOptionen"
-            DialogTest ( SilbentrennungOptionen )
-            SilbentrennungOptionen.Cancel
+            Kontext "HyphenationOptions"
+            DialogTest ( HyphenationOptions )
+            HyphenationOptions.Cancel
         end if
     next i
 
@@ -396,11 +396,11 @@ testcase tToolsHyphenation
         end if
     end if
 
-    Kontext "Silbentrennung"
+    Kontext "Hyphenation"
     printlog " Close upcoming 'Hyphenation' dialog"
-    if Silbentrennung.Exists then
-        Call DialogTest ( Silbentrennung )
-        Silbentrennung.Cancel
+    if Hyphenation.Exists then
+        Call DialogTest ( Hyphenation )
+        Hyphenation.Cancel
     else
         Warnlog "Dialog 'Hyphenation' not up!"
         Kontext "Active"
@@ -1300,11 +1300,11 @@ testcase tMasterDocToolsHyphenation
         end if
     end if
 
-    Kontext "Silbentrennung"
+    Kontext "Hyphenation"
     printlog " Close upcoming 'Hyphenation' dialog"
-    if ( Silbentrennung.Exists( 2 ) ) then
-        Call DialogTest ( Silbentrennung )
-        Silbentrennung.Cancel
+    if ( Hyphenation.Exists( 2 ) ) then
+        Call DialogTest ( Hyphenation )
+        Hyphenation.Cancel
     else
         Warnlog "Dialog 'Hyphenation' not up!"
         Kontext "Active"

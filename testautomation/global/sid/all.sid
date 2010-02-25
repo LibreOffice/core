@@ -481,7 +481,6 @@ FormatAusrichtung SID_ALIGN
 ' ****
 ' **** Alle
 ExtrasRechtschreibungAutomatisch SID_AUTOSPELL_CHECK
-ExtrasSilbentrennung FN_HYPHENATE_OPT_DLG
 ExtrasAutoKorrektur SID_AUTO_CORRECT_DLG
 ExtrasMakro SID_BASICCHOOSER
 ExtrasAnpassen SID_CONFIG
@@ -527,7 +526,6 @@ ExtrasAutoEingabe FID_AUTOCOMPLETE
 
 ' **** Draw / Impress
 ExtrasThesaurusDraw SID_THESAURUS
-ExtrasSilbentrennungDraw SID_HYPHENATION
 ExtrasPipette SID_BMPMASK
 ExtrasDiawechsel .uno:SlideChangeWindow
 ExtrasAnimation SID_ANIMATION_OBJECTS

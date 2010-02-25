@@ -195,14 +195,14 @@ testcase tToolsSpellcheck
     '/// Click on 'Edit' – button
     printlog " Click on 'Edit' – button"
     OptionenBearbeiten.Click
-    Kontext "SilbentrennungOptionen"
-    Call DialogTest ( SilbentrennungOptionen )
+    Kontext "HyphenationOptions"
+    Call DialogTest ( HyphenationOptions )
     '/// Decrease 'Minimal word length'
     printlog " Decrease 'Minimal word length'"
     ZeichenVorUmbruch.More
     '/// Close dialog with 'Cancel'
     printlog " Close dialog with 'Cancel'"
-    SilbentrennungOptionen.Cancel
+    HyphenationOptions.Cancel
     Kontext "TabLinguistik"
     '/// Close dialog with 'Cancel'
     printlog " Close dialog with 'Cancel'"

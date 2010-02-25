@@ -178,10 +178,10 @@ testcase tiToolsHyphenation
     '/// open application ///'
     Call hNewDocument
     '/// Tools->Hyphenation ///'
-    ExtrasSilbentrennungDraw
+    ToolsLanguageHyphenationDraw
     WaitSlot (2000)    'sleep 2
     '/// Tools->Hyphenation ///'
-    ExtrasSilbentrennungDraw
+    ToolsLanguageHyphenationDraw
     '/// close application ///'
     Call hCloseDocument
 endcase

@@ -735,6 +735,7 @@ ToolsUpdateAllIndexes FN_UPDATE_TOX
 ToolsBibliographyDatabase SID_COMP_BIBLIOGRAPHY
 ToolsWordCount FN_WORDCOUNT_DIALOG
 TableTableProperties .uno:TableDialog
+ToolsLanguageHyphenation FN_HYPHENATE_OPT_DLG
 
 ' **** WriterWeb
 ToolsPageFormatting FN_REPAGINATE
@@ -767,6 +768,7 @@ ToolsGallery .uno:Gallery
 ToolsEyedropper SID_BMPMASK
 ToolsMediaPlayer .uno:AVMediaPlayer
 ToolsChineseTranslation .uno:ChineseConversion
+ToolsLanguageHyphenationDraw SID_HYPHENATION
 
 ' **** Math
 ToolsSymbolsCatalog SID_SYMBOLS_CATALOGUE
