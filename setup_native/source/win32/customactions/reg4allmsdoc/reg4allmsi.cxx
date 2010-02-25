@@ -338,7 +338,7 @@ extern "C" UINT __stdcall LookForRegisteredExtensions( MSIHANDLE handle )
     bool bRegisterNone = IsSetMsiProp( handle, "REGISTER_NO_MSO_TYPES" );
 
     if ( ( ERROR_SUCCESS == MsiGetFeatureState( handle, L"gm_p_Wrt", &current_state, &future_state ) ) &&
-         ( (future_state == INSTALLSTATE_LOCAL) || (future_state == INSTALLSTATE_UNKNOWN) ) )
+         ( (future_state == INSTALLSTATE_LOCAL) || ((current_state == INSTALLSTATE_LOCAL) && (future_state == INSTALLSTATE_UNKNOWN) ) ) )
         bWriterEnabled = true;
 
     OutputDebugStringFormat( "LookForRegisteredExtensions: Install state Writer is [%d], will be [%d]", current_state, future_state );
@@ -348,7 +348,7 @@ extern "C" UINT __stdcall LookForRegisteredExtensions( MSIHANDLE handle )
         OutputDebugStringFormat( "LookForRegisteredExtensions: Writer is NOT enabled" );
 
     if ( ( ERROR_SUCCESS == MsiGetFeatureState( handle, L"gm_p_Calc", &current_state, &future_state ) ) &&
-         ( (future_state == INSTALLSTATE_LOCAL) || (future_state == INSTALLSTATE_UNKNOWN) ) )
+         ( (future_state == INSTALLSTATE_LOCAL) || ((current_state == INSTALLSTATE_LOCAL) && (future_state == INSTALLSTATE_UNKNOWN) ) ) )
         bCalcEnabled = true;
 
     OutputDebugStringFormat( "LookForRegisteredExtensions: Install state Calc is [%d], will be [%d]", current_state, future_state );
@@ -358,7 +358,7 @@ extern "C" UINT __stdcall LookForRegisteredExtensions( MSIHANDLE handle )
         OutputDebugStringFormat( "LookForRegisteredExtensions: Calc is NOT enabled" );
 
     if ( ( ERROR_SUCCESS == MsiGetFeatureState( handle, L"gm_p_Impress", &current_state, &future_state ) ) &&
-         ( (future_state == INSTALLSTATE_LOCAL) || (future_state == INSTALLSTATE_UNKNOWN) ) )
+         ( (future_state == INSTALLSTATE_LOCAL) || ((current_state == INSTALLSTATE_LOCAL) && (future_state == INSTALLSTATE_UNKNOWN) ) ) )
         bImpressEnabled = true;
 
     OutputDebugStringFormat( "LookForRegisteredExtensions: Install state Impress is [%d], will be [%d]", current_state, future_state );
@@ -367,12 +367,9 @@ extern "C" UINT __stdcall LookForRegisteredExtensions( MSIHANDLE handle )
     else
         OutputDebugStringFormat( "LookForRegisteredExtensions: Impress is NOT enabled" );
 
-    if ( !bWriterEnabled || bRegisterNone )
-        MsiSetPropertyA( handle, "SELECT_WORD", "" );
-    if ( !bCalcEnabled || bRegisterNone )
-        MsiSetPropertyA( handle, "SELECT_EXCEL", "" );
-    if ( !bImpressEnabled || bRegisterNone )
-        MsiSetPropertyA( handle, "SELECT_POWERPOINT", "" );
+    MsiSetPropertyA( handle, "SELECT_WORD", "" );
+    MsiSetPropertyA( handle, "SELECT_EXCEL", "" );
+    MsiSetPropertyA( handle, "SELECT_POWERPOINT", "" );
 
     if ( ! bRegisterNone )
     {
