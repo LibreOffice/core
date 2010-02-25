@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: colorcfg.hxx,v $
- * $Revision: 1.5.108.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,9 +31,9 @@
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
 #include <com/sun/star/uno/Sequence.h>
-#include <svtools/brdcst.hxx>
-#include <svtools/lstner.hxx>
-#include <svtools/options.hxx>
+#include <svl/brdcst.hxx>
+#include <svl/lstner.hxx>
+#include <unotools/options.hxx>
 
 //-----------------------------------------------------------------------------
 namespace svtools{
@@ -108,7 +105,7 @@ struct ColorConfigValue
 
  ---------------------------------------------------------------------------*/
 class SVT_DLLPUBLIC ColorConfig:
-    public svt::detail::Options, public SfxBroadcaster, public SfxListener
+    public utl::detail::Options
 {
     friend class ColorConfig_Impl;
 private:
@@ -117,12 +114,9 @@ public:
     ColorConfig();
     virtual ~ColorConfig();
 
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-
     // get the configured value - if bSmart is set the default color setting is provided
     // instead of the automatic color
     ColorConfigValue        GetColorValue(ColorConfigEntry eEntry, sal_Bool bSmart = sal_True)const;
-
     static Color            GetDefaultColor(ColorConfigEntry eEntry);
 };
 /* -----------------------------22.03.2002 15:31------------------------------

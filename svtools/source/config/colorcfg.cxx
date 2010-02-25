@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: colorcfg.cxx,v $
- * $Revision: 1.20.82.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,11 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#ifdef  SVL_DLLIMPLEMENTATION
-#undef  SVL_DLLIMPLEMENTATION
-#endif
-#define SVT_DLLIMPLEMENTATION
-
 #include <svtools/colorcfg.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -46,8 +38,8 @@
 #include <unotools/configitem.hxx>
 #include <unotools/configpathes.hxx>
 #include <com/sun/star/uno/Sequence.h>
-#include <svtools/poolitem.hxx> //Any2Bool
-#include <svtools/smplhint.hxx>
+#include <svl/poolitem.hxx> //Any2Bool
+#include <svl/smplhint.hxx>
 #include <vos/mutex.hxx>
 
 #include <itemholder2.hxx>
@@ -81,15 +73,12 @@ ColorConfig_Impl*    ColorConfig::m_pImpl = NULL;
 
 /* -----------------------------16.01.01 15:36--------------------------------
  ---------------------------------------------------------------------------*/
-class ColorConfig_Impl : public utl::ConfigItem, public SfxBroadcaster
+class ColorConfig_Impl : public utl::ConfigItem
 {
     ColorConfigValue    m_aConfigValues[ColorConfigEntryCount];
     sal_Bool            m_bEditMode;
     rtl::OUString       m_sIsVisible;
     rtl::OUString       m_sLoadedScheme;
-    sal_Bool            m_bIsBroadcastEnabled;
-    static sal_Bool     m_bLockBroadcast;
-    static sal_Bool     m_bBroadcastWhenUnlocked;
 
     uno::Sequence< ::rtl::OUString> GetPropertyNames(const rtl::OUString& rScheme);
 public:
@@ -117,13 +106,6 @@ public:
     void                            SetModified(){ConfigItem::SetModified();}
     void                            ClearModified(){ConfigItem::ClearModified();}
     void                            SettingsChanged();
-
-    static void                     DisableBroadcast();
-    static void                     EnableBroadcast();
-    static sal_Bool                 IsEnableBroadcast();
-
-    static void                     LockBroadcast();
-    static void                     UnlockBroadcast();
 
     // #100822#
     DECL_LINK( DataChangedEventListener, VclWindowEvent* );
@@ -219,13 +201,10 @@ uno::Sequence< OUString> ColorConfig_Impl::GetPropertyNames(const rtl::OUString&
 /* -----------------------------22.03.2002 14:37------------------------------
 
  ---------------------------------------------------------------------------*/
-sal_Bool ColorConfig_Impl::m_bLockBroadcast = sal_False;
-sal_Bool ColorConfig_Impl::m_bBroadcastWhenUnlocked = sal_False;
 ColorConfig_Impl::ColorConfig_Impl(sal_Bool bEditMode) :
     ConfigItem(C2U("Office.UI/ColorScheme")),
     m_bEditMode(bEditMode),
-    m_sIsVisible(C2U("/IsVisible")),
-    m_bIsBroadcastEnabled(sal_True)
+    m_sIsVisible(C2U("/IsVisible"))
 {
     if(!m_bEditMode)
     {
@@ -248,23 +227,6 @@ ColorConfig_Impl::~ColorConfig_Impl()
 {
     // #100822#
     ::Application::RemoveEventListener( LINK(this, ColorConfig_Impl, DataChangedEventListener) );
-}
-// -----------------------------------------------------------------------------
-void ColorConfig_Impl::DisableBroadcast()
-{
-    if ( ColorConfig::m_pImpl )
-        ColorConfig::m_pImpl->m_bIsBroadcastEnabled = sal_False;
-}
-// -----------------------------------------------------------------------------
-void ColorConfig_Impl::EnableBroadcast()
-{
-    if ( ColorConfig::m_pImpl )
-        ColorConfig::m_pImpl->m_bIsBroadcastEnabled = sal_True;
-}
-// -----------------------------------------------------------------------------
-sal_Bool ColorConfig_Impl::IsEnableBroadcast()
-{
-    return ColorConfig::m_pImpl ? ColorConfig::m_pImpl->m_bIsBroadcastEnabled : sal_False;
 }
 /* -----------------------------22.03.2002 14:38------------------------------
 
@@ -308,16 +270,7 @@ void    ColorConfig_Impl::Notify( const uno::Sequence<OUString>& )
 {
     //loading via notification always uses the default setting
     Load(::rtl::OUString());
-
-    vos::OGuard aVclGuard( Application::GetSolarMutex() );
-
-    if(m_bLockBroadcast)
-    {
-        m_bBroadcastWhenUnlocked = sal_True;
-        ImplUpdateApplicationSettings();
-    }
-    else
-        Broadcast(SfxSimpleHint(SFX_HINT_COLORS_CHANGED));
+    NotifyListeners(0);
 }
 /* -----------------------------22.03.2002 14:38------------------------------
 
@@ -414,34 +367,7 @@ void ColorConfig_Impl::SettingsChanged()
 
     ImplUpdateApplicationSettings();
 
-    Broadcast( SfxSimpleHint( SFX_HINT_COLORS_CHANGED ) );
-}
-/* -----------------11.12.2002 09:21-----------------
- *
- * --------------------------------------------------*/
-void ColorConfig_Impl::LockBroadcast()
-{
-    m_bLockBroadcast = sal_True;
-}
-/* -----------------11.12.2002 09:21-----------------
- *
- * --------------------------------------------------*/
-void ColorConfig_Impl::UnlockBroadcast()
-{
-    if ( m_bBroadcastWhenUnlocked )
-    {
-        m_bBroadcastWhenUnlocked = ColorConfig::m_pImpl != NULL;
-        if ( m_bBroadcastWhenUnlocked )
-        {
-            ColorConfig::m_pImpl->ImplUpdateApplicationSettings();
-            if ( ColorConfig::m_pImpl->IsEnableBroadcast() )
-            {
-                m_bBroadcastWhenUnlocked = sal_False;
-                ColorConfig::m_pImpl->Broadcast(SfxSimpleHint(SFX_HINT_COLORS_CHANGED));
-            }
-        }
-    }
-    m_bLockBroadcast = sal_False;
+    NotifyListeners(0);
 }
 /* -----------------------------2002/08/16 12:07 -----------------------------
    #100822#
@@ -500,7 +426,7 @@ ColorConfig::ColorConfig()
         ItemHolder2::holdConfigItem(E_COLORCFG);
     }
     ++nColorRefCount_Impl;
-    StartListening( *m_pImpl);
+    m_pImpl->AddListener(this);
 }
 /* -----------------------------16.01.01 15:36--------------------------------
 
@@ -508,7 +434,7 @@ ColorConfig::ColorConfig()
 ColorConfig::~ColorConfig()
 {
     ::osl::MutexGuard aGuard( ColorMutex_Impl::get() );
-    EndListening( *m_pImpl);
+    m_pImpl->RemoveListener(this);
     if(!--nColorRefCount_Impl)
     {
         delete m_pImpl;
@@ -636,15 +562,6 @@ ColorConfigValue ColorConfig::GetColorValue(ColorConfigEntry eEntry, sal_Bool bS
 
     return aRet;
 }
-/* -----------------------------12.04.2002 09:25------------------------------
-
- ---------------------------------------------------------------------------*/
-void ColorConfig::Notify( SfxBroadcaster&, const SfxHint& rHint )
-{
-    vos::OGuard aVclGuard( Application::GetSolarMutex() );
-
-    Broadcast( rHint );
-}
 /* -----------------------------25.03.2002 12:01------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -652,14 +569,14 @@ EditableColorConfig::EditableColorConfig() :
     m_pImpl(new ColorConfig_Impl),
     m_bModified(sal_False)
 {
-    m_pImpl->LockBroadcast();
+    m_pImpl->BlockBroadcasts(TRUE);
 }
 /*-- 25.03.2002 12:03:08---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 EditableColorConfig::~EditableColorConfig()
 {
-    m_pImpl->UnlockBroadcast();
+    m_pImpl->BlockBroadcasts(FALSE);
     if(m_bModified)
         m_pImpl->SetModified();
     if(m_pImpl->IsModified())
@@ -757,12 +674,12 @@ void EditableColorConfig::Commit()
 // -----------------------------------------------------------------------------
 void EditableColorConfig::DisableBroadcast()
 {
-    m_pImpl->DisableBroadcast();
+    m_pImpl->BlockBroadcasts(TRUE);
 }
 // -----------------------------------------------------------------------------
 void EditableColorConfig::EnableBroadcast()
 {
-    m_pImpl->EnableBroadcast();
+    m_pImpl->BlockBroadcasts(FALSE);
 }
 // -----------------------------------------------------------------------------
 

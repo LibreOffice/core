@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: calendarwrapper.cxx,v $
- * $Revision: 1.15.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,7 +68,7 @@ CalendarWrapper::CalendarWrapper(
         }
         catch ( Exception& e )
         {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             ByteString aMsg( "CalendarWrapper ctor: Exception caught\n" );
             aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
             DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -96,7 +93,7 @@ CalendarWrapper::CalendarWrapper(
         }
         catch ( Exception& e )
         {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             ByteString aMsg( "getComponentInstance: Exception caught\n" );
             aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
             DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -122,7 +119,7 @@ void CalendarWrapper::loadDefaultCalendar( const ::com::sun::star::lang::Locale&
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "loadDefaultCalendar: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -142,7 +139,7 @@ void CalendarWrapper::loadCalendar( const ::rtl::OUString& rUniqueID, const ::co
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "loadCalendar: Exception caught\nrequested: " );
         aMsg += ByteString( String( rUniqueID ), RTL_TEXTENCODING_UTF8 );
         aMsg += "   Locale: ";
@@ -167,7 +164,7 @@ void CalendarWrapper::loadCalendar( const ::rtl::OUString& rUniqueID, const ::co
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "getLoadedCalendar: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -188,7 +185,7 @@ void CalendarWrapper::loadCalendar( const ::rtl::OUString& rUniqueID, const ::co
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "getAllCalendars: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -209,7 +206,7 @@ void CalendarWrapper::loadCalendar( const ::rtl::OUString& rUniqueID, const ::co
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "getUniqueID: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -230,7 +227,7 @@ void CalendarWrapper::setDateTime( double nTimeInDays )
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "setDateTime: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -250,7 +247,7 @@ double CalendarWrapper::getDateTime() const
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "getDateTime: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -280,7 +277,7 @@ sal_Int32 CalendarWrapper::getCombinedOffsetInMillis(
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "setLocalDateTime: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -352,7 +349,7 @@ void CalendarWrapper::setLocalDateTime( double nTimeInDays )
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "setLocalDateTime: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -378,7 +375,7 @@ double CalendarWrapper::getLocalDateTime() const
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "getLocalDateTime: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -399,7 +396,7 @@ void CalendarWrapper::setValue( sal_Int16 nFieldIndex, sal_Int16 nValue )
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "setValue: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -419,7 +416,7 @@ sal_Bool CalendarWrapper::isValid() const
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "isValid: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -440,7 +437,7 @@ sal_Int16 CalendarWrapper::getValue( sal_Int16 nFieldIndex ) const
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "getValue: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -461,7 +458,7 @@ void CalendarWrapper::addValue( sal_Int16 nFieldIndex, sal_Int32 nAmount )
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "addValue: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -481,7 +478,7 @@ sal_Int16 CalendarWrapper::getFirstDayOfWeek() const
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "getFirstDayOfWeek: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -502,7 +499,7 @@ void CalendarWrapper::setFirstDayOfWeek( sal_Int16 nDay )
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "setFirstDayOfWeek: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -522,7 +519,7 @@ void CalendarWrapper::setMinimumNumberOfDaysForFirstWeek( sal_Int16 nDays )
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "setMinimumNumberOfDaysForFirstWeek: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -542,7 +539,7 @@ sal_Int16 CalendarWrapper::getMinimumNumberOfDaysForFirstWeek() const
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "getMinimumNumberOfDaysForFirstWeek: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -563,7 +560,7 @@ sal_Int16 CalendarWrapper::getNumberOfMonthsInYear() const
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "getNumberOfMonthsInYear: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -584,7 +581,7 @@ sal_Int16 CalendarWrapper::getNumberOfDaysInWeek() const
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "getNumberOfDaysInWeek: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -605,7 +602,7 @@ sal_Int16 CalendarWrapper::getNumberOfDaysInWeek() const
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "getMonths: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -626,7 +623,7 @@ sal_Int16 CalendarWrapper::getNumberOfDaysInWeek() const
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "getDays: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -647,7 +644,7 @@ String CalendarWrapper::getDisplayName( sal_Int16 nCalendarDisplayIndex, sal_Int
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "getDisplayName: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -670,7 +667,7 @@ String CalendarWrapper::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_In
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "getDisplayString: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );

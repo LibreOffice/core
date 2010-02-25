@@ -2,11 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: embedhlp.cxx,v $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +30,7 @@
 
 #include <svtools/embedhlp.hxx>
 #include <svtools/filter.hxx>
-#include <svtools/svtools.hrc>
+#include <svl/svtools.hrc>
 #include <svtools/svtdata.hxx>
 
 #include <comphelper/embeddedobjectcontainer.hxx>
@@ -57,6 +55,7 @@
 #include <cppuhelper/implbase4.hxx>
 #include "vcl/svapp.hxx"
 #include <rtl/logfile.hxx>
+#include <vos/mutex.hxx>
 
 using namespace com::sun::star;
 

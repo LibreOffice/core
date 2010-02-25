@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salprn.h,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -83,7 +80,6 @@ public:
     virtual String                  GetPaperBinName( const ImplJobSetup* pSetupData, ULONG nPaperBin );
     virtual void                    InitPaperFormats( const ImplJobSetup* pSetupData );
     virtual int                 GetLandscapeAngle( const ImplJobSetup* pSetupData );
-    virtual DuplexMode          GetDuplexMode( const ImplJobSetup* pSetupData );
 };
 
 // ------------------
@@ -136,7 +132,9 @@ public:
     virtual BOOL                    StartJob( const XubString* pFileName,
                                               const XubString& rJobName,
                                               const XubString& rAppName,
-                                              ULONG nCopies, BOOL bCollate,
+                                              ULONG nCopies,
+                                              bool bCollate,
+                                              bool bDirect,
                                               ImplJobSetup* pSetupData );
     virtual BOOL                    EndJob();
     virtual BOOL                    AbortJob();

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: X11_selection.hxx,v $
- * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +29,7 @@
 #define _DTRANS_X11_SELECTION_HXX_
 
 #include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase4.hxx>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
@@ -39,6 +37,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
 #include <osl/thread.h>
 
 #ifndef _OSL_CONDITION_HXX_
@@ -48,7 +47,9 @@
 #include <hash_map>
 #include <list>
 
+#include "tools/prex.h"
 #include <X11/Xlib.h>
+#include "tools/postx.h"
 
 #define XDND_IMPLEMENTATION_NAME "com.sun.star.datatransfer.dnd.XdndSupport"
 #define XDND_DROPTARGET_IMPLEMENTATION_NAME "com.sun.star.datatransfer.dnd.XdndDropTarget"
@@ -84,7 +85,7 @@ namespace x11 {
         ::osl::Mutex                m_aMutex;
         bool                        m_bActive;
         sal_Int8                    m_nDefaultActions;
-        Window                      m_aTargetWindow;
+        XLIB_Window                 m_aTargetWindow;
         class SelectionManager*     m_pSelectionManager;
         Reference< ::com::sun::star::datatransfer::dnd::XDragSource >
                                     m_xSelectionManager;
@@ -155,10 +156,11 @@ namespace x11 {
 
 
     class SelectionManager :
-        public ::cppu::WeakImplHelper3<
+        public ::cppu::WeakImplHelper4<
             ::com::sun::star::datatransfer::dnd::XDragSource,
             ::com::sun::star::lang::XInitialization,
-            ::com::sun::star::awt::XEventHandler
+            ::com::sun::star::awt::XEventHandler,
+            ::com::sun::star::frame::XTerminateListener
         >,
         public SelectionAdaptor
     {
@@ -175,7 +177,7 @@ namespace x11 {
         {
             Sequence< sal_Int8 >            m_aData;
             int                             m_nBufferPos;
-            Window                          m_aRequestor;
+            XLIB_Window                         m_aRequestor;
             Atom                            m_aProperty;
             Atom                            m_aTarget;
             int                             m_nFormat;
@@ -209,11 +211,11 @@ namespace x11 {
             Atom                        m_aUTF8Type;
             bool                        m_bHaveCompound;
             bool                        m_bOwner;
-            Window                      m_aLastOwner;
+            XLIB_Window                 m_aLastOwner;
             PixmapHolder*               m_pPixmap;
-            // m_nOrigTimestamp contains the timestamp at which the seclection
-            // was acquired; needed for TIMESTAMP target
-            Time                        m_nOrigTimestamp;
+            // m_nOrigXLIB_Timestamp contains the XLIB_Timestamp at which the seclection
+            // was acquired; needed for XLIB_TimeSTAMP target
+            XLIB_Time                        m_nOrigTimestamp;
 
             Selection() : m_eState( Inactive ),
                           m_pAdaptor( NULL ),
@@ -234,7 +236,7 @@ namespace x11 {
         struct DropTargetEntry
         {
             DropTarget*     m_pTarget;
-            Window          m_aRootWindow;
+            XLIB_Window     m_aRootWindow;
 
             DropTargetEntry() : m_pTarget( NULL ), m_aRootWindow( None ) {}
             DropTargetEntry( DropTarget* pTarget ) :
@@ -257,13 +259,13 @@ namespace x11 {
         oslThread                   m_aThread;
         oslThread                   m_aDragExecuteThread;
         ::osl::Condition            m_aDragRunning;
-        Window                      m_aWindow;
+        XLIB_Window                 m_aWindow;
         Reference< ::com::sun::star::awt::XDisplayConnection >
                                     m_xDisplayConnection;
         Reference< com::sun::star::script::XInvocation >
                                     m_xBitmapConverter;
         sal_Int32                   m_nSelectionTimeout;
-        Time                        m_nSelectionTimestamp;
+        XLIB_Time                   m_nSelectionTimestamp;
 
 
         // members used for Xdnd
@@ -272,21 +274,21 @@ namespace x11 {
 
         // contains the XdndEnterEvent of a drop action running
         // with one of our targets. The data.l[0] member
-        // (conatining the drag source window) is set
+        // (conatining the drag source XLIB_Window) is set
         // to None while that is not the case
         XClientMessageEvent         m_aDropEnterEvent;
         // set to false on XdndEnter
         // set to true on first XdndPosition or XdndLeave
         bool                        m_bDropEnterSent;
-        Window                      m_aCurrentDropWindow;
-        // time code of XdndDrop
-        Time                        m_nDropTime;
+        XLIB_Window                 m_aCurrentDropWindow;
+        // XLIB_Time code of XdndDrop
+        XLIB_Time                   m_nDropTime;
         sal_Int8                    m_nLastDropAction;
         // XTransferable for Xdnd with foreign drag source
         Reference< ::com::sun::star::datatransfer::XTransferable >
                                     m_xDropTransferable;
         int                         m_nLastX, m_nLastY;
-        Time                        m_nDropTimestamp;
+        XLIB_Time                   m_nDropTimestamp;
         // set to true when calling drop()
         // if another XdndEnter is received this shows that
         // someone forgot to call dropComplete - we should reset
@@ -296,10 +298,10 @@ namespace x11 {
         // drag only
 
         // None if no Dnd action is running with us as source
-        Window                      m_aDropWindow;
-        // either m_aDropWindow or its XdndProxy
-        Window                      m_aDropProxy;
-        Window                      m_aDragSourceWindow;
+        XLIB_Window                 m_aDropWindow;
+        // either m_aDropXLIB_Window or its XdndProxy
+        XLIB_Window                 m_aDropProxy;
+        XLIB_Window                 m_aDragSourceWindow;
         // XTransferable for Xdnd when we are drag source
         Reference< ::com::sun::star::datatransfer::XTransferable >
                                     m_xDragSourceTransferable;
@@ -321,20 +323,20 @@ namespace x11 {
         bool                        m_bDropSent;
         time_t                      m_nDropTimeout;
         bool                        m_bWaitingForPrimaryConversion;
-        Time                        m_nDragTimestamp;
+        XLIB_Time                   m_nDragTimestamp;
 
         // drag cursors
-        Cursor                      m_aMoveCursor;
-        Cursor                      m_aCopyCursor;
-        Cursor                      m_aLinkCursor;
-        Cursor                      m_aNoneCursor;
-        Cursor                      m_aCurrentCursor;
+        XLIB_Cursor                 m_aMoveCursor;
+        XLIB_Cursor                 m_aCopyCursor;
+        XLIB_Cursor                 m_aLinkCursor;
+        XLIB_Cursor                 m_aNoneCursor;
+        XLIB_Cursor                 m_aCurrentCursor;
 
 
         // drag and drop
 
         int                         m_nCurrentProtocolVersion;
-        ::std::hash_map< Window, DropTargetEntry >
+        ::std::hash_map< XLIB_Window, DropTargetEntry >
                                     m_aDropTargets;
 
 
@@ -374,7 +376,7 @@ namespace x11 {
         ::std::hash_map< Atom, Selection* >
                                     m_aSelections;
         // IncrementalTransfers in progress
-        std::hash_map< Window, std::hash_map< Atom, IncrementalTransfer > >
+        std::hash_map< XLIB_Window, std::hash_map< Atom, IncrementalTransfer > >
                                     m_aIncrementals;
 
         // do not use X11 multithreading capabilities
@@ -398,12 +400,12 @@ namespace x11 {
 
         // dnd helpers
         void sendDragStatus( Atom nDropAction );
-        void sendDropPosition( bool bForce, Time eventTime );
+        void sendDropPosition( bool bForce, XLIB_Time eventXLIB_Time );
         bool updateDragAction( int modifierState );
-        int getXdndVersion( Window aWindow, Window& rProxy );
-        Cursor createCursor( const char* pPointerData, const char* pMaskData, int width, int height, int hotX, int hotY );
-        // coordinates on root window
-        void updateDragWindow( int nX, int nY, Window aRoot );
+        int getXdndVersion( XLIB_Window aXLIB_Window, XLIB_Window& rProxy );
+        XLIB_Cursor createCursor( const char* pPointerData, const char* pMaskData, int width, int height, int hotX, int hotY );
+        // coordinates on root XLIB_Window
+        void updateDragWindow( int nX, int nY, XLIB_Window aRoot );
 
         bool getPasteData( Atom selection, Atom type, Sequence< sal_Int8 >& rData );
         // returns true if conversion was successful
@@ -412,7 +414,7 @@ namespace x11 {
                           Atom nSelection,
                           int & rFormat,
                           Sequence< sal_Int8 >& rData );
-        bool sendData( SelectionAdaptor* pAdaptor, Window requestor, Atom target, Atom property, Atom selection );
+        bool sendData( SelectionAdaptor* pAdaptor, XLIB_Window requestor, Atom target, Atom property, Atom selection );
 
         // thread dispatch loop
         public:
@@ -438,7 +440,7 @@ namespace x11 {
         static SelectionManager& get( const ::rtl::OUString& rDisplayName = ::rtl::OUString() );
 
         Display * getDisplay() { return m_pDisplay; };
-        Window getWindow() { return m_aWindow; };
+        XLIB_Window getWindow() { return m_aWindow; };
 
 
         void registerHandler( Atom selection, SelectionAdaptor& rAdaptor );
@@ -464,19 +466,21 @@ namespace x11 {
         bool getPasteData( Atom selection, const ::rtl::OUString& rType, Sequence< sal_Int8 >& rData );
 
         // for XDropTarget to register/deregister itself
-        void registerDropTarget( Window aWindow, DropTarget* pTarget );
-        void deregisterDropTarget( Window aWindow );
+        void registerDropTarget( XLIB_Window aXLIB_Window, DropTarget* pTarget );
+        void deregisterDropTarget( XLIB_Window aXLIB_Window );
 
         // for XDropTarget{Drag|Drop}Context
-        void accept( sal_Int8 dragOperation, Window aDropWindow, Time aTimestamp );
-        void reject( Window aDropWindow, Time aTimestamp );
-        void dropComplete( sal_Bool success, Window aDropWindow, Time aTimestamp );
+        void accept( sal_Int8 dragOperation, XLIB_Window aDropXLIB_Window, XLIB_Time aXLIB_Timestamp );
+        void reject( XLIB_Window aDropXLIB_Window, XLIB_Time aXLIB_Timestamp );
+        void dropComplete( sal_Bool success, XLIB_Window aDropXLIB_Window, XLIB_Time aXLIB_Timestamp );
 
         // for XDragSourceContext
         sal_Int32 getCurrentCursor();
-        void setCursor( sal_Int32 cursor, Window aDropWindow, Time aTimestamp );
-        void setImage( sal_Int32 image, Window aDropWindow, Time aTimestamp );
+        void setCursor( sal_Int32 cursor, XLIB_Window aDropXLIB_Window, XLIB_Time aXLIB_Timestamp );
+        void setImage( sal_Int32 image, XLIB_Window aDropXLIB_Window, XLIB_Time aXLIB_Timestamp );
         void transferablesFlavorsChanged();
+
+        void shutdown() throw();
 
         // XInitialization
         virtual void        SAL_CALL initialize( const Sequence< Any >& arguments ) throw( ::com::sun::star::uno::Exception );
@@ -499,6 +503,15 @@ namespace x11 {
         virtual void clearTransferable() throw();
         virtual void fireContentsChanged() throw();
         virtual Reference< XInterface > getReference() throw();
+
+        // XEventListener
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw( ::com::sun::star::uno::RuntimeException );
+
+        // XTerminateListener
+        virtual void SAL_CALL queryTermination( const ::com::sun::star::lang::EventObject& aEvent )
+                throw( ::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException );
+        virtual void SAL_CALL notifyTermination( const ::com::sun::star::lang::EventObject& aEvent )
+                throw( ::com::sun::star::uno::RuntimeException );
     };
 
 // ------------------------------------------------------------------------

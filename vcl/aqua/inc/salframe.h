@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salframe.h,v $
- * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -121,6 +118,7 @@ public:
     virtual BOOL                PostEvent( void* pData );
     virtual void                SetTitle( const XubString& rTitle );
     virtual void                SetIcon( USHORT nIcon );
+    virtual void                SetRepresentedURL( const rtl::OUString& );
     virtual void                SetMenu( SalMenu* pSalMenu );
     virtual void                DrawMenuBar();
     virtual void                Show( BOOL bVisible, BOOL bNoActivate = FALSE );
@@ -140,7 +138,7 @@ public:
     virtual void                SetPointer( PointerStyle ePointerStyle );
     virtual void                CaptureMouse( BOOL bMouse );
     virtual void                SetPointerPos( long nX, long nY );
-    virtual void                Flush( void);
+    virtual void                Flush( void );
     virtual void                Flush( const Rectangle& );
     virtual void                Sync();
     virtual void                SetInputContext( SalInputContext* pContext );

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pdfwriter.hxx,v $
- * $Revision: 1.8.134.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -547,6 +544,7 @@ The following structure describes the permissions used in PDF security
          */
         PDFWriter::ExportDataFormat     SubmitFormat;
         bool                            AllowDuplicateFieldNames;
+        bool                            FieldsUseSystemFonts;
         /* the following data members are used to customize the PDF viewer
            preferences
          */
@@ -592,6 +590,7 @@ The following structure describes the permissions used in PDF security
                 EmbedStandardFonts( false ),
                 SubmitFormat( PDFWriter::FDF ),
                 AllowDuplicateFieldNames( false ),
+                FieldsUseSystemFonts( true ),
                 PDFDocumentMode( PDFWriter::ModeDefault ),
                 PDFDocumentAction( PDFWriter::ActionDefault ),
                 Zoom( 100 ),

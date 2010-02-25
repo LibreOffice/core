@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: b2dpolygonclipper.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +37,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <basegfx/tools/rectcliptools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -361,11 +359,10 @@ namespace basegfx
             else if(rCandidate.count())
             {
                 const B2DVector aEdge(rPointB - rPointA);
-                B2DHomMatrix aMatrixTransform;
                 B2DPolygon aCandidate(rCandidate);
 
                 // translate and rotate polygon so that given edge is on x axis
-                aMatrixTransform.translate(-rPointA.getX(), -rPointA.getY());
+                B2DHomMatrix aMatrixTransform(basegfx::tools::createTranslateB2DHomMatrix(-rPointA.getX(), -rPointA.getY()));
                 aMatrixTransform.rotate(-atan2(aEdge.getY(), aEdge.getX()));
                 aCandidate.transform(aMatrixTransform);
 
@@ -395,11 +392,10 @@ namespace basegfx
             else if(rCandidate.count())
             {
                 const B2DVector aEdge(rPointB - rPointA);
-                B2DHomMatrix aMatrixTransform;
                 B2DPolyPolygon aCandidate(rCandidate);
 
                 // translate and rotate polygon so that given edge is on x axis
-                aMatrixTransform.translate(-rPointA.getX(), -rPointA.getY());
+                B2DHomMatrix aMatrixTransform(basegfx::tools::createTranslateB2DHomMatrix(-rPointA.getX(), -rPointA.getY()));
                 aMatrixTransform.rotate(-atan2(aEdge.getY(), aEdge.getX()));
                 aCandidate.transform(aMatrixTransform);
 

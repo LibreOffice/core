@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: canvastools.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,9 +29,9 @@
 #include "precompiled_basegfx.hxx"
 
 #include <basegfx/tools/gradienttools.hxx>
-
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 namespace basegfx
 {
@@ -79,9 +76,8 @@ namespace basegfx
             B2DPoint aCenter(0.5, 0.5);
             aCenter *= o_rGradientInfo.maTextureTransform;
 
-            o_rGradientInfo.maTextureTransform.translate(-aCenter.getX(), -aCenter.getY());
-            o_rGradientInfo.maTextureTransform.rotate(fAngle);
-            o_rGradientInfo.maTextureTransform.translate(aCenter.getX(), aCenter.getY());
+            o_rGradientInfo.maTextureTransform = basegfx::tools::createRotateAroundPoint(aCenter, fAngle)
+                * o_rGradientInfo.maTextureTransform;
         }
 
         // add object translate
@@ -158,9 +154,8 @@ namespace basegfx
                 B2DPoint aCenter(0.5, 0.5);
                 aCenter *= o_rGradientInfo.maTextureTransform;
 
-                o_rGradientInfo.maTextureTransform.translate(-aCenter.getX(), -aCenter.getY());
-                o_rGradientInfo.maTextureTransform.rotate(fAngle);
-                o_rGradientInfo.maTextureTransform.translate(aCenter.getX(), aCenter.getY());
+                o_rGradientInfo.maTextureTransform = basegfx::tools::createRotateAroundPoint(aCenter, fAngle)
+                    * o_rGradientInfo.maTextureTransform;
             }
         }
 
@@ -232,9 +227,8 @@ namespace basegfx
             B2DPoint aCenter(0.5, 0.5);
             aCenter *= o_rGradientInfo.maTextureTransform;
 
-            o_rGradientInfo.maTextureTransform.translate(-aCenter.getX(), -aCenter.getY());
-            o_rGradientInfo.maTextureTransform.rotate(fAngle);
-            o_rGradientInfo.maTextureTransform.translate(aCenter.getX(), aCenter.getY());
+            o_rGradientInfo.maTextureTransform = basegfx::tools::createRotateAroundPoint(aCenter, fAngle)
+                * o_rGradientInfo.maTextureTransform;
         }
 
         // add defined offsets after rotation

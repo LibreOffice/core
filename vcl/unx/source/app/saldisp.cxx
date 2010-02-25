@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: saldisp.cxx,v $
- * $Revision: 1.101.30.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,16 +35,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#if defined(IRIX)
-#include <ctime>
-#endif
 #include <sys/time.h>
 #include <pthread.h>
 #include <unistd.h>
 #include <ctype.h>
 #include <string.h>
 
-#if defined(SOLARIS) || defined(IRIX)
+#if defined(SOLARIS)
 #include <sal/alloca.h>
 #include <osl/module.h>
 #endif
@@ -898,7 +892,7 @@ void SalDisplay::Init()
         sscanf( pProperties, "%li", &nProperties_ );
     else
     {
-#if defined DBG_UTIL || defined SUN || defined LINUX || defined FREEBSD || defined IRIX
+#if defined DBG_UTIL || defined SUN || defined LINUX || defined FREEBSD
         nProperties_ |= PROPERTY_FEATURE_Maximize;
 #endif
         // Server Bugs & Properties
@@ -2307,11 +2301,7 @@ long SalX11Display::Dispatch( XEvent *pEvent )
             return 0;
 
     SalInstance* pInstance = GetSalData()->m_pInstance;
-    if( pInstance->GetEventCallback() )
-    {
-        YieldMutexReleaser aReleaser;
-        pInstance->CallEventCallback( pEvent, sizeof( XEvent ) );
-    }
+    pInstance->CallEventCallback( pEvent, sizeof( XEvent ) );
 
     switch( pEvent->type )
     {

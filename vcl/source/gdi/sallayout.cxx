@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sallayout.cxx,v $
- * $Revision: 1.94.90.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +41,7 @@
 #include <vcl/sallayout.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <i18npool/lang.h>
 
 #ifndef _TL_DEBUG_HXX
@@ -893,10 +891,8 @@ bool SalLayout::GetOutline( SalGraphics& rSalGraphics,
         {
             if( aPos.X() || aPos.Y() )
             {
-                ::basegfx::B2DHomMatrix aMatrix;
-        aMatrix.translate( aPos.X(), aPos.Y() );
-        aGlyphOutline.transform( aMatrix );
-        }
+                aGlyphOutline.transform(basegfx::tools::createTranslateB2DHomMatrix(aPos.X(), aPos.Y()));
+            }
 
             // insert outline at correct position
             rVector.push_back( aGlyphOutline );

@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -65,6 +65,7 @@
 #include "basegfx/polygon/b2dpolygon.hxx"
 #include "basegfx/polygon/b2dpolypolygon.hxx"
 #include "basegfx/matrix/b2dhommatrix.hxx"
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include "sft.hxx"
 
@@ -2480,9 +2481,8 @@ BOOL WinSalGraphics::GetGlyphOutline( long nIndex,
     // rescaling needed for the PolyPolygon conversion
     if( rB2DPolyPoly.count() )
     {
-        ::basegfx::B2DHomMatrix aMatrix;
-        aMatrix.scale( mfFontScale/256, mfFontScale/256 );
-        rB2DPolyPoly.transform( aMatrix );
+        const double fFactor(mfFontScale/256);
+        rB2DPolyPoly.transform(basegfx::tools::createScaleB2DHomMatrix(fFactor, fFactor));
     }
 
     return bRet;

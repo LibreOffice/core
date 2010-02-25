@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: accmgr.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -82,6 +79,23 @@ void ImplAccelManager::RemoveAccel( Accelerator* pAccel )
     // Haben wir ueberhaupt eine Liste ?
     if ( !mpAccelList )
         return;
+
+    //e.g. #i90599#. Someone starts typing a sequence in a dialog, but doesn't
+    //end it, and then closes the dialog, deleting the accelerators. So if
+    //we're removing an accelerator that a sub-accelerator which is in the
+    //sequence list, throw away the entire sequence
+    if ( mpSequenceList )
+    {
+        for (USHORT i = 0; i < pAccel->GetItemCount(); ++i)
+        {
+            Accelerator* pSubAccel = pAccel->GetAccel(pAccel->GetItemId(i));
+            if ( mpSequenceList->GetPos( pSubAccel ) != LIST_ENTRY_NOTFOUND )
+            {
+                EndSequence( true );
+                break;
+            }
+        }
+    }
 
     // Raus damit
     mpAccelList->Remove( pAccel );

@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.33.132.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -57,6 +53,9 @@ EXCEPTIONSFILES=	$(SLO)$/salmisc.obj 	\
                     $(SLO)$/gfxlink.obj		\
                     $(SLO)$/print.obj		\
                     $(SLO)$/print2.obj		\
+                    $(SLO)$/print3.obj		\
+                    $(SLO)$/oldprintadaptor.obj		\
+                    $(SLO)$/configsettings.obj 	\
                     $(SLO)$/sallayout.obj		\
                     $(SLO)$/image.obj		\
                     $(SLO)$/impimage.obj		\
@@ -64,19 +63,17 @@ EXCEPTIONSFILES=	$(SLO)$/salmisc.obj 	\
                     $(SLO)$/metric.obj		\
                     $(SLO)$/pdfwriter_impl.obj	\
                     $(SLO)$/pdffontcache.obj\
-                    $(SLO)$/fontcfg.obj		\
                     $(SLO)$/bmpconv.obj		\
                     $(SLO)$/pdfextoutdevdata.obj	\
-                    $(SLO)$/fontcvt.obj		\
                     $(SLO)$/jobset.obj		\
                     $(SLO)$/impimagetree.obj		\
                     $(SLO)$/pngread.obj		\
                     $(SLO)$/pngwrite.obj    \
                     $(SLO)$/virdev.obj \
-                    $(SLO)$/impprn.obj \
                     $(SLO)$/gdimtf.obj		\
                     $(SLO)$/graphictools.obj \
-                    $(SLO)$/textlayout.obj
+                    $(SLO)$/textlayout.obj   \
+                    $(SLO)$/lineinfo.obj
 
 SLOFILES=	$(EXCEPTIONSFILES)      \
             $(SLO)$/animate.obj 	\
@@ -101,8 +98,6 @@ SLOFILES=	$(EXCEPTIONSFILES)      \
             $(SLO)$/impbmp.obj		\
             $(SLO)$/imagerepository.obj   \
             $(SLO)$/impvect.obj 	\
-            $(SLO)$/implncvt.obj	\
-            $(SLO)$/lineinfo.obj	\
             $(SLO)$/mapmod.obj		\
             $(SLO)$/metaact.obj 	\
             $(SLO)$/octree.obj		\
@@ -119,6 +114,7 @@ SLOFILES=	$(EXCEPTIONSFILES)      \
             $(SLO)$/salgdilayout.obj	\
             $(SLO)$/extoutdevdata.obj	\
             $(SLO)$/salnativewidgets-none.obj
+
 
 # --- Targets ------------------------------------------------------
 

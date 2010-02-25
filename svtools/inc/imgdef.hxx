@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: imgdef.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,17 +33,6 @@ enum SfxSymbolsSize
     SFX_SYMBOLS_SIZE_SMALL,
     SFX_SYMBOLS_SIZE_LARGE,
     SFX_SYMBOLS_SIZE_AUTO
-};
-
-enum SfxSymbolsStyle
-{
-    SFX_SYMBOLS_STYLE_AUTO,
-    SFX_SYMBOLS_STYLE_DEFAULT,
-    SFX_SYMBOLS_STYLE_HICONTRAST,
-    SFX_SYMBOLS_STYLE_INDUSTRIAL,
-    SFX_SYMBOLS_STYLE_CRYSTAL,
-    SFX_SYMBOLS_STYLE_TANGO,
-    SFX_SYMBOLS_STYLE_CLASSIC
 };
 
 #define SFX_TOOLBOX_CHANGESYMBOLSET     0x0001

@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -79,9 +79,7 @@ GlyphCache::~GlyphCache()
 
 // -----------------------------------------------------------------------
 
-#ifndef IRIX
 inline
-#endif
 size_t GlyphCache::IFSD_Hash::operator()( const ImplFontSelectData& rFontSelData ) const
 {
     // TODO: is it worth to improve this hash function?

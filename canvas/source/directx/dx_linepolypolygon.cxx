@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dx_linepolypolygon.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,14 +43,14 @@ namespace dxcanvas
     {
     }
 
-    GraphicsPathSharedPtr LinePolyPolygon::getGraphicsPath() const
+    GraphicsPathSharedPtr LinePolyPolygon::getGraphicsPath( bool bNoLineJoin ) const
     {
         // generate GraphicsPath only on demand (gets deleted as soon
         // as any of the modifying methods above touches the
         // B2DPolyPolygon).
         if( !mpPath )
         {
-            mpPath = tools::graphicsPathFromB2DPolyPolygon( getPolyPolygonUnsafe() );
+            mpPath = tools::graphicsPathFromB2DPolyPolygon( getPolyPolygonUnsafe(), bNoLineJoin );
             mpPath->SetFillMode( const_cast<LinePolyPolygon*>(this)->getFillRule() == rendering::FillRule_EVEN_ODD ?
                                  Gdiplus::FillModeAlternate : Gdiplus::FillModeWinding );
         }

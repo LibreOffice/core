@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: impprn.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,7 +25,7 @@
  *
  ************************************************************************/
 
-#ifndef _SV_IMPPRN_HXX
+#if 0
 #define _SV_IMPPRN_HXX
 
 #include <vcl/print.hxx>
@@ -107,7 +104,6 @@ public:
     /**
     used by pull implementation to emit the next page
     */
-    using Printer::PrintPage;
     void        PrintPage( unsigned int nPage );
     /**
     used by pull implementation to get the number of physical pages

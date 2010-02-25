@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -29,7 +29,7 @@
 #include "precompiled_vcl.hxx"
 
 #define _SV_SALDATA_CXX
-#include "kde_headers.h"
+#include <shell/kde_headers.h>
 
 #include <unistd.h>
 #include <fcntl.h>

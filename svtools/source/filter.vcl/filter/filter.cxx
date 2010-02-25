@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: filter.cxx,v $
- * $Revision: 1.77 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,7 +51,7 @@
 #include "jpeg.hxx"
 #include "xbmread.hxx"
 #include "xpmread.hxx"
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 #include "strings.hrc"
 #include "sgffilt.hxx"
 #include "osl/module.hxx"
@@ -2129,3 +2126,42 @@ GraphicFilter* GraphicFilter::GetGraphicFilter()
     }
     return pGraphicFilter;
 }
+
+int GraphicFilter::LoadGraphic( const String &rPath, const String &rFilterName,
+                 Graphic& rGraphic, GraphicFilter* pFilter,
+                 USHORT* pDeterminedFormat )
+{
+    if ( !pFilter )
+        pFilter = GetGraphicFilter();
+
+    const USHORT nFilter = rFilterName.Len() && pFilter->GetImportFormatCount()
+                    ? pFilter->GetImportFormatNumber( rFilterName )
+                    : GRFILTER_FORMAT_DONTKNOW;
+
+    SvStream* pStream = NULL;
+    INetURLObject aURL( rPath );
+
+    if ( aURL.HasError() || INET_PROT_NOT_VALID == aURL.GetProtocol() )
+    {
+        aURL.SetSmartProtocol( INET_PROT_FILE );
+        aURL.SetSmartURL( rPath );
+    }
+    else if ( INET_PROT_FILE != aURL.GetProtocol() )
+    {
+        pStream = ::utl::UcbStreamHelper::CreateStream( rPath, STREAM_READ );
+    }
+
+    int nRes = GRFILTER_OK;
+    if ( !pStream )
+        nRes = pFilter->ImportGraphic( rGraphic, aURL, nFilter, pDeterminedFormat );
+    else
+        nRes = pFilter->ImportGraphic( rGraphic, rPath, *pStream, nFilter, pDeterminedFormat );
+
+#ifdef DBG_UTIL
+    if( nRes )
+        DBG_WARNING2( "GrafikFehler [%d] - [%s]", nRes, rPath.GetBuffer() );
+#endif
+
+    return nRes;
+}
+

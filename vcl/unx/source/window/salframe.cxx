@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salframe.cxx,v $
- * $Revision: 1.225 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -930,12 +927,13 @@ void X11SalFrame::ReleaseGraphics( SalGraphics *pGraphics )
     pGraphics_      = NULL;
 }
 
-void X11SalFrame::updateGraphics()
+void X11SalFrame::updateGraphics( bool bClear )
 {
+    Drawable aDrawable = bClear ? None : GetWindow();
     if( pGraphics_ )
-        pGraphics_->SetDrawable( GetWindow(), m_nScreen );
+        pGraphics_->SetDrawable( aDrawable, m_nScreen );
     if( pFreeGraphics_ )
-        pFreeGraphics_->SetDrawable( GetWindow(), m_nScreen );
+        pFreeGraphics_->SetDrawable( aDrawable, m_nScreen );
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -2726,6 +2724,7 @@ void X11SalFrame::createNewWindow( XLIB_Window aNewParent, int nScreen )
     }
 
     // first deinit frame
+    updateGraphics(true);
     if( mpInputContext )
     {
         mpInputContext->UnsetICFocus( this );
@@ -2748,7 +2747,7 @@ void X11SalFrame::createNewWindow( XLIB_Window aNewParent, int nScreen )
         Init( nStyle_ & ~SAL_FRAME_STYLE_PLUG, nScreen, NULL, true );
 
     // update graphics if necessary
-    updateGraphics();
+    updateGraphics(false);
 
     if( m_aTitle.Len() )
         SetTitle( m_aTitle );

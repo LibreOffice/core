@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: lineinfo.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,26 +29,29 @@
 #define _SV_LINEINFO_HXX
 
 #include <vcl/dllapi.h>
-
 #include <tools/gen.hxx>
 #include <vcl/vclenum.hxx>
+#include <basegfx/vector/b2enums.hxx>
 
 // ----------------
 // - ImplLineInfo -
 // ----------------
 
 class SvStream;
+namespace basegfx { class B2DPolyPolygon; }
 
 struct ImplLineInfo
 {
-    ULONG               mnRefCount;
-    LineStyle           meStyle;
-    long                mnWidth;
-    USHORT              mnDashCount;
-    long                mnDashLen;
-    USHORT              mnDotCount;
-    long                mnDotLen;
-    long                mnDistance;
+    ULONG                   mnRefCount;
+    LineStyle               meStyle;
+    long                    mnWidth;
+    USHORT                  mnDashCount;
+    long                    mnDashLen;
+    USHORT                  mnDotCount;
+    long                    mnDotLen;
+    long                    mnDistance;
+
+    basegfx::B2DLineJoin    meLineJoin;
 
                         ImplLineInfo();
                         ImplLineInfo( const ImplLineInfo& rImplLineInfo );
@@ -107,10 +107,26 @@ public:
     void            SetDistance( long nDistance );
     long            GetDistance() const { return mpImplLineInfo->mnDistance; }
 
+    void SetLineJoin(basegfx::B2DLineJoin eLineJoin);
+    basegfx::B2DLineJoin GetLineJoin() const { return mpImplLineInfo->meLineJoin; }
+
     BOOL            IsDefault() const { return( !mpImplLineInfo->mnWidth && ( LINE_SOLID == mpImplLineInfo->meStyle ) ); }
 
     friend VCL_DLLPUBLIC SvStream& operator>>( SvStream& rIStm, LineInfo& rLineInfo );
     friend VCL_DLLPUBLIC SvStream& operator<<( SvStream& rOStm, const LineInfo& rLineInfo );
+
+    // helper to check if line width or DashDot is used
+    bool isDashDotOrFatLineUsed() const;
+
+    // helper to get decomposed polygon data with the LineInfo applied. The source
+    // hairline polygon is given in io_rLinePolyPolygon. Both given polygons may
+    // contain results; e.g. when no fat line but DasDot is defined, the resut will
+    // be in io_rLinePolyPolygon while o_rFillPolyPolygon will be empty. When fat line
+    // is defined, it will be vice-versa. If none is defined, io_rLinePolyPolygon will
+    // not be changed (but o_rFillPolyPolygon will be freed)
+    void applyToB2DPolyPolygon(
+        basegfx::B2DPolyPolygon& io_rLinePolyPolygon,
+        basegfx::B2DPolyPolygon& o_rFillPolyPolygon) const;
 };
 
 #endif  // _SV_LINEINFO_HXX

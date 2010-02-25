@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: X11_dndcontext.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +33,9 @@
 #include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
 #include <cppuhelper/implbase1.hxx>
 
+#include "tools/prex.h"
 #include <X11/Xlib.h>
+#include "tools/postx.h"
 
 using namespace com::sun::star::uno;
 
@@ -49,12 +48,12 @@ namespace x11 {
     ::com::sun::star::datatransfer::dnd::XDropTargetDropContext
     >
     {
-        Window                      m_aDropWindow;
-        Time                        m_nTimestamp;
+        XLIB_Window                 m_aDropWindow;
+        XLIB_Time                   m_nTimestamp;
         SelectionManager&           m_rManager;
         Reference< XInterface >     m_xManagerRef;
     public:
-        DropTargetDropContext( Window, Time, SelectionManager& );
+        DropTargetDropContext( XLIB_Window, XLIB_Time, SelectionManager& );
         virtual ~DropTargetDropContext();
 
         // XDropTargetDropContext
@@ -68,12 +67,12 @@ namespace x11 {
     ::com::sun::star::datatransfer::dnd::XDropTargetDragContext
     >
     {
-        Window                      m_aDropWindow;
-        Time                        m_nTimestamp;
+        XLIB_Window                 m_aDropWindow;
+        XLIB_Time                   m_nTimestamp;
         SelectionManager&           m_rManager;
         Reference< XInterface >     m_xManagerRef;
     public:
-        DropTargetDragContext( Window, Time, SelectionManager& );
+        DropTargetDragContext( XLIB_Window, XLIB_Time, SelectionManager& );
         virtual ~DropTargetDragContext();
 
         // XDropTargetDragContext
@@ -86,12 +85,12 @@ namespace x11 {
     ::com::sun::star::datatransfer::dnd::XDragSourceContext
     >
     {
-        Window                      m_aDropWindow;
-        Time                        m_nTimestamp;
+        XLIB_Window                 m_aDropWindow;
+        XLIB_Time                   m_nTimestamp;
         SelectionManager&           m_rManager;
         Reference< XInterface >     m_xManagerRef;
     public:
-        DragSourceContext( Window, Time, SelectionManager& );
+        DragSourceContext( XLIB_Window, XLIB_Time, SelectionManager& );
         virtual ~DragSourceContext();
 
         // XDragSourceContext

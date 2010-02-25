@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salinst.cxx,v $
- * $Revision: 1.53.22.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,7 +66,7 @@
 #import "apple_remote/RemoteMainController.h"
 #include "apple_remote/RemoteControl.h"
 #include "postmac.h"
-
+#include <tools/solarmutex.hxx>
 
 using namespace std;
 using namespace ::com::sun::star;
@@ -472,6 +469,7 @@ AquaSalInstance::AquaSalInstance()
 {
     mpSalYieldMutex = new SalYieldMutex;
     mpSalYieldMutex->acquire();
+    ::tools::SolarMutex::SetSolarMutex( mpSalYieldMutex );
     maMainThread = vos::OThread::getCurrentIdentifier();
     mbWaitingYield = false;
     maUserEventListMutex = osl_createMutex();
@@ -482,6 +480,7 @@ AquaSalInstance::AquaSalInstance()
 
 AquaSalInstance::~AquaSalInstance()
 {
+    ::tools::SolarMutex::SetSolarMutex( 0 );
     mpSalYieldMutex->release();
     delete mpSalYieldMutex;
     osl_destroyMutex( maUserEventListMutex );

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: accessibilityoptions.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,14 +30,14 @@
 #include "svtools/svtdllapi.h"
 #include <unotools/configitem.hxx>
 #include <tools/string.hxx>
-#include <svtools/brdcst.hxx>
-#include <svtools/lstner.hxx>
-#include <svtools/options.hxx>
+#include <svl/brdcst.hxx>
+#include <svl/lstner.hxx>
+#include <unotools/options.hxx>
 
 class SvtAccessibilityOptions_Impl;
 
 class SVT_DLLPUBLIC SvtAccessibilityOptions:
-    public svt::detail::Options, public SfxBroadcaster, private SfxListener
+    public utl::detail::Options, private SfxListener
 {
 private:
     static SvtAccessibilityOptions_Impl* volatile sm_pSingleImplConfig;

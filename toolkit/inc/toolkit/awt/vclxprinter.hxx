@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vclxprinter.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,9 +40,7 @@
 #include <toolkit/helper/mutexandbroadcasthelper.hxx>
 #include <cppuhelper/propshlp.hxx>
 
-class Printer;
-class String;
-
+#include "vcl/oldprintadaptor.hxx"
 
 // Fuer den Drucker relevante Properties:
 /*
@@ -65,20 +60,17 @@ class VCLXPrinterPropertySet :  public ::com::sun::star::awt::XPrinterPropertySe
                                 public MutexAndBroadcastHelper,
                                 public ::cppu::OPropertySetHelper
 {
-private:
-    Printer*                    mpPrinter;
+protected:
+    boost::shared_ptr<Printer>                      mpPrinter;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice >  mxPrnDevice;
 
     sal_Int16                   mnOrientation;
     sal_Bool                    mbHorizontal;
-
-protected:
-
 public:
     VCLXPrinterPropertySet( const String& rPrinterName );
     virtual ~VCLXPrinterPropertySet();
 
-    Printer*                    GetPrinter() const { return mpPrinter; }
+    Printer*                    GetPrinter() const { return mpPrinter.get(); }
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice >  GetDevice();
 
     // ::com::sun::star::uno::XInterface
@@ -120,6 +112,8 @@ class VCLXPrinter:  public ::com::sun::star::awt::XPrinter,
                     public VCLXPrinterPropertySet,
                     public ::cppu::OWeakObject
 {
+    boost::shared_ptr<vcl::OldStylePrintAdaptor>    mpListener;
+    JobSetup                                        maInitJobSetup;
 public:
                     VCLXPrinter( const String& rPrinterName );
                     ~VCLXPrinter();

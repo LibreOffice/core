@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: color.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,6 +78,16 @@ namespace cppcanvas
     inline Color::IntSRGBA makeColor( sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue, sal_uInt8 nAlpha )
     {
         return (nRed << 24U)|(nGreen << 16U)|(nBlue << 8U)|(nAlpha);
+    }
+
+    inline sal_Int32 unMakeColor( sal_uInt8 nAlpha, sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue)
+    {
+        return (nAlpha << 24U)|(nRed << 16U)|(nGreen << 8U)|(nBlue);
+    }
+
+    inline sal_Int32 makeColorARGB( sal_uInt8 nAlpha, sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue)
+    {
+        return (nAlpha << 24U)|(nRed << 16U)|(nGreen << 8U)|(nBlue);
     }
 
 }

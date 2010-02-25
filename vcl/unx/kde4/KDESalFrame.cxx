@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2009 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -363,12 +363,13 @@ void KDESalFrame::ReleaseGraphics( SalGraphics *pGraphics )
     }
 }
 
-void KDESalFrame::updateGraphics()
+void KDESalFrame::updateGraphics( bool bClear )
 {
+    Drawable aDrawable = bClear ? None : GetWindow();
     for( int i = 0; i < nMaxGraphics; i++ )
     {
         if( m_aGraphics[i].bInUse )
-            m_aGraphics[i].pGraphics->SetDrawable( GetWindow(), GetScreenNumber() );
+            m_aGraphics[i].pGraphics->SetDrawable( aDrawable, GetScreenNumber() );
     }
 }
 

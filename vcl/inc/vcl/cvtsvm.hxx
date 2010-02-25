@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: cvtsvm.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,6 +81,10 @@
 #define GDI_GRADIENTEX_COMMENT          1030
 #define GDI_COMMENT_COMMENT             1031
 #define GDI_UNICODE_COMMENT             1032
+
+#define GDI_LINEJOIN_ACTION             1033
+#define GDI_EXTENDEDPOLYGON_ACTION      1034
+#define GDI_LINEDASHDOT_ACTION          1035
 
 // ----------------
 // - SVMConverter -

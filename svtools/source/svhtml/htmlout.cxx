@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: htmlout.cxx,v $
- * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,11 +29,11 @@
 #include "precompiled_svtools.hxx"
 
 #include <tools/urlobj.hxx>
-#include <svtools/zformat.hxx>
-#include <svtools/macitem.hxx>
+#include <svl/zformat.hxx>
+#include <svl/macitem.hxx>
 #include <tools/cachestr.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 
 #include <svtools/htmlout.hxx>
 #include "htmlkywd.hxx"
@@ -44,7 +41,7 @@
 #include <svtools/imaprect.hxx>
 #include <svtools/imapcirc.hxx>
 #include <svtools/imappoly.hxx>
-#include "urihelper.hxx"
+#include "svl/urihelper.hxx"
 
 #ifndef RTL_CONSTASCII_STRINGPARAM
 #define RTL_CONSTASCII_STRINGPARAM( c ) c, sizeof(c)-1

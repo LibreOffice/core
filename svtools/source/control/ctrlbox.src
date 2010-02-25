@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ctrlbox.src,v $
- * $Revision: 1.59 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include <svtools/svtools.hrc>
+#include <svl/svtools.hrc>
 
 #ifndef IMAGE_STDBTN_COLOR
 #define IMAGE_STDBTN_COLOR Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; }

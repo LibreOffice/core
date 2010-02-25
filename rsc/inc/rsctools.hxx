@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: rsctools.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -138,28 +135,41 @@ public:
     sal_uInt32      Size(){ return( nLen ); };
     void        Put( sal_uInt64 lVal )
                 {
+                    union
+                    {
+                        sal_uInt64 lVal64;
+                        sal_uInt32 aVal32[2];
+                    };
+                    lVal64 = lVal;
                     if( bSwap )
                     {
-                        Put( *(((sal_uInt32*)&lVal)+1) );
-                        Put( *(sal_uInt32*)&lVal );
+                        Put( aVal32[1] );
+                        Put( aVal32[0] );
                     }
                     else
                     {
-                        Put( *(sal_uInt32*)&lVal );
-                        Put( *(((sal_uInt32*)&lVal)+1) );
+                        Put( aVal32[0] );
+                        Put( aVal32[1] );
                     }
                 }
     void        Put( sal_Int32 lVal )
                 {
+                    union
+                    {
+                        sal_uInt32 lVal32;
+                        sal_uInt16 aVal16[2];
+                    };
+                    lVal32 = lVal;
+
                     if( bSwap )
                     {
-                        Put( *(((sal_uInt16*)&lVal) +1) );
-                        Put( *(sal_uInt16*)&lVal );
+                        Put( aVal16[1] );
+                        Put( aVal16[0] );
                     }
                     else
                     {
-                        Put( *(sal_uInt16*)&lVal );
-                        Put( *(((sal_uInt16*)&lVal) +1) );
+                        Put( aVal16[0] );
+                        Put( aVal16[1] );
                     }
                 }
     void        Put( sal_uInt32 nValue )
@@ -171,15 +181,22 @@ public:
 
     void        PutAt( sal_uInt32 nPos, INT32 lVal )
                 {
+                    union
+                    {
+                        sal_uInt32 lVal32;
+                        sal_uInt16 aVal16[2];
+                    };
+                    lVal32 = lVal;
+
                     if( bSwap )
                     {
-                        PutAt( nPos, *(((sal_uInt16*)&lVal) +1) );
-                        PutAt( nPos + 2, *(sal_uInt16*)&lVal );
+                        PutAt( nPos, aVal16[1] );
+                        PutAt( nPos + 2, aVal16[0] );
                     }
                     else
                     {
-                        PutAt( nPos, *(sal_uInt16*)&lVal );
-                        PutAt( nPos + 2, *(((sal_uInt16*)&lVal) +1) );
+                        PutAt( nPos, aVal16[0] );
+                        PutAt( nPos + 2, aVal16[1] );
                     }
                 }
     void        PutAt( sal_uInt32 nPos, sal_uInt32 lVal )

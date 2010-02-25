@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: extcolorcfg.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,11 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-#ifdef  SVL_DLLIMPLEMENTATION
-#undef  SVL_DLLIMPLEMENTATION
-#endif
-#define SVT_DLLIMPLEMENTATION
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_svtools.hxx"
 
 #include "extcolorcfg.hxx"
 #include <com/sun/star/uno/Any.hxx>
@@ -43,8 +37,8 @@
 #include <unotools/configitem.hxx>
 #include <unotools/configpathes.hxx>
 #include <com/sun/star/uno/Sequence.h>
-#include <svtools/poolitem.hxx> //Any2Bool
-#include <svtools/smplhint.hxx>
+#include <svl/poolitem.hxx> //Any2Bool
+#include <svl/smplhint.hxx>
 #include <vos/mutex.hxx>
 
  /* #100822# ----

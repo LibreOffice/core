@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dx_canvashelper.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,6 +43,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/tools/canvastools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <comphelper/sequence.hxx>
 #include <canvas/canvastools.hxx>
@@ -367,7 +365,11 @@ namespace dxcanvas
                 pGraphics->GetPixelOffsetMode() );
             pGraphics->SetPixelOffsetMode( Gdiplus::PixelOffsetModeNone );
 
-            aPen.SetMiterLimit( static_cast< Gdiplus::REAL >(strokeAttributes.MiterLimit) );
+            const bool bIsMiter(rendering::PathJoinType::MITER == strokeAttributes.JoinType);
+            const bool bIsNone(rendering::PathJoinType::NONE == strokeAttributes.JoinType);
+
+            if(bIsMiter)
+                aPen.SetMiterLimit( static_cast< Gdiplus::REAL >(strokeAttributes.MiterLimit) );
 
             const ::std::vector< Gdiplus::REAL >& rDashArray(
                 ::comphelper::sequenceToContainer< ::std::vector< Gdiplus::REAL > >(
@@ -380,9 +382,10 @@ namespace dxcanvas
             aPen.SetLineCap( gdiCapFromCap(strokeAttributes.StartCapType),
                              gdiCapFromCap(strokeAttributes.EndCapType),
                              Gdiplus::DashCapFlat );
-            aPen.SetLineJoin( gdiJoinFromJoin(strokeAttributes.JoinType) );
+            if(!bIsNone)
+                aPen.SetLineJoin( gdiJoinFromJoin(strokeAttributes.JoinType) );
 
-            GraphicsPathSharedPtr pPath( tools::graphicsPathFromXPolyPolygon2D( xPolyPolygon ) );
+            GraphicsPathSharedPtr pPath( tools::graphicsPathFromXPolyPolygon2D( xPolyPolygon, bIsNone ) );
 
             // TODO(E1): Return value
             Gdiplus::Status hr = pGraphics->DrawPath( &aPen, pPath.get() );
@@ -733,10 +736,8 @@ namespace dxcanvas
         // add output offset
         if( !maOutputOffset.equalZero() )
         {
-            ::basegfx::B2DHomMatrix aOutputOffset;
-            aOutputOffset.translate( maOutputOffset.getX(),
-                                     maOutputOffset.getY() );
-
+            const basegfx::B2DHomMatrix aOutputOffset(basegfx::tools::createTranslateB2DHomMatrix(
+                maOutputOffset.getX(), maOutputOffset.getY()));
             aTransform = aOutputOffset * aTransform;
         }
 
@@ -774,10 +775,8 @@ namespace dxcanvas
         // add output offset
         if( !maOutputOffset.equalZero() )
         {
-            ::basegfx::B2DHomMatrix aOutputOffset;
-            aOutputOffset.translate( maOutputOffset.getX(),
-                                     maOutputOffset.getY() );
-
+            const basegfx::B2DHomMatrix aOutputOffset(basegfx::tools::createTranslateB2DHomMatrix(
+                maOutputOffset.getX(), maOutputOffset.getY()));
             aTransform = aOutputOffset * aTransform;
         }
 

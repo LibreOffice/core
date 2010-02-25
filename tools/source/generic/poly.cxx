@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: poly.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1615,7 +1612,16 @@ void Polygon::Clip( const Rectangle& rRect, BOOL bPolygon )
 Rectangle Polygon::GetBoundRect() const
 {
     DBG_CHKTHIS( Polygon, NULL );
-    DBG_ASSERT( !mpImplPolygon->mpFlagAry, "GetBoundRect could fail with beziers!" );
+    // Removing the assert. Bezier curves have the attribute that each single
+    // curve segment defined by four points can not exit the four-point polygon
+    // defined by that points. This allows to say that the curve segment can also
+    // never leave the Range of it's defining points.
+    // The result is that Polygon::GetBoundRect() may not create the minimal
+    // BoundRect of the Polygon (to get that, use basegfx::B2DPolygon classes),
+    // but will always create a valid BoundRect, at least as long as this method
+    // 'blindly' travels over all points, including control points.
+    //
+    // DBG_ASSERT( !mpImplPolygon->mpFlagAry, "GetBoundRect could fail with beziers!" );
 
     USHORT  nCount = mpImplPolygon->mnPoints;
     if( ! nCount )

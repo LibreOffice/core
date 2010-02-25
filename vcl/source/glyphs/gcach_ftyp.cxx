@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -43,6 +43,7 @@
 
 #include "tools/poly.hxx"
 #include "basegfx/matrix/b2dhommatrix.hxx"
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include "basegfx/polygon/b2dpolypolygon.hxx"
 
 #include "osl/file.hxx"
@@ -2282,9 +2283,7 @@ bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex,
     // convert to basegfx polypolygon
     // TODO: get rid of the intermediate tools polypolygon
     rB2DPolyPoly = aToolPolyPolygon.getB2DPolyPolygon();
-    ::basegfx::B2DHomMatrix aMatrix;
-    aMatrix.scale( +1.0/(1<<6), -1.0/(1<<6) );
-    rB2DPolyPoly.transform( aMatrix );
+    rB2DPolyPoly.transform(basegfx::tools::createScaleB2DHomMatrix( +1.0/(1<<6), -1.0/(1<<6) ));
 
     return true;
 }
@@ -2487,14 +2486,12 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
                         pCoverage += 2;
                         for( int i = nCntRange; --i >= 0; )
                         {
-                            const USHORT nGlyph0 = GetUShort( pCoverage+0 );
-                            const USHORT nGlyph1 = GetUShort( pCoverage+2 );
-                            const USHORT nStartCoverageIndex = GetUShort( pCoverage+4 );
-                            DBG_ASSERT( aSubstVector.size() == nStartCoverageIndex, "coverage index mismatch");
-                            (void)nStartCoverageIndex;
+                            const UINT32 nGlyph0 = GetUShort( pCoverage+0 );
+                            const UINT32 nGlyph1 = GetUShort( pCoverage+2 );
+                            const USHORT nCovIdx = GetUShort( pCoverage+4 );
                             pCoverage += 6;
-                            for( USHORT j = nGlyph0; j <= nGlyph1; ++j )
-                                aSubstVector.push_back( GlyphSubst( j, 0 ) );
+                            for( UINT32 j = nGlyph0; j <= nGlyph1; ++j )
+                                aSubstVector.push_back( GlyphSubst( static_cast<USHORT>(j + nCovIdx), 0 ) );
                         }
                     }
                     break;
@@ -2538,3 +2535,4 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
 }
 
 // =======================================================================
+

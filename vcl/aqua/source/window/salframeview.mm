@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  * 
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salframeview.mm,v $
- * $Revision: 1.12.22.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1065,7 +1062,17 @@ private:
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_LINE character: 0  modifiers: 0];
 }
 
+-(void)moveToRightEndOfLine: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_LINE character: 0  modifiers: 0];
+}
+
 -(void)moveToEndOfLineAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_END_OF_LINE character: 0  modifiers: 0];
+}
+
+-(void)moveToRightEndOfLineAndModifySelection: (id)aSender
 {
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_END_OF_LINE character: 0  modifiers: 0];
 }
@@ -1075,7 +1082,17 @@ private:
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_LINE character: 0  modifiers: 0];
 }
 
+-(void)moveToLeftEndOfLine: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_LINE character: 0  modifiers: 0];
+}
+
 -(void)moveToBeginningOfLineAndModifySelection: (id)aSender
+{
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_LINE character: 0  modifiers: 0];
+}
+
+-(void)moveToLeftEndOfLineAndModifySelection: (id)aSender
 {
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_LINE character: 0  modifiers: 0];
 }
@@ -1125,6 +1142,12 @@ private:
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_DOCUMENT character: 0  modifiers: 0];
 }
 
+-(void)scrollToEndOfDocument: (id)aSender
+{
+    // this is not exactly what we should do, but it makes "End" and "Shift-End" behave consistent
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_END_OF_DOCUMENT character: 0  modifiers: 0];
+}
+
 -(void)moveToEndOfDocumentAndModifySelection: (id)aSender
 {
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::SELECT_TO_END_OF_DOCUMENT character: 0  modifiers: 0];
@@ -1132,6 +1155,12 @@ private:
 
 -(void)moveToBeginningOfDocument: (id)aSender
 {
+    [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT character: 0  modifiers: 0];
+}
+
+-(void)scrollToBeginningOfDocument: (id)aSender
+{
+    // this is not exactly what we should do, but it makes "Home" and "Shift-Home" behave consistent
     [self sendKeyInputAndReleaseToFrame: com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT character: 0  modifiers: 0];
 }
 
@@ -1462,6 +1491,9 @@ private:
 {
     if( AquaSalFrame::isAlive( mpFrame ) )
     {
+        #if OSL_DEBUG_LEVEL > 1
+        // fprintf( stderr, "SalFrameView: doCommandBySelector %s\n", (char*)aSelector );
+        #endif
         if( (mpFrame->mnICOptions & SAL_INPUTCONTEXT_TEXT) != 0 &&
             aSelector != NULL && [self respondsToSelector: aSelector] )
         {

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svapp.cxx,v $
- * $Revision: 1.84 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,7 +73,8 @@
 #include "vcl/salimestatus.hxx"
 
 #include <utility>
-#include "vcl/lazydelete.hxx"
+#include <vcl/lazydelete.hxx>
+#include <unotools/syslocaleoptions.hxx>
 
 using namespace ::com::sun::star::uno;
 
@@ -704,12 +702,10 @@ bool Application::ValidateSystemFont()
 
 void Application::SetSettings( const AllSettings& rSettings )
 {
-    MsLangId::setConfiguredSystemLanguage( rSettings.GetLanguage());
-    MsLangId::setConfiguredSystemUILanguage( rSettings.GetUILanguage());
     ImplSVData* pSVData = ImplGetSVData();
     if ( !pSVData->maAppData.mpSettings )
     {
-        pSVData->maAppData.mpSettings = new AllSettings();
+        GetSettings();
         *pSVData->maAppData.mpSettings = rSettings;
         ResMgr::SetDefaultLocale( rSettings.GetUILocale() );
     }
@@ -811,7 +807,12 @@ const AllSettings& Application::GetSettings()
 {
     ImplSVData* pSVData = ImplGetSVData();
     if ( !pSVData->maAppData.mpSettings )
+    {
+        pSVData->maAppData.mpCfgListener = new LocaleConfigurationListener;
         pSVData->maAppData.mpSettings = new AllSettings();
+        pSVData->maAppData.mpSettings->GetSysLocale().GetOptions().AddListener( pSVData->maAppData.mpCfgListener );
+    }
+
     return *(pSVData->maAppData.mpSettings);
 }
 

@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.61 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -32,80 +28,29 @@ PRJ=..$/..
 
 PRJNAME=svtools
 TARGET=config
-TARGET1=heavyconfig
-LIBTARGET=NO
 
 ENABLE_EXCEPTIONS := TRUE
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-.INCLUDE :  $(PRJ)$/util$/svl.pmk
+.INCLUDE :  $(PRJ)$/util$/svt.pmk
 
 # --- Files --------------------------------------------------------
 
-SLOFILES = $(LIB1OBJFILES) $(LIB2OBJFILES)
-
-# --- config.lib Files --------------------------------------------------------
-LIB1TARGET= $(SLB)$/$(TARGET).lib
-
-LIB1OBJFILES=  \
-    $(SLO)$/accelcfg.obj				\
-    $(SLO)$/fltrcfg.obj				\
-    $(SLO)$/xmlaccelcfg.obj				\
-    $(SLO)$/moduleoptions.obj           \
-    $(SLO)$/pathoptions.obj             \
-    $(SLO)$/saveopt.obj					\
-    $(SLO)$/lingucfg.obj                \
-    $(SLO)$/javaoptions.obj             \
-    $(SLO)$/securityoptions.obj			\
-    $(SLO)$/localisationoptions.obj		\
-    $(SLO)$/workingsetoptions.obj		\
-    $(SLO)$/viewoptions.obj				\
-    $(SLO)$/internaloptions.obj			\
-    $(SLO)$/startoptions.obj			\
-    $(SLO)$/historyoptions.obj			\
-    $(SLO)$/inetoptions.obj				\
-    $(SLO)$/menuoptions.obj				\
-    $(SLO)$/dynamicmenuoptions.obj		\
-    $(SLO)$/optionsdrawinglayer.obj		\
-    $(SLO)$/fontoptions.obj				\
-    $(SLO)$/addxmltostorageoptions.obj	\
-    $(SLO)$/defaultoptions.obj			\
-    $(SLO)$/searchopt.obj				\
-    $(SLO)$/printwarningoptions.obj		\
-    $(SLO)$/cacheoptions.obj            \
-    $(SLO)$/regoptions.obj				\
-    $(SLO)$/cmdoptions.obj				\
-    $(SLO)$/extendedsecurityoptions.obj \
-    $(SLO)$/sourceviewconfig.obj		\
-    $(SLO)$/compatibility.obj           \
-    $(SLO)$/eventcfg.obj                \
-    $(SLO)$/optionsdlg.obj              \
-    $(SLO)$/itemholder1.obj \
-    $(SLO)$/options.obj
-
-#	$(SLO)$/miscopt.obj					\
-# --- heavyconfig.lib Files --------------------------------------------------------
-LIB2TARGET= $(SLB)$/$(TARGET1).lib
-
-LIB2OBJFILES=  \
-    $(SLO)$/accessibilityoptions.obj	\
-    $(SLO)$/fontsubstconfig.obj				\
-    $(SLO)$/misccfg.obj				\
-    $(SLO)$/apearcfg.obj				\
-    $(SLO)$/helpopt.obj                 \
-    $(SLO)$/printoptions.obj			\
-    $(SLO)$/languageoptions.obj     \
-    $(SLO)$/ctloptions.obj          \
-    $(SLO)$/cjkoptions.obj          \
-    $(SLO)$/colorcfg.obj            \
-    $(SLO)$/extcolorcfg.obj            \
-    $(SLO)$/undoopt.obj                 \
-    $(SLO)$/useroptions.obj      \
-    $(SLO)$/syslocaleoptions.obj \
-    $(SLO)$/itemholder2.obj \
-    $(SLO)$/miscopt.obj
+SLOFILES=  \
+        $(SLO)$/accessibilityoptions.obj	\
+        $(SLO)$/apearcfg.obj				\
+        $(SLO)$/colorcfg.obj            \
+        $(SLO)$/extcolorcfg.obj            \
+        $(SLO)$/fontsubstconfig.obj				\
+        $(SLO)$/helpopt.obj                 \
+    $(SLO)$/htmlcfg.obj \
+        $(SLO)$/itemholder2.obj \
+        $(SLO)$/menuoptions.obj				\
+        $(SLO)$/miscopt.obj             \
+        $(SLO)$/optionsdrawinglayer.obj		\
+        $(SLO)$/printoptions.obj			
 
 # --- Targets ------------------------------------------------------
 

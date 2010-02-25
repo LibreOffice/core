@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: testsax.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,11 +27,6 @@
 
 #include <stdio.h>
 #include <string.h>
-
-#if OSL_DEBUG_LEVEL == 0
-#define NDEBUG
-#endif
-#include <assert.h>
 
 #include <osl/time.h>
 #include <osl/diagnose.h>
@@ -245,12 +237,12 @@ Reference < XInputStream > createStreamFromSequence(
 {
     Reference < XInterface > xOutStreamService =
         xSMgr->createInstance( OUString::createFromAscii("com.sun.star.io.Pipe") );
-    assert( xOutStreamService.is() );
+    OSL_ASSERT( xOutStreamService.is() );
     Reference< XOutputStream >  rOutStream( xOutStreamService , UNO_QUERY );
-    assert( rOutStream.is() );
+    OSL_ASSERT( rOutStream.is() );
 
     Reference< XInputStream > rInStream( xOutStreamService , UNO_QUERY );
-    assert( rInStream.is() );
+    OSL_ASSERT( rInStream.is() );
 
     rOutStream->writeBytes( seqBytes );
     rOutStream->flush();
@@ -379,7 +371,7 @@ public: // ExtendedDocumentHandler
 
     virtual void SAL_CALL endElement(const OUString& aName) throw (SAXException,RuntimeException)
     {
-        assert( m_iLevel );
+        OSL_ASSERT( m_iLevel );
         m_iLevel --;
         if( m_bPrint ) {
             int i;

@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -51,6 +51,8 @@
 #include <map>
 #include <hash_map>
 #include <list>
+
+#include <boost/shared_array.hpp>
 
 class ImplFontSelectData;
 class ImplFontMetricData;
@@ -270,10 +272,53 @@ public:
     };
 
     // font subsets
-    struct GlyphEmit
+    class GlyphEmit
     {
-        sal_Ucs     m_aUnicode;
-        sal_uInt8   m_nSubsetGlyphID;
+        // performance: actually this should probably a vector;
+        sal_Ucs                         m_aBufferedUnicodes[3];
+        sal_Int32                       m_nUnicodes;
+        sal_Int32                       m_nMaxUnicodes;
+        boost::shared_array<sal_Ucs>    m_pUnicodes;
+        sal_uInt8                       m_nSubsetGlyphID;
+
+    public:
+        GlyphEmit() : m_nUnicodes(0), m_nSubsetGlyphID(0)
+        {
+            rtl_zeroMemory( m_aBufferedUnicodes, sizeof( m_aBufferedUnicodes ) );
+            m_nMaxUnicodes = sizeof(m_aBufferedUnicodes)/sizeof(m_aBufferedUnicodes[0]);
+        }
+        ~GlyphEmit()
+        {
+        }
+
+        void setGlyphId( sal_uInt8 i_nId ) { m_nSubsetGlyphID = i_nId; }
+        sal_uInt8 getGlyphId() const { return m_nSubsetGlyphID; }
+
+        void addCode( sal_Ucs i_cCode )
+        {
+            if( m_nUnicodes == m_nMaxUnicodes )
+            {
+                sal_Ucs* pNew = new sal_Ucs[ 2 * m_nMaxUnicodes];
+                if( m_pUnicodes.get() )
+                    rtl_copyMemory( pNew, m_pUnicodes.get(), m_nMaxUnicodes * sizeof(sal_Ucs) );
+                else
+                    rtl_copyMemory( pNew, m_aBufferedUnicodes, m_nMaxUnicodes * sizeof(sal_Ucs) );
+                m_pUnicodes.reset( pNew );
+                m_nMaxUnicodes *= 2;
+            }
+            if( m_pUnicodes.get() )
+                m_pUnicodes[ m_nUnicodes++ ] = i_cCode;
+            else
+                m_aBufferedUnicodes[ m_nUnicodes++ ] = i_cCode;
+        }
+        sal_Int32 countCodes() const { return m_nUnicodes; }
+        sal_Ucs getCode( sal_Int32 i_nIndex ) const
+        {
+            sal_Ucs nRet = 0;
+            if( i_nIndex < m_nUnicodes )
+                nRet = m_pUnicodes.get() ? m_pUnicodes[ i_nIndex ] : m_aBufferedUnicodes[ i_nIndex ];
+            return nRet;
+        }
     };
     typedef std::map< sal_GlyphId, GlyphEmit > FontEmitMapping;
     struct FontEmit
@@ -311,6 +356,8 @@ public:
     {
         sal_Int32                       m_nNormalFontID;
         std::list< EmbedEncoding >      m_aExtendedEncodings;
+
+        EmbedFont() : m_nNormalFontID( 0 ) {}
     };
     typedef std::map< const ImplFontData*, EmbedFont > FontEmbedData;
 
@@ -396,6 +443,7 @@ public:
         USHORT                      m_nTextStyle;
         rtl::OUString               m_aValue;
         rtl::OString                m_aDAString;
+        rtl::OString                m_aDRDict;
         rtl::OString                m_aMKDict;
         rtl::OString                m_aMKDictCAString;  // i12626, added to be able to encrypt the /CA text string
                                                         // since the object number is not known at the moment
@@ -612,6 +660,7 @@ private:
     FontSubsetData                      m_aSubsets;
     bool                                m_bEmbedStandardFonts;
     FontEmbedData                       m_aEmbeddedFonts;
+    FontEmbedData                       m_aSystemFonts;
     sal_Int32                           m_nNextFID;
     PDFFontCache                        m_aFontCache;
 
@@ -679,6 +728,7 @@ private:
                 m_aOverlineColor( COL_TRANSPARENT ),
                 m_nAntiAlias( 1 ),
                 m_nLayoutMode( 0 ),
+                m_aDigitLanguage( 0 ),
                 m_nTransparentPercent( 0 ),
                 m_nFlags( 0xffff ),
                 m_nUpdateFlags( 0xffff )
@@ -693,6 +743,7 @@ private:
                 m_aClipRegion( rState.m_aClipRegion ),
                 m_nAntiAlias( rState.m_nAntiAlias ),
                 m_nLayoutMode( rState.m_nLayoutMode ),
+                m_aDigitLanguage( rState.m_aDigitLanguage ),
                 m_nTransparentPercent( rState.m_nTransparentPercent ),
                 m_nFlags( rState.m_nFlags ),
                 m_nUpdateFlags( rState.m_nUpdateFlags )
@@ -710,6 +761,7 @@ private:
             m_aClipRegion           = rState.m_aClipRegion;
             m_nAntiAlias            = rState.m_nAntiAlias;
             m_nLayoutMode           = rState.m_nLayoutMode;
+            m_aDigitLanguage        = rState.m_aDigitLanguage;
             m_nTransparentPercent   = rState.m_nTransparentPercent;
             m_nFlags                = rState.m_nFlags;
             m_nUpdateFlags          = rState.m_nUpdateFlags;
@@ -853,7 +905,7 @@ i12626
     void appendLiteralStringEncrypt( rtl::OStringBuffer& rInString, const sal_Int32 nInObjectNumber, rtl::OStringBuffer& rOutBuffer );
 
     /* creates fonts and subsets that will be emitted later */
-    void registerGlyphs( int nGlyphs, sal_GlyphId* pGlyphs, sal_Int32* pGlpyhWidths, sal_Ucs* pUnicodes, sal_uInt8* pMappedGlyphs, sal_Int32* pMappedFontObjects, const ImplFontData* pFallbackFonts[] );
+    void registerGlyphs( int nGlyphs, sal_GlyphId* pGlyphs, sal_Int32* pGlpyhWidths, sal_Ucs* pUnicodes, sal_Int32* pUnicodesPerGlyph, sal_uInt8* pMappedGlyphs, sal_Int32* pMappedFontObjects, const ImplFontData* pFallbackFonts[] );
 
     /*  emits a text object according to the passed layout */
     /* TODO: remove rText as soon as SalLayout will change so that rText is not necessary anymore */
@@ -897,10 +949,12 @@ i12626
     sal_Int32 emitBuiltinFont( const ImplFontData*, sal_Int32 nObject = -1 );
     /* writes a type1 embedded font object and returns its mapping from font ids to object ids (or 0 in case of failure ) */
     std::map< sal_Int32, sal_Int32 > emitEmbeddedFont( const ImplFontData*, EmbedFont& );
+    /* writes a type1 system font object and returns its mapping from font ids to object ids (or 0 in case of failure ) */
+    std::map< sal_Int32, sal_Int32 > emitSystemFont( const ImplFontData*, EmbedFont& );
     /* writes a font descriptor and returns its object id (or 0) */
     sal_Int32 emitFontDescriptor( const ImplFontData*, FontSubsetInfo&, sal_Int32 nSubsetID, sal_Int32 nStream );
     /* writes a ToUnicode cmap, returns the corresponding stream object */
-    sal_Int32 createToUnicodeCMap( sal_uInt8* pEncoding, sal_Ucs* pUnicodes, int nGlyphs );
+    sal_Int32 createToUnicodeCMap( sal_uInt8* pEncoding, sal_Ucs* pUnicodes, sal_Int32* pUnicodesPerGlyph, sal_Int32* pEncToUnicodeIndex, int nGlyphs );
 
     /* get resource dict object number */
     sal_Int32 getResourceDictObj()
@@ -983,6 +1037,7 @@ i12626
     sal_Int32 findRadioGroupWidget( const PDFWriter::RadioButtonWidget& rRadio );
     Font replaceFont( const Font& rControlFont, const Font& rAppSetFont );
     sal_Int32 getBestBuiltinFont( const Font& rFont );
+    sal_Int32 getSystemFont( const Font& i_rFont );
 
     // used for edit and listbox
     Font drawFieldBorder( PDFWidget&, const PDFWriter::AnyWidget&, const StyleSettings& );

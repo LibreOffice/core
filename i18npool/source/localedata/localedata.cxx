@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: localedata.cxx,v $
- * $Revision: 1.59.24.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,13 +34,6 @@
 #include <string.h>
 #include <stdio.h>
 #include "rtl/instance.hxx"
-
-#if OSL_DEBUG_LEVEL == 0
-#  ifndef NDEBUG
-#    define NDEBUG
-#  endif
-#endif
-#include <assert.h>
 
 using namespace com::sun::star::i18n;
 using namespace com::sun::star::uno;
@@ -1136,7 +1126,7 @@ LocaleData::getContinuousNumberingLevels( const lang::Locale& rLocale ) throw(Ru
                              rVal.Value <<= (sal_Int16) sVal.toInt32();
                              break;
                         default:
-                             assert(0);
+                             OSL_ASSERT(0);
                         }
                    }
               }
@@ -1260,7 +1250,7 @@ LocaleData::getOutlineNumberingLevels( const lang::Locale& rLocale ) throw(Runti
                         case 10: level[j].sTransliteration = tmp; break;
                         case 11: level[j].nNatNum    = tmp.toInt32();   break;
                         default:
-                            assert(0);
+                            OSL_ASSERT(0);
                     }
                 }
             }

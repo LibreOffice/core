@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salptype.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +37,11 @@
 #define SAL_JOBSET_ORIENTATION                  ((ULONG)0x00000001)
 #define SAL_JOBSET_PAPERBIN                     ((ULONG)0x00000002)
 #define SAL_JOBSET_PAPERSIZE                    ((ULONG)0x00000004)
-#define SAL_JOBSET_ALL                          (SAL_JOBSET_ORIENTATION | SAL_JOBSET_PAPERBIN | SAL_JOBSET_PAPERSIZE)
+#define SAL_JOBSET_DUPLEXMODE                   ((ULONG)0x00000008)
+#define SAL_JOBSET_ALL                          (SAL_JOBSET_ORIENTATION |\
+                                                 SAL_JOBSET_PAPERBIN    |\
+                                                 SAL_JOBSET_PAPERSIZE   |\
+                                                 SAL_JOBSET_DUPLEXMODE)
 
 // -------------------
 // - SalPrinterError -

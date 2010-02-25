@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: atkwindow.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +30,7 @@
 
 #include <plugins/gtk/gtkframe.hxx>
 #include <vcl/window.hxx>
+#include "vcl/popupmenuwindow.hxx"
 
 #include "atkwindow.hxx"
 #include "atkwrapper.hxx"
@@ -108,6 +106,17 @@ init_from_window( AtkObject *accessible, Window *pWindow )
                     pChild->SetAccessibleRole( AccessibleRole::LABEL );
                     accessible->name = g_strdup( rtl::OUStringToOString( pChild->GetText(), RTL_TEXTENCODING_UTF8 ).getStr() );
                 }
+                else if ( pWindow->GetType() == WINDOW_BORDERWINDOW && pChild->GetType() == WINDOW_FLOATINGWINDOW )
+                {
+                    PopupMenuFloatingWindow* p = dynamic_cast<PopupMenuFloatingWindow*>(pChild);
+                    if (p && p->IsPopupMenu() && p->GetMenuStackLevel() == 0)
+                    {
+                        // This is a top-level menu popup.  Register it.
+                        role = ATK_ROLE_POPUP_MENU;
+                        pChild->SetAccessibleRole( AccessibleRole::POPUP_MENU );
+                        accessible->name = g_strdup( rtl::OUStringToOString( pChild->GetText(), RTL_TEXTENCODING_UTF8 ).getStr() );
+                    }
+                }
             }
             break;
         }
@@ -136,6 +145,23 @@ ooo_window_wrapper_real_focus_gtk (GtkWidget *, GdkEventFocus *)
 
 /*****************************************************************************/
 
+static bool
+isChildPopupMenu(Window* pWindow)
+{
+    Window* pChild = pWindow->GetAccessibleChildWindow(0);
+    if (!pChild)
+        return false;
+
+    if (WINDOW_FLOATINGWINDOW != pChild->GetType())
+        return false;
+
+    PopupMenuFloatingWindow* p = dynamic_cast<PopupMenuFloatingWindow*>(pChild);
+    if (!p)
+        return false;
+
+    return p->IsPopupMenu();
+}
+
 static void
 ooo_window_wrapper_real_initialize(AtkObject *obj, gpointer data)
 {
@@ -157,8 +183,16 @@ ooo_window_wrapper_real_initialize(AtkObject *obj, gpointer data)
              */
             if( WINDOW_BORDERWINDOW == pWindow->GetType() )
             {
-                ooo_wrapper_registry_add( xAccessible, obj );
-                g_object_set_data( G_OBJECT(obj), "ooo:atk-wrapper-key", xAccessible.get() );
+                if ( isChildPopupMenu(pWindow) )
+                {
+                    AtkObject *child = atk_object_wrapper_new( xAccessible, obj );
+                    ooo_wrapper_registry_add( xAccessible, child );
+                }
+                else
+                {
+                    ooo_wrapper_registry_add( xAccessible, obj );
+                    g_object_set_data( G_OBJECT(obj), "ooo:atk-wrapper-key", xAccessible.get() );
+                }
             }
             else
             {

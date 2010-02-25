@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: wmfwr.cxx,v $
- * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,8 @@
 
 #include <vcl/salbtype.hxx>
 #include "wmfwr.hxx"
-#include <vcl/fontcvt.hxx>
+#include <unotools/fontcvt.hxx>
+#include "emfwr.hxx"
 #include <rtl/crc.h>
 #include <rtl/tencinfo.h>
 #include <tools/tenccvt.hxx>
@@ -42,8 +40,9 @@
 #include <i18nutil/unicode.hxx> //unicode::getUnicodeScriptType
 #endif
 
-
 #include <vcl/metric.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 
 //====================== MS-Windows-defines ===============================
 
@@ -1136,6 +1135,49 @@ void WMFWriter::SetAllAttr()
 }
 
 
+void WMFWriter::HandleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx::B2DPolygon& rLinePolygon)
+{
+    if(rLinePolygon.count())
+    {
+        basegfx::B2DPolyPolygon aLinePolyPolygon(rLinePolygon);
+        basegfx::B2DPolyPolygon aFillPolyPolygon;
+
+        rInfo.applyToB2DPolyPolygon(aLinePolyPolygon, aFillPolyPolygon);
+
+        if(aLinePolyPolygon.count())
+        {
+            aSrcLineInfo = rInfo;
+            SetLineAndFillAttr();
+
+            for(sal_uInt32 a(0); a < aLinePolyPolygon.count(); a++)
+            {
+                const basegfx::B2DPolygon aCandidate(aLinePolyPolygon.getB2DPolygon(a));
+                WMFRecord_PolyLine(Polygon(aCandidate));
+            }
+        }
+
+        if(aFillPolyPolygon.count())
+        {
+            const Color aOldLineColor(aSrcLineColor);
+            const Color aOldFillColor(aSrcFillColor);
+
+            aSrcLineColor = Color( COL_TRANSPARENT );
+            aSrcFillColor = aOldLineColor;
+            SetLineAndFillAttr();
+
+            for(sal_uInt32 a(0); a < aFillPolyPolygon.count(); a++)
+            {
+                const Polygon aPolygon(aFillPolyPolygon.getB2DPolygon(a));
+                WMFRecord_Polygon(Polygon(aPolygon));
+            }
+
+            aSrcLineColor = aOldLineColor;
+            aSrcFillColor = aOldFillColor;
+            SetLineAndFillAttr();
+        }
+    }
+}
+
 void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 {
     ULONG       nA, nACount;
@@ -1176,10 +1218,21 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 case META_LINE_ACTION:
                 {
                     const MetaLineAction* pA = (const MetaLineAction *) pMA;
-                    aSrcLineInfo = pA->GetLineInfo();
-                    SetLineAndFillAttr();
-                    WMFRecord_MoveTo( pA->GetStartPoint() );
-                    WMFRecord_LineTo( pA->GetEndPoint() );
+                    if(pA->GetLineInfo().IsDefault())
+                    {
+                        aSrcLineInfo = pA->GetLineInfo();
+                        SetLineAndFillAttr();
+                        WMFRecord_MoveTo( pA->GetStartPoint() );
+                        WMFRecord_LineTo( pA->GetEndPoint() );
+                    }
+                    else
+                    {
+                        // LineInfo used; handle Dash/Dot and fat lines
+                        basegfx::B2DPolygon aPolygon;
+                        aPolygon.append(basegfx::B2DPoint(pA->GetStartPoint().X(), pA->GetStartPoint().Y()));
+                        aPolygon.append(basegfx::B2DPoint(pA->GetEndPoint().X(), pA->GetEndPoint().Y()));
+                        HandleLineInfoPolyPolygons(pA->GetLineInfo(), aPolygon);
+                    }
                 }
                 break;
 
@@ -1241,9 +1294,22 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 case META_POLYLINE_ACTION:
                 {
                     const MetaPolyLineAction* pA = (const MetaPolyLineAction*) pMA;
-                    aSrcLineInfo = pA->GetLineInfo();
-                    SetLineAndFillAttr();
-                    WMFRecord_PolyLine( pA->GetPolygon() );
+                    const Polygon&              rPoly = pA->GetPolygon();
+
+                    if( rPoly.GetSize() )
+                    {
+                        if(pA->GetLineInfo().IsDefault())
+                        {
+                            aSrcLineInfo = pA->GetLineInfo();
+                            SetLineAndFillAttr();
+                            WMFRecord_PolyLine( rPoly );
+                        }
+                        else
+                        {
+                            // LineInfo used; handle Dash/Dot and fat lines
+                            HandleLineInfoPolyPolygons(pA->GetLineInfo(), rPoly.getB2DPolygon());
+                        }
+                    }
                 }
                 break;
 
@@ -1807,6 +1873,7 @@ BOOL WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
 {
     WMFWriterAttrStackMember * pAt;
 
+    bEmbedEMF = TRUE;
     bStatus=TRUE;
     pConvert = 0;
     pVirDev = new VirtualDevice;
@@ -1870,6 +1937,8 @@ BOOL WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
     CountActionsAndBitmaps(rMTF);
 
     WriteHeader(rMTF,bPlaceable);
+    if( bEmbedEMF )
+        WriteEmbeddedEMF( rMTF );
     WMFRecord_SetWindowOrg(Point(0,0));
     WMFRecord_SetWindowExt(rMTF.GetPrefSize());
     WMFRecord_SetBkMode( TRUE );
@@ -1947,4 +2016,81 @@ USHORT WMFWriter::CalcSaveTargetMapMode(MapMode& rMapMode,
     }
 
     return nDivisor;
+}
+
+// ------------------------------------------------------------------------
+
+void WMFWriter::WriteEmbeddedEMF( const GDIMetaFile& rMTF )
+{
+    EMFWriter aEMFWriter;
+    SvMemoryStream aStream;
+
+    if( aEMFWriter.WriteEMF( rMTF, aStream ) )
+    {
+        sal_Size nTotalSize = aStream.Tell();
+        if( nTotalSize > SAL_MAX_UINT32 )
+            return;
+        aStream.Seek( 0 );
+        sal_uInt32 nRemainingSize = static_cast< sal_uInt32 >( nTotalSize );
+        sal_uInt32 nRecCounts = ( (nTotalSize - 1) / 0x2000 ) + 1;
+        sal_uInt16 nCheckSum = 0, nWord;
+
+        sal_uInt32 nPos = 0;
+
+        while( nPos + 1 < nTotalSize )
+        {
+            aStream >> nWord;
+            nCheckSum ^= nWord;
+            nPos += 2;
+        }
+
+        nCheckSum = static_cast< sal_uInt16 >( nCheckSum * -1 );
+
+        aStream.Seek( 0 );
+        while( nRemainingSize > 0 )
+        {
+            sal_uInt32 nCurSize;
+            if( nRemainingSize > 0x2000 )
+            {
+                nCurSize = 0x2000;
+                nRemainingSize -= 0x2000;
+            }
+            else
+            {
+                nCurSize = nRemainingSize;
+                nRemainingSize = 0;
+            }
+            WriteEMFRecord( aStream,
+                            nCurSize,
+                            nRemainingSize,
+                            nTotalSize,
+                            nRecCounts,
+                            nCheckSum );
+            nCheckSum = 0;
+        }
+    }
+}
+
+// ------------------------------------------------------------------------
+
+void WMFWriter::WriteEMFRecord( SvMemoryStream& rStream, sal_uInt32 nCurSize, sal_uInt32 nRemainingSize,
+                sal_uInt32 nTotalSize, sal_uInt32 nRecCounts, sal_uInt16 nCheckSum )
+{
+   // according to http://msdn.microsoft.com/en-us/library/dd366152%28PROT.13%29.aspx
+   WriteRecordHeader( 0, W_META_ESCAPE );
+   *pWMF << (sal_uInt16)W_MFCOMMENT         // same as META_ESCAPE_ENHANCED_METAFILE
+          << (sal_uInt16)( nCurSize + 34 )  // we will always have a 34 byte escape header:
+          << (sal_uInt32) 0x43464D57        // WMFC
+          << (sal_uInt32) 0x00000001        // Comment type
+          << (sal_uInt32) 0x00010000        // version
+          << nCheckSum                      // check sum
+          << (sal_uInt32) 0                 // flags = 0
+          << nRecCounts                     // total number of records
+          << nCurSize                       // size of this record's data
+          << nRemainingSize                 // remaining size of data in following records, missing in MSDN documentation
+          << nTotalSize;                    // total size of EMF stream
+
+   pWMF->Write( static_cast< const sal_Char* >( rStream.GetData() ) + rStream.Tell(), nCurSize );
+   rStream.SeekRel( nCurSize );
+   UpdateRecordHeader();
 }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SvFilterOptionsDialog.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +34,7 @@
 #include "FilterConfigCache.hxx"
 #include <osl/file.hxx>
 #include <osl/module.hxx>
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 #include <svtools/fltcall.hxx>
 #include "dlgexpor.hxx"
 #include "dlgejpg.hxx"
@@ -49,7 +46,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Any.h>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include "vcl/svapp.hxx"
 
 #if defined WIN || (defined OS2 && !defined ICC)

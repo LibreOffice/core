@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: b2dpolygontools.hxx,v $
- * $Revision: 1.24.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -288,14 +285,6 @@ namespace basegfx
          */
         B2DPolygon createPolygonFromCircle( const B2DPoint& rCenter, double fRadius );
 
-        /** append a unit circle with one point and the control vectors to the given polygon
-         */
-        void appendUnitCircleQuadrant(B2DPolygon& rPolygon, sal_uInt32 nQuadrant, bool bEndPoint);
-
-        /** append a segment of unit circle with one point and the control vectors to the given polygon
-         */
-        void appendUnitCircleQuadrantSegment(B2DPolygon& rPolygon, sal_uInt32 nQuadrant, double fStart, double fEnd, bool bEndPoint);
-
         /** create a polygon which describes the unit circle and close it
 
             @param nStartQuadrant
@@ -324,59 +313,6 @@ namespace basegfx
             Radius of the ellipse in Y direction
          */
         B2DPolygon createPolygonFromEllipse( const B2DPoint& rCenter, double fRadiusX, double fRadiusY );
-
-        /** append a unit circle with one point and the control vectors to the given polygon
-         */
-        void appendUnitCircleQuadrant(B2DPolygon& rPolygon, sal_uInt32 nQuadrant);
-
-        /** append a segment of unit circle with start point, the control vectors and end point to the given polygon
-         */
-        void appendUnitCircleQuadrantSegment(B2DPolygon& rPolygon, sal_uInt32 nQuadrant, double fStart, double fEnd);
-
-        /** Create an ellipse polygon with given radii.
-
-            This method creates an ellipse approximation consisting of
-            four cubic bezier segments, which approximate the given
-            ellipse with an error of less than 0.5 percent.
-
-            @param rCenter
-            Center point of the circle
-
-            @param fRadiusX
-            Radius of the ellipse in X direction
-
-            @param fRadiusY
-            Radius of the ellipse in Y direction
-
-            @param fStart
-            Start angle where the ellipe segment starts in the range [0.0 .. 2PI[
-
-            @param fEnd
-            End angle where the ellipe segment ends in the range [0.0 .. 2PI[
-         */
-        B2DPolygon createPolygonFromEllipse( const B2DPoint& rCenter, double fRadiusX, double fRadiusY );
-
-        /** Create an ellipse polygon with given radii and the given angles, from start to end
-
-            This method creates an ellipse approximation consisting of
-            four cubic bezier segments, which approximate the given
-            ellipse with an error of less than 0.5 percent.
-
-            @param rCenter
-            Center point of the circle
-
-            @param fRadiusX
-            Radius of the ellipse in X direction
-
-            @param fRadiusY
-            Radius of the ellipse in Y direction
-
-            @param fStart
-            Start angle where the ellipe segment starts in the range [0.0 .. 2PI[
-
-            @param fEnd
-            End angle where the ellipe segment ends in the range [0.0 .. 2PI[
-         */
 
         /** Create an unit ellipse polygon with the given angles, from start to end
          */

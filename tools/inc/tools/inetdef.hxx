@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: inetdef.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,8 +58,6 @@
 #define TOOLS_INETDEF_OS "FreeBSD/amd64"
 #elif defined SINIX
 #define TOOLS_INETDEF_OS "SINIX"
-#elif defined IRIX
-#define TOOLS_INETDEF_OS "IRIX"
 #else // AIX, HPUX, SOLARIS, ...
 #define TOOLS_INETDEF_OS "Unix"
 #endif // AIX, HPUX, SOLARIS, ...

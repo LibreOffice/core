@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: mslangid.cxx,v $
- * $Revision: 1.10.24.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -154,7 +151,7 @@ LanguageType MsLangId::resolveSystemLanguageByScriptType( LanguageType nLang, sa
                 if (nConfiguredAsianFallback == LANGUAGE_SYSTEM)
                     nLang = LANGUAGE_CHINESE_SIMPLIFIED;
                 else
-                    nLang = nConfiguredComplexFallback;
+                    nLang = nConfiguredAsianFallback;
                 break;
             case ::com::sun::star::i18n::ScriptType::COMPLEX:
                 if (nConfiguredComplexFallback == LANGUAGE_SYSTEM)

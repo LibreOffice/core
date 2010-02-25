@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: parhtml.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 #include "svtools/svtdllapi.h"
 #include <tools/solar.h>
 #include <tools/string.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <svtools/svparser.hxx>
 
 
@@ -272,6 +269,8 @@ public:
     static void RemoveSGMLComment( String &rString, BOOL bFull );
 
     static BOOL InternalImgToPrivateURL( String& rURL );
+    static rtl_TextEncoding GetEncodingByHttpHeader( SvKeyValueIterator *pHTTPHeader );
+    BOOL SetEncodingByHTTPHeader( SvKeyValueIterator *pHTTPHeader );
 };
 
 inline void HTMLParser::StartPRE( BOOL bRestart )

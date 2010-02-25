@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: poly.h,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -98,18 +95,5 @@ public:
                     ImplPolyPolygon( const ImplPolyPolygon& rImplPolyPoly );
                     ~ImplPolyPolygon();
 };
-
-inline long MinMax( long nVal, long nMin, long nMax )
-{
-    return( nVal >= nMin ? ( nVal <= nMax ? nVal : nMax ) : nMin );
-}
-
-// ------------------------------------------------------------------
-
-inline long FRound( double fVal )
-{
-    return( fVal > 0.0 ? (long) ( fVal + 0.5 ) : -(long) ( -fVal + 0.5 ) );
-}
-
 
 #endif // _SV_POLY_H

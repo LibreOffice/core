@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: settings.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +35,7 @@
 #include "vcl/accel.hxx"
 #include "vcl/wall.hxx"
 #include "com/sun/star/lang/Locale.hpp"
+#include <unotools/syslocale.hxx>
 
 class CollatorWrapper;
 class LocaleDataWrapper;
@@ -521,9 +519,10 @@ private:
 #define STYLE_SYMBOLS_HICONTRAST    ((ULONG)2)
 #define STYLE_SYMBOLS_INDUSTRIAL    ((ULONG)3)
 #define STYLE_SYMBOLS_CRYSTAL       ((ULONG)4)
-#define STYLE_SYMBOLS_TANGO     ((ULONG)5)
-#define STYLE_SYMBOLS_CLASSIC       ((ULONG)6)
-#define STYLE_SYMBOLS_THEMES_MAX    ((ULONG)6)
+#define STYLE_SYMBOLS_TANGO         ((ULONG)5)
+#define STYLE_SYMBOLS_OXYGEN        ((ULONG)6)
+#define STYLE_SYMBOLS_CLASSIC       ((ULONG)7)
+#define STYLE_SYMBOLS_THEMES_MAX    ((ULONG)8)
 
 #define STYLE_CURSOR_NOBLINKTIME    ((ULONG)0xFFFFFFFF)
 
@@ -947,6 +946,8 @@ public:
     void                            SetPreferredSymbolsStyleName( const ::rtl::OUString &rName );
     ULONG                           GetPreferredSymbolsStyle() const
                                         { return mpData->mnPreferredSymbolsStyle; }
+    // check whether the symbols style is supported (icons are installed)
+    bool                            CheckSymbolStyle( ULONG nStyle ) const;
     ULONG                           GetAutoSymbolsStyle() const;
 
     ULONG                           GetCurrentSymbolsStyle() const;
@@ -993,7 +994,6 @@ class ImplMiscData
 
 private:
     ULONG                           mnRefCount;
-    USHORT                          mnTwoDigitYearStart;
     USHORT                          mnEnableATT;
     BOOL                            mbEnableLocalizedDecimalSep;
     USHORT                          mnDisablePrinting;
@@ -1015,10 +1015,6 @@ public:
                                     MiscSettings( const MiscSettings& rSet );
                                     ~MiscSettings();
 
-    void                            SetTwoDigitYearStart( USHORT nYearStart )
-                                        { CopyData(); mpData->mnTwoDigitYearStart = nYearStart; }
-    USHORT                          GetTwoDigitYearStart() const
-                                        { return mpData->mnTwoDigitYearStart; }
     void                            SetEnableATToolSupport( BOOL bEnable );
     BOOL                            GetEnableATToolSupport() const;
     void                            SetDisablePrinting( BOOL bEnable );
@@ -1141,7 +1137,7 @@ public:
 // -----------------------
 // - ImplAllSettingsData -
 // -----------------------
-
+class LocaleConfigurationListener;
 class ImplAllSettingsData
 {
     friend class    AllSettings;
@@ -1171,6 +1167,8 @@ private:
     CollatorWrapper*                        mpUICollatorWrapper;
     vcl::I18nHelper*                        mpI18nHelper;
     vcl::I18nHelper*                        mpUII18nHelper;
+    LocaleConfigurationListener*            mpLocaleCfgListener;
+    SvtSysLocale                            maSysLocale;
 };
 
 // ---------------
@@ -1287,6 +1285,8 @@ public:
     BOOL                                    operator ==( const AllSettings& rSet ) const;
     BOOL                                    operator !=( const AllSettings& rSet ) const
                                                 { return !(*this == rSet); }
+    static void                             LocaleSettingsChanged( sal_uInt32 nHint );
+    SvtSysLocale&                           GetSysLocale() { return mpData->maSysLocale; }
 };
 
 #endif // _SV_SETTINGS_HXX

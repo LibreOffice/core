@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: printdlg.cxx,v $
- * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,7 +44,7 @@
 #include <svtools/printdlg.hxx>
 #include <svtools/svtdata.hxx>
 #include <filedlg.hxx>
-#include "pickerhelper.hxx"
+#include "svl/pickerhelper.hxx"
 #ifndef _SVT_HELPID_HRC
 #include <svtools/helpid.hrc>
 #endif

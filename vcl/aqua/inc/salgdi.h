@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salgdi.h,v $
- * $Revision: 1.45.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -175,6 +172,9 @@ public:
     void                RefreshRect(float lX, float lY, float lWidth, float lHeight);
 
     void                SetState();
+    void                UnsetState();
+    // InvalidateContext does an UnsetState and sets mrContext to 0
+    void                InvalidateContext();
 
     virtual BOOL        unionClipRegion( long nX, long nY, long nWidth, long nHeight );
     virtual bool        unionClipRegion( const ::basegfx::B2DPolyPolygon& );
@@ -359,6 +359,7 @@ private:
     void ApplyXorContext();
     void Pattern50Fill();
     UInt32 getState( ControlState nState );
+    UInt32 getTrackState( ControlState nState );
 };
 
 class XorEmulation

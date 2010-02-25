@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svparser.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +34,7 @@
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <rtl/textcvt.h>
 #include <rtl/tencinfo.h>
 
@@ -66,7 +63,7 @@ struct SvParser_Impl
     rtl_TextToUnicodeConverter hConv;
     rtl_TextToUnicodeContext   hContext;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     SvFileStream aOut;
 #endif
 
@@ -100,7 +97,7 @@ SvParser::SvParser( SvStream& rIn, BYTE nStackSize )
     pTokenStack = new TokenStackType[ nTokenStackSize ];
     pTokenStackPos = pTokenStack;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
     // wenn die Datei schon existiert, dann Anhaengen:
     if( !pImplData )
@@ -119,7 +116,7 @@ SvParser::SvParser( SvStream& rIn, BYTE nStackSize )
 
 SvParser::~SvParser()
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     if( pImplData->aOut.IsOpen() )
         pImplData->aOut << "\n\n >>>>>>>>>>>>>>> Dump Ende <<<<<<<<<<<<<<<\n";
     pImplData->aOut.Close();
@@ -417,7 +414,7 @@ sal_Unicode SvParser::GetNextChar()
             return sal_Unicode(EOF);
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     if( pImplData->aOut.IsOpen() )
         pImplData->aOut << ByteString::ConvertFromUnicode( c,
                                                 RTL_TEXTENCODING_MS_1251 );

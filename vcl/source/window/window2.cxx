@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: window2.cxx,v $
- * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1459,7 +1456,6 @@ ULONG Window::GetHelpId() const
 
 void Window::SetSmartHelpId( const SmartId& aId, SmartIdUpdateMode aMode )
 {
-    mpWindowImpl->maHelpText = String();
     // create SmartId if required
     if ( (aMode == SMART_SET_STR) || (aMode == SMART_SET_ALL) || ( (aMode == SMART_SET_SMART) && aId.HasString() ) )
     {
@@ -2000,6 +1996,7 @@ BOOL Window::IsZoom() const
 void Window::SetHelpText( const XubString& rHelpText )
 {
     mpWindowImpl->maHelpText = rHelpText;
+    mpWindowImpl->mbHelpTextDynamic = TRUE;
 }
 
 void Window::SetQuickHelpText( const XubString& rHelpText )

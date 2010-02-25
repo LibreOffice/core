@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: templwin.src,v $
- * $Revision: 1.65 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 #include "templwin.hrc"
 #include "controldims.hrc"
 #include <svtools/helpid.hrc>
-#include <svtools/svtools.hrc>
+#include <svl/svtools.hrc>
 
 // Magenta and Grey as mask colors
 #define MASK_COL_MAGENTA    Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };

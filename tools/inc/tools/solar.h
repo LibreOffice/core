@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: solar.h,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -393,8 +390,6 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
   #define __DLLEXTENSION "fi.so"
 #elif defined FREEBSD && defined X86_64
   #define __DLLEXTENSION "fx.so"
-#elif defined IRIX
-  #define __DLLEXTENSION "im.so"
 #elif defined MACOSX && defined POWERPC
   #define __DLLEXTENSION "mxp.dylib"
 #elif defined MACOSX && defined X86

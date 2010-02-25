@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: converter.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,8 +29,9 @@
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Date.hpp>
-#include <com/sun/star/util/Time.hpp>
+#include <com/sun/star/util/Duration.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
+
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 #include "sax/tools/converter.hxx"
@@ -683,11 +681,10 @@ bool Converter::convertDouble(double& rValue, const ::rtl::OUString& rString)
     return ( eStatus == rtl_math_ConversionStatus_Ok );
 }
 
-/** convert double to ISO Time String; negative durations allowed */
-void Converter::convertTime( ::rtl::OUStringBuffer& rBuffer,
-                            const double& fTime)
+/** convert double to ISO "duration" string; negative durations allowed */
+void Converter::convertDuration(::rtl::OUStringBuffer& rBuffer,
+                                const double fTime)
 {
-
     double fValue = fTime;
 
     // take care of negative durations as specified in:
@@ -755,9 +752,9 @@ void Converter::convertTime( ::rtl::OUStringBuffer& rBuffer,
     rBuffer.append( sal_Unicode('S'));
 }
 
-/** convert ISO Time String to double; negative durations allowed */
-bool Converter::convertTime( double& fTime,
-                            const ::rtl::OUString& rString)
+/** convert ISO "duration" string to double; negative durations allowed */
+bool Converter::convertDuration(double& rfTime,
+                                const ::rtl::OUString& rString)
 {
     rtl::OUString aTrimmed = rString.trim().toAsciiUpperCase();
     const sal_Unicode* pStr = aTrimmed.getStr();
@@ -880,64 +877,403 @@ bool Converter::convertTime( double& fTime,
             fTempTime = -fTempTime;
         }
 
-        fTime = fTempTime;
+        rfTime = fTempTime;
     }
     return bSuccess;
 }
 
-/** convert util::DateTime to ISO Time String */
-void Converter::convertTime( ::rtl::OUStringBuffer& rBuffer,
-                            const ::com::sun::star::util::DateTime& rDateTime )
+/** convert util::Duration to ISO "duration" string */
+void Converter::convertDuration(::rtl::OUStringBuffer& rBuffer,
+        const ::util::Duration& rDuration)
 {
-    double fHour = rDateTime.Hours;
-    double fMin = rDateTime.Minutes;
-    double fSec = rDateTime.Seconds;
-    double fSec100 = rDateTime.HundredthSeconds;
-    double fTempTime = fHour / 24;
-    fTempTime += fMin / (24 * 60);
-    fTempTime += fSec / (24 * 60 * 60);
-    fTempTime += fSec100 / (24 * 60 * 60 * 100);
-    convertTime( rBuffer, fTempTime );
+    if (rDuration.Negative)
+    {
+        rBuffer.append(sal_Unicode('-'));
+    }
+    rBuffer.append(sal_Unicode('P'));
+    const bool bHaveDate(static_cast<sal_Int32>(rDuration.Years)
+                        +static_cast<sal_Int32>(rDuration.Months)
+                        +static_cast<sal_Int32>(rDuration.Days));
+    if (rDuration.Years)
+    {
+        rBuffer.append(static_cast<sal_Int32>(rDuration.Years));
+        rBuffer.append(sal_Unicode('Y'));
+    }
+    if (rDuration.Months)
+    {
+        rBuffer.append(static_cast<sal_Int32>(rDuration.Months));
+        rBuffer.append(sal_Unicode('M'));
+    }
+    if (rDuration.Days)
+    {
+        rBuffer.append(static_cast<sal_Int32>(rDuration.Days));
+        rBuffer.append(sal_Unicode('D'));
+    }
+    const sal_Int32 nHSecs(static_cast<sal_Int32>(rDuration.Seconds)
+                         + static_cast<sal_Int32>(rDuration.HundredthSeconds));
+    if (static_cast<sal_Int32>(rDuration.Hours) +
+        static_cast<sal_Int32>(rDuration.Minutes) + nHSecs)
+    {
+        rBuffer.append(sal_Unicode('T')); // time separator
+        if (rDuration.Hours)
+        {
+            rBuffer.append(static_cast<sal_Int32>(rDuration.Hours));
+            rBuffer.append(sal_Unicode('H'));
+        }
+        if (rDuration.Minutes)
+        {
+            rBuffer.append(static_cast<sal_Int32>(rDuration.Minutes));
+            rBuffer.append(sal_Unicode('M'));
+        }
+        if (nHSecs)
+        {
+            // seconds must not be omitted (i.e. ".42S" is not valid)
+            rBuffer.append(static_cast<sal_Int32>(rDuration.Seconds));
+            if (rDuration.HundredthSeconds)
+            {
+                rBuffer.append(sal_Unicode('.'));
+                const sal_Int32 nHundredthSeconds(
+                        rDuration.HundredthSeconds % 100);
+                if (nHundredthSeconds < 10)
+                {
+                    rBuffer.append(sal_Unicode('0'));
+                }
+                rBuffer.append(nHundredthSeconds);
+            }
+            rBuffer.append(sal_Unicode('S'));
+        }
+    }
+    else if (!bHaveDate)
+    {
+        // zero duration: XMLSchema-2 says there must be at least one component
+        rBuffer.append(sal_Unicode('0'));
+        rBuffer.append(sal_Unicode('D'));
+    }
 }
 
-/** convert ISO Time String to util::DateTime */
-bool Converter::convertTime( ::com::sun::star::util::DateTime& rDateTime,
-                             const ::rtl::OUString& rString )
+enum Result { R_NOTHING, R_OVERFLOW, R_SUCCESS };
+
+static Result
+readUnsignedNumber(const ::rtl::OUString & rString,
+    sal_Int32 & io_rnPos, sal_Int32 & o_rNumber)
 {
-    double fCalculatedTime = 0.0;
-    if( convertTime( fCalculatedTime, rString ) )
+    bool bOverflow(false);
+    sal_Int32 nTemp(0);
+
+    for (sal_Int32 nPos = io_rnPos; (nPos < rString.getLength()); ++nPos)
     {
-        // #101357# declare as volatile to prevent optimization
-        // (gcc 3.0.1 Linux)
-        volatile double fTempTime = fCalculatedTime;
-        fTempTime *= 24;
-        double fHoursValue = ::rtl::math::approxFloor (fTempTime);
-        fTempTime -= fHoursValue;
-        fTempTime *= 60;
-        double fMinsValue = ::rtl::math::approxFloor (fTempTime);
-        fTempTime -= fMinsValue;
-        fTempTime *= 60;
-        double fSecsValue = ::rtl::math::approxFloor (fTempTime);
-        fTempTime -= fSecsValue;
-        double f100SecsValue = 0.0;
+        const sal_Unicode c = rString[nPos];
+        if ((sal_Unicode('0') <= c) && (c <= sal_Unicode('9')))
+        {
+            nTemp *= 10;
+            nTemp += (c - sal_Unicode('0'));
+            if (nTemp >= SAL_MAX_INT16)
+            {
+                bOverflow = true;
+            }
+        }
+        else
+        {
+            if (io_rnPos != nPos) // read something?
+            {
+                io_rnPos = nPos;
+                if (bOverflow)
+                {
+                    return R_OVERFLOW;
+                }
+                else
+                {
+                    o_rNumber = nTemp;
+                    return R_SUCCESS;
+                }
+            }
+            else break;
+        }
+    }
 
-        if( fTempTime > 0.00001 )
-            f100SecsValue = fTempTime;
+    o_rNumber = -1;
+    return R_NOTHING;
+}
 
-        rDateTime.Year = 0;
-        rDateTime.Month = 0;
-        rDateTime.Day = 0;
-        rDateTime.Hours = static_cast < sal_uInt16 > ( fHoursValue );
-        rDateTime.Minutes = static_cast < sal_uInt16 > ( fMinsValue );
-        rDateTime.Seconds = static_cast < sal_uInt16 > ( fSecsValue );
-        rDateTime.HundredthSeconds = static_cast < sal_uInt16 > ( f100SecsValue * 100.0 );
-
+static bool
+readDurationT(const ::rtl::OUString & rString, sal_Int32 & io_rnPos)
+{
+    if ((io_rnPos < rString.getLength()) &&
+        (rString[io_rnPos] == sal_Unicode('T')))
+    {
+        ++io_rnPos;
         return true;
     }
     return false;
 }
 
-/** convert util::DateTime to ISO Date String */
+static bool
+readDurationComponent(const ::rtl::OUString & rString,
+    sal_Int32 & io_rnPos, sal_Int32 & io_rnTemp, bool & io_rbTimePart,
+    sal_Int32 & o_rnTarget, const sal_Unicode c)
+{
+    if ((io_rnPos < rString.getLength()))
+    {
+        if (c == rString[io_rnPos])
+        {
+            ++io_rnPos;
+            if (-1 != io_rnTemp)
+            {
+                o_rnTarget = io_rnTemp;
+                io_rnTemp = -1;
+                if (!io_rbTimePart)
+                {
+                    io_rbTimePart = readDurationT(rString, io_rnPos);
+                }
+                return (R_OVERFLOW !=
+                        readUnsignedNumber(rString, io_rnPos, io_rnTemp));
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+/** convert ISO "duration" string to util::Duration */
+bool Converter::convertDuration(util::Duration& rDuration,
+                                const ::rtl::OUString& rString)
+{
+    const ::rtl::OUString string = rString.trim().toAsciiUpperCase();
+    sal_Int32 nPos(0);
+
+    bool bIsNegativeDuration(false);
+    if (string.getLength() && (sal_Unicode('-') == string[0]))
+    {
+        bIsNegativeDuration = true;
+        ++nPos;
+    }
+
+    if ((nPos < string.getLength())
+        && (string[nPos] != sal_Unicode('P'))) // duration must start with "P"
+    {
+        return false;
+    }
+
+    ++nPos;
+
+    /// last read number; -1 == no valid number! always reset after using!
+    sal_Int32 nTemp(-1);
+    bool bTimePart(false); // have we read 'T'?
+    bool bSuccess(false);
+    sal_Int32 nYears(0);
+    sal_Int32 nMonths(0);
+    sal_Int32 nDays(0);
+    sal_Int32 nHours(0);
+    sal_Int32 nMinutes(0);
+    sal_Int32 nSeconds(0);
+    sal_Int32 nHundredthSeconds(0);
+
+    bTimePart = readDurationT(string, nPos);
+    bSuccess = (R_SUCCESS == readUnsignedNumber(string, nPos, nTemp));
+
+    if (!bTimePart && bSuccess)
+    {
+        bSuccess = readDurationComponent(string, nPos, nTemp, bTimePart,
+                     nYears, sal_Unicode('Y'));
+    }
+
+    if (!bTimePart && bSuccess)
+    {
+        bSuccess = readDurationComponent(string, nPos, nTemp, bTimePart,
+                     nMonths, sal_Unicode('M'));
+    }
+
+    if (!bTimePart && bSuccess)
+    {
+        bSuccess = readDurationComponent(string, nPos, nTemp, bTimePart,
+                     nDays, sal_Unicode('D'));
+    }
+
+    if (bTimePart)
+    {
+        if (-1 == nTemp) // a 'T' must be followed by a component
+        {
+            bSuccess = false;
+        }
+
+        if (bSuccess)
+        {
+            bSuccess = readDurationComponent(string, nPos, nTemp, bTimePart,
+                         nHours, sal_Unicode('H'));
+        }
+
+        if (bSuccess)
+        {
+            bSuccess = readDurationComponent(string, nPos, nTemp, bTimePart,
+                         nMinutes, sal_Unicode('M'));
+        }
+
+        // eeek! seconds are icky.
+        if ((nPos < string.getLength()) && bSuccess)
+        {
+            if (sal_Unicode('.') == string[nPos])
+            {
+                ++nPos;
+                if (-1 != nTemp)
+                {
+                    nSeconds = nTemp;
+                    nTemp = -1;
+                    const sal_Int32 nStart(nPos);
+                    bSuccess =
+                        (R_SUCCESS == readUnsignedNumber(string, nPos, nTemp));
+                    if ((nPos < string.getLength()) && bSuccess)
+                    {
+                        if (sal_Unicode('S') == string[nPos])
+                        {
+                            ++nPos;
+                            if (-1 != nTemp)
+                            {
+                                nTemp = -1;
+                                const sal_Int32 nDigits = nPos - nStart;
+                                OSL_ENSURE(nDigits > 0, "bad code monkey");
+                                nHundredthSeconds = 10 *
+                                    (string[nStart] - sal_Unicode('0'));
+                                if (nDigits >= 2)
+                                {
+                                    nHundredthSeconds +=
+                                        (string[nStart+1] - sal_Unicode('0'));
+                                }
+                            }
+                            else
+                            {
+                                bSuccess = false;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    bSuccess = false;
+                }
+            }
+            else if (sal_Unicode('S') == string[nPos])
+            {
+                ++nPos;
+                if (-1 != nTemp)
+                {
+                    nSeconds = nTemp;
+                    nTemp = -1;
+                }
+                else
+                {
+                    bSuccess = false;
+                }
+            }
+        }
+    }
+
+    if (nPos != string.getLength()) // string not processed completely?
+    {
+        bSuccess = false;
+    }
+
+    if (nTemp != -1) // unprocessed number?
+    {
+        bSuccess = false;
+    }
+
+    if (bSuccess)
+    {
+        rDuration.Negative  = bIsNegativeDuration;
+        rDuration.Years     = static_cast<sal_Int16>(nYears);
+        rDuration.Months    = static_cast<sal_Int16>(nMonths);
+        rDuration.Days      = static_cast<sal_Int16>(nDays);
+        rDuration.Hours     = static_cast<sal_Int16>(nHours);
+        rDuration.Minutes   = static_cast<sal_Int16>(nMinutes);
+        rDuration.Seconds   = static_cast<sal_Int16>(nSeconds);
+        rDuration.HundredthSeconds = static_cast<sal_Int16>(nHundredthSeconds);
+    }
+
+    return bSuccess;
+}
+
+#if 0
+//FIXME
+struct Test {
+    static bool eqDuration(util::Duration a, util::Duration b) {
+        return a.Years == b.Years && a.Months == b.Months && a.Days == b.Days
+            && a.Hours == b.Hours && a.Minutes == b.Minutes
+            && a.Seconds == b.Seconds
+            && a.HundredthSeconds == b.HundredthSeconds
+            && a.Negative == b.Negative;
+    }
+    static void doTest(util::Duration const & rid, const char * pis)
+    {
+        bool bSuccess(false);
+        ::rtl::OUStringBuffer buf;
+        Converter::convertDuration(buf, rid);
+        ::rtl::OUString os(buf.makeStringAndClear());
+        OSL_TRACE(::rtl::OUStringToOString(os.getStr(), RTL_TEXTENCODING_UTF8));
+        OSL_ASSERT(os.equalsAscii(pis));
+        util::Duration od;
+        bSuccess = Converter::convertDuration(od, os);
+        OSL_TRACE("%d %dY %dM %dD %dH %dM %dS %dH",
+            od.Negative, od.Years, od.Months, od.Days,
+            od.Hours, od.Minutes, od.Seconds, od.HundredthSeconds);
+        OSL_ASSERT(bSuccess);
+        OSL_ASSERT(eqDuration(rid, od));
+    }
+    static void doTestF(const char * pis)
+    {
+        util::Duration od;
+        bool bSuccess = Converter::convertDuration(od,
+                ::rtl::OUString::createFromAscii(pis));
+        OSL_TRACE("%d %dY %dM %dD %dH %dM %dS %dH",
+            od.Negative, od.Years, od.Months, od.Days,
+            od.Hours, od.Minutes, od.Seconds, od.HundredthSeconds);
+        OSL_ASSERT(!bSuccess);
+    }
+    Test() {
+        OSL_TRACE("\nSAX CONVERTER TEST BEGIN\n");
+        doTest( util::Duration(false, 1, 0, 0, 0, 0, 0, 0), "P1Y" );
+        doTest( util::Duration(false, 0, 42, 0, 0, 0, 0, 0), "P42M" );
+        doTest( util::Duration(false, 0, 0, 111, 0, 0, 0, 0), "P111D" );
+        doTest( util::Duration(false, 0, 0, 0, 52, 0, 0, 0), "PT52H" );
+        doTest( util::Duration(false, 0, 0, 0, 0, 717, 0, 0), "PT717M" );
+        doTest( util::Duration(false, 0, 0, 0, 0, 0, 121, 0), "PT121S" );
+        doTest( util::Duration(false, 0, 0, 0, 0, 0, 0, 19), "PT0.19S" );
+        doTest( util::Duration(false, 0, 0, 0, 0, 0, 0, 9), "PT0.09S" );
+        doTest( util::Duration(true , 0, 0, 9999, 0, 0, 0, 0), "-P9999D" );
+        doTest( util::Duration(true , 7, 6, 5, 4, 3, 2, 1),
+                "-P7Y6M5DT4H3M2.01S" );
+        doTest( util::Duration(false, 0, 6, 0, 0, 3, 0, 0), "P6MT3M" );
+        doTest( util::Duration(false, 0, 0, 0, 0, 0, 0, 0), "P0D" );
+        doTestF("1Y1M");
+        doTestF("P-1Y1M");
+        doTestF("P1M1Y");
+        doTestF("PT1Y");
+        doTestF("P1Y1M1M");
+        doTestF("P1YT1MT1M");
+        doTestF("P1YT");
+        doTestF("P99999999999Y");
+        doTestF("PT.1S");
+        doTestF("PT5M.134S");
+        doTestF("PT1.S");
+        OSL_TRACE("\nSAX CONVERTER TEST END\n");
+    }
+};
+static Test test;
+#endif
+
+/** convert util::Date to ISO "date" string */
+void Converter::convertDate(
+        ::rtl::OUStringBuffer& i_rBuffer,
+        const util::Date& i_rDate)
+{
+    const util::DateTime dt(
+            0, 0, 0, 0, i_rDate.Day, i_rDate.Month, i_rDate.Year);
+    convertDateTime(i_rBuffer, dt, false);
+}
+
+/** convert util::DateTime to ISO "date" or "dateTime" string */
 void Converter::convertDateTime(
         ::rtl::OUStringBuffer& i_rBuffer,
         const com::sun::star::util::DateTime& i_rDateTime,
@@ -990,9 +1326,36 @@ void Converter::convertDateTime(
     }
 }
 
-/** convert ISO Date String to util::DateTime */
-bool Converter::convertDateTime( com::sun::star::util::DateTime& rDateTime,
-                                     const ::rtl::OUString& rString )
+/** convert ISO "date" or "dateTime" string to util::DateTime */
+bool Converter::convertDateTime( util::DateTime& rDateTime,
+                                 const ::rtl::OUString& rString )
+{
+    bool isDateTime;
+    util::Date date;
+    if (convertDateOrDateTime(date, rDateTime, isDateTime, rString))
+    {
+        if (!isDateTime)
+        {
+            rDateTime.Year = date.Year;
+            rDateTime.Month = date.Month;
+            rDateTime.Day = date.Day;
+            rDateTime.Hours = 0;
+            rDateTime.Minutes = 0;
+            rDateTime.Seconds = 0;
+            rDateTime.HundredthSeconds = 0;
+        }
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+/** convert ISO "date" or "dateTime" string to util::DateTime or util::Date */
+bool Converter::convertDateOrDateTime(
+                util::Date & rDate, util::DateTime & rDateTime,
+                bool & rbDateTime, const ::rtl::OUString & rString )
 {
     bool bSuccess = true;
 
@@ -1077,13 +1440,25 @@ bool Converter::convertDateTime( com::sun::star::util::DateTime& rDateTime,
 
     if (bSuccess)
     {
-        rDateTime.Year = (sal_uInt16)nYear;
-        rDateTime.Month = (sal_uInt16)nMonth;
-        rDateTime.Day = (sal_uInt16)nDay;
-        rDateTime.Hours = (sal_uInt16)nHour;
-        rDateTime.Minutes = (sal_uInt16)nMin;
-        rDateTime.Seconds = (sal_uInt16)nSec;
-        rDateTime.HundredthSeconds = (sal_uInt16)(sDoubleStr.toDouble() * 100);
+        if ( aTimeStr.getLength() > 0 ) // time is optional
+        {
+            rDateTime.Year = static_cast<sal_uInt16>(nYear);
+            rDateTime.Month = static_cast<sal_uInt16>(nMonth);
+            rDateTime.Day = static_cast<sal_uInt16>(nDay);
+            rDateTime.Hours = static_cast<sal_uInt16>(nHour);
+            rDateTime.Minutes = static_cast<sal_uInt16>(nMin);
+            rDateTime.Seconds = static_cast<sal_uInt16>(nSec);
+            rDateTime.HundredthSeconds =
+                static_cast<sal_uInt16>((sDoubleStr).toDouble() * 100);
+            rbDateTime = true;
+        }
+        else
+        {
+            rDate.Year = static_cast<sal_uInt16>(nYear);
+            rDate.Month = static_cast<sal_uInt16>(nMonth);
+            rDate.Day = static_cast<sal_uInt16>(nDay);
+            rbDateTime = false;
+        }
     }
     return bSuccess;
 }

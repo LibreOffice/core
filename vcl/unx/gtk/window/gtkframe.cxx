@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: gtkframe.cxx,v $
- * $Revision: 1.84.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1315,7 +1312,7 @@ void GtkSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
             setMinMaxSize();
 
             // #i45160# switch to desktop where a dialog with parent will appear
-            if( m_pParent && m_pParent->m_nWorkArea != m_nWorkArea )
+            if( m_pParent && m_pParent->m_nWorkArea != m_nWorkArea && GTK_WIDGET_MAPPED(m_pParent->m_pWindow) )
                 getDisplay()->getWMAdaptor()->switchToWorkArea( m_pParent->m_nWorkArea );
 
             if( isFloatGrabWindow() &&
@@ -2376,6 +2373,11 @@ void GtkSalFrame::createNewWindow( XLIB_Window aNewParent, bool bXEmbed, int nSc
             }
         }
     }
+
+    // free xrender resources
+    for( unsigned int i = 0; i < sizeof(m_aGraphics)/sizeof(m_aGraphics[0]); i++ )
+        if( m_aGraphics[i].bInUse )
+            m_aGraphics[i].pGraphics->SetDrawable( None, m_nScreen );
 
     // first deinit frame
     if( m_pIMHandler )

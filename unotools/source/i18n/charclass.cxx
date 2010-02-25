@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: charclass.cxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -538,7 +535,7 @@ sal_Int32 CharClass::getStringType( const String& rStr, xub_StrLen nPos, xub_Str
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "parseAnyToken: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -570,7 +567,7 @@ sal_Int32 CharClass::getStringType( const String& rStr, xub_StrLen nPos, xub_Str
     }
     catch ( Exception& e )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "parsePredefinedToken: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );

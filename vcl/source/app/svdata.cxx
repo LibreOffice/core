@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdata.cxx,v $
- * $Revision: 1.56 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,7 +44,7 @@
 #include <uno/current_context.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <tools/debug.hxx>
-#include <vcl/fontcfg.hxx>
+#include <unotools/fontcfg.hxx>
 #include <vcl/configsettings.hxx>
 #include <vcl/svdata.hxx>
 #include <vcl/window.h>
@@ -232,6 +229,15 @@ ResMgr* ImplGetResMgr()
         }
     }
     return pSVData->mpResMgr;
+}
+
+ResId VclResId( sal_Int32 nId )
+{
+    ResMgr* pMgr = ImplGetResMgr();
+    if( ! pMgr )
+        throw std::bad_alloc();
+
+    return ResId( nId, *pMgr );
 }
 
 DockingManager* ImplGetDockingManager()
@@ -523,3 +529,9 @@ Window* ImplFindWindow( const SalFrame* pFrame, Point& rSalFramePos )
 
     return NULL;
 }
+
+void LocaleConfigurationListener::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 nHint )
+{
+    AllSettings::LocaleSettingsChanged( nHint );
+}
+

@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -54,6 +54,7 @@
 #include "basegfx/polygon/b2dpolygon.hxx"
 #include "basegfx/polygon/b2dpolygontools.hxx"
 #include "basegfx/matrix/b2dhommatrix.hxx"
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 using namespace vcl;
 
@@ -603,7 +604,8 @@ void AquaSalGraphics::EndSetClipRegion()
 void AquaSalGraphics::SetLineColor()
 {
     maLineColor.SetAlpha( 0.0 );   // transparent
-    CGContextSetStrokeColor( mrContext, maLineColor.AsArray() );
+    if( CheckContext() )
+        CGContextSetStrokeColor( mrContext, maLineColor.AsArray() );
 }
 
 // -----------------------------------------------------------------------
@@ -611,7 +613,8 @@ void AquaSalGraphics::SetLineColor()
 void AquaSalGraphics::SetLineColor( SalColor nSalColor )
 {
     maLineColor = RGBAColor( nSalColor );
-    CGContextSetStrokeColor( mrContext, maLineColor.AsArray() );
+    if( CheckContext() )
+        CGContextSetStrokeColor( mrContext, maLineColor.AsArray() );
 }
 
 // -----------------------------------------------------------------------
@@ -619,7 +622,8 @@ void AquaSalGraphics::SetLineColor( SalColor nSalColor )
 void AquaSalGraphics::SetFillColor()
 {
     maFillColor.SetAlpha( 0.0 );   // transparent
-    CGContextSetFillColor( mrContext, maFillColor.AsArray() );
+    if( CheckContext() )
+        CGContextSetFillColor( mrContext, maFillColor.AsArray() );
 }
 
 // -----------------------------------------------------------------------
@@ -627,7 +631,8 @@ void AquaSalGraphics::SetFillColor()
 void AquaSalGraphics::SetFillColor( SalColor nSalColor )
 {
     maFillColor = RGBAColor( nSalColor );
-    CGContextSetFillColor( mrContext, maFillColor.AsArray() );
+    if( CheckContext() )
+        CGContextSetFillColor( mrContext, maFillColor.AsArray() );
 }
 
 // -----------------------------------------------------------------------
@@ -1768,9 +1773,7 @@ BOOL AquaSalGraphics::GetGlyphOutline( long nGlyphId, basegfx::B2DPolyPolygon& r
 
     GgoClosePathProc( &aGgoData );
     if( mfFontScale != 1.0 ) {
-        basegfx::B2DHomMatrix aScale;
-        aScale.scale( +mfFontScale, +mfFontScale );
-        rPolyPoly.transform( aScale );
+        rPolyPoly.transform(basegfx::tools::createScaleB2DHomMatrix(+mfFontScale, +mfFontScale));
     }
     return true;
 }

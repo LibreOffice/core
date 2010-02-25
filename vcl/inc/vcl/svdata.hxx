@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdata.hxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +41,7 @@
 #include <tools/debug.hxx>
 #include <vcl/dllapi.h>
 #include <com/sun/star/uno/Reference.hxx>
+#include <unotools/options.hxx>
 
 namespace com {
 namespace sun {
@@ -86,6 +84,7 @@ class Timer;
 class AutoTimer;
 class Help;
 class ImageList;
+class Image;
 class PopupMenu;
 class Application;
 class OutputDevice;
@@ -114,11 +113,17 @@ class VclEventListeners2;
 
 namespace vos { class OMutex; }
 namespace vos { class OCondition; }
-namespace vcl { class DisplayConnection; class FontSubstConfiguration; class SettingsConfigItem; class DefaultFontConfiguration; class DeleteOnDeinitBase; }
+namespace vcl { class DisplayConnection; class SettingsConfigItem; class DeleteOnDeinitBase; }
+namespace utl { class DefaultFontConfiguration; class FontSubstConfiguration; }
 
 // -----------------
 // - ImplSVAppData -
 // -----------------
+class LocaleConfigurationListener : public utl::ConfigurationListener
+{
+public:
+    virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
+};
 
 struct ImplSVAppData
 {
@@ -131,21 +136,22 @@ struct ImplSVAppData
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    mxMSF;
     String*                 mpMSFTempFileName;
-    AllSettings*            mpSettings;                     // Application settings
-    VclEventListeners*      mpEventListeners;               // listeners for vcl events (eg, extended toolkit)
-    VclEventListeners*      mpKeyListeners;                 // listeners for key events only (eg, extended toolkit)
-    ImplAccelManager*       mpAccelMgr;                     // Accelerator Manager
-    XubString*              mpAppName;                      // Application name
-    XubString*              mpAppFileName;                  // Abs. Application FileName
-    XubString*              mpDisplayName;                  // Application Display Name
-    String*                 mpFontPath;                     // Additional Fontpath
-    Help*                   mpHelp;                         // Application help
-    PopupMenu*              mpActivePopupMenu;              // Actives Popup-Menu (in Execute)
-    UniqueIdContainer*      mpUniqueIdCont;                 // Fuer Eindeutige Id's
-    ImplIdleMgr*            mpIdleMgr;                      // Idle-Manager
-    ImplWheelWindow*        mpWheelWindow;                  // WheelWindow
-    ImplHotKey*             mpFirstHotKey;                  // HotKey-Verwaltung
-    ImplEventHook*          mpFirstEventHook;               // Event-Hooks
+    AllSettings*            mpSettings;         // Application settings
+    LocaleConfigurationListener* mpCfgListener;
+    VclEventListeners*      mpEventListeners;   // listeners for vcl events (eg, extended toolkit)
+    VclEventListeners*      mpKeyListeners;     // listeners for key events only (eg, extended toolkit)
+    ImplAccelManager*       mpAccelMgr;         // Accelerator Manager
+    XubString*              mpAppName;          // Application name
+    XubString*              mpAppFileName;      // Abs. Application FileName
+    XubString*              mpDisplayName;      // Application Display Name
+    String*                 mpFontPath;         // Additional Fontpath
+    Help*                   mpHelp;             // Application help
+    PopupMenu*              mpActivePopupMenu;  // Actives Popup-Menu (in Execute)
+    UniqueIdContainer*      mpUniqueIdCont;     // Fuer Eindeutige Id's
+    ImplIdleMgr*            mpIdleMgr;          // Idle-Manager
+    ImplWheelWindow*        mpWheelWindow;      // WheelWindow
+    ImplHotKey*             mpFirstHotKey;      // HotKey-Verwaltung
+    ImplEventHook*          mpFirstEventHook;   // Event-Hooks
     VclEventListeners2*     mpPostYieldListeners;           // post yield listeners
     ULONG                   mnLastInputTime;                // GetLastInputTime()
     USHORT                  mnDispatchLevel;                // DispatchLevel
@@ -200,8 +206,8 @@ struct ImplSVGDIData
     long                    mnAppFontX;         // AppFont X-Numenator for 40/tel Width + DialogScaleX
     long                    mnAppFontY;         // AppFont Y-Numenator for 80/tel Height
     BOOL                    mbFontSubChanged;   // TRUE: FontSubstitution wurde zwischen Begin/End geaendert
-    vcl::DefaultFontConfiguration* mpDefaultFontConfiguration;
-    vcl::FontSubstConfiguration* mpFontSubstConfiguration;
+    utl::DefaultFontConfiguration* mpDefaultFontConfiguration;
+    utl::FontSubstConfiguration* mpFontSubstConfiguration;
     bool                    mbPrinterPullModel; // true: use pull model instead of normal push model when printing
     bool                    mbNativeFontConfig; // true: do not override UI font
     bool                    mbNoXORClipping;    // true: do not use XOR to achieve clipping effects
@@ -251,6 +257,10 @@ struct ImplSVCtrlData
     ImageList*              mpSplitVPinImgList; // ImageList for Vertikale SplitWindows (PIN's)
     ImageList*              mpSplitHArwImgList; // ImageList for Horizontale SplitWindows (Arrows)
     ImageList*              mpSplitVArwImgList; // ImageList for Vertikale SplitWindows (Arrows)
+    Image*                  mpDisclosurePlus;
+    Image*                  mpDisclosurePlusHC;
+    Image*                  mpDisclosureMinus;
+    Image*                  mpDisclosureMinusHC;
     ImplTBDragMgr*          mpTBDragMgr;        // DragMgr for ToolBox
     USHORT                  mnCheckStyle;       // CheckBox-Style for ImageList-Update
     USHORT                  mnRadioStyle;       // Radio-Style for ImageList-Update
@@ -359,6 +369,7 @@ void        ImplDeInitSVData();
 void        ImplDestroySVData();
 Window*     ImplGetDefaultWindow();
 VCL_DLLPUBLIC ResMgr*     ImplGetResMgr();
+VCL_DLLPUBLIC ResId VclResId( sal_Int32 nId ); // throws std::bad_alloc if no res mgr
 DockingManager*     ImplGetDockingManager();
 void        ImplWindowAutoMnemonic( Window* pWindow );
 
