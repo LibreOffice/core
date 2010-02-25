@@ -223,8 +223,6 @@
 ../../xmlsecurity/inc
 ../../xmlsecurity/unxlngi6.pro/inc
 ../../padmin/unxlngi6.pro/inc
-../../goodies/inc
-../../goodies/unxlngi6.pro/inc
 ../../regexp/inc
 ../../regexp/unxlngi6.pro/inc
 ../../ucbhelper/inc

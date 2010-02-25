@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unoiface.cxx,v $
- * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1053,7 +1050,7 @@ void SVTXFormattedField::setProperty( const ::rtl::OUString& PropertyName, const
         case ::com::sun::star::uno::TypeClass_DOUBLE:
             if (pField->TreatingAsNumber())
             {
-                double d;
+                double d = 0.0;
                 rValue >>= d;
                 aReturn <<= d;
             }
@@ -1065,7 +1062,7 @@ void SVTXFormattedField::setProperty( const ::rtl::OUString& PropertyName, const
                     // should never fail
 
                 Color* pDum;
-                double d;
+                double d = 0.0;
                 rValue >>= d;
                 String sConverted;
                 pFormatter->GetOutputString(d, 0, sConverted, &pDum);
