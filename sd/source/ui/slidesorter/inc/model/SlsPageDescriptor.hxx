@@ -118,7 +118,12 @@ public:
             returned.  When they were the same this method returns
             <FALSE/>.
     */
-    bool UpdateSelection (void);
+    bool GetCoreSelection (void);
+
+    /** Set the selection flags of the SdPage objects to the corresponding
+        selection states of the page descriptors.
+    */
+    void SetCoreSelection (void);
 
     VisualState& GetVisualState (void);
 

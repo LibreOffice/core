@@ -72,11 +72,17 @@ public:
 
     void SelectAllPages (void);
     void DeselectAllPages (void);
+
     /** Update the selection state of all page descriptors to be the same as
-        that of the pages of the SdDrawDocument they describe and issue
+        that of the corresponding pages of the SdPage objects and issue
         redraw requests where necessary.
     */
-    void UpdateAllPages (void);
+    void GetCoreSelection (void);
+
+    /** Update the selection state of the SdPage objects to be the same as
+        that of the correspinding page descriptors.
+    */
+    void SetCoreSelection (void);
 
     void SelectPage (int nPageIndex);
     /** Select the descriptor that is associated with the given page.
@@ -184,6 +190,7 @@ public:
     {
     public:
         UpdateLock (SlideSorter& rSlideSorter);
+        UpdateLock (PageSelector& rPageSelector);
         ~UpdateLock (void);
     private:
         PageSelector& mrSelector;

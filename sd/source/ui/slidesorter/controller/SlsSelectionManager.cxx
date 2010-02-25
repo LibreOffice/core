@@ -123,7 +123,11 @@ SelectionManager::~SelectionManager (void)
 
 void SelectionManager::DeleteSelectedPages (void)
 {
+    // Create some locks to prevent updates of the model, view, selection
+    // state while modifying any of them.
     SlideSorterController::ModelChangeLock aLock (mrController);
+    SlideSorterView::DrawLock aDrawLock (mrSlideSorter);
+    PageSelector::UpdateLock aSelectionLock (mrSlideSorter);
 
     // Hide focus.
     bool bIsFocusShowing = mrController.GetFocusManager().IsFocusShowing();
@@ -135,8 +139,19 @@ void SelectionManager::DeleteSelectedPages (void)
     model::PageEnumeration aPageEnumeration (
         PageEnumerationProvider::CreateSelectedPagesEnumeration(mrSlideSorter.GetModel()));
     ::std::vector<SdPage*> aSelectedPages;
+    sal_Int32 nLastPageIndex (-1);
     while (aPageEnumeration.HasMoreElements())
-        aSelectedPages.push_back (aPageEnumeration.GetNextElement()->GetPage());
+    {
+        SharedPageDescriptor pDescriptor (aPageEnumeration.GetNextElement());
+        aSelectedPages.push_back(pDescriptor->GetPage());
+        nLastPageIndex = pDescriptor->GetPageIndex();
+    }
+    if (aSelectedPages.empty())
+        return;
+
+    // Determine the slide to select (and thereby make the current slide)
+    // after the deletion.
+    sal_Int32 nNewCurrentSlide (nLastPageIndex - aSelectedPages.size() + 1);
 
     // The actual deletion of the selected pages is done in one of two
     // helper functions.  They are specialized for normal respectively for
@@ -153,8 +168,13 @@ void SelectionManager::DeleteSelectedPages (void)
 
     // Show focus and move it to next valid location.
     if (bIsFocusShowing)
-        mrController.GetFocusManager().ToggleFocus ();
-    mrController.GetFocusManager().MoveFocus (FocusManager::FMD_NONE);
+        mrController.GetFocusManager().ToggleFocus();
+
+    // Set the new current slide.
+    if (nNewCurrentSlide >= mrSlideSorter.GetModel().GetPageCount())
+        nNewCurrentSlide = mrSlideSorter.GetModel().GetPageCount()-1;
+    mrController.GetPageSelector().SelectPage(nNewCurrentSlide);
+    mrController.GetFocusManager().SetFocusedPage(nNewCurrentSlide);
 }
 
 

@@ -508,12 +508,16 @@ sal_Int8 Clipboard::AcceptDrop (
 {
     sal_Int8 nResult = DND_ACTION_NONE;
 
-    FunctionReference rFunction (mrSlideSorter.GetViewShell()->GetCurrentFunction());
-    SelectionFunction* pSelectionFunction = dynamic_cast<SelectionFunction*>(rFunction.get());
-    if (pSelectionFunction != NULL)
-        pSelectionFunction->MouseDragged(rEvent);
+    const Clipboard::DropType eDropType (IsDropAccepted());
+    if (eDropType != DT_NONE)
+    {
+        FunctionReference rFunction (mrSlideSorter.GetViewShell()->GetCurrentFunction());
+        SelectionFunction* pSelectionFunction = dynamic_cast<SelectionFunction*>(rFunction.get());
+        if (pSelectionFunction != NULL)
+            pSelectionFunction->MouseDragged(rEvent);
+    }
 
-    switch (IsDropAccepted())
+    switch (eDropType)
     {
         case DT_PAGE:
         {

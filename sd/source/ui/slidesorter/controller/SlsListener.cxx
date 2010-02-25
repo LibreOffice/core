@@ -425,7 +425,7 @@ IMPL_LINK(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexerEvent
         case tools::EventMultiplexerEvent::EID_CONTROLLER_ATTACHED:
         {
             ConnectToController();
-            mrController.GetPageSelector().UpdateAllPages();
+            mrController.GetPageSelector().GetCoreSelection();
             UpdateEditMode();
         }
         break;
@@ -514,7 +514,7 @@ void SAL_CALL Listener::propertyChange (
                     String(RTL_CONSTASCII_USTRINGPARAM("Number")));
                 sal_Int32 nCurrentPage = 0;
                 aPageNumber >>= nCurrentPage;
-                mrController.GetPageSelector().UpdateAllPages ();
+                mrController.GetPageSelector().GetCoreSelection();
                 // The selection is already set but we call SelectPage()
                 // nevertheless in order to make the new current page the
                 // last recently selected page of the PageSelector.  This is
@@ -561,7 +561,7 @@ void SAL_CALL Listener::frameAction (const frame::FrameActionEvent& rEvent)
         case frame::FrameAction_COMPONENT_REATTACHED:
         {
             ConnectToController();
-            mrController.GetPageSelector().UpdateAllPages();
+            mrController.GetPageSelector().GetCoreSelection();
             UpdateEditMode();
         }
         break;

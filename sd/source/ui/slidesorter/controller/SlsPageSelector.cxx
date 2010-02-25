@@ -81,6 +81,8 @@ PageSelector::PageSelector (SlideSorter& rSlideSorter)
 
 void PageSelector::SelectAllPages (void)
 {
+    PageSelector::UpdateLock aLock (*this);
+
     int nPageCount = mrModel.GetPageCount();
     for (int nPageIndex=0; nPageIndex<nPageCount; nPageIndex++)
         SelectPage (nPageIndex);
@@ -91,6 +93,8 @@ void PageSelector::SelectAllPages (void)
 
 void PageSelector::DeselectAllPages (void)
 {
+    PageSelector::UpdateLock aLock (*this);
+
     int nPageCount = mrModel.GetPageCount();
     for (int nPageIndex=0; nPageIndex<nPageCount; nPageIndex++)
         DeselectPage (nPageIndex);
@@ -104,8 +108,10 @@ void PageSelector::DeselectAllPages (void)
 
 
 
-void PageSelector::UpdateAllPages (void)
+void PageSelector::GetCoreSelection (void)
 {
+    PageSelector::UpdateLock aLock (*this);
+
     bool bSelectionHasChanged (true);
     mnSelectedPageCount = 0;
     model::PageEnumeration aAllPages (
@@ -113,7 +119,7 @@ void PageSelector::UpdateAllPages (void)
     while (aAllPages.HasMoreElements())
     {
         model::SharedPageDescriptor pDescriptor (aAllPages.GetNextElement());
-        if (pDescriptor->UpdateSelection())
+        if (pDescriptor->GetCoreSelection())
         {
             mrSlideSorter.GetView().RequestRepaint(pDescriptor);
             bSelectionHasChanged = true;
@@ -130,8 +136,20 @@ void PageSelector::UpdateAllPages (void)
         else
             mrController.GetSelectionManager()->SelectionHasChanged();
     }
+}
 
-    UpdateCurrentPage();
+
+
+
+void PageSelector::SetCoreSelection (void)
+{
+    model::PageEnumeration aAllPages (
+        model::PageEnumerationProvider::CreateAllPagesEnumeration(mrModel));
+    while (aAllPages.HasMoreElements())
+    {
+        model::SharedPageDescriptor pDescriptor (aAllPages.GetNextElement());
+        pDescriptor->SetCoreSelection();
+    }
 }
 
 
@@ -260,7 +278,7 @@ void PageSelector::PrepareModelChange (void)
 
 void PageSelector::HandleModelChange (void)
 {
-    UpdateAllPages();
+    GetCoreSelection();
 }
 
 
@@ -408,6 +426,15 @@ void PageSelector::UpdateCurrentPage (const bool bUpdateOnlyWhenPending)
 
 PageSelector::UpdateLock::UpdateLock (SlideSorter& rSlideSorter)
     : mrSelector(rSlideSorter.GetController().GetPageSelector())
+{
+    ++mrSelector.mnUpdateLockCount;
+}
+
+
+
+
+PageSelector::UpdateLock::UpdateLock (PageSelector& rSelector)
+    : mrSelector(rSelector)
 {
     ++mrSelector.mnUpdateLockCount;
 }

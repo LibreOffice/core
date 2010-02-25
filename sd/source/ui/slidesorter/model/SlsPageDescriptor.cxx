@@ -224,12 +224,28 @@ VisualState& PageDescriptor::GetVisualState (void)
 
 
 
-bool PageDescriptor::UpdateSelection (void)
+bool PageDescriptor::GetCoreSelection (void)
 {
     if (mpPage!=NULL && (mpPage->IsSelected()==TRUE) != mbIsSelected)
         return SetState(ST_Selected, !mbIsSelected);
     else
         return false;
+}
+
+
+
+
+void PageDescriptor::SetCoreSelection (void)
+{
+    if (mpPage != NULL)
+        if (HasState(ST_Selected))
+            mpPage->SetSelected(TRUE);
+        else
+            mpPage->SetSelected(FALSE);
+    else
+    {
+        OSL_ASSERT(mpPage!=NULL);
+    }
 }
 
 

@@ -32,7 +32,6 @@
 
 DockingWindow FLT_LEFT_PANE_IMPRESS_DOCKING_WINDOW
 {
-    //  HelpID = SID_EFFECT_WIN ;
     Border = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
@@ -48,7 +47,6 @@ DockingWindow FLT_LEFT_PANE_IMPRESS_DOCKING_WINDOW
 
 DockingWindow FLT_LEFT_PANE_DRAW_DOCKING_WINDOW
 {
-    //  HelpID = SID_EFFECT_WIN ;
     Border = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
@@ -64,7 +62,6 @@ DockingWindow FLT_LEFT_PANE_DRAW_DOCKING_WINDOW
 
 DockingWindow FLT_RIGHT_PANE_DOCKING_WINDOW
 {
-    //  HelpID = SID_EFFECT_WIN ;
     Border = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;

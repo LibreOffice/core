@@ -484,17 +484,20 @@ BOOL SelectionFunction::KeyInput (const KeyEvent& rEvent)
 
         case KEY_TAB:
             if ( ! rFocusManager.IsFocusShowing())
+            {
                 rFocusManager.ShowFocus();
-            else
-                if (rCode.IsShift())
-                    rFocusManager.MoveFocus (FocusManager::FMD_LEFT);
-                else
-                    rFocusManager.MoveFocus (FocusManager::FMD_RIGHT);
-            bResult = TRUE;
+                bResult = TRUE;
+            }
             break;
 
         case KEY_ESCAPE:
-            rFocusManager.SetFocusToToolBox();
+            // When there is an active multiselection or drag-and-drop
+            // operation then stop that.  Otherwise transfer the focus to
+            // the tool box.
+
+            if ( ! (mpSubstitutionHandler || mpMouseMultiSelector))
+                rFocusManager.SetFocusToToolBox();
+
             if (mpSubstitutionHandler)
             {
                 mpSubstitutionHandler->Dispose();
@@ -512,7 +515,7 @@ BOOL SelectionFunction::KeyInput (const KeyEvent& rEvent)
         {
             // Toggle the selection state.
             model::SharedPageDescriptor pDescriptor (rFocusManager.GetFocusedPageDescriptor());
-            if (pDescriptor.get() != NULL)
+            if (pDescriptor && rCode.IsMod1())
             {
                 // Doing a multi selection by default.  Can we ask the event
                 // for the state of the shift key?

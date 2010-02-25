@@ -39,6 +39,7 @@
 #include <sfx2/dispatch.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/taskpanelist.hxx>
+#include <tools/wintypes.hxx>
 #include "framework/FrameworkHelper.hxx"
 
 using namespace ::com::sun::star;
@@ -58,8 +59,7 @@ PaneDockingWindow::PaneDockingWindow (
         _pBindings,
         pChildWindow,
         pParent,
-        rResId
-        ),
+        rResId),
       msPaneURL(rsPaneURL),
       msTitle(rsTitle),
       mpTitleToolBox(),
@@ -397,6 +397,18 @@ void PaneDockingWindow::DataChanged (const DataChangedEvent& rEvent)
 
 
 
+void PaneDockingWindow::MouseButtonDown (const MouseEvent& rEvent)
+{
+    if (rEvent.GetButtons() == MOUSE_LEFT && mpContentWindow)
+    {
+        mpContentWindow->GrabFocus();
+    }
+    SfxDockingWindow::MouseButtonDown(rEvent);
+}
+
+
+
+
 ::Window* PaneDockingWindow::GetContentWindow (void)
 {
     return mpContentWindow.get();
@@ -409,6 +421,7 @@ void PaneDockingWindow::DataChanged (const DataChangedEvent& rEvent)
 {
     return mpTitleToolBox;
 }
+
 
 
 } // end of namespace ::sd

@@ -37,6 +37,7 @@
 #include "controller/SlsPageSelector.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsCurrentSlideManager.hxx"
+#include "controller/SlsFocusManager.hxx"
 #include "view/SlideSorterView.hxx"
 #include "ViewShellBase.hxx"
 #include "ViewShell.hxx"
@@ -145,6 +146,7 @@ void CurrentSlideManager::SwitchCurrentSlide (const SharedPageDescriptor& rpDesc
             FrameView* pFrameView = pViewShell->GetFrameView();
             if (pFrameView != NULL)
                 pFrameView->SetSelectedPage(sal::static_int_cast<USHORT>(mnCurrentSlideIndex));
+            mrSlideSorter.GetController().GetPageSelector().SetCoreSelection();
         }
         else
         {
@@ -154,8 +156,9 @@ void CurrentSlideManager::SwitchCurrentSlide (const SharedPageDescriptor& rpDesc
             // changes).  Therefore, we call DrawViewShell::SwitchPage(),
             // too.
             SetCurrentSlideAtViewShellBase(rpDescriptor);
-            SetCurrentSlideAtXController(rpDescriptor);
         }
+        SetCurrentSlideAtXController(rpDescriptor);
+        mrSlideSorter.GetController().GetFocusManager().SetFocusedPage(rpDescriptor);
     }
 }
 

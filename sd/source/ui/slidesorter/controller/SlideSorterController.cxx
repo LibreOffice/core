@@ -177,7 +177,7 @@ void SlideSorterController::Init (void)
 
     mpListener = new Listener(mrSlideSorter);
 
-    mpPageSelector->UpdateAllPages();
+    mpPageSelector->GetCoreSelection();
     GetSelectionManager()->SelectionHasChanged();
 }
 

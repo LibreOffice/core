@@ -79,6 +79,7 @@ public:
     virtual long Notify( NotifyEvent& rNEvt );
     virtual void StateChanged( StateChangedType nType );
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void MouseButtonDown (const MouseEvent& rEvent);
 
     /** Initializing the title tool box either creates a new title tool box
         or clears all items from an existing one.  A closer is added as only
