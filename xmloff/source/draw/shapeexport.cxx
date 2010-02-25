@@ -1118,7 +1118,7 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                 else if(aType.EqualsAscii("FooterShape", 26, 11)) { eShapeType = XmlShapeTypePresFooterShape; }
                 else if(aType.EqualsAscii("SlideNumberShape", 26, 16)) { eShapeType = XmlShapeTypePresSlideNumberShape; }
                 else if(aType.EqualsAscii("DateTimeShape", 26, 13)) { eShapeType = XmlShapeTypePresDateTimeShape; }
-                else if(aType.EqualsAscii("MediaShape", 21, 10)) { eShapeType = XmlShapeTypePresMediaShape; }
+                else if(aType.EqualsAscii("MediaShape", 26, 10)) { eShapeType = XmlShapeTypePresMediaShape; }
             }
         }
     }
