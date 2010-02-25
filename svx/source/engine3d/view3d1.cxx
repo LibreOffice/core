@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: view3d1.cxx,v $
- * $Revision: 1.15.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,7 +41,7 @@
 #include <svx/obj3d.hxx>
 #include <svx/polysc3d.hxx>
 #include <svx/e3ditem.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/colritem.hxx>
 #include <svx/lathe3d.hxx>
 #include <svx/sphere3d.hxx>
 #include <svx/extrud3d.hxx>

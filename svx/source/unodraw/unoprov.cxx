@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unoprov.cxx,v $
- * $Revision: 1.72.92.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,30 +31,28 @@
 #define _SVX_USE_UNOGLOBALS_
 
 #include <com/sun/star/table/XTable.hpp>
-
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
-#ifndef _COM_SUN_STAR_MEDIA_ZOOMLEVEL_HDL_
 #include <com/sun/star/media/ZoomLevel.hpp>
-#endif
 #include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <vcl/fldunit.hxx>
 #include <tools/shl.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
-
 #include <comphelper/propertysetinfo.hxx>
 #include <svx/dialmgr.hxx>
-
 #include "unoapi.hxx"
-#include <svx/unotext.hxx>
+#include <editeng/unotext.hxx>
 #include <svx/unoshprp.hxx>
-#include <svx/svdobj.hxx>
+#include <editeng/editeng.hxx>
 #include "globl3d.hxx"
 #include <svx/dialogs.hrc>
+#include <svx/svdpool.hxx>
+#include <svx/svdobj.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -1004,83 +999,14 @@ const SfxItemPropertyMapEntry* SvxUnoPropertyMapProvider::GetMap(UINT16 nPropert
     }
     return aMapArr[nPropertyId];
 }
-const SvxItemPropertySet* SvxUnoPropertyMapProvider::GetPropertySet(UINT16 nPropertyId)
+const SvxItemPropertySet* SvxUnoPropertyMapProvider::GetPropertySet(UINT16 nPropertyId, SfxItemPool& rPool)
 {
     if( !aSetArr[nPropertyId] )
-        aSetArr[nPropertyId] = new SvxItemPropertySet( GetMap( nPropertyId ) );
+        aSetArr[nPropertyId] = new SvxItemPropertySet( GetMap( nPropertyId ), rPool );
     return aSetArr[nPropertyId];
 }
 
 // #####################################################################
-
-/** returns an empty UString(). most times sufficient */
-::rtl::OUString SAL_CALL SvxServiceInfoHelper::getImplementationName() throw( ::com::sun::star::uno::RuntimeException )
-{
-    return ::rtl::OUString();
-}
-
-/** the base implementation iterates over the service names from <code>getSupportedServiceNames</code> */
-sal_Bool SAL_CALL SvxServiceInfoHelper::supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException)
-{
-    return supportsService( ServiceName, getSupportedServiceNames() );
-}
-
-sal_Bool SAL_CALL SvxServiceInfoHelper::supportsService( const ::rtl::OUString& ServiceName, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& SupportedServices ) throw()
-{
-    const ::rtl::OUString * pArray = SupportedServices.getConstArray();
-    for( INT32 i = 0; i < SupportedServices.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return TRUE;
-    return FALSE;
-}
-
-/** the base implementation has no supported services */
-::com::sun::star::uno::Sequence< ::rtl::OUString > SvxServiceInfoHelper::getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException )
-{
-    ::com::sun::star::uno::Sequence< ::rtl::OUString> aSeq(0);
-    return aSeq;
-}
-
-/** this method concatenates the given sequences and returns the result
- */
-::com::sun::star::uno::Sequence< ::rtl::OUString > SvxServiceInfoHelper::concatSequences( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rSeq1, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rSeq2 ) throw()
-{
-    const sal_Int32 nLen1 = rSeq1.getLength();
-    const sal_Int32 nLen2 = rSeq2.getLength();
-
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > aSeq( nLen1 + nLen2 );
-
-    ::rtl::OUString* pStrings = aSeq.getArray();
-
-    sal_Int32 nIdx;
-    const ::rtl::OUString* pStringSrc = rSeq1.getConstArray();
-    for( nIdx = 0; nIdx < nLen1; nIdx++ )
-        *pStrings++ = *pStringSrc++;
-
-    pStringSrc = rSeq2.getConstArray();
-    for( nIdx = 0; nIdx < nLen2; nIdx++ )
-        *pStrings++ = *pStringSrc++;
-
-    return aSeq;
-}
-
-/** this method adds a variable number of char pointer to a given Sequence
- */
-void SvxServiceInfoHelper::addToSequence( ::com::sun::star::uno::Sequence< ::rtl::OUString >& rSeq, UINT16 nServices, /* char * */ ... ) throw()
-{
-    UINT32 nCount = rSeq.getLength();
-
-    rSeq.realloc( nCount + nServices );
-    OUString* pStrings = rSeq.getArray();
-
-    va_list marker;
-    va_start( marker, nServices );
-    for( UINT16 i = 0 ; i < nServices; i++ )
-        pStrings[nCount++] = OUString::createFromAscii(va_arg( marker, char*));
-    va_end( marker );
-}
-
-
 
 /** maps the API constant MeasureUnit to a vcl MapUnit enum.
     Returns false if conversion is not supported.

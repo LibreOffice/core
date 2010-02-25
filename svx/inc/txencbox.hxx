@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: txencbox.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -97,12 +94,6 @@ public:
         <method>GetBestMimeEncoding</method>
      */
     void                FillWithMimeAndSelectBest();
-
-    /** Get the best MIME encoding matching the system locale, or if that isn't
-        determinable one that matches the UI locale, or UTF8 if everything else
-        fails.
-     */
-    static  rtl_TextEncoding    GetBestMimeEncoding();
 
     const SvxTextEncodingTable*     GetTextEncodingTable() const
                             { return m_pEncTable; }

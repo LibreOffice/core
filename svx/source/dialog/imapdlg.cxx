@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: imapdlg.cxx,v $
- * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -835,7 +832,7 @@ IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow*, pWnd )
 IMPL_LINK( SvxIMapDlg, MousePosHdl, IMapWindow*, pWnd )
 {
     String aStr;
-    const FieldUnit eFieldUnit = GetModuleFieldUnit();
+    const FieldUnit eFieldUnit = GetBindings().GetDispatcher()->GetModule()->GetFieldUnit();
     const Point& rMousePos = pWnd->GetMousePos();
     LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
     const sal_Unicode cSep = aLocaleWrapper.getNumDecimalSep().GetChar(0);
@@ -858,7 +855,7 @@ IMPL_LINK( SvxIMapDlg, MousePosHdl, IMapWindow*, pWnd )
 IMPL_LINK( SvxIMapDlg, GraphSizeHdl, IMapWindow*, pWnd )
 {
     String aStr;
-    const FieldUnit eFieldUnit = GetModuleFieldUnit();
+    const FieldUnit eFieldUnit = GetBindings().GetDispatcher()->GetModule()->GetFieldUnit();
     const Size& rSize = pWnd->GetGraphicSize();
     LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
     const sal_Unicode cSep = aLocaleWrapper.getNumDecimalSep().GetChar(0);

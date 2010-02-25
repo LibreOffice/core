@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: mtnotification.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +27,8 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
-#include <cppuhelper/weakref.hxx>
+#include <com/sun/star/awt/XCallback.hpp>
+#include <cppuhelper/implbase1.hxx>
 
 #include <rtl/ref.hxx>
 
@@ -39,7 +37,7 @@ class OleEmbeddedObject;
 #define OLECOMP_ONVIEWCHANGE    1
 #define OLECOMP_ONCLOSE         2
 
-class MainThreadNotificationRequest
+class MainThreadNotificationRequest :  public cppu::WeakImplHelper1< com::sun::star::awt::XCallback >
 {
     OleEmbeddedObject* m_pObject;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::embed::XEmbeddedObject > m_xObject;
@@ -48,11 +46,10 @@ class MainThreadNotificationRequest
     sal_uInt32 m_nAspect;
 
 public:
+    virtual void SAL_CALL notify (const com::sun::star::uno::Any& rUserData)
+        throw (com::sun::star::uno::RuntimeException);
     MainThreadNotificationRequest( const ::rtl::Reference< OleEmbeddedObject >& xObj, sal_uInt16 nNotificationType, sal_uInt32 nAspect = 0 );
-
-    static long worker( MainThreadNotificationRequest*, MainThreadNotificationRequest* );
-
-    static void mainThreadWorkerStart( MainThreadNotificationRequest* );
+    ~MainThreadNotificationRequest();
 };
 
 

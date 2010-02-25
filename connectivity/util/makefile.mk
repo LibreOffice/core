@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.22 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -47,7 +43,7 @@ DIR_LANG_SOURCE  := $(MISC)$/merge
 DIR_LANG_SOURCE  := $(MISC)$/registry$/data
 .ENDIF
 DRIVER_MERGE_XCU := $(shell -@$(FIND) $(DIR_LANG_SOURCE)$/org$/openoffice$/Office$/DataAccess -name "*.xcu")
-   
+DRIVER_MERGE_DEST = $(MISC)/lang/{$(DRIVER_MERGE_XCU:f)}
 REALFILTERPACKAGES_FILTERS_UI_LANGPACKS = \
     $(foreach,i,$(alllangiso) $(foreach,j,$(DRIVER_MERGE_XCU) $(DIR_LANGPACK)$/$i$/org$/openoffice$/Office$/DataAccess$/$(j:f)))
 
@@ -74,5 +70,26 @@ $(BIN)$/fcfg_drivers_{$(alllangiso)}.zip : $(REALFILTERPACKAGES_FILTERS_UI_LANGP
 
 ALLTAR: \
     $(MISC)$/$(TARGET)_delzip \
-    $(BIN)$/fcfg_drivers_{$(alllangiso)}.zip
+    $(BIN)$/fcfg_drivers_{$(alllangiso)}.zip \
+    $(MISC)/lastlang.mk
+
+.IF "$(DRIVER_MERGE_DEST)"!=""
+.INCLUDE .IGNORE : $(MISC)/lastlang.mk
+
+ALLTAR : \
+    $(DRIVER_MERGE_DEST)
+
+.IF "$(LAST_LANGS)"!="$(WITH_LANG)"
+DO_PHONY=.PHONY
+.ENDIF          # "$(LAST_LANG)"!="$(WITH_LANG)"
+
+$(MISC)/lang/%.xcu $(DO_PHONY) : $(DIR_LANG_SOURCE)$/org$/openoffice$/Office$/DataAccess/%.xcu
+    @@-$(MKDIRHIER) $(@:d:d)
+    $(COPY) $< $@
+
+.ENDIF          # "$(DRIVER_MERGE_DEST)"!=""
+
+$(MISC)/lastlang.mk $(DO_PHONY) :
+    $(RM) $@
+    echo LAST_LANGS=$(WITH_LANG) > $@
 

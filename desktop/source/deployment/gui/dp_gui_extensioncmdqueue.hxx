@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dp_gui_extensioncmdqueue.hxx,v $
- *
- * $Revision: 1.3.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -95,14 +91,6 @@ public:
        that it should install the remaining extensions and then terminate.
     */
     void stop();
-
-    /** Determines if thread of this class has terminated.
-    */
-    bool hasTerminated();
-
-    /** Blocks until the thread has terminated. All URLs in the queue will be processed.
-    */
-    void stopAndWait();
 
     bool isBusy();
 private:
