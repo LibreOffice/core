@@ -267,6 +267,7 @@ common
         HAVE_LD_HASH_STYLE
         JAVACOMPILER
         JAVADOC
+        JAVAIFLAGS
         JDK
         NO_HIDS
         PAM_LINK

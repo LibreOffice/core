@@ -2704,6 +2704,17 @@ if test "$SOLAR_JAVA" != ""; then
       fi
       JAVAINTERPRETER=`cygpath -d "$JAVAINTERPRETER"`
       JAVAINTERPRETER=`cygpath -u "$JAVAINTERPRETER"`
+   elif test "$_os" = "Darwin"; then
+      dnl HACK:  There currently is only a 32 bit version of OOo for Mac OS X,
+      dnl and Tiger java complains about -d32 while Snow Leopard java needs it
+      dnl to run in 32 bit mode and be able to load OOo jnilibs:
+      AC_MSG_CHECKING([whether to pass -d32 to Java interpreter])
+      if "$JAVAINTERPRETER" -d32 >&5 2>&5; then
+         AC_MSG_RESULT([yes])
+         JAVAIFLAGS=-d32
+      else
+         AC_MSG_RESULT([no])
+      fi
    fi
 fi
 
@@ -3086,6 +3097,7 @@ AC_SUBST(JAVA_HOME)
 AC_SUBST(JDK)
 AC_SUBST(JAVAFLAGS)
 AC_SUBST(JAVAINTERPRETER)
+AC_SUBST(JAVAIFLAGS)
 AC_SUBST(JAVACOMPILER)
 AC_SUBST(JAVAAOTCOMPILER)
 AC_SUBST(JAVADOC)
