@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unoframe.cxx,v $
- * $Revision: 1.124 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +36,8 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include <svx/svxids.hrc>
+#include <editeng/memberids.hrc>
 
 #include <swtypes.hxx>
 #include <cmdid.h>
@@ -84,16 +83,16 @@
 #include <unostyle.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/protitem.hxx>
 #include <fmtornt.hxx>
 #include <fmturl.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/prntitem.hxx>
-#include <svx/shaditem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/prntitem.hxx>
+#include <editeng/shaditem.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtfsize.hxx>
 #include <grfatr.hxx>
@@ -113,7 +112,7 @@
 #include <pagedesc.hxx>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <tools/urlobj.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/frmdiritem.hxx>
 // DVO, OD 01.10.2003 #i18732#
 #include <fmtfollowtextflow.hxx>
 // OD 2004-05-05 #i28701#

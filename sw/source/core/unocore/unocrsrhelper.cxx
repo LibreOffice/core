@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unocrsrhelper.cxx,v $
- *
- * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,10 +28,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <svx/svxids.hrc>
 #include <map>
-
 #include <com/sun/star/text/XTextSection.hpp>
-
 #include <cmdid.h>
 #include <unocrsrhelper.hxx>
 #include <unofootnote.hxx>
@@ -71,7 +66,7 @@
 #include <tox.hxx>
 #include <doctxm.hxx>
 #include <fchrfmt.hxx>
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
 #include <vcl/metric.hxx>
 #include <svtools/ctrltool.hxx>
 #define _SVSTDARR_USHORTS

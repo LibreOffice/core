@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pagedesc.cxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,13 +31,13 @@
 
 
 #include <hintids.hxx>
-#include <svx/pbinitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/lrspitem.hxx>
-#include "svx/frmdiritem.hxx"
+#include <editeng/pbinitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/lrspitem.hxx>
+#include "editeng/frmdiritem.hxx"
 #include <fmtclds.hxx>
 #include <fmtfsize.hxx>
 #include <frmatr.hxx>

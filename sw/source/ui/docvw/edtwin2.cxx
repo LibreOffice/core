@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: edtwin2.cxx,v $
- * $Revision: 1.31.130.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,12 +43,12 @@
 #include <tools/urlobj.hxx>
 #include <txtrfmrk.hxx>
 #include <fmtrfmrk.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #include <svl/urihelper.hxx>
 #include <svx/svdotext.hxx>
 #ifndef _OUTLINER_HXX //autogen
 #define _EEITEMID_HXX
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #endif
 #include <svl/itemiter.hxx>
 #include <svx/svdview.hxx>
