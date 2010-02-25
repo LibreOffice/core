@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: bulmaper.cxx,v $
- * $Revision: 1.10.80.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,23 +38,23 @@
 
 //-> Fonts & Items
 #include <vcl/font.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/cntritem.hxx>
-#include <svx/shdditem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/shdditem.hxx>
 
 //<- Fonts & Items
-#include <svx/bulitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/bulitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <vcl/graph.hxx>
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
-#include <svx/numitem.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/numitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include "bulmaper.hxx"
 

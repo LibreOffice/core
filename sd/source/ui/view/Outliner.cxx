@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Outliner.cxx,v $
- * $Revision: 1.37.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,35 +30,33 @@
 
 #include "Outliner.hxx"
 #include <vcl/wrkwin.hxx>
-#include <sfx2/srchitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/editstat.hxx>
+#include <svl/srchitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/editstat.hxx>
 #include <vcl/outdev.hxx>
-#ifndef _DLGUTIL_HXX
 #include <svx/dlgutil.hxx>
-#endif
 #include <svx/xtable.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/printer.hxx>
 #include <svx/svxerr.hxx>
 #include <svx/svdotext.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <svx/svditer.hxx>
 #include <comphelper/extract.hxx>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/processfactory.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/forbiddencharacterstable.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
 #include <svx/srchdlg.hxx>
 #include <unotools/linguprops.hxx>
 #include <unotools/lingucfg.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 #include <vcl/metric.hxx>
 #include <sfx2/viewfrm.hxx>
-
+#include <svtools/langtab.hxx>
 #include "strings.hrc"
 #include "sdstring.hrc"
 #include "eetext.hxx"
@@ -80,6 +75,8 @@
 #include "SpellDialogChildWindow.hxx"
 #include "ToolBarManager.hxx"
 #include "framework/FrameworkHelper.hxx"
+#include <svx/svxids.hrc>
+#include <editeng/editerr.hxx>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -1395,7 +1392,7 @@ void Outliner::EnterEditMode (BOOL bGrabFocus)
 IMPL_LINK_INLINE_START( Outliner, SpellError, void *, nLang )
 {
     mbError = true;
-    String aError( ::GetLanguageString( (LanguageType)(ULONG)nLang ) );
+    String aError( SvtLanguageTable::GetLanguageString( (LanguageType)(ULONG)nLang ) );
     ErrorHandler::HandleError(* new StringErrorInfo(
                                 ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS, aError) );
     return 0;
