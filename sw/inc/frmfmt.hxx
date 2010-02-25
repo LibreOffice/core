@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: frmfmt.hxx,v $
- * $Revision: 1.15.214.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,11 +27,14 @@
 #ifndef _FRMFMT_HXX
 #define _FRMFMT_HXX
 
-#include <format.hxx>
-
 // --> OD 2004-08-06 #i28749#
 #include <com/sun/star/text/PositionLayoutDir.hpp>
 // <--
+
+#include <cppuhelper/weakref.hxx>
+
+#include <format.hxx>
+
 #include "swdllapi.h"
 
 class SwFlyFrm;
@@ -51,8 +51,9 @@ class SW_DLLPUBLIC SwFrmFmt: public SwFmt
 {
     friend class SwDoc;
     friend class SwPageDesc;    //darf den protected CTor rufen.
-//  friend class SwSwgReader;   // der SW2-Reader auch!
-//  friend class Sw3IoImp;      // der SW3-Reader auch!
+
+    ::com::sun::star::uno::WeakReference<
+        ::com::sun::star::uno::XInterface> m_wXObject;
 
 protected:
     SwFrmFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
@@ -135,6 +136,13 @@ public:
     // <--
 
     virtual String GetDescription() const;
+
+    SW_DLLPRIVATE ::com::sun::star::uno::WeakReference<
+        ::com::sun::star::uno::XInterface> const& GetXObject() const
+            { return m_wXObject; }
+    SW_DLLPRIVATE void SetXObject(::com::sun::star::uno::Reference<
+                    ::com::sun::star::uno::XInterface> const& xObject)
+            { m_wXObject = xObject; }
 
     DECL_FIXEDMEMPOOL_NEWDEL_DLL(SwFrmFmt)
 };

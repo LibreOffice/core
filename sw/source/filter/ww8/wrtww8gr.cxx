@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: wrtww8gr.cxx,v $
- * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,8 +34,8 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <rtl/math.hxx>
 #include <svtools/filter.hxx>
-#include <svtools/itemiter.hxx>
-#include "svtools/urihelper.hxx"
+#include <svl/itemiter.hxx>
+#include "svl/urihelper.hxx"
 
 #include <svtools/embedhlp.hxx>
 
@@ -46,13 +43,13 @@
 #include <vcl/svapp.hxx>
 
 #include <hintids.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/msoleexp.hxx>
-#include <svx/lrspitem.hxx> // SvxLRSpaceItem
-#include <svx/ulspitem.hxx>
-#include <svx/fhgtitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/shaditem.hxx>
+#include <filter/msfilter/msoleexp.hxx>
+#include <editeng/lrspitem.hxx> // SvxLRSpaceItem
+#include <editeng/ulspitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <svx/svdoole2.hxx>
 
 #include <unotools/ucbstreamhelper.hxx>
@@ -404,7 +401,7 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
 
     const SwFrmFmt &rFlyFmt = rFrame.GetFrmFmt();
     const RndStdIds eAn = rFlyFmt.GetAttrSet().GetAnchor(false).GetAnchorId();
-    if( eAn == FLY_IN_CNTNT )
+    if (eAn == FLY_AS_CHAR)
     {
         sal_Int16 eVert = rFlyFmt.GetVertOrient().GetVertOrient();
         if ((eVert == text::VertOrientation::CHAR_CENTER) || (eVert == text::VertOrientation::LINE_CENTER))
@@ -465,8 +462,8 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
     // Otherwise, an additional paragraph is exported for a graphic, which is
     // forced to be treated as inline, because it's anchored inside another frame.
     if ( !rFrame.IsInline() &&
-         ( ( eAn == FLY_AT_CNTNT && ( bWrtWW8 || !bIsInTable ) ) ||
-           eAn == FLY_PAGE ) )
+         ( ((eAn == FLY_AT_PARA) && ( bWrtWW8 || !bIsInTable )) ||
+           (eAn == FLY_AT_PAGE)) )
     // <--
     {
         WriteChar( (char)0x0d ); // umgebenden Rahmen mit CR abschliessen

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: inftxt.cxx,v $
- * $Revision: 1.123.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,28 +30,28 @@
 
 
 #include <com/sun/star/uno/Sequence.h>
-#include <svtools/linguprops.hxx>
-#include <svtools/lingucfg.hxx>
+#include <unotools/linguprops.hxx>
+#include <unotools/lingucfg.hxx>
 #include <hintids.hxx>
 #include <sfx2/printer.hxx>
-#include <svx/hyznitem.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/hngpnctitem.hxx>
-#include <svx/scriptspaceitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/splwrap.hxx>
-#include <svx/pgrditem.hxx>
+#include <editeng/hyznitem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/hngpnctitem.hxx>
+#include <editeng/scriptspaceitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/splwrap.hxx>
+#include <editeng/pgrditem.hxx>
 // --> OD 2008-01-17 #newlistlevelattrs#
 #ifndef _SVX_TSTPITEM_HXX
-#include <svx/tstpitem.hxx>
+#include <editeng/tstpitem.hxx>
 #endif
 // <--
 
 #include <SwSmartTagMgr.hxx>
 #include <linguistic/lngprops.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <breakit.hxx>
-#include <svx/forbiddenruleitem.hxx>
+#include <editeng/forbiddenruleitem.hxx>
 #include <txatbase.hxx>
 #include <fmtinfmt.hxx>
 #include <swmodule.hxx>
@@ -114,13 +111,13 @@ namespace numfunc
 }
 // <--
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 // Test2: WYSIWYG++
 // Test4: WYSIWYG debug
 static sal_Bool bDbgLow = sal_False;
 #endif
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 sal_Bool SwTxtSizeInfo::IsOptCalm() const { return !GetOpt().IsTest3(); }
 
@@ -236,7 +233,7 @@ SwTxtInfo::SwTxtInfo( const SwTxtInfo &rInf )
 { }
 
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 /*************************************************************************
  *                      ChkOutDev()
  *************************************************************************/
@@ -288,7 +285,7 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew )
       bSnapToGrid( rNew.SnapToGrid() ),
       nDirection( rNew.GetDirection() )
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     ChkOutDev( *this );
 #endif
 }
@@ -325,7 +322,7 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
         pRef = pOut;
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     ChkOutDev( *this );
 #endif
 
@@ -412,7 +409,7 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const XubString &rTxt,
       bSnapToGrid( rNew.SnapToGrid() ),
       nDirection( rNew.GetDirection() )
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     ChkOutDev( *this );
 #endif
     SetLen( GetMinLen( *this ) );
@@ -570,7 +567,7 @@ void SwTxtPaintInfo::CtorInitTxtPaintInfo( SwTxtFrm *pFrame, const SwRect &rPain
     pGrammarCheckList = NULL;
     pSmartTags = NULL;  // SMARTTAGS
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
     pBrushItem = 0;
 #else
     pBrushItem = ((SvxBrushItem*)-1);

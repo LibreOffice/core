@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: crsrsh.hxx,v $
- * $Revision: 1.46 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -111,7 +108,7 @@ struct SwContentAtPos
         SW_NUMLABEL         = 0x0200, // #i23726#
         SW_CONTENT_CHECK    = 0x0400, // --> FME 2005-05-13 #i43742# <--
         SW_SMARTTAG         = 0x0800
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ,SW_CURR_ATTRS      = 0x4000        // nur zum Debuggen
         ,SW_TABLEBOXVALUE   = 0x8000        // nur zum Debuggen
 #endif
@@ -465,7 +462,7 @@ public:
      */
     void Combine();
 
-#if defined( PRODUCT )
+#if !defined(DBG_UTIL)
     void SttCrsrMove() { ++nCrsrMove; StartAction(); }
     void EndCrsrMove( const BOOL bIdleEnd = FALSE )
             { EndAction( bIdleEnd ); --nCrsrMove; }

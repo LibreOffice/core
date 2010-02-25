@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: chardlg.cxx,v $
- * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,11 +38,11 @@
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#include <svtools/urihelper.hxx>
-#include <svtools/stritem.hxx>
-#include <svx/flstitem.hxx>
+#include <svl/urihelper.hxx>
+#include <svl/stritem.hxx>
+#include <editeng/flstitem.hxx>
 #include <svx/htmlmode.hxx>
-#include <svtools/cjkoptions.hxx>
+#include <svl/cjkoptions.hxx>
 
 #ifndef _CMDID_H
 #include <cmdid.h>

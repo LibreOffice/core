@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tracer.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 #include <tools/urlobj.hxx>         //INetURLObject
 #include <sfx2/docfile.hxx>         //SfxMedium
-#include <svx/msfiltertracer.hxx>   //MSFilterTracer
+#include <filter/msfilter/msfiltertracer.hxx>   //MSFilterTracer
 #include "tracer.hxx"               //sw::log::Tracer
 
 using rtl::OUString;

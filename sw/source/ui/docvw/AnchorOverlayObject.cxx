@@ -68,7 +68,7 @@ private:
     bool                            mbLineSolid : 1;
 
 protected:
-    virtual drawinglayer::primitive2d::Primitive2DSequence createLocalDecomposition(
+    virtual drawinglayer::primitive2d::Primitive2DSequence create2DDecomposition(
         const drawinglayer::geometry::ViewInformation2D& rViewInformation) const;
 
 public:
@@ -106,7 +106,7 @@ public:
     DeclPrimitrive2DIDBlock()
 };
 
-drawinglayer::primitive2d::Primitive2DSequence AnchorPrimitive::createLocalDecomposition(
+drawinglayer::primitive2d::Primitive2DSequence AnchorPrimitive::create2DDecomposition(
     const drawinglayer::geometry::ViewInformation2D& /*rViewInformation*/) const
 {
     drawinglayer::primitive2d::Primitive2DSequence aRetval;

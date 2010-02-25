@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: newfrm.cxx,v $
- * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -311,7 +308,7 @@ void _FrmInit()
 {
     SwRootFrm::pVout = new SwLayVout();
     SwCache *pNew = new SwCache( 100, 100
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     , "static SwBorderAttrs::pCache"
 #endif
     );
@@ -322,7 +319,7 @@ void _FrmInit()
 
 void _FrmFinit()
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     // im Chache duerfen nur noch 0-Pointer stehen
     for( USHORT n = SwFrm::GetCachePtr()->Count(); n; )
         if( (*SwFrm::GetCachePtr())[ --n ] )

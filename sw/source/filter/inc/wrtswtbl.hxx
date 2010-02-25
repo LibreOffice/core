@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: wrtswtbl.hxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +29,7 @@
 
 #include <tools/solar.h>
 #include <tools/color.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 #include <swdllapi.h>
 
@@ -262,7 +259,7 @@ protected:
 
     BOOL bRelWidths : 1;        // Breiten relativ ausgeben?
     BOOL bUseLayoutHeights : 1; // Layout zur Hoehenbestimmung nehmen?
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     BOOL bGetLineHeightCalled : 1;
 #endif
 

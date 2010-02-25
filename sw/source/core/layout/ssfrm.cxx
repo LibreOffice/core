@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ssfrm.cxx,v $
- * $Revision: 1.51 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,8 +48,8 @@
 #include <ndindex.hxx>
 #include <frmtool.hxx>
 #include <pagedesc.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/shaditem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/shaditem.hxx>
 #include <fmtclds.hxx>
 #include <viewsh.hxx>
 #include <viewimp.hxx>
@@ -411,7 +408,7 @@ SwFrm::~SwFrm()
             delete pDrawObjs;
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     // JP 15.10.2001: for detection of access to deleted frames
     pDrawObjs = (SwSortedObjs*)0x33333333;
 #endif

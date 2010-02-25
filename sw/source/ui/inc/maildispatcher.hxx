@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: maildispatcher.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -131,7 +128,6 @@ public:
     /** returns if the thread is still running
     */
     using osl::Thread::isRunning;
-    bool isRunning() const;
 
     /** returns if shutdown has already been called
     */
@@ -167,7 +163,6 @@ private:
     ::rtl::Reference<MailDispatcher> m_xSelfReference;
     bool run_;
     bool shutdown_requested_;
-    bool bIsInRun;
 };
 
 #endif // INCLUDED_MAILDISPATCHER_HXX

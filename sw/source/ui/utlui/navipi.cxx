@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: navipi.cxx,v $
- * $Revision: 1.46 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,10 +34,10 @@
 
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 #include <tools/list.hxx>
-#include <svtools/urlbmk.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/urlbmk.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/filter.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <sot/formats.hxx>
 #include <sot/filelist.hxx>
 #include <sfx2/event.hxx>

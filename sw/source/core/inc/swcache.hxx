@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swcache.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,7 +57,7 @@
  *
  */
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
 #endif
@@ -68,7 +65,7 @@
 
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 
 class SwCacheObj;
@@ -94,7 +91,7 @@ class SwCache : public SwCacheObjArr
 
     void DeleteObj( SwCacheObj *pObj );
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     ByteString aName;
     long nAppend;           //Anzahl der Eintragungen durch Erweiterung.
     long nInsertFree;       //Anzahl der Eintragungen auf freie Plaetze.
@@ -116,7 +113,7 @@ class SwCache : public SwCacheObjArr
 public:
 
     //nur BYTE hineinstecken!!!
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     SwCache( const USHORT nInitSize, const USHORT nGrowSize,
             const ByteString &rNm );
     ~SwCache();
@@ -197,7 +194,7 @@ public:
 
     inline BOOL IsLocked() const { return 0 != nLock; }
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
     inline void Lock() { ++nLock; }
     inline void Unlock() { --nLock; }
 #else
@@ -249,7 +246,7 @@ public:
 inline void SwCache::IncreaseMax( const USHORT nAdd )
 {
     nCurMax = nCurMax + sal::static_int_cast< USHORT >(nAdd);
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     ++nIncreaseMax;
 #endif
 }
@@ -257,7 +254,7 @@ inline void SwCache::DecreaseMax( const USHORT nSub )
 {
     if ( nCurMax > nSub )
         nCurMax = nCurMax - sal::static_int_cast< USHORT >(nSub);
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     ++nDecreaseMax;
 #endif
 }

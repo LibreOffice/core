@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: textfld.cxx,v $
- * $Revision: 1.38.190.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,18 +35,18 @@
 #include <fmtfld.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/useroptions.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/macitem.hxx>
+#include <svl/itempool.hxx>
+#include <unotools/useroptions.hxx>
+#include <svl/whiter.hxx>
+#include <svl/eitem.hxx>
+#include <svl/macitem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>
 #include <svx/postattr.hxx>
 #include <svx/hlnkitem.hxx>
 
 #include <svx/svxdlg.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <sfx2/dispatch.hxx>
 #include <fmtinfmt.hxx>
@@ -468,7 +465,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
                     SvxAbstractDialogFactory* pFact2 = SvxAbstractDialogFactory::Create();
                     DBG_ASSERT(pFact2, "Dialogdiet fail!");
-                    AbstractSvxPostItDialog* pDlg = pFact2->CreateSvxPostItDialog( pMDI, aSet, RID_SVXDLG_POSTIT, bTravel, TRUE );
+                    AbstractSvxPostItDialog* pDlg = pFact2->CreateSvxPostItDialog( pMDI, aSet, bTravel, TRUE );
                     DBG_ASSERT(pDlg, "Dialogdiet fail!");
                     pDlg->HideAuthor();
 

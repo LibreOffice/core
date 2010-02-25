@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drawsh.cxx,v $
- * $Revision: 1.20.190.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,13 +32,13 @@
 #include <tools/shl.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdotext.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/fontwork.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/objface.hxx>
-#include <svtools/itemiter.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/itemiter.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/xftsfit.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>

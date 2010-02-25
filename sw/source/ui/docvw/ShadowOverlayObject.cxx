@@ -61,7 +61,7 @@ private:
     ShadowState                 maShadowState;
 
 protected:
-    virtual drawinglayer::primitive2d::Primitive2DSequence createLocalDecomposition(
+    virtual drawinglayer::primitive2d::Primitive2DSequence create2DDecomposition(
         const drawinglayer::geometry::ViewInformation2D& rViewInformation) const;
 
 public:
@@ -85,7 +85,7 @@ public:
     DeclPrimitrive2DIDBlock()
 };
 
-drawinglayer::primitive2d::Primitive2DSequence ShadowPrimitive::createLocalDecomposition(
+drawinglayer::primitive2d::Primitive2DSequence ShadowPrimitive::create2DDecomposition(
     const drawinglayer::geometry::ViewInformation2D& /*rViewInformation*/) const
 {
     // get logic sizes in object coordinate system

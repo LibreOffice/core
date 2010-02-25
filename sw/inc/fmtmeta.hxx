@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fmtmeta.hxx,v $
- * $Revision: 1.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,9 @@
 #ifndef SW_FMTMETA_HXX
 #define SW_FMTMETA_HXX
 
-#include <svtools/poolitem.hxx>
+#include <cppuhelper/weakref.hxx>
+
+#include <svl/poolitem.hxx>
 #include <sfx2/Metadatable.hxx>
 
 #include <boost/shared_ptr.hpp>
@@ -122,8 +121,8 @@ public:
     virtual SfxPoolItem *    Clone( SfxItemPool *pPool = 0 ) const;
 //    TYPEINFO();
 
-    // notify clients registered at m_pMeta that this meta is being removed
-    void NotifyRemoval();
+    /// notify clients registered at m_pMeta that this meta is being (re-)moved
+    void NotifyChangeTxtNode(SwTxtNode *const pTxtNode);
     static SwFmtMeta * CreatePoolDefault( const USHORT i_nWhich );
     ::sw::Meta * GetMeta() { return m_pMeta.get(); }
     /// this method <em>must</em> be called when the hint is actually copied
@@ -140,8 +139,11 @@ class Meta
     , public SwModify
 {
 protected:
-    friend class ::SwFmtMeta; // SetFmtMeta
-    friend class ::SwXMeta; // GetTxtNode, GetTxtAttr
+    friend class ::SwFmtMeta; // SetFmtMeta, NotifyChangeTxtNode
+    friend class ::SwXMeta; // GetTxtNode, GetTxtAttr, Get/SetXMeta
+
+    ::com::sun::star::uno::WeakReference<
+        ::com::sun::star::rdf::XMetadatable> m_wXMeta;
 
     SwFmtMeta * m_pFmt;
 
@@ -150,6 +152,15 @@ protected:
 
     SwFmtMeta * GetFmtMeta() const { return m_pFmt; }
     void SetFmtMeta( SwFmtMeta * const i_pFmt ) { m_pFmt = i_pFmt; };
+
+    void NotifyChangeTxtNode();
+
+    ::com::sun::star::uno::WeakReference<
+        ::com::sun::star::rdf::XMetadatable> const& GetXMeta() const
+            { return m_wXMeta; }
+    void SetXMeta(::com::sun::star::uno::Reference<
+                    ::com::sun::star::rdf::XMetadatable> const& xMeta)
+            { m_wXMeta = xMeta; }
 
 public:
     explicit Meta(SwFmtMeta * const i_pFmt = 0);

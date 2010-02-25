@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: $
- * $Revision: $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3097,7 +3094,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
             XPropertySet xPropSet = (XPropertySet)
                 UnoRuntime.queryInterface(XPropertySet.class, xPortion);
             String type = (String) xPropSet.getPropertyValue("TextPortionType");
-            assure("first: not text", type.equals("Text"));
+            assure("first: not text: " + type, type.equals("Text"));
             String txt = xPortion.getString();
             assure("first: text differs: " + txt, "45".equals(txt));
         }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pagechg.cxx,v $
- * $Revision: 1.57 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <ndole.hxx>
 #include <docary.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <fmtfsize.hxx>
 #include <fmthdft.hxx>
 #include <fmtclds.hxx>
@@ -46,9 +43,7 @@
 #include <ftninfo.hxx>
 #include <tgrditem.hxx>
 #include <viewopt.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 
 #include "viewimp.hxx"
 #include "pagefrm.hxx"
@@ -76,7 +71,7 @@
 #include "htmltbl.hxx"
 #include "pagedesc.hxx"
 #include "poolfmt.hxx"
-#include <svx/frmdiritem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <swfntcch.hxx> // SwFontAccess
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
@@ -408,7 +403,7 @@ void MA_FASTCALL lcl_MakeObjs( const SwSpzFrmFmts &rTbl, SwPageFrm *pPage )
         {
             if( rAnch.GetCntntAnchor() )
             {
-                if( FLY_PAGE == rAnch.GetAnchorId() )
+                if (FLY_AT_PAGE == rAnch.GetAnchorId())
                 {
                     SwFmtAnchor aAnch( rAnch );
                     aAnch.SetAnchor( 0 );
@@ -1196,7 +1191,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, BOOL bNotifyFields )
                 if ( pPage->GetFmt() != pFmtWish )
                     pPage->SetFrmFmt( pFmtWish );
             }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             else
             {
                 ASSERT( FALSE, "CheckPageDescs, missing solution" );
@@ -1239,7 +1234,7 @@ void SwFrm::CheckPageDescs( SwPageFrm *pStart, BOOL bNotifyFields )
         pDoc->UpdatePageFlds( &aMsgHnt );
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     //Ein paar Pruefungen muessen schon erlaubt sein.
 
     //1. Keine zwei EmptyPages hintereinander.
@@ -1661,7 +1656,7 @@ void SwRootFrm::AssertPageFlys( SwPageFrm *pPage )
                 SwFrmFmt& rFmt = (*pPage->GetSortedObjs())[i]->GetFrmFmt();
                 const SwFmtAnchor &rAnch = rFmt.GetAnchor();
                 const USHORT nPg = rAnch.GetPageNum();
-                if ( rAnch.GetAnchorId() == FLY_PAGE &&
+                if ((rAnch.GetAnchorId() == FLY_AT_PAGE) &&
                      nPg != pPage->GetPhyPageNum() )
                 {
                     //Das er auf der falschen Seite steht muss noch nichts
@@ -1672,7 +1667,7 @@ void SwRootFrm::AssertPageFlys( SwPageFrm *pPage )
                     {
                         //Umhaengen kann er sich selbst, indem wir ihm
                         //einfach ein Modify mit seinem AnkerAttr schicken.
-#ifdef PRODUCT
+#ifndef DBG_UTIL
                         rFmt.SwModify::Modify( 0, (SwFmtAnchor*)&rAnch );
 #else
                         const sal_uInt32 nCnt = pPage->GetSortedObjs()->Count();
@@ -1836,11 +1831,11 @@ void SwRootFrm::ImplCalcBrowseWidth()
                 long nWidth = 0;
                 switch ( rFmt.GetAnchor().GetAnchorId() )
                 {
-                    case FLY_IN_CNTNT:
+                    case FLY_AS_CHAR:
                         nWidth = bFly ? rFmt.GetFrmSize().GetWidth() :
                                         pAnchoredObj->GetObjRect().Width();
                         break;
-                    case FLY_AT_CNTNT:
+                    case FLY_AT_PARA:
                         {
                             // --> FME 2004-09-13 #i33170#
                             // Reactivated old code because
@@ -2009,7 +2004,7 @@ void lcl_MoveAllLowerObjs( SwFrm* pFrm, const Point& rOffset )
 
         // all except from the as character anchored objects are moved
         // when processing the page frame:
-        const bool bAsChar = rAnchor.GetAnchorId() == FLY_IN_CNTNT;
+        const bool bAsChar = (rAnchor.GetAnchorId() == FLY_AS_CHAR);
         if ( !bPage && !bAsChar )
             continue;
 

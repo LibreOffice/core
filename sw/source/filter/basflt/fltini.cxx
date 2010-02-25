@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fltini.cxx,v $
- * $Revision: 1.59 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,15 +36,15 @@
 #include <i18npool/mslangid.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/parhtml.hxx>
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <sot/storage.hxx>
 #include <sot/clsids.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/tstpitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/tstpitem.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
 #include <pam.hxx>
@@ -61,7 +58,7 @@
 #include <fmtfsize.hxx>
 #include <swtable.hxx>
 #include <fmtcntnt.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <frmatr.hxx>
 #include <frmfmt.hxx>
 #include <numrule.hxx>
@@ -417,6 +414,9 @@ void SwFilterOptions::GetValues( sal_uInt16 nCnt, const sal_Char** ppNames,
         for( n = 0; n < nCnt; ++n )
             pValues[ n ] = 0;
 }
+
+void SwFilterOptions::Commit() {}
+void SwFilterOptions::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
 /*  */
 
@@ -1008,3 +1008,24 @@ void GetWW8Writer( const String& rFltName, const String& rBaseURL, WriterRef& xR
     else
         xRet = WriterRef(0);
 }
+
+typedef ULONG ( __LOADONCALLAPI *SaveOrDel )( SfxObjectShell&, SotStorage&, BOOL, const String& );
+typedef ULONG ( __LOADONCALLAPI *GetSaveWarning )( SfxObjectShell& );
+
+ULONG SaveOrDelMSVBAStorage( SfxObjectShell& rDoc, SotStorage& rStor, BOOL bSaveInto, const String& rStorageName )
+{
+    SaveOrDel pFunction = reinterpret_cast<SaveOrDel>( GetMswordLibSymbol( "SaveOrDelMSVBAStorage_ww8" ) );
+    if( pFunction )
+        return pFunction( rDoc, rStor, bSaveInto, rStorageName );
+    return ERRCODE_NONE;
+}
+
+ULONG GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocS )
+{
+    GetSaveWarning pFunction = reinterpret_cast<GetSaveWarning>( GetMswordLibSymbol( "GetSaveWarningOfMSVBAStorage_ww8" ) );
+    if( pFunction )
+            return pFunction( rDocS );
+    return ERRCODE_NONE;
+}
+
+

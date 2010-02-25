@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drawdoc.cxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,10 +32,10 @@
 #include <svx/svxids.hrc>
 #endif
 #include <tools/stream.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <sot/storage.hxx>
-#include <svtools/intitem.hxx>
-#include <svx/forbiddencharacterstable.hxx>
+#include <svl/intitem.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <svx/xtable.hxx>

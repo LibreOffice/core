@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docredln.cxx,v $
- * $Revision: 1.51.122.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,12 +32,12 @@
 #include <hintids.hxx>
 #include <tools/shl.hxx>
 #ifndef _SFX_ITEMITER_HXX //autogen
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #endif
 #include <sfx2/app.hxx>
-#include <svx/colritem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/crsditem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/crsditem.hxx>
 #include <swmodule.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
@@ -59,7 +56,7 @@ using namespace com::sun::star;
 
 TYPEINIT1(SwRedlineHint, SfxHint);
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 
     #define _CHECK_REDLINE( pDoc )
     #define _DEBUG_REDLINE( pDoc )
@@ -310,7 +307,7 @@ Verhalten von Delete-Redline:
 bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
 {
 #if 0
-// #i93179# disabled: ASSERT in ~SwIndexReg     #ifndef PRODUCT
+// #i93179# disabled: ASSERT in ~SwIndexReg     #ifdef DBG_UTIL
     SwRedline aCopy( *pNewRedl );
 #endif
     bool bError = true;
@@ -3698,7 +3695,7 @@ void SwRedline::SetContentIdx( const SwNodeIndex* pIdx )
         delete pCntntSect, pCntntSect = 0;
         bIsVisible = FALSE;
     }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     else
         ASSERT( !this, "das ist keine gueltige Operation" );
 #endif

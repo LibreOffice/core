@@ -42,18 +42,18 @@
 
 #include <vcl/menu.hxx>
 
-#include <svtools/undo.hxx>
-#include <svtools/syslocale.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/undo.hxx>
+#include <unotools/syslocale.hxx>
+#include <svl/languageoptions.hxx>
 
-#include <svx/postitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/langitem.hxx>
 
-#include <svx/editview.hxx>
-#include <svx/outliner.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editobj.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editobj.hxx>
 
 #include <docufld.hxx> // SwPostItField
 #include <txtfld.hxx>

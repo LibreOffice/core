@@ -1,13 +1,10 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
- * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: x $
- * $Revision: 1.00 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,9 +54,9 @@ one go*/
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/sfxecode.hxx>
-#include <svtools/saveopt.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/itemprop.hxx>
+#include <unotools/saveopt.hxx>
+#include <svl/stritem.hxx>
+#include <svl/itemprop.hxx>
 #include <unotools/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -337,7 +334,7 @@ ULONG SmXMLImportWrapper::ReadThroughComponent(
         packages::zip::ZipIOException aBrokenPackage;
         if ( aSaxEx.WrappedException >>= aBrokenPackage )
             return ERRCODE_IO_BROKENPACKAGE;
-        
+
         if ( bEncrypted )
             nError = ERRCODE_SFX_WRONGPASSWORD;
     }
@@ -346,7 +343,7 @@ ULONG SmXMLImportWrapper::ReadThroughComponent(
         packages::zip::ZipIOException aBrokenPackage;
         if ( r.WrappedException >>= aBrokenPackage )
             return ERRCODE_IO_BROKENPACKAGE;
- 
+
         if ( bEncrypted )
             nError = ERRCODE_SFX_WRONGPASSWORD;
     }
@@ -553,8 +550,8 @@ rtl::OUString SAL_CALL SmXMLImport::getImplementationName()
 }
 
 
-sal_Int64 SAL_CALL SmXMLImport::getSomething( 
-    const uno::Sequence< sal_Int8 >&rId ) 
+sal_Int64 SAL_CALL SmXMLImport::getSomething(
+    const uno::Sequence< sal_Int8 >&rId )
 throw(uno::RuntimeException)
 {
     if ( rId.getLength() == 16 &&
@@ -625,17 +622,17 @@ public:
     SmXMLImportContext( SmXMLImport &rImport, sal_uInt16 nPrfx,
         const OUString& rLName)
         : SvXMLImportContext(rImport, nPrfx, rLName) {}
-    
+
     const SmXMLImport& GetSmImport() const
     {
         return (const SmXMLImport&)GetImport();
     }
-    
+
     SmXMLImport& GetSmImport()
     {
         return (SmXMLImport&)GetImport();
     }
-    
+
     virtual void TCharacters(const OUString & /*rChars*/);
     virtual void Characters(const OUString &rChars);
     virtual SvXMLImportContext *CreateChildContext(sal_uInt16 /*nPrefix*/, const OUString& /*rLocalName*/, const uno::Reference< xml::sax::XAttributeList > & /*xAttrList*/);
@@ -644,7 +641,7 @@ public:
 void SmXMLImportContext::TCharacters(const OUString & /*rChars*/)
 {
 }
-    
+
 void SmXMLImportContext::Characters(const OUString &rChars)
 {
     /*
@@ -678,10 +675,10 @@ struct SmXMLContext_Helper
     OUString sColor;
 
     SmXMLImportContext rContext;
-    
-    SmXMLContext_Helper(SmXMLImportContext &rImport) : 
+
+    SmXMLContext_Helper(SmXMLImportContext &rImport) :
         nIsBold(-1), nIsItalic(-1), nFontSize(0.0), rContext(rImport)  {}
-    
+
     void RetrieveAttrs(const uno::Reference< xml::sax::XAttributeList > &xAttrList );
     void ApplyAttrs();
 };
@@ -845,9 +842,9 @@ public:
     SmXMLDocContext_Impl( SmXMLImport &rImport, sal_uInt16 nPrfx,
         const OUString& rLName)
         : SmXMLImportContext(rImport,nPrfx,rLName) {}
-    
+
     virtual SvXMLImportContext *CreateChildContext(sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &xAttrList);
-    
+
     void EndElement();
 };
 
@@ -864,13 +861,13 @@ public:
         const OUString& rLName)
         : SmXMLDocContext_Impl(rImport,nPrefix,rLName)
         { nElementCount = GetSmImport().GetNodeStack().Count(); }
-    
+
     virtual SvXMLImportContext *CreateChildContext(sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &xAttrList);
-    
+
     SvXMLImportContext *StrictCreateChildContext(sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > &xAttrList);
-    
+
     void EndElement();
 };
 
@@ -882,7 +879,7 @@ public:
     SmXMLFracContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName)
         : SmXMLRowContext_Impl(rImport,nPrefix,rLName) {}
-    
+
     void EndElement();
 };
 
@@ -894,7 +891,7 @@ public:
     SmXMLSqrtContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName)
         : SmXMLRowContext_Impl(rImport,nPrefix,rLName) {}
-    
+
     void EndElement();
 };
 
@@ -906,7 +903,7 @@ public:
     SmXMLRootContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName)
         : SmXMLRowContext_Impl(rImport,nPrefix,rLName) {}
-    
+
     void EndElement();
 };
 
@@ -922,7 +919,7 @@ public:
     SmXMLStyleContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName) : SmXMLRowContext_Impl(rImport,nPrefix,rLName),
         aStyleHelper(*this) {}
-    
+
     void EndElement();
     void StartElement(const uno::Reference< xml::sax::XAttributeList > &xAttrList );
 };
@@ -1100,7 +1097,7 @@ public:
     SmXMLPaddedContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName)
         : SmXMLRowContext_Impl(rImport,nPrefix,rLName) {}
-    
+
     void EndElement();
 };
 
@@ -1124,7 +1121,7 @@ public:
     SmXMLPhantomContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName)
         : SmXMLRowContext_Impl(rImport,nPrefix,rLName) {}
-    
+
     void EndElement();
 };
 
@@ -1164,7 +1161,7 @@ public:
         const OUString& rLName)
         : SmXMLRowContext_Impl(rImport,nPrefix,rLName),
         cBegin('('), cEnd(')') {}
-    
+
     void StartElement(const uno::Reference< xml::sax::XAttributeList > & xAttrList );
     void EndElement();
 };
@@ -1255,7 +1252,7 @@ public:
     SmXMLErrorContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName)
         : SmXMLRowContext_Impl(rImport,nPrefix,rLName) {}
-    
+
     void EndElement();
 };
 
@@ -1293,9 +1290,9 @@ public:
         aToken.nLevel = 5;
         aToken.eType = TNUMBER;
     }
-    
+
     virtual void TCharacters(const OUString &rChars);
-    
+
     void EndElement();
 };
 
@@ -1319,9 +1316,9 @@ public:
     SmXMLAnnotationContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName)
         : SmXMLImportContext(rImport,nPrefix,rLName), bIsStarMath(sal_False) {}
-    
+
     virtual void Characters(const OUString &rChars);
-    
+
     void StartElement(const uno::Reference<xml::sax::XAttributeList > & xAttrList );
 };
 
@@ -1374,9 +1371,9 @@ public:
         aToken.nLevel = 5;
         aToken.eType = TTEXT;
     }
-    
+
     virtual void TCharacters(const OUString &rChars);
-    
+
     void EndElement();
 };
 
@@ -1407,9 +1404,9 @@ public:
         aToken.nLevel = 5;
         aToken.eType = TTEXT;
     }
-    
+
     virtual void TCharacters(const OUString &rChars);
-    
+
     void EndElement();
 };
 
@@ -1454,9 +1451,9 @@ public:
         aToken.nLevel = 5;
         aToken.eType = TIDENT;
     }
-    
+
     void TCharacters(const OUString &rChars);
-    void StartElement(const uno::Reference< xml::sax::XAttributeList > & xAttrList ) 
+    void StartElement(const uno::Reference< xml::sax::XAttributeList > & xAttrList )
     {
         aStyleHelper.RetrieveAttrs(xAttrList);
     };
@@ -1519,7 +1516,7 @@ public:
         aToken.eType = TSPECIAL;
         aToken.nLevel = 5;
     }
-    
+
     void TCharacters(const OUString &rChars);
     void StartElement(const uno::Reference< xml::sax::XAttributeList > &xAttrList );
     void EndElement();
@@ -1578,7 +1575,7 @@ public:
     SmXMLSpaceContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName)
         : SmXMLImportContext(rImport,nPrefix,rLName) {}
-    
+
     void StartElement(const uno::Reference< xml::sax::XAttributeList >& xAttrList );
 };
 
@@ -1606,10 +1603,10 @@ public:
     SmXMLSubContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName)
         : SmXMLRowContext_Impl(rImport,nPrefix,rLName) {}
-    
-    void EndElement() 
-    { 
-        GenericEndElement(TRSUB,RSUB); 
+
+    void EndElement()
+    {
+        GenericEndElement(TRSUB,RSUB);
     }
 };
 
@@ -1647,7 +1644,7 @@ public:
     SmXMLSupContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName)
         : SmXMLSubContext_Impl(rImport,nPrefix,rLName) {}
-    
+
     void EndElement()
     {
         GenericEndElement(TRSUP,RSUP);
@@ -1665,9 +1662,9 @@ public:
     SmXMLSubSupContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName)
         : SmXMLRowContext_Impl(rImport,nPrefix,rLName) {}
-    
-    void EndElement() 
-    { 
+
+    void EndElement()
+    {
         GenericEndElement(TRSUB,RSUB,RSUP);
     }
 };
@@ -1711,7 +1708,7 @@ public:
     SmXMLUnderContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName)
         : SmXMLSubContext_Impl(rImport,nPrefix,rLName) {}
-    
+
     void StartElement(const uno::Reference< xml::sax::XAttributeList > &xAttrList );
     void EndElement();
     void HandleAccent();
@@ -1782,7 +1779,7 @@ public:
     SmXMLOverContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName)
         : SmXMLSubContext_Impl(rImport,nPrefix,rLName), nAttrCount(0) {}
-    
+
     void EndElement();
     void StartElement(const uno::Reference< xml::sax::XAttributeList > &xAttrList );
     void HandleAccent();
@@ -1836,9 +1833,9 @@ public:
     SmXMLUnderOverContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName)
         : SmXMLSubSupContext_Impl(rImport,nPrefix,rLName) {}
-    
-    void EndElement() 
-    { 
+
+    void EndElement()
+    {
         GenericEndElement(TCSUB,CSUB,CSUP);
     }
 };
@@ -1854,7 +1851,7 @@ public:
         const OUString& rLName) :
         SmXMLSubSupContext_Impl(rImport,nPrefix,rLName),
         bHasPrescripts(FALSE) {}
-    
+
     void EndElement();
     void MiddleElement();
     SvXMLImportContext *CreateChildContext(sal_uInt16 nPrefix,
@@ -1870,7 +1867,7 @@ public:
     SmXMLNoneContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName)
         : SmXMLImportContext(rImport,nPrefix,rLName) {}
-    
+
     void EndElement();
 };
 
@@ -1906,7 +1903,7 @@ public:
         const OUString& rLName) :
         SmXMLRowContext_Impl(rImport,nPrefix,rLName)
         {}
-    
+
     SvXMLImportContext *CreateChildContext(sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > &xAttrList);
@@ -1922,7 +1919,7 @@ public:
         const OUString& rLName) :
         SmXMLTableRowContext_Impl(rImport,nPrefix,rLName)
         {}
-    
+
     void EndElement();
     SvXMLImportContext *CreateChildContext(sal_uInt16 nPrefix,
         const OUString& rLocalName,
@@ -1950,9 +1947,9 @@ public:
         const OUString& rLName) :
         SmXMLRowContext_Impl(rImport,nPrefix,rLName)
         {}
-    
+
     /*Don't do anything with alignment for now*/
-    void EndElement() 
+    void EndElement()
     {
     }
 };
@@ -1966,7 +1963,7 @@ public:
         const OUString& rLName) :
         SmXMLRowContext_Impl(rImport,nPrefix,rLName)
         {}
-    
+
     void EndElement();
 };
 
@@ -1980,7 +1977,7 @@ public:
     SmXMLOfficeContext_Impl( SmXMLImport &rImport, sal_uInt16 nPrfx,
         const OUString& rLName)
         : SvXMLImportContext(rImport,nPrfx,rLName) {}
-    
+
     virtual SvXMLImportContext *CreateChildContext(sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &xAttrList);
 };
 
@@ -1990,10 +1987,10 @@ SvXMLImportContext *SmXMLOfficeContext_Impl::CreateChildContext(sal_uInt16 nPref
 {
     SvXMLImportContext *pContext = 0;
     if ( XML_NAMESPACE_OFFICE == nPrefix &&
-        rLocalName == GetXMLToken(XML_META) ) 
+        rLocalName == GetXMLToken(XML_META) )
     {
         DBG_WARNING("XML_TOK_DOC_META: should not have come here, maybe document is invalid?");
-    } 
+    }
     else if ( XML_NAMESPACE_OFFICE == nPrefix &&
         rLocalName == GetXMLToken(XML_SETTINGS) )
     {
@@ -2049,8 +2046,8 @@ SvXMLImportContext *SmXMLFlatDocContext_Impl::CreateChildContext(
     {
         return SvXMLMetaDocumentContext::CreateChildContext(
                     i_nPrefix, i_rLocalName, i_xAttrList );
-    } 
-    else 
+    }
+    else
     {
         return SmXMLOfficeContext_Impl::CreateChildContext(
                     i_nPrefix, i_rLocalName, i_xAttrList );
@@ -2837,10 +2834,10 @@ SvXMLImportContext *SmXMLImport::CreateContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
     const uno::Reference <xml::sax::XAttributeList> & /*xAttrList*/)
 {
-    if ( XML_NAMESPACE_OFFICE == nPrefix ) 
+    if ( XML_NAMESPACE_OFFICE == nPrefix )
     {
         if ( (IsXMLToken(rLocalName, XML_DOCUMENT) ||
-              IsXMLToken(rLocalName, XML_DOCUMENT_META))) 
+              IsXMLToken(rLocalName, XML_DOCUMENT_META)))
         {
             uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
                 mxServiceFactory->createInstance(
@@ -2856,12 +2853,12 @@ SvXMLImportContext *SmXMLImport::CreateContext(sal_uInt16 nPrefix,
                 // flat OpenDocument file format -- this has not been tested...
                 : new SmXMLFlatDocContext_Impl( *this, nPrefix, rLocalName,
                             xDPS->getDocumentProperties(), xDocBuilder);
-        } 
-        else 
+        }
+        else
         {
             return new SmXMLOfficeContext_Impl( *this,nPrefix,rLocalName);
         }
-    } 
+    }
     else
         return new SmXMLDocContext_Impl(*this,nPrefix,rLocalName);
 }
@@ -3186,4 +3183,5 @@ void SmXMLImport::SetConfigurationSettings(const Sequence<PropertyValue>& aConfP
 
 
 ////////////////////////////////////////////////////////////
+
 

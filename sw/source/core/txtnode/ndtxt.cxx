@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ndtxt.cxx,v $
- * $Revision: 1.86.66.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,19 +30,19 @@
 #include <hintids.hxx>
 #include <hints.hxx>
 
-#include <svx/fontitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/lrspitem.hxx>
 // --> OD 2008-01-17 #newlistlevelattrs#
-#include <svx/tstpitem.hxx>
+#include <editeng/tstpitem.hxx>
 // <--
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
-#include <svtools/ctloptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <swmodule.hxx>
 #include <txtfld.hxx>
 #include <txtinet.hxx>
@@ -92,13 +89,13 @@
 #include <numrule.hxx>
 
 //--> #outlinelevel added by zhaojianwei
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 //<--end
 #include <swtable.hxx>
 #include <docsh.hxx>
 #include <SwNodeNum.hxx>
 // --> OD 2008-02-25 #refactorlists#
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <list.hxx>
 // <--
 
@@ -111,7 +108,7 @@ SV_DECL_PTRARR(SwpHts,SwTxtAttr*,1,1)
 // Leider ist das SwpHints nicht ganz wasserdicht:
 // Jeder darf an den Hints rumfummeln, ohne die Sortierreihenfolge
 // und Verkettung sicherstellen zu muessen.
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #define CHECK_SWPHINTS(pNd)  { if( pNd->GetpSwpHints() && \
                                    !pNd->GetDoc()->IsInReading() ) \
                                   pNd->GetpSwpHints()->Check(); }
@@ -372,7 +369,7 @@ void lcl_ChangeFtnRef( SwTxtNode &rNode )
                             ((SwTxtFrm*)pFrm)->SetFtn( TRUE );
                         }
                     }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                     while( 0 != (pCntnt = (SwCntntFrm*)aIter.Next()) )
                     {
                         SwFtnFrm *pDbgFtn = pCntnt->FindFtnFrm();
@@ -3623,6 +3620,12 @@ void SwTxtNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
     }
 
     m_bNotifiable = bWasNotifiable;
+
+    if (pOldValue && (RES_REMOVE_UNO_OBJECT == pOldValue->Which()))
+    {   // invalidate cached uno object
+        SetXParagraph(::com::sun::star::uno::Reference<
+                ::com::sun::star::text::XTextContent>(0));
+    }
 }
 
 SwFmtColl* SwTxtNode::ChgFmtColl( SwFmtColl *pNewColl )
@@ -4972,27 +4975,15 @@ bool SwTxtNode::IsInContent() const
     return !GetDoc()->IsInHeaderFooter( SwNodeIndex(*this) );
 }
 
-#include <unoobj.hxx>
+#include <unoparagraph.hxx>
 
-::com::sun::star::uno::Reference< ::com::sun::star::rdf::XMetadatable >
+using namespace ::com::sun::star;
+
+uno::Reference< rdf::XMetadatable >
 SwTxtNode::MakeUnoObject()
 {
-    // re-use existing SwXParagraph
-    SwClientIter iter( *this );
-    SwClient * pClient( iter.First( TYPE( SwXParagraph ) ) );
-    while (pClient) {
-        SwXParagraph *pPara( dynamic_cast<SwXParagraph*>(pClient) );
-        if (pPara && pPara->GetCoreObject() == this ) {
-            return pPara;
-        }
-        pClient = iter.Next();
-    }
-
-    // create new SwXParagraph
-    SwPosition Pos( *this );
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > xParent(
-        SwXTextRange::CreateParentXText( GetDoc(), Pos  ) );
-    SwXParagraph * pXPara( new SwXParagraph( xParent, this ) );
-    return pXPara;
+    const uno::Reference<rdf::XMetadatable> xMeta(
+            SwXParagraph::CreateXParagraph(*GetDoc(), *this), uno::UNO_QUERY);
+    return xMeta;
 }
 

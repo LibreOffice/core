@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: wrtww8.cxx,v $
- * $Revision: 1.91.98.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,23 +43,23 @@
 #include <docsh.hxx>
 
 #define _SVSTDARR_BOOLS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
-#include <svtools/fltrcfg.hxx>
+#include <unotools/fltrcfg.hxx>
 #include <vcl/salbtype.hxx>
 #include <sot/storage.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/zformat.hxx>
 #include <sfx2/docinf.hxx>
-#include <svx/tstpitem.hxx>
+#include <editeng/tstpitem.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/hyznitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/msoleexp.hxx>
-#include <svx/msocximex.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/hyznitem.hxx>
+#include <editeng/langitem.hxx>
+#include <filter/msfilter/msoleexp.hxx>
+#include <filter/msfilter/msocximex.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <swtypes.hxx>
 #include <swrect.hxx>
 #include <txatbase.hxx>
@@ -112,9 +109,10 @@
 #include "dbgoutsw.hxx"
 
 #include <sfx2/docfile.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <unotools/tempfile.hxx>
-#include <svx/mscodec.hxx>
+#include <filter/msfilter/mscodec.hxx>
+#include <filter/msfilter/svxmsbas.hxx>
 #include <osl/time.h>
 #include <rtl/random.h>
 #include "WW8Sttbf.hxx"
@@ -741,7 +739,7 @@ ULONG SwWW8Writer::FillUntil( SvStream& rStrm, ULONG nEndPos )
 
     if( nEndPos > nCurPos )
         SwWW8Writer::FillCount( rStrm, nEndPos - nCurPos );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     else
         ASSERT( nEndPos == nCurPos, "Falsches FillUntil()" );
 #endif
@@ -2371,7 +2369,6 @@ void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
     if ( m_rWW8Export.bWrtWW8 )
     {
         sal_uInt32 aSprmIds[] = {NS_sprm::LN_TCellShd, NS_sprm::LN_TCellShadow};
-
         sal_uInt8 nBoxes0 = rTabBoxes.Count();
         if (nBoxes0 > 21)
             nBoxes0 = 21;
@@ -2390,8 +2387,8 @@ void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
                 Color aColor;
 
                 if ( SFX_ITEM_ON ==
-                     pFrmFmt->GetAttrSet().
-                     GetItemState( RES_BACKGROUND, false, &pI ) )
+                         pFrmFmt->GetAttrSet().
+                         GetItemState( RES_BACKGROUND, false, &pI ) )
                 {
                     aColor = dynamic_cast<const SvxBrushItem *>(pI)->GetColor();
                 }
@@ -2713,7 +2710,6 @@ void WW8Export::WriteFkpPlcUsw()
         // <--
         {
             ::std::vector<String> aStrings;
-
             ::ww8::StringVector_t & aSttbStrings = pSttbfAssoc->getStrings();
             ::ww8::StringVector_t::const_iterator aItEnd = aSttbStrings.end();
             for (::ww8::StringVector_t::const_iterator aIt = aSttbStrings.begin();
@@ -2726,14 +2722,12 @@ void WW8Export::WriteFkpPlcUsw()
             WriteAsStringTable(aStrings, pFib->fcSttbfAssoc,
                                pFib->lcbSttbfAssoc);
         }
-
     }
     Strm().Seek( 0 );
 
     // Reclaim stored FIB data from document.
     ::ww8::WW8FibData * pFibData = dynamic_cast<ww8::WW8FibData *>
           (pDoc->getExternalData(::sw::FIB).get());
-
     // --> OD 2009-10-19 #i106057#
     if ( pFibData )
     // <--
@@ -2745,6 +2739,7 @@ void WW8Export::WriteFkpPlcUsw()
     }
 
     pFib->Write( Strm() );  // FIB
+
 }
 
 void WW8Export::StoreDoc1()
@@ -2867,7 +2862,7 @@ namespace
 {
     const ULONG WW_BLOCKSIZE = 0x200;
 
-    void EncryptRC4(svx::MSCodec_Std97& rCtx, SvStream &rIn, SvStream &rOut)
+    void EncryptRC4(msfilter::MSCodec_Std97& rCtx, SvStream &rIn, SvStream &rOut)
     {
         rIn.Seek(STREAM_SEEK_TO_END);
         ULONG nLen = rIn.Tell();
@@ -2899,7 +2894,7 @@ void MSWordExportBase::ExportDocument( bool bWriteAll )
 
     mpParentFrame = 0;
     pFlyOffset = 0;
-    eNewAnchorType = FLY_PAGE;
+    eNewAnchorType = FLY_AT_PAGE;
     nTxtTyp = TXT_MAINTEXT;
     // --> OD 2007-04-19 #i43447# - removed
 //    nFlyWidth = nFlyHeight = 0;
@@ -3041,7 +3036,7 @@ void WW8Export::ExportDocument_Impl()
 
     pFtn = new WW8_WrPlcFtnEdn( TXT_FTN );                      // Footnotes
     pEdn = new WW8_WrPlcFtnEdn( TXT_EDN );                      // Endnotes
-    pAtn = new WW8_WrPlcPostIt;                                 // PostIts
+    pAtn = new WW8_WrPlcAnnotations;                                 // PostIts
     pTxtBxs = new WW8_WrPlcTxtBoxes( TXT_TXTBOX );
     pHFTxtBxs = new WW8_WrPlcTxtBoxes( TXT_HFTXTBOX );
 
@@ -3103,7 +3098,7 @@ void WW8Export::ExportDocument_Impl()
         for (xub_StrLen nChar = 0; nChar < nLen; ++nChar )
             aPassword[nChar] = sUniPassword.GetChar(nChar);
 
-        svx::MSCodec_Std97 aCtx;
+        msfilter::MSCodec_Std97 aCtx;
         aCtx.InitKey(aPassword, aDocId);
 
         SvStream *pStrmTemp, *pTableStrmTemp, *pDataStrmTemp;
@@ -3397,9 +3392,21 @@ SwWW8Writer::~SwWW8Writer()
 {
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT ULONG SAL_CALL SaveOrDelMSVBAStorage_ww8( SfxObjectShell& rDoc, SotStorage& rStor, BOOL bSaveInto, const String& rStorageName )
+{
+    SvxImportMSVBasic aTmp( rDoc, rStor );
+    return aTmp.SaveOrDelMSVBAStorage( bSaveInto, rStorageName );
+}
+
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL ExportDOC( const String& rFltName, const String& rBaseURL, WriterRef& xRet )
 {
     xRet = new SwWW8Writer( rFltName, rBaseURL );
+}
+
+
+extern "C" SAL_DLLPUBLIC_EXPORT ULONG SAL_CALL GetSaveWarningOfMSVBAStorage_ww8(  SfxObjectShell &rDocS )
+{
+    return SvxImportMSVBasic::GetSaveWarningOfMSVBAStorage( rDocS );
 }
 
 bool WW8_WrPlcFtnEdn::WriteTxt( WW8Export& rWrt )
@@ -3438,7 +3445,7 @@ void WW8_WrPlcFtnEdn::WritePlc( WW8Export& rWrt ) const
 }
 
 
-bool WW8_WrPlcPostIt::WriteTxt( WW8Export& rWrt )
+bool WW8_WrPlcAnnotations::WriteTxt( WW8Export& rWrt )
 {
     bool bRet = WriteGenericTxt( rWrt, TXT_ATN, rWrt.pFib->ccpAtn );
     rWrt.pFldAtn->Finish( rWrt.Fc2Cp( rWrt.Strm().Tell() ),
@@ -3447,7 +3454,7 @@ bool WW8_WrPlcPostIt::WriteTxt( WW8Export& rWrt )
     return bRet;
 }
 
-void WW8_WrPlcPostIt::WritePlc( WW8Export& rWrt ) const
+void WW8_WrPlcAnnotations::WritePlc( WW8Export& rWrt ) const
 {
     WriteGenericPlc( rWrt, TXT_ATN, rWrt.pFib->fcPlcfandTxt,
         rWrt.pFib->lcbPlcfandTxt, rWrt.pFib->fcPlcfandRef,

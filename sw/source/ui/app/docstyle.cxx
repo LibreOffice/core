@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docstyle.cxx,v $
- * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,23 +30,21 @@
 
 #define _SVSTDARR_USHORTS
 
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 #include <hintids.hxx>
-#include <svtools/itemiter.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/syslocale.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/numitem.hxx>
+#include <svl/itemiter.hxx>
+#include <svl/eitem.hxx>
+#include <unotools/syslocale.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/numitem.hxx>
 // --> OD 2008-02-13 #newlistlevelattrs#
-#include <svx/lrspitem.hxx>
+#include <editeng/lrspitem.hxx>
 // <--
 #include <fmtcol.hxx>
 #include <uitool.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <errhdl.hxx>
 #include <frmfmt.hxx>
 #include <charfmt.hxx>
@@ -59,21 +54,18 @@
 #include <docary.hxx>
 #include <ccoll.hxx>
 #include <doc.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <swstyle.h>
-#ifndef _APP_HRC
 #include <app.hrc>
-#endif
 #include <paratr.hxx>
 #include <SwStyleNameMapper.hxx>
-#include <svtools/cjkoptions.hxx>
+#include <svl/cjkoptions.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <numrule.hxx>
 #include <fmthdft.hxx>
+#include <svx/svxids.hrc>
 // --> OD 2008-02-12 #newlistlevelattrs#
 #include <SwRewriter.hxx>
 #include <undobj.hxx>

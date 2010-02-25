@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: rtffld.cxx,v $
- * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,13 +38,13 @@
 #ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
 #endif
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svtools/rtftoken.h>
-#include <svtools/zforlist.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/brkitem.hxx>
+#include <svl/zforlist.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/brkitem.hxx>
 #include <fmtfld.hxx>
 #include <fmtinfmt.hxx>
 #include <swtypes.hxx>
@@ -69,7 +66,7 @@
 #include <breakit.hxx>
 #include <reffld.hxx>
 #include <SwStyleNameMapper.hxx>
-#include <svx/charhiddenitem.hxx>
+#include <editeng/charhiddenitem.hxx>
 
 
 // bestimme, ob es sich um ein IMPORT/TOC - Feld handelt.

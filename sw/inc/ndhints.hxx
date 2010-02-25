@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ndhints.hxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,7 @@
 #define _NDHINTS_HXX
 
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <tools/mempool.hxx>
 
 #include "swtypes.hxx"
@@ -117,7 +114,7 @@ public:
         { return m_HintStarts[nIdx]; }
     inline USHORT Count() const { return m_HintStarts.Count(); }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     bool Check() const;
 #endif
 };

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: laycache.cxx,v $
- * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 
 
 #include <hintids.hxx>
-#include <svx/brkitem.hxx>
+#include <editeng/brkitem.hxx>
 #include <tools/stream.hxx>
 #include <doc.hxx>
 #include <docstat.hxx>
@@ -63,16 +60,15 @@
 #include <sortedobjs.hxx>
 // --> OD 2006-03-22 #b6375613#
 #include <pam.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
+#include <set>
+
+
 using namespace ::com::sun::star;
 // <--
-
-#include <set>
 
 SV_IMPL_PTRARR( SwPageFlyCache, SwFlyCachePtr )
 
@@ -348,7 +344,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
     }
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 sal_Bool SwLayoutCache::CompareLayout( const SwDoc& rDoc ) const
 {
     sal_Bool bRet = sal_True;
@@ -696,8 +692,8 @@ bool lcl_HasTextFrmAnchoredObjs( SwTxtFrm* p_pTxtFrm )
         SwFrmFmt *pFmt = (SwFrmFmt*)(*pSpzFrmFmts)[i];
         const SwFmtAnchor &rAnch = pFmt->GetAnchor();
         if ( rAnch.GetCntntAnchor() &&
-             ( rAnch.GetAnchorId() == FLY_AT_CNTNT ||
-               rAnch.GetAnchorId() == FLY_AUTO_CNTNT ) &&
+             ((rAnch.GetAnchorId() == FLY_AT_PARA) ||
+              (rAnch.GetAnchorId() == FLY_AT_CHAR)) &&
              rAnch.GetCntntAnchor()->nNode.GetIndex() ==
                                         p_pTxtFrm->GetTxtNode()->GetIndex() )
         {

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: htmlfly.cxx,v $
- * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,27 +31,22 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
-
-
+#include <svx/svxids.hrc>
 #include "hintids.hxx"
 #include <tools/string.hxx>
-#include <svtools/urihelper.hxx>
-#ifndef _APP_HXX
+#include <svl/urihelper.hxx>
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmlout.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/imapobj.hxx>
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <svx/xoutbmp.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/brshitem.hxx>
 
 
 #include <fmtanchr.hxx>
@@ -338,12 +330,12 @@ void SwHTMLWriter::CollectFlyFrms()
         sal_Int16 eHoriRel = rFrmFmt.GetHoriOrient().GetRelationOrient();
         switch( rAnchor.GetAnchorId() )
         {
-        case FLY_PAGE:
+        case FLY_AT_PAGE:
         case FLY_AT_FLY:
             nMode = aHTMLOutFrmPageFlyTable[eType][nExportMode];
             break;
 
-        case FLY_AT_CNTNT:
+        case FLY_AT_PARA:
             // Absatz-gebundene Rahmen werden nur dann vor den
             // Absatz geschrieben, wenn der Absatz einen Abstand
             // hat.
@@ -362,7 +354,7 @@ void SwHTMLWriter::CollectFlyFrms()
             nMode = aHTMLOutFrmParaPrtAreaTable[eType][nExportMode];
             break;
 
-        case FLY_AUTO_CNTNT:
+        case FLY_AT_CHAR:
             if( text::RelOrientation::FRAME == eHoriRel || text::RelOrientation::PRINT_AREA == eHoriRel )
                 nMode = aHTMLOutFrmParaPrtAreaTable[eType][nExportMode];
             else
@@ -594,7 +586,7 @@ void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
     const sal_Char *pStr = 0;
     RndStdIds eAnchorId = rFrmFmt.GetAnchor().GetAnchorId();
     if( (nFrmOpts & HTML_FRMOPT_ALIGN) &&
-        (FLY_AT_CNTNT == eAnchorId || FLY_AUTO_CNTNT == eAnchorId) )
+        ((FLY_AT_PARA == eAnchorId) || (FLY_AT_CHAR == eAnchorId)) )
     {
         // MIB 12.3.98: Ist es nicht schlauer, absatzgebundene
         // Rahmen notfalls links auszurichten als sie
@@ -611,7 +603,7 @@ void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
     }
     if( (nFrmOpts & HTML_FRMOPT_ALIGN) && !pStr &&
         ( (nFrmOpts & HTML_FRMOPT_S_ALIGN) == 0 ||
-          FLY_IN_CNTNT == eAnchorId ) &&
+          (FLY_AS_CHAR == eAnchorId) ) &&
         SFX_ITEM_SET == rItemSet.GetItemState( RES_VERT_ORIENT, TRUE, &pItem ))
     {
         switch( ((SwFmtVertOrient*)pItem)->GetVertOrient() )
@@ -764,8 +756,8 @@ void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
     // Umlauf fuer absatzgeb. Grafiken als <BR CLEAR=...> in den String
     // schreiben
     if( (nFrmOpts & HTML_FRMOPT_BRCLEAR) &&
-        (FLY_AT_CNTNT== rFrmFmt.GetAnchor().GetAnchorId() ||
-         FLY_AUTO_CNTNT== rFrmFmt.GetAnchor().GetAnchorId()) &&
+        ((FLY_AT_PARA == rFrmFmt.GetAnchor().GetAnchorId()) ||
+         (FLY_AT_CHAR == rFrmFmt.GetAnchor().GetAnchorId())) &&
         SFX_ITEM_SET == rItemSet.GetItemState( RES_SURROUND, TRUE, &pItem ))
     {
         const SwFmtSurround* pSurround = (const SwFmtSurround*)pItem;
@@ -1893,7 +1885,7 @@ SwHTMLPosFlyFrm::SwHTMLPosFlyFrm( const SwPosFlyFrm& rPosFly,
     nOutputMode( nOutMode )
 {
     const SwFmtAnchor& rAnchor = rPosFly.GetFmt().GetAnchor();
-    if( FLY_AUTO_CNTNT==rAnchor.GetAnchorId() &&
+    if ((FLY_AT_CHAR == rAnchor.GetAnchorId()) &&
         HTML_POS_INSIDE == GetOutPos() )
     {
         // Auto-gebundene Rahmen werden ein Zeichen weiter hinten

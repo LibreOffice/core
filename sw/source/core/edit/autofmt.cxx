@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: autofmt.cxx,v $
- * $Revision: 1.42 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,19 +35,19 @@
 #include <ctype.h>
 #include <hintids.hxx>
 
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <unotools/charclass.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/tstpitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/cscoitem.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/cscoitem.hxx>
+#include <editeng/unolingu.hxx>
 
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 #include <swwait.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtanchr.hxx>
@@ -316,6 +313,7 @@ void SwAutoFormat::_SetRedlineTxt( USHORT nActionId )
         case STR_AUTOFMTREDL_FRACTION:
         case STR_AUTOFMTREDL_DASH:
         case STR_AUTOFMTREDL_ORDINAL:
+        case STR_AUTOFMTREDL_NON_BREAK_SPACE:
             nSeqNo = ++nRedlAutoFmtSeqId;
             break;
         }
@@ -386,7 +384,7 @@ BOOL SwAutoFormat::HasObjects( const SwNode& rNd )
     for( USHORT n = 0; n < rFmts.Count(); ++n )
     {
         const SwFmtAnchor& rAnchor = rFmts[ n ]->GetAnchor();
-        if( FLY_PAGE != rAnchor.GetAnchorId() &&
+        if ((FLY_AT_PAGE != rAnchor.GetAnchorId()) &&
             rAnchor.GetCntntAnchor() &&
             &rAnchor.GetCntntAnchor()->nNode.GetNode() == &rNd )
         {
@@ -1891,12 +1889,17 @@ void SwAutoFormat::BuildHeadLine( USHORT nLvl )
         // dann lasse doch mal das AutoCorrect auf den akt. TextNode los
 void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
 {
+    SvxAutoCorrect* pATst = SvxAutoCorrCfg::Get()->GetAutoCorrect();
+    long aSvxFlags = pATst->GetFlags( );
+    bool bReplaceQuote = ( aSvxFlags & ChgQuotes ) > 0;
+    bool bReplaceSglQuote = ( aSvxFlags & ChgSglQuotes ) > 0;
+
     if( aFlags.bAFmtByInput ||
-        (!aFlags.bAutoCorrect && !aFlags.bReplaceQuote &&
+        (!aFlags.bAutoCorrect && !bReplaceQuote && !bReplaceSglQuote &&
         !aFlags.bCptlSttSntnc && !aFlags.bCptlSttWrd &&
-        !aFlags.bChgFracionSymbol && !aFlags.bChgOrdinalNumber &&
+        !aFlags.bChgOrdinalNumber &&
         !aFlags.bChgToEnEmDash && !aFlags.bSetINetAttr &&
-        !aFlags.bChgWeightUnderl) )
+        !aFlags.bChgWeightUnderl && !aFlags.bAddNonBrkSpace) )
         return;
 
     const String* pTxt = &pAktTxtNd->GetTxt();
@@ -1905,7 +1908,8 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
 
     BOOL bGetLanguage = aFlags.bChgOrdinalNumber ||
                         aFlags.bChgToEnEmDash || aFlags.bSetINetAttr ||
-                        aFlags.bCptlSttWrd || aFlags.bCptlSttSntnc;
+                        aFlags.bCptlSttWrd || aFlags.bCptlSttSntnc ||
+                        aFlags.bAddNonBrkSpace;
 
 
     aDelPam.DeleteMark();
@@ -1913,7 +1917,6 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
     aDelPam.GetPoint()->nContent.Assign( pAktTxtNd, 0 );
 
     SwAutoCorrDoc aACorrDoc( *pEditShell, aDelPam );
-    SvxAutoCorrect* pATst = SvxAutoCorrCfg::Get()->GetAutoCorrect();
 
     SwTxtFrmInfo aFInfo( 0 );
 
@@ -1929,8 +1932,8 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
         if( nPos == pTxt->Len() )
             break;      // das wars
 
-        if( aFlags.bReplaceQuote &&
-            ( '\"' == cChar || '\'' == cChar ) &&
+        if( ( ( bReplaceQuote && '\"' == cChar ) ||
+              ( bReplaceSglQuote && '\'' == cChar ) ) &&
             ( !nPos || ' ' == pTxt->GetChar( nPos-1 ) ) )
         {
             // --------------------------------------
@@ -1983,7 +1986,7 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
             {
             case '\"':
             case '\'':
-                if( aFlags.bReplaceQuote )
+                if( ( cChar == '\"' && bReplaceQuote ) || ( cChar == '\'' && bReplaceSglQuote ) )
                 {
                     // --------------------------------------
                     // beachte: Sonderfall Symbolfonts !!!
@@ -2068,6 +2071,18 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
                     }
                 }
                 break;
+            case '/':
+                if ( aFlags.bAddNonBrkSpace )
+                {
+                    LanguageType eLang = (bGetLanguage && pAktTxtNd)
+                                           ? pAktTxtNd->GetLang( nSttPos )
+                                           : LANGUAGE_SYSTEM;
+
+                    SetRedlineTxt( STR_AUTOFMTREDL_NON_BREAK_SPACE );
+                    if ( pATst->FnAddNonBrkSpace( aACorrDoc, *pTxt, nSttPos, nPos, eLang ) )
+                        --nPos;
+                }
+                break;
 
             case '.':
             case '!':
@@ -2076,7 +2091,6 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
                     bFirstSent = TRUE;
 //alle Wortrenner loesen die Autokorrektur aus!
 //              break;
-
             default:
 //alle Wortrenner loesen die Autokorrektur aus!
 //          case ' ':
@@ -2125,10 +2139,13 @@ void SwAutoFormat::AutoCorrect( xub_StrLen nPos )
                                            ? pAktTxtNd->GetLang( nSttPos )
                                            : LANGUAGE_SYSTEM;
 
-            if( ( aFlags.bChgFracionSymbol &&
-                    SetRedlineTxt( STR_AUTOFMTREDL_FRACTION ) &&
-                    pATst->FnChgFractionSymbol( aACorrDoc, *pTxt, nSttPos, nPos ) ) ||
-                ( aFlags.bChgOrdinalNumber &&
+            if ( aFlags.bAddNonBrkSpace )
+            {
+                SetRedlineTxt( STR_AUTOFMTREDL_NON_BREAK_SPACE );
+                pATst->FnAddNonBrkSpace( aACorrDoc, *pTxt, nSttPos, nPos, eLang );
+            }
+
+            if( ( aFlags.bChgOrdinalNumber &&
                     SetRedlineTxt( STR_AUTOFMTREDL_ORDINAL ) &&
                     pATst->FnChgOrdinalNumber( aACorrDoc, *pTxt, nSttPos, nPos, eLang ) ) ||
                 ( aFlags.bChgToEnEmDash &&

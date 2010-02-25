@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ndtbl.cxx,v $
- * $Revision: 1.57 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,13 +35,12 @@
 #endif
 #include <hintids.hxx>
 
-
-#include <svx/lrspitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/protitem.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/protitem.hxx>
+#include <editeng/boxitem.hxx>
 // OD 06.08.2003 #i17174#
-#include <svx/shaditem.hxx>
+#include <editeng/shaditem.hxx>
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
 #include <fmtfordr.hxx>
@@ -91,9 +87,7 @@
 #include <comcore.hrc>
 #endif
 #include "docsh.hxx"
-#ifdef LINUX
 #include <tabcol.hxx>
-#endif
 #include <unochart.hxx>
 
 #include <node.hxx>
@@ -104,7 +98,10 @@
 // --> OD 2005-12-05 #i27138#
 #include <rootfrm.hxx>
 // <--
-#ifdef PRODUCT
+#include <fldupde.hxx>
+
+
+#ifndef DBG_UTIL
 #define CHECK_TABLE(t)
 #else
 #ifdef DEBUG
@@ -113,7 +110,6 @@
 #define CHECK_TABLE(t)
 #endif
 #endif
-#include <fldupde.hxx>
 
 
 using namespace ::com::sun::star;
@@ -1684,17 +1680,19 @@ BOOL SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
     // #i28006# Fly frames have to be restored even if the table was
     // #alone in the section
     const SwSpzFrmFmts& rFlyArr = *GetDoc()->GetSpzFrmFmts();
-    const SwPosition* pAPos;
     for( USHORT n = 0; n < rFlyArr.Count(); ++n )
     {
-        SwFrmFmt* pFmt = (SwFrmFmt*)rFlyArr[n];
+        SwFrmFmt *const pFmt = (SwFrmFmt*)rFlyArr[n];
         const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
-        if( ( FLY_AT_CNTNT == rAnchor.GetAnchorId() ||
-              FLY_AUTO_CNTNT == rAnchor.GetAnchorId() ) &&
-            0 != ( pAPos = rAnchor.GetCntntAnchor() ) &&
+        SwPosition const*const pAPos = rAnchor.GetCntntAnchor();
+        if (pAPos &&
+            ((FLY_AT_PARA == rAnchor.GetAnchorId()) ||
+             (FLY_AT_CHAR == rAnchor.GetAnchorId())) &&
             nStt <= pAPos->nNode.GetIndex() &&
             pAPos->nNode.GetIndex() < nEnd )
+        {
             pFmt->MakeFrms();
+        }
     }
 
     return TRUE;

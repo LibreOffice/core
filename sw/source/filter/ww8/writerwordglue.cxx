@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: writerwordglue.cxx,v $
- * $Revision: 1.28.216.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,13 +45,13 @@
 #endif
 
 #ifndef SV_FONTCVT_HXX
-#   include <vcl/fontcvt.hxx>   //GetSubsFontName
+#   include <unotools/fontcvt.hxx>   //GetSubsFontName
 #endif
-#   include <svx/paperinf.hxx>      //lA0Width...
-#   include <svx/lrspitem.hxx>      //SvxLRSpaceItem
-#   include <svx/ulspitem.hxx>      //SvxULSpaceItem
-#   include <svx/boxitem.hxx>       //SvxBoxItem
-#   include <svx/fontitem.hxx>      //SvxFontItem
+#   include <editeng/paperinf.hxx>      //lA0Width...
+#   include <editeng/lrspitem.hxx>      //SvxLRSpaceItem
+#   include <editeng/ulspitem.hxx>      //SvxULSpaceItem
+#   include <editeng/boxitem.hxx>       //SvxBoxItem
+#   include <editeng/fontitem.hxx>      //SvxFontItem
 #   include <frmfmt.hxx>            //SwFrmFmt
 #   include <fmtclds.hxx>           //SwFmtCol
 #   include <hfspacingitem.hxx>     //SwHeaderAndFooterEatSpacingItem

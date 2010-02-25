@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: view.cxx,v $
- * $Revision: 1.112.94.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,25 +30,24 @@
 
 
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
-
 #include <stdlib.h>
 #include <hintids.hxx>
 #include <rtl/logfile.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/inputctx.hxx>
 #include <basic/sbxobj.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/undoopt.hxx>
-#include <svtools/lingucfg.hxx>
+#include <svl/eitem.hxx>
+#include <unotools/undoopt.hxx>
+#include <unotools/lingucfg.hxx>
 #include <svtools/printdlg.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/app.hxx>
 #include <svx/ruler.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/protitem.hxx>
 #include <svx/fmshell.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
@@ -100,7 +96,7 @@
 #include <prtopt.hxx>
 #include <swprtopt.hxx>
 #include <linguistic/lngprops.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 //#include <sfx2/app.hxx>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/scanner/ScannerContext.hpp>
@@ -1920,53 +1916,6 @@ void SwView::NotifyDBChanged()
     Beschreibung:   Drucken
  --------------------------------------------------------------------*/
 
-void SwView::MakeOptions( PrintDialog* pDlg, SwPrtOptions& rOpts,
-         BOOL* pPrtProspect, BOOL* pPrtProspect_RTL, BOOL bWeb, SfxPrinter* pPrt, SwPrintData* pData )
-{
-    SwAddPrinterItem* pAddPrinterAttr;
-    if( pPrt && SFX_ITEM_SET == pPrt->GetOptions().GetItemState(
-        FN_PARAM_ADDPRINTER, FALSE, (const SfxPoolItem**)&pAddPrinterAttr ))
-    {
-        pData = pAddPrinterAttr;
-    }
-    else if(!pData)
-    {
-        pData = SW_MOD()->GetPrtOptions(bWeb);
-    }
-    rOpts = *pData;
-    if( pPrtProspect )
-        *pPrtProspect = pData->bPrintProspect;
-    if( pPrtProspect_RTL )
-        *pPrtProspect_RTL = pData->bPrintProspect_RTL;
-    rOpts.aMulti.SetTotalRange( Range( 0, RANGE_MAX ) );
-    rOpts.aMulti.SelectAll( FALSE );
-    rOpts.nCopyCount = 1;
-    rOpts.bCollate = FALSE;
-    rOpts.bPrintSelection = FALSE;
-    rOpts.bJobStartet = FALSE;
-
-    if ( pDlg )
-    {
-        rOpts.nCopyCount = pDlg->GetCopyCount();
-        rOpts.bCollate = pDlg->IsCollateChecked();
-        if ( pDlg->GetCheckedRange() == PRINTDIALOG_SELECTION )
-        {
-            rOpts.aMulti.SelectAll();
-            rOpts.bPrintSelection = TRUE;
-        }
-        else if ( PRINTDIALOG_ALL == pDlg->GetCheckedRange() )
-            rOpts.aMulti.SelectAll();
-        else
-        {
-            rOpts.aMulti = MultiSelection( pDlg->GetRangeText() );
-            rOpts.aMulti.SetTotalRange( Range( 0, RANGE_MAX ) );
-        }
-    }
-    else
-        rOpts.aMulti.SelectAll();
-    rOpts.aMulti.Select( 0, FALSE );
-}
-
 /* -----------------------------28.10.02 13:25--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -1995,3 +1944,20 @@ void SwView::AddTransferable(SwTransferable& rTransferable)
 {
     GetViewImpl()->AddTransferable(rTransferable);
 }
+
+/* --------------------------------------------------*/
+
+void SwPrtOptions::MakeOptions( BOOL bWeb )
+{
+    *this = *SW_MOD()->GetPrtOptions(bWeb);
+
+    nCopyCount = 1;
+    bCollate = FALSE;
+    bPrintSelection = FALSE;
+    bJobStartet = FALSE;
+
+    aMulti.SetTotalRange( Range( 0, RANGE_MAX ) );
+    aMulti.SelectAll();
+    aMulti.Select( 0, FALSE );
+}
+

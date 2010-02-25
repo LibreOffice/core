@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unocoll.cxx,v $
- * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <swtypes.hxx>
 #include <cmdid.h>
 #include <hintids.hxx>
@@ -44,7 +40,6 @@
 #include <poolfmt.hxx>
 #include <unocoll.hxx>
 #include <unosett.hxx>
-#include <unoclbck.hxx>
 #include <fmtanchr.hxx>
 #include <ndtxt.hxx>
 #include <section.hxx>
@@ -59,7 +54,7 @@
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
-#include <svtools/PasswordHelper.hxx>
+#include <svl/PasswordHelper.hxx>
 #include <svtools/unoimap.hxx>
 #include <svtools/unoevent.hxx>
 #include <unotbl.hxx>
@@ -67,7 +62,9 @@
 #include <unofield.hxx>
 #include <unoidx.hxx>
 #include <unoframe.hxx>
+#include <unofootnote.hxx>
 #include <vcl/svapp.hxx>
+#include <fmtcntnt.hxx>
 #include <authfld.hxx>
 #include <SwXTextDefaults.hxx>
 #include <unochart.hxx>
@@ -76,7 +73,11 @@
 #include <slist>
 #include <iterator>
 
-#include "unometa.hxx"
+#include <unosection.hxx>
+#include <unoparagraph.hxx>
+#include <unobookmark.hxx>
+#include <unorefmark.hxx>
+#include <unometa.hxx>
 #include "docsh.hxx"
 
 
@@ -442,7 +443,8 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         break;
         case SW_SERVICE_INDEX_HEADER_SECTION :
         case SW_SERVICE_TEXT_SECTION :
-            xRet = SwXTextSectionClient::CreateXTextSection( 0, SW_SERVICE_INDEX_HEADER_SECTION == nObjectType);
+            xRet = SwXTextSection::CreateXTextSection(0,
+                    (SW_SERVICE_INDEX_HEADER_SECTION == nObjectType));
 
         break;
         case SW_SERVICE_REFERENCE_MARK :
@@ -869,7 +871,8 @@ namespace
     }
 
     template<FlyCntType T>
-    class SwXFrameEnumeration : public SwSimpleEnumerationBaseClass
+    class SwXFrameEnumeration
+        : public SwSimpleEnumeration_Base
     {
         private:
             typedef ::std::slist< Any > frmcontainer_t;
@@ -1467,15 +1470,7 @@ sal_Bool SwXTextSections::hasElements(void) throw( uno::RuntimeException )
   -----------------------------------------------------------------------*/
 uno::Reference< XTextSection >  SwXTextSections::GetObject( SwSectionFmt& rFmt )
 {
-    SwXTextSectionClient* pClient = (SwXTextSectionClient*)SwClientIter( rFmt ).
-                                    First( TYPE( SwXTextSectionClient ));
-    uno::Reference< XTextSection > xRet;
-    if( pClient  )
-        xRet = pClient->GetXTextSection();
-    // it is possible that the client is still registered but the reference is already invalid
-    if( !xRet.is() )
-        xRet = SwXTextSectionClient::CreateXTextSection(&rFmt);
-    return xRet;
+    return SwXTextSection::CreateXTextSection(&rFmt);
 }
 
 OUString SwXBookmarks::getImplementationName(void) throw( RuntimeException )
@@ -1523,8 +1518,9 @@ uno::Any SwXBookmarks::getByIndex(sal_Int32 nIndex)
 
     uno::Any aRet;
     ::sw::mark::IMark* pBkmk = pMarkAccess->getBookmarksBegin()[nIndex].get();
-    uno::Reference< XTextContent > xRef = GetObject(*pBkmk, GetDoc());
-    aRet.setValue(&xRef, ::getCppuType((uno::Reference<XTextContent>*)0));
+    const uno::Reference< text::XTextContent > xRef =
+        SwXBookmark::CreateXBookmark(*GetDoc(), *pBkmk);
+    aRet <<= xRef;
     return aRet;
 }
 
@@ -1541,8 +1537,9 @@ uno::Any SwXBookmarks::getByName(const rtl::OUString& rName)
         throw NoSuchElementException();
 
     uno::Any aRet;
-    uno::Reference< XTextContent > xRef = SwXBookmarks::GetObject(*(ppBkmk->get()), GetDoc());
-    aRet.setValue(&xRef, ::getCppuType((uno::Reference<XTextContent>*)0));
+    const uno::Reference< text::XTextContent > xRef =
+        SwXBookmark::CreateXBookmark(*GetDoc(), *(ppBkmk->get()));
+    aRet <<= xRef;
     return aRet;
 }
 
@@ -1586,27 +1583,6 @@ sal_Bool SwXBookmarks::hasElements(void)
     if(!IsValid())
         throw uno::RuntimeException();
     return GetDoc()->getIDocumentMarkAccess()->getBookmarksCount() != 0;
-}
-
-SwXBookmark* SwXBookmarks::GetObject( ::sw::mark::IMark& rBkmk, SwDoc* pDoc)
-{
-    SwModify* const pModify = static_cast<SwModify*>(&rBkmk);
-    SwXBookmark* pXBkmk = (SwXBookmark*)SwClientIter(*pModify).First(TYPE(SwXBookmark));
-    if(!pXBkmk)
-    {
-        // FIXME: These belong in XTextFieldsSupplier
-        //if (dynamic_cast< ::sw::mark::TextFieldmark* >(&rBkmk))
-        //    pXBkmk = new SwXFieldmark(false, &rBkmk, pDoc);
-        //else if (dynamic_cast< ::sw::mark::CheckboxFieldmark* >(&rBkmk))
-        //    pXBkmk = new SwXFieldmark(true, &rBkmk, pDoc);
-        //else
-        OSL_ENSURE(
-            dynamic_cast< ::sw::mark::IBookmark* >(&rBkmk),
-            "<SwXBookmark::GetObject(..)>"
-            "SwXBookmark requested for non-bookmark mark.");
-        pXBkmk = new SwXBookmark(&rBkmk, pDoc);
-    }
-    return pXBkmk;
 }
 
 /******************************************************************
@@ -1747,8 +1723,8 @@ uno::Any SwXFootnotes::getByIndex(sal_Int32 nIndex)
 
             if(nCount == nIndex)
             {
-                xRef = new SwXFootnote(GetDoc(), rFtn);
-                aRet.setValue(&xRef, ::getCppuType((uno::Reference<XFootnote>*)0));
+                xRef = SwXFootnote::CreateXFootnote(*GetDoc(), rFtn);
+                aRet <<= xRef;
                 break;
             }
             nCount++;
@@ -1782,12 +1758,7 @@ sal_Bool SwXFootnotes::hasElements(void) throw( uno::RuntimeException )
  ---------------------------------------------------------------------------*/
 Reference<XFootnote>    SwXFootnotes::GetObject( SwDoc& rDoc, const SwFmtFtn& rFmt )
 {
-    Reference<XTextContent> xContent = ((SwUnoCallBack*)rDoc.GetUnoCallBack())->
-                                                            GetFootnote(rFmt);
-    if(!xContent.is())
-        xContent = new SwXFootnote(&rDoc, rFmt);
-    Reference<XFootnote> xRet(xContent, UNO_QUERY);
-    return xRet;
+    return SwXFootnote::CreateXFootnote(rDoc, rFmt);
 }
 
 /******************************************************************
@@ -1940,18 +1911,10 @@ sal_Bool SwXReferenceMarks::hasElements(void) throw( uno::RuntimeException )
 SwXReferenceMark* SwXReferenceMarks::GetObject( SwDoc* pDoc, const SwFmtRefMark* pMark )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    SwClientIter aIter( *pDoc->GetUnoCallBack() );
-    SwXReferenceMark* pxMark = (SwXReferenceMark*)aIter.First( TYPE( SwXReferenceMark ));
-    while(pxMark)
-    {
-        if(pxMark->GetMark() == pMark)
-            break;
-        pxMark = (SwXReferenceMark*)aIter.Next();
-    }
-    if( !pxMark )
-        pxMark = new SwXReferenceMark(pDoc, pMark);
-    return pxMark;
+
+    return SwXReferenceMark::CreateXReferenceMark(*pDoc, *pMark);
 }
+
 /******************************************************************
  *
  ******************************************************************/

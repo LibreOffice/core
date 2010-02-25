@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: writer.cxx,v $
- * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,15 +30,14 @@
 #include <hintids.hxx>
 
 #define _SVSTDARR_STRINGSSORTDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #include <sot/storage.hxx>
 #include <sfx2/docfile.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svtools/filter.hxx>
-#include <svx/impgrf.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <shellio.hxx>
 #include <pam.hxx>
 #include <doc.hxx>
@@ -250,7 +246,7 @@ SwPaM* Writer::NewSwPaM( SwDoc & rDoc, ULONG nStartIdx, ULONG nEndIdx,
 /////////////////////////////////////////////////////////////////////////////
 
 // Stream-spezifisches
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 SvStream& Writer::Strm()
 {
     ASSERT( pStrm, "Oh-oh. Dies ist ein Storage-Writer. Gleich knallts!" );

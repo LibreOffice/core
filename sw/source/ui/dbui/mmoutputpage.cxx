@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: mmoutputpage.cxx,v $
- * $Revision: 1.23.136.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,10 +48,10 @@
 #include <IDocumentDeviceAccess.hxx>
 #endif
 #include <hintids.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/langitem.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/stritem.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <editeng/langitem.hxx>
+#include <svl/itemset.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
 #include <vcl/msgbox.hxx>
@@ -68,7 +65,7 @@
 //#include <sfx2/docfilt.hxx>
 //#endif
 #include <tools/urlobj.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #ifndef _VCL_PRINT_HXX
 #include <vcl/print.hxx>
 #endif
@@ -90,7 +87,7 @@
 #include <swunohelper.hxx>
 #include <vos/mutex.hxx>
 #include <shellio.hxx>
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <sfx2/event.hxx>
 #include <swevent.hxx>
 #include <mmoutputpage.hrc>
@@ -991,6 +988,13 @@ IMPL_LINK(SwMailMergeOutputPage, PrintHdl_Impl, PushButton*, EMPTYARG)
             nEnd = rConfigItem.GetMergedDocumentCount();
     }
     rConfigItem.SetPrintRange( (USHORT)nBegin, (USHORT)nEnd );
+    SwDocMergeInfo& rStartInfo = rConfigItem.GetDocumentMergeInfo(nBegin);
+    SwDocMergeInfo& rEndInfo = rConfigItem.GetDocumentMergeInfo(nEnd - 1);
+
+    rtl::OUString sPages(rtl::OUString::valueOf( rStartInfo.nStartPageInTarget ));
+    sPages += rtl::OUString::createFromAscii( " - ");
+    sPages += rtl::OUString::valueOf(  rEndInfo.nEndPageInTarget );
+
     SwWrtShell& rSh = pTargetView->GetWrtShell();
     pTargetView->SetMailMergeConfigItem(&rConfigItem, 0, sal_False);
     if(m_pTempPrinter)
@@ -1002,11 +1006,17 @@ IMPL_LINK(SwMailMergeOutputPage, PrintHdl_Impl, PushButton*, EMPTYARG)
     SfxObjectShell* pObjSh = pTargetView->GetViewFrame()->GetObjectShell();
     SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE), pObjSh));
     rSh.GetNewDBMgr()->SetMergeType( DBMGR_MERGE_DOCUMENTS );
-    SfxDispatcher *pDis = pTargetView->GetViewFrame()->GetDispatcher();
+    //SfxDispatcher *pDis = pTargetView->GetViewFrame()->GetDispatcher();
     SfxBoolItem aMergeSilent(SID_SILENT, sal_False);
     m_pWizard->enableButtons(WZB_CANCEL, sal_False);
-    pDis->Execute(SID_PRINTDOCDIRECT,
-            SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD, &aMergeSilent, 0L);
+
+    uno::Sequence < beans::PropertyValue > aProps( 2 );
+    aProps[0]. Name = rtl::OUString::createFromAscii("MonitorVisible");
+    aProps[0].Value <<= sal_True;
+    aProps[1]. Name = rtl::OUString::createFromAscii("Pages");
+    aProps[1]. Value <<= sPages;
+
+    pTargetView->ExecPrint( aProps, false, true );
     SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE_END, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE_END), pObjSh));
 
     pTargetView->SetMailMergeConfigItem(0, 0, sal_False);

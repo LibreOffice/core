@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: modcfg.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 #include <tools/string.hxx>
 #include <vcl/wintypes.hxx>
 #include <vcl/field.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <unotools/configitem.hxx>
 #include "swdllapi.h"
 #include "authratr.hxx"
@@ -78,6 +75,7 @@ class SwRevisionConfig : public utl::ConfigItem
         ~SwRevisionConfig();
 
     virtual void            Commit();
+    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
@@ -108,6 +106,7 @@ class SwInsertConfig : public utl::ConfigItem
         ~SwInsertConfig();
 
     virtual void            Commit();
+    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
@@ -134,6 +133,7 @@ class SwTableConfig : public utl::ConfigItem
         ~SwTableConfig();
 
     virtual void            Commit();
+    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
@@ -163,6 +163,7 @@ class SwMiscConfig : public utl::ConfigItem
         ~SwMiscConfig();
 
     virtual void            Commit();
+    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };

@@ -35,14 +35,14 @@
 
 #include <SidebarTxtControl.hxx>
 
-#include <svtools/brdcst.hxx>
+#include <svl/brdcst.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
-#include <svx/unoedsrc.hxx>
-#include <svx/unoforou.hxx>
-#include <svx/unoviwou.hxx>
-#include <svx/unoedhlp.hxx>
+#include <editeng/unoedsrc.hxx>
+#include <editeng/unoforou.hxx>
+#include <editeng/unoviwou.hxx>
+#include <editeng/unoedhlp.hxx>
 #include <svx/AccessibleTextHelper.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 
 
 namespace css = ::com::sun::star;

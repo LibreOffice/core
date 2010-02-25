@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewimp.hxx,v $
- * $Revision: 1.36.214.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,6 +54,7 @@ struct SdrPaintProcRec;
 class SwAccessibleMap;
 class SdrObject;
 class Fraction;
+class SwPrtOptions;
 class SwPagePreviewLayout;
 struct PrevwPage;
 #include <vector>
@@ -263,10 +261,11 @@ public:
     // direction at the outliner of the draw view for painting layers <hell>
     // and <heaven>.
     // OD 25.06.2003 #108784# - correct type of 1st parameter
-    void   PaintLayer  ( const SdrLayerID _nLayerID,
-                         const SwRect& _rRect,
-                         const Color* _pPageBackgrdColor = 0,
-                         const bool _bIsPageRightToLeft = false ) const;
+    void   PaintLayer( const SdrLayerID _nLayerID,
+                       const SwPrtOptions *pPrintData,
+                       const SwRect& _rRect,
+                       const Color* _pPageBackgrdColor = 0,
+                       const bool _bIsPageRightToLeft = false ) const;
 
     //wird als Link an die DrawEngine uebergeben, entscheidet was wie
     //gepaintet wird oder nicht.

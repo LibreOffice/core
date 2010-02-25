@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: textsh1.cxx,v $
- * $Revision: 1.70.84.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,33 +35,33 @@
 #include <helpid.h>
 
 #include <i18npool/mslangid.hxx>
-#include <svtools/languageoptions.hxx>
-#include <svx/langitem.hxx>
+#include <svl/languageoptions.hxx>
+#include <editeng/langitem.hxx>
 #include <svtools/langtab.hxx>
-#include <svtools/slstitm.hxx>
+#include <svl/slstitm.hxx>
 #include <string.h>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <svx/htmlmode.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objitem.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/unohelp2.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/macitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/tstpitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/svxacorr.hxx>
-#include <svtools/cjkoptions.hxx>
-#include <svtools/ctloptions.hxx>
+#include <svl/eitem.hxx>
+#include <svl/macitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/svxacorr.hxx>
+#include <svl/cjkoptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <charfmt.hxx>
-#include <svx/fontitem.hxx>
+#include <editeng/fontitem.hxx>
 #include <svx/SmartTagItem.hxx>
 #include <svx/dialmgr.hxx>
 #include <fmtinfmt.hxx>
@@ -109,20 +106,20 @@
 
 #include <SwSmartTagMgr.hxx>
 
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 #include "swabstdlg.hxx"
 #include "misc.hrc"
 #include "chrdlg.hrc"
 #include <IDocumentStatistics.hxx>
 
 #include <sfx2/sfxdlg.hxx>
-#include <svtools/languageoptions.hxx>
-#include <svtools/lingucfg.hxx>
+#include <svl/languageoptions.hxx>
+#include <unotools/lingucfg.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/uno/Any.hxx>
-#include <svx/unolingu.hxx>
-#include <svtools/syslocaleoptions.hxx>
+#include <editeng/unolingu.hxx>
+#include <unotools/syslocaleoptions.hxx>
 #include <doc.hxx>
 #include <view.hxx>
 #include <ndtxt.hxx>

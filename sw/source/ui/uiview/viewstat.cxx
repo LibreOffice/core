@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewstat.cxx,v $
- * $Revision: 1.42 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,20 +30,20 @@
 #include <hintids.hxx>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <svtools/aeitem.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/cjkoptions.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/whiter.hxx>
+#include <svl/cjkoptions.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objitem.hxx>
-#include <svtools/imageitm.hxx>
-#include <svtools/languageoptions.hxx>
-#include <svx/protitem.hxx>
-#include <svx/linkmgr.hxx>
-#include <svx/langitem.hxx>
-#include <svx/brshitem.hxx>
+#include <svl/imageitm.hxx>
+#include <svl/languageoptions.hxx>
+#include <editeng/protitem.hxx>
+#include <sfx2/linkmgr.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <svx/htmlmode.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <sfx2/msgpool.hxx>
 #include <swmodule.hxx>
 #include <tox.hxx>
@@ -67,9 +64,9 @@
 #include <wview.hxx>
 #endif
 #include <globdoc.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/moduleoptions.hxx>
-#include <svtools/visitem.hxx>
+#include <svl/stritem.hxx>
+#include <unotools/moduleoptions.hxx>
+#include <svl/visitem.hxx>
 
 #ifndef _CMDID_H
 #include <cmdid.h>

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swfntcch.hxx,v $
- * $Revision: 1.7.210.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,7 +46,7 @@ class SwFontCache : public SwCache
 public:
 
     inline SwFontCache() : SwCache(50,50
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     , "Globaler AttributSet/Font-Cache pSwFontCache"
 #endif
     ) {}

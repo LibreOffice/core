@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: optcomp.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
-#include <svtools/compatibility.hxx>
+#include <unotools/compatibility.hxx>
 #include <svx/checklbx.hxx>
 
 // class SwCompatibilityOptPage ------------------------------------------

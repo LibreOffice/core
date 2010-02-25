@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: itrpaint.cxx,v $
- * $Revision: 1.47.210.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,9 +35,9 @@
 #include "errhdl.hxx"
 #include "txtatr.hxx"  // SwINetFmt
 #include <tools/multisel.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <txtinet.hxx>
 #include <fchrfmt.hxx>
 #include <frmatr.hxx>
@@ -103,7 +100,7 @@ void SwTxtPainter::CtorInitTxtPainter( SwTxtFrm *pNewFrm, SwTxtPaintInfo *pNewIn
     pInf = pNewInf;
     SwFont *pMyFnt = GetFnt();
     GetInfo().SetFont( pMyFnt );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     if( ALIGN_BASELINE != pMyFnt->GetAlign() )
     {
         ASSERT( ALIGN_BASELINE == pMyFnt->GetAlign(),

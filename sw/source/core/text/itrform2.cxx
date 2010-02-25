@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: itrform2.cxx,v $
- * $Revision: 1.107.20.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,12 +33,12 @@
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
-#include <svx/lspcitem.hxx>
+#include <editeng/lspcitem.hxx>
 #include <txtftn.hxx>
 #include <fmtftn.hxx>
 #include <ftninfo.hxx>
 #include <charfmt.hxx>
-#include <svx/charrotateitem.hxx>
+#include <editeng/charrotateitem.hxx>
 #include <layfrm.hxx>       // GetFrmRstHeight, etc
 #include <viewsh.hxx>
 #include <viewopt.hxx>      // SwViewOptions
@@ -66,7 +63,7 @@
 #include <doc.hxx>          // SwDoc
 #include <pormulti.hxx>     // SwMultiPortion
 #define _SVSTDARR_LONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <unotools/charclass.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
@@ -101,6 +98,7 @@ void SwTxtFormatter::CtorInitTxtFormatter( SwTxtFrm *pNewFrm, SwTxtFormatInfo *p
     pMulti = NULL;
 
     bOnceMore = sal_False;
+    bFlyInCntBase = sal_False;
     bChanges = sal_False;
     bTruncLines = sal_False;
     nCntEndHyph = 0;
@@ -2106,7 +2104,10 @@ long SwTxtFormatter::CalcOptRepaint( xub_StrLen nOldLineEnd,
 bool lcl_BuildHiddenPortion( const SwTxtSizeInfo& rInf, xub_StrLen &rPos )
 {
     // Only if hidden text should not be shown:
-    if ( rInf.GetVsh() && rInf.GetVsh()->GetWin() && rInf.GetOpt().IsShowHiddenChar() )
+//    if ( rInf.GetVsh() && rInf.GetVsh()->GetWin() && rInf.GetOpt().IsShowHiddenChar() )
+    const bool bShowInDocView = rInf.GetVsh() && rInf.GetVsh()->GetWin() && rInf.GetOpt().IsShowHiddenChar();
+    const bool bShowForPrinting = rInf.GetOpt().IsShowHiddenChar( TRUE ) && rInf.GetOpt().IsPrinting();
+    if (bShowInDocView || bShowForPrinting)
         return false;
 
     const SwScriptInfo& rSI = rInf.GetParaPortion()->GetScriptInfo();

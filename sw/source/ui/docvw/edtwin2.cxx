@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: edtwin2.cxx,v $
- * $Revision: 1.31.130.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,26 +31,26 @@
 #include <hintids.hxx>
 
 #include <doc.hxx>
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #include <stdio.h>
 #endif
 
 #ifndef _HELP_HXX //autogen
 #include <vcl/help.hxx>
 #endif
-#include <svtools/stritem.hxx>
-#include <svtools/securityoptions.hxx>
+#include <svl/stritem.hxx>
+#include <unotools/securityoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <txtrfmrk.hxx>
 #include <fmtrfmrk.hxx>
-#include <svx/flditem.hxx>
-#include <svtools/urihelper.hxx>
+#include <editeng/flditem.hxx>
+#include <svl/urihelper.hxx>
 #include <svx/svdotext.hxx>
 #ifndef _OUTLINER_HXX //autogen
 #define _EEITEMID_HXX
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #endif
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
 #include <swmodule.hxx>
@@ -161,7 +158,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                                     SwContentAtPos::SW_TOXMARK |
                                     SwContentAtPos::SW_REFMARK |
                                     SwContentAtPos::SW_SMARTTAG |
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                                     SwContentAtPos::SW_TABLEBOXVALUE |
                         ( bBalloon ? SwContentAtPos::SW_CURR_ATTRS : 0) |
 #endif
@@ -175,7 +172,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 sTxt.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "= " ));
                 sTxt += ((SwTblBoxFormula*)aCntntAtPos.aFnd.pAttr)->GetFormula();
                 break;
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             case SwContentAtPos::SW_TABLEBOXVALUE:
             {
                 sTxt = UniString(

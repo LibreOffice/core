@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: node.hxx,v $
- * $Revision: 1.22.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -89,7 +86,7 @@ class SW_DLLPUBLIC SwNode : private /* public*/ BigPtrEntry
 {
     friend class SwNodes;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     static long nSerial;
     long nMySerial;
 #endif
@@ -114,7 +111,7 @@ protected:
 public:
     virtual ~SwNode();
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     long int GetSerial() const { return nMySerial; }
 #endif
 

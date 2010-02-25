@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docnew.cxx,v $
- * $Revision: 1.89 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,15 +43,16 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/frame.hxx>
+#include <sfx2/viewfrm.hxx>
 
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svdogrp.hxx>
-#include <svx/linkmgr.hxx>
-#include <svx/forbiddencharacterstable.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/compatibility.hxx>
-#include <svtools/lingucfg.hxx>
+#include <sfx2/linkmgr.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
+#include <svl/zforlist.hxx>
+#include <unotools/compatibility.hxx>
+#include <unotools/lingucfg.hxx>
 #include <svx/svdpage.hxx>
 #include <paratr.hxx>
 #include <fchrfmt.hxx>
@@ -90,7 +88,6 @@
 #include <viewsh.hxx>
 #include <doctxm.hxx>
 #include <shellres.hxx>
-#include <unoclbck.hxx>
 #include <breakit.hxx>
 #include <laycache.hxx>
 #include <mvsave.hxx>
@@ -169,15 +166,33 @@ SV_IMPL_PTRARR( SwGrfFmtColls, SwGrfFmtCollPtr)
 
 void StartGrammarChecking( SwDoc &rDoc )
 {
-    uno::Reference< linguistic2::XProofreadingIterator > xGCIterator( rDoc.GetGCIterator() );
-    if ( xGCIterator.is() )
+    // check for a visible view
+    bool bVisible = false;
+    const SwDocShell *pDocShell = rDoc.GetDocShell();
+    SfxViewFrame    *pFrame = SfxViewFrame::GetFirst( pDocShell, 0, sal_False );
+    while (pFrame && !bVisible)
     {
-        uno::Reference< lang::XComponent >  xDoc( rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY );
-        uno::Reference< text::XFlatParagraphIteratorProvider >  xFPIP( xDoc, uno::UNO_QUERY );
+        if (pFrame->IsVisible())
+            bVisible = true;
+        pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell, 0, sal_False );
+    }
 
-        // start automatic background checking if not active already
-        if ( xFPIP.is() && !xGCIterator->isProofreading( xDoc ) )
-            xGCIterator->startProofreading( xDoc, xFPIP );
+    //!! only documents with visible views need to be checked
+    //!! (E.g. don't check temporary documents created for printing, see printing of notes and selections.
+    //!! Those get created on the fly and get hard deleted a bit later as well, and no one should have
+    //!! a uno reference to them)
+    if (bVisible)
+    {
+        uno::Reference< linguistic2::XProofreadingIterator > xGCIterator( rDoc.GetGCIterator() );
+        if ( xGCIterator.is() )
+        {
+            uno::Reference< lang::XComponent >  xDoc( rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY );
+            uno::Reference< text::XFlatParagraphIteratorProvider >  xFPIP( xDoc, uno::UNO_QUERY );
+
+            // start automatic background checking if not active already
+            if ( xFPIP.is() && !xGCIterator->isProofreading( xDoc ) )
+                xGCIterator->startProofreading( xDoc, xFPIP );
+        }
     }
 }
 
@@ -240,7 +255,7 @@ SwDoc::SwDoc() :
     pDocStat( new SwDocStat ),
     pDocShell( 0 ),
     pDocShRef( 0 ),
-    pLinkMgr( new SvxLinkManager( 0 ) ),
+    pLinkMgr( new sfx2::LinkManager( 0 ) ),
     pACEWord( 0 ),
     pURLStateChgd( 0 ),
     pNumberFormatter( 0 ),
@@ -259,7 +274,7 @@ SwDoc::SwDoc() :
     pStyleAccess( 0 ),
     // <--
     pLayoutCache( 0 ),
-    pUnoCallBack(new SwUnoCallBack(0)),
+    pUnoCallBack(new SwModify(0)),
     mpGrammarContact( 0 ),
     aChartDataProviderImplRef(),
     pChartControllerHelper( 0 ),
@@ -319,7 +334,7 @@ SwDoc::SwDoc() :
     mbInsOnlyTxtGlssry =
     mbContains_MSVBasic =
     mbKernAsianPunctuation =
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     mbXMLExport =
 #endif
     // --> OD 2006-03-21 #b6375613#
@@ -1139,7 +1154,7 @@ SwDoc* SwDoc::CreateCopy() const
     pDocStat( new SwDocStat ),
     pDocShell( 0 ),
     pDocShRef( 0 ),
-    pLinkMgr( new SvxLinkManager( 0 ) ),
+    pLinkMgr( new sfx2::LinkManager( 0 ) ),
     pACEWord( 0 ),
     pURLStateChgd( 0 ),
     pNumberFormatter( 0 ),
@@ -1353,6 +1368,7 @@ SwDoc* SwDoc::CreateCopy() const
     ResetModified();
 
 */
+    pRet->ReplaceStyles( *(SwDoc*)this );
     //copy content
     pRet->Paste( *this );
     return pRet;
@@ -1415,9 +1431,9 @@ void SwDoc::Paste( const SwDoc& rSource )
                 if( bInsWithFmt  )
                 {
                     SwFmtAnchor aAnchor( rCpyFmt.GetAnchor() );
-                    if( FLY_PAGE == aAnchor.GetAnchorId() )
+                    if (FLY_AT_PAGE == aAnchor.GetAnchorId())
                     {
-                        aAnchor.SetPageNum( aAnchor.GetPageNum() + /*nStartPageNumber - */1 );
+                        aAnchor.SetPageNum( aAnchor.GetPageNum() /*+ nStartPageNumber - */);
                     }
                     else
                         continue;

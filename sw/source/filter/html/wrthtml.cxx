@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: wrthtml.cxx,v $
- * $Revision: 1.40 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,25 +31,25 @@
 
 #include <stdlib.h>
 #include <hintids.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <rtl/tencinfo.h>
 #include <vcl/wrkwin.hxx>
 #include <sfx2/linkmgr.hxx>
 
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <vcl/svapp.hxx>
 #include <i18npool/mslangid.hxx>
 #include <sfx2/frmhtmlw.hxx>
 #include <svx/xoutbmp.hxx>
 #include <svx/htmlmode.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/langitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <editeng/langitem.hxx>
+#include <svl/stritem.hxx>
+#include <editeng/frmdiritem.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>

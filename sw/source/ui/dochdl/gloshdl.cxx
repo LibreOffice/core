@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: gloshdl.cxx,v $
- * $Revision: 1.32.240.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,8 +30,8 @@
 
 
 #include <hintids.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/adjitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/adjitem.hxx>
 #ifndef __RSC //autogen
 #include <tools/errinf.hxx>
 #endif
@@ -44,12 +41,12 @@
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
 #define _SVSTDARR_STRINGS
-#include <svtools/svstdarr.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/svstdarr.hxx>
+#include <svl/urihelper.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <poolfmt.hxx>
 #include <fmtcol.hxx>
@@ -82,7 +79,7 @@
 #include <vcl/lstbox.hxx>
 #endif
 
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 #include "swabstdlg.hxx"
 #include <misc.hrc>
 

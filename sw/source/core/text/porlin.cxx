@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: porlin.cxx,v $
- * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,7 +44,7 @@
 #include "porglue.hxx"
 #include "inftxt.hxx"
 #include "blink.hxx"
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 sal_Bool ChkChain( SwLinePortion *pStart )
 {
@@ -216,7 +213,7 @@ SwLinePortion *SwLinePortion::Insert( SwLinePortion *pIns )
 {
     pIns->FindLastPortion()->SetPortion( pPortion );
     SetPortion( pIns );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     ChkChain( this );
 #endif
     return pIns;
@@ -247,7 +244,7 @@ SwLinePortion *SwLinePortion::Append( SwLinePortion *pIns )
     SwLinePortion *pPos = FindLastPortion();
     pPos->SetPortion( pIns );
     pIns->SetPortion( 0 );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     ChkChain( this );
 #endif
     return pIns;
@@ -307,7 +304,7 @@ SwPosSize SwLinePortion::GetTxtSize( const SwTxtSizeInfo & ) const
     return SwPosSize();
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 /*************************************************************************
  *                virtual SwLinePortion::Check()

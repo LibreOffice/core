@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: cfgitem.hxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,7 +41,7 @@
 #include <tools/solar.h>
 #include <rtl/ustring.hxx>
 #include <unotools/configitem.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <vcl/timer.hxx>
 
 #include <symbol.hxx>
@@ -174,7 +171,7 @@ public:
     virtual ~SmMathConfig();
 
     // utl::ConfigItem
-    //virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString > &rPropertyNames );
+    virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString > &rPropertyNames );
     virtual void    Commit();
 
     // make some protected functions of utl::ConfigItem public

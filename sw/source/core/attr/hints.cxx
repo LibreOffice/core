@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: hints.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
-#include <svx/scripttypeitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <hintids.hxx>
 #include <swtypes.hxx>
 #include <ndtxt.hxx>
@@ -44,12 +41,6 @@
 SwFmtChg::SwFmtChg( SwFmt *pFmt )
     : SwMsgPoolItem( RES_FMT_CHG ),
     pChangedFmt( pFmt )
-{}
-
-
-SwInsChr::SwInsChr( xub_StrLen nP )
-    : SwMsgPoolItem( RES_INS_CHR ),
-    nPos( nP )
 {}
 
 
@@ -147,7 +138,7 @@ SwAttrSetChg::~SwAttrSetChg()
 }
 
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 void SwAttrSetChg::ClearItem( USHORT nWhch )
 {
@@ -183,7 +174,7 @@ SfxPoolItem* SwMsgPoolItem::Clone( SfxItemPool* ) const
  * Ist keines vorhanden, returnt ein 0-Pointer !!!
  * Used to be inlined (hintids.hxx) in PRODUCT.
  ******************************************************************************/
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 const SfxPoolItem* GetDfltAttr( USHORT nWhich )
 {
     return aAttrTab[ nWhich - POOLATTR_BEGIN ];
@@ -226,12 +217,6 @@ SwVirtPageNumInfo::SwVirtPageNumInfo( const SwPageFrm *pPg ) :
 //{
 //    aList.Insert(rNd.GetIndex(), &rNd);
 //}
-
-SwNRuleLowerLevel::SwNRuleLowerLevel( const String& rRuleName, BYTE nSrchLvl )
-    : SwMsgPoolItem( RES_GETLOWERNUMLEVEL ), rName( rRuleName ),
-    nLvl(nSrchLvl)
-{
-}
 
 
 SwFindNearestNode::SwFindNearestNode( const SwNode& rNd )

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: htmltbl.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -397,7 +394,7 @@ USHORT SwHTMLTableLayout::GetBrowseWidth( const SwDoc& rDoc )
 */
             ASSERT( nWidth, "No browse width available" );
         }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         else
         {
             // und wenn das auch nicht klappt, gibt es zur Zeit keine Breite
@@ -1660,13 +1657,13 @@ static BOOL lcl_ResizeBox( const SwTableBox*& rpBox, void* pPara )
 static BOOL lcl_ResizeLine( const SwTableLine*& rpLine, void* pPara )
 {
     USHORT *pWidth = (USHORT *)pPara;
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     USHORT nOldWidth = *pWidth;
 #endif
     *pWidth = 0;
     ((SwTableLine *)rpLine)->GetTabBoxes().ForEach( &lcl_ResizeBox, pWidth );
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     ASSERT( !nOldWidth || Abs(*pWidth-nOldWidth) < COLFUZZY,
             "Zeilen einer Box sind unterschiedlich lang" );
 #endif
@@ -1777,7 +1774,7 @@ void SwHTMLTableLayout::SetWidths( BOOL bCallPass2, USHORT nAbsAvail,
             }
         }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         {
             // steht im tblrwcl.cxx
             extern void _CheckBoxWidth( const SwTableLine&, SwTwips );

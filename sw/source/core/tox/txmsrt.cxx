@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: txmsrt.cxx,v $
- * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #include <tools/resid.hxx>
 #include <unotools/charclass.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <txtfld.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
@@ -191,7 +188,7 @@ SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwCntntNode* pNd,
                 {
                     SwPosition aPos( *pNd );
                     const SwDoc& rDoc = *pNd->GetDoc();
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                     ASSERT( GetBodyTxtNode( rDoc, aPos, *pFrm ),
                             "wo steht der Absatz" );
 #else

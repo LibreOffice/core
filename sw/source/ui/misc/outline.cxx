@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: outline.cxx,v $
- * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +39,7 @@
 #include <vcl/msgbox.hxx>
 #endif
 #include <sfx2/tabdlg.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <unotools/configmgr.hxx>
 #include <SwStyleNameMapper.hxx>
 
@@ -65,7 +62,7 @@
 #include <uinums.hxx>
 #include <poolfmt.hxx>
 #include <shellres.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <charfmt.hxx>
 #include <docstyle.hxx>
 #include <viewopt.hxx>

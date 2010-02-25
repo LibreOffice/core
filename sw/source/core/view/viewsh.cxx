@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewsh.cxx,v $
- * $Revision: 1.87.42.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -376,6 +373,37 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
                         // #i75172# end DrawingLayer paint
                         DLPostPaint2(true);
                     }
+
+                    // --> OD 2009-12-03 #i107365#
+                    // Direct paint has been performed. Thus, take care of
+                    // transparent child windows.
+                    if ( GetWin() )
+                    {
+                        Window& rWindow = *(GetWin());
+                        if(rWindow.IsChildTransparentModeEnabled() && rWindow.GetChildCount())
+                        {
+                            const Rectangle aRectanglePixel(rWindow.LogicToPixel(aRect.SVRect()));
+
+                            for ( sal_uInt16 a(0); a < rWindow.GetChildCount(); a++ )
+                            {
+                                Window* pCandidate = rWindow.GetChild(a);
+
+                                if ( pCandidate && pCandidate->IsPaintTransparent() )
+                                {
+                                    const Rectangle aCandidatePosSizePixel(
+                                                    pCandidate->GetPosPixel(),
+                                                    pCandidate->GetSizePixel());
+
+                                    if ( aCandidatePosSizePixel.IsOver(aRectanglePixel) )
+                                    {
+                                        pCandidate->Invalidate( INVALIDATE_NOTRANSPARENT|INVALIDATE_CHILDREN );
+                                        pCandidate->Update();
+                }
+                                }
+                            }
+                        }
+                    }
+                    // <--
                 }
 
                 delete pVout;
@@ -407,7 +435,7 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
     UISizeNotify();
     ++nStartAction;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     // test option 'No Scroll' suppresses the automatic repair of the scrolled area
     if ( !GetViewOptions()->IsTest8() )
 #endif
@@ -589,7 +617,7 @@ void ViewShell::MakeVisible( const SwRect &rRect )
                     EndAction();
                 } while( nOldH != pRoot->Frm().Height() && nLoopCnt-- );
             }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             else
             {
                 //MA: 04. Nov. 94, braucht doch keiner oder??
@@ -746,7 +774,7 @@ void ViewShell::LayoutIdle()
 
     SET_CURR_SHELL( this );
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     // Wenn Test5 gedrueckt ist, wird der IdleFormatierer abgeknipst.
     if( pOpt->IsTest5() )
         return;
@@ -1146,7 +1174,7 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
     if ( rRect == VisArea() )
         return;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     if ( bInEndAction )
     {
         //Da Rescheduled doch schon wieder irgendwo einer?

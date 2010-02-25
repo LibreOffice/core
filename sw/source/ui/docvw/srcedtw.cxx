@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: srcedtw.cxx,v $
- * $Revision: 1.21.252.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,9 +46,9 @@
 #include <sfx2/app.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/txtattr.hxx>
-#include <svtools/sourceviewconfig.hxx>
+#include <unotools/sourceviewconfig.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
 #include <vcl/metric.hxx>
 #include <svtools/ctrltool.hxx>
 #include <tools/time.hxx>
@@ -248,7 +245,7 @@ SwSrcEditWindow::SwSrcEditWindow( Window* pParent, SwSrcView* pParentView ) :
     pVScrollbar(0),
 
     pSrcView(pParentView),
-    pSourceViewConfig(new svt::SourceViewConfig),
+    pSourceViewConfig(new utl::SourceViewConfig),
 
     nCurTextWidth(0),
     nStartLine(USHRT_MAX),
@@ -258,14 +255,14 @@ SwSrcEditWindow::SwSrcEditWindow( Window* pParent, SwSrcView* pParentView ) :
 {
     SetHelpId(HID_SOURCE_EDITWIN);
     CreateTextEngine();
-    StartListening(*pSourceViewConfig);
+    pSourceViewConfig->AddListener(this);
 }
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
  SwSrcEditWindow::~SwSrcEditWindow()
 {
-    EndListening(*pSourceViewConfig);
+    pSourceViewConfig->RemoveListener(this);
     delete pSourceViewConfig;
     aSyntaxIdleTimer.Stop();
     if ( pTextEngine )
@@ -819,7 +816,7 @@ void SwSrcEditWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
 
 --------------------------------------------------*/
 
-void SwSrcEditWindow::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void SwSrcEditWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     if ( rHint.ISA( TextHint ) )
     {
@@ -842,7 +839,11 @@ void SwSrcEditWindow::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             DoDelayedSyntaxHighlight( (USHORT)rTextHint.GetValue() );
         }
     }
-    else if(&rBC == pSourceViewConfig)
+}
+
+void SwSrcEditWindow::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, sal_uInt32 )
+{
+    if( pBrdCst == pSourceViewConfig)
         SetFont();
 }
 

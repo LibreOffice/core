@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: editsh.cxx,v $
- * $Revision: 1.58 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,7 +60,7 @@
 #include <extinput.hxx>
 #include <crsskip.hxx>
 #include <scriptinfo.hxx>
-#include <unoobj.hxx>
+#include <unocrsrhelper.hxx>
 #include <section.hxx>
 #include <unochart.hxx>
 #include <numrule.hxx>
@@ -283,7 +280,7 @@ const Graphic* SwEditShell::GetGraphic( BOOL bWait ) const
             if( pGrf->IsSwapOut() ||
                 ( pGrfNode->IsLinkedFile() && GRAPHIC_DEFAULT == pGrf->GetType() ) )
             {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 ASSERT( pGrfNode->SwapIn( bWait ) || !bWait, "Grafik konnte nicht geladen werden" );
 #else
                 pGrfNode->SwapIn( bWait );
@@ -294,7 +291,7 @@ const Graphic* SwEditShell::GetGraphic( BOOL bWait ) const
         {
             if ( pGrf->IsSwapOut() && !pGrfNode->IsLinkedFile() )
             {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 ASSERT( pGrfNode->SwapIn( bWait ) || !bWait, "Grafik konnte nicht geladen werden" );
 #else
                 pGrfNode->SwapIn( bWait );
@@ -696,7 +693,7 @@ String SwEditShell::Calculate()
 }
 
 
-SvxLinkManager& SwEditShell::GetLinkManager()
+sfx2::LinkManager& SwEditShell::GetLinkManager()
 {
     return pDoc->GetLinkManager();
 }
@@ -726,7 +723,7 @@ Graphic SwEditShell::GetIMapGraphic() const
             if( rGrf.IsSwapOut() || ( ((SwGrfNode*)pNd)->IsLinkedFile() &&
                                     GRAPHIC_DEFAULT == rGrf.GetType() ) )
             {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 ASSERT( ((SwGrfNode*)pNd)->SwapIn( TRUE ) || !TRUE, "Grafik konnte nicht geladen werden" );
 #else
                 ((SwGrfNode*)pNd)->SwapIn( TRUE );
@@ -1111,7 +1108,7 @@ String SwEditShell::DeleteExtTextInput( SwExtTextInput* pDel, BOOL bInsText )
     if( pDel )
     {
         rtl::OUString sTmp;
-        SwXTextCursor::getTextFromPam(*pDel, sTmp);
+        SwUnoCursorHelper::GetTextFromPam(*pDel, sTmp);
         sRet = sTmp;
         SET_CURR_SHELL( this );
         StartAllAction();

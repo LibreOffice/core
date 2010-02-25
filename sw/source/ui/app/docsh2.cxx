@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docsh2.cxx,v $
- * $Revision: 1.103.144.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,33 +27,22 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-#ifndef _COM_SUN_STAR_LANG_XMultiServiceFactory_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
-#include <comphelper/processfactory.hxx>
-#endif
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XDispatchHelper.hpp>
 
+#include <comphelper/processfactory.hxx>
 
 #include <hintids.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#include <svtools/lckbitem.hxx>
-#include <svtools/eitem.hxx>
-/*
-#include <svtools/macitem.hxx>
-*/
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
-#include <svtools/pathoptions.hxx>
+#include <svl/lckbitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svtools/transfer.hxx>
 #ifndef _SFXSIDS_HRC //autogen
 #include <sfx2/dialogs.hrc>
@@ -75,11 +61,11 @@
 #include <svx/svxids.hrc>
 #endif
 #include <svx/drawitem.hxx>
-#include <svx/svxacorr.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/svxacorr.hxx>
+#include <editeng/langitem.hxx>
 #include <svx/fmshell.hxx>
 
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <svx/ofaitem.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <sfx2/app.hxx>
@@ -90,51 +76,33 @@
 #include <swunodef.hxx>
 #include <fmtcol.hxx>
 #include <swevent.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>         // fuer die aktuelle Sicht
-#endif
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>        // Dokumenterzeugung
-#endif
 #include <wrtsh.hxx>
 #include <fldbas.hxx>
 #include <viewopt.hxx>
-#ifndef _GLOBDOC_HXX
 #include <globdoc.hxx>
-#endif
 #include <fldwrap.hxx>
-#ifndef _REDLNDLG_HXX
 #include <redlndlg.hxx>
-#endif
 #include <docstyle.hxx>
 #include <doc.hxx>
 #include <pagedesc.hxx>
 #include <shellio.hxx>
-#ifndef _PVIEW_HXX
 #include <pview.hxx>
-#endif
-#ifndef _SRCVIEW_HXX
 #include <srcview.hxx>
-#endif
 #include <poolfmt.hxx>
 #include <usrpref.hxx>
-#ifndef _WDOCSH_HXX
 #include <wdocsh.hxx>
-#endif
 #include <unotxdoc.hxx>
 #include <acmplwrd.hxx>
 #include <swmodule.hxx>
-#include <unoobj.hxx>
+#include <unobaseclass.hxx>
 #include <swwait.hxx>
 #include <swcli.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <globals.h>
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
 #ifndef _APP_HRC
 #include <app.hrc>
 #endif
@@ -152,7 +120,7 @@
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 #include <SwStyleNameMapper.hxx>
 
 #include <sfx2/fcontnr.hxx>
@@ -180,8 +148,6 @@ SfxDocumentInfoDialog* SwDocShell::CreateDocumentInfoDialog(
                                 Window *pParent, const SfxItemSet &rSet)
 {
     SfxDocumentInfoDialog* pDlg = new SfxDocumentInfoDialog(pParent, rSet);
-//  const SfxDocumentInfoItem& rItem = (const SfxDocumentInfoItem&)rSet.Get(SID_DOCINFO);
-//  if(rItem.IsOwnFormat())
     //nur mit Statistik, wenn dieses Doc auch angezeigt wird, nicht
     //aus dem Doc-Manager
     SwDocShell* pDocSh = (SwDocShell*) SfxObjectShell::Current();
@@ -1134,7 +1100,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                                         xRef( pClipCntnr );
 
                         pClipCntnr->CopyAnyData( FORMAT_RTF, (sal_Char*)
-                                        pStrm->GetData(), pStrm->GetSize() );
+                                    pStrm->GetData(), pStrm->GetEndOfData() );
                         pClipCntnr->CopyToClipboard(
                             GetView()? (Window*)&GetView()->GetEditWin() : 0 );
                         delete pStrm;

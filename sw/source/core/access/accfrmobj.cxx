@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: accfrmobj.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -170,7 +167,7 @@ bool SwAccessibleChild::IsBoundAsChar() const
     {
         const SwFrmFmt* mpFrmFmt = ::FindFrmFmt( mpDrawObj );
         bRet = mpFrmFmt
-               ? (FLY_IN_CNTNT == mpFrmFmt->GetAnchor().GetAnchorId())
+               ? (FLY_AS_CHAR == mpFrmFmt->GetAnchor().GetAnchorId())
                : false;
     }
     else if ( mpWindow )
@@ -347,7 +344,7 @@ const SwFrm* SwAccessibleChild::GetParent( const sal_Bool bInPagePreview ) const
             const SwFlyFrm* pFly = static_cast< const SwFlyFrm *>( mpFrm );
             if( pFly->IsFlyInCntFrm() )
             {
-                // For FLY_IN_CNTNT the parent is the anchor
+                // For FLY_AS_CHAR the parent is the anchor
                 pParent = pFly->GetAnchorFrm();
                 ASSERT( SwAccessibleChild( pParent ).IsAccessible( bInPagePreview ),
                         "parent is not accessible" );
@@ -381,9 +378,9 @@ const SwFrm* SwAccessibleChild::GetParent( const sal_Bool bInPagePreview ) const
         {
             const SwFrmFmt *pFrmFmt = pContact->GetFmt();
             ASSERT( pFrmFmt, "frame format is missing" );
-            if( pFrmFmt && FLY_IN_CNTNT == pFrmFmt->GetAnchor().GetAnchorId() )
+            if( pFrmFmt && FLY_AS_CHAR == pFrmFmt->GetAnchor().GetAnchorId() )
             {
-                // For FLY_IN_CNTNT the parent is the anchor
+                // For FLY_AS_CHAR the parent is the anchor
                 pParent = pContact->GetAnchorFrm();
                 ASSERT( SwAccessibleChild( pParent ).IsAccessible( bInPagePreview ),
                         "parent is not accessible" );

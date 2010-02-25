@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dview.cxx,v $
- * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,11 +29,9 @@
 #include "precompiled_sw.hxx"
 
 #include "hintids.hxx"
-#include <svx/protitem.hxx>
+#include <editeng/protitem.hxx>
 #include <svx/svdpagv.hxx>
-#ifndef _FM_FMMODEL_HXX
 #include <svx/fmmodel.hxx>
-#endif
 
 #include "swtypes.hxx"
 #include "pagefrm.hxx"
@@ -58,11 +53,9 @@
 #include "shellres.hxx"
 
 // #i7672#
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 
 #include <com/sun/star/embed/EmbedMisc.hpp>
-
-using namespace com::sun::star;
 
 // OD 18.06.2003 #108784#
 //#ifndef _SVDVMARK_HXX //autogen
@@ -73,6 +66,10 @@ using namespace com::sun::star;
 #include <sortedobjs.hxx>
 #include <flyfrms.hxx>
 // <--
+
+
+using namespace com::sun::star;
+
 
 class SwSdrHdl : public SdrHdl
 {
@@ -258,7 +255,7 @@ void SwDrawView::AddCustomHdl()
     const SwFmtAnchor &rAnchor = pFrmFmt->GetAnchor();
     // <--
 
-    if(FLY_IN_CNTNT == rAnchor.GetAnchorId())
+    if (FLY_AS_CHAR == rAnchor.GetAnchorId())
         return;
 
     const SwFrm* pAnch;
@@ -267,7 +264,7 @@ void SwDrawView::AddCustomHdl()
 
     Point aPos(aAnchorPoint);
 
-    if ( FLY_AUTO_CNTNT == rAnchor.GetAnchorId() )
+    if ( FLY_AT_CHAR == rAnchor.GetAnchorId() )
     {
         // --> OD 2004-06-24 #i28701# - use last character rectangle saved at object
         // in order to avoid a format of the anchor frame
@@ -1007,10 +1004,6 @@ void SwDrawView::CheckPossibilities()
         }
         if ( pFrm )
             bProtect = pFrm->IsProtected(); //Rahmen, Bereiche usw.
-        // --> OD 2006-11-06 #130889# - make code robust
-//        if ( FLY_IN_CNTNT == ::FindFrmFmt( (SdrObject*)pObj )->GetAnchor().GetAnchorId() &&
-//             rMrkList.GetMarkCount() > 1 )
-//            bProtect = TRUE;
         {
             SwFrmFmt* pFrmFmt( ::FindFrmFmt( const_cast<SdrObject*>(pObj) ) );
             if ( !pFrmFmt )
@@ -1019,13 +1012,12 @@ void SwDrawView::CheckPossibilities()
                         "<SwDrawView::CheckPossibilities()> - missing frame format" );
                 bProtect = TRUE;
             }
-            else if ( FLY_IN_CNTNT == pFrmFmt->GetAnchor().GetAnchorId() &&
+            else if ((FLY_AS_CHAR == pFrmFmt->GetAnchor().GetAnchorId()) &&
                       rMrkList.GetMarkCount() > 1 )
             {
                 bProtect = TRUE;
             }
         }
-        // <--
     }
     bMoveProtect    |= bProtect;
     bResizeProtect  |= bProtect | bSzProtect;

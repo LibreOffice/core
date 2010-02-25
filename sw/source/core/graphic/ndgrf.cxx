@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ndgrf.cxx,v $
- * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,16 +30,15 @@
 #include <hintids.hxx>
 #include <vcl/salbtype.hxx>             // FRound
 #include <tools/urlobj.hxx>
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 #ifndef SVTOOLS_FSTATHELPER_HXX
-#include <svtools/fstathelper.hxx>
+#include <svl/fstathelper.hxx>
 #endif
 #include <svtools/imap.hxx>
 #include <svtools/filter.hxx>
 #include <sot/storage.hxx>
-#include <svx/linkmgr.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/impgrf.hxx>
+#include <sfx2/linkmgr.hxx>
+#include <editeng/boxitem.hxx>
 #include <sot/formats.hxx>
 #include <fmtfsize.hxx>
 #include <fmturl.hxx>
@@ -402,7 +398,7 @@ Size SwGrfNode::GetTwipSize() const
 BOOL SwGrfNode::ImportGraphic( SvStream& rStrm )
 {
     Graphic aGraphic;
-    if( !GetGrfFilter()->ImportGraphic( aGraphic, String(), rStrm ) )
+    if( !GraphicFilter::GetGraphicFilter()->ImportGraphic( aGraphic, String(), rStrm ) )
     {
         const String aUserData( aGrfObj.GetUserData() );
 
@@ -679,7 +675,7 @@ void SwGrfNode::SetTwipSize( const Size& rSz )
 void SwGrfNode::SetTransferPriority( USHORT nPrio )
 {
     if( refLink.Is() && refLink->GetObj() )
-        SvxLinkManager::SetTransferPriority( *refLink, nPrio );
+        sfx2::LinkManager::SetTransferPriority( *refLink, nPrio );
 }
 
 
@@ -921,7 +917,7 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
             SvStream* pStrm = _GetStreamForEmbedGrf( refPics, aStrmName );
             if ( pStrm )
             {
-                GetGrfFilter()->ImportGraphic( aTmpGrf, String(), *pStrm );
+                GraphicFilter::GetGraphicFilter()->ImportGraphic( aTmpGrf, String(), *pStrm );
                 delete pStrm;
             }
             // <--
@@ -941,7 +937,7 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
         aTmpGrf = aGrfObj.GetGraphic();
     }
 
-    const sfx2::SvLinkManager& rMgr = getIDocumentLinksAdministration()->GetLinkManager();
+    const sfx2::LinkManager& rMgr = getIDocumentLinksAdministration()->GetLinkManager();
     String sFile, sFilter;
     if( IsLinkedFile() )
         rMgr.GetDisplayNames( refLink, 0, &sFile, 0, &sFilter );
@@ -1041,7 +1037,7 @@ void DelAllGrfCacheEntries( SwDoc* pDoc )
     if( pDoc )
     {
         // alle Graphic-Links mit dem Namen aus dem Cache loeschen
-        const SvxLinkManager& rLnkMgr = pDoc->GetLinkManager();
+        const sfx2::LinkManager& rLnkMgr = pDoc->GetLinkManager();
         const ::sfx2::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
         SwGrfNode* pGrfNd;
         String sFileNm;

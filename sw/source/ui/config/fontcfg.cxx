@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fontcfg.cxx,v $
- * $Revision: 1.24.224.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #include <fontcfg.hxx>
 #include <i18npool/mslangid.hxx>
 #include <vcl/outdev.hxx>
-#include <svtools/lingucfg.hxx>
+#include <unotools/lingucfg.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -357,4 +354,6 @@ sal_Int32 SwStdFontConfig::GetFontHeight( sal_uInt8 nFont, sal_uInt8 nScriptType
         return GetDefaultHeightFor(nFont + FONT_PER_GROUP * nScriptType, eLang);
     return nRet;
 }
+
+void SwStdFontConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 

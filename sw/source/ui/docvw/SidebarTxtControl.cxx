@@ -41,7 +41,7 @@
 #include <cmdid.h>
 #include <docvw.hrc>
 
-#include <svtools/securityoptions.hxx>
+#include <unotools/securityoptions.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
@@ -54,10 +54,10 @@
 #include <vcl/gradient.hxx>
 #include <vcl/scrbar.hxx>
 
-#include <svx/outliner.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editview.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/flditem.hxx>
 
 #include <uitool.hxx>
 #include <view.hxx>

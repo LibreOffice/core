@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: init.cxx,v $
- * $Revision: 1.66.138.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,60 +30,60 @@
 #include <hintids.hxx>
 #include <tools/globname.hxx>
 #include <vcl/mapmod.hxx>
-#include <svx/xmlcnitm.hxx>
-#include <svtools/macitem.hxx>
-#include <svx/pbinitem.hxx>
-#include <svx/keepitem.hxx>
-#include <svx/nlbkitem.hxx>
-#include <svx/hyznitem.hxx>
-#include <svx/protitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/prszitem.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/prntitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/tstpitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/wrlmitem.hxx>
-#include <svx/kernitem.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/cscoitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/orphitem.hxx>
-#include <svx/widwitem.hxx>
-#include <svx/nhypitem.hxx>
-#include <svx/spltitem.hxx>
-#include <svx/lspcitem.hxx>
-#include <svx/blnkitem.hxx>
-#include <svx/akrnitem.hxx>
-#include <svx/emphitem.hxx>
-#include <svx/twolinesitem.hxx>
-#include <svx/scriptspaceitem.hxx>
-#include <svx/hngpnctitem.hxx>
-#include <svx/cmapitem.hxx>
-#include <svx/charscaleitem.hxx>
-#include <svx/charrotateitem.hxx>
-#include <svx/charreliefitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/xmlcnitm.hxx>
+#include <svl/macitem.hxx>
+#include <editeng/pbinitem.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/nlbkitem.hxx>
+#include <editeng/hyznitem.hxx>
+#include <editeng/protitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/prszitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/prntitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/wrlmitem.hxx>
+#include <editeng/kernitem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/cscoitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/orphitem.hxx>
+#include <editeng/widwitem.hxx>
+#include <editeng/nhypitem.hxx>
+#include <editeng/spltitem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/blnkitem.hxx>
+#include <editeng/akrnitem.hxx>
+#include <editeng/emphitem.hxx>
+#include <editeng/twolinesitem.hxx>
+#include <editeng/scriptspaceitem.hxx>
+#include <editeng/hngpnctitem.hxx>
+#include <editeng/cmapitem.hxx>
+#include <editeng/charscaleitem.hxx>
+#include <editeng/charrotateitem.hxx>
+#include <editeng/charreliefitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
 #endif
-#include <svx/swafopt.hxx>
-#include <svx/svxacorr.hxx>
+#include <editeng/swafopt.hxx>
+#include <editeng/svxacorr.hxx>
 #include <unotools/charclass.hxx>
-#include <svx/unolingu.hxx>
-#include <svx/forbiddenruleitem.hxx>
-#include <svx/paravertalignitem.hxx>
-#include <svx/pgrditem.hxx>
-#include <svx/charhiddenitem.hxx>
+#include <editeng/unolingu.hxx>
+#include <editeng/forbiddenruleitem.hxx>
+#include <editeng/paravertalignitem.hxx>
+#include <editeng/pgrditem.hxx>
+#include <editeng/charhiddenitem.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <unotools/collatorwrapper.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <unotools/transliterationwrapper.hxx>
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 #include <vcl/svapp.hxx>
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>
@@ -780,7 +777,7 @@ void _FinitCore()
 
     delete SwEditShell::pAutoFmtFlags;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     //Defaultattribut freigeben lassen um asserts zu vermeiden.
     if ( aAttrTab[0]->GetRefCount() )
         SfxItemPool::ReleaseDefaults( aAttrTab, POOLATTR_END-POOLATTR_BEGIN, FALSE);

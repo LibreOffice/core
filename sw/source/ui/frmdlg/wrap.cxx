@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: wrap.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,15 +33,14 @@
 #endif
 
 
-
 #include "hintids.hxx"
 #include <vcl/graph.hxx>
 #include <svx/htmlmode.hxx>
 #include <sfx2/objsh.hxx>
-#include <svtools/intitem.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
+#include <svl/intitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
 // OD 18.09.2003 #i18732#
 #include <fmtfollowtextflow.hxx>
 #include <svx/swframevalidation.hxx>
@@ -141,7 +137,7 @@ SwWrapTabPage::SwWrapTabPage(Window *pParent, const SfxItemSet &rSet) :
     aWrapIL             (SW_RES(IL_WRAP)),
     aWrapILH            (SW_RES(ILH_WRAP)),
 
-    nAnchorId(FLY_AT_CNTNT),
+    nAnchorId(FLY_AT_PARA),
     nHtmlMode(0),
 
     pWrtSh(0),
@@ -254,10 +250,15 @@ void SwWrapTabPage::Reset(const SfxItemSet &rSet)
     const SwFmtAnchor &rAnch = (const SwFmtAnchor&)rSet.Get(RES_ANCHOR);
     nAnchorId = rAnch.GetAnchorId();
 
-    if ( (nAnchorId == FLY_AT_CNTNT || nAnchorId == FLY_AUTO_CNTNT) && nSur != SURROUND_NONE )
+    if (((nAnchorId == FLY_AT_PARA) || (nAnchorId == FLY_AT_CHAR))
+        && (nSur != SURROUND_NONE))
+    {
         aWrapAnchorOnlyCB.Check( rSurround.IsAnchorOnly() );
+    }
     else
+    {
         aWrapAnchorOnlyCB.Enable( FALSE );
+    }
 
     BOOL bContour = rSurround.IsContour();
     aWrapOutlineCB.Check( bContour );
@@ -452,7 +453,7 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
     // Anchor
     const SwFmtAnchor &rAnch = (const SwFmtAnchor&)rSet.Get(RES_ANCHOR);
     nAnchorId = rAnch.GetAnchorId();
-    BOOL bEnable = nAnchorId != FLY_IN_CNTNT;
+    BOOL bEnable = (nAnchorId != FLY_AS_CHAR);
 
     if (!bDrawMode)
     {
@@ -521,7 +522,7 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         }
         else
         {
-            if (aVal.nAnchorType == FLY_IN_CNTNT)
+            if (aVal.nAnchorType == FLY_AS_CHAR)
             {
                 nLeft = nRight;
 
@@ -566,7 +567,8 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         sal_Int16 eHOrient = rHori.GetHoriOrient();
         sal_Int16 eHRelOrient = rHori.GetRelationOrient();
         aWrapOutlineCB.Hide();
-        BOOL bAllHtmlModes = (nAnchorId == FLY_AT_CNTNT || nAnchorId == FLY_AUTO_CNTNT) &&
+        const bool bAllHtmlModes =
+            ((nAnchorId == FLY_AT_PARA) || (nAnchorId == FLY_AT_CHAR)) &&
                             (eHOrient == text::HoriOrientation::RIGHT || eHOrient == text::HoriOrientation::LEFT);
         aWrapAnchorOnlyCB.Enable( bAllHtmlModes && nSur != SURROUND_NONE );
         aWrapOutsideCB.Hide();
@@ -574,17 +576,26 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
 
 
         aWrapTransparentCB.Enable( FALSE );
-        aNoWrapRB.Enable( FLY_AT_CNTNT == nAnchorId );
+        aNoWrapRB.Enable( FLY_AT_PARA == nAnchorId );
         aWrapParallelRB.Enable( FALSE  );
-        aWrapLeftRB       .Enable( FLY_AT_CNTNT == nAnchorId ||
-                            (FLY_AUTO_CNTNT == nAnchorId && eHOrient == text::HoriOrientation::RIGHT && eHRelOrient == text::RelOrientation::PRINT_AREA));
-        aWrapRightRB      .Enable( FLY_AT_CNTNT == nAnchorId ||
-                            ( FLY_AUTO_CNTNT == nAnchorId && eHOrient == text::HoriOrientation::LEFT && eHRelOrient == text::RelOrientation::PRINT_AREA));
+        aWrapLeftRB       .Enable
+                    (  (FLY_AT_PARA == nAnchorId)
+                    || (   (FLY_AT_CHAR == nAnchorId)
+                        && (eHOrient == text::HoriOrientation::RIGHT)
+                        && (eHRelOrient == text::RelOrientation::PRINT_AREA)));
+        aWrapRightRB      .Enable
+                    (  (FLY_AT_PARA == nAnchorId)
+                    || (   (FLY_AT_CHAR == nAnchorId)
+                        && (eHOrient == text::HoriOrientation::LEFT)
+                        && (eHRelOrient == text::RelOrientation::PRINT_AREA)));
 
-        aWrapThroughRB.Enable( (FLY_PAGE == nAnchorId ||
-                                (FLY_AUTO_CNTNT == nAnchorId && eHRelOrient != text::RelOrientation::PRINT_AREA) || FLY_AT_CNTNT == nAnchorId )
-                                    && bSomeAbsPos &&
-                                        eHOrient != text::HoriOrientation::RIGHT);
+        aWrapThroughRB.Enable
+                (   (  (FLY_AT_PAGE == nAnchorId)
+                    || (   (FLY_AT_CHAR == nAnchorId)
+                        && (eHRelOrient != text::RelOrientation::PRINT_AREA))
+                    || (FLY_AT_PARA == nAnchorId))
+                && bSomeAbsPos
+                && (eHOrient != text::HoriOrientation::RIGHT));
         if(aNoWrapRB.IsChecked() && !aNoWrapRB.IsEnabled())
         {
             if(aWrapThroughRB.IsEnabled())
@@ -624,7 +635,8 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         aIdealWrapRB.Enable( bEnable );
         aWrapThroughRB.Enable( bEnable );
         aWrapParallelRB.Enable( bEnable );
-        aWrapAnchorOnlyCB.Enable( (nAnchorId == FLY_AT_CNTNT || nAnchorId == FLY_AUTO_CNTNT)
+        aWrapAnchorOnlyCB.Enable(
+                ((nAnchorId == FLY_AT_PARA) || (nAnchorId == FLY_AT_CHAR))
                 && nSur != SURROUND_NONE );
     }
     ContourHdl(0);
@@ -693,10 +705,11 @@ IMPL_LINK( SwWrapTabPage, WrapTypeHdl, ImageRadioButton *, pBtn )
 {
     BOOL bWrapThrough = (pBtn == &aWrapThroughRB);
     aWrapTransparentCB.Enable( bWrapThrough && !bHtmlMode );
-    bWrapThrough |= ( nAnchorId == FLY_IN_CNTNT );
+    bWrapThrough |= ( nAnchorId == FLY_AS_CHAR );
     aWrapOutlineCB.Enable( !bWrapThrough && pBtn != &aNoWrapRB);
     aWrapOutsideCB.Enable( !bWrapThrough && aWrapOutlineCB.IsChecked() );
-    aWrapAnchorOnlyCB.Enable( (nAnchorId == FLY_AT_CNTNT || nAnchorId == FLY_AUTO_CNTNT) &&
+    aWrapAnchorOnlyCB.Enable(
+        ((nAnchorId == FLY_AT_PARA) || (nAnchorId == FLY_AT_CHAR)) &&
         (pBtn != &aNoWrapRB) );
 
     ContourHdl(0);

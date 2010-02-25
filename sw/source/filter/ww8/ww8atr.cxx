@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ww8atr.cxx,v $
- * $Revision: 1.113.40.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,49 +38,49 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/salbtype.hxx>
-#include <svtools/zformat.hxx>
-#include <svtools/itemiter.hxx>
-#include <svtools/whiter.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/tstpitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/spltitem.hxx>
-#include <svx/widwitem.hxx>
-#include <svx/lspcitem.hxx>
-#include <svx/keepitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/kernitem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/cmapitem.hxx>
-#include <svx/wrlmitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/hyznitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/cntritem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/akrnitem.hxx>
-#include <svx/pbinitem.hxx>
-#include <svx/emphitem.hxx>
-#include <svx/twolinesitem.hxx>
-#include <svx/charscaleitem.hxx>
-#include <svx/charrotateitem.hxx>
-#include <svx/charreliefitem.hxx>
-#include <svx/paravertalignitem.hxx>
-#include <svx/pgrditem.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/blnkitem.hxx>
-#include <svx/charhiddenitem.hxx>
-#include <svx/paperinf.hxx>
+#include <svl/zformat.hxx>
+#include <svl/itemiter.hxx>
+#include <svl/whiter.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/spltitem.hxx>
+#include <editeng/widwitem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/kernitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/cmapitem.hxx>
+#include <editeng/wrlmitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/hyznitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/akrnitem.hxx>
+#include <editeng/pbinitem.hxx>
+#include <editeng/emphitem.hxx>
+#include <editeng/twolinesitem.hxx>
+#include <editeng/charscaleitem.hxx>
+#include <editeng/charrotateitem.hxx>
+#include <editeng/charreliefitem.hxx>
+#include <editeng/paravertalignitem.hxx>
+#include <editeng/pgrditem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/blnkitem.hxx>
+#include <editeng/charhiddenitem.hxx>
+#include <editeng/paperinf.hxx>
 #include <fmtfld.hxx>
 #include <fchrfmt.hxx>
 #include <fmtfsize.hxx>
@@ -128,9 +125,7 @@
 
 #include <writerfilter/doctok/sprmids.hxx>
 
-#if OSL_DEBUG_LEVEL > 1
-#  include <fmtcntnt.hxx>
-#endif
+#include <fmtcntnt.hxx>
 #include "writerhelper.hxx"
 #include "writerwordglue.hxx"
 #include "wrtww8.hxx"
@@ -980,6 +975,24 @@ void WW8AttributeOutput::StartRunProperties()
 {
     WW8_WrPlcFld* pCurrentFields = m_rWW8Export.CurrentFieldPlc();
     m_nFieldResults = pCurrentFields ? pCurrentFields->ResultCount() : 0;
+}
+
+
+void WW8AttributeOutput::StartRun( const SwRedlineData* pRedlineData )
+{
+    if (pRedlineData)
+    {
+        const String &rComment = pRedlineData->GetComment();
+        //Only possible to export to main text
+        if (rComment.Len() && (m_rWW8Export.nTxtTyp == TXT_MAINTEXT))
+        {
+            if (m_rWW8Export.pAtn->IsNewRedlineComment(pRedlineData))
+            {
+                m_rWW8Export.pAtn->Append( m_rWW8Export.Fc2Cp( m_rWW8Export.Strm().Tell() ), pRedlineData );
+                m_rWW8Export.WritePostItBegin( m_rWW8Export.pO );
+            }
+        }
+    }
 }
 
 void WW8AttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
@@ -2555,8 +2568,8 @@ void WW8AttributeOutput::SetField( const SwField& rFld, ww::eField eType, const 
 
 void WW8AttributeOutput::PostitField( const SwField* pFld )
 {
-    const SwPostItField& rPFld = *(SwPostItField*)pFld;
-    m_rWW8Export.pAtn->Append( m_rWW8Export.Fc2Cp( m_rWW8Export.Strm().Tell() ), rPFld );
+    const SwPostItField *pPFld = (const SwPostItField*)pFld;
+    m_rWW8Export.pAtn->Append( m_rWW8Export.Fc2Cp( m_rWW8Export.Strm().Tell() ), pPFld );
     m_rWW8Export.WritePostItBegin( m_rWW8Export.pO );
 }
 
@@ -3582,7 +3595,7 @@ ULONG WW8Export::ReplaceCr( BYTE nChar )
         pChpPlc->AppendFkpEntry(rStrm.Tell());
         nRetPos = rStrm.Tell();
     }
-#ifdef PRODUCT
+#ifndef DBG_UTIL
     else
     {
         ASSERT( nRetPos || nPos == (ULONG)pFib->fcMin,
@@ -4069,15 +4082,15 @@ void WW8AttributeOutput::FormatAnchor( const SwFmtAnchor& rAnchor )
         BYTE nP = 0;
         switch ( rAnchor.GetAnchorId() )
         {
-            case FLY_PAGE:
+            case FLY_AT_PAGE:
                 // Vert: Page | Horz: Page
                 nP |= (1 << 4) | (2 << 6);
                 break;
             // Im Fall eine Flys als Zeichen: Absatz-gebunden setzen!!!
             case FLY_AT_FLY:
-            case FLY_AUTO_CNTNT:
-            case FLY_AT_CNTNT:
-            case FLY_IN_CNTNT:
+            case FLY_AT_CHAR:
+            case FLY_AT_PARA:
+            case FLY_AS_CHAR:
                 // Vert: Page | Horz: Page
                 nP |= (2 << 4) | (0 << 6);
                 break;

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlfmt.cxx,v $
- * $Revision: 1.40 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,13 +34,12 @@
 
 #ifndef _SVSTDARR_STRINGSSORT_DECL
 #define _SVSTDARR_STRINGSSORT
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 #include <xmloff/nmspmap.hxx>
 #include <format.hxx>
 #include <fmtcol.hxx>
 #include <hints.hxx>
-#include <unoobj.hxx>
 #include <poolfmt.hxx>
 #include <charfmt.hxx>
 #include <paratr.hxx>
@@ -57,19 +53,11 @@
 #include <xmloff/xmltkmap.hxx>
 #include "xmlitem.hxx"
 #include <xmloff/xmlstyle.hxx>
-#ifndef _XMLOFF_TXTSTYLI_HXX
 #include <xmloff/txtstyli.hxx>
-#endif
-#ifndef _XMLOFF_TXTIMP_HXX
 #include <xmloff/txtimp.hxx>
-#endif
-#ifndef _XMLOFF_FAMILIES_HXX
 #include <xmloff/families.hxx>
-#endif
 #include <xmloff/XMLTextMasterStylesContext.hxx>
-#ifndef _XMLOFF_XMLTEXTSHAPESTYLECONTEXT_HXX
 #include <xmloff/XMLTextShapeStyleContext.hxx>
-#endif
 #include <xmloff/XMLGraphicsDefaultStyle.hxx>
 #include "xmlimp.hxx"
 #include "xmltbli.hxx"
@@ -78,6 +66,7 @@
 #include <xmloff/attrlist.hxx>
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
+
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sectfrm.cxx,v $
- * $Revision: 1.55 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +29,7 @@
 #include "precompiled_sw.hxx"
 
 
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <hints.hxx>
 #include <txtftn.hxx>
 #include <fmtftn.hxx>
@@ -58,9 +55,9 @@
 #include "dbg_lay.hxx"
 #include "viewsh.hxx"
 #include "viewimp.hxx"
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <fmtftntx.hxx>
 // OD 2004-05-24 #i28701#
 #include <dflyobj.hxx>
@@ -2781,7 +2778,7 @@ void SwRootFrm::_RemoveFromList( SwSectionFrm* pSct )
         pDestroy->Remove( nPos );
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 BOOL SwRootFrm::IsInDelList( SwSectionFrm* pSct ) const
 {

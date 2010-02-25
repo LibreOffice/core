@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ascfldlg.cxx,v $
- * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,16 +34,16 @@
 #include <rtl/textenc.h>
 #include <i18npool/mslangid.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <svtools/lingucfg.hxx>
+#include <unotools/lingucfg.hxx>
 #include <fontcfg.hxx>
 #include <swmodule.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <sfx2/printer.hxx>
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
 #include <svx/dlgutil.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <swtypes.hxx>
 #include <ascfldlg.hxx>
 #include <shellio.hxx>

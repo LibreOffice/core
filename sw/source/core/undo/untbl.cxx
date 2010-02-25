@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: untbl.cxx,v $
- * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 
 
 #include <hintids.hxx>
-#include <svx/brkitem.hxx>
+#include <editeng/brkitem.hxx>
 #include <fmtornt.hxx>
 #include <fmtpdsc.hxx>
 #include <doc.hxx>
@@ -66,8 +63,7 @@
 #include <comcore.hrc>
 #include <unochart.hxx>
 
-
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 #define CHECK_TABLE(t)
 #else
 #ifdef DEBUG
@@ -77,7 +73,7 @@
 #endif
 #endif
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
     #define _DEBUG_REDLINE( pDoc )
 #else
     void lcl_DebugRedline( const SwDoc* pDoc );
@@ -195,7 +191,7 @@ public:
 void InsertSort( SvUShorts& rArr, USHORT nIdx, USHORT* pInsPos = 0 );
 void InsertSort( SvULongs& rArr, ULONG nIdx, USHORT* pInsPos = 0 );
 
-#if defined( JP_DEBUG ) && !defined( PRODUCT )
+#if defined( JP_DEBUG ) && defined(DBG_UTIL)
 #include "shellio.hxx"
 void DumpDoc( SwDoc* pDoc, const String& rFileNm );
 void CheckTable( const SwTable& );
@@ -449,12 +445,12 @@ SwUndoTblToTxt::SwUndoTblToTxt( const SwTable& rTbl, sal_Unicode cCh )
     const SwSpzFrmFmts& rFrmFmtTbl = *pTblNd->GetDoc()->GetSpzFrmFmts();
     for( USHORT n = 0; n < rFrmFmtTbl.Count(); ++n )
     {
-        const SwPosition* pAPos;
         SwFrmFmt* pFmt = rFrmFmtTbl[ n ];
-        const SwFmtAnchor* pAnchor = &pFmt->GetAnchor();
-        if( 0 != ( pAPos = pAnchor->GetCntntAnchor()) &&
-            ( FLY_AUTO_CNTNT == pAnchor->GetAnchorId() ||
-              FLY_AT_CNTNT == pAnchor->GetAnchorId() ) &&
+        SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();
+        SwPosition const*const pAPos = pAnchor->GetCntntAnchor();
+        if (pAPos &&
+            ((FLY_AT_CHAR == pAnchor->GetAnchorId()) ||
+             (FLY_AT_PARA == pAnchor->GetAnchorId())) &&
             nTblStt <= pAPos->nNode.GetIndex() &&
             pAPos->nNode.GetIndex() < nTblEnd )
         {
@@ -3253,7 +3249,7 @@ void InsertSort( SvULongs& rArr, ULONG nIdx, USHORT* pInsPos )
         *pInsPos = nU;
 }
 
-#if defined( JP_DEBUG ) && !defined( PRODUCT )
+#if defined( JP_DEBUG ) && defined(DBG_UTIL)
 
 
 void DumpDoc( SwDoc* pDoc, const String& rFileNm )

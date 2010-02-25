@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tblrwcl.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,7 @@
 #define _TBLRWCL_HXX
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 #include <vector>
 #include <swtypes.hxx>
@@ -69,7 +66,7 @@ BOOL lcl_BoxSetHeadCondColl( const SwTableBox*& rpBox, void* pPara );
 BOOL lcl_LineSetHeadCondColl( const SwTableLine*& rpLine, void* pPara );
 
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 void _CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize );
 #endif
 

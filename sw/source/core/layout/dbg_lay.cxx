@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dbg_lay.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -106,7 +103,7 @@
  *
  * --------------------------------------------------*/
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 #error Wer fummelt denn an den makefiles rum?
 #endif
 
@@ -119,7 +116,7 @@
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_USHORTSSORT
 #define _SVSTDARR_LONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 
 #include <stdio.h>
@@ -139,7 +136,7 @@ SwImplProtocol* SwProtocol::pImpl = NULL;
 
 ULONG lcl_GetFrameId( const SwFrm* pFrm )
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     static BOOL bFrameId = FALSE;
     if( bFrameId )
         return pFrm->GetFrmId();

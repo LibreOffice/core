@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: $
- * $Revision: $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,11 +28,19 @@
 #ifndef _BOOKMRK_HXX
 #define _BOOKMRK_HXX
 
-#include <IMark.hxx>
+#include <cppuhelper/weakref.hxx>
+
 #include <sfx2/Metadatable.hxx>
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>
+
+#include <IMark.hxx>
+
+
+namespace com { namespace sun { namespace star {
+    namespace text { class XTextContent; }
+} } }
 
 struct SwPosition;  // fwd Decl. wg. UI
 class SwDoc;
@@ -90,6 +95,17 @@ namespace sw { namespace mark
             {}
 
             virtual ~MarkBase();
+
+            // SwClient
+            virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
+
+            const ::com::sun::star::uno::WeakReference<
+                ::com::sun::star::text::XTextContent> & GetXBookmark() const
+                    { return m_wXBookmark; }
+            void SetXBookmark(::com::sun::star::uno::Reference<
+                        ::com::sun::star::text::XTextContent> const& xBkmk)
+                    { m_wXBookmark = xBkmk; }
+
         protected:
             MarkBase(const SwPaM& rPaM,
                 const ::rtl::OUString& rName);
@@ -97,6 +113,9 @@ namespace sw { namespace mark
             ::boost::scoped_ptr<SwPosition> m_pPos2;
             ::rtl::OUString m_aName;
             static ::rtl::OUString GenerateNewName(const ::rtl::OUString& rPrefix);
+
+            ::com::sun::star::uno::WeakReference<
+                ::com::sun::star::text::XTextContent> m_wXBookmark;
     };
 
     class NavigatorReminder

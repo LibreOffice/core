@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swtable.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,17 +36,19 @@
 #include <float.h>
 #include <hintids.hxx>
 #include <hints.hxx>    // fuer SwAttrSetChg
-#include <svx/lrspitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/linkmgr.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/colritem.hxx>
+#include <sfx2/linkmgr.hxx>
+#include <editeng/boxitem.hxx>
 
 
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
 #include <fmtpdsc.hxx>
+#include <fldbas.hxx>
+#include <fmtfld.hxx>
 #include <frmatr.hxx>
 #include <doc.hxx>
 #include <docary.hxx>   // fuer RedlineTbl()
@@ -74,7 +73,7 @@
 #include <redline.hxx>
 #include <list>
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 #define CHECK_TABLE(t)
 #else
 #ifdef DEBUG
@@ -101,6 +100,8 @@ SV_IMPL_REF( SwServerObject )
 
 #define COLFUZZY 20
 
+void ChgTextToNum( SwTableBox& rBox, const String& rTxt, const Color* pCol,
+                    BOOL bChgAlign,ULONG nNdPos );
 //----------------------------------
 
 class SwTableBox_Impl
@@ -1090,7 +1091,7 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
         }
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     {
 // steht im tblrwcl.cxx
 extern void _CheckBoxWidth( const SwTableLine&, SwTwips );
@@ -1197,7 +1198,7 @@ static void lcl_CalcNewWidths( std::list<USHORT> &rSpanPos, ChangeList& rChanges
         USHORT nPos = (USHORT)nSum;
         while( pCurr != rChanges.end() && pCurr->first < nPos )
         {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             USHORT nTemp = pCurr->first;
             nTemp = pCurr->second;
 #endif
@@ -1297,7 +1298,7 @@ static void lcl_CalcNewWidths( std::list<USHORT> &rSpanPos, ChangeList& rChanges
 void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
     const SwTabCols &rOld, const SwTableBox *pStart, BOOL bCurRowOnly )
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     static int nCallCount = 0;
     ++nCallCount;
 #endif
@@ -2013,7 +2014,7 @@ BOOL SwTableBox::IsInHeadline( const SwTable* pTbl ) const
     return pTbl->GetTabLines()[ 0 ] == pLine;
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 ULONG SwTableBox::GetSttIdx() const
 {
@@ -2060,9 +2061,11 @@ BOOL SwTable::GetInfo( SfxPoolItem& rInfo ) const
     return TRUE;
 }
 
-SwTable* SwTable::FindTable( SwFrmFmt* pFmt )
+SwTable * SwTable::FindTable( SwFrmFmt const*const pFmt )
 {
-    return pFmt ? (SwTable*)SwClientIter( *pFmt ).First( TYPE(SwTable) ) : 0;
+    return (pFmt)
+        ? static_cast<SwTable*>(SwClientIter(*pFmt).First( TYPE(SwTable) ))
+        : 0;
 }
 
 SwTableNode* SwTable::GetTableNode() const
@@ -2087,11 +2090,16 @@ void SwTable::SetHTMLTableLayout( SwHTMLTableLayout *p )
     pHTMLLayout = p;
 }
 
-
 void ChgTextToNum( SwTableBox& rBox, const String& rTxt, const Color* pCol,
                     BOOL bChgAlign )
 {
     ULONG nNdPos = rBox.IsValidNumTxtNd( TRUE );
+    ChgTextToNum( rBox,rTxt,pCol,bChgAlign,nNdPos);
+}
+void ChgTextToNum( SwTableBox& rBox, const String& rTxt, const Color* pCol,
+                    BOOL bChgAlign,ULONG nNdPos )
+{
+
     if( ULONG_MAX != nNdPos )
     {
         SwDoc* pDoc = rBox.GetFrmFmt()->GetDoc();
@@ -2158,6 +2166,8 @@ void ChgTextToNum( SwTableBox& rBox, const String& rTxt, const Color* pCol,
             xub_StrLen n;
 
             for( n = 0; n < rOrig.Len() && '\x9' == rOrig.GetChar( n ); ++n )
+                ;
+            for( ; n < rOrig.Len() && '\x01' == rOrig.GetChar( n ); ++n )
                 ;
             SwIndex aIdx( pTNd, n );
             for( n = rOrig.Len(); n && '\x9' == rOrig.GetChar( --n ); )
@@ -2637,6 +2647,14 @@ ULONG SwTableBox::IsValidNumTxtNd( BOOL bCheckAttr ) const
                             *pAttr->GetStart() ||
                             *pAttr->GetAnyEnd() < rTxt.Len() )
                         {
+                            if ( pAttr->Which() == RES_TXTATR_FIELD )
+                            {
+                                const SwField* pField = pAttr->GetFld().GetFld();
+                                if ( pField && pField->GetTypeId() == TYP_SETFLD )
+                                {
+                                    continue;
+                                }
+                            }
                             nPos = ULONG_MAX;
                             break;
                         }
@@ -2691,7 +2709,7 @@ void SwTableBox::ActualiseValueBox()
 
             const String& rTxt = pSttNd->GetNodes()[ nNdPos ]->GetTxtNode()->GetTxt();
             if( rTxt != sNewTxt )
-                ChgTextToNum( *this, sNewTxt, pCol, FALSE );
+                ChgTextToNum( *this, sNewTxt, pCol, FALSE ,nNdPos);
         }
     }
 }

@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -42,7 +38,7 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 
 # BEGIN ----------------------------------------------------------------
-# auto generated Target:testjob by codegen.pl 
+# auto generated Target:testjob by codegen.pl
 
 .IF "$(GUI)" == "WNT"
     CFLAGS+=/Ob1
@@ -52,17 +48,7 @@ SHL1OBJS=$(SLO)$/Test-BigPtrArray.obj \
     $(SLO)$/bparr.obj
 
 SHL1TARGET=$(TARGET)
-SHL1STDLIBS=$(SALLIB) $(TOOLSLIB) 
-   
-.IF "$(GUI)" == "WNT"
-SHL1STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib
-.ENDIF
-.IF "$(GUI)" == "UNX"
-SHL1STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
-# .IF "$(OS)" == "SOLARIS"
-# SHL1STDLIBS += -lrt -laio
-# .ENDIF
-.ENDIF
+SHL1STDLIBS=$(SALLIB) $(TOOLSLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
 

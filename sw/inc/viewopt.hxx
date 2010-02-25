@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewopt.hxx,v $
- * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -82,8 +79,7 @@ namespace svtools{ class ColorConfig;}
 #define VIEWOPT_CORE2_SMOOTHSCROLL      0x00000004L
 #define VIEWOPT_CORE2_CRSR_IN_PROT      0x00000008L
 #define VIEWOPT_CORE2_PDF_EXPORT        0x00000010L
-
-
+#define VIEWOPT_CORE2_PRINTING          0x00000020L
 #define VIEWOPT_CORE2_BIGMARKHDL        0x00000040L
 
 #define VIEWOPT_2_UNUSED1           0x00000100L
@@ -175,7 +171,7 @@ protected:
 
     BYTE            nTblDest;           // Ziel fuer Tabellenhintergrund
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     // korrespondieren zu den Angaben in ui/config/cfgvw.src
     BOOL  bTest1        :1;     // Test-Flag  "Layout not loading"
     BOOL  bTest2        :1;     // Test-Flag  "WYSIWYG++"
@@ -381,6 +377,12 @@ public:
     inline void SetPDFExport(BOOL b)
         { (b != 0) ? (nCore2Options |= VIEWOPT_CORE2_PDF_EXPORT) : (nCore2Options &= ~VIEWOPT_CORE2_PDF_EXPORT);}
 
+    inline BOOL IsPrinting() const
+        {return nCore2Options & VIEWOPT_CORE2_PRINTING ? TRUE : FALSE;}
+
+    inline void SetPrinting(BOOL b)
+        { (b != 0) ? (nCore2Options |= VIEWOPT_CORE2_PRINTING) : (nCore2Options &= ~VIEWOPT_CORE2_PRINTING);}
+
 /*---------------------------------------------------------------------------
 
 ----------------------------------------------------------------------------*/
@@ -417,7 +419,7 @@ public:
     USHORT GetViewLayoutColumns() const { return mnViewLayoutColumns; }
     void   SetViewLayoutColumns( USHORT nNew ) { mnViewLayoutColumns = nNew; }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     // korrespondieren zu den Angaben in ui/config/cfgvw.src
     inline BOOL IsTest1() const     { return bTest1; }
     inline void SetTest1( BOOL b )  { bTest1 = b; }
@@ -450,7 +452,8 @@ public:
     SwViewOption& operator=( const SwViewOption &rOpt );
     // Vergleichsmethoden
     BOOL IsEqualFlags ( const SwViewOption &rOpt ) const;
-    inline BOOL operator==( const SwViewOption &rOpt ) const;
+    inline BOOL operator == ( const SwViewOption &rOpt ) const;
+    inline BOOL operator != ( const SwViewOption &rOpt ) const  { return !(*this == rOpt); }
 
 
 /*---------------------------------------------------------------------------

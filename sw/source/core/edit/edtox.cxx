@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: edtox.cxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,10 +35,10 @@
 #include <tools/urlobj.hxx>
 #include <svtools/txtcmp.hxx>
 #ifndef SVTOOLS_FSTATHELPER_HXX
-#include <svtools/fstathelper.hxx>
+#include <svl/fstathelper.hxx>
 #endif
 #include <sfx2/docfile.hxx>
-#include "svx/unolingu.hxx"
+#include "editeng/unolingu.hxx"
 #include <swtypes.hxx>
 #include <editsh.hxx>
 #include <doc.hxx>

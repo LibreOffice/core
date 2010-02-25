@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: frame.hxx,v $
- * $Revision: 1.58 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,7 +26,7 @@
  ************************************************************************/
 #ifndef _FRAME_HXX
 #define _FRAME_HXX
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include "swtypes.hxx"  // fuer SwTwips
 #include "swrect.hxx"
 #include "calbck.hxx"   // fuer SwClient
@@ -56,6 +53,7 @@ class SvxBrushItem;
 class SwSelectionList;
 struct SwPosition;
 struct SwCrsrMoveState;
+class SwPrtOptions;
 
 // --> OD 2004-07-06 #i28701#
 class SwSortedObjs;
@@ -828,7 +826,7 @@ public:
                                  SwCrsrMoveState* = 0 ) const;
     virtual BOOL    GetCharRect( SwRect &, const SwPosition&,
                                  SwCrsrMoveState* = 0 ) const;
-    virtual void    Paint( const SwRect& ) const;
+    virtual void    Paint( const SwRect&, const SwPrtOptions *pPrintData = NULL ) const;
 
     // der "kurze Dienstweg" zwischen den Frames und der Formatierung.
     // Wer den void* falsch Casted ist selbst schuld!

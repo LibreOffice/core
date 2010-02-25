@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: atrstck.cxx,v $
- * $Revision: 1.30.210.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,35 +31,35 @@
 
 #include <errhdl.hxx>   // ASSERT
 #include <atrhndl.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <vcl/outdev.hxx>
-#include <svx/cmapitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/cntritem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/kernitem.hxx>
-#include <svx/charreliefitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/wrlmitem.hxx>
-#include <svx/akrnitem.hxx>
-#include <svx/blnkitem.hxx>
-#include <svx/charrotateitem.hxx>
-#include <svx/emphitem.hxx>
-#include <svx/charscaleitem.hxx>
-#include <svx/twolinesitem.hxx>
-#include <svx/charhiddenitem.hxx>
+#include <editeng/cmapitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/kernitem.hxx>
+#include <editeng/charreliefitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/wrlmitem.hxx>
+#include <editeng/akrnitem.hxx>
+#include <editeng/blnkitem.hxx>
+#include <editeng/charrotateitem.hxx>
+#include <editeng/emphitem.hxx>
+#include <editeng/charscaleitem.hxx>
+#include <editeng/twolinesitem.hxx>
+#include <editeng/charhiddenitem.hxx>
 #include <viewopt.hxx>
 #include <charfmt.hxx>
 #include <fchrfmt.hxx>
 #include <fmtautofmt.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <fmtinfmt.hxx>
 #include <txtinet.hxx>
 #include <IDocumentSettingAccess.hxx>

@@ -37,7 +37,7 @@
 #include <app.hrc>
 #include <access.hrc>
 
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/menu.hxx>

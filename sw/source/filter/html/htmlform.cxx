@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: htmlform.cxx,v $
- * $Revision: 1.27.94.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,32 +31,26 @@
 
 #include <hintids.hxx>
 #include <vcl/svapp.hxx>
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <vcl/imgcons.hxx>
 
-#ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/docfile.hxx>
-#ifndef _SFXAPP_HXX
 #include <sfx2/viewfrm.hxx>
-#endif
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/crsditem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/crsditem.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/fmglob.hxx>
 #include <com/sun/star/form/ListSourceType.hpp>
@@ -76,6 +67,9 @@
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/awt/XTextLayoutConstrains.hpp>
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
+#include <com/sun/star/awt/XImageConsumer.hpp>
+#include <com/sun/star/form/XImageProducerSupplier.hpp>
+#include <com/sun/star/form/XForm.hpp>
 #include <doc.hxx>
 #include <pam.hxx>
 #include <swtable.hxx>
@@ -84,12 +78,13 @@
 #include <docsh.hxx>
 #include <viewsh.hxx>
 #include <unodraw.hxx>
-#include <unoobj.hxx>
+#include <unotextrange.hxx>
 #include "dcontact.hxx"
 
 #include "swcss1.hxx"
 #include "swhtml.hxx"
 #include "htmlform.hxx"
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

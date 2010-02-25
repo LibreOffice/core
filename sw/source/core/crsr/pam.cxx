@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pam.cxx,v $
- * $Revision: 1.23.12.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 
 
 #include <hintids.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/protitem.hxx>
 #include <cntfrm.hxx>
 #include <pagefrm.hxx>
 #include <doc.hxx>
@@ -550,7 +547,7 @@ void SwPaM::SetMark()
     (*m_pMark) = (*m_pPoint);
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 void SwPaM::Exchange()
 {

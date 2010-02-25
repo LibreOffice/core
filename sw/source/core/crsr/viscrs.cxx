@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viscrs.cxx,v $
- * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 
 #include <vcl/dialog.hxx>
@@ -862,7 +859,7 @@ BOOL SwShellCrsr::UpDown( BOOL bUp, USHORT nCnt )
                             &GetPtPos(), GetShell()->GetUpDownX() );
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 // JP 05.03.98: zum Testen des UNO-Crsr Verhaltens hier die Implementierung
 //              am sichtbaren Cursor
@@ -1001,7 +998,7 @@ BOOL SwShellTableCrsr::IsInside( const Point& rPt ) const
     return FALSE;
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 // JP 05.03.98: zum Testen des UNO-Crsr Verhaltens hier die Implementierung
 //              am sichtbaren Cursor

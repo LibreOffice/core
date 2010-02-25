@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fesh.hxx,v $
- * $Revision: 1.63.212.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -479,7 +476,7 @@ public:
     void EndTextEdit();             //Loescht ggf. das Objekt.
 
     //Ankertyp des selektierten Objektes, -1 bei Uneindeutigkeit oder
-    //Rahmenselektion; FLY_PAGE bzw. FLY_AT_CNTNT aus frmatr.hxx sonst.
+    //Rahmenselektion; FLY_AT_PAGE bzw. FLY_AT_PARA aus frmatr.hxx sonst.
     short GetAnchorId() const;
 
     //Erzeugen von DrawObjekten, beim Begin wird der Objekttyp mitgegeben.

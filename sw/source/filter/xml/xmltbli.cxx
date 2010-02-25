@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmltbli.cxx,v $
- * $Revision: 1.65 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,15 +29,14 @@
 #include "precompiled_sw.hxx"
 
 
-
 #include "hintids.hxx"
 
 #include <limits.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
-#include <svtools/itemset.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/itemset.hxx>
+#include <svl/zformat.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -48,7 +44,7 @@
 #include <xmloff/families.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/i18nmap.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/protitem.hxx>
 #include "poolfmt.hxx"
 #include "fmtfsize.hxx"
 #include "fmtornt.hxx"
@@ -58,6 +54,7 @@
 #include "swtblfmt.hxx"
 #include "pam.hxx"
 #include "unotbl.hxx"
+#include "unotextrange.hxx"
 #include "unocrsr.hxx"
 #include "cellatr.hxx"
 #include "swddetbl.hxx"
@@ -1452,6 +1449,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     pDDESource(NULL),
     bFirstSection( sal_False ),
     bRelWidth( sal_True ),
+    bHasSubTables( sal_False ),
     nHeaderRows( 0 ),
     nCurRow( 0UL ),
     nCurCol( 0UL ),
@@ -2315,7 +2313,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
                 bSplit = 1UL == pCell->GetColSpan();
             }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             if( nCol == nRightCol-1UL )
             {
                 ASSERT( bSplit, "Split-Flag falsch" );
@@ -2926,8 +2924,8 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
             SwPosition aPos( *pCNd );
             aPos.nContent.Assign( pCNd, 0U );
 
-            Reference < XTextRange > xTextRange =
-                SwXTextRange::CreateTextRangeFromPosition( pDoc, aPos, 0 );
+            const uno::Reference< text::XTextRange > xTextRange =
+                SwXTextRange::CreateXTextRange( *pDoc, aPos, 0 );
             Reference < XText > xText = xTextRange->getText();
             Reference < XTextCursor > xTextCursor =
                 xText->createTextCursorByRange( xTextRange );

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: section.cxx,v $
- * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,12 +31,12 @@
 
 #include <stdlib.h>
 #include <hintids.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
-#include <svx/protitem.hxx>
-#include <svx/linkmgr.hxx>
+#include <editeng/protitem.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <tools/urlobj.hxx>
 
 #include <sfx2/sfxsids.hrc>
@@ -835,6 +832,11 @@ void SwSectionFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         break;
     }
     SwFrmFmt::Modify( pOld, pNew );
+
+    if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
+    {   // invalidate cached uno object
+        SetXTextSection(uno::Reference<text::XTextSection>(0));
+    }
 }
 
         // erfrage vom Format Informationen
@@ -1276,7 +1278,7 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
     ULONG nDataFormat = SotExchange::GetFormatIdFromMimeType( rMimeType );
 
     if( !pSectNd || !pDoc || pDoc->IsInDtor() || ChkNoDataFlag() ||
-        SvxLinkManager::RegisterStatusInfoId() == nDataFormat )
+        sfx2::LinkManager::RegisterStatusInfoId() == nDataFormat )
     {
         // sollten wir schon wieder im Undo stehen?
         return ;

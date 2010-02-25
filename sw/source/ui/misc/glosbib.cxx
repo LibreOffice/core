@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: glosbib.cxx,v $
- * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,8 +43,8 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/tempfile.hxx>
 
-#include <svtools/svstdarr.hxx>
-#include <svtools/pathoptions.hxx>
+#include <svl/svstdarr.hxx>
+#include <unotools/pathoptions.hxx>
 #include <swtypes.hxx>
 #include <glosbib.hxx>
 #include <gloshdl.hxx>

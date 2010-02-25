@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: htmlftn.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -354,7 +351,7 @@ void SwHTMLWriter::OutFootEndNotes()
     if( !pFootEndNotes )
         return;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     USHORT nFtn = nFootNote, nEn = nEndNote;
 #endif
     nFootNote = 0, nEndNote = 0;
@@ -419,7 +416,7 @@ void SwHTMLWriter::OutFootEndNotes()
         }
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     ASSERT( nFtn == nFootNote,
             "SwHTMLWriter::OutFootEndNotes: Anzahl Fussnoten stimmt nicht" );
     ASSERT( nEn == nEndNote,

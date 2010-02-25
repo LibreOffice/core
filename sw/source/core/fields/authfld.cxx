@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: authfld.cxx,v $
- * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,9 +35,9 @@
 #define _SVSTDARR_ULONGS
 #include <hintids.hxx>
 
-#include <svtools/svstdarr.hxx>
-#include <svx/unolingu.hxx>
-#include <svx/langitem.hxx>
+#include <svl/svstdarr.hxx>
+#include <editeng/unolingu.hxx>
+#include <editeng/langitem.hxx>
 #include <swtypes.hxx>
 #include <tools/resid.hxx>
 #ifndef _COMCORE_HRC

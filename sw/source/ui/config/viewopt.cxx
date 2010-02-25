@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewopt.cxx,v $
- * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,13 +30,13 @@
 
 
 #include <svx/htmlmode.hxx>
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 
 #ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
 #endif
-#include <svx/svxenum.hxx>
-#include <svx/svxacorr.hxx>
+#include <editeng/svxenum.hxx>
+#include <editeng/svxacorr.hxx>
 #include <unotools/localedatawrapper.hxx>
 #ifndef _REGION_HXX //autogen
 #include <vcl/region.hxx>
@@ -58,11 +55,11 @@
 #include <crstate.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/accessibilityoptions.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 BOOL   SwViewOption::bTest9 = FALSE;        //DrawingLayerNotLoading
 #endif
 Color SwViewOption::aDocBoundColor(COL_LIGHTGRAY);
@@ -115,7 +112,7 @@ BOOL SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
             && bFormView == rOpt.IsFormView()
             && mbViewLayoutBookMode == rOpt.mbViewLayoutBookMode
             && bShowPlaceHolderFields == rOpt.bShowPlaceHolderFields
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             // korrespondieren zu den Angaben in ui/config/cfgvw.src
             && bTest1 == rOpt.IsTest1()
             && bTest2 == rOpt.IsTest2()
@@ -246,7 +243,7 @@ SwViewOption::SwViewOption() :
 
     bSelectionInReadonly = SW_MOD()->GetAccessibilityOptions().IsSelectionInReadonly();
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     // korrespondieren zu den Angaben in ui/config/cfgvw.src
     bTest1 = bTest2 = bTest3 = bTest4 =
              bTest5 = bTest6 = bTest7 = bTest8 = bTest10 = FALSE;
@@ -281,7 +278,7 @@ SwViewOption::SwViewOption(const SwViewOption& rVOpt)
     mbViewLayoutBookMode = rVOpt.mbViewLayoutBookMode;
     bShowPlaceHolderFields = rVOpt.bShowPlaceHolderFields;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     bTest1          = rVOpt.bTest1      ;
     bTest2          = rVOpt.bTest2      ;
     bTest3          = rVOpt.bTest3      ;
@@ -321,7 +318,7 @@ SwViewOption& SwViewOption::operator=( const SwViewOption &rVOpt )
     mbViewLayoutBookMode = rVOpt.mbViewLayoutBookMode;
     bShowPlaceHolderFields = rVOpt.bShowPlaceHolderFields;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     bTest1          = rVOpt.bTest1      ;
     bTest2          = rVOpt.bTest2      ;
     bTest3          = rVOpt.bTest3      ;

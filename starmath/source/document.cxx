@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: document.cxx,v $
- * $Revision: 1.94.26.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,33 +52,33 @@
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/fstathelper.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/lingucfg.hxx>
-#include <svtools/linguprops.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/ptitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/fstathelper.hxx>
+#include <svl/intitem.hxx>
+#include <svl/itempool.hxx>
+#include <unotools/lingucfg.hxx>
+#include <unotools/linguprops.hxx>
+#include <unotools/pathoptions.hxx>
+#include <svl/ptitem.hxx>
 #include <svtools/sfxecode.hxx>
-#include <svtools/slstitm.hxx>
-#include <svtools/smplhint.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/slstitm.hxx>
+#include <svl/smplhint.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/transfer.hxx>
-#include <svtools/undo.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/whiter.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editstat.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/unolingu.hxx>
+#include <svl/undo.hxx>
+#include <svl/urihelper.hxx>
+#include <svl/whiter.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/unolingu.hxx>
 #include <ucbhelper/content.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/mapunit.hxx>
 #include <vcl/msgbox.hxx>
-
+#include <sfx2/sfx.hrc>
 #include <document.hxx>
 #include <action.hxx>
 #include <config.hxx>
@@ -97,8 +94,8 @@
 #include "mathtype.hxx"
 #include "mathmlimport.hxx"
 #include "mathmlexport.hxx"
-
-
+#include <sfx2/sfxsids.hrc>
+#include <svx/svxids.hrc>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -111,16 +108,11 @@ using namespace ::com::sun::star::uno;
 
 static const char __FAR_DATA pStarMathDoc[] = "StarMathDocument";
 
-
-/**************************************************************************/
-/*
-**
-**  CLASS IMPLEMENTATION
-**
-**/
-
 #define SmDocShell
 #include "smslots.hxx"
+
+////////////////////////////////////////////////////////////
+
 
 TYPEINIT1( SmDocShell, SfxObjectShell );
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fmtfld.hxx,v $
- * $Revision: 1.9.118.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,9 +27,9 @@
 #ifndef _FMTFLD_HXX
 #define _FMTFLD_HXX
 
-#include <svtools/poolitem.hxx>
-#include <svtools/brdcst.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/poolitem.hxx>
+#include <svl/brdcst.hxx>
+#include <svl/smplhint.hxx>
 
 #include "swdllapi.h"
 #include <calbck.hxx>

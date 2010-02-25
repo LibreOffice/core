@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pview.cxx,v $
- * $Revision: 1.70 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,10 +38,11 @@
 #include <vcl/cmdevt.hxx>
 #include <vcl/button.hxx>
 #include <svtools/printdlg.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/whiter.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
 #include <sfx2/printer.hxx>
+#include <sfx2/progress.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/topfrm.hxx>
 #include <sfx2/bindings.hxx>
@@ -52,8 +50,8 @@
 #include <sfx2/dispatch.hxx>
 #include <vcl/msgbox.hxx>
 #include <svx/stddlg.hxx>
-#include <svx/paperinf.hxx>
-#include <svx/srchitem.hxx>
+#include <editeng/paperinf.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/svdview.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/zoomslideritem.hxx>
@@ -1376,7 +1374,7 @@ void  SwPagePreView::Execute( SfxRequest &rReq )
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if(pFact)
                 {
-                    pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aCoreSet, RID_SVXDLG_ZOOM);
+                    pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aCoreSet);
                     DBG_ASSERT(pDlg, "Dialogdiet fail!");
                 }
 
@@ -1520,12 +1518,6 @@ MOVEPAGE:
             rReq.SetSlot( FN_PRINT_PAGEPREVIEW );
             return;
         }
-        case FN_PREVIEW_PRINT_OPTIONS :
-        {
-            SwPreviewPrintOptionsDialog aDlg(aViewWin, *this);
-            aDlg.Execute();
-        }
-        break;
         case SID_PRINTDOCDIRECT:
         case SID_PRINTDOC:
             ::SetAppPrintOptions( aViewWin.GetViewShell(), FALSE );
@@ -1788,7 +1780,7 @@ void SwPagePreView::Init(const SwViewOption * pPrefs)
 
     // OD 09.01.2003 #i6467# - adjust view shell option to the same as for print
     SwPrtOptions aPrintOptions( GetViewFrame()->GetObjectShell()->GetTitle(0) );
-    SwView::MakeOptions( 0, aPrintOptions, 0, 0, false, 0, 0 );
+    aPrintOptions.MakeOptions( false );
     GetViewShell()->AdjustOptionsForPagePreview( aPrintOptions );
 
     IDocumentSettingAccess* pIDSA = pESh->getIDocumentSettingAccess();
@@ -2416,72 +2408,6 @@ void SwPagePreView::ScrollDocSzChg()
 
 // alles zum Thema Drucken
 
-USHORT  SwPagePreView::Print( SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *pDlg )
-{
-    ViewShell* pSh = aViewWin.GetViewShell();
-    SfxPrinter* pPrinter = GetPrinter();
-    if( !pPrinter || !pPrinter->InitJob( &aViewWin,
-                pSh->HasDrawView() && !bIsAPI && pSh->GetDrawView()->GetModel()->HasTransparentObjects() ))
-        return ERRCODE_IO_ABORT;
-
-    SwWait aWait( *GetDocShell(), TRUE );
-
-    USHORT nRowCol = ( aViewWin.GetRow() << 8 ) +
-                        aViewWin.GetCol();  // Zeilen / DoppelSeiten
-
-    {
-        // die Felder aktualisieren
-        // ACHTUNG: hochcasten auf die EditShell, um die SS zu nutzen.
-        //          In den Methoden wird auf die akt. Shell abgefragt!
-        SwEditShell* pESh = (SwEditShell*)pSh;
-        SwDocStat aDocStat;
-        BOOL bIsModified = pESh->IsModified();
-
-        pESh->StartAllAction();
-        pESh->UpdateDocStat( aDocStat );
-        pSh->UpdateFlds();
-        pESh->EndAllAction();
-
-        if( !bIsModified )
-            pESh->ResetModified();
-    }
-
-    // Druckauftrag starten
-    SfxObjectShell *pObjShell = GetViewFrame()->GetObjectShell();
-    SwPrtOptions aOpts( pObjShell->GetTitle(0) );
-
-    BOOL bPrtPros;
-    BOOL bPrtPros_RTL;
-    SwView::MakeOptions( pDlg, aOpts, &bPrtPros, &bPrtPros_RTL, FALSE, GetPrinter(), GetDocShell()->GetDoc()->getPrintData() );
-
-    if( bNormalPrint )
-    {
-        if( bPrtPros )
-            pSh->PrintProspect( aOpts, rProgress, bPrtPros_RTL );
-        else
-            pSh->Prt( aOpts, &rProgress );
-    }
-    else
-    {
-        const SwPagePreViewPrtData* pPPVPD = pSh->GetDoc()->GetPreViewPrtData();
-        if( pPPVPD && pPPVPD->GetCol() && pPPVPD->GetRow() )
-        {
-            // Zeilen / Seiten
-            nRowCol = ( pPPVPD->GetRow() << 8 ) + pPPVPD->GetCol();
-        }
-        else
-            pPPVPD = 0;
-        pSh->PrintPreViewPage( aOpts, nRowCol, rProgress, pPPVPD );
-    }
-
-    return 0; // OK
-}
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 SfxPrinter*  SwPagePreView::GetPrinter( BOOL bCreate )
 {
     return aViewWin.GetViewShell()->getIDocumentDeviceAccess()->getPrinter( bCreate );
@@ -2531,7 +2457,7 @@ USHORT  SwPagePreView::SetPrinter( SfxPrinter *pNew, USHORT nDiffFlags, bool )
             SID_ATTR_LONG_ULSPACE, SID_ATTR_LONG_LRSPACE,
             SID_RULER_BORDERS, SID_RULER_PAGE_POS, 0
         };
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     {
         const USHORT* pPtr = aInval + 1;
         do {

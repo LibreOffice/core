@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: initui.cxx,v $
- * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,7 +51,7 @@
 #ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
 #endif
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 
 #include <unomid.h>
 
@@ -169,6 +166,7 @@ ShellResource::ShellResource()
     aStrAllPageHeadFoot( SW_RES( STR_ALLPAGE_HEADFOOT ) ),
     aStrNone( SW_RES( STR_TEMPLATE_NONE )),
     aFixedStr( SW_RES( STR_FIELD_FIXED )),
+    sDurationFormat( SW_RES( STR_DURATION_FORMAT )),
 
     aTOXIndexName(          SW_RES(STR_TOI)),
     aTOXUserName(           SW_RES(STR_TOU)),

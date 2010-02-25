@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile:  $
- * $Revision:  $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,17 +44,17 @@
 #include <viewopt.hxx>
 #include <cmdid.h>
 
-#include <svx/fontitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/editview.hxx>
-#include <svx/outliner.hxx>
-#include <svx/editeng.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/eeitem.hxx>
 
-#include <svtools/zforlist.hxx>
-#include <svtools/undo.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/undo.hxx>
+#include <svl/stritem.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>

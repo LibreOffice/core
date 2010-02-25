@@ -1,13 +1,10 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
- * Copyright 2008 by Sun Microsystems, Inc.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: x $
- * $Revision: 1.00 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,9 +58,9 @@
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/sfxecode.hxx>
-#include <svtools/saveopt.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/itemprop.hxx>
+#include <unotools/saveopt.hxx>
+#include <svl/stritem.hxx>
+#include <svl/itemprop.hxx>
 #include <unotools/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -403,8 +400,8 @@ SmXMLExport::SmXMLExport(
 {
 }
 
-sal_Int64 SAL_CALL SmXMLExport::getSomething( 
-    const uno::Sequence< sal_Int8 >& rId ) 
+sal_Int64 SAL_CALL SmXMLExport::getSomething(
+    const uno::Sequence< sal_Int8 >& rId )
 throw(uno::RuntimeException)
 {
     if ( rId.getLength() == 16 &&
@@ -833,7 +830,7 @@ void SmXMLExport::ExportTable(const SmNode *pNode, int nLevel)
     if (nSize >= 1 && pNode->GetSubNode(nSize-1)->GetNumSubNodes() == 0)
         --nSize;
 
-    // try to avoid creating a mtable element when the formula consists only 
+    // try to avoid creating a mtable element when the formula consists only
     // of a single output line
     if (nLevel || (nSize >1))
         pTable = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MTABLE, sal_True, sal_True);
@@ -902,7 +899,7 @@ void SmXMLExport::ExportText(const SmNode *pNode, int /*nLevel*/)
 
 void SmXMLExport::ExportBlank(const SmNode * /*pNode*/, int /*nLevel*/)
 {
-    //!! exports an empty <mi> tag since for example "~_~" is allowed in 
+    //!! exports an empty <mi> tag since for example "~_~" is allowed in
     //!! Math (so it has no sense at all) but must not result in an empty
     //!! <msub> tag in MathML !!
 
@@ -910,7 +907,7 @@ void SmXMLExport::ExportBlank(const SmNode * /*pNode*/, int /*nLevel*/)
     //const SmBlankNode *pTemp = static_cast<const SmBlankNode *>(pNode);
 
     pText = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MI, sal_True, sal_False);
-    
+
     GetDocHandler()->characters( OUString() );
     delete pText;
 }
@@ -1203,10 +1200,10 @@ void SmXMLExport::ExportAttributes(const SmNode *pNode, int nLevel)
 
 static bool lcl_HasEffectOnMathvariant( const SmTokenType eType )
 {
-    return  eType == TBOLD || eType == TNBOLD || 
+    return  eType == TBOLD || eType == TNBOLD ||
             eType == TITALIC || eType == TNBOLD ||
             eType == TSANS || eType == TSERIF || eType == TFIXED;
-}    
+}
 
 void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
 {
@@ -1480,7 +1477,7 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
                     // thus at least it will not vanish into nothing
                     ExportText(pNode, nLevel);
                 }
-                else    
+                else
                 {
                     //To fully handle generic MathML we need to implement the full
                     //operator dictionary, we will generate MathML with explicit

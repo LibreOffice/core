@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ww8par.hxx,v $
- * $Revision: 1.159.12.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,9 +30,9 @@
 #define _WW8PAR_HXX
 
 #include <tools/string.hxx>
-#include <svx/msdffimp.hxx>
-#include <svx/msocximex.hxx>
-#include <svx/frmdir.hxx>
+#include <filter/msfilter/msdffimp.hxx>
+#include <filter/msfilter/msocximex.hxx>
+#include <editeng/frmdir.hxx>
 #include <fltshell.hxx>         // fuer den Attribut Stack
 
 #ifndef __SGI_STL_VECTOR
@@ -990,7 +987,7 @@ private:
     ANLDRuleMap maANLDRules;
     WW8_OLST* pNumOlst;         // Gliederung im Text
 
-    SwNode* pNode_FLY_AT_CNTNT; // set: WW8SwFlyPara()   read: CreateSwTable()
+    SwNode* pNode_FLY_AT_PARA; // set: WW8SwFlyPara()   read: CreateSwTable()
 
     SdrModel* pDrawModel;
     SdrPage* pDrawPg;
