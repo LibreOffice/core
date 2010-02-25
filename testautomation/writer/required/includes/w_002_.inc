@@ -377,6 +377,8 @@ testcase tEditCompareDocument
         goto endsub
     endif
 
+    call hNewDocument()
+
     printlog( "Open test document")    
     EditCompareDocumentCalc
 
@@ -389,16 +391,19 @@ testcase tEditCompareDocument
 
         Kontext "FilterAuswahl"
         if Filterauswahl.Exists( 2 ) then
+            warnlog( "Dialog <Filterauswahl> was not expected at this point" )
             Filterauswahl.OK()
         else
-            qaerrorlog( "Dialog <Filterauswahl> did not open. Good or bad?" )
+            printlog( "No dialog <Filterauswahl>, good" )
         endif
         
         Kontext "Active"
         if Active.Exists( 1 ) then
             Warnlog Active.Gettext()
             Active.Ok()
-        end if
+        else
+            printlog( "No unexpected messageboxes, good." )
+        endif
 
         Kontext "Redlining"
         PrintLog "Dialog 'Accept and Reject changes' has to come up"
@@ -411,7 +416,7 @@ testcase tEditCompareDocument
             hCloseDialog( Redlining, "close" )
         else
             Warnlog "- Dialog 'Redlining' does not exist!"
-        end if
+        endif
     else
         warnlog( "Dialog <FileOpen> did not open")
     endif
@@ -988,41 +993,51 @@ testcase tEditFields
     PrintLog( "Open new document" )
     Call hNewDocument()
 
+    printlog( "Insert->Field->Other" )
     InsertFieldsOther
 
-    printlog( "Insert a field from the user data" )
-    kontext "TabDokumentFeldbefehle"
-    if ( TabDokumentFeldbefehle.exists( 2 ) ) then
-        Feldtyp.select( 1 )
-        Auswahl.select( 1 )
-        Einfuegen.click()
-        hCloseDialog( TabDokumentFeldbefehle , "close" )
-        
+    ' Note that the tabdialog does not have a unique ID yet, so we treat it as "Active"
+    kontext
+    if ( Active.exists( 2 ) ) then
 
-        PrintLog( "Move cursor infront of field (start of document)" )
-        Call wTypeKeys("<Home>")
+        printlog( "Switch to <Document> tab" )
+        Active.setPage( TabDokumentFeldbefehle )
 
-        PrintLog( "Edit / Fields" )
-        EditFields
-        
-        Kontext "FeldbefehlBearbeitenDokument"
-        if ( FeldbefehlBearbeitenDokument.exists( 2 ) ) then
-            Call DialogTest ( FeldbefehlBearbeitenDokument )
+        kontext "TabDokumentFeldbefehle"
+        printlog( "Select any item from the user data, insert the field, close the dialog" )
+        if ( TabDokumentFeldbefehle.isVisible() ) then
+            Feldtyp.select( 1 )
+            Auswahl.select( 1 )
+            Einfuegen.click()
+            hCloseDialog( TabDokumentFeldbefehle , "close" )
 
-            PrintLog( "In 'Edit Fields' dialog select 'Edit'" )
-            if ( Bearbeiten.IsVisible() and Bearbeiten.IsEnabled() ) then
-                Bearbeiten.Click()
+            PrintLog( "Move cursor infront of field (start of document)" )
+            Call wTypeKeys("<Home>")
 
-                Kontext "TabBenutzerdaten"
-                if ( TabBenutzerdaten.exists( 2 ) ) then
-                    printlog( "<TabBenutzerdaten> is open. Good." )
-                    call DialogTest( TabBenutzerdaten )
-                    hCloseDialog( TabBenutzerdaten, "cancel" )
+            PrintLog( "Edit / Fields" )
+            EditFields
+
+            Kontext "FeldbefehlBearbeitenDokument"
+            if ( FeldbefehlBearbeitenDokument.exists( 2 ) ) then
+                Call DialogTest ( FeldbefehlBearbeitenDokument )
+
+                PrintLog( "In 'Edit Fields' dialog select 'Edit'" )
+                if ( Bearbeiten.IsVisible() and Bearbeiten.IsEnabled() ) then
+                    Bearbeiten.Click()
+
+                    Kontext "TabBenutzerdaten"
+                    if ( TabBenutzerdaten.exists( 2 ) ) then
+                        printlog( "<TabBenutzerdaten> is open. Good." )
+                        call DialogTest( TabBenutzerdaten )
+                        hCloseDialog( TabBenutzerdaten, "cancel" )
+                    else
+                        warnlog( "<TabBenutzerdaten> did not open" )
+                    endif
                 else
-                    warnlog( "<TabBenutzerdaten> did not open" )
+                    Warnlog( "Button 'Edit' in Dialog disabled!" )
                 endif
             else
-                Warnlog( "Button 'Edit' in Dialog disabled!" )
+                warnlog( "<TabDokumentFeldbefehle> is not visible" )
             endif
 
             PrintLog( "Close dialog" )
@@ -1125,9 +1140,7 @@ endcase
 '----------------------------------------------------------------
 
 testcase tEditIndexEntry
-    qaErrorLog "#158646# - Insert Indexes Entry causes crash."
-    goto endsub
-
+    
     PrintLog "- Edit/Index Entry"
     if gApplication = "HTML" then
         printlog "Not in WriterWeb!"
