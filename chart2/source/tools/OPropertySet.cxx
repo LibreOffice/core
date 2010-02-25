@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: OPropertySet.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -377,7 +374,7 @@ void SAL_CALL OPropertySet::getFastPropertyValue
         uno::Reference< beans::XFastPropertySet > xStylePropSet( m_pImplProperties->GetStyle(), uno::UNO_QUERY );
         if( xStylePropSet.is() )
         {
-#ifndef NDEBUG
+#ifdef DBG_UTIL
             {
                 // check if the handle of the style points to the same property
                 // name as the handle in this property set

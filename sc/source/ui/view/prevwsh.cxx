@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: prevwsh.cxx,v $
- * $Revision: 1.44.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,11 +33,11 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/srchitem.hxx>
+#include <editeng/sizeitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <svx/svdview.hxx>
 //CHINA001 #include <svx/zoom.hxx>
@@ -49,8 +46,8 @@
 #include <sfx2/request.hxx>
 #include <sfx2/topfrm.hxx>
 #include <svtools/printdlg.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/stritem.hxx>
+#include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/help.hxx>
 #include <tools/urlobj.hxx>
@@ -705,7 +702,7 @@ void __EXPORT ScPreviewShell::Execute( SfxRequest& rReq )
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
-                        AbstractSvxZoomDialog* pDlg = pFact->CreateSvxZoomDialog(NULL, aSet, RID_SVXDLG_ZOOM);
+                        AbstractSvxZoomDialog* pDlg = pFact->CreateSvxZoomDialog(NULL, aSet);
                         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                         pDlg->SetLimits( 20, 400 );
                         pDlg->HideButton( ZOOMBTN_OPTIMAL );

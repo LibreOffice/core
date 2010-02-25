@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docsh.cxx,v $
- * $Revision: 1.103.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,14 +32,14 @@
 
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
-#include <svx/svxenum.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/svxenum.hxx>
 #include <svx/algitem.hxx>
 
 
 
 #include <sot/clsids.hxx>
-#include <svtools/securityoptions.hxx>
+#include <unotools/securityoptions.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
@@ -51,7 +48,7 @@
 #include <vcl/waitobj.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/sfxecode.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dinfdlg.hxx>
@@ -62,11 +59,10 @@
 #include <sfx2/sfx.hrc>
 #include <sfx2/topfrm.hxx>
 #include <sfx2/objface.hxx>
-#include <svx/srchitem.hxx>
-#include <svx/svxmsbas.hxx>
-#include <svtools/fltrcfg.hxx>
-#include <svtools/documentlockfile.hxx>
-#include <svtools/sharecontrolfile.hxx>
+#include <svl/srchitem.hxx>
+#include <unotools/fltrcfg.hxx>
+#include <svl/documentlockfile.hxx>
+#include <svl/sharecontrolfile.hxx>
 #include <unotools/charclass.hxx>
 #include <vcl/virdev.hxx>
 #include "chgtrack.hxx"

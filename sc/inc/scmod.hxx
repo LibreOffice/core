@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: scmod.hxx,v $
- * $Revision: 1.24.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,11 +31,11 @@
 #include "scdllapi.h"
 #include "scdll.hxx"
 #include <vcl/timer.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include "global.hxx"       // ScInputMode
 #include "markdata.hxx"     //ScMarkData
 #include "shellids.hxx"
-
+#include <unotools/options.hxx>
 #include <tools/shl.hxx>
 
 //<!--Added by PengYunQuan for Validity Cell Range Picker
@@ -119,7 +116,7 @@ struct ScClipData
 //==================================================================
 
 
-class ScModule: public SfxModule, public SfxListener
+class ScModule: public SfxModule, public SfxListener, utl::ConfigurationListener
 {
     Timer               aIdleTimer;
     Timer               aSpellTimer;
@@ -162,6 +159,7 @@ public:
 
     virtual void        FillStatusBar(StatusBar &rBar);
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void        ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
     void                DeleteCfg();
 
                         // von der Applikation verschoben:

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docsh3.cxx,v $
- * $Revision: 1.38.52.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,17 +37,15 @@
 
 #include "scitems.hxx"
 #include "rangelst.hxx"
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
 #include <svx/pageitem.hxx>
-#include <svx/paperinf.hxx>
+#include <editeng/paperinf.hxx>
 #include <svx/postattr.hxx>
-//#include <svx/postdlg.hxx>
-#include <svx/sizeitem.hxx>
-
+#include <editeng/sizeitem.hxx>
+#include <unotools/misccfg.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
-#include <svtools/misccfg.hxx>
 #include <sfx2/printer.hxx>
 #include <svtools/ctrltool.hxx>
 #include <vcl/virdev.hxx>
@@ -443,7 +438,7 @@ void ScDocShell::InitOptions()          // Fortsetzung von InitNew (CLOOKs)
     aDocOpt.SetAutoSpell( bAutoSpell );
 
     // zweistellige Jahreszahleneingabe aus Extras->Optionen->Allgemein->Sonstiges
-    aDocOpt.SetYear2000( sal::static_int_cast<USHORT>( SFX_APP()->GetMiscConfig()->GetYear2000() ) );
+    aDocOpt.SetYear2000( sal::static_int_cast<USHORT>( ::utl::MiscCfg().GetYear2000() ) );
 
     aDocument.SetDocOptions( aDocOpt );
     aDocument.SetViewOptions( aViewOpt );
@@ -968,7 +963,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                 //  -> wird weggelassen
                 //! ??? Loesch-Aktion rueckgaengig machen ???
                 //! ??? Aktion irgendwo anders speichern  ???
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 String aValue;
                 if ( eSourceType == SC_CAT_CONTENT )
                     ((const ScChangeActionContent*)pSourceAction)->GetNewString( aValue );
@@ -1126,7 +1121,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                     ScChangeAction* pAct = pThisTrack->GetLast();
                     if ( pAct && pAct->GetActionNumber() > nOldActionMax )
                         pAct->SetComment( rComment );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                     else
                         DBG_ERROR( "MergeDocument: wohin mit dem Kommentar?!?" );
 #endif

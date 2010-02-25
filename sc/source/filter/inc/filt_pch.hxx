@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: filt_pch.hxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,7 +64,7 @@
 #include <tools/debug.hxx>
 #include <tools/time.hxx>
 #include <tools/date.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <vcl/sv.h>
 #include <vcl/timer.hxx>
 #include <tools/gen.hxx>
@@ -99,8 +96,8 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Exception.hpp>
-#include <svtools/hint.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/hint.hxx>
+#include <svl/poolitem.hxx>
 #include <document.hxx>
 #include <vcl/prntypes.hxx>
 #include <table.hxx>
@@ -108,9 +105,9 @@
 #include <markarr.hxx>
 #include <root.hxx>
 #include <flttypes.hxx>
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 #include <sfx2/sfxsids.hrc>
-#include <svtools/cntwids.hrc>
+#include <svl/cntwids.hrc>
 #include <sfx2/cntids.hrc>
 #include <tools/mempool.hxx>
 #include <compiler.hxx>
@@ -118,8 +115,8 @@
 #include <sfx2/sfx.hrc>
 #include <scitems.hxx>
 #include <svx/svxids.hrc>
-#include <svtools/itemset.hxx>
-#include <svtools/memberid.hrc>
+#include <svl/itemset.hxx>
+#include <svl/memberid.hrc>
 #include <tools/table.hxx>
 #include <flttools.hxx>
 #include <vcl/vclenum.hxx>
@@ -131,14 +128,14 @@
 #include <vcl/mapmod.hxx>
 #include <vcl/mapunit.hxx>
 #include <vcl/region.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <patattr.hxx>
 #include <vcl/font.hxx>
-#include <svtools/cenumitm.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/cintitem.hxx>
-#include <svtools/brdcst.hxx>
+#include <svl/cenumitm.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/cintitem.hxx>
+#include <svl/brdcst.hxx>
 #include <sot/sotref.hxx>
 #include <tools/globname.hxx>
 #include <sot/factory.hxx>
@@ -161,7 +158,7 @@
 #include <namebuff.hxx>
 #include <tools/shl.hxx>
 #include <tools/pstm.hxx>
-#include <svx/fhgtitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <vos/types.hxx>
 #include <vos/object.hxx>
 #include <vos/macros.hxx>
@@ -170,8 +167,8 @@
 #include <uno/sequence2.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <attrib.hxx>
-#include <svtools/zforlist.hxx>
-#include <svx/fontitem.hxx>
+#include <svl/zforlist.hxx>
+#include <editeng/fontitem.hxx>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XEventListener.hdl>
 #include <com/sun/star/lang/EventObject.hdl>
@@ -231,23 +228,23 @@
 #include <vos/runnable.hxx>
 #include <vos/refernce.hxx>
 #include <vcl/apptypes.hxx>
-#include <svx/editdata.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/editeng.hxx>
 #include <com/sun/star/lang/WrappedTargetException.hdl>
 #include <com/sun/star/lang/WrappedTargetException.hpp>
 #include <sfx2/shell.hxx>
 #include <tools/stack.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XComponent.hdl>
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include <formel.hxx>
 #include <com/sun/star/container/XElementAccess.hdl>
 #include <com/sun/star/container/XElementAccess.hpp>
-#include <svtools/itempool.hxx>
-#include <svx/eeitem.hxx>
+#include <svl/itempool.hxx>
+#include <editeng/eeitem.hxx>
 #include <rangenam.hxx>
 #include <vcl/syswin.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 #include <fontbuff.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/field.hxx>
@@ -302,7 +299,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hdl>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <tools/urlobj.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/colritem.hxx>
 #include <vcl/wrkwin.hxx>
 #include <excimp8.hxx>
 #include <excscen.hxx>

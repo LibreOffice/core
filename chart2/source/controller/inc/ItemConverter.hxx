@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ItemConverter.hxx,v $
- * $Revision: 1.10.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,8 +28,8 @@
 #define CHART_ITEMCONVERTER_HXX
 
 #include <unotools/eventlisteneradapter.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 // for pair

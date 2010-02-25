@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: chgtrack.cxx,v $
- * $Revision: 1.32.100.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,12 +33,12 @@
 #include <tools/shl.hxx>        // SHL_CALC
 #include <tools/stack.hxx>
 #include <tools/rtti.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/isethint.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/itemset.hxx>
+#include <svl/isethint.hxx>
+#include <svl/itempool.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <sfx2/sfxsids.hrc>
 
 #include "cell.hxx"
@@ -2229,7 +2226,7 @@ ScChangeTrack::ScChangeTrack( ScDocument* pDocP ) :
         pDoc( pDocP )
 {
     Init();
-    StartListening(SC_MOD()->GetUserOptions());
+    SC_MOD()->GetUserOptions().AddListener(this);
 
     ppContentSlots = new ScChangeActionContent* [ nContentSlots ];
     memset( ppContentSlots, 0, nContentSlots * sizeof( ScChangeActionContent* ) );
@@ -2240,13 +2237,14 @@ ScChangeTrack::ScChangeTrack( ScDocument* pDocP, const ScStrCollection& aTempUse
         pDoc( pDocP )
 {
     Init();
-    StartListening(SC_MOD()->GetUserOptions());
+    SC_MOD()->GetUserOptions().AddListener(this);
     ppContentSlots = new ScChangeActionContent* [ nContentSlots ];
     memset( ppContentSlots, 0, nContentSlots * sizeof( ScChangeActionContent* ) );
 }
 
 ScChangeTrack::~ScChangeTrack()
 {
+    SC_MOD()->GetUserOptions().RemoveListener(this);
     DtorClear();
     delete [] ppContentSlots;
 }
@@ -2339,11 +2337,9 @@ void ScChangeTrack::Clear()
 }
 
 
-void __EXPORT ScChangeTrack::Notify( SfxBroadcaster&, const SfxHint& rHint )
+void __EXPORT ScChangeTrack::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 )
 {
-    if ( !pDoc->IsInDtorClear() &&
-         rHint.ISA(SfxSimpleHint) &&
-        ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_USER_OPTIONS_CHANGED )
+    if ( !pDoc->IsInDtorClear() )
     {
         const SvtUserOptions& rUserOptions = SC_MOD()->GetUserOptions();
         USHORT nOldCount = aUserCollection.GetCount();

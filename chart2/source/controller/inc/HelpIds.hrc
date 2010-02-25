@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: HelpIds.hrc,v $
- * $Revision: 1.8.56.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +27,7 @@
 #ifndef CHART_HELPIDS_HRC
 #define CHART_HELPIDS_HRC
 
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 //next is 120
 
 //see old chart: schhids.h

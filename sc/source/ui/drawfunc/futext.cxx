@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: futext.cxx,v $
- * $Revision: 1.28.128.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,18 +30,18 @@
 
 #include <svx/svddef.hxx>
 #include <svx/svdoutl.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/sdtaaitm.hxx>
 #include <svx/sdtacitm.hxx>
 #include <svx/svdotext.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <svx/svdocapt.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/svxids.hrc>
-#include <svx/eeitem.hxx>
-#include <svtools/itemset.hxx>
+#include <editeng/eeitem.hxx>
+#include <svl/itemset.hxx>
 
 #include "futext.hxx"
 #include "drwlayer.hxx"

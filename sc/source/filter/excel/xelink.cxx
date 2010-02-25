@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xelink.cxx,v $
- * $Revision: 1.21.134.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 
 #include <algorithm>
 #include <unotools/collatorwrapper.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include "document.hxx"
 #include "cell.hxx"
 #include "scextopt.hxx"

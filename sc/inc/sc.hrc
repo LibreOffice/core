@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sc.hrc,v $
- * $Revision: 1.63 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1377,6 +1374,8 @@
 
 #define SCSTR_RENAMEOBJECT          (STR_START + 215)
 
+#define SCSTR_PRINT_OPTIONS     (STR_START+216)
+
 // Navigator - in der Reihenfolge wie SC_CONTENT_...
 #define SCSTR_CONTENT_ROOT      (STR_START + 250)
 #define SCSTR_CONTENT_TABLE     (STR_START + 251)
@@ -1439,6 +1438,8 @@
 #define RID_IMG_H_DROP_URL      (BMP_START + 5)
 #define RID_IMG_H_DROP_LINK     (BMP_START + 6)
 #define RID_IMG_H_DROP_COPY     (BMP_START + 7)
+#define RID_IMG_SELECT_CURRENT   (BMP_START + 8)
+#define RID_IMG_UNSELECT_CURRENT (BMP_START + 9)
 
 #define RID_SCPTR_PIVOTCOL      (BMP_START + 81)
 #define RID_SCPTR_PIVOTROW      (BMP_START + 82)
@@ -1630,8 +1631,9 @@
 #define RID_SCDLG_DOCPROTECTION         (SC_DIALOGS_START + 149)
 #define RID_SCDLG_RETYPEPASS            (SC_DIALOGS_START + 150)
 #define RID_SCDLG_RETYPEPASS_INPUT      (SC_DIALOGS_START + 151)
+#define RID_POPUP_FILTER                (SC_DIALOGS_START + 152)
 
-#define SC_DIALOGS_END          (SC_DIALOGS_START + 152)
+#define SC_DIALOGS_END                  (SC_DIALOGS_START + 153)
 
 #ifndef STD_MASKCOLOR
 #define STD_MASKCOLOR Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; }

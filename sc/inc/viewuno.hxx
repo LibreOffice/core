@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewuno.hxx,v $
- * $Revision: 1.12.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,8 +29,8 @@
 #define SC_VIEWUNO_HXX
 
 #include <sfx2/sfxbasecontroller.hxx>
-#include <svtools/svarray.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/svarray.hxx>
+#include <svl/itemprop.hxx>
 #include <com/sun/star/view/XFormLayerAccess.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
@@ -96,12 +93,13 @@ private:
     USHORT                  nPane;          // ScSplitPos oder SC_VIEWPANE_ACTIVE
 
 protected:
-    ScTabViewShell*         GetViewShell() const    { return pViewShell; }
     ::com::sun::star::awt::Rectangle GetVisArea() const;
 
 public:
                             ScViewPaneBase(ScTabViewShell* pViewSh, USHORT nP);
     virtual                 ~ScViewPaneBase();
+
+    ScTabViewShell*         GetViewShell() const    { return pViewShell; }
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
                                 const ::com::sun::star::uno::Type & rType )
@@ -124,7 +122,7 @@ public:
                             getReferredCells() throw(::com::sun::star::uno::RuntimeException);
 
                             // XFormLayerAccess
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > SAL_CALL
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormController > SAL_CALL
                             getFormController( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::form::XForm >& Form )
                                     throw (::com::sun::star::uno::RuntimeException);

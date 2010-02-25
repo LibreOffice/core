@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: inputwin.hxx,v $
- * $Revision: 1.17.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 #include <vector>
 #include <vcl/toolbox.hxx>
 #include <sfx2/childwin.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/window.hxx>
 #include <svtools/transfer.hxx>

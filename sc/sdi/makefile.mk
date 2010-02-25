@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.11 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -47,7 +43,12 @@ SDI1NAME=$(TARGET)
 SDI1EXPORT=scalc
 
 SVSDI1DEPEND= \
-    scalc.sdi \
+        $(SOLARINCXDIR)$/sfx2/sfx.sdi \
+        $(SOLARINCXDIR)$/sfx2/sfxitems.sdi \
+        $(SOLARINCXDIR)$/svx/svx.sdi \
+        $(SOLARINCXDIR)$/svx/svxitems.sdi \
+        $(SOLARINCXDIR)$/svx/xoitems.sdi \
+        scalc.sdi \
     app.sdi \
     auditsh.sdi \
     docsh.sdi \
@@ -66,8 +67,7 @@ SVSDI1DEPEND= \
     mediash.sdi \
     pgbrksh.sdi \
     scslots.hrc \
-    $(INC)$/sc.hrc \
-    $(SOLARINCXDIR)$/svxslots.ilb
+    $(INC)$/sc.hrc 
 .ENDIF
 
 # --- Targets -------------------------------------------------------

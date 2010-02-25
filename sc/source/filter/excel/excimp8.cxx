@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: excimp8.cxx,v $
- * $Revision: 1.127.4.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,27 +33,27 @@
 
 #include <scitems.hxx>
 #include <comphelper/processfactory.hxx>
-#include <svtools/fltrcfg.hxx>
+#include <unotools/fltrcfg.hxx>
 
 #include <svtools/wmf.hxx>
 
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/editdata.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editobj.hxx>
-#include <svx/editstat.hxx>
-#include <svx/colritem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/flditem.hxx>
 #include <svx/xflclit.hxx>
-#include <svx/svxmsbas.hxx>
+#include <filter/msfilter/svxmsbas.hxx>
 
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
@@ -117,7 +114,7 @@ using namespace com::sun::star;
 
 
 ImportExcel8::ImportExcel8( XclImpRootData& rImpData, SvStream& rStrm ) :
-    ImportExcel( rImpData, rStrm )
+    ImportExcel( rImpData, rStrm ), mnTab(0)
 {
     delete pFormConv;
 
@@ -240,9 +237,15 @@ void ImportExcel8::Codename( BOOL bWorkbookGlobals )
         if( aName.Len() )
         {
             if( bWorkbookGlobals )
+            {
                 GetExtDocOptions().GetDocSettings().maGlobCodeName = aName;
+                GetDoc().SetCodeName( aName );
+            }
             else
+            {
                 GetExtDocOptions().AppendCodeName( aName );
+                GetDoc().SetCodeName( mnTab++, aName );
+            }
         }
     }
 }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: htmlexp.cxx,v $
- * $Revision: 1.38.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,34 +33,34 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #define _SVSTDARR_STRINGSSORTDTOR
 #include <rtl/tencinfo.h>
 
 #include <vcl/svapp.hxx>
 #include <svx/algitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/wghtitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/wghtitem.hxx>
 #include <svx/xoutbmp.hxx>
-#include <svx/editeng.hxx>
-#include <svx/htmlcfg.hxx>
+#include <editeng/editeng.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/frmhtmlw.hxx>
 #include <sfx2/objsh.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/stritem.hxx>
+#include <svl/urihelper.hxx>
 #ifndef _SVSTDARR_USHORTS
 #define _SVSTDARR_USHORTS
 #endif
-#include <svtools/svstdarr.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/svstdarr.hxx>
+#include <svl/zforlist.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmlout.hxx>
 #include <svtools/parhtml.hxx>
@@ -86,9 +83,9 @@
 #include "ftools.hxx"
 
 
-#include <svx/flditem.hxx>
-#include <svx/borderline.hxx>
-#include <svtools/syslocale.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/borderline.hxx>
+#include <unotools/syslocale.hxx>
 
 
 // ohne sc.hrc: error C2679: binary '=' : no operator defined which takes a

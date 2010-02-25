@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tabvwshb.cxx,v $
- * $Revision: 1.39.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,15 +54,15 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svdview.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <svx/fontworkbar.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svtools/soerr.hxx>
-#include <svtools/rectitem.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <svl/rectitem.hxx>
+#include <svl/whiter.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <sot/exchange.hxx>
 
 #include "tabvwsh.hxx"

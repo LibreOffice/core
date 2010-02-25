@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: expop2.cxx,v $
- * $Revision: 1.35.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,11 +32,11 @@
 
 //------------------------------------------------------------------------
 
-#include <svtools/fltrcfg.hxx>
+#include <unotools/fltrcfg.hxx>
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/docinf.hxx>
-#include <svx/svxmsbas.hxx>
+#include <filter/msfilter/svxmsbas.hxx>
 
 #include "scerrors.hxx"
 #include "scextopt.hxx"

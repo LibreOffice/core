@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DrawModelWrapper.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,15 +34,15 @@
 #include "ChartItemPool.hxx"
 #include "ObjectIdentifier.hxx"
 #include <svx/unomodel.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 // header for class SfxBoolItem
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 // header for define EE_PARA_HYPHENATE
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 // header for class Svx3DPercentDiagonalItem
 #include <svx/svx3ditems.hxx>
 // header for class SvtPathOptions
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 // header E3dObjFactory
 #include <svx/objfac3d.hxx>
 // header for class SdrObjList
@@ -57,7 +54,7 @@
 // header for class SdrOutliner
 #include <svx/svdoutl.hxx>
 // header for class LinguMgr
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 // header for class Application
 #include <vcl/svapp.hxx>
 // header for class VirtualDevice

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ddelink.cxx,v $
- * $Revision: 1.16.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,9 +32,9 @@
 
 // INCLUDE ---------------------------------------------------------------
 #include <tools/list.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 
 #include "ddelink.hxx"
 #include "brdcst.hxx"
@@ -250,7 +247,7 @@ void __EXPORT ScDdeLink::ListenersGone()
 
     ScDocument* pStackDoc = pDoc;   // member pDoc can't be used after removing the link
 
-    SvxLinkManager* pLinkMgr = pDoc->GetLinkManager();
+    sfx2::LinkManager* pLinkMgr = pDoc->GetLinkManager();
     pLinkMgr->Remove( this);        // deletes this
 
     if ( !pLinkMgr->GetLinks().Count() )            // letzten geloescht ?

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: cellsuno.hxx,v $
- * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,9 +32,9 @@
 #include "rangelst.hxx"         // ScRangeList
 
 #include "formula/grammar.hxx"
-#include <svtools/lstner.hxx>
-#include <svtools/listener.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/lstner.hxx>
+#include <svl/listener.hxx>
+#include <svl/itemprop.hxx>
 #include <com/sun/star/table/XTableChartsSupplier.hpp>
 #include <com/sun/star/chart/XChartDataArray.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>

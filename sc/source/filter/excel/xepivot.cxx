@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xepivot.cxx,v $
- * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +39,7 @@
 
 #include <rtl/math.hxx>
 #include <tools/date.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/zformat.hxx>
 #include <sot/storage.hxx>
 #include "document.hxx"
 #include "dpobject.hxx"
@@ -67,6 +64,7 @@ using ::com::sun::star::sheet::DataPilotFieldSortInfo;
 using ::com::sun::star::sheet::DataPilotFieldAutoShowInfo;
 using ::com::sun::star::sheet::DataPilotFieldLayoutInfo;
 using ::com::sun::star::sheet::DataPilotFieldReference;
+using ::rtl::OUString;
 
 using ::rtl::OString;
 using ::rtl::OUString;
@@ -975,6 +973,11 @@ void XclExpPTItem::SetPropertiesFromMember( const ScDPSaveMember& rSaveMem )
 {
     ::set_flag( maItemInfo.mnFlags, EXC_SXVI_HIDDEN, !rSaveMem.GetIsVisible() );
     ::set_flag( maItemInfo.mnFlags, EXC_SXVI_HIDEDETAIL, !rSaveMem.GetShowDetails() );
+
+    // visible name
+    const OUString* pVisName = rSaveMem.GetLayoutName();
+    if (pVisName && !pVisName->equals(GetItemName()))
+        maItemInfo.SetVisName(*pVisName);
 }
 
 void XclExpPTItem::WriteBody( XclExpStream& rStrm )
@@ -1032,6 +1035,31 @@ sal_uInt16 XclExpPTField::GetItemIndex( const String& rName, sal_uInt16 nDefault
 
 // fill data --------------------------------------------------------------
 
+/**
+ * Calc's subtotal names are escaped with backslashes ('\'), while Excel's
+ * are not escaped at all.
+ */
+static OUString lcl_convertCalcSubtotalName(const OUString& rName)
+{
+    OUStringBuffer aBuf;
+    const sal_Unicode* p = rName.getStr();
+    sal_Int32 n = rName.getLength();
+    bool bEscaped = false;
+    for (sal_Int32 i = 0; i < n; ++i)
+    {
+        const sal_Unicode c = p[i];
+        if (!bEscaped && c == sal_Unicode('\\'))
+        {
+            bEscaped = true;
+            continue;
+        }
+
+        aBuf.append(c);
+        bEscaped = false;
+    }
+    return aBuf.makeStringAndClear();
+}
+
 void XclExpPTField::SetPropertiesFromDim( const ScDPSaveDimension& rSaveDim )
 {
     // orientation
@@ -1043,8 +1071,16 @@ void XclExpPTField::SetPropertiesFromDim( const ScDPSaveDimension& rSaveDim )
     ::set_flag( maFieldExtInfo.mnFlags, EXC_SXVDEX_SHOWALL, rSaveDim.GetShowEmpty() );
 
     // visible name
-    if( rSaveDim.HasLayoutName() && (rSaveDim.GetLayoutName() != GetFieldName()) )
-        maFieldInfo.SetVisName( rSaveDim.GetLayoutName() );
+    const OUString* pLayoutName = rSaveDim.GetLayoutName();
+    if (pLayoutName && !pLayoutName->equals(GetFieldName()))
+        maFieldInfo.SetVisName(*pLayoutName);
+
+    const rtl::OUString* pSubtotalName = rSaveDim.GetSubtotalName();
+    if (pSubtotalName)
+    {
+        OUString aSubName = lcl_convertCalcSubtotalName(*pSubtotalName);
+        maFieldExtInfo.mpFieldTotalName.reset(new rtl::OUString(aSubName));
+    }
 
     // subtotals
     XclPTSubtotalVec aSubtotals;
@@ -1111,7 +1147,11 @@ void XclExpPTField::SetDataPropertiesFromDim( const ScDPSaveDimension& rSaveDim 
     rDataInfo.SetApiAggFunc( eFunc );
 
     // visible name
-    rDataInfo.SetVisName( lclGetDataFieldCaption( GetFieldName(), eFunc ) );
+    const rtl::OUString* pVisName = rSaveDim.GetLayoutName();
+    if (pVisName)
+        rDataInfo.SetVisName(*pVisName);
+    else
+        rDataInfo.SetVisName( lclGetDataFieldCaption( GetFieldName(), eFunc ) );
 
     // result field reference
     if( const DataPilotFieldReference* pFieldRef = rSaveDim.GetReferenceValue() )
@@ -1220,8 +1260,9 @@ XclExpPivotTable::XclExpPivotTable( const XclExpRoot& rRoot, const ScDPObject& r
         // pivot table properties from DP object
         mnOutScTab = rOutScRange.aStart.Tab();
         maPTInfo.maTableName = rDPObj.GetName();
-        maPTInfo.maDataName = ScGlobal::GetRscString( STR_PIVOT_DATA );
         maPTInfo.mnCacheIdx = mrPCache.GetCacheIndex();
+
+        maPTViewEx9Info.Init( rDPObj );
 
         if( const ScDPSaveData* pSaveData = rDPObj.GetSaveData() )
         {
@@ -1302,6 +1343,10 @@ void XclExpPivotTable::Save( XclExpStream& rStrm )
         WriteSxli( rStrm, maPTInfo.mnDataCols, maPTInfo.mnColFields );
         // SXEX
         WriteSxex( rStrm );
+        // QSISXTAG
+        WriteQsiSxTag( rStrm );
+        // SXVIEWEX9
+        WriteSxViewEx9( rStrm );
     }
 }
 
@@ -1335,6 +1380,15 @@ void XclExpPivotTable::SetPropertiesFromDP( const ScDPSaveData& rSaveData )
     ::set_flag( maPTInfo.mnFlags, EXC_SXVIEW_COLGRAND, rSaveData.GetColumnGrand() );
     ::set_flag( maPTExtInfo.mnFlags, EXC_SXEX_DRILLDOWN, rSaveData.GetDrillDown() );
     mbFilterBtn = rSaveData.GetFilterButton();
+    const ScDPSaveDimension* pDim = rSaveData.GetExistingDataLayoutDimension();
+    if (!pDim)
+        return;
+
+    const rtl::OUString* pLayoutName = pDim->GetLayoutName();
+    if (pLayoutName)
+        maPTInfo.maDataName = *pLayoutName;
+    else
+        maPTInfo.maDataName = ScGlobal::GetRscString(STR_PIVOT_DATA);
 }
 
 void XclExpPivotTable::SetFieldPropertiesFromDim( const ScDPSaveDimension& rSaveDim )
@@ -1442,13 +1496,21 @@ void XclExpPivotTable::Finalize()
     rnDataXclRow = rnXclRow1 + maPTInfo.mnColFields + 1;
     if( maDataFields.empty() )
         ++rnDataXclRow;
+
+    bool bExtraHeaderRow = (0 == maPTViewEx9Info.mnGridLayout && maPTInfo.mnColFields == 0);
+    if (bExtraHeaderRow)
+        // Insert an extra row only when there is no column field.
+        ++rnDataXclRow;
+
     rnXclCol2 = ::std::max( rnXclCol2, rnDataXclCol );
     rnXclRow2 = ::std::max( rnXclRow2, rnDataXclRow );
     maPTInfo.mnDataCols = rnXclCol2 - rnDataXclCol + 1;
     maPTInfo.mnDataRows = rnXclRow2 - rnDataXclRow + 1;
 
     // first heading
-    maPTInfo.mnFirstHeadRow = rnXclRow1 + 1;
+    maPTInfo.mnFirstHeadRow = rnXclRow1;
+    if (bExtraHeaderRow)
+        maPTInfo.mnFirstHeadRow += 2;
 }
 
 // records ----------------------------------------------------------------
@@ -1526,6 +1588,72 @@ void XclExpPivotTable::WriteSxex( XclExpStream& rStrm ) const
     rStrm.StartRecord( EXC_ID_SXEX, 24 );
     rStrm << maPTExtInfo;
     rStrm.EndRecord();
+}
+
+void XclExpPivotTable::WriteQsiSxTag( XclExpStream& rStrm ) const
+{
+    rStrm.StartRecord( 0x0802, 32 );
+
+    sal_uInt16 nRecordType = 0x0802;
+    sal_uInt16 nDummyFlags = 0x0000;
+    sal_uInt16 nTableType  = 1; // 0 = query table : 1 = pivot table
+
+    rStrm << nRecordType << nDummyFlags << nTableType;
+
+    // General flags
+    bool bEnableRefresh = true;
+    bool bPCacheInvalid = false;
+    bool bOlapPTReport  = false;
+
+    sal_uInt16 nFlags = 0x0000;
+    if (bEnableRefresh) nFlags |= 0x0001;
+    if (bPCacheInvalid) nFlags |= 0x0002;
+    if (bOlapPTReport)  nFlags |= 0x0004;
+    rStrm << nFlags;
+
+    // Feature-specific options.  The value differs depending on the table
+    // type, but we assume the table type is always pivot table.
+    sal_uInt32 nOptions = 0x00000000;
+    bool bNoStencil = false;
+    bool bHideTotal = false;
+    bool bEmptyRows = false;
+    bool bEmptyCols = false;
+    if (bNoStencil) nOptions |= 0x00000001;
+    if (bHideTotal) nOptions |= 0x00000002;
+    if (bEmptyRows) nOptions |= 0x00000008;
+    if (bEmptyCols) nOptions |= 0x00000010;
+    rStrm << nOptions;
+
+    enum ExcelVersion
+    {
+        Excel2000 = 0,
+        ExcelXP   = 1,
+        Excel2003 = 2,
+        Excel2007 = 3
+    };
+    ExcelVersion eXclVer = Excel2000;
+    sal_uInt8 nOffsetBytes = 16;
+    rStrm << static_cast<sal_uInt8>(eXclVer)  // version table last refreshed
+          << static_cast<sal_uInt8>(eXclVer)  // minimum version to refresh
+          << nOffsetBytes
+          << static_cast<sal_uInt8>(eXclVer); // first version created
+
+    rStrm << XclExpString(maPTInfo.maTableName);
+    rStrm << static_cast<sal_uInt16>(0x0001); // no idea what this is for.
+
+    rStrm.EndRecord();
+}
+
+void XclExpPivotTable::WriteSxViewEx9( XclExpStream& rStrm ) const
+{
+    // Until we sync the autoformat ids only export if using grid header layout
+    // That could only have been set via xls import so far.
+    if ( 0 == maPTViewEx9Info.mnGridLayout )
+    {
+        rStrm.StartRecord( EXC_ID_SXVIEWEX9, 17 );
+        rStrm << maPTViewEx9Info;
+        rStrm.EndRecord();
+    }
 }
 
 // ============================================================================

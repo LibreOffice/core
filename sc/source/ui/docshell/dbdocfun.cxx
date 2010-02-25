@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dbdocfun.cxx,v $
- * $Revision: 1.20.128.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1234,7 +1231,7 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
                                   aRange.aEnd.Col(),   aRange.aEnd.Row(),
                                   nTab, SC_MF_AUTO );
 
-            pDoc->GetDPCollection()->Free( pOldObj );   // object is deleted here
+            pDoc->GetDPCollection()->FreeTable( pOldObj );  // object is deleted here
 
             rDocShell.PostPaintGridAll();   //! only necessary parts
             rDocShell.PostPaint( aRange.aStart.Col(), aRange.aStart.Row(), nTab,
@@ -1278,7 +1275,7 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
 
                 pDestObj = new ScDPObject( *pNewObj );
                 pDestObj->SetAlive(TRUE);
-                if ( !pDoc->GetDPCollection()->Insert(pDestObj) )
+                if ( !pDoc->GetDPCollection()->InsertNewTable(pDestObj) )
                 {
                     DBG_ERROR("cannot insert DPObject");
                     DELETEZ( pDestObj );

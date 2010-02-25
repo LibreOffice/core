@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: attrdlg.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +42,7 @@
 //CHINA001 #include <svx/chardlg.hxx>
 //CHINA001 #include <svx/numfmt.hxx>
 //CHINA001 #include <svx/paragrph.hxx>
-#include <svtools/cjkoptions.hxx>
+#include <svl/cjkoptions.hxx>
 
 #include "tabpages.hxx"
 #include "attrdlg.hxx"
@@ -54,7 +51,7 @@
 #include <svx/svxdlg.hxx> //CHINA001
 #include <svx/dialogs.hrc> //CHINA001
 #include <svx/flagsdef.hxx> //CHINA001
-#include <svx/flstitem.hxx> //CHINA001
+#include <editeng/flstitem.hxx> //CHINA001
 #include <sfx2/app.hxx> //CHINA001
 
 #if !LAYOUT_SFX_TABDIALOG_BROKEN

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pvfundlg.hxx,v $
- * $Revision: 1.7.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,6 +51,8 @@
 #include <svx/checklbx.hxx>
 #include <sfx2/itemconnect.hxx>
 #include "pivot.hxx"
+
+#include <hash_map>
 
 // ============================================================================
 
@@ -217,6 +216,11 @@ public:
 
     virtual short       Execute();
 
+    /**
+     * @return String internal name of the selected field.  Note that this may
+     *         be different from the name displayed in the dialog if the field
+     *         has a layout name.
+     */
     String              GetDimensionName() const;
 
 private:
@@ -228,6 +232,10 @@ private:
     OKButton            maBtnOk;
     CancelButton        maBtnCancel;
     HelpButton          maBtnHelp;
+
+    typedef ::std::hash_map<String, long, ScStringHashCode> DimNameIndexMap;
+    DimNameIndexMap     maNameIndexMap;
+    ScDPObject&         mrDPObj;
 };
 
 // ============================================================================

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dpoutput.hxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -94,6 +91,7 @@ private:
         com::sun::star::uno::Sequence<
             com::sun::star::sheet::DataResult> > aData;
     BOOL                    bResultsError;
+    bool                    mbHasDataLayout;
     String                  aDataDescription;
 
     // Number format related parameters
@@ -109,6 +107,7 @@ private:
     long                    nColCount;
     long                    nRowCount;
     long                    nHeaderSize;
+    bool                    mbHeaderLayout;  // TRUE : grid, FALSE : standard
     SCCOL                   nTabStartCol;
     SCROW                   nTabStartRow;
     SCCOL                   nMemberStartCol;
@@ -124,7 +123,7 @@ private:
                                 const com::sun::star::sheet::MemberResult& rData,
                                 BOOL bColHeader, long nLevel );
     void            FieldCell( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rCaption,
-                                BOOL bFrame = TRUE );
+                               bool bInTable, bool bPopup, bool bHasHiddenMember );
     void            CalcSizes();
 
     /** Query which sub-area of the table the cell is in. See
@@ -161,6 +160,9 @@ public:
     BOOL            IsFilterButton( const ScAddress& rPos );
 
     void            GetMemberResultNames( ScStrCollection& rNames, long nDimension );
+
+    void            SetHeaderLayout(bool bUseGrid);
+    bool            GetHeaderLayout() const;
 
     static void     GetDataDimensionNames( String& rSourceName, String& rGivenName,
                                            const com::sun::star::uno::Reference<

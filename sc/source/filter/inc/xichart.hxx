@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xichart.hxx,v $
- * $Revision: 1.13.62.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,9 +33,10 @@
 #include <set>
 #include <list>
 
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 
 #include "rangelst.hxx"
+#include "token.hxx"
 #include "xlchart.hxx"
 #include "xlstyle.hxx"
 #include "xistring.hxx"
@@ -402,6 +400,8 @@ public:
     /** Creates a sequence of formatted string objects. */
     XFormattedStringSeq CreateStringSequence( const XclImpChRoot& rRoot,
                             sal_uInt16 nLeadFontIdx, const Color& rLeadFontColor ) const;
+
+    void                FillSourceLink(::std::vector<ScSharedTokenRef>& rTokens) const;
 
 private:
     XclChSourceLink     maData;             /// Contents of the CHSOURCELINK record.
@@ -810,6 +810,8 @@ public:
     XLabeledDataSeqRef  CreateCategSequence( const ::rtl::OUString& rCategRole ) const;
     /** Creates a data series object with initialized source links. */
     XDataSeriesRef      CreateDataSeries() const;
+
+    void                FillAllSourceLinks(::std::vector<ScSharedTokenRef>& rTokens) const;
 
 private:
     /** Reads a CHSOURCELINK record. */
@@ -1353,7 +1355,7 @@ public:
     inline sal_Size     GetProgressSize() const { return 2 * EXC_CHART_PROGRESS_SIZE; }
 
     /** Converts and writes all properties to the passed chart. */
-    void                Convert( XChartDocRef xChartDoc, ScfProgressBar& rProgress ) const;
+    void                Convert( XChartDocRef xChartDoc, ScfProgressBar& rProgress, const ::rtl::OUString& rObjName ) const;
 
 private:
     /** Reads a CHSERIES group (data series source and formatting). */
@@ -1421,7 +1423,7 @@ public:
     inline bool         IsPivotChart() const { return mbIsPivotChart; }
 
     /** Creates the chart object in the passed component. */
-    void                Convert( XModelRef xModel, ScfProgressBar& rProgress ) const;
+    void                Convert( XModelRef xModel, ScfProgressBar& rProgress, const ::rtl::OUString& rObjName ) const;
 
 private:
     /** Reads the CHCHART group (entire chart data). */

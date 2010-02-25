@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drawsh2.cxx,v $
- * $Revision: 1.26.128.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,15 +32,15 @@
 #include <com/sun/star/embed/EmbedMisc.hpp>
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
-#include <svx/sizeitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/sizeitem.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/xdef.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svtools/ptitem.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/ptitem.hxx>
+#include <svl/whiter.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/extrusionbar.hxx>

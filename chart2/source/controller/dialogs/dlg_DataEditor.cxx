@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dlg_DataEditor.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,10 +40,10 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <svtools/miscopt.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 
 // for SfxBoolItem
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 
 #include <vcl/edit.hxx>
 
@@ -104,7 +101,7 @@ DataEditor::DataEditor(
     SvtMiscOptions aMiscOptions;
     const sal_Int16 nStyle( aMiscOptions.GetToolboxStyle() );
     // react on changes
-    aMiscOptions.AddListener( LINK( this, DataEditor, MiscHdl ) );
+    aMiscOptions.AddListenerLink( LINK( this, DataEditor, MiscHdl ) );
     m_aTbxData.SetOutStyle( nStyle );
 
     // set good window width
@@ -132,7 +129,7 @@ DataEditor::~DataEditor()
     notifySystemWindow( this, & m_aTbxData, ::comphelper::mem_fun( & TaskPaneList::RemoveWindow ));
 
     SvtMiscOptions aMiscOptions;
-    aMiscOptions.RemoveListener( LINK( this, DataEditor, MiscHdl ) );
+    aMiscOptions.RemoveListenerLink( LINK( this, DataEditor, MiscHdl ) );
 
     OSL_TRACE( "DataEditor: DTOR" );
 }

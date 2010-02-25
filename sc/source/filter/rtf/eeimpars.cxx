@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: eeimpars.cxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,24 +33,24 @@
 //------------------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 
-#include <svx/adjitem.hxx>
-#include <svx/editobj.hxx>
-#include <svx/editview.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/htmlcfg.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <sfx2/sfxhtml.hxx>
 #include <svtools/parhtml.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <unotools/charclass.hxx>
 
 #include "eeimport.hxx"

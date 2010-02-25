@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: XMLExportDatabaseRanges.cxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -458,7 +455,7 @@ void ScXMLExportDatabaseRanges::WriteSortDescriptor(const uno::Sequence <beans::
 
         if (aSortFields[0].IsCaseSensitive)
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         sal_Bool bCaseSensitive(aSortFields[0].IsCaseSensitive);
         for (i = 1; i < nSortFields; ++i)
         {
@@ -478,7 +475,7 @@ void ScXMLExportDatabaseRanges::WriteSortDescriptor(const uno::Sequence <beans::
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_COUNTRY, aSortFields[0].CollatorLocale.Country);
         if (aSortFields[0].CollatorAlgorithm.getLength())
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ALGORITHM, aSortFields[0].CollatorAlgorithm);
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         rtl::OUString sLanguage(aSortFields[0].CollatorLocale.Language);
         rtl::OUString sCountry(aSortFields[0].CollatorLocale.Country);
         rtl::OUString sAlgorithm(aSortFields[0].CollatorAlgorithm);

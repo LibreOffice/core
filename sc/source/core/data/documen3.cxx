@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: documen3.cxx,v $
- * $Revision: 1.42.100.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,13 +31,13 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/langitem.hxx>
-#include <svx/srchitem.hxx>
-#include <svx/linkmgr.hxx>
+#include <editeng/langitem.hxx>
+#include <svl/srchitem.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/objsh.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/PasswordHelper.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/PasswordHelper.hxx>
 #include <vcl/svapp.hxx>
 #include "document.hxx"
 #include "attrib.hxx"

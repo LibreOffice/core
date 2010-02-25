@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xiescher.cxx,v $
- * $Revision: 1.57.52.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,8 +53,8 @@
 
 #include <rtl/logfile.hxx>
 #include <sfx2/objsh.hxx>
-#include <svtools/moduleoptions.hxx>
-#include <svtools/fltrcfg.hxx>
+#include <unotools/moduleoptions.hxx>
+#include <unotools/fltrcfg.hxx>
 #include <svtools/wmf.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/classids.hxx>
@@ -79,18 +76,18 @@
 #include <svx/svdocapt.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/editobj.hxx>
-#include <svx/outliner.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svditer.hxx>
-#include <svx/writingmodeitem.hxx>
+#include <editeng/writingmodeitem.hxx>
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/colritem.hxx>
 #include <svx/xflclit.hxx>
-#include <svx/adjitem.hxx>
+#include <editeng/adjitem.hxx>
 #include <svx/xlineit.hxx>
 #include <svx/xlinjoit.hxx>
 #include <svx/xlntrit.hxx>
@@ -105,6 +102,7 @@
 #include "convuno.hxx"
 #include "postit.hxx"
 #include "globstr.hrc"
+#include "chartlis.hxx"
 
 #include "fprogressbar.hxx"
 #include "xltracer.hxx"
@@ -1422,38 +1420,121 @@ void XclImpTextObj::DoProcessSdrObj( SdrObject& rSdrObj ) const
                 (with no content) while exporting to XLS, which can cause a
                 corrupted exported document. */
 
-            // horizontal text alignment
             SvxAdjust eHorAlign = SVX_ADJUST_LEFT;
-            switch( maTextData.maData.GetHorAlign() )
-            {
-                case EXC_OBJ_HOR_LEFT:      eHorAlign = SVX_ADJUST_LEFT;    break;
-                case EXC_OBJ_HOR_CENTER:    eHorAlign = SVX_ADJUST_CENTER;  break;
-                case EXC_OBJ_HOR_RIGHT:     eHorAlign = SVX_ADJUST_RIGHT;   break;
-                case EXC_OBJ_HOR_JUSTIFY:   eHorAlign = SVX_ADJUST_BLOCK;   break;
-            }
-            rSdrObj.SetMergedItem( SvxAdjustItem( eHorAlign, EE_PARA_JUST ) );
-
-            // vertical text alignment
             SdrTextVertAdjust eVerAlign = SDRTEXTVERTADJUST_TOP;
-            switch( maTextData.maData.GetVerAlign() )
-            {
-                case EXC_OBJ_VER_TOP:       eVerAlign = SDRTEXTVERTADJUST_TOP;      break;
-                case EXC_OBJ_VER_CENTER:    eVerAlign = SDRTEXTVERTADJUST_CENTER;   break;
-                case EXC_OBJ_VER_BOTTOM:    eVerAlign = SDRTEXTVERTADJUST_BOTTOM;   break;
-                case EXC_OBJ_VER_JUSTIFY:   eVerAlign = SDRTEXTVERTADJUST_BLOCK;    break;
-            }
-            rSdrObj.SetMergedItem( SdrTextVertAdjustItem( eVerAlign ) );
 
             // orientation (this is only a fake, drawing does not support real text orientation)
             namespace csst = ::com::sun::star::text;
             csst::WritingMode eWriteMode = csst::WritingMode_LR_TB;
             switch( maTextData.maData.mnOrient )
             {
-                case EXC_OBJ_ORIENT_NONE:       eWriteMode = csst::WritingMode_LR_TB;   break;
-                case EXC_OBJ_ORIENT_STACKED:    eWriteMode = csst::WritingMode_TB_RL;   break;
-                case EXC_OBJ_ORIENT_90CCW:      eWriteMode = csst::WritingMode_TB_RL;   break;
-                case EXC_OBJ_ORIENT_90CW:       eWriteMode = csst::WritingMode_TB_RL;   break;
+                default:
+                case EXC_OBJ_ORIENT_NONE:
+                {
+                    eWriteMode = csst::WritingMode_LR_TB;
+                    switch( maTextData.maData.GetHorAlign() )
+                    {
+                        case EXC_OBJ_HOR_LEFT:      eHorAlign = SVX_ADJUST_LEFT;    break;
+                        case EXC_OBJ_HOR_CENTER:    eHorAlign = SVX_ADJUST_CENTER;  break;
+                        case EXC_OBJ_HOR_RIGHT:     eHorAlign = SVX_ADJUST_RIGHT;   break;
+                        case EXC_OBJ_HOR_JUSTIFY:   eHorAlign = SVX_ADJUST_BLOCK;   break;
+                    }
+                    switch( maTextData.maData.GetVerAlign() )
+                    {
+                        case EXC_OBJ_VER_TOP:       eVerAlign = SDRTEXTVERTADJUST_TOP;      break;
+                        case EXC_OBJ_VER_CENTER:    eVerAlign = SDRTEXTVERTADJUST_CENTER;   break;
+                        case EXC_OBJ_VER_BOTTOM:    eVerAlign = SDRTEXTVERTADJUST_BOTTOM;   break;
+                        case EXC_OBJ_VER_JUSTIFY:   eVerAlign = SDRTEXTVERTADJUST_BLOCK;    break;
+                    }
+                }
+                break;
+
+                case EXC_OBJ_ORIENT_90CCW:
+                {
+                    if( SdrObjCustomShape* pObjCustomShape = dynamic_cast< SdrObjCustomShape* >( &rSdrObj ) )
+                    {
+                        double fAngle = 180.0;
+                        com::sun::star::beans::PropertyValue aTextRotateAngle;
+                        aTextRotateAngle.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "TextRotateAngle" ) );
+                        aTextRotateAngle.Value <<= fAngle;
+                        SdrCustomShapeGeometryItem aGeometryItem((SdrCustomShapeGeometryItem&)pObjCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
+                        aGeometryItem.SetPropertyValue( aTextRotateAngle );
+                        pObjCustomShape->SetMergedItem( aGeometryItem );
+                    }
+                    eWriteMode = csst::WritingMode_TB_RL;
+                    switch( maTextData.maData.GetHorAlign() )
+                    {
+                        case EXC_OBJ_HOR_LEFT:      eVerAlign = SDRTEXTVERTADJUST_TOP;      break;
+                        case EXC_OBJ_HOR_CENTER:    eVerAlign = SDRTEXTVERTADJUST_CENTER;   break;
+                        case EXC_OBJ_HOR_RIGHT:     eVerAlign = SDRTEXTVERTADJUST_BOTTOM;   break;
+                        case EXC_OBJ_HOR_JUSTIFY:   eVerAlign = SDRTEXTVERTADJUST_BLOCK;    break;
+                    }
+                    MSO_Anchor eTextAnchor = (MSO_Anchor)GetObjectManager().GetDffManager().GetPropertyValue( DFF_Prop_anchorText, mso_anchorTop );
+                    switch( eTextAnchor )
+                    {
+                        case mso_anchorTopCentered :
+                        case mso_anchorMiddleCentered :
+                        case mso_anchorBottomCentered :
+                        {
+                            eHorAlign = SVX_ADJUST_CENTER;
+                        }
+                        break;
+
+                        default:
+                        {
+                            switch( maTextData.maData.GetVerAlign() )
+                            {
+                                case EXC_OBJ_VER_TOP:       eHorAlign = SVX_ADJUST_RIGHT;   break;
+                                case EXC_OBJ_VER_CENTER:    eHorAlign = SVX_ADJUST_CENTER;  break;
+                                case EXC_OBJ_VER_BOTTOM:    eHorAlign = SVX_ADJUST_LEFT;    break;
+                                case EXC_OBJ_VER_JUSTIFY:   eHorAlign = SVX_ADJUST_BLOCK;   break;
+                            }
+                        }
+                    }
+                }
+                break;
+
+                case EXC_OBJ_ORIENT_STACKED:    // PASSTHROUGH INTENDED
+                {
+                    // sj: STACKED is not supported, maybe it can be optimized here a bit
+                }
+                case EXC_OBJ_ORIENT_90CW:
+                {
+                    eWriteMode = csst::WritingMode_TB_RL;
+                    switch( maTextData.maData.GetHorAlign() )
+                    {
+                        case EXC_OBJ_HOR_LEFT:      eVerAlign = SDRTEXTVERTADJUST_BOTTOM;   break;
+                        case EXC_OBJ_HOR_CENTER:    eVerAlign = SDRTEXTVERTADJUST_CENTER;   break;
+                        case EXC_OBJ_HOR_RIGHT:     eVerAlign = SDRTEXTVERTADJUST_TOP;      break;
+                        case EXC_OBJ_HOR_JUSTIFY:   eVerAlign = SDRTEXTVERTADJUST_BLOCK;    break;
+                    }
+                    MSO_Anchor eTextAnchor = (MSO_Anchor)GetObjectManager().GetDffManager().GetPropertyValue( DFF_Prop_anchorText, mso_anchorTop );
+                    switch ( eTextAnchor )
+                    {
+                        case mso_anchorTopCentered :
+                        case mso_anchorMiddleCentered :
+                        case mso_anchorBottomCentered :
+                        {
+                            eHorAlign = SVX_ADJUST_CENTER;
+                        }
+                        break;
+
+                        default:
+                        {
+                            switch( maTextData.maData.GetVerAlign() )
+                            {
+                                case EXC_OBJ_VER_TOP:       eHorAlign = SVX_ADJUST_LEFT;   break;
+                                case EXC_OBJ_VER_CENTER:    eHorAlign = SVX_ADJUST_CENTER;  break;
+                                case EXC_OBJ_VER_BOTTOM:    eHorAlign = SVX_ADJUST_RIGHT;   break;
+                                case EXC_OBJ_VER_JUSTIFY:   eHorAlign = SVX_ADJUST_BLOCK;   break;
+                            }
+                        }
+                    }
+                }
+                break;
             }
+            rSdrObj.SetMergedItem( SvxAdjustItem( eHorAlign, EE_PARA_JUST ) );
+            rSdrObj.SetMergedItem( SdrTextVertAdjustItem( eVerAlign ) );
             rSdrObj.SetMergedItem( SvxWritingModeItem( eWriteMode, SDRATTR_TEXTDIRECTION ) );
         }
     }
@@ -1579,7 +1660,7 @@ SdrObject* XclImpChartObj::DoCreateSdrObj( const Rectangle& rAnchorRect, ScfProg
         if( svt::EmbeddedObjectRef::TryRunningState( xEmbObj ) )
         {
             Reference< XModel > xModel( xEmbObj->getComponent(), UNO_QUERY );
-            mxChart->Convert( xModel, rProgress );
+            mxChart->Convert( xModel, rProgress, aEmbObjName );
 
             Reference< XEmbedPersist > xPers( xEmbObj, UNO_QUERY );
             if( xPers.is() )
@@ -3755,6 +3836,9 @@ void XclImpObjectManager::ConvertObjects()
                     rDffManager.ProcessDrawing( maDffStrm, *aPIt );
         }
     }
+    ScChartListenerCollection* pChartListeners = GetDoc().GetChartListenerCollection();
+    if (pChartListeners && pChartListeners->GetCount())
+        pChartListeners->SetDirty();
 }
 
 String XclImpObjectManager::GetDefaultObjName( const XclImpDrawObjBase& rDrawObj ) const

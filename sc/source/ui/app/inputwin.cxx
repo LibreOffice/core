@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: inputwin.cxx,v $
- * $Revision: 1.57.22.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,25 +31,25 @@
 #include <algorithm>
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/editview.hxx>
-#include <svx/editstat.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/lspcitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/lspcitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/imgmgr.hxx>
 #include <stdlib.h>     // qsort
-#include <svx/scriptspaceitem.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/scriptspaceitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/help.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 
 #include "inputwin.hxx"
 #include "scmod.hxx"
@@ -73,7 +70,7 @@
 #include "rangeutl.hxx"
 #include "docfunc.hxx"
 #include "funcdesc.hxx"
-#include <svx/fontitem.hxx>
+#include <editeng/fontitem.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include "AccessibleEditObject.hxx"
 #include "AccessibleText.hxx"

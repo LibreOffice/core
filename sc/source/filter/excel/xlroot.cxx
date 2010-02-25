@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xlroot.cxx,v $
- * $Revision: 1.32.88.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,16 +30,15 @@
 #include "xlroot.hxx"
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <vcl/svapp.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/languageoptions.hxx>
-#include <svtools/useroptions.hxx>
+#include <svl/stritem.hxx>
+#include <svl/languageoptions.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/docfile.hxx>
 #include <vcl/font.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/editstat.hxx>
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include "document.hxx"
 #include "docpool.hxx"
 #include "docuno.hxx"
@@ -55,7 +51,7 @@
 #include "xlstyle.hxx"
 #include "xlchart.hxx"
 #include "xltracer.hxx"
-
+#include <unotools/useroptions.hxx>
 #include "root.hxx"
 
 namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
@@ -96,12 +92,10 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     mnScTab( 0 ),
     mbExport( bExport )
 {
-    // user name
-    maUserName = SvtUserOptions().GetLastName();
+ maUserName = SvtUserOptions().GetLastName();
     if( maUserName.Len() == 0 )
         maUserName = CREATE_STRING( "Calc" );
 
-    // default script type, e.g. for empty cells
     switch( ScGlobal::GetDefaultScriptType() )
     {
         case SCRIPTTYPE_LATIN:      mnDefApiScript = ApiScriptType::LATIN;      break;

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: excdoc.cxx,v $
- * $Revision: 1.69.60.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,10 +37,10 @@
 #include <svx/svdobj.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/zformat.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/zformat.hxx>
 #include <sot/storage.hxx>
 #include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>
@@ -235,7 +232,7 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
             Add( new XclExpFilePass( GetRoot() ) );
         Add( new XclExpInterfaceHdr( nCodePage ) );
         Add( new XclExpUInt16Record( EXC_ID_MMS, 0 ) );
-        Add( new XclExpEmptyRecord( EXC_ID_INTERFACEEND ) );
+        Add( new XclExpInterfaceEnd );
         Add( new XclExpWriteAccess );
     }
 

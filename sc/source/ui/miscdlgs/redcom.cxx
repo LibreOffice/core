@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: redcom.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,7 +46,7 @@ ScRedComDialog::ScRedComDialog( Window* pParent, const SfxItemSet& rCoreSet,
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        pDlg = pFact->CreateSvxPostItDialog( pParent, rCoreSet, RID_SVXDLG_POSTIT, bPrevNext, TRUE );
+        pDlg = pFact->CreateSvxPostItDialog( pParent, rCoreSet, bPrevNext, TRUE );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
         pDocShell=pShell;
         pDlg->DontChangeAuthor();
