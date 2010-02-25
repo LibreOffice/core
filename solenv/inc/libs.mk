@@ -1,14 +1,10 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
-# Copyright 2008 by Sun Microsystems, Inc.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: libs.mk,v $
-#
-# $Revision: 1.134.2.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -182,7 +178,6 @@ BTCOMMUNILIB=-lbtcommuni$(DLLPOSTFIX)
 AUTOMATIONLIB=-lsts$(DLLPOSTFIX)
 SVLLIB=-lsvl$(DLLPOSTFIX)
 TKTLIB=-ltkt$(DLLPOSTFIX)
-GOODIESLIB=-lgo$(DLLPOSTFIX)
 SAXLIB=-lsax$(DLLPOSTFIX)
 MAILLIB=-lmail
 DOCMGRLIB=-ldmg$(DLLPOSTFIX)
@@ -245,6 +240,7 @@ FWILIB=-lfwi$(DLLPOSTFIX)
 SVXCORELIB=-lsvxcore$(DLLPOSTFIX)
 MSFILTERLIB=-lmsfilter$(DLLPOSTFIX)
 SVXLIB=-lsvx$(DLLPOSTFIX)
+EDITENGLIB=-lediteng$(DLLPOSTFIX)
 BASCTLLIB=-lbasctl$(DLLPOSTFIX)
 BASICIDELIB=-lybctl
 SVXLLIB=-lsvxl
@@ -422,7 +418,6 @@ BTCOMMUNILIB=ibtcommuni.lib
 AUTOMATIONLIB=ists.lib
 SVLLIB=isvl.lib
 PLUGAPPLIB=plugapp.lib
-GOODIESLIB=igo.lib
 SAXLIB=isax.lib
 MAILLIB=mail.lib
 DOCMGRLIB=docmgr.lib
@@ -433,6 +428,7 @@ SJLIB=sj.lib
 SVXCORELIB=isvxcore.lib
 MSFILTERLIB=imsfilter.lib
 SVXLIB=isvx.lib
+EDITENGLIB=iediteng.lib
 BASCTLLIB=basctl.lib
 BASICIDELIB=ybctl.lib
 SVXLLIB=svxl.lib
