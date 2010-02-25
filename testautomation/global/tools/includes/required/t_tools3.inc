@@ -993,7 +993,7 @@ function hCloseDialog( oDialog as object, sUserFlags as string ) as boolean
     const METHOD_OK     = 3
     const TIMEOUT       = 2 ' Maximum time to wait for a dialog to close
 
-    dim sFlags as string : sFlagList = lcase( sUserFlags )
+    dim sFlags as string : sFlags = lcase( sUserFlags )
     dim iClosingMethod as integer
     dim bDialogMustExist as boolean : bDialogMustExist = TRUE
     
@@ -1018,7 +1018,8 @@ function hCloseDialog( oDialog as object, sUserFlags as string ) as boolean
         case METHOD_CLOSE  : oDialog.close()
         case METHOD_CANCEL : oDialog.cancel()
         case METHOD_OK     : oDialog.ok()
-        case else    : warnlog( CFN & " Script error: Allowed closing methods are <cancel>, <close> and <ok>." )
+        case else :
+            warnlog( CFN & " Script error: Allowed closing methods are <cancel>, <close> and <ok>." )
         end select
     else
         if ( bDialogMustExist ) then
@@ -1028,6 +1029,7 @@ function hCloseDialog( oDialog as object, sUserFlags as string ) as boolean
         endif
     endif
 
+    ' Any other outcome until now returned FALSE. If we get here, we have a success.
     if ( oDialog.notExists( TIMEOUT ) ) then hCloseDialog() = TRUE
 
 end function
