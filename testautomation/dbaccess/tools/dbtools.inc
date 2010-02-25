@@ -99,10 +99,10 @@ function fConnectToDatasourceInBeamer(sDSName , sPWD, optional bNewDoc)
         DatabaseSelection.TypeKeys "<DOWN>"
         DatabaseSelection.TypeKeys "<ADD>"                
         Kontext "LoginDialog"
-            if LoginDialog.Exists(3) then
-                Password.SetText sPWD
-                LoginDialog.OK                
-            end if
+        if LoginDialog.Exists(3) then
+            LoginPassword.SetText sPWD
+            LoginDialog.OK
+        end if
         bConnect = true    
     else
         warnlog "Could not found the datasource " + sDSName
