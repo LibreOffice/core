@@ -1,0 +1,8 @@
+UDK_3_0_0 {
+        global:
+                GraphicExport;
+                DoExportDialog;
+
+        local:
+                *;
+};
