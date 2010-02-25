@@ -1380,7 +1380,7 @@ static void CalcAutoLayoutRectangles( SdPage& rPage, int nLayout, Rectangle* rRe
 }
 
 
-void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDescriptor, std::vector< SdrObject* >& rShapes, bool bInit )
+void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDescriptor, std::vector< SdrObject* >& rShapes, bool bInit, bool bSwitchLayout )
 {
     int i;
 
@@ -1400,7 +1400,7 @@ void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDescripto
         {
             PresObjIndex[eKind]++; // on next search for eKind, find next shape with same eKind
 
-            if( !pObj->IsEmptyPresObj() )
+            if( !bSwitchLayout || !pObj->IsEmptyPresObj() )
             {
                 rShapes[i] = pObj;
                 break;
@@ -1545,6 +1545,8 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bCreate )
 {
     sd::ScopeLockGuard aGuard( maLockAutoLayoutArrangement );
 
+    const bool bSwitchLayout = eLayout != GetAutoLayout();
+
     sd::UndoManager* pUndoManager = pModel ? static_cast<SdDrawDocument*>(pModel)->GetUndoManager() : 0;
     const bool bUndo = pUndoManager && pUndoManager->isInListAction() && IsInserted();
 
@@ -1567,7 +1569,7 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bCreate )
 
 
     std::vector< SdrObject* > aLayoutShapes(PRESOBJ_MAX, 0);
-    findAutoLayoutShapesImpl( *this, aDescriptor, aLayoutShapes, bInit );
+    findAutoLayoutShapesImpl( *this, aDescriptor, aLayoutShapes, bInit, bSwitchLayout );
 
     int i;
 

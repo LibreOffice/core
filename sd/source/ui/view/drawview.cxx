@@ -593,6 +593,8 @@ SdrObject* DrawView::GetMaxToBtmObj(SdrObject* pObj) const
 
 void DrawView::DeleteMarked()
 {
+    OSL_TRACE( "DrawView::DeleteMarked() - enter" );
+
     sd::UndoManager* pUndoManager = mpDoc->GetUndoManager();
     DBG_ASSERT( pUndoManager, "sd::DrawView::DeleteMarked(), ui action without undo manager!?" );
 
@@ -643,6 +645,8 @@ void DrawView::DeleteMarked()
                     pPage->SetObjectOrdNum( pNewObj->GetOrdNum(), pObj->GetOrdNum() );
 
                     bResetLayout = true;
+
+                    OSL_TRACE( "DrawView::InsertAutoLayoutShape() - InsertAutoLayoutShape" );
                 }
             }
         }
@@ -655,6 +659,8 @@ void DrawView::DeleteMarked()
 
     if( pUndoManager )
         pUndoManager->LeaveListAction();
+
+    OSL_TRACE( "DrawView::InsertAutoLayoutShape() - leave" );
 }
 
 } // end of namespace sd

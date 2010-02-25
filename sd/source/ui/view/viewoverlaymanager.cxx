@@ -312,14 +312,15 @@ bool ChangePlaceholderTag::KeyInput( const KeyEvent& rKEvt )
 /** returns true if the SmartTag consumes this event. */
 bool ChangePlaceholderTag::RequestHelp( const HelpEvent& rHEvt )
 {
+/*
     Rectangle aItemRect( rHEvt.GetMousePosPixel(), Size(1,1) );
     String aHelpText(RTL_CONSTASCII_USTRINGPARAM("I'm a help text"));
     if( rHEvt.GetMode() == HELPMODE_BALLOON )
         Help::ShowBalloon( static_cast< ::Window* >(mrView.GetFirstOutputDevice()), aItemRect.Center(), aItemRect, aHelpText);
     else
         Help::ShowQuickHelp( static_cast< ::Window* >(mrView.GetFirstOutputDevice()), aItemRect, aHelpText );
-
-    return true;
+*/
+    return false;
 }
 
 // --------------------------------------------------------------------

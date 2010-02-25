@@ -123,6 +123,9 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         const bool bIsGraphic = pPickObj->ISA( SdrGrafObj );
         if( bIsGraphic || pObj->IsEmptyPresObj() )
         {
+            if( IsUndoEnabled() )
+                BegUndo(String(SdResId(STR_INSERTGRAPHIC)));
+
             SdPage* pPage = (SdPage*) pPickObj->GetPage();
 
             if( bIsGraphic )
@@ -157,10 +160,8 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
 
             ReplaceObjectAtView(pPickObj, *pPV, pNewGrafObj); // maybe ReplaceObjectAtView
 
-            if( !IsUndoEnabled() && pPickObj )
-            {
-                SdrObject::Free( pPickObj );
-            }
+            if( IsUndoEnabled() )
+                EndUndo();
         }
         else if (pPickObj->IsClosedObj() && !pPickObj->ISA(SdrOle2Obj))
         {
@@ -329,13 +330,14 @@ SdrMediaObj* View::InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAc
 
         pNewMediaObj = new SdrMediaObj( aRect );
 
+        bool bIsPres = false;
         if( pPickObj )
         {
             SdPage* pPage = static_cast< SdPage* >(pPickObj->GetPage());
-            if(pPage && pPage->IsPresObj(pPickObj))
+            bIsPres = pPage && pPage->IsPresObj(pPickObj);
+            if( bIsPres )
             {
                 pPage->InsertPresObj( pNewMediaObj, PRESOBJ_MEDIA );
-                pNewMediaObj->SetUserCall(pPickObj->GetUserCall());
             }
         }
 
@@ -347,10 +349,11 @@ SdrMediaObj* View::InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAc
         pNewMediaObj->setURL( rMediaURL );
 
         if( pPickObj )
+        {
             pNewMediaObj->AdjustToMaxRect( pPickObj->GetLogicRect() );
-
-        if( !IsUndoEnabled() )
-            SdrObject::Free( pPickObj );
+            if( bIsPres )
+                pNewMediaObj->SetUserCall(pPickObj->GetUserCall());
+        }
     }
 
     rAction = mnAction;

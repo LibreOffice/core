@@ -410,12 +410,6 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                     mpViewShell->AdaptDefaultsForChart( xObj );
                 }
             }
-
-            if( !mpView->IsUndoEnabled() && pPickObj )
-            {
-                // replaced object must be freed if there is no undo action owning it
-                SdrObject::Free( pPickObj );
-            }
         }
         else
         {

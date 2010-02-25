@@ -193,12 +193,6 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
         else
             mpView->InsertObjectAtView(pObj, *pPV, SDRINSERT_SETDEFLAYER);
 
-        if( !mpView->IsUndoEnabled() && pPickObj )
-        {
-            // replaced object must be freed if there is no undo action owning it
-            SdrObject::Free( pPickObj );
-        }
-
         Invalidate(SID_DRAWTBX_INSERT);
         rReq.Ignore();
         break;
