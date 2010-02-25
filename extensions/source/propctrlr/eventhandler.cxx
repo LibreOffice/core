@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: eventhandler.cxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,6 +63,7 @@
 /** === end UNO includes === **/
 
 #include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/evtmethodhelper.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ref.hxx>
@@ -173,36 +171,6 @@ namespace pcr
     //========================================================================
     namespace
     {
-        //....................................................................
-        Sequence< ::rtl::OUString > lcl_getListenerMethodsForType( const Type& type )
-        {
-            typelib_InterfaceTypeDescription *pType=0;
-            type.getDescription( (typelib_TypeDescription**)&pType);
-
-            if ( !pType )
-                return Sequence< ::rtl::OUString>();
-
-            Sequence< ::rtl::OUString > aNames( pType->nMembers );
-            ::rtl::OUString* pNames = aNames.getArray();
-            for ( sal_Int32 i = 0; i < pType->nMembers; ++i, ++pNames)
-            {
-                // the decription reference
-                typelib_TypeDescriptionReference* pMemberDescriptionReference = pType->ppMembers[i];
-                // the description for the reference
-                typelib_TypeDescription* pMemberDescription = NULL;
-                typelib_typedescriptionreference_getDescription( &pMemberDescription, pMemberDescriptionReference );
-                if ( pMemberDescription )
-                {
-                    typelib_InterfaceMemberTypeDescription* pRealMemberDescription =
-                        reinterpret_cast<typelib_InterfaceMemberTypeDescription*>(pMemberDescription);
-                    *pNames = pRealMemberDescription->pMemberName;
-                }
-            }
-
-            typelib_typedescription_release( (typelib_TypeDescription*)pType );
-            return aNames;
-        }
-
         //....................................................................
         #define DESCRIBE_EVENT( asciinamespace, asciilistener, asciimethod, id_postfix ) \
             s_aKnownEvents.insert( EventMap::value_type( \
@@ -835,7 +803,7 @@ namespace pcr
                         continue;
 
                     // loop through all methods
-                    Sequence< ::rtl::OUString > aMethods( lcl_getListenerMethodsForType( *pListeners ) );
+                    Sequence< ::rtl::OUString > aMethods( comphelper::getEventMethodsForType( *pListeners ) );
 
                     const ::rtl::OUString* pMethods = aMethods.getConstArray();
                     sal_uInt32 methodCount = aMethods.getLength();
