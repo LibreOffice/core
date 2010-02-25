@@ -52,10 +52,6 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
-#include <com/sun/star/accessibility/AccessibleRole.hpp>
-#include <com/sun/star/accessibility/AccessibleTextType.hpp>
-#include <com/sun/star/accessibility/XAccessibleText.hpp>
-#include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <unotools/accessiblestatesethelper.hxx>

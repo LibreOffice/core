@@ -53,7 +53,10 @@ public:
     virtual void            RemoveAttribs( const ESelection& rSelection, sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich );
     virtual void            GetPortions( USHORT nPara, SvUShorts& rList ) const;
 
-    virtual USHORT          GetItemState( const ESelection& rSel, USHORT nWhich ) const;
+    virtual sal_Int32       CalcLogicalIndex( USHORT nPara, USHORT nEEIndex );
+    virtual USHORT          CalcEditEngineIndex( USHORT nPara, sal_Int32 nLogicalIndex );
+
+     virtual USHORT         GetItemState( const ESelection& rSel, USHORT nWhich ) const;
     virtual USHORT          GetItemState( USHORT nPara, USHORT nWhich ) const;
 
     virtual void            QuickInsertText( const String& rText, const ESelection& rSel );
@@ -64,6 +67,8 @@ public:
     virtual SfxItemPool*    GetPool() const;
 
     virtual XubString       CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rpTxtColor, Color*& rpFldColor );
+    virtual void            FieldClicked( const SvxFieldItem& rField, USHORT nPara, xub_StrLen nPos );
+
     virtual BOOL            IsValid() const;
 
     virtual LanguageType    GetLanguage( USHORT, USHORT ) const;

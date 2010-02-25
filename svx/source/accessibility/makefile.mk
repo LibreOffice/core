@@ -68,6 +68,7 @@ LIB2OBJFILES= \
     $(SLO)$/AccessibleTextEventQueue.obj		\
     $(SLO)$/AccessibleStaticTextBase.obj		\
     $(SLO)$/AccessibleParaManager.obj			\
+    $(SLO)$/AccessibleHyperlink.obj			    \
     $(SLO)$/AccessibleEditableTextPara.obj		\
     $(SLO)$/AccessibleImageBullet.obj			\
     $(SLO)$/ShapeTypeHandler.obj				\

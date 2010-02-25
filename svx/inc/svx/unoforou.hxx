@@ -85,6 +85,8 @@ public:
     virtual SfxItemPool* GetPool() const;
 
     virtual XubString    CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rpTxtColor, Color*& rpFldColor );
+    virtual void         FieldClicked( const SvxFieldItem& rField, USHORT nPara, xub_StrLen nPos );
+
     virtual BOOL        IsValid() const;
 
     Outliner&           GetOutliner() const { return rOutliner; }

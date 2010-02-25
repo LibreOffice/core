@@ -145,6 +145,8 @@ namespace accessibility
         {
             return  XubString();
         }
+        void            FieldClicked( const SvxFieldItem&, USHORT, xub_StrLen ) {;}
+
         BOOL            IsValid() const { return sal_True; }
 
         void            SetNotifyHdl( const Link& ) {}

@@ -34,7 +34,7 @@
 #include <tools/gen.hxx>
 #include <tools/string.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <cppuhelper/compbase8.hxx>
+#include <cppuhelper/compbase9.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
@@ -45,6 +45,7 @@
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
+#include <com/sun/star/accessibility/XAccessibleHypertext.hpp>
 #include <com/sun/star/accessibility/XAccessibleMultiLineText.hpp>
 
 #include <comphelper/accessibletexthelper.hxx>
@@ -55,12 +56,13 @@
 
 namespace accessibility
 {
-    typedef ::cppu::WeakComponentImplHelper8< ::com::sun::star::accessibility::XAccessible,
+    typedef ::cppu::WeakComponentImplHelper9< ::com::sun::star::accessibility::XAccessible,
                                      ::com::sun::star::accessibility::XAccessibleContext,
                                      ::com::sun::star::accessibility::XAccessibleComponent,
                                      ::com::sun::star::accessibility::XAccessibleEditableText,
                                      ::com::sun::star::accessibility::XAccessibleEventBroadcaster,
                                      ::com::sun::star::accessibility::XAccessibleTextAttributes,
+                                     ::com::sun::star::accessibility::XAccessibleHypertext,
                                      ::com::sun::star::accessibility::XAccessibleMultiLineText,
                                      ::com::sun::star::lang::XServiceInfo >  AccessibleTextParaInterfaceBase;
 
@@ -163,6 +165,11 @@ namespace accessibility
         // XAccessibleTextAttributes
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getDefaultAttributes( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& RequestedAttributes ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getRunAttributes( ::sal_Int32 Index, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& RequestedAttributes ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+
+        // XAccessibleHypertext
+        virtual ::sal_Int32 SAL_CALL getHyperLinkCount(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleHyperlink > SAL_CALL getHyperLink( ::sal_Int32 nLinkIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+        virtual ::sal_Int32 SAL_CALL getHyperLinkIndex( ::sal_Int32 nCharIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
 
         // XAccessibleMultiLineText
         virtual ::sal_Int32 SAL_CALL getLineNumberAtIndex( ::sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
