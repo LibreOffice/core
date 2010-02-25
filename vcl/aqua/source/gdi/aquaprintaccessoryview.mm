@@ -321,6 +321,12 @@ class ControllerProperties
             double fScaleX = double(aLogicSize.Width())/double(aPageSize.aSize.Width());
             double fScaleY = double(aLogicSize.Height())/double(aPageSize.aSize.Height());
             double fScale = (fScaleX < fScaleY) ? fScaleX : fScaleY;
+            // #i104784# if we render the page too small, the corresponding small fonts lead to
+            // layout artifacts looking really bad. So scale the page unto a device that is not
+            // full page size but not too small either. This is a workaround for the limitations of
+            // our text system.
+            if( fScale < 0.1 )
+                fScale = 0.1;
             aMtf.WindStart();
             aMtf.Scale( fScale, fScale );
             aMtf.WindStart();
@@ -361,9 +367,10 @@ class ControllerProperties
         NSSize aMargins = [mpPreviewBox contentViewMargins];
         aPreviewFrame.origin.x = 0;
         aPreviewFrame.origin.y = 34;
+        aPreviewFrame.size.width -= 2*(aMargins.width+1);
         aPreviewFrame.size.height -= 61;
         mpPreview = [[NSImageView alloc] initWithFrame: aPreviewFrame];
-        [mpPreview setImageScaling: NSScaleNone];
+        [mpPreview setImageScaling: NSScaleProportionally];
         [mpPreview setImageAlignment: NSImageAlignCenter];
         [mpPreview setImageFrameStyle: NSImageFrameNone];
         [mpPreviewBox addSubview: [mpPreview autorelease]];

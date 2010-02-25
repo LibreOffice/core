@@ -191,6 +191,23 @@ void PrintDialog::PrintPreviewWindow::Resize()
     }
     aScaledSize.Width() = long(aScaledSize.Width()*fScale);
     aScaledSize.Height() = long(aScaledSize.Height()*fScale);
+
+    maPreviewSize = aScaledSize;
+
+    // #i104784# if we render the page too small, the corresponding small fonts lead to
+    // layout artifacts looking really bad. So scale the page unto a device that is not
+    // full page size but not too small either. This is a workaround for the limitations of
+    // our text system.
+    // find a good scaling factor
+    Size aPreviewMMSize( maPageVDev.PixelToLogic( aScaledSize, MapMode( MAP_100TH_MM ) ) );
+    double fZoom = double(maOrigSize.Height())/double(aPreviewMMSize.Height());
+    while( fZoom > 10 )
+    {
+        aScaledSize.Width() *= 2;
+        aScaledSize.Height() *= 2;
+        fZoom /= 2.0;
+    }
+
     maPageVDev.SetOutputSizePixel( aScaledSize, FALSE );
 }
 
@@ -219,11 +236,11 @@ void PrintDialog::PrintPreviewWindow::Paint( const Rectangle& )
     {
         GDIMetaFile aMtf( maMtf );
 
-        Size aPreviewSize = maPageVDev.GetOutputSizePixel();
-        Point aOffset( (aSize.Width() - aPreviewSize.Width()) / 2,
-                       (aSize.Height() - aPreviewSize.Height()) / 2 );
+        Point aOffset( (aSize.Width() - maPreviewSize.Width()) / 2,
+                       (aSize.Height() - maPreviewSize.Height()) / 2 );
 
-        const Size aLogicSize( maPageVDev.PixelToLogic( aPreviewSize, MapMode( MAP_100TH_MM ) ) );
+        Size aVDevSize( maPageVDev.GetOutputSizePixel() );
+        const Size aLogicSize( maPageVDev.PixelToLogic( aVDevSize, MapMode( MAP_100TH_MM ) ) );
         Size aOrigSize( maOrigSize );
         if( aOrigSize.Width() < 1 )
             aOrigSize.Width() = aLogicSize.Width();
@@ -243,11 +260,11 @@ void PrintDialog::PrintPreviewWindow::Paint( const Rectangle& )
 
         SetMapMode( MAP_PIXEL );
         maPageVDev.SetMapMode( MAP_PIXEL );
-        DrawOutDev( aOffset, aPreviewSize, Point( 0, 0 ), aPreviewSize, maPageVDev );
+        DrawOutDev( aOffset, maPreviewSize, Point( 0, 0 ), aVDevSize, maPageVDev );
 
         DecorationView aVw( this );
-        aOffset.X() -= 1; aOffset.Y() -=1; aPreviewSize.Width() += 2; aPreviewSize.Height() += 2;
-        aVw.DrawFrame( Rectangle( aOffset, aPreviewSize ), FRAME_DRAW_GROUP );
+        Rectangle aFrame( aOffset + Point( -1, -1 ), Size( maPreviewSize.Width() + 2, maPreviewSize.Height() + 2 ) );
+        aVw.DrawFrame( aFrame, FRAME_DRAW_GROUP );
     }
 }
 

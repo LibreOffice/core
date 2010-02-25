@@ -58,6 +58,7 @@ namespace vcl
         {
             GDIMetaFile         maMtf;
             Size                maOrigSize;
+            Size                maPreviewSize;
             VirtualDevice       maPageVDev;
             rtl::OUString       maReplacementString;
             rtl::OUString       maToolTipString;
