@@ -38,6 +38,10 @@ TARGET=hunspell
 
 TARFILE_NAME=hunspell-1.2.9
 TARFILE_ROOTDIR=hunspell-1.2.9
+ADDITIONAL_FILES+=config.h
+
+PATCH_FILES=\
+    hunspell-wntconfig.patch
 
 .IF "$(GUI)"=="UNX"
 
