@@ -2045,7 +2045,7 @@ void FmGridControl::Select()
     // die HandleColumn wird nicht selektiert
     switch (nSelectedColumn)
     {
-        case -1 : break;    // no selection
+        case SAL_MAX_UINT16: break; // no selection
         case  0 : nSelectedColumn = SAL_MAX_UINT16; break;
                     // handle col can't be seledted
         default :
