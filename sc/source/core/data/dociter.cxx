@@ -936,11 +936,6 @@ ScDBQueryDataIterator::ScDBQueryDataIterator(ScDocument* pDocument, ScDBQueryPar
     }
 }
 
-bool ScDBQueryDataIterator::GetThis(Value& rValue)
-{
-    return mpData->getCurrent(rValue);
-}
-
 bool ScDBQueryDataIterator::GetFirst(Value& rValue)
 {
     return mpData->getFirst(rValue);
@@ -1253,14 +1248,6 @@ ScBaseCell* ScQueryCellIterator::GetNext()
     if ( nTestEqualCondition )
         nTestEqualCondition = nTestEqualConditionEnabled;
     return GetThis();
-}
-
-ULONG ScQueryCellIterator::GetNumberFormat()
-{
-    ScColumn* pCol = &(pDoc->pTab[nTab])->aCol[nCol];
-    lcl_IterGetNumberFormat( nNumFormat, pAttrArray,
-        nAttrEndRow, pCol->pAttrArray, nRow, pDoc );
-    return nNumFormat;
 }
 
 void ScQueryCellIterator::AdvanceQueryParamEntryField()

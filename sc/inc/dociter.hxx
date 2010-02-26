@@ -206,8 +206,6 @@ private:
     ::std::auto_ptr<ScDBQueryParamBase> mpParam;
     ::std::auto_ptr<DataAccess>         mpData;
 
-    bool            GetThis(Value& rValue);
-
 public:
                     ScDBQueryDataIterator(ScDocument* pDocument, ScDBQueryParamBase* pParam);
     /// Does NOT reset rValue if no value found!
@@ -305,7 +303,6 @@ public:
     ScBaseCell*     GetNext();
     SCCOL           GetCol() { return nCol; }
     SCROW           GetRow() { return nRow; }
-    ULONG           GetNumberFormat();
 
                     // setzt alle Entry.nField einen weiter, wenn Spalte
                     // wechselt, fuer ScInterpreter ScHLookup()
