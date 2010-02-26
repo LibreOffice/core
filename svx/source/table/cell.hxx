@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: cell.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,16 +34,17 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 
 #include <rtl/ref.hxx>
-
+#include <svl/style.hxx>
 #include "svx/sdtaitm.hxx"
 #include "tablemodel.hxx"
-#include "svx/unotext.hxx"
+#include "editeng/unotext.hxx"
 #include "svx/svdtext.hxx"
 
 // -----------------------------------------------------------------------------
 
 class SfxItemSet;
 class OutlinerParaObject;
+class SdrObject;
 
 namespace sdr { namespace properties {
     class TextProperties;

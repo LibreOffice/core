@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fontwork.cxx,v $
- * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,7 +46,7 @@
 #include <svx/dialogs.hrc>
 #include "fontwork.hrc"
 #include <svx/fontwork.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 
@@ -295,7 +292,7 @@ SvxFontWorkDialog::SvxFontWorkDialog( SfxBindings *pBindinx,
     aMtrFldShadowY.SetModifyHdl( aLink );
 
     // System-Metrik setzen
-    const FieldUnit eDlgUnit = GetModuleFieldUnit();
+    const FieldUnit eDlgUnit = rBindings.GetDispatcher()->GetModule()->GetFieldUnit();
     SetFieldUnit( aMtrFldDistance, eDlgUnit, TRUE );
     SetFieldUnit( aMtrFldTextStart, eDlgUnit, TRUE );
     SetFieldUnit( aMtrFldShadowX, eDlgUnit, TRUE );
@@ -605,7 +602,7 @@ void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
             if ( pItem->GetValue() == XFTSHADOW_NORMAL )
             {
                 nId = TBI_SHADOW_NORMAL;
-                 const FieldUnit eDlgUnit = GetModuleFieldUnit();
+                const FieldUnit eDlgUnit = rBindings.GetDispatcher()->GetModule()->GetFieldUnit();
 
 //              aFbShadowX.SetBitmap( Bitmap( ResId(RID_SVXBMP_SHADOW_XDIST, _pMgr ) ) );
                 //aMtrFldShadowX.SetUnit(FUNIT_MM);
@@ -888,7 +885,7 @@ IMPL_LINK( SvxFontWorkDialog, InputTimoutHdl_Impl, void *, EMPTYARG )
     // System-Metrik evtl. neu setzen
     // Dieses sollte mal als Listener passieren, ist aber aus
     // inkompatibilitaetsgruenden z.Z. nicht moeglich
-    const FieldUnit eDlgUnit = GetModuleFieldUnit();
+    const FieldUnit eDlgUnit = rBindings.GetDispatcher()->GetModule()->GetFieldUnit();
     if( eDlgUnit != aMtrFldDistance.GetUnit() )
     {
         SetFieldUnit( aMtrFldDistance, eDlgUnit, TRUE );

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: resultsetforquery.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -186,7 +183,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
 
                     aParamsSeq[0] = uno::makeAny( rtl::OUString::createFromAscii( "-lang" ) );
                     aParamsSeq[1] = uno::makeAny( m_aURLParameter.get_language() );
-                    
+
                     aParamsSeq[2] = uno::makeAny( rtl::OUString::createFromAscii( "-index" ) );
                     rtl::OUString aSystemPath;
                     osl::FileBase::getSystemPathFromFileURL( idxDir, aSystemPath );

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: langselectionstatusbarcontroller.cxx,v $
- * $Revision: 1.6.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,14 +71,14 @@ uno::Reference< linguistic2::XLanguageGuessing > LanguageGuessingHelper::GetGues
         {
             (void) r;
             DBG_ASSERT( 0, "failed to get language guessing component" );
-        }    
+        }
     }
     return m_xLanguageGuesser;
 }
 
 ////////////////////////////////////////////////////////////
 
-::rtl::OUString RetrieveLabelFromCommand( 
+::rtl::OUString RetrieveLabelFromCommand(
     const ::rtl::OUString& aCmdURL,
     const uno::Reference< lang::XMultiServiceFactory >& _xServiceFactory,
     uno::Reference< container::XNameAccess >& _xUICommandLabels,
@@ -151,10 +148,10 @@ uno::Reference< linguistic2::XLanguageGuessing > LanguageGuessingHelper::GetGues
 
     return aLabel;
 }
-    
+
 ////////////////////////////////////////////////////////////
 
-void FillLangItems( std::set< OUString > &rLangItems, 
+void FillLangItems( std::set< OUString > &rLangItems,
         const SvtLanguageTable &    rLanguageTable,
         const uno::Reference< frame::XFrame > & rxFrame,
         const LanguageGuessingHelper & rLangGuessHelper,
@@ -236,6 +233,7 @@ void FillLangItems( std::set< OUString > &rLangItems,
         }
     }
 }
-    
+
 } // namespace framework
+
 

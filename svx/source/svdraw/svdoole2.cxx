@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdoole2.cxx,v $
- * $Revision: 1.89.60.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,7 +66,7 @@
 #include <sot/clsids.hxx>
 
 #include <sot/formats.hxx>
-#include <linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <svtools/transfer.hxx>
 #include <cppuhelper/implbase5.hxx>
 
@@ -85,7 +82,6 @@
 #include <svx/svdetc.hxx>
 #include <svx/svdview.hxx>
 #include "unomlstr.hxx"
-#include "svx/impgrf.hxx"
 #include <svtools/chartprettypainter.hxx>
 #include <svx/sdr/contact/viewcontactofsdrole2obj.hxx>
 #include <svx/svdograf.hxx>
@@ -938,7 +934,7 @@ sal_Bool SdrOle2Obj::UpdateLinkURL_Impl()
 
     if ( mpImpl->mpObjectLink )
     {
-        SvxLinkManager* pLinkManager = pModel ? pModel->GetLinkManager() : NULL;
+        sfx2::LinkManager* pLinkManager = pModel ? pModel->GetLinkManager() : NULL;
         if ( pLinkManager )
         {
             String aNewLinkURL;
@@ -1029,7 +1025,7 @@ void SdrOle2Obj::BreakFileLink_Impl()
 
 void SdrOle2Obj::DisconnectFileLink_Impl()
 {
-    SvxLinkManager* pLinkManager = pModel ? pModel->GetLinkManager() : NULL;
+    sfx2::LinkManager* pLinkManager = pModel ? pModel->GetLinkManager() : NULL;
     if ( pLinkManager && mpImpl->mpObjectLink )
     {
         pLinkManager->Remove( mpImpl->mpObjectLink );
@@ -1052,7 +1048,7 @@ void SdrOle2Obj::CheckFileLink_Impl()
                 if ( aLinkURL.Len() )
                 {
                     // this is a file link so the model link manager should handle it
-                    SvxLinkManager* pLinkManager = pModel->GetLinkManager();
+                    sfx2::LinkManager* pLinkManager = pModel->GetLinkManager();
                     if ( pLinkManager )
                     {
                         mpImpl->mpObjectLink = new SdrEmbedObjectLink( this );

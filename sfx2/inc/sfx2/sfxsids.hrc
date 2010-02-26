@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sfxsids.hrc,v $
- * $Revision: 1.12.104.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,92 +29,25 @@
 
 // include ---------------------------------------------------------------
 
-#ifndef _SOLAR_HRC
 #include <svl/solar.hrc>
-#endif
-
-#define SID_SFX_START                5000
-#define SID_SFX_END                  8999
-
-#ifndef _CNTIDS_HRC
 #include <sfx2/cntids.hrc>
-#endif
+#include <svl/memberid.hrc>
 
 // Please be careful:
 // Changing just one part here doesn't add new
 // docking windows automatically!
 //
-#define SID_DOCKWIN_START           9800
-#define SID_DOCKWIN_0               9800
-#define SID_DOCKWIN_1               9801
-#define SID_DOCKWIN_2               9802
-#define SID_DOCKWIN_3               9803
-#define SID_DOCKWIN_4               9804
-#define SID_DOCKWIN_5               9805
-#define SID_DOCKWIN_6               9806
-#define SID_DOCKWIN_7               9807
-#define SID_DOCKWIN_8               9808
-#define SID_DOCKWIN_9               9809
-/*
-#define SID_DOCKWIN_10              9810
-#define SID_DOCKWIN_11              9811
-#define SID_DOCKWIN_12              9812
-#define SID_DOCKWIN_13              9813
-#define SID_DOCKWIN_14              9814
-#define SID_DOCKWIN_15              9815
-#define SID_DOCKWIN_16              9816
-#define SID_DOCKWIN_17              9817
-#define SID_DOCKWIN_18              9818
-#define SID_DOCKWIN_19              9819
-#define SID_DOCKWIN_20              9820
-#define SID_DOCKWIN_21              9821
-#define SID_DOCKWIN_22              9822
-#define SID_DOCKWIN_23              9823
-#define SID_DOCKWIN_24              9824
-#define SID_DOCKWIN_25              9825
-#define SID_DOCKWIN_26              9826
-#define SID_DOCKWIN_27              9827
-#define SID_DOCKWIN_28              9828
-#define SID_DOCKWIN_29              9829
-*/
-#define SID_DOCKWIN_END             9999
 
-#define SID_LIB_START               10000
-#define SID_LIB_END                 19999
-
-#define SID_APP_START               20000
-#define SID_APP_END                 29999
-
-#define SID_SW_START                20000
-#define SID_SW_END                  25999
-
-#define SID_SC_START                26000
-#define SID_SC_END                  26999
-
-#define SID_SD_START                27000
-#define SID_SD_END                  27999
-
-#define SID_Sa_START                28000
-#define SID_Sa_END                  28999
-
-#define SID_Sb_START                29000
-#define SID_Sb_END                  29999
-
-#define SID_OBJ_START               30000
-#define SID_OBJ0_START              (SID_OBJ_START +    0)
-#define SID_OBJ2_START              (SID_OBJ_START +  256)
-#define SID_OBJ1_START              (SID_OBJ_START +  512)
-#define SID_OBJ3_START              (SID_OBJ_START +  768)
-#define SID_OBJ4_START              (SID_OBJ_START + 1024)
-#define SID_OBJ5_START              (SID_OBJ_START + 1280)
-#define SID_OBJ6_START              (SID_OBJ_START + 1536)
-#define SID_OBJ7_START              (SID_OBJ_START + 1792)
-#define SID_OBJ_END(nStart)         (nStart+255)
-
-#define SID_SIM_START               SID_OBJ0_START
-#define SID_SCH_START               SID_OBJ1_START
-#define SID_SMA_START               SID_OBJ2_START
-#define SID_BASICIDE_START          SID_OBJ3_START
+#define SID_DOCKWIN_0               SID_DOCKWIN_START
+#define SID_DOCKWIN_1               SID_DOCKWIN_START+1
+#define SID_DOCKWIN_2               SID_DOCKWIN_START+2
+#define SID_DOCKWIN_3               SID_DOCKWIN_START+3
+#define SID_DOCKWIN_4               SID_DOCKWIN_START+4
+#define SID_DOCKWIN_5               SID_DOCKWIN_START+5
+#define SID_DOCKWIN_6               SID_DOCKWIN_START+6
+#define SID_DOCKWIN_7               SID_DOCKWIN_START+7
+#define SID_DOCKWIN_8               SID_DOCKWIN_START+8
+#define SID_DOCKWIN_9               SID_DOCKWIN_START+9
 
 //=========================================================================
 
@@ -997,19 +927,6 @@
 #define SID_SFXNODES_ATTACHLIST             (SID_SFXNODES_START + 41)
 #define SID_SFXNODES_END                    SID_SFXNODES_ATTACHLIST
 
-#define SID_OPTIONS_START               (SID_LIB_START +    2000)
-#define SID_OPTIONS_FIRSTFREE           99
-#define SID_OPTIONS_END                 (SID_OPTIONS_START + 100)
-
-#define SID_SBA_START                   (SID_LIB_START  +   2101)
-#define SID_SBA_END                     (SID_SBA_START  +    149)
-
-#define SID_DBACCESS_START              (SID_LIB_START      +    2251)
-#define SID_DBACCESS_END                (SID_DBACCESS_START +     200)
-
-#define SID_RPTUI_START                 (SID_LIB_START      +    2452)
-#define SID_RPTUI_END                   (SID_RPTUI_START    +     197)
-
 // SaveTabPage
 #define SID_ATTR_DOCINFO                (SID_OPTIONS_START +  0)
 #define SID_ATTR_BACKUP                 (SID_OPTIONS_START +  1)
@@ -1135,30 +1052,6 @@
 
 // slot IDs from SVX (svxids.hrc) ---------------------------------------------
 
-#define SID_SVX_START                       (SID_LIB_START +   0)
-
-#define SID_ATTR_CHAR                       (SID_SVX_START +   6)
-#define SID_ATTR_CHAR_FONT                  (SID_SVX_START +   7)
-#define SID_ATTR_CHAR_POSTURE               (SID_SVX_START +   8)
-#define SID_ATTR_CHAR_WEIGHT                (SID_SVX_START +   9)
-#define SID_ATTR_CHAR_SHADOWED              (SID_SVX_START +  10)
-#define SID_ATTR_CHAR_WORDLINEMODE          (SID_SVX_START +  11)
-#define SID_ATTR_CHAR_CONTOUR               (SID_SVX_START +  12)
-#define SID_ATTR_CHAR_STRIKEOUT             (SID_SVX_START +  13)
-#define SID_ATTR_CHAR_UNDERLINE             (SID_SVX_START +  14)
-#define SID_ATTR_CHAR_FONTHEIGHT            (SID_SVX_START +  15)
-#define SID_ATTR_CHAR_PROPSIZE              (SID_SVX_START +  16)
-#define SID_ATTR_CHAR_COLOR                 (SID_SVX_START +  17)
-#define SID_ATTR_CHAR_KERNING               (SID_SVX_START +  18)
-#define SID_ATTR_CHAR_CASEMAP               (SID_SVX_START +  19)
-#define SID_ATTR_CHAR_LANGUAGE              (SID_SVX_START +  20)
-#define SID_ATTR_CHAR_ESCAPEMENT            (SID_SVX_START +  21)
-#define SID_ATTR_CHAR_FONTLIST              (SID_SVX_START +  22)
-// Temp-Id f"ur FontMapType
-#define SID_ATTR_CHAR_MAPTYPE               (SID_SVX_START +  64)
-// zusaetzlich f"ur die Ext-Zeichen-TabPage
-#define SID_ATTR_CHAR_AUTOKERN              (SID_SVX_START +  67)
-#define SID_ATTR_CHAR_OVERLINE              (SID_SVX_START +  68)
 #define SID_ZOOM_TOOLBOX                    (SID_SVX_START +  96)
 #define SID_ZOOM_OUT                        (SID_SVX_START +  97)
 #define SID_ZOOM_IN                         (SID_SVX_START +  98)
@@ -1292,30 +1185,6 @@
 //-----------------------------------------------------------------------
 
 #define SID_ATTR_CHAR_FILLCOLOR             (SID_SFX_START + 1551)
-
-#define MID_SEARCH_STYLEFAMILY          1
-#define MID_SEARCH_CELLTYPE             2
-#define MID_SEARCH_ROWDIRECTION         3
-#define MID_SEARCH_ALLTABLES            4
-#define MID_SEARCH_BACKWARD             5
-#define MID_SEARCH_PATTERN              6
-#define MID_SEARCH_CONTENT              7
-#define MID_SEARCH_ASIANOPTIONS         8
-#define MID_SEARCH_ALGORITHMTYPE        9
-#define MID_SEARCH_FLAGS                10
-#define MID_SEARCH_SEARCHSTRING         11
-#define MID_SEARCH_REPLACESTRING        12
-#define MID_SEARCH_LOCALE               13
-#define MID_SEARCH_CHANGEDCHARS         14
-#define MID_SEARCH_DELETEDCHARS         15
-#define MID_SEARCH_INSERTEDCHARS        16
-#define MID_SEARCH_TRANSLITERATEFLAGS   17
-#define MID_SEARCH_COMMAND              18
-
-// SvxSizeItem
-#define MID_SIZE_SIZE       0
-#define MID_SIZE_WIDTH      1
-#define MID_SIZE_HEIGHT     2
 
 // SfxScriptOrganizerItem
 #define MID_SCRIPT_ORGANIZER_LANGUAGE       1 // Don't use zero for MID's. It's forbidden to do it!

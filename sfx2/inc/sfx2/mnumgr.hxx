@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: mnumgr.hxx,v $
- * $Revision: 1.4.84.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -110,10 +107,9 @@ private:
     // if we don't delete the pointer that got created in SfxPopupMenuManager::Popup
     static PopupMenu *  pStaticThesSubMenu;
 
-private:
-                        // only declared, but not defined: don't allow copying
-                        SfxPopupMenuManager( const SfxPopupMenuManager& );
-                        SfxPopupMenuManager& operator=( const SfxPopupMenuManager& );
+    // only declared, but not defined: don't allow copying
+    SfxPopupMenuManager( const SfxPopupMenuManager& );
+    SfxPopupMenuManager& operator=( const SfxPopupMenuManager& );
 
 public:
                         SfxPopupMenuManager( const ResId&, SfxBindings& );

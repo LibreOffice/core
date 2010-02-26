@@ -62,9 +62,9 @@ private:
 public:
     SfxThesSubMenuControl(USHORT, Menu&, SfxBindings&);
     ~SfxThesSubMenuControl();
-    
+
     virtual PopupMenu*  GetPopup() const;
-    
+
     SFX_DECL_MENU_CONTROL();
 };
 
@@ -76,17 +76,17 @@ class SfxThesSubMenuHelper
     css::uno::Reference< css::linguistic2::XThesaurus >             m_xThesarus;
 
 private:
-    
+
     // don't use copy c-tor and assignment operator
     SfxThesSubMenuHelper( const SfxThesSubMenuHelper & );
     SfxThesSubMenuHelper & operator = ( const SfxThesSubMenuHelper & );
-    
+
 public:
     SfxThesSubMenuHelper();
     ~SfxThesSubMenuHelper();
 
     static ::rtl::OUString     GetText( const String &rLookUpString, xub_StrLen nDelimPos );
-    
+
     // returns the Locale to be used for the selected text when the thesaurus is to be called
     static void GetLocale( css::lang::Locale /*out */ &rLocale, const String &rLookUpString, xub_StrLen nDelimPos );
 
@@ -102,20 +102,6 @@ public:
 ////////////////////////////////////////////////////////////
 
 
-// taken from #include <svx/impgrf.hxx> :
-
-//!! temporary implemented locally:
-//!! once MBAs latest CWS is integrated this functions are available in svtools
-//!! under a slightly different name
-class GraphicFilter;
-class Graphic;
-GraphicFilter* lcl_GetGrfFilter();
-int   lcl_LoadGraphic( const String& rPath, const String& rFilter,
-                     Graphic& rGraphic,
-                     GraphicFilter* pFilter = NULL,
-                     USHORT* pDeterminedFormat = NULL );
-
-    
 #endif
 
 
