@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tdoc_content.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -226,7 +223,7 @@ uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
                 rType, static_cast< ucb::XContentCreator * >( this ) );
         if ( aRet.hasValue() )
         {
-            if ( !isContentCreator() )
+            if ( !m_aProps.isContentCreator() )
                 return uno::Any();
         }
     }
@@ -249,7 +246,7 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
 {
     cppu::OTypeCollection * pCollection = 0;
 
-    if ( isContentCreator() )
+    if ( m_aProps.isContentCreator() )
     {
         static cppu::OTypeCollection* pFolderTypes = 0;
 
@@ -660,6 +657,49 @@ uno::Any SAL_CALL Content::execute(
 
         transfer( aInfo, Environment );
     }
+    else if ( aCommand.Name.equalsAsciiL(
+                  RTL_CONSTASCII_STRINGPARAM( "createNewContent" ) ) )
+    {
+        //////////////////////////////////////////////////////////////////
+        // createNewContent ( Supported by document and folders only )
+        //////////////////////////////////////////////////////////////////
+
+        {
+            osl::MutexGuard aGuard( m_aMutex );
+
+            ContentType eType = m_aProps.getType();
+            if ( ( eType != FOLDER ) && ( eType != DOCUMENT ) )
+            {
+                ucbhelper::cancelCommandExecution(
+                    uno::makeAny( ucb::UnsupportedCommandException(
+                                    rtl::OUString(
+                                        RTL_CONSTASCII_USTRINGPARAM(
+                                            "createNewContent command only "
+                                            "supported by folders and "
+                                            "documents!" ) ),
+                                    static_cast< cppu::OWeakObject * >(
+                                        this ) ) ),
+                    Environment );
+                // Unreachable
+            }
+        }
+
+        ucb::ContentInfo aInfo;
+        if ( !( aCommand.Argument >>= aInfo ) )
+        {
+            OSL_ENSURE( sal_False, "Wrong argument type!" );
+            ucbhelper::cancelCommandExecution(
+                uno::makeAny( lang::IllegalArgumentException(
+                                    rtl::OUString::createFromAscii(
+                                        "Wrong argument type!" ),
+                                    static_cast< cppu::OWeakObject * >( this ),
+                                    -1 ) ),
+                Environment );
+            // Unreachable
+        }
+
+        aRet <<= createNewContent( aInfo );
+    }
     else
     {
         //////////////////////////////////////////////////////////////////
@@ -695,65 +735,7 @@ uno::Sequence< ucb::ContentInfo > SAL_CALL
 Content::queryCreatableContentsInfo()
     throw( uno::RuntimeException )
 {
-    if ( isContentCreator() )
-    {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
-        uno::Sequence< beans::Property > aProps( 1 );
-        aProps.getArray()[ 0 ] = beans::Property(
-                    rtl::OUString::createFromAscii( "Title" ),
-                    -1,
-                    getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
-                    beans::PropertyAttribute::BOUND );
-
-#ifdef NO_STREAM_CREATION_WITHIN_DOCUMENT_ROOT
-        if ( m_aProps.getType() == DOCUMENT )
-        {
-            // streams cannot be created as direct children of document root
-            uno::Sequence< ucb::ContentInfo > aSeq( 1 );
-
-            // Folder.
-            aSeq.getArray()[ 0 ].Type
-                = rtl::OUString::createFromAscii( TDOC_FOLDER_CONTENT_TYPE );
-            aSeq.getArray()[ 0 ].Attributes
-                = ucb::ContentInfoAttribute::KIND_FOLDER;
-            aSeq.getArray()[ 0 ].Properties = aProps;
-
-            return aSeq;
-        }
-        else
-        {
-#endif
-            uno::Sequence< ucb::ContentInfo > aSeq( 2 );
-
-            // Folder.
-            aSeq.getArray()[ 0 ].Type
-                = rtl::OUString::createFromAscii( TDOC_FOLDER_CONTENT_TYPE );
-            aSeq.getArray()[ 0 ].Attributes
-                = ucb::ContentInfoAttribute::KIND_FOLDER;
-            aSeq.getArray()[ 0 ].Properties = aProps;
-
-            // Stream.
-            aSeq.getArray()[ 1 ].Type
-                = rtl::OUString::createFromAscii( TDOC_STREAM_CONTENT_TYPE );
-            aSeq.getArray()[ 1 ].Attributes
-                = ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM
-                  | ucb::ContentInfoAttribute::KIND_DOCUMENT;
-            aSeq.getArray()[ 1 ].Properties = aProps;
-
-            return aSeq;
-#ifdef NO_STREAM_CREATION_WITHIN_DOCUMENT_ROOT
-        }
-#endif
-    }
-    else
-    {
-        OSL_ENSURE( sal_False,
-                    "queryCreatableContentsInfo called on non-contentcreator "
-                    "object!" );
-
-        return uno::Sequence< ucb::ContentInfo >( 0 );
-    }
+    return m_aProps.getCreatableContentsInfo();
 }
 
 //=========================================================================
@@ -762,7 +744,7 @@ uno::Reference< ucb::XContent > SAL_CALL
 Content::createNewContent( const ucb::ContentInfo& Info )
     throw( uno::RuntimeException )
 {
-    if ( isContentCreator() )
+    if ( m_aProps.isContentCreator() )
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -1061,6 +1043,12 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 xRow->appendBoolean( rProp, rData.getIsFolder() );
             }
             else if ( rProp.Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM( "CreatableContentsInfo" ) ) )
+            {
+                xRow->appendObject(
+                    rProp, uno::makeAny( rData.getCreatableContentsInfo() ) );
+            }
+            else if ( rProp.Name.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM( "Storage" ) ) )
             {
                 // Storage is only supported by folders.
@@ -1155,6 +1143,15 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                       beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ),
             rData.getIsFolder() );
+        xRow->appendObject(
+            beans::Property(
+                rtl::OUString::createFromAscii( "CreatableContentsInfo" ),
+                -1,
+                getCppuType( static_cast<
+                        const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
+                beans::PropertyAttribute::BOUND
+                | beans::PropertyAttribute::READONLY ),
+            uno::makeAny( rData.getCreatableContentsInfo() ) );
 
         // Storage is only supported by folders.
         if ( eType == FOLDER )
@@ -1219,10 +1216,10 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     beans::PropertyChangeEvent aEvent;
     aEvent.Source         = static_cast< cppu::OWeakObject * >( this );
     aEvent.Further        = sal_False;
-//  aEvent.PropertyName   =
+    //    aEvent.PropertyName   =
     aEvent.PropertyHandle = -1;
-//  aEvent.OldValue       =
-//  aEvent.NewValue       =
+    //    aEvent.OldValue       =
+    //    aEvent.NewValue       =
 
     const beans::PropertyValue* pValues = rValues.getConstArray();
     sal_Int32 nCount = rValues.getLength();
@@ -1258,6 +1255,15 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         }
         else if ( rValue.Name.equalsAsciiL(
                     RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
+        {
+            // Read-only property!
+            aRet[ n ] <<= lang::IllegalAccessException(
+                            rtl::OUString::createFromAscii(
+                                "Property is read-only!" ),
+                            static_cast< cppu::OWeakObject * >( this ) );
+        }
+        else if ( rValue.Name.equalsAsciiL(
+                    RTL_CONSTASCII_STRINGPARAM( "CreatableContentsInfo" ) ) )
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
@@ -2370,14 +2376,6 @@ void Content::transfer(
 }
 
 //=========================================================================
-bool Content::isContentCreator()
-{
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
-    return
-        ( m_aProps.getType() == FOLDER ) || ( m_aProps.getType() == DOCUMENT );
-}
-
-//=========================================================================
 //static
 bool Content::hasData( ContentProvider* pProvider, const Uri & rUri )
 {
@@ -3058,4 +3056,80 @@ uno::Reference< io::XStream > Content::getStream(
             bPasswordRequested = true;
         }
     }
+}
+
+//=========================================================================
+//=========================================================================
+//
+// ContentProperties Implementation.
+//
+//=========================================================================
+//=========================================================================
+
+uno::Sequence< ucb::ContentInfo >
+ContentProperties::getCreatableContentsInfo() const
+{
+    if ( isContentCreator() )
+    {
+        uno::Sequence< beans::Property > aProps( 1 );
+        aProps.getArray()[ 0 ] = beans::Property(
+                    rtl::OUString::createFromAscii( "Title" ),
+                    -1,
+                    getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+                    beans::PropertyAttribute::BOUND );
+
+#ifdef NO_STREAM_CREATION_WITHIN_DOCUMENT_ROOT
+        if ( getType() == DOCUMENT )
+        {
+            // streams cannot be created as direct children of document root
+            uno::Sequence< ucb::ContentInfo > aSeq( 1 );
+
+            // Folder.
+            aSeq.getArray()[ 0 ].Type
+                = rtl::OUString::createFromAscii( TDOC_FOLDER_CONTENT_TYPE );
+            aSeq.getArray()[ 0 ].Attributes
+                = ucb::ContentInfoAttribute::KIND_FOLDER;
+            aSeq.getArray()[ 0 ].Properties = aProps;
+
+            return aSeq;
+        }
+        else
+        {
+#endif
+            uno::Sequence< ucb::ContentInfo > aSeq( 2 );
+
+            // Folder.
+            aSeq.getArray()[ 0 ].Type
+                = rtl::OUString::createFromAscii( TDOC_FOLDER_CONTENT_TYPE );
+            aSeq.getArray()[ 0 ].Attributes
+                = ucb::ContentInfoAttribute::KIND_FOLDER;
+            aSeq.getArray()[ 0 ].Properties = aProps;
+
+            // Stream.
+            aSeq.getArray()[ 1 ].Type
+                = rtl::OUString::createFromAscii( TDOC_STREAM_CONTENT_TYPE );
+            aSeq.getArray()[ 1 ].Attributes
+                = ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM
+                  | ucb::ContentInfoAttribute::KIND_DOCUMENT;
+            aSeq.getArray()[ 1 ].Properties = aProps;
+
+            return aSeq;
+#ifdef NO_STREAM_CREATION_WITHIN_DOCUMENT_ROOT
+        }
+#endif
+    }
+    else
+    {
+        OSL_ENSURE( sal_False,
+                    "getCreatableContentsInfo called on non-contentcreator "
+                    "object!" );
+
+        return uno::Sequence< ucb::ContentInfo >( 0 );
+    }
+}
+
+//=========================================================================
+bool ContentProperties::isContentCreator() const
+{
+    return ( getType() == FOLDER ) || ( getType() == DOCUMENT );
 }

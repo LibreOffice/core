@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewcontactofsdrobjcustomshape.cxx,v $
- * $Revision: 1.7.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,11 +65,10 @@ namespace sdr
             // no need to correct if no extra text range
             if(aTextRange != aObjectRange)
             {
-                const double fExtraTextRotation(GetCustomShapeObj().GetExtraTextRotation());
                 const GeoStat& rGeoStat(GetCustomShapeObj().GetGeoStat());
 
                 // only correct when rotation and/or shear is used
-                if(rGeoStat.nShearWink || rGeoStat.nDrehWink || !basegfx::fTools::equalZero(fExtraTextRotation))
+                if(rGeoStat.nShearWink || rGeoStat.nDrehWink )
                 {
                     // text range needs to be corrected by
                     // aObjectRange.getCenter() - aRotObjectRange.getCenter() since it's
@@ -94,11 +90,6 @@ namespace sdr
                     if(rGeoStat.nDrehWink)
                     {
                         aRotMatrix.rotate((36000 - rGeoStat.nDrehWink) * F_PI18000);
-                    }
-
-                    if(!basegfx::fTools::equalZero(fExtraTextRotation))
-                    {
-                        aRotMatrix.rotate((360.0 - fExtraTextRotation) * F_PI180);
                     }
 
                     aRotMatrix.translate(aObjectRange.getMinimum().getX(), aObjectRange.getMinimum().getY());
@@ -189,6 +180,16 @@ namespace sdr
                                     aTextRange.getMinY() - aObjectRange.getMinimum().getY());
                             }
 
+                            if(!basegfx::fTools::equalZero(fExtraTextRotation))
+                            {
+                                basegfx::B2DVector aTranslation(
+                                    ( aTextRange.getWidth() / 2 ) + ( aTextRange.getMinX() - aObjectRange.getMinimum().getX() ),
+                                    ( aTextRange.getHeight() / 2 ) + ( aTextRange.getMinY() - aObjectRange.getMinimum().getY() ) );
+                                aTextBoxMatrix.translate( -aTranslation.getX(), -aTranslation.getY() );
+                                aTextBoxMatrix.rotate((360.0 - fExtraTextRotation) * F_PI180);
+                                aTextBoxMatrix.translate( aTranslation.getX(), aTranslation.getY() );
+                            }
+
                             if(rGeoStat.nShearWink)
                             {
                                 aTextBoxMatrix.shearX(tan((36000 - rGeoStat.nShearWink) * F_PI18000));
@@ -197,11 +198,6 @@ namespace sdr
                             if(rGeoStat.nDrehWink)
                             {
                                 aTextBoxMatrix.rotate((36000 - rGeoStat.nDrehWink) * F_PI18000);
-                            }
-
-                            if(!basegfx::fTools::equalZero(fExtraTextRotation))
-                            {
-                                aTextBoxMatrix.rotate((360.0 - fExtraTextRotation) * F_PI180);
                             }
 
                             // give text it's target position

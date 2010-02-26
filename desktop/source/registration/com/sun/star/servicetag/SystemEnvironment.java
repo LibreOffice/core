@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Registration.java,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -95,12 +92,12 @@ public class SystemEnvironment {
         this.systemManufacturer = "";
         this.cpuManufacturer = "";
         this.serialNumber = "";
-        this.physmem = "";
-        this.sockets = "";
-        this.cores = "";
-        this.virtcpus = "";
+        this.physmem = "0";
+        this.sockets = "0";
+        this.cores = "0";
+        this.virtcpus = "0";
         this.cpuname = "";
-        this.clockrate = "";
+        this.clockrate = "0";
     }
 
 
@@ -173,6 +170,8 @@ public class SystemEnvironment {
      * @param physmem The physmem to set.
      */
     public void setPhysMem(String physmem) {
+        if (physmem.length() == 0)
+            physmem = "0";
         this.physmem = physmem;
     }
 
@@ -181,6 +180,8 @@ public class SystemEnvironment {
      * @param sockets The sockets to set.
      */
     public void setSockets(String sockets) {
+        if (sockets.length() == 0)
+            sockets = "0";
         this.sockets = sockets;
     }
 
@@ -189,6 +190,8 @@ public class SystemEnvironment {
      * @param cores The cores to set.
      */
     public void setCores(String cores) {
+        if (cores.length() == 0)
+            cores ="0";
         this.cores = cores;
     }
 
@@ -197,6 +200,8 @@ public class SystemEnvironment {
      * @param virtcpus The virtcpus to set.
      */
     public void setVirtCpus(String virtcpus) {
+        if (virtcpus.length() == 0)
+            virtcpus = "0";
         this.virtcpus = virtcpus;
     }
 
@@ -213,9 +218,14 @@ public class SystemEnvironment {
      * @param clockrate The clockrate to set.
      */
     public void setClockRate(String clockrate) {
-        Float f = Float.parseFloat(clockrate);
-        Integer nClockrate = f.intValue();
-        this.clockrate = nClockrate.toString();
+        if (clockrate.length() == 0)
+            this.clockrate = "0";
+        else
+        {
+            Float f = Float.parseFloat(clockrate);
+            Integer nClockrate = f.intValue();
+            this.clockrate = nClockrate.toString();
+        }
     }
 
     /**

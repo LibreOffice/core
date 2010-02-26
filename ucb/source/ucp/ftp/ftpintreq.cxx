@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ftpintreq.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,7 +98,6 @@ bool XInteractionApproveImpl::isSelected() const
 }
 
 
-
 // XInteractionDisapproveImpl
 
 XInteractionDisapproveImpl::XInteractionDisapproveImpl()
@@ -154,13 +150,6 @@ void SAL_CALL XInteractionDisapproveImpl::select()
 {
     m_bSelected = true;
 }
-
-
-bool XInteractionDisapproveImpl::isSelected() const
-{
-    return m_bSelected;
-}
-
 
 
 // XInteractionRequestImpl
@@ -231,12 +220,6 @@ XInteractionRequestImpl::getContinuations(  )
     throw (RuntimeException)
 {
     return m_aSeq;
-}
-
-
-bool XInteractionRequestImpl::aborted() const
-{
-    return p2->isSelected();
 }
 
 
