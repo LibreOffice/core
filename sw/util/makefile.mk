@@ -119,10 +119,6 @@ SHL1STDLIBS+= \
     $(SALHELPERLIB) \
     $(ICUUCLIB) \
     $(I18NUTILLIB)
-.IF "$(ENABLE_VBA)" == "YES"
-SHL1STDLIBS+= \
-                $(VBAHELPERLIB)
-.ENDIF # "$(ENABLE_VBA)" == "YES" 
 SHL1STDLIBS+= \
     $(AVMEDIALIB)
 
