@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drviewse.cxx,v $
- * $Revision: 1.77 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +39,7 @@
 #include "undo/undomanager.hxx"
 #include <vcl/waitobj.hxx>
 #include <svl/aeitem.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/editstat.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/urlbmk.hxx>
 #include <svx/svdpagv.hxx>
@@ -53,12 +50,12 @@
 #include <svx/svdorect.hxx>
 #include <svx/svdograf.hxx>
 #include <svl/eitem.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>
 #include <svx/svxids.hrc>
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #include <svx/ruler.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/fmglob.hxx>

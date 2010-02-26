@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: stlpool.cxx,v $
- * $Revision: 1.41.68.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,38 +29,38 @@
 #include "precompiled_sd.hxx"
 
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <svx/eeitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/cntritem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/fontitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/fontitem.hxx>
 #include <svl/poolitem.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xlineit0.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/numitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/numitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/editeng.hxx>
 #include <svl/smplhint.hxx>
-#include <svx/langitem.hxx>
-#include <svx/charreliefitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/charreliefitem.hxx>
 #ifndef _SVX_EMPHITEM_HXX
-#include <svx/emphitem.hxx>
+#include <editeng/emphitem.hxx>
 #endif
 #include <svx/sdr/table/tabledesign.hxx>
-#include <svx/akrnitem.hxx>
+#include <editeng/akrnitem.hxx>
 
 #include <svx/svdattr.hxx>
 #include "eetext.hxx"
 #include <svx/xtable.hxx>           // fuer RGB_Color
-#include <svx/bulitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/adjitem.hxx>
+#include <editeng/bulitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/adjitem.hxx>
 #include <svl/itempool.hxx>
 
 #define _SDR_POSITIVE

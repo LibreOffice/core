@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drtxtob.cxx,v $
- * $Revision: 1.28.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,16 +30,19 @@
 
 #include "TextObjectBar.hxx"
 
-#include <com/sun/star/i18n/WordType.hpp>
+#include <svx/svxids.hrc>
 
 #include <i18npool/mslangid.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lspcitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/editview.hxx>
-#include <svx/editeng.hxx>
-#include <svx/outliner.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/unolingu.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/adjitem.hxx>
 #include <vcl/vclenum.hxx>
 #include <sfx2/app.hxx>
 #include <svl/whiter.hxx>
@@ -51,13 +51,13 @@
 #include <svl/style.hxx>
 #include <svl/languageoptions.hxx>
 #include <sfx2/tplpitem.hxx>
-#include <svx/escpitem.hxx>
+#include <editeng/escpitem.hxx>
 #include <svx/svdoutl.hxx>
 #include <svl/intitem.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/writingmodeitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/writingmodeitem.hxx>
+#include <editeng/frmdiritem.hxx>
 
 
 #include <sfx2/objface.hxx>

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drtxtob1.cxx,v $
- * $Revision: 1.32.72.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,23 +30,16 @@
 
 #include "TextObjectBar.hxx"
 
-#include <com/sun/star/i18n/WordType.hpp>
 
-//#include <i18npool/mslangid.hxx>
-#include <svx/editview.hxx>
-#include <svx/editeng.hxx>
-#include <svx/unolingu.hxx>
+#include <svx/svxids.hrc>
 
-#include <svx/outliner.hxx>
-#ifndef _ULSPITEM_HXX
-#include <svx/ulspitem.hxx>
-#endif
-#ifndef _LSPCITEM_HXX
-#include <svx/lspcitem.hxx>
-#endif
-#ifndef _ADJITEM_HXX
-#include <svx/adjitem.hxx>
-#endif
+#include <editeng/editview.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/unolingu.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/adjitem.hxx>
 #include <vcl/vclenum.hxx>
 #include <sfx2/app.hxx>
 #include <svl/whiter.hxx>
@@ -59,25 +49,23 @@
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/cntritem.hxx>
-#include <svx/shdditem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/shdditem.hxx>
 #include <svx/xtable.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/flstitem.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/flstitem.hxx>
+#include <editeng/editeng.hxx>
 #include <svl/intitem.hxx>
-#ifndef _SVX_SRIPTTYPEITEM_HXX //autogen
-#include <svx/scripttypeitem.hxx>
-#endif
+#include <editeng/scripttypeitem.hxx>
 #include <svx/svdoutl.hxx>
-#include <svx/writingmodeitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/writingmodeitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <svl/itemiter.hxx>
 
 
