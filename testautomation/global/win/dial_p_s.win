@@ -15,24 +15,24 @@ SchutzAufheben HID_CHG_PROTECT
 PasswortEingabe sfx2:Edit:DLG_PASSWD:ED_PASSWD_USER
 PasswortBestaetigen sfx2:Edit:DLG_PASSWD:ED_PASSWD_CONFIRM
 
-*PBMOptionen goodies:ModalDialog:DLG_EXPORT_EPBM
-Binaer goodies:RadioButton:DLG_EXPORT_EPBM:RB_RAW
-Ascii goodies:RadioButton:DLG_EXPORT_EPBM:RB_ASCII
+*PBMOptionen filter:ModalDialog:DLG_EXPORT_EPBM
+Binaer filter:RadioButton:DLG_EXPORT_EPBM:RB_RAW
+Ascii filter:RadioButton:DLG_EXPORT_EPBM:RB_ASCII
 
 *PfadeAuswaehlen HID_MULTIPATH
 Pfade HID_OPTIONS_MULTIPATH_LIST
 Hinzufuegen cui:PUSHBUTTON:RID_SVXDLG_MULTIPATH:BTN_ADD_MULTIPATH
 Loeschen cui:PUSHBUTTON:RID_SVXDLG_MULTIPATH:BTN_DEL_MULTIPATH
 
-*PGMOptionen goodies:ModalDialog:DLG_EXPORT_EPGM
-Binaer goodies:RadioButton:DLG_EXPORT_EPGM:RB_RAW
-Ascii goodies:RadioButton:DLG_EXPORT_EPGM:RB_ASCII
+*PGMOptionen filter:ModalDialog:DLG_EXPORT_EPGM
+Binaer filter:RadioButton:DLG_EXPORT_EPGM:RB_RAW
+Ascii filter:RadioButton:DLG_EXPORT_EPGM:RB_ASCII
 
-*PICTOPtionen goodies:ModalDialog:DLG_EXPORT_EPCT
-Original goodies:RadioButton:DLG_EXPORT_EPCT:RB_ORIGINAL
-Groesse goodies:RadioButton:DLG_EXPORT_EPCT:RB_SIZE
-Breite goodies:MetricField:DLG_EXPORT_EPCT:MTF_SIZEX
-Hoehe goodies:MetricField:DLG_EXPORT_EPCT:MTF_SIZEY
+*PICTOPtionen filter:ModalDialog:DLG_EXPORT_EPCT
+Original filter:RadioButton:DLG_EXPORT_EPCT:RB_ORIGINAL
+Groesse filter:RadioButton:DLG_EXPORT_EPCT:RB_SIZE
+Breite filter:MetricField:DLG_EXPORT_EPCT:MTF_SIZEX
+Hoehe filter:MetricField:DLG_EXPORT_EPCT:MTF_SIZEY
 
 *Pipette SID_BMPMASK svx:DockingWindow:RID_SVXDLG_BMPMASK
 PipetteKnopf HID_BMPMASK_TBI_PIPETTE
@@ -79,12 +79,9 @@ Optionen cui:MULTILINEEDIT:MD_INSERT_OBJECT_PLUGIN:ED_PLUGINS_OPTIONS
 Kompression svtools:NumericField:DLG_EXPORT_EPNG:NUM_COMPRESSION
 Interlaced svtools:CheckBox:DLG_EXPORT_EPNG:CBX_INTERLACED
 
-*PPMOptionen goodies:ModalDialog:DLG_EXPORT_EPPM
-Binaer goodies:RadioButton:DLG_EXPORT_EPPM:RB_RAW
-Ascii goodies:RadioButton:DLG_EXPORT_EPPM:RB_ASCII
-
-*ProxyWarnung cui:ModalDialog:RID_OFADLG_OPTIONS_TREE_HINT
-NichtMehrAnzeigen cui:CheckBox:RID_OFADLG_OPTIONS_TREE_HINT:CB_DISABLE
+*PPMOptionen filter:ModalDialog:DLG_EXPORT_EPPM
+Binaer filter:RadioButton:DLG_EXPORT_EPPM:RB_RAW
+Ascii filter:RadioButton:DLG_EXPORT_EPPM:RB_ASCII
 
 *QuelleAuswaehlen HID_DATAPILOT_TYPE
 AktuelleSelektion sc:RadioButton:RID_SCDLG_DAPITYPE:BTN_SELECTION
@@ -235,11 +232,11 @@ FormatStarWriter sw:CheckBox:DLG_MAILMERGE:CB_FORMAT_SW
 Datenbankfeldliste sw:ListBox:DLG_MAILMERGE:LB_COLUMN
 
 *Silbentrennung HID_HYPHENATE svx:ModalDialog:RID_SVXDLG_HYPHENATE
-Wort svx:Edit:RID_SVXDLG_HYPHENATE:ED_WORD
-Vor svx:ImageButton:RID_SVXDLG_HYPHENATE:BTN_LEFT
-Zurueck svx:ImageButton:RID_SVXDLG_HYPHENATE:BTN_RIGHT
-Weiter svx:PushButton:RID_SVXDLG_HYPHENATE:BTN_HYPH_CONTINUE
-Entfernen svx:PushButton:RID_SVXDLG_HYPHENATE:BTN_HYPH_DELETE
+Wort cui:Edit:RID_SVXDLG_HYPHENATE:ED_WORD
+Vor cui:ImageButton:RID_SVXDLG_HYPHENATE:BTN_LEFT
+Zurueck cui:ImageButton:RID_SVXDLG_HYPHENATE:BTN_RIGHT
+Weiter cui:PushButton:RID_SVXDLG_HYPHENATE:BTN_HYPH_CONTINUE
+Entfernen cui:PushButton:RID_SVXDLG_HYPHENATE:BTN_HYPH_DELETE
 
 *SilbentrennungOptionen HID_LNGDLG_NUM_PREBREAK
 ZeichenVorUmbruch cui:NumericField:RID_SVXDLG_LNG_ED_NUM_PREBREAK:ED_PREBREAK
@@ -345,7 +342,7 @@ FilterkriterienMin sc:ImageButton:RID_SCDLG_SPEC_FILTER:RB_CRITERIA_AREA
 FilterergebnisMin sc:ImageButton:RID_SCDLG_SPEC_FILTER:RB_COPY_AREA
 
 *SpracheAuswaehlen HID_THES_LANGUAGE
-Auswahl svx:ListBox:RID_SVXDLG_THES_LANGUAGE:LB_THES_LANGUAGE
+Auswahl cui:ListBox:RID_SVXDLG_THES_LANGUAGE:LB_THES_LANGUAGE
 
 *StandardFilter SID_FILTER
 FeldName1 sc:ListBox:RID_SCDLG_FILTER:LB_FIELD1
