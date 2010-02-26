@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ReportDefinition.cxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -114,7 +111,7 @@
 #include <unotools/moduleoptions.hxx>
 #include <osl/thread.hxx>
 
-#include <svx/paperinf.hxx>
+#include <editeng/paperinf.hxx>
 #include <svx/svdlayer.hxx>
 #include <svx/xmleohlp.hxx>
 #include <svx/xmlgrhlp.hxx>
@@ -563,8 +560,7 @@ namespace
         }
         catch(uno::Exception& ex)
         {
-            (void)ex;
-            OSL_ASSERT(0);
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
     void SAL_CALL FactoryLoader::onTerminated()

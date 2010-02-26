@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TableFieldDescription.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,24 +66,10 @@ OTableFieldDesc::OTableFieldDesc()
 //------------------------------------------------------------------------------
 OTableFieldDesc::OTableFieldDesc(const OTableFieldDesc& rRS)
     : ::vos::OReference()
-    ,m_vecCriteria( rRS.m_vecCriteria)
-    ,m_aTableName(rRS.GetTable())
-    ,m_aAliasName(rRS.GetAlias())       // table range
-    ,m_aFieldName(rRS.GetField())       // column
-    ,m_aFieldAlias(rRS.GetFieldAlias()) // column alias
-    ,m_aFunctionName(rRS.GetFunction()) // Funktionsname
-    ,m_pTabWindow(rRS.GetTabWindow())
-    ,m_eDataType(rRS.GetDataType())
-    ,m_eFunctionType( rRS.GetFunctionType() )
-    ,m_eFieldType(rRS.GetFieldType())
-    ,m_eOrderDir(rRS.GetOrderDir())
-    ,m_nIndex(rRS.GetFieldIndex())
-    ,m_nColWidth(rRS.GetColWidth())
-    ,m_nColumnId( rRS.m_nColumnId)
-    ,m_bGroupBy(rRS.IsGroupBy())
-    ,m_bVisible(rRS.IsVisible())
+
 {
     DBG_CTOR(OTableFieldDesc,NULL);
+    *this = rRS;
 }
 
 //------------------------------------------------------------------------------
@@ -107,7 +90,31 @@ OTableFieldDesc::~OTableFieldDesc()
 {
     DBG_DTOR(OTableFieldDesc,NULL);
 }
+//------------------------------------------------------------------------------
+OTableFieldDesc& OTableFieldDesc::operator=( const OTableFieldDesc& rRS )
+{
+    if (&rRS == this)
+        return *this;
 
+    m_vecCriteria = rRS.m_vecCriteria;
+    m_aTableName = rRS.GetTable();
+    m_aAliasName = rRS.GetAlias();      // table range
+    m_aFieldName = rRS.GetField();      // column
+    m_aFieldAlias = rRS.GetFieldAlias();    // column alias
+    m_aFunctionName = rRS.GetFunction();    // Funktionsname
+    m_pTabWindow = rRS.GetTabWindow();
+    m_eDataType = rRS.GetDataType();
+    m_eFunctionType = rRS.GetFunctionType();
+    m_eFieldType = rRS.GetFieldType();
+    m_eOrderDir = rRS.GetOrderDir();
+    m_nIndex = rRS.GetFieldIndex();
+    m_nColWidth = rRS.GetColWidth();
+    m_nColumnId = rRS.m_nColumnId;
+    m_bGroupBy = rRS.IsGroupBy();
+    m_bVisible = rRS.IsVisible();
+
+    return *this;
+}
 //------------------------------------------------------------------------------
 sal_Bool OTableFieldDesc::operator==( const OTableFieldDesc& rDesc )
 {

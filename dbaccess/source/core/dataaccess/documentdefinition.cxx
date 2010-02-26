@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: documentdefinition.cxx,v $
- * $Revision: 1.64.20.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1694,8 +1691,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& _x
                         if ( !xEnumDrivers.is() || !xEnumDrivers->hasMoreElements() )
                         {
                             com::sun::star::io::WrongFormatException aWFE;
-                            aWFE.Message = ::rtl::OUString::createFromAscii("Extension not present.");
-                                // TODO: resource
+                            aWFE.Message = DBACORE_RESSTRING( RID_STR_MISSING_EXTENSION );
                             throw aWFE;
                         }
                     }

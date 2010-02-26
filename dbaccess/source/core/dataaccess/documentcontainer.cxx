@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: documentcontainer.cxx,v $
- * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -380,9 +377,12 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
 
                     ::rtl::OUString sServiceName;
                     if ( Reference< XNameAccess >( xObjectToCopy, UNO_QUERY ).is() )
+                    {
                         if ( m_bFormsContainer )
                             sServiceName = SERVICE_NAME_FORM_COLLECTION;
-                        else sServiceName = SERVICE_NAME_REPORT_COLLECTION;
+                        else
+                            sServiceName = SERVICE_NAME_REPORT_COLLECTION;
+                    }
                     else
                         sServiceName = SERVICE_SDB_DOCUMENTDEFINITION;
 
@@ -503,7 +503,7 @@ namespace
         if ( bRet )
         {
             _rRet = _xNameContainer->getByName(_sSimpleName = sName);
-            while ( nIndex != -1 )
+            while ( nIndex != -1 && bRet )
             {
                 sName = _sName.getToken(0,'/',nIndex);
                 _xNameContainer.set(_rRet,UNO_QUERY);
@@ -517,8 +517,10 @@ namespace
                 }
             }
         }
-        else if ( nIndex == -1 )
-            _sSimpleName = sName; // a content on the root content
+        if ( nIndex == -1 )
+            _sSimpleName = sName; // a content
+        else
+            _xNameContainer.clear(); // a sub folder doesn't exist
         return bRet;
     }
 }
@@ -540,7 +542,6 @@ Reference< XComponent > SAL_CALL ODocumentContainer::loadComponentFromURL( const
         if ( !lcl_queryContent(_sURL,xNameContainer,aContent,sName) )
         {
             ::rtl::OUString sMessage( DBA_RES( RID_STR_NAME_NOT_FOUND ) );
-                // TODO: resource
             ::comphelper::string::searchAndReplaceAsciiI( sMessage, "$name$", _sURL );
             throw IllegalArgumentException( sMessage, *this, 1 );
         }
@@ -610,15 +611,24 @@ sal_Bool SAL_CALL ODocumentContainer::hasByHierarchicalName( const ::rtl::OUStri
 // XHierarchicalNameContainer
 void SAL_CALL ODocumentContainer::insertByHierarchicalName( const ::rtl::OUString& _sName, const Any& _aElement ) throw (IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
 {
+    Reference< XContent > xContent(_aElement,UNO_QUERY);
+    if ( !xContent.is() )
+        throw IllegalArgumentException();
+
     ClearableMutexGuard aGuard(m_aMutex);
     Any aContent;
     Reference< XNameContainer > xNameContainer(this);
     ::rtl::OUString sName;
     if ( lcl_queryContent(_sName,xNameContainer,aContent,sName) )
         throw ElementExistException(_sName,*this);
-    Reference< XContent > xContent(_aElement,UNO_QUERY);
-    if ( !xContent.is() )
-        throw IllegalArgumentException();
+
+    if ( !xNameContainer.is() )
+    {
+        ::rtl::OUString sMessage( DBA_RES( RID_STR_NO_SUB_FOLDER ) );
+        sal_Int32 index = sName.getLength();
+        ::comphelper::string::searchAndReplaceAsciiI( sMessage, "$folder$", _sName.getToken(0,'/',index) );
+        throw IllegalArgumentException( sMessage, *this, 1 );
+    }
 
     xNameContainer->insertByName(sName,_aElement);
 }

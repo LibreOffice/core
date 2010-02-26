@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DExport.cxx,v $
- * $Revision: 1.40.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -479,6 +476,7 @@ sal_Int16 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int16 _nOl
                         case NumberFormat::DATETIME:
                         case NumberFormat::TEXT:
                         case NumberFormat::DATE:
+                            nNumberFormat = _nOldNumberFormat;
                             break;
                         case NumberFormat::ALL:
                             nNumberFormat = NumberFormat::DATE;
@@ -494,6 +492,7 @@ sal_Int16 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int16 _nOl
                         case NumberFormat::DATETIME:
                         case NumberFormat::TEXT:
                         case NumberFormat::TIME:
+                            nNumberFormat = _nOldNumberFormat;
                             break;
                         case NumberFormat::ALL:
                             nNumberFormat = NumberFormat::TIME;
@@ -510,6 +509,7 @@ sal_Int16 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int16 _nOl
                             nNumberFormat = NumberFormat::CURRENCY;
                             break;
                         case NumberFormat::CURRENCY:
+                            nNumberFormat = _nOldNumberFormat;
                             break;
                         case NumberFormat::ALL:
                             nNumberFormat = NumberFormat::CURRENCY;
@@ -526,6 +526,7 @@ sal_Int16 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int16 _nOl
                     switch(_nOldNumberFormat)
                     {
                         case NumberFormat::NUMBER:
+                            nNumberFormat = _nOldNumberFormat;
                             break;
                         case NumberFormat::CURRENCY:
                             nNumberFormat = NumberFormat::CURRENCY;
@@ -549,6 +550,7 @@ sal_Int16 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int16 _nOl
                         case NumberFormat::DATETIME:
                         case NumberFormat::TEXT:
                         case NumberFormat::TIME:
+                            nNumberFormat = _nOldNumberFormat;
                             break;
                         case NumberFormat::ALL:
                             nNumberFormat = NumberFormat::DATETIME;

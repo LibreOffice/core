@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ViewsWindow.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -337,12 +334,6 @@ void OViewsWindow::removeSection(USHORT _nPosition)
         Resize();
     } // if ( _nPosition < m_aSections.size() )
 }
-//----------------------------------------------------------------------------
-void OViewsWindow::showView(USHORT _nPos,BOOL _bShow)
-{
-    if ( _nPos < m_aSections.size() )
-        m_aSections[_nPos]->setCollapsed(_bShow);
-}
 //------------------------------------------------------------------------------
 void OViewsWindow::toggleGrid(BOOL _bVisible)
 {
@@ -533,21 +524,6 @@ void OViewsWindow::SelectAll(const sal_uInt16 _nObjectType)
     ::std::for_each(m_aSections.begin(),m_aSections.end(),
         ::std::compose1(::boost::bind(::boost::mem_fn(&OReportSection::SelectAll),_1,_nObjectType),TReportPairHelper()));
     m_bInUnmark = sal_False;
-}
-//----------------------------------------------------------------------------
-void OViewsWindow::SectionHasFocus(OReportSection* /*_pSection*/,BOOL /*_bHasFocus*/)
-{
-/* LLA!: this function does nothing!
-TSectionsMap::iterator aIter = m_aSections.begin();
-    TSectionsMap::iterator aEnd = m_aSections.end();
-    for (USHORT i = 0 ; aIter != aEnd ; ++aIter,++i)
-    {
-        if ( (*aIter).first.get() == _pSection )
-        {
-
-        }
-    }
-*/
 }
 //-----------------------------------------------------------------------------
 void OViewsWindow::unmarkAllObjects(OSectionView* _pSectionView)
@@ -982,12 +958,6 @@ void OViewsWindow::setDragStripes(BOOL bOn)
         (*aIter)->getReportSection().getSectionView().SetDragStripes(bOn);
 }
 // -----------------------------------------------------------------------------
-BOOL OViewsWindow::isDragStripes() const
-{
-    return !m_aSections.empty() && (*m_aSections.begin())->getReportSection().getSectionView().IsDragStripes();
-}
-// -----------------------------------------------------------------------------
-
 USHORT OViewsWindow::getPosition(const OSectionWindow* _pSectionWindow) const
 {
     TSectionsMap::const_iterator aIter = m_aSections.begin();

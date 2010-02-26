@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: databasedocument.cxx,v $
- * $Revision: 1.40.6.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1613,8 +1610,7 @@ void SAL_CALL ODatabaseDocument::loadFromStorage( const Reference< XStorage >& /
     DocumentGuard aGuard( *this );
 
     throw Exception(
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Embedding of database documents is not supported." ) ),
-            // TODO: resource
+        DBACORE_RESSTRING( RID_STR_NO_EMBEDDING ),
         *this
     );
 }

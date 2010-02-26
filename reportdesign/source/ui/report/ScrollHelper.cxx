@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ScrollHelper.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -391,11 +388,6 @@ void OScrollWindowHelper::setGridSnap(BOOL bOn)
 void OScrollWindowHelper::setDragStripes(BOOL bOn)
 {
     m_aReportWindow.setDragStripes(bOn);
-}
-// -----------------------------------------------------------------------------
-BOOL OScrollWindowHelper::isDragStripes() const
-{
-    return m_aReportWindow.isDragStripes();
 }
 // -----------------------------------------------------------------------------
 sal_uInt32 OScrollWindowHelper::getMarkedObjectCount() const

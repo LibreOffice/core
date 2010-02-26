@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: QueryDesignView.hxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -171,6 +168,10 @@ namespace dbaui
                                                                     const String& _sCriteria,
                                                                     ::rtl::OUString& _rsErrorMessage,
                                                                     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxColumn) const;
+
+        void fillFunctionInfo(   const ::connectivity::OSQLParseNode* pNode
+                                ,const ::rtl::OUString& sFunctionTerm
+                                ,OTableFieldDescRef& aInfo);
     protected:
         // return the Rectangle where I can paint myself
         virtual void resizeDocumentView(Rectangle& rRect);

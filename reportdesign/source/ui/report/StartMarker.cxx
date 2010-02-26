@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: StartMarker.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -285,12 +282,6 @@ void OStartMarker::showRuler(sal_Bool _bShow)
     m_bShowRuler = _bShow;
     m_aVRuler.Show(!m_bCollapsed && m_bShowRuler);
 }
-//------------------------------------------------------------------------------
-sal_Int32 OStartMarker::getRulerOffset() const
-{
-    return m_aVRuler.GetSizePixel().Width();
-}
-
 //------------------------------------------------------------------------------
 void OStartMarker::RequestHelp( const HelpEvent& rHEvt )
 {

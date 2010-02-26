@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DesignView.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -680,12 +677,14 @@ void ODesignView::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAlig
 {
     m_aScrollWindow.alignMarkedObjects(_nControlModification, _bAlignAtSection,bBoundRects);
 }
+#if 0
 // -----------------------------------------------------------------------------
 sal_Bool ODesignView::isAlignPossible() const
 {
     ::boost::shared_ptr<OSectionWindow> pMarkedSection = getMarkedSection();
     return pMarkedSection.get() && pMarkedSection->getReportSection().getSectionView().IsAlignPossible();
 }
+#endif
 //------------------------------------------------------------------------------
 sal_Bool ODesignView::handleKeyEvent(const KeyEvent& _rEvent)
 {

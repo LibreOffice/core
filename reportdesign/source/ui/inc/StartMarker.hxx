@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: StartMarker.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,10 +72,6 @@ namespace rptui
 
         void            setTitle(const String& _sTitle);
         sal_Int32       getMinHeight() const;
-
-        /** returns the offset where the horizontal ruler must start
-        */
-        sal_Int32       getRulerOffset() const;
 
         /** shows or hides the ruler.
         */
