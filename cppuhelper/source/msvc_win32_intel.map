@@ -275,4 +275,5 @@ UDK_3.5 { # OOo 3.0
 UDK_3.6 { # OOo 3.3
     global:
         ?disposeWeakConnectionPoint@OWeakObject@cppu@@IAEXXZ;
+        ?clear@WeakReferenceHelper@uno@star@sun@com@@QAAXXZ;
 } UDK_3.5;
