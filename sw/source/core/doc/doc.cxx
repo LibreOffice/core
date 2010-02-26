@@ -1335,7 +1335,6 @@ void SwDoc::CalculatePagesForPrinting(
         // 0 -> print all pages (default if aPageRange is empty)
         // 1 -> print range according to PageRange
         // 2 -> print selection
-        const sal_Int32 nContent = rOptions.getIntValue( "PrintContent", 0 );
         if (1 == nContent)
             aPageRange = rOptions.getStringValue( "PageRange", OUString() );
         if (2 == nContent)
