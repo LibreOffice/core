@@ -271,6 +271,17 @@ void ImportExcel8::ReadBasic( void )
         {
             SvxImportMSVBasic aBasicImport( *pShell, *xRootStrg, bLoadCode, bLoadStrg );
         bool bAsComment = !bLoadExecutable;
+            if ( !bAsComment )
+            {
+            uno::Any aGlobs;
+                uno::Sequence< uno::Any > aArgs(1);
+                aArgs[ 0 ] <<= pShell->GetModel();
+            aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.excel.Globals" ) ), aArgs );
+            pShell->GetBasicManager()->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
+                BasicManager* pAppMgr = SFX_APP()->GetBasicManager();
+                if ( pAppMgr )
+                    pAppMgr->SetGlobalUNOConstant( "ThisExcelDoc", aArgs[ 0 ] );
+            }
             aBasicImport.Import( EXC_STORAGE_VBA_PROJECT, EXC_STORAGE_VBA, bAsComment );
         }
     }

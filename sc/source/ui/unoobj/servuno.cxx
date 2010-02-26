@@ -65,6 +65,10 @@
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #include <svx/unomod.hxx>
 
+#include <comphelper/processfactory.hxx>
+#include <basic/basmgr.hxx>
+#include <sfx2/app.hxx>
+
 using namespace ::com::sun::star;
 
 class ScVbaCodeNameProvider : public ::cppu::WeakImplHelper1< document::XCodeNameQuery >
@@ -183,6 +187,7 @@ static const ProvNamesId_Type __FAR_DATA aProvNamesId[] =
     { "com.sun.star.text.textfield.DocumentTitle",      SC_SERVICE_TITLEFIELD },
     { "com.sun.star.text.textfield.FileName",           SC_SERVICE_FILEFIELD },
     { "com.sun.star.text.textfield.SheetName",          SC_SERVICE_SHEETFIELD },
+    { "ooo.vba.VBAGlobals",          SC_SERVICE_VBAGLOBALS },
 };
 
 //
@@ -236,6 +241,7 @@ static const sal_Char* __FAR_DATA aOldNames[SC_SERVICE_COUNT] =
         "",                                         // SC_SERVICE_FORMULAPARS
         "",                                         // SC_SERVICE_OPCODEMAPPER
         "",                                         // SC_SERVICE_VBACODENAMEPROVIDER
+        "",                                         // SC_SERVICE_VBAGLOBALS
     };
 
 
@@ -452,6 +458,25 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
                     xRet.set(static_cast<document::XCodeNameQuery*>(new ScVbaCodeNameProvider( pDocShell )));
                 }
                 break;
+            }
+        case SC_SERVICE_VBAGLOBALS:
+            {
+                uno::Any aGlobs;
+                ScDocument* pDoc = pDocShell->GetDocument();
+                if ( pDoc )
+                {
+                    if ( !pDocShell->GetBasicManager()->GetGlobalUNOConstant( "VBAGlobals", aGlobs ) )
+                    {
+                        uno::Sequence< uno::Any > aArgs(1);
+                        aArgs[ 0 ] <<= pDocShell->GetModel();
+                        aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.excel.Globals" ) ), aArgs );
+                        pDocShell->GetBasicManager()->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
+                        BasicManager* pAppMgr = SFX_APP()->GetBasicManager();
+                        if ( pAppMgr )
+                            pAppMgr->SetGlobalUNOConstant( "ThisExcelDoc", aArgs[ 0 ] );
+                    }
+                    aGlobs >>= xRet;
+                }
             }
     }
 

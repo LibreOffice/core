@@ -355,6 +355,7 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
     }
     else
         aDocument.SetInsertingFromOtherDoc( FALSE );
+#if 0 // disable load of vba related libraries
     // add vba globals ( if they are availabl )
     uno::Any aGlobs;
         uno::Sequence< uno::Any > aArgs(1);
@@ -375,7 +376,7 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
         BasicManager* pAppMgr = SFX_APP()->GetBasicManager();
         if ( pAppMgr )
             pAppMgr->SetGlobalUNOConstant( "ThisExcelDoc", aArgs[ 0 ] );
-
+#endif
     aDocument.SetImportingXML( FALSE );
     aDocument.EnableExecuteLink( true );
     aDocument.EnableUndo( TRUE );
