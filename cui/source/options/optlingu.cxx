@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: optlingu.cxx,v $
- * $Revision: 1.68 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +37,7 @@
 #include <tools/dynary.hxx>
 #include <i18npool/mslangid.hxx>
 #include <unotools/lingucfg.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <svx/dlgutil.hxx>
 #include <linguistic/lngprops.hxx>
 #include <linguistic/misc.hxx>
@@ -73,7 +70,7 @@
 #include "optlingu.hrc"
 
 #include <svx/svxdlg.hxx>
-#include <svx/optitems.hxx>
+#include <editeng/optitems.hxx>
 #include "optlingu.hxx"
 #include <dialmgr.hxx>
 #include <cuires.hrc>
