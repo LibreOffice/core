@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: attrib.hxx,v $
- * $Revision: 1.10.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,13 +39,16 @@
 
                                         // Flags fuer durch Merge verdeckte Zellen
                                         // und Control fuer Auto-Filter
-#define SC_MF_HOR               1
-#define SC_MF_VER               2
-#define SC_MF_AUTO              4
-#define SC_MF_BUTTON            8
-#define SC_MF_SCENARIO          16
+#define SC_MF_HOR               0x0001
+#define SC_MF_VER               0x0002
+#define SC_MF_AUTO              0x0004  /// autofilter arrow
+#define SC_MF_BUTTON            0x0008  /// field button for datapilot
+#define SC_MF_SCENARIO          0x0010
+#define SC_MF_BUTTON_POPUP      0x0020  /// dp button with popup arrow
+#define SC_MF_HIDDEN_MEMBER     0x0040  /// dp field button with presence of hidden member
+#define SC_MF_DP_TABLE          0x0080  /// dp table output
 
-#define SC_MF_ALL               31
+#define SC_MF_ALL               0x00FF
 
 
 class EditTextObject;
@@ -103,6 +103,7 @@ public:
 
     BOOL    HasAutoFilter() const       { return ( GetValue() & SC_MF_AUTO ) != 0; }
     BOOL    HasButton() const           { return ( GetValue() & SC_MF_BUTTON ) != 0; }
+    bool    HasDPTable() const          { return ( GetValue() & SC_MF_DP_TABLE ) != 0; }
 
     BOOL    IsScenario() const          { return ( GetValue() & SC_MF_SCENARIO ) != 0; }
 };

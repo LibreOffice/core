@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: transobj.cxx,v $
- * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +33,7 @@
 
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 
 #include <com/sun/star/uno/Sequence.hxx>
@@ -63,8 +60,8 @@
 #include "scmod.hxx"
 
 // for InitDocShell
-#include <svx/paperinf.hxx>
-#include <svx/sizeitem.hxx>
+#include <editeng/paperinf.hxx>
+#include <editeng/sizeitem.hxx>
 #include <svx/algitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/zforlist.hxx>

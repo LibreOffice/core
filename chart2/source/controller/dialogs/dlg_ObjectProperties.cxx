@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dlg_ObjectProperties.cxx,v $
- * $Revision: 1.23.42.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,7 +73,7 @@
 #include <svx/svxgrahicitem.hxx>
 
 #include <svx/dialogs.hrc>
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
 #include <svx/tabline.hxx>
 
 #include <svx/flagsdef.hxx>

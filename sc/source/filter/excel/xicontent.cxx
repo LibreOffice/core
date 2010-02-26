@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xicontent.cxx,v $
- * $Revision: 1.31.88.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,21 +31,21 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <tools/urlobj.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editobj.hxx>
-#include <svx/linkmgr.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editobj.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <svl/itemset.hxx>
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
-#include <svx/flditem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/crsditem.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/crsditem.hxx>
 #include "document.hxx"
 #include "editutil.hxx"
 #include "cell.hxx"

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: VSeriesPlotter.cxx,v $
- * $Revision: 1.44.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,7 +65,7 @@
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
-#include <svx/unoprnms.hxx>
+#include <editeng/unoprnms.hxx>
 #include <tools/color.hxx>
 // header for class OUStringBuffer
 #include <rtl/ustrbuf.hxx>
@@ -537,6 +534,9 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
             createText( xTarget_, aText.makeStringAndClear()
                         , *pPropNames, *pPropValues, ShapeFactory::makeTransformation( aScreenPosition2D ) );
 
+        if( !xTextShape.is() )
+            return xTextShape;
+
         const awt::Point aUnrotatedTextPos( xTextShape->getPosition() );
         if( fRotationDegrees != 0.0 )
         {
@@ -547,7 +547,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
             LabelPositionHelper::correctPositionForRotation( xTextShape, eAlignment, fRotationDegrees, true /*bRotateAroundCenter*/ );
         }
 
-        if( xSymbol.is() && xTextShape.is() )
+        if( xSymbol.is() )
         {
             const awt::Point aOldTextPos( xTextShape->getPosition() );
             awt::Point aNewTextPos( aOldTextPos );

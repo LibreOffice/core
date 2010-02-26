@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docpool.cxx,v $
- * $Revision: 1.25.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,37 +36,37 @@
 #include <svl/aeitem.hxx>
 #include <svl/itemiter.hxx>
 #include <svx/algitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/bolnitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/charreliefitem.hxx>
-#include <svx/cntritem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/crsditem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/bolnitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/charreliefitem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/crsditem.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/emphitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/forbiddenruleitem.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/hngpnctitem.hxx>
-#include <svx/itemtype.hxx>
-#include <svx/langitem.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/emphitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/forbiddenruleitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/hngpnctitem.hxx>
+#include <editeng/itemtype.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <svx/pageitem.hxx>
-#include <svx/pbinitem.hxx>
-#include <svx/postitem.hxx>
+#include <editeng/pbinitem.hxx>
+#include <editeng/postitem.hxx>
 #include <svx/rotmodit.hxx>
-#include <svx/scriptspaceitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/sizeitem.hxx>
+#include <editeng/scriptspaceitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/sizeitem.hxx>
 #include <svx/svxitems.hrc>
-#include <svx/udlnitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/wrlmitem.hxx>
-#include <svx/xmlcnitm.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/wrlmitem.hxx>
+#include <editeng/xmlcnitm.hxx>
 
 #include "docpool.hxx"
 #include "global.hxx"

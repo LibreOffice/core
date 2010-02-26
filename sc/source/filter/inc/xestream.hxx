@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xestream.hxx,v $
- * $Revision: 1.8.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -126,6 +123,9 @@ public:
     sal_Size            Write( const void* pData, sal_Size nBytes );
     /** Writes a sequence of nBytes zero bytes (respects slice setting). */
     void                WriteZeroBytes( sal_Size nBytes );
+
+    void                WriteZeroBytesToRecord( sal_Size nBytes );
+
     /** Copies nBytes bytes from current position of the stream rInStrm.
         @descr  Omitting the second parameter means: read to end of stream. */
     sal_Size            CopyFromStream( SvStream& rInStrm, sal_Size nBytes = STREAM_SEEK_TO_END );

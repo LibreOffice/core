@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xiescher.hxx,v $
- * $Revision: 1.28.90.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -979,7 +976,7 @@ class SdrObjList;
 /** Derived from SvxMSDffManager and SvxMSConvertOCXControls, contains core
     implementation of DFF stream import and OCX form control import.
  */
-class XclImpDffManager : protected XclImpSimpleDffManager, protected SvxMSConvertOCXControls
+class XclImpDffManager : public XclImpSimpleDffManager, protected SvxMSConvertOCXControls
 {
 public:
     explicit            XclImpDffManager(
