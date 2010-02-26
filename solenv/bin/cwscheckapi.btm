@@ -1,14 +1,11 @@
 @echo off
 REM **************************************************************************
+REM *
 REM * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 REM * 
-REM * Copyright 2008 by Sun Microsystems, Inc.
+REM * Copyright 2000, 2010 Oracle and/or its affiliates.
 REM *
 REM * OpenOffice.org - a multi-platform office productivity suite
-REM *
-REM * $RCSfile: cwscheckapi.btm,v $
-REM *
-REM * $Revision: 1.3.6.4 $
 REM *
 REM * This file is part of OpenOffice.org.
 REM *
@@ -26,6 +23,7 @@ REM * You should have received a copy of the GNU Lesser General Public License
 REM * version 3 along with OpenOffice.org.  If not, see
 REM * <http://www.openoffice.org/license.html>
 REM * for a copy of the LGPLv3 License.
+REM *
 REM ************************************************************************/
 
 rem echo on
