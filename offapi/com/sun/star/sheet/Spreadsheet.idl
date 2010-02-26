@@ -96,6 +96,8 @@
 #include <com/sun/star/sheet/XExternalSheetName.idl>
 #endif
 
+#include <com/sun/star/util/Color.idl>
+
 //=============================================================================
 
 module com {  module sun {  module star {  module sheet {
@@ -264,6 +266,9 @@ service Spreadsheet
      */
     [optional, property] boolean AutomaticPrintArea;
 
+    /** specifies the color of the sheet tab, if any.
+     */
+    [optional, property] com::sun::star::util::Color TabColor;
 };
 
 //=============================================================================
