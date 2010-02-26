@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: gridwin4.cxx,v $
- * $Revision: 1.40 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,14 +33,14 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 
 #include <svtools/colorcfg.hxx>
-#include <svx/colritem.hxx>
-#include <svx/editview.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/printer.hxx>
 
@@ -74,6 +71,7 @@
 #include "inputopt.hxx"
 #include "fillinfo.hxx"
 #include "dpcontrol.hxx"
+#include "queryparam.hxx"
 #include "sc.hrc"
 #include <vcl/virdev.hxx>
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xehelper.cxx,v $
- * $Revision: 1.31.148.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,15 +35,15 @@
 #include <svl/itemset.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svx/svdotext.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include "scitems.hxx"
-#include <svx/fhgtitem.hxx>
-#include <svx/flstitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/flditem.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/svxfont.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/flstitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/svxfont.hxx>
 
 #define _SVSTDARR_USHORTS
 #include <svl/svstdarr.hxx>

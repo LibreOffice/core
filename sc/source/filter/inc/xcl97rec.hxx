@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xcl97rec.hxx,v $
- * $Revision: 1.48.30.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -566,6 +563,19 @@ public:
 
 private:
     virtual void        WriteBody( XclExpStream& rStrm );
+};
+
+// ============================================================================
+
+/** End of User Interface Records */
+class XclExpInterfaceEnd : public XclExpRecord
+{
+public:
+    explicit XclExpInterfaceEnd();
+    virtual ~XclExpInterfaceEnd();
+
+private:
+    virtual void WriteBody( XclExpStream& rStrm );
 };
 
 // ============================================================================
