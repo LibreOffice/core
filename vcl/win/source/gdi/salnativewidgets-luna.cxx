@@ -294,6 +294,10 @@ BOOL WinSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
             if( nPart == PART_ENTIRE_CONTROL )
                 hTheme = getThemeHandle( mhWnd, L"Progress");
             break;
+        case CTRL_LISTNODE:
+            if( nPart == PART_ENTIRE_CONTROL )
+                hTheme = getThemeHandle( mhWnd, L"TreeView" );
+            break;
         default:
             hTheme = NULL;
             break;
@@ -893,6 +897,27 @@ BOOL ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         return ImplDrawTheme( hTheme, hDC, PP_CHUNK, iState, aProgressRect, aCaption );
     }
 
+    if( nType == CTRL_LISTNODE )
+    {
+        if( nPart != PART_ENTIRE_CONTROL )
+            return FALSE;
+
+        ButtonValue aButtonValue = aValue.getTristateVal();
+        iPart = TVP_GLYPH;
+        switch( aButtonValue )
+        {
+        case BUTTONVALUE_ON:
+            iState = GLPS_OPENED;
+            break;
+        case BUTTONVALUE_OFF:
+            iState = GLPS_CLOSED;
+            break;
+        default:
+            return FALSE;
+        }
+        return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption );
+    }
+
     return false;
 }
 
@@ -972,6 +997,10 @@ BOOL WinSalGraphics::drawNativeControl( ControlType nType,
         case CTRL_PROGRESS:
             if( nPart == PART_ENTIRE_CONTROL )
                 hTheme = getThemeHandle( mhWnd, L"Progress");
+            break;
+        case CTRL_LISTNODE:
+            if( nPart == PART_ENTIRE_CONTROL )
+                hTheme = getThemeHandle( mhWnd, L"TreeView");
             break;
         default:
             hTheme = NULL;
