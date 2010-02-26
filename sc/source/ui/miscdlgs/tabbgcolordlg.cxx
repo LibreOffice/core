@@ -39,14 +39,14 @@
 #include "scresid.hxx"
 #include "miscdlgs.hrc"
 
-#include <tools/debug.hxx>
-#include <tools/color.hxx>
-#include <sfx2/objsh.hxx>
-#include <svx/xtable.hxx>
-#include <svx/drawitem.hxx>
-#include <unotools/pathoptions.hxx>
-#include <tools/resid.hxx>
-#include <svx/svxitems.hrc>
+#include "tools/debug.hxx"
+#include "tools/color.hxx"
+#include "sfx2/objsh.hxx"
+#include "svx/xtable.hxx"
+#include "svx/drawitem.hxx"
+#include "unotools/pathoptions.hxx"
+#include "tools/resid.hxx"
+#include "editeng/editrids.hrc"
 
 #include <boost/scoped_ptr.hpp>
 
@@ -116,7 +116,7 @@ void ScTabBgColorDlg::FillColorValueSets_Impl()
     }
     if ( pColorTable )
     {
-        short i = 0;
+        sal_uInt16 i = 0;
         long nCount = pColorTable->Count();
         XColorEntry* pEntry = NULL;
         Color aColWhite( COL_WHITE );
