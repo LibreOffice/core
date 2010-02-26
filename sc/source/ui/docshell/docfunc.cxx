@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docfunc.cxx,v $
- * $Revision: 1.70.100.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,11 +33,11 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
-#include <svx/editobj.hxx>
-#include <svx/linkmgr.hxx>
+#include <editeng/editobj.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <svx/svdundo.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/printer.hxx>
@@ -4649,7 +4646,7 @@ BOOL ScDocFunc::InsertAreaLink( const String& rFile, const String& rFilter,
     ScDocument* pDoc = rDocShell.GetDocument();
     BOOL bUndo (pDoc->IsUndoEnabled());
 
-    SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
+    sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
 
     //  #i52120# if other area links exist at the same start position,
     //  remove them first (file format specifies only one link definition

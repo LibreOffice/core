@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessibleText.cxx,v $
- * $Revision: 1.42.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +29,7 @@
 #include "precompiled_sc.hxx"
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 
 #include <memory>
@@ -48,12 +45,12 @@
 #include "unoguard.hxx"
 #include "patattr.hxx"
 #include "inputwin.hxx"
-#include <svx/unofored.hxx>
-#include <svx/editview.hxx>
-#include <svx/unoedhlp.hxx>
+#include <editeng/unofored.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/unoedhlp.hxx>
 #include <vcl/virdev.hxx>
-#include <svx/editobj.hxx>
-#include <svx/adjitem.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/adjitem.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/algitem.hxx>
 
