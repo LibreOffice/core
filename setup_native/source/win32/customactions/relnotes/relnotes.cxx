@@ -40,6 +40,7 @@
 #include <malloc.h>
 #include <stdio.h>
 #include <strsafe.h>
+#include <string>
 
 //----------------------------------------------------------
 #ifdef DEBUG
@@ -62,6 +63,24 @@ static inline void OutputDebugStringFormat( LPCTSTR, ... )
 inline bool IsValidHandle( HANDLE handle )
 {
     return (NULL != handle) && (INVALID_HANDLE_VALUE != handle);
+}
+
+//----------------------------------------------------------
+static bool GetMsiProp(MSIHANDLE handle, LPCTSTR name, /*out*/std::wstring& value)
+{
+    DWORD sz = 0;
+    LPTSTR dummy = TEXT("");
+    if (MsiGetProperty(handle, name, dummy, &sz) == ERROR_MORE_DATA)
+    {
+        sz++;
+        DWORD nbytes = sz * sizeof(TCHAR);
+        LPTSTR buff = reinterpret_cast<LPTSTR>(_alloca(nbytes));
+        ZeroMemory(buff, nbytes);
+        MsiGetProperty(handle, name, buff, &sz);
+        value = buff;
+        return true;
+    }
+    return false;
 }
 
 //----------------------------------------------------------
@@ -138,8 +157,15 @@ extern "C" UINT __stdcall ShowReleaseNotesAfter( MSIHANDLE )
 }
 
 //----------------------------------------------------------
-extern "C" UINT __stdcall ShowSurveyAfter( MSIHANDLE )
+extern "C" UINT __stdcall ShowSurveyAfter( MSIHANDLE handle )
 {
+    std::wstring prodname;
+
+    GetMsiProp( handle, TEXT("ProductName"), prodname );
+    std::wstring::size_type nIndex = prodname.find( TEXT( "OpenOffice.org" ) );
+    if( std::wstring::npos == nIndex )
+        return ERROR_SUCCESS;
+
     OutputDebugString( TEXT("DEBUG: ShowSurveyAfter called") );
 
     SHELLEXECUTEINFOW aExecInf;
