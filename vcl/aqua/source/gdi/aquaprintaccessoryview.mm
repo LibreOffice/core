@@ -321,10 +321,10 @@ class ControllerProperties
             double fScaleX = double(aLogicSize.Width())/double(aPageSize.aSize.Width());
             double fScaleY = double(aLogicSize.Height())/double(aPageSize.aSize.Height());
             double fScale = (fScaleX < fScaleY) ? fScaleX : fScaleY;
-            // #i104784# if we render the page too small, the corresponding small fonts lead to
+            // #i104784# if we render the page too small then rounding issues result in
             // layout artifacts looking really bad. So scale the page unto a device that is not
-            // full page size but not too small either. This is a workaround for the limitations of
-            // our text system.
+            // full page size but not too small either. This also results in much better visual
+            // quality of the preview, e.g. when its height approaches the number of text lines
             if( fScale < 0.1 )
                 fScale = 0.1;
             aMtf.WindStart();
