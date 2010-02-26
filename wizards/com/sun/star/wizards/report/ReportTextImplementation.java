@@ -3,13 +3,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ReportTextImplementation.java,v $
- *
- * $Revision: 1.2.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -480,7 +476,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
         return m_aDoc.xMSFDoc;
     }
 
-    public void store(String _sName, int _nOpenMode)
+    public void store(String _sName, int _nOpenMode) throws com.sun.star.uno.Exception
     {
         getDoc().createReportForm(ReportWizard.SOREPORTFORMNAME);
         // int nOpenMode = getReportOpenMode();

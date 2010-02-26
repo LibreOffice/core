@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: simplecm.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -279,9 +276,9 @@ SvStream* SimpleCommunicationLinkViaSocket::GetBestCommunicationStream()
 BOOL SimpleCommunicationLinkViaSocket::DoReceiveDataStream()
 {
     BOOL bWasError = FALSE;
-    char* pBuffer = NULL;
+    void* pBuffer = NULL;
     comm_UINT32 nLen;
-    bWasError = pPacketHandler->ReceiveData( (void* &)pBuffer, nLen ) != C_ERROR_NONE;
+    bWasError = pPacketHandler->ReceiveData( pBuffer, nLen ) != C_ERROR_NONE;
     if ( !bWasError )
     {
         pReceiveStream = GetBestCommunicationStream();

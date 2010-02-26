@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: textanim.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -140,7 +137,7 @@ SvxTextAnimationPage::SvxTextAnimationPage( Window* pWindow, const SfxItemSet& r
 {
     FreeResource();
 
-    eFUnit = GetModuleFieldUnit( &rInAttrs );
+    eFUnit = GetModuleFieldUnit( rInAttrs );
     SfxItemPool* pPool = rOutAttrs.GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
     eUnit = pPool->GetMetric( SDRATTR_TEXT_LEFTDIST );
