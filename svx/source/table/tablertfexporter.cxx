@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tablertfexporter.cxx,v $
- * $Revision: 1.3.212.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,18 +37,18 @@
 #include <svtools/rtfkeywd.hxx>
 #include <svtools/rtfout.hxx>
 
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/sdtaitm.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/udlnitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/udlnitem.hxx>
 
 #include "cell.hxx"
 #include "celltypes.hxx"
 #include "svx/svdotable.hxx"
 #include "svx/svdoutl.hxx"
-#include "svx/editeng.hxx"
-#include "svx/outlobj.hxx"
+#include "editeng/editeng.hxx"
+#include "editeng/outlobj.hxx"
 
 //#include <tablertfexporter.hxx>
 
