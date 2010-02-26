@@ -78,7 +78,7 @@ typedef UINT32 ColorData;
 #define COL_YELLOW                  RGB_COLORDATA( 0xFF, 0xFF, 0x00 )
 #define COL_WHITE                   RGB_COLORDATA( 0xFF, 0xFF, 0xFF )
 #define COL_TRANSPARENT             TRGB_COLORDATA( 0xFF, 0xFF, 0xFF, 0xFF )
-#define COL_AUTO                    (UINT32)0xFFFFFFFF
+#define COL_AUTO                    (ColorData)0xFFFFFFFF
 #define COL_AUTHOR1_DARK            RGB_COLORDATA(198, 146, 0)
 #define COL_AUTHOR1_NORMAL          RGB_COLORDATA(255, 255, 158)
 #define COL_AUTHOR1_LIGHT           RGB_COLORDATA(255, 255, 195)
