@@ -31,8 +31,8 @@ import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleAction;
 import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.accessibility.XAccessibleText;
-import com.sun.star.awt.XExtendedToolkit;
 import com.sun.star.awt.XWindow;
+import com.sun.star.frame.XModel;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
@@ -102,23 +102,10 @@ public class AccessibleMenu extends TestCase {
             throw new StatusException("Can't create document", e);
         }
 
-        XInterface oObj = null;
-
-        try {
-            oObj = (XInterface) msf.createInstance("com.sun.star.awt.Toolkit");
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Couldn't get toolkit");
-            e.printStackTrace(log);
-            throw new StatusException("Couldn't get toolkit", e);
-        }
-
-        XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
-                                      XExtendedToolkit.class, oObj);
-
         shortWait();
 
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
-                                                              tk.getActiveTopWindow());
+        XWindow xWindow = UnoRuntime.queryInterface(XModel.class, xTextDoc).
+            getCurrentController().getFrame().getContainerWindow();
 
         AccessibilityTools at = new AccessibilityTools();
 
@@ -127,6 +114,7 @@ public class AccessibleMenu extends TestCase {
         at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
         XAccessibleContext menubar = at.getAccessibleObjectForRole(xRoot,
                                                                    AccessibleRole.MENU_BAR);
+        XInterface oObj = null;
         Object menu2 = null;
 
         try {

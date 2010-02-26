@@ -32,7 +32,6 @@ import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.awt.PosSize;
 import com.sun.star.awt.Rectangle;
-import com.sun.star.awt.XExtendedToolkit;
 import com.sun.star.awt.XWindow;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.XDesktop;
@@ -58,7 +57,6 @@ public class AccessibleShape extends TestCase {
 
     XTextDocument xTextDoc = null;
     XInterface oObj = null;
-    XWindow basicIDE = null;
 
     protected void cleanup(TestParameters Param, PrintWriter log) {
         log.println("Cleaning up");
@@ -115,15 +113,9 @@ public class AccessibleShape extends TestCase {
             throw new StatusException("Couldn't get toolkit", e );
         }
 
-
-        XExtendedToolkit tk = (XExtendedToolkit)
-        UnoRuntime.queryInterface(XExtendedToolkit.class,oObj);
-
-
         AccessibilityTools at = new AccessibilityTools();
 
-        basicIDE = (XWindow)
-        UnoRuntime.queryInterface(XWindow.class,tk.getActiveTopWindow());
+        final XWindow basicIDE = xFrame.getContainerWindow();
 
         XAccessible xRoot = at.getAccessibleObject(basicIDE);
 
@@ -138,23 +130,19 @@ public class AccessibleShape extends TestCase {
 
         tEnv.addObjRelation("Destroy", Boolean.TRUE);
 
-        final XExtendedToolkit subtk = tk;
-
         tEnv.addObjRelation("EventProducer",
                 new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
             public void fireEvent() {
-                XWindow xWin = (XWindow) UnoRuntime.queryInterface(
-                                       XWindow.class, subtk.getActiveTopWindow());
-                Rectangle oldPosSize = xWin.getPosSize();
+                Rectangle oldPosSize = basicIDE.getPosSize();
                 Rectangle newPosSize = new Rectangle();
                 newPosSize.Width = oldPosSize.Width/2;
                 newPosSize.Height = oldPosSize.Height/2;
                 newPosSize.X = oldPosSize.X + 20;
                 newPosSize.Y = oldPosSize.Y + 20;
-                xWin.setPosSize(newPosSize.X, newPosSize.Y, newPosSize.Width,
+                basicIDE.setPosSize(newPosSize.X, newPosSize.Y, newPosSize.Width,
                                 newPosSize.Height, PosSize.POSSIZE);
                 utils.shortWait(1000);
-                xWin.setPosSize(oldPosSize.X, oldPosSize.Y, oldPosSize.Width,
+                basicIDE.setPosSize(oldPosSize.X, oldPosSize.Y, oldPosSize.Width,
                                 oldPosSize.Height, PosSize.POSSIZE);
             }
         });
