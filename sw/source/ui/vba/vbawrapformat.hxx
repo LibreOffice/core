@@ -47,7 +47,6 @@ private:
     void setDistance( const rtl::OUString& sName, float _distance ) throw (css::uno::RuntimeException);
 
 public:
-    SwVbaWrapFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape > xShape );
     SwVbaWrapFormat(  css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
 
     virtual ::sal_Int32 SAL_CALL getType() throw (css::uno::RuntimeException);

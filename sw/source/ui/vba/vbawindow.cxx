@@ -39,11 +39,6 @@ SwVbaWindow::SwVbaWindow( const uno::Reference< XHelperInterface >& xParent, con
 {
 }
 
-SwVbaWindow::SwVbaWindow( uno::Sequence< uno::Any > const & args, uno::Reference< uno::XComponentContext > const & xContext )
-        : WindowImpl_BASE( args, xContext )
-{
-}
-
 void
 SwVbaWindow::Activate() throw (css::uno::RuntimeException)
 {

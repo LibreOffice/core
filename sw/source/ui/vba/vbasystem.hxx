@@ -42,7 +42,6 @@ private:
     ByteString  maKey;
 public:
     PrivateProfileStringListener(){};
-    PrivateProfileStringListener( const rtl::OUString& rFileName, const ByteString& rGroupName, const ByteString& rKey );
     virtual ~PrivateProfileStringListener();
     void Initialize( const rtl::OUString& rFileName, const ByteString& rGroupName, const ByteString& rKey );
 
