@@ -349,8 +349,8 @@ static TranslatePropMap aTranslatePropMap_Impl[] =
     { MAP_CHAR_LEN("mouseDragged"), { MAP_CHAR_LEN("_MouseMove"), ooMouseEvtToVBAMouseEvt, DenyMouseDrag, NULL } }, //liuchen, add to support VBA MouseMove event when the "Shift" key is pressed
 
     // keyPressed ooo event
-    { MAP_CHAR_LEN("keyPressed"), { MAP_CHAR_LEN("_KeyDown"), ooKeyPressedToVBAKeyUpDown, ApproveAll, NULL } },
-    { MAP_CHAR_LEN("keyPressed"), { MAP_CHAR_LEN("_KeyPress"), ooKeyPressedToVBAKeyUpDown, ApproveAll, NULL } }
+    { MAP_CHAR_LEN("keyPressed"), { MAP_CHAR_LEN("_KeyDown"), ooKeyPressedToVBAKeyPressed, ApproveAll, NULL } },
+    { MAP_CHAR_LEN("keyPressed"), { MAP_CHAR_LEN("_KeyPress"), ooKeyPressedToVBAKeyPressed, ApproveAll, NULL } }
 };
 
 EventInfoHash& getEventTransInfo()
