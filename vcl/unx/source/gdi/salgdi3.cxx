@@ -2165,7 +2165,7 @@ namespace
 bool FcPreMatchSubstititution::FindFontSubstitute( ImplFontSelectData &rFontSelData ) const
 {
     // We dont' actually want to talk to Fontconfig at all for symbol fonts
-    if (rFontSelData.IsSymbolFont())
+    if( rFontSelData.IsSymbolFont() )
         return false;
     // StarSymbol is a unicode font, but it still deserves the symbol flag
     if( 0 == rFontSelData.maSearchName.CompareIgnoreCaseToAscii( "starsymbol", 10)
@@ -2174,19 +2174,32 @@ bool FcPreMatchSubstititution::FindFontSubstitute( ImplFontSelectData &rFontSelD
 
     rtl::OUString aDummy;
     const ImplFontSelectData aOut = GetFcSubstitute( rFontSelData, aDummy );
-    if (!aOut.maSearchName.Len())
-        return false;
-    if( uselessmatch(rFontSelData, aOut ) )
+    // TODO: cache the font substitution suggestion
+    // FC doing it would be preferable because it knows the invariables
+    // e.g. FC knows the FC rule that all Arial gets replaced by LiberationSans
+    // whereas we would have to check for every size or attribute
+    if( !aOut.maSearchName.Len() )
         return false;
 
+    const bool bHaveSubstitute = !uselessmatch( rFontSelData, aOut );
+
 #ifdef DEBUG
-    ByteString aOrigName( rFontSelData.maTargetName, RTL_TEXTENCODING_UTF8 );
-    ByteString aSubstName( aOut.maSearchName, RTL_TEXTENCODING_UTF8 );
-    printf( "FcPreMatchSubstititution \"%s\" -> \"%s\"\n",
-        aOrigName.GetBuffer(), aSubstName.GetBuffer() );
+    const ByteString aOrigName( rFontSelData.maTargetName, RTL_TEXTENCODING_UTF8 );
+    const ByteString aSubstName( aOut.maSearchName, RTL_TEXTENCODING_UTF8 );
+    printf( "FcPreMatchSubstititution \"%s\" bipw=%d%d%d%d -> ",
+        aOrigName.GetBuffer(), rFontSelData.meWeight, rFontSelData.meItalic,
+        rFontSelData.mePitch, rFontSelData.meWidthType );
+    if( !bHaveSubstitute )
+        printf( "no substitute available\n" );
+    else
+        printf( "\"%s\" bipw=%d%d%d%d\n", aSubstName.GetBuffer(),
+        aOut.meWeight, aOut.meItalic, aOut.mePitch, aOut.meWidthType );
 #endif
-    rFontSelData = aOut;
-    return true;
+
+    if( bHaveSubstitute )
+        rFontSelData = aOut;
+
+    return bHaveSubstitute;
 }
 
 // -----------------------------------------------------------------------
@@ -2203,20 +2216,32 @@ bool FcGlyphFallbackSubstititution::FindFontSubstitute( ImplFontSelectData& rFon
         return false;
 
     const ImplFontSelectData aOut = GetFcSubstitute( rFontSelData, rMissingCodes );
-    // TODO: cache the unicode+font specific result
-    if (!aOut.maSearchName.Len())
-        return false;
-    if (uselessmatch(rFontSelData, aOut))
+    // TODO: cache the unicode + srcfont specific result
+    // FC doing it would be preferable because it knows the invariables
+    // e.g. FC knows the FC rule that all Arial gets replaced by LiberationSans
+    // whereas we would have to check for every size or attribute
+    if( !aOut.maSearchName.Len() )
         return false;
 
+    const bool bHaveSubstitute = !uselessmatch( rFontSelData, aOut );
+
 #ifdef DEBUG
-    ByteString aOrigName( rFontSelData.maTargetName, RTL_TEXTENCODING_UTF8 );
-    ByteString aSubstName( aOut.maSearchName, RTL_TEXTENCODING_UTF8 );
-    printf( "FcGlyphFallbackSubstititution \"%s\" -> \"%s\"\n",
-        aOrigName.GetBuffer(), aSubstName.GetBuffer() );
+    const ByteString aOrigName( rFontSelData.maTargetName, RTL_TEXTENCODING_UTF8 );
+    const ByteString aSubstName( aOut.maSearchName, RTL_TEXTENCODING_UTF8 );
+    printf( "FcGFSubstititution \"%s\" bipw=%d%d%d%d ->",
+        aOrigName.GetBuffer(), rFontSelData.meWeight, rFontSelData.meItalic,
+        rFontSelData.mePitch, rFontSelData.meWidthType );
+    if( !bHaveSubstitute )
+        printf( "no substitute available\n" );
+    else
+        printf( "\"%s\" bipw=%d%d%d%d\n", aSubstName.GetBuffer(),
+        aOut.meWeight, aOut.meItalic, aOut.mePitch, aOut.meWidthType );
 #endif
-    rFontSelData = aOut;
-    return true;
+
+    if( bHaveSubstitute )
+        rFontSelData = aOut;
+
+    return bHaveSubstitute;
 }
 
 // ===========================================================================
