@@ -63,7 +63,7 @@ IMPL_LINK( AccessibleTabBarBase, WindowEventListener, VclSimpleEvent*, pEvent )
         DBG_ASSERT( pEventWindow, "AccessibleTabBarBase::WindowEventListener: no window!" );
 
         if( ( pWinEvent->GetId() == VCLEVENT_TABBAR_PAGEREMOVED ) &&
-            ( (sal_uInt16)(sal_IntPtr) pWinEvent->GetData() == TABBAR_PAGE_NOTFOUND ) &&
+            ( (sal_uInt16)(sal_IntPtr) pWinEvent->GetData() == TabBar::PAGE_NOT_FOUND ) &&
             ( dynamic_cast< AccessibleTabBarPageList *> (this) != NULL ) )
         {
             return 0;
