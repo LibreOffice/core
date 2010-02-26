@@ -61,6 +61,8 @@ public:
         NET_WM_NAME,
         NET_WM_DESKTOP,
         NET_WM_ICON_NAME,
+        NET_WM_PID,
+        NET_WM_PING,
         NET_WM_STATE,
         NET_WM_STATE_MAXIMIZED_HORZ,
         NET_WM_STATE_MAXIMIZED_VERT,
@@ -221,6 +223,18 @@ public:
      *  sets window title
      */
     virtual void setWMName( X11SalFrame* pFrame, const String& rWMName ) const;
+
+    /*
+     * set NET_WM_PID
+     */
+    virtual void setPID( X11SalFrame* pFrame ) const;
+
+    /*
+     * set WM_CLIENT_MACHINE
+     */
+    virtual void setClientMachine( X11SalFrame* pFrame ) const;
+
+    virtual void answerPing( X11SalFrame*, XClientMessageEvent* ) const;
 
     /*
      *  maximizes frame

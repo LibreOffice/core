@@ -279,6 +279,7 @@ X11SalData::X11SalData()
     m_pPlugin       = NULL;
 
     hMainThread_    = pthread_self();
+    osl_getLocalHostname( &maLocalHostName.pData );
 }
 
 X11SalData::~X11SalData()
