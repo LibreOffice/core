@@ -932,19 +932,15 @@
 +}
 --- misc/libtextcat-2.2/src/makefile.mk	Mon Mar 31 11:30:06 2008
 +++ misc/build/libtextcat-2.2/src/makefile.mk	Mon Mar 31 11:29:42 2008
-@@ -1 +1,91 @@
+@@ -1 +1,87 @@
 -dummy
 +#*************************************************************************
 +#
 +# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 +# 
-+# Copyright 2008 by Sun Microsystems, Inc.
++# Copyright 2000, 2010 Oracle and/or its affiliates.
 +#
 +# OpenOffice.org - a multi-platform office productivity suite
-+#
-+# $RCSfile: libtextcat-2.2.patch,v $
-+#
-+# $Revision: 1.8 $
 +#
 +# This file is part of OpenOffice.org.
 +#

@@ -1,0 +1,12 @@
+--- misc/mysql-connector-cpp/driver/mysql_connection.cpp	2009-12-16 13:24:24.088933245 +0100
++++ misc/build/mysql-connector-cpp/driver/mysql_connection.cpp	2009-12-16 13:24:15.666841004 +0100
+@@ -437,6 +437,9 @@
+ 		throw sql::InvalidArgumentException(e.what());
+ 	}
+ 
++	int default_protocol_tcp = MYSQL_PROTOCOL_TCP;
++	proxy->options(MYSQL_OPT_PROTOCOL, (const char *) &default_protocol_tcp);
++
+ #ifndef _WIN32
+ 	if (!hostName.compare(0, sizeof("unix://") - 1, "unix://")) {
+ 		protocol_tcp = false;
