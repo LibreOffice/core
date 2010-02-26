@@ -296,9 +296,7 @@ ContextHandlerRef OoxWorksheetFragment::onCreateContext( sal_Int32 nElement, con
         case XLS_TOKEN( sheetPr ):
             switch( nElement )
             {
-// TODO: Treat tab color as a sheet setting later.
-//              case XLS_TOKEN( tabColor ):         getWorksheetSettings().importTabColor( rAttribs );              break;
-                case XLS_TOKEN( tabColor ):         getSheetViewSettings().importTabColor( rAttribs );              break;
+                case XLS_TOKEN( tabColor ):         getWorksheetSettings().importTabColor( rAttribs );              break;
                 case XLS_TOKEN( outlinePr ):        getWorksheetSettings().importOutlinePr( rAttribs );             break;
                 case XLS_TOKEN( pageSetUpPr ):      importPageSetUpPr( rAttribs );                                  break;
             }

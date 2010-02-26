@@ -80,7 +80,6 @@ struct SheetViewModel
     bool                mbShowZeros;                    /// True = show zero value zells.
     bool                mbShowOutline;                  /// True = show outlines.
     bool                mbZoomToFit;                    /// True = zoom chart sheet to fit window.
-    Color               maTabColor;                     /// Sheet tab color. (TODO: Move to sheet settings later.)
 
     explicit            SheetViewModel();
 
@@ -112,8 +111,6 @@ public:
 
     /** Imports the sheetView element containing sheet view settings. */
     void                importSheetView( const AttributeList& rAttribs );
-    /** Imports the tabcolor element containing tab color settings. */
-    void                importTabColor( const AttributeList& rAttribs );
     /** Imports the pane element containing sheet pane settings. */
     void                importPane( const AttributeList& rAttribs );
     /** Imports the selection element containing selection settings for a pane. */

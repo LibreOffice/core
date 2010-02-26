@@ -26,14 +26,18 @@
  ************************************************************************/
 
 #include "oox/xls/worksheetsettings.hxx"
-#include <com/sun/star/util/XProtectable.hpp>
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/recordinputstream.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/pagesettings.hxx"
 #include "oox/xls/workbooksettings.hxx"
+#include "properties.hxx"
+
+#include <com/sun/star/util/XProtectable.hpp>
 
 using ::rtl::OUString;
+using ::com::sun::star::beans::XPropertySet;
+using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
@@ -307,6 +311,13 @@ void WorksheetSettings::finalizeImport()
     }
     catch( Exception& )
     {
+    }
+
+    if (!maSheetSettings.maTabColor.isAuto())
+    {
+        sal_Int32 nColor = maSheetSettings.maTabColor.getColor(getBaseFilter());
+        PropertySet aSheetProp(getSheet());
+        aSheetProp.setProperty(PROP_TabColor, nColor);
     }
 }
 
