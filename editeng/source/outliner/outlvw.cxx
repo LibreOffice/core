@@ -1686,7 +1686,7 @@ Selection OutlinerView::GetSurroundingTextSelection() const
 
 // returns: true if a word for thesaurus look-up was found at the current cursor position.
 // The status string will be word + iso language string (e.g. "light#en-US")
-bool SVX_DLLPUBLIC GetStatusValueForThesaurusFromContext(
+bool EDITENG_DLLPUBLIC GetStatusValueForThesaurusFromContext(
     String &rStatusVal,
     LanguageType &rLang,
     const EditView &rEditView )
@@ -1714,7 +1714,7 @@ bool SVX_DLLPUBLIC GetStatusValueForThesaurusFromContext(
 }
 
 
-void SVX_DLLPUBLIC ReplaceTextWithSynonym( EditView &rEditView, const String &rSynonmText )
+void EDITENG_DLLPUBLIC ReplaceTextWithSynonym( EditView &rEditView, const String &rSynonmText )
 {
     // get selection to use
     ESelection aCurSel( rEditView.GetSelection() );
