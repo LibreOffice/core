@@ -1713,6 +1713,7 @@ namespace xmloff { namespace token {
         TOKEN( "symbol-image-name",               XML_SYMBOL_IMAGE_NAME ),
         TOKEN( "symbol-width",                    XML_SYMBOL_WIDTH ),
         TOKEN( "system",                          XML_SYSTEM ),
+        TOKEN( "tab-color",                       XML_TAB_COLOR ),
         TOKEN( "tab-stop",                        XML_TAB_STOP ),
         TOKEN( "tab-stop-distance",               XML_TAB_STOP_DISTANCE ),
         TOKEN( "tab-stops",                       XML_TAB_STOPS ),
