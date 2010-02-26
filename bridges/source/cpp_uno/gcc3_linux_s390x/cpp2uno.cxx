@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: cpp2uno.cxx,v $
- *
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -491,7 +487,7 @@ static typelib_TypeClass cpp_mediate(
 long privateSnippetExecutor(long r2, long r3, long r4, long r5, long r6, long firstonstack)
 {
     register long r0 asm("r0");
-    sal_uInt32 nOffsetAndIndex = r0;
+    sal_uInt64 nOffsetAndIndex = r0;
 
     long sp = (long)&firstonstack;
 
@@ -522,15 +518,21 @@ long privateSnippetExecutor(long r2, long r3, long r4, long r5, long r6, long fi
 
     switch( aType )
     {
-        case typelib_TypeClass_VOID:
         case typelib_TypeClass_BOOLEAN:
         case typelib_TypeClass_BYTE:
+            nRegReturn[0] = (unsigned long)(*(unsigned char *)nRegReturn);
+            break;
         case typelib_TypeClass_CHAR:
         case typelib_TypeClass_UNSIGNED_SHORT:
         case typelib_TypeClass_SHORT:
+            nRegReturn[0] = (unsigned long)(*(unsigned short *)nRegReturn);
+            break;
         case typelib_TypeClass_ENUM:
         case typelib_TypeClass_UNSIGNED_LONG:
         case typelib_TypeClass_LONG:
+            nRegReturn[0] = (unsigned long)(*(unsigned int *)nRegReturn);
+            break;
+        case typelib_TypeClass_VOID:
         default:
             break;
         case typelib_TypeClass_FLOAT:

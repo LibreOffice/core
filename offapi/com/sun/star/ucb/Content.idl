@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Content.idl,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -137,7 +134,7 @@ published service Content
                 [parameter type and name]
 
         -----------------------------------------------------------------------
-        Requiered commands:
+        Mandatory commands:
         -----------------------------------------------------------------------
 
         // This command obtains an interface which allows to query
@@ -218,7 +215,7 @@ published service Content
         //                sequence is the same as the order of result set
         //                columns. First element of sequence will be row
         //                number one, second will be row number two, ...
-        // SortingInfo  : contains sort criteria, if result set shall
+        // SortingInfo      : contains sort criteria, if result set shall
         //                be sorted, otherwise it can be left empty.
         //
         // The exceution must be aborted by the implementation of this command
@@ -236,12 +233,12 @@ published service Content
         //
         // Mode         : DOCUMENT or DOCUMENT_SHARE_DENY_NONE or
         //                DOCUMENT_SHARE_DENY_WRITE. Support for DOCUMENT
-         //                is mandatory, all others are optional.
+        //                is mandatory, all others are optional.
         // Priority     : can be set, but implementation may ignore the value
         // Sink         : a sink, where the implementation can put the
         //                document data into.
         // Properties   : empty ( ignored )
-        // SortingInfo  : empty ( ignored )
+        // SortingInfo      : empty ( ignored )
         //
         // The exceution must be aborted by the implementation of this command
         // (by throwing a <type>CommandAbortedException</type>), if an
@@ -296,8 +293,8 @@ published service Content
                 void
 
         // (1) This command inserts a new content. It commits the process of
-        // creating a new content via calling another content's method
-        // <member>XContentCreator::createNewContent</member>
+        // creating a new content via executing the command "createNewContent"
+        // and initializing it via setting properties, afterwards.
         // The command is not called on the content which created the new
         // content, because the new object already knows where it is to be
         // inserted (i.e. Calling createNewContent with the content type for a
@@ -350,7 +347,7 @@ published service Content
         // Transfers without the transfer command can be done as follows:
         //
         // 1) Create a new content at the target folder
-        //    --> targetContent = target.XContentCreator::createNewContent(...)
+        //    --> targetContent = target.execute( "createNewContent", type )
         // 2) Transfer data from source to target content
         //    --> props = sourceContent.execute( "getPropertyValues", ... )
         //    --> dataStream = sourceContent.execute( "open", ... )
@@ -366,12 +363,57 @@ published service Content
             <B>transfer</B>
                 <type>TransferInfo</type> aTransferInfo
 
+        // This command obtains an exlusive write lock for the resource. The
+        // lock is active until command "unlock" is executed or the OOo
+        // session that obtained the lock ends or until the lock is released by
+        // a third party (e.g. a system administrator).
+        void
+            <B>lock</B>
+                void
+        Exceptions: <type>InteractiveLockingLockedException</type>
+                    <type>InteractiveLockingLockExpiredException</type>
+
+        // This command removes a lock obtained by executing the command "lock"
+        // from the resource.
+        void
+            <B>unlock</B>
+                void
+        Exceptions: <type>InteractiveLockingNotLockedException</type>
+                    <type>InteractiveLockingLockExpiredException</type>
+
+        // Note that <type>InteractiveLockingLockExpiredException</type> might
+        // be raised by any command that requires a previously obtained lock.
+
+        // This command creates a new non-persistent content of a given type.
+        //
+        // <p>Creation of a new (persistent) content:
+        // <ol>
+        //    <li>creatabletypes = obtain "CreatableContentsInfo" property<br>
+        //        from creator
+        //    <li>choose a suitable type from creatabletypes
+        //    <li>newObject = execute command "createNewContent(type)" at<br>
+        //        creator
+        //    <li>initialize the new object (i.e. newObject.Property1 = ...)
+        //    <li>execute command "insert" at new content. This command
+        //        commits the data and makes the new content persistent.
+        // </ol>
+        //
+        // This command must be supported by every Content that supports the
+        // property "CreatableContentsInfo" if the returned property value
+        // contains a non-empty sequence of creatable types.
+        //
+        // Note: This command is part of the replacement for the deprecated
+        // interface <type>XContentCreator</type>.
+        <type>XContent</type> >
+            <B>createNewContent</B>
+                <type>ContentInfo<type> contentinfo
+
         =======================================================================
         Properties:
         =======================================================================
 
         -----------------------------------------------------------------------
-        Requiered properties:
+        Mandatory properties:
         -----------------------------------------------------------------------
 
         // contains a unique(!) type string for the content ( i.e.
@@ -380,8 +422,8 @@ published service Content
         // content. Media types may be provided through the optional property
         // "MediaType".
         // The value of this property should match the information on creatable
-        // contents given by UCB contents that implement the interface
-        // <type>XContentCreator</type>.
+        // contents given by UCB contents that implement the property
+        // "CreatableContentsInfo".
         string ContentType
 
         // indicates, whether a content can contain other contents.
@@ -570,7 +612,6 @@ published service Content
         </dt><dd>Show in new task
         </dd></dl>
         </p>
-
         string TargetFrames
 
         // for contents that are links to other contents, contains the URL of
@@ -586,6 +627,17 @@ published service Content
 
         // describes a verification policy.
         <type>VerificationMode</type> VerificationMode
+
+        // contains the types of Contents a Content object can create via
+        // command "createNewContent".
+        //
+        // If the property value can be a non-empty sequence, the Content must
+        // also support command "createNewContent".
+        //
+        // Note: This property is part of the replacement for the deprecated
+        // interface <type>XContentCreator</type>.
+        sequence <type>ContentInfo</type> CreatableContentsInfo
+
         </pre>
      */
     interface com::sun::star::ucb::XCommandProcessor;
@@ -675,6 +727,11 @@ published service Content
 
         <p>This interface is optional. It should be implemented by contents
         which shall be able to create new objects.
+
+        @deprecated
+
+        <p>This interface is <b>deprecated</b>. Use property
+        "CreatableContentsInfo" and command "createNewContent" instead.
      */
     [optional] interface com::sun::star::ucb::XContentCreator;
 
