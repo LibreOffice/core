@@ -841,7 +841,8 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                         {
                             //TODO: Handle cases where a paragraph <> character style relation is needed
                             StyleSheetEntryPtr pParent = FindStyleSheetByISTD( pEntry->sBaseStyleIdentifier );
-                            xStyle->setParentStyle(ConvertStyleName( pParent->sStyleName ));
+                            if (pParent.get() != NULL)
+                                xStyle->setParentStyle(ConvertStyleName( pParent->sStyleName ));
                         }
                         catch( const uno::RuntimeException& )
                         {
