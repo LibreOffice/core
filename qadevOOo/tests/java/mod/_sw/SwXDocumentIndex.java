@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SwXDocumentIndex.java,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +39,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextCursor;
+import com.sun.star.text.XTextRange;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 
@@ -132,6 +130,9 @@ public class SwXDocumentIndex extends TestCase {
 
         tEnv.addObjRelation("CONTENT", (XTextContent)
                         UnoRuntime.queryInterface(XTextContent.class,instance));
+        oCursor.gotoEnd(false);
+        tEnv.addObjRelation("RANGE", (XTextRange)
+                        UnoRuntime.queryInterface(XTextRange.class, oCursor));
 
         // relation for XDocumentIndex
         tEnv.addObjRelation("TextDoc", xTextDoc);
