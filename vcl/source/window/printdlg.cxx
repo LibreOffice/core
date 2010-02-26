@@ -1148,7 +1148,7 @@ static void setSmartId( Window* i_pWindow, const char* i_pType, sal_Int32 i_nId 
     i_pWindow->SetSmartHelpId( SmartId( aBuf.makeStringAndClear(), HID_PRINTDLG ) );
 }
 
-static void setHelpText( Window* i_pWindow, const Sequence< rtl::OUString >& i_rHelpTexts, sal_Int32 i_nIndex )
+static void setHelpText( Window* /*i_pWindow*/, const Sequence< rtl::OUString >& /*i_rHelpTexts*/, sal_Int32 /*i_nIndex*/ )
 {
     // without a help text set and the correct smartID,
     // help texts will be retrieved from the online help system
