@@ -158,10 +158,6 @@ void SwRenderData::MakeSwPrtOptions(
     BOOL bWeb = pDocShell->IsA( aSwWebDocShellTypeId );
     rOptions.MakeOptions( bWeb );
 
-    const sal_Int32 nContent = pOpt->getIntValue( "PrintContent", 0 );
-    const bool bPrintSelection = nContent == 2;
-
-
     // get print options to use from provided properties
     rOptions.bPrintGraphic          = pOpt->IsPrintGraphics();
     rOptions.bPrintTable            = pOpt->IsPrintTables();
