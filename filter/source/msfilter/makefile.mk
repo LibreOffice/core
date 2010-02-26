@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.17 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -55,7 +51,6 @@ SLOFILES= \
     $(SLO)$/mscodec.obj		\
     $(SLO)$/msfiltertracer.obj \
     $(SLO)$/svdfppt.obj		\
-    $(SLO)$/msvbahelper.obj\
     $(SLO)$/svxmsbas2.obj
 
 SHL1TARGET= msfilter$(DLLPOSTFIX)
@@ -63,10 +58,11 @@ SHL1IMPLIB=	i$(TARGET)
 SHL1OBJS=	$(SLOFILES)
 SHL1USE_EXPORTS=name
 SHL1STDLIBS= \
+             $(EDITENGLIB) \
+             $(VBAHELPERLIB) \
              $(SVXCORELIB) \
              $(SFX2LIB) \
              $(XMLOFFLIB) \
-             $(GOODIESLIB) \
              $(BASEGFXLIB) \
              $(BASICLIB) \
              $(SVTOOLLIB) \

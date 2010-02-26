@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: impdialog.hxx,v $
- * $Revision: 1.23.80.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,7 +98,8 @@ protected:
     sal_Int32                   mnMaxImageResolution;
     sal_Bool                    mbUseTaggedPDF;
     sal_Int32                   mnPDFTypeSelection;
-    sal_Bool                    mbExportNotesBoth;
+    sal_Bool                    mbExportNotes;
+    sal_Bool                    mbExportNotesPages;
     sal_Bool                    mbUseTransitionEffects;
     sal_Bool                    mbIsSkipEmptyPages;
     sal_Bool                    mbAddStream;
@@ -201,6 +199,7 @@ class ImpPDFTabGeneralPage : public SfxTabPage
 
     CheckBox                    maCbExportBookmarks;
     CheckBox                    maCbExportNotes;
+    CheckBox                    maCbExportNotesPages;
 
     CheckBox                    maCbExportEmptyPages;
     CheckBox                    maCbAddStream;

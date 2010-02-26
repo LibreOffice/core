@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pdfexport.cxx,v $
- * $Revision: 1.69.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,31 +77,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::view;
-
-sal_Bool GetPropertyValue( Any& rAny, const Reference< XPropertySet > & rXPropSet, const sal_Char* pName )
-{
-    sal_Bool bRetValue = sal_True;
-    try
-    {
-        rAny = rXPropSet->getPropertyValue( String::CreateFromAscii( pName ) );
-        if ( !rAny.hasValue() )
-            bRetValue = sal_False;
-    }
-    catch( ::com::sun::star::uno::Exception& )
-    {
-        bRetValue = sal_False;
-    }
-    return bRetValue;
-}
-
-OUString GetProperty( const Reference< XPropertySet > & rXPropSet, const sal_Char* pName )
-{
-    OUString aRetValue;
-    Any aAny;
-    if ( GetPropertyValue( aAny, rXPropSet, pName ) )
-        aAny >>= aRetValue;
-    return aRetValue;
-}
 
 // -------------
 // - PDFExport -
