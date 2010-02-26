@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: jvmfwk.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,16 +42,9 @@ namespace css = com::sun::star;
 namespace migration
 {
 
-
 rtl::OUString jvmfwk_getImplementationName();
 
 css::uno::Sequence< rtl::OUString > jvmfwk_getSupportedServiceNames();
-
-
-css::uno::Reference< css::uno::XInterface > SAL_CALL jvmfwk_create(
-    css::uno::Reference< css::uno::XComponentContext > const & )
-    throw (css::uno::Exception);
-
 
 } //end blind namespace
 

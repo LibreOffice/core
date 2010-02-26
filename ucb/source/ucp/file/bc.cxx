@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: bc.cxx,v $
- * $Revision: 1.40 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,7 +46,6 @@
 #include <com/sun/star/beans/PropertySetInfoChange.hpp>
 #include <com/sun/star/ucb/ContentAction.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
-#include <com/sun/star/ucb/ContentInfoAttribute.hpp>
 #include "filglob.hxx"
 #include "filid.hxx"
 #include "filrow.hxx"
@@ -437,6 +433,15 @@ BaseContent::execute( const Command& aCommand,
         if(!xRow->wasNull())
             aAny <<= CasePreservingURL;
     }
+    else if( ! aCommand.Name.compareToAscii( "createNewContent" ) )
+    {
+        ucb::ContentInfo aArg;
+        if ( !( aCommand.Argument >>= aArg ) )
+            m_pMyShell->installError( CommandId,
+                                      TASKHANDLING_WRONG_CREATENEWCONTENT_ARGUMENT );
+        else
+            aAny <<= createNewContent( aArg );
+    }
     else
         m_pMyShell->installError( CommandId,
                                   TASKHANDLER_UNSUPPORTED_COMMAND );
@@ -529,9 +534,9 @@ BaseContent::getContentType()
                 // Who am I ?
                 Sequence< beans::Property > seq(1);
                 seq[0] = beans::Property( rtl::OUString::createFromAscii("IsDocument"),
-                                                -1,
-                                                getCppuType( static_cast< sal_Bool* >(0) ),
-                                                0 );
+                                          -1,
+                                          getCppuType( static_cast< sal_Bool* >(0) ),
+                                          0 );
                 Reference< sdbc::XRow > xRow = getPropertyValues( -1,seq );
                 sal_Bool IsDocument = xRow->getBoolean( 1 );
 
@@ -637,27 +642,7 @@ BaseContent::queryCreatableContentsInfo(
     void )
     throw( RuntimeException )
 {
-    Sequence< ContentInfo > seq(2);
-
-    // file
-    seq[0].Type       = m_pMyShell->FileContentType;
-    seq[0].Attributes = ContentInfoAttribute::INSERT_WITH_INPUTSTREAM
-        | ContentInfoAttribute::KIND_DOCUMENT;
-
-    Sequence< beans::Property > props( 1 );
-    props[0] = beans::Property(
-        rtl::OUString::createFromAscii( "Title" ),
-        -1,
-        getCppuType( static_cast< rtl::OUString* >( 0 ) ),
-        beans::PropertyAttribute::MAYBEVOID
-        | beans::PropertyAttribute::BOUND );
-    seq[0].Properties = props;
-
-    // folder
-    seq[1].Type       = m_pMyShell->FolderContentType;
-    seq[1].Attributes = ContentInfoAttribute::KIND_FOLDER;
-    seq[1].Properties = props;
-    return seq;
+    return m_pMyShell->queryCreatableContentsInfo();
 }
 
 
@@ -688,18 +673,18 @@ BaseContent::createNewContent(
     {
         Sequence< beans::Property > seq(1);
         seq[0] = beans::Property( rtl::OUString::createFromAscii("IsDocument"),
-                                    -1,
-                                    getCppuType( static_cast< sal_Bool* >(0) ),
-                                    0 );
+                                  -1,
+                                  getCppuType( static_cast< sal_Bool* >(0) ),
+                                  0 );
         Reference< sdbc::XRow > xRow = getPropertyValues( -1,seq );
         IsDocument = xRow->getBoolean( 1 );
 
         if ( xRow->wasNull() )
         {
             IsDocument = false;
-//          OSL_ENSURE( false,
-//                      "BaseContent::createNewContent - Property value was null!" );
-//          return Reference< XContent >();
+//              OSL_ENSURE( false,
+//                          "BaseContent::createNewContent - Property value was null!" );
+//              return Reference< XContent >();
         }
     }
     catch ( sdbc::SQLException const & )

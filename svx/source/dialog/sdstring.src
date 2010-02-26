@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdstring.src,v $
- * $Revision: 1.42 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -366,32 +363,6 @@ String RID_SVXSTR_LINEJOINT_ROUND
 {
     Text [ en-US ] = "Line joint round";
 };
-
-String RID_SVXSTR_GRFILTER_OPENERROR
-{
-    Text [ en-US ] = "Graphics file cannot be opened" ;
-};
-String RID_SVXSTR_GRFILTER_IOERROR
-{
-    Text [ en-US ] = "Graphics file cannot be read" ;
-};
-String RID_SVXSTR_GRFILTER_FORMATERROR
-{
-    Text [ en-US ] = "Unknown graphics format" ;
-};
-String RID_SVXSTR_GRFILTER_VERSIONERROR
-{
-    Text [ en-US ] = "This version of the graphics file is not supported" ;
-};
-String RID_SVXSTR_GRFILTER_FILTERERROR
-{
-    Text [ en-US ] = "Graphics filter not found" ;
-};
-String RID_SVXSTR_GRFILTER_TOOBIG
-{
-    Text [ en-US ] = "Not enough memory to insert graphic" ;
-};
-
 
 ///////////////////////////////////////////////////////////////////////////////
 //

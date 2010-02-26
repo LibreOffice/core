@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fpsmartcontent.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,14 +30,13 @@
 #include "fpsmartcontent.hxx"
 
 /** === begin UNO includes === **/
-#include <com/sun/star/ucb/XContentCreator.hpp>
 #include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/ucb/ContentInfo.hpp>
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
+#include <com/sun/star/ucb/XContent.hpp>
 /** === end UNO includes === **/
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <ucbhelper/commandenvironment.hxx>
 #include <tools/solar.h>
 #include <tools/debug.hxx>
@@ -282,25 +278,21 @@ namespace svt
         sal_Bool bRet = sal_False;
         try
         {
-            Reference< XContentCreator > xCreator = Reference< XContentCreator >( m_pContent->get(), UNO_QUERY );
-            if ( xCreator.is() )
+            Sequence< ContentInfo > aInfo = m_pContent->queryCreatableContentsInfo();
+            const ContentInfo* pInfo = aInfo.getConstArray();
+            sal_Int32 nCount = aInfo.getLength();
+            for ( sal_Int32 i = 0; i < nCount; ++i, ++pInfo )
             {
-                Sequence< ContentInfo > aInfo = xCreator->queryCreatableContentsInfo();
-                const ContentInfo* pInfo = aInfo.getConstArray();
-                sal_Int32 nCount = aInfo.getLength();
-                for ( sal_Int32 i = 0; i < nCount; ++i, ++pInfo )
+                // Simply look for the first KIND_FOLDER...
+                if ( pInfo->Attributes & ContentInfoAttribute::KIND_FOLDER )
                 {
-                    // Simply look for the first KIND_FOLDER...
-                    if ( pInfo->Attributes & ContentInfoAttribute::KIND_FOLDER )
-                    {
-                        bRet = sal_True;
-                        break;
-                    }
+                    bRet = sal_True;
+                    break;
                 }
-
-                // now we're definately valid
-                m_eState = VALID;
             }
+
+            // now we're definately valid
+            m_eState = VALID;
         }
         catch( Exception& )
         {

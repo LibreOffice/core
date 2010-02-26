@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dp_misc.cxx,v $
- * $Revision: 1.19.8.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -439,19 +436,19 @@ OUString readConsole()
     {
         OSL_ASSERT((dwRead % 2) == 0);
         OUString value( aBuffer, dwRead / 2);
-        value = value.trim();
-        return value;
+        return value.trim();
     }
-    return OUString();
-
 #else
     char buf[1024];
     rtl_zeroMemory(buf, 1024);
     // read one char less so that the last char in buf is always zero
-    fgets(buf, 1024, stdin);
-    OUString value = ::rtl::OStringToOUString(::rtl::OString(buf), osl_getThreadTextEncoding());
-    return value.trim();
+    if (fgets(buf, 1024, stdin) != NULL)
+    {
+        OUString value = ::rtl::OStringToOUString(::rtl::OString(buf), osl_getThreadTextEncoding());
+        return value.trim();
+    }
 #endif
+    return OUString();
 }
 
 void TRACE(::rtl::OUString const & sText)

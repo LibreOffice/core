@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dbtools.cxx,v $
- * $Revision: 1.74.46.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1388,16 +1385,18 @@ namespace
         ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
         Reference< XPropertySetInfo > xInfo = _xTable->getPropertySetInfo();
         if (    xInfo.is()
-            &&  xInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME))
-            &&  xInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))
             &&  xInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_NAME)) )
         {
 
             ::rtl::OUString aCatalog;
             ::rtl::OUString aSchema;
             ::rtl::OUString aTable;
-            _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME)) >>= _out_rCatalog;
-            _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))  >>= _out_rSchema;
+            if (    xInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME))
+                &&  xInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME)) )
+            {
+                _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME)) >>= _out_rCatalog;
+                _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))  >>= _out_rSchema;
+            }
             _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))        >>= _out_rName;
         }
         else
@@ -1779,15 +1778,31 @@ void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
     Reference<XIndexAccess>  xParamsAsIndicies = xParameters.is() ? xParameters->getParameters() : Reference<XIndexAccess>();
     Reference<XNameAccess>   xParamsAsNames(xParamsAsIndicies, UNO_QUERY);
     sal_Int32 nParamCount = xParamsAsIndicies.is() ? xParamsAsIndicies->getCount() : 0;
-    if ( (nParamCount && _aParametersSet.empty()) || ::std::count(_aParametersSet.begin(),_aParametersSet.end(),true) != nParamCount )
+    ::std::bit_vector aNewParameterSet( _aParametersSet );
+    if ( nParamCount || ::std::count(aNewParameterSet.begin(),aNewParameterSet.end(),true) != nParamCount )
     {
+        static const ::rtl::OUString PROPERTY_NAME(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME));
+        aNewParameterSet.resize(nParamCount ,false);
+        typedef ::std::map< ::rtl::OUString, ::std::vector<sal_Int32> > TParameterPositions;
+        TParameterPositions aParameterNames;
+        for(sal_Int32 i = 0; i < nParamCount; ++i)
+        {
+            Reference<XPropertySet> xParam(xParamsAsIndicies->getByIndex(i),UNO_QUERY);
+            ::rtl::OUString sName;
+            xParam->getPropertyValue(PROPERTY_NAME) >>= sName;
+
+            TParameterPositions::iterator aFind = aParameterNames.find(sName);
+            if ( aFind != aParameterNames.end() )
+                aNewParameterSet[i] = true;
+            aParameterNames[sName].push_back(i+1);
+        }
         // build an interaction request
         // two continuations (Ok and Cancel)
         OInteractionAbort* pAbort = new OInteractionAbort;
         OParameterContinuation* pParams = new OParameterContinuation;
         // the request
         ParametersRequest aRequest;
-        Reference<XIndexAccess> xWrappedParameters = new OParameterWrapper(_aParametersSet,xParamsAsIndicies);
+        Reference<XIndexAccess> xWrappedParameters = new OParameterWrapper(aNewParameterSet,xParamsAsIndicies);
         aRequest.Parameters = xWrappedParameters;
         aRequest.Connection = _xConnection;
         OInteractionRequest* pRequest = new OInteractionRequest(makeAny(aRequest));
@@ -1815,11 +1830,10 @@ void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
             Reference< XPropertySet > xParamColumn(xWrappedParameters->getByIndex(i),UNO_QUERY);
             if (xParamColumn.is())
             {
-#ifdef DBG_UTIL
                 ::rtl::OUString sName;
-                xParamColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= sName;
+                xParamColumn->getPropertyValue(PROPERTY_NAME) >>= sName;
                 OSL_ENSURE(sName.equals(pFinalValues->Name), "::dbaui::askForParameters: inconsistent parameter names!");
-#endif
+
                 // determine the field type and ...
                 sal_Int32 nParamType = 0;
                 xParamColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)) >>= nParamType;
@@ -1827,21 +1841,17 @@ void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
                 sal_Int32 nScale = 0;
                 if (hasProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE), xParamColumn))
                     xParamColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)) >>= nScale;
-                // and set the value
-                ::std::bit_vector::const_iterator aIter = _aParametersSet.begin();
-                ::std::bit_vector::const_iterator aEnd = _aParametersSet.end();
-                sal_Int32 j = 0;
-                sal_Int32 nParamPos = -1;
-                for(; aIter != aEnd && j <= i; ++aIter)
+                    // (the index of the parameters is one-based)
+                TParameterPositions::iterator aFind = aParameterNames.find(pFinalValues->Name);
+                ::std::vector<sal_Int32>::iterator aIterPos = aFind->second.begin();
+                ::std::vector<sal_Int32>::iterator aEndPos = aFind->second.end();
+                for(;aIterPos != aEndPos;++aIterPos)
                 {
-                    ++nParamPos;
-                    if ( !*aIter )
+                    if ( _aParametersSet.empty() || !_aParametersSet[(*aIterPos)-1] )
                     {
-                        ++j;
+                        _xParameters->setObjectWithInfo(*aIterPos, pFinalValues->Value, nParamType, nScale);
                     }
                 }
-                _xParameters->setObjectWithInfo(nParamPos + 1, pFinalValues->Value, nParamType, nScale);
-                    // (the index of the parameters is one-based)
             }
         }
     }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: hierarchycontentcaps.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,25 +36,28 @@
 
     Props/Commands:
 
-                        root    folder  folder  link    link
-                                        (new)           (new)
+                           root    folder  folder  link    link
+                                   (new)           (new)
     ----------------------------------------------------------------
-    ContentType         x       x       x       x       x
-    IsDocument          x       x       x       x       x
-    IsFolder            x       x       x       x       x
-    Title               x       x       x       x       x
-    TargetURL                                   x       x
+    ContentType            x       x       x       x       x
+    IsDocument             x       x       x       x       x
+    IsFolder               x       x       x       x       x
+    Title                  x       x       x       x       x
+    TargetURL                                      x       x
+    CreatableContentsInfo  x       x       x       x       x
 
-    getCommandInfo      x       x       x       x       x
-    getPropertySetInfo  x       x       x       x       x
-    getPropertyValues   x       x       x       x       x
-    setPropertyValues   x       x       x       x       x
-    insert                              x               x
-    delete                      x               x
-    open                x       x
-    transfer            x       x
+    getCommandInfo         x       x       x       x       x
+    getPropertySetInfo     x       x       x       x       x
+    getPropertyValues      x       x       x       x       x
+    setPropertyValues      x       x       x       x       x
+    createNewContent       x               x
+    insert                                 x               x
+    delete                         x               x
+    open                   x       x
+    transfer               x       x
 
  *************************************************************************/
+
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -75,6 +75,12 @@ using namespace hierarchy_ucp;
 // HierarchyContent implementation.
 //
 //=========================================================================
+
+#define MAKEPROPSEQUENCE( a ) \
+    uno::Sequence< beans::Property >( a, sizeof( a )  / sizeof( a[ 0 ] ) )
+
+#define MAKECMDSEQUENCE( a ) \
+    uno::Sequence< ucb::CommandInfo >( a, sizeof( a )  / sizeof( a[ 0 ] ) )
 
 //=========================================================================
 //
@@ -143,13 +149,20 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
                     getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
-                )
+                ),
+                beans::Property(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                        "CreatableContentsInfo" ) ),
+                    -1,
+                    getCppuType( static_cast<
+                        const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
+                    beans::PropertyAttribute::BOUND
+                        | beans::PropertyAttribute::READONLY )
                 ///////////////////////////////////////////////////////////
                 // New properties
                 ///////////////////////////////////////////////////////////
             };
-            return uno::Sequence<
-                            beans::Property >( aLinkPropertyInfoTable, 5 );
+            return MAKEPROPSEQUENCE( aLinkPropertyInfoTable );
         }
         else
         {
@@ -195,13 +208,20 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
                     -1,
                     getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
-                )
+                ),
+                beans::Property(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                        "CreatableContentsInfo" ) ),
+                    -1,
+                    getCppuType( static_cast<
+                        const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
+                    beans::PropertyAttribute::BOUND
+                        | beans::PropertyAttribute::READONLY )
                 ///////////////////////////////////////////////////////////
                 // New properties
                 ///////////////////////////////////////////////////////////
             };
-            return uno::Sequence<
-                            beans::Property >( aLinkPropertyInfoTable, 5 );
+            return MAKEPROPSEQUENCE( aLinkPropertyInfoTable );
         }
     }
     else if ( m_eKind == FOLDER )
@@ -248,16 +268,23 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
                     getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY
-                )
+                ),
                 ///////////////////////////////////////////////////////////
                 // Optional standard properties
                 ///////////////////////////////////////////////////////////
+                beans::Property(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                        "CreatableContentsInfo" ) ),
+                    -1,
+                    getCppuType( static_cast<
+                        const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
+                    beans::PropertyAttribute::BOUND
+                        | beans::PropertyAttribute::READONLY )
                 ///////////////////////////////////////////////////////////
                 // New properties
                 ///////////////////////////////////////////////////////////
             };
-            return uno::Sequence<
-                            beans::Property >( aFolderPropertyInfoTable, 4 );
+            return MAKEPROPSEQUENCE( aFolderPropertyInfoTable );
         }
         else
         {
@@ -294,16 +321,23 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
                     -1,
                     getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
-                )
+                ),
                 ///////////////////////////////////////////////////////////
                 // Optional standard properties
                 ///////////////////////////////////////////////////////////
+                beans::Property(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                        "CreatableContentsInfo" ) ),
+                    -1,
+                    getCppuType( static_cast<
+                        const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
+                    beans::PropertyAttribute::BOUND
+                        | beans::PropertyAttribute::READONLY )
                 ///////////////////////////////////////////////////////////
                 // New properties
                 ///////////////////////////////////////////////////////////
             };
-            return uno::Sequence<
-                            beans::Property >( aFolderPropertyInfoTable, 4 );
+            return MAKEPROPSEQUENCE( aFolderPropertyInfoTable );
         }
     }
     else
@@ -313,6 +347,9 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
         // Root Folder: Supported properties
         //
         //=================================================================
+
+        // Currently no difference between reonly /read-write
+        // -> all props ar read-only
 
         static beans::Property aRootFolderPropertyInfoTable[] =
         {
@@ -346,16 +383,23 @@ uno::Sequence< beans::Property > HierarchyContent::getProperties(
                 getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
-            )
+            ),
             ///////////////////////////////////////////////////////////////
             // Optional standard properties
             ///////////////////////////////////////////////////////////////
+            beans::Property(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                        "CreatableContentsInfo" ) ),
+                    -1,
+                    getCppuType( static_cast<
+                        const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
+                    beans::PropertyAttribute::BOUND
+                        | beans::PropertyAttribute::READONLY )
             ///////////////////////////////////////////////////////////////
             // New properties
             ///////////////////////////////////////////////////////////////
         };
-        return uno::Sequence<
-                beans::Property >( aRootFolderPropertyInfoTable, 4 );
+        return MAKEPROPSEQUENCE( aRootFolderPropertyInfoTable );
     }
 }
 
@@ -416,8 +460,7 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                 // New commands
                 ///////////////////////////////////////////////////////////
             };
-            return uno::Sequence<
-                    ucb::CommandInfo >( aLinkCommandInfoTable, 4 );
+            return MAKECMDSEQUENCE( aLinkCommandInfoTable );
         }
         else
         {
@@ -470,8 +513,7 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                 // New commands
                 ///////////////////////////////////////////////////////////
             };
-            return uno::Sequence<
-                    ucb::CommandInfo >( aLinkCommandInfoTable, 6 );
+            return MAKECMDSEQUENCE( aLinkCommandInfoTable );
         }
     }
     else if ( m_eKind == FOLDER )
@@ -529,8 +571,7 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                 // New commands
                 ///////////////////////////////////////////////////////////
             };
-            return uno::Sequence<
-                    ucb::CommandInfo >( aFolderCommandInfoTable, 5 );
+            return MAKECMDSEQUENCE( aFolderCommandInfoTable );
         }
         else
         {
@@ -589,13 +630,18 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "transfer" ) ),
                     -1,
                     getCppuType( static_cast< ucb::TransferInfo * >( 0 ) )
+                ),
+                ucb::CommandInfo(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "createNewContent" ) ),
+                    -1,
+                    getCppuType( static_cast< ucb::ContentInfo * >( 0 ) )
                 )
                 ///////////////////////////////////////////////////////////
                 // New commands
                 ///////////////////////////////////////////////////////////
             };
-            return uno::Sequence<
-                    ucb::CommandInfo >( aFolderCommandInfoTable, 8 );
+            return MAKECMDSEQUENCE( aFolderCommandInfoTable );
         }
     }
     else
@@ -653,8 +699,7 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                 // New commands
                 ///////////////////////////////////////////////////////////
             };
-            return uno::Sequence<
-                    ucb::CommandInfo >( aRootFolderCommandInfoTable, 5 );
+            return MAKECMDSEQUENCE( aRootFolderCommandInfoTable );
         }
         else
         {
@@ -703,13 +748,18 @@ uno::Sequence< ucb::CommandInfo > HierarchyContent::getCommands(
                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "transfer" ) ),
                     -1,
                     getCppuType( static_cast< ucb::TransferInfo * >( 0 ) )
+                ),
+                ucb::CommandInfo(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "createNewContent" ) ),
+                    -1,
+                    getCppuType( static_cast< ucb::ContentInfo * >( 0 ) )
                 )
                 ///////////////////////////////////////////////////////////
                 // New commands
                 ///////////////////////////////////////////////////////////
             };
-            return uno::Sequence<
-                    ucb::CommandInfo >( aRootFolderCommandInfoTable, 6 );
+            return MAKECMDSEQUENCE( aRootFolderCommandInfoTable );
         }
     }
 }

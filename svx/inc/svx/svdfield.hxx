@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdfield.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,45 +28,9 @@
 #ifndef _SVDFIELD_HXX
 #define _SVDFIELD_HXX
 
-#include <svx/eeitem.hxx>
-
-#ifndef _FLDITEM_HXX
-#ifndef ITEMID_FIELD
-#ifndef _EDITDATA_HXX
-#include <svx/editdata.hxx>  /* das include wird wg. EE_FEATURE_FIELD benoetigt */
-#endif
-#define ITEMID_FIELD EE_FEATURE_FIELD  /* wird fuer #include <svx/flditem.hxx> benoetigt */
-#endif
-#include <svx/flditem.hxx>
-#endif
 #include "svx/svxdllapi.h"
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// Do not remove this, it is still used in src536a!
 void SVX_DLLPUBLIC SdrRegisterFieldClasses();
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-#define SDR_MEASUREFIELD 50
-
-class SdrMeasureObj;
-
-enum SdrMeasureFieldKind {SDRMEASUREFIELD_VALUE,SDRMEASUREFIELD_UNIT,SDRMEASUREFIELD_ROTA90BLANCS};
-
-class SVX_DLLPUBLIC SdrMeasureField: public SvxFieldData {
-    SdrMeasureFieldKind eMeasureFieldKind;
-public:
-    SV_DECL_PERSIST1(SdrMeasureField,SvxFieldData,SDR_MEASUREFIELD)
-    SdrMeasureField(): eMeasureFieldKind(SDRMEASUREFIELD_VALUE) {}
-    SdrMeasureField(SdrMeasureFieldKind eNewKind): eMeasureFieldKind(eNewKind) {}
-    virtual ~SdrMeasureField();
-    virtual SvxFieldData* Clone() const;
-    virtual int operator==(const SvxFieldData&) const;
-    SdrMeasureFieldKind GetMeasureFieldKind() const { return eMeasureFieldKind; }
-    void SetMeasureFieldKind(SdrMeasureFieldKind eNewKind) { eMeasureFieldKind=eNewKind; }
-    void TakeRepresentation(const SdrMeasureObj& rObj, XubString& rStr) const;
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #endif //_SVDFIELD_HXX
 
