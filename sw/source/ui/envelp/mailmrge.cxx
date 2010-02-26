@@ -68,7 +68,7 @@
 #include <com/sun/star/sdbc/XDataSource.hpp>
 #include <toolkit/unohlp.hxx>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/form/XFormController.hpp>
+#include <com/sun/star/form/runtime/XFormController.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
@@ -99,7 +99,7 @@ using namespace ::com::sun::star::ui::dialogs;
  ---------------------------------------------------------------------------*/
 struct SwMailMergeDlg_Impl
 {
-    uno::Reference<XFormController> xFController;
+    uno::Reference<runtime::XFormController> xFController;
     uno::Reference<XSelectionChangeListener> xChgLstnr;
     uno::Reference<XSelectionSupplier> xSelSupp;
 };
@@ -332,7 +332,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
                 pBeamerWin->Show();
             }
             uno::Reference<XController> xController = xFrame->getController();
-            pImpl->xFController = uno::Reference<XFormController>(xController, UNO_QUERY);
+            pImpl->xFController = uno::Reference<runtime::XFormController>(xController, UNO_QUERY);
             if(pImpl->xFController.is())
             {
                 uno::Reference< awt::XControl > xCtrl = pImpl->xFController->getCurrentControl(  );
