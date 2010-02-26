@@ -28,27 +28,35 @@
  *
  ************************************************************************/
 
-#ifndef SC_TABBGCOLOR_HXX
-#define SC_TABBGCOLOR_HXX
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sc.hxx"
 
-#include "tools/color.hxx"
-#include "address.hxx"
 
-#include <vector>
 
-struct ScUndoTabColorInfo
+// INCLUDE ---------------------------------------------------------------
+
+#include "tabbgcolor.hxx"
+
+bool ScUndoTabColorInfo::IsDefaultOldTabBgColor() const
 {
-    SCTAB mnTabId;
-    Color maOldTabBgColor;
-    Color maNewTabBgColor;
+    return maOldTabBgColor == Color(COL_AUTO);
+}
 
-    bool IsDefaultOldTabBgColor() const;
-    bool IsDefaultNewTabBgColor() const;
+bool ScUndoTabColorInfo::IsDefaultNewTabBgColor() const
+{
+    return maOldTabBgColor == Color(COL_AUTO);
+}
 
-    explicit ScUndoTabColorInfo(SCTAB nTab);
-    ScUndoTabColorInfo(const ScUndoTabColorInfo& r);
+ScUndoTabColorInfo::ScUndoTabColorInfo(SCTAB nTab) :
+    mnTabId(nTab),
+    maOldTabBgColor(COL_AUTO),
+    maNewTabBgColor(COL_AUTO)
+{
+}
 
-    typedef ::std::vector<ScUndoTabColorInfo> List;
-};
-
-#endif
+ScUndoTabColorInfo::ScUndoTabColorInfo(const ScUndoTabColorInfo& r) :
+    mnTabId(r.mnTabId),
+    maOldTabBgColor(r.maOldTabBgColor),
+    maNewTabBgColor(r.maNewTabBgColor)
+{
+}

@@ -297,7 +297,7 @@ void XclImpTabViewSettings::Finalize()
 
     // *** set tab bg color
     if ( !maData.IsDefaultTabBgColor() )
-        rTabSett.maTabBgColor = maData.maTabBgColor;
+        rDoc.SetTabBgColor(nScTab, maData.maTabBgColor);
 }
 
 // ============================================================================

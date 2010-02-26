@@ -100,6 +100,7 @@ SLOFILES =  \
     $(SLO)$/sortparam.obj \
     $(SLO)$/stlpool.obj \
     $(SLO)$/stlsheet.obj \
+        $(SLO)$/tabbgcolor.obj \
     $(SLO)$/table1.obj \
     $(SLO)$/table2.obj \
     $(SLO)$/table3.obj \
@@ -126,6 +127,7 @@ EXCEPTIONSFILES= \
     $(SLO)$/dptabres.obj \
     $(SLO)$/dptabdat.obj \
     $(SLO)$/global2.obj \
+    $(SLO)$/tabbgcolor.obj \
     $(SLO)$/table1.obj \
     $(SLO)$/table2.obj \
     $(SLO)$/table3.obj \

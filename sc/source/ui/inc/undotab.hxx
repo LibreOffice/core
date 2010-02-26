@@ -224,19 +224,19 @@ private:
     void DoChange() const;
 };
 
-class ScUndoSetTabBgColor: public ScSimpleUndo
+class ScUndoTabColor: public ScSimpleUndo
 {
 public:
                     TYPEINFO();
-                    ScUndoSetTabBgColor(
+                    ScUndoTabColor(
                             ScDocShell* pNewDocShell,
                             SCTAB nT,
                             const Color& aOTabBgColor,
                             const Color& aNTabBgColor);
-                    ScUndoSetTabBgColor(
+                    ScUndoTabColor(
                             ScDocShell* pNewDocShell,
-                            ScUndoSetTabBgColorInfoList* pUndoSetTabBgColorInfoList);
-    virtual         ~ScUndoSetTabBgColor();
+                            const ScUndoTabColorInfo::List& rUndoTabColorList);
+    virtual         ~ScUndoTabColor();
 
     virtual void    Undo();
     virtual void    Redo();
@@ -246,14 +246,10 @@ public:
 virtual String  GetComment() const;
 
 private:
-    ScUndoSetTabBgColorInfoList* aUndoSetTabBgColorInfoList;
-    SCTAB   nTab;
-    Color   aOldTabBgColor;
-    Color   aNewTabBgColor;
-    BOOL    bIsMultipleUndo;
+    ScUndoTabColorInfo::List aTabColorList;
+    bool    bIsMultipleUndo;
 
-    void DoChange( SCTAB nTab, const Color& rTabBgColor ) const;
-    void DoChange( BOOL bUndoType ) const;
+    void DoChange(bool bUndoType) const;
 };
 
 class ScUndoMakeScenario: public ScSimpleUndo

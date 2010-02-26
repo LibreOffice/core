@@ -769,6 +769,7 @@ const SfxItemPropertySet* lcl_GetSheetPropertySet()
         {MAP_CHAR_LEN(SC_UNONAME_VALIXML),  SC_WID_UNO_VALIXML, &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   &getCppuType((table::CellVertJustify*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    &getCppuType((sal_Int16*)0),            0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_TABCOLOR), SC_WID_UNO_TABCOLOR, &getCppuType((sal_Int32*)0), 0, 0 },
         {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aSheetPropertySet( aSheetPropertyMap_Impl );
@@ -8467,6 +8468,15 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
                     pDoc->ClearPrintRanges( nTab ); // if this flag is true, there are no PrintRanges, so Clear clears only the flag.
             }
         }
+        else if ( pEntry->nWID == SC_WID_UNO_TABCOLOR )
+        {
+            sal_Int32 nColor = COL_AUTO;
+            if (aValue >>= nColor)
+            {
+                if (static_cast<ColorData>(nColor) != COL_AUTO)
+                    pDoc->SetTabBgColor(nTab, Color(static_cast<ColorData>(nColor)));
+            }
+        }
         else
             ScCellRangeObj::SetOnePropertyValue(pEntry, aValue);        // base class, no Item WID
     }
@@ -8604,6 +8614,10 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
         {
             BOOL bAutoPrint = pDoc->IsPrintEntireSheet( nTab );
             ScUnoHelpFunctions::SetBoolInAny( rAny, bAutoPrint );
+        }
+        else if ( pEntry->nWID == SC_WID_UNO_TABCOLOR )
+        {
+            rAny <<= sal_Int32(pDoc->GetTabBgColor(nTab).GetColor());
         }
         else
             ScCellRangeObj::GetOnePropertyValue(pEntry, rAny);

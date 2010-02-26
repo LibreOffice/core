@@ -173,6 +173,7 @@
 #define SC_UNONAME_COPYFORM         "CopyFormulas"
 #define SC_UNONAME_TABLAYOUT        "TableLayout"
 #define SC_UNONAME_AUTOPRINT        "AutomaticPrintArea"
+#define SC_UNONAME_TABCOLOR         "TabColor"
 
 //  LinkTarget
 #define SC_UNO_LINKDISPBIT          "LinkDisplayBitmap"
@@ -526,7 +527,6 @@
 #define SC_UNO_ZOOMTYPE             "ZoomType"
 #define SC_UNO_ZOOMVALUE            "ZoomValue"
 #define SC_UNO_UPDTEMPL             "UpdateFromTemplate"
-#define SC_UNO_TABCOLOR             "TabColor"
 
 /*Stampit enable/disable print cancel */
 #define SC_UNO_ALLOWPRINTJOBCANCEL  "AllowPrintJobCancel"

@@ -85,8 +85,7 @@
 #include "inputwin.hxx"
 #include "funcdesc.hxx"
 #include "docuno.hxx"
-
-#include "tabbgcolor.hxx" //DBW
+#include "tabbgcolor.hxx"
 
 // STATIC DATA ---------------------------------------------------------------
 
@@ -2274,9 +2273,9 @@ BOOL ScViewFunc::RenameTable( const String& rName, SCTAB nTab )
 
 //----------------------------------------------------------------------------
 
-BOOL ScViewFunc::SetTabBgColor( const Color& rColor, SCTAB nTab )
+bool ScViewFunc::SetTabBgColor( const Color& rColor, SCTAB nTab )
 {
-    BOOL bSuccess = GetViewData()->GetDocShell()->GetDocFunc().SetTabBgColor( nTab, rColor, TRUE, FALSE );
+    bool bSuccess = GetViewData()->GetDocShell()->GetDocFunc().SetTabBgColor( nTab, rColor, TRUE, FALSE );
     if (bSuccess)
     {
         GetViewData()->GetViewShell()->UpdateInputHandler();
@@ -2284,9 +2283,9 @@ BOOL ScViewFunc::SetTabBgColor( const Color& rColor, SCTAB nTab )
     return bSuccess;
 }
 
-BOOL ScViewFunc::SetTabBgColor( ScUndoSetTabBgColorInfoList* rUndoSetTabBgColorInfoList )
+bool ScViewFunc::SetTabBgColor( ScUndoTabColorInfo::List& rUndoSetTabBgColorInfoList )
 {
-    BOOL bSuccess = GetViewData()->GetDocShell()->GetDocFunc().SetTabBgColor( rUndoSetTabBgColorInfoList, TRUE, FALSE );
+    bool bSuccess = GetViewData()->GetDocShell()->GetDocFunc().SetTabBgColor( rUndoSetTabBgColorInfoList, TRUE, FALSE );
     if (bSuccess)
     {
         GetViewData()->GetViewShell()->UpdateInputHandler();

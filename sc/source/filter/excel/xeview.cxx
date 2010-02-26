@@ -394,14 +394,14 @@ XclExpTabViewSettings::XclExpTabViewSettings( const XclExpRoot& rRoot, SCTAB nSc
         maData.mnNormalZoom     = lclGetXclZoom( rTabSett.mnNormalZoom, EXC_WIN2_NORMALZOOM_DEF );
         maData.mnPageZoom       = lclGetXclZoom( rTabSett.mnPageZoom, EXC_WIN2_PAGEZOOM_DEF );
         maData.mnCurrentZoom    = maData.mbPageMode ? maData.mnPageZoom : maData.mnNormalZoom;
+    }
 
-        // Tab Bg Color
-        if ( GetBiff() == EXC_BIFF8 && !rTabSett.IsDefaultTabBgColor() )
-        {
-            XclExpPalette& rPal = GetPalette();
-            maData.maTabBgColor = rTabSett.maTabBgColor;
-            maData.mnTabBgColorId = rPal.InsertColor(maData.maTabBgColor, EXC_COLOR_TABBG, EXC_COLOR_NOTABBG );
-        }
+    // Tab Bg Color
+    if ( GetBiff() == EXC_BIFF8 && !GetDoc().IsDefaultTabBgColor(nScTab) )
+    {
+        XclExpPalette& rPal = GetPalette();
+        maData.maTabBgColor = GetDoc().GetTabBgColor(nScTab);
+        maData.mnTabBgColorId = rPal.InsertColor(maData.maTabBgColor, EXC_COLOR_TABBG, EXC_COLOR_NOTABBG );
     }
 }
 

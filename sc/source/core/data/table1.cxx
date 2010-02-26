@@ -153,6 +153,7 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const String& rNewName,
     nLockCount( 0 ),
     pScenarioRanges( NULL ),
     aScenarioColor( COL_LIGHTGRAY ),
+    aTabBgColor( COL_AUTO ),
     nScenarioFlags( 0 ),
     bActiveScenario( FALSE )
 {
@@ -274,6 +275,22 @@ void ScTable::SetLayoutRTL( BOOL bSet )
 void ScTable::SetLoadingRTL( BOOL bSet )
 {
     bLoadingRTL = bSet;
+}
+
+const Color& ScTable::GetTabBgColor() const
+{
+    return aTabBgColor;
+}
+
+void ScTable::SetTabBgColor(const Color& rColor)
+{
+    if (aTabBgColor != rColor)
+    {
+        // The tab color has changed.  Set this table 'modified'.
+        aTabBgColor = rColor;
+        if (IsStreamValid())
+            SetStreamValid(false);
+    }
 }
 
 void ScTable::SetScenario( BOOL bFlag )
