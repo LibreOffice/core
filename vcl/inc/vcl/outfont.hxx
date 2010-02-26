@@ -335,15 +335,17 @@ public: // TODO: make data members private
     short               mnOrientation;      // text angle in 3600 system
     bool                mbInit;             // true if maMetric member is valid
 
-    void                AddFallbackForUnicode( sal_UCS4, const String& rFontName );
-    bool                GetFallbackForUnicode( sal_UCS4, String* pFontName ) const;
-    void                IgnoreFallbackForUnicode( sal_UCS4, const String& rFontName );
+    void                AddFallbackForUnicode( sal_UCS4, FontWeight eWeight, const String& rFontName );
+    bool                GetFallbackForUnicode( sal_UCS4, FontWeight eWeight, String* pFontName ) const;
+    void                IgnoreFallbackForUnicode( sal_UCS4, FontWeight eWeight, const String& rFontName );
 
 private:
     // cache of Unicode characters and replacement font names
     // TODO: a fallback map can be shared with many other ImplFontEntries
     // TODO: at least the ones which just differ in orientation, stretching or height
-    typedef ::std::hash_map<sal_UCS4,String> UnicodeFallbackList;
+    typedef ::std::pair<sal_UCS4,FontWeight> GFBCacheKey;
+    struct GFBCacheKey_Hash{ size_t operator()( const GFBCacheKey& ) const; };
+    typedef ::std::hash_map<GFBCacheKey,String,GFBCacheKey_Hash> UnicodeFallbackList;
     UnicodeFallbackList* mpUnicodeFallbackList;
 };
 
