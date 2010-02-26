@@ -17,8 +17,8 @@
 -o toolkit.AccessibleScrollBar
 -o toolkit.AccessibleStatusBar
 -o toolkit.AccessibleStatusBarItem
--o toolkit.AccessibleTabControl
--o toolkit.AccessibleTabPage
+#i109643 -o toolkit.AccessibleTabControl
+#i109643 -o toolkit.AccessibleTabPage
 #i86287 -o toolkit.AccessibleToolBox
 #i88605 -o toolkit.AccessibleToolBoxItem
 -o toolkit.AccessibleWindow

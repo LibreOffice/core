@@ -235,3 +235,7 @@ toolkit.UnoScrollBarControl::com::sun::star::awt::XScrollBar
 
 ### i94344 ###
 toolkit.AccessibleTabPage::com::sun::star::accessibility::XAccessibleText
+
+### i109643 ###
+toolkit.AccessibleMenu::com::sun::star::accessibility::XAccessibleValue
+toolkit.AccessibleMenuBar::com::sun::star::accessibility::XAccessibleSelection
