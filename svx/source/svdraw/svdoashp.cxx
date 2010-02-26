@@ -703,7 +703,10 @@ void SdrObjCustomShape::MergeDefaultAttributes( const rtl::OUString* pType )
         for ( i = 0; i < nCount; i++ )
         {
             if ( seqAdjustmentValues[ i ].State != com::sun::star::beans::PropertyState_DIRECT_VALUE )
+            {
                 seqAdjustmentValues[ i ].Value <<= pDefData[ i ];
+                seqAdjustmentValues[ i ].State = com::sun::star::beans::PropertyState_DIRECT_VALUE;
+            }
         }
     }
     aPropVal.Name = sAdjustmentValues;
