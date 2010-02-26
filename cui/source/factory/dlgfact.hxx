@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dlgfact.hxx,v $
- * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,6 +63,8 @@ class SvPasteObjectDialog;
 class SvBaseLinksDlg;
 class SvxTransformTabDialog;
 class SvxCaptionTabDialog;
+class SvxThesaurusDialog;
+class SvxHyphenWordDialog;
 
 namespace svx{
 class HangulHanjaConversionDialog;
@@ -161,8 +160,8 @@ class AbstractHangulHanjaConversionDialog_Impl: public AbstractHangulHanjaConver
     virtual void    EndDialog(long nResult = 0);
     virtual void    EnableRubySupport( sal_Bool _bVal );
     virtual void    SetByCharacter( sal_Bool _bByCharacter ) ;
-    virtual void    SetConversionDirectionState( sal_Bool _bTryBothDirections, HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection );
-    virtual void    SetConversionFormat( HangulHanjaConversion::ConversionFormat _eType );
+    virtual void    SetConversionDirectionState( sal_Bool _bTryBothDirections, editeng::HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection );
+    virtual void    SetConversionFormat( editeng::HangulHanjaConversion::ConversionFormat _eType );
     virtual void    SetOptionsChangedHdl( const Link& _rHdl );
     virtual void    SetIgnoreHdl( const Link& _rHdl );
     virtual void    SetIgnoreAllHdl( const Link& _rHdl ) ;
@@ -172,19 +171,34 @@ class AbstractHangulHanjaConversionDialog_Impl: public AbstractHangulHanjaConver
     virtual void    SetConversionFormatChangedHdl( const Link& _rHdl ) ;
     virtual void    SetFindHdl( const Link& _rHdl );
     virtual sal_Bool        GetUseBothDirections( ) const;
-    virtual HangulHanjaConversion::ConversionDirection    GetDirection( HangulHanjaConversion::ConversionDirection _eDefaultDirection ) const;
+    virtual editeng::HangulHanjaConversion::ConversionDirection    GetDirection( editeng::HangulHanjaConversion::ConversionDirection _eDefaultDirection ) const;
     virtual void    SetCurrentString(
                     const String& _rNewString,
                     const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rSuggestions,
                     bool _bOriginatesFromDocument = true
                 );
     virtual String  GetCurrentString( ) const ;
-    virtual HangulHanjaConversion::ConversionFormat    GetConversionFormat( ) const ;
+    virtual editeng::HangulHanjaConversion::ConversionFormat    GetConversionFormat( ) const ;
     virtual void    FocusSuggestion( );
     virtual String  GetCurrentSuggestion( ) const;
 };
 
-// for HangulHanjaConversionDialog end
+class AbstractThesaurusDialog_Impl : public AbstractThesaurusDialog
+{
+    DECL_ABSTDLG_BASE(AbstractThesaurusDialog_Impl,SvxThesaurusDialog)
+    virtual String      GetWord();
+    virtual sal_uInt16  GetLanguage() const;
+    virtual Window*     GetWindow();
+};
+
+
+class AbstractHyphenWordDialog_Impl: public AbstractHyphenWordDialog
+{
+    DECL_ABSTDLG_BASE(AbstractHyphenWordDialog_Impl,SvxHyphenWordDialog)
+    virtual void    SelLeft();
+    virtual void    SelRight();
+    virtual Window* GetWindow();
+};
 
 // for FmShowColsDialog begin
 class FmShowColsDialog;
@@ -579,7 +593,6 @@ private:
 //AbstractDialogFactory_Impl implementations
 class AbstractDialogFactory_Impl : public SvxAbstractDialogFactory
 {
-
 public:
     virtual VclAbstractDialog*          CreateVclDialog( Window* pParent, sal_uInt32 nResId );
     virtual VclAbstractDialog*          CreateSfxDialog( Window* pParent, const SfxBindings& rBindings, sal_uInt32 nResId );
@@ -629,10 +642,17 @@ public:
     virtual VclAbstractDialog*          CreateEditObjectDialog( Window* pParent, USHORT nSlotId,
             const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObj );
    virtual  SfxAbstractPasteDialog*         CreatePasteDialog( Window* pParent );
-   virtual  SfxAbstractLinksDialog*         CreateLinksDialog( Window* pParent, sfx2::SvLinkManager* pMgr, BOOL bHTML, sfx2::SvBaseLink* p=0  );
+   virtual  SfxAbstractLinksDialog*         CreateLinksDialog( Window* pParent, sfx2::LinkManager* pMgr, BOOL bHTML, sfx2::SvBaseLink* p=0  );
 
    virtual AbstractHangulHanjaConversionDialog * CreateHangulHanjaConversionDialog( Window* _pParent,  //add for HangulHanjaConversionDialog CHINA001
-                                            HangulHanjaConversion::ConversionDirection _ePrimaryDirection );
+                                            editeng::HangulHanjaConversion::ConversionDirection _ePrimaryDirection );
+    virtual AbstractThesaurusDialog*        CreateThesaurusDialog( Window*, ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XThesaurus >  xThesaurus,
+                                                const String &rWord, sal_Int16 nLanguage );
+
+    virtual AbstractHyphenWordDialog*       CreateHyphenWordDialog( Window*,
+                                                const String &rWord, LanguageType nLang,
+                                                ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XHyphenator >  &xHyphen,
+                                                SvxSpellWrapper* pWrapper );
 
    virtual AbstractFmShowColsDialog * CreateFmShowColsDialog( Window* pParent );  //add for FmShowColsDialog
    virtual AbstractSvxZoomDialog * CreateSvxZoomDialog( Window* pParent,  //add for SvxZoomDialog
