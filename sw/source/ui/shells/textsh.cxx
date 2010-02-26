@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: textsh.cxx,v $
- * $Revision: 1.63 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,29 +44,29 @@
 #include <vcl/msgbox.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <svx/hlnkitem.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <svl/urihelper.hxx>
 #include <basic/sbxvar.hxx>
 #include <svl/whiter.hxx>
 #include <sfx2/request.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/svxacorr.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/svxacorr.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <svtools/filter.hxx>
 #include <svx/htmlmode.hxx>
 #include <svx/pfiledlg.hxx>
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 
 #include <sot/clsids.hxx>
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 #include <wdocsh.hxx>
 #include <fmtinfmt.hxx>
 #include <fmtclds.hxx>
@@ -197,7 +194,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             SvxAutoCorrect* pACorr = pACfg->GetAutoCorrect();
             if( pACorr && pACfg->IsAutoFmtByInput() &&
                     pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
-                                ChgFractionSymbol | ChgOrdinalNumber |
+                                AddNonBrkSpace | ChgOrdinalNumber |
                                 ChgToEnEmDash | SetINetAttr | Autocorrect ))
                 rSh.AutoCorrect( *pACorr, cIns );
             else

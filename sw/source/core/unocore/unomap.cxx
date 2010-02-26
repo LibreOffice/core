@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unomap.cxx,v $
- * $Revision: 1.213.54.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,15 +29,9 @@
 #include "precompiled_sw.hxx"
 #include <hintids.hxx>
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
-#ifndef _COMPHELPER_TYPEGENERATION_HXX
 #include <comphelper/TypeGeneration.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PropertyAttribute_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
 #include <com/sun/star/text/PageNumberType.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 // --> OD 2004-08-06 #i28749#
@@ -50,12 +41,9 @@
 #include <unomap.hxx>
 #include <unoprnms.hxx>
 #include <unomid.h>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _UNOFLDMID_H
 #include <unofldmid.h>
-#endif
+#include <editeng/memberids.hrc>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;

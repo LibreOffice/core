@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: regionsw.cxx,v $
- * $Revision: 1.40 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,9 +42,8 @@
 #include <sfx2/request.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/linkmgr.hxx>
-#include <svx/sizeitem.hxx>
-
-#include <svx/htmlcfg.hxx>
+#include <editeng/sizeitem.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <section.hxx>
 #include <docary.hxx>
 #include <regionsw.hxx>
@@ -61,18 +57,11 @@
 #include <fmtfsize.hxx>
 #include <swunodef.hxx>
 #include <shellio.hxx>
-
 #include <helpid.h>
 #include <cmdid.h>
-#ifndef _REGIONSW_HRC
 #include <regionsw.hrc>
-#endif
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 #include <sfx2/bindings.hxx>
 #include <svx/htmlmode.hxx>
 #include <svx/dlgutil.hxx>

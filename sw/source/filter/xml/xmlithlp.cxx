@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlithlp.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,13 +31,13 @@
 #include "hintids.hxx"
 #include "unomid.h"
 #include <svx/unomid.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/keepitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/brshitem.hxx>
 #include "fmtpdsc.hxx"
 #include "fmtornt.hxx"
 #include "fmtfsize.hxx"

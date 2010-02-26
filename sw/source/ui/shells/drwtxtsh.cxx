@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drwtxtsh.cxx,v $
- * $Revision: 1.42.190.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,24 +32,24 @@
 #include <i18npool/lang.h>
 #include <svl/slstitm.hxx>
 #include <svl/cjkoptions.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svx/svdview.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objface.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/xftsfit.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editview.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <svx/fontwork.hxx>
 #include <sfx2/request.hxx>
 #include <svl/whiter.hxx>
-#include <svx/outliner.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/editstat.hxx>
 #include <svx/svdoutl.hxx>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>

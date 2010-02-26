@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: wrtw8nds.cxx,v $
- * $Revision: 1.109.40.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,19 +37,19 @@
 #include <iostream>
 #include <hintids.hxx>
 #include <tools/urlobj.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/cmapitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/svxfont.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/keepitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/tstpitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/cmapitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/svxfont.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/tstpitem.hxx>
 #include "svl/urihelper.hxx"
 #include <svl/whiter.hxx>
 #include <fmtpdsc.hxx>

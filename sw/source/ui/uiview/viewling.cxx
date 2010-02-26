@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewling.cxx,v $
- * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,25 +49,19 @@
 #include <sfx2/request.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svx/svxerr.hxx>
-#include <svx/unolingu.hxx>
-#include <svx/thesdlg.hxx>
-#include <svx/SpellPortions.hxx>
+#include <editeng/unolingu.hxx>
+#include <svx/svxdlg.hxx>
+#include <editeng/SpellPortions.hxx>
 #include <swmodule.hxx>
 #include <swwait.hxx>
 #include <initui.hxx>               // fuer SpellPointer
 #include <uitool.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
-#ifndef _BASESH_HXX
 #include <basesh.hxx>
-#endif
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>                // CheckSpellChanges
-#endif
 #include <viewopt.hxx>              // Viewoptions
 #include <swundo.hxx>               // fuer Undo-Ids
 #include <hyp.hxx>                  // Trennung
@@ -80,18 +71,10 @@
 #include <crsskip.hxx>
 #include <ndtxt.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>              // STR_MULT_INTERACT_SPELL_WARN
-#endif
-#ifndef _VIEW_HRC
 #include <view.hrc>
-#endif
 #include <hhcwrp.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
 
@@ -112,10 +95,11 @@
 #include <cppuhelper/bootstrap.hxx>
 #include "stmenu.hxx"              // PopupMenu for smarttags
 #include <svx/dialogs.hrc>
-
+#include <svtools/langtab.hxx>
 #include <unomid.h>
 
 #include <memory>
+#include <editeng/editerr.hxx>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -385,7 +369,7 @@ IMPL_LINK( SwView, SpellError, LanguageType *, pLang )
         while( pWrtShell->ActionPend() );
     }
     LanguageType eLang = pLang ? *pLang : LANGUAGE_NONE;
-    String aErr(::GetLanguageString( eLang ) );
+    String aErr(SvtLanguageTable::GetLanguageString( eLang ) );
 
     SwEditWin &rEditWin = GetEditWin();
 #if OSL_DEBUG_LEVEL > 1
@@ -635,7 +619,7 @@ void SwView::StartThesaurus()
     String aTmp = GetThesaurusLookUpText( bSelection );
 
     Reference< XThesaurus >  xThes( ::GetThesaurus() );
-    SvxThesaurusDialog *pDlg = NULL;
+    AbstractThesaurusDialog *pDlg = NULL;
 
     if ( !xThes.is() || !xThes->hasLocale( SvxCreateLocale( eLang ) ) )
         SpellError( &eLang );
@@ -644,7 +628,9 @@ void SwView::StartThesaurus()
         // create dialog
         {   //Scope for SwWait-Object
             SwWait aWait( *GetDocShell(), sal_True );
-            pDlg = new SvxThesaurusDialog( &GetEditWin(), xThes, aTmp, eLang );
+            // load library with dialog only on demand ...
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            pDlg = pFact->CreateThesaurusDialog( &GetEditWin(), xThes, aTmp, eLang );
         }
 
         if ( pDlg->Execute()== RET_OK )

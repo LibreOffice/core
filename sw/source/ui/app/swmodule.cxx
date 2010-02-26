@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swmodule.cxx,v $
- * $Revision: 1.67 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -153,7 +150,7 @@
 // OD 14.02.2003 #107424#
 #include <svtools/colorcfg.hxx>
 
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 #include <unotools/moduleoptions.hxx>
 
 #ifndef _AVMEDIA_MEDIAPPLAYER_HXX

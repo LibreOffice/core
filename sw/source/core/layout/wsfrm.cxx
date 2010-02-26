@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: wsfrm.cxx,v $
- * $Revision: 1.86.124.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,9 +34,9 @@
 #include <tools/pstm.hxx>
 #include <vcl/outdev.hxx>
 #include <svl/itemiter.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/keepitem.hxx>
-#include <svx/brkitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/brkitem.hxx>
 #include <fmtornt.hxx>
 #include <pagefrm.hxx>
 #include <section.hxx>
@@ -73,7 +70,7 @@
 #include <bodyfrm.hxx>
 #include <cellfrm.hxx>
 #include <dbg_lay.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/frmdiritem.hxx>
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
 

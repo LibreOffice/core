@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: view.hxx,v $
- * $Revision: 1.60 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,12 +29,13 @@
 
 #include <vcl/timer.hxx>
 #include <vcl/field.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <sfx2/viewfac.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>   // SfxObjectShellRef <-> SV_DECL_REF(SfxObjectShell)
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include <svx/zoomitem.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/editstat.hxx>
 #include "swdllapi.h"
 #include <swtypes.hxx>
 #include <shellid.hxx>
@@ -197,6 +195,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     static SearchAttrItemList* pReplList;
 
 
+    SvxHtmlOptions      aHTMLOpt;
     Timer               aTimer;         //Fuer verzoegerte ChgLnks waehrend
                                         //einer Aktion
     String              aPageStr;       //Statusanzeige, aktuelle Seite
@@ -306,6 +305,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SW_DLLPRIVATE DECL_LINK( TimeoutHdl, Timer * );
     SW_DLLPRIVATE DECL_LINK( UpdatePercentHdl, GraphicFilter* );
 
+    SW_DLLPRIVATE DECL_LINK( HtmlOptionsHdl, void * );
 
     inline long     GetXScroll() const;
     inline long     GetYScroll() const;

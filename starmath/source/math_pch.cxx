@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: math_pch.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -817,7 +814,7 @@
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/viewfac.hxx>
 #include <edit.hxx>
-#include <svx/editdata.hxx>
+#include <editeng/editdata.hxx>
 #include <toolbox.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/dockwin.hxx>

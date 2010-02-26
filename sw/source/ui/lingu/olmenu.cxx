@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: olmenu.cxx,v $
- * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,56 +27,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
-#include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/document/XDocumentLanguages.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/i18n/ScriptType.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/linguistic2/SingleProofreadingError.hpp>
-#include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
-#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
-#include <com/sun/star/uno/Any.hxx>
-
-#include <comphelper/processfactory.hxx>
-
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_STRINGSDTOR
-#include <svl/svstdarr.hxx>
-#endif
-
-#include <i18npool/mslangid.hxx>
-#include <linguistic/lngprops.hxx>
-#include <linguistic/misc.hxx>
-#include <osl/file.hxx>
-#include <rtl/string.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/imagemgr.hxx>
-#include <sfx2/request.hxx>
-#include <sfx2/sfxdlg.hxx>
-#include <svl/itemset.hxx>
-#include <svl/stritem.hxx>
-#include <svtools/filter.hxx>
-#include <svtools/langtab.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/acorrcfg.hxx>
-#include <svx/dlgutil.hxx>
-#include <svx/impgrf.hxx>
-#include <svx/langitem.hxx>
-#include <svl/languageoptions.hxx>
-#include <svx/splwrap.hxx>
-#include <svx/svxacorr.hxx>
-#include <svx/unolingu.hxx>
-#include <unotools/lingucfg.hxx>
-#include <unotools/linguprops.hxx>
-#include <svl/languageoptions.hxx>
-#include <vcl/msgbox.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/svapp.hxx>
-
 
 #include "SwRewriter.hxx"
 #include "chrdlg.hrc"
@@ -106,9 +53,58 @@
 #include "viewopt.hxx"
 #include "wrtsh.hxx"
 #include "wview.hxx"
+#include "swabstdlg.hxx"
+#include "chrdlg.hrc"
 
+
+#ifndef _SVSTDARR_HXX
+#define _SVSTDARR_STRINGSDTOR
+#include <svl/svstdarr.hxx>
+#endif
+
+#include <comphelper/processfactory.hxx>
+#include <editeng/acorrcfg.hxx>
+#include <editeng/svxacorr.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/splwrap.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/unolingu.hxx>
+#include <i18npool/mslangid.hxx>
+#include <linguistic/lngprops.hxx>
+#include <linguistic/misc.hxx>
+#include <osl/file.hxx>
+#include <rtl/string.hxx>
+#include <svtools/filter.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/imagemgr.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/sfxdlg.hxx>
+#include <svl/itemset.hxx>
+#include <svl/languageoptions.hxx>
+#include <svl/stritem.hxx>
+#include <svtools/filter.hxx>
+#include <svtools/langtab.hxx>
+#include <svx/dlgutil.hxx>
+#include <unotools/lingucfg.hxx>
+#include <unotools/linguprops.hxx>
+#include <vcl/msgbox.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 
 #include <map>
+
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/document/XDocumentLanguages.hpp>
+#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/linguistic2/SingleProofreadingError.hpp>
+#include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
+#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
+#include <com/sun/star/uno/Any.hxx>
 
 
 using namespace ::com::sun::star;
@@ -342,7 +338,7 @@ static Image lcl_GetImageFromPngUrl( const OUString &rFileUrl )
 #endif
     Graphic aGraphic;
     const String aFilterName( RTL_CONSTASCII_USTRINGPARAM( IMP_PNG ) );
-    if( GRFILTER_OK == LoadGraphic( aTmp, aFilterName, aGraphic ) )
+    if( GRFILTER_OK == GraphicFilter::LoadGraphic( aTmp, aFilterName, aGraphic ) )
     {
         aRes = Image( aGraphic.GetBitmapEx() );
     }
