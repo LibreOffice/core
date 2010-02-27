@@ -43,10 +43,7 @@ bool InitAtkBridge(void)
 {
     const char* pVersion = atk_get_toolkit_version();
     if( ! pVersion )
-    {
-        g_warning( "unable to get gail version number" );
         return false;
-    }
 
     unsigned int major, minor, micro;
 
