@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: hidother.src,v $
- * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -143,6 +140,8 @@ hidspecial HID_OFADLG_TREELISTBOX                   { HelpId = HID_OFADLG_TREELI
 hidspecial HID_OFAPAGE_AUTOCORR_CLB                 { HelpId = HID_OFAPAGE_AUTOCORR_CLB; };
 hidspecial HID_OFAPAGE_AUTOFORMAT_CLB               { HelpId = HID_OFAPAGE_AUTOFORMAT_CLB; };
 hidspecial HID_OFAPAGE_MSFLTR2_CLB                   { HelpId = HID_OFAPAGE_MSFLTR2_CLB             ; };
+hidspecial HID_OFAPAGE_QUOTE_CLB                    { HelpId = HID_OFAPAGE_QUOTE_CLB; };
+hidspecial HID_OFAPAGE_QUOTE_SW_CLB                 { HelpId = HID_OFAPAGE_QUOTE_SW_CLB; };
 hidspecial HID_OFA_CONNPOOL_DRIVERLIST              { HelpId = HID_OFA_CONNPOOL_DRIVERLIST; };
 hidspecial HID_OFA_FONT_SUBST_CLB                   { HelpId = HID_OFA_FONT_SUBST_CLB; };
 hidspecial HID_OPTIONS_COLORCONFIG_COLORLIST_WIN    { HelpID = HID_OPTIONS_COLORCONFIG_COLORLIST_WIN ;};
