@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: msdffimp.cxx,v $
- * $Revision: 1.157 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,8 +47,8 @@
 #include "viscache.hxx"
 
 // SvxItem-Mapping. Wird benoetigt um die SvxItem-Header erfolgreich zu includen
-#include <svx/eeitem.hxx>
-#include <svx/editdata.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/editdata.hxx>
 #include <svl/urihelper.hxx>
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
@@ -66,8 +63,8 @@
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/GluePoint2.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
-#include <svx/charscaleitem.hxx>
-#include <svx/kernitem.hxx>
+#include <editeng/charscaleitem.hxx>
+#include <editeng/kernitem.hxx>
 #include <svtools/filter.hxx>
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
@@ -81,7 +78,7 @@
 #include <sfx2/module.hxx>
 #include <svx/sdgcpitm.hxx>
 #include <svx/sdgmoitm.hxx>
-#include <svx/tstpitem.hxx>
+#include <editeng/tstpitem.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdobj.hxx>
@@ -96,32 +93,31 @@
 #include <svx/svdoutl.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdopath.hxx>
-#include <svx/frmdir.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/frmdir.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/sxenditm.hxx>
 #include <svx/sdgluitm.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/colritem.hxx>
 #include <svx/sxekitm.hxx>
-#include <svx/bulitem.hxx>
+#include <editeng/bulitem.hxx>
 #include <svx/polysc3d.hxx>
 #include <svx/extrud3d.hxx>
 #include "svx/svditer.hxx"
 #include <svx/xpoly.hxx>
 #include "svx/xattr.hxx"
-#include "svx/impgrf.hxx"
 #include <filter/msfilter/msdffimp.hxx> // extern sichtbare Header-Datei
-#include <svx/outliner.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/editobj.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/editeng.hxx>
 #include "svx/gallery.hxx"
 #include <com/sun/star/drawing/ShadeMode.hpp>
 #include <svl/itempool.hxx>
@@ -4662,7 +4658,7 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
 
                 if( aURLObj.GetProtocol() != INET_PROT_NOT_VALID )
                 {
-                    GraphicFilter* pGrfFilter = GetGrfFilter();
+                    GraphicFilter* pGrfFilter = GraphicFilter::GetGraphicFilter();
                     aFilterName = pGrfFilter->GetImportFormatName(
                                     pGrfFilter->GetImportFormatNumberForShortName( aURLObj.getExtension() ) );
                 }
@@ -7120,7 +7116,7 @@ BOOL SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, Rect
         }
         else
         {   // und unsere feinen Filter darauf loslassen
-            GraphicFilter* pGF = GetGrfFilter();
+            GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
             String aEmptyStr;
             nRes = pGF->ImportGraphic( rData, aEmptyStr, *pGrStream, GRFILTER_FORMAT_DONTKNOW );
 
