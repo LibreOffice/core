@@ -1766,6 +1766,7 @@ void PrintDialog::checkControlDependencies()
     maJobPage.maCollateImage.SetSizePixel( aImgSize );
     maJobPage.maCollateImage.SetImage( bHC ? aHCImg : aImg );
     maJobPage.maCollateImage.SetModeImage( aHCImg, BMP_COLOR_HIGHCONTRAST );
+    maJobPage.maLayout.resize();
 
     // enable setup button only for printers that can be setup
     bool bHaveSetup = maPController->getPrinter()->HasSupport( SUPPORT_SETUPDIALOG );
