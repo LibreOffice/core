@@ -57,7 +57,7 @@
 
 #include "tabbgcolor.hxx"
 #include "tabbgcolordlg.hxx"
-#include "svx/colritem.hxx"
+#include "editeng/colritem.hxx"
 
 #include <boost/scoped_ptr.hpp>
 
