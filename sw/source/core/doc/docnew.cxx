@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docnew.cxx,v $
- * $Revision: 1.89 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,8 +48,8 @@
 #include <svl/macitem.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svdogrp.hxx>
-#include <svx/linkmgr.hxx>
-#include <svx/forbiddencharacterstable.hxx>
+#include <sfx2/linkmgr.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
 #include <svl/zforlist.hxx>
 #include <unotools/compatibility.hxx>
 #include <unotools/lingucfg.hxx>
@@ -258,7 +255,7 @@ SwDoc::SwDoc() :
     pDocStat( new SwDocStat ),
     pDocShell( 0 ),
     pDocShRef( 0 ),
-    pLinkMgr( new SvxLinkManager( 0 ) ),
+    pLinkMgr( new sfx2::LinkManager( 0 ) ),
     pACEWord( 0 ),
     pURLStateChgd( 0 ),
     pNumberFormatter( 0 ),
@@ -1157,7 +1154,7 @@ SwDoc* SwDoc::CreateCopy() const
     pDocStat( new SwDocStat ),
     pDocShell( 0 ),
     pDocShRef( 0 ),
-    pLinkMgr( new SvxLinkManager( 0 ) ),
+    pLinkMgr( new sfx2::LinkManager( 0 ) ),
     pACEWord( 0 ),
     pURLStateChgd( 0 ),
     pNumberFormatter( 0 ),

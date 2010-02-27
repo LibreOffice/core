@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmltbli.cxx,v $
- * $Revision: 1.65 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,7 +44,7 @@
 #include <xmloff/families.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/i18nmap.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/protitem.hxx>
 #include "poolfmt.hxx"
 #include "fmtfsize.hxx"
 #include "fmtornt.hxx"
@@ -1452,6 +1449,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     pDDESource(NULL),
     bFirstSection( sal_False ),
     bRelWidth( sal_True ),
+    bHasSubTables( sal_False ),
     nHeaderRows( 0 ),
     nCurRow( 0UL ),
     nCurCol( 0UL ),

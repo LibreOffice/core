@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unotxdoc.cxx,v $
- * $Revision: 1.134 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -97,9 +94,9 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/reflection/XIdlClassProvider.hpp>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <svx/unofill.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <sfx2/progress.hxx>
 #include <swmodule.hxx>
 #include <docstat.hxx>
@@ -111,7 +108,7 @@
 #include <SwXDocumentSettings.hxx>
 #include <SwXPrintPreviewSettings.hxx>
 #include <doc.hxx>
-#include <svx/forbiddencharacterstable.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
 #include <svl/zforlist.hxx>
 #include <drawdoc.hxx>
 #include <SwStyleNameMapper.hxx>
@@ -125,7 +122,7 @@
 ///////////////////////////Modified on Jun. 14th//////////////////////////
 ///////////////////////for getDocumentLanguages///////////////////////////
 //-->
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <doc.hxx>
 #include <docary.hxx>      //SwCharFmts
 #include <i18npool/mslangid.hxx>
@@ -147,8 +144,8 @@
 #include <set>
 #include <vector>
 
-#include <svx/eeitem.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/editeng.hxx>
 #include <svx/svdoutl.hxx>
 #include <svl/languageoptions.hxx>
 #include <svx/svdview.hxx>
@@ -2414,7 +2411,7 @@ void SwXTextDocument::updateLinks(  ) throw(RuntimeException)
     if(!IsValid())
         throw RuntimeException();
     SwDoc* pDoc = pDocShell->GetDoc();
-      SvxLinkManager& rLnkMan = pDoc->GetLinkManager();
+      sfx2::LinkManager& rLnkMan = pDoc->GetLinkManager();
     if( rLnkMan.GetLinks().Count() )
     {
         UnoActionContext aAction(pDoc);

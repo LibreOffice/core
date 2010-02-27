@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docdraw.cxx,v $
- * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,17 +31,16 @@
 #include <rtl/logfile.hxx>
 #include <vcl/outdev.hxx>
 #include <sfx2/printer.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/flditem.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/editeng.hxx>
 #include <svx/svdoutl.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/colritem.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdogrp.hxx>
-#include <svx/langitem.hxx>
-#include <svx/unolingu.hxx>
-
-#include <svx/svdfield.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/unolingu.hxx>
+#include <editeng/measfld.hxx>
 #include <svx/svdpool.hxx>
 #include <fmtanchr.hxx>
 #include <charatr.hxx>
@@ -66,7 +62,7 @@
 #include <flyfrm.hxx>
 #include <dflyobj.hxx>
 #include <svx/svdetc.hxx>
-#include <svx/fhgtitem.hxx>
+#include <editeng/fhgtitem.hxx>
 
 // OD 26.06.2003 #108784#
 #include <svx/svdpagv.hxx>
@@ -74,7 +70,7 @@
 #include <dcontact.hxx>
 #include <txtfrm.hxx>
 #include <frmfmt.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <fmtornt.hxx>
 // --> OD 2006-03-14 #i62875#
 #include <svx/svditer.hxx>

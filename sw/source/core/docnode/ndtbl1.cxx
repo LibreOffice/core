@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ndtbl1.cxx,v $
- * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,10 +34,10 @@
 #endif
 
 #include "hintids.hxx"
-#include <svx/lrspitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
 #include <fmtlsplt.hxx>
@@ -51,7 +48,7 @@
 #include <tabfrm.hxx>
 #include <cntfrm.hxx>
 #include <txtfrm.hxx>
-
+#include <svx/svxids.hrc>
 #include "doc.hxx"
 #include "pam.hxx"
 #include "swcrsr.hxx"
@@ -176,8 +173,8 @@ BOOL lcl_GetBoxSel( const SwCursor& rCursor, SwSelBoxes& rBoxes,
 
 inline void InsertLine( SvPtrarr& rLineArr, SwTableLine* pLine )
 {
-    if( USHRT_MAX == rLineArr.GetPos( (void*&)pLine ) )
-        rLineArr.Insert( (void*&)pLine, rLineArr.Count() );
+    if( USHRT_MAX == rLineArr.GetPos( pLine ) )
+        rLineArr.Insert( pLine, rLineArr.Count() );
 }
 
 //-----------------------------------------------------------------------------
@@ -560,8 +557,8 @@ BOOL SwDoc::GetRowBackground( const SwCursor& rCursor, SvxBrushItem &rToFill ) c
 #***********************************************************************/
 inline void InsertCell( SvPtrarr& rCellArr, SwCellFrm* pCellFrm )
 {
-    if( USHRT_MAX == rCellArr.GetPos( (void*&)pCellFrm ) )
-        rCellArr.Insert( (void*&)pCellFrm, rCellArr.Count() );
+    if( USHRT_MAX == rCellArr.GetPos( pCellFrm ) )
+        rCellArr.Insert( pCellFrm, rCellArr.Count() );
 }
 
 //-----------------------------------------------------------------------------

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: annotsh.cxx,v $
- * $Revision: 1.7.82.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,42 +39,42 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
-#include <svx/spltitem.hxx>
-#include <svx/orphitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/widwitem.hxx>
-#include <svx/kernitem.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/lspcitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/hyznitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/fhgtitem.hxx>
+#include <editeng/spltitem.hxx>
+#include <editeng/orphitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/widwitem.hxx>
+#include <editeng/kernitem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/hyznitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <svx/clipfmtitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/slstitm.hxx>
-#include <svx/colritem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/cntritem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <svx/svdoutl.hxx>
 #include <svl/whiter.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
 #include <unotools/useroptions.hxx>
 #include <vcl/msgbox.hxx>
-#include <svx/flditem.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/editstat.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/htmlmode.hxx>
-#include <svx/langitem.hxx>
-#include <svx/unolingu.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/writingmodeitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/unolingu.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <editeng/writingmodeitem.hxx>
 #include <swundo.hxx>
 #include <doc.hxx>
 #include <viewopt.hxx>
@@ -109,12 +106,12 @@
 
 #include <svx/svxids.hrc>
 #include <svl/itempool.hxx>
-#include <svx/outliner.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editview.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editview.hxx>
 
 #include <svl/languageoptions.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svtools/langtab.hxx>
 #include <svl/slstitm.hxx>
 

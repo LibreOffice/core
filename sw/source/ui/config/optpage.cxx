@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: optpage.cxx,v $
- * $Revision: 1.61 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,9 +48,9 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/bindings.hxx>
 #include <svx/xtable.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svx/dlgutil.hxx>
 #include <fmtcol.hxx>
 #include <charatr.hxx>

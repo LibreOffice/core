@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: rtfatr.cxx,v $
- * $Revision: 1.75.136.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,45 +43,45 @@
 #include <svl/whiter.hxx>
 #include <svtools/rtfout.hxx>
 #include <svl/itemiter.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/hyznitem.hxx>
-#include <svx/tstpitem.hxx>
-#include <svx/lspcitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/keepitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/cmapitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/protitem.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/prntitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/spltitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/cntritem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/wrlmitem.hxx>
-#include <svx/emphitem.hxx>
-#include <svx/twolinesitem.hxx>
-#include <svx/charscaleitem.hxx>
-#include <svx/charrotateitem.hxx>
-#include <svx/charreliefitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/hyznitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/cmapitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/protitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/prntitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/spltitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/wrlmitem.hxx>
+#include <editeng/emphitem.hxx>
+#include <editeng/twolinesitem.hxx>
+#include <editeng/charscaleitem.hxx>
+#include <editeng/charrotateitem.hxx>
+#include <editeng/charreliefitem.hxx>
 #include <svx/xoutbmp.hxx>
-#include <svx/paravertalignitem.hxx>
-#include <svx/hngpnctitem.hxx>
-#include <svx/scriptspaceitem.hxx>
-#include <svx/forbiddenruleitem.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/charhiddenitem.hxx>
+#include <editeng/paravertalignitem.hxx>
+#include <editeng/hngpnctitem.hxx>
+#include <editeng/scriptspaceitem.hxx>
+#include <editeng/forbiddenruleitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/charhiddenitem.hxx>
 #include <unotools/charclass.hxx>
 #include <reffld.hxx>
 #include <frmatr.hxx>
