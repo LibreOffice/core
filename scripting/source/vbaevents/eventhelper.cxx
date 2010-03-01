@@ -929,9 +929,12 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* /*pRet*/ ) throw(Runtime
                     Sequence< Any > aOutArgs;
                     try
                     {
-                        uno::Reference< script::provider::XScript > xScript = xScriptProvider->getScript( url );
-                        if ( xScript.is() )
-                           xScript->invoke( aArguments, aOutArgsIndex, aOutArgs  );
+                        if ( mpShell )
+                        {
+                            uno::Any aRet;
+                            mpShell->CallXScript( url,
+                                aArguments, aRet, aOutArgsIndex, aOutArgs, false );
+                        }
                     }
                     catch ( uno::Exception& e )
                     {
