@@ -36,28 +36,3 @@
 '*
 '\************************************************************************
 
-function GetFileNameListLocal ( sPath$, sMatch$ ,lsFile() as String  ) as integer
-
-    ' DUPLICATE FUNCTION but used in ./global/tools/compressstatus.bas
-
-    '/// Get files from a directory that match the pattern and append them to a list (without path)
-    '/// <u>Input</u>: Directory with complete path; Search Pattern, e.g *.*; List
-    '/// <u>Return</u>: count of appended entries; updated list
-    Dim Count%
-    Dim Datname as String
-
-    Count% = 0
-
-    if right ( sPath$, 1 ) <> gPathSigne then sPath$ = sPath$ + gPathSigne
-    ' at the end of the string has to be teh path seperator, else the dir-command doesn't work
-    Datname = Dir( sPath$ + sMatch$ , 0)
-
-    do until Len(Datname) = 0
-        Count% = Count% + 1
-        lsFile(Count%) = Datname ' append
-        lsFile(0) = Count%
-        Datname = Dir
-    loop
-
-    GetFileNameListLocal = Count%    ' all files
-end function
