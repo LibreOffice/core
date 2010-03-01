@@ -179,7 +179,8 @@ testcase tOpenObjectsWithFileDialog( cCategory as string )
         else
         
             printlog( "Close navigator, if open" )
-            hCloseNavigator()
+            kontext "Navigator"
+            hCloseDialog( Navigator, "close,optional" )
     
             sFileOut = cCategory & "_" & iCurrentTemplate
             sFileOut = convertpath( sPathOut & sFileOut ) 
@@ -202,7 +203,8 @@ testcase tOpenObjectsWithFileDialog( cCategory as string )
             hHandleActivesOnLoad( 0 , 2 )
             
             printlog( "Close navigator, if open" )
-            hCloseNavigator()
+            kontext "Navigator"
+            hCloseDialog( Navigator, "close,optional" )
     
             printlog( "Close document" )
             hDestroyDocument()

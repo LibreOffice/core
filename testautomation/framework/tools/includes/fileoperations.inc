@@ -70,7 +70,8 @@ function hSaveLoadDelSuccess( cFile as string ) as integer
     printlog( CFN & "Enter with option: " & cFile & "/" & cFileExt )
     
     '///+<li>Close the navigator if it exists</li>
-    hCloseNavigator()
+    kontext "Navigator"
+    hCloseDialog( Navigator, "close,optional" )
 
     '///+<li>Save the current file, overwriting existing</li>
     brc = hSaveFileExpectSuccess( cFile , TRUE ) ' save and overwrite

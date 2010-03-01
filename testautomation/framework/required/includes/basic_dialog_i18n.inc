@@ -43,7 +43,8 @@ testcase tUpdtBasicDialogI18n
 
     dim brc as boolean
     
-    hCloseNavigator()
+    kontext "Navigator"
+    hCloseDialog( Navigator, "close,optional" )
     hCreateDocument()'
     
     brc = hInitFormControls( "tDialogI18n" )

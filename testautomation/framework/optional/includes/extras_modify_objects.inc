@@ -149,12 +149,14 @@ testcase tModifyObjects( iMode as integer, cCategory as string, sVer as string )
                 else
                     printlog( "Build filename; save, reload and delete" )
                     sFile = sPath & cCategory & iObjectFolder & "_" & iObject
-                    hCloseNavigator()
+                    kontext "Navigator"
+                    hCloseDialog( Navigator, "close,optional" )
                     hFileSaveAsKill( sFile )
                     hDestroyDocument()
                     hFileOpen( sFile )
                     hHandleActivesOnLoad( 1 , 2 )
-                    hCloseNavigator()
+                    kontext "Navigator"
+                    hCloseDialog( Navigator, "close,optional" )
                     hDestroyDocument()
                     hDeleteFile( sFile )
                     printlog( "Test cycle done, going for next object." )

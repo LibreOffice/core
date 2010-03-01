@@ -79,7 +79,8 @@ function hAccessStandardBar() as boolean
     endif
 
     '///+<li>Close the navigator</li>
-    hCloseNavigator()
+    kontext "Navigator"
+    hCloseDialog( Navigator, "close,optional" )
     
     '///+<li>Close the document</li>
     hDestroyDocument()

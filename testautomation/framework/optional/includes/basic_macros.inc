@@ -70,7 +70,8 @@ testcase tMakro_In_All_Apps
         brc = hCloseBasicIde()
         
         printlog( "Close the navigator (Master-doc)" )
-        brc = hCloseNavigator()
+        kontext "Navigator"
+        hCloseDialog( Navigator, "close,optional" )
         
         printlog( "Close the document" )
         FileClose
@@ -94,12 +95,6 @@ endcase
 
 testcase tMakro_Dialog
 
-    if ( gBuild < 9305 ) then
-        warnlog( "#i87457# - Application macros assigned to userlayer" )
-        goto endsub
-    endif
-
-    
     dim brc as boolean
     dim cMsg as string
     

@@ -115,10 +115,9 @@ testcase tTextGridDialog_2
     Kontext
     ViewNavigator
     Kontext "NavigatorWriter"
-
     Seitennummer.SetText "2"
-    Sleep 5
-    hCloseNavigator
+    kontext "Navigator"
+    hCloseDialog( Navigator, "close" )
 
     '/// In No Grid mode, there should be only 1 page, the focus is before the first line
     Kontext "DocumentWriter"
@@ -164,10 +163,9 @@ testcase tTextGridDialog_3
     Kontext
     ViewNavigator
     Kontext "NavigatorWriter"
-
     Seitennummer.SetText "2"
-    Sleep 5
-    hCloseNavigator
+    kontext "Navigator"
+    hCloseDialog( Navigator, "close" )
 
     Kontext "DocumentWriter"
     Call DocumentWriter.TypeKeys  "<End>"
@@ -215,10 +213,9 @@ testcase tTextGridDialog_4
     Kontext
     ViewNavigator
     Kontext "NavigatorWriter"
-
     Seitennummer.SetText "2"
-    Sleep 5
-    hCloseNavigator
+    kontext "Navigator"
+    hCloseDialog( Navigator, "close" )
 
     Kontext "DocumentWriter"
     Call DocumentWriter.TypeKeys  "<End>"
@@ -413,13 +410,9 @@ testcase tFontSizeChanges_1
     Kontext
     ViewNavigator
     Kontext "NavigatorWriter"
-    if NavigatorWriter.exists(5) then
-        Seitennummer.SetText "2"
-        Sleep 5
-    else
-        warnlog "Navigator not available"
-    endif
-    hCloseNavigator
+    Seitennummer.SetText "2"
+    kontext "Navigator"
+    hCloseDialog( Navigator, "close" )
 
     Kontext "DocumentWriter"
     sleep 3
@@ -505,7 +498,7 @@ testcase tIndentsTest_1
     ViewNavigator
     Kontext "NavigatorWriter"
     if Seitennummer.GetText <> sCorrectPage1 then Warnlog "First test :Something wrong in indents test!"
-    hCloseNavigator
+    hCloseDialog( Navigator, "close" )
 
     '/// press TAB in second line again
     Kontext "DocumentWriter"
@@ -521,7 +514,7 @@ testcase tIndentsTest_1
     ViewNavigator
     Kontext "NavigatorWriter"
     if Seitennummer.GetText <> sCorrectPage2 then Warnlog "Second test :Something wrong in indents test!"
-    hCloseNavigator
+    hCloseDialog( Navigator, "close" )
 
     Call hCloseDocument
 endcase
@@ -547,7 +540,7 @@ testcase tObjectsTest_1
     Sleep 1
     Auswahlliste.TypeKeys "<Return>"
     Sleep 1
-    hCloseNavigator
+    hCloseDialog( Navigator, "close" )
 
     Kontext
     FormatAnchorAsCharacter
@@ -559,12 +552,12 @@ testcase tObjectsTest_1
     Seitennummer.SetText   sCorrectPage2
     Sleep 5
     if Seitennummer.GetText <> sCorrectPage2 then Warnlog "Something wrong when object is anchored as Character!"
-    hCloseNavigator
+    hCloseDialog( Navigator, "close" )
 
     '/// If object is anchored to Character , check if it will NOT snap to the appropriate grid cell
     fStartupNavigator( "OLEObject" , 1 )
     Auswahlliste.TypeKeys "<Return>"
-    hCloseNavigator
+    hCloseDialog( Navigator, "close" )
 
     Kontext
     FormatAnchorToCharacter
@@ -574,7 +567,7 @@ testcase tObjectsTest_1
     Seitennummer.SetText   sCorrectPage2
     Sleep 5
     if Seitennummer.GetText <> sCorrectPage1 then Warnlog "Something wrong when object is anchored to Character!"
-    hCloseNavigator
+    hCloseDialog( Navigator, "close" )
     Kontext
 
     Call hCloseDocument

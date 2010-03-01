@@ -124,10 +124,8 @@ testcase tTextGridDialog_2
     Kontext
     ViewNavigator
     Kontext "NavigatorWriter"
-
     Seitennummer.SetText "2"
-    Sleep 5
-    hCloseNavigator
+    hCloseDialog( Navigator, "close" )
 
     '/// In No Grid mode, there should be only 1 page, the focus is before the first line
     Kontext "DocumentWriter"
@@ -173,10 +171,8 @@ testcase tTextGridDialog_3
     Kontext
     ViewNavigator
     Kontext "NavigatorWriter"
-
     Seitennummer.SetText "2"
-    Sleep 5
-    hCloseNavigator
+    hCloseDialog( Navigator, "close" )
 
     Kontext "DocumentWriter"
     Call DocumentWriter.TypeKeys  "<End>"
@@ -224,10 +220,8 @@ testcase tTextGridDialog_4
     Kontext
     ViewNavigator
     Kontext "NavigatorWriter"
-
     Seitennummer.SetText "2"
-    Sleep 5
-    hCloseNavigator
+    hCloseDialog( Navigator, "close" )
 
     Kontext "DocumentWriter"
     Call DocumentWriter.TypeKeys  "<End>"
