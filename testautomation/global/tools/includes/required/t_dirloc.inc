@@ -36,19 +36,6 @@
 '*
 '\************************************************************************
 
-function hFileExistsLocal ( Dat as String ) as Boolean
-    '/// Checks if a file exists
-    '/// <u>Input</u>: Filename with complete path
-    '/// <u>Return</u>: TRUE or FALSE if the file exists.
-    if Dir ( Dat ) = "" then
-        hFileExistsLocal = FALSE
-    else
-        hFileExistsLocal = TRUE
-    end if
-end function
-'
-'-------------------------------------------------------------------------------
-'
 function GetFileNameListLocal ( sPath$, sMatch$ ,lsFile() as String  ) as integer
 
     ' DUPLICATE FUNCTION but used in ./global/tools/compressstatus.bas
