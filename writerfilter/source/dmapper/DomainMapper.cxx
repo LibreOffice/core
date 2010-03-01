@@ -72,6 +72,7 @@
 #include <com/sun/star/text/TextGridMode.hpp>
 #include <com/sun/star/text/XDocumentIndexesSupplier.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <comphelper/types.hxx>
@@ -2660,7 +2661,10 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
         }
         break;  // sprmPOutLvl
     case NS_sprm::LN_PFBiDi:
-        /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
+        /* WRITERFILTERSTATUS: done: 100, planned: 2, spent: 0 */
+            rContext->Insert(PROP_WRITING_MODE, false, uno::makeAny( text::WritingMode2::RL_TB ));
+            rContext->Insert(PROP_PARA_ADJUST, false, uno::makeAny( style::ParagraphAdjust_RIGHT ));
+
         break;  // sprmPFBiDi
     case NS_sprm::LN_PFNumRMIns:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
