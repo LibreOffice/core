@@ -186,26 +186,3 @@ end function
 '
 '-------------------------------------------------------------------------------
 '
-function KillDirListLocal ( lsList() as String ) as Boolean
-    '/// Delete all directories in the list
-    '/// <u>Input</u>: List with directories
-    '/// <u>Return</u>: TRUE or FALSE if directories are killed; modified list with not deleted directories.
-    Dim i as Integer
-    Dim FehlerListe ( 1000 ) as String
-
-    FehlerListe ( 0 ) = 0
-    for i=1 to ListCount ( lsList() )
-        try
-            rmDir ( lsList(i) )
-        catch
-            ListAppend ( FehlerListe (), lsList(i) )
-        endcatch
-    next i
-
-    lsList(0) = 0               ' delete old list
-    KillDirListLocal = TRUE
-    for i=1 to ListCount ( FehlerListe () )
-        KillDirListLocal = FALSE
-        ListAppend (  lsList(), FehlerListe (i) )
-    next i
-end function
