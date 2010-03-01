@@ -568,11 +568,11 @@ sub ExitRestartTheOffice (optional sProfPath as String, optional sProfParameter 
     catch
     endcatch
     'Disable Quickstarter internaly
-    hDisableQuickstarterAPI 
+    hDisableQuickstarterAPI
+
     ' Recover to backingwindow, until resetApplication can handle this
-    for i = 1 to getDocumentCount
-        hCloseDocument() 
-    next i
+    hFileCloseAll()
+
 end sub
 
 '-------------------------------------------------------------------------
@@ -706,15 +706,7 @@ sub PleaseRecover (sWhat as String)
     Kontext
 
     ' Recover to backingwindow, until resetApplication can handle this
-    a = getDocumentCount
-    for i = 1 to a
-        qaErrorLog "Needed to close window: (" + i + "/"+a+") on " + sWhat
-        hCloseDocument()
-    next i
-    a = getDocumentCount
-    if a > 0 then
-        warnlog "Failed to close window; There are still open: " + a
-    endif
+    hFileCloseAll()
 end sub
 
 '-------------------------------------------------------------------------
