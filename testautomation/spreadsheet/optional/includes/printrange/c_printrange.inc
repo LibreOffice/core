@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: c_printrange.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 08:05:51 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
 '/************************************************************************
 '*
 '* owner : oliver.craemer@sun.com
@@ -266,14 +260,16 @@ testcase tAddPrintRange
      Active.ok
     end if
     
-    Kontext "DruckenDlg"
-   	Seiten.check
-    if SeitenText.GetText = "1-3" then
+    Kontext "Printing"
+    Kontext "TabPrintGeneral"
+    PrintPages.check
+    if PageRange.GetText = "1-3" then
    	   printlog "+ Pages to print as expected"
     else
-   	   warnlog "Expected pages to print are <1-3>, but we got: " & SeitenText.GetText
+   	   warnlog "Expected pages to print are <1-3>, but we got: " & PageRange.GetText
     end if
-   	DruckenDlg.Cancel
+    	Kontext "Printing"
+   	Printing.Cancel
     sleep(2)
     call hCloseDocument
 endcase
@@ -864,15 +860,15 @@ testcase tEmptyRangeMessagebox
             endcatch
         end if
     else
-        warnlog "There is no messagebox"
+        warnlog "There is no messagebox (#i106423#)"
         kontext "DocumentCalc"
         call hCloseDocument
         goto endsub
     end if
     
-    Kontext "DruckenDlg"
-    if DruckenDlg.Exists( 2 ) then
-    	DruckenDlg.Cancel
+    Kontext "Printing"
+    if Printing.Exists( 2 ) then
+    	Printing.Cancel
     end if
     sleep 2
 
@@ -916,9 +912,9 @@ testcase tEmptyRangeMessagebox
         goto endsub
     end if
 
-	kontext "DruckenDlg"
-	if DruckenDlg.Exists( 2 ) then
-		DruckenDlg.Cancel
+    kontext "Printing"
+    if Printing.Exists( 2 ) then
+    	Printing.Cancel
     end if    
     printlog "Close document"
     call hCloseDocument

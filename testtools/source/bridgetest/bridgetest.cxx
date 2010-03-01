@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: bridgetest.cxx,v $
- * $Revision: 1.24.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -535,24 +532,28 @@ static sal_Bool performTest(
         bRet = check( equals( aData, aRet ) && equals( aData, aRet2 ) , "struct comparison test") && bRet;
 
         {
-                SmallStruct aIn(1, 2);
-                SmallStruct aOut = xLBT->echoSmallStruct(aIn);
-                bRet = check( memcmp(&aIn, &aOut, sizeof(SmallStruct)) == 0, "small struct test" ) && bRet;
+            SmallStruct aIn(1, 2);
+            SmallStruct aOut = xLBT->echoSmallStruct(aIn);
+            bRet = check( memcmp(&aIn, &aOut, sizeof(SmallStruct)) == 0, "small struct test" ) && bRet;
         }
         {
-                MediumStruct aIn(1, 2, 3, 4);
-                MediumStruct aOut = xLBT->echoMediumStruct(aIn);
-                bRet = check( memcmp(&aIn, &aOut, sizeof(MediumStruct)) == 0, "medium struct test" ) && bRet;
+            MediumStruct aIn(1, 2, 3, 4);
+            MediumStruct aOut = xLBT->echoMediumStruct(aIn);
+            bRet = check( memcmp(&aIn, &aOut, sizeof(MediumStruct)) == 0, "medium struct test" ) && bRet;
         }
         {
-                BigStruct aIn(1, 2, 3, 4, 5, 6, 7, 8);
-                BigStruct aOut = xLBT->echoBigStruct(aIn);
-                bRet = check( memcmp(&aIn, &aOut, sizeof(BigStruct)) == 0, "big struct test" ) && bRet;
+            BigStruct aIn(1, 2, 3, 4, 5, 6, 7, 8);
+            BigStruct aOut = xLBT->echoBigStruct(aIn);
+            bRet = check( memcmp(&aIn, &aOut, sizeof(BigStruct)) == 0, "big struct test" ) && bRet;
         }
         {
-                AllFloats aIn(1.1f, 2.2f, 3.3f, 4.4f);
-                AllFloats aOut = xLBT->echoAllFloats(aIn);
-                bRet = check( memcmp(&aIn, &aOut, sizeof(AllFloats)) == 0, "all floats struct test" ) && bRet;
+            AllFloats aIn(1.1f, 2.2f, 3.3f, 4.4f);
+            AllFloats aOut = xLBT->echoAllFloats(aIn);
+            bRet = check( memcmp(&aIn, &aOut, sizeof(AllFloats)) == 0, "all floats struct test" ) && bRet;
+        }
+        {
+            sal_Int32 i2 = xLBT->testPPCAlignment( 0, 0, 0, 0, 0xbeaf );
+            bRet = check( i2 == 0xbeaf, "ppc-style alignment test" ) && bRet;
         }
 
         // Test extended attributes that raise exceptions:

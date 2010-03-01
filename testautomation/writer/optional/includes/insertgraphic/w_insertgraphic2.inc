@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: w_insertgraphic2.inc,v $
-'*
-'* $Revision: 1.2 $
-'*
-'* last change: $Author: vg $ $Date: 2008-08-18 12:30:51 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
 '/************************************************************************
 '*
 '* owner : helge.delfs@sun.com
@@ -631,116 +625,116 @@ endcase
 
 testcase tInsertGraphic_18
 
-  Dim sGraphicName1 as String
-  Dim sGraphicName2 as String
-  Dim sGraphicName3 as String
-  Dim sWidth as String
-  Dim sHeight as String
+    Dim sGraphicName1 as String
+    Dim sGraphicName2 as String
+    Dim sGraphicName3 as String
+    Dim sWidth as String
+    Dim sHeight as String
 
-  sGraphicName1 = "TEST1"
-  sGraphicName2 = "TEST2"
-  sGraphicName3 = "TEST3"
+    sGraphicName1 = "TEST1"
+    sGraphicName2 = "TEST2"
+    sGraphicName3 = "TEST3"
 
-  sWidth       = "7"+ gSeperator + "00" + gMeasurementUnit
-  sHeight      = "6"+ gSeperator + "00" + gMeasurementUnit
+    sWidth       = "7"+ gSeperator + "00" + gMeasurementUnit
+    sHeight      = "6"+ gSeperator + "00" + gMeasurementUnit
 
-  PrintLog "- Test Set different attributes via Contextmenu Arrange (send backward)"
- '/// Test Set different attributes via Contextmenu Arrange (send backward)
+    PrintLog "- Test Set different attributes via Contextmenu Arrange (send backward)"
+    '/// Test Set different attributes via Contextmenu Arrange (send backward)
 
-   Call hNewDocument
+    Call hNewDocument
 
-   Call wTypeKeys "<Return>"
+    Call wTypeKeys "<Return>"
 
-  '/// Insert three Graphics at the same place , and named in series
+    '/// Insert three Graphics at the same place , and named in series
 
-   'the 1st graphic
-   fInsertGraphics("Bughunter.jpg")
+    'the 1st graphic
+    fInsertGraphics("Bughunter.jpg")
 
-   fFormatGraphic("TabZusaetze")
-   Sleep 1
-   ObjektName.SetText sGraphicName1
-   TabZusaetze.OK
+    fFormatGraphic("TabZusaetze")
+    Sleep 1
+    ObjektName.SetText sGraphicName1
+    Kontext
+    Active.Setpage TabType
+    Kontext "TabType"
+    KeepRatio.UnCheck
+    Sleep 1
+    Width.SetText        sWidth
+    wait 500
+    Height.SetText       sHeight
+    wait 500
+    TabType.OK
 
-   fFormatGraphic("TabType")
-   KeepRatio.UnCheck
-   Sleep 1
-   Width.SetText        sWidth
-   wait 500
-   Height.SetText       sHeight
-   wait 500
-   TabType.OK
+    Call wTypeKeys "<ESCape>"
 
-   Call wTypeKeys "<ESCape>"
+    'the 2nd graphic
+    fInsertGraphics("flowers.gif")
 
-   'the 2nd graphic
-   fInsertGraphics("flowers.gif")
+    fFormatGraphic("TabZusaetze")
+    Sleep 1
+    ObjektName.SetText sGraphicName2
+    TabZusaetze.OK
 
-   fFormatGraphic("TabZusaetze")
-   Sleep 1
-   ObjektName.SetText sGraphicName2
-   TabZusaetze.OK
+    fFormatGraphic("TabType")
+    KeepRatio.UnCheck
+    Sleep 1
+    Width.SetText        sWidth
+    wait 500
+    Height.SetText       sHeight
+    wait 500
+    TabType.OK
 
-   fFormatGraphic("TabType")
-   KeepRatio.UnCheck
-   Sleep 1
-   Width.SetText        sWidth
-   wait 500
-   Height.SetText       sHeight
-   wait 500
-   TabType.OK
+    Call wTypeKeys "<ESCape>"
 
-   Call wTypeKeys "<ESCape>"
+    'the 3rd graphic
+    fInsertGraphics("game.bmp")
 
-   'the 3rd graphic
-   fInsertGraphics("game.bmp")
+    fFormatGraphic("TabZusaetze")
+    Sleep 1
+    ObjektName.SetText sGraphicName3
+    TabZusaetze.OK
 
-   fFormatGraphic("TabZusaetze")
-   Sleep 1
-   ObjektName.SetText sGraphicName3
-   TabZusaetze.OK
+    fFormatGraphic("TabType")
+    KeepRatio.UnCheck
+    Sleep 1
+    Width.SetText        sWidth
+    wait 500
+    Height.SetText       sHeight
+    wait 500
+    TabType.OK
 
-   fFormatGraphic("TabType")
-   KeepRatio.UnCheck
-   Sleep 1
-   Width.SetText        sWidth
-   wait 500
-   Height.SetText       sHeight
-   wait 500
-   TabType.OK
-
-   '/// ContextMenu  Arrange / Send backward
-   Call wOpenContextMenu
+    '/// ContextMenu  Arrange / Send backward
+    Call wOpenContextMenu
     hMenuSelectNr(1)
     Sleep 2
     hMenuSelectNr(3)
     Sleep 1
 
-   Call wTypeKeys "<ESCape>"
-   Sleep 1
+    Call wTypeKeys "<ESCape>"
+    Sleep 1
 
-   '/// Check if the attributes Arrange (send to back) works well
-   Call wNavigatorAuswahl(4,1)
-   Sleep 1
-   fFormatGraphic("TabZusaetze")
-   Sleep 1
-   if ObjektName.GetText <> sGraphicName1  then Warnlog "The graphic's name is not correct ,should be "+sGraphicName1 + " but get " +ObjektName.GetText
-   TabZusaetze.Cancel
+    '/// Check if the attributes Arrange (send to back) works well
+    Call wNavigatorAuswahl(4,1)
+    Sleep 1
+    fFormatGraphic("TabZusaetze")
+    Sleep 1
+    if ObjektName.GetText <> sGraphicName1  then Warnlog "The graphic's name is not correct ,should be "+sGraphicName1 + " but get " +ObjektName.GetText
+    TabZusaetze.Cancel
 
-   Call wNavigatorAuswahl(4,2)
-   Sleep 1
-   fFormatGraphic("TabZusaetze")
-   Sleep 1
-   if ObjektName.GetText <> sGraphicName2  then Warnlog "The graphic's name is not correct ,should be "+sGraphicName2 + " but get " +ObjektName.GetText
-   TabZusaetze.Cancel
+    Call wNavigatorAuswahl(4,2)
+    Sleep 1
+    fFormatGraphic("TabZusaetze")
+    Sleep 1
+    if ObjektName.GetText <> sGraphicName2  then Warnlog "The graphic's name is not correct ,should be "+sGraphicName2 + " but get " +ObjektName.GetText
+    TabZusaetze.Cancel
 
-   Call wNavigatorAuswahl(4,3)
-   Sleep 1
-   fFormatGraphic("TabZusaetze")
-   Sleep 1
-   if ObjektName.GetText <> sGraphicName3  then Warnlog "The graphic's name is not correct ,should be "+sGraphicName3 + " but get " +ObjektName.GetText
-   TabZusaetze.Cancel
+    Call wNavigatorAuswahl(4,3)
+    Sleep 1
+    fFormatGraphic("TabZusaetze")
+    Sleep 1
+    if ObjektName.GetText <> sGraphicName3  then Warnlog "The graphic's name is not correct ,should be "+sGraphicName3 + " but get " +ObjektName.GetText
+    TabZusaetze.Cancel
 
-   Call hCloseDocument
+    Call hCloseDocument
 
 endcase
 
@@ -748,120 +742,122 @@ endcase
 
 testcase tInsertGraphic_19
 
-  Dim sGraphicName1 as String
-  Dim sGraphicName2 as String
-  Dim sGraphicName3 as String
-  Dim sWidth as String
-  Dim sHeight as String
+    Dim sGraphicName1 as String
+    Dim sGraphicName2 as String
+    Dim sGraphicName3 as String
+    Dim sWidth as String
+    Dim sHeight as String
 
-  sGraphicName1 = "TEST1"
-  sGraphicName2 = "TEST2"
-  sGraphicName3 = "TEST3"
+    sGraphicName1 = "TEST1"
+    sGraphicName2 = "TEST2"
+    sGraphicName3 = "TEST3"
 
-  sWidth       = "7"+ gSeperator + "00" + gMeasurementUnit
-  sHeight      = "6"+ gSeperator + "00" + gMeasurementUnit
+    sWidth       = "7"+ gSeperator + "00" + gMeasurementUnit
+    sHeight      = "6"+ gSeperator + "00" + gMeasurementUnit
 
-  PrintLog "- Test Set different attributes via Contextmenu Arrange (bring to front)"
- '/// Test Set different attributes via Contextmenu Arrange (bring to front)
+    PrintLog "- Test Set different attributes via Contextmenu Arrange (bring to front)"
+    '/// Test Set different attributes via Contextmenu Arrange (bring to front)
 
-  Call hNewDocument
+    Call hNewDocument
 
-  Call wTypeKeys "<Return>"
+    Call wTypeKeys "<Return>"
 
-  '/// Insert three Graphics at the same place , and named in series
+    '/// Insert three Graphics at the same place , and named in series
 
-   'the 1st graphic
-   fInsertGraphics("Bughunter.jpg")
+    'the 1st graphic
+    fInsertGraphics("Bughunter.jpg")
 
-   fFormatGraphic("TabZusaetze")
-   Sleep 1
-   ObjektName.SetText sGraphicName1
-   TabZusaetze.OK
+    fFormatGraphic("TabZusaetze")
+    Sleep 1
+    ObjektName.SetText sGraphicName1
 
-   fFormatGraphic("TabType")
-   KeepRatio.UnCheck
-   Sleep 1
-   Width.SetText        sWidth
-   wait 500
-   Height.SetText       sHeight
-   wait 500
-   TabType.OK
+    Kontext
+    Active.Setpage TabType
+    Kontext "TabType"
 
-   Call wTypeKeys "<ESCape>"
+    KeepRatio.UnCheck
+    Sleep 1
+    Width.SetText        sWidth
+    wait 500
+    Height.SetText       sHeight
+    wait 500
+    TabType.OK
 
-   'the 2nd graphic
-   fInsertGraphics("flowers.gif")
+    Call wTypeKeys "<ESCape>"
 
-   fFormatGraphic("TabZusaetze")
-   Sleep 1
-   ObjektName.SetText sGraphicName2
-   TabZusaetze.OK
+    'the 2nd graphic
+    fInsertGraphics("flowers.gif")
 
-   fFormatGraphic("TabType")
-   KeepRatio.UnCheck
-   Sleep 1
-   Width.SetText        sWidth
-   wait 500
-   Height.SetText       sHeight
-   wait 500
-   TabType.OK
+    fFormatGraphic("TabZusaetze")
+    Sleep 1
+    ObjektName.SetText sGraphicName2
+    TabZusaetze.OK
 
-   Call wTypeKeys "<ESCape>"
+    fFormatGraphic("TabType")
+    KeepRatio.UnCheck
+    Sleep 1
+    Width.SetText        sWidth
+    wait 500
+    Height.SetText       sHeight
+    wait 500
+    TabType.OK
 
-   'the 3rd graphic
-   fInsertGraphics("game.bmp")
+    Call wTypeKeys "<ESCape>"
 
-   fFormatGraphic("TabZusaetze")
-   Sleep 1
-   ObjektName.SetText sGraphicName3
-   TabZusaetze.OK
+    'the 3rd graphic
+    fInsertGraphics("game.bmp")
 
-   fFormatGraphic("TabType")
-   KeepRatio.UnCheck
-   Sleep 1
-   Width.SetText        sWidth
-   wait 500
-   Height.SetText       sHeight
-   wait 500
-   TabType.OK
+    fFormatGraphic("TabZusaetze")
+    Sleep 1
+    ObjektName.SetText sGraphicName3
+    TabZusaetze.OK
 
-   '/// Format / Arrange / Send to back
-   FormatArrangeSendToBack
-   Sleep 2
+    fFormatGraphic("TabType")
+    KeepRatio.UnCheck
+    Sleep 1
+    Width.SetText        sWidth
+    wait 500
+    Height.SetText       sHeight
+    wait 500
+    TabType.OK
 
-   '/// ContextMenu Arrange / bring to front
-   Call wOpenContextMenu
+    '/// Format / Arrange / Send to back
+    FormatArrangeSendToBack
+    Sleep 2
+
+    '/// ContextMenu Arrange / bring to front
+    Call wOpenContextMenu
     hMenuSelectNr(1)
     Sleep 2
     hMenuSelectNr(1)
     Sleep 1
 
-   Call wTypeKeys "<ESCape>"
-   Sleep 1
+    Call wTypeKeys "<ESCape>"
+    Sleep 1
 
-   '/// Check if the attributes Arrange (send to back) works well
-   Call wNavigatorAuswahl(4,1)
-   Sleep 1
-   fFormatGraphic("TabZusaetze")
-   Sleep 1
-   if ObjektName.GetText <> sGraphicName1  then Warnlog "The graphic's name is not correct ,should be "+sGraphicName1 + " but get " +ObjektName.GetText
-   TabZusaetze.Cancel
+    '/// Check if the attributes Arrange (send to back) works well
+    Call wNavigatorAuswahl(4,1)
+    Sleep 1
+    fFormatGraphic("TabZusaetze")
+    Sleep 1
+    if ObjektName.GetText <> sGraphicName1  then Warnlog "The graphic's name is not correct ,should be "+sGraphicName1 + " but get " +ObjektName.GetText
+    TabZusaetze.Cancel
 
-   Call wNavigatorAuswahl(4,2)
-   Sleep 1
-   fFormatGraphic("TabZusaetze")
-   Sleep 1
-   if ObjektName.GetText <> sGraphicName2  then Warnlog "The graphic's name is not correct ,should be "+sGraphicName2 + " but get " +ObjektName.GetText
-   TabZusaetze.Cancel
+    Call wNavigatorAuswahl(4,2)
+    Sleep 1
+    fFormatGraphic("TabZusaetze")
+    Sleep 1
+    if ObjektName.GetText <> sGraphicName2  then Warnlog "The graphic's name is not correct ,should be "+sGraphicName2 + " but get " +ObjektName.GetText
+    TabZusaetze.Cancel
 
-   Call wNavigatorAuswahl(4,3)
-   Sleep 1
-   fFormatGraphic("TabZusaetze")
-   Sleep 1
-   if ObjektName.GetText <> sGraphicName3  then Warnlog "The graphic's name is not correct ,should be "+sGraphicName3 + " but get " +ObjektName.GetText
-   TabZusaetze.Cancel
+    Call wNavigatorAuswahl(4,3)
+    Sleep 1
+    fFormatGraphic("TabZusaetze")
+    Sleep 1
+    if ObjektName.GetText <> sGraphicName3  then Warnlog "The graphic's name is not correct ,should be "+sGraphicName3 + " but get " +ObjektName.GetText
+    TabZusaetze.Cancel
 
-   Call hCloseDocument
+    Call hCloseDocument
 
 endcase
 

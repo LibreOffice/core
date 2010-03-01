@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: utils.java,v $
- * $Revision: 1.17.2.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,7 +78,7 @@ public class utils {
 
         String pthSep = System.getProperty("file.separator");
 
-        if (docpth.equals("unkown")) {
+        if (docpth.equals("unknown")) {
             System.out.println("try to get tDoc from $SRC_ROOT/qadevOOo");
             String srcRoot = System.getProperty(PropertyName.SRC_ROOT);
             if (srcRoot != null) {
@@ -108,7 +105,7 @@ public class utils {
         }
         String testdocPth = "";
 
-        if (docpth.equals("unkown")) {
+        if (docpth.equals("unknown")) {
             System.out.println("try to get tDoc from OBJDSCS");
             String objdscPth = System.getProperty("OBJDSCS");
             if (objdscPth != null) {
@@ -549,7 +546,7 @@ public class utils {
     }
 
     /**
-     * Copies file to a new location using SOffice features. If the target
+     * Copies file to a new location using OpenOffice.org features. If the target
      * file already exists, the file is deleted.
      *
      * @returns <code>true</code> if the file was successfully copied,
@@ -571,7 +568,7 @@ public class utils {
         } catch (com.sun.star.ucb.InteractiveAugmentedIOException e) {
             return false;
         } catch (com.sun.star.uno.Exception e) {
-            System.out.println("Couldn't create a service.");
+            System.out.println("Couldn't copy " + oldF + " to " + newF + ".");
             e.printStackTrace();
         }
 
@@ -909,7 +906,7 @@ public class utils {
      * @return unxsols, unxsoli, unxlngi, wntmsci
      */
     public static String getOfficeOS(XMultiServiceFactory xMSF) {
-        String platform = "unkown";
+        String platform = "unknown";
 
         try {
             String theOS = expandMacro(xMSF, "$_OS");

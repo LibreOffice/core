@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: cppobj.cxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -225,6 +222,8 @@ public:
         { return rStruct; }
     virtual AllFloats SAL_CALL echoAllFloats(const AllFloats& rStruct) throw(com::sun::star::uno::RuntimeException)
         { return rStruct; }
+    virtual sal_Int32 SAL_CALL testPPCAlignment( sal_Int64, sal_Int64, sal_Int32, sal_Int64, sal_Int32 i2 ) throw(com::sun::star::uno::RuntimeException)
+        { return i2; }
 
     virtual sal_Bool SAL_CALL getBool() throw(com::sun::star::uno::RuntimeException)
         { return _aData.Bool; }

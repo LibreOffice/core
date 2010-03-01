@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'*
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: id_001.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 10:42:41 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
 '/************************************************************************
 '*
 '* Owner : wolfram.garten@sun.com
@@ -41,7 +35,6 @@
 ' #1 tiFileVersion (sFileIn as string)
 ' #1 tiFilePassword
 ' #1 tiFileTemplates
-' #1 tiFilePrint
 ' #1 tmFileNewFromTemplate
 ' #1 tmFileOpen
 ' #1 tmFileClose
@@ -468,30 +461,6 @@ testcase tiFileTemplates
         Warnlog "- There are problems with File-Template-Save"
     endcatch
     WaitSlot (1000)
-    Call hCloseDocument
-endcase
-
-testcase tiFilePrint
-    Call hNewDocument
-    FilePrint
-    WaitSlot (1000)
-    kontext
-    if active.exists(5) then
-        active.ok
-        qaerrorlog "There is no printer available - please install one on your system!"
-    end if
-    WaitSlot (2000)
-    Kontext "DruckenDlg"
-    Call DialogTest (DruckenDlg)
-    WaitSlot (2000)
-    Zusaetze.Click
-
-    Kontext "DruckerZusaetzeDraw"
-    Call DialogTest (DruckerZusaetzeDraw)
-    DruckerZusaetzeDraw.Cancel
-    Kontext "DruckenDlg"
-    DruckenDlg.Cancel
-    WaitSlot (2000)
     Call hCloseDocument
 endcase
 

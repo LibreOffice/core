@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: sysinfo.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-13 10:27:06 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
 '/************************************************************************
 '*
 '* owner : helge.delfs@sun.com
@@ -67,7 +61,6 @@ Global Const SYS_OSX   = 12
 Global Const SYS_PPC   = 13
 Global Const SYS_SCO   = 14
 Global Const SYS_AIX   = 15
-Global Const SYS_IRI   = 16
 Global Const SYS_HP    = 17
 Global Const SYS_FBSD  = 18
 Global Const SYS_NBSD  = 19
@@ -97,7 +90,6 @@ sub PlatFormInit
 '///+<TR><TD>Linux PPC</TD><TD>ppc</TD><TD>unx</TD></TR>
 '///+<TR><TD>SCO UNIX</TD><TD>sco</TD><TD>unx</TD></TR>
 '///+<TR><TD>AIX</TD><TD>aix</TD><TD>unx</TD></TR>
-'///+<TR><TD>Irix</TD><TD>iri</TD><TD>unx</TD></TR>
 '///+<TR><TD>HP UNIX</TD><TD>hp</TD><TD>unx</TD></TR>
 '///+<TR><TD>FreeBSD</TD><TD>fbsd</TD><TD>unx</TD></TR>
 '///+<TR><TD>NetBSD</TD><TD>nbsd</TD><TD>unx</TD></TR>
@@ -120,7 +112,6 @@ sub PlatFormInit
    PlatformName(SYS_PPC)   = "Linux PPC"      : PlatformExt(SYS_PPC)  = "ppc"
    PlatFormName(SYS_SCO)   = "SCO Unix"       : PlatFormExt(SYS_SCO)  = "sco"
    PlatFormName(SYS_AIX)   = "AIX"            : PlatFormExt(SYS_AIX)  = "aix"
-   PlatFormName(SYS_IRI)   = "IRIX"           : PlatFormExt(SYS_IRI)  = "iri"
    PlatFormName(SYS_HP)    = "HP UNIX"        : PlatFormExt(SYS_Hp)   = "hp"
    PlatFormName(SYS_FBSD)  = "FreeBSD"        : PlatFormExt(SYS_FBSD) = "fbsd"
    PlatFormName(SYS_NBSD)  = "NetBSD"         : PlatFormExt(SYS_NBSD) = "nbsd"
@@ -143,7 +134,6 @@ sub PlatFormInit
    PlatFormGroup(SYS_PPC)  = "unx"
    PlatFormGroup(SYS_SCO)  = "unx"
    PlatFormGroup(SYS_AIX)  = "unx"
-   PlatFormGroup(SYS_IRI)  = "unx"
    PlatFormGroup(SYS_HP)   = "unx"
    PlatFormGroup(SYS_FBSD) = "unx"
    PlatFormGroup(SYS_NBSD) = "unx"
@@ -221,7 +211,6 @@ sub GetToolPlatform
 '///+<TR><TD>Linux PPC</TD><TD>13</TD></TR>
 '///+<TR><TD>SCO UNIX</TD><TD>02</TD></TR>
 '///+<TR><TD>AIX</TD><TD>04</TD></TR>
-'///+<TR><TD>Irix</TD><TD>06</TD></TR>
 '///+<TR><TD>HP UNIX</TD><TD>07</TD></TR>
 '///+<TR><TD>FreeBSD</TD><TD>08</TD></TR>
 '///+<TR><TD>NetBSD</TD><TD>14</TD></TR>
@@ -254,7 +243,7 @@ sub GetToolPlatform
          qaErrorLog("The GUI-entry in '" + gTesttoolIni + "' is missing!"+Chr(13)+"Please insert the correct number for your operating system! In Section [GUI Platform], entry Current= "+Chr(13)+"Win95....: 100"+Chr(13)+"Win98....: 395"+Chr(13)+"WinNT....: 351 or 400"+Chr(13)+"WinSE....: 410"+Chr(13)+"WinME....: 490"+Chr(13)+"Win2000..: 500"+Chr(13)+"WinXP....: 501")
        else
          iGuiVersion = 01
-         QAErrorLog("The GUI value in '" + gTesttoolIni + "' is missing!"+Chr(13)+"Please insert the correct number for your operating system! In Section [GUI Platform], entry Current= "+Chr(13)+"Solaris SPARC.: 01"+Chr(13)+"SCO UNIX......: 02"+Chr(13)+"Linux.........: 03"+Chr(13)+"AIX...........: 04"+Chr(13)+"Solaris x86...: 05"+Chr(13)+"Irix..........: 06"+Chr(13)+"HP-UX.........: 07"+Chr(13)+"FreeBSD........: 08"+Chr(13)+"Mac OS X......: 12"+Chr(13)+"Linux PPC.....: 13"+Chr(13)+"NetBSD.....: 14"+Chr(13)+"Linux 64 bit.....: 15"+Chr(13)+"Linux SPARC.....: 16")
+         QAErrorLog("The GUI value in '" + gTesttoolIni + "' is missing!"+Chr(13)+"Please insert the correct number for your operating system! In Section [GUI Platform], entry Current= "+Chr(13)+"Solaris SPARC.: 01"+Chr(13)+"SCO UNIX......: 02"+Chr(13)+"Linux.........: 03"+Chr(13)+"AIX...........: 04"+Chr(13)+"Solaris x86...: 05"+Chr(13)+"HP-UX.........: 07"+Chr(13)+"FreeBSD........: 08"+Chr(13)+"Mac OS X......: 12"+Chr(13)+"Linux PPC.....: 13"+Chr(13)+"NetBSD.....: 14"+Chr(13)+"Linux 64 bit.....: 15"+Chr(13)+"Linux SPARC.....: 16")
       end if
    end if
 '///Get the variable <b>gSamePC</b>
@@ -302,7 +291,6 @@ sub GetToolPlatform
             case 03 :   gSystemnummer = SYS_LIN
             case 04 :   gSystemnummer = SYS_AIX
             case 05 :   gSystemnummer = SYS_X86
-            case 06 :   gSystemnummer = SYS_IRI
             case 07 :   gSystemnummer = SYS_HP
             case 08 :   gSystemnummer = SYS_FBSD
             case 12 :   gSystemnummer = SYS_OSX
@@ -345,7 +333,6 @@ sub GetOfficePlatform
 '///+<TR><TD>Linux PPC</TD><TD>PPC</TD></TR>
 '///+<TR><TD>SCO UNIX</TD><TD>SCO</TD></TR>
 '///+<TR><TD>AIX</TD><TD>AIX</TD></TR>
-'///+<TR><TD>Irix</TD><TD>IRI</TD></TR>
 '///+<TR><TD>HP UNIX</TD><TD>HP</TD></TR>
 '///+<TR><TD>FreeBSD</TD><TD>FBSD</TD></TR>
 '///+<TR><TD>NetBSD</TD><TD>NBSD</TD></TR>
@@ -374,7 +361,6 @@ sub GetOfficePlatform
          case "PPC"     : GUI = 13         
          case "SCO"     : GUI = 14
          case "AIX"     : GUI = 15
-         case "IRI"     : GUI = 16
          case "HP"      : GUI = 17        
          case "FBSD"    : GUI = 18        
          case "NBSD"    : GUI = 19        

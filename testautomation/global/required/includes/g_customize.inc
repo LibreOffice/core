@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: g_customize.inc,v $
-'*
-'* $Revision: 1.4 $
-'*
-'* last change: $Author: rt $ $Date: 2008-08-28 11:41:02 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
 '/************************************************************************
 '*
 '* Owner : thorsten.bosbach@sun.com
@@ -108,6 +102,7 @@ testcase tToolsCustomize
         
         Kontext "TabCustomizeMenu"
         '/// Click button 'Command' ///'
+        sleep(1)
         Command.click
         printlog "opened second one"
         WaitSlot()
@@ -123,6 +118,7 @@ testcase tToolsCustomize
         WaitSlot()
         Kontext "TabCustomizeMenu"
         '/// Click button 'Command' ///'
+		sleep(1)
         Command.click
         printlog "opened third one"
         WaitSlot()
@@ -192,8 +188,10 @@ testcase tToolsCustomize
         
         waitslot
         Kontext "TabCustomizeToolbars"
+        sleep(1)
         '/// Click button 'Command' ///'
         Command.click
+        waitslot
         '/// Select the firste entry 'Rename' ///'
         hMenuSelectNr(1)
         '/// Dialog 'Name' comes up ///'
@@ -206,7 +204,9 @@ testcase tToolsCustomize
         endif        
 
         Kontext "TabCustomizeToolbars"
+        sleep(1)
         Command.click
+        waitslot
         hMenuSelectNr(1)
         Kontext "CustomizeToolbarsReName"
         call DialogTest (CustomizeToolbarsReName)
@@ -217,7 +217,9 @@ testcase tToolsCustomize
         waitslot
         Kontext "TabCustomizeToolbars"
         '/// Click button 'Command' ///'
+        sleep(1)
         Command.click
+        waitslot
         '/// Select the fifth entry 'Change Icon' ///'
         hMenuSelectNr(5)
         '/// Dialog 'Change Icon' comes up ///'
@@ -252,6 +254,7 @@ testcase tToolsCustomize
         WaitSlot()
         Kontext "TabCustomizeToolbars"
         '/// On Tab Page 'Customize Menus' click on Button 'Toolbar' ///'
+        sleep(1)
         MenuBtn.openMenu
         WaitSlot()
         hMenuSelectNr(1)

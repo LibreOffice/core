@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: c_print_scale.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 08:05:52 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
 '/************************************************************************
 '*
 '* owner : oliver.craemer@sun.com
@@ -232,17 +226,19 @@ dim sPagesToPrint as STRING
             end if
         end if
         printlog "Check if print dialog exists"
-        Kontext "DruckenDlg"
-        if DruckenDlg.Exists(2) then
-            Seiten.check
-            printlog "Check for string '1-12' in pages textbox"
-            sPagesToPrint = SeitenText.getText
-            if sPagesToPrint = "1-12" then
+        Kontext "Printing"
+        if Printing.Exists(2) then
+            Kontext "TabPrintGeneral"
+            PrintPages.check
+            printlog "Check for string '1-4' in pages textbox"
+            sPagesToPrint = PageRange.getText
+            if sPagesToPrint = "1-4" then
                 printlog "    OK, expected number of pages for output"
             else
                 warnlog "Unexpected number of pages for print output: " & sPagesToPrint & " -> Check this out!"
             end if
-            DruckenDlg.Cancel
+            Kontext "Printing"
+            Printing.Cancel
         else
             qaErrorlog "OOPS, are you sure that a printer is configured at all?"
         end if

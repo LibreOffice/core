@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: help_browser.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:19:03 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
 '/******************************************************************************
 '*
 '* owner : joerg.skottke@sun.com
@@ -41,9 +35,7 @@ testcase tHelp_DialogTest
 
     printlog( "Resource test for the Help Browser" )
 
-    Dim i as Integer
     dim brc as boolean
-    printlog "- open the help"
 
     brc = hOpenHelp()
     if ( not brc ) then
@@ -56,6 +48,11 @@ testcase tHelp_DialogTest
         goto endsub
     endif
 
+    hSelectHelpTab( "content" )
+    hSelectHelpTab( "index" )
+    hSelectHelpTab( "find" )
+    hSelectHelpTab( "bookmarks" )
+    
 
     brc = hSelectHelpTab( "content" )
     call DialogTest( ContentPage )
@@ -78,8 +75,10 @@ endcase
 
 testcase tHelp_ToolBar
 
-    Dim i as Integer
+    printlog( "Resource test for the help toolbar" )
+    
     dim brc as boolean
+    dim iExitCounter as integer : iExitCounter = 0
 
     brc = hOpenHelp()
     if ( not brc ) then
@@ -104,9 +103,13 @@ testcase tHelp_ToolBar
     ' Backward- and Forward-button
     printlog "- activate 'Index'-page"
     brc = hSelectHelpTab( "index" )
-    sleep( 2 )
+    
+    do while( SearchIndex.getItemCount() < 100 )
+        iExitCounter = iExitCounter + 1 : if ( iExitCounter = 20 ) then exit do
+        wait( 100 )
+    loop
 
-    SearchIndex.Select 4
+    SearchIndex.Select( 4 )
     DisplayIndex.Click()
     waitslot
 
@@ -126,37 +129,25 @@ testcase tHelp_ToolBar
     PrintButton.Click()
 
     kontext "active"
-
-    if Active.Exists ( 1 ) then
-
-        if Active.getRT() = 304 then
-            qaerrorlog "- Printing failed: Did you define a default printer?"
-            Active.OK()
-            
-            Kontext "DruckenDlg"
-            if ( druckenDlg.exists() ) then
-                printlog( "Printer dialog is still open, closing with cancel" )
-                druckenDlg. cancel()
-            endif
-            
-        endif
-
-    else
-        kontext "druckendlg"
-        if DruckenDlg.NotExists (2) then
-            warnlog "No print-dialog is open. => direct printing? - bug 93788!"
-        else
-            DruckenDlg.Cancel()
-        endif
-
+    if ( Active.Exists ( 1 ) ) then
+        qaerrorlog( "Unexpected messagebox: " & Active.getText() )
+        qaerrorlog( "Probably missing default printer on this system, fix it!" )
+        Active.OK()
     endif
     
-    printlog "- Set Bookmark"
-
+    kontext "Printing"
+    if ( Printing.exists( 2 ) ) then
+        printlog( "Print dialog open, good." )
+        Printing.cancel()
+    else
+        warnlog( "Print dialog not open" )
+    endif
+    
     kontext "tb_help"
+    printlog "- Set Bookmark"
     SetBookmarks.Click()
 
-    kontext "addbookmark"
+    kontext "AddBookmark"
     call DialogTest ( AddBookmark )
     AddBookmark.Cancel()
 

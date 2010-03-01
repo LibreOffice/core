@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ORowSet.java,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,12 +40,11 @@ import util.utils;
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.CommandType;
 import com.sun.star.sdb.ParametersRequest;
-import com.sun.star.sdb.RowChangeEvent;
 import com.sun.star.sdb.XInteractionSupplyParameters;
-import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XConnection;
 import com.sun.star.sdbc.XResultSet;
 import com.sun.star.sdbc.XResultSetUpdate;
@@ -59,56 +55,35 @@ import com.sun.star.task.XInteractionAbort;
 import com.sun.star.task.XInteractionContinuation;
 import com.sun.star.task.XInteractionRequest;
 import com.sun.star.ucb.AuthenticationRequest;
-import com.sun.star.ucb.XSimpleFileAccess;
-import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+import com.sun.star.util.XCloseable;
+import com.sun.star.frame.XModel;
+import com.sun.star.sdb.RowChangeEvent;
+import com.sun.star.sdbc.SQLException;
+import com.sun.star.sdbc.XParameters;
 import ifc.sdb._XCompletedExecution;
+import util.db.DataSource;
+import util.db.DataSourceDescriptor;
 
 /**
  * Test for object which is represented by service
- * <code>com.sun.star.sdb.DataSource</code>. <p>
+ * <code>com.sun.star.sdb.RowSet</code>. <p>
  *
- * Object implements the following interfaces :
- * <ul>
- *  <li> <code>com::sun::star::sdbc::RowSet</code></li>
- *  <li> <code>com::sun::star::sdbcx::XRowLocate</code></li>
- *  <li> <code>com::sun::star::sdbc::XResultSetUpdate</code></li>
- *  <li> <code>com::sun::star::util::XCancellable</code></li>
- *  <li> <code>com::sun::star::sdbc::XParameters</code></li>
- *  <li> <code>com::sun::star::sdbc::XResultSetMetaDataSupplier</code></li>
- *  <li> <code>com::sun::star::sdbcx::XDeleteRows</code></li>
- *  <li> <code>com::sun::star::sdbc::XCloseable</code></li>
- *  <li> <code>com::sun::star::sdbcx::XColumnsSupplier</code></li>
- *  <li> <code>com::sun::star::sdb::XResultSetAccess</code></li>
- *  <li> <code>com::sun::star::sdbc::XResultSet</code></li>
- *  <li> <code>com::sun::star::sdbc::XColumnLocate</code></li>
- *  <li> <code>com::sun::star::sdbc::XRowSet</code></li>
- *  <li> <code>com::sun::star::sdb::RowSet</code></li>
- *  <li> <code>com::sun::star::sdbc::XRowUpdate</code></li>
- *  <li> <code>com::sun::star::sdb::XRowSetApproveBroadcaster</code></li>
- *  <li> <code>com::sun::star::beans::XPropertySet</code></li>
- *  <li> <code>com::sun::star::sdbc::XRow</code></li>
- *  <li> <code>com::sun::star::sdbc::XWarningsSupplier</code></li>
- *  <li> <code>com::sun::star::lang::XComponent</code></li>
- *  <li> <code>com::sun::star::sdbcx::ResultSet</code></li>
- *  <li> <code>com::sun::star::sdbc::ResultSet</code></li>
- * </ul> <p>
  * The following files used by this test :
  * <ul>
  *  <li><b> TestDB/TestDB.dbf </b> : the database file with some
  *    predefined fields described in <code>util.DBTools</code>.
  *    The copy of this file is always made in temp directory for
  *    testing purposes.</li>
- * </ul> <p>
+ * </ul>
  * The following parameters in ini-file used by this test:
  * <ul>
  *   <li><code>test.db.url</code> - URL to MySQL database.
  *   For example: <code>mysql://mercury:3306/api_current</code></li>
  *   <li><code>test.db.user</code> - user for MySQL database</li>
  *   <li><code>test.db.password</code> - password for MySQL database</li>
- * </ul><p>
+ * </ul>
  *
  * @see com.sun.star.sdbc.RowSet
  * @see com.sun.star.sdbcx.XRowLocate
@@ -160,15 +135,15 @@ public class ORowSet extends TestCase {
     private static int uniqueSuffix = 0 ;
     private DBTools dbTools     = null ;
     private static String origDB = null ;
-    private PrintWriter log = null ;
-    private static String tmpDir = null ;
     String tableName = null;
-    DBTools.DataSourceInfo srcInf = null;
+    DataSourceDescriptor srcInf = null;
     boolean isMySQLDB = false;
     protected final static String dbSourceName = "ORowSetDataSource";
-    public XConnection conn = null;
-    Object dbSrc = null;
-    String aFile = "";
+    public XConnection m_connection = null;
+    private Object m_rowSet = null;
+    private DataSource m_dataSource;
+    private String m_tableFile;
+    private XMultiServiceFactory m_orb = null;
 
     /**
     * Initializes some class fields. Then creates DataSource, which serves
@@ -190,16 +165,16 @@ public class ORowSet extends TestCase {
     * @throws StatusException if DataSource can not be created or
     * registered.
     */
-    protected void initialize ( TestParameters Param, PrintWriter log)
-        throws StatusException {
+    protected void initialize ( TestParameters Param, PrintWriter _log)
+        throws StatusException
+    {
+        m_orb = (XMultiServiceFactory)Param.getMSF();
 
-        this.log = log ;
-        tmpDir = (String) Param.get("TMPURL") ;
-            tmpDir = utils.getOfficeTemp((XMultiServiceFactory)Param.getMSF());
+        String tmpDir = utils.getOfficeTemp( m_orb );
 
         origDB = util.utils.getFullTestDocName("TestDB/testDB.dbf");
 
-        dbTools = new DBTools((XMultiServiceFactory)Param.getMSF()) ;
+        dbTools = new DBTools( m_orb, _log );
 
         // creating DataSource and registering it in DatabaseContext
         String dbURL = (String) Param.get("test.db.url");
@@ -207,48 +182,31 @@ public class ORowSet extends TestCase {
         String dbPassword = (String) Param.get("test.db.password");
 
         log.println("Creating and registering DataSource ...");
-        srcInf = dbTools.newDataSourceInfo();
-        if (dbURL != null && dbUser != null && dbPassword != null) {
+        srcInf = new DataSourceDescriptor( m_orb );
+        if (dbURL != null && dbUser != null && dbPassword != null)
+        {
             isMySQLDB = true;
             log.println("dbURL = " + dbURL);
             log.println("dbUSER = " + dbUser);
             log.println("dbPASSWORD = " + dbPassword);
             //DataSource for mysql db
-            try {
-                tableName = "soffice_test_table";
-                srcInf.URL = "jdbc:" + dbURL;
-                srcInf.IsPasswordRequired = new Boolean(true);
-                srcInf.Password = dbPassword;
-                srcInf.User = dbUser;
-                PropertyValue[] propInfo = new PropertyValue[1];
-                propInfo[0] = new PropertyValue();
-                propInfo[0].Name = "JavaDriverClass";
-                propInfo[0].Value = "org.gjt.mm.mysql.Driver";
-                srcInf.Info = propInfo;
-                dbSrc = srcInf.getDataSourceService() ;
-                if (uniqueSuffix < 1)
-                    dbTools.reRegisterDB(dbSourceName, dbSrc);
-                XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF ();
-                    aFile = utils.getOfficeTemp (xMSF)+dbSourceName+".odb";
-            } catch (com.sun.star.uno.Exception e) {
-                log.println("Error while object test initialization :") ;
-                e.printStackTrace(log) ;
-                throw new StatusException("Error while object test" +
-                    " initialization", e);
-            }
-        } else {
-            try {
-                srcInf.URL = "sdbc:dbase:" + DBTools.dirToUrl(tmpDir) ;
-                dbSrc = srcInf.getDataSourceService() ;
-                if (uniqueSuffix < 1)
-                    dbTools.reRegisterDB(dbSourceName, dbSrc) ;
-            } catch (com.sun.star.uno.Exception e) {
-                log.println("Error while object test initialization :") ;
-                e.printStackTrace(log) ;
-                throw new
-                    StatusException("Error while object test initialization",e) ;
-            }
+            tableName = "soffice_test_table";
+            srcInf.URL = "jdbc:" + dbURL;
+            srcInf.IsPasswordRequired = new Boolean(true);
+            srcInf.Password = dbPassword;
+            srcInf.User = dbUser;
+            PropertyValue[] propInfo = new PropertyValue[1];
+            propInfo[0] = new PropertyValue();
+            propInfo[0].Name = "JavaDriverClass";
+            propInfo[0].Value = "org.gjt.mm.mysql.Driver";
+            srcInf.Info = propInfo;
         }
+        else
+        {
+            srcInf.URL = "sdbc:dbase:" + DBTools.dirToUrl(tmpDir);
+        }
+        m_dataSource = srcInf.createDataSource();
+        m_dataSource.registerAs( dbSourceName, true );
     }
 
     /**
@@ -292,152 +250,149 @@ public class ORowSet extends TestCase {
     * @see com.sun.star.sdb.DataSource
     */
     protected TestEnvironment createTestEnvironment(TestParameters Param,
-            PrintWriter log) {
-
-        XInterface oObj = null;
-        Object oInterface = null;
-        XMultiServiceFactory xMSF = null ;
+            PrintWriter log)
+    {
+        XMultiServiceFactory orb = (XMultiServiceFactory)Param.getMSF();
         uniqueSuffix++;
         boolean envCreatedOK = false ;
 
         //initialize test table
-        if (isMySQLDB) {
-            try {
-                dbTools.initTestTableUsingJDBC(tableName, srcInf);
-            } catch(java.sql.SQLException e) {
+        if (isMySQLDB)
+        {
+            try
+            {
+                DBTools.DataSourceInfo legacyDescriptor = dbTools.newDataSourceInfo();
+                legacyDescriptor.Name = srcInf.Name;
+                legacyDescriptor.User = srcInf.User;
+                legacyDescriptor.Password = srcInf.Password;
+                legacyDescriptor.Info = srcInf.Info;
+                legacyDescriptor.URL = srcInf.URL;
+                legacyDescriptor.IsPasswordRequired = srcInf.IsPasswordRequired;
+                dbTools.initTestTableUsingJDBC(tableName, legacyDescriptor);
+            }
+            catch(java.sql.SQLException e)
+            {
                 e.printStackTrace(log);
                 throw new StatusException(Status.failed("Couldn't " +
                     " init test table. SQLException..."));
-            } catch(java.lang.ClassNotFoundException e) {
+            }
+            catch(java.lang.ClassNotFoundException e)
+            {
                 throw new StatusException(Status.failed("Couldn't " +
                     "register mysql driver"));
             }
-        } else {
+        }
+        else
+        {
             String oldF = null ;
             String newF = null ;
-            do {
+            String tempFolder = utils.getOfficeTemp( orb );
+            do
+            {
                 tableName = "ORowSet_tmp" + uniqueSuffix ;
                 oldF = utils.getFullURL(origDB);
-                newF = utils.getOfficeTemp((XMultiServiceFactory)Param.getMSF())+tableName+".dbf";
-            } while (!utils.overwriteFile((XMultiServiceFactory)Param.getMSF(),oldF,newF) &&
-                uniqueSuffix++ < 50);
+                newF = tempFolder + tableName + ".dbf";
+            }
+            while ( !utils.overwriteFile( orb, oldF, newF ) );
+            m_tableFile = newF;
         }
 
-        XConnection connection = null ;
+        try
+        {
+            m_rowSet = orb.createInstance("com.sun.star.sdb.RowSet");
 
-        try {
-            xMSF = (XMultiServiceFactory)Param.getMSF();
-
-            Object oRowSet = xMSF.createInstance("com.sun.star.sdb.RowSet") ;
-
-            XPropertySet xSetProp = (XPropertySet) UnoRuntime.queryInterface
-                (XPropertySet.class, oRowSet) ;
+            XPropertySet rowSetProps = UnoRuntime.queryInterface( XPropertySet.class, m_rowSet );
 
             log.println("Trying to open: " + tableName);
 
-            xSetProp.setPropertyValue("DataSourceName", dbSourceName) ;
-            xSetProp.setPropertyValue("Command", tableName) ;
-            xSetProp.setPropertyValue("CommandType",
-                new Integer(CommandType.TABLE)) ;
+            rowSetProps.setPropertyValue("DataSourceName", dbSourceName);
+            rowSetProps.setPropertyValue("Command", tableName);
+            rowSetProps.setPropertyValue("CommandType",
+                new Integer(CommandType.TABLE));
 
-            com.sun.star.sdbc.XRowSet xORowSet = (com.sun.star.sdbc.XRowSet)
-                UnoRuntime.queryInterface(com.sun.star.sdbc.XRowSet.class,
-                oRowSet) ;
+            final XRowSet rowSet = UnoRuntime.queryInterface( XRowSet.class, m_rowSet);
+            rowSet.execute();
+            m_connection = UnoRuntime.queryInterface( XConnection.class, rowSetProps.getPropertyValue("ActiveConnection") );
 
-            xORowSet.execute() ;
+            XResultSet xRes = UnoRuntime.queryInterface( XResultSet.class, m_rowSet );
+            xRes.first();
 
-            connection = null;
-
-            try {
-                connection = (XConnection) AnyConverter.toObject(
-                                    new Type(XConnection.class),
-                                    xSetProp.getPropertyValue("ActiveConnection"));
-            } catch (com.sun.star.lang.IllegalArgumentException iae) {
-                throw new StatusException("couldn't convert Any",iae);
-            }
-
-            oInterface = oRowSet ;
-
-            XResultSet xRes = (XResultSet) UnoRuntime.queryInterface
-                (XResultSet.class, oRowSet) ;
-
-            xRes.first() ;
-
-            if (oInterface == null) {
-                log.println("Service wasn't created") ;
-                throw new StatusException("Service wasn't created",
-                    new NullPointerException()) ;
-            }
-
-            oObj = (XInterface) oInterface;
-
-            log.println( "    creating a new environment for object" );
-            TestEnvironment tEnv = new TestEnvironment( oObj );
-
-            // Adding relations for disposing object
-            tEnv.addObjRelation("ORowSet.Connection", connection) ;
-            this.conn = (XConnection) tEnv.getObjRelation("ORowSet.Connection");
-
+            log.println( "creating a new environment for object" );
+            TestEnvironment tEnv = new TestEnvironment( (XInterface)m_rowSet );
 
             // Adding obj relation for XRowSetApproveBroadcaster test
             {
-                final XResultSet xResSet = (XResultSet)
-                    UnoRuntime.queryInterface(XResultSet.class, oObj) ;
-                final XResultSetUpdate xResSetUpdate = (XResultSetUpdate)
-                    UnoRuntime.queryInterface(XResultSetUpdate.class, oObj) ;
-                final XRowSet xRowSet = (XRowSet) UnoRuntime.queryInterface
-                    (XRowSet.class, oObj) ;
-                final XRowUpdate xRowUpdate = (XRowUpdate)
-                    UnoRuntime.queryInterface(XRowUpdate.class, oObj) ;
+                final XResultSet resultSet = UnoRuntime.queryInterface( XResultSet.class, m_rowSet );
+                final XResultSetUpdate resultSetUpdate = UnoRuntime.queryInterface( XResultSetUpdate.class, m_rowSet );
+                final XRowUpdate rowUpdate = UnoRuntime.queryInterface(XRowUpdate.class, m_rowSet );
                 final PrintWriter logF = log ;
-                tEnv.addObjRelation("XRowSetApproveBroadcaster.ApproveChecker",
-                    new ifc.sdb._XRowSetApproveBroadcaster.RowSetApproveChecker() {
-                        public void moveCursor() {
-                            try {
-                                xResSet.beforeFirst() ;
-                                xResSet.afterLast() ;
-                                xResSet.first() ;
-                            } catch (com.sun.star.sdbc.SQLException e) {
-                                logF.println("### _XRowSetApproveBroadcaster." +
-                                    "RowSetApproveChecker.moveCursor() :") ;
-                                e.printStackTrace(logF) ;
+                tEnv.addObjRelation( "XRowSetApproveBroadcaster.ApproveChecker",
+                    new ifc.sdb._XRowSetApproveBroadcaster.RowSetApproveChecker()
+                    {
+                        public void moveCursor()
+                        {
+                            try
+                            {
+                                resultSet.beforeFirst();
+                                resultSet.afterLast();
+                                resultSet.first();
+                            }
+                            catch (com.sun.star.sdbc.SQLException e)
+                            {
+                                logF.println("### _XRowSetApproveBroadcaster.RowSetApproveChecker.moveCursor() :");
+                                e.printStackTrace(logF);
+                                throw new StatusException( "RowSetApproveChecker.moveCursor failed", e );
                             }
                         }
-                        public RowChangeEvent changeRow() {
-                            try {
-                                xResSet.first() ;
-                                xRowUpdate.updateString(1, "ORowSetTest2") ;
-                                xResSetUpdate.updateRow() ;
-                            } catch (com.sun.star.sdbc.SQLException e) {
-                                logF.println("### _XRowSetApproveBroadcaster." +
-                                    "RowSetApproveChecker.changeRow() :") ;
-                                e.printStackTrace(logF) ;
+                        public RowChangeEvent changeRow()
+                        {
+                            try
+                            {
+                                resultSet.first();
+                                rowUpdate.updateString(1, "ORowSetTest2");
+                                resultSetUpdate.updateRow();
                             }
-                            RowChangeEvent ev = new RowChangeEvent() ;
+                            catch (com.sun.star.sdbc.SQLException e)
+                            {
+                                logF.println("### _XRowSetApproveBroadcaster.RowSetApproveChecker.changeRow() :");
+                                e.printStackTrace(logF);
+                                throw new StatusException( "RowSetApproveChecker.changeRow failed", e );
+                            }
+                            RowChangeEvent ev = new RowChangeEvent();
                             ev.Action = com.sun.star.sdb.RowChangeAction.UPDATE ;
                             ev.Rows = 1 ;
 
                             return ev ;
                         }
-                        public void changeRowSet() {
-                            try {
-                                xRowSet.execute() ;
-                                xResSet.first() ;
-                            } catch (com.sun.star.sdbc.SQLException e) {
-                                logF.println("### _XRowSetApproveBroadcaster."+
-                                    "RowSetApproveChecker.changeRowSet() :") ;
-                                e.printStackTrace(logF) ;
+                        public void changeRowSet()
+                        {
+                            try
+                            {
+                                // since we gave the row set a parametrized statement, we need to ensure the
+                                // parameter is actually filled, otherwise we would get an empty result set,
+                                // which would imply some further tests failing
+                                XParameters rowSetParams = UnoRuntime.queryInterface( XParameters.class, resultSet );
+                                rowSetParams.setString( 1, "String2" );
+                                rowSet.execute();
+                                resultSet.first();
+                            }
+                            catch (com.sun.star.sdbc.SQLException e)
+                            {
+                                logF.println("### _XRowSetApproveBroadcaster.RowSetApproveChecker.changeRowSet() :");
+                                e.printStackTrace(logF);
+                                throw new StatusException( "RowSetApproveChecker.changeRowSet failed", e );
                             }
                         }
-                    }) ;
+                    }
+                );
             }
             // Adding relations for XRow as a Vector with all data
             // of current row of RowSet.
 
-            Vector rowData = new Vector() ;
+            Vector rowData = new Vector();
 
             for (int i = 0; i < DBTools.TST_TABLE_VALUES[0].length; i++) {
-                rowData.add(DBTools.TST_TABLE_VALUES[0][i]) ;
+                rowData.add(DBTools.TST_TABLE_VALUES[0][i]);
             }
 
             // here XRef must be added
@@ -445,97 +400,104 @@ public class ORowSet extends TestCase {
             // here XClob must be added
             // here XArray must be added
 
-            tEnv.addObjRelation("CurrentRowData", rowData) ;
+            tEnv.addObjRelation("CurrentRowData", rowData);
 
             // Adding relation for XColumnLocate ifc test
-            tEnv.addObjRelation("XColumnLocate.ColumnName",
-                DBTools.TST_STRING_F) ;
+            tEnv.addObjRelation( "XColumnLocate.ColumnName", DBTools.TST_STRING_F );
 
             // Adding relation for XCompletedExecution
-            tEnv.addObjRelation("InteractionHandlerChecker", new InteractionHandlerImpl());
-            XPropertySet xProp = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oObj) ;
-            try {
-                xProp.setPropertyValue("DataSourceName", dbSourceName) ;
-                if(isMySQLDB) {
-                    xProp.setPropertyValue("Command", "SELECT Column0  FROM soffice_test_table  WHERE ( (  Column0 = :param1 ) )");
-                }
-                else {
-                    xProp.setPropertyValue("Command", "SELECT \"_TEXT\" FROM \"ORowSet_tmp" + uniqueSuffix + "\" WHERE ( ( \"_TEXT\" = :param1 ) )");
-                }
-
-                xProp.setPropertyValue("CommandType", new Integer(CommandType.COMMAND)) ;
+            tEnv.addObjRelation( "InteractionHandlerChecker", new InteractionHandlerImpl() );
+            try
+            {
+                String sqlCommand = isMySQLDB
+                    ?   "SELECT Column0  FROM soffice_test_table  WHERE ( (  Column0 = :param1 ) )"
+                    :   "SELECT \"_TEXT\" FROM \"" + tableName + "\" WHERE ( ( \"_TEXT\" = :param1 ) )";
+                rowSetProps.setPropertyValue( "DataSourceName", dbSourceName );
+                rowSetProps.setPropertyValue( "Command", sqlCommand );
+                rowSetProps.setPropertyValue( "CommandType", new Integer(CommandType.COMMAND) );
             }
-            catch(Exception e) {
+            catch(Exception e)
+            {
+                throw new StatusException( "setting up the RowSet with a parametrized command failed", e );
             }
-
-
-
-
 
             // Adding relation for XParameters ifc test
-            Vector params = new Vector() ;
-
-
-            tEnv.addObjRelation("XParameters.ParamValues", params) ;
+            tEnv.addObjRelation( "XParameters.ParamValues", new Vector() );
 
             // Adding relation for XRowUpdate
-            XRow row = (XRow) UnoRuntime.queryInterface (XRow.class, oObj) ;
-            tEnv.addObjRelation("XRowUpdate.XRow", row) ;
+            final XRow row = UnoRuntime.queryInterface( XRow.class, m_rowSet );
+            tEnv.addObjRelation("XRowUpdate.XRow", row);
 
             // Adding relation for XResultSetUpdate
             {
-                final XResultSet xResSet = (XResultSet)
-                    UnoRuntime.queryInterface(XResultSet.class, oObj) ;
-                final XRowUpdate xRowUpdate = (XRowUpdate)
-                    UnoRuntime.queryInterface(XRowUpdate.class, oObj) ;
-                final XRow xRow = (XRow) UnoRuntime.queryInterface
-                    (XRow.class, oObj) ;
+                final XResultSet resultSet = UnoRuntime.queryInterface( XResultSet.class, m_rowSet );
+                final XRowUpdate rowUpdate = UnoRuntime.queryInterface( XRowUpdate.class, m_rowSet );
 
                 tEnv.addObjRelation("XResultSetUpdate.UpdateTester",
-                    new ifc.sdbc._XResultSetUpdate.UpdateTester() {
+                    new ifc.sdbc._XResultSetUpdate.UpdateTester()
+                    {
                         String lastUpdate = null ;
 
-                        public int rowCount() throws SQLException {
-                            int prevPos = xResSet.getRow() ;
-                            xResSet.last() ;
-                            int count = xResSet.getRow() ;
-                            xResSet.absolute(prevPos) ;
+                        public int rowCount() throws SQLException
+                        {
+                            int prevPos = resultSet.getRow();
+                            resultSet.last();
+                            int count = resultSet.getRow();
+                            resultSet.absolute(prevPos);
 
                             return count ;
                         }
 
-                        public void update() throws SQLException {
-                            lastUpdate = xRow.getString(1) ;
+                        public void update() throws SQLException
+                        {
+                            lastUpdate = row.getString(1);
                             lastUpdate += "_" ;
-                            xRowUpdate.updateString(1, lastUpdate) ;
+                            rowUpdate.updateString(1, lastUpdate);
                         }
 
-                        public boolean wasUpdated() throws SQLException {
-                            String getStr = xRow.getString(1) ;
-                            return lastUpdate.equals(getStr) ;
+                        public boolean wasUpdated() throws SQLException
+                        {
+                            String getStr = row.getString(1);
+                            return lastUpdate.equals(getStr);
                         }
 
-                        public int currentRow() throws SQLException {
-                            return xResSet.getRow() ;
+                        public int currentRow() throws SQLException
+                        {
+                            return resultSet.getRow();
                         }
-                    }) ;
+                    }
+                );
             }
 
             envCreatedOK = true ;
             return tEnv;
 
-        } catch(com.sun.star.uno.Exception e) {
-            log.println("Can't create object" );
-            e.printStackTrace(log) ;
-            try {
-                connection.close() ;
-            } catch(Exception ex) {}
-            throw new StatusException("Can't create object", e) ;
-        } finally {
-            if (!envCreatedOK) {
-                try {
-                    connection.close() ;
-                } catch(Exception ex) {}
+        }
+        catch(com.sun.star.uno.Exception e)
+        {
+            log.println( "couldn't set up tes tenvironment:" );
+            e.printStackTrace(log);
+            try
+            {
+                if ( m_connection != null )
+                    m_connection.close();
+            }
+            catch(Exception ex)
+            {
+            }
+            throw new StatusException( "couldn't set up tes tenvironment", e );
+        }
+        finally
+        {
+            if (!envCreatedOK)
+            {
+                try
+                {
+                    m_connection.close();
+                }
+                catch(Exception ex)
+                {
+                }
             }
         }
 
@@ -544,30 +506,68 @@ public class ORowSet extends TestCase {
     /**
     * Closes connection of <code>RowSet</code> instance created.
     */
-    protected void cleanup( TestParameters Param, PrintWriter log) {
-        try {
-            conn.close() ;
-            XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF ();
-            Object sfa = xMSF.createInstance ("com.sun.star.comp.ucb.SimpleFileAccess");
-            XSimpleFileAccess xSFA = (XSimpleFileAccess) UnoRuntime.queryInterface (XSimpleFileAccess.class, sfa);
-            log.println ("deleting database file");
-            xSFA.kill (aFile);
-            log.println ("Could delete file "+aFile+": "+!xSFA.exists (aFile));
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Can't close the connection") ;
-            e.printStackTrace(log) ;
-        } catch (com.sun.star.lang.DisposedException e) {
-            log.println("Connection was already closed. It's OK.") ;
+    protected void cleanup( TestParameters Param, PrintWriter log)
+    {
+        String doing = null;
+        try
+        {
+            doing = "revoking data source registration";
+            log.println( doing );
+            m_dataSource.revokeRegistration();
+
+            doing = "closing database document";
+            log.println( doing );
+            XModel databaseDocModel = UnoRuntime.queryInterface( XModel.class,
+                m_dataSource.getDatabaseDocument().getDatabaseDocument() );
+            String documentFile = databaseDocModel.getURL();
+
+            XCloseable closeModel = UnoRuntime.queryInterface( XCloseable.class,
+                m_dataSource.getDatabaseDocument().getDatabaseDocument() );
+            closeModel.close( true );
+
+            if ( m_rowSet != null )
+            {
+                doing = "disposing row set";
+                log.println( doing );
+                XComponent rowSetComponent = UnoRuntime.queryInterface( XComponent.class, m_rowSet );
+                rowSetComponent.dispose();
+            }
+
+            try
+            {
+                doing = "closing connection";
+                log.println( doing );
+                m_connection.close();
+            }
+            catch (com.sun.star.lang.DisposedException e)
+            {
+                log.println( "already closed - okay." );
+            }
+
+            doing = "deleting database file ("  + documentFile + ")";
+            log.println( doing );
+            impl_deleteFile( documentFile );
+
+            if ( m_tableFile != null )
+            {
+                doing = "deleting dBase table file (" + m_tableFile + ")";
+                log.println( doing );
+                impl_deleteFile( m_tableFile );
+            }
         }
-//        try {
-//            dbTools.revokeDB(dbSourceName) ;
-//            XComponent db = (XComponent) UnoRuntime.queryInterface(XComponent.class,dbSrc);
-//            db.dispose();
-//        } catch (com.sun.star.uno.Exception e) {
-//            log.println("Error while object test cleaning up :") ;
-//            e.printStackTrace(log) ;
-//            throw new StatusException("Error while object test cleaning up",e) ;
-//        }
+        catch (com.sun.star.uno.Exception e)
+        {
+            log.println( "error: ");
+            e.printStackTrace(log);
+        }
+    }
+
+    private final void impl_deleteFile( final String _file )
+    {
+        java.io.File file = new java.io.File( _file );
+        file.delete();
+        if ( file.exists() )
+            file.deleteOnExit();
     }
 
     /**
@@ -608,14 +608,13 @@ public class ORowSet extends TestCase {
             for(int i=0; i<xCont.length; i++) {
                 if (abort) {
                     XInteractionAbort xAbort = null;
-                    xAbort = (XInteractionAbort)UnoRuntime.queryInterface(XInteractionAbort.class, xCont[i]);
+                    xAbort = UnoRuntime.queryInterface(XInteractionAbort.class, xCont[i]);
                     if (xAbort != null)
                         xAbort.select();
                         return;
                 }
                 else {
-                    xParamCallback = (XInteractionSupplyParameters)
-                                    UnoRuntime.queryInterface(XInteractionSupplyParameters.class, xCont[i]);
+                    xParamCallback = UnoRuntime.queryInterface(XInteractionSupplyParameters.class, xCont[i]);
                     if (xParamCallback != null)
                         break;
                 }

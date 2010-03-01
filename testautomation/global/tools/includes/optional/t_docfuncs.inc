@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: t_docfuncs.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsk $ $Date: 2008-06-20 07:57:47 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
 '/************************************************************************
 '*
 '* owner : joerg.skottke@sun.com
@@ -95,22 +89,19 @@ end function
 function hCloseNavigator() as boolean
 
     '///<h3>Function to close the navigator</h3>
-    '///<i>Starting point: Any document</i>
-    '///<ul>
     const CFN = "global::tools::includes::optional::t_docfuncs.inc::hCloseNavigator::"
     
     if ( VERBOSE ) then printlog( CFN & "Enter" )
     
-    '///+<li>close the navigator if found</li>
     Kontext "Navigator"
     if ( Navigator.Exists() ) then
         Navigator.Close()
+        Navigator.notExists( 2 )
         if ( VERBOSE ) then printlog( CFN & "Closed Navigator" )
     else
         if ( VERBOSE ) then printlog( CFN & "Navigator not present" )
     endif
     
-    '///+<li>verify that the navigator is indeed closed, return true on success</li>
     Kontext "Navigator"
     if ( Navigator.exists() ) then
         hCloseNavigator() = false
@@ -120,7 +111,6 @@ function hCloseNavigator() as boolean
     endif
     
     if ( VERBOSE ) then printlog( CFN & "Exit" )
-    '///</ul>
 
 end function
 
@@ -302,36 +292,16 @@ end function
 
 function hCreateDocument() as boolean
 
-    '///<h3>Create anew document, extends hNewDocument()</h3>
-    '///<i>Starting point: Any document</i><br>
-    '///<i>Note: When calling this function with gApplication "BACKGROUND" the
-    '///+ function will actually close one document to get to the backing window</i><br>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Nothing, valid gApplication must be set</li>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Errorstatus (boolean)</li>
-    '///<ul>
-    '///+<li>TRUE if a new document was created successfully</li>
-    '///+<li>FALSE if anything went wrong</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
-    
-
+    '///<h3>Create anew document, extends hNewDocument() by providing a returnvalue</h3>
+    ' TRUE = New document created, FALSE = Failed to create a new document '
     const CFN = "global::tools::includes::optional::t_docfuncs.inc::hCreateDocument::"
 
     dim iDocCountBefore as integer 
     dim iDocCountAfter as integer
 
-    '///+<li>Retrieve the number of open documents</li>
     iDocCountBefore = getDocumentCount
     if ( VERBOSE ) then printlog( CFN & "Number of open documents before: " & iDocCountBefore )
 
-    '///+<li>Special treatment if gApplication = BACKGROUND (virtual gApplication)</li>
     if ( ucase( gApplication ) = "BACKGROUND" ) then
     	do while( getDocumentCount > 0 )
     	    hCloseDocument()
@@ -339,13 +309,8 @@ function hCreateDocument() as boolean
         hCreateDocument() = true
     else
     
-        '///+<li>Open a new document using hNewDocument()</li>
         call hNewDocument()
-
-        '///+<li>Retrieve the number of open documents</li>
         iDocCountAfter = getDocumentCount()
-
-        '///+<li>Verify that there is exactly one more document than before</li>
         if ( iDocCountAfter = ( iDocCountBefore + 1 ) ) then
             hCreateDocument() = true
         else
@@ -484,9 +449,7 @@ function hInitSingleDoc() as boolean
     '///<u>Description:</u>
     '///<ul>
     '///+<li>Close all documents until we are on the backing window</li>
-    do while ( getDocumentCount > 0 ) 
-        call hCloseDocument()
-    loop
+    hFileCloseAll()
     
     '///+<li>Save the previous gApplication</li>
     cOldApplication = gApplication
@@ -539,9 +502,7 @@ function hInitBackingMode() as boolean
     '///<u>Description:</u>
     '///<ul>
     '///+<li>Close all documents until we are on the backing window</li>
-    do while ( getDocumentCount > 0 ) 
-        hCloseDocument()
-    loop
+    hFileCloseAll()
     
     '///+<li>verify that we do not have any open documents left (redundant check)</li>
     if ( getDocumentCount = 0 ) then

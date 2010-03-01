@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: basic_package_export.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 12:18:13 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
 '/******************************************************************************
 '*
 '*  owner : joerg.skottke@sun.com
@@ -45,7 +39,7 @@ testcase tBasicPackageExport
     const PACKAGE_NAME = "tBasicExport.oxt"
     const LIBRARY_NAME = "tBasicExport"
     const DOCUMENT_POSITION = 4
-    const PACKAGE_SIZE = 2000
+    const PACKAGE_SIZE = 1325
     
     dim cDocumentName as string
     dim cLibraryName as string
@@ -162,16 +156,17 @@ testcase tBasicPackageExport
             Export.click()
             
             kontext "ExportBasicLibraryDlg"
-            if ( ExportBasicLibraryDlg.exists( 1 ) ) then
-                printlog( "Select to export as package" )
+            if ( ExportBasicLibraryDlg.exists( 3 ) ) then
+                printlog( "Select to export as extension" )
                 ExportAsPackage.check()
                 ExportBasicLibraryDlg.ok()
                 
                 kontext "SpeichernDlg"
-                if ( SpeichernDlg.exists( 1 ) ) then
-                    printlog( "Save the file, automatic filename extension must be checked" )
-                    DateiName.setText( hGetWorkPath() & LIBRARY_NAME ) ' automatic filename extension/uno-pkg is default
+                if ( SpeichernDlg.exists( 3 ) ) then
+                    printlog( "Save the file, suffix will be added automatically." )
+                    DateiName.setText( hGetWorkPath() & LIBRARY_NAME )
                     Speichern.click()
+                    Speichern.notExists( 1 )
                 else
                     warnlog( "Dialog <File Save> did not open" )
                 endif
@@ -182,6 +177,7 @@ testcase tBasicPackageExport
             kontext "TabBibliotheken"
             printlog( "Close libraires tabpage" )
             TabBibliotheken.cancel()
+            TabBibliotheken.notExists( 1 )
         else
             warnlog( "Dialog <TabBibliotheken> is not available" )
         endif
@@ -189,6 +185,7 @@ testcase tBasicPackageExport
         kontext "Makro"
         printlog( "Close BASIC organizer" )
         Makro.cancel()
+        Makro.notExists( 1 )
     else
         warnlog( "Dialog <Makro> did not open" )
     endif
@@ -197,6 +194,7 @@ testcase tBasicPackageExport
     hFileCloseAll()   
     
     printlog( "Verify automatic filename extension (dialog should append .oxt)" )
+    printlog( "Checking for file: " & cFile )
     if ( FileExists( cFile ) ) then
         printlog( "The test-package was saved with .oxt extension, good." )
         cPackageFileName = cFile
@@ -211,17 +209,11 @@ testcase tBasicPackageExport
     endif
     
     printlog( "Verify file size" )
-'    if ( FileLen( cPackageFileName ) <> PACKAGE_SIZE ) then
-'        warnlog( "#i105719# - The exported test-package has an incorrect file size." )
-        if ( FileLen( cPackageFileName ) = 0 ) then
-            printlog( "File has zero bytes, it is empty." )
-        else
-            printlog( "Size is.: " & FileLen( cPackageFileName ) )
-            printlog( "Expected: " & PACKAGE_SIZE )
-        endif
-'    else
-'        printlog( "File has correct size" )
-'    endif
+    if ( FileLen( cPackageFileName ) <> PACKAGE_SIZE ) then
+        warnlog( "#i105719# - The exported test-package has an incorrect file size." )
+    else
+        printlog( "File has correct size." )
+    endif
     
 endcase
 

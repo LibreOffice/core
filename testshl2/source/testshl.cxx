@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: testshl.cxx,v $
- * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,15 +52,15 @@
 #include "testshl/log.hxx"
 #include "testshl/filehelper.hxx"
 #include "testshl/getopt.hxx"
-#include "cppunit/result/outputter.hxx"
-#include "cppunit/joblist.hxx"
+#include "testshl/result/outputter.hxx"
+#include "testshl/joblist.hxx"
 
 // #include <osl/time.h>
 
 using namespace std;
 
-#include "cppunit/result/testshlTestResult.h"
-#include "cppunit/result/emacsTestResult.hxx"
+#include "testshl/result/testshlTestResult.h"
+#include "testshl/result/emacsTestResult.hxx"
 
 // Prototype for signal handling
 void setSignalFilename(GetOpt & opt);

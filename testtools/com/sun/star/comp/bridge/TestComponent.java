@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TestComponent.java,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -493,6 +490,10 @@ public class TestComponent {
 
         public AllFloats echoAllFloats( AllFloats i_Struct) throws com.sun.star.uno.RuntimeException {
             return i_Struct;
+        }
+
+        public int testPPCAlignment( long l1, long l2, int i1, long l3, int i2 ) throws com.sun.star.uno.RuntimeException {
+            return i2;
         }
 
         // Attributes

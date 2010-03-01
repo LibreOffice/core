@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'* 
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: frm_Forms.inc,v $
-'*
-'* $Revision: 1.2 $
-'*
-'* last change: $Author: rt $ $Date: 2008-08-28 11:39:23 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
 '/************************************************************************
 '*
 '* owner : marc.neumann@sun.com
@@ -530,9 +524,10 @@ testcase tCreateSubForms
      DataSource.setText(gDSName)	
      TabDataForm.TypeKeys("<RETURN>")
      '/// set the table TT_Forms
-     printlog "set the table TT_Forms"              
-	 Content.setText("TT_Forms")
-     TabDataForm.TypeKeys("<RETURN>")
+     printlog "set the table TT_Forms"
+     Content.setText("TT_Forms")
+     sleep(1)
+     Content.TypeKeys("<RETURN>",true)
      sleep(1)
   	Kontext "FormPropertiesDialog"
      sleep(1)
@@ -607,7 +602,11 @@ testcase tCreateSubForms
        '/// set the sql string : select * from TT_Forms where id=:var1"
        printlog "set the sql string : select * from TT_Forms where id=:var1"
        TabDataForm.TypeKeys "<RETURN>" , true
-       TabDataForm.TypeKeys "select * from TT_Forms where id=:var1" , true
+       sleep(1)
+       Content.TypeKeys "select * from TT_Forms where id=:var1" , true
+       sleep(1)
+       TabDataForm.TypeKeys("<RETURN>")
+       sleep(1)
        '/// set link master field
        printlog "set link master field"
        TabDataForm.TypeKeys "<TAB>" , 11 , true
