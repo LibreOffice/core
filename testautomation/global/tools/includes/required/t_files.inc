@@ -216,43 +216,6 @@ end function
 '
 '-------------------------------------------------------------------------------
 '
-sub hSys2IntDlg
-    '/// Change from system to StarOffice-internal file-dialog (only for Win32)
-    if gPlatgroup <> "unx" then
-        Call hhSysToInt ( TRUE )
-    endif
-    gUseSysDlg = FALSE
-end sub
-'
-'-------------------------------------------------------------------------------
-'
-sub hInt2SysDlg
-    '/// Change from StarOffice-internal to system file-dialog (only for Win32)
-    if gPlatgroup <> "unx" then
-        Call hhSysToInt ( FALSE )
-    endif
-    gUseSysDlg = TRUE
-end sub
-'
-'-------------------------------------------------------------------------------
-'
-sub hhSysToInt ( bwhats as Boolean )
-    '/// subroutine for <i>hSys2IntDlg</i> and </i>hInt2SysDlg</i>
-    ToolsOptions
-    hToolsOptions ( "StarOffice", "General" )
-    if bwhats = TRUE then
-        StarOfficeDialogeBenutzen.Check
-    else
-        StarOfficeDialogeBenutzen.Uncheck
-    end if
-    Sleep 1
-    Kontext "OptionenDlg"
-    OptionenDlg.OK
-    WaitSlot( 3000 )
-end sub
-'
-'-------------------------------------------------------------------------------
-'
 function hGetUsedFilter () as string
     '/// Get used filter for loaded file.
     try
