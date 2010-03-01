@@ -903,6 +903,7 @@ function getSofficeNative() as string
         iVendorEntries = 1
         sVendor(iVendorEntries) = "Sun Microsystems": inc (iVendorEntries)
         sVendor(iVendorEntries) = "OpenOffice.org"  : inc (iVendorEntries)
+        sVendor(iVendorEntries) = "Oracle"  : inc (iVendorEntries)
         
         iOfficeEntries = 1
         sOffice(iOfficeEntries) = "Oracle Open Office"    : inc (iOfficeEntries)
@@ -913,6 +914,7 @@ function getSofficeNative() as string
         iVersionEntries = 1
         sVersion(iVersionEntries) = "9"      : inc (iVersionEntries)
         sVersion(iVersionEntries) = "8"      : inc (iVersionEntries)
+        sVersion(iVersionEntries) = "3"      : inc (iVersionEntries)
         iOOoVersionBorder = iVersionEntries
         sVersion(iVersionEntries) = "2.0.0"  : inc (iVersionEntries)
         sVersion(iVersionEntries) = "680"    : inc (iVersionEntries)
