@@ -321,6 +321,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Sardinian, Gallurese" ; LANGUAGE_USER_SARDINIAN_GALLURESE ; > ;
         < "Sardinian, Logudorese" ; LANGUAGE_USER_SARDINIAN_LOGUDORESE ; > ;
         < "Sardinian, Sassarese" ; LANGUAGE_USER_SARDINIAN_SASSARESE ; > ;
+        < "Bafia" ; LANGUAGE_USER_BAFIA ; > ;
     };
 };
 
