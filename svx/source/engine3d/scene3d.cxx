@@ -337,6 +337,12 @@ UINT16 E3dScene::GetObjIdentifier() const
     return E3D_SCENE_ID;
 }
 
+void E3dScene::SetBoundRectDirty()
+{
+    // avoid resetting aOutRect which in case of this object is model data,
+    // not re-creatable view data
+}
+
 /*************************************************************************
 |*
 |* SetSnapRect

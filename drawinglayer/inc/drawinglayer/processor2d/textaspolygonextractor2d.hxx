@@ -48,7 +48,7 @@ namespace drawinglayer
 {
     namespace processor2d
     {
-        // helper data structure for returning the result
+        /// helper data structure for returning the result
         struct TextAsPolygonDataNode
         {
         private:
@@ -73,9 +73,13 @@ namespace drawinglayer
             bool getIsFilled() const { return mbIsFilled; }
         };
 
-        // typedef for a vector of that helper data
+        /// typedef for a vector of that helper data
         typedef ::std::vector< TextAsPolygonDataNode > TextAsPolygonDataNodeVector;
 
+        /** TextAsPolygonExtractor2D class
+
+            This processor extracts text in the feeded primitives to filled polygons
+         */
         class TextAsPolygonExtractor2D : public BaseProcessor2D
         {
         private:

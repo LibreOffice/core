@@ -46,13 +46,18 @@ namespace drawinglayer
 {
     namespace processor2d
     {
+        /** ContourExtractor2D class
+
+            A processor who extracts the contour of the primtives feeded to it
+            in the single local PolyPolygon
+         */
         class ContourExtractor2D : public BaseProcessor2D
         {
         private:
-            // the extracted contour
+            /// the extracted contour
             std::vector< basegfx::B2DPolyPolygon >  maExtractedContour;
 
-            // tooling methods
+            /// tooling methods
             void processBasePrimitive2D(const primitive2d::BasePrimitive2D& rCandidate);
 
         public:

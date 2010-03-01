@@ -38,7 +38,6 @@
 
 #include <drawinglayer/texture/texture3d.hxx>
 #include <vcl/bmpacc.hxx>
-#include <drawinglayer/attribute/fillattribute.hxx>
 #include <drawinglayer/primitive3d/hatchtextureprimitive3d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////

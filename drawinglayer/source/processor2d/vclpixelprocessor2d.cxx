@@ -47,14 +47,14 @@
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
-#include <drawinglayer/primitive2d/alphaprimitive2d.hxx>
+#include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
 #include <drawinglayer/primitive2d/controlprimitive2d.hxx>
 #include <com/sun/star/awt/XWindow2.hpp>
-#include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #include <drawinglayer/primitive2d/chartprimitive2d.hxx>
 #include <helperchartrenderer.hxx>
@@ -267,50 +267,62 @@ namespace drawinglayer
                     RenderModifiedColorPrimitive2D(static_cast< const primitive2d::ModifiedColorPrimitive2D& >(rCandidate));
                     break;
                 }
-                case PRIMITIVE2D_ID_UNIFIEDALPHAPRIMITIVE2D :
+                case PRIMITIVE2D_ID_UNIFIEDTRANSPARENCEPRIMITIVE2D :
                 {
                     // Detect if a single PolyPolygonColorPrimitive2D is contained; in that case,
                     // use the faster OutputDevice::DrawTransparent method
-                    const primitive2d::UnifiedAlphaPrimitive2D& rUniAlphaCandidate = static_cast< const primitive2d::UnifiedAlphaPrimitive2D& >(rCandidate);
-                    const primitive2d::Primitive2DSequence rContent = rUniAlphaCandidate.getChildren();
-                    bool bDrawTransparentUsed(false);
+                    const primitive2d::UnifiedTransparencePrimitive2D& rUniTransparenceCandidate = static_cast< const primitive2d::UnifiedTransparencePrimitive2D& >(rCandidate);
+                    const primitive2d::Primitive2DSequence rContent = rUniTransparenceCandidate.getChildren();
 
-                    // since DEV300 m33 DrawTransparent is supported in VCL (for some targets
-                    // natively), so i am now enabling this shortcut
-                    static bool bAllowUsingDrawTransparent(true);
-
-                    if(bAllowUsingDrawTransparent && rContent.hasElements() && 1 == rContent.getLength())
+                    if(rContent.hasElements())
                     {
-                        const primitive2d::Primitive2DReference xReference(rContent[0]);
-                        const primitive2d::PolyPolygonColorPrimitive2D* pPoPoColor = dynamic_cast< const primitive2d::PolyPolygonColorPrimitive2D* >(xReference.get());
-
-                        if(pPoPoColor && PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D == pPoPoColor->getPrimitive2DID())
+                        if(0.0 == rUniTransparenceCandidate.getTransparence())
                         {
-                            // single transparent PolyPolygon identified, use directly
-                            const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(pPoPoColor->getBColor()));
-                            mpOutputDevice->SetFillColor(Color(aPolygonColor));
-                            mpOutputDevice->SetLineColor();
-
-                            basegfx::B2DPolyPolygon aLocalPolyPolygon(pPoPoColor->getB2DPolyPolygon());
-                            aLocalPolyPolygon.transform(maCurrentTransformation);
-
-                            mpOutputDevice->DrawTransparent(aLocalPolyPolygon, rUniAlphaCandidate.getAlpha());
-                            bDrawTransparentUsed = true;
+                            // not transparent at all, use content
+                            process(rUniTransparenceCandidate.getChildren());
                         }
-                    }
+                        else if(rUniTransparenceCandidate.getTransparence() > 0.0 && rUniTransparenceCandidate.getTransparence() < 1.0)
+                        {
+                            bool bDrawTransparentUsed(false);
 
-                    if(!bDrawTransparentUsed)
-                    {
-                        // unified sub-transparence. Draw to VDev first.
-                        RenderUnifiedAlphaPrimitive2D(rUniAlphaCandidate);
+                            // since DEV300 m33 DrawTransparent is supported in VCL (for some targets
+                            // natively), so i am now enabling this shortcut
+                            static bool bAllowUsingDrawTransparent(true);
+
+                            if(bAllowUsingDrawTransparent && 1 == rContent.getLength())
+                            {
+                                const primitive2d::Primitive2DReference xReference(rContent[0]);
+                                const primitive2d::PolyPolygonColorPrimitive2D* pPoPoColor = dynamic_cast< const primitive2d::PolyPolygonColorPrimitive2D* >(xReference.get());
+
+                                if(pPoPoColor && PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D == pPoPoColor->getPrimitive2DID())
+                                {
+                                    // single transparent PolyPolygon identified, use directly
+                                    const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(pPoPoColor->getBColor()));
+                                    mpOutputDevice->SetFillColor(Color(aPolygonColor));
+                                    mpOutputDevice->SetLineColor();
+
+                                    basegfx::B2DPolyPolygon aLocalPolyPolygon(pPoPoColor->getB2DPolyPolygon());
+                                    aLocalPolyPolygon.transform(maCurrentTransformation);
+
+                                    mpOutputDevice->DrawTransparent(aLocalPolyPolygon, rUniTransparenceCandidate.getTransparence());
+                                    bDrawTransparentUsed = true;
+                                }
+                            }
+
+                            if(!bDrawTransparentUsed)
+                            {
+                                // unified sub-transparence. Draw to VDev first.
+                                RenderUnifiedTransparencePrimitive2D(rUniTransparenceCandidate);
+                            }
+                        }
                     }
 
                     break;
                 }
-                case PRIMITIVE2D_ID_ALPHAPRIMITIVE2D :
+                case PRIMITIVE2D_ID_TRANSPARENCEPRIMITIVE2D :
                 {
                     // sub-transparence group. Draw to VDev first.
-                    RenderAlphaPrimitive2D(static_cast< const primitive2d::AlphaPrimitive2D& >(rCandidate));
+                    RenderTransparencePrimitive2D(static_cast< const primitive2d::TransparencePrimitive2D& >(rCandidate));
                     break;
                 }
                 case PRIMITIVE2D_ID_TRANSFORMPRIMITIVE2D :

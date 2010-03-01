@@ -33,8 +33,15 @@
 #define _SDR_ATTRIBUTE_SDRFORMTEXTOUTLINEATTRIBUTE_HXX
 
 #include <sal/types.h>
-#include <drawinglayer/attribute/lineattribute.hxx>
-#include <drawinglayer/attribute/strokeattribute.hxx>
+
+//////////////////////////////////////////////////////////////////////////////
+// predefines
+
+namespace drawinglayer { namespace attribute {
+    class ImpSdrFormTextOutlineAttribute;
+    class LineAttribute;
+    class StrokeAttribute;
+}}
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -45,24 +52,29 @@ namespace drawinglayer
         class SdrFormTextOutlineAttribute
         {
         private:
-            // one set of attributes for FormText (FontWork) outline visualisation
-            LineAttribute                       maLineAttribute;
-            StrokeAttribute                     maStrokeAttribute;
-            sal_uInt8                           mnTransparence;
+            ImpSdrFormTextOutlineAttribute*     mpSdrFormTextOutlineAttribute;
 
         public:
+            /// constructors/assignmentoperator/destructor
             SdrFormTextOutlineAttribute(
                 const LineAttribute& rLineAttribute,
                 const StrokeAttribute& rStrokeAttribute,
                 sal_uInt8 nTransparence);
+            SdrFormTextOutlineAttribute();
+            SdrFormTextOutlineAttribute(const SdrFormTextOutlineAttribute& rCandidate);
+            SdrFormTextOutlineAttribute& operator=(const SdrFormTextOutlineAttribute& rCandidate);
+            ~SdrFormTextOutlineAttribute();
+
+            // checks if the incarnation is default constructed
+            bool isDefault() const;
 
             // compare operator
             bool operator==(const SdrFormTextOutlineAttribute& rCandidate) const;
 
             // data read access
-            const LineAttribute& getLineAttribute() const { return maLineAttribute; }
-            const StrokeAttribute getStrokeAttribute() const { return maStrokeAttribute; }
-            sal_uInt8 getTransparence() const { return mnTransparence; }
+            const LineAttribute& getLineAttribute() const;
+            const StrokeAttribute& getStrokeAttribute() const;
+            sal_uInt8 getTransparence() const;
         };
     } // end of namespace attribute
 } // end of namespace drawinglayer

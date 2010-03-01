@@ -772,9 +772,7 @@ namespace drawinglayer
                             {
                                 // clipping needed. Embed to MaskPrimitive2D. Create childs and mask polygon
                                 const primitive2d::Primitive2DSequence aChildContent(&xPrimitive, 1);
-                                basegfx::B2DPolygon aMaskPolygon(
-                                    basegfx::tools::createPolygonFromRect(
-                                        basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
+                                basegfx::B2DPolygon aMaskPolygon(basegfx::tools::createUnitPolygon());
                                 aMaskPolygon.transform(aTransform);
 
                                 xPrimitive = Primitive2DReference(
@@ -880,7 +878,7 @@ namespace drawinglayer
                             else
                             {
                                 // cropped got bigger, mask it with original object's bounds
-                                basegfx::B2DPolyPolygon aMaskPolyPolygon(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
+                                basegfx::B2DPolyPolygon aMaskPolyPolygon(basegfx::tools::createUnitPolygon());
                                 aMaskPolyPolygon.transform(getTransform());
 
                                 // create maskPrimitive with aMaskPolyPolygon and aMaskContentVector

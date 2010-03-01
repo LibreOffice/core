@@ -138,7 +138,7 @@ namespace drawinglayer
 
                     if(aColor.bIsVisible)
                     {
-                        basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
+                        basegfx::B2DPolygon aOutline(basegfx::tools::createUnitPolygon());
                         const Color aVclColor(aColor.nColor);
                         aOutline.transform(getObjectTransform());
                         const drawinglayer::primitive2d::Primitive2DReference xOutline(

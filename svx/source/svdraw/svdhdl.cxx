@@ -284,13 +284,13 @@ SdrHdlBitmapSet& getSimpleSet()
 
 SdrHdlBitmapSet& getModernSet()
 {
-    static vcl::DeleteOnDeinit< SdrHdlBitmapSet > aModernSet(new SdrHdlBitmapSet(SIP_SA_MARKERS));
+    static vcl::DeleteOnDeinit< SdrHdlBitmapSet > aModernSet(new SdrHdlBitmapSet(SIP_SA_FINE_MARKERS));
     return *aModernSet.get();
 }
 
 SdrHdlBitmapSet& getHighContrastSet()
 {
-    static vcl::DeleteOnDeinit< SdrHdlBitmapSet > aHighContrastSet(new SdrHdlBitmapSet(SIP_SA_MARKERS));
+    static vcl::DeleteOnDeinit< SdrHdlBitmapSet > aHighContrastSet(new SdrHdlBitmapSet(SIP_SA_ACCESSIBILITY_MARKERS));
     return *aHighContrastSet.get();
 }
 

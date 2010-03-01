@@ -58,16 +58,8 @@ namespace sdr
         {
             drawinglayer::primitive3d::Primitive3DSequence xRetval;
             const SfxItemSet& rItemSet = GetE3dCubeObj().GetMergedItemSet();
-            drawinglayer::attribute::SdrLineFillShadowAttribute* pAttribute = drawinglayer::primitive2d::createNewSdrLineFillShadowAttribute(rItemSet, false);
-
-            // for 3D Objects, always create a primitive even when not visible. This is necessary ATM
-            // since e.g. chart geometries rely on the occupied space of non-visible objects
-            if(!pAttribute)
-            {
-                pAttribute = new drawinglayer::attribute::SdrLineFillShadowAttribute(
-                    impCreateFallbackLineAttribute(basegfx::BColor(0.0, 1.0, 0.0)),
-                    0, 0, 0, 0);
-            }
+            const drawinglayer::attribute::SdrLineFillShadowAttribute3D aAttribute(
+                drawinglayer::primitive2d::createNewSdrLineFillShadowAttribute(rItemSet, false));
 
             // get cube geometry and use as traslation and scaling for unit cube
             basegfx::B3DRange aCubeRange;
@@ -100,12 +92,13 @@ namespace sdr
             const basegfx::B2DVector aTextureSize(aCubeSize.getX(), aCubeSize.getY());
 
             // create primitive and add
-            const drawinglayer::primitive3d::Primitive3DReference xReference(new drawinglayer::primitive3d::SdrCubePrimitive3D(aWorldTransform, aTextureSize, *pAttribute, *pSdr3DObjectAttribute));
+            const drawinglayer::primitive3d::Primitive3DReference xReference(
+                new drawinglayer::primitive3d::SdrCubePrimitive3D(
+                    aWorldTransform, aTextureSize, aAttribute, *pSdr3DObjectAttribute));
             xRetval = drawinglayer::primitive3d::Primitive3DSequence(&xReference, 1);
 
             // delete 3D Object Attributes
             delete pSdr3DObjectAttribute;
-            delete pAttribute;
 
             return xRetval;
         }

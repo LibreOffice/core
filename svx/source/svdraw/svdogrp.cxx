@@ -83,7 +83,7 @@
 
 sdr::properties::BaseProperties* SdrObjGroup::CreateObjectSpecificProperties()
 {
-    return new sdr::properties::GroupProperties((SdrObject&)(*this));
+    return new sdr::properties::GroupProperties(*this);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -165,6 +165,12 @@ void SdrObjGroup::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     }
 }
 
+
+void SdrObjGroup::SetBoundRectDirty()
+{
+    // avoid resetting aOutRect which in case of this object is model data,
+    // not re-creatable view data
+}
 
 UINT16 SdrObjGroup::GetObjIdentifier() const
 {

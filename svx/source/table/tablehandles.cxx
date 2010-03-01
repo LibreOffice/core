@@ -50,7 +50,7 @@
 #include <svx/svdpagv.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <svx/sdr/overlay/overlayhatchrect.hxx>
-#include <drawinglayer/primitive2d/hittestprimitive2d.hxx>
+#include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 
 namespace sdr { namespace table {
 
@@ -245,10 +245,11 @@ drawinglayer::primitive2d::Primitive2DSequence OverlayTableEdge::createOverlayOb
         }
         else
         {
-            // embed in HitTest primitive to support HitTest of this overlay object
+            // embed in HiddenGeometryPrimitive2D to support HitTest of this invisible
+            // overlay object
             const drawinglayer::primitive2d::Primitive2DSequence aSequence(&aReference, 1);
             const drawinglayer::primitive2d::Primitive2DReference aNewReference(
-                new drawinglayer::primitive2d::HitTestPrimitive2D(aSequence));
+                new drawinglayer::primitive2d::HiddenGeometryPrimitive2D(aSequence));
             aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aNewReference, 1);
         }
     }

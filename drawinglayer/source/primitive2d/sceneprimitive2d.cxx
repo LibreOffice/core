@@ -156,8 +156,10 @@ namespace drawinglayer
             if(impGetShadow3D(rViewInformation))
             {
                 // test visibility
-                const basegfx::B2DRange aShadow2DRange(getB2DRangeFromPrimitive2DSequence(maShadowPrimitives, rViewInformation));
-                const basegfx::B2DRange aViewRange(rViewInformation.getViewport());
+                const basegfx::B2DRange aShadow2DRange(
+                    getB2DRangeFromPrimitive2DSequence(maShadowPrimitives, rViewInformation));
+                const basegfx::B2DRange aViewRange(
+                    rViewInformation.getViewport());
 
                 if(aViewRange.isEmpty() || aShadow2DRange.overlaps(aViewRange))
                 {
@@ -170,6 +172,7 @@ namespace drawinglayer
             basegfx::B2DRange aDiscreteRange;
             basegfx::B2DRange aVisibleDiscreteRange;
             basegfx::B2DRange aUnitVisibleRange;
+
             calculateDiscreteSizes(rViewInformation, aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
 
             if(!aVisibleDiscreteRange.isEmpty())
@@ -235,8 +238,9 @@ namespace drawinglayer
                     aUnitVisibleRange,
                     nOversampleValue);
 
-                aZBufferProcessor3D.processNonTransparent(getChildren3D());
-                aZBufferProcessor3D.processTransparent(getChildren3D());
+                aZBufferProcessor3D.process(getChildren3D());
+                aZBufferProcessor3D.finish();
+
                 const_cast< ScenePrimitive2D* >(this)->maOldRenderedBitmap = aZBufferProcessor3D.getBitmapEx();
                 const Size aBitmapSizePixel(maOldRenderedBitmap.GetSizePixel());
 
@@ -262,7 +266,7 @@ namespace drawinglayer
 
                     if(bAddOutlineToCreated3DSceneRepresentation)
                     {
-                        basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
+                        basegfx::B2DPolygon aOutline(basegfx::tools::createUnitPolygon());
                         aOutline.transform(aNew2DTransform);
                         const Primitive2DReference xRef2(new PolygonHairlinePrimitive2D(aOutline, basegfx::BColor(1.0, 0.0, 0.0)));
                         appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, xRef2);

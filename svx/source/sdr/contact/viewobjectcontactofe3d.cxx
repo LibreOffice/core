@@ -39,7 +39,6 @@
 #include <svx/sdr/contact/viewobjectcontactofe3dscene.hxx>
 #include <drawinglayer/primitive2d/embedded3dprimitive2d.hxx>
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
-#include <drawinglayer/attribute/sdrattribute3d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations

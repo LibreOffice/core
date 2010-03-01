@@ -51,6 +51,7 @@ SLOFILES=\
         $(SLO)$/textproperties.obj			\
         $(SLO)$/customshapeproperties.obj	\
         $(SLO)$/rectangleproperties.obj		\
+        $(SLO)$/oleproperties.obj			\
         $(SLO)$/captionproperties.obj		\
         $(SLO)$/circleproperties.obj		\
         $(SLO)$/connectorproperties.obj		\

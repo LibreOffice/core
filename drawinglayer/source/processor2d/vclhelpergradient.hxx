@@ -36,7 +36,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PROCESSOR2D_VCLHELPERGRADIENT_HXX
 #define INCLUDED_DRAWINGLAYER_PROCESSOR2D_VCLHELPERGRADIENT_HXX
 
-#include <drawinglayer/attribute/fillattribute.hxx>
+#include <sal/types.h>
+#include <drawinglayer/attribute/fillgradientattribute.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines

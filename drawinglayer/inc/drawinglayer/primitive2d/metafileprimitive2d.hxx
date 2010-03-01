@@ -47,7 +47,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        /** MediaPrimitive2D class
+        /** MetafilePrimitive2D class
 
             This is the MetaFile representing primitive. It's geometry is defined
             by MetaFileTransform. The content (defined by MetaFile) will be scaled

@@ -55,11 +55,12 @@ class SfxItemPool;
 
 class SVX_DLLPUBLIC SdrAttrObj : public SdrObject
 {
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
-
+private:
     friend class                SdrOutliner;
 
 protected:
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
+
     Rectangle                   maSnapRect;
 
 protected:

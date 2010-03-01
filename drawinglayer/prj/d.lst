@@ -8,7 +8,7 @@ mkdir: %_DEST%\inc%_EXT%\drawinglayer
 
 mkdir: %_DEST%\inc%_EXT%\drawinglayer\primitive2d
 ..\inc\drawinglayer\primitive2d\drawinglayer_primitivetypes2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\drawinglayer_primitivetypes2d.hxx
-..\inc\drawinglayer\primitive2d\alphaprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\alphaprimitive2d.hxx
+..\inc\drawinglayer\primitive2d\transparenceprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\transparenceprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\animatedprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\animatedprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\backgroundcolorprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\backgroundcolorprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\baseprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\baseprimitive2d.hxx
@@ -24,7 +24,7 @@ mkdir: %_DEST%\inc%_EXT%\drawinglayer\primitive2d
 ..\inc\drawinglayer\primitive2d\gridprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\gridprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\groupprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\groupprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\helplineprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\helplineprimitive2d.hxx
-..\inc\drawinglayer\primitive2d\hittestprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\hittestprimitive2d.hxx
+..\inc\drawinglayer\primitive2d\hiddengeometryprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\hiddengeometryprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\invertprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\invertprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\markerarrayprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\markerarrayprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\maskprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\maskprimitive2d.hxx
@@ -36,6 +36,7 @@ mkdir: %_DEST%\inc%_EXT%\drawinglayer\primitive2d
 ..\inc\drawinglayer\primitive2d\polygonprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\polygonprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\polypolygonprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\polypolygonprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\primitivetools2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\primitivetools2d.hxx
+..\inc\drawinglayer\primitive2d\sdrdecompositiontools2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\sdrdecompositiontools2d.hxx
 ..\inc\drawinglayer\primitive2d\sceneprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\sceneprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\shadowprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\shadowprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\structuretagprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\structuretagprimitive2d.hxx
@@ -46,7 +47,7 @@ mkdir: %_DEST%\inc%_EXT%\drawinglayer\primitive2d
 ..\inc\drawinglayer\primitive2d\textdecoratedprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\textdecoratedprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\texthierarchyprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\texthierarchyprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\transformprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\transformprimitive2d.hxx
-..\inc\drawinglayer\primitive2d\unifiedalphaprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\unifiedalphaprimitive2d.hxx
+..\inc\drawinglayer\primitive2d\unifiedtransparenceprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\unifiedtransparenceprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\wrongspellprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\wrongspellprimitive2d.hxx
 
 mkdir: %_DEST%\inc%_EXT%\drawinglayer\primitive3d
@@ -54,7 +55,7 @@ mkdir: %_DEST%\inc%_EXT%\drawinglayer\primitive3d
 ..\inc\drawinglayer\primitive3d\baseprimitive3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\baseprimitive3d.hxx
 ..\inc\drawinglayer\primitive3d\groupprimitive3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\groupprimitive3d.hxx
 ..\inc\drawinglayer\primitive3d\hatchtextureprimitive3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\hatchtextureprimitive3d.hxx
-..\inc\drawinglayer\primitive3d\hittestprimitive3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\hittestprimitive3d.hxx
+..\inc\drawinglayer\primitive2d\hiddengeometryprimitive3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\hiddengeometryprimitive3d.hxx
 ..\inc\drawinglayer\primitive3d\modifiedcolorprimitive3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\modifiedcolorprimitive3d.hxx
 ..\inc\drawinglayer\primitive3d\polygonprimitive3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\polygonprimitive3d.hxx
 ..\inc\drawinglayer\primitive3d\polygontubeprimitive3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\polygontubeprimitive3d.hxx
@@ -97,13 +98,20 @@ mkdir: %_DEST%\inc%_EXT%\drawinglayer\processor3d
 ..\inc\drawinglayer\processor3d\tbufferprocessor3d.hxx %_DEST%\inc%_EXT%\drawinglayer\processor3d\tbufferprocessor3d.hxx
 
 mkdir: %_DEST%\inc%_EXT%\drawinglayer\attribute
-..\inc\drawinglayer\attribute\fillattribute.hxx %_DEST%\inc%_EXT%\drawinglayer\attribute\fillattribute.hxx
+..\inc\drawinglayer\attribute\fillgradientattribute.hxx %_DEST%\inc%_EXT%\drawinglayer\attribute\fillgradientattribute.hxx
+..\inc\drawinglayer\attribute\fillhatchattribute.hxx %_DEST%\inc%_EXT%\drawinglayer\attribute\fillhatchattribute.hxx
 ..\inc\drawinglayer\attribute\fillbitmapattribute.hxx %_DEST%\inc%_EXT%\drawinglayer\attribute\fillbitmapattribute.hxx
 ..\inc\drawinglayer\attribute\fontattribute.hxx %_DEST%\inc%_EXT%\drawinglayer\attribute\fontattribute.hxx
 ..\inc\drawinglayer\attribute\materialattribute3d.hxx %_DEST%\inc%_EXT%\drawinglayer\attribute\materialattribute3d.hxx
 ..\inc\drawinglayer\attribute\sdrallattribute3d.hxx %_DEST%\inc%_EXT%\drawinglayer\attribute\sdrallattribute3d.hxx
-..\inc\drawinglayer\attribute\sdrattribute.hxx %_DEST%\inc%_EXT%\drawinglayer\attribute\sdrattribute.hxx
-..\inc\drawinglayer\attribute\sdrattribute3d.hxx %_DEST%\inc%_EXT%\drawinglayer\attribute\sdrattribute3d.hxx
+..\inc\drawinglayer\attribute\sdrlineattribute.hxx %_DEST%\inc%_EXT%\drawinglayer\attribute\sdrlineattribute.hxx
+..\inc\drawinglayer\attribute\sdrlinestartendattribute.hxx %_DEST%\inc%_EXT%\drawinglayer\attribute\sdrlinestartendattribute.hxx
+..\inc\drawinglayer\attribute\sdrshadowattribute.hxx %_DEST%\inc%_EXT%\drawinglayer\attribute\sdrshadowattribute.hxx
+..\inc\drawinglayer\attribute\sdrfillattribute.hxx %_DEST%\inc%_EXT%\drawinglayer\attribute\sdrfillattribute.hxx
+..\inc\drawinglayer\attribute\sdrobjectattribute3d.hxx %_DEST%\inc%_EXT%\drawinglayer\attribute\sdrobjectattribute3d.hxx
+..\inc\drawinglayer\attribute\sdrlightattribute3d.hxx %_DEST%\inc%_EXT%\drawinglayer\attribute\sdrlightattribute3d.hxx
+..\inc\drawinglayer\attribute\sdrlightingattribute3d.hxx %_DEST%\inc%_EXT%\drawinglayer\attribute\sdrlightingattribute3d.hxx
+..\inc\drawinglayer\attribute\sdrsceneattribute3d.hxx %_DEST%\inc%_EXT%\drawinglayer\attribute\sdrsceneattribute3d.hxx
 ..\inc\drawinglayer\attribute\sdrfillbitmapattribute.hxx %_DEST%\inc%_EXT%\drawinglayer\attribute\sdrfillbitmapattribute.hxx
 ..\inc\drawinglayer\attribute\strokeattribute.hxx %_DEST%\inc%_EXT%\drawinglayer\attribute\strokeattribute.hxx
 ..\inc\drawinglayer\attribute\lineattribute.hxx %_DEST%\inc%_EXT%\drawinglayer\attribute\lineattribute.hxx

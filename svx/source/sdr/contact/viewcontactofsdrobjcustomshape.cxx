@@ -34,13 +34,13 @@
 #include <svx/svdoashp.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
-#include <svx/sdr/attribute/sdrallattribute.hxx>
 #include <svditer.hxx>
 #include <svx/sdr/primitive2d/sdrcustomshapeprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/obj3d.hxx>
+#include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -115,130 +115,125 @@ namespace sdr
         {
             drawinglayer::primitive2d::Primitive2DSequence xRetval;
             const SfxItemSet& rItemSet = GetCustomShapeObj().GetMergedItemSet();
-            SdrText* pSdrText = GetCustomShapeObj().getText(0);
 
-            if(pSdrText)
-            {
-                // #i98072# Get shandow and text; eventually suppress the text if it's
-                // a TextPath FontworkGallery object
-                drawinglayer::attribute::SdrShadowTextAttribute* pAttribute = drawinglayer::primitive2d::createNewSdrShadowTextAttribute(
+            // #i98072# Get shandow and text; eventually suppress the text if it's
+            // a TextPath FontworkGallery object
+            const drawinglayer::attribute::SdrShadowTextAttribute aAttribute(
+                drawinglayer::primitive2d::createNewSdrShadowTextAttribute(
                     rItemSet,
-                    *pSdrText,
-                    GetCustomShapeObj().IsTextPath());
-                drawinglayer::primitive2d::Primitive2DSequence xGroup;
-                bool bHasText(pAttribute && pAttribute->getText());
+                    GetCustomShapeObj().getText(0),
+                    GetCustomShapeObj().IsTextPath()));
+            drawinglayer::primitive2d::Primitive2DSequence xGroup;
+            bool bHasText(!aAttribute.getText().isDefault());
 
-                // create Primitive2DSequence from sub-geometry
-                const SdrObject* pSdrObjRepresentation = GetCustomShapeObj().GetSdrObjectFromCustomShape();
-                bool b3DShape(false);
+            // create Primitive2DSequence from sub-geometry
+            const SdrObject* pSdrObjRepresentation = GetCustomShapeObj().GetSdrObjectFromCustomShape();
+            bool b3DShape(false);
 
-                if(pSdrObjRepresentation)
+            if(pSdrObjRepresentation)
+            {
+                SdrObjListIter aIterator(*pSdrObjRepresentation);
+
+                while(aIterator.IsMore())
                 {
-                    SdrObjListIter aIterator(*pSdrObjRepresentation);
+                    SdrObject& rCandidate = *aIterator.Next();
 
-                    while(aIterator.IsMore())
+                    if(!b3DShape && dynamic_cast< E3dObject* >(&rCandidate))
                     {
-                        SdrObject& rCandidate = *aIterator.Next();
-
-                        if(!b3DShape && dynamic_cast< E3dObject* >(&rCandidate))
-                        {
-                            b3DShape = true;
-                        }
-
-                        const drawinglayer::primitive2d::Primitive2DSequence xNew(rCandidate.GetViewContact().getViewIndependentPrimitive2DSequence());
-                        drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xGroup, xNew);
-                    }
-                }
-
-                if(bHasText || xGroup.hasElements())
-                {
-                    // prepare text box geometry
-                    basegfx::B2DHomMatrix aTextBoxMatrix;
-                    bool bWordWrap(false);
-
-                    if(bHasText)
-                    {
-                        // take unrotated snap rect as default, then get the
-                        // unrotated text box. Rotation needs to be done centered
-                        const Rectangle aObjectBound(GetCustomShapeObj().GetGeoRect());
-                        const basegfx::B2DRange aObjectRange(aObjectBound.Left(), aObjectBound.Top(), aObjectBound.Right(), aObjectBound.Bottom());
-
-                        // #i101684# get the text range unrotated and absolute to the object range
-                        const basegfx::B2DRange aTextRange(getCorrectedTextBoundRect());
-
-                        // give text object a size
-                        aTextBoxMatrix.scale(aTextRange.getWidth(), aTextRange.getHeight());
-
-                        // check if we have a rotation/shear at all to take care of
-                        const double fExtraTextRotation(GetCustomShapeObj().GetExtraTextRotation());
-                        const GeoStat& rGeoStat(GetCustomShapeObj().GetGeoStat());
-
-                        if(rGeoStat.nShearWink || rGeoStat.nDrehWink || !basegfx::fTools::equalZero(fExtraTextRotation))
-                        {
-                            if(aObjectRange != aTextRange)
-                            {
-                                // move relative to unrotated object range
-                                aTextBoxMatrix.translate(
-                                    aTextRange.getMinX() - aObjectRange.getMinimum().getX(),
-                                    aTextRange.getMinY() - aObjectRange.getMinimum().getY());
-                            }
-
-                            if(!basegfx::fTools::equalZero(fExtraTextRotation))
-                            {
-                                basegfx::B2DVector aTranslation(
-                                    ( aTextRange.getWidth() / 2 ) + ( aTextRange.getMinX() - aObjectRange.getMinimum().getX() ),
-                                    ( aTextRange.getHeight() / 2 ) + ( aTextRange.getMinY() - aObjectRange.getMinimum().getY() ) );
-                                aTextBoxMatrix.translate( -aTranslation.getX(), -aTranslation.getY() );
-                                aTextBoxMatrix.rotate((360.0 - fExtraTextRotation) * F_PI180);
-                                aTextBoxMatrix.translate( aTranslation.getX(), aTranslation.getY() );
-                            }
-
-                            if(rGeoStat.nShearWink)
-                            {
-                                aTextBoxMatrix.shearX(tan((36000 - rGeoStat.nShearWink) * F_PI18000));
-                            }
-
-                            if(rGeoStat.nDrehWink)
-                            {
-                                aTextBoxMatrix.rotate((36000 - rGeoStat.nDrehWink) * F_PI18000);
-                            }
-
-                            // give text it's target position
-                            aTextBoxMatrix.translate(aObjectRange.getMinimum().getX(), aObjectRange.getMinimum().getY());
-                        }
-                        else
-                        {
-                            aTextBoxMatrix.translate(aTextRange.getMinX(), aTextRange.getMinY());
-                        }
-
-                        // check if SdrTextWordWrapItem is set
-                        bWordWrap = ((SdrTextWordWrapItem&)(GetCustomShapeObj().GetMergedItem(SDRATTR_TEXT_WORDWRAP))).GetValue();
+                        b3DShape = true;
                     }
 
-                    // make sure a (even empty) SdrShadowTextAttribute exists for
-                    // primitive creation
-                    if(!pAttribute)
-                    {
-                        pAttribute = new drawinglayer::attribute::SdrShadowTextAttribute(0L, 0L);
-                    }
-
-                    // create primitive
-                    const drawinglayer::primitive2d::Primitive2DReference xReference(
-                        new drawinglayer::primitive2d::SdrCustomShapePrimitive2D(
-                            *pAttribute,
-                            xGroup,
-                            aTextBoxMatrix,
-                            bWordWrap,
-                            b3DShape,
-                            false));        // #SJ# New parameter to force to clipped BlockText for SC
-                    xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
-                }
-
-                if(pAttribute)
-                {
-                    delete pAttribute;
+                    const drawinglayer::primitive2d::Primitive2DSequence xNew(rCandidate.GetViewContact().getViewIndependentPrimitive2DSequence());
+                    drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xGroup, xNew);
                 }
             }
+
+            if(bHasText || xGroup.hasElements())
+            {
+                // prepare text box geometry
+                basegfx::B2DHomMatrix aTextBoxMatrix;
+                bool bWordWrap(false);
+
+                if(bHasText)
+                {
+                    // take unrotated snap rect as default, then get the
+                    // unrotated text box. Rotation needs to be done centered
+                    const Rectangle aObjectBound(GetCustomShapeObj().GetGeoRect());
+                    const basegfx::B2DRange aObjectRange(aObjectBound.Left(), aObjectBound.Top(), aObjectBound.Right(), aObjectBound.Bottom());
+
+                    // #i101684# get the text range unrotated and absolute to the object range
+                    const basegfx::B2DRange aTextRange(getCorrectedTextBoundRect());
+
+                    // give text object a size
+                    aTextBoxMatrix.scale(aTextRange.getWidth(), aTextRange.getHeight());
+
+                    // check if we have a rotation/shear at all to take care of
+                    const double fExtraTextRotation(GetCustomShapeObj().GetExtraTextRotation());
+                    const GeoStat& rGeoStat(GetCustomShapeObj().GetGeoStat());
+
+                    if(rGeoStat.nShearWink || rGeoStat.nDrehWink || !basegfx::fTools::equalZero(fExtraTextRotation))
+                    {
+                        if(aObjectRange != aTextRange)
+                        {
+                            // move relative to unrotated object range
+                            aTextBoxMatrix.translate(
+                                aTextRange.getMinX() - aObjectRange.getMinimum().getX(),
+                                aTextRange.getMinY() - aObjectRange.getMinimum().getY());
+                        }
+
+                        if(!basegfx::fTools::equalZero(fExtraTextRotation))
+                        {
+                            basegfx::B2DVector aTranslation(
+                                ( aTextRange.getWidth() / 2 ) + ( aTextRange.getMinX() - aObjectRange.getMinimum().getX() ),
+                                ( aTextRange.getHeight() / 2 ) + ( aTextRange.getMinY() - aObjectRange.getMinimum().getY() ) );
+                            aTextBoxMatrix.translate( -aTranslation.getX(), -aTranslation.getY() );
+                            aTextBoxMatrix.rotate((360.0 - fExtraTextRotation) * F_PI180);
+                            aTextBoxMatrix.translate( aTranslation.getX(), aTranslation.getY() );
+                        }
+
+                        if(rGeoStat.nShearWink)
+                        {
+                            aTextBoxMatrix.shearX(tan((36000 - rGeoStat.nShearWink) * F_PI18000));
+                        }
+
+                        if(rGeoStat.nDrehWink)
+                        {
+                            aTextBoxMatrix.rotate((36000 - rGeoStat.nDrehWink) * F_PI18000);
+                        }
+
+                        // give text it's target position
+                        aTextBoxMatrix.translate(aObjectRange.getMinimum().getX(), aObjectRange.getMinimum().getY());
+                    }
+                    else
+                    {
+                        aTextBoxMatrix.translate(aTextRange.getMinX(), aTextRange.getMinY());
+                    }
+
+                    // check if SdrTextWordWrapItem is set
+                    bWordWrap = ((SdrTextWordWrapItem&)(GetCustomShapeObj().GetMergedItem(SDRATTR_TEXT_WORDWRAP))).GetValue();
+                }
+
+                // create primitive
+                const drawinglayer::primitive2d::Primitive2DReference xReference(
+                    new drawinglayer::primitive2d::SdrCustomShapePrimitive2D(
+                        aAttribute,
+                        xGroup,
+                        aTextBoxMatrix,
+                        bWordWrap,
+                        b3DShape,
+                        false));        // #SJ# New parameter to force to clipped BlockText for SC
+                xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+            }
+
+            // always append an invisible outline for the cases where no visible content exists
+            const Rectangle aObjectBound(GetCustomShapeObj().GetGeoRect());
+            const basegfx::B2DRange aObjectRange(
+                aObjectBound.Left(), aObjectBound.Top(),
+                aObjectBound.Right(), aObjectBound.Bottom());
+
+            drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval,
+                drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
+                    false, aObjectRange));
 
             return xRetval;
         }

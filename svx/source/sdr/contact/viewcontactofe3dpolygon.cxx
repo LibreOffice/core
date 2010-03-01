@@ -60,16 +60,8 @@ namespace sdr
             drawinglayer::primitive3d::Primitive3DSequence xRetval;
             const SfxItemSet& rItemSet = GetE3dPolygonObj().GetMergedItemSet();
             const bool bSuppressFill(GetE3dPolygonObj().GetLineOnly());
-            drawinglayer::attribute::SdrLineFillShadowAttribute* pAttribute = drawinglayer::primitive2d::createNewSdrLineFillShadowAttribute(rItemSet, bSuppressFill);
-
-            // for 3D Objects, always create a primitive even when not visible. This is necessary ATM
-            // since e.g. chart geometries rely on the occupied space of non-visible objects
-            if(!pAttribute)
-            {
-                pAttribute = new drawinglayer::attribute::SdrLineFillShadowAttribute(
-                    impCreateFallbackLineAttribute(basegfx::BColor(0.0, 1.0, 0.0)),
-                    0, 0, 0, 0);
-            }
+            const drawinglayer::attribute::SdrLineFillShadowAttribute3D aAttribute(
+                drawinglayer::primitive2d::createNewSdrLineFillShadowAttribute(rItemSet, bSuppressFill));
 
             // get extrude geometry
             basegfx::B3DPolyPolygon aPolyPolygon3D(GetE3dPolygonObj().GetPolyPolygon3D());
@@ -181,13 +173,13 @@ namespace sdr
 
             // create primitive and add
             const basegfx::B3DHomMatrix aWorldTransform;
-            const drawinglayer::primitive3d::Primitive3DReference xReference(new drawinglayer::primitive3d::SdrPolyPolygonPrimitive3D(
-                aPolyPolygon3D, aWorldTransform, aTextureSize, *pAttribute, *pSdr3DObjectAttribute));
+            const drawinglayer::primitive3d::Primitive3DReference xReference(
+                new drawinglayer::primitive3d::SdrPolyPolygonPrimitive3D(
+                    aPolyPolygon3D, aWorldTransform, aTextureSize, aAttribute, *pSdr3DObjectAttribute));
             xRetval = drawinglayer::primitive3d::Primitive3DSequence(&xReference, 1);
 
             // delete 3D Object Attributes
             delete pSdr3DObjectAttribute;
-            delete pAttribute;
 
             return xRetval;
         }

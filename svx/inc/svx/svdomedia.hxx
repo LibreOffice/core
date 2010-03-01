@@ -83,10 +83,9 @@ public:
 protected:
 
         virtual void                mediaPropertiesChanged( const ::avmedia::MediaItem& rNewState );
+        virtual ::sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
 private:
-
-        virtual ::sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
         ::avmedia::MediaItem        maMediaProperties;
         ::std::auto_ptr< Graphic >  mapGraphic;

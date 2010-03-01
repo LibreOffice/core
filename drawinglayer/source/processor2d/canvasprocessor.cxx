@@ -61,7 +61,7 @@
 #include <vclhelperbitmaptransform.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#include <drawinglayer/primitive2d/alphaprimitive2d.hxx>
+#include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
 #include <basegfx/tuple/b2i64tuple.hxx>
 #include <basegfx/range/b2irange.hxx>
 #include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
@@ -70,7 +70,7 @@
 #include <com/sun/star/rendering/PathJoinType.hpp>
 #include <drawinglayer/primitive2d/fillbitmapprimitive2d.hxx>
 #include <com/sun/star/rendering/TexturingMode.hpp>
-#include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <vclhelperbufferdevice.hxx>
 #include <drawinglayer/primitive2d/chartprimitive2d.hxx>
 #include <helperchartrenderer.hxx>
@@ -388,7 +388,7 @@ using namespace com::sun::star;
                             // slightly inside), slightly enlarge the
                             // gradient:
                             //
-                            // y/2 sin(alpha) + x/2 cos(alpha)
+                            // y/2 sin(transparence) + x/2 cos(transparence)
                             //
                             // (values to change are not actual
                             // gradient scales, but original bound
@@ -603,8 +603,7 @@ using namespace com::sun::star;
                 }
                 else
                 {
-                    aUnitPolygon = basegfx::tools::createPolygonFromRect(
-                        basegfx::B2DRange(0.0, 0.0, 1.0, 1.0));
+                    aUnitPolygon = basegfx::tools::createUnitPolygon();
                 }
 
                 // create geometries
@@ -977,10 +976,10 @@ using namespace com::sun::star;
                 // paint content to it
                 process(rSubList);
 
-                // TODO(F3): render transparent list to alpha
+                // TODO(F3): render transparent list to transparence
                 // channel. Note that the OutDev implementation has a
                 // shortcoming, in that nested transparency groups
-                // don't work - alpha is not combined properly.
+                // don't work - transparence is not combined properly.
 
                 // process(rTransCandidate.getTransparenceList());
 
@@ -988,7 +987,7 @@ using namespace com::sun::star;
                 mxCanvas = xLastCanvas;
                 setWorldToView(aLastWorldToView);
 
-                // DUMMY: add alpha modulation value to DeviceColor
+                // DUMMY: add transparence modulation value to DeviceColor
                 // TODO(F3): color management
                 canvas::tools::setDeviceColor( maRenderState,
                                                1.0, 1.0, 1.0, 0.5 );
@@ -1307,7 +1306,7 @@ namespace drawinglayer
                 {
                     // there are principally two methods for implementing the mask primitive. One
                     // is to set a clip polygon at the canvas, the other is to create and use a
-                    // alpha-using XBitmap for content and draw the mask as alpha. Both have their
+                    // transparence-using XBitmap for content and draw the mask as transparence. Both have their
                     // advantages and disadvantages, so here are both with a bool allowing simple
                     // change
                     if(bUseMaskBitmapMethod)
@@ -1380,8 +1379,8 @@ namespace drawinglayer
                                 if(getOptionsDrawinglayer().IsAntiAliasing())
                                 {
                                     // with AA, use 8bit AlphaMask to get nice borders
-                                    VirtualDevice& rAlpha = aBufferDevice.getAlpha();
-                                    rAlpha.GetCanvas()->fillPolyPolygon(
+                                    VirtualDevice& rTransparence = aBufferDevice.getTransparence();
+                                    rTransparence.GetCanvas()->fillPolyPolygon(
                                         basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(mxCanvas->getDevice(), aMask),
                                         maViewState, maRenderState);
                                 }
@@ -1586,7 +1585,7 @@ namespace drawinglayer
             {
                 // replace with color filled polygon
                 const basegfx::BColor aModifiedColor(maBColorModifierStack.getModifiedColor(basegfx::BColor()));
-                const basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
+                const basegfx::B2DPolygon aPolygon(basegfx::tools::createUnitPolygon());
 
                 maRenderState.DeviceColor = aModifiedColor.colorToDoubleSequence(mxCanvas->getDevice());
                 canvas::tools::setRenderStateTransform(maRenderState,
@@ -1619,12 +1618,12 @@ namespace drawinglayer
             }
         }
 
-        void canvasProcessor2D::impRenderAlphaPrimitive2D(const primitive2d::AlphaPrimitive2D& rAlphaCandidate)
+        void canvasProcessor2D::impRenderTransparencePrimitive2D(const primitive2d::TransparencePrimitive2D& rTransparenceCandidate)
         {
-            const primitive2d::Primitive2DSequence& rChildren = rAlphaCandidate.getChildren();
-            const primitive2d::Primitive2DSequence& rAlpha = rAlphaCandidate.getAlpha();
+            const primitive2d::Primitive2DSequence& rChildren = rTransparenceCandidate.getChildren();
+            const primitive2d::Primitive2DSequence& rTransparence = rTransparenceCandidate.getTransparence();
 
-            if(rChildren.hasElements() && rAlpha.hasElements())
+            if(rChildren.hasElements() && rTransparence.hasElements())
             {
                 // get logic range of transparent part and clip with ViewRange
                 basegfx::B2DRange aLogicRange(primitive2d::getB2DRangeFromPrimitive2DSequence(rChildren, getViewInformation2D()));
@@ -1688,16 +1687,16 @@ namespace drawinglayer
                         process(rChildren);
 
                         // set to mask
-                        mpOutputDevice = &aBufferDevice.getAlpha();
+                        mpOutputDevice = &aBufferDevice.getTransparence();
                         mxCanvas = mpOutputDevice->GetCanvas();
                         canvas::tools::setViewStateTransform(maViewState, getViewInformation2D().getViewTransformation());
 
-                        // when painting alpha masks, reset the color stack
+                        // when painting transparence masks, reset the color stack
                         basegfx::BColorModifierStack aLastBColorModifierStack(maBColorModifierStack);
                         maBColorModifierStack = basegfx::BColorModifierStack();
 
-                        // paint mask to it (always with alpha intensities, evtl. with AA)
-                        process(rAlpha);
+                        // paint mask to it (always with transparence intensities, evtl. with AA)
+                        process(rTransparence);
 
                         // back to old color stack, OutDev, Canvas and ViewTransform
                         maBColorModifierStack = aLastBColorModifierStack;
@@ -1801,7 +1800,7 @@ namespace drawinglayer
                     {
                         // replace with color filled polygon
                         const basegfx::BColor aModifiedColor(maBColorModifierStack.getModifiedColor(basegfx::BColor()));
-                        const basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
+                        const basegfx::B2DPolygon aPolygon(basegfx::tools::createUnitPolygon());
 
                         maRenderState.DeviceColor = aModifiedColor.colorToDoubleSequence(mxCanvas->getDevice());
                         canvas::tools::setRenderStateTransform(maRenderState,
@@ -1832,7 +1831,7 @@ namespace drawinglayer
                             aTexture.RepeatModeY = rendering::TexturingMode::REPEAT;
 
                             // canvas needs a polygon to fill, create unit rectangle polygon
-                            const basegfx::B2DPolygon aOutlineRectangle(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
+                            const basegfx::B2DPolygon aOutlineRectangle(basegfx::tools::createUnitPolygon());
 
                             // set primitive's transformation as render state transform
                             canvas::tools::setRenderStateTransform(maRenderState,
@@ -1860,52 +1859,60 @@ namespace drawinglayer
             }
         }
 
-        void canvasProcessor2D::impRenderUnifiedAlphaPrimitive2D(const primitive2d::UnifiedAlphaPrimitive2D& rUniAlphaCandidate)
+        void canvasProcessor2D::impRenderUnifiedTransparencePrimitive2D(const primitive2d::UnifiedTransparencePrimitive2D& rUniTransparenceCandidate)
         {
-            const primitive2d::Primitive2DSequence rChildren = rUniAlphaCandidate.getChildren();
-
-            if(rChildren.hasElements())
+            if(0.0 == rUniTransparenceCandidate.getTransparence())
             {
-                bool bOutputDone(false);
+                // not transparent at all, directly use content
+                process(rUniTransparenceCandidate.getChildren());
+            }
+            else if(rUniTransparenceCandidate.getTransparence() > 0.0 && rUniTransparenceCandidate.getTransparence() < 1.0)
+            {
+                const primitive2d::Primitive2DSequence rChildren = rUniTransparenceCandidate.getChildren();
 
-                // Detect if a single PolyPolygonColorPrimitive2D is contained; in that case,
-                // use the fillPolyPolygon method with correctly set alpha. This is a often used
-                // case, so detectiong it is valuable
-                if(1 == rChildren.getLength())
+                if(rChildren.hasElements())
                 {
-                    const primitive2d::Primitive2DReference xReference(rChildren[0]);
-                    const primitive2d::PolyPolygonColorPrimitive2D* pPoPoColor = dynamic_cast< const primitive2d::PolyPolygonColorPrimitive2D* >(xReference.get());
+                    bool bOutputDone(false);
 
-                    if(pPoPoColor && PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D == pPoPoColor->getPrimitive2DID())
+                    // Detect if a single PolyPolygonColorPrimitive2D is contained; in that case,
+                    // use the fillPolyPolygon method with correctly set transparence. This is a often used
+                    // case, so detectiong it is valuable
+                    if(1 == rChildren.getLength())
                     {
-                        // direct draw of PolyPolygon with color and transparence
-                        const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(pPoPoColor->getBColor()));
+                        const primitive2d::Primitive2DReference xReference(rChildren[0]);
+                        const primitive2d::PolyPolygonColorPrimitive2D* pPoPoColor = dynamic_cast< const primitive2d::PolyPolygonColorPrimitive2D* >(xReference.get());
 
-                        // add alpha modulation value to DeviceColor
-                        uno::Sequence< double > aColor(4);
+                        if(pPoPoColor && PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D == pPoPoColor->getPrimitive2DID())
+                        {
+                            // direct draw of PolyPolygon with color and transparence
+                            const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(pPoPoColor->getBColor()));
 
-                        aColor[0] = aPolygonColor.getRed();
-                        aColor[1] = aPolygonColor.getGreen();
-                        aColor[2] = aPolygonColor.getBlue();
-                        aColor[3] = 1.0 - rUniAlphaCandidate.getAlpha();
-                        maRenderState.DeviceColor = aColor;
+                            // add transparence modulation value to DeviceColor
+                            uno::Sequence< double > aColor(4);
 
-                        canvas::tools::setRenderStateTransform(maRenderState, getViewInformation2D().getObjectTransformation());
-                        mxCanvas->fillPolyPolygon(
-                            basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(mxCanvas->getDevice(), pPoPoColor->getB2DPolyPolygon()),
-                            maViewState,  maRenderState);
-                        bOutputDone = true;
+                            aColor[0] = aPolygonColor.getRed();
+                            aColor[1] = aPolygonColor.getGreen();
+                            aColor[2] = aPolygonColor.getBlue();
+                            aColor[3] = 1.0 - rUniTransparenceCandidate.getTransparence();
+                            maRenderState.DeviceColor = aColor;
+
+                            canvas::tools::setRenderStateTransform(maRenderState, getViewInformation2D().getObjectTransformation());
+                            mxCanvas->fillPolyPolygon(
+                                basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(mxCanvas->getDevice(), pPoPoColor->getB2DPolyPolygon()),
+                                maViewState,  maRenderState);
+                            bOutputDone = true;
+                        }
                     }
-                }
 
-                if(!bOutputDone)
-                {
-                    // process decomposition. This will be decomposed to an AlphaPrimitive2D
-                    // with the same child context and a single polygon for alpha context. This could be
-                    // directly handled here with known VCL-buffer technology, but would only
-                    // make a small difference compared to directly rendering the AlphaPrimitive2D
-                    // using impRenderAlphaPrimitive2D above.
-                    process(rUniAlphaCandidate.get2DDecomposition(getViewInformation2D()));
+                    if(!bOutputDone)
+                    {
+                        // process decomposition. This will be decomposed to an TransparencePrimitive2D
+                        // with the same child context and a single polygon for transparent context. This could be
+                        // directly handled here with known VCL-buffer technology, but would only
+                        // make a small difference compared to directly rendering the TransparencePrimitive2D
+                        // using impRenderTransparencePrimitive2D above.
+                        process(rUniTransparenceCandidate.get2DDecomposition(getViewInformation2D()));
+                    }
                 }
             }
         }
@@ -2063,10 +2070,10 @@ namespace drawinglayer
 
                     break;
                 }
-                case PRIMITIVE2D_ID_ALPHAPRIMITIVE2D :
+                case PRIMITIVE2D_ID_TRANSPARENCEPRIMITIVE2D :
                 {
-                    // Alpha primitive
-                    impRenderAlphaPrimitive2D(static_cast< const primitive2d::AlphaPrimitive2D& >(rCandidate));
+                    // Transparence primitive
+                    impRenderTransparencePrimitive2D(static_cast< const primitive2d::TransparencePrimitive2D& >(rCandidate));
 
                     break;
                 }
@@ -2084,10 +2091,10 @@ namespace drawinglayer
 
                     break;
                 }
-                case PRIMITIVE2D_ID_UNIFIEDALPHAPRIMITIVE2D :
+                case PRIMITIVE2D_ID_UNIFIEDTRANSPARENCEPRIMITIVE2D :
                 {
-                    // UnifiedAlphaPrimitive2D
-                    impRenderUnifiedAlphaPrimitive2D(static_cast< const primitive2d::UnifiedAlphaPrimitive2D& >(rCandidate));
+                    // UnifiedTransparencePrimitive2D
+                    impRenderUnifiedTransparencePrimitive2D(static_cast< const primitive2d::UnifiedTransparencePrimitive2D& >(rCandidate));
 
                     break;
                 }

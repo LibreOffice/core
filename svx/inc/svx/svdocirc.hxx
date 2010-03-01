@@ -61,20 +61,17 @@ public:
 class SVX_DLLPUBLIC SdrCircObj : public SdrRectObj
 {
 private:
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
-
     // to allow sdr::properties::CircleProperties access to ImpSetAttrToCircInfo()
     friend class sdr::properties::CircleProperties;
 
     // only for SdrCircleAttributes
     SdrObjKind GetCircleKind() const { return meCircleKind; }
 
-    // DrawContact section
-private:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
-
 protected:
-     SdrObjKind                 meCircleKind;
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
+
+    SdrObjKind                  meCircleKind;
     long                        nStartWink;
     long                        nEndWink;
 

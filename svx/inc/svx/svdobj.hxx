@@ -426,6 +426,7 @@ public:
     // BaseProperties section
 private:
     sdr::properties::BaseProperties*                                mpProperties;
+protected:
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
 public:
     virtual sdr::properties::BaseProperties& GetProperties() const;
@@ -434,6 +435,7 @@ public:
     // #110094# DrawContact section
 private:
     sdr::contact::ViewContact*                                      mpViewContact;
+protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 public:
     sdr::contact::ViewContact& GetViewContact() const;
@@ -1099,11 +1101,6 @@ public:
     virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon);
 
     sal_Bool IsTransparent( BOOL bCheckForAlphaChannel = FALSE ) const;
-
-    // #111111#
-    // Needed again and again i will now add a test for finding out if
-    // this object is the BackgroundObject of the page.
-    sal_Bool IsMasterPageBackgroundObject() const;
 
     // #116168#
     // Give info if object is in destruction

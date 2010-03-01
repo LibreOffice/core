@@ -101,20 +101,20 @@ namespace drawinglayer
 
             double getTextWidth(
                 const String& rText,
-                xub_StrLen nIndex,
-                xub_StrLen nLength) const;
+                sal_uInt32 nIndex,
+                sal_uInt32 nLength) const;
 
             bool getTextOutlines(
                 basegfx::B2DPolyPolygonVector&,
                 const String& rText,
-                xub_StrLen nIndex,
-                xub_StrLen nLength,
-                const ::std::vector< double >& rDXArray);
+                sal_uInt32 nIndex,
+                sal_uInt32 nLength,
+                const ::std::vector< double >& rDXArray) const;
 
             basegfx::B2DRange getTextBoundRect(
                 const String& rText,
-                xub_StrLen nIndex,
-                xub_StrLen nLength) const;
+                sal_uInt32 nIndex,
+                sal_uInt32 nLength) const;
 
             double getFontAscent() const;
             double getFontDescent() const;
@@ -123,7 +123,12 @@ namespace drawinglayer
                 const Rectangle& rRectangle,
                 const String& rText,
                 sal_uInt16 nStyle,
-                GDIMetaFile& rGDIMetaFile);
+                GDIMetaFile& rGDIMetaFile) const;
+
+            ::std::vector< double > getTextArray(
+                const String& rText,
+                sal_uInt32 nIndex,
+                sal_uInt32 nLength) const;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

@@ -38,6 +38,7 @@
 
 #include <drawinglayer/primitive3d/textureprimitive3d.hxx>
 #include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
+#include <basegfx/color/bcolor.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -81,7 +82,7 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        UnifiedAlphaTexturePrimitive3D::UnifiedAlphaTexturePrimitive3D(
+        UnifiedTransparenceTexturePrimitive3D::UnifiedTransparenceTexturePrimitive3D(
             double fTransparence,
             const Primitive3DSequence& rChildren)
         :   TexturePrimitive3D(rChildren, basegfx::B2DVector(), false, false),
@@ -89,11 +90,11 @@ namespace drawinglayer
         {
         }
 
-        bool UnifiedAlphaTexturePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
+        bool UnifiedTransparenceTexturePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
         {
             if(TexturePrimitive3D::operator==(rPrimitive))
             {
-                const UnifiedAlphaTexturePrimitive3D& rCompare = (UnifiedAlphaTexturePrimitive3D&)rPrimitive;
+                const UnifiedTransparenceTexturePrimitive3D& rCompare = (UnifiedTransparenceTexturePrimitive3D&)rPrimitive;
 
                 return (getTransparence() == rCompare.getTransparence());
             }
@@ -101,7 +102,14 @@ namespace drawinglayer
             return false;
         }
 
-        Primitive3DSequence UnifiedAlphaTexturePrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
+        basegfx::B3DRange UnifiedTransparenceTexturePrimitive3D::getB3DRange(const geometry::ViewInformation3D& rViewInformation) const
+        {
+            // do not use the fallback to decomposition here since for a correct BoundRect we also
+            // need invisible (1.0 == getTransparence()) geometry; these would be deleted in the decomposition
+            return getB3DRangeFromPrimitive3DSequence(getChildren(), rViewInformation);
+        }
+
+        Primitive3DSequence UnifiedTransparenceTexturePrimitive3D::get3DDecomposition(const geometry::ViewInformation3D& /*rViewInformation*/) const
         {
             if(0.0 == getTransparence())
             {
@@ -110,10 +118,10 @@ namespace drawinglayer
             }
             else if(getTransparence() > 0.0 && getTransparence() < 1.0)
             {
-                // create AlphaTexturePrimitive3D with fixed transparence as replacement
+                // create TransparenceTexturePrimitive3D with fixed transparence as replacement
                 const basegfx::BColor aGray(getTransparence(), getTransparence(), getTransparence());
                 const attribute::FillGradientAttribute aFillGradient(attribute::GRADIENTSTYLE_LINEAR, 0.0, 0.0, 0.0, 0.0, aGray, aGray, 1);
-                const Primitive3DReference xRef(new AlphaTexturePrimitive3D(aFillGradient, getChildren(), getTextureSize()));
+                const Primitive3DReference xRef(new TransparenceTexturePrimitive3D(aFillGradient, getChildren(), getTextureSize()));
                 return Primitive3DSequence(&xRef, 1L);
             }
             else
@@ -124,7 +132,7 @@ namespace drawinglayer
         }
 
         // provide unique ID
-        ImplPrimitrive3DIDBlock(UnifiedAlphaTexturePrimitive3D, PRIMITIVE3D_ID_UNIFIEDALPHATEXTUREPRIMITIVE3D)
+        ImplPrimitrive3DIDBlock(UnifiedTransparenceTexturePrimitive3D, PRIMITIVE3D_ID_UNIFIEDTRANSPARENCETEXTUREPRIMITIVE3D)
 
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
@@ -204,7 +212,7 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        AlphaTexturePrimitive3D::AlphaTexturePrimitive3D(
+        TransparenceTexturePrimitive3D::TransparenceTexturePrimitive3D(
             const attribute::FillGradientAttribute& rGradient,
             const Primitive3DSequence& rChildren,
             const basegfx::B2DVector& rTextureSize)
@@ -212,13 +220,13 @@ namespace drawinglayer
         {
         }
 
-        bool AlphaTexturePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
+        bool TransparenceTexturePrimitive3D::operator==(const BasePrimitive3D& rPrimitive) const
         {
             return (GradientTexturePrimitive3D::operator==(rPrimitive));
         }
 
         // provide unique ID
-        ImplPrimitrive3DIDBlock(AlphaTexturePrimitive3D, PRIMITIVE3D_ID_ALPHATEXTUREPRIMITIVE3D)
+        ImplPrimitrive3DIDBlock(TransparenceTexturePrimitive3D, PRIMITIVE3D_ID_TRANSPARENCETEXTUREPRIMITIVE3D)
 
     } // end of namespace primitive3d
 } // end of namespace drawinglayer

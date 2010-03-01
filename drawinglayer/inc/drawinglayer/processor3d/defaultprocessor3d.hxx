@@ -41,9 +41,11 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/color/bcolormodifier.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
+#include <boost/shared_ptr.hpp>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
+
 namespace basegfx {
     class BZPixelRaster;
     class B3DPolygon;
@@ -76,35 +78,49 @@ namespace drawinglayer
 {
     namespace processor3d
     {
+        /** DefaultProcessor3D class
+
+            This processor renders all feeded primitives to a 2D raster where for all
+            primitives the two basic methods rasterconvertB3DPolygon for hairlines and
+            rasterconvertB3DPolyPolygon for filled geometry is called. It is a beseclass to
+            e.g. base a Z-Buffer supported renderer on the 3D primitive processing.
+         */
         class DefaultProcessor3D : public BaseProcessor3D
         {
         protected:
-            // render information
-            const attribute::SdrSceneAttribute&                 mrSdrSceneAttribute;    // read-only scene infos (normal handling, etc...)
-            const attribute::SdrLightingAttribute&              mrSdrLightingAttribute; // read-only light infos (lights, etc...)
+            /// read-only scene infos (normal handling, etc...)
+            const attribute::SdrSceneAttribute&                 mrSdrSceneAttribute;
 
-            // renderer range. Need to be correctly set by the derived implementations
-            basegfx::B2DRange                                   maRasterRange;          // the (0, 0, W, H) range from mpBZPixelRaster
+            /// read-only light infos (lights, etc...)
+            const attribute::SdrLightingAttribute&              mrSdrLightingAttribute;
 
-            // the modifiedColorPrimitive stack
+            /// renderer range. Need to be correctly set by the derived implementations
+            /// normally the (0, 0, W, H) range from mpBZPixelRaster
+            basegfx::B2DRange                                   maRasterRange;
+
+            /// the modifiedColorPrimitive stack
             basegfx::BColorModifierStack                        maBColorModifierStack;
 
-            // the current active texture
-            texture::GeoTexSvx*                                 mpGeoTexSvx;
+            /// the current active texture
+            boost::shared_ptr< texture::GeoTexSvx >             mpGeoTexSvx;
 
-            // the current active transparence texture
-            texture::GeoTexSvx*                                 mpTransparenceGeoTexSvx;
+            /// the current active transparence texture
+            boost::shared_ptr< texture::GeoTexSvx >             mpTransparenceGeoTexSvx;
 
-            // SvtOptionsDrawinglayer incarnation to react on diverse settings
+            /// SvtOptionsDrawinglayer incarnation to react on diverse settings
             const SvtOptionsDrawinglayer                        maDrawinglayerOpt;
 
-            // bitfield
+            /// counter for entered transparence textures
+            sal_uInt32                                          mnTransparenceCounter;
+
+            /// bitfield
             unsigned                                            mbModulate : 1;
             unsigned                                            mbFilter : 1;
             unsigned                                            mbSimpleTextureActive : 1;
 
             //////////////////////////////////////////////////////////////////////////////
             // rendering support
+
             void impRenderGradientTexturePrimitive3D(const primitive3d::GradientTexturePrimitive3D& rPrimitive, bool bTransparence);
             void impRenderHatchTexturePrimitive3D(const primitive3d::HatchTexturePrimitive3D& rPrimitive);
             void impRenderBitmapTexturePrimitive3D(const primitive3d::BitmapTexturePrimitive3D& rPrimitive);
@@ -116,6 +132,7 @@ namespace drawinglayer
             //////////////////////////////////////////////////////////////////////////////
             // rasterconversions for filled and non-filled polygons. These NEED to be
             // implemented from derivations
+
             virtual void rasterconvertB3DPolygon(const attribute::MaterialAttribute3D& rMaterial, const basegfx::B3DPolygon& rHairline) const = 0;
             virtual void rasterconvertB3DPolyPolygon(const attribute::MaterialAttribute3D& rMaterial, const basegfx::B3DPolyPolygon& rFill) const = 0;
 
@@ -129,19 +146,20 @@ namespace drawinglayer
                 const attribute::SdrLightingAttribute& rSdrLightingAttribute);
             virtual ~DefaultProcessor3D();
 
-            // data read access
+            /// data read access
             const attribute::SdrSceneAttribute& getSdrSceneAttribute() const { return mrSdrSceneAttribute; }
             const attribute::SdrLightingAttribute& getSdrLightingAttribute() const { return mrSdrLightingAttribute; }
 
-            // data read access renderer stuff
+            /// data read access renderer stuff
             const basegfx::BColorModifierStack& getBColorModifierStack() const { return maBColorModifierStack; }
-            const texture::GeoTexSvx* getGeoTexSvx() const { return mpGeoTexSvx; }
-            const texture::GeoTexSvx* getTransparenceGeoTexSvx() const { return mpTransparenceGeoTexSvx; }
+            const boost::shared_ptr< texture::GeoTexSvx >& getGeoTexSvx() const { return mpGeoTexSvx; }
+            const boost::shared_ptr< texture::GeoTexSvx >& getTransparenceGeoTexSvx() const { return mpTransparenceGeoTexSvx; }
+            sal_uInt32 getTransparenceCounter() const { return mnTransparenceCounter; }
             bool getModulate() const { return mbModulate; }
             bool getFilter() const { return mbFilter; }
             bool getSimpleTextureActive() const { return mbSimpleTextureActive; }
 
-            // access to Drawinglayer configuration options
+            /// access to Drawinglayer configuration options
             const SvtOptionsDrawinglayer& getOptionsDrawinglayer() const { return maDrawinglayerOpt; }
         };
     } // end of namespace processor3d

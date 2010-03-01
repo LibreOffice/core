@@ -34,8 +34,11 @@
 #include <svl/itemset.hxx>
 #include <com/sun/star/drawing/NormalsKind.hpp>
 #include <com/sun/star/drawing/TextureProjectionMode.hpp>
-#include <drawinglayer/attribute/sdrattribute3d.hxx>
+#include <com/sun/star/drawing/TextureKind2.hpp>
+#include <com/sun/star/drawing/TextureMode.hpp>
 #include <svx/xflclit.hxx>
+#include <drawinglayer/attribute/materialattribute3d.hxx>
+#include <drawinglayer/attribute/sdrobjectattribute3d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 

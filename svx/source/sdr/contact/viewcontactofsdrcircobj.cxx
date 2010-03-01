@@ -35,7 +35,6 @@
 #include <svx/sdr/contact/viewcontactofsdrcircobj.hxx>
 #include <svx/svdocirc.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
-#include <svx/sdr/attribute/sdrallattribute.hxx>
 #include <svx/sdr/primitive2d/sdrellipseprimitive2d.hxx>
 #include <svl/itemset.hxx>
 #include <svx/sxciaitm.hxx>
@@ -58,56 +57,62 @@ namespace sdr
 
         drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrCircObj::createViewIndependentPrimitive2DSequence() const
         {
-            drawinglayer::primitive2d::Primitive2DSequence xRetval;
             const SfxItemSet& rItemSet = GetCircObj().GetMergedItemSet();
-            SdrText* pSdrText = GetCircObj().getText(0);
+            const drawinglayer::attribute::SdrLineFillShadowTextAttribute aAttribute(
+                drawinglayer::primitive2d::createNewSdrLineFillShadowTextAttribute(
+                    rItemSet,
+                    GetCircObj().getText(0)));
 
-            if(pSdrText)
+            // take unrotated snap rect (direct model data) for position and size
+            const Rectangle& rRectangle = GetCircObj().GetGeoRect();
+            const basegfx::B2DRange aObjectRange(
+                rRectangle.Left(), rRectangle.Top(),
+                rRectangle.Right(), rRectangle.Bottom());
+            const GeoStat& rGeoStat(GetCircObj().GetGeoStat());
+
+            // fill object matrix
+            const basegfx::B2DHomMatrix aObjectMatrix(
+                basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                    aObjectRange.getWidth(), aObjectRange.getHeight(),
+                    rGeoStat.nShearWink ? tan((36000 - rGeoStat.nShearWink) * F_PI18000) : 0.0,
+                    rGeoStat.nDrehWink ? (36000 - rGeoStat.nDrehWink) * F_PI18000 : 0.0,
+                    aObjectRange.getMinX(), aObjectRange.getMinY()));
+
+            // create primitive data
+            const sal_uInt16 nIdentifier(GetCircObj().GetObjIdentifier());
+
+            // always create primitives to allow the decomposition of SdrEllipsePrimitive2D
+            // or SdrEllipseSegmentPrimitive2D to create needed invisible elements for HitTest
+            // and/or BoundRect
+            if(OBJ_CIRC == nIdentifier)
             {
-                drawinglayer::attribute::SdrLineFillShadowTextAttribute* pAttribute = drawinglayer::primitive2d::createNewSdrLineFillShadowTextAttribute(rItemSet, *pSdrText);
+                const drawinglayer::primitive2d::Primitive2DReference xReference(
+                    new drawinglayer::primitive2d::SdrEllipsePrimitive2D(
+                        aObjectMatrix,
+                        aAttribute));
 
-                if(pAttribute)
-                {
-                    if(pAttribute->isVisible())
-                    {
-                        // take unrotated snap rect (direct model data) for position and size
-                        const Rectangle& rRectangle = GetCircObj().GetGeoRect();
-                        const ::basegfx::B2DRange aObjectRange(rRectangle.Left(), rRectangle.Top(), rRectangle.Right(), rRectangle.Bottom());
-                        const GeoStat& rGeoStat(GetCircObj().GetGeoStat());
-
-                        // fill object matrix
-                        const basegfx::B2DHomMatrix aObjectMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
-                            aObjectRange.getWidth(), aObjectRange.getHeight(),
-                            rGeoStat.nShearWink ? tan((36000 - rGeoStat.nShearWink) * F_PI18000) : 0.0,
-                            rGeoStat.nDrehWink ? (36000 - rGeoStat.nDrehWink) * F_PI18000 : 0.0,
-                            aObjectRange.getMinX(), aObjectRange.getMinY()));
-
-                        // create primitive data
-                        const sal_uInt16 nIdentifier(GetCircObj().GetObjIdentifier());
-
-                        if(OBJ_CIRC == nIdentifier)
-                        {
-                            const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::SdrEllipsePrimitive2D(aObjectMatrix, *pAttribute));
-                            xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
-                        }
-                        else
-                        {
-                            const sal_Int32 nNewStart(((SdrCircStartAngleItem&)rItemSet.Get(SDRATTR_CIRCSTARTANGLE)).GetValue());
-                            const sal_Int32 nNewEnd(((SdrCircEndAngleItem&)rItemSet.Get(SDRATTR_CIRCENDANGLE)).GetValue());
-                            const double fStart(((36000 - nNewEnd) % 36000) * F_PI18000);
-                            const double fEnd(((36000 - nNewStart) % 36000) * F_PI18000);
-                            const bool bCloseSegment(OBJ_CARC != nIdentifier);
-                            const bool bCloseUsingCenter(OBJ_SECT == nIdentifier);
-                            const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::SdrEllipseSegmentPrimitive2D(aObjectMatrix, *pAttribute, fStart, fEnd, bCloseSegment, bCloseUsingCenter));
-                            xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
-                        }
-                    }
-
-                    delete pAttribute;
-                }
+                return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
             }
+            else
+            {
+                const sal_Int32 nNewStart(((SdrCircStartAngleItem&)rItemSet.Get(SDRATTR_CIRCSTARTANGLE)).GetValue());
+                const sal_Int32 nNewEnd(((SdrCircEndAngleItem&)rItemSet.Get(SDRATTR_CIRCENDANGLE)).GetValue());
+                const double fStart(((36000 - nNewEnd) % 36000) * F_PI18000);
+                const double fEnd(((36000 - nNewStart) % 36000) * F_PI18000);
+                const bool bCloseSegment(OBJ_CARC != nIdentifier);
+                const bool bCloseUsingCenter(OBJ_SECT == nIdentifier);
 
-            return xRetval;
+                const drawinglayer::primitive2d::Primitive2DReference xReference(
+                    new drawinglayer::primitive2d::SdrEllipseSegmentPrimitive2D(
+                        aObjectMatrix,
+                        aAttribute,
+                        fStart,
+                        fEnd,
+                        bCloseSegment,
+                        bCloseUsingCenter));
+
+                return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+            }
         }
     } // end of namespace contact
 } // end of namespace sdr

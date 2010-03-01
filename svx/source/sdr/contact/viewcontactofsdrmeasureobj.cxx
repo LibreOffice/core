@@ -35,7 +35,6 @@
 #include <svx/sdr/contact/viewcontactofsdrmeasureobj.hxx>
 #include <svx/svdomeas.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
-#include <svx/sdr/attribute/sdrallattribute.hxx>
 #include <svl/itemset.hxx>
 #include <svx/sxmbritm.hxx>
 #include <svx/sxmlhitm.hxx>
@@ -61,91 +60,85 @@ namespace sdr
 
         drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrMeasureObj::createViewIndependentPrimitive2DSequence() const
         {
-            drawinglayer::primitive2d::Primitive2DSequence xRetval;
             const SfxItemSet& rItemSet = GetMeasureObj().GetMergedItemSet();
-            SdrText* pSdrText = GetMeasureObj().getText(0);
+            const drawinglayer::attribute::SdrLineShadowTextAttribute aAttribute(
+                drawinglayer::primitive2d::createNewSdrLineShadowTextAttribute(
+                    rItemSet,
+                    GetMeasureObj().getText(0)));
 
-            if(pSdrText)
+            // take properties which are the model data.
+            const ::basegfx::B2DPoint aStart(GetMeasureObj().GetPoint(0).X(), GetMeasureObj().GetPoint(0).Y());
+            const ::basegfx::B2DPoint aEnd(GetMeasureObj().GetPoint(1).X(), GetMeasureObj().GetPoint(1).Y());
+            const double fDistance(((SdrMeasureLineDistItem&)rItemSet.Get(SDRATTR_MEASURELINEDIST)).GetValue());
+            const double fUpperDistance(((SdrMeasureHelplineOverhangItem&)rItemSet.Get(SDRATTR_MEASUREHELPLINEOVERHANG)).GetValue());
+            const double fLowerDistance(((SdrMeasureHelplineDistItem&)rItemSet.Get(SDRATTR_MEASUREHELPLINEDIST)).GetValue());
+            const double fLeftDelta(((SdrMeasureHelpline1LenItem&)rItemSet.Get(SDRATTR_MEASUREHELPLINE1LEN)).GetValue());
+            const double fRightDelta(((SdrMeasureHelpline2LenItem&)rItemSet.Get(SDRATTR_MEASUREHELPLINE2LEN)).GetValue());
+            const bool bBelow(((SdrMeasureBelowRefEdgeItem&)rItemSet.Get(SDRATTR_MEASUREBELOWREFEDGE)).GetValue());
+            const bool bTextRotation(((SdrMeasureTextRota90Item&)rItemSet.Get(SDRATTR_MEASURETEXTROTA90)).GetValue());
+            const bool bTextAutoAngle(((SdrMeasureTextAutoAngleItem&)rItemSet.Get(SDRATTR_MEASURETEXTAUTOANGLE)).GetValue());
+            drawinglayer::primitive2d::MeasureTextPosition aMTPHor(drawinglayer::primitive2d::MEASURETEXTPOSITION_AUTOMATIC);
+            drawinglayer::primitive2d::MeasureTextPosition aMTPVer(drawinglayer::primitive2d::MEASURETEXTPOSITION_AUTOMATIC);
+
+            switch(((SdrMeasureTextHPosItem&)rItemSet.Get(SDRATTR_MEASURETEXTHPOS)).GetValue())
             {
-                drawinglayer::attribute::SdrLineShadowTextAttribute* pAttribute = drawinglayer::primitive2d::createNewSdrLineShadowTextAttribute(rItemSet, *pSdrText);
-
-                if(pAttribute)
+                case SDRMEASURE_TEXTLEFTOUTSIDE :
                 {
-                    if(pAttribute->isVisible())
-                    {
-                        // take properties which are the model data.
-                        const ::basegfx::B2DPoint aStart(GetMeasureObj().GetPoint(0).X(), GetMeasureObj().GetPoint(0).Y());
-                        const ::basegfx::B2DPoint aEnd(GetMeasureObj().GetPoint(1).X(), GetMeasureObj().GetPoint(1).Y());
-                        const double fDistance(((SdrMeasureLineDistItem&)rItemSet.Get(SDRATTR_MEASURELINEDIST)).GetValue());
-                        const double fUpperDistance(((SdrMeasureHelplineOverhangItem&)rItemSet.Get(SDRATTR_MEASUREHELPLINEOVERHANG)).GetValue());
-                        const double fLowerDistance(((SdrMeasureHelplineDistItem&)rItemSet.Get(SDRATTR_MEASUREHELPLINEDIST)).GetValue());
-                        const double fLeftDelta(((SdrMeasureHelpline1LenItem&)rItemSet.Get(SDRATTR_MEASUREHELPLINE1LEN)).GetValue());
-                        const double fRightDelta(((SdrMeasureHelpline2LenItem&)rItemSet.Get(SDRATTR_MEASUREHELPLINE2LEN)).GetValue());
-                        const bool bBelow(((SdrMeasureBelowRefEdgeItem&)rItemSet.Get(SDRATTR_MEASUREBELOWREFEDGE)).GetValue());
-                        const bool bTextRotation(((SdrMeasureTextRota90Item&)rItemSet.Get(SDRATTR_MEASURETEXTROTA90)).GetValue());
-                        const bool bTextAutoAngle(((SdrMeasureTextAutoAngleItem&)rItemSet.Get(SDRATTR_MEASURETEXTAUTOANGLE)).GetValue());
-                        drawinglayer::primitive2d::MeasureTextPosition aMTPHor(drawinglayer::primitive2d::MEASURETEXTPOSITION_AUTOMATIC);
-                        drawinglayer::primitive2d::MeasureTextPosition aMTPVer(drawinglayer::primitive2d::MEASURETEXTPOSITION_AUTOMATIC);
-
-                        switch(((SdrMeasureTextHPosItem&)rItemSet.Get(SDRATTR_MEASURETEXTHPOS)).GetValue())
-                        {
-                            case SDRMEASURE_TEXTLEFTOUTSIDE :
-                            {
-                                aMTPHor = drawinglayer::primitive2d::MEASURETEXTPOSITION_NEGATIVE;
-                                break;
-                            }
-                            case SDRMEASURE_TEXTINSIDE :
-                            {
-                                aMTPHor = drawinglayer::primitive2d::MEASURETEXTPOSITION_CENTERED;
-                                break;
-                            }
-                            case SDRMEASURE_TEXTRIGHTOUTSIDE :
-                            {
-                                aMTPHor = drawinglayer::primitive2d::MEASURETEXTPOSITION_POSITIVE;
-                                break;
-                            }
-                            default : // SDRMEASURE_TEXTHAUTO
-                            {
-                                break;
-                            }
-                        }
-
-                        switch(((SdrMeasureTextVPosItem&)rItemSet.Get(SDRATTR_MEASURETEXTVPOS)).GetValue())
-                        {
-                            case SDRMEASURE_ABOVE :
-                            {
-                                aMTPVer = drawinglayer::primitive2d::MEASURETEXTPOSITION_NEGATIVE;
-                                break;
-                            }
-                            case SDRMEASURETEXT_BREAKEDLINE :
-                            case SDRMEASURETEXT_VERTICALCENTERED :
-                            {
-                                aMTPVer = drawinglayer::primitive2d::MEASURETEXTPOSITION_CENTERED;
-                                break;
-                            }
-                            case SDRMEASURE_BELOW :
-                            {
-                                aMTPVer = drawinglayer::primitive2d::MEASURETEXTPOSITION_POSITIVE;
-                                break;
-                            }
-                            default : // SDRMEASURE_TEXTVAUTO
-                            {
-                                break;
-                            }
-                        }
-
-                        // create primitive with the model data
-                        const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::SdrMeasurePrimitive2D(*pAttribute,
-                            aStart, aEnd, aMTPHor, aMTPVer, fDistance, fUpperDistance, fLowerDistance, fLeftDelta, fRightDelta,
-                            bBelow, bTextRotation, bTextAutoAngle));
-                        xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
-                    }
-
-                    delete pAttribute;
+                    aMTPHor = drawinglayer::primitive2d::MEASURETEXTPOSITION_NEGATIVE;
+                    break;
+                }
+                case SDRMEASURE_TEXTINSIDE :
+                {
+                    aMTPHor = drawinglayer::primitive2d::MEASURETEXTPOSITION_CENTERED;
+                    break;
+                }
+                case SDRMEASURE_TEXTRIGHTOUTSIDE :
+                {
+                    aMTPHor = drawinglayer::primitive2d::MEASURETEXTPOSITION_POSITIVE;
+                    break;
+                }
+                default : // SDRMEASURE_TEXTHAUTO
+                {
+                    break;
                 }
             }
 
-            return xRetval;
+            switch(((SdrMeasureTextVPosItem&)rItemSet.Get(SDRATTR_MEASURETEXTVPOS)).GetValue())
+            {
+                case SDRMEASURE_ABOVE :
+                {
+                    aMTPVer = drawinglayer::primitive2d::MEASURETEXTPOSITION_NEGATIVE;
+                    break;
+                }
+                case SDRMEASURETEXT_BREAKEDLINE :
+                case SDRMEASURETEXT_VERTICALCENTERED :
+                {
+                    aMTPVer = drawinglayer::primitive2d::MEASURETEXTPOSITION_CENTERED;
+                    break;
+                }
+                case SDRMEASURE_BELOW :
+                {
+                    aMTPVer = drawinglayer::primitive2d::MEASURETEXTPOSITION_POSITIVE;
+                    break;
+                }
+                default : // SDRMEASURE_TEXTVAUTO
+                {
+                    break;
+                }
+            }
+
+            // create primitive with the model data. Always create primitives to allow the
+            // decomposition of SdrMeasurePrimitive2D to create needed invisible elements for HitTest
+            // and/or BoundRect
+            const drawinglayer::primitive2d::Primitive2DReference xReference(
+                new drawinglayer::primitive2d::SdrMeasurePrimitive2D(
+                    aAttribute, aStart, aEnd,
+                    aMTPHor, aMTPVer, fDistance,
+                    fUpperDistance, fLowerDistance,
+                    fLeftDelta, fRightDelta, bBelow,
+                    bTextRotation, bTextAutoAngle));
+
+            return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
         }
     } // end of namespace contact
 } // end of namespace sdr

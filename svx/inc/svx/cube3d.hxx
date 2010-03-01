@@ -55,10 +55,6 @@ enum { CUBE_BOTTOM = 0x0001, CUBE_BACK = 0x0002, CUBE_LEFT = 0x0004,
 class SVX_DLLPUBLIC E3dCubeObj : public E3dCompoundObject
 {
 private:
-    // Zur Geometrieerzeugung eines Cubes notwendige
-    // #110094# DrawContact section
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
-
     // Parameter
     basegfx::B3DPoint                   aCubePos;
     basegfx::B3DVector                  aCubeSize;
@@ -69,6 +65,7 @@ private:
 
 protected:
     void SetDefaultAttributes(E3dDefaultAttributes& rDefault);
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
 public:
     TYPEINFO();

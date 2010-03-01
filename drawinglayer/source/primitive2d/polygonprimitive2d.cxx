@@ -43,6 +43,7 @@
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <basegfx/polygon/b2dlinegeometry.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -243,7 +244,7 @@ namespace drawinglayer
                 const basegfx::B2DPolygon aB2DPolygon(basegfx::tools::simplifyCurveSegments(getB2DPolygon()));
                 basegfx::B2DPolyPolygon aHairLinePolyPolygon;
 
-                if(0.0 == getStrokeAttribute().getFullDotDashLen())
+                if(getStrokeAttribute().isDefault() || 0.0 == getStrokeAttribute().getFullDotDashLen())
                 {
                     // no line dashing, just copy
                     aHairLinePolyPolygon.append(aB2DPolygon);
@@ -251,12 +252,14 @@ namespace drawinglayer
                 else
                 {
                     // apply LineStyle
-                    basegfx::tools::applyLineDashing(aB2DPolygon, getStrokeAttribute().getDotDashArray(), &aHairLinePolyPolygon, 0, getStrokeAttribute().getFullDotDashLen());
+                    basegfx::tools::applyLineDashing(
+                        aB2DPolygon, getStrokeAttribute().getDotDashArray(),
+                        &aHairLinePolyPolygon, 0, getStrokeAttribute().getFullDotDashLen());
                 }
 
                 const sal_uInt32 nCount(aHairLinePolyPolygon.count());
 
-                if(getLineAttribute().getWidth())
+                if(!getLineAttribute().isDefault() && getLineAttribute().getWidth())
                 {
                     // create fat line data
                     const double fHalfLineWidth(getLineAttribute().getWidth() / 2.0);
@@ -293,7 +296,11 @@ namespace drawinglayer
                 else
                 {
                     // prepare return value
-                    const Primitive2DReference xRef(new PolyPolygonHairlinePrimitive2D(aHairLinePolyPolygon, getLineAttribute().getColor()));
+                    const Primitive2DReference xRef(
+                        new PolyPolygonHairlinePrimitive2D(
+                            aHairLinePolyPolygon,
+                            getLineAttribute().getColor()));
+
                     return Primitive2DSequence(&xRef, 1);
                 }
             }
@@ -519,7 +526,7 @@ namespace drawinglayer
                 double fStart(0.0);
                 double fEnd(0.0);
 
-                if(getStart().isActive())
+                if(!getStart().isDefault() && getStart().isActive())
                 {
                     // create start arrow primitive and consume
                     aArrowA = basegfx::tools::createAreaGeometryForLineStartEnd(
@@ -530,7 +537,7 @@ namespace drawinglayer
                     fStart *= 0.8;
                 }
 
-                if(getEnd().isActive())
+                if(!getEnd().isDefault() && getEnd().isActive())
                 {
                     // create end arrow primitive and consume
                     aArrowB = basegfx::tools::createAreaGeometryForLineStartEnd(
@@ -553,18 +560,24 @@ namespace drawinglayer
             sal_uInt32 nInd(0L);
 
             // add shaft
-            const Primitive2DReference xRefShaft(new PolygonStrokePrimitive2D(aLocalPolygon, getLineAttribute(), getStrokeAttribute()));
+            const Primitive2DReference xRefShaft(new
+                PolygonStrokePrimitive2D(
+                    aLocalPolygon, getLineAttribute(), getStrokeAttribute()));
             aRetval[nInd++] = xRefShaft;
 
             if(aArrowA.count())
             {
-                const Primitive2DReference xRefA(new PolyPolygonColorPrimitive2D(aArrowA, getLineAttribute().getColor()));
+                const Primitive2DReference xRefA(
+                    new PolyPolygonColorPrimitive2D(
+                        aArrowA, getLineAttribute().getColor()));
                 aRetval[nInd++] = xRefA;
             }
 
             if(aArrowB.count())
             {
-                const Primitive2DReference xRefB(new PolyPolygonColorPrimitive2D(aArrowB, getLineAttribute().getColor()));
+                const Primitive2DReference xRefB(
+                    new PolyPolygonColorPrimitive2D(
+                        aArrowB, getLineAttribute().getColor()));
                 aRetval[nInd++] = xRefB;
             }
 

@@ -69,7 +69,7 @@
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>
-#include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include "svditer.hxx"
 #include <svx/svdopath.hxx>
@@ -78,13 +78,14 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
-#include <drawinglayer/attribute/sdrattribute.hxx>
 #include <svx/sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdovirt.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/sdr/primitive2d/sdrprimitivetools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <drawinglayer/attribute/sdrlineattribute.hxx>
+#include <drawinglayer/attribute/sdrlinestartendattribute.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -677,7 +678,7 @@ void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
         createSdrDragEntries();
     }
 
-    // if there are entries, derive OverlayObjects fromthe entries, including
+    // if there are entries, derive OverlayObjects from the entries, including
     // modification from current interactive state
     if(maSdrDragEntries.size())
     {
@@ -726,8 +727,8 @@ void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
 
         if(aResultTransparent.hasElements())
         {
-            drawinglayer::primitive2d::Primitive2DReference aUnifiedAlphaPrimitive2D(new drawinglayer::primitive2d::UnifiedAlphaPrimitive2D(aResultTransparent, 0.5));
-            aResultTransparent = drawinglayer::primitive2d::Primitive2DSequence(&aUnifiedAlphaPrimitive2D, 1);
+            drawinglayer::primitive2d::Primitive2DReference aUnifiedTransparencePrimitive2D(new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(aResultTransparent, 0.5));
+            aResultTransparent = drawinglayer::primitive2d::Primitive2DSequence(&aUnifiedTransparencePrimitive2D, 1);
 
             sdr::overlay::OverlayObject* pNewOverlayObject = new sdr::overlay::OverlayPrimitive2DSequenceObject(aResultTransparent);
             rOverlayManager.add(*pNewOverlayObject);
@@ -822,38 +823,36 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragMethod::AddConnectorOverla
                     // this polygon is a temporary calculated connector path, so it is not possible to fetch
                     // the needed primitives directly from the pEdge object which does not get changed. If full
                     // drag is on, use the SdrObjects ItemSet to create a adequate representation
-                    if(getSolidDraggingActive())
+                    bool bUseSolidDragging(getSolidDraggingActive());
+
+                    if(bUseSolidDragging)
+                    {
+                        // switch off solid dragging if connector is not visible
+                        if(!pEdge->HasLineStyle())
+                        {
+                            bUseSolidDragging = false;
+                        }
+                    }
+
+                    if(bUseSolidDragging)
                     {
                         const SfxItemSet& rItemSet = pEdge->GetMergedItemSet();
-                        drawinglayer::attribute::SdrLineAttribute* pLine = drawinglayer::primitive2d::createNewSdrLineAttribute(rItemSet);
-                        drawinglayer::attribute::SdrLineStartEndAttribute* pLineStartEnd = 0;
+                        const drawinglayer::attribute::SdrLineAttribute aLine(
+                            drawinglayer::primitive2d::createNewSdrLineAttribute(rItemSet));
 
-                        if(pLine && !pLine->isVisible())
+                        if(!aLine.isDefault())
                         {
-                            delete pLine;
-                            pLine = 0;
-                        }
-
-                        if(pLine)
-                        {
-                            pLineStartEnd = drawinglayer::primitive2d::createNewSdrLineStartEndAttribute(rItemSet, pLine->getWidth());
-
-                            if(pLineStartEnd && !pLineStartEnd->isVisible())
-                            {
-                                delete pLineStartEnd;
-                                pLineStartEnd = 0;
-                            }
+                            const drawinglayer::attribute::SdrLineStartEndAttribute aLineStartEnd(
+                                drawinglayer::primitive2d::createNewSdrLineStartEndAttribute(
+                                    rItemSet,
+                                    aLine.getWidth()));
 
                             drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(
                                 aRetval, drawinglayer::primitive2d::createPolygonLinePrimitive(
-                                    aEdgePolygon, basegfx::B2DHomMatrix(), *pLine, pLineStartEnd));
-
-                            if(pLineStartEnd)
-                            {
-                                delete pLineStartEnd;
-                            }
-
-                            delete pLine;
+                                    aEdgePolygon,
+                                    basegfx::B2DHomMatrix(),
+                                    aLine,
+                                    aLineStartEnd));
                         }
                     }
                     else

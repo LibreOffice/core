@@ -58,16 +58,8 @@ namespace sdr
         {
             drawinglayer::primitive3d::Primitive3DSequence xRetval;
             const SfxItemSet& rItemSet = GetE3dExtrudeObj().GetMergedItemSet();
-            drawinglayer::attribute::SdrLineFillShadowAttribute* pAttribute = drawinglayer::primitive2d::createNewSdrLineFillShadowAttribute(rItemSet, false);
-
-            // for 3D Objects, always create a primitive even when not visible. This is necessary ATM
-            // since e.g. chart geometries rely on the occupied space of non-visible objects
-            if(!pAttribute)
-            {
-                pAttribute = new drawinglayer::attribute::SdrLineFillShadowAttribute(
-                    impCreateFallbackLineAttribute(basegfx::BColor(0.0, 1.0, 0.0)),
-                    0, 0, 0, 0);
-            }
+            const drawinglayer::attribute::SdrLineFillShadowAttribute3D aAttribute(
+                drawinglayer::primitive2d::createNewSdrLineFillShadowAttribute(rItemSet, false));
 
             // get extrude geometry
             const basegfx::B2DPolyPolygon aPolyPolygon(GetE3dExtrudeObj().GetExtrudePolygon());
@@ -93,15 +85,15 @@ namespace sdr
 
             // create primitive and add
             const basegfx::B3DHomMatrix aWorldTransform;
-            const drawinglayer::primitive3d::Primitive3DReference xReference(new drawinglayer::primitive3d::SdrExtrudePrimitive3D(
-                aWorldTransform, aTextureSize, *pAttribute, *pSdr3DObjectAttribute,
-                aPolyPolygon, fDepth, fDiagonal, fBackScale, bSmoothNormals, true, bSmoothLids,
-                bCharacterMode, bCloseFront, bCloseBack));
+            const drawinglayer::primitive3d::Primitive3DReference xReference(
+                new drawinglayer::primitive3d::SdrExtrudePrimitive3D(
+                    aWorldTransform, aTextureSize, aAttribute, *pSdr3DObjectAttribute,
+                    aPolyPolygon, fDepth, fDiagonal, fBackScale, bSmoothNormals, true, bSmoothLids,
+                    bCharacterMode, bCloseFront, bCloseBack));
             xRetval = drawinglayer::primitive3d::Primitive3DSequence(&xReference, 1);
 
             // delete 3D Object Attributes
             delete pSdr3DObjectAttribute;
-            delete pAttribute;
 
             return xRetval;
         }

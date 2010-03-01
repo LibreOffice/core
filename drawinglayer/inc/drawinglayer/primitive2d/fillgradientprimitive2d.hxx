@@ -37,7 +37,7 @@
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_FILLGRADIENTPRIMITIVE2D_HXX
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#include <drawinglayer/attribute/fillattribute.hxx>
+#include <drawinglayer/attribute/fillgradientattribute.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines

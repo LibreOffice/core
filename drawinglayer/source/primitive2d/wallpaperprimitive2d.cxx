@@ -223,7 +223,8 @@ namespace drawinglayer
                         if(bNeedsClipping)
                         {
                             // embed to clipping; this is necessary for tiled fills
-                            const basegfx::B2DPolyPolygon aPolyPolygon(basegfx::tools::createPolygonFromRect(getLocalObjectRange()));
+                            const basegfx::B2DPolyPolygon aPolyPolygon(
+                                basegfx::tools::createPolygonFromRect(getLocalObjectRange()));
                             const drawinglayer::primitive2d::Primitive2DReference xClippedFill(
                                 new drawinglayer::primitive2d::MaskPrimitive2D(
                                     aPolyPolygon,

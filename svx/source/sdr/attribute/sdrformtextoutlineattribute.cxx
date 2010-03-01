@@ -32,10 +32,8 @@
 #include "precompiled_svx.hxx"
 
 #include <svx/sdr/attribute/sdrformtextoutlineattribute.hxx>
-
-//////////////////////////////////////////////////////////////////////////////
-// pointer compare define
-#define pointerOrContentEqual(p, q) ((p == q) || (p && q && *p == *q))
+#include <drawinglayer/attribute/lineattribute.hxx>
+#include <drawinglayer/attribute/strokeattribute.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -43,21 +41,146 @@ namespace drawinglayer
 {
     namespace attribute
     {
+        class ImpSdrFormTextOutlineAttribute
+        {
+        public:
+            // refcounter
+            sal_uInt32                          mnRefCount;
+
+            // one set of attributes for FormText (FontWork) outline visualisation
+            LineAttribute                       maLineAttribute;
+            StrokeAttribute                     maStrokeAttribute;
+            sal_uInt8                           mnTransparence;
+
+            ImpSdrFormTextOutlineAttribute(
+                const LineAttribute& rLineAttribute,
+                const StrokeAttribute& rStrokeAttribute,
+                sal_uInt8 nTransparence)
+            :   mnRefCount(0),
+                maLineAttribute(rLineAttribute),
+                maStrokeAttribute(rStrokeAttribute),
+                mnTransparence(nTransparence)
+            {
+            }
+
+            // data read access
+            const LineAttribute& getLineAttribute() const { return maLineAttribute; }
+            const StrokeAttribute& getStrokeAttribute() const { return maStrokeAttribute; }
+            sal_uInt8 getTransparence() const { return mnTransparence; }
+
+            // compare operator
+            bool operator==(const ImpSdrFormTextOutlineAttribute& rCandidate) const
+            {
+                return (getLineAttribute() == rCandidate.getLineAttribute()
+                    && getStrokeAttribute() == rCandidate.getStrokeAttribute()
+                    && getTransparence() == rCandidate.getTransparence());
+            }
+
+            static ImpSdrFormTextOutlineAttribute* get_global_default()
+            {
+                static ImpSdrFormTextOutlineAttribute* pDefault = 0;
+
+                if(!pDefault)
+                {
+                    pDefault = new ImpSdrFormTextOutlineAttribute(
+                        LineAttribute(),
+                        StrokeAttribute(),
+                        0);
+
+                    // never delete; start with RefCount 1, not 0
+                    pDefault->mnRefCount++;
+                }
+
+                return pDefault;
+            }
+        };
+
         SdrFormTextOutlineAttribute::SdrFormTextOutlineAttribute(
             const LineAttribute& rLineAttribute,
             const StrokeAttribute& rStrokeAttribute,
             sal_uInt8 nTransparence)
-        :   maLineAttribute(rLineAttribute),
-            maStrokeAttribute(rStrokeAttribute),
-            mnTransparence(nTransparence)
+        :   mpSdrFormTextOutlineAttribute(new ImpSdrFormTextOutlineAttribute(
+                rLineAttribute, rStrokeAttribute, nTransparence))
         {
+        }
+
+        SdrFormTextOutlineAttribute::SdrFormTextOutlineAttribute()
+        :   mpSdrFormTextOutlineAttribute(ImpSdrFormTextOutlineAttribute::get_global_default())
+        {
+            mpSdrFormTextOutlineAttribute->mnRefCount++;
+        }
+
+        SdrFormTextOutlineAttribute::SdrFormTextOutlineAttribute(const SdrFormTextOutlineAttribute& rCandidate)
+        :   mpSdrFormTextOutlineAttribute(rCandidate.mpSdrFormTextOutlineAttribute)
+        {
+            mpSdrFormTextOutlineAttribute->mnRefCount++;
+        }
+
+        SdrFormTextOutlineAttribute::~SdrFormTextOutlineAttribute()
+        {
+            if(mpSdrFormTextOutlineAttribute->mnRefCount)
+            {
+                mpSdrFormTextOutlineAttribute->mnRefCount--;
+            }
+            else
+            {
+                delete mpSdrFormTextOutlineAttribute;
+            }
+        }
+
+        bool SdrFormTextOutlineAttribute::isDefault() const
+        {
+            return mpSdrFormTextOutlineAttribute == ImpSdrFormTextOutlineAttribute::get_global_default();
+        }
+
+        SdrFormTextOutlineAttribute& SdrFormTextOutlineAttribute::operator=(const SdrFormTextOutlineAttribute& rCandidate)
+        {
+            if(rCandidate.mpSdrFormTextOutlineAttribute != mpSdrFormTextOutlineAttribute)
+            {
+                if(mpSdrFormTextOutlineAttribute->mnRefCount)
+                {
+                    mpSdrFormTextOutlineAttribute->mnRefCount--;
+                }
+                else
+                {
+                    delete mpSdrFormTextOutlineAttribute;
+                }
+
+                mpSdrFormTextOutlineAttribute = rCandidate.mpSdrFormTextOutlineAttribute;
+                mpSdrFormTextOutlineAttribute->mnRefCount++;
+            }
+
+            return *this;
         }
 
         bool SdrFormTextOutlineAttribute::operator==(const SdrFormTextOutlineAttribute& rCandidate) const
         {
-            return (getLineAttribute() == rCandidate.getLineAttribute()
-                && getStrokeAttribute() == rCandidate.getStrokeAttribute()
-                && getTransparence() == rCandidate.getTransparence());
+            if(rCandidate.mpSdrFormTextOutlineAttribute == mpSdrFormTextOutlineAttribute)
+            {
+                return true;
+            }
+
+            if(rCandidate.isDefault() != isDefault())
+            {
+                return false;
+            }
+
+            return (*rCandidate.mpSdrFormTextOutlineAttribute == *mpSdrFormTextOutlineAttribute);
+        }
+
+        const LineAttribute& SdrFormTextOutlineAttribute::getLineAttribute() const
+        {
+            return mpSdrFormTextOutlineAttribute->getLineAttribute();
+        }
+
+        const StrokeAttribute& SdrFormTextOutlineAttribute::getStrokeAttribute() const
+        {
+            return mpSdrFormTextOutlineAttribute->getStrokeAttribute();
+        }
+
+        sal_uInt8 SdrFormTextOutlineAttribute::getTransparence() const
+        {
+            return mpSdrFormTextOutlineAttribute->getTransparence();
         }
     } // end of namespace attribute
 } // end of namespace drawinglayer

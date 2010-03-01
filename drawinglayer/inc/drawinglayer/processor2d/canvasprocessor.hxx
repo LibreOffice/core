@@ -64,10 +64,10 @@ namespace drawinglayer { namespace primitive2d {
     class MetafilePrimitive2D;
     class TextSimplePortionPrimitive2D;
     class BitmapPrimitive2D;
-    class AlphaPrimitive2D;
+    class TransparencePrimitive2D;
     class PolygonStrokePrimitive2D;
     class FillBitmapPrimitive2D;
-    class UnifiedAlphaPrimitive2D;
+    class UnifiedTransparencePrimitive2D;
 }}
 
 //////////////////////////////////////////////////////////////////////////////
@@ -76,6 +76,11 @@ namespace drawinglayer
 {
     namespace processor2d
     {
+        /** canvasProcessor2D class
+
+            A basic implementation of a renderer for com::sun::star::rendering::XCanvas
+            as a target
+         */
         class canvasProcessor2D : public BaseProcessor2D
         {
         private:
@@ -111,10 +116,10 @@ namespace drawinglayer
             void impRenderMetafilePrimitive2D(const primitive2d::MetafilePrimitive2D& rMetaCandidate);
             void impRenderTextSimplePortionPrimitive2D(const primitive2d::TextSimplePortionPrimitive2D& rTextCandidate);
             void impRenderBitmapPrimitive2D(const primitive2d::BitmapPrimitive2D& rBitmapCandidate);
-            void impRenderAlphaPrimitive2D(const primitive2d::AlphaPrimitive2D& rAlphaCandidate);
+            void impRenderTransparencePrimitive2D(const primitive2d::TransparencePrimitive2D& rTransparenceCandidate);
             void impRenderPolygonStrokePrimitive2D(const primitive2d::PolygonStrokePrimitive2D& rPolygonStrokePrimitive);
             void impRenderFillBitmapPrimitive2D(const primitive2d::FillBitmapPrimitive2D& rFillBitmapPrimitive2D);
-            void impRenderUnifiedAlphaPrimitive2D(const primitive2d::UnifiedAlphaPrimitive2D& rUniAlphaCandidate);
+            void impRenderUnifiedTransparencePrimitive2D(const primitive2d::UnifiedTransparencePrimitive2D& rUniTransparenceCandidate);
 
         public:
             canvasProcessor2D(

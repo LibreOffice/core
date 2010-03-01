@@ -68,18 +68,15 @@ public:
 class SVX_DLLPUBLIC SdrMeasureObj : public SdrTextObj
 {
 private:
-    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
-
     // to allow sdr::properties::MeasureProperties access to SetTextDirty()
     friend class sdr::properties::MeasureProperties;
 
     friend class                SdrMeasureField;
 
-    // DrawContact section
-private:
-    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
-
 protected:
+    virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
+
     Point                       aPt1;
     Point                       aPt2;
     FASTBOOL                    bTextDirty;

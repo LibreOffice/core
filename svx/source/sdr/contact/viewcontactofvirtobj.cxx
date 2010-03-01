@@ -36,6 +36,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <vcl/outdev.hxx>
+#include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -77,29 +78,39 @@ namespace sdr
 
         drawinglayer::primitive2d::Primitive2DSequence ViewContactOfVirtObj::createViewIndependentPrimitive2DSequence() const
         {
-            drawinglayer::primitive2d::Primitive2DSequence xRetval;
+            // create displacement transformation if we have content
+            basegfx::B2DHomMatrix aObjectMatrix;
+            Point aAnchor(GetVirtObj().GetAnchorPos());
+
+            if(aAnchor.X() || aAnchor.Y())
+            {
+                aObjectMatrix.set(0, 2, aAnchor.X());
+                aObjectMatrix.set(1, 2, aAnchor.Y());
+            }
 
             // use method from referenced object to get the Primitive2DSequence
-            const drawinglayer::primitive2d::Primitive2DSequence xSequenceVirtual(GetVirtObj().GetReferencedObj().GetViewContact().getViewIndependentPrimitive2DSequence());
+            const drawinglayer::primitive2d::Primitive2DSequence xSequenceVirtual(
+                GetVirtObj().GetReferencedObj().GetViewContact().getViewIndependentPrimitive2DSequence());
 
             if(xSequenceVirtual.hasElements())
             {
-                // create displacement transformation if we have content
-                ::basegfx::B2DHomMatrix aObjectMatrix;
-                Point aAnchor(GetVirtObj().GetAnchorPos());
-
-                if(aAnchor.X() || aAnchor.Y())
-                {
-                    aObjectMatrix.set(0, 2, aAnchor.X());
-                    aObjectMatrix.set(1, 2, aAnchor.Y());
-                }
-
                 // create transform primitive
-                const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::TransformPrimitive2D(aObjectMatrix, xSequenceVirtual));
-                xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
-            }
+                const drawinglayer::primitive2d::Primitive2DReference xReference(
+                    new drawinglayer::primitive2d::TransformPrimitive2D(
+                        aObjectMatrix,
+                        xSequenceVirtual));
 
-            return xRetval;
+                return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+            }
+            else
+            {
+                // always append an invisible outline for the cases where no visible content exists
+                const drawinglayer::primitive2d::Primitive2DReference xReference(
+                    drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
+                        false, aObjectMatrix));
+
+                return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+            }
         }
     } // end of namespace contact
 } // end of namespace sdr

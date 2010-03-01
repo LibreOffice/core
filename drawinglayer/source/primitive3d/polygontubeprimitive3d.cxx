@@ -65,7 +65,7 @@ namespace drawinglayer
                 // may exclusively change static data, use mutex
                 ::osl::Mutex m_mutex;
 
-                if(nSegments != nLineTubeSegments || rMaterial != aLineMaterial)
+                if(nSegments != nLineTubeSegments || !(rMaterial == aLineMaterial))
                 {
                     nLineTubeSegments = nSegments;
                     aLineMaterial = rMaterial;
@@ -126,7 +126,7 @@ namespace drawinglayer
                 // may exclusively change static data, use mutex
                 ::osl::Mutex m_mutex;
 
-                if(nSegments != nLineCapSegments || rMaterial != aLineMaterial)
+                if(nSegments != nLineCapSegments || !(rMaterial == aLineMaterial))
                 {
                     nLineCapSegments = nSegments;
                     aLineMaterial = rMaterial;

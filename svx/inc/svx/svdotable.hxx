@@ -315,14 +315,10 @@ public:
 private:
     void init( sal_Int32 nColumns, sal_Int32 nRows );
 
-    // BaseProperties section
-    SVX_DLLPRIVATE virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
-
-    // DrawContact section
-private:
+protected:
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact();
 
-protected:
     virtual SdrObjGeoData* NewGeoData() const;
     virtual void SaveGeoData(SdrObjGeoData& rGeo) const;
     virtual void RestGeoData(const SdrObjGeoData& rGeo);

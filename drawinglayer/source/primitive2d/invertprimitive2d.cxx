@@ -2,7 +2,7 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
- *  $RCSfile: unifiedalphaprimitive2d.cxx,v $
+ *  $RCSfile: UnifiedTransparencePrimitive2D.cxx,v $
  *
  *  $Revision: 1.5 $
  *

@@ -587,22 +587,6 @@ namespace sdr
                 bHintUsed = sal_True;
             }
 
-            // #111111#
-            // When it's the BackgroundObject, set the MasterPage to changed to
-            // get a refresh for the evtl. changed BackgroundStyle
-
-            // #114265#
-            // To only invalidate the page when the StyleSheet change happens,
-            // some more rigid testing is necessary.
-            const SfxSimpleHint *pSimpleHint = PTR_CAST(SfxSimpleHint, &rHint);
-
-            if(pSimpleHint
-                && pSimpleHint->GetId() == SFX_HINT_DATACHANGED
-                && GetSdrObject().IsMasterPageBackgroundObject())
-            {
-                GetSdrObject().GetPage()->ActionChanged();
-            }
-
             if(!bHintUsed)
             {
                 // forward to SdrObject ATM. Not sure if this will be necessary

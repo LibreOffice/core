@@ -50,7 +50,7 @@ namespace drawinglayer { namespace attribute {
     class SdrShadowTextAttribute;
     class SdrLineShadowTextAttribute;
     class SdrLineFillShadowTextAttribute;
-    class SdrLineFillShadowAttribute;
+    class SdrLineFillShadowAttribute3D;
     class SdrSceneAttribute;
     class SdrLightingAttribute;
     class SdrFillTextAttribute;
@@ -67,13 +67,21 @@ namespace drawinglayer
     namespace primitive2d
     {
         // SdrAttribute creators
-        attribute::SdrLineAttribute* createNewSdrLineAttribute(const SfxItemSet& rSet);
-        attribute::SdrLineStartEndAttribute* createNewSdrLineStartEndAttribute(const SfxItemSet& rSet, double fWidth);
-        attribute::SdrShadowAttribute* createNewSdrShadowAttribute(const SfxItemSet& rSet);
-        attribute::SdrFillAttribute* createNewSdrFillAttribute(const SfxItemSet& rSet);
+        attribute::SdrLineAttribute createNewSdrLineAttribute(
+            const SfxItemSet& rSet);
+
+        attribute::SdrLineStartEndAttribute createNewSdrLineStartEndAttribute(
+            const SfxItemSet& rSet,
+            double fWidth);
+
+        attribute::SdrShadowAttribute createNewSdrShadowAttribute(
+            const SfxItemSet& rSet);
+
+        attribute::SdrFillAttribute createNewSdrFillAttribute(
+            const SfxItemSet& rSet);
 
         // #i101508# Support handing over given text-to-border distances
-        attribute::SdrTextAttribute* createNewSdrTextAttribute(
+        attribute::SdrTextAttribute createNewSdrTextAttribute(
             const SfxItemSet& rSet,
             const SdrText& rText,
             const sal_Int32* pLeft = 0,
@@ -81,20 +89,37 @@ namespace drawinglayer
             const sal_Int32* pRight = 0,
             const sal_Int32* pLower = 0);
 
-        attribute::FillGradientAttribute* createNewTransparenceGradientAttribute(const SfxItemSet& rSet);
-        attribute::SdrFillBitmapAttribute* createNewSdrFillBitmapAttribute(const SfxItemSet& rSet);
-        attribute::SdrShadowTextAttribute* createNewSdrShadowTextAttribute(
+        attribute::FillGradientAttribute createNewTransparenceGradientAttribute(
+            const SfxItemSet& rSet);
+
+        attribute::SdrFillBitmapAttribute createNewSdrFillBitmapAttribute(
+            const SfxItemSet& rSet);
+
+        attribute::SdrShadowTextAttribute createNewSdrShadowTextAttribute(
             const SfxItemSet& rSet,
-            const SdrText& rText,
+            const SdrText* pText,
             bool bSuppressText); // #i98072# added option to suppress text on demand
-        attribute::SdrLineShadowTextAttribute* createNewSdrLineShadowTextAttribute(const SfxItemSet& rSet, const SdrText& rText);
-        attribute::SdrLineFillShadowTextAttribute* createNewSdrLineFillShadowTextAttribute(const SfxItemSet& rSet, const SdrText& rText);
-        attribute::SdrLineFillShadowAttribute* createNewSdrLineFillShadowAttribute(const SfxItemSet& rSet, bool bSuppressFill);
-        attribute::SdrSceneAttribute* createNewSdrSceneAttribute(const SfxItemSet& rSet);
-        attribute::SdrLightingAttribute* createNewSdrLightingAttribute(const SfxItemSet& rSet);
+
+        attribute::SdrLineShadowTextAttribute createNewSdrLineShadowTextAttribute(
+            const SfxItemSet& rSet,
+            const SdrText* pText);
+
+        attribute::SdrLineFillShadowTextAttribute createNewSdrLineFillShadowTextAttribute(
+            const SfxItemSet& rSet,
+            const SdrText* pText);
+
+        attribute::SdrLineFillShadowAttribute3D createNewSdrLineFillShadowAttribute(
+            const SfxItemSet& rSet,
+            bool bSuppressFill);
+
+        attribute::SdrSceneAttribute createNewSdrSceneAttribute(
+            const SfxItemSet& rSet);
+
+        attribute::SdrLightingAttribute createNewSdrLightingAttribute(
+            const SfxItemSet& rSet);
 
         // #i101508# Support handing over given text-to-border distances
-        attribute::SdrFillTextAttribute* createNewSdrFillTextAttribute(
+        attribute::SdrFillTextAttribute createNewSdrFillTextAttribute(
             const SfxItemSet& rSet,
             const SdrText* pSdrText,
             const sal_Int32* pLeft = 0,
@@ -103,7 +128,11 @@ namespace drawinglayer
             const sal_Int32* pLower = 0);
 
         // helpers
-        void calculateRelativeCornerRadius(sal_Int32 nRadius, const ::basegfx::B2DRange& rObjectRange, double& rfCornerRadiusX, double& rfCornerRadiusY);
+        void calculateRelativeCornerRadius(
+            sal_Int32 nRadius,
+            const ::basegfx::B2DRange& rObjectRange,
+            double& rfCornerRadiusX,
+            double& rfCornerRadiusY);
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

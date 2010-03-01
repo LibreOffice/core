@@ -53,10 +53,10 @@
 #include <drawinglayer/primitive2d/discretebitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <vcl/salbtype.hxx>
-#include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/fillgradientprimitive2d.hxx>
 #include <vcl/svapp.hxx>
-#include <drawinglayer/primitive2d/alphaprimitive2d.hxx>
+#include <drawinglayer/primitive2d/transparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/fillhatchprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygonclipper.hxx>
@@ -589,7 +589,14 @@ namespace drawinglayer
         Primitive2DSequence NonOverlappingFillGradientPrimitive2D::create2DDecomposition(
             const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            return createFill(false);
+            if(!getFillGradient().isDefault())
+            {
+                return createFill(false);
+            }
+            else
+            {
+                return Primitive2DSequence();
+            }
         }
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -841,7 +848,7 @@ namespace
     }
 
     /** helper to create a regular BotmapEx from a MaskAction (definitions
-        which use a bitmap without alpha but define one of the colors as
+        which use a bitmap without transparence but define one of the colors as
         transparent)
      */
     BitmapEx createMaskBmpEx(const Bitmap& rBitmap, const Color& rMaskColor)
@@ -974,7 +981,42 @@ namespace
         TargetHolders& rTargetHolders,
         PropertyHolders& rPropertyHolders)
     {
-        // process evtl. created primitives which belong to the current region settings
+        const bool bNewActive(pRegion && !pRegion->IsEmpty());
+
+        // #i108636# The handlig of new ClipRegions was not done as good as possible
+        // in the first version of this interpreter; e.g. when a ClipRegion was set
+        // initially and then using a lot of push/pop actions, the pop always leads
+        // to setting a 'new' ClipRegion which indeed is the return to the ClipRegion
+        // of the properties next on the stack.
+        // This ClipRegion is identical to the current one, so there is no need to
+        // create a MaskPrimitive2D containing the up-to-now created primitives, but
+        // this was done before. While this does not lead to wrong primitive
+        // representations of the metafile data, it creates unneccesarily expensive
+        // representations. Just detecting when no really 'new' ClipRegion gets set
+        // solves the problem.
+
+        if(!rPropertyHolders.Current().getRegionActive() && !bNewActive)
+        {
+            // no active region exchanged by no new one, done
+            return;
+        }
+
+        if(rPropertyHolders.Current().getRegionActive() && bNewActive)
+        {
+            // active region and new active region
+            if(rPropertyHolders.Current().getRegion() == *pRegion)
+            {
+                // new region is the same as the old region, done
+                return;
+            }
+        }
+
+        // Here the old region and the new one are definitively different, maybe
+        // old one and/or new one is not active.
+
+        // Handle deletion of old region.The process evtl. created primitives which
+        // belong to this active region. These need to be embedded to a
+        // MaskPrimitive2D accordingly.
         if(rPropertyHolders.Current().getRegionActive() && rTargetHolders.size() > 1)
         {
             drawinglayer::primitive2d::Primitive2DSequence aSubContent;
@@ -994,8 +1036,8 @@ namespace
             }
         }
 
-        // apply new settings
-        const bool bNewActive(pRegion && !pRegion->IsEmpty());
+        // apply new settings to current properties by setting
+        // the new region now
         rPropertyHolders.Current().setRegionActive(bNewActive);
 
         if(bNewActive)
@@ -1252,13 +1294,12 @@ namespace
         const XubString& rText,
         sal_uInt16 nTextStart,
         sal_uInt16 nTextLength,
-        sal_Int32* pDXArray,
+        const ::std::vector< double >& rDXArray,
         TargetHolder& rTarget,
         PropertyHolder& rProperty)
     {
         drawinglayer::primitive2d::BasePrimitive2D* pResult = 0;
         const Font& rFont = rProperty.getFont();
-        std::vector< double > aDXArray;
         basegfx::B2DVector aAlignmentOffset(0.0, 0.0);
 
         if(nTextLength)
@@ -1275,17 +1316,6 @@ namespace
 
             // add TextStartPosition
             aTextTransform.translate(rTextStartPosition.X(), rTextStartPosition.Y());
-
-            // preapare DXArray (if used)
-            if(pDXArray && nTextLength)
-            {
-                aDXArray.reserve(nTextLength);
-
-                for(xub_StrLen a(0); a < nTextLength; a++)
-                {
-                    aDXArray.push_back((double)(*(pDXArray + a)));
-                }
-            }
 
             // prepare FontColor and Locale
             const basegfx::BColor aFontColor(rProperty.getTextColor());
@@ -1346,7 +1376,7 @@ namespace
                     rText,
                     nTextStart,
                     nTextLength,
-                    aDXArray,
+                    rDXArray,
                     aFontAttribute,
                     aLocale,
                     aFontColor,
@@ -1373,7 +1403,7 @@ namespace
                     rText,
                     nTextStart,
                     nTextLength,
-                    aDXArray,
+                    rDXArray,
                     aFontAttribute,
                     aLocale,
                     aFontColor);
@@ -1389,13 +1419,13 @@ namespace
             // get text width
             double fTextWidth(0.0);
 
-            if(aDXArray.empty())
+            if(rDXArray.empty())
             {
                 fTextWidth = aTextLayouterDevice.getTextWidth(rText, nTextStart, nTextLength);
             }
             else
             {
-                fTextWidth = aDXArray.back();
+                fTextWidth = rDXArray.back();
             }
 
             if(basegfx::fTools::more(fTextWidth, 0.0))
@@ -1950,15 +1980,24 @@ namespace
                 {
                     /** CHECKED, WORKS WELL */
                     const MetaTextAction* pA = (const MetaTextAction*)pAction;
+                    sal_uInt32 nTextLength(pA->GetLen());
+                    const sal_uInt32 nTextIndex(pA->GetIndex());
+                    const sal_uInt32 nStringLength(pA->GetText().Len());
 
-                    if(pA->GetLen() && rPropertyHolders.Current().getTextColorActive())
+                    if(nTextLength + nTextIndex > nStringLength)
                     {
+                        nTextLength = nStringLength - nTextIndex;
+                    }
+
+                    if(nTextLength && rPropertyHolders.Current().getTextColorActive())
+                    {
+                        const std::vector< double > aDXArray;
                         proccessMetaTextAction(
                             pA->GetPoint(),
                             pA->GetText(),
-                            pA->GetIndex(),
-                            pA->GetLen(),
-                            0,
+                            nTextIndex,
+                            nTextLength,
+                            aDXArray,
                             rTargetHolders.Current(),
                             rPropertyHolders.Current());
                     }
@@ -1969,15 +2008,37 @@ namespace
                 {
                     /** CHECKED, WORKS WELL */
                     const MetaTextArrayAction* pA = (const MetaTextArrayAction*)pAction;
+                    sal_uInt32 nTextLength(pA->GetLen());
+                    const sal_uInt32 nTextIndex(pA->GetIndex());
+                    const sal_uInt32 nStringLength(pA->GetText().Len());
 
-                    if(pA->GetLen() && rPropertyHolders.Current().getTextColorActive())
+                    if(nTextLength + nTextIndex > nStringLength)
                     {
+                        nTextLength = nStringLength - nTextIndex;
+                    }
+
+                    if(nTextLength && rPropertyHolders.Current().getTextColorActive())
+                    {
+                        // preapare DXArray (if used)
+                        std::vector< double > aDXArray;
+                        sal_Int32* pDXArray = pA->GetDXArray();
+
+                        if(pDXArray)
+                        {
+                            aDXArray.reserve(nTextLength);
+
+                            for(sal_uInt32 a(0); a < nTextLength; a++)
+                            {
+                                aDXArray.push_back((double)(*(pDXArray + a)));
+                            }
+                        }
+
                         proccessMetaTextAction(
                             pA->GetPoint(),
                             pA->GetText(),
-                            pA->GetIndex(),
-                            pA->GetLen(),
-                            pA->GetDXArray(),
+                            nTextIndex,
+                            nTextLength,
+                            aDXArray,
                             rTargetHolders.Current(),
                             rPropertyHolders.Current());
                     }
@@ -1986,10 +2047,65 @@ namespace
                 }
                 case META_STRETCHTEXT_ACTION :
                 {
-                    /** NEEDS IMPLEMENTATION */
-                    OSL_ENSURE(false, "META_STRETCHTEXT_ACTION requested (!)");
-                    // use OutputDevice::GetTextArray() to map the...
-                    // const MetaStretchTextAction* pA = (const MetaStretchTextAction*)pAction;
+                    // #i108440# StarMath uses MetaStretchTextAction, thus support is needed.
+                    // It looks as if it pretty never really uses a width different from
+                    // the default text-layout width, but it's not possible to be sure.
+                    // Implemented getting the DXArray and checking for scale at all. If
+                    // scale is more than 3.5% different, scale the DXArray before usage.
+                    // New status:
+
+                    /** CHECKED, WORKS WELL */
+                    const MetaStretchTextAction* pA = (const MetaStretchTextAction*)pAction;
+                    sal_uInt32 nTextLength(pA->GetLen());
+                    const sal_uInt32 nTextIndex(pA->GetIndex());
+                    const sal_uInt32 nStringLength(pA->GetText().Len());
+
+                    if(nTextLength + nTextIndex > nStringLength)
+                    {
+                        nTextLength = nStringLength - nTextIndex;
+                    }
+
+                    if(nTextLength && rPropertyHolders.Current().getTextColorActive())
+                    {
+                        drawinglayer::primitive2d::TextLayouterDevice aTextLayouterDevice;
+                        aTextLayouterDevice.setFont(rPropertyHolders.Current().getFont());
+
+                        ::std::vector< double > aTextArray(
+                            aTextLayouterDevice.getTextArray(
+                                pA->GetText(),
+                                nTextIndex,
+                                nTextLength));
+
+                        if(!aTextArray.empty())
+                        {
+                            const double fTextLength(aTextArray.back());
+
+                            if(0.0 != fTextLength && pA->GetWidth())
+                            {
+                                const double fRelative(pA->GetWidth() / fTextLength);
+
+                                if(fabs(fRelative - 1.0) >= 0.035)
+                                {
+                                    // when derivation is more than 3,5% from default text size,
+                                    // scale the DXArray
+                                    for(sal_uInt32 a(0); a < aTextArray.size(); a++)
+                                    {
+                                        aTextArray[a] *= fRelative;
+                                    }
+                                }
+                            }
+                        }
+
+                        proccessMetaTextAction(
+                            pA->GetPoint(),
+                            pA->GetText(),
+                            nTextIndex,
+                            nTextLength,
+                            aTextArray,
+                            rTargetHolders.Current(),
+                            rPropertyHolders.Current());
+                    }
+
                     break;
                 }
                 case META_TEXTRECT_ACTION :
@@ -1998,8 +2114,9 @@ namespace
                     // OSL_ENSURE(false, "META_TEXTRECT_ACTION requested (!)");
                     const MetaTextRectAction* pA = (const MetaTextRectAction*)pAction;
                     const Rectangle& rRectangle = pA->GetRect();
+                    const sal_uInt32 nStringLength(pA->GetText().Len());
 
-                    if(!rRectangle.IsEmpty() && 0 != pA->GetText().Len())
+                    if(!rRectangle.IsEmpty() && 0 != nStringLength)
                     {
                         // The problem with this action is that it describes unlayouted text
                         // and the layout capabilities are in EditEngine/Outliner in SVX. The
@@ -2728,7 +2845,7 @@ namespace
                             if(aSubContent.hasElements())
                             {
                                 rTargetHolders.Current().append(
-                                    new drawinglayer::primitive2d::UnifiedAlphaPrimitive2D(
+                                    new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
                                         aSubContent,
                                         nTransparence * 0.01));
                             }
@@ -2839,9 +2956,9 @@ namespace
 
                                 if(aAttribute.getStartColor() == aAttribute.getEndColor())
                                 {
-                                    // not really a gradient; create UnifiedAlphaPrimitive2D
+                                    // not really a gradient; create UnifiedTransparencePrimitive2D
                                     rTargetHolders.Current().append(
-                                        new drawinglayer::primitive2d::UnifiedAlphaPrimitive2D(
+                                        new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
                                             xSubContent,
                                             aAttribute.getStartColor().luminance()));
                                 }
@@ -2853,17 +2970,17 @@ namespace
                                         aTargetRectangle.Right(), aTargetRectangle.Bottom());
                                     aRange.transform(rPropertyHolders.Current().getTransformation());
 
-                                    // prepare gradient for alpha content
-                                    const drawinglayer::primitive2d::Primitive2DReference xAlpha(
+                                    // prepare gradient for transparent content
+                                    const drawinglayer::primitive2d::Primitive2DReference xTransparence(
                                         new drawinglayer::primitive2d::FillGradientPrimitive2D(
                                             aRange,
                                             aAttribute));
 
-                                    // create alpha primitive
+                                    // create transparence primitive
                                     rTargetHolders.Current().append(
-                                        new drawinglayer::primitive2d::AlphaPrimitive2D(
+                                        new drawinglayer::primitive2d::TransparencePrimitive2D(
                                             xSubContent,
-                                            drawinglayer::primitive2d::Primitive2DSequence(&xAlpha, 1)));
+                                            drawinglayer::primitive2d::Primitive2DSequence(&xTransparence, 1)));
                                 }
                             }
                         }

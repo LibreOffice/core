@@ -39,6 +39,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -81,25 +82,22 @@ namespace sdr
                     drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(xRetval, aCandSeq);
                 }
             }
-
-            if(xRetval.hasElements())
-            {
-                return xRetval;
-            }
             else
             {
-                // create a gray placeholder hairline polygon in object size. Use the model data directly. For empty groups,
-                // this is SdrObject::aOutRect, as can be seen in SdrObjGroup::GetSnapRect(). Access that using GetLastBoundRect()
-                // to not execute anything.
+                // append an invisible outline for the cases where no visible content exists
                 const Rectangle aCurrentBoundRect(GetSdrObjGroup().GetLastBoundRect());
-                const basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(
-                    aCurrentBoundRect.Left(), aCurrentBoundRect.Top(), aCurrentBoundRect.Right(), aCurrentBoundRect.Bottom())));
-                const basegfx::BColor aGrayTone(0xc0 / 255.0, 0xc0 / 255.0, 0xc0 / 255.0);
-                const drawinglayer::primitive2d::Primitive2DReference xReference(new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(aOutline, aGrayTone));
+                const basegfx::B2DRange aCurrentRange(
+                    aCurrentBoundRect.Left(), aCurrentBoundRect.Top(),
+                    aCurrentBoundRect.Right(), aCurrentBoundRect.Bottom());
 
-                // The replacement object may also get a text like 'empty group' here later
-                return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+                const drawinglayer::primitive2d::Primitive2DReference xReference(
+                    drawinglayer::primitive2d::createHiddenGeometryPrimitives2D(
+                        false, aCurrentRange));
+
+                xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
             }
+
+            return xRetval;
         }
     } // end of namespace contact
 } // end of namespace sdr

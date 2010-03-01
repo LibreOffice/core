@@ -37,12 +37,14 @@
 #define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_POLYPOLYGONPRIMITIVE2D_HXX
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#include <drawinglayer/attribute/fillattribute.hxx>
 #include <drawinglayer/attribute/fillbitmapattribute.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <drawinglayer/attribute/lineattribute.hxx>
 #include <drawinglayer/attribute/strokeattribute.hxx>
 #include <drawinglayer/attribute/linestartendattribute.hxx>
+#include <drawinglayer/attribute/fillgradientattribute.hxx>
+#include <drawinglayer/attribute/fillhatchattribute.hxx>
+#include <basegfx/color/bcolor.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // PolyPolygonHairlinePrimitive2D class
@@ -409,7 +411,7 @@ namespace drawinglayer
         /** PolyPolygonBitmapPrimitive2D class
 
             This primitive defines a PolyPolygon filled with bitmap data
-            (including alpha). The decomosition will create a MaskPrimitive2D
+            (including transparence). The decomosition will create a MaskPrimitive2D
             containing a FillBitmapPrimitive2D.
          */
         class PolyPolygonBitmapPrimitive2D : public BufferedDecompositionPrimitive2D

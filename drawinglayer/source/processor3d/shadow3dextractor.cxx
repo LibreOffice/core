@@ -39,7 +39,7 @@
 #include <drawinglayer/processor3d/shadow3dextractor.hxx>
 #include <drawinglayer/primitive3d/shadowprimitive3d.hxx>
 #include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
-#include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
+#include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive3d/transformprimitive3d.hxx>
 #include <drawinglayer/primitive3d/polygonprimitive3d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -99,7 +99,7 @@ namespace drawinglayer
                     {
                         // create simpleTransparencePrimitive, add created primitives
                         const primitive2d::Primitive2DSequence aNewTransPrimitiveVector(&xRef, 1L);
-                        const primitive2d::Primitive2DReference xRef2(new primitive2d::UnifiedAlphaPrimitive2D(aNewTransPrimitiveVector, rPrimitive.getShadowTransparence()));
+                        const primitive2d::Primitive2DReference xRef2(new primitive2d::UnifiedTransparencePrimitive2D(aNewTransPrimitiveVector, rPrimitive.getShadowTransparence()));
                         primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(*mpPrimitive2DSequence, xRef2);
                     }
                     else

@@ -89,13 +89,20 @@ namespace drawinglayer
             const basegfx::B2DVector& rTextureSize,
             const attribute::Sdr3DObjectAttribute& aSdr3DObjectAttribute,
             const attribute::SdrFillAttribute& rFill,
-            const attribute::FillGradientAttribute* pFillGradient = 0L);
+            const attribute::FillGradientAttribute& rFillGradient);
 
         Primitive3DSequence createShadowPrimitive3D(
             const Primitive3DSequence& rSource,
             const attribute::SdrShadowAttribute& rShadow,
             bool bShadow3D);
-    } // end of namespace overlay
+
+        Primitive3DSequence createHiddenGeometryPrimitives3D(
+            const ::std::vector< basegfx::B3DPolyPolygon >& r3DPolyPolygonVector,
+            const basegfx::B3DHomMatrix& rObjectTransform,
+            const basegfx::B2DVector& rTextureSize,
+            const attribute::Sdr3DObjectAttribute& aSdr3DObjectAttribute);
+
+    } // end of namespace primitive3d
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
