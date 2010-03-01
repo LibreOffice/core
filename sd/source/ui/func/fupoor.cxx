@@ -107,6 +107,7 @@ FuPoor::FuPoor (
       bNoScrollUntilInside (TRUE),
       bScrollable (FALSE),
       bDelayActive (FALSE),
+      bFirstMouseMove (FALSE),
       // #95491# remember MouseButton state
       mnCode(0)
 {
