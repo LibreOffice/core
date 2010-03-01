@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xestyle.hxx,v $
- * $Revision: 1.20.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,9 +31,9 @@
 #include <map>
 #include <tools/mempool.hxx>
 #include <tools/string.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/nfkeytab.hxx>
-#include <svx/svxfont.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/nfkeytab.hxx>
+#include <editeng/svxfont.hxx>
 #include "xerecord.hxx"
 #include "xlstyle.hxx"
 #include "xeroot.hxx"
@@ -139,6 +136,36 @@ const size_t EXC_FONTLIST_NOTFOUND = static_cast< size_t >( -1 );
 
 // ----------------------------------------------------------------------------
 
+/** Static helper functions for font export. */
+class XclExpFontHelper
+{
+public:
+    /** Returns the script type of the first font item found in the item set and its parents. */
+    static sal_Int16    GetFirstUsedScript(
+                            const XclExpRoot& rRoot,
+                            const SfxItemSet& rItemSet );
+
+    /** Returns a VCL font object filled from the passed item set. */
+    static Font         GetFontFromItemSet(
+                            const XclExpRoot& rRoot,
+                            const SfxItemSet& rItemSet,
+                            sal_Int16 nScript );
+
+    /** Returns true, if at least one font related item is set in the passed item set.
+        @param bDeep  true = Searches in parent item sets too. */
+    static bool         CheckItems(
+                            const XclExpRoot& rRoot,
+                            const SfxItemSet& rItemSet,
+                            sal_Int16 nScript,
+                            bool bDeep );
+
+private:
+                            XclExpFontHelper();
+                            ~XclExpFontHelper();
+};
+
+// ----------------------------------------------------------------------------
+
 /** Stores all data of an Excel font and provides export of FONT records. */
 class XclExpFont : public XclExpRecord, protected XclExpRoot
 {
@@ -227,15 +254,6 @@ public:
     /** Writes all FONT records contained in this buffer. */
     virtual void        Save( XclExpStream& rStrm );
     virtual void        SaveXml( XclExpXmlStream& rStrm );
-
-    /** Returns the script type of the first font item found in the item set and its parents. */
-    static sal_Int16    GetFirstUsedScript( const SfxItemSet& rItemSet );
-
-    /** Returns a VCL font object filled from the passed item set. */
-    static Font         GetFontFromItemSet( const SfxItemSet& rItemSet, sal_Int16 nScript );
-    /** Returns true, if at least one font related item is set in the passed item set.
-        @param bDeep  true = Searches in parent item sets too. */
-    static bool         CheckItems( const SfxItemSet& rItemSet, sal_Int16 nScript, bool bDeep );
 
 private:
     /** Initializes the default fonts for the current BIFF version. */

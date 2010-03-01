@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xechart.cxx,v $
- * $Revision: 1.10.62.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,7 +56,7 @@
 #include <com/sun/star/chart2/TickmarkStyle.hpp>
 
 #include <vcl/outdev.hxx>
-#include <svx/escherex.hxx>
+#include <filter/msfilter/escherex.hxx>
 
 #include "document.hxx"
 #include "rangelst.hxx"

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: cellform.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,8 +30,8 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include <sfx2/objsh.hxx>
-#include <svtools/smplhint.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/smplhint.hxx>
+#include <svl/zforlist.hxx>
 
 #include "cellform.hxx"
 #include "cell.hxx"

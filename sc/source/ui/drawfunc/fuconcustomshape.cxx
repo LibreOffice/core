@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fuconcustomshape.cxx,v $
- * $Revision: 1.13.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,20 +29,20 @@
 #include "precompiled_sc.hxx"
 
 #include "fuconcustomshape.hxx"
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include <svx/gallery.hxx>
 #include <sfx2/request.hxx>
 #include <svx/fmmodel.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdoashp.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/sdtagitm.hxx>
 #include "fuconuno.hxx"
 #include "tabvwsh.hxx"
 #include "sc.hrc"
 #include "drawview.hxx"
-#include <svx/adjitem.hxx>
+#include <editeng/adjitem.hxx>
 
 #include <math.h>
 

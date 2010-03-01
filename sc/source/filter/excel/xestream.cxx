@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xestream.cxx,v $
- * $Revision: 1.11.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -257,6 +254,17 @@ void XclExpStream::WriteZeroBytes( sal_Size nBytes )
     }
     else
         WriteRawZeroBytes( nBytes );
+}
+
+void XclExpStream::WriteZeroBytesToRecord( sal_Size nBytes )
+{
+    if (!mbInRec)
+        // not in record.
+        return;
+
+    sal_uInt8 nZero = 0;
+    for (sal_Size i = 0; i < nBytes; ++i)
+        *this << nZero;
 }
 
 sal_Size XclExpStream::CopyFromStream( SvStream& rInStrm, sal_Size nBytes )
@@ -578,7 +586,7 @@ void XclExpBiff8Encrypter::Init( const String& aPass, const sal_uInt8 nDocId[16]
         maCodec.InitKey(mnPassw, mnDocId);
 
         // generate salt hash.
-        ::svx::MSCodec_Std97 aCodec;
+        ::msfilter::MSCodec_Std97 aCodec;
         aCodec.InitKey(mnPassw, mnDocId);
         aCodec.CreateSaltDigest(nSalt, mnSaltDigest);
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: cellsh.cxx,v $
- * $Revision: 1.48.126.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,10 +32,10 @@
 
 #include "scitems.hxx"
 
-#include <svtools/slstitm.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <svl/slstitm.hxx>
+#include <svl/stritem.hxx>
+#include <svl/whiter.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <svtools/cliplistener.hxx>
 #include <svtools/insdlg.hxx>
 #include <sot/formats.hxx>
@@ -49,7 +46,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/clipfmtitem.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 
 #include "cellsh.hxx"
 #include "sc.hrc"

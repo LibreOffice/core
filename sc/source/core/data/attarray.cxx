@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: attarray.cxx,v $
- * $Revision: 1.25.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,13 +34,13 @@
 
 #include "scitems.hxx"
 #include <svx/algitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/bolnitem.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/shaditem.hxx>
-#include <svtools/poolcach.hxx>
-#include <svx/fontitem.hxx>
-#include <vcl/fontcvt.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/bolnitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/shaditem.hxx>
+#include <svl/poolcach.hxx>
+#include <editeng/fontitem.hxx>
+#include <unotools/fontcvt.hxx>
 
 #include "attarray.hxx"
 #include "global.hxx"
@@ -2117,7 +2114,8 @@ void ScAttrArray::InsertRow( SCROW nStartRow, SCSIZE nSize )
     }
 
     // Don't duplicate the merge flags in the inserted row.
-    RemoveFlags( nStartRow, nStartRow+nSize-1, SC_MF_ALL );
+    // #i108488# SC_MF_SCENARIO has to be allowed.
+    RemoveFlags( nStartRow, nStartRow+nSize-1, SC_MF_HOR | SC_MF_VER | SC_MF_AUTO | SC_MF_BUTTON );
 }
 
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vbaaxis.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,8 +29,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <ooo/vba/excel/XAxis.hpp>
 #include <ooo/vba/excel/XChart.hpp>
-#include "vbahelperinterface.hxx"
-
+#include <vbahelper/vbahelperinterface.hxx>
+#include <memory>
 typedef InheritedHelperInterfaceImpl1< ov::excel::XAxis >  ScVbaAxis_BASE;
 class ScVbaChart;
 class ScVbaAxis : public ScVbaAxis_BASE

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ImplUndoManager.cxx,v $
- * $Revision: 1.7.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -487,6 +484,10 @@ void UndoStepsConfigItem::Notify( const Sequence< OUString > & aPropertyNames )
         if( aPropertyNames[nIdx].equals( aUndoStepsPropName ))
             m_rListener.notify( aPropertyNames[nIdx] );
     }
+}
+
+void UndoStepsConfigItem::Commit()
+{
 }
 
 // mtehod is not const, because GetProperties is not const

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fillinfo.cxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,10 +33,10 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/boxitem.hxx>
-#include <svx/bolnitem.hxx>
-#include <svx/editdata.hxx>     // can be removed if table has a bLayoutRTL flag
-#include <svx/shaditem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/bolnitem.hxx>
+#include <editeng/editdata.hxx>     // can be removed if table has a bLayoutRTL flag
+#include <editeng/shaditem.hxx>
 
 #include "fillinfo.hxx"
 #include "document.hxx"
@@ -332,6 +329,8 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
             pInfo->bVOverlapped = FALSE;
             pInfo->bAutoFilter  = FALSE;
             pInfo->bPushButton  = FALSE;
+            pInfo->bPopupButton = false;
+            pInfo->bFilterActive = false;
             pInfo->nRotateDir   = SC_ROTDIR_NONE;
 
             pInfo->bPrinted     = FALSE;                    //  view-intern
@@ -458,6 +457,8 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                         BOOL bAutoFilter  = ((nOverlap & SC_MF_AUTO) != 0);
                         BOOL bPushButton  = ((nOverlap & SC_MF_BUTTON) != 0);
                         BOOL bScenario    = ((nOverlap & SC_MF_SCENARIO) != 0);
+                        bool bPopupButton = ((nOverlap & SC_MF_BUTTON_POPUP) != 0);
+                        bool bFilterActive = ((nOverlap & SC_MF_HIDDEN_MEMBER) != 0);
                         if (bMerged||bHOverlapped||bVOverlapped)
                             bAnyMerged = TRUE;                              // intern
 
@@ -498,6 +499,8 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                 pInfo->bVOverlapped = bVOverlapped;
                                 pInfo->bAutoFilter  = bAutoFilter;
                                 pInfo->bPushButton  = bPushButton;
+                                pInfo->bPopupButton = bPopupButton;
+                                pInfo->bFilterActive = bFilterActive;
                                 pInfo->pLinesAttr   = pLinesAttr;
                                 pInfo->mpTLBRLine   = pTLBRLine;
                                 pInfo->mpBLTRLine   = pBLTRLine;
@@ -512,7 +515,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                         nCurRow >= aEmbedRange.aStart.Row() &&
                                         nCurRow <= aEmbedRange.aEnd.Row();
 
-                                if (bPushButton || bScenario)
+                                if (bScenario)
                                 {
                                     pInfo->pBackground = ScGlobal::GetButtonBrushItem();
                                     pThisRowInfo->bEmptyBack = FALSE;

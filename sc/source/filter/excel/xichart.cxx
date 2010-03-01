@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xichart.cxx,v $
- * $Revision: 1.20.62.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +31,7 @@
 #include "xichart.hxx"
 
 #include <algorithm>
+#include <memory>
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
@@ -75,6 +73,8 @@
 #include "tokenarray.hxx"
 #include "token.hxx"
 #include "compiler.hxx"
+#include "reftokenhelper.hxx"
+#include "chartlis.hxx"
 #include "fprogressbar.hxx"
 #include "xltracer.hxx"
 #include "xistream.hxx"
@@ -794,6 +794,22 @@ Sequence< Reference< XFormattedString > > XclImpChSourceLink::CreateStringSequen
         }
     }
     return ScfApiHelper::VectorToSequence( aStringVec );
+}
+
+void XclImpChSourceLink::FillSourceLink( ::std::vector< ScSharedTokenRef >& rTokens ) const
+{
+    if( !mxTokenArray.is() )
+        // no links to fill.
+        return;
+
+    mxTokenArray->Reset();
+    for (FormulaToken* p = mxTokenArray->First(); p; p = mxTokenArray->Next())
+    {
+        ScSharedTokenRef pToken(static_cast<ScToken*>(p->Clone()));
+        if (ScRefTokenHelper::isRef(pToken))
+            // This is a reference token.  Store it.
+            ScRefTokenHelper::join(rTokens, pToken);
+    }
 }
 
 // Text =======================================================================
@@ -1840,6 +1856,18 @@ Reference< XDataSeries > XclImpChSeries::CreateDataSeries() const
         }
     }
     return xDataSeries;
+}
+
+void XclImpChSeries::FillAllSourceLinks( ::std::vector< ScSharedTokenRef >& rTokens ) const
+{
+    if( mxValueLink.is() )
+        mxValueLink->FillSourceLink( rTokens );
+    if( mxCategLink.is() )
+        mxCategLink->FillSourceLink( rTokens );
+    if( mxTitleLink.is() )
+        mxTitleLink->FillSourceLink( rTokens );
+    if( mxBubbleLink.is() )
+        mxBubbleLink->FillSourceLink( rTokens );
 }
 
 void XclImpChSeries::ReadChSourceLink( XclImpStream& rStrm )
@@ -3488,7 +3516,7 @@ XclImpChTextRef XclImpChChart::GetDefaultText( XclChTextType eTextType ) const
     return maDefTexts.get( nDefTextId );
 }
 
-void XclImpChChart::Convert( Reference< XChartDocument > xChartDoc, XclImpDffConverter& rDffConv ) const
+void XclImpChChart::Convert( Reference< XChartDocument > xChartDoc, XclImpDffConverter& rDffConv, const OUString& rObjName ) const
 {
     // initialize conversion (locks the model to suppress any internal updates)
     InitConversion( xChartDoc );
@@ -3531,6 +3559,22 @@ void XclImpChChart::Convert( Reference< XChartDocument > xChartDoc, XclImpDffCon
 
     // unlock the model
     FinishConversion( rDffConv );
+
+    // start listening to this chart
+    ScDocument& rDoc = GetRoot().GetDoc();
+    if( ScChartListenerCollection* pChartCollection = rDoc.GetChartListenerCollection() )
+    {
+        ::std::auto_ptr< ::std::vector< ScSharedTokenRef > > xRefTokens( new ::std::vector< ScSharedTokenRef > );
+        for( XclImpChSeriesVec::const_iterator aIt = maSeries.begin(), aEnd = maSeries.end(); aIt != aEnd; ++aIt )
+            (*aIt)->FillAllSourceLinks( *xRefTokens );
+        if( !xRefTokens->empty() )
+        {
+            ::std::auto_ptr< ScChartListener > xListener( new ScChartListener( rObjName, &rDoc, xRefTokens.release() ) );
+            xListener->SetUsed( true );
+            xListener->StartListeningTo();
+            pChartCollection->Insert( xListener.release() );
+        }
+    }
 }
 
 void XclImpChChart::ReadChSeries( XclImpStream& rStrm )
@@ -3842,13 +3886,13 @@ sal_Size XclImpChart::GetProgressSize() const
         (mxChartDrawing.is() ? mxChartDrawing->GetProgressSize() : 0);
 }
 
-void XclImpChart::Convert( Reference< XModel > xModel, XclImpDffConverter& rDffConv, const Rectangle& rChartRect ) const
+void XclImpChart::Convert( Reference< XModel > xModel, XclImpDffConverter& rDffConv, const OUString& rObjName, const Rectangle& rChartRect ) const
 {
     Reference< XChartDocument > xChartDoc( xModel, UNO_QUERY );
     if( xChartDoc.is() )
     {
         if( mxChartData.is() )
-            mxChartData->Convert( xChartDoc, rDffConv );
+            mxChartData->Convert( xChartDoc, rDffConv, rObjName );
         if( mxChartDrawing.is() )
             mxChartDrawing->ConvertObjects( rDffConv, xModel, rChartRect );
     }

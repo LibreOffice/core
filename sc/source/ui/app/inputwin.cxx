@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: inputwin.cxx,v $
- * $Revision: 1.57.22.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,30 +28,28 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
-//------------------------------------------------------------------
+#include <algorithm>
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/editview.hxx>
-#include <svx/editstat.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/lspcitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/lspcitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/imgmgr.hxx>
 #include <stdlib.h>     // qsort
-#include <svx/scriptspaceitem.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/scriptspaceitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/help.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 
 #include "inputwin.hxx"
 #include "scmod.hxx"
@@ -75,7 +70,7 @@
 #include "rangeutl.hxx"
 #include "docfunc.hxx"
 #include "funcdesc.hxx"
-#include <svx/fontitem.hxx>
+#include <editeng/fontitem.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include "AccessibleEditObject.hxx"
 #include "AccessibleText.hxx"
@@ -738,7 +733,6 @@ ScTextWnd::ScTextWnd( Window* pParent )
         DragSourceHelper( this ),
         pEditEngine  ( NULL ),
         pEditView    ( NULL ),
-        pAccTextData ( NULL ),
         bIsInsertMode( TRUE ),
         bFormulaMode ( FALSE ),
         bInputMode   ( FALSE )
@@ -774,8 +768,8 @@ __EXPORT ScTextWnd::~ScTextWnd()
 {
     delete pEditView;
     delete pEditEngine;
-    if (pAccTextData)
-        pAccTextData->Dispose();
+    for( AccTextDataVector::reverse_iterator aIt = maAccTextDatas.rbegin(), aEnd = maAccTextDatas.rend(); aIt != aEnd; ++aIt )
+        (*aIt)->Dispose();
 }
 
 void __EXPORT ScTextWnd::Paint( const Rectangle& rRec )
@@ -1112,8 +1106,8 @@ void ScTextWnd::StartEditEngine()
 
         pEditEngine->SetModifyHdl(LINK(this, ScTextWnd, NotifyHdl));
 
-        if (pAccTextData)
-            pAccTextData->StartEdit();
+        if (!maAccTextDatas.empty())
+            maAccTextDatas.back()->StartEdit();
 
         //  as long as EditEngine and DrawText sometimes differ for CTL text,
         //  repaint now to have the EditEngine's version visible
@@ -1154,8 +1148,8 @@ void ScTextWnd::StopEditEngine( BOOL bAll )
 {
     if (pEditView)
     {
-        if (pAccTextData)
-            pAccTextData->EndEdit();
+        if (!maAccTextDatas.empty())
+            maAccTextDatas.back()->EndEdit();
 
         ScModule* pScMod = SC_MOD();
 
@@ -1259,8 +1253,8 @@ void ScTextWnd::SetTextString( const String& rNewString )
 
         aString = rNewString;
 
-        if (pAccTextData)
-            pAccTextData->TextChanged();
+        if (!maAccTextDatas.empty())
+            maAccTextDatas.back()->TextChanged();
 
         bInputMode = FALSE;
     }
@@ -1317,8 +1311,8 @@ void ScTextWnd::MakeDialogEditView()
     if ( bIsRTL )
         lcl_ModifyRTLVisArea( pEditView );
 
-    if (pAccTextData)
-        pAccTextData->StartEdit();
+    if (!maAccTextDatas.empty())
+        maAccTextDatas.back()->StartEdit();
 }
 
 void ScTextWnd::ImplInitSettings()
@@ -1341,6 +1335,22 @@ void ScTextWnd::ImplInitSettings()
     return new ScAccessibleEditObject(GetAccessibleParentWindow()->GetAccessible(), NULL, this,
         rtl::OUString(String(ScResId(STR_ACC_EDITLINE_NAME))),
         rtl::OUString(String(ScResId(STR_ACC_EDITLINE_DESCR))), EditLine);
+}
+
+void ScTextWnd::InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData )
+{
+    OSL_ENSURE( ::std::find( maAccTextDatas.begin(), maAccTextDatas.end(), &rTextData ) == maAccTextDatas.end(),
+        "ScTextWnd::InsertAccessibleTextData - passed object already registered" );
+    maAccTextDatas.push_back( &rTextData );
+}
+
+void ScTextWnd::RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData )
+{
+    AccTextDataVector::iterator aEnd = maAccTextDatas.end();
+    AccTextDataVector::iterator aIt = ::std::find( maAccTextDatas.begin(), aEnd, &rTextData );
+    OSL_ENSURE( aIt != aEnd, "ScTextWnd::RemoveAccessibleTextData - passed object not registered" );
+    if( aIt != aEnd )
+        maAccTextDatas.erase( aIt );
 }
 
 // -----------------------------------------------------------------------

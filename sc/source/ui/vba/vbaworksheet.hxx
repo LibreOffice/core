@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vbaworksheet.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,9 +41,11 @@
 #include <ooo/vba/excel/XOutline.hpp>
 #include <ooo/vba/excel/XPageSetup.hpp>
 #include <ooo/vba/excel/XHPageBreaks.hpp>
+#include <ooo/vba/excel/XVPageBreaks.hpp>
 #include <ooo/vba/excel/XChartObjects.hpp>
 
-#include "vbahelperinterface.hxx"
+#include <vbahelper/vbahelperinterface.hxx>
+#include "address.hxx"
 
 typedef InheritedHelperInterfaceImpl1< ov::excel::XWorksheet >  WorksheetImpl_BASE;
 
@@ -93,9 +92,12 @@ public:
     virtual css::uno::Reference< ov::excel::XOutline > SAL_CALL Outline( ) throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XPageSetup > SAL_CALL PageSetup( ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL HPageBreaks( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL VPageBreaks( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XWorksheet > SAL_CALL getNext() throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XWorksheet > SAL_CALL getPrevious() throw (css::uno::RuntimeException);
      virtual sal_Int16 SAL_CALL getIndex() throw (css::uno::RuntimeException);
+     virtual sal_Int32 SAL_CALL getEnableSelection() throw (css::uno::RuntimeException);
+     virtual void SAL_CALL setEnableSelection( sal_Int32 nSelection ) throw (css::uno::RuntimeException);
 
     // Methods
     virtual void SAL_CALL Activate() throw (css::uno::RuntimeException);

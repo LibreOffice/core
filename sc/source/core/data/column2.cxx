@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: column2.cxx,v $
- * $Revision: 1.32.126.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,20 +33,20 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <svx/algitem.hxx>
-#include <svx/editobj.hxx>
-#include <svx/editstat.hxx>
-#include <svx/emphitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/forbiddencharacterstable.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/emphitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
 #include <svx/rotmodit.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/unolingu.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/broadcast.hxx>
-#include <svtools/listeneriter.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <editeng/unolingu.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/broadcast.hxx>
+#include <svl/listeneriter.hxx>
 #include <vcl/outdev.hxx>
 
 #include "column.hxx"
@@ -1376,13 +1373,13 @@ SCSIZE ScColumn::GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirecti
     return nLines;
 }
 
-//UNUSED2009-05 SCROW ScColumn::GetFirstDataPos() const
-//UNUSED2009-05 {
-//UNUSED2009-05     if (nCount)
-//UNUSED2009-05         return pItems[0].nRow;
-//UNUSED2009-05     else
-//UNUSED2009-05         return 0;
-//UNUSED2009-05 }
+SCROW ScColumn::GetFirstDataPos() const
+{
+    if (nCount)
+        return pItems[0].nRow;
+    else
+        return 0;
+}
 
 SCROW ScColumn::GetLastDataPos() const
 {

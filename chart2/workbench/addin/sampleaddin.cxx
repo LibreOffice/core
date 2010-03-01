@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sampleaddin.cxx,v $
- * $Revision: 1.3.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -138,7 +135,7 @@ sal_Bool SampleAddIn::getLogicalPosition( uno::Reference< drawing::XShape >& xAx
         {
             try
             {
-                double fMin, fMax;
+                double fMin(0.0), fMax(0.0);
                 uno::Any aAny = xProp->getPropertyValue( OUString::createFromAscii( "Min" ));
                 aAny >>= fMin;
                 aAny = xProp->getPropertyValue( OUString::createFromAscii( "Max" ));

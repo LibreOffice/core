@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vbaworksheets.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,8 +32,8 @@
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/itemwrapper.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/itemset.hxx>
+#include <svl/eitem.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase3.hxx>
@@ -209,16 +206,29 @@ ScVbaWorksheets::Add( const uno::Any& Before, const uno::Any& After,
     Count >>= nNewSheets;
     Type >>= nType;
     SCTAB nCount = 0;
-    Before >>= aStringSheet;
-    if (!aStringSheet.getLength())
+
+    uno::Reference< excel::XWorksheet > xBeforeAfterSheet;
+
+    if ( Before.hasValue() )
     {
-        After >>= aStringSheet;
+            if ( Before >>= xBeforeAfterSheet )
+            aStringSheet = xBeforeAfterSheet->getName();
+        else
+            Before >>= aStringSheet;
+    }
+
+    if (!aStringSheet.getLength() && After.hasValue() )
+    {
+            if ( After >>= xBeforeAfterSheet )
+            aStringSheet = xBeforeAfterSheet->getName();
+        else
+            After >>= aStringSheet;
         bBefore = sal_False;
     }
     if (!aStringSheet.getLength())
     {
-        aStringSheet = ScVbaGlobals::getGlobalsImpl(
-            mxContext )->getApplication()->getActiveWorkbook()->getActiveSheet()->getName();
+        uno::Reference< excel::XApplication > xApplication( Application(), uno::UNO_QUERY_THROW );
+        aStringSheet = xApplication->getActiveWorkbook()->getActiveSheet()->getName();
         bBefore = sal_True;
     }
         nCount = static_cast< SCTAB >( m_xIndexAccess->getCount() );
@@ -252,7 +262,9 @@ ScVbaWorksheets::Add( const uno::Any& Before, const uno::Any& After,
         m_xSheets->insertNewByName(aStringName, nSheetIndex + i);
         result = getItemByStringIndex( aStringName );
     }
-
+    uno::Reference< excel::XWorksheet > xNewSheet( result, uno::UNO_QUERY );
+    if ( xNewSheet.is() )
+        xNewSheet->Activate();
     return  result;
 }
 
@@ -295,7 +307,7 @@ ScVbaWorksheets::PrintOut( const uno::Any& From, const uno::Any& To, const uno::
         if ( isSelectedSheets() )
             bSelection = sal_True;
 
-    PrintOutHelper( From, To, Copies, Preview, ActivePrinter, PrintToFile, Collate, PrToFileName, mxModel, bSelection );
+    PrintOutHelper( excel::getBestViewShell( mxModel ), From, To, Copies, Preview, ActivePrinter, PrintToFile, Collate, PrToFileName, bSelection );
 }
 
 uno::Any SAL_CALL
@@ -336,7 +348,7 @@ ScVbaWorksheets::setVisible( const uno::Any& _visible ) throw (uno::RuntimeExcep
 void SAL_CALL
 ScVbaWorksheets::Select( const uno::Any& Replace ) throw (uno::RuntimeException)
 {
-    ScTabViewShell* pViewShell = getBestViewShell( mxModel );
+    ScTabViewShell* pViewShell = excel::getBestViewShell( mxModel );
     if ( !pViewShell )
         throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Cannot obtain view shell" ) ), uno::Reference< uno::XInterface >() );
 

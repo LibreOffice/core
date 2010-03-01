@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ChartView.cxx,v $
- * $Revision: 1.46.22.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -105,7 +102,7 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <sot/clsids.hxx>
 
 //.............................................................................

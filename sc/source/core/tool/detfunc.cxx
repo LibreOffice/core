@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: detfunc.cxx,v $
- * $Revision: 1.30.20.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,8 +32,8 @@
 
 #include "scitems.hxx"
 #include <svtools/colorcfg.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/sdshitm.hxx>
 #include <svx/sdsxyitm.hxx>
 #include <svx/sdtditm.hxx>
@@ -58,11 +55,11 @@
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xtable.hxx>
-#include <svx/outliner.hxx>
-#include <svx/editobj.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/editobj.hxx>
 #include <svx/sxcecitm.hxx>
-#include <svtools/whiter.hxx>
-#include <svx/writingmodeitem.hxx>
+#include <svl/whiter.hxx>
+#include <editeng/writingmodeitem.hxx>
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

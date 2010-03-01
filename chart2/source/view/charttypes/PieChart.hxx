@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PieChart.hxx,v $
- * $Revision: 1.9.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -105,7 +102,7 @@ private: //methods
                         , double fLogicZ, double fDepth, double fExplodePercentage
                         , tPropertyNameValueMap* pOverWritePropertiesMap );
 
-    double              getMaxOffset() const;
+    double              getMaxOffset();
     bool                detectLabelOverlapsAndMove(const ::com::sun::star::awt::Size& rPageSize);//returns true when there might be more to do
     void                resetLabelPositionsToPreviousState();
 struct PieLabelInfo;
@@ -137,6 +134,8 @@ private: //member
     };
 
     ::std::vector< PieLabelInfo > m_aLabelInfoList;
+
+    double m_fMaxOffset;    /// cached max offset value (init'ed to NaN)
 };
 //.............................................................................
 } //namespace chart

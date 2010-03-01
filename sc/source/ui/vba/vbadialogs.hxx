@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vbadialogs.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,25 +27,22 @@
 #ifndef SC_VBA_DIALOGS_HXX
 #define SC_VBA_DIALOGS_HXX
 
-#include <cppuhelper/implbase1.hxx>
-
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <ooo/vba/excel/XDialogs.hpp>
 #include <ooo/vba/XCollection.hpp>
-#include "vbahelperinterface.hxx"
+#include <vbahelper/vbahelperinterface.hxx>
+#include <vbahelper/vbadialogsbase.hxx>
+#include <cppuhelper/implbase1.hxx>
 
-class ScModelObj;
-
-typedef InheritedHelperInterfaceImpl1< ov::excel::XDialogs > ScVbaDialogs_BASE;
+typedef cppu::ImplInheritanceHelper1< VbaDialogsBase, ov::excel::XDialogs > ScVbaDialogs_BASE;
 
 class ScVbaDialogs : public ScVbaDialogs_BASE
 {
 public:
-    ScVbaDialogs( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > &xContext ): ScVbaDialogs_BASE( xParent, xContext ) {}
+    ScVbaDialogs( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > &xContext, const css::uno::Reference< css::frame::XModel >& xModel ): ScVbaDialogs_BASE( xParent, xContext, xModel ) {}
     virtual ~ScVbaDialogs() {}
 
     // XCollection
-    virtual ::sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index ) throw (css::uno::RuntimeException);
 
     // XDialogs

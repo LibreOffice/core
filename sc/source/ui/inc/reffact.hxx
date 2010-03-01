@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: reffact.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -102,6 +99,22 @@ class ScSimpleRefDlgWrapper: public SfxChildWindow
         void            StartRefInput();
 };
 
+//<!--Added by PengYunQuan for Validity Cell Range Picker
+class SC_DLLPUBLIC ScValidityRefChildWin : public SfxChildWindow
+{
+    bool    m_bVisibleLock:1;
+    bool    m_bFreeWindowLock:1;
+    Window * m_pSavedWndParent;
+public:
+    ScValidityRefChildWin( Window*, USHORT, SfxBindings*, SfxChildWinInfo* );
+    SFX_DECL_CHILDWINDOW(ScValidityRefChildWin);
+    ~ScValidityRefChildWin();
+    bool    LockVisible( bool bLock ){ bool bVis = m_bVisibleLock; m_bVisibleLock = bLock; return bVis; }
+    bool    LockFreeWindow( bool bLock ){ bool bFreeWindow = m_bFreeWindowLock; m_bFreeWindowLock = bLock; return bFreeWindow; }
+    void                Hide(){ if( !m_bVisibleLock) SfxChildWindow::Hide(); }
+    void                Show( USHORT nFlags ){ if( !m_bVisibleLock ) SfxChildWindow::Show( nFlags ); }
+};
+//-->Added by PengYunQuan for Validity Cell Range Picker
 
 //==================================================================
 

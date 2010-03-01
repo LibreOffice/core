@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: global2.cxx,v $
- * $Revision: 1.23.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,13 +35,13 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
 #include <unotools/textsearch.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/charclass.hxx>
 #include <stdlib.h>
 #include <ctype.h>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 
 #include "global.hxx"
 #include "rangeutl.hxx"
@@ -56,6 +53,7 @@
 #include "sc.hrc"
 #include "globstr.hrc"
 
+using ::std::vector;
 
 // -----------------------------------------------------------------------
 
@@ -239,238 +237,6 @@ utl::TextSearch* ScQueryEntry::GetSearchTextPtr( BOOL bCaseSens )
         pSearchText = new utl::TextSearch( *pSearchParam, *ScGlobal::pCharClass );
     }
     return pSearchText;
-}
-
-//------------------------------------------------------------------------
-
-ScQueryParam::ScQueryParam()
-{
-    nEntryCount = 0;
-    Clear();
-}
-
-//------------------------------------------------------------------------
-
-ScQueryParam::ScQueryParam( const ScQueryParam& r ) :
-        nCol1(r.nCol1),nRow1(r.nRow1),nCol2(r.nCol2),nRow2(r.nRow2),nTab(r.nTab),
-        bHasHeader(r.bHasHeader), bByRow(r.bByRow), bInplace(r.bInplace), bCaseSens(r.bCaseSens),
-        bRegExp(r.bRegExp), bMixedComparison(r.bMixedComparison),
-        bDuplicate(r.bDuplicate), bDestPers(r.bDestPers),
-        nDestTab(r.nDestTab), nDestCol(r.nDestCol), nDestRow(r.nDestRow)
-{
-    nEntryCount = 0;
-
-    Resize( r.nEntryCount );
-    for (USHORT i=0; i<nEntryCount; i++)
-        pEntries[i] = r.pEntries[i];
-}
-
-//------------------------------------------------------------------------
-
-ScQueryParam::~ScQueryParam()
-{
-    delete[] pEntries;
-}
-
-//------------------------------------------------------------------------
-
-void ScQueryParam::Clear()
-{
-    nCol1=nCol2=nDestCol = 0;
-    nRow1=nRow2=nDestRow = 0;
-    nDestTab = 0;
-    nTab = SCTAB_MAX;
-    bHasHeader = bCaseSens = bRegExp = bMixedComparison = FALSE;
-    bInplace = bByRow = bDuplicate = bDestPers = TRUE;
-
-    Resize( MAXQUERY );
-    for (USHORT i=0; i<MAXQUERY; i++)
-        pEntries[i].Clear();
-}
-
-//------------------------------------------------------------------------
-
-ScQueryParam& ScQueryParam::operator=( const ScQueryParam& r )
-{
-    nCol1       = r.nCol1;
-    nRow1       = r.nRow1;
-    nCol2       = r.nCol2;
-    nRow2       = r.nRow2;
-    nTab        = r.nTab;
-    nDestTab    = r.nDestTab;
-    nDestCol    = r.nDestCol;
-    nDestRow    = r.nDestRow;
-    bHasHeader  = r.bHasHeader;
-    bInplace    = r.bInplace;
-    bCaseSens   = r.bCaseSens;
-    bRegExp     = r.bRegExp;
-    bMixedComparison = r.bMixedComparison;
-    bDuplicate  = r.bDuplicate;
-    bByRow      = r.bByRow;
-    bDestPers   = r.bDestPers;
-
-    Resize( r.nEntryCount );
-    for (USHORT i=0; i<nEntryCount; i++)
-        pEntries[i] = r.pEntries[i];
-
-    return *this;
-}
-
-//------------------------------------------------------------------------
-
-BOOL ScQueryParam::operator==( const ScQueryParam& rOther ) const
-{
-    BOOL bEqual = FALSE;
-
-    // Anzahl der Queries gleich?
-    USHORT nUsed      = 0;
-    USHORT nOtherUsed = 0;
-    while ( nUsed<nEntryCount && pEntries[nUsed].bDoQuery ) ++nUsed;
-    while ( nOtherUsed<rOther.nEntryCount && rOther.pEntries[nOtherUsed].bDoQuery )
-        ++nOtherUsed;
-
-    if (   (nUsed       == nOtherUsed)
-        && (nCol1       == rOther.nCol1)
-        && (nRow1       == rOther.nRow1)
-        && (nCol2       == rOther.nCol2)
-        && (nRow2       == rOther.nRow2)
-        && (nTab        == rOther.nTab)
-        && (bHasHeader  == rOther.bHasHeader)
-        && (bByRow      == rOther.bByRow)
-        && (bInplace    == rOther.bInplace)
-        && (bCaseSens   == rOther.bCaseSens)
-        && (bRegExp     == rOther.bRegExp)
-        && (bMixedComparison == rOther.bMixedComparison)
-        && (bDuplicate  == rOther.bDuplicate)
-        && (bDestPers   == rOther.bDestPers)
-        && (nDestTab    == rOther.nDestTab)
-        && (nDestCol    == rOther.nDestCol)
-        && (nDestRow    == rOther.nDestRow) )
-    {
-        bEqual = TRUE;
-        for ( USHORT i=0; i<nUsed && bEqual; i++ )
-            bEqual = pEntries[i] == rOther.pEntries[i];
-    }
-    return bEqual;
-}
-
-//------------------------------------------------------------------------
-
-void ScQueryParam::DeleteQuery( SCSIZE nPos )
-{
-    if (nPos<nEntryCount)
-    {
-        for (SCSIZE i=nPos; i+1<nEntryCount; i++)
-            pEntries[i] = pEntries[i+1];
-
-        pEntries[nEntryCount-1].Clear();
-    }
-    else
-    {
-        DBG_ERROR("Falscher Parameter bei ScQueryParam::DeleteQuery");
-    }
-}
-
-//------------------------------------------------------------------------
-
-void ScQueryParam::Resize(SCSIZE nNew)
-{
-    if ( nNew < MAXQUERY )
-        nNew = MAXQUERY;                // nie weniger als MAXQUERY
-
-    ScQueryEntry* pNewEntries = NULL;
-    if ( nNew )
-        pNewEntries = new ScQueryEntry[nNew];
-
-    SCSIZE nCopy = Min( nEntryCount, nNew );
-    for (SCSIZE i=0; i<nCopy; i++)
-        pNewEntries[i] = pEntries[i];
-
-    if ( nEntryCount )
-        delete[] pEntries;
-    nEntryCount = nNew;
-    pEntries = pNewEntries;
-}
-
-//------------------------------------------------------------------------
-
-void ScQueryParam::MoveToDest()
-{
-    if (!bInplace)
-    {
-        SCsCOL nDifX = ((SCsCOL) nDestCol) - ((SCsCOL) nCol1);
-        SCsROW nDifY = ((SCsROW) nDestRow) - ((SCsROW) nRow1);
-        SCsTAB nDifZ = ((SCsTAB) nDestTab) - ((SCsTAB) nTab);
-
-        nCol1 = sal::static_int_cast<SCCOL>( nCol1 + nDifX );
-        nRow1 = sal::static_int_cast<SCROW>( nRow1 + nDifY );
-        nCol2 = sal::static_int_cast<SCCOL>( nCol2 + nDifX );
-        nRow2 = sal::static_int_cast<SCROW>( nRow2 + nDifY );
-        nTab  = sal::static_int_cast<SCTAB>( nTab  + nDifZ );
-        for (USHORT i=0; i<nEntryCount; i++)
-            pEntries[i].nField += nDifX;
-
-        bInplace = TRUE;
-    }
-    else
-    {
-        DBG_ERROR("MoveToDest, bInplace == TRUE");
-    }
-}
-
-//------------------------------------------------------------------------
-
-void ScQueryParam::FillInExcelSyntax(String& aCellStr, SCSIZE nIndex)
-{
-    if (aCellStr.Len() > 0)
-    {
-        if ( nIndex >= nEntryCount )
-            Resize( nIndex+1 );
-
-        ScQueryEntry& rEntry = pEntries[nIndex];
-
-        rEntry.bDoQuery = TRUE;
-        // Operatoren herausfiltern
-        if (aCellStr.GetChar(0) == '<')
-        {
-            if (aCellStr.GetChar(1) == '>')
-            {
-                *rEntry.pStr = aCellStr.Copy(2);
-                rEntry.eOp   = SC_NOT_EQUAL;
-            }
-            else if (aCellStr.GetChar(1) == '=')
-            {
-                *rEntry.pStr = aCellStr.Copy(2);
-                rEntry.eOp   = SC_LESS_EQUAL;
-            }
-            else
-            {
-                *rEntry.pStr = aCellStr.Copy(1);
-                rEntry.eOp   = SC_LESS;
-            }
-        }
-        else if (aCellStr.GetChar(0) == '>')
-        {
-            if (aCellStr.GetChar(1) == '=')
-            {
-                *rEntry.pStr = aCellStr.Copy(2);
-                rEntry.eOp   = SC_GREATER_EQUAL;
-            }
-            else
-            {
-                *rEntry.pStr = aCellStr.Copy(1);
-                rEntry.eOp   = SC_GREATER;
-            }
-        }
-        else
-        {
-            if (aCellStr.GetChar(0) == '=')
-                *rEntry.pStr = aCellStr.Copy(1);
-            else
-                *rEntry.pStr = aCellStr;
-            rEntry.eOp = SC_EQUAL;
-        }
-    }
 }
 
 //------------------------------------------------------------------------
@@ -817,7 +583,6 @@ bool PivotField::operator==( const PivotField& r ) const
 
 ScPivotParam::ScPivotParam()
     :   nCol(0), nRow(0), nTab(0),
-        ppLabelArr( NULL ), nLabels(0),
         nPageCount(0), nColCount(0), nRowCount(0), nDataCount(0),
         bIgnoreEmptyRows(FALSE), bDetectCategories(FALSE),
         bMakeTotalCol(TRUE), bMakeTotalRow(TRUE)
@@ -828,23 +593,22 @@ ScPivotParam::ScPivotParam()
 
 ScPivotParam::ScPivotParam( const ScPivotParam& r )
     :   nCol( r.nCol ), nRow( r.nRow ), nTab( r.nTab ),
-        ppLabelArr( NULL ), nLabels(0),
         nPageCount(0), nColCount(0), nRowCount(0), nDataCount(0),
         bIgnoreEmptyRows(r.bIgnoreEmptyRows),
         bDetectCategories(r.bDetectCategories),
         bMakeTotalCol(r.bMakeTotalCol),
         bMakeTotalRow(r.bMakeTotalRow)
 {
-    SetLabelData    ( r.ppLabelArr, r.nLabels );
     SetPivotArrays  ( r.aPageArr, r.aColArr, r.aRowArr, r.aDataArr,
                       r.nPageCount, r.nColCount, r.nRowCount, r.nDataCount );
+
+    SetLabelData(r.maLabelArray);
 }
 
 //------------------------------------------------------------------------
 
 __EXPORT ScPivotParam::~ScPivotParam()
 {
-    ClearLabelData();
 }
 
 //------------------------------------------------------------------------
@@ -860,22 +624,6 @@ __EXPORT ScPivotParam::~ScPivotParam()
 //UNUSED2009-05     ClearPivotArrays();
 //UNUSED2009-05 }
 
-//------------------------------------------------------------------------
-
-void __EXPORT ScPivotParam::ClearLabelData()
-{
-    if ( (nLabels > 0) && ppLabelArr )
-    {
-        for ( SCSIZE i=0; i<nLabels; i++ )
-            delete ppLabelArr[i];
-        delete [] ppLabelArr;
-        ppLabelArr = NULL;
-        nLabels = 0;
-    }
-}
-
-//------------------------------------------------------------------------
-
 void __EXPORT ScPivotParam::ClearPivotArrays()
 {
     memset( aPageArr, 0, PIVOT_MAXPAGEFIELD * sizeof(PivotField) );
@@ -888,20 +636,17 @@ void __EXPORT ScPivotParam::ClearPivotArrays()
     nDataCount = 0;
 }
 
-//------------------------------------------------------------------------
-
-void __EXPORT ScPivotParam::SetLabelData( LabelData**   pLabArr,
-                                          SCSIZE        nLab )
+void ScPivotParam::SetLabelData(const vector<ScDPLabelDataRef>& r)
 {
-    ClearLabelData();
-
-    if ( (nLab > 0) && pLabArr )
+    vector<ScDPLabelDataRef> aNewArray;
+    aNewArray.reserve(r.size());
+    for (vector<ScDPLabelDataRef>::const_iterator itr = r.begin(), itrEnd = r.end();
+          itr != itrEnd; ++itr)
     {
-        nLabels = (nLab>MAX_LABELS) ? MAX_LABELS : nLab;
-        ppLabelArr = new LabelData*[nLabels];
-        for ( SCSIZE i=0; i<nLabels; i++ )
-            ppLabelArr[i] = new LabelData( *(pLabArr[i]) );
+        ScDPLabelDataRef p(new ScDPLabelData(**itr));
+        aNewArray.push_back(p);
     }
+    maLabelArray.swap(aNewArray);
 }
 
 //------------------------------------------------------------------------
@@ -943,10 +688,9 @@ ScPivotParam& __EXPORT ScPivotParam::operator=( const ScPivotParam& r )
     bMakeTotalCol     = r.bMakeTotalCol;
     bMakeTotalRow     = r.bMakeTotalRow;
 
-    SetLabelData    ( r.ppLabelArr, r.nLabels );
     SetPivotArrays  ( r.aPageArr, r.aColArr, r.aRowArr, r.aDataArr,
                       r.nPageCount, r.nColCount, r.nRowCount, r.nDataCount );
-
+    SetLabelData(r.maLabelArray);
     return *this;
 }
 
@@ -961,7 +705,7 @@ BOOL __EXPORT ScPivotParam::operator==( const ScPivotParam& r ) const
                  && (bDetectCategories == r.bDetectCategories)
                  && (bMakeTotalCol == r.bMakeTotalCol)
                  && (bMakeTotalRow == r.bMakeTotalRow)
-                 && (nLabels    == r.nLabels)
+                 && (maLabelArray.size() == r.maLabelArray.size())
                  && (nPageCount == r.nPageCount)
                  && (nColCount  == r.nColCount)
                  && (nRowCount  == r.nRowCount)

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: table2.cxx,v $
- * $Revision: 1.40.124.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,12 +31,12 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/boxitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/poolcach.hxx>
+#include <svl/poolcach.hxx>
 #include <unotools/charclass.hxx>
 #include <math.h>
-#include <svtools/PasswordHelper.hxx>
+#include <svl/PasswordHelper.hxx>
 #include <unotools/transliterationwrapper.hxx>
 
 #include "patattr.hxx"
@@ -972,6 +969,14 @@ ScBaseCell* ScTable::GetCell( SCCOL nCol, SCROW nRow ) const
     return NULL;
 }
 
+void ScTable::GetFirstDataPos(SCCOL& rCol, SCROW& rRow) const
+{
+    rCol = 0;
+    rRow = 0;
+    while (aCol[rCol].IsEmptyData() && rCol < MAXCOL)
+        ++rCol;
+    rRow = aCol[rCol].GetFirstDataPos();
+}
 
 void ScTable::GetLastDataPos(SCCOL& rCol, SCROW& rRow) const
 {

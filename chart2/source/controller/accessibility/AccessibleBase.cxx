@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessibleBase.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,7 +40,7 @@
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-
+#include <comphelper/serviceinfohelper.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <rtl/ustrbuf.hxx>
@@ -51,9 +48,9 @@
 #include <vcl/svapp.hxx>
 #include <rtl/uuid.h>
 #include <cppuhelper/queryinterface.hxx>
-#include <svtools/itemset.hxx>
-#include <svx/unofdesc.hxx>
-#include <svx/outliner.hxx>
+#include <svl/itemset.hxx>
+#include <editeng/unofdesc.hxx>
+#include <editeng/outliner.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/unoshape.hxx>
@@ -958,7 +955,7 @@ OUString SAL_CALL AccessibleBase::getImplementationName()
 sal_Bool SAL_CALL AccessibleBase::supportsService( const OUString& ServiceName )
     throw (RuntimeException)
 {
-    return SvxServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
 }
 
 uno::Sequence< OUString > SAL_CALL AccessibleBase::getSupportedServiceNames()

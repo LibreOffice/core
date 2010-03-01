@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ChartController_Window.cxx,v $
- * $Revision: 1.31.24.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1025,7 +1022,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
         else
         {
             // todo: the context menu should be specified by an xml file in uiconfig
-            uno::Reference< awt::XPopupMenu > xPopupMenu( 
+            uno::Reference< awt::XPopupMenu > xPopupMenu(
                 m_xCC->getServiceManager()->createInstanceWithContext(
                     C2U("com.sun.star.awt.PopupMenu"), m_xCC ), uno::UNO_QUERY );
             uno::Reference< awt::XMenuExtended > xMenuEx( xPopupMenu, uno::UNO_QUERY );
@@ -1046,7 +1043,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                     uno::Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), m_aModel->getModel() );
                     uno::Reference< chart2::XRegressionCurveContainer > xCurveCnt( xSeries, uno::UNO_QUERY );
                     Reference< chart2::XRegressionCurve > xTrendline( RegressionCurveHelper::getFirstCurveNotMeanValueLine( xCurveCnt ) );
-                    bool bHasEquation = RegressionCurveHelper::hasEquation( xTrendline ); 
+                    bool bHasEquation = RegressionCurveHelper::hasEquation( xTrendline );
                     Reference< chart2::XRegressionCurve > xMeanValue( RegressionCurveHelper::getMeanValueLine( xCurveCnt ) );
                     bool bHasYErrorBars = StatisticsHelper::hasErrorBars( xSeries, true );
                     bool bHasDataLabelsAtSeries = DataSeriesHelper::hasDataLabelsAtSeries( xSeries );
@@ -1124,7 +1121,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                             ASSERT_EXCEPTION( ex );
                         }
                     }
-                    
+
                     if( bHasDataLabelsAtSeries )
                         lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatDataLabels") );
                     if( xTrendline.is() )
@@ -1173,9 +1170,9 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
 
                     //if( nIdBeforeDelete != nUniqueId )
                         xPopupMenu->insertSeparator( -1 );
-                    
+
                     lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId, C2U(".uno:ArrangeRow"));
-                    uno::Reference< awt::XPopupMenu > xArrangePopupMenu( 
+                    uno::Reference< awt::XPopupMenu > xArrangePopupMenu(
                         m_xCC->getServiceManager()->createInstanceWithContext(
                             C2U("com.sun.star.awt.PopupMenu"), m_xCC ), uno::UNO_QUERY );
                     uno::Reference< awt::XMenuExtended > xArrangeMenuEx( xArrangePopupMenu, uno::UNO_QUERY );
@@ -1223,7 +1220,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                         uno::Reference< XTitled > xTitled( xAxis, uno::UNO_QUERY );
                         if( xTitled.is())
                             bHasTitle = TitleHelper::getCompleteString( xTitled->getTitleObject() ).getLength()>0;
-                        
+
                         if( OBJECTTYPE_AXIS  != eObjectType && bIsAxisVisible )
                             lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatAxis") );
                         if( OBJECTTYPE_GRID != eObjectType && bIsMajorGridVisible && !bIsSecondaryAxis )
@@ -1269,12 +1266,12 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                     lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertTitles") );
                     if( !bHasLegend )
                         lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertLegend") );
-                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertRemoveAxes") );    
+                    lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:InsertRemoveAxes") );
                     if( bHasLegend )
                         lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DeleteLegend") );
                 }
                 //-----
-                
+
                 xPopupMenu->insertSeparator( -1 );
                 lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DiagramType"));
                 lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:DataRanges"));

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: notemark.cxx,v $
- * $Revision: 1.12.126.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,8 +33,8 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdocapt.hxx>
 #include <sfx2/printer.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/itempool.hxx>
+#include <unotools/pathoptions.hxx>
+#include <svl/itempool.hxx>
 #include <vcl/svapp.hxx>
 
 #include "notemark.hxx"

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ImplUndoManager.hxx,v $
- * $Revision: 1.5.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -216,6 +213,7 @@ public:
 protected:
     // ____ ::utl::ConfigItem ____
     virtual void Notify( const ::com::sun::star::uno::Sequence< ::rtl::OUString > & aPropertyNames );
+    virtual void Commit();
 
 private:
     ConfigItemListener &    m_rListener;

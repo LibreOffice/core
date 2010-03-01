@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drtxtob2.cxx,v $
- * $Revision: 1.19.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,20 +29,20 @@
 #include "precompiled_sc.hxx"
 
 #include "scitems.hxx"
-#include <svx/adjitem.hxx>
+#include <editeng/adjitem.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/fontwork.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/xtextit.hxx>
-#include <svx/writingmodeitem.hxx>
+#include <editeng/writingmodeitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
 #include <sot/formats.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 
 #include "sc.hrc"
 #include "drtxtob.hxx"

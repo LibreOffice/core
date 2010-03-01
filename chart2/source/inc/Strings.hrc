@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Strings.hrc,v $
- * $Revision: 1.9.72.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,7 @@
 #define CHART_STRINGS_HRC
 
 // this includes no link dependency
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 
 //next free is 291
 //single free is: 134

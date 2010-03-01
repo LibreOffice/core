@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: scmod.hxx,v $
- * $Revision: 1.24.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,12 +31,18 @@
 #include "scdllapi.h"
 #include "scdll.hxx"
 #include <vcl/timer.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include "global.hxx"       // ScInputMode
 #include "markdata.hxx"     //ScMarkData
 #include "shellids.hxx"
-
+#include <unotools/options.hxx>
 #include <tools/shl.hxx>
+
+//<!--Added by PengYunQuan for Validity Cell Range Picker
+#include <map>
+#include <list>
+#include <algorithm>
+//-->Added by PengYunQuan for Validity Cell Range Picker
 
 
 class KeyEvent;
@@ -113,7 +116,7 @@ struct ScClipData
 //==================================================================
 
 
-class ScModule: public SfxModule, public SfxListener
+class ScModule: public SfxModule, public SfxListener, utl::ConfigurationListener
 {
     Timer               aIdleTimer;
     Timer               aSpellTimer;
@@ -145,6 +148,9 @@ class ScModule: public SfxModule, public SfxListener
     bool                mbIsInSharedDocLoading;
     bool                mbIsInSharedDocSaving;
 
+    //<!--Added by PengYunQuan for Validity Cell Range Picker
+    std::map<USHORT, std::list<Window*> > m_mapRefWindow;
+    //-->Added by PengYunQuan for Validity Cell Range Picker
 public:
                     SFX_DECL_INTERFACE(SCID_APP)
 
@@ -153,6 +159,7 @@ public:
 
     virtual void        FillStatusBar(StatusBar &rBar);
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void        ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
     void                DeleteCfg();
 
                         // von der Applikation verschoben:
@@ -253,7 +260,10 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     ScFormEditData*     GetFormEditData()       { return pFormEditData; }
 
     //  Referenzeingabe:
-    void                SetRefDialog( USHORT nId, BOOL bVis, SfxViewFrame* pViewFrm = NULL );
+    //<!--Added by PengYunQuan for Validity Cell Range Picker
+    //void              SetRefDialog( USHORT nId, BOOL bVis, SfxViewFrame* pViewFrm = NULL );
+    SC_DLLPUBLIC void               SetRefDialog( USHORT nId, BOOL bVis, SfxViewFrame* pViewFrm = NULL );
+    //-->Added by PengYunQuan for Validity Cell Range Picker
     BOOL                IsModalMode(SfxObjectShell* pDocSh = NULL);
     BOOL                IsFormulaMode();
     BOOL                IsRefDialogOpen();
@@ -276,6 +286,14 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     bool                IsInSharedDocLoading() const        { return mbIsInSharedDocLoading; }
     void                SetInSharedDocSaving( bool bNew )   { mbIsInSharedDocSaving = bNew; }
     bool                IsInSharedDocSaving() const         { return mbIsInSharedDocSaving; }
+
+    //<!--Added by PengYunQuan for Validity Cell Range Picker
+    SC_DLLPUBLIC BOOL   RegisterRefWindow( USHORT nSlotId, Window *pWnd );
+    SC_DLLPUBLIC BOOL   UnregisterRefWindow( USHORT nSlotId, Window *pWnd );
+    SC_DLLPUBLIC BOOL   IsAliveRefDlg( USHORT nSlotId, Window *pWnd );
+    SC_DLLPUBLIC Window * Find1RefWindow( USHORT nSlotId, Window *pWndAncestor );
+    SC_DLLPUBLIC Window * Find1RefWindow( Window *pWndAncestor );
+    //-->Added by PengYunQuan for Validity Cell Range Picker
 };
 
 #define SC_MOD() ( *(ScModule**) GetAppData(SHL_CALC) )

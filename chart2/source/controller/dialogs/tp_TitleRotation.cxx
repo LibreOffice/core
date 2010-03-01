@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tp_TitleRotation.cxx,v $
- * $Revision: 1.11.72.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,11 +33,11 @@
 #include "TabPages.hrc"
 #include "chartview/ChartSfxItemIds.hxx"
 #include "HelpIds.hrc"
-#include <svx/eeitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/frmdiritem.hxx>
 
 // header for class SfxInt32Item
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 
 //.............................................................................
 namespace chart

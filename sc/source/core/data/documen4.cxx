@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: documen4.cxx,v $
- * $Revision: 1.23.102.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,8 +32,8 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <svtools/intitem.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/intitem.hxx>
+#include <svl/zforlist.hxx>
 #include <vcl/sound.hxx>
 #include <formula/token.hxx>
 
@@ -76,9 +73,13 @@ BOOL ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
         CellType eFType, eVType;
         GetCellType(nFCol, nFRow, nFTab, eFType);
         GetCellType(nVCol, nVRow, nVTab, eVType);
-        // CELLTYPE_NOTE: kein Value aber von Formel referiert
-        if (eFType == CELLTYPE_FORMULA && (eVType == CELLTYPE_VALUE
-                || eVType == CELLTYPE_NOTE) )
+        // CELLTYPE_NOTE: no value, but referenced by formula
+        // #i108005# convert target value to number using default format,
+        // as previously done in ScInterpreter::GetDouble
+        double nTargetVal = 0.0;
+        sal_uInt32 nFIndex = 0;
+        if (eFType == CELLTYPE_FORMULA && (eVType == CELLTYPE_VALUE || eVType == CELLTYPE_NOTE) &&
+            GetFormatTable()->IsNumberFormat(sValStr, nFIndex, nTargetVal))
         {
             ScSingleRefData aRefData;
             aRefData.InitFlags();
@@ -98,7 +99,7 @@ BOOL ScDocument::Solver(SCCOL nFCol, SCROW nFRow, SCTAB nFTab,
 
             aArr.AddSingleReference( aRefData );
             aArr.AddOpCode( ocSep );
-            aArr.AddString( sValStr.GetBuffer() );
+            aArr.AddDouble( nTargetVal );
             aArr.AddOpCode( ocClose );
             aArr.AddOpCode( ocStop );
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tabview.hxx,v $
- * $Revision: 1.28.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -292,7 +289,7 @@ public:
 
     void            TabChanged();
     void            SetZoom( const Fraction& rNewX, const Fraction& rNewY, BOOL bAll );
-    void            RefreshZoom();
+    SC_DLLPUBLIC void            RefreshZoom();
     void            SetPagebreakMode( BOOL bSet );
 
     void            UpdateLayerLocks();
@@ -390,7 +387,10 @@ public:
 
     void            SetNewStartIfMarking();
 
-    void            SetTabNo( SCTAB nTab, BOOL bNew = FALSE, BOOL bExtendSelection = FALSE );
+    //<!--Added by PengYunQuan for Validity Cell Range Picker
+    //void            SetTabNo( SCTAB nTab, BOOL bNew = FALSE, BOOL bExtendSelection = FALSE );
+    SC_DLLPUBLIC void            SetTabNo( SCTAB nTab, BOOL bNew = FALSE, BOOL bExtendSelection = FALSE );
+    //-->Added by PengYunQuan for Validity Cell Range Picker
     void            SelectNextTab( short nDir, BOOL bExtendSelection = FALSE );
 
     void            ActivateView( BOOL bActivate, BOOL bFirst );

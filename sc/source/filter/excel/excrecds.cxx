@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: excrecds.cxx,v $
- * $Revision: 1.88 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,37 +35,37 @@
 #include "excrecds.hxx"
 
 #include <map>
-#include <svx/countryid.hxx>
+#include <filter/msfilter/countryid.hxx>
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <sfx2/objsh.hxx>
 
-#include <svx/editdata.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editobj.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/editstat.hxx>
 
-#include <svx/flditem.hxx>
-#include <svx/flstitem.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/flstitem.hxx>
 
 #include <svx/algitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <svx/pageitem.hxx>
-#include <svx/paperinf.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/escpitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
+#include <editeng/paperinf.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/escpitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <svtools/ctrltool.hxx>
 
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #include <string.h>
 
@@ -457,7 +454,7 @@ XclExpCountry::XclExpCountry( const XclExpRoot& rRoot ) :
     /*  #i31530# set document country as UI country too -
         needed for correct behaviour of number formats. */
     mnUICountry = mnDocCountry = static_cast< sal_uInt16 >(
-        ::svx::ConvertLanguageToCountry( rRoot.GetDocLanguage() ) );
+        ::msfilter::ConvertLanguageToCountry( rRoot.GetDocLanguage() ) );
 }
 
 void XclExpCountry::WriteBody( XclExpStream& rStrm )

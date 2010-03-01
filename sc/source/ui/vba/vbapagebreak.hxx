@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile$
- * $Revision$
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,12 +30,13 @@
 #include <cppuhelper/implbase1.hxx>
 #include <ooo/vba/excel/XPageBreak.hpp>
 #include <ooo/vba/excel/XHPageBreak.hpp>
+#include <ooo/vba/excel/XVPageBreak.hpp>
 #include <ooo/vba/excel/XRange.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/script/BasicErrorException.hpp>
 #include <com/sun/star/sheet/TablePageBreakData.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include "vbahelperinterface.hxx"
+#include <vbahelper/vbahelperinterface.hxx>
 
 template< typename Ifc1 >
 class ScVbaPageBreak : public InheritedHelperInterfaceImpl1< Ifc1 >
@@ -78,6 +76,24 @@ public:
               ScVbaHPageBreak_BASE( xParent,xContext,xProps,aTablePageBreakData ){}
 
     virtual ~ScVbaHPageBreak(){}
+
+    // XHelperInterface
+    virtual rtl::OUString& getServiceImplName();
+    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+};
+
+//VPageBreak
+typedef ScVbaPageBreak < ov::excel::XVPageBreak > ScVbaVPageBreak_BASE;
+
+class ScVbaVPageBreak :  public ScVbaVPageBreak_BASE
+{
+public:
+    ScVbaVPageBreak( const css::uno::Reference< ov::XHelperInterface >& xParent,
+                     const css::uno::Reference< css::uno::XComponentContext >& xContext,
+                     css::uno::Reference< css::beans::XPropertySet >& xProps,
+                     css::sheet::TablePageBreakData aTablePageBreakData) throw (css::uno::RuntimeException);
+
+    virtual ~ScVbaVPageBreak();
 
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();
