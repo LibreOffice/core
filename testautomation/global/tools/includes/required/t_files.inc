@@ -217,6 +217,8 @@ end function
 '-------------------------------------------------------------------------------
 '
 function hGetUsedFilter () as string
+
+    ' used in math and graphics modules
     '/// Get used filter for loaded file.
     try
         FileSaveAs
@@ -226,28 +228,6 @@ function hGetUsedFilter () as string
     catch
         hGetUsedFilter = "Not possible; try/catch fail in function"
     endcatch
-end function
-'
-'-------------------------------------------------------------------------------
-'
-function hFileExport (sName as string, sFilter as string) as boolean
-    '/// Wrapper function to simplify the use of the export functions, just give a filename and export format.
-    '///+ INPUT:<ul><li>sName: filename</li><li>sFilter: &quot;PDF&quot;: call export for PDF</li></ul>
-    '///+ RETURN: execution success?
-    select case sFilter
-    case "PDF" : '/// use the function 'hExportAsPDF' with RECOMMENDED values /// '
-        hFileExport = hExportAsPDFmulti (3, TRUE,  sName, FALSE, TRUE, 1, 1)
-    end select
-    kontext
-    if active.exists(5) then
-        try
-            printlog active.getText
-            active.ok
-            warnLog "i26820 - errormessage about saving"
-        catch
-            printlog "pdf unexpected error in hFileExport()"
-        endcatch
-    endif
 end function
 '
 '-------------------------------------------------------------------------------
