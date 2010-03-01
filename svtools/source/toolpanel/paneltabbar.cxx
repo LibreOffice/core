@@ -262,6 +262,8 @@ namespace svt
         // IToolPanelContainerListener
         virtual void PanelInserted( const PToolPanel& i_pPanel, const size_t i_nPosition )
         {
+            (void)i_pPanel;
+            (void)i_nPosition;
             bItemsDirty = true;
         }
 
@@ -404,7 +406,7 @@ namespace svt
         }
 
         //--------------------------------------------------------------------------------------------------------------
-        static void lcl_drawItems( const PanelTabBar_Data& i_rData, PanelTabBar& i_rTabBar, const Rectangle& i_rTargetArea )
+        static void lcl_drawItems( const PanelTabBar_Data& i_rData, const Rectangle& i_rTargetArea )
         {
             size_t i=0;
             for (   ItemDescriptors::const_iterator item = i_rData.aItems.begin();
@@ -495,7 +497,7 @@ namespace svt
         DrawRect( Rectangle( Point(), GetOutputSizePixel() ) );
 
         // items
-        lcl_drawItems( *m_pData, *this, i_rRect );
+        lcl_drawItems( *m_pData, i_rRect );
     }
 
     //------------------------------------------------------------------------------------------------------------------
