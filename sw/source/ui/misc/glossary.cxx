@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: glossary.cxx,v $
- * $Revision: 1.49 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,57 +27,45 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #ifdef SW_DLLIMPLEMENTATION
 #undef SW_DLLIMPLEMENTATION
 #endif
-
-
 
 #define _SVSTDARR_STRINGSDTOR
 #define _SVSTDARR_STRINGS
 #include <hintids.hxx>
 
-#ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
-#endif
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#ifndef _HELP_HXX //autogen
 #include <vcl/help.hxx>
-#endif
 #ifndef _SVSTDARR_HXX
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
-#include <svtools/stritem.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/lingucfg.hxx>
+#include <svl/stritem.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/lingucfg.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/fcontnr.hxx>
 
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <unocrsr.hxx>
 #include <unotools.hxx>
-#include <unoobj.hxx>
 #include <comphelper/processfactory.hxx>
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <unotools/charclass.hxx>
 #include <swwait.hxx>
 #include <swtypes.hxx>
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
-#ifndef _BASESH_HXX
 #include <basesh.hxx>
-#endif
 #include <glossary.hxx>
 #include <gloshdl.hxx>
 #include <glosbib.hxx>
@@ -88,20 +73,12 @@
 #include <glosdoc.hxx>
 #include <macassgn.hxx>
 #include <swevent.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <shellio.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#ifndef _SWERROR_H
 #include <swerror.h>
-#endif
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif
@@ -1216,7 +1193,7 @@ IMPL_LINK( SwGlossaryDlg, PathHdl, Button *, pBtn )
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        AbstractSvxMultiPathDialog* pDlg = pFact->CreateSvxMultiPathDialog( pBtn, RID_SVXDLG_MULTIPATH);
+        AbstractSvxMultiPathDialog* pDlg = pFact->CreateSvxMultiPathDialog( pBtn );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");
         SvtPathOptions aPathOpt;
         String sGlosPath( aPathOpt.GetAutoTextPath() );

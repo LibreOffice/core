@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: node.cxx,v $
- * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,12 +32,10 @@
 #include <hintids.hxx>
 
 // --> OD 2005-02-21 #i42921#
-#include <svx/frmdiritem.hxx>
+#include <editeng/frmdiritem.hxx>
 // <--
-#include <svx/protitem.hxx>
-#ifndef _COM_SUN_STAR_I18N_CHARACTERITERATORMODE_HDL_
+#include <editeng/protitem.hxx>
 #include <com/sun/star/i18n/CharacterIteratorMode.hdl>
-#endif
 #include <fmtcntnt.hxx>
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
@@ -341,7 +336,7 @@ USHORT SwNode::GetSectionLevel() const
 |*
 *******************************************************************/
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 long SwNode::nSerial = 0;
 #endif
 
@@ -373,7 +368,7 @@ SwNode::SwNode( const SwNodeIndex &rWhere, const BYTE nNdType )
         pStartOfSection = (SwStartNode*)this;
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     nMySerial = nSerial;
     nSerial++;
 #endif
@@ -406,7 +401,7 @@ SwNode::SwNode( SwNodes& rNodes, ULONG nPos, const BYTE nNdType )
         pStartOfSection = (SwStartNode*)this;
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     nMySerial = nSerial;
     nSerial++;
 #endif
@@ -609,7 +604,7 @@ const SwPageDesc* SwNode::FindPageDesc( BOOL bCalcLay,
             if( pFmt )
             {
                 const SwFmtAnchor* pAnchor = &pFmt->GetAnchor();
-                if( FLY_PAGE != pAnchor->GetAnchorId() &&
+                if ((FLY_AT_PAGE != pAnchor->GetAnchorId()) &&
                     pAnchor->GetCntntAnchor() )
                 {
                     pNd = &pAnchor->GetCntntAnchor()->nNode.GetNode();
@@ -631,7 +626,7 @@ const SwPageDesc* SwNode::FindPageDesc( BOOL bCalcLay,
                                     break;
                                 }
                                 pAnchor = &pFrmFmt->GetAnchor();
-                                if( FLY_PAGE == pAnchor->GetAnchorId() ||
+                                if ((FLY_AT_PAGE == pAnchor->GetAnchorId()) ||
                                     !pAnchor->GetCntntAnchor() )
                                 {
                                     pFlyNd = 0;
@@ -1479,7 +1474,6 @@ SwCntntNode *SwCntntNode::JoinPrev()
     // erfrage vom Modify Informationen
 BOOL SwCntntNode::GetInfo( SfxPoolItem& rInfo ) const
 {
-    const SwNumRuleItem* pItem;
     switch( rInfo.Which() )
     {
     case RES_AUTOFMT_DOCNODE:
@@ -1508,18 +1502,6 @@ BOOL SwCntntNode::GetInfo( SfxPoolItem& rInfo ) const
 
 //        return TRUE;
     // <--
-
-    case RES_GETLOWERNUMLEVEL:
-        if( IsTxtNode() &&
-            0 != ( pItem = (SwNumRuleItem*)GetNoCondAttr(
-            RES_PARATR_NUMRULE, TRUE )) && pItem->GetValue().Len() &&
-            pItem->GetValue() == ((SwNRuleLowerLevel&)rInfo).GetName() &&
-            ((SwTxtNode*)this)->GetActualListLevel()
-                > ((SwNRuleLowerLevel&)rInfo).GetLevel() )
-        {
-            return FALSE;
-        }
-        break;
 
     case RES_FINDNEARESTNODE:
         if( ((SwFmtPageDesc&)GetAttr( RES_PAGEDESC )).GetPageDesc() )
@@ -1572,7 +1554,7 @@ BOOL SwCntntNode::SetAttr(const SfxPoolItem& rAttr )
     }
     return bRet;
 }
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 
 BOOL SwCntntNode::SetAttr( const SfxItemSet& rSet )
 {

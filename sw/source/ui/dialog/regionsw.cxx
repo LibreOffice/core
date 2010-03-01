@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: regionsw.cxx,v $
- * $Revision: 1.40 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,39 +31,25 @@
 
 #include <hintids.hxx>
 #include <uitool.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/PasswordHelper.hxx>
-#ifndef _MSGBOX_HXX //autogen
+#include <svl/urihelper.hxx>
+#include <svl/PasswordHelper.hxx>
 #include <vcl/msgbox.hxx>
-#endif
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
 #include <sot/formats.hxx>
-#ifndef _PASSWD_HXX //autogen
 #include <sfx2/passwd.hxx>
-#endif
 #include <sfx2/docfilt.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/linkmgr.hxx>
-#ifndef _SVX_SIZEITEM_HXX //autogen
-
-#include <svx/sizeitem.hxx>
-#endif
-
-#include <svx/htmlcfg.hxx>
+#include <editeng/sizeitem.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <section.hxx>
 #include <docary.hxx>
 #include <regionsw.hxx>
-#ifndef _BASESH_HXX
 #include <basesh.hxx>
-#endif
-#ifndef _WDOCSH_HXX
 #include <wdocsh.hxx>
-#endif
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <swundo.hxx>                   // fuer Undo-Ids
@@ -74,22 +57,11 @@
 #include <fmtfsize.hxx>
 #include <swunodef.hxx>
 #include <shellio.hxx>
-
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _REGIONSW_HRC
 #include <regionsw.hrc>
-#endif
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 #include <sfx2/bindings.hxx>
 #include <svx/htmlmode.hxx>
 #include <svx/dlgutil.hxx>
@@ -118,7 +90,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
     if (!pSet || pSet->Count()==0)
     {
         SwRect aRect;
-        rSh.CalcBoundRect(aRect, FLY_IN_CNTNT);
+        rSh.CalcBoundRect(aRect, FLY_AS_CHAR);
 
         long nWidth = aRect.Width();
         aSet.Put(SwFmtFrmSize(ATT_VAR_SIZE, nWidth));
@@ -154,7 +126,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         {
             SwFmtCol aCol;
             SwRect aRect;
-            rSh.CalcBoundRect(aRect, FLY_IN_CNTNT);
+            rSh.CalcBoundRect(aRect, FLY_AS_CHAR);
             long nWidth = aRect.Width();
 
             USHORT nCol = ((SfxUInt16Item *)pItem)->GetValue();
@@ -232,7 +204,7 @@ IMPL_STATIC_LINK( SwWrtShell, InsertRegionDialog, SwSection*, pSect )
                 SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE,
                 0);
         SwRect aRect;
-        pThis->CalcBoundRect(aRect, FLY_IN_CNTNT);
+        pThis->CalcBoundRect(aRect, FLY_AS_CHAR);
         long nWidth = aRect.Width();
         aSet.Put(SwFmtFrmSize(ATT_VAR_SIZE, nWidth));
         // Hoehe=Breite fuer konsistentere Vorschau (analog zu Bereich bearbeiten)

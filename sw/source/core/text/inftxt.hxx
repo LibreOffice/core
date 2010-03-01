@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: inftxt.hxx,v $
- * $Revision: 1.60 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +42,7 @@
 #include "txtfrm.hxx"
 #include "ndtxt.hxx"
 #include "txttypes.hxx"
-#include <svx/paravertalignitem.hxx>
+#include <editeng/paravertalignitem.hxx>
 
 class Font;
 class OutputDevice;
@@ -79,7 +76,7 @@ class SwWrongList;
 #define DIR_RIGHT2LEFT 2
 #define DIR_TOP2BOTTOM 3
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #define OPTCALM( rInf )  (rInf).IsOptCalm()
 #define OPTLOW( rInf )   (rInf).IsOptLow()
 #define OPTDBG( rInf )   (rInf).IsOptDbg()
@@ -380,7 +377,7 @@ public:
         { return ( pKanaComp && nKanaIdx < pKanaComp->Count() )
                    ? (*pKanaComp)[nKanaIdx] : 0; }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     sal_Bool IsOptCalm() const;
     sal_Bool IsOptLow() const;
     sal_Bool IsOptDbg() const;
@@ -423,7 +420,7 @@ class SwTxtPaintInfo : public SwTxtSizeInfo
     void _DrawBackBrush( const SwLinePortion &rPor ) const;
 
 protected:
-#ifdef PRODUCT
+#ifndef DBG_UTIL
     SwTxtPaintInfo() { pFrm = 0; pWrongList = 0; pGrammarCheckList = 0; pWrongList = 0; pSmartTags = 0; pSpaceAdd = 0; pBrushItem = 0;}
 #else
     SwTxtPaintInfo() { pFrm = 0; pWrongList = 0; pGrammarCheckList = 0; pSmartTags = 0; pSpaceAdd = 0;

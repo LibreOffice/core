@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: smres.src,v $
- * $Revision: 1.118 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -114,14 +111,12 @@ ModalDialog RID_FONTSIZEDIALOG
     SVLook = TRUE ;
     HelpID = SID_FONTSIZE ;
     Size = MAP_APPFONT ( 171 , 120 ) ;
-    /* ### ACHTUNG: Neuer Text in Resource? Schriftgrößen : Schriftgrößen */
     Text [ en-US ] = "Font Sizes" ;
     FixedText 1
     {
         Left = TRUE ;
         Pos = MAP_APPFONT ( 12 , 7 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Basisgröße: : ~Basisgröße: */
         Text [ en-US ] = "Base ~size";
     };
     MetricField 1
@@ -246,7 +241,6 @@ ModalDialog RID_FONTSIZEDIALOG
     {
         Pos = MAP_APPFONT ( 6 , 24 ) ;
         Size = MAP_APPFONT ( 99 , 8 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? relative Größen : relative Größen */
         Text [ en-US ] = "Relative sizes" ;
     };
     OKButton 1
@@ -433,7 +427,6 @@ ModalDialog RID_DISTANCEDIALOG
     SVLook = TRUE ;
     HelpID = SID_DISTANCE ;
     Size = MAP_APPFONT ( 240 , 90 ) ;
-    /* ### ACHTUNG: Neuer Text in Resource? Abstände : Abstände */
     Text [ en-US ] = "Spacing" ;
     FixedText 1
     {
@@ -564,7 +557,6 @@ ModalDialog RID_DISTANCEDIALOG
     {
         String 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Abstände : Abstände */
             Text [ en-US ] = "Spacing" ;
         };
         String 2
@@ -639,12 +631,10 @@ ModalDialog RID_DISTANCEDIALOG
     {
         String 1
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Brüche : Br³che */
             Text [ en-US ] = "Fractions" ;
         };
         String 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? ~Zählerhöhe: : ~Zählerhöhe: */
             Text [ en-US ] = "~Numerator";
         };
         Bitmap 20
@@ -676,7 +666,6 @@ ModalDialog RID_DISTANCEDIALOG
         };
         String 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? ~Überlänge: : ~šberlänge: */
             Text [ en-US ] = "~Excess length";
         };
         Bitmap 20
@@ -689,7 +678,6 @@ ModalDialog RID_DISTANCEDIALOG
         };
         String 3
         {
-            /* ### ACHTUNG: Neuer Text in Resource? ~Strichstärke: : ~Strichstärke: */
             Text [ en-US ] = "~Weight";
         };
         Bitmap 30
@@ -709,7 +697,6 @@ ModalDialog RID_DISTANCEDIALOG
         };
         String 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? Grenz~höhe: : Grenz~höhe: */
             Text [ en-US ] = "~Upper limit";
         };
         Bitmap 20
@@ -815,7 +802,6 @@ ModalDialog RID_DISTANCEDIALOG
         };
         String 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? ~Primärhöhe: : ~Primärhöhe: */
             Text [ en-US ] = "~Primary height";
         };
         Bitmap 20
@@ -847,7 +833,6 @@ ModalDialog RID_DISTANCEDIALOG
         };
         String 2
         {
-            /* ### ACHTUNG: Neuer Text in Resource? ~Übergröße: : ~šbergröße: */
             Text [ en-US ] = "~Excess size";
         };
         Bitmap 20
@@ -1127,7 +1112,6 @@ ModalDialog RID_SYMBOLDIALOG
         Pos = MAP_APPFONT ( 177 , 6 ) ;
         Size = MAP_APPFONT ( 56 , 14 ) ;
         DefButton = TRUE ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Übernehmen : ~šbernehmen */
         Text [ en-US ] = "~Insert" ;
     };
     PushButton 3
@@ -1365,14 +1349,13 @@ ModalDialog RID_SYMDEFINEDIALOG
 
 WarningBox RID_NOMATHTYPEFACEWARNING
 {
-    Message [ en-US ] = "The \"StarMath\" font has not been installed.\nWithout this font %PRODUCTNAME Math cannot function correctly.\nPlease install this font and restart %PRODUCTNAME Math." ;
+    Message [ en-US ] = "The 'StarMath' font has not been installed.\nWithout this font %PRODUCTNAME Math cannot function correctly.\nPlease install this font and restart %PRODUCTNAME Math." ;
 };
 
 QueryBox RID_DEFAULTSAVEQUERY
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_YES ;
-    /* ### ACHTUNG: Neuer Text in Resource? Sollen die Änderungen als Standard gespeichert werden ?\n\nDiese Änderungen wirken sich auf alle neuen Formeln aus. : Sollen die Žnderungen als Standard gespeichert werden ?\n\nDiese Žnderungen wirken sich auf alle neuen Formeln aus. */
     Message [ en-US ] = "Should the changes be saved as defaults?\n\nThese changes will apply for all new formulas." ;
 };
 
@@ -1438,7 +1421,6 @@ Menu RID_VIEWMENU
         {
             Identifier = SID_ZOOMIN ;
             HelpID = SID_ZOOMIN ;
-            /* ### ACHTUNG: Neuer Text in Resource? Vergrößern : Vergrößern */
             Text [ en-US ] = "~Zoom In" ;
         };
         MenuItem
@@ -1759,7 +1741,7 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_XSIMEQY ;
                 HelpId = HID_SMA_XSIMEQY ;
-                /* ### ACHTUNG: Neuer Text in Resource? ist ähnlich oder gleich : ist ähnlich oder glech */
+                /* ### ACHTUNG: Neuer Text in Resource? ist ï¿½hnlich oder gleich : ist ï¿½hnlich oder glech */
                 Text [ en-US ] = "Is Similar Or Equal" ;
             };
             ToolBoxItem
@@ -1782,7 +1764,6 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_XLESLANTY ;
                 HelpId = HID_SMA_XLESLANTY ;
-                /* ### ACHTUNG: Neuer Text in Resource? ist kleiner gleich (schräg) : ist keiner gleich */
                 Text [ en-US ] = "Is Less Than Or Equal To" ;
             };
             ToolBoxItem
@@ -2051,7 +2032,6 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_EX ;
                 HelpId = HID_SMA_EX ;
-                /* ### ACHTUNG: Neuer Text in Resource? Exponentialfunktion : natürliche Exponentialfunktion */
                 Text [ en-US ] = "Exponential Function" ;
             };
             ToolBoxItem
@@ -2734,7 +2714,6 @@ FloatingWindow RID_TOOLBOXWINDOW
             {
                 Identifier = RID_ALIGNCX ;
                 HelpId = HID_SMA_ALIGNCX ;
-                /* ### ACHTUNG: Neuer Text in Resource? zentriert ausrichten : zentriert (horizontal) ausrichten */
                 Text [ en-US ] = "Align Center" ;
             };
             ToolBoxItem
@@ -3456,13 +3435,11 @@ String RID_ERR_FUNCEXPECTED
 
 String RID_ERR_UNOPEREXPECTED
 {
-    /* ### ACHTUNG: Neuer Text in Resource?     Unärer Operator erwartet : Un§rer Operator erwartet */
     Text [ en-US ] = "Unary operator expected" ;
 };
 
 String RID_ERR_BINOPEREXPECTED
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Binärer Operator erwartet : Bin§rer Operator erwartet */
     Text [ en-US ] = "Binary operator expected" ;
 };
 
@@ -3526,9 +3503,7 @@ ToolBox RID_MATH_TOOLBOX
         {
             Identifier = SID_ZOOMIN ;
             HelpID = SID_ZOOMIN ;
-            /* ### ACHTUNG: Neuer Text in Resource? Größer : Größer */
             Text [ en-US ] = "Zoom In" ;
-            /* ### ACHTUNG: Neuer Text in Resource? Stellt den Ausschnitt vergrößert dar : Stellt den Ausschnitt vergrößert dar */
         };
         ToolBoxItem
         {
@@ -3541,7 +3516,6 @@ ToolBox RID_MATH_TOOLBOX
             Identifier = SID_VIEW100 ;
             HelpID = SID_VIEW100 ;
             Text [ en-US ] = "Zoom 100%" ;
-            /* ### ACHTUNG: Neuer Text in Resource? Stellt den Ausschnitt in tatsächlicher Größe dar : Stellt den Ausschnitt in tatsächlicher GröÃe dar */
         };
         ToolBoxItem
         {
@@ -3570,7 +3544,6 @@ ToolBox RID_MATH_TOOLBOX
             Identifier = SID_SYMBOLS_CATALOGUE ;
             HelpID = SID_SYMBOLS_CATALOGUE ;
             Text [ en-US ] = "Symbols" ;
-            /* ### ACHTUNG: Neuer Text in Resource? Symbole einfügen und bearbeiten : Symbole einf³gen und bearbeiten */
         };
     };
 };
@@ -3580,189 +3553,28 @@ String RID_MATH_TOOLBOX
     Text [ en-US ] = "Main Toolbar" ;
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+StringArray RID_PRINTUIOPTIONS
+{
+    ItemList [en-US] =
+    {
+        < "%PRODUCTNAME %s"; >;
+        < "Contents"; >;
+        < "~Title row"; >;
+        < "Specifies whether you want the name of the document to be included in the printout"; >;
+        < "~Formula text"; >;
+        < "Specifies whether to include the contents of the 'Commands' window at the bottom of the printout."; >;
+        < "B~orders"; >;
+        < "Applies a thin border to the formula area in the printout."; >;
+        < "Size"; >;
+        < "O~riginal size"; >;
+        < "Prints the formula without adjusting the current font size."; >;
+        < "Fit to ~page"; >;
+        < "Adjusts the formula to the page format used in the printout."; >;
+        < "~Scaling"; >;
+        < "Reduces or enlarges the size of the printed formula by a specified enlargement factor."; >;
+        < "Miscellaneous options"; >;
+        < "Ig~nore ~~ and ` at the end of the line"; >;
+        < "Specfies that these space wildcards will be removed if they are at the end of a line."; >;
+    };
+};
 

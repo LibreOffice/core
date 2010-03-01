@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: cmdid.h,v $
- * $Revision: 1.84.34.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -323,7 +320,6 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_GLOBAL_OPEN          (FN_VIEW + 47)  /* oeffnen */
 #define FN_GLOBAL_SAVE_CONTENT  (FN_VIEW + 48)  /* Inhalt der Verknuepfung mitspeichern */
 #define FN_CREATE_NAVIGATION    (FN_VIEW + 49)  /* Navigations-Controller erzeugen */
-#define FN_PREVIEW_PRINT_OPTIONS (FN_VIEW + 50)  /* Optionsdialog Preview drucken */
 #define FN_PREVIEW_ZOOM          (FN_VIEW + 51)  /* der Tabellencontroller fuer den Zoom */
 
 #define FN_SET_MODOPT_TBLNUMFMT  (FN_VIEW + 52) /* Zahlenerkennung in Tabellen */

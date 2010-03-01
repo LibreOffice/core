@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: grfshex.cxx,v $
- * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,13 +30,9 @@
 
 
 #include <docary.hxx>
-#ifndef _GRFSH_HXX
 #include <grfsh.hxx>
-#endif
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <docary.hxx>
 #ifndef _TEXTSH_HXX
 #include <textsh.hxx>
@@ -51,9 +44,8 @@
 #endif
 #include <caption.hxx>
 #define _SVSTDARR_STRINGSSORTDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <svtools/filter.hxx>
-#include <svx/impgrf.hxx>
 #include <svx/htmlmode.hxx>
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
@@ -81,7 +73,7 @@
 
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <vcl/svapp.hxx>
 

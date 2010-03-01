@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: txatbase.hxx,v $
- * $Revision: 1.22.210.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,7 @@
 #define _TXATBASE_HXX
 
 #include <tools/solar.h>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <hintids.hxx>
 #include <errhdl.hxx>
 

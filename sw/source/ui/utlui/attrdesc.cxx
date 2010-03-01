@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: attrdesc.cxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,10 +29,10 @@
 #include "precompiled_sw.hxx"
 
 
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <vcl/svapp.hxx>
-#include <svx/itemtype.hxx>
-#include <goodies/grfmgr.hxx>
+#include <editeng/itemtype.hxx>
+#include <svtools/grfmgr.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <fmtanchr.hxx>
@@ -53,9 +50,7 @@
 #include <fmturl.hxx>
 #include <fmthdft.hxx>
 #include <fmtcnct.hxx>
-#ifndef _FMTLINE_HXX
 #include <fmtline.hxx>
-#endif
 #include <tgrditem.hxx>
 #include <hfspacingitem.hxx>
 #include <fmtruby.hxx>
@@ -687,13 +682,13 @@ SfxItemPresentation SwFmtAnchor::GetPresentation
             USHORT nId = 0;
             switch ( GetAnchorId() )
             {
-                case FLY_AT_CNTNT:      //Absatzgebundener Rahmen
+                case FLY_AT_PARA:
                     nId = STR_FLY_AT_CNTNT;
                     break;
-                case FLY_IN_CNTNT:      //Zeichengebundener Rahmen
+                case FLY_AS_CHAR:
                     nId = STR_FLY_IN_CNTNT;
                     break;
-                case FLY_PAGE:          //Seitengebundener Rahmen
+                case FLY_AT_PAGE:
                     nId = STR_FLY_PAGE;
                     break;
                 default:;//prevent warning

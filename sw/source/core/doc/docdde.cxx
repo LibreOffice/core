@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docdde.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,8 +38,8 @@
 #include <tools/urlobj.hxx>
 
 #define _SVSTDARR_STRINGS
-#include <svtools/svstdarr.hxx>
-#include <svx/linkmgr.hxx>          // LinkManager
+#include <svl/svstdarr.hxx>
+#include <sfx2/linkmgr.hxx>         // LinkManager
 #include <unotools/charclass.hxx>
 #include <fmtcntnt.hxx>
 #include <doc.hxx>

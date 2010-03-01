@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unoredline.cxx,v $
- * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,24 +28,29 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
 
+#include <rtl/ustrbuf.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
+
 #include <pagedesc.hxx>
 #include "poolfmt.hxx"
 #include <redline.hxx>
 #include <section.hxx>
 #include <unoprnms.hxx>
-#include <unoobj.hxx>
+#include <unomid.h>
+#include <unotextrange.hxx>
+#include <unotextcursor.hxx>
+#include <unoparagraph.hxx>
 #include <unocoll.hxx>
 #include <unomap.hxx>
 #include <unocrsr.hxx>
 #include <unoredline.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/text/XTextTable.hpp>
+
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -136,9 +138,9 @@ uno::Reference<text::XTextCursor> SwXRedlineText::createTextCursor(void)
     vos::OGuard aGuard(Application::GetSolarMutex());
 
     SwPosition aPos(aNodeIndex);
-    SwXTextCursor* pCrsr = new SwXTextCursor(this, aPos, CURSOR_REDLINE,
-                                             GetDoc());
-    SwUnoCrsr* pUnoCursor = pCrsr->GetCrsr();
+    SwXTextCursor *const pXCursor =
+        new SwXTextCursor(*GetDoc(), this, CURSOR_REDLINE, aPos);
+    SwUnoCrsr *const pUnoCursor = pXCursor->GetCursor();
     pUnoCursor->Move(fnMoveForward, fnGoNode);
 
     // #101929# prevent a newly created text cursor from running inside a table
@@ -170,7 +172,7 @@ uno::Reference<text::XTextCursor> SwXRedlineText::createTextCursor(void)
         throw aExcept;
     }
 
-    return (text::XWordCursor*)pCrsr;
+    return static_cast<text::XWordCursor*>(pXCursor);
 }
 /* ---------------------------------------------------------------------------
 
@@ -193,7 +195,9 @@ uno::Reference<container::XEnumeration> SwXRedlineText::createEnumeration(void)
     vos::OGuard aGuard(Application::GetSolarMutex());
     SwPaM aPam(aNodeIndex);
     aPam.Move(fnMoveForward, fnGoNode);
-    return new SwXParagraphEnumeration(this, *aPam.Start(), CURSOR_REDLINE);
+    ::std::auto_ptr<SwUnoCrsr> pUnoCursor(
+        GetDoc()->CreateUnoCrsr(*aPam.Start(), sal_False));
+    return new SwXParagraphEnumeration(this, pUnoCursor, CURSOR_REDLINE);
 }
 /* ---------------------------------------------------------------------------
 
@@ -584,11 +588,8 @@ uno::Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
                     pPoint = pRedline->GetPoint();
                 else
                     pPoint = pRedline->GetMark();
-                SwPaM aTmp(*pPoint);
-                uno::Reference<text::XText> xTmpParent;
-//              uno::Reference< text::XTextRange > xRange = SwXTextRange::createTextRangeFromPaM(aTmp);
-                uno::Reference<text::XTextRange>xRange =
-                    SwXTextRange::CreateTextRangeFromPosition( pDoc, *pPoint, 0 );
+                const uno::Reference<text::XTextRange> xRange =
+                    SwXTextRange::CreateXTextRange(*pDoc, *pPoint, 0);
                 xRet = xRange.get();
             }
             break;
@@ -676,7 +677,9 @@ uno::Reference< container::XEnumeration >  SwXRedline::createEnumeration(void) t
     {
         SwPaM aPam(*pNodeIndex);
         aPam.Move(fnMoveForward, fnGoNode);
-        xRet = new SwXParagraphEnumeration(this, *aPam.Start(), CURSOR_REDLINE);
+        ::std::auto_ptr<SwUnoCrsr> pUnoCursor(
+            GetDoc()->CreateUnoCrsr(*aPam.Start(), sal_False));
+        xRet = new SwXParagraphEnumeration(this, pUnoCursor, CURSOR_REDLINE);
     }
     return xRet;
 }
@@ -710,8 +713,9 @@ uno::Reference< text::XTextCursor >  SwXRedline::createTextCursor(void) throw( u
     if(pNodeIndex)
     {
         SwPosition aPos(*pNodeIndex);
-        SwXTextCursor* pCrsr = new SwXTextCursor(this, aPos, CURSOR_REDLINE, pDoc);
-        SwUnoCrsr* pUnoCrsr = pCrsr->GetCrsr();
+        SwXTextCursor *const pXCursor =
+            new SwXTextCursor(*pDoc, this, CURSOR_REDLINE, aPos);
+        SwUnoCrsr *const pUnoCrsr = pXCursor->GetCursor();
         pUnoCrsr->Move(fnMoveForward, fnGoNode);
 
         //steht hier eine Tabelle?
@@ -725,7 +729,7 @@ uno::Reference< text::XTextCursor >  SwXRedline::createTextCursor(void) throw( u
         }
         if(pCont)
             pUnoCrsr->GetPoint()->nContent.Assign(pCont, 0);
-        xRet =  (text::XWordCursor*)pCrsr;
+        xRet = static_cast<text::XWordCursor*>(pXCursor);
     }
     else
     {

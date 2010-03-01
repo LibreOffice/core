@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ccoll.cxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -209,11 +206,7 @@ int SwCondCollItem::operator==( const SfxPoolItem& rItem) const
 
 const String&   SwCondCollItem::GetStyle(USHORT nPos) const
 {
-#ifndef IRIX
     return nPos < COND_COMMAND_COUNT ? sStyles[nPos] : aEmptyStr;
-#else
-    return nPos < COND_COMMAND_COUNT ? (String)sStyles[nPos] : aEmptyStr;
-#endif
 }
 
 /****************************************************************************
@@ -224,11 +217,7 @@ const String&   SwCondCollItem::GetStyle(USHORT nPos) const
 void SwCondCollItem::SetStyle(const String* pStyle, USHORT nPos)
 {
     if( nPos < COND_COMMAND_COUNT )
-#ifndef IRIX
         sStyles[nPos] = pStyle ? *pStyle : aEmptyStr;
-#else
-        sStyles[nPos] = pStyle ? (String)*pStyle : aEmptyStr;
-#endif
 }
 
 

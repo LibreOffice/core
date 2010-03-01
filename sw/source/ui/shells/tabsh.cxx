@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tabsh.cxx,v $
- * $Revision: 1.46.212.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,28 +31,28 @@
 
 #ifndef _ZFORLIST_HXX
 #define _ZFORLIST_DECLARE_TABLE
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #endif
-#include <svtools/stritem.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <svl/stritem.hxx>
+#include <svl/whiter.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <svx/rulritem.hxx>
-#include <svx/srchitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/spltitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/keepitem.hxx>
-#include <svx/bolnitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <svl/srchitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/spltitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/bolnitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <svx/numinf.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svxdlg.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/zformat.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
@@ -108,16 +105,12 @@
 #ifndef _TABLE_HRC
 #include <table.hrc>
 #endif
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#include <unoobj.hxx>
+#include <unobaseclass.hxx>
 
 #define SwTableShell
 #include <sfx2/msg.hxx>

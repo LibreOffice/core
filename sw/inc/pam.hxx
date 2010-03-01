@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pam.hxx,v $
- * $Revision: 1.19.172.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -192,8 +189,8 @@ public:
             m_pMark = m_pPoint;
         }
     }
+#ifndef DBG_UTIL
 
-#ifdef PRODUCT
     void Exchange()
     {
         if (m_pPoint != m_pMark)

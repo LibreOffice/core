@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: porfld.hxx,v $
- * $Revision: 1.16.100.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,7 +57,7 @@ protected:
     sal_Bool bAnimated : 1;         // wird von SwGrfNumPortion benutzt
     sal_Bool bNoPaint : 1;          // wird von SwGrfNumPortion benutzt
     sal_Bool bReplace : 1;          // wird von SwGrfNumPortion benutzt
-    sal_Bool bPlaceHolder : 1;
+    const sal_Bool bPlaceHolder : 1;
     sal_Bool m_bNoLength : 1;       // HACK for meta suffix (no CH_TXTATR)
 
     inline void SetFont( SwFont *pNew ) { pFnt = pNew; }

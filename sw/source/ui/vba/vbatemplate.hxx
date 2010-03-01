@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unoclbck.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,26 +24,29 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _UNOCLBCK_HXX
-#define _UNOCLBCK_HXX
-#include <calbck.hxx>
+#ifndef SW_VBA_TEMPLATE_HXX
+#define SW_VBA_TEMPLATE_HXX
 
-class SwXReferenceMark;
-class SwFmtRefMark;
-class SwFmtFtn;
-class SwXFootnote;
-class SwTOXMark;
-class SwXDocumentIndexMark;
+#include <ooo/vba/word/XTemplate.hpp>
+#include <vbahelper/vbahelperinterface.hxx>
 
-class SwUnoCallBack : public SwModify
+typedef InheritedHelperInterfaceImpl1< ooo::vba::word::XTemplate > SwVbaTemplate_BASE;
+
+class SwVbaTemplate : public SwVbaTemplate_BASE
 {
+private:
+    css::uno::Reference< css::frame::XModel > mxModel;
+    rtl::OUString msName;
 public:
-    SwUnoCallBack(SwModify *pToRegisterIn);
-    virtual ~SwUnoCallBack();
+    SwVbaTemplate( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext,
+        const css::uno::Reference< css::frame::XModel >& rModel, const rtl::OUString& );
+    virtual ~SwVbaTemplate();
 
-    // returns the API object of a reference mark if available
-    SwXReferenceMark*   GetRefMark(const SwFmtRefMark& rMark);
-    SwXFootnote*        GetFootnote(const SwFmtFtn& rMark);
-    SwXDocumentIndexMark* GetTOXMark(const SwTOXMark& rMark);
+   // XTemplate
+    virtual rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL AutoTextEntries( const css::uno::Any& index ) throw (css::uno::RuntimeException);
+    // XHelperInterface
+    virtual rtl::OUString& getServiceImplName();
+    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
-#endif
+#endif /* SW_VBA_TEMPLATE_HXX */

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: srcview.hxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,10 +25,12 @@
  *
  ************************************************************************/
 #ifndef _SRCVIEW_HXX
-#define _SRCIEW_HXX
+#define _SRCVIEW_HXX
 
 #include <sfx2/viewfac.hxx>
 #include <sfx2/viewsh.hxx>
+#include <vcl/outdev.hxx>
+
 #include "srcedtw.hxx"
 #include "shellid.hxx"
 
@@ -92,10 +91,10 @@ public:
 
     void            Load(SwDocShell* pDocShell);
 
-    virtual USHORT  SetPrinter( SfxPrinter* pNew,
-                                        USHORT nDiff = SFX_PRINTER_ALL, bool bIsAPI=false );
-    virtual ErrCode DoPrint( SfxPrinter *pPrinter, PrintDialog *pPrintDialog, BOOL bSilent, BOOL bIsAPI );
+    virtual USHORT  SetPrinter( SfxPrinter* pNew, USHORT nDiff = SFX_PRINTER_ALL, bool bIsAPI=false );
     virtual         SfxPrinter*     GetPrinter( BOOL bCreate = FALSE );
+
+    sal_Int32       PrintSource( OutputDevice *pOutDev, sal_Int32 nPage, bool bCalcNumPagesOnly );
 
     void            SourceSaved() {bSourceSaved = TRUE;}
     BOOL            HasSourceSaved() const {return bSourceSaved;}

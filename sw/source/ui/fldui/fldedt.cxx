@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fldedt.cxx,v $
- * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -226,15 +223,15 @@ SfxTabPage* SwFldEditDlg::CreatePage(USHORT nGroup)
                 uno::Reference< beans::XPropertySet > xUDProps(
                     xDocProps->getUserDefinedProperties(),
                     uno::UNO_QUERY_THROW);
-                uno::Reference< beans::XPropertySetInfo > xSetInfo
-                    = xUDProps->getPropertySetInfo();
-                const uno::Sequence< beans::Property > props
-                    = xSetInfo->getProperties();
-                uno::Sequence< ::rtl::OUString > names(props.getLength());
-                for (sal_Int32 i = 0; i < props.getLength(); ++i) {
-                    names[i] = props[i].Name;
-                }
-                pSet->Put( SfxUnoAnyItem( SID_DOCINFO, uno::makeAny(names) ) );
+//                uno::Reference< beans::XPropertySetInfo > xSetInfo
+//                    = xUDProps->getPropertySetInfo();
+//                const uno::Sequence< beans::Property > props
+//                    = xSetInfo->getProperties();
+//                uno::Sequence< ::rtl::OUString > names(props.getLength());
+//                for (sal_Int32 i = 0; i < props.getLength(); ++i) {
+//                    names[i] = props[i].Name;
+//                }
+                pSet->Put( SfxUnoAnyItem( SID_DOCINFO, uno::makeAny(xUDProps) ) );
                 pTabPage = SwFldDokInfPage::Create(this, *pSet);
                 nHelpId = HID_EDIT_FLD_DOKINF;
                 break;

@@ -1,14 +1,10 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
-# Copyright 2008 by Sun Microsystems, Inc.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.74 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -42,10 +38,6 @@ USE_DEFFILE=TRUE
 .INCLUDE :  settings.mk
 
 # --- Allgemein -----------------------------------------------------------
-
-.IF "$(OS)"=="IRIX"
-LINKFLAGS+=-Wl,-LD_LAYOUT:lgot_buffer=40
-.ENDIF
 
 sw_res_files= \
     $(SRS)$/app.srs          \
@@ -103,11 +95,11 @@ LIB1OBJFILES= $(OUT)$/slo$/swmodule.obj \
 SHL1STDLIBS+= \
     $(LNGLIB) \
     $(SVXCORELIB) \
+    $(EDITENGLIB) \
     $(SVXLIB) \
     $(SFXLIB) \
     $(XMLOFFLIB) \
     $(BASICLIB) \
-    $(GOODIESLIB) \
     $(BASEGFXLIB) \
     $(DRAWINGLAYERLIB) \
     $(SVTOOLLIB) \
@@ -127,6 +119,7 @@ SHL1STDLIBS+= \
     $(SALHELPERLIB) \
     $(ICUUCLIB) \
     $(I18NUTILLIB)	\
+                $(VBAHELPERLIB) \
     $(AVMEDIALIB)
 
 .IF "$(GUI)"=="WNT"
@@ -148,6 +141,7 @@ DEF2NAME=       $(SHL2TARGET)
 SHL2STDLIBS= \
             $(SFX2LIB) \
             $(SVTOOLLIB) \
+    $(UNOTOOLSLIB) \
             $(SVLLIB) \
             $(VCLLIB) \
             $(SOTLIB) \
@@ -163,7 +157,7 @@ SHL2OBJS=   $(SLO)$/swdetect.obj \
         $(SLO)$/detreg.obj \
         $(SLO)$/iodetect.obj
 
-.IF "$(product)"==""
+.IF "$(dbgutil)"!=""
 SHL2OBJS+=  \
         $(SLO)$/errhdl.obj
 .ENDIF
@@ -181,6 +175,7 @@ DEF3NAME=       $(SHL3TARGET)
 SHL3STDLIBS= \
         $(ISWLIB) \
             $(SVXCORELIB) \
+            $(EDITENGLIB) \
             $(SVXLIB) \
             $(SFX2LIB) \
             $(SVTOOLLIB) \
@@ -321,9 +316,9 @@ DEF4NAME=$(SHL4TARGET)
 SHL4STDLIBS= \
     $(ISWLIB) \
     $(SVXCORELIB) \
-    $(SVXMSFILTERLIB) \
+       $(EDITENGLIB) \
+    $(MSFILTERLIB) \
     $(SFXLIB) \
-    $(GOODIESLIB) \
     $(BASEGFXLIB) \
     $(SVTOOLLIB) \
     $(TKLIB) \
@@ -339,6 +334,41 @@ SHL4STDLIBS= \
     $(CPPUHELPERLIB) \
     $(SALLIB) \
     $(ICUUCLIB) \
+    $(BASICLIB)     \
     $(I18NUTILLIB)
+
+#target vba
+TARGET_VBA=vbaswobj
+SHL5TARGET=$(TARGET_VBA)$(DLLPOSTFIX).uno
+SHL5IMPLIB=     i$(TARGET_VBA)
+
+SHL5VERSIONMAP=$(TARGET_VBA).map
+SHL5DEF=$(MISC)$/$(SHL5TARGET).def
+DEF5NAME=$(SHL5TARGET)
+SHL5STDLIBS= \
+                $(ISWLIB) \
+                $(CPPUHELPERLIB) \
+                $(VCLLIB) \
+                $(CPPULIB) \
+                $(COMPHELPERLIB) \
+                $(SVLIB) \
+                $(UNOTOOLSLIB) \
+                $(TOOLSLIB) \
+                $(SALLIB)\
+                $(VBAHELPERLIB) \
+                $(BASICLIB)     \
+                $(SFXLIB)       \
+                $(SVXLIB)       \
+                $(SVTOOLLIB)    \
+                $(SVLLIB) \
+                $(VCLLIB) \
+                $(TKLIB) \
+                $(I18NISOLANGLIB) \
+                $(EDITENGLIB) \
+                $(SVXCORELIB) \
+                $(SVXMSFILTERLIB)
+
+SHL5DEPN=$(SHL1TARGETN)
+SHL5LIBS=$(SLB)$/$(TARGET_VBA).lib
 
 .INCLUDE :  target.mk

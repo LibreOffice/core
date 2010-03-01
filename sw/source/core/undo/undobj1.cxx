@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: undobj1.cxx,v $
- * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 
 
 #include <hintids.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <fmtflcnt.hxx>
 #include <fmtanchr.hxx>
 #include <fmtcntnt.hxx>
@@ -93,15 +90,19 @@ void SwUndoFlyBase::InsFly( SwUndoIter& rUndoIter, BOOL bShowSelFrm )
 
     SwFmtAnchor aAnchor( (RndStdIds)nRndId );
 
-    if( FLY_PAGE == nRndId )
+    if (FLY_AT_PAGE == nRndId)
+    {
         aAnchor.SetPageNum( (USHORT)nNdPgPos );
+    }
     else
     {
         SwPosition aNewPos( *rUndoIter.pAktPam->GetPoint() );
         aNewPos.nNode = nNdPgPos;
-        if( FLY_IN_CNTNT == nRndId || FLY_AUTO_CNTNT == nRndId )
+        if ((FLY_AS_CHAR == nRndId) || (FLY_AT_CHAR == nRndId))
+        {
             aNewPos.nContent.Assign( aNewPos.nNode.GetNode().GetCntntNode(),
                                     nCntPos );
+        }
         aAnchor.SetAnchor( &aNewPos );
     }
 
@@ -119,7 +120,7 @@ void SwUndoFlyBase::InsFly( SwUndoIter& rUndoIter, BOOL bShowSelFrm )
     //              vorhanden ist! Sonst wuerde das Layout den Fly vorher
     //              formatieren, aber keine Inhalt finden; so geschene bei
     //              Grafiken aus dem Internet
-    if( FLY_IN_CNTNT == nRndId )
+    if (FLY_AS_CHAR == nRndId)
     {
         // es muss mindestens das Attribut im TextNode stehen
         SwCntntNode* pCNd = aAnchor.GetCntntAnchor()->nNode.GetNode().GetCntntNode();
@@ -138,22 +139,22 @@ void SwUndoFlyBase::InsFly( SwUndoIter& rUndoIter, BOOL bShowSelFrm )
 
     switch( nRndId )
     {
-    case FLY_IN_CNTNT:
-    case FLY_AUTO_CNTNT:
+    case FLY_AS_CHAR:
+    case FLY_AT_CHAR:
         {
             const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
             nNdPgPos = rAnchor.GetCntntAnchor()->nNode.GetIndex();
             nCntPos = rAnchor.GetCntntAnchor()->nContent.GetIndex();
         }
         break;
-    case FLY_AT_CNTNT:
+    case FLY_AT_PARA:
     case FLY_AT_FLY:
         {
             const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
             nNdPgPos = rAnchor.GetCntntAnchor()->nNode.GetIndex();
         }
         break;
-    case FLY_PAGE:
+    case FLY_AT_PAGE:
         break;
     }
     bDelFmt =  FALSE;
@@ -193,7 +194,8 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
     const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
     const SwPosition* pPos = rAnchor.GetCntntAnchor();
     // die Positionen im Nodes-Array haben sich verschoben
-    if( FLY_IN_CNTNT == ( nRndId = static_cast<USHORT>(rAnchor.GetAnchorId()) ) )
+    nRndId = static_cast<USHORT>(rAnchor.GetAnchorId());
+    if (FLY_AS_CHAR == nRndId)
     {
         nNdPgPos = pPos->nNode.GetIndex();
         nCntPos = pPos->nContent.GetIndex();
@@ -210,15 +212,19 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
             pTxtNd->EraseText( aIdx, 1 );
         }
     }
-    else if( FLY_AUTO_CNTNT == nRndId )
+    else if (FLY_AT_CHAR == nRndId)
     {
         nNdPgPos = pPos->nNode.GetIndex();
         nCntPos = pPos->nContent.GetIndex();
     }
-    else if( FLY_AT_CNTNT == nRndId || FLY_AT_FLY == nRndId )
+    else if ((FLY_AT_PARA == nRndId) || (FLY_AT_FLY == nRndId))
+    {
         nNdPgPos = pPos->nNode.GetIndex();
+    }
     else
+    {
         nNdPgPos = rAnchor.GetPageNum();
+    }
 
     pFrmFmt->ResetFmtAttr( RES_ANCHOR );        // Anchor loeschen
 
@@ -240,15 +246,15 @@ SwUndoInsLayFmt::SwUndoInsLayFmt( SwFrmFmt* pFormat, ULONG nNodeIdx, xub_StrLen 
     bDelFmt = FALSE;
     switch( nRndId )
     {
-    case FLY_PAGE:
+    case FLY_AT_PAGE:
         nNdPgPos = rAnchor.GetPageNum();
         break;
-    case FLY_AT_CNTNT:
+    case FLY_AT_PARA:
     case FLY_AT_FLY:
         nNdPgPos = rAnchor.GetCntntAnchor()->nNode.GetIndex();
         break;
-    case FLY_IN_CNTNT:
-    case FLY_AUTO_CNTNT:
+    case FLY_AS_CHAR:
+    case FLY_AT_CHAR:
         {
             const SwPosition* pPos = rAnchor.GetCntntAnchor();
             nCntPos = pPos->nContent.GetIndex();
@@ -305,13 +311,15 @@ void SwUndoInsLayFmt::Repeat( SwUndoIter& rUndoIter )
     SwDoc* pDoc = &rUndoIter.GetDoc();
     // erfrage und setze den Anker neu
     SwFmtAnchor aAnchor( pFrmFmt->GetAnchor() );
-    if( FLY_AT_CNTNT == aAnchor.GetAnchorId() ||
-        FLY_AUTO_CNTNT == aAnchor.GetAnchorId() ||
-        FLY_IN_CNTNT == aAnchor.GetAnchorId() )
+    if ((FLY_AT_PARA == aAnchor.GetAnchorId()) ||
+        (FLY_AT_CHAR == aAnchor.GetAnchorId()) ||
+        (FLY_AS_CHAR == aAnchor.GetAnchorId()))
     {
         SwPosition aPos( *rUndoIter.pAktPam->GetPoint() );
-        if( FLY_AT_CNTNT == aAnchor.GetAnchorId() )
+        if (FLY_AT_PARA == aAnchor.GetAnchorId())
+        {
             aPos.nContent.Assign( 0, 0 );
+        }
         aAnchor.SetAnchor( &aPos );
     }
     else if( FLY_AT_FLY == aAnchor.GetAnchorId() )
@@ -328,7 +336,7 @@ void SwUndoInsLayFmt::Repeat( SwUndoIter& rUndoIter )
             return ;
         }
     }
-    else if( FLY_PAGE == aAnchor.GetAnchorId() )
+    else if (FLY_AT_PAGE == aAnchor.GetAnchorId())
     {
         aAnchor.SetPageNum( pDoc->GetRootFrm()->GetCurrPage(
                                         rUndoIter.pAktPam ));
@@ -482,7 +490,7 @@ void SwUndoSetFlyFmt::GetAnchor( SwFmtAnchor& rAnchor,
                                 ULONG nNode, xub_StrLen nCntnt )
 {
     RndStdIds nAnchorTyp = rAnchor.GetAnchorId();
-    if( FLY_PAGE != nAnchorTyp )
+    if (FLY_AT_PAGE != nAnchorTyp)
     {
         SwNode* pNd = pFrmFmt->GetDoc()->GetNodes()[ nNode ];
 
@@ -490,26 +498,34 @@ void SwUndoSetFlyFmt::GetAnchor( SwFmtAnchor& rAnchor,
                 ? ( !pNd->IsStartNode() || SwFlyStartNode !=
                     ((SwStartNode*)pNd)->GetStartNodeType() )
                 : !pNd->IsTxtNode() )
-            pNd = 0;                // ungueltige Position
+        {
+            pNd = 0;    // invalid position
+        }
         else
         {
             SwPosition aPos( *pNd );
-            if( FLY_IN_CNTNT == nAnchorTyp ||
-                FLY_AUTO_CNTNT == nAnchorTyp )
+            if ((FLY_AS_CHAR == nAnchorTyp) ||
+                (FLY_AT_CHAR == nAnchorTyp))
             {
-                if( nCntnt > ((SwTxtNode*)pNd)->GetTxt().Len() )
-                    pNd = 0;        // ungueltige Position
+                if ( nCntnt > static_cast<SwTxtNode*>(pNd)->GetTxt().Len() )
+                {
+                    pNd = 0;    // invalid position
+                }
                 else
-                    aPos.nContent.Assign( (SwTxtNode*)pNd, nCntnt );
+                {
+                    aPos.nContent.Assign(static_cast<SwTxtNode*>(pNd), nCntnt);
+                }
             }
-            if( pNd )
+            if ( pNd )
+            {
                 rAnchor.SetAnchor( &aPos );
+            }
         }
 
         if( !pNd )
         {
             // ungueltige Position - setze auf 1. Seite
-            rAnchor.SetType( FLY_PAGE );
+            rAnchor.SetType( FLY_AT_PAGE );
             rAnchor.SetPageNum( 1 );
         }
     }
@@ -548,7 +564,7 @@ void SwUndoSetFlyFmt::Undo( SwUndoIter& rIter )
         if( bAnchorChgd )
         {
             const SwFmtAnchor& rOldAnch = pFrmFmt->GetAnchor();
-            if( FLY_IN_CNTNT == rOldAnch.GetAnchorId() )
+            if (FLY_AS_CHAR == rOldAnch.GetAnchorId())
             {
                 // Bei InCntnt's wird es spannend: Das TxtAttribut muss
                 // vernichtet werden. Leider reisst dies neben den Frms
@@ -577,7 +593,7 @@ void SwUndoSetFlyFmt::Undo( SwUndoIter& rIter )
             GetAnchor( aNewAnchor, nOldNode, nOldCntnt );
             pFrmFmt->SetFmtAttr( aNewAnchor );
 
-            if( FLY_IN_CNTNT == aNewAnchor.GetAnchorId() )
+            if (FLY_AS_CHAR == aNewAnchor.GetAnchorId())
             {
                 SwPosition* pPos = (SwPosition*)aNewAnchor.GetCntntAnchor();
                 SwFmtFlyCnt aFmt( pFrmFmt );
@@ -629,10 +645,10 @@ void SwUndoSetFlyFmt::PutAttr( USHORT nWhich, const SfxPoolItem* pItem )
             const SwFmtAnchor* pAnchor = (SwFmtAnchor*)pItem;
             switch( nOldAnchorTyp = static_cast<USHORT>(pAnchor->GetAnchorId()) )
             {
-            case FLY_IN_CNTNT:
-            case FLY_AUTO_CNTNT:
+            case FLY_AS_CHAR:
+            case FLY_AT_CHAR:
                 nOldCntnt = pAnchor->GetCntntAnchor()->nContent.GetIndex();
-            case FLY_AT_CNTNT:
+            case FLY_AT_PARA:
             case FLY_AT_FLY:
                 nOldNode = pAnchor->GetCntntAnchor()->nNode.GetIndex();
                 break;
@@ -644,10 +660,10 @@ void SwUndoSetFlyFmt::PutAttr( USHORT nWhich, const SfxPoolItem* pItem )
             pAnchor = (SwFmtAnchor*)&pFrmFmt->GetAnchor();
             switch( nNewAnchorTyp = static_cast<USHORT>(pAnchor->GetAnchorId()) )
             {
-            case FLY_IN_CNTNT:
-            case FLY_AUTO_CNTNT:
+            case FLY_AS_CHAR:
+            case FLY_AT_CHAR:
                 nNewCntnt = pAnchor->GetCntntAnchor()->nContent.GetIndex();
-            case FLY_AT_CNTNT:
+            case FLY_AT_PARA:
             case FLY_AT_FLY:
                 nNewNode = pAnchor->GetCntntAnchor()->nNode.GetIndex();
                 break;

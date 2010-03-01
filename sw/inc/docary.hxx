@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docary.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,7 +48,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 #include <tools/table.hxx>
 #endif
 #include <swtypes.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 typedef SwFieldType* SwFldTypePtr;
 #define GROW_FLDTYPES   16

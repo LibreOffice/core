@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PostItMgr.cxx,v $
- *
- * $Revision: 1.12.34.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,17 +63,17 @@
 
 #include <sfx2/request.hxx>
 #include <sfx2/event.hxx>
-#include <sfx2/srchitem.hxx>
+#include <svl/srchitem.hxx>
 
 
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <svtools/langtab.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 #include <svx/svdview.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/outliner.hxx>
 
 #include <i18npool/mslangid.hxx>
 #include <i18npool/lang.h>
@@ -1941,9 +1937,14 @@ void SwPostItMgr::AssureStdModeAtShell()
         {
                 mpWrtShell->UnSelectFrm();
                 mpWrtShell->LeaveSelFrmMode();
+                mpWrtShell->GetView().LeaveDrawCreate();
                 mpWrtShell->EnterStdMode();
 
                 mpWrtShell->DrawSelChanged();
                 mpView->StopShellTimer();
         }
 }
+
+void SwNoteProps::Commit() {}
+void SwNoteProps::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
+

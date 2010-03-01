@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fldmgr.cxx,v $
- * $Revision: 1.53 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 
 #include <cmdid.h>
 #include <hintids.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/text/XDefaultNumberingProvider.hpp>
@@ -45,21 +42,21 @@
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <comphelper/processfactory.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/app.hxx>
 #include <basic/basmgr.hxx>
-#include <svx/langitem.hxx>
-#include <svtools/macitem.hxx>
+#include <editeng/langitem.hxx>
+#include <svl/macitem.hxx>
 #include <basic/sbmod.hxx>
 #include <fmtrfmrk.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sbx.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <vcl/mnemonic.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>        // Actives Fenster

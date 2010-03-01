@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: poolfmt.cxx,v $
- * $Revision: 1.54.108.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,32 +30,28 @@
 #include <hintids.hxx>
 #include <i18npool/mslangid.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <svx/paperinf.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/fhgtitem.hxx>
-#ifndef _SVX_TSTPITEM_HXX //autogen
-#include <svx/tstpitem.hxx>
-#endif
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/keepitem.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/cmapitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/protitem.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/charrotateitem.hxx>
-#include <svx/frmdiritem.hxx>
-#ifndef _SVX_EMPHITEM_HXX
-#include <svx/emphitem.hxx>
-#endif
-#include <svx/scriptspaceitem.hxx>
+#include <editeng/paperinf.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/cmapitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/protitem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/charrotateitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/emphitem.hxx>
+#include <editeng/scriptspaceitem.hxx>
 #include <viewopt.hxx>
 #include <doc.hxx>
 #include <fmtanchr.hxx>
@@ -1303,13 +1296,13 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
         {
             if ( get(IDocumentSettingAccess::BROWSE_MODE) )
             {
-                aSet.Put( SwFmtAnchor( FLY_IN_CNTNT ));
+                aSet.Put( SwFmtAnchor( FLY_AS_CHAR ));
                 aSet.Put( SwFmtVertOrient( 0, text::VertOrientation::LINE_CENTER, text::RelOrientation::PRINT_AREA ) );
                 aSet.Put( SwFmtSurround( SURROUND_NONE ) );
             }
             else
             {
-                aSet.Put( SwFmtAnchor( FLY_AT_CNTNT ));
+                aSet.Put( SwFmtAnchor( FLY_AT_PARA ));
                 aSet.Put( SwFmtSurround( SURROUND_PARALLEL ) );
                 aSet.Put( SwFmtHoriOrient( 0, text::HoriOrientation::CENTER, text::RelOrientation::PRINT_AREA ) );
                 aSet.Put( SwFmtVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::PRINT_AREA ) );
@@ -1330,7 +1323,7 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
     case RES_POOLFRM_GRAPHIC:
     case RES_POOLFRM_OLE:
         {
-            aSet.Put( SwFmtAnchor( FLY_AT_CNTNT ));
+            aSet.Put( SwFmtAnchor( FLY_AT_PARA ));
             aSet.Put( SwFmtHoriOrient( 0, text::HoriOrientation::CENTER, text::RelOrientation::FRAME ));
             aSet.Put( SwFmtVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ));
             aSet.Put( SwFmtSurround( SURROUND_NONE ));
@@ -1338,14 +1331,14 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
         break;
     case RES_POOLFRM_FORMEL:
         {
-            aSet.Put( SwFmtAnchor( FLY_IN_CNTNT ) );
+            aSet.Put( SwFmtAnchor( FLY_AS_CHAR ) );
             aSet.Put( SwFmtVertOrient( 0, text::VertOrientation::CHAR_CENTER, text::RelOrientation::FRAME ) );
             aSet.Put( SvxLRSpaceItem( 114, 114, 0, 0, RES_LR_SPACE ) );
         }
         break;
     case RES_POOLFRM_MARGINAL:
         {
-            aSet.Put( SwFmtAnchor( FLY_AT_CNTNT ));
+            aSet.Put( SwFmtAnchor( FLY_AT_PARA ));
             aSet.Put( SwFmtHoriOrient( 0, text::HoriOrientation::LEFT, text::RelOrientation::FRAME ));
             aSet.Put( SwFmtVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ));
             aSet.Put( SwFmtSurround( SURROUND_PARALLEL ));
@@ -1358,7 +1351,7 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
         break;
     case RES_POOLFRM_WATERSIGN:
         {
-            aSet.Put( SwFmtAnchor( FLY_PAGE ));
+            aSet.Put( SwFmtAnchor( FLY_AT_PAGE ));
             aSet.Put( SwFmtHoriOrient( 0, text::HoriOrientation::CENTER, text::RelOrientation::FRAME ));
             aSet.Put( SwFmtVertOrient( 0, text::VertOrientation::CENTER, text::RelOrientation::FRAME ));
             aSet.Put( SvxOpaqueItem( FALSE ));
@@ -1368,7 +1361,7 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
 
     case RES_POOLFRM_LABEL:
         {
-            aSet.Put( SwFmtAnchor( FLY_IN_CNTNT ) );
+            aSet.Put( SwFmtAnchor( FLY_AS_CHAR ) );
             aSet.Put( SwFmtVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ) );
             aSet.Put( SvxLRSpaceItem( 114, 114, 0, 0, RES_LR_SPACE ) );
 

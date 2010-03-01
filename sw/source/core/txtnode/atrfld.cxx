@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: atrfld.cxx,v $
- * $Revision: 1.16.190.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,7 +43,7 @@
 #include "hints.hxx"
 #include <IDocumentFieldsAccess.hxx>
 
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 TYPEINIT3( SwFmtFld, SfxPoolItem, SwClient,SfxBroadcaster)
 TYPEINIT1(SwFmtFldHint, SfxHint);

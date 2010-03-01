@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ww8graf2.cxx,v $
- * $Revision: 1.75 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,18 +30,15 @@
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 
-#ifndef __SGI_STL_ITERATOR
 #include <iterator>
-#endif
 #include <hintids.hxx>
-#include <svtools/urihelper.hxx>
-#include <svx/impgrf.hxx>
+#include <svl/urihelper.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/msdffimp.hxx>
+#include <editeng/opaqitem.hxx>
+#include <filter/msfilter/msdffimp.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
@@ -64,6 +58,7 @@
 #include "ww8par.hxx"           // class SwWWImplReader
 #include "ww8par2.hxx"          // struct WWFlyPara
 #include "ww8graf.hxx"
+#include <svtools/filter.hxx>
 
 using namespace ::com::sun::star;
 using namespace sw::types;
@@ -263,7 +258,7 @@ extern void WW8PicShadowToReal(  WW8_PIC_SHADOW*  pPicS,  WW8_PIC*  pPic );
 
 bool SwWW8ImplReader::GetPictGrafFromStream(Graphic& rGraphic, SvStream& rSrc)
 {
-    return 0 == ::GetGrfFilter()->ImportGraphic(rGraphic, aEmptyStr, rSrc,
+    return 0 == GraphicFilter::GetGraphicFilter()->ImportGraphic(rGraphic, aEmptyStr, rSrc,
         GRFILTER_FORMAT_DONTKNOW);
 }
 
@@ -415,7 +410,7 @@ SwFlyFrmFmt* SwWW8ImplReader::MakeGrafNotInCntnt(const WW8PicDesc& rPD,
 
     // Damit die Frames bei Einfuegen in existierendes Doc erzeugt werden:
     if (rDoc.GetRootFrm() &&
-        (FLY_AT_CNTNT == pFlyFmt->GetAnchor().GetAnchorId()))
+        (FLY_AT_PARA == pFlyFmt->GetAnchor().GetAnchorId()))
     {
         pFlyFmt->MakeFrms();
     }
@@ -548,9 +543,11 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
             //              it is anchored in content; because this anchor add
             //              a character into the textnode.
             //              IussueZilla task 2806
-            if( FLY_IN_CNTNT ==
+            if (FLY_AS_CHAR ==
                 pFlyFmtOfJustInsertedGraphic->GetAnchor().GetAnchorId() )
+            {
                 aFlySet.ClearItem( RES_ANCHOR );
+            }
 
             pFlyFmtOfJustInsertedGraphic->SetFmtAttr( aFlySet );
 

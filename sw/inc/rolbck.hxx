@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: rolbck.hxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,9 +31,9 @@
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_USHORTSSORT
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 
 //Nur die History anziehen, um das docnew.cxx gegen die CLOOK's zu behaupten.
 
@@ -78,8 +75,7 @@ class SwCharFmt;
 
 #include <memory>
 
-
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 class Writer;
 #define OUT_HSTR_HINT( name )    \
     friend Writer& OutUndo_Hstr_ ## name( Writer&, const SwHistoryHint& );
@@ -164,8 +160,11 @@ public:
 
 class SwHistorySetTxtFld : public SwHistoryHint
 {
+    //!! beware of the order for the declation of thje auto_ptrs.
+    //!! If they get destroyed in the wrong order sw may crash (namely mail-merge as well)
     ::std::auto_ptr<SwFieldType> m_pFldType;
     const ::std::auto_ptr<SwFmtFld> m_pFld;
+
     ULONG m_nNodeIndex;
     xub_StrLen m_nPos;
     USHORT m_nFldWhich;

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dpage.cxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,8 +29,8 @@
 #include "precompiled_sw.hxx"
 #include <basic/basmgr.hxx>
 #include <svtools/imapobj.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/securityoptions.hxx>
+#include <svl/urihelper.hxx>
+#include <unotools/securityoptions.hxx>
 #include <vcl/help.hxx>
 #include <svx/svdview.hxx>
 #include <fmturl.hxx>

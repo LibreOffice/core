@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: porfld.cxx,v $
- * $Revision: 1.62.110.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,7 +38,7 @@
 #ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
 #endif
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #ifndef _METRIC_HXX //autogen
 #include <vcl/metric.hxx>
 #endif
@@ -65,7 +62,7 @@
 #include <porrst.hxx>
 #include <porftn.hxx>   // SwFtnPortion
 #include <accessibilityoptions.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/lrspitem.hxx>
 
 #include <unicode/ubidi.h>
 
@@ -82,8 +79,13 @@ SwFldPortion *SwFldPortion::Clone( const XubString &rExpand ) const
 {
     SwFont *pNewFnt;
     if( 0 != ( pNewFnt = pFnt ) )
+    {
         pNewFnt = new SwFont( *pFnt );
-    SwFldPortion* pClone = new SwFldPortion( rExpand, pNewFnt );
+    }
+    // --> OD 2009-11-25 #i107143#
+    // pass placeholder property to created <SwFldPortion> instance.
+    SwFldPortion* pClone = new SwFldPortion( rExpand, pNewFnt, bPlaceHolder );
+    // <--
     pClone->SetNextOffset( nNextOffset );
     pClone->m_bNoLength = this->m_bNoLength;
     return pClone;
@@ -823,7 +825,7 @@ SwBulletPortion::SwBulletPortion( const xub_Unicode cBullet,
 
 // --> OD 2008-01-23 #newlistlevelattrs#
 SwGrfNumPortion::SwGrfNumPortion(
-        SwFrm *pFrm,
+        SwFrm*,
         const XubString& rGraphicFollowedBy,
         const SvxBrushItem* pGrfBrush,
         const SwFmtVertOrient* pGrfOrient, const Size& rGrfSize,
@@ -840,8 +842,7 @@ SwGrfNumPortion::SwGrfNumPortion(
     if( pGrfBrush )
     {
         *pBrush = *pGrfBrush;
-        SwDocShell *pSh = pFrm->GetShell()->GetDoc()->GetDocShell();
-        const Graphic* pGraph = pGrfBrush->GetGraphic( pSh );
+        const Graphic* pGraph = pGrfBrush->GetGraphic();
         if( pGraph )
             SetAnimated( pGraph->IsAnimated() );
         else

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: index.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +36,7 @@
 #include "index.hxx"
 #include "error.h"              // fuers ASSERT
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 int SwIndex::nSerial = 0;
 #endif
 
@@ -103,7 +100,7 @@ SwIndex::SwIndex( SwIndexReg* pArr, xub_StrLen nIdx )
     else
         ChgValue( *pArray->pFirst, nIdx );
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     MySerial = ++nSerial;       // nur in der nicht PRODUCT-Version
 #endif
 IDX_CHK_ARRAY
@@ -115,7 +112,7 @@ SwIndex::SwIndex( const SwIndex& rIdx, short nIdx )
 {
     ChgValue( rIdx, rIdx.nIndex + nIdx );
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     MySerial = ++nSerial;       // nur in der nicht PRODUCT-Version
 #endif
 IDX_CHK_ARRAY
@@ -126,7 +123,7 @@ SwIndex::SwIndex( const SwIndex& rIdx )
     : nIndex( rIdx.nIndex ), pArray( rIdx.pArray ), pNext( 0 ), pPrev( 0 )
 {
     ChgValue( rIdx, rIdx.nIndex );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     MySerial = ++nSerial;       // nur in der nicht PRODUCT-Version
 #endif
 IDX_CHK_ARRAY
@@ -371,7 +368,7 @@ void SwIndexReg::Update( SwIndex const & rIdx, const xub_StrLen nDiff,
 ARR_CHK_ARRAY
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #ifndef CFRONT
 
 /*************************************************************************

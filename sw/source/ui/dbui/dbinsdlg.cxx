@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dbinsdlg.cxx,v $
- * $Revision: 1.63 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,22 +60,22 @@
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <comphelper/processfactory.hxx>
-#include <svx/langitem.hxx>
-#include <svtools/numuno.hxx>
-#include <svtools/stritem.hxx>
+#include <editeng/langitem.hxx>
+#include <svl/numuno.hxx>
+#include <svl/stritem.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #ifndef __SV_MNEMONIC_HXX
 #include <vcl/mnemonic.hxx>
 #endif
-#include <svtools/style.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/style.hxx>
+#include <svl/zformat.hxx>
 #include <svx/htmlmode.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/itemset.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/boxitem.hxx>
+#include <svl/itemset.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <svx/rulritem.hxx>
 #include <swdbtoolsclient.hxx>
 #ifndef _SWTABLEREP_HXX //autogen
@@ -1651,6 +1648,8 @@ static rtl::OUString lcl_CreateUniqueName(const Sequence<rtl::OUString>& aNames)
 /* -----------------------------05.12.00 15:00--------------------------------
 
  ---------------------------------------------------------------------------*/
+void SwInsertDBColAutoPilot::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >&  ) {}
+
 void SwInsertDBColAutoPilot::Commit()
 {
     Sequence <rtl::OUString> aNames = GetNodeNames(rtl::OUString());

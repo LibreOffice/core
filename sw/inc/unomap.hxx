@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unomap.hxx,v $
- * $Revision: 1.63 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +27,7 @@
 #ifndef _UNOMAP_HXX
 #define _UNOMAP_HXX
 
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 
 #define PROPERTY_NONE 0
 
@@ -251,6 +248,7 @@
 #define WID_DOC_LOCK_UPDATES                    1016
 #define WID_DOC_HAS_VALID_SIGNATURES            1017
 #define WID_DOC_BUILDID                         1024
+#define WID_DOC_ISTEMPLATEID                        1025
 // --> OD 2006-03-21 #b6375613#
 #define WID_APPLY_WORKAROUND_FOR_B6375613       1070
 // <--
@@ -295,6 +293,7 @@
 
 #define WID_LAYOUT_SIZE                         1104
 #define WID_DOC_DIALOG_LIBRARIES                1105
+#define WID_DOC_VBA_DOCOBJ                      1106
 
 
 //AutoText

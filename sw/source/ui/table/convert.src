@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: convert.src,v $
- * $Revision: 1.29.240.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -177,7 +174,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
     PushButton BT_AUTOFORMAT
     {
         Pos = MAP_APPFONT ( 12 , 152 ) ;
-        Size = MAP_APPFONT ( 66 , 14 ) ;
+        Size = MAP_APPFONT ( 86 , 14 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
         Text [ en-US ] = "Auto~Format..." ;

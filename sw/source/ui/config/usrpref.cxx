@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: usrpref.cxx,v $
- * $Revision: 1.39 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 
 
 #include <tools/stream.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 
 #include "swtypes.hxx"
 #include "hintids.hxx"
@@ -427,6 +424,9 @@ void SwLayoutViewConfig::Load()
         }
     }
 }
+
+void SwLayoutViewConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
+
 /* -----------------------------19.01.01 13:07--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -531,6 +531,8 @@ void SwGridConfig::Load()
     }
 }
 
+void SwGridConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
+
 /* -----------------------------19.01.01 13:07--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -621,6 +623,9 @@ void SwCursorConfig::Load()
 
     }
 }
+
+void SwCursorConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
+
 /*-- 28.09.00 09:55:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -654,6 +659,9 @@ void SwWebColorConfig::Commit()
     }
     PutProperties(aPropNames, aValues);
 }
+
+void SwWebColorConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
+
 /*-- 28.09.00 09:55:34---------------------------------------------------
 
   -----------------------------------------------------------------------*/

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: txtinit.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -79,7 +76,7 @@ void _TextInit()
     pFntCache = new SwFntCache;                     // Cache for SwSubFont -> SwFntObj = { Font aFont, Font* pScrFont, Font* pPrtFont, OutputDevice* pPrinter, ... }
     pSwFontCache = new SwFontCache;                 // Cache for SwTxtFmtColl -> SwFontObj = { SwFont aSwFont, SfxPoolItem* pDefaultArray }
     SwCache *pTxtCache = new SwCache( 250, 100      // Cache for SwTxtFrm -> SwTxtLine = { SwParaPortion* pLine }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     , "static SwTxtFrm::pTxtCache"
 #endif
     );

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: modcfg.cxx,v $
- * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,11 +33,11 @@
 #include <sot/clsids.hxx>
 #include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
-#include <goodies/mailenum.hxx>
+#include <svl/mailenum.hxx>
 #ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
 #endif
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include <tools/debug.hxx>
 
 #include <tools/globname.hxx>
@@ -50,7 +47,7 @@
 #include <modcfg.hxx>
 #endif
 #include <fldupde.hxx>
-#include <svtools/syslocaleoptions.hxx>
+#include <unotools/syslocaleoptions.hxx>
 #include <caption.hxx>
 #include <com/sun/star/uno/Any.hxx>
 
@@ -336,6 +333,8 @@ sal_Int32 lcl_ConvertAttrToCfg(const AuthorCharAttr& rAttr)
     return nRet;
 }
 //-----------------------------------------------------------------------------
+void SwRevisionConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
+
 void SwRevisionConfig::Commit()
 {
     const Sequence<OUString>& aNames = GetPropertyNames();
@@ -691,6 +690,8 @@ void lcl_WriteOpt(const InsCaptionOpt& rOpt, Any* pValues, sal_Int32 nProp, sal_
     }
 }
 //-----------------------------------------------------------------------------
+void SwInsertConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
+
 void SwInsertConfig::Commit()
 {
     const Sequence<OUString>& aNames = GetPropertyNames();
@@ -1207,6 +1208,8 @@ SwTableConfig::~SwTableConfig()
 /*-- 10.10.00 16:22:56---------------------------------------------------
 
   -----------------------------------------------------------------------*/
+void SwTableConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
+
 void SwTableConfig::Commit()
 {
     const Sequence<OUString>& aNames = GetPropertyNames();
@@ -1318,6 +1321,8 @@ const Sequence<OUString>& SwMiscConfig::GetPropertyNames()
 /*-- 18.01.01 17:02:47---------------------------------------------------
 
   -----------------------------------------------------------------------*/
+void SwMiscConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
+
 void SwMiscConfig::Commit()
 {
     const Sequence<OUString>& aNames = GetPropertyNames();

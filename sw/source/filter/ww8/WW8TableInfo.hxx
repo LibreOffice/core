@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: WW8TableInfo.hxx,v $
- * $Revision: 1.1.2.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -97,6 +94,7 @@ private:
     const SwNode * mpNode;
     Inners_t mInners;
     WW8TableNodeInfo * mpNext;
+    SwNode * mpNextNode;
 
 public:
     typedef boost::shared_ptr<WW8TableNodeInfo> Pointer_t;
@@ -112,6 +110,7 @@ public:
     void setCell(sal_uInt32 nCell);
     void setRow(sal_uInt32 nRow);
     void setNext(WW8TableNodeInfo * pNext);
+    void setNextNode(SwNode * pNode);
 
     sal_uInt32 getDepth() const;
     bool isEndOfLine() const;
@@ -120,6 +119,7 @@ public:
     const SwTableBox * getTableBox() const;
     const SwTable * getTable() const;
     WW8TableNodeInfo * getNext() const;
+    SwNode * getNextNode() const;
 
     const Inners_t & getInners() const;
     const WW8TableNodeInfoInner::Pointer_t getFirstInner() const;

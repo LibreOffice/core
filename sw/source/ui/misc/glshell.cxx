@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: glshell.cxx,v $
- * $Revision: 1.17.236.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,16 +31,16 @@
 #include <com/sun/star/frame/XTitle.hpp>
 
 #include <tools/list.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <svx/srchitem.hxx>
-#include <svtools/macitem.hxx>
+#include <svl/srchitem.hxx>
+#include <svl/macitem.hxx>
 #include <gloshdl.hxx>
 
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -154,10 +151,10 @@ BOOL lcl_Save( SwWrtShell& rSh, const String& rGroupName,
  --------------------------------------------------------------------*/
 
 
-SwGlosDocShell::SwGlosDocShell( sal_Bool bNewShow)
-    :
-    SwDocShell( bShow ? SFX_CREATE_MODE_STANDARD : SFX_CREATE_MODE_INTERNAL )
-    ,bShow ( bNewShow )
+SwGlosDocShell::SwGlosDocShell(sal_Bool bNewShow)
+    : SwDocShell( (bNewShow)
+            ? SFX_CREATE_MODE_STANDARD : SFX_CREATE_MODE_INTERNAL )
+    , bShow ( bNewShow )
 {
     SetHelpId(SW_GLOSDOCSHELL);
 }

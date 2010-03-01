@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: WW8TableInfo.cxx,v $
- * $Revision: 1.1.2.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -161,7 +158,8 @@ WW8TableNodeInfo::WW8TableNodeInfo(const SwNode * pNode)
 :
     mnDepth(0),
     mpNode(pNode),
-    mpNext(NULL)
+    mpNext(NULL),
+    mpNextNode(NULL)
 {
 }
 
@@ -190,9 +188,7 @@ WW8TableNodeInfo::~WW8TableNodeInfo()
     }
 
 #ifdef DEBUG
-//!! does not compile with debug=t -> unresolved external (dbg_out),
-//!! sommeone who knows what he wants to get should fix this
-//    sResult += dbg_out(*mpNode);
+    sResult += dbg_out(*mpNode);
 #endif
 
     sResult +="</tableNodeInfo>";
@@ -247,6 +243,17 @@ void WW8TableNodeInfo::setTable(const SwTable * pTable)
 void WW8TableNodeInfo::setNext(WW8TableNodeInfo * pNext)
 {
     mpNext = pNext;
+
+#ifdef DEBUG
+    ::std::clog << "<setnext><from>" << toString() << "</from><to>"
+                << pNext->toString() << "</to></setnext>"
+                << ::std::endl;
+#endif
+}
+
+void WW8TableNodeInfo::setNextNode(SwNode * pNode)
+{
+    mpNode = pNode;
 }
 
 void WW8TableNodeInfo::setCell(sal_uInt32 nCell)
@@ -285,6 +292,11 @@ const SwTable * WW8TableNodeInfo::getTable() const
 WW8TableNodeInfo * WW8TableNodeInfo::getNext() const
 {
     return mpNext;
+}
+
+SwNode * WW8TableNodeInfo::getNextNode() const
+{
+    return mpNextNode;
 }
 
 bool WW8TableNodeInfo::isEndOfLine() const
@@ -360,6 +372,14 @@ void WW8TableInfo::processSwTable(const SwTable * pTable)
         const SwTableLine * pLine = rLines[n];
 
         pPrev = processTableLine(pTable, pLine, n, 1, pPrev);
+    }
+
+    if (pPrev != NULL)
+    {
+        SwTableNode * pTableNode = pTable->GetTableNode();
+        SwEndNode * pEndNode = pTableNode->EndOfSectionNode();
+
+        pPrev->setNextNode(pEndNode);
     }
 
 #ifdef DEBUG
@@ -602,6 +622,13 @@ const SwNode * WW8TableInfo::getNextNode(const SwNode * pNode)
 
         if (pNextInfo != NULL)
             pResult = pNextInfo->getNode();
+        else
+        {
+            SwNode * pNextNode = pNodeInfo->getNextNode();
+
+            if (pNextNode != NULL)
+                pResult = pNextNode;
+        }
     }
 
     return pResult;

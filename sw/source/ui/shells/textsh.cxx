@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: textsh.cxx,v $
- * $Revision: 1.63 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,42 +32,40 @@
 #define _SW_FRMVALID_HXX
 #include <hintids.hxx>
 
-#include <svtools/globalnameitem.hxx>
+#include <svl/globalnameitem.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/lnkbase.hxx>
 
-#ifndef __RSC //autogen
 #include <tools/errinf.hxx>
-#endif
 #include <svx/svdview.hxx>
-#include <svtools/ptitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <svl/ptitem.hxx>
+#include <svl/stritem.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <svx/hlnkitem.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <basic/sbxvar.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <sfx2/request.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/svxacorr.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/svxacorr.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <svtools/filter.hxx>
 #include <svx/htmlmode.hxx>
 #include <svx/pfiledlg.hxx>
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <com/sun/star/i18n/TransliterationModules.hdl>
 
 #include <sot/clsids.hxx>
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 #include <wdocsh.hxx>
 #include <fmtinfmt.hxx>
 #include <fmtclds.hxx>
@@ -82,9 +77,7 @@
 #include <docsh.hxx>
 #include <doc.hxx>
 #include <uitool.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif
@@ -112,9 +105,7 @@
 #ifndef _POPUP_HRC
 #include <popup.hrc>
 #endif
-#ifndef _SWERROR_H
 #include <swerror.h>
-#endif
 #include <SwAppletImpl.hxx>
 #include <unochart.hxx>
 
@@ -202,7 +193,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             SvxAutoCorrect* pACorr = pACfg->GetAutoCorrect();
             if( pACorr && pACfg->IsAutoFmtByInput() &&
                     pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
-                                ChgFractionSymbol | ChgOrdinalNumber |
+                                AddNonBrkSpace | ChgOrdinalNumber |
                                 ChgToEnEmDash | SetINetAttr | Autocorrect ))
                 rSh.AutoCorrect( *pACorr, cIns );
             else
@@ -566,7 +557,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 aCol.Init( nCols, aCol.GetGutterWidth(), aCol.GetWishWidth() );
                 aMgr.SetCol( aCol );
             }
-            aMgr.InsertFlyFrm(FLY_AT_CNTNT, aStartPos, aSize);
+            aMgr.InsertFlyFrm(FLY_AT_PARA, aStartPos, aSize);
             GetShell().EndAllAction();
             GetShell().UnlockPaint();
         }
@@ -600,7 +591,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             Size aSize(aMgr.GetSize());
             aSize.Width() = GetShell().GetAnyCurRect(RECT_PAGE_PRT).Width();
             Point aPos = aMgr.GetPos();
-            RndStdIds eAnchor = FLY_AT_CNTNT;
+            RndStdIds eAnchor = FLY_AT_PARA;
             if(pArgs->GetItemState(nSlot, FALSE, &pItem) == SFX_ITEM_SET)
                 eAnchor = (RndStdIds)((SfxUInt16Item *)pItem)->GetValue();
             if(pArgs->GetItemState(FN_PARAM_1, FALSE, &pItem)  == SFX_ITEM_SET)
@@ -764,7 +755,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             SwFlyFrmAttrMgr aFrmMgr( TRUE, &rSh, FRMMGR_TYPE_GRF );
             // am FrmMgr muessen die richtigen Parameter eingestellt werden
 
-            aFrmMgr.SetAnchor(FLY_IN_CNTNT);
+            aFrmMgr.SetAnchor(FLY_AS_CHAR);
 
             rSh.SplitNode( FALSE, FALSE );
             rSh.SplitNode( FALSE, FALSE );

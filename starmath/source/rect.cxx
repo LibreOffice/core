@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: rect.cxx,v $
- * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -150,8 +147,7 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
     aSize = Size(rDev.GetTextWidth(rText), rDev.GetTextHeight());
 
     const FontMetric  aFM (rDev.GetFontMetric());
-    BOOL              bIsMath  = aFM.GetName().EqualsIgnoreCaseAscii( FONTNAME_MATH ) ||
-                                 aFM.GetName().EqualsIgnoreCaseAscii( FONTNAME_MATH2 );
+    BOOL              bIsMath  = aFM.GetName().EqualsIgnoreCaseAscii( FONTNAME_MATH );
     BOOL              bAllowSmaller = bIsMath && !SmIsMathAlpha(rText);
     const long        nFontHeight = rDev.GetFont().GetSize().Height();
 

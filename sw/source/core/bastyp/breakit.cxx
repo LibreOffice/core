@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: breakit.cxx,v $
- * $Revision: 1.16.112.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,9 +37,9 @@
 #include <unotools/localedatawrapper.hxx>
 
 #ifndef _SVX_LINGU_HXX
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #endif
-#include <svx/scripttypeitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include "swtypes.hxx"
 
 using namespace com::sun::star;

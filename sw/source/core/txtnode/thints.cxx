@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: thints.cxx,v $
- * $Revision: 1.65.62.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,17 +31,17 @@
 
 #include <hintids.hxx>
 #include <sot/factory.hxx>
-#include <svx/xmlcnitm.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/itemiter.hxx>
-#include <svtools/stylepool.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/emphitem.hxx>
-#include <svx/charscaleitem.hxx>
-#include <svx/charrotateitem.hxx>
+#include <editeng/xmlcnitm.hxx>
+#include <svl/whiter.hxx>
+#include <svl/itemiter.hxx>
+#include <svl/stylepool.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/emphitem.hxx>
+#include <editeng/charscaleitem.hxx>
+#include <editeng/charrotateitem.hxx>
 // --> OD 2008-01-16 #newlistlevelattrs#
-#include <svx/lrspitem.hxx>
+#include <editeng/lrspitem.hxx>
 // <--
 #include <txtinet.hxx>
 #include <txtflcnt.hxx>
@@ -84,11 +81,11 @@
 // OD 26.06.2003 #108784#
 #include <dcontact.hxx>
 #include <docsh.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 #include <algorithm>
 #include <map>
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #define CHECK    Check();
 #else
 #define CHECK
@@ -114,6 +111,11 @@ struct TxtAttrDeleter
     TxtAttrDeleter( SwDoc & rDoc ) : m_rPool( rDoc.GetAttrPool() ) { }
     void operator() (SwTxtAttr * const pAttr)
     {
+        if (RES_TXTATR_META == pAttr->Which() ||
+            RES_TXTATR_METAFIELD == pAttr->Which())
+        {
+            static_cast<SwTxtMeta *>(pAttr)->ChgTxtNode(0); // prevents ASSERT
+        }
         SwTxtAttr::Destroy( pAttr, m_rPool );
     }
 };
@@ -153,12 +155,15 @@ bool isOverlap(const xub_StrLen nStart1, const xub_StrLen nEnd1,
      || ((nStart1 < nStart2) && (nStart2 < nEnd1) && (nEnd1 < nEnd2)); // (2)
 }
 
+/// #i106930#: now asymmetric: empty hint1 is _not_ nested, but empty hint2 is
 static
 bool isNestedAny(const xub_StrLen nStart1, const xub_StrLen nEnd1,
                  const xub_StrLen nStart2, const xub_StrLen nEnd2)
 {
-    return (nStart1 == nStart2) // in this case ends do not matter
-        || ((nStart1 < nStart2) ? (nEnd1 >= nEnd2) : (nEnd1 <= nEnd2));
+    return ((nStart1 == nStart2) || (nEnd1 == nEnd2))
+        // same start/end: nested except if hint1 empty and hint2 not empty
+        ? (nStart1 != nEnd1) || (nStart2 == nEnd2)
+        : ((nStart1 < nStart2) ? (nEnd1 >= nEnd2) : (nEnd1 <= nEnd2));
 }
 
 static
@@ -658,7 +663,7 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
         }
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     if( !rNode.GetDoc()->IsInReading() )
         CHECK;
 #endif
@@ -1166,7 +1171,7 @@ void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
             break;
 
         case RES_TXTATR_TOXMARK:
-            nDelMsg = RES_TOXMARK_DELETED;
+            static_cast<SwTOXMark&>(pAttr->GetAttr()).InvalidateTOXMark();
             break;
 
         case RES_TXTATR_REFMARK:
@@ -1175,7 +1180,7 @@ void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
 
         case RES_TXTATR_META:
         case RES_TXTATR_METAFIELD:
-            static_cast<SwFmtMeta&>(pAttr->GetAttr()).NotifyRemoval();
+            static_cast<SwTxtMeta*>(pAttr)->ChgTxtNode(0);
             break;
 
         default:
@@ -1267,11 +1272,15 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                     InsertText( c, aIdx, nInsertFlags );
                     nInsMode |= nsSetAttrMode::SETATTR_NOTXTATRCHR;
 
-                    if( pAnchor && FLY_IN_CNTNT == pAnchor->GetAnchorId() &&
+                    if (pAnchor &&
+                        (FLY_AS_CHAR == pAnchor->GetAnchorId()) &&
                         pAnchor->GetCntntAnchor() &&
                         pAnchor->GetCntntAnchor()->nNode == *this &&
                         pAnchor->GetCntntAnchor()->nContent == aIdx )
-                        ((SwIndex&)pAnchor->GetCntntAnchor()->nContent)--;
+                    {
+                        const_cast<SwIndex&>(
+                            pAnchor->GetCntntAnchor()->nContent)--;
+                    }
                 }
                 pFly->SetAnchor( this );
 
@@ -1410,11 +1419,11 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                 // FussNote im Redline-Bereich NICHT ins FtnArray einfuegen!
                 if( StartOfSectionIndex() > rNodes.GetEndOfRedlines().GetIndex() )
                 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                     const BOOL bSuccess =
 #endif
                         pDoc->GetFtnIdxs().Insert( pTxtFtn );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                     ASSERT( bSuccess, "FtnIdx nicht eingetragen." );
 #endif
                 }
@@ -2614,7 +2623,7 @@ bool SwpHints::TryInsertHint( SwTxtAttr* const pHint, SwTxtNode &rNode,
     {
         SwpHintsArray::Insert( pHint );
         CalcFlags();
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         if( !rNode.GetDoc()->IsInReading() )
             CHECK;
 #endif
@@ -2707,7 +2716,7 @@ bool SwpHints::TryInsertHint( SwTxtAttr* const pHint, SwTxtNode &rNode,
         rNode.Modify( 0, &aHint );
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     if( !bNoHintAdjustMode && !rNode.GetDoc()->IsInReading() )
         CHECK;
 #endif

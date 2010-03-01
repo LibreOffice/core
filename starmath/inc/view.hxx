@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: view.hxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,6 +44,7 @@ class DataChangedEvent;
 class SmClipboardChangeListener;
 class SmDocShell;
 class SmViewShell;
+class SmPrintUIOptions;
 
 /**************************************************************************/
 
@@ -292,8 +290,8 @@ public:
     virtual void Execute( SfxRequest& rReq );
     virtual void GetState(SfxItemSet &);
 
-    void Impl_Print( OutputDevice &rOutDev, const SmPrintSize ePrintSize,
-                     Rectangle aOutRect, Point aZeroPoint );
+    void Impl_Print( OutputDevice &rOutDev, const SmPrintUIOptions &rPrintUIOptions,
+            Rectangle aOutRect, Point aZeroPoint );
 };
 
 #endif

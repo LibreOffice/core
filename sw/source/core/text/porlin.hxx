@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: porlin.hxx,v $
- * $Revision: 1.17.214.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +39,7 @@ class SwPortionHandler;
 // Das CLASSIO-Makro implementiert die 'freischwebende' Funktion.
 // Auf diese Weise erhaelt man beide Vorteile: virtuelle Ausgabeoperatoren
 // und allgemeine Verwendbarkeit.
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #define OUTPUT_OPERATOR  virtual SvStream &operator<<( SvStream & aOs ) const;
 #else
 #define OUTPUT_OPERATOR
@@ -177,7 +174,7 @@ public:
     virtual void Paint( const SwTxtPaintInfo &rInf ) const = 0;
     void PrePaint( const SwTxtPaintInfo &rInf, const SwLinePortion *pLast ) const;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     virtual sal_Bool Check( SvStream &rOs, SwTxtSizeInfo &rInfo ); //$ ostream
 #endif
 

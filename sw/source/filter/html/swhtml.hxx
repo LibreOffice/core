@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swhtml.hxx,v $
- * $Revision: 1.18.100.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,12 +41,12 @@
 #ifndef _SVSTDARR_STRINGSDTOR_DECL
 #define _SVSTDARR_STRINGSDTOR
 #endif
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 #include <tools/urlobj.hxx>
 #include <sfx2/sfxhtml.hxx>
-#include <svtools/macitem.hxx>
-#include <svx/svxenum.hxx>
+#include <svl/macitem.hxx>
+#include <editeng/svxenum.hxx>
 #include <fmtornt.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
@@ -453,7 +450,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     enum JumpToMarks { JUMPTO_NONE, JUMPTO_MARK, JUMPTO_TABLE, JUMPTO_FRAME,
                         JUMPTO_REGION, JUMPTO_GRAPHIC } eJumpTo;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     sal_uInt16  nContinue;          // Tiefe der Continue-Aufrufe
 #endif
 

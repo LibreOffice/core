@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: calbck.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -202,7 +199,7 @@ class SwClientIter
     friend SwClient* SwModify::_Remove(SwClient *); // fuer Ptr-Korrektur
     friend void SwModify::Add(SwClient *);          // nur fuer ASSERT !
 
-    SwModify& rRoot;
+    SwModify const& rRoot;
     SwClient *pAkt, *pDelNext;
     // fuers Updaten der aller Iteratoren beim Einfuegen/Loeschen von
     // Clients, wenn der Iterator gerade draufsteht.
@@ -213,11 +210,10 @@ class SwClientIter
     TypeId aSrchId;             // fuer First/Next - suche diesen Type
 
 public:
-    SW_DLLPUBLIC SwClientIter( SwModify& );
+    SW_DLLPUBLIC SwClientIter( SwModify const& );
     SW_DLLPUBLIC ~SwClientIter();
 
     const SwModify& GetModify() const       { return rRoot; }
-          SwModify& GetModify()             { return rRoot; }
 
 #ifndef CFRONT
     SwClient* operator++(int);  // zum Naechsten

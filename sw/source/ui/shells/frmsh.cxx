@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: frmsh.cxx,v $
- * $Revision: 1.22.190.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,19 +30,19 @@
 
 
 #include <hintids.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svtools/imapobj.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svtools/imap.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <basic/sbstar.hxx>
-#include <svtools/rectitem.hxx>
-#include <svtools/ptitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/bolnitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/protitem.hxx>
+#include <svl/rectitem.hxx>
+#include <svl/ptitem.hxx>
+#include <svl/stritem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/bolnitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/protitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/objface.hxx>
@@ -618,8 +615,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 AbstractSvxObjectTitleDescDialog* pDlg =
                     pFact->CreateSvxObjectTitleDescDialog( NULL,
                                                            aTitle,
-                                                           aDescription,
-                                                           RID_SVXDLG_OBJECT_TITLE_DESC );
+                                                           aDescription );
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
                 if ( pDlg->Execute() == RET_OK )

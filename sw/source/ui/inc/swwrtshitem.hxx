@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swwrtshitem.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,7 +26,7 @@
  ************************************************************************/
 #ifndef _SW_WRTSHELLITEM_HXX
 #define _SW_WRTSHELLITEM_HXX
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include "swdllapi.h"
 
 class SwWrtShell;

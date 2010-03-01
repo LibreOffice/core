@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: edattr.cxx,v $
- * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,10 +32,10 @@
 #include <hintids.hxx>
 
 #ifndef _SVX_TSTPITEM_HXX //autogen
-#include <svx/tstpitem.hxx>
+#include <editeng/tstpitem.hxx>
 #endif
-#include <svx/lrspitem.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
@@ -60,7 +57,7 @@
 #include <crsskip.hxx>
 #include <txtfrm.hxx>       // SwTxtFrm
 #include <scriptinfo.hxx>
-#include <svtools/ctloptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <charfmt.hxx>  // #i27615#
 #include <numrule.hxx>
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: math_pch.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,11 +45,11 @@
 #include <tools/rtti.hxx>
 #include <tools/ref.hxx>
 #include <tools/link.hxx>
-#include <svtools/brdcst.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/brdcst.hxx>
+#include <svl/svarray.hxx>
 #include <tools/debug.hxx>
-#include <svtools/hint.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/hint.hxx>
+#include <svl/smplhint.hxx>
 #include <sot/sotref.hxx>
 #include <tools/globname.hxx>
 #include <sot/factory.hxx>
@@ -130,9 +127,9 @@
 #include <smdll.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <chaos/cntids.hrc>
-#include <svtools/cntwids.hrc>
-#include <svtools/solar.hrc>
-#include <svtools/lstner.hxx>
+#include <svl/cntwids.hrc>
+#include <svl/solar.hrc>
+#include <svl/lstner.hxx>
 #include <starmath.hrc>
 #include <basic/sbx.hxx>
 #include <basic/sbxform.hxx>
@@ -143,7 +140,7 @@
 #include <basic/sbxmeth.hxx>
 #include <tools/unqid.hxx>
 #include <tools/unqidx.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <svtools/args.hxx>
 #include <smmod.hxx>
 #include <vos/thread.hxx>
@@ -156,7 +153,7 @@
 #include <vcl/timer.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/sfx.hrc>
-#include <svtools/memberid.hrc>
+#include <svl/memberid.hrc>
 #include <vcl/syswin.hxx>
 #include <vcl/virdev.hxx>
 #include <tools/datetime.hxx>
@@ -736,7 +733,7 @@
 #endif
 #include <usr/refl.hxx>
 #include <sfx2/msg.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/dialog.hxx>
@@ -745,10 +742,10 @@
 #include <sfx2/frame.hxx>
 #include <sfx2/objface.hxx>
 #include <vcl/event.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
 #include <symbol.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <vcl/image.hxx>
 #include <vcl/metric.hxx>
 #include <sfx2/inimgr.hxx>
@@ -756,14 +753,14 @@
 #include <tools/pstm.hxx>
 #include <tools/table.hxx>
 #include <sfx2/docfac.hxx>
-#include <svtools/ownlist.hxx>
+#include <svl/ownlist.hxx>
 #include <sfx2/objsh.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <vcl/mapmod.hxx>
 #include <sfx2/ipfrm.hxx>
 #include <vcl/dialog.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <sfx2/bindings.hxx>
 #include <dialog.hxx>
 #include <vcl/button.hxx>
@@ -817,14 +814,14 @@
 #include <sfx2/ctrlitem.hxx>
 #include <sfx2/viewfac.hxx>
 #include <edit.hxx>
-#include <svx/editdata.hxx>
+#include <editeng/editdata.hxx>
 #include <toolbox.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/dockwin.hxx>
 #include <smslots.hxx>
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <vcl/prntypes.hxx>
 #include <vcl/jobset.hxx>
 #include <vcl/gdimtf.hxx>

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swcache.cxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +35,7 @@
 
 SV_IMPL_PTRARR(SwCacheObjArr,SwCacheObj*);
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 #define INCREMENT( nVar )
 #else
 #define INCREMENT( nVar )   ++nVar
@@ -53,7 +50,7 @@ SV_IMPL_PTRARR(SwCacheObjArr,SwCacheObj*);
 |*
 |*************************************************************************/
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 void SwCache::Check()
 {
@@ -90,7 +87,7 @@ void SwCache::Check()
 }
 #endif
 
-#if !defined(PRODUCT) && defined(MADEBUG)
+#if defined(DBG_UTIL) && defined(MADEBUG)
 #define CHECK Check();
 #else
 #define CHECK
@@ -107,7 +104,7 @@ void SwCache::Check()
 
 
 SwCache::SwCache( const USHORT nInitSize, const USHORT nGrowSize
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     , const ByteString &rNm
 #endif
     ) :
@@ -118,7 +115,7 @@ SwCache::SwCache( const USHORT nInitSize, const USHORT nGrowSize
     pLast( 0 ),
     nMax( nInitSize ),
     nCurMax( nInitSize )
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     , aName( rNm ),
     nAppend( 0 ),
     nInsertFree( 0 ),
@@ -137,7 +134,7 @@ SwCache::SwCache( const USHORT nInitSize, const USHORT nGrowSize
 {
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 
 SwCache::~SwCache()
@@ -197,7 +194,7 @@ void SwCache::Flush( const BYTE )
     SwCacheObj *pTmp;
     while ( pObj )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         if ( pObj->IsLocked() )
         {
             ASSERT( TRUE, "Flushing locked objects." );
@@ -322,7 +319,7 @@ SwCacheObj *SwCache::Get( const void *pOwner, const USHORT nIndex,
             ToTop( pRet );
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         if ( pRet )
             ++nGetSuccess;
         else
@@ -346,7 +343,7 @@ SwCacheObj *SwCache::Get( const void *pOwner, const BOOL bToTop )
     if ( bToTop && pRet && pRet != pFirst )
         ToTop( pRet );
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     if ( pRet )
         ++nGetSuccess;
     else
@@ -588,7 +585,7 @@ SwCacheObj::~SwCacheObj()
 |*
 |*************************************************************************/
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 
 

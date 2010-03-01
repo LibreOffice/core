@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: postithelper.hxx,v $
- * $Revision: 1.2.118.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #include <redline.hxx>
 #include <vector>
 #include <vcl/window.hxx>
-#include <svtools/brdcst.hxx>
+#include <svl/brdcst.hxx>
 
 class SwTxtFld;
 class SwRootFrm;

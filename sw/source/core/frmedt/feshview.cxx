@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: feshview.cxx,v $
- * $Revision: 1.61.136.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,9 +44,9 @@
 #include <svx/xfillit.hxx>
 #include <svx/svdocapt.hxx>
 #include <sfx2/app.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/protitem.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
 
@@ -326,7 +323,7 @@ sal_Bool SwFEShell::MoveAnchor( USHORT nDir )
         SwFrmFmt& rFmt = pAnchoredObj->GetFrmFmt();
         SwFmtAnchor aAnch( rFmt.GetAnchor() );
         RndStdIds nAnchorId = aAnch.GetAnchorId();
-        if ( FLY_IN_CNTNT == nAnchorId )
+        if ( FLY_AS_CHAR == nAnchorId )
             return sal_False;
         if( pOld->IsVertical() )
         {
@@ -348,7 +345,7 @@ sal_Bool SwFEShell::MoveAnchor( USHORT nDir )
             }
         }
         switch ( nAnchorId ) {
-            case FLY_PAGE:
+            case FLY_AT_PAGE:
             {
                 ASSERT( pOld->IsPageFrm(), "Wrong anchor, page exspected." );
                 if( SW_MOVE_UP == nDir )
@@ -362,7 +359,7 @@ sal_Bool SwFEShell::MoveAnchor( USHORT nDir )
                 }
                 break;
             }
-            case FLY_AUTO_CNTNT:
+            case FLY_AT_CHAR:
             {
                 ASSERT( pOld->IsCntntFrm(), "Wrong anchor, page exspected." );
                 if( SW_MOVE_LEFT == nDir || SW_MOVE_RIGHT == nDir )
@@ -396,7 +393,7 @@ sal_Bool SwFEShell::MoveAnchor( USHORT nDir )
                     }
                 }
             } // no break!
-            case FLY_AT_CNTNT:
+            case FLY_AT_PARA:
             {
                 ASSERT( pOld->IsCntntFrm(), "Wrong anchor, page exspected." );
                 if( SW_MOVE_UP == nDir )
@@ -1652,7 +1649,7 @@ BOOL SwFEShell::ImpEndCreate()
 
             if( bCharBound )
             {
-                aAnch.SetType( FLY_IN_CNTNT );
+                aAnch.SetType( FLY_AS_CHAR );
                 aAnch.SetAnchor( &aPos );
             }
         }
@@ -1719,7 +1716,7 @@ BOOL SwFEShell::ImpEndCreate()
                 bAtPage = true;
             else
             {
-                aAnch.SetType( FLY_AT_CNTNT );
+                aAnch.SetType( FLY_AT_PARA );
                 aAnch.SetAnchor( &aPos );
             }
         }
@@ -1728,7 +1725,7 @@ BOOL SwFEShell::ImpEndCreate()
         {
             pPage = pAnch->FindPageFrm();
 
-            aAnch.SetType( FLY_PAGE );
+            aAnch.SetType( FLY_AT_PAGE );
             aAnch.SetPageNum( pPage->GetPhyPageNum() );
             pAnch = pPage;      // die Page wird jetzt zum Anker
         }
@@ -1871,7 +1868,7 @@ BOOL SwFEShell::ImpEndCreate()
         // <--
         if( bCharBound )
         {
-            ASSERT( aAnch.GetAnchorId() == FLY_IN_CNTNT, "wrong AnchorType" );
+            ASSERT( aAnch.GetAnchorId() == FLY_AS_CHAR, "wrong AnchorType" );
             SwTxtNode *pNd = aAnch.GetCntntAnchor()->nNode.GetNode().GetTxtNode();
             SwFmtFlyCnt aFmt( pFmt );
             pNd->InsertItem(aFmt,
@@ -2256,7 +2253,7 @@ BOOL SwFEShell::IsGroupSelected()
                  // --> FME 2004-12-08 #i38505# No ungroup allowed for 3d objects
                  !pObj->Is3DObj() &&
                  // <--
-                 FLY_IN_CNTNT != ((SwDrawContact*)GetUserCall(pObj))->
+                 FLY_AS_CHAR != ((SwDrawContact*)GetUserCall(pObj))->
                                       GetFmt()->GetAnchor().GetAnchorId() )
             {
                 return TRUE;
@@ -2302,7 +2299,7 @@ bool SwFEShell::IsGroupAllowed() const
                             "<SwFEShell::IsGroupAllowed()> - missing frame format" );
                     bIsGroupAllowed = false;
                 }
-                else if ( FLY_IN_CNTNT == pFrmFmt->GetAnchor().GetAnchorId() )
+                else if ( FLY_AS_CHAR == pFrmFmt->GetAnchor().GetAnchorId() )
                 {
                     bIsGroupAllowed = false;
                 }
@@ -2619,7 +2616,7 @@ BOOL SwFEShell::IsAlignPossible() const
             SdrObject *pO = Imp()->GetDrawView()->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
             SwDrawContact *pC = (SwDrawContact*)GetUserCall(pO);
             //only as character bound drawings can be aligned
-            bRet = pC->GetFmt()->GetAnchor().GetAnchorId() == FLY_IN_CNTNT;
+            bRet = (pC->GetFmt()->GetAnchor().GetAnchorId() == FLY_AS_CHAR);
         }
         if ( bRet )
             return Imp()->GetDrawView()->IsAlignPossible();
@@ -2664,7 +2661,7 @@ void SwFEShell::CheckUnboundObjects()
             {
             pAnch = ::FindAnchor( pPage, aPt, TRUE );
             SwPosition aPos( *((SwCntntFrm*)pAnch)->GetNode() );
-            aAnch.SetType( FLY_AT_CNTNT );
+            aAnch.SetType( FLY_AT_PARA );
             aAnch.SetAnchor( &aPos );
             ((SwRect&)GetCharRect()).Pos() = aPt;
             }

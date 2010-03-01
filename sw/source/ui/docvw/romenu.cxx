@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: romenu.cxx,v $
- * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,9 +34,9 @@
 #include <vcl/graph.hxx>
 #include <vcl/msgbox.hxx>
 #include <sot/formats.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/pathoptions.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svtools/filter.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/inetimg.hxx>
@@ -47,9 +44,8 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/xoutbmp.hxx>
-#include <svx/impgrf.hxx>
 #include <svx/gallery.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 
 
 #include <swunodef.hxx>
@@ -408,7 +404,7 @@ String SwReadOnlyPopup::SaveGraphic( USHORT nId )
         if ( pItem->GetGraphicLink() )
             sGrfName = *pItem->GetGraphicLink();
         ((SvxBrushItem*)pItem)->SetDoneLink( Link() );
-        const Graphic *pGrf = pItem->GetGraphic( rView.GetDocShell() );
+        const Graphic *pGrf = pItem->GetGraphic();
         if ( pGrf )
         {
             aGraphic = *pGrf;
@@ -442,7 +438,7 @@ String ExportGraphic( const Graphic &rGraphic, const String &rGrfName )
     aURL.SetSmartURL( aName );
     aDlgHelper.SetFileName( aURL.GetName() );
 
-    GraphicFilter& rGF = *GetGrfFilter();
+    GraphicFilter& rGF = *GraphicFilter::GetGraphicFilter();
     const USHORT nCount = rGF.GetExportFormatCount();
 
     String aExt( aURL.GetExtension() );

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: guess.cxx,v $
- * $Revision: 1.50 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 
 
 #include <ctype.h>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <tools/shl.hxx>    // needed for SW_MOD() macro
 #include <errhdl.hxx>   // ASSERTs
 #include <dlelstnr.hxx>
@@ -176,7 +173,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
     {
         nCutPos = rInf.GetTxtBreak( nLineWidth, nMaxLen, nMaxComp );
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         if ( STRING_LEN != nCutPos )
         {
             rInf.GetTxtSize( &rSI, rInf.GetIdx(), nCutPos - rInf.GetIdx(),

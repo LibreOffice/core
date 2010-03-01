@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SwXTextDefaults.cxx,v $
- * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,9 +27,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
+
 #include <SwXTextDefaults.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <fchrfmt.hxx>
@@ -44,6 +44,7 @@
 #include <unomid.h>
 #include <paratr.hxx>
 #include <unoprnms.hxx>
+#include <unocrsrhelper.hxx>
 #include <hintids.hxx>
 
 #include <unomid.h>
@@ -55,9 +56,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
-
-// declarations
-void lcl_setPageDesc(SwDoc*, const uno::Any&, SfxItemSet& ); // from unoobj.cxx
 
 
 SwXTextDefaults::SwXTextDefaults ( SwDoc * pNewDoc ) :
@@ -97,7 +95,7 @@ void SAL_CALL SwXTextDefaults::setPropertyValue( const OUString& rPropertyName, 
     {
         SfxItemSet aSet( m_pDoc->GetAttrPool(), RES_PAGEDESC, RES_PAGEDESC );
         aSet.Put(rItem);
-        lcl_setPageDesc( m_pDoc, aValue, aSet );
+        SwUnoCursorHelper::SetPageDesc( aValue, *m_pDoc, aSet );
         m_pDoc->SetDefault(aSet.Get(RES_PAGEDESC));
     }
     else if ((RES_PARATR_DROP == pMap->nWID && MID_DROPCAP_CHAR_STYLE_NAME == pMap->nMemberId) ||

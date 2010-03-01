@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: doctxm.cxx,v $
- * $Revision: 1.53 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,11 +33,11 @@
 #include <hintids.hxx>
 
 #define _SVSTDARR_STRINGSSORT
-#include <svtools/svstdarr.hxx>
-#include <svx/langitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/tstpitem.hxx>
-#include <svx/lrspitem.hxx>
+#include <svl/svstdarr.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <sot/clsids.hxx>
 #include <docsh.hxx>
 #include <ndole.hxx>
@@ -2220,7 +2217,9 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
         }
     }
     pNd->InsertText( aNumStr, aPos,
-            IDocumentContentOperations::INS_EMPTYEXPAND );
+           static_cast<IDocumentContentOperations::InsertFlags>(
+               IDocumentContentOperations::INS_EMPTYEXPAND |
+               IDocumentContentOperations::INS_FORCEHINTEXPAND) );
     if(pPageNoCharFmt)
     {
         SwFmtCharFmt aCharFmt( pPageNoCharFmt );

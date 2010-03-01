@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SwNumberTree.cxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +36,7 @@
 using std::vector;
 using std::find;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 unsigned long SwNumberTreeNode::nInstances = 0;
 #endif
 
@@ -55,7 +52,7 @@ SwNumberTreeNode::SwNumberTreeNode()
 {
     mItLastValid = mChildren.end();
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     mnSerial = nInstances;
     nInstances++;
 #endif
@@ -80,7 +77,7 @@ SwNumberTreeNode::~SwNumberTreeNode()
 
     ASSERT( IsPhantom() || mpParent == NULL, ": I'm not supposed to have a parent.");
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     nInstances--;
 #endif
 
@@ -1108,7 +1105,7 @@ SwNumberTreeNode::GetIterator(const SwNumberTreeNode * pChild) const
 //  return aStr;
 //}
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 unsigned long SwNumberTreeNode::GetInstances()
 {
     return nInstances;

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swtablerep.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,20 +32,20 @@
 #include <hintids.hxx>
 #include <tools/list.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/htmlmode.hxx>
-#include <svx/keepitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svtools/ctloptions.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <svl/ctloptions.hxx>
 #include <swmodule.hxx>
 #include <fmtornt.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtlsplt.hxx>
 
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <fmtrowsplt.hxx>
 #include <svx/htmlmode.hxx>
 

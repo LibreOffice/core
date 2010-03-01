@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: txttab.cxx,v $
- * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,9 +29,9 @@
 #include "precompiled_sw.hxx"
 
 #include "hintids.hxx"
-#include <svx/lrspitem.hxx>
+#include <editeng/lrspitem.hxx>
 #ifndef _SVX_TSTPITEM_HXX //autogen
-#include <svx/tstpitem.hxx>
+#include <editeng/tstpitem.hxx>
 #endif
 #include <IDocumentSettingAccess.hxx>
 #include <frmatr.hxx>
@@ -328,7 +325,7 @@ SwTabPortion::SwTabPortion( const KSHORT nTabPosition, const xub_Unicode cFillCh
     : SwFixPortion( 0, 0 ), nTabPos(nTabPosition), cFill(cFillChar)
 {
     nLineLength = 1;
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     if( IsFilled() )
     {
         ASSERT( ' ' != cFill, "SwTabPortion::CTOR: blanks ?!" );
@@ -563,7 +560,7 @@ sal_Bool SwTabPortion::PostFormat( SwTxtFormatInfo &rInf )
 
 void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     // Wir wollen uns die Fixbreite anzeigen
     if( rInf.OnWin() && OPTDBG( rInf ) &&
         !rInf.GetOpt().IsPagePreview() && \

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tblcpy.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #include <hintids.hxx>
 
 #define _ZFORLIST_DECLARE_TABLE
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
 #include <cntfrm.hxx>
@@ -591,14 +588,14 @@ void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
         }
 
         // stehen noch FlyFrames rum, loesche auch diese
-        const SwPosition* pAPos;
         for( USHORT n = 0; n < pDoc->GetSpzFrmFmts()->Count(); ++n )
         {
-            SwFrmFmt* pFly = (*pDoc->GetSpzFrmFmts())[n];
-            const SwFmtAnchor* pAnchor = &pFly->GetAnchor();
-            if( ( FLY_AT_CNTNT == pAnchor->GetAnchorId() ||
-                    FLY_AUTO_CNTNT == pAnchor->GetAnchorId() ) &&
-                0 != ( pAPos = pAnchor->GetCntntAnchor() ) &&
+            SwFrmFmt *const pFly = (*pDoc->GetSpzFrmFmts())[n];
+            SwFmtAnchor const*const pAnchor = &pFly->GetAnchor();
+            SwPosition const*const pAPos = pAnchor->GetCntntAnchor();
+            if (pAPos &&
+                ((FLY_AT_PARA == pAnchor->GetAnchorId()) ||
+                 (FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
                 aInsIdx <= pAPos->nNode && pAPos->nNode <= aEndNdIdx )
             {
                 pDoc->DelLayoutFmt( pFly );

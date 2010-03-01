@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PostItMgr.hxx,v $
- * $Revision: 1.8.84.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,18 +28,18 @@
 #ifndef _POSTITMGR_HXX
 #define _POSTITMGR_HXX
 
-#include <svtools/lstner.hxx>
-
 #include <list>
 #include <vector>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <tools/string.hxx>
 #include <tools/link.hxx>
 #include <tools/debug.hxx>
 #include <swrect.hxx>
 #include <unotools/configitem.hxx>
+#include <unotools/options.hxx>
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/uno/Any.hxx>
+#include <svl/lstner.hxx>
 
 class SwWrtShell;
 class SwDoc;
@@ -139,6 +136,9 @@ class SwNoteProps: public utl::ConfigItem
                  }
                  return aNames;
             }
+
+    virtual void Commit();
+    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
 };
 
 class SwPostItMgr: public SfxListener

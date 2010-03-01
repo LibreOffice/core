@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SwNumberTree.hxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -385,7 +382,7 @@ public:
 //                                                   RTL_TEXTENCODING_ASCII_US),
 //                 int nDepth = -1) const;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     static unsigned long GetInstances();
     unsigned long GetSerial();
 #endif
@@ -494,7 +491,7 @@ protected:
      */
     mutable tSwNumberTreeChildren::iterator mItLastValid;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     /**
        Counter for the number of created instances.
      */

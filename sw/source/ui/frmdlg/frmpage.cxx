@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: frmpage.cxx,v $
- * $Revision: 1.67 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,26 +34,21 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/EmbedMisc.hpp>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
 #include <hintids.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/mnemonic.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/stritem.hxx>
-#include <svx/impgrf.hxx>
+#include <svl/urihelper.hxx>
+#include <svl/stritem.hxx>
 #include <svx/htmlmode.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/protitem.hxx>
-#include <svx/prntitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/protitem.hxx>
+#include <editeng/prntitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <svx/swframevalidation.hxx>
 #include <sot/clsids.hxx>
 
@@ -68,9 +60,7 @@
 #include <wrtsh.hxx>
 #include <swmodule.hxx>
 #include <uitool.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <viewopt.hxx>
 #include <frmatr.hxx>
 #include <frmdlg.hxx>
@@ -83,17 +73,14 @@
 // OD 19.09.2003 #i18732#
 #include <fmtfollowtextflow.hxx>
 
-#ifndef _FRMUI_HRC
 #include <frmui.hrc>
-#endif
-#ifndef _FRMPAGE_HRC
 #include <frmpage.hrc>
-#endif
 #include <sfx2/filedlghelper.hxx>
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
+#include <svtools/filter.hxx>
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -881,10 +868,10 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
     // Allgemeiner Initialisierungteil
     switch(rAnchor.GetAnchorId())
     {
-        case FLY_PAGE: aAnchorAtPageRB.Check(); break;
-        case FLY_AT_CNTNT: aAnchorAtParaRB.Check(); break;
-        case FLY_AUTO_CNTNT: aAnchorAtCharRB.Check(); break;
-        case FLY_IN_CNTNT: aAnchorAsCharRB.Check(); break;
+        case FLY_AT_PAGE: aAnchorAtPageRB.Check(); break;
+        case FLY_AT_PARA: aAnchorAtParaRB.Check(); break;
+        case FLY_AT_CHAR: aAnchorAtCharRB.Check(); break;
+        case FLY_AS_CHAR: aAnchorAsCharRB.Check(); break;
         case FLY_AT_FLY: aAnchorAtFrameRB.Check();break;
         default:; //prevent warning
     }
@@ -911,7 +898,7 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
         }
         if( 0 == (nHtmlMode & HTMLMODE_SOME_ABS_POS))
         {
-            if(GetAnchor() == FLY_PAGE)
+            if (GetAnchor() == FLY_AT_PAGE)
             {
                 aAnchorAtParaRB.Check();
             }
@@ -1048,8 +1035,10 @@ BOOL SwFrmPage::FillItemSet(SfxItemSet &rSet)
             // Vertikale Position
             // fuer zeichengebundene Rahmen Offset umrechenen
             SwTwips nY = static_cast< SwTwips >(aAtVertPosED.Denormalize(aAtVertPosED.GetValue(FUNIT_TWIP)));
-            if (eAnchorId == FLY_IN_CNTNT)
+            if (eAnchorId == FLY_AS_CHAR)
+            {
                 nY *= -1;
+            }
             aVertOrient.SetPos( nY );
         }
         pOldItem = GetOldItem(rSet, FN_VERT_ORIENT);
@@ -1188,7 +1177,7 @@ void SwFrmPage::InitPos(RndStdIds eId,
     }
 
     BOOL bEnable = TRUE;
-    if ( eId == FLY_PAGE )
+    if ( eId == FLY_AT_PAGE )
     {
         pVMap = bHtmlMode ? aVPageHtmlMap : aVPageMap;
         pHMap = bHtmlMode ? aHPageHtmlMap : aHPageMap;
@@ -1200,7 +1189,7 @@ void SwFrmPage::InitPos(RndStdIds eId,
         pVMap = bHtmlMode ? aVFlyHtmlMap : aVFrameMap;
         pHMap = bHtmlMode ? aHFlyHtmlMap : aHFrameMap;
     }
-    else if ( eId == FLY_AT_CNTNT )
+    else if ( eId == FLY_AT_PARA )
     {
         if(bHtmlMode)
         {
@@ -1213,7 +1202,7 @@ void SwFrmPage::InitPos(RndStdIds eId,
             pHMap = aHParaMap;
         }
     }
-    else if ( eId == FLY_AUTO_CNTNT )
+    else if ( eId == FLY_AT_CHAR )
     {
         if(bHtmlMode)
         {
@@ -1226,7 +1215,7 @@ void SwFrmPage::InitPos(RndStdIds eId,
             pHMap = aHCharMap;
         }
     }
-    else if ( eId == FLY_IN_CNTNT )
+    else if ( eId == FLY_AS_CHAR )
     {
         pVMap = bHtmlMode ? aVAsCharHtmlMap     : aVAsCharMap;
         pHMap = 0;
@@ -1257,7 +1246,7 @@ void SwFrmPage::InitPos(RndStdIds eId,
     FillRelLB(pVMap, nMapPos, nV, nVRel, aVertRelationLB, aVertRelationFT);
 
     // Edits init
-    bEnable = nH == text::HoriOrientation::NONE && eId != FLY_IN_CNTNT;//#61359# warum nicht in Formaten&& !bFormat;
+    bEnable = nH == text::HoriOrientation::NONE && eId != FLY_AS_CHAR;
     if (!bEnable)
     {
         aAtHorzPosED.SetValue( 0, FUNIT_TWIP );
@@ -1281,7 +1270,7 @@ void SwFrmPage::InitPos(RndStdIds eId,
     }
     else
     {
-        if ( eId == FLY_IN_CNTNT )
+        if ( eId == FLY_AS_CHAR )
         {
             if ( nY == LONG_MAX )
                 nY = 0;
@@ -1608,15 +1597,23 @@ USHORT SwFrmPage::GetMapPos( const FrmMap *pMap, ListBox &rAlignLB )
 
 RndStdIds SwFrmPage::GetAnchor()
 {
-    RndStdIds nRet = FLY_PAGE;
+    RndStdIds nRet = FLY_AT_PAGE;
     if(aAnchorAtParaRB.IsChecked())
-        nRet = FLY_AT_CNTNT;
+    {
+        nRet = FLY_AT_PARA;
+    }
     else if(aAnchorAtCharRB.IsChecked())
-        nRet = FLY_AUTO_CNTNT;
+    {
+        nRet = FLY_AT_CHAR;
+    }
     else if(aAnchorAsCharRB.IsChecked())
-        nRet = FLY_IN_CNTNT;
+    {
+        nRet = FLY_AS_CHAR;
+    }
     else if(aAnchorAtFrameRB.IsChecked())
+    {
         nRet = FLY_AT_FLY;
+    }
     return nRet;
 }
 
@@ -1818,8 +1815,10 @@ IMPL_LINK( SwFrmPage, RangeModifyHdl, Edit *, EMPTYARG )
     if ( aVal.nHPos != nAtHorzPosVal )
         aAtHorzPosED.SetValue(aAtHorzPosED.Normalize(aVal.nHPos), FUNIT_TWIP);
 
-    SwTwips nUpperOffset = aVal.nAnchorType == FLY_IN_CNTNT ? nUpperBorder : 0;
-    SwTwips nLowerOffset = aVal.nAnchorType == FLY_IN_CNTNT ? nLowerBorder : 0;
+    const SwTwips nUpperOffset = (aVal.nAnchorType == FLY_AS_CHAR)
+        ? nUpperBorder : 0;
+    const SwTwips nLowerOffset = (aVal.nAnchorType == FLY_AS_CHAR)
+        ? nLowerBorder : 0;
 
     aAtVertPosED.SetMin(aAtVertPosED.Normalize(aVal.nMinVPos + nLowerOffset + nUpperOffset), FUNIT_TWIP);
     aAtVertPosED.SetMax(aAtVertPosED.Normalize(aVal.nMaxVPos), FUNIT_TWIP);
@@ -1905,7 +1904,7 @@ IMPL_LINK( SwFrmPage, PosHdl, ListBox *, pLB )
 
     // Sonderbehandlung fuer HTML-Mode mit horz-vert-Abhaengigkeiten
     if(bHtmlMode && nHtmlMode&HTMLMODE_SOME_ABS_POS &&
-            FLY_AUTO_CNTNT == (RndStdIds)GetAnchor())
+            (FLY_AT_CHAR == GetAnchor()))
     {
         BOOL bSet = FALSE;
         if(bHori)
@@ -1977,7 +1976,7 @@ IMPL_LINK( SwFrmPage, RelHdl, ListBox *, pLB )
     else
         bAtVertPosModified = TRUE;
 
-    if(bHtmlMode  && FLY_AUTO_CNTNT == (RndStdIds)GetAnchor()) // wieder Sonderbehandlung
+    if (bHtmlMode && (FLY_AT_CHAR == GetAnchor()))
     {
         if(bHori)
         {
@@ -2219,7 +2218,7 @@ void SwFrmPage::Init(const SfxItemSet& rSet, BOOL bReset)
         nOldV    = rVert.GetVertOrient(),
         nOldVRel = rVert.GetRelationOrient();
 
-        if (eAnchorId == FLY_PAGE)
+        if (eAnchorId == FLY_AT_PAGE)
         {
             if (nOldHRel == text::RelOrientation::FRAME)
                 nOldHRel = text::RelOrientation::PAGE_FRAME;
@@ -2551,7 +2550,7 @@ IMPL_LINK( SwGrfExtPage, BrowseHdl, Button *, EMPTYARG )
         aBmpWin.MirrorVert(FALSE);
 
         Graphic aGraphic;
-        ::LoadGraphic( pGrfDlg->GetPath(), aEmptyStr, aGraphic );
+        GraphicFilter::LoadGraphic( pGrfDlg->GetPath(), aEmptyStr, aGraphic );
         aBmpWin.SetGraphic(aGraphic);
 
         BOOL bEnable = GRAPHIC_BITMAP      == aGraphic.GetType() ||

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swrenamexnameddlg.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,13 +54,12 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <shellio.hxx>
 #include <docsh.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <swmodule.hxx>
-#include <unoobj.hxx>
 #include <unocrsr.hxx>
 
 #include "swrenamexnameddlg.hxx"

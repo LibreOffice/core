@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viscrs.hxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -169,7 +166,7 @@ public:
     // TRUE: an die Position kann der Cursor gesetzt werden
     virtual BOOL IsAtValidPos( BOOL bPoint = TRUE ) const;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 // JP 05.03.98: zum Testen des UNO-Crsr Verhaltens hier die Implementierung
 //              am sichtbaren Cursor
     virtual BOOL IsSelOvr( int eFlags =
@@ -213,7 +210,7 @@ public:
     // TRUE: an die Position kann der Cursor gesetzt werden
     virtual BOOL IsAtValidPos( BOOL bPoint = TRUE ) const;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 // JP 05.03.98: zum Testen des UNO-Crsr Verhaltens hier die Implementierung
 //              am sichtbaren Cursor
     virtual BOOL IsSelOvr( int eFlags =

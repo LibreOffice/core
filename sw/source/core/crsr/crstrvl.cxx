@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: crstrvl.cxx,v $
- * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,10 +30,10 @@
 
 
 #include <hintids.hxx>
-#include <svtools/itemiter.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/brkitem.hxx>
+#include <svl/itemiter.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/brkitem.hxx>
 #ifndef _SVX_SVDOBJ_HXX
 #include <svx/svdobj.hxx>
 #endif
@@ -1337,7 +1334,7 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
 
             if( !bRet && (
                 SwContentAtPos::SW_TABLEBOXFML & rCntntAtPos.eCntntAtPos
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 || SwContentAtPos::SW_TABLEBOXVALUE & rCntntAtPos.eCntntAtPos
 #endif
                 ))
@@ -1349,7 +1346,7 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                 if( pSttNd && 0 != ( pTblNd = pTxtNd->FindTableNode()) &&
                     0 != ( pBox = pTblNd->GetTable().GetTblBox(
                                     pSttNd->GetIndex() )) &&
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                     ( SFX_ITEM_SET == pBox->GetFrmFmt()->GetItemState(
                         RES_BOXATR_FORMULA, FALSE, &pItem ) ||
                       SFX_ITEM_SET == pBox->GetFrmFmt()->GetItemState(
@@ -1383,7 +1380,7 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                         // erzeuge aus der internen (fuer CORE)
                         // die externe (fuer UI) Formel
                         rCntntAtPos.eCntntAtPos = SwContentAtPos::SW_TABLEBOXFML;
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                         if( RES_BOXATR_VALUE == pItem->Which() )
                             rCntntAtPos.eCntntAtPos = SwContentAtPos::SW_TABLEBOXVALUE;
                         else
@@ -1417,7 +1414,7 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                 }
             }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             if( !bRet && SwContentAtPos::SW_CURR_ATTRS & rCntntAtPos.eCntntAtPos )
             {
                 xub_StrLen n = aPos.nContent.GetIndex();

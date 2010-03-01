@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: uiregionsw.cxx,v $
- * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,12 +33,12 @@
 
 #include <hintids.hxx>
 #include <regionsw.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/PasswordHelper.hxx>
+#include <svl/urihelper.hxx>
+#include <svl/PasswordHelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/request.hxx>
@@ -49,8 +46,8 @@
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/docinsert.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/htmlcfg.hxx>
+#include <editeng/sizeitem.hxx>
+#include <svtools/htmlcfg.hxx>
 
 #include <comphelper/storagehelper.hxx>
 #include <uitool.hxx>
@@ -1480,14 +1477,16 @@ static void lcl_ReadSections( SfxMedium& rMedium, ComboBox& rBox )
     uno::Reference < embed::XStorage > xStg;
     if( rMedium.IsStorage() && (xStg = rMedium.GetStorage()).is() )
     {
-        SvStringsDtor aArr( 10, 10 );
+        SvStrings aArr( 10, 10 );
         sal_uInt32 nFormat = SotStorage::GetFormatID( xStg );
         if ( nFormat == SOT_FORMATSTR_ID_STARWRITER_60 || nFormat == SOT_FORMATSTR_ID_STARWRITERGLOB_60 ||
             nFormat == SOT_FORMATSTR_ID_STARWRITER_8 || nFormat == SOT_FORMATSTR_ID_STARWRITERGLOB_8)
-            SwGetReaderXML()->GetSectionList( rMedium, (SvStrings&) aArr );
+            SwGetReaderXML()->GetSectionList( rMedium, aArr );
 
         for( USHORT n = 0; n < aArr.Count(); ++n )
             rBox.InsertEntry( *aArr[ n ] );
+
+        aArr.DeleteAndDestroy(0, aArr.Count());
     }
 }
 /* -----------------21.05.99 10:16-------------------

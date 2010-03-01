@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ndindex.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +42,7 @@ class SW_DLLPUBLIC SwNodeIndex
     friend void SwNodes::DeRegisterIndex( SwNodeIndex& );
     friend void SwNodes::RemoveNode( ULONG, ULONG, BOOL );
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     static int nSerial;
     int MySerial;
 #endif

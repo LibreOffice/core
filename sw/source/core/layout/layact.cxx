@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: layact.cxx,v $
- * $Revision: 1.75 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,12 +61,12 @@
 #include <ftnidx.hxx>
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <SwSmartTagMgr.hxx>
 
 #define _SVSTDARR_BOOLS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #define _LAYACT_CXX
 #include "layact.hxx"
@@ -116,7 +113,7 @@
 
 
 //Sparen von Schreibarbeit um den Zugriff auf zerstoerte Seiten zu vermeiden.
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 static void BreakPoint()
 {
@@ -2808,7 +2805,7 @@ BOOL SwLayIdle::DoIdleJob( IdleJobType eJob, BOOL bVisAreaOnly )
 }
 
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #if OSL_DEBUG_LEVEL > 1
 
 /*************************************************************************
@@ -2857,7 +2854,7 @@ void SwLayIdle::ShowIdle( ColorData eColorData )
 SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
     pRoot( pRt ),
     pImp( pI )
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #if OSL_DEBUG_LEVEL > 1
     , bIndicator( FALSE )
 #endif
@@ -3041,7 +3038,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
     if( pImp->IsAccessible() )
         pImp->FireAccessibleEvents();
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #if OSL_DEBUG_LEVEL > 1
     if ( bIndicator && pImp->GetShell()->GetWin() )
     {

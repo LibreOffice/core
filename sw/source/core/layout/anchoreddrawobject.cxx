@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: anchoreddrawobject.cxx,v $
- * $Revision: 1.26.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,12 +34,8 @@
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
 #include <doc.hxx>
-#ifndef _TOCNTNTANCHOROBJECTPOSITION_HXX
 #include <tocntntanchoredobjectposition.hxx>
-#endif
-#ifndef _TOLAYOUTANCHOROBJECTPOSITION_HXX
 #include <tolayoutanchoredobjectposition.hxx>
-#endif
 #include <frmtool.hxx>
 #include <fmtornt.hxx>
 // --> OD 2004-08-12 #i32795#
@@ -357,7 +350,7 @@ void SwAnchoredDrawObject::MakeObjPos()
         // determine relative position of drawing object and set it
         switch ( pDrawContact->GetAnchorId() )
         {
-            case FLY_IN_CNTNT:
+            case FLY_AS_CHAR:
             {
                 // indicate that position will be valid after positioning is performed
                 mbValidPos = true;
@@ -365,15 +358,15 @@ void SwAnchoredDrawObject::MakeObjPos()
                 // during the format of its anchor frame - see <SwFlyCntPortion::SetBase(..)>
             }
             break;
-            case FLY_AT_CNTNT:
-            case FLY_AUTO_CNTNT:
+            case FLY_AT_PARA:
+            case FLY_AT_CHAR:
             {
                 // --> OD 2004-08-12 #i32795# - move intrinsic positioning to
                 // helper method <_MakeObjPosAnchoredAtPara()>
                 _MakeObjPosAnchoredAtPara();
             }
             break;
-            case FLY_PAGE:
+            case FLY_AT_PAGE:
             case FLY_AT_FLY:
             {
                 // --> OD 2004-08-12 #i32795# - move intrinsic positioning to
@@ -603,7 +596,7 @@ void SwAnchoredDrawObject::_InvalidatePage( SwPageFrm* _pPageFrm )
         {
             // --> OD 2004-11-11 #i35007# - correct invalidation for as-character
             // anchored objects.
-            if ( GetFrmFmt().GetAnchor().GetAnchorId() == FLY_IN_CNTNT )
+            if ( GetFrmFmt().GetAnchor().GetAnchorId() == FLY_AS_CHAR )
             {
                 _pPageFrm->InvalidateFlyInCnt();
             }
@@ -645,7 +638,7 @@ void SwAnchoredDrawObject::InvalidateObjPos()
             // --> OD 2005-03-09 #i44559# - assure, that text hint is already
             // existing in the text frame
             if ( GetAnchorFrm()->ISA(SwTxtFrm) &&
-                 GetFrmFmt().GetAnchor().GetAnchorId() == FLY_IN_CNTNT )
+                 (GetFrmFmt().GetAnchor().GetAnchorId() == FLY_AS_CHAR) )
             {
                 SwTxtFrm* pAnchorTxtFrm( static_cast<SwTxtFrm*>(AnchorFrm()) );
                 if ( pAnchorTxtFrm->GetTxtNode()->GetpSwpHints() &&

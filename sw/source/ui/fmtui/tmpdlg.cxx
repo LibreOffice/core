@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tmpdlg.cxx,v $
- * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,15 +37,15 @@
 
 #ifndef _SVSTDARR_STRINGSSORTDTOR
 #define _SVSTDARR_STRINGSSORTDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 #include <vcl/msgbox.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/hdft2.hxx>
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
 #include <svx/htmlmode.hxx>
-#include <svx/htmlcfg.hxx>
-#include <svtools/cjkoptions.hxx>
+#include <svtools/htmlcfg.hxx>
+#include <svl/cjkoptions.hxx>
 #include <numpara.hxx>
 #include <fmtclds.hxx>
 #include <swtypes.hxx>
@@ -95,11 +92,11 @@
 #endif
 #include <SwStyleNameMapper.hxx>
 #include <svx/svxids.hrc>
-#include <svtools/stritem.hxx>
-#include <svtools/aeitem.hxx>
-#include <svtools/slstitm.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/slstitm.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/flagsdef.hxx>

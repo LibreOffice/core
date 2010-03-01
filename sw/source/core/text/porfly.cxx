@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: porfly.cxx,v $
- * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,11 +36,9 @@
 #include "frmfmt.hxx"   // SwFrmFmt
 #include "viewsh.hxx"
 
-#ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
-#endif
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <fmtanchr.hxx>
 #include <fmtflcnt.hxx>
 #include <fmtornt.hxx>
@@ -56,6 +51,7 @@
 
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
+
 
 /*************************************************************************
  *                class SwFlyPortion
@@ -178,7 +174,7 @@ void SwTxtFrm::MoveFlyInCnt( SwTxtFrm *pNew, xub_StrLen nStart, xub_StrLen nEnd 
             // <SwSortedList> entries
             SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
             const SwFmtAnchor& rAnch = pAnchoredObj->GetFrmFmt().GetAnchor();
-            if ( rAnch.GetAnchorId() == FLY_IN_CNTNT )
+            if (rAnch.GetAnchorId() == FLY_AS_CHAR)
             {
                 const SwPosition* pPos = rAnch.GetCntntAnchor();
                 xub_StrLen nIdx = pPos->nContent.GetIndex();

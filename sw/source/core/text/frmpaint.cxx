@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: frmpaint.cxx,v $
- * $Revision: 1.60.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,8 +32,8 @@
 #include <hintids.hxx>
 #include <vcl/sound.hxx>
 #include <tools/shl.hxx> // SW_MOD
-#include <svx/pgrditem.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/pgrditem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <pagedesc.hxx> // SwPageDesc
 #include <tgrditem.hxx>
 #include <paratr.hxx>
@@ -600,7 +597,7 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
  *                      SwTxtFrm::Paint()
  *************************************************************************/
 
-void SwTxtFrm::Paint( const SwRect &rRect ) const
+void SwTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/ ) const
 {
     ResetRepaint();
 
@@ -728,7 +725,7 @@ void SwTxtFrm::Paint( const SwRect &rRect ) const
                 //DBG_LOOP; shadows declaration above.
                 //resolved into:
 #if  OSL_DEBUG_LEVEL > 1
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 DbgLoop aDbgLoop2( (const void*) this );
 #endif
 #endif

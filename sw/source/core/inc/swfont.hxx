@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swfont.hxx,v $
- * $Revision: 1.37.210.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #ifndef _TOOLS_STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
-#include <svx/svxfont.hxx>
+#include <editeng/svxfont.hxx>
 #include <swtypes.hxx>
 #include <drawfont.hxx>     // SwDrawTextInfo
 
@@ -848,7 +845,7 @@ public:
  *                      class SvStatistics
  *************************************************************************/
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 #define SV_STAT(nWhich)
 #else
 

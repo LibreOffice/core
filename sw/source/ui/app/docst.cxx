@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docst.cxx,v $
- * $Revision: 1.36.136.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,23 +33,24 @@
 
 #include <hintids.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <sfx2/templdlg.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/newstyle.hxx>
-#include <svtools/macitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/languageoptions.hxx>
-#include <svx/eeitem.hxx>
+#include <sfx2/printer.hxx>
+#include <svl/macitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/languageoptions.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/htmlmode.hxx>
 #include <swmodule.hxx>
 #include <wdocsh.hxx>
 #include <fmtfsize.hxx>
 #include <fchrfmt.hxx>
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <undobj.hxx>
 #include <swundo.hxx>

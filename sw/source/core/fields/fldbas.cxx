@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fldbas.cxx,v $
- * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,9 +32,9 @@
 // #include <math.h>
 #include <float.h>
 #include <rtl/math.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
-#include <svx/unolingu.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
+#include <editeng/unolingu.hxx>
 #ifndef _UNOFLDMID_H
 #include <unofldmid.h>
 #endif
@@ -167,7 +164,7 @@ SwFieldType::SwFieldType( USHORT nWhichId )
     DBG_CTOR( SwFieldType, 0 );
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 SwFieldType::~SwFieldType()
 {
@@ -213,7 +210,7 @@ SwField::~SwField()
     Beschreibung: Statt Umweg ueber den Typ
  --------------------------------------------------------------------*/
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 USHORT SwField::Which() const
 {
     ASSERT(pType, "Kein Typ vorhanden");
