@@ -86,27 +86,3 @@ function GetFileNameListLocal ( sPath$, sMatch$ ,lsFile() as String  ) as intege
 
     GetFileNameListLocal = Count%    ' all files
 end function
-'
-'-------------------------------------------------------------------------------
-'
-function GetFileListLocal ( sPath$, sMatch$ ,lsFile() as String  ) as integer
-    '/// Get files from a directory that match the pattern and append them to a list (<b>with</b> path)
-    '/// <u>Input</u>: Directory with complete path; Search Pattern, e.g *.*; List
-    '/// <u>Return</u>: count of appended entries; updated list
-    Dim Count%
-    Dim Datname as String
-
-    Count% = 0
-
-    if right ( sPath$, 1 ) <> gPathSigne then sPath$ = sPath$ + gPathSigne
-    ' at the end of the string has to be teh path seperator, else the dir-command doesn't work
-    Datname = Dir( sPath$ + sMatch$ , 0)
-
-    do until Len(Datname) = 0
-        lsFile(0) = Val(lsFile(0)) + 1
-        lsFile( lsFile(0) ) =sPath$ + Datname
-        Count% = Count% + 1
-        Datname = Dir
-    loop
-    GetFileListLocal = Count%
-end function
