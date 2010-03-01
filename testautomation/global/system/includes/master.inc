@@ -316,7 +316,6 @@ end sub
 sub LoadGlobalIncludeFiles
 '///Load all important global files.    
     use "global\tools\includes\required\t_dir.inc"          '///+<li><b>t_dir</b>: Routines to parse directories (methods execute on the office side)</li>
-    use "global\tools\includes\required\t_dirloc.inc"       '///+<li><b>t_dirloc</b>: Routines to parse directories (execute on the testtool side)</li>
     use "global\tools\includes\required\t_doc1.inc"         '///+<li><b>t_doc1</b>: Global routines to work on office documents (I)</li>
     use "global\tools\includes\required\t_doc2.inc"         '///+<li><b>t_doc2</b>: Global routines to work on office documents (II)</li>
     use "global\tools\includes\required\t_files.inc"        '///+<ul><li><b>t_files</b>: Routines to open/save/print files</li>
