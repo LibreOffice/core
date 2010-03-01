@@ -353,43 +353,6 @@ end function
     
 '*******************************************************************************
 
-function hCloseScriptOrganizer() as boolean
-
-    '///<h3>Close a Script Organizer (Cancel)</h3>
-    '///<i>Starting point: Any open Script Organizer</i><br>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Errorcondition (boolean)</li>
-    '///<ul>
-    '///+<li>TRUE if the Script Organizer was closed</li>
-    '///+<li>FALSE if the Script Organizer is still open</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
-    
-
-    const CFN = "hCloseScriptOrganizer::" 
-    
-    hCloseScriptOrganizer() = false
-    
-    '///+<li>Try to close the script </li>
-    kontext "ScriptOrganizer"
-    if ( ScriptOrganizer.exists( 5 ) ) then
-        ScriptOrganizer.cancel()
-        hCloseScriptOrganizer() = true
-    endif
-        
-    '///</ul>
-    
-end function
-
-'*******************************************************************************
-
 function hOpenRunMacroDialog() as boolean
 
     '///<h3>Open the &quot;Run Macro&quot; dialog</h3>
