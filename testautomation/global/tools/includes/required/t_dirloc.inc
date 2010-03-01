@@ -160,27 +160,6 @@ end function
 '
 '-------------------------------------------------------------------------------
 '
-function GetAllFileListLocal ( byVal sPath$, byVal sMatch$ ,lsFile() as String ) as integer
-    '/// Get all Files recursiv (including in subdirectories) that match the pattern and append them to a list
-    '/// <u>Input</u>: Directory with complete path; Search Pattern, e.g *.*; Empty list, because it get's reset in this function!;
-    '/// <u>Return</u>: Count of appended entries (1. entry is the whole path); updated list
-    Dim DirCount% : Dim FileCount% : Dim Count%
-    Dim lsDir(1000) as String
-
-    DirCount% = GetAllDirListLocal ( sPath$, "*", lsDir() ) ' just all directories
-    FileCount% = 0
-    lsFile(0) = 1
-    lsFile(1) = sPath$
-
-    For Count% = 1 to Val( lsDir(0) )
-        FileCount% = FileCount% + GetFileListLocal ( lsDir( Count% ), sMatch$, lsFile() )
-    next Count%
-
-    GetAllFileListLocal = FileCount% ' count of files
-end function
-'
-'-------------------------------------------------------------------------------
-'
 function KillFileListLocal ( lsList() as String ) as Boolean
     '/// Delete all files in the list
     '/// <u>Input</u>: List with files
