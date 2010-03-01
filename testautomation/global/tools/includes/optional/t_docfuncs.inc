@@ -229,14 +229,8 @@ function hIdentifyWriterDoc( cString as string, bWarn as boolean ) as boolean
     DocumentWriter.typeKeys( "<SHIFT END>" )
    
     '///+<li>copy the string to the clipboard and store it into a variable</li>
-    try
-	    editcopy
-	    cIdentifier = getClipboardText()
-	catch
-	    warnlog( "EditCopy failed. Probably the document is empty" )
-	    cIdentifier = "**** invalid ****"
-	endcatch
-    
+    hUseAsyncSlot( "EditCopy" )
+    cIdentifier = getClipboardText()
    
     '///+<li>compare the string to the reference (given as parameter)</li>
     irc = hCompareSubstrings( cIdentifier, cString )
@@ -278,10 +272,8 @@ function hCreateDocument() as boolean
     iDocCountBefore = getDocumentCount
     if ( VERBOSE ) then printlog( CFN & "Number of open documents before: " & iDocCountBefore )
 
-    if ( ucase( gApplication ) = "BACKGROUND" ) then
-    	do while( getDocumentCount > 0 )
-    	    hCloseDocument()
-        loop
+    if ( gApplication = "BACKGROUND" ) then
+    	hFileCloseAll()
         hCreateDocument() = true
     else
     
