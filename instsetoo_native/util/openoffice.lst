@@ -36,6 +36,7 @@ Globals
             UPDATE_DATABASE_LISTNAME finals_instsetoo.txt
  			PACKAGEMAP package_names.txt,package_names_ext.txt
 			WINDOWSPATCHLEVEL 6
+			BUILDIDCWS {buildidcws}
 		}
 	}
 }
