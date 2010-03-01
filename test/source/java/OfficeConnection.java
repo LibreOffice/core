@@ -45,7 +45,7 @@ public final class OfficeConnection {
         description = "pipe,name=oootest" + UUID.randomUUID();
         ProcessBuilder pb = new ProcessBuilder(
             getArgument("path"), "-quickstart=no", "-nofirststartwizard",
-            "-accept=" + description + ";urp",
+            "-norestore", "-accept=" + description + ";urp",
             "-env:UserInstallation=" + getArgument("user"),
             "-env:UNO_JAVA_JFW_ENV_JREHOME=true",
             "-env:UNO_JAVA_JFW_ENV_CLASSPATH=true");

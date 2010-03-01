@@ -68,6 +68,7 @@ void OfficeConnection::setUp() {
         RTL_CONSTASCII_USTRINGPARAM("-quickstart=no"));
     rtl::OUString nofirstArg(
         RTL_CONSTASCII_USTRINGPARAM("-nofirststartwizard"));
+    rtl::OUString norestoreArg(RTL_CONSTASCII_USTRINGPARAM("-norestore"));
     rtl::OUString acceptArg(
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-accept=")) + desc);
     rtl::OUString argUser;
@@ -82,8 +83,8 @@ void OfficeConnection::setUp() {
     rtl::OUString classpathArg(
         RTL_CONSTASCII_USTRINGPARAM("-env:UNO_JAVA_JFW_ENV_CLASSPATH=true"));
     rtl_uString * args[] = {
-        noquickArg.pData, nofirstArg.pData, acceptArg.pData, userArg.pData,
-        jreArg.pData, classpathArg.pData };
+        noquickArg.pData, nofirstArg.pData, norestoreArg.pData, acceptArg.pData,
+        userArg.pData, jreArg.pData, classpathArg.pData };
     rtl_uString ** envs = 0;
     rtl::OUString argEnv;
     if (getArgument(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("env")), &argEnv))
