@@ -2166,6 +2166,10 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                 aProp <<= (sal_Bool) mpImpl->isEnableVisible();
                 break;
 
+            case BASEPROPERTY_HIGHCONTRASTMODE:
+                aProp <<= (sal_Bool) GetWindow()->GetSettings().GetStyleSettings().GetHighContrastMode();
+                break;
+
             case BASEPROPERTY_TEXT:
             case BASEPROPERTY_LABEL:
             case BASEPROPERTY_TITLE:
