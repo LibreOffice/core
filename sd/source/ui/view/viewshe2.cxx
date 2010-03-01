@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewshe2.cxx,v $
- * $Revision: 1.57 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,14 +49,14 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/app.hxx>
 #include <svx/ruler.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #include <svtools/ehdl.hxx>
 #include <svx/svdoole2.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svx/fmshell.hxx>
 #include <sfx2/dispatch.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
 #endif

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: clockwipe.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +32,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include "clockwipe.hxx"
 
 
@@ -66,9 +64,7 @@ namespace internal {
 
 ::basegfx::B2DPolyPolygon ClockWipe::operator () ( double t )
 {
-    ::basegfx::B2DHomMatrix aTransform;
-    aTransform.scale( 0.5, 0.5 );
-    aTransform.translate( 0.5, 0.5 );
+    const basegfx::B2DHomMatrix aTransform(basegfx::tools::createScaleTranslateB2DHomMatrix(0.5, 0.5, 0.5, 0.5));
     ::basegfx::B2DPolygon poly( calcCenteredClock(t) );
     poly.transform( aTransform );
     return ::basegfx::B2DPolyPolygon(poly);

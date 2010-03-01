@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: figurewipe.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +32,7 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include "transitiontools.hxx"
 #include "figurewipe.hxx"
 
@@ -45,10 +43,7 @@ namespace internal {
 ::basegfx::B2DPolyPolygon FigureWipe::operator () ( double t )
 {
     ::basegfx::B2DPolyPolygon res(m_figure);
-    ::basegfx::B2DHomMatrix aTransform;
-    aTransform.scale( t, t );
-    aTransform.translate( 0.5, 0.5 );
-    res.transform( aTransform );
+    res.transform(basegfx::tools::createScaleTranslateB2DHomMatrix(t, t, 0.5, 0.5));
     return res;
 }
 

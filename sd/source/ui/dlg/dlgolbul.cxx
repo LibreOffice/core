@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dlgolbul.cxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,17 +39,17 @@
 #endif
 #include <sfx2/objsh.hxx>
 #include <svx/drawitem.hxx>
-#include <svx/bulitem.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/bulitem.hxx>
+#include <editeng/eeitem.hxx>
 
-#include <svx/numitem.hxx>
+#include <editeng/numitem.hxx>
 
 #include <svx/dialogs.hrc>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/svdmark.hxx>
 #include "View.hxx"
 #include <svx/svdobj.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <drawdoc.hxx>
 
 #ifndef _SD_SDRESID_HXX
@@ -64,7 +61,7 @@
 #include "bulmaper.hxx"
 #include "DrawDocShell.hxx"
 #include <svx/svxids.hrc>
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 
 namespace sd {
 

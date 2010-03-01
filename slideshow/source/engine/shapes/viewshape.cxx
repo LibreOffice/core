@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewshape.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,6 +48,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <canvas/verbosetrace.hxx>
 #include <canvas/canvastools.hxx>
@@ -713,9 +711,8 @@ namespace slideshow
 
                         aBitmapTransform.invert();
 
-                        ::basegfx::B2DHomMatrix aTranslation;
-                        aTranslation.translate( aTmpRect.getMinX(),
-                                                aTmpRect.getMinY() );
+                        const basegfx::B2DHomMatrix aTranslation(basegfx::tools::createTranslateB2DHomMatrix(
+                            aTmpRect.getMinX(), aTmpRect.getMinY()));
 
                         aBitmapTransform = aBitmapTransform * aTranslation;
                         pBitmap->setTransformation( aBitmapTransform );

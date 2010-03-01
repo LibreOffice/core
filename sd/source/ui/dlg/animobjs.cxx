@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: animobjs.cxx,v $
- * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +36,7 @@
 #include <svx/xoutbmp.hxx>
 
 #include <time.h>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdogrp.hxx>
 #include <sfx2/dispatch.hxx>

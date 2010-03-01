@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: optsitem.hxx,v $
- * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,6 +82,7 @@ public:
     virtual ~SdOptionsItem();
 
     virtual void            Commit();
+    virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > GetProperties(
                                 const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rNames );
@@ -173,7 +171,7 @@ public:
     BOOL    IsDragStripes() const { Init(); return (BOOL) bDragStripes; }
     BOOL    IsHandlesBezier() const { Init(); return (BOOL) bHandlesBezier; }
     BOOL    IsHelplines() const { Init(); return (BOOL) bHelplines; }
-    UINT16  GetMetric() const { Init(); return( ( 0xffff == nMetric ) ? (UINT16)GetModuleFieldUnit() : nMetric ); }
+    UINT16  GetMetric() const { Init(); return( ( 0xffff == nMetric ) ? (UINT16)SfxModule::GetCurrentFieldUnit() : nMetric ); }
     UINT16  GetDefTab() const { Init(); return nDefTab; }
 
     void    SetRulerVisible( BOOL bOn = TRUE ) { if( bRuler != bOn ) { OptionsChanged(); bRuler = bOn; } }

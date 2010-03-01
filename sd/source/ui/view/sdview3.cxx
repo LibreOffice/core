@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdview3.cxx,v $
- * $Revision: 1.76 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,17 +33,15 @@
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <sot/filelist.hxx>
-#include <svtools/pathoptions.hxx>
-#ifndef _EDITDATA_HXX
-#include <svx/editdata.hxx>
-#endif
-#include <svtools/urlbmk.hxx>
+#include <unotools/pathoptions.hxx>
+#include <editeng/editdata.hxx>
+#include <svl/urlbmk.hxx>
 #include <svx/xexch.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/colritem.hxx>
 #include <sfx2/docfile.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdogrp.hxx>
@@ -55,23 +50,19 @@
 #include <svx/svdetc.hxx>
 #include <svx/svdundo.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <sot/clsids.hxx>
-#ifndef _FM_FMMODEL_HXX
 #include <svx/fmmodel.hxx>
-#endif
 #include <sot/formats.hxx>
-#include <svx/outliner.hxx>
-#ifndef _EDITENG_HXX //autogen
-#include <svx/editeng.hxx>
-#endif
+#include <editeng/outliner.hxx>
+#include <editeng/editeng.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/e3dundo.hxx>
 #include <svx/dbexch.hrc>
 #include <svx/unomodel.hxx>
 #include <unotools/streamwrap.hxx>
 #include <vcl/metaact.hxx>
-
+#include <svx/svxids.hrc>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include "DrawDocShell.hxx"

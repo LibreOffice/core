@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drviewsa.cxx,v $
- * $Revision: 1.49.70.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,21 +32,21 @@
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/processfactory.hxx>
 #ifndef _SVX_SIZEITEM
-#include <svx/sizeitem.hxx>
+#include <editeng/sizeitem.hxx>
 #endif
 #include <svx/svdlayer.hxx>
 #ifndef _SVX_ZOOMITEM
 #include <svx/zoomitem.hxx>
 #endif
 #include <svx/svdpagv.hxx>
-#include <svtools/ptitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/ptitem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdopath.hxx>
 #include <sfx2/docfile.hxx>
 #include <svx/zoomslideritem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>

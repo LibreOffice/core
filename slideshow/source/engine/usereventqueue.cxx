@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: usereventqueue.cxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -306,26 +303,45 @@ public:
                             EventMultiplexer & rEventMultiplexer )
         : ClickEventHandler(rEventQueue),
           mrEventQueue(rEventQueue),
-          mrEventMultiplexer(rEventMultiplexer) {}
+          mrEventMultiplexer(rEventMultiplexer),
+          mbSkipTriggersNextEffect(true) {}
+
+    /** Remember to trigger (or not to trigger) the next effect after the
+        current effect is skiped.
+    */
+    void setSkipTriggersNextEffect (const bool bSkipTriggersNextEffect)
+    { mbSkipTriggersNextEffect = bSkipTriggersNextEffect; }
+
+    ///  Skip the current effect but do not triggere the next effect.
+    void skipEffect (void) { handleEvent_impl(false); }
 
 private:
     virtual bool handleEvent_impl()
+    {
+        return handleEvent_impl(true);
+    }
+
+    bool handleEvent_impl (bool bNotifyNextEffect)
     {
         // fire all events, so animation nodes can register their
         // next effect listeners:
         if(fireAllEvents( maEvents, mrEventQueue ))
         {
-            // then simulate a next effect event:
-            // this skip effect handler is triggered upon next effect
-            // events (multiplexer prio=-1)!
-            // Posting a notifyNextEffect() here is only safe
-            // (we don't run into busy loop), because we assume that
-            // someone has registerered above for next effects
-            // (multiplexer prio=0) at the user event queue.
-            return mrEventQueue.addEventForNextRound(
-                makeEvent( boost::bind(
-                               &EventMultiplexer::notifyNextEffect,
-                               boost::ref(mrEventMultiplexer) ) ) );
+            if (mbSkipTriggersNextEffect && bNotifyNextEffect)
+            {
+                // then simulate a next effect event: this skip effect
+                // handler is triggered upon next effect events (multiplexer
+                // prio=-1)!  Posting a notifyNextEffect() here is only safe
+                // (we don't run into busy loop), because we assume that
+                // someone has registerered above for next effects
+                // (multiplexer prio=0) at the user event queue.
+                return mrEventQueue.addEventWhenQueueIsEmpty(
+                    makeEvent( boost::bind( &EventMultiplexer::notifyNextEffect,
+                                            boost::ref(mrEventMultiplexer) ),
+                               "EventMultiplexer::notifyNextEffect") );
+            }
+            else
+                return true;
         }
         return false;
     }
@@ -333,6 +349,7 @@ private:
 private:
     EventQueue & mrEventQueue;
     EventMultiplexer & mrEventMultiplexer;
+    bool mbSkipTriggersNextEffect;
 };
 
 class RewindEffectEventHandler : public MouseEventHandler_,
@@ -772,6 +789,7 @@ void UserEventQueue::setAdvanceOnClick( bool bAdvanceOnClick )
         mpClickEventHandler->setAdvanceOnClick( bAdvanceOnClick );
 }
 
+
 void UserEventQueue::registerSlideStartEvent( const EventSharedPtr& rEvent )
 {
     registerEvent( mpStartEventHandler,
@@ -888,7 +906,9 @@ void UserEventQueue::registerNextEffectEvent( const EventSharedPtr& rEvent )
                                                   mbAdvanceOnClick ) );
 }
 
-void UserEventQueue::registerSkipEffectEvent( EventSharedPtr const & pEvent )
+void UserEventQueue::registerSkipEffectEvent(
+    EventSharedPtr const & pEvent,
+    const bool bSkipTriggersNextEffect)
 {
     if(!mpSkipEffectEventHandler)
     {
@@ -905,6 +925,7 @@ void UserEventQueue::registerSkipEffectEvent( EventSharedPtr const & pEvent )
         // we're called here)
         mpSkipEffectEventHandler->setAdvanceOnClick( mbAdvanceOnClick );
     }
+    mpSkipEffectEventHandler->setSkipTriggersNextEffect(bSkipTriggersNextEffect);
     mpSkipEffectEventHandler->addEvent( pEvent );
 }
 
@@ -971,6 +992,14 @@ void UserEventQueue::registerMouseLeaveEvent( const EventSharedPtr& rEvent,
                    boost::bind( &EventMultiplexer::addMouseMoveHandler,
                                 boost::ref( mrMultiplexer ), _1,
                                 0.0 /* default prio */ ) );
+}
+
+void UserEventQueue::callSkipEffectEventHandler (void)
+{
+    ::boost::shared_ptr<SkipEffectEventHandler> pHandler (
+        ::boost::dynamic_pointer_cast<SkipEffectEventHandler>(mpSkipEffectEventHandler));
+    if (pHandler)
+        pHandler->skipEffect();
 }
 
 } // namespace internal

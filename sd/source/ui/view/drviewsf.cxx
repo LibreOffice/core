@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drviewsf.cxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,14 +39,14 @@
 #include <svx/globl3d.hxx>
 #endif
 #include <svx/hlnkitem.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #ifndef _FLDITEM_HXX
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #endif
 #include <sfx2/viewfrm.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/whiter.hxx>
+#include <svl/eitem.hxx>
+#include <svl/itempool.hxx>
 #include <sfx2/tplpitem.hxx>
 #ifndef _BINDING_HXX //autogen
 #include <sfx2/bindings.hxx>
@@ -63,7 +60,7 @@
 #include <tools/urlobj.hxx>
 #include <svx/fmshell.hxx>
 #include <sfx2/topfrm.hxx>
-#include <svtools/cjkoptions.hxx>
+#include <svl/cjkoptions.hxx>
 
 #ifndef SD_FRAME_VIEW
 #include "FrameView.hxx"

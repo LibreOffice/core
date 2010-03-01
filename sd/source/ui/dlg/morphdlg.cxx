@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: morphdlg.cxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,8 +44,8 @@
 #include <svx/xlineit0.hxx>
 #include <svx/xenum.hxx>
 #include <svx/svdobj.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itemset.hxx>
+#include <svl/itempool.hxx>
 
 namespace sd {
 

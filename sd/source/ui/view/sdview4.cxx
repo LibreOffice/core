@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdview4.cxx,v $
- * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +35,7 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/xfillit.hxx>
 #include <svx/svdundo.hxx>
@@ -46,15 +43,12 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/svdoole2.hxx>
-#ifndef _IMPGRF_HXX
-#include <svx/impgrf.hxx>
-#endif
 #include <sot/storage.hxx>
 #include <sfx2/app.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
-
+#include <svtools/filter.hxx>
 #include "app.hrc"
 #include "Window.hxx"
 #include "DrawDocShell.hxx"
@@ -367,7 +361,7 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, EMPTYARG )
             aURL = INetURLObject( aURLStr );
         }
 
-        GraphicFilter*  pGraphicFilter = GetGrfFilter();
+        GraphicFilter*  pGraphicFilter = GraphicFilter::GetGraphicFilter();
         Graphic         aGraphic;
 
         aCurrentDropFile = aURL.GetMainURL( INetURLObject::NO_DECODE );
@@ -377,9 +371,10 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, EMPTYARG )
             if( !pGraphicFilter->ImportGraphic( aGraphic, aURL ) )
             {
                 sal_Int8    nTempAction = ( aIter == maDropFileVector.begin() ) ? mnAction : 0;
+                const bool bLink = ( ( nTempAction & DND_ACTION_LINK ) != 0 );
                 SdrGrafObj* pGrafObj = InsertGraphic( aGraphic, nTempAction, maDropPos, NULL, NULL );
 
-                if( pGrafObj )
+                if( pGrafObj && bLink )
                     pGrafObj->SetGraphicLink( aCurrentDropFile, String() );
 
                 // return action from first inserted graphic

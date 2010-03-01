@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SlsViewOverlay.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,6 +52,8 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/sdrpagewindow.hxx>
@@ -165,9 +164,7 @@ OverlayBase::OverlayBase (ViewOverlay& rViewOverlay)
 
 OverlayBase::~OverlayBase (void)
 {
-    OverlayManager* pOverlayManager = getOverlayManager();
-    if (pOverlayManager != NULL)
-        pOverlayManager->remove(*this);
+    OSL_ENSURE(!getOverlayManager(), "Please call RemoveRegistration() in the derived class; it's too late to call it in the base class since virtual methods will be missing when called in the destructor.");
 }
 
 
@@ -181,6 +178,16 @@ void OverlayBase::EnsureRegistration (void)
         if (pOverlayManager != NULL)
             pOverlayManager->add(*this);
     }
+}
+
+
+
+
+void OverlayBase::RemoveRegistration()
+{
+    OverlayManager* pOverlayManager = getOverlayManager();
+    if (pOverlayManager != NULL)
+        pOverlayManager->remove(*this);
 }
 
 
@@ -200,6 +207,7 @@ SubstitutionOverlay::SubstitutionOverlay (ViewOverlay& rViewOverlay)
 
 SubstitutionOverlay::~SubstitutionOverlay (void)
 {
+    RemoveRegistration();
 }
 
 
@@ -245,8 +253,7 @@ void SubstitutionOverlay::Clear (void)
 
 void SubstitutionOverlay::Move (const Point& rOffset)
 {
-    basegfx::B2DHomMatrix aTranslation;
-    aTranslation.translate(rOffset.X(), rOffset.Y());
+    const basegfx::B2DHomMatrix aTranslation(basegfx::tools::createTranslateB2DHomMatrix(rOffset.X(), rOffset.Y()));
 
     maShapes.transform(aTranslation);
     maPosition += rOffset;
@@ -312,6 +319,13 @@ SelectionRectangleOverlay::SelectionRectangleOverlay (ViewOverlay& rViewOverlay)
       maAnchor(0,0),
       maSecondCorner(0,0)
 {
+}
+
+
+
+SelectionRectangleOverlay::~SelectionRectangleOverlay()
+{
+    RemoveRegistration();
 }
 
 
@@ -386,6 +400,14 @@ InsertionIndicatorOverlay::InsertionIndicatorOverlay (ViewOverlay& rViewOverlay)
       mnInsertionIndex(-1),
       maBoundingBox()
 {
+}
+
+
+
+
+InsertionIndicatorOverlay::~InsertionIndicatorOverlay()
+{
+    RemoveRegistration();
 }
 
 
@@ -509,6 +531,7 @@ MouseOverIndicatorOverlay::MouseOverIndicatorOverlay (ViewOverlay& rViewOverlay)
 
 MouseOverIndicatorOverlay::~MouseOverIndicatorOverlay (void)
 {
+    RemoveRegistration();
 }
 
 

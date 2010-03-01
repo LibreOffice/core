@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: basenode.cxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,6 +47,7 @@
 #include "tools.hxx"
 #include "nodetools.hxx"
 #include "generateevent.hxx"
+#include "debug.hxx"
 
 #include <boost/bind.hpp>
 #include <vector>
@@ -312,6 +310,10 @@ public:
             mpNode->meCurrState = meToState;
             clear();
         }
+
+        // Uncomment the following line to write the node tree to file on
+        // every state change of one of its nodes.
+        //     Debug_ShowNodeTree(mpNode->mpSelf);
     }
 
     void clear() {
@@ -488,7 +490,9 @@ bool BaseNode::resolve()
             // schedule delayed activation event. Take iterate node
             // timeout into account
             mpCurrentEvent = makeDelay(
-                boost::bind( &AnimationNode::activate, mpSelf ), mnStartDelay );
+                boost::bind( &AnimationNode::activate, mpSelf ),
+                mnStartDelay,
+                "AnimationNode::activate with delay");
             maContext.mrEventQueue.addEvent( mpCurrentEvent );
         }
 

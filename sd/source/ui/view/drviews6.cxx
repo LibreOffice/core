@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drviews6.cxx,v $
- * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,12 +78,8 @@
 #include "fusumry.hxx"
 #include "fucushow.hxx"
 #include "drawview.hxx"
-#ifndef SD_FRAME_VIEW
 #include "FrameView.hxx"
-#endif
 #include "Window.hxx"
-#include "fuformatpaintbrush.hxx"
-#include "formatclipboard.hxx"
 #include "DrawDocShell.hxx"
 #include "TaskPaneViewShell.hxx"
 #include "framework/FrameworkHelper.hxx"
@@ -501,35 +494,6 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
     USHORT nSId = rReq.GetSlot();
     switch( nSId )
     {
-        case SID_FORMATPAINTBRUSH:
-        {
-            SdFormatClipboard* pFormatClipboard = GetDocSh()->mpFormatClipboard;
-            if(pFormatClipboard)
-            {
-                if( pFormatClipboard->HasContent() )
-                {
-                    pFormatClipboard->Erase();
-                    GetViewFrame()->GetBindings().Invalidate(SID_FORMATPAINTBRUSH);
-                    Cancel();
-                    rReq.Ignore ();
-                }
-                else
-                {
-                    bool bPersistentCopy = false;
-                    const SfxItemSet *pArgs = rReq.GetArgs();
-                    if( pArgs && pArgs->Count() >= 1 )
-                    {
-                        bPersistentCopy = static_cast<bool>(((SfxBoolItem &)pArgs->Get(
-                                                SID_FORMATPAINTBRUSH)).GetValue());
-                    }
-
-                    pFormatClipboard->Copy( *mpDrawView, bPersistentCopy );
-                    SetCurrentFunction( FuFormatPaintBrush::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
-                    GetViewFrame()->GetBindings().Invalidate(SID_FORMATPAINTBRUSH);
-                }
-            }
-        }
-        break;
         case SID_FONTWORK:
         {
             if ( rReq.GetArgs() )

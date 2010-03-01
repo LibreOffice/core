@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: futransf.cxx,v $
- * $Revision: 1.12.114.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -94,7 +91,7 @@ void FuTransform::DoExecute( SfxRequest& rReq )
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if ( pFact )
                 {
-                    std::auto_ptr< SfxAbstractTabDialog > pDlg( pFact->CreateCaptionDialog( NULL, mpView, RID_SVXDLG_CAPTION ) );
+                    std::auto_ptr< SfxAbstractTabDialog > pDlg( pFact->CreateCaptionDialog( NULL, mpView ) );
 
                     const USHORT* pRange = pDlg->GetInputRanges( *aNewAttr.GetPool() );
                     SfxItemSet aCombSet( *aNewAttr.GetPool(), pRange );
@@ -114,7 +111,7 @@ void FuTransform::DoExecute( SfxRequest& rReq )
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if(pFact)
                 {
-                    std::auto_ptr< SfxAbstractTabDialog > pDlg( pFact->CreateSvxTransformTabDialog( NULL, &aSet,mpView, RID_SVXDLG_TRANSFORM) );
+                    std::auto_ptr< SfxAbstractTabDialog > pDlg( pFact->CreateSvxTransformTabDialog( NULL, &aSet, mpView ) );
                     if( pDlg.get() && (pDlg->Execute() == RET_OK) )
                     {
                         rReq.Done( *( pDlg->GetOutputItemSet() ) );

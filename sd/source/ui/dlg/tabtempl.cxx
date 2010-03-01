@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tabtempl.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,23 +32,23 @@
 #undef SD_DLLIMPLEMENTATION
 #endif
 
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
 
 #include <svx/svxids.hrc>
 
 #include <svx/drawitem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/ofaitem.hxx>
 #include <svx/svxgrahicitem.hxx>
 #include <svx/svdmodel.hxx>
-#include <svtools/cjkoptions.hxx>
+#include <svl/cjkoptions.hxx>
 
 
 #include <svx/dialogs.hrc>
 
 #include <svx/svxdlg.hxx>
 #include <svx/tabline.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <svx/xtable.hxx>
 
 #include "DrawDocShell.hxx"

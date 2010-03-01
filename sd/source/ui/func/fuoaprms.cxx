@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fuoaprms.cxx,v $
- * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +33,7 @@
 
 #include "sdattr.hxx"
 #include <svx/svdpagv.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/colritem.hxx>
 #include <svx/svdundo.hxx>
 #include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
@@ -46,7 +43,7 @@
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include "svx/xtable.hxx"
 
 #include "strings.hrc"

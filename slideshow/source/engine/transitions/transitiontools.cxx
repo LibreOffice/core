@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: transitiontools.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +33,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 
 namespace slideshow {
@@ -53,10 +51,7 @@ namespace internal {
     ::basegfx::B2DPolyPolygon const & polypoly )
 {
     ::basegfx::B2DPolyPolygon res(polypoly);
-    ::basegfx::B2DHomMatrix aTransform;
-    aTransform.scale( -1.0, 1.0 );
-    aTransform.translate( 1.0, 0.0 );
-    res.transform( aTransform );
+    res.transform(basegfx::tools::createScaleTranslateB2DHomMatrix(-1.0, 1.0, 1.0, 0.0));
     res.flip();
     return res;
 }
@@ -65,10 +60,7 @@ namespace internal {
     ::basegfx::B2DPolyPolygon const & polypoly )
 {
     ::basegfx::B2DPolyPolygon res(polypoly);
-    ::basegfx::B2DHomMatrix aTransform;
-    aTransform.scale( 1.0, -1.0 );
-    aTransform.translate( 0.0, 1.0 );
-    res.transform( aTransform );
+    res.transform(basegfx::tools::createScaleTranslateB2DHomMatrix(1.0, -1.0, 0.0, 1.0));
     res.flip();
     return res;
 }

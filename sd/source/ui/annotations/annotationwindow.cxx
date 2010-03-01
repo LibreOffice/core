@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: postit.cxx,v $
- * $Revision: 1.8.42.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,38 +27,38 @@
 
 #include "precompiled_sd.hxx"
 
-#include <svx/fontitem.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/bulitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/flditem.hxx>
-#include <svx/frmdir.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/editview.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/bulitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/frmdir.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/editview.hxx>
 #include <svx/svdview.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
-#include <svx/editstat.hxx> //EditEngine flags
-#include <svx/outliner.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editobj.hxx>
-#include <svx/unolingu.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/postitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/crsditem.hxx>
-
+#include <editeng/editstat.hxx> //EditEngine flags
+#include <editeng/outliner.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/unolingu.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <svx/svxids.hrc>
 #include <svtools/langtab.hxx>
-#include <svtools/slstitm.hxx>
-#include <svtools/securityoptions.hxx>
-#include <svtools/useroptions.hxx>
-#include <svtools/languageoptions.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/slstitm.hxx>
+#include <unotools/securityoptions.hxx>
+#include <unotools/useroptions.hxx>
+#include <svl/languageoptions.hxx>
+#include <svl/zforlist.hxx>
 #include <svtools/svmedit.hxx>
 
 #include <linguistic/lngprops.hxx>

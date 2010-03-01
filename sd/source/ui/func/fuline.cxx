@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fuline.cxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,8 +35,8 @@
 #include <svx/tabline.hxx>
 #include <svx/xenum.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/request.hxx>
 #include <svx/xdef.hxx>
 #include <sfx2/bindings.hxx>
@@ -98,7 +95,7 @@ void FuLine::DoExecute( SfxRequest& rReq )
         mpView->GetAttributes( *pNewAttr );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        SfxAbstractTabDialog * pDlg = pFact ? pFact->CreateSvxLineTabDialog(NULL,pNewAttr,mpDoc,RID_SVXDLG_LINE,pObj,bHasMarked) : 0;
+        SfxAbstractTabDialog * pDlg = pFact ? pFact->CreateSvxLineTabDialog(NULL,pNewAttr,mpDoc,pObj,bHasMarked) : 0;
         if( pDlg && (pDlg->Execute() == RET_OK) )
         {
             mpView->SetAttributes (*(pDlg->GetOutputItemSet ()));

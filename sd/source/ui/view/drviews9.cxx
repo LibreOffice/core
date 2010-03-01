@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drviews9.cxx,v $
- * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,10 +44,10 @@
 #ifndef _SFX_DISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #ifndef _SVXIDS_HXX
 #include <svx/svxids.hrc>
 #endif
@@ -60,7 +57,7 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
 #include <sot/storage.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <basic/sbstar.hxx>
 
 #include <sfx2/viewfrm.hxx>

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docshel4.cxx,v $
- * $Revision: 1.80.86.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,10 +36,10 @@
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#include <svx/flstitem.hxx>
-#include <svx/eeitem.hxx>
-#include <svtools/aeitem.hxx>
-#include <svtools/flagitem.hxx>
+#include <editeng/flstitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/flagitem.hxx>
 #include <sot/storage.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
@@ -50,7 +47,7 @@
 #include <sfx2/dispatch.hxx>
 #endif
 #include <svx/svdotext.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <sfx2/printer.hxx>
 #include <svtools/ctrltool.hxx>
 #ifndef _SFX_ECODE_HXX //autogen
@@ -63,11 +60,11 @@
 #include "unomodel.hxx"
 #endif
 
-#include <svtools/fltrcfg.hxx>
+#include <unotools/fltrcfg.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svx/svxmsbas.hxx>
-#include <svtools/saveopt.hxx>
+//#include <svx/svxmsbas.hxx>
+#include <unotools/saveopt.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <comphelper/processfactory.hxx>

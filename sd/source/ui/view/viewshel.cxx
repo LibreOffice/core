@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewshel.cxx,v $
- * $Revision: 1.71.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,7 +45,7 @@
 #ifndef _SCRBAR_HXX //autogen
 #include <vcl/scrbar.hxx>
 #endif
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <svx/ruler.hxx>
 #ifndef _SVXIDS_HXX
 #include <svx/svxids.hrc>
@@ -90,7 +87,7 @@
 #include <svx/svdoutl.hxx>
 
 // #96090#
-#include <svtools/slstitm.hxx>
+#include <svl/slstitm.hxx>
 #include <sfx2/request.hxx>
 #include "SpellDialogChildWindow.hxx"
 

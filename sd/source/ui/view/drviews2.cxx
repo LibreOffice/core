@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drviews2.cxx,v $
- * $Revision: 1.55.68.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,7 +41,7 @@
 #include <svx/zoomitem.hxx>
 #endif
 #ifndef _EDITDATA_HXX
-#include <svx/editdata.hxx>
+#include <editeng/editdata.hxx>
 #endif
 #include <basic/sberrors.hxx>
 #include <vcl/msgbox.hxx>
@@ -52,10 +49,10 @@
 #include <sfx2/dispatch.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
-#include <svtools/aeitem.hxx>
-#include <svx/eeitem.hxx>
+#include <svl/aeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <basic/sbstar.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xfillit0.hxx>
 
@@ -467,7 +464,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 DBG_ASSERT(pFact, "Dialogdiet fail!");
-                AbstractSvxNameDialog* aNameDlg = pFact->CreateSvxNameDialog( GetActiveWindow(), aPageName, aDescr, RID_SVXDLG_NAME );
+                AbstractSvxNameDialog* aNameDlg = pFact->CreateSvxNameDialog( GetActiveWindow(), aPageName, aDescr );
                 DBG_ASSERT(aNameDlg, "Dialogdiet fail!");
                 aNameDlg->SetText( aTitle );
                 aNameDlg->SetCheckNameHdl( LINK( this, DrawViewShell, RenameSlideHdl ), true );

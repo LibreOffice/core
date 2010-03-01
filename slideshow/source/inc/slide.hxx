@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: slide.hxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +39,7 @@
 namespace com {  namespace sun { namespace star {
     namespace drawing {
         class XDrawPage;
+        class XDrawPagesSupplier;
     }
     namespace uno {
         class XComponentContext;
@@ -63,7 +61,7 @@ namespace slideshow
     {
         class RGBColor;
         class ScreenUpdater;
-
+        typedef ::std::vector< ::cppcanvas::PolyPolygonSharedPtr> PolyPolygonVector;
         class Slide
         {
         public:
@@ -117,6 +115,14 @@ namespace slideshow
             virtual ::com::sun::star::uno::Reference<
                 ::com::sun::star::animations::XAnimationNode > getXAnimationNode() const = 0;
 
+            ///Gets the slide Polygons
+            virtual PolyPolygonVector getPolygons() = 0;
+
+            ///Draw the slide Polygons
+            virtual void drawPolygons() const = 0;
+
+            ///Check if slide is already active
+            virtual bool isPaintOverlayActive() const = 0;
 
             // Slide bitmaps
             // -------------------------------------------------------------------
@@ -183,24 +189,28 @@ namespace slideshow
             UserEeventQueue
         */
         SlideSharedPtr createSlide( const ::com::sun::star::uno::Reference<
-                                       ::com::sun::star::drawing::XDrawPage >&         xDrawPage,
+                                       ::com::sun::star::drawing::XDrawPage >&          xDrawPage,
+                                   const ::com::sun::star::uno::Reference<
+                                       ::com::sun::star::drawing::XDrawPagesSupplier >& xDrawPages,
                                     const ::com::sun::star::uno::Reference<
-                                       ::com::sun::star::animations::XAnimationNode >& xRootNode,
-                                    EventQueue&                                        rEventQueue,
-                                    EventMultiplexer&                                  rEventMultiplexer,
-                                    ScreenUpdater&                                     rScreenUpdater,
-                                    ActivitiesQueue&                                   rActivitiesQueue,
-                                    UserEventQueue&                                    rUserEventQueue,
-                                    CursorManager&                                     rCursorManager,
-                                    const UnoViewContainer&                            rViewContainer,
+                                       ::com::sun::star::animations::XAnimationNode >&  xRootNode,
+                                    EventQueue&                                         rEventQueue,
+                                    EventMultiplexer&                                   rEventMultiplexer,
+                                    ScreenUpdater&                                      rScreenUpdater,
+                                    ActivitiesQueue&                                    rActivitiesQueue,
+                                    UserEventQueue&                                     rUserEventQueue,
+                                    CursorManager&                                      rCursorManager,
+                                    const UnoViewContainer&                             rViewContainer,
                                     const ::com::sun::star::uno::Reference<
-                                       ::com::sun::star::uno::XComponentContext >&     xContext,
-                                    const ShapeEventListenerMap&                       rShapeListenerMap,
-                                    const ShapeCursorMap&                              rShapeCursorMap,
-                                    RGBColor const&                                    aUserPaintColor,
-                                    bool                                               bUserPaintEnabled,
-                                    bool                                               bIntrinsicAnimationsAllowed,
-                                    bool                                               bDisableAnimationZOrder );
+                                       ::com::sun::star::uno::XComponentContext >&      xContext,
+                                    const ShapeEventListenerMap&                        rShapeListenerMap,
+                                    const ShapeCursorMap&                               rShapeCursorMap,
+                                    const PolyPolygonVector&                            rPolyPolygonVector,
+                                    RGBColor const&                                     aUserPaintColor,
+                                    double                                              dUserPaintStrokeWidth,
+                                    bool                                                bUserPaintEnabled,
+                                    bool                                                bIntrinsicAnimationsAllowed,
+                                    bool                                                bDisableAnimationZOrder );
     }
 }
 

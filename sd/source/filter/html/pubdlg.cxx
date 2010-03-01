@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pubdlg.cxx,v $
- * $Revision: 1.12.186.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,24 +41,23 @@
 #include <vcl/fixed.hxx>
 #include <vcl/combobox.hxx>
 #include <svtools/svmedit.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/aeitem.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/itemset.hxx>
+#include <svl/stritem.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/valueset.hxx>
 #include <vcl/graph.hxx>
-#include <svtools/eitem.hxx>
-#include <svx/impgrf.hxx>
+#include <svl/eitem.hxx>
 #include <svtools/colrdlg.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/colritem.hxx>
 #include <tools/list.hxx>
 #include <sdiocmpt.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
 #include <pres.hxx>
-#include <svtools/useroptions.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/useroptions.hxx>
+#include <unotools/pathoptions.hxx>
 
 #include "sdresid.hxx"
 #include "sdattr.hxx"

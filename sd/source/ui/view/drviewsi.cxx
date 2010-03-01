@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drviewsi.cxx,v $
- * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,11 +31,11 @@
 #include "DrawViewShell.hxx"
 #include <svx/xtable.hxx>
 #include "sdattr.hxx"
-#include <svtools/aeitem.hxx>
-#include <svx/eeitem.hxx>
+#include <svl/aeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <sfx2/request.hxx>
 #include <svx/svditer.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/colritem.hxx>
 #include <sfx2/viewfrm.hxx>
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>

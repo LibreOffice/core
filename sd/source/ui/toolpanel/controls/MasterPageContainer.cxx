@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: MasterPageContainer.cxx,v $
- * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,8 +57,8 @@
 #include "DrawDocShell.hxx"
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
-#include <svtools/itemset.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/itemset.hxx>
+#include <svl/eitem.hxx>
 #include "sdresid.hxx"
 #include "tools/TimerBasedTaskExecution.hxx"
 #include "pres.hxx"

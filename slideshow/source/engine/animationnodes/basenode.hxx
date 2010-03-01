@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: basenode.hxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -137,14 +134,14 @@ public:
     // nop:
     virtual void notifyDeactivating( const AnimationNodeSharedPtr& rNotifier );
 
+    bool isMainSequenceRootNode() const { return mbIsMainSequenceRootNode; }
+
 protected:
     void scheduleDeactivationEvent( EventSharedPtr const& pEvent =
                                     EventSharedPtr() );
 
     SlideShowContext const&                 getContext() const { return maContext; }
     ::boost::shared_ptr<BaseNode> const&    getSelf() const { return mpSelf; }
-
-    bool isMainSequenceRootNode() const { return mbIsMainSequenceRootNode; }
 
     bool checkValidNode() const {
         ENSURE_OR_THROW( mpSelf, "no self ptr set!" );

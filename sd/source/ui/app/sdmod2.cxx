@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdmod2.cxx,v $
- * $Revision: 1.55 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,22 +27,22 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
-#include <svx/eeitem.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/flditem.hxx>
 #include <sfx2/printer.hxx>
-#include <svtools/inethist.hxx>
-#include <svtools/poolitem.hxx>
-#include <svtools/flagitem.hxx>
-#include <svtools/useroptions.hxx>
+#include <svl/inethist.hxx>
+#include <svl/poolitem.hxx>
+#include <svl/flagitem.hxx>
+#include <unotools/useroptions.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/request.hxx>
 
-#include <svx/svdfield.hxx>
-#include <svx/editstat.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/measfld.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/editeng.hxx>
 
 #include <svx/dialogs.hrc>
 #include <svx/svdotext.hxx>
@@ -85,7 +82,7 @@
 #include "sdabstdlg.hxx"
 #include "tpoption.hrc"
 #include "prntopts.hrc"
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 
 /** retrieves the page that is currently painted. This will only be the master page
     if the current drawn view only shows the master page*/
@@ -490,7 +487,7 @@ SfxItemSet*  SdModule::CreateItemSet( USHORT nSlot )
         nMetric = (FieldUnit)pOptions->GetMetric();
 
     if( nMetric == (FieldUnit)0xffff )
-        nMetric = GetModuleFieldUnit();
+        nMetric = GetFieldUnit();
 
     pRet->Put( SfxUInt16Item( SID_ATTR_METRIC, (UINT16)nMetric ) );
 

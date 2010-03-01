@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.17 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -41,6 +37,10 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :	settings.mk
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 
+.IF "$(ENABLE_PRESENTER_EXTRA_UI)"=="YES"
+CDEFS+=-DENABLE_PRESENTER_EXTRA_UI
+.ENDIF
+
 # --- Common ----------------------------------------------------------
 
 ENVCFLAGS += -DBOOST_SPIRIT_USE_OLD_NAMESPACE
@@ -72,6 +72,7 @@ SLOFILES =	$(SLO)$/activitiesqueue.obj \
             $(SLO)$/attributemap.obj \
             $(SLO)$/color.obj \
             $(SLO)$/delayevent.obj \
+            $(SLO)$/effectrewinder.obj \
             $(SLO)$/eventmultiplexer.obj \
             $(SLO)$/eventqueue.obj \
             $(SLO)$/expressionnodefactory.obj \
@@ -89,7 +90,8 @@ SLOFILES =	$(SLO)$/activitiesqueue.obj \
             $(SLO)$/unoviewcontainer.obj \
             $(SLO)$/usereventqueue.obj \
             $(SLO)$/waitsymbol.obj \
-            $(SLO)$/wakeupevent.obj
+            $(SLO)$/wakeupevent.obj \
+            $(SLO)$/debug.obj
 
 .IF "$(debug)"!="" || "$(DEBUG)"!=""
 SLOFILES +=  $(SLO)$/sp_debug.obj

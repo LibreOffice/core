@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: event.hxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,8 @@
 #define INCLUDED_SLIDESHOW_EVENT_HXX
 
 #include "disposable.hxx"
-
+#include "debug.hxx"
+#include <rtl/ustring.hxx>
 #include <boost/shared_ptr.hpp>
 #include <vector>
 
@@ -43,6 +41,10 @@ namespace internal {
 class Event : public Disposable
 {
 public:
+#if OSL_DEBUG_LEVEL > 1
+    Event (const ::rtl::OUString& rsDescription) : msDescription(rsDescription) {};
+#endif
+
     /** Execute the event.
 
         @return true, if event was successfully executed.
@@ -72,6 +74,13 @@ public:
         event is to be fired.
     */
     virtual double getActivationTime( double nCurrentTime ) const = 0;
+
+#if OSL_DEBUG_LEVEL > 1
+    ::rtl::OUString GetDescription (void) const { return msDescription; }
+
+private:
+    const ::rtl::OUString msDescription;
+#endif
 };
 
 typedef ::boost::shared_ptr< Event > EventSharedPtr;

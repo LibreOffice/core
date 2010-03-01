@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SlideSorterView.cxx,v $
- * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,7 +57,7 @@
 #include "sdresid.hxx"
 #include "glob.hrc"
 
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/xlndsit.hxx>
@@ -72,10 +69,10 @@
 #include <algorithm>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/sdrpagewindow.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 
 #ifndef _SFXITEMPOOL_HXX
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #endif
 
 using namespace std;

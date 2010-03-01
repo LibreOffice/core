@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unosrch.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,11 +30,10 @@
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
 
-#ifndef SVX_UNOSHAPE_HXX
 #include <svx/unoshape.hxx>
-#endif
+#include <svx/svdpool.hxx>
 #include <svx/unoprov.hxx>
-#include <svx/unotext.hxx>
+#include <editeng/unotext.hxx>
 
 #include <comphelper/extract.hxx>
 #include <rtl/uuid.h>
@@ -732,7 +728,7 @@ UNO3_GETIMPLEMENTATION_IMPL( SdUnoSearchReplaceDescriptor );
 
 SdUnoSearchReplaceDescriptor::SdUnoSearchReplaceDescriptor( sal_Bool bReplace ) throw()
 {
-    mpPropSet = new SvxItemPropertySet(ImplGetSearchPropertyMap());
+    mpPropSet = new SvxItemPropertySet(ImplGetSearchPropertyMap(), SdrObject::GetGlobalDrawObjectItemPool());
 
     mbBackwards = sal_False;
     mbCaseSensitive = sal_False;

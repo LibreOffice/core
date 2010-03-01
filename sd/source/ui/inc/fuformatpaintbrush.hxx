@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fuformatpaintbrush.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,15 +28,17 @@
 #ifndef SD_FU_FORMATPAINTBRUSH_HXX
 #define SD_FU_FORMATPAINTBRUSH_HXX
 
-#include "fupoor.hxx"
+#include "futext.hxx"
 
 // header for class SfxItemSet
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
+#include <boost/scoped_ptr.hpp>
 
 namespace sd {
 
-class FuFormatPaintBrush
-    : public FuPoor
+class DrawViewShell;
+
+class FuFormatPaintBrush : public FuText
 {
 public:
     TYPEINFO();
@@ -54,14 +53,22 @@ public:
     virtual void Activate();
     virtual void Deactivate();
 
-private:
-        FuFormatPaintBrush (
-        ViewShell* pViewSh,
-        ::sd::Window* pWin,
-        ::sd::View* pView,
-        SdDrawDocument* pDoc,
-        SfxRequest& rReq);
+    static void GetMenuState( DrawViewShell& rDrawViewShell, SfxItemSet &rSet );
+    static bool CanCopyThisType( UINT32 nObjectInventor, UINT16 nObjectIdentifier );
 
+private:
+    FuFormatPaintBrush ( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq);
+
+    void DoExecute( SfxRequest& rReq );
+
+    bool HasContentForThisType( UINT32 nObjectInventor, UINT16 nObjectIdentifier ) const;
+    void Paste( bool, bool );
+
+    void implcancel();
+
+    ::boost::shared_ptr<SfxItemSet> mpItemSet;
+    bool   mbPermanent;
+    bool   mbOldIsQuickTextEditMode;
 };
 
 } // end of namespace sd

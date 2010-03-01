@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pptinanimations.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,15 +31,13 @@
 #include <com/sun/star/animations/XTimeContainer.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 
-#ifndef _SD_PPTANIMATIONS_HXX
 #include "pptanimations.hxx"
-#endif
 #include <animations.hxx>
 
 #ifdef DBG_ANIM_LOG
 #include <stdio.h>
 #endif
-#include <svx/svdfppt.hxx>
+#include <filter/msfilter/svdfppt.hxx>
 
 #include <list>
 

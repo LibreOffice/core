@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessibleDocumentViewBase.hxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,9 +28,9 @@
 #ifndef SD_ACCESSIBILITY_ACCESSIBLE_DOCUMENT_VIEW_BASE_HXX
 #define SD_ACCESSIBILITY_ACCESSIBLE_DOCUMENT_VIEW_BASE_HXX
 
-#include <svx/AccessibleContextBase.hxx>
-#include <svx/AccessibleComponentBase.hxx>
-#include <svx/AccessibleSelectionBase.hxx>
+#include <editeng/AccessibleContextBase.hxx>
+#include <editeng/AccessibleComponentBase.hxx>
+#include <editeng/AccessibleSelectionBase.hxx>
 #include "AccessibleViewForwarder.hxx"
 #include "AccessiblePageShape.hxx"
 #include <svx/ChildrenManager.hxx>
@@ -42,6 +39,7 @@
 #include <com/sun/star/awt/XFocusListener.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <tools/link.hxx>
 
 namespace sd {
@@ -159,7 +157,8 @@ public:
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (sal_Int32 nIndex)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException,
+            ::com::sun::star::lang::IndexOutOfBoundsException);
 
 
     //=====  XAccessibleComponent  ============================================

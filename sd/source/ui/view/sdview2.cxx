@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdview2.cxx,v $
- * $Revision: 1.61 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,13 +49,13 @@
 #include <sfx2/childwin.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdpagv.hxx>
-#include <svtools/urlbmk.hxx>
-#include <svtools/urlbmk.hxx>
-#include <svx/outliner.hxx>
+#include <svl/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
+#include <editeng/outliner.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/dbexch.hrc>
 #include <sot/formats.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 #include <svx/svditer.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/scene3d.hxx>
@@ -963,7 +960,7 @@ BOOL View::GetExchangeList( List*& rpExchangeList, List* pBookmarkList, USHORT n
                     String          aTitle( SdResId( STR_TITLE_NAMEGROUP ) );
                     String          aDesc( SdResId( STR_DESC_NAMEGROUP ) );
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    AbstractSvxNameDialog* pDlg = pFact ? pFact->CreateSvxNameDialog( mpViewSh->GetActiveWindow(), *pNewName, aDesc, RID_SVXDLG_NAME ) : 0;
+                    AbstractSvxNameDialog* pDlg = pFact ? pFact->CreateSvxNameDialog( mpViewSh->GetActiveWindow(), *pNewName, aDesc ) : 0;
                     if( pDlg )
                     {
                         pDlg->SetEditHelpId( HID_SD_NAMEDIALOG_OBJECT );

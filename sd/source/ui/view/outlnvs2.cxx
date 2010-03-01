@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: outlnvs2.cxx,v $
- * $Revision: 1.31.36.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,16 +37,16 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #ifndef _ZOOMITEM_HXX //autogen
 #include <svx/zoomitem.hxx>
 #endif
 #include <vcl/msgbox.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/flditem.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/editstat.hxx>
 #include "optsitem.hxx"
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include "Outliner.hxx"

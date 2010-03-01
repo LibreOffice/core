@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PresenterTextView.cxx,v $
- *
- * $Revision: 1.5.76.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,16 +31,16 @@
 
 #include <i18npool/mslangid.hxx>
 #include <cppcanvas/vclfactory.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/linguprops.hxx>
-#include <svtools/lingucfg.hxx>
-#include <svx/colritem.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editstat.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/fontitem.hxx>
+#include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
+#include <unotools/linguprops.hxx>
+#include <unotools/lingucfg.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
 #include <svx/xflclit.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/svapp.hxx>

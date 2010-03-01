@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drawdoc2.cxx,v $
- * $Revision: 1.46.76.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,21 +37,21 @@
 #ifndef SD_OUTLINE_HXX
 #include "Outliner.hxx"
 #endif
-#include <svx/paperinf.hxx>
+#include <editeng/paperinf.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdundo.hxx>
 #include <vcl/svapp.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/langitem.hxx>
-#include <svtools/itempool.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/langitem.hxx>
+#include <svl/itempool.hxx>
 #include <svx/svdpool.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 
-#include <svx/linkmgr.hxx>
-#include <svx/editdata.hxx>
+#include <sfx2/linkmgr.hxx>
+#include <editeng/editdata.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>                  // SVX_RESSTR
 
@@ -923,7 +920,7 @@ BOOL SdDrawDocument::MovePages(USHORT nTargetPage)
 
 /*************************************************************************
 |*
-|* Anzahl der Links im LinkManager zurueckgeben
+|* Anzahl der Links im sfx2::LinkManager zurueckgeben
 |*
 \************************************************************************/
 

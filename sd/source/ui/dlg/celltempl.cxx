@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: celltempl.cxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,15 +32,15 @@
 #undef SD_DLLIMPLEMENTATION
 #endif
 
-#include <svtools/style.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/style.hxx>
+#include <svl/intitem.hxx>
 
 #include <svx/dialogs.hrc>
 #include <svx/drawitem.hxx>
-#include <svx/bulitem.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/numitem.hxx>
+#include <editeng/bulitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/numitem.hxx>
 #include <svx/svdmodel.hxx>
 
 #include "DrawDocShell.hxx"

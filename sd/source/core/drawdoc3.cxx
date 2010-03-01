@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drawdoc3.cxx,v $
- * $Revision: 1.53 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,14 +41,14 @@
 #include <sfx2/docfile.hxx>
 #include <sot/storage.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svditer.hxx>
-#include <svtools/style.hxx>
-#include <svx/linkmgr.hxx>
+#include <svl/style.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdundo.hxx>

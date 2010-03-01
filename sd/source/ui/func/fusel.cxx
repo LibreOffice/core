@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fusel.cxx,v $
- * $Revision: 1.55.74.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,21 +37,21 @@
 #include <svx/polysc3d.hxx>
 #include "drawview.hxx"
 #include <svtools/imapobj.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <svx/svxids.hrc>
 #include <svx/xfillit0.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svtools/aeitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
 #include <tools/debug.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/flditem.hxx>
 
 #include <svx/svdotable.hxx>
 

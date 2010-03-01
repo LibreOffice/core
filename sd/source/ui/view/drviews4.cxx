@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drviews4.cxx,v $
- * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,13 +32,13 @@
 
 #include "DrawViewShell.hxx"
 #include <vcl/msgbox.hxx>
-#include <svtools/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/fmglob.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #ifndef _FLDITEM_HXX
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #endif
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
@@ -50,7 +47,7 @@
 #ifndef _GLOBL3D_HXX
 #include <svx/globl3d.hxx>
 #endif
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #ifndef _SFX_CLIENTSH_HXX
 #include <sfx2/ipclient.hxx>
 #endif
@@ -58,7 +55,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svx/svdopath.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svx/editview.hxx>
+#include <editeng/editview.hxx>
 #include <vcl/cursor.hxx>
 
 

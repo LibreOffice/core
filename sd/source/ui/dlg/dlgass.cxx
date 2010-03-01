@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dlgass.cxx,v $
- * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,7 +38,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
 #include <sfx2/doctempl.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <sfx2/objsh.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
@@ -49,7 +46,7 @@
 #include <com/sun/star/presentation/FadeEffect.hpp>
 #include <fadedef.h>
 #include <sfx2/sfxsids.hrc>
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 #include "DrawDocShell.hxx"
 #include <vcl/gdimtf.hxx>
 #include <vcl/wintypes.hxx>
@@ -66,7 +63,7 @@
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
-#include <svtools/historyoptions.hxx>
+#include <unotools/historyoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
 #include <sfx2/filedlghelper.hxx>

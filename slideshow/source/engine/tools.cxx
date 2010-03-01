@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tools.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,6 +48,7 @@
 #include <basegfx/vector/b2ivector.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <cppcanvas/basegfxfactory.hxx>
 
@@ -163,10 +161,10 @@ namespace slideshow
         // =========================
 
         /// extract unary double value from Any
-        bool extractValue( double&                          o_rValue,
-                           const uno::Any&                  rSourceAny,
-                           const ShapeSharedPtr&            rShape,
-                           const ::basegfx::B2DVector&      rSlideBounds )
+        bool extractValue( double&                      o_rValue,
+                           const uno::Any&              rSourceAny,
+                           const ShapeSharedPtr&        rShape,
+                           const ::basegfx::B2DVector&  rSlideBounds )
         {
             // try to extract numeric value (double, or smaller POD, like float or int)
             if( (rSourceAny >>= o_rValue) )
@@ -524,10 +522,9 @@ namespace slideshow
         {
             if( !pAttr )
             {
-                ::basegfx::B2DHomMatrix aTransform;
-
-                aTransform.scale( rShapeBounds.getWidth(), rShapeBounds.getHeight() );
-                aTransform.translate( rShapeBounds.getMinX(), rShapeBounds.getMinY() );
+                const basegfx::B2DHomMatrix aTransform(basegfx::tools::createScaleTranslateB2DHomMatrix(
+                    rShapeBounds.getWidth(), rShapeBounds.getHeight(),
+                    rShapeBounds.getMinX(), rShapeBounds.getMinY()));
 
                 return aTransform;
             }
@@ -710,6 +707,38 @@ namespace slideshow
                     static_cast< sal_uInt8 >( nColor >> 24U ) ) );
         }
 
+        sal_Int32 RGBAColor2UnoColor( ::cppcanvas::Color::IntSRGBA aColor )
+        {
+            return ::cppcanvas::makeColorARGB(
+                // convert from IntSRGBA color to API color
+                // (0xRRGGBBAA -> 0xAARRGGBB)
+                static_cast< sal_uInt8 >(0),
+                ::cppcanvas::getRed(aColor),
+                ::cppcanvas::getGreen(aColor),
+                ::cppcanvas::getBlue(aColor));
+        }
+
+        /*sal_Int32 RGBAColor2UnoColor( ::cppcanvas::Color::IntSRGBA aColor )
+        {
+            return ::cppcanvas::unMakeColor(
+                                                    // convert from IntSRGBA color to API color
+                                                    // (0xRRGGBBAA -> 0xAARRGGBB)
+                                                    static_cast< sal_uInt8 >(0),
+                                                    ::cppcanvas::getRed(aColor),
+                                                    ::cppcanvas::getGreen(aColor),
+                                                    ::cppcanvas::getBlue(aColor));
+        }*/
+
+        sal_Int8 unSignedToSigned(sal_Int8 nInt)
+        {
+            if(nInt < 0 ){
+                sal_Int8 nInt2 = nInt >> 1U;
+                return nInt2;
+            }else{
+                return nInt;
+            }
+        }
+
         void fillRect( const ::cppcanvas::CanvasSharedPtr& rCanvas,
                        const ::basegfx::B2DRectangle&      rRect,
                        ::cppcanvas::Color::IntSRGBA        aFillColor )
@@ -806,12 +835,12 @@ namespace slideshow
 
             // determine transformed page bounds
             const basegfx::B2DRange aRect( 0,0,
-                                             rSlideSize.getX(),
-                                             rSlideSize.getY() );
+                                           rSlideSize.getX(),
+                                           rSlideSize.getY() );
             basegfx::B2DRange aTmpRect;
             canvas::tools::calcTransformedRectBounds( aTmpRect,
-                                                        aRect,
-                                                        pView->getTransformation() );
+                                                      aRect,
+                                                      pView->getTransformation() );
 
             // #i42440# Returned slide size is one pixel too small, as
             // rendering happens one pixel to the right and below the

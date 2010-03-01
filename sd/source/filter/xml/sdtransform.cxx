@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdtransform.cxx,v $
- *
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,18 +28,18 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
-#include <svtools/style.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/style.hxx>
+#include <svl/itemset.hxx>
+#include <svl/itempool.hxx>
+#include <svl/whiter.hxx>
 
 #include <svx/svdoutl.hxx>
-#include <svx/xmlcnitm.hxx>
+#include <editeng/xmlcnitm.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdogrp.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/numitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/numitem.hxx>
 
 #include "drawdoc.hxx"
 #include "glob.hxx"

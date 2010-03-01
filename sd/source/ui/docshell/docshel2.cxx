@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docshel2.cxx,v $
- * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -374,7 +371,7 @@ BOOL DrawDocShell::CheckPageName (::Window* pWin, String& rName )
     {
         String aDesc( SdResId( STR_WARN_PAGE_EXISTS ) );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        AbstractSvxNameDialog* aNameDlg = pFact ? pFact->CreateSvxNameDialog( pWin, aStrForDlg, aDesc, RID_SVXDLG_NAME ) : 0;
+        AbstractSvxNameDialog* aNameDlg = pFact ? pFact->CreateSvxNameDialog( pWin, aStrForDlg, aDesc ) : 0;
         if( aNameDlg )
         {
             aNameDlg->SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drviews1.cxx,v $
- * $Revision: 1.79.34.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,7 +55,7 @@
 #include <svx/fmshell.hxx>
 #include <svx/globl3d.hxx>
 #include <svx/fmglob.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 
 
 #include "misc.hxx"
@@ -553,7 +550,7 @@ SvxRuler* DrawViewShell::CreateHRuler (::sd::Window* pWin, BOOL bIsFirst)
     UINT16 nMetric = (UINT16)GetDoc()->GetUIUnit();
 
     if( nMetric == 0xffff )
-        nMetric = (UINT16)GetModuleFieldUnit();
+        nMetric = (UINT16)GetViewShellBase().GetViewFrame()->GetDispatcher()->GetModule()->GetFieldUnit();
 
     pRuler->SetUnit( FieldUnit( nMetric ) );
 
@@ -587,7 +584,7 @@ SvxRuler* DrawViewShell::CreateVRuler(::sd::Window* pWin)
     UINT16 nMetric = (UINT16)GetDoc()->GetUIUnit();
 
     if( nMetric == 0xffff )
-        nMetric = (UINT16)GetModuleFieldUnit();
+        nMetric = (UINT16)GetViewShellBase().GetViewFrame()->GetDispatcher()->GetModule()->GetFieldUnit();
 
     pRuler->SetUnit( FieldUnit( nMetric ) );
 
@@ -1196,25 +1193,15 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
             {
                 // set pages for all available handout presentation objects
                 sd::ShapeList& rShapeList = pMaster->GetPresentationShapeList();
-
-                sal_uInt16 nPgNum = 0;
                 SdrObject* pObj = 0;
+
                 while( (pObj = rShapeList.getNextShape(pObj)) != 0 )
                 {
                     if( pMaster->GetPresObjKind(pObj) == PRESOBJ_HANDOUT )
                     {
-                        const sal_uInt16 nDestinationPageNum(2 * nPgNum + 1);
-
-                        if(nDestinationPageNum < GetDoc()->GetPageCount())
-                        {
-                            static_cast<SdrPageObj*>(pObj)->SetReferencedPage(GetDoc()->GetPage(nDestinationPageNum));
-                        }
-                        else
-                        {
-                            static_cast<SdrPageObj*>(pObj)->SetReferencedPage(0L);
-                        }
-
-                        nPgNum++;
+                        // #i105146# We want no content to be displayed for PK_HANDOUT,
+                        // so just never set a page as content
+                        static_cast<SdrPageObj*>(pObj)->SetReferencedPage(0);
                     }
                 }
             }

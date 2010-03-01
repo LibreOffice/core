@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: demoshow.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -100,12 +97,9 @@ public:
     void resize( const ::Size& rNewSize )
     {
         maSize = rNewSize;
-        maTransform.identity();
-        const sal_Int32 nSize( std::min( rNewSize.Width(),
-                                         rNewSize.Height() ) - 10 );
-        maTransform.scale( nSize, nSize );
-        maTransform.translate( (rNewSize.Width() - nSize) / 2,
-                               (rNewSize.Height() - nSize) / 2 );
+        const sal_Int32 nSize( std::min( rNewSize.Width(), rNewSize.Height() ) - 10);
+        maTransform = basegfx::tools::createScaleTranslateB2DHomMatrix(
+            nSize, nSize, (rNewSize.Width() - nSize) / 2, (rNewSize.Height() - nSize) / 2);
 
         lang::EventObject aEvent( *this );
         maTransformationListeners.notifyEach( &util::XModifyListener::modified,

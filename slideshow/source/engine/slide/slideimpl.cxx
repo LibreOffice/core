@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: slideimpl.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,7 +78,7 @@
 #include <iterator>
 #include <algorithm>
 #include <functional>
-
+#include <iostream>
 
 using namespace ::com::sun::star;
 
@@ -101,6 +98,7 @@ class SlideImpl : public Slide,
 {
 public:
     SlideImpl( const uno::Reference<drawing::XDrawPage>&         xDrawPage,
+               const uno::Reference<drawing::XDrawPagesSupplier>&    xDrawPages,
                const uno::Reference<animations::XAnimationNode>& xRootNode,
                EventQueue&                                       rEventQueue,
                EventMultiplexer&                                 rEventMultiplexer,
@@ -112,7 +110,9 @@ public:
                const uno::Reference<uno::XComponentContext>&     xContext,
                const ShapeEventListenerMap&                      rShapeListenerMap,
                const ShapeCursorMap&                             rShapeCursorMap,
+               const PolyPolygonVector&                          rPolyPolygonVector,
                RGBColor const&                                   rUserPaintColor,
+               double                                            dUserPaintStrokeWidth,
                bool                                              bUserPaintEnabled,
                bool                                              bIntrinsicAnimationsAllowed,
                bool                                              bDisableAnimationZOrder );
@@ -136,6 +136,9 @@ public:
     virtual basegfx::B2ISize getSlideSize() const;
     virtual uno::Reference<drawing::XDrawPage > getXDrawPage() const;
     virtual uno::Reference<animations::XAnimationNode> getXAnimationNode() const;
+    virtual PolyPolygonVector getPolygons();
+    virtual void drawPolygons() const;
+    virtual bool isPaintOverlayActive() const;
 
     // TODO(F2): Rework SlideBitmap to no longer be based on XBitmap,
     // but on canvas-independent basegfx bitmaps
@@ -201,6 +204,8 @@ private:
     /// End GIF and other intrinsic shape animations
     void startIntrinsicAnimations();
 
+    /// Add Polygons to the member maPolygons
+    void addPolygons(PolyPolygonVector aPolygons);
 
     // Types
     // =====
@@ -230,6 +235,7 @@ private:
 
     /// The page model object
     uno::Reference< drawing::XDrawPage >                mxDrawPage;
+    uno::Reference< drawing::XDrawPagesSupplier >       mxDrawPagesSupplier;
     uno::Reference< animations::XAnimationNode >        mxRootNode;
 
     LayerManagerSharedPtr                               mpLayerManager;
@@ -244,8 +250,10 @@ private:
 
     /// Handles the animation and event generation for us
     SlideAnimations                                     maAnimations;
+    PolyPolygonVector                                   maPolygons;
 
     RGBColor                                            maUserPaintColor;
+    double                                              mdUserPaintStrokeWidth;
     UserPaintOverlaySharedPtr                           mpPaintOverlay;
 
     /// Bitmaps with slide content at various states
@@ -287,6 +295,9 @@ private:
 
     /// When true, show() was called. Slide hidden oherwise.
     bool                                                mbActive;
+
+    ///When true, enablePaintOverlay was called and mbUserPaintOverlay = true
+    bool                                                mbPaintOverlayActive;
 };
 
 
@@ -335,6 +346,7 @@ private:
 
 
 SlideImpl::SlideImpl( const uno::Reference< drawing::XDrawPage >&           xDrawPage,
+                      const uno::Reference<drawing::XDrawPagesSupplier>&    xDrawPages,
                       const uno::Reference< animations::XAnimationNode >&   xRootNode,
                       EventQueue&                                           rEventQueue,
                       EventMultiplexer&                                     rEventMultiplexer,
@@ -346,11 +358,14 @@ SlideImpl::SlideImpl( const uno::Reference< drawing::XDrawPage >&           xDra
                       const uno::Reference< uno::XComponentContext >&       xComponentContext,
                       const ShapeEventListenerMap&                          rShapeListenerMap,
                       const ShapeCursorMap&                                 rShapeCursorMap,
+                      const PolyPolygonVector&                              rPolyPolygonVector,
                       RGBColor const&                                       aUserPaintColor,
+                      double                                                dUserPaintStrokeWidth,
                       bool                                                  bUserPaintEnabled,
                       bool                                                  bIntrinsicAnimationsAllowed,
                       bool                                                  bDisableAnimationZOrder ) :
     mxDrawPage( xDrawPage ),
+    mxDrawPagesSupplier( xDrawPages ),
     mxRootNode( xRootNode ),
     mpLayerManager( new LayerManager(
                         rViewContainer,
@@ -375,7 +390,9 @@ SlideImpl::SlideImpl( const uno::Reference< drawing::XDrawPage >&           xDra
     mrCursorManager( rCursorManager ),
     maAnimations( maContext,
                   getSlideSizeImpl() ),
+    maPolygons(rPolyPolygonVector),
     maUserPaintColor(aUserPaintColor),
+    mdUserPaintStrokeWidth(dUserPaintStrokeWidth),
     mpPaintOverlay(),
     maSlideBitmaps(),
     meAnimationState( CONSTRUCTING_STATE ),
@@ -387,7 +404,8 @@ SlideImpl::SlideImpl( const uno::Reference< drawing::XDrawPage >&           xDra
     mbShowLoaded( false ),
     mbHaveAnimations( false ),
     mbMainSequenceFound( false ),
-    mbActive( false )
+    mbActive( false ),
+    mbPaintOverlayActive( false )
 {
     // clone already existing views for slide bitmaps
     std::for_each( rViewContainer.begin(),
@@ -436,6 +454,9 @@ void SlideImpl::dispose()
     mpShapeManager.reset();
     mxRootNode.clear();
     mxDrawPage.clear();
+#ifndef ENABLE_PRESENTER_EXTRA_UI
+    mxDrawPagesSupplier.clear();
+#endif
 }
 
 bool SlideImpl::prefetch()
@@ -583,6 +604,12 @@ uno::Reference<animations::XAnimationNode> SlideImpl::getXAnimationNode() const
     return mxRootNode;
 }
 
+PolyPolygonVector SlideImpl::getPolygons()
+{
+    if(mbPaintOverlayActive)
+        maPolygons = mpPaintOverlay->getPolygons();
+    return maPolygons;
+}
 
 SlideBitmapSharedPtr SlideImpl::getCurrentSlideBitmap( const UnoViewSharedPtr& rView ) const
 {
@@ -862,14 +889,47 @@ bool SlideImpl::implPrefetchShow()
 void SlideImpl::enablePaintOverlay()
 {
     if( mbUserPaintOverlayEnabled )
+    {
         mpPaintOverlay = UserPaintOverlay::create( maUserPaintColor,
-                                                   2.0,
-                                                   maContext );
+                                                   mdUserPaintStrokeWidth,
+                                                   maContext,
+                                                   maPolygons );
+        mbPaintOverlayActive = true;
+    }
+}
+
+void SlideImpl::drawPolygons() const
+{
+    if( mbUserPaintOverlayEnabled )
+        mpPaintOverlay->drawPolygons();
+}
+
+void SlideImpl::addPolygons(PolyPolygonVector aPolygons)
+{
+    if(!aPolygons.empty())
+    {
+        for( PolyPolygonVector::iterator aIter=aPolygons.begin(),
+                 aEnd=aPolygons.end();
+             aIter!=aEnd;
+             ++aIter )
+        {
+            maPolygons.push_back(*aIter);
+        }
+    }
+}
+
+bool SlideImpl::isPaintOverlayActive() const
+{
+    return mbPaintOverlayActive;
 }
 
 void SlideImpl::disablePaintOverlay()
 {
+    if(mbPaintOverlayActive)
+        maPolygons = mpPaintOverlay->getPolygons();
+
     mpPaintOverlay.reset();
+    mbPaintOverlayActive = false;
 }
 
 ::basegfx::B2DRectangle SlideImpl::getSlideRect() const
@@ -1073,6 +1133,7 @@ bool SlideImpl::loadShapes()
                 // -------------------------------------------------------------------------
                 ShapeImporter aMPShapesFunctor( xMasterPage,
                                                 mxDrawPage,
+                                                mxDrawPagesSupplier,
                                                 maContext,
                                                 0, /* shape num starts at 0 */
                                                 true );
@@ -1087,6 +1148,7 @@ bool SlideImpl::loadShapes()
                     if( rShape )
                         mpLayerManager->addShape( rShape );
                 }
+                addPolygons(aMPShapesFunctor.getPolygons());
 
                 nCurrCount = xMasterPageShapes->getCount() + 1;
             }
@@ -1121,6 +1183,7 @@ bool SlideImpl::loadShapes()
 
         ShapeImporter aShapesFunctor( mxDrawPage,
                                       mxDrawPage,
+                                      mxDrawPagesSupplier,
                                       maContext,
                                       nCurrCount,
                                       false );
@@ -1132,6 +1195,7 @@ bool SlideImpl::loadShapes()
             if( rShape )
                 mpLayerManager->addShape( rShape );
         }
+        addPolygons(aShapesFunctor.getPolygons());
     }
     catch( uno::RuntimeException& )
     {
@@ -1176,6 +1240,7 @@ basegfx::B2ISize SlideImpl::getSlideSizeImpl() const
 
 
 SlideSharedPtr createSlide( const uno::Reference< drawing::XDrawPage >&         xDrawPage,
+                            const uno::Reference<drawing::XDrawPagesSupplier>&  xDrawPages,
                             const uno::Reference< animations::XAnimationNode >& xRootNode,
                             EventQueue&                                         rEventQueue,
                             EventMultiplexer&                                   rEventMultiplexer,
@@ -1187,18 +1252,25 @@ SlideSharedPtr createSlide( const uno::Reference< drawing::XDrawPage >&         
                             const uno::Reference< uno::XComponentContext >&     xComponentContext,
                             const ShapeEventListenerMap&                        rShapeListenerMap,
                             const ShapeCursorMap&                               rShapeCursorMap,
+                            const PolyPolygonVector&                            rPolyPolygonVector,
                             RGBColor const&                                     rUserPaintColor,
+                            double                                              dUserPaintStrokeWidth,
                             bool                                                bUserPaintEnabled,
                             bool                                                bIntrinsicAnimationsAllowed,
                             bool                                                bDisableAnimationZOrder )
 {
-    boost::shared_ptr<SlideImpl> pRet( new SlideImpl( xDrawPage, xRootNode, rEventQueue,
+#ifdef ENABLE_PRESENTER_EXTRA_UI
+    boost::shared_ptr<SlideImpl> pRet( new SlideImpl( xDrawPage, xDrawPages, xRootNode, rEventQueue,
+#else
+    (void)xDrawPages;
+    boost::shared_ptr<SlideImpl> pRet( new SlideImpl( xDrawPage, NULL, xRootNode, rEventQueue,
+#endif
                                                       rEventMultiplexer, rScreenUpdater,
                                                       rActivitiesQueue, rUserEventQueue,
                                                       rCursorManager, rViewContainer,
                                                       xComponentContext, rShapeListenerMap,
-                                                      rShapeCursorMap, rUserPaintColor,
-                                                      bUserPaintEnabled,
+                                                      rShapeCursorMap, rPolyPolygonVector, rUserPaintColor,
+                                                      dUserPaintStrokeWidth, bUserPaintEnabled,
                                                       bIntrinsicAnimationsAllowed,
                                                       bDisableAnimationZOrder ));
 

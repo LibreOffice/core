@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: slideshow.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +32,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <comphelper/serviceinfohelper.hxx>
 
 #include <cppuhelper/bootstrap.hxx>
 
@@ -43,8 +41,8 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
-
-#include <svtools/itemprop.hxx>
+#include <svx/svdpool.hxx>
+#include <svl/itemprop.hxx>
 
 #include <sfx2/topfrm.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -87,7 +85,7 @@ extern String getUiNameFromPageApiNameImpl( const ::rtl::OUString& rApiName );
 
 namespace {
     /** This local version of the work window overloads DataChanged() so that it
-        can restart the slide show when a displau is added or removed.
+        can restart the slide show when a display is added or removed.
     */
     class FullScreenWorkWindow : public WorkWindow
     {
@@ -151,7 +149,7 @@ const SfxItemPropertyMapEntry* ImplGetPresentationPropertyMap()
 
 SlideShow::SlideShow( SdDrawDocument* pDoc )
 : SlideshowBase( m_aMutex )
-, maPropSet(ImplGetPresentationPropertyMap())
+, maPropSet(ImplGetPresentationPropertyMap(), SdrObject::GetGlobalDrawObjectItemPool())
 , mbIsInStartup(false)
 , mpDoc( pDoc )
 , mpCurrentViewShellBase( 0 )
@@ -278,7 +276,7 @@ OUString SAL_CALL SlideShow::getImplementationName(  ) throw(RuntimeException)
 
 sal_Bool SAL_CALL SlideShow::supportsService( const OUString& ServiceName ) throw(RuntimeException)
 {
-    return SvxServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames(  ) );
+    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames(  ) );
 }
 
 // --------------------------------------------------------------------

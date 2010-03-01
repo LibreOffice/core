@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unoview.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,6 +65,16 @@ namespace slideshow
                 with a different calling convention under Windows).
              */
             virtual void _dispose() = 0;
+
+            /** Return whether the sound play back is enabled.
+            */
+            virtual bool isSoundEnabled (void) const = 0;
+
+            /** Tell the view whether it may play sounds.  Disabling this
+                can be used to prevent different views to play the same
+                sounds at the same time.
+            */
+            virtual void setIsSoundEnabled (const bool bValue) = 0;
         };
 
         typedef ::boost::shared_ptr< UnoView >      UnoViewSharedPtr;

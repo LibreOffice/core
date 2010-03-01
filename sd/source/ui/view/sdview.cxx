@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdview.cxx,v $
- * $Revision: 1.66 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,11 +31,11 @@
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 
 #include "View.hxx"
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <sfx2/request.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/fmview.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
@@ -54,7 +51,7 @@
 #include <svx/sdr/contact/displayinfo.hxx>
 
 #include <svx/svdetc.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/editstat.hxx>
 
 #include <svx/dialogs.hrc>
 #include <sfx2/viewfrm.hxx>
@@ -99,6 +96,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <svx/unoapi.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <numeric>
 
@@ -447,20 +445,19 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
 
                             aVclFont.SetHeight( 500 );
 
-                            const drawinglayer::primitive2d::FontAttributes aFontAttributes(
-                                drawinglayer::primitive2d::getFontAttributesFromVclFont(
+                            const drawinglayer::attribute::FontAttribute aFontAttribute(
+                                drawinglayer::primitive2d::getFontAttributeFromVclFont(
                                     aTextSizeAttribute,
                                     aVclFont,
                                     false,
                                     false));
 
                             // fill text matrix
-                            basegfx::B2DHomMatrix aTextMatrix;
-
-                            aTextMatrix.scale(aTextSizeAttribute.getX(), aTextSizeAttribute.getY());
-                            aTextMatrix.shearX(fShearX);
-                            aTextMatrix.rotate(fRotate);
-                            aTextMatrix.translate(fPosX, fPosY);
+                            const basegfx::B2DHomMatrix aTextMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                                aTextSizeAttribute.getX(), aTextSizeAttribute.getY(),
+                                fShearX,
+                                fRotate,
+                                fPosX, fPosY));
 
                             // create DXTextArray (can be empty one)
                             const ::std::vector< double > aDXArray;
@@ -476,7 +473,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                                     0,
                                     nTextLength,
                                     aDXArray,
-                                    aFontAttributes,
+                                    aFontAttribute,
                                     aLocale,
                                     aFontColor));
                             drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval, xRef);

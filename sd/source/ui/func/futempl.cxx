@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: futempl.cxx,v $
- * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,18 +35,18 @@
 
 #include "futempl.hxx"
 
-#include <svx/editdata.hxx>
-#include <svx/bulitem.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/bulitem.hxx>
 #include <svx/svxids.hrc>   // fuer SID_OBJECT_SELECT
 #include <sfx2/bindings.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/msgbox.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <sfx2/request.hxx>
-#include <svx/numitem.hxx>
-#include <svx/editeng.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/numitem.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/lrspitem.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/svditer.hxx>
 

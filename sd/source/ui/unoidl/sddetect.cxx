@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sddetect.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,9 +37,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -52,21 +47,16 @@
 #include <com/sun/star/ucb/InteractiveAppException.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
-
-
 #include <framework/interaction.hxx>
-
-#ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
 #include <ucbhelper/simpleinteractionrequest.hxx>
-
+#include <svtools/filter.hxx>
 #include <rtl/ustring.h>
 #include <rtl/logfile.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <vcl/window.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <tools/urlobj.hxx>
 #include <vos/mutex.hxx>
 #include <svtools/sfxecode.hxx>
@@ -80,10 +70,9 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/brokenpackageint.hxx>
-#include <svx/impgrf.hxx>
 #include <svtools/FilterConfigItem.hxx>
 #include <sot/storage.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <com/sun/star/util/XArchiver.hpp>
 #include <comphelper/processfactory.hxx>
 
@@ -378,7 +367,7 @@ SdFilterDetect::~SdFilterDetect()
 
                             const String        aFileName( aMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
                             GraphicDescriptor   aDesc( *pStm, &aFileName );
-                            GraphicFilter*      pGrfFilter = GetGrfFilter();
+                            GraphicFilter*      pGrfFilter = GraphicFilter::GetGraphicFilter();
                             if( !aDesc.Detect( FALSE ) )
                             {
                                 pFilter = 0;

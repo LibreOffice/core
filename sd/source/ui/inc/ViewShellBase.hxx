@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ViewShellBase.hxx,v $
- * $Revision: 1.23.34.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -136,6 +133,11 @@ public:
     */
     virtual ErrCode DoVerb (long nVerb);
 
+    /** Return a new renderer that can be used for example for printing the
+        document.
+    */
+    virtual com::sun::star::uno::Reference<com::sun::star::view::XRenderable> GetRenderable (void);
+
     /// Forwarded to the print manager.
     virtual SfxPrinter* GetPrinter (BOOL bCreate = FALSE);
 
@@ -258,6 +260,10 @@ public:
     ::Window* GetViewWindow (void);
 
     CustomHandleManager& getCustomHandleManager() const;
+
+    /** returns the ui descriptive name for the given uno slot. The result is taken from the configuration
+        and not cached, so do not use it excessive (f.e. in status updates) */
+    ::rtl::OUString RetrieveLabelFromCommand( const ::rtl::OUString& aCmdURL ) const;
 
 protected:
     osl::Mutex maMutex;

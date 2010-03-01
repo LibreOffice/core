@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fudraw.cxx,v $
- * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,10 +29,10 @@
 #include "precompiled_sd.hxx"
 
 #include <sot/object.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <vcl/waitobj.hxx>
 
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #include <svx/svdogrp.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/help.hxx>
@@ -76,7 +73,7 @@
 #include "sdresid.hxx"
 #include "drawview.hxx"
 #include "fusel.hxx"
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <vcl/msgbox.hxx>
 #include "slideshow.hxx"
 #include <svx/sdrhittesthelper.hxx>

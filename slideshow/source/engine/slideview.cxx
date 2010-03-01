@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: slideview.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -715,6 +712,8 @@ private:
     // UnoView:
     virtual void _dispose();
     virtual uno::Reference<presentation::XSlideShowView> getUnoView()const;
+    virtual void setIsSoundEnabled (const bool bValue);
+    virtual bool isSoundEnabled (void) const;
 
     // XEventListener:
     virtual void SAL_CALL disposing( lang::EventObject const& evt )
@@ -755,6 +754,7 @@ private:
 
     basegfx::B2DHomMatrix                                     maViewTransform;
     basegfx::B2DSize                                          maUserSize;
+    bool mbIsSoundEnabled;
 };
 
 
@@ -770,7 +770,8 @@ SlideView::SlideView( const uno::Reference<presentation::XSlideShowView>& xView,
     maViewLayers(),
     maClip(),
     maViewTransform(),
-    maUserSize( 1.0, 1.0 ) // default size: one-by-one rectangle
+    maUserSize( 1.0, 1.0 ), // default size: one-by-one rectangle
+    mbIsSoundEnabled(true)
 {
     // take care not constructing any UNO references to this _inside_
     // ctor, shift that code to createSlideView()!
@@ -1001,6 +1002,16 @@ uno::Reference<presentation::XSlideShowView> SlideView::getUnoView() const
     return mxView;
 }
 
+void SlideView::setIsSoundEnabled (const bool bValue)
+{
+    mbIsSoundEnabled = bValue;
+}
+
+bool SlideView::isSoundEnabled (void) const
+{
+    return mbIsSoundEnabled;
+}
+
 void SlideView::_dispose()
 {
     dispose();
@@ -1071,7 +1082,8 @@ void SlideView::modified( const lang::EventObject& /*aEvent*/ )
         makeEvent( boost::bind( (bool (EventMultiplexer::*)(
                                      const uno::Reference<presentation::XSlideShowView>&))
                                 &EventMultiplexer::notifyViewChanged,
-                                boost::ref(mrEventMultiplexer), mxView )));
+                                boost::ref(mrEventMultiplexer), mxView ),
+                   "EventMultiplexer::notifyViewChanged"));
 }
 
 // XPaintListener
@@ -1086,7 +1098,8 @@ void SlideView::windowPaint( const awt::PaintEvent& /*e*/ )
     // this might not be the main thread!
     mrEventQueue.addEvent(
         makeEvent( boost::bind( &EventMultiplexer::notifyViewClobbered,
-                                boost::ref(mrEventMultiplexer), mxView ) ) );
+                                boost::ref(mrEventMultiplexer), mxView ),
+                   "EventMultiplexer::notifyViewClobbered") );
 }
 
 void SlideView::updateCanvas()

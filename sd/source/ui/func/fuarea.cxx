@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fuarea.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,8 +34,8 @@
 #include <svx/svxids.hrc>
 #include <svx/tabarea.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
@@ -85,7 +82,6 @@ void FuArea::DoExecute( SfxRequest& rReq )
         AbstractSvxAreaTabDialog * pDlg = pFact ? pFact->CreateSvxAreaTabDialog( NULL,
                                                                         &aNewAttr,
                                                                         mpDoc,
-                                                                        RID_SVXDLG_AREA,
                                                                         mpView) : 0;
         if( pDlg && (pDlg->Execute() == RET_OK) )
         {

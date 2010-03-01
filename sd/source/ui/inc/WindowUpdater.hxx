@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: WindowUpdater.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,8 +28,8 @@
 #ifndef SD_OUTPUT_DEVICE_UPDATER_HXX
 #define SD_OUTPUT_DEVICE_UPDATER_HXX
 
-#include <svtools/lstner.hxx>
-#include <svtools/ctloptions.hxx>
+#include <svl/lstner.hxx>
+#include <svl/ctloptions.hxx>
 #include "sddllapi.h"
 
 #ifndef INCLUDED_VECTOR
@@ -65,7 +62,7 @@ class ViewShell;
     this document is reformatted when the monitored option changes.</p>
 */
 class SD_DLLPUBLIC WindowUpdater
-    : public SfxListener
+    : public utl::ConfigurationListener
 {
 public:
     explicit WindowUpdater (void);
@@ -116,7 +113,7 @@ public:
     /** Callback that waits for notifications of a
         <type>SvtCTLOptions</type> object.
     */
-    virtual void Notify (SfxBroadcaster& rBC, const SfxHint& rHint);
+    virtual void ConfigurationChanged ( utl::ConfigurationBroadcaster*, sal_uInt32 nHint);
 
 private:
     /// Options to monitor for changes.

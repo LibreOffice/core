@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docshel3.cxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,15 +42,15 @@
 #include <svx/ofaitem.hxx>
 #include <svx/svxerr.hxx>
 #include <svx/dialmgr.hxx>
-#include <sfx2/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/srchdlg.hxx>
 #ifdef _OUTLINER_HXX
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #endif
 #include <sfx2/request.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <svx/drawitem.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drviews3.cxx,v $
- * $Revision: 1.44 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,11 +31,11 @@
 #include "DrawViewShell.hxx"
 
 #include <sfx2/viewfrm.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/tstpitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/protitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/protitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <svx/ruler.hxx>
 #ifndef _SVX_RULERITEM_HXX
 #include <svx/rulritem.hxx>
@@ -51,13 +48,13 @@
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/aeitem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/rectitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/rectitem.hxx>
+#include <svl/stritem.hxx>
 #include <svx/svdoole2.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/ptitem.hxx>
+#include <svl/itempool.hxx>
+#include <svl/ptitem.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/sberrors.hxx>
 #include <svx/fmshell.hxx>

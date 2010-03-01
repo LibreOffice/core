@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: screenupdater.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +32,19 @@
 #include <boost/bind.hpp>
 #include <vector>
 #include <algorithm>
+
+namespace {
+    class UpdateLock : public ::slideshow::internal::ScreenUpdater::UpdateLock
+    {
+    public:
+        UpdateLock (::slideshow::internal::ScreenUpdater& rUpdater, const bool bStartLocked);
+        virtual ~UpdateLock (void);
+        virtual void Activate (void);
+    private:
+        ::slideshow::internal::ScreenUpdater& mrUpdater;
+        bool mbIsActivated;
+    };
+}
 
 namespace slideshow
 {
@@ -64,12 +74,16 @@ namespace internal
         /// True, if at least one notifyUpdate() call had bViewClobbered set
         bool                                   mbViewClobbered;
 
+        /// The screen is updated only when mnLockCount==0
+        sal_Int32 mnLockCount;
+
         explicit ImplScreenUpdater( UnoViewContainer const& rViewContainer ) :
             maUpdaters(),
             maViewUpdateRequests(),
             mrViewContainer(rViewContainer),
             mbUpdateAllRequest(false),
-            mbViewClobbered(false)
+            mbViewClobbered(false),
+            mnLockCount(0)
         {}
     };
 
@@ -100,6 +114,9 @@ namespace internal
 
     void ScreenUpdater::commitUpdates()
     {
+        if (mpImpl->mnLockCount > 0)
+            return;
+
         // cases:
         //
         // (a) no update necessary at all
@@ -178,6 +195,9 @@ namespace internal
 
     void ScreenUpdater::requestImmediateUpdate()
     {
+        if (mpImpl->mnLockCount > 0)
+            return;
+
         // TODO(F2): This will interfere with other updates, since it
         // happens out-of-sync with main animation loop. Might cause
         // artifacts.
@@ -186,5 +206,63 @@ namespace internal
                        boost::mem_fn(&View::updateScreen) );
     }
 
+    void ScreenUpdater::lockUpdates (void)
+    {
+        ++mpImpl->mnLockCount;
+        OSL_ASSERT(mpImpl->mnLockCount>0);
+    }
+
+    void ScreenUpdater::unlockUpdates (void)
+    {
+        OSL_ASSERT(mpImpl->mnLockCount>0);
+        if (mpImpl->mnLockCount > 0)
+        {
+            --mpImpl->mnLockCount;
+            if (mpImpl->mnLockCount)
+                commitUpdates();
+        }
+    }
+
+    ::boost::shared_ptr<ScreenUpdater::UpdateLock> ScreenUpdater::createLock (const bool bStartLocked)
+    {
+        return ::boost::shared_ptr<ScreenUpdater::UpdateLock>(new ::UpdateLock(*this, bStartLocked));
+    }
+
+
 } // namespace internal
 } // namespace slideshow
+
+namespace {
+
+UpdateLock::UpdateLock (
+    ::slideshow::internal::ScreenUpdater& rUpdater,
+    const bool bStartLocked)
+    : mrUpdater(rUpdater),
+      mbIsActivated(false)
+{
+    if (bStartLocked)
+        Activate();
+}
+
+
+
+
+UpdateLock::~UpdateLock (void)
+{
+    if (mbIsActivated)
+        mrUpdater.unlockUpdates();
+}
+
+
+
+
+void UpdateLock::Activate (void)
+{
+    if ( ! mbIsActivated)
+    {
+        mbIsActivated = true;
+        mrUpdater.lockUpdates();
+    }
+}
+
+}

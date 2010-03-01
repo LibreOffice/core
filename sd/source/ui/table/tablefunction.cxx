@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tablefunction.cxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,23 +43,23 @@
 #include <svx/sdr/overlay/overlayobjectcell.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/svxids.hrc>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdetc.hxx>
-#include <svx/editstat.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/unolingu.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdr/table/tabledesign.hxx>
 #include <svx/svxdlg.hxx>
 #include <vcl/msgbox.hxx>
 
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 
 #include "framework/FrameworkHelper.hxx"
 #include "app.hrc"

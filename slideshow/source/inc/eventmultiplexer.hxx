@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: eventmultiplexer.hxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -485,6 +482,33 @@ public:
         this event (and probably, nothing will happen at all)
     */
     bool notifyUserPaintColor( RGBColor const& rUserColor );
+
+    /** Notify a new user paint width
+
+         Sending this notification also implies that user paint is
+         enabled. .
+
+         @return true, if this event was processed by
+         anybody. If false is returned, no handler processed
+         this event (and probably, nothing will happen at all)
+         */
+    bool notifyUserPaintStrokeWidth( double rUserStrokeWidth );
+
+
+    /** Notify a new user paint erase all ink mode
+
+     Sending this notification also implies that user paint is
+     enabled. User paint denotes the feature to draw colored lines
+     on top of the slide content.
+
+     @return true, if this event was processed by
+     anybody. If false is returned, no handler processed
+     this event (and probably, nothing will happen at all)
+     */
+    bool notifyEraseAllInk( bool const& rEraseAllInk );
+    bool notifySwitchPenMode();
+    bool notifySwitchEraserMode();
+    bool notifyEraseInkWidth( sal_Int32 rEraseInkSize );
 
     /** Notify that user paint is disabled
 

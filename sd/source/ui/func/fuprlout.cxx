@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fuprlout.cxx,v $
- * $Revision: 1.17.130.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,8 +32,8 @@
 #include "fuprlout.hxx"
 #include <vcl/wrkwin.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svtools/smplhint.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/smplhint.hxx>
+#include <svl/itempool.hxx>
 #include <sot/storage.hxx>
 #include <vcl/msgbox.hxx>
 #include <svx/svdundo.hxx>
@@ -66,7 +63,7 @@
 #include "sdresid.hxx"
 #include "drawview.hxx"
 #include "eetext.hxx"
-#include <svx/editdata.hxx>
+#include <editeng/editdata.hxx>
 #include "sdabstdlg.hxx"
 
 namespace sd

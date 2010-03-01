@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pptin.hxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,11 +28,11 @@
 #ifndef _SD_PPTIN_HXX
 #define _SD_PPTIN_HXX
 
-#include <svx/svdfppt.hxx>
+#include <filter/msfilter/svdfppt.hxx>
 #include <svx/msdffdef.hxx>
 #include <diadef.h>
 #include <svx/svdtypes.hxx>
-#include <svx/msfiltertracer.hxx>
+#include <filter/msfilter/msfiltertracer.hxx>
 #include <com/sun/star/uno/Any.h>
 #include <boost/shared_ptr.hpp>
 

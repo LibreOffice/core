@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fuconstr.cxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 #include "fuconstr.hxx"
 
 #include <svx/svxids.hrc>
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xfillit0.hxx>

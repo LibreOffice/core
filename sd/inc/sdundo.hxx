@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdundo.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,7 @@
 #ifndef _SD_SDUNDO_HXX
 #define _SD_SDUNDO_HXX
 
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 #include "sddllapi.h"
 
 class SdDrawDocument;

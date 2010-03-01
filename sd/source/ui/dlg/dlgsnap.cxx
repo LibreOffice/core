@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dlgsnap.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,8 +35,8 @@
 
 #include <svx/svxids.hrc>
 #include <svx/dlgutil.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/itempool.hxx>
+#include <svl/aeitem.hxx>
 
 #include "dlgsnap.hrc"
 #include "sdattr.hxx"

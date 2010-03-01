@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unoobj.cxx,v $
- * $Revision: 1.61 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,9 +37,9 @@
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/stl_types.hxx>
 #include <vos/mutex.hxx>
-#include <svtools/itemprop.hxx>
-#include <svtools/style.hxx>
-
+#include <svl/itemprop.hxx>
+#include <svl/style.hxx>
+#include <svx/svdpool.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/app.hxx>
 #include <svtools/unoimap.hxx>
@@ -58,10 +55,11 @@
 #include <svx/svdopath.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdograf.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include "CustomAnimationPreset.hxx"
 #include "Outliner.hxx"
 #include "sdresid.hxx"
+#include <comphelper/serviceinfohelper.hxx>
 
 #include "anminfo.hxx"
 #include "unohelp.hxx"
@@ -247,12 +245,12 @@ static SdTypesCache gImplTypesCache;
         {
             if( bGraphicObj )
             {
-                static SvxItemPropertySet aImpress_SdXShapePropertyGraphicSet_Impl( lcl_GetImpress_SdXShapePropertyGraphicMap_Impl());
+                static SvxItemPropertySet aImpress_SdXShapePropertyGraphicSet_Impl( lcl_GetImpress_SdXShapePropertyGraphicMap_Impl(), SdrObject::GetGlobalDrawObjectItemPool());
                 pRet = &aImpress_SdXShapePropertyGraphicSet_Impl;
             }
             else
             {
-                static SvxItemPropertySet aImpress_SdXShapePropertySet_Impl(lcl_GetImpress_SdXShapePropertySimpleMap_Impl());
+                static SvxItemPropertySet aImpress_SdXShapePropertySet_Impl(lcl_GetImpress_SdXShapePropertySimpleMap_Impl(), SdrObject::GetGlobalDrawObjectItemPool());
                 pRet = &aImpress_SdXShapePropertySet_Impl;
             }
         }
@@ -260,12 +258,12 @@ static SdTypesCache gImplTypesCache;
         {
             if( bGraphicObj )
             {
-                static SvxItemPropertySet aDraw_SdXShapePropertyGraphicSet_Impl(lcl_GetDraw_SdXShapePropertyGraphicMap_Impl());
+                static SvxItemPropertySet aDraw_SdXShapePropertyGraphicSet_Impl(lcl_GetDraw_SdXShapePropertyGraphicMap_Impl(), SdrObject::GetGlobalDrawObjectItemPool());
                 pRet = &aDraw_SdXShapePropertyGraphicSet_Impl;
             }
             else
             {
-                static SvxItemPropertySet aDraw_SdXShapePropertySet_Impl( lcl_GetDraw_SdXShapePropertySimpleMap_Impl());
+                static SvxItemPropertySet aDraw_SdXShapePropertySet_Impl( lcl_GetDraw_SdXShapePropertySimpleMap_Impl(), SdrObject::GetGlobalDrawObjectItemPool());
                 pRet = &aDraw_SdXShapePropertySet_Impl;
             }
         }
@@ -282,7 +280,7 @@ static SdTypesCache gImplTypesCache;
 
     static const SvxItemPropertySet* lcl_GetEmpty_SdXShapePropertySet_Impl()
     {
-        static SvxItemPropertySet aEmptyPropSet( lcl_GetEmpty_SdXShapePropertyMap_Impl() );
+        static SvxItemPropertySet aEmptyPropSet( lcl_GetEmpty_SdXShapePropertyMap_Impl(), SdrObject::GetGlobalDrawObjectItemPool() );
         return &aEmptyPropSet;
     }
 const SvEventDescription* ImplGetSupportedMacroItems()
@@ -957,7 +955,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL SdXShape::getSupportedServiceNames() t
 {
     uno::Sequence< OUString > aSeq( mpShape->_getSupportedServiceNames() );
 
-    SvxServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.presentation.Shape",
+    comphelper::ServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.presentation.Shape",
                                                   "com.sun.star.document.LinkTarget" );
 
     SdrObject* pObj = mpShape->GetSdrObject();
@@ -967,10 +965,10 @@ uno::Sequence< ::rtl::OUString > SAL_CALL SdXShape::getSupportedServiceNames() t
         switch( nInventor )
         {
         case OBJ_TITLETEXT:
-            SvxServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.presentation.TitleTextShape" );
+            comphelper::ServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.presentation.TitleTextShape" );
             break;
         case OBJ_OUTLINETEXT:
-            SvxServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.presentation.OutlinerShape" );
+            comphelper::ServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.presentation.OutlinerShape" );
             break;
         }
     }

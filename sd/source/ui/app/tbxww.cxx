@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tbxww.cxx,v $
- * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #include <sfx2/bindings.hxx>
 #include <svx/svxids.hrc>
 #include <svx/grafctrl.hxx>
-#include <svtools/cjkoptions.hxx>
+#include <svl/cjkoptions.hxx>
 #include <sfx2/viewsh.hxx>
 #ifndef _SFX_IMAGEMGR_HXX
 #include <sfx2/imagemgr.hxx>

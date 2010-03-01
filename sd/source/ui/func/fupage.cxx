@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fupage.cxx,v $
- * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,14 +37,14 @@
 
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
 #include <sfx2/request.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <vcl/prntypes.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <stlsheet.hxx>
 #ifndef _SVX_SVDORECT_HXX
 #include <svx/svdorect.hxx>
@@ -55,23 +52,23 @@
 #ifndef _SVX_SVDUNDO_HXX
 #include <svx/svdundo.hxx>
 #endif
-#include <svx/eeitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xsetit.hxx>
-#include <svtools/itempool.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
+#include <svl/itempool.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
 
 #include "glob.hrc"
-#include <svx/shaditem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/pbinitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/pbinitem.hxx>
 #include <sfx2/app.hxx>
-#include <svx/opengrf.hxx>
+#include <sfx2/opengrf.hxx>
 
 #include "strings.hrc"
 #include "sdpage.hxx"

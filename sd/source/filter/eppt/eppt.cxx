@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: eppt.cxx,v $
- * $Revision: 1.64.78.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,13 +53,14 @@
 #include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <tools/zcodec.hxx>
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include <sot/storinfo.hxx>
-#include <svx/msoleexp.hxx>
+#include <filter/msfilter/msoleexp.hxx>
 #include <vcl/virdev.hxx>
 #include <svtools/wmf.hxx>
-#include <svx/msdffimp.hxx>
-#include <svx/flditem.hxx>
+#include <filter/msfilter/msdffimp.hxx>
+#include <filter/msfilter/svxmsbas.hxx>
+#include <editeng/flditem.hxx>
 #include <sfx2/docinf.hxx>
 
 #define PPT_TRANSITION_TYPE_NONE            0
@@ -2465,5 +2463,40 @@ extern "C" SAL_DLLPUBLIC_EXPORT BOOL __LOADONCALLAPI ExportPPT( SvStorageRef& rS
     }
 
     return bStatus;
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT BOOL __LOADONCALLAPI SaveVBA( SfxObjectShell& rDocShell, SvMemoryStream*& pBas )
+{
+    SvStorageRef xDest( new SvStorage( new SvMemoryStream(), TRUE ) );
+    SvxImportMSVBasic aMSVBas( rDocShell, *xDest, FALSE, FALSE );
+    aMSVBas.SaveOrDelMSVBAStorage( TRUE, String( RTL_CONSTASCII_USTRINGPARAM("_MS_VBA_Overhead") ) );
+
+    SvStorageRef xOverhead = xDest->OpenSotStorage( String( RTL_CONSTASCII_USTRINGPARAM("_MS_VBA_Overhead") ) );
+    if ( xOverhead.Is() && ( xOverhead->GetError() == SVSTREAM_OK ) )
+    {
+        SvStorageRef xOverhead2 = xOverhead->OpenSotStorage( String( RTL_CONSTASCII_USTRINGPARAM("_MS_VBA_Overhead") ) );
+        if ( xOverhead2.Is() && ( xOverhead2->GetError() == SVSTREAM_OK ) )
+        {
+            SvStorageStreamRef xTemp = xOverhead2->OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM("_MS_VBA_Overhead2") ) );
+            if ( xTemp.Is() && ( xTemp->GetError() == SVSTREAM_OK ) )
+            {
+                UINT32 nLen = xTemp->GetSize();
+                if ( nLen )
+                {
+                    char* pTemp = new char[ nLen ];
+                    if ( pTemp )
+                    {
+                        xTemp->Seek( STREAM_SEEK_TO_BEGIN );
+                        xTemp->Read( pTemp, nLen );
+                        pBas = new SvMemoryStream( pTemp, nLen, STREAM_READ );
+                        pBas->ObjectOwnsMemory( TRUE );
+                        return TRUE;
+                    }
+                }
+            }
+        }
+    }
+
+    return FALSE;
 }
 

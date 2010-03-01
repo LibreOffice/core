@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: stlsheet.hxx,v $
- * $Revision: 1.6.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,9 +41,9 @@
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/basemutex.hxx>
 
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 
-#include <svx/unoipset.hxx>
+#include <editeng/unoipset.hxx>
 
 #include <boost/scoped_ptr.hpp>
 

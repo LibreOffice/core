@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: slidebitmap.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +39,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <canvas/canvastools.hxx>
 #include <basegfx/tools/canvastools.hxx>
@@ -78,9 +76,7 @@ namespace slideshow
             rendering::RenderState aRenderState;
             ::canvas::tools::initRenderState( aRenderState );
 
-            ::basegfx::B2DHomMatrix aTranslation;
-            aTranslation.translate( maOutputPos.getX(),
-                                    maOutputPos.getY() );
+            const basegfx::B2DHomMatrix aTranslation(basegfx::tools::createTranslateB2DHomMatrix(maOutputPos));
             ::canvas::tools::setRenderStateTransform( aRenderState, aTranslation );
 
             try

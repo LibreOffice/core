@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: prltempl.cxx,v $
- * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,17 +36,17 @@
 #include "eetext.hxx"
 
 #include <svx/dialogs.hrc>
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
 #include <svx/drawitem.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <svx/tabline.hxx>
-#include <svx/bulitem.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/bulitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <vcl/graph.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/numitem.hxx>
-#include <svtools/cjkoptions.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/numitem.hxx>
+#include <svl/cjkoptions.hxx>
 
 #include "DrawDocShell.hxx"
 #include "glob.hrc"
@@ -59,7 +56,7 @@
 #include "enumdlg.hrc"
 //#include "enumdlg.hxx"
 #include "bulmaper.hxx"
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/svxgrahicitem.hxx>
 #include <svx/flagsdef.hxx>
 #include "drawdoc.hxx"

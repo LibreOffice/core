@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ViewShellBase.sdi,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -267,7 +264,7 @@ SfxVoidItem TaskPaneShowPanel SID_TASK_PANE (
     GroupId = GID_VIEW;
 ]
 
-interface ViewShellBaseView : View
+interface ViewShellBaseView
 {
     SID_SWITCH_SHELL
     [
@@ -380,7 +377,7 @@ interface ViewShellBaseView : View
     ]
 }
 
-shell ViewShellBase : SfxViewShell
+shell ViewShellBase
 {
     import ViewShellBaseView[Automation];
 }

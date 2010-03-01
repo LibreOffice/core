@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: CustomAnimationCreateDialog.cxx,v $
- * $Revision: 1.14.74.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,7 +50,7 @@
 #include <svx/svdetc.hxx>
 #include <svx/svdstr.hrc>
 #include "sdresid.hxx"
-#include <svtools/viewoptions.hxx>
+#include <unotools/viewoptions.hxx>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include "CustomAnimationCreateDialog.hxx"
 #ifndef _SD_CUSTOMANIMATIONCREATEDIALOG_HRC

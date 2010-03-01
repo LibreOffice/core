@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: facreg.cxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -270,10 +267,8 @@ static ::boost::shared_ptr<FactoryMap> spFactoryMap;
 } // end of anonymous namespace
 
 
-#ifdef __cplusplus
 extern "C"
 {
-#endif
 
 SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     const sal_Char  ** ppEnvTypeName,

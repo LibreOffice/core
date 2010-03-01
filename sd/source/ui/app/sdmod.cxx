@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdmod.cxx,v $
- * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,8 +27,8 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
-#include <svtools/pathoptions.hxx>
-#include <svtools/languageoptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <svl/languageoptions.hxx>
 #ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
 #endif
@@ -39,19 +36,19 @@
 #include <vcl/virdev.hxx>
 #include <sfx2/app.hxx>
 #include <vcl/status.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/printer.hxx>
 #include <svx/pszctrl.hxx>
 #include <svx/zoomctrl.hxx>
 #include <svx/modctrl.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svtools/ehdl.hxx>
 
 #include <svx/svxids.hrc>
-#include <sfx2/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/svxerr.hxx>
 
 #include <svx/xmlsecctrl.hxx>

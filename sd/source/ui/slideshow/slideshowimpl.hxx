@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: slideshowimpl.hxx,v $
- * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,8 +59,8 @@
 #include <basegfx/tools/canvastools.hxx>
 #include <vcl/help.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/saveopt.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/saveopt.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -166,7 +163,7 @@ public:
     virtual void SAL_CALL slideTransitionStarted() throw (css::uno::RuntimeException);
     virtual void SAL_CALL slideTransitionEnded() throw (css::uno::RuntimeException);
     virtual void SAL_CALL slideAnimationsEnded() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL slideEnded() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL slideEnded(sal_Bool bReverse) throw (css::uno::RuntimeException);
     virtual void SAL_CALL hyperLinkClicked(const ::rtl::OUString & hyperLink) throw (css::uno::RuntimeException);
 
     // css::lang::XEventListener:
@@ -202,12 +199,22 @@ public:
     virtual void SAL_CALL setUsePen( ::sal_Bool _usepen ) throw (css::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getPenColor() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setPenColor( ::sal_Int32 _pencolor ) throw (css::uno::RuntimeException);
+#ifdef ENABLE_PRESENTER_EXTRA_UI
+    virtual void SAL_CALL setUseEraser( ::sal_Bool _usepen ) throw (css::uno::RuntimeException);
+    virtual double SAL_CALL getPenWidth() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setPenWidth( double dStrokeWidth ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setEraseAllInk( bool bEraseAllInk ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setEraseInk( sal_Int32 nEraseInkSize ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setPenMode( bool bSwitchPenMode) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setEraserMode( bool bSwitchEraserMode ) throw (css::uno::RuntimeException);
+#endif
     virtual ::sal_Bool SAL_CALL isRunning(  ) throw (css::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getSlideCount(  ) throw (css::uno::RuntimeException);
     virtual css::uno::Reference< css::drawing::XDrawPage > SAL_CALL getSlideByIndex( ::sal_Int32 Index ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
     virtual void SAL_CALL addSlideShowListener( const css::uno::Reference< css::presentation::XSlideShowListener >& Listener ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL removeSlideShowListener( const css::uno::Reference< css::presentation::XSlideShowListener >& Listener ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL gotoNextEffect(  ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL gotoPreviousEffect(  ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL gotoFirstSlide(  ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL gotoNextSlide(  ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL gotoPreviousSlide(  ) throw (css::uno::RuntimeException);
@@ -237,7 +244,7 @@ public:
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // will be called from the SlideShowListenerProxy when this event is fired from the XSlideShow
-    void slideEnded();
+    void slideEnded(const bool bReverse);
     void hyperLinkClicked(const ::rtl::OUString & hyperLink) throw (css::uno::RuntimeException);
     void click(const css::uno::Reference< css::drawing::XShape > & xShape, const css::awt::MouseEvent & aOriginalEvent);
 
@@ -278,7 +285,7 @@ private:
 
     void createSlideList( bool bAll, bool bStartWithActualSlide, const String& rPresSlide );
 
-    void displayCurrentSlide();
+    void displayCurrentSlide (const bool bSkipAllMainSequenceEffects = false);
 
     void displaySlideNumber( sal_Int32 nSlide );
     void displaySlideIndex( sal_Int32 nIndex );
@@ -297,6 +304,7 @@ private:
     void setActiveXToolbarsVisible( sal_Bool bVisible );
 
     DECL_LINK( updateHdl, Timer* );
+    DECL_LINK( PostYieldListener, void* );
     DECL_LINK( ReadyForNextInputHdl, Timer* );
     DECL_LINK( endPresentationHdl, void* );
     DECL_LINK( ContextMenuSelectHdl, Menu * );
@@ -330,6 +338,14 @@ private:
     css::uno::Reference< css::presentation::XSlideShow > createSlideShow() const;
 
     void setAutoSaveState( bool bOn );
+    void gotoPreviousSlide (const bool bSkipAllMainSequenceEffects);
+
+    /** Called by PostYieldListener and updateHdl handlers this method is
+        responsible to call the slideshow update() method and, depending on
+        its return value, wait for a certain amount of time before another
+        call to update() is scheduled.
+    */
+    sal_Int32 updateSlideShow (void);
 
     css::uno::Reference< css::presentation::XSlideShow > mxShow;
     comphelper::ImplementationReference< ::sd::SlideShowView, css::presentation::XSlideShowView > mxView;
@@ -381,6 +397,14 @@ private:
     PresentationSettings maPresSettings;
     sal_Int32       mnUserPaintColor;
 
+#ifdef ENABLE_PRESENTER_EXTRA_UI
+    bool            mbSwitchPenMode;
+    bool            mbSwitchEraserMode;
+    double          mdUserPaintStrokeWidth;
+    bool            mbEraseAllInk;
+//    bool          mbEraseInk;
+    sal_Int32       mnEraseInkSize;
+#endif
     /// used in updateHdl to prevent recursive calls
     sal_Int32       mnEntryCounter;
 

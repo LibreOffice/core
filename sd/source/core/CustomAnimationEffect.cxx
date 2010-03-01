@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: CustomAnimationEffect.cxx,v $
- * $Revision: 1.17.74.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,6 +66,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <algorithm>
 
@@ -1715,21 +1713,16 @@ void CustomAnimationEffect::updateSdrPathObjFromPath( SdrPathObj& rPathObj )
         SdrObject* pObj = GetSdrObjectFromXShape( getTargetShape() );
         if( pObj )
         {
-            ::basegfx::B2DHomMatrix aTransform;
-
             SdrPage* pPage = pObj->GetPage();
             if( pPage )
             {
                 const Size aPageSize( pPage->GetSize() );
-                aTransform.scale( (double)aPageSize.Width(), (double)aPageSize.Height() );
-                xPolyPoly.transform( aTransform );
-                aTransform.identity();
+                xPolyPoly.transform(basegfx::tools::createScaleB2DHomMatrix((double)aPageSize.Width(), (double)aPageSize.Height()));
             }
 
             const Rectangle aBoundRect( pObj->GetCurrentBoundRect() );
             const Point aCenter( aBoundRect.Center() );
-            aTransform.translate( aCenter.X(), aCenter.Y() );
-            xPolyPoly.transform( aTransform );
+            xPolyPoly.transform(basegfx::tools::createTranslateB2DHomMatrix(aCenter.X(), aCenter.Y()));
         }
     }
 
@@ -1748,17 +1741,14 @@ void CustomAnimationEffect::updatePathFromSdrPathObj( const SdrPathObj& rPathObj
         const Rectangle aBoundRect( pObj->GetCurrentBoundRect() );
         const Point aCenter( aBoundRect.Center() );
 
-        ::basegfx::B2DHomMatrix aTransform;
-        aTransform.translate( -aCenter.X(), -aCenter.Y() );
-        xPolyPoly.transform( aTransform );
+        xPolyPoly.transform(basegfx::tools::createTranslateB2DHomMatrix(-aCenter.X(), -aCenter.Y()));
 
         SdrPage* pPage = pObj->GetPage();
         if( pPage )
         {
-            aTransform.identity();
             const Size aPageSize( pPage->GetSize() );
-            aTransform.scale( 1.0 / (double)aPageSize.Width(), 1.0 / (double)aPageSize.Height() );
-            xPolyPoly.transform( aTransform );
+            xPolyPoly.transform(basegfx::tools::createScaleB2DHomMatrix(
+                1.0 / (double)aPageSize.Width(), 1.0 / (double)aPageSize.Height()));
         }
     }
 

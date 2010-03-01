@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: MasterPagesSelector.cxx,v $
- * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,12 +59,12 @@
 #include "drawview.hxx"
 #endif
 #include <vcl/image.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/mnumgr.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/itemset.hxx>
+#include <svl/eitem.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svxids.hrc>
@@ -76,7 +73,7 @@
 #include "stlpool.hxx"
 #include "unmovss.hxx"
 #include <sfx2/request.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 
 using namespace ::sd::toolpanel::controls;
 #define MasterPagesSelector
