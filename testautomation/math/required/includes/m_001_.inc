@@ -54,6 +54,7 @@ sub M_001_
    Call tmFileReload
    Call tmFileVersions
    Call tmExportAsPDF
+   Call tExportAsPDFButton
    Call tmFileProperties
   Call tmFilePrinterSetting
    Call tmFilePassword
