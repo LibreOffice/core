@@ -27,6 +27,8 @@
 #include "precompiled_svtools.hxx"
 
 #include "svtools/toolpanel/tablayouter.hxx"
+#include "svtools/toolpanel/toolpaneldeck.hxx"
+#include "paneltabbar.hxx"
 
 #include <tools/gen.hxx>
 
@@ -40,17 +42,39 @@ namespace svt
     //====================================================================
     struct TabDeckLayouter_Data
     {
-        TabAlignment    eAlignment;
+        TabAlignment        eAlignment;
+        PToolPanelContainer pPanels;
+        ::std::auto_ptr< PanelTabBar >
+                            pTabBar;
+
+        TabDeckLayouter_Data( const TabAlignment i_eAlignment, ToolPanelDeck& i_rPanelDeck )
+            :eAlignment( i_eAlignment )
+            ,pPanels( i_rPanelDeck.GetPanels() )
+            ,pTabBar( new PanelTabBar( i_rPanelDeck ) )
+        {
+            pTabBar->Show();
+        }
     };
+
+    //====================================================================
+    //= helper
+    //====================================================================
+    namespace
+    {
+        static bool lcl_isVerticalTabBar( const TabAlignment i_eAlignment )
+        {
+            return  ( i_eAlignment == TABS_RIGHT )
+                ||  ( i_eAlignment == TABS_LEFT );
+        }
+    }
 
     //====================================================================
     //= TabDeckLayouter
     //====================================================================
     //--------------------------------------------------------------------
-    TabDeckLayouter::TabDeckLayouter( const TabAlignment i_eAlignment )
-        :m_pData( new TabDeckLayouter_Data )
+    TabDeckLayouter::TabDeckLayouter( const TabAlignment i_eAlignment, ToolPanelDeck& i_rPanelDeck )
+        :m_pData( new TabDeckLayouter_Data( i_eAlignment, i_rPanelDeck ) )
     {
-        m_pData->eAlignment = i_eAlignment;
     }
 
     //--------------------------------------------------------------------
@@ -59,10 +83,53 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
+    IMPLEMENT_IREFERENCE( TabDeckLayouter )
+
+    //--------------------------------------------------------------------
     Rectangle TabDeckLayouter::Layout( const Rectangle& i_rDeckPlayground )
     {
-        // TODO
+        if ( !m_pData->pTabBar.get() )
+        {
+            OSL_ENSURE( false, "TabDeckLayouter::Layout: disposed!" );
+            return i_rDeckPlayground;
+        }
+
+        if ( lcl_isVerticalTabBar( m_pData->eAlignment ) )
+        {
+            const Size aPreferredSize( m_pData->pTabBar->GetOptimalSize( WINDOWSIZE_PREFERRED ) );
+            Size aTabBarSize =    ( aPreferredSize.Width() < i_rDeckPlayground.GetWidth() )
+                                    ?   aPreferredSize
+                                    :   m_pData->pTabBar->GetOptimalSize( WINDOWSIZE_MINIMUM );
+            aTabBarSize.Height() = i_rDeckPlayground.GetHeight();
+
+            Rectangle aPanelRect( i_rDeckPlayground );
+            if ( m_pData->eAlignment == TABS_RIGHT )
+            {
+                aPanelRect.Right() -= aTabBarSize.Width();
+                Point aTabBarTopLeft( aPanelRect.TopRight() );
+                aTabBarTopLeft.X() += 1;
+                m_pData->pTabBar->SetPosSizePixel( aTabBarTopLeft, aTabBarSize );
+            }
+            else
+            {
+                m_pData->pTabBar->SetPosSizePixel( aPanelRect.TopLeft(), aTabBarSize );
+                aPanelRect.Left() += aTabBarSize.Width();
+            }
+            if ( aPanelRect.Left() >= aPanelRect.Right() )
+                aPanelRect = Rectangle();
+
+            return aPanelRect;
+        }
+
+        OSL_ENSURE( false, "TabDeckLayouter::Layout: unreachable!" );
+            // currently there do not even exist enum values for other alignments ...
         return i_rDeckPlayground;
+    }
+
+    //--------------------------------------------------------------------
+    void TabDeckLayouter::Destroy()
+    {
+        m_pData->pTabBar.reset();
     }
 
 //........................................................................

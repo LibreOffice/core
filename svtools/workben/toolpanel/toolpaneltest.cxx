@@ -35,6 +35,7 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/servicefactory.hxx>
 #include <tools/diagnose_ex.h>
+#include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 
@@ -82,30 +83,60 @@ public:
 class ColoredPanel : public IToolPanel
 {
 public:
-    ColoredPanel( Window& i_rParent, const Color& i_rColor );
+    ColoredPanel( Window& i_rParent, const Color& i_rColor, const sal_Char* i_pAsciiPanelName );
     ~ColoredPanel();
 
     // IToolPanel
     virtual void Show();
     virtual void Hide();
     virtual void SetPosSizePixel( const Rectangle& i_rPanelPlayground );
+    virtual ::rtl::OUString GetDisplayName() const;
+    virtual Image GetImage() const;
+
+    // IReference
+    virtual oslInterlockedCount SAL_CALL acquire();
+    virtual oslInterlockedCount SAL_CALL release();
 
 private:
+    oslInterlockedCount m_refCount;
     ColoredPanelWindow  m_aWindow;
+    ::rtl::OUString     m_aPanelName;
+    BitmapEx            m_aPanelIcon;
 };
 
 //=============================================================================
 //= ColoredPanel
 //=============================================================================
 //-----------------------------------------------------------------------------
-ColoredPanel::ColoredPanel( Window& i_rParent, const Color& i_rColor )
-    :m_aWindow( i_rParent, i_rColor )
+ColoredPanel::ColoredPanel( Window& i_rParent, const Color& i_rColor, const sal_Char* i_pAsciiPanelName )
+    :m_refCount(0)
+    ,m_aWindow( i_rParent, i_rColor )
+    ,m_aPanelName( ::rtl::OUString::createFromAscii( i_pAsciiPanelName ) )
+    ,m_aPanelIcon()
 {
+    Bitmap aBitmap( Size( 16, 16 ), 8 );
+    m_aPanelIcon = BitmapEx( aBitmap );
+    m_aPanelIcon.Erase( i_rColor );
 }
 
 //-----------------------------------------------------------------------------
 ColoredPanel::~ColoredPanel()
 {
+}
+
+//-----------------------------------------------------------------------------
+oslInterlockedCount SAL_CALL ColoredPanel::acquire()
+{
+    return osl_incrementInterlockedCount( &m_refCount );
+}
+
+//-----------------------------------------------------------------------------
+oslInterlockedCount SAL_CALL ColoredPanel::release()
+{
+    oslInterlockedCount newCount = osl_decrementInterlockedCount( &m_refCount );
+    if ( 0 == newCount )
+        delete this;
+    return newCount;
 }
 
 //-----------------------------------------------------------------------------
@@ -124,6 +155,18 @@ void ColoredPanel::Hide()
 void ColoredPanel::SetPosSizePixel( const Rectangle& i_rPanelPlayground )
 {
     m_aWindow.SetPosSizePixel( i_rPanelPlayground.TopLeft(), i_rPanelPlayground.GetSize() );
+}
+
+//-----------------------------------------------------------------------------
+::rtl::OUString ColoredPanel::GetDisplayName() const
+{
+    return m_aPanelName;
+}
+
+//-----------------------------------------------------------------------------
+Image ColoredPanel::GetImage() const
+{
+    return Image( m_aPanelIcon );
 }
 
 //=============================================================================
@@ -155,16 +198,20 @@ PanelDemoMainWindow::PanelDemoMainWindow()
     m_aToolPanelDeck.SetPosSizePixel( Point( 20, 20 ), Size( 500, 300 ) );
     m_aToolPanelDeck.SetBorderStyle( WINDOW_BORDER_MONO );
 
-    ToolPanelCollection& rPanels = m_aToolPanelDeck.GetPanels();
-    const size_t nFirstPanelPosition = rPanels.InsertPanel( PToolPanel( new ColoredPanel( m_aToolPanelDeck, Color( COL_RED ) ) ), rPanels.GetPanelCount() );
-    m_aToolPanelDeck.ActivatePanel( nFirstPanelPosition );
+    PToolPanelContainer pPanels( m_aToolPanelDeck.GetPanels() );
+    pPanels->InsertPanel( PToolPanel( new ColoredPanel( m_aToolPanelDeck, Color( COL_RED ), "Red" ) ), pPanels->GetPanelCount() );
+    pPanels->InsertPanel( PToolPanel( new ColoredPanel( m_aToolPanelDeck, Color( COL_GREEN ), "Some flavor of Green" ) ), pPanels->GetPanelCount() );
+    pPanels->InsertPanel( PToolPanel( new ColoredPanel( m_aToolPanelDeck, RGB_COLORDATA( 255, 255, 0 ), "Yellow is ugly" ) ), pPanels->GetPanelCount() );
 
+    m_aToolPanelDeck.ActivatePanel( 0 );
     m_aToolPanelDeck.Show();
 
     SetBackground( Color( COL_LIGHTGRAY ) );
 
     SetText( String::CreateFromAscii( "ToolPanelDeck Demo Application" ) );
     Show();
+
+    Help::EnableQuickHelp();
 }
 
 //-----------------------------------------------------------------------------

@@ -24,15 +24,10 @@
  *
 ************************************************************************/
 
-#ifndef TOOLPANEL_HXX
-#define TOOLPANEL_HXX
+#ifndef REFBASE_HXX
+#define REFBASE_HXX
 
-#include <rtl/ustring.hxx>
-#include <vcl/image.hxx>
-
-#include <rtl/ref.hxx>
-
-class Rectangle;
+#include <osl/interlck.h>
 
 //........................................................................
 namespace svt
@@ -40,33 +35,44 @@ namespace svt
 //........................................................................
 
     //====================================================================
-    //= IToolPanel
+    //= RefBase
     //====================================================================
-    /** abstract interface for a single tool panel
-    */
-    class IToolPanel : public ::rtl::IReference
+    class RefBase
     {
-    public:
-        /// shows the panel
-        virtual void Show() = 0;
-        /// hides the panel
-        virtual void Hide() = 0;
-        /// sets the position of the panel
-        virtual void SetPosSizePixel( const Rectangle& i_rPanelPlayground ) = 0;
-        /// retrieves the display name of the panel
-        virtual ::rtl::OUString GetDisplayName() const = 0;
-        /// retrieves the image associated with the panel, if any
-        virtual Image GetImage() const = 0;
-
-        virtual ~IToolPanel()
+    protected:
+        RefBase()
+            :m_refCount( 0 )
         {
         }
+
+        virtual ~RefBase()
+        {
+        }
+
+        virtual oslInterlockedCount SAL_CALL acquire();
+        virtual oslInterlockedCount SAL_CALL release();
+
+    private:
+        oslInterlockedCount m_refCount;
     };
 
-    typedef ::rtl::Reference< IToolPanel >  PToolPanel;
+#define DECLARE_IREFERENCE()    \
+    virtual oslInterlockedCount SAL_CALL acquire(); \
+    virtual oslInterlockedCount SAL_CALL release();
+
+
+#define IMPLEMENT_IREFERENCE( classname )   \
+    oslInterlockedCount classname::acquire()    \
+    {   \
+        return RefBase::acquire();  \
+    }   \
+    oslInterlockedCount classname::release()    \
+    {   \
+        return RefBase::release();  \
+    }
 
 //........................................................................
 } // namespace svt
 //........................................................................
 
-#endif // TOOLPANEL_HXX
+#endif // REFBASE_HXX

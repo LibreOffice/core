@@ -28,6 +28,8 @@
 #define TABLAYOUTER_HXX
 
 #include "svtools/toolpanel/decklayouter.hxx"
+#include "svtools/toolpanel/toolpanelcontainer.hxx"
+#include "refbase.hxx"
 
 #include <memory>
 
@@ -36,9 +38,12 @@ namespace svt
 {
 //........................................................................
 
+    class ToolPanelDeck;
+
     enum TabAlignment
     {
-        TABS_RIGHT
+        TABS_RIGHT,
+        TABS_LEFT
     };
 
     struct TabDeckLayouter_Data;
@@ -46,14 +51,27 @@ namespace svt
     //====================================================================
     //= TabDeckLayouter
     //====================================================================
-    class TabDeckLayouter : public IDeckLayouter
+    class TabDeckLayouter   :public RefBase
+                            ,public IDeckLayouter
     {
     public:
-        TabDeckLayouter( const TabAlignment i_eAlignment );
+        /** creates a new layouter
+            @param i_eAlignment
+                specifies the alignment of the panel selector
+            @param i_rPanelDeck
+                the panel deck which the layouter is responsible for. Provides access to the panels
+                container, and can and should be used as parent for any other windows which the layouter
+                needs to create.
+        */
+        TabDeckLayouter( const TabAlignment i_eAlignment, ToolPanelDeck& i_rPanelDeck );
         ~TabDeckLayouter();
 
         // IDeckLayouter
         virtual Rectangle   Layout( const Rectangle& i_rDeckPlayground );
+        virtual void        Destroy();
+
+        // IReference
+        DECLARE_IREFERENCE()
 
     private:
         ::std::auto_ptr< TabDeckLayouter_Data > m_pData;

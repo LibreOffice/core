@@ -26,7 +26,7 @@
 
 #include "precompiled_svtools.hxx"
 
-#include "svtools/toolpanel/toolpanelcollection.hxx"
+#include "toolpanelcollection.hxx"
 
 #include <tools/diagnose_ex.h>
 
@@ -42,7 +42,8 @@ namespace svt
     //====================================================================
     struct ToolPanelCollection_Data
     {
-        ::std::vector< PToolPanel > aPanels;
+        ::std::vector< PToolPanel >                     aPanels;
+        ::std::vector< IToolPanelContainerListener* >   aListeners;
     };
 
     //====================================================================
@@ -60,6 +61,9 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
+    IMPLEMENT_IREFERENCE( ToolPanelCollection )
+
+    //--------------------------------------------------------------------
     size_t ToolPanelCollection::GetPanelCount() const
     {
         return m_pData->aPanels.size();
@@ -75,18 +79,47 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    size_t ToolPanelCollection::InsertPanel( const PToolPanel& i_pPanel, const size_t i_pPosition )
+    size_t ToolPanelCollection::InsertPanel( const PToolPanel& i_pPanel, const size_t i_nPosition )
     {
         OSL_ENSURE( i_pPanel.get(), "ToolPanelCollection::InsertPanel: illegal panel!" );
         if ( !i_pPanel.get() )
             return 0;
 
-        const size_t position = i_pPosition < m_pData->aPanels.size() ? i_pPosition : m_pData->aPanels.size();
+        const size_t position = i_nPosition < m_pData->aPanels.size() ? i_nPosition : m_pData->aPanels.size();
         m_pData->aPanels.insert( m_pData->aPanels.begin() + position, i_pPanel );
 
-        // TODO: notification. The tool panel deck which owns us is certainly interested in this event ...
+        // notifications
+        for (   ::std::vector< IToolPanelContainerListener* >::const_iterator loop = m_pData->aListeners.begin();
+                loop != m_pData->aListeners.end();
+                ++loop
+            )
+        {
+            (*loop)->PanelInserted( i_pPanel, i_nPosition );
+        }
 
         return position;
+    }
+
+    //--------------------------------------------------------------------
+    void ToolPanelCollection::AddListener( IToolPanelContainerListener& i_rListener )
+    {
+        m_pData->aListeners.push_back( &i_rListener );
+    }
+
+    //--------------------------------------------------------------------
+    void ToolPanelCollection::RemoveListener( IToolPanelContainerListener& i_rListener )
+    {
+        for (   ::std::vector< IToolPanelContainerListener* >::iterator lookup = m_pData->aListeners.begin();
+                lookup != m_pData->aListeners.end();
+                ++lookup
+            )
+        {
+            if ( *lookup == &i_rListener )
+            {
+                m_pData->aListeners.erase( lookup );
+                return;
+            }
+        }
     }
 
 //........................................................................

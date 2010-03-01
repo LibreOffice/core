@@ -47,6 +47,9 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
+    IMPLEMENT_IREFERENCE( DummyPanel )
+
+    //--------------------------------------------------------------------
     void DummyPanel::Show()
     {
     }
@@ -59,6 +62,18 @@ namespace svt
     //--------------------------------------------------------------------
     void DummyPanel::SetPosSizePixel( const Rectangle& /*i_rPanelPlayground*/ )
     {
+    }
+
+    //--------------------------------------------------------------------
+    ::rtl::OUString DummyPanel::GetDisplayName() const
+    {
+        return ::rtl::OUString();
+    }
+
+    //--------------------------------------------------------------------
+    Image DummyPanel::GetImage() const
+    {
+        return Image();
     }
 
 //........................................................................

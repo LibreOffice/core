@@ -24,15 +24,9 @@
  *
 ************************************************************************/
 
-#ifndef TOOLPANEL_HXX
-#define TOOLPANEL_HXX
+#include "precompiled_svtools.hxx"
 
-#include <rtl/ustring.hxx>
-#include <vcl/image.hxx>
-
-#include <rtl/ref.hxx>
-
-class Rectangle;
+#include "refbase.hxx"
 
 //........................................................................
 namespace svt
@@ -40,33 +34,23 @@ namespace svt
 //........................................................................
 
     //====================================================================
-    //= IToolPanel
+    //= RefBase
     //====================================================================
-    /** abstract interface for a single tool panel
-    */
-    class IToolPanel : public ::rtl::IReference
+    //--------------------------------------------------------------------
+    oslInterlockedCount SAL_CALL RefBase::acquire()
     {
-    public:
-        /// shows the panel
-        virtual void Show() = 0;
-        /// hides the panel
-        virtual void Hide() = 0;
-        /// sets the position of the panel
-        virtual void SetPosSizePixel( const Rectangle& i_rPanelPlayground ) = 0;
-        /// retrieves the display name of the panel
-        virtual ::rtl::OUString GetDisplayName() const = 0;
-        /// retrieves the image associated with the panel, if any
-        virtual Image GetImage() const = 0;
+        return osl_incrementInterlockedCount( &m_refCount );
+    }
 
-        virtual ~IToolPanel()
-        {
-        }
-    };
-
-    typedef ::rtl::Reference< IToolPanel >  PToolPanel;
+    //--------------------------------------------------------------------
+    oslInterlockedCount SAL_CALL RefBase::release()
+    {
+        oslInterlockedCount newCount = osl_decrementInterlockedCount( &m_refCount );
+        if ( 0 == newCount )
+            delete this;
+        return newCount;
+    }
 
 //........................................................................
 } // namespace svt
 //........................................................................
-
-#endif // TOOLPANEL_HXX

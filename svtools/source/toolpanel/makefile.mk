@@ -45,12 +45,11 @@ ENABLE_EXCEPTIONS=TRUE
 
 SLOFILES=\
         $(SLO)$/dummypanel.obj \
+        $(SLO)$/paneltabbar.obj \
+        $(SLO)$/refbase.obj \
         $(SLO)$/tablayouter.obj \
         $(SLO)$/toolpanelcollection.obj \
         $(SLO)$/toolpaneldeck.obj \
-
-#LIB1TARGET=     $(SLB)$/$(TARGET).lib
-#LIB1OBJFILES=   $(SLOFILES)
 
 # --- Targets ------------------------------------------------------
 

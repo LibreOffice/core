@@ -27,7 +27,7 @@
 #ifndef DECKLAYOUTER_HXX
 #define DECKLAYOUTER_HXX
 
-#include <boost/shared_ptr.hpp>
+#include <rtl/ref.hxx>
 
 class Rectangle;
 
@@ -39,7 +39,7 @@ namespace svt
     //====================================================================
     //= IDeckLayouter
     //====================================================================
-    class IDeckLayouter
+    class IDeckLayouter : public ::rtl::IReference
     {
     public:
         /** re-arranges the elements of the tool deck, taking into account the
@@ -48,16 +48,25 @@ namespace svt
             @param i_rDeckPlayground
                 the playground for the complete tool panel deck
             @return
-                the content area for the single tool panels
+                the content area for a single tool panel
         */
         virtual Rectangle   Layout( const Rectangle& i_rDeckPlayground ) = 0;
+
+        /** destroys the instance
+
+            Since the layouter is ref-counted, but might keep references to non-ref-counted objects
+            (in particular, the ToolPanelDeck, which is a VCL-Window, and thus cannot be ref-counted),
+            Destroy is the definitive way to dispose the instance. Technically, it's still alive afterwards,
+            but non-functioal.
+        */
+        virtual void        Destroy() = 0;
 
         virtual ~IDeckLayouter()
         {
         }
     };
 
-    typedef ::boost::shared_ptr< IDeckLayouter >    PDeckLayouter;
+    typedef ::rtl::Reference< IDeckLayouter >   PDeckLayouter;
 
 //........................................................................
 } // namespace svt

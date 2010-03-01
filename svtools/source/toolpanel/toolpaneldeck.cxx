@@ -27,6 +27,7 @@
 #include "precompiled_svtools.hxx"
 
 #include "dummypanel.hxx"
+#include "toolpanelcollection.hxx"
 
 #include "svtools/toolpanel/toolpaneldeck.hxx"
 #include "svtools/toolpanel/tablayouter.hxx"
@@ -46,28 +47,26 @@ namespace svt
     public:
         ToolPanelDeck_Impl( ToolPanelDeck& i_rDeck )
             :m_rDeck( i_rDeck )
-            ,m_aPanels()
+            ,m_pPanels( new( ToolPanelCollection ) )
             ,m_pDummyPanel( new DummyPanel )
             ,m_aActivePanel()
             ,m_pLayouter()
             ,m_aPanelPlayground()
         {
-            // use a default layouter
-            m_pLayouter.reset( new TabDeckLayouter( TABS_RIGHT ) );
-
-            // add as listener to the panels collection - we're interested in panels
-            // being added and removed
-            // TODO
+            // TODO: add as listener to the panels collection - we're interested in panels
+            // being added and removed, as we need to re-layout then
         }
 
-        const ToolPanelCollection&  GetPanels() const   { return m_aPanels; }
-              ToolPanelCollection&  GetPanels()         { return m_aPanels; }
+        PToolPanelContainer GetPanels() const { return m_pPanels; }
 
-        size_t          GetActivePanel() const;
-        void            ActivatePanel( const size_t i_nPanel );
+        size_t              GetActivePanel() const;
+        void                ActivatePanel( const size_t i_nPanel );
 
-        PDeckLayouter   GetLayouter() const { return m_pLayouter; }
-        void            SetLayouter( const PDeckLayouter& i_pNewLayouter );
+        PDeckLayouter       GetLayouter() const { return m_pLayouter; }
+        void                SetLayouter( const PDeckLayouter& i_pNewLayouter );
+
+        void                AddListener( IToolPanelDeckListener& i_rListener );
+        void                RemoveListener( IToolPanelDeckListener& i_rListener );
 
         /// re-layouts everything
         void    LayoutAll() { ImplDoLayout(); }
@@ -81,13 +80,16 @@ namespace svt
     private:
         ToolPanelDeck&      m_rDeck;
 
-        ToolPanelCollection m_aPanels;
+        PToolPanelContainer m_pPanels;
         PToolPanel          m_pDummyPanel;
         ::boost::optional< size_t >
                             m_aActivePanel;
 
         PDeckLayouter       m_pLayouter;
         Rectangle           m_aPanelPlayground;
+
+        ::std::vector< IToolPanelDeckListener* >
+                            m_aListeners;
     };
 
     //--------------------------------------------------------------------
@@ -95,7 +97,7 @@ namespace svt
     {
         if ( !m_aActivePanel )
             return m_pDummyPanel;
-        return m_aPanels.GetPanel( *m_aActivePanel );
+        return m_pPanels->GetPanel( *m_aActivePanel );
     }
 
     //--------------------------------------------------------------------
@@ -121,17 +123,18 @@ namespace svt
     //--------------------------------------------------------------------
     void ToolPanelDeck_Impl::ActivatePanel( const size_t i_nPanel )
     {
-        OSL_ENSURE( i_nPanel < m_aPanels.GetPanelCount(), "ToolPanelDeck_Impl::ActivatePanel: illegal panel no.!" );
-        if ( i_nPanel >= m_aPanels.GetPanelCount() )
+        OSL_ENSURE( i_nPanel < m_pPanels->GetPanelCount(), "ToolPanelDeck_Impl::ActivatePanel: illegal panel no.!" );
+        if ( i_nPanel >= m_pPanels->GetPanelCount() )
             return;
 
-        if ( !!m_aActivePanel && ( *m_aActivePanel == i_nPanel ) )
+        if ( m_aActivePanel == i_nPanel )
             return;
 
         // hide the old panel
         const PToolPanel pOldActive( GetActiveOrDummyPanel_Impl() );
         pOldActive->Hide();
 
+        const ::boost::optional< size_t > aOldPanel( m_aActivePanel );
         m_aActivePanel = i_nPanel;
 
         // position and show the new panel
@@ -139,8 +142,14 @@ namespace svt
         pNewActive->SetPosSizePixel( m_aPanelPlayground );
         pNewActive->Show();
 
-        // tell the layouter - it might need to adjust its visuals to the new situation
-        // TODO
+        // notify listeners
+        for (   ::std::vector< IToolPanelDeckListener* >::iterator loop = m_aListeners.begin();
+                loop != m_aListeners.end();
+                ++loop
+            )
+        {
+            (*loop)->ActivePanelChanged( aOldPanel, *m_aActivePanel );
+        }
     }
 
     //--------------------------------------------------------------------
@@ -159,6 +168,28 @@ namespace svt
         pActive->SetPosSizePixel( m_aPanelPlayground );
     }
 
+    //--------------------------------------------------------------------
+    void ToolPanelDeck_Impl::AddListener( IToolPanelDeckListener& i_rListener )
+    {
+        m_aListeners.push_back( &i_rListener );
+    }
+
+    //--------------------------------------------------------------------
+    void ToolPanelDeck_Impl::RemoveListener( IToolPanelDeckListener& i_rListener )
+    {
+        for (   ::std::vector< IToolPanelDeckListener* >::iterator lookup = m_aListeners.begin();
+                lookup != m_aListeners.end();
+                ++lookup
+            )
+        {
+            if ( *lookup == &i_rListener )
+            {
+                m_aListeners.erase( lookup );
+                return;
+            }
+        }
+    }
+
     //====================================================================
     //= ToolPanelDeck
     //====================================================================
@@ -167,11 +198,14 @@ namespace svt
         :Control( &i_rParent, i_nStyle )
         ,m_pImpl( new ToolPanelDeck_Impl( *this ) )
     {
+        // use a default layouter
+        SetLayouter( PDeckLayouter( new TabDeckLayouter( TABS_RIGHT, *this ) ) );
     }
 
     //--------------------------------------------------------------------
     ToolPanelDeck::~ToolPanelDeck()
     {
+        GetLayouter()->Destroy();
     }
 
     //--------------------------------------------------------------------
@@ -199,15 +233,21 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    const ToolPanelCollection& ToolPanelDeck::GetPanels() const
+    PToolPanelContainer ToolPanelDeck::GetPanels() const
     {
         return m_pImpl->GetPanels();
     }
 
     //--------------------------------------------------------------------
-    ToolPanelCollection& ToolPanelDeck::GetPanels()
+    void ToolPanelDeck::AddListener( IToolPanelDeckListener& i_rListener )
     {
-        return m_pImpl->GetPanels();
+        m_pImpl->AddListener( i_rListener );
+    }
+
+    //--------------------------------------------------------------------
+    void ToolPanelDeck::RemoveListener( IToolPanelDeckListener& i_rListener )
+    {
+        m_pImpl->RemoveListener( i_rListener );
     }
 
     //--------------------------------------------------------------------

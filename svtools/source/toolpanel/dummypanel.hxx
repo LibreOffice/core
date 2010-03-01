@@ -28,6 +28,7 @@
 #define DUMMYPANEL_HXX
 
 #include "svtools/toolpanel/toolpanel.hxx"
+#include "refbase.hxx"
 
 //........................................................................
 namespace svt
@@ -38,7 +39,8 @@ namespace svt
     //= DummyPanel
     //====================================================================
     /// is a dummy implementation of the IToolPanel interface
-    class DummyPanel : public IToolPanel
+    class DummyPanel    :public RefBase
+                        ,public IToolPanel
     {
     public:
         DummyPanel();
@@ -48,6 +50,10 @@ namespace svt
         virtual void Show();
         virtual void Hide();
         virtual void SetPosSizePixel( const Rectangle& i_rPanelPlayground );
+        virtual ::rtl::OUString GetDisplayName() const;
+        virtual Image GetImage() const;
+
+        DECLARE_IREFERENCE()
     };
 
 //........................................................................

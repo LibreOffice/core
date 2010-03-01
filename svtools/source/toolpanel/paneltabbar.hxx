@@ -23,50 +23,53 @@
  * for a copy of the LGPLv3 License.
  *
 ************************************************************************/
+#ifndef PANELTABBAR_HXX
+#define PANELTABBAR_HXX
 
-#ifndef TOOLPANEL_HXX
-#define TOOLPANEL_HXX
+#include "svtools/toolpanel/toolpanelcontainer.hxx"
 
-#include <rtl/ustring.hxx>
-#include <vcl/image.hxx>
+#include <vcl/ctrl.hxx>
 
-#include <rtl/ref.hxx>
-
-class Rectangle;
+#include <memory>
 
 //........................................................................
 namespace svt
 {
 //........................................................................
 
+    class ToolPanelDeck;
+    class PanelTabBar_Data;
+
     //====================================================================
-    //= IToolPanel
+    //= PanelTabBar
     //====================================================================
-    /** abstract interface for a single tool panel
+    /** a tab bar for selecting panels
+
+        At the moment, this control aligns the tabs vertically, this might be extended to also support a horizontal
+        layout in the future.
     */
-    class IToolPanel : public ::rtl::IReference
+    class PanelTabBar : public Control
     {
     public:
-        /// shows the panel
-        virtual void Show() = 0;
-        /// hides the panel
-        virtual void Hide() = 0;
-        /// sets the position of the panel
-        virtual void SetPosSizePixel( const Rectangle& i_rPanelPlayground ) = 0;
-        /// retrieves the display name of the panel
-        virtual ::rtl::OUString GetDisplayName() const = 0;
-        /// retrieves the image associated with the panel, if any
-        virtual Image GetImage() const = 0;
+        PanelTabBar( ToolPanelDeck& i_rParent );
+        ~PanelTabBar();
 
-        virtual ~IToolPanel()
-        {
-        }
+        // Window overridables
+        virtual Size    GetOptimalSize( WindowSizeType i_eType ) const;
+        virtual void    Paint( const Rectangle& i_rRect );
+        virtual void    Resize();
+        virtual void    MouseMove( const MouseEvent& i_rMouseEvent );
+        virtual void    MouseButtonDown( const MouseEvent& i_rMouseEvent );
+        virtual void    MouseButtonUp( const MouseEvent& i_rMouseEvent );
+        virtual void    RequestHelp( const HelpEvent& i_rHelpEvent );
+
+    private:
+        ::std::auto_ptr< PanelTabBar_Data > m_pData;
     };
-
-    typedef ::rtl::Reference< IToolPanel >  PToolPanel;
 
 //........................................................................
 } // namespace svt
 //........................................................................
 
-#endif // TOOLPANEL_HXX
+#endif // PANELTABBAR_HXX
+

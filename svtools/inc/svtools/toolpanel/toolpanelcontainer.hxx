@@ -24,66 +24,62 @@
  *
 ************************************************************************/
 
-#ifndef TOOLPANELDECK_HXX
-#define TOOLPANELDECK_HXX
+#ifndef TOOLPANELCONTAINER_HXX
+#define TOOLPANELCONTAINER_HXX
 
-#include "svtools/toolpanel/decklayouter.hxx"
-#include "svtools/toolpanel/toolpanelcontainer.hxx"
+#include "svtools/toolpanel/toolpanel.hxx"
 
-#include <vcl/ctrl.hxx>
-
-#include <boost/optional.hpp>
-#include <memory>
+#include <rtl/ref.hxx>
 
 //........................................................................
 namespace svt
 {
 //........................................................................
 
-    class ToolPanelCollection;
-    class ToolPanelDeck_Impl;
-
     //====================================================================
-    //= IToolPanelDeckListener
+    //= IToolPanelContainerListener
     //====================================================================
-    class SAL_NO_VTABLE IToolPanelDeckListener
+    class SAL_NO_VTABLE IToolPanelContainerListener
     {
     public:
-        virtual void ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const size_t i_nNewActive ) = 0;
+        virtual void PanelInserted( const PToolPanel& i_pPanel, const size_t i_nPosition ) = 0;
     };
 
     //====================================================================
-    //= ToolPanelDeck
+    //= IToolPanelContainer
     //====================================================================
-    class ToolPanelDeck : public Control
+    class IToolPanelContainer : public ::rtl::IReference
     {
     public:
-        ToolPanelDeck( Window& i_rParent, const WinBits i_nStyle );
-        ~ToolPanelDeck();
+        /** returns the number of panels in the container
+        */
+        virtual size_t      GetPanelCount() const = 0;
 
-        // attributes
-        PDeckLayouter       GetLayouter() const;
-        void                SetLayouter( const PDeckLayouter& i_pNewLayouter );
+        /** retrieves the panel with the given index. Invalid indexes will be reported via an assertion in the
+            non-product version, and silently ignored in the product version, with a NULL panel being returned.
+        */
+        virtual PToolPanel  GetPanel( const size_t i_nPos ) const = 0;
 
-        PToolPanelContainer GetPanels() const;
+        /** inserts a new panel into the container. NULL panels are not allowed, as are positions greater than the
+            current panel count. Violations of this will be reported via an assertion in the non-product version, and
+            silently ignored in the product version.
+        */
+        virtual size_t      InsertPanel( const PToolPanel& i_pPanel, const size_t i_nPosition ) = 0;
 
-        size_t              GetActivePanel() const;
-        void                ActivatePanel( const size_t i_nPanel );
+        /** adds a new listener to be notified when the container content changes. The caller is responsible
+            for life time control, i.e. removing the listener before it actually dies.
+        */
+        virtual void        AddListener( IToolPanelContainerListener& i_rListener ) = 0;
 
-        // listeners
-        void                AddListener( IToolPanelDeckListener& i_rListener );
-        void                RemoveListener( IToolPanelDeckListener& i_rListener );
-
-    protected:
-        // Window overridables
-        virtual void Resize();
-
-    private:
-        ::std::auto_ptr< ToolPanelDeck_Impl >   m_pImpl;
+        /** removes a container listener previously added via addListener.
+        */
+        virtual void        RemoveListener( IToolPanelContainerListener& i_rListener ) = 0;
     };
+
+    typedef ::rtl::Reference< IToolPanelContainer > PToolPanelContainer;
 
 //........................................................................
 } // namespace svt
 //........................................................................
 
-#endif // TOOLPANELDECK_HXX
+#endif // TOOLPANELCONTAINER_HXX

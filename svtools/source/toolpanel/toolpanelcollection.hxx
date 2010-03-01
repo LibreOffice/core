@@ -27,7 +27,8 @@
 #ifndef TOOLPANELCOLLECTION_HXX
 #define TOOLPANELCOLLECTION_HXX
 
-#include "svtools/toolpanel/toolpanel.hxx"
+#include "svtools/toolpanel/toolpanelcontainer.hxx"
+#include "refbase.hxx"
 
 #include <memory>
 
@@ -41,16 +42,22 @@ namespace svt
     //====================================================================
     //= ToolPanelCollection
     //====================================================================
-    class ToolPanelCollection
+    class ToolPanelCollection   :public RefBase
+                                ,public IToolPanelContainer
     {
     public:
         ToolPanelCollection();
         ~ToolPanelCollection();
 
-        // panel access
-        size_t      GetPanelCount() const;
-        PToolPanel  GetPanel( const size_t i_nPos ) const;
-        size_t      InsertPanel( const PToolPanel& i_pPanel, const size_t i_pPosition );
+        // IToolPanelContainer
+        virtual size_t      GetPanelCount() const;
+        virtual PToolPanel  GetPanel( const size_t i_nPos ) const;
+        virtual size_t      InsertPanel( const PToolPanel& i_pPanel, const size_t i_pPosition );
+        virtual void        AddListener( IToolPanelContainerListener& i_rListener );
+        virtual void        RemoveListener( IToolPanelContainerListener& i_rListener );
+
+        // IReference
+        DECLARE_IREFERENCE()
 
     private:
         ::std::auto_ptr< ToolPanelCollection_Data > m_pData;
