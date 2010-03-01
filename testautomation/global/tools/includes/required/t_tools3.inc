@@ -1032,6 +1032,8 @@ function hUseAsyncSlot( cSlot as string ) as integer
             case "editobjectproperties"           : EditObjectProperties
             case "editobjectedit"                 : EditObjectEdit
             case "editobjectsavecopyas"           : EditObjectSaveCopyAs
+            case "edithyperlink"                  : EditHyperlink
+            case "editlinkswriter"                : EditLinksWriter
 
             case "formatcharttype"                : FormatChartType
             case "formatcontrol"                  : FormatControl
