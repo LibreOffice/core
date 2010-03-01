@@ -49,22 +49,10 @@ end function
 '
 '-------------------------------------------------------------------------------
 '
-function hDirectoryExistsLocal ( Verz as String ) as Boolean
-    '/// Checks if a directory exists
-    '/// <u>Input</u>: Directory with complete path
-    '/// <u>Return</u>: TRUE or FALSE if the directory exists.
-    ' at the end of the string has to be teh path seperator, else the dir-command doesn't work
-    if right ( Verz, 1 ) <> gPathSigne then Verz = Verz + gPathSigne
-    if Dir ( Verz, 16 ) = "" then
-        hDirectoryExistsLocal = FALSE
-    else
-        hDirectoryExistsLocal = TRUE
-    end if
-end function
-'
-'-------------------------------------------------------------------------------
-'
 function GetFileNameListLocal ( sPath$, sMatch$ ,lsFile() as String  ) as integer
+
+    ' DUPLICATE FUNCTION but used in ./global/tools/compressstatus.bas
+
     '/// Get files from a directory that match the pattern and append them to a list (without path)
     '/// <u>Input</u>: Directory with complete path; Search Pattern, e.g *.*; List
     '/// <u>Return</u>: count of appended entries; updated list
