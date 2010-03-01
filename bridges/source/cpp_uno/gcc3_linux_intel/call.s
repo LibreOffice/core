@@ -9,7 +9,8 @@ privateSnippetExecutorGeneral:
 .LCFIg0:
     movl    %esp,%ebp
 .LCFIg1:
-    subl    $0x4,%esp         # 32bit returnValue
+    subl    $0x8,%esp         # 32bit returnValue, and preserve potential 128bit
+                              #  stack alignment
     pushl   %esp              # 32bit &returnValue
     pushl   %ecx              # 32bit pCallStack
     pushl   %edx              # 32bit nVtableOffset
@@ -30,6 +31,7 @@ privateSnippetExecutorVoid:
 .LCFIv0:
     movl    %esp,%ebp
 .LCFIv1:
+    andl    $0xFFFFFFF0,%esp  # preserve potential 128bit stack alignment
     pushl   $0                # 32bit null pointer (returnValue not used)
     pushl   %ecx              # 32bit pCallStack
     pushl   %edx              # 32bit nVtableOffset
@@ -49,7 +51,8 @@ privateSnippetExecutorHyper:
 .LCFIh0:
     movl    %esp,%ebp
 .LCFIh1:
-    subl    $0x8,%esp         # 64bit returnValue
+    subl    $0x8,%esp         # 64bit returnValue (preserves potential 128bit
+                              #  stack alignment)
     pushl   %esp              # 32bit &returnValue
     pushl   %ecx              # 32bit pCallStack
     pushl   %edx              # 32bit nVtableOffset
@@ -71,7 +74,8 @@ privateSnippetExecutorFloat:
 .LCFIf0:
     movl    %esp,%ebp
 .LCFIf1:
-    subl    $0x4,%esp         # 32bit returnValue
+    subl    $0x8,%esp         # 32bit returnValue, and preserve potential 128bit
+                              #  stack alignment
     pushl   %esp              # 32bit &returnValue
     pushl   %ecx              # 32bit pCallStack
     pushl   %edx              # 32bit nVtableOffset
@@ -92,7 +96,8 @@ privateSnippetExecutorDouble:
 .LCFId0:
     movl    %esp,%ebp
 .LCFId1:
-    subl    $0x8,%esp         # 64bit returnValue
+    subl    $0x8,%esp         # 64bit returnValue (preserves potential 128bit
+                              #  stack alignment)
     pushl   %esp              # 32bit &returnValue
     pushl   %ecx              # 32bit pCallStack
     pushl   %edx              # 32bit nVtableOffset
@@ -113,7 +118,8 @@ privateSnippetExecutorClass:
 .LCFIc0:
     movl    %esp,%ebp
 .LCFIc1:
-    subl    $0x4,%esp         # 32bit returnValue
+    subl    $0x8,%esp         # 32bit returnValue, and preserve potential 128bit
+                              #  stack alignment
     pushl   %esp              # 32bit &returnValue
     pushl   %ecx              # 32bit pCallStack
     pushl   %edx              # 32bit nVtableOffset

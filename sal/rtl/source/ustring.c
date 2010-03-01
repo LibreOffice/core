@@ -753,8 +753,6 @@ getInternMutex()
     return pPoolGuard;
 }
 
-static StringHashTable *pInternPool = NULL;
-
 /* returns true if we found a dup in the pool */
 static void rtl_ustring_intern_internal( rtl_uString ** newStr,
                                          rtl_uString  * str,
@@ -766,9 +764,7 @@ static void rtl_ustring_intern_internal( rtl_uString ** newStr,
 
     osl_acquireMutex( pPoolMutex );
 
-    if (!pInternPool)
-        pInternPool = rtl_str_hash_new (1024);
-    *newStr = rtl_str_hash_intern (pInternPool, str, can_return);
+    *newStr = rtl_str_hash_intern (str, can_return);
 
     osl_releaseMutex( pPoolMutex );
 
@@ -856,7 +852,7 @@ internRelease (rtl_uString *pThis)
         pPoolMutex = getInternMutex();
         osl_acquireMutex( pPoolMutex );
 
-        rtl_str_hash_remove (pInternPool, pThis);
+        rtl_str_hash_remove (pThis);
 
         /* May have been separately acquired */
         if ( SAL_STRING_REFCOUNT(
