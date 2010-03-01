@@ -158,15 +158,17 @@ namespace basegfx
         bool equal(const B2DTuple& rTup) const
         {
             return (
-                fTools::equal(mfX, rTup.mfX) &&
-                fTools::equal(mfY, rTup.mfY));
+                this == &rTup ||
+                (fTools::equal(mfX, rTup.mfX) &&
+                fTools::equal(mfY, rTup.mfY)));
         }
 
         bool equal(const B2DTuple& rTup, const double& rfSmallValue) const
         {
             return (
-                fTools::equal(mfX, rTup.mfX, rfSmallValue) &&
-                fTools::equal(mfY, rTup.mfY, rfSmallValue));
+                this == &rTup ||
+                (fTools::equal(mfX, rTup.mfX, rfSmallValue) &&
+                fTools::equal(mfY, rTup.mfY, rfSmallValue)));
         }
 
         // operators

@@ -68,6 +68,14 @@ namespace basegfx
         B2DPolygon addPointsAtCuts(const B2DPolygon& rCandidate, const B2DPolyPolygon& rMask);
         B2DPolyPolygon addPointsAtCuts(const B2DPolyPolygon& rCandidate, const B2DPolyPolygon& rMask);
 
+        // look for self-intersections in given polygon and add extra points there. Result will have no
+        // intersections on an edge
+        B2DPolygon addPointsAtCuts(const B2DPolygon& rCandidate);
+
+        // add points at all self-intersections of single polygons (depends on bSelfIntersections)
+        // and at polygon-polygon intersections
+        B2DPolyPolygon addPointsAtCuts(const B2DPolyPolygon& rCandidate, bool bSelfIntersections = true);
+
     } // end of namespace tools
 } // end of namespace basegfx
 
