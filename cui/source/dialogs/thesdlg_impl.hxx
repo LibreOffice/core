@@ -31,9 +31,10 @@
 #ifndef _SVX_THESDLG_IMPL_HXX
 #define _SVX_THESDLG_IMPL_HXX
 
-#include <svx/thesdlg.hxx>
-#include <svx/checklbx.hxx>
+#include "thesdlg.hxx"
 
+#include <svtools/ehdl.hxx>
+#include <svx/checklbx.hxx>
 #include <vcl/button.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/edit.hxx>
@@ -162,7 +163,7 @@ public:
 
 struct SvxThesaurusDialog_Impl
 {
-    Window *        m_pParent;
+    SvxThesaurusDialog *    m_pDialog;
 
     FixedImage              aVendorImageFI;
     ImageButton             aLeftBtn;
@@ -188,8 +189,6 @@ struct SvxThesaurusDialog_Impl
     std::stack< OUString >  aLookUpHistory;
     bool                    m_bWordFound;
 
-    SfxErrorContext*    pErrContext;    // error context while dfalog is opened
-
 
     // Handler
     DECL_LINK( LeftBtnHdl_Impl, Button * );
@@ -203,7 +202,7 @@ struct SvxThesaurusDialog_Impl
     DECL_STATIC_LINK( SvxThesaurusDialog_Impl, VendorImageInitHdl, SvxThesaurusDialog_Impl * );
 
 
-    SvxThesaurusDialog_Impl( Window* pParent );
+    SvxThesaurusDialog_Impl( SvxThesaurusDialog * pDialog );
     ~SvxThesaurusDialog_Impl();
 
     uno::Sequence< uno::Reference< linguistic2::XMeaning > > SAL_CALL
@@ -211,7 +210,6 @@ struct SvxThesaurusDialog_Impl
 
     bool    UpdateAlternativesBox_Impl();
     void    UpdateVendorImage();
-    void    SetWindowTitle( LanguageType nLanguage );
     void    LookUp( const String &rText );
     void    LookUp_Impl();
 };

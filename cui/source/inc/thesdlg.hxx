@@ -52,6 +52,7 @@ public:
                         const String &rWord, LanguageType nLanguage );
     ~SvxThesaurusDialog();
 
+    void            SetWindowTitle( LanguageType nLanguage );
     String          GetWord();
     sal_uInt16      GetLanguage() const;
 };
