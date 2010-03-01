@@ -938,9 +938,7 @@ Optional Features:
                           assertions, object counting, etc. Larger build.
                           Independent from --enable-debug
 
-  --enable-crashdump[=yes|TRUE|STATIC|no]
-                          Enable (disable) the crashdump feature code.
-                          [default=no]
+  --enable-crashdump      Enable the crashdump feature code.
 
   --enable-cl-standard    For Microsoft C/C++ compiler users, use non-optimizing
                           standard compiler. ( This just disavles optimization
@@ -2101,8 +2099,6 @@ fi;
 if test "${enable_crashdump+set}" = set; then
   enableval="$enable_crashdump"
 
-else
-  enable_crashdump=no
 fi;
 # Check whether --enable-cl-standard or --disable-cl-standard was given.
 if test "${enable_cl_standard+set}" = set; then
@@ -3466,28 +3462,15 @@ esac
 
 echo "$as_me:$LINENO: checking whether to enable crashdump feature" >&5
 echo $ECHO_N "checking whether to enable crashdump feature... $ECHO_C" >&6
-if test "$enable_crashdump" = "yes" -o "$enable_crashdump" = "TRUE"; then
+if test "$enable_crashdump" = "yes"; then
    ENABLE_CRASHDUMP="TRUE"
+   BUILD_TYPE="$BUILD_TYPE CRASHREP"
    echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
-   BUILD_TYPE="$BUILD_TYPE CRASHREP"
 else
-   if test "$enable_crashdump" = "STATIC"; then
-      ENABLE_CRASHDUMP="STATIC"
-      echo "$as_me:$LINENO: result: yes, STATIC" >&5
-echo "${ECHO_T}yes, STATIC" >&6
-      BUILD_TYPE="$BUILD_TYPE CRASHREP"
-   else
-      if test "$enable_crashdump" = "" -o "$enable_crashdump" = "no"; then
-         ENABLE_CRASHDUMP=""
-	 echo "$as_me:$LINENO: result: no" >&5
+   ENABLE_CRASHDUMP=""
+   echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
-      else
-         { { echo "$as_me:$LINENO: error: --enable-crashdump only accepts yes, no, TRUE or STATIC as parameter." >&5
-echo "$as_me: error: --enable-crashdump only accepts yes, no, TRUE or STATIC as parameter." >&2;}
-   { (exit 1); exit 1; }; }
-      fi
-   fi
 fi
 
 

@@ -183,10 +183,8 @@ AC_ARG_ENABLE(dbgutil,
                           Independent from --enable-debug
 ],,)
 AC_ARG_ENABLE(crashdump,
-[[  --enable-crashdump[=yes|TRUE|STATIC|no]
-                          Enable (disable) the crashdump feature code.
-                          [default=no]
-]],,enable_crashdump=no)
+[  --enable-crashdump      Enable the crashdump feature code.
+],,)
 AC_ARG_ENABLE(cl-standard,
 [  --enable-cl-standard    For Microsoft C/C++ compiler users, use non-optimizing
                           standard compiler. ( This just disavles optimization
@@ -1045,23 +1043,13 @@ dnl ===================================================================
 dnl Set the ENABLE_CRASHDUMP variable.
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable crashdump feature])
-if test "$enable_crashdump" = "yes" -o "$enable_crashdump" = "TRUE"; then
+if test "$enable_crashdump" = "yes"; then
    ENABLE_CRASHDUMP="TRUE"
-   AC_MSG_RESULT([yes])
    BUILD_TYPE="$BUILD_TYPE CRASHREP"
+   AC_MSG_RESULT([yes])
 else
-   if test "$enable_crashdump" = "STATIC"; then
-      ENABLE_CRASHDUMP="STATIC"
-      AC_MSG_RESULT([yes, STATIC])
-      BUILD_TYPE="$BUILD_TYPE CRASHREP"
-   else
-      if test "$enable_crashdump" = "" -o "$enable_crashdump" = "no"; then
-         ENABLE_CRASHDUMP=""
-	 AC_MSG_RESULT([no])
-      else
-         AC_MSG_ERROR([--enable-crashdump only accepts yes, no, TRUE or STATIC as parameter.])
-      fi
-   fi
+   ENABLE_CRASHDUMP=""
+   AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_CRASHDUMP)
 
