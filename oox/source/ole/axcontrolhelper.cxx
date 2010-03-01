@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: axcontrolhelper.cxx,v $
- * $Revision: 1.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -93,8 +90,10 @@ AxControlHelper::~AxControlHelper()
 Reference< XForm > AxControlHelper::getControlForm() const
 {
     if( !mbHasFormQuerried )
+    {
+        mbHasFormQuerried = true;
         mxForm = createControlForm();   // virtual call
-    mbHasFormQuerried = true;
+    }
     return mxForm;
 }
 

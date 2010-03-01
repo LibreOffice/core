@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.9 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -44,7 +40,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Common ----------------------------------------------------------
 
 # BEGIN ----------------------------------------------------------------
-# auto generated Target:tests by codegen.pl 
+# auto generated Target:tests by codegen.pl
 SHL1OBJS=  \
     $(SLO)$/domtest.obj
 
@@ -66,6 +62,7 @@ SHL1STDLIBS= \
     $(COMPHELPERLIB)	\
     $(CPPUHELPERLIB)	\
     $(CPPUNITLIB)	 \
+        $(TESTSHL2LIB)    \
     $(CPPULIB)	\
     $(SAXLIB) \
     $(SALLIB)\
@@ -74,18 +71,18 @@ SHL1STDLIBS= \
 SHL1IMPLIB= i$(SHL1TARGET)
 
 DEF1NAME    =$(SHL1TARGET)
-SHL1VERSIONMAP = export.map 
+SHL1VERSIONMAP = export.map
 
 # END ------------------------------------------------------------------
 
 #------------------------------- All object files -------------------------------
 # do this here, so we get right dependencies
-SLOFILES=$(SHL1OBJS) 
+SLOFILES=$(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : target.mk
-.INCLUDE : _cppunit.mk 
+.INCLUDE : _cppunit.mk
 
 # --- Fake uno bootstrap ------------------------
 
@@ -100,7 +97,7 @@ $(MISC)$/unoxml_unittest_succeeded : $(SHL1TARGETN) $(BIN)$/unoxml_unittest_test
         @echo ----------------------------------------------------------
         @echo - start unit test on library $(SHL1TARGETN)
         @echo ----------------------------------------------------------
-        testshl2 -forward $(BIN)$/ -sf $(mktmp ) $(SHL1TARGETN)
+                $(TESTSHL2) -forward $(BIN)$/ -sf $(mktmp ) $(SHL1TARGETN)
         $(TOUCH) $@
 
 ALLTAR : $(MISC)$/unoxml_unittest_succeeded

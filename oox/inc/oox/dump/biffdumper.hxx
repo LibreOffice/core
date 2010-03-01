@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: biffdumper.hxx,v $
- * $Revision: 1.4.20.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -415,11 +412,24 @@ private:
     sal_uInt16          dumpFormatIdx( const String& rName = EMPTY_STRING );
     sal_uInt16          dumpXfIdx( const String& rName = EMPTY_STRING, bool bBiff2Style = false );
 
+    template< typename Type >
+    inline Type         dumpExtColorType() { return dumpDec< Type >( "color-type", "EXTCOLOR-TYPE" ); }
+    void                dumpExtColorValue( sal_uInt32 nColorType );
+    void                dumpExtColor( const String& rName = EMPTY_STRING );
+    void                dumpExtCfColor( const String& rName = EMPTY_STRING );
+    void                dumpExtGradientHead();
+
     ::rtl::OUString     dumpPivotString( const String& rName, sal_uInt16 nStrLen );
     ::rtl::OUString     dumpPivotString( const String& rName );
 
     sal_uInt16          dumpCellHeader( bool bBiff2Style = false );
     void                dumpBoolErr();
+
+    void                dumpCfRuleProp();
+    void                dumpXfExtProp();
+    void                dumpDxfProp();
+    void                dumpDxf12Prop();
+    void                dumpCfRule12Param( sal_uInt16 nSubType );
 
     void                dumpFontRec();
     void                dumpFormatRec();

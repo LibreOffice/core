@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swfwriter.hxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,6 +60,8 @@ class PolyPolygon;
 class Gradient;
 class SvtGraphicFill;
 class SvtGraphicStroke;
+class LineInfo;
+namespace basegfx { class B2DPolygon; }
 
 inline sal_uInt16 _uInt16( sal_Int32 nValue )
 {
@@ -319,8 +318,10 @@ public:
     /** inserts a place shape tag into the movie stream or the current sprite */
     void placeShape( sal_uInt16 nID, sal_uInt16 nDepth, sal_Int32 x, sal_Int32 y, sal_uInt16 nClipDepth = 0, const char* pName = NULL );
 
+#ifdef THEFUTURE
     /** inserts a move shape tag into the movie stream or the current sprite */
     void moveShape( sal_uInt16 nDepth, sal_Int32 x, sal_Int32 y );
+#endif
 
     /** inserts a remove shape tag into the movie stream or the current sprite */
     void removeShape( sal_uInt16 nDepth );
@@ -363,6 +364,7 @@ private:
     void Impl_writeBmp( sal_uInt16 nBitmapId, sal_uInt32 width, sal_uInt32 height, sal_uInt8 *pCompressed, sal_uInt32 compressed_size );
     void Impl_writeImage( const BitmapEx& rBmpEx, const Point& rPt, const Size& rSz, const Point& rSrcPt, const Size& rSrcSz, const Rectangle& rClipRect, bool bMap );
     void Impl_writeJPEG(sal_uInt16 nBitmapId, const sal_uInt8* pJpgData, sal_uInt32 nJpgDataLength, sal_uInt8 *pCompressed, sal_uInt32 compressed_size );
+    void Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx::B2DPolygon& rLinePolygon);
     void Impl_writeActions( const GDIMetaFile& rMtf );
     void Impl_writePolygon( const Polygon& rPoly, sal_Bool bFilled );
     void Impl_writePolygon( const Polygon& rPoly, sal_Bool bFilled, const Color& rFillColor, const Color& rLineColor );

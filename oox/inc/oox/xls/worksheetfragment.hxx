@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: worksheetfragment.hxx,v $
- * $Revision: 1.4.20.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -182,6 +179,8 @@ private:
     void                importPTDefinition();
     /** Imports the SCENARIOS record and the following scenarios. */
     void                importScenarios();
+    /** Imports the SHAREDFEATHEAD record. */
+    void                importSharedFeatHead();
     /** Imports the STANDARDWIDTH record and sets standard column width. */
     void                importStandardWidth();
 

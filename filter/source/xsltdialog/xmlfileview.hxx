@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlfileview.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,7 @@
 #define _XMLFILEVIEW_HXX
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <vcl/timer.hxx>
 
 #ifndef _TABLE_HXX //autogen

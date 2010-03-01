@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dumperbase.cxx,v $
- * $Revision: 1.4.20.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -3191,20 +3188,6 @@ void RecordObjectBase::writeHeader()
 }
 
 // ============================================================================
-
-void SequenceRecordObjectBase::construct(
-        const ObjectBase& rParent, const BinaryInputStreamRef& rxBaseStrm, const ::rtl::OUString& rSysFileName,
-        const BinaryInputStreamRef& rxRecStrm, const String& rRecNames, const String& rSimpleRecs )
-{
-    RecordObjectBase::construct( rParent, rxBaseStrm, rSysFileName, rxRecStrm, rRecNames, rSimpleRecs );
-}
-
-void SequenceRecordObjectBase::construct( const OutputObjectBase& rParent,
-        const BinaryInputStreamRef& rxBaseStrm, const BinaryInputStreamRef& rxRecStrm,
-        const String& rRecNames, const String& rSimpleRecs )
-{
-    RecordObjectBase::construct( rParent, rxBaseStrm, rxRecStrm, rRecNames, rSimpleRecs );
-}
 
 void SequenceRecordObjectBase::construct( const ObjectBase& rParent,
         const BinaryInputStreamRef& rxBaseStrm, const ::rtl::OUString& rSysFileName,

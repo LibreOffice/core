@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swfwriter2.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +29,7 @@
 #include "precompiled_filter.hxx"
 #include "swfwriter.hxx"
 #include <vcl/virdev.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <math.h>
 
@@ -608,10 +606,7 @@ struct GradRecord
 void FillStyle::Impl_addGradient( Tag* pTag ) const
 {
     vector< struct GradRecord > aGradientRecords;
-
-    ::basegfx::B2DHomMatrix m; // #i73264#
-
-    m.rotate( (maGradient.GetAngle() - 900) * F_PI1800 );
+    basegfx::B2DHomMatrix m(basegfx::tools::createRotateB2DHomMatrix((maGradient.GetAngle() - 900) * F_PI1800));
 
     switch( maGradient.GetStyle() )
     {

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: impdialog.hxx,v $
- * $Revision: 1.23.80.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,6 +54,12 @@ class ImpPDFTabViewerPage;
 class ImpPDFTabOpnFtrPage;
 class ImpPDFTabLinksPage;
 
+class PDFFilterResId : public ResId
+{
+public:
+    PDFFilterResId( sal_uInt32 nId );
+};
+
 class ImplErrorDialog : public ModalDialog
 {
     FixedImage      maFI;
@@ -68,7 +71,7 @@ class ImplErrorDialog : public ModalDialog
 
     DECL_LINK( SelectHdl, ListBox* );
     public:
-    ImplErrorDialog( const std::set< vcl::PDFWriter::ErrorCode >&, ResMgr& rResMgr );
+    ImplErrorDialog( const std::set< vcl::PDFWriter::ErrorCode >& );
     ~ImplErrorDialog();
 };
 
@@ -84,8 +87,6 @@ private:
     Any                         maSelection;
 
 protected:
-
-    ResMgr*                     mprResMgr;
 //the following data are the configuration used throughout the dialog and pages
        sal_Bool                    mbIsPresentation;
     sal_Bool                    mbIsWriter;
@@ -97,7 +98,8 @@ protected:
     sal_Int32                   mnMaxImageResolution;
     sal_Bool                    mbUseTaggedPDF;
     sal_Int32                   mnPDFTypeSelection;
-    sal_Bool                    mbExportNotesBoth;
+    sal_Bool                    mbExportNotes;
+    sal_Bool                    mbExportNotesPages;
     sal_Bool                    mbUseTransitionEffects;
     sal_Bool                    mbIsSkipEmptyPages;
     sal_Bool                    mbAddStream;
@@ -149,7 +151,7 @@ public:
     friend class                ImpPDFTabSecurityPage;
     friend class                ImpPDFTabLinksPage;
 
-    ImpPDFTabDialog( Window* pParent, ResMgr& rResMgr,
+    ImpPDFTabDialog( Window* pParent,
                      Sequence< PropertyValue >& rFilterData,
                      const Reference< XComponent >& rDoc,
                      const Reference< lang::XMultiServiceFactory >& xFact
@@ -197,14 +199,13 @@ class ImpPDFTabGeneralPage : public SfxTabPage
 
     CheckBox                    maCbExportBookmarks;
     CheckBox                    maCbExportNotes;
+    CheckBox                    maCbExportNotesPages;
 
     CheckBox                    maCbExportEmptyPages;
     CheckBox                    maCbAddStream;
 
     sal_Bool                    mbIsPresentation;
     sal_Bool                    mbIsWriter;
-
-    ResMgr*                     mpaResMgr;
 
 const ImpPDFTabDialog*          mpaParent;
 
@@ -218,8 +219,7 @@ public:
     DECL_LINK( ToggleExportPDFAHdl, void* );
 
     ImpPDFTabGeneralPage( Window* pParent,
-                          const SfxItemSet& rSet,
-                          ResMgr* paResMgr );
+                          const SfxItemSet& rSet );
 
     ~ImpPDFTabGeneralPage();
     static SfxTabPage*          Create( Window* pParent,
@@ -256,15 +256,13 @@ class ImpPDFTabOpnFtrPage : public SfxTabPage
     CheckBox                    maCbPgLyFirstOnLeft;
 
     sal_Bool                    mbUseCTLFont;
-    ResMgr*                     mpaResMgr;
 
     DECL_LINK( ToggleRbPgLyContinueFacingHdl, void* );
     DECL_LINK( ToggleRbMagnHdl, void* );
 
 public:
     ImpPDFTabOpnFtrPage( Window* pParent,
-                         const SfxItemSet& rSet,
-                         ResMgr* paResMgr );
+                         const SfxItemSet& rSet );
 
     ~ImpPDFTabOpnFtrPage();
     static SfxTabPage*          Create( Window* pParent,
@@ -297,13 +295,10 @@ class ImpPDFTabViewerPage : public SfxTabPage
     RadioButton                 maRbVisibleBookmarkLevels;
     NumericField                maNumBookmarkLevels;
 
-    ResMgr*                     mpaResMgr;
-
     DECL_LINK( ToggleRbBookmarksHdl, void* );
 public:
     ImpPDFTabViewerPage( Window* pParent,
-                         const SfxItemSet& rSet,
-                         ResMgr* paResMgr );
+                         const SfxItemSet& rSet );
 
     ~ImpPDFTabViewerPage();
     static SfxTabPage*          Create( Window* pParent,
@@ -347,8 +342,6 @@ class ImpPDFTabSecurityPage : public SfxTabPage
     String                      msOwnerPassword;
     String                      msOwnerPwdTitle;
 
-    ResMgr*                     mpaResMgr;
-
     long nWidth;
 
     DECL_LINK( ClickmaPbUserPwdHdl, void* );
@@ -360,8 +353,7 @@ class ImpPDFTabSecurityPage : public SfxTabPage
 
 public:
     ImpPDFTabSecurityPage( Window* pParent,
-                           const SfxItemSet& rSet,
-                           ResMgr* paResMgr );
+                           const SfxItemSet& rSet );
 
     ~ImpPDFTabSecurityPage();
     static SfxTabPage*      Create( Window* pParent,
@@ -387,8 +379,6 @@ class ImpPDFTabLinksPage : public SfxTabPage
     RadioButton                 maRbOpnLnksBrowser;
     sal_Bool                    mbOpnLnksBrowserUserState;
 
-    ResMgr*                     mpaResMgr;
-
     long nWidth;
 
     DECL_LINK( ClickRbOpnLnksDefaultHdl, void* );
@@ -396,8 +386,7 @@ class ImpPDFTabLinksPage : public SfxTabPage
 
 public:
     ImpPDFTabLinksPage( Window* pParent,
-                           const SfxItemSet& rSet,
-                           ResMgr& rResMgr );
+                           const SfxItemSet& rSet );
 
     ~ImpPDFTabLinksPage();
     static SfxTabPage*      Create( Window* pParent,

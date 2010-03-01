@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: formulabase.cxx,v $
- * $Revision: 1.5.20.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1655,13 +1652,16 @@ void FormulaProcessorBase::extractCellRangeList( ApiCellRangeList& orRanges,
         sal_Int32 nOpCode = aIt->OpCode;
         switch( eState )
         {
+            // #i107275# accept OPCODE_SEP and OPCODE_LIST as separator token
             case STATE_REF:
-                     if( nOpCode == OPCODE_LIST )  eState = STATE_SEP;
+                     if( nOpCode == OPCODE_SEP )   eState = STATE_SEP;
+                else if( nOpCode == OPCODE_LIST )  eState = STATE_SEP;
                 else if( nOpCode == OPCODE_CLOSE ) eState = lclProcessClose( nParenLevel );
                 else                               eState = STATE_ERROR;
             break;
             case STATE_SEP:
                      if( nOpCode == OPCODE_PUSH )  eState = lclProcessRef( orRanges, aIt->Data, bAllowRelative, nFilterBySheet );
+                else if( nOpCode == OPCODE_SEP )   eState = STATE_SEP;
                 else if( nOpCode == OPCODE_LIST )  eState = STATE_SEP;
                 else if( nOpCode == OPCODE_OPEN )  eState = lclProcessOpen( nParenLevel );
                 else if( nOpCode == OPCODE_CLOSE ) eState = lclProcessClose( nParenLevel );
@@ -1669,13 +1669,15 @@ void FormulaProcessorBase::extractCellRangeList( ApiCellRangeList& orRanges,
             break;
             case STATE_OPEN:
                      if( nOpCode == OPCODE_PUSH )  eState = lclProcessRef( orRanges, aIt->Data, bAllowRelative, nFilterBySheet );
+                else if( nOpCode == OPCODE_SEP )   eState = STATE_SEP;
                 else if( nOpCode == OPCODE_LIST )  eState = STATE_SEP;
                 else if( nOpCode == OPCODE_OPEN )  eState = lclProcessOpen( nParenLevel );
                 else if( nOpCode == OPCODE_CLOSE ) eState = lclProcessClose( nParenLevel );
                 else                               eState = STATE_ERROR;
             break;
             case STATE_CLOSE:
-                     if( nOpCode == OPCODE_LIST )  eState = STATE_SEP;
+                     if( nOpCode == OPCODE_SEP )   eState = STATE_SEP;
+                else if( nOpCode == OPCODE_LIST )  eState = STATE_SEP;
                 else if( nOpCode == OPCODE_CLOSE ) eState = lclProcessClose( nParenLevel );
                 else                               eState = STATE_ERROR;
             break;

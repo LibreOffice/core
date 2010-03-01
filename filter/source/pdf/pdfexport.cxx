@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pdfexport.cxx,v $
- * $Revision: 1.69.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,10 +48,10 @@
 #include <unotools/processfactory.hxx>
 #include <svtools/FilterConfigItem.hxx>
 #include <svtools/filter.hxx>
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 #include <comphelper/string.hxx>
 
-#include <svtools/saveopt.hxx> // only for testing of relative saving options in PDF
+#include <unotools/saveopt.hxx> // only for testing of relative saving options in PDF
 
 #include <vcl/graphictools.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -80,31 +77,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::view;
-
-sal_Bool GetPropertyValue( Any& rAny, const Reference< XPropertySet > & rXPropSet, const sal_Char* pName )
-{
-    sal_Bool bRetValue = sal_True;
-    try
-    {
-        rAny = rXPropSet->getPropertyValue( String::CreateFromAscii( pName ) );
-        if ( !rAny.hasValue() )
-            bRetValue = sal_False;
-    }
-    catch( ::com::sun::star::uno::Exception& )
-    {
-        bRetValue = sal_False;
-    }
-    return bRetValue;
-}
-
-OUString GetProperty( const Reference< XPropertySet > & rXPropSet, const sal_Char* pName )
-{
-    OUString aRetValue;
-    Any aAny;
-    if ( GetPropertyValue( aAny, rXPropSet, pName ) )
-        aAny >>= aRetValue;
-    return aRetValue;
-}
 
 // -------------
 // - PDFExport -
@@ -895,7 +867,10 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     }
                 }
 
-                bRet = ExportSelection( *pPDFWriter, xRenderable, aSelection, aMultiSelection, aRenderOptions, nPageCount );
+                if( nPageCount > 0 )
+                    bRet = ExportSelection( *pPDFWriter, xRenderable, aSelection, aMultiSelection, aRenderOptions, nPageCount );
+                else
+                    bRet = FALSE;
 
                 if ( bRet && bSecondPassForImpressNotes )
                 {
@@ -944,14 +919,8 @@ void PDFExport::showErrors( const std::set< PDFWriter::ErrorCode >& rErrors )
 {
     if( ! rErrors.empty() )
     {
-        ByteString aResMgrName( "pdffilter" );
-        ResMgr* pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
-        if ( pResMgr )
-        {
-            ImplErrorDialog aDlg( rErrors, *pResMgr );
-            aDlg.Execute();
-            delete pResMgr;
-        }
+        ImplErrorDialog aDlg( rErrors );
+        aDlg.Execute();
     }
 }
 
@@ -1365,7 +1334,6 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                                 PolyPolygon aEndArrow;
                                 double fTransparency( aStroke.getTransparency() );
                                 double fStrokeWidth( aStroke.getStrokeWidth() );
-                                SvtGraphicStroke::JoinType eJT( aStroke.getJoinType() );
                                 SvtGraphicStroke::DashArray aDashArray;
 
                                 aStroke.getStartArrow( aStartArrow );
@@ -1374,8 +1342,6 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
 
                                 bSkipSequence = sal_True;
                                 if ( aStartArrow.Count() || aEndArrow.Count() )
-                                    bSkipSequence = sal_False;
-                                if ( (sal_uInt32)eJT > 2 )
                                     bSkipSequence = sal_False;
                                 if ( aDashArray.size() && ( fStrokeWidth != 0.0 ) && ( fTransparency == 0.0 ) )
                                     bSkipSequence = sal_False;
@@ -1404,7 +1370,40 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, PDFExtOutDevData* pPDF
                                             break;
                                     }
                                     aInfo.m_aDashArray = aDashArray;
-                                    rWriter.DrawPolyLine( aPath, aInfo );
+
+                                    if(SvtGraphicStroke::joinNone == aStroke.getJoinType()
+                                        && fStrokeWidth > 0.0)
+                                    {
+                                        // emulate no edge rounding by handling single edges
+                                        const sal_uInt16 nPoints(aPath.GetSize());
+                                        const bool bCurve(aPath.HasFlags());
+
+                                        for(sal_uInt16 a(0); a + 1 < nPoints; a++)
+                                        {
+                                            if(bCurve
+                                                && POLY_NORMAL != aPath.GetFlags(a + 1)
+                                                && a + 2 < nPoints
+                                                && POLY_NORMAL != aPath.GetFlags(a + 2)
+                                                && a + 3 < nPoints)
+                                            {
+                                                const Polygon aSnippet(4,
+                                                    aPath.GetConstPointAry() + a,
+                                                    aPath.GetConstFlagAry() + a);
+                                                rWriter.DrawPolyLine( aSnippet, aInfo );
+                                                a += 2;
+                                            }
+                                            else
+                                            {
+                                                const Polygon aSnippet(2,
+                                                    aPath.GetConstPointAry() + a);
+                                                rWriter.DrawPolyLine( aSnippet, aInfo );
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        rWriter.DrawPolyLine( aPath, aInfo );
+                                    }
                                 }
                             }
                             else if ( pA->GetComment().Equals( "XPATHFILL_SEQ_BEGIN" ) )

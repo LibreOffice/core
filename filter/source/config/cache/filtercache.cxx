@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: filtercache.cxx,v $
- * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2456,6 +2453,7 @@ OUStringList FilterCache::impl_tokenizeString(const ::rtl::OUString& sData     ,
     return lData;
 }
 
+#if OSL_DEBUG_LEVEL > 0
 /*-----------------------------------------------*/
 ::rtl::OUString FilterCache::impl_searchFrameLoaderForType(const ::rtl::OUString& sType) const
 {
@@ -2493,6 +2491,7 @@ OUStringList FilterCache::impl_tokenizeString(const ::rtl::OUString& sData     ,
 
     return ::rtl::OUString();
 }
+#endif
 
 /*-----------------------------------------------*/
 sal_Bool FilterCache::impl_isModuleInstalled(const ::rtl::OUString& sModule)

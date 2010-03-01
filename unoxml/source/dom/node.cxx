@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: node.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1000,6 +997,12 @@ namespace DOM
     {
         events::CEventDispatcher::dispatchEvent(m_aNodePtr, evt);
         return sal_True;
+    }
+
+    ::sal_Int64 SAL_CALL CNode::getSomething(const Sequence< ::sal_Int8 >& /*aIdentifier*/)
+        throw (RuntimeException)
+    {
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(m_aNodePtr));
     }
 }
 
