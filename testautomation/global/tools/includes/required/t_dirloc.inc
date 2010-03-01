@@ -136,24 +136,3 @@ function GetDirListLocal ( sPath$, sMatch$ ,lsFile() as String ) as integer
 
     GetDirListLocal = Count%
 end function
-'
-'-------------------------------------------------------------------------------
-'
-function GetAllDirListLocal ( byVal sPath$, byVal sMatch$ ,lsFile() as String ) as integer
-    '/// Get all directorys recursiv that match the pattern and append them to a list
-    '/// <u>Input</u>: Directory with complete path; Search Pattern, e.g *; Empty list, because it get's reset in this function!;
-    '/// <u>Return</u>: Count of appended entries (1. entry is the whole path); updated list
-    Dim Count% : Dim DirCount%
-
-    DirCount% = 1   ' dummy
-    Count% = 1
-    lsFile(0) = 1           'new list
-    lsFile(1) = sPath$      'first path is the calling path
-
-    do until Count%>Val(lsFile(0))  ' get first generation
-        DirCount% = GetDirListLocal ( lsFile(Count%) , sMatch$, lsFile() )        ' append all subdirectories
-        Count% = Count% +1
-    loop
-
-    GetAllDirListLocal = Count% - 1  ' count of listelements
-end function
