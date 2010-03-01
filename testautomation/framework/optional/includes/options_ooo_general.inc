@@ -92,53 +92,6 @@ testcase tOOoGeneral
    Kontext "ExtrasOptionenDlg"
    hCloseDialog( ExtrasOptionenDlg, "ok" )
 
-   'It's a little tricky to reproduce.
-   if gPlatgroup = "unx" then
-       hNewDocument()
-       FilePrint
-       Kontext "DruckenDLG"
-       if DruckenDLG.exists(5) then
-           if gPlatform <> "osx" then
-              Eigenschaften.click
-              kontext
-              active.setPage TabSPAPaper
-              Kontext "TabSPAPaper"
-              if TabSPAPaper.exists (5) then
-                  TabSPAPaper.OK
-                  sleep 5
-              else
-                  qaErrorlog "Properties of Printer didn't come up."
-              endif
-            end if
-            Kontext "DruckenDLG"
-            DruckenDLG.OK
-            ' check state
-            kontext
-            if active.exists(5) then
-                printlog "active: printing failed? '" + active.gettext + "'"
-                active.ok
-            endif
-            try
-                FileSave
-                qaErrorlog "#i52248# Modify flag is set after printing though option is not set."
-                kontext "SpeichernDlg"
-                if SpeichernDlg.exists(5) then
-                    SpeichernDlg.cancel
-                endif
-            catch
-                printlog "#i52248# doesn't come up."
-            endcatch
-       else
-            qaErrorLog "No printer available - resuming."
-            kontext
-            if active.exists(5) then
-                printlog active.getText
-                active.ok
-            endif
-       endif
-       hCloseDocument
-   endif
-   
    printlog " - check data"
    ToolsOptions
    hToolsOptions ( "StarOffice", "General" )
