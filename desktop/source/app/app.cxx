@@ -1149,16 +1149,6 @@ USHORT Desktop::Exception(USHORT nError)
 
     switch( nError & EXC_MAJORTYPE )
     {
-/*
-        case EXC_USER:
-            if( nError == EXC_OUTOFMEMORY )
-            {
-                // not possible without a special NewHandler!
-                String aMemExceptionString;
-                Application::Abort( aMemExceptionString );
-            }
-            break;
-*/
         case EXC_RSCNOTLOADED:
         {
             String aResExceptionString;
@@ -1175,23 +1165,14 @@ USHORT Desktop::Exception(USHORT nError)
 
         default:
         {
-            if ( pArgs->IsNoRestore() ) {
-                if (m_pLockfile != NULL) {
-                    m_pLockfile->clean();
-                }
-                _exit( ExitHelper::E_LOCKFILE );
+            if (m_pLockfile != NULL) {
+                m_pLockfile->clean();
             }
-
             if( bRestart )
             {
                 OfficeIPCThread::DisableOfficeIPCThread();
                 if( pSignalHandler )
                     DELETEZ( pSignalHandler );
-
-                if (m_pLockfile != NULL) {
-                    m_pLockfile->clean();
-                }
-
 #ifdef MACOSX
                 DoRestart();
 #endif
@@ -1199,17 +1180,15 @@ USHORT Desktop::Exception(USHORT nError)
             }
             else
             {
-                bInException = sal_False;
-                _exit( ExitHelper::E_CRASH );
+                Application::Abort( String() );
             }
 
             break;
         }
     }
 
+    OSL_ASSERT(false); // unreachable
     return 0;
-
-    // ConfigManager is disposed, so no way to continue
 }
 
 void Desktop::AppEvent( const ApplicationEvent& rAppEvent )
