@@ -980,7 +980,150 @@ function hIsAccessbridgeInstalled() as boolean
     
 end function
 
-'-------------------------------------------------------------------------------
+'*******************************************************************************
+
+function hUseAsyncSlot( cSlot as string ) as integer
+
+    dim iWait as integer : iWait = 0
+    dim iTime as integer : iTime = 0
+
+    const MAX_RETRIES    = 100 ' Number of time we try to call the slot
+    const DELAY          = 100 ' 100ms delay to wait between retries
+    const RETVAL_TIMEOUT = -1  ' Returnvalue if slot is not available
+    const CFN = "global::tools::includes::required::hUseAsyncSlot(): "
+
+    if ( VERBOSE ) then printlog( CFN & "Using slot: " & cSlot )
+    WaitSlot()
+
+    for iWait = 1 to MAX_RETRIES
+        try
+            select case ( lcase( cSlot ) )
+            case "fileclose"                      : FileClose
+            case "filesaveas"                     : FileSaveAs( "SynchronMode", TRUE )
+            case "filesaveall"                    : FileSaveAll( "SynchronMode", TRUE )
+            case "fileexport"                     : FileExport
+            case "filereload"                     : FileReload( "SynchronMode", TRUE )
+            case "fileopen"                       : FileOpen
+
+            case "editdoc"                        : EditDoc
+            case "editcopy"                       : EditCopy
+            case "editchangesrecord"              : EditChangesRecord
+            case "editchangesshow"                : EditChangesShow
+            case "editchangesprotecttrace"        : EditChangesProtectTrace
+            case "editchangescomment"             : EditChangesComment
+
+            case "editpaste"                      : EditPaste
+            case "editcopy"                       : EditCopy
+            case "editcut"                        : EditCut
+            case "editselectall"                  : EditSelectAll
+            case "editselectallmath"              : EditSelectAllMath
+            case "editselectionmodeblock"         : EditSelectionModeBlock
+            case "editselectionmodestandard"      : EditSelectionModeStandard
+            case "editdeletecontents"             : EditDeleteContents
+            case "editundo"                       : EditUndo
+            case "editredo"                       : EditRedo
+            case "editrepeat"                     : EditRepeat
+            case "editpastespecial"               : EditPasteSpecial
+            case "editpastespecialwriter"         : EditPasteSpecialWriter
+            case "editsearchandreplace"           : EditSearchAndReplace
+            case "editduplicate"                  : EditDuplicate
+            case "editgluepoints"                 : EditGluePoints
+            case "editdeleteslide"                : EditDeleteSlide
+            case "editobjectproperties"           : EditObjectProperties
+            case "editobjectedit"                 : EditObjectEdit
+            case "editobjectsavecopyas"           : EditObjectSaveCopyAs
+
+            case "formatcharttype"                : FormatChartType
+            case "formatcontrol"                  : FormatControl
+            case "formateditpoints"               : FormatEditPoints
+            case "formatsections"                 : FormatSections
+            case "formatchangecaseupper"          : FormatChangeCaseUpper
+            case "formatchangecaselower"          : FormatChangeCaseLower
+            case "formatarea"                     : FormatArea
+            case "formatarrangebringtofrontcalc"  : FormatArrangeBringToFrontCalc
+            case "formatflipvertically"           : FormatFlipVertically
+            case "formatfliphorizontally"         : FormatFlipHorizontally
+            case "formatline"                     : FormatLine
+            case "formatpositionandsize"          : FormatPositionAndSize
+            case "formatfontwork"                 : FormatFontwork
+            case "formatparagraph"                : FormatParagraph
+            case "formatstylebold"                : FormatStyleBold
+            case "formatungroupdraw"              : FormatUngroupDraw
+            case "formatexitgroupdraw"            : FormatExitGroupDraw
+            case "formatgroupgroup"               : FormatGroupGroup
+            case "formatgroupeditgroupcalc"       : FormatGroupEditGroupCalc
+            case "formatalignmentlefttext"        : FormatAlignmentLeftText
+            case "formatgraphics"                 : FormatGraphics
+            case "formatanchortopage"             : FormatAnchorToPage
+            case "formatwrapcontour"              : FormatWrapContour
+            case "formatwrapeditcontour"          : FormatWrapEditContour
+            case "formatpagewriter"               : FormatPageWriter
+
+            case "insertindexesbibliographyentry" : InsertIndexesBibliographyEntry
+
+            case "contextpositionandsize"         : ContextPositionAndSize
+
+            case "toolslanguagehyphenate"         : ToolsLanguageHyphenate
+            case "toolsupdateallindexes"          : ToolsUpdateAllIndexes
+            case "toolsupdatefields"              : ToolsUpdateFields
+            case "toolsupdatelinks"               : ToolsUpdateLinks
+            case "toolslanguagehangulhanjaconversion" : ToolsLanguageHangulHanjaConversion
+
+            case else : warnlog( "Unknown slot called: " & cSlot )
+            end select
+
+            exit for  ' This is only executed if the slot was called successfully
+        catch
+            wait( DELAY )
+        endcatch
+    next iWait
+
+    ' Total time used
+    iTime = iWait * DELAY
+
+    ' Timeout is -1
+    if ( iTime = MAX_RETRIES * DELAY ) then iTime = RETVAL_TIMEOUT
+
+    if ( VERBOSE ) then printlog( CFN & "Exit with rc=" & iTime )
+    hUseAsyncSlot() = iTime
+
+end function
+
+'*******************************************************************************
+
+function hClickButton( oButton as object ) as integer
+
+    dim iWait as integer : iWait = 0
+    dim iTime as integer : iTime = 0
+
+    const MAX_RETRIES    = 50  ' Try to click the button max 50 times
+    const DELAY          = 100 ' 100ms wait between retries
+    const RETVAL_TIMEOUT = -1  ' Return -1 if the button is not available
+    const CFN = "global::tools::includes::required::hClickButton(): "
+
+    if ( VERBOSE ) then printlog( CFN & "Click button: " & oButton.name() )
+    WaitSlot()
+
+    for iWait = 1 to MAX_RETRIES
+        try
+            oButton.click()
+            exit for
+        catch
+            wait( DELAY )
+        endcatch
+    next iWait
+
+    ' Total time used
+    iTime = iWait * DELAY
+
+    if ( iTime = MAX_RETRIES * DELAY ) then iTime = RETVAL_TIMEOUT
+
+    if ( VERBOSE ) then printlog( CFN & "Exit with rc=" & iTime )
+    hClickButton() = iTime
+
+end function
+
+'*******************************************************************************
 
 function hCloseDialog( oDialog as object, sUserFlags as string ) as boolean
 
@@ -996,7 +1139,7 @@ function hCloseDialog( oDialog as object, sUserFlags as string ) as boolean
     dim sFlags as string : sFlags = lcase( sUserFlags )
     dim iClosingMethod as integer
     dim bDialogMustExist as boolean : bDialogMustExist = TRUE
-    
+
     hCloseDialog() = FALSE ' Set default returnvalue, assume failure
 
     ' Find out which closing method was provided, "close" ist the default
