@@ -188,7 +188,6 @@ MKDIRHIER*=mkdir$E -p
 RMDIR*=rmdir
 XARGS*=xargs
 GNUTAR*:=tar
-TAR*:=tar
 
 RM+=$(RMFLAGS)
 ADJUSTVISIBILITY*=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/adjustvisibility
