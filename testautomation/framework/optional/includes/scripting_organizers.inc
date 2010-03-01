@@ -184,7 +184,7 @@ testcase tScriptingOrganizers( iDialog as integer )
     endif
     
     kontext "ScriptOrganizer"
-    brc = hCloseScriptOrganizer()
+    hCloseDialog( ScriptOrganizer, "close" )
     
     printlog( "" )
     printlog( "Test 3: Script storage in documents (save/load)" )
@@ -231,7 +231,7 @@ testcase tScriptingOrganizers( iDialog as integer )
     endif
         
     kontext "ScriptOrganizer"
-    brc = hCloseScriptOrganizer()
+    hCloseDialog( ScriptOrganizer, "close" )
     
     try
         hFileSave
@@ -256,7 +256,8 @@ testcase tScriptingOrganizers( iDialog as integer )
     iItemCount = hGetNodeCount( ScriptTreeList )
     if ( iItemCount <> IDOCPOS ) then
         warnlog( "Treelist not populated, the test cannot continue" )
-        brc = hCloseScriptOrganizer()
+        kontext "ScriptOrganizer"
+        hCloseDialog( ScriptOrganizer, "close" )
         brc = hDestroyDocument()
         goto endsub
     endif
@@ -266,9 +267,11 @@ testcase tScriptingOrganizers( iDialog as integer )
         warnlog( "Not all libraries/scripts have been deleted" )
     endif
             
-    brc = hCloseScriptOrganizer()
+    kontext "ScriptOrganizer"
+    hCloseDialog( ScriptOrganizer, "close" )
 
-    brc = hCloseNavigator()
+    kontext "Navigator"
+    hCloseDialog( Navigator, "close,optional" )
     
     brc = hDestroyDocument()
     
