@@ -45,7 +45,7 @@ testcase tTextGridDialog_1
     if iSystemSprache <> 81 AND iSystemSprache <> 82 AND iSystemSprache <> 86 AND iSystemSprache <> 88 then
         Call CheckAsianLanguageSupport("Off")
         hNewDocument()
-        FormatPageWriter
+        hUseAsyncSlot( "FormatPageWriter" )
         try
             Kontext
             Active.SetPage TabGrid
@@ -63,25 +63,32 @@ testcase tTextGridDialog_1
     '/// Check if tabpage 'Text Grid' appears when "Asian Language support" is checked
     Call CheckAsianLanguageSupport("On")
 
-    sleep 5
-    FormatPageWriter
-    Kontext
-    if Active.exists (10) then
-        try
-            Kontext
-            Active.SetPage TabGrid
-            Kontext "TabGrid"
-            TabGrid.Cancel
-        catch
-            Kontext
-            Active.SetPage TabSeite
-            Kontext "TabSeite"
-            TabSeite.Cancel
-            warnlog "Couldn't get Tabpage: Grid Text"
-        endcatch
-    else
-        warnlog "FormatPageWriter didn't bring up ndialog"
-    endif
+    hNewDocument
+   ToolsOptions
+   hToolsOptions ( "StarOffice", "General" )
+
+   printlog " - save old data"
+   lsSave ( 1 ) = Zweistellig.GetText
+   lbSave ( 1 ) = Aktivieren.IsChecked
+   Aktivieren.Check
+   if gPlatgroup = "w95" then
+      lbSave (2) = StarOfficeDialogeBenutzen.IsChecked
+   end if
+   lbSave ( 3 ) = DruckenStatus.IsChecked
+   lsSave ( 3 ) = StyleSheet.GetSelText
+
+   printlog " - invert/change data"
+   Zweistellig.SetText "1950"
+   Zuruecksetzen.Click
+   if gPlatgroup = "w95" then
+      if lbSave (2) = TRUE then StarOfficeDialogeBenutzen.Uncheck else StarOfficeDialogeBenutzen.Check
+   end if
+   If lbSave ( 3 ) = TRUE then DruckenStatus.Uncheck else DruckenStatus.Check
+   StyleSheet.Select 3
+
+   Kontext "ExtrasOptionenDlg"
+   hCloseDialog( ExtrasOptionenDlg, "ok" )
+
     hCloseDocument()
 endcase
 
@@ -100,23 +107,21 @@ testcase tTextGridDialog_2
     Call hFileOpen ( gTesttoolPath + SOURCE_PATH + testFile )
     sMakeReadOnlyDocumentEditable
 
-    FormatPageWriter
+    hUseAsyncSlot( "FormatPageWriter" )
     Kontext
     if active.exists(5) then
         Active.SetPage TabGrid
     endif
     Kontext "TabGrid"
     NoGrid.Check
-    Sleep 1
-    TabGrid.OK
-    Sleep 1
+    hCloseDialog( TabGrid, "ok" )
+
 
     '/// Active navigator dialogue , set page to '2'  and wait for a while
     Kontext
     ViewNavigator
     Kontext "NavigatorWriter"
     Seitennummer.SetText "2"
-    kontext "Navigator"
     hCloseDialog( Navigator, "close" )
 
     '/// In No Grid mode, there should be only 1 page, the focus is before the first line
@@ -147,7 +152,7 @@ testcase tTextGridDialog_3
     '/// + set 10 line/page
     Call hFileOpen ( gTesttoolPath + SOURCE_PATH + testFile )
     sMakeReadOnlyDocumentEditable
-    FormatPageWriter
+    hUseAsyncSlot( "FormatPageWriter" )
     Kontext
     if active.exists(5) then
         Active.SetPage TabGrid
@@ -155,16 +160,13 @@ testcase tTextGridDialog_3
     Kontext "TabGrid"
     LinesGrid.Check
     LinesPerPage.SetText sLinesPerPage
-    Sleep 1
-    TabGrid.OK
-    Sleep 1
+    hCloseDialog( TabGrid, "ok" )
 
     '/// Active navigator dialogue , set page to '2'  and wait for a while
     Kontext
     ViewNavigator
     Kontext "NavigatorWriter"
     Seitennummer.SetText "2"
-    kontext "Navigator"
     hCloseDialog( Navigator, "close" )
 
     Kontext "DocumentWriter"
@@ -196,7 +198,7 @@ testcase tTextGridDialog_4
     '/// + set 10 line/page and 9 characters/line
     Call hFileOpen ( gTesttoolPath + SOURCE_PATH + testFile )
     sMakeReadOnlyDocumentEditable
-    FormatPageWriter
+    hUseAsyncSlot( "FormatPageWriter" )
     Kontext
     if active.exists(5) then
         Active.SetPage TabGrid
@@ -205,16 +207,13 @@ testcase tTextGridDialog_4
     CharsGrid.Check
     LinesPerPage.SetText sLinesPerPage
     CharsPerLine.SetText sCharsPerLine
-    Sleep 1
-    TabGrid.OK
-    Sleep 1
+    hCloseDialog( TabGrid, "ok" )
 
     '/// Active navigator dialogue , set page to '2'  and wait for a while
     Kontext
     ViewNavigator
     Kontext "NavigatorWriter"
     Seitennummer.SetText "2"
-    kontext "Navigator"
     hCloseDialog( Navigator, "close" )
 
     Kontext "DocumentWriter"
@@ -236,7 +235,7 @@ testcase  tGridDisplay_1
 
     '/// format / page  / tabpage Text grid
     '/// + check "display grid" and check "print grid"
-    FormatPageWriter
+    hUseAsyncSlot( "FormatPageWriter" )
     Kontext
     if active.exists(5) then
         Active.SetPage TabGrid
@@ -244,14 +243,12 @@ testcase  tGridDisplay_1
     Kontext "TabGrid"
     CharsGrid.Check
     Display.Check
-    Sleep 1
     PrintGrid.Check
-    Sleep 1
-    TabGrid.OK
-    Sleep 1
+    hCloseDialog( TabGrid, "ok" )
+
 
     '/// Print to printer
-    FilePrint
+    hUseAsyncSlot( "FilePrint" )
     Kontext "Active"
     if ( Active.Exists( 5 ) ) then
         if Active.GetRT() = 304 then
@@ -265,7 +262,7 @@ testcase  tGridDisplay_1
     else
         Kontext "Printing"
         if ( Printing.exists( 2 )) then
-            printing.cancel()
+            Printing.OK()
             Printing.notExists( 5 )
         endif
 
@@ -286,11 +283,8 @@ testcase  tGridDisplay_1
     Kontext "TabGrid"
     CharsGrid.Check
     Display.Check
-    Sleep 1
     PrintGrid.UnCheck
-    Sleep 1
-    TabGrid.OK
-    Sleep 1
+    hCloseDialog( TabGrid, "ok" )
 
     '/// Print to printer
     FilePrint
@@ -307,7 +301,7 @@ testcase  tGridDisplay_1
     else
         Kontext "Printing"
         if( Printing.exists( 1 )) then
-            printing.cancel()
+            Printing.OK
             Printing.notExists( 5 )
         endif
         kontext
@@ -336,7 +330,7 @@ testcase tUserDefineLayout_1
 
     '/// Format/page , set lines per page to 20, and set charsets per line to 2
     '/// + wait for a moment , then check the the number  of lines per page.
-    FormatPageWriter
+    hUseAsyncSlot( "FormatPageWriter" )
     Kontext
     if active.exists(5) then
         Active.SetPage TabGrid
@@ -345,16 +339,13 @@ testcase tUserDefineLayout_1
     CharsGrid.Check
 
     LinesPerPage.SetText sLinesPerPage
-    Sleep 2
     CharsPerLine.SetText sCharsPerLine
-    Sleep 2
 
     'This step is no use, just let the LinesPerPage change the number
     CharsGrid.Check
 
     if LinesPerPage.GetText <> sExpectLinesPerPage AND LinesPerPage.GetText <> sExpectLinesPerPage1 then
-        Warnlog( "#i106381# - LInes per page changed" )
-        printlog( "The lines per page should be"  + sExpectLinesPerPage & " OR " & sExpectLinesPerPage1 & " but get " &LinesPerPage.GetText )
+        Warnlog "The lines per page should be"  + sExpectLinesPerPage + " OR " + sExpectLinesPerPage1 +" but get " +LinesPerPage.GetText
     endif
 
     TabGrid.Cancel
@@ -365,7 +356,6 @@ endcase
 '-------------------------------------------------------------------------
 
 testcase tFontSizeChanges_1
-
     '/// Change the font size to bigger enough will change the layout
     Dim testFile      , sCorrectResult as String
     Dim sLinesPerPage , sCharsPerLine  as String
@@ -384,10 +374,9 @@ testcase tFontSizeChanges_1
     Kontext "FormatObjectbar"
     Schriftgroesse.Select   "60"
     Schriftgroesse.TypeKeys "<Return>"
-    Sleep 1
 
     Kontext "DocumentWriter"
-    FormatPageWriter
+    hUseAsyncSlot( "FormatPageWriter" )
     Kontext
     if active.exists(5) then
         Active.SetPage TabGrid
@@ -396,11 +385,11 @@ testcase tFontSizeChanges_1
     if TabGrid.exists(5) then
         sTemp = LinesPerPage.GetText
         if sTemp <> sLinesPerPage then
-            Warnlog "The lines per page should be: '" & sLinesPerPage & "'; but get: '" & sTemp & "'"
+            Warnlog "The lines per page should be: '" + sLinesPerPage + "'; but get: '" + sTemp + "'"
         endif
         sTemp = CharsPerLine.GetText
         if sTemp <> sCharsPerLine then
-            Warnlog "The chars per line should be: '" & sCharsPerLine & "'; but get: '" &sTemp & "'"
+            Warnlog "The chars per line should be: '" + sCharsPerLine + "'; but get: '" +sTemp + "'"
         endif
         TabGrid.Cancel
     else
@@ -410,9 +399,13 @@ testcase tFontSizeChanges_1
     Kontext
     ViewNavigator
     Kontext "NavigatorWriter"
-    Seitennummer.SetText "2"
-    kontext "Navigator"
-    hCloseDialog( Navigator, "close" )
+    if NavigatorWriter.exists(5) then
+        Seitennummer.SetText "2"
+        kontext "Navigator"
+        hCloseDialog( Navigator, "close" )
+    else
+        warnlog( "Navigator not open" )
+    endif
 
     Kontext "DocumentWriter"
     sleep 3
@@ -421,7 +414,7 @@ testcase tFontSizeChanges_1
     hUseAsyncSlot( "EditCopy" )
     sTemp = GetClipboardText
     if sTemp <> sCorrectResult then
-        Warnlog "Don't get the expected result , hope to be: '" & sCorrectResult & "'; but get: '" & sTemp & "'"
+        Warnlog "Don't get the expected result , hope to be: '" + sCorrectResult + "'; but get: '" + sTemp + "'"
     endif
 
     Call hCloseDocument
@@ -443,28 +436,27 @@ testcase tRubyText_1
     sMakeReadOnlyDocumentEditable
     Kontext "DocumentWriter"
     Call DocumentWriter.TypeKeys  "<Shift Right>"
-    Sleep 1
 
-    FormatRuby
+    hUseAsyncSlot( "FormatRuby" )
     Kontext "RubyDialog"
-    Sleep 3
-    RubyText1.setText sRubyText
-    Sleep 2
-    RubyDialog.OK
-    Sleep 2
-    DialogClose.Click
-    Sleep 1
+    if ( RubyDialog.exists( 3 ) ) then
+        RubyText1.setText sRubyText
+        RubyDialog.OK
+        DialogClose.Click
+    else
+        warnlog( "Ruby dialog not open" )
+    endif
 
     Kontext "DocumentWriter"
-    FormatAutoformatApply
-    Sleep 2
+    hUseAsyncSlot( "FormatAutoformatApply" )
+    WaitSlot( 3000 )
     Call DocumentWriter.TypeKeys  "<End>"
     Sleep 2
     Call DocumentWriter.TypeKeys  "<Shift Left>"
     hUseAsyncSlot( "EditCopy" )
 
     if NOT(GetClipboardText = "5" OR GetClipboardText = "6") then
-        Warnlog "Don't get the correct result after inserting ruby text! Get " & GetClipboardText
+        Warnlog "Don't get the correct result after inserting ruby text! Get " + GetClipboardText
     endif
 
     Call hCloseDocument
@@ -498,7 +490,8 @@ testcase tIndentsTest_1
     ViewNavigator
     Kontext "NavigatorWriter"
     if Seitennummer.GetText <> sCorrectPage1 then Warnlog "First test :Something wrong in indents test!"
-    hCloseDialog( Navigator, "close" )
+    kontext "Navigator"
+    hCloseDialog( Navigator, "cancel" )
 
     '/// press TAB in second line again
     Kontext "DocumentWriter"
@@ -514,7 +507,8 @@ testcase tIndentsTest_1
     ViewNavigator
     Kontext "NavigatorWriter"
     if Seitennummer.GetText <> sCorrectPage2 then Warnlog "Second test :Something wrong in indents test!"
-    hCloseDialog( Navigator, "close" )
+    kontext "Navigator"
+    hCloseDialog( Navigator, "cancel" )
 
     Call hCloseDocument
 endcase
@@ -540,6 +534,7 @@ testcase tObjectsTest_1
     Sleep 1
     Auswahlliste.TypeKeys "<Return>"
     Sleep 1
+    kontext "Navigator"
     hCloseDialog( Navigator, "close" )
 
     Kontext
@@ -550,13 +545,15 @@ testcase tObjectsTest_1
     ViewNavigator
     Kontext "NavigatorWriter"
     Seitennummer.SetText   sCorrectPage2
-    Sleep 5
+    WaitSlot( 5000 ) ' Sleep 5
     if Seitennummer.GetText <> sCorrectPage2 then Warnlog "Something wrong when object is anchored as Character!"
+    kontext "Navigator"
     hCloseDialog( Navigator, "close" )
 
     '/// If object is anchored to Character , check if it will NOT snap to the appropriate grid cell
     fStartupNavigator( "OLEObject" , 1 )
     Auswahlliste.TypeKeys "<Return>"
+    kontext "Navigator"
     hCloseDialog( Navigator, "close" )
 
     Kontext
@@ -565,10 +562,10 @@ testcase tObjectsTest_1
     ViewNavigator
     Kontext "NavigatorWriter"
     Seitennummer.SetText   sCorrectPage2
-    Sleep 5
+    WaitSlot( 5000 ) ' Sleep 5
     if Seitennummer.GetText <> sCorrectPage1 then Warnlog "Something wrong when object is anchored to Character!"
+    kontext "Navigator"
     hCloseDialog( Navigator, "close" )
-    Kontext
 
     Call hCloseDocument
 endcase
