@@ -64,27 +64,6 @@ end function
 '
 '-------------------------------------------------------------------------------
 '
-function DirNameListLocal (ByVal sPfad$ , lsDirName() as String ) as Integer
-    '/// seperate a path in its parts
-    '/// <u>Input</u>: Path to seperate; Empty list, because it get's reset in this function!;
-    '/// <u>Return</u>: Number on entries in the list; list with entries
-    Dim i%
-    Dim Pos%
-
-    lsDirName(0) = 0
-    do
-        Pos% = InStr(1, sPfad$, "\")  ' got a path
-        i% = Val(lsDirName(0) ) + 1
-        lsDirName(0) = i%
-        lsDirName( i%  ) = Left( sPfad$, Pos%  )    ' .. put in list
-        sPfad = Mid( sPfad$, Pos% + 1 )         ' ...cut off
-    loop while Pos%>0
-    lsDirName( i%  ) = sPfad$
-    DirNameListLocal = i%    ' count of
-end function
-'
-'-------------------------------------------------------------------------------
-'
 function GetFileNameListLocal ( sPath$, sMatch$ ,lsFile() as String  ) as integer
     '/// Get files from a directory that match the pattern and append them to a list (without path)
     '/// <u>Input</u>: Directory with complete path; Search Pattern, e.g *.*; List
