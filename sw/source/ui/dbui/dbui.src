@@ -86,7 +86,7 @@ ModelessDialog DLG_PRINTMONITOR
         Pos = MAP_APPFONT ( 6, 17 ) ;
         Size = MAP_APPFONT (  100, 8 ) ;
         CENTER = TRUE ;
-        Text [ en-US ] = "is being printed on" ;
+        Text [ en-US ] = "is being prepared for printing on" ;
     };
     FixedText FT_SENDING
     {
