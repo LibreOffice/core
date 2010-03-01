@@ -1006,6 +1006,7 @@ function hUseAsyncSlot( cSlot as string ) as integer
             case "fileexport"                     : FileExport
             case "filereload"                     : FileReload( "SynchronMode", TRUE )
             case "fileopen"                       : FileOpen
+            case "fileprint"                      : FilePrint
 
             case "editdoc"                        : EditDoc
             case "editcopy"                       : EditCopy
@@ -1050,7 +1051,9 @@ function hUseAsyncSlot( cSlot as string ) as integer
             case "formatline"                     : FormatLine
             case "formatpositionandsize"          : FormatPositionAndSize
             case "formatfontwork"                 : FormatFontwork
+            case "formatpagewriter"               : FormatPageWriter
             case "formatparagraph"                : FormatParagraph
+            case "formatruby"                     : FormatRuby
             case "formatstylebold"                : FormatStyleBold
             case "formatungroupdraw"              : FormatUngroupDraw
             case "formatexitgroupdraw"            : FormatExitGroupDraw
@@ -1062,6 +1065,7 @@ function hUseAsyncSlot( cSlot as string ) as integer
             case "formatwrapcontour"              : FormatWrapContour
             case "formatwrapeditcontour"          : FormatWrapEditContour
             case "formatpagewriter"               : FormatPageWriter
+            case "formatautoformatapply"          : FormatAutoformatApply
 
             case "insertindexesbibliographyentry" : InsertIndexesBibliographyEntry
 
