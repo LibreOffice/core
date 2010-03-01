@@ -2074,6 +2074,13 @@ sal_Int64 SAL_CALL ScModelObj::getSomething(
         return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
     }
 
+    if ( rId.getLength() == 16 &&
+          0 == rtl_compareMemory( SfxObjectShell::getUnoTunnelId().getConstArray(),
+                                    rId.getConstArray(), 16 ) )
+        {
+            return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(pDocShell ));
+        }
+
     //  aggregated number formats supplier has XUnoTunnel, too
     //  interface from aggregated object must be obtained via queryAggregation
 
