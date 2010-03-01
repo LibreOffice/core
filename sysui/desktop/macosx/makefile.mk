@@ -58,12 +58,6 @@ CREATOR_TYPE=OOO2
 EXECUTABLE=soffice
 .ENDIF
 
-SOURCE=$(RSCREVISION)
-
-.IF "$(CWS_WORK_STAMP)" != ""
-CWS=[CWS:$(CWS_WORK_STAMP)]
-.ENDIF
-
 .IF "$(WITH_LANG)"!=""
 ULFDIR:=$(COMMONMISC)$/desktopshare
 .ELSE # "$(WITH_LANG)"!=""
@@ -83,7 +77,7 @@ $(COMMONMISC)$/PkgInfo :
 
 
 $(COMMONMISC)$/Info.plist : $$(@:f)
-    sed -e "s|\%EXECUTABLE|${EXECUTABLE}|g" -e "s|\%SOURCE|[$(SOURCE)$(CWS)]|g" $< > $@
+    sed -e "s|\%EXECUTABLE|${EXECUTABLE}|g" $< > $@
 
 $(COMMONBIN)$/InfoPlist_{$(alllangiso)}.zip : $(COMMONMISC)$/$$(@:b)/InfoPlist.strings
     cd $(<:d) && zip ../$(@:f).$(INPATH) $(<:f)
