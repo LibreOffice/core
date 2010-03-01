@@ -37,6 +37,8 @@
 '*
 '\******************************************************************************
 
+private const VERBOSE = FALSE
+
 
 sub hToolbarSelect( sType as string, sOpen as boolean, optional SetToDefault as boolean )
     Dim sDefault as integer, sKontext as string, sPosition as integer
