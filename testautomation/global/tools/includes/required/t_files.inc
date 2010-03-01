@@ -152,31 +152,6 @@ end function
 '
 '-------------------------------------------------------------------------------
 '
-function IsItSaved as boolean
-    '/// IsItSaved
-    '/// Wait until document is saved.
-    Dim iLoop as integer
-
-    IsItSaved = FALSE
-    sleep(3)
-    for iLoop =1 to 20
-        try
-            'Calling slot 'IsDocSaving'
-            IsItSaved = IsDocSaving
-        catch
-            IsItSaved = FALSE
-        endcatch
-
-        if IsItSaved = TRUE then
-            exit for
-        end if
-        sleep(1)
-    next iLoop
-    sleep(2)
-end function
-'
-'-------------------------------------------------------------------------------
-'
 function IsItLoaded as boolean
     '/// IsItLoaded
     '/// Wait until document is loaded
