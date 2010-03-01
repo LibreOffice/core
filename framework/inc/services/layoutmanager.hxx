@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: layoutmanager.hxx,v $
- * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,6 +66,7 @@
 #include <com/sun/star/ui/XUIElementFactory.hpp>
 #include <com/sun/star/frame/XInplaceLayout.hpp>
 #include <com/sun/star/ui/DockingArea.hpp>
+#include <com/sun/star/awt/XTopWindow2.hpp>
 #include <com/sun/star/awt/XDockableWindow.hpp>
 #include <com/sun/star/awt/XDockableWindowListener.hpp>
 #include <com/sun/star/frame/XMenuBarMergingAcceptor.hpp>
@@ -78,8 +76,9 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 #include <cppuhelper/propshlp.hxx>
+#include <cppuhelper/implbase9.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
-#include <cppuhelper/weak.hxx>
+#include <comphelper/propertycontainer.hxx>
 #include <vcl/wintypes.hxx>
 #include <svtools/miscopt.hxx>
 #include <vcl/toolbox.hxx>
@@ -89,22 +88,23 @@ class MenuBar;
 namespace framework
 {
     class GlobalSettings;
-    class LayoutManager : public  css::lang::XTypeProvider                        ,
-                          public  css::lang::XServiceInfo                         ,
-                          public  ::com::sun::star::frame::XLayoutManager         ,
-                          public  css::awt::XWindowListener                       ,
-                          public  css::frame::XFrameActionListener                ,
-                          public  ::com::sun::star::ui::XUIConfigurationListener  ,
-                          public  ::com::sun::star::frame::XInplaceLayout         ,
-                          public  css::awt::XDockableWindowListener               ,
-                          public  ::com::sun::star::frame::XMenuBarMergingAcceptor,
-                          public  css::frame::XLayoutManagerEventBroadcaster      ,
+    typedef ::cppu::WeakImplHelper9 <   ::com::sun::star::lang::XServiceInfo
+                                    ,   ::com::sun::star::frame::XLayoutManager
+                                    ,   ::com::sun::star::awt::XWindowListener
+                                    ,   ::com::sun::star::frame::XFrameActionListener
+                                    ,   ::com::sun::star::ui::XUIConfigurationListener
+                                    ,   ::com::sun::star::frame::XInplaceLayout
+                                    ,   ::com::sun::star::awt::XDockableWindowListener
+                                    ,   ::com::sun::star::frame::XMenuBarMergingAcceptor
+                                    ,   ::com::sun::star::frame::XLayoutManagerEventBroadcaster
+                                    >   LayoutManager_Base;
+    typedef ::comphelper::OPropertyContainer    LayoutManager_PBase;
+    class LayoutManager : public  LayoutManager_Base                    ,
                           // base classes
                           // Order is neccessary for right initialization!
                           private ThreadHelpBase                        ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
                           public  ::cppu::OBroadcastHelper              ,
-                          public  ::cppu::OPropertySetHelper            ,   // => XPropertySet / XFastPropertySet / XMultiPropertySet
-                          public  ::cppu::OWeakObject                       // => XWeak, XInterface
+                          public  LayoutManager_PBase
     {
         public:
             enum { DOCKINGAREAS_COUNT = 4 };
@@ -328,7 +328,6 @@ namespace framework
             //---------------------------------------------------------------------------------------------------------
             void impl_clearUpMenuBar();
             void implts_reset( sal_Bool bAttach );
-            void implts_setMenuBarCloser(sal_Bool bCloserState);
             void implts_updateMenuBarClose();
             sal_Bool implts_resetMenuBar();
 
@@ -388,6 +387,7 @@ namespace framework
 
             // layouting methods
             sal_Bool implts_compareRectangles( const ::com::sun::star::awt::Rectangle& rRect1, const ::com::sun::star::awt::Rectangle& rRect2 );
+            sal_Bool implts_resizeContainerWindow( const ::com::sun::star::awt::Size& rContainerSize, const ::com::sun::star::awt::Point& rComponentPos );
             ::Size  implts_getTopBottomDockingAreaSizes();
             ::Size  implts_getContainerWindowOutputSize();
             ::com::sun::star::awt::Rectangle implts_getDockingAreaWindowSizes();
@@ -399,7 +399,8 @@ namespace framework
             void    implts_findNextDockingPos( ::com::sun::star::ui::DockingArea DockingArea, const ::Size& aUIElementSize, ::Point& rVirtualPos, ::Point& rPixelPos );
             ::com::sun::star::awt::Rectangle implts_calcDockingAreaSizes();
             void    implts_setDockingAreaWindowSizes( const com::sun::star::awt::Rectangle& rBorderSpace );
-            sal_Bool implts_doLayout( sal_Bool bForceRequestBorderSpace );
+            sal_Bool implts_doLayout( sal_Bool bForceRequestBorderSpace, sal_Bool bOuterResize );
+            void    implts_doLayout_notify( sal_Bool bOuterResize );
 
             // internal methods to control status/progress bar
             ::Size      implts_getStatusBarSize();
@@ -449,15 +450,15 @@ namespace framework
             virtual ::cppu::IPropertyArrayHelper&                       SAL_CALL getInfoHelper();
             virtual ::com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw (::com::sun::star::uno::RuntimeException);
 
-            static const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > impl_getStaticPropertyDescriptor();
-
             css::uno::Reference< css::lang::XMultiServiceFactory >                      m_xSMGR; /** reference to factory, which has created this instance. */
             css::uno::Reference< css::util::XURLTransformer >                           m_xURLTransformer;
+            css::uno::Reference< css::container::XIndexAccess >                         m_xDisplayAccess;
             css::uno::Reference< css::frame::XFrame >                                   m_xFrame;
             css::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >        m_xModuleCfgMgr;
             css::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >        m_xDocCfgMgr;
             css::uno::WeakReference< css::frame::XModel >                               m_xModel;
             css::uno::Reference< css::awt::XWindow >                                    m_xContainerWindow;
+            css::uno::Reference< css::awt::XTopWindow2 >                                m_xContainerTopWindow;
             css::uno::Reference< css::awt::XWindow >                                    m_xDockAreaWindows[DOCKINGAREAS_COUNT];
             sal_Int32                                                                   m_nLockCount;
             UIElementVector                                                             m_aUIElements;
@@ -474,6 +475,7 @@ namespace framework
             bool                                                                        m_bStoreWindowState;
             bool                                                                        m_bHideCurrentUI;
             bool                                                                        m_bGlobalSettings;
+            bool                                                                        m_bPreserveContentSize;
             DockingOperation                                                            m_eDockOperation;
             UIElement                                                                   m_aDockUIElement;
             css::awt::Rectangle                                                         m_aDockingArea;

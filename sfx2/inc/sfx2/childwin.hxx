@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: childwin.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -205,8 +202,10 @@ public:
     void                SetPosSizePixel(const Point& rPoint, Size& rSize);
     Point               GetPosPixel()
                         { return pWindow->GetPosPixel(); }
-    void                Hide();
-    void                Show( USHORT nFlags );
+//<!--Modified by PengYunQuan for Validity Cell Range Picker
+    virtual void                Hide();
+    virtual void                Show( USHORT nFlags );
+//-->Modified by PengYunQuan for Validity Cell Range Picker
     sal_uInt16          GetFlags() const
                         { return GetInfo().nFlags; }
     sal_Bool                CanGetFocus() const;

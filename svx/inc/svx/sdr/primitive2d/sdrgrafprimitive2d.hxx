@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdrgrafprimitive2d.hxx,v $
- *
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +32,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/attribute/sdrattribute.hxx>
 #include <svx/sdr/attribute/sdrallattribute.hxx>
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -47,7 +43,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        class SdrGrafPrimitive2D : public BasePrimitive2D
+        class SdrGrafPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             ::basegfx::B2DHomMatrix                     maTransform;
@@ -57,7 +53,7 @@ namespace drawinglayer
 
         protected:
             // local decomposition.
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& aViewInformation) const;
 
         public:
             SdrGrafPrimitive2D(

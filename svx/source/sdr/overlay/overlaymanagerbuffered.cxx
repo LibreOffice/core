@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: overlaymanagerbuffered.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -370,8 +367,41 @@ namespace sdr
                     OverlayManager::ImpDrawMembers(aBufferRememberedRangeLogic, getOutputDevice());
                 }
 
-                // #i80730# removed: VCL hack for transparent child windows
-                // No longer needed, checked in DEV300 m54
+                // VCL hack for transparent child windows
+                // Problem is e.g. a radiobuttion form control in life mode. The used window
+                // is a transparence vcl childwindow. This flag only allows the parent window to
+                // paint into the child windows area, but there is no mechanism which takes
+                // care for a repaint of the child window. A transparent child window is NOT
+                // a window which always keeps it's content consistent over the parent, but it's
+                // more like just a paint flag for the parent.
+                // To get the update, the windows in question are updated manulally here.
+                if(bTargetIsWindow)
+                {
+                    Window& rWindow = static_cast< Window& >(rmOutputDevice);
+
+                    if(rWindow.IsChildTransparentModeEnabled() && rWindow.GetChildCount())
+                    {
+                        const Rectangle aRegionRectanglePixel(
+                            maBufferRememberedRangePixel.getMinX(), maBufferRememberedRangePixel.getMinY(),
+                            maBufferRememberedRangePixel.getMaxX(), maBufferRememberedRangePixel.getMaxY());
+
+                        for(sal_uInt16 a(0); a < rWindow.GetChildCount(); a++)
+                        {
+                            Window* pCandidate = rWindow.GetChild(a);
+
+                            if(pCandidate && pCandidate->IsPaintTransparent())
+                            {
+                                const Rectangle aCandidatePosSizePixel(pCandidate->GetPosPixel(), pCandidate->GetSizePixel());
+
+                                if(aCandidatePosSizePixel.IsOver(aRegionRectanglePixel))
+                                {
+                                    pCandidate->Invalidate(INVALIDATE_NOTRANSPARENT|INVALIDATE_CHILDREN);
+                                    pCandidate->Update();
+                                }
+                            }
+                        }
+                    }
+                }
 
                 // #i80730# restore visibility of VCL cursor
                 if(bCursorWasEnabled)

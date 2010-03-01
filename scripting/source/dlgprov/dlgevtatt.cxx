@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dlgevtatt.cxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,14 +29,13 @@
 #include "precompiled_scripting.hxx"
 #include "dlgevtatt.hxx"
 
-#ifndef SCRIPTING_DLGPROV_HXX
 #include "dlgprov.hxx"
-#endif
+
 #include <sfx2/sfx.hrc>
 #include <sfx2/app.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
+#include <tools/diagnose_ex.h>
+
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XDialogEventHandler.hpp>
 #include <com/sun/star/awt/XContainerWindowEventHandler.hpp>
@@ -53,6 +49,7 @@
 #include <com/sun/star/reflection/XIdlMethod.hpp>
 #include <com/sun/star/beans/MethodConcept.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
+
 #ifdef FAKE_VBA_EVENT_SUPPORT
 #include <ooo/vba/XVBAToOOEventDescGen.hpp>
 #endif
@@ -121,20 +118,25 @@ namespace dlgprov
     DialogVBAScriptListenerImpl::DialogVBAScriptListenerImpl( const Reference< XComponentContext >& rxContext, const Reference< awt::XControl >& rxControl, const Reference< frame::XModel >& xModel ) : DialogScriptListenerImpl( rxContext )
     {
         Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager() );
+        Sequence< Any > args(1);
         if ( xSMgr.is() )
         {
-            Sequence< Any > args(1);
             args[0] <<= xModel;
             mxListener = Reference< XScriptListener >( xSMgr->createInstanceWithArgumentsAndContext( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.EventListener" ) ), args, m_xContext ), UNO_QUERY );
         }
         if ( rxControl.is() )
         {
-            Reference< XPropertySet > xProps( rxControl->getModel(), UNO_QUERY );
             try
             {
+                Reference< XPropertySet > xProps( rxControl->getModel(), UNO_QUERY_THROW );
                 xProps->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name") ) ) >>= msDialogCodeName;
+                xProps.set( mxListener, UNO_QUERY_THROW );
+                xProps->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Model") ), args[ 0 ] );
             }
-            catch ( Exception&  ) {}
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
         }
 
     }
@@ -149,7 +151,10 @@ namespace dlgprov
             {
                 mxListener->firing( aScriptEventCopy );
             }
-            catch( Exception& ) {}
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
         }
     }
 #endif
@@ -193,7 +198,7 @@ namespace dlgprov
         return it->second;
     }
 #ifdef FAKE_VBA_EVENT_SUPPORT
-    Reference< XScriptEventsSupplier > DialogEventsAttacherImpl::getFakeVbaEventsSupplier( const Reference< XControl >& xControl )
+    Reference< XScriptEventsSupplier > DialogEventsAttacherImpl::getFakeVbaEventsSupplier( const Reference< XControl >& xControl, rtl::OUString& sControlName )
     {
         Reference< XScriptEventsSupplier > xEventsSupplier;
         Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager() );
@@ -201,8 +206,7 @@ namespace dlgprov
         {
             Reference< ooo::vba::XVBAToOOEventDescGen > xVBAToOOEvtDesc( xSMgr->createInstanceWithContext( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAToOOEventDesc" ) ), m_xContext ), UNO_QUERY );
             if ( xVBAToOOEvtDesc.is() )
-                xEventsSupplier.set( xVBAToOOEvtDesc->getEventSupplier( xControl ), UNO_QUERY );
-
+                xEventsSupplier.set( xVBAToOOEvtDesc->getEventSupplier( xControl, sControlName ), UNO_QUERY );
         }
         return xEventsSupplier;
     }
@@ -248,17 +252,9 @@ namespace dlgprov
                         if ( xListener_.is() )
                             bSuccess = true;
                     }
-                    catch ( IllegalArgumentException& )
+                    catch ( const Exception& )
                     {
-                    }
-                    catch ( IntrospectionException& )
-                    {
-                    }
-                    catch ( CannotCreateAdapterException& )
-                    {
-                    }
-                    catch ( ServiceNotRegisteredException& )
-                    {
+                        DBG_UNHANDLED_EXCEPTION();
                     }
 
                     try
@@ -271,17 +267,9 @@ namespace dlgprov
                                 aDesc.AddListenerParam, aDesc.EventMethod );
                         }
                     }
-                    catch( IllegalArgumentException& )
+                    catch ( const Exception& )
                     {
-                    }
-                    catch( IntrospectionException& )
-                    {
-                    }
-                    catch( CannotCreateAdapterException& )
-                    {
-                    }
-                    catch( ServiceNotRegisteredException& )
-                    {
+                        DBG_UNHANDLED_EXCEPTION();
                     }
                 }
             }
@@ -324,6 +312,20 @@ namespace dlgprov
         // go over all objects
         const Reference< XInterface >* pObjects = Objects.getConstArray();
         sal_Int32 nObjCount = Objects.getLength();
+#ifdef FAKE_VBA_EVENT_SUPPORT
+        Reference< awt::XControl > xDlgControl( Objects[ nObjCount - 1 ], uno::UNO_QUERY ); // last object is the dialog
+        rtl::OUString sDialogCodeName;
+        if ( xDlgControl.is() )
+        {
+            Reference< XPropertySet > xProps( xDlgControl->getModel(), UNO_QUERY );
+            try
+            {
+                xProps->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name") ) ) >>= sDialogCodeName;
+            }
+            catch( Exception& ){}
+        }
+#endif
+
         for ( sal_Int32 i = 0; i < nObjCount; ++i )
         {
             // We know that we have to do with instances of XControl.
@@ -338,7 +340,7 @@ namespace dlgprov
             Reference< XScriptEventsSupplier > xEventsSupplier( xControlModel, UNO_QUERY );
             attachEventsToControl( xControl, xEventsSupplier, Helper );
 #ifdef FAKE_VBA_EVENT_SUPPORT
-            xEventsSupplier.set( getFakeVbaEventsSupplier( xControl ) );
+            xEventsSupplier.set( getFakeVbaEventsSupplier( xControl, sDialogCodeName ) );
             attachEventsToControl( xControl, xEventsSupplier, Helper );
 #endif
         }
@@ -495,15 +497,9 @@ namespace dlgprov
                 }
             }
         }
-        catch ( RuntimeException& e )
+        catch ( const Exception& )
         {
-            OSL_TRACE( "DialogScriptListenerImpl::firing_impl: caught RuntimeException reason %s",
-                ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-        }
-        catch ( Exception& e )
-        {
-            OSL_TRACE( "DialogScriptListenerImpl::firing_impl: caught Exception reason %s",
-                ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -512,21 +508,21 @@ namespace dlgprov
         ::rtl::OUString sScriptURL;
         ::rtl::OUString sScriptCode( aScriptEvent.ScriptCode );
 
-    if ( aScriptEvent.ScriptType.compareToAscii( "StarBasic" ) == 0 )
-    {
-        // StarBasic script: convert ScriptCode to scriptURL
-        sal_Int32 nIndex = sScriptCode.indexOf( ':' );
-        if ( nIndex >= 0 && nIndex < sScriptCode.getLength() )
+        if ( aScriptEvent.ScriptType.compareToAscii( "StarBasic" ) == 0 )
         {
-            sScriptURL = ::rtl::OUString::createFromAscii( "vnd.sun.star.script:" );
-            sScriptURL += sScriptCode.copy( nIndex + 1 );
-            sScriptURL += ::rtl::OUString::createFromAscii( "?language=Basic&location=" );
-            sScriptURL += sScriptCode.copy( 0, nIndex );
+            // StarBasic script: convert ScriptCode to scriptURL
+            sal_Int32 nIndex = sScriptCode.indexOf( ':' );
+            if ( nIndex >= 0 && nIndex < sScriptCode.getLength() )
+            {
+                sScriptURL = ::rtl::OUString::createFromAscii( "vnd.sun.star.script:" );
+                sScriptURL += sScriptCode.copy( nIndex + 1 );
+                sScriptURL += ::rtl::OUString::createFromAscii( "?language=Basic&location=" );
+                sScriptURL += sScriptCode.copy( 0, nIndex );
+            }
+            ScriptEvent aSFScriptEvent( aScriptEvent );
+            aSFScriptEvent.ScriptCode = sScriptURL;
+            DialogSFScriptListenerImpl::firing_impl( aSFScriptEvent, pRet );
         }
-        ScriptEvent aSFScriptEvent( aScriptEvent );
-        aSFScriptEvent.ScriptCode = sScriptURL;
-        DialogSFScriptListenerImpl::firing_impl( aSFScriptEvent, pRet );
-    }
     }
 
     void DialogUnoScriptListenerImpl::firing_impl( const ScriptEvent& aScriptEvent, Any* pRet )
@@ -603,12 +599,10 @@ namespace dlgprov
                     bHandled = true;
                 }
             }
-            catch( com::sun::star::lang::IllegalArgumentException& )
-            {}
-            catch( com::sun::star::lang::NoSuchMethodException& )
-            {}
-            catch( com::sun::star::reflection::InvocationTargetException& )
-            {}
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
         }
 
         if( bHandled )

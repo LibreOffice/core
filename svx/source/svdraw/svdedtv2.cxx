@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdedtv2.cxx,v $
- * $Revision: 1.33.146.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +29,7 @@
 #include "precompiled_svx.hxx"
 
 #include <svx/svdedtv.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdogrp.hxx>   // fuer's Gruppieren
 #include <svx/svdovirt.hxx>  // fuer VirtualObject-Bundling (Writer)
@@ -48,8 +45,8 @@
 #include <svx/svdetc.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <vcl/msgbox.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/eeitem.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 
@@ -816,7 +813,7 @@ void SdrEditView::DistributeMarkedObjects()
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            AbstractSvxDistributeDialog *pDlg = pFact->CreateSvxDistributeDialog(NULL, aNewAttr, RID_SVXPAGE_DISTRIBUTE);
+            AbstractSvxDistributeDialog *pDlg = pFact->CreateSvxDistributeDialog(NULL, aNewAttr);
             DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
 
             UINT16 nResult = pDlg->Execute();

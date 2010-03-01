@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: srchctrl.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 
 // include ---------------------------------------------------------------
 #include <tools/pstm.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <sfx2/objsh.hxx>
 
 #include <svx/svxids.hrc>
@@ -44,7 +41,7 @@
 
 #include "srchctrl.hxx"
 #include "srchdlg.hxx"
-#include <sfx2/srchitem.hxx>
+#include <svl/srchitem.hxx>
 
 // class SvxSearchFamilyControllerItem -----------------------------------
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: attrlist.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,13 +33,6 @@
 #include <xmloff/xmltoken.hxx>
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
-
-#if OSL_DEBUG_LEVEL == 0
-#  ifndef NDEBUG
-#    define NDEBUG
-#  endif
-#endif
-#include <assert.h>
 
 #include <xmloff/attrlist.hxx>
 
@@ -183,7 +173,7 @@ void SvXMLAttributeList::Clear()
 {
     m_pImpl->vecAttribute.clear();
 
-    assert( ! getLength() );
+    OSL_ASSERT( ! getLength() );
 }
 
 void SvXMLAttributeList::RemoveAttribute( const OUString sName )
@@ -207,7 +197,7 @@ void SvXMLAttributeList::SetAttributeList( const uno::Reference< ::com::sun::sta
 
 void SvXMLAttributeList::AppendAttributeList( const uno::Reference< ::com::sun::star::xml::sax::XAttributeList >  &r )
 {
-    assert( r.is() );
+    OSL_ASSERT( r.is() );
 
     sal_Int16 nMax = r->getLength();
     SvXMLAttributeList_Impl::size_type nTotalSize =
@@ -220,7 +210,7 @@ void SvXMLAttributeList::AppendAttributeList( const uno::Reference< ::com::sun::
             r->getValueByIndex( i )));
     }
 
-    assert( nTotalSize == (SvXMLAttributeList_Impl::size_type)getLength());
+    OSL_ASSERT( nTotalSize == (SvXMLAttributeList_Impl::size_type)getLength());
 }
 
 void SvXMLAttributeList::SetValueByIndex( sal_Int16 i,

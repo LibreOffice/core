@@ -3,7 +3,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -47,6 +47,14 @@
       <prop oor:name="SuppressAccelerators" oor:type="xs:string" oor:op="replace">
         <value>false</value>
       </prop>
+    </node>
+    <node oor:name="PrintDialog" oor:op="replace">
+        <prop oor:name="Collate" oor:op="replace" oor:type="xs:string">
+            <value>true</value>
+        </prop>
+        <prop oor:name="CollateBox" oor:op="replace" oor:type="xs:string">
+            <value>Default</value>
+        </prop>
     </node>
   </node>
   <node oor:name="DefaultFonts">
@@ -1648,9 +1656,9 @@
           <value>Default,Serif</value>
         </prop>
       </node>
-      <node oor:name="bitstreamveramono" oor:op="replace">
+      <node oor:name="bitstreamverasansmono" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>dejavumono</value>
+          <value>dejavusansmono;couriernew;liberationmono</value>
         </prop>
         <prop oor:name="SubstFontsHTML"><value>monospace</value></prop>
         <prop oor:name="FontWeight"><value>Normal</value></prop>
@@ -2377,7 +2385,7 @@
       </node>
       <node oor:name="couriernew" oor:op="replace">
     <prop oor:name="SubstFonts">
-      <value>cumberland;cumberlandamt;liberationmono;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol</value>
+      <value>cumberland;cumberlandamt;liberationmono;dejavusansmono;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol</value>
         </prop>
     <prop oor:name="SubstFontsMS"><value></value></prop>
     <prop oor:name="SubstFontsPS"><value>Courier</value></prop>
@@ -2388,7 +2396,7 @@
       </node>
       <node oor:name="cumberland" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>cumberlandamt;couriernew;liberationmono;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol</value>
+          <value>cumberlandamt;couriernew;liberationmono;dejavusansmono;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>Courier New</value>
@@ -2411,7 +2419,7 @@
       </node>
       <node oor:name="cumberlandamt" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>cumberland;couriernew;liberationmono;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol</value>
+          <value>cumberland;couriernew;liberationmono;dejavusansmono;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>Courier New</value>
@@ -2498,9 +2506,9 @@
           <value>Default,Serif</value>
         </prop>
       </node>
-      <node oor:name="dejavumono" oor:op="replace">
+      <node oor:name="dejavusansmono" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>bitstreamveramono</value>
+          <value>bitstreamverasansmono;couriernew;liberationmono</value>
         </prop>
         <prop oor:name="SubstFontsHTML"><value>monospace</value></prop>
         <prop oor:name="FontWeight"><value>Normal</value></prop>
@@ -4739,7 +4747,7 @@
       </node>
       <node oor:name="liberationmono" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>cumberland;cumberlandamt;couriernew;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol</value>
+          <value>cumberland;cumberlandamt;couriernew;dejavusansmono;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>Courier New</value>

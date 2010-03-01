@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: localebackend.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +36,7 @@
 
 #include <stdio.h>
 
-#if defined(LINUX) || defined(SOLARIS) || defined(IRIX) || defined(NETBSD) || defined(FREEBSD) || defined(OS2)
+#if defined(LINUX) || defined(SOLARIS) || defined(NETBSD) || defined(FREEBSD) || defined(OS2)
 
 #include <rtl/ustrbuf.hxx>
 #include <locale.h>
@@ -256,7 +253,7 @@ LocaleBackend* LocaleBackend::createInstance(
 
 rtl::OUString LocaleBackend::getLocale(void)
 {
-#if defined(LINUX) || defined(SOLARIS) || defined(IRIX) || defined(NETBSD) || defined(FREEBSD) || defined(OS2)
+#if defined(LINUX) || defined(SOLARIS) || defined(NETBSD) || defined(FREEBSD) || defined(OS2)
     return ImplGetLocale(LC_CTYPE);
 #elif defined (MACOSX)
     return ImplGetLocale("AppleLocale");
@@ -269,7 +266,7 @@ rtl::OUString LocaleBackend::getLocale(void)
 
 rtl::OUString LocaleBackend::getUILocale(void)
 {
-#if defined(LINUX) || defined(SOLARIS) || defined(IRIX) || defined(NETBSD) || defined(FREEBSD) || defined(OS2)
+#if defined(LINUX) || defined(SOLARIS) || defined(NETBSD) || defined(FREEBSD) || defined(OS2)
     return ImplGetLocale(LC_MESSAGES);
 #elif defined(MACOSX)
     return ImplGetLocale("AppleLanguages");

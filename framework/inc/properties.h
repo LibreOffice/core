@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: properties.h,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -193,25 +190,26 @@ namespace framework{
 //_______________________________________________
 /** properties for "LayoutManager" class */
 
-#define LAYOUTMANAGER_PROPNAME_ASCII_MENUBARCLOSER      "MenuBarCloser"
-#define LAYOUTMANAGER_PROPNAME_ASCII_AUTOMATICTOOLBARS  "AutomaticToolbars"
-#define LAYOUTMANAGER_PROPNAME_ASCII_REFRESHVISIBILITY  "RefreshContextToolbarVisibility"
-#define LAYOUTMANAGER_PROPNAME_ASCII_HIDECURRENTUI      "HideCurrentUI"
-#define LAYOUTMANAGER_PROPNAME_ASCII_LOCKCOUNT          "LockCount"
+#define LAYOUTMANAGER_PROPNAME_ASCII_MENUBARCLOSER          "MenuBarCloser"
+#define LAYOUTMANAGER_PROPNAME_ASCII_AUTOMATICTOOLBARS      "AutomaticToolbars"
+#define LAYOUTMANAGER_PROPNAME_ASCII_REFRESHVISIBILITY      "RefreshContextToolbarVisibility"
+#define LAYOUTMANAGER_PROPNAME_ASCII_HIDECURRENTUI          "HideCurrentUI"
+#define LAYOUTMANAGER_PROPNAME_ASCII_LOCKCOUNT              "LockCount"
+#define LAYOUTMANAGER_PROPNAME_ASCII_PRESERVE_CONTENT_SIZE  "PreserveContentSize"
 
 #define LAYOUTMANAGER_PROPNAME_MENUBARCLOSER            ::rtl::OUString::createFromAscii( LAYOUTMANAGER_PROPNAME_ASCII_MENUBARCLOSER )
 #define LAYOUTMANAGER_PROPNAME_AUTOMATICTOOLBARS        ::rtl::OUString::createFromAscii( LAYOUTMANAGER_PROPNAME_ASCII_AUTOMATICTOOLBARS )
 #define LAYOUTMANAGER_PROPNAME_REFRESHVISIBILITY        ::rtl::OUString::createFromAscii( LAYOUTMANAGER_PROPNAME_ASCII_REFRESHVISIBILITY )
 #define LAYOUTMANAGER_PROPNAME_HIDECURRENTUI            ::rtl::OUString::createFromAscii( LAYOUTMANAGER_PROPNAME_ASCII_HIDECURRENTUI )
 #define LAYOUTMANAGER_PROPNAME_LOCKCOUNT                ::rtl::OUString::createFromAscii( LAYOUTMANAGER_PROPNAME_ASCII_LOCKCOUNT )
+#define LAYOUTMANAGER_PROPNAME_PRESERVE_CONTENT_SIZE    ::rtl::OUString::createFromAscii( LAYOUTMANAGER_PROPNAME_ASCII_PRESERVE_CONTENT_SIZE )
 
 #define LAYOUTMANAGER_PROPHANDLE_MENUBARCLOSER          0
 #define LAYOUTMANAGER_PROPHANDLE_AUTOMATICTOOLBARS      1
 #define LAYOUTMANAGER_PROPHANDLE_REFRESHVISIBILITY      2
 #define LAYOUTMANAGER_PROPHANDLE_HIDECURRENTUI          3
 #define LAYOUTMANAGER_PROPHANDLE_LOCKCOUNT              4
-
-#define LAYOUTMANAGER_PROPCOUNT                         5
+#define LAYOUTMANAGER_PROPHANDLE_PRESERVE_CONTENT_SIZE  5
 
 //_______________________________________________
 /** properties for "UICommandDescription" class */

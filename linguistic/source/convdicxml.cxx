@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: convdicxml.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +33,6 @@
 #include <tools/string.hxx>
 #include <i18npool/mslangid.hxx>
 #include <tools/stream.hxx>
-#include <sfx2/docfile.hxx>
 #include <osl/mutex.hxx>
 #include <unotools/processfactory.hxx>
 #include <ucbhelper/content.hxx>
@@ -335,7 +331,7 @@ void ConvDicXMLRightTextContext_Impl::EndElement()
 
 ///////////////////////////////////////////////////////////////////////////
 
-sal_Bool ConvDicXMLExport::Export( SfxMedium & /*rMedium*/ )
+sal_Bool ConvDicXMLExport::Export()
 {
     sal_Bool bRet = sal_False;
 

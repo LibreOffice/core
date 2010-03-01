@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: step2.cxx,v $
- * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,57 +52,6 @@ using namespace com::sun::star::script;
 using com::sun::star::uno::Reference;
 
 SbxVariable* getVBAConstant( const String& rName );
-
-const static String aThisComponent( RTL_CONSTASCII_USTRINGPARAM("ThisComponent") );
-const static String aVBAHook( RTL_CONSTASCII_USTRINGPARAM( "VBAGlobals" ) );
-//  i#i68894#
-SbxArray* getVBAGlobals( )
-{
-    static SbxArrayRef pArray;
-    static bool isInitialised = false;
-    if ( isInitialised )
-        return pArray;
-    Reference < XComponentContext > xCtx;
-    Reference < XPropertySet > xProps(
-    ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
-    xCtx.set( xProps->getPropertyValue( rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))),
-            UNO_QUERY_THROW );
-    SbUnoObject dGlobs( String( RTL_CONSTASCII_USTRINGPARAM("ExcelGlobals") ), xCtx->getValueByName( ::rtl::OUString::createFromAscii( "/singletons/ooo.vba.theGlobals") ) );
-
-    SbxVariable *vba = dGlobs.Find( String( RTL_CONSTASCII_USTRINGPARAM("getGlobals") ) , SbxCLASS_DONTCARE );
-
-    if ( vba )
-    {
-        pArray = static_cast<SbxArray *>(vba->GetObject());
-        isInitialised = true;
-        return pArray;
-    }
-    return NULL;
-}
-
-//  i#i68894#
-SbxVariable* VBAFind( const String& rName, SbxClassType t )
-{
-    if( rName == aThisComponent )
-        return NULL;
-
-    SbxArray *pVBAGlobals = getVBAGlobals( );
-    for (USHORT i = 0; pVBAGlobals && i < pVBAGlobals->Count(); i++)
-    {
-        SbxVariable *pElem = pVBAGlobals->Get( i );
-        if (!pElem || !pElem->IsObject())
-            continue;
-        SbxObject *pVba = static_cast<SbxObject *>(pElem->GetObject());
-        SbxVariable *pVbaVar = pVba ? pVba->Find( rName, t ) : NULL;
-        if( pVbaVar )
-        {
-            return pVbaVar;
-        }
-    }
-    return NULL;
-
-}
 
 // Suchen eines Elements
 // Die Bits im String-ID:
@@ -191,7 +137,7 @@ SbxVariable* SbiRuntime::FindElement
                 if ( bVBAEnabled )
                 {
                     // Try Find in VBA symbols space
-                    pElem = VBAFind( aName, SbxCLASS_DONTCARE );
+                    pElem = rBasic.VBAFind( aName, SbxCLASS_DONTCARE );
                     if ( pElem )
                         bSetName = false; // don't overwrite uno name
                     else

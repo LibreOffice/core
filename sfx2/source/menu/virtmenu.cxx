@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: virtmenu.cxx,v $
- * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 #include <sot/factory.hxx>
 #include <svtools/menuoptions.hxx>
 #include <svtools/imagemgr.hxx>
-#include <svtools/imageitm.hxx>
+#include <svl/imageitm.hxx>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
@@ -284,7 +281,7 @@ SfxVirtualMenu::~SfxVirtualMenu()
     DBG_DTOR(SfxVirtualMenu, 0);
 
     DELETEZ( pImageControl );
-    SvtMenuOptions().RemoveListener( LINK( this, SfxVirtualMenu, SettingsChanged ) );
+    SvtMenuOptions().RemoveListenerLink( LINK( this, SfxVirtualMenu, SettingsChanged ) );
 
     if ( bIsActive )
     {
@@ -396,7 +393,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
     const int bOleServer = FALSE;
     const int bMac = FALSE;
     SvtMenuOptions aOptions;
-    aOptions.AddListener( LINK( this, SfxVirtualMenu, SettingsChanged ) );
+    aOptions.AddListenerLink( LINK( this, SfxVirtualMenu, SettingsChanged ) );
 
     // iterate through the items
     pBindings->ENTERREGISTRATIONS(); ++nLocks;
@@ -417,8 +414,12 @@ void SfxVirtualMenu::CreateFromSVMenu()
             DELETEZ( pPopup );
         }
 
+        const String sItemText = pSVMenu->GetItemText(nSlotId);
+        const String sHelpText = pSVMenu->GetHelpText(nSlotId);
+
         if ( pPopup )
         {
+
             SfxMenuControl *pMnuCtrl =
                 SfxMenuControl::CreateControl(nSlotId, *pPopup, *pBindings);
 
@@ -434,10 +435,8 @@ void SfxVirtualMenu::CreateFromSVMenu()
 
                 SfxMenuCtrlArr_Impl &rCtrlArr = GetAppCtrl_Impl();
                 rCtrlArr.C40_INSERT( SfxMenuControl, pMnuCtrl, rCtrlArr.Count() );
-                (pItems+nPos)->Bind( 0, nSlotId, pSVMenu->GetItemText(nSlotId),
-                                    pSVMenu->GetHelpText(nSlotId), *pBindings);
-                pMnuCtrl->Bind( this, nSlotId, pSVMenu->GetItemText(nSlotId),
-                                pSVMenu->GetHelpText(nSlotId), *pBindings);
+                (pItems+nPos)->Bind( 0, nSlotId, sItemText, sHelpText, *pBindings);
+                pMnuCtrl->Bind( this, nSlotId, sItemText, sHelpText, *pBindings);
 
                 if (  Application::GetSettings().GetStyleSettings().GetUseImagesInMenus() )
                 {
@@ -473,7 +472,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
                 {
                     pMnuCtrl->Bind( this, nSlotId,
                         *new SfxVirtualMenu(nSlotId, this, *pPopup, bHelpInitialized, *pBindings, bOLE, bResCtor),
-                        pSVMenu->GetItemText(nSlotId), pSVMenu->GetHelpText(nSlotId),
+                        sItemText, sHelpText,
                         *pBindings );
                 }
             }
@@ -510,12 +509,12 @@ void SfxVirtualMenu::CreateFromSVMenu()
                     if ( aCmd.Len() && (( nSlotId < SID_SFX_START ) || ( nSlotId > SHRT_MAX )) )
                     {
                         // try to create control via comand name
-                        pMnuCtrl = SfxMenuControl::CreateControl( aCmd, nSlotId, *pSVMenu, *pBindings, this );
+                        pMnuCtrl = SfxMenuControl::CreateControl( aCmd, nSlotId, *pSVMenu, sItemText, sHelpText, *pBindings, this );
                         if ( pMnuCtrl )
                         {
                             SfxMenuCtrlArr_Impl &rCtrlArr = GetAppCtrl_Impl();
                             rCtrlArr.C40_INSERT( SfxMenuControl, pMnuCtrl, rCtrlArr.Count());
-                            (pItems+nPos)->Bind( 0, nSlotId, pSVMenu->GetItemText(nSlotId), pSVMenu->GetHelpText(nSlotId), *pBindings);
+                            (pItems+nPos)->Bind( 0, nSlotId, sItemText, sHelpText, *pBindings);
                         }
                     }
 
@@ -527,13 +526,13 @@ void SfxVirtualMenu::CreateFromSVMenu()
                         {
                             SfxMenuCtrlArr_Impl &rCtrlArr = GetAppCtrl_Impl();
                             rCtrlArr.C40_INSERT( SfxMenuControl, pMnuCtrl, rCtrlArr.Count());
-                            (pItems+nPos)->Bind( 0, nSlotId, pSVMenu->GetItemText(nSlotId), pSVMenu->GetHelpText(nSlotId), *pBindings);
+                            (pItems+nPos)->Bind( 0, nSlotId, sItemText, sHelpText, *pBindings);
                         }
                         else
                             // take default control
                             pMnuCtrl = (pItems+nPos);
 
-                        pMnuCtrl->Bind( this, nSlotId, pSVMenu->GetItemText(nSlotId), pSVMenu->GetHelpText(nSlotId), *pBindings);
+                        pMnuCtrl->Bind( this, nSlotId, sItemText, sHelpText, *pBindings);
                     }
 
                     if ( Application::GetSettings().GetStyleSettings().GetUseImagesInMenus() )
@@ -1252,36 +1251,6 @@ String SfxVirtualMenu::GetItemHelpText( USHORT nSlotId ) const
         return (pItems+nPos)->GetHelpText();
     return String();
 }
-
-//--------------------------------------------------------------------
-/*
-void SfxVirtualMenu::InvalidateKeyCodes()
-{
-    DBG_ASSERT( pSVMenu, "invalidating key of incomplete menu" );
-
-    SfxApplication* pSfxApp = SFX_APP();
-    SfxViewFrame *pViewFrame = pBindings->GetDispatcher()->GetFrame();
-    SfxAcceleratorManager* pAccMgr = pViewFrame->GetViewShell()->GetAccMgr_Impl();
-    SfxAcceleratorManager* pAppAccel = pSfxApp->GetAppAccel_Impl();
-    if ( !pAccMgr )
-        pAccMgr = pAppAccel;
-
-    for ( USHORT nPos = 0; nPos < pSVMenu->GetItemCount(); ++nPos )
-    {
-        USHORT nId = pSVMenu->GetItemId(nPos);
-        SfxVirtualMenu *pPopup = GetPopupMenu(nId);
-//        if ( pPopup )
-//            pPopup->InvalidateKeyCodes();
-//        else if ( nId )
-        if ( nId && !pSVMenu->GetPopupMenu( nId ) )
-        {
-            KeyCode aCode = pAccMgr->GetKeyCode( nId );
-            if ( !aCode.GetCode() && pAccMgr != pAppAccel )
-                aCode = pAppAccel->GetKeyCode( nId );
-            pSVMenu->SetAccelKey( nId, aCode );
-        }
-    }
-} */
 
 //--------------------------------------------------------------------
 

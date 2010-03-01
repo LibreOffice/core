@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: config.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,8 +36,13 @@
 #include <tchar.h>
 #endif
 
+#ifdef _AMD64_
+#define MODULE_NAME TEXT("shlxthdl_x64.dll")
+#define MODULE_NAME_FILTER TEXT("ooofilt_x64.dll")
+#else
 #define MODULE_NAME TEXT("shlxthdl.dll")
 #define MODULE_NAME_FILTER TEXT("ooofilt.dll")
+#endif
 
 #define COLUMN_HANDLER_DESCRIPTIVE_NAME    TEXT("OpenOffice.org Column Handler")
 #define INFOTIP_HANDLER_DESCRIPTIVE_NAME   TEXT("OpenOffice.org Infotip Handler")

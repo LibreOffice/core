@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: quotedstring.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -152,7 +149,6 @@ namespace connectivity
                         // Vorzeitiger Abbruch der Schleife moeglich, denn
                         // wir haben, was wir wollten.
                         nStartPos = i+1;
-                        *pData = 0;
                         break;
                     }
                     else
@@ -161,6 +157,7 @@ namespace connectivity
                     }
                 }
             } // for( xub_StrLen i = nStartPos; i < nLen; ++i )
+            *pData = 0;
             _rStr.ReleaseBufferAccess(xub_StrLen(pData - pStart));
         }
     }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: mnuitem.cxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,8 +48,8 @@
 #include <comphelper/processfactory.hxx>
 #endif
 #include <tools/urlobj.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/menuoptions.hxx>
 #include <framework/menuconfiguration.hxx>
@@ -542,12 +539,32 @@ SfxUnoMenuControl* SfxMenuControl::CreateControl( const String& rCmd,
     return new SfxUnoMenuControl( rCmd, nId, rMenu, rBindings, pVirt );
 }
 
+SfxUnoMenuControl* SfxMenuControl::CreateControl( const String& rCmd,
+        USHORT nId, Menu& rMenu, const String& sItemText, const String& sHelpText,
+        SfxBindings& rBindings, SfxVirtualMenu* pVirt)
+{
+    return new SfxUnoMenuControl( rCmd, nId, rMenu, sItemText, sHelpText, rBindings, pVirt);
+}
+
 SfxUnoMenuControl::SfxUnoMenuControl( const String& rCmd, USHORT nSlotId,
     Menu& rMenu, SfxBindings& rBindings, SfxVirtualMenu* pVirt )
     : SfxMenuControl( nSlotId, rBindings )
 {
     Bind( pVirt, nSlotId, rMenu.GetItemText(nSlotId),
                         rMenu.GetHelpText(nSlotId), rBindings);
+    UnBind();
+    pUnoCtrl = new SfxUnoControllerItem( this, rBindings, rCmd );
+    pUnoCtrl->acquire();
+    pUnoCtrl->GetNewDispatch();
+}
+
+SfxUnoMenuControl::SfxUnoMenuControl(
+    const String& rCmd, USHORT nSlotId, Menu& /*rMenu*/,
+    const String& rItemText, const String& rHelpText,
+    SfxBindings& rBindings, SfxVirtualMenu* pVirt)
+    : SfxMenuControl( nSlotId, rBindings )
+{
+    Bind( pVirt, nSlotId, rItemText, rHelpText, rBindings);
     UnBind();
     pUnoCtrl = new SfxUnoControllerItem( this, rBindings, rCmd );
     pUnoCtrl->acquire();

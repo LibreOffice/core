@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: appserv.cxx,v $
- * $Revision: 1.78 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,7 +59,7 @@
 #ifndef _SVT_DOC_ADDRESSTEMPLATE_HXX_
 #include <svtools/addresstemplate.hxx>
 #endif
-#include <svtools/visitem.hxx>
+#include <svl/visitem.hxx>
 #include <unotools/intlwrapper.hxx>
 
 #ifndef _UNOTOOLS_CONFIGMGR_HXX_
@@ -71,10 +68,10 @@
 #include <tools/config.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/msgbox.hxx>
-#include <svtools/cancel.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/cancel.hxx>
+#include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/basrdll.hxx>
@@ -84,9 +81,9 @@
 #include <vcl/stdtext.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#include <svtools/pathoptions.hxx>
-#include <svtools/moduleoptions.hxx>
-#include <svtools/regoptions.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/moduleoptions.hxx>
+#include <unotools/regoptions.hxx>
 #include <svtools/helpopt.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/shl.hxx>
@@ -1209,7 +1206,7 @@ void SfxApplication::OfaState_Impl(SfxItemSet &rSet)
             {
                 case SID_ONLINE_REGISTRATION:
                 {
-                    ::svt::RegOptions aOptions;
+                    ::utl::RegOptions aOptions;
                     if ( !aOptions.allowMenu() )
                         rSet.DisableItem( SID_ONLINE_REGISTRATION );
                 }

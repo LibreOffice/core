@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dlgctrl.cxx,v $
- * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,6 +57,7 @@
 #include <svx/svdopath.hxx>
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
+#include "linectrl.hrc"
 
 #define OUTPUT_DRAWMODE_COLOR       (DRAWMODE_DEFAULT)
 #define OUTPUT_DRAWMODE_CONTRAST    (DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT)
@@ -1772,6 +1770,30 @@ void LineLB::Fill( const XDashList* pList )
             InsertEntry( pEntry->GetName() );
     }
     SetUpdateMode( TRUE );
+}
+
+void LineLB::FillStyles()
+{
+    ResMgr& rMgr = DIALOG_MGR();
+
+    // Linienstile
+    Clear();
+    InsertEntry( String( ResId( RID_SVXSTR_INVISIBLE, rMgr ) ) );
+
+    const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
+    Bitmap aBitmap ( SVX_RES ( RID_SVXCTRL_LINECTRL ) );
+    Color aSourceColors[2];
+    Color aDestColors[2];
+
+    aSourceColors[0] = Color( COL_WHITE );
+    aSourceColors[1] = Color( COL_BLACK );
+
+    aDestColors[0] = rStyles.GetFieldColor();
+    aDestColors[1] = rStyles.GetFieldTextColor();
+
+    aBitmap.Replace ( aSourceColors, aDestColors, 2 );
+    Image aSolidLine ( aBitmap );
+    InsertEntry( String( ResId( RID_SVXSTR_SOLID, rMgr ) ), aSolidLine );
 }
 
 /************************************************************************/

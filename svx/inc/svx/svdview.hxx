@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdview.hxx,v $
- * $Revision: 1.5.76.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +35,7 @@
 #include <svtools/accessibilityoptions.hxx>
 #include "svx/svxdllapi.h"
 #include <svx/svdcrtv.hxx>
+#include <unotools/options.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -197,8 +195,6 @@ class SVX_DLLPUBLIC SdrView: public SdrCreateView, public tools::WeakBase< SdrVi
 protected:
     SvtAccessibilityOptions maAccessibilityOptions;
 
-    virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
-
 public:
     TYPEINFO();
     SdrView(SdrModel* pModel1, OutputDevice* pOut = 0L);
@@ -234,6 +230,8 @@ public:
     virtual BOOL MouseButtonUp(const MouseEvent& rMEvt, Window* pWin);
     virtual BOOL MouseMove(const MouseEvent& rMEvt, Window* pWin);
     virtual BOOL Command(const CommandEvent& rCEvt, Window* pWin);
+
+    virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
 
     BOOL SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll=FALSE) { return SdrCreateView::SetAttributes(rSet,bReplaceAll); }
     BOOL SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAttr=FALSE) { return SdrCreateView::SetStyleSheet(pStyleSheet,bDontRemoveHardAttr); }

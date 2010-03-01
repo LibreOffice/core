@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: templdlg.cxx,v $
- * $Revision: 1.58.46.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,14 +31,14 @@
 #ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
 #endif
-#include <svtools/intitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/style.hxx>
+#include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/style.hxx>
 #ifndef GCC
 #endif
 
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <unotools/intlwrapper.hxx>

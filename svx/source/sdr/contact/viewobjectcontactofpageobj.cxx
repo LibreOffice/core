@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewobjectcontactofpageobj.cxx,v $
- *
- * $Revision: 1.2.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +40,7 @@
 #include <svx/svdpage.hxx>
 #include <unoapi.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
+#include <drawinglayer/primitive2d/hittestprimitive2d.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -153,7 +150,7 @@ namespace sdr
                     // would be possible, but would require the internal transformation
                     // which maps between the page visualisation object and the page
                     // content, including the aspect ratios (for details see in
-                    // PagePreviewPrimitive2D::createLocalDecomposition)
+                    // PagePreviewPrimitive2D::create2DDecomposition)
                     basegfx::B2DRange(),
 
                     GetXDrawPageForSdrPage(const_cast< SdrPage* >(pStartPage)),
@@ -234,6 +231,9 @@ namespace sdr
                 aPageObjectTransform.set(1, 2, aPageObjectBound.getMinY());
             }
 
+            // #i102637# add gray frame also when printing and page exists (handout pages)
+            const bool bCreateGrayFrame(!GetObjectContact().isOutputToPrinter() || pPage);
+
             // get displayed page's content. This is the uscaled page content
             if(mpExtractor && pPage)
             {
@@ -289,10 +289,28 @@ namespace sdr
                     xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xPagePreview, 1);
                 }
             }
+            else if(bCreateGrayFrame)
+            {
+                // #i105146# no content, but frame display. To make hitting the page preview objects
+                // on the handout page more simple, add a HitTest fill primitive
+                const basegfx::B2DRange aUnitRange(0.0, 0.0, 1.0, 1.0);
+                basegfx::B2DPolygon aOutline(basegfx::tools::createPolygonFromRect(aUnitRange));
+                aOutline.transform(aPageObjectTransform);
+
+                const drawinglayer::primitive2d::Primitive2DReference xHitFill(
+                    new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+                        basegfx::B2DPolyPolygon(aOutline),
+                        basegfx::BColor(0.0, 0.0, 0.0)));
+
+                const drawinglayer::primitive2d::Primitive2DReference xHit(
+                    new drawinglayer::primitive2d::HitTestPrimitive2D(
+                        drawinglayer::primitive2d::Primitive2DSequence(&xHitFill, 1)));
+
+                xRetval = drawinglayer::primitive2d::Primitive2DSequence(&xHit, 1);
+            }
 
             // add a gray outline frame, except not when printing
-            // #i102637# add frame also when printing and page exists (handout pages)
-            if(!GetObjectContact().isOutputToPrinter() || pPage)
+            if(bCreateGrayFrame)
             {
                 const Color aFrameColor(aColorConfig.GetColorValue(svtools::OBJECTBOUNDARIES).nColor);
                 basegfx::B2DPolygon aOwnOutline(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));

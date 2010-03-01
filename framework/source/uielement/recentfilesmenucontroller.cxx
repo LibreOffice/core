@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: recentfilesmenucontroller.cxx,v $
- * $Revision: 1.9.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,7 +59,7 @@
 #include <vcl/i18nhelp.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <svtools/historyoptions.hxx>
+#include <unotools/historyoptions.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <osl/file.hxx>
 //#include <tools/solar.hrc>

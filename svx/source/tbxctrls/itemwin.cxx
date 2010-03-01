@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: itemwin.cxx,v $
- * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -279,26 +276,7 @@ void SvxLineBox::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SvxLineBox::FillControl()
 {
-    Clear();
-
-    InsertEntry( SVX_RESSTR(RID_SVXSTR_INVISIBLE) );
-
-    Bitmap aBitmap ( SVX_RES ( RID_SVXCTRL_LINECTRL ) );
-
-    ::Color aSourceColors[2];
-    ::Color aDestColors[2];
-
-    aSourceColors[0] = ::Color( COL_WHITE );
-    aSourceColors[1] = ::Color( COL_BLACK );
-
-    const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
-    aDestColors[0] = rStyles.GetFieldColor();
-    aDestColors[1] = rStyles.GetFieldTextColor();
-
-    aBitmap.Replace ( aSourceColors, aDestColors, 2 );
-    Image aSolidLine ( aBitmap );
-    InsertEntry( SVX_RESSTR(RID_SVXSTR_SOLID), aSolidLine );
-
+    FillStyles();
     if ( !mpSh )
         mpSh = SfxObjectShell::Current();
 
@@ -308,6 +286,7 @@ void SvxLineBox::FillControl()
         if ( pItem )
             Fill( pItem->GetDashList() );
     }
+
 
 //  rBindings.Invalidate( SID_ATTR_LINE_DASH );
 }
@@ -512,7 +491,7 @@ SvxMetricField::SvxMetricField(
     SetLast( 5000 );
     SetFirst( 0 );
 
-    eDlgUnit = GetModuleFieldUnit( NULL );
+    eDlgUnit = SfxModule::GetCurrentFieldUnit();
     SetFieldUnit( *this, eDlgUnit, FALSE );
     Show();
 }
@@ -597,8 +576,7 @@ void SvxMetricField::SetCoreUnit( SfxMapUnit eUnit )
 
 void SvxMetricField::RefreshDlgUnit()
 {
-    FieldUnit eTmpUnit = GetModuleFieldUnit( NULL );
-
+    FieldUnit eTmpUnit = SfxModule::GetCurrentFieldUnit();
     if ( eDlgUnit != eTmpUnit )
     {
         eDlgUnit = eTmpUnit;

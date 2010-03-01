@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: runtime.cxx,v $
- * $Revision: 1.39 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,8 +30,8 @@
 #include <tools/fsys.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/wldcrd.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/syslocale.hxx>
+#include <svl/zforlist.hxx>
+#include <unotools/syslocale.hxx>
 #include "runtime.hxx"
 #include "sbintern.hxx"
 #include "opcodes.hxx"
@@ -867,7 +864,7 @@ void SbiRuntime::PushVar( SbxVariable* pVar )
 
 SbxVariableRef SbiRuntime::PopVar()
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     if( !nExprLvl )
     {
         StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
@@ -902,7 +899,7 @@ BOOL SbiRuntime::ClearExprStack()
 SbxVariable* SbiRuntime::GetTOS( short n )
 {
     n = nExprLvl - n - 1;
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     if( n < 0 )
     {
         StarBASIC::FatalError( SbERR_INTERNAL_ERROR );

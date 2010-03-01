@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: hierarchycontent.hxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,6 +98,9 @@ public:
 
     sal_Bool getIsDocument() const { return !getIsFolder(); }
 
+    com::sun::star::uno::Sequence< com::sun::star::ucb::ContentInfo >
+    getCreatableContentsInfo() const;
+
     const HierarchyEntryData & getHierarchyEntryData() const { return m_aData; }
 
 private:
@@ -117,7 +117,7 @@ class HierarchyContent : public ::ucbhelper::ContentImplHelper,
 {
     enum ContentKind  { LINK, FOLDER, ROOT };
     enum ContentState { TRANSIENT,  // created via CreateNewContent,
-                                       // but did not process "insert" yet
+                                        // but did not process "insert" yet
                         PERSISTENT, // processed "insert"
                         DEAD        // processed "delete"
                       };
@@ -198,7 +198,7 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
     getPropertyValues( const ::com::sun::star::uno::Sequence<
-                             ::com::sun::star::beans::Property >& rProperties );
+                            ::com::sun::star::beans::Property >& rProperties );
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
     setPropertyValues(
             const ::com::sun::star::uno::Sequence<
@@ -270,7 +270,7 @@ public:
     execute( const com::sun::star::ucb::Command& aCommand,
              sal_Int32 CommandId,
              const com::sun::star::uno::Reference<
-                 com::sun::star::ucb::XCommandEnvironment >& Environment )
+                com::sun::star::ucb::XCommandEnvironment >& Environment )
         throw( com::sun::star::uno::Exception,
                com::sun::star::ucb::CommandAbortedException,
                com::sun::star::uno::RuntimeException );
@@ -300,7 +300,7 @@ public:
     getPropertyValues( const ::com::sun::star::uno::Reference<
                         ::com::sun::star::lang::XMultiServiceFactory >& rSMgr,
                        const ::com::sun::star::uno::Sequence<
-                           ::com::sun::star::beans::Property >& rProperties,
+                            ::com::sun::star::beans::Property >& rProperties,
                        const HierarchyContentProperties& rData,
                        HierarchyContentProvider* pProvider,
                        const ::rtl::OUString& rContentId );

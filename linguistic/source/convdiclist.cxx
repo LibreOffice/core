@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: convdiclist.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,11 +30,9 @@
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/useroptions.hxx>
-#include <svtools/lingucfg.hxx>
-#include <sfx2/docfile.hxx>
-#include <vcl/svapp.hxx>
+#include <unotools/pathoptions.hxx>
+#include <unotools/useroptions.hxx>
+#include <unotools/lingucfg.hxx>
 #include <rtl/instance.hxx>
 #include <cppuhelper/factory.hxx>   // helper for factories
 #include <unotools/localfilehelper.hxx>

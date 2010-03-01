@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: selectioncontroller.cxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
+#include <tools/debug.hxx>
 #include <svx/selectioncontroller.hxx>
 
 namespace sdr
@@ -99,6 +97,16 @@ bool SelectionController::GetMarkedObjModel( SdrPage* /*pNewPage*/ )
 }
 
 bool SelectionController::PasteObjModel( const SdrModel& /*rModel*/ )
+{
+    return false;
+}
+
+bool SelectionController::TakeFormatPaintBrush( boost::shared_ptr< SfxItemSet >& /*rFormatSet*/  )
+{
+    return false;
+}
+
+bool SelectionController::ApplyFormatPaintBrush( SfxItemSet& /*rFormatSet*/, bool /*bNoCharacterFormats*/, bool /*bNoParagraphFormats*/ )
 {
     return false;
 }

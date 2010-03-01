@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fontsizemenucontroller.cxx,v $
- * $Revision: 1.10.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -326,7 +323,9 @@ void FontSizeMenuController::impl_select(const Reference< XDispatch >& _xDispatc
     Sequence<PropertyValue>      aArgs;
     if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
         UiEventLogHelper(::rtl::OUString::createFromAscii("FontSizeMenuController")).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
-    _xDispatch->dispatch( aTargetURL, aArgs );
+    OSL_ENSURE(_xDispatch.is(),"FontSizeMenuController::impl_select: No dispatch");
+    if ( _xDispatch.is() )
+        _xDispatch->dispatch( aTargetURL, aArgs );
 }
 
 // XPopupMenuController

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: mnuitem.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -90,9 +87,9 @@ public:
     virtual void            StateChanged( USHORT nSID, SfxItemState eState,
                                           const SfxPoolItem* pState );
 
-    static SfxMenuControl*  CreateControl( USHORT nId, Menu &, SfxBindings & );
-    static SfxUnoMenuControl*
-                            CreateControl( const String&, USHORT, Menu&, SfxBindings&, SfxVirtualMenu* );
+    static SfxMenuControl*    CreateControl( USHORT nId, Menu &, SfxBindings & );
+    static SfxUnoMenuControl* CreateControl( const String&, USHORT, Menu&, SfxBindings&, SfxVirtualMenu* );
+    static SfxUnoMenuControl* CreateControl( const String&, USHORT, Menu&, const String& sItemText, const String& sHelpText, SfxBindings&, SfxVirtualMenu* );
     static BOOL             IsSpecialControl( USHORT nId, SfxModule* );
     static void             RegisterMenuControl(SfxModule*, SfxMenuCtrlFactory*);
 
@@ -103,6 +100,9 @@ class SfxUnoMenuControl : public SfxMenuControl
     SfxUnoControllerItem*   pUnoCtrl;
 public:
                             SfxUnoMenuControl( const String&, USHORT nId, Menu&,
+                                                SfxBindings&, SfxVirtualMenu* );
+                            SfxUnoMenuControl( const String&, USHORT nId, Menu&,
+                                               const String&, const String&,
                                                 SfxBindings&, SfxVirtualMenu* );
                             ~SfxUnoMenuControl();
     void                    Select();

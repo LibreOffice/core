@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: gridctrl.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -584,9 +581,10 @@ protected:
     sal_Int32 GetSeekPos() const {return m_nSeekPos;}
     sal_Int32 GetTotalCount() const {return m_nTotalCount;}
 
-    const DbGridRowRef& GetEmptyRow() const {return m_xEmptyRow;}
-    const DbGridRowRef& GetSeekRow() const {return m_xSeekRow;}
-    CursorWrapper* GetSeekCursor() const {return m_pSeekCursor;}
+    const DbGridRowRef& GetEmptyRow() const { return m_xEmptyRow;   }
+    const DbGridRowRef& GetSeekRow() const  { return m_xSeekRow;    }
+    const DbGridRowRef& GetPaintRow() const { return m_xPaintRow;   }
+    CursorWrapper* GetSeekCursor() const    { return m_pSeekCursor; }
 
     void ConnectToFields();
     void DisconnectFromFields();

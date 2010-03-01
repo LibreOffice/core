@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dp_dependencies.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,20 +61,6 @@ namespace Dependencies {
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::dom::XElement > >
     check(::dp_misc::DescriptionInfoset const & infoset);
-
-    /**
-       Obtain the (human-readable) name of a dependency.
-
-       @param dependency
-       a dependency represented as a non-null XML element
-
-       @return
-       the name of the dependency; will never be empty, as a localized
-       &ldquo;unknown&rdquo; is substituted for an empty/missing name
-     */
-    DESKTOP_DEPLOYMENTMISC_DLLPUBLIC ::rtl::OUString name(
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::dom::XElement > const & dependency);
 
     /**
        Obtain the (human-readable) error message of a failed dependency.

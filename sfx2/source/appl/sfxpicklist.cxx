@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sfxpicklist.cxx,v $
- * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,13 +29,13 @@
 #include "precompiled_sfx2.hxx"
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
-#include <svtools/historyoptions.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/historyoptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <tools/urlobj.hxx>
 #include <framework/menuconfiguration.hxx>
-#include <svtools/inethist.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/inethist.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
 #include <osl/file.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <cppuhelper/implbase1.hxx>

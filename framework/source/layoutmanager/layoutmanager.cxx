@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: layoutmanager.cxx,v $
- * $Revision: 1.72 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,17 +64,13 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/XSystemDependentMenuPeer.hpp>
-#ifndef _COM_SUN_STAR_LANG_XYSTEMDEPENDENT_HPP_
 #include <com/sun/star/lang/SystemDependent.hpp>
-#endif
 #include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/awt/XSystemDependentWindowPeer.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
-#ifndef _COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGER_HPP_
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
-#endif
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
@@ -92,20 +85,20 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 #include <svtools/imgdef.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/dockingarea.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/wall.hxx>
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <comphelper/mediadescriptor.hxx>
+#include <comphelper/uno3.hxx>
 #include <rtl/logfile.hxx>
-#include <svtools/cmdoptions.hxx>
+#include <unotools/cmdoptions.hxx>
 
 #include <algorithm>
 #include <boost/bind.hpp>
@@ -249,6 +242,7 @@ bool LayoutManager::UIElement::operator< ( const LayoutManager::UIElement& aUIEl
 
 LayoutManager::UIElement& LayoutManager::UIElement::operator= ( const LayoutManager::UIElement& rUIElement )
 {
+    if (this == &rUIElement) { return *this; }
     m_aType             = rUIElement.m_aType;
     m_aName             = rUIElement.m_aName;
     m_aUIName           = rUIElement.m_aUIName;
@@ -354,40 +348,8 @@ static void impl_setDockingWindowVisibility( const css::uno::Reference< css::lan
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_14                    (   LayoutManager                                                                   ,
-                                            OWeakObject                                                                     ,
-                                            DIRECT_INTERFACE( css::lang::XTypeProvider                                      ),
-                                            DIRECT_INTERFACE( css::lang::XServiceInfo                                       ),
-                                            DIRECT_INTERFACE( ::com::sun::star::frame::XLayoutManager                       ),
-                                            DIRECT_INTERFACE( css::awt::XWindowListener                                     ),
-                                            DIRECT_INTERFACE( css::frame::XFrameActionListener                              ),
-                                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIConfigurationListener                ),
-                                            DIRECT_INTERFACE( ::com::sun::star::frame::XInplaceLayout                       ),
-                                            DIRECT_INTERFACE( css::awt::XDockableWindowListener                             ),
-                                            DIRECT_INTERFACE( ::com::sun::star::frame::XMenuBarMergingAcceptor              ),
-                                            DIRECT_INTERFACE( css::frame::XLayoutManagerEventBroadcaster                    ),
-                                            DERIVED_INTERFACE( css::lang::XEventListener, css::frame::XFrameActionListener  ),
-                                            DIRECT_INTERFACE( ::com::sun::star::beans::XMultiPropertySet                    ),
-                                            DIRECT_INTERFACE( ::com::sun::star::beans::XFastPropertySet                     ),
-                                            DIRECT_INTERFACE( ::com::sun::star::beans::XPropertySet                         )
-                                        )
-
-DEFINE_XTYPEPROVIDER_14                 (   LayoutManager                                           ,
-                                            css::lang::XTypeProvider                                ,
-                                            css::lang::XServiceInfo                                 ,
-                                            ::com::sun::star::frame::XLayoutManager                 ,
-                                            css::awt::XWindowListener                               ,
-                                            css::frame::XFrameActionListener                        ,
-                                            css::lang::XEventListener                               ,
-                                            ::com::sun::star::ui::XUIConfigurationListener          ,
-                                            ::com::sun::star::frame::XInplaceLayout                 ,
-                                            css::awt::XDockableWindowListener                       ,
-                                            ::com::sun::star::frame::XMenuBarMergingAcceptor        ,
-                                            css::frame::XLayoutManagerEventBroadcaster              ,
-                                            ::com::sun::star::beans::XMultiPropertySet              ,
-                                            ::com::sun::star::beans::XFastPropertySet               ,
-                                            ::com::sun::star::beans::XPropertySet
-                                        )
+IMPLEMENT_FORWARD_XTYPEPROVIDER2( LayoutManager, LayoutManager_Base, LayoutManager_PBase )
+IMPLEMENT_FORWARD_XINTERFACE2( LayoutManager, LayoutManager_Base, LayoutManager_PBase )
 
 DEFINE_XSERVICEINFO_MULTISERVICE        (   LayoutManager                       ,
                                             ::cppu::OWeakObject                 ,
@@ -398,15 +360,14 @@ DEFINE_XSERVICEINFO_MULTISERVICE        (   LayoutManager                       
 DEFINE_INIT_SERVICE                     (   LayoutManager, {} )
 
 
-LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceManager ) :
-        ThreadHelpBase( &Application::GetSolarMutex() )
+LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceManager )
+        :   LayoutManager_Base          (                                                   )
+        ,   ThreadHelpBase              ( &Application::GetSolarMutex()                     )
         ,   ::cppu::OBroadcastHelperVar< ::cppu::OMultiTypeInterfaceContainerHelper, ::cppu::OMultiTypeInterfaceContainerHelper::keyType >( m_aLock.getShareableOslMutex()         )
-        ,   ::cppu::OPropertySetHelper  ( *(static_cast< ::cppu::OBroadcastHelper* >(this)) )
-        ,   ::cppu::OWeakObject         (                                                   )
+        ,   LayoutManager_PBase         ( *(static_cast< ::cppu::OBroadcastHelper* >(this)) )
         ,   m_xSMGR( xServiceManager )
-        ,   m_xURLTransformer( Reference< XURLTransformer >( xServiceManager->createInstance(
-                                                                SERVICENAME_URLTRANSFORMER),
-                                                             UNO_QUERY ))
+        ,   m_xURLTransformer( xServiceManager->createInstance( SERVICENAME_URLTRANSFORMER ), UNO_QUERY )
+        ,   m_xDisplayAccess( xServiceManager->createInstance( SERVICENAME_DISPLAYACCESS ), UNO_QUERY )
         ,   m_nLockCount( 0 )
         ,   m_bActive( sal_False )
         ,   m_bInplaceMenuSet( sal_False )
@@ -421,6 +382,7 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
         ,   m_bStoreWindowState( sal_False )
         ,   m_bHideCurrentUI( false )
         ,   m_bGlobalSettings( sal_False )
+        ,   m_bPreserveContentSize( false )
         ,   m_eDockOperation( DOCKOP_ON_COLROW )
         ,   m_pInplaceMenuBar( NULL )
         ,   m_xModuleManager( Reference< XModuleManager >(
@@ -455,13 +417,22 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
 
     m_pMiscOptions = new SvtMiscOptions();
 
-    m_pMiscOptions->AddListener( LINK( this, LayoutManager, OptionsChanged ) );
+    m_pMiscOptions->AddListenerLink( LINK( this, LayoutManager, OptionsChanged ) );
     Application::AddEventListener( LINK( this, LayoutManager, SettingsChanged ) );
     m_eSymbolsSize = m_pMiscOptions->GetSymbolsSize();
     m_eSymbolsStyle = m_pMiscOptions->GetCurrentSymbolsStyle();
 
     m_aAsyncLayoutTimer.SetTimeout( 50 );
     m_aAsyncLayoutTimer.SetTimeoutHdl( LINK( this, LayoutManager, AsyncLayoutHdl ) );
+
+
+    registerProperty( LAYOUTMANAGER_PROPNAME_AUTOMATICTOOLBARS, LAYOUTMANAGER_PROPHANDLE_AUTOMATICTOOLBARS, css::beans::PropertyAttribute::TRANSIENT, &m_bAutomaticToolbars, ::getCppuType( &m_bAutomaticToolbars ) );
+    registerProperty( LAYOUTMANAGER_PROPNAME_HIDECURRENTUI, LAYOUTMANAGER_PROPHANDLE_HIDECURRENTUI, css::beans::PropertyAttribute::TRANSIENT, &m_bHideCurrentUI, ::getCppuType( &m_bHideCurrentUI ) );
+    registerProperty( LAYOUTMANAGER_PROPNAME_LOCKCOUNT, LAYOUTMANAGER_PROPHANDLE_LOCKCOUNT, css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY, &m_nLockCount, getCppuType( &m_nLockCount )  );
+    registerProperty( LAYOUTMANAGER_PROPNAME_MENUBARCLOSER, LAYOUTMANAGER_PROPHANDLE_MENUBARCLOSER, css::beans::PropertyAttribute::TRANSIENT, &m_bMenuBarCloser, ::getCppuType( &m_bMenuBarCloser ) );
+    const sal_Bool bRefreshVisibility = sal_False;
+    registerPropertyNoMember( LAYOUTMANAGER_PROPNAME_REFRESHVISIBILITY, LAYOUTMANAGER_PROPHANDLE_REFRESHVISIBILITY, css::beans::PropertyAttribute::TRANSIENT, ::getCppuType( &bRefreshVisibility ), &bRefreshVisibility );
+    registerProperty( LAYOUTMANAGER_PROPNAME_PRESERVE_CONTENT_SIZE, LAYOUTMANAGER_PROPHANDLE_PRESERVE_CONTENT_SIZE, css::beans::PropertyAttribute::TRANSIENT, &m_bPreserveContentSize, ::getCppuType( &m_bPreserveContentSize ) );
 }
 
 LayoutManager::~LayoutManager()
@@ -469,7 +440,7 @@ LayoutManager::~LayoutManager()
     Application::RemoveEventListener( LINK( this, LayoutManager, SettingsChanged ) );
     if ( m_pMiscOptions )
     {
-        m_pMiscOptions->RemoveListener( LINK( this, LayoutManager, OptionsChanged ) );
+        m_pMiscOptions->RemoveListenerLink( LINK( this, LayoutManager, OptionsChanged ) );
         delete m_pMiscOptions;
         m_pMiscOptions = 0;
     }
@@ -3240,7 +3211,7 @@ void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
     if ( bSetVisible )
     {
         implts_createNonContextSensitiveToolBars();
-        doLayout();
+        implts_doLayout_notify( sal_False );
     }
     else
     {
@@ -3516,7 +3487,7 @@ sal_Bool LayoutManager::implts_showProgressBar()
         if ( !pWindow->IsVisible() )
         {
             pWindow->Show();
-            doLayout();
+            implts_doLayout_notify( sal_False );
         }
         return sal_True;
     }
@@ -3557,7 +3528,7 @@ sal_Bool LayoutManager::implts_hideProgressBar()
          ( bHideStatusBar || bInternalStatusBar ))
     {
         pWindow->Hide();
-        doLayout();
+        implts_doLayout_notify( sal_False );
         return sal_True;
     }
 
@@ -3829,6 +3800,7 @@ throw ( RuntimeException )
     {
         m_aDockingArea     = css::awt::Rectangle();
         m_xContainerWindow = m_xDockingAreaAcceptor->getContainerWindow();
+        m_xContainerTopWindow.set( m_xContainerWindow, UNO_QUERY );
         m_xContainerWindow->addWindowListener( Reference< css::awt::XWindowListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
 
         // we always must keep a connection to the window of our frame for resize events
@@ -3913,7 +3885,7 @@ throw ( RuntimeException )
             implts_createNonContextSensitiveToolBars();
         }
         implts_sortUIElements();
-        implts_doLayout( sal_True );
+        implts_doLayout( sal_True, sal_False );
     }
 }
 
@@ -5477,26 +5449,33 @@ throw (RuntimeException)
     implts_notifyListeners( css::frame::LayoutManagerEvents::UNLOCK, a );
 
     if ( bDoLayout )
-      doLayout();
+      implts_doLayout_notify( sal_True );
 }
 
 void SAL_CALL LayoutManager::doLayout()
 throw (RuntimeException)
 {
-    sal_Bool bLayouted = implts_doLayout( sal_False );
+    implts_doLayout_notify( sal_True );
+}
 
+void LayoutManager::implts_doLayout_notify( sal_Bool bOuterResize )
+{
+    sal_Bool bLayouted = implts_doLayout( sal_False, bOuterResize );
     if ( bLayouted )
         implts_notifyListeners( css::frame::LayoutManagerEvents::LAYOUT, Any() );
 }
 
-sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace )
+sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace, sal_Bool bOuterResize )
 {
     RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::LayoutManager::implts_doLayout" );
 
     sal_Bool bNoLock( sal_False );
     css::awt::Rectangle aCurrBorderSpace;
     Reference< css::awt::XWindow > xContainerWindow;
+    Reference< css::awt::XTopWindow2 > xContainerTopWindow;
+    Reference< css::awt::XWindow > xComponentWindow;
     Reference< XDockingAreaAcceptor > xDockingAreaAcceptor;
+    bool bPreserveContentSize( false );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ReadGuard aReadLock( m_aLock );
@@ -5507,8 +5486,11 @@ sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace )
 
     bNoLock = ( m_nLockCount == 0 );
     xContainerWindow = m_xContainerWindow;
+    xContainerTopWindow = m_xContainerTopWindow;
+    xComponentWindow = m_xFrame->getComponentWindow();
     xDockingAreaAcceptor = m_xDockingAreaAcceptor;
     aCurrBorderSpace = m_aDockingArea;
+    bPreserveContentSize = m_bPreserveContentSize;
     aReadLock.unlock();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
@@ -5516,7 +5498,8 @@ sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace )
 
     if ( bNoLock &&
          xDockingAreaAcceptor.is() &&
-         xContainerWindow.is() )
+         xContainerWindow.is() &&
+         xComponentWindow.is() )
     {
         bLayouted = sal_True;
 
@@ -5532,11 +5515,44 @@ sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace )
 
         if ( !bEqual || bForceRequestBorderSpace || bMustDoLayout )
         {
-            bGotRequestedBorderSpace = xDockingAreaAcceptor->requestDockingAreaSpace( aBorderSpace );
+            // we always resize the content window (instead of the complete container window) if we're not set up
+            // to (attempt to) preserve the content window's size
+            if ( bOuterResize && !bPreserveContentSize )
+                bOuterResize = sal_False;
+
+            // maximized windows can resized their content window only, not their container window
+            if ( bOuterResize && xContainerTopWindow.is() && xContainerTopWindow->getIsMaximized() )
+                bOuterResize = sal_False;
+
+            // if the component window does not have a size (yet), then we can't use it to calc the container
+            // window size
+            css::awt::Rectangle aComponentRect = xComponentWindow->getPosSize();
+            if ( bOuterResize && ( aComponentRect.Width == 0 ) && ( aComponentRect.Height == 0 ) )
+                bOuterResize = sal_False;
+
+            bGotRequestedBorderSpace = sal_False;
+            if ( bOuterResize )
+            {
+                Reference< awt::XDevice > xDevice( xContainerWindow, uno::UNO_QUERY );
+                awt::DeviceInfo aContainerInfo  = xDevice->getInfo();
+
+                awt::Size aRequestedSize( aComponentRect.Width + aContainerInfo.LeftInset + aContainerInfo.RightInset + aBorderSpace.X + aBorderSpace.Width,
+                                          aComponentRect.Height + aContainerInfo.TopInset  + aContainerInfo.BottomInset + aBorderSpace.Y + aBorderSpace.Height );
+                awt::Point aComponentPos( aBorderSpace.X, aBorderSpace.Y );
+
+                bGotRequestedBorderSpace = implts_resizeContainerWindow( aRequestedSize, aComponentPos );
+            }
+
+            // if we did not do an container window resize, or it failed, then use the DockingAcceptor as usual
+            if ( !bGotRequestedBorderSpace )
+            {
+                bGotRequestedBorderSpace = xDockingAreaAcceptor->requestDockingAreaSpace( aBorderSpace );
+                if ( bGotRequestedBorderSpace )
+                    xDockingAreaAcceptor->setDockingAreaSpace( aBorderSpace );
+            }
+
             if ( bGotRequestedBorderSpace )
             {
-                xDockingAreaAcceptor->setDockingAreaSpace( aBorderSpace );
-
                 /* SAFE AREA ----------------------------------------------------------------------------------------------- */
                 aWriteGuard.lock();
                 m_aDockingArea = aBorderSpace;
@@ -5601,6 +5617,52 @@ sal_Bool LayoutManager::implts_compareRectangles( const css::awt::Rectangle& rRe
             ( rRect1.Y == rRect2.Y ) &&
             ( rRect1.Width == rRect2.Width ) &&
             ( rRect1.Height == rRect2.Height ));
+}
+
+sal_Bool LayoutManager::implts_resizeContainerWindow( const awt::Size& rContainerSize,
+                                                      const awt::Point& rComponentPos )
+{
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    ReadGuard aReadLock( m_aLock );
+    Reference< awt::XWindow >               xContainerWindow    = m_xContainerWindow;
+    Reference< awt::XTopWindow2 >           xContainerTopWindow = m_xContainerTopWindow;
+    Reference< awt::XWindow >               xComponentWindow    = m_xFrame->getComponentWindow();
+    Reference< container::XIndexAccess >    xDisplayAccess      = m_xDisplayAccess;
+    aReadLock.unlock();
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+
+    // calculate the maximum size we have for the container window
+    awt::Rectangle aWorkArea;
+    try
+    {
+        sal_Int32 nDisplay = xContainerTopWindow->getDisplay();
+        Reference< beans::XPropertySet > xDisplayInfo( xDisplayAccess->getByIndex( nDisplay ), UNO_QUERY_THROW );
+        OSL_VERIFY( xDisplayInfo->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "WorkArea" ) ) ) >>= aWorkArea );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
+    if ( ( aWorkArea.Width > 0 ) && ( aWorkArea.Height > 0 ) )
+    {
+        if  (   ( rContainerSize.Width > aWorkArea.Width )
+            ||  ( rContainerSize.Height > aWorkArea.Height )
+            )
+            return sal_False;
+        // Strictly, this is not correct. If we have a multi-screen display (css.awt.DisplayAccess.MultiDisplay == true),
+        // the the "effective work area" would be much larger than the work area of a single display, since we could in theory
+        // position the container window across multiple screens.
+        // However, this should suffice as a heuristics here ... (nobody really wants to check whethere the different screens are
+        // stacked horizontally or vertically, whether their work areas can really be combined, or are separated by non-work-areas,
+        // and the like ... right?)
+    }
+
+    // resize our container window
+    xContainerWindow->setPosSize( 0, 0, rContainerSize.Width, rContainerSize.Height, css::awt::PosSize::SIZE );
+    // position the component window
+    xComponentWindow->setPosSize( rComponentPos.X, rComponentPos.Y, 0, 0, css::awt::PosSize::POS );
+    return sal_True;
 }
 
 void SAL_CALL LayoutManager::setVisible( sal_Bool bVisible )
@@ -6118,16 +6180,6 @@ sal_Bool LayoutManager::implts_resetMenuBar()
     }
 
     return sal_False;
-}
-
-void LayoutManager::implts_setMenuBarCloser(sal_Bool bCloserState)
-{
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    WriteGuard aWriteLock( m_aLock );
-    m_bMenuBarCloser = bCloserState;
-    aWriteLock.unlock();
-
-    implts_updateMenuBarClose();
 }
 
 sal_Int16 LayoutManager::implts_getCurrentSymbolsSize()
@@ -7028,7 +7080,7 @@ IMPL_LINK( LayoutManager, AsyncLayoutHdl, Timer *, EMPTYARG )
     aReadLock.unlock();
 
     implts_setDockingAreaWindowSizes( aDockingArea );
-    implts_doLayout( sal_True );
+    implts_doLayout( sal_True, sal_False );
 
     return 0;
 }
@@ -7079,7 +7131,8 @@ throw ( RuntimeException )
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
         implts_reset( sal_True );
-        implts_doLayout( sal_True );
+        implts_doLayout( sal_True, sal_False );
+        implts_doLayout( sal_True, sal_True );
     }
     else if (( aEvent.Action == FrameAction_FRAME_UI_ACTIVATED      ) ||
              ( aEvent.Action == FrameAction_FRAME_UI_DEACTIVATING   ))
@@ -7106,7 +7159,6 @@ throw ( RuntimeException )
         // SAFE AREA -----------------------------------------------------------------------------------------------
 
         implts_reset( sal_False );
-
     }
 }
 
@@ -7127,7 +7179,7 @@ throw( RuntimeException )
         Application::RemoveEventListener( LINK( this, LayoutManager, SettingsChanged ) );
         if ( m_pMiscOptions )
         {
-            m_pMiscOptions->RemoveListener( LINK( this, LayoutManager, OptionsChanged ) );
+            m_pMiscOptions->RemoveListenerLink( LINK( this, LayoutManager, OptionsChanged ) );
             delete m_pMiscOptions;
             m_pMiscOptions = 0;
         }
@@ -7148,6 +7200,7 @@ throw( RuntimeException )
         }
         m_xInplaceMenuBar.clear();
         m_xContainerWindow.clear();
+        m_xContainerTopWindow.clear();
         implts_destroyDockingAreaWindows();
 
         if ( m_xModuleCfgMgr.is() )
@@ -7198,6 +7251,7 @@ throw( RuntimeException )
         }
         m_xInplaceMenuBar.clear();
         m_xContainerWindow.clear();
+        m_xContainerTopWindow.clear();
     }
     else if ( rEvent.Source == Reference< XInterface >( m_xDocCfgMgr, UNO_QUERY ))
     {
@@ -7412,65 +7466,21 @@ sal_Bool SAL_CALL LayoutManager::convertFastPropertyValue( Any&       aConverted
                                                            sal_Int32  nHandle         ,
                                                            const Any& aValue             ) throw( com::sun::star::lang::IllegalArgumentException )
 {
-    //  Initialize state with FALSE !!!
-    //  (Handle can be invalid)
-    sal_Bool bReturn = sal_False;
-
-    switch( nHandle )
-    {
-        case LAYOUTMANAGER_PROPHANDLE_MENUBARCLOSER :
-            bReturn = PropHelper::willPropertyBeChanged(
-                        com::sun::star::uno::makeAny(m_bMenuBarCloser),
-                        aValue,
-                        aOldValue,
-                        aConvertedValue);
-                break;
-        case LAYOUTMANAGER_PROPHANDLE_AUTOMATICTOOLBARS:
-            bReturn = PropHelper::willPropertyBeChanged(
-                        com::sun::star::uno::makeAny(m_bAutomaticToolbars),
-                        aValue,
-                        aOldValue,
-                        aConvertedValue);
-                break;
-        case LAYOUTMANAGER_PROPHANDLE_REFRESHVISIBILITY:
-            bReturn = PropHelper::willPropertyBeChanged(
-                        com::sun::star::uno::makeAny(sal_False),
-                        aValue,
-                        aOldValue,
-                        aConvertedValue);
-                break;
-        case LAYOUTMANAGER_PROPHANDLE_HIDECURRENTUI:
-            bReturn = PropHelper::willPropertyBeChanged(
-                        com::sun::star::uno::makeAny(m_bHideCurrentUI),
-                        aValue,
-                        aOldValue,
-                        aConvertedValue);
-                break;
-    }
-
-    // Return state of operation.
-    return bReturn ;
+    return LayoutManager_PBase::convertFastPropertyValue( aConvertedValue, aOldValue, nHandle, aValue );
 }
 
 void SAL_CALL LayoutManager::setFastPropertyValue_NoBroadcast( sal_Int32                       nHandle ,
                                                                const com::sun::star::uno::Any& aValue  ) throw( com::sun::star::uno::Exception )
 {
+    if ( nHandle != LAYOUTMANAGER_PROPHANDLE_REFRESHVISIBILITY )
+        LayoutManager_PBase::setFastPropertyValue_NoBroadcast( nHandle, aValue );
+
     switch( nHandle )
     {
         case LAYOUTMANAGER_PROPHANDLE_MENUBARCLOSER:
-        {
-            sal_Bool bCloserState = sal_False;
-            aValue >>= bCloserState;
-            implts_setMenuBarCloser( bCloserState );
+            implts_updateMenuBarClose();
             break;
-        }
-        case LAYOUTMANAGER_PROPHANDLE_AUTOMATICTOOLBARS:
-        {
-            sal_Bool bValue = sal_Bool();
-            if ( aValue >>= bValue )
-                m_bAutomaticToolbars = bValue;
-            break;
-        }
+
         case LAYOUTMANAGER_PROPHANDLE_REFRESHVISIBILITY:
         {
             sal_Bool bValue = sal_Bool();
@@ -7478,40 +7488,17 @@ void SAL_CALL LayoutManager::setFastPropertyValue_NoBroadcast( sal_Int32        
                 implts_refreshContextToolbarsVisibility();
             break;
         }
+
         case LAYOUTMANAGER_PROPHANDLE_HIDECURRENTUI:
-        {
-            sal_Bool bValue = sal_Bool();
-            if ( aValue >>= bValue )
-            {
-                m_bHideCurrentUI = bValue;
-                implts_setCurrentUIVisibility( !bValue );
-            }
+            implts_setCurrentUIVisibility( !m_bHideCurrentUI );
             break;
-        }
     }
 }
 
 void SAL_CALL LayoutManager::getFastPropertyValue( com::sun::star::uno::Any& aValue  ,
                                                    sal_Int32                 nHandle    ) const
 {
-    switch( nHandle )
-    {
-        case LAYOUTMANAGER_PROPHANDLE_MENUBARCLOSER:
-            aValue <<= m_bMenuBarCloser;
-            break;
-        case LAYOUTMANAGER_PROPHANDLE_AUTOMATICTOOLBARS:
-            aValue <<= m_bAutomaticToolbars;
-            break;
-        case LAYOUTMANAGER_PROPHANDLE_REFRESHVISIBILITY:
-            aValue <<= sal_False;
-            break;
-        case LAYOUTMANAGER_PROPHANDLE_HIDECURRENTUI:
-            aValue <<= m_bHideCurrentUI;
-            break;
-        case LAYOUTMANAGER_PROPHANDLE_LOCKCOUNT:
-            aValue <<= m_nLockCount;
-            break;
-    }
+    LayoutManager_PBase::getFastPropertyValue( aValue, nHandle );
 }
 
 ::cppu::IPropertyArrayHelper& SAL_CALL LayoutManager::getInfoHelper()
@@ -7530,9 +7517,9 @@ void SAL_CALL LayoutManager::getFastPropertyValue( com::sun::star::uno::Any& aVa
         if( pInfoHelper == NULL )
         {
             // Define static member to give structure of properties to baseclass "OPropertySetHelper".
-            // "impl_getStaticPropertyDescriptor" is a non exported and static funtion, who will define a static propertytable.
-            // "sal_True" say: Table is sorted by name.
-            static ::cppu::OPropertyArrayHelper aInfoHelper( impl_getStaticPropertyDescriptor(), sal_True );
+            uno::Sequence< beans::Property > aProperties;
+            describeProperties( aProperties );
+            static ::cppu::OPropertyArrayHelper aInfoHelper( aProperties, sal_True );
             pInfoHelper = &aInfoHelper;
         }
     }
@@ -7562,29 +7549,6 @@ com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > SAL_CA
     }
 
     return (*pInfo);
-}
-
-const com::sun::star::uno::Sequence< com::sun::star::beans::Property > LayoutManager::impl_getStaticPropertyDescriptor()
-{
-    // Create a new static property array to initialize sequence!
-    // Table of all predefined properties of this class. Its used from OPropertySetHelper-class!
-    // Don't forget to change the defines (see begin of this file), if you add, change or delete a property in this list!!!
-    // It's necessary for methods of OPropertySetHelper.
-    // ATTENTION:
-    //      YOU MUST SORT FOLLOW TABLE BY NAME ALPHABETICAL !!!
-
-    static const com::sun::star::beans::Property pProperties[] =
-    {
-        com::sun::star::beans::Property( LAYOUTMANAGER_PROPNAME_AUTOMATICTOOLBARS, LAYOUTMANAGER_PROPHANDLE_AUTOMATICTOOLBARS, ::getCppuType((const sal_Bool*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT  ),
-        com::sun::star::beans::Property( LAYOUTMANAGER_PROPNAME_HIDECURRENTUI, LAYOUTMANAGER_PROPHANDLE_HIDECURRENTUI, ::getCppuType((const sal_Bool*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT  ),
-        com::sun::star::beans::Property( LAYOUTMANAGER_PROPNAME_LOCKCOUNT, LAYOUTMANAGER_PROPHANDLE_LOCKCOUNT, ::getCppuType((const sal_Int32*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT|com::sun::star::beans::PropertyAttribute::READONLY  ),
-        com::sun::star::beans::Property( LAYOUTMANAGER_PROPNAME_MENUBARCLOSER, LAYOUTMANAGER_PROPHANDLE_MENUBARCLOSER, ::getCppuType((const sal_Bool*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT  ),
-        com::sun::star::beans::Property( LAYOUTMANAGER_PROPNAME_REFRESHVISIBILITY, LAYOUTMANAGER_PROPHANDLE_REFRESHVISIBILITY, ::getCppuType((const sal_Bool*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT  )
-    };
-    // Use it to initialize sequence!
-    static const com::sun::star::uno::Sequence< com::sun::star::beans::Property > lPropertyDescriptor( pProperties, LAYOUTMANAGER_PROPCOUNT );
-    // Return static "PropertyDescriptor"
-    return lPropertyDescriptor;
 }
 
 } // namespace framework

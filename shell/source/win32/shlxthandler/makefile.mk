@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.14 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -58,7 +54,7 @@ SLOFILES=$(SLO)$/classfactory.obj\
     $(SLO)$/shlxthdl.obj\
     $(SLO)$/listviewbuilder.obj\
     $(SLO)$/document_statistic.obj\
-    $(SLO)$/thumbviewer.obj
+    $(SLO)$/thumbviewer.obj\
 
 SHL1TARGET=$(TARGET)
 
@@ -79,7 +75,9 @@ SHL1STDLIBS+=\
     $(SHELL32LIB)\
     $(KERNEL32LIB)\
     $(GDI32LIB)\
-    $(GDIPLUSLIB)
+    $(GDIPLUSLIB)\
+    msvcprt.lib \
+    $(SHLWAPILIB)
 
 SHL1LIBS+=$(SLB)$/util.lib\
     $(SLB)$/ooofilereader.lib
@@ -108,7 +106,7 @@ SLOFILES_X64= \
     $(SLO_X64)$/shlxthdl.obj\
     $(SLO_X64)$/listviewbuilder.obj\
     $(SLO_X64)$/document_statistic.obj\
-    $(SLO_X64)$/thumbviewer.obj
+    $(SLO_X64)$/thumbviewer.obj\
 
 SHL1TARGET_X64=$(TARGET)
 SHL1LIBS_X64=$(SOLARLIBDIR_X64)$/zlib.lib\
@@ -123,17 +121,22 @@ SHL1STDLIBS_X64+=\
     $(SHELL32LIB_X64)\
     $(KERNEL32LIB_X64)\
     $(GDI32LIB_X64)\
-    $(MSVCRT_X64) \
-    $(MSVCPRT_X64) \
     $(USER32LIB_X64) \
+    $(GDIPLUSLIB_X64) \
+    $(MSVCRT_X64)   \
+    $(MSVCPRT_X64)  \
     $(OLDNAMESLIB_X64) \
-    $(GDIPLUSLIB_X64)
+    msvcprt.lib
+
+.IF "$(PRODUCT)"!="full"
+SHL1STDLIBS+=msvcrt.lib
+.ENDIF
 
 SHL1LIBS_X64+=$(SLB_X64)$/util.lib\
     $(SLB_X64)$/ooofilereader.lib
 SHL1OBJS_X64=$(SLOFILES_X64)
 SHL1DEF_X64=$(MISC_X64)$/$(SHL1TARGET).def
-SHL1RES_X64=$(RES_X64)$/$(TARGET)_x64.res
+SHL1RES_X64=$(RES_X64)$/$(TARGET).res
 
 DEF1NAME_X64=$(SHL1TARGET_X64)
 DEF1EXPORTFILE_X64=exports.dxp
@@ -143,4 +146,7 @@ DEF1EXPORTFILE_X64=exports.dxp
 
 .INCLUDE :	set_wntx64.mk
 .INCLUDE :	target.mk
+INCLUDE!:=$(subst,/stl, $(INCLUDE))
+.EXPORT : INCLUDE
 .INCLUDE :	tg_wntx64.mk
+

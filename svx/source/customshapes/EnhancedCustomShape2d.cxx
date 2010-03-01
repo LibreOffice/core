@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: EnhancedCustomShape2d.cxx,v $
- * $Revision: 1.31.146.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,6 @@
 #include "EnhancedCustomShape2d.hxx"
 #include "EnhancedCustomShapeGeometry.hxx"
 #include "EnhancedCustomShapeTypeNames.hxx"
-#include "EnhancedCustomShapeFunctionParser.hxx"
 #include <svx/svdoashp.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdocirc.hxx>

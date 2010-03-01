@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -256,9 +256,9 @@ private:
     virtual ~Thread();
 
     virtual void execute();
-
+#if 0
     void handleGeneralError(css::uno::Any const & exception) const;
-
+#endif
     void handleSpecificError(
         css::uno::Reference< css::deployment::XPackage > const & package,
         css::uno::Any const & exception) const;
@@ -284,8 +284,8 @@ private:
     css::uno::Reference< css::uno::XComponentContext > m_context;
     UpdateDialog & m_dialog;
     std::vector< dp_gui::TUpdateListEntry > m_vExtensionList;
-    css::uno::Reference< css::deployment::XUpdateInformationProvider >
-        m_updateInformation;
+    css::uno::Reference< css::deployment::XUpdateInformationProvider > m_updateInformation;
+    css::uno::Reference< css::task::XInteractionHandler > m_xInteractionHdl;
 
     // guarded by Application::GetSolarMutex():
     css::uno::Reference< css::task::XAbortChannel > m_abort;
@@ -302,7 +302,21 @@ UpdateDialog::Thread::Thread(
     m_updateInformation(
         css::deployment::UpdateInformationProvider::create(context)),
     m_stop(false)
-{}
+{
+    if( m_context.is() )
+    {
+        css::uno::Reference< css::lang::XMultiComponentFactory > xServiceManager( m_context->getServiceManager() );
+
+        if( xServiceManager.is() )
+        {
+            m_xInteractionHdl = css::uno::Reference< css::task::XInteractionHandler > (
+                                xServiceManager->createInstanceWithContext( OUSTR( "com.sun.star.task.InteractionHandler" ), m_context),
+                                css::uno::UNO_QUERY );
+            if ( m_xInteractionHdl.is() )
+                m_updateInformation->setInteractionHandler( m_xInteractionHdl );
+        }
+    }
+}
 
 void UpdateDialog::Thread::stop() {
     css::uno::Reference< css::task::XAbortChannel > abort;
@@ -327,7 +341,11 @@ UpdateDialog::Thread::Entry::Entry(
     version(theVersion)
 {}
 
-UpdateDialog::Thread::~Thread() {}
+UpdateDialog::Thread::~Thread()
+{
+    if ( m_xInteractionHdl.is() )
+        m_updateInformation->setInteractionHandler( css::uno::Reference< css::task::XInteractionHandler > () );
+}
 
 void UpdateDialog::Thread::execute()
 {
@@ -395,7 +413,7 @@ void UpdateDialog::Thread::execute()
         m_dialog.checkingDone();
     }
 }
-
+#if 0
 void UpdateDialog::Thread::handleGeneralError(css::uno::Any const & exception)
     const
 {
@@ -409,7 +427,7 @@ void UpdateDialog::Thread::handleGeneralError(css::uno::Any const & exception)
         m_dialog.addGeneralError(message);
     }
 }
-
+#endif
 //Parameter package can be null
 void UpdateDialog::Thread::handleSpecificError(
     css::uno::Reference< css::deployment::XPackage > const & package,
@@ -764,7 +782,7 @@ void UpdateDialog::addDisabledUpdate(UpdateDialog::DisabledUpdate const & data)
         SvLBoxButtonKind_disabledCheckbox);
         // position overflow is rather harmless
 }
-
+#if 0
 void UpdateDialog::addGeneralError(rtl::OUString const & message) {
     std::vector< rtl::OUString >::size_type n = m_generalErrors.size();
     m_generalErrors.push_back(message);
@@ -775,7 +793,7 @@ void UpdateDialog::addGeneralError(rtl::OUString const & message) {
         UpdateDialog::Index::newGeneralError(n), SvLBoxButtonKind_staticImage);
         // position overflow is rather harmless
 }
-
+#endif
 void UpdateDialog::addSpecificError(UpdateDialog::SpecificError const & data) {
     std::vector< UpdateDialog::SpecificError >::size_type n =
         m_specificErrors.size();
@@ -1260,7 +1278,7 @@ IMPL_LINK( UpdateDialog, hyperlink_clicked, svt::FixedHyperlink*, pHyperlink )
     {
         css::uno::Reference< css::system::XSystemShellExecute > xSystemShellExecute(
             m_context->getServiceManager()->createInstanceWithContext(
-                ::rtl::OUString::createFromAscii( "com.sun.star.system.SystemShellExecute" ),
+                OUSTR( "com.sun.star.system.SystemShellExecute" ),
                 m_context), css::uno::UNO_QUERY_THROW);
         //throws css::lang::IllegalArgumentException, css::system::SystemShellExecuteException
         xSystemShellExecute->execute(

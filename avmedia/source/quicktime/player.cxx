@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: player.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -100,8 +97,6 @@ Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     if ((result == noErr) && (mnVersion >= QT701))
     {
       // we have version 7.01 or later, initialize
-      mpMovie = [QTMovie movie];
-      [mpMovie retain];
       mbInitialized = true;
     }
     [pool release];
@@ -111,43 +106,57 @@ Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
 
 Player::~Player()
 {
-    if( mbInitialized )
+    if( mpMovie )
     {
-        if( mpMovie )
-        {
-            [mpMovie release];
-            mpMovie = nil;
-        }
-
+        [mpMovie release];
+        mpMovie = nil;
     }
 }
+// ------------------------------------------------------------------------------
 
+QTMovie* Player::getMovie()
+{
+    OSL_ASSERT( mpMovie );
+    return mpMovie;
+}
 
 // ------------------------------------------------------------------------------
 
 bool Player::create( const ::rtl::OUString& rURL )
 {
     bool    bRet = false;
-    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-    NSString* aNSStr = [[[NSString alloc] initWithCharacters: rURL.getStr() length: rURL.getLength()]stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] ;
-//  NSString * aNSStringEscaped = [aNSStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSURL* aURL = [NSURL URLWithString:aNSStr ];
-
     // create the Movie
-
     if( mbInitialized )
     {
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
 
-        mpMovie = [mpMovie initWithURL:aURL error:nil];
+        if( mpMovie )
+        {
+            [mpMovie release];
+            mpMovie = nil;
+        }
+
+        NSString* aNSStr = [[[NSString alloc] initWithCharacters: rURL.getStr() length: rURL.getLength()]stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] ;
+        NSURL* aURL = [NSURL URLWithString:aNSStr ];
+
+
+        NSError* pErr = nil;
+        mpMovie = [QTMovie movieWithURL:aURL error:&pErr];
         if(mpMovie)
         {
             [mpMovie retain];
             maURL = rURL;
             bRet = true;
         }
+        if( pErr )
+        {
+            OSL_TRACE( "NSMovie create failed with error %ld (%s)",
+                       (long)[pErr code],
+                       [[pErr localizedDescription] cString]
+                       );
+        }
+        [pool release];
     }
-
-    [pool release];
 
     return bRet;
 }
@@ -159,10 +168,10 @@ void SAL_CALL Player::start(  )
 {
   OSL_TRACE ("Player::start");
 
-  if ( mbInitialized && mpMovie )
-    {
+  if( mpMovie )
+  {
       [mpMovie play];
-    }
+  }
 }
 
 // ------------------------------------------------------------------------------
@@ -171,11 +180,10 @@ void SAL_CALL Player::stop(  )
     throw (uno::RuntimeException)
 {
     OSL_TRACE ("Player::stop");
-    if ( mpMovie )
+    if( mpMovie )
     {
-      [mpMovie stop];
+        [mpMovie stop];
     }
-
 }
 
 // ------------------------------------------------------------------------------
@@ -185,7 +193,7 @@ sal_Bool SAL_CALL Player::isPlaying()
 {
     bool bRet = false;
 
-    if ( mbInitialized )
+    if ( mpMovie )
     {
         if ([mpMovie rate] != 0)
         {
@@ -220,10 +228,10 @@ void SAL_CALL Player::setMediaTime( double fTime )
 {
     OSL_TRACE ("Player::setMediaTime");
 
-  if ( mpMovie )
-  {
-      [mpMovie setCurrentTime: QTMakeTimeWithTimeInterval(fTime)];
-  }
+    if ( mpMovie )
+    {
+        [mpMovie setCurrentTime: QTMakeTimeWithTimeInterval(fTime)];
+    }
 }
 
 // ------------------------------------------------------------------------------
@@ -244,7 +252,6 @@ double SAL_CALL Player::getMediaTime(  )
       stop();
   }
 
-
   return position;
 }
 
@@ -256,7 +263,6 @@ void SAL_CALL Player::setStopTime( double fTime )
     OSL_TRACE ("Player::setStopTime %f", fTime);
 
     mnStopTime = fTime;
-
 }
 
 // ------------------------------------------------------------------------------
@@ -264,9 +270,7 @@ void SAL_CALL Player::setStopTime( double fTime )
 double SAL_CALL Player::getStopTime(  )
     throw (uno::RuntimeException)
 {
-    double fRet = 0.0;
-
-    fRet = mnStopTime;
+    double fRet = mnStopTime;
 
     return fRet;
 }

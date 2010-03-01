@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: objxtor.cxx,v $
- * $Revision: 1.85 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,14 +51,14 @@
 #include <vcl/wrkwin.hxx>
 #endif
 #include <vcl/svapp.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <tools/rtti.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <sfxhelp.hxx>
 #include <basic/sbstar.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <basic/sbx.hxx>
-#include <svtools/eventcfg.hxx>
+#include <unotools/eventcfg.hxx>
 
 #include <sfx2/objsh.hxx>
 #include <sfx2/signaturestate.hxx>
@@ -71,7 +68,7 @@
 #endif
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
-#include <svtools/printwarningoptions.hxx>
+#include <unotools/printwarningoptions.hxx>
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
 #endif
@@ -82,9 +79,9 @@
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 
-#include <svtools/urihelper.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/sharecontrolfile.hxx>
+#include <svl/urihelper.hxx>
+#include <unotools/pathoptions.hxx>
+#include <svl/sharecontrolfile.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <svtools/asynclink.hxx>
@@ -190,7 +187,6 @@ TYPEINIT1(SfxObjectShell, SfxShell);
 //--------------------------------------------------------------------
 SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
 :mpObjectContainer(0)
-    ,pAccMgr(0)
     ,pCfgMgr( 0)
     ,pBasicManager( new SfxBasicManagerHolder )
     ,rDocShell( _rDocShell )

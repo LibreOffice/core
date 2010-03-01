@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: headermenucontroller.cxx,v $
- * $Revision: 1.10.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -254,7 +251,9 @@ void HeaderMenuController::impl_select(const Reference< XDispatch >& _xDispatch,
     Sequence<PropertyValue>      aArgs;
     if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
         UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(m_bFooter ? "FooterMenuController" : "HeaderMenuController"))).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
-    _xDispatch->dispatch( aTargetURL, aArgs );
+    OSL_ENSURE(_xDispatch.is(),"HeaderMenuController::impl_select: No dispatch");
+    if ( _xDispatch.is() )
+        _xDispatch->dispatch( aTargetURL, aArgs );
 }
 
 void SAL_CALL HeaderMenuController::updatePopupMenu() throw (::com::sun::star::uno::RuntimeException)

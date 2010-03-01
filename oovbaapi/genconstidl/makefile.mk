@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -56,17 +52,15 @@ MYDONEFILES += $(foreach,i,$(MYSYMFILES) $(MISC)$/$(i:b).done)
 
 ALLTAR: GENIDL
 
-GENIDL : $(MY_GEN_IDL_PATH) $(MYDONEFILES)
+GENIDL : $(MYDONEFILES)
 
 GENRDB : GENIDL $(MYURDFILES)
 
 $(MISC)$/%.done : %.api
+    @@-$(MKDIR) $(MY_GEN_IDL_PATH)
     @echo Processing $?
     $(PERL) api-to-idl.pl $? $(MY_GEN_IDL_PATH)
     @$(TOUCH) $@
-
-$(MY_GEN_IDL_PATH) : 
-    @@-$(MKDIR) $@
 
 CLEAN :
     @$(RM) $(MY_GEN_IDL_PATH)$/*.idl

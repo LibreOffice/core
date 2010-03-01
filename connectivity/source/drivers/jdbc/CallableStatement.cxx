@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: CallableStatement.cxx,v $
- * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -227,9 +224,8 @@ void SAL_CALL java_sql_CallableStatement::registerOutParameter( sal_Int32 parame
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         // Parameter konvertieren
-        jstring str = convertwchar_tToJavaString(t.pEnv,typeName);
-        t.pEnv->CallVoidMethod( object, mID, parameterIndex,sqlType,str);
-        t.pEnv->DeleteLocalRef(str);
+        jdbc::LocalRef< jstring > str( t.env(),convertwchar_tToJavaString(t.pEnv,typeName));
+        t.pEnv->CallVoidMethod( object, mID, parameterIndex,sqlType,str.get());
         ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
     }
 }
@@ -336,23 +332,22 @@ void java_sql_CallableStatement::createStatement(JNIEnv* /*_pEnv*/)
         // Java-Call absetzen
         jobject out = NULL;
         // Parameter konvertieren
-        jstring str = convertwchar_tToJavaString(t.pEnv,m_sSqlStatement);
+        jdbc::LocalRef< jstring > str( t.env(),convertwchar_tToJavaString(t.pEnv,m_sSqlStatement));
 
         static jmethodID mID(NULL);
         if ( !mID  )
             mID  = t.pEnv->GetMethodID( m_pConnection->getMyClass(), cMethodName, cSignature );
         if( mID ){
-            out = t.pEnv->CallObjectMethod( m_pConnection->getJavaObject(), mID, str ,m_nResultSetType,m_nResultSetConcurrency);
+            out = t.pEnv->CallObjectMethod( m_pConnection->getJavaObject(), mID, str.get() ,m_nResultSetType,m_nResultSetConcurrency);
         } //mID
         else
         {
             static const char * cSignature2 = "(Ljava/lang/String;)Ljava/sql/CallableStatement;";
             static jmethodID mID2 = t.pEnv->GetMethodID( m_pConnection->getMyClass(), cMethodName, cSignature2 );OSL_ENSURE(mID2,"Unknown method id!");
             if( mID2 ){
-                out = t.pEnv->CallObjectMethod( m_pConnection->getJavaObject(), mID2, str );
+                out = t.pEnv->CallObjectMethod( m_pConnection->getJavaObject(), mID2, str.get() );
             } //mID
         }
-        t.pEnv->DeleteLocalRef(str);
         ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
 
         if ( out )

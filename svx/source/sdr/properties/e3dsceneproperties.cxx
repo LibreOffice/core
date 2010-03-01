@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: e3dsceneproperties.cxx,v $
- * $Revision: 1.11.226.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,8 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <svx/sdr/properties/e3dsceneproperties.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/itemset.hxx>
+#include <svl/whiter.hxx>
 #include <svx/svddef.hxx>
 #include <svx/scene3d.hxx>
 #include <svditer.hxx>

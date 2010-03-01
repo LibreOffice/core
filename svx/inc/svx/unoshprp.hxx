@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unoshprp.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,9 +37,7 @@
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
-#ifndef _COM_SUN_STAR_DRAWING_LINEJOINT_Hpp_
 #include <com/sun/star/drawing/LineJoint.hpp>
-#endif
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
@@ -79,10 +74,10 @@
 
 #define _SVX_USE_UNOGLOBALS_
 #include <svx/unoprov.hxx>
-#include <svx/unoprnms.hxx>
+#include <editeng/unoprnms.hxx>
 #include <svx/unomid.hxx>
-#include <svx/unotext.hxx>
-#include <svtools/itemprop.hxx>
+#include <editeng/unotext.hxx>
+#include <svl/itemprop.hxx>
 
 #include <svx/svxids.hrc>
 
@@ -94,7 +89,6 @@
  #endif
 #endif
 
-#define OWN_ATTR_VALUE_START                    (3900)
 #define OWN_ATTR_VALUE_START_TEXT               (OWN_ATTR_VALUE_START+0)    // the next 10 entries are reserved for text
 #define OWN_ATTR_VALUE_POLYGONKIND              (OWN_ATTR_VALUE_START+10)
 #define OWN_ATTR_VALUE_POLYPOLYGON              (OWN_ATTR_VALUE_START+11)
@@ -192,9 +186,7 @@
 
 #define OWN_ATTR_STYLE                          (OWN_ATTR_VALUE_START+87)
 
-#define OWN_ATTR_EDGE_POLYPOLYGONBEZIER         (OWN_ATTR_VALUE_START+88)
-
-#define OWN_ATTR_VALUE_END                      OWN_ATTR_EDGE_POLYPOLYGONBEZIER // WARNING: ee items start at 3991!
+#define OWN_ATTR_EDGE_POLYPOLYGONBEZIER         (OWN_ATTR_VALUE_START+88)   // maximum is OWN_ATTR_VALUE_START+88, see svl/inc/svl/solar.hrc
 
 // #FontWork#
 #define FONTWORK_PROPERTIES \

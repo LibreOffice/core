@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdpage.cxx,v $
- * $Revision: 1.67 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -671,7 +668,13 @@ const Rectangle& SdrObjList::GetAllObjSnapRect() const
 
 const Rectangle& SdrObjList::GetAllObjBoundRect() const
 {
-    if (bRectsDirty) {
+    // #i106183# for deep group hierarchies like in chart2, the invalidates
+    // through the hierarchy are not correct; use a 2nd hint for the needed
+    // recalculation. Future versions will have no bool flag at all, but
+    // just aOutRect in empty state to representate an invalid state, thus
+    // it's a step in the right direction.
+    if (bRectsDirty || aOutRect.IsEmpty())
+    {
         ((SdrObjList*)this)->RecalcRects();
         ((SdrObjList*)this)->bRectsDirty=FALSE;
     }
@@ -1823,6 +1826,12 @@ GDIMetaFile SdrPage::GetMetaFile(const SetOfByte& /*rVisibleLayers*/, FASTBOOL /
 {
     DBG_ASSERT(0, "SdrPage::GetMetaFile(): not yet implemented.");
     return GDIMetaFile();
+}
+
+bool SdrPage::isHandoutMasterPage() const
+{
+    return mbMaster && GetModel() && GetModel()->GetMasterPageCount()
+        && GetModel()->GetMasterPage(0) == this;
 }
 
 //////////////////////////////////////////////////////////////////////////////

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: gridcolumnproptranslator.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -235,9 +232,15 @@ namespace xmloff
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL OGridColumnPropertyTranslator::setPropertyValue( const ::rtl::OUString& aPropertyName, const Any& aValue ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
+    void SAL_CALL OGridColumnPropertyTranslator::setPropertyValue( const ::rtl::OUString& _rPropertyName, const Any& aValue ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
     {
-        Sequence< ::rtl::OUString > aNames( &aPropertyName, 1 );
+        // we implement this by delegating it to setPropertyValues, which is to ignore unknown properties. On the other hand, our
+        // contract requires us to throw a UnknownPropertyException for unknown properties, so check this first.
+
+        if ( !getPropertySetInfo()->hasPropertyByName( _rPropertyName ) )
+            throw UnknownPropertyException( _rPropertyName, *this );
+
+        Sequence< ::rtl::OUString > aNames( &_rPropertyName, 1 );
         Sequence< Any >             aValues( &aValue, 1 );
         setPropertyValues( aNames, aValues );
     }

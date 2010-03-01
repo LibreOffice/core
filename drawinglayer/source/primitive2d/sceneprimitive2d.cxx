@@ -1,35 +1,27 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: sceneprimitive2d.cxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.16 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: aw $ $Date: 2008-06-24 15:31:08 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
@@ -147,7 +139,7 @@ namespace drawinglayer
             }
         }
 
-        Primitive2DSequence ScenePrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const
+        Primitive2DSequence ScenePrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const
         {
             Primitive2DSequence aRetval;
 
@@ -356,7 +348,7 @@ namespace drawinglayer
             const attribute::SdrLightingAttribute& rSdrLightingAttribute,
             const basegfx::B2DHomMatrix& rObjectTransformation,
             const geometry::ViewInformation3D& rViewInformation3D)
-        :   BasePrimitive2D(),
+        :   BufferedDecompositionPrimitive2D(),
             mxChildren3D(rxChildren3D),
             maSdrSceneAttribute(rSdrSceneAttribute),
             maSdrLightingAttribute(rSdrLightingAttribute),
@@ -373,7 +365,7 @@ namespace drawinglayer
 
         bool ScenePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if(BasePrimitive2D::operator==(rPrimitive))
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const ScenePrimitive2D& rCompare = (ScenePrimitive2D&)rPrimitive;
 
@@ -424,7 +416,7 @@ namespace drawinglayer
             bool bNeedNewDecomposition(false);
             bool bDiscreteSizesAreCalculated(false);
 
-            if(getLocalDecomposition().hasElements())
+            if(getBuffered2DDecomposition().hasElements())
             {
                 basegfx::B2DRange aVisibleDiscreteRange;
                 calculateDiscreteSizes(rViewInformation, aDiscreteRange, aVisibleDiscreteRange, aUnitVisibleRange);
@@ -452,10 +444,10 @@ namespace drawinglayer
             if(bNeedNewDecomposition)
             {
                 // conditions of last local decomposition have changed, delete
-                const_cast< ScenePrimitive2D* >(this)->setLocalDecomposition(Primitive2DSequence());
+                const_cast< ScenePrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DSequence());
             }
 
-            if(!getLocalDecomposition().hasElements())
+            if(!getBuffered2DDecomposition().hasElements())
             {
                 if(!bDiscreteSizesAreCalculated)
                 {
@@ -471,7 +463,7 @@ namespace drawinglayer
             }
 
             // use parent implementation
-            return BasePrimitive2D::get2DDecomposition(rViewInformation);
+            return BufferedDecompositionPrimitive2D::get2DDecomposition(rViewInformation);
         }
 
         // provide unique ID

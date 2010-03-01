@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AResultSet.cxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -334,11 +331,9 @@ Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 /*columnIndex*/ ) throw
 }
 // -------------------------------------------------------------------------
 
-Any SAL_CALL OResultSet::getObject( sal_Int32 /*columnIndex*/, const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
+Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
 {
-
-    ::dbtools::throwFeatureNotImplementedException( "XRow::getObject", *this );
-    return Any();
+    return getValue(columnIndex).makeAny();
 }
 // -------------------------------------------------------------------------
 
@@ -786,14 +781,24 @@ void SAL_CALL OResultSet::updateTimestamp( sal_Int32 columnIndex, const ::com::s
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OResultSet::updateBinaryStream( sal_Int32 /*columnIndex*/, const Reference< ::com::sun::star::io::XInputStream >& /*x*/, sal_Int32 /*length*/ ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::updateBinaryStream( sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XRowUpdate::updateBinaryStream", *this );
+    if(!x.is())
+        ::dbtools::throwFunctionSequenceException(*this);
+
+    Sequence<sal_Int8> aSeq;
+    x->readBytes(aSeq,length);
+    updateBytes(columnIndex,aSeq);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OResultSet::updateCharacterStream( sal_Int32 /*columnIndex*/, const Reference< ::com::sun::star::io::XInputStream >& /*x*/, sal_Int32 /*length*/ ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::updateCharacterStream( sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XRowUpdate::updateCharacterStream", *this );
+    if(!x.is())
+        ::dbtools::throwFunctionSequenceException(*this);
+
+    Sequence<sal_Int8> aSeq;
+    x->readBytes(aSeq,length);
+    updateBytes(columnIndex,aSeq);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::refreshRow(  ) throw(SQLException, RuntimeException)

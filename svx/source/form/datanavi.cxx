@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: datanavi.cxx,v $
- * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,9 +41,9 @@
 #include <svx/dialmgr.hxx>
 #include <svx/fmshell.hxx>
 #include <svtools/miscopt.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/viewoptions.hxx>
-#include <svtools/svtools.hrc>
+#include <unotools/pathoptions.hxx>
+#include <unotools/viewoptions.hxx>
+#include <svl/svtools.hrc>
 #include <sfx2/app.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/objitem.hxx>

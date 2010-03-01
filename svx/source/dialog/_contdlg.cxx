@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: _contdlg.cxx,v $
- * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #include <tools/shl.hxx>
 #include <vcl/salbtype.hxx>     // FRound
 #include <vcl/msgbox.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svtools/miscopt.hxx>
@@ -421,7 +418,7 @@ SvxSuperContourDlg::SvxSuperContourDlg( SfxBindings *_pBindings, SfxChildWindow 
     Point           aPos( aTbx1.GetPosPixel() );
       SvtMiscOptions  aMiscOptions;
 
-    aMiscOptions.AddListener( LINK( this, SvxSuperContourDlg, MiscHdl ) );
+    aMiscOptions.AddListenerLink( LINK( this, SvxSuperContourDlg, MiscHdl ) );
 
     aTbx1.SetOutStyle( aMiscOptions.GetToolboxStyle() );
     aTbx1.SetSizePixel( aTbxSize );
@@ -874,7 +871,7 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx )
 IMPL_LINK( SvxSuperContourDlg, MousePosHdl, ContourWindow*, pWnd )
 {
     String aStr;
-    const FieldUnit eFieldUnit = GetModuleFieldUnit();
+    const FieldUnit eFieldUnit = GetBindings().GetDispatcher()->GetModule()->GetFieldUnit();
     const Point& rMousePos = pWnd->GetMousePos();
     LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
     const sal_Unicode cSep = aLocaleWrapper.getNumDecimalSep().GetChar(0);
@@ -897,7 +894,7 @@ IMPL_LINK( SvxSuperContourDlg, MousePosHdl, ContourWindow*, pWnd )
 IMPL_LINK( SvxSuperContourDlg, GraphSizeHdl, ContourWindow*, pWnd )
 {
     String aStr;
-    const FieldUnit eFieldUnit = GetModuleFieldUnit();
+    const FieldUnit eFieldUnit = GetBindings().GetDispatcher()->GetModule()->GetFieldUnit();
     const Size& rSize = pWnd->GetGraphicSize();
     LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
     const sal_Unicode cSep = aLocaleWrapper.getNumDecimalSep().GetChar(0);

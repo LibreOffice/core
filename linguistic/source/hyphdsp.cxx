@@ -1,14 +1,10 @@
-
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: hyphdsp.cxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,7 +37,7 @@
 #include <i18npool/lang.h>
 #include <unotools/localedatawrapper.hxx>
 #include <tools/debug.hxx>
-#include <svtools/lngmisc.hxx>
+#include <svl/lngmisc.hxx>
 #include <unotools/processfactory.hxx>
 #include <osl/mutex.hxx>
 
@@ -275,7 +271,8 @@ Reference< XHyphenatedWord > SAL_CALL
         return xRes;
 
     // search for entry with that language
-    LangSvcEntries_Hyph *pEntry = aSvcMap[ nLanguage ].get();
+    HyphSvcByLangMap_t::iterator    aIt( aSvcMap.find( nLanguage ) );
+    LangSvcEntries_Hyph     *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : NULL;
 
     BOOL bWordModified = FALSE;
     if (!pEntry || (nMaxLeading < 0 || nMaxLeading > nWordLen))
@@ -418,7 +415,8 @@ Reference< XHyphenatedWord > SAL_CALL
         return xRes;
 
     // search for entry with that language
-    LangSvcEntries_Hyph *pEntry = aSvcMap[ nLanguage ].get();
+    HyphSvcByLangMap_t::iterator    aIt( aSvcMap.find( nLanguage ) );
+    LangSvcEntries_Hyph     *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : NULL;
 
     BOOL bWordModified = FALSE;
     if (!pEntry || !(0 <= nIndex && nIndex <= nWordLen - 2))
@@ -555,7 +553,8 @@ Reference< XPossibleHyphens > SAL_CALL
         return xRes;
 
     // search for entry with that language
-    LangSvcEntries_Hyph *pEntry = aSvcMap[ nLanguage ].get();
+    HyphSvcByLangMap_t::iterator    aIt( aSvcMap.find( nLanguage ) );
+    LangSvcEntries_Hyph     *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : NULL;
 
     if (!pEntry)
     {
@@ -713,8 +712,9 @@ Sequence< OUString >
 
     // search for entry with that language and use data from that
     INT16 nLanguage = LocaleToLanguage( rLocale );
-    HyphenatorDispatcher    *pThis = (HyphenatorDispatcher *) this;
-    const LangSvcEntries_Hyph *pEntry = pThis->aSvcMap[ nLanguage ].get();
+    HyphenatorDispatcher            *pThis = (HyphenatorDispatcher *) this;
+    const HyphSvcByLangMap_t::iterator  aIt( pThis->aSvcMap.find( nLanguage ) );
+    const LangSvcEntries_Hyph       *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : NULL;
     if (pEntry)
     {
         aRes = pEntry->aSvcImplNames;

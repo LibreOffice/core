@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdrattributecreator3d.cxx,v $
- *
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +27,7 @@
 
 #include <svx/sdr/primitive3d/sdrattributecreator3d.hxx>
 #include <svx/svx3ditems.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <com/sun/star/drawing/NormalsKind.hpp>
 #include <com/sun/star/drawing/TextureProjectionMode.hpp>
 #include <drawinglayer/attribute/sdrattribute3d.hxx>

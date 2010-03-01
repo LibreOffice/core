@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdpntv.cxx,v $
- * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 #include <svx/svdpntv.hxx>
 #include <vcl/msgbox.hxx>
 #include <sdrpaintwindow.hxx>
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #include <svx/svdmodel.hxx>
 
 #ifdef DBG_UTIL
@@ -42,10 +39,10 @@
 #endif
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 #include <svx/svdpntv.hxx>
-#include <svx/editdata.hxx>
+#include <editeng/editdata.hxx>
 #include <svx/svdmrkv.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdpage.hxx>
@@ -66,10 +63,10 @@
 #include <svx/svdobj.hxx>
 #include <svx/svdview.hxx>
 #include <svx/sxlayitm.hxx>
-#include <svtools/itemiter.hxx>
-#include <svx/eeitem.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/style.hxx>
+#include <svl/itemiter.hxx>
+#include <editeng/eeitem.hxx>
+#include <svl/whiter.hxx>
+#include <svl/style.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/svdouno.hxx>
 #include <vcl/svapp.hxx>
@@ -275,7 +272,8 @@ SdrPaintView::SdrPaintView(SdrModel* pModel1, OutputDevice* pOut)
     mbPagePaintingAllowed(true),
     mbHideOle(false),
     mbHideChart(false),
-    mbHideDraw(false)
+    mbHideDraw(false),
+    mbHideFormControl(false)
 {
     DBG_CTOR(SdrPaintView,NULL);
     pMod=pModel1;
@@ -289,14 +287,14 @@ SdrPaintView::SdrPaintView(SdrModel* pModel1, OutputDevice* pOut)
     // Flag zur Visualisierung von Gruppen
     bVisualizeEnteredGroup = TRUE;
 
-    StartListening( maColorConfig );
+    maColorConfig.AddListener(this);
     onChangeColorConfig();
 }
 
 SdrPaintView::~SdrPaintView()
 {
     DBG_DTOR(SdrPaintView,NULL);
-    EndListening( maColorConfig );
+    maColorConfig.RemoveListener(this);
     ClearPageView();
 
 #ifdef DBG_UTIL
@@ -345,12 +343,12 @@ void __EXPORT SdrPaintView::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint
             }
         }
     }
+}
 
-    if( rHint.ISA( SfxSimpleHint ) && ( (SfxSimpleHint&) rHint ).GetId() == SFX_HINT_COLORS_CHANGED )
-    {
-        onChangeColorConfig();
-        InvalidateAllWin();
-    }
+void SdrPaintView::ConfigurationChanged( ::utl::ConfigurationBroadcaster* , sal_uInt32 )
+{
+    onChangeColorConfig();
+    InvalidateAllWin();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

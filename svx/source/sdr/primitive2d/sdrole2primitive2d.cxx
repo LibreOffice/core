@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdrole2primitive2d.cxx,v $
- *
- * $Revision: 1.2.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,9 +42,37 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence SdrOle2Primitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
+        SdrOle2Primitive2D::SdrOle2Primitive2D(
+            const Primitive2DSequence& rOLEContent,
+            const basegfx::B2DHomMatrix& rTransform,
+            const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute)
+        :   BasePrimitive2D(),
+            maOLEContent(rOLEContent),
+            maTransform(rTransform),
+            maSdrLFSTAttribute(rSdrLFSTAttribute)
         {
-            // to take care of getSdrLFSTAttribute() later, the same as in SdrGrafPrimitive2D::createLocalDecomposition
+        }
+
+        bool SdrOle2Primitive2D::operator==(const BasePrimitive2D& rPrimitive) const
+        {
+            if(BasePrimitive2D::operator==(rPrimitive))
+            {
+                const SdrOle2Primitive2D& rCompare = (SdrOle2Primitive2D&)rPrimitive;
+
+                if(getOLEContent() == rCompare.getOLEContent()
+                    && getTransform() == rCompare.getTransform()
+                    && getSdrLFSTAttribute() == rCompare.getSdrLFSTAttribute())
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        Primitive2DSequence SdrOle2Primitive2D::get2DDecomposition(const geometry::ViewInformation2D& /*aViewInformation*/) const
+        {
+            // to take care of getSdrLFSTAttribute() later, the same as in SdrGrafPrimitive2D::create2DDecomposition
             // should happen. For the moment we only need the OLE itself
             // Added complete primitive preparation using getSdrLFSTAttribute() now. To not do stuff which is not needed now, it
             // may be supressed by using a static bool. The paint version only supported text.
@@ -104,7 +128,7 @@ namespace drawinglayer
             }
 
             // add graphic content
-            appendPrimitive2DSequenceToPrimitive2DSequence(aRetval, getChildren());
+            appendPrimitive2DSequenceToPrimitive2DSequence(aRetval, getOLEContent());
 
             // add text, no need to supress to stay compatible since text was
             // always supported by the old paints, too
@@ -120,32 +144,6 @@ namespace drawinglayer
             }
 
             return aRetval;
-        }
-
-        SdrOle2Primitive2D::SdrOle2Primitive2D(
-            const Primitive2DSequence& rChildren,
-            const ::basegfx::B2DHomMatrix& rTransform,
-            const attribute::SdrLineFillShadowTextAttribute& rSdrLFSTAttribute)
-        :   GroupPrimitive2D(rChildren),
-            maTransform(rTransform),
-            maSdrLFSTAttribute(rSdrLFSTAttribute)
-        {
-        }
-
-        bool SdrOle2Primitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(GroupPrimitive2D::operator==(rPrimitive))
-            {
-                const SdrOle2Primitive2D& rCompare = (SdrOle2Primitive2D&)rPrimitive;
-
-                if(getTransform() == rCompare.getTransform()
-                    && getSdrLFSTAttribute() == rCompare.getSdrLFSTAttribute())
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
 
         // provide unique ID

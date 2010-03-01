@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fontmenucontroller.cxx,v $
- * $Revision: 1.10.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -188,7 +185,9 @@ void FontMenuController::impl_select(const Reference< XDispatch >& _xDispatch,co
             m_xFrame,
             aTargetURL,
             Sequence<PropertyValue>());
-    _xDispatch->dispatch( aTargetURL, aArgs );
+    OSL_ENSURE(_xDispatch.is(),"FontMenuController::impl_select: No dispatch");
+    if ( _xDispatch.is() )
+        _xDispatch->dispatch( aTargetURL, aArgs );
 }
 
 void SAL_CALL FontMenuController::activate( const css::awt::MenuEvent& ) throw (RuntimeException)

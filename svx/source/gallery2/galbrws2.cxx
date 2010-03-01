@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: galbrws2.cxx,v $
- * $Revision: 1.57 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,23 +32,26 @@
 #include <sot/formats.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/valueset.hxx>
-#include <svtools/urlbmk.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/urlbmk.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
 #include <svtools/transfer.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxsids.hrc>
-#include "impgrf.hxx"
-#include <svx/brshitem.hxx>
+#include "svtools/filter.hxx"
+#include <editeng/brshitem.hxx>
 #include "helpid.hrc"
-#include "gallery1.hxx"
+#include "gallery.hxx"
+#include "galobj.hxx"
+#include "svx/gallery1.hxx"
 #include "galtheme.hxx"
-#include "galmisc.hxx"
-#include "galdlg.hxx"
+#include "galctrl.hxx"
+#include "svx/galmisc.hxx"
 #include "galbrws2.hxx"
+#include "gallery.hrc"
 #include <vcl/svapp.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/svxdlg.hxx> //CHINA001
@@ -321,7 +321,7 @@ GalleryBrowser2::GalleryBrowser2( GalleryBrowser* pParent, const ResId& rResId, 
     const Link  aSelectHdl( LINK( this, GalleryBrowser2, SelectObjectHdl ) );
     Font        aInfoFont( maInfoBar.GetControlFont() );
 
-    maMiscOptions.AddListener( LINK( this, GalleryBrowser2, MiscHdl ) );
+    maMiscOptions.AddListenerLink( LINK( this, GalleryBrowser2, MiscHdl ) );
 
     maViewBox.InsertItem( TBX_ID_ICON, aDummyImage );
     maViewBox.SetItemBits( TBX_ID_ICON, TIB_RADIOCHECK | TIB_AUTOCHECK );
@@ -353,7 +353,7 @@ GalleryBrowser2::GalleryBrowser2( GalleryBrowser* pParent, const ResId& rResId, 
 
 GalleryBrowser2::~GalleryBrowser2()
 {
-    maMiscOptions.RemoveListener( LINK( this, GalleryBrowser2, MiscHdl ) );
+    maMiscOptions.RemoveListenerLink( LINK( this, GalleryBrowser2, MiscHdl ) );
 
     delete mpPreview;
     delete mpListView;
@@ -1014,7 +1014,7 @@ void GalleryBrowser2::ImplExecute( USHORT nId )
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
-                        AbstractTitleDialog* aDlg = pFact->CreateTitleDialog( this, aOldTitle, RID_SVXDLG_GALLERY_TITLE );
+                        AbstractTitleDialog* aDlg = pFact->CreateTitleDialog( this, aOldTitle );
                         DBG_ASSERT(aDlg, "Dialogdiet fail!");//CHINA001
                         if( aDlg->Execute() == RET_OK )//CHINA001 if( aDlg.Execute() == RET_OK )
                         {
@@ -1151,7 +1151,7 @@ String GalleryBrowser2::GetFilterName() const
 
         if( ( SGA_OBJ_BMP == eObjKind ) || ( SGA_OBJ_ANIM == eObjKind ) )
         {
-            GraphicFilter*      pFilter = GetGrfFilter();
+            GraphicFilter*      pFilter = GraphicFilter::GetGraphicFilter();
             INetURLObject       aURL; mpCurTheme->GetURL( mnCurActionPos, aURL );
             sal_uInt16          nFilter = pFilter->GetImportFormatNumberForShortName( aURL.GetExtension() );
 

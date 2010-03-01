@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: KDatabaseMetaData.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 #include "KDatabaseMetaData.hxx"
 #include "kfields.hxx"
 #include "KDEInit.h"
-#include <vcl/kde_headers.h>
+#include <shell/kde_headers.h>
 #include "FDatabaseMetaDataResultSet.hxx"
 #include "OTypeInfo.hxx"
 #include <com/sun/star/sdbc/ColumnValue.hpp>

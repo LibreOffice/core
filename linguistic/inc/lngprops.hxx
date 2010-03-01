@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: lngprops.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,7 @@
 #ifndef _LINGUISTIC_LNGPROPS_HHX_
 #define _LINGUISTIC_LNGPROPS_HHX_
 
-#include <svtools/linguprops.hxx>
+#include <unotools/linguprops.hxx>
 
 // maximal number of suggestions to be returned in spelling  context-menu
 // (may not include results added by looking up user dictionaries)

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fmexch.cxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 #include "fmexch.hxx"
 
 #include <sot/storage.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 
 #ifndef _SVX_DBEXCH_HRC
 #include <dbexch.hrc>
@@ -43,7 +40,7 @@
 #include <tools/diagnose_ex.h>
 
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 //........................................................................
 namespace svxform

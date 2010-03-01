@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewcontactofsdrpathobj.cxx,v $
- *
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +34,7 @@
 #include <svx/sdr/attribute/sdrallattribute.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/sdr/primitive2d/sdrpathprimitive2d.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -98,9 +95,11 @@ namespace sdr
                                 aUnitPolyPolygon.setB2DPolygon(0, aNewPolygon);
 
                                 // #i102548# fill objectMatrix with rotation and offset (no shear for lines)
-                                aObjectMatrix.scale(aLine.getLength(), 1.0);
-                                aObjectMatrix.rotate(atan2(aLine.getY(), aLine.getX()));
-                                aObjectMatrix.translate(aStart.getX(), aStart.getY());
+                                aObjectMatrix = basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                                    aLine.getLength(), 1.0,
+                                    0.0,
+                                    atan2(aLine.getY(), aLine.getX()),
+                                    aStart.getX(), aStart.getY());
                             }
                             else
                             {
@@ -110,22 +109,14 @@ namespace sdr
                                 const GeoStat& rGeoStat(GetPathObj().GetGeoStat());
                                 const double fWidth(aObjectRange.getWidth());
                                 const double fHeight(aObjectRange.getHeight());
+                                const double fScaleX(basegfx::fTools::equalZero(fWidth) ? 1.0 : fWidth);
+                                const double fScaleY(basegfx::fTools::equalZero(fHeight) ? 1.0 : fHeight);
 
-                                aObjectMatrix.scale(
-                                    basegfx::fTools::equalZero(fWidth) ? 1.0 : fWidth,
-                                    basegfx::fTools::equalZero(fHeight) ? 1.0 : fHeight);
-
-                                if(rGeoStat.nShearWink)
-                                {
-                                    aObjectMatrix.shearX(tan((36000 - rGeoStat.nShearWink) * F_PI18000));
-                                }
-
-                                if(rGeoStat.nDrehWink)
-                                {
-                                    aObjectMatrix.rotate((36000 - rGeoStat.nDrehWink) * F_PI18000);
-                                }
-
-                                aObjectMatrix.translate(aObjectRange.getMinX(), aObjectRange.getMinY());
+                                aObjectMatrix = basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                                    fScaleX, fScaleY,
+                                    rGeoStat.nShearWink ? tan((36000 - rGeoStat.nShearWink) * F_PI18000) : 0.0,
+                                    rGeoStat.nDrehWink ? (36000 - rGeoStat.nDrehWink) * F_PI18000 : 0.0,
+                                    aObjectRange.getMinX(), aObjectRange.getMinY());
 
                                 // ceate unit polygon from object's absolute path
                                 basegfx::B2DHomMatrix aInverse(aObjectMatrix);

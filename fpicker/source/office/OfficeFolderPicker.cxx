@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: OfficeFolderPicker.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,13 +36,13 @@
 #include <tools/urlobj.hxx>
 
 #define _SVSTDARR_STRINGSDTOR
-#include "svtools/svstdarr.hxx"
+#include "svl/svstdarr.hxx"
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 
 // using ----------------------------------------------------------------
 

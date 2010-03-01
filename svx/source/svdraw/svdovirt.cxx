@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdovirt.cxx,v $
- * $Revision: 1.21.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +37,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svddrgv.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -216,9 +214,7 @@ basegfx::B2DPolyPolygon SdrVirtObj::TakeXorPoly() const
 
     if(aAnchor.X() || aAnchor.Y())
     {
-        basegfx::B2DHomMatrix aMatrix;
-        aMatrix.translate(aAnchor.X(), aAnchor.Y());
-        aPolyPolygon.transform(aMatrix);
+        aPolyPolygon.transform(basegfx::tools::createTranslateB2DHomMatrix(aAnchor.X(), aAnchor.Y()));
     }
 
     return aPolyPolygon;

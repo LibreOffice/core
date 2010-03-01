@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: precompiled_framework.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -380,32 +377,32 @@
 #include "sot/storage.hxx"
 
 #include "svtools/acceleratorexecute.hxx"
-#include "svtools/cmdoptions.hxx"
+#include "unotools/cmdoptions.hxx"
 #include "svtools/colorcfg.hxx"
 #include "svtools/ctrltool.hxx"
-#include "svtools/dynamicmenuoptions.hxx"
+#include "unotools/dynamicmenuoptions.hxx"
 #include "svtools/filter.hxx"
 #include "svtools/framestatuslistener.hxx"
 #include "svtools/helpopt.hxx"
-#include "svtools/historyoptions.hxx"
-#include "svtools/imageitm.hxx"
+#include "unotools/historyoptions.hxx"
+#include "svl/imageitm.hxx"
 #include "svtools/imgdef.hxx"
-#include "svtools/inettype.hxx"
-#include "svtools/internaloptions.hxx"
-#include "svtools/lstner.hxx"
+#include "svl/inettype.hxx"
+#include "unotools/internaloptions.hxx"
+#include "svl/lstner.hxx"
 #include "svtools/menuoptions.hxx"
 #include "svtools/miscopt.hxx"
-#include "svtools/moduleoptions.hxx"
-#include "svtools/pathoptions.hxx"
+#include "unotools/moduleoptions.hxx"
+#include "unotools/pathoptions.hxx"
 #include "svtools/sfxecode.hxx"
-#include "svtools/smplhint.hxx"
-#include "svtools/solar.hrc"
+#include "svl/smplhint.hxx"
+#include "svl/solar.hrc"
 #include "svtools/statusbarcontroller.hxx"
-#include "svtools/svarray.hxx"
+#include "svl/svarray.hxx"
 #include "svtools/svmedit.hxx"
 #include "svtools/toolboxcontroller.hxx"
 #include "svtools/transfer.hxx"
-#include "svtools/urihelper.hxx"
+#include "svl/urihelper.hxx"
 #include "svtools/xtextedt.hxx"
 
 #include "toolkit/awt/vclxmenu.hxx"

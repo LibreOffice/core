@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: app.hrc,v $
- * $Revision: 1.49 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -257,6 +254,18 @@
 #define STR_QUERY_UPDATE_LINKS                  (RID_SFX_APP_START + 192)
 #define STR_DDE_ERROR                           (RID_SFX_APP_START + 193)
 #define RID_SECURITY_WARNING_NO_HYPERLINKS      (RID_SFX_APP_START + 194)
+
+#define RID_SVXSTR_FILELINK                     (RID_SFX_APP_START + 195)
+#define RID_SVXSTR_GRAFIKLINK                   (RID_SFX_APP_START + 196)
+#define RID_SVXSTR_EDITGRFLINK                  (RID_SFX_APP_START + 197)
+
+// strings for error messsages of OpenGraphics dialog
+#define RID_SVXSTR_GRFILTER_OPENERROR           (RID_SFX_APP_START + 198)
+#define RID_SVXSTR_GRFILTER_IOERROR             (RID_SFX_APP_START + 199)
+#define RID_SVXSTR_GRFILTER_FORMATERROR         (RID_SFX_APP_START + 200)
+#define RID_SVXSTR_GRFILTER_VERSIONERROR        (RID_SFX_APP_START + 201)
+#define RID_SVXSTR_GRFILTER_FILTERERROR         (RID_SFX_APP_START + 202)
+#define RID_SVXSTR_GRFILTER_TOOBIG              (RID_SFX_APP_START + 203)
 
 #define MD_DDE_LINKEDIT                         (RID_SFX_APP_START + 1)
 

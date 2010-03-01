@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TDatabaseMetaDataBase.cxx,v $
- * $Revision: 1.8.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -145,6 +142,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getTypeInfo(  ) throw(SQ
                 }
             }
 
+            ::connectivity::ODatabaseMetaDataResultSet::ORows aTypeInfoRows;
             while( xRet->next() )
             {
                 ::connectivity::ODatabaseMetaDataResultSet::ORow aRow;
@@ -169,8 +167,9 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getTypeInfo(  ) throw(SQ
                     else
                         ++aIter;
                 }
-                m_aTypeInfoRows.push_back(aRow);
+                aTypeInfoRows.push_back(aRow);
             }
+            m_aTypeInfoRows = aTypeInfoRows;
         }
     }
     ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTypeInfo);

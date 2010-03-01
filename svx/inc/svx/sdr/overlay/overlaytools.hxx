@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: overlayobject.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,7 +55,7 @@ namespace drawinglayer
             sal_uInt16                              mnCenterY;
 
         protected:
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
             OverlayBitmapExPrimitive(
@@ -99,7 +96,7 @@ namespace drawinglayer
             double                                  mfDiscreteDashLength;
 
         protected:
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
             OverlayCrosshairPrimitive(
@@ -148,7 +145,7 @@ namespace drawinglayer
             double                          mfRotation;
 
         protected:
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
             OverlayHatchRectanglePrimitive(
@@ -206,7 +203,7 @@ namespace drawinglayer
             double                                  mfDiscreteDashLength;
 
         protected:
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
             OverlayHelplineStripedPrimitive(
@@ -251,7 +248,7 @@ namespace drawinglayer
             double                                  mfDiscreteDashLength;
 
         protected:
-            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+            virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
             OverlayRollingRectanglePrimitive(
