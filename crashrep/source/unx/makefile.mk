@@ -56,15 +56,14 @@ APP1TARGET=$(TARGET)
 APP1OBJS=$(OBJFILES)
 APP1RPATH=BRAND
 
-.IF "$(OS)" != "MACOSX"
-APP1STDLIBS=$(DYNAMIC) -lXext -lX11
-.ENDIF
 .IF "$(OS)" != "FREEBSD" && "$(OS)" != "MACOSX" && "$(OS)"!="NETBSD"
 APP1STDLIBS+=-ldl -lnsl
 .ENDIF
 .IF "$(OS)" == "SOLARIS"
 APP1STDLIBS+=-lsocket
 .ENDIF
+
+UNIXTEXT = $(MISC)/crash_report.sh
 
 .ENDIF #  "$(ENABLE_CRASHDUMP)" != "" || "$(PRODUCT)" == ""
 
