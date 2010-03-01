@@ -298,7 +298,7 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet,const ::rtl::O
 
     Reference< XMultiServiceFactory >  xFactory(m_xConnection, UNO_QUERY_THROW);
     Reference<XSingleSelectQueryComposer> xAnalyzer(xFactory->createInstance(SERVICE_NAME_SINGLESELECTQUERYCOMPOSER),UNO_QUERY);
-    xAnalyzer->setQuery(m_xComposer->getQuery());
+    xAnalyzer->setElementaryQuery(m_xComposer->getQuery());
     Reference<XTablesSupplier> xTabSup(xAnalyzer,uno::UNO_QUERY);
     Reference<XNameAccess> xSelectTables(xTabSup->getTables(),uno::UNO_QUERY);
     const Sequence< ::rtl::OUString> aSeq = xSelectTables->getElementNames();
