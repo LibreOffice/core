@@ -157,32 +157,3 @@ function GetAllDirListLocal ( byVal sPath$, byVal sMatch$ ,lsFile() as String ) 
 
     GetAllDirListLocal = Count% - 1  ' count of listelements
 end function
-'
-'-------------------------------------------------------------------------------
-'
-function KillFileListLocal ( lsList() as String ) as Boolean
-    '/// Delete all files in the list
-    '/// <u>Input</u>: List with files
-    '/// <u>Return</u>: TRUE or FALSE if files are killed; modified list with not deleted files.
-    Dim i as Integer
-    Dim FehlerListe ( 1000 ) as String
-
-    FehlerListe ( 0 ) = 0
-    for i=1 to ListCount ( lsList() )
-        try
-            kill ( lsList(i) )
-        catch
-            ListAppend ( FehlerListe (), lsList(i) )
-        endcatch
-    next i
-
-    lsList(0) = 0               ' delete old list
-    KillFileListLocal = TRUE
-    for i=1 to ListCount ( FehlerListe () )
-        KillFileListLocal = FALSE
-        ListAppend ( lsList(), FehlerListe (i) )
-    next i
-end function
-'
-'-------------------------------------------------------------------------------
-'
