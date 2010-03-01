@@ -186,6 +186,11 @@ end function
 '-------------------------------------------------------------------------------
 '
 function IsImageLoaded
+
+' used by:
+' - hGrafikEinfuegen = IsImageLoaded
+' - hGrafikVerknuepftEinfuegen = IsImageLoaded
+
     '/// IsImageLoaded
     '/// Wait until images in document are loaded
     Dim i% : Dim Herbert as Boolean
@@ -208,32 +213,6 @@ function IsImageLoaded
         IsImageLoaded = TRUE
     end if
 end function
-'
-'-------------------------------------------------------------------------------
-'
-sub hIsWebPageLoaded as boolean
-    'Author: Joerg Sievers
-    '/// If a document in StarOffice Writer is loaded all 9 items in the
-    '///+ statusbar are visible otherwise not.
-    '///+ This sub checks the state of these items.
-    Dim i as integer
-    Dim iGibtdenStatusraus as integer
-    printlog "- global::tools::inc::tfiles.inc::hIsWebPageLoaded"
-    hIsWebPageLoaded = FALSE
-    for i = 1 to 20
-        Kontext "DocumentWriter"
-        if DocumentWriter.Exists(3) then
-            'Count the items on the status bar.
-            iGibtdenStatusraus = DocumentWriter.StatusGetItemCount
-            'There are nine items on the status bar if the web page has been loaded.
-            if iGibtdenStatusraus = 9 then
-                hIsWebPageLoaded = TRUE
-                exit for
-            end If
-        end if
-        WaitSlot( 3000 )
-    next i
-end sub
 '
 '-------------------------------------------------------------------------------
 '
