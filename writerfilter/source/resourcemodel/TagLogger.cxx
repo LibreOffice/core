@@ -356,7 +356,7 @@ namespace writerfilter
 
         static char sBuffer[256];
         snprintf(sBuffer, sizeof(sBuffer),
-                 "0x%" SAL_PRIxUINT32 "x, %" SAL_PRIxUINT32 "d", rSprm.getId(),
+                 "0x%" SAL_PRIxUINT32 ", %" SAL_PRIuUINT32, rSprm.getId(),
                  rSprm.getId());
         pTag->addAttr("id", sBuffer);
         pTag->addAttr("value", rSprm.getValue()->toString());
