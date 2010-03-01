@@ -92,22 +92,6 @@ end function
 
 '*******************************************************************************
 
-function hCloseNavigator() as boolean
-
-    '///<h3>Function to close the navigator</h3>
-    const CFN = "global::tools::includes::optional::t_docfuncs.inc::hCloseNavigator::"
-    
-    if ( VERBOSE ) then printlog( CFN & "Enter" )
-    
-    Kontext "Navigator"
-    hCloseNavigator() = hCloseDialog( Navigator , "close, optional" )
-    
-    if ( VERBOSE ) then printlog( CFN & "Exit" )
-
-end function
-
-'*******************************************************************************
-
 function hNumericDocType( doctype as integer ) as string
 
     '///<h3>Convert a numeric expression to a gApplication</h3>
