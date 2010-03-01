@@ -209,23 +209,3 @@ function KillDirListLocal ( lsList() as String ) as Boolean
         ListAppend (  lsList(), FehlerListe (i) )
     next i
 end function
-'
-'-------------------------------------------------------------------------------
-'
-function GetFileSizesLocal ( lsList() as String ) as long
-    '/// Computes the total Filesize of the files in the list
-    '/// <u>Input</u>: List with files
-    '/// <u>Return</u>: Filesize in bytes
-    Dim iSum
-    Dim i as Integer
-
-    iSum = 0
-    for i=1 to ListCount ( lsList() )
-        try
-            iSum = iSum + FileLen ( lsList(i) )
-        catch
-        endcatch
-    next i
-
-    GetFileSizesLocal = iSum
-end function
