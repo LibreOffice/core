@@ -64,27 +64,6 @@ end function
 '
 '-------------------------------------------------------------------------------
 '
-function hKillFileLocal ( Dat as String ) as Boolean
-    '/// Delete a file
-    '/// <u>Input</u>: File with complete path
-    '/// <u>Return</u>: TRUE or FALSE success on deleting?
-    if Dir ( Dat ) <> "" then
-        try
-            kill ( Dat )
-        catch
-        endcatch
-        if Dir ( Dat ) <> "" then
-            hKillFileLocal = FALSE
-        else
-            hKillFileLocal = TRUE
-        end if
-    else
-        hKillFileLocal = TRUE
-    end if
-end function
-'
-'-------------------------------------------------------------------------------
-'
 function DirNameListLocal (ByVal sPfad$ , lsDirName() as String ) as Integer
     '/// seperate a path in its parts
     '/// <u>Input</u>: Path to seperate; Empty list, because it get's reset in this function!;

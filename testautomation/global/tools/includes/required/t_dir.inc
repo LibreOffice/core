@@ -65,27 +65,6 @@ end function
 '
 '-------------------------------------------------------------------------------
 '
-function hKillFile ( Dat as String ) as Boolean
-    '/// Delete a file
-    '/// <u>Input</u>: File with complete path
-    '/// <u>Return</u>: TRUE or FALSE success on deleting?
-    if app.Dir ( Dat ) <> "" then
-        try
-            app.kill ( Dat )
-        catch
-        endcatch
-        if app.Dir ( Dat ) <> "" then
-            hKillFile = FALSE
-        else
-            hKillFile = TRUE
-        end if
-    else
-        hKillFile = TRUE
-    end if
-end function
-'
-'-------------------------------------------------------------------------------
-'
 function DirNameList (ByVal sPfad$ , lsDirName() as String ) as Integer
     '/// seperate a path in its parts
     '/// <u>Input</u>: Path to seperate; Empty list, because it get's reset in this function!;
