@@ -110,29 +110,3 @@ function GetFileListLocal ( sPath$, sMatch$ ,lsFile() as String  ) as integer
     loop
     GetFileListLocal = Count%
 end function
-'
-'-------------------------------------------------------------------------------
-'
-function GetDirListLocal ( sPath$, sMatch$ ,lsFile() as String ) as integer
-    '/// Get Subdirectories from a directory and append them to a list (<b>with</b> path)
-    '/// <u>Input</u>: Directory with complete path; Search Pattern, e.g *; List
-    '/// <u>Return</u>: count of appended entries; updated list
-    Dim Count%
-    Dim Verzeichnis as String
-
-    if right ( sPath$, 1 ) <> gPathSigne then sPath$ = sPath$ + gPathSigne
-    ' at the end of the string has to be teh path seperator, else the dir-command doesn't work
-    Verzeichnis = Dir( sPath$ + sMatch$ , 16)
-    Count% = 0
-
-    do until Len(Verzeichnis) = 0
-        if Verzeichnis <>"." AND Verzeichnis <> ".." then
-            lsFile(0) = Val(lsFile(0)) + 1
-            lsFile( lsFile(0) ) = sPath$  + Verzeichnis + gPathSigne
-            Count% = Count% + 1
-        end if
-        Verzeichnis = Dir
-    loop
-
-    GetDirListLocal = Count%
-end function
