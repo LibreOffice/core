@@ -864,35 +864,29 @@ sal_Bool ImplSdPPTImport::Import()
                 {
                     if ( pMPage->GetPageKind() == PK_STANDARD )
                     {
-                        // Hintergrundobjekt gefunden (erstes Objekt der MasterPage)
-                        pObj->SetEmptyPresObj( TRUE );
-                        pObj->SetUserCall( pMPage );
-                        pObj->SetLayer( mnBackgroundLayerID );
+                        // transform data from imported background object to new form
+                        // and delete the object. It was used as container to transport
+                        // the attributes of the MasterPage background fill
+                        SfxStyleSheet* pSheet = pMPage->GetStyleSheetForMasterPageBackground();
 
-                        // Schatten am ersten Objekt (Hintergrundobjekt) entfernen (#57918#)
-                        SfxItemSet aTempAttr( mpDoc->GetPool() );
-                        aTempAttr.Put( pObj->GetMergedItemSet() );
-
-                        BOOL bShadowIsOn = ( (SdrShadowItem&)( aTempAttr.Get( SDRATTR_SHADOW ) ) ).GetValue();
-                        if( bShadowIsOn )
+                        if(pSheet)
                         {
-                            aTempAttr.Put( SdrShadowItem( FALSE ) );
-                            pObj->SetMergedItemSet( aTempAttr );
-                        }
-                        SfxStyleSheet* pSheet = pMPage->GetStyleSheetForPresObj( PRESOBJ_BACKGROUND );
-                        if ( pSheet )
-                        {   // StyleSheet fuellen und dem Objekt zuweisen
+                            // if we have a StyleSheet (for Masterpages), set attributes there and use it
                             pSheet->GetItemSet().ClearItem();
-                            pSheet->GetItemSet().Put( pObj->GetMergedItemSet() );
-                            aTempAttr.ClearItem();
-                            pObj->SetMergedItemSet( aTempAttr );
-                            pObj->SetStyleSheet( pSheet, FALSE );
+                            pSheet->GetItemSet().Put(pObj->GetMergedItemSet());
+                            pMPage->getSdrPageProperties().ClearItem();
+                            pMPage->getSdrPageProperties().SetStyleSheet(pSheet);
                         }
-                        pMPage->InsertPresObj( pObj, PRESOBJ_BACKGROUND );
+                        else
+                        {
+                            // without StyleSheet, set attributes directly. This
+                            // should not be done at all and is an error (will be asserted by SdrPage)
+                            pMPage->getSdrPageProperties().ClearItem();
+                            pMPage->getSdrPageProperties().PutItemSet(pObj->GetMergedItemSet());
+                        }
 
-                        // #110094#-15
-                        // tell the page that it's visualization has changed
-                        pMPage->ActionChanged();
+                        pMPage->RemoveObject(pObj->GetOrdNum());
+                        SdrObject::Free(pObj);
                     }
                 }
             }

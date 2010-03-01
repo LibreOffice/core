@@ -70,7 +70,7 @@ SharedPageDescriptor PageObject::GetDescriptor (void) const
 
 
 
-sdr::contact::ViewContact* PageObject::CreateObjectSpecificViewContact (void)
+sdr::contact::ViewContact* PageObject::CreateObjectSpecificViewContact()
 {
     if (mpDescriptor.get() != NULL)
         return mpDescriptor->GetPageObjectFactory().CreateViewContact(this, mpDescriptor);

@@ -43,8 +43,6 @@
 #include <cppuhelper/implbase4.hxx>
 
 const SvxItemPropertySet* ImplGetPageBackgroundPropertySet();
-
-class SdrObject;
 class SdDrawDocument;
 class SfxItemSet;
 
@@ -62,8 +60,7 @@ protected:
 
     const SfxItemPropertySimpleEntry* getPropertyMapEntry( const ::rtl::OUString& rPropertyName ) const throw();
 public:
-    SdUnoPageBackground( SdDrawDocument* pDoc = NULL, SdrObject* pObj = NULL ) throw();
-    SdUnoPageBackground( SdDrawDocument* pDoc, const SfxItemSet* pSet ) throw();
+    SdUnoPageBackground( SdDrawDocument* pDoc = NULL, const SfxItemSet* pSet = NULL) throw();
     ~SdUnoPageBackground() throw();
 
     // internal

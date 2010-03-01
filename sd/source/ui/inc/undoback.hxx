@@ -35,7 +35,7 @@
 
 class SdDrawDocument;
 class SdPage;
-class SdrObject;
+class SfxItemSet;
 
 // -----------------------------
 // - SdBackgroundObjUndoAction -
@@ -46,7 +46,7 @@ class SdBackgroundObjUndoAction : public SdUndoAction
 private:
 
     SdPage&                 mrPage;
-    SdrObject*              mpBackgroundObj;
+    SfxItemSet*             mpItemSet;
 
     void                    ImplRestoreBackgroundObj();
 
@@ -54,7 +54,10 @@ public:
 
                             TYPEINFO();
 
-                            SdBackgroundObjUndoAction( SdDrawDocument& rDoc, SdPage& rPage, const SdrObject* pBackgroundObj );
+                            SdBackgroundObjUndoAction(
+                                SdDrawDocument& rDoc,
+                                SdPage& rPage,
+                                const SfxItemSet& rItenSet);
     virtual                 ~SdBackgroundObjUndoAction();
 
     virtual void            Undo();

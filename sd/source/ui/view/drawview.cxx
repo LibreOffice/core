@@ -306,8 +306,7 @@ BOOL DrawView::SetAttributes(const SfxItemSet& rSet,
                     String aTemplateName(aLayoutName);
 
                     if (ePresObjKind == PRESOBJ_TITLE ||
-                        ePresObjKind == PRESOBJ_NOTES ||
-                        ePresObjKind == PRESOBJ_BACKGROUND)
+                        ePresObjKind == PRESOBJ_NOTES)
                     {
                         // Presentation object (except outline)
                         SfxStyleSheet* pSheet = rPage.GetStyleSheetForPresObj( ePresObjKind );
@@ -578,17 +577,6 @@ void DrawView::HideSdrPage()
     }
 
     ::sd::View::HideSdrPage();
-}
-
-SdrObject* DrawView::GetMaxToBtmObj(SdrObject* pObj) const
-{
-    if( pObj )
-    {
-        SdPage* pPage = (SdPage*)pObj->GetPage();
-        if( pPage && pPage->IsMasterPage() )
-            return pPage->GetPresObj( PRESOBJ_BACKGROUND ) ;
-    }
-    return NULL;
 }
 
 void DrawView::DeleteMarked()

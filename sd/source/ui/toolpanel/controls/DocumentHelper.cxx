@@ -46,7 +46,7 @@
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include "stlpool.hxx"
-
+#include <svx/xfillit0.hxx>
 using namespace ::com::sun::star;
 
 namespace sd { namespace toolpanel { namespace controls {
@@ -449,9 +449,10 @@ void DocumentHelper::AssignMasterPageToPage (
         // not override the new master page) and assign the master page to
         // the regular slide.
         pDocument->GetDocSh()->GetUndoManager()->AddUndoAction(
-            new SdBackgroundObjUndoAction(*pDocument, *pPage, pPage->GetBackgroundObj()),
-                TRUE);
-        pPage->SetBackgroundObj(NULL);
+            new SdBackgroundObjUndoAction(
+                *pDocument, *pPage, pPage->getSdrPageProperties().GetItemSet()),
+            TRUE);
+        pPage->getSdrPageProperties().PutItem(XFillStyleItem(XFILL_NONE));
 
         pDocument->SetMasterPage (
             (pPage->GetPageNum()-1)/2,

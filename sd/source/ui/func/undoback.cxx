@@ -35,6 +35,7 @@
 #include "sdpage.hxx"
 #include "sdresid.hxx"
 #include "strings.hrc"
+#include <svl/itemset.hxx>
 
 // ---------------------------
 // - BackgroundObjUndoAction -
@@ -44,10 +45,13 @@ TYPEINIT1( SdBackgroundObjUndoAction, SdUndoAction );
 
 // -----------------------------------------------------------------------------
 
-SdBackgroundObjUndoAction::SdBackgroundObjUndoAction( SdDrawDocument& rDoc, SdPage& rPage, const SdrObject* pBackgroundObj ) :
-    SdUndoAction( &rDoc ),
-    mrPage( rPage ),
-    mpBackgroundObj( pBackgroundObj ? pBackgroundObj->Clone() : NULL )
+SdBackgroundObjUndoAction::SdBackgroundObjUndoAction(
+    SdDrawDocument& rDoc,
+    SdPage& rPage,
+    const SfxItemSet& rItenSet)
+:   SdUndoAction(&rDoc),
+    mrPage(rPage),
+    mpItemSet(new SfxItemSet(rItenSet))
 {
     String aString( SdResId( STR_UNDO_CHANGE_PAGEFORMAT ) );
     SetComment( aString );
@@ -57,20 +61,18 @@ SdBackgroundObjUndoAction::SdBackgroundObjUndoAction( SdDrawDocument& rDoc, SdPa
 
 SdBackgroundObjUndoAction::~SdBackgroundObjUndoAction()
 {
-    SdrObject::Free( mpBackgroundObj );
+    delete mpItemSet;
 }
 
 // -----------------------------------------------------------------------------
 
 void SdBackgroundObjUndoAction::ImplRestoreBackgroundObj()
 {
-    SdrObject* pOldObj = mrPage.GetBackgroundObj();
-
-    if( pOldObj )
-        pOldObj = pOldObj->Clone();
-
-    mrPage.SetBackgroundObj( mpBackgroundObj );
-    mpBackgroundObj = pOldObj;
+    SfxItemSet* pNew = new SfxItemSet(mrPage.getSdrPageProperties().GetItemSet());
+    mrPage.getSdrPageProperties().ClearItem();
+    mrPage.getSdrPageProperties().PutItemSet(*mpItemSet);
+    delete mpItemSet;
+    mpItemSet = pNew;
 
     // #110094#-15
     // tell the page that it's visualization has changed
@@ -95,5 +97,5 @@ void SdBackgroundObjUndoAction::Redo()
 
 SdUndoAction* SdBackgroundObjUndoAction::Clone() const
 {
-    return new SdBackgroundObjUndoAction( *mpDoc, mrPage, mpBackgroundObj );
+    return new SdBackgroundObjUndoAction(*mpDoc, mrPage, *mpItemSet);
 }
