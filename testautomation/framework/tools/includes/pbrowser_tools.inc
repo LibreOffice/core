@@ -131,6 +131,11 @@ function hClosePropertyBrowser() as boolean
     
     const CFN = "hClosePropertyBrowser::"
 
+    kontext "ControlPropertiesTabControl"
+    hClosePropertyBrowser() = hCloseDialog( ControlPropertiesTabControl, "close" )
+
+goto skipall
+
     '///+<li>Verify that the property browser is open</li>
     kontext "ControlPropertiesTabControl"
     if ( ControlPropertiesTabControl.exists( 1 ) ) then
@@ -151,6 +156,7 @@ function hClosePropertyBrowser() as boolean
         hClosePropertyBrowser() = false
     endif
     '///</ul>
+skipall:
     
 end function
 
