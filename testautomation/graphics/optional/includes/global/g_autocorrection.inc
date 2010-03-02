@@ -1,34 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
-'* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-'*
-'* Copyright 2008 by Sun Microsystems, Inc.
-'*
-'* OpenOffice.org - a multi-platform office productivity suite
-'*
-'* $RCSfile: g_autocorrection.inc,v $
-'*
-'* $Revision: 1.1 $
-'*
-'* last change: $Author: jsi $ $Date: 2008-06-16 10:42:39 $
-'*
-'* This file is part of OpenOffice.org.
-'*
-'* OpenOffice.org is free software: you can redistribute it and/or modify
-'* it under the terms of the GNU Lesser General Public License version 3
-'* only, as published by the Free Software Foundation.
-'*
-'* OpenOffice.org is distributed in the hope that it will be useful,
-'* but WITHOUT ANY WARRANTY; without even the implied warranty of
-'* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'* GNU Lesser General Public License version 3 for more details
-'* (a copy is included in the LICENSE file that accompanied this code).
-'*
-'* You should have received a copy of the GNU Lesser General Public License
-'* version 3 along with OpenOffice.org.  If not, see
-'* <http://www.openoffice.org/license.html>
-'* for a copy of the LGPLv3 License.
-'*
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* Owner : wolfram.garten@sun.com
@@ -217,15 +211,15 @@ testcase tToolsAutocorrectCustomQuotes(bSimple as boolean)
     Printlog "   - replace quotes" '------------------------------------------------------------------------------------------
     ToolsAutocorrect
     Kontext
-    active.SetPage TabTypografisch
-    Kontext "TabTypografisch"
+    active.SetPage TabLocalizedOptions
+    Kontext "TabLocalizedOptions"
     if bSimple then
-        EinfacheErsetzen.Check
+        SingleQuotesReplace.Check
     else
-        DoppelteErsetzen.Check
-        DoppeltStandard.Click
+        DoubleQuotesReplace.Check
+        DoubleQuotesDefault.Click
     endif
-    TabTypografisch.OK
+    TabLocalizedOptions.OK
     sleep 5
     gMouseClick 50,50
     sleep 5
@@ -252,14 +246,14 @@ testcase tToolsAutocorrectCustomQuotes(bSimple as boolean)
     Printlog "   - dont replace quotes" '------------------------------------------------------------------------------------------
     ToolsAutocorrect
     Kontext
-    Active.SetPage TabTypografisch
-    Kontext "TabTypografisch"
+    Active.SetPage TabLocalizedOptions
+    Kontext "TabLocalizedOptions"
     if bSimple then
-        EinfacheErsetzen.Uncheck
+        SingleQuotesReplace.Uncheck
     else
-        DoppelteErsetzen.Uncheck
+        DoubleQuotesReplace.Uncheck
     endif
-    TabTypografisch.OK
+    TabLocalizedOptions.OK
     sleep 1
     gMouseClick 50,50
     sleep 1
@@ -285,14 +279,14 @@ testcase tToolsAutocorrectCustomQuotes(bSimple as boolean)
     Printlog "   - replace quotes" '------------------------------------------------------------------------------------------
     ToolsAutocorrect
     Kontext
-    active.SetPage TabTypografisch
-    Kontext "TabTypografisch"
+    active.SetPage TabLocalizedOptions
+    Kontext "TabLocalizedOptions"
     if bSimple then
-        EinfacheErsetzen.Check
-        EinfachWortAnfang.Click
+        SingleQuotesReplace.Check
+        SingleQuotesStart.Click
     else
-        DoppelteErsetzen.Check
-        DoppeltWortAnfang.Click
+        DoubleQuotesReplace.Check
+        DoubleQuotesStart.Click
     endif
     Kontext "Sonderzeichen"
     sleep 1
@@ -301,11 +295,11 @@ testcase tToolsAutocorrectCustomQuotes(bSimple as boolean)
     sleep 1
     Sonderzeichen.OK
 
-    Kontext "TabTypografisch"
+    Kontext "TabLocalizedOptions"
     if bSimple then
-        EinfachWortEnde.Click
+        SingleQuotesEnd.Click
     else
-        DoppeltWortEnde.Click
+        DoubleQuotesEnd.Click
     endif
     Kontext "Sonderzeichen"
     sleep 1
@@ -314,8 +308,8 @@ testcase tToolsAutocorrectCustomQuotes(bSimple as boolean)
     sleep 1
     Sonderzeichen.OK
 
-    Kontext "TabTypografisch"
-    TabTypografisch.OK
+    Kontext "TabLocalizedOptions"
+    TabLocalizedOptions.OK
     sleep 5
     gMouseClick 50,50
     sleep 5
@@ -341,17 +335,17 @@ testcase tToolsAutocorrectCustomQuotes(bSimple as boolean)
     Printlog "   - back to standard" '------------------------------------------------------------------------------------------
     ToolsAutocorrect
     Kontext
-    active.SetPage TabTypografisch
-    Kontext "TabTypografisch"
+    active.SetPage TabLocalizedOptions
+    Kontext "TabLocalizedOptions"
     if bSimple then
-        EinfacheErsetzen.Check
-        EinfachStandard.Click
+        SingleQuotesReplace.Check
+        SingleQuotesDefault.Click
     else
-        DoppelteErsetzen.Check
-        DoppeltStandard.Click
+        DoubleQuotesReplace.Check
+        DoubleQuotesDefault.Click
     endif
 
-    TabTypografisch.OK
+    TabLocalizedOptions.OK
     sleep 1
     hTextrahmenErstellen ( Normal$ + "Hello" + Normal$ + " ",20,20,60,30)
     sleep 2
@@ -374,14 +368,14 @@ testcase tToolsAutocorrectCustomQuotes(bSimple as boolean)
 
     ToolsAutocorrect
     Kontext
-    active.SetPage TabTypografisch
-    Kontext "TabTypografisch"
+    active.SetPage TabLocalizedOptions
+    Kontext "TabLocalizedOptions"
     if bSimple then
-        EinfacheErsetzen.UnCheck
+        SingleQuotesReplace.UnCheck
     else
-        DoppelteErsetzen.UnCheck
+        DoubleQuotesReplace.UnCheck
     endif
-    TabTypografisch.OK
+    TabLocalizedOptions.OK
     sleep 1
 
     hCloseDocument
@@ -390,7 +384,7 @@ endcase
 '-------------------------------------------------------------------------------
 testcase tToolsAutocorrectOption
 
-    const cEntryCount = 9
+    const cEntryCount = 7
     dim i as integer
     dim iEntryCount as integer
     dim sEntries (20, 2) as string
@@ -407,14 +401,14 @@ testcase tToolsAutocorrectOption
     sEntries (4,2) = "*Hello* " '"_Hello_ "
     sEntries (5,1) = "URL Recognition"
     sEntries (5,2) = "It is www.ksta.de "
-    sEntries (6,1) = "Replace 1st... with 1^st..."
-    sEntries (6,2) = "1st "
-    sEntries (7,1) = "Replace 1/2 ... with ÃÂ» ..."
-    sEntries (7,2) = "1/2 "
-    sEntries (8,1) = "Replace dashes"
-    sEntries (8,2) = "Hello - Hrbert "
-    sEntries (9,1) = "Ignore double spaces"
-    sEntries (9,2) = "Hello  this is 2  blanks "
+    'sEntries (6,1) = "Replace 1st... with 1^st..."
+    'sEntries (6,2) = "1st "
+    'sEntries (7,1) = "Replace 1/2 ... with ÃÂ» ..."
+    'sEntries (7,2) = "1/2 "
+    sEntries (6,1) = "Replace dashes"
+    sEntries (6,2) = "Hello - Hrbert "
+    sEntries (7,1) = "Ignore double spaces"
+    sEntries (7,2) = "Hello  this is 2  blanks "
 
     Printlog "- Tools / Autocorrect -options"
     Call hNewDocument()
