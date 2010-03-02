@@ -105,9 +105,9 @@ void FramePainter::PaintFrame (
 
 
 
-//===== OffsetBitmap ==========================================================
+//===== FramePainter::OffsetBitmap ============================================
 
-OffsetBitmap::OffsetBitmap (
+FramePainter::OffsetBitmap::OffsetBitmap (
     const BitmapEx& rBitmap,
     const sal_Int32 nHorizontalPosition,
     const sal_Int32 nVerticalPosition)
@@ -150,7 +150,7 @@ OffsetBitmap::OffsetBitmap (
 
 
 
-void OffsetBitmap::PaintCorner (
+void FramePainter::OffsetBitmap::PaintCorner (
     OutputDevice& rDevice,
     const Point& rAnchor) const
 {
@@ -161,7 +161,7 @@ void OffsetBitmap::PaintCorner (
 
 
 
-void OffsetBitmap::PaintSide (
+void FramePainter::OffsetBitmap::PaintSide (
     OutputDevice& rDevice,
     const Point& rAnchor1,
     const Point& rAnchor2,

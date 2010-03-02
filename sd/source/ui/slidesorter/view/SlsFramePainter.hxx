@@ -41,77 +41,6 @@
 
 namespace sd { namespace slidesorter { namespace view {
 
-namespace {
-
-/** Bitmap with offset that is used when the bitmap is painted.  The bitmap
-*/
-class OffsetBitmap
-{
-public:
-    /** Create one of the eight shadow bitmaps from one that combines them
-        all.  This larger bitmap is expected to have dimension NxN with
-        N=1+2*M.  Of this larger bitmap there are created four corner
-        bitmaps of size 2*M x 2*M and four side bitmaps of sizes 1xM (top
-        and bottom) and Mx1 (left and right).  The corner bitmaps have each
-        one quadrant of size MxM that is painted under the interior of the
-        frame.
-        @param rBitmap
-            The larger bitmap of which the eight shadow bitmaps are cut out
-            from.
-        @param nHorizontalPosition
-            Valid values are -1 (left), 0 (center), and +1 (right).
-        @param nVerticalPosition
-            Valid values are -1 (top), 0 (center), and +1 (bottom).
-    */
-    OffsetBitmap (
-        const BitmapEx& rBitmap,
-        const sal_Int32 nHorizontalPosition,
-        const sal_Int32 nVerticalPosition);
-
-    /** Create bitmap and offset from the given values.  Corner bitmaps are
-        constructed with the given width and height.  Side bitmaps are
-        stretched along one axis to reduce the paint calls when the sides of
-        a frame are painted.
-        @param rBitmap
-            The larger bitmap that contains the four corner bitmaps and the
-            four side bitmaps.
-    */
-    void SetBitmap (
-        const BitmapEx& rBitmap,
-        const sal_Int32 nOriginX,
-        const sal_Int32 nOriginY,
-        const sal_Int32 nWidth,
-        const sal_Int32 nHeight,
-        const sal_Int32 nOffsetX,
-        const sal_Int32 nOffsetY);
-
-    /** Use the given device to paint the bitmap at the location that is the
-        sum of the given anchor and the internal offset.
-    */
-    void PaintCorner (OutputDevice& rDevice, const Point& rAnchor) const;
-
-    /** Use the given device to paint the bitmap stretched between the two
-        given locations.  Offsets of the adjacent corner bitmaps and the
-        offset of the side bitmap are used to determine the area that is to
-        be filled with the side bitmap.
-    */
-    void PaintSide (
-        OutputDevice& rDevice,
-        const Point& rAnchor1,
-        const Point& rAnchor2,
-        const OffsetBitmap& rCornerBitmap1,
-        const OffsetBitmap& rCornerBitmap2) const;
-
-private:
-    BitmapEx maBitmap;
-    Point maOffset;
-};
-
-} // end of anonymous namespace
-
-
-
-
 class FramePainter
 {
 public:
@@ -120,6 +49,51 @@ public:
     void PaintFrame (OutputDevice&rDevice, const Rectangle aBox) const;
 
 private:
+    /** Bitmap with offset that is used when the bitmap is painted.  The bitmap
+    */
+    class OffsetBitmap {
+    public:
+        /** Create one of the eight shadow bitmaps from one that combines
+            them all.  This larger bitmap is expected to have dimension NxN
+            with N=1+2*M.  Of this larger bitmap there are created four
+            corner bitmaps of size 2*M x 2*M and four side bitmaps of sizes
+            1xM (top and bottom) and Mx1 (left and right).  The corner
+            bitmaps have each one quadrant of size MxM that is painted under
+            the interior of the frame.
+            @param rBitmap
+                The larger bitmap of which the eight shadow bitmaps are cut
+                out from.
+            @param nHorizontalPosition
+                Valid values are -1 (left), 0 (center), and +1 (right).
+            @param nVerticalPosition
+                Valid values are -1 (top), 0 (center), and +1 (bottom).
+        */
+        OffsetBitmap (
+            const BitmapEx& rBitmap,
+            const sal_Int32 nHorizontalPosition,
+            const sal_Int32 nVerticalPosition);
+
+        /** Use the given device to paint the bitmap at the location that is
+            the sum of the given anchor and the internal offset.
+        */
+        void PaintCorner (OutputDevice& rDevice, const Point& rAnchor) const;
+
+        /** Use the given device to paint the bitmap stretched between the
+            two given locations.  Offsets of the adjacent corner bitmaps and
+            the offset of the side bitmap are used to determine the area
+            that is to be filled with the side bitmap.
+        */
+        void PaintSide (
+            OutputDevice& rDevice,
+            const Point& rAnchor1,
+            const Point& rAnchor2,
+            const OffsetBitmap& rCornerBitmap1,
+            const OffsetBitmap& rCornerBitmap2) const;
+
+    private:
+        BitmapEx maBitmap;
+        Point maOffset;
+    };
     OffsetBitmap maShadowTopLeft;
     OffsetBitmap maShadowTop;
     OffsetBitmap maShadowTopRight;
