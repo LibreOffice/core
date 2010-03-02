@@ -164,17 +164,6 @@ function inc(Ref as integer)
    Ref = Ref + 1
 end function
 
-function SetURL ( sURL as String )
-'Author: TZ
-'/// Routine to open a special URL with <i>file open</i>-dialog
-'/// <u>input</u>: The URL as string
-  FileOpen
-  Kontext "OeffnenDlg"
-   Dateiname.SetText sURL
-   Oeffnen.Click
-   wait 500
-end function
-
 '-------------------------------------------------------------------------
 
 function fGetFileText (sFilename as string, iCount as long) as string
