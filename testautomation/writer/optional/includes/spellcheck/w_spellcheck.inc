@@ -58,7 +58,7 @@ testcase tToolsSpellcheckWithShortcut
     '/// Check if Spellcheck dialog comes up with shortcut 'F7'
     printlog " Open document where the formatting is set to the language we wish to test."
     TheFile = Convertpath (gTesttoolpath + "writer\optional\input\spellcheck\spellcheck_" + iSprache + ".odt")
-    if hFileExists ( TheFile ) <> TRUE then
+    if FileExists ( TheFile ) <> TRUE then
        Warnlog "Found no Document for the language you're testing in, Please inform the Test-Developer."
        exit sub
     end if
@@ -126,7 +126,7 @@ testcase tToolsSpellcheckCorrect
     Dim FFText as String
 
     TheFile = Convertpath (gTesttoolpath + "writer\optional\input\spellcheck\spellcheck_" + iSprache + ".odt")
-    if hFileExists ( TheFile ) <> TRUE then
+    if FileExists ( TheFile ) <> TRUE then
        Warnlog "Found no Document for the language you're testing in, Please inform the Test-Developer."
        exit sub
     end if
@@ -225,7 +225,7 @@ testcase tToolsSpellcheck1Mistake
     Dim TheFile as String
 
     TheFile = Convertpath (gTesttoolpath + "writer\optional\input\spellcheck\spellcheck_" + iSprache + ".odt")
-    if hFileExists ( TheFile ) <> TRUE then
+    if FileExists ( TheFile ) <> TRUE then
        Warnlog "Found no Document for the language you're testing in, Please inform the Test-Developer."
        exit sub
     end if
@@ -732,7 +732,7 @@ testcase tToolsSpellcheckAutomatic
     Dim TheFile as String
 
     TheFile = Convertpath (gTesttoolpath + "writer\optional\input\spellcheck\spellcheck_" + iSprache + ".odt")
-    if hFileExists ( TheFile ) <> TRUE then
+    if FileExists ( TheFile ) <> TRUE then
        Warnlog "Found no Document for the language you're testing in, Please inform the Test-Developer."
        exit sub
     end if
@@ -1244,7 +1244,7 @@ testcase tToolsThesaurus
 
     printlog " Open document where the formatting is set to the language we wish to test."
     TheFile = Convertpath (gTesttoolpath + "writer\optional\input\spellcheck\spellcheck_" + iSprache + ".odt")
-    if hFileExists ( TheFile ) <> TRUE then
+    if FileExists ( TheFile ) <> TRUE then
        Warnlog "Found no Document for the language you're testing in, Please inform the Test-Developer."
        exit sub
     end if

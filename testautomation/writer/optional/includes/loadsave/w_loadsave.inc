@@ -454,7 +454,7 @@ testcase tExportTop5FormatsIntoTop5
 						Call hCloseDocument
 					Loop
 					printlog " - check if file exists"
-					if hFileExists (sCurrentSaveFile) then
+					if FileExists (sCurrentSaveFile) then
 						printlog "  - success"
 						printlog " - reload previously saved file"
 						if hFileOpenWithFilter(sCurrentSaveFile, sCurrentSaveFilter) = true then

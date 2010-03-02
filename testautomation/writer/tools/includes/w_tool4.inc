@@ -149,7 +149,7 @@ function wGetSpellcheckDocumentName(xCategory as integer) as string
     end select
 
     if sReturn <> "None" then
-        if hFileExists(sTemp) then
+        if FileExists(sTemp) then
             sReturn = sTemp
         else
             sReturn = "Empty"

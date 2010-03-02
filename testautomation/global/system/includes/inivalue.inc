@@ -248,7 +248,7 @@ sub DateiSperren( Datei$ )
 '///+ OUTPUT: - ///'
   Dim i%
 
-   if hFileExists ( Datei$ ) <> TRUE then
+   if FileExists ( Datei$ ) <> TRUE then
       Warnlog "File '" + Datei$ + "' doesn't exist; exiting now!"
       exit sub
    end if
@@ -270,7 +270,7 @@ sub DateiFreigeben( Datei$ )
 '///+ OUTPUT: - ///'
   Dim i%
 
-   if hFileExists ( Datei$ ) <> TRUE then
+   if FileExists ( Datei$ ) <> TRUE then
       Warnlog "File '" + Datei$ + "' doesn't exist; exiting now!"
       exit sub
    end if

@@ -931,7 +931,7 @@ testcase  tLine_6
     soeFile            = ConvertPath(gOfficePath + "user\work\standard_reserver.soe")
     soeDefaultFile = ConvertPath(gOfficePath + "user\config\standard.soe")
     
-    if hFileExists ( soeFile ) then app.kill ( soeFile )
+    if FileExists ( soeFile ) then app.kill ( soeFile )
     
     PrintLog "- check the attributes in format/line/arrow styles"
 
@@ -1013,7 +1013,7 @@ testcase  tLine_6
     Kontext
     Kontext "TabLinienenden"
     
-    if hFileExists ( soeDefaultFile ) then app.kill ( soeDefaultFile )
+    if FileExists ( soeDefaultFile ) then app.kill ( soeDefaultFile )
     
     Speichern.Click
     Kontext

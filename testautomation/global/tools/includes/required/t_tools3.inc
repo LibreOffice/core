@@ -950,7 +950,7 @@ function hIsAccessbridgeInstalled() as boolean
                 sAccessBridgeFolder = "Java Access Bridge"
                 sCompareString = sProgramFiles & "\" & sAccessBridgeFolder & "\AccessBridgeTester.class"
               	sAccessibilityCompare = "with accessibility support"
-                if hFileExists(sCompareString) = True then
+                if ( FileExists( sCompareString ) ) then
                     AccessbridgeIsInstalled = True
                 else
                     ToolsOptions

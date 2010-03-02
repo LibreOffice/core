@@ -37,15 +37,6 @@
 '*
 '\************************************************************************
 
-function hFileExists ( file as String ) as Boolean
-    '/// Checks if a file exists
-    '/// <u>Input</u>: Filename with complete path
-    '/// <u>Return</u>: TRUE or FALSE if the file exists.
-    hFileExists() = FileExists( file )
-end function
-'
-'-------------------------------------------------------------------------------
-'
 function DirNameList (ByVal sPfad$ , lsDirName() as String ) as Integer
     '/// seperate a path in its parts
     '/// <u>Input</u>: Path to seperate; Empty list, because it get's reset in this function!;

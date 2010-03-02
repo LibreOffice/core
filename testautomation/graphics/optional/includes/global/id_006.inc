@@ -110,7 +110,7 @@ testcase tiToolsThesaurus
         else
             sFileName = (ConvertPath (gTesttoolPath + "graphics\required\input\engtext.odg"))
         end if
-        if hFileExists ( sFileName ) = FALSE then
+        if FileExists ( sFileName ) = FALSE then
             warnlog "The language-file was not found or accessible! The test ends."
             goto endsub
         end if

@@ -616,7 +616,7 @@ testcase  tGroup_12
     PrintLog "- Edit object group  via Menu Format/Group/Edit Group"
 
     sDocument = ConvertPath ( gOfficePath +"user\work\tGroup_12.odt")
-    if hFileExists ( sDocument ) then app.kill ( sDocument )
+    if FileExists ( sDocument ) then app.kill ( sDocument )
     
     Call hNewDocument
     

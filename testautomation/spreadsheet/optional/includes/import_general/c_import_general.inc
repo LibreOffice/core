@@ -146,7 +146,7 @@ function fCalcFileOpen (sDocName as string, optional bLinked as boolean) as bool
     sSourceFile = ConvertPath ( sDocName )
 
     fCalcFileOpen = TRUE
-    if hFileExists (sSourceFile) = FALSE then
+    if FileExists (sSourceFile) = FALSE then
         warnlog "fCalcFileOpen: '" + sSourceFile + "' does not exists!"
         fCalcFileOpen = FALSE
     else

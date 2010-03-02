@@ -86,7 +86,7 @@ testcase tToolsSpellcheck
 
     printlog " Open document where the formatting is set to the language we wish to test."
     TheFile = Convertpath (gTesttoolpath + "writer\optional\input\spellcheck\spellcheck_" + iSprache + ".odt")
-    if ( not hFileExists ( TheFile ) ) then
+    if ( not FileExists ( TheFile ) ) then
         Warnlog "Found no Document for the language you're testing in, Please inform the Test-Developer."
         goto endsub
     end if
@@ -249,7 +249,7 @@ testcase tToolsThesaurus
 
     printlog " Open document where the formatting is set to the language we wish to test."
     TheFile = Convertpath (gTesttoolpath + "writer\optional\input\spellcheck\spellcheck_" + iSprache + ".odt")
-    if ( not hFileExists ( TheFile ) ) then
+    if ( not FileExists ( TheFile ) ) then
         Warnlog "Found no Document for the language you're testing in, Please inform the Test-Developer."
         goto endsub
     end if
@@ -345,7 +345,7 @@ testcase tToolsHyphenation
         LingFile = str$(iSprache) + "-hyph.dat"
     end select
 
-    if ( not hFileExists( DieDatei ) ) then
+    if ( not FileExists( DieDatei ) ) then
         Warnlog "No defined Errortext for language: " + isprache + "! Exit!"
         goto endsub
     end if
@@ -1238,7 +1238,7 @@ testcase tMasterDocToolsHyphenation
     end select
 
     sTestFile = convertpath( sTestFile )
-    if ( not hFileExists( sTestFile ) )then
+    if ( not FileExists( sTestFile ) )then
         Warnlog "No defined Errortext for language: " + isprache + "! Exit!"
         goto endsub
     end if
