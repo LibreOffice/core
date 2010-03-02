@@ -706,6 +706,7 @@ public:
 
     /// Write the data of the form field
     virtual void WriteFormData( const ::sw::mark::IFieldmark& rFieldmark ) = 0;
+    virtual void WriteHyperlinkData( const ::sw::mark::IFieldmark& rFieldmark ) = 0;
 
     virtual void DoComboBox(const rtl::OUString &rName,
                     const rtl::OUString &rHelp,
@@ -1073,6 +1074,7 @@ public:
 
     /// Write the data of the form field
     virtual void WriteFormData( const ::sw::mark::IFieldmark& rFieldmark );
+    virtual void WriteHyperlinkData( const ::sw::mark::IFieldmark& rFieldmark );
 
     /// Fields.
     WW8_WrPlcFld* CurrentFieldPlc() const;
