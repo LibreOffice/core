@@ -37,7 +37,7 @@
 // space around an item
 #define ITEM_OUTER_SPACE        2 * 2
 // spacing before and after (in writing direction, whether this is horizontal or vertical) an item's text
-#define ITEM_TEXT_FLOW_SPACE    2
+#define ITEM_TEXT_FLOW_SPACE    5
 // distance between two items
 #define ITEM_DISTANCE_PIXEL     2
 // space between item icon and icon text
@@ -185,6 +185,21 @@ namespace svt
     {
         const Size aItemSize( CalculateItemSize( i_pPanel, i_rTargetWindow, i_bDrawMinimal ) );
 
+        bool bNativeOK = false;
+        if ( i_rTargetWindow.IsNativeControlSupported( CTRL_TOOLBAR, PART_BUTTON ) )
+        {
+            ImplControlValue    aControlValue;
+            Region              aCtrlRegion( i_rItemRect );
+            ControlState        nState = CTRL_STATE_ENABLED;
+
+            if ( i_nItemFlags & ITEM_STATE_FOCUSED )    nState |= CTRL_STATE_PRESSED;
+            if ( i_nItemFlags & ITEM_STATE_HOVERED )    nState |= CTRL_STATE_ROLLOVER;
+
+            aControlValue.setTristateVal( ( i_nItemFlags & ITEM_STATE_ACTIVE ) ? BUTTONVALUE_ON : BUTTONVALUE_OFF );
+
+            bNativeOK = i_rTargetWindow.DrawNativeControl( CTRL_TOOLBAR, PART_BUTTON, aCtrlRegion, nState, aControlValue, rtl::OUString() );
+        }
+
         Point aDrawPos( i_rItemRect.TopLeft() );
         aDrawPos.Y() += ITEM_OUTER_SPACE;
 
@@ -224,26 +239,29 @@ namespace svt
             i_rTargetWindow.Pop();
         }
 
-        const bool bActive = ( ( i_nItemFlags & ITEM_STATE_ACTIVE ) != 0 );
-        const bool bHovered = ( ( i_nItemFlags & ITEM_STATE_HOVERED ) != 0 );
-        const bool bFocused = ( ( i_nItemFlags & ITEM_STATE_FOCUSED ) != 0 );
-        if ( bActive || bHovered || bFocused )
+        if ( !bNativeOK )
         {
-            Rectangle aSelectionRect( i_rItemRect );
-            aSelectionRect.Left() += ITEM_OUTER_SPACE / 2;
-            aSelectionRect.Top() += ITEM_OUTER_SPACE / 2;
-            aSelectionRect.Right() -= ITEM_OUTER_SPACE / 2;
-            aSelectionRect.Bottom() -= ITEM_OUTER_SPACE / 2;
-            i_rTargetWindow.DrawSelectionBackground(
-                aSelectionRect,
-                ( bHovered || bFocused ) ? ( bActive ? 1 : 2 ) : 0 /* hilight */,
-                bActive /* check */,
-                TRUE /* border */,
-                FALSE /* ext border only */,
-                0 /* corner radius */,
-                NULL,
-                NULL
-            );
+            const bool bActive = ( ( i_nItemFlags & ITEM_STATE_ACTIVE ) != 0 );
+            const bool bHovered = ( ( i_nItemFlags & ITEM_STATE_HOVERED ) != 0 );
+            const bool bFocused = ( ( i_nItemFlags & ITEM_STATE_FOCUSED ) != 0 );
+            if ( bActive || bHovered || bFocused )
+            {
+                Rectangle aSelectionRect( i_rItemRect );
+                aSelectionRect.Left() += ITEM_OUTER_SPACE / 2;
+                aSelectionRect.Top() += ITEM_OUTER_SPACE / 2;
+                aSelectionRect.Right() -= ITEM_OUTER_SPACE / 2;
+                aSelectionRect.Bottom() -= ITEM_OUTER_SPACE / 2;
+                i_rTargetWindow.DrawSelectionBackground(
+                    aSelectionRect,
+                    ( bHovered || bFocused ) ? ( bActive ? 1 : 2 ) : 0 /* hilight */,
+                    bActive /* check */,
+                    TRUE /* border */,
+                    FALSE /* ext border only */,
+                    0 /* corner radius */,
+                    NULL,
+                    NULL
+                );
+            }
         }
     }
 
