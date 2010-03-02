@@ -48,6 +48,7 @@ TARFILE_NAME=$(PRJNAME)-$(XMLSEC1VERSION)
 
 #xmlsec1-configure.patch: Set up the build. Straightforward
 #configuration
+#xmlsec1-olderlibxml2.patch: Allow build against older libxml2, for macosx
 #xmlsec1-customkeymanage.patch: Could we do this alternatively outside xmlsec
 #xmlsec1-nssmangleciphers.patch: Dubious, do we still need this ?
 #xmlsec1-nssdisablecallbacks.patch: Dubious, do we still need this ?
@@ -56,6 +57,7 @@ TARFILE_NAME=$(PRJNAME)-$(XMLSEC1VERSION)
 #xmlsec1-mingw-customkeymanage-addmscrypto.patch builds the custom keymanager on mingw
 PATCH_FILES=\
    xmlsec1-configure.patch \
+   xmlsec1-olderlibxml2.patch \
    xmlsec1-customkeymanage.patch \
    xmlsec1-nssmangleciphers.patch \
    xmlsec1-nssdisablecallbacks.patch \
