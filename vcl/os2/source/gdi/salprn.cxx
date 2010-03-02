@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salprn.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1559,7 +1556,9 @@ Os2SalPrinter::~Os2SalPrinter()
 BOOL Os2SalPrinter::StartJob( const XubString* pFileName,
                            const XubString& rJobName,
                            const XubString& rAppName,
-                           ULONG nCopies, BOOL bCollate,
+                           ULONG nCopies,
+                           bool bCollate,
+                           bool bDirect,
                            ImplJobSetup* pSetupData )
 {
     DEVOPENSTRUC    aDevOpenStruc;
@@ -1831,9 +1830,4 @@ int Os2SalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* pSetupData )
     printf("Os2SalInfoPrinter::GetLandscapeAngle\n");
     return 0;
 }
-DuplexMode Os2SalInfoPrinter::GetDuplexMode( const ImplJobSetup* pSetupData )
-{
-    DuplexMode nRet = DUPLEX_UNKNOWN;
-    printf("Os2SalInfoPrinter::GetDuplexMode\n");
-    return nRet;
-}
+

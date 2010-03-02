@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -604,7 +604,8 @@ void AquaSalGraphics::EndSetClipRegion()
 void AquaSalGraphics::SetLineColor()
 {
     maLineColor.SetAlpha( 0.0 );   // transparent
-    CGContextSetStrokeColor( mrContext, maLineColor.AsArray() );
+    if( CheckContext() )
+        CGContextSetStrokeColor( mrContext, maLineColor.AsArray() );
 }
 
 // -----------------------------------------------------------------------
@@ -612,7 +613,8 @@ void AquaSalGraphics::SetLineColor()
 void AquaSalGraphics::SetLineColor( SalColor nSalColor )
 {
     maLineColor = RGBAColor( nSalColor );
-    CGContextSetStrokeColor( mrContext, maLineColor.AsArray() );
+    if( CheckContext() )
+        CGContextSetStrokeColor( mrContext, maLineColor.AsArray() );
 }
 
 // -----------------------------------------------------------------------
@@ -620,7 +622,8 @@ void AquaSalGraphics::SetLineColor( SalColor nSalColor )
 void AquaSalGraphics::SetFillColor()
 {
     maFillColor.SetAlpha( 0.0 );   // transparent
-    CGContextSetFillColor( mrContext, maFillColor.AsArray() );
+    if( CheckContext() )
+        CGContextSetFillColor( mrContext, maFillColor.AsArray() );
 }
 
 // -----------------------------------------------------------------------
@@ -628,7 +631,8 @@ void AquaSalGraphics::SetFillColor()
 void AquaSalGraphics::SetFillColor( SalColor nSalColor )
 {
     maFillColor = RGBAColor( nSalColor );
-    CGContextSetFillColor( mrContext, maFillColor.AsArray() );
+    if( CheckContext() )
+        CGContextSetFillColor( mrContext, maFillColor.AsArray() );
 }
 
 // -----------------------------------------------------------------------

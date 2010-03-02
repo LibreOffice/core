@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: stream.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -776,6 +773,9 @@ class TOOLS_DLLPUBLIC SvMemoryStream : public SvStream
     SvMemoryStream (const SvMemoryStream&);
     SvMemoryStream & operator= (const SvMemoryStream&);
 
+    friend class SvCacheStream;
+    sal_Size            GetSize() const { return nSize; }
+
 protected:
     sal_Size            nSize;
     sal_Size            nResize;
@@ -817,7 +817,7 @@ public:
 
     virtual void    ResetError();
 
-    sal_Size            GetSize() const { return nSize; }
+    sal_Size        GetEndOfData() const { return nEndOfData; }
     const void*     GetData() { Flush(); return pBuf; }
     operator const  void*() { Flush(); return pBuf; }
     virtual sal_uInt16  IsA() const;

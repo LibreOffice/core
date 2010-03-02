@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: outdev.hxx,v $
- * $Revision: 1.7.20.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1131,12 +1128,15 @@ public:
         false: output metafile is unchanged input metafile
 
         @attention this is a member method, so current state can influence the result !
+        @attention the output metafile is prepared in pixel mode for the currentOutputDevice
+                   state. It can not be moved or rotated reliably anymore.
     */
     bool                RemoveTransparenciesFromMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutMtf,
                                                           long nMaxBmpDPIX, long nMaxBmpDPIY,
                                                           bool bReduceTransparency,
                                                           bool bTransparencyAutoMode,
-                                                          bool bDownsampleBitmaps
+                                                          bool bDownsampleBitmaps,
+                                                          const Color& rBackground = Color( COL_TRANSPARENT )
                                                           );
     /** Retrieve downsampled and cropped bitmap
 

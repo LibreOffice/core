@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ehdl.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -321,16 +318,21 @@ BOOL SfxErrorHandler::GetClassString(ULONG lClassId, String &rStr) const
     */
 
 {
-
-    ResId aId(RID_ERRHDL, *pMgr);
-    ErrorResource_Impl aEr(aId, (USHORT)lClassId);
-    if(aEr)
+    BOOL bRet = FALSE;
+    com::sun::star::lang::Locale aLocale( Application::GetSettings().GetUILocale() );
+    ResMgr* pResMgr = ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(ofa), aLocale );
+    if( pResMgr )
     {
-        rStr=((ResString)aEr).GetString();
-        return TRUE;
+        ResId aId(RID_ERRHDL, *pResMgr );
+        ErrorResource_Impl aEr(aId, (USHORT)lClassId);
+        if(aEr)
+        {
+            rStr=((ResString)aEr).GetString();
+            bRet = TRUE;
+        }
     }
-    else
-        return FALSE;
+    delete pResMgr;
+    return bRet;
 }
 
 //-------------------------------------------------------------------------
@@ -379,10 +381,10 @@ BOOL SfxErrorHandler::GetErrorString(
 
     BOOL bRet = FALSE;
     rStr=String(SvtResId(RID_ERRHDL_CLASS));
-    ResId *pResId = new ResId(nId, *pMgr);
+    ResId aResId(nId, *pMgr);
 
     {
-        ErrorResource_Impl aEr(*pResId, (USHORT)lErrId);
+        ErrorResource_Impl aEr(aResId, (USHORT)lErrId);
         if(aEr)
         {
             ResString aErrorString(aEr);
@@ -408,7 +410,6 @@ BOOL SfxErrorHandler::GetErrorString(
         rStr.SearchAndReplace(String::CreateFromAscii( "$(CLASS)" ),aErrStr);
     }
 
-    delete pResId;
     return bRet;
 }
 

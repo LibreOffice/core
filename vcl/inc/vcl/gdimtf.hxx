@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: gdimtf.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -164,6 +161,7 @@ public:
     void            Scale( double fScaleX, double fScaleY );
     void            Scale( const Fraction& rScaleX, const Fraction& rScaleY );
     void            Rotate( long nAngle10 );
+    void            Clip( const Rectangle& );
     /* get the bound rect of the contained actions
      * caveats:
      * - clip actions will limit the contained actions,

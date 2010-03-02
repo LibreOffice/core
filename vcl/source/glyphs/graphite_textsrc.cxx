@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile:  $
- * $Revision:  $
  *
  * This file is part of OpenOffice.org.
  *
@@ -138,16 +135,16 @@ gr::isocode TextSourceAdaptor::getLanguage(gr::toffset)
     return unknown;
 }
 
-std::pair<gr::toffset, gr::toffset> TextSourceAdaptor::propertyRange(gr::toffset nCharIdx)
+sil_std::pair<gr::toffset, gr::toffset> TextSourceAdaptor::propertyRange(gr::toffset nCharIdx)
 {
 
     if (nCharIdx < unsigned(maLayoutArgs.mnMinCharPos))
-        return std::make_pair(0, maLayoutArgs.mnMinCharPos);
+        return sil_std::make_pair(0, maLayoutArgs.mnMinCharPos);
 
     if (nCharIdx < mnEnd)
-        return std::make_pair(maLayoutArgs.mnMinCharPos, mnEnd);
+        return sil_std::make_pair(maLayoutArgs.mnMinCharPos, mnEnd);
 
-    return std::make_pair(mnEnd, maLayoutArgs.mnLength);
+    return sil_std::make_pair(mnEnd, maLayoutArgs.mnLength);
 }
 
 size_t TextSourceAdaptor::getFontFeatures(gr::toffset, gr::FeatureSetting * settings)
@@ -159,7 +156,7 @@ size_t TextSourceAdaptor::getFontFeatures(gr::toffset, gr::FeatureSetting * sett
 
 bool TextSourceAdaptor::sameSegment(gr::toffset char_idx1, gr::toffset char_idx2)
 {
-    const std::pair<gr::toffset, gr::toffset>
+    const sil_std::pair<gr::toffset, gr::toffset>
     range1 = propertyRange(char_idx1),
     range2 = propertyRange(char_idx2);
 

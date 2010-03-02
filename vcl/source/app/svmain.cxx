@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svmain.cxx,v $
- * $Revision: 1.73.92.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -443,6 +440,26 @@ void DeInitVCL()
     {
         delete pSVData->maCtrlData.mpSplitVArwImgList;
         pSVData->maCtrlData.mpSplitVArwImgList = NULL;
+    }
+    if ( pSVData->maCtrlData.mpDisclosurePlus )
+    {
+        delete pSVData->maCtrlData.mpDisclosurePlus;
+        pSVData->maCtrlData.mpDisclosurePlus = NULL;
+    }
+    if ( pSVData->maCtrlData.mpDisclosurePlusHC )
+    {
+        delete pSVData->maCtrlData.mpDisclosurePlusHC;
+        pSVData->maCtrlData.mpDisclosurePlusHC = NULL;
+    }
+    if ( pSVData->maCtrlData.mpDisclosureMinus )
+    {
+        delete pSVData->maCtrlData.mpDisclosureMinus;
+        pSVData->maCtrlData.mpDisclosureMinus = NULL;
+    }
+    if ( pSVData->maCtrlData.mpDisclosureMinusHC )
+    {
+        delete pSVData->maCtrlData.mpDisclosureMinusHC;
+        pSVData->maCtrlData.mpDisclosureMinusHC = NULL;
     }
     if ( pSVData->mpDefaultWin )
     {

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ctrlbox.cxx,v $
- * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1152,6 +1149,7 @@ void FontSizeBox::ImplInit()
     SetDecimalDigits( 1 );
     SetMin( 20 );
     SetMax( 9999 );
+    SetProminentEntryType( PROMINENT_MIDDLE );
 }
 
 // -----------------------------------------------------------------------

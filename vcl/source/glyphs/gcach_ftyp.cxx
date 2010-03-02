@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -2486,14 +2486,12 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
                         pCoverage += 2;
                         for( int i = nCntRange; --i >= 0; )
                         {
-                            const USHORT nGlyph0 = GetUShort( pCoverage+0 );
-                            const USHORT nGlyph1 = GetUShort( pCoverage+2 );
-                            const USHORT nStartCoverageIndex = GetUShort( pCoverage+4 );
-                            DBG_ASSERT( aSubstVector.size() == nStartCoverageIndex, "coverage index mismatch");
-                            (void)nStartCoverageIndex;
+                            const UINT32 nGlyph0 = GetUShort( pCoverage+0 );
+                            const UINT32 nGlyph1 = GetUShort( pCoverage+2 );
+                            const USHORT nCovIdx = GetUShort( pCoverage+4 );
                             pCoverage += 6;
-                            for( USHORT j = nGlyph0; j <= nGlyph1; ++j )
-                                aSubstVector.push_back( GlyphSubst( j, 0 ) );
+                            for( UINT32 j = nGlyph0; j <= nGlyph1; ++j )
+                                aSubstVector.push_back( GlyphSubst( static_cast<USHORT>(j + nCovIdx), 0 ) );
                         }
                     }
                     break;
@@ -2537,3 +2535,4 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
 }
 
 // =======================================================================
+

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: bmpconv.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -192,7 +189,8 @@ BmpTransporter::BmpTransporter( const Bitmap& rBM )
     m_aSize.Height = rBM.GetSizePixel().Height();
     SvMemoryStream aStream;
     rBM.Write( aStream, FALSE, TRUE );
-    m_aBM = Sequence<sal_Int8>((const sal_Int8*)aStream.GetData(), aStream.GetSize() );
+    m_aBM = Sequence<sal_Int8>(static_cast<const sal_Int8*>(aStream.GetData()),
+                aStream.GetEndOfData());
 }
 
 BmpTransporter::~BmpTransporter()

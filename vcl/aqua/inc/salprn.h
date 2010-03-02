@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salprn.h,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,8 +70,8 @@ class AquaSalInfoPrinter : public SalInfoPrinter
 
     int                       mnStartPageOffsetX;
     int                       mnStartPageOffsetY;
-    ULONG                     mnCurPageRangeStart;
-    ULONG                     mnCurPageRangeCount;
+    sal_Int32                 mnCurPageRangeStart;
+    sal_Int32                 mnCurPageRangeCount;
 
     public:
     AquaSalInfoPrinter( const SalPrinterQueueInfo& pInfo );
@@ -96,19 +93,17 @@ class AquaSalInfoPrinter : public SalInfoPrinter
     virtual String              GetPaperBinName( const ImplJobSetup* i_pSetupData, ULONG i_nPaperBin );
     virtual void                InitPaperFormats( const ImplJobSetup* i_pSetupData );
     virtual int                 GetLandscapeAngle( const ImplJobSetup* i_pSetupData );
-    virtual DuplexMode          GetDuplexMode( const ImplJobSetup* i_pSetupData );
-
 
     // the artificial separation between InfoPrinter and Printer
     // is not really useful for us
     // so let's make AquaSalPrinter just a forwarder to AquaSalInfoPrinter
     // and concentrate the real work in one class
     // implement pull model print system
-    BOOL                        StartJob( const String* pFileName,
-                                          const String& rAppName,
-                                          ImplJobSetup* pSetupData,
-                                          ImplQPrinter* pQPrinter,
-                                          bool bIsQuickJob );
+    BOOL                        StartJob( const String* i_pFileName,
+                                          const String& rJobName,
+                                          const String& i_rAppName,
+                                          ImplJobSetup* i_pSetupData,
+                                          vcl::PrinterController& i_rController );
     BOOL                        EndJob();
     BOOL                        AbortJob();
     SalGraphics*                StartPage( ImplJobSetup* i_pSetupData, BOOL i_bNewJobData );
@@ -117,8 +112,12 @@ class AquaSalInfoPrinter : public SalInfoPrinter
 
     NSPrintInfo* getPrintInfo() const { return mpPrintInfo; }
     void setStartPageOffset( int nOffsetX, int nOffsetY ) { mnStartPageOffsetX = nOffsetX; mnStartPageOffsetY = nOffsetY; }
-    ULONG getCurPageRangeStart() const { return mnCurPageRangeStart; }
-    ULONG getCurPageRangeCount() const { return mnCurPageRangeCount; }
+    sal_Int32 getCurPageRangeStart() const { return mnCurPageRangeStart; }
+    sal_Int32 getCurPageRangeCount() const { return mnCurPageRangeCount; }
+
+    // match width/height against known paper formats, possibly switching orientation
+    const PaperInfo* matchPaper( long i_nWidth, long i_nHeight, Orientation& o_rOrientation ) const;
+    void setPaperSize( long i_nWidth, long i_nHeight, Orientation i_eSetOrientation );
 
     private:
     AquaSalInfoPrinter( const AquaSalInfoPrinter& );
@@ -139,13 +138,16 @@ class AquaSalPrinter : public SalPrinter
     virtual BOOL                    StartJob( const XubString* i_pFileName,
                                               const XubString& i_rJobName,
                                               const XubString& i_rAppName,
-                                              ULONG i_nCopies, BOOL i_bCollate,
+                                              ULONG i_nCopies,
+                                              bool i_bCollate,
+                                              bool i_bDirect,
                                               ImplJobSetup* i_pSetupData );
     // implement pull model print system
-    virtual BOOL                    StartJob( const String* pFileName,
-                                              const String& rAppName,
-                                              ImplJobSetup* pSetupData,
-                                              ImplQPrinter* pQPrinter );
+    virtual BOOL                    StartJob( const String* i_pFileName,
+                                              const String& rJobName,
+                                              const String& i_rAppName,
+                                              ImplJobSetup* i_pSetupData,
+                                              vcl::PrinterController& i_rListener );
 
     virtual BOOL                    EndJob();
     virtual BOOL                    AbortJob();
@@ -162,7 +164,7 @@ const double fPtTo100thMM = 35.27777778;
 
 inline int PtTo10Mu( double nPoints ) { return (int)(((nPoints)*fPtTo100thMM)+0.5); }
 
-inline double TenMuToPt( double nUnits ) { return (((nUnits)/fPtTo100thMM)+0.5); }
+inline double TenMuToPt( double nUnits ) { return floor(((nUnits)/fPtTo100thMM)+0.5); }
 
 
 

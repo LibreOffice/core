@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fixed.cxx,v $
- * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1058,6 +1055,14 @@ void FixedImage::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
 void FixedImage::Paint( const Rectangle& )
 {
     ImplDraw( this, 0, Point(), GetOutputSizePixel() );
+}
+
+// -----------------------------------------------------------------------
+
+Size FixedImage::GetOptimalSize( WindowSizeType ) const
+{
+    const Image* pImage = GetSettings().GetStyleSettings().GetHighContrastMode() ? &maImageHC : &maImage;
+    return pImage->GetSizePixel();
 }
 
 // -----------------------------------------------------------------------

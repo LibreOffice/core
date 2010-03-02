@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: gdimtf.cxx,v $
- * $Revision: 1.24.134.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -872,6 +869,40 @@ void GDIMetaFile::Scale( double fScaleX, double fScaleY )
 void GDIMetaFile::Scale( const Fraction& rScaleX, const Fraction& rScaleY )
 {
     Scale( (double) rScaleX, (double) rScaleY );
+}
+
+// ------------------------------------------------------------------------
+
+void GDIMetaFile::Clip( const Rectangle& i_rClipRect )
+{
+    Rectangle aCurRect( i_rClipRect );
+    VirtualDevice   aMapVDev;
+
+    aMapVDev.EnableOutput( FALSE );
+    aMapVDev.SetMapMode( GetPrefMapMode() );
+
+    for( MetaAction* pAct = (MetaAction*) First(); pAct; pAct = (MetaAction*) Next() )
+    {
+        const long  nType = pAct->GetType();
+
+        if( ( META_MAPMODE_ACTION == nType ) ||
+            ( META_PUSH_ACTION == nType ) ||
+            ( META_POP_ACTION == nType ) )
+        {
+            pAct->Execute( &aMapVDev );
+            aCurRect = aMapVDev.LogicToLogic( i_rClipRect, GetPrefMapMode(), aMapVDev.GetMapMode() );
+        }
+        else if( nType == META_CLIPREGION_ACTION )
+        {
+            MetaClipRegionAction* pOldAct = (MetaClipRegionAction*)pAct;
+            Region aNewReg( aCurRect );
+            if( pOldAct->IsClipping() )
+                aNewReg.Intersect( pOldAct->GetRegion() );
+            MetaClipRegionAction* pNewAct = new MetaClipRegionAction( aNewReg, TRUE );
+            Replace( pNewAct, GetCurPos() );
+            pOldAct->Delete();
+        }
+    }
 }
 
 // ------------------------------------------------------------------------

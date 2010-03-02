@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: combobox.cxx,v $
- * $Revision: 1.50 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -951,7 +948,7 @@ void ComboBox::ImplUpdateFloatSelection()
         if( nSelect != LISTBOX_ENTRY_NOTFOUND )
         {
             if ( !mpImplLB->IsVisible( nSelect ) )
-                mpImplLB->SetTopEntry( nSelect );
+                mpImplLB->ShowProminentEntry( nSelect );
             mpImplLB->SelectEntry( nSelect, bSelect );
         }
         else
@@ -959,7 +956,6 @@ void ComboBox::ImplUpdateFloatSelection()
             nSelect = mpImplLB->GetEntryList()->GetSelectEntryPos( 0 );
             if( nSelect != LISTBOX_ENTRY_NOTFOUND )
                 mpImplLB->SelectEntry( nSelect, FALSE );
-            // mpImplLB->SetTopEntry( 0 ); #92555# Ugly....
             mpImplLB->ResetCurrentPos();
         }
     }
@@ -1440,12 +1436,33 @@ void ComboBox::SetTopEntry( USHORT nPos )
 
 // -----------------------------------------------------------------------
 
+void ComboBox::ShowProminentEntry( USHORT nPos )
+{
+    mpImplLB->ShowProminentEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
+}
+
+// -----------------------------------------------------------------------
+
 USHORT ComboBox::GetTopEntry() const
 {
     USHORT nPos = GetEntryCount() ? mpImplLB->GetTopEntry() : LISTBOX_ENTRY_NOTFOUND;
     if ( nPos < mpImplLB->GetEntryList()->GetMRUCount() )
         nPos = 0;
     return nPos;
+}
+
+// -----------------------------------------------------------------------
+
+void ComboBox::SetProminentEntryType( ProminentEntry eType )
+{
+    mpImplLB->SetProminentEntryType( eType );
+}
+
+// -----------------------------------------------------------------------
+
+ProminentEntry ComboBox::GetProminentEntryType() const
+{
+    return mpImplLB->GetProminentEntryType();
 }
 
 // -----------------------------------------------------------------------

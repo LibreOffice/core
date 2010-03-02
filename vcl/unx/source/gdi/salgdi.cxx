@@ -2,7 +2,7 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
@@ -1428,14 +1428,17 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rOrigPoly
         // unless it splits another trapezoid that is still active
         bool bSplit = false;
         ActiveTrapSet::iterator aActiveTrapsIt = aActiveTraps.begin();
-        for(; aActiveTrapsIt != aActiveTraps.end(); ++aActiveTrapsIt )
+        while(aActiveTrapsIt != aActiveTraps.end())
         {
             XTrapezoid& rLeftTrap = aTrapVector[ *aActiveTrapsIt ];
 
             // skip until first overlap candidate
             // TODO: use stl::*er_bound() instead
             if( IsLeftOf( aTrapezoid.left, rLeftTrap.left) )
+            {
+                ++aActiveTrapsIt;
                 continue;
+            }
 
             // in the ActiveTrapSet there are still trapezoids where
             // a vertical overlap with new trapezoids is no longer possible
@@ -1446,15 +1449,26 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rOrigPoly
             {
                 ActiveTrapSet::iterator it = aActiveTrapsIt;
                 if( aActiveTrapsIt != aActiveTraps.begin() )
+                {
                     --aActiveTrapsIt;
-                aActiveTraps.erase( it );
+                    aActiveTraps.erase( it );
+                    ++aActiveTrapsIt;
+                }
+                else
+                {
+                    aActiveTraps.erase( it );
+                    aActiveTrapsIt = aActiveTraps.begin();
+                }
                 continue;
             }
 
             // check if there is horizontal overlap
             // aTrapezoid.left==rLeftTrap.right is allowed though
             if( !IsLeftOf( aTrapezoid.left, rLeftTrap.right ) )
+            {
+                ++aActiveTrapsIt;
                 continue;
+            }
 
             // prepare to split the old trapezoid and keep its upper part
             // find the old trapezoids entry in the VerticalTrapSet and remove it

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: wintypes.hxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -332,6 +329,12 @@ typedef USHORT StandardButtonType;
 #define BUTTON_ABORT        ((StandardButtonType)9)
 #define BUTTON_LESS         ((StandardButtonType)10)
 #define BUTTON_COUNT        11
+
+// --------------------------------------------
+// - prominent place for ListBox window types -
+// --------------------------------------------
+
+enum ProminentEntry { PROMINENT_TOP, PROMINENT_MIDDLE };
 
 #endif // _TOOLS_WINTYPES_HXX
 

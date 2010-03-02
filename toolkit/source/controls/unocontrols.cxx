@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unocontrols.cxx,v $
- * $Revision: 1.87 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -476,6 +473,7 @@ void UnoEditControl::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) t
 //  ----------------------------------------------------
 UnoControlFileControlModel::UnoControlFileControlModel()
 {
+    ImplRegisterProperty( BASEPROPERTY_ALIGN );
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
     ImplRegisterProperty( BASEPROPERTY_BORDER );
     ImplRegisterProperty( BASEPROPERTY_BORDERCOLOR );
@@ -489,6 +487,7 @@ UnoControlFileControlModel::UnoControlFileControlModel()
     ImplRegisterProperty( BASEPROPERTY_READONLY );
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );
     ImplRegisterProperty( BASEPROPERTY_TEXT );
+    ImplRegisterProperty( BASEPROPERTY_VERTICALALIGN );
     ImplRegisterProperty( BASEPROPERTY_WRITING_MODE );
     ImplRegisterProperty( BASEPROPERTY_CONTEXT_WRITING_MODE );
     ImplRegisterProperty( BASEPROPERTY_HIDEINACTIVESELECTION );

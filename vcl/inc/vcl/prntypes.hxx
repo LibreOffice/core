@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: prntypes.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +36,7 @@
 // - Duplex Mode -
 // ---------------
 
-enum DuplexMode { DUPLEX_UNKNOWN, DUPLEX_OFF, DUPLEX_ON };
+enum DuplexMode { DUPLEX_UNKNOWN, DUPLEX_OFF, DUPLEX_LONGEDGE, DUPLEX_SHORTEDGE };
 
 // ---------------
 // - Orientation -
@@ -93,5 +90,6 @@ enum Orientation { ORIENTATION_PORTRAIT, ORIENTATION_LANDSCAPE };
 #define PRINTER_CAPABILITIES_FAX                ((USHORT)8)
 #define PRINTER_CAPABILITIES_PDF                ((USHORT)9)
 #define PRINTER_CAPABILITIES_EXTERNALDIALOG     ((USHORT)10)
+#define PRINTER_CAPABILITIES_SETDUPLEX          ((USHORT)11)
 
 #endif  // _SV_PRNTYPES_HXX

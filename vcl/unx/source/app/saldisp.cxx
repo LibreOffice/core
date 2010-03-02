@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: saldisp.cxx,v $
- * $Revision: 1.101.30.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2304,11 +2301,7 @@ long SalX11Display::Dispatch( XEvent *pEvent )
             return 0;
 
     SalInstance* pInstance = GetSalData()->m_pInstance;
-    if( pInstance->GetEventCallback() )
-    {
-        YieldMutexReleaser aReleaser;
-        pInstance->CallEventCallback( pEvent, sizeof( XEvent ) );
-    }
+    pInstance->CallEventCallback( pEvent, sizeof( XEvent ) );
 
     switch( pEvent->type )
     {

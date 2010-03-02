@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile:  $
- * $Revision:  $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,10 +55,11 @@
 #include "vcl/dllapi.h"
 
 // Libraries
+#include "pregraphitestl.h"
 #include <graphite/GrClient.h>
 #include <graphite/Font.h>
 #include <graphite/ITextSource.h>
-
+#include "postgraphitestl.h"
 
 // Module type definitions and forward declarations.
 //
@@ -121,7 +119,7 @@ public:
     const grutils::GrFeatureParser * features() const { return mpFeatures; };
 
 private:
-    virtual void UniqueCacheInfo(std::wstring &, bool &, bool &);
+    virtual void UniqueCacheInfo(sil_std::wstring &, bool &, bool &);
 
     FreetypeServerFont& mrFont;
     FontProperties        maFontProperties;
