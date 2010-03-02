@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: printerjob.cxx,v $
- * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -915,6 +912,9 @@ bool PrinterJob::writePageSetup( osl::File* pFile, const JobData& rJob, bool bWr
 
 void PrinterJob::writeJobPatch( osl::File* pFile, const JobData& rJobData )
 {
+    if( ! PrinterInfoManager::get().getUseJobPatch() )
+        return;
+
     const PPDKey* pKey = NULL;
 
     if( rJobData.m_pParser )

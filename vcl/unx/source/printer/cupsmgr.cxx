@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: cupsmgr.cxx,v $
- * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -533,6 +530,10 @@ void CUPSManager::initialize()
                                                       pDest->options );
     if( pOpt )
         m_bUseIncludeFeature = true;
+    // do not send include JobPatch; CUPS will insert that itself
+    // TODO: currently unknwon which versions of CUPS insert JobPatches
+    // so currently it is assumed CUPS = don't insert JobPatch files
+    m_bUseJobPatch = false;
 
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     int nPrinter = m_nDests;

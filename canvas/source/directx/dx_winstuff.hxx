@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dx_winstuff.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -89,7 +86,7 @@
 
     #include <d3d9.h>
     #include <d3dx9.h>
-    #include <dxerr9.h>
+//  #include <dxerr9.h>     #i107614# removing include, it has been changed in the latest sdk fron August2009 from dxerr9.h into dxerr.h
 
     typedef IDirect3DSurface9 surface_type;
 
