@@ -703,28 +703,6 @@ end function
 
 '*******************************************************************************
 
-sub ErgebnisSchreiben ( Window, Name$ )
-
-    '/// ErgebnisSchreiben
-    '///+ Used in context with making screenshots.
-    
-    Dim FileNum% : Dim i%
-    Dim Datei$
-    Dim Text$ : Dim Text2$
-
-    Datei$ = sCapturePath + "Ergebis.txt"
-    Text2$ = Window.Name
-    Text$ = Text2$ +  "    =>   " + Name$
-
-    FileNum% = FreeFile
-    Open Datei$ for Append  as #FileNum%
-    Print #FileNum%, Text$
-    Close #FileNum%
-    
-end sub
-
-'*******************************************************************************
-
 sub TextInDatei ( TextText$, Datei$ )
 
     '/// TextInDatei
