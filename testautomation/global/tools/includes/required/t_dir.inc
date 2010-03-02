@@ -250,25 +250,6 @@ end function
 '
 '-------------------------------------------------------------------------------
 '
-function PfadExtract ( sFiledat$ ) as string
-    '/// Get the path from a file
-    '/// <u>Input</u>: file with path
-    '/// <u>Return</u>: path without the filename
-    Dim s$ : Dim i% : Dim k%
-    dim ls(25) as String
-
-    s$ = ""
-    i% = DirNameList( sFileDat$, ls() )
-    k% = 2
-    do until K%>=i%
-        ls( 1 ) = ls( 1 ) +  ls(k%)
-        k% = k% +1
-    loop
-    PfadExtract = Left( ls(1), Len(ls( 1 ))-1)
-end function
-'
-'-------------------------------------------------------------------------------
-'
 function hPfadname (Dateipfad$) as string
     '/// Get the path from a file
     '/// <u>Input</u>: file with path
