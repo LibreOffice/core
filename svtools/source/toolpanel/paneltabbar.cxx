@@ -35,7 +35,9 @@
 #include <vector>
 
 // space around an item
-#define ITEM_OUTER_SPACE        2 * 3
+#define ITEM_OUTER_SPACE        2 * 2
+// spacing before and after (in writing direction, whether this is horizontal or vertical) an item's text
+#define ITEM_TEXT_FLOW_SPACE    2
 // distance between two items
 #define ITEM_DISTANCE_PIXEL     2
 // space between item icon and icon text
@@ -53,6 +55,33 @@ namespace svt
     #define ITEM_STATE_NORMAL   0x00
     #define ITEM_STATE_ACTIVE   0x01
     #define ITEM_STATE_HOVERED  0x02
+    #define ITEM_STATE_FOCUSED  0x04
+
+    //==================================================================================================================
+    //= ItemDescriptor
+    //==================================================================================================================
+    struct ItemDescriptor
+    {
+        PToolPanel  pPanel;
+        Rectangle   aMinArea;
+        Rectangle   aPrefArea;
+        bool        bUseMinimal;
+
+        ItemDescriptor()
+            :pPanel()
+            ,aMinArea()
+            ,aPrefArea()
+            ,bUseMinimal( false )
+        {
+        }
+
+        const Rectangle& GetCurrentRect() const
+        {
+            return bUseMinimal ? aMinArea : aPrefArea;
+        }
+    };
+
+    typedef ::std::vector< ItemDescriptor > ItemDescriptors;
 
     //==================================================================================================================
     //= IItemsLayout
@@ -83,6 +112,11 @@ namespace svt
         */
         virtual void    DrawItem( const PToolPanel& i_pPanel, Window& i_rTargetWindow, const Rectangle& i_rItemRect,
                             const ItemFlags i_nItemFlags, const bool i_bDrawMinimal ) = 0;
+
+        /** updates the given items to use their minimal or optimal size, so they fit (if possible) into the given
+            area.
+        */
+        virtual void    FitItemRects( ItemDescriptors& i_rItems, const Rectangle& i_rFitInto ) = 0;
     };
 
     typedef ::boost::shared_ptr< IItemsLayout >  PItemsLayout;
@@ -102,6 +136,7 @@ namespace svt
         virtual Point   GetNextItemPosition( const Rectangle& i_rPreviousItemArea ) const;
         virtual void    DrawItem( const PToolPanel& i_pPanel, Window& i_rTargetWindow, const Rectangle& i_rItemRect,
                             const ItemFlags i_nItemFlags, const bool i_bDrawMinimal );
+        virtual void    FitItemRects( ItemDescriptors& i_rItems, const Rectangle& i_rFitInto );
     };
 
     //------------------------------------------------------------------------------------------------------------------
@@ -126,6 +161,8 @@ namespace svt
             const Size aTextSize( i_rReferenceDevice.GetCtrlTextWidth( sItemText ), i_rReferenceDevice.GetTextHeight() );
             aItemSize.Height() += aTextSize.Width();
             aItemSize.Width() = ::std::max( aItemSize.Width(), aTextSize.Height() );
+
+            aItemSize.Height() += 2 * ITEM_TEXT_FLOW_SPACE;
         }
 
         aItemSize.Width() += 2 * ITEM_OUTER_SPACE;
@@ -165,6 +202,8 @@ namespace svt
 
         if ( !i_bDrawMinimal )
         {
+            aDrawPos.Y() += ITEM_TEXT_FLOW_SPACE;
+
             // draw the text
             i_rTargetWindow.Push( PUSH_FONT );
 
@@ -187,7 +226,8 @@ namespace svt
 
         const bool bActive = ( ( i_nItemFlags & ITEM_STATE_ACTIVE ) != 0 );
         const bool bHovered = ( ( i_nItemFlags & ITEM_STATE_HOVERED ) != 0 );
-        if ( bActive || bHovered )
+        const bool bFocused = ( ( i_nItemFlags & ITEM_STATE_FOCUSED ) != 0 );
+        if ( bActive || bHovered || bFocused )
         {
             Rectangle aSelectionRect( i_rItemRect );
             aSelectionRect.Left() += ITEM_OUTER_SPACE / 2;
@@ -196,8 +236,8 @@ namespace svt
             aSelectionRect.Bottom() -= ITEM_OUTER_SPACE / 2;
             i_rTargetWindow.DrawSelectionBackground(
                 aSelectionRect,
-                bHovered ? ( bActive ? 1 : 2 ) : 0 /* hilight */,
-                FALSE /* check */,
+                ( bHovered || bFocused ) ? ( bActive ? 1 : 2 ) : 0 /* hilight */,
+                bActive /* check */,
                 TRUE /* border */,
                 FALSE /* ext border only */,
                 0 /* corner radius */,
@@ -207,31 +247,24 @@ namespace svt
         }
     }
 
-    //==================================================================================================================
-    //= ItemDescriptor
-    //==================================================================================================================
-    struct ItemDescriptor
+    //------------------------------------------------------------------------------------------------------------------
+    void VerticalItemLayout::FitItemRects( ItemDescriptors& i_rItems, const Rectangle& i_rFitInto )
     {
-        PToolPanel  pPanel;
-        Rectangle   aMinArea;
-        Rectangle   aPrefArea;
-        bool        bUseMinimal;
+        if ( i_rItems.empty() )
+            // nothing to do
+            return;
 
-        ItemDescriptor()
-            :pPanel()
-            ,aMinArea()
-            ,aPrefArea()
-            ,bUseMinimal( false )
+        // use the minimal sizes if and only if the preferred sizes do not fit
+        const Point aBottomRight( i_rItems.rbegin()->aPrefArea.BottomRight() );
+        bool bUseMinimal = ( aBottomRight.Y() >= i_rFitInto.Bottom() );
+        for (   ItemDescriptors::iterator item = i_rItems.begin();
+                item != i_rItems.end();
+                ++item
+            )
         {
+            item->bUseMinimal = bUseMinimal;
         }
-
-        const Rectangle& GetCurrentRect() const
-        {
-            return bUseMinimal ? aMinArea : aPrefArea;
-        }
-    };
-
-    typedef ::std::vector< ItemDescriptor > ItemDescriptors;
+    }
 
     //==================================================================================================================
     //= PanelTabBar_Data
@@ -245,6 +278,7 @@ namespace svt
             ,rPanelDeck( dynamic_cast< ToolPanelDeck& >( *i_rTabBar.GetParent() ) )
             ,pLayout( new VerticalItemLayout )
             ,aHoveredItem()
+            ,aFocusedItem()
             ,bMouseButtonDown( false )
             ,aItems()
             ,bItemsDirty( true )
@@ -265,6 +299,7 @@ namespace svt
             (void)i_pPanel;
             (void)i_nPosition;
             bItemsDirty = true;
+            rTabBar.Invalidate();
         }
 
         // IToolPanelDeckListener
@@ -275,6 +310,7 @@ namespace svt
         ToolPanelDeck&              rPanelDeck;
         const PItemsLayout          pLayout;
         ::boost::optional< size_t > aHoveredItem;
+        ::boost::optional< size_t > aFocusedItem;
         bool                        bMouseButtonDown;
 
         ItemDescriptors             aItems;
@@ -401,6 +437,9 @@ namespace svt
             if ( i_rData.rPanelDeck.GetActivePanel() == i_nItemIndex )
                 nItemFlags |= ITEM_STATE_ACTIVE;
 
+            if ( i_rData.aFocusedItem == i_nItemIndex )
+                nItemFlags |= ITEM_STATE_FOCUSED;
+
             i_rData.rTabBar.DrawRect( rItem.GetCurrentRect() );
             i_rData.pLayout->DrawItem( rItem.pPanel, i_rData.rTabBar, rItem.GetCurrentRect(), nItemFlags, rItem.bUseMinimal );
         }
@@ -475,17 +514,14 @@ namespace svt
         Control::Resize();
 
         // decide whether we should use the minimal or the prefered version of the items
-        const Size aPreferredSize( GetOptimalSize( WINDOWSIZE_PREFERRED ) );
-        const Size aOutputSize( GetOutputSizePixel() );
-        const bool bDrawMinimal( aPreferredSize.Height() >= aOutputSize.Height() );
 
-        for (   ItemDescriptors::iterator item = m_pData->aItems.begin();
-                item != m_pData->aItems.end();
-                ++item
-            )
-        {
-            item->bUseMinimal = bDrawMinimal;
-        }
+        // the available size
+        Size aOutputSize( GetOutputSizePixel() );
+        // shrunk by the outer space
+        aOutputSize.Width() -= TAB_BAR_OUTER_SPACE;
+        aOutputSize.Height() -= TAB_BAR_OUTER_SPACE;
+        // let the layouter decide
+        m_pData->pLayout->FitItemRects( m_pData->aItems, Rectangle( Point(), aOutputSize ) );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -590,6 +626,102 @@ namespace svt
             Help::ShowBalloon( this, OutputToScreenPixel( rItem.GetCurrentRect().Center() ), rItem.GetCurrentRect(), sItemText );
         else
             Help::ShowQuickHelp( this, rItem.GetCurrentRect(), sItemText );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void PanelTabBar::GetFocus()
+    {
+        Control::GetFocus();
+        if ( m_pData->rPanelDeck.GetPanels()->GetPanelCount() )
+        {
+            m_pData->aFocusedItem.reset( m_pData->rPanelDeck.GetActivePanel() );
+            lcl_drawItem( *m_pData, *m_pData->aFocusedItem );
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void PanelTabBar::LoseFocus()
+    {
+        Control::LoseFocus();
+
+        ::boost::optional< size_t > aPreviouslyFocused( m_pData->aFocusedItem );
+        m_pData->aFocusedItem.reset();
+        if ( !!aPreviouslyFocused )
+            lcl_drawItem( *m_pData, *aPreviouslyFocused );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void PanelTabBar::KeyInput( const KeyEvent& i_rKeyEvent )
+    {
+        Control::KeyInput( i_rKeyEvent );
+
+        const KeyCode& rKeyCode( i_rKeyEvent.GetKeyCode() );
+        if ( rKeyCode.GetModifier() != 0 )
+            // only interested in mere key presses
+            return;
+
+        // if there are less than 2 panels, we cannot travel them ...
+        const size_t nPanelCount( m_pData->rPanelDeck.GetPanels()->GetPanelCount() );
+        if ( nPanelCount < 2 )
+            return;
+
+        OSL_PRECOND( !!m_pData->aFocusedItem, "PanelTabBar::KeyInput: we should have a focused item here!" );
+            // if we get KeyInput events, we should have the focus. In this case, aFocusedItem should not be empty,
+            // except if there are no panels, but then we bail out of this method here earlier ...
+
+        bool bFocusNext = false;
+        bool bFocusPrev = false;
+
+        switch ( rKeyCode.GetCode() )
+        {
+        case KEY_UP:    bFocusPrev = true; break;
+        case KEY_DOWN:  bFocusNext = true; break;
+        case KEY_LEFT:
+            if ( IsRTLEnabled() )
+                bFocusNext = true;
+            else
+                bFocusPrev = true;
+            break;
+        case KEY_RIGHT:
+            if ( IsRTLEnabled() )
+                bFocusPrev = true;
+            else
+                bFocusNext = true;
+            break;
+        case KEY_RETURN:
+            m_pData->rPanelDeck.ActivatePanel( *m_pData->aFocusedItem );
+            break;
+        }
+
+        if ( !bFocusNext && !bFocusPrev )
+            return;
+
+        const size_t nOldFocus = *m_pData->aFocusedItem;
+        if ( bFocusNext )
+        {
+            m_pData->aFocusedItem.reset( ( *m_pData->aFocusedItem + 1 ) % nPanelCount );
+        }
+        else
+        {
+            m_pData->aFocusedItem.reset( ( *m_pData->aFocusedItem + nPanelCount - 1 ) % nPanelCount );
+        }
+
+        lcl_drawItem( *m_pData, nOldFocus );
+        lcl_drawItem( *m_pData, *m_pData->aFocusedItem );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void PanelTabBar::DataChanged( const DataChangedEvent& i_rDataChanedEvent )
+    {
+        Control::DataChanged( i_rDataChanedEvent );
+
+        if  (   ( i_rDataChanedEvent.GetType() == DATACHANGED_SETTINGS )
+            &&  ( ( i_rDataChanedEvent.GetFlags() & SETTINGS_STYLE ) != 0 )
+            )
+        {
+            SetFillColor( GetSettings().GetStyleSettings().GetDialogColor() );
+            Invalidate();
+        }
     }
 
 //........................................................................

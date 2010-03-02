@@ -57,9 +57,14 @@ namespace svt
             Since the layouter is ref-counted, but might keep references to non-ref-counted objects
             (in particular, the ToolPanelDeck, which is a VCL-Window, and thus cannot be ref-counted),
             Destroy is the definitive way to dispose the instance. Technically, it's still alive afterwards,
-            but non-functioal.
+            but non-functional.
         */
         virtual void        Destroy() = 0;
+
+        /** assuming that a layouter neesds to provide some kind of panel selector control, this method
+            requests to set the focus to this control.
+        */
+        virtual void        SetFocusToPanelSelector() = 0;
 
         virtual ~IDeckLayouter()
         {

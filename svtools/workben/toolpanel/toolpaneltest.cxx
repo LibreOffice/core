@@ -27,6 +27,7 @@
 #include "precompiled_svtools.hxx"
 
 #include "svtools/toolpanel/toolpaneldeck.hxx"
+#include "svtools/toolpanel/tablayouter.hxx"
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -35,14 +36,20 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/servicefactory.hxx>
 #include <tools/diagnose_ex.h>
+#include <ucbhelper/contentbroker.hxx>
+#include <vcl/button.hxx>
+#include <vcl/edit.hxx>
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/taskpanelist.hxx>
 #include <vcl/wrkwin.hxx>
 
 namespace svt { namespace toolpanel
 {
 
 using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::Any;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::uno::XComponentContext;
 
@@ -66,15 +73,35 @@ class ColoredPanelWindow : public Window
 public:
     ColoredPanelWindow( Window& i_rParent, const Color& i_rColor )
         :Window( &i_rParent )
+        ,m_aEdit( this, WB_BORDER )
     {
         SetLineColor();
         SetFillColor( i_rColor );
+
+        m_aEdit.Show();
     }
 
     virtual void Paint( const Rectangle& i_rRect )
     {
         DrawRect( i_rRect );
     }
+
+    virtual void GetFocus()
+    {
+        m_aEdit.GrabFocus();
+    }
+
+    virtual void Resize()
+    {
+        const Size aOutputSize( GetOutputSizePixel() );
+        m_aEdit.SetPosSizePixel(
+            Point( 20, 20 ),
+            Size( aOutputSize.Width() - 40, 20 )
+        );
+    }
+
+private:
+    Edit    m_aEdit;
 };
 
 //=============================================================================
@@ -87,11 +114,13 @@ public:
     ~ColoredPanel();
 
     // IToolPanel
+    virtual ::rtl::OUString GetDisplayName() const;
+    virtual Image GetImage() const;
     virtual void Show();
     virtual void Hide();
     virtual void SetPosSizePixel( const Rectangle& i_rPanelPlayground );
-    virtual ::rtl::OUString GetDisplayName() const;
-    virtual Image GetImage() const;
+    virtual void GrabFocus();
+    virtual bool HasFocus() const;
 
     // IReference
     virtual oslInterlockedCount SAL_CALL acquire();
@@ -158,6 +187,18 @@ void ColoredPanel::SetPosSizePixel( const Rectangle& i_rPanelPlayground )
 }
 
 //-----------------------------------------------------------------------------
+void ColoredPanel::GrabFocus()
+{
+    m_aWindow.GrabFocus();
+}
+
+//-----------------------------------------------------------------------------
+bool ColoredPanel::HasFocus() const
+{
+    return m_aWindow.HasChildPathFocus();
+}
+
+//-----------------------------------------------------------------------------
 ::rtl::OUString ColoredPanel::GetDisplayName() const
 {
     return m_aPanelName;
@@ -170,31 +211,153 @@ Image ColoredPanel::GetImage() const
 }
 
 //=============================================================================
-//= PanelDemoMainWindow
+//= OptionsWindow
 //=============================================================================
-class PanelDemoMainWindow : public WorkWindow
+class PanelDemoMainWindow;
+class OptionsWindow : public Window
 {
-private:
-    ToolPanelDeck   m_aToolPanelDeck;
-
-protected:
-    virtual void    GetFocus();
-
 public:
-                    PanelDemoMainWindow();
-                    ~PanelDemoMainWindow();
+    OptionsWindow( PanelDemoMainWindow& i_rParent );
 
-    virtual void    Resize();
+    virtual void Resize();
+    virtual void GetFocus();
+
+private:
+    DECL_LINK( OnAlignmentChanged, void* );
+
+private:
+    RadioButton     m_aAlignLeft;
+    RadioButton     m_aAlignRight;
 };
 
 //=============================================================================
 //= PanelDemoMainWindow
 //=============================================================================
+class PanelDemoMainWindow : public WorkWindow
+{
+public:
+                    PanelDemoMainWindow();
+                    ~PanelDemoMainWindow();
+
+    // window overridables
+    virtual void    Resize();
+
+public:
+    // operations
+    void AlignTabs( const ::svt::TabAlignment i_eAlignment );
+
+protected:
+    virtual void    GetFocus();
+
+private:
+    ToolPanelDeck   m_aToolPanelDeck;
+    OptionsWindow   m_aDemoOptions;
+};
+
+//=============================================================================
+//= PanelDemoMainWindow - implementation
+//=============================================================================
+//-----------------------------------------------------------------------------
+OptionsWindow::OptionsWindow( PanelDemoMainWindow& i_rParent )
+    :Window( &i_rParent, WB_BORDER | WB_DIALOGCONTROL )
+    ,m_aAlignLeft( this, WB_GROUP )
+    ,m_aAlignRight( this, 0 )
+{
+    SetBorderStyle( WINDOW_BORDER_MONO );
+    const Color aFaceColor( GetSettings().GetStyleSettings().GetFaceColor() );
+    SetBackground( aFaceColor );
+
+    RadioButton* pRadios[] =
+    {
+        &m_aAlignLeft, &m_aAlignRight
+    };
+    const sal_Char* pTexts[] =
+    {
+        "Left", "Right"
+    };
+    for ( size_t i=0; i < sizeof( pRadios ) / sizeof( pRadios[0] ); ++i )
+    {
+        pRadios[i]->SetText( String::CreateFromAscii( pTexts[i] ) );
+        pRadios[i]->SetControlBackground( aFaceColor );
+        pRadios[i]->Show();
+        pRadios[i]->SetToggleHdl( LINK( this, OptionsWindow, OnAlignmentChanged ) );
+    }
+
+    m_aAlignRight.Check();
+
+    Show();
+}
+
+//-----------------------------------------------------------------------------
+void OptionsWindow::GetFocus()
+{
+    Window::GetFocus();
+    RadioButton* pRadios[] =
+    {
+        &m_aAlignLeft, &m_aAlignRight
+    };
+    for ( size_t i=0; i < sizeof( pRadios ) / sizeof( pRadios[0] ); ++i )
+    {
+        if ( pRadios[i]->IsChecked() )
+        {
+            pRadios[i]->GrabFocus();
+            break;
+        }
+    }
+}
+
+//-----------------------------------------------------------------------------
+void OptionsWindow::Resize()
+{
+    Window::Resize();
+
+    const Size aSpacing( LogicToPixel( Size( 3, 3 ), MAP_APPFONT ) );
+    const Size aOutputSize( GetOutputSizePixel() );
+
+    const Size aRadioSize(
+        aOutputSize.Width() - 2 * aSpacing.Width(),
+        LogicToPixel( Size( 0, 8 ), MAP_APPFONT ).Height()
+    );
+
+    Point aRadioPos( aSpacing.Width(), aSpacing.Height() );
+    RadioButton* pRadios[] =
+    {
+        &m_aAlignLeft, &m_aAlignRight
+    };
+    for ( size_t i=0; i < sizeof( pRadios ) / sizeof( pRadios[0] ); ++i )
+    {
+        pRadios[i]->SetPosSizePixel( aRadioPos, aRadioSize );
+        aRadioPos.Move( 0, aRadioSize.Height() + aSpacing.Height() );
+    }
+}
+
+//-----------------------------------------------------------------------------
+IMPL_LINK( OptionsWindow, OnAlignmentChanged, void*, /**/ )
+{
+    PanelDemoMainWindow& rController( dynamic_cast< PanelDemoMainWindow& >( *GetParent() ) );
+    if ( m_aAlignLeft.IsChecked() )
+    {
+        rController.AlignTabs( TABS_LEFT );
+    }
+    else if ( m_aAlignRight.IsChecked() )
+    {
+        rController.AlignTabs( TABS_RIGHT );
+    }
+    return 0L;
+}
+//=============================================================================
+//= PanelDemoMainWindow - implementation
+//=============================================================================
 //-----------------------------------------------------------------------------
 PanelDemoMainWindow::PanelDemoMainWindow()
     :WorkWindow( NULL, WB_APP | WB_STDWORK | WB_CLIPCHILDREN )
     ,m_aToolPanelDeck( *this, WB_BORDER )
+    ,m_aDemoOptions( *this )
 {
+    const Color aFaceColor( GetSettings().GetStyleSettings().GetFaceColor() );
+
+    SetBackground( aFaceColor );
+
     m_aToolPanelDeck.SetPosSizePixel( Point( 20, 20 ), Size( 500, 300 ) );
     m_aToolPanelDeck.SetBorderStyle( WINDOW_BORDER_MONO );
 
@@ -206,17 +369,22 @@ PanelDemoMainWindow::PanelDemoMainWindow()
     m_aToolPanelDeck.ActivatePanel( 0 );
     m_aToolPanelDeck.Show();
 
-    SetBackground( Color( COL_LIGHTGRAY ) );
-
     SetText( String::CreateFromAscii( "ToolPanelDeck Demo Application" ) );
     Show();
 
+    AlignTabs( TABS_RIGHT );
+
     Help::EnableQuickHelp();
+
+    GetSystemWindow()->GetTaskPaneList()->AddWindow( &m_aToolPanelDeck );
+    GetSystemWindow()->GetTaskPaneList()->AddWindow( &m_aDemoOptions );
 }
 
 //-----------------------------------------------------------------------------
 PanelDemoMainWindow::~PanelDemoMainWindow()
 {
+    GetSystemWindow()->GetTaskPaneList()->RemoveWindow( &m_aDemoOptions );
+    GetSystemWindow()->GetTaskPaneList()->RemoveWindow( &m_aToolPanelDeck );
 }
 
 //-----------------------------------------------------------------------------
@@ -231,9 +399,20 @@ void PanelDemoMainWindow::Resize()
 {
     WorkWindow::Resize();
     Size aSize( GetOutputSizePixel() );
-    aSize.Width() -= 40;
+    aSize.Width() -= 140;
     aSize.Height() -= 40;
     m_aToolPanelDeck.SetPosSizePixel( Point( 20, 20 ), aSize );
+
+    m_aDemoOptions.SetPosSizePixel(
+        Point( 20 + aSize.Width(), 20 ),
+        Size( 100, aSize.Height() )
+    );
+}
+
+//-----------------------------------------------------------------------------
+void PanelDemoMainWindow::AlignTabs( const ::svt::TabAlignment i_eAlignment )
+{
+    m_aToolPanelDeck.SetLayouter( PDeckLayouter( new TabDeckLayouter( i_eAlignment, m_aToolPanelDeck ) ) );
 }
 
 //=============================================================================
@@ -260,9 +439,17 @@ Reference< XMultiServiceFactory > PanelDemo::createApplicationServiceManager()
 //-----------------------------------------------------------------------------
 void __EXPORT PanelDemo::Main()
 {
+    // create service factory
     Reference< XMultiServiceFactory >  xSMgr = createApplicationServiceManager();
     ::comphelper::setProcessServiceFactory( xSMgr );
 
+    // initialize the UCB
+    Sequence< Any > aArgs(2);
+    aArgs[0] <<= rtl::OUString::createFromAscii( "Local" );
+    aArgs[1] <<= rtl::OUString::createFromAscii( "Office" );
+    ::ucbhelper::ContentBroker::initialize( xSMgr, aArgs );
+
+    // run the application
     PanelDemoMainWindow aWindow;
     Execute();
 }

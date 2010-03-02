@@ -39,10 +39,25 @@ namespace svt
 {
 //........................................................................
 
+    enum DeckAction
+    {
+        /// activates the first panel
+        ACTION_ACTIVATE_FIRST,
+        // activates the panel after the currently active panel
+        ACTION_ACTIVATE_NEXT,
+        // activates the panel before the currently active panel
+        ACTION_ACTIVATE_PREV,
+        // activates the last panel
+        ACTION_ACTIVATE_LAST,
+
+        // toggles the focus between the active panel and the panel selector
+        ACTION_TOGGLE_FOCUS,
+    };
+
     //====================================================================
     //= ToolPanelDeck_Impl
     //====================================================================
-    class ToolPanelDeck_Impl
+    class ToolPanelDeck_Impl : public IToolPanelContainerListener
     {
     public:
         ToolPanelDeck_Impl( ToolPanelDeck& i_rDeck )
@@ -53,8 +68,7 @@ namespace svt
             ,m_pLayouter()
             ,m_aPanelPlayground()
         {
-            // TODO: add as listener to the panels collection - we're interested in panels
-            // being added and removed, as we need to re-layout then
+            m_pPanels->AddListener( *this );
         }
 
         PToolPanelContainer GetPanels() const { return m_pPanels; }
@@ -71,11 +85,17 @@ namespace svt
         /// re-layouts everything
         void    LayoutAll() { ImplDoLayout(); }
 
-    private:
-        void    ImplDoLayout();
+        void                DoAction( const DeckAction i_eAction );
+
+        void                FocusActivePanel();
+
+    protected:
+        // IToolPanelContainerListener
+        virtual void        PanelInserted( const PToolPanel& i_pPanel, const size_t i_nPosition );
 
     private:
-        PToolPanel  GetActiveOrDummyPanel_Impl();
+        void                ImplDoLayout();
+        PToolPanel          GetActiveOrDummyPanel_Impl();
 
     private:
         ToolPanelDeck&      m_rDeck;
@@ -141,6 +161,7 @@ namespace svt
         const PToolPanel pNewActive( GetActiveOrDummyPanel_Impl() );
         pNewActive->SetPosSizePixel( m_aPanelPlayground );
         pNewActive->Show();
+        pNewActive->GrabFocus();
 
         // notify listeners
         for (   ::std::vector< IToolPanelDeckListener* >::iterator loop = m_aListeners.begin();
@@ -187,6 +208,65 @@ namespace svt
                 m_aListeners.erase( lookup );
                 return;
             }
+        }
+    }
+
+    //--------------------------------------------------------------------
+    void ToolPanelDeck_Impl::DoAction( const DeckAction i_eAction )
+    {
+        ::boost::optional< size_t > aActivatePanel;
+        const size_t nPanelCount( GetPanels()->GetPanelCount() );
+        const size_t nActivePanel( GetActivePanel() );
+
+        switch ( i_eAction )
+        {
+        case ACTION_ACTIVATE_FIRST:
+            if ( nPanelCount > 0 )
+                aActivatePanel = 0;
+            break;
+        case ACTION_ACTIVATE_PREV:
+            if ( nActivePanel > 0 )
+                aActivatePanel = nActivePanel - 1;
+            break;
+        case ACTION_ACTIVATE_NEXT:
+            if ( nActivePanel < nPanelCount - 1 )
+                aActivatePanel = nActivePanel + 1;
+            break;
+        case ACTION_ACTIVATE_LAST:
+            if ( nPanelCount > 0 )
+                aActivatePanel = nPanelCount - 1;
+            break;
+        case ACTION_TOGGLE_FOCUS:
+            {
+                PToolPanel pActivePanel( GetActiveOrDummyPanel_Impl() );
+                if ( !pActivePanel->HasFocus() )
+                    pActivePanel->GrabFocus();
+                else
+                    GetLayouter()->SetFocusToPanelSelector();
+            }
+            break;
+        }
+
+        if ( !!aActivatePanel )
+        {
+            ActivatePanel( *aActivatePanel );
+        }
+    }
+
+    //--------------------------------------------------------------------
+    void ToolPanelDeck_Impl::FocusActivePanel()
+    {
+        PToolPanel pActivePanel( GetActiveOrDummyPanel_Impl() );
+        pActivePanel->GrabFocus();
+    }
+
+    //--------------------------------------------------------------------
+    void ToolPanelDeck_Impl::PanelInserted( const PToolPanel& i_pPanel, const size_t i_nPosition )
+    {
+        if ( !!m_aActivePanel )
+        {
+            if ( i_nPosition <= *m_aActivePanel )
+                ++*m_aActivePanel;
         }
     }
 
@@ -255,6 +335,59 @@ namespace svt
     {
         Control::Resize();
         m_pImpl->LayoutAll();
+    }
+
+    //--------------------------------------------------------------------
+    long ToolPanelDeck::Notify( NotifyEvent& i_rNotifyEvent )
+    {
+        bool bHandled = false;
+        if ( i_rNotifyEvent.GetType() == EVENT_KEYINPUT )
+        {
+            const KeyEvent* pEvent = i_rNotifyEvent.GetKeyEvent();
+            const KeyCode& rKeyCode = pEvent->GetKeyCode();
+            if ( rKeyCode.GetModifier() == KEY_MOD1 )
+            {
+                bHandled = true;
+                switch ( rKeyCode.GetCode() )
+                {
+                case KEY_HOME:
+                    m_pImpl->DoAction( ACTION_ACTIVATE_FIRST );
+                    break;
+                case KEY_PAGEUP:
+                    m_pImpl->DoAction( ACTION_ACTIVATE_PREV );
+                    break;
+                case KEY_PAGEDOWN:
+                    m_pImpl->DoAction( ACTION_ACTIVATE_NEXT );
+                    break;
+                case KEY_END:
+                    m_pImpl->DoAction( ACTION_ACTIVATE_LAST );
+                    break;
+                default:
+                    bHandled = false;
+                    break;
+                }
+            }
+            else if ( rKeyCode.GetModifier() == ( KEY_MOD1 | KEY_SHIFT ) )
+            {
+                if ( rKeyCode.GetCode() == KEY_E )
+                {
+                    m_pImpl->DoAction( ACTION_TOGGLE_FOCUS );
+                    bHandled = true;
+                }
+            }
+        }
+
+        if ( bHandled )
+            return 1;
+
+        return Control::Notify( i_rNotifyEvent );
+    }
+
+    //--------------------------------------------------------------------
+    void ToolPanelDeck::GetFocus()
+    {
+        Control::GetFocus();
+        m_pImpl->FocusActivePanel();
     }
 
 //........................................................................

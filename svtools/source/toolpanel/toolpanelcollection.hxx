@@ -28,7 +28,7 @@
 #define TOOLPANELCOLLECTION_HXX
 
 #include "svtools/toolpanel/toolpanelcontainer.hxx"
-#include "refbase.hxx"
+#include "svtools/toolpanel/refbase.hxx"
 
 #include <memory>
 

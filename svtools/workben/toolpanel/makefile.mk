@@ -53,6 +53,7 @@ APP1OBJS=   $(OBJFILES)
 APP1LIBS=   $(SLB)/toolpanel.lib
 APP1STDLIBS=\
             $(VCLLIB)           \
+            $(UCBHELPERLIB)     \
             $(SALLIB)           \
             $(TOOLSLIB)         \
             $(COMPHELPERLIB)    \

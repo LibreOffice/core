@@ -29,7 +29,7 @@
 
 #include "svtools/toolpanel/decklayouter.hxx"
 #include "svtools/toolpanel/toolpanelcontainer.hxx"
-#include "refbase.hxx"
+#include "svtools/toolpanel/refbase.hxx"
 
 #include <memory>
 
@@ -42,8 +42,8 @@ namespace svt
 
     enum TabAlignment
     {
-        TABS_RIGHT,
-        TABS_LEFT
+        TABS_LEFT,
+        TABS_RIGHT
     };
 
     struct TabDeckLayouter_Data;
@@ -69,6 +69,7 @@ namespace svt
         // IDeckLayouter
         virtual Rectangle   Layout( const Rectangle& i_rDeckPlayground );
         virtual void        Destroy();
+        virtual void        SetFocusToPanelSelector();
 
         // IReference
         DECLARE_IREFERENCE()

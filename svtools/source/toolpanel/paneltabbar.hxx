@@ -62,6 +62,10 @@ namespace svt
         virtual void    MouseButtonDown( const MouseEvent& i_rMouseEvent );
         virtual void    MouseButtonUp( const MouseEvent& i_rMouseEvent );
         virtual void    RequestHelp( const HelpEvent& i_rHelpEvent );
+        virtual void    GetFocus();
+        virtual void    LoseFocus();
+        virtual void    KeyInput( const KeyEvent& i_rKeyEvent );
+        virtual void    DataChanged( const DataChangedEvent& i_rDataChanedEvent );
 
     private:
         ::std::auto_ptr< PanelTabBar_Data > m_pData;

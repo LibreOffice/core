@@ -47,16 +47,30 @@ namespace svt
     class IToolPanel : public ::rtl::IReference
     {
     public:
-        /// shows the panel
-        virtual void Show() = 0;
-        /// hides the panel
-        virtual void Hide() = 0;
-        /// sets the position of the panel
-        virtual void SetPosSizePixel( const Rectangle& i_rPanelPlayground ) = 0;
         /// retrieves the display name of the panel
         virtual ::rtl::OUString GetDisplayName() const = 0;
+
         /// retrieves the image associated with the panel, if any
         virtual Image GetImage() const = 0;
+
+        /// shows the panel window
+        virtual void Show() = 0;
+
+        /// hides the panel window
+        virtual void Hide() = 0;
+
+        /// sets the position of the panel window
+        virtual void SetPosSizePixel( const Rectangle& i_rPanelPlayground ) = 0;
+
+        /// sets the focus to the panel window
+        virtual void GrabFocus() = 0;
+
+        /** determines whether the panel window, or any of its children, currently has the focus
+
+            Effectively, an implementation simply needs to redelegate this to its panel window's HasChildPathFocus
+            method.
+        */
+        virtual bool HasFocus() const = 0;
 
         virtual ~IToolPanel()
         {

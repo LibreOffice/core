@@ -132,6 +132,17 @@ namespace svt
         m_pData->pTabBar.reset();
     }
 
+    //--------------------------------------------------------------------
+    void TabDeckLayouter::SetFocusToPanelSelector()
+    {
+        if ( !m_pData->pTabBar.get() )
+        {
+            OSL_ENSURE( false, "TabDeckLayouter::SetFocusToPanelSelector: already disposed!" );
+            return;
+        }
+        m_pData->pTabBar->GrabFocus();
+    }
+
 //........................................................................
 } // namespace svt
 //........................................................................

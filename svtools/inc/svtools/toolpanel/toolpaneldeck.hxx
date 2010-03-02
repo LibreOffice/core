@@ -77,6 +77,8 @@ namespace svt
     protected:
         // Window overridables
         virtual void Resize();
+        virtual long Notify( NotifyEvent& i_rNotifyEvent );
+        virtual void GetFocus();
 
     private:
         ::std::auto_ptr< ToolPanelDeck_Impl >   m_pImpl;

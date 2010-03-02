@@ -28,7 +28,7 @@
 #define DUMMYPANEL_HXX
 
 #include "svtools/toolpanel/toolpanel.hxx"
-#include "refbase.hxx"
+#include "svtools/toolpanel/refbase.hxx"
 
 //........................................................................
 namespace svt
@@ -47,11 +47,13 @@ namespace svt
         ~DummyPanel();
 
         // IToolPanel
+        virtual ::rtl::OUString GetDisplayName() const;
+        virtual Image GetImage() const;
         virtual void Show();
         virtual void Hide();
         virtual void SetPosSizePixel( const Rectangle& i_rPanelPlayground );
-        virtual ::rtl::OUString GetDisplayName() const;
-        virtual Image GetImage() const;
+        virtual void GrabFocus();
+        virtual bool HasFocus() const;
 
         DECLARE_IREFERENCE()
     };
