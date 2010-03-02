@@ -56,6 +56,7 @@ SHL1STDLIBS=       \
         $(SVLLIB) \
         $(VCLLIB) \
         $(SVTOOLLIB)    \
+        $(MSFILTERLIB)    \
         $(TKLIB)
 
 SHL1DEPN=

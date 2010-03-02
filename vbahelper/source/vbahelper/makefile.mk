@@ -36,7 +36,6 @@ VISIBILITY_HIDDEN=TRUE
 .INCLUDE :  settings.mk
 
 SLOFILES=\
-    $(SLO)$/msvbahelper.obj \
     $(SLO)$/vbahelper.obj \
     $(SLO)$/vbapropvalue.obj \
     $(SLO)$/vbacommandbars.obj \
