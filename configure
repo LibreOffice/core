@@ -309,7 +309,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS EGREP AWK SED LOCAL_SOLENV _solenv UPD SOURCEVERSION build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os GNUTAR OSVERSION PTHREAD_CFLAGS PTHREAD_LIBS ENABLE_CRASHDUMP VC_STANDARD ENABLE_WERROR ENABLE_DEBUG PRODUCT PROFULLSWITCH PROEXT ENABLE_SYMBOLS DISABLE_STRIP ENABLE_CUPS ENABLE_FONTCONFIG WITH_BINFILTER ENABLE_DIRECTX DISABLE_ACTIVEX DISABLE_ATL ENABLE_RPATH WITH_MYSPELL_DICTS SYSTEM_DICTS DICT_SYSTEM_DIR HYPH_SYSTEM_DIR THES_SYSTEM_DIR USE_SHELL WITH_MINGWIN SHELLPATH GCC_HOME CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COMPATH GCCVER HAVE_LD_BSYMBOLIC_FUNCTIONS ENABLE_PCH NO_HIDS GNUMAKE _cc HAVE_LD_HASH_STYLE PERL MSPDB_PATH COMEX USE_MINGW MIDL_PATH CSC_PATH FRAME_HOME CPP CXX CXXFLAGS ac_ct_CXX CXXCPP SIZEOF_LONG WORDS_BIGENDIAN LFS_CFLAGS ENABLE_VBA VBA_EXTENSION PAM NEW_SHADOW_API PAM_LINK CRYPT_LINK GXX_INCLUDE_PATH MINGW_LIB_INCLUDE_PATH MINGW_BACKWARD_INCLUDE_PATH MINGW_CLIB_DIR MINGW_SHARED_GCCLIB MINGW_GCCLIB_EH MINGW_SHARED_GXXLIB MINGW_GCCDLL MINGW_GXXDLL EXCEPTIONS STLPORT4 STLPORT_VER USE_SYSTEM_STL USE_CCACHE CCACHE HAVE_GCC_VISIBILITY_FEATURE ALLOC BUILD_VER_STRING SOLAR_JAVA JAVAINTERPRETER JAVACOMPILER JAVACISGCJ JAVADOC AWTLIB JAVAAOTCOMPILER JAVA_HOME JDK JAVAFLAGS DMAKE BUILD_DMAKE EPM DPKG PKGMK BUILD_EPM PKGFORMAT RPM GPERF MINGWCXX ac_ct_MINGWCXX MINGWSTRIP ac_ct_MINGWSTRIP BUILD_UNOWINREG BUILD_QADEVOOO SYSTEM_STDLIBS SYSTEM_ZLIB SYSTEM_JPEG SYSTEM_EXPAT PKG_CONFIG LIBWPD_CFLAGS LIBWPD_LIBS SYSTEM_LIBWPD FREETYPE_CFLAGS FREETYPE_LIBS USE_FT_EMBOLDEN LIBXSLT_CFLAGS LIBXSLT_LIBS XSLTPROC SYSTEM_LIBXSLT LIBXML_CFLAGS LIBXML_LIBS SYSTEM_LIBXML PYTHON PYTHON_VERSION PYTHON_PREFIX PYTHON_EXEC_PREFIX PYTHON_PLATFORM pythondir pkgpythondir pyexecdir pkgpyexecdir BZIP2 SYSTEM_PYTHON PYTHON_CFLAGS PYTHON_LIBS HOME SYSTEM_DB DB_VERSION DB_INCLUDES DB_JAR SYSTEM_LUCENE LUCENE_CORE_JAR LUCENE_ANALYZERS_JAR SYSTEM_HSQLDB HSQLDB_JAR SYSTEM_BSH BSH_JAR SERIALIZER_JAR SYSTEM_SAXON SAXON_JAR CURLCONFIG SYSTEM_CURL CURL_CFLAGS CURL_LIBS SYSTEM_BOOST SYSTEM_VIGRA SYSTEM_ODBC_HEADERS WITH_MOZILLA WITH_LDAP WITH_OPENLDAP MOZ_NSS_CFLAGS MOZ_NSS_LIBS NSS_LIB MOZ_NSPR_CFLAGS MOZ_NSPR_LIBS NSPR_LIB MOZILLAXPCOM_CFLAGS MOZILLAXPCOM_LIBS MOZILLA_VERSION MOZILLA_TOOLKIT MOZGTK2_CFLAGS MOZGTK2_LIBS MOZLIBREQ_CFLAGS MOZLIBREQ_LIBS BUILD_MOZAB ENABLE_NSS_MODULE MOZILLABUILD SYSTEM_MOZILLA MOZ_FLAVOUR MOZ_INC MOZ_LIB MOZ_LIB_XPCOM MOZ_LDAP_CFLAGS SYSTEM_SANE_HEADER SYSTEM_GENBRK SYSTEM_GENCCODE SYSTEM_GENCMN SYSTEM_ICU GRAPHITE_CFLAGS GRAPHITE_LIBS ENABLE_GRAPHITE SYSTEM_GRAPHITE X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS XINC XLIB XAU_LIBS DISABLE_XAW SYSTEM_XRENDER_HEADERS XRENDER_LINK XRANDR_CFLAGS XRANDR_LIBS XRANDR_DLOPEN ENABLE_RANDR DISABLE_NEON NEON_CFLAGS NEON_LIBS SYSTEM_NEON NEON_VERSION OPENSSL_CFLAGS OPENSSL_LIBS SYSTEM_OPENSSL ENABLE_AGG AGG_CFLAGS AGG_LIBS SYSTEM_AGG AGG_VERSION REDLAND_CFLAGS REDLAND_LIBS SYSTEM_REDLAND HUNSPELL_CFLAGS HUNSPELL_LIBS SYSTEM_HUNSPELL SYSTEM_HYPH HYPHEN_LIB SYSTEM_MYTHES SYSTEM_LPSOLVE PSDK_HOME WINDOWS_VISTA_PSDK DIRECTXSDK_HOME DIRECTXSDK_LIB NSIS_PATH BISON FLEX PATCH GNUCP GNUPATCH CYGWIN_PATH ML_EXE ASM_HOME ZIP UNZIP ZIP_HOME ENABLE_GTK ENABLE_KDE ENABLE_KDE4 GCONF_CFLAGS GCONF_LIBS ENABLE_GCONF GNOMEVFS_CFLAGS GNOMEVFS_LIBS ENABLE_GNOMEVFS GTK_CFLAGS GTK_LIBS DBUS_CFLAGS DBUS_LIBS GIO_CFLAGS GIO_LIBS ENABLE_GIO ENABLE_DBUS ENABLE_SYSTRAY_GTK CAIRO_CFLAGS CAIRO_LIBS ENABLE_CAIRO BUILD_PIXMAN SYSTEM_CAIRO ENABLE_OPENGL ENABLE_MINIMIZER ENABLE_PRESENTER_SCREEN POPPLER_CFLAGS POPPLER_LIBS ENABLE_PDFIMPORT SYSTEM_POPPLER ENABLE_MEDIAWIKI SYSTEM_SERVLETAPI SERVLETAPI_JAR ENABLE_REPORTBUILDER SYSTEM_JFREEREPORT SAC_JAR LIBXML_JAR FLUTE_JAR JFREEREPORT_JAR LIBBASE_JAR LIBLAYOUT_JAR LIBLOADER_JAR LIBFORMULA_JAR LIBREPOSITORY_JAR LIBFONTS_JAR LIBSERIALIZER_JAR SYSTEM_APACHE_COMMONS COMMONS_CODEC_JAR COMMONS_LANG_JAR COMMONS_HTTPCLIENT_JAR COMMONS_LOGGING_JAR MOC KDE_CFLAGS KDE_LIBS MOC4 KDE4_CFLAGS KDE4_LIBS ENABLE_LOCKDOWN GOBJECT_CFLAGS GOBJECT_LIBS ENABLE_EVOAB2 ENABLE_KAB WITH_FONTS WITHOUT_PPDS WITHOUT_AFMS SCPDEFS USE_XINERAMA XINERAMA_LINK ANT ANT_HOME ANT_LIB WITH_LANG WITH_POOR_HELP_LOCALIZATIONS WITH_DICT INTRO_BITMAPS ABOUT_BITMAPS OOO_VENDOR UNIXWRAPPERNAME ENABLE_STATIC_GTK ENABLE_LAYOUT VERBOSE LOCAL_SOLVER BUILD_TYPE LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS EGREP AWK SED LOCAL_SOLENV _solenv UPD SOURCEVERSION build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os GNUTAR OSVERSION PTHREAD_CFLAGS PTHREAD_LIBS ENABLE_CRASHDUMP VC_STANDARD ENABLE_WERROR ENABLE_DEBUG PRODUCT PROFULLSWITCH PROEXT ENABLE_SYMBOLS DISABLE_STRIP ENABLE_CUPS ENABLE_FONTCONFIG WITH_BINFILTER ENABLE_DIRECTX DISABLE_ACTIVEX DISABLE_ATL ENABLE_RPATH WITH_MYSPELL_DICTS SYSTEM_DICTS DICT_SYSTEM_DIR HYPH_SYSTEM_DIR THES_SYSTEM_DIR USE_SHELL WITH_MINGWIN SHELLPATH GCC_HOME CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COMPATH GCCVER HAVE_LD_BSYMBOLIC_FUNCTIONS ENABLE_PCH NO_HIDS GNUMAKE _cc HAVE_LD_HASH_STYLE PERL MSPDB_PATH COMEX USE_MINGW MIDL_PATH CSC_PATH FRAME_HOME CPP CXX CXXFLAGS ac_ct_CXX CXXCPP SIZEOF_LONG WORDS_BIGENDIAN LFS_CFLAGS ENABLE_VBA VBA_EXTENSION PAM NEW_SHADOW_API PAM_LINK CRYPT_LINK GXX_INCLUDE_PATH MINGW_LIB_INCLUDE_PATH MINGW_BACKWARD_INCLUDE_PATH MINGW_CLIB_DIR MINGW_SHARED_GCCLIB MINGW_GCCLIB_EH MINGW_SHARED_GXXLIB MINGW_GCCDLL MINGW_GXXDLL EXCEPTIONS STLPORT4 STLPORT_VER USE_SYSTEM_STL USE_CCACHE CCACHE HAVE_GCC_VISIBILITY_FEATURE ALLOC BUILD_VER_STRING SOLAR_JAVA JAVAINTERPRETER JAVACOMPILER JAVACISGCJ JAVADOC AWTLIB JAVAAOTCOMPILER JAVA_HOME JDK JAVAFLAGS DMAKE BUILD_DMAKE EPM DPKG PKGMK BUILD_EPM PKGFORMAT RPM GPERF MINGWCXX ac_ct_MINGWCXX MINGWSTRIP ac_ct_MINGWSTRIP BUILD_UNOWINREG BUILD_QADEVOOO SYSTEM_STDLIBS SYSTEM_ZLIB SYSTEM_JPEG SYSTEM_EXPAT PKG_CONFIG LIBWPD_CFLAGS LIBWPD_LIBS SYSTEM_LIBWPD FREETYPE_CFLAGS FREETYPE_LIBS USE_FT_EMBOLDEN LIBXSLT_CFLAGS LIBXSLT_LIBS XSLTPROC SYSTEM_LIBXSLT LIBXML_CFLAGS LIBXML_LIBS SYSTEM_LIBXML PYTHON PYTHON_VERSION PYTHON_PREFIX PYTHON_EXEC_PREFIX PYTHON_PLATFORM pythondir pkgpythondir pyexecdir pkgpyexecdir BZIP2 SYSTEM_PYTHON PYTHON_CFLAGS PYTHON_LIBS HOME SYSTEM_DB DB_VERSION DB_INCLUDES DB_JAR SYSTEM_LUCENE LUCENE_CORE_JAR LUCENE_ANALYZERS_JAR ENABLE_MYSQLC MYSQLCONFIG SYSTEM_MYSQL MYSQL_INC MYSQL_LIB MYSQL_DEFINES LIBMYSQL_PATH SYSTEM_MYSQL_CPPCONN SYSTEM_HSQLDB HSQLDB_JAR SYSTEM_BSH BSH_JAR SERIALIZER_JAR SYSTEM_SAXON SAXON_JAR CURLCONFIG SYSTEM_CURL CURL_CFLAGS CURL_LIBS SYSTEM_BOOST SYSTEM_VIGRA SYSTEM_ODBC_HEADERS WITH_MOZILLA WITH_LDAP WITH_OPENLDAP MOZ_NSS_CFLAGS MOZ_NSS_LIBS NSS_LIB MOZ_NSPR_CFLAGS MOZ_NSPR_LIBS NSPR_LIB MOZILLAXPCOM_CFLAGS MOZILLAXPCOM_LIBS MOZILLA_VERSION MOZILLA_TOOLKIT MOZGTK2_CFLAGS MOZGTK2_LIBS MOZLIBREQ_CFLAGS MOZLIBREQ_LIBS BUILD_MOZAB ENABLE_NSS_MODULE MOZILLABUILD SYSTEM_MOZILLA MOZ_FLAVOUR MOZ_INC MOZ_LIB MOZ_LIB_XPCOM MOZ_LDAP_CFLAGS SYSTEM_SANE_HEADER SYSTEM_GENBRK SYSTEM_GENCCODE SYSTEM_GENCMN SYSTEM_ICU GRAPHITE_CFLAGS GRAPHITE_LIBS ENABLE_GRAPHITE SYSTEM_GRAPHITE X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS XINC XLIB XAU_LIBS DISABLE_XAW SYSTEM_XRENDER_HEADERS XRENDER_LINK XRANDR_CFLAGS XRANDR_LIBS XRANDR_DLOPEN ENABLE_RANDR DISABLE_NEON NEON_CFLAGS NEON_LIBS SYSTEM_NEON NEON_VERSION OPENSSL_CFLAGS OPENSSL_LIBS SYSTEM_OPENSSL ENABLE_AGG AGG_CFLAGS AGG_LIBS SYSTEM_AGG AGG_VERSION REDLAND_CFLAGS REDLAND_LIBS SYSTEM_REDLAND HUNSPELL_CFLAGS HUNSPELL_LIBS SYSTEM_HUNSPELL SYSTEM_HYPH HYPHEN_LIB SYSTEM_MYTHES SYSTEM_LPSOLVE PSDK_HOME WINDOWS_VISTA_PSDK DIRECTXSDK_HOME DIRECTXSDK_LIB NSIS_PATH BISON FLEX PATCH GNUCP GNUPATCH CYGWIN_PATH ML_EXE ASM_HOME ZIP UNZIP ZIP_HOME ENABLE_GTK ENABLE_KDE ENABLE_KDE4 GCONF_CFLAGS GCONF_LIBS ENABLE_GCONF GNOMEVFS_CFLAGS GNOMEVFS_LIBS ENABLE_GNOMEVFS GTK_CFLAGS GTK_LIBS DBUS_CFLAGS DBUS_LIBS GIO_CFLAGS GIO_LIBS ENABLE_GIO ENABLE_DBUS ENABLE_SYSTRAY_GTK CAIRO_CFLAGS CAIRO_LIBS ENABLE_CAIRO BUILD_PIXMAN SYSTEM_CAIRO ENABLE_OPENGL ENABLE_PRESENTER_EXTRA_UI ENABLE_MINIMIZER ENABLE_PRESENTER_SCREEN POPPLER_CFLAGS POPPLER_LIBS ENABLE_PDFIMPORT SYSTEM_POPPLER ENABLE_MEDIAWIKI SYSTEM_SERVLETAPI SERVLETAPI_JAR ENABLE_REPORTBUILDER SYSTEM_JFREEREPORT SAC_JAR LIBXML_JAR FLUTE_JAR JFREEREPORT_JAR LIBBASE_JAR LIBLAYOUT_JAR LIBLOADER_JAR LIBFORMULA_JAR LIBREPOSITORY_JAR LIBFONTS_JAR LIBSERIALIZER_JAR SYSTEM_APACHE_COMMONS COMMONS_CODEC_JAR COMMONS_LANG_JAR COMMONS_HTTPCLIENT_JAR COMMONS_LOGGING_JAR MOC KDE_CFLAGS KDE_LIBS MOC4 KDE4_CFLAGS KDE4_LIBS ENABLE_LOCKDOWN GOBJECT_CFLAGS GOBJECT_LIBS ENABLE_EVOAB2 ENABLE_KAB WITH_FONTS WITHOUT_PPDS WITHOUT_AFMS SCPDEFS USE_XINERAMA XINERAMA_LINK ANT ANT_HOME ANT_LIB WITH_LANG WITH_POOR_HELP_LOCALIZATIONS WITH_DICT INTRO_BITMAPS ABOUT_BITMAPS OOO_VENDOR UNIXWRAPPERNAME ENABLE_STATIC_GTK ENABLE_LAYOUT VERBOSE LOCAL_SOLVER BUILD_TYPE LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -1008,6 +1008,13 @@ Optional Features:
   --disable-randr-link    disable linking with libXrandr, instead dynamically
                            open it at runtime
 
+  --enable-mysql-connector     enables the build of the MySQL Connector/OOo extension.
+                                This requires access to the MySQL Connector/C (aka libmysql) to be given, too, with
+                                either the --with-system-mysql or --with-libmysql-path option.
+
+  --enable-presenter-extra-ui   enables extra functionality during slideshow,
+                                 e.g. selecting pen color, erasing drawings etc.
+
   --enable-minimizer          enables the build of the Presentation Minimizer extension
 
   --enable-presenter-console          enables the build of the Presenter Console extension
@@ -1167,6 +1174,15 @@ Optional Packages:
 
   --with-lucene-core-jar=JARFILE   Specify path to jarfile manually
   --with-lucene-analyzers-jar=JARFILE   Specify path to jarfile manually
+  --with-system-mysql          Use MySQL libraries already on system, for building the MySQL Connector/OOo extension.
+                                Requires MYSQLCONFIG to point to the mysql_config executable.
+
+  --with-libmysql-path         Use Connector/C (libmysql) installation for building the MySQL Connector/OOo extension.
+
+                                Usage: --with-libmysql-path=<absolute path to your Connector/C installation>
+
+  --with-system-mysql-cppconn  Use MySQL C++ Connector libraries already on system
+
   --with-system-hsqldb    Use hsqldb already on system
 
   --with-hsqldb-jar=JARFILE   Specify path to jarfile manually
@@ -2384,6 +2400,31 @@ if test "${with_lucene_analyzers_jar+set}" = set; then
    LUCENE_ANALYZERS_JAR="$withval"
 
 fi;
+# Check whether --enable-mysql-connector or --disable-mysql-connector was given.
+if test "${enable_mysql_connector+set}" = set; then
+  enableval="$enable_mysql_connector"
+
+fi;
+
+# Check whether --with-system-mysql or --without-system-mysql was given.
+if test "${with_system_mysql+set}" = set; then
+  withval="$with_system_mysql"
+
+else
+  with_system_mysql="no"
+fi;
+
+# Check whether --with-libmysql-path or --without-libmysql-path was given.
+if test "${with_libmysql_path+set}" = set; then
+  withval="$with_libmysql_path"
+
+fi;
+
+# Check whether --with-system-mysql-cppconn or --without-system-mysql-cppconn was given.
+if test "${with_system_mysql_cppconn+set}" = set; then
+  withval="$with_system_mysql_cppconn"
+
+fi;
 
 # Check whether --with-system-hsqldb or --without-system-hsqldb was given.
 if test "${with_system_hsqldb+set}" = set; then
@@ -2409,6 +2450,13 @@ if test "${with_beanshell_jar+set}" = set; then
   withval="$with_beanshell_jar"
    BSH_JAR="$withval"
 
+fi;
+# Check whether --enable-presenter-extra-ui or --disable-presenter-extra-ui was given.
+if test "${enable_presenter_extra_ui+set}" = set; then
+  enableval="$enable_presenter_extra_ui"
+
+else
+  enable_presenter_extra_ui=no
 fi;
 # Check whether --enable-minimizer or --disable-minimizer was given.
 if test "${enable_minimizer+set}" = set; then
@@ -12720,7 +12768,7 @@ echo "${ECHO_T}no" >&6
 fi
 
 
-if test -z "$with_system_stdlibs" -a -z "$with_system_libs"; then
+if test "$_os" = "Linux" -a -z "$with_system_stdlibs" -a -z "$with_system_libs"; then
   if test -n "$checkforstdlibproblems"; then
     if test -f /etc/rpm/macros.prelink; then
       with_system_stdlibs=yes
@@ -14944,6 +14992,467 @@ fi
 
 
 
+echo "$as_me:$LINENO: checking whether to build the MySQL Connector extension" >&5
+echo $ECHO_N "checking whether to build the MySQL Connector extension... $ECHO_C" >&6
+if test -n "$enable_mysql_connector" -a "$enable_mysql_connector" != "no"; then
+  echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+  ENABLE_MYSQLC=YES
+  echo "$as_me:$LINENO: checking for mysqlc module" >&5
+echo $ECHO_N "checking for mysqlc module... $ECHO_C" >&6
+  if test -d mysqlc; then
+   echo "$as_me:$LINENO: result: OK" >&5
+echo "${ECHO_T}OK" >&6
+  else
+   { { echo "$as_me:$LINENO: error: not existing. get it (did you get the -extensions tarball?)" >&5
+echo "$as_me: error: not existing. get it (did you get the -extensions tarball?)" >&2;}
+   { (exit 1); exit 1; }; }
+  fi
+  BUILD_TYPE="$BUILD_TYPE MYSQLC"
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+  ENABLE_MYSQLC=NO
+fi
+
+
+if test "$ENABLE_MYSQLC" = "YES"; then
+echo "$as_me:$LINENO: checking for mysql pre-requisites" >&5
+echo $ECHO_N "checking for mysql pre-requisites... $ECHO_C" >&6
+if test -n "$with_system_mysql" -o -n "$with_system_libs" && \
+       test "$with_system_mysql" != "no" && test "$with_system_libs" != "no"; then
+	echo "$as_me:$LINENO: result: external MySQL" >&5
+echo "${ECHO_T}external MySQL" >&6
+	SYSTEM_MYSQL=YES
+	# Extract the first word of "mysql_config", so it can be a program name with args.
+set dummy mysql_config; ac_word=$2
+echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+if test "${ac_cv_path_MYSQLCONFIG+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $MYSQLCONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_MYSQLCONFIG="$MYSQLCONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_MYSQLCONFIG="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+
+  ;;
+esac
+fi
+MYSQLCONFIG=$ac_cv_path_MYSQLCONFIG
+
+if test -n "$MYSQLCONFIG"; then
+  echo "$as_me:$LINENO: result: $MYSQLCONFIG" >&5
+echo "${ECHO_T}$MYSQLCONFIG" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+	echo "$as_me:$LINENO: checking MySQL version" >&5
+echo $ECHO_N "checking MySQL version... $ECHO_C" >&6
+	MYSQL_VERSION=`$MYSQLCONFIG --version`
+	MYSQL_MAJOR=`$MYSQLCONFIG --version | cut -d"." -f1`
+	if test "$MYSQL_MAJOR" -ge "5"; then
+		echo "$as_me:$LINENO: result: OK" >&5
+echo "${ECHO_T}OK" >&6
+	else
+		{ { echo "$as_me:$LINENO: error: too old, use 5.0.x or 5.1.x" >&5
+echo "$as_me: error: too old, use 5.0.x or 5.1.x" >&2;}
+   { (exit 1); exit 1; }; }
+	fi
+	echo "$as_me:$LINENO: checking for MySQL Client library" >&5
+echo $ECHO_N "checking for MySQL Client library... $ECHO_C" >&6
+	MYSQL_INC=`$MYSQLCONFIG --include`
+	MYSQL_LIB=`$MYSQLCONFIG --libs`
+	MYSQL_DEFINES=`$MYSQLCONFIG --cflags | sed -e s,$MYSQL_INC,,`
+	echo "$as_me:$LINENO: result: includes $MYSQL_INC, libraries $MYSQL_LIB" >&5
+echo "${ECHO_T}includes $MYSQL_INC, libraries $MYSQL_LIB" >&6
+else
+    SYSTEM_MYSQL=NO
+    if test -n "$with_libmysql_path"; then
+        echo "$as_me:$LINENO: result: external Connector/C (libmysql)" >&5
+echo "${ECHO_T}external Connector/C (libmysql)" >&6
+        LIBMYSQL=libmysql.so
+        if test "$_os" = "Darwin"; then
+            LIBMYSQL=libmysql.dylib
+        elif test "$_os" = "WINNT"; then
+            LIBMYSQL=libmysql.dll
+        fi
+        echo "$as_me:$LINENO: checking for $LIBMYSQL" >&5
+echo $ECHO_N "checking for $LIBMYSQL... $ECHO_C" >&6
+        if test -e "$with_libmysql_path/lib/$LIBMYSQL"; then
+            echo "$as_me:$LINENO: result: found." >&5
+echo "${ECHO_T}found." >&6
+            LIBMYSQL_PATH=$with_libmysql_path
+        else
+            { { echo "$as_me:$LINENO: error: not found. Please specify proper path in --with-libmysql-path." >&5
+echo "$as_me: error: not found. Please specify proper path in --with-libmysql-path." >&2;}
+   { (exit 1); exit 1; }; }
+        fi
+    else
+        { { echo "$as_me:$LINENO: error: not given. Please specify either --with-system-mysql or --with-libmysql-path" >&5
+echo "$as_me: error: not given. Please specify either --with-system-mysql or --with-libmysql-path" >&2;}
+   { (exit 1); exit 1; }; }
+    fi
+fi
+
+
+
+
+
+
+ac_ext=cc
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+# FIXME!
+# who thought this too-generic cppconn dir was a good idea?
+echo "$as_me:$LINENO: checking MySQL Connector/C++" >&5
+echo $ECHO_N "checking MySQL Connector/C++... $ECHO_C" >&6
+if test -n "$with_system_mysql_cppconn" -o -n "$with_system_libs" && \
+		test "$with_system_mysql_cppconn" != "no" && test "$with_system_libs" != "no"; then
+	echo "$as_me:$LINENO: result: external" >&5
+echo "${ECHO_T}external" >&6
+	SYSTEM_MYSQL_CPPCONN=YES
+        ac_ext=cc
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+	if test "${ac_cv_header_mysql_driver_h+set}" = set; then
+  echo "$as_me:$LINENO: checking for mysql_driver.h" >&5
+echo $ECHO_N "checking for mysql_driver.h... $ECHO_C" >&6
+if test "${ac_cv_header_mysql_driver_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+fi
+echo "$as_me:$LINENO: result: $ac_cv_header_mysql_driver_h" >&5
+echo "${ECHO_T}$ac_cv_header_mysql_driver_h" >&6
+else
+  # Is the header compilable?
+echo "$as_me:$LINENO: checking mysql_driver.h usability" >&5
+echo $ECHO_N "checking mysql_driver.h usability... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+#include <mysql_driver.h>
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_cxx_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_header_compiler=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_header_compiler=no
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
+echo "${ECHO_T}$ac_header_compiler" >&6
+
+# Is the header present?
+echo "$as_me:$LINENO: checking mysql_driver.h presence" >&5
+echo $ECHO_N "checking mysql_driver.h presence... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <mysql_driver.h>
+_ACEOF
+if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
+  (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } >/dev/null; then
+  if test -s conftest.err; then
+    ac_cpp_err=$ac_cxx_preproc_warn_flag
+    ac_cpp_err=$ac_cpp_err$ac_cxx_werror_flag
+  else
+    ac_cpp_err=
+  fi
+else
+  ac_cpp_err=yes
+fi
+if test -z "$ac_cpp_err"; then
+  ac_header_preproc=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+  ac_header_preproc=no
+fi
+rm -f conftest.err conftest.$ac_ext
+echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
+echo "${ECHO_T}$ac_header_preproc" >&6
+
+# So?  What about this header?
+case $ac_header_compiler:$ac_header_preproc:$ac_cxx_preproc_warn_flag in
+  yes:no: )
+    { echo "$as_me:$LINENO: WARNING: mysql_driver.h: accepted by the compiler, rejected by the preprocessor!" >&5
+echo "$as_me: WARNING: mysql_driver.h: accepted by the compiler, rejected by the preprocessor!" >&2;}
+    { echo "$as_me:$LINENO: WARNING: mysql_driver.h: proceeding with the compiler's result" >&5
+echo "$as_me: WARNING: mysql_driver.h: proceeding with the compiler's result" >&2;}
+    ac_header_preproc=yes
+    ;;
+  no:yes:* )
+    { echo "$as_me:$LINENO: WARNING: mysql_driver.h: present but cannot be compiled" >&5
+echo "$as_me: WARNING: mysql_driver.h: present but cannot be compiled" >&2;}
+    { echo "$as_me:$LINENO: WARNING: mysql_driver.h:     check for missing prerequisite headers?" >&5
+echo "$as_me: WARNING: mysql_driver.h:     check for missing prerequisite headers?" >&2;}
+    { echo "$as_me:$LINENO: WARNING: mysql_driver.h: see the Autoconf documentation" >&5
+echo "$as_me: WARNING: mysql_driver.h: see the Autoconf documentation" >&2;}
+    { echo "$as_me:$LINENO: WARNING: mysql_driver.h:     section \"Present But Cannot Be Compiled\"" >&5
+echo "$as_me: WARNING: mysql_driver.h:     section \"Present But Cannot Be Compiled\"" >&2;}
+    { echo "$as_me:$LINENO: WARNING: mysql_driver.h: proceeding with the preprocessor's result" >&5
+echo "$as_me: WARNING: mysql_driver.h: proceeding with the preprocessor's result" >&2;}
+    { echo "$as_me:$LINENO: WARNING: mysql_driver.h: in the future, the compiler will take precedence" >&5
+echo "$as_me: WARNING: mysql_driver.h: in the future, the compiler will take precedence" >&2;}
+    (
+      cat <<\_ASBOX
+## ------------------------------------------ ##
+## Report this to the AC_PACKAGE_NAME lists.  ##
+## ------------------------------------------ ##
+_ASBOX
+    ) |
+      sed "s/^/$as_me: WARNING:     /" >&2
+    ;;
+esac
+echo "$as_me:$LINENO: checking for mysql_driver.h" >&5
+echo $ECHO_N "checking for mysql_driver.h... $ECHO_C" >&6
+if test "${ac_cv_header_mysql_driver_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_cv_header_mysql_driver_h=$ac_header_preproc
+fi
+echo "$as_me:$LINENO: result: $ac_cv_header_mysql_driver_h" >&5
+echo "${ECHO_T}$ac_cv_header_mysql_driver_h" >&6
+
+fi
+if test $ac_cv_header_mysql_driver_h = yes; then
+  :
+else
+  { { echo "$as_me:$LINENO: error: mysql_driver.h not found. install MySQL C++ Connectivity" >&5
+echo "$as_me: error: mysql_driver.h not found. install MySQL C++ Connectivity" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+
+
+echo "$as_me:$LINENO: checking for main in -lmysqlcppconn" >&5
+echo $ECHO_N "checking for main in -lmysqlcppconn... $ECHO_C" >&6
+if test "${ac_cv_lib_mysqlcppconn_main+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lmysqlcppconn  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+
+int
+main ()
+{
+main ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_cxx_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_mysqlcppconn_main=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_mysqlcppconn_main=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_mysqlcppconn_main" >&5
+echo "${ECHO_T}$ac_cv_lib_mysqlcppconn_main" >&6
+if test $ac_cv_lib_mysqlcppconn_main = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBMYSQLCPPCONN 1
+_ACEOF
+
+  LIBS="-lmysqlcppconn $LIBS"
+
+else
+  { { echo "$as_me:$LINENO: error: MySQL C++ Connectivity lib not found or functional" >&5
+echo "$as_me: error: MySQL C++ Connectivity lib not found or functional" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+   echo "$as_me:$LINENO: checking version" >&5
+echo $ECHO_N "checking version... $ECHO_C" >&6
+      if test "$cross_compiling" = yes; then
+  { { echo "$as_me:$LINENO: error: cannot run test program while cross compiling
+See \`config.log' for more details." >&5
+echo "$as_me: error: cannot run test program while cross compiling
+See \`config.log' for more details." >&2;}
+   { (exit 1); exit 1; }; }
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+#include <mysql_driver.h>
+
+int main(int argc, char **argv) {
+	sql::Driver *driver;
+	driver = get_driver_instance();
+	if (driver->getMajorVersion() > 1 || \
+	   (driver->getMajorVersion() == 1 && driver->getMinorVersion() > 0) || \
+	   (driver->getMajorVersion() == 1 && driver->getMinorVersion() == 0 && driver->getPatchVersion() >= 6))
+        return 0;
+      else
+        return 1;
+}
+
+_ACEOF
+rm -f conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && { ac_try='./conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  echo "$as_me:$LINENO: result: OK" >&5
+echo "${ECHO_T}OK" >&6
+else
+  echo "$as_me: program exited with status $ac_status" >&5
+echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+( exit $ac_status )
+{ { echo "$as_me:$LINENO: error: not suitable, we need >= 1.0.6" >&5
+echo "$as_me: error: not suitable, we need >= 1.0.6" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+rm -f core *.core gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
+fi
+        ac_ext=cc
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+
+	echo "$as_me:$LINENO: checking STL compatibility" >&5
+echo $ECHO_N "checking STL compatibility... $ECHO_C" >&6
+	if test "$WITH_STLPORT" != "no"; then
+		{ { echo "$as_me:$LINENO: error: to use system mysqlcppconn you need to use --without-stlport" >&5
+echo "$as_me: error: to use system mysqlcppconn you need to use --without-stlport" >&2;}
+   { (exit 1); exit 1; }; }
+	else
+		echo "$as_me:$LINENO: result: OK" >&5
+echo "${ECHO_T}OK" >&6
+	fi
+
+else
+	echo "$as_me:$LINENO: result: internal" >&5
+echo "${ECHO_T}internal" >&6
+        echo "$as_me:$LINENO: checking for mysqlcppconn module" >&5
+echo $ECHO_N "checking for mysqlcppconn module... $ECHO_C" >&6
+        if test -d mysqlcppconn; then
+          echo "$as_me:$LINENO: result: OK" >&5
+echo "${ECHO_T}OK" >&6
+        else
+          { { echo "$as_me:$LINENO: error: not existing. get it (did you get the -extensions tarball?)" >&5
+echo "$as_me: error: not existing. get it (did you get the -extensions tarball?)" >&2;}
+   { (exit 1); exit 1; }; }
+        fi
+	BUILD_TYPE="$BUILD_TYPE MYSQLCPPCONN"
+	SYSTEM_MYSQL_CPPCONN=NO
+fi
+ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+
+fi
+
 echo "$as_me:$LINENO: checking which hsqldb to use" >&5
 echo $ECHO_N "checking which hsqldb to use... $ECHO_C" >&6
 if test -n "$with_system_hsqldb" -o -n "$with_system_libs" && \
@@ -15276,13 +15785,13 @@ echo "$as_me: error: install curl to run this script" >&2;}
    fi
 
    # check curl version
-   echo "$as_me:$LINENO: checking whether curl is >= 7.9.8" >&5
-echo $ECHO_N "checking whether curl is >= 7.9.8... $ECHO_C" >&6
+   echo "$as_me:$LINENO: checking whether curl is >= 7.13.1" >&5
+echo $ECHO_N "checking whether curl is >= 7.13.1... $ECHO_C" >&6
    if test "`$CURLCONFIG --version | $AWK -F' ' '{print $2}' | $AWK -F. '{ print $1 }'`" -gt "7" -a \
-	"`$CURLCONFIG --version | $AWK -F' ' '{print $2}' | $AWK -F. '{ print $2 }'`" -gt "9" -a \
-	"`$CURLCONFIG --version | $AWK -F' ' '{print $2}' | $AWK -F. '{ print $3 }'`" -gt "8"; then
-      { { echo "$as_me:$LINENO: error: no, you need at least curl 7.9,8" >&5
-echo "$as_me: error: no, you need at least curl 7.9,8" >&2;}
+	"`$CURLCONFIG --version | $AWK -F' ' '{print $2}' | $AWK -F. '{ print $2 }'`" -gt "13" -a \
+	"`$CURLCONFIG --version | $AWK -F' ' '{print $2}' | $AWK -F. '{ print $3 }'`" -gt "1"; then
+      { { echo "$as_me:$LINENO: error: no, you need at least curl 7.13,1" >&5
+echo "$as_me: error: no, you need at least curl 7.13,1" >&2;}
    { (exit 1); exit 1; }; }
    else
       echo "$as_me:$LINENO: result: yes" >&5
@@ -18636,16 +19145,6 @@ echo "$as_me: error: Library requirements (silgraphite ) not met; consider adjus
    { (exit 1); exit 1; }; }
   fi
 
-	echo "$as_me:$LINENO: checking STL compatibility" >&5
-echo $ECHO_N "checking STL compatibility... $ECHO_C" >&6
-	if test "$WITH_STLPORT" != "no"; then
-		{ { echo "$as_me:$LINENO: error: to use system graphite you need to use --without-stlport" >&5
-echo "$as_me: error: to use system graphite you need to use --without-stlport" >&2;}
-   { (exit 1); exit 1; }; }
-	else
-		echo "$as_me:$LINENO: result: OK" >&5
-echo "${ECHO_T}OK" >&6
-	fi
     else
         echo "$as_me:$LINENO: result: internal" >&5
 echo "${ECHO_T}internal" >&6
@@ -22788,6 +23287,7 @@ else
     echo "$as_me:$LINENO: result: internal" >&5
 echo "${ECHO_T}internal" >&6
     SYSTEM_HYPH=NO
+    BUILD_TYPE="$BUILD_TYPE HYPHEN"
 fi
 
 
@@ -25346,6 +25846,19 @@ else
 echo "${ECHO_T}no" >&6
 fi
 
+
+
+echo "$as_me:$LINENO: checking whether to build extra presenter ui" >&5
+echo $ECHO_N "checking whether to build extra presenter ui... $ECHO_C" >&6
+if test -n "$enable_presenter_extra_ui" -a "$enable_presenter_extra_ui" != "no"; then
+   echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+   ENABLE_PRESENTER_EXTRA_UI=YES
+else
+   echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+   ENABLE_PRESENTER_EXTRA_UI=NO
+fi
 
 
 echo "$as_me:$LINENO: checking whether to build the Presentation Minimizer extension" >&5
@@ -29003,6 +29516,14 @@ s,@DB_JAR@,$DB_JAR,;t t
 s,@SYSTEM_LUCENE@,$SYSTEM_LUCENE,;t t
 s,@LUCENE_CORE_JAR@,$LUCENE_CORE_JAR,;t t
 s,@LUCENE_ANALYZERS_JAR@,$LUCENE_ANALYZERS_JAR,;t t
+s,@ENABLE_MYSQLC@,$ENABLE_MYSQLC,;t t
+s,@MYSQLCONFIG@,$MYSQLCONFIG,;t t
+s,@SYSTEM_MYSQL@,$SYSTEM_MYSQL,;t t
+s,@MYSQL_INC@,$MYSQL_INC,;t t
+s,@MYSQL_LIB@,$MYSQL_LIB,;t t
+s,@MYSQL_DEFINES@,$MYSQL_DEFINES,;t t
+s,@LIBMYSQL_PATH@,$LIBMYSQL_PATH,;t t
+s,@SYSTEM_MYSQL_CPPCONN@,$SYSTEM_MYSQL_CPPCONN,;t t
 s,@SYSTEM_HSQLDB@,$SYSTEM_HSQLDB,;t t
 s,@HSQLDB_JAR@,$HSQLDB_JAR,;t t
 s,@SYSTEM_BSH@,$SYSTEM_BSH,;t t
@@ -29129,6 +29650,7 @@ s,@ENABLE_CAIRO@,$ENABLE_CAIRO,;t t
 s,@BUILD_PIXMAN@,$BUILD_PIXMAN,;t t
 s,@SYSTEM_CAIRO@,$SYSTEM_CAIRO,;t t
 s,@ENABLE_OPENGL@,$ENABLE_OPENGL,;t t
+s,@ENABLE_PRESENTER_EXTRA_UI@,$ENABLE_PRESENTER_EXTRA_UI,;t t
 s,@ENABLE_MINIMIZER@,$ENABLE_MINIMIZER,;t t
 s,@ENABLE_PRESENTER_SCREEN@,$ENABLE_PRESENTER_SCREEN,;t t
 s,@POPPLER_CFLAGS@,$POPPLER_CFLAGS,;t t

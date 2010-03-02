@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: prj.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -87,6 +84,7 @@ class CommandData
     ByteString      aComment;
     ByteString      sClientRestriction;
     SByteStringList *pDepList;
+    SByteStringList *pCommandList;
     USHORT      nOSType;
     USHORT      nCommand;
 
@@ -130,6 +128,9 @@ public:
 
     void        AddDepth(){nDepth++;}
     ULONG       GetDepth(){return nDepth;}
+
+    void AddCommand(ByteString* pCommand);
+    SByteStringList* GetCommandList() {return pCommandList;}
 
     CommandData& operator<<  ( SvStream& rStream );
     CommandData& operator>>  ( SvStream& rStream );
@@ -284,6 +285,8 @@ private:
     BOOL            bIsAvailable;
     SByteStringList* RemoveStringList(SByteStringList* pStringList );
     SDepInfoList*   RemoveDepInfoList(SDepInfoList* pInfoList );
+    PrjList*        pTempCommandDataList;
+    BOOL            bTempCommandDataListPermanent;
 public:
                     Prj();
                     Prj( ByteString aName );
@@ -317,6 +320,14 @@ public:
     void            IsAvailable( BOOL bAvailable ) { bIsAvailable=bAvailable; }
 
     void            ExtractDependencies();
+
+    PrjList*        GetCommandDataList ();
+    void            RemoveTempCommandDataList();
+    void            GenerateTempCommandDataList();
+    void            GenerateEmptyTempCommandDataList();
+    BOOL            HasTempCommandDataList() {return pTempCommandDataList != NULL;}
+    void            SetTempCommandDataListPermanent (BOOL bVar = TRUE) {bTempCommandDataListPermanent = bVar;}
+    BOOL            IsTempCommandDataListPermanent() {return bTempCommandDataListPermanent;}
 
     Prj&            operator<<  ( SvStream& rStream );
     Prj&            operator>>  ( SvStream& rStream );

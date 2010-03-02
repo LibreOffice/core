@@ -368,6 +368,23 @@ AC_ARG_WITH(lucene-analyzers-jar,
 [  --with-lucene-analyzers-jar=JARFILE   Specify path to jarfile manually ],
 [ LUCENE_ANALYZERS_JAR="$withval"
 ])
+AC_ARG_ENABLE(mysql-connector,
+[  --enable-mysql-connector     enables the build of the MySQL Connector/OOo extension.
+                                This requires access to the MySQL Connector/C (aka libmysql) to be given, too, with
+                                either the --with-system-mysql or --with-libmysql-path option.
+],,)
+AC_ARG_WITH(system-mysql,
+[  --with-system-mysql          Use MySQL libraries already on system, for building the MySQL Connector/OOo extension.
+                                Requires MYSQLCONFIG to point to the mysql_config executable.
+],,with_system_mysql="no")
+AC_ARG_WITH(libmysql-path,
+[  --with-libmysql-path         Use Connector/C (libmysql) installation for building the MySQL Connector/OOo extension.
+
+                                Usage: --with-libmysql-path=<absolute path to your Connector/C installation>
+],,)
+AC_ARG_WITH(system-mysql-cppconn,
+[  --with-system-mysql-cppconn  Use MySQL C++ Connector libraries already on system
+],,)
 AC_ARG_WITH(system-hsqldb,
 [  --with-system-hsqldb    Use hsqldb already on system
 ],,)
@@ -382,6 +399,10 @@ AC_ARG_WITH(beanshell-jar,
 [  --with-beanshell-jar=JARFILE   Specify path to jarfile manually ],
 [ BSH_JAR="$withval"
 ])
+AC_ARG_ENABLE(presenter-extra-ui,
+[  --enable-presenter-extra-ui   enables extra functionality during slideshow,
+                                 e.g. selecting pen color, erasing drawings etc.
+],,enable_presenter_extra_ui=no)
 AC_ARG_ENABLE(minimizer,
 [  --enable-minimizer          enables the build of the Presentation Minimizer extension
 ],,)
@@ -3495,7 +3516,7 @@ AC_SUBST(BUILD_QADEVOOO)
 dnl ===================================================================
 dnl Check for prelinked libgcc_s.so.1
 dnl ===================================================================
-if test -z "$with_system_stdlibs" -a -z "$with_system_libs"; then
+if test "$_os" = "Linux" -a -z "$with_system_stdlibs" -a -z "$with_system_libs"; then
   if test -n "$checkforstdlibproblems"; then
     if test -f /etc/rpm/macros.prelink; then
       with_system_stdlibs=yes
@@ -3831,6 +3852,128 @@ AC_SUBST(SYSTEM_LUCENE)
 AC_SUBST(LUCENE_CORE_JAR)
 AC_SUBST(LUCENE_ANALYZERS_JAR)
 
+AC_MSG_CHECKING([whether to build the MySQL Connector extension])
+if test -n "$enable_mysql_connector" -a "$enable_mysql_connector" != "no"; then
+  AC_MSG_RESULT([yes])
+  ENABLE_MYSQLC=YES
+  AC_MSG_CHECKING([for mysqlc module])
+  if test -d mysqlc; then
+   AC_MSG_RESULT([OK])
+  else
+   AC_MSG_ERROR([not existing. get it (did you get the -extensions tarball?)])
+  fi
+  BUILD_TYPE="$BUILD_TYPE MYSQLC"
+else
+  AC_MSG_RESULT([no])
+  ENABLE_MYSQLC=NO
+fi
+AC_SUBST(ENABLE_MYSQLC)
+
+if test "$ENABLE_MYSQLC" = "YES"; then
+dnl ===================================================================
+dnl Check for system MySQL
+dnl ===================================================================
+AC_MSG_CHECKING([for mysql pre-requisites])
+if test -n "$with_system_mysql" -o -n "$with_system_libs" && \
+       test "$with_system_mysql" != "no" && test "$with_system_libs" != "no"; then
+	AC_MSG_RESULT([external MySQL])
+	SYSTEM_MYSQL=YES
+	AC_PATH_PROG( MYSQLCONFIG, mysql_config)
+	AC_MSG_CHECKING([MySQL version])
+	MYSQL_VERSION=`$MYSQLCONFIG --version` 
+	MYSQL_MAJOR=`$MYSQLCONFIG --version | cut -d"." -f1`
+	if test "$MYSQL_MAJOR" -ge "5"; then
+		AC_MSG_RESULT([OK])
+	else
+		AC_MSG_ERROR([too old, use 5.0.x or 5.1.x])
+	fi
+	AC_MSG_CHECKING([for MySQL Client library])
+	MYSQL_INC=`$MYSQLCONFIG --include` 
+	MYSQL_LIB=`$MYSQLCONFIG --libs`
+	MYSQL_DEFINES=`$MYSQLCONFIG --cflags | sed -e s,$MYSQL_INC,,`
+	AC_MSG_RESULT([includes $MYSQL_INC, libraries $MYSQL_LIB])
+else
+    SYSTEM_MYSQL=NO
+    if test -n "$with_libmysql_path"; then
+        AC_MSG_RESULT([external Connector/C (libmysql)])
+        LIBMYSQL=libmysql.so
+        if test "$_os" = "Darwin"; then
+            LIBMYSQL=libmysql.dylib
+        elif test "$_os" = "WINNT"; then
+            LIBMYSQL=libmysql.dll
+        fi
+        AC_MSG_CHECKING([for $LIBMYSQL])
+        if test -e "$with_libmysql_path/lib/$LIBMYSQL"; then
+            AC_MSG_RESULT([found.])
+            LIBMYSQL_PATH=$with_libmysql_path
+        else
+            AC_MSG_ERROR([not found. Please specify proper path in --with-libmysql-path.])
+        fi
+    else
+        AC_MSG_ERROR([not given. Please specify either --with-system-mysql or --with-libmysql-path])
+    fi
+fi
+AC_SUBST(SYSTEM_MYSQL)
+AC_SUBST(MYSQL_INC)
+AC_SUBST(MYSQL_LIB)
+AC_SUBST(MYSQL_DEFINES)
+AC_SUBST(LIBMYSQL_PATH)
+
+AC_LANG_PUSH([C++])
+dnl ===================================================================
+dnl Check for system MySQL C++ Connector
+dnl ===================================================================
+# FIXME!
+# who thought this too-generic cppconn dir was a good idea?
+AC_MSG_CHECKING([MySQL Connector/C++])
+if test -n "$with_system_mysql_cppconn" -o -n "$with_system_libs" && \
+		test "$with_system_mysql_cppconn" != "no" && test "$with_system_libs" != "no"; then
+	AC_MSG_RESULT([external])
+	SYSTEM_MYSQL_CPPCONN=YES
+        AC_LANG_PUSH([C++])
+	AC_CHECK_HEADER(mysql_driver.h, [],
+					[AC_MSG_ERROR(mysql_driver.h not found. install MySQL C++ Connectivity)], [])
+	AC_CHECK_LIB(mysqlcppconn, main, [],
+					[AC_MSG_ERROR(MySQL C++ Connectivity lib not found or functional)], [])
+   AC_MSG_CHECKING([version])
+      AC_TRY_RUN([
+#include <mysql_driver.h>
+
+int main(int argc, char **argv) {
+	sql::Driver *driver;
+	driver = get_driver_instance();
+	if (driver->getMajorVersion() > 1 || \
+	   (driver->getMajorVersion() == 1 && driver->getMinorVersion() > 0) || \
+	   (driver->getMajorVersion() == 1 && driver->getMinorVersion() == 0 && driver->getPatchVersion() >= 6)) 
+        return 0;
+      else
+        return 1;
+}
+      ], [AC_MSG_RESULT(OK)], [AC_MSG_ERROR([not suitable, we need >= 1.0.6])])
+        AC_LANG_POP([C++])
+
+	AC_MSG_CHECKING([STL compatibility])
+	if test "$WITH_STLPORT" != "no"; then
+		AC_MSG_ERROR([to use system mysqlcppconn you need to use --without-stlport])
+	else
+		AC_MSG_RESULT([OK])	
+	fi
+
+else
+	AC_MSG_RESULT([internal])
+        AC_MSG_CHECKING([for mysqlcppconn module])
+        if test -d mysqlcppconn; then
+          AC_MSG_RESULT([OK])
+        else
+          AC_MSG_ERROR([not existing. get it (did you get the -extensions tarball?)])
+        fi
+	BUILD_TYPE="$BUILD_TYPE MYSQLCPPCONN"
+	SYSTEM_MYSQL_CPPCONN=NO
+fi
+AC_LANG_POP([C++])
+AC_SUBST(SYSTEM_MYSQL_CPPCONN)
+fi
+
 dnl ===================================================================
 dnl Check for system hsqldb
 dnl ===================================================================
@@ -3962,11 +4105,11 @@ if test -n "$with_system_curl" -o -n "$with_system_libs" && \
    fi
 
    # check curl version
-   AC_MSG_CHECKING([whether curl is >= 7.9.8])
+   AC_MSG_CHECKING([whether curl is >= 7.13.1])
    if test "`$CURLCONFIG --version | $AWK -F' ' '{print $2}' | $AWK -F. '{ print $1 }'`" -gt "7" -a \
-	"`$CURLCONFIG --version | $AWK -F' ' '{print $2}' | $AWK -F. '{ print $2 }'`" -gt "9" -a \
-	"`$CURLCONFIG --version | $AWK -F' ' '{print $2}' | $AWK -F. '{ print $3 }'`" -gt "8"; then 
-      AC_MSG_ERROR([no, you need at least curl 7.9,8])
+	"`$CURLCONFIG --version | $AWK -F' ' '{print $2}' | $AWK -F. '{ print $2 }'`" -gt "13" -a \
+	"`$CURLCONFIG --version | $AWK -F' ' '{print $2}' | $AWK -F. '{ print $3 }'`" -gt "1"; then 
+      AC_MSG_ERROR([no, you need at least curl 7.13,1])
    else
       AC_MSG_RESULT([yes])
    fi
@@ -4472,12 +4615,6 @@ if test "$_os" = "WINNT" -o "$_os" = "Linux" && test "z$enable_graphite" == "z" 
         AC_MSG_RESULT([external])
         SYSTEM_GRAPHITE=YES
         PKG_CHECK_MODULES( GRAPHITE, silgraphite )
-	AC_MSG_CHECKING([STL compatibility])
-	if test "$WITH_STLPORT" != "no"; then
-		AC_MSG_ERROR([to use system graphite you need to use --without-stlport])
-	else
-		AC_MSG_RESULT([OK])	
-	fi
     else
         AC_MSG_RESULT([internal])
         SYSTEM_GRAPHITE=NO
@@ -4870,6 +5007,7 @@ if test -n "$with_system_altlinuxhyph" -o -n "$with_system_libs" && \
 else
     AC_MSG_RESULT([internal])
     SYSTEM_HYPH=NO
+    BUILD_TYPE="$BUILD_TYPE HYPHEN"
 fi
 AC_SUBST(SYSTEM_HYPH)
 AC_SUBST(HYPHEN_LIB)
@@ -5530,6 +5668,16 @@ else
 fi
 
 AC_SUBST(ENABLE_OPENGL)
+
+AC_MSG_CHECKING([whether to build extra presenter ui])
+if test -n "$enable_presenter_extra_ui" -a "$enable_presenter_extra_ui" != "no"; then
+   AC_MSG_RESULT([yes])
+   ENABLE_PRESENTER_EXTRA_UI=YES
+else
+   AC_MSG_RESULT([no])
+   ENABLE_PRESENTER_EXTRA_UI=NO
+fi
+AC_SUBST(ENABLE_PRESENTER_EXTRA_UI)
 
 AC_MSG_CHECKING([whether to build the Presentation Minimizer extension])
 if test -n "$enable_minimizer" -a "$enable_minimizer" != "no"; then
