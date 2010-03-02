@@ -1579,7 +1579,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Calulates the arithmetically declining value of an asset (depreciation) for a specified period." ;
+            Text [ en-US ] = "Calculates the arithmetically declining value of an asset (depreciation) for a specified period." ;
         };
         ExtraData =
         {
