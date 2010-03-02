@@ -40,6 +40,7 @@
 #include <vector>
 #endif
 #include<map>
+#include <com/sun/star/script/ModuleType.hpp>
 
 /* class VBA:
  * The VBA class provides a set of methods to handle Visual Basic For
@@ -63,13 +64,12 @@ DECLARE_DYNARRAY(StringArray,String *)
 // #117718# define internal types to distinguish between
 // module types, form, class & normal
 // #i37965# DR 2004-12-03: add "Document", used in Excel for macros attached to sheet
-enum ModuleType { Unknown = 0, Normal, Class, Form, Document };
 
 // #117718# define map to hold types of module
 //
-
+typedef sal_Int32 ModType;
 typedef ::std::map< UniString,
-    ModuleType > ModuleTypeHash;
+    ModType > ModuleTypeHash;
 
 class VBA_Impl
 {
@@ -90,8 +90,7 @@ public:
     void Output(int len, const sal_uInt8 *data);
     //
     // #117718# member map of module names to types of module
-    ModuleType GetModuleType( const UniString& rModuleName );
-
+    ModType GetModuleType( const UniString& rModuleName );
     std::vector<String> maReferences;
 private:
     struct VBAOffset_Impl

@@ -50,6 +50,10 @@ using namespace com::sun::star::awt;
 
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
+#include <com/sun/star/script/ModuleInfo.hpp>
+#include <com/sun/star/script/XVBAModuleInfo.hpp>
+#include <com/sun/star/script/XVBACompat.hpp>
+
 using namespace com::sun::star::container;
 using namespace com::sun::star::script;
 using namespace com::sun::star::uno;
@@ -58,12 +62,23 @@ using namespace com::sun::star;
 
 using rtl::OUString;
 
+static ::rtl::OUString sVBAOption( RTL_CONSTASCII_USTRINGPARAM( "Option VBASupport 1\n" ) );
+
 int SvxImportMSVBasic::Import( const String& rStorageName,
                                 const String &rSubStorageName,
                                 BOOL bAsComment, BOOL bStripped )
 {
+    std::vector< String > codeNames;
+    return Import(  rStorageName, rSubStorageName, codeNames, bAsComment, bStripped );
+}
+
+int SvxImportMSVBasic::Import( const String& rStorageName,
+                                const String &rSubStorageName,
+                                const std::vector< String >& codeNames,
+                                BOOL bAsComment, BOOL bStripped )
+{
     int nRet = 0;
-    if( bImport && ImportCode_Impl( rStorageName, rSubStorageName,
+    if( bImport && ImportCode_Impl( rStorageName, rSubStorageName, codeNames,
                                     bAsComment, bStripped ))
         nRet |= 1;
 
@@ -225,6 +240,7 @@ BOOL SvxImportMSVBasic::CopyStorage_Impl( const String& rStorageName,
 
 BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                                         const String &rSubStorageName,
+                                        const std::vector< String >& codeNames,
                                         BOOL bAsComment, BOOL bStripped )
 {
     BOOL bRet = FALSE;
@@ -233,13 +249,18 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
     {
         SFX_APP()->EnterBasicCall();
         Reference<XLibraryContainer> xLibContainer = rDocSh.GetBasicContainer();
+        Reference<XVBACompat> xVBACompat( xLibContainer, UNO_QUERY );
+
+        if ( xVBACompat.is() && !bAsComment )
+            xVBACompat->setVBACompatModeOn( sal_True );
+
         DBG_ASSERT( xLibContainer.is(), "No BasicContainer!" );
 
         UINT16 nStreamCount = aVBA.GetNoStreams();
         Reference<XNameContainer> xLib;
+        String aLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
         if( xLibContainer.is() && nStreamCount )
         {
-            String aLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
             if( !xLibContainer->hasByName( aLibName ) )
                 xLibContainer->createLibrary( aLibName );
 
@@ -248,6 +269,28 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
         }
         if( xLib.is() )
         {
+            Reference< script::XVBAModuleInfo > xVBAModuleInfo( xLib, UNO_QUERY );
+            Reference< container::XNameAccess > xVBACodeNamedObjectAccess;
+            if ( !bAsComment )
+            {
+                Reference< XMultiServiceFactory> xSF(rDocSh.GetModel(), UNO_QUERY);
+                if ( xSF.is() )
+                {
+                    try
+                    {
+                        xVBACodeNamedObjectAccess.set( xSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAObjectModuleObjectProvider"))), UNO_QUERY );
+                    }
+                    catch( Exception& ) { }
+                }
+            }
+            typedef  std::hash_map< rtl::OUString, uno::Any, ::rtl::OUStringHash,
+::std::equal_to< ::rtl::OUString > > NameModuleDataHash;
+            typedef  std::hash_map< rtl::OUString, script::ModuleInfo, ::rtl::OUStringHash,
+::std::equal_to< ::rtl::OUString > > NameModuleInfoHash;
+
+            NameModuleDataHash moduleData;
+            NameModuleInfoHash moduleInfos;
+
             for( UINT16 i=0; i<nStreamCount;i++)
             {
                 StringArray aDecompressed = aVBA.Decompress(i);
@@ -281,7 +324,7 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                 // is the same as the encoding for the names
                 // that are keys in the map used by GetModuleType method
                 const String &sOrigVBAModName = aVBA.GetStreamName( i );
-                ModuleType mType = aVBA.GetModuleType( sOrigVBAModName );
+                ModType mType = aVBA.GetModuleType( sOrigVBAModName );
 
                 rtl::OUString sClassRem( RTL_CONSTASCII_USTRINGPARAM( "Rem Attribute VBA_ModuleType=" ) );
 
@@ -289,23 +332,23 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
 
                 switch( mType )
                 {
-                    case Class:
+                    case ModuleType::Class:
                         modeTypeComment = sClassRem +
                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VBAClassModule\n" ) );
                         break;
-                    case Form:
+                    case ModuleType::Form:
                         modeTypeComment = sClassRem +
                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VBAFormModule\n" ) );
                         break;
-                    case Document:
+                    case ModuleType::Document:
                         modeTypeComment = sClassRem +
                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VBADocumentModule\n" ) );
                         break;
-                    case Normal:
+                    case ModuleType::Normal:
                         modeTypeComment = sClassRem +
                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VBAModule\n" ) );
                         break;
-                    case Unknown:
+                    case ModuleType::Unknown:
                         modeTypeComment = sClassRem +
                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VBAUnknown\n" ) );
                         break;
@@ -318,7 +361,7 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                 if ( !bAsComment )
                 {
                     modeTypeComment = modeTypeComment + sVBAOption;
-                    if ( mType == Class )
+                    if ( mType == ModuleType::Class )
                         modeTypeComment = modeTypeComment + sClassOption;
 
                 }
@@ -380,20 +423,69 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                         aSource += rtl::OUString::createFromAscii("\nEnd Sub");
                 }
                 ::rtl::OUString aModName( sModule );
-                if ( aSource.getLength() )
-                {
-                    aSource = modeTypeComment + aSource;
+                aSource = modeTypeComment + aSource;
 
-                    Any aSourceAny;
+                Any aSourceAny;
+                OSL_TRACE("erm %d", mType );
                     aSourceAny <<= aSource;
-                    if( xLib->hasByName( aModName ) )
-                        xLib->replaceByName( aModName, aSourceAny );
-                    else
-                        xLib->insertByName( aModName, aSourceAny );
+                if (  !bAsComment )
+                {
+                    OSL_TRACE("vba processing  %d", mType );
+                    script::ModuleInfo sModuleInfo;
+                    sModuleInfo.ModuleType = mType;
+                    moduleInfos[ aModName ] = sModuleInfo;
+                }
+                 moduleData[ aModName ] = aSourceAny;
+            }
+            // Hack for missing codenames ( only know to happen in excel but... )
+            // only makes sense to do this if we are importing non-commented basic
+            if ( !bAsComment )
+            {
+                for ( std::vector< String >::const_iterator it =  codeNames.begin(); it != codeNames.end(); ++it )
+                {
+                    script::ModuleInfo sModuleInfo;
+                    sModuleInfo.ModuleType = ModuleType::Document;
+                    moduleInfos[ *it ] = sModuleInfo;
+                    moduleData[ *it ] = uno::makeAny( sVBAOption );
+                }
+            }
+            NameModuleDataHash::iterator it_end = moduleData.end();
+            for ( NameModuleDataHash::iterator it = moduleData.begin(); it != it_end; ++it )
+            {
+                NameModuleInfoHash::iterator it_info = moduleInfos.find( it->first );
+                if ( it_info != moduleInfos.end() )
+                {
+                    ModuleInfo& sModuleInfo = it_info->second;
+                    if ( sModuleInfo.ModuleType == ModuleType::Form )
+                        // hack, the module ( imo document basic should...
+                        // know the XModel... ) but it doesn't
+                        sModuleInfo.ModuleObject.set( rDocSh.GetModel(), UNO_QUERY );
+                    //  document modules, we should be able to access
+                    //  the api objects at this time
+                    else if ( sModuleInfo.ModuleType == ModuleType::Document )
+                    {
+                        if ( xVBACodeNamedObjectAccess.is() )
+                        {
+                            try
+                            {
+                                sModuleInfo.ModuleObject.set( xVBACodeNamedObjectAccess->getByName( it->first ), uno::UNO_QUERY );
+                                OSL_TRACE("** Straight up creation of Module");
+                            }
+                            catch(uno::Exception& e)
+                            {
+                                OSL_TRACE("Failed to get documument object for %s", rtl::OUStringToOString( it->first, RTL_TEXTENCODING_UTF8 ).getStr() );
+                            }
+                        }
+                    }
+                    xVBAModuleInfo->insertModuleInfo( it->first, sModuleInfo );
                 }
 
-                bRet = true;
+                if( xLib->hasByName( it->first ) )
+                    xLib->replaceByName( it->first, it->second );
+                else
+                    xLib->insertByName( it->first, it->second );
             }
+            bRet = true;
         }
         SFX_APP()->LeaveBasicCall();
     }
