@@ -22439,10 +22439,10 @@
       <element name="u" tokenid="ooxml:EG_RPrBase_u"/>
       <element name="effect" tokenid="sprm:CSfxText"/>
       <element name="bdr" tokenid="ooxml:EG_RPrBase_bdr"/>
-      <element name="shd" tokenid="ooxml:EG_RPrBase_shd"/>
+      <element name="shd" tokenid="sprm:CShd"/>
       <element name="fitText" tokenid="ooxml:EG_RPrBase_fitText"/>
       <element name="vertAlign" tokenid="ooxml:EG_RPrBase_vertAlign"/>
-      <element name="rtl" tokenid="ooxml:EG_RPrBase_rtl"/>
+      <element name="rtl" tokenid="sprm:CFBiDi"/>
       <element name="cs" tokenid="sprm:CComplexScript"/>
       <element name="em" tokenid="sprm:CKcd"/>
       <element name="lang" tokenid="ooxml:EG_RPrBase_lang"/>

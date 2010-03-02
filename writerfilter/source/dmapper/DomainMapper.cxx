@@ -2729,7 +2729,7 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
         break;  // sprmCIdCharType
     case NS_sprm::LN_CHighlight:
-        /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
+        /* WRITERFILTERSTATUS: done: 100, planned: 2, spent: 0 */
         {
             sal_Int32 nColor = 0;
             if(true ==( mbIsHighlightSet = getColorFromIndex(nIntValue, nColor)))
@@ -3137,7 +3137,7 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
         break;  // sprmCBrc
     case NS_sprm::LN_CShd:
-        /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         break;  // sprmCShd
     case NS_sprm::LN_CIdslRMarkDel:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
@@ -4206,7 +4206,6 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
     case NS_ooxml::LN_EG_SectPrContents_formProt: //section protection, only form editing is enabled - unsupported
     case NS_ooxml::LN_EG_SectPrContents_vAlign:
     case NS_ooxml::LN_EG_RPrBase_fitText:
-    case NS_ooxml::LN_EG_RPrBase_shd:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
     break;
     case NS_ooxml::LN_CT_Lvl_pStyle:
