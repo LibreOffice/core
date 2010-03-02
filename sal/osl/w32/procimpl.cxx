@@ -204,9 +204,9 @@ namespace /* private */
         if (!create_merged_environment(environment_vars, n_environment_vars, &merged_env))
             return false;
 
-        // reserve enough space for the '\0'-separated environment strings and
+        // allocate enough space for the '\0'-separated environment strings and
         // a final '\0'
-        environment.reserve(calc_sum_of_string_lengths(merged_env) + 1);
+        environment.resize(calc_sum_of_string_lengths(merged_env) + 1);
 
         string_container_const_iterator_t iter = merged_env.begin();
         string_container_const_iterator_t iter_end = merged_env.end();
