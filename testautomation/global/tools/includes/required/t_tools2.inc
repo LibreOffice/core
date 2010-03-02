@@ -148,69 +148,6 @@ function hSetLocaleStrings (fLocale as String, TBOstringLocale() as String ) as 
    hSetLocaleStrings = bFoundLanguage
 end function
 
-'-------------------------------------------------------------------------
-
-sub GetHTMLCharSet as String
-'///function to get the Character Set for HTML export
-'///+(tools/options/load&save/HTML compatibility -> Character Set)
-   ToolsOptions
-   hToolsOptions ( "LoadSave", "HTMLCompatibility" )
-   GetHTMLCharSet = Zeichensatz.GetSelText
-   Kontext "ExtrasOptionenDlg"
-   ExtrasOptionenDlg.OK
-end sub
-
-'-------------------------------------------------------------------------
-
-sub SetHTMLCharSet ( CharSet as String )
-'///routine to set the Character Set for HTML export
-'///+( tools/options/load&save/HTML compatibility -> Character Set )
-   ToolsOptions
-   hToolsOptions ( "LoadSave", "HTMLCompatibility" )
-   Zeichensatz.Select CharSet
-   Kontext "ExtrasOptionenDlg"
-   ExtrasOptionenDlg.OK
-end sub
-
-'-------------------------------------------------------------------------
-
-sub SetHTMLCharSetToUTF8 as Boolean
-'///function to set the Character Set for HTML export to 'Unicode UTF8'
-'///+( tools/options/load&save/HTML compatibility -> Character Set )
-  Dim i as Integer
-  Dim sDum as String
-
-   ToolsOptions
-   hToolsOptions ( "LoadSave", "HTMLCompatibility" )
-
-   for i=1 to Zeichensatz.GetItemCount
-      sDum = Zeichensatz.GetItemText (i)
-      if Instr ( lcase (sDum), "utf-8" ) <> 0 then
-         Zeichensatz.Select (i)
-         i=1000
-      else
-         if Instr ( lcase (sDum), "utf8" ) <> 0 then
-            Zeichensatz.Select (i)
-            i=1000
-         else
-            if Instr ( lcase (sDum), "utf 8" ) <> 0 then
-               Zeichensatz.Select (i)
-               i=1000
-            end if
-         end if
-      end if
-   next i
-   if i<1000 then
-      SetHTMLCharSetToUTF8 = FALSE
-   else
-      SetHTMLCharSetToUTF8 = TRUE
-   end if
-   Kontext "ExtrasOptionenDlg"
-    ExtrasOptionenDlg.OK
-end sub
-
-'-------------------------------------------------------------------------
-
 function dec(Ref as integer)
 '/// decrement variable, call it like 'dec variable' ///'
 ' reference or value .-) an excursion :-))
