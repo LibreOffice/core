@@ -100,6 +100,7 @@ sal_Char __READONLY_DATA sXML_np__text[] = "_text";
 sal_Char __READONLY_DATA sXML_np__table[] = "_table";
 sal_Char __READONLY_DATA sXML_np__table_ext[] = "_table_ooo";
 sal_Char __READONLY_DATA sXML_np__draw[] = "_draw";
+sal_Char __READONLY_DATA sXML_np__draw_ext[] = "_draw_ooo";
 sal_Char __READONLY_DATA sXML_np__dr3d[] = "_dr3d";
 sal_Char __READONLY_DATA sXML_np__fo[] = "_fo";
 sal_Char __READONLY_DATA sXML_np__xlink[] = "_xlink";
@@ -263,6 +264,9 @@ void SvXMLImport::_InitCtor()
         mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__draw ) ),
                             GetXMLToken(XML_N_DRAW),
                             XML_NAMESPACE_DRAW );
+        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__draw_ext ) ),
+                            GetXMLToken(XML_N_DRAW_EXT),
+                            XML_NAMESPACE_DRAW_EXT );
         mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM (sXML_np__dr3d ) ),
                             GetXMLToken(XML_N_DR3D),
                             XML_NAMESPACE_DR3D );

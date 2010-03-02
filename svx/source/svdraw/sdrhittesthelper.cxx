@@ -60,7 +60,7 @@ SdrObject* SdrObjectPrimitiveHit(
     }
     else
     {
-        if(!pVisiLayer || pVisiLayer->IsSet(rObject.GetLayer()))
+        if( rObject.IsVisible() && (!pVisiLayer || pVisiLayer->IsSet(rObject.GetLayer())))
         {
             // single object, 3d object, empty scene or empty group. Check if
             // it's a single 3D object

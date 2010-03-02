@@ -2699,6 +2699,16 @@ bool SvxShape::setPropertyValueImpl( const ::rtl::OUString&, const SfxItemProper
         }
         break;
     }
+    case SDRATTR_OBJVISIBLE:
+    {
+        sal_Bool bVisible = sal_Bool();
+        if( rValue >>= bVisible )
+        {
+            mpObj->SetVisible(bVisible);
+            return true;
+        }
+        break;
+    }
     case SDRATTR_OBJSIZEPROTECT:
     {
         sal_Bool bResizeProtect = sal_Bool();
@@ -3069,11 +3079,15 @@ bool SvxShape::getPropertyValueImpl( const ::rtl::OUString&, const SfxItemProper
     }
 
     case SDRATTR_OBJPRINTABLE:
-        rValue = uno::makeAny( (sal_Bool) mpObj->IsPrintable() );
+        rValue <<= static_cast<sal_Bool>( mpObj->IsPrintable() );
+        break;
+
+    case SDRATTR_OBJVISIBLE:
+        rValue <<= static_cast<sal_Bool>( mpObj->IsVisible() );
         break;
 
     case SDRATTR_OBJSIZEPROTECT:
-        rValue = uno::makeAny( (sal_Bool)mpObj->IsResizeProtect() );
+        rValue <<= static_cast<sal_Bool>( mpObj->IsResizeProtect() );
         break;
 
     case OWN_ATTR_PAGE_NUMBER:

@@ -641,12 +641,17 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
         GetXMLToken(XML_N_ANIMATION),
         XML_NAMESPACE_ANIMATION);
 
-    if( getDefaultVersion() == SvtSaveOptions::ODFVER_LATEST )
+    if( getDefaultVersion() > SvtSaveOptions::ODFVER_12 )
     {
         _GetNamespaceMap().Add(
             GetXMLToken(XML_NP_OFFICE_EXT),
             GetXMLToken(XML_N_OFFICE_EXT),
             XML_NAMESPACE_OFFICE_EXT);
+
+        _GetNamespaceMap().Add(
+            GetXMLToken(XML_NP_DRAW_EXT),
+            GetXMLToken(XML_N_DRAW_EXT),
+            XML_NAMESPACE_DRAW_EXT);
     }
 
     GetShapeExport()->enableLayerExport();
@@ -2806,7 +2811,7 @@ void SdXMLExport::collectAnnotationAutoStyles( const Reference<XDrawPage>& xDraw
 void SdXMLExport::exportAnnotations( const Reference<XDrawPage>& xDrawPage )
 {
     // do not export in ODF 1.2 or older
-    if( getDefaultVersion() != SvtSaveOptions::ODFVER_LATEST )
+    if( getDefaultVersion() <= SvtSaveOptions::ODFVER_012 )
         return;
 
     Reference< XAnnotationAccess > xAnnotationAccess( xDrawPage, UNO_QUERY );

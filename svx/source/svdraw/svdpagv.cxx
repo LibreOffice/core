@@ -754,6 +754,12 @@ sal_Bool SdrPageView::IsObjMarkable(SdrObject* pObj) const
             return sal_False;
         }
 
+        // only visible are markable
+        if( !pObj->IsVisible() )
+        {
+            return sal_False;
+        }
+
         // #112440#
         if(pObj->ISA(SdrObjGroup))
         {

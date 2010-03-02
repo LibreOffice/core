@@ -325,6 +325,7 @@
     { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_MOVEPROTECT),  SDRATTR_OBJMOVEPROTECT          , &::getBooleanCppuType(),                      0,  0}, \
     { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_NAME),         SDRATTR_OBJECTNAME              , &::getCppuType((const ::rtl::OUString*)0),    0,  0}, \
     { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_PRINTABLE),    SDRATTR_OBJPRINTABLE            , &::getBooleanCppuType(),                      0,  0}, \
+    { MAP_CHAR_LEN("Visible"),                      SDRATTR_OBJVISIBLE              , &::getBooleanCppuType(),                      0,  0}, \
     { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_SIZEPROTECT),  SDRATTR_OBJSIZEPROTECT          , &::getBooleanCppuType(),                      0,  0},\
     { MAP_CHAR_LEN("UINameSingular"),               OWN_ATTR_UINAME_SINGULAR        , &::getCppuType((const ::rtl::OUString*)0),    ::com::sun::star::beans::PropertyAttribute::READONLY,   0}, \
     { MAP_CHAR_LEN("UINamePlural"),                 OWN_ATTR_UINAME_PLURAL          , &::getCppuType((const ::rtl::OUString*)0),    ::com::sun::star::beans::PropertyAttribute::READONLY,   0}, \
