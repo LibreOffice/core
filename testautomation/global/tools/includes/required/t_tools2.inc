@@ -261,12 +261,6 @@ End Function
 
 '-------------------------------------------------------------------------
 
-function fRemoveDoubleSpace(stringToChange as string) As String
-    fRemoveDoubleSpace = fRemoveDoubleCharacter(stringToChange, " ")
-End Function
-
-'-------------------------------------------------------------------------
-
 function writeCrashRepFile()
 '/// Creates a file <i>(gOfficePath)</i>/user/work/crashrep.txt with two lines:
 '///+ <ol><li>name of .bas file</li>
