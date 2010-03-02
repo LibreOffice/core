@@ -1188,6 +1188,10 @@ void SdrMarkView::CheckMarked()
         }
         bRaus=bRaus || pPV->GetLockedLayers().IsSet(nLay) ||  // Layer gesperrt?
                        !pPV->GetVisibleLayers().IsSet(nLay);  // Layer nicht sichtbar?
+
+        if( !bRaus )
+            bRaus = !pObj->IsVisible(); // not visible objects can not be marked
+
         if (!bRaus) {
             // Joe am 9.3.1997: Gruppierte Objekten koennen nun auch
             // markiert werden. Nach EnterGroup muessen aber die Objekte
@@ -1591,7 +1595,7 @@ void SdrMarkView::SetMarkHdlSizePixel(USHORT nSiz)
 #define SDRSEARCH_IMPISMASTER 0x80000000 /* MasterPage wird gerade durchsucht */
 SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, USHORT nTol, SdrObject* pObj, SdrPageView* pPV, ULONG nOptions, const SetOfByte* pMVisLay) const
 {
-    if((nOptions & SDRSEARCH_IMPISMASTER) && pObj->IsNotVisibleAsMaster())
+    if(((nOptions & SDRSEARCH_IMPISMASTER) && pObj->IsNotVisibleAsMaster()) || (!pObj->IsVisible()))
     {
         return NULL;
     }

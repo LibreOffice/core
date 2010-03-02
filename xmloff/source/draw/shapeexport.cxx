@@ -79,6 +79,8 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
     // #88546# init to FALSE
     mbHandleProgressBar( sal_False ),
     msZIndex( RTL_CONSTASCII_USTRINGPARAM("ZOrder") ),
+    msPrintable( RTL_CONSTASCII_USTRINGPARAM("Pintable") ),
+    msVisible( RTL_CONSTASCII_USTRINGPARAM("Visible") ),
     msEmptyPres( RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") ),
     msModel( RTL_CONSTASCII_USTRINGPARAM("Model") ),
     msStartShape( RTL_CONSTASCII_USTRINGPARAM("StartShape") ),
@@ -663,6 +665,35 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             {
                 DBG_ERROR( "could not export layer name for shape!" );
             }
+        }
+    }
+
+    // export draw:display (do not export in ODF 1.2 or older)
+    if( xSet.is() && ( mrExport.getDefaultVersion() > SvtSaveOptions::ODFVER_012 ) )
+    {
+        try
+        {
+            sal_Bool bVisible = sal_True;
+            sal_Bool bPrintable = sal_True;
+
+            xSet->getPropertyValue(msVisible) >>= bVisible;
+            xSet->getPropertyValue(msPrintable) >>= bPrintable;
+
+            XMLTokenEnum eDisplayToken = XML_TOKEN_INVALID;
+            switch( (bVisible << 1) | bPrintable )
+            {
+            case 0: eDisplayToken = XML_NONE; break;
+            case 1: eDisplayToken = XML_PRINTER; break;
+            case 2: eDisplayToken = XML_SCREEN; break;
+            // case 3: eDisplayToken = XML_ALWAYS break; this is the default
+            }
+
+            if( eDisplayToken != XML_TOKEN_INVALID )
+                mrExport.AddAttribute(XML_NAMESPACE_DRAW_EXT, XML_DISPLAY, eDisplayToken );
+        }
+        catch( uno::Exception& )
+        {
+            DBG_ERROR( "XMLShapeExport::exportShape(), exception caught!" );
         }
     }
 

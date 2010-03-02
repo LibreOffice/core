@@ -2395,6 +2395,11 @@ String SIP_SA_OBJPRINTABLE
     Text [ en-US ] = "Object, printable";
 };
 
+String SIP_SA_OBJVISIBLE
+{
+    Text [ en-US ] = "Object, visible";
+};
+
 String SIP_SA_LAYERID
 {
     Text [ en-US ] = "Level ID";

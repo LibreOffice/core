@@ -83,6 +83,9 @@ protected:
     com::sun::star::awt::Size   maSize;
     com::sun::star::awt::Point  maPosition;
 
+    bool                        mbVisible;
+    bool                        mbPrintable;
+
     /** if bSupportsStyle is false, auto styles will be set but not a style */
     void SetStyle( bool bSupportsStyle = true );
     void SetLayer();

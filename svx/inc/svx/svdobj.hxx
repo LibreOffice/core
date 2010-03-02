@@ -283,6 +283,7 @@ public:
     BOOL                        bSizProt;
     BOOL                        bNoPrint;
     BOOL                        bClosedObj;
+    bool                        mbVisible;
     SdrLayerID                  mnLayerID;
 
 public:
@@ -467,10 +468,10 @@ protected:
     unsigned                    bGrouped : 1;   // Member eines GroupObjektes?
 
     // Die folgende Flags werden gestreamt
-    unsigned                    bMovProt : 1; // Position geschuetzt
-    unsigned                    bSizProt : 1; // Groesse geschuetzt
-    unsigned                    bNoPrint : 1; // Nicht drucken
-
+    unsigned                    bMovProt : 1; // If true, the position is protected
+    unsigned                    bSizProt : 1; // If true, the size is protected
+    unsigned                    bNoPrint : 1; // If true, the object is not printed.
+    unsigned                    mbVisible : 1; // If false, the object is not visible on screen (but maybe on printer, depending on bNoprint
     // Wenn bEmptyPresObj TRUE ist, handelt es sich um ein
     // Praesentationsobjekt, dem noch kein Inhalt zugewiesen
     // wurde. Default ist das Flag auf FALSE. Die Verwaltung
@@ -1010,6 +1011,8 @@ public:
     sal_Bool IsResizeProtect() const { return bSizProt; }
     void SetPrintable(sal_Bool bPrn);
     sal_Bool IsPrintable() const { return !bNoPrint; }
+    void SetVisible(sal_Bool bVisible);
+    sal_Bool IsVisible() const { return mbVisible; }
     void SetEmptyPresObj(sal_Bool bEpt) { bEmptyPresObj=bEpt; }
     sal_Bool IsEmptyPresObj() const { return bEmptyPresObj; }
     void SetNotVisibleAsMaster(sal_Bool bFlg) { bNotVisibleAsMaster=bFlg; }

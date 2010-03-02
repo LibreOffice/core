@@ -235,6 +235,7 @@ SdrObjGeoData::SdrObjGeoData():
     bSizProt(FALSE),
     bNoPrint(FALSE),
     bClosedObj(FALSE),
+    mbVisible(true),
     mnLayerID(0)
 {
     DBG_CTOR(SdrObjGeoData,NULL);
@@ -457,6 +458,7 @@ SdrObject::SdrObject()
     bEmptyPresObj    =FALSE;
     bNotVisibleAsMaster=FALSE;
     bClosedObj       =FALSE;
+    mbVisible        = true;
 
     // #i25616#
     mbLineIsOutsideGeometry = sal_False;
@@ -1092,6 +1094,7 @@ void SdrObject::operator=(const SdrObject& rObj)
     bSizProt=rObj.bSizProt;
     bMovProt=rObj.bMovProt;
     bNoPrint=rObj.bNoPrint;
+    mbVisible=rObj.mbVisible;
     bMarkProt=rObj.bMarkProt;
     //EmptyPresObj wird nicht kopiert: nun doch! (25-07-1995, Joe)
     bEmptyPresObj =rObj.bEmptyPresObj;
@@ -1958,6 +1961,7 @@ void SdrObject::SaveGeoData(SdrObjGeoData& rGeo) const
     rGeo.bMovProt      =bMovProt      ;
     rGeo.bSizProt      =bSizProt      ;
     rGeo.bNoPrint      =bNoPrint      ;
+    rGeo.mbVisible     =mbVisible     ;
     rGeo.bClosedObj    =bClosedObj    ;
     rGeo.mnLayerID = mnLayerID;
 
@@ -1984,6 +1988,7 @@ void SdrObject::RestGeoData(const SdrObjGeoData& rGeo)
     bMovProt      =rGeo.bMovProt      ;
     bSizProt      =rGeo.bSizProt      ;
     bNoPrint      =rGeo.bNoPrint      ;
+    mbVisible     =rGeo.mbVisible     ;
     bClosedObj    =rGeo.bClosedObj    ;
     mnLayerID = rGeo.mnLayerID;
 
@@ -2191,6 +2196,11 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
         SetPrintable(b);
     }
 
+    if (rAttr.GetItemState(SDRATTR_OBJVISIBLE,TRUE,&pPoolItem)==SFX_ITEM_SET) {
+        bool b=((const SdrObjVisibleItem*)pPoolItem)->GetValue();
+        SetVisible(b);
+    }
+
     SdrLayerID nLayer=SDRLAYER_NOTFOUND;
     if (rAttr.GetItemState(SDRATTR_LAYERID,TRUE,&pPoolItem)==SFX_ITEM_SET) {
         nLayer=((const SdrLayerIdItem*)pPoolItem)->GetValue();
@@ -2252,6 +2262,7 @@ void SdrObject::TakeNotPersistAttr(SfxItemSet& rAttr, FASTBOOL bMerge) const
     lcl_SetItem(rAttr,bMerge,SdrObjMoveProtectItem(IsMoveProtect()));
     lcl_SetItem(rAttr,bMerge,SdrObjSizeProtectItem(IsResizeProtect()));
     lcl_SetItem(rAttr,bMerge,SdrObjPrintableItem(IsPrintable()));
+    lcl_SetItem(rAttr,bMerge,SdrObjVisibleItem(IsVisible()));
     lcl_SetItem(rAttr,bMerge,SdrRotateAngleItem(GetRotateAngle()));
     lcl_SetItem(rAttr,bMerge,SdrShearAngleItem(GetShearAngle()));
     lcl_SetItem(rAttr,bMerge,SdrOneSizeWidthItem(rSnap.GetWidth()-1));
@@ -2730,11 +2741,29 @@ void SdrObject::SetResizeProtect(sal_Bool bProt)
 
 void SdrObject::SetPrintable(sal_Bool bPrn)
 {
-    bNoPrint=!bPrn;
-    SetChanged();
-    if (IsInserted() && pModel!=NULL) {
-        SdrHint aHint(*this);
-        pModel->Broadcast(aHint);
+    if( bPrn != bNoPrint )
+    {
+        bNoPrint=!bPrn;
+        SetChanged();
+        if (IsInserted() && pModel!=NULL)
+        {
+            SdrHint aHint(*this);
+            pModel->Broadcast(aHint);
+        }
+    }
+}
+
+void SdrObject::SetVisible(sal_Bool bVisible)
+{
+    if( bVisible != mbVisible )
+    {
+        mbVisible = bVisible;
+        SetChanged();
+        if (IsInserted() && pModel!=NULL)
+        {
+            SdrHint aHint(*this);
+            pModel->Broadcast(aHint);
+        }
     }
 }
 

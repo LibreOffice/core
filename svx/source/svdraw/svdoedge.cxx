@@ -2100,7 +2100,7 @@ FASTBOOL SdrEdgeObj::ImpFindConnector(const Point& rPt, const SdrPageView& rPV, 
         // Problem: Gruppenobjekt mit verschiedenen Layern liefert LayerID 0 !!!!
         no--;
         SdrObject* pObj=pOL->GetObj(no);
-        if (rVisLayer.IsSet(pObj->GetLayer()) &&       // nur sichtbare Objekte
+        if (rVisLayer.IsSet(pObj->GetLayer()) && pObj->IsVisible() &&      // only visible objects
             (pThis==NULL || pObj!=(SdrObject*)pThis) && // nicht an mich selbst connecten
             pObj->IsNode())
         {

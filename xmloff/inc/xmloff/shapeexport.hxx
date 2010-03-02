@@ -189,6 +189,9 @@ private:
     SAL_DLLPRIVATE UniReference< SvXMLExportPropertyMapper > GetPropertySetMapper() const { return mxPropertySetMapper; }
 
     const rtl::OUString                         msZIndex;
+    const rtl::OUString                         msPrintable;
+    const rtl::OUString                         msVisible;
+
     const rtl::OUString                         msEmptyPres;
     const rtl::OUString                         msModel;
     const rtl::OUString                         msStartShape;

@@ -760,6 +760,7 @@ void SdrEditView::MergeNotPersistAttrFromMarked(SfxItemSet& rAttr, BOOL /*bOnlyH
     BOOL bMovProtect=FALSE,bMovProtectDC=FALSE;
     BOOL bSizProtect=FALSE,bSizProtectDC=FALSE;
     BOOL bPrintable =TRUE ,bPrintableDC=FALSE;
+    BOOL bVisible = TRUE, bVisibleDC=FALSE;
     SdrLayerID nLayerId=0; BOOL bLayerDC=FALSE;
     XubString aObjName;     BOOL bObjNameDC=FALSE,bObjNameSet=FALSE;
     long nSnapPosX=0;      BOOL bSnapPosXDC=FALSE;
@@ -781,6 +782,7 @@ void SdrEditView::MergeNotPersistAttrFromMarked(SfxItemSet& rAttr, BOOL /*bOnlyH
             bMovProtect=pObj->IsMoveProtect();
             bSizProtect=pObj->IsResizeProtect();
             bPrintable =pObj->IsPrintable();
+            bVisible = pObj->IsVisible();
             Rectangle aSnapRect2(pObj->GetSnapRect());
             Rectangle aLogicRect2(pObj->GetLogicRect());
             nSnapPosX=aSnapRect2.Left();
@@ -798,6 +800,7 @@ void SdrEditView::MergeNotPersistAttrFromMarked(SfxItemSet& rAttr, BOOL /*bOnlyH
             if (!bMovProtectDC && bMovProtect!=pObj->IsMoveProtect())   bMovProtectDC=TRUE;
             if (!bSizProtectDC && bSizProtect!=pObj->IsResizeProtect()) bSizProtectDC=TRUE;
             if (!bPrintableDC  && bPrintable !=pObj->IsPrintable())     bPrintableDC=TRUE;
+            if (!bVisibleDC    && bVisible !=pObj->IsVisible())         bVisibleDC=TRUE;
             if (!bRotAngleDC   && nRotAngle  !=pObj->GetRotateAngle())  bRotAngleDC=TRUE;
             if (!bShrAngleDC   && nShrAngle  !=pObj->GetShearAngle())   bShrAngleDC=TRUE;
             if (!bSnapWdtDC || !bSnapHgtDC || !bSnapPosXDC || !bSnapPosYDC || !bLogicWdtDiff || !bLogicHgtDiff) {
@@ -837,6 +840,7 @@ void SdrEditView::MergeNotPersistAttrFromMarked(SfxItemSet& rAttr, BOOL /*bOnlyH
     rAttr.Put(SdrRotateOneItem());
     rAttr.Put(SdrHorzShearOneItem());
     rAttr.Put(SdrVertShearOneItem());
+
     if (nMarkAnz>1) {
         rAttr.Put(SdrResizeXAllItem());
         rAttr.Put(SdrResizeYAllItem());

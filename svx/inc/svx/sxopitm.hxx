@@ -39,4 +39,10 @@ public:
     SdrObjPrintableItem(SvStream& rIn): SdrYesNoItem(SDRATTR_OBJPRINTABLE,rIn) {}
 };
 
+class SdrObjVisibleItem: public SdrYesNoItem {
+public:
+    SdrObjVisibleItem(bool bOn=true): SdrYesNoItem(SDRATTR_OBJVISIBLE,bOn) {}
+    SdrObjVisibleItem(SvStream& rIn): SdrYesNoItem(SDRATTR_OBJVISIBLE,rIn) {}
+};
+
 #endif
