@@ -7915,7 +7915,8 @@ void SAL_CALL ScTableSheetObj::protect( const rtl::OUString& aPassword )
 {
     ScUnoGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
-    if ( pDocSh )
+    // #i108245# if already protected, don't change anything
+    if ( pDocSh && !pDocSh->GetDocument()->IsTabProtected( GetTab_Impl() ) )
     {
         String aString(aPassword);
         ScDocFunc aFunc(*pDocSh);
@@ -7932,9 +7933,9 @@ void SAL_CALL ScTableSheetObj::unprotect( const rtl::OUString& aPassword )
     {
         String aString(aPassword);
         ScDocFunc aFunc(*pDocSh);
-        aFunc.Unprotect( GetTab_Impl(), aString, TRUE );
-
-        //! Rueckgabewert auswerten, Exception oder so
+        BOOL bDone = aFunc.Unprotect( GetTab_Impl(), aString, TRUE );
+        if (!bDone)
+            throw lang::IllegalArgumentException();
     }
 }
 
