@@ -1662,9 +1662,10 @@ void SAL_CALL ScDataPilotFieldObj::setPropertyValue( const OUString& aPropertyNa
     String aNameString(aPropertyName);
     if ( aNameString.EqualsAscii( SC_UNONAME_FUNCTION ) )
     {
-        GeneralFunction eFunction = GeneralFunction_NONE;
-        if( aValue >>= eFunction )
-            setFunction( eFunction );
+        // #i109350# use GetEnumFromAny because it also allows sal_Int32
+        GeneralFunction eFunction = (GeneralFunction)
+                            ScUnoHelpFunctions::GetEnumFromAny( aValue );
+        setFunction( eFunction );
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_SUBTOTALS ) )
     {
