@@ -51,6 +51,7 @@
 #include <tools/tenccvt.hxx>
 
 #include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/script/XVBACompat.hpp>
 
 #include "document.hxx"
 #include "table.hxx"
@@ -4963,4 +4964,13 @@ void ScDocument::EnableUndo( bool bVal )
     mbUndoEnabled = bVal;
 }
 
-
+bool ScDocument::IsInVBAMode() const
+{
+    bool bResult = false;
+    if ( pShell )
+    {
+        com::sun::star::uno::Reference< com::sun::star::script::XVBACompat > xVBA( pShell->GetBasicContainer(), com::sun::star::uno::UNO_QUERY );
+        bResult = xVBA->getVBACompatModeOn();
+    }
+    return bResult;
+}

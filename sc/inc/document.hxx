@@ -1716,6 +1716,8 @@ public:
                             { return eStorageGrammar; }
 
     SfxUndoManager*     GetUndoManager();
+    bool IsInVBAMode() const;
+
 private: // CLOOK-Impl-Methoden
 
     /**

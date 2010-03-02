@@ -48,6 +48,12 @@
 #include <svl/zforlist.hxx>
 #include <svl/PasswordHelper.hxx>
 
+#include <basic/sbstar.hxx>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/script/XLibraryContainer.hpp>
+#include <com/sun/star/script/XVBAModuleInfo.hpp>
+#include <com/sun/star/script/ModuleType.hpp>
+
 #include <list>
 
 #include "docfunc.hxx"
@@ -94,6 +100,7 @@
 #include "clipparam.hxx"
 
 #include <memory>
+#include <basic/basmgr.hxx>
 
 using namespace com::sun::star;
 using ::com::sun::star::uno::Sequence;
@@ -2576,6 +2583,106 @@ BOOL ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
 }
 
 //------------------------------------------------------------------------
+uno::Reference< uno::XInterface > GetDocModuleObject( SfxObjectShell& rDocSh, String& sCodeName )
+{
+    uno::Reference< lang::XMultiServiceFactory> xSF(rDocSh.GetModel(), uno::UNO_QUERY);
+    uno::Reference< container::XNameAccess > xVBACodeNamedObjectAccess;
+    uno::Reference< uno::XInterface > xDocModuleApiObject;
+    if ( xSF.is() )
+    {
+        xVBACodeNamedObjectAccess.set( xSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAObjectModuleObjectProvider"))), uno::UNO_QUERY );
+        xDocModuleApiObject.set( xVBACodeNamedObjectAccess->getByName( sCodeName ), uno::UNO_QUERY );
+    }
+    return xDocModuleApiObject;
+
+}
+
+script::ModuleInfo lcl_InitModuleInfo( SfxObjectShell& rDocSh, String& sModule )
+{
+    ::rtl::OUString sVbaOption( RTL_CONSTASCII_USTRINGPARAM( "Rem Attribute VBA_ModuleType=VBADocumentModule\nOption VBASupport 1\n" ));
+    script::ModuleInfo sModuleInfo;
+    sModuleInfo.ModuleType = script::ModuleType::Document;
+    sModuleInfo.ModuleObject = GetDocModuleObject( rDocSh, sModule );
+    return sModuleInfo;
+}
+
+void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, String& sModuleName, String& sSource )
+{
+    SFX_APP()->EnterBasicCall();
+    SfxObjectShell& rDocSh = *rDoc.GetDocumentShell();
+    uno::Reference< script::XLibraryContainer > xLibContainer = rDocSh.GetBasicContainer();
+    DBG_ASSERT( xLibContainer.is(), "No BasicContainer!" );
+
+    uno::Reference< container::XNameContainer > xLib;
+    if( xLibContainer.is() )
+    {
+        String aLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
+        if ( rDocSh.GetBasicManager() && rDocSh.GetBasicManager()->GetName().Len() )
+            aLibName = rDocSh.GetBasicManager()->GetName();
+        uno::Any aLibAny = xLibContainer->getByName( aLibName );
+        aLibAny >>= xLib;
+    }
+    if( xLib.is() )
+    {
+        // if the Module with codename exists then find a new name
+        sal_Int32 nNum = 0;
+        String genModuleName;
+        if ( sModuleName.Len() )
+            sModuleName = sModuleName;
+        else
+        {
+             genModuleName = String::CreateFromAscii( "Sheet1" );
+             nNum = 1;
+        }
+        while( xLib->hasByName( genModuleName  ) )
+            genModuleName = rtl::OUString::createFromAscii( "Sheet" ) + rtl::OUString::valueOf( ++nNum );
+
+        uno::Any aSourceAny;
+        rtl::OUString sTmpSource = sSource;
+        if ( sTmpSource.getLength() == 0 )
+            sTmpSource = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Rem Attribute VBA_ModuleType=VBADocumentModule\nOption VBASupport 1\n" ));
+        aSourceAny <<= sTmpSource;
+        uno::Reference< script::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY );
+        if ( xVBAModuleInfo.is() )
+        {
+            String sCodeName( genModuleName );
+            rDoc.SetCodeName( nTab, sCodeName );
+            script::ModuleInfo sModuleInfo = lcl_InitModuleInfo(  rDocSh, genModuleName );
+            xVBAModuleInfo->insertModuleInfo( genModuleName, sModuleInfo );
+            xLib->insertByName( genModuleName, aSourceAny );
+        }
+
+    }
+    SFX_APP()->LeaveBasicCall();
+}
+
+void VBA_DeleteModule( ScDocShell& rDocSh, String& sModuleName )
+{
+    SFX_APP()->EnterBasicCall();
+    uno::Reference< script::XLibraryContainer > xLibContainer = rDocSh.GetBasicContainer();
+    DBG_ASSERT( xLibContainer.is(), "No BasicContainer!" );
+
+    uno::Reference< container::XNameContainer > xLib;
+    if( xLibContainer.is() )
+    {
+        String aLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
+        if ( rDocSh.GetBasicManager() && rDocSh.GetBasicManager()->GetName().Len() )
+            aLibName = rDocSh.GetBasicManager()->GetName();
+        uno::Any aLibAny = xLibContainer->getByName( aLibName );
+        aLibAny >>= xLib;
+    }
+    if( xLib.is() )
+    {
+        uno::Reference< script::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY );
+        if( xLib->hasByName( sModuleName ) )
+            xLib->removeByName( sModuleName );
+        if ( xVBAModuleInfo.is() )
+            xVBAModuleInfo->removeModuleInfo( sModuleName );
+
+    }
+    SFX_APP()->LeaveBasicCall();
+}
+
 
 BOOL ScDocFunc::InsertTable( SCTAB nTab, const String& rName, BOOL bRecord, BOOL bApi )
 {
@@ -2585,8 +2692,19 @@ BOOL ScDocFunc::InsertTable( SCTAB nTab, const String& rName, BOOL bRecord, BOOL
     ScDocShellModificator aModificator( rDocShell );
 
     ScDocument* pDoc = rDocShell.GetDocument();
-    if (bRecord && !pDoc->IsUndoEnabled())
+
+
+    // Strange loop, also basic is loaded too early ( InsertTable )
+    // is called via the xml import for sheets in described in odf
+    BOOL bInsertDocModule = false;
+
+    if(  !rDocShell.GetDocument()->IsImportingXML() )
+    {
+        bInsertDocModule = pDoc ? pDoc->IsInVBAMode() : false;
+    }
+    if ( bInsertDocModule || ( bRecord && !pDoc->IsUndoEnabled() ) )
         bRecord = FALSE;
+
     if (bRecord)
         pDoc->BeginDrawUndo();                          //  InsertTab erzeugt ein SdrUndoNewPage
 
@@ -2597,10 +2715,17 @@ BOOL ScDocFunc::InsertTable( SCTAB nTab, const String& rName, BOOL bRecord, BOOL
 
     if (pDoc->InsertTab( nTab, rName ))
     {
+        String sCodeName;
         if (bRecord)
             rDocShell.GetUndoManager()->AddUndoAction(
                         new ScUndoInsertTab( &rDocShell, nTab, bAppend, rName));
         //  Views updaten:
+        // Only insert vba modules if vba mode ( and not currently importing XML )
+        if( bInsertDocModule )
+        {
+            String sSource;
+            VBA_InsertModule( *pDoc, nTab, sCodeName, sSource );
+        }
         rDocShell.Broadcast( ScTablesHint( SC_TAB_INSERTED, nTab ) );
 
         rDocShell.PostPaintExtras();
@@ -2622,7 +2747,10 @@ BOOL ScDocFunc::DeleteTable( SCTAB nTab, BOOL bRecord, BOOL /* bApi */ )
 
     BOOL bSuccess = FALSE;
     ScDocument* pDoc = rDocShell.GetDocument();
+    BOOL bVbaEnabled = pDoc ? pDoc->IsInVBAMode() : false;
     if (bRecord && !pDoc->IsUndoEnabled())
+        bRecord = FALSE;
+    if ( bVbaEnabled )
         bRecord = FALSE;
     BOOL bWasLinked = pDoc->IsLinked(nTab);
     ScDocument* pUndoDoc = NULL;
@@ -2664,6 +2792,8 @@ BOOL ScDocFunc::DeleteTable( SCTAB nTab, BOOL bRecord, BOOL /* bApi */ )
         pUndoData = new ScRefUndoData( pDoc );
     }
 
+    String sCodeName;
+    BOOL bHasCodeName = pDoc->GetCodeName( nTab, sCodeName );
     if (pDoc->DeleteTab( nTab, pUndoDoc ))
     {
         if (bRecord)
@@ -2674,6 +2804,13 @@ BOOL ScDocFunc::DeleteTable( SCTAB nTab, BOOL bRecord, BOOL /* bApi */ )
                         new ScUndoDeleteTab( &rDocShell, theTabs, pUndoDoc, pUndoData ));
         }
         //  Views updaten:
+        if( bVbaEnabled )
+        {
+            if( bHasCodeName )
+            {
+                VBA_DeleteModule( rDocShell, sCodeName );
+            }
+        }
         rDocShell.Broadcast( ScTablesHint( SC_TAB_DELETED, nTab ) );
 
         if (bWasLinked)

@@ -93,6 +93,7 @@
 #include "tabprotection.hxx"
 #include "formulaparserpool.hxx"
 #include "clipparam.hxx"
+#include <basic/basmgr.hxx>
 
 // pImpl because including lookupcache.hxx in document.hxx isn't wanted, and
 // dtor plus helpers are convenient.
@@ -934,6 +935,8 @@ BOOL ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
     return bValid;
 }
 
+void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, String& sModuleName, String& sModuleSource );
+
 ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                                 SCTAB nDestPos, BOOL bInsertNew,
                                 BOOL bResultsOnly )
@@ -1104,6 +1107,40 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
     }
     if (!bValid)
         nRetVal = 0;
+    SfxObjectShell* pDestShell = pSrcDoc ? pSrcDoc->GetDocumentShell() : NULL;
+    StarBASIC* pStarBASIC = pDestShell ? pDestShell->GetBasic() : NULL;
+    String aLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
+    if ( pDestShell && pDestShell->GetBasicManager()->GetName().Len() > 0 )
+    {
+        aLibName = pDestShell->GetBasicManager()->GetName();
+        pStarBASIC = pDestShell->GetBasicManager()->GetLib( aLibName );
+    }
+
+    BOOL bVbaEnabled = IsInVBAMode();
+
+    if ( bVbaEnabled && pDestShell )
+    {
+        String sCodeName;
+        String sSource;
+        com::sun::star::uno::Reference< com::sun::star::script::XLibraryContainer > xLibContainer = pDestShell->GetBasicContainer();
+        com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > xLib;
+        if( xLibContainer.is() )
+        {
+            com::sun::star::uno::Any aLibAny = xLibContainer->getByName( aLibName );
+            aLibAny >>= xLib;
+        }
+
+        if( xLib.is() )
+        {
+            String sSrcCodeName;
+            pSrcDoc->GetCodeName( nSrcPos, sSrcCodeName );
+            rtl::OUString sRTLSource;
+            xLib->getByName( sSrcCodeName ) >>= sRTLSource;
+            sSource = sRTLSource;
+        }
+        VBA_InsertModule( *this, nDestPos, sCodeName, sSource );
+    }
+
     return nRetVal;
 }
 

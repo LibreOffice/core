@@ -983,7 +983,7 @@ FltError ImportExcel8::Read( void )
                     case 0x22:  Rec1904(); break;       // 1904         [ 2345   ]
                     case 0x56:  Builtinfmtcnt(); break; // BUILTINFMTCNT[  34    ]
                     case 0x8D:  Hideobj(); break;       // HIDEOBJ      [  345   ]
-                    case 0xD3:  ReadBasic(); break;
+                    case 0xD3:  bHasBasic = true; break;
                     case 0xDE:  Olesize(); break;
                     case 0x01BA: Codename( TRUE ); break;
 

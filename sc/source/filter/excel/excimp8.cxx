@@ -104,7 +104,6 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <sfx2/app.hxx>
 
-
 using namespace com::sun::star;
 
 
@@ -257,8 +256,6 @@ void ImportExcel8::SheetProtection( void )
 
 void ImportExcel8::ReadBasic( void )
 {
-    bHasBasic = TRUE;
-
     SfxObjectShell* pShell = GetDocShell();
     SotStorageRef xRootStrg = GetRootStorage();
     SvtFilterOptions* pFilterOpt = SvtFilterOptions::Get();
@@ -271,7 +268,7 @@ void ImportExcel8::ReadBasic( void )
         {
             SvxImportMSVBasic aBasicImport( *pShell, *xRootStrg, bLoadCode, bLoadStrg );
         bool bAsComment = !bLoadExecutable;
-            aBasicImport.Import( EXC_STORAGE_VBA_PROJECT, EXC_STORAGE_VBA, bAsComment );
+            aBasicImport.Import( EXC_STORAGE_VBA_PROJECT, EXC_STORAGE_VBA,  bAsComment );
         }
     }
 }
@@ -286,6 +283,10 @@ void ImportExcel8::EndSheet( void )
 
 void ImportExcel8::PostDocLoad( void )
 {
+    // delay reading basic until sheet object ( codenames etc. ) are read
+
+    if ( bHasBasic )
+        ReadBasic();
     // #i11776# filtered ranges before outlines and hidden rows
     if( pExcRoot->pAutoFilterBuffer )
         pExcRoot->pAutoFilterBuffer->Apply();
