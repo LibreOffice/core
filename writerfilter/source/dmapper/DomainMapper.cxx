@@ -2757,7 +2757,7 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
         break;  // sprmCPlain
     case NS_sprm::LN_CKcd:
-        /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
+        /* WRITERFILTERSTATUS: done: 100, planned: 2, spent: 0 */
         rContext->Insert(PROP_CHAR_EMPHASIS, true, uno::makeAny ( getEmphasisValue (nIntValue)));
         break;  // sprmCKcd
     case NS_sprm::LN_CFEmboss:// sprmCFEmboss
