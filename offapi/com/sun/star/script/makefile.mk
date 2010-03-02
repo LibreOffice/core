@@ -48,6 +48,8 @@ IDLFILES=\
     XPersistentLibraryContainer.idl\
     XStorageBasedLibraryContainer.idl\
     ModuleSizeExceededRequest.idl\
+    XVBACompat.idl\
+        XVBAModuleInfo.idl\
 
 # ------------------------------------------------------------------
 

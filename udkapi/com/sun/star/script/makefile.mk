@@ -81,6 +81,8 @@ IDLFILES=\
     XScriptEventsAttacher.idl\
     XDefaultMethod.idl\
     XDefaultProperty.idl\
+    ModuleInfo.idl\
+    ModuleType.idl\
 
 # ------------------------------------------------------------------
 
