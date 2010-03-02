@@ -2666,6 +2666,11 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
             rContext->Insert(PROP_PARA_ADJUST, false, uno::makeAny( style::ParagraphAdjust_RIGHT ));
 
         break;  // sprmPFBiDi
+    case NS_ooxml::LN_EG_SectPrContents_bidi:
+        /* WRITERFILTERSTATUS: done: 100, planned: 2, spent: 0 */
+        if (pSectionContext != NULL)
+            pSectionContext->Insert(PROP_WRITING_MODE,false, uno::makeAny( text::WritingMode2::RL_TB));
+        break;
     case NS_sprm::LN_PFNumRMIns:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
         break;  // sprmPFNumRMIns
