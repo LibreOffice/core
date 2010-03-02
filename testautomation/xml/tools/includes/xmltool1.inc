@@ -49,7 +49,7 @@ sub CreateWorkXMLExportDir ( DirName as string )
  Dim Isliste(200) as string
  Dim i, BornToKill
  printlog "Checking work-dir & creating '" & gOfficePath & ConvertPath(DirName) & "'."
-  if hDirectoryExists ( gOfficePath & ConvertPath(DirName) ) = TRUE then
+  if ( FileExists( gOfficePath & ConvertPath( DirName) ) then
     OutputPath = gOfficePath & ConvertPath(DirName)
     IsListe(0) = 0
     GetFileList ( OutputPath ,  "*", IsListe() )

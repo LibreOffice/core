@@ -37,30 +37,11 @@
 '*
 '\************************************************************************
 
-function hFileExists ( Dat as String ) as Boolean
+function hFileExists ( file as String ) as Boolean
     '/// Checks if a file exists
     '/// <u>Input</u>: Filename with complete path
     '/// <u>Return</u>: TRUE or FALSE if the file exists.
-    if app.Dir ( Dat ) = "" then
-        hFileExists = FALSE
-    else
-        hFileExists = TRUE
-    end if
-end function
-'
-'-------------------------------------------------------------------------------
-'
-function hDirectoryExists ( Verz as String ) as Boolean
-    '/// Checks if a directory exists
-    '/// <u>Input</u>: Directory with complete path
-    '/// <u>Return</u>: TRUE or FALSE if the directory exists.
-    ' at the end of the string has to be teh path seperator, else the dir-command doesn't work
-    if right ( Verz, 1 ) <> gPathSigne then Verz = Verz + gPathsigne
-    if app.Dir ( Verz, 16 ) = "" then
-        hDirectoryExists = FALSE
-    else
-        hDirectoryExists = TRUE
-    end if
+    hFileExists() = FileExists( file )
 end function
 '
 '-------------------------------------------------------------------------------

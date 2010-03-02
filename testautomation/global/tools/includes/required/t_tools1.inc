@@ -418,10 +418,10 @@ sub DialogTest( Window, optional iNumber as integer)
         'save with respect to application and language
         sCapturePath = ConvertPath (gOfficePath + "user\work\screenshots"+iSprache+"\")
         sPicName = sCapturePath + lCase(gApplication)
+
         'create directory if it doesn't exist
-        if hDirectoryExists(sPicName) <> TRUE then
-            mkdir (sPicName)
-        end if
+        if ( not FileExists(sPicName) ) then mkdir sPicName
+
         sPicName = sPicName + sName
         try
             sleep 1
