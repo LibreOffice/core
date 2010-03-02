@@ -3593,8 +3593,9 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
     }
     break;  // sprmSClm
     case NS_sprm::LN_STextFlow:
-    {
+    case NS_ooxml::LN_EG_SectPrContents_textDirection:
         /* WRITERFILTERSTATUS: done: 100, planned: 2, spent: 0 */
+    {
         /* 0 HoriLR 1 Vert TR 2 Vert TR 3 Vert TT 4 HoriLT
             only 0 and 1 can be imported correctly
           */
@@ -3612,7 +3613,16 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
             break;
             default:;
         }
-        rContext->Insert(PROP_WRITING_MODE, false, uno::makeAny( nDirection ) );
+
+        PropertyMap * pTargetContext = rContext.get();
+
+        if (pSectionContext != NULL &&
+            nSprmId == NS_ooxml::LN_EG_SectPrContents_textDirection)
+        {
+            pTargetContext = pSectionContext;
+        }
+
+        pTargetContext->Insert(PROP_WRITING_MODE, false, uno::makeAny( nDirection ) );
     }
     break;  // sprmSTextFlow
     case NS_sprm::LN_TJc: // sprmTJc

@@ -21754,11 +21754,11 @@
       <attribute name="val" tokenid="ooxml:CT_Kinsoku_val"/>
     </resource>
     <resource name="ST_TextDirection" resource="List">
-      <value tokenid="ooxml:Value_ST_TextDirection_lrTb">lrTb</value>
-      <value tokenid="ooxml:Value_ST_TextDirection_tbRl">tbRl</value>
-      <value tokenid="ooxml:Value_ST_TextDirection_btLr">btLr</value>
-      <value tokenid="ooxml:Value_ST_TextDirection_lrTbV">lrTbV</value>
-      <value tokenid="ooxml:Value_ST_TextDirection_tbRlV">tbRlV</value>
+      <value tokenid="0">lrTb</value>
+      <value tokenid="1">tbRl</value>
+      <value tokenid="3">btLr</value>
+      <value tokenid="4">lrTbV</value>
+      <value tokenid="5">tbRlV</value>
       <value tokenid="ooxml:Value_ST_TextDirection_tbLrV">tbLrV</value>
     </resource>
     <resource name="CT_TextDirection" resource="Value">
