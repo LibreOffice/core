@@ -1,7 +1,6 @@
 #*************************************************************************
-#
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -22,27 +21,18 @@
 # version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
-#
-#*************************************************************************
-PRJ=..
+#***********************************************************************/
 
-PRJNAME=configmgr
-TARGET=inc
+PRJ = ..
+PRJNAME = configmgr
+TARGET = inc
 
-# --- Settings -----------------------------------------------------
+ENABLE_EXCEPTIONS = TRUE
+VISIBILITY_HIDDEN = TRUE
 
-.INCLUDE :  settings.mk
-.INCLUDE : $(PRJ)$/makefile.pmk
+.INCLUDE: settings.mk
+.INCLUDE: target.mk
 
-# --- Files --------------------------------------------------------
-# --- Targets -------------------------------------------------------
-
-.INCLUDE :  target.mk
-
-.IF "$(ENABLE_PCH)"!=""
-ALLTAR : \
-    $(SLO)$/precompiled.pch \
-    $(SLO)$/precompiled_ex.pch
-    
-.ENDIF			# "$(ENABLE_PCH)"!=""
-
+.IF "$(ENABLE_PCH)" != ""
+ALLTAR: $(SLO)/precompiled.pch $(SLO)/precompiled_ex.pch
+.ENDIF
