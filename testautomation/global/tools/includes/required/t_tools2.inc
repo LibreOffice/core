@@ -31,52 +31,6 @@
 '*
 '\*************************************************************************************
 
-sub GetOLEDefaultNames
-
- '/// Reads the names of all OLE objects from a reference file.
-'///+ The OLE name-files are language dependent and should be created 
-'///+ using the the <i>getnames.bas</i> script running on Windows
-'///+ The files are (per this revision) written and read utf-8 encoded.
-'///+ The OLE names are stored in global variables.
-
-    const CFN = "t_tools2::GetOLEDefaultNames():"
-  
-    dim sPath as string
-        sPath = gTesttoolPath & "global\input\olenames\" & gProductName
-      
-    dim sFile as String              ' the file that contains the OLE names
-        sFile = convertpath( sPath & "\ole_" & iSprache & ".txt" )
-      
-    dim sFilterList(20) as String    ' the list that temporarily holds the OLE names
-        sFilterlist( 0 ) = "0"
-      
-    printlog( CFN & "Using OLE names from: " & sFile )
-
-    ' Find the reference file. Warn if not found and exit
-    if ( Dir ( sFile ) = "" ) then
-   
-        Warnlog( CFN & " The file for default-filter-names is missing."
-        PrintLog( "Please create the list with ..\global\tools\getnames.bas::GetFilterNames!" )
-        exit sub
-      
-    end if
-
-    ' Read the file data into an array (sFilterList), utf-8 encoded
-    call ListRead ( sFilterList(), sFile, "utf8" )
-
-    ' Evaluate the array and assign the data to global variables.
-    gOLEWriter  = hGetValueForKeyAsString( sFilterList() , "WRITER"  )
-    gOLECalc    = hGetValueForKeyAsString( sFilterList() , "CALC"    )
-    gOLEImpress = hGetValueForKeyAsString( sFilterList() , "IMPRESS" )
-    gOLEDraw    = hGetValueForKeyAsString( sFilterList() , "DRAW"    )
-    gOLEMath    = hGetValueForKeyAsString( sFilterList() , "MATH"    )
-    gOLEChart   = hGetValueForKeyAsString( sFilterList() , "CHART"   )
-    gOLEOthers  = hGetValueForKeyAsString( sFilterList() , "OTHER"   )
-
-end sub
-
-'-------------------------------------------------------------------------
-
 function hSetLocaleStrings (fLocale as String, TBOstringLocale() as String ) as Boolean
 'TODO: JSI, make real description from it!
 ' creator: TBO @ 25.10.2001

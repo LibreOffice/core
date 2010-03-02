@@ -57,7 +57,7 @@ testcase tIBIS111099
         if SwitchControlDesignMode.getState(2) = 0 then 
             printlog "OK, design mode is disabled"
         else
-            warnlog "Document is opened in design mode -> #111099#"
+            warnlog "#i108315# Document is opened in design mode -> #111099#"
         end if
     else
         printlog "Form controls toolbar was not enabled."
@@ -84,23 +84,20 @@ testcase tIBIS111158
     sleep(2)
     Kontext "FormControls"
     try
-        if SwitchControlDesignMode.IsEnabled then
+    	if SwitchControlDesignMode.GetState(2) = 0 then
             '/// Click on 'Design Mode on/off' button on 'Form Controls'-toolbar
             SwitchControlDesignMode.click
             sleep(2)
-            '/// Click on 'Form Design' button on 'Form Controls'-toolbar                
-            FormDesignTools.Click
-            sleep(2)
-        else
-            printlog "Form controls toolbar was not enabled."
         end if
     catch
-        QAErrorlog "Document is opened in design mode -> #111099#"
-        QAErrorlog "No need to test if that one isn't fixed -> aborted"
+        warnlog "Form controls toolbar was not enabled, maybe the doc is writeprotected."
+        Call hToolbarSelect("CONTROLS", false)
         call hCloseDocument
         goto endsub
     endcatch
-
+    '/// Click on 'Form Design' button on 'Form Controls'-toolbar                
+    FormDesignTools.Click
+    sleep(2)
     Kontext "FormDesignTools"
     if FormDesignTools.Exists(2) then
         If ShowFmExplorer.IsEnabled then

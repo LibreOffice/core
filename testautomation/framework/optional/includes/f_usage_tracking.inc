@@ -31,22 +31,19 @@
 '*
 '\******************************************************************************
 
-' Concept
-' The usage tracking functionality is disabled during test init.
-' Configuration is done in Tools/Options. There a tabpage must exist that
-' offers the functionality to enable/disable tracking and to show what has 
-' logged.
-    
 private const LOGFILE = "user\temp\Feedback\Current.csv"
 
 '*******************************************************************************
 
 testcase tUsageTracking1
 
-    printlog( "Test case 1: Presence of the Usage Tracking featureset (API)" )
+    printlog( "Test case 1: Presence of the Usage Tracking featureset" )
+    
+    ' Broken in CWS sb111'
+    ' Currently missing: Check for Office brand, StarOffice should always have OOoImp enabled'
     
     if ( not gOOoImprovementIsEnabled ) then
-        warnlog( "Could not access API for usage tracking program" )
+        warnlog( "Usage tracking program is not enabled for this build" )
     endif
     
 endcase
@@ -87,13 +84,19 @@ testcase tUsageTracking3
     if ( TabOOoImprovement.exists( 1 ) ) then
     
         if ( not ParticipateNo.isChecked() ) then
-            qaerrorlog( "#i98736# - UI should reflect current status for usage tracking: No" )
+            warnlog( "#i98736# - UI should reflect current status for usage tracking: No" )
         endif
         
         if ( ShowData.isEnabled() ) then
-            qaerrorlog( "#i97340# - Show data button should not be enabled if nothing is logged" )
+            warnlog( "#i97340# - Show data button should not be enabled if nothing is logged" )
     
             ShowData.click()
+            
+            kontext "FilterAuswahl"
+            if ( FilterAuswahl.exists( 2 ) ) then
+                warnlog( "Filter Selection dialog is not expected at this point, ")
+                FilterAuswahl.cancel()
+            endif
             
             kontext "Active"
             if ( Active.exists( 2 ) ) then
@@ -118,7 +121,7 @@ testcase tUsageTracking3
     else
         warnlog( "OOo Improvement Tabpage (Tools/Options) is missing" )
     endif
-    
+      
     kontext "OptionenDlg"
     OptionenDlg.cancel()
     
