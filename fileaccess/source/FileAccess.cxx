@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: FileAccess.cxx,v $
- * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,7 +58,6 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
-#include <com/sun/star/ucb/XContentCreator.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 
@@ -480,11 +476,7 @@ void OFileAccess::createFolder( const rtl::OUString& NewFolderURL )
 
     ucbhelper::Content aCnt( aURL.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
 
-    Reference< XContentCreator > xCreator = Reference< XContentCreator >( aCnt.get(), UNO_QUERY );
-    if ( !xCreator.is() )
-        return;
-
-    Sequence< ContentInfo > aInfo = xCreator->queryCreatableContentsInfo();
+    Sequence< ContentInfo > aInfo = aCnt.queryCreatableContentsInfo();
     sal_Int32 nCount = aInfo.getLength();
     if ( nCount == 0 )
         return;
@@ -758,56 +750,51 @@ bool OFileAccess::createNewFile( const rtl::OUString & rParentURL,
 {
     ucbhelper::Content aParentCnt( rParentURL, mxEnvironment );
 
-    Reference< XContentCreator > xCreator
-        = Reference< XContentCreator >( aParentCnt.get(), UNO_QUERY );
-    if ( xCreator.is() )
+    Sequence< ContentInfo > aInfo = aParentCnt.queryCreatableContentsInfo();
+    sal_Int32 nCount = aInfo.getLength();
+    if ( nCount == 0 )
+        return false;
+
+    for ( sal_Int32 i = 0; i < nCount; ++i )
     {
-        Sequence< ContentInfo > aInfo = xCreator->queryCreatableContentsInfo();
-        sal_Int32 nCount = aInfo.getLength();
-        if ( nCount == 0 )
-            return false;
-
-        for ( sal_Int32 i = 0; i < nCount; ++i )
+        const ContentInfo & rCurr = aInfo[i];
+        if ( ( rCurr.Attributes
+               & ContentInfoAttribute::KIND_DOCUMENT ) &&
+             ( rCurr.Attributes
+               & ContentInfoAttribute::INSERT_WITH_INPUTSTREAM ) )
         {
-            const ContentInfo & rCurr = aInfo[i];
-            if ( ( rCurr.Attributes
-                    & ContentInfoAttribute::KIND_DOCUMENT ) &&
-                 ( rCurr.Attributes
-                    & ContentInfoAttribute::INSERT_WITH_INPUTSTREAM ) )
+            // Make sure the only required bootstrap property is
+            // "Title",
+            const Sequence< Property > & rProps = rCurr.Properties;
+            if ( rProps.getLength() != 1 )
+                continue;
+
+            if ( !rProps[ 0 ].Name.equalsAsciiL(
+                     RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+                continue;
+
+            Sequence<rtl::OUString> aNames(1);
+            rtl::OUString* pNames = aNames.getArray();
+            pNames[0] = rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM( "Title" ) );
+            Sequence< Any > aValues(1);
+            Any* pValues = aValues.getArray();
+            pValues[0] = makeAny( rtl::OUString( rTitle ) );
+
+            try
             {
-                // Make sure the only required bootstrap property is
-                // "Title",
-                const Sequence< Property > & rProps = rCurr.Properties;
-                if ( rProps.getLength() != 1 )
+                ucbhelper::Content aNew;
+                if ( aParentCnt.insertNewContent(
+                         rCurr.Type, aNames, aValues, data, aNew ) )
+                    return true; // success.
+                else
                     continue;
-
-                if ( !rProps[ 0 ].Name.equalsAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
-                    continue;
-
-                Sequence<rtl::OUString> aNames(1);
-                rtl::OUString* pNames = aNames.getArray();
-                pNames[0] = rtl::OUString(
-                                RTL_CONSTASCII_USTRINGPARAM( "Title" ) );
-                Sequence< Any > aValues(1);
-                Any* pValues = aValues.getArray();
-                pValues[0] = makeAny( rtl::OUString( rTitle ) );
-
-                try
-                {
-                    ucbhelper::Content aNew;
-                    if ( aParentCnt.insertNewContent(
-                            rCurr.Type, aNames, aValues, data, aNew ) )
-                        return true; // success.
-                    else
-                        continue;
-                }
-                catch ( CommandFailedException const & )
-                {
-                    // Interaction Handler already handled the
-                    // error that has occured...
-                    continue;
-                }
+            }
+            catch ( CommandFailedException const & )
+            {
+                // Interaction Handler already handled the
+                // error that has occured...
+                continue;
             }
         }
     }

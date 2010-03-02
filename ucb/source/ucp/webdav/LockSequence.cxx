@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: LockSequence.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,12 +71,11 @@ struct LockSequenceParseContext
 extern "C" int LockSequence_startelement_callback(
     void *,
     int parent,
-    const char *nspace,
+    const char * /*nspace*/,
     const char *name,
     const char ** )
 {
-    if ( ( name != 0 ) &&
-         ( ( nspace == 0 ) || ( strcmp( nspace, "" ) == 0 ) ) )
+    if ( name != 0 )
     {
         switch ( parent )
         {
@@ -347,7 +343,7 @@ bool LockSequence::createFromXML( const rtl::OString & rInData,
             rOutData[ nCount - 1 ] = *aCtx.pLock;
         }
 
-        nStart = nEnd + TOKEN_LENGTH + 1;
+        nStart = nEnd + TOKEN_LENGTH;
         nEnd   = rInData.indexOf( "</activelock>", nStart );
     }
 

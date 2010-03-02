@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: layoutmanager.cxx,v $
- * $Revision: 1.72 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -6183,16 +6180,6 @@ sal_Bool LayoutManager::implts_resetMenuBar()
     }
 
     return sal_False;
-}
-
-void LayoutManager::implts_setMenuBarCloser(sal_Bool bCloserState)
-{
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    WriteGuard aWriteLock( m_aLock );
-    m_bMenuBarCloser = bCloserState;
-    aWriteLock.unlock();
-
-    implts_updateMenuBarClose();
 }
 
 sal_Int16 LayoutManager::implts_getCurrentSymbolsSize()

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: svdedxv.cxx,v $
- * $Revision: 1.62 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,15 +41,15 @@
 #include <vcl/hatch.hxx>
 #include <svl/whiter.hxx>
 #include <svl/style.hxx>
-#include <editstat.hxx>
+#include <editeng/editstat.hxx>
 #include <tools/config.hxx>
 #include <vcl/cursor.hxx>
-#include <svx/unotext.hxx>
+#include <editeng/unotext.hxx>
 
-#include <svx/editeng.hxx>
-#include <svx/editobj.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include "svditext.hxx"
 #include <svx/svdoutl.hxx>
 #include <svx/sdtfchim.hxx>
@@ -73,8 +70,8 @@
 #include "svdstr.hrc"   // Namen aus der Resource
 #include "svdglob.hxx"  // StringCache
 #include "globl3d.hxx"
-#include <svx/outliner.hxx>
-#include <svx/adjitem.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/adjitem.hxx>
 
 // #98988#
 #include <svtools/colorcfg.hxx>

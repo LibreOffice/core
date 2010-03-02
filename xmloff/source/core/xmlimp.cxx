@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlimp.cxx,v $
- * $Revision: 1.112.2.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -101,6 +98,7 @@ sal_Char __READONLY_DATA sXML_np__of[] = "_of";
 sal_Char __READONLY_DATA sXML_np__style[] = "_style";
 sal_Char __READONLY_DATA sXML_np__text[] = "_text";
 sal_Char __READONLY_DATA sXML_np__table[] = "_table";
+sal_Char __READONLY_DATA sXML_np__table_ext[] = "_table_ooo";
 sal_Char __READONLY_DATA sXML_np__draw[] = "_draw";
 sal_Char __READONLY_DATA sXML_np__dr3d[] = "_dr3d";
 sal_Char __READONLY_DATA sXML_np__fo[] = "_fo";
@@ -259,6 +257,9 @@ void SvXMLImport::_InitCtor()
         mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__table ) ),
                             GetXMLToken(XML_N_TABLE),
                             XML_NAMESPACE_TABLE );
+        mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__table_ext ) ),
+                            GetXMLToken(XML_N_TABLE_EXT),
+                            XML_NAMESPACE_TABLE_EXT );
         mpNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__draw ) ),
                             GetXMLToken(XML_N_DRAW),
                             XML_NAMESPACE_DRAW );

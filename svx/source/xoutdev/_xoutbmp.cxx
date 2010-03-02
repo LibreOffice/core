@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: _xoutbmp.cxx,v $
- * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,9 +38,9 @@
 #include <svl/solar.hrc>
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
-#include "svx/impgrf.hxx"
 #include "xoutbmp.hxx"
 #include <svtools/FilterConfigItem.hxx>
+#include <svtools/filter.hxx>
 
 // -----------
 // - Defines -
@@ -330,7 +327,7 @@ USHORT XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
         INetURLObject   aURL( rFileName );
         Graphic         aGraphic;
         String          aExt;
-        GraphicFilter*  pFilter = GetGrfFilter();
+        GraphicFilter*  pFilter = GraphicFilter::GetGraphicFilter();
         USHORT          nErr = GRFILTER_FILTERERROR, nFilter = GRFILTER_FORMAT_NOTFOUND;
         BOOL            bTransparent = rGraphic.IsTransparent(), bAnimated = rGraphic.IsAnimated();
 

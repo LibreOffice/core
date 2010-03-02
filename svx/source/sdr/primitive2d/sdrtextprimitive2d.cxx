@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdrtextprimitive2d.cxx,v $
- *
- * $Revision: 1.2.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,9 +31,9 @@
 #include <basegfx/color/bcolor.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/editobj.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/flditem.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <unoapi.hxx>
 #include <svx/svdpage.hxx>
@@ -121,7 +117,7 @@ namespace drawinglayer
             mbContainsOtherFields(false)
         {
             const EditTextObject& rETO = maOutlinerParaObject.GetTextObject();
-            
+
             mbContainsPageField = rETO.HasField(SvxPageField::StaticType());
             mbContainsPageCountField = rETO.HasField(SvxPagesField::StaticType());
             mbContainsOtherFields = rETO.HasField(SvxHeaderField::StaticType())

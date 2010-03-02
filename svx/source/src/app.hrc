@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: app.hrc,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -138,7 +135,6 @@
 #define RID_OFADLG_OPTIONS_TREE         (RID_OFA_START + 115)
 #define RID_OFADLG_OPTIONS_TREE_PAGES   (RID_OFA_START + 116)
 #define RID_OFADLG_AWCP_VALUES          (RID_OFA_START + 117)
-#define RID_OFADLG_OPTIONS_TREE_HINT    (RID_OFA_START + 118)
 #define RID_OFAPAGE_AUTOCOMPLETE_OPTIONS (RID_OFA_START + 119)
 #define RID_OFAPAGE_MSFILTEROPT         (RID_OFA_START + 120)
 #define RID_OFAPAGE_MSFILTEROPT2        (RID_OFA_START + 121)

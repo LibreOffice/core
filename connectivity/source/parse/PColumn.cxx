@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PColumn.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -116,7 +113,7 @@ OParseColumn* OParseColumn::createColumnForResultSet( const Reference< XResultSe
     const Reference< XDatabaseMetaData >& _rxDBMetaData, sal_Int32 _nColumnPos )
 {
     OParseColumn* pColumn = new OParseColumn(
-        _rxResMetaData->getColumnName( _nColumnPos ),
+        _rxResMetaData->getColumnLabel( _nColumnPos ),
         _rxResMetaData->getColumnTypeName( _nColumnPos ),
         ::rtl::OUString(),
         _rxResMetaData->isNullable( _nColumnPos ),
@@ -135,6 +132,7 @@ OParseColumn* OParseColumn::createColumnForResultSet( const Reference< XResultSe
         eComplete
     ) );
     pColumn->setIsSearchable( _rxResMetaData->isSearchable( _nColumnPos ) );
+    pColumn->setRealName(_rxResMetaData->getColumnName( _nColumnPos ));
     return pColumn;
 }
 

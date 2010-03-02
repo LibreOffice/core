@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pkgcontentcaps.cxx,v $
- * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,6 +42,7 @@
     MediaType            (w)       (w)        w
     Title                 r         w         w
     Size                  -         -         r
+    CreatableContentsInfo r         r         r
     Compressed            -         -         w
     Encrypted             -         -         w
     HasEncryptedEntries   r         -         -
@@ -58,6 +56,7 @@
     open                  x         x         x
     transfer              x         x         -
     flush                 x         x         -
+    createNewContent      x         x         -
 
  *************************************************************************/
 #include <com/sun/star/beans/Property.hpp>
@@ -77,6 +76,12 @@ using namespace package_ucp;
 // Content implementation.
 //
 //=========================================================================
+
+#define MAKEPROPSEQUENCE( a ) \
+    uno::Sequence< beans::Property >( a, sizeof( a )  / sizeof( a[ 0 ] ) )
+
+#define MAKECMDSEQUENCE( a ) \
+    uno::Sequence< ucb::CommandInfo >( a, sizeof( a )  / sizeof( a[ 0 ] ) )
 
 //=========================================================================
 //
@@ -145,6 +150,15 @@ uno::Sequence< beans::Property > Content::getProperties(
                     getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
                 ),
+                beans::Property(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                        "CreatableContentsInfo" ) ),
+                    -1,
+                    getCppuType( static_cast<
+                        const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
+                    beans::PropertyAttribute::BOUND
+                        | beans::PropertyAttribute::READONLY
+                ),
                 ///////////////////////////////////////////////////////////////
                 // New properties
                 ///////////////////////////////////////////////////////////////
@@ -157,8 +171,7 @@ uno::Sequence< beans::Property > Content::getProperties(
                         | beans::PropertyAttribute::READONLY
                 )
             };
-            return uno::Sequence< beans::Property >(
-                                            aRootFolderPropertyInfoTable, 6 );
+            return MAKEPROPSEQUENCE( aRootFolderPropertyInfoTable );
         }
         else
         {
@@ -210,13 +223,21 @@ uno::Sequence< beans::Property > Content::getProperties(
                     -1,
                     getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                     beans::PropertyAttribute::BOUND
+                ),
+                beans::Property(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                        "CreatableContentsInfo" ) ),
+                    -1,
+                    getCppuType( static_cast<
+                        const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
+                    beans::PropertyAttribute::BOUND
+                        | beans::PropertyAttribute::READONLY
                 )
                 ///////////////////////////////////////////////////////////////
                 // New properties
                 ///////////////////////////////////////////////////////////////
             };
-            return uno::Sequence< beans::Property >(
-                                            aFolderPropertyInfoTable, 5 );
+            return MAKEPROPSEQUENCE( aFolderPropertyInfoTable );
         }
     }
     else
@@ -275,6 +296,15 @@ uno::Sequence< beans::Property > Content::getProperties(
                 beans::PropertyAttribute::BOUND
                     | beans::PropertyAttribute::READONLY
             ),
+            beans::Property(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                    "CreatableContentsInfo" ) ),
+                -1,
+                getCppuType( static_cast<
+                    const uno::Sequence< ucb::ContentInfo > * >( 0 ) ),
+                beans::PropertyAttribute::BOUND
+                | beans::PropertyAttribute::READONLY
+            ),
             ///////////////////////////////////////////////////////////////
             // New properties
             ///////////////////////////////////////////////////////////////
@@ -291,7 +321,7 @@ uno::Sequence< beans::Property > Content::getProperties(
                 beans::PropertyAttribute::BOUND
             )
         };
-        return uno::Sequence< beans::Property >( aStreamPropertyInfoTable, 8 );
+        return MAKEPROPSEQUENCE( aStreamPropertyInfoTable );
     }
 }
 
@@ -360,6 +390,12 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                     getCppuType(
                         static_cast< ucb::TransferInfo * >( 0 ) )
                 ),
+                ucb::CommandInfo(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "createNewContent" ) ),
+                    -1,
+                    getCppuType( static_cast< ucb::ContentInfo * >( 0 ) )
+                ),
                 ///////////////////////////////////////////////////////////
                 // New commands
                 ///////////////////////////////////////////////////////////
@@ -370,8 +406,7 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                 )
             };
 
-            return uno::Sequence<
-                    ucb::CommandInfo >( aRootFolderCommandInfoTable, 7 );
+            return MAKECMDSEQUENCE( aRootFolderCommandInfoTable );
         }
         else
         {
@@ -439,6 +474,12 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                     getCppuType(
                         static_cast< ucb::TransferInfo * >( 0 ) )
                 ),
+                ucb::CommandInfo(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "createNewContent" ) ),
+                    -1,
+                    getCppuType( static_cast< ucb::ContentInfo * >( 0 ) )
+                ),
                 ///////////////////////////////////////////////////////////
                 // New commands
                 ///////////////////////////////////////////////////////////
@@ -449,8 +490,7 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                 )
             };
 
-            return uno::Sequence<
-                    ucb::CommandInfo >( aFolderCommandInfoTable, 9 );
+            return MAKECMDSEQUENCE( aFolderCommandInfoTable );
         }
     }
     else
@@ -517,8 +557,6 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             ///////////////////////////////////////////////////////////////
         };
 
-        return uno::Sequence< ucb::CommandInfo >(
-                                            aStreamCommandInfoTable, 7 );
+        return MAKECMDSEQUENCE( aStreamCommandInfoTable );
     }
 }
-
