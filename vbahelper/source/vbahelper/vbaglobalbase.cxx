@@ -85,9 +85,14 @@ VbaGlobalsBase::createInstanceWithArguments( const ::rtl::OUString& ServiceSpeci
 {
 
     uno::Reference< uno::XInterface > xReturn;
-
+    OSL_TRACE("VbaGlobalsBase::createInstanceWithArguments(%s)", rtl::OUStringToOString( ServiceSpecifier, RTL_TEXTENCODING_UTF8 ).getStr() );
     if ( hasServiceName( ServiceSpecifier ) )
+    {
+        OSL_TRACE("VbaGlobalsBase::hasServiceName(%s) - true", rtl::OUStringToOString( ServiceSpecifier, RTL_TEXTENCODING_UTF8 ).getStr() );
         xReturn = mxContext->getServiceManager()->createInstanceWithArgumentsAndContext( ServiceSpecifier, Arguments, mxContext );
+    }
+    else
+        OSL_TRACE("VbaGlobalsBase::hasServiceName(%s) - false", rtl::OUStringToOString( ServiceSpecifier, RTL_TEXTENCODING_UTF8 ).getStr() );
     return xReturn;
 }
 

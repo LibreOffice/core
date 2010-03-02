@@ -52,6 +52,8 @@
 
 #include <basic/basrdll.hxx>
 #include <vos/mutex.hxx>
+#include <basic/sbobjmod.hxx>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
 
 // for the bsearch
@@ -72,6 +74,13 @@
 #include <vcl/svapp.hxx>
  using namespace ::com::sun::star;
 
+#include <com/sun/star/script/XLibraryContainer.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/awt/XDialogProvider.hpp>
+#include <com/sun/star/awt/XTopWindow.hpp>
+#include <com/sun/star/awt/XControl.hpp>
+#include <cppuhelper/implbase1.hxx>
+#include <comphelper/anytostring.hxx>
 
 TYPEINIT1(SbModule,SbxObject)
 TYPEINIT1(SbMethod,SbxMethod)
@@ -79,6 +88,8 @@ TYPEINIT1(SbProperty,SbxProperty)
 TYPEINIT1(SbProcedureProperty,SbxProperty)
 TYPEINIT1(SbJScriptModule,SbModule)
 TYPEINIT1(SbJScriptMethod,SbMethod)
+TYPEINIT1(SbObjModule,SbModule)
+TYPEINIT1(SbUserFormModule,SbObjModule)
 
 SV_DECL_VARARR(SbiBreakpoints,USHORT,4,4)
 SV_IMPL_VARARR(SbiBreakpoints,USHORT)
@@ -148,12 +159,13 @@ bool UnlockControllerHack( StarBASIC* pBasic )
 // Ein BASIC-Modul hat EXTSEARCH gesetzt, damit die im Modul enthaltenen
 // Elemente von anderen Modulen aus gefunden werden koennen.
 
-SbModule::SbModule( const String& rName )
+SbModule::SbModule( const String& rName,  bool bVBACompat )
          : SbxObject( String( RTL_CONSTASCII_USTRINGPARAM("StarBASICModule") ) ),
-           pImage( NULL ), pBreaks( NULL ), pClassData( NULL )
+           pImage( NULL ), pBreaks( NULL ), pClassData( NULL ), mbVBACompat( bVBACompat ),  pDocObject( NULL ), bIsProxyModule( false )
 {
     SetName( rName );
     SetFlag( SBX_EXTSEARCH | SBX_GBLSEARCH );
+    SetModuleType( com::sun::star::script::ModuleType::Normal );
 }
 
 SbModule::~SbModule()
@@ -328,7 +340,10 @@ void SbModule::Clear()
 
 SbxVariable* SbModule::Find( const XubString& rName, SbxClassType t )
 {
+    // make sure a search in an uninstatiated class module will fail
     SbxVariable* pRes = SbxObject::Find( rName, t );
+    if ( bIsProxyModule )
+        return NULL;
     if( !pRes && pImage )
     {
         SbiInstance* pInst = pINST;
@@ -430,6 +445,7 @@ void SbModule::SetSource32( const ::rtl::OUString& r )
     aOUSource = r;
     StartDefinitions();
     SbiTokenizer aTok( r );
+        aTok.SetCompatible( IsVBACompat() );
     while( !aTok.IsEof() )
     {
         SbiToken eEndTok = NIL;
@@ -453,13 +469,6 @@ void SbModule::SetSource32( const ::rtl::OUString& r )
                 if( eCurTok == PROPERTY )
                 {
                     eEndTok = ENDPROPERTY; break;
-                }
-                if( eCurTok == OPTION )
-                {
-                    eCurTok = aTok.Next();
-                    if( eCurTok == COMPATIBLE
-                    || ( ( eCurTok == VBASUPPORT ) && ( aTok.Next() == NUMBER ) && ( aTok.GetDbl()== 1 ) ) )
-                        aTok.SetCompatible( true );
                 }
             }
             eLastTok = eCurTok;
@@ -600,7 +609,15 @@ void ClearUnoObjectsInRTL_Impl( StarBASIC* pBasic )
     if( ((StarBASIC*)p) != pBasic )
         ClearUnoObjectsInRTL_Impl_Rek( (StarBASIC*)p );
 }
+bool SbModule::IsVBACompat()
+{
+    return mbVBACompat;
+}
 
+void SbModule::SetVBACompat( bool bCompat )
+{
+    mbVBACompat = bCompat;
+}
 // Ausfuehren eines BASIC-Unterprogramms
 USHORT SbModule::Run( SbMethod* pMeth )
 {
@@ -695,10 +712,9 @@ USHORT SbModule::Run( SbMethod* pMeth )
             if( pRt->pNext )
                 pRt->pNext->block();
             pINST->pRun = pRt;
-            if ( SbiRuntime ::isVBAEnabled() )
+            if ( mbVBACompat )
                         {
                 pINST->EnableCompatibility( TRUE );
-                pRt->SetVBAEnabled( true );
                         }
             while( pRt->Step() ) {}
             if( pRt->pNext )
@@ -1482,6 +1498,390 @@ SbJScriptMethod::~SbJScriptMethod()
 {}
 
 
+/////////////////////////////////////////////////////////////////////////
+SbObjModule::SbObjModule( const String& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsVbaCompatible )
+    : SbModule( rName, bIsVbaCompatible )
+{
+    SetModuleType( mInfo.ModuleType );
+    if ( mInfo.ModuleType == script::ModuleType::Form )
+    {
+        SetClassName( rtl::OUString::createFromAscii( "Form" ) );
+    }
+    else if ( mInfo.ModuleObject.is() )
+        SetUnoObject( uno::makeAny( mInfo.ModuleObject ) );
+}
+void
+SbObjModule::SetUnoObject( const uno::Any& aObj ) throw ( uno::RuntimeException )
+{
+    SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,(SbxVariable*)pDocObject);
+    if ( pUnoObj && pUnoObj->getUnoAny() == aObj ) // object is equal, nothing to do
+        return;
+    pDocObject = new SbUnoObject( GetName(), uno::makeAny( aObj ) );
+
+    com::sun::star::uno::Reference< com::sun::star::lang::XServiceInfo > xServiceInfo( aObj, com::sun::star::uno::UNO_QUERY_THROW );
+    if( xServiceInfo->supportsService( rtl::OUString::createFromAscii( "ooo.vba.excel.Worksheet" ) ) )
+    {
+        SetClassName( rtl::OUString::createFromAscii( "Worksheet" ) );
+    }
+    else if( xServiceInfo->supportsService( rtl::OUString::createFromAscii( "ooo.vba.excel.Workbook" ) ) )
+    {
+        SetClassName( rtl::OUString::createFromAscii( "Workbook" ) );
+    }
+}
+
+SbxVariable*
+SbObjModule::GetObject()
+{
+    return pDocObject;
+}
+SbxVariable*
+SbObjModule::Find( const XubString& rName, SbxClassType t )
+{
+    //OSL_TRACE("SbObjectModule find for %s", rtl::OUStringToOString(  rName, RTL_TEXTENCODING_UTF8 ).getStr() );
+    SbxVariable* pVar = NULL;
+    if ( !pVar && pDocObject)
+        pVar = pDocObject->Find( rName, t );
+    if ( !pVar )
+        pVar = SbModule::Find( rName, t );
+    return pVar;
+}
+
+typedef ::cppu::WeakImplHelper1< awt::XTopWindowListener > EventListener_BASE;
+
+class FormObjEventListenerImpl : public EventListener_BASE
+{
+    SbUserFormModule* mpUserForm;
+    uno::Reference< lang::XComponent > mxComponent;
+    bool mbDisposed;
+    sal_Bool mbOpened;
+    sal_Bool mbActivated;
+    sal_Bool mbShowing;
+    FormObjEventListenerImpl(); // not defined
+    FormObjEventListenerImpl(const FormObjEventListenerImpl&); // not defined
+public:
+    FormObjEventListenerImpl( SbUserFormModule* pUserForm, const uno::Reference< lang::XComponent >& xComponent ) : mpUserForm( pUserForm ), mxComponent( xComponent) , mbDisposed( false ), mbOpened( sal_False ), mbActivated( sal_False ), mbShowing( sal_False )
+    {
+        if ( mxComponent.is() );
+        {
+        uno::Reference< awt::XTopWindow > xList( mxComponent, uno::UNO_QUERY_THROW );;
+            //uno::Reference< awt::XWindow > xList( mxComponent, uno::UNO_QUERY_THROW );;
+            OSL_TRACE("*********** Registering the listener");
+            xList->addTopWindowListener( this );
+        }
+    }
+
+    ~FormObjEventListenerImpl()
+    {
+        removeListener();
+    }
+    sal_Bool isShowing() { return mbShowing; }
+    void removeListener()
+    {
+        try
+        {
+            if ( mxComponent.is() && !mbDisposed )
+            {
+                uno::Reference< awt::XTopWindow > xList( mxComponent, uno::UNO_QUERY_THROW );;
+                OSL_TRACE("*********** Removing the listener");
+                xList->removeTopWindowListener( this );
+                mxComponent = NULL;
+            }
+        }
+        catch( uno::Exception& ) {}
+    }
+    virtual void SAL_CALL windowOpened( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException)
+    {
+        if ( mpUserForm  )
+        {
+            mbOpened = sal_True;
+            mbShowing = sal_True;
+            if ( mbActivated )
+            {
+                mbOpened = mbActivated = sal_False;
+                mpUserForm->triggerActivateEvent();
+            }
+        }
+    }
+
+    //liuchen 2009-7-21, support Excel VBA Form_QueryClose event
+    virtual void SAL_CALL windowClosing( const lang::EventObject& e ) throw (uno::RuntimeException)
+    {
+#if IN_THE_FUTURE
+        uno::Reference< awt::XDialog > xDialog( e.Source, uno::UNO_QUERY );
+        if ( xDialog.is() )
+        {
+            uno::Reference< awt::XControl > xControl( xDialog, uno::UNO_QUERY );
+            if ( xControl->getPeer().is() )
+            {
+                uno::Reference< document::XVbaMethodParameter > xVbaMethodParameter( xControl->getPeer(), uno::UNO_QUERY );
+                if ( xVbaMethodParameter.is() )
+                {
+                    sal_Int8 nCancel = 0;
+                    sal_Int8 nCloseMode = 0;
+
+                    Sequence< Any > aParams;
+                    aParams.realloc(2);
+                    aParams[0] <<= nCancel;
+                    aParams[1] <<= nCloseMode;
+
+                    mpUserForm->triggerMethod( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Userform_QueryClose") ),
+                                                aParams);
+                    xVbaMethodParameter->setVbaMethodParameter( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Cancel")), aParams[0]);
+                    return;
+
+                }
+            }
+        }
+
+        mpUserForm->triggerMethod( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Userform_QueryClose") ) );
+#endif
+    }
+    //liuchen 2009-7-21
+
+    virtual void SAL_CALL windowClosed( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException) { mbOpened = sal_False; mbShowing = sal_False; }
+    virtual void SAL_CALL windowMinimized( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException) {}
+    virtual void SAL_CALL windowNormalized( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException){}
+    virtual void SAL_CALL windowActivated( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException)
+    {
+        if ( mpUserForm  )
+        {
+            mbActivated = sal_True;
+            if ( mbOpened )
+            {
+                mbOpened = mbActivated = sal_False;
+                mpUserForm->triggerActivateEvent();
+            }
+        }
+    }
+
+    virtual void SAL_CALL windowDeactivated( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException)
+    {
+        if ( mpUserForm  )
+            mpUserForm->triggerDeActivateEvent();
+    }
+
+
+    virtual void SAL_CALL disposing( const lang::EventObject& Source ) throw (uno::RuntimeException)
+    {
+        OSL_TRACE("** Userform/Dialog disposing");
+        mbDisposed = true;
+        uno::Any aSource;
+        aSource <<= Source;
+        mxComponent = NULL;
+        if ( mpUserForm )
+            mpUserForm->ResetApiObj();
+    }
+};
+
+SbUserFormModule::SbUserFormModule( const String& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsCompat )
+    :SbObjModule( rName, mInfo, bIsCompat ), mbInit( false )
+{
+        m_xModel.set( mInfo.ModuleObject, uno::UNO_QUERY_THROW );
+}
+
+void SbUserFormModule::ResetApiObj()
+{
+        if (  m_xDialog.is() ) // probably someone close the dialog window
+    {
+            triggerTerminateEvent();
+        }
+        pDocObject = NULL;
+    m_xDialog = NULL;
+}
+
+void SbUserFormModule::triggerMethod( const String& aMethodToRun )
+{
+    Sequence< Any > aArguments;
+    triggerMethod( aMethodToRun, aArguments );
+}
+void SbUserFormModule::triggerMethod( const String& aMethodToRun, Sequence< Any >& aArguments)
+{
+    OSL_TRACE("*** trigger %s ***", rtl::OUStringToOString( aMethodToRun, RTL_TEXTENCODING_UTF8 ).getStr() );
+    // Search method
+    SbxVariable* pMeth = SbObjModule::Find( aMethodToRun, SbxCLASS_METHOD );
+    if( pMeth )
+    {
+#if IN_THE_FUTURE
+                 //liuchen 2009-7-21, support Excel VBA UserForm_QueryClose event with parameters
+        if ( aArguments.getLength() > 0 )   // Setup parameters
+        {
+            SbxArrayRef xArray = new SbxArray;
+            xArray->Put( pMeth, 0 );    // Method as parameter 0
+
+            for ( sal_Int32 i = 0; i < aArguments.getLength(); ++i )
+            {
+                SbxVariableRef xSbxVar = new SbxVariable( SbxVARIANT );
+                unoToSbxValue( static_cast< SbxVariable* >( xSbxVar ), aArguments[i] );
+                xArray->Put( xSbxVar, static_cast< USHORT >( i ) + 1 );
+
+                // Enable passing by ref
+                if ( xSbxVar->GetType() != SbxVARIANT )
+                    xSbxVar->SetFlag( SBX_FIXED );
+            }
+            pMeth->SetParameters( xArray );
+
+            SbxValues aVals;
+            pMeth->Get( aVals );
+
+            for ( sal_Int32 i = 0; i < aArguments.getLength(); ++i )
+            {
+                aArguments[i] = sbxToUnoValue( xArray->Get( static_cast< USHORT >(i) + 1) );
+            }
+            pMeth->SetParameters( NULL );
+        }
+        else
+//liuchen 2009-7-21
+#endif
+        {
+            SbxValues aVals;
+            pMeth->Get( aVals );
+        }
+    }
+}
+
+void SbUserFormModule::triggerActivateEvent( void )
+{
+        OSL_TRACE("**** entering SbUserFormModule::triggerActivate");
+    triggerMethod( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("UserForm_activate") ) );
+        OSL_TRACE("**** leaving SbUserFormModule::triggerActivate");
+}
+
+void SbUserFormModule::triggerDeActivateEvent( void )
+{
+        OSL_TRACE("**** SbUserFormModule::triggerDeActivate");
+    triggerMethod( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Userform_DeActivate") ) );
+}
+
+void SbUserFormModule::triggerInitializeEvent( void )
+
+{
+    if ( mbInit )
+        return;
+        OSL_TRACE("**** SbUserFormModule::triggerInitializeEvent");
+    static String aInitMethodName( RTL_CONSTASCII_USTRINGPARAM("Userform_Initialize") );
+    triggerMethod( aInitMethodName );
+    mbInit = true;
+}
+
+void SbUserFormModule::triggerTerminateEvent( void )
+{
+       OSL_TRACE("**** SbUserFormModule::triggerTerminateEvent");
+    static String aTermMethodName( RTL_CONSTASCII_USTRINGPARAM("Userform_Terminate") );
+    triggerMethod( aTermMethodName );
+    mbInit=false;
+}
+
+void SbUserFormModule::load()
+{
+    OSL_TRACE("** load() ");
+    // forces a load
+    if ( !pDocObject )
+        InitObject();
+}
+
+//liuchen 2009-7-21 change to accmordate VBA's beheavior
+void SbUserFormModule::Unload()
+{
+    OSL_TRACE("** Unload() ");
+
+    sal_Int8 nCancel = 0;
+    sal_Int8 nCloseMode = 1;
+
+    Sequence< Any > aParams;
+    aParams.realloc(2);
+    aParams[0] <<= nCancel;
+    aParams[1] <<= nCloseMode;
+
+    triggerMethod( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Userform_QueryClose") ), aParams);
+
+    aParams[0] >>= nCancel;
+    if (nCancel == 1)
+    {
+        return;
+    }
+
+    if ( m_xDialog.is() )
+    {
+        triggerTerminateEvent();
+    }
+    // Search method
+    SbxVariable* pMeth = SbObjModule::Find( String( RTL_CONSTASCII_USTRINGPARAM( "UnloadObject" ) ), SbxCLASS_METHOD );
+    if( pMeth )
+    {
+        OSL_TRACE("Attempting too run the UnloadObjectMethod");
+                m_xDialog = NULL; //release ref to the uno object
+        SbxValues aVals;
+               FormObjEventListenerImpl* pFormListener = dynamic_cast< FormObjEventListenerImpl* >( m_DialogListener.get() );
+        bool bWaitForDispose = true; // assume dialog is showing
+                if ( pFormListener )
+        {
+            bWaitForDispose = pFormListener->isShowing();
+            OSL_TRACE("Showing %d", bWaitForDispose );
+        }
+        pMeth->Get( aVals);
+                if ( !bWaitForDispose )
+                {
+                    // we've either already got a dispose or we'er never going to get one
+            ResetApiObj();
+                } // else wait for dispose
+        OSL_TRACE("UnloadObject completed ( we hope )");
+    }
+}
+//liuchen
+
+void SbUserFormModule::InitObject()
+{
+    try
+    {
+
+        String aHook( RTL_CONSTASCII_USTRINGPARAM( "VBAGlobals" ) );
+        SbUnoObject* pGlobs = (SbUnoObject*)GetParent()->Find( aHook, SbxCLASS_DONTCARE );
+        if ( m_xModel.is() && pGlobs )
+        {
+
+            uno::Reference< lang::XMultiServiceFactory > xVBAFactory( pGlobs->getUnoAny(), uno::UNO_QUERY_THROW );
+            uno::Reference< lang::XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
+            uno::Sequence< uno::Any > aArgs(1);
+            aArgs[ 0 ] <<= m_xModel;
+            rtl::OUString sDialogUrl( RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.script:" ) );
+            rtl::OUString sProjectName( RTL_CONSTASCII_USTRINGPARAM("Standard") );
+            if ( this->GetParent()->GetName().Len() )
+                sProjectName = this->GetParent()->GetName();
+            sDialogUrl = sDialogUrl.concat( sProjectName ).concat( rtl::OUString( '.') ).concat( GetName() ).concat( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("?location=document") ) );
+
+            uno::Reference< awt::XDialogProvider > xProvider( xFactory->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.DialogProvider")), aArgs  ), uno::UNO_QUERY_THROW );
+            m_xDialog = xProvider->createDialog( sDialogUrl );
+
+            // create vba api object
+            aArgs.realloc( 4 );
+            aArgs[ 0 ] = uno::Any();
+            aArgs[ 1 ] <<= m_xDialog;
+            aArgs[ 2 ] <<= m_xModel;
+            aArgs[ 3 ] <<= rtl::OUString( GetParent()->GetName() );
+            pDocObject = new SbUnoObject( GetName(), uno::makeAny( xVBAFactory->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.msforms.UserForm")), aArgs  ) ) );
+            uno::Reference< lang::XComponent > xComponent( aArgs[ 1 ], uno::UNO_QUERY_THROW );
+            // remove old listener if it exists
+            FormObjEventListenerImpl* pFormListener = dynamic_cast< FormObjEventListenerImpl* >( m_DialogListener.get() );
+            if ( pFormListener )
+                pFormListener->removeListener();
+            m_DialogListener = new FormObjEventListenerImpl( this, xComponent );
+
+            triggerInitializeEvent();
+        }
+    }
+    catch( uno::Exception& e )
+    {
+    }
+
+}
+
+SbxVariable*
+SbUserFormModule::Find( const XubString& rName, SbxClassType t )
+{
+    if ( !pDocObject && !GetSbData()->bRunInit && pINST )
+        InitObject();
+    return SbObjModule::Find( rName, t );
+}
 /////////////////////////////////////////////////////////////////////////
 
 SbProperty::SbProperty( const String& r, SbxDataType t, SbModule* p )

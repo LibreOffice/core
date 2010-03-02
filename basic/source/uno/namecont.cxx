@@ -73,7 +73,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <basic/sbmod.hxx>
 
-
 namespace basic
 {
 
@@ -332,7 +331,7 @@ SfxLibraryContainer::SfxLibraryContainer( void )
     , mbOldInfoFormat( sal_False )
     , mbOasis2OOoFormat( sal_False )
     , mpBasMgr( NULL )
-    , mbOwnBasMgr( sal_False )
+    , mbOwnBasMgr( sal_False ), mbVBACompat( sal_False )
 {
     DBG_CTOR( SfxLibraryContainer, NULL );
 
@@ -2724,6 +2723,28 @@ OUString SfxLibraryContainer::expand_url( const OUString& url )
     {
         return url;
     }
+}
+
+::sal_Bool SAL_CALL SfxLibraryContainer::getVBACompatModeOn() throw (RuntimeException)
+{
+    return mbVBACompat;
+}
+
+void SAL_CALL SfxLibraryContainer::setVBACompatModeOn( ::sal_Bool _vbacompatmodeon ) throw (RuntimeException)
+{
+    BasicManager* pBasMgr = getBasicManager();
+    if( pBasMgr )
+    {
+        // get the standard library
+        String aLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
+                if ( pBasMgr->GetName().Len() )
+                    aLibName = pBasMgr->GetName();
+
+        StarBASIC* pBasic = pBasMgr->GetLib( aLibName );
+        if( pBasic )
+            pBasic->SetVBAEnabled( _vbacompatmodeon );
+    }
+        mbVBACompat = _vbacompatmodeon;
 }
 
 // Methods XServiceInfo

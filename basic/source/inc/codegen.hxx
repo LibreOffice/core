@@ -53,6 +53,7 @@ public:
     void GenStmnt();            // evtl. Statement-Opcode erzeugen
     UINT32 GetPC();
     UINT32 GetOffset()              { return GetPC() + 1; }
+    SbModule& GetModule() { return rMod; }
     void Save();
 
     // #29955 for-Schleifen-Ebene pflegen

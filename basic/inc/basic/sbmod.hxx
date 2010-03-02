@@ -34,6 +34,7 @@
 #ifndef _RTL_USTRING_HXX
 #include <rtl/ustring.hxx>
 #endif
+#include <com/sun/star/script/ModuleType.hpp>
 
 class SbMethod;
 class SbProperty;
@@ -63,6 +64,10 @@ protected:
     SbiImage*           pImage;        // the Image
     SbiBreakpoints*     pBreaks;       // Breakpoints
     SbClassData*        pClassData;
+    bool mbVBACompat;
+    INT32 mnType;
+    SbxObjectRef pDocObject; // an impl object ( used by Document Modules )
+    bool    bIsProxyModule;
 
     void            StartDefinitions();
     SbMethod*       GetMethod( const String&, SbxDataType );
@@ -87,7 +92,7 @@ protected:
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_BASICMOD,2);
     TYPEINFO();
-                    SbModule( const String& );
+                    SbModule( const String&, bool bCompat = false );
     virtual void    SetParent( SbxObject* );
     virtual void    Clear();
 
@@ -123,6 +128,11 @@ public:
     BOOL LoadBinaryData( SvStream& );
     BOOL ExceedsLegacyModuleSize();
     void fixUpMethodStart( bool bCvtToLegacy, SbiImage* pImg = NULL ) const;
+        bool IsVBACompat();
+        void SetVBACompat( bool bCompat );
+        INT32 GetModuleType() { return mnType; }
+        void SetModuleType( INT32 nType ) { mnType = nType; }
+    bool GetIsProxyModule() { return bIsProxyModule; }
 };
 
 #ifndef __SB_SBMODULEREF_HXX

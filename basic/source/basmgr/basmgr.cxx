@@ -41,6 +41,7 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <basic/sbmod.hxx>
+#include <basic/sbobjmod.hxx>
 
 #include <basic/sbuno.hxx>
 #include <basic/basmgr.hxx>
@@ -65,6 +66,10 @@
 #include <com/sun/star/script/XStarBasicDialogInfo.hpp>
 #include <com/sun/star/script/XStarBasicLibraryInfo.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
+#include <com/sun/star/script/ModuleInfo.hpp>
+#include <com/sun/star/script/ModuleType.hpp>
+#include <com/sun/star/script/XVBAModuleInfo.hpp>
+#include <com/sun/star/script/XVBACompat.hpp>
 
 #include <cppuhelper/implbase1.hxx>
 
@@ -243,7 +248,15 @@ void BasMgrContainerListenerImpl::addLibraryModulesImpl( BasicManager* pMgr,
             Any aElement = xLibNameAccess->getByName( aModuleName );
             ::rtl::OUString aMod;
             aElement >>= aMod;
-            pLib->MakeModule32( aModuleName, aMod );
+            Reference< XVBAModuleInfo > xVBAModuleInfo( xLibNameAccess, UNO_QUERY );
+            if ( xVBAModuleInfo.is() && xVBAModuleInfo->hasModuleInfo( aModuleName ) )
+            {
+                ModuleInfo mInfo = xVBAModuleInfo->getModuleInfo( aModuleName );
+                OSL_TRACE("#addLibraryModulesImpl - aMod");
+                pLib->MakeModule32( aModuleName, mInfo, aMod );
+            }
+            else
+        pLib->MakeModule32( aModuleName, aMod );
         }
     }
 
@@ -277,11 +290,16 @@ void SAL_CALL BasMgrContainerListenerImpl::elementInserted( const ContainerEvent
     {
         Reference< XLibraryContainer > xScriptCont( Event.Source, UNO_QUERY );
         insertLibraryImpl( xScriptCont, mpMgr, Event.Element, aName );
+        StarBASIC* pLib = mpMgr->GetLib( aName );
+        if ( pLib )
+        {
+            Reference<XVBACompat> xVBACompat( xScriptCont, UNO_QUERY );
+            if ( xVBACompat.is() )
+                pLib->SetVBAEnabled( xVBACompat->getVBACompatModeOn() );
+        }
     }
     else
     {
-        ::rtl::OUString aMod;
-        Event.Element >>= aMod;
 
         StarBASIC* pLib = mpMgr->GetLib( maLibName );
         DBG_ASSERT( pLib, "BasMgrContainerListenerImpl::elementInserted: Unknown lib!");
@@ -290,7 +308,16 @@ void SAL_CALL BasMgrContainerListenerImpl::elementInserted( const ContainerEvent
             SbModule* pMod = pLib->FindModule( aName );
             if( !pMod )
             {
-                pLib->MakeModule32( aName, aMod );
+            ::rtl::OUString aMod;
+            Event.Element >>= aMod;
+                Reference< XVBAModuleInfo > xVBAModuleInfo( Event.Source, UNO_QUERY );
+                if ( xVBAModuleInfo.is() && xVBAModuleInfo->hasModuleInfo( aName ) )
+                {
+                    ModuleInfo mInfo = xVBAModuleInfo->getModuleInfo( aName );
+                    pLib->MakeModule32( aName, mInfo, aMod );
+                }
+                else
+                    pLib->MakeModule32( aName, aMod );
                 pLib->SetModified( FALSE );
             }
         }
@@ -319,10 +346,11 @@ void SAL_CALL BasMgrContainerListenerImpl::elementReplaced( const ContainerEvent
         SbModule* pMod = pLib->FindModule( aName );
         ::rtl::OUString aMod;
         Event.Element >>= aMod;
+
         if( pMod )
-            pMod->SetSource32( aMod );
+                pMod->SetSource32( aMod );
         else
-            pLib->MakeModule32( aName, aMod );
+                pLib->MakeModule32( aName, aMod );
 
         pLib->SetModified( FALSE );
     }

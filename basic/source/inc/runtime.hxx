@@ -433,7 +433,7 @@ class SbiRuntime
     void StepFIND_CM( UINT32, UINT32 );
     void StepFIND_STATIC( UINT32, UINT32 );
 public:
-    void          SetVBAEnabled( bool bEnabled ) { bVBAEnabled = bEnabled; };
+    void          SetVBAEnabled( bool bEnabled );
     USHORT      GetImageFlag( USHORT n ) const;
     USHORT      GetBase();
     xub_StrLen  nLine,nCol1,nCol2;  // aktuelle Zeile, Spaltenbereich

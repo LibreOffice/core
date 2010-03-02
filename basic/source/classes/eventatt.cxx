@@ -55,7 +55,10 @@
 #include <com/sun/star/awt/XDialogProvider.hpp>
 
 #include <com/sun/star/frame/XModel.hpp>
-
+#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <basic/basicmanagerrepository.hxx>
+#include <basic/basmgr.hxx>
 //==================================================================================================
 
 #include <xmlscript/xmldlg_imexp.hxx>
@@ -450,6 +453,43 @@ Any implFindDialogLibForDialog( const Any& rDlgAny, SbxObject* pBasic )
     return aRetDlgLibAny;
 }
 
+Any implFindDialogLibForDialogBasic( const Any& aAnyISP, SbxObject* pBasic, StarBASIC*& pFoundBasic )
+{
+    Any aDlgLibAny;
+    // Find dialog library for dialog, direct access is not possible here
+    StarBASIC* pStartedBasic = (StarBASIC*)pBasic;
+    SbxObject* pParentBasic = pStartedBasic ? pStartedBasic->GetParent() : NULL;
+    SbxObject* pParentParentBasic = pParentBasic ? pParentBasic->GetParent() : NULL;
+
+    SbxObject* pSearchBasic1 = NULL;
+    SbxObject* pSearchBasic2 = NULL;
+    if( pParentParentBasic )
+    {
+        pSearchBasic1 = pParentBasic;
+        pSearchBasic2 = pParentParentBasic;
+    }
+    else
+    {
+        pSearchBasic1 = pStartedBasic;
+        pSearchBasic2 = pParentBasic;
+    }
+    if( pSearchBasic1 )
+    {
+        aDlgLibAny = implFindDialogLibForDialog( aAnyISP, pSearchBasic1 );
+
+        if ( aDlgLibAny.hasValue() )
+            pFoundBasic = (StarBASIC*)pSearchBasic1;
+
+        else if( pSearchBasic2 )
+        {
+            aDlgLibAny = implFindDialogLibForDialog( aAnyISP, pSearchBasic2 );
+            if ( aDlgLibAny.hasValue() )
+                pFoundBasic = (StarBASIC*)pSearchBasic2;
+        }
+    }
+    return aDlgLibAny;
+}
+
 static ::rtl::OUString aDecorationPropName =
     ::rtl::OUString::createFromAscii( "Decoration" );
 static ::rtl::OUString aTitlePropName =
@@ -529,39 +569,51 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
         {}
     }
 
-    // Find dialog library for dialog, direct access is not possible here
-    StarBASIC* pStartedBasic = pINST->GetBasic();
-    SbxObject* pParentBasic = pStartedBasic ? pStartedBasic->GetParent() : NULL;
-    SbxObject* pParentParentBasic = pParentBasic ? pParentBasic->GetParent() : NULL;
-
-    SbxObject* pSearchBasic1 = NULL;
-    SbxObject* pSearchBasic2 = NULL;
-    if( pParentParentBasic )
-    {
-        pSearchBasic1 = pParentBasic;
-        pSearchBasic2 = pParentParentBasic;
-    }
-    else
-    {
-        pSearchBasic1 = pStartedBasic;
-        pSearchBasic2 = pParentBasic;
-    }
-
     Any aDlgLibAny;
-    if( pSearchBasic1 )
-    {
-        aDlgLibAny = implFindDialogLibForDialog( aAnyISP, pSearchBasic1 );
-        if( pSearchBasic2 && aDlgLibAny.getValueType().getTypeClass() == TypeClass_VOID )
-            aDlgLibAny = implFindDialogLibForDialog( aAnyISP, pSearchBasic2 );
-    }
-
-
+    bool bDocDialog = false;
+    StarBASIC* pFoundBasic = NULL;
     OSL_TRACE("About to try get a hold of ThisComponent");
-    Reference< frame::XModel > xModel = getModelFromBasic( pStartedBasic ) ;
-    Reference< XScriptListener > xScriptListener = new BasicScriptListener_Impl( pStartedBasic, xModel );
+    Reference< frame::XModel > xModel = getModelFromBasic( pINST->GetBasic() ) ;
+        aDlgLibAny = implFindDialogLibForDialogBasic( aAnyISP, pINST->GetBasic(), pFoundBasic );
+        // If we found the dialog then it belongs to the Search basic
+        if ( !pFoundBasic )
+    {
+            Reference< frame::XDesktop > xDesktop( xMSF->createInstance
+        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ) ) ),
+            UNO_QUERY );
+            Reference< container::XEnumeration > xModels;
+            if ( xDesktop.is() )
+    {
+                Reference< container::XEnumerationAccess > xComponents( xDesktop->getComponents(), UNO_QUERY );
+                if ( xComponents.is() )
+                    xModels.set( xComponents->createEnumeration(), UNO_QUERY );
+                if ( xModels.is() )
+                {
+                    while ( xModels->hasMoreElements() )
+                    {
+                        Reference< frame::XModel > xNextModel( xModels->nextElement(), UNO_QUERY );
+                        if ( xNextModel.is() )
+                        {
+                            BasicManager* pMgr = basic::BasicManagerRepository::getDocumentBasicManager( xNextModel );
+                            if ( pMgr )
+                                aDlgLibAny = implFindDialogLibForDialogBasic( aAnyISP, pMgr->GetLib(0), pFoundBasic );
+                            if ( aDlgLibAny.hasValue() )
+    {
+                                bDocDialog = true;
+                                xModel = xNextModel;
+                                break;
+    }
+                        }
+                    }
+                }
+            }
+        }
+    if ( pFoundBasic )
+        bDocDialog = pFoundBasic->IsDocBasic();
+       Reference< XScriptListener > xScriptListener = new BasicScriptListener_Impl( pINST->GetBasic(), xModel );
 
     Sequence< Any > aArgs( 4 );
-    aArgs[ 0 ] <<= xModel;
+    aArgs[ 0 ] <<= bDocDialog ? xModel : uno::Reference< uno::XInterface >();
     aArgs[ 1 ] <<= xInput;
     aArgs[ 2 ] = aDlgLibAny;
     aArgs[ 3 ] <<= xScriptListener;

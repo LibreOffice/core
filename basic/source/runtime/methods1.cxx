@@ -61,6 +61,7 @@
 #endif
 
 #include <vcl/jobset.hxx>
+#include <basic/sbobjmod.hxx>
 
 #include "sbintern.hxx"
 #include "runtime.hxx"
@@ -2594,14 +2595,15 @@ RTLFUNC(Me)
 
     SbModule* pActiveModule = pINST->GetActiveModule();
     SbClassModuleObject* pClassModuleObject = PTR_CAST(SbClassModuleObject,pActiveModule);
+    SbxVariableRef refVar = rPar.Get(0);
     if( pClassModuleObject == NULL )
     {
         StarBASIC::Error( SbERR_INVALID_USAGE_OBJECT );
+        SbObjModule* pMod = PTR_CAST(SbObjModule,pActiveModule);
+        if ( pMod )
+            refVar->PutObject( pMod );
     }
     else
-    {
-        SbxVariableRef refVar = rPar.Get(0);
         refVar->PutObject( pClassModuleObject );
-    }
 }
 

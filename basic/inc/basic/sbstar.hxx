@@ -37,6 +37,7 @@
 
 #include <basic/sbdef.hxx>
 #include <basic/sberrors.hxx>
+#include <com/sun/star/script/ModuleInfo.hpp>
 
 class SbModule;                     // completed module
 class SbiInstance;                  // runtime instance
@@ -69,6 +70,7 @@ class StarBASIC : public SbxObject
     BOOL            bNoRtl;                 // if TRUE: do not search RTL
     BOOL            bBreak;                 // if TRUE: Break, otherwise Step
     BOOL            bDocBasic;
+    BOOL            bVBAEnabled;
     BasicLibInfo*   pLibInfo;           // Info block for basic manager
     SbLanguageMode  eLanguageMode;      // LanguageMode of the basic object
     BOOL            bQuit;
@@ -117,6 +119,7 @@ public:
     // Compiler-Interface
     SbModule*       MakeModule( const String& rName, const String& rSrc );
     SbModule*       MakeModule32( const String& rName, const ::rtl::OUString& rSrc );
+    SbModule*       MakeModule32( const String& rName, const com::sun::star::script::ModuleInfo& mInfo, const ::rtl::OUString& rSrc );
     BOOL            Compile( SbModule* );
     BOOL            Disassemble( SbModule*, String& rText );
     static void     Stop();
@@ -189,6 +192,8 @@ public:
                     ( const String& rName, USHORT& rStatus );
     static SbMethod* GetActiveMethod( USHORT nLevel = 0 );
     static SbModule* GetActiveModule();
+    void SetVBAEnabled( BOOL bEnabled );
+    BOOL isVBAEnabled();
 
     // #60175 TRUE: SFX-Resource is not displayed on basic errors
     static void StaticSuppressSfxResource( BOOL bSuppress );
