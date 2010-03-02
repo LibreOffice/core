@@ -250,24 +250,6 @@ end function
 '
 '-------------------------------------------------------------------------------
 '
-function hPfadname (Dateipfad$) as string
-    '/// Get the path from a file
-    '/// <u>Input</u>: file with path
-    '/// <u>Return</u>: path without the filename
-    dim wh as integer
-
-    for wh = len(Dateipfad$) to 1 step -1
-        if mid(Dateipfad$,wh,1) = gPathSigne then
-            hpfadname = left(Dateipfad$,wh)
-            exit for
-        else
-            hpfadname = Dateipfad$
-        end if
-    next wh
-end function
-'
-'-------------------------------------------------------------------------------
-'
 function DateiExtract ( sFileDat$ )
     '/// Get the filename from a path
     '/// <u>Input</u>: path with file
