@@ -486,14 +486,14 @@ void XclImpDrawObjBase::ProcessSdrObject( SdrObject& rSdrObj ) const
     {
         if( ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( &rSdrObj, TRUE ) )
         {
-            pInfo->SetMacro( XclControlHelper::GetScMacroName( maMacroName ) );
+            pInfo->SetMacro( XclControlHelper::GetScMacroName( maMacroName, GetDocShell() ) );
             pInfo->SetHlink( maHyperlink );
         }
     }
 #else
     if( mbSimpleMacro && (maMacroName.Len() > 0) )
         if( ScMacroInfo* pInfo = ScDrawLayer::GetMacroInfo( &rSdrObj, TRUE ) )
-            pInfo->SetMacro( XclControlHelper::GetScMacroName( maMacroName ) );
+            pInfo->SetMacro( XclControlHelper::GetScMacroName( maMacroName, GetDocShell() ) );
 #endif
 
     // call virtual function for object type specific processing
@@ -1939,7 +1939,7 @@ void XclImpTbxObjBase::SetDffProperties( const DffPropSet& rDffPropSet )
 
 bool XclImpTbxObjBase::FillMacroDescriptor( ScriptEventDescriptor& rDescriptor ) const
 {
-    return XclControlHelper::FillMacroDescriptor( rDescriptor, DoGetEventType(), GetMacroName() );
+    return XclControlHelper::FillMacroDescriptor( rDescriptor, DoGetEventType(), GetMacroName(), GetDocShell() );
 }
 
 void XclImpTbxObjBase::ConvertFont( ScfPropertySet& rPropSet ) const

@@ -35,6 +35,7 @@
 #include "document.hxx"
 #include "xistream.hxx"
 #include "xlescher.hxx"
+#include <filter/msfilter/msvbahelper.hxx>
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
@@ -298,10 +299,16 @@ Reference< XControlModel > XclControlHelper::GetControlModel( Reference< XShape 
 #define EXC_MACRONAME_PRE "vnd.sun.star.script:Standard."
 #define EXC_MACRONAME_SUF "?language=Basic&location=document"
 
-OUString XclControlHelper::GetScMacroName( const String& rXclMacroName )
+OUString XclControlHelper::GetScMacroName( const String& rXclMacroName, SfxObjectShell* pDocShell )
 {
+    String sTmp( rXclMacroName );
     if( rXclMacroName.Len() > 0 )
-        return CREATE_OUSTRING( EXC_MACRONAME_PRE ) + rXclMacroName + CREATE_OUSTRING( EXC_MACRONAME_SUF );
+    {
+        ooo::vba::VBAMacroResolvedInfo aMacro = ooo::vba::resolveVBAMacro( pDocShell, rXclMacroName, false );
+        if ( aMacro.IsResolved() )
+            return ooo::vba::makeMacroURL( aMacro.ResolvedMacro() );
+
+    }
     return OUString();
 }
 
@@ -335,14 +342,14 @@ spTbxListenerData[] =
 #define EXC_MACROSCRIPT "Script"
 
 bool XclControlHelper::FillMacroDescriptor( ScriptEventDescriptor& rDescriptor,
-        XclTbxEventType eEventType, const String& rXclMacroName )
+        XclTbxEventType eEventType, const String& rXclMacroName, SfxObjectShell* pShell )
 {
     if( rXclMacroName.Len() > 0 )
     {
         rDescriptor.ListenerType = OUString::createFromAscii( spTbxListenerData[ eEventType ].mpcListenerType );
         rDescriptor.EventMethod = OUString::createFromAscii( spTbxListenerData[ eEventType ].mpcEventMethod );
         rDescriptor.ScriptType = CREATE_OUSTRING( EXC_MACROSCRIPT );
-        rDescriptor.ScriptCode = GetScMacroName( rXclMacroName );
+        rDescriptor.ScriptCode = GetScMacroName( rXclMacroName, pShell );
         return true;
     }
     return false;

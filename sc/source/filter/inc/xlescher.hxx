@@ -429,7 +429,7 @@ public:
                         GetControlModel( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
 
     /** Returns the Calc macro name from an Excel macro name. */
-    static ::rtl::OUString GetScMacroName( const String& rXclMacroName );
+    static ::rtl::OUString GetScMacroName( const String& rXclMacroName, SfxObjectShell* pShell = NULL );
     /** Returns the Excel macro name from a Calc macro name. */
     static String       GetXclMacroName( const ::rtl::OUString& rScMacroName );
 
@@ -437,7 +437,7 @@ public:
     static bool         FillMacroDescriptor(
                             ::com::sun::star::script::ScriptEventDescriptor& rDescriptor,
                             XclTbxEventType eEventType,
-                            const String& rXclMacroName );
+                            const String& rXclMacroName, SfxObjectShell* pShell = NULL );
     /** Tries to extract an Excel macro name from the passed macro descriptor. */
     static String       ExtractFromMacroDescriptor(
                             const ::com::sun::star::script::ScriptEventDescriptor& rDescriptor,
