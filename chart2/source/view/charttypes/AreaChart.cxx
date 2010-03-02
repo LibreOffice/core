@@ -402,7 +402,7 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
 
                 m_pShapeFactory->createStripe(xSeriesGroupShape_Shapes
                     , Stripe( aPoint1, aPoint2, fDepth )
-                    , pSeries->getPropertiesOfSeries(), PropertyMapper::getPropertyNameMapForFilledSeriesProperties(), true );
+                    , pSeries->getPropertiesOfSeries(), PropertyMapper::getPropertyNameMapForFilledSeriesProperties(), true, 1 );
             }
         }
     }

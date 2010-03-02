@@ -61,9 +61,11 @@ public:
     void SetManualNormal( const ::com::sun::star::drawing::Direction3D& rNormal );
     ::com::sun::star::drawing::Direction3D getNormal() const;
 
+    void InvertNormal( bool bInvertNormal );
+
     ::com::sun::star::uno::Any      getPolyPolygonShape3D() const;
     ::com::sun::star::uno::Any      getNormalsPolygon() const;
-    ::com::sun::star::uno::Any      getTexturePolygon( bool bRotatedTexture ) const;
+    ::com::sun::star::uno::Any      getTexturePolygon( short nRotatedTexture ) const; //0 to 7 are the different possibilities
 
     ::com::sun::star::drawing::Position3D GetPosition1() const { return m_aPoint1; }
     ::com::sun::star::drawing::Position3D GetPosition2() const { return m_aPoint2; }
@@ -76,6 +78,7 @@ private:
     ::com::sun::star::drawing::Position3D m_aPoint3;
     ::com::sun::star::drawing::Position3D m_aPoint4;
 
+    bool m_bInvertNormal;
     bool m_bManualNormalSet;
     ::com::sun::star::drawing::Direction3D m_aManualNormal;
 };

@@ -534,6 +534,9 @@ void VDiagram::createShapes_3d()
 
     bool bAddFloorAndWall = DiagramHelper::isSupportingFloorAndWall( m_xDiagram );
 
+    const bool bDoubleSided = false;
+    const bool bFlatNormals = true;
+
     //add walls
     {
         uno::Reference< beans::XPropertySet > xWallProp( NULL );
@@ -544,19 +547,31 @@ void VDiagram::createShapes_3d()
         if( !bAddFloorAndWall )
             aWallCID = rtl::OUString();
         uno::Reference< drawing::XShapes > xWallGroup_Shapes( m_pShapeFactory->createGroup3D( xOuterGroup_Shapes, aWallCID ) );
+
+        CuboidPlanePosition eLeftWallPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardLeftWall( uno::Reference< beans::XPropertySet >( m_xDiagram, uno::UNO_QUERY ) ) );
+        CuboidPlanePosition eBackWallPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBackWall( uno::Reference< beans::XPropertySet >( m_xDiagram, uno::UNO_QUERY ) ) );
+
         //add left wall
         {
+            short nRotatedTexture = ( CuboidPlanePosition_Front==eBackWallPos ) ? 3 : 1;
             double xPos = 0.0;
-            CuboidPlanePosition eLeftWallPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardLeftWall( uno::Reference< beans::XPropertySet >( m_xDiagram, uno::UNO_QUERY ) ) );
             if( CuboidPlanePosition_Right==eLeftWallPos )
                 xPos = FIXED_SIZE_FOR_3D_CHART_VOLUME;
             Stripe aStripe( drawing::Position3D(xPos,FIXED_SIZE_FOR_3D_CHART_VOLUME,0)
-                , drawing::Direction3D(0,-FIXED_SIZE_FOR_3D_CHART_VOLUME,0)
-                , drawing::Direction3D(0,0,FIXED_SIZE_FOR_3D_CHART_VOLUME) );
+                , drawing::Direction3D(0,0,FIXED_SIZE_FOR_3D_CHART_VOLUME)
+                , drawing::Direction3D(0,-FIXED_SIZE_FOR_3D_CHART_VOLUME,0) );
+            if( CuboidPlanePosition_Right==eLeftWallPos )
+            {
+                nRotatedTexture = ( CuboidPlanePosition_Front==eBackWallPos ) ? 2 : 0;
+                aStripe = Stripe( drawing::Position3D(xPos,FIXED_SIZE_FOR_3D_CHART_VOLUME,0)
+                    , drawing::Direction3D(0,-FIXED_SIZE_FOR_3D_CHART_VOLUME,0)
+                    , drawing::Direction3D(0,0,FIXED_SIZE_FOR_3D_CHART_VOLUME) );
+            }
+            aStripe.InvertNormal(true);
 
             uno::Reference< drawing::XShape > xShape =
                 m_pShapeFactory->createStripe( xWallGroup_Shapes, aStripe
-                    , xWallProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), true, true );
+                    , xWallProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), bDoubleSided, nRotatedTexture, bFlatNormals );
             if( !bAddFloorAndWall )
             {
                 //we always need this object as dummy object for correct scene dimensions
@@ -566,17 +581,25 @@ void VDiagram::createShapes_3d()
         }
         //add back wall
         {
+            short nRotatedTexture = 0;
             double zPos = 0.0;
-            CuboidPlanePosition eBackWallPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBackWall( uno::Reference< beans::XPropertySet >( m_xDiagram, uno::UNO_QUERY ) ) );
             if( CuboidPlanePosition_Front==eBackWallPos )
                     zPos = FIXED_SIZE_FOR_3D_CHART_VOLUME;
             Stripe aStripe( drawing::Position3D(0,FIXED_SIZE_FOR_3D_CHART_VOLUME,zPos)
+                , drawing::Direction3D(0,-FIXED_SIZE_FOR_3D_CHART_VOLUME,0)
+                , drawing::Direction3D(FIXED_SIZE_FOR_3D_CHART_VOLUME,0,0) );
+            if( CuboidPlanePosition_Front==eBackWallPos )
+            {
+                aStripe = Stripe( drawing::Position3D(0,FIXED_SIZE_FOR_3D_CHART_VOLUME,zPos)
                 , drawing::Direction3D(FIXED_SIZE_FOR_3D_CHART_VOLUME,0,0)
                 , drawing::Direction3D(0,-FIXED_SIZE_FOR_3D_CHART_VOLUME,0) );
+                nRotatedTexture = 3;
+            }
+            aStripe.InvertNormal(true);
 
             uno::Reference< drawing::XShape > xShape =
                 m_pShapeFactory->createStripe(xWallGroup_Shapes, aStripe
-                    , xWallProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), true );
+                    , xWallProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), bDoubleSided, nRotatedTexture, bFlatNormals );
             if( !bAddFloorAndWall )
             {
                 //we always need this object as dummy object for correct scene dimensions
@@ -644,12 +667,13 @@ void VDiagram::createShapes_3d()
             xFloorProp=uno::Reference< beans::XPropertySet >( m_xDiagram->getFloor());
 
         Stripe aStripe( drawing::Position3D(0,0,0)
-            , drawing::Direction3D(FIXED_SIZE_FOR_3D_CHART_VOLUME,0,0)
-            , drawing::Direction3D(0,0,FIXED_SIZE_FOR_3D_CHART_VOLUME) );
+            , drawing::Direction3D(0,0,FIXED_SIZE_FOR_3D_CHART_VOLUME)
+            , drawing::Direction3D(FIXED_SIZE_FOR_3D_CHART_VOLUME,0,0) );
+        aStripe.InvertNormal(true);
 
         uno::Reference< drawing::XShape > xShape =
             m_pShapeFactory->createStripe(xOuterGroup_Shapes, aStripe
-                , xFloorProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), true );
+                , xFloorProp, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), bDoubleSided, 0, bFlatNormals );
 
         CuboidPlanePosition eBottomPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBottom( uno::Reference< beans::XPropertySet >( m_xDiagram, uno::UNO_QUERY ) ) );
         if( !bAddFloorAndWall || (CuboidPlanePosition_Bottom!=eBottomPos) )

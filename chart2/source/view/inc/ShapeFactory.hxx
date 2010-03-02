@@ -124,7 +124,7 @@ public:
                     , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSourceProp
                     , const tPropertyNameMap& rPropertyNameMap
                     , sal_Bool bDoubleSided = true
-                    , bool bRotatedTexture=false
+                    , short nRotatedTexture = 0 //0 to 7 are the different possibilities
                     , bool bFlatNormals=true );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >

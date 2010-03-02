@@ -49,8 +49,8 @@ Stripe::Stripe( const drawing::Position3D& rPoint1
             , m_aPoint3(m_aPoint2+rDirectionToPoint4)
             , m_aPoint4(rPoint1+rDirectionToPoint4)
             , m_bManualNormalSet(false)
+            , m_bInvertNormal(false)
 {
-
 }
 
 Stripe::Stripe( const drawing::Position3D& rPoint1
@@ -61,6 +61,7 @@ Stripe::Stripe( const drawing::Position3D& rPoint1
         , m_aPoint3(rPoint2)
         , m_aPoint4(rPoint1)
         , m_bManualNormalSet(false)
+        , m_bInvertNormal(false)
 {
     m_aPoint3.PositionZ += fDepth;
     m_aPoint4.PositionZ += fDepth;
@@ -75,16 +76,19 @@ Stripe::Stripe( const drawing::Position3D& rPoint1
             , m_aPoint3(rPoint3)
             , m_aPoint4(rPoint4)
             , m_bManualNormalSet(false)
+            , m_bInvertNormal(false)
 {
-
 }
 
 void Stripe::SetManualNormal( const drawing::Direction3D& rNormal )
 {
-    drawing::Direction3D aTest(getNormal());
-
     m_aManualNormal = rNormal;
     m_bManualNormalSet = true;
+}
+
+void Stripe::InvertNormal( bool bInvertNormal )
+{
+    m_bInvertNormal = bInvertNormal;
 }
 
 uno::Any Stripe::getPolyPolygonShape3D() const
@@ -128,15 +132,28 @@ uno::Any Stripe::getPolyPolygonShape3D() const
 
 drawing::Direction3D Stripe::getNormal() const
 {
-    if( m_bManualNormalSet )
-        return m_aManualNormal;
+    drawing::Direction3D aRet(1.0,0.0,0.0);
 
-    ::basegfx::B3DPolygon aPolygon3D;
-    aPolygon3D.append(Position3DToB3DPoint( m_aPoint1 ));
-    aPolygon3D.append(Position3DToB3DPoint( m_aPoint2 ));
-    aPolygon3D.append(Position3DToB3DPoint( m_aPoint3 ));
-    ::basegfx::B3DVector aNormal(::basegfx::tools::getNormal(aPolygon3D));
-    return B3DVectorToDirection3D(aNormal);
+    if( m_bManualNormalSet )
+        aRet = m_aManualNormal;
+    else
+    {
+        ::basegfx::B3DPolygon aPolygon3D;
+        aPolygon3D.append(Position3DToB3DPoint( m_aPoint1 ));
+        aPolygon3D.append(Position3DToB3DPoint( m_aPoint2 ));
+        aPolygon3D.append(Position3DToB3DPoint( m_aPoint3 ));
+        aPolygon3D.append(Position3DToB3DPoint( m_aPoint4 ));
+        ::basegfx::B3DVector aNormal(::basegfx::tools::getNormal(aPolygon3D));
+        aRet = B3DVectorToDirection3D(aNormal);
+    }
+
+    if( m_bInvertNormal )
+    {
+        aRet.DirectionX *= -1.0;
+        aRet.DirectionY *= -1.0;
+        aRet.DirectionZ *= -1.0;
+    }
+    return aRet;
 }
 
 uno::Any Stripe::getNormalsPolygon() const
@@ -170,7 +187,7 @@ uno::Any Stripe::getNormalsPolygon() const
     return uno::Any( &aPP, ::getCppuType((const drawing::PolyPolygonShape3D*)0) );
 }
 
-uno::Any Stripe::getTexturePolygon( bool bRotatedTexture ) const
+uno::Any Stripe::getTexturePolygon( short nRotatedTexture ) const
 {
     drawing::PolyPolygonShape3D aPP;
 
@@ -190,7 +207,97 @@ uno::Any Stripe::getTexturePolygon( bool bRotatedTexture ) const
     double* pInnerSequenceY = pOuterSequenceY->getArray();
     double* pInnerSequenceZ = pOuterSequenceZ->getArray();
 
-    if( !bRotatedTexture )
+    if( nRotatedTexture==0 )
+    {
+        *pInnerSequenceX++ = 0.0;
+        *pInnerSequenceY++ = 0.0;
+        *pInnerSequenceZ++ = 0.0;
+
+        *pInnerSequenceX++ = 0.0;
+        *pInnerSequenceY++ = 1.0;
+        *pInnerSequenceZ++ = 0.0;
+
+        *pInnerSequenceX++ = 1.0;
+        *pInnerSequenceY++ = 1.0;
+        *pInnerSequenceZ++ = 0.0;
+
+        *pInnerSequenceX++ = 1.0;
+        *pInnerSequenceY++ = 0.0;
+        *pInnerSequenceZ++ = 0.0;
+    }
+    else if( nRotatedTexture==1 )
+    {
+        *pInnerSequenceX++ = 1.0;
+        *pInnerSequenceY++ = 0.0;
+        *pInnerSequenceZ++ = 0.0;
+
+        *pInnerSequenceX++ = 0.0;
+        *pInnerSequenceY++ = 0.0;
+        *pInnerSequenceZ++ = 0.0;
+
+        *pInnerSequenceX++ = 0.0;
+        *pInnerSequenceY++ = 1.0;
+        *pInnerSequenceZ++ = 0.0;
+
+        *pInnerSequenceX++ = 1.0;
+        *pInnerSequenceY++ = 1.0;
+        *pInnerSequenceZ++ = 0.0;
+    }
+    else if( nRotatedTexture==2 )
+    {
+        *pInnerSequenceX++ = 1.0;
+        *pInnerSequenceY++ = 1.0;
+        *pInnerSequenceZ++ = 0.0;
+
+        *pInnerSequenceX++ = 1.0;
+        *pInnerSequenceY++ = 0.0;
+        *pInnerSequenceZ++ = 0.0;
+
+        *pInnerSequenceX++ = 0.0;
+        *pInnerSequenceY++ = 0.0;
+        *pInnerSequenceZ++ = 0.0;
+
+        *pInnerSequenceX++ = 0.0;
+        *pInnerSequenceY++ = 1.0;
+        *pInnerSequenceZ++ = 0.0;
+    }
+    else if( nRotatedTexture==3 )
+    {
+        *pInnerSequenceX++ = 0.0;
+        *pInnerSequenceY++ = 1.0;
+        *pInnerSequenceZ++ = 0.0;
+
+        *pInnerSequenceX++ = 1.0;
+        *pInnerSequenceY++ = 1.0;
+        *pInnerSequenceZ++ = 0.0;
+
+        *pInnerSequenceX++ = 1.0;
+        *pInnerSequenceY++ = 0.0;
+        *pInnerSequenceZ++ = 0.0;
+
+        *pInnerSequenceX++ = 0.0;
+        *pInnerSequenceY++ = 0.0;
+        *pInnerSequenceZ++ = 0.0;
+    }
+    else if( nRotatedTexture==4 )
+    {
+        *pInnerSequenceX++ = 1.0;
+        *pInnerSequenceY++ = 0.0;
+        *pInnerSequenceZ++ = 0.0;
+
+        *pInnerSequenceX++ = 1.0;
+        *pInnerSequenceY++ = 1.0;
+        *pInnerSequenceZ++ = 0.0;
+
+        *pInnerSequenceX++ = 0.0;
+        *pInnerSequenceY++ = 1.0;
+        *pInnerSequenceZ++ = 0.0;
+
+        *pInnerSequenceX++ = 0.0;
+        *pInnerSequenceY++ = 0.0;
+        *pInnerSequenceZ++ = 0.0;
+    }
+    else if( nRotatedTexture==5 )
     {
         *pInnerSequenceX++ = 0.0;
         *pInnerSequenceY++ = 0.0;
@@ -208,8 +315,16 @@ uno::Any Stripe::getTexturePolygon( bool bRotatedTexture ) const
         *pInnerSequenceY++ = 1.0;
         *pInnerSequenceZ++ = 0.0;
     }
-    else
+    else if( nRotatedTexture==6 )
     {
+        *pInnerSequenceX++ = 0.0;
+        *pInnerSequenceY++ = 1.0;
+        *pInnerSequenceZ++ = 0.0;
+
+        *pInnerSequenceX++ = 0.0;
+        *pInnerSequenceY++ = 0.0;
+        *pInnerSequenceZ++ = 0.0;
+
         *pInnerSequenceX++ = 1.0;
         *pInnerSequenceY++ = 0.0;
         *pInnerSequenceZ++ = 0.0;
@@ -217,12 +332,22 @@ uno::Any Stripe::getTexturePolygon( bool bRotatedTexture ) const
         *pInnerSequenceX++ = 1.0;
         *pInnerSequenceY++ = 1.0;
         *pInnerSequenceZ++ = 0.0;
+    }
+    else if( nRotatedTexture==7 )
+    {
+        *pInnerSequenceX++ = 1.0;
+        *pInnerSequenceY++ = 1.0;
+        *pInnerSequenceZ++ = 0.0;
 
         *pInnerSequenceX++ = 0.0;
         *pInnerSequenceY++ = 1.0;
         *pInnerSequenceZ++ = 0.0;
 
         *pInnerSequenceX++ = 0.0;
+        *pInnerSequenceY++ = 0.0;
+        *pInnerSequenceZ++ = 0.0;
+
+        *pInnerSequenceX++ = 1.0;
         *pInnerSequenceY++ = 0.0;
         *pInnerSequenceZ++ = 0.0;
     }

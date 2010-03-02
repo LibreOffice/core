@@ -560,8 +560,8 @@ uno::Reference<drawing::XShape>
 
     Reference< drawing::XShapes > xGroup( ShapeFactory::createGroup3D( xTarget, rtl::OUString() ) );
 
-    sal_Bool bDoubleSided = true;
-    bool bRotatedTexture = false;
+    sal_Bool bDoubleSided = false;
+    short nRotatedTexture = 0;
 
     const double fWidth = rSize.DirectionX;
     const double fDepth = rSize.DirectionZ;
@@ -629,41 +629,67 @@ uno::Reference<drawing::XShape>
         aNormalsTopP4.PositionY += fHeight;
     }
 
-    if(fHeight<0.0)
-    {
-        std::swap( aBottomP1, aTopP1);
-        std::swap( aBottomP2, aTopP2);
-        std::swap( aBottomP3, aTopP3);
-        std::swap( aBottomP4, aTopP4);
+    bool bInvertPolygon = false;
+    bool bInvertNormals = false;
 
-        std::swap( aNormalsBottomP1, aNormalsTopP1);
-        std::swap( aNormalsBottomP2, aNormalsTopP2);
-        std::swap( aNormalsBottomP3, aNormalsTopP3);
-        std::swap( aNormalsBottomP4, aNormalsTopP4);
+    if(bRotateZ)
+    {
+        //bars
+        if(fHeight>=0.0)
+        {
+            nRotatedTexture = 2;
+            bInvertNormals = true;
+            aStripeBottom = Stripe( aBottomP1, aBottomP4, aBottomP3, aBottomP2 );
+        }
+        else
+        {
+            bInvertPolygon = true;
+            nRotatedTexture = 1;
+            aStripeBottom = Stripe( aBottomP2, aBottomP3, aBottomP4, aBottomP1 );
+        }
     }
+    else
+    {
+        //columns
+        if(fHeight>=0.0)
+        {
+            bInvertPolygon = true;
+            nRotatedTexture = 2;
+            aStripeBottom = Stripe( aBottomP2, aBottomP3, aBottomP4, aBottomP1 );
+        }
+        else
+        {
+            nRotatedTexture = 3;
+            bInvertNormals = true;
+            aStripeBottom = Stripe( aBottomP4, aBottomP3, aBottomP2, aBottomP1 );
+        }
+    }
+    aStripeBottom.InvertNormal(true);
 
     Stripe aStripe1( aTopP2, aTopP1, aBottomP1, aBottomP2 );
     Stripe aStripe2( aTopP3, aTopP2, aBottomP2, aBottomP3 );
     Stripe aStripe3( aTopP4, aTopP3, aBottomP3, aBottomP4 );
     Stripe aStripe4( aTopP1, aTopP4, aBottomP4, aBottomP1 );
 
-    Stripe aNormalsStripe1( aNormalsBottomP2, aNormalsBottomP1, aNormalsTopP1, aNormalsTopP2   );
-    Stripe aNormalsStripe2( aNormalsBottomP3, aNormalsBottomP2, aNormalsTopP2, aNormalsTopP3 );
-    Stripe aNormalsStripe3( aNormalsBottomP4, aNormalsBottomP3, aNormalsTopP3, aNormalsTopP4 );
-    Stripe aNormalsStripe4( aNormalsBottomP1, aNormalsBottomP4, aNormalsTopP4, aNormalsTopP1 );
-
-    if(bRotateZ)
+    if( bInvertPolygon )
     {
-        bRotatedTexture = true;
-        aStripe1 = Stripe( aTopP1, aTopP2, aBottomP2, aBottomP1 );
-        aStripe2 = Stripe( aTopP2, aTopP3, aBottomP3, aBottomP2  );
-        aStripe3 = Stripe( aTopP3, aTopP4, aBottomP4, aBottomP3  );
-        aStripe4 = Stripe( aTopP4, aTopP1, aBottomP1, aBottomP4  );
+        aStripe1 = Stripe( aBottomP1, aTopP1, aTopP2, aBottomP2 );
+        aStripe2 = Stripe( aBottomP2, aTopP2, aTopP3, aBottomP3 );
+        aStripe3 = Stripe( aBottomP3, aTopP3, aTopP4, aBottomP4 );
+        aStripe4 = Stripe( aBottomP4, aTopP4, aTopP1, aBottomP1 );
+    }
 
-        aNormalsStripe1 = Stripe( aNormalsBottomP1, aNormalsBottomP2, aNormalsTopP2, aNormalsTopP1   );
-        aNormalsStripe2 = Stripe( aNormalsBottomP2, aNormalsBottomP3, aNormalsTopP3, aNormalsTopP2 );
-        aNormalsStripe3 = Stripe( aNormalsBottomP3, aNormalsBottomP4, aNormalsTopP4, aNormalsTopP3 );
-        aNormalsStripe4 = Stripe( aNormalsBottomP4, aNormalsBottomP1, aNormalsTopP1, aNormalsTopP4 );
+    Stripe aNormalsStripe1( aNormalsTopP1, aNormalsBottomP1, aNormalsBottomP2, aNormalsTopP2 );
+    Stripe aNormalsStripe2( aNormalsTopP2, aNormalsBottomP2, aNormalsBottomP3, aNormalsTopP3 );
+    Stripe aNormalsStripe3( aNormalsTopP3, aNormalsBottomP3, aNormalsBottomP4, aNormalsTopP4 );
+    Stripe aNormalsStripe4( aNormalsTopP4, aNormalsBottomP4, aNormalsBottomP1, aNormalsTopP1 );
+
+    if( bInvertNormals )
+    {
+        aNormalsStripe1 = Stripe( aNormalsTopP2, aNormalsBottomP2, aNormalsBottomP1, aNormalsTopP1 );
+        aNormalsStripe2 = Stripe( aNormalsTopP3, aNormalsBottomP3, aNormalsBottomP2, aNormalsTopP2 );
+        aNormalsStripe3 = Stripe( aNormalsTopP4, aNormalsBottomP4, aNormalsBottomP3, aNormalsTopP3 );
+        aNormalsStripe4 = Stripe( aNormalsTopP1, aNormalsBottomP1, aNormalsBottomP4, aNormalsTopP4 );
     }
 
     aStripe1.SetManualNormal( aNormalsStripe1.getNormal() );
@@ -672,11 +698,11 @@ uno::Reference<drawing::XShape>
     aStripe4.SetManualNormal( aNormalsStripe4.getNormal() );
 
     const bool bFlatNormals = false;
-    ShapeFactory::createStripe( xGroup, aStripe1, xSourceProp, rPropertyNameMap, bDoubleSided, bRotatedTexture, bFlatNormals );
-    ShapeFactory::createStripe( xGroup, aStripe2, xSourceProp, rPropertyNameMap, bDoubleSided, bRotatedTexture, bFlatNormals );
-    ShapeFactory::createStripe( xGroup, aStripe3, xSourceProp, rPropertyNameMap, bDoubleSided, bRotatedTexture, bFlatNormals );
-    ShapeFactory::createStripe( xGroup, aStripe4, xSourceProp, rPropertyNameMap, bDoubleSided, bRotatedTexture, bFlatNormals );
-    ShapeFactory::createStripe( xGroup, aStripeBottom, xSourceProp, rPropertyNameMap, bDoubleSided, bRotatedTexture );
+    ShapeFactory::createStripe( xGroup, aStripe1, xSourceProp, rPropertyNameMap, bDoubleSided, nRotatedTexture, bFlatNormals );
+    ShapeFactory::createStripe( xGroup, aStripe2, xSourceProp, rPropertyNameMap, bDoubleSided, nRotatedTexture, bFlatNormals );
+    ShapeFactory::createStripe( xGroup, aStripe3, xSourceProp, rPropertyNameMap, bDoubleSided, nRotatedTexture, bFlatNormals );
+    ShapeFactory::createStripe( xGroup, aStripe4, xSourceProp, rPropertyNameMap, bDoubleSided, nRotatedTexture, bFlatNormals );
+    ShapeFactory::createStripe( xGroup, aStripeBottom, xSourceProp, rPropertyNameMap, bDoubleSided, nRotatedTexture, bFlatNormals );
 
     return Reference< drawing::XShape >( xGroup, uno::UNO_QUERY );
 }
@@ -1110,7 +1136,7 @@ uno::Reference< drawing::XShape >
                     , const uno::Reference< beans::XPropertySet >& xSourceProp
                     , const tPropertyNameMap& rPropertyNameMap
                     , sal_Bool bDoubleSided
-                    , bool bRotatedTexture
+                    , short nRotatedTexture
                     , bool bFlatNormals )
 {
     if( !xTarget.is() )
@@ -1135,7 +1161,7 @@ uno::Reference< drawing::XShape >
 
             //TexturePolygon
             xProp->setPropertyValue( C2U( UNO_NAME_3D_TEXTUREPOLYGON3D )
-                , rStripe.getTexturePolygon( bRotatedTexture ) );
+                , rStripe.getTexturePolygon( nRotatedTexture ) );
 
             //Normals Polygon
             xProp->setPropertyValue( C2U( UNO_NAME_3D_NORMALSPOLYGON3D )
