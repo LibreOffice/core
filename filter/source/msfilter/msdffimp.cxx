@@ -5057,6 +5057,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                         if ( GetPropertyValue( DFF_Prop_gtextFStrikethrough, 0 ) & 0x1000 ) // SJ: Font Kerning On ?
                             aSet.Put( SvxKerningItem( 1, EE_CHAR_KERNING ) );
                     }
+                    pRet->SetMergedItemSet( aSet );
 
                     // sj: taking care of rtl, ltr. In case of fontwork mso. seems not to be able to set
                     // proper text directions, instead the text default is depending to the string.
