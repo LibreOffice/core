@@ -48,8 +48,8 @@ Stripe::Stripe( const drawing::Position3D& rPoint1
             , m_aPoint2(rPoint1+rDirectionToPoint2)
             , m_aPoint3(m_aPoint2+rDirectionToPoint4)
             , m_aPoint4(rPoint1+rDirectionToPoint4)
-            , m_bManualNormalSet(false)
             , m_bInvertNormal(false)
+            , m_bManualNormalSet(false)
 {
 }
 
@@ -60,8 +60,8 @@ Stripe::Stripe( const drawing::Position3D& rPoint1
         , m_aPoint2(rPoint2)
         , m_aPoint3(rPoint2)
         , m_aPoint4(rPoint1)
-        , m_bManualNormalSet(false)
         , m_bInvertNormal(false)
+        , m_bManualNormalSet(false)
 {
     m_aPoint3.PositionZ += fDepth;
     m_aPoint4.PositionZ += fDepth;
@@ -75,8 +75,8 @@ Stripe::Stripe( const drawing::Position3D& rPoint1
             , m_aPoint2(rPoint2)
             , m_aPoint3(rPoint3)
             , m_aPoint4(rPoint4)
-            , m_bManualNormalSet(false)
             , m_bInvertNormal(false)
+            , m_bManualNormalSet(false)
 {
 }
 
