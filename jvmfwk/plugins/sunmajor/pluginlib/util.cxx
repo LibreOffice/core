@@ -801,8 +801,9 @@ OUString resolveDirPath(const OUString & path)
 {
     OUString ret;
     OUString sResolved;
+    //getAbsoluteFileURL also resolves links
     if (File::getAbsoluteFileURL(
-        rtl::OUString(), path, sResolved) != File::E_None)
+            OUSTR("file:///"), path, sResolved) != File::E_None)
         return OUString();
 
     //check if this is a valid path and if it is a directory
@@ -832,7 +833,7 @@ OUString resolveFilePath(const OUString & path)
     OUString sResolved;
 
     if (File::getAbsoluteFileURL(
-        rtl::OUString(), path, sResolved) != File::E_None)
+            OUSTR("file:///"), path, sResolved) != File::E_None)
         return OUString();
 
     //check if this is a valid path to a file or and if it is a link
