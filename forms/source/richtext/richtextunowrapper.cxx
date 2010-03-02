@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: richtextunowrapper.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,9 +32,12 @@
 /** === begin UNO includes === **/
 #include <com/sun/star/container/XNameContainer.hpp>
 /** === end UNO includes === **/
-#include <svx/unofored.hxx>
-#include <svx/editview.hxx>
-#include <svx/unoipset.hxx>
+#include <editeng/unofored.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/unoipset.hxx>
+#include <svx/svdpool.hxx>
+#include <svx/svdobj.hxx>
+#include <editeng/unoprnms.hxx>
 
 //........................................................................
 namespace frm
@@ -64,7 +64,7 @@ namespace frm
                 { MAP_CHAR_LEN("ParaUserDefinedAttributes"), EE_PARA_XMLATTRIBS, &::getCppuType( static_cast< const Reference< XNameContainer >* >( NULL ) ), 0, 0 },
                 { NULL, 0, 0, NULL, 0, 0 }
             };
-            static SvxItemPropertySet aTextEnginePropertySet( aTextEnginePropertyMap );
+            static SvxItemPropertySet aTextEnginePropertySet( aTextEnginePropertyMap, SdrObject::GetGlobalDrawObjectItemPool() );
             return &aTextEnginePropertySet;
         }
     }

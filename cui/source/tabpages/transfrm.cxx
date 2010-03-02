@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: transfrm.cxx,v $
- * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,12 +40,12 @@
 #include <svx/dialogs.hrc>
 #include <cuires.hrc>
 #include "transfrm.hrc"
-#include <svx/sizeitem.hxx>
+#include <editeng/sizeitem.hxx>
 
 #include "transfrm.hxx"
 #include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include "svx/anchorid.hxx"
 #include <sfx2/module.hxx>
 #include <svl/rectitem.hxx>
@@ -259,7 +256,7 @@ SvxAngleTabPage::SvxAngleTabPage( Window* pParent, const SfxItemSet& rInAttrs  )
 void SvxAngleTabPage::Construct()
 {
     DBG_ASSERT(pView, "No valid view (!)");
-    eDlgUnit = GetModuleFieldUnit(&GetItemSet());
+    eDlgUnit = GetModuleFieldUnit(GetItemSet());
     SetFieldUnit(aMtrPosX, eDlgUnit, TRUE);
     SetFieldUnit(aMtrPosY, eDlgUnit, TRUE);
 
@@ -545,7 +542,7 @@ void SvxSlantTabPage::Construct()
 {
     // get the range
     DBG_ASSERT(pView, "no valid view (!)");
-    eDlgUnit = GetModuleFieldUnit(&GetItemSet());
+    eDlgUnit = GetModuleFieldUnit(GetItemSet());
     SetFieldUnit(aMtrRadius, eDlgUnit, TRUE);
 
     { // #i75273#
@@ -776,7 +773,7 @@ void SvxPositionSizeTabPage::Construct()
 {
     // get range and work area
     DBG_ASSERT( mpView, "no valid view (!)" );
-    meDlgUnit = GetModuleFieldUnit( &GetItemSet() );
+    meDlgUnit = GetModuleFieldUnit( GetItemSet() );
     SetFieldUnit( maMtrPosX, meDlgUnit, TRUE );
     SetFieldUnit( maMtrPosY, meDlgUnit, TRUE );
     SetFieldUnit( maMtrWidth, meDlgUnit, TRUE );

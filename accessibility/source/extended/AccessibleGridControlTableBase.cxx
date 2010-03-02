@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2009 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessibleGridControlTableBase.cxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -261,16 +258,6 @@ sal_Int32 AccessibleGridControlTableBase::implGetChildIndex(
         sal_Int32 nRow, sal_Int32 nColumn ) const
 {
     return nRow * m_aTable.GetColumnCount() + nColumn;
-}
-
-sal_Bool AccessibleGridControlTableBase::implIsRowSelected( sal_Int32 nRow ) const
-{
-    return m_aTable.IsRowSelected( nRow );
-}
-
-sal_Int32 AccessibleGridControlTableBase::implGetSelectedRowCount() const
-{
-    return m_aTable.GetSelectedRowCount();
 }
 
 void AccessibleGridControlTableBase::implGetSelectedRows( Sequence< sal_Int32 >& rSeq )

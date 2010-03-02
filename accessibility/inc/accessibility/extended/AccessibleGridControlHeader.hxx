@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessibleGridControlHeader.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -197,12 +194,6 @@ protected:
     inline sal_Bool isRowBar() const;
     /** @return  <TRUE/>, if the objects is a header bar for columns. */
     inline sal_Bool isColumnBar() const;
-
-    /** @attention  This method requires locked mutex's and a living object.
-        @throws <type>IndexOutOfBoundsException</type>
-        If the specified row/column index (depending on type) is invalid. */
-    void ensureIsValidHeaderIndex( sal_Int32 nIndex )
-        throw ( ::com::sun::star::lang::IndexOutOfBoundsException );
 };
 
 // inlines --------------------------------------------------------------------

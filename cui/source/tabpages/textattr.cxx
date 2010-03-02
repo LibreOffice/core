@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: textattr.cxx,v $
- * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,7 +54,7 @@
 #include "svx/dlgutil.hxx"
 #include <sfx2/request.hxx> //add CHINA001
 #include <svx/ofaitem.hxx> //add CHINA001
-#include <svx/writingmodeitem.hxx>
+#include <editeng/writingmodeitem.hxx>
 
 static USHORT pRanges[] =
 {
@@ -133,7 +130,7 @@ SvxTextAttrPage::SvxTextAttrPage( Window* pWindow, const SfxItemSet& rInAttrs ) 
 {
     FreeResource();
 
-    FieldUnit eFUnit = GetModuleFieldUnit( &rInAttrs );
+    FieldUnit eFUnit = GetModuleFieldUnit( rInAttrs );
     SetFieldUnit( aMtrFldLeft, eFUnit );
     SetFieldUnit( aMtrFldRight, eFUnit );
     SetFieldUnit( aMtrFldTop, eFUnit );

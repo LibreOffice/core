@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: header.hxx,v $
-#
-# $Revision: 1.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -30,30 +26,30 @@
 #*************************************************************************
 
 # GUI String in the installer ("Java Runtime Environment (${JAVAVERSION})")
-JAVAVERSION=Java 6 Update 17
-WINDOWSJAVAVERSION=Java 6 Update 17
+JAVAVERSION=Java 6 Update 18
+WINDOWSJAVAVERSION=Java 6 Update 18
 
 # Windows (scp2 and downloadtemplate.nsi)
-WINDOWSJAVAFILENAME=jre-6u17-windows-i586.exe
-WINDOWSJAVAREGISTRYENTRY=1.6.0_17
+WINDOWSJAVAFILENAME=jre-6u18-windows-i586.exe
+WINDOWSJAVAREGISTRYENTRY=1.6.0_18
 
 # Linux (scp2)
-LINUXJAVAFILENAME=jre-6u17-linux-i586.rpm
+LINUXJAVAFILENAME=jre-6u18-linux-i586.rpm
 # Linux (rpmUnit.xml, rpm -qp <filename> )
-LINUXJAVANAME=jre-1.6.0_17-fcs
+LINUXJAVANAME=jre-1.6.0_18-fcs
 
 # Linux-x64 (scp2)
-LINUXX64JAVAFILENAME=jre-6u17-linux-amd64.rpm
+LINUXX64JAVAFILENAME=jre-6u18-linux-amd64.rpm
 
 # Solaris Sparc (scp2)
-SOLSJAVARTPACKED=SUNWj6rt_1_6_0_17_sparc.tar.gz
-SOLSJAVACFGPACKED=SUNWj6cfg_1_6_0_17_sparc.tar.gz
-SOLSJAVAMANPACKED=SUNWj6man_1_6_0_17_sparc.tar.gz
+SOLSJAVARTPACKED=SUNWj6rt_1_6_0_18_sparc.tar.gz
+SOLSJAVACFGPACKED=SUNWj6cfg_1_6_0_18_sparc.tar.gz
+SOLSJAVAMANPACKED=SUNWj6man_1_6_0_18_sparc.tar.gz
 
 # Solaris x86 (scp2)
-SOLIJAVARTPACKED=SUNWj6rt_1_6_0_17_x86.tar.gz
-SOLIJAVACFGPACKED=SUNWj6cfg_1_6_0_17_x86.tar.gz
-SOLIJAVAMANPACKED=SUNWj6man_1_6_0_17_x86.tar.gz
+SOLIJAVARTPACKED=SUNWj6rt_1_6_0_18_x86.tar.gz
+SOLIJAVACFGPACKED=SUNWj6cfg_1_6_0_18_x86.tar.gz
+SOLIJAVAMANPACKED=SUNWj6man_1_6_0_18_x86.tar.gz
 
 # Solaris (pkgUnit.xml, needs only to be changed in major changes)
 SOLARISJAVART=SUNWj6rt
