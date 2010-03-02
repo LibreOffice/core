@@ -51,10 +51,37 @@
 #include <tools/diagnose_ex.h>
 #include <sfx2/sfxdefs.hxx>
 #include <sfx2/signaturestate.hxx>
+#include <com/sun/star/script/XVBAModuleInfo.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 namespace css = ::com::sun::star;
+
+void lcl_getObjectName( const uno::Reference< container::XNameContainer >& rLib, const String& rModName, String& rObjName )
+{
+    try
+    {
+                uno::Reference< script::XVBAModuleInfo > xVBAModuleInfo( rLib, uno::UNO_QUERY );
+                if ( xVBAModuleInfo.is() && xVBAModuleInfo->hasModuleInfo( rModName ) )
+                {
+            script::ModuleInfo aModuleInfo = xVBAModuleInfo->getModuleInfo( rModName );
+            uno::Any aObject( aModuleInfo.ModuleObject );
+            uno::Reference< lang::XServiceInfo > xServiceInfo( aObject, uno::UNO_QUERY );
+            if( xServiceInfo.is() && xServiceInfo->supportsService( rtl::OUString::createFromAscii( "ooo.vba.excel.Worksheet" ) ) )
+            {
+                uno::Reference< container::XNamed > xNamed( aObject, uno::UNO_QUERY );
+                if( xNamed.is() )
+                    rObjName = xNamed->getName();
+            }
+        }
+    }
+    catch( uno::Exception& )
+    {
+    }
+}
 
 IMPL_LINK_INLINE_START( BasicIDEShell, ObjectDialogCancelHdl, ObjectCatalog *, EMPTYARG )
 {
@@ -235,7 +262,7 @@ ModulWindow* BasicIDEShell::CreateBasWin( const ScriptDocument& rDocument, const
     if ( !aLibName.Len() )
         aLibName = String::CreateFromAscii( "Standard" );
 
-    rDocument.getOrCreateLibrary( E_SCRIPTS, aLibName );
+    uno::Reference< container::XNameContainer > xLib = rDocument.getOrCreateLibrary( E_SCRIPTS, aLibName );
 
     if ( !aModName.Len() )
         aModName = rDocument.createObjectName( E_SCRIPTS, aLibName );
@@ -254,10 +281,13 @@ ModulWindow* BasicIDEShell::CreateBasWin( const ScriptDocument& rDocument, const
 
         if ( bSuccess )
         {
-            // new module window
+            pWin = FindBasWin( rDocument, aLibName, aModName, FALSE, TRUE );
+            if( !pWin )
+            {    // new module window
             pWin = new ModulWindow( pModulLayout, rDocument, aLibName, aModName, aModule );
             nKey = InsertWindowInTable( pWin );
         }
+    }
     }
     else
     {
@@ -271,7 +301,21 @@ ModulWindow* BasicIDEShell::CreateBasWin( const ScriptDocument& rDocument, const
         }
         DBG_ASSERT( nKey, "CreateBasWin: Kein Key- Fenster nicht gefunden!" );
     }
+    if( nKey )
+    {
+        if( xLib.is() )
+        {
+            // display a nice friendly name in the ObjectModule tab,
+            // combining the objectname and module name, e.g. Sheet1 ( Financials )
+            String sObjName;
+            lcl_getObjectName( xLib, rModName, sObjName );
+            if( sObjName.Len() )
+            {
+                aModName.AppendAscii(" (").Append(sObjName).AppendAscii(")");
+            }
+        }
     pTabBar->InsertPage( (USHORT)nKey, aModName );
+    }
     pTabBar->Sort();
     pWin->GrabScrollBars( &aHScrollBar, &aVScrollBar );
     if ( !pCurWin )

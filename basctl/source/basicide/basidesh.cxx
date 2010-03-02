@@ -77,6 +77,9 @@
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/container/XContainer.hpp>
+#include <com/sun/star/container/XContainerListener.hpp>
+#include <com/sun/star/script/XLibraryContainer.hpp>
 
 #include <svx/xmlsecctrl.hxx>
 
@@ -84,6 +87,71 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
+static const rtl::OUString sStandardLibName(  rtl::OUString::createFromAscii("Standard") );
+
+typedef ::cppu::WeakImplHelper1< container::XContainerListener > ContainerListenerBASE;
+
+class ContainerListenerImpl : public ContainerListenerBASE
+{
+    BasicIDEShell* mpShell;
+public:
+
+    ContainerListenerImpl( BasicIDEShell* pShell ) : mpShell( pShell ) {}
+
+    ~ContainerListenerImpl()
+    {
+    }
+
+    void addContainerListener( const ScriptDocument& rScriptDocument, const String& aLibName )
+    {
+        try
+        {
+            uno::Reference< container::XContainer > xContainer( rScriptDocument.getLibrary( E_SCRIPTS, aLibName, FALSE ), uno::UNO_QUERY );
+            if ( rScriptDocument.isDocument() && xContainer.is() )
+            {
+                uno::Reference< container::XContainerListener > xContainerListener( this );
+                xContainer->addContainerListener( xContainerListener );
+            }
+        }
+        catch( uno::Exception& ) {}
+    }
+    void removeContainerListener( const ScriptDocument& rScriptDocument, const String& aLibName )
+    {
+        try
+        {
+            uno::Reference< container::XContainer > xContainer( rScriptDocument.getLibrary( E_SCRIPTS, aLibName, FALSE ), uno::UNO_QUERY );
+            if ( rScriptDocument.isDocument() && xContainer.is() )
+            {
+                uno::Reference< container::XContainerListener > xContainerListener( this );
+                xContainer->removeContainerListener( xContainerListener );
+            }
+        }
+        catch( uno::Exception& ) {}
+    }
+
+    // XEventListener
+    virtual void SAL_CALL disposing( const lang::EventObject& ) throw( uno::RuntimeException ) {}
+
+    // XContainerListener
+    virtual void SAL_CALL elementInserted( const container::ContainerEvent& Event ) throw( uno::RuntimeException )
+    {
+        rtl::OUString sModuleName;
+        if( mpShell && ( Event.Accessor >>= sModuleName ) )
+            mpShell->FindBasWin( mpShell->m_aCurDocument, mpShell->m_aCurLibName, sModuleName, TRUE, FALSE );
+    }
+    virtual void SAL_CALL elementReplaced( const container::ContainerEvent& ) throw( com::sun::star::uno::RuntimeException ) { }
+    virtual void SAL_CALL elementRemoved( const container::ContainerEvent& Event ) throw( com::sun::star::uno::RuntimeException )
+    {
+        rtl::OUString sModuleName;
+        if( mpShell  && ( Event.Accessor >>= sModuleName ) )
+        {
+            IDEBaseWindow* pWin = mpShell->FindWindow( mpShell->m_aCurDocument, mpShell->m_aCurLibName, sModuleName, BASICIDE_TYPE_MODULE, TRUE );
+            if( pWin )
+                mpShell->RemoveWindow( pWin, FALSE, TRUE );
+        }
+    }
+
+};
 
 TYPEINIT1( BasicIDEShell, SfxViewShell );
 
@@ -121,6 +189,7 @@ BasicIDEShell::BasicIDEShell( SfxViewFrame* pFrame_, SfxViewShell* /* pOldShell 
         m_bAppBasicModified( FALSE ),
         m_aNotifier( *this )
 {
+    m_xLibListener = new ContainerListenerImpl( this );
     Init();
     GnBasicIDEShellCount++;
 }
@@ -212,6 +281,12 @@ __EXPORT BasicIDEShell::~BasicIDEShell()
     delete pTabBar;
     delete pObjectCatalog;
     DestroyModulWindowLayout();
+
+        ContainerListenerImpl* pListener = dynamic_cast< ContainerListenerImpl* >( m_xLibListener.get() );
+        // Destroy all ContainerListeners for Basic Container.
+        if ( pListener )
+            pListener->removeContainerListener( m_aCurDocument, m_aCurLibName );
+
     // MI: Das gab einen GPF im SDT beim Schliessen da dann der ViewFrame die
     // ObjSh loslaesst. Es wusste auch keiner mehr wozu das gut war.
     // GetViewFrame()->GetObjectShell()->Broadcast( SfxSimpleHint( SFX_HINT_DYING ) );
@@ -828,9 +903,22 @@ void BasicIDEShell::RemoveWindow( IDEBaseWindow* pWindow_, BOOL bDestroy, BOOL b
         {
             pWindow_->AddStatus( BASWIN_TOBEKILLED );
             pWindow_->Hide();
-            StarBASIC::Stop();
-            // Es kommt kein Notify...
-            pWindow_->BasicStopped();
+            // In normal mode stop basic in windows to be deleted
+            // In VBA stop basic only if the running script is trying to delete
+            // its parent module
+            bool bStop = true;
+            if ( pWindow_->GetDocument().isInVBAMode() )
+            {
+                SbModule* pMod = StarBASIC::GetActiveModule();
+                if ( !pMod || ( pMod && ( pMod->GetName() != pWindow_->GetName() ) ) )
+                    bStop = false;
+            }
+            if ( bStop )
+            {
+                StarBASIC::Stop();
+                // Es kommt kein Notify...
+                pWindow_->BasicStopped();
+            }
             aIDEWindowTable.Insert( nKey, pWindow_ );   // wieder einhaegen
         }
     }
@@ -918,7 +1006,19 @@ void BasicIDEShell::SetCurLib( const ScriptDocument& rDocument, String aLibName,
 {
     if ( !bCheck || ( rDocument != m_aCurDocument || aLibName != m_aCurLibName ) )
     {
+        ContainerListenerImpl* pListener = NULL;
+
+        if ( rDocument.isInVBAMode() )
+            pListener = dynamic_cast< ContainerListenerImpl* >( m_xLibListener.get() );
+
+        if ( pListener )
+            pListener->removeContainerListener( m_aCurDocument, m_aCurLibName );
+
         m_aCurDocument = rDocument;
+
+        if ( pListener )
+            pListener->addContainerListener( m_aCurDocument, aLibName );
+
         m_aCurLibName = aLibName;
         if ( bUpdateWindows )
             UpdateWindows();

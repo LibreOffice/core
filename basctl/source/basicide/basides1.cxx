@@ -1198,10 +1198,16 @@ IDEBaseWindow* BasicIDEShell::FindWindow( const ScriptDocument& rDocument, const
                 // return any non-suspended window
                 return pWin;
             }
-            else if ( pWin->IsDocument( rDocument ) && pWin->GetLibName() == rLibName && pWin->GetName() == rName &&
+            else if ( pWin->IsDocument( rDocument ) )
+            {
+                OSL_TRACE("FindWindow pWin->GetLibName() %s rLibName %s",
+            rtl::OUStringToOString( pWin->GetLibName(), RTL_TEXTENCODING_UTF8 ).getStr(),
+            rtl::OUStringToOString( rLibName, RTL_TEXTENCODING_UTF8 ).getStr() );
+                OSL_TRACE("pWin->pWin->IsA( TYPE( ModulWindow ) %d && nType %d = BASICIDE_TYPE_MODULE %d", pWin->IsA( TYPE( ModulWindow ) ), nType, BASICIDE_TYPE_MODULE );
+                OSL_TRACE("pWin->pWin->IsA( TYPE( DialogWindow ) %d && nType %d = BASICIDE_TYPE_DIALOG %d", pWin->IsA( TYPE( DialogWindow ) ), nType, BASICIDE_TYPE_DIALOG );
+        if (  pWin->GetLibName() == rLibName && pWin->GetName() == rName &&
                       ( ( pWin->IsA( TYPE( ModulWindow ) )  && nType == BASICIDE_TYPE_MODULE ) ||
                         ( pWin->IsA( TYPE( DialogWindow ) ) && nType == BASICIDE_TYPE_DIALOG ) ) )
-            {
                 return pWin;
             }
         }

@@ -46,6 +46,7 @@
 #include <com/sun/star/script/XLibraryContainer2.hpp>
 #endif
 #include <com/sun/star/document/MacroExecMode.hpp>
+#include <com/sun/star/script/ModuleType.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sfx2/docfile.hxx>
 #include <basic/basrdll.hxx>
@@ -106,6 +107,8 @@ using namespace comphelper;
 DBG_NAME( ModulWindow )
 
 TYPEINIT1( ModulWindow , IDEBaseWindow );
+
+void lcl_getObjectName( const uno::Reference< container::XNameContainer >& rLib, const String& rModName, String& rObjName );
 
 void lcl_PrintHeader( Printer* pPrinter, USHORT nPages, USHORT nCurPage, const String& rTitle, bool bOutput )
 {
@@ -332,6 +335,8 @@ BOOL ModulWindow::BasicExecute()
             DBG_ASSERT( xModule.Is(), "Kein Modul!" );
             AddStatus( BASWIN_RUNNINGBASIC );
             USHORT nStart, nEnd, nCurMethodStart = 0;
+            TextSelection aSel = GetEditView()->GetSelection();
+            nCurMethodStart = ( aSel.GetStart().GetPara() + 1 );
             SbMethod* pMethod = 0;
             // erstes Macro, sonst blind "Main" (ExtSearch?)
             for ( USHORT nMacro = 0; nMacro < xModule->GetMethods()->Count(); nMacro++ )
@@ -339,16 +344,16 @@ BOOL ModulWindow::BasicExecute()
                 SbMethod* pM = (SbMethod*)xModule->GetMethods()->Get( nMacro );
                 DBG_ASSERT( pM, "Method?" );
                 pM->GetLineRange( nStart, nEnd );
-                if ( !pMethod || ( nStart < nCurMethodStart ) )
+                if (  nCurMethodStart >= nStart && nCurMethodStart <= nEnd )
                 {
                     pMethod = pM;
-                    nCurMethodStart = nStart;
+                    break;
                 }
             }
             if ( !pMethod )
-                pMethod = (SbMethod*)xModule->Find( String( RTL_CONSTASCII_USTRINGPARAM( "Main" ) ), SbxCLASS_METHOD );
+                return ( BasicIDE::ChooseMacro( uno::Reference< frame::XModel >(), FALSE, rtl::OUString() ).getLength() > 0 ) ? TRUE : FALSE;
 
-            if ( pMethod )
+            else
             {
                 pMethod->SetDebugFlags( aStatus.nBasicFlags );
                 BasicDLL::SetDebugMode( TRUE );
@@ -1372,7 +1377,39 @@ BasicEntryDescriptor ModulWindow::CreateEntryDescriptor()
     ScriptDocument aDocument( GetDocument() );
     String aLibName( GetLibName() );
     LibraryLocation eLocation = aDocument.getLibraryLocation( aLibName );
-    return BasicEntryDescriptor( aDocument, eLocation, aLibName, GetName(), OBJ_TYPE_MODULE );
+    String aModName( GetName() );
+    String aLibSubName;
+    if( xBasic.Is() && aDocument.isInVBAMode() && xModule.Is() )
+    {
+        switch( xModule->GetModuleType() )
+        {
+            case script::ModuleType::Document:
+            {
+                aLibSubName = String( IDEResId( RID_STR_DOCUMENT_OBJECTS ) );
+                uno::Reference< container::XNameContainer > xLib = aDocument.getOrCreateLibrary( E_SCRIPTS, aLibName );
+                if( xLib.is() )
+                {
+                    String sObjName;
+                    lcl_getObjectName( xLib, aModName, sObjName );
+                    if( sObjName.Len() )
+                    {
+                        aModName.AppendAscii(" (").Append(sObjName).AppendAscii(")");
+                    }
+                }
+                break;
+            }
+            case script::ModuleType::Form:
+                aLibSubName = String( IDEResId( RID_STR_USERFORMS ) );
+                break;
+            case script::ModuleType::Normal:
+                aLibSubName = String( IDEResId( RID_STR_NORMAL_MODULES ) );
+                break;
+            case script::ModuleType::Class:
+                aLibSubName = String( IDEResId( RID_STR_CLASS_MODULES ) );
+                break;
+        }
+    }
+    return BasicEntryDescriptor( aDocument, eLocation, aLibName, aLibSubName, aModName, OBJ_TYPE_MODULE );
 }
 
 void ModulWindow::SetReadOnly( BOOL b )

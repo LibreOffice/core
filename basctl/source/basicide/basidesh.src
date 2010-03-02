@@ -636,6 +636,22 @@ String RID_STR_TRANSLATION_DEFAULT
 {
     Text [ en-US ] = "[Default Language]" ;
 };
+String RID_STR_DOCUMENT_OBJECTS
+{
+    Text [ en-US ] = "Document Objects" ;
+};
+String RID_STR_USERFORMS
+{
+    Text [ en-US ] = "Forms" ;
+};
+String RID_STR_NORMAL_MODULES
+{
+    Text [ en-US ] = "Modules" ;
+};
+String RID_STR_CLASS_MODULES
+{
+    Text [ en-US ] = "Class Modules" ;
+};
 
 
 String RID_STR_DLGIMP_CLASH_RENAME

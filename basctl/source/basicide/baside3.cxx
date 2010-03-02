@@ -82,6 +82,7 @@
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <com/sun/star/resource/StringResourceWithLocation.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/script/XVBACompat.hpp>
 
 using namespace comphelper;
 using namespace ::com::sun::star;
@@ -112,8 +113,16 @@ DialogWindow::DialogWindow( Window* pParent, const ScriptDocument& rDocument, St
 {
     InitSettings( TRUE, TRUE, TRUE );
 
-    pEditor = new DlgEditor();
+    pEditor = new DlgEditor( rDocument.isDocument() ? rDocument.getDocument() : Reference< frame::XModel >() );
     pEditor->SetWindow( this );
+    // set vba mode on DialogModel ( allows it to work in 100thmm instead of MAP_APPFONT )
+    if ( rDocument.isDocument() && rDocument.getDocument().is() )
+    {
+        uno::Reference< script::XVBACompat > xDocVBAMode( rDocument.getLibraryContainer( E_SCRIPTS ), uno::UNO_QUERY );
+        uno::Reference< script::XVBACompat > xDialogModelVBAMode( xDialogModel, uno::UNO_QUERY );
+        if ( xDocVBAMode.is()  &&  xDialogModelVBAMode.is() )
+            xDialogModelVBAMode->setVBACompatModeOn( xDocVBAMode->getVBACompatModeOn() );
+    }
     pEditor->SetDialog( xDialogModel );
 
     // Undo einrichten
@@ -1297,8 +1306,9 @@ BasicEntryDescriptor DialogWindow::CreateEntryDescriptor()
 {
     ScriptDocument aDocument( GetDocument() );
     String aLibName( GetLibName() );
+    String aLibSubName;
     LibraryLocation eLocation = aDocument.getLibraryLocation( aLibName );
-    return BasicEntryDescriptor( aDocument, eLocation, aLibName, GetName(), OBJ_TYPE_DIALOG );
+    return BasicEntryDescriptor( aDocument, eLocation, aLibName, aLibSubName, GetName(), OBJ_TYPE_DIALOG );
 }
 
 void DialogWindow::SetReadOnly( BOOL b )

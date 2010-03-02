@@ -57,6 +57,7 @@
 #include <com/sun/star/script/XLibraryContainer2.hpp>
 #endif
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
+#include <com/sun/star/script/ModuleType.hpp>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
@@ -584,7 +585,29 @@ void __EXPORT BasicIDETabBar::Command( const CommandEvent& rCEvt )
                 aPopup.EnableItem( SID_BASICIDE_RENAMECURRENT, FALSE );
                 aPopup.RemoveDisabledEntries();
             }
+
+            // disable to delete or remove object modules in IDE
+            BasicManager* pBasMgr = aDocument.getBasicManager();
+            if ( pBasMgr )
+            {
+                StarBASIC* pBasic = pBasMgr->GetLib( aOULibName );
+                if( pBasic )
+                {
+                    IDEWindowTable& aIDEWindowTable = pIDEShell->GetIDEWindowTable();
+                    IDEBaseWindow* pWin = aIDEWindowTable.Get( GetCurPageId() );
+                    if( pWin && pWin->ISA( ModulWindow ) )
+                    {
+                        SbModule* pActiveModule = (SbModule*)pBasic->FindModule( pWin->GetName() );
+                        if( pActiveModule && ( pActiveModule->GetModuleType() == script::ModuleType::Document ) )
+                        {
+                            aPopup.EnableItem( SID_BASICIDE_DELETECURRENT, FALSE );
+                            aPopup.EnableItem( SID_BASICIDE_RENAMECURRENT, FALSE );
         }
+                    }
+                }
+            }
+        }
+
 
         SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
         SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;

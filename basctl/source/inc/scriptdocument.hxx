@@ -212,6 +212,7 @@ namespace basctl
         */
         bool        isAlive() const;
 
+        bool        isInVBAMode() const;
         /// returns the BasicManager associated with this instance
         BasicManager*
                     getBasicManager() const;

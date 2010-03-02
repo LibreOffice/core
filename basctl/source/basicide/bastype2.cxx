@@ -50,10 +50,28 @@
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/componentcontext.hxx>
+#include <map>
+#include <com/sun/star/script/ModuleType.hpp>
+#include <com/sun/star/script/XVBAModuleInfo.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/script/XVBAModuleInfo.hpp>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
+void lcl_getObjectName( const uno::Reference< container::XNameContainer >& rLib, const String& rModName, String& rObjName );
+
+sal_Int32 lcl_getModuleType(  const uno::Reference< container::XNameContainer >& rLib, const String& rModName )
+{
+    sal_Int32 nType = com::sun::star::script::ModuleType::Normal;
+    uno::Reference< script::XVBAModuleInfo > xVBAModuleInfo( rLib, uno::UNO_QUERY );
+    if ( xVBAModuleInfo.is() && xVBAModuleInfo->hasModuleInfo( rModName ) )
+    {
+        script::ModuleInfo aModuleInfo = xVBAModuleInfo->getModuleInfo( rModName );
+        nType = aModuleInfo.ModuleType;
+    }
+    return nType;
+}
 
 BasicEntry::~BasicEntry()
 {
@@ -88,20 +106,22 @@ BasicEntryDescriptor::BasicEntryDescriptor()
 {
 }
 
-BasicEntryDescriptor::BasicEntryDescriptor( const ScriptDocument& rDocument, LibraryLocation eLocation, const String& rLibName, const String& rName, BasicEntryType eType )
+BasicEntryDescriptor::BasicEntryDescriptor( const ScriptDocument& rDocument, LibraryLocation eLocation, const String& rLibName, const String& rLibSubName, const String& rName, BasicEntryType eType )
     :m_aDocument( rDocument )
     ,m_eLocation( eLocation )
     ,m_aLibName( rLibName )
+    ,m_aLibSubName( rLibSubName )
     ,m_aName( rName )
     ,m_eType( eType )
 {
     OSL_ENSURE( m_aDocument.isValid(), "BasicEntryDescriptor::BasicEntryDescriptor: invalid document!" );
 }
 
-BasicEntryDescriptor::BasicEntryDescriptor( const ScriptDocument& rDocument, LibraryLocation eLocation, const String& rLibName, const String& rName, const String& rMethodName, BasicEntryType eType )
+BasicEntryDescriptor::BasicEntryDescriptor( const ScriptDocument& rDocument, LibraryLocation eLocation, const String& rLibName, const String& rLibSubName, const String& rName, const String& rMethodName, BasicEntryType eType )
     :m_aDocument( rDocument )
     ,m_eLocation( eLocation )
     ,m_aLibName( rLibName )
+    ,m_aLibSubName( rLibSubName )
     ,m_aName( rName )
     ,m_aMethodName( rMethodName )
     ,m_eType( eType )
@@ -117,6 +137,7 @@ BasicEntryDescriptor::BasicEntryDescriptor( const BasicEntryDescriptor& rDesc )
     :m_aDocument( rDesc.m_aDocument )
     ,m_eLocation( rDesc.m_eLocation )
     ,m_aLibName( rDesc.m_aLibName )
+    ,m_aLibSubName( rDesc.m_aLibSubName )
     ,m_aName( rDesc.m_aName )
     ,m_aMethodName( rDesc.m_aMethodName )
     ,m_eType( rDesc.m_eType )
@@ -128,6 +149,7 @@ BasicEntryDescriptor& BasicEntryDescriptor::operator=( const BasicEntryDescripto
     m_aDocument = rDesc.m_aDocument;
     m_eLocation = rDesc.m_eLocation;
     m_aLibName = rDesc.m_aLibName;
+    m_aLibSubName = rDesc.m_aLibSubName;
     m_aName = rDesc.m_aName;
     m_aMethodName = rDesc.m_aMethodName;
     m_eType = rDesc.m_eType;
@@ -140,6 +162,7 @@ bool BasicEntryDescriptor::operator==( const BasicEntryDescriptor& rDesc ) const
     return m_aDocument == rDesc.m_aDocument &&
            m_eLocation == rDesc.m_eLocation &&
            m_aLibName == rDesc.m_aLibName &&
+           m_aLibSubName == rDesc.m_aLibSubName &&
            m_aName == rDesc.m_aName &&
            m_aMethodName == rDesc.m_aMethodName &&
            m_eType == rDesc.m_eType;
@@ -284,6 +307,11 @@ void BasicTreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const
         {
             try
             {
+                sal_Bool bVBAEnabled = rDocument.isInVBAMode();
+                if( bVBAEnabled )
+                    ImpCreateLibSubEntriesInVBAMode( pLibRootEntry, rDocument, rLibName );
+                else
+                {
                 // get a sorted list of module names
                 Sequence< ::rtl::OUString > aModNames = rDocument.getObjectNames( E_SCRIPTS, rLibName );
                 sal_Int32 nModCount = aModNames.getLength();
@@ -322,6 +350,7 @@ void BasicTreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const
                         }
                     }
                 }
+            }
             }
             catch ( const container::NoSuchElementException& )
             {
@@ -363,6 +392,139 @@ void BasicTreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const
             }
         }
     }
+}
+
+void BasicTreeListBox::ImpCreateLibSubEntriesInVBAMode( SvLBoxEntry* pLibRootEntry, const ScriptDocument& rDocument, const String& rLibName )
+{
+    ::std::map< BasicEntryType, ::rtl::OUString > aEntryMap;
+    aEntryMap.insert( ::std::make_pair( OBJ_TYPE_DOCUMENT_OBJECTS, String( IDEResId( RID_STR_DOCUMENT_OBJECTS ) ) ) );
+    aEntryMap.insert( ::std::make_pair( OBJ_TYPE_USERFORMS,  String( IDEResId( RID_STR_USERFORMS ) ) ) );
+    aEntryMap.insert( ::std::make_pair( OBJ_TYPE_NORMAL_MODULES, String( IDEResId( RID_STR_NORMAL_MODULES ) ) ) );
+    aEntryMap.insert( ::std::make_pair( OBJ_TYPE_CLASS_MODULES,  String( IDEResId( RID_STR_CLASS_MODULES ) ) ) );
+
+    ::std::map< BasicEntryType, ::rtl::OUString >::iterator iter;
+    for( iter = aEntryMap.begin(); iter != aEntryMap.end(); ++iter )
+    {
+        BasicEntryType eType = iter->first;
+        ::rtl::OUString aEntryName = iter->second;
+        SvLBoxEntry* pLibSubRootEntry = FindEntry( pLibRootEntry, aEntryName, eType );
+        if( pLibSubRootEntry )
+        {
+            SetEntryBitmaps( pLibSubRootEntry, Image( IDEResId( RID_IMG_MODLIB ) ), Image( IDEResId( RID_IMG_MODLIB_HC ) ) );
+            if ( IsExpanded( pLibSubRootEntry ) )
+                ImpCreateLibSubSubEntriesInVBAMode( pLibSubRootEntry, rDocument, rLibName );
+        }
+        else
+        {
+            pLibSubRootEntry = AddEntry(
+                aEntryName,
+                Image( IDEResId( RID_IMG_MODLIB ) ),
+                Image( IDEResId( RID_IMG_MODLIB_HC ) ),
+                pLibRootEntry, true,
+                std::auto_ptr< BasicEntry >( new BasicEntry( eType ) ) );
+        }
+    }
+}
+
+void BasicTreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvLBoxEntry* pLibSubRootEntry, const ScriptDocument& rDocument, const String& rLibName )
+{
+    uno::Reference< container::XNameContainer > xLib = rDocument.getOrCreateLibrary( E_SCRIPTS, rLibName );
+    if( !xLib.is() )
+        return;
+
+    try
+    {
+        // get a sorted list of module names
+        Sequence< ::rtl::OUString > aModNames = rDocument.getObjectNames( E_SCRIPTS, rLibName );
+        sal_Int32 nModCount = aModNames.getLength();
+        const ::rtl::OUString* pModNames = aModNames.getConstArray();
+
+        BasicEntryDescriptor aDesc( GetEntryDescriptor( pLibSubRootEntry ) );
+        BasicEntryType eCurrentType( aDesc.GetType() );
+
+        for ( sal_Int32 i = 0 ; i < nModCount ; i++ )
+        {
+            String aModName = pModNames[ i ];
+            BasicEntryType eType = OBJ_TYPE_UNKNOWN;
+            switch( lcl_getModuleType( xLib, aModName ) )
+            {
+                case script::ModuleType::Document:
+                    eType = OBJ_TYPE_DOCUMENT_OBJECTS;
+                    break;
+                case script::ModuleType::Form:
+                    eType = OBJ_TYPE_USERFORMS;
+                    break;
+                case script::ModuleType::Normal:
+                    eType = OBJ_TYPE_NORMAL_MODULES;
+                    break;
+                case script::ModuleType::Class:
+                    eType = OBJ_TYPE_CLASS_MODULES;
+                    break;
+            }
+            if( eType != eCurrentType )
+                continue;
+
+            // display a nice friendly name in the ObjectModule tab,
+               // combining the objectname and module name, e.g. Sheet1 ( Financials )
+            String aEntryName( aModName );
+            if( eType == OBJ_TYPE_DOCUMENT_OBJECTS )
+            {
+                   String sObjName;
+                lcl_getObjectName( xLib, aModName, sObjName );
+                if( sObjName.Len() )
+                   {
+                    aEntryName.AppendAscii(" (").Append(sObjName).AppendAscii(")");
+                }
+            }
+            SvLBoxEntry* pModuleEntry = FindEntry( pLibSubRootEntry, aEntryName, OBJ_TYPE_MODULE );
+            if ( !pModuleEntry )
+                pModuleEntry = AddEntry(
+                    aEntryName,
+                    Image( IDEResId( RID_IMG_MODULE ) ),
+                    Image( IDEResId( RID_IMG_MODULE_HC ) ),
+                    pLibSubRootEntry, false,
+                    std::auto_ptr< BasicEntry >( new BasicEntry( OBJ_TYPE_MODULE ) ) );
+
+            // methods
+            if ( nMode & BROWSEMODE_SUBS )
+            {
+                Sequence< ::rtl::OUString > aNames = BasicIDE::GetMethodNames( rDocument, rLibName, aModName );
+                sal_Int32 nCount = aNames.getLength();
+                const ::rtl::OUString* pNames = aNames.getConstArray();
+
+                for ( sal_Int32 j = 0 ; j < nCount ; j++ )
+                {
+                    String aName = pNames[ j ];
+                    SvLBoxEntry* pEntry = FindEntry( pModuleEntry, aName, OBJ_TYPE_METHOD );
+                    if ( !pEntry )
+                        pEntry = AddEntry(
+                            aName,
+                            Image( IDEResId( RID_IMG_MACRO ) ),
+                            Image( IDEResId( RID_IMG_MACRO_HC ) ),
+                            pModuleEntry, false,
+                            std::auto_ptr< BasicEntry >( new BasicEntry( OBJ_TYPE_METHOD ) ) );
+                }
+            }
+        }
+    }
+    catch ( const container::NoSuchElementException& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+}
+
+SvLBoxEntry* BasicTreeListBox::ImpFindEntry( SvLBoxEntry* pParent, const String& rText )
+{
+    ULONG nRootPos = 0;
+    SvLBoxEntry* pEntry = pParent ? FirstChild( pParent ) : GetEntry( nRootPos );
+    while ( pEntry )
+    {
+        if (  GetEntryText( pEntry ) == rText )
+            return pEntry;
+
+        pEntry = pParent ? NextSibling( pEntry ) : GetEntry( ++nRootPos );
+    }
+    return 0;
 }
 
 void BasicTreeListBox::onDocumentCreated( const ScriptDocument& /*_rDocument*/ )
@@ -477,10 +639,11 @@ long BasicTreeListBox::ExpandingHdl()
         if ( aDocument.isAlive() )
         {
             String aLibName( aDesc.GetLibName() );
+            String aLibSubName( aDesc.GetLibSubName() );
             String aName( aDesc.GetName() );
             String aMethodName( aDesc.GetMethodName() );
 
-            if ( aLibName.Len() && !aName.Len() && !aMethodName.Len() )
+            if ( aLibName.Len() && !aLibSubName.Len() && !aName.Len() && !aMethodName.Len() )
             {
                 // check password, if library is password protected and not verified
                 ::rtl::OUString aOULibName( aLibName );
@@ -633,7 +796,7 @@ void BasicTreeListBox::SetCurrentEntry( BasicEntryDescriptor& rDesc )
         aDesc = BasicEntryDescriptor(
             ScriptDocument::getApplicationScriptDocument(),
             LIBRARY_LOCATION_USER, String::CreateFromAscii( "Standard" ),
-            String::CreateFromAscii( "." ), OBJ_TYPE_UNKNOWN );
+            String(), String::CreateFromAscii( "." ), OBJ_TYPE_UNKNOWN );
     }
     ScriptDocument aDocument( aDesc.GetDocument() );
     OSL_ENSURE( aDocument.isValid(), "BasicTreeListBox::SetCurrentEntry: invalid document!" );
@@ -650,14 +813,24 @@ void BasicTreeListBox::SetCurrentEntry( BasicEntryDescriptor& rDesc )
             if ( pLibEntry )
             {
                 pCurEntry = pLibEntry;
+                String aLibSubName( aDesc.GetLibSubName() );
+                if( aLibSubName.Len() )
+                {
+                    Expand( pLibEntry );
+                    SvLBoxEntry* pLibSubEntry = ImpFindEntry( pLibEntry, aLibSubName );
+                    if( pLibSubEntry )
+                    {
+                        pCurEntry = pLibSubEntry;
+                    }
+                }
                 String aName( aDesc.GetName() );
                 if ( aName.Len() )
                 {
-                    Expand( pLibEntry );
+                    Expand( pCurEntry );
                     BasicEntryType eType = OBJ_TYPE_MODULE;
                     if ( aDesc.GetType() == OBJ_TYPE_DIALOG )
                         eType = OBJ_TYPE_DIALOG;
-                    SvLBoxEntry* pEntry = FindEntry( pLibEntry, aName, eType );
+                    SvLBoxEntry* pEntry = FindEntry( pCurEntry, aName, eType );
                     if ( pEntry )
                     {
                         pCurEntry = pEntry;

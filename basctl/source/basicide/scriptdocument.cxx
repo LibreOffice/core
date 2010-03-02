@@ -53,6 +53,8 @@
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
+#include <com/sun/star/script/XVBAModuleInfo.hpp>
+#include <com/sun/star/script/XVBACompat.hpp>
 /** === end UNO includes === **/
 
 #include <sfx2/objsh.hxx>
@@ -139,6 +141,9 @@ namespace basctl
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::document::XEventBroadcaster;
     using ::com::sun::star::document::XEmbeddedScripts;
+    using ::com::sun::star::script::ModuleInfo;
+    using ::com::sun::star::script::XVBAModuleInfo;
+    using ::com::sun::star::script::XVBACompat;
     /** === end UNO using === **/
     namespace MacroExecMode = ::com::sun::star::document::MacroExecMode;
     namespace FrameSearchFlag = ::com::sun::star::frame::FrameSearchFlag;
@@ -272,6 +277,7 @@ namespace basctl
 
         // versions with the same signature/semantics as in ScriptDocument itself
         bool        isReadOnly() const;
+        bool        isInVBAMode() const;
         BasicManager*
                     getBasicManager() const;
         Reference< XModel >
@@ -444,6 +450,18 @@ namespace basctl
         return bIsReadOnly;
     }
 
+    bool ScriptDocument_Impl::isInVBAMode() const
+    {
+        bool bResult = false;
+        if ( !isApplication() )
+        {
+            Reference< XVBACompat > xVBACompat( getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
+            if ( xVBACompat.is() )
+                bResult = xVBACompat->getVBACompatModeOn();
+        }
+        return bResult;
+    }
+
     //--------------------------------------------------------------------
     BasicManager* ScriptDocument_Impl::getBasicManager() const
     {
@@ -462,6 +480,8 @@ namespace basctl
     {
         OSL_ENSURE( isValid(), "ScriptDocument_Impl::getDocument: invalid state!" );
         OSL_ENSURE( isDocument(), "ScriptDocument_Impl::getDocument: for documents only!" );
+        if ( !isDocument() )
+            OSL_TRACE("**** BAHHHH!!!*****");
         if ( !isValid() || !isDocument() )
             return NULL;
 
@@ -671,6 +691,16 @@ namespace basctl
             }
 
             // insert element by new name in container
+            if ( _eType == E_SCRIPTS )
+            {
+                Reference< XVBAModuleInfo > xVBAModuleInfo( xLib, UNO_QUERY );
+                if ( xVBAModuleInfo->hasModuleInfo( _rOldName ) )
+                {
+                    ModuleInfo sModuleInfo = xVBAModuleInfo->getModuleInfo( _rOldName );
+                    xVBAModuleInfo->removeModuleInfo( _rOldName );
+                    xVBAModuleInfo->insertModuleInfo( _rNewName, sModuleInfo );
+                }
+            }
             xLib->insertByName( _rNewName, aElement );
             return true;
         }
@@ -735,8 +765,7 @@ namespace basctl
             Reference< XNameContainer > xLib( getOrCreateLibrary( E_SCRIPTS, _rLibName ), UNO_QUERY_THROW );
             if ( !xLib->hasByName( _rModName ) )
                 return false;
-
-            xLib->replaceByName( _rModName, makeAny( _rModuleCode ) );
+            xLib->replaceByName( _rModName,  makeAny( _rModuleCode ) );
             return true;
         }
         catch( const Exception& )
@@ -1349,6 +1378,11 @@ namespace basctl
     bool ScriptDocument::isApplication() const
     {
         return m_pImpl->isApplication();
+    }
+
+    bool ScriptDocument::isInVBAMode() const
+    {
+        return m_pImpl->isInVBAMode();
     }
 
     //--------------------------------------------------------------------
