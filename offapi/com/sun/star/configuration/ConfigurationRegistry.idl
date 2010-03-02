@@ -43,6 +43,10 @@ module com { module sun { module star { module configuration {
 
 /*  provides access to a configuration tree as a registry.
 
+    <p>This service is deprecated,
+    <type scope="com.sun.star.configuration">ConfigurationProvider</type> should
+    be used instead.</p>
+
     <p> Using the <type scope="com::sun::star::registry">XSimpleRegistry</type>
     interface, the service can be bound to a subtree within the
     configuration tree, as provided by an

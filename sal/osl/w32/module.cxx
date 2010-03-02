@@ -1,39 +1,42 @@
 /*************************************************************************
- *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
- *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
-
+*
+* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+*
+* Copyright 2000, 2010 Oracle and/or its affiliates.
+*
+* OpenOffice.org - a multi-platform office productivity suite
+*
+* This file is part of OpenOffice.org.
+*
+* OpenOffice.org is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License version 3
+* only, as published by the Free Software Foundation.
+*
+* OpenOffice.org is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License version 3 for more details
+* (a copy is included in the LICENSE file that accompanied this code).
+*
+* You should have received a copy of the GNU Lesser General Public License
+* version 3 along with OpenOffice.org.  If not, see
+* <http://www.openoffice.org/license.html>
+* for a copy of the LGPLv3 License.
+*
+************************************************************************/
 
 #include "system.h"
 #include <tlhelp32.h>
+
+#include "file_url.h"
+#include "path_helper.hxx"
 
 #include <osl/module.h>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <osl/file.h>
 #include <rtl/logfile.h>
+
 /*
     under WIN32, we use the void* oslModule
     as a WIN32 HANDLE (which is also a 32-bit value)
@@ -309,22 +312,22 @@ static sal_Bool SAL_CALL _osl_addressGetModuleURL_NT4( void *pv, rtl_uString **p
         if ( lpfnSymInitialize && lpfnSymCleanup && lpfnSymGetModuleInfo )
         {
             IMAGEHLP_MODULE ModuleInfo;
-            CHAR    szModuleFileName[MAX_PATH];
+            ::osl::LongPathBuffer< sal_Char > aModuleFileName( MAX_LONG_PATH );
             LPSTR   lpSearchPath = NULL;
 
-            if ( GetModuleFileNameA( NULL, szModuleFileName, sizeof(szModuleFileName) ) )
+            if ( GetModuleFileNameA( NULL, aModuleFileName, aModuleFileName.getBufSizeInSymbols() ) )
             {
-                char *pLastBkSlash = strrchr( szModuleFileName, '\\' );
+                char *pLastBkSlash = strrchr( aModuleFileName, '\\' );
 
                 if (
                     pLastBkSlash &&
-                    pLastBkSlash > szModuleFileName
+                    pLastBkSlash > (sal_Char*)aModuleFileName
                     && *(pLastBkSlash - 1) != ':'
                     && *(pLastBkSlash - 1) != '\\'
                     )
                 {
                     *pLastBkSlash = 0;
-                    lpSearchPath = szModuleFileName;
+                    lpSearchPath = aModuleFileName;
                 }
             }
 
@@ -423,12 +426,12 @@ static sal_Bool SAL_CALL _osl_addressGetModuleURL_NT( void *pv, rtl_uString **pu
 
                 if ( (BYTE *)pv >= (BYTE *)modinfo.lpBaseOfDll && (BYTE *)pv < (BYTE *)modinfo.lpBaseOfDll + modinfo.SizeOfImage )
                 {
-                    WCHAR   szBuffer[MAX_PATH];
+                    ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
                     rtl_uString *ustrSysPath = NULL;
 
-                    GetModuleFileNameW( lpModules[iModule], szBuffer, bufsizeof(szBuffer) );
+                    GetModuleFileNameW( lpModules[iModule], aBuffer, aBuffer.getBufSizeInSymbols() );
 
-                    rtl_uString_newFromStr( &ustrSysPath, szBuffer );
+                    rtl_uString_newFromStr( &ustrSysPath, aBuffer );
                     osl_getFileURLFromSystemPath( ustrSysPath, pustrURL );
                     rtl_uString_release( ustrSysPath );
 
