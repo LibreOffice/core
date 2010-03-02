@@ -251,7 +251,7 @@ end function
 '-------------------------------------------------------------------------------
 '
 function DateiExtract ( sFileDat$ )
-    '/// Get the filename from a path
+   '/// Get the filename from a path
     '/// <u>Input</u>: path with file
     '/// <u>Return</u>: filename without the path
     Dim i%
