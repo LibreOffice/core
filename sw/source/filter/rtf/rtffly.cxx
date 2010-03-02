@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: rtffly.cxx,v $
- * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,13 +33,13 @@
 #include <tools/cachestr.hxx>
 #include <svtools/rtftoken.h>
 #include <svl/itemiter.hxx>
-#include <svx/prntitem.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/protitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/prntitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/protitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <fmtfsize.hxx>
 #include <fmtanchr.hxx>
 #include <fmtpdsc.hxx>
@@ -64,23 +61,18 @@
 #include <txtflcnt.hxx>
 #include <fmtflcnt.hxx>
 #include <fltini.hxx>
-#ifndef __SGI_STL_DEQUE
 #include <deque>
-#endif
-#ifndef __SGI_STL_MAP
 #include <map>
-#endif
-#ifndef __SGI_STL_UTILITY
 #include <utility>
-#endif
 // --> OD 2004-06-30 #i27767#
 #include <fmtwrapinfluenceonobjpos.hxx>
 // <--
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <fmtfollowtextflow.hxx>
 // --> OD, FLR 2006-02-16 #131205#
 #include "dcontact.hxx"
 // <--
+
 
 using namespace ::com::sun::star;
 
@@ -459,7 +451,7 @@ void SwRTFParser::SetFlysInDoc()
         SwFlyFrmFmt* pFmt = pDoc->MakeFlyFrmFmt( aEmptyStr, pParent );
         pFmt->SetFmtAttr( pFlySave->aFlySet );
         const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
-        if( FLY_IN_CNTNT != rAnchor.GetAnchorId() )
+        if (FLY_AS_CHAR != rAnchor.GetAnchorId())
         {
             // korrigiere noch den Absatz, ist immer der vorhergehende !
             // JP 20.09.95: wenn es diesen gibt! (DocAnfang!)
@@ -568,7 +560,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
 
     // RTF-Defaults setzen:
     // --> OD 2004-06-24 #i27767#
-    SwFmtAnchor aAnchor( FLY_AT_CNTNT );
+    SwFmtAnchor aAnchor( FLY_AT_PARA );
 
     SwFmtHoriOrient aHori( 0, text::HoriOrientation::LEFT, text::RelOrientation::FRAME );
     SwFmtVertOrient aVert( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME );
@@ -844,7 +836,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                             switch( GetNextToken() )
                             {
                             case RTF_FLY_PAGE:
-                                aAnchor.SetType( FLY_PAGE );
+                                aAnchor.SetType( FLY_AT_PAGE );
                                 aAnchor.SetPageNum( USHORT(nTokenValue));
                                 aAnchor.SetAnchor( 0 );
                                 break;
@@ -854,7 +846,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                                     SwNodeIndex aIdx( pPam->GetPoint()->nNode );
                                     pDoc->GetNodes().GoPrevious( &aIdx );
                                     SwPosition aPos( aIdx );
-                                    aAnchor.SetType( FLY_AT_CNTNT );
+                                    aAnchor.SetType( FLY_AT_PARA );
                                     aAnchor.SetAnchor( &aPos );
                                 }
                                 break;
@@ -1288,7 +1280,7 @@ void SwRTFParser::InsPicture( const String& rGrfNm, const Graphic* pGrf,
                                                 RES_VERT_ORIENT,*/ RES_ANCHOR );
         const SwPosition* pPos = pPam->GetPoint();
 
-        SwFmtAnchor aAnchor( FLY_IN_CNTNT );
+        SwFmtAnchor aAnchor( FLY_AS_CHAR );
         aAnchor.SetAnchor( pPos );
         aFlySet.Put( aAnchor );
         aFlySet.Put( SwFmtVertOrient( 0, text::VertOrientation::TOP ));

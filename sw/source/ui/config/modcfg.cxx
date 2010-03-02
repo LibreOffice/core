@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: modcfg.cxx,v $
- * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,11 +33,11 @@
 #include <sot/clsids.hxx>
 #include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
-#include <goodies/mailenum.hxx>
+#include <svl/mailenum.hxx>
 #ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
 #endif
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include <tools/debug.hxx>
 
 #include <tools/globname.hxx>

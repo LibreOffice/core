@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: edtwin.cxx,v $
- * $Revision: 1.164 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,43 +47,36 @@
 #include <sot/storage.hxx>
 #include <svl/macitem.hxx>
 #include <unotools/securityoptions.hxx>
-#ifndef __SBX_SBXVARIABLE_HXX //autogen
 #include <basic/sbxvar.hxx>
-#endif
 #include <svl/ctloptions.hxx>
 #include <basic/sbx.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
-#ifndef _SFX_CLIENTSH_HXX
 #include <sfx2/ipclient.hxx>
-#endif
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/ptitem.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svx/htmlmode.hxx>
 #include <svx/svdview.hxx>
-//#ifndef _SVDVMARK_HXX //autogen
-//#include <svx/svdvmark.hxx>
-//#endif
 #include <svx/svdhdl.hxx>
 #include <svx/svdoutl.hxx>
-#include <svx/editeng.hxx>
-#include <svx/svxacorr.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/flditem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/svxacorr.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/protitem.hxx>
 #include <unotools/charclass.hxx>
 
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <edtwin.hxx>
 #include <view.hxx>
@@ -128,12 +118,8 @@
 #include <breakit.hxx>
 #include <checkit.hxx>
 
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #ifndef _DOCVW_HRC
 #include <docvw.hrc>
 #endif
@@ -1019,7 +1005,7 @@ void SwEditWin::ChangeFly( BYTE nDir, BOOL bWeb )
             default: ASSERT( TRUE, "ChangeFly: Unknown direction." );
         }
         BOOL bSet = FALSE;
-        if( FLY_IN_CNTNT == eAnchorId && ( nDir % 2 ) )
+        if ((FLY_AS_CHAR == eAnchorId) && ( nDir % 2 ))
         {
             long aDiff = aTmp.Top() - aRefPoint.Y();
             if( aDiff > 0 )
@@ -1064,7 +1050,8 @@ void SwEditWin::ChangeFly( BYTE nDir, BOOL bWeb )
             aSet.Put( aVert );
             bSet = TRUE;
         }
-        if( bWeb && FLY_AT_CNTNT == eAnchorId && ( nDir==MOVE_LEFT_SMALL || nDir==MOVE_RIGHT_BIG ) )
+        if (bWeb && (FLY_AT_PARA == eAnchorId)
+            && ( nDir==MOVE_LEFT_SMALL || nDir==MOVE_RIGHT_BIG ))
         {
             SwFmtHoriOrient aHori( (SwFmtHoriOrient&)aSet.Get(RES_HORI_ORIENT) );
             sal_Int16 eNew;
@@ -1091,11 +1078,13 @@ void SwEditWin::ChangeFly( BYTE nDir, BOOL bWeb )
         rSh.StartAllAction();
         if( bSet )
             rSh.SetFlyFrmAttr( aSet );
-        BOOL bSetPos = FLY_IN_CNTNT != eAnchorId;
+        BOOL bSetPos = (FLY_AS_CHAR != eAnchorId);
         if(bSetPos && bWeb)
         {
-            if(FLY_PAGE != eAnchorId)
+            if (FLY_AT_PAGE != eAnchorId)
+            {
                 bSetPos = FALSE;
+            }
             else
             {
                 bSetPos = (::GetHtmlMode(rView.GetDocShell()) & HTMLMODE_SOME_ABS_POS) ?
@@ -1185,7 +1174,8 @@ void SwEditWin::ChangeDrawing( BYTE nDir )
                 BOOL bDummy;
                 const bool bVertAnchor = rSh.IsFrmVertical( TRUE, bDummy );
                 const bool bHoriMove = !bVertAnchor == !( nDir % 2 );
-                const bool bMoveAllowed = !bHoriMove || rSh.GetAnchorId() != FLY_IN_CNTNT;
+                const bool bMoveAllowed =
+                    !bHoriMove || (rSh.GetAnchorId() != FLY_AS_CHAR);
                 if ( bMoveAllowed )
                 {
                 // <--
@@ -2285,7 +2275,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 else if( !aKeyEvent.GetRepeat() && pACorr && bIsAutoCorrectChar &&
                         pACfg->IsAutoFmtByInput() &&
                     pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
-                                            ChgFractionSymbol | ChgOrdinalNumber |
+                                            ChgOrdinalNumber |
                                             ChgToEnEmDash | SetINetAttr |
                                             Autocorrect ) &&
                     '\"' != aCh && '\'' != aCh && '*' != aCh && '_' != aCh &&
@@ -2317,7 +2307,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
         {
             if( pACorr && pACfg->IsAutoFmtByInput() &&
                 pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
-                                        ChgFractionSymbol | ChgOrdinalNumber |
+                                        ChgOrdinalNumber |
                                         ChgToEnEmDash | SetINetAttr |
                                         Autocorrect ) &&
                 !rSh.HasReadonlySel() )

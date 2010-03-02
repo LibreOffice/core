@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docdraw.cxx,v $
- * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,36 +29,27 @@
 #include "precompiled_sw.hxx"
 #include <hintids.hxx>
 #include <rtl/logfile.hxx>
-#ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
-#endif
 #include <sfx2/printer.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/flditem.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/editeng.hxx>
 #include <svx/svdoutl.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/colritem.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdogrp.hxx>
-#include <svx/langitem.hxx>
-#include <svx/unolingu.hxx>
-
-#ifndef _SVDOMEAS_HXX
-#include <svx/svdfield.hxx>
-#endif
+#include <editeng/langitem.hxx>
+#include <editeng/unolingu.hxx>
+#include <editeng/measfld.hxx>
 #include <svx/svdpool.hxx>
 #include <fmtanchr.hxx>
 #include <charatr.hxx>
 #include <frmfmt.hxx>
 #include <charfmt.hxx>
 #include <viewimp.hxx>
-#ifndef _SWHINTS_HXX
 #include <swhints.hxx>
-#endif
 #include <doc.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <rootfrm.hxx>  //Damit der RootDtor gerufen wird.
 #include <poolfmt.hxx>
 #include <viewsh.hxx>           // fuer MakeDrawView
@@ -74,7 +62,7 @@
 #include <flyfrm.hxx>
 #include <dflyobj.hxx>
 #include <svx/svdetc.hxx>
-#include <svx/fhgtitem.hxx>
+#include <editeng/fhgtitem.hxx>
 
 // OD 26.06.2003 #108784#
 #include <svx/svdpagv.hxx>
@@ -82,7 +70,7 @@
 #include <dcontact.hxx>
 #include <txtfrm.hxx>
 #include <frmfmt.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <fmtornt.hxx>
 // --> OD 2006-03-14 #i62875#
 #include <svx/svditer.hxx>
@@ -481,7 +469,7 @@ BOOL SwDoc::DeleteSelection( SwDrawView& rDrawView )
                 SwDrawContact *pC = (SwDrawContact*)GetUserCall(pObj);
                 SwDrawFrmFmt *pFrmFmt = (SwDrawFrmFmt*)pC->GetFmt();
                 if( pFrmFmt &&
-                    FLY_IN_CNTNT == pFrmFmt->GetAnchor().GetAnchorId() )
+                    FLY_AS_CHAR == pFrmFmt->GetAnchor().GetAnchorId() )
                 {
                     rDrawView.MarkObj( pObj, rDrawView.Imp().GetPageView(), TRUE );
                     --i;

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: rolbck.cxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,7 +66,7 @@
 #ifndef _UNDO_HRC
 #include <undo.hrc>
 #endif
-#include <svx/brkitem.hxx>
+#include <editeng/brkitem.hxx>
 #include <bookmrk.hxx>
 
 SV_IMPL_PTRARR( SwpHstry, SwHistoryHintPtr)
@@ -922,7 +919,7 @@ SwHistoryChangeFlyAnchor::SwHistoryChangeFlyAnchor( SwFrmFmt& rFmt )
     : SwHistoryHint( HSTRY_CHGFLYANCHOR )
     , m_rFmt( rFmt )
     , m_nOldNodeIndex( rFmt.GetAnchor().GetCntntAnchor()->nNode.GetIndex() )
-    , m_nOldContentIndex( ( FLY_AUTO_CNTNT == rFmt.GetAnchor().GetAnchorId() )
+    , m_nOldContentIndex( (FLY_AT_CHAR == rFmt.GetAnchor().GetAnchorId())
             ?   rFmt.GetAnchor().GetCntntAnchor()->nContent.GetIndex()
             :   STRING_MAXLEN )
 {

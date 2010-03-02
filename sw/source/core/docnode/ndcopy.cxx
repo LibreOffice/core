@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ndcopy.cxx,v $
- * $Revision: 1.34.74.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +33,7 @@
 #include <hintids.hxx>
 
 
-#include <svx/brkitem.hxx>
+#include <editeng/brkitem.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtanchr.hxx>
 #include <fmtcntnt.hxx>
@@ -552,20 +549,18 @@ void SwTxtNode::CopyCollFmt( SwTxtNode& rDestNd )
 BOOL lcl_ChkFlyFly( SwDoc* pDoc, ULONG nSttNd, ULONG nEndNd,
                         ULONG nInsNd )
 {
-    const SwFrmFmt* pFmt;
-    const SwFmtAnchor* pAnchor;
-    const SwPosition* pAPos;
     const SwSpzFrmFmts& rFrmFmtTbl = *pDoc->GetSpzFrmFmts();
 
     for( USHORT n = 0; n < rFrmFmtTbl.Count(); ++n )
     {
-        pFmt = rFrmFmtTbl[n];
-        pAnchor = &pFmt->GetAnchor();
-        if( 0 != ( pAPos = pAnchor->GetCntntAnchor()) &&
-            ( FLY_IN_CNTNT == pAnchor->GetAnchorId() ||
-              FLY_AUTO_CNTNT == pAnchor->GetAnchorId() ||
-              FLY_AT_FLY == pAnchor->GetAnchorId() ||
-              FLY_AT_CNTNT == pAnchor->GetAnchorId() ) &&
+        SwFrmFmt const*const  pFmt = rFrmFmtTbl[n];
+        SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();
+        SwPosition const*const pAPos = pAnchor->GetCntntAnchor();
+        if (pAPos &&
+            ((FLY_AS_CHAR == pAnchor->GetAnchorId()) ||
+             (FLY_AT_CHAR == pAnchor->GetAnchorId()) ||
+             (FLY_AT_FLY  == pAnchor->GetAnchorId()) ||
+             (FLY_AT_PARA == pAnchor->GetAnchorId())) &&
             nSttNd <= pAPos->nNode.GetIndex() &&
             pAPos->nNode.GetIndex() < nEndNd )
         {
@@ -1398,18 +1393,17 @@ void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
     SwDoc *const pDest = rStartIdx.GetNode().GetDoc();
     _ZSortFlys aArr;
     USHORT nArrLen = GetSpzFrmFmts()->Count();
-    USHORT n;
 
-    for( n = 0; n < nArrLen; ++n )
+    for ( USHORT n = 0; n < nArrLen; ++n )
     {
-        const SwFrmFmt* pFmt = (*GetSpzFrmFmts())[n];
-        const SwFmtAnchor* pAnchor = &pFmt->GetAnchor();
-        const SwPosition* pAPos;
-        bool bAtCntnt = pAnchor->GetAnchorId() == FLY_AT_CNTNT;
-        if ( ( bAtCntnt ||
-               pAnchor->GetAnchorId() == FLY_AT_FLY ||
-               pAnchor->GetAnchorId() == FLY_AUTO_CNTNT ) &&
-             0 != ( pAPos = pAnchor->GetCntntAnchor()) &&
+        SwFrmFmt const*const pFmt = (*GetSpzFrmFmts())[n];
+        SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();
+        SwPosition const*const pAPos = pAnchor->GetCntntAnchor();
+        bool bAtCntnt = (pAnchor->GetAnchorId() == FLY_AT_PARA);
+        if ( pAPos &&
+             ( bAtCntnt ||
+              (pAnchor->GetAnchorId() == FLY_AT_FLY) ||
+              (pAnchor->GetAnchorId() == FLY_AT_CHAR)) &&
              (( bCopyFlyAtFly && FLY_AT_FLY == pAnchor->GetAnchorId() )
                     ? rRg.aStart <= pAPos->nNode.GetIndex() + 1
                     : ( IsRedlineMove()
@@ -1470,7 +1464,7 @@ void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
     //die Chains entsprechend aufgebaut werden koennen.
     SvPtrarr aNewArr( 10, 10 );
 
-    for( n = 0; n < aArr.Count(); ++n )
+    for ( USHORT n = 0; n < aArr.Count(); ++n )
     {
         const _ZSortFly& rZSortFly = aArr[ n ];
 
@@ -1485,8 +1479,8 @@ void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
         // method <SwNodes::_CopyNodes(..)>.
         // Thus, the new anchor position in the destination document is found
         // by counting the text nodes.
-        if ( aAnchor.GetAnchorId() == FLY_AT_CNTNT ||
-             aAnchor.GetAnchorId() == FLY_AUTO_CNTNT )
+        if ((aAnchor.GetAnchorId() == FLY_AT_PARA) ||
+            (aAnchor.GetAnchorId() == FLY_AT_CHAR) )
         {
             // First, determine number of anchor text node in the copied range.
             // Note: The anchor text node *have* to be inside the copied range.
@@ -1552,7 +1546,7 @@ void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
         }
         // <--
         // die am Zeichen Flys wieder ans das vorgegebene Zeichen setzen
-        if ( FLY_AUTO_CNTNT == aAnchor.GetAnchorId() &&
+        if ((FLY_AT_CHAR == aAnchor.GetAnchorId()) &&
              pNewPos->nNode.GetNode().IsTxtNode() )
         {
             pNewPos->nContent.Assign( (SwTxtNode*)&pNewPos->nNode.GetNode(),
@@ -1592,7 +1586,7 @@ void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
     ASSERT( aArr.Count() == aNewArr.Count(), "Missing new Flys" );
     if ( aArr.Count() == aNewArr.Count() )
     {
-        for ( n = 0; n < aArr.Count(); ++n )
+        for ( USHORT n = 0; n < aArr.Count(); ++n )
         {
             const SwFrmFmt *pFmt = aArr[n].GetFmt();
             const SwFmtChain &rChain = pFmt->GetChain();

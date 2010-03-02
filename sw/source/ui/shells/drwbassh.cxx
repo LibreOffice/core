@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drwbassh.cxx,v $
- * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,16 +39,14 @@
 #include <svl/aeitem.hxx>
 #include <svx/svdview.hxx>
 #include <vcl/msgbox.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svl/whiter.hxx>
 #include <svx/swframevalidation.hxx>
 #include <svx/anchorid.hxx>
 #include <svx/htmlmode.hxx>
 #include <uitool.hxx>
 #include <fmtornt.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <wview.hxx>
@@ -479,7 +474,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                 {   // Objekte nicht aneinander ausrichten
 
                     USHORT nAnchor = pSh->GetAnchorId();
-                    if (nAnchor == FLY_IN_CNTNT)
+                    if (nAnchor == FLY_AS_CHAR)
                     {
                         sal_Int16 nVertOrient = -1;
 
@@ -509,7 +504,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                         }
                         break;
                     }
-                    if (nAnchor == FLY_AT_CNTNT)
+                    if (nAnchor == FLY_AT_PARA)
                         break;  // Absatzverankerte Rahmen nicht ausrichten
                 }
 
@@ -855,7 +850,7 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation 
         pValidation->nWidth = pValidation->nHeight;
         pValidation->nHeight = nTmp;
     }
-    if ( eAnchorType == FLY_PAGE || eAnchorType == FLY_AT_FLY )
+    if ((eAnchorType == FLY_AT_PAGE) || (eAnchorType == FLY_AT_FLY))
     {
         // MinimalPosition
         pValidation->nMinHPos = aBoundRect.Left();
@@ -903,7 +898,7 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation 
         pValidation->nMaxVPos   = aBoundRect.Bottom() - pValidation->nHeight;
         pValidation->nMaxWidth  = aBoundRect.Right()  - nH;
     }
-    else if ( eAnchorType == FLY_AT_CNTNT || eAnchorType == FLY_AUTO_CNTNT )
+    else if ((eAnchorType == FLY_AT_PARA) || (eAnchorType == FLY_AT_CHAR))
     {
         if (pValidation->nHPos + pValidation->nWidth > aBoundRect.Right())
         {
@@ -964,7 +959,7 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation 
         pValidation->nMaxHeight  = pValidation->nMaxVPos + pValidation->nHeight - nV;
         pValidation->nMaxWidth   = pValidation->nMaxHPos + pValidation->nWidth - nH;
     }
-    else if ( eAnchorType == FLY_IN_CNTNT )
+    else if (eAnchorType == FLY_AS_CHAR)
     {
         pValidation->nMinHPos = 0;
         pValidation->nMaxHPos = 0;

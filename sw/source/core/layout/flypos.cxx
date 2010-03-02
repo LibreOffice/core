@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: flypos.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,8 +54,10 @@ SwPosFlyFrm::SwPosFlyFrm( const SwNodeIndex& rIdx, const SwFrmFmt* pFmt,
 {
     BOOL bFnd = FALSE;
     const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
-    if( FLY_PAGE == rAnchor.GetAnchorId() )
+    if (FLY_AT_PAGE == rAnchor.GetAnchorId())
+    {
         pNdIdx = new SwNodeIndex( rIdx );
+    }
     else if( pFmt->GetDoc()->GetRootFrm() )
     {
         SwClientIter aIter( (SwFmt&)*pFmt );
@@ -88,8 +87,10 @@ SwPosFlyFrm::SwPosFlyFrm( const SwNodeIndex& rIdx, const SwFrmFmt* pFmt,
 SwPosFlyFrm::~SwPosFlyFrm()
 {
     const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
-    if( FLY_PAGE == rAnchor.GetAnchorId() )
+    if (FLY_AT_PAGE == rAnchor.GetAnchorId())
+    {
         delete pNdIdx;
+    }
 }
 
 BOOL SwPosFlyFrm::operator==( const SwPosFlyFrm& )

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ww8par.cxx,v $
- * $Revision: 1.199.12.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,16 +46,16 @@
 #include <comphelper/docpasswordrequest.hxx>
 #include <hintids.hxx>
 
-#include <svx/tstpitem.hxx>
-#include <svx/cscoitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/cscoitem.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/paperinf.hxx>
-#include <svx/lrspitem.hxx> // SvxLRSpaceItem
-#include <svx/ulspitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/charhiddenitem.hxx>
+#include <editeng/paperinf.hxx>
+#include <editeng/lrspitem.hxx> // SvxLRSpaceItem
+#include <editeng/ulspitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/charhiddenitem.hxx>
 #include <filter/msfilter/svxmsbas.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdoole2.hxx>
@@ -1649,7 +1646,7 @@ void SwWW8ImplReader::Read_HdFtTextAsHackedFrame(long nStart, long nLen,
     pPaM->GetPoint()->nNode = pSttIdx->GetIndex() + 1;
     pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(), 0);
 
-    SwFlyFrmFmt *pFrame = rDoc.MakeFlySection(FLY_AT_CNTNT, pPaM->GetPoint());
+    SwFlyFrmFmt *pFrame = rDoc.MakeFlySection(FLY_AT_PARA, pPaM->GetPoint());
 
     pFrame->SetFmtAttr(SwFmtFrmSize(ATT_MIN_SIZE, nPageWidth, MINLAY));
     pFrame->SetFmtAttr(SwFmtSurround(SURROUND_THROUGHT));

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: htmlcss1.cxx,v $
- * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,24 +36,19 @@
 #include <svl/urihelper.hxx>
 #include <i18npool/mslangid.hxx>
 #include <sfx2/docfile.hxx>
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
-#include <svx/fhgtitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#ifndef _SVX_BOXITEM_HXX //autogen
-
-#include <svx/boxitem.hxx>
-#endif
-#include <svx/fhgtitem.hxx>
-#include <svx/flstitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/keepitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/flstitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
 #include <fmtpdsc.hxx>
@@ -67,7 +59,7 @@
 #include "frmatr.hxx"
 #include <charfmt.hxx>
 #include <docary.hxx>
-
+#include <svx/svxids.hrc>
 
 #include "doc.hxx"
 #include "pam.hxx"
@@ -2094,7 +2086,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( const SfxItemSet & /*rItemSet*/,
             }
             else
             {
-                aAnchor.SetType( FLY_PAGE );
+                aAnchor.SetType( FLY_AT_PAGE );
                 aAnchor.SetPageNum( 1 );
             }
             nHoriPos = rPropInfo.nLeft;
@@ -2102,7 +2094,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( const SfxItemSet & /*rItemSet*/,
         }
         else
         {
-            aAnchor.SetType( FLY_AT_CNTNT );
+            aAnchor.SetType( FLY_AT_PARA );
             aAnchor.SetAnchor( pPam->GetPoint() );
             eVertOri = text::VertOrientation::TOP;
             eVertRel = text::RelOrientation::CHAR;
@@ -2128,14 +2120,14 @@ void SwHTMLParser::SetAnchorAndAdjustment( const SfxItemSet & /*rItemSet*/,
         xub_StrLen nCntnt = pPam->GetPoint()->nContent.GetIndex();
         if( nCntnt )
         {
-            aAnchor.SetType( FLY_AUTO_CNTNT );
+            aAnchor.SetType( FLY_AT_CHAR );
             pPam->Move( fnMoveBackward );
             eVertOri = text::VertOrientation::CHAR_BOTTOM;
             eVertRel = text::RelOrientation::CHAR;
         }
         else
         {
-            aAnchor.SetType( FLY_AT_CNTNT );
+            aAnchor.SetType( FLY_AT_PARA );
             eVertOri = text::VertOrientation::TOP;
             eVertRel = text::RelOrientation::PRINT_AREA;
         }

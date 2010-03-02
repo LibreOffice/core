@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swdtflvr.cxx,v $
- * $Revision: 1.120 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,19 +50,13 @@
 #include <osl/endian.h>
 #include <sfx2/linkmgr.hxx>
 #include <tools/urlobj.hxx>
-#ifndef _WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
-#endif
-#ifndef _MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
 #include <sfx2/dispatch.hxx>
 #include <svl/stritem.hxx>
 #include <svtools/imap.hxx>
 #include <sot/storage.hxx>
-#ifndef _GRAPH_HXX
 #include <vcl/graph.hxx>
-#endif
 #include <svl/urihelper.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/xexch.hxx>
@@ -79,15 +70,15 @@
 #include <svtools/htmlout.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svtools/inetimg.hxx>
-#include <svx/paperinf.hxx>
+#include <editeng/paperinf.hxx>
 #include <svx/fmview.hxx>
-#include <svx/impgrf.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <sfx2/docfilt.hxx>
 #include <svtools/imapobj.hxx>
 #include <sfx2/docfile.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/streamwrap.hxx>
+#include <svtools/filter.hxx>
 
 #include <svx/unomodel.hxx>
 #include <fmturl.hxx>
@@ -107,15 +98,9 @@
 #include <swcont.hxx>
 #include <wrtsh.hxx>
 #include <swmodule.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
-#ifndef _WDOCSH_HXX
 #include <wdocsh.hxx>
-#endif
 #include <fldbas.hxx>       //DDE
 #include <swundo.hxx>       // fuer Undo-Ids
 #include <pam.hxx>
@@ -126,25 +111,19 @@
 #include <vcl/sound.hxx>
 #include <swerror.h>
 #include <SwCapObjType.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _DOCHDL_HRC
 #include <dochdl.hrc>
-#endif
-#ifndef _COMCORE_HRC
 #include <comcore.hrc> // #111827#
-#endif
 #include <sot/stg.hxx>
 
 // #108584#
 #include <svx/svditer.hxx>
 
 // #108584#
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 // #108584#
-#include <svx/fhgtitem.hxx>
+#include <editeng/fhgtitem.hxx>
 
 // #108584#
 #include <svx/svdpage.hxx>
@@ -154,9 +133,7 @@
 #include <swcrsr.hxx>
 #include <SwRewriter.hxx>
 #include <undobj.hxx>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <swserv.hxx>
@@ -2003,8 +1980,8 @@ int SwTransferable::_PasteTargetURL( TransferableDataHelper& rData,
             //!!! auf FileSystem abpruefen - nur dann ist es sinnvoll die
             // Grafiken zu testen !!!!
             Graphic aGrf;
-            GraphicFilter *pFlt = ::GetGrfFilter();
-            nRet = GRFILTER_OK == ::LoadGraphic( sURL, aEmptyStr, aGrf, pFlt );
+            GraphicFilter *pFlt = GraphicFilter::GetGraphicFilter();
+            nRet = GRFILTER_OK == GraphicFilter::LoadGraphic( sURL, aEmptyStr, aGrf, pFlt );
             if( nRet )
             {
                 switch( nAction )
@@ -2352,8 +2329,8 @@ int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
     {
         //!!! auf FileSystem abpruefen - nur dann ist es sinnvoll die
         // Grafiken zu testen !!!!
-        GraphicFilter *pFlt = ::GetGrfFilter();
-        nRet = GRFILTER_OK == ::LoadGraphic( aBkmk.GetURL(), aEmptyStr,
+        GraphicFilter *pFlt = GraphicFilter::GetGraphicFilter();
+        nRet = GRFILTER_OK == GraphicFilter::LoadGraphic( aBkmk.GetURL(), aEmptyStr,
                                             aGrf, pFlt );
         if( !nRet && SW_PASTESDR_SETATTR == nAction &&
             SOT_FORMAT_FILE == nFmt &&

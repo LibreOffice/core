@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ndtxt.hxx,v $
- * $Revision: 1.61 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,6 +26,8 @@
  ************************************************************************/
 #ifndef _NDTXT_HXX
 #define _NDTXT_HXX
+
+#include <cppuhelper/weakref.hxx>
 
 #include "swdllapi.h"
 #include <error.h>
@@ -76,9 +75,12 @@ class SwScriptInfo;
 struct SwDocStat;
 struct SwParaIdleData_Impl;
 
-namespace com { namespace sun { namespace star { namespace uno {
-    template < class > class Sequence;
-}}}}
+namespace com { namespace sun { namespace star {
+    namespace uno {
+        template < class > class Sequence;
+    }
+    namespace text { class XTextContent; }
+} } }
 
 typedef std::set< xub_StrLen > SwSoftPageBreakList;
 
@@ -132,6 +134,8 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
     SwList* mpList;
     // <--
 
+    ::com::sun::star::uno::WeakReference<
+        ::com::sun::star::text::XTextContent> m_wXParagraph;
 
     SW_DLLPRIVATE SwTxtNode( const SwNodeIndex &rWhere, SwTxtFmtColl *pTxtColl,
                              const SfxItemSet* pAutoAttr = 0 );
@@ -812,6 +816,13 @@ public:
     bool IsFirstOfNumRule() const;
 
     USHORT GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd ) const;
+
+    SW_DLLPRIVATE ::com::sun::star::uno::WeakReference<
+        ::com::sun::star::text::XTextContent> const& GetXParagraph() const
+            { return m_wXParagraph; }
+    SW_DLLPRIVATE void SetXParagraph(::com::sun::star::uno::Reference<
+                    ::com::sun::star::text::XTextContent> const& xParagraph)
+            { m_wXParagraph = xParagraph; }
 
     // sfx2::Metadatable
     virtual ::sfx2::IXmlIdRegistry& GetRegistry();

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: editsh.cxx,v $
- * $Revision: 1.58 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,7 +60,7 @@
 #include <extinput.hxx>
 #include <crsskip.hxx>
 #include <scriptinfo.hxx>
-#include <unoobj.hxx>
+#include <unocrsrhelper.hxx>
 #include <section.hxx>
 #include <unochart.hxx>
 #include <numrule.hxx>
@@ -696,7 +693,7 @@ String SwEditShell::Calculate()
 }
 
 
-SvxLinkManager& SwEditShell::GetLinkManager()
+sfx2::LinkManager& SwEditShell::GetLinkManager()
 {
     return pDoc->GetLinkManager();
 }
@@ -1111,7 +1108,7 @@ String SwEditShell::DeleteExtTextInput( SwExtTextInput* pDel, BOOL bInsText )
     if( pDel )
     {
         rtl::OUString sTmp;
-        SwXTextCursor::getTextFromPam(*pDel, sTmp);
+        SwUnoCursorHelper::GetTextFromPam(*pDel, sTmp);
         sRet = sTmp;
         SET_CURR_SHELL( this );
         StartAllAction();

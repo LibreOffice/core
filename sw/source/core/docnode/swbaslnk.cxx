@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swbaslnk.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,25 +28,22 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <hintids.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 
-#ifndef _OSL_THREAD_HXX_
 #include <osl/thread.hxx>
-#endif
 #include <salhelper/condition.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/objsh.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/boxitem.hxx>
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>       // fuer die EventIds
 #endif
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <svtools/soerr.hxx>
 #include <fmtfsize.hxx>
 #include <fmtanchr.hxx>
@@ -121,7 +115,7 @@ void SwBaseLink::DataChanged( const String& rMimeType,
     ULONG nFmt = SotExchange::GetFormatIdFromMimeType( rMimeType );
 
     if( pCntntNode->IsNoTxtNode() &&
-        nFmt == SvxLinkManager::RegisterStatusInfoId() )
+        nFmt == sfx2::LinkManager::RegisterStatusInfoId() )
     {
         // nur eine Statusaenderung - Events bedienen ?
         ::rtl::OUString sState;
@@ -130,9 +124,9 @@ void SwBaseLink::DataChanged( const String& rMimeType,
             USHORT nEvent = 0;
             switch( sState.toInt32() )
             {
-            case STATE_LOAD_OK:     nEvent = SVX_EVENT_IMAGE_LOAD;  break;
-            case STATE_LOAD_ERROR:  nEvent = SVX_EVENT_IMAGE_ERROR; break;
-            case STATE_LOAD_ABORT:  nEvent = SVX_EVENT_IMAGE_ABORT; break;
+            case sfx2::LinkManager::STATE_LOAD_OK:      nEvent = SVX_EVENT_IMAGE_LOAD;  break;
+            case sfx2::LinkManager::STATE_LOAD_ERROR:   nEvent = SVX_EVENT_IMAGE_ERROR; break;
+            case sfx2::LinkManager::STATE_LOAD_ABORT:   nEvent = SVX_EVENT_IMAGE_ABORT; break;
             }
 
             SwFrmFmt* pFmt;
@@ -163,7 +157,7 @@ void SwBaseLink::DataChanged( const String& rMimeType,
         ((SwGrfNode*)pCntntNode)->SetGrafikArrived( bGraphicArrived );
 
         Graphic aGrf;
-        if( SvxLinkManager::GetGraphicFromAny( rMimeType, rValue, aGrf ) &&
+        if( sfx2::LinkManager::GetGraphicFromAny( rMimeType, rValue, aGrf ) &&
             ( GRAPHIC_DEFAULT != aGrf.GetType() ||
               GRAPHIC_DEFAULT != rGrfObj.GetType() ) )
         {
@@ -492,18 +486,23 @@ void SwBaseLink::Closed()
 
 const SwNode* SwBaseLink::GetAnchor() const
 {
-    SwFrmFmt* pFmt;
-    if( pCntntNode && 0 != ( pFmt = pCntntNode->GetFlyFmt()) )
+    if (pCntntNode)
     {
-        const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
-        const SwPosition* pAPos;
-        if( 0 != ( pAPos = rAnchor.GetCntntAnchor()) &&
-            ( FLY_IN_CNTNT == rAnchor.GetAnchorId() ||
-            FLY_AUTO_CNTNT == rAnchor.GetAnchorId() ||
-            FLY_AT_FLY == rAnchor.GetAnchorId() ||
-            FLY_AT_CNTNT == rAnchor.GetAnchorId() ))
-                return &pAPos->nNode.GetNode();
-        return 0;
+        SwFrmFmt *const pFmt = pCntntNode->GetFlyFmt();
+        if (pFmt)
+        {
+            const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
+            SwPosition const*const pAPos = rAnchor.GetCntntAnchor();
+            if (pAPos &&
+                ((FLY_AS_CHAR == rAnchor.GetAnchorId()) ||
+                 (FLY_AT_CHAR == rAnchor.GetAnchorId()) ||
+                 (FLY_AT_FLY  == rAnchor.GetAnchorId()) ||
+                 (FLY_AT_PARA == rAnchor.GetAnchorId())))
+            {
+                    return &pAPos->nNode.GetNode();
+            }
+            return 0;
+        }
     }
 
     ASSERT( !this, "GetAnchor nicht ueberlagert" );

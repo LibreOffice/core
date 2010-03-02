@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: htmlplug.cxx,v $
- * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,8 +30,6 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-
-
 #include "hintids.hxx"
 #include <svl/urihelper.hxx>
 #define _SVSTDARR_ULONGS
@@ -42,13 +37,11 @@
 #include <vcl/svapp.hxx>
 #include <sfx2/frmhtml.hxx>
 #include <sfx2/frmhtmlw.hxx>
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <sot/storage.hxx>
 #include <svx/xoutbmp.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmltokn.h>
 #include <SwAppletImpl.hxx>
@@ -465,7 +458,7 @@ void SwHTMLParser::InsertEmbed()
     }
     else
     {
-        SwFmtAnchor aAnchor( FLY_AT_CNTNT );
+        SwFmtAnchor aAnchor( FLY_AT_PARA );
         aAnchor.SetAnchor( pPam->GetPoint() );
         aFrmSet.Put( aAnchor );
         aFrmSet.Put( SwFmtHoriOrient( 0, text::HoriOrientation::LEFT, text::RelOrientation::FRAME) );
@@ -1167,7 +1160,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             sOut = '\"';
         }
 
-        if( FLY_AT_CNTNT == rFrmFmt.GetAnchor().GetAnchorId() &&
+        if ((FLY_AT_PARA == rFrmFmt.GetAnchor().GetAnchorId()) &&
             SURROUND_THROUGHT == rFrmFmt.GetSurround().GetSurround() )
         {
             // Das Plugin ist HIDDEN

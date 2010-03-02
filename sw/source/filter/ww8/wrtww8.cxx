@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: wrtww8.cxx,v $
- * $Revision: 1.91.98.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,16 +50,16 @@
 #include <sot/storage.hxx>
 #include <svl/zformat.hxx>
 #include <sfx2/docinf.hxx>
-#include <svx/tstpitem.hxx>
+#include <editeng/tstpitem.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/hyznitem.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/hyznitem.hxx>
+#include <editeng/langitem.hxx>
 #include <filter/msfilter/msoleexp.hxx>
 #include <filter/msfilter/msocximex.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <swtypes.hxx>
 #include <swrect.hxx>
 #include <txatbase.hxx>
@@ -2897,7 +2894,7 @@ void MSWordExportBase::ExportDocument( bool bWriteAll )
 
     mpParentFrame = 0;
     pFlyOffset = 0;
-    eNewAnchorType = FLY_PAGE;
+    eNewAnchorType = FLY_AT_PAGE;
     nTxtTyp = TXT_MAINTEXT;
     // --> OD 2007-04-19 #i43447# - removed
 //    nFlyWidth = nFlyHeight = 0;

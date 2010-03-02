@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: accpara.cxx,v $
- * $Revision: 1.78 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,10 +27,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <txtfrm.hxx>
 #include <ndtxt.hxx>
 #include <pam.hxx>
-#include <unoobj.hxx>
+#include <unotextrange.hxx>
+#include <unocrsrhelper.hxx>
 #include <crstate.hxx>
 #include <accmap.hxx>
 #include "fesh.hxx"
@@ -63,7 +62,6 @@
 #include <unotools/charclass.hxx>   // for GetWordBoundary
 // for get/setCharacterAttribute(...)
 #include "unocrsr.hxx"
-#include "unoobj.hxx"
 #include "unoport.hxx"
 #include "doc.hxx"
 #include "crsskip.hxx"
@@ -85,7 +83,7 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 // <--
 // --> OD 2007-01-17 #i71385#
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <viewimp.hxx>
 // <--
 // --> OD 2007-11-12 #i82637#
@@ -1532,7 +1530,7 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
         SfxItemSet aCharAttrsAtPaM( pPaM->GetDoc()->GetAttrPool(),
                                     RES_CHRATR_BEGIN, RES_CHRATR_END -1,
                                     0 );
-        SwXTextCursor::GetCrsrAttr( *pPaM, aCharAttrsAtPaM, TRUE, TRUE );
+        SwUnoCursorHelper::GetCrsrAttr(*pPaM, aCharAttrsAtPaM, TRUE, TRUE);
         aSet.Put( aCharAttrsAtPaM );
     }
     // <--
@@ -2104,8 +2102,10 @@ sal_Bool SwAccessibleParagraph::replaceText(
             aEndPos.nContent = nEnd;
 
             // now create XTextRange as helper and set string
-            SwXTextRange::CreateTextRangeFromPosition(
-                pNode->GetDoc(), aStartPos, &aEndPos)->setString(sReplacement);
+            const uno::Reference<text::XTextRange> xRange(
+                SwXTextRange::CreateXTextRange(
+                    *pNode->GetDoc(), aStartPos, &aEndPos));
+            xRange->setString(sReplacement);
 
             // delete portion data
             ClearPortionData();

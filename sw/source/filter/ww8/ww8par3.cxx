@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ww8par3.cxx,v $
- * $Revision: 1.93.92.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,17 +64,17 @@
 #include <algorithm>
 #include <functional>
 #include <hintids.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/postitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/postitem.hxx>
 #include <filter/msfilter/msocximex.hxx>
 #include <errhdl.hxx>
-#include <unoobj.hxx>
+#include <unotextrange.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
 #include <docsh.hxx>

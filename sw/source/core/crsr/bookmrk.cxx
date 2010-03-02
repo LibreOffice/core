@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: bookmrk.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,16 +36,17 @@
 #include <ndtxt.hxx>
 #include <pam.hxx>
 #include <swserv.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <swtypes.hxx>
 #include <undobj.hxx>
-#include <unoobj.hxx>
+#include <unobookmark.hxx>
 #include <rtl/random.h>
 
 
 SV_IMPL_REF( SwServerObject )
 
 using namespace ::sw::mark;
+using namespace ::com::sun::star;
 
 namespace
 {
@@ -147,6 +145,16 @@ namespace sw { namespace mark
         return aResult.append(nCount++).append(sUniquePostfix).makeStringAndClear();
     }
 
+    // SwClient
+    void MarkBase::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+    {
+        SwModify::Modify(pOld, pNew);
+        if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
+        {   // invalidate cached uno object
+            SetXBookmark(uno::Reference<text::XTextContent>(0));
+        }
+    }
+
 
     NavigatorReminder::NavigatorReminder(const SwPaM& rPaM)
         : MarkBase(rPaM, our_sNamePrefix)
@@ -240,24 +248,13 @@ namespace sw { namespace mark
         return !pDoc->IsInHeaderFooter( SwNodeIndex(GetMarkPos().nNode) );
     }
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::rdf::XMetadatable >
-        Bookmark::MakeUnoObject()
+    uno::Reference< rdf::XMetadatable > Bookmark::MakeUnoObject()
     {
-        // re-use existing SwXBookmark
-        SwClientIter iter( *this );
-        SwClient * pClient( iter.First( TYPE( SwXBookmark ) ) );
-        while (pClient) {
-            SwXBookmark *const pBookmark( dynamic_cast<SwXBookmark*>(pClient) );
-            if (pBookmark && pBookmark->GetCoreObject() == this) {
-                return pBookmark;
-            }
-            pClient = iter.Next();
-        }
-
-        // create new SwXBookmark
         SwDoc *const pDoc( GetMarkPos().GetDoc() );
         OSL_ENSURE(pDoc, "Bookmark::MakeUnoObject: no doc?");
-        return new SwXBookmark(this, pDoc);
+        const uno::Reference< rdf::XMetadatable> xMeta(
+                SwXBookmark::CreateXBookmark(*pDoc, *this), uno::UNO_QUERY);
+        return xMeta;
     }
 
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unofield.hxx,v $
- * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,13 +27,17 @@
 #ifndef _UNOFIELD_HXX
 #define _UNOFIELD_HXX
 
-#include <com/sun/star/text/XDependentTextField.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
+#include <com/sun/star/text/XDependentTextField.hpp>
+
+#include <cppuhelper/implbase5.hxx>
+
 #include <calbck.hxx>
-#include <unoobj.hxx>
 #include <unocoll.hxx>
 #include <RefreshListenerContainer.hxx>
+
 
 class SwFieldType;
 class SwDoc;

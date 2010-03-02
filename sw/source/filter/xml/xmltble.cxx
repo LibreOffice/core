@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmltble.cxx,v $
- * $Revision: 1.48 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,23 +28,21 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/text/XTextSection.hpp>
 
 #include <hintids.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <com/sun/star/text/XTextTable.hpp>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/numehelp.hxx>
 #include <svl/cntnrsrt.hxx>
 #include <svl/zforlist.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <fmtrowsplt.hxx>
-#ifndef _SVX_FRAMEDIRITEM_HXX
-#include <svx/frmdiritem.hxx>
-#endif
-
+#include <editeng/frmdiritem.hxx>
 #include <list>
 #include "swtable.hxx"
 #include "doc.hxx"
@@ -62,7 +57,6 @@
 #include <ndole.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <sfx2/linkmgr.hxx>  // for cTokenSeperator
-#include "unoobj.hxx"
 #include "unotbl.hxx"
 #include "xmltexte.hxx"
 #include "xmlexp.hxx"

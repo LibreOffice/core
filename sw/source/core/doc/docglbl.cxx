@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docglbl.cxx,v $
- * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,12 +46,8 @@
 #include <docary.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
-#ifndef _GLOBDOC_HXX
 #include <globdoc.hxx>
-#endif
 #include <shellio.hxx>
 #include <swundo.hxx>       // fuer die UndoIds
 #include <section.hxx>
@@ -371,14 +364,15 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
                             CorrAbs( aSIdx, aEIdx, *aTmp.GetPoint(), TRUE);
 
                             // stehen noch FlyFrames rum, loesche auch diese
-                            const SwPosition* pAPos;
                             for( USHORT n = 0; n < GetSpzFrmFmts()->Count(); ++n )
                             {
                                 SwFrmFmt* pFly = (*GetSpzFrmFmts())[n];
                                 const SwFmtAnchor* pAnchor = &pFly->GetAnchor();
-                                if( ( FLY_AT_CNTNT == pAnchor->GetAnchorId() ||
-                                        FLY_AUTO_CNTNT == pAnchor->GetAnchorId() ) &&
-                                    0 != ( pAPos = pAnchor->GetCntntAnchor() ) &&
+                                SwPosition const*const pAPos =
+                                    pAnchor->GetCntntAnchor();
+                                if (pAPos &&
+                                    ((FLY_AT_PARA == pAnchor->GetAnchorId()) ||
+                                     (FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
                                     aSIdx <= pAPos->nNode &&
                                     pAPos->nNode < aEIdx )
                                 {
@@ -717,14 +711,15 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath, int nOutlineLevel )
                             CorrAbs( aSIdx, aEIdx, *aTmp.GetPoint(), TRUE);
 
                             // stehen noch FlyFrames rum, loesche auch diese
-                            const SwPosition* pAPos;
                             for( USHORT n = 0; n < GetSpzFrmFmts()->Count(); ++n )
                             {
                                 SwFrmFmt* pFly = (*GetSpzFrmFmts())[n];
                                 const SwFmtAnchor* pAnchor = &pFly->GetAnchor();
-                                if( ( FLY_AT_CNTNT == pAnchor->GetAnchorId() ||
-                                        FLY_AUTO_CNTNT == pAnchor->GetAnchorId() ) &&
-                                    0 != ( pAPos = pAnchor->GetCntntAnchor() ) &&
+                                SwPosition const*const pAPos =
+                                    pAnchor->GetCntntAnchor();
+                                if (pAPos &&
+                                    ((FLY_AT_PARA == pAnchor->GetAnchorId()) ||
+                                     (FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
                                     aSIdx <= pAPos->nNode &&
                                     pAPos->nNode < aEIdx )
                                 {

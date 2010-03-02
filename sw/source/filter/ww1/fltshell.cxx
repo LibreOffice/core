@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fltshell.cxx,v $
- * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,19 +31,17 @@
 #include <ctype.h>
 #include <hintids.hxx>
 #include <hints.hxx>
+#include <svtools/filter.hxx>
 
-#ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
-#endif
 #include <svl/urihelper.hxx>
-#include <svx/impgrf.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/cmapitem.hxx>
-#include <svx/cntritem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/crsditem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/cmapitem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/crsditem.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/charclass.hxx>
 #include <txtftn.hxx>
@@ -72,12 +67,11 @@
 #include <section.hxx>          // class SwSection
 #include <tblsel.hxx>           // class SwSelBoxes
 #include <pagedesc.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>            // class SwDocSh
-#endif
 #include <fltshell.hxx>
 #include <viewsh.hxx>
 #include <shellres.hxx>
+
 
 #define MAX_FIELDLEN 64000
 
@@ -437,7 +431,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
                 // Damit die Frames bei Einfuegen in existierendes Doc
                 //  erzeugt werden (erst nach Setzen des Ankers!):
                 if(pDoc->GetRootFrm()
-                   && FLY_AT_CNTNT == pFmt->GetAnchor().GetAnchorId())
+                   && (FLY_AT_PARA == pFmt->GetAnchor().GetAnchorId()))
                 {
                     pFmt->MakeFrms();
                 }
@@ -1089,7 +1083,7 @@ void SwFltShell::NextPage()
 SwFltShell& SwFltShell::AddGraphic( const String& rPicName )
 {
     // embedded:
-    GraphicFilter* pFilter = ::GetGrfFilter();
+    GraphicFilter* pFilter = GraphicFilter::GetGraphicFilter();
     Graphic aGraphic;
     // one of: GFF_NOT GFF_BMP GFF_GIF GFF_JPG GFF_PCD GFF_PCX GFF_PNG
     // GFF_TIF GFF_XBM GFF_DXF GFF_MET GFF_PCT GFF_SGF GFF_SVM GFF_WMF
@@ -1285,7 +1279,7 @@ SwFltOutBase::~SwFltOutBase()
 }
 
 SwFltOutBase::SwFltOutBase(SwDoc& rDocu)
-    : rDoc(rDocu), eFlyAnchor(FLY_AT_CNTNT), bFlyAbsPos(false)
+    : rDoc(rDocu), eFlyAnchor(FLY_AT_PARA), bFlyAbsPos(false)
 {
 }
 
@@ -1702,8 +1696,8 @@ BOOL SwFltOutBase::BeginFly( RndStdIds eAnchor /*= FLY_AT_CNTNT*/,
         ASSERT( FALSE, "SetFlyAnchor() ohne Fly" );
         return;
     }
-    if( eAnchor == FLY_IN_CNTNT ){
-        ASSERT( FALSE, "SetFlyAnchor( FLY_IN_CNTNT ) nicht implementiert" );
+    if ( eAnchor == FLY_AS_CHAR ){
+        ASSERT( FALSE, "SetFlyAnchor( FLY_AS_CHAR ) nicht implementiert" );
         return;
     }
     SwFmtAnchor& rAnchor = (SwFmtAnchor&)GetFlyFrmAttr( RES_ANCHOR );

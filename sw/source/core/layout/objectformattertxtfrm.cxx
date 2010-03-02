@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: objectformattertxtfrm.cxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -136,7 +133,7 @@ bool SwObjectFormatterTxtFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
     // check, if only as-character anchored object have to be formatted, and
     // check the anchor type
     if ( FormatOnlyAsCharAnchored() &&
-         !_rAnchoredObj.GetFrmFmt().GetAnchor().GetAnchorId() == FLY_IN_CNTNT )
+         !(_rAnchoredObj.GetFrmFmt().GetAnchor().GetAnchorId() == FLY_AS_CHAR) )
     {
         return true;
     }
@@ -656,8 +653,8 @@ bool SwObjectFormatterTxtFrm::CheckMovedFwdCondition(
     // which will be on the next page.
     if ( !bAnchorIsMovedForward &&
          _bAnchoredAtMasterBeforeFormatAnchor &&
-         ( _rAnchoredObj.GetFrmFmt().GetAnchor().GetAnchorId() == FLY_AUTO_CNTNT ||
-           _rAnchoredObj.GetFrmFmt().GetAnchor().GetAnchorId() == FLY_AT_CNTNT ) )
+        ((_rAnchoredObj.GetFrmFmt().GetAnchor().GetAnchorId() == FLY_AT_CHAR) ||
+         (_rAnchoredObj.GetFrmFmt().GetAnchor().GetAnchorId() == FLY_AT_PARA)))
     {
         SwFrm* pAnchorFrm = _rAnchoredObj.GetAnchorFrmContainingAnchPos();
         ASSERT( pAnchorFrm->IsTxtFrm(),

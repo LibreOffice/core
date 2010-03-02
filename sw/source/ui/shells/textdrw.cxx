@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: textdrw.cxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,23 +36,17 @@
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
 #include <edtwin.hxx>
 #include <swundo.hxx>
-#ifndef _BASESH_HXX
 #include <basesh.hxx>
-#endif
 
 #ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>
 #endif
 
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <sfx2/docfile.hxx>
 #include <svl/urihelper.hxx>
 #include <avmedia/mediawindow.hxx>

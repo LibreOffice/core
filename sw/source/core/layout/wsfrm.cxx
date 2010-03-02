@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: wsfrm.cxx,v $
- * $Revision: 1.86.124.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,13 +32,11 @@
 #include <hintids.hxx>
 #include <hints.hxx>
 #include <tools/pstm.hxx>
-#ifndef _OUTDEV_HXX
 #include <vcl/outdev.hxx>
-#endif
 #include <svl/itemiter.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/keepitem.hxx>
-#include <svx/brkitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/brkitem.hxx>
 #include <fmtornt.hxx>
 #include <pagefrm.hxx>
 #include <section.hxx>
@@ -52,9 +47,7 @@
 #include <viewimp.hxx>
 #include <doc.hxx>
 #include <fesh.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <flyfrm.hxx>
 #include <frmtool.hxx>
 #include <ftninfo.hxx>
@@ -77,11 +70,13 @@
 #include <bodyfrm.hxx>
 #include <cellfrm.hxx>
 #include <dbg_lay.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/frmdiritem.hxx>
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
 
+
 using namespace ::com::sun::star;
+
 
 /*************************************************************************
 |*
@@ -4004,8 +3999,8 @@ void SwRootFrm::InvalidateAllObjPos()
             {
                 SwAnchoredObject* pAnchoredObj = rObjs[i];
                 const SwFmtAnchor& rAnch = pAnchoredObj->GetFrmFmt().GetAnchor();
-                if ( rAnch.GetAnchorId() != FLY_AT_CNTNT &&
-                     rAnch.GetAnchorId() != FLY_AUTO_CNTNT )
+                if ((rAnch.GetAnchorId() != FLY_AT_PARA) &&
+                    (rAnch.GetAnchorId() != FLY_AT_CHAR))
                 {
                     // only to paragraph and to character anchored objects are considered.
                     continue;

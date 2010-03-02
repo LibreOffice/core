@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dcontact.hxx,v $
- * $Revision: 1.26.210.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -191,11 +188,11 @@ public:
     }
 
     RndStdIds GetAnchorId() const { return GetAnchorFmt().GetAnchorId(); }
-    bool      ObjAnchoredAtPage() const { return GetAnchorId() == FLY_PAGE; }
-    bool      ObjAnchoredAtFly() const { return GetAnchorId() == FLY_AT_FLY; }
-    bool      ObjAnchoredAtPara() const { return GetAnchorId() == FLY_AT_CNTNT; }
-    bool      ObjAnchoredAtChar() const { return GetAnchorId() == FLY_AUTO_CNTNT; }
-    bool      ObjAnchoredAsChar() const { return GetAnchorId() == FLY_IN_CNTNT; }
+    bool      ObjAnchoredAtPage() const { return GetAnchorId() == FLY_AT_PAGE; }
+    bool      ObjAnchoredAtFly()  const { return GetAnchorId() == FLY_AT_FLY; }
+    bool      ObjAnchoredAtPara() const { return GetAnchorId() == FLY_AT_PARA; }
+    bool      ObjAnchoredAtChar() const { return GetAnchorId() == FLY_AT_CHAR; }
+    bool      ObjAnchoredAsChar() const { return GetAnchorId() == FLY_AS_CHAR; }
 
     const SwPosition&  GetCntntAnchor() const
     {

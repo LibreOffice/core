@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: wrtw8nds.cxx,v $
- * $Revision: 1.109.40.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,19 +37,19 @@
 #include <iostream>
 #include <hintids.hxx>
 #include <tools/urlobj.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/cmapitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/svxfont.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/keepitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/tstpitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/cmapitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/svxfont.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/tstpitem.hxx>
 #include "svl/urihelper.hxx"
 #include <svl/whiter.hxx>
 #include <fmtpdsc.hxx>
@@ -376,7 +373,7 @@ xub_StrLen SwAttrIter::SearchNext( xub_StrLen nStartPos )
         if (nPos >= nStartPos && nPos <= nMinPos)
             nMinPos = nPos;
 
-        if (maFlyIter->GetFrmFmt().GetAnchor().GetAnchorId() == FLY_AUTO_CNTNT)
+        if (maFlyIter->GetFrmFmt().GetAnchor().GetAnchorId() == FLY_AT_CHAR)
         {
             ++nPos;
             if (nPos >= nStartPos && nPos <= nMinPos)
@@ -1301,7 +1298,7 @@ short MSWordExportBase::TrueFrameDirection( const SwFrmFmt &rFlyFmt ) const
         {
             pItem = 0;
             const SwFmtAnchor* pAnchor = &pFlyFmt->GetAnchor();
-            if ( FLY_PAGE != pAnchor->GetAnchorId() &&
+            if ((FLY_AT_PAGE != pAnchor->GetAnchorId()) &&
                 pAnchor->GetCntntAnchor() )
             {
                 pFlyFmt = pAnchor->GetCntntAnchor()->nNode.GetNode().GetFlyFmt();
@@ -1359,7 +1356,7 @@ SvxBrushItem WW8Export::TrueFrameBgBrush(const SwFrmFmt &rFlyFmt) const
         {
             pRet = 0;
             const SwFmtAnchor* pAnchor = &pFlyFmt->GetAnchor();
-            if (FLY_PAGE != pAnchor->GetAnchorId() &&
+            if ((FLY_AT_PAGE != pAnchor->GetAnchorId()) &&
                 pAnchor->GetCntntAnchor())
             {
                 pFlyFmt =
@@ -2497,12 +2494,13 @@ void WW8AttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFmt, const Point
                 aOffset -= aPageRect.Pos();
 
                 m_rWW8Export.pFlyOffset = &aOffset;
-                m_rWW8Export.eNewAnchorType = FLY_PAGE;
+                m_rWW8Export.eNewAnchorType = FLY_AT_PAGE;
             }
 
             m_rWW8Export.mpParentFrame = &rFmt;
             if (
-                 m_rWW8Export.bIsInTable && (FLY_PAGE != rAnch.GetAnchorId()) &&
+                 m_rWW8Export.bIsInTable &&
+                 (FLY_AT_PAGE != rAnch.GetAnchorId()) &&
                  !m_rWW8Export.pDoc->GetNodes()[ nStt ]->IsNoTxtNode()
                )
             {
@@ -2534,7 +2532,7 @@ void AttributeOutputBase::OutputFlyFrame( const sw::Frame& rFmt )
     Point* pLayPos;
     bool bValidNdPos = false, bValidPgPos = false;
 
-    if ( FLY_PAGE == rFmt.GetFrmFmt().GetAnchor().GetAnchorId() )
+    if (FLY_AT_PAGE == rFmt.GetFrmFmt().GetAnchor().GetAnchorId())
     {
         // get the Layout Node-Position.
         if ( !bValidPgPos )

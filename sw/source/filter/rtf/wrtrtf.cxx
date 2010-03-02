@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: wrtrtf.cxx,v $
- * $Revision: 1.42.208.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,19 +37,17 @@
 #include <rtl/tencinfo.h>
 #include <svtools/rtfkeywd.hxx>
 #include <svtools/rtfout.hxx>
-#include <svx/paperinf.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/boxitem.hxx>
-#ifndef _SVX_TSTPITEM_HXX //autogen
-#include <svx/tstpitem.hxx>
-#endif
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/udlnitem.hxx>
+#include <editeng/paperinf.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/udlnitem.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtfsize.hxx>
@@ -77,13 +72,12 @@
 #include <swmodule.hxx>
 #include <swerror.h>
 #include <mdiexp.hxx>       // ...Percent()
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>      // ResId fuer Statusleiste
-#endif
 #include <docsh.hxx>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+
 
 #if defined(UNX)
 const sal_Char SwRTFWriter::sNewLine = '\012';
@@ -1129,7 +1123,7 @@ bool ExportAsInline(const SwFlyFrmFmt& rFlyFrmFmt)
 {
     //if not an inline element (hack in our limitations here as to only
     //graphics like this!!!!
-    return rFlyFrmFmt.GetAnchor().GetAnchorId() == FLY_IN_CNTNT;
+    return rFlyFrmFmt.GetAnchor().GetAnchorId() == FLY_AS_CHAR;
 }
 
 void SwRTFWriter::OutRTFFlyFrms(const SwFlyFrmFmt& rFlyFrmFmt)
@@ -1779,7 +1773,7 @@ short SwRTFWriter::TrueFrameDirection(const SwFrmFmt &rFlyFmt) const
         {
             pItem = 0;
             const SwFmtAnchor* pAnchor = &pFlyFmt2->GetAnchor();
-            if( FLY_PAGE != pAnchor->GetAnchorId() &&
+            if ((FLY_AT_PAGE != pAnchor->GetAnchorId()) &&
                 pAnchor->GetCntntAnchor() )
             {
                 pFlyFmt2 = pAnchor->GetCntntAnchor()->nNode.

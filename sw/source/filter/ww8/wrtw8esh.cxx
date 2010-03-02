@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: wrtw8esh.cxx,v $
- * $Revision: 1.105.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,21 +47,21 @@
 #include <svx/svdotext.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/editobj.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/editobj.hxx>
 #include <svx/unoshape.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 #ifndef _SVX_FLDITEM_HXX
 //miserable hack to get around #98519#
 
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #endif
 
 #include <comphelper/seqstream.hxx>
@@ -588,7 +584,7 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
             //fHdr/bx/by/wr/wrk/fRcaSimple/fBelowText/fAnchorLock
             USHORT nFlags=0;
             //If nFlags isn't 0x14 its overridden by the escher properties
-            if( FLY_PAGE == rFmt.GetAnchor().GetAnchorId())
+            if (FLY_AT_PAGE == rFmt.GetAnchor().GetAnchorId())
                 nFlags = 0x0000;
             else
                 nFlags = 0x0014;        // x-rel to text,  y-rel to text
@@ -2118,7 +2114,7 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
 {
     const RndStdIds eAnchor = _rFrmFmt.GetAnchor().GetAnchorId();
 
-    if ( FLY_IN_CNTNT == eAnchor || FLY_AT_FLY == eAnchor )
+    if ( (FLY_AS_CHAR == eAnchor) || (FLY_AT_FLY == eAnchor) )
     {
         // no conversion for as-character or at frame anchored objects
         return false;
@@ -2167,7 +2163,7 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
     // the fact, that the object is anchored at a paragraph, which has a "column
     // break before" attribute
     bool bConvDueToAnchoredAtColBreakPara( false );
-    if ( ( eAnchor == FLY_AT_CNTNT || eAnchor == FLY_AUTO_CNTNT ) &&
+    if ( ( (eAnchor == FLY_AT_PARA) || (eAnchor == FLY_AT_CHAR) ) &&
          _rFrmFmt.GetAnchor().GetCntntAnchor() &&
          _rFrmFmt.GetAnchor().GetCntntAnchor()->nNode.GetNode().IsTxtNode() )
     {
@@ -2404,7 +2400,7 @@ bool WinwordAnchoring::ConvertPosition( SwFmtHoriOrient& _iorHoriOri,
 void WinwordAnchoring::SetAnchoring(const SwFrmFmt& rFmt)
 {
     const RndStdIds eAnchor = rFmt.GetAnchor().GetAnchorId();
-    mbInline = (eAnchor == FLY_IN_CNTNT);
+    mbInline = (eAnchor == FLY_AS_CHAR);
 
     SwFmtHoriOrient rHoriOri = rFmt.GetHoriOrient();
     SwFmtVertOrient rVertOri = rFmt.GetVertOrient();
@@ -2488,13 +2484,13 @@ void WinwordAnchoring::SetAnchoring(const SwFrmFmt& rFmt)
         case text::RelOrientation::FRAME:
         case text::RelOrientation::FRAME_LEFT: //:-(
         case text::RelOrientation::FRAME_RIGHT: //:-(
-            if (eAnchor == FLY_PAGE)
+            if (eAnchor == FLY_AT_PAGE)
                 mnXRelTo = 1;
             else
                 mnXRelTo = 2;
             break;
         case text::RelOrientation::PRINT_AREA:
-            if (eAnchor == FLY_PAGE)
+            if (eAnchor == FLY_AT_PAGE)
                 mnXRelTo = 0;
             else
                 mnXRelTo = 2;
@@ -2516,13 +2512,13 @@ void WinwordAnchoring::SetAnchoring(const SwFrmFmt& rFmt)
             mnYRelTo = 1;
             break;
         case text::RelOrientation::PRINT_AREA:
-            if (eAnchor == FLY_PAGE)
+            if (eAnchor == FLY_AT_PAGE)
                 mnYRelTo = 0;
             else
                 mnYRelTo = 2;
             break;
         case text::RelOrientation::FRAME:
-            if (eAnchor == FLY_PAGE)
+            if (eAnchor == FLY_AT_PAGE)
                 mnYRelTo = 1;
             else
                 mnYRelTo = 2;

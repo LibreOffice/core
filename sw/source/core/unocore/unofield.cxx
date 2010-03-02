@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unofield.cxx,v $
- * $Revision: 1.108 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,9 +38,10 @@
 #include <ndtxt.hxx>
 #include <unomap.hxx>
 #include <unoprnms.hxx>
-#include <unoobj.hxx>
+#include <unotextrange.hxx>
+#include <unotextcursor.hxx>
 #include <unocoll.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <docstat.hxx>
 #include <editsh.hxx>
 #include <viewsh.hxx>
@@ -92,7 +90,7 @@
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <textapi.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #include <docsh.hxx>
 #include <fmtmeta.hxx> // MetaFieldManager
 
@@ -1304,7 +1302,7 @@ void SwXTextField::attachToRange(
     {
         SwUnoInternalPaM aPam(*pDoc);
         //das muss jetzt sal_True liefern
-        SwXTextRange::XTextRangeToSwPaM(aPam, xTextRange);
+        ::sw::XTextRangeToSwPaM(aPam, xTextRange);
         SwField* pFld = 0;
         switch(m_nServiceId)
         {
@@ -1879,8 +1877,8 @@ uno::Reference< text::XTextRange >  SwXTextField::getAnchor(void) throw( uno::Ru
 
         SwPaM aPam(rTxtNode, *pTxtFld->GetStart() + 1, rTxtNode, *pTxtFld->GetStart());
 
-        aRef = SwXTextRange::CreateTextRangeFromPosition(m_pDoc,
-                                *aPam.GetPoint(), aPam.GetMark());
+        aRef = SwXTextRange::CreateXTextRange(
+                *m_pDoc, *aPam.GetPoint(), aPam.GetMark());
     }
     return aRef;
 

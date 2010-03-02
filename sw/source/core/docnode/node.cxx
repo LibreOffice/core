@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: node.cxx,v $
- * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,12 +32,10 @@
 #include <hintids.hxx>
 
 // --> OD 2005-02-21 #i42921#
-#include <svx/frmdiritem.hxx>
+#include <editeng/frmdiritem.hxx>
 // <--
-#include <svx/protitem.hxx>
-#ifndef _COM_SUN_STAR_I18N_CHARACTERITERATORMODE_HDL_
+#include <editeng/protitem.hxx>
 #include <com/sun/star/i18n/CharacterIteratorMode.hdl>
-#endif
 #include <fmtcntnt.hxx>
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
@@ -609,7 +604,7 @@ const SwPageDesc* SwNode::FindPageDesc( BOOL bCalcLay,
             if( pFmt )
             {
                 const SwFmtAnchor* pAnchor = &pFmt->GetAnchor();
-                if( FLY_PAGE != pAnchor->GetAnchorId() &&
+                if ((FLY_AT_PAGE != pAnchor->GetAnchorId()) &&
                     pAnchor->GetCntntAnchor() )
                 {
                     pNd = &pAnchor->GetCntntAnchor()->nNode.GetNode();
@@ -631,7 +626,7 @@ const SwPageDesc* SwNode::FindPageDesc( BOOL bCalcLay,
                                     break;
                                 }
                                 pAnchor = &pFrmFmt->GetAnchor();
-                                if( FLY_PAGE == pAnchor->GetAnchorId() ||
+                                if ((FLY_AT_PAGE == pAnchor->GetAnchorId()) ||
                                     !pAnchor->GetCntntAnchor() )
                                 {
                                     pFlyNd = 0;

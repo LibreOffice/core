@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ww8par4.cxx,v $
- * $Revision: 1.62 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,19 +32,14 @@
 #include "writerhelper.hxx"
 #include <com/sun/star/embed/XClassifiedObject.hpp>
 
-#ifndef __SGI_STL_ALGORITHM
 #include <algorithm>
-#endif
-#ifndef __SGI_STL_FUNCTIONAL
 #include <functional>
-#endif
 #include <osl/endian.h>
 #include <sot/storage.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <hintids.hxx>
 #include <svx/svdoole2.hxx>
 #include <filter/msfilter/msdffimp.hxx>
-#include <svx/impgrf.hxx>
 #include <svx/unoapi.hxx>
 #include <filter/msfilter/msocximex.hxx>
 
@@ -59,9 +51,7 @@
 #include <frmfmt.hxx>
 #include <pam.hxx>
 #include <ndgrf.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>            // fuer Ole-Node
-#endif
 #include <mdiexp.hxx>           // Progress
 #include <redline.hxx>
 #include <fltshell.hxx>
@@ -69,6 +59,7 @@
 #include <shellio.hxx>
 #include <ndole.hxx>
 
+#include <svtools/filter.hxx>
 
 #include "ww8scan.hxx"
 #include "ww8par.hxx"
@@ -296,7 +287,7 @@ SwFrmFmt* SwWW8ImplReader::ImportOle(const Graphic* pGrf,
         if (!mbNewDoc)
             Reader::ResetFrmFmtAttrs( *pTempSet );
 
-        SwFmtAnchor aAnchor( FLY_IN_CNTNT );
+        SwFmtAnchor aAnchor( FLY_AS_CHAR );
         aAnchor.SetAnchor( pPaM->GetPoint() );
         pTempSet->Put( aAnchor );
 

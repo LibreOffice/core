@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: select.cxx,v $
- * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,16 +35,10 @@
 #include <svl/eitem.hxx>
 #include <svl/macitem.hxx>
 #include <unotools/charclass.hxx>
-#include <svx/scripttypeitem.hxx>
-#ifndef _CMDID_H
+#include <editeng/scripttypeitem.hxx>
 #include <cmdid.h>
-#endif
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
-#ifndef _BASESH_HXX
 #include <basesh.hxx>
-#endif
 #include <wrtsh.hxx>
 #include <frmatr.hxx>
 #include <initui.hxx>
