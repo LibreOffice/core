@@ -52,11 +52,12 @@ InsertionIndicatorHandler::InsertionIndicatorHandler (SlideSorter& rSlideSorter)
       mpInsertionIndicatorOverlay(
           mrSlideSorter.GetView().GetOverlay().GetInsertionIndicatorOverlay()),
       mnInsertionIndex(-1),
-      mbIsBeforePage(false),
+      maVisualInsertionIndices(-1,-1),
       meMode(MoveMode),
       mbIsActive(false),
       mbIsReadOnly(mrSlideSorter.GetModel().IsReadOnly()),
-      mbIsOverSourceView(true)
+      mbIsOverSourceView(true),
+      maIconSize(0,0)
 {
 }
 
@@ -88,6 +89,24 @@ void InsertionIndicatorHandler::Start (
 
     mbIsActive = true;
     mbIsOverSourceView = bIsOverSourceView;
+}
+
+
+
+
+void InsertionIndicatorHandler::UpdateIndicatorIcon (
+    model::PageEnumeration& rEnumeration)
+{
+    mpInsertionIndicatorOverlay->Create(rEnumeration);
+    maIconSize = mpInsertionIndicatorOverlay->GetSize();
+}
+
+
+
+
+void InsertionIndicatorHandler::UpdateIndicatorIcon (void)
+{
+    mpInsertionIndicatorOverlay->Create();
 }
 
 
@@ -141,7 +160,7 @@ void InsertionIndicatorHandler::End (void)
     if (mbIsReadOnly)
         return;
 
-    GetInsertAnimator()->SetInsertPosition(-1, false);
+    GetInsertAnimator()->SetInsertPosition(-1, Pair(-1,-1), Size(0,0));
 
     mbIsActive = false;
     mpInsertionIndicatorOverlay->SetIsVisible(false);
@@ -178,74 +197,55 @@ void InsertionIndicatorHandler::SetPosition (
     view::Layouter& rLayouter (mrSlideSorter.GetView().GetLayouter());
     USHORT nPageCount ((USHORT)mrSlideSorter.GetModel().GetPageCount());
 
-    sal_Int32 nInsertionIndex = rLayouter.GetInsertionIndex (rPoint,
-        bAllowHorizontalInsertMarker);
-    if (nInsertionIndex >= nPageCount)
-        nInsertionIndex = nPageCount-1;
-    sal_Int32 nDrawIndex = nInsertionIndex;
-
-    bool bVertical = false;
-    bool bIsBeforePage = false;
-    if (nInsertionIndex >= 0)
+    sal_Int32 nInsertionIndex (mnInsertionIndex);
+    Pair aVisualInsertionIndices (maVisualInsertionIndices);
+    if (rLayouter.GetColumnCount() == 1)
     {
-        // Now that we know where to insert, we still have to determine
-        // where to draw the marker.  There are two decisions to make:
-        // 1. Draw a vertical or a horizontal insert marker.
-        //    The horizontal one may only be chosen when there is only one
-        //    column.
-        // 2. The vertical (standard) insert marker may be painted left to
-        //    the insert page or right of the previous one.  When both pages
-        //    are in the same row this makes no difference.  Otherwise the
-        //    posiotions are at the left and right ends of two rows.
-
-        Point aPageCenter (rLayouter.GetPageObjectBox (
-            nInsertionIndex).Center());
-
-        if (bAllowHorizontalInsertMarker
-            && rLayouter.GetColumnCount() == 1)
-        {
-            bVertical = false;
-            bIsBeforePage = (rPoint.Y() <= aPageCenter.Y());
-        }
-        else
-        {
-            bVertical = true;
-            bIsBeforePage = (rPoint.X() <= aPageCenter.X());
-        }
-
-        // Add one when the mark was painted below or to the right of the
-        // page object.
-        if ( ! bIsBeforePage)
-            nInsertionIndex += 1;
-    }
-
-    if (mnInsertionIndex!=nInsertionIndex
-        || mbIsBeforePage!=bIsBeforePage
-        || meMode!=eMode)
-    {
-        mnInsertionIndex = nInsertionIndex;
-        mbIsBeforePage = bIsBeforePage;
-        meMode = eMode;
-        mbIsInsertionTrivial = IsInsertionTrivial(eMode);
-
-        mpInsertionIndicatorOverlay->SetLocation(
-            rLayouter.GetInsertionMarkerLocation (
-                nDrawIndex,
-                bVertical,
-                mbIsBeforePage));
-    }
-
-    if (mnInsertionIndex>=0 && ! mbIsInsertionTrivial)
-    {
-        GetInsertAnimator()->SetInsertPosition(
-            mnInsertionIndex,
-            mbIsBeforePage);
-        mpInsertionIndicatorOverlay->SetIsVisible(true);
+        // Pages are placed in a single column.  Insertion indicator is
+        // placed between rows.
+        nInsertionIndex = rLayouter.GetVerticalInsertionIndex(rPoint);
+        aVisualInsertionIndices = Pair(nInsertionIndex, -1);
     }
     else
     {
-        GetInsertAnimator()->Reset();
-        mpInsertionIndicatorOverlay->SetIsVisible(false);
+        // Pages are placed in a grid.  Insertion indicator is placed
+        // between columns.
+        aVisualInsertionIndices = rLayouter.GetGridInsertionIndices(rPoint);
+        nInsertionIndex = aVisualInsertionIndices.A() * rLayouter.GetColumnCount()
+            + aVisualInsertionIndices.B();
+        if (aVisualInsertionIndices.B() == rLayouter.GetColumnCount())
+            --nInsertionIndex;
+    }
+
+    if (mnInsertionIndex != nInsertionIndex
+        || maVisualInsertionIndices != aVisualInsertionIndices
+        || meMode != eMode
+        || ! mpInsertionIndicatorOverlay->IsVisible())
+    {
+        mnInsertionIndex = nInsertionIndex;
+        maVisualInsertionIndices = aVisualInsertionIndices;
+        meMode = eMode;
+        mbIsInsertionTrivial = IsInsertionTrivial(eMode);
+
+        const Point aIndicatorLocation (
+            rLayouter.GetInsertionIndicatorLocation(
+                maVisualInsertionIndices,
+                maIconSize));
+        mpInsertionIndicatorOverlay->SetLocation(aIndicatorLocation);
+
+        if (mnInsertionIndex>=0 && ! mbIsInsertionTrivial)
+        {
+            GetInsertAnimator()->SetInsertPosition(
+                mnInsertionIndex,
+                maVisualInsertionIndices,
+                maIconSize);
+            mpInsertionIndicatorOverlay->SetIsVisible(true);
+        }
+        else
+        {
+            GetInsertAnimator()->Reset();
+            mpInsertionIndicatorOverlay->SetIsVisible(false);
+        }
     }
 }
 

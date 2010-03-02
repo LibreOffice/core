@@ -306,19 +306,7 @@ BOOL SelectionFunction::MouseMove (const MouseEvent& rEvent)
             aDragTimer.Stop();
     }
 
-
-    // In some modes (dragging, moving) the mouse over indicator is only
-    // annoying.  Turn it off in these cases.
-    if (mpSubstitutionHandler || mpMouseMultiSelector)
-    {
-        mrSlideSorter.GetView().SetPageUnderMouse(model::SharedPageDescriptor());
-    }
-    else
-    {
-        mrSlideSorter.GetView().UpdatePageUnderMouse(
-            aMousePosition,
-            (rEvent.GetButtons() & MOUSE_LEFT)!=0);
-    }
+    UpdatePageUnderMouse(aMousePosition, (rEvent.GetButtons() & MOUSE_LEFT)!=0);
 
     // Detect the mouse leaving the window.  When not button is pressed then
     // we can call IsLeaveWindow at the event.  Otherwise we have to make an
@@ -808,6 +796,21 @@ bool SelectionFunction::cancel (void)
 
 
 
+void SelectionFunction::UpdatePageUnderMouse (
+    const Point& rMousePosition,
+    const bool bIsMouseButtonDown)
+{
+    // In some modes (dragging, moving) the mouse over indicator is only
+    // annoying.  Turn it off in these cases.
+    if (mpSubstitutionHandler || mpMouseMultiSelector)
+        mrSlideSorter.GetView().SetPageUnderMouse(model::SharedPageDescriptor());
+    else
+        mrSlideSorter.GetView().UpdatePageUnderMouse(rMousePosition, bIsMouseButtonDown);
+}
+
+
+
+
 void SelectionFunction::DeselectAllPages (void)
 {
     mbIsDeselectionPending = false;
@@ -1261,6 +1264,11 @@ bool SelectionFunction::EventProcessing (const EventDescriptor& rDescriptor)
                                 mrSlideSorter,
                                 pHitDescriptor,
                                 rDescriptor.maMouseModelPosition));
+                            StartDrag(
+                                rDescriptor.maMousePosition,
+                                (rDescriptor.mnEventCode | CONTROL_MODIFIER) != 0
+                                    ? InsertionIndicatorHandler::CopyMode
+                                    : InsertionIndicatorHandler::MoveMode);
                             break;
 
                             // A mouse motion not over a page starts a rectangle selection.

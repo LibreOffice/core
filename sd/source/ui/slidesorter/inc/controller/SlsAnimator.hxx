@@ -74,11 +74,14 @@ public:
         the specified duration.
         @param rAnimation
             The animation operation.
+        @param nStartOffset
+            Time in milli seconds before the animation is started.
         @param nDuration
             The duration in milli seconds.
     */
     AnimationId AddAnimation (
         const AnimationFunctor& rAnimation,
+        const sal_Int32 nStartOffset,
         const sal_Int32 nDuration,
         const FinishFunctor& rFinishFunctor = FinishFunctor());
 

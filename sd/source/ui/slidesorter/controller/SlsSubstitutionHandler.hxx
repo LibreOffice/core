@@ -88,7 +88,6 @@ public:
 
 private:
     SlideSorter* mpTargetSlideSorter;
-    view::SubstitutionOverlay::SharedInternalState mpOverlayState;
     model::SharedPageDescriptor mpHitDescriptor;
     sal_Int32 mnInsertionIndex;
 

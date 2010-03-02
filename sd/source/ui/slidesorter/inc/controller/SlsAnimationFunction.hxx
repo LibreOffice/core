@@ -54,6 +54,11 @@ class AnimationFunction
     : private ::boost::noncopyable
 {
 public:
+    /** Acceleration function that maps [0,1] to [0,1] linearly, ie it
+        returns the given time value unaltered.
+    */
+    static double Linear (const double nTime);
+
     /** Acceleration function that maps [0,1] to [0,1].  Speed starts fast
         and ends slow following the sine function.
     */

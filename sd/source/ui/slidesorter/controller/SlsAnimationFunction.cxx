@@ -41,6 +41,15 @@
 namespace sd { namespace slidesorter { namespace controller {
 
 
+double AnimationFunction::Linear (const double nTime)
+{
+    OSL_ASSERT(nTime>=0.0 && nTime<=1.0);
+    return nTime;
+}
+
+
+
+
 double AnimationFunction::FastInSlowOut_Sine (const double nTime)
 {
     OSL_ASSERT(nTime>=0.0 && nTime<=1.0);

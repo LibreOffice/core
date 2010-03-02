@@ -40,6 +40,7 @@
 #include <tools/color.hxx>
 
 #include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 
 
 namespace sd { namespace slidesorter { namespace controller {
@@ -64,20 +65,25 @@ public:
 
     BitmapEx GetInsertIndicatorIcon (void) const;
 
-    enum FontType { PageNumberFont };
-    ::boost::shared_ptr<Font> CreateFont (
+    enum FontType {
+        PageNumberFont,
+        PageCountFont
+    };
+    static ::boost::shared_ptr<Font> GetFont (
         const FontType eType,
-        OutputDevice& rDevice) const;
+        const OutputDevice& rDevice);
 
-    ColorData GetColorForVisualState (const model::VisualState::State eState) const;
+    static ColorData GetColorForVisualState (const model::VisualState::State eState);
 
     enum ColorType {
         Background,
+        PageBackground,
         ButtonBackground,
         MouseOverColor,
         PageNumberBorder,
         PageNumberColor,
-        Selection
+        Selection,
+        PreviewBorder
     };
     ColorData GetColor (const ColorType eType);
 
@@ -99,8 +105,8 @@ public:
 
     enum IconType
     {
-        InsertionIndicator,
-        RawShadow
+        RawShadow,
+        RawInsertShadow
     };
     BitmapEx GetIcon (const IconType eType);
 
@@ -114,12 +120,13 @@ private:
         ColorData maBorderColor2;
     };
     ColorData maBackgroundColor;
+    ColorData maPageBackgroundColor;
     GradientDescriptor maNormalGradient;
     GradientDescriptor maSelectedGradient;
     GradientDescriptor maSelectedAndFocusedGradient;
     GradientDescriptor maMouseOverGradient;
     BitmapEx maRawShadow;
-    BitmapEx maInsertionIndicator;
+    BitmapEx maRawInsertShadow;
 };
 
 

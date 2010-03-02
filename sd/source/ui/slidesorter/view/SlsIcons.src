@@ -66,4 +66,9 @@ Resource IMG_ICONS
     {
         ImageBitmap = Bitmap { File = "slide_sorter_shadow.png" ; };
     };
+
+    Image IMAGE_INSERT_SHADOW
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_insert_shadow.png" ; };
+    };
 };

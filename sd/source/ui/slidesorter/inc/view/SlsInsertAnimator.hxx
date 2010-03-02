@@ -47,9 +47,13 @@ class InsertAnimator
 public:
     InsertAnimator (SlideSorter& rSlideSorter);
 
+    /** Set the position at which we have to make room for the display of an
+        icon.
+    */
     void SetInsertPosition (
         const sal_Int32 nPageIndex,
-        const bool bInsertBefore);
+        const Pair& rVisualInsertionIndices,
+        const Size& rIconSize);
 
     void Reset (void);
 

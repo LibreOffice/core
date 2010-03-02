@@ -69,15 +69,13 @@ SubstitutionHandler::SubstitutionHandler (
         model::PageEnumeration aSelectedPages(
             model::PageEnumerationProvider::CreateSelectedPagesEnumeration(
                 rSlideSorter.GetModel()));
-        rOverlay.GetSubstitutionOverlay()->Create(
-            aSelectedPages,
-            rMouseModelPosition,
-            mpHitDescriptor);
         rOverlay.GetSubstitutionOverlay()->SetIsVisible(true);
         rSlideSorter.GetController().GetInsertionIndicatorHandler()->Start(
             rMouseModelPosition,
             InsertionIndicatorHandler::MoveMode,
             true);
+        rSlideSorter.GetController().GetInsertionIndicatorHandler()->UpdateIndicatorIcon(
+            aSelectedPages);
     }
 }
 
@@ -217,8 +215,6 @@ void SubstitutionHandler::SetTargetSlideSorter (
 {
     if (mpTargetSlideSorter != NULL)
     {
-        mpOverlayState = mpTargetSlideSorter->GetView().GetOverlay().GetSubstitutionOverlay()
-            ->GetInternalState();
         mpTargetSlideSorter->GetController().GetInsertionIndicatorHandler()->End();
     }
 
@@ -226,8 +222,6 @@ void SubstitutionHandler::SetTargetSlideSorter (
 
     if (mpTargetSlideSorter != NULL)
     {
-        mpTargetSlideSorter->GetView().GetOverlay().GetSubstitutionOverlay()->SetInternalState(
-            mpOverlayState);
         mpTargetSlideSorter->GetController().GetInsertionIndicatorHandler()->Start(
             aMousePosition,
             eMode,

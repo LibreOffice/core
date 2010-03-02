@@ -34,6 +34,9 @@
 #include "view/SlsInsertAnimator.hxx"
 
 namespace sd { namespace slidesorter { class SlideSorter; } }
+namespace sd { namespace slidesorter { namespace model {
+class PageEnumeration;
+} } }
 namespace sd { namespace slidesorter { namespace view {
 class InsertAnimator;
 class InsertionIndicatorOverlay;
@@ -61,6 +64,9 @@ public:
         const Point& rMouseModelPosition,
         const Mode eMode,
         const bool bIsOverSourceView);
+
+    void UpdateIndicatorIcon (model::PageEnumeration& rEnumeration);
+    void UpdateIndicatorIcon (void);
 
     /** Set the position of the insertion marker to the given coordinates.
     */
@@ -97,12 +103,13 @@ private:
     ::boost::shared_ptr<view::InsertAnimator> mpInsertAnimator;
     ::boost::shared_ptr<view::InsertionIndicatorOverlay> mpInsertionIndicatorOverlay;
     sal_Int32 mnInsertionIndex;
-    bool mbIsBeforePage;
+    Pair maVisualInsertionIndices;
     Mode meMode;
     bool mbIsInsertionTrivial;
     bool mbIsActive;
     bool mbIsReadOnly;
     bool mbIsOverSourceView;
+    Size maIconSize;
 
     void SetPosition (
         const Point& rPoint,

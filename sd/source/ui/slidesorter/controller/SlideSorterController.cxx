@@ -443,6 +443,7 @@ bool SlideSorterController::Command (
                     pWindow->PixelToLogic(rEvent.GetMousePosPixel()),
                     InsertionIndicatorHandler::MoveMode,
                     false);
+                GetInsertionIndicatorHandler()->UpdateIndicatorIcon();
             }
 
             pWindow->ReleaseMouse();

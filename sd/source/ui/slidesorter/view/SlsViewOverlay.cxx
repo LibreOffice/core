@@ -35,6 +35,7 @@
 #include "SlideSorter.hxx"
 #include "SlideSorterViewShell.hxx"
 #include "SlsLayeredDevice.hxx"
+#include "SlsFramePainter.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "model/SlsPageEnumeration.hxx"
@@ -63,7 +64,8 @@
 #include <svx/svdpagv.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <vcl/svapp.hxx>
-
+#include <vcl/bmpacc.hxx>
+#include <rtl/math.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 
@@ -74,10 +76,10 @@ using namespace ::basegfx;
 
 namespace {
 
-#define AirForceBlue 0x5d8aa8
-#define Arsenic 0x3b444b
 #define Amber 0x007fff
-#define Charcoal 0x36454f
+
+static const double gnPreviewOffsetScale = 1.0 / 8.0;
+
 
 
 Rectangle GrowRectangle (const Rectangle& rBox, const sal_Int32 nOffset)
@@ -99,45 +101,12 @@ Rectangle ConvertRectangle (const B2DRectangle& rBox)
         rIntegerBox.getMaxY());
 }
 
+sal_Int32 RoundToInt (const double nValue) { return sal_Int32(::rtl::math::round(nValue)); }
 
 } // end of anonymous namespace
 
 
 namespace sd { namespace slidesorter { namespace view {
-
-//===== SubstitutionOverlay::InternalState ====================================
-
-class ItemDescriptor
-{
-public:
-    BitmapEx maImage;
-    Point maLocation;
-    double mnTransparency;
-    basegfx::B2DPolygon maShape;
-};
-
-class SubstitutionOverlay::InternalState
-{
-public:
-    /** The set of items that is displayed as substitution of the selected
-        pages.  Note that the number of items may differ from the number of
-        selected pages because only the selected pages in the neighborhood
-        of the anchor page are included.
-    */
-    ::std::vector<ItemDescriptor> maItems;
-
-    /** Bounding box of all items in maItems at their original location.
-    */
-    Rectangle maBoundingBox;
-
-    /** The anchor position of the substitution is the paint that, after
-        translation, is mapped onto the current position.
-    */
-    Point maAnchor;
-
-};
-
-
 
 
 //=====  ViewOverlay  =========================================================
@@ -327,8 +296,7 @@ SubstitutionOverlay::SubstitutionOverlay (
     ViewOverlay& rViewOverlay,
     const sal_Int32 nLayerIndex)
     : OverlayBase(rViewOverlay, nLayerIndex),
-      maPosition(0,0),
-      mpState(new InternalState())
+      maPosition(0,0)
 {
 }
 
@@ -342,89 +310,9 @@ SubstitutionOverlay::~SubstitutionOverlay (void)
 
 
 
-void SubstitutionOverlay::Create (
-    model::PageEnumeration& rSelection,
-    const Point& rAnchor,
-    const model::SharedPageDescriptor& rpHitDescriptor)
-{
-    OSL_ASSERT(mpState);
-
-    mpState->maAnchor = rAnchor;
-    maPosition = rAnchor;
-
-    ::boost::shared_ptr<cache::PageCache> pPreviewCache (
-        mrViewOverlay.GetSlideSorter().GetView().GetPreviewCache());
-    view::Layouter& rLayouter (mrViewOverlay.GetSlideSorter().GetView().GetLayouter());
-    ::boost::shared_ptr<view::PageObjectLayouter> pPageObjectLayouter (
-        rLayouter.GetPageObjectLayouter());
-
-    const sal_Int32 nRow0 (rpHitDescriptor
-        ? rLayouter.GetRow(rpHitDescriptor->GetPageIndex())
-        : -1);
-    const sal_Int32 nColumn0 (rpHitDescriptor
-        ? rLayouter.GetColumn(rpHitDescriptor->GetPageIndex())
-        : -1);
-
-    mpState->maItems.clear();
-    while (rSelection.HasMoreElements())
-    {
-        model::SharedPageDescriptor pDescriptor (rSelection.GetNextElement());
-
-        sal_uInt8 nTransparency (128);
-
-        // Calculate distance between current page object and the one under
-        // the mouse.
-        if (nRow0>=0 || nColumn0>=0)
-        {
-            const sal_Int32 nRow (rLayouter.GetRow(pDescriptor->GetPageIndex()));
-            const sal_Int32 nColumn (rLayouter.GetColumn(pDescriptor->GetPageIndex()));
-
-            const sal_Int32 nRowDistance (abs(nRow - nRow0));
-            const sal_Int32 nColumnDistance (abs(nColumn - nColumn0));
-            if (nRowDistance>1 || nColumnDistance>1)
-                continue;
-            if (nRowDistance!=0 && nColumnDistance!=0)
-                nTransparency = 255 * mnCornerTransparency / 100;
-            else if (nRowDistance!=0 || nColumnDistance!=0)
-                nTransparency = 255 * mnSideTransparency / 100;
-            else
-                nTransparency = 255 * mnCenterTransparency / 100;
-        }
-
-        const Rectangle aBox (pDescriptor->GetBoundingBox());
-        mpState->maBoundingBox.Union(aBox);
-        basegfx::B2DRectangle aB2DBox(
-            aBox.Left(),
-            aBox.Top(),
-            aBox.Right(),
-            aBox.Bottom());
-
-        const Bitmap aBitmap (pPreviewCache->GetPreviewBitmap(pDescriptor->GetPage()).GetBitmap());
-        AlphaMask aMask (aBitmap.GetSizePixel());
-        aMask.Erase(nTransparency);
-        mpState->maItems.push_back(ItemDescriptor());
-        ItemDescriptor& rNewItem (mpState->maItems.back());
-        rNewItem.maImage = BitmapEx(
-            aBitmap,
-            aMask);
-        rNewItem.maLocation = pPageObjectLayouter->GetBoundingBox(
-            pDescriptor,
-            PageObjectLayouter::Preview,
-            PageObjectLayouter::WindowCoordinateSystem).TopLeft();
-        rNewItem.mnTransparency = nTransparency/255.0;
-        rNewItem.maShape = basegfx::tools::createPolygonFromRect(aB2DBox);
-    }
-
-    SetIsVisible(mpState->maItems.size() > 0);
-}
-
-
-
-
 void SubstitutionOverlay::Clear (void)
 {
     SetIsVisible(false);
-    mpState.reset(new InternalState());
 }
 
 
@@ -432,12 +320,7 @@ void SubstitutionOverlay::Clear (void)
 
 void SubstitutionOverlay::SetAnchor (const Point& rAnchor)
 {
-    OSL_ASSERT(mpState);
-    if (mpState->maAnchor != rAnchor)
-    {
-        Invalidator aInvalidator (*this);
-        mpState->maAnchor = rAnchor;
-    }
+    (void)rAnchor;
 }
 
 
@@ -445,11 +328,7 @@ void SubstitutionOverlay::SetAnchor (const Point& rAnchor)
 
 void SubstitutionOverlay::Move (const Point& rOffset)
 {
-    if (rOffset != Point(0,0))
-    {
-        Invalidator aInvalidator (*this);
-        maPosition += rOffset;
-    }
+    (void)rOffset;
 }
 
 
@@ -457,11 +336,7 @@ void SubstitutionOverlay::Move (const Point& rOffset)
 
 void SubstitutionOverlay::SetPosition (const Point& rPosition)
 {
-    if (maPosition != rPosition)
-    {
-        Invalidator aInvalidator (*this);
-        maPosition = rPosition;
-    }
+    (void)rPosition;
 }
 
 
@@ -469,7 +344,7 @@ void SubstitutionOverlay::SetPosition (const Point& rPosition)
 
 Point SubstitutionOverlay::GetPosition (void) const
 {
-    return maPosition;
+    return Point(0,0);
 }
 
 
@@ -479,30 +354,8 @@ void SubstitutionOverlay::Paint (
     OutputDevice& rDevice,
     const Rectangle& rRepaintArea)
 {
+    (void)rDevice;
     (void)rRepaintArea;
-    OSL_ASSERT(mpState);
-
-    if ( ! IsVisible())
-        return;
-
-    const Point aOffset (maPosition - mpState->maAnchor);
-    basegfx::B2DHomMatrix aTranslation;
-    aTranslation.translate(aOffset.X(), aOffset.Y());
-
-    rDevice.SetFillColor(Color(AirForceBlue));
-    rDevice.SetLineColor();
-
-    for (::std::vector<ItemDescriptor>::const_iterator
-             iItem(mpState->maItems.begin()),
-             iEnd(mpState->maItems.end());
-         iItem!=iEnd;
-         ++iItem)
-    {
-        ::basegfx::B2DPolyPolygon aPolygon (iItem->maShape);
-        aPolygon.transform(aTranslation);
-        rDevice.DrawTransparent(aPolygon, iItem->mnTransparency);
-        rDevice.DrawBitmapEx(iItem->maLocation+aOffset, iItem->maImage);
-    }
 }
 
 
@@ -510,28 +363,7 @@ void SubstitutionOverlay::Paint (
 
 Rectangle SubstitutionOverlay::GetBoundingBox (void) const
 {
-    OSL_ASSERT(mpState);
-
-    Rectangle aBox (mpState->maBoundingBox);
-    aBox.Move(maPosition.X() - mpState->maAnchor.X(), maPosition.Y() - mpState->maAnchor.Y());
-    return aBox;
-}
-
-
-
-
-SubstitutionOverlay::SharedInternalState SubstitutionOverlay::GetInternalState (void) const
-{
-    return mpState;
-}
-
-
-
-
-void SubstitutionOverlay::SetInternalState (const SharedInternalState& rpState)
-{
-    if (rpState)
-        mpState = rpState;
+    return Rectangle();
 }
 
 
@@ -622,12 +454,212 @@ Rectangle SelectionRectangleOverlay::GetBoundingBox (void) const
 
 //=====  InsertionIndicatorOverlay  ===========================================
 
+const static sal_Int32 gnShadowBorder = 3;
+
 InsertionIndicatorOverlay::InsertionIndicatorOverlay (
     ViewOverlay& rViewOverlay,
     const sal_Int32 nLayerIndex)
     : OverlayBase (rViewOverlay, nLayerIndex),
       maLocation(),
-      maIcon(rViewOverlay.GetSlideSorter().GetTheme()->GetIcon(Theme::InsertionIndicator))
+      maIcon(),
+      mpShadowPainter(new FramePainter(
+          rViewOverlay.GetSlideSorter().GetTheme()->GetIcon(Theme::RawInsertShadow)))
+{
+}
+
+
+
+
+void InsertionIndicatorOverlay::Create (model::PageEnumeration& rSelection)
+{
+    view::Layouter& rLayouter (mrViewOverlay.GetSlideSorter().GetView().GetLayouter());
+    ::boost::shared_ptr<view::PageObjectLayouter> pPageObjectLayouter (
+        rLayouter.GetPageObjectLayouter());
+    ::boost::shared_ptr<view::Theme> pTheme (mrViewOverlay.GetSlideSorter().GetTheme());
+    const Size aOriginalPreviewSize (pPageObjectLayouter->GetPreviewSize());
+
+    const double nPreviewScale (0.5);
+    const Size aPreviewSize (
+        RoundToInt(aOriginalPreviewSize.Width()*nPreviewScale),
+        RoundToInt(aOriginalPreviewSize.Height()*nPreviewScale));
+    const sal_Int32 nOffset (
+        RoundToInt(Min(aPreviewSize.Width(),aPreviewSize.Height()) * gnPreviewOffsetScale));
+
+    ::std::vector<model::SharedPageDescriptor> aDescriptors;
+    SelectRepresentatives(rSelection, aDescriptors);
+
+    // Determine size and offset depending on the number of previews.
+    sal_Int32 nCount (aDescriptors.size());
+    if (nCount > 0)
+        --nCount;
+    Size aIconSize(
+        aPreviewSize.Width() + 2 * gnShadowBorder + nCount*nOffset,
+        aPreviewSize.Height() + 2 * gnShadowBorder + nCount*nOffset);
+    maIconOffset = Point(gnShadowBorder, gnShadowBorder);
+
+    // Create virtual devices for bitmap and mask whose bitmaps later be
+    // combined to form the BitmapEx of the icon.
+    VirtualDevice aContent (
+        *mrViewOverlay.GetSlideSorter().GetContentWindow(),
+        0,
+        0);
+    aContent.SetOutputSizePixel(aIconSize);
+
+    aContent.SetFillColor();
+    aContent.SetLineColor(pTheme->GetColor(Theme::PreviewBorder));
+    const Point aOffset = PaintRepresentatives(aContent, aPreviewSize, nOffset, aDescriptors);
+
+    PaintPageCount(aContent, rSelection, aPreviewSize, aOffset);
+
+    maIcon = aContent.GetBitmapEx(Point(0,0), aIconSize);
+}
+
+
+
+
+void InsertionIndicatorOverlay::SelectRepresentatives (
+    model::PageEnumeration& rSelection,
+    ::std::vector<model::SharedPageDescriptor>& rDescriptors) const
+{
+    sal_Int32 nCount (0);
+    while (rSelection.HasMoreElements())
+    {
+        if (nCount++ >= 3)
+            break;
+        rDescriptors.push_back(rSelection.GetNextElement());
+    }
+}
+
+
+
+
+Point InsertionIndicatorOverlay::PaintRepresentatives (
+    OutputDevice& rContent,
+    const Size aPreviewSize,
+    const sal_Int32 nOffset,
+    const ::std::vector<model::SharedPageDescriptor>& rDescriptors) const
+{
+    const Point aOffset (0,rDescriptors.size()==1 ? -nOffset : 0);
+
+    // Paint the pages.
+    Point aPageOffset (0,0);
+    double nTransparency (0);
+    for (sal_Int32 nIndex=2; nIndex>=0; --nIndex)
+    {
+        if (rDescriptors.size() <= nIndex)
+            continue;
+        switch(nIndex)
+        {
+            case 0 :
+                aPageOffset = Point(0, nOffset);
+                nTransparency = 0.85;
+                break;
+            case 1:
+                aPageOffset = Point(nOffset, 0);
+                nTransparency = 0.75;
+                break;
+            case 2:
+                aPageOffset = Point(2*nOffset, 2*nOffset);
+                nTransparency = 0.65;
+                break;
+        }
+        aPageOffset += aOffset;
+        aPageOffset.X() += gnShadowBorder;
+        aPageOffset.Y() += gnShadowBorder;
+
+        ::boost::shared_ptr<cache::PageCache> pPreviewCache (
+            mrViewOverlay.GetSlideSorter().GetView().GetPreviewCache());
+        BitmapEx aPreview (pPreviewCache->GetPreviewBitmap(rDescriptors[nIndex]->GetPage()));
+        aPreview.Scale(aPreviewSize, BMP_SCALE_INTERPOLATE);
+        rContent.DrawBitmapEx(aPageOffset, aPreview);
+
+        // Tone down the bitmap.  The further back the darker it becomes.
+        Rectangle aBox (
+            aPageOffset.X(),
+            aPageOffset.Y(),
+            aPageOffset.X()+aPreviewSize.Width()-1,
+            aPageOffset.Y()+aPreviewSize.Height()-1);
+        rContent.SetFillColor(COL_BLACK);
+        rContent.SetLineColor();
+        rContent.DrawTransparent(
+            ::basegfx::B2DPolyPolygon(::basegfx::tools::createPolygonFromRect(
+                ::basegfx::B2DRectangle(aBox.Left(), aBox.Top(), aBox.Right()+1, aBox.Bottom()+1),
+                0,
+                0)),
+            nTransparency);
+
+        // Draw border around preview.
+        Rectangle aBorderBox (GrowRectangle(aBox, 1));
+        rContent.SetLineColor(COL_GRAY);
+        rContent.SetFillColor();
+        rContent.DrawRect(aBorderBox);
+
+        // Draw shadow around preview.
+        mpShadowPainter->PaintFrame(rContent, aBorderBox);
+    }
+
+    return aPageOffset;
+}
+
+
+
+
+void InsertionIndicatorOverlay::PaintPageCount (
+    OutputDevice& rDevice,
+    model::PageEnumeration& rSelection,
+    const Size aPreviewSize,
+    const Point aFirstPageOffset) const
+{
+    // Paint the number of slides.
+    ::boost::shared_ptr<view::Theme> pTheme (mrViewOverlay.GetSlideSorter().GetTheme());
+    ::boost::shared_ptr<Font> pFont(Theme::GetFont(Theme::PageCountFont, rDevice));
+    if (pFont)
+    {
+        // Count the elements in the selection and create a string for the
+        // result.
+        sal_Int32 nSelectionCount (0);
+        rSelection.Rewind();
+        while (rSelection.HasMoreElements())
+        {
+            rSelection.GetNextElement();
+            ++nSelectionCount;
+        }
+        ::rtl::OUString sNumber (::rtl::OUString::valueOf(nSelectionCount));
+
+        // Determine the size of the (painted) text and create a bounding
+        // box that centers the text on the first preview.
+        rDevice.SetFont(*pFont);
+        Rectangle aTextBox;
+        rDevice.GetTextBoundRect(aTextBox, sNumber);
+        Point aTextOffset (aTextBox.TopLeft());
+        Size aTextSize (aTextBox.GetSize());
+        // Place text inside the first page preview.
+        Point aTextLocation(aFirstPageOffset);
+        // Center the text.
+        aTextLocation += Point(
+            (aPreviewSize.Width()-aTextBox.GetWidth())/2,
+            (aPreviewSize.Height()-aTextBox.GetHeight())/2);
+        aTextBox = Rectangle(aTextLocation, aTextSize);
+
+        // Paint background, border and text.
+        static const sal_Int32 nBorder = 5;
+        rDevice.SetFillColor(pTheme->GetColor(Theme::Selection));
+        rDevice.SetLineColor(pTheme->GetColor(Theme::Selection));
+        rDevice.DrawRect(GrowRectangle(aTextBox, nBorder));
+
+        rDevice.SetFillColor();
+        rDevice.SetLineColor(COL_WHITE);
+        rDevice.DrawRect(GrowRectangle(aTextBox, nBorder-1));
+
+        rDevice.SetTextColor(COL_WHITE);
+        rDevice.DrawText(aTextBox.TopLeft()-aTextOffset, sNumber);
+    }
+}
+
+
+
+
+void InsertionIndicatorOverlay::Create (void)
 {
 }
 
@@ -670,6 +702,15 @@ Rectangle InsertionIndicatorOverlay::GetBoundingBox (void) const
     return Rectangle(maLocation, maIcon.GetSizePixel());
 }
 
+
+
+
+Size InsertionIndicatorOverlay::GetSize (void) const
+{
+    return Size(
+        maIcon.GetSizePixel().Width() + 10,
+        maIcon.GetSizePixel().Height() + 10);
+}
 
 
 

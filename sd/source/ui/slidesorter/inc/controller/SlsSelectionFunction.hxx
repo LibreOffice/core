@@ -100,6 +100,15 @@ public:
     */
     void NotifyDragFinished (void);
 
+    /** This is the higher level version of the
+        SlideSorterView::UpdatePageUnderMouse() method.
+        It does not update the page under the mouse when an operation is
+        active that (logically) captures the mouse.
+    */
+    void UpdatePageUnderMouse (
+        const Point& rMousePosition,
+        const bool bIsMouseButtonDown);
+
     ::boost::shared_ptr<SubstitutionHandler> GetSubstitutionHandler (void) const;
 
     class MouseMultiSelector;
@@ -222,10 +231,6 @@ private:
     void EventPreprocessing (const EventDescriptor& rEvent);
     bool EventProcessing (const EventDescriptor& rEvent);
     void EventPostprocessing (const EventDescriptor& rEvent);
-
-    void UpdatePageUnderMouse (
-        const Point& rMousePosition,
-        const bool bIsMouseButtonDown);
 
     void ProcessButtonClick (
         const model::SharedPageDescriptor& rpDescriptor,

@@ -36,6 +36,8 @@
 #include <tools/color.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/image.hxx>
+#include <vcl/svapp.hxx>
+#include <svtools/colorcfg.hxx>
 
 #define USE_SYSTEM_SELECTION_COLOR
 
@@ -85,17 +87,18 @@ ColorData ChangeLuminance (const ColorData aColorData, const int nValue)
 
 Theme::Theme (const ::boost::shared_ptr<controller::Properties>& rpProperties)
     : maBackgroundColor(rpProperties->GetBackgroundColor().GetColor()),
+      maPageBackgroundColor(COL_WHITE),
       maNormalGradient(),
       maSelectedGradient(),
       maSelectedAndFocusedGradient(),
       maMouseOverGradient(),
       maRawShadow(),
-      maInsertionIndicator()
+      maRawInsertShadow()
 {
     LocalResource aResource (IMG_ICONS);
 
     maRawShadow = Image(SdResId(IMAGE_SHADOW)).GetBitmapEx();
-    maInsertionIndicator = Image(SdResId(IMAGE_INSERTION_INDICATOR_SELECT)).GetBitmapEx();
+    maRawInsertShadow = Image(SdResId(IMAGE_INSERT_SHADOW)).GetBitmapEx();
 
     Update(rpProperties);
 }
@@ -106,6 +109,8 @@ Theme::Theme (const ::boost::shared_ptr<controller::Properties>& rpProperties)
 void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpProperties)
 {
     maBackgroundColor = rpProperties->GetBackgroundColor().GetColor();
+    maPageBackgroundColor = svtools::ColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
+
 #ifdef USE_SYSTEM_SELECTION_COLOR
     const ColorData aSelectionColor (rpProperties->GetSelectionColor().GetColor());
 
@@ -151,18 +156,37 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
 
 
 
-::boost::shared_ptr<Font> Theme::CreateFont (
+::boost::shared_ptr<Font> Theme::GetFont (
     const FontType eType,
-    OutputDevice& rDevice) const
+    const OutputDevice& rDevice)
 {
     ::boost::shared_ptr<Font> pFont;
 
     switch (eType)
     {
         case PageNumberFont:
-            pFont.reset(new Font(rDevice.GetFont()));
+            pFont.reset(new Font(Application::GetSettings().GetStyleSettings().GetAppFont()));
+            pFont->SetTransparent(TRUE);
             pFont->SetWeight(WEIGHT_BOLD);
             break;
+
+        case PageCountFont:
+            pFont.reset(new Font(Application::GetSettings().GetStyleSettings().GetAppFont()));
+            pFont->SetTransparent(TRUE);
+            pFont->SetWeight(WEIGHT_NORMAL);
+            const Size aSize (pFont->GetSize());
+            pFont->SetSize(Size(aSize.Width()*4/3, aSize.Height()*4/3));
+            break;
+    }
+
+    if (pFont)
+    {
+        // Transform the point size to pixel size.
+        const MapMode aFontMapMode (MAP_POINT);
+        const Size aFontSize (rDevice.LogicToPixel(pFont->GetSize(), aFontMapMode));
+
+        // Transform the font size to the logical coordinates of the device.
+        pFont->SetSize(rDevice.PixelToLogic(aFontSize));
     }
 
     return pFont;
@@ -171,7 +195,7 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
 
 
 
-ColorData Theme::GetColorForVisualState (const model::VisualState::State eState) const
+ColorData Theme::GetColorForVisualState (const model::VisualState::State eState)
 {
     ColorData nColor;
     switch (eState)
@@ -190,7 +214,7 @@ ColorData Theme::GetColorForVisualState (const model::VisualState::State eState)
             break;
 
         case model::VisualState::VS_Excluded:
-            nColor = 0xcc929ca2;
+            nColor = 0x88000000;
             break;
 
         case model::VisualState::VS_None:
@@ -212,6 +236,8 @@ ColorData Theme::GetColor (const ColorType eType)
         case Background:
             return maBackgroundColor;
 
+        case PageBackground:
+
         case ButtonBackground:
             return AirForceBlue;
 
@@ -226,6 +252,9 @@ ColorData Theme::GetColor (const ColorType eType)
 
         case Selection:
             return StellaBlue;
+
+        case PreviewBorder:
+            return 0x949599;
     }
     return 0;
 }
@@ -285,11 +314,11 @@ BitmapEx Theme::GetIcon (const IconType eType)
 {
     switch (eType)
     {
-        case InsertionIndicator:
-            return maInsertionIndicator;
-
         case RawShadow:
             return maRawShadow;
+
+        case RawInsertShadow:
+            return maRawInsertShadow;
 
         default:
             return BitmapEx();

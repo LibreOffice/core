@@ -192,27 +192,19 @@ public:
     */
     Rectangle GetPageBox (const sal_Int32 nObjectCount = -1) const;
 
-    /** Return the location of the center of the insertion marker that is
+    /** Return the location of the center of the insertion indicator that is
         specified by the parameters.
-        @param nIndex
-            Index of the page object from which the position of the marker
-            will be calculated.
-        @param bVertical
-            When <TRUE/> then the insertion marker will be calculated with a
-            vertical orientation positioned to the left or right of the
-            specified page object.  A horizontal orientation is indicated by
-            <FALSE/>.  In this case the marker will be positioned above or
-            below the page object.
-        @param bLeftOrTop
-            This flag indicates whether the insertion marker will be
-            positioned above or to the left (<TRUE/>) the page object.  When
-            <FALSE/> is given then the marker will be positioned below or to
-            the right of the page object.
+        @param aVisualIndicatorIndices
+            Row and column of where to paint the insertion indicator.  Column
+            is -1 when the indicator is placed between rows of a single
+            column.
+        @param rIndicatorSize
+            The size of the insertion indicator.  This size is used to adapt
+            the location when at the left or right of a row.
     */
-    Point GetInsertionMarkerLocation (
-        const sal_Int32 nIndex,
-        const bool bVertical,
-        const bool bLeftOrTop) const;
+    Point GetInsertionIndicatorLocation (
+        const Pair& rVisualIndicatorIndices,
+        const Size& rIndicatorSize) const;
 
     /** Return the index of the first fully or partially visible page
         object.  This takes into account only the vertical dimension.
@@ -221,25 +213,6 @@ public:
             page objects.
     */
     Range GetRangeOfVisiblePageObjects (const Rectangle& rVisibleArea) const;
-
-    /** Return a pair of indices that point to the first and last slide in
-        the selection delimited by the two given points.  The second point
-        may be located above and/or left of the anchor.
-        @param rAnchor
-            Location where the mouse button was pressed and the range
-            selection started.
-        @param rOther
-            Current location of the mouse.
-        @param rCurrentSelectionRange
-            Current range of the selection.
-        @return
-            The indices are sorted.  When the first index is -1 then the
-            range is empty.
-    */
-    Range GetSelectionRange (
-        const Point& rAnchor,
-        const Point& rOther,
-        const Range& rCurrentSelectionRange) const;
 
     /** Return the index of the page object that is rendered at the given
         point.
@@ -262,17 +235,12 @@ public:
 
     /** Return the page index of where to do an insert operation when the
         user would release the the mouse button at the given position after
-        a drag operation.
+        a drag operation.  This method assumes that pages are placed in a
+        single column.
         @param rPosition
             The position in the model coordinate system for which to
             determine the insertion page index.  The position does not have
             to be over a page object to return a valid value.
-        @param bAllowVerticalPosition
-            When this flag is <TRUE/> then the vertical gaps between rows
-            may be taken into account for calculating the insertion index as
-            well as the horizontal gaps between columns.  This will happen
-            only when there is only one column.
-        (better name, anyone?)
         @return
             Returns the page index, as accepted by the slide sorter model,
             of the page after which an insertion would take place.  An index
@@ -282,9 +250,23 @@ public:
             A value of -1 indicates that no valid insertion index exists for
             the given point.
     */
-    sal_Int32 GetInsertionIndex (
-        const Point& rModelPosition,
-        const bool bAllowVerticalPosition) const;
+    sal_Int32 GetVerticalInsertionIndex (const Point& rModelPosition) const;
+
+    /** Return a pair of row and column indices of where to do an insert
+        operation when the user would release the the mouse button at the
+        given position after a drag operation.  This method assumes that
+        pages are placed in a row-first grid.
+        @param rPosition
+            The position in the model coordinate system for which to
+            determine the insertion page index.  The position does not have
+            to be over a page object to return a valid value.
+        @return
+            Returns a pair of (row,column) indices and defines the place of
+            where to paint the insertion indicator.  The column index lies
+            in the range [0,column count].  A value of (-1,-1) indicates
+            that no valid insertion index exists for the given point.
+    */
+    Pair GetGridInsertionIndices (const Point& rModelPosition) const;
 
     /** Return whether the main orientation of the slides in the slide
         sorter is vertical, i.e. all slides are arranged in one column.
@@ -385,6 +367,8 @@ private:
         GapMembership eGapMembership,
         sal_Int32 nIndex,
         sal_Int32 nGap) const;
+
+    Rectangle GetPreviewBox (const sal_Int32 nIndex) const;
 };
 
 } } } // end of namespace ::sd::slidesorter::view

@@ -124,6 +124,11 @@ public:
         const Part ePart,
         const CoordinateSystem eCoordinateSystem,
         const sal_Int32 nIndex = 0);
+    Rectangle GetBoundingBox (
+        const Point& rPageObjectLocation,
+        const Part ePart,
+        const CoordinateSystem eCoordinateSystem,
+        const sal_Int32 nIndex = 0);
 
     /** Return the size in pixel of the whole page object.
     */
@@ -152,6 +157,7 @@ private:
     Rectangle maTransitionEffectBoundingBox;
     Rectangle maButtonAreaBoundingBox;
     const Image maTransitionEffectIcon;
+    const ::boost::shared_ptr<Font> mpPageNumberFont;
 
     Size GetPageNumberAreaSize (const int nPageCount);
     Rectangle CalculatePreviewBoundingBox (

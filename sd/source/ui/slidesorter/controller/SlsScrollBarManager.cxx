@@ -39,6 +39,7 @@
 #include "view/SlideSorterView.hxx"
 #include "view/SlsLayouter.hxx"
 #include "view/SlsViewOverlay.hxx"
+#include "view/SlsTheme.hxx"
 #include "Window.hxx"
 #include "sdpage.hxx"
 
@@ -333,14 +334,7 @@ IMPL_LINK(ScrollBarManager, VerticalScrollBarHandler, ScrollBar*, pScrollBar)
         double nRelativePosition = double(pScrollBar->GetThumbPos())
             / double(pScrollBar->GetRange().Len());
         mrSlideSorter.GetView().InvalidatePageObjectVisibilities();
-        mrSlideSorter.GetContentWindow()->SetVisibleXY (
-            -1,
-            nRelativePosition);
-        /*
-        mrSlideSorter.GetView().UpdatePageUnderMouse(
-            aMousePosition,
-            (rEvent.GetButtons() & MOUSE_LEFT)!=0);
-        */
+        mrSlideSorter.GetContentWindow()->SetVisibleXY (-1, nRelativePosition);
     }
     return TRUE;
 }

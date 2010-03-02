@@ -42,6 +42,7 @@
 #include "controller/SlsSlotManager.hxx"
 #include "controller/SlsCurrentSlideManager.hxx"
 #include "controller/SlsSelectionManager.hxx"
+#include "controller/SlsSelectionFunction.hxx"
 #include "view/SlideSorterView.hxx"
 #include "view/SlsLayouter.hxx"
 #include "model/SlideSorterModel.hxx"
@@ -557,7 +558,12 @@ bool SlideSorterViewShell::HandleScrollCommand (const CommandEvent& rEvent, ::sd
     {
         OSL_ASSERT(mpSlideSorter.get()!=NULL);
         if (rEvent.GetCommand() == COMMAND_WHEEL)
-            mpSlideSorter->GetView().UpdatePageUnderMouse(rEvent.GetMousePosPixel(), false);
+        {
+            ::rtl::Reference<controller::SelectionFunction> pFunction (
+                mpSlideSorter->GetController().GetCurrentSelectionFunction());
+            if (pFunction.is())
+                pFunction->UpdatePageUnderMouse(rEvent.GetMousePosPixel(), false);
+        }
     }
 
     return bDone;

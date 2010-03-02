@@ -48,6 +48,7 @@ class Animator::Animation
 public:
     Animation (
         const Animator::AnimationFunctor& rAnimation,
+        const double nStartOffset,
         const double nDuration,
         const double nGlobalTime,
         const Animator::AnimationId nAnimationId,
@@ -123,6 +124,7 @@ void Animator::Dispose (void)
 
 Animator::AnimationId Animator::AddAnimation (
     const AnimationFunctor& rAnimation,
+    const sal_Int32 nStartOffset,
     const sal_Int32 nDuration,
     const FinishFunctor& rFinishFunctor)
 {
@@ -135,6 +137,7 @@ Animator::AnimationId Animator::AddAnimation (
     boost::shared_ptr<Animation> pAnimation (
         new Animation(
             rAnimation,
+            nStartOffset / 1000.0,
             nDuration / 1000.0,
             maElapsedTime.getElapsedTime(),
             ++mnNextAnimationId,
@@ -162,6 +165,7 @@ Animator::AnimationId Animator::AddInfiniteAnimation (
     boost::shared_ptr<Animation> pAnimation (
         new Animation(
             rAnimation,
+            0,
             -1,
             maElapsedTime.getElapsedTime(),
             mnNextAnimationId++,
@@ -290,6 +294,7 @@ IMPL_LINK(Animator, TimeoutHandler, Timer*, EMPTYARG)
 
 Animator::Animation::Animation (
     const Animator::AnimationFunctor& rAnimation,
+    const double nStartOffset,
     const double nDuration,
     const double nGlobalTime,
     const Animator::AnimationId nId,
@@ -298,18 +303,11 @@ Animator::Animation::Animation (
       maFinishFunctor(rFinishFunctor),
       mnAnimationId(nId),
       mnDuration(nDuration),
-      mnEnd(nGlobalTime + nDuration),
-      mnGlobalTimeAtStart(nGlobalTime),
+      mnEnd(nGlobalTime + nDuration + nStartOffset),
+      mnGlobalTimeAtStart(nGlobalTime + nStartOffset),
       mbIsExpired(false)
 {
-    if (mnDuration > 0)
-        maAnimation(0.0);
-    else if (mnDuration < 0)
-        maAnimation(nGlobalTime);
-    else
-    {
-        OSL_ASSERT(mnDuration != 0);
-    }
+    Run(nGlobalTime);
 }
 
 
@@ -333,7 +331,7 @@ bool Animator::Animation::Run (const double nGlobalTime)
                 maAnimation(1.0);
                 Expire();
             }
-            else
+            else if (nGlobalTime >= mnGlobalTimeAtStart)
             {
                 maAnimation((nGlobalTime - mnGlobalTimeAtStart) / mnDuration);
             }

@@ -85,6 +85,10 @@
 #include <canvas/elapsedtime.hxx>
 #include <boost/bind.hpp>
 
+//#define DEBUG_TIMING
+#ifdef DEBUG_TIMING
+#include <vector>
+#endif
 
 using namespace std;
 using namespace ::sd::slidesorter::model;
@@ -785,18 +789,27 @@ Rectangle SlideSorterView::GetModelArea (void)
 }
 
 
+#ifdef DEBUG_TIMING
 static ::canvas::tools::ElapsedTime gaTimer;
-
+static const size_t gFrameTimeCount (10);
+static size_t gFrameTimeIndex (0);
+static ::std::vector<double> gFrameTimes (gFrameTimeCount, 0);
+static double gFrameTimeSum (0);
+static const Rectangle gFrameTimeBox (10,10,150,20);
+static double gnLastFrameStart = 0;
+#endif
 
 void SlideSorterView::CompleteRedraw (
     OutputDevice* pDevice,
     const Region& rPaintArea,
     sdr::contact::ViewObjectContactRedirector* pRedirector)
 {
+#ifdef DEBUG_TIMING
     const double nStartTime (gaTimer.getElapsedTime());
     OSL_TRACE("SlideSorterView::CompleteRedraw start at %f, %s",
         nStartTime,
         mnLockRedrawSmph ? "locked" : "");
+#endif
 
     if (pDevice == NULL || pDevice!=mrSlideSorter.GetContentWindow().get())
         return;
@@ -818,8 +831,25 @@ void SlideSorterView::CompleteRedraw (
         View::CompleteRedraw(pDevice, rPaintArea, pRedirector);
     }
 
+#ifdef DEBUG_TIMING
     const double nEndTime (gaTimer.getElapsedTime());
     OSL_TRACE("SlideSorterView::CompleteRedraw end at %f after %fms", nEndTime, (nEndTime-nStartTime)*1000);
+    gFrameTimeSum -= gFrameTimes[gFrameTimeIndex];
+    gFrameTimes[gFrameTimeIndex] = nStartTime - gnLastFrameStart;
+    gnLastFrameStart = nStartTime;
+    gFrameTimeSum += gFrameTimes[gFrameTimeIndex];
+    gFrameTimeIndex = (gFrameTimeIndex+1) % gFrameTimeCount;
+
+
+    mrSlideSorter.GetContentWindow()->SetFillColor(COL_BLUE);
+    mrSlideSorter.GetContentWindow()->DrawRect(gFrameTimeBox);
+    mrSlideSorter.GetContentWindow()->SetTextColor(COL_WHITE);
+    mrSlideSorter.GetContentWindow()->DrawText(
+        gFrameTimeBox,
+        ::rtl::OUString::valueOf(1 / (gFrameTimeSum / gFrameTimeCount)),
+        TEXT_DRAW_RIGHT | TEXT_DRAW_VCENTER);
+    //    mrSlideSorter.GetContentWindow()->Invalidate(gFrameTimeBox);
+#endif
 }
 
 
@@ -953,6 +983,8 @@ void SlideSorterView::SetPageUnderMouse (const model::SharedPageDescriptor& rpDe
         if (mpPageUnderMouse)
             SetState(mpPageUnderMouse, PageDescriptor::ST_MouseOver, true);
 
+        // Change the quick help text to display the name of the page under
+        // the mouse.
         SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
         if (pWindow)
         {
@@ -1041,7 +1073,7 @@ bool SlideSorterView::SetState (
                 AnimationFunction::Blend,
                 nStartAlpha,
                 nEndAlpha,
-                ::boost::bind(AnimationFunction::FastInSlowOut_Root, _1)));
+                ::boost::bind(AnimationFunction::Linear, _1)));
         rpDescriptor->GetVisualState().SetButtonAlphaAnimationId(
             mrSlideSorter.GetController().GetAnimator()->AddAnimation(
                 ::boost::bind(
@@ -1049,6 +1081,7 @@ bool SlideSorterView::SetState (
                     rpDescriptor,
                     ::boost::ref(*this),
                     ::boost::bind(aBlendFunctor, _1)),
+                bStateValue ? 500 : 0,
                 400,
                 ::boost::bind(
                     &VisualState::SetButtonAlphaAnimationId,

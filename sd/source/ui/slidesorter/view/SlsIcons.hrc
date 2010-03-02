@@ -43,5 +43,6 @@
 #define IMAGE_NEW_SLIDE 6
 
 #define IMAGE_SHADOW 10
+#define IMAGE_INSERT_SHADOW 11
 
 #endif

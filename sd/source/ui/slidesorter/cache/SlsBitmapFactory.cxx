@@ -56,8 +56,7 @@ class PageObjectViewObjectContact;
 namespace sd { namespace slidesorter { namespace cache {
 
 BitmapFactory::BitmapFactory (void)
-    : maRenderer(NULL, false),
-      mbRemoveBorder(false)
+    : maRenderer(NULL, false)
 {
 }
 
@@ -83,31 +82,10 @@ BitmapFactory::~BitmapFactory (void)
         aSize.Width() *= gnSuperSampleFactor;
         aSize.Height() *= gnSuperSampleFactor;
     }
-    if (mbRemoveBorder)
-    {
-        aSize.Width() += 2;
-        aSize.Height() += 2;
-    }
 
     const Image aPreview (maRenderer.RenderPage (&rPage, aSize, String()));
 
     ::boost::shared_ptr<BitmapEx> pPreview (new BitmapEx(aPreview.GetBitmapEx()));
-    if (mbRemoveBorder)
-    {
-        static sal_Int32 gnCounter (0);
-        SvFileStream aOut (
-            ::rtl::OUString::createFromAscii("c:\\tmp\\image-")
-                +::rtl::OUString::valueOf(gnCounter)
-                    +::rtl::OUString::createFromAscii(".png"),
-            STREAM_WRITE);
-        ::vcl::PNGWriter aWriter (*pPreview);
-        aWriter.Write(aOut);
-        ++gnCounter;
-
-        OSL_ASSERT(pPreview->GetSizePixel() == aSize);
-        pPreview->Crop(Rectangle(1,1,aSize.Width()-2,aSize.Height()-2));
-        OSL_ASSERT(pPreview->GetSizePixel() == Size(aSize.Width()-2,aSize.Height()-2));
-    }
     if (bDo)
     {
 #if 1

@@ -29,10 +29,13 @@
  *
  ************************************************************************/
 
+#include "precompiled_sd.hxx"
+
 #include "view/SlsPageObjectLayouter.hxx"
 
 #include "model/SlsPageDescriptor.hxx"
 #include "view/SlsFontProvider.hxx"
+#include "view/SlsTheme.hxx"
 #include "tools/IconCache.hxx"
 #include "Window.hxx"
 #include "res_bmp.hrc"
@@ -62,7 +65,8 @@ PageObjectLayouter::PageObjectLayouter (
       maPreviewBoundingBox(),
       maTransitionEffectBoundingBox(),
       maButtonAreaBoundingBox(),
-      maTransitionEffectIcon(IconCache::Instance().GetIcon(BMP_FADE_EFFECT_INDICATOR))
+      maTransitionEffectIcon(IconCache::Instance().GetIcon(BMP_FADE_EFFECT_INDICATOR)),
+      mpPageNumberFont(Theme::GetFont(Theme::PageNumberFont, *rpWindow))
 {
     const Size aPageNumberAreaSize (GetPageNumberAreaSize(nPageCount));
 
@@ -179,6 +183,19 @@ Rectangle PageObjectLayouter::GetBoundingBox (
     const CoordinateSystem eCoordinateSystem,
     const sal_Int32 nIndex)
 {
+    Point aLocation (rpPageDescriptor ? rpPageDescriptor->GetLocation() : Point(0,0));
+    return GetBoundingBox(aLocation, ePart, eCoordinateSystem, nIndex);
+}
+
+
+
+
+Rectangle PageObjectLayouter::GetBoundingBox (
+    const Point& rPageObjectLocation,
+    const Part ePart,
+    const CoordinateSystem eCoordinateSystem,
+    const sal_Int32 nIndex)
+{
     Rectangle aBoundingBox;
     switch (ePart)
     {
@@ -221,11 +238,11 @@ Rectangle PageObjectLayouter::GetBoundingBox (
             break;
     }
 
-    Point aLocation (rpPageDescriptor ? rpPageDescriptor->GetLocation() : Point(0,0));
+    Point aLocation (rPageObjectLocation);
     if (eCoordinateSystem == ScreenCoordinateSystem)
         aLocation += mpWindow->GetMapMode().GetOrigin();
 
-    return  Rectangle(
+    return Rectangle(
         aBoundingBox.TopLeft() + aLocation,
         aBoundingBox.BottomRight() + aLocation);
 }
@@ -255,7 +272,8 @@ Size PageObjectLayouter::GetPageNumberAreaSize (const int nPageCount)
 
     // Set the correct font.
     Font aOriginalFont (mpWindow->GetFont());
-    mpWindow->SetFont(*FontProvider::Instance().GetFont(*mpWindow));
+    if (mpPageNumberFont)
+        mpWindow->SetFont(*mpPageNumberFont);
 
     String sPageNumberTemplate;
     if (nPageCount < 10)

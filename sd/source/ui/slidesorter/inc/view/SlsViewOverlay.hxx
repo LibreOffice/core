@@ -42,7 +42,7 @@
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <vector>
-#include <boost/weak_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
 
 
@@ -70,6 +70,8 @@ class InsertionIndicatorOverlay;
 class SelectionRectangleOverlay;
 class SubstitutionOverlay;
 class ViewOverlay;
+class FramePainter;
+
 
 /** This base class of slide sorter overlays uses the drawing layer overlay
     support for the display.
@@ -120,15 +122,6 @@ public:
     SubstitutionOverlay (ViewOverlay& rViewOverlay, const sal_Int32 nLayer);
     virtual ~SubstitutionOverlay (void);
 
-    /** Setup the substitution display of the given set of selected pages.
-        The given mouse position is remembered so that it later can be
-        returned by GetPosition(). This is a convenience feature.
-    */
-    void Create (
-        model::PageEnumeration& rSelection,
-        const Point& rAnchor,
-        const model::SharedPageDescriptor& rpHitDescriptor);
-
     void SetAnchor (const Point& rAnchor);
 
     /** Clear the substitution display.  Until the next call of Create() no
@@ -145,11 +138,6 @@ public:
     virtual void Paint (
         OutputDevice& rDevice,
         const Rectangle& rRepaintArea);
-
-    class InternalState;
-    typedef ::boost::shared_ptr<InternalState> SharedInternalState;
-    SharedInternalState GetInternalState (void) const;
-    void SetInternalState (const SharedInternalState& rpState);
 
 protected:
     virtual Rectangle GetBoundingBox (void) const;
@@ -168,8 +156,6 @@ private:
     static const sal_Int32 mnCenterTransparency;
     static const sal_Int32 mnSideTransparency;
     static const sal_Int32 mnCornerTransparency;
-
-    SharedInternalState mpState;
 };
 
 
@@ -214,11 +200,19 @@ class InsertionIndicatorOverlay
 public:
     InsertionIndicatorOverlay (ViewOverlay& rViewOverlay, const sal_Int32 nLayer);
 
+    /** Setup the insertion indicator by creating the icon.  It consists of
+        scaled down previews of some of the selected pages.
+    */
+    void Create (model::PageEnumeration& rSelection);
+    void Create (void);
+
     /** Given a position in model coordinates this method calculates the
         insertion marker both as an index in the document and as a location
         used for drawing the insertion indicator.
     */
     void SetLocation (const Point& rPosition);
+
+    Size GetSize (void) const;
 
     virtual void Paint (
         OutputDevice& rDevice,
@@ -236,7 +230,23 @@ private:
     */
     bool mbIsBeforePage;
     BitmapEx maIcon;
+    Point maIconOffset;
+    ::boost::scoped_ptr<FramePainter> mpShadowPainter;
+
     void SetPositionAndSize (const Rectangle& rBoundingBox);
+    void SelectRepresentatives (
+        model::PageEnumeration& rSelection,
+        ::std::vector<model::SharedPageDescriptor>& rDescriptors) const;
+    Point PaintRepresentatives (
+        OutputDevice& rContent,
+        const Size aPreviewSize,
+        const sal_Int32 nOffset,
+        const ::std::vector<model::SharedPageDescriptor>& rDescriptors) const;
+    void PaintPageCount (
+        OutputDevice& rDevice,
+        model::PageEnumeration& rSelection,
+        const Size aPreviewSize,
+        const Point aFirstPageOffset) const;
 };
 
 

@@ -451,42 +451,98 @@ Rectangle Layouter::GetPageBox (const sal_Int32 nObjectCount) const
 
 
 
-Point Layouter::GetInsertionMarkerLocation (
-    const sal_Int32 nIndex,
-    const bool bVertical,
-    const bool bLeftOrTop) const
+Rectangle Layouter::GetPreviewBox (const sal_Int32 nIndex) const
 {
-    Rectangle aBox (GetPageObjectBox (nIndex));
-    Point aLocation = aBox.Center();
+    return mpPageObjectLayouter->GetBoundingBox(
+        GetPageObjectBox(nIndex).TopLeft(),
+        PageObjectLayouter::Preview,
+        PageObjectLayouter::WindowCoordinateSystem);
+}
 
-    if (bVertical)
+
+
+
+Point Layouter::GetInsertionIndicatorLocation (
+    const Pair& rVisualIndices,
+    const Size& rIndicatorSize) const
+{
+    if (rVisualIndices.B() < 0)
     {
-        if (bLeftOrTop)
+        // Place indicator between rows of a single column of pages.
+
+        if (rVisualIndices.A() == 0)
         {
-            // Left.
-            aLocation.setX(aBox.Left() - (mnHorizontalGap+1)/2 - 1);
+            // Place indicator at the top of the column.
+            const Rectangle aOuterBox (GetPageObjectBox(0));
+            const Rectangle aPreviewBox (mpPageObjectLayouter->GetBoundingBox(
+                aOuterBox.TopLeft(),
+                PageObjectLayouter::Preview,
+                PageObjectLayouter::WindowCoordinateSystem));
+            return Point(aPreviewBox.Center().X(), aOuterBox.Top()+rIndicatorSize.Height()/2);
+        }
+        else if (rVisualIndices.A() == mnRowCount)
+        {
+            // Place indicator at the bottom of the column.
+            const Rectangle aOuterBox (GetPageObjectBox(mnRowCount-1));
+            const Rectangle aPreviewBox (mpPageObjectLayouter->GetBoundingBox(
+                aOuterBox.TopLeft(),
+                PageObjectLayouter::Preview,
+                PageObjectLayouter::WindowCoordinateSystem));
+            return Point(aPreviewBox.Center().X(), aOuterBox.Bottom()-rIndicatorSize.Height()/2);
         }
         else
         {
-            // Right.
-            aLocation.setX(aBox.Right() + mnHorizontalGap/2);
+            // Place indicator between two rows.
+            const Rectangle aBox1 (mpPageObjectLayouter->GetBoundingBox(
+                GetPageObjectBox(rVisualIndices.A()-1).TopLeft(),
+                PageObjectLayouter::Preview,
+                PageObjectLayouter::WindowCoordinateSystem));
+            const Rectangle aBox2 (mpPageObjectLayouter->GetBoundingBox(
+                GetPageObjectBox(rVisualIndices.A()).TopLeft(),
+                PageObjectLayouter::Preview,
+                PageObjectLayouter::WindowCoordinateSystem));
+            return (aBox1.Center() + aBox2.Center() + Point(1,1)) / 2;
         }
     }
     else
     {
-        if (bLeftOrTop)
+        // Place indicator between columns in one row.
+        const sal_Int32 nIndex (rVisualIndices.A() * mnColumnCount + rVisualIndices.B());
+
+        if (rVisualIndices.B() == 0)
         {
-            // Above.
-            aLocation.setY(aBox.Top() - (mnVerticalGap+1)/2 - 1);
+            // Place indicator at the left of the row.
+            const Rectangle aOuterBox (GetPageObjectBox(nIndex));
+            const Rectangle aPreviewBox (mpPageObjectLayouter->GetBoundingBox(
+                aOuterBox.TopLeft(),
+                PageObjectLayouter::Preview,
+                PageObjectLayouter::WindowCoordinateSystem));
+            return Point(aOuterBox.Left()+rIndicatorSize.Width()/2, aPreviewBox.Center().Y());
+        }
+        else if (rVisualIndices.B() == mnColumnCount)
+        {
+            // Place indicator at the end of the row.
+            const Rectangle aOuterBox (GetPageObjectBox(nIndex-1));
+            const Rectangle aPreviewBox (mpPageObjectLayouter->GetBoundingBox(
+                aOuterBox.TopLeft(),
+                PageObjectLayouter::Preview,
+                PageObjectLayouter::WindowCoordinateSystem));
+            return Point(aOuterBox.Right()-rIndicatorSize.Width()/2, aPreviewBox.Center().Y());
         }
         else
         {
-            // Below.
-            aLocation.setY(aBox.Bottom() + mnVerticalGap/2);
+            // Place indicator between two columns.
+            const Rectangle aBox1 (mpPageObjectLayouter->GetBoundingBox(
+                GetPageObjectBox(nIndex-1).TopLeft(),
+                PageObjectLayouter::Preview,
+                PageObjectLayouter::WindowCoordinateSystem));
+            const Rectangle aBox2 (mpPageObjectLayouter->GetBoundingBox(
+                GetPageObjectBox(nIndex).TopLeft(),
+                PageObjectLayouter::Preview,
+                PageObjectLayouter::WindowCoordinateSystem));
+            return (aBox1.Center() + aBox2.Center() + Point(1,1)) / 2;
         }
     }
-
-    return aLocation;
 }
 
 
@@ -500,62 +556,6 @@ Range Layouter::GetRangeOfVisiblePageObjects (const Rectangle& aVisibleArea) con
     return Range(
         ::std::min(nRow0 * mnColumnCount, mnPageCount-1),
         ::std::min((nRow1+1) * mnColumnCount - 1, mnPageCount-1));
-}
-
-
-
-
-Range Layouter::GetSelectionRange (
-    const Point& rAnchor,
-    const Point& rOther,
-    const Range& rCurrentSelectionRange) const
-{
-    (void)rCurrentSelectionRange;
-    sal_Int32 nIndexA (GetInsertionIndex(rAnchor, true));
-    sal_Int32 nIndexB (GetInsertionIndex(rOther, true));
-
-    // When either of the locations does not lie over a page then we may
-    // have to adapt the start or end index.
-    Rectangle aBoxA (GetPageObjectBox(nIndexA));
-    Rectangle aBoxB (GetPageObjectBox(nIndexB));
-    if (nIndexA > nIndexB)
-    {
-        ::std::swap(nIndexA,nIndexB);
-        ::std::swap(aBoxA, aBoxB);
-    }
-
-    if (mnColumnCount == 1)
-    {
-        // Vertical arrangement of pages.
-        if (nIndexA <= nIndexB)
-        {
-            if (rOther.Y() < aBoxB.Top())
-                --nIndexB;
-        }
-        else
-        {
-            if (rOther.Y() > aBoxB.Bottom())
-                --nIndexA;
-        }
-    }
-    else
-    {
-        // Horizontal arrangement of pages.
-        if (nIndexA <= nIndexB)
-        {
-            if (rOther.X() < aBoxB.Left())
-                --nIndexB;
-        }
-        else
-        {
-            if (rOther.X() > aBoxB.Right())
-                --nIndexA;
-        }
-    }
-
-    return Range(
-        ::std::min(nIndexA, nIndexB),
-        ::std::min(mnPageCount-1, ::std::max(nIndexA, nIndexB)));
 }
 
 
@@ -581,32 +581,26 @@ sal_Int32 Layouter::GetIndexAtPoint (
 
 
 
-/** Calculation of the insertion index:
-    1. Determine the row.  rPoint has to be in the row between upper and
-    lower border.  If it is in a horizontal gap or border an invalid
-    insertion index (-1, which is a valid return value) will be returned.
-    2. Determine the column.  Here both vertical borders and vertical gaps
-    will yield valid return values.  The horizontal positions between the
-    center of page objects in column i and the center of page objects in
-    column i+1 will return column i+1 as insertion index.
-
-    When there is only one column and bAllowVerticalPosition is true than
-    take the vertical areas between rows into account as well.
-*/
-sal_Int32 Layouter::GetInsertionIndex (
-    const Point& rPosition,
-    bool bAllowVerticalPosition) const
+sal_Int32 Layouter::GetVerticalInsertionIndex (const Point& rPosition) const
 {
-    sal_Int32 nIndex = -1;
+    OSL_ASSERT(mnColumnCount == 1);
 
-    sal_Int32 nRow = GetRowAtPosition (rPosition.Y(), true,
-        (mnColumnCount==1 && bAllowVerticalPosition) ? GM_BOTH : GM_BOTH);
-    sal_Int32 nColumn = GetColumnAtPosition (rPosition.X(), true, GM_BOTH);
+    const sal_Int32 nY = rPosition.Y() - mnTopBorder + maPageObjectSize.Height()/2;
+    const sal_Int32 nRowHeight (maPageObjectSize.Height() + mnVerticalGap);
+    return nY / nRowHeight;
+}
 
-    if (nRow >= 0 && nColumn >= 0)
-        nIndex = nRow * mnColumnCount + nColumn;
 
-    return nIndex;
+
+
+Pair Layouter::GetGridInsertionIndices (const Point& rPosition) const
+{
+    const sal_Int32 nRow = GetRowAtPosition (rPosition.Y(), true, GM_BOTH);
+
+    const sal_Int32 nX = rPosition.X() - mnLeftBorder + maPageObjectSize.Width()/2;
+    const sal_Int32 nRowWidth (maPageObjectSize.Width() + mnHorizontalGap);
+
+    return Pair(nRow, nX / nRowWidth);
 }
 
 

@@ -55,6 +55,7 @@ SRC1FILES =	\
 SLOFILES =      							\
     $(SLO)$/SlideSorterView.obj				\
     $(SLO)$/SlsFontProvider.obj				\
+    $(SLO)$/SlsFramePainter.obj				\
     $(SLO)$/SlsInsertAnimator.obj			\
     $(SLO)$/SlsLayeredDevice.obj			\
     $(SLO)$/SlsLayouter.obj					\

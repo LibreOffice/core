@@ -61,7 +61,6 @@ public:
 
 private:
     PreviewRenderer maRenderer;
-    const bool mbRemoveBorder;
 };
 
 

@@ -467,6 +467,7 @@ Size SelectionManager::MakeRectangleVisible (const Rectangle& rBox)
                     mrController.GetAnimator()->RemoveAnimation(mnAnimationId);
                 mnAnimationId = mrController.GetAnimator()->AddAnimation(
                     VerticalVisibleAreaScroller(mrSlideSorter, aVisibleArea.Top(), nNewTop),
+                    0,
                     300);
             }
             else
@@ -505,6 +506,7 @@ Size SelectionManager::MakeRectangleVisible (const Rectangle& rBox)
             if (mrSlideSorter.GetProperties()->IsSmoothSelectionScrolling())
                 mrController.GetAnimator()->AddAnimation(
                     HorizontalVisibleAreaScroller(mrSlideSorter, aVisibleArea.Left(), nNewLeft),
+                    0,
                     300);
             else
                 HorizontalVisibleAreaScroller(mrSlideSorter, aVisibleArea.Left(), nNewLeft)(1.0);
