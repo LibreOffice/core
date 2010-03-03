@@ -150,6 +150,13 @@ for a rng:define
 
  -->
 <xsl:template name="factoryattributetoresourcemapinner">
+  <xsl:for-each select=".//rng:ref[not(ancestor::rng:element or ancestor::rng:attribute)]">
+    <xsl:variable name="name" select="@name"/>
+    <xsl:for-each select="ancestor::namespace/rng:grammar/rng:define[@name=$name]">
+        <xsl:call-template name="factoryattributetoresourcemapinner"/>
+    </xsl:for-each>
+  </xsl:for-each>
+
   <xsl:for-each select=".//rng:attribute">
     <xsl:variable name="mynsid" select="generate-id(ancestor::namespace)"/>
     <xsl:variable name="resource">
@@ -200,13 +207,6 @@ for a rng:define
       </xsl:otherwise>
     </xsl:choose>
     
-  </xsl:for-each>
-  
-  <xsl:for-each select=".//rng:ref[not(ancestor::rng:element or ancestor::rng:attribute)]">
-    <xsl:variable name="name" select="@name"/>
-    <xsl:for-each select="ancestor::namespace/rng:grammar/rng:define[@name=$name]">
-        <xsl:call-template name="factoryattributetoresourcemapinner"/>
-    </xsl:for-each>
   </xsl:for-each>
 </xsl:template>
 
@@ -283,25 +283,6 @@ ListValueMapPointer </xsl:text>
 
 <!-- factoryelementtoresorucemapinner -->
 <xsl:template name="factorycreateelementmapinner">
-    <xsl:for-each select=".//rng:element">
-        <xsl:variable name="resource">
-            <xsl:for-each select="rng:ref">
-                <xsl:call-template name="contextresource"/>
-            </xsl:for-each>
-        </xsl:variable>
-        <xsl:if test="string-length($resource) > 0">
-            <xsl:text>
-        (*pMap)[</xsl:text>
-            <xsl:call-template name="fasttoken"/>
-            <xsl:text>] = CreateElement(RT_</xsl:text>
-            <xsl:value-of select="$resource"/>
-            <xsl:text>, </xsl:text>
-            <xsl:for-each select="rng:ref">
-                <xsl:call-template name="idforref"/>
-            </xsl:for-each>
-            <xsl:text>);</xsl:text>
-        </xsl:if>
-    </xsl:for-each>
     <xsl:for-each select=".//rng:ref[not(ancestor::rng:element or ancestor::rng:attribute)]">
         <xsl:variable name="name" select="@name"/>
         <xsl:variable name="block">
@@ -327,6 +308,25 @@ ListValueMapPointer </xsl:text>
             <xsl:value-of select="$name"/>
             <xsl:text>*/</xsl:text>
             <xsl:value-of select="$block1"/>
+        </xsl:if>
+    </xsl:for-each>
+    <xsl:for-each select=".//rng:element">
+        <xsl:variable name="resource">
+            <xsl:for-each select="rng:ref">
+                <xsl:call-template name="contextresource"/>
+            </xsl:for-each>
+        </xsl:variable>
+        <xsl:if test="string-length($resource) > 0">
+            <xsl:text>
+        (*pMap)[</xsl:text>
+            <xsl:call-template name="fasttoken"/>
+            <xsl:text>] = CreateElement(RT_</xsl:text>
+            <xsl:value-of select="$resource"/>
+            <xsl:text>, </xsl:text>
+            <xsl:for-each select="rng:ref">
+                <xsl:call-template name="idforref"/>
+            </xsl:for-each>
+            <xsl:text>);</xsl:text>
         </xsl:if>
     </xsl:for-each>
 </xsl:template>
@@ -610,6 +610,25 @@ string </xsl:text>
 
 <xsl:template name="factorytokentoidmapinner">
     <xsl:variable name="name" select="@name"/>
+    <xsl:for-each select=".//rng:ref[not(ancestor::rng:element or ancestor::rng:attribute)]">
+        <xsl:variable name="refname" select="@name"/>
+	<xsl:variable name="refblock1">
+	    <xsl:for-each 
+		select="ancestor::rng:grammar/rng:define[@name=$refname]">
+	      <xsl:call-template name="factorytokentoidmapinner"/>
+	    </xsl:for-each>
+	</xsl:variable>
+	<xsl:choose>
+	  <xsl:when test="string-length($refblock1) = 0">
+	    <xsl:for-each select="ancestor::model/namespace/rng:grammar/rng:define[@name=$refname]">
+		<xsl:call-template name="factorytokentoidmapinner"/>
+	      </xsl:for-each>
+	  </xsl:when>
+	  <xsl:otherwise>
+	    <xsl:value-of select="$refblock1"/>
+	  </xsl:otherwise>
+	</xsl:choose>
+    </xsl:for-each>
     <xsl:variable name="body">
         <xsl:for-each select="ancestor::namespace/resource[@name=$name]">
             <xsl:for-each select="element[@tokenid]|attribute[@tokenid]">
@@ -630,25 +649,6 @@ string </xsl:text>
         <xsl:value-of select="$name"/>
         <xsl:value-of select="$body"/>
     </xsl:if>
-    <xsl:for-each select=".//rng:ref[not(ancestor::rng:element or ancestor::rng:attribute)]">
-        <xsl:variable name="refname" select="@name"/>
-	<xsl:variable name="refblock1">
-	    <xsl:for-each 
-		select="ancestor::rng:grammar/rng:define[@name=$refname]">
-	      <xsl:call-template name="factorytokentoidmapinner"/>
-	    </xsl:for-each>
-	</xsl:variable>
-	<xsl:choose>
-	  <xsl:when test="string-length($refblock1) = 0">
-	    <xsl:for-each select="ancestor::model/namespace/rng:grammar/rng:define[@name=$refname]">
-		<xsl:call-template name="factorytokentoidmapinner"/>
-	      </xsl:for-each>
-	  </xsl:when>
-	  <xsl:otherwise>
-	    <xsl:value-of select="$refblock1"/>
-	  </xsl:otherwise>
-	</xsl:choose>
-    </xsl:for-each>
 </xsl:template>
 
 <xsl:template name="factorytokentoidmap">
