@@ -76,9 +76,6 @@ RootData::RootData( void )
     pTabId = NULL;
     pUserBViewList = NULL;
 
-    pObjRecs = NULL;
-    pEscher = NULL;
-
     pIR = NULL;
     pER = NULL;
 }

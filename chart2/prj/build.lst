@@ -14,7 +14,7 @@ ch	chart2\source\view\axes						nmake	-	all	ch_source_view_axes ch_source_tools 
 ch	chart2\source\view\charttypes				nmake	-	all	ch_source_view_charttypes ch_inc NULL
 ch	chart2\source\view\diagram					nmake	-	all	ch_source_view_diagram ch_inc NULL
 ch	chart2\source\view\main						nmake	-	all	ch_source_view_main ch_inc NULL
-ch	chart2\source\controller					nmake	-	all	ch_source_controller ch_source_tools ch_source_view ch_source_controller_drawinglayer ch_source_controller_itemsetwrapper ch_source_controller_dialogs ch_source_controller_main ch_source_controller_chartapiwrapper ch_source_controller_accessibility ch_inc NULL
+ch	chart2\source\controller					nmake	-	all	ch_source_controller ch_source_tools ch_source_view ch_source_controller_drawinglayer ch_source_controller_itemsetwrapper ch_source_controller_dialogs ch_source_controller_main ch_source_controller_chartapiwrapper ch_source_controller_accessibility ch_inc ch_source_controller_menus NULL
 ch	chart2\source\controller\inc				get		-	all	ch_source_controller_inc NULL
 ch	chart2\source\controller\accessibility		nmake	-	all	ch_source_controller_accessibility ch_inc NULL
 ch	chart2\source\controller\dialogs			nmake	-	all	ch_source_controller_dialogs ch_inc NULL
@@ -22,4 +22,5 @@ ch	chart2\source\controller\drawinglayer		nmake	-	all	ch_source_controller_drawi
 ch	chart2\source\controller\itemsetwrapper		nmake	-	all	ch_source_controller_itemsetwrapper ch_inc NULL
 ch  chart2\source\controller\chartapiwrapper	nmake   -   all ch_source_controller_chartapiwrapper ch_inc NULL
 ch	chart2\source\controller\main				nmake	-	all	ch_source_controller_main ch_inc NULL
+ch	chart2\source\controller\menus				nmake	-	all	ch_source_controller_menus ch_inc NULL
 ch	chart2\prj									get		-	all	ch_prj NULL

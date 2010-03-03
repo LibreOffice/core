@@ -308,7 +308,7 @@ XclChTypeGroup::XclChTypeGroup() :
 // ----------------------------------------------------------------------------
 
 XclChProperties::XclChProperties() :
-    mnFlags( EXC_CHPROPS_MANSERIES ),
+    mnFlags( 0 ),
     mnEmptyMode( EXC_CHPROPS_EMPTY_SKIP )
 {
 }
@@ -988,8 +988,8 @@ void XclChPropSetHelper::ReadLegendProperties( XclChLegend& rLegend, const ScfPr
         cssc::RelativePosition aRelPos;
         if( aRelPosAny >>= aRelPos )
         {
-            rLegend.maRect.mnX = limit_cast< sal_Int32 >( aRelPos.Primary * 4000.0, 0, 4000 );
-            rLegend.maRect.mnY = limit_cast< sal_Int32 >( aRelPos.Secondary * 4000.0, 0, 4000 );
+            rLegend.maRect.mnX = limit_cast< sal_Int32 >( aRelPos.Primary * EXC_CHART_UNIT, 0, EXC_CHART_UNIT );
+            rLegend.maRect.mnY = limit_cast< sal_Int32 >( aRelPos.Secondary * EXC_CHART_UNIT, 0, EXC_CHART_UNIT );
         }
         else
             rLegend.mnDockMode = EXC_CHLEGEND_LEFT;
@@ -1240,8 +1240,8 @@ void XclChPropSetHelper::WriteLegendProperties(
             eApiExpand = cssc::LegendExpansion_BALANCED;
         // set position
         cssc::RelativePosition aRelPos;
-        aRelPos.Primary = rLegend.maRect.mnX / 4000.0;
-        aRelPos.Secondary = rLegend.maRect.mnY / 4000.0;
+        aRelPos.Primary = static_cast< double >( rLegend.maRect.mnX ) / EXC_CHART_UNIT;
+        aRelPos.Secondary = static_cast< double >( rLegend.maRect.mnY ) / EXC_CHART_UNIT;
         aRelPos.Anchor = cssd::Alignment_TOP_LEFT;
         aRelPosAny <<= aRelPos;
     }
