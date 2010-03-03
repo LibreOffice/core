@@ -238,4 +238,5 @@ toolkit.AccessibleTabPage::com::sun::star::accessibility::XAccessibleText
 
 ### i109643 ###
 toolkit.AccessibleMenu::com::sun::star::accessibility::XAccessibleValue
+toolkit.AccessibleMenuBar::com::sun::star::accessibility::XAccessibleEventBroadcaster
 toolkit.AccessibleMenuBar::com::sun::star::accessibility::XAccessibleSelection
