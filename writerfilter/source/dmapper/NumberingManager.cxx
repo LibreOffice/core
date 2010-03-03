@@ -150,7 +150,7 @@ sal_Int16 ListLevel::GetParentNumbering( OUString sText, sal_Int16 nLevel,
     }
     sal_Int32 nMinLevel = nLevel;
     //now the text should either be empty or start with %
-    nFound = 0;
+    nFound = sLevelText.getLength( ) > 1 ? 0 : -1;
     while( nFound >= 0 )
     {
         if( sLevelText.getLength() > 1 )
@@ -526,6 +526,8 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                 // Get the merged level properties
                 uno::Sequence< beans::PropertyValue > aLvlProps = aProps[sal_Int32( nLevel )];
 
+                lcl_printProperties( aLvlProps );
+
                 // Get the char style
                 uno::Sequence< beans::PropertyValue > aAbsCharStyleProps = pAbsLevel->GetCharStyleProperties( );
                 uno::Sequence< beans::PropertyValue >& rAbsCharStyleProps = aAbsCharStyleProps;
@@ -816,7 +818,7 @@ void ListsManager::sprm( Sprm& rSprm )
                 {
                     // The current def should be a ListDef
                     pListDef->SetAbstractDefinition(
-                        m_aAbstractLists[ nAbstractNumId ] );
+                           GetAbstractList( nAbstractNumId ) );
                 }
             }
             break;
@@ -968,6 +970,21 @@ void ListsManager::entry( int /* pos */,
     }
 }
 
+AbstractListDef::Pointer ListsManager::GetAbstractList( sal_Int32 nId )
+{
+    AbstractListDef::Pointer pAbstractList;
+
+    int nLen = m_aAbstractLists.size( );
+    int i = 0;
+    while ( !pAbstractList.get( ) && i < nLen )
+    {
+        if ( m_aAbstractLists[i]->GetId( ) == nId )
+            pAbstractList = m_aAbstractLists[i];
+        i++;
+    }
+
+    return pAbstractList;
+}
 
 ListDef::Pointer ListsManager::GetList( sal_Int32 nId )
 {

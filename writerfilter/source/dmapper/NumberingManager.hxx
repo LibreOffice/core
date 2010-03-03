@@ -188,6 +188,8 @@ private:
     AbstractListDef::Pointer                            m_pCurrentDefinition;
     bool                                                m_bIsLFOImport;
 
+    AbstractListDef::Pointer    GetAbstractList( sal_Int32 nId );
+
 public:
 
     ListsManager(
