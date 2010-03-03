@@ -25,7 +25,6 @@ mkdir: %_DEST%\lib%_EXT%\sqlite
 ..\%__SRC%\lib\libssl3.* %_DEST%\lib%_EXT%\libssl3.*
 
 ..\%__SRC%\lib\libsqlite3.* %_DEST%\lib%_EXT%\sqlite\libsqlite3.*
-..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%
 
 ..\%__SRC%\bin\* %_DEST%\bin%_EXT%
 
