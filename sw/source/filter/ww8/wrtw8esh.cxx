@@ -1308,16 +1308,14 @@ void WW8Export::WriteEscher()
 
 void SwEscherEx::WritePictures()
 {
-    if (pPictStrm)
+    if( SvStream* pPicStrm = static_cast< SwEscherExGlobal& >( *mxGlobal ).GetPictureStream() )
     {
         // set the blip - entries to the correct stream pos
         INT32 nEndPos = rWrt.Strm().Tell();
-        SetNewBlipStreamOffset( nEndPos );
+        mxGlobal->SetNewBlipStreamOffset( nEndPos );
 
-        pPictStrm->Seek( 0 );
-        rWrt.Strm() << *pPictStrm;
-
-        delete pPictStrm, pPictStrm = 0;
+        pPicStrm->Seek( 0 );
+        rWrt.Strm() << *pPicStrm;
     }
     Flush();
 }
@@ -1326,10 +1324,24 @@ void SwEscherEx::WritePictures()
 
 // Output- Routines for Escher Export
 
-SwBasicEscherEx::SwBasicEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt,
-    UINT32 nDrawings)
-    : EscherEx(*pStrm, nDrawings), rWrt(rWW8Wrt), pEscherStrm(pStrm),
-    pPictStrm(0)
+SwEscherExGlobal::SwEscherExGlobal()
+{
+}
+
+SwEscherExGlobal::~SwEscherExGlobal()
+{
+}
+
+SvStream* SwEscherExGlobal::ImplQueryPictureStream()
+{
+    // this function will be called exactly once
+    mxPicStrm.reset( new SvMemoryStream );
+    mxPicStrm->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+    return mxPicStrm.get();
+}
+
+SwBasicEscherEx::SwBasicEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
+    : EscherEx( EscherExGlobalRef( new SwEscherExGlobal ), *pStrm), rWrt(rWW8Wrt), pEscherStrm(pStrm)
 {
     Init();
 }
@@ -1442,8 +1454,8 @@ INT32 SwBasicEscherEx::WriteGrfFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId)
             Point aEmptyPoint = Point();
             Rectangle aRect( aEmptyPoint, aSize );
 
-            sal_uInt32 nBlibId = GetBlibID( *QueryPicStream(), aUniqueId,
-                aRect, NULL, 0 );
+            sal_uInt32 nBlibId = mxGlobal->GetBlibID( *QueryPictureStream(),
+                aUniqueId, aRect, NULL, 0 );
             if (nBlibId)
                 aPropOpt.AddOpt(ESCHER_Prop_pib, nBlibId, sal_True);
         }
@@ -1651,8 +1663,8 @@ void SwBasicEscherEx::WriteBrushAttr(const SvxBrushItem &rBrush,
             Point aEmptyPoint = Point();
             Rectangle aRect(aEmptyPoint, aSize);
 
-            sal_uInt32 nBlibId = GetBlibID(*QueryPicStream(), aUniqueId,
-                aRect, NULL, 0);
+            sal_uInt32 nBlibId = mxGlobal->GetBlibID( *QueryPictureStream(),
+                aUniqueId, aRect, NULL, 0);
             if (nBlibId)
                 rPropOpt.AddOpt(ESCHER_Prop_fillBlip,nBlibId,sal_True);
         }
@@ -1894,16 +1906,6 @@ INT32 SwBasicEscherEx::ToFract16(INT32 nVal, UINT32 nMax) const
     return 0;
 }
 
-SvStream* SwBasicEscherEx::QueryPicStream()
-{
-    if (!pPictStrm)
-    {
-        pPictStrm = new SvMemoryStream;
-        pPictStrm->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
-    }
-    return pPictStrm;
-}
-
 SdrLayerID SwBasicEscherEx::GetInvisibleHellId() const
 {
     return rWrt.pDoc->GetInvisibleHellId();
@@ -1911,22 +1913,19 @@ SdrLayerID SwBasicEscherEx::GetInvisibleHellId() const
 
 void SwBasicEscherEx::WritePictures()
 {
-    ASSERT(pPictStrm, "no picture!");
-    if (pPictStrm)
+    if( SvStream* pPicStrm = static_cast< SwEscherExGlobal& >( *mxGlobal ).GetPictureStream() )
     {
         // set the blip - entries to the correct stream pos
-        INT32 nEndPos = pPictStrm->Tell();
-        WriteBlibStoreEntry(*pEscherStrm, 1, sal_True, nEndPos);
+        INT32 nEndPos = pPicStrm->Tell();
+        mxGlobal->WriteBlibStoreEntry(*pEscherStrm, 1, sal_True, nEndPos);
 
-        pPictStrm->Seek(0);
-        *pEscherStrm << *pPictStrm;
-
-        delete pPictStrm, pPictStrm = 0;
+        pPicStrm->Seek(0);
+        *pEscherStrm << *pPicStrm;
     }
 }
 
 SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
-    : SwBasicEscherEx(pStrm, rWW8Wrt, rWW8Wrt.pHFSdrObjs->size() ? 2 : 1),
+    : SwBasicEscherEx(pStrm, rWW8Wrt),
     pTxtBxs(0)
 {
     aHostData.SetClientData(&aWinwordAnchoring);
@@ -1964,7 +1963,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
 
         EnterGroup( 0 );
 
-        ULONG nSecondShapeId = pSdrObjs == rWrt.pSdrObjs ? GetShapeID() : 0;
+        ULONG nSecondShapeId = pSdrObjs == rWrt.pSdrObjs ? GenerateShapeId() : 0;
 
         // write now all Writer-/DrawObjects
         DrawObjPointerVector aSorted;
@@ -1990,7 +1989,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
                     nBorderThick = WriteFlyFrm(*pObj, nShapeId, aSorted);
                     break;
                 case sw::Frame::eFormControl:
-                    WriteOCXControl(rFmt, nShapeId=GetShapeID());
+                    WriteOCXControl(rFmt, nShapeId = GenerateShapeId());
                     break;
                 case sw::Frame::eDrawing:
                     aWinwordAnchoring.SetAnchoring(rFmt);
@@ -2560,10 +2559,10 @@ INT32 SwEscherEx::WriteFlyFrm(const DrawObj &rObj, UINT32 &rShapeId,
         switch( aIdx.GetNode().GetNodeType() )
         {
         case ND_GRFNODE:
-            nBorderThick = WriteGrfFlyFrame( rFmt, rShapeId = GetShapeID() );
+            nBorderThick = WriteGrfFlyFrame( rFmt, rShapeId = GenerateShapeId() );
             break;
         case ND_OLENODE:
-            nBorderThick = WriteOLEFlyFrame( rFmt, rShapeId = GetShapeID() );
+            nBorderThick = WriteOLEFlyFrame( rFmt, rShapeId = GenerateShapeId() );
             break;
         default:
             if (const SdrObject* pObj = rFmt.FindRealSdrObject())
@@ -2702,7 +2701,8 @@ void SwBasicEscherEx::WriteOLEPicture(EscherPropertyContainer &rPropOpt,
         aRect.SetPos(Point(0,0));
         aRect.Right() = DrawModelToEmu(aRect.Right());
         aRect.Bottom() = DrawModelToEmu(aRect.Bottom());
-        sal_uInt32 nBlibId = GetBlibID(*QueryPicStream(), aId, aRect, pVisArea, 0); // SJ: the fourth parameter (VisArea) should be set..
+        sal_uInt32 nBlibId = mxGlobal->GetBlibID( *QueryPictureStream(),
+            aId, aRect, pVisArea, 0);    // SJ: the fourth parameter (VisArea) should be set..
         if (nBlibId)
             rPropOpt.AddOpt(ESCHER_Prop_pib, nBlibId, sal_True);
     }
@@ -2774,7 +2774,7 @@ void SwEscherEx::MakeZOrderArrAndFollowIds(
                 bNeedsShapeId = true;
         }
 
-        ULONG nShapeId = bNeedsShapeId ? GetShapeID() : 0;
+        ULONG nShapeId = bNeedsShapeId ? GenerateShapeId() : 0;
 
         aFollowShpIds.Insert(nShapeId, n);
     }
@@ -2789,12 +2789,12 @@ UINT32 SwEscherEx::GetFlyShapeId(const SwFrmFmt& rFmt,
     {
         if (0 == (nShapeId = aFollowShpIds[nPos]))
         {
-            nShapeId = GetShapeID();
+            nShapeId = GenerateShapeId();
             aFollowShpIds[ nPos ] = nShapeId;
         }
     }
     else
-        nShapeId = GetShapeID();
+        nShapeId = GenerateShapeId();
     return nShapeId;
 }
 
