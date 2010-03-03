@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: css1atr.cxx,v $
- * $Revision: 1.44.138.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,31 +34,31 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svl/whiter.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/blnkitem.hxx>
-#include <svx/cmapitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/kernitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/lspcitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/keepitem.hxx>
-#include <svx/widwitem.hxx>
-#include <svx/spltitem.hxx>
-#include <svx/orphitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/blnkitem.hxx>
+#include <editeng/cmapitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/kernitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/widwitem.hxx>
+#include <editeng/spltitem.hxx>
+#include <editeng/orphitem.hxx>
 #include <svx/xoutbmp.hxx>
-#include <svx/langitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <svtools/htmlout.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svx/htmlmode.hxx>

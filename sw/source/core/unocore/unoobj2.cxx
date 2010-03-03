@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unoobj2.cxx,v $
- * $Revision: 1.70 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,7 +88,8 @@
 #include <unostyle.hxx>
 #include <unofield.hxx>
 #include <fmtanchr.hxx>
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
+#include <editeng/unolingu.hxx>
 #include <svtools/ctrltool.hxx>
 #include <flypos.hxx>
 #include <txtftn.hxx>
@@ -113,7 +111,7 @@
 #define _SVSTDARR_USHORTSSORT
 #define _SVSTDARR_XUB_STRLEN
 #include <svl/svstdarr.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <fmtclds.hxx>
 #include <dcontact.hxx>
 #include <dflyobj.hxx>

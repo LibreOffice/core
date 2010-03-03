@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: wrtw8esh.cxx,v $
- * $Revision: 1.105.10.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,21 +47,21 @@
 #include <svx/svdotext.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/editobj.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/editobj.hxx>
 #include <svx/unoshape.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 #ifndef _SVX_FLDITEM_HXX
 //miserable hack to get around #98519#
 
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #endif
 
 #include <comphelper/seqstream.hxx>

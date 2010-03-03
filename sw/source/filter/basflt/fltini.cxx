@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fltini.cxx,v $
- * $Revision: 1.59 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,8 +43,8 @@
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/tstpitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/tstpitem.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
 #include <pam.hxx>
@@ -61,7 +58,7 @@
 #include <fmtfsize.hxx>
 #include <swtable.hxx>
 #include <fmtcntnt.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <frmatr.hxx>
 #include <frmfmt.hxx>
 #include <numrule.hxx>

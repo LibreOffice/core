@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tabfrm.cxx,v $
- * $Revision: 1.105.58.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,12 +47,12 @@
 #include <ftnidx.hxx>
 #include <svl/itemiter.hxx>
 #include <docary.hxx>
-#include <svx/keepitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/brshitem.hxx>
 // --> collapsing borders FME 2005-05-27 #i29550#
-#include <svx/boxitem.hxx>
+#include <editeng/boxitem.hxx>
 // <--
 #include <vcl/outdev.hxx>
 #include <fmtlsplt.hxx>

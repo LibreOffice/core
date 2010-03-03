@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewopt.cxx,v $
- * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,13 +30,13 @@
 
 
 #include <svx/htmlmode.hxx>
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 
 #ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
 #endif
-#include <svx/svxenum.hxx>
-#include <svx/svxacorr.hxx>
+#include <editeng/svxenum.hxx>
+#include <editeng/svxacorr.hxx>
 #include <unotools/localedatawrapper.hxx>
 #ifndef _REGION_HXX //autogen
 #include <vcl/region.hxx>
@@ -60,7 +57,7 @@
 #include <svtools/accessibilityoptions.hxx>
 #include <unotools/syslocale.hxx>
 
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 
 #ifdef DBG_UTIL
 BOOL   SwViewOption::bTest9 = FALSE;        //DrawingLayerNotLoading

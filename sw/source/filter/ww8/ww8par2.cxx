@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ww8par2.cxx,v $
- * $Revision: 1.145.76.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,19 +33,19 @@
 #include <vcl/vclenum.hxx>
 #include <vcl/font.hxx>
 #include <hintids.hxx>
-#include <svx/colritem.hxx>
-#include <svx/orphitem.hxx>
-#include <svx/widwitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/hyznitem.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/charrotateitem.hxx>
-#include <svx/pgrditem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/orphitem.hxx>
+#include <editeng/widwitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/hyznitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/charrotateitem.hxx>
+#include <editeng/pgrditem.hxx>
 #include <msfilter.hxx>
 #include <pam.hxx>              // fuer SwPam
 #include <doc.hxx>
