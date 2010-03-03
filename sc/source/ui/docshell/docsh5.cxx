@@ -907,7 +907,7 @@ BOOL ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, BOOL bCopy, BOOL bRec
                             }
                             VBA_InsertModule( aDocument, nTabToUse, sCodeName, sSource );
                         }
-
+                }
         Broadcast( ScTablesHint( SC_TAB_COPIED, nSrcTab, nDestTab ) );
     }
     else

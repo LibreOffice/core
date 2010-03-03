@@ -1107,38 +1107,41 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
     }
     if (!bValid)
         nRetVal = 0;
-    SfxObjectShell* pDestShell = pSrcDoc ? pSrcDoc->GetDocumentShell() : NULL;
-    StarBASIC* pStarBASIC = pDestShell ? pDestShell->GetBasic() : NULL;
-    String aLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
-    if ( pDestShell && pDestShell->GetBasicManager()->GetName().Len() > 0 )
-    {
-        aLibName = pDestShell->GetBasicManager()->GetName();
-        pStarBASIC = pDestShell->GetBasicManager()->GetLib( aLibName );
-    }
-
     BOOL bVbaEnabled = IsInVBAMode();
 
-    if ( bVbaEnabled && pDestShell )
+    if ( bVbaEnabled  )
     {
-        String sCodeName;
-        String sSource;
-        com::sun::star::uno::Reference< com::sun::star::script::XLibraryContainer > xLibContainer = pDestShell->GetBasicContainer();
-        com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > xLib;
-        if( xLibContainer.is() )
+        SfxObjectShell* pSrcShell = pSrcDoc ? pSrcDoc->GetDocumentShell() : NULL;
+        if ( pSrcShell )
         {
-            com::sun::star::uno::Any aLibAny = xLibContainer->getByName( aLibName );
-            aLibAny >>= xLib;
-        }
+            StarBASIC* pStarBASIC = pSrcShell ? pSrcShell->GetBasic() : NULL;
+            String aLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
+            if ( pSrcShell && pSrcShell->GetBasicManager()->GetName().Len() > 0 )
+            {
+                aLibName = pSrcShell->GetBasicManager()->GetName();
+                pStarBASIC = pSrcShell->GetBasicManager()->GetLib( aLibName );
+            }
 
-        if( xLib.is() )
-        {
-            String sSrcCodeName;
-            pSrcDoc->GetCodeName( nSrcPos, sSrcCodeName );
-            rtl::OUString sRTLSource;
-            xLib->getByName( sSrcCodeName ) >>= sRTLSource;
-            sSource = sRTLSource;
+            String sCodeName;
+            String sSource;
+            com::sun::star::uno::Reference< com::sun::star::script::XLibraryContainer > xLibContainer = pSrcShell->GetBasicContainer();
+            com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > xLib;
+            if( xLibContainer.is() )
+            {
+                com::sun::star::uno::Any aLibAny = xLibContainer->getByName( aLibName );
+                aLibAny >>= xLib;
+            }
+
+            if( xLib.is() )
+            {
+                String sSrcCodeName;
+                pSrcDoc->GetCodeName( nSrcPos, sSrcCodeName );
+                rtl::OUString sRTLSource;
+                xLib->getByName( sSrcCodeName ) >>= sRTLSource;
+                sSource = sRTLSource;
+            }
+            VBA_InsertModule( *this, nDestPos, sCodeName, sSource );
         }
-        VBA_InsertModule( *this, nDestPos, sCodeName, sSource );
     }
 
     return nRetVal;
