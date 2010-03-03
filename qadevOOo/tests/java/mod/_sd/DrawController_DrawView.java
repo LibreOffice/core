@@ -47,7 +47,6 @@ import com.sun.star.drawing.XDrawPagesSupplier;
 import com.sun.star.drawing.XShape;
 import com.sun.star.drawing.XShapes;
 import com.sun.star.frame.XController;
-import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XComponent;
@@ -87,21 +86,8 @@ import com.sun.star.util.XModifiable;
 * @see ifc.drawing._XDrawView
 */
 public class DrawController_DrawView extends TestCase {
-    static XDesktop the_Desk;
     static XComponent xDrawDoc;
     static XComponent xSecondDrawDoc;
-
-    /**
-    * Creates the instance of the service
-    * <code>com.sun.star.frame.Desktop</code>.
-    * @see com.sun.star.frame.Desktop
-    */
-    protected void initialize(TestParameters Param, PrintWriter log) {
-        the_Desk = (XDesktop)
-            UnoRuntime.queryInterface(
-                XDesktop.class, DesktopTools.createDesktop(
-                                    (XMultiServiceFactory)Param.getMSF()) );
-    }
 
     /**
     * Called while disposing a <code>TestEnvironment</code>.
@@ -216,9 +202,10 @@ public class DrawController_DrawView extends TestCase {
 
         XModel aModel2 = (XModel)
             UnoRuntime.queryInterface(XModel.class, xSecondDrawDoc);
+        XController aController2 = aModel2.getCurrentController();
 
         XWindow anotherWindow = (XWindow) UnoRuntime.queryInterface(
-                                XWindow.class,aModel2.getCurrentController());
+                                XWindow.class, aController2);
 
         log.println( "creating a new environment for impress view object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );
@@ -276,16 +263,13 @@ public class DrawController_DrawView extends TestCase {
 
         tEnv.addObjRelation("XUserInputInterception.XModel", aModel);
 
-        XFrame the_frame = the_Desk.getCurrentFrame();
+        XFrame the_frame = aController2.getFrame();
         tEnv.addObjRelation("Frame", the_frame);
 
-         aModel = (XModel)
-            UnoRuntime.queryInterface(XModel.class, xSecondDrawDoc);
         //Adding ObjRelations for XController
-        tEnv.addObjRelation("SecondModel", aModel);
+        tEnv.addObjRelation("SecondModel", aModel2);
 
-        XController secondController = aModel.getCurrentController();
-        tEnv.addObjRelation("SecondController", secondController);
+        tEnv.addObjRelation("SecondController", aController2);
         tEnv.addObjRelation("XDispatchProvider.URL",
                                     "slot:27009");
 
