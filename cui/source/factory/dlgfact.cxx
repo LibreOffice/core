@@ -103,6 +103,7 @@
 #include "macroass.hxx"
 #include "acccfg.hxx"
 #include "insrc.hxx"
+#include "passwdomdlg.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
@@ -161,6 +162,7 @@ IMPL_ABSTDLG_BASE(AbstractInsertObjectDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractLinksDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSpellDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxPostItDialog_Impl);
+IMPL_ABSTDLG_BASE(AbstractPasswordToOpenModifyDialog_Impl);
 
 //////////////////////////////////////////////////////////////////////////
 // VclAbstractDialog2_Impl
@@ -950,6 +952,15 @@ IMPL_LINK( AbstractSvxPostItDialog_Impl, PrevHdl, Window*, EMPTYARG )
 Window * AbstractSvxPostItDialog_Impl::GetWindow()
 {
     return (Window *)pDlg;
+}
+
+String AbstractPasswordToOpenModifyDialog_Impl::GetPasswordToOpen() const
+{
+    return pDlg->GetPasswordToOpen();
+}
+String AbstractPasswordToOpenModifyDialog_Impl::GetPasswordToModify() const
+{
+    return pDlg->GetPasswordToModify();
 }
 
 // Create dialogs with simplest interface
@@ -1903,5 +1914,11 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateOptionsDialog(
 SvxAbstractInsRowColDlg* AbstractDialogFactory_Impl::CreateSvxInsRowColDlg( Window* pParent, bool bCol, ULONG nHelpId )
 {
     return new SvxInsRowColDlg( pParent, bCol, nHelpId );
+}
+
+AbstractPasswordToOpenModifyDialog * AbstractDialogFactory_Impl::CreatePasswordToOpenModifyDialog( Window * pParent )
+{
+    PasswordToOpenModifyDialog * pDlg = new PasswordToOpenModifyDialog( pParent );
+    return new AbstractPasswordToOpenModifyDialog_Impl( pDlg );
 }
 

@@ -283,6 +283,9 @@
 #define RID_SVXSTR_ARCHIVE_HEADLINE         (RID_SVX_START + 485)
 #define RID_SVXSTR_MULTIFILE_DBL_ERR        (RID_SVX_START + 486)
 
+// password to open/modify dialog
+#define RID_DLG_PASSWORD_TO_OPEN_MODIFY     (RID_SVX_START + 500)
+
 // multi path dialog
 #define RID_SVXDLG_MULTIPATH                (RID_SVX_START + 201)
 #define RID_MULTIPATH_DBL_ERR               (RID_SVX_START + 207)

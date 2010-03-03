@@ -60,6 +60,7 @@ SRC1FILES =  \
         insrc.src \
         multipat.src \
         newtabledlg.src \
+        passwdomdlg.src \
         postdlg.src \
         scriptdlg.src \
         sdrcelldlg.src \
@@ -96,6 +97,7 @@ SLOFILES+=\
         $(SLO)$/multifil.obj \
         $(SLO)$/multipat.obj \
         $(SLO)$/newtabledlg.obj \
+        $(SLO)$/passwdomdlg.obj \
         $(SLO)$/pastedlg.obj \
         $(SLO)$/plfilter.obj \
         $(SLO)$/postdlg.obj \
