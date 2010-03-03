@@ -877,39 +877,36 @@ BOOL ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, BOOL bCopy, BOOL bRec
                         new ScUndoCopyTab( this, aSrcList, aDestList ) );
             }
 
-            StarBASIC* pStarBASIC = GetBasic();
-                String aLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
-                        if ( GetBasicManager()->GetName().Len() > 0 )
-            {
-                aLibName = GetBasicManager()->GetName();
-                pStarBASIC = GetBasicManager()->GetLib( aLibName );
-            }
             BOOL bVbaEnabled = aDocument.IsInVBAMode();
-            SCTAB nTabToUse = nDestTab;
-
-            if ( nDestTab == SC_TAB_APPEND )
-                nTabToUse = aDocument.GetMaxTableNumber() - 1;
-
-            if ( bVbaEnabled )
-            {
-                String sCodeName;
-                String sSource;
-                com::sun::star::uno::Reference< com::sun::star::script::XLibraryContainer > xLibContainer = GetBasicContainer();
-                com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > xLib;
-                    if( xLibContainer.is() )
-                    {
-                        com::sun::star::uno::Any aLibAny = xLibContainer->getByName( aLibName );
-                        aLibAny >>= xLib;
-                    }
-                    if( xLib.is() )
-                    {
-                                        rtl::OUString sRTLSource;
-                    xLib->getByName( sSrcCodeName ) >>= sRTLSource;
-                                        sSource = sRTLSource;
-                }
-                VBA_InsertModule( aDocument, nTabToUse, sCodeName, sSource );
-            }
-        }
+                        if ( bVbaEnabled )
+                        {
+                StarBASIC* pStarBASIC = GetBasic();
+                            String aLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
+                            if ( GetBasicManager()->GetName().Len() > 0 )
+                            {
+                                aLibName = GetBasicManager()->GetName();
+                                pStarBASIC = GetBasicManager()->GetLib( aLibName );
+                            }
+                            SCTAB nTabToUse = nDestTab;
+                            if ( nDestTab == SC_TAB_APPEND )
+                                nTabToUse = aDocument.GetMaxTableNumber() - 1;
+                            String sCodeName;
+                            String sSource;
+                            com::sun::star::uno::Reference< com::sun::star::script::XLibraryContainer > xLibContainer = GetBasicContainer();
+                            com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > xLib;
+                            if( xLibContainer.is() )
+                            {
+                                com::sun::star::uno::Any aLibAny = xLibContainer->getByName( aLibName );
+                                aLibAny >>= xLib;
+                            }
+                            if( xLib.is() )
+                            {
+                                rtl::OUString sRTLSource;
+                                xLib->getByName( sSrcCodeName ) >>= sRTLSource;
+                                sSource = sRTLSource;
+                            }
+                            VBA_InsertModule( aDocument, nTabToUse, sCodeName, sSource );
+                        }
 
         Broadcast( ScTablesHint( SC_TAB_COPIED, nSrcTab, nDestTab ) );
     }
