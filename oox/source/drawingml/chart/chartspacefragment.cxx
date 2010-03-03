@@ -75,6 +75,9 @@ ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const
                     return 0;
                 case C_TOKEN( txPr ):
                     return new TextBodyContext( *this, mrModel.mxTextProp.create() );
+                case C_TOKEN( userShapes ):
+                    mrModel.maDrawingPath = getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
+                    return 0;
             }
         break;
 

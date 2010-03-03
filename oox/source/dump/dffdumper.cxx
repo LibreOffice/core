@@ -36,6 +36,30 @@ namespace dump {
 
 // ============================================================================
 
+namespace {
+
+const sal_uInt16 DFF_ID_BSE                 = 0xF007;   /// BLIP store entry.
+const sal_uInt16 DFF_ID_BSTORECONTAINER     = 0xF001;   /// BLIP store container.
+const sal_uInt16 DFF_ID_CHILDANCHOR         = 0xF00F;   /// Child anchor (in groups).
+const sal_uInt16 DFF_ID_CLIENTANCHOR        = 0xF010;   /// Client anchor.
+const sal_uInt16 DFF_ID_DG                  = 0xF008;   /// Drawing.
+const sal_uInt16 DFF_ID_DGG                 = 0xF006;   /// Drawing group.
+const sal_uInt16 DFF_ID_OPT                 = 0xF00B;   /// Property set.
+const sal_uInt16 DFF_ID_OPT2                = 0xF121;   /// Secondary property set.
+const sal_uInt16 DFF_ID_OPT3                = 0xF122;   /// Ternary property set.
+const sal_uInt16 DFF_ID_SP                  = 0xF00A;   /// Shape.
+const sal_uInt16 DFF_ID_SPGR                = 0xF009;   /// Shape group.
+const sal_uInt16 DFF_ID_SPLITMENUCOLORS     = 0xF11E;   /// Current toolbar colors.
+
+const sal_uInt16 DFF_OPT_IDMASK             = 0x3FFF;
+const sal_uInt16 DFF_OPT_PICTURE            = 0x4000;
+const sal_uInt16 DFF_OPT_COMPLEX            = 0x8000;
+const sal_uInt16 DFF_OPT_FLAGSMASK          = 0x003F;
+
+} // namespace
+
+// ============================================================================
+
 void DffStreamObject::construct( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName )
 {
     SequenceRecordObjectBase::construct( rParent, rxStrm, rSysFileName, "DFF-RECORD-NAMES" );
@@ -62,10 +86,12 @@ void DffStreamObject::implWriteExtHeader()
     const sal_Char* pcListName = "DFF-RECORD-INST";
     switch( getRecId() )
     {
-        case 0xF001:    pcListName = "DFFBSTORECONT-RECORD-INST";   break;  // DFFBSTORECONTAINER contains BLIP count
-        case 0xF007:    pcListName = "DFFBSE-RECORD-INST";          break;  // DFFBSE contains BLIP type
-        case 0xF00A:    pcListName = "DFFSP-RECORD-INST";           break;  // DFFSP contains shape type
-        case 0xF00B:    pcListName = "DFFOPT-RECORD-INST";          break;  // DFFOPT contains property count
+        case DFF_ID_BSE:                pcListName = "DFFBSE-RECORD-INST";          break;  // BLIP type
+        case DFF_ID_BSTORECONTAINER:    pcListName = "DFFBSTORECONT-RECORD-INST";   break;  // BLIP count
+        case DFF_ID_DG:                 pcListName = "DFFDG-RECORD-INST";           break;  // drawing ID
+        case DFF_ID_OPT:                pcListName = "DFFOPT-RECORD-INST";          break;  // property count
+        case DFF_ID_SP:                 pcListName = "DFFSP-RECORD-INST";           break;  // shape type
+        case DFF_ID_SPLITMENUCOLORS:    pcListName = "DFFSPLITMENUC-RECORD-INST";   break;  // number of colors
     }
     MultiItemsGuard aMultiGuard( out() );
     writeHexItem( "instance", mnInstVer, pcListName );
@@ -76,7 +102,7 @@ void DffStreamObject::implDumpRecordBody()
 {
     switch( getRecId() )
     {
-        case 0xF007:    // DFFBSE
+        case DFF_ID_BSE:
             dumpDec< sal_uInt8 >( "win-type", "DFFBSE-TYPE" );
             dumpDec< sal_uInt8 >( "mac-type", "DFFBSE-TYPE" );
             dumpGuid( "guid" );
@@ -89,26 +115,63 @@ void DffStreamObject::implDumpRecordBody()
             dumpUnused( 2 );
         break;
 
-        case 0xF00A:    // DFFSP
-            dumpHex< sal_uInt32 >( "shape-id", "CONV-DEC" );
-            dumpHex< sal_uInt32 >( "shape-flags", "DFFSP-FLAGS" );
+        case DFF_ID_CHILDANCHOR:
+            dumpDec< sal_uInt32 >( "left" );
+            dumpDec< sal_uInt32 >( "top" );
+            dumpDec< sal_uInt32 >( "right" );
+            dumpDec< sal_uInt32 >( "bottom" );
         break;
 
-        case 0xF00B:    // DFFOPT
+        case DFF_ID_CLIENTANCHOR:
+            implDumpClientAnchor();
+        break;
+
+        case DFF_ID_DG:
+            dumpDec< sal_uInt32 >( "shape-count" );
+            dumpHex< sal_uInt32 >( "max-shape-id", "CONV-DEC" );
+        break;
+
+        case DFF_ID_DGG:
         {
-            sal_uInt16 nPropCount = getInst();
-            out().resetItemIndex();
-            for( sal_uInt16 nPropIdx = 0; !in().isEof() && (nPropIdx < nPropCount); ++nPropIdx )
+            dumpHex< sal_uInt32 >( "max-shape-id", "CONV-DEC" );
+            sal_uInt32 nClusters = dumpDec< sal_uInt32 >( "id-cluster-count" );
+            dumpDec< sal_uInt32 >( "shape-count" );
+            dumpDec< sal_uInt32 >( "drawing-count" );
+            out().resetItemIndex( 1 );
+            TableGuard aTabGuard( out(), 15, 16 );
+            for( sal_uInt32 nCluster = 1; !in().isEof() && (nCluster < nClusters); ++nCluster )
             {
-                sal_uInt16 nPropId = dumpDffOptPropHeader();
-                IndentGuard aIndent( out() );
-                dumpDffOptPropValue( nPropId, in().readuInt32() );
+                MultiItemsGuard aMultiGuard( out() );
+                writeEmptyItem( "#cluster" );
+                dumpDec< sal_uInt32 >( "drawing-id" );
+                dumpHex< sal_uInt32 >( "next-free-id", "CONV-DEC" );
             }
         }
         break;
 
-        case 0xF010:    // DFFCLIENTANCHOR
-            implDumpClientAnchor();
+        case DFF_ID_OPT:
+        case DFF_ID_OPT2:
+        case DFF_ID_OPT3:
+            dumpDffOpt();
+        break;
+
+        case DFF_ID_SP:
+            dumpHex< sal_uInt32 >( "shape-id", "CONV-DEC" );
+            dumpHex< sal_uInt32 >( "shape-flags", "DFFSP-FLAGS" );
+        break;
+
+        case DFF_ID_SPGR:
+            dumpDec< sal_uInt32 >( "left" );
+            dumpDec< sal_uInt32 >( "top" );
+            dumpDec< sal_uInt32 >( "right" );
+            dumpDec< sal_uInt32 >( "bottom" );
+        break;
+
+        case DFF_ID_SPLITMENUCOLORS:
+            dumpDffSimpleColor( "fill-color" );
+            dumpDffSimpleColor( "line-color" );
+            dumpDffSimpleColor( "shadow-color" );
+            dumpDffSimpleColor( "3d-color" );
         break;
     }
 }
@@ -121,6 +184,126 @@ void DffStreamObject::constructDffObj()
 {
     mnInstVer = 0;
     mnRealSize = 0;
+    if( SequenceRecordObjectBase::implIsValid() )
+    {
+        maSimpleProps.insertFormats( cfg().getNameList( "DFFOPT-SIMPLE-PROPERTIES" ) );
+        maComplexProps.insertFormats( cfg().getNameList( "DFFOPT-COMPLEX-PROPERTIES" ) );
+    }
+}
+
+sal_uInt32 DffStreamObject::dumpDffSimpleColor( const String& rName )
+{
+    return dumpHex< sal_uInt32 >( rName, "DFF-SIMPLE-COLOR" );
+}
+
+sal_uInt32 DffStreamObject::dumpDffColor( const String& rName )
+{
+    return dumpHex< sal_uInt32 >( rName, "DFF-COLOR" );
+}
+
+namespace {
+
+enum PropType { PROPTYPE_BINARY, PROPTYPE_STRING, PROPTYPE_BLIP, PROPTYPE_COLORARRAY };
+
+struct PropInfo
+{
+    OUString            maName;
+    PropType            meType;
+    sal_uInt16          mnId;
+    sal_uInt32          mnSize;
+    inline explicit     PropInfo( const OUString& rName, PropType eType, sal_uInt16 nId, sal_uInt32 nSize ) :
+                            maName( rName ), meType( eType ), mnId( nId ), mnSize( nSize ) {}
+};
+
+typedef ::std::vector< PropInfo > PropInfoVector;
+
+} // namespace
+
+void DffStreamObject::dumpDffOpt()
+{
+    sal_uInt16 nPropCount = getInst();
+    PropInfoVector aPropInfos;
+    out().resetItemIndex();
+    for( sal_uInt16 nPropIdx = 0; !in().isEof() && (nPropIdx < nPropCount); ++nPropIdx )
+    {
+        sal_uInt16 nPropId = dumpDffOptPropHeader();
+        sal_uInt16 nBaseId = nPropId & DFF_OPT_IDMASK;
+        sal_uInt32 nValue = in().readuInt32();
+
+        IndentGuard aIndent( out() );
+        if( getFlag( nPropId, DFF_OPT_COMPLEX ) )
+        {
+            writeHexItem( "complex-size", nValue, "CONV-DEC" );
+            String aName;
+            PropType eType = PROPTYPE_BINARY;
+            ItemFormatMap::const_iterator aIt = maComplexProps.find( nBaseId );
+            if( aIt != maComplexProps.end() )
+            {
+                const ItemFormat& rItemFmt = aIt->second;
+                aName = rItemFmt.maItemName;
+                if( rItemFmt.maListName.equalsAscii( "binary" ) )
+                    eType = PROPTYPE_BINARY;
+                else if( rItemFmt.maListName.equalsAscii( "string" ) )
+                    eType = PROPTYPE_STRING;
+                else if( rItemFmt.maListName.equalsAscii( "blip" ) )
+                    eType = PROPTYPE_BLIP;
+                else if( rItemFmt.maListName.equalsAscii( "colorarray" ) )
+                    eType = PROPTYPE_COLORARRAY;
+            }
+            aPropInfos.push_back( PropInfo( aName( "property-data" ), eType, nBaseId, nValue ) );
+        }
+        else
+        {
+            ItemFormatMap::const_iterator aIt = maSimpleProps.find( nBaseId );
+            if( aIt != maSimpleProps.end() )
+            {
+                const ItemFormat& rItemFmt = aIt->second;
+                // flags always at end of block of 64 properties
+                if( (nBaseId & DFF_OPT_FLAGSMASK) == DFF_OPT_FLAGSMASK )
+                {
+                    FlagsList* pFlagsList = dynamic_cast< FlagsList* >( cfg().getNameList( rItemFmt.maListName ).get() );
+                    sal_Int64 nOldIgnoreFlags = 0;
+                    if( pFlagsList )
+                    {
+                        nOldIgnoreFlags = pFlagsList->getIgnoreFlags();
+                        pFlagsList->setIgnoreFlags( nOldIgnoreFlags | 0xFFFF0000 | ~(nValue >> 16) );
+                    }
+                    writeValueItem( rItemFmt, nValue );
+                    if( pFlagsList )
+                        pFlagsList->setIgnoreFlags( nOldIgnoreFlags );
+                }
+                else
+                    writeValueItem( rItemFmt, nValue );
+            }
+            else
+                writeHexItem( "value", nValue );
+        }
+    }
+
+    out().resetItemIndex();
+    for( PropInfoVector::iterator aIt = aPropInfos.begin(), aEnd = aPropInfos.end(); !in().isEof() && (aIt != aEnd); ++aIt )
+    {
+        out().startMultiItems();
+        writeEmptyItem( "#complex-data" );
+        writeHexItem( "id", aIt->mnId, "DFFOPT-PROPERTY-NAMES" );
+        out().endMultiItems();
+        IndentGuard aIndent( out() );
+        switch( aIt->meType )
+        {
+            case PROPTYPE_BINARY:
+                dumpBinary( aIt->maName, aIt->mnSize );
+            break;
+            case PROPTYPE_STRING:
+                dumpUnicodeArray( aIt->maName, aIt->mnSize / 2, true );
+            break;
+            case PROPTYPE_BLIP:
+                dumpBinary( aIt->maName, aIt->mnSize );
+            break;
+            case PROPTYPE_COLORARRAY:
+                dumpBinary( aIt->maName, aIt->mnSize );
+            break;
+        }
+    }
 }
 
 sal_uInt16 DffStreamObject::dumpDffOptPropHeader()
@@ -129,28 +312,6 @@ sal_uInt16 DffStreamObject::dumpDffOptPropHeader()
     TableGuard aTabGuard( out(), 11 );
     writeEmptyItem( "#prop" );
     return dumpHex< sal_uInt16 >( "id", "DFFOPT-PROPERTY-ID" );
-}
-
-void DffStreamObject::dumpDffOptPropValue( sal_uInt16 nPropId, sal_uInt32 nValue )
-{
-    switch( nPropId & 0x3FFF )
-    {
-        case 127:   writeHexItem( "flags", nValue, "DFFOPT-LOCK-FLAGS" );       break;
-        case 191:   writeHexItem( "flags", nValue, "DFFOPT-TEXT-FLAGS" );       break;
-        case 255:   writeHexItem( "flags", nValue, "DFFOPT-TEXTGEO-FLAGS" );    break;
-        case 319:   writeHexItem( "flags", nValue, "DFFOPT-PICTURE-FLAGS" );    break;
-        case 383:   writeHexItem( "flags", nValue, "DFFOPT-GEO-FLAGS" );        break;
-        case 447:   writeHexItem( "flags", nValue, "DFFOPT-FILL-FLAGS" );       break;
-        case 511:   writeHexItem( "flags", nValue, "DFFOPT-LINE-FLAGS" );       break;
-        case 575:   writeHexItem( "flags", nValue, "DFFOPT-SHADOW-FLAGS" );     break;
-        case 639:   writeHexItem( "flags", nValue, "DFFOPT-PERSP-FLAGS" );      break;
-        case 703:   writeHexItem( "flags", nValue, "DFFOPT-3DOBJ-FLAGS" );      break;
-        case 767:   writeHexItem( "flags", nValue, "DFFOPT-3DSTYLE-FLAGS" );    break;
-        case 831:   writeHexItem( "flags", nValue, "DFFOPT-SHAPE1-FLAGS" );     break;
-        case 895:   writeHexItem( "flags", nValue, "DFFOPT-CALLOUT-FLAGS" );    break;
-        case 959:   writeHexItem( "flags", nValue, "DFFOPT-SHAPE2-FLAGS" );     break;
-        default:    writeHexItem( "value", nValue );
-    }
 }
 
 // ============================================================================

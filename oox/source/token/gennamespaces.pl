@@ -50,6 +50,7 @@ print ( HXX "// defines for tokens with specific namespaces, can be used in swit
 print ( HXX "#define A_TOKEN( token )            (::oox::NMSP_DRAWINGML | XML_##token)\n" );
 print ( HXX "#define AX_TOKEN( token )           (::oox::NMSP_AX | XML_##token)\n" );
 print ( HXX "#define C_TOKEN( token )            (::oox::NMSP_CHART | XML_##token)\n" );
+print ( HXX "#define CDR_TOKEN( token )          (::oox::NMSP_CDR | XML_##token)\n" );
 print ( HXX "#define O_TOKEN( token )            (::oox::NMSP_OFFICE | XML_##token)\n" );
 print ( HXX "#define PPT_TOKEN( token )          (::oox::NMSP_PPT | XML_##token)\n" );
 print ( HXX "#define R_TOKEN( token )            (::oox::NMSP_RELATIONSHIPS | XML_##token)\n" );
