@@ -886,20 +886,6 @@ BOOL Window::ImplDlgCtrl( const KeyEvent& rKEvt, BOOL bKeyInput )
         return TRUE;
     }
 
-    // if we have come here (and therefore the strange "formular" logic above
-    // turned up no result, then let's try to find a customer for Ctrl-TAB
-    if ( nKeyCode == KEY_TAB && aKeyCode.IsMod1() && ! aKeyCode.IsMod2() )
-    {
-        TabDialog* pDlg = dynamic_cast<TabDialog*>(this);
-        if( pDlg )
-        {
-            TabControl* pTabCtrl = pDlg->ImplGetFirstTabControl();
-            NotifyEvent aEvt( bKeyInput ? EVENT_KEYINPUT : EVENT_KEYUP,
-                              pTabCtrl, &rKEvt );
-            return pTabCtrl->ImplHandleNotifyEvent( aEvt );
-        }
-    }
-
     return FALSE;
 }
 

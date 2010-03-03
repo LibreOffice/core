@@ -98,9 +98,6 @@ private:
     DECL_DLLPRIVATE_LINK(       ImplListBoxSelectHdl, ListBox* );
     DECL_DLLPRIVATE_LINK(       ImplWindowEventListener, VclSimpleEvent* );
 
-public:
-    // just for dialog control
-    SAL_DLLPRIVATE bool         ImplHandleNotifyEvent( NotifyEvent& rEvt );
 
 protected:
     using Window::ImplInit;

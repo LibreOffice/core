@@ -1717,9 +1717,6 @@ long TabControl::PreNotify( NotifyEvent& rNEvt )
 
 long TabControl::Notify( NotifyEvent& rNEvt )
 {
-    // after upgrading to m71, remove changes from VCL108
-    // http://hg.services.openoffice.org/cws/vcl108/rev/68a2dcff2b44
-
     long nRet = 0;
 
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
