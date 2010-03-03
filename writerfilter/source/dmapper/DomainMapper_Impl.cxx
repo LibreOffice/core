@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DomainMapper_Impl.cxx,v $
- * $Revision: 1.27.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1086,18 +1083,6 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                     aProperties[nLength].Value <<= aDrop;
                     aProperties[nLength].Name = rPropNameSupplier.GetName(PROP_DROP_CAP_FORMAT);
                 }
-#if DEBUG
-                sal_Int32 nLen = aProperties.getLength();
-                for ( sal_Int32 i = 0; i < nLen; i++ )
-                {
-                    uno::Any aValue = aProperties[i].Value;
-                    uno::Sequence< style::TabStop > aTabs;
-                    if ( aValue >>= aTabs )
-                    {
-                        fprintf( stderr, "Found tab stops\n" );
-                    }
-                }
-#endif
                 uno::Reference< text::XTextRange > xTextRange =
                     xTextAppend->finishParagraph( aProperties );
                 getTableManager( ).handle(xTextRange);

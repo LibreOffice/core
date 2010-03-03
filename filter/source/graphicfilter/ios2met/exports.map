@@ -1,0 +1,7 @@
+METIMPORTER_1_0 {
+        global:
+                GraphicImport;
+
+        local:
+                *;
+};

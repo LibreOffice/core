@@ -63,9 +63,6 @@ void SettingsTable::sprm( Sprm& rSprm )
 void SettingsTable::entry( int nPos, writerfilter::Reference<Properties>::Pointer_t pRef )
 {
     (void)nPos;
-#if DEBUG
-    fprintf( stderr, "SettingsTable::entry( ), pos: %d\n", nPos );
-#endif
     pRef->resolve( *this );
 }
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: OOXMLTestService.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,10 +24,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-/**
-  Copyright 2005 Sun Microsystems, Inc.
-  */
 
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/lang/XMain.hpp>
