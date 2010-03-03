@@ -192,6 +192,14 @@ handle_r1c1:
                 if ( (nFlags & SCA_TAB2_3D) == 0 )
                     aRange.aEnd.SetTab( aRange.aStart.Tab() );
 
+                if ( ( nFlags & ( SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2 ) ) == 0 )
+                {
+                    // #i73766# if a single ref was parsed, set the same "abs" flags for ref2,
+                    // so Format doesn't output a double ref because of different flags.
+                    USHORT nAbsFlags = nFlags & ( SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE );
+                    nFlags |= nAbsFlags << 4;
+                }
+
                 if (!nCount)
                 {
                     pEngine->SetUpdateMode( FALSE );
