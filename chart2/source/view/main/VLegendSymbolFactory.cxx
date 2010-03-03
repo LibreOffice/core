@@ -85,6 +85,16 @@ void lcl_setPropetiesToShape(
         ::chart::tNameSequence aPropNames;
         ::chart::tAnySequence aPropValues;
         ::chart::PropertyMapper::getMultiPropertyListsFromValueMap( aPropNames, aPropValues, aValueMap );
+
+        uno::Any* pLineWidthAny = ::chart::PropertyMapper::getValuePointer(aPropValues,aPropNames,C2U("LineWidth"));
+        sal_Int32 nLineWidth = 0;
+        if( pLineWidthAny && (*pLineWidthAny>>=nLineWidth) )
+        {
+            const sal_Int32 nMaxLineWidthForLegend = 50;/*1/100 mm*///todo: make this dependent from legend entry height
+            if( nLineWidth>nMaxLineWidthForLegend )
+                *pLineWidthAny = uno::makeAny( nMaxLineWidthForLegend );
+        }
+
         ::chart::PropertyMapper::setMultiProperties( aPropNames, aPropValues, xShapeProp );
     }
 }
@@ -316,10 +326,10 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
                         ShapeFactory aFactory( xShapeFactory );
                         if( aSymbol.Style == chart2::SymbolStyle_STANDARD )
                         {
-                            // border of symbols always black
-                            aSymbol.BorderColor = 0x000000;
                             // take series color as fill color
                             xLegendEntryProperties->getPropertyValue( C2U("Color")) >>= aSymbol.FillColor;
+                            // border of symbols always same as fill color
+                            aSymbol.BorderColor = aSymbol.FillColor;
 
                             xSymbol.set( aFactory.createSymbol2D(
                                              xResultGroup,
