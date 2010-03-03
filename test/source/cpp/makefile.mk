@@ -34,6 +34,10 @@ VISIBILITY_HIDDEN = TRUE
 
 CDEFS += -DOOO_DLLIMPLEMENTATION_TEST
 
+.IF "$(SYSTEM_CPPUNIT)"=="YES"
+CFLAGS += $(CPPUNIT_CFLAGS)
+.ENDIF
+
 SLOFILES = \
     $(SLO)/getargument.obj \
     $(SLO)/officeconnection.obj \
