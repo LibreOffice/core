@@ -763,7 +763,6 @@ ProfileItem gid_Brand_Profileitem_Bootstrap_Userinstall
   #else
     Value = "$SYSUSERCONFIG/.%LCONEWORDPRODUCTNAME/%USERDIRPRODUCTVERSION";
   #endif
-    StandaloneValue = "$ORIGIN/..";
 End
 
 ProfileItem gid_Brand_Profileitem_Soffice_UreBootstrap
