@@ -453,12 +453,14 @@ namespace basctl
     bool ScriptDocument_Impl::isInVBAMode() const
     {
         bool bResult = false;
+#ifdef FUTURE_VBA_CWS
         if ( !isApplication() )
         {
             Reference< XVBACompat > xVBACompat( getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
             if ( xVBACompat.is() )
                 bResult = xVBACompat->getVBACompatModeOn();
         }
+#endif
         return bResult;
     }
 
