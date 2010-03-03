@@ -73,7 +73,7 @@ BUILD_ACTION=make hyph_en_US.dic
 @all:
     echo "Nothing to do here."
 .ELSE
-BUILD_ACTION=make
+BUILD_ACTION=make && make check
 OUT2INC += hyphen.h 
 .ENDIF
 
