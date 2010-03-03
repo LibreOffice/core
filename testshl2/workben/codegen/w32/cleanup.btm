@@ -1,9 +1,0 @@
-rem cleanup
-del *.cxx *.new *.exp
-
-iff exist makefile.mk_orig then
-   del makefile.mk
-   rem rename original makefile back
-   ren makefile.mk_orig makefile.mk
-endiff
-

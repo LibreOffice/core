@@ -1,7 +1,0 @@
-rem %1 is the filename
-
-iff exist %1 then
-echo Ok: %1 exist.
-else
-echo ERROR: %1 does not exist.
-endiff

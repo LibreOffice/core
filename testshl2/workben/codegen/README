@@ -1,9 +1,0 @@
-This directory contains a simple code generator self test.
-Within UNIX simply start ./selftest
-
-You will get lot of output.
-The code generator creates some files,
-dmake compiles the generated code,
-testshl2 checks the code.
-
-If something goes wrong, you will hopefully get an informal error message.
