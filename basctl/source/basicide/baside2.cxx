@@ -336,7 +336,8 @@ BOOL ModulWindow::BasicExecute()
             AddStatus( BASWIN_RUNNINGBASIC );
             USHORT nStart, nEnd, nCurMethodStart = 0;
             TextSelection aSel = GetEditView()->GetSelection();
-            nCurMethodStart = ( aSel.GetStart().GetPara() + 1 );
+            if ( aDocument.isInVBAMode() )
+                nCurMethodStart = ( aSel.GetStart().GetPara() + 1 );
             SbMethod* pMethod = 0;
             // erstes Macro, sonst blind "Main" (ExtSearch?)
             for ( USHORT nMacro = 0; nMacro < xModule->GetMethods()->Count(); nMacro++ )
@@ -344,16 +345,20 @@ BOOL ModulWindow::BasicExecute()
                 SbMethod* pM = (SbMethod*)xModule->GetMethods()->Get( nMacro );
                 DBG_ASSERT( pM, "Method?" );
                 pM->GetLineRange( nStart, nEnd );
-                if (  nCurMethodStart >= nStart && nCurMethodStart <= nEnd )
+                                if ( ( aDocument.isInVBAMode() && (  nCurMethodStart >= nStart && nCurMethodStart <= nEnd ) ) || ( !aDocument.isInVBAMode() && !pMethod ) )
                 {
                     pMethod = pM;
                     break;
                 }
             }
             if ( !pMethod )
-                return ( BasicIDE::ChooseMacro( uno::Reference< frame::XModel >(), FALSE, rtl::OUString() ).getLength() > 0 ) ? TRUE : FALSE;
-
-            else
+            {
+                if ( aDocument.isInVBAMode() )
+                    return ( BasicIDE::ChooseMacro( uno::Reference< frame::XModel >(), FALSE, rtl::OUString() ).getLength() > 0 ) ? TRUE : FALSE;
+                else
+                    pMethod = (SbMethod*)xModule->Find( String( RTL_CONSTASCII_USTRINGPARAM( "Main" ) ), SbxCLASS_METHOD );
+            }
+            if ( pMethod )
             {
                 pMethod->SetDebugFlags( aStatus.nBasicFlags );
                 BasicDLL::SetDebugMode( TRUE );
