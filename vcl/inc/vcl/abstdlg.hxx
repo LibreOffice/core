@@ -69,6 +69,15 @@ public:
     virtual void            Sync() = 0;
 };
 
+class AbstractPasswordToOpenModifyDialog : public VclAbstractDialog
+{
+public:
+    virtual String  GetPasswordToOpen() const   = 0;
+    virtual String  GetPasswordToModify() const = 0;
+};
+
+//-------------------------------------------------------------
+
 class VCL_DLLPUBLIC VclAbstractDialogFactory
 {
 public:
@@ -76,6 +85,9 @@ public:
     // nDialogId was previously a ResId without ResMgr; the ResourceId is now
     // an implementation detail of the factory
     virtual VclAbstractDialog*          CreateVclDialog( Window* pParent, sal_uInt32 nResId ) = 0;
+
+    // creates instance of PasswordToOpenModifyDialog from cui
+    virtual AbstractPasswordToOpenModifyDialog *    CreatePasswordToOpenModifyDialog( Window * pParent ) = 0;
 };
 
 #endif
