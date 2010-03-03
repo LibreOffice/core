@@ -124,6 +124,7 @@ published constants NumberingType
 
     //-------------------------------------------------------------------------
     /** Numbering for Chinese lower case number
+        as "一,二,三..."
      */
     const short NUMBER_LOWER_ZH = 15;
 
@@ -139,11 +140,13 @@ published constants NumberingType
 
     //-------------------------------------------------------------------------
     /** Bullet for Chinese Tian Gan
+        as "甲,乙,丙..."
      */
     const short TIAN_GAN_ZH = 18;
 
     //-------------------------------------------------------------------------
     /** Bullet for Chinese Di Zi
+        as "子,丑,寅..."
      */
     const short DI_ZI_ZH = 19;
 
@@ -174,36 +177,43 @@ published constants NumberingType
 
     //-------------------------------------------------------------------------
     /** Numbering for Korean upper case number
+        as "壹,貳,參..."
      */
     const short NUMBER_UPPER_KO = 25;
 
     //-------------------------------------------------------------------------
     /** Numbering for Korean hangul number
+        as "일,이,삼..."
      */
     const short NUMBER_HANGUL_KO = 26;
 
     //-------------------------------------------------------------------------
     /** Bullet for Korean Hangul Jamo
+        as "ㄱ,ㄴ,ㄷ..."
      */
     const short HANGUL_JAMO_KO = 27;
 
     //-------------------------------------------------------------------------
     /** Bullet for Korean Hangul Syllable
+        as "가,나,다..."
      */
     const short HANGUL_SYLLABLE_KO = 28;
 
     //-------------------------------------------------------------------------
     /** Bullet for Korean Hangul Circled Jamo
+        as "㉠,㉡,㉢..."
      */
     const short HANGUL_CIRCLED_JAMO_KO = 29;
 
     //-------------------------------------------------------------------------
     /** Bullet for Korean Hangul Circled Syllable
+        as "㉮,㉯,㉰..."
      */
     const short HANGUL_CIRCLED_SYLLABLE_KO = 30;
 
     //-------------------------------------------------------------------------
     /** Numbering in Arabic alphabet letters
+        as "أ,ب,ت..."
 
         @since OOo 1.1.2
      */
