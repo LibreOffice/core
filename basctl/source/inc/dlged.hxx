@@ -32,7 +32,6 @@
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <tools/link.hxx>
 #include <tools/gen.hxx>
 #include <vcl/timer.hxx>
@@ -129,11 +128,9 @@ protected:
     BOOL                bDialogModelChanged;
     Timer               aMarkTimer;
     long                mnPaintGuard;
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > m_xDocument;
 
-    DlgEditor(); // not implemented
 public:
-    DlgEditor( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
+    DlgEditor();
     ~DlgEditor();
 
     void            SetWindow( Window* pWindow );

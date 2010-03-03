@@ -307,50 +307,49 @@ void BasicTreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const
         {
             try
             {
-                sal_Bool bVBAEnabled = rDocument.isInVBAMode();
-                if( bVBAEnabled )
+                if( rDocument.isInVBAMode() )
                     ImpCreateLibSubEntriesInVBAMode( pLibRootEntry, rDocument, rLibName );
                 else
                 {
-                // get a sorted list of module names
-                Sequence< ::rtl::OUString > aModNames = rDocument.getObjectNames( E_SCRIPTS, rLibName );
-                sal_Int32 nModCount = aModNames.getLength();
-                const ::rtl::OUString* pModNames = aModNames.getConstArray();
+                    // get a sorted list of module names
+                    Sequence< ::rtl::OUString > aModNames = rDocument.getObjectNames( E_SCRIPTS, rLibName );
+                    sal_Int32 nModCount = aModNames.getLength();
+                    const ::rtl::OUString* pModNames = aModNames.getConstArray();
 
-                for ( sal_Int32 i = 0 ; i < nModCount ; i++ )
-                {
-                    String aModName = pModNames[ i ];
-                    SvLBoxEntry* pModuleEntry = FindEntry( pLibRootEntry, aModName, OBJ_TYPE_MODULE );
-                    if ( !pModuleEntry )
-                        pModuleEntry = AddEntry(
-                            aModName,
-                            Image( IDEResId( RID_IMG_MODULE ) ),
-                            Image( IDEResId( RID_IMG_MODULE_HC ) ),
-                            pLibRootEntry, false,
-                            std::auto_ptr< BasicEntry >( new BasicEntry( OBJ_TYPE_MODULE ) ) );
-
-                    // methods
-                    if ( nMode & BROWSEMODE_SUBS )
+                    for ( sal_Int32 i = 0 ; i < nModCount ; i++ )
                     {
-                        Sequence< ::rtl::OUString > aNames = BasicIDE::GetMethodNames( rDocument, rLibName, aModName );
-                        sal_Int32 nCount = aNames.getLength();
-                        const ::rtl::OUString* pNames = aNames.getConstArray();
+                        String aModName = pModNames[ i ];
+                        SvLBoxEntry* pModuleEntry = FindEntry( pLibRootEntry, aModName, OBJ_TYPE_MODULE );
+                        if ( !pModuleEntry )
+                            pModuleEntry = AddEntry(
+                                aModName,
+                                Image( IDEResId( RID_IMG_MODULE ) ),
+                                Image( IDEResId( RID_IMG_MODULE_HC ) ),
+                                pLibRootEntry, false,
+                                std::auto_ptr< BasicEntry >( new BasicEntry( OBJ_TYPE_MODULE ) ) );
 
-                        for ( sal_Int32 j = 0 ; j < nCount ; j++ )
+                        // methods
+                        if ( nMode & BROWSEMODE_SUBS )
                         {
-                            String aName = pNames[ j ];
-                            SvLBoxEntry* pEntry = FindEntry( pModuleEntry, aName, OBJ_TYPE_METHOD );
-                            if ( !pEntry )
-                                pEntry = AddEntry(
-                                    aName,
-                                    Image( IDEResId( RID_IMG_MACRO ) ),
-                                    Image( IDEResId( RID_IMG_MACRO_HC ) ),
-                                    pModuleEntry, false,
-                                    std::auto_ptr< BasicEntry >( new BasicEntry( OBJ_TYPE_METHOD ) ) );
+                            Sequence< ::rtl::OUString > aNames = BasicIDE::GetMethodNames( rDocument, rLibName, aModName );
+                            sal_Int32 nCount = aNames.getLength();
+                            const ::rtl::OUString* pNames = aNames.getConstArray();
+
+                            for ( sal_Int32 j = 0 ; j < nCount ; j++ )
+                            {
+                                String aName = pNames[ j ];
+                                SvLBoxEntry* pEntry = FindEntry( pModuleEntry, aName, OBJ_TYPE_METHOD );
+                                if ( !pEntry )
+                                    pEntry = AddEntry(
+                                        aName,
+                                        Image( IDEResId( RID_IMG_MACRO ) ),
+                                        Image( IDEResId( RID_IMG_MACRO_HC ) ),
+                                        pModuleEntry, false,
+                                        std::auto_ptr< BasicEntry >( new BasicEntry( OBJ_TYPE_METHOD ) ) );
+                            }
                         }
                     }
                 }
-            }
             }
             catch ( const container::NoSuchElementException& )
             {

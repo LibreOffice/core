@@ -480,8 +480,6 @@ namespace basctl
     {
         OSL_ENSURE( isValid(), "ScriptDocument_Impl::getDocument: invalid state!" );
         OSL_ENSURE( isDocument(), "ScriptDocument_Impl::getDocument: for documents only!" );
-        if ( !isDocument() )
-            OSL_TRACE("**** BAHHHH!!!*****");
         if ( !isValid() || !isDocument() )
             return NULL;
 

@@ -301,21 +301,18 @@ ModulWindow* BasicIDEShell::CreateBasWin( const ScriptDocument& rDocument, const
         }
         DBG_ASSERT( nKey, "CreateBasWin: Kein Key- Fenster nicht gefunden!" );
     }
-    if( nKey )
+    if( nKey && xLib.is() && rDocument.isInVBAMode() )
     {
-        if( xLib.is() )
+        // display a nice friendly name in the ObjectModule tab,
+        // combining the objectname and module name, e.g. Sheet1 ( Financials )
+        String sObjName;
+        lcl_getObjectName( xLib, rModName, sObjName );
+        if( sObjName.Len() )
         {
-            // display a nice friendly name in the ObjectModule tab,
-            // combining the objectname and module name, e.g. Sheet1 ( Financials )
-            String sObjName;
-            lcl_getObjectName( xLib, rModName, sObjName );
-            if( sObjName.Len() )
-            {
-                aModName.AppendAscii(" (").Append(sObjName).AppendAscii(")");
-            }
+            aModName.AppendAscii(" (").Append(sObjName).AppendAscii(")");
         }
-    pTabBar->InsertPage( (USHORT)nKey, aModName );
     }
+    pTabBar->InsertPage( (USHORT)nKey, aModName );
     pTabBar->Sort();
     pWin->GrabScrollBars( &aHScrollBar, &aVScrollBar );
     if ( !pCurWin )

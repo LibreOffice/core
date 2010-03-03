@@ -205,7 +205,7 @@ BOOL DlgEditor::RemarkDialog()
 
 //----------------------------------------------------------------------------
 
-DlgEditor::DlgEditor( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel )
+DlgEditor::DlgEditor()
     :pHScroll(NULL)
     ,pVScroll(NULL)
     ,pDlgEdModel(NULL)
@@ -227,7 +227,6 @@ DlgEditor::DlgEditor( const ::com::sun::star::uno::Reference< ::com::sun::star::
     ,bCreateOK(TRUE)
     ,bDialogModelChanged(FALSE)
     ,mnPaintGuard(0)
-    ,m_xDocument( xModel )
 {
     pDlgEdModel = new DlgEdModel();
     pDlgEdModel->GetItemPool().FreezeIdRanges();
