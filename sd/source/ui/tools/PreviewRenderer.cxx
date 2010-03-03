@@ -71,7 +71,10 @@ PreviewRenderer::PreviewRenderer (
         mpPreviewDevice->SetBackground(pTemplate->GetBackground());
     }
     else
-        mpPreviewDevice->SetBackground(Wallpaper(COL_WHITE));
+    {
+        mpPreviewDevice->SetBackground(Wallpaper(
+            Application::GetSettings().GetStyleSettings().GetWindowColor()));
+    }
 }
 
 
@@ -159,8 +162,8 @@ Image PreviewRenderer::RenderSubstitution (
         mpPreviewDevice->SetOutputSizePixel(rPreviewPixelSize);
 
         // Adjust contrast mode.
-        bool bUseContrast = Application::GetSettings().GetStyleSettings().
-            GetHighContrastMode();
+        const bool bUseContrast (
+            Application::GetSettings().GetStyleSettings().GetHighContrastMode());
         mpPreviewDevice->SetDrawMode (bUseContrast
             ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
             : ViewShell::OUTPUT_DRAWMODE_COLOR);
@@ -169,7 +172,7 @@ Image PreviewRenderer::RenderSubstitution (
         // visible.
         MapMode aMapMode (mpPreviewDevice->GetMapMode());
         aMapMode.SetMapUnit(MAP_100TH_MM);
-        double nFinalScale (25.0 * rPreviewPixelSize.Width() / 28000.0);
+        const double nFinalScale (25.0 * rPreviewPixelSize.Width() / 28000.0);
         aMapMode.SetScaleX(nFinalScale);
         aMapMode.SetScaleY(nFinalScale);
         const sal_Int32 nFrameWidth (mbHasFrame ? snFrameWidth : 0);
@@ -178,7 +181,7 @@ Image PreviewRenderer::RenderSubstitution (
         mpPreviewDevice->SetMapMode (aMapMode);
 
         // Clear the background.
-        Rectangle aPaintRectangle (
+        const Rectangle aPaintRectangle (
             Point(0,0),
             mpPreviewDevice->GetOutputSizePixel());
         mpPreviewDevice->EnableMapMode(FALSE);
@@ -192,7 +195,7 @@ Image PreviewRenderer::RenderSubstitution (
         PaintSubstitutionText (rSubstitutionText);
         PaintFrame();
 
-        Size aSize (mpPreviewDevice->GetOutputSizePixel());
+        const Size aSize (mpPreviewDevice->GetOutputSizePixel());
         aPreview = mpPreviewDevice->GetBitmap (
             mpPreviewDevice->PixelToLogic(Point(0,0)),
             mpPreviewDevice->PixelToLogic(aSize));
@@ -266,6 +269,8 @@ bool PreviewRenderer::Initialize (
         rOutliner.SetDefaultLanguage(pDocument->GetLanguage(EE_CHAR_LANGUAGE));
         mpView->SetApplicationBackgroundColor(
             Color(aColorConfig.GetColorValue(svtools::APPBACKGROUND).nColor));
+        mpPreviewDevice->SetBackground(Wallpaper(aPageBackgroundColor));
+        mpPreviewDevice->Erase();
 
         bSuccess = true;
     }

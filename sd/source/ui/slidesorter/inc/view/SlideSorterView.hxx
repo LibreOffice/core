@@ -146,6 +146,10 @@ public:
         sdr::contact::ViewObjectContactRedirector* pRedirector = NULL);
     void Paint (OutputDevice& rDevice, const Rectangle& rRepaintArea);
 
+    virtual void ConfigurationChanged (
+        utl::ConfigurationBroadcaster* pBroadcaster,
+        sal_uInt32 nHint);
+
     void Layout (void);
     /** This tells the view that it has to re-determine the visibility of
         the page objects before painting them the next time.

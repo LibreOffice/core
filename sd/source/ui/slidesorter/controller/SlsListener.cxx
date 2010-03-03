@@ -42,6 +42,7 @@
 #include "model/SlsPageEnumerationProvider.hxx"
 #include "view/SlideSorterView.hxx"
 #include "cache/SlsPageCache.hxx"
+#include "cache/SlsPageCacheManager.hxx"
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
 
@@ -634,14 +635,20 @@ void Listener::HandleShapeModification (const SdrPage* pPage)
         model::PageEnumeration aAllPages (
             model::PageEnumerationProvider::CreateAllPagesEnumeration(
                 mrSlideSorter.GetModel()));
-        while (aAllPages.HasMoreElements())
+        ::boost::shared_ptr<cache::PageCacheManager> pCacheManager (
+            cache::PageCacheManager::Instance());
+        if (pCacheManager)
         {
-            model::SharedPageDescriptor pDescriptor (aAllPages.GetNextElement());
-            SdrPage* pCandidate = pDescriptor->GetPage();
-            if (pCandidate!=NULL && &pCandidate->TRG_GetMasterPage() == pPage)
-                mrSlideSorter.GetView().GetPreviewCache()->InvalidatePreviewBitmap(
-                    pCandidate,
-                    true);
+            while (aAllPages.HasMoreElements())
+            {
+                model::SharedPageDescriptor pDescriptor (aAllPages.GetNextElement());
+                SdrPage* pCandidate = pDescriptor->GetPage();
+                if (pCandidate!=NULL && &pCandidate->TRG_GetMasterPage() == pPage)
+                    pCacheManager->InvalidatePreviewBitmap(
+                        mrSlideSorter.GetModel().GetDocument()->getUnoModel(),
+                        pCandidate);
+                mrSlideSorter.GetView().GetPreviewCache()->RequestPreviewBitmap(pCandidate);
+            }
         }
     }
     else

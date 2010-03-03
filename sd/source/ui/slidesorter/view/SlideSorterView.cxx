@@ -322,12 +322,12 @@ TYPEINIT1(SlideSorterView, ::sd::View);
 SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
     : ::sd::View (
         rSlideSorter.GetModel().GetDocument(),
-        NULL,
+            rSlideSorter.GetContentWindow().get(),
         rSlideSorter.GetViewShell()),
     mrSlideSorter(rSlideSorter),
     mrModel(rSlideSorter.GetModel()),
     mbIsDisposed(false),
-    mpLayouter (new Layouter (rSlideSorter.GetContentWindow())),
+    mpLayouter (new Layouter(rSlideSorter.GetContentWindow())),
     mbPageObjectVisibilitiesValid (false),
     mpPreviewCache(),
     mpLayeredDevice(new LayeredDevice(rSlideSorter.GetContentWindow())),
@@ -881,6 +881,20 @@ void SlideSorterView::Paint (
 
         mpPageObjectPainter->PaintPageObject(rDevice, pDescriptor);
     }
+}
+
+
+
+
+void SlideSorterView::ConfigurationChanged (
+    utl::ConfigurationBroadcaster* pBroadcaster,
+    sal_uInt32 nHint)
+{
+    // Some changes of the configuration (some of the colors for example)
+    // may affect the previews.  Throw away the old ones and create new ones.
+    cache::PageCacheManager::Instance()->InvalidateAllCaches();
+
+    ::sd::View::ConfigurationChanged(pBroadcaster, nHint);
 }
 
 
