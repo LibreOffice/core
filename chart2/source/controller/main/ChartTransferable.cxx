@@ -32,9 +32,9 @@
 
 #include <unotools/streamwrap.hxx>
 #include <vcl/graph.hxx>
-#include <svtools/itempool.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/fhgtitem.hxx>
+#include <svl/itempool.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>

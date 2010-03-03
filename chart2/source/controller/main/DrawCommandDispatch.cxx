@@ -37,8 +37,8 @@
 
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/itempool.hxx>
-#include <svx/adjitem.hxx>
+#include <svl/itempool.hxx>
+#include <editeng/adjitem.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
 #include <svx/fmmodel.hxx>

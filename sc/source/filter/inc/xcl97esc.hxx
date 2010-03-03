@@ -31,6 +31,7 @@
 #include <memory>
 #include <tools/table.hxx>
 #include <tools/stack.hxx>
+#include <filter/msfilter/escherex.hxx>
 #include "xlescher.hxx"
 #include "xeroot.hxx"
 

@@ -29,6 +29,7 @@
 #define SC_XEESCHER_HXX
 
 #include <vcl/graph.hxx>
+#include <filter/msfilter/escherex.hxx>
 #include "xcl97rec.hxx"
 #include "xlescher.hxx"
 

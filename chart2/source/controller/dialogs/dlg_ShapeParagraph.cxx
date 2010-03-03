@@ -32,8 +32,8 @@
 #include "ResId.hxx"
 #include "ResourceIds.hrc"
 
-#include <svtools/cjkoptions.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/cjkoptions.hxx>
+#include <svl/intitem.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/flagsdef.hxx>
 

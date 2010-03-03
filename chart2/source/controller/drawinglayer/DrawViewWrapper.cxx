@@ -31,8 +31,8 @@
 #include "chartview/DrawModelWrapper.hxx"
 #include "ConfigurationAccess.hxx"
 
-#include <svtools/lingucfg.hxx>
-#include <svx/langitem.hxx>
+#include <unotools/lingucfg.hxx>
+#include <editeng/langitem.hxx>
 // header for class SdrPage
 #include <svx/svdpage.hxx>
 //header for class SdrPageView
@@ -53,7 +53,7 @@
 
 // header for class SvxShape
 #include <svx/unoshape.hxx>
-#include <svx/fhgtitem.hxx>
+#include <editeng/fhgtitem.hxx>
 
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>

@@ -33,11 +33,11 @@
 #include "ResId.hxx"
 #include "ResourceIds.hrc"
 
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/flagsdef.hxx>
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
 
 using ::com::sun::star::uno::Reference;
 using namespace ::com::sun::star;

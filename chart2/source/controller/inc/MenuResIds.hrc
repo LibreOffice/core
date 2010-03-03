@@ -28,7 +28,7 @@
 #define CHART_MENURESIDS_HRC
 
 #ifndef _SOLAR_HRC
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 #endif
 
 //-----------------------------------------------------------------------------

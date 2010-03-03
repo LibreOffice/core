@@ -43,15 +43,15 @@
 #include <vos/mutex.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
-#include <svx/brkitem.hxx>
+#include <editeng/brkitem.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/drawitem.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/hyznitem.hxx>
-#include <svx/orphitem.hxx>
-#include <svx/spltitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/hyznitem.hxx>
+#include <editeng/orphitem.hxx>
+#include <editeng/spltitem.hxx>
 #include <svx/svxdlg.hxx>
-#include <svx/widwitem.hxx>
+#include <editeng/widwitem.hxx>
 
 #include <boost/scoped_ptr.hpp>
 
@@ -282,7 +282,7 @@ void ShapeController::executeDispatch_FormatLine()
             {
                 ::boost::scoped_ptr< SfxAbstractTabDialog > pDlg(
                     pFact->CreateSvxLineTabDialog( pParent, &aAttr, &pDrawModelWrapper->getSdrModel(),
-                        RID_SVXDLG_LINE, pSelectedObj, bHasMarked ) );
+                        pSelectedObj, bHasMarked ) );
                 if ( pDlg.get() && ( pDlg->Execute() == RET_OK ) )
                 {
                     const SfxItemSet* pOutAttr = pDlg->GetOutputItemSet();
@@ -321,7 +321,7 @@ void ShapeController::executeDispatch_FormatArea()
             {
                 ::boost::scoped_ptr< AbstractSvxAreaTabDialog > pDlg(
                     pFact->CreateSvxAreaTabDialog( pParent, &aAttr, &pDrawModelWrapper->getSdrModel(),
-                        RID_SVXDLG_AREA, pDrawViewWrapper ) );
+                        pDrawViewWrapper ) );
                 if ( pDlg.get() )
                 {
                     SfxItemPool& rItemPool = pDrawViewWrapper->GetModel()->GetItemPool();
@@ -368,7 +368,7 @@ void ShapeController::executeDispatch_TextAttributes()
             if ( pFact )
             {
                 ::boost::scoped_ptr< SfxAbstractTabDialog > pDlg(
-                    pFact->CreateTextTabDialog( pParent, &aAttr, RID_SVXDLG_TEXT, pDrawViewWrapper ) );
+                    pFact->CreateTextTabDialog( pParent, &aAttr, pDrawViewWrapper ) );
                 if ( pDlg.get() && ( pDlg->Execute() == RET_OK ) )
                 {
                     const SfxItemSet* pOutAttr = pDlg->GetOutputItemSet();
@@ -407,7 +407,7 @@ void ShapeController::executeDispatch_TransformDialog()
                 if ( pFact )
                 {
                     ::boost::scoped_ptr< SfxAbstractTabDialog > pDlg(
-                        pFact->CreateCaptionDialog( pParent, pDrawViewWrapper, RID_SVXDLG_CAPTION ) );
+                        pFact->CreateCaptionDialog( pParent, pDrawViewWrapper ) );
                     if ( pDlg.get() )
                     {
                         const USHORT* pRange = pDlg->GetInputRanges( *aAttr.GetPool() );
@@ -432,7 +432,7 @@ void ShapeController::executeDispatch_TransformDialog()
                 if ( pFact )
                 {
                     ::boost::scoped_ptr< SfxAbstractTabDialog > pDlg(
-                        pFact->CreateSvxTransformTabDialog( pParent, &aGeoAttr, pDrawViewWrapper, RID_SVXDLG_TRANSFORM ) );
+                        pFact->CreateSvxTransformTabDialog( pParent, &aGeoAttr, pDrawViewWrapper ) );
                     if ( pDlg.get() && ( pDlg->Execute() == RET_OK ) )
                     {
                         const SfxItemSet* pOutAttr = pDlg->GetOutputItemSet();
@@ -461,7 +461,7 @@ void ShapeController::executeDispatch_ObjectTitleDescription()
                 if ( pFact )
                 {
                     ::boost::scoped_ptr< AbstractSvxObjectTitleDescDialog > pDlg(
-                        pFact->CreateSvxObjectTitleDescDialog( NULL, aTitle, aDescription, RID_SVXDLG_OBJECT_TITLE_DESC ) );
+                        pFact->CreateSvxObjectTitleDescDialog( NULL, aTitle, aDescription ) );
                     if ( pDlg.get() && ( pDlg->Execute() == RET_OK ) )
                     {
                         pDlg->GetTitle( aTitle );
@@ -491,7 +491,7 @@ void ShapeController::executeDispatch_RenameObject()
                 if ( pFact )
                 {
                     ::boost::scoped_ptr< AbstractSvxObjectNameDialog > pDlg(
-                        pFact->CreateSvxObjectNameDialog( NULL, aName, RID_SVXDLG_OBJECT_NAME ) );
+                        pFact->CreateSvxObjectNameDialog( NULL, aName ) );
                     pDlg->SetCheckNameHdl( LINK( this, ShapeController, CheckNameHdl ) );
                     if ( pDlg.get() && ( pDlg->Execute() == RET_OK ) )
                     {
