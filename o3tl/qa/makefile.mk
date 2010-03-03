@@ -35,6 +35,11 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+
+.IF "$(SYSTEM_CPPUNIT)"=="YES"
+CFLAGS+= $(CPPUNIT_CFLAGS)
+.ENDIF
+
 .IF "$(L10N_framework)"==""
 # --- Common ----------------------------------------------------------
 

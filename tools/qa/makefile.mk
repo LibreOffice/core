@@ -32,6 +32,10 @@ ENABLE_EXCEPTIONS = TRUE
 
 .INCLUDE: settings.mk
 
+.IF "$(SYSTEM_CPPUNIT)"=="YES"
+CFLAGS+= $(CPPUNIT_CFLAGS)
+.ENDIF
+
 DLLPRE = # no leading "lib" on .so files
 
 SHL1TARGET = test_pathutils

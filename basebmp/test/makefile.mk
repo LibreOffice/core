@@ -60,6 +60,10 @@ CDEFS+=-xalias_level=compatible
 .ENDIF
 .ENDIF
 
+.IF "$(SYSTEM_CPPUNIT)"=="YES"
+CFLAGS += $(CPPUNIT_CFLAGS)
+.ENDIF
+
 # --- Common ----------------------------------------------------------
 .IF "$(L10N_framework)"==""
 
