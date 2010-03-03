@@ -411,7 +411,6 @@ install_info MigrationImpl::findInstallation(const strings_v& rVersions)
 
 sal_Int32 MigrationImpl::findPreferedMigrationProcess(const migrations_available& rAvailableMigrations)
 {
-    bool         bFound( false );
     sal_Int32    nIndex( -1 );
     sal_Int32    i( 0 );
 
