@@ -29,6 +29,7 @@
  ************************************************************************/
 
 #include "com/sun/star/task/DocumentPasswordRequest.hpp"
+#include "com/sun/star/task/DocumentPasswordRequest2.hpp"
 #include "com/sun/star/task/DocumentMSPasswordRequest.hpp"
 #include "com/sun/star/task/MasterPasswordRequest.hpp"
 #include "com/sun/star/task/XInteractionAbort.hpp"
@@ -37,6 +38,7 @@
 #include "com/sun/star/ucb/XInteractionSupplyAuthentication2.hpp"
 #include "com/sun/star/ucb/URLAuthenticationRequest.hpp"
 
+#include "osl/diagnose.h"
 #include "rtl/digest.h"
 #include "vos/mutex.hxx"
 #include "tools/errcode.hxx"
@@ -561,28 +563,46 @@ UUIInteractionHelper::handlePasswordRequest(
     uno::Reference< task::XInteractionRequest > const & rRequest)
     SAL_THROW((uno::RuntimeException))
 {
+    // parameters to be filled for the call to handlePasswordRequest_
+    Window * pParent = getParentProperty();
+    task::PasswordRequestMode nMode = task::PasswordRequestMode_PASSWORD_ENTER;
+    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const & rContinuations = rRequest->getContinuations();
+    ::rtl::OUString aDocumentName;
+    bool bMSCryptoMode          = false;
+    bool bIsPasswordToModify    = false;
+
+    bool bDoHandleRequest = false;
+
     uno::Any aAnyRequest(rRequest->getRequest());
 
     task::DocumentPasswordRequest aDocumentPasswordRequest;
-    if (aAnyRequest >>= aDocumentPasswordRequest)
+    if (!bDoHandleRequest && (aAnyRequest >>= aDocumentPasswordRequest))
     {
-        handlePasswordRequest_(getParentProperty(),
-                               aDocumentPasswordRequest.Mode,
-                               rRequest->getContinuations(),
-                               aDocumentPasswordRequest.Name,
-                               false /* bool bMSCryptoMode */);
-        return true;
+        nMode               = aDocumentPasswordRequest.Mode;
+        aDocumentName       = aDocumentPasswordRequest.Name;
+        OSL_ENSURE( bMSCryptoMode == false, "bMSCryptoMode should be false" );
+        OSL_ENSURE( bIsPasswordToModify == false, "bIsPasswordToModify should be false" );
+
+        bDoHandleRequest = true;
     }
 
     task::DocumentMSPasswordRequest aDocumentMSPasswordRequest;
-    if (aAnyRequest >>= aDocumentMSPasswordRequest)
+    if (!bDoHandleRequest && (aAnyRequest >>= aDocumentMSPasswordRequest))
     {
-        handlePasswordRequest_(getParentProperty(),
-                               aDocumentMSPasswordRequest.Mode,
-                               rRequest->getContinuations(),
-                               aDocumentMSPasswordRequest.Name,
-                               true /* bool bMSCryptoMode */);
+        nMode               = aDocumentMSPasswordRequest.Mode;
+        aDocumentName       = aDocumentMSPasswordRequest.Name;
+        bMSCryptoMode       = true;
+        OSL_ENSURE( bIsPasswordToModify == false, "bIsPasswordToModify should be false" );
+
+        bDoHandleRequest = true;
+    }
+
+    if (bDoHandleRequest)
+    {
+        handlePasswordRequest_( pParent, nMode, rContinuations, aDocumentName, bMSCryptoMode );
         return true;
     }
+
     return false;
 }
+
