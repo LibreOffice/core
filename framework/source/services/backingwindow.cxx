@@ -506,6 +506,9 @@ void BackingWindow::initControls()
                              aModuleOptions, SvtModuleOptions::E_SWRITER,
                              maOpenButton, maOpenText, aMnemns, maOpenString );
         nYPos += 10;
+
+        // change taborder to reflect changed positions
+        maOpenButton.SetZOrder( &maDrawButton, WINDOW_ZORDER_BEFOR );
     }
     else
     {
@@ -527,6 +530,16 @@ void BackingWindow::initControls()
 
     if( mnLayoutStyle == 1 )
     {
+        if( mnTextColumnWidth[1] > mnTextColumnWidth[0] )
+        {
+            mnColumnWidth[0]     = mnColumnWidth[1];
+            mnTextColumnWidth[0] = mnTextColumnWidth[1];
+        }
+        else
+        {
+            mnColumnWidth[1]     = mnColumnWidth[0];
+            mnTextColumnWidth[1] = mnTextColumnWidth[0];
+        }
         if( maControlRect.GetWidth() < maControlRect.GetHeight() * 3 / 2 )
         {
             maControlRect.Right() = maControlRect.Left() + maControlRect.GetHeight() * 3 / 2;
