@@ -140,9 +140,14 @@ uno::Reference< XChartType > ChartModelHelper::getChartTypeOfSeries(
     return DiagramHelper::getChartTypeOfSeries( ChartModelHelper::findDiagram( xModel ), xGivenDataSeries );
 }
 
+awt::Size ChartModelHelper::getDefaultPageSize()
+{
+    return awt::Size( 16000, 9000 );
+}
+
 awt::Size ChartModelHelper::getPageSize( const uno::Reference< frame::XModel >& xModel )
 {
-    awt::Size aPageSize( 8000, 7000 );
+    awt::Size aPageSize( ChartModelHelper::getDefaultPageSize() );
     uno::Reference< embed::XVisualObject > xVisualObject(xModel,uno::UNO_QUERY);
     DBG_ASSERT(xVisualObject.is(),"need xVisualObject for page size");
     if( xVisualObject.is() )

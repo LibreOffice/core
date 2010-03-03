@@ -93,6 +93,8 @@ public:
             , const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XDataSeries >& xGivenDataSeries );
 
+    static ::com::sun::star::awt::Size getDefaultPageSize();
+
     static ::com::sun::star::awt::Size getPageSize(
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::frame::XModel >& xModel );

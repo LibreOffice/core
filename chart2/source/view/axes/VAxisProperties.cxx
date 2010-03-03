@@ -33,6 +33,7 @@
 #include "CommonConverters.hxx"
 #include "AxisHelper.hxx"
 #include "DiagramHelper.hxx"
+#include "ChartModelHelper.hxx"
 
 #include <tools/color.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -378,8 +379,8 @@ void AxisProperties::init( bool bCartesian )
 //-----------------------------------------------------------------------------
 
 AxisLabelProperties::AxisLabelProperties()
-                        : m_aFontReferenceSize( 8000, 7000 )
-                        , m_aMaximumSpaceForLabels( 0 , 0, 8000, 7000 )
+                        : m_aFontReferenceSize( ChartModelHelper::getDefaultPageSize() )
+                        , m_aMaximumSpaceForLabels( 0 , 0, m_aFontReferenceSize.Width, m_aFontReferenceSize.Height )
                         , nNumberFormatKey(0)
                         , eStaggering( SIDE_BY_SIDE )
                         , bLineBreakAllowed( false )

@@ -98,8 +98,7 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
     , m_aControllers( m_aModelMutex )
     , m_nControllerLockCount(0)
     , m_xContext( xContext )
-    // default visual area is 8 x 7 cm
-    , m_aVisualAreaSize( 8000, 7000 )
+    , m_aVisualAreaSize( ChartModelHelper::getDefaultPageSize() )
 {
     OSL_TRACE( "ChartModel: CTOR called" );
 
