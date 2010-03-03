@@ -21855,6 +21855,24 @@
       <action name="start" action="clearProps"/>
       <action name="end" action="mark" sendtokenid="ooxml:endtrackchange"/>
     </resource>
+    <resource name="EG_RangeMarkupElements" resource="Properties">
+      <element name="bookmarkStart" tokenid="ooxml:EG_RangeMarkupElements_bookmarkStart"/>
+      <element name="bookmarkEnd" tokenid="ooxml:EG_RangeMarkupElements_bookmarkEnd"/>
+      <element name="moveFromRangeStart" tokenid="ooxml:EG_RangeMarkupElements_moveFromRangeStart"/>
+      <element name="moveFromRangeEnd" tokenid="ooxml:EG_RangeMarkupElements_moveFromRangeEnd"/>
+      <element name="moveToRangeStart" tokenid="ooxml:EG_RangeMarkupElements_moveToRangeStart"/>
+      <element name="moveToRangeEnd" tokenid="ooxml:EG_RangeMarkupElements_moveToRangeEnd"/>
+      <element name="commentRangeStart" tokenid="ooxml:EG_RangeMarkupElements_commentRangeStart"/>
+      <element name="commentRangeEnd" tokenid="ooxml:EG_RangeMarkupElements_commentRangeEnd"/>
+      <element name="customXmlInsRangeStart" tokenid="ooxml:EG_RangeMarkupElements_customXmlInsRangeStart"/>
+      <element name="customXmlInsRangeEnd" tokenid="ooxml:EG_RangeMarkupElements_customXmlInsRangeEnd"/>
+      <element name="customXmlDelRangeStart" tokenid="ooxml:EG_RangeMarkupElements_customXmlDelRangeStart"/>
+      <element name="customXmlDelRangeEnd" tokenid="ooxml:EG_RangeMarkupElements_customXmlDelRangeEnd"/>
+      <element name="customXmlMoveFromRangeStart" tokenid="ooxml:EG_RangeMarkupElements_customXmlMoveFromRangeStart"/>
+      <element name="customXmlMoveFromRangeEnd" tokenid="ooxml:EG_RangeMarkupElements_customXmlMoveFromRangeEnd"/>
+      <element name="customXmlMoveToRangeStart" tokenid="ooxml:EG_RangeMarkupElements_customXmlMoveToRangeStart"/>
+      <element name="customXmlMoveToRangeEnd" tokenid="ooxml:EG_RangeMarkupElements_customXmlMoveToRangeEnd"/>
+    </resource>
     <resource name="CT_NumPr" resource="Properties">
       <kind name="paragraph"/>
       <element name="ilvl" tokenid="sprm:PIlvl"/>
