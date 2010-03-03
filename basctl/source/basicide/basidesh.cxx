@@ -1006,26 +1006,17 @@ void BasicIDEShell::SetCurLib( const ScriptDocument& rDocument, String aLibName,
 {
     if ( !bCheck || ( rDocument != m_aCurDocument || aLibName != m_aCurLibName ) )
     {
-        ContainerListenerImpl* pListener = NULL;
-
-        pListener = dynamic_cast< ContainerListenerImpl* >( m_xLibListener.get() );
+        ContainerListenerImpl* pListener = pListener = static_cast< ContainerListenerImpl* >( m_xLibListener.get() );
 
         if ( pListener )
             pListener->removeContainerListener( m_aCurDocument, m_aCurLibName );
 
         m_aCurDocument = rDocument;
 
-        if ( m_aCurDocument.isInVBAMode() )
-        {
-            if ( !pListener )
-            {
+        pListener->addContainerListener( m_aCurDocument, aLibName );
 
-                pListener = new ContainerListenerImpl( this );
-                m_xLibListener = pListener;
-            }
-            pListener->addContainerListener( m_aCurDocument, aLibName );
-        }
         m_aCurLibName = aLibName;
+
         if ( bUpdateWindows )
             UpdateWindows();
 
