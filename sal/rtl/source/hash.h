@@ -8,15 +8,11 @@
 extern "C" {
 #endif /* __cplusplus */
 
-typedef struct StringHashTableImpl StringHashTable;
+/* These functions are not multi-thread safe: */
 
-StringHashTable *rtl_str_hash_new    (sal_uInt32         nSize);
-void             rtl_str_hash_free   (StringHashTable   *pHash);
-rtl_uString     *rtl_str_hash_intern (StringHashTable   *pHash,
-                                      rtl_uString       *pString,
+rtl_uString     *rtl_str_hash_intern (rtl_uString       *pString,
                                       int                can_return);
-void             rtl_str_hash_remove (StringHashTable   *pHash,
-                                      rtl_uString       *pString);
+void             rtl_str_hash_remove (rtl_uString       *pString);
 
 #if defined __cplusplus
 }

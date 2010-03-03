@@ -175,7 +175,7 @@ rtl::OUString getRuntimeLib(const rtl::ByteSequence & data)
 jmp_buf jmp_jvm_abort;
 sig_atomic_t g_bInGetJavaVM = 0;
 
-void abort_handler()
+extern "C" void JNICALL abort_handler()
 {
     // If we are within JNI_CreateJavaVM then we jump back into getJavaVM
     if( g_bInGetJavaVM != 0 )
@@ -507,20 +507,6 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
                 sLib.getStr(), sSymbol.getStr());
         return JFW_PLUGIN_E_VM_CREATION_FAILED;
     }
-
-    // The office sets a signal handler at startup. That causes a crash
-    // with java 1.3 under Solaris. To make it work, we set back the
-    // handler
-#ifdef UNX
-    struct sigaction act;
-    act.sa_handler=SIG_DFL;
-    act.sa_flags= 0;
-    sigaction( SIGSEGV, &act, NULL);
-    sigaction( SIGPIPE, &act, NULL);
-    sigaction( SIGBUS, &act, NULL);
-    sigaction( SIGILL, &act, NULL);
-    sigaction( SIGFPE, &act, NULL);
-#endif
 
     // Some testing with Java 1.4 showed that JavaVMOption.optionString has to
     // be encoded with the system encoding (i.e., osl_getThreadTextEncoding):
