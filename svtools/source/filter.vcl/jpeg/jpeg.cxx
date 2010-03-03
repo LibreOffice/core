@@ -30,21 +30,15 @@
 
 #include <tools/solar.h>
 
-#ifdef SYSTEM_JPEG
-#define INT32 JPEG_INT32
-#endif
-
 extern "C"
 {
+    #define INT32 JPEG_INT32
     #include "stdio.h"
     #include "jpeg.h"
     #include "jpeglib.h"
     #include "jerror.h"
+    #undef INT32
 }
-
-#ifdef SYSTEM_JPEG
-#undef INT32
-#endif
 
 #define _JPEGPRIVATE
 #include <vcl/bmpacc.hxx>
@@ -396,11 +390,7 @@ void* JPEGReader::CreateBitmap( void* pParam )
 
         if(
             ( bGray && ( BMP_FORMAT_8BIT_PAL == nFormat ) ) ||
-#ifndef SYSTEM_JPEG
-            ( !bGray && ( BMP_FORMAT_24BIT_TC_BGR == nFormat ) )
-#else
             ( !bGray && ( BMP_FORMAT_24BIT_TC_RGB == nFormat ) )
-#endif
           )
         {
             pBmpBuf = pAcc->GetBuffer();
@@ -463,15 +453,9 @@ void JPEGReader::FillBitmap()
 
                 for( long nX = 0L; nX < nWidth; nX++ )
                 {
-#ifndef SYSTEM_JPEG
-                    aColor.SetBlue( *pTmp++ );
-                    aColor.SetGreen( *pTmp++ );
-                    aColor.SetRed( *pTmp++ );
-#else
                     aColor.SetRed( *pTmp++ );
                     aColor.SetGreen( *pTmp++ );
                     aColor.SetBlue( *pTmp++ );
-#endif
                     pAcc->SetPixel( nY, nX, aColor );
                 }
             }
@@ -651,19 +635,11 @@ void* JPEGWriter::GetScanline( long nY )
                 for( long nX = 0L; nX < nWidth; nX++ )
                 {
                     aColor = pAcc->GetPaletteColor( (BYTE) pAcc->GetPixel( nY, nX ) );
-#ifndef SYSTEM_JPEG
-                    *pTmp++ = aColor.GetBlue();
-                    if ( bGreys )
-                        continue;
-                    *pTmp++ = aColor.GetGreen();
-                    *pTmp++ = aColor.GetRed();
-#else
                     *pTmp++ = aColor.GetRed();
                     if ( bGreys )
                         continue;
                     *pTmp++ = aColor.GetGreen();
                     *pTmp++ = aColor.GetBlue();
-#endif
                 }
             }
             else
@@ -671,19 +647,11 @@ void* JPEGWriter::GetScanline( long nY )
                 for( long nX = 0L; nX < nWidth; nX++ )
                 {
                     aColor = pAcc->GetPixel( nY, nX );
-#ifndef SYSTEM_JPEG
-                    *pTmp++ = aColor.GetBlue();
-                    if ( bGreys )
-                        continue;
-                    *pTmp++ = aColor.GetGreen();
-                    *pTmp++ = aColor.GetRed();
-#else
                     *pTmp++ = aColor.GetRed();
                     if ( bGreys )
                         continue;
                     *pTmp++ = aColor.GetGreen();
                     *pTmp++ = aColor.GetBlue();
-#endif
                 }
             }
 
@@ -738,14 +706,7 @@ BOOL JPEGWriter::Write( const Graphic& rGraphic )
 
     if( pAcc )
     {
-        if ( bGreys )
-            bNative = ( pAcc->GetScanlineFormat() == BMP_FORMAT_8BIT_PAL );
-        else
-#ifndef SYSTEM_JPEG
-            bNative = ( pAcc->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_BGR );
-#else
-            bNative = ( pAcc->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_RGB );
-#endif
+        bNative = ( pAcc->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_RGB );
 
         if( !bNative )
             pBuffer = new BYTE[ AlignedWidth4Bytes( bGreys ? pAcc->Width() * 8L : pAcc->Width() * 24L ) ];

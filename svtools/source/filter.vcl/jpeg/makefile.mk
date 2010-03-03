@@ -35,10 +35,6 @@ TARGET=jpeg
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/util$/svt.pmk
 
-.IF "$(SYSTEM_JPEG)" == "YES"
-CFLAGS+=-DSYSTEM_JPEG
-.ENDIF
-
 SOLARINC+=-I../../inc
 
 # --- Files --------------------------------------------------------
