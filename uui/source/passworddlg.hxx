@@ -53,7 +53,7 @@ class PasswordDialog : public ModalDialog
     DECL_LINK( OKHdl_Impl, OKButton * );
 
 public:
-    PasswordDialog( Window* pParent, ::com::sun::star::task::PasswordRequestMode nDlgMode, ResMgr * pResMgr, ::rtl::OUString& aDocURL );
+    PasswordDialog( Window* pParent, ::com::sun::star::task::PasswordRequestMode nDlgMode, ResMgr * pResMgr, ::rtl::OUString& aDocURL, bool bOpenToModify = false );
 
     String          GetPassword() const { return aEDPassword.GetText(); }
 

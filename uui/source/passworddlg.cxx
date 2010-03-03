@@ -51,29 +51,33 @@ IMPL_LINK( PasswordDialog, OKHdl_Impl, OKButton *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-PasswordDialog::PasswordDialog
-(
+PasswordDialog::PasswordDialog(
     Window* _pParent,
     ::com::sun::star::task::PasswordRequestMode nDlgMode,
     ResMgr * pResMgr,
-    rtl::OUString& aDocURL
-    )
+    rtl::OUString& aDocURL,
+    bool bOpenToModify )
+
     :ModalDialog( _pParent, ResId( DLG_UUI_PASSWORD, *pResMgr ) )
-    ,aFTPassword    ( this, ResId( FT_PASSWORD, *pResMgr )    )
-    ,aEDPassword           ( this, ResId( ED_PASSWORD, *pResMgr )            )
-    ,aOKBtn       ( this, ResId( BTN_PASSWORD_OK, *pResMgr )        )
-    ,aCancelBtn       ( this, ResId( BTN_PASSWORD_CANCEL, *pResMgr )        )
-    ,aHelpBtn       ( this, ResId( BTN_PASSWORD_HELP, *pResMgr )        )
-    ,aFixedLine1           ( this, ResId( FL_FIXED_LINE_1, *pResMgr )            )
-    ,nDialogMode        ( nDlgMode )
-    ,pResourceMgr   ( pResMgr )
+    ,aFTPassword( this, ResId( FT_PASSWORD, *pResMgr ))
+    ,aEDPassword( this, ResId( ED_PASSWORD, *pResMgr ))
+    ,aOKBtn ( this, ResId( BTN_PASSWORD_OK, *pResMgr ))
+    ,aCancelBtn ( this, ResId( BTN_PASSWORD_CANCEL, *pResMgr ))
+    ,aHelpBtn ( this, ResId( BTN_PASSWORD_HELP, *pResMgr ))
+    ,aFixedLine1( this, ResId( FL_FIXED_LINE_1, *pResMgr ))
+    ,nDialogMode( nDlgMode )
+    ,pResourceMgr ( pResMgr )
 {
     if( nDialogMode == ::com::sun::star::task::PasswordRequestMode_PASSWORD_REENTER )
     {
-        String aErrorMsg( ResId( STR_ERROR_PASSWORD_WRONG, *pResourceMgr ));
+        USHORT nErrStrId = bOpenToModify ? STR_ERROR_PASSWORD_TO_MODIFY_WRONG : STR_ERROR_PASSWORD_TO_OPEN_WRONG;
+        String aErrorMsg( ResId( nErrStrId, *pResourceMgr ));
         ErrorBox aErrorBox( _pParent, WB_OK, aErrorMsg );
         aErrorBox.Execute();
     }
+
+    USHORT nStrId = bOpenToModify ? STR_ENTER_PASSWORD_TO_MODIFY : STR_ENTER_PASSWORD_TO_OPEN;
+    aFTPassword.SetText( String( ResId( nStrId, *pResourceMgr ) ) );
 
     FreeResource();
 
