@@ -59,7 +59,6 @@ class VirtualDevice;
 class Cursor;
 class ImplDevFontList;
 class ImplFontCache;
-class SalControlHandle;
 class SmartId;
 class VCLXWindow;
 class SalFrame;
@@ -123,7 +122,6 @@ struct ImplWinData
     USHORT              mnTrackFlags;
     USHORT              mnIsTopWindow;
     BOOL                mbMouseOver;          // tracks mouse over for native widget paint effect
-    SalControlHandle*   mpSalControlHandle;   // native data for NWF
     BOOL                mbEnableNativeWidget; // toggle native widget rendering
     SmartId*            mpSmartHelpId;
     SmartId*            mpSmartUniqueId;

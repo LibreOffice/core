@@ -557,14 +557,12 @@ public:
     SAL_DLLPRIVATE void        ImplStartDnd();
 
     SAL_DLLPRIVATE static void ImplInitAppFontData( Window* pWindow );
-    SAL_DLLPRIVATE void        ImplInitSalControlHandle();
     SAL_DLLPRIVATE void        ImplPaintToDevice( OutputDevice* pTargetOutDev, const Point& rPos );
 
     SAL_DLLPRIVATE BOOL        ImplIsInTaskPaneList();
     SAL_DLLPRIVATE void        ImplIsInTaskPaneList( BOOL mbIsInTaskList );
     SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas >
                                ImplGetCanvas( const Size& rFullscreenSize, bool bFullscreen, bool bSpriteCanvas ) const;
-    SAL_DLLPRIVATE void        ImplMoveControlValue( ControlType, const ImplControlValue&, const Point& ) const;
 
 private:
     // Default construction is forbidden and not implemented.
@@ -1094,44 +1092,6 @@ public:
     // form controls must never use native widgets, this can be toggled here
     void    EnableNativeWidget( BOOL bEnable = TRUE );
     BOOL    IsNativeWidgetEnabled() const;
-
-    // These all just call through to the private mpWindowImpl->mpFrame functions of the same name.
-
-    // Query the platform layer for control support
-    BOOL                    IsNativeControlSupported( ControlType nType, ControlPart nPart );
-
-    // Query the native control to determine if it was acted upon
-    BOOL                HitTestNativeControl( ControlType nType,
-                                      ControlPart nPart,
-                                      const Region& rControlRegion,
-                                      const Point& aPos,
-                                      BOOL& rIsInside );
-
-    // Request rendering of a particular control and/or part
-    BOOL                DrawNativeControl(    ControlType nType,
-                                      ControlPart nPart,
-                                      const Region& rControlRegion,
-                                      ControlState nState,
-                                      const ImplControlValue& aValue,
-                                      rtl::OUString aCaption );
-
-     // Request rendering of a caption string for a control
-    BOOL                DrawNativeControlText(     ControlType nType,
-                                          ControlPart nPart,
-                                          const Region& rControlRegion,
-                                          ControlState nState,
-                                          const ImplControlValue& aValue,
-                                          rtl::OUString aCaption );
-
-    // Query the native control's actual drawing region (including adornment)
-    BOOL                GetNativeControlRegion(  ControlType nType,
-                                          ControlPart nPart,
-                                          const Region& rControlRegion,
-                                          ControlState nState,
-                                          const ImplControlValue& aValue,
-                                          rtl::OUString aCaption,
-                                          Region &rNativeBoundingRegion,
-                                          Region &rNativeContentRegion );
 
     // a helper method for a Control's Draw method
     void PaintToDevice( OutputDevice* pDevice, const Point& rPos, const Size& rSize );

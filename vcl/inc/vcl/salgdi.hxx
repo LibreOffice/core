@@ -162,15 +162,15 @@ protected:
 
     // native widget rendering methods that require mirroring
     virtual BOOL        hitTestNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
-                                              const Point& aPos, SalControlHandle& rControlHandle, BOOL& rIsInside );
+                                              const Point& aPos, BOOL& rIsInside );
     virtual BOOL        drawNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
-                                           ControlState nState, const ImplControlValue& aValue, SalControlHandle& rControlHandle,
+                                           ControlState nState, const ImplControlValue& aValue,
                                            const rtl::OUString& aCaption );
     virtual BOOL        drawNativeControlText( ControlType nType, ControlPart nPart, const Region& rControlRegion,
                                                ControlState nState, const ImplControlValue& aValue,
-                                               SalControlHandle& rControlHandle, const rtl::OUString& aCaption );
+                                               const rtl::OUString& aCaption );
     virtual BOOL        getNativeControlRegion( ControlType nType, ControlPart nPart, const Region& rControlRegion, ControlState nState,
-                                                const ImplControlValue& aValue, SalControlHandle& rControlHandle, const rtl::OUString& aCaption,
+                                                const ImplControlValue& aValue, const rtl::OUString& aCaption,
                                                 Region &rNativeBoundingRegion, Region &rNativeContentRegion );
 
     /** Render bitmap with alpha channel
@@ -444,7 +444,6 @@ public:
                                       ControlPart nPart,
                                       const Region& rControlRegion,
                                       const Point& aPos,
-                                      SalControlHandle& rControlHandle,
                                       BOOL& rIsInside,
                                       const OutputDevice *pOutDev );
 
@@ -454,7 +453,6 @@ public:
                                     const Region& rControlRegion,
                                     ControlState nState,
                                     const ImplControlValue& aValue,
-                                    SalControlHandle& rControlHandle,
                                     const rtl::OUString& aCaption,
                                     const OutputDevice *pOutDev );
 
@@ -464,7 +462,6 @@ public:
                                         const Region& rControlRegion,
                                         ControlState nState,
                                         const ImplControlValue& aValue,
-                                        SalControlHandle& rControlHandle,
                                         const rtl::OUString& aCaption,
                                         const OutputDevice *pOutDev );
 
@@ -474,7 +471,6 @@ public:
                                          const Region& rControlRegion,
                                          ControlState nState,
                                          const ImplControlValue& aValue,
-                                         SalControlHandle& rControlHandle,
                                          const rtl::OUString& aCaption,
                                          Region &rNativeBoundingRegion,
                                          Region &rNativeContentRegion,

@@ -1180,18 +1180,18 @@ class KDESalGraphics : public X11SalGraphics
     virtual BOOL IsNativeControlSupported( ControlType nType, ControlPart nPart );
     virtual BOOL hitTestNativeControl( ControlType nType, ControlPart nPart,
                                        const Region& rControlRegion, const Point& aPos,
-                                       SalControlHandle& rControlHandle, BOOL& rIsInside );
+                                       BOOL& rIsInside );
     virtual BOOL drawNativeControl( ControlType nType, ControlPart nPart,
                                     const Region& rControlRegion, ControlState nState,
-                                    const ImplControlValue& aValue, SalControlHandle& rControlHandle,
+                                    const ImplControlValue& aValue,
                                     const OUString& aCaption );
     virtual BOOL drawNativeControlText( ControlType nType, ControlPart nPart,
                                         const Region& rControlRegion, ControlState nState,
-                                        const ImplControlValue& aValue, SalControlHandle& rControlHandle,
+                                        const ImplControlValue& aValue,
                                         const OUString& aCaption );
     virtual BOOL getNativeControlRegion( ControlType nType, ControlPart nPart,
                                          const Region& rControlRegion, ControlState nState,
-                                         const ImplControlValue& aValue, SalControlHandle& rControlHandle,
+                                         const ImplControlValue& aValue,
                                          const OUString& aCaption,
                                          Region &rNativeBoundingRegion, Region &rNativeContentRegion );
 };
@@ -1245,7 +1245,7 @@ BOOL KDESalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
 */
 BOOL KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
                                            const Region& rControlRegion, const Point& rPos,
-                                           SalControlHandle&, BOOL& rIsInside )
+                                           BOOL& rIsInside )
 {
     if ( nType == CTRL_SCROLLBAR )
     {
@@ -1347,15 +1347,12 @@ BOOL KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
     @param aValue
     An optional value (tristate/numerical/string).
 
-    @param rControlHandle
-    Carries platform dependent data and is maintained by the SalFrame implementation.
-
     @param aCaption
     A caption or title string (like button text etc.)
 */
 BOOL KDESalGraphics::drawNativeControl( ControlType nType, ControlPart nPart,
                                         const Region& rControlRegion, ControlState nState,
-                                        const ImplControlValue& aValue, SalControlHandle&,
+                                        const ImplControlValue& aValue,
                                         const OUString& )
 {
     BOOL bReturn = FALSE;
@@ -1492,15 +1489,12 @@ BOOL KDESalGraphics::drawNativeControl( ControlType nType, ControlPart nPart,
     @param aValue
     An optional value (tristate/numerical/string)
 
-    @param rControlHandle
-    Carries platform dependent data and is maintained by the SalFrame implementation.
-
     @param aCaption
     A caption or title string (like button text etc.)
 */
 BOOL KDESalGraphics::drawNativeControlText( ControlType, ControlPart,
                                             const Region&, ControlState,
-                                            const ImplControlValue&, SalControlHandle&,
+                                            const ImplControlValue&,
                                             const OUString& )
 {
     return FALSE;
@@ -1520,15 +1514,12 @@ BOOL KDESalGraphics::drawNativeControlText( ControlType, ControlPart,
     @param aValue
     An optional value (tristate/numerical/string)
 
-    @param rControlHandle
-    Carries platform dependent data and is maintained by the SalFrame implementation.
-
     @param aCaption
     A caption or title string (like button text etc.)
 */
 BOOL KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPart,
                                              const Region& rControlRegion, ControlState nState,
-                                             const ImplControlValue&, SalControlHandle&,
+                                             const ImplControlValue&,
                                              const OUString&,
                                              Region &rNativeBoundingRegion, Region &rNativeContentRegion )
 {

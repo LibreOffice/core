@@ -1318,7 +1318,6 @@ ImplWinData* Window::ImplGetWinData() const
         mpWindowImpl->mpWinData->mnIsTopWindow  = (USHORT) ~0;  // not initialized yet, 0/1 will indicate TopWindow (see IsTopWindow())
         mpWindowImpl->mpWinData->mbMouseOver      = FALSE;
         mpWindowImpl->mpWinData->mbEnableNativeWidget = (pNoNWF && *pNoNWF) ? FALSE : TRUE; // TRUE: try to draw this control with native theme API
-        mpWindowImpl->mpWinData->mpSalControlHandle  = NULL;
         mpWindowImpl->mpWinData->mpSmartHelpId    = NULL;
         mpWindowImpl->mpWinData->mpSmartUniqueId  = NULL;
    }
@@ -4718,10 +4717,6 @@ Window::~Window()
             delete mpWindowImpl->mpWinData->mpFocusRect;
         if ( mpWindowImpl->mpWinData->mpTrackRect )
             delete mpWindowImpl->mpWinData->mpTrackRect;
-        // Native widget support
-        delete mpWindowImpl->mpWinData->mpSalControlHandle;
-        mpWindowImpl->mpWinData->mpSalControlHandle = NULL;
-
         if ( mpWindowImpl->mpWinData->mpSmartHelpId )
             delete mpWindowImpl->mpWinData->mpSmartHelpId;
         if ( mpWindowImpl->mpWinData->mpSmartUniqueId )

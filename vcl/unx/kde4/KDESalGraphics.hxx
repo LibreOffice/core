@@ -53,7 +53,7 @@ class KDESalGraphics : public X11SalGraphics
         */
         virtual BOOL hitTestNativeControl( ControlType type, ControlPart part,
                                         const Region& rControlRegion, const Point& aPos,
-                                        SalControlHandle& rControlHandle, BOOL& rIsInside );
+                                        BOOL& rIsInside );
         /** Draw the requested control described by part/nControlState.
 
             @param rControlRegion
@@ -62,15 +62,12 @@ class KDESalGraphics : public X11SalGraphics
             @param aValue
             An optional value (tristate/numerical/string).
 
-            @param rControlHandle
-            Carries platform dependent data and is maintained by the SalFrame implementation.
-
             @param aCaption
             A caption or title string (like button text etc.)
         */
         virtual BOOL drawNativeControl( ControlType type, ControlPart part,
                                         const Region& rControlRegion, ControlState nControlState,
-                                        const ImplControlValue& aValue, SalControlHandle& rControlHandle,
+                                        const ImplControlValue& aValue,
                                         const rtl::OUString& aCaption );
 
         /** Draw text on the widget.
@@ -79,12 +76,11 @@ class KDESalGraphics : public X11SalGraphics
 
             @param rControlRegion The bounding region of the complete control in VCL frame coordinates.
             @param aValue An optional value (tristate/numerical/string)
-            @param rControlHandle Carries platform dependent data and is maintained by the SalFrame implementation.
             @param aCaption A caption or title string (like button text etc.)
         */
         virtual BOOL drawNativeControlText( ControlType, ControlPart,
                                             const Region&, ControlState,
-                                            const ImplControlValue&, SalControlHandle&,
+                                            const ImplControlValue&,
                                             const rtl::OUString& ) { return false; }
         /** Check if the bounding regions match.
 
@@ -100,15 +96,12 @@ class KDESalGraphics : public X11SalGraphics
             @param aValue
             An optional value (tristate/numerical/string)
 
-            @param rControlHandle
-            Carries platform dependent data and is maintained by the SalFrame implementation.
-
             @param aCaption
             A caption or title string (like button text etc.)
         */
         virtual BOOL getNativeControlRegion( ControlType type, ControlPart part,
                                             const Region& rControlRegion, ControlState nControlState,
-                                            const ImplControlValue& aValue, SalControlHandle& rControlHandle,
+                                            const ImplControlValue& aValue,
                                             const rtl::OUString& aCaption,
                                             Region &rNativeBoundingRegion, Region &rNativeContentRegion );
 };

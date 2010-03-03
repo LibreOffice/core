@@ -314,7 +314,6 @@ BOOL WinSalGraphics::hitTestNativeControl( ControlType,
                               ControlPart,
                               const Region&,
                               const Point&,
-                              SalControlHandle&,
                               BOOL& )
 {
     return FALSE;
@@ -420,7 +419,6 @@ BOOL ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                             ControlPart nPart,
                             ControlState nState,
                             const ImplControlValue& aValue,
-                            SalControlHandle&,
                             OUString aCaption )
 {
     // a listbox dropdown is actually a combobox dropdown
@@ -903,7 +901,6 @@ BOOL ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
  *
  *  rControlRegion: The bounding region of the complete control in VCL frame coordinates.
  *  aValue:         An optional value (tristate/numerical/string)
- *  rControlHandle: Carries platform dependent data and is maintained by the WinSalGraphics implementation.
  *  aCaption:   A caption or title string (like button text etc)
  */
 BOOL WinSalGraphics::drawNativeControl( ControlType nType,
@@ -911,7 +908,6 @@ BOOL WinSalGraphics::drawNativeControl( ControlType nType,
                             const Region& rControlRegion,
                             ControlState nState,
                             const ImplControlValue& aValue,
-                            SalControlHandle& rControlHandle,
                             const OUString& aCaption )
 {
     BOOL bOk = false;
@@ -994,7 +990,7 @@ BOOL WinSalGraphics::drawNativeControl( ControlType nType,
     OUString aCaptionStr( aCaption.replace('~', '&') ); // translate mnemonics
     bOk = ImplDrawNativeControl(mhDC, hTheme, rc,
                             nType, nPart, nState, aValue,
-                            rControlHandle, aCaptionStr );
+                            aCaptionStr );
 
     // restore alignment
     SetTextAlign( mhDC, ta );
@@ -1014,7 +1010,6 @@ BOOL WinSalGraphics::drawNativeControl( ControlType nType,
  *
  *  rControlRegion: The bounding region of the complete control in VCL frame coordinates.
  *  aValue:         An optional value (tristate/numerical/string)
- *  rControlHandle: Carries platform dependent data and is maintained by the WinSalGraphics implementation.
  *  aCaption:   A caption or title string (like button text etc)
  */
 BOOL WinSalGraphics::drawNativeControlText( ControlType,
@@ -1022,7 +1017,6 @@ BOOL WinSalGraphics::drawNativeControlText( ControlType,
                                 const Region&,
                                 ControlState,
                                 const ImplControlValue&,
-                                SalControlHandle&,
                                 const OUString& )
 {
     return( false );
@@ -1040,7 +1034,6 @@ BOOL WinSalGraphics::drawNativeControlText( ControlType,
  *
  *  rControlRegion: The bounding region of the control in VCL frame coordinates.
  *  aValue:     An optional value (tristate/numerical/string)
- *  rControlHandle: Carries platform dependent data and is maintained by the WinSalGraphics implementation.
  *  aCaption:       A caption or title string (like button text etc)
  */
 BOOL WinSalGraphics::getNativeControlRegion(  ControlType nType,
@@ -1048,7 +1041,6 @@ BOOL WinSalGraphics::getNativeControlRegion(  ControlType nType,
                                 const Region& rControlRegion,
                                 ControlState,
                                 const ImplControlValue&,
-                                SalControlHandle&,
                                 const OUString&,
                                 Region &rNativeBoundingRegion,
                                 Region &rNativeContentRegion )
@@ -1164,6 +1156,10 @@ BOOL WinSalGraphics::getNativeControlRegion(  ControlType nType,
                 }
             }
         }
+    }
+
+    if ( ( nType == CTRL_TAB_ITEM ) && ( nType == PART_ENTIRE_CONTROL ) )
+    {
     }
 
     ReleaseDC( mhWnd, hDC );
