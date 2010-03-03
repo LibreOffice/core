@@ -96,10 +96,6 @@ public class MarkableOutputStream extends TestCase {
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XInterface oObj = null;
-        Object ostream = null;
-
-        Object istream = null ;
-        XOutputStream moStream = null ;
 
         XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
         Object aPipe = null;

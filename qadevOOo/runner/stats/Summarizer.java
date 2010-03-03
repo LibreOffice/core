@@ -24,7 +24,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 package stats;
 
 import java.util.Vector;
@@ -35,57 +34,81 @@ import share.DescEntry;
  * this class summs up the results of the subentries of a given DescEntry<br>
  * and fills the subentries in cases of SKIPPED states
  */
-public class Summarizer {
+public class Summarizer
+{
 
     /**
      *
      * gets the state for a SuperEntry according to its subentries
      * @param entry
      */
-    public void summarizeUp(DescEntry entry) {
-        if ( ( entry.State != null ) && !entry.State.equals("UNKNOWN")) return;
+    public void summarizeUp(DescEntry entry)
+    {
+        if ((entry.State != null) && !entry.State.equals("UNKNOWN"))
+        {
+            return;
+        }
         int count = entry.SubEntryCount;
         int knownIssues = 0;
         Vector failures = new Vector();
         Vector states = new Vector();
-        for (int i=0; i<count; i++) {
-            if (entry.SubEntries[i].State == null) {
+        for (int i = 0; i < count; i++)
+        {
+            if (entry.SubEntries[i].State == null)
+            {
                 entry.SubEntries[i].State = "PASSED.FAILED";
             }
-            if (entry.SubEntries[i].State.equals("known issue")) {
+            if (entry.SubEntries[i].State.equals("known issue"))
+            {
                 entry.SubEntries[i].State = "PASSED.OK";
                 knownIssues++;
             }
-            if (!entry.SubEntries[i].State.endsWith("OK")) {
-                failures.add(entry.SubEntries[i].entryName);
+            if (!entry.SubEntries[i].State.endsWith("OK"))
+            {
+                String sFailure = "[" + entry.SubEntries[i].longName + "]" + " is testcode: [" + entry.SubEntries[i].entryName + "]";
+                failures.add(sFailure);
                 states.add(entry.SubEntries[i].State);
             }
         }
-        if (failures.size()>0) {
+        if (failures.size() > 0)
+        {
             String errMsg = "";
             String state = "PASSED.FAILED";
-            for (int j=0; j<failures.size();j++) {
-                if (states.elementAt(j).equals("not part of the job")) {
+            for (int j = 0; j < failures.size(); j++)
+            {
+                if (states.elementAt(j).equals("not part of the job"))
+                {
                     state = "Not possible since not all Interfaces/Services have been checked";
-                } else errMsg +=
-                        failures.elementAt(j)+" - "+states.elementAt(j)+"\r\n";
+                }
+                else
+                {
+                    errMsg +=
+                            failures.elementAt(j) + " - " + states.elementAt(j) + "\r\n";
+                }
             }
-            entry.hasErrorMsg=true;
+            entry.hasErrorMsg = true;
             entry.ErrorMsg = errMsg;
             entry.State = state;
-        } else if (entry.EntryType.equals("component") && knownIssues > 0) {
+        }
+        else if (entry.EntryType.equals("component") && knownIssues > 0)
+        {
             entry.State = "PASSED(with known issues).OK";
-        } else {
+        }
+        else
+        {
             entry.State = "PASSED.OK";
         }
     }
 
-    public static void summarizeDown(DescEntry entry, String state) {
-        if ( ( entry.State == null ) || entry.State.equals("UNKNOWN"))
+    public static void summarizeDown(DescEntry entry, String state)
+    {
+        if ((entry.State == null) || entry.State.equals("UNKNOWN"))
+        {
             entry.State = state;
-        for (int i=0; i<entry.SubEntryCount; i++) {
+        }
+        for (int i = 0; i < entry.SubEntryCount; i++)
+        {
             summarizeDown(entry.SubEntries[i], entry.State);
         }
     }
-
 }
