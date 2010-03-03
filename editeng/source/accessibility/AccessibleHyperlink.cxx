@@ -29,14 +29,14 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_svx.hxx"
+#include "precompiled_editeng.hxx"
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/accessiblekeybindinghelper.hxx>
 
 #include "AccessibleHyperlink.hxx"
-#include "unoedprx.hxx"
+#include "editeng/unoedprx.hxx"
 #include <svx/flditem.hxx>
 #include <vcl/keycodes.hxx>
 
