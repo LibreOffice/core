@@ -393,7 +393,6 @@ const LanguageType MapCharToLanguage( sal_UCS4 uChar )
     return LANGUAGE_DONTKNOW;
 }
 
-//class ImplWinFontData;
 void ImplGetLogFontFromFontSelect( HDC hDC,
                                    const ImplFontSelectData* pFont,
                                    LOGFONTW& rLogFont,
@@ -423,7 +422,8 @@ inline WinGlyphFallbackSubstititution::WinGlyphFallbackSubstititution( HDC hDC, 
 bool WinGlyphFallbackSubstititution::HasMissingChars( const ImplFontData* pFace, const rtl::OUString& rMissingChars ) const
 {
     const ImplWinFontData* pWinFont = static_cast<const ImplWinFontData*>(pFace);
-    if( !pWinFont->GetImplFontCharMap() )
+    const ImplFontCharMap* pCharMap = pWinFont->GetImplFontCharMap();
+    if( !pCharMap )
     {
         // construct a Size structure as the parameter of constructor of class ImplFontSelectData
         const Size aSize( pFace->GetWidth(), pFace->GetHeight() );
@@ -438,26 +438,42 @@ bool WinGlyphFallbackSubstititution::HasMissingChars( const ImplFontData* pFace,
         // select the new font into device
         HFONT hOldFont = ::SelectFont( mhDC, hNewFont );
 
-        // read CMAP table
+        // read CMAP table to update their pCharMap
         pWinFont->UpdateFromHDC( mhDC );;
 
+        // cleanup temporary font
         ::SelectFont( mhDC, hOldFont );
         ::DeleteFont( hNewFont );
+
+        // get the new charmap
+        pCharMap = pWinFont->GetImplFontCharMap();
     }
 
-    sal_Int32 nStrIndex = 0; // TODO: check more missing characters?
-    const sal_UCS4 uChar = rMissingChars.iterateCodePoints( &nStrIndex );
-    const bool bHasChar = pWinFont->HasChar( uChar );
-    return bHasChar;
+    // avoid fonts with unknown CMAP subtables for glyph fallback
+    if( !pCharMap || pCharMap->IsDefaultMap() )
+        return false;
+
+    int nMatchCount = 0;
+    // static const int nMaxMatchCount = 1; // TODO: check more missing characters?
+    const sal_Int32 nStrLen = rMissingChars.getLength();
+    for( sal_Int32 nStrIdx = 0; nStrIdx < nStrLen; ++nStrIdx )
+    {
+        const sal_UCS4 uChar = rMissingChars.iterateCodePoints( &nStrIdx );
+        nMatchCount += pCharMap->HasChar( uChar );
+        break; // for now
+    }
+
+    const bool bHasMatches = (nMatchCount > 0);
+    return bHasMatches;
 }
 
-//get fallback font for missing characters
+// find a fallback font for missing characters
+// TODO: should stylistic matches be searched and prefered?
 bool WinGlyphFallbackSubstititution::FindFontSubstitute( ImplFontSelectData& rFontSelData, rtl::OUString& rMissingChars ) const
 {
-    //g et locale by the language type of missing string
+    // guess a locale matching to the missing chars
     com::sun::star::lang::Locale aLocale;
 
-    // what are langauge and mapping locale of the missing characters?
     sal_Int32 nStrIdx = 0;
     const sal_Int32 nStrLen = rMissingChars.getLength();
     while( nStrIdx < nStrLen )
@@ -470,19 +486,21 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute( ImplFontSelectData& rFo
         break;
     }
 
-    // fall back to default UI locale
+    // fall back to default UI locale if the missing characters are inconclusive
     if( nStrIdx >= nStrLen )
         aLocale = Application::GetSettings().GetUILocale();
 
-    // first level fallback, get font type face by locale
+    // first level fallback:
+    // try use the locale specific default fonts in VCL.xcu
     /*const*/ ImplDevFontListData* pDevFont = mpFontList->ImplFindByLocale( aLocale );
     if( pDevFont )
     {
-//      const ImplFontData* pFace = pDevFont->FindBestFontFace( rFontSelData );
-//      if( HasMissingChas( pFace, MissingChars) ) {
+        const ImplFontData* pFace = pDevFont->FindBestFontFace( rFontSelData );
+        if( HasMissingChars( pFace, rMissingChars ) )
+        {
             rFontSelData.maSearchName = pDevFont->GetSearchName();
             return true;
-//      }
+        }
     }
 
     // are the missing characters symbols?
@@ -1115,8 +1133,8 @@ bool ImplWinFontData::IsGSUBstituted( sal_UCS4 cChar ) const
 
 ImplFontCharMap* ImplWinFontData::GetImplFontCharMap() const
 {
-    if(!mpUnicodeMap)
-        return 0;
+    if( !mpUnicodeMap )
+        return NULL;
     mpUnicodeMap->AddReference();
     return mpUnicodeMap;
 }
@@ -2456,9 +2474,8 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
         bImplSalCourierNew      = aInfo.mbImplSalCourierNew;
     }
 
-    //set font fallback hook
-    static WinGlyphFallbackSubstititution aSubstFallback(mhDC, pFontList);
-    //aSubstFallback.SetHDC(mhDC);
+    // set font fallback hook
+    static WinGlyphFallbackSubstititution aSubstFallback( mhDC, pFontList );
     pFontList->SetFallbackHook( &aSubstFallback );
 }
 
