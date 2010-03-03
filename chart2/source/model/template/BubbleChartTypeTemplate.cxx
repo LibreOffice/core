@@ -192,6 +192,7 @@ void SAL_CALL BubbleChartTypeTemplate::applyStyle(
     throw (uno::RuntimeException)
 {
     ChartTypeTemplate::applyStyle( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
+    DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, C2U( "BorderStyle" ), uno::makeAny( drawing::LineStyle_NONE ) );
 
     try
     {

@@ -378,7 +378,7 @@ void ImplChartModel::CreateDefaultChart()
             {
                 xDiagramProperties->setPropertyValue( C2U("RightAngledAxes"), uno::makeAny( sal_True ));
                 xDiagramProperties->setPropertyValue( C2U("D3DScenePerspective"), uno::makeAny( drawing::ProjectionMode_PARALLEL ));
-                ThreeDHelper::setScheme( xDiagram, ThreeDLookScheme_Simple );
+                ThreeDHelper::setScheme( xDiagram, ThreeDLookScheme_Realistic );
             }
 
             //set some new 'defaults' for wall and floor

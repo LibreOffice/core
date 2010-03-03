@@ -241,6 +241,8 @@ void SAL_CALL ScatterChartTypeTemplate::applyStyle(
         DataSeriesHelper::switchSymbolsOnOrOff( xProp, m_bHasSymbols, nSeriesIndex );
         DataSeriesHelper::switchLinesOnOrOff( xProp, m_bHasLines );
         DataSeriesHelper::makeLinesThickOrThin( xProp, m_nDim==2 );
+        if( m_nDim==3 )
+            DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, C2U( "BorderStyle" ), uno::makeAny( drawing::LineStyle_NONE ) );
     }
     catch( uno::Exception & ex )
     {

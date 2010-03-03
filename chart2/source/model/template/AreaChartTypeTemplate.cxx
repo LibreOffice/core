@@ -31,6 +31,7 @@
 #include "macros.hxx"
 #include "servicenames_charttypes.hxx"
 #include "DiagramHelper.hxx"
+#include "DataSeriesHelper.hxx"
 #include "ContainerHelper.hxx"
 #include "PropertyHelper.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -208,41 +209,26 @@ void SAL_CALL AreaChartTypeTemplate::applyStyle(
     throw (uno::RuntimeException)
 {
     ChartTypeTemplate::applyStyle( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
-    if( getDimension() == 3 )
-    {
-        try
-        {
-            uno::Reference< beans::XPropertySet > xProp( xSeries, uno::UNO_QUERY_THROW );
-            xProp->setPropertyValue( C2U("BorderStyle"),
-                                     uno::makeAny( drawing::LineStyle_NONE ));
-        }
-        catch( uno::Exception & ex )
-        {
-            ASSERT_EXCEPTION( ex );
-        }
-    }
+    DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, C2U( "BorderStyle" ), uno::makeAny( drawing::LineStyle_NONE ) );
 }
 
 void SAL_CALL AreaChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram >& xDiagram )
     throw (uno::RuntimeException)
 {
     ChartTypeTemplate::resetStyles( xDiagram );
-    if( getDimension() == 3 )
+    ::std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
+        DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
+    uno::Any aLineStyleAny( uno::makeAny( drawing::LineStyle_NONE ));
+    for( ::std::vector< Reference< chart2::XDataSeries > >::iterator aIt( aSeriesVec.begin());
+         aIt != aSeriesVec.end(); ++aIt )
     {
-        ::std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
-            DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
-        uno::Any aLineStyleAny( uno::makeAny( drawing::LineStyle_NONE ));
-        for( ::std::vector< Reference< chart2::XDataSeries > >::iterator aIt( aSeriesVec.begin());
-             aIt != aSeriesVec.end(); ++aIt )
+        Reference< beans::XPropertyState > xState( *aIt, uno::UNO_QUERY );
+        Reference< beans::XPropertySet > xProp( *aIt, uno::UNO_QUERY );
+        if( xState.is() &&
+            xProp.is() &&
+            xProp->getPropertyValue( C2U("BorderStyle")) == aLineStyleAny )
         {
-            Reference< beans::XPropertyState > xState( *aIt, uno::UNO_QUERY );
-            Reference< beans::XPropertySet > xProp( *aIt, uno::UNO_QUERY );
-            if( xState.is() &&
-                xProp.is() &&
-                xProp->getPropertyValue( C2U("BorderStyle")) == aLineStyleAny )
-            {
-                xState->setPropertyToDefault( C2U("BorderStyle"));
-            }
+            xState->setPropertyToDefault( C2U("BorderStyle"));
         }
     }
 }
