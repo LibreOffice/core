@@ -47,7 +47,9 @@ IDLFILES=\
     DocumentMacroConfirmationRequest.idl\
     DocumentMacroConfirmationRequest2.idl\
     DocumentPasswordRequest.idl\
+    DocumentPasswordRequest2.idl\
     DocumentMSPasswordRequest.idl\
+    DocumentMSPasswordRequest2.idl\
     ErrorCodeRequest.idl\
     ErrorCodeIOException.idl\
     FutureDocumentVersionProductUpdateRequest.idl\
