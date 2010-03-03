@@ -34,6 +34,10 @@ ENABLE_EXCEPTIONS := TRUE
 .INCLUDE: settings.mk
 .INCLUDE: $(PRJ)$/source$/deployment$/inc$/dp_misc.mk
 
+.IF "$(SYSTEM_CPPUNIT)"=="YES"
+CFLAGS+= $(CPPUNIT_CFLAGS)
+.ENDIF
+
 DLLPRE = # no leading "lib" on .so files
 
 SHL1TARGET = $(TARGET)
