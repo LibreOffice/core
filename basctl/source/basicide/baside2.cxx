@@ -205,20 +205,26 @@ ModulWindow::ModulWindow( ModulWindowLayout* pParent, const ScriptDocument& rDoc
     pLayout = pParent;
     aXEditorWindow.Show();
 
-    BasicManager* pBasMgr = rDocument.getBasicManager();
-    if ( pBasMgr )
-    {
-        StarBASIC* pBasic = pBasMgr->GetLib( aLibName );
-        if ( pBasic )
-        {
-            xBasic = pBasic;
-            xModule = (SbModule*)pBasic->FindModule( aName );
-        }
-    }
-
     SetBackground();
 }
 
+SbModuleRef ModulWindow::XModule()
+{
+    if ( !xModule.Is() )
+    {
+        BasicManager* pBasMgr = GetDocument().getBasicManager();
+        if ( pBasMgr )
+        {
+            StarBASIC* pBasic = pBasMgr->GetLib( GetLibName() );
+            if ( pBasic )
+            {
+                xBasic = pBasic;
+                xModule = (SbModule*)pBasic->FindModule( GetName() );
+            }
+        }
+    }
+    return xModule;
+}
 
 __EXPORT ModulWindow::~ModulWindow()
 {
@@ -269,7 +275,7 @@ void ModulWindow::CheckCompileBasic()
 {
     DBG_CHKTHIS( ModulWindow, 0 );
 
-    if ( xModule.Is() )
+    if ( XModule().Is() )
     {
         // Zur Laufzeit wird niemals compiliert!
         BOOL bRunning = StarBASIC::IsRunning();
@@ -325,7 +331,7 @@ BOOL ModulWindow::BasicExecute()
 
     CheckCompileBasic();
 
-    if ( xModule.Is() && xModule->IsCompiled() && !aStatus.bError )
+    if ( XModule().Is() && xModule->IsCompiled() && !aStatus.bError )
     {
         if ( GetBreakPoints().Count() )
             aStatus.nBasicFlags = aStatus.nBasicFlags | SbDEBUG_BREAK;
@@ -345,10 +351,18 @@ BOOL ModulWindow::BasicExecute()
                 SbMethod* pM = (SbMethod*)xModule->GetMethods()->Get( nMacro );
                 DBG_ASSERT( pM, "Method?" );
                 pM->GetLineRange( nStart, nEnd );
-                                if ( ( aDocument.isInVBAMode() && (  nCurMethodStart >= nStart && nCurMethodStart <= nEnd ) ) || ( !aDocument.isInVBAMode() && !pMethod ) )
+                if ( aDocument.isInVBAMode() )
+                {
+                    if (  nCurMethodStart >= nStart && nCurMethodStart <= nEnd )
+                    {
+                        pMethod = pM;
+                        break;
+                    }
+                }
+                else if  ( !pMethod || ( nStart < nCurMethodStart ) )
                 {
                     pMethod = pM;
-                    break;
+                    nCurMethodStart = nStart;
                 }
             }
             if ( !pMethod )
@@ -384,7 +398,7 @@ BOOL ModulWindow::CompileBasic()
     CheckCompileBasic();
 
     BOOL bIsCompiled = FALSE;
-    if ( xModule.Is() )
+    if ( XModule().Is() )
         bIsCompiled = xModule->IsCompiled();
 
     return bIsCompiled;
@@ -561,11 +575,11 @@ BOOL ModulWindow::ImportDialog()
 
 BOOL ModulWindow::ToggleBreakPoint( ULONG nLine )
 {
-    DBG_ASSERT( xModule.Is(), "Kein Modul!" );
+    DBG_ASSERT( XModule().Is(), "Kein Modul!" );
 
     BOOL bNewBreakPoint = FALSE;
 
-    if ( xModule.Is() )
+    if ( XModule().Is() )
     {
         CheckCompileBasic();
         if ( aStatus.bError )
@@ -607,9 +621,9 @@ BOOL ModulWindow::ToggleBreakPoint( ULONG nLine )
 
 void ModulWindow::UpdateBreakPoint( const BreakPoint& rBrk )
 {
-    DBG_ASSERT( xModule.Is(), "Kein Modul!" );
+    DBG_ASSERT( XModule().Is(), "Kein Modul!" );
 
-    if ( xModule.Is() )
+    if ( XModule().Is() )
     {
         CheckCompileBasic();
 
@@ -833,9 +847,9 @@ void ModulWindow::BasicRemoveWatch()
 void ModulWindow::EditMacro( const String& rMacroName )
 {
     DBG_CHKTHIS( ModulWindow, 0 );
-    DBG_ASSERT( xModule.Is(), "Kein Modul!" );
+    DBG_ASSERT( XModule().Is(), "Kein Modul!" );
 
-    if ( xModule.Is() )
+    if ( XModule().Is() )
     {
         CheckCompileBasic();
 
@@ -905,12 +919,12 @@ BOOL __EXPORT ModulWindow::AllowUndo()
 void __EXPORT ModulWindow::UpdateData()
 {
     DBG_CHKTHIS( ModulWindow, 0 );
-    DBG_ASSERT( xModule.Is(), "Kein Modul!" );
+    DBG_ASSERT( XModule().Is(), "Kein Modul!" );
     // UpdateData wird gerufen, wenn sich der Source von aussen
     // geaendert hat.
     // => Keine Unterbrechungen erwuenscht!
 
-    if ( xModule.Is() )
+    if ( XModule().Is() )
     {
         SetModule( xModule->GetSource32() );
 
@@ -1231,7 +1245,7 @@ void __EXPORT ModulWindow::GoOnTop()
 String ModulWindow::GetSbModuleName()
 {
     String aModuleName;
-    if ( xModule.Is() )
+    if ( XModule().Is() )
         aModuleName = xModule->GetName();
     return aModuleName;
 }
@@ -1353,7 +1367,7 @@ USHORT __EXPORT ModulWindow::GetSearchOptions()
 
 void __EXPORT ModulWindow::BasicStarted()
 {
-    if ( xModule.Is() )
+    if ( XModule().Is() )
     {
         aStatus.bIsRunning = TRUE;
         BreakPointList& rList = GetBreakPoints();
@@ -1384,7 +1398,7 @@ BasicEntryDescriptor ModulWindow::CreateEntryDescriptor()
     LibraryLocation eLocation = aDocument.getLibraryLocation( aLibName );
     String aModName( GetName() );
     String aLibSubName;
-    if( xBasic.Is() && aDocument.isInVBAMode() && xModule.Is() )
+    if( xBasic.Is() && aDocument.isInVBAMode() && XModule().Is() )
     {
         switch( xModule->GetModuleType() )
         {

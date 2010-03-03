@@ -357,6 +357,7 @@ private:
     void                AssertValidEditEngine();
 
     sal_Int32           FormatAndPrint( Printer* pPrinter, sal_Int32 nPage = -1 );
+    SbModuleRef         XModule();
 protected:
     virtual void    Resize();
     virtual void    GetFocus();

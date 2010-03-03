@@ -147,7 +147,7 @@ public:
         {
             IDEBaseWindow* pWin = mpShell->FindWindow( mpShell->m_aCurDocument, mpShell->m_aCurLibName, sModuleName, BASICIDE_TYPE_MODULE, TRUE );
             if( pWin )
-                mpShell->RemoveWindow( pWin, FALSE, TRUE );
+                mpShell->RemoveWindow( pWin, TRUE, TRUE );
         }
     }
 
@@ -1006,7 +1006,7 @@ void BasicIDEShell::SetCurLib( const ScriptDocument& rDocument, String aLibName,
 {
     if ( !bCheck || ( rDocument != m_aCurDocument || aLibName != m_aCurLibName ) )
     {
-        ContainerListenerImpl* pListener = pListener = static_cast< ContainerListenerImpl* >( m_xLibListener.get() );
+        ContainerListenerImpl* pListener = static_cast< ContainerListenerImpl* >( m_xLibListener.get() );
 
         if ( pListener )
             pListener->removeContainerListener( m_aCurDocument, m_aCurLibName );
