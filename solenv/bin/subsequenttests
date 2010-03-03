@@ -82,18 +82,37 @@ foreach $module ($sc->get_active_modules()) {
     }
 }
 
+my $cmd = 'dmake';
+foreach (@ARGV) {
+    s/'/'\''/g;
+    $cmd .= " '" . $_ . "'";
+}
+$cmd .= ' 2>&1 |';
+
 my %pids = ();
 my @failedpaths = ();
 my $running = 0;
+my $counter = 0;
 while (@testpaths || $running > 0) {
     while (@testpaths && $running < $max_running) {
         my $testpath = shift(@testpaths);
+        ++$counter;
+        print("$counter: make $testpath\n");
         my $pid = fork();
-        defined($pid) or die($!);
+        defined($pid) or die("$counter: $!");
         if ($pid == 0) {
-            chdir($testpath) or die($!);
+            chdir($testpath) or die("$counter: $!");
             $ENV{'OOO_SUBSEQUENT_TESTS'} = 'x';
-            exec('dmake', @ARGV) or die($!);
+            open(OUTPUT, $cmd) or die("$counter: $!");
+            while (<OUTPUT>) {
+                if (/\n$/) {
+                    print("$counter: $_");
+                } else {
+                    print("$counter: $_\n");
+                }
+            }
+            close(OUTPUT);
+            exit($? == 0 ? 0 : 1);
         }
         $pids{$pid} = $testpath;
         ++$running;
