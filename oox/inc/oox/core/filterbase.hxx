@@ -60,11 +60,11 @@ namespace com { namespace sun { namespace star {
 
 namespace comphelper {
     class IDocPasswordVerifier;
-    class MediaDescriptor;
 }
 
 namespace oox {
     class GraphicHelper;
+    class MediaDescriptor;
     class ModelObjectHelper;
 }
 
@@ -115,9 +115,6 @@ public:
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
                         getGlobalFactory() const;
 
-    /** Returns the media descriptor. */
-    ::comphelper::MediaDescriptor& getMediaDescriptor() const;
-
     /** Returns the document model (always existing). */
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >&
                         getModel() const;
@@ -133,6 +130,9 @@ public:
     /** Returns the status interaction handler (may be null). */
     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >&
                         getInteractionHandler() const;
+
+    /** Returns the media descriptor. */
+    MediaDescriptor&    getMediaDescriptor() const;
 
     /** Returns the URL of the imported or exported file. */
     const ::rtl::OUString& getFileUrl() const;
@@ -277,9 +277,9 @@ public:
     // ------------------------------------------------------------------------
 protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
-                        implGetInputStream( ::comphelper::MediaDescriptor& rMediaDesc ) const;
+                        implGetInputStream( MediaDescriptor& rMediaDesc ) const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >
-                        implGetOutputStream( ::comphelper::MediaDescriptor& rMediaDesc ) const;
+                        implGetOutputStream( MediaDescriptor& rMediaDesc ) const;
 
 private:
     void                setMediaDescriptor(

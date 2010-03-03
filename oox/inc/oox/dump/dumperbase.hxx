@@ -41,10 +41,10 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/util/DateTime.hpp>
-#include <comphelper/mediadescriptor.hxx>
-#include "oox/helper/helper.hxx"
-#include "oox/helper/storagebase.hxx"
 #include "oox/helper/binaryinputstream.hxx"
+#include "oox/helper/helper.hxx"
+#include "oox/helper/mediadescriptor.hxx"
+#include "oox/helper/storagebase.hxx"
 
 #define OOX_INCLUDE_DUMPER (OSL_DEBUG_LEVEL > 0)
 
@@ -872,7 +872,7 @@ public:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
                             const StorageRef& rxRootStrg,
                             const ::rtl::OUString& rSysFileName,
-                            ::comphelper::MediaDescriptor& rMediaDesc );
+                            MediaDescriptor& rMediaDesc );
 
     virtual             ~SharedConfigData();
 
@@ -914,7 +914,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxFactory;
     StorageRef          mxRootStrg;
     ::rtl::OUString     maSysFileName;
-    ::comphelper::MediaDescriptor& mrMediaDesc;
+    MediaDescriptor&    mrMediaDesc;
     ConfigFileSet       maConfigFiles;
     ConfigDataMap       maConfigData;
     NameListMap         maNameLists;
@@ -959,7 +959,7 @@ public:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
                             const StorageRef& rxRootStrg,
                             const ::rtl::OUString& rSysFileName,
-                            ::comphelper::MediaDescriptor& rMediaDesc );
+                            MediaDescriptor& rMediaDesc );
 
     virtual             ~Config();
 
@@ -1004,7 +1004,7 @@ protected:
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
                             const StorageRef& rxRootStrg,
                             const ::rtl::OUString& rSysFileName,
-                            ::comphelper::MediaDescriptor& rMediaDesc );
+                            MediaDescriptor& rMediaDesc );
 
     virtual bool        implIsValid() const;
     virtual const ::rtl::OUString* implGetOption( const ::rtl::OUString& rKey ) const;

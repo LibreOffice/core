@@ -22,6 +22,7 @@ mkdir: %_DEST%\inc%_EXT%\oox\vml
 ..\inc\oox\dllapi.h %_DEST%\inc%_EXT%\oox\dllapi.h
 ..\inc\oox\helper\binarystreambase.hxx %_DEST%\inc%_EXT%\oox\helper\binarystreambase.hxx
 ..\inc\oox\helper\helper.hxx %_DEST%\inc%_EXT%\oox\helper\helper.hxx
+..\inc\oox\helper\mediadescriptor.hxx %_DEST%\inc%_EXT%\oox\helper\mediadescriptor.hxx
 ..\inc\oox\helper\storagebase.hxx %_DEST%\inc%_EXT%\oox\helper\storagebase.hxx
 ..\inc\oox\helper\zipstorage.hxx %_DEST%\inc%_EXT%\oox\helper\zipstorage.hxx
 ..\inc\oox\core\filterbase.hxx %_DEST%\inc%_EXT%\oox\core\filterbase.hxx

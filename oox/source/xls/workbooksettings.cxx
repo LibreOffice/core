@@ -32,9 +32,9 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/sheet/XCalculatable.hpp>
-#include <comphelper/mediadescriptor.hxx>
 #include "properties.hxx"
 #include "oox/helper/attributelist.hxx"
+#include "oox/helper/mediadescriptor.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/helper/recordinputstream.hxx"
 #include "oox/core/filterbase.hxx"
@@ -42,6 +42,7 @@
 #include "oox/xls/unitconverter.hxx"
 
 using ::rtl::OUString;
+using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::util::Date;
@@ -299,7 +300,7 @@ void WorkbookSettings::finalizeImport()
     if( maFileSharing.mbRecommendReadOnly || (maFileSharing.mnPasswordHash != 0) )
         getBaseFilter().getMediaDescriptor()[ CREATE_OUSTRING( "ReadOnly" ) ] <<= true;
     if( maFileSharing.mnPasswordHash != 0 )
-        aPropSet.setProperty( PROP_WriteProtectionPassword, static_cast< sal_Int32 >( maFileSharing.mnPasswordHash ) );
+        getBaseFilter().getMediaDescriptor().setComponentDataEntry( CREATE_OUSTRING( "ModifyPasswordHash" ), Any( static_cast< sal_Int32 >( maFileSharing.mnPasswordHash ) ) );
 
     // calculation settings
     Date aNullDate = getNullDate();
