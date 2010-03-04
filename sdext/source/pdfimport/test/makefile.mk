@@ -35,16 +35,14 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE: settings.mk
 
-.IF "$(SYSTEM_CPPUNIT)"=="YES"
-CFLAGS+= $(CPPUNIT_CFLAGS)
-.ENDIF
-
 # --- test lib ------------------------------------------------------
 
 .IF "$(ENABLE_PDFIMPORT)" == "NO"
 @all:
         @echo "PDF Import extension disabled."
 .ENDIF
+
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
 .IF "$(SYSTEM_ZLIB)" == "YES"
 CFLAGS+=-DSYSTEM_ZLIB
