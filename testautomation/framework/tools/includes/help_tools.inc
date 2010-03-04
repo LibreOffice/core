@@ -33,120 +33,36 @@
 
 function hOpenHelp() as boolean
 
-    '///<h3>Function to open the Help Browser</h3>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Errorcondition (boolean)</li>
-    '///<ul>
-    '///+<li>TRUE if the help is open</li>
-    '///+<li>FALSE if the help did not open</li>
-    '///</ul>
-    '///</ol>
-    
-    '///<u>Description</u>:
-    '///<ul>
-    const CFN = "hOpenHelp::"
+    printlog( "Open Help Browser" )
 
-    dim iTry as integer
-    dim brc as boolean
-        brc = false
-        
-    printlog( CFN & "Enter" )
-    
-    '///+<li>Open the help Browser using the slot</li>
-    try
-        HelpContents
-    catch
-        printlog( CFN & "Failed to open help, slot failed" )
-        hOpenHelp() = false
-        exit function
-    endcatch
+    HelpContents
 
-    '///+<li>Verify that the help is indeed open (max 10 sec.)</li>
-    Kontext "StarOfficeHelp"
-    for iTry = 1 to 10
-
-        if ( StarOfficeHelp.exists() ) then
-            brc = true
-            exit for
-        endif
-
-        sleep( 1 )
-
-    next iTry
-
-    '///+<li>Print a status to the log, return TRUE or FALSE</li>
-    if ( brc ) then
-        printlog( CFN & "Exit: Help is open" )
+    kontext "StarOfficeHelp"
+    if ( StarOfficeHelp.exists( 5 ) ) then
+        hOpenHelp() = TRUE
     else
-        printlog( CFN & "Exit: Help is not open" )
-        kontext "Active"
-        if ( Active.exists( 2 ) ) then
-            printlog( "Msgbox: " & Active.getText()
-            Active.ok()
-        endif
+        warnlog( "Unable to open help browser" )
+        hOpenHelp() = FALSE
     endif
 
-    '///</ul>
-    hOpenHelp() = brc
-
+  
 end function
 
 '*******************************************************************************
 
 function hCloseHelp() as boolean
 
-    '///<h3>Function to close the Help Browser</h3>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Errorcondition (boolean)</li>
-    '///<ul>
-    '///+<li>TRUE if the help is closed</li>
-    '///+<li>FALSE if the help did not close</li>
-    '///</ul>
-    '///</ol>
-    
-    '///<u>Description</u>:
-    '///<ul>
-    const CFN = "hCloseHelp::"
-    dim brc as boolean
-    
-    printlog( CFN & "Enter" )
+    printlog( "Close Help Browser" )
 
-    '///+<li>Verify that the Help Browser is Open</li>
     kontext "StarOfficeHelp"
-    if ( not StarOfficeHelp.exists() ) then
-        printlog( CFN & "Help is not open" )
-        hCloseHelp() = false 
-        exit function
-    endif
-
-    '///+<li>Close the Help Browser by typing CTRL+F4</li>
     StarOfficeHelp.typeKeys( "<MOD1 F4>" )
 
-    '///+<li>Verify that the Help Browser is not open (anymore)</li>
-    kontext "StarOfficeHelp"
-    if ( StarOfficeHelp.exists() ) then
-        printlog( CFN & "Exit: Help is still open" )
-        brc = false
+    if ( StarOfficeHelp.notExists( 3 ) ) then
+        hCloseHelp() = TRUE
     else
-        printlog( CFN & "Exit: Help has been closed" )
-        brc = true
+        warnlog( "Help browser could not be closed" )
+        hCloseHelp() = FALSE
     endif
-
-    '///+<li>Return TRUE or FALSE</li>
-    '///</ul>
-    hCloseHelp() = brc
 
 end function
 
@@ -179,11 +95,8 @@ function hSelectHelpTab( cTab as string ) as boolean
     '///<ul>
     const CFN = "hSelectHelpTab::"
 
-    dim brc as boolean
-        brc = false
-
-    dim cTabName as string
-        cTabName = lcase( cTab )
+    dim brc as boolean     : brc = false
+    dim cTabName as string : cTabName = lcase( cTab )
 
     kontext "StarOfficeHelp"
     
@@ -301,65 +214,27 @@ end function
 
 function hHelpGetAboutItemCount() as integer
 
-    '///<h3>Get the number of applications listed in the Help ListBox</h3>
-    
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Number of applications listed (integer)</li>
-    '///<ul>
-    '///+<li>The default is 7</li>
-    '///</ul>
-    '///</ol
-    
-    '///<u>Description</u>:
-    '///<ul>
-    
+    printlog( "Get the number of applications listed in the help listbox (should be 8)
     const I_ABOUT_ITEMS = 8
-    const CFN = "hHelpGetAboutItemCount::"
-    
-    dim iItem as integer
-    dim cItemName as string
-    dim iAboutItems as integer
-    dim brc as boolean
-    
-    printlog( CFN & "Enter" )
-    
-    '///+<li>Open Help</li>
-    brc = hOpenHelp()
-    if ( not brc ) then
-        qaerrorlog( CFN & "Help not open, aborting" )
-        hHelpGetAboutItemCount() = 0
-        exit function
-    endif
-    
+
+    dim itemcount as integer
+
+    hOpenHelp()
     hSelectHelpTab( "index" )
+
     Kontext "IndexPage"
-    
-    '///+<li>get the number of applications from the drop down box</li>
-    iAboutItems = HelpAbout.getItemCount()
-    if ( iAboutItems <> I_ABOUT_ITEMS ) then
-        warnlog( "The list of topics is incomplete:" )
+    itemcount = HelpAbout.getItemCount()
+
+    if ( itemcount <> ABOUT_ITEMS ) then
+        warnlog( "Number of applications is incorrect" )
+        printlog( "Found...: " & itemcount )
+        printlog( "Expected: " & ABOUT_ITEMS
     endif
-    
-    '///+<li>Print the list of items to the log</li>
-    printlog( CFN & "Items listed in Application Listbox (HelpAbout)" )
-    for iItem = 1 to iAboutItems
-        cItemName = HelpAbout.getItemText( iItem )
-        printlog( "     " & cItemName )
-    next iItem
-    
-    '///+<li>close help</li>
+
     hCloseHelp()
-    '///</ul>    
-    
-    printlog( CFN & "Exit with item count = " & iAboutItems )
-    hHelpGetAboutItemCount() = iAboutItems
-    
+
+    hHelpGetAboutItemCount() = itemcount
+
 end function
 
 '*******************************************************************************
