@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -23,73 +23,40 @@
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
-#*************************************************************************
+#***********************************************************************/
 
-PRJ     = ..
-TARGET  = connectivity
+PRJ = ..
 PRJNAME = connectivity
+TARGET = connectivity
 
-# -----------------------------------------------------------------------------
-# include global settings
-# -----------------------------------------------------------------------------
+.INCLUDE : settings.mk
+.INCLUDE : target.mk
 
-.INCLUDE :  settings.mk
+# For any given platform, for each driver .xcu (in $(MY_XCUS)) built on that
+# platform (in $(MISC)/registry/data/org/openoffice/Office/DataAccess) there are
+# corresponding language-specific .xcu files (in
+# $(MISC)/registry/res/%/org/openoffice/Office/DataAccess).  For each language,
+# all language-specific .xcu files for that language are assembled into
+# $(BIN)$/fcfg_drivers_%.zip.  To meet the requirements of dmake percent rules,
+# the first item from $(MY_XCUS) is arbitrarily taken to be the main
+# prerequisite while all the items from $(MY_XCUS) are made into indirect
+# prerequisites (harmlessly doubling the first item).
 
-DIR_FILTERCFGOUT := $(MISC)$/drivers
-DIR_LANGPACK     := $(DIR_FILTERCFGOUT)
-.IF "$(WITH_LANG)"!=""
-DIR_LANG_SOURCE  := $(MISC)$/merge
-.ELSE
-DIR_LANG_SOURCE  := $(MISC)$/registry$/data
+MY_XCUS := \
+    $(shell cd $(MISC)/registry/data/org/openoffice/Office/DataAccess && \
+    ls *.xcu)
+
+.IF "$(MY_XCUS)" != ""
+
+ALLTAR : $(BIN)/fcfg_drivers_{$(alllangiso)}.zip
+
+$(BIN)/fcfg_drivers_{$(alllangiso)}.zip : \
+        $(MISC)/registry/res/$$(@:b:s/fcfg_drivers_//)/org/openoffice/Office/DataAccess/{$(MY_XCUS)}
+
+$(BIN)/fcfg_drivers_%.zip : \
+        $(MISC)/registry/res/%/org/openoffice/Office/DataAccess/$(MY_XCUS:1)
+    zip -j $@ \
+        $(foreach,i,$(MY_XCUS) \
+            $(MISC)/registry/res/$*/org/openoffice/Office/DataAccess/$i)
+
 .ENDIF
-DRIVER_MERGE_XCU := $(shell -@$(FIND) $(DIR_LANG_SOURCE)$/org$/openoffice$/Office$/DataAccess -name "*.xcu")
-DRIVER_MERGE_DEST = $(MISC)/lang/{$(DRIVER_MERGE_XCU:f)}
-REALFILTERPACKAGES_FILTERS_UI_LANGPACKS = \
-    $(foreach,i,$(alllangiso) $(foreach,j,$(DRIVER_MERGE_XCU) $(DIR_LANGPACK)$/$i$/org$/openoffice$/Office$/DataAccess$/$(j:f)))
-
-.INCLUDE: target.mk
-
-PACKLANG := $(XSLTPROC) --nonet
-PACKLANG_IN :=
-PACKLANG_PARAM := --stringparam
-PACKLANG_XSL :=
-    
-$(REALFILTERPACKAGES_FILTERS_UI_LANGPACKS) : 
-      @echo ===================================================================
-      @echo Building language package for driver $(@:b:s/Filter_//) 
-      @echo ===================================================================
-      +-$(MKDIRHIER) $(@:d)
-      $(PACKLANG) $(PACKLANG_PARAM) lang $(@:d:d:d:d:d:d:d:d:d:d:b) $(PACKLANG_XSL) langfilter.xsl $(PACKLANG_IN) $(DIR_LANG_SOURCE)$/org$/openoffice$/Office$/DataAccess$/$(@:f) > $@
-
-$(MISC)$/$(TARGET)_delzip :
-    -$(RM) $(BIN)$/fcfg_drivers_{$(alllangiso)}.zip	
-
-$(BIN)$/fcfg_drivers_{$(alllangiso)}.zip : $(REALFILTERPACKAGES_FILTERS_UI_LANGPACKS)
-    cd $(DIR_FILTERCFGOUT)$/$(@:b:s/fcfg_drivers_//) && zip -ru ..$/..$/..$/bin$/fcfg_drivers_$(@:b:s/fcfg_drivers_//).zip org/*
-    $(PERL) -w $(SOLARENV)$/bin$/cleanzip.pl $@
-
-ALLTAR: \
-    $(MISC)$/$(TARGET)_delzip \
-    $(BIN)$/fcfg_drivers_{$(alllangiso)}.zip \
-    $(MISC)/lastlang.mk
-
-.IF "$(DRIVER_MERGE_DEST)"!=""
-.INCLUDE .IGNORE : $(MISC)/lastlang.mk
-
-ALLTAR : \
-    $(DRIVER_MERGE_DEST)
-
-.IF "$(LAST_LANGS)"!="$(WITH_LANG)"
-DO_PHONY=.PHONY
-.ENDIF          # "$(LAST_LANG)"!="$(WITH_LANG)"
-
-$(MISC)/lang/%.xcu $(DO_PHONY) : $(DIR_LANG_SOURCE)$/org$/openoffice$/Office$/DataAccess/%.xcu
-    @@-$(MKDIRHIER) $(@:d:d)
-    $(COPY) $< $@
-
-.ENDIF          # "$(DRIVER_MERGE_DEST)"!=""
-
-$(MISC)/lastlang.mk $(DO_PHONY) :
-    $(RM) $@
-    echo LAST_LANGS=$(WITH_LANG) > $@
-

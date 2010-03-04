@@ -1567,7 +1567,9 @@ void SAL_CALL PersistentPropertySet::setPropertyValue(
                     // Write state ( Now it is a directly set value )
                     xNameReplace->replaceByName(
                                     OUString::createFromAscii( "State" ),
-                                    makeAny( PropertyState_DIRECT_VALUE ) );
+                                    makeAny(
+                                        sal_Int32(
+                                            PropertyState_DIRECT_VALUE ) ) );
 
                     // Commit changes.
                     xBatch->commitChanges();
@@ -1851,7 +1853,9 @@ void SAL_CALL PersistentPropertySet::addProperty(
                 // Set state ( always "default" )
                 xNameReplace->replaceByName(
                                     OUString::createFromAscii( "State" ),
-                                    makeAny( PropertyState_DEFAULT_VALUE ) );
+                                    makeAny(
+                                        sal_Int32(
+                                            PropertyState_DEFAULT_VALUE ) ) );
 
                 // Set attributes
                 xNameReplace->replaceByName(
@@ -2327,7 +2331,9 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
                         // Write state ( Now it is a directly set value )
                         xNameReplace->replaceByName(
                                     OUString::createFromAscii( "State" ),
-                                    makeAny( PropertyState_DIRECT_VALUE ) );
+                                    makeAny(
+                                        sal_Int32(
+                                            PropertyState_DIRECT_VALUE ) ) );
 
                         // Commit changes.
                         xBatch->commitChanges();

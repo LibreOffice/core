@@ -31,8 +31,7 @@ TARGET=gconfbe
 
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
-
-COMP1TYPELIST=$(TARGET)
+VISIBILITY_HIDDEN=TRUE
 
 # --- Settings ---
 
@@ -65,9 +64,8 @@ PKGCONFIG_LIBS!:=-Wl,--export-dynamic $(PKGCONFIG_LIBS)
 
 
 SLOFILES=\
-    $(SLO)$/gconfbecdef.obj \
-    $(SLO)$/gconfbackend.obj \
-    $(SLO)$/gconflayer.obj
+    $(SLO)$/gconfaccess.obj \
+    $(SLO)$/gconfbackend.obj
         
 SHL1NOCHECK=TRUE
 SHL1TARGET=$(TARGET)1.uno   
@@ -82,7 +80,6 @@ SHL1STDLIBS=    \
         
 SHL1STDLIBS+=$(PKGCONFIG_LIBS)
 
-SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 
