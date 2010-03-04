@@ -280,64 +280,6 @@ end function
 
 '*******************************************************************************
 
-function hCheckPropertyPresence ( cSetting as string , iPos as integer ) as boolean
-    
-    '///<h3>Function to determine whether a property is available for a control or not</h3>
-    '///<i>This function takes a string (provided by controlcfg.dat) and looks for an 'x' at.
-    '///+ a given position.  If it is found it returns TRUE, FALSE if it is a '-'<br>
-    '///+Note that this function is a terrible workaround for a missing feature: In the current
-    '///+ version of the Testtool we cannot ask which controls are present on a dialog. So this
-    '///+ has to be kept in a list of some sort. This is especially bad for a property browser
-    '///+ test as we need to maintain such a list for 21 controls and a total of 76 (IIRC)
-    '///+ possible properties whereof only a small number (eight, i think) are common for all
-    '///+ controls. The test is barely maintainable, issues have been written but there is
-    '///+ no solution so far.</i><br><br>
-    
-    '///<u>Input</u>:
-    '///<ol>
-    
-    '///+<li>Configuration string (string)</li>
-    '///<ul>
-    '///+<li>The string must be taken from file &quot;controlcfg.dat&quot;</li>
-    '///</ul>
-    
-    '///+<li>Position of the control (integer)</li>
-    '///<ul>
-    '///+<li>&gt; 0 and &lt; 74 (all possible control config items)</li>
-    '///</ul>
-    
-    '///</ol>
-    
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Status (boolean)</li>
-    '///<ul>
-    '///+<li>TRUE: The property should exist for the current control</li>
-    '///+<li>FALSE: The property is not expected to exist for this control</li>
-    '///</ul>
-    
-    '///</ol>
-    
-    '///<u>Description</u>:
-    '///<ul>
-    
-    ' this function looks at a given position in the string cSetting for either
-    ' a "x" or a "-".
-    ' if "x" is found, the function returns true, else false.
-    
-    
-    '///+<li>Find the requested position in the string, set TRUE if it is an &quot;x&quot;</li>
-    if ( mid( cSetting , iPos , 1 ) = "x" ) then
-        hCheckPropertyPresence() = true
-    else
-        hCheckPropertyPresence() = false
-    endif
-    '///</ul>
-    
-end function
-
-'*******************************************************************************
-
 function hSetPBTabPage( iPage as integer ) as boolean
     
     '///<h3>A small helper to switch between tabpages in the property-browser</h3>
@@ -428,44 +370,4 @@ function hSetPBTabPage( iPage as integer ) as boolean
 end function
 
 '*******************************************************************************
-
-function hSetLabelName( sLabelName as string ) as boolean
-    
-    '///<h3>Name a control, with limited errorhandling</h3>
-    
-    '///<i>This function was introduced due to a problem with the property-
-    '///browser not being open fast enough or just refusing to accept input</i><br><br>
-    
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Text to be inserted in the control &quot;NameText&quot; (string)</li>
-    '///</ol>
-    
-    '///<u>Returns</u>:
-    '///<ol>
-    
-    '///+<li>Errorcondition</li>
-    '///<ul>
-    '///+<li>TRUE: The control name was successfully updated</li>
-    '///+<li>FALSE: Control is not visible within current context</li>
-    '///</ul>
-    
-    '///</ol>
-    
-    '///<u>Description</u>:
-    '///<ul>
-    '///+<li>Test that the control &quot;NameText&quot; exists</li>
-    kontext "TabGeneralControl"
-    if ( Label.exists() ) then
-        '///+<li>Set the new name</li>
-        Label.setText( sLabelName )
-        TabGeneralControl.TypeKeys ("<RETURN>" , true)
-        hSetLabelName() = true
-    else
-        warnlog( "Unable to name the control." )
-        hSetLabelName() = false
-    endif
-    '///</ul>
-    
-end function
 
