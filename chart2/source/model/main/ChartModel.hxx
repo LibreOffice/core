@@ -147,6 +147,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >          m_xParent;
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XRangeHighlighter > m_xRangeHighlighter;
     ::std::vector< GraphicObject >                                               m_aGraphicObjectVector;
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XUndoManager >   m_xUndoManager;
 
 private:
     //private methods
@@ -191,6 +192,9 @@ private:
             ::com::sun::star::document::XFilter >
         impl_createFilter( const ::com::sun::star::uno::Sequence<
                       ::com::sun::star::beans::PropertyValue > & rMediaDescriptor );
+
+    void impl_adjustAdditionalShapesPositionAndSize(
+        const ::com::sun::star::awt::Size& aVisualAreaSize );
 
 public:
     //no default constructor
