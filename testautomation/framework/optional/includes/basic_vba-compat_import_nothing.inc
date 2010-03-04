@@ -76,7 +76,7 @@ testcase tBasicVBACompatImportNothing()
     printlog( "Verify position of the document node" )
     MakroAus.select( cNodeCount + DOCUMENT_POSITION_OFFSET )
     if ( MakroAus.getSelText() <> "vba-test.xls" ) then
-        qaerrorlog( "The document node is not at the expected position" )
+        printlog( "The document node is not at the expected position, searching" )
     endif
     
     printlog( "Select the last node, this should be the standard Library for the document" )

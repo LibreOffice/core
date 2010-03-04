@@ -96,7 +96,7 @@ testcase tBasicVBACompatImportEnabled()
     MakroAus.select( cNodeCount + DOCUMENT_POSITION_OFFSET )
     cTempString = MakroAus.getSelText()
     if ( cTempString <> cFile ) then
-        qaerrorlog( "The filename does not match. File may be read-only." )
+        printlog( "The filename does not match. File may be read-only." )
         if ( instr( cTempString, cFile ) > 1 ) then
             printlog( "Filename is contained in the UI string." )
             select case ( getAttr( cTestFile ) )
@@ -108,8 +108,8 @@ testcase tBasicVBACompatImportEnabled()
                 printlog( "RC from getAttr() is: " &  getAttr( cTestFile ) )
             end select
         else
-            qaerrorlog( "The document node is not at the expected position." )
-            qaerrorlog( "Object at this position is: " & MakroAus.getSelText() )
+            printlog( "The document node is not at the expected position." )
+            printlog( "Object at this position is: " & MakroAus.getSelText() )
         endif
     endif
     

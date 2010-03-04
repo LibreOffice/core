@@ -90,7 +90,7 @@ testcase tBasicVBACompatImportDisabled()
     printlog( "Verify position of the document node" )
     MakroAus.select( cNodeCount + DOCUMENT_POSITION_OFFSET )
     if ( MakroAus.getSelText() <> "vba-test.xls" ) then
-        qaerrorlog( "The document node is not at the expected position" )
+        printlog( "The document node is not at the expected position, searching..." )
     endif
     
     for iCurrentModule = 2 to 7
