@@ -1347,6 +1347,10 @@ $(COMP9TYPELIST)_XML2CMPTYPES:=$(shell @$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)/x
 XML_APIS_JAR*=$(SOLARBINDIR)/xml-apis.jar
 XERCES_JAR*=$(SOLARBINDIR)/xercesImpl.jar
 
+.IF "$(SYSTEM_CPPUNIT)" != "YES"
+CPPUNIT_CFLAGS =
+.END
+
 # workaround for strange dmake bug:
 # if the previous block was a rule or a target, "\#" isn't recognized
 # as an escaped "#". if it was an assignment, escaping works...
