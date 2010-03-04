@@ -50,10 +50,13 @@ private:
     String _aAccount;
     String _aUserName;
     String _aPassword;
+    String _aPasswordToOpen;
+    String _aPasswordToModify;
     String _aPath;
     String _aErrorText;
     BYTE   _nFlags;
     USHORT _nRet;
+    bool   _bRecommendToOpenReadonly;
 
 public:
                     LoginErrorInfo()
@@ -67,6 +70,9 @@ public:
     const String&   GetAccount() const      { return _aAccount; }
     const String&   GetUserName() const     { return _aUserName; }
     const String&   GetPassword() const     { return _aPassword; }
+    const String&   GetPasswordToOpen() const    { return _aPasswordToOpen; }
+    const String&   GetPasswordToModify() const  { return _aPasswordToModify; }
+    const bool      IsRecommendToOpenReadonly() const { return _bRecommendToOpenReadonly; }
     const String&   GetPath() const         { return _aPath; }
     const String&   GetErrorText() const    { return _aErrorText; }
     BOOL            GetIsPersistentPassword() const
@@ -91,6 +97,12 @@ public:
                     { _aUserName = aUserName; }
     void            SetPassword( const String& aPassword )
                     { _aPassword = aPassword; }
+    void            SetPasswordToOpen( const String& aPassword )
+                    { _aPasswordToOpen = aPassword; }
+    void            SetPasswordToModify( const String& aPassword )
+                    { _aPasswordToModify = aPassword; }
+    void            SetRecommendToOpenReadonly( bool bVal )
+                    { _bRecommendToOpenReadonly = bVal; }
     void            SetPath( const String& aPath )
                     { _aPath = aPath; }
     void            SetErrorText( const String& aErrorText )
