@@ -27,6 +27,7 @@
 #define PANELTABBAR_HXX
 
 #include "svtools/toolpanel/toolpanelcontainer.hxx"
+#include "svtools/toolpanel/tabalignment.hxx"
 
 #include <vcl/ctrl.hxx>
 
@@ -51,7 +52,7 @@ namespace svt
     class PanelTabBar : public Control
     {
     public:
-        PanelTabBar( ToolPanelDeck& i_rParent );
+        PanelTabBar( ToolPanelDeck& i_rParent, const TabAlignment i_eAlignment );
         ~PanelTabBar();
 
         // Window overridables

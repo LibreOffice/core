@@ -50,7 +50,7 @@ namespace svt
         TabDeckLayouter_Data( const TabAlignment i_eAlignment, ToolPanelDeck& i_rPanelDeck )
             :eAlignment( i_eAlignment )
             ,pPanels( i_rPanelDeck.GetPanels() )
-            ,pTabBar( new PanelTabBar( i_rPanelDeck ) )
+            ,pTabBar( new PanelTabBar( i_rPanelDeck, i_eAlignment ) )
         {
             pTabBar->Show();
         }

@@ -59,6 +59,7 @@ APP1STDLIBS=\
             $(COMPHELPERLIB)    \
             $(CPPUHELPERLIB)    \
             $(CPPULIB)          \
+            $(BASEGFXLIB)       \
 
 
 .IF "$(GUI)"!="UNX"

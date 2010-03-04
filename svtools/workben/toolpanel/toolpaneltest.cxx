@@ -372,8 +372,6 @@ PanelDemoMainWindow::PanelDemoMainWindow()
     SetText( String::CreateFromAscii( "ToolPanelDeck Demo Application" ) );
     Show();
 
-    AlignTabs( TABS_RIGHT );
-
     Help::EnableQuickHelp();
 
     GetSystemWindow()->GetTaskPaneList()->AddWindow( &m_aToolPanelDeck );

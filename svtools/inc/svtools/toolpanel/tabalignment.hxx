@@ -24,57 +24,22 @@
  *
 ************************************************************************/
 
-#ifndef TABLAYOUTER_HXX
-#define TABLAYOUTER_HXX
-
-#include "svtools/toolpanel/decklayouter.hxx"
-#include "svtools/toolpanel/toolpanelcontainer.hxx"
-#include "svtools/toolpanel/tabalignment.hxx"
-#include "svtools/toolpanel/refbase.hxx"
-
-#include <memory>
+#ifndef TABALIGNMENT_HXX
+#define TABALIGNMENT_HXX
 
 //........................................................................
 namespace svt
 {
 //........................................................................
 
-    class ToolPanelDeck;
-
-    struct TabDeckLayouter_Data;
-
-    //====================================================================
-    //= TabDeckLayouter
-    //====================================================================
-    class TabDeckLayouter   :public RefBase
-                            ,public IDeckLayouter
+    enum TabAlignment
     {
-    public:
-        /** creates a new layouter
-            @param i_eAlignment
-                specifies the alignment of the panel selector
-            @param i_rPanelDeck
-                the panel deck which the layouter is responsible for. Provides access to the panels
-                container, and can and should be used as parent for any other windows which the layouter
-                needs to create.
-        */
-        TabDeckLayouter( const TabAlignment i_eAlignment, ToolPanelDeck& i_rPanelDeck );
-        ~TabDeckLayouter();
-
-        // IDeckLayouter
-        virtual Rectangle   Layout( const Rectangle& i_rDeckPlayground );
-        virtual void        Destroy();
-        virtual void        SetFocusToPanelSelector();
-
-        // IReference
-        DECLARE_IREFERENCE()
-
-    private:
-        ::std::auto_ptr< TabDeckLayouter_Data > m_pData;
+        TABS_LEFT,
+        TABS_RIGHT
     };
 
 //........................................................................
 } // namespace svt
 //........................................................................
 
-#endif // TABLAYOUTER_HXX
+#endif // TABALIGNMENT_HXX
