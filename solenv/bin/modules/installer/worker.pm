@@ -3022,6 +3022,24 @@ sub key_in_a_is_also_key_in_b
     return $returnvalue;
 }
 
+######################################################
+# Getting the first entry from a list of languages
+######################################################
+
+sub get_first_from_list
+{
+    my ( $list ) = @_;
+
+    my $first = $list;
+
+    if ( $list =~ /^\s*(.+?),(.+)\s*$/) # "?" for minimal matching
+    {
+        $first = $1;
+    }
+
+    return $first;
+}
+
 ################################################
 # Setting all spellchecker languages
 ################################################
@@ -3054,16 +3072,29 @@ sub set_spellcheckerlanguages
         {
             my $onelang = $1;
             my $languagelist = $2;
-            $spellcheckhash{$onelang} = $languagelist;
 
-            # Special handling for language packs. Do only include that one language of the language pack, no further language.
-            # And this only, if the language of the language pack is also already part of the language list
+            # Special handling for language packs. Only include the first language of the language list.
+            # If no spellchecker shall be included, the keyword "EMPTY" can be used.
 
             if ( $installer::globals::languagepack )
             {
-                if ( $languagelist =~ /\b$onelang\b/ ) { $spellcheckhash{$onelang} = $onelang; }
-                else { $spellcheckhash{$onelang} = ""; }
+                my $first = get_first_from_list($languagelist);
+
+                if ( $first eq "EMPTY" )     # no spellchecker into language pack
+                {
+                    $languagelist = "";
+                }
+                else
+                {
+                    $languagelist = $first;
+                }
             }
+            else  # no language pack, so EMPTY is not required
+            {
+                $languagelist =~ s/^\s*EMPTY\s*,//; # removing the entry EMPTY
+            }
+
+            $spellcheckhash{$onelang} = $languagelist;
         }
     }
 

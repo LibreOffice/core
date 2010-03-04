@@ -2098,7 +2098,7 @@ End
 File gid_File_Extension_Dictionary_Sr
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-sr.oxt";
-	Styles = (PACKED);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
