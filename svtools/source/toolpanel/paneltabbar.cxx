@@ -92,6 +92,13 @@ namespace svt
     //==================================================================================================================
     //= IItemsLayout
     //==================================================================================================================
+    // TODO: originally, IItemsLayout was intended to abstract from the "vertical vs. horizontal" problem. Meanwhile,
+    // the only existing implementation (VerticalItemLayout) does much more than just caring for the vertical layout,
+    // a lot of the code would need to be re-used for horizontal layout.
+    // Thinking about, horizontal and vertical layout only differ in some coordinate and font rotations. So,
+    // one could probably have a single layouter instance, which calculates, say, a default horizontal layout, and
+    // derive every other layout by just rotating the coordinates.
+
     class IItemsLayout
     {
     public:
@@ -119,6 +126,10 @@ namespace svt
         /** returns the position where the next item should start, assuming the previous item occupies a given area
         */
         virtual Point   GetNextItemPosition( const Rectangle& i_rPreviousItemArea ) const = 0;
+
+        /** fills the background of our target device
+        */
+        virtual void    DrawBackground( const Rectangle& i_rArea ) = 0;
 
         /** draws the item onto the given device, in the givem area
             @param i_pPanel
@@ -158,6 +169,7 @@ namespace svt
                             Rectangle& o_rContentArea
                         ) const;
         virtual Point   GetNextItemPosition( const Rectangle& i_rPreviousItemArea ) const;
+        virtual void    DrawBackground( const Rectangle& i_rArea );
         virtual void    DrawItem(
                             const PToolPanel& i_pPanel,
                             const Point& i_rPosition,
@@ -501,6 +513,35 @@ namespace svt
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    void VerticalItemLayout::DrawBackground( const Rectangle& i_rArea )
+    {
+        bool bNativeOK = false;
+        switch ( m_eRenderMode )
+        {
+        case VCL_BASED:
+        case NWF_TOOLBAR_ITEM:
+            break;
+
+        case NWF_TABBAR_ITEM:
+        {
+            ControlState nState( 0 );
+            if ( m_rTargetWindow.IsEnabled() )
+                nState |= CTRL_STATE_ENABLED;
+            if ( m_rTargetWindow.HasChildPathFocus() )
+                nState |= CTRL_STATE_FOCUSED;
+
+            bNativeOK = m_rTargetWindow.IsNativeControlSupported( CTRL_TAB_PANE, PART_ENTIRE_CONTROL )
+                    &&  m_rTargetWindow.DrawNativeControl( CTRL_TAB_PANE, PART_ENTIRE_CONTROL, i_rArea, nState,
+                            ImplControlValue(), rtl::OUString() );
+        }
+        break;
+        }
+
+        if ( !bNativeOK )
+            m_rTargetWindow.DrawRect( i_rArea );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     void VerticalItemLayout::DrawItem( const PToolPanel& i_pPanel, const Point& i_rPosition,
             const ItemFlags i_nItemFlags, const bool i_bDrawMinimal )
     {
@@ -728,23 +769,6 @@ namespace svt
             i_rData.pLayout->DrawItem( rItem.pPanel, rItem.GetCurrentRect().TopLeft(), nItemFlags, rItem.bUseMinimal );
             i_rData.rTabBar.SetUpdateMode( TRUE );
         }
-
-        //--------------------------------------------------------------------------------------------------------------
-        static void lcl_drawItems( const PanelTabBar_Data& i_rData, const Rectangle& i_rTargetArea )
-        {
-            size_t i=0;
-            for (   ItemDescriptors::const_iterator item = i_rData.aItems.begin();
-                    item != i_rData.aItems.end();
-                    ++item, ++i
-                )
-            {
-                const Rectangle& rItemRect( item->GetCurrentRect() );
-                if ( rItemRect.IsOver( i_rTargetArea ) )
-                {
-                    lcl_drawItem( i_rData, i );
-                }
-            }
-        }
     }
 
     //==================================================================================================================
@@ -815,10 +839,21 @@ namespace svt
         lcl_ensureItemsCache( *m_pData );
 
         // background
-        DrawRect( Rectangle( Point(), GetOutputSizePixel() ) );
+        m_pData->pLayout->DrawBackground( Rectangle( Point(), GetOutputSizePixel() ) );
 
         // items
-        lcl_drawItems( *m_pData, i_rRect );
+        size_t i=0;
+        for (   ItemDescriptors::const_iterator item = m_pData->aItems.begin();
+                item != m_pData->aItems.end();
+                ++item, ++i
+            )
+        {
+            const Rectangle& rItemRect( item->GetCurrentRect() );
+            if ( rItemRect.IsOver( i_rRect ) )
+            {
+                lcl_drawItem( *m_pData, i );
+            }
+        }
     }
 
     //------------------------------------------------------------------------------------------------------------------
