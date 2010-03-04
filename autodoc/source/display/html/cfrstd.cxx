@@ -336,9 +336,9 @@ MakeCopyRight()
         plt = localtime(&gt);
     int year = 1900 + plt->tm_year;
 
-    cr  << "Copyright &copy; "
+    cr  << "Copyright &copy; 1995, "
         << year
-        << " Oracle";
+        << ", Oracle and/or its affiliates. All rights reserved.";
     return String(cr.c_str());
 
 }
