@@ -39,6 +39,7 @@
 #include <ucbhelper/contentbroker.hxx>
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/fixed.hxx>
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/taskpanelist.hxx>
@@ -223,11 +224,16 @@ public:
     virtual void GetFocus();
 
 private:
-    DECL_LINK( OnAlignmentChanged, void* );
+    DECL_LINK( OnRadioToggled, RadioButton* );
 
 private:
+    FixedLine       m_aAlignmentHeader;
     RadioButton     m_aAlignLeft;
     RadioButton     m_aAlignRight;
+    FixedLine       m_aTabItemContent;
+    RadioButton     m_aImagesAndText;
+    RadioButton     m_aImagesOnly;
+    RadioButton     m_aTextOnly;
 };
 
 //=============================================================================
@@ -245,6 +251,7 @@ public:
 public:
     // operations
     void AlignTabs( const ::svt::TabAlignment i_eAlignment );
+    void SetTabItemContent( const TabItemContent i_eItemContent );
 
 protected:
     virtual void    GetFocus();
@@ -260,30 +267,38 @@ private:
 //-----------------------------------------------------------------------------
 OptionsWindow::OptionsWindow( PanelDemoMainWindow& i_rParent )
     :Window( &i_rParent, WB_BORDER | WB_DIALOGCONTROL )
+    ,m_aAlignmentHeader( this )
     ,m_aAlignLeft( this, WB_GROUP )
     ,m_aAlignRight( this, 0 )
+    ,m_aTabItemContent( this )
+    ,m_aImagesAndText( this )
+    ,m_aImagesOnly( this )
+    ,m_aTextOnly( this )
 {
     SetBorderStyle( WINDOW_BORDER_MONO );
     const Color aFaceColor( GetSettings().GetStyleSettings().GetFaceColor() );
     SetBackground( aFaceColor );
 
-    RadioButton* pRadios[] =
+    Window* pControls[] =
     {
-        &m_aAlignLeft, &m_aAlignRight
+        &m_aAlignmentHeader, &m_aAlignLeft, &m_aAlignRight, &m_aTabItemContent, &m_aImagesAndText, &m_aImagesOnly, &m_aTextOnly
     };
     const sal_Char* pTexts[] =
     {
-        "Left", "Right"
+        "Tab Bar Alignment", "Left", "Right", "Tab Items", "Images and Text", "Images only", "Text only"
     };
-    for ( size_t i=0; i < sizeof( pRadios ) / sizeof( pRadios[0] ); ++i )
+    for ( size_t i=0; i < sizeof( pControls ) / sizeof( pControls[0] ); ++i )
     {
-        pRadios[i]->SetText( String::CreateFromAscii( pTexts[i] ) );
-        pRadios[i]->SetControlBackground( aFaceColor );
-        pRadios[i]->Show();
-        pRadios[i]->SetToggleHdl( LINK( this, OptionsWindow, OnAlignmentChanged ) );
+        pControls[i]->SetText( String::CreateFromAscii( pTexts[i] ) );
+        pControls[i]->SetControlBackground( aFaceColor );
+        pControls[i]->Show();
+
+        if ( pControls[i]->GetType() == WINDOW_RADIOBUTTON )
+            static_cast< RadioButton* >( pControls[i] )->SetToggleHdl( LINK( this, OptionsWindow, OnRadioToggled ) );
     }
 
     m_aAlignRight.Check();
+    m_aImagesAndText.Check();
 
     Show();
 }
@@ -311,37 +326,79 @@ void OptionsWindow::Resize()
 {
     Window::Resize();
 
-    const Size aSpacing( LogicToPixel( Size( 3, 3 ), MAP_APPFONT ) );
     const Size aOutputSize( GetOutputSizePixel() );
 
-    const Size aRadioSize(
-        aOutputSize.Width() - 2 * aSpacing.Width(),
-        LogicToPixel( Size( 0, 8 ), MAP_APPFONT ).Height()
-    );
+    const Size aSpacing( LogicToPixel( Size( 3, 3 ), MAP_APPFONT ) );
+    const long nIndent( LogicToPixel( Size( 6, 9 ), MAP_APPFONT ).Width() );
+    const long nLineHeight( LogicToPixel( Size( 0, 8 ), MAP_APPFONT ).Height() );
 
-    Point aRadioPos( aSpacing.Width(), aSpacing.Height() );
-    RadioButton* pRadios[] =
+    const Size aSuperordinateSize( aOutputSize.Width() - 2 * aSpacing.Width(), nLineHeight );
+    const long nSuperordinateX = aSpacing.Width();
+
+    const Size aSubordinateSize( aOutputSize.Width() - 2 * aSpacing.Width() - nIndent, nLineHeight );
+    const long nSubordinateX = aSpacing.Width() + nIndent;
+
+    Point aItemPos( nSuperordinateX, aSpacing.Height() );
+
+    struct ControlRow
     {
-        &m_aAlignLeft, &m_aAlignRight
+        Window* pWindow;
+        bool    bSubordinate;
+        ControlRow( Window& i_rWindow, const bool i_bSubordinate ) : pWindow( &i_rWindow ), bSubordinate( i_bSubordinate ) { }
     };
-    for ( size_t i=0; i < sizeof( pRadios ) / sizeof( pRadios[0] ); ++i )
+    ControlRow aControlRows[] =
     {
-        pRadios[i]->SetPosSizePixel( aRadioPos, aRadioSize );
-        aRadioPos.Move( 0, aRadioSize.Height() + aSpacing.Height() );
+        ControlRow( m_aAlignmentHeader, false ),
+        ControlRow( m_aAlignLeft,       true ),
+        ControlRow( m_aAlignRight,      true ),
+        ControlRow( m_aTabItemContent,  false ),
+        ControlRow( m_aImagesAndText,   true ),
+        ControlRow( m_aImagesOnly,      true ),
+        ControlRow( m_aTextOnly,        true )
+    };
+    bool bPreviousWasSubordinate = false;
+    for ( size_t i=0; i < sizeof( aControlRows ) / sizeof( aControlRows[0] ); ++i )
+    {
+        aItemPos.X() = ( aControlRows[i].bSubordinate ) ? nSubordinateX : nSuperordinateX;
+
+        if ( bPreviousWasSubordinate && !aControlRows[i].bSubordinate )
+            aItemPos.Y() += aSpacing.Height();
+        bPreviousWasSubordinate = aControlRows[i].bSubordinate;
+
+        const Size& rControlSize = ( aControlRows[i].bSubordinate ) ? aSubordinateSize : aSuperordinateSize;
+        aControlRows[i].pWindow->SetPosSizePixel( aItemPos, rControlSize );
+
+        aItemPos.Move( 0, rControlSize.Height() + aSpacing.Height() );
     }
 }
 
 //-----------------------------------------------------------------------------
-IMPL_LINK( OptionsWindow, OnAlignmentChanged, void*, /**/ )
+IMPL_LINK( OptionsWindow, OnRadioToggled, RadioButton*, i_pRadioButton )
 {
     PanelDemoMainWindow& rController( dynamic_cast< PanelDemoMainWindow& >( *GetParent() ) );
-    if ( m_aAlignLeft.IsChecked() )
+
+    if ( i_pRadioButton->IsChecked() )
     {
-        rController.AlignTabs( TABS_LEFT );
-    }
-    else if ( m_aAlignRight.IsChecked() )
-    {
-        rController.AlignTabs( TABS_RIGHT );
+        if ( i_pRadioButton == &m_aAlignLeft )
+        {
+            rController.AlignTabs( TABS_LEFT );
+        }
+        else if ( i_pRadioButton == &m_aAlignRight )
+        {
+            rController.AlignTabs( TABS_RIGHT );
+        }
+        else if ( i_pRadioButton == &m_aImagesAndText )
+        {
+            rController.SetTabItemContent( TABITEM_IMAGE_AND_TEXT );
+        }
+        else if ( i_pRadioButton == &m_aImagesOnly )
+        {
+            rController.SetTabItemContent( TABITEM_IMAGE_ONLY );
+        }
+        else if ( i_pRadioButton == &m_aTextOnly )
+        {
+            rController.SetTabItemContent( TABITEM_TEXT_ONLY );
+        }
     }
     return 0L;
 }
@@ -397,20 +454,38 @@ void PanelDemoMainWindow::Resize()
 {
     WorkWindow::Resize();
     Size aSize( GetOutputSizePixel() );
-    aSize.Width() -= 140;
+    aSize.Width() -= 190;
     aSize.Height() -= 40;
     m_aToolPanelDeck.SetPosSizePixel( Point( 20, 20 ), aSize );
 
     m_aDemoOptions.SetPosSizePixel(
         Point( 20 + aSize.Width(), 20 ),
-        Size( 100, aSize.Height() )
+        Size( 150, aSize.Height() )
     );
 }
 
 //-----------------------------------------------------------------------------
 void PanelDemoMainWindow::AlignTabs( const ::svt::TabAlignment i_eAlignment )
 {
-    m_aToolPanelDeck.SetLayouter( PDeckLayouter( new TabDeckLayouter( i_eAlignment, m_aToolPanelDeck ) ) );
+    TabItemContent eCurrentItemContent( TABITEM_IMAGE_AND_TEXT );
+    TabDeckLayouter* pLayouter = dynamic_cast< TabDeckLayouter* >( m_aToolPanelDeck.GetLayouter().get() );
+    OSL_ENSURE( pLayouter, "PanelDemoMainWindow::AlignTabs: wrong layouter!" );
+    if ( pLayouter )
+        eCurrentItemContent = pLayouter->GetTabItemContent();
+
+    m_aToolPanelDeck.SetLayouter( PDeckLayouter( new TabDeckLayouter( m_aToolPanelDeck, i_eAlignment, eCurrentItemContent ) ) );
+}
+
+//-----------------------------------------------------------------------------
+void PanelDemoMainWindow::SetTabItemContent( const TabItemContent i_eItemContent )
+{
+    TabDeckLayouter* pLayouter = dynamic_cast< TabDeckLayouter* >( m_aToolPanelDeck.GetLayouter().get() );
+    OSL_ENSURE( pLayouter, "PanelDemoMainWindow::SetTabItemContent: wrong layouter!" );
+        // we currently use tab layouters only ...
+    if ( !pLayouter )
+        return;
+
+    pLayouter->SetTabItemContent( i_eItemContent );
 }
 
 //=============================================================================

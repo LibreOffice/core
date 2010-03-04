@@ -30,6 +30,7 @@
 #include "svtools/toolpanel/decklayouter.hxx"
 #include "svtools/toolpanel/toolpanelcontainer.hxx"
 #include "svtools/toolpanel/tabalignment.hxx"
+#include "svtools/toolpanel/tabitemcontent.hxx"
 #include "svtools/toolpanel/refbase.hxx"
 
 #include <memory>
@@ -51,15 +52,25 @@ namespace svt
     {
     public:
         /** creates a new layouter
-            @param i_eAlignment
-                specifies the alignment of the panel selector
             @param i_rPanelDeck
                 the panel deck which the layouter is responsible for. Provides access to the panels
                 container, and can and should be used as parent for any other windows which the layouter
                 needs to create.
+            @param i_eAlignment
+                specifies the alignment of the panel selector
+            @param TabItemContent
+                specifies the content to show on the tab items
         */
-        TabDeckLayouter( const TabAlignment i_eAlignment, ToolPanelDeck& i_rPanelDeck );
+        TabDeckLayouter(
+            ToolPanelDeck& i_rPanelDeck,
+            const TabAlignment i_eAlignment,
+            const TabItemContent i_eItemContent
+        );
         ~TabDeckLayouter();
+
+        // attribute access
+        TabItemContent  GetTabItemContent() const;
+        void            SetTabItemContent( const TabItemContent& i_eItemContent );
 
         // IDeckLayouter
         virtual Rectangle   Layout( const Rectangle& i_rDeckPlayground );

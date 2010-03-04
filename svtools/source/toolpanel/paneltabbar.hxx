@@ -28,6 +28,7 @@
 
 #include "svtools/toolpanel/toolpanelcontainer.hxx"
 #include "svtools/toolpanel/tabalignment.hxx"
+#include "svtools/toolpanel/tabitemcontent.hxx"
 
 #include <vcl/ctrl.hxx>
 
@@ -52,8 +53,12 @@ namespace svt
     class PanelTabBar : public Control
     {
     public:
-        PanelTabBar( ToolPanelDeck& i_rParent, const TabAlignment i_eAlignment );
+        PanelTabBar( ToolPanelDeck& i_rParent, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent );
         ~PanelTabBar();
+
+        // attribute access
+        TabItemContent  GetTabItemContent() const;
+        void            SetTabItemContent( const TabItemContent& i_eItemContent );
 
         // Window overridables
         virtual Size    GetOptimalSize( WindowSizeType i_eType ) const;

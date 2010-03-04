@@ -47,10 +47,10 @@ namespace svt
         ::std::auto_ptr< PanelTabBar >
                             pTabBar;
 
-        TabDeckLayouter_Data( const TabAlignment i_eAlignment, ToolPanelDeck& i_rPanelDeck )
+        TabDeckLayouter_Data( ToolPanelDeck& i_rPanelDeck, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent )
             :eAlignment( i_eAlignment )
             ,pPanels( i_rPanelDeck.GetPanels() )
-            ,pTabBar( new PanelTabBar( i_rPanelDeck, i_eAlignment ) )
+            ,pTabBar( new PanelTabBar( i_rPanelDeck, i_eAlignment, i_eItemContent ) )
         {
             pTabBar->Show();
         }
@@ -66,14 +66,24 @@ namespace svt
             return  ( i_eAlignment == TABS_RIGHT )
                 ||  ( i_eAlignment == TABS_LEFT );
         }
+
+        static bool lcl_checkDisposed( const TabDeckLayouter_Data& i_rData )
+        {
+            if ( !i_rData.pTabBar.get() )
+            {
+                OSL_ENSURE( false, "lcl_checkDisposed: already disposed!" );
+                return true;
+            }
+            return false;
+        }
     }
 
     //====================================================================
     //= TabDeckLayouter
     //====================================================================
     //--------------------------------------------------------------------
-    TabDeckLayouter::TabDeckLayouter( const TabAlignment i_eAlignment, ToolPanelDeck& i_rPanelDeck )
-        :m_pData( new TabDeckLayouter_Data( i_eAlignment, i_rPanelDeck ) )
+    TabDeckLayouter::TabDeckLayouter( ToolPanelDeck& i_rPanelDeck, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent )
+        :m_pData( new TabDeckLayouter_Data( i_rPanelDeck, i_eAlignment, i_eItemContent ) )
     {
     }
 
@@ -86,13 +96,26 @@ namespace svt
     IMPLEMENT_IREFERENCE( TabDeckLayouter )
 
     //--------------------------------------------------------------------
+    TabItemContent TabDeckLayouter::GetTabItemContent() const
+    {
+        if ( lcl_checkDisposed( *m_pData ) )
+            return TABITEM_IMAGE_AND_TEXT;
+        return m_pData->pTabBar->GetTabItemContent();
+    }
+
+    //--------------------------------------------------------------------
+    void TabDeckLayouter::SetTabItemContent( const TabItemContent& i_eItemContent )
+    {
+        if ( lcl_checkDisposed( *m_pData ) )
+            return;
+        m_pData->pTabBar->SetTabItemContent( i_eItemContent );
+    }
+
+    //--------------------------------------------------------------------
     Rectangle TabDeckLayouter::Layout( const Rectangle& i_rDeckPlayground )
     {
-        if ( !m_pData->pTabBar.get() )
-        {
-            OSL_ENSURE( false, "TabDeckLayouter::Layout: disposed!" );
+        if ( lcl_checkDisposed( *m_pData ) )
             return i_rDeckPlayground;
-        }
 
         if ( lcl_isVerticalTabBar( m_pData->eAlignment ) )
         {

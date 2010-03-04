@@ -68,22 +68,36 @@ namespace svt
     //==================================================================================================================
     struct ItemDescriptor
     {
-        PToolPanel  pPanel;
-        Rectangle   aMinArea;
-        Rectangle   aPrefArea;
-        bool        bUseMinimal;
+        PToolPanel      pPanel;
+        Rectangle       aCompleteArea;
+        Rectangle       aIconOnlyArea;
+        Rectangle       aTextOnlyArea;
+        TabItemContent  eContent;
+            // content to be used for this particular item. Might differ from item content which has been set
+            // up for the complete control, in case not the complete content fits into the available space.
 
         ItemDescriptor()
             :pPanel()
-            ,aMinArea()
-            ,aPrefArea()
-            ,bUseMinimal( false )
+            ,aCompleteArea()
+            ,aIconOnlyArea()
+            ,aTextOnlyArea()
+            ,eContent( TABITEM_IMAGE_AND_TEXT )
         {
+        }
+
+        const Rectangle& GetRect( const TabItemContent i_eItemContent ) const
+        {
+            return  ( i_eItemContent == TABITEM_IMAGE_AND_TEXT )
+                ?   aCompleteArea
+                :   (   ( i_eItemContent == TABITEM_TEXT_ONLY )
+                    ?   aTextOnlyArea
+                    :   aIconOnlyArea
+                    );
         }
 
         const Rectangle& GetCurrentRect() const
         {
-            return bUseMinimal ? aMinArea : aPrefArea;
+            return GetRect( eContent );
         }
     };
 
@@ -105,8 +119,8 @@ namespace svt
         /** calculates the size of the area occupied by the item representing the given tool panel
             @param i_pPanel
                 denotes the panel whose item's size should be calculated
-            @param i_bMinimum
-                <TRUE/> if and only if the minimal version of the item should be rendered
+            @param i_eItemContent
+                defines which content to draw on the tab item
             @param o_rBoundingSize
                 contains, upon return, the overall size needed to render the item, including possible decorations which are
                 <em>not</em> available for the item content
@@ -118,7 +132,7 @@ namespace svt
         */
         virtual void    CalculateItemSize(
                             const PToolPanel& i_pPanel,
-                            const bool i_bMinimum,
+                            const TabItemContent i_eItemContent,
                             Size& o_rBoundingSize,
                             Rectangle& o_rContentArea
                         ) const = 0;
@@ -139,16 +153,11 @@ namespace svt
                 as "bounding size" in CalculateItemSize might be used.
             @param i_nItemFlags
                 defines in which state to draw the item
-            @param i_bDrawMinimal
-                defines whether the minimal version of the item should be drawn
+            @param i_eItemContent
+                defines which content to draw on the tab item
         */
         virtual void    DrawItem( const PToolPanel& i_pPanel, const Point& i_rPosition,
-                            const ItemFlags i_nItemFlags, const bool i_bDrawMinimal ) = 0;
-
-        /** updates the given items to use their minimal or optimal size, so they fit (if possible) into the given
-            area.
-        */
-        virtual void    FitItemRects( ItemDescriptors& i_rItems, const Rectangle& i_rFitInto ) = 0;
+                            const ItemFlags i_nItemFlags, const TabItemContent i_eItemContent ) = 0;
     };
 
     typedef ::boost::shared_ptr< IItemsLayout >  PItemsLayout;
@@ -164,7 +173,7 @@ namespace svt
         // IItemsLayout overridables
         virtual void    CalculateItemSize(
                             const PToolPanel& i_pPanel,
-                            const bool i_bMinimum,
+                            const TabItemContent i_eItemContent,
                             Size& o_rBoundingSize,
                             Rectangle& o_rContentArea
                         ) const;
@@ -174,9 +183,8 @@ namespace svt
                             const PToolPanel& i_pPanel,
                             const Point& i_rPosition,
                             const ItemFlags i_nItemFlags,
-                            const bool i_bDrawMinimal
+                            const TabItemContent i_eItemContent
                         );
-        virtual void    FitItemRects( ItemDescriptors& i_rItems, const Rectangle& i_rFitInto );
 
     private:
         void    impl_preRender(
@@ -187,7 +195,7 @@ namespace svt
         void    impl_renderContent(
                     const PToolPanel& i_pPanel,
                     const Rectangle& i_rContentArea,
-                    const bool i_bMinimal
+                    const TabItemContent i_eItemContent
                 );
         void    impl_postRender(
                     const Rectangle& i_rBoundingArea,
@@ -202,8 +210,8 @@ namespace svt
                 impl_rotateFormation( Rectangle& io_rBoundingRect, Rectangle& io_rContentRect, const bool i_bLeft );
 
     private:
-        Window&     m_rTargetWindow;
-        const bool  m_bLeft;
+        Window&                 m_rTargetWindow;
+        const bool              m_bLeft;
 
         enum ItemRenderMode
         {
@@ -269,22 +277,24 @@ namespace svt
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void VerticalItemLayout::CalculateItemSize( const PToolPanel& i_pPanel, const bool i_bMinimum,
+    void VerticalItemLayout::CalculateItemSize( const PToolPanel& i_pPanel, const TabItemContent i_eItemContent,
             Size& o_rBoundingSize, Rectangle& o_rContentArea ) const
     {
         const Image aImage( i_pPanel->GetImage() );
-        const ::rtl::OUString sItemText( i_pPanel->GetDisplayName() );
+        const bool bUseImage = !!aImage && ( i_eItemContent != TABITEM_TEXT_ONLY );
 
-        // for the moment, we display the icons only
+        const ::rtl::OUString sItemText( i_pPanel->GetDisplayName() );
+        const bool bUseText = ( sItemText.getLength() != 0 ) && ( i_eItemContent != TABITEM_IMAGE_ONLY );
+
         Size aItemContentSize;
-        if ( !!aImage )
+        if ( bUseImage )
         {
             aItemContentSize = aImage.GetSizePixel();
         }
 
-        if ( !i_bMinimum && sItemText.getLength() )
+        if ( bUseText )
         {
-            if ( !!aImage )
+            if ( bUseImage )
                 aItemContentSize.Height() += ITEM_ICON_TEXT_DISTANCE;
 
             // add space for vertical text
@@ -439,25 +449,32 @@ namespace svt
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void VerticalItemLayout::impl_renderContent( const PToolPanel& i_pPanel, const Rectangle& i_rContentArea, const bool i_bDrawMinimal )
+    void VerticalItemLayout::impl_renderContent( const PToolPanel& i_pPanel, const Rectangle& i_rContentArea, const TabItemContent i_eItemContent )
     {
         Point aDrawPos( i_rContentArea.TopLeft() );
         aDrawPos.Y() += ITEM_OUTER_SPACE;
 
         // draw the image
         const Image aItemImage( i_pPanel->GetImage() );
-        if ( !!aItemImage )
+        const Size aImageSize( aItemImage.GetSizePixel() );
+        const bool bUseImage = !!aItemImage && ( i_eItemContent != TABITEM_TEXT_ONLY );
+
+        if ( bUseImage )
         {
-            const Size aImageSize( aItemImage.GetSizePixel() );
             m_rTargetWindow.DrawImage(
                 Point( aDrawPos.X() + ( i_rContentArea.GetWidth() - aImageSize.Width() ) / 2, aDrawPos.Y() ),
                 aItemImage
             );
-            aDrawPos.Y() += aImageSize.Height() + ITEM_ICON_TEXT_DISTANCE;
         }
 
-        if ( !i_bDrawMinimal )
+        const ::rtl::OUString sItemText( i_pPanel->GetDisplayName() );
+        const bool bUseText = ( sItemText.getLength() != 0 ) && ( i_eItemContent != TABITEM_IMAGE_ONLY );
+
+        if ( bUseText )
         {
+            if ( bUseImage )
+                aDrawPos.Y() += aImageSize.Height() + ITEM_ICON_TEXT_DISTANCE;
+
             aDrawPos.Y() += ITEM_TEXT_FLOW_SPACE;
 
             // draw the text
@@ -468,7 +485,6 @@ namespace svt
             aFont.SetVertical( TRUE );
             m_rTargetWindow.SetFont( aFont );
 
-            const ::rtl::OUString sItemText( i_pPanel->GetDisplayName() );
             const Size aTextSize( m_rTargetWindow.GetCtrlTextWidth( sItemText ), m_rTargetWindow.GetTextHeight() );
 
             Point aTextPos( aDrawPos );
@@ -543,37 +559,18 @@ namespace svt
 
     //------------------------------------------------------------------------------------------------------------------
     void VerticalItemLayout::DrawItem( const PToolPanel& i_pPanel, const Point& i_rPosition,
-            const ItemFlags i_nItemFlags, const bool i_bDrawMinimal )
+            const ItemFlags i_nItemFlags, const TabItemContent i_eItemContent )
     {
         Rectangle aContentArea;
         Size aBoundingSize;
-        CalculateItemSize( i_pPanel, i_bDrawMinimal, aBoundingSize, aContentArea );
+        CalculateItemSize( i_pPanel, i_eItemContent, aBoundingSize, aContentArea );
 
         aContentArea.Move( i_rPosition.X(), i_rPosition.Y() );
         const Rectangle aBoundingArea( i_rPosition, aBoundingSize );
 
         impl_preRender( aBoundingArea, aContentArea, i_nItemFlags );
-        impl_renderContent( i_pPanel, aContentArea, i_bDrawMinimal );
+        impl_renderContent( i_pPanel, aContentArea, i_eItemContent );
         impl_postRender( aBoundingArea, aContentArea, i_nItemFlags );
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    void VerticalItemLayout::FitItemRects( ItemDescriptors& i_rItems, const Rectangle& i_rFitInto )
-    {
-        if ( i_rItems.empty() )
-            // nothing to do
-            return;
-
-        // use the minimal sizes if and only if the preferred sizes do not fit
-        const Point aBottomRight( i_rItems.rbegin()->aPrefArea.BottomRight() );
-        bool bUseMinimal = ( aBottomRight.Y() >= i_rFitInto.Bottom() );
-        for (   ItemDescriptors::iterator item = i_rItems.begin();
-                item != i_rItems.end();
-                ++item
-            )
-        {
-            item->bUseMinimal = bUseMinimal;
-        }
     }
 
     //==================================================================================================================
@@ -583,9 +580,11 @@ namespace svt
                             ,public IToolPanelDeckListener
     {
     public:
-        PanelTabBar_Data( PanelTabBar& i_rTabBar, const TabAlignment i_eAlignment )
+        PanelTabBar_Data( PanelTabBar& i_rTabBar, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent )
             :rTabBar( i_rTabBar )
             ,rPanelDeck( dynamic_cast< ToolPanelDeck& >( *i_rTabBar.GetParent() ) )
+            ,eAlignment( i_eAlignment )
+            ,eTabItemContent( i_eItemContent )
             ,pLayout( new VerticalItemLayout( i_rTabBar, i_eAlignment == TABS_LEFT ) )
             ,aHoveredItem()
             ,aFocusedItem()
@@ -621,7 +620,9 @@ namespace svt
     public:
         PanelTabBar&                rTabBar;
         ToolPanelDeck&              rPanelDeck;
-        const PItemsLayout          pLayout;
+        const TabAlignment          eAlignment;
+        TabItemContent              eTabItemContent;
+        PItemsLayout                pLayout;
         ::boost::optional< size_t > aHoveredItem;
         ::boost::optional< size_t > aFocusedItem;
         bool                        bMouseButtonDown;
@@ -674,8 +675,9 @@ namespace svt
         {
             io_rData.aItems.resize(0);
 
-            Point aMinItemPos( TAB_BAR_OUTER_SPACE, TAB_BAR_OUTER_SPACE );
-            Point aPrefItemPos( TAB_BAR_OUTER_SPACE, TAB_BAR_OUTER_SPACE );
+            Point aCompletePos( TAB_BAR_OUTER_SPACE, TAB_BAR_OUTER_SPACE );
+            Point aIconOnlyPos( TAB_BAR_OUTER_SPACE, TAB_BAR_OUTER_SPACE );
+            Point aTextOnlyPos( TAB_BAR_OUTER_SPACE, TAB_BAR_OUTER_SPACE );
 
             for (   size_t i = 0;
                     i < io_rData.rPanelDeck.GetPanels()->GetPanelCount();
@@ -689,21 +691,26 @@ namespace svt
 
                 Rectangle aContentArea;
 
-                Size aMinItemSize;
-                io_rData.pLayout->CalculateItemSize( pPanel, true, aMinItemSize, aContentArea );
+                Size aCompleteSize;
+                io_rData.pLayout->CalculateItemSize( pPanel, TABITEM_IMAGE_AND_TEXT, aCompleteSize, aContentArea );
 
-                Size aPrefItemSize;
-                io_rData.pLayout->CalculateItemSize( pPanel, false, aPrefItemSize, aContentArea );
+                Size aIconOnlySize;
+                io_rData.pLayout->CalculateItemSize( pPanel, TABITEM_IMAGE_ONLY, aIconOnlySize, aContentArea );
 
-                // TODO: have one method calculating both sizes?
+                Size aTextOnlySize;
+                io_rData.pLayout->CalculateItemSize( pPanel, TABITEM_TEXT_ONLY, aTextOnlySize, aContentArea );
 
-                aItem.aMinArea = Rectangle( aMinItemPos, aMinItemSize );
-                aItem.aPrefArea = Rectangle( aPrefItemPos, aPrefItemSize );
+                // TODO: have one method calculating all sizes?
+
+                aItem.aCompleteArea = Rectangle( aCompletePos, aCompleteSize );
+                aItem.aIconOnlyArea = Rectangle( aIconOnlyPos, aIconOnlySize );
+                aItem.aTextOnlyArea = Rectangle( aTextOnlyPos, aTextOnlySize );
 
                 io_rData.aItems.push_back( aItem );
 
-                aMinItemPos = io_rData.pLayout->GetNextItemPosition( aItem.aMinArea );
-                aPrefItemPos = io_rData.pLayout->GetNextItemPosition( aItem.aPrefArea );
+                aCompletePos = io_rData.pLayout->GetNextItemPosition( aItem.aCompleteArea );
+                aIconOnlyPos = io_rData.pLayout->GetNextItemPosition( aItem.aIconOnlyArea );
+                aTextOnlyPos = io_rData.pLayout->GetNextItemPosition( aItem.aTextOnlyArea );
             }
 
             io_rData.bItemsDirty = false;
@@ -766,8 +773,62 @@ namespace svt
                 nItemFlags |= ITEM_POSITION_LAST;
 
             i_rData.rTabBar.SetUpdateMode( FALSE );
-            i_rData.pLayout->DrawItem( rItem.pPanel, rItem.GetCurrentRect().TopLeft(), nItemFlags, rItem.bUseMinimal );
+            i_rData.pLayout->DrawItem( rItem.pPanel, rItem.GetCurrentRect().TopLeft(), nItemFlags, rItem.eContent );
             i_rData.rTabBar.SetUpdateMode( TRUE );
+        }
+
+        //--------------------------------------------------------------------------------------------------------------
+        static void lcl_fitItems( PanelTabBar_Data& io_rData )
+        {
+            if ( io_rData.aItems.empty() )
+                // nothing to do
+                return;
+
+            // the available size
+            Size aOutputSize( io_rData.rTabBar.GetOutputSizePixel() );
+            // shrunk by the outer space
+            aOutputSize.Width() -= TAB_BAR_OUTER_SPACE;
+            aOutputSize.Height() -= TAB_BAR_OUTER_SPACE;
+            const Rectangle aFitInto( Point( 0, 0 ), aOutputSize );
+
+            // the "content modes" to try
+            TabItemContent eTryThis[] =
+            {
+                TABITEM_IMAGE_ONLY,     // assumed to have the smalles rects
+                TABITEM_TEXT_ONLY,
+                TABITEM_IMAGE_AND_TEXT  // assumed to have the largest rects
+            };
+
+            // do not start with the largest, but with the one currently set up for the TabBar
+            size_t nTryIndex = 0;
+            while   (   ( nTryIndex < ( sizeof( eTryThis ) / sizeof( eTryThis[0] ) ) )
+                    &&  ( eTryThis[nTryIndex] != io_rData.eTabItemContent )
+                    )
+            {
+                ++nTryIndex;
+            }
+
+            // determine which of the different version fits
+            TabItemContent eContent = eTryThis[0];
+            while ( nTryIndex > 0 )
+            {
+                const Point aBottomRight( io_rData.aItems.rbegin()->GetRect( eTryThis[ nTryIndex ] ).BottomRight() );
+                if ( aFitInto.IsInside( aBottomRight ) )
+                {
+                    eContent = eTryThis[ nTryIndex ];
+                    break;
+                }
+                --nTryIndex;
+            }
+
+            // propagate to the items
+            for (   ItemDescriptors::iterator item = io_rData.aItems.begin();
+                    item != io_rData.aItems.end();
+                    ++item
+                )
+            {
+                item->eContent = eContent;
+            }
         }
     }
 
@@ -787,9 +848,9 @@ namespace svt
     //= PanelTabBar
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
-    PanelTabBar::PanelTabBar( ToolPanelDeck& i_rPanelDeck, const TabAlignment i_eAlignment )
+    PanelTabBar::PanelTabBar( ToolPanelDeck& i_rPanelDeck, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent )
         :Control( &i_rPanelDeck, 0 )
-        ,m_pData( new PanelTabBar_Data( *this, i_eAlignment ) )
+        ,m_pData( new PanelTabBar_Data( *this, i_eAlignment, i_eItemContent ) )
     {
         DBG_CHECK( *m_pData );
 
@@ -803,6 +864,20 @@ namespace svt
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    TabItemContent PanelTabBar::GetTabItemContent() const
+    {
+        return m_pData->eTabItemContent;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void PanelTabBar::SetTabItemContent( const TabItemContent& i_eItemContent )
+    {
+        m_pData->eTabItemContent = i_eItemContent;
+        lcl_fitItems( *m_pData );
+        Invalidate();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     Size PanelTabBar::GetOptimalSize( WindowSizeType i_eType ) const
     {
         lcl_ensureItemsCache( *m_pData );
@@ -810,27 +885,18 @@ namespace svt
         if ( m_pData->aItems.empty() )
             return Size( 2 * TAB_BAR_OUTER_SPACE, 2 * TAB_BAR_OUTER_SPACE );
 
-        const bool nMinimalSize = ( i_eType == WINDOWSIZE_MINIMUM );
+        const bool bMinimalSize = ( i_eType == WINDOWSIZE_MINIMUM );
         // the rect of the last item
-        const Rectangle& rLastItemRect( nMinimalSize ? m_pData->aItems.rbegin()->aMinArea : m_pData->aItems.rbegin()->aPrefArea );
+        const Rectangle& rLastItemRect( bMinimalSize ? m_pData->aItems.rbegin()->aIconOnlyArea : m_pData->aItems.rbegin()->aCompleteArea );
         const Point aBottomRight( rLastItemRect.BottomRight() );
-        return Size( aBottomRight.X() + TAB_BAR_OUTER_SPACE, aBottomRight.Y() + TAB_BAR_OUTER_SPACE );
+        return Size( aBottomRight.X() + 1 + TAB_BAR_OUTER_SPACE, aBottomRight.Y() + 1 + TAB_BAR_OUTER_SPACE );
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void PanelTabBar::Resize()
     {
         Control::Resize();
-
-        // decide whether we should use the minimal or the prefered version of the items
-
-        // the available size
-        Size aOutputSize( GetOutputSizePixel() );
-        // shrunk by the outer space
-        aOutputSize.Width() -= TAB_BAR_OUTER_SPACE;
-        aOutputSize.Height() -= TAB_BAR_OUTER_SPACE;
-        // let the layouter decide
-        m_pData->pLayout->FitItemRects( m_pData->aItems, Rectangle( Point(), aOutputSize ) );
+        lcl_fitItems( *m_pData );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -936,9 +1002,8 @@ namespace svt
             return;
 
         const ItemDescriptor& rItem( m_pData->aItems[ *aHelpItem ] );
-        if ( !rItem.bUseMinimal )
-            // if we do not use the minimal representation of the item, then the text is completely drawn - no
-            // need to show it as tooltip, too
+        if ( rItem.eContent != TABITEM_IMAGE_ONLY )
+            // if the text is displayed for the item, we do not need to show it as tooltip
             return;
 
         const ::rtl::OUString sItemText( rItem.pPanel->GetDisplayName() );

@@ -279,7 +279,7 @@ namespace svt
         ,m_pImpl( new ToolPanelDeck_Impl( *this ) )
     {
         // use a default layouter
-        SetLayouter( PDeckLayouter( new TabDeckLayouter( TABS_RIGHT, *this ) ) );
+        SetLayouter( PDeckLayouter( new TabDeckLayouter( *this, TABS_RIGHT, TABITEM_IMAGE_AND_TEXT ) ) );
     }
 
     //--------------------------------------------------------------------
