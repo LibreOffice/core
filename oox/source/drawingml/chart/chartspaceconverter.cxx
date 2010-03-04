@@ -26,24 +26,29 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/chartspaceconverter.hxx"
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
-#include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/chart/chartconverter.hxx"
+#include "oox/drawingml/chart/chartdrawingfragment.hxx"
 #include "oox/drawingml/chart/chartspacemodel.hxx"
 #include "oox/drawingml/chart/plotareaconverter.hxx"
 #include "oox/drawingml/chart/titleconverter.hxx"
 #include "properties.hxx"
 
 using ::rtl::OUString;
+using ::com::sun::star::awt::Point;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::util::XNumberFormatsSupplier;
+using ::com::sun::star::drawing::XDrawPageSupplier;
+using ::com::sun::star::drawing::XShapes;
 using ::com::sun::star::chart2::XDiagram;
 using ::com::sun::star::chart2::XTitled;
 using ::com::sun::star::chart2::data::XDataReceiver;
@@ -63,7 +68,7 @@ ChartSpaceConverter::~ChartSpaceConverter()
 {
 }
 
-void ChartSpaceConverter::convertFromModel()
+void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExternalPage, const Point& rChartPos )
 {
     /*  create data provider (virtual function in the ChartConverter class,
         derived converters may create an external data provider) */
@@ -81,8 +86,8 @@ void ChartSpaceConverter::convertFromModel()
     }
 
     // formatting of the chart background
-    PropertySet aPropSet( getChartDocument()->getPageBackground() );
-    getFormatter().convertFrameFormatting( aPropSet, mrModel.mxShapeProp, OBJECTTYPE_CHARTSPACE );
+    PropertySet aBackPropSet( getChartDocument()->getPageBackground() );
+    getFormatter().convertFrameFormatting( aBackPropSet, mrModel.mxShapeProp, OBJECTTYPE_CHARTSPACE );
 
     // convert plot area (container of all chart type groups)
     PlotAreaConverter aPlotAreaConv( *this, mrModel.mxPlotArea.getOrCreate() );
@@ -121,10 +126,10 @@ void ChartSpaceConverter::convertFromModel()
     }
 
     // legend
-    if( mrModel.mxLegend.is() )
+    if( xDiagram.is() && mrModel.mxLegend.is() )
     {
         LegendConverter aLegendConv( *this, *mrModel.mxLegend );
-        aLegendConv.convertFromModel( getChartDocument()->getFirstDiagram() );
+        aLegendConv.convertFromModel( xDiagram );
     }
 
     // treatment of missing values
@@ -142,12 +147,48 @@ void ChartSpaceConverter::convertFromModel()
         aDiaProp.setProperty( PROP_MissingValueTreatment, nMissingValues );
     }
 
-    // set the IncludeHiddenCells property via the old API as only this ensures that the data provider and al created sequences get this flag correctly
-    Reference< com::sun::star::chart::XChartDocument > xStandardApiChartDoc( getChartDocument(), UNO_QUERY );
-    if( xStandardApiChartDoc.is() )
+    Reference< com::sun::star::chart::XChartDocument > xOldChartDoc( getChartDocument(), UNO_QUERY );
+    if( xOldChartDoc.is() )
     {
-        PropertySet aStandardApiDiagramProp( xStandardApiChartDoc->getDiagram() );
-        aStandardApiDiagramProp.setProperty( PROP_IncludeHiddenCells, !mrModel.mbPlotVisOnly );
+        /*  Set the IncludeHiddenCells property via the old API as only this
+            ensures that the data provider and all created sequences get this
+            flag correctly. */
+        PropertySet aOldDiaProp( xOldChartDoc->getDiagram() );
+        aOldDiaProp.setProperty( PROP_IncludeHiddenCells, !mrModel.mbPlotVisOnly );
+    }
+
+    // embedded drawing shapes
+    if( mrModel.maDrawingPath.getLength() > 0 ) try
+    {
+        /*  Get the internal draw page of the chart document, if no external
+            drawing page has been passed. */
+        Reference< XShapes > xShapes;
+        Point aShapesOffset( 0, 0 );
+        if( rxExternalPage.is() )
+        {
+            xShapes = rxExternalPage;
+            // offset for embedded shapes to move them inside the chart area
+            aShapesOffset = rChartPos;
+        }
+        else
+        {
+            Reference< XDrawPageSupplier > xDrawPageSupp( getChartDocument(), UNO_QUERY_THROW );
+            xShapes.set( xDrawPageSupp->getDrawPage(), UNO_QUERY_THROW );
+        }
+
+        /*  If an external drawing page is passed, all embedded shapes will be
+            inserted there (used e.g. with 'chart sheets' in spreadsheet
+            documents). In this case, all types of shapes including OLE objects
+            are supported. If the shapes are inserted into the internal chart
+            drawing page instead, it is not possible to embed OLE objects. */
+        bool bOleSupport = rxExternalPage.is();
+
+        // now, xShapes is not null anymore
+        getFilter().importFragment( new ChartDrawingFragment(
+            getFilter(), mrModel.maDrawingPath, xShapes, getChartSize(), aShapesOffset, bOleSupport ) );
+    }
+    catch( Exception& )
+    {
     }
 }
 
