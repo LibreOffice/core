@@ -36,11 +36,6 @@ TARGET=oovbaapi_db
 
 .INCLUDE :  makefile.pmk
 
-.IF "$(ENABLE_VBA)"!="YES"
-dummy:
-        @echo "not building vba..."
-.ENDIF
-
 .IF "$(L10N_framework)"==""
 # ------------------------------------------------------------------
 UNOIDLDBFILES= \
