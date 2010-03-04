@@ -486,6 +486,9 @@ public:
     /// closes explicitly the current key
     inline RegError closeKey();
 
+    /// releases the current key
+    inline void releaseKey();
+
     /** sets a value of a key.
 
         @param  keyName specifies the name of the key which value will be set.
@@ -810,19 +813,18 @@ inline void RegistryKey::setRegistry(Registry& registry)
 inline RegistryKey::~RegistryKey()
     {
         if (m_hImpl)
-            m_registry.m_pApi->closeKey(m_hImpl);
+            m_registry.m_pApi->releaseKey(m_hImpl);
     }
 
 inline RegistryKey& RegistryKey::operator = (const RegistryKey& toAssign)
 {
     m_registry = toAssign.m_registry;
 
-    if (m_hImpl != toAssign.m_hImpl)
-    {
+    if (toAssign.m_hImpl)
+        m_registry.m_pApi->acquireKey(toAssign.m_hImpl);
+    if (m_hImpl)
         m_registry.m_pApi->releaseKey(m_hImpl);
-        m_hImpl = toAssign.m_hImpl;
-        m_registry.m_pApi->acquireKey(m_hImpl);
-    }
+    m_hImpl = toAssign.m_hImpl;
 
     return *this;
 }
@@ -947,6 +949,14 @@ inline RegError RegistryKey::closeKey()
         } else
             return REG_INVALID_KEY;
     }
+
+inline void RegistryKey::releaseKey()
+{
+    if (m_registry.isValid() && (m_hImpl != 0))
+    {
+        m_registry.m_pApi->releaseKey(m_hImpl), m_hImpl = 0;
+    }
+}
 
 inline RegError RegistryKey::setValue(const ::rtl::OUString& keyName,
                                               RegValueType valueType,
@@ -1166,15 +1176,13 @@ inline Registry::~Registry()
 
 inline Registry& Registry::operator = (const Registry& toAssign)
 {
-
-    if (m_hImpl != toAssign.m_hImpl)
-    {
-        m_pApi->release(m_hImpl);
-        m_pApi = toAssign.m_pApi;
-        m_hImpl = toAssign.m_hImpl;
-    }
+    if (toAssign.m_hImpl)
+        toAssign.m_pApi->acquire(toAssign.m_hImpl);
     if (m_hImpl)
-        m_pApi->acquire(m_hImpl);
+        m_pApi->release(m_hImpl);
+
+    m_pApi  = toAssign.m_pApi;
+    m_hImpl = toAssign.m_hImpl;
 
     return *this;
 }

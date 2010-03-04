@@ -31,12 +31,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_registry.hxx"
 
-#include    "reflcnst.hxx"
-
 #include "keyimpl.hxx"
-#include    <rtl/alloc.h>
-#include    <rtl/memory.h>
+
+#include "reflcnst.hxx"
+#include "rtl/alloc.h"
+#include "rtl/memory.h"
 #include "rtl/ustrbuf.hxx"
+
+using rtl::OUString;
+using rtl::OUStringBuffer;
+using namespace store;
 
 namespace { static char const VALUE_PREFIX[] = "$VL_"; }
 
@@ -46,9 +50,35 @@ namespace { static char const VALUE_PREFIX[] = "$VL_"; }
 ORegKey::ORegKey(const OUString& keyName, ORegistry* pReg)
     : m_refCount(1)
     , m_name(keyName)
-    , m_bDeleted(sal_False)
+    , m_bDeleted(0)
+    , m_bModified(0)
     , m_pRegistry(pReg)
-{}
+{
+}
+
+//*********************************************************************
+//  ~ORegKey()
+//
+ORegKey::~ORegKey()
+{
+    OSL_POSTCOND(m_refCount == 0, "registry::ORegKey::dtor(): refcount not zero.");
+}
+
+//*********************************************************************
+//  acquireKey
+//
+RegError ORegKey::acquireKey(RegKeyHandle hKey)
+{
+    return m_pRegistry->acquireKey(hKey);
+}
+
+//*********************************************************************
+//  releaseKey
+//
+RegError ORegKey::releaseKey(RegKeyHandle hKey)
+{
+    return m_pRegistry->releaseKey(hKey);
+}
 
 //*********************************************************************
 //  createKey
@@ -64,7 +94,7 @@ RegError ORegKey::createKey(const OUString& keyName, RegKeyHandle* phNewKey)
 //
 RegError ORegKey::openKey(const OUString& keyName, RegKeyHandle* phOpenKey)
 {
-    return (m_pRegistry->openKey(this, keyName, phOpenKey));
+    return m_pRegistry->openKey(this, keyName, phOpenKey);
 }
 
 
@@ -73,33 +103,24 @@ RegError ORegKey::openKey(const OUString& keyName, RegKeyHandle* phOpenKey)
 //
 RegError ORegKey::openSubKeys(const OUString& keyName, RegKeyHandle** phOpenSubKeys, sal_uInt32* pnSubKeys)
 {
-    ORegKey*        pKey;
-    OUString        sFullKeyName, sSubKeyName;
-    RegKeyHandle    hSKey = 0, hSubKey;
-    RegError        _ret = REG_NO_ERROR;
-    sal_uInt32      nSubKeys;
-    ORegKey*        *subKeys;
+    RegError _ret = REG_NO_ERROR;
 
+    *phOpenSubKeys = 0;
+    *pnSubKeys = 0;
+
+    ORegKey* pKey = this;
     if ( keyName.getLength() )
     {
-        _ret = openKey(keyName, &hSKey);
-        if (_ret)
-        {
-            *phOpenSubKeys = NULL;
-            *pnSubKeys = 0;
+        _ret = openKey(keyName, (RegKeyHandle*)&pKey);
+        if (_ret != REG_NO_ERROR)
             return _ret;
-        }
-
-        pKey = (ORegKey*)hSKey;
-    } else
-    {
-        pKey = this;
     }
 
-    nSubKeys = pKey->countSubKeys();
-
+    sal_uInt32 nSubKeys = pKey->countSubKeys();
     *pnSubKeys = nSubKeys;
-    subKeys = (ORegKey**)rtl_allocateZeroMemory(nSubKeys * sizeof(ORegKey*));
+
+    ORegKey** pSubKeys;
+    pSubKeys = (ORegKey**)rtl_allocateZeroMemory(nSubKeys * sizeof(ORegKey*));
 
     OStoreDirectory::iterator   iter;
     OStoreDirectory             rStoreDir(pKey->getStoreDir());
@@ -110,22 +131,19 @@ RegError ORegKey::openSubKeys(const OUString& keyName, RegKeyHandle** phOpenSubK
     {
         if ( iter.m_nAttrib & STORE_ATTRIB_ISDIR )
         {
-            sSubKeyName = iter.m_pszName;
-            sFullKeyName = pKey->getName();
-            if (sFullKeyName.getLength() > 1)
-                sFullKeyName += m_pRegistry->ROOT;
-            sFullKeyName += sSubKeyName;
+            OUString const sSubKeyName = iter.m_pszName;
 
-            _ret = pKey->openKey(sSubKeyName, &hSubKey);
-            if (_ret)
+            ORegKey* pOpenSubKey = 0;
+            _ret = pKey->openKey(sSubKeyName, (RegKeyHandle*)&pOpenSubKey);
+            if (_ret != REG_NO_ERROR)
             {
                 *phOpenSubKeys = NULL;
                 *pnSubKeys = 0;
-                rtl_freeMemory(subKeys);
-                return _ret;
+                rtl_freeMemory(pSubKeys); // @@@ leaking 'pSubKeys[0...nSubkeys-1]'
+                return _ret;              // @@@ leaking 'pKey'
             }
 
-            subKeys[nSubKeys] = ((ORegKey*)hSubKey);
+            pSubKeys[nSubKeys] = pOpenSubKey;
 
             nSubKeys++;
         }
@@ -133,10 +151,10 @@ RegError ORegKey::openSubKeys(const OUString& keyName, RegKeyHandle** phOpenSubK
         _err = rStoreDir.next(iter);
     }
 
-    *phOpenSubKeys = (RegKeyHandle*)subKeys;
+    *phOpenSubKeys = (RegKeyHandle*)pSubKeys;
     if (keyName.getLength())
     {
-        closeKey(hSKey);
+        (void) releaseKey(pKey);
     }
     return REG_NO_ERROR;
 }
@@ -149,35 +167,28 @@ RegError ORegKey::getKeyNames(const OUString& keyName,
                               rtl_uString*** pSubKeyNames,
                               sal_uInt32* pnSubKeys)
 {
-    ORegKey*            pKey;
-    OUString            sFullKeyName, sSubKeyName;
-    RegError            _ret = REG_NO_ERROR;
-    sal_uInt32          nSubKeys;
-    rtl_uString**       pSubKeys;
+    RegError _ret = REG_NO_ERROR;
 
+    *pSubKeyNames = 0;
+    *pnSubKeys = 0;
+
+    ORegKey* pKey = this;
     if (keyName.getLength())
     {
         _ret = openKey(keyName, (RegKeyHandle*)&pKey);
-        if (_ret)
-        {
-            *pSubKeyNames = NULL;
-            *pnSubKeys = 0;
+        if (_ret != REG_NO_ERROR)
             return _ret;
-        }
-    } else
-    {
-        pKey = this;
     }
 
-    nSubKeys = pKey->countSubKeys();
-
+    sal_uInt32 nSubKeys = pKey->countSubKeys();
     *pnSubKeys = nSubKeys;
+
+    rtl_uString** pSubKeys = 0;
     pSubKeys = (rtl_uString**)rtl_allocateZeroMemory(nSubKeys * sizeof(rtl_uString*));
 
     OStoreDirectory::iterator   iter;
     OStoreDirectory             rStoreDir(pKey->getStoreDir());
     storeError                  _err = rStoreDir.first(iter);
-    OUString                    subKey;
 
     nSubKeys = 0;
 
@@ -185,14 +196,14 @@ RegError ORegKey::getKeyNames(const OUString& keyName,
     {
         if ( iter.m_nAttrib & STORE_ATTRIB_ISDIR)
         {
-            sSubKeyName = iter.m_pszName;
-            sFullKeyName = pKey->getName();
+            OUString const sSubKeyName = iter.m_pszName;
+
+            OUString sFullKeyName(pKey->getName());
             if (sFullKeyName.getLength() > 1)
                 sFullKeyName += m_pRegistry->ROOT;
             sFullKeyName += sSubKeyName;
 
-            subKey = sFullKeyName;
-            rtl_uString_newFromString(&pSubKeys[nSubKeys], subKey.pData);
+            rtl_uString_newFromString(&pSubKeys[nSubKeys], sFullKeyName.pData);
 
             nSubKeys++;
         }
@@ -203,7 +214,7 @@ RegError ORegKey::getKeyNames(const OUString& keyName,
     *pSubKeyNames = pSubKeys;
     if (keyName.getLength())
     {
-        closeKey((RegKeyHandle)pKey);
+        releaseKey(pKey);
     }
     return REG_NO_ERROR;
 }
@@ -352,7 +363,6 @@ RegError ORegKey::setValue(const OUString& valueName, RegValueType vType, RegVal
             break;
     }
 
-
     sal_uInt32  writenBytes;
     if ( rValue.writeAt(0, pBuffer, VALUE_HEADERSIZE+size, writenBytes) )
     {
@@ -364,6 +374,7 @@ RegError ORegKey::setValue(const OUString& valueName, RegValueType vType, RegVal
         rtl_freeMemory(pBuffer);
         return REG_SET_VALUE_FAILED;
     }
+    setModified();
 
     rtl_freeMemory(pBuffer);
     return REG_NO_ERROR;
@@ -422,6 +433,7 @@ RegError ORegKey::setLongListValue(const OUString& valueName, sal_Int32* pValueL
         rtl_freeMemory(pBuffer);
         return REG_SET_VALUE_FAILED;
     }
+    setModified();
 
     rtl_freeMemory(pBuffer);
     return REG_NO_ERROR;
@@ -489,6 +501,7 @@ RegError ORegKey::setStringListValue(const OUString& valueName, sal_Char** pValu
         rtl_freeMemory(pBuffer);
         return REG_SET_VALUE_FAILED;
     }
+    setModified();
 
     rtl_freeMemory(pBuffer);
     return REG_NO_ERROR;
@@ -556,6 +569,7 @@ RegError ORegKey::setUnicodeListValue(const OUString& valueName, sal_Unicode** p
         rtl_freeMemory(pBuffer);
         return REG_SET_VALUE_FAILED;
     }
+    setModified();
 
     rtl_freeMemory(pBuffer);
     return REG_NO_ERROR;
@@ -625,7 +639,6 @@ RegError ORegKey::getValue(const OUString& valueName, RegValue value) const
         return REG_INVALID_VALUE;
     }
 
-//  rtl_copyMemory(value, pBuffer, valueSize);
     switch (valueType)
     {
         case RG_VALUETYPE_NOT_DEFINED:
@@ -969,33 +982,30 @@ RegError ORegKey::getUnicodeListValue(const OUString& valueName, sal_Unicode*** 
 //
 RegError ORegKey::getKeyType(const OUString& name, RegKeyType* pKeyType) const
 {
-    ORegKey*    pKey;
-    RegError    _ret = REG_NO_ERROR;
-
     *pKeyType = RG_KEYTYPE;
 
     REG_GUARD(m_pRegistry->m_mutex);
 
     if ( name.getLength() )
     {
-        _ret = ((ORegKey*)this)->openKey(
-            name, (RegKeyHandle*)&pKey);
-        if (_ret)
+        ORegKey* pThis = const_cast< ORegKey* >(this);
+
+        RegKeyHandle hKey = 0;
+        RegError _ret = pThis->openKey(name, &hKey);
+        if (_ret != REG_NO_ERROR)
             return _ret;
-        ((ORegKey*)this)->closeKey((RegKeyHandle)pKey);
-        return _ret;
-    } else
-    {
-        return _ret;
+        (void) pThis->releaseKey(hKey);
     }
+
+    return REG_NO_ERROR;
 }
 
 RegError ORegKey::getResolvedKeyName(const OUString& keyName,
                                      OUString& resolvedName)
 {
-    if (keyName.getLength() == 0) {
+    if (keyName.getLength() == 0)
         return REG_INVALID_KEYNAME;
-    }
+
     resolvedName = getFullPath(keyName);
     return REG_NO_ERROR;
 }
