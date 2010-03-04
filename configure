@@ -12211,6 +12211,9 @@ if test -n "$with_system_cppunit" -o -n "$with_system_libs" && \
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: external" >&5
 $as_echo "external" >&6; }
     SYSTEM_CPPUNIT=YES
+    # might work for earlier, too but go sure. We didn't have
+    # a system-cppunit before the first version using a proper cppunit
+    # (and that being 1.12.1) anyway
 
   succeeded=no
 
@@ -12266,23 +12269,23 @@ fi
   else
      PKG_CONFIG_MIN_VERSION=0.9.0
      if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
-        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for cppunit " >&5
-$as_echo_n "checking for cppunit ... " >&6; }
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for cppunit >= 1.12.1 " >&5
+$as_echo_n "checking for cppunit >= 1.12.1 ... " >&6; }
 
-        if $PKG_CONFIG --exists "cppunit " ; then
+        if $PKG_CONFIG --exists "cppunit >= 1.12.1 " ; then
             { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
             succeeded=yes
 
             { $as_echo "$as_me:${as_lineno-$LINENO}: checking CPPUNIT_CFLAGS" >&5
 $as_echo_n "checking CPPUNIT_CFLAGS... " >&6; }
-            CPPUNIT_CFLAGS=`$PKG_CONFIG --cflags "cppunit "`
+            CPPUNIT_CFLAGS=`$PKG_CONFIG --cflags "cppunit >= 1.12.1 "`
             { $as_echo "$as_me:${as_lineno-$LINENO}: result: $CPPUNIT_CFLAGS" >&5
 $as_echo "$CPPUNIT_CFLAGS" >&6; }
 
             { $as_echo "$as_me:${as_lineno-$LINENO}: checking CPPUNIT_LIBS" >&5
 $as_echo_n "checking CPPUNIT_LIBS... " >&6; }
-            CPPUNIT_LIBS=`$PKG_CONFIG --libs "cppunit "`
+            CPPUNIT_LIBS=`$PKG_CONFIG --libs "cppunit >= 1.12.1 "`
             { $as_echo "$as_me:${as_lineno-$LINENO}: result: $CPPUNIT_LIBS" >&5
 $as_echo "$CPPUNIT_LIBS" >&6; }
         else
@@ -12290,7 +12293,7 @@ $as_echo "$CPPUNIT_LIBS" >&6; }
             CPPUNIT_LIBS=""
             ## If we have a custom action on failure, don't print errors, but
             ## do set a variable so people can do so.
-            CPPUNIT_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cppunit "`
+            CPPUNIT_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cppunit >= 1.12.1 "`
             echo $CPPUNIT_PKG_ERRORS
         fi
 
@@ -12305,7 +12308,7 @@ $as_echo "$CPPUNIT_LIBS" >&6; }
   if test $succeeded = yes; then
      :
   else
-     as_fn_error "Library requirements (cppunit ) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." "$LINENO" 5
+     as_fn_error "Library requirements (cppunit >= 1.12.1 ) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." "$LINENO" 5
   fi
 
 else
