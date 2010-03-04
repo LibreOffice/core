@@ -33,42 +33,20 @@
 
 function hToolsCustomizeOpen() as boolean
 
-    '///<h3>Open Tools/Customize</h3>
-    '///<i>Starting point: Any plain document</i><br>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Errorstatus (boolean)</li>
-    '///<ul>
-    '///+<li>TRUE if the Keyboard-Tab is open</li>
-    '///+<li>FALSE on any other case</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
-    
     const CFN = "hToolsCustomizeOpen::"
+    hToolsCustomizeOpen() = FALSE
 
-    '///+<li>Open Tools/Customize using the ToolsCustomize slot</li>
+    printlog( "Open Tools/Customize dialog" )
+
     ToolsCustomize
-
-    '///+<li>Switch to the Events Tab</li>
     hToolsCustomizeSelectTab( "Events" )
     
-    '///+<li>Verify that the requested tabpage is open</li>
     Kontext TabCustomizeEvents
-    if ( TabCustomizeEvents.exists() ) then
-    	hToolsCustomizeOpen() = true
-    	printlog( CFN & "Successfully opened ToolsCustomize" )
+    if ( TabCustomizeEvents.exists( 2 ) ) then
+        hToolsCustomizeOpen() = TRUE
     else
-        hToolsCustomizeOpen() = false
-        printlog( CFN & "Failed to open ToolsCustomize" )
+        warnlog( CFN & "Unable to open Tools/Customize dialog" )
     endif
-    '///+<li>Return TRUE on success</li>
-    '///</ul>
 
 end function
 
@@ -184,7 +162,7 @@ function hToolsCustomizeClose( iMode as integer  ) as boolean
     '///<ul>
     
     const CFN = "hToolsCustomizeClose::"
-    dim brc as boolean : brc = true
+    hToolsCustomizeClose() = FALSE
 
     kontext 
 
@@ -203,23 +181,14 @@ function hToolsCustomizeClose( iMode as integer  ) as boolean
     end select
     '///</ol>
     
-    
-    
     '///+<li>Verify that the dialog has indeed been closed</li>
     kontext "TabCustomizeEvents"
-    TabCustomizeEvents.notExists( 3 )
-    if ( TabCustomizeEvents.exists() ) then
-        brc = false
-    endif
-
-    if ( brc ) then
-        printlog( CFN & "Closed Tools/Customize" )
+    if ( TabCustomizeEvents.notExists( 3 ) ) then
+        hToolsCustomizeClose() = TRUE
     else
-        printlog( CFN & "Failed to close Tools/Customize" )
+        warnlog( "Unable to close Tools/Customize dialog" )
     endif
 
-    '///</ul>
-    hToolsCustomizeClose() = brc
 end function
 
 '*******************************************************************************
