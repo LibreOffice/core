@@ -327,9 +327,12 @@ struct Unicode2LangType
     LanguageType mnLangID;
 };
 
+// entries marked with default-CJK get replaced with the default-CJK language
+#define LANGUAGE_DEFAULT_CJK 0xFFF0
+
 // map unicode ranges to languages supported by OOo
 // NOTE: due to the binary search used this list must be sorted by mnMinCode
-static const Unicode2LangType aLangFromCodeChart[]= {
+static Unicode2LangType aLangFromCodeChart[]= {
     {0x0000, 0x007f, LANGUAGE_ENGLISH},             // Basic Latin
     {0x0080, 0x024f, LANGUAGE_ENGLISH},             // Latin Extended-A and Latin Extended-B
     {0x0250, 0x02af, LANGUAGE_SYSTEM},              // IPA Extensions
@@ -349,19 +352,19 @@ static const Unicode2LangType aLangFromCodeChart[]= {
     {0x1e00, 0x1eff, LANGUAGE_ENGLISH},             // Latin Extended Additional
     {0x2c60, 0x2c7f, LANGUAGE_ENGLISH},             // Latin Extended-C
     {0x2e80, 0x2fff, LANGUAGE_CHINESE_SIMPLIFIED},  // CJK Radicals Supplement + Kangxi Radical + Ideographic Description Characters
-    {0x3000, 0x303F, LANGUAGE_CHINESE_SIMPLIFIED},  // CJK Symbols and punctuation
+    {0x3000, 0x303F, LANGUAGE_DEFAULT_CJK},         // CJK Symbols and punctuation
     {0x3040, 0x30FF, LANGUAGE_JAPANESE},            // Japanese Hiragana + Katakana
     {0x3100, 0x312f, LANGUAGE_CHINESE_TRADITIONAL}, // Bopomofo
     {0x3130, 0x318f, LANGUAGE_KOREAN},              // Hangul Compatibility Jamo, Kocrean-specific
     {0x3190, 0x319f, LANGUAGE_JAPANESE},            // Kanbun
     {0x31a0, 0x31bf, LANGUAGE_CHINESE_TRADITIONAL}, // Bopomofo Extended
-    {0x31c0, 0x31ef, LANGUAGE_CHINESE_SIMPLIFIED},  // CJK Strokes
+    {0x31c0, 0x31ef, LANGUAGE_DEFAULT_CJK},         // CJK Ideographs
     {0x31f0, 0x31ff, LANGUAGE_JAPANESE},            // Japanese Katakana Phonetic Extensions
-    {0x3400, 0x4dbf, LANGUAGE_CHINESE_SIMPLIFIED},  // CJK Unified Ideographs Extension A
-    {0x4e00, 0x9fcf, LANGUAGE_CHINESE_SIMPLIFIED},  // Unified CJK Ideographs
+    {0x3400, 0x4dbf, LANGUAGE_DEFAULT_CJK},         // CJK Unified Ideographs Extension A
+    {0x4e00, 0x9fcf, LANGUAGE_DEFAULT_CJK},         // Unified CJK Ideographs
     {0xa720, 0xa7ff, LANGUAGE_ENGLISH},             // Latin Extended-D
     {0xac00, 0xd7af, LANGUAGE_KOREAN},              // Hangul Syllables, Kocrean-specific
-    {0xF900, 0xFAFF, LANGUAGE_CHINESE_SIMPLIFIED},  // CJK Compatibility Ideographs
+    {0xF900, 0xFAFF, LANGUAGE_DEFAULT_CJK},         // CJK Compatibility Ideographs
     {0xfb00, 0xfb4f, LANGUAGE_HEBREW},              // Hibrew present forms
     {0xfb50, 0xfdff, LANGUAGE_ARABIC_PRIMARY_ONLY}, // Arabic Presentation Forms-A
     {0xfe70, 0xfefe, LANGUAGE_ARABIC_PRIMARY_ONLY}, // Arabic Presentation Forms-B
@@ -369,13 +372,47 @@ static const Unicode2LangType aLangFromCodeChart[]= {
     {0xffa0, 0xffDC, LANGUAGE_KOREAN},              // Kocrean halfwidth hangual variant
     {0x10140, 0x1018f, LANGUAGE_GREEK},             // Ancient Greak numbers
     {0x1d200, 0x1d24f, LANGUAGE_GREEK},             // Ancient Greek Musical
-    {0x20000, 0x2a6df, LANGUAGE_CHINESE},           // CJK Unified Ideographs Extension B
-    {0x2f800, 0x2fa1f, LANGUAGE_CHINESE}            // CJK Compatibility Ideographs Supplement
+    {0x20000, 0x2a6df, LANGUAGE_DEFAULT_CJK},       // CJK Unified Ideographs Extension B
+    {0x2f800, 0x2fa1f, LANGUAGE_DEFAULT_CJK}        // CJK Compatibility Ideographs Supplement
 };
 
-// get language type in accordance of a missing char
-const LanguageType MapCharToLanguage( sal_UCS4 uChar )
+// get language matching to the missing char
+LanguageType MapCharToLanguage( sal_UCS4 uChar )
 {
+    // entries marked with default-CJK should get replaced with a default-CJK language
+    static bool bFirst = true;
+    if( bFirst )
+    {
+        bFirst = false;
+        // TODO: use the default-CJK language instead
+        // when the setting from Tools->Options->LangSettings->Languages becomes available here
+        LanguageType nDefaultCJK = LANGUAGE_CHINESE;
+        const LanguageType nUILang = Application::GetSettings().GetUILanguage();
+        switch( nUILang )
+        {
+            case LANGUAGE_JAPANESE:
+            case LANGUAGE_KOREAN:
+            case LANGUAGE_KOREAN_JOHAB:
+            case LANGUAGE_CHINESE_SIMPLIFIED:
+            case LANGUAGE_CHINESE_TRADITIONAL:
+            case LANGUAGE_CHINESE_SINGAPORE:
+            case LANGUAGE_CHINESE_HONGKONG:
+            case LANGUAGE_CHINESE_MACAU:
+                nDefaultCJK = nUILang;
+                break;
+            default:
+                nDefaultCJK = LANGUAGE_CHINESE;
+                break;
+        }
+
+        static const int nCount = (sizeof(aLangFromCodeChart) / sizeof(*aLangFromCodeChart));
+        for( int i = 0; i < nCount; ++i )
+        {
+            if( aLangFromCodeChart[ i].mnLangID == LANGUAGE_DEFAULT_CJK )
+                aLangFromCodeChart[ i].mnLangID = nDefaultCJK;
+        }
+    }
+
     // binary search
     int nLow = 0;
     int nHigh = (sizeof(aLangFromCodeChart) / sizeof(*aLangFromCodeChart)) - 1;
@@ -393,19 +430,12 @@ const LanguageType MapCharToLanguage( sal_UCS4 uChar )
     return LANGUAGE_DONTKNOW;
 }
 
-void ImplGetLogFontFromFontSelect( HDC hDC,
-                                   const ImplFontSelectData* pFont,
-                                   LOGFONTW& rLogFont,
-                                   bool /*bTestVerticalAvail*/ );
-
 class WinGlyphFallbackSubstititution
 :    public ImplGlyphFallbackFontSubstitution
 {
 public:
-    WinGlyphFallbackSubstititution( HDC hDC, ImplDevFontList* pDFL );
+    WinGlyphFallbackSubstititution( HDC, ImplDevFontList* );
 
-//  void SetHDC( HDC hDC ) { mhDC = hDC; }
-//  void SetFontList( ImplDevFontList* pFontLiest ) { mpFontList = pFontList; }
     bool FindFontSubstitute( ImplFontSelectData&, rtl::OUString& rMissingChars ) const;
 private:
     HDC mhDC;
@@ -417,6 +447,9 @@ inline WinGlyphFallbackSubstititution::WinGlyphFallbackSubstititution( HDC hDC, 
 :   mhDC( hDC )
 ,   mpFontList( pDFL )
 {}
+
+void ImplGetLogFontFromFontSelect( HDC, const ImplFontSelectData*,
+    LOGFONTW&, bool /*bTestVerticalAvail*/ );
 
 // does a font face hold the given missing characters?
 bool WinGlyphFallbackSubstititution::HasMissingChars( const ImplFontData* pFace, const rtl::OUString& rMissingChars ) const
@@ -491,7 +524,7 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute( ImplFontSelectData& rFo
         aLocale = Application::GetSettings().GetUILocale();
 
     // first level fallback:
-    // try use the locale specific default fonts in VCL.xcu
+    // try use the locale specific default fonts defined in VCL.xcu
     /*const*/ ImplDevFontListData* pDevFont = mpFontList->ImplFindByLocale( aLocale );
     if( pDevFont )
     {
