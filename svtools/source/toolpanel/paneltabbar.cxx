@@ -46,8 +46,6 @@
 #define ITEM_DISTANCE_PIXEL     0
 // space between item icon and icon text
 #define ITEM_ICON_TEXT_DISTANCE 4
-// outer space (aka margin) of the complete tab bar control
-#define TAB_BAR_OUTER_SPACE     1
 
 //........................................................................
 namespace svt
@@ -597,6 +595,17 @@ namespace svt
 
             rPanelDeck.AddListener( *this );
             rPanelDeck.GetPanels()->AddListener( *this );
+
+            if ( i_eAlignment == TABS_LEFT )
+            {
+                aTopLeftSpace = Size( 2, 2 );
+                aBottomRightSpace = Size( 1, 1 );
+            }
+            else if ( i_eAlignment == TABS_RIGHT )
+            {
+                aTopLeftSpace = Size( 1, 1 );
+                aBottomRightSpace = Size( 2, 2 );
+            }
         }
 
         ~PanelTabBar_Data()
@@ -620,15 +629,20 @@ namespace svt
     public:
         PanelTabBar&                rTabBar;
         ToolPanelDeck&              rPanelDeck;
+
         const TabAlignment          eAlignment;
         TabItemContent              eTabItemContent;
         PItemsLayout                pLayout;
+
         ::boost::optional< size_t > aHoveredItem;
         ::boost::optional< size_t > aFocusedItem;
         bool                        bMouseButtonDown;
 
         ItemDescriptors             aItems;
         bool                        bItemsDirty;
+
+        Size                        aTopLeftSpace;
+        Size                        aBottomRightSpace;
     };
 
     //==================================================================================================================
@@ -675,9 +689,9 @@ namespace svt
         {
             io_rData.aItems.resize(0);
 
-            Point aCompletePos( TAB_BAR_OUTER_SPACE, TAB_BAR_OUTER_SPACE );
-            Point aIconOnlyPos( TAB_BAR_OUTER_SPACE, TAB_BAR_OUTER_SPACE );
-            Point aTextOnlyPos( TAB_BAR_OUTER_SPACE, TAB_BAR_OUTER_SPACE );
+            Point aCompletePos( io_rData.aTopLeftSpace.Width(), io_rData.aTopLeftSpace.Height() );
+            Point aIconOnlyPos( aCompletePos );
+            Point aTextOnlyPos( aCompletePos );
 
             for (   size_t i = 0;
                     i < io_rData.rPanelDeck.GetPanels()->GetPanelCount();
@@ -787,8 +801,8 @@ namespace svt
             // the available size
             Size aOutputSize( io_rData.rTabBar.GetOutputSizePixel() );
             // shrunk by the outer space
-            aOutputSize.Width() -= TAB_BAR_OUTER_SPACE;
-            aOutputSize.Height() -= TAB_BAR_OUTER_SPACE;
+            aOutputSize.Width() -= io_rData.aBottomRightSpace.Width();
+            aOutputSize.Height() -= io_rData.aBottomRightSpace.Height();
             const Rectangle aFitInto( Point( 0, 0 ), aOutputSize );
 
             // the "content modes" to try
@@ -883,13 +897,19 @@ namespace svt
         lcl_ensureItemsCache( *m_pData );
 
         if ( m_pData->aItems.empty() )
-            return Size( 2 * TAB_BAR_OUTER_SPACE, 2 * TAB_BAR_OUTER_SPACE );
+            return Size(
+                m_pData->aTopLeftSpace.Width() + m_pData->aBottomRightSpace.Width(),
+                m_pData->aTopLeftSpace.Height() + m_pData->aBottomRightSpace.Height()
+            );
 
         const bool bMinimalSize = ( i_eType == WINDOWSIZE_MINIMUM );
         // the rect of the last item
         const Rectangle& rLastItemRect( bMinimalSize ? m_pData->aItems.rbegin()->aIconOnlyArea : m_pData->aItems.rbegin()->aCompleteArea );
         const Point aBottomRight( rLastItemRect.BottomRight() );
-        return Size( aBottomRight.X() + 1 + TAB_BAR_OUTER_SPACE, aBottomRight.Y() + 1 + TAB_BAR_OUTER_SPACE );
+        return Size(
+                    aBottomRight.X() + 1 + m_pData->aBottomRightSpace.Width(),
+                    aBottomRight.Y() + 1 + m_pData->aBottomRightSpace.Height()
+                );
     }
 
     //------------------------------------------------------------------------------------------------------------------
