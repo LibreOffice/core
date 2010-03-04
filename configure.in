@@ -3593,6 +3593,12 @@ if test -n "$with_system_cppunit" -o -n "$with_system_libs" && \
     # a system-cppunit before the first version using a proper cppunit
     # (and that being 1.12.1) anyway
     PKG_CHECK_MODULES( CPPUNIT, cppunit >= 1.12.1 )
+    AC_MSG_CHECKING([STL compatibility])
+    if test "$WITH_STLPORT" != "no"; then
+	AC_MSG_ERROR([to use system cppunit you need to use --without-stlport])
+    else
+	AC_MSG_RESULT([OK])	
+    fi
 else
     AC_MSG_RESULT([internal])
     SYSTEM_CPPUNIT=NO

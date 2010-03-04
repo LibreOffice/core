@@ -12311,6 +12311,14 @@ $as_echo "$CPPUNIT_LIBS" >&6; }
      as_fn_error "Library requirements (cppunit >= 1.12.1 ) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." "$LINENO" 5
   fi
 
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking STL compatibility" >&5
+$as_echo_n "checking STL compatibility... " >&6; }
+    if test "$WITH_STLPORT" != "no"; then
+	as_fn_error "to use system cppunit you need to use --without-stlport" "$LINENO" 5
+    else
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: OK" >&5
+$as_echo "OK" >&6; }
+    fi
 else
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: internal" >&5
 $as_echo "internal" >&6; }
