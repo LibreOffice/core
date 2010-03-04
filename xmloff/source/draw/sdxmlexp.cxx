@@ -641,7 +641,7 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
         GetXMLToken(XML_N_ANIMATION),
         XML_NAMESPACE_ANIMATION);
 
-    if( getDefaultVersion() > SvtSaveOptions::ODFVER_12 )
+    if( getDefaultVersion() > SvtSaveOptions::ODFVER_012 )
     {
         _GetNamespaceMap().Add(
             GetXMLToken(XML_NP_OFFICE_EXT),

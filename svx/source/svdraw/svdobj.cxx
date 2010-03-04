@@ -2741,7 +2741,7 @@ void SdrObject::SetResizeProtect(sal_Bool bProt)
 
 void SdrObject::SetPrintable(sal_Bool bPrn)
 {
-    if( bPrn != bNoPrint )
+    if( bPrn == bNoPrint )
     {
         bNoPrint=!bPrn;
         SetChanged();

@@ -79,7 +79,7 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
     // #88546# init to FALSE
     mbHandleProgressBar( sal_False ),
     msZIndex( RTL_CONSTASCII_USTRINGPARAM("ZOrder") ),
-    msPrintable( RTL_CONSTASCII_USTRINGPARAM("Pintable") ),
+    msPrintable( RTL_CONSTASCII_USTRINGPARAM("Printable") ),
     msVisible( RTL_CONSTASCII_USTRINGPARAM("Visible") ),
     msEmptyPres( RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") ),
     msModel( RTL_CONSTASCII_USTRINGPARAM("Model") ),
@@ -671,6 +671,9 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     // export draw:display (do not export in ODF 1.2 or older)
     if( xSet.is() && ( mrExport.getDefaultVersion() > SvtSaveOptions::ODFVER_012 ) )
     {
+        if( aShapeInfo.meShapeType != XmlShapeTypeDrawPageShape && aShapeInfo.meShapeType != XmlShapeTypePresPageShape &&
+            aShapeInfo.meShapeType != XmlShapeTypeHandoutShape )
+
         try
         {
             sal_Bool bVisible = sal_True;
@@ -680,7 +683,8 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             xSet->getPropertyValue(msPrintable) >>= bPrintable;
 
             XMLTokenEnum eDisplayToken = XML_TOKEN_INVALID;
-            switch( (bVisible << 1) | bPrintable )
+            const unsigned short nDisplay = (bVisible ? 2 : 0) | (bPrintable ? 1 : 0);
+            switch( nDisplay )
             {
             case 0: eDisplayToken = XML_NONE; break;
             case 1: eDisplayToken = XML_PRINTER; break;
