@@ -64,7 +64,7 @@ namespace sw { namespace mark
         MarkBase::SetMarkPos(rNewPos);
     }
 
-    const SwPosition& CrossRefBookmark::GetOtherMarkPos() const
+    SwPosition& CrossRefBookmark::GetOtherMarkPos() const
     {
         OSL_PRECOND(false,
             "<SwCrossRefBookmark::GetOtherMarkPos(..)>"

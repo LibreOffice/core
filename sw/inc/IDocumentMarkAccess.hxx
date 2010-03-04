@@ -83,6 +83,13 @@ class IDocumentMarkAccess
             const ::rtl::OUString& rProposedName,
             MarkType eMark) =0;
 
+        virtual sw::mark::IFieldmark* makeFieldBookmark( const SwPaM& rPaM,
+            const rtl::OUString& rName,
+            const rtl::OUString& rType) = 0;
+        virtual sw::mark::IFieldmark* makeNoTextFieldBookmark( const SwPaM& rPaM,
+            const rtl::OUString& rName,
+            const rtl::OUString& rType) = 0;
+
         /** Returns a mark in the document for a paragraph.
             If there is none, a mark will be created.
 

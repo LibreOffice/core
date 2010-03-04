@@ -52,11 +52,13 @@
 #include <IMark.hxx>
 #include <pam.hxx>
 #include <doc.hxx>
+#include <xmloff/odffields.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
 const sal_Char *GetLangName( const MSHORT nLang );
 #endif
 
+using namespace ::sw::mark;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n::ScriptType;
 
@@ -349,7 +351,7 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
     //   C2 break iterator does not found a possible line break at all:
     //      ==> line break
 
-      // case A: line not yet full
+    // case A: line not yet full
     if ( !bFull )
     {
         Width( aGuess.BreakWidth() );
@@ -655,7 +657,7 @@ xub_StrLen SwTxtPortion::GetSpaceCnt( const SwTxtSizeInfo &rInf,
 
 long SwTxtPortion::CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) const
 {
-     xub_StrLen nCnt = 0;
+    xub_StrLen nCnt = 0;
 
     if ( InExpGrp() )
     {
@@ -766,9 +768,10 @@ void SwHolePortion::HandlePortion( SwPortionHandler& rPH ) const
     rPH.Text( GetLen(), GetWhichPor() );
 }
 
-void SwFieldMarkPortion::Paint( const SwTxtPaintInfo & rInf) const
+void SwFieldMarkPortion::Paint( const SwTxtPaintInfo & /*rInf*/) const
 {
-    SwTxtPortion::Paint(rInf);
+    // These shouldn't be painted!
+    // SwTxtPortion::Paint(rInf);
 }
 
 sal_Bool SwFieldMarkPortion::Format( SwTxtFormatInfo & )
@@ -778,38 +781,96 @@ sal_Bool SwFieldMarkPortion::Format( SwTxtFormatInfo & )
     return ret;
 }
 
-
-//FIXME Fieldbk
-//void SwFieldFormPortion::Paint( const SwTxtPaintInfo& rInf ) const
-void SwFieldFormPortion::Paint( const SwTxtPaintInfo& ) const
-{
-//    SwTxtNode *pNd=const_cast<SwTxtNode*>(rInf.GetTxtFrm()->GetTxtNode());
-//    const SwDoc *doc=pNd->GetDoc();
-//    SwIndex aIndex( pNd, rInf.GetIdx() );
-//    SwPosition aPosition(*pNd, aIndex);
-//    pMark = dynamic_cast< doc->getFieldmarkFor(aPosition);
-//    OSL_ENSURE(pMark,
-//        "SwFieldFormPortion::Paint(..)"
-//        " - Where is my form field bookmark???");
-
-//    bool checked=(pBM!=NULL?pBM->IsChecked():false);
-//    rInf.DrawCheckBox(*this , checked);
+namespace {
+    static sal_Int32 getCurrentListIndex( IFieldmark* pBM,
+            ::rtl::OUString* io_pCurrentText = NULL )
+    {
+        const IFieldmark::parameter_map_t* const pParameters = pBM->GetParameters();
+        sal_Int32 nCurrentIdx = 0;
+        const IFieldmark::parameter_map_t::const_iterator pResult = pParameters->find(::rtl::OUString::createFromAscii(ODF_FORMDROPDOWN_RESULT));
+        if(pResult != pParameters->end())
+            pResult->second >>= nCurrentIdx;
+        if(io_pCurrentText)
+        {
+            const IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(::rtl::OUString::createFromAscii(ODF_FORMDROPDOWN_LISTENTRY));
+            if(pListEntries != pParameters->end())
+            {
+                uno::Sequence< ::rtl::OUString > vListEntries;
+                pListEntries->second >>= vListEntries;
+                if(nCurrentIdx < vListEntries.getLength())
+                    *io_pCurrentText = vListEntries[nCurrentIdx];
+            }
+        }
+        return nCurrentIdx;
+    }
 }
 
-sal_Bool SwFieldFormPortion::Format( SwTxtFormatInfo &rInf )
+//FIXME Fieldbk
+void SwFieldFormPortion::Paint( const SwTxtPaintInfo& rInf ) const
 {
-    sal_Bool ret=0;
-//  ret=SwTxtPortion::Format(rInf);
+    SwTxtNode* pNd = const_cast<SwTxtNode*>(rInf.GetTxtFrm()->GetTxtNode());
+    const SwDoc *doc=pNd->GetDoc();
+    SwIndex aIndex( pNd, rInf.GetIdx() );
+    SwPosition aPosition(*pNd, aIndex);
 
-    Width(rInf.GetTxtHeight());
-    Height(rInf.GetTxtHeight());
-    SetAscent(rInf.GetAscent());
-    //int h=rInf.GetTxtHeight();
+    IFieldmark* pBM = doc->getIDocumentMarkAccess( )->getFieldmarkFor( aPosition );
 
-/*
-    Height(100);
-    SetAscent(100);
-*/
+    OSL_ENSURE( pBM,
+        "SwFieldFormPortion::Paint(..)"
+        " - Where is my form field bookmark???");
+
+    if ( pBM != NULL )
+    {
+        if ( pBM->GetFieldname( ).equalsAscii( ODF_FORMCHECKBOX ) )
+        { // a checkbox...
+            ICheckboxFieldmark* pCheckboxFm = dynamic_cast< ICheckboxFieldmark* >(pBM);
+            bool checked = pCheckboxFm->IsChecked();
+            rInf.DrawCheckBox(*this, checked);
+        }
+        else if ( pBM->GetFieldname( ).equalsAscii(  ODF_FORMDROPDOWN ) )
+        { // a list...
+            rtl::OUString aTxt;
+            rInf.DrawViewOpt( *this, POR_FLD );
+            rInf.DrawText( aTxt, *this, 0, 0/*aTxt.getLength()*/, false );
+        }
+        else
+        {
+            assert(0); // unknown type...
+        }
+    }
+}
+
+sal_Bool SwFieldFormPortion::Format( SwTxtFormatInfo & rInf )
+{
+    sal_Bool ret = 0;
+    SwTxtNode *pNd = const_cast < SwTxtNode * >( rInf.GetTxtFrm(  )->GetTxtNode(  ) );
+    const SwDoc *doc = pNd->GetDoc(  );
+    SwIndex aIndex( pNd, rInf.GetIdx(  ) );
+    SwPosition aPosition( *pNd, aIndex );
+    IFieldmark *pBM = doc->getIDocumentMarkAccess( )->getFieldmarkFor( aPosition );
+    ASSERT( pBM != NULL, "Where is my form field bookmark???" );
+    if ( pBM != NULL )
+    {
+        if ( pBM->GetFieldname( ).equalsAscii( ODF_FORMCHECKBOX ) )
+        {
+            Width( rInf.GetTxtHeight(  ) );
+            Height( rInf.GetTxtHeight(  ) );
+            SetAscent( rInf.GetAscent(  ) );
+        }
+        else if ( pBM->GetFieldname( ).equalsAscii( ODF_FORMDROPDOWN ) )
+        {
+            ::rtl::OUString aTxt;
+            getCurrentListIndex( pBM, &aTxt );
+            SwPosSize aPosSize = rInf.GetTxtSize( aTxt );
+            Width( aPosSize.Width(  ) );
+            Height( aPosSize.Height(  ) );
+            SetAscent( rInf.GetAscent(  ) );
+        }
+        else
+        {
+            assert( 0 );        // unknown type...
+        }
+    }
     return ret;
 }
 

@@ -47,6 +47,7 @@ CDEFS+=-Dmydebug
 EXCEPTIONSFILES=    \
     $(SLO)$/crbm.obj \
     $(SLO)$/crsrsh.obj \
+    $(SLO)$/bookmrk.obj \
     $(SLO)$/viscrs.obj
 
 SLOFILES =	\
