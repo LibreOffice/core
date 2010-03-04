@@ -12204,8 +12204,8 @@ fi
 
 
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking which libwpd to use" >&5
-$as_echo_n "checking which libwpd to use... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking which cppunit to use" >&5
+$as_echo_n "checking which cppunit to use... " >&6; }
 if test -n "$with_system_cppunit" -o -n "$with_system_libs" && \
         test "$with_system_cppunit" != "no"; then
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: external" >&5

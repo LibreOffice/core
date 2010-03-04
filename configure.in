@@ -3584,7 +3584,7 @@ AC_SUBST(LIBWPD_LIBS)
 dnl ===================================================================
 dnl Check for system cppunit
 dnl ===================================================================
-AC_MSG_CHECKING([which libwpd to use])
+AC_MSG_CHECKING([which cppunit to use])
 if test -n "$with_system_cppunit" -o -n "$with_system_libs" && \
         test "$with_system_cppunit" != "no"; then
     AC_MSG_RESULT([external])
