@@ -35,6 +35,7 @@
 #include <unotools/saveopt.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include "xecontent.hxx"
 #include "xltracer.hxx"
@@ -247,27 +248,21 @@ String XclExpRoot::GetPassword() const
     {
         const SfxPoolItem* pItem = 0;
         if( pItemSet->GetItemState( SID_PASSWORD, TRUE, &pItem ) == SFX_ITEM_SET )
-        {
             if( const SfxStringItem* pStrItem = dynamic_cast< const SfxStringItem* >( pItem ) )
                 return pStrItem->GetValue();
-        }
     }
     return String::EmptyString();
 }
 
 sal_uInt16 XclExpRoot::GetWriteProtPassword() const
 {
-#if 0
     if( SfxItemSet* pItemSet = GetMedium().GetItemSet() )
     {
         const SfxPoolItem* pItem = 0;
         if( pItemSet->GetItemState( SID_MODIFYPASSWORDHASH, TRUE, &pItem ) == SFX_ITEM_SET )
-        {
             if( const SfxInt32Item* pIntItem = dynamic_cast< const SfxInt32Item* >( pItem ) )
                 return static_cast< sal_uInt16 >( pIntItem->GetValue() );
-        }
     }
-#endif
     return 0;
 }
 
