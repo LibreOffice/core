@@ -1757,7 +1757,7 @@ ErrCode SfxObjectShell::CallXScript( const String& rScriptURL,
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aOutParam
         , bool bRaiseError )
 {
-    return CallXScript( GetModel(), rScriptURL, aParams, aRet, aOutParamIndex, aOutParam );
+    return CallXScript( GetModel(), rScriptURL, aParams, aRet, aOutParamIndex, aOutParam, bRaiseError );
 }
 
 //-------------------------------------------------------------------------
