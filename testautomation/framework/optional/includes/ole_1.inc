@@ -1,28 +1,28 @@
 'encoding UTF-8  Do not remove or change this line!
 '**************************************************************************
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- * 
- * Copyright 2000, 2010 Oracle and/or its affiliates.
- *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+'
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
 '/************************************************************************
 '*
 '* owner : thorsten.bosbach@sun.com
@@ -41,13 +41,13 @@ testcase tOLEWriter
     Call hNewDocument
     
     PrintLog "- Writer :   Chart without table"
-    InsertObjectChart
-    sleep(4)    
+    hUseAsyncSlot( "InsertObjectChart" )
+
     Kontext "DocumentChart"
-    if DocumentChart.Exists(5) then
+    if ( DocumentChart.Exists( 5 ) ) then
         FormatChartType
         Kontext "ChartType"
-        if ChartType.Exists(5) then
+        if ( ChartType.Exists( 5 ) ) then
             ChartType.Cancel
         else
             warnlog "Chart Type dialog did bot occour."
@@ -56,18 +56,22 @@ testcase tOLEWriter
         DocumentChart.TypeKeys "<ESCAPE>"
         Kontext "DocumentWriter"
         DocumentWriter.TypeKeys "<DELETE>"
-        sleep(1)        
     else
         warnlog "Chart has not been inserted."
     end if    
-    sleep(4)        
+
     PrintLog "- Writer :   Chart out of a table only with numbers"
-    InsertTableWriter
+    hUseAsyncSlot( "InsertTableWriter" )
     
     Kontext "TabelleEinfuegenWriter"
-    Spalten.SetText "3"
-    Zeilen.SetText "10"
-    TabelleEinfuegenWriter.OK
+    if ( TabelleEinfuegenWriter.exists( 1 ) ) then
+        Spalten.SetText "3"
+        Zeilen.SetText "10"
+        TabelleEinfuegenWriter.OK
+        TabelleEinfuegenWriter.notExists( 2 )
+    else
+        warnlog( "Dialog <TabelleEinfuegenWriter> did not open" )
+    endif
     
     Kontext "DocumentWriter"
     for i%=1 to 10
@@ -80,7 +84,7 @@ testcase tOLEWriter
         DocumentWriter.TypeKeys "<Left>", 3
     next i%
     
-    InsertObjectChart
+    hUseAsyncSlot( "InsertObjectChart" )
     hStepThroughChartWizard()
     
     Kontext "DocumentChart"
@@ -90,16 +94,19 @@ testcase tOLEWriter
     Sleep 1
     DocumentWriter.TypeKeys "<Down>", 20
     DocumentWriter.TypeKeys "<Return>", 2
-    Sleep 1
-    
     
     PrintLog "- Writer :   Chart out of a table only with chars"
-    InsertTableWriter
+    hUseAsyncSlot( "InsertTableWriter" )
     
     Kontext "TabelleEinfuegenWriter"
-    Spalten.SetText "3"
-    Zeilen.SetText "10"
-    TabelleEinfuegenWriter.OK
+    if ( TabelleEinfuegenWriter.exists( 1 ) ) then
+        Spalten.SetText "3"
+        Zeilen.SetText "10"
+        TabelleEinfuegenWriter.OK
+        TabelleEinfuegenWriter.notExists( 2 )
+    else
+        warnlog( "Dialog <TabelleEinfuegenWriter> did not open" )
+    endif
     
     Kontext "DocumentWriter"
     for i%=1 to 10
@@ -112,8 +119,7 @@ testcase tOLEWriter
         DocumentWriter.TypeKeys "<Left>", 3
     next i%
     
-    InsertObjectChart
-    
+    hUseAsyncSlot( "InsertObjectChart" )
     hStepThroughChartWizard()
         
     Kontext "DocumentChart"
@@ -123,30 +129,32 @@ testcase tOLEWriter
     Sleep 1
     DocumentWriter.TypeKeys "<Down>", 20
     DocumentWriter.TypeKeys "<Return>", 2
-    Sleep 1
     
     PrintLog "- Writer :   Math"
     
-    InsertObjectFormulaWriter
+    hUseAsyncSlot( "InsertObjectFormulaWriter" )
     gMouseClick ( 1, 1)
     
     Kontext "DocumentWriter"
     DocumentWriter.TypeKeys "<Delete>"
-    Sleep 1
     
     PrintLog "- Writer :   floating frame"
+    hUseAsyncSlot( "InsertFloatingFrame" )
     
-    'warnlog( "#148094# - Crash when deselecting floating frame in Writer" )
-    
-    InsertFloatingFrame
-    
+    printlog( "Properties dialog for floating frame should open" )    
     Kontext "TabEigenschaften"
-    FrameName.SetText "Hallo"
-    Inhalt.SetText ConvertPath ( gTesttoolPath+"global\input\graf_inp\borabora.jpg" )
+    if ( TabEigenschaften.exists( 1 ) and TabEigenschaften.isVisible() ) then
+
+        printlog( "Name the floating frame, close the dialog" )
+        FrameName.SetText "Hallo"
+        Inhalt.SetText ConvertPath ( gTesttoolPath+"global\input\graf_inp\borabora.jpg" )
+        
+        TabEigenschaften.OK
+        TabEigenSchaften.notExists( 2 )
+        
+    endif
     
-    TabEigenschaften.OK
-    Sleep 2
-    
+    printlog( "Close the writer document" )
     Kontext "DocumentWriter"
     DocumentWriter.TypeKeys "<Delete>"
     Sleep 1
@@ -327,7 +335,7 @@ testcase tOLEDraw
     MenuSelect(0)
     
     try
-        InsertObjectChart
+        hUseAsyncSlot( "InsertObjectChart" )
         Sleep ( 2 )
         
         Kontext "DocumentChart"
@@ -407,7 +415,7 @@ testcase tOLEImpress
     PrintLog "- Impress :   Chart"
     
     try
-        InsertObjectChart
+        hUseAsyncSlot( "InsertObjectChart" )
         sleep 2
         
         gMouseClick ( 1 , 1 )

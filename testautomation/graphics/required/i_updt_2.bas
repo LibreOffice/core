@@ -69,7 +69,6 @@ sub LoadIncludeFiles
    use "global\system\includes\master.inc"
    use "global\system\includes\gvariabl.inc"
    use "global\required\includes\g_001.inc"
-   use "global\required\includes\g_009.inc"
    use "global\required\includes\g_printing.inc"
    use "global\tools\includes\optional\t_docfuncs.inc"
    use "global\tools\includes\optional\t_control_objects.inc"

@@ -183,7 +183,7 @@ public class Runner
     }
 
     public static boolean run(String... args) {
-        System.out.println("OOoRunner Main() version from 20090825 (yyyymmdd)");
+        System.out.println("OOoRunner Main() version from 20100125 (yyyymmdd)");
 
         setStartTime(getTime());
 
