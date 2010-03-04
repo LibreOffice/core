@@ -50,25 +50,22 @@
 class PasswordReenterEdit_Impl : public Edit
 {
     String  m_aDefaultTxt;
-    bool    m_bForceNonEmptyPasswd;
 
     // disallow use of copy c-tor and assignment operator
     PasswordReenterEdit_Impl( const PasswordReenterEdit_Impl & );
     PasswordReenterEdit_Impl & operator = ( const PasswordReenterEdit_Impl & );
 
 public:
-    PasswordReenterEdit_Impl( Window * pParent, const ResId &rResId, bool bForceNonEmptyPasswd );
+    PasswordReenterEdit_Impl( Window * pParent, const ResId &rResId );
     virtual ~PasswordReenterEdit_Impl();
 
     // Edit
-//    virtual void        Modify();
     virtual void        Paint( const Rectangle& rRect );
 };
 
 
-PasswordReenterEdit_Impl::PasswordReenterEdit_Impl( Window * pParent, const ResId &rResId, bool bForceNonEmptyPasswd ) :
-    Edit( pParent, rResId ),
-    m_bForceNonEmptyPasswd( bForceNonEmptyPasswd )
+PasswordReenterEdit_Impl::PasswordReenterEdit_Impl( Window * pParent, const ResId &rResId ) :
+    Edit( pParent, rResId )
 {
     m_aDefaultTxt = String( CUI_RES( STR_PASSWD_MUST_BE_CONFIRMED ) );
 }
@@ -78,28 +75,22 @@ PasswordReenterEdit_Impl::~PasswordReenterEdit_Impl()
 {
 }
 
-/*
-void PasswordReenterEdit_Impl::Modify()
-{
-    Edit::Modify();
-    SetModifyFlag();
-    if (m_bForceNonEmptyPasswd && GetText().Len() == 0)
-        Invalidate();   // get the m_aDefaultTxt displayed again
-}
-*/
 
 void PasswordReenterEdit_Impl::Paint( const Rectangle& rRect )
 {
-    if (!IsEnabled() || !IsModified() || (m_bForceNonEmptyPasswd && GetText().Len() == 0))
+    if (GetText().Len() == 0)
     {
-        Push( PUSH_FILLCOLOR | PUSH_TEXTFILLCOLOR );
-
+        Push( /*PUSH_FILLCOLOR | PUSH_TEXTFILLCOLOR |*/ PUSH_TEXTCOLOR );
+/*
         Color aFillColor( GetParent()->GetBackground().GetColor() );
-        SetLineColor();
+        SetLineColor(); // don't draw a border when painting the Edit field rectangle with the new background color
         SetFillColor( aFillColor );
         SetTextFillColor( aFillColor );
+        SetTextColor( GetParent()->GetTextColor() );    // use plain text color even if the Edit field is disabled (it is hard to read the text otherwise)
 
         DrawRect( Rectangle( Point(), GetOutputSizePixel() ) );
+*/
+        SetTextColor( Color( COL_GRAY ) );
         DrawText( Point(), m_aDefaultTxt );
 
         Pop();
@@ -131,24 +122,25 @@ struct PasswordToOpenModifyDialog_Impl
     FixedText                   m_aReenterPasswdToModifyFT;
     PasswordReenterEdit_Impl    m_aReenterPasswdToModifyED;
     FixedImage                  m_aPasswdToModifyMatchFI;
-
-    bool                        m_bReenterPasswdToOpenEdited;
-    bool                        m_bReenterPasswdToModifyEdited;
+    CheckBox                    m_aOpenReadonlyCB;
 
 
     DECL_LINK( ModifyHdl, Edit * );
 
-    PasswordToOpenModifyDialog_Impl( Window * pParent );
+    PasswordToOpenModifyDialog_Impl( Window * pParent, sal_uInt16 nMinPasswdLen, sal_uInt16 nMaxPasswdLen );
     ~PasswordToOpenModifyDialog_Impl();
 };
 
 
-PasswordToOpenModifyDialog_Impl::PasswordToOpenModifyDialog_Impl( Window * pParent ) :
+PasswordToOpenModifyDialog_Impl::PasswordToOpenModifyDialog_Impl(
+        Window * pParent,
+        sal_uInt16 nMinPasswdLen,
+        sal_uInt16 nMaxPasswdLen ) :
     m_pParent( pParent ),
     m_aPasswdToOpenFT           ( pParent, CUI_RES( FT_PASSWD_TO_OPEN ) ),
     m_aPasswdToOpenED           ( pParent, CUI_RES( ED_PASSWD_TO_OPEN ) ),
     m_aReenterPasswdToOpenFT    ( pParent, CUI_RES( FT_REENTER_PASSWD_TO_OPEN ) ),
-    m_aReenterPasswdToOpenED    ( pParent, CUI_RES( ED_REENTER_PASSWD_TO_OPEN ), true ),
+    m_aReenterPasswdToOpenED    ( pParent, CUI_RES( ED_REENTER_PASSWD_TO_OPEN ) ),
     m_aPasswdToOpenMatchFI      ( pParent, CUI_RES( FI_PASSWD_TO_OPEN_MATCH ) ),
     m_aPasswdNoteFT             ( pParent, CUI_RES( FT_PASSWD_NOTE ) ),
     m_aButtonsFL                ( pParent, CUI_RES( FL_BUTTONS ) ),
@@ -159,10 +151,9 @@ PasswordToOpenModifyDialog_Impl::PasswordToOpenModifyDialog_Impl( Window * pPare
     m_aPasswdToModifyFT         ( pParent, CUI_RES( FT_PASSWD_TO_MODIFY ) ),
     m_aPasswdToModifyED         ( pParent, CUI_RES( ED_PASSWD_TO_MODIFY ) ),
     m_aReenterPasswdToModifyFT  ( pParent, CUI_RES( FT_REENTER_PASSWD_TO_MODIFY ) ),
-    m_aReenterPasswdToModifyED  ( pParent, CUI_RES( ED_REENTER_PASSWD_TO_MODIFY ), false ),
+    m_aReenterPasswdToModifyED  ( pParent, CUI_RES( ED_REENTER_PASSWD_TO_MODIFY ) ),
     m_aPasswdToModifyMatchFI    ( pParent, CUI_RES( FI_PASSWD_TO_MODIFY_MATCH ) ),
-    m_bReenterPasswdToOpenEdited    ( false ),
-    m_bReenterPasswdToModifyEdited  ( false )
+    m_aOpenReadonlyCB           ( pParent, CUI_RES( CB_OPEN_READONLY ) )
 {
     const sal_Bool bHighContrast = pParent->GetSettings().GetStyleSettings().GetHighContrastMode();
     const Image aImage( CUI_RES( bHighContrast ? IMG_PASSWD_MATCH_HC : IMG_PASSWD_MATCH ) );
@@ -178,9 +169,19 @@ PasswordToOpenModifyDialog_Impl::PasswordToOpenModifyDialog_Impl( Window * pPare
     m_aPasswdToModifyED.SetModifyHdl( aModifyLink );
     m_aReenterPasswdToModifyED.SetModifyHdl( aModifyLink );
 
-    m_aReenterPasswdToOpenED.Enable( FALSE );
-    m_aReenterPasswdToModifyED.Enable( FALSE );
     m_aOk.Enable( FALSE );
+
+    if (nMaxPasswdLen)
+    {
+        m_aPasswdToOpenED.SetMaxTextLen( nMaxPasswdLen );
+        m_aReenterPasswdToOpenED.SetMaxTextLen( nMaxPasswdLen );
+        m_aPasswdToModifyED.SetMaxTextLen( nMaxPasswdLen );
+        m_aReenterPasswdToModifyED.SetMaxTextLen( nMaxPasswdLen );
+    }
+
+    (void) nMinPasswdLen;   // currently not supported
+
+    m_aPasswdToOpenED.GrabFocus();
 
     ModifyHdl( NULL );
 }
@@ -193,26 +194,23 @@ PasswordToOpenModifyDialog_Impl::~PasswordToOpenModifyDialog_Impl()
 
 IMPL_LINK( PasswordToOpenModifyDialog_Impl, ModifyHdl, Edit *, pEdit )
 {
-    if (pEdit == &m_aReenterPasswdToOpenED)
-        m_bReenterPasswdToOpenEdited = true;
-    if (pEdit == &m_aReenterPasswdToModifyED)
-        m_bReenterPasswdToModifyEdited = true;
-
-    m_aReenterPasswdToOpenED.Enable( m_aPasswdToOpenED.GetText().Len() > 0 );
-    m_aReenterPasswdToModifyED.Enable( m_aPasswdToModifyED.GetText().Len() > 0 );
-
-    const bool bToOpenEqual     = m_aPasswdToOpenED.GetText() == m_aReenterPasswdToOpenED.GetText();
-    const bool bToModifyEqual   = m_aPasswdToModifyED.GetText() == m_aReenterPasswdToModifyED.GetText();
-    const BOOL bEnableOk =
-            m_bReenterPasswdToOpenEdited && m_aPasswdToOpenED.GetText().Len() > 0 &&
-            bToOpenEqual && (!m_bReenterPasswdToModifyEdited || bToModifyEqual);
-    m_aOk.Enable( bEnableOk );
-
-    m_aPasswdToOpenMatchFI.Enable( bToOpenEqual && m_aPasswdToOpenED.GetText().Len() > 0 );
-    m_aPasswdToModifyMatchFI.Enable( bToModifyEqual );
-
+    // force repaints to get the m_aDefaultTxt displayed again
     if (m_aReenterPasswdToOpenED.GetText().Len() == 0)
-        m_aReenterPasswdToOpenED.Invalidate();   // get the m_aDefaultTxt displayed again
+        m_aReenterPasswdToOpenED.Invalidate();
+    if (m_aReenterPasswdToModifyED.GetText().Len() == 0)
+        m_aReenterPasswdToModifyED.Invalidate();
+
+    const sal_Int32 nPasswdToOpenLen    = m_aPasswdToOpenED.GetText().Len();
+    const sal_Int32 nPasswdToModifyLen  = m_aPasswdToModifyED.GetText().Len();
+
+    const bool bBothEmpty       = nPasswdToOpenLen == 0 && nPasswdToModifyLen == 0;
+    const bool bToOpenMatch     = m_aPasswdToOpenED.GetText()   == m_aReenterPasswdToOpenED.GetText();
+    const bool bToModifyMatch   = m_aPasswdToModifyED.GetText() == m_aReenterPasswdToModifyED.GetText();
+
+    m_aOk.Enable( bToOpenMatch && bToModifyMatch && !bBothEmpty );
+
+    m_aPasswdToOpenMatchFI.Enable( bToOpenMatch && !bBothEmpty );
+    m_aPasswdToModifyMatchFI.Enable( bToModifyMatch && !bBothEmpty );
 
     return 0;
 }
@@ -221,10 +219,14 @@ IMPL_LINK( PasswordToOpenModifyDialog_Impl, ModifyHdl, Edit *, pEdit )
 //////////////////////////////////////////////////////////////////////
 
 
-PasswordToOpenModifyDialog::PasswordToOpenModifyDialog( Window * pParent ) :
+PasswordToOpenModifyDialog::PasswordToOpenModifyDialog(
+        Window * pParent,
+        sal_uInt16 nMinPasswdLen,
+        sal_uInt16 nMaxPasswdLen ) :
     SfxModalDialog( pParent, CUI_RES( RID_DLG_PASSWORD_TO_OPEN_MODIFY ) )
 {
-    m_pImpl = boost::shared_ptr< PasswordToOpenModifyDialog_Impl >( new PasswordToOpenModifyDialog_Impl( this ) );
+    m_pImpl = std::auto_ptr< PasswordToOpenModifyDialog_Impl >(
+            new PasswordToOpenModifyDialog_Impl( this, nMinPasswdLen, nMaxPasswdLen ) );
 
     FreeResource();
 }
@@ -237,20 +239,27 @@ PasswordToOpenModifyDialog::~PasswordToOpenModifyDialog()
 
 String PasswordToOpenModifyDialog::GetPasswordToOpen() const
 {
-    const bool bPasswdEditedAndOk =
-            m_pImpl->m_bReenterPasswdToOpenEdited && m_pImpl->m_aPasswdToOpenED.GetText().Len() > 0 &&
+    const bool bPasswdOk =
+            m_pImpl->m_aPasswdToOpenED.GetText().Len() > 0 &&
             m_pImpl->m_aPasswdToOpenED.GetText() == m_pImpl->m_aReenterPasswdToOpenED.GetText();
-    return bPasswdEditedAndOk ? m_pImpl->m_aPasswdToOpenED.GetText() : String();
+    return bPasswdOk ? m_pImpl->m_aPasswdToOpenED.GetText() : String();
 }
 
 
 String PasswordToOpenModifyDialog::GetPasswordToModify() const
 {
-    const bool bPasswdEditedAndOk =
-            m_pImpl->m_bReenterPasswdToModifyEdited && m_pImpl->m_aPasswdToModifyED.GetText().Len() > 0 &&
+    const bool bPasswdOk =
+            m_pImpl->m_aPasswdToModifyED.GetText().Len() > 0 &&
             m_pImpl->m_aPasswdToModifyED.GetText() == m_pImpl->m_aReenterPasswdToModifyED.GetText();
-    return bPasswdEditedAndOk ? m_pImpl->m_aPasswdToModifyED.GetText() : String();
+    return bPasswdOk ? m_pImpl->m_aPasswdToModifyED.GetText() : String();
 }
+
+
+bool PasswordToOpenModifyDialog::IsRecommendToOpenReadonly() const
+{
+    return m_pImpl->m_aOpenReadonlyCB.IsChecked();
+}
+
 
 //////////////////////////////////////////////////////////////////////
 

@@ -962,6 +962,10 @@ String AbstractPasswordToOpenModifyDialog_Impl::GetPasswordToModify() const
 {
     return pDlg->GetPasswordToModify();
 }
+bool AbstractPasswordToOpenModifyDialog_Impl::IsRecommendToOpenReadonly() const
+{
+    return pDlg->IsRecommendToOpenReadonly();
+}
 
 // Create dialogs with simplest interface
 VclAbstractDialog* AbstractDialogFactory_Impl::CreateVclDialog( Window* pParent, sal_uInt32 nResId )
@@ -1916,9 +1920,11 @@ SvxAbstractInsRowColDlg* AbstractDialogFactory_Impl::CreateSvxInsRowColDlg( Wind
     return new SvxInsRowColDlg( pParent, bCol, nHelpId );
 }
 
-AbstractPasswordToOpenModifyDialog * AbstractDialogFactory_Impl::CreatePasswordToOpenModifyDialog( Window * pParent )
+AbstractPasswordToOpenModifyDialog * AbstractDialogFactory_Impl::CreatePasswordToOpenModifyDialog(
+    Window * pParent,
+    sal_uInt16 nMinPasswdLen, sal_uInt16 nMaxPasswdLen )
 {
-    PasswordToOpenModifyDialog * pDlg = new PasswordToOpenModifyDialog( pParent );
+    PasswordToOpenModifyDialog * pDlg = new PasswordToOpenModifyDialog( pParent, nMinPasswdLen, nMaxPasswdLen );
     return new AbstractPasswordToOpenModifyDialog_Impl( pDlg );
 }
 

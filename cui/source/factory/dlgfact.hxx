@@ -583,6 +583,7 @@ class AbstractPasswordToOpenModifyDialog_Impl : public AbstractPasswordToOpenMod
 
     virtual String  GetPasswordToOpen() const;
     virtual String  GetPasswordToModify() const;
+    virtual bool    IsRecommendToOpenReadonly() const;
 };
 //for PasswordToOpenModifyDialog end
 
@@ -789,7 +790,7 @@ public:
 
     virtual SvxAbstractInsRowColDlg* CreateSvxInsRowColDlg( Window* pParent, bool bCol, ULONG nHelpId );
 
-    virtual AbstractPasswordToOpenModifyDialog *    CreatePasswordToOpenModifyDialog( Window * pParent );
+    virtual AbstractPasswordToOpenModifyDialog *    CreatePasswordToOpenModifyDialog( Window * pParent, sal_uInt16 nMinPasswdLen, sal_uInt16 nMaxPasswdLen  );
 };
 
 #endif

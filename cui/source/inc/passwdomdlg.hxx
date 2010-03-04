@@ -27,10 +27,10 @@
 #ifndef _CUI_PASSWDOMDLG_HXX_
 #define _CUI_PASSWDOMDLG_HXX_
 
-#include <boost/shared_ptr.hpp>
 
 #include <sfx2/basedlgs.hxx>
 
+#include <memory>
 
 //////////////////////////////////////////////////////////////////////
 
@@ -38,18 +38,20 @@ struct PasswordToOpenModifyDialog_Impl;
 
 class PasswordToOpenModifyDialog : public SfxModalDialog
 {
-    boost::shared_ptr< PasswordToOpenModifyDialog_Impl >  m_pImpl;
+    std::auto_ptr< PasswordToOpenModifyDialog_Impl >  m_pImpl;
 
     // disallow use of copy c-tor and assignment operator
     PasswordToOpenModifyDialog( const PasswordToOpenModifyDialog & );
     PasswordToOpenModifyDialog & operator = ( const PasswordToOpenModifyDialog & );
 
 public:
-    PasswordToOpenModifyDialog( Window * pParent );
+    PasswordToOpenModifyDialog( Window * pParent, sal_uInt16 nMinPasswdLen, sal_uInt16 nMaxPasswdLen /* 0 -> no max len enforced */);
     virtual ~PasswordToOpenModifyDialog();
 
+    // AbstractPasswordToOpenModifyDialog
     virtual String  GetPasswordToOpen() const;
     virtual String  GetPasswordToModify() const;
+    virtual bool    IsRecommendToOpenReadonly() const;
 };
 
 //////////////////////////////////////////////////////////////////////

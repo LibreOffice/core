@@ -46,6 +46,7 @@
 #define ED_REENTER_PASSWD_TO_MODIFY     26
 #define FI_PASSWD_TO_OPEN_MATCH         27
 #define FI_PASSWD_TO_MODIFY_MATCH       28
+#define CB_OPEN_READONLY                29
 
 #define STR_MORE_OPTIONS                51
 #define STR_FEWER_OPTIONS               52
