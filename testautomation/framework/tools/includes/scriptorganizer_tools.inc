@@ -344,39 +344,3 @@ function hOpenScriptOrganizer( iDialog as integer ) as boolean
     '///</ul>
 
 end function
-    
-'*******************************************************************************
-
-function hOpenRunMacroDialog() as boolean
-
-    '///<h3>Open the &quot;Run Macro&quot; dialog</h3>
-    '///<i>Starting point: Any document</i><br>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Errorcondition</li>
-    '///<ul>
-    '///+<li>TRUE if dialog is open</li>
-    '///+<li>FALSE if the Script Selector does not exist</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
-    
-
-    '///+<li>Execute the ToolsMacrosRunMacro slot</li>
-    ToolsMacrosRunMacro
-
-    '///+<li>Verify that the dialog is present</li>
-    kontext "ScriptSelector"
-    if ( ScriptSelector.exists( 2 ) ) then
-        hOpenRunMacroDialog() = true
-    else
-        hOpenRunMacroDialog() = false
-    endif
-    '///</ul>
-
-end function
