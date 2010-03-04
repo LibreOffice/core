@@ -3994,6 +3994,33 @@ SfxVoidItem MacroOrganizer SID_MACROORGANIZER
 ]
 
 //--------------------------------------------------------------------------
+SfxInt32Item ModifyPasswordHash SID_MODIFYPASSWORDHASH
+
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = TRUE,
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = ;
+]
+
+//--------------------------------------------------------------------------
 SfxVoidItem RunMacro SID_RUNMACRO
 ()
 [
