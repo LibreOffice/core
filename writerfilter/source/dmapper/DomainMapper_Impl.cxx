@@ -2577,9 +2577,6 @@ void FieldContext::AppendCommand(const ::rtl::OUString& rPart)
         OUString sToken = GetCommand().getToken(0, ' ', nIndex);
         bool bInStringNext = bInString;
 
-        ::std::string sToken2 = OUStringToOString(sToken, RTL_TEXTENCODING_ASCII_US).getStr();
-        ::std::clog << "GetCommandParts:" << sToken2 << ::std::endl;
-
         if (sToken.getLength() == 0)
             continue;
 
