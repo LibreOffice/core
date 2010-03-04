@@ -140,6 +140,11 @@ published service MediaDescriptor
         for a special component type. Format of that depends from real
         type of adressed component.
         </p>
+
+        <p>
+        For extensibility, it is recommended to use values of type
+        sequence<com.sun.star.beans.PropertyValue> with this property.
+        </p>
      */
     [optional,property] any ComponentData;
 
