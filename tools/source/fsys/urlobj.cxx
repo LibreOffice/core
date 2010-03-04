@@ -1605,7 +1605,23 @@ bool INetURLObject::convertRelToAbs(rtl::OUString const & rTheRelURIRef,
                  STATE_DONE };
 
     rtl::OUStringBuffer aSynAbsURIRef;
-    aSynAbsURIRef.appendAscii(getSchemeInfo().m_pScheme);
+    // make sure that the scheme is copied for generic schemes: getSchemeInfo().m_pScheme
+    // is empty ("") in that case, so take the scheme from m_aAbsURIRef
+    if (m_eScheme != INET_PROT_GENERIC)
+    {
+        aSynAbsURIRef.appendAscii(getSchemeInfo().m_pScheme);
+    }
+    else
+    {
+        sal_Unicode const * pSchemeBegin
+            = m_aAbsURIRef.getStr();
+        sal_Unicode const * pSchemeEnd = pSchemeBegin;
+        while (pSchemeEnd[0] != ':')
+        {
+            ++pSchemeEnd;
+        }
+        aSynAbsURIRef.append(pSchemeBegin, pSchemeEnd - pSchemeBegin);
+    }
     aSynAbsURIRef.append(sal_Unicode(':'));
 
     sal_Char cEscapePrefix = getEscapePrefix();
@@ -3814,7 +3830,27 @@ INetURLObject::getAbbreviated(
     OSL_ENSURE(rStringWidth.is(), "specification violation");
     sal_Char cEscapePrefix = getEscapePrefix();
     rtl::OUStringBuffer aBuffer;
-    aBuffer.appendAscii(getSchemeInfo().m_pScheme);
+    // make sure that the scheme is copied for generic schemes: getSchemeInfo().m_pScheme
+    // is empty ("") in that case, so take the scheme from m_aAbsURIRef
+    if (m_eScheme != INET_PROT_GENERIC)
+    {
+        aBuffer.appendAscii(getSchemeInfo().m_pScheme);
+    }
+    else
+    {
+        if (m_aAbsURIRef)
+        {
+            sal_Unicode const * pSchemeBegin
+                = m_aAbsURIRef.getStr();
+            sal_Unicode const * pSchemeEnd = pSchemeBegin;
+
+            while (pSchemeEnd[0] != ':')
+            {
+                ++pSchemeEnd;
+            }
+            aBuffer.append(pSchemeBegin, pSchemeEnd - pSchemeBegin);
+        }
+    }
     aBuffer.append(static_cast< sal_Unicode >(':'));
     bool bAuthority = getSchemeInfo().m_bAuthority;
     sal_Unicode const * pCoreBegin
