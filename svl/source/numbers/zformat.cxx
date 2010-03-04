@@ -678,7 +678,7 @@ SvNumberformat::SvNumberformat(String& rString,
                     xub_StrLen nAnzChars = ImpGetNumber(rString, nPos, sStr);
                     if (nAnzChars > 0)
                     {
-                        short F_Type;
+                        short F_Type = NUMBERFORMAT_UNDEFINED;
                         if (!pISc->IsNumberFormat(sStr,F_Type,fNumber) ||
                             ( F_Type != NUMBERFORMAT_NUMBER &&
                             F_Type != NUMBERFORMAT_SCIENTIFIC) )
