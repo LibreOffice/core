@@ -2565,6 +2565,66 @@ void FieldContext::AppendCommand(const ::rtl::OUString& rPart)
 {
     m_sCommand += rPart;
 }
+
+::std::vector<rtl::OUString> FieldContext::GetCommandParts() const
+{
+    ::std::vector<rtl::OUString> aResult;
+    sal_Int32 nIndex = 0;
+    bool bInString = false;
+    OUString sPart;
+    while (nIndex != -1)
+    {
+        OUString sToken = GetCommand().getToken(0, ' ', nIndex);
+        bool bInStringNext = bInString;
+
+        ::std::string sToken2 = OUStringToOString(sToken, RTL_TEXTENCODING_ASCII_US).getStr();
+        ::std::clog << "GetCommandParts:" << sToken2 << ::std::endl;
+
+        if (sToken.getLength() == 0)
+            continue;
+
+        if (sToken.getStr()[0] == '"')
+        {
+            bInStringNext = true;
+            sToken = sToken.copy(1);
+        }
+        if (sToken.getStr()[sToken.getLength() - 1] == '"')
+        {
+            bInStringNext = false;
+            sToken = sToken.copy(0, sToken.getLength() - 1);
+        }
+
+        if (bInString)
+        {
+            if (bInStringNext)
+            {
+                sPart += OUString(' ');
+                sPart += sToken;
+            }
+            else
+            {
+                sPart += sToken;
+                aResult.push_back(sPart);
+            }
+        }
+        else
+        {
+            if (bInStringNext)
+            {
+                sPart = sToken;
+            }
+            else
+            {
+                aResult.push_back(sToken);
+            }
+        }
+
+        bInString = bInStringNext;
+    }
+
+    return aResult;
+}
+
 /*-- 29.01.2007 11:33:15---------------------------------------------------
 //collect the pieces of the command
   -----------------------------------------------------------------------*/
@@ -2902,10 +2962,48 @@ void DomainMapper_Impl::CloseFieldCommand()
                     case FIELD_GOTOBUTTON   : break;
                     case FIELD_HYPERLINK:
                     {
-                        sal_Int32 nStartQuote = pContext->GetCommand().indexOf( '\"' );
-                        sal_Int32 nEndQuote = nStartQuote < pContext->GetCommand().getLength() + 1 ? pContext->GetCommand().indexOf( '\"', nStartQuote + 1) : -1;
-                        if( nEndQuote > 0)
-                            pContext->SetHyperlinkURL( pContext->GetCommand().copy(nStartQuote + 1, nEndQuote - nStartQuote - 1) );
+                        ::std::vector<rtl::OUString> aParts = pContext->GetCommandParts();
+                        ::std::vector<rtl::OUString>::const_iterator aItEnd = aParts.end();
+                        ::std::vector<rtl::OUString>::const_iterator aIt = aParts.begin();
+
+                        OUString sURL;
+
+                        while (aIt != aItEnd)
+                        {
+                            if (aIt->equalsAscii("\\l"))
+                            {
+                                aIt++;
+
+                                if (aIt == aItEnd)
+                                    break;
+
+                                sURL = OUString('#');
+                                sURL += *aIt;
+                            }
+                            else if (aIt->equalsAscii("\\m") ||
+                                     aIt->equalsAscii("\\n"))
+                            {
+                            }
+                            else if (aIt->equalsAscii("\\o") ||
+                                     aIt->equalsAscii("\\t"))
+                            {
+                                aIt++;
+
+                                if (aIt == aItEnd)
+                                    break;
+                            }
+                            else
+                            {
+                                sURL = *aIt;
+                            }
+
+                            aIt++;
+                        }
+
+                        if (sURL.getLength() > 0)
+                        {
+                            pContext->SetHyperlinkURL(sURL);
+                        }
                     }
                     break;
                     case FIELD_IF           : break;

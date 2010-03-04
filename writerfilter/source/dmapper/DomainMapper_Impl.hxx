@@ -163,6 +163,7 @@ public:
     void    SetHyperlinkURL( const ::rtl::OUString& rURL ) { m_sHyperlinkURL = rURL; }
     const ::rtl::OUString&                                                      GetHyperlinkURL() { return m_sHyperlinkURL; }
 
+    ::std::vector<rtl::OUString> GetCommandParts() const;
 };
 
 struct TextAppendContext
