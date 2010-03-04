@@ -419,6 +419,7 @@ void StyleSheetTable::attribute(Id Name, Value & val)
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("StyleSheetTable.attribute");
     dmapper_logger->attribute("name", (*QNameToString::Instance())(Name));
+    dmapper_logger->attribute("value", val.toString());
 #endif
 
     OSL_ENSURE( m_pImpl->m_pCurrentEntry, "current entry has to be set here");
@@ -536,10 +537,9 @@ void StyleSheetTable::attribute(Id Name, Value & val)
         break;
         default:
         {
-            //----> debug
-            int nVal = val.getInt();
-            ++nVal;
-            //<---- debug
+#ifdef DEBUG_DOMAINMAPPER
+            dmapper_logger->element("unhandled");
+#endif
         }
         break;
     }
