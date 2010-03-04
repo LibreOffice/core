@@ -43,6 +43,8 @@ ENABLE_EXCEPTIONS=TRUE
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
+
 # BEGIN ----------------------------------------------------------------
 # auto generated Target:Socket by codegen.pl
 SHL1OBJS=  \

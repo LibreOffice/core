@@ -33,10 +33,7 @@ ENABLE_EXCEPTIONS := TRUE
 
 .INCLUDE: settings.mk
 
-.IF "$(SYSTEM_CPPUNIT)"=="YES"
-CFLAGS+= $(CPPUNIT_CFLAGS)
-.ENDIF
-
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
 DLLPRE = # no leading "lib" on .so files
 
 SHL1TARGET = $(TARGET)

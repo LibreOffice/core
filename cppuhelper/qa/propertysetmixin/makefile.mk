@@ -45,12 +45,9 @@ my_file = file:///
 my_file = file://
 .END
 
-.IF "$(SYSTEM_CPPUNIT)"=="YES"
-CFLAGS+= $(CPPUNIT_CFLAGS)
-.ENDIF
-
 DLLPRE = # no leading "lib" on .so files
 INCPRE += -I$(MISC)/$(TARGET)/inc
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
 SHL1TARGET = $(TARGET)
 SHL1OBJS = $(SLO)/test_propertysetmixin.obj
