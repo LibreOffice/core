@@ -33,6 +33,7 @@
 #include "pppoptimizertoken.hxx"
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
@@ -55,6 +56,7 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
+#include <com/sun/star/view/XControlAccess.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 
 
@@ -63,6 +65,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::ui::dialogs;
 
 FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxMSF ) :
@@ -75,6 +78,17 @@ FileOpenDialog::FileOpenDialog( const Reference< XComponentContext >& rxMSF ) :
         OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ) ), aInitPropSeq, rxMSF ),UNO_QUERY_THROW );
     mxFilePicker->setMultiSelectionMode( sal_False );
 
+    Reference< XFilePickerControlAccess > xAccess( mxFilePicker, UNO_QUERY );
+    if ( xAccess.is() )
+    {
+        Any aValue( static_cast< sal_Bool >( sal_True ) );
+        try
+        {
+            xAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue );
+        }
+        catch( com::sun::star::uno::Exception& )
+        {}
+    }
 
     // collecting a list of impress filters
     Reference< XNameAccess > xFilters( mxMSF->getServiceManager()->createInstanceWithContext(
