@@ -32,9 +32,9 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/sheet/XCalculatable.hpp>
+#include <comphelper/mediadescriptor.hxx>
 #include "properties.hxx"
 #include "oox/helper/attributelist.hxx"
-#include "oox/helper/mediadescriptor.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/helper/recordinputstream.hxx"
 #include "oox/core/filterbase.hxx"
@@ -48,6 +48,7 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::util::Date;
 using ::com::sun::star::util::XNumberFormatsSupplier;
 using ::com::sun::star::sheet::XCalculatable;
+using ::comphelper::MediaDescriptor;
 using ::oox::core::CodecHelper;
 
 namespace oox {

@@ -34,10 +34,10 @@
 #include <rtl/digest.h>
 #include <openssl/evp.h>
 #include <comphelper/docpasswordhelper.hxx>
+#include <comphelper/mediadescriptor.hxx>
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/binaryoutputstream.hxx"
-#include "oox/helper/mediadescriptor.hxx"
 #include "oox/helper/olestorage.hxx"
 #include "oox/helper/zipstorage.hxx"
 #include "oox/core/fasttokenhandler.hxx"
@@ -65,6 +65,7 @@ using ::com::sun::star::xml::sax::XFastAttributeList;
 using ::com::sun::star::xml::sax::XFastContextHandler;
 using ::com::sun::star::xml::sax::XFastParser;
 using ::com::sun::star::xml::sax::XLocator;
+using ::comphelper::MediaDescriptor;
 using ::comphelper::SequenceAsHashMap;
 
 namespace oox {

@@ -41,6 +41,7 @@ using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::io::XInputStream;
+using ::comphelper::MediaDescriptor;
 using ::oox::core::FilterBase;
 
 namespace oox {

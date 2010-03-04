@@ -51,7 +51,6 @@ SLOFILES =	\
         $(SLO)$/binarystreambase.obj		\
         $(SLO)$/containerhelper.obj			\
         $(SLO)$/graphichelper.obj			\
-        $(SLO)$/mediadescriptor.obj		    \
         $(SLO)$/modelobjecthelper.obj		\
         $(SLO)$/olestorage.obj				\
         $(SLO)$/progressbar.obj				\

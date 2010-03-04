@@ -32,8 +32,8 @@
 #include <algorithm>
 #include <rtl/strbuf.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
+#include <comphelper/mediadescriptor.hxx>
 #include "oox/helper/binaryinputstream.hxx"
-#include "oox/helper/mediadescriptor.hxx"
 #include "oox/helper/olestorage.hxx"
 
 using ::rtl::OUString;
@@ -47,6 +47,7 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::io::XInputStream;
+using ::comphelper::MediaDescriptor;
 
 namespace oox {
 namespace xls {

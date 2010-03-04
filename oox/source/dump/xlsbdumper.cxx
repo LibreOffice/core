@@ -48,6 +48,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::util::DateTime;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::io::XInputStream;
+using ::comphelper::MediaDescriptor;
 using ::oox::core::FilterBase;
 
 using namespace ::oox::xls;

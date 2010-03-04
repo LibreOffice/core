@@ -64,6 +64,7 @@ using ::com::sun::star::io::XInputStream;
 using ::com::sun::star::io::XOutputStream;
 using ::com::sun::star::io::XTextInputStream;
 using ::com::sun::star::io::XTextOutputStream;
+using ::comphelper::MediaDescriptor;
 using ::oox::core::FilterBase;
 
 namespace oox {

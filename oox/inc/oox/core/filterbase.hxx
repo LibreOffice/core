@@ -60,11 +60,11 @@ namespace com { namespace sun { namespace star {
 
 namespace comphelper {
     class IDocPasswordVerifier;
+    class MediaDescriptor;
 }
 
 namespace oox {
     class GraphicHelper;
-    class MediaDescriptor;
     class ModelObjectHelper;
 }
 
@@ -132,7 +132,7 @@ public:
                         getInteractionHandler() const;
 
     /** Returns the media descriptor. */
-    MediaDescriptor&    getMediaDescriptor() const;
+    ::comphelper::MediaDescriptor& getMediaDescriptor() const;
 
     /** Returns the URL of the imported or exported file. */
     const ::rtl::OUString& getFileUrl() const;
@@ -277,9 +277,9 @@ public:
     // ------------------------------------------------------------------------
 protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
-                        implGetInputStream( MediaDescriptor& rMediaDesc ) const;
+                        implGetInputStream( ::comphelper::MediaDescriptor& rMediaDesc ) const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >
-                        implGetOutputStream( MediaDescriptor& rMediaDesc ) const;
+                        implGetOutputStream( ::comphelper::MediaDescriptor& rMediaDesc ) const;
 
 private:
     void                setMediaDescriptor(

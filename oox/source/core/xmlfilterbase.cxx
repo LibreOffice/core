@@ -39,11 +39,11 @@
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
+#include <comphelper/mediadescriptor.hxx>
 #include <sax/fshelper.hxx>
 #include "properties.hxx"
 #include "tokens.hxx"
 #include "oox/helper/containerhelper.hxx"
-#include "oox/helper/mediadescriptor.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/helper/zipstorage.hxx"
 #include "oox/core/fasttokenhandler.hxx"
@@ -79,6 +79,7 @@ using ::com::sun::star::xml::sax::InputSource;
 using ::com::sun::star::xml::sax::SAXException;
 using ::com::sun::star::document::XDocumentProperties;
 using ::com::sun::star::util::DateTime;
+using ::comphelper::MediaDescriptor;
 using ::sax_fastparser::FastSerializerHelper;
 using ::sax_fastparser::FSHelperPtr;
 

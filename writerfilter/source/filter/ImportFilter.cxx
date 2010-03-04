@@ -32,7 +32,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include <oox/helper/mediadescriptor.hxx>
+#include <comphelper/mediadescriptor.hxx>
 #include <oox/core/filterdetect.hxx>
 #include <dmapper/DomainMapper.hxx>
 #include <WriterFilter.hxx>
@@ -46,6 +46,7 @@
 #include <resourcemodel/TagLogger.hxx>
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using ::comphelper::MediaDescriptor;
 
 /*-- 09.06.2006 10:15:20---------------------------------------------------
 
@@ -68,8 +69,8 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
     }
     else if (m_xDstDoc.is())
     {
-        ::oox::MediaDescriptor aMediaDesc( aDescriptor );
-        OUString sFilterName = aMediaDesc.getUnpackedValueOrDefault( ::oox::MediaDescriptor::PROP_FILTERNAME(), OUString() );
+        MediaDescriptor aMediaDesc( aDescriptor );
+        OUString sFilterName = aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_FILTERNAME(), OUString() );
 
         uno::Reference< io::XInputStream > xInputStream;
         try

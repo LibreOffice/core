@@ -39,11 +39,11 @@
 #include <rtl/instance.hxx>
 #include <rtl/uri.hxx>
 #include <comphelper/docpasswordhelper.hxx>
+#include <comphelper/mediadescriptor.hxx>
 #include "tokens.hxx"
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/binaryoutputstream.hxx"
 #include "oox/helper/graphichelper.hxx"
-#include "oox/helper/mediadescriptor.hxx"
 #include "oox/helper/modelobjecthelper.hxx"
 #include "oox/ole/oleobjecthelper.hxx"
 
@@ -71,6 +71,7 @@ using ::com::sun::star::io::XStream;
 using ::com::sun::star::task::XStatusIndicator;
 using ::com::sun::star::task::XInteractionHandler;
 using ::com::sun::star::graphic::XGraphic;
+using ::comphelper::MediaDescriptor;
 using ::comphelper::SequenceAsHashMap;
 using ::oox::ole::OleObjectHelper;
 
