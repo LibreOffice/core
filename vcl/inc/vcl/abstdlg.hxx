@@ -74,6 +74,7 @@ class AbstractPasswordToOpenModifyDialog : public VclAbstractDialog
 public:
     virtual String  GetPasswordToOpen() const   = 0;
     virtual String  GetPasswordToModify() const = 0;
+    virtual bool    IsRecommendToOpenReadonly() const = 0;
 };
 
 //-------------------------------------------------------------
@@ -87,7 +88,7 @@ public:
     virtual VclAbstractDialog*          CreateVclDialog( Window* pParent, sal_uInt32 nResId ) = 0;
 
     // creates instance of PasswordToOpenModifyDialog from cui
-    virtual AbstractPasswordToOpenModifyDialog *    CreatePasswordToOpenModifyDialog( Window * pParent ) = 0;
+    virtual AbstractPasswordToOpenModifyDialog *    CreatePasswordToOpenModifyDialog( Window * pParent, sal_uInt16 nMinPasswdLen, sal_uInt16 nMaxPasswdLen ) = 0;
 };
 
 #endif
