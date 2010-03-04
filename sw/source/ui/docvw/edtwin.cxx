@@ -2308,17 +2308,17 @@ KEYINPUT_CHECKTABLE_INSDEL:
         case KS_CheckAutoCorrect:
         {
             if( pACorr && pACfg->IsAutoFmtByInput() &&
-/*              pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
+                pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
                                         ChgOrdinalNumber |
                                         ChgToEnEmDash | SetINetAttr |
                                         Autocorrect ) &&
                 !rSh.HasReadonlySel() )
-            {*/
+        /*  {
                 pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
                                         ChgFractionSymbol | ChgOrdinalNumber |
                                         ChgToEnEmDash | SetINetAttr |
                                         Autocorrect ) &&
-                !rSh.HasReadonlySel() )
+                !rSh.HasReadonlySel() ) */
             {
                 FlushInBuffer();
                 rSh.AutoCorrect( *pACorr, static_cast< sal_Unicode >('\0') );
