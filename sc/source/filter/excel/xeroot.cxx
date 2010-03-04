@@ -241,24 +241,34 @@ bool XclExpRoot::IsDocumentEncrypted() const
     return false;
 }
 
-const String XclExpRoot::GetPassword() const
+String XclExpRoot::GetPassword() const
 {
-    SfxItemSet* pSet = GetMedium().GetItemSet();
-    if (!pSet)
-        return String();
-
-    const SfxPoolItem* pItem = NULL;
-    if (SFX_ITEM_SET == pSet->GetItemState(SID_PASSWORD, sal_True, &pItem))
+    if( SfxItemSet* pItemSet = GetMedium().GetItemSet() )
     {
-        const SfxStringItem* pStrItem = dynamic_cast<const SfxStringItem*>(pItem);
-        if (pStrItem)
+        const SfxPoolItem* pItem = 0;
+        if( pItemSet->GetItemState( SID_PASSWORD, TRUE, &pItem ) == SFX_ITEM_SET )
         {
-            // Password from the save dialog.
-            return pStrItem->GetValue();
+            if( const SfxStringItem* pStrItem = dynamic_cast< const SfxStringItem* >( pItem ) )
+                return pStrItem->GetValue();
         }
     }
+    return String::EmptyString();
+}
 
-    return String();
+sal_uInt16 XclExpRoot::GetWriteProtPassword() const
+{
+#if 0
+    if( SfxItemSet* pItemSet = GetMedium().GetItemSet() )
+    {
+        const SfxPoolItem* pItem = 0;
+        if( pItemSet->GetItemState( SID_MODIFYPASSWORDHASH, TRUE, &pItem ) == SFX_ITEM_SET )
+        {
+            if( const SfxInt32Item* pIntItem = dynamic_cast< const SfxInt32Item* >( pItem ) )
+                return static_cast< sal_uInt16 >( pIntItem->GetValue() );
+        }
+    }
+#endif
+    return 0;
 }
 
 XclExpRootData::XclExpLinkMgrRef XclExpRoot::GetLocalLinkMgrRef() const

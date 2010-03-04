@@ -205,17 +205,9 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
 
     rR.pObjRecs = NULL;             // per sheet
 
-    sal_uInt16 nWriteProtHash = 0;
-    if( SfxObjectShell* pDocShell = GetDocShell() )
-    {
-        ScfPropertySet aPropSet( pDocShell->GetModel() );
-        sal_Int32 nApiHash = 0;
-        if( aPropSet.GetProperty( nApiHash, CREATE_OUSTRING( "WriteProtectionPassword" ) ) && (0 < nApiHash) && (nApiHash <= SAL_MAX_UINT16) )
-        {
-            nWriteProtHash = static_cast< sal_uInt16 >( nApiHash );
-            Add( new XclExpEmptyRecord( EXC_ID_WRITEPROT ) );
-        }
-    }
+    sal_uInt16 nWriteProtHash = GetWriteProtPassword();
+    if( nWriteProtHash > 0 )
+        Add( new XclExpEmptyRecord( EXC_ID_WRITEPROT ) );
 
     // TODO: correct codepage for BIFF5?
     sal_uInt16 nCodePage = XclTools::GetXclCodePage( (GetBiff() <= EXC_BIFF5) ? RTL_TEXTENCODING_MS_1252 : RTL_TEXTENCODING_UNICODE );
