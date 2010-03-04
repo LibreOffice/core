@@ -70,7 +70,7 @@
 #include <edtwin.hxx>
 #include <crsskip.hxx>
 #include <ndtxt.hxx>
-
+#include <vcl/lstbox.hxx>
 #include <cmdid.h>
 #include <globals.hrc>
 #include <comcore.hrc>              // STR_MULT_INTERACT_SPELL_WARN
