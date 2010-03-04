@@ -97,6 +97,21 @@ static uno::Reference< uno::XComponentContext > getComponentContext( const uno::
     return rContext;
 }
 
+static sal_Int32 getBuildId()
+{
+    ::rtl::OUString aDefault;
+    ::rtl::OUString aBuildIdData = utl::Bootstrap::getBuildIdData( aDefault );
+    sal_Int32 nBuildId( 0 );
+    sal_Int32 nIndex1 = aBuildIdData.indexOf(':');
+    sal_Int32 nIndex2 = aBuildIdData.indexOf(')');
+    if (( nIndex1 > 0 ) && ( nIndex2 > 0 ) && ( nIndex2-1 > nIndex1+1 ))
+    {
+        ::rtl::OUString aBuildId = aBuildIdData.copy( nIndex1+1, nIndex2-nIndex1-1 );
+        nBuildId = aBuildId.toInt32();
+    }
+    return nBuildId;
+}
+
 WizardResId::WizardResId( USHORT nId ) :
     ResId( nId, *FirstStartWizard::GetResManager() )
 {
@@ -413,6 +428,14 @@ sal_Bool FirstStartWizard::prepareLeaveCurrentState( CommitPageReason _eReason )
 
 sal_Bool FirstStartWizard::leaveState(WizardState)
 {
+    if (( getCurrentState() == STATE_MIGRATION ) && m_bLicenseWasAccepted )
+    {
+        // Store accept date and patch level now as it has been
+        // overwritten by the migration process!
+        storeAcceptDate();
+        setPatchLevel();
+    }
+
     return sal_True;
 }
 
@@ -497,6 +520,30 @@ void FirstStartWizard::storeAcceptDate()
     {
     }
 
+}
+
+void FirstStartWizard::setPatchLevel()
+{
+    try {
+        Reference < XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+        // get configuration provider
+        Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory >(
+        xFactory->createInstance(sConfigSrvc), UNO_QUERY_THROW);
+        Sequence< Any > theArgs(1);
+        NamedValue v(OUString::createFromAscii("NodePath"),
+            makeAny(OUString::createFromAscii("org.openoffice.Office.Common/Help/Registration")));
+        theArgs[0] <<= v;
+        Reference< XPropertySet > pset = Reference< XPropertySet >(
+            theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs), UNO_QUERY_THROW);
+        Any result = pset->getPropertyValue(OUString::createFromAscii("ReminderDate"));
+
+        OUString aPatchLevel( RTL_CONSTASCII_USTRINGPARAM( "Patch" ));
+        aPatchLevel += OUString::valueOf( getBuildId(), 10 );
+        pset->setPropertyValue(OUString::createFromAscii("ReminderDate"), makeAny(aPatchLevel));
+        Reference< XChangesBatch >(pset, UNO_QUERY_THROW)->commitChanges();
+    } catch (const Exception&)
+    {
+    }
 }
 
 #ifdef WNT

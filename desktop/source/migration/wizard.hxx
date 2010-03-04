@@ -82,6 +82,7 @@ private:
     rtl::OUString m_aLicensePath;
 
     void storeAcceptDate();
+    void setPatchLevel();
     void disableWizard();
     void enableQuickstart();
 
