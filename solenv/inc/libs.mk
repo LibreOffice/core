@@ -205,7 +205,7 @@ ZLIB3RDLIB=-lzlib
 #i34482# Blackdown/Sun jdk is in the libsearch patch and has a libjpeg :-(
 .IF "$(OS)" == "FREEBSD"
 JPEG3RDLIB=/usr/local/lib/libjpeg.so
-.ELIF "$(CPUNAME)" == "X86_64"
+.ELIF "$(CPUNAME)" == "X86_64" || "$(CPUNAME)" == "S390X" || "$(CPUNAME)" == "POWERPC64"
 JPEG3RDLIB=/usr/lib64/libjpeg.so
 .ELSE
 JPEG3RDLIB=/usr/lib/libjpeg.so
@@ -347,6 +347,7 @@ PYUNOLIB=-lpyuno
 LPSOLVELIB=-llpsolve55
 SOFFICELIB=-lsofficeapp
 UNOPKGAPPLIB=-lunopkgapp
+CONFIGMGRLIB=-lconfigmgr
 TESTLIB=-ltest
 
 .ELSE				# ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
@@ -528,6 +529,7 @@ PYUNOLIB=ipyuno.lib
 LPSOLVELIB=lpsolve55.lib
 SOFFICELIB=isofficeapp.lib
 UNOPKGAPPLIB=iunopkgapp.lib
+CONFIGMGRLIB=iconfigmgr.lib
 TESTLIB=itest.lib
 
 .ENDIF              # ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"

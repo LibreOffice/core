@@ -1039,6 +1039,10 @@ sub nsis_language_converter
 
     my $nsislanguage = "";
 
+    # Assign language used by NSIS.
+    # The files "$nsislanguage.nsh" and "$nsislanguage.nlf"
+    # are needed in the NSIS environment.
+    # Directory: <NSIS-Dir>/Contrib/Language files
     if ( $language eq "en-US" ) { $nsislanguage = "English"; }
     elsif ( $language eq "sq" ) { $nsislanguage = "Albanian"; }
     elsif ( $language eq "ar" ) { $nsislanguage = "Arabic"; }
@@ -1057,6 +1061,7 @@ sub nsis_language_converter
     elsif ( $language eq "fr" ) { $nsislanguage = "French"; }
     elsif ( $language eq "hu" ) { $nsislanguage = "Hungarian"; }
     elsif ( $language eq "he" ) { $nsislanguage = "Hebrew"; }
+    elsif ( $language eq "is" ) { $nsislanguage = "Icelandic"; }
     elsif ( $language eq "id" ) { $nsislanguage = "Indonesian"; }
     elsif ( $language eq "it" ) { $nsislanguage = "Italian"; }
     elsif ( $language eq "lv" ) { $nsislanguage = "Latvian"; }
