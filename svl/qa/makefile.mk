@@ -35,9 +35,7 @@ ENABLE_EXCEPTIONS = true
 
 .INCLUDE :  settings.mk
 
-.IF "$(SYSTEM_CPPUNIT)"=="YES"
-CFLAGS+= $(CPPUNIT_CFLAGS)
-.ENDIF
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
 # BEGIN ----------------------------------------------------------------
 # auto generated Target:job by codegen.pl
