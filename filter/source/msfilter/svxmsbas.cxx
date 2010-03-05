@@ -356,7 +356,6 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                         DBG_ERRORFILE( "SvxImportMSVBasic::ImportCode_Impl - unknown module type" );
                         break;
                 }
-                static ::rtl::OUString sVBAOption( RTL_CONSTASCII_USTRINGPARAM( "Option VBASupport 1\n" ) );
                 static ::rtl::OUString sClassOption( RTL_CONSTASCII_USTRINGPARAM( "Option ClassModule\n" ) );
                 if ( !bAsComment )
                 {
