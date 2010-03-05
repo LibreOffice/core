@@ -811,7 +811,7 @@ BOOL ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                 if( pValue->isRightAligned() )
                     rc.right+=1;
             }
-            rc.top-=3;
+            rc.top-=2;
             rc.bottom+=2;
         }
         else if( nState & CTRL_STATE_ROLLOVER )
