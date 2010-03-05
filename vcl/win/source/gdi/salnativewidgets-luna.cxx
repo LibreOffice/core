@@ -811,7 +811,7 @@ BOOL ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                 if( pValue->isRightAligned() )
                     rc.right+=1;
             }
-            rc.top-=2;
+            rc.top-=3;
             rc.bottom+=2;
         }
         else if( nState & CTRL_STATE_ROLLOVER )
@@ -1039,8 +1039,8 @@ BOOL WinSalGraphics::drawNativeControlText( ControlType,
 BOOL WinSalGraphics::getNativeControlRegion(  ControlType nType,
                                 ControlPart nPart,
                                 const Region& rControlRegion,
-                                ControlState,
-                                const ImplControlValue&,
+                                ControlState nState,
+                                const ImplControlValue& rControlValue,
                                 const OUString&,
                                 Region &rNativeBoundingRegion,
                                 Region &rNativeContentRegion )
@@ -1158,8 +1158,36 @@ BOOL WinSalGraphics::getNativeControlRegion(  ControlType nType,
         }
     }
 
-    if ( ( nType == CTRL_TAB_ITEM ) && ( nType == PART_ENTIRE_CONTROL ) )
+    if ( ( nType == CTRL_TAB_ITEM ) && ( nPart == PART_ENTIRE_CONTROL ) )
     {
+        Rectangle aControlRect( rControlRegion.GetBoundRect() );
+        rNativeContentRegion = aControlRect;
+
+        --aControlRect.Bottom();
+
+        TabitemValue *pValue = static_cast< TabitemValue* >( rControlValue.getOptionalVal() );
+        if ( pValue )
+        {
+            if ( pValue->isBothAligned() )
+                --aControlRect.Right();
+        }
+
+        if ( nState & CTRL_STATE_SELECTED )
+        {
+            aControlRect.Left() -= 2;
+            aControlRect.Right() += 1;
+            if ( pValue && !pValue->isBothAligned() )
+            {
+                if ( pValue->isLeftAligned() || pValue->isNotAligned() )
+                    aControlRect.Right() += 2;
+                if ( pValue->isRightAligned() )
+                    aControlRect.Right() += 1;
+            }
+            aControlRect.Top() -= 3;
+            aControlRect.Bottom() += 2;
+        }
+        rNativeBoundingRegion = aControlRect;
+        bRet = TRUE;
     }
 
     ReleaseDC( mhWnd, hDC );

@@ -405,6 +405,9 @@ Size TabControl::ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth )
     if( aImageSize.Height() > aSize.Height() )
         aSize.Height() = aImageSize.Height();
 
+    aSize.Width()  += TAB_TABOFFSET_X*2;
+    aSize.Height() += TAB_TABOFFSET_Y*2;
+
     Region aCtrlRegion(  Rectangle( (const Point&)Point( 0, 0 ), aSize ) );
     Region aBoundingRgn, aContentRgn;
     const ImplControlValue aControlValue( BUTTONVALUE_DONTKNOW, rtl::OUString(), 0 );
@@ -416,8 +419,6 @@ Size TabControl::ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth )
         return aCont.GetSize();
     }
 
-    aSize.Width()  += TAB_TABOFFSET_X*2;
-    aSize.Height() += TAB_TABOFFSET_Y*2;
     // For systems without synthetic bold support
     if ( mbExtraSpace )
         aSize.Width() += TAB_EXTRASPACE_X;
