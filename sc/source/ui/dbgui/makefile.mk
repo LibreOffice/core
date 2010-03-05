@@ -107,7 +107,6 @@ LIB1OBJFILES =  \
     $(SLO)$/expftext.obj	\
     $(SLO)$/fieldwnd.obj	\
     $(SLO)$/pvlaydlg.obj	\
-    $(SLO)$/pvfundlg.obj	\
     $(SLO)$/consdlg.obj		\
     $(SLO)$/imoptdlg.obj	\
     $(SLO)$/csvsplits.obj	\
