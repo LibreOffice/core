@@ -58,6 +58,13 @@ function hTestActive( cString as string , iMethod as integer , bExact as boolean
     ' -3 = content of messagebox not relevant
     ' -4 = Messagebox not displayed / Macro not executed
     ' 1 - 4 = Number of buttons on the dialog
+
+    ' internal states, if state = 0 we return the buttoncount instead
+    const STATE_SUCCESS                = 0
+    const STATE_FUZZY_MATCH            = -1
+    const STATE_NO_MATCH               = -2
+    const STATE_IGNORE_MSGBOX          = -3
+    const STATE_MACRO_EXECUTION_FAILED = -4
     
     const CFN = "hTestActive()::"
 
@@ -71,30 +78,26 @@ function hTestActive( cString as string , iMethod as integer , bExact as boolean
         cMsg = Active.getText()
     
         if ( cString <> "" ) then
-            if ( instr( active.getText(), cString ) <> 0 ) then
+            if ( instr( active.getText(), cString ) ) then
                 if ( active.getText() = cString ) then
-                    'printlog( CFN & "Correct message found (exact match): " & cMsg )
-                    rc = 0
+                    rc = STATE_SUCCESS
                 else
                     if ( bExact ) then
                         warnlog( CFN & "Message is no exact match: " & cMsg )
-                        rc = -1
+                        rc = STATE_FUZZY_MATCH
                     else
-                        'printlog( CFN & "Correct message found (fuzzy match): " & cMsg )
-                        rc = 0
+                        rc = STATE_SUCCESS
                     endif
                 endif
             else
                 warnlog( CFN & "Messagebox has wrong content: " & cMsg )
-                rc = -4
+                rc = STATE_NO_MATCH
             endif
         else
-            'printlog( CFN & "Messagebox: " & cMsg )
-            rc = -3
+            rc = STATE_IGNORE_MSGBOX
         endif
         
         buttons = Active.getButtonCount()
-        'printlog( CFN & "Number of buttons: " & buttons )
         select case( iMethod )
         case 1 : Active.OK()
         case 2 : Active.Cancel()
@@ -103,9 +106,10 @@ function hTestActive( cString as string , iMethod as integer , bExact as boolean
         end select
     else
         warnlog( CFN & "Messagebox is missing" )
+        rc = STATE_MACRO_EXECUTION_FAILED
     endif
     
-    if ( rc = 0 ) then hTestActive() = buttons
+    if ( rc = STATE_SUCCESS ) then hTestActive() = buttons
     
 end function
        
@@ -182,7 +186,7 @@ testcase t_macros()
     hIDERunMacro()
     hTestActive( "1900" , 1 , FALSE )
     hTestActive( "2"    , 1 , FALSE )
-'---------    
+  
     printlog( "" )
     printlog( " ---------- i103691 ------------ " )
     hInsertMacroFromFile( "i103691" )
@@ -203,7 +207,14 @@ testcase t_macros()
     hTestActive( "43" , 1 , FALSE )
     hTestActive( "Pi" , 1 , FALSE )
 
-'-------
+    printlog( "" )
+    printlog( " ---------- i107070 ------------ " )
+    hInsertMacroFromFile( "i107070" )
+    hIDERunMacro()
+    hTestActive( "Dbg_Methods" , 1 , FALSE )
+    hTestActive( "Dbg_Methods" , 1 , FALSE )
+    hTestActive( "." , 1 , FALSE )
+
     printlog( "" )
     printlog( " ---------- MessageBoxes ------------ " )
     hInsertMacroFromFile( "MessageBoxes" )
