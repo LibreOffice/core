@@ -574,13 +574,12 @@ namespace svt
     //==================================================================================================================
     //= PanelTabBar_Data
     //==================================================================================================================
-    class PanelTabBar_Data  :public IToolPanelContainerListener
-                            ,public IToolPanelDeckListener
+    class PanelTabBar_Data : public IToolPanelDeckListener
     {
     public:
-        PanelTabBar_Data( PanelTabBar& i_rTabBar, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent )
+        PanelTabBar_Data( PanelTabBar& i_rTabBar, IToolPanelDeck& i_rPanelDeck, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent )
             :rTabBar( i_rTabBar )
-            ,rPanelDeck( dynamic_cast< ToolPanelDeck& >( *i_rTabBar.GetParent() ) )
+            ,rPanelDeck( i_rPanelDeck )
             ,eAlignment( i_eAlignment )
             ,eTabItemContent( i_eItemContent )
             ,pLayout( new VerticalItemLayout( i_rTabBar, i_eAlignment == TABS_LEFT ) )
@@ -594,7 +593,6 @@ namespace svt
                 "PanelTabBar_Data: unsupported alignment!" );
 
             rPanelDeck.AddListener( *this );
-            rPanelDeck.GetPanels()->AddListener( *this );
 
             if ( i_eAlignment == TABS_LEFT )
             {
@@ -610,11 +608,10 @@ namespace svt
 
         ~PanelTabBar_Data()
         {
-            rPanelDeck.GetPanels()->RemoveListener( *this );
             rPanelDeck.RemoveListener( *this );
         }
 
-        // IToolPanelContainerListener
+        // IToolPanelDeckListener
         virtual void PanelInserted( const PToolPanel& i_pPanel, const size_t i_nPosition )
         {
             (void)i_pPanel;
@@ -623,12 +620,12 @@ namespace svt
             rTabBar.Invalidate();
         }
 
-        // IToolPanelDeckListener
         virtual void ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const size_t i_nNewActive );
+        virtual void Dying();
 
     public:
         PanelTabBar&                rTabBar;
-        ToolPanelDeck&              rPanelDeck;
+        IToolPanelDeck&             rPanelDeck;
 
         const TabAlignment          eAlignment;
         TabItemContent              eTabItemContent;
@@ -654,21 +651,16 @@ namespace svt
     #if OSL_DEBUG_LEVEL > 0
         static void lcl_checkConsistency( const PanelTabBar_Data& i_rData )
         {
-            if ( !i_rData.rPanelDeck.GetPanels().get() )
-            {
-                OSL_ENSURE( false, "lcl_checkConsistency: NULL panels?!" );
-                return;
-            }
             if ( !i_rData.bItemsDirty )
             {
-                if ( i_rData.rPanelDeck.GetPanels()->GetPanelCount() != i_rData.aItems.size() )
+                if ( i_rData.rPanelDeck.GetPanelCount() != i_rData.aItems.size() )
                 {
                     OSL_ENSURE( false, "lcl_checkConsistency: inconsistent array sizes!" );
                     return;
                 }
-                for ( size_t i = 0; i < i_rData.rPanelDeck.GetPanels()->GetPanelCount(); ++i )
+                for ( size_t i = 0; i < i_rData.rPanelDeck.GetPanelCount(); ++i )
                 {
-                    if ( i_rData.rPanelDeck.GetPanels()->GetPanel( i ).get() != i_rData.aItems[i].pPanel.get() )
+                    if ( i_rData.rPanelDeck.GetPanel( i ).get() != i_rData.aItems[i].pPanel.get() )
                     {
                         OSL_ENSURE( false, "lcl_checkConsistency: array elements are inconsistent!" );
                         return;
@@ -694,11 +686,11 @@ namespace svt
             Point aTextOnlyPos( aCompletePos );
 
             for (   size_t i = 0;
-                    i < io_rData.rPanelDeck.GetPanels()->GetPanelCount();
+                    i < io_rData.rPanelDeck.GetPanelCount();
                     ++i
                 )
             {
-                PToolPanel pPanel( io_rData.rPanelDeck.GetPanels()->GetPanel( i ) );
+                PToolPanel pPanel( io_rData.rPanelDeck.GetPanel( i ) );
 
                 ItemDescriptor aItem;
                 aItem.pPanel = pPanel;
@@ -783,7 +775,7 @@ namespace svt
             if ( 0 == i_nItemIndex )
                 nItemFlags |= ITEM_POSITION_FIRST;
 
-            if ( i_rData.rPanelDeck.GetPanels()->GetPanelCount() - 1 == i_nItemIndex )
+            if ( i_rData.rPanelDeck.GetPanelCount() - 1 == i_nItemIndex )
                 nItemFlags |= ITEM_POSITION_LAST;
 
             i_rData.rTabBar.SetUpdateMode( FALSE );
@@ -849,6 +841,7 @@ namespace svt
     //==================================================================================================================
     //= PanelTabBar_Data
     //==================================================================================================================
+    //------------------------------------------------------------------------------------------------------------------
     void PanelTabBar_Data::ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const size_t i_nNewActive )
     {
         lcl_ensureItemsCache( *this );
@@ -858,13 +851,19 @@ namespace svt
         lcl_drawItem( *this, i_nNewActive );
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+    void PanelTabBar_Data::Dying()
+    {
+        // TODO
+    }
+
     //==================================================================================================================
     //= PanelTabBar
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
-    PanelTabBar::PanelTabBar( ToolPanelDeck& i_rPanelDeck, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent )
-        :Control( &i_rPanelDeck, 0 )
-        ,m_pData( new PanelTabBar_Data( *this, i_eAlignment, i_eItemContent ) )
+    PanelTabBar::PanelTabBar( Window& i_rParentWindow, IToolPanelDeck& i_rPanelDeck, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent )
+        :Control( &i_rParentWindow, 0 )
+        ,m_pData( new PanelTabBar_Data( *this, i_rPanelDeck, i_eAlignment, i_eItemContent ) )
     {
         DBG_CHECK( *m_pData );
 
@@ -1037,10 +1036,14 @@ namespace svt
     void PanelTabBar::GetFocus()
     {
         Control::GetFocus();
-        if ( m_pData->rPanelDeck.GetPanels()->GetPanelCount() )
+        if ( m_pData->rPanelDeck.GetPanelCount() )
         {
-            m_pData->aFocusedItem.reset( m_pData->rPanelDeck.GetActivePanel() );
-            lcl_drawItem( *m_pData, *m_pData->aFocusedItem );
+            ::boost::optional< size_t > aActivePanel( m_pData->rPanelDeck.GetActivePanel() );
+            if ( !!aActivePanel )
+            {
+                m_pData->aFocusedItem = aActivePanel;
+                lcl_drawItem( *m_pData, *m_pData->aFocusedItem );
+            }
         }
     }
 
@@ -1066,7 +1069,7 @@ namespace svt
             return;
 
         // if there are less than 2 panels, we cannot travel them ...
-        const size_t nPanelCount( m_pData->rPanelDeck.GetPanels()->GetPanelCount() );
+        const size_t nPanelCount( m_pData->rPanelDeck.GetPanelCount() );
         if ( nPanelCount < 2 )
             return;
 

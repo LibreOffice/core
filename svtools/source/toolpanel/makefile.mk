@@ -45,6 +45,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 SLOFILES=\
         $(SLO)$/dummypanel.obj \
+        $(SLO)$/paneldecklisteners.obj \
         $(SLO)$/paneltabbar.obj \
         $(SLO)$/refbase.obj \
         $(SLO)$/tablayouter.obj \

@@ -418,10 +418,9 @@ PanelDemoMainWindow::PanelDemoMainWindow()
     m_aToolPanelDeck.SetPosSizePixel( Point( 20, 20 ), Size( 500, 300 ) );
     m_aToolPanelDeck.SetBorderStyle( WINDOW_BORDER_MONO );
 
-    PToolPanelContainer pPanels( m_aToolPanelDeck.GetPanels() );
-    pPanels->InsertPanel( PToolPanel( new ColoredPanel( m_aToolPanelDeck, Color( COL_RED ), "Red" ) ), pPanels->GetPanelCount() );
-    pPanels->InsertPanel( PToolPanel( new ColoredPanel( m_aToolPanelDeck, Color( COL_GREEN ), "Some flavor of Green" ) ), pPanels->GetPanelCount() );
-    pPanels->InsertPanel( PToolPanel( new ColoredPanel( m_aToolPanelDeck, RGB_COLORDATA( 255, 255, 0 ), "Yellow is ugly" ) ), pPanels->GetPanelCount() );
+    m_aToolPanelDeck.InsertPanel( PToolPanel( new ColoredPanel( m_aToolPanelDeck, Color( COL_RED ), "Red" ) ), m_aToolPanelDeck.GetPanelCount() );
+    m_aToolPanelDeck.InsertPanel( PToolPanel( new ColoredPanel( m_aToolPanelDeck, Color( COL_GREEN ), "Some flavor of Green" ) ), m_aToolPanelDeck.GetPanelCount() );
+    m_aToolPanelDeck.InsertPanel( PToolPanel( new ColoredPanel( m_aToolPanelDeck, RGB_COLORDATA( 255, 255, 0 ), "Yellow is ugly" ) ), m_aToolPanelDeck.GetPanelCount() );
 
     m_aToolPanelDeck.ActivatePanel( 0 );
     m_aToolPanelDeck.Show();

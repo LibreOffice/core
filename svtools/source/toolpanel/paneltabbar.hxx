@@ -26,7 +26,6 @@
 #ifndef PANELTABBAR_HXX
 #define PANELTABBAR_HXX
 
-#include "svtools/toolpanel/toolpanelcontainer.hxx"
 #include "svtools/toolpanel/tabalignment.hxx"
 #include "svtools/toolpanel/tabitemcontent.hxx"
 
@@ -39,7 +38,6 @@ namespace svt
 {
 //........................................................................
 
-    class ToolPanelDeck;
     class PanelTabBar_Data;
 
     //====================================================================
@@ -53,7 +51,7 @@ namespace svt
     class PanelTabBar : public Control
     {
     public:
-        PanelTabBar( ToolPanelDeck& i_rParent, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent );
+        PanelTabBar( Window& i_rParentWindow, IToolPanelDeck& i_rPanelDeck, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent );
         ~PanelTabBar();
 
         // attribute access

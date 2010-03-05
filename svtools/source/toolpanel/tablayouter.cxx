@@ -43,14 +43,14 @@ namespace svt
     struct TabDeckLayouter_Data
     {
         TabAlignment        eAlignment;
-        PToolPanelContainer pPanels;
+        IToolPanelDeck&     rPanels;
         ::std::auto_ptr< PanelTabBar >
                             pTabBar;
 
         TabDeckLayouter_Data( ToolPanelDeck& i_rPanelDeck, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent )
             :eAlignment( i_eAlignment )
-            ,pPanels( i_rPanelDeck.GetPanels() )
-            ,pTabBar( new PanelTabBar( i_rPanelDeck, i_eAlignment, i_eItemContent ) )
+            ,rPanels( i_rPanelDeck )
+            ,pTabBar( new PanelTabBar( i_rPanelDeck, i_rPanelDeck, i_eAlignment, i_eItemContent ) )
         {
             pTabBar->Show();
         }

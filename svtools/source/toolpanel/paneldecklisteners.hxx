@@ -24,67 +24,47 @@
  *
 ************************************************************************/
 
-#ifndef TABLAYOUTER_HXX
-#define TABLAYOUTER_HXX
+#ifndef PANELDECKLISTENERS_HXX
+#define PANELDECKLISTENERS_HXX
 
-#include "svtools/toolpanel/decklayouter.hxx"
-#include "svtools/toolpanel/tabalignment.hxx"
-#include "svtools/toolpanel/tabitemcontent.hxx"
-#include "svtools/toolpanel/refbase.hxx"
+#include "svtools/toolpanel/toolpanel.hxx"
 
-#include <memory>
+#include <boost/optional.hpp>
+#include <vector>
 
 //........................................................................
 namespace svt
 {
 //........................................................................
 
-    class ToolPanelDeck;
-
-    struct TabDeckLayouter_Data;
+    class IToolPanelDeckListener;
 
     //====================================================================
-    //= TabDeckLayouter
+    //= PanelDeckListeners
     //====================================================================
-    class TabDeckLayouter   :public RefBase
-                            ,public IDeckLayouter
+    /** implements a container for IToolPanelDeckListeners
+    */
+    class PanelDeckListeners
     {
     public:
-        /** creates a new layouter
-            @param i_rPanelDeck
-                the panel deck which the layouter is responsible for. Provides access to the panels
-                container, and can and should be used as parent for any other windows which the layouter
-                needs to create.
-            @param i_eAlignment
-                specifies the alignment of the panel selector
-            @param TabItemContent
-                specifies the content to show on the tab items
-        */
-        TabDeckLayouter(
-            ToolPanelDeck& i_rPanelDeck,
-            const TabAlignment i_eAlignment,
-            const TabItemContent i_eItemContent
-        );
-        ~TabDeckLayouter();
+        PanelDeckListeners();
+        ~PanelDeckListeners();
 
-        // attribute access
-        TabItemContent  GetTabItemContent() const;
-        void            SetTabItemContent( const TabItemContent& i_eItemContent );
+        // IToolPanelDeckListener equivalents, forward the events to all registered listeners
+        void    PanelInserted( const PToolPanel& i_pPanel, const size_t i_nPosition );
+        void    ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const size_t i_nNewActive );
+        void    Dying();
 
-        // IDeckLayouter
-        virtual Rectangle   Layout( const Rectangle& i_rDeckPlayground );
-        virtual void        Destroy();
-        virtual void        SetFocusToPanelSelector();
-
-        // IReference
-        DECLARE_IREFERENCE()
+        // listener maintainance
+        void    AddListener( IToolPanelDeckListener& i_rListener );
+        void    RemoveListener( IToolPanelDeckListener& i_rListener );
 
     private:
-        ::std::auto_ptr< TabDeckLayouter_Data > m_pData;
+        ::std::vector< IToolPanelDeckListener* >    m_aListeners;
     };
 
 //........................................................................
 } // namespace svt
 //........................................................................
 
-#endif // TABLAYOUTER_HXX
+#endif // PANELDECKLISTENERS_HXX

@@ -28,6 +28,7 @@
 
 #include "dummypanel.hxx"
 #include "toolpanelcollection.hxx"
+#include "paneldecklisteners.hxx"
 
 #include "svtools/toolpanel/toolpaneldeck.hxx"
 #include "svtools/toolpanel/tablayouter.hxx"
@@ -57,41 +58,50 @@ namespace svt
     //====================================================================
     //= ToolPanelDeck_Impl
     //====================================================================
-    class ToolPanelDeck_Impl : public IToolPanelContainerListener
+    class ToolPanelDeck_Impl : public IToolPanelDeckListener
     {
     public:
         ToolPanelDeck_Impl( ToolPanelDeck& i_rDeck )
             :m_rDeck( i_rDeck )
-            ,m_pPanels( new( ToolPanelCollection ) )
+            ,m_aPanels()
             ,m_pDummyPanel( new DummyPanel )
-            ,m_aActivePanel()
             ,m_pLayouter()
             ,m_aPanelPlayground()
         {
-            m_pPanels->AddListener( *this );
+            m_aPanels.AddListener( *this );
         }
 
-        PToolPanelContainer GetPanels() const { return m_pPanels; }
-
-        size_t              GetActivePanel() const;
-        void                ActivatePanel( const size_t i_nPanel );
+        ~ToolPanelDeck_Impl()
+        {
+            m_aPanels.RemoveListener( *this );
+            m_aListeners.Dying();
+        }
 
         PDeckLayouter       GetLayouter() const { return m_pLayouter; }
         void                SetLayouter( const PDeckLayouter& i_pNewLayouter );
 
+        // IToolPanelDeck equivalents
+        size_t              GetPanelCount() const;
+        PToolPanel          GetPanel( const size_t i_nPos ) const;
+        ::boost::optional< size_t >
+                            GetActivePanel() const;
+        void                ActivatePanel( const size_t i_nPanel );
+        size_t              InsertPanel( const PToolPanel& i_pPanel, const size_t i_nPosition );
         void                AddListener( IToolPanelDeckListener& i_rListener );
         void                RemoveListener( IToolPanelDeckListener& i_rListener );
 
         /// re-layouts everything
-        void    LayoutAll() { ImplDoLayout(); }
+        void                LayoutAll() { ImplDoLayout(); }
 
         void                DoAction( const DeckAction i_eAction );
 
         void                FocusActivePanel();
 
     protected:
-        // IToolPanelContainerListener
+        // IToolPanelDeckListener
         virtual void        PanelInserted( const PToolPanel& i_pPanel, const size_t i_nPosition );
+        virtual void        ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const size_t i_nNewActive );
+        virtual void        Dying();
 
     private:
         void                ImplDoLayout();
@@ -99,25 +109,21 @@ namespace svt
 
     private:
         ToolPanelDeck&      m_rDeck;
-
-        PToolPanelContainer m_pPanels;
+        ToolPanelCollection m_aPanels;
         PToolPanel          m_pDummyPanel;
-        ::boost::optional< size_t >
-                            m_aActivePanel;
+        PanelDeckListeners  m_aListeners;
 
         PDeckLayouter       m_pLayouter;
         Rectangle           m_aPanelPlayground;
-
-        ::std::vector< IToolPanelDeckListener* >
-                            m_aListeners;
     };
 
     //--------------------------------------------------------------------
     PToolPanel ToolPanelDeck_Impl::GetActiveOrDummyPanel_Impl()
     {
-        if ( !m_aActivePanel )
+        ::boost::optional< size_t > aActivePanel( m_aPanels.GetActivePanel() );
+        if ( !aActivePanel )
             return m_pDummyPanel;
-        return m_pPanels->GetPanel( *m_aActivePanel );
+        return m_aPanels.GetPanel( *aActivePanel );
     }
 
     //--------------------------------------------------------------------
@@ -132,45 +138,33 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    size_t ToolPanelDeck_Impl::GetActivePanel() const
+    size_t ToolPanelDeck_Impl::GetPanelCount() const
     {
-        OSL_PRECOND( !!m_aActivePanel, "ToolPanelDeck_Impl::GetActivePanel: no active panel (yet)!" );
-        if ( !m_aActivePanel )
-            return 0;
-        return *m_aActivePanel;
+        return m_aPanels.GetPanelCount();
+    }
+
+    //--------------------------------------------------------------------
+    PToolPanel ToolPanelDeck_Impl::GetPanel( const size_t i_nPos ) const
+    {
+        return m_aPanels.GetPanel( i_nPos );
+    }
+
+    //--------------------------------------------------------------------
+    ::boost::optional< size_t > ToolPanelDeck_Impl::GetActivePanel() const
+    {
+        return m_aPanels.GetActivePanel();
     }
 
     //--------------------------------------------------------------------
     void ToolPanelDeck_Impl::ActivatePanel( const size_t i_nPanel )
     {
-        OSL_ENSURE( i_nPanel < m_pPanels->GetPanelCount(), "ToolPanelDeck_Impl::ActivatePanel: illegal panel no.!" );
-        if ( i_nPanel >= m_pPanels->GetPanelCount() )
-            return;
+        m_aPanels.ActivatePanel( i_nPanel );
+    }
 
-        if ( m_aActivePanel == i_nPanel )
-            return;
-
-        // hide the old panel
-        const PToolPanel pOldActive( GetActiveOrDummyPanel_Impl() );
-        pOldActive->Hide();
-
-        const ::boost::optional< size_t > aOldPanel( m_aActivePanel );
-        m_aActivePanel = i_nPanel;
-
-        // position and show the new panel
-        const PToolPanel pNewActive( GetActiveOrDummyPanel_Impl() );
-        pNewActive->SetPosSizePixel( m_aPanelPlayground );
-        pNewActive->Show();
-        pNewActive->GrabFocus();
-
-        // notify listeners
-        for (   ::std::vector< IToolPanelDeckListener* >::iterator loop = m_aListeners.begin();
-                loop != m_aListeners.end();
-                ++loop
-            )
-        {
-            (*loop)->ActivePanelChanged( aOldPanel, *m_aActivePanel );
-        }
+    //--------------------------------------------------------------------
+    size_t ToolPanelDeck_Impl::InsertPanel( const PToolPanel& i_pPanel, const size_t i_nPosition )
+    {
+        return m_aPanels.InsertPanel( i_pPanel, i_nPosition );
     }
 
     //--------------------------------------------------------------------
@@ -192,31 +186,21 @@ namespace svt
     //--------------------------------------------------------------------
     void ToolPanelDeck_Impl::AddListener( IToolPanelDeckListener& i_rListener )
     {
-        m_aListeners.push_back( &i_rListener );
+        m_aListeners.AddListener( i_rListener );
     }
 
     //--------------------------------------------------------------------
     void ToolPanelDeck_Impl::RemoveListener( IToolPanelDeckListener& i_rListener )
     {
-        for (   ::std::vector< IToolPanelDeckListener* >::iterator lookup = m_aListeners.begin();
-                lookup != m_aListeners.end();
-                ++lookup
-            )
-        {
-            if ( *lookup == &i_rListener )
-            {
-                m_aListeners.erase( lookup );
-                return;
-            }
-        }
+        m_aListeners.RemoveListener( i_rListener );
     }
 
     //--------------------------------------------------------------------
     void ToolPanelDeck_Impl::DoAction( const DeckAction i_eAction )
     {
+        const size_t nPanelCount( m_aPanels.GetPanelCount() );
         ::boost::optional< size_t > aActivatePanel;
-        const size_t nPanelCount( GetPanels()->GetPanelCount() );
-        const size_t nActivePanel( GetActivePanel() );
+        ::boost::optional< size_t > aCurrentPanel( GetActivePanel() );
 
         switch ( i_eAction )
         {
@@ -225,12 +209,18 @@ namespace svt
                 aActivatePanel = 0;
             break;
         case ACTION_ACTIVATE_PREV:
-            if ( nActivePanel > 0 )
-                aActivatePanel = nActivePanel - 1;
+            if ( !aCurrentPanel && ( nPanelCount > 0 ) )
+                aActivatePanel = nPanelCount - 1;
+            else
+            if ( !!aCurrentPanel && ( *aCurrentPanel > 0 ) )
+                aActivatePanel = *aCurrentPanel - 1;
             break;
         case ACTION_ACTIVATE_NEXT:
-            if ( nActivePanel < nPanelCount - 1 )
-                aActivatePanel = nActivePanel + 1;
+            if ( !aCurrentPanel && ( nPanelCount > 0 ) )
+                aActivatePanel = 0;
+            else
+            if ( !!aCurrentPanel && ( *aCurrentPanel < nPanelCount - 1 ) )
+                aActivatePanel = *aCurrentPanel + 1;
             break;
         case ACTION_ACTIVATE_LAST:
             if ( nPanelCount > 0 )
@@ -263,11 +253,35 @@ namespace svt
     //--------------------------------------------------------------------
     void ToolPanelDeck_Impl::PanelInserted( const PToolPanel& i_pPanel, const size_t i_nPosition )
     {
-        if ( !!m_aActivePanel )
+        // multiplex to our own listeners
+        m_aListeners.PanelInserted( i_pPanel, i_nPosition );
+    }
+
+    //--------------------------------------------------------------------
+    void ToolPanelDeck_Impl::ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const size_t i_nNewActive )
+    {
+        // hide the old panel
+        if ( !!i_rOldActive )
         {
-            if ( i_nPosition <= *m_aActivePanel )
-                ++*m_aActivePanel;
+            const PToolPanel pOldActive( m_aPanels.GetPanel( *i_rOldActive ) );
+            pOldActive->Hide();
         }
+
+        // position and show the new panel
+        const PToolPanel pNewActive( m_aPanels.GetPanel( i_nNewActive ) );
+        pNewActive->SetPosSizePixel( m_aPanelPlayground );
+        pNewActive->Show();
+        pNewActive->GrabFocus();
+
+        // multiplex to our own listeners
+        m_aListeners.ActivePanelChanged( i_rOldActive, i_nNewActive );
+    }
+
+    //--------------------------------------------------------------------
+    void ToolPanelDeck_Impl::Dying()
+    {
+        // not interested in. Since the ToolPanelCollection is our member, this just means we ourself
+        // are dying, and we already sent this notification in our dtor.
     }
 
     //====================================================================
@@ -289,7 +303,19 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    size_t ToolPanelDeck::GetActivePanel() const
+    size_t ToolPanelDeck::GetPanelCount() const
+    {
+        return m_pImpl->GetPanelCount();
+    }
+
+    //--------------------------------------------------------------------
+    PToolPanel ToolPanelDeck::GetPanel( const size_t i_nPos ) const
+    {
+        return m_pImpl->GetPanel( i_nPos );
+    }
+
+    //--------------------------------------------------------------------
+    ::boost::optional< size_t > ToolPanelDeck::GetActivePanel() const
     {
         return m_pImpl->GetActivePanel();
     }
@@ -298,6 +324,12 @@ namespace svt
     void ToolPanelDeck::ActivatePanel( const size_t i_nPanel )
     {
         m_pImpl->ActivatePanel( i_nPanel );
+    }
+
+    //--------------------------------------------------------------------
+    size_t ToolPanelDeck::InsertPanel( const PToolPanel& i_pPanel, const size_t i_nPosition )
+    {
+        return m_pImpl->InsertPanel( i_pPanel, i_nPosition );
     }
 
     //--------------------------------------------------------------------
@@ -310,12 +342,6 @@ namespace svt
     void ToolPanelDeck::SetLayouter( const PDeckLayouter& i_pNewLayouter )
     {
         return m_pImpl->SetLayouter( i_pNewLayouter );
-    }
-
-    //--------------------------------------------------------------------
-    PToolPanelContainer ToolPanelDeck::GetPanels() const
-    {
-        return m_pImpl->GetPanels();
     }
 
     //--------------------------------------------------------------------

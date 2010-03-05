@@ -27,6 +27,7 @@
 #include "precompiled_svtools.hxx"
 
 #include "toolpanelcollection.hxx"
+#include "paneldecklisteners.hxx"
 
 #include <tools/diagnose_ex.h>
 
@@ -42,8 +43,9 @@ namespace svt
     //====================================================================
     struct ToolPanelCollection_Data
     {
-        ::std::vector< PToolPanel >                     aPanels;
-        ::std::vector< IToolPanelContainerListener* >   aListeners;
+        ::std::vector< PToolPanel >                 aPanels;
+        ::boost::optional< size_t >                 aActivePanel;
+        PanelDeckListeners                          aListeners;
     };
 
     //====================================================================
@@ -58,15 +60,36 @@ namespace svt
     //--------------------------------------------------------------------
     ToolPanelCollection::~ToolPanelCollection()
     {
+        m_pData->aListeners.Dying();
     }
-
-    //--------------------------------------------------------------------
-    IMPLEMENT_IREFERENCE( ToolPanelCollection )
 
     //--------------------------------------------------------------------
     size_t ToolPanelCollection::GetPanelCount() const
     {
         return m_pData->aPanels.size();
+    }
+
+    //--------------------------------------------------------------------
+    ::boost::optional< size_t > ToolPanelCollection::GetActivePanel() const
+    {
+        return m_pData->aActivePanel;
+    }
+
+    //--------------------------------------------------------------------
+    void ToolPanelCollection::ActivatePanel( const size_t i_nPanel )
+    {
+        OSL_ENSURE( i_nPanel < GetPanelCount(), "ToolPanelCollection::ActivatePanel: illegal panel no.!" );
+        if ( i_nPanel >= GetPanelCount() )
+            return;
+
+        if ( m_pData->aActivePanel == i_nPanel )
+            return;
+
+        const ::boost::optional< size_t > aOldPanel( m_pData->aActivePanel );
+        m_pData->aActivePanel = i_nPanel;
+
+        // notify listeners
+        m_pData->aListeners.ActivePanelChanged( aOldPanel, *m_pData->aActivePanel );
     }
 
     //--------------------------------------------------------------------
@@ -85,41 +108,33 @@ namespace svt
         if ( !i_pPanel.get() )
             return 0;
 
+        // insert
         const size_t position = i_nPosition < m_pData->aPanels.size() ? i_nPosition : m_pData->aPanels.size();
         m_pData->aPanels.insert( m_pData->aPanels.begin() + position, i_pPanel );
 
-        // notifications
-        for (   ::std::vector< IToolPanelContainerListener* >::const_iterator loop = m_pData->aListeners.begin();
-                loop != m_pData->aListeners.end();
-                ++loop
-            )
+        // update active panel
+        if ( !!m_pData->aActivePanel )
         {
-            (*loop)->PanelInserted( i_pPanel, i_nPosition );
+            if ( i_nPosition <= *m_pData->aActivePanel )
+                ++*m_pData->aActivePanel;
         }
+
+        // notifications
+        m_pData->aListeners.PanelInserted( i_pPanel, i_nPosition );
 
         return position;
     }
 
     //--------------------------------------------------------------------
-    void ToolPanelCollection::AddListener( IToolPanelContainerListener& i_rListener )
+    void ToolPanelCollection::AddListener( IToolPanelDeckListener& i_rListener )
     {
-        m_pData->aListeners.push_back( &i_rListener );
+        m_pData->aListeners.AddListener( i_rListener );
     }
 
     //--------------------------------------------------------------------
-    void ToolPanelCollection::RemoveListener( IToolPanelContainerListener& i_rListener )
+    void ToolPanelCollection::RemoveListener( IToolPanelDeckListener& i_rListener )
     {
-        for (   ::std::vector< IToolPanelContainerListener* >::iterator lookup = m_pData->aListeners.begin();
-                lookup != m_pData->aListeners.end();
-                ++lookup
-            )
-        {
-            if ( *lookup == &i_rListener )
-            {
-                m_pData->aListeners.erase( lookup );
-                return;
-            }
-        }
+        m_pData->aListeners.RemoveListener( i_rListener );
     }
 
 //........................................................................
