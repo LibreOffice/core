@@ -46,6 +46,9 @@ PATCH_FILES=curl-7.19.7.patch
 
 .IF "$(GUI)"=="WNT"
     PATCH_FILES+=curl-7.19.7_win.patch
+    .IF "$(COM)"=="GCC"
+        PATCH_FILES+=curl-7.19.7_mingw.patch
+    .ENDIF
 .ENDIF
 
 
@@ -96,7 +99,7 @@ curl_LIBS+=-lstdc++_s
 CONFIGURE_DIR=.$/
 #relative to CONFIGURE_DIR
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS= --without-ssl --enable-ftp --enable-ipv6 --disable-http --disable-gopher --disable-file --disable-ldap --disable-telnet --disable-dict --build=i586-pc-mingw32 --host=i586-pc-mingw32 CC="$(curl_CC)" OBJDUMP="$(WRAPCMD) objdump" CFLAGS=-D_MT LDFLAGS="-L$(ILIB:s/;/ -L/)" LIBS="$(curl_LIBS)"
+CONFIGURE_FLAGS= --without-ssl --enable-ftp --enable-ipv6 --disable-http --disable-gopher --disable-file --disable-ldap --disable-telnet --disable-dict --build=i586-pc-mingw32 --host=i586-pc-mingw32 CC="$(curl_CC)" CPPFLAGS="$(INCLUDE)" OBJDUMP="objdump" CFLAGS=-D_MT LDFLAGS="-L$(ILIB:s/;/ -L/)" LIBS="$(curl_LIBS)"
 BUILD_DIR=$(CONFIGURE_DIR)$/lib
 BUILD_ACTION=make
 OUT2BIN=$(BUILD_DIR)$/.libs$/libcurl*.dll
