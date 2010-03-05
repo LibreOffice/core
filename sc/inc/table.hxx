@@ -377,7 +377,7 @@ public:
                         SCCOL nStartCol, SCROW nStartRow, SCCOL& rEndCol, SCROW nEndRow );
 
     void        GetDataArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow,
-                                BOOL bIncludeOld );
+                             BOOL bIncludeOld ) const;
 
     SCSIZE      GetEmptyLinesInBlock( SCCOL nStartCol, SCROW nStartRow,
                                         SCCOL nEndCol, SCROW nEndRow, ScDirection eDir );

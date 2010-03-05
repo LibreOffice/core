@@ -673,11 +673,10 @@ bool ScDocument::ShrinkToDataArea(SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow
 //  zusammenhaengender Bereich
 
 void ScDocument::GetDataArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
-                                SCCOL& rEndCol, SCROW& rEndRow, BOOL bIncludeOld )
+                              SCCOL& rEndCol, SCROW& rEndRow, BOOL bIncludeOld ) const
 {
-    if (VALIDTAB(nTab))
-        if (pTab[nTab])
-            pTab[nTab]->GetDataArea( rStartCol, rStartRow, rEndCol, rEndRow, bIncludeOld );
+    if (ValidTab(nTab) && pTab[nTab])
+        pTab[nTab]->GetDataArea( rStartCol, rStartRow, rEndCol, rEndRow, bIncludeOld );
 }
 
 
