@@ -74,6 +74,9 @@ static AtkTextAttribute atk_text_attribute_tab_stops = ATK_TEXT_ATTR_INVALID;
 static AtkTextAttribute atk_text_attribute_writing_mode = ATK_TEXT_ATTR_INVALID;
 static AtkTextAttribute atk_text_attribute_vertical_align = ATK_TEXT_ATTR_INVALID;
 static AtkTextAttribute atk_text_attribute_misspelled = ATK_TEXT_ATTR_INVALID;
+// --> OD 2010-03-01 #i92232#
+static AtkTextAttribute atk_text_attribute_tracked_change = ATK_TEXT_ATTR_INVALID;
+// <--
 
 /*****************************************************************************/
 
@@ -1308,6 +1311,49 @@ AtkAttributeSet* attribute_set_prepend_misspelled( AtkAttributeSet* attribute_se
     return attribute_set;
 }
 
+// --> OD 2010-03-01 #i92232#
+AtkAttributeSet* attribute_set_prepend_tracked_change_insertion( AtkAttributeSet* attribute_set )
+{
+    if ( ATK_TEXT_ATTR_INVALID == atk_text_attribute_tracked_change )
+    {
+        atk_text_attribute_tracked_change = atk_text_attribute_register( "text-tracked-change" );
+    }
+
+    attribute_set = attribute_set_prepend( attribute_set,
+                                           atk_text_attribute_tracked_change,
+                                           g_strdup_printf( "insertion" ) );
+
+    return attribute_set;
+}
+
+AtkAttributeSet* attribute_set_prepend_tracked_change_deletion( AtkAttributeSet* attribute_set )
+{
+    if ( ATK_TEXT_ATTR_INVALID == atk_text_attribute_tracked_change )
+    {
+        atk_text_attribute_tracked_change = atk_text_attribute_register( "text-tracked-change" );
+    }
+
+    attribute_set = attribute_set_prepend( attribute_set,
+                                           atk_text_attribute_tracked_change,
+                                           g_strdup_printf( "deletion" ) );
+
+    return attribute_set;
+}
+
+AtkAttributeSet* attribute_set_prepend_tracked_change_formatchange( AtkAttributeSet* attribute_set )
+{
+    if ( ATK_TEXT_ATTR_INVALID == atk_text_attribute_tracked_change )
+    {
+        atk_text_attribute_tracked_change = atk_text_attribute_register( "text-tracked-change" );
+    }
+
+    attribute_set = attribute_set_prepend( attribute_set,
+                                           atk_text_attribute_tracked_change,
+                                           g_strdup_printf( "attribute-change" ) );
+
+    return attribute_set;
+}
+// <--
 
 /*****************************************************************************/
 
