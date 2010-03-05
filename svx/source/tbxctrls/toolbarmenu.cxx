@@ -38,6 +38,9 @@
 #include <vcl/menu.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/image.hxx>
+#include <vcl/taskpanelist.hxx>
+
+#include <svtools/valueset.hxx>
 
 #include "svx/toolbarmenu.hxx"
 
@@ -46,6 +49,29 @@ const int SEPARATOR_HEIGHT = 4;
 const int TITLE_ID = -1;
 const int BORDER_X = 0;
 const int BORDER_Y = 0;
+
+static Window* GetTopMostParentSystemWindow( Window* pWindow )
+{
+    OSL_ASSERT( pWindow );
+    if ( pWindow )
+    {
+        // ->manually search topmost system window
+        // required because their might be another system window between this and the top window
+        pWindow = pWindow->GetParent();
+        SystemWindow* pTopMostSysWin = NULL;
+        while ( pWindow )
+        {
+            if ( pWindow->IsSystemWindow() )
+                pTopMostSysWin = (SystemWindow*)pWindow;
+            pWindow = pWindow->GetParent();
+        }
+        pWindow = pTopMostSysWin;
+        OSL_ASSERT( pWindow );
+        return pWindow;
+    }
+
+    return NULL;
+}
 
 class ToolbarMenuEntry
 {
@@ -170,6 +196,10 @@ void ToolbarMenu::implInit()
 
 //    EnableChildTransparentMode();
 
+    Window* pWindow = GetTopMostParentSystemWindow( this );
+    if ( pWindow )
+        ((SystemWindow *)pWindow)->GetTaskPaneList()->AddWindow( this );
+
     mxServiceManager = ::comphelper::getProcessServiceFactory();
 
     mnCheckPos = 0;
@@ -183,6 +213,10 @@ void ToolbarMenu::implInit()
 
 ToolbarMenu::~ToolbarMenu()
 {
+    Window* pWindow = GetTopMostParentSystemWindow( this );
+    if ( pWindow )
+        ((SystemWindow *)pWindow)->GetTaskPaneList()->RemoveWindow( this );
+
     if ( mxStatusListener.is() )
     {
         mxStatusListener->dispose();
@@ -448,17 +482,18 @@ Size ToolbarMenu::implCalcSize()
 
 void ToolbarMenu::GetFocus()
 {
-/*
+    OSL_TRACE("ToolbarMenu::GetFocus()");
+
     if( mnHighlightedEntry == -1 )
     {
         implChangeHighlightEntry( 0 );
     }
-*/
     DockingWindow::GetFocus();
 }
 
 void ToolbarMenu::LoseFocus()
 {
+    OSL_TRACE("ToolbarMenu::LoseFocus()");
     if( mnHighlightedEntry != -1 )
     {
         implChangeHighlightEntry( -1 );
@@ -533,6 +568,16 @@ ToolbarMenuEntry* ToolbarMenu::implSearchEntry( int nEntryId ) const
     return NULL;
 }
 
+static void implDeselectControl( Control* pControl )
+{
+    ValueSet* pValueSet = dynamic_cast< ValueSet* >( pControl );
+    if( pValueSet )
+    {
+        pValueSet->SetNoSelection();
+        pValueSet->Invalidate();
+    }
+}
+
 void ToolbarMenu::implHighlightEntry( int nHighlightEntry, bool bHighlight )
 {
     Size    aSz = GetOutputSizePixel();
@@ -563,6 +608,10 @@ void ToolbarMenu::implHighlightEntry( int nHighlightEntry, bool bHighlight )
                         aRect.nRight -= 1;
                         DrawSelectionBackground( aRect, true, false, TRUE, TRUE );
                     }
+                }
+                else if( p->mpControl != NULL )
+                {
+                    implDeselectControl( p->mpControl );
                 }
 
                 implPaint( p, bHighlight );
@@ -682,6 +731,32 @@ void ToolbarMenu::implChangeHighlightEntry( int nEntry )
     }
 }
 
+static bool implCheckSubControlCursorMove( Control* pControl, bool bUp )
+{
+    ValueSet* pValueSet = dynamic_cast< ValueSet* >( pControl );
+    if( pValueSet )
+    {
+        USHORT nItemPos = pValueSet->GetItemPos( pValueSet->GetSelectItemId() );
+        if( nItemPos != VALUESET_ITEM_NOTFOUND )
+        {
+            const USHORT nColCount = pValueSet->GetColCount();
+            const USHORT nLine = nItemPos / nColCount;
+
+            if( bUp )
+            {
+                return nLine > 0;
+            }
+            else
+            {
+                const USHORT nLineCount = (pValueSet->GetItemCount() + nColCount - 1) / nColCount;
+                return (nLine+1) < nLineCount;
+            }
+        }
+    }
+
+    return false;
+}
+
 ToolbarMenuEntry* ToolbarMenu::implCursorUpDown( bool bUp, bool bHomeEnd )
 {
     int n = mnHighlightedEntry;
@@ -691,6 +766,18 @@ ToolbarMenuEntry* ToolbarMenu::implCursorUpDown( bool bUp, bool bHomeEnd )
             n = 0;
         else
             n = maEntryVector.size()-1;
+    }
+    else if( !bHomeEnd )
+    {
+        // if we have a currently selected entry and
+        // cursor keys are used than check if this entry
+        // has a control that can use those cursor keys
+        ToolbarMenuEntry* pData = maEntryVector[n];
+        if( pData && pData->mpControl && !pData->mbHasText )
+        {
+            if( implCheckSubControlCursorMove( pData->mpControl, bUp ) )
+                return pData;
+        }
     }
 
     int nLoop = n;
@@ -746,6 +833,8 @@ ToolbarMenuEntry* ToolbarMenu::implCursorUpDown( bool bUp, bool bHomeEnd )
 
 void ToolbarMenu::KeyInput( const KeyEvent& rKEvent )
 {
+    OSL_TRACE("ToolbarMenu::KeyInput()");
+    Control* pForwardControl = 0;
     USHORT nCode = rKEvent.GetKeyCode().GetCode();
     switch ( nCode )
     {
@@ -756,12 +845,19 @@ void ToolbarMenu::KeyInput( const KeyEvent& rKEvent )
             ToolbarMenuEntry*p = implCursorUpDown( nCode == KEY_UP, false );
             if( p && p->mpControl && !p->mbHasText )
             {
-                p->mpControl->GrabFocus();
+                OSL_TRACE("ToolbarMenu::KeyInput() - grab focus to control");
+//              p->mpControl->GrabFocus();
                 if( nOldEntry != mnHighlightedEntry )
                 {
                     KeyCode aKeyCode( (nCode == KEY_UP) ? KEY_END : KEY_HOME );
                     KeyEvent aKeyEvent( 0, aKeyCode );
                     p->mpControl->KeyInput( aKeyEvent );
+                    p->mpControl->Invalidate();
+                }
+                else if( !p->mpControl->HasFocus() )
+                {
+                    // in case we are in a system floating window, GrabFocus does not work :-/
+                    pForwardControl = p->mpControl;
                 }
             }
         }
@@ -772,10 +868,11 @@ void ToolbarMenu::KeyInput( const KeyEvent& rKEvent )
             ToolbarMenuEntry* p = implCursorUpDown( nCode == KEY_END, true );
             if( p && p->mpControl && !p->mbHasText )
             {
-                p->mpControl->GrabFocus();
+//              p->mpControl->GrabFocus();
                 KeyCode aKeyCode( KEY_HOME );
                 KeyEvent aKeyEvent( 0, aKeyCode );
                 p->mpControl->KeyInput( aKeyEvent );
+                p->mpControl->Invalidate();
             }
         }
         break;
@@ -783,29 +880,10 @@ void ToolbarMenu::KeyInput( const KeyEvent& rKEvent )
         case KEY_ESCAPE:
         {
             // Ctrl-F6 acts like ESC here, the menu bar however will then put the focus in the document
-            if( nCode == KEY_F6 && !rKEvent.GetKeyCode().IsMod1() )
-                break;
+//            if( nCode == KEY_F6 && !rKEvent.GetKeyCode().IsMod1() )
+//                break;
 
             implSelectEntry( -1 );
-/*
-            if ( !pMenu->pStartedFrom )
-            {
-                StopExecute();
-                KillActivePopup();
-            }
-            else if ( pMenu->pStartedFrom->bIsMenuBar )
-            {
-                // Forward...
-                ((MenuBarWindow*)((MenuBar*)pMenu->pStartedFrom)->ImplGetWindow())->KeyInput( rKEvent );
-            }
-            else
-            {
-                StopExecute();
-                ToolbarMenu* pFloat = ((PopupMenu*)pMenu->pStartedFrom)->ImplGetFloatingWindow();
-                pFloat->GrabFocus();
-                pFloat->KillActivePopup();
-            }
-*/
         }
         break;
 
@@ -816,47 +894,29 @@ void ToolbarMenu::KeyInput( const KeyEvent& rKEvent )
             {
                 if( pEntry->mpControl )
                 {
-                    pEntry->mpControl->GrabFocus();
+                    pForwardControl = pEntry->mpControl;
                 }
                 else
                 {
                     implSelectEntry( mnHighlightedEntry );
                 }
             }
-  //          else
-  //              StopExecute();
         }
         break;
         default:
         {
-/*
-            xub_Unicode nCharCode = rKEvent.GetCharCode();
-            USHORT nPos;
-            USHORT nDuplicates = 0;
-            MenuItemData* pData = nCharCode ? pMenu->GetItemList()->SearchItem( nCharCode, nPos, nDuplicates, nHighlightedItem ) : NULL;
-            if ( pData )
+            ToolbarMenuEntry* pEntry = implGetEntry( mnHighlightedEntry );
+            if ( pEntry && pEntry->mbEnabled && pEntry->mpControl && !pEntry->mbHasText )
             {
-                if ( pData->pSubMenu || nDuplicates > 1 )
-                {
-                    implChangeHighlightEntry( nPos );
-                    HighlightChanged( 0 );
-                }
-                else
-                {
-                    nHighlightedItem = nPos;
-                    EndExecute();
-                }
+//              pEntry->mpControl->GrabFocus();
+                pForwardControl = pEntry->mpControl;
             }
-            else
-            {
-                // Bei ungueltigen Tasten Beepen, aber nicht bei HELP und F-Tasten
-                if ( !rKEvent.GetKeyCode().IsControlMod() && ( nCode != KEY_HELP ) && ( rKEvent.GetKeyCode().GetGroup() != KEYGROUP_FKEYS ) )
-                    Sound::Beep();
-                FloatingWindow::KeyInput( rKEvent );
-            }
-    */
         }
+
     }
+    if( pForwardControl )
+        pForwardControl->KeyInput( rKEvent );
+
 }
 
 void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
