@@ -2152,7 +2152,7 @@ sal_Bool lcl_IsAtEnd( rtl::OUStringBuffer& rBuffer, const String& rToken )
     if ( nTokLen > nBufLen )
         return sal_False;
 
-    sal_Int32 nStartPos = nTokLen - nBufLen;
+    sal_Int32 nStartPos = nBufLen - nTokLen;
     for ( xub_StrLen nTokPos = 0; nTokPos < nTokLen; nTokPos++ )
         if ( rToken.GetChar( nTokPos ) != rBuffer.charAt( nStartPos + nTokPos ) )
             return sal_False;
