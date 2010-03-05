@@ -326,12 +326,13 @@ DBG_NAME( SfxLibraryContainer )
 // Ctor
 SfxLibraryContainer::SfxLibraryContainer( void )
     : LibraryContainerHelper( maMutex )
+    , mbVBACompat( sal_False )
     , maModifiable( *this, maMutex )
     , maNameContainer( getCppuType( (Reference< XNameAccess >*) NULL ) )
     , mbOldInfoFormat( sal_False )
     , mbOasis2OOoFormat( sal_False )
     , mpBasMgr( NULL )
-    , mbOwnBasMgr( sal_False ), mbVBACompat( sal_False )
+    , mbOwnBasMgr( sal_False )
 {
     DBG_CTOR( SfxLibraryContainer, NULL );
 

@@ -1561,10 +1561,9 @@ class FormObjEventListenerImpl : public EventListener_BASE
 public:
     FormObjEventListenerImpl( SbUserFormModule* pUserForm, const uno::Reference< lang::XComponent >& xComponent ) : mpUserForm( pUserForm ), mxComponent( xComponent) , mbDisposed( false ), mbOpened( sal_False ), mbActivated( sal_False ), mbShowing( sal_False )
     {
-        if ( mxComponent.is() );
+        if ( mxComponent.is() )
         {
         uno::Reference< awt::XTopWindow > xList( mxComponent, uno::UNO_QUERY_THROW );;
-            //uno::Reference< awt::XWindow > xList( mxComponent, uno::UNO_QUERY_THROW );;
             OSL_TRACE("*********** Registering the listener");
             xList->addTopWindowListener( this );
         }
@@ -1604,7 +1603,7 @@ public:
     }
 
     //liuchen 2009-7-21, support Excel VBA Form_QueryClose event
-    virtual void SAL_CALL windowClosing( const lang::EventObject& e ) throw (uno::RuntimeException)
+    virtual void SAL_CALL windowClosing( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException)
     {
 #if IN_THE_FUTURE
         uno::Reference< awt::XDialog > xDialog( e.Source, uno::UNO_QUERY );
@@ -1694,7 +1693,7 @@ void SbUserFormModule::triggerMethod( const String& aMethodToRun )
     Sequence< Any > aArguments;
     triggerMethod( aMethodToRun, aArguments );
 }
-void SbUserFormModule::triggerMethod( const String& aMethodToRun, Sequence< Any >& aArguments)
+void SbUserFormModule::triggerMethod( const String& aMethodToRun, Sequence< Any >& /*aArguments*/)
 {
     OSL_TRACE("*** trigger %s ***", rtl::OUStringToOString( aMethodToRun, RTL_TEXTENCODING_UTF8 ).getStr() );
     // Search method
