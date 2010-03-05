@@ -29,7 +29,7 @@
 
 // include ---------------------------------------------------------------
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include <vcl/edit.hxx>
 #include <vcl/button.hxx>
@@ -64,7 +64,7 @@ struct SvxHyphenWordDialog_Impl;
 
 class SvxHyphenWordDialog : public SfxModalDialog
 {
-    boost::shared_ptr< SvxHyphenWordDialog_Impl > m_pImpl;
+    std::auto_ptr< SvxHyphenWordDialog_Impl > m_pImpl;
 
 public:
     SvxHyphenWordDialog( const String &rWord, LanguageType nLang,

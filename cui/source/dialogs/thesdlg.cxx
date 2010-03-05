@@ -29,17 +29,11 @@
 
 #include "precompiled_cui.hxx"
 
-#include "cuires.hrc"
 #include "thesdlg.hrc"
 #include "thesdlg.hxx"
 #include "thesdlg_impl.hxx"
-
-//#include <svx/dialmgr.hxx>
-//#include <svx/dialogs.hrc>
-//#include <svx/langbox.hxx>
-//#include <svx/checklbx.hxx>
-//#include <dlgutil.hxx>
-//#include <svxerr.hxx>
+#include "cuires.hrc"
+#include "dialmgr.hxx"
 
 #include <editeng/unolingu.hxx>
 #include <tools/shl.hxx>
@@ -203,7 +197,7 @@ void AlternativesString_Impl::Paint(
 ThesaurusAlternativesCtrl_Impl::ThesaurusAlternativesCtrl_Impl(
         Window* pParent,
         SvxThesaurusDialog_Impl &rImpl ) :
-    SvxCheckListBox( pParent, SVX_RES( CT_THES_ALTERNATIVES ) ),
+    SvxCheckListBox( pParent, CUI_RES( CT_THES_ALTERNATIVES ) ),
     m_rDialogImpl( rImpl )
 {
     SetWindowBits( WB_CLIPCHILDREN | WB_HSCROLL | WB_FORCE_MAKEVISIBLE );
@@ -291,22 +285,22 @@ void ThesaurusAlternativesCtrl_Impl::Paint( const Rectangle& rRect )
 
 SvxThesaurusDialog_Impl::SvxThesaurusDialog_Impl( SvxThesaurusDialog * pDialog ) :
     m_pDialog       ( pDialog ),
-    aVendorImageFI  ( pDialog , SVX_RES( IMG_VENDOR ) ),
-    aLeftBtn        ( pDialog, SVX_RES( BTN_LEFT ) ),
-    aWordText       ( pDialog, SVX_RES( FT_WORD ) ),
-    aWordCB         ( pDialog, SVX_RES( CB_WORD ), *this ),
-    m_aAlternativesText  ( pDialog, SVX_RES( FT_THES_ALTERNATIVES ) ),
+    aVendorImageFI  ( pDialog, CUI_RES( IMG_VENDOR ) ),
+    aLeftBtn        ( pDialog, CUI_RES( BTN_LEFT ) ),
+    aWordText       ( pDialog, CUI_RES( FT_WORD ) ),
+    aWordCB         ( pDialog, CUI_RES( CB_WORD ), *this ),
+    m_aAlternativesText  ( pDialog, CUI_RES( FT_THES_ALTERNATIVES ) ),
     m_pAlternativesCT    ( new ThesaurusAlternativesCtrl_Impl( pDialog, *this ) ),
-    aReplaceText    ( pDialog, SVX_RES( FT_REPL ) ),
-    aReplaceEdit    ( pDialog, SVX_RES( ED_REPL ) ),
-    aFL             ( pDialog, SVX_RES( FL_VAR ) ),
-    aHelpBtn        ( pDialog, SVX_RES( BTN_THES_HELP ) ),
-    aLangMBtn       ( pDialog, SVX_RES( MB_LANGUAGE ) ),
-    aReplaceBtn     ( pDialog, SVX_RES( BTN_THES_OK ) ),
-    aCancelBtn      ( pDialog, SVX_RES( BTN_THES_CANCEL ) ),
-    aErrStr                 ( SVX_RES( STR_ERR_TEXTNOTFOUND ) ),
-    aVendorDefaultImage     ( SVX_RES( IMG_DEFAULT_VENDOR ) ),
-    aVendorDefaultImageHC   ( SVX_RES( IMG_DEFAULT_VENDOR_HC ) ),
+    aReplaceText    ( pDialog, CUI_RES( FT_REPL ) ),
+    aReplaceEdit    ( pDialog, CUI_RES( ED_REPL ) ),
+    aFL             ( pDialog, CUI_RES( FL_VAR ) ),
+    aHelpBtn        ( pDialog, CUI_RES( BTN_THES_HELP ) ),
+    aLangMBtn       ( pDialog, CUI_RES( MB_LANGUAGE ) ),
+    aReplaceBtn     ( pDialog, CUI_RES( BTN_THES_OK ) ),
+    aCancelBtn      ( pDialog, CUI_RES( BTN_THES_CANCEL ) ),
+    aErrStr                 ( CUI_RES( STR_ERR_TEXTNOTFOUND ) ),
+    aVendorDefaultImage     ( CUI_RES( IMG_DEFAULT_VENDOR ) ),
+    aVendorDefaultImageHC   ( CUI_RES( IMG_DEFAULT_VENDOR_HC ) ),
     xThesaurus      ( NULL ),
     aLookUpText     (),
     nLookUpLanguage ( LANGUAGE_NONE ),
@@ -663,9 +657,9 @@ SvxThesaurusDialog::SvxThesaurusDialog(
     const String &rWord,
     LanguageType nLanguage ) :
 
-    SvxStandardDialog( pParent, SVX_RES( RID_SVXDLG_THESAURUS ) )
+    SvxStandardDialog( pParent, CUI_RES( RID_SVXDLG_THESAURUS ) )
 {
-    m_pImpl = boost::shared_ptr< SvxThesaurusDialog_Impl >(new SvxThesaurusDialog_Impl( this ));
+    m_pImpl = std::auto_ptr< SvxThesaurusDialog_Impl >(new SvxThesaurusDialog_Impl( this ));
 
     m_pImpl->xThesaurus = xThes;
     m_pImpl->aLookUpText = OUString( rWord );

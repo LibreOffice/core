@@ -157,17 +157,17 @@ SvxHyphenWordDialog_Impl::SvxHyphenWordDialog_Impl(
         SvxSpellWrapper* pWrapper ) :
 
     m_pDialog   ( pDialog ),
-    aWordFT     ( pDialog, SVX_RES( FT_WORD ) ),
-    aWordEdit   ( pDialog, SVX_RES( ED_WORD ) ),
-    aLeftBtn    ( pDialog, SVX_RES( BTN_LEFT ) ),
-    aRightBtn   ( pDialog, SVX_RES( BTN_RIGHT ) ),
-    aOkBtn      ( pDialog, SVX_RES( BTN_HYPH_CUT ) ),
-    aContBtn    ( pDialog, SVX_RES( BTN_HYPH_CONTINUE ) ),
-    aDelBtn     ( pDialog, SVX_RES( BTN_HYPH_DELETE ) ),
-    aFLBottom   ( pDialog, SVX_RES( FL_BOTTOM ) ),
-    aHelpBtn    ( pDialog, SVX_RES( BTN_HYPH_HELP ) ),
-    aHyphAll    ( pDialog, SVX_RES( BTN_HYPH_ALL ) ),
-    aCancelBtn  ( pDialog, SVX_RES( BTN_HYPH_CANCEL ) ),
+    aWordFT     ( pDialog, CUI_RES( FT_WORD ) ),
+    aWordEdit   ( pDialog, CUI_RES( ED_WORD ) ),
+    aLeftBtn    ( pDialog, CUI_RES( BTN_LEFT ) ),
+    aRightBtn   ( pDialog, CUI_RES( BTN_RIGHT ) ),
+    aOkBtn      ( pDialog, CUI_RES( BTN_HYPH_CUT ) ),
+    aContBtn    ( pDialog, CUI_RES( BTN_HYPH_CONTINUE ) ),
+    aDelBtn     ( pDialog, CUI_RES( BTN_HYPH_DELETE ) ),
+    aFLBottom   ( pDialog, CUI_RES( FL_BOTTOM ) ),
+    aHelpBtn    ( pDialog, CUI_RES( BTN_HYPH_HELP ) ),
+    aHyphAll    ( pDialog, CUI_RES( BTN_HYPH_ALL ) ),
+    aCancelBtn  ( pDialog, CUI_RES( BTN_HYPH_CANCEL ) ),
     aLabel          ( pDialog->GetText() ),
     pHyphWrapper    ( NULL ),
     xHyphenator     ( NULL ),
@@ -500,9 +500,9 @@ SvxHyphenWordDialog::SvxHyphenWordDialog(
     uno::Reference< linguistic2::XHyphenator >  &xHyphen,
     SvxSpellWrapper* pWrapper ) :
 
-    SfxModalDialog( pParent, SVX_RES( RID_SVXDLG_HYPHENATE ) )
+    SfxModalDialog( pParent, CUI_RES( RID_SVXDLG_HYPHENATE ) )
 {
-    m_pImpl = boost::shared_ptr< SvxHyphenWordDialog_Impl >(
+    m_pImpl = std::auto_ptr< SvxHyphenWordDialog_Impl >(
             new SvxHyphenWordDialog_Impl( this, rWord, nLang, xHyphen, pWrapper ) );
 
     FreeResource();

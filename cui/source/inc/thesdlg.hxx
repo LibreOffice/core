@@ -33,7 +33,7 @@
 #include "svx/stddlg.hxx"
 #include "svx/svxdllapi.h"
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 
 /////////////////////////////////////////////////////////////////
@@ -42,7 +42,7 @@ struct SvxThesaurusDialog_Impl;
 
 class SvxThesaurusDialog : public SvxStandardDialog
 {
-    boost::shared_ptr< SvxThesaurusDialog_Impl > m_pImpl;
+    std::auto_ptr< SvxThesaurusDialog_Impl > m_pImpl;
 
     SVX_DLLPRIVATE virtual void     Apply();
 
