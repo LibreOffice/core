@@ -1064,6 +1064,7 @@ function hUseAsyncSlot( cSlot as string ) as integer
             case "insertindexesbibliographyentry" : InsertIndexesBibliographyEntry
 
             case "contextpositionandsize"         : ContextPositionAndSize
+            case "contextproperties"              : ContextProperties
 
             case "toolslanguagehyphenate"         : ToolsLanguageHyphenate
             case "toolsupdateallindexes"          : ToolsUpdateAllIndexes

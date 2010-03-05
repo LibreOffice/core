@@ -34,64 +34,25 @@
 private const DEBUG_ENABLE = false
 
 function hOpenPropertyBrowser() as boolean
-    
-    '///<h3>Function to open the properties of a selected control</h3>
-    '///<i>The function verifies that the property browser is really open and
-    '///+ ensures that we are on the General tabpage</i><br><br>
-    
-    '///<u>Input</u>:
-    '///<ol>
-    
-    '///+<li>Nothing</li>
-    
-    '///</ol>
-    
-    '///<u>Returns</u>:
-    '///<ol>
-    
-    '///+<li>Errorcondition (boolean)</li>
-    '///<ul>
-    '///+<li>TRUE on successful open of the property browser</li>
-    '///+<li>FALSE on any error</li>
-    '///</ul>
-    
-    '///</ol>
-    
-    '///<u>Description</u>:
-    '///<ul>
-    
+
+    '///<h3>Open the BASIC property browser</h3>
+
     const CFN = "hOpenPropertyBrowser::"
-    
-    '///+<li>Open the property browser (call slot)</li>
-    try
-        ContextProperties
-        
-        '///+<li>Verify that the property browser is open</li>
+
+    if ( hUseAsyncSlot( "ContextProperties" ) <> -1 ) then
         kontext "ControlPropertiesTabControl"
         if ( ControlPropertiesTabControl.exists( 2 ) ) then
-            
-            '///+<li>Activate General-tabpage</li>
             ControlPropertiesTabControl.setPage( TabGeneralControl )
-        
-            '///+<li>Verify that the General-tabpage is visible</li>
-            kontext "TabGeneralControl"
-            if ( TabGeneralControl.isVisible() ) then
-                printlog( CFN & "ok" )
-                hOpenPropertyBrowser() = true
-            else
-                printlog( CFN & "General-tab is not visible." )
-                hOpenPropertyBrowser() = false
-            endif   
+            printlog( "Property browser is open" )
+            hOpenPropertyBrowser() = true
         else
-            printlog( CFN & "Could not open property browser" )
-            hOpenPropertyBrowser() = false    
+            warnlog( CFN & "Dialog <ControlPropertiesTabControl> is not available" )
+            hOpenPropertyBrowser() = false
         endif
-    catch
+    else
+        warnlog( CFN & "Could not execute <ContextProperties> slot" )
         hOpenPropertyBrowser() = false
-        printlog( CFN & "Slot <ContextProperties> not available" )
-    endcatch
-    
-    '///</ul>
+    endif
     
 end function
 
@@ -99,49 +60,22 @@ end function
 
 function hClosePropertyBrowser() as boolean
     
-    '///<h3>A function that closes the Property-Browser</h3>
-    '///<i>The property browser is closed by executing the slot (the slot 
-    '///+ toggles the dialog).</i><br><br>
-    
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    
-    '///<u>Returns</u>:
-    '///<ol>
-    
-    '///+<li>Errorcondition (boolean)</li>
-    '///<ul>
-    '///+<li>TRUE if the Property Browser has been closed</li>
-    '///+<li>FALSE if the property browser is not open</li>
-    '///+<li>FALSE if the property browser could not be closed</li>
-    '///</ul>
-    
-    '///</ol>
-    
-    '///<u>Description</u>:
-    '///<ul>
-    '///+<li>Verify that the property browser is open</li>
     kontext "ControlPropertiesTabControl"
-    if ( ControlPropertiesTabControl.exists( 1 ) ) then
+    if ( ControlPropertiesTabControl.exists() ) then
     
-        '///+<li>Execute the ContextProperties slot</li>
-        ContextProperties
+        hUseAsyncSlot( "ContextProperties" )
         
-        '///+<li>Verify that the property browser is closed</li>
-        if ( ControlPropertiesTabControl.exists() ) then
+        if ( ControlPropertiesTabControl.notExists( 2 ) ) then
             printlog( CFN & "Property browser could not be closed" )
-            hClosePropertyBrowser() = false
+            hClosePropertyBrowser() = true
         else
             printlog( CFN & "ok" )
-            hClosePropertyBrowser() = true
+            hClosePropertyBrowser() = false
         endif
     else
         printlog( CFN & "Property browser is not open" )
-        hClosePropertyBrowser() = false
+        hClosePropertyBrowser() = true
     endif
-    '///</ul>
    
 end function
 
