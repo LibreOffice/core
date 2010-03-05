@@ -400,7 +400,6 @@ VisualEffect
 Weight
 WhiteDay
 Width
-WriteProtectionPassword
 WritingMode
 ZoomType
 ZoomValue

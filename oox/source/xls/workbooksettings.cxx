@@ -42,11 +42,13 @@
 #include "oox/xls/unitconverter.hxx"
 
 using ::rtl::OUString;
+using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::util::Date;
 using ::com::sun::star::util::XNumberFormatsSupplier;
 using ::com::sun::star::sheet::XCalculatable;
+using ::comphelper::MediaDescriptor;
 using ::oox::core::CodecHelper;
 
 namespace oox {
@@ -299,7 +301,7 @@ void WorkbookSettings::finalizeImport()
     if( maFileSharing.mbRecommendReadOnly || (maFileSharing.mnPasswordHash != 0) )
         getBaseFilter().getMediaDescriptor()[ CREATE_OUSTRING( "ReadOnly" ) ] <<= true;
     if( maFileSharing.mnPasswordHash != 0 )
-        aPropSet.setProperty( PROP_WriteProtectionPassword, static_cast< sal_Int32 >( maFileSharing.mnPasswordHash ) );
+        getBaseFilter().getMediaDescriptor().setComponentDataEntry( CREATE_OUSTRING( "ModifyPasswordHash" ), Any( static_cast< sal_Int32 >( maFileSharing.mnPasswordHash ) ) );
 
     // calculation settings
     Date aNullDate = getNullDate();

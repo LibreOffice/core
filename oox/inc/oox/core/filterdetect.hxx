@@ -44,6 +44,7 @@ namespace com { namespace sun { namespace star {
 } } }
 
 namespace comphelper { class MediaDescriptor; }
+
 namespace oox { class AttributeList; }
 
 namespace oox {
