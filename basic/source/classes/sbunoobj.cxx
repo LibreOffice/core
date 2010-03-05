@@ -138,16 +138,19 @@ bool SbUnoObject::getDefaultPropName( SbUnoObject* pUnoObj, String& sDfltProp )
 SbxVariable* getDefaultProp( SbxVariable* pRef )
 {
     SbxVariable* pDefaultProp = NULL;
-    SbxObject* pObj = PTR_CAST(SbxObject,(SbxVariable*) pRef);
-    if ( !pObj )
+    if ( pRef->GetType() == SbxOBJECT )
     {
-        SbxBase* pObjVarObj = pRef->GetObject();
-        pObj = PTR_CAST(SbxObject,pObjVarObj);
-    }
-    if ( pObj && pObj->ISA(SbUnoObject) )
-    {
-        SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,(SbxObject*)pObj);
-        pDefaultProp = pUnoObj->GetDfltProperty();
+          SbxObject* pObj = PTR_CAST(SbxObject,(SbxVariable*) pRef);
+        if ( !pObj )
+        {
+            SbxBase* pObjVarObj = pRef->GetObject();
+            pObj = PTR_CAST(SbxObject,pObjVarObj);
+        }
+        if ( pObj && pObj->ISA(SbUnoObject) )
+        {
+            SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,(SbxObject*)pObj);
+            pDefaultProp = pUnoObj->GetDfltProperty();
+        }
     }
     return pDefaultProp;
 }
