@@ -591,7 +591,11 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
 
             if (ScDBQueryDataIterator::IsQueryValid(*mpDoc, *mpParam, nTab, nRow, pCell))
             {
-                switch (pCell->GetCellType())
+                // #i109812# get cell here if it wasn't done above
+                if (nCol != static_cast<SCCOL>(nFirstQueryField))
+                    pCell = ScDBQueryDataIterator::GetCellByColEntryIndex(*mpDoc, nTab, nCol, nColRow);
+
+                switch (pCell ? pCell->GetCellType() : CELLTYPE_NONE)
                 {
                     case CELLTYPE_VALUE:
                         {
