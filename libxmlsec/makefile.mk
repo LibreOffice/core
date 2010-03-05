@@ -46,21 +46,20 @@ XMLSEC1VERSION=1.2.14
 
 TARFILE_NAME=$(PRJNAME)-$(XMLSEC1VERSION)
 
-#xmlsec1-configure.patch: Set up the build. Straightforward
-#configuration
+#xmlsec1-configure.patch: Set up the build. Straightforward configuration
 #xmlsec1-olderlibxml2.patch: Allow build against older libxml2, for macosx
+#xmlsec1-nssdisablecallbacks.patch: Disable use of smime3 so don't need to package it
 #xmlsec1-customkeymanage.patch: Could we do this alternatively outside xmlsec
 #xmlsec1-nssmangleciphers.patch: Dubious, do we still need this ?
-#xmlsec1-nssdisablecallbacks.patch: Dubious, do we still need this ?
 #xmlsec1-noverify.patch: As per readme.txt. 
 #xmlsec1-mingw32.patch: Mingw32 support. 
 #xmlsec1-mingw-customkeymanage-addmscrypto.patch builds the custom keymanager on mingw
 PATCH_FILES=\
    xmlsec1-configure.patch \
    xmlsec1-olderlibxml2.patch \
+   xmlsec1-nssdisablecallbacks.patch \
    xmlsec1-customkeymanage.patch \
    xmlsec1-nssmangleciphers.patch \
-   xmlsec1-nssdisablecallbacks.patch \
    xmlsec1-noverify.patch \
    xmlsec1-mingw32.patch \
    xmlsec1-mingw-keymgr-mscrypto.patch
