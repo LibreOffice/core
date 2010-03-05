@@ -43,8 +43,7 @@ public final class Test {
     @org.junit.Test public void test() {
         assertTrue(
             Runner.run(
-                "-sce", "cfgmgr2.sce", "-xcl", "knownissues.xcl", "-cs",
-                connection.getDescription()));
+                "-sce", "module.sce", "-cs", connection.getDescription()));
     }
 
     private final OfficeConnection connection = new OfficeConnection();
