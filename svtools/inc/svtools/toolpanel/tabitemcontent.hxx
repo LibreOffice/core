@@ -36,7 +36,9 @@ namespace svt
     {
         TABITEM_IMAGE_AND_TEXT,
         TABITEM_IMAGE_ONLY,
-        TABITEM_TEXT_ONLY
+        TABITEM_TEXT_ONLY,
+
+        TABITEM_AUTO
     };
 
 //........................................................................

@@ -234,6 +234,7 @@ private:
     RadioButton     m_aImagesAndText;
     RadioButton     m_aImagesOnly;
     RadioButton     m_aTextOnly;
+    RadioButton     m_aAutomaticContent;
 };
 
 //=============================================================================
@@ -274,6 +275,7 @@ OptionsWindow::OptionsWindow( PanelDemoMainWindow& i_rParent )
     ,m_aImagesAndText( this )
     ,m_aImagesOnly( this )
     ,m_aTextOnly( this )
+    ,m_aAutomaticContent( this )
 {
     SetBorderStyle( WINDOW_BORDER_MONO );
     const Color aFaceColor( GetSettings().GetStyleSettings().GetFaceColor() );
@@ -281,11 +283,12 @@ OptionsWindow::OptionsWindow( PanelDemoMainWindow& i_rParent )
 
     Window* pControls[] =
     {
-        &m_aAlignmentHeader, &m_aAlignLeft, &m_aAlignRight, &m_aTabItemContent, &m_aImagesAndText, &m_aImagesOnly, &m_aTextOnly
+        &m_aAlignmentHeader, &m_aAlignLeft, &m_aAlignRight, &m_aTabItemContent, &m_aImagesAndText, &m_aImagesOnly,
+        &m_aTextOnly, &m_aAutomaticContent
     };
     const sal_Char* pTexts[] =
     {
-        "Tab Bar Alignment", "Left", "Right", "Tab Items", "Images and Text", "Images only", "Text only"
+        "Tab Bar Alignment", "Left", "Right", "Tab Items", "Images and Text", "Images only", "Text only", "Automatic"
     };
     for ( size_t i=0; i < sizeof( pControls ) / sizeof( pControls[0] ); ++i )
     {
@@ -348,13 +351,14 @@ void OptionsWindow::Resize()
     };
     ControlRow aControlRows[] =
     {
-        ControlRow( m_aAlignmentHeader, false ),
-        ControlRow( m_aAlignLeft,       true ),
-        ControlRow( m_aAlignRight,      true ),
-        ControlRow( m_aTabItemContent,  false ),
-        ControlRow( m_aImagesAndText,   true ),
-        ControlRow( m_aImagesOnly,      true ),
-        ControlRow( m_aTextOnly,        true )
+        ControlRow( m_aAlignmentHeader,     false ),
+        ControlRow( m_aAlignLeft,           true ),
+        ControlRow( m_aAlignRight,          true ),
+        ControlRow( m_aTabItemContent,      false ),
+        ControlRow( m_aImagesAndText,       true ),
+        ControlRow( m_aImagesOnly,          true ),
+        ControlRow( m_aTextOnly,            true ),
+        ControlRow( m_aAutomaticContent,    true )
     };
     bool bPreviousWasSubordinate = false;
     for ( size_t i=0; i < sizeof( aControlRows ) / sizeof( aControlRows[0] ); ++i )
@@ -398,6 +402,10 @@ IMPL_LINK( OptionsWindow, OnRadioToggled, RadioButton*, i_pRadioButton )
         else if ( i_pRadioButton == &m_aTextOnly )
         {
             rController.SetTabItemContent( TABITEM_TEXT_ONLY );
+        }
+        else if ( i_pRadioButton == &m_aAutomaticContent )
+        {
+            rController.SetTabItemContent( TABITEM_AUTO );
         }
     }
     return 0L;

@@ -85,6 +85,8 @@ namespace svt
 
         const Rectangle& GetRect( const TabItemContent i_eItemContent ) const
         {
+            OSL_ENSURE( i_eItemContent != TABITEM_AUTO, "ItemDescriptor::GetRect: illegal value!" );
+
             return  ( i_eItemContent == TABITEM_IMAGE_AND_TEXT )
                 ?   aCompleteArea
                 :   (   ( i_eItemContent == TABITEM_TEXT_ONLY )
@@ -278,6 +280,8 @@ namespace svt
     void VerticalItemLayout::CalculateItemSize( const PToolPanel& i_pPanel, const TabItemContent i_eItemContent,
             Size& o_rBoundingSize, Rectangle& o_rContentArea ) const
     {
+        OSL_ENSURE( i_eItemContent != TABITEM_AUTO, "VerticalItemLayout::CalculateItemSize: illegal TabItemContent value!" );
+
         const Image aImage( i_pPanel->GetImage() );
         const bool bUseImage = !!aImage && ( i_eItemContent != TABITEM_TEXT_ONLY );
 
@@ -449,6 +453,8 @@ namespace svt
     //------------------------------------------------------------------------------------------------------------------
     void VerticalItemLayout::impl_renderContent( const PToolPanel& i_pPanel, const Rectangle& i_rContentArea, const TabItemContent i_eItemContent )
     {
+        OSL_ENSURE( i_eItemContent != TABITEM_AUTO, "VerticalItemLayout::impl_renderContent: illegal TabItemContent value!" );
+
         Point aDrawPos( i_rContentArea.TopLeft() );
         aDrawPos.Y() += ITEM_OUTER_SPACE;
 
@@ -790,41 +796,38 @@ namespace svt
                 // nothing to do
                 return;
 
-            // the available size
-            Size aOutputSize( io_rData.rTabBar.GetOutputSizePixel() );
-            // shrunk by the outer space
-            aOutputSize.Width() -= io_rData.aBottomRightSpace.Width();
-            aOutputSize.Height() -= io_rData.aBottomRightSpace.Height();
-            const Rectangle aFitInto( Point( 0, 0 ), aOutputSize );
-
-            // the "content modes" to try
-            TabItemContent eTryThis[] =
+            TabItemContent eItemContent( io_rData.eTabItemContent );
+            if ( io_rData.eTabItemContent == TABITEM_AUTO )
             {
-                TABITEM_IMAGE_ONLY,     // assumed to have the smalles rects
-                TABITEM_TEXT_ONLY,
-                TABITEM_IMAGE_AND_TEXT  // assumed to have the largest rects
-            };
+                // the available size
+                Size aOutputSize( io_rData.rTabBar.GetOutputSizePixel() );
+                // shrunk by the outer space
+                aOutputSize.Width() -= io_rData.aBottomRightSpace.Width();
+                aOutputSize.Height() -= io_rData.aBottomRightSpace.Height();
+                const Rectangle aFitInto( Point( 0, 0 ), aOutputSize );
 
-            // do not start with the largest, but with the one currently set up for the TabBar
-            size_t nTryIndex = 0;
-            while   (   ( nTryIndex < ( sizeof( eTryThis ) / sizeof( eTryThis[0] ) ) )
-                    &&  ( eTryThis[nTryIndex] != io_rData.eTabItemContent )
-                    )
-            {
-                ++nTryIndex;
-            }
-
-            // determine which of the different version fits
-            TabItemContent eContent = eTryThis[0];
-            while ( nTryIndex > 0 )
-            {
-                const Point aBottomRight( io_rData.aItems.rbegin()->GetRect( eTryThis[ nTryIndex ] ).BottomRight() );
-                if ( aFitInto.IsInside( aBottomRight ) )
+                // the "content modes" to try
+                TabItemContent eTryThis[] =
                 {
-                    eContent = eTryThis[ nTryIndex ];
-                    break;
+                    TABITEM_IMAGE_ONLY,     // assumed to have the smallest rects
+                    TABITEM_TEXT_ONLY,
+                    TABITEM_IMAGE_AND_TEXT  // assumed to have the largest rects
+                };
+
+
+                // determine which of the different version fits
+                eItemContent = eTryThis[0];
+                size_t nTryIndex = 2;
+                while ( nTryIndex > 0 )
+                {
+                    const Point aBottomRight( io_rData.aItems.rbegin()->GetRect( eTryThis[ nTryIndex ] ).BottomRight() );
+                    if ( aFitInto.IsInside( aBottomRight ) )
+                    {
+                        eItemContent = eTryThis[ nTryIndex ];
+                        break;
+                    }
+                    --nTryIndex;
                 }
-                --nTryIndex;
             }
 
             // propagate to the items
@@ -833,7 +836,7 @@ namespace svt
                     ++item
                 )
             {
-                item->eContent = eContent;
+                item->eContent = eItemContent;
             }
         }
     }
