@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: OOXMLAnalyzeService.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,10 +24,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-/**
-  Copyright 2005 Sun Microsystems, Inc.
-*/
 
 #ifndef INCLUDED_OOXML_ANALYZE_SERVICE_HXX
 #define INCLUDED_OOXML_ANALYZE_SERVICE_HXX

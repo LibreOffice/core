@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swfwriter.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -264,6 +261,7 @@ void Writer::placeShape( sal_uInt16 nID, sal_uInt16 nDepth, sal_Int32 x, sal_Int
     endTag();
 }
 
+#ifdef THEFUTURE
 // -----------------------------------------------------------------------------
 
 void Writer::moveShape( sal_uInt16 nDepth, sal_Int32 x, sal_Int32 y )
@@ -291,6 +289,7 @@ void Writer::moveShape( sal_uInt16 nDepth, sal_Int32 x, sal_Int32 y )
 
     endTag();
 }
+#endif
 
 // -----------------------------------------------------------------------------
 
