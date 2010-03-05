@@ -626,7 +626,14 @@ namespace svt
             rTabBar.Invalidate();
         }
 
-        virtual void ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const size_t i_nNewActive );
+        virtual void PanelRemoved( const size_t i_nPosition )
+        {
+            (void)i_nPosition;
+            bItemsDirty = true;
+            rTabBar.Invalidate();
+        }
+
+        virtual void ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive );
         virtual void Dying();
 
     public:
@@ -845,13 +852,14 @@ namespace svt
     //= PanelTabBar_Data
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
-    void PanelTabBar_Data::ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const size_t i_nNewActive )
+    void PanelTabBar_Data::ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive )
     {
         lcl_ensureItemsCache( *this );
 
         if ( !!i_rOldActive )
             lcl_drawItem( *this, *i_rOldActive );
-        lcl_drawItem( *this, i_nNewActive );
+        if ( !!i_rNewActive )
+            lcl_drawItem( *this, *i_rNewActive );
     }
 
     //------------------------------------------------------------------------------------------------------------------

@@ -52,7 +52,8 @@ namespace svt
 
         // IToolPanelDeckListener equivalents, forward the events to all registered listeners
         void    PanelInserted( const PToolPanel& i_pPanel, const size_t i_nPosition );
-        void    ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const size_t i_nNewActive );
+        void    PanelRemoved( const size_t i_nPosition );
+        void    ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive );
         void    Dying();
 
         // listener maintainance

@@ -53,9 +53,13 @@ namespace svt
         */
         virtual void PanelInserted( const PToolPanel& i_pPanel, const size_t i_nPosition ) = 0;
 
+        /** called when a panel has been removed from the deck
+        */
+        virtual void PanelRemoved( const size_t i_nPosition ) = 0;
+
         /** called when the active panel of the deck changed
         */
-        virtual void ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const size_t i_nNewActive ) = 0;
+        virtual void ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive ) = 0;
 
         /** called when the tool panel deck which the listener registered at is dying. The listener is required to
             release all references to the deck then.
@@ -78,8 +82,7 @@ namespace svt
         */
         virtual PToolPanel  GetPanel( const size_t i_nPos ) const = 0;
 
-        /** returns the number of the currently active panel. If the deck does not currently contain any panel,
-            the behavior is undefined.
+        /** returns the number of the currently active panel.
         */
         virtual ::boost::optional< size_t >
                             GetActivePanel() const;
@@ -94,6 +97,10 @@ namespace svt
             silently ignored in the product version.
         */
         virtual size_t      InsertPanel( const PToolPanel& i_pPanel, const size_t i_nPosition ) = 0;
+
+        /** removes a panel specified by its position.
+        */
+        virtual void        RemovePanel( const size_t i_nPosition ) = 0;
 
         /** adds a new listener to be notified when the container content changes. The caller is responsible
             for life time control, i.e. removing the listener before it actually dies.
@@ -126,6 +133,7 @@ namespace svt
                             GetActivePanel() const;
         virtual void        ActivatePanel( const size_t i_nPanel );
         virtual size_t      InsertPanel( const PToolPanel& i_pPanel, const size_t i_nPosition );
+        virtual void        RemovePanel( const size_t i_nPosition );
         virtual void        AddListener( IToolPanelDeckListener& i_rListener );
         virtual void        RemoveListener( IToolPanelDeckListener& i_rListener );
 

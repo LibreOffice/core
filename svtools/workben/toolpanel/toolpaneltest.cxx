@@ -41,6 +41,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/help.hxx>
+#include <vcl/lstbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/wrkwin.hxx>
@@ -215,16 +216,32 @@ Image ColoredPanel::GetImage() const
 //= OptionsWindow
 //=============================================================================
 class PanelDemoMainWindow;
-class OptionsWindow : public Window
+class OptionsWindow :public Window
+                    ,public ::svt::IToolPanelDeckListener
 {
 public:
     OptionsWindow( PanelDemoMainWindow& i_rParent );
+    ~OptionsWindow();
 
-    virtual void Resize();
-    virtual void GetFocus();
+    // Window overridables
+    virtual void    Resize();
+    virtual void    GetFocus();
+    virtual void    StateChanged( StateChangedType i_nStateChange );
+
+    // IToolPanelDeckListener
+    virtual void PanelInserted( const PToolPanel& i_pPanel, const size_t i_nPosition );
+    virtual void PanelRemoved( const size_t i_nPosition );
+    virtual void ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive );
+    virtual void Dying();
 
 private:
     DECL_LINK( OnRadioToggled, RadioButton* );
+    DECL_LINK( OnListEntrySelected, ListBox* );
+    DECL_LINK( OnListEntryDoubleClicked, ListBox* );
+    DECL_LINK( OnButtonClicked, PushButton* );
+
+    void    impl_initPanelList();
+    void    impl_updateRemoveButton();
 
 private:
     FixedLine       m_aAlignmentHeader;
@@ -235,6 +252,10 @@ private:
     RadioButton     m_aImagesOnly;
     RadioButton     m_aTextOnly;
     RadioButton     m_aAutomaticContent;
+
+    FixedLine       m_aPanelsHeader;
+    ListBox         m_aPanelList;
+    PushButton      m_aRemovePanel;
 };
 
 //=============================================================================
@@ -253,6 +274,9 @@ public:
     // operations
     void AlignTabs( const ::svt::TabAlignment i_eAlignment );
     void SetTabItemContent( const TabItemContent i_eItemContent );
+
+    // member access
+    IToolPanelDeck& GetToolPanelDeck();
 
 protected:
     virtual void    GetFocus();
@@ -276,34 +300,89 @@ OptionsWindow::OptionsWindow( PanelDemoMainWindow& i_rParent )
     ,m_aImagesOnly( this )
     ,m_aTextOnly( this )
     ,m_aAutomaticContent( this )
+    ,m_aPanelsHeader( this )
+    ,m_aPanelList( this )
+    ,m_aRemovePanel( this )
 {
     SetBorderStyle( WINDOW_BORDER_MONO );
-    const Color aFaceColor( GetSettings().GetStyleSettings().GetFaceColor() );
-    SetBackground( aFaceColor );
-
     Window* pControls[] =
     {
         &m_aAlignmentHeader, &m_aAlignLeft, &m_aAlignRight, &m_aTabItemContent, &m_aImagesAndText, &m_aImagesOnly,
-        &m_aTextOnly, &m_aAutomaticContent
+        &m_aTextOnly, &m_aAutomaticContent, &m_aPanelsHeader, &m_aPanelList, &m_aRemovePanel
     };
     const sal_Char* pTexts[] =
     {
-        "Tab Bar Alignment", "Left", "Right", "Tab Items", "Images and Text", "Images only", "Text only", "Automatic"
+        "Tab Bar Alignment", "Left", "Right", "Tab Items", "Images and Text", "Images only", "Text only", "Automatic",
+        "Panels", "", "Remove Panel"
     };
     for ( size_t i=0; i < sizeof( pControls ) / sizeof( pControls[0] ); ++i )
     {
+        const WindowType eWindowType = pControls[i]->GetType();
+
         pControls[i]->SetText( String::CreateFromAscii( pTexts[i] ) );
-        pControls[i]->SetControlBackground( aFaceColor );
         pControls[i]->Show();
 
-        if ( pControls[i]->GetType() == WINDOW_RADIOBUTTON )
+        if ( eWindowType == WINDOW_RADIOBUTTON )
             static_cast< RadioButton* >( pControls[i] )->SetToggleHdl( LINK( this, OptionsWindow, OnRadioToggled ) );
+
+        if ( eWindowType == WINDOW_LISTBOX )
+        {
+            static_cast< ListBox* >( pControls[i] )->SetSelectHdl( LINK( this, OptionsWindow, OnListEntrySelected ) );
+            static_cast< ListBox* >( pControls[i] )->SetDoubleClickHdl( LINK( this, OptionsWindow, OnListEntryDoubleClicked ) );
+        }
+
+        if ( eWindowType == WINDOW_PUSHBUTTON )
+        {
+            static_cast< PushButton* >( pControls[i] )->SetClickHdl( LINK( this, OptionsWindow, OnButtonClicked ) );
+        }
     }
 
     m_aAlignRight.Check();
     m_aImagesAndText.Check();
 
     Show();
+}
+
+//-----------------------------------------------------------------------------
+OptionsWindow::~OptionsWindow()
+{
+}
+
+//-----------------------------------------------------------------------------
+void OptionsWindow::impl_updateRemoveButton()
+{
+    m_aRemovePanel.Enable( m_aPanelList.GetSelectEntryCount() > 0 );
+}
+
+//-----------------------------------------------------------------------------
+void OptionsWindow::impl_initPanelList()
+{
+    m_aPanelList.Clear();
+
+    PanelDemoMainWindow& rController( dynamic_cast< PanelDemoMainWindow& >( *GetParent() ) );
+    IToolPanelDeck& rPanelDeck( rController.GetToolPanelDeck() );
+
+    for ( size_t i=0; i<rPanelDeck.GetPanelCount(); ++i )
+    {
+        PToolPanel pPanel = rPanelDeck.GetPanel( i );
+        m_aPanelList.InsertEntry( pPanel->GetDisplayName(), pPanel->GetImage() );
+    }
+    ActivePanelChanged( ::boost::optional< size_t >(), rPanelDeck.GetActivePanel() );
+
+    impl_updateRemoveButton();
+
+    rPanelDeck.AddListener( *this );
+}
+
+//-----------------------------------------------------------------------------
+void OptionsWindow::StateChanged( StateChangedType i_nStateChange )
+{
+    Window::StateChanged( i_nStateChange );
+
+    if ( i_nStateChange == STATE_CHANGE_INITSHOW )
+    {
+        impl_initPanelList();
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -335,10 +414,10 @@ void OptionsWindow::Resize()
     const long nIndent( LogicToPixel( Size( 6, 9 ), MAP_APPFONT ).Width() );
     const long nLineHeight( LogicToPixel( Size( 0, 8 ), MAP_APPFONT ).Height() );
 
-    const Size aSuperordinateSize( aOutputSize.Width() - 2 * aSpacing.Width(), nLineHeight );
+    const long nSuperordinateWidth = aOutputSize.Width() - 2 * aSpacing.Width();
     const long nSuperordinateX = aSpacing.Width();
 
-    const Size aSubordinateSize( aOutputSize.Width() - 2 * aSpacing.Width() - nIndent, nLineHeight );
+    const long nSubordinateWidth = aOutputSize.Width() - 2 * aSpacing.Width() - nIndent;
     const long nSubordinateX = aSpacing.Width() + nIndent;
 
     Point aItemPos( nSuperordinateX, aSpacing.Height() );
@@ -347,7 +426,14 @@ void OptionsWindow::Resize()
     {
         Window* pWindow;
         bool    bSubordinate;
-        ControlRow( Window& i_rWindow, const bool i_bSubordinate ) : pWindow( &i_rWindow ), bSubordinate( i_bSubordinate ) { }
+        size_t  nRows;
+
+        ControlRow( Window& i_rWindow, const bool i_bSubordinate, const size_t i_nRows = 1 )
+            :pWindow( &i_rWindow )
+            ,bSubordinate( i_bSubordinate )
+            ,nRows( i_nRows )
+        {
+        }
     };
     ControlRow aControlRows[] =
     {
@@ -358,7 +444,10 @@ void OptionsWindow::Resize()
         ControlRow( m_aImagesAndText,       true ),
         ControlRow( m_aImagesOnly,          true ),
         ControlRow( m_aTextOnly,            true ),
-        ControlRow( m_aAutomaticContent,    true )
+        ControlRow( m_aAutomaticContent,    true ),
+        ControlRow( m_aPanelsHeader,        false ),
+        ControlRow( m_aPanelList,           true, 8 ),
+        ControlRow( m_aRemovePanel,         true, 2 )
     };
     bool bPreviousWasSubordinate = false;
     for ( size_t i=0; i < sizeof( aControlRows ) / sizeof( aControlRows[0] ); ++i )
@@ -369,11 +458,76 @@ void OptionsWindow::Resize()
             aItemPos.Y() += aSpacing.Height();
         bPreviousWasSubordinate = aControlRows[i].bSubordinate;
 
-        const Size& rControlSize = ( aControlRows[i].bSubordinate ) ? aSubordinateSize : aSuperordinateSize;
-        aControlRows[i].pWindow->SetPosSizePixel( aItemPos, rControlSize );
+        Size aControlSize(
+            aControlRows[i].bSubordinate ? nSubordinateWidth : nSuperordinateWidth,
+            nLineHeight * aControlRows[i].nRows
+        );
+        aControlRows[i].pWindow->SetPosSizePixel( aItemPos, aControlSize );
 
-        aItemPos.Move( 0, rControlSize.Height() + aSpacing.Height() );
+        aItemPos.Move( 0, aControlSize.Height() + aSpacing.Height() );
     }
+}
+
+//-----------------------------------------------------------------------------
+void OptionsWindow::PanelInserted( const PToolPanel& i_pPanel, const size_t i_nPosition )
+{
+    m_aPanelList.InsertEntry( i_pPanel->GetDisplayName(), i_pPanel->GetImage(), USHORT( i_nPosition ) );
+}
+
+//-----------------------------------------------------------------------------
+void OptionsWindow::PanelRemoved( const size_t i_nPosition )
+{
+    m_aPanelList.RemoveEntry( USHORT( i_nPosition ) );
+    impl_updateRemoveButton();
+}
+
+//-----------------------------------------------------------------------------
+void OptionsWindow::ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive )
+{
+    (void)i_rOldActive;
+
+    if ( !i_rNewActive )
+        m_aPanelList.SetNoSelection();
+    else
+        m_aPanelList.SelectEntryPos( USHORT( *i_rNewActive ) );
+}
+
+//-----------------------------------------------------------------------------
+void OptionsWindow::Dying()
+{
+    // not interested in
+}
+
+//-----------------------------------------------------------------------------
+IMPL_LINK( OptionsWindow, OnListEntrySelected, ListBox*, i_pListBox )
+{
+    impl_updateRemoveButton();
+    return 0L;
+}
+
+//-----------------------------------------------------------------------------
+IMPL_LINK( OptionsWindow, OnListEntryDoubleClicked, ListBox*, i_pListBox )
+{
+    PanelDemoMainWindow& rController( dynamic_cast< PanelDemoMainWindow& >( *GetParent() ) );
+
+    if ( i_pListBox == &m_aPanelList )
+    {
+        size_t nActivatePanel = size_t( m_aPanelList.GetSelectEntryPos() );
+        rController.GetToolPanelDeck().ActivatePanel( nActivatePanel );
+    }
+
+    return 0L;
+}
+//-----------------------------------------------------------------------------
+IMPL_LINK( OptionsWindow, OnButtonClicked, PushButton*, i_pPushButton )
+{
+    PanelDemoMainWindow& rController( dynamic_cast< PanelDemoMainWindow& >( *GetParent() ) );
+
+    if ( i_pPushButton == &m_aRemovePanel )
+    {
+        rController.GetToolPanelDeck().RemovePanel( size_t( m_aPanelList.GetSelectEntryPos() ) );
+    }
+    return 0L;
 }
 
 //-----------------------------------------------------------------------------
@@ -419,10 +573,6 @@ PanelDemoMainWindow::PanelDemoMainWindow()
     ,m_aToolPanelDeck( *this, WB_BORDER )
     ,m_aDemoOptions( *this )
 {
-    const Color aFaceColor( GetSettings().GetStyleSettings().GetFaceColor() );
-
-    SetBackground( aFaceColor );
-
     m_aToolPanelDeck.SetPosSizePixel( Point( 20, 20 ), Size( 500, 300 ) );
     m_aToolPanelDeck.SetBorderStyle( WINDOW_BORDER_MONO );
 
@@ -461,13 +611,13 @@ void PanelDemoMainWindow::Resize()
 {
     WorkWindow::Resize();
     Size aSize( GetOutputSizePixel() );
-    aSize.Width() -= 190;
+    aSize.Width() -= 240;
     aSize.Height() -= 40;
     m_aToolPanelDeck.SetPosSizePixel( Point( 20, 20 ), aSize );
 
     m_aDemoOptions.SetPosSizePixel(
         Point( 20 + aSize.Width(), 20 ),
-        Size( 150, aSize.Height() )
+        Size( 200, aSize.Height() )
     );
 }
 
@@ -493,6 +643,12 @@ void PanelDemoMainWindow::SetTabItemContent( const TabItemContent i_eItemContent
         return;
 
     pLayouter->SetTabItemContent( i_eItemContent );
+}
+
+//-----------------------------------------------------------------------------
+IToolPanelDeck& PanelDemoMainWindow::GetToolPanelDeck()
+{
+    return m_aToolPanelDeck;
 }
 
 //=============================================================================

@@ -60,14 +60,26 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    void PanelDeckListeners::ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const size_t i_nNewActive )
+    void PanelDeckListeners::PanelRemoved( const size_t i_nPosition )
     {
         for (   ::std::vector< IToolPanelDeckListener* >::const_iterator loop = m_aListeners.begin();
                 loop != m_aListeners.end();
                 ++loop
             )
         {
-            (*loop)->ActivePanelChanged( i_rOldActive, i_nNewActive );
+            (*loop)->PanelRemoved( i_nPosition );
+        }
+    }
+
+    //--------------------------------------------------------------------
+    void PanelDeckListeners::ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive )
+    {
+        for (   ::std::vector< IToolPanelDeckListener* >::const_iterator loop = m_aListeners.begin();
+                loop != m_aListeners.end();
+                ++loop
+            )
+        {
+            (*loop)->ActivePanelChanged( i_rOldActive, i_rNewActive );
         }
     }
 

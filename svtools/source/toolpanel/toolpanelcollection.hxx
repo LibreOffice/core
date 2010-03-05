@@ -54,6 +54,7 @@ namespace svt
                             GetActivePanel() const;
         virtual void        ActivatePanel( const size_t i_nPanel );
         virtual size_t      InsertPanel( const PToolPanel& i_pPanel, const size_t i_nPosition );
+        virtual void        RemovePanel( const size_t i_nPosition );
         virtual void        AddListener( IToolPanelDeckListener& i_rListener );
         virtual void        RemoveListener( IToolPanelDeckListener& i_rListener );
 

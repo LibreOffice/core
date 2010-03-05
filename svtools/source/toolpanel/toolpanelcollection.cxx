@@ -89,7 +89,7 @@ namespace svt
         m_pData->aActivePanel = i_nPanel;
 
         // notify listeners
-        m_pData->aListeners.ActivePanelChanged( aOldPanel, *m_pData->aActivePanel );
+        m_pData->aListeners.ActivePanelChanged( aOldPanel, m_pData->aActivePanel );
     }
 
     //--------------------------------------------------------------------
@@ -123,6 +123,49 @@ namespace svt
         m_pData->aListeners.PanelInserted( i_pPanel, i_nPosition );
 
         return position;
+    }
+
+    //--------------------------------------------------------------------
+    void ToolPanelCollection::RemovePanel( const size_t i_nPosition )
+    {
+        OSL_ENSURE( i_nPosition < m_pData->aPanels.size(), "ToolPanelCollection::RemovePanel: illegal position!" );
+        if ( i_nPosition >= m_pData->aPanels.size() )
+            return;
+
+        // if the active panel is going to be removed, activate another one (before the actual removal)
+        if ( m_pData->aActivePanel == i_nPosition )
+        {
+            const ::boost::optional< size_t > aOldActive( m_pData->aActivePanel );
+
+            if ( i_nPosition + 1 < GetPanelCount() )
+            {
+                ++*m_pData->aActivePanel;
+            }
+            else if ( i_nPosition > 0 )
+            {
+                --*m_pData->aActivePanel;
+            }
+            else
+            {
+                m_pData->aActivePanel.reset();
+            }
+
+            m_pData->aListeners.ActivePanelChanged( aOldActive, m_pData->aActivePanel );
+        }
+
+        // actually remove
+        m_pData->aPanels.erase( m_pData->aPanels.begin() + i_nPosition );
+
+        if ( !!m_pData->aActivePanel )
+        {
+            if ( i_nPosition < *m_pData->aActivePanel )
+            {
+                --*m_pData->aActivePanel;
+            }
+        }
+
+        // notify removed panel
+        m_pData->aListeners.PanelRemoved( i_nPosition );
     }
 
     //--------------------------------------------------------------------
