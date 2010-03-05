@@ -155,7 +155,7 @@ SdLayoutDialogContent::SdLayoutDialogContent( ViewShellBase& rBase, ::Window* pP
 
     SetSelectHdl( LINK( this, SdLayoutDialogContent, SelectHdl ) );
 
-    mpLayoutSet1 = new ValueSet( this, WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
+    mpLayoutSet1 = new ValueSet( this, WB_TABSTOP | /* WB_MENUSTYLEVALUESET | */ WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
 //  mpLayoutSet1->SetHelpId( HID_VALUESET_EXTRUSION_LIGHTING );
 
     mpLayoutSet1->SetSelectHdl( LINK( this, SdLayoutDialogContent, SelectHdl ) );
@@ -171,7 +171,7 @@ SdLayoutDialogContent::SdLayoutDialogContent( ViewShellBase& rBase, ::Window* pP
 
     if( bVerticalEnabled )
     {
-        mpLayoutSet2 = new ValueSet( this, WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
+        mpLayoutSet2 = new ValueSet( this, WB_TABSTOP | /* WB_MENUSTYLEVALUESET | */ WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
     //  mpLayoutSet2->SetHelpId( HID_VALUESET_EXTRUSION_LIGHTING );
 
         mpLayoutSet2->SetSelectHdl( LINK( this, SdLayoutDialogContent, SelectHdl ) );
