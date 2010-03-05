@@ -43,6 +43,7 @@
 #include <vcl/help.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/tabctrl.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/wrkwin.hxx>
 
@@ -76,11 +77,23 @@ public:
     ColoredPanelWindow( Window& i_rParent, const Color& i_rColor )
         :Window( &i_rParent )
         ,m_aEdit( this, WB_BORDER )
+        ,m_aTabControl( this )
     {
         SetLineColor();
         SetFillColor( i_rColor );
 
         m_aEdit.Show();
+        m_aTabControl.Show();
+
+        const sal_Char* pTabTitles[] =
+        {
+            "This", "is a", "Tab", "Control", "test", "intended", "for", "comparison"
+        };
+        for ( size_t i=0; i < sizeof( pTabTitles ) / sizeof( pTabTitles[0] ); ++i )
+        {
+            String sText( String::CreateFromAscii( pTabTitles[i] ) );
+            m_aTabControl.InsertPage( i + 1, sText );
+        }
     }
 
     virtual void Paint( const Rectangle& i_rRect )
@@ -100,10 +113,15 @@ public:
             Point( 20, 20 ),
             Size( aOutputSize.Width() - 40, 20 )
         );
+        m_aTabControl.SetPosSizePixel(
+            Point( 20, 50 ),
+            Size( aOutputSize.Width() - 40, 150 )
+        );
     }
 
 private:
-    Edit    m_aEdit;
+    Edit        m_aEdit;
+    TabControl  m_aTabControl;
 };
 
 //=============================================================================
