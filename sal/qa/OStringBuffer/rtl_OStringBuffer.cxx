@@ -40,6 +40,8 @@
 #include "cppunit/extensions/HelperMacros.h"
 #include "cppunit/plugin/TestPlugIn.h"
 
+#include <string.h>
+
 using namespace rtl;
 
 //------------------------------------------------------------------------

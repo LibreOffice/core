@@ -55,6 +55,7 @@
 #ifdef UNX
 #include <unistd.h>
 #endif
+#include <string.h>
 
 using namespace osl;
 using namespace rtl;
