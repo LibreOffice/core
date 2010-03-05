@@ -59,7 +59,6 @@ FILES_TO_COPY_FROM_MINGW= \
 FILES_TO_COPY_FROM_W32API= \
     amvideo.h \
     basetyps.h \
-    oaidl.h \
     objidl.h \
     specstrings.h \
     uxtheme.h \
@@ -102,6 +101,7 @@ FILES_TO_COPY_FROM_PSDK= \
     msiquery.h \
     multimon.h \
     ntquery.h \
+    oaidl.h \
     ocidl.h \
     oleauto.h \
     olectl.h \
@@ -110,6 +110,7 @@ FILES_TO_COPY_FROM_PSDK= \
     propidl.h \
     propkeydef.h \
     propsys.h \
+    propvarutil.h \
     shlobj.h \
     shobjidl.h \
     shtypes.h \
