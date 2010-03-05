@@ -1603,6 +1603,23 @@ bool checkUnoObjectType( SbUnoObject* pUnoObj,
                 break;
             }
             ::rtl::OUString sClassName = xClass->getName();
+            if ( sClassName.equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.oleautomation.XAutomationObject" ) ) ) )
+            {
+                // there is a hack in the extensions/source/ole/oleobj.cxx  to return the typename of the automation object, lets check if it
+                // matches
+                Reference< XInvocation > xInv( aToInspectObj, UNO_QUERY );
+                if ( xInv.is() )
+                {
+                    rtl::OUString sTypeName;
+                    xInv->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("$GetTypeName") ) ) >>= sTypeName;
+                    if ( sTypeName.getLength() == 0 || sTypeName.equals(  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("IDispatch") ) ) )
+                        // can't check type, leave it pass
+                        result = true;
+                    else
+                        result = sTypeName.equals( aClass );
+                }
+                break; // finished checking automation object
+            }
             OSL_TRACE("Checking if object implements %s",
                 OUStringToOString( defaultNameSpace + aClass,
                     RTL_TEXTENCODING_UTF8 ).getStr() );
