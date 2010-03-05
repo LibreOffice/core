@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: document.cxx,v $
- * $Revision: 1.90.36.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,12 +32,12 @@
 
 #define _ZFORLIST_DECLARE_TABLE
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
-#include <svx/boxitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <svx/pageitem.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdocapt.hxx>
@@ -148,6 +145,32 @@ BOOL ScDocument::GetName( SCTAB nTab, String& rName ) const
         if (pTab[nTab])
         {
             pTab[nTab]->GetName( rName );
+            return TRUE;
+        }
+    rName.Erase();
+    return FALSE;
+}
+
+BOOL ScDocument::SetCodeName( SCTAB nTab, String& rName )
+{
+    if (VALIDTAB(nTab))
+    {
+        if (pTab[nTab])
+        {
+            pTab[nTab]->SetCodeName( rName );
+            return TRUE;
+        }
+    }
+    OSL_TRACE( "**** can't set code name %s", rtl::OUStringToOString( rName, RTL_TEXTENCODING_UTF8 ).getStr() );
+    return FALSE;
+}
+
+BOOL ScDocument::GetCodeName( SCTAB nTab, String& rName ) const
+{
+    if (VALIDTAB(nTab))
+        if (pTab[nTab])
+        {
+            pTab[nTab]->GetCodeName( rName );
             return TRUE;
         }
     rName.Erase();
@@ -293,6 +316,7 @@ BOOL ScDocument::InsertTab( SCTAB nPos, const String& rName,
         if (nPos == SC_TAB_APPEND || nPos == nTabCount)
         {
             pTab[nTabCount] = new ScTable(this, nTabCount, rName);
+            pTab[nTabCount]->SetCodeName( rName );
             ++nMaxTableNumber;
             if ( bExternalDocument )
                 pTab[nTabCount]->SetVisible( FALSE );
@@ -320,10 +344,16 @@ BOOL ScDocument::InsertTab( SCTAB nPos, const String& rName,
                 for (i = 0; i <= MAXTAB; i++)
                     if (pTab[i])
                         pTab[i]->UpdateInsertTab(nPos);
+
                 for (i = nTabCount; i > nPos; i--)
+                {
                     pTab[i] = pTab[i - 1];
+                }
+
                 pTab[nPos] = new ScTable(this, nPos, rName);
+                pTab[nPos]->SetCodeName( rName );
                 ++nMaxTableNumber;
+
                 // UpdateBroadcastAreas must be called between UpdateInsertTab,
                 // which ends listening, and StartAllListeners, to not modify
                 // areas that are to be inserted by starting listeners.
@@ -4673,6 +4703,13 @@ ULONG ScDocument::GetCellCount() const
     return nCellCount;
 }
 
+SCSIZE ScDocument::GetCellCount(SCTAB nTab, SCCOL nCol) const
+{
+    if (!ValidTab(nTab) || !pTab[nTab])
+        return 0;
+
+    return pTab[nTab]->GetCellCount(nCol);
+}
 
 ULONG ScDocument::GetCodeCount() const
 {

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: chartlis.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,7 +46,7 @@ class ScChartUnoData;
 #include <com/sun/star/chart/XChartData.hpp>
 #include <com/sun/star/chart/XChartDataChangeEventListener.hpp>
 
-class ScChartListener : public StrData, public SvtListener
+class SC_DLLPUBLIC ScChartListener : public StrData, public SvtListener
 {
 public:
     class ExternalRefListener : public ScExternalRefManager::LinkListener
@@ -186,7 +183,7 @@ public:
                              const com::sun::star::uno::Reference< com::sun::star::chart::XChartData >& rSource );
     void            StartTimer();
     void            UpdateDirtyCharts();
-    void            SetDirty();
+    void SC_DLLPUBLIC SetDirty();
     void            SetDiffDirty( const ScChartListenerCollection&,
                         BOOL bSetChartRangeLists = FALSE );
 

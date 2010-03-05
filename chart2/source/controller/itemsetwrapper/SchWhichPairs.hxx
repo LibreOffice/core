@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SchWhichPairs.hxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #endif
 #include <svx/xdef.hxx>
 #include <svx/svddef.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include "chartview/ChartSfxItemIds.hxx"
 
@@ -136,7 +133,7 @@ const USHORT nDataLabelWhichPairs[] =
 #define CHART_POINT_WHICHPAIRS  \
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              /*  1000 -  1016  svx/xdef.hxx   */ \
     XATTR_FILL_FIRST, XATTR_FILL_LAST,              /*  1018 -  1046  svx/xdef.hxx   */ \
-    EE_ITEMS_START, EE_ITEMS_END,                   /*  3994 -  4037  svx/eeitem.hxx */ \
+    EE_ITEMS_START, EE_ITEMS_END,                   /*  3994 -  4037  editeng/eeitem.hxx */ \
     SID_CHAR_DLG_PREVIEW_STRING, SID_CHAR_DLG_PREVIEW_STRING, \
     SCHATTR_DATADESCR_START, SCHATTR_DATADESCR_END, /*     1 -     2  sch/schattr.hxx*/ \
     SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_INFO,    /* 10585 - 10585  svx/svxids.hrc */ \

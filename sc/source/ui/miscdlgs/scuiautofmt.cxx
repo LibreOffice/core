@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: scuiautofmt.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,16 +36,16 @@
 
 #include "scitems.hxx"
 #include <svx/algitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/cntritem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/wghtitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/wghtitem.hxx>
 #include <svl/zforlist.hxx>
 #include <vcl/msgbox.hxx>
 #include <comphelper/processfactory.hxx>
