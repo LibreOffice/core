@@ -193,65 +193,6 @@ end function
 
 '*******************************************************************************
 
-function hToolsCustomizeAddNewMenu( cName as string, bMode as boolean ) as boolean
-
-    '///<h3>Add a new menu via Tools/Customize/Menu</h3>
-    '///<i>Starting point: Tools/Customize with Menu-Tab open</i><br>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Name of the new menu (string)</li>
-    '///+<li>Mode (boolean). Options:</li>
-    '///<ul>
-    '///+<li>TRUE = The entry will be created (OK)</li>
-    '///+<li>FALSE = The entry will not be created (Cancel)</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Errorstatus (boolean)</li>
-    '///<ul>
-    '///+<li>TRUE on success</li>
-    '///+<li>FALSE on failure</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
-    
-    const CFN = "hToolsCustomizeAddNewMenu::"
-    dim brc as boolean
-        brc = false
-    
-    '///+<li>Click the &quot;New...&quot; button</li>
-    kontext "TabCustomizeMenu"
-    BtnNew.click()
-    
-    '///+<li>Verify that the menu organizer exists</li>
-    Kontext "MenuOrganiser"
-    if ( not MenuName.exists() ) then
-        printlog( CFN & "MenuOrganiser is not open" )
-        exit function
-    endif
-    
-    '///+<li>Name the new menu if we intend to create the new entry</li>
-    if ( bMode ) then
-        printlog( CFN & "Naming menu: " & cName )
-        MenuName.setText( cName )
-        MenuOrganiser.OK()
-        brc = true
-    else
-        call DialogTest( MenuOrganiser )
-        printlog( CFN & "Opened and closed MenuOrganiser" )
-        MenuOrganiser.cancel()
-        brc = true
-    endif
-    
-    hToolsCustomizeAddNewMenu() = brc
-    '///</ul>
-
-end function
-
-'*******************************************************************************
-
 function hDeselectSeparator() as integer
 
     '///<h3>Make sure that we do not work on a separator item (Toolbars)</h3>
