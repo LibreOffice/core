@@ -21,7 +21,6 @@ mkdir: %_DEST%\bin%_EXT%\desktop-integration\pkg
 ..\%__SRC%\bin\soquickstart.exe %_DEST%\bin%_EXT%\so\install_quickstart.exe
 
 ..\%__SRC%\misc\ooo3_main_app.ico %_DEST%\bin%_EXT%\soffice.ico
-..\%__SRC%\misc\so9_main_app.ico %_DEST%\bin%_EXT%\so\soffice.ico
 
 ..\%__SRC%\misc\desktopshare\*.desktop %_DEST%\pck%_EXT%\*.desktop
 ..\%__SRC%\misc\PkgInfo %_DEST%\pck%_EXT%\PkgInfo
