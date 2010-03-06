@@ -1036,17 +1036,6 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
 
         delete pOld;
     }
-
-    pCode->Reset();
-    for ( formula::FormulaToken* t = pCode->GetNextReferenceOrName(); t; t = pCode->GetNextReferenceOrName() )
-    {
-        StackVar sv = t->GetType();
-        if (sv == svExternalSingleRef || sv == svExternalDoubleRef || sv == svExternalName)
-        {
-            pDocument->GetExternalRefManager()->updateRefCell(aOldPos, aPos, eUpdateRefMode == URM_COPY);
-            break;
-        }
-    }
 }
 
 void ScFormulaCell::UpdateInsertTab(SCTAB nTable)

@@ -374,10 +374,6 @@ BOOL ScDocument::InsertTab( SCTAB nPos, const String& rName,
                 if ( pChartListenerCollection )
                     pChartListenerCollection->UpdateScheduledSeriesRanges();
 
-                // Update cells containing external references.
-                if (pExternalRefMgr.get())
-                    pExternalRefMgr->updateRefInsertTable(nPos);
-
                 SetDirty();
                 bValid = TRUE;
             }
@@ -465,11 +461,6 @@ BOOL ScDocument::DeleteTab( SCTAB nTab, ScDocument* pRefUndoDoc )
                 }
                 // #81844# sheet names of references are not valid until sheet is deleted
                 pChartListenerCollection->UpdateScheduledSeriesRanges();
-
-
-                // Update cells containing external references.
-                if (pExternalRefMgr.get())
-                    pExternalRefMgr->updateRefDeleteTable(nTab);
 
                 SetAutoCalc( bOldAutoCalc );
                 bValid = TRUE;

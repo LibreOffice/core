@@ -137,6 +137,71 @@ private:
     ScExternalRefManager::LinkUpdateType meType;
 };
 
+struct UpdateFormulaCell : public unary_function<ScFormulaCell*, void>
+{
+    void operator() (ScFormulaCell* pCell) const
+    {
+        // Check to make sure the cell really contains ocExternalRef.
+        // External names, external cell and range references all have a
+        // ocExternalRef token.
+        const ScTokenArray* pCode = pCell->GetCode();
+        if (!pCode->HasOpCode( ocExternalRef))
+            return;
+
+        ScTokenArray* pArray = pCell->GetCode();
+        if (pArray)
+            // Clear the error code, or a cell with error won't get re-compiled.
+            pArray->SetCodeError(0);
+
+        pCell->SetCompile(true);
+        pCell->CompileTokenArray();
+        pCell->SetDirty();
+    }
+};
+
+class RemoveFormulaCell : public unary_function<pair<const sal_uInt16, ScExternalRefManager::RefCellSet>, void>
+{
+public:
+    explicit RemoveFormulaCell(ScFormulaCell* p) : mpCell(p) {}
+    void operator() (pair<const sal_uInt16, ScExternalRefManager::RefCellSet>& r) const
+    {
+        r.second.erase(mpCell);
+    }
+private:
+    ScFormulaCell* mpCell;
+};
+
+class ConvertFormulaToStatic : public unary_function<ScFormulaCell*, void>
+{
+public:
+    explicit ConvertFormulaToStatic(ScDocument* pDoc) : mpDoc(pDoc) {}
+    void operator() (ScFormulaCell* pCell) const
+    {
+        String aStr;
+        pCell->aPos.Format(aStr, SCA_VALID);
+        ScAddress aPos = pCell->aPos;
+
+        // We don't check for empty cells because empty external cells are
+        // treated as having a value of 0.
+
+        if (pCell->IsValue())
+        {
+            // Turn this into value cell.
+            double fVal = pCell->GetValue();
+            mpDoc->PutCell(aPos, new ScValueCell(fVal));
+        }
+        else
+        {
+            // string cell otherwise.
+            String aVal;
+            pCell->GetString(aVal);
+            mpDoc->PutCell(aPos, new ScStringCell(aVal));
+        }
+    }
+private:
+    ScDocument* mpDoc;
+};
+
 }
 
 // ============================================================================
@@ -1414,230 +1479,6 @@ ScExternalRefCache::TableTypeRef ScExternalRefManager::getCacheTable(sal_uInt16 
 
 // ============================================================================
 
-ScExternalRefManager::RefCells::TabItem::TabItem(SCTAB nIndex) :
-    mnIndex(nIndex)
-{
-}
-
-ScExternalRefManager::RefCells::TabItem::TabItem(const TabItem& r) :
-    mnIndex(r.mnIndex),
-    maCols(r.maCols)
-{
-}
-
-ScExternalRefManager::RefCells::RefCells()
-{
-}
-
-ScExternalRefManager::RefCells::~RefCells()
-{
-}
-
-list<ScExternalRefManager::RefCells::TabItemRef>::iterator ScExternalRefManager::RefCells::getTabPos(SCTAB nTab)
-{
-    list<TabItemRef>::iterator itr = maTables.begin(), itrEnd = maTables.end();
-    for (; itr != itrEnd; ++itr)
-        if ((*itr)->mnIndex >= nTab)
-            return itr;
-    // Not found.  return the end position.
-    return itrEnd;
-}
-
-void ScExternalRefManager::RefCells::insertCell(const ScAddress& rAddr)
-{
-    SCTAB nTab = rAddr.Tab();
-    SCCOL nCol = rAddr.Col();
-    SCROW nRow = rAddr.Row();
-
-    // Search by table index.
-    list<TabItemRef>::iterator itrTab = getTabPos(nTab);
-    TabItemRef xTabRef;
-    if (itrTab == maTables.end())
-    {
-        // All previous tables come before the specificed table.
-        xTabRef.reset(new TabItem(nTab));
-        maTables.push_back(xTabRef);
-    }
-    else if ((*itrTab)->mnIndex > nTab)
-    {
-        // Insert at the current iterator position.
-        xTabRef.reset(new TabItem(nTab));
-        maTables.insert(itrTab, xTabRef);
-    }
-    else if ((*itrTab)->mnIndex == nTab)
-    {
-        // The table found.
-        xTabRef = *itrTab;
-    }
-    ColSet& rCols = xTabRef->maCols;
-
-    // Then by column index.
-    ColSet::iterator itrCol = rCols.find(nCol);
-    if (itrCol == rCols.end())
-    {
-        RowSet aRows;
-        pair<ColSet::iterator, bool> r = rCols.insert(ColSet::value_type(nCol, aRows));
-        if (!r.second)
-            // column insertion failed.
-            return;
-        itrCol = r.first;
-    }
-    RowSet& rRows = itrCol->second;
-
-    // Finally, insert the row index.
-    rRows.insert(nRow);
-}
-
-void ScExternalRefManager::RefCells::removeCell(const ScAddress& rAddr)
-{
-    SCTAB nTab = rAddr.Tab();
-    SCCOL nCol = rAddr.Col();
-    SCROW nRow = rAddr.Row();
-
-    // Search by table index.
-    list<TabItemRef>::iterator itrTab = getTabPos(nTab);
-    if (itrTab == maTables.end() || (*itrTab)->mnIndex != nTab)
-        // No such table.
-        return;
-
-    ColSet& rCols = (*itrTab)->maCols;
-
-    // Then by column index.
-    ColSet::iterator itrCol = rCols.find(nCol);
-    if (itrCol == rCols.end())
-        // No such column
-        return;
-
-    RowSet& rRows = itrCol->second;
-    rRows.erase(nRow);
-}
-
-void ScExternalRefManager::RefCells::moveTable(SCTAB nOldTab, SCTAB nNewTab, bool bCopy)
-{
-    if (nOldTab == nNewTab)
-        // Nothing to do here.
-        return;
-
-    list<TabItemRef>::iterator itrOld = getTabPos(nOldTab);
-    if (itrOld == maTables.end() || (*itrOld)->mnIndex != nOldTab)
-        // No table to move or copy.
-        return;
-
-    list<TabItemRef>::iterator itrNew = getTabPos(nNewTab);
-    if (bCopy)
-    {
-        // Simply make a duplicate of the original table, insert it at the
-        // new tab position, and increment the table index for all tables
-        // that come after that inserted table.
-
-        TabItemRef xNewTab(new TabItem(*(*itrOld)));
-        xNewTab->mnIndex = nNewTab;
-        maTables.insert(itrNew, xNewTab);
-        list<TabItemRef>::iterator itr = itrNew, itrEnd = maTables.end();
-        if (itr != itrEnd)  // #i99807# check that itr is not at end already
-            for (++itr; itr != itrEnd; ++itr)
-                (*itr)->mnIndex += 1;
-    }
-    else
-    {
-        if (itrOld == itrNew)
-        {
-            // No need to move the table.  Just update the table index.
-            (*itrOld)->mnIndex = nNewTab;
-            return;
-        }
-
-        if (nOldTab < nNewTab)
-        {
-            // Iterate from the old tab position to the new tab position (not
-            // inclusive of the old tab itself), and decrement their tab
-            // index by one.
-            list<TabItemRef>::iterator itr = itrOld;
-            for (++itr; itr != itrNew; ++itr)
-                (*itr)->mnIndex -= 1;
-
-            // Insert a duplicate of the original table.  This does not
-            // invalidate the iterators.
-            (*itrOld)->mnIndex = nNewTab - 1;
-            if (itrNew == maTables.end())
-                maTables.push_back(*itrOld);
-            else
-                maTables.insert(itrNew, *itrOld);
-
-            // Remove the original table.
-            maTables.erase(itrOld);
-        }
-        else
-        {
-            // nNewTab < nOldTab
-
-            // Iterate from the new tab position to the one before the old tab
-            // position, and increment their tab index by one.
-            list<TabItemRef>::iterator itr = itrNew;
-            for (++itr; itr != itrOld; ++itr)
-                (*itr)->mnIndex += 1;
-
-            (*itrOld)->mnIndex = nNewTab;
-            maTables.insert(itrNew, *itrOld);
-
-            // Remove the original table.
-            maTables.erase(itrOld);
-        }
-    }
-}
-
-void ScExternalRefManager::RefCells::insertTable(SCTAB nPos)
-{
-    TabItemRef xNewTab(new TabItem(nPos));
-    list<TabItemRef>::iterator itr = getTabPos(nPos);
-    if (itr == maTables.end())
-        maTables.push_back(xNewTab);
-    else
-        maTables.insert(itr, xNewTab);
-}
-
-void ScExternalRefManager::RefCells::removeTable(SCTAB nPos)
-{
-    list<TabItemRef>::iterator itr = getTabPos(nPos);
-    if (itr == maTables.end())
-        // nothing to remove.
-        return;
-
-    maTables.erase(itr);
-}
-
-void ScExternalRefManager::RefCells::refreshAllCells(ScExternalRefManager& rRefMgr)
-{
-    // Get ALL the cell positions for re-compilation.
-    for (list<TabItemRef>::iterator itrTab = maTables.begin(), itrTabEnd = maTables.end();
-          itrTab != itrTabEnd; ++itrTab)
-    {
-        SCTAB nTab = (*itrTab)->mnIndex;
-        ColSet& rCols = (*itrTab)->maCols;
-        for (ColSet::iterator itrCol = rCols.begin(), itrColEnd = rCols.end();
-              itrCol != itrColEnd; ++itrCol)
-        {
-            SCCOL nCol = itrCol->first;
-            RowSet& rRows = itrCol->second;
-            RowSet aNewRows;
-            for (RowSet::iterator itrRow = rRows.begin(), itrRowEnd = rRows.end();
-                  itrRow != itrRowEnd; ++itrRow)
-            {
-                SCROW nRow = *itrRow;
-                ScAddress aCell(nCol, nRow, nTab);
-                if (rRefMgr.compileTokensByCell(aCell))
-                    // This cell still contains an external refernce.
-                    aNewRows.insert(nRow);
-            }
-            // Update the rows so that cells with no external references are
-            // no longer tracked.
-            rRows.swap(aNewRows);
-        }
-    }
-}
-
-// ----------------------------------------------------------------------------
-
 ScExternalRefManager::LinkListener::LinkListener()
 {
 }
@@ -1982,8 +1823,8 @@ void ScExternalRefManager::refreshAllRefCells(sal_uInt16 nFileId)
     if (itrFile == maRefCells.end())
         return;
 
-    RefCells& rRefCells = itrFile->second;
-    rRefCells.refreshAllCells(*this);
+    RefCellSet& rRefCells = itrFile->second;
+    for_each(rRefCells.begin(), rRefCells.end(), UpdateFormulaCell());
 
     ScViewData* pViewData = ScDocShell::GetViewData();
     if (!pViewData)
@@ -2004,7 +1845,7 @@ void ScExternalRefManager::insertRefCell(sal_uInt16 nFileId, const ScAddress& rC
     RefCellMap::iterator itr = maRefCells.find(nFileId);
     if (itr == maRefCells.end())
     {
-        RefCells aRefCells;
+        RefCellSet aRefCells;
         pair<RefCellMap::iterator, bool> r = maRefCells.insert(
             RefCellMap::value_type(nFileId, aRefCells));
         if (!r.second)
@@ -2013,7 +1854,10 @@ void ScExternalRefManager::insertRefCell(sal_uInt16 nFileId, const ScAddress& rC
 
         itr = r.first;
     }
-    itr->second.insertCell(rCell);
+
+    ScBaseCell* pCell = mpDoc->GetCell(rCell);
+    if (pCell && pCell->GetCellType() == CELLTYPE_FORMULA)
+        itr->second.insert(static_cast<ScFormulaCell*>(pCell));
 }
 
 ScDocument* ScExternalRefManager::getSrcDocument(sal_uInt16 nFileId)
@@ -2349,6 +2193,18 @@ void ScExternalRefManager::refreshNames(sal_uInt16 nFileId)
 
 void ScExternalRefManager::breakLink(sal_uInt16 nFileId)
 {
+    // Turn all formula cells referencing this external document into static
+    // cells.
+    RefCellMap::iterator itrRefs = maRefCells.find(nFileId);
+    if (itrRefs != maRefCells.end())
+    {
+        // Make a copy because removing the formula cells below will modify
+        // the original container.
+        RefCellSet aSet = itrRefs->second;
+        for_each(aSet.begin(), aSet.end(), ConvertFormulaToStatic(mpDoc));
+        maRefCells.erase(nFileId);
+    }
+
     lcl_removeByFileId(nFileId, maDocShells);
 
     if (maDocShells.empty())
@@ -2420,32 +2276,9 @@ void ScExternalRefManager::resetSrcFileData(const String& rBaseFileUrl)
     }
 }
 
-void ScExternalRefManager::updateRefCell(const ScAddress& rOldPos, const ScAddress& rNewPos, bool bCopy)
+void ScExternalRefManager::removeRefCell(ScFormulaCell* pCell)
 {
-    for (RefCellMap::iterator itr = maRefCells.begin(), itrEnd = maRefCells.end(); itr != itrEnd; ++itr)
-    {
-        if (!bCopy)
-            itr->second.removeCell(rOldPos);
-        itr->second.insertCell(rNewPos);
-    }
-}
-
-void ScExternalRefManager::updateRefMoveTable(SCTAB nOldTab, SCTAB nNewTab, bool bCopy)
-{
-    for (RefCellMap::iterator itr = maRefCells.begin(), itrEnd = maRefCells.end(); itr != itrEnd; ++itr)
-        itr->second.moveTable(nOldTab, nNewTab, bCopy);
-}
-
-void ScExternalRefManager::updateRefInsertTable(SCTAB nPos)
-{
-    for (RefCellMap::iterator itr = maRefCells.begin(), itrEnd = maRefCells.end(); itr != itrEnd; ++itr)
-        itr->second.insertTable(nPos);
-}
-
-void ScExternalRefManager::updateRefDeleteTable(SCTAB nPos)
-{
-    for (RefCellMap::iterator itr = maRefCells.begin(), itrEnd = maRefCells.end(); itr != itrEnd; ++itr)
-        itr->second.removeTable(nPos);
+    for_each(maRefCells.begin(), maRefCells.end(), RemoveFormulaCell(pCell));
 }
 
 void ScExternalRefManager::addLinkListener(sal_uInt16 nFileId, LinkListener* pListener)

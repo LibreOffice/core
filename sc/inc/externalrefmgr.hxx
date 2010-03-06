@@ -43,6 +43,7 @@
 #include <boost/shared_ptr.hpp>
 #include <vector>
 #include <list>
+#include <set>
 #include <formula/ExternalReferenceHelper.hxx>
 
 class ScDocument;
@@ -56,6 +57,7 @@ class ScTokenArray;
 class String;
 class SfxObjectShellRef;
 class Window;
+class ScFormulaCell;
 
 class ScExternalRefCache;
 
@@ -351,58 +353,8 @@ class SC_DLLPUBLIC ScExternalRefManager : public formula::ExternalReferenceHelpe
 {
 public:
 
-    // SUNWS needs a forward declared friend, otherwise types and members
-    // of the outer class are not accessible.
-    class RefCells;
-    friend class ScExternalRefManager::RefCells;
-
-    /**
-     *  Collection of cell addresses that contain external references. This
-     *  data is used for link updates.
-     */
-    class RefCells
-    {
-    public:
-        RefCells();
-        ~RefCells();
-
-        void insertCell(const ScAddress& rAddr);
-        void removeCell(const ScAddress& rAddr);
-        void moveTable(SCTAB nOldTab, SCTAB nNewTab, bool bCopy);
-        void insertTable(SCTAB nPos);
-        void removeTable(SCTAB nPos);
-        void refreshAllCells(ScExternalRefManager& rRefMgr);
-    private:
-
-        typedef ::std::hash_set<SCROW>              RowSet;
-        typedef ::std::hash_map<SCCOL, RowSet>      ColSet;
-
-        // SUNWS needs a forward declared friend, otherwise types and members
-        // of the outer class are not accessible.
-        struct TabItem;
-        friend struct ScExternalRefManager::RefCells::TabItem;
-
-        struct TabItem
-        {
-            SCTAB       mnIndex;
-            ColSet      maCols;
-            explicit TabItem(SCTAB nIndex);
-            explicit TabItem(const TabItem& r);
-        };
-        typedef ::boost::shared_ptr<TabItem>        TabItemRef;
-
-        /**
-         * Return the position that points either to the specified table
-         * position or to the position where a new table would be inserted in
-         * case the specified table is not present.
-         *
-         * @param nTab index of the desired table
-         */
-        ::std::list<TabItemRef>::iterator getTabPos(SCTAB nTab);
-
-        // This list must be sorted by the table index at all times.
-        ::std::list<TabItemRef> maTables;
-    };
+    typedef ::std::set<ScFormulaCell*>                      RefCellSet;
+    typedef ::std::hash_map<sal_uInt16, RefCellSet>         RefCellMap;
 
     enum LinkUpdateType { LINK_MODIFIED, LINK_BROKEN };
 
@@ -438,7 +390,6 @@ private:
     typedef ::std::hash_map<sal_uInt16, SrcShell>           DocShellMap;
     typedef ::std::hash_map<sal_uInt16, bool>               LinkedDocMap;
 
-    typedef ::std::hash_map<sal_uInt16, RefCells>           RefCellMap;
     typedef ::std::hash_map<sal_uInt16, SvNumberFormatterMergeMap> NumFmtMap;
 
 
@@ -665,32 +616,12 @@ public:
     void resetSrcFileData(const String& rBaseFileUrl);
 
     /**
-     * Update a single referencing cell position.
+     * Stop tracking a specific formula cell.
      *
-     * @param rOldPos old position
-     * @param rNewPos new position
+     * @param pCell pointer to cell that formerly contained external
+     *              reference.
      */
-    void updateRefCell(const ScAddress& rOldPos, const ScAddress& rNewPos, bool bCopy);
-
-    /**
-     * Update referencing cells affected by sheet movement.
-     *
-     * @param nOldTab old sheet position
-     * @param nNewTab new sheet position
-     * @param bCopy whether this is a sheet move (false) or sheet copy (true)
-     */
-    void updateRefMoveTable(SCTAB nOldTab, SCTAB nNewTab, bool bCopy);
-
-    /**
-     * Update referencing cells affected by sheet insertion.
-     *
-     * @param nPos sheet insertion position.  All sheets to the right
-     *             including the one at the insertion poistion shift to the
-     *             right by one.
-     */
-    void updateRefInsertTable(SCTAB nPos);
-
-    void updateRefDeleteTable(SCTAB nPos);
+    void removeRefCell(ScFormulaCell* pCell);
 
     /**
      * Register a new link listener to a specified external document.  Note
