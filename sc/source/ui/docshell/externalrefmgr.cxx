@@ -177,8 +177,6 @@ public:
     explicit ConvertFormulaToStatic(ScDocument* pDoc) : mpDoc(pDoc) {}
     void operator() (ScFormulaCell* pCell) const
     {
-        String aStr;
-        pCell->aPos.Format(aStr, SCA_VALID);
         ScAddress aPos = pCell->aPos;
 
         // We don't check for empty cells because empty external cells are
