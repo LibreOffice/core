@@ -673,8 +673,6 @@ private:
      */
     void maybeCreateRealFileName(sal_uInt16 nFileId);
 
-    bool compileTokensByCell(const ScAddress& rCell);
-
     /**
      * Purge those source document instances that have not been accessed for
      * the specified duration.

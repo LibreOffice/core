@@ -2051,35 +2051,6 @@ void ScExternalRefManager::maybeCreateRealFileName(sal_uInt16 nFileId)
     maSrcFiles[nFileId].maybeCreateRealFileName(getOwnDocumentName());
 }
 
-bool ScExternalRefManager::compileTokensByCell(const ScAddress& rCell)
-{
-    ScBaseCell* pCell;
-    mpDoc->GetCell(rCell.Col(), rCell.Row(), rCell.Tab(), pCell);
-
-    if (!pCell || pCell->GetCellType() != CELLTYPE_FORMULA)
-        return false;
-
-    ScFormulaCell* pFC = static_cast<ScFormulaCell*>(pCell);
-
-    // Check to make sure the cell really contains ocExternalRef.
-    // External names, external cell and range references all have a
-    // ocExternalRef token.
-    const ScTokenArray* pCode = pFC->GetCode();
-    if (!pCode->HasOpCode( ocExternalRef))
-        return false;
-
-    ScTokenArray* pArray = pFC->GetCode();
-    if (pArray)
-        // Clear the error code, or a cell with error won't get re-compiled.
-        pArray->SetCodeError(0);
-
-    pFC->SetCompile(true);
-    pFC->CompileTokenArray();
-    pFC->SetDirty();
-
-    return true;
-}
-
 const String& ScExternalRefManager::getOwnDocumentName() const
 {
     SfxObjectShell* pShell = mpDoc->GetDocumentShell();
