@@ -59,6 +59,7 @@ SHL1STDLIBS= \
         $(COMPHELPERLIB) \
         $(UCBHELPERLIB) \
         $(CPPULIB) \
+        $(BASICLIB) \
         $(SALLIB)
 
 SHL1DEPN=
