@@ -28,6 +28,7 @@
  *
  ************************************************************************/
 
+#include <stdio.h>
 #include <rtl/ustrbuf.hxx>
 #include <resourcemodel/Protocol.hxx>
 #include <resourcemodel/WW8ResourceModel.hxx>
