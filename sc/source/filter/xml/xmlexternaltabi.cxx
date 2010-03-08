@@ -370,7 +370,7 @@ SvXMLImportContext* ScXMLExternalRefCellContext::CreateChildContext(
     const SvXMLTokenMap& rTokenMap = mrScImport.GetTableRowCellElemTokenMap();
     sal_uInt16 nToken = rTokenMap.Get(nPrefix, rLocalName);
     if (nToken == XML_TOK_TABLE_ROW_CELL_P)
-        return new ScXMLExternalRefCellTextContext(mrScImport, nPrefix, rLocalName, xAttrList, maCellString);
+        return new ScXMLExternalRefCellTextContext(mrScImport, nPrefix, rLocalName, xAttrList, *this);
 
     return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
 }
@@ -399,14 +399,20 @@ void ScXMLExternalRefCellContext::EndElement()
     }
 }
 
+void ScXMLExternalRefCellContext::SetCellString(const OUString& rStr)
+{
+    maCellString = rStr;
+}
+
 // ============================================================================
 
 ScXMLExternalRefCellTextContext::ScXMLExternalRefCellTextContext(
     ScXMLImport& rImport, USHORT nPrefix, const OUString& rLName,
-    const Reference<XAttributeList>& /*xAttrList*/, OUString& rCellString ) :
+    const Reference<XAttributeList>& /*xAttrList*/,
+    ScXMLExternalRefCellContext& rParent ) :
     SvXMLImportContext( rImport, nPrefix, rLName ),
     mrScImport(rImport),
-    mrCellString(rCellString)
+    mrParent(rParent)
 {
 }
 
@@ -422,9 +428,10 @@ SvXMLImportContext* ScXMLExternalRefCellTextContext::CreateChildContext(
 
 void ScXMLExternalRefCellTextContext::Characters(const OUString& rChar)
 {
-    mrCellString = rChar;
+    maCellStrBuf.append(rChar);
 }
 
 void ScXMLExternalRefCellTextContext::EndElement()
 {
+    mrParent.SetCellString(maCellStrBuf.makeStringAndClear());
 }

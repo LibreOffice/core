@@ -152,6 +152,13 @@ public:
         Table();
         ~Table();
 
+        /**
+         * Add cell value to the cache.
+         *
+         * @param bSetCacheRange if true, mark this cell 'cached'.  This is
+         *                       false _only when_ adding a range of cell
+         *                       values, for performance reasons.
+         */
         SC_DLLPUBLIC void setCell(SCCOL nCol, SCROW nRow, TokenRef pToken, sal_uInt32 nFmtIndex = 0, bool bSetCacheRange = true);
         TokenRef getCell(SCCOL nCol, SCROW nRow, sal_uInt32* pnFmtIndex = NULL) const;
         bool hasRow( SCROW nRow ) const;

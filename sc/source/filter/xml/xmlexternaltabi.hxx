@@ -29,6 +29,7 @@
 #define SC_XMLEXTERNALTABI_HXX
 
 #include <xmloff/xmlictxt.hxx>
+#include "rtl/ustrbuf.hxx"
 
 class ScXMLImport;
 struct ScXMLExternalTabData;
@@ -129,6 +130,8 @@ public:
 
     virtual void EndElement();
 
+    void SetCellString(const ::rtl::OUString& rStr);
+
 private:
     ScXMLImport&            mrScImport;
     ScXMLExternalTabData&   mrExternalRefInfo;
@@ -150,7 +153,7 @@ public:
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                        ::rtl::OUString& rCellString );
+                        ScXMLExternalRefCellContext& rParent );
 
     virtual ~ScXMLExternalRefCellTextContext();
 
@@ -165,7 +168,9 @@ public:
 
 private:
     ScXMLImport&            mrScImport;
-    ::rtl::OUString&        mrCellString;
+    ScXMLExternalRefCellContext& mrParent;
+
+    ::rtl::OUStringBuffer   maCellStrBuf;
 };
 
 #endif
