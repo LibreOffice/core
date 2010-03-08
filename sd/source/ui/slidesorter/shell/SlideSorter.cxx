@@ -37,6 +37,7 @@
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsScrollBarManager.hxx"
 #include "controller/SlsProperties.hxx"
+#include "controller/SlsAnimator.hxx"
 #include "view/SlideSorterView.hxx"
 #include "view/SlsTheme.hxx"
 #include "model/SlideSorterModel.hxx"
@@ -497,18 +498,19 @@ void SlideSorter::ArrangeGUIElements (
 {
     Point aOrigin (rOffset);
 
-    if (rSize.Width()!=0 && rSize.Height()!=0)
+    if (rSize.Width()>0
+        && rSize.Height()>0
+        && GetContentWindow()
+        && GetContentWindow()->IsVisible())
     {
         // Prevent untimely redraws while the view is not yet correctly
         // resized.
-        view::SlideSorterView::DrawLock aLock (*mpSlideSorterView);
-        if (GetContentWindow())
-            GetContentWindow()->EnablePaint (FALSE);
+        view::SlideSorterView::DrawLock aLock (*this);
+        GetContentWindow()->EnablePaint (FALSE);
 
         mpSlideSorterController->Resize (Rectangle(aOrigin, rSize));
 
-        if (GetContentWindow())
-            GetContentWindow()->EnablePaint (TRUE);
+        GetContentWindow()->EnablePaint (TRUE);
 
         mbLayoutPending = false;
     }
@@ -537,6 +539,9 @@ SvBorder SlideSorter::GetBorder (void)
 
 bool SlideSorter::RelocateToWindow (::Window* pParentWindow)
 {
+   // Stop all animations for they have been started for the old window.
+    mpSlideSorterController->GetAnimator()->RemoveAllAnimations();
+
     ReleaseListeners();
 
     if (mpViewShell != NULL)
@@ -548,8 +553,8 @@ bool SlideSorter::RelocateToWindow (::Window* pParentWindow)
     // For accessibility we have to shortly hide the content window.  This
     // triggers the construction of a new accessibility object for the new
     // view shell.  (One is created earlier while the construtor of the base
-    // class is executed.  At that time the correct accessibility object can
-    // not be constructed.)
+    // class is executed.  But because at that time the correct
+    // accessibility object can not be constructed we do that now.)
     if (mpContentWindow.get() !=NULL)
     {
         mpContentWindow->Hide();

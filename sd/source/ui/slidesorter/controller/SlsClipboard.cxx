@@ -38,7 +38,6 @@
 #include "model/SlsPageDescriptor.hxx"
 #include "model/SlsPageEnumerationProvider.hxx"
 #include "view/SlideSorterView.hxx"
-#include "view/SlsViewOverlay.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsInsertionIndicatorHandler.hxx"
 #include "controller/SlsPageSelector.hxx"
@@ -47,7 +46,8 @@
 #include "controller/SlsScrollBarManager.hxx"
 #include "controller/SlsFocusManager.hxx"
 #include "controller/SlsSelectionManager.hxx"
-#include "SlsTransferable.hxx"
+#include "controller/SlsTransferable.hxx"
+#include "cache/SlsPageCache.hxx"
 
 #include "ViewShellBase.hxx"
 #include "DrawViewShell.hxx"
@@ -363,21 +363,40 @@ void Clipboard::CreateSlideTransferable (
         maPagesToRemove.push_back (pDescriptor->GetPage());
     }
 
+    // Create a small set of representatives of the selection for which
+    // previews are included into the transferable so that an insertion
+    // indicator can be rendered.
+    aSelectedPages.Rewind();
+    ::std::vector<Bitmap> aRepresentatives;
+    aRepresentatives.reserve(3);
+    ::boost::shared_ptr<cache::PageCache> pPreviewCache (
+        mrSlideSorter.GetView().GetPreviewCache());
+    while (aSelectedPages.HasMoreElements())
+    {
+        model::SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
+        if ( ! pDescriptor || pDescriptor->GetPage()==NULL)
+            continue;
+        Bitmap aPreview (pPreviewCache->GetPreviewBitmap(pDescriptor->GetPage()).GetBitmap());
+        aRepresentatives.push_back(aPreview);
+        if (aRepresentatives.size() >= 3)
+            break;
+    }
+
     if (aBookmarkList.Count() > 0)
     {
         mrSlideSorter.GetView().BrkAction();
         SdDrawDocument* pDocument = mrSlideSorter.GetModel().GetDocument();
-        ::boost::shared_ptr<SubstitutionHandler> pSubstitutionHandler;
+        ::boost::shared_ptr<DragAndDropContext> pDragAndDropContext;
         ::rtl::Reference<SelectionFunction> pSelectionFunction (
             mrSlideSorter.GetController().GetCurrentSelectionFunction());
         if (pSelectionFunction.is())
-            pSubstitutionHandler = pSelectionFunction->GetSubstitutionHandler();
+            pDragAndDropContext = pSelectionFunction->GetDragAndDropContext();
         SdTransferable* pTransferable = new Transferable (
             pDocument,
             NULL,
             FALSE,
             dynamic_cast<SlideSorterViewShell*>(mrSlideSorter.GetViewShell()),
-            pSubstitutionHandler);
+            aRepresentatives);
 
         if (bDrag)
             SD_MOD()->pTransferDrag = pTransferable;
@@ -540,11 +559,9 @@ sal_Int8 Clipboard::AcceptDrop (
 
             // Show the insertion marker and the substitution for a drop.
             Point aPosition = pTargetWindow->PixelToLogic (rEvent.maPosPixel);
-            view::ViewOverlay& rOverlay (mrSlideSorter.GetView().GetOverlay());
             mrController.GetInsertionIndicatorHandler()->UpdatePosition(
                 aPosition,
                 rEvent.maDragEvent.DropAction);
-            rOverlay.GetSubstitutionOverlay()->SetPosition(aPosition);
 
             // Scroll the window when the mouse reaches the window border.
             //            mrController.GetScrollBarManager().AutoScroll (rEvent.maPosPixel);
@@ -629,7 +646,7 @@ sal_Int8 Clipboard::ExecuteDrop (
                 else
                 {
                     // Handle a general drop operation.
-                    HandlePageDrop (*pDragTransferable);
+                    HandlePageDrop(*pDragTransferable);
                     nResult = rEvent.mnAction;
                 }
             }

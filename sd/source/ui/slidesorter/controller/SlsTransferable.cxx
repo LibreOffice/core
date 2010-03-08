@@ -31,7 +31,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
-#include "SlsTransferable.hxx"
+#include "controller/SlsTransferable.hxx"
 
 #include "SlideSorterViewShell.hxx"
 #include "View.hxx"
@@ -43,10 +43,10 @@ Transferable::Transferable (
     ::sd::View* pWorkView,
     BOOL bInitOnGetData,
     SlideSorterViewShell* pViewShell,
-    const ::boost::shared_ptr<SubstitutionHandler>& rpSubstitutionHandler)
+    const ::std::vector<Bitmap>& rRepresentatives)
     : SdTransferable (pSrcDoc, pWorkView, bInitOnGetData),
       mpViewShell(pViewShell),
-      mpSubstitutionHandler(rpSubstitutionHandler)
+      maRepresentatives(rRepresentatives)
 {
     if (mpViewShell != NULL)
         StartListening(*mpViewShell);
@@ -68,7 +68,6 @@ void Transferable::DragFinished (sal_Int8 nDropAction)
 {
     if (mpViewShell != NULL)
         mpViewShell->DragFinished(nDropAction);
-    mpSubstitutionHandler.reset();
 }
 
 
@@ -96,11 +95,10 @@ void Transferable::Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint)
 
 
 
-::boost::shared_ptr<SubstitutionHandler> Transferable::GetSubstitutionHandler (void) const
+const ::std::vector<Bitmap>& Transferable::GetRepresentatives (void) const
 {
-    return mpSubstitutionHandler;
+    return maRepresentatives;
 }
-
 
 
 } } } // end of namespace ::sd::slidesorter::controller

@@ -287,14 +287,14 @@ void PageObjectPainter::PaintPreview (
     if (rpDescriptor->GetVisualState().GetCurrentVisualState()
         == model::VisualState::VS_Excluded)
     {
-        rDevice.SetFillColor(COL_BLACK);
+        rDevice.SetFillColor(COL_GRAY);
         rDevice.SetLineColor();
         rDevice.DrawTransparent(
             ::basegfx::B2DPolyPolygon(::basegfx::tools::createPolygonFromRect(
                 ::basegfx::B2DRectangle(aBox.Left(), aBox.Top(), aBox.Right()+1, aBox.Bottom()+1),
                 0,
                 0)),
-            0.5);
+            0.3);
     }
 }
 
@@ -505,11 +505,6 @@ Bitmap PageObjectPainter::CreateBackgroundBitmap(
         PageObjectLayouter::WindowCoordinateSystem));
     Rectangle aFrameBox (aBox.Left()-1,aBox.Top()-1,aBox.Right()+1,aBox.Bottom()+1);
     mpShadowPainter->PaintFrame(aBitmapDevice, aFrameBox);
-
-    // Clear the area where the preview will later be painted.
-    aBitmapDevice.SetFillColor(mpTheme->GetColor(Theme::PageBackground));
-    aBitmapDevice.SetLineColor(mpTheme->GetColor(Theme::PageBackground));
-    aBitmapDevice.DrawRect(aBox);
 
     return aBitmapDevice.GetBitmap (Point(0,0),aSize);
 }

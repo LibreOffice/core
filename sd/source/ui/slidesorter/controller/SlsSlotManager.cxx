@@ -49,7 +49,6 @@
 #include "model/SlsPageDescriptor.hxx"
 #include "view/SlideSorterView.hxx"
 #include "view/SlsLayouter.hxx"
-#include "view/SlsViewOverlay.hxx"
 #include "framework/FrameworkHelper.hxx"
 #include "Window.hxx"
 #include "fupoor.hxx"
@@ -1093,8 +1092,7 @@ void SlotManager::InsertSlide (SfxRequest& rRequest)
     }
 
     // No selection.  Is there an insertion indicator?
-    else if (mrSlideSorter.GetView().GetOverlay()
-        .GetInsertionIndicatorOverlay()->IsVisible())
+    else if (mrSlideSorter.GetController().GetInsertionIndicatorHandler()->IsActive())
     {
         // Select the page before the insertion indicator.
         nInsertionIndex

@@ -34,8 +34,8 @@
 
 #include "SlideSorter.hxx"
 #include "SlideSorterViewShell.hxx"
-#include "SlsSubstitutionHandler.hxx"
-#include "SlsTransferable.hxx"
+#include "SlsDragAndDropContext.hxx"
+#include "controller/SlsTransferable.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsPageSelector.hxx"
 #include "controller/SlsFocusManager.hxx"
@@ -50,7 +50,6 @@
 #include "model/SlsPageDescriptor.hxx"
 #include "model/SlsPageEnumerationProvider.hxx"
 #include "view/SlideSorterView.hxx"
-#include "view/SlsViewOverlay.hxx"
 #include "view/SlsLayouter.hxx"
 #include "view/SlsPageObjectLayouter.hxx"
 #include "framework/FrameworkHelper.hxx"
@@ -94,14 +93,13 @@ static const sal_uInt32 OVER_FADE_INDICATOR      (0x00040000);
 static const sal_uInt32 OVER_BUTTON              (0x00080000);
 static const sal_uInt32 SHIFT_MODIFIER           (0x00100000);
 static const sal_uInt32 CONTROL_MODIFIER         (0x00200000);
-static const sal_uInt32 SUBSTITUTION_VISIBLE     (0x01000000);
-static const sal_uInt32 RECTANGLE_VISIBLE        (0x02000000);
+static const sal_uInt32 DRAG_ACTIVE              (0x01000000);
+static const sal_uInt32 MULTI_SELECTOR           (0x02000000);
 
 static const sal_uInt32 KEY_EVENT                (0x10000000);
 
 // Some absent events are defined so they can be expressed explicitly.
 static const sal_uInt32 NO_MODIFIER              (0x00000000);
-static const sal_uInt32 SUBSTITUTION_NOT_VISIBLE (0x00000000);
 static const sal_uInt32 NOT_OVER_PAGE            (0x00000000);
 
 // Masks
@@ -150,25 +148,6 @@ protected:
 
 namespace {
 
-    class RectangleSelector
-        : public SelectionFunction::MouseMultiSelector
-    {
-    public:
-        /** Start a rectangle selection at the given position.
-        */
-        RectangleSelector (
-            SlideSorter& rSlideSorter,
-            const Point& rMouseModelPosition);
-        virtual ~RectangleSelector (void);
-
-    protected:
-        virtual void UpdateModelPosition (const Point& rMouseModelPosition);
-
-        /** Select all pages that lie completly in the selection rectangle.
-        */
-        virtual void UpdateSelection (void);
-    };
-
     class RangeSelector
         : public SelectionFunction::MouseMultiSelector
     {
@@ -205,11 +184,12 @@ class SelectionFunction::EventDescriptor
 public:
     Point maMousePosition;
     Point maMouseModelPosition;
-    ::boost::weak_ptr<model::PageDescriptor> mpHitDescriptor;
+    model::SharedPageDescriptor mpHitDescriptor;
     SdrPage* mpHitPage;
     sal_uInt32 mnEventCode;
     sal_Int32 mnButtonIndex;
     InsertionIndicatorHandler::Mode meDragMode;
+    bool mbMakeSelectionVisible;
 
     EventDescriptor (
         sal_uInt32 nEventType,
@@ -244,14 +224,13 @@ SelectionFunction::SelectionFunction (
       mbDragSelection(false),
       maInsertionMarkerBox(),
       mbProcessingMouseButtonDown(false),
-      mpSubstitutionHandler(),
+      mpDragAndDropContext(),
       mpMouseMultiSelector(),
       mnButtonDownPageIndex(-1),
       mnButtonDownButtonIndex(-1),
       mbIsDeselectionPending(false),
       mnShiftKeySelectionAnchor(-1)
 {
-    aDragTimer.SetTimeoutHdl(LINK(this, SelectionFunction, DragSlideHdl));
 }
 
 
@@ -259,7 +238,6 @@ SelectionFunction::SelectionFunction (
 
 SelectionFunction::~SelectionFunction (void)
 {
-    aDragTimer.Stop();
 }
 
 
@@ -297,15 +275,6 @@ BOOL SelectionFunction::MouseMove (const MouseEvent& rEvent)
 {
     Point aMousePosition (rEvent.GetPosPixel());
 
-    // Allow one mouse move before the drag timer is disabled.
-    if (aDragTimer.IsActive())
-    {
-        if (bFirstMouseMove)
-            bFirstMouseMove = FALSE;
-        else
-            aDragTimer.Stop();
-    }
-
     UpdatePageUnderMouse(aMousePosition, (rEvent.GetButtons() & MOUSE_LEFT)!=0);
 
     // Detect the mouse leaving the window.  When not button is pressed then
@@ -314,12 +283,10 @@ BOOL SelectionFunction::MouseMove (const MouseEvent& rEvent)
     if (rEvent.IsLeaveWindow()
         || ! Rectangle(Point(0,0),mpWindow->GetOutputSizePixel()).IsInside(aMousePosition))
     {
-        if (mpSubstitutionHandler)
+        if (mpDragAndDropContext)
         {
-            // Mouse left the window with pressed left button.  Make it a drag.
-            StartDrag(aMousePosition, InsertionIndicatorHandler::MoveMode);
-            mpSubstitutionHandler->Hide();
-            mpSubstitutionHandler.reset();
+            mpDragAndDropContext->Hide();
+            mpDragAndDropContext.reset();
         }
         mrSlideSorter.GetView().SetPageUnderMouse(model::SharedPageDescriptor());
     }
@@ -347,9 +314,6 @@ BOOL SelectionFunction::MouseButtonUp (const MouseEvent& rEvent)
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode (rEvent.GetButtons());
 
-    if (aDragTimer.IsActive())
-        aDragTimer.Stop();
-
     ProcessMouseEvent(BUTTON_UP, rEvent);
 
     mbProcessingMouseButtonDown = false;
@@ -365,39 +329,26 @@ void SelectionFunction::MouseDragged (const AcceptDropEvent& rEvent)
 {
     if (rEvent.mbLeaving)
     {
-        if (mpSubstitutionHandler)
+        if (mpDragAndDropContext)
         {
             // Disconnect the substitution handler from this selection function.
-            mpSubstitutionHandler->Hide();
-            mpSubstitutionHandler->SetTargetSlideSorter();
-            mpSubstitutionHandler.reset();
+            mpDragAndDropContext->Hide();
+            mpDragAndDropContext->SetTargetSlideSorter();
+            mpDragAndDropContext.reset();
         }
     }
-    else if ( ! mpSubstitutionHandler)
+    else if ( ! mpDragAndDropContext)
     {
         const SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
-        const Transferable* pSlideSorterTransferable
-            = dynamic_cast<const Transferable*>(pDragTransferable);
-        if (pSlideSorterTransferable != NULL)
-        {
-            // Connect the substitution handler to this selection function.
-            mpSubstitutionHandler = pSlideSorterTransferable->GetSubstitutionHandler();
-            if (mpSubstitutionHandler)
-            {
-                mpSubstitutionHandler->SetTargetSlideSorter(
-                    &mrSlideSorter,
-                    rEvent.maPosPixel,
-                    InsertionIndicatorHandler::GetModeFromDndAction(rEvent.mnAction),
-                pSlideSorterTransferable->GetView() == &mrSlideSorter.GetView());
-                mpSubstitutionHandler->Show();
-            }
-        }
-        else
-            mpSubstitutionHandler.reset(
-                new SubstitutionHandler(
-                    mrSlideSorter,
-                    mrSlideSorter.GetController().GetPageAt(rEvent.maPosPixel),
-                    rEvent.maPosPixel));
+        // Connect the substitution handler to this selection function.
+        mpDragAndDropContext.reset(new DragAndDropContext(
+            mrSlideSorter,
+            dynamic_cast<const Transferable*>(pDragTransferable)));
+        mrController.GetInsertionIndicatorHandler()->Start(
+            pDragTransferable->GetView()==&mrSlideSorter.GetView());
+        mpDragAndDropContext->UpdatePosition(
+            rEvent.maPosPixel,
+            InsertionIndicatorHandler::GetModeFromDndAction(rEvent.mnAction));
     }
 
     // 1. Compute some frequently used values relating to the event.
@@ -405,23 +356,21 @@ void SelectionFunction::MouseDragged (const AcceptDropEvent& rEvent)
         new EventDescriptor(rEvent, mrSlideSorter));
 
     // 2. Detect whether we are dragging pages or dragging a selection rectangle.
-    view::ViewOverlay& rOverlay (mrSlideSorter.GetView().GetOverlay());
-    if (mpSubstitutionHandler)
-        pEventDescriptor->mnEventCode |= SUBSTITUTION_VISIBLE;
+    if (mpDragAndDropContext)
+        pEventDescriptor->mnEventCode |= DRAG_ACTIVE;
     if (mpMouseMultiSelector)
-        pEventDescriptor->mnEventCode |= RECTANGLE_VISIBLE;
+        pEventDescriptor->mnEventCode |= MULTI_SELECTOR;
 
     // 3. Set the drag mode.
     pEventDescriptor->SetDragMode(
         InsertionIndicatorHandler::GetModeFromDndAction(rEvent.mnAction));
 
     // 4. Process the event.
-    EventPreprocessing(*pEventDescriptor);
-    if ( ! EventProcessing(*pEventDescriptor))
+    if ( ! ProcessEvent(*pEventDescriptor))
     {
         OSL_TRACE ("can not handle event code %x", pEventDescriptor->mnEventCode);
     }
-    EventPostprocessing(*pEventDescriptor);
+    PostProcessEvent(*pEventDescriptor);
 }
 
 
@@ -429,10 +378,10 @@ void SelectionFunction::MouseDragged (const AcceptDropEvent& rEvent)
 
 void SelectionFunction::NotifyDragFinished (void)
 {
-    if (mpSubstitutionHandler)
+    if (mpDragAndDropContext)
     {
-        mpSubstitutionHandler->Dispose();
-        mpSubstitutionHandler.reset();
+        mpDragAndDropContext->Dispose();
+        mpDragAndDropContext.reset();
     }
     mrController.GetInsertionIndicatorHandler()->End();
 }
@@ -440,9 +389,9 @@ void SelectionFunction::NotifyDragFinished (void)
 
 
 
-::boost::shared_ptr<SubstitutionHandler> SelectionFunction::GetSubstitutionHandler (void) const
+::boost::shared_ptr<DragAndDropContext> SelectionFunction::GetDragAndDropContext (void) const
 {
-    return mpSubstitutionHandler;
+    return mpDragAndDropContext;
 }
 
 
@@ -483,13 +432,13 @@ BOOL SelectionFunction::KeyInput (const KeyEvent& rEvent)
             // operation then stop that.  Otherwise transfer the focus to
             // the tool box.
 
-            if ( ! (mpSubstitutionHandler || mpMouseMultiSelector))
+            if ( ! (mpDragAndDropContext || mpMouseMultiSelector))
                 rFocusManager.SetFocusToToolBox();
 
-            if (mpSubstitutionHandler)
+            if (mpDragAndDropContext)
             {
-                mpSubstitutionHandler->Dispose();
-                mpSubstitutionHandler.reset();
+                mpDragAndDropContext->Dispose();
+                mpDragAndDropContext.reset();
             }
             if (mpMouseMultiSelector)
             {
@@ -734,53 +683,26 @@ void SelectionFunction::DoPaste (void)
 
 
 
-void SelectionFunction::StartDragTimer (void)
-{
-    if ( ! mrSlideSorter.GetProperties()->IsUIReadOnly())
-    {
-        bFirstMouseMove = TRUE;
-        aDragTimer.Start();
-    }
-}
-
-
-
-
-IMPL_LINK( SelectionFunction, DragSlideHdl, Timer*, EMPTYARG )
-{
-    StartDrag(aMDPos, InsertionIndicatorHandler::MoveMode);
-    return 0;
-}
-
-
-
-
 void SelectionFunction::StartDrag (
     const Point& rMousePosition,
     const InsertionIndicatorHandler::Mode eMode)
 {
-    if (mbPageHit
-        &&  ! mrSlideSorter.GetProperties()->IsUIReadOnly())
+    if ( ! mrSlideSorter.GetProperties()->IsUIReadOnly())
     {
-        if ( ! mpSubstitutionHandler)
-            mpSubstitutionHandler.reset(
-                new SubstitutionHandler(
-                    mrSlideSorter,
-                    mrSlideSorter.GetController().GetPageAt(rMousePosition),
-                    rMousePosition));
-        else
-            mpSubstitutionHandler->UpdatePosition(
-                rMousePosition,
-                eMode);
-        mbPageHit = false;
-        mpWindow->ReleaseMouse();
-
         if (mrSlideSorter.GetViewShell() != NULL)
         {
             SlideSorterViewShell* pSlideSorterViewShell
                 = dynamic_cast<SlideSorterViewShell*>(mrSlideSorter.GetViewShell());
             pSlideSorterViewShell->StartDrag (rMousePosition, mpWindow);
         }
+
+        if ( ! mpDragAndDropContext)
+        {
+            mpDragAndDropContext.reset(new DragAndDropContext(mrSlideSorter, NULL));
+            mrController.GetInsertionIndicatorHandler()->Start(true);
+        }
+        mpDragAndDropContext->UpdatePosition(rMousePosition, eMode);
+        mpWindow->ReleaseMouse();
     }
 }
 
@@ -802,7 +724,7 @@ void SelectionFunction::UpdatePageUnderMouse (
 {
     // In some modes (dragging, moving) the mouse over indicator is only
     // annoying.  Turn it off in these cases.
-    if (mpSubstitutionHandler || mpMouseMultiSelector)
+    if (mpDragAndDropContext || mpMouseMultiSelector)
         mrSlideSorter.GetView().SetPageUnderMouse(model::SharedPageDescriptor());
     else
         mrSlideSorter.GetView().UpdatePageUnderMouse(rMousePosition, bIsMouseButtonDown);
@@ -888,19 +810,6 @@ void SelectionFunction::GotoNextPage (int nOffset)
 
 
 
-void SelectionFunction::ClearOverlays (void)
-{
-    view::ViewOverlay& rOverlay (mrSlideSorter.GetView().GetOverlay());
-
-    rOverlay.GetSubstitutionOverlay()->SetIsVisible(false);
-    rOverlay.GetSubstitutionOverlay()->Clear();
-
-    mrController.GetInsertionIndicatorHandler()->End();
-}
-
-
-
-
 void SelectionFunction::ProcessMouseEvent (sal_uInt32 nEventType, const MouseEvent& rEvent)
 {
     // #95491# remember button state for creation of own MouseEvents
@@ -916,15 +825,11 @@ void SelectionFunction::ProcessMouseEvent (sal_uInt32 nEventType, const MouseEve
         = EncodeMouseEvent(*pEventDescriptor, rEvent) | EncodeState(*pEventDescriptor);
 
     // 3. Process the event.
-    EventPreprocessing(*pEventDescriptor);
-    if ( ! EventProcessing(*pEventDescriptor))
+    if ( ! ProcessEvent(*pEventDescriptor))
     {
         OSL_TRACE ("can not handle event code %x", pEventDescriptor->mnEventCode);
     }
-    EventPostprocessing(*pEventDescriptor);
-
-    if (nEventType == BUTTON_UP)
-        mbPageHit = false;
+    PostProcessEvent(*pEventDescriptor);
 }
 
 
@@ -998,10 +903,9 @@ sal_uInt32 SelectionFunction::EncodeState (
     sal_uInt32 nEventCode (0);
 
     // Detect whether the event has happened over a page object.
-    if (rDescriptor.mpHitPage != NULL && ! rDescriptor.mpHitDescriptor.expired())
+    if (rDescriptor.mpHitPage != NULL && rDescriptor.mpHitDescriptor)
     {
-        model::SharedPageDescriptor pHitDescriptor (rDescriptor.mpHitDescriptor);
-        if (pHitDescriptor->HasState(model::PageDescriptor::ST_Selected))
+        if (rDescriptor.mpHitDescriptor->HasState(model::PageDescriptor::ST_Selected))
             nEventCode |= OVER_SELECTED_PAGE;
         else
             nEventCode |= OVER_UNSELECTED_PAGE;
@@ -1013,10 +917,10 @@ sal_uInt32 SelectionFunction::EncodeState (
     }
 
     // Detect whether we are dragging pages or dragging a selection rectangle.
-    if (mpSubstitutionHandler)
-        nEventCode |= SUBSTITUTION_VISIBLE;
+    if (mpDragAndDropContext)
+        nEventCode |= DRAG_ACTIVE;
     if (mpMouseMultiSelector)
-        nEventCode |= RECTANGLE_VISIBLE;
+        nEventCode |= MULTI_SELECTOR;
 
     return nEventCode;
 }
@@ -1035,25 +939,9 @@ void SelectionFunction::ProcessKeyEvent (const KeyEvent& rEvent)
         = EncodeKeyEvent(*pEventDescriptor, rEvent) | EncodeState(*pEventDescriptor);
 
     // 3. Process the event.
-    EventPreprocessing(*pEventDescriptor);
-    if ( ! EventProcessing(*pEventDescriptor))
+    if ( ! ProcessEvent(*pEventDescriptor))
         OSL_TRACE ("can not handle event code %x", pEventDescriptor->mnEventCode);
-    EventPostprocessing(*pEventDescriptor);
-}
-
-
-
-
-void SelectionFunction::EventPreprocessing (const EventDescriptor& rDescriptor)
-{
-    // Some general processing that is not specific to the exact event code.
-    if (rDescriptor.mnEventCode & BUTTON_DOWN)
-        mbPageHit = (rDescriptor.mpHitPage!=NULL);
-
-    // Set the focus to the slide under the mouse.
-    //  if (rDescriptor.mpHitPage != NULL)
-    //
-    //      mrController.GetFocusManager().FocusPage((rDescriptor.mpHitPage->GetPageNum()-1)/2);
+    PostProcessEvent(*pEventDescriptor);
 }
 
 
@@ -1069,221 +957,52 @@ bool Match (
 
 
 
-bool SelectionFunction::EventProcessing (const EventDescriptor& rDescriptor)
+bool SelectionFunction::ProcessEvent (EventDescriptor& rDescriptor)
 {
     // Define some macros to make the following switch statement more readable.
 #define ANY_MODIFIER(code)                  \
          code|NO_MODIFIER:                  \
     case code|SHIFT_MODIFIER:               \
     case code|CONTROL_MODIFIER
-#define ANY_PAGE(code)                      \
-         code|NOT_OVER_PAGE:                \
-    case code|OVER_UNSELECTED_PAGE:         \
-    case code|OVER_SELECTED_PAGE
-#define ANY_PAGE_AND_MODIFIER(code)         \
-         ANY_PAGE(code|NO_MODIFIER):        \
-    case ANY_PAGE(code|SHIFT_MODIFIER):     \
-    case ANY_PAGE(code|CONTROL_MODIFIER)
-
 
     bool bResult (true);
-    bool bMakeSelectionVisible (true);
 
     mrController.GetPageSelector().DisableBroadcasting();
     PageSelector::UpdateLock aLock (mrSlideSorter);
 
-    // 2b. With the event code determine the type of operation with which to
+    // With the event code determine the type of operation with which to
     // react to the event.
 
-    // Acquire a shared_ptr to the hit page descriptor.
-    model::SharedPageDescriptor pHitDescriptor;
-    if ( ! rDescriptor.mpHitDescriptor.expired())
-        pHitDescriptor = model::SharedPageDescriptor(rDescriptor.mpHitDescriptor);
-
-    switch (rDescriptor.mnEventCode & (SUBSTITUTION_VISIBLE | RECTANGLE_VISIBLE))
+    switch (rDescriptor.mnEventCode & (DRAG_ACTIVE | MULTI_SELECTOR))
     {
-        case SUBSTITUTION_VISIBLE:
-            OSL_ASSERT(mpSubstitutionHandler);
-            // The substitution is visible.  Handle events accordingly.
-            if (Match(rDescriptor.mnEventCode, MOUSE_MOTION | LEFT_BUTTON | SINGLE_CLICK))
-            {
-                if ((rDescriptor.mnEventCode & CONTROL_MODIFIER) != 0)
-                    StartDrag(rDescriptor.maMousePosition, InsertionIndicatorHandler::CopyMode);
-                mpSubstitutionHandler->UpdatePosition(
-                    rDescriptor.maMousePosition,
-                    rDescriptor.meDragMode);
-            }
-            else if (Match(rDescriptor.mnEventCode, MOUSE_DRAG))
-            {
-                mpSubstitutionHandler->UpdatePosition(
-                    rDescriptor.maMousePosition,
-                    rDescriptor.meDragMode);
-            }
-            else if (Match(rDescriptor.mnEventCode, BUTTON_UP | LEFT_BUTTON))
-            {
-                // The following Process() call may lead to the desctruction
-                // of pHitDescriptor so release our reference to it.
-                pHitDescriptor.reset();
-                mpSubstitutionHandler.reset();
-            }
+        case DRAG_ACTIVE:
+            ProcessEventWhileDragActive(rDescriptor);
             break;
 
-        case RECTANGLE_VISIBLE:
-            OSL_ASSERT(mpMouseMultiSelector);
-            // The selection rectangle is visible.  Handle events accordingly.
-            if (Match(rDescriptor.mnEventCode, MOUSE_MOTION | LEFT_BUTTON | SINGLE_CLICK))
-            {
-                if (mpMouseMultiSelector)
-                {
-                    mpMouseMultiSelector->SetSelectionModeFromModifier(rDescriptor.mnEventCode);
-                    mpMouseMultiSelector->UpdatePosition(rDescriptor.maMousePosition);
-                }
-                bMakeSelectionVisible = false;
-            }
-            else if (Match(rDescriptor.mnEventCode, BUTTON_UP | LEFT_BUTTON | SINGLE_CLICK))
-            {
-                mpMouseMultiSelector.reset();
-            }
-            // Anything else stops the rectangle selection and the event is
-            // processed again.
-            else
-            {
-                mpMouseMultiSelector.reset();
-                EventDescriptor aModifiedDescriptor (rDescriptor);
-                aModifiedDescriptor.mnEventCode &= ~RECTANGLE_VISIBLE;
-                EventProcessing(aModifiedDescriptor);
-            }
+        case MULTI_SELECTOR:
+            ProcessEventWhileMultiSelectorActive(rDescriptor);
             break;
 
         default:
             OSL_ASSERT(!mpMouseMultiSelector);
+            OSL_ASSERT(!mpDragAndDropContext);
             switch (rDescriptor.mnEventCode & (BUTTON_DOWN | BUTTON_UP | MOUSE_MOTION))
             {
                 case BUTTON_DOWN:
-                    switch (rDescriptor.mnEventCode)
-                    {
-                        case BUTTON_DOWN | LEFT_BUTTON | SINGLE_CLICK | OVER_UNSELECTED_PAGE:
-                            SetCurrentPage(pHitDescriptor);
-                            StartDragTimer();
-                            break;
-
-                        case BUTTON_DOWN | LEFT_BUTTON | SINGLE_CLICK | OVER_SELECTED_PAGE:
-                            StartDragTimer();
-                            break;
-
-                        case BUTTON_DOWN | LEFT_BUTTON | DOUBLE_CLICK | OVER_SELECTED_PAGE:
-                        case BUTTON_DOWN | LEFT_BUTTON | DOUBLE_CLICK | OVER_UNSELECTED_PAGE:
-                            // A double click allways shows the selected slide in the center
-                            // pane in an edit view.
-                            SetCurrentPage(pHitDescriptor);
-                            SwitchView(pHitDescriptor);
-                            break;
-
-                        // Range selection with the shift modifier.
-                        case BUTTON_DOWN | LEFT_BUTTON | SINGLE_CLICK | OVER_SELECTED_PAGE | SHIFT_MODIFIER:
-                        case BUTTON_DOWN | LEFT_BUTTON | SINGLE_CLICK | OVER_UNSELECTED_PAGE | SHIFT_MODIFIER:
-                            RangeSelect(pHitDescriptor);
-                            break;
-
-                        case BUTTON_DOWN | LEFT_BUTTON | SINGLE_CLICK | OVER_UNSELECTED_PAGE | OVER_BUTTON:
-                        case BUTTON_DOWN | LEFT_BUTTON | SINGLE_CLICK | OVER_SELECTED_PAGE | OVER_BUTTON:
-                            // Remember page and button index.  When mouse button is
-                            // released over same page and button then invoke action of that
-                            // button.
-                            mnButtonDownButtonIndex = rDescriptor.mnButtonIndex;
-                            OSL_ASSERT(pHitDescriptor);
-                            mnButtonDownPageIndex = pHitDescriptor->GetPageIndex();
-                            pHitDescriptor->GetVisualState().SetActiveButtonState(
-                                mnButtonDownButtonIndex,
-                                model::VisualState::BS_Pressed);
-                            mrSlideSorter.GetView().RequestRepaint(pHitDescriptor);
-                            break;
-
-                            // Right button for context menu.
-                        case BUTTON_DOWN | RIGHT_BUTTON | SINGLE_CLICK | OVER_UNSELECTED_PAGE:
-                            // Single right click and shift+F10 select as preparation to
-                            // show the context menu.  Change the selection only when the
-                            // page under the mouse is not selected.  In this case the
-                            // selection is set to this single page.  Otherwise the
-                            // selection is not modified.
-                            DeselectAllPages();
-                            SetCurrentPage(pHitDescriptor);
-                            bMakeSelectionVisible = false;
-                            break;
-
-                        case BUTTON_DOWN | RIGHT_BUTTON | SINGLE_CLICK | OVER_SELECTED_PAGE:
-                            // Do not change the selection.  Just adjust the insertion indicator.
-                            bMakeSelectionVisible = false;
-                            break;
-                        case BUTTON_DOWN | RIGHT_BUTTON | SINGLE_CLICK | NOT_OVER_PAGE:
-
-                        // Rectangle selection.
-                        case ANY_MODIFIER(BUTTON_DOWN | LEFT_BUTTON | SINGLE_CLICK | NOT_OVER_PAGE):
-                            mbIsDeselectionPending = true;
-                            OSL_ASSERT(!mpMouseMultiSelector);
-                            break;
-                    }
+                    ProcessButtonDownEvent(rDescriptor);
                     break;
 
                 case BUTTON_UP:
-                    switch (rDescriptor.mnEventCode)
-                    {
-                        case BUTTON_UP | LEFT_BUTTON | SINGLE_CLICK | OVER_SELECTED_PAGE:
-                            SetCurrentPage(pHitDescriptor);
-                            break;
-
-                            // Multi selection with the control modifier.
-                        case BUTTON_UP | LEFT_BUTTON | SINGLE_CLICK | OVER_SELECTED_PAGE | CONTROL_MODIFIER:
-                            mrController.GetPageSelector().DeselectPage(pHitDescriptor);
-                            break;
-
-                        case BUTTON_UP | LEFT_BUTTON | SINGLE_CLICK | OVER_UNSELECTED_PAGE | CONTROL_MODIFIER:
-                            mrController.GetPageSelector().SelectPage(pHitDescriptor);
-                            // fallthrough
-                        case BUTTON_UP | LEFT_BUTTON | SINGLE_CLICK | OVER_UNSELECTED_PAGE | OVER_BUTTON:
-                        case BUTTON_UP | LEFT_BUTTON | SINGLE_CLICK | OVER_SELECTED_PAGE | OVER_BUTTON:
-                            if (mnButtonDownButtonIndex == rDescriptor.mnButtonIndex
-                                && mnButtonDownPageIndex == pHitDescriptor->GetPageIndex())
-                            {
-                                ProcessButtonClick(pHitDescriptor, mnButtonDownButtonIndex);
-                            }
-                            break;
-                        case BUTTON_UP | LEFT_BUTTON | SINGLE_CLICK | NOT_OVER_PAGE:
-                            if (mbIsDeselectionPending)
-                                DeselectAllPages();
-                            break;
-                    }
+                    ProcessButtonUpEvent(rDescriptor);
                     break;
 
                 case MOUSE_MOTION:
-                    switch (rDescriptor.mnEventCode)
-                    {
-                        // A mouse motion without visible substitution starts that.
-                        case ANY_MODIFIER(MOUSE_MOTION | LEFT_BUTTON | SINGLE_CLICK | OVER_SELECTED_PAGE):
-                            mpSubstitutionHandler.reset(new SubstitutionHandler(
-                                mrSlideSorter,
-                                pHitDescriptor,
-                                rDescriptor.maMouseModelPosition));
-                            StartDrag(
-                                rDescriptor.maMousePosition,
-                                (rDescriptor.mnEventCode | CONTROL_MODIFIER) != 0
-                                    ? InsertionIndicatorHandler::CopyMode
-                                    : InsertionIndicatorHandler::MoveMode);
-                            break;
-
-                            // A mouse motion not over a page starts a rectangle selection.
-                        case ANY_MODIFIER(MOUSE_MOTION | LEFT_BUTTON | SINGLE_CLICK | NOT_OVER_PAGE):
-                            OSL_ASSERT(!mpMouseMultiSelector);
-                            mpMouseMultiSelector.reset(
-                                new RangeSelector(mrSlideSorter, rDescriptor.maMouseModelPosition));
-                            mpMouseMultiSelector->SetSelectionModeFromModifier(rDescriptor.mnEventCode);
-                            break;
-                    }
+                    ProcessMouseMotionEvent(rDescriptor);
                     break;
             }
     }
 
-    mrController.GetPageSelector().EnableBroadcasting(bMakeSelectionVisible);
+    mrController.GetPageSelector().EnableBroadcasting(rDescriptor.mbMakeSelectionVisible);
 
     return bResult;
 }
@@ -1291,33 +1010,203 @@ bool SelectionFunction::EventProcessing (const EventDescriptor& rDescriptor)
 
 
 
-void SelectionFunction::EventPostprocessing (const EventDescriptor& rDescriptor)
+void SelectionFunction::ProcessEventWhileDragActive (EventDescriptor& rDescriptor)
+{
+    OSL_ASSERT(mpDragAndDropContext);
+    // The substitution is visible.  Handle events accordingly.
+    if (Match(rDescriptor.mnEventCode, MOUSE_MOTION | LEFT_BUTTON | SINGLE_CLICK))
+    {
+        if ((rDescriptor.mnEventCode & CONTROL_MODIFIER) != 0)
+            StartDrag(rDescriptor.maMousePosition, InsertionIndicatorHandler::CopyMode);
+        mpDragAndDropContext->UpdatePosition(
+            rDescriptor.maMousePosition,
+            rDescriptor.meDragMode);
+    }
+    else if (Match(rDescriptor.mnEventCode, MOUSE_DRAG))
+    {
+        mpDragAndDropContext->UpdatePosition(
+            rDescriptor.maMousePosition,
+            rDescriptor.meDragMode);
+    }
+    else if (Match(rDescriptor.mnEventCode, BUTTON_UP | LEFT_BUTTON))
+    {
+        // The following Process() call may lead to the desctruction
+        // of rDescriptor.mpHitDescriptor so release our reference to it.
+        rDescriptor.mpHitDescriptor.reset();
+        mpDragAndDropContext.reset();
+    }
+}
+
+
+
+
+void SelectionFunction::ProcessEventWhileMultiSelectorActive (EventDescriptor& rDescriptor)
+{
+    OSL_ASSERT(mpMouseMultiSelector);
+    // The selection rectangle is visible.  Handle events accordingly.
+    if (Match(rDescriptor.mnEventCode, MOUSE_MOTION | LEFT_BUTTON | SINGLE_CLICK))
+    {
+        if (mpMouseMultiSelector)
+        {
+            mpMouseMultiSelector->SetSelectionModeFromModifier(rDescriptor.mnEventCode);
+            mpMouseMultiSelector->UpdatePosition(rDescriptor.maMousePosition);
+        }
+        rDescriptor.mbMakeSelectionVisible = false;
+    }
+    else if (Match(rDescriptor.mnEventCode, BUTTON_UP | LEFT_BUTTON | SINGLE_CLICK))
+    {
+        mpMouseMultiSelector.reset();
+    }
+    // Anything else stops the rectangle selection and the event is
+    // processed again.
+    else
+    {
+        mpMouseMultiSelector.reset();
+        rDescriptor.mnEventCode &= ~MULTI_SELECTOR;
+        ProcessEvent(rDescriptor);
+    }
+}
+
+
+
+
+void SelectionFunction::ProcessButtonDownEvent (EventDescriptor& rDescriptor)
+{
+    switch (rDescriptor.mnEventCode)
+    {
+        case BUTTON_DOWN | LEFT_BUTTON | SINGLE_CLICK | OVER_UNSELECTED_PAGE:
+            SetCurrentPage(rDescriptor.mpHitDescriptor);
+            break;
+
+        case BUTTON_DOWN | LEFT_BUTTON | SINGLE_CLICK | OVER_SELECTED_PAGE:
+            break;
+
+        case BUTTON_DOWN | LEFT_BUTTON | DOUBLE_CLICK | OVER_SELECTED_PAGE:
+        case BUTTON_DOWN | LEFT_BUTTON | DOUBLE_CLICK | OVER_UNSELECTED_PAGE:
+            // A double click allways shows the selected slide in the center
+            // pane in an edit view.
+            SetCurrentPage(rDescriptor.mpHitDescriptor);
+            SwitchView(rDescriptor.mpHitDescriptor);
+            break;
+
+        case BUTTON_DOWN | LEFT_BUTTON | SINGLE_CLICK | OVER_SELECTED_PAGE | SHIFT_MODIFIER:
+        case BUTTON_DOWN | LEFT_BUTTON | SINGLE_CLICK | OVER_UNSELECTED_PAGE | SHIFT_MODIFIER:
+            // Range selection with the shift modifier.
+            RangeSelect(rDescriptor.mpHitDescriptor);
+            break;
+
+        case BUTTON_DOWN | LEFT_BUTTON | SINGLE_CLICK | OVER_UNSELECTED_PAGE | OVER_BUTTON:
+        case BUTTON_DOWN | LEFT_BUTTON | SINGLE_CLICK | OVER_SELECTED_PAGE | OVER_BUTTON:
+            // Remember page and button index.  When mouse button is
+            // released over same page and button then invoke action of that
+            // button.
+            mnButtonDownButtonIndex = rDescriptor.mnButtonIndex;
+            OSL_ASSERT(rDescriptor.mpHitDescriptor);
+            mnButtonDownPageIndex = rDescriptor.mpHitDescriptor->GetPageIndex();
+            rDescriptor.mpHitDescriptor->GetVisualState().SetActiveButtonState(
+                mnButtonDownButtonIndex,
+                model::VisualState::BS_Pressed);
+            mrSlideSorter.GetView().RequestRepaint(rDescriptor.mpHitDescriptor);
+            break;
+
+            // Right button for context menu.
+        case BUTTON_DOWN | RIGHT_BUTTON | SINGLE_CLICK | OVER_UNSELECTED_PAGE:
+            // Single right click and shift+F10 select as preparation to
+            // show the context menu.  Change the selection only when the
+            // page under the mouse is not selected.  In this case the
+            // selection is set to this single page.  Otherwise the
+            // selection is not modified.
+            DeselectAllPages();
+            SetCurrentPage(rDescriptor.mpHitDescriptor);
+            rDescriptor.mbMakeSelectionVisible = false;
+            break;
+
+        case BUTTON_DOWN | RIGHT_BUTTON | SINGLE_CLICK | OVER_SELECTED_PAGE:
+            // Do not change the selection.  Just adjust the insertion indicator.
+            rDescriptor.mbMakeSelectionVisible = false;
+            break;
+
+        case BUTTON_DOWN | RIGHT_BUTTON | SINGLE_CLICK | NOT_OVER_PAGE:
+            // Fallthrough.
+        case ANY_MODIFIER(BUTTON_DOWN | LEFT_BUTTON | SINGLE_CLICK | NOT_OVER_PAGE):
+            DeselectAllPages();
+            break;
+    }
+}
+
+
+
+
+void SelectionFunction::ProcessButtonUpEvent (const EventDescriptor& rDescriptor)
+{
+    switch (rDescriptor.mnEventCode)
+    {
+        case BUTTON_UP | LEFT_BUTTON | SINGLE_CLICK | OVER_SELECTED_PAGE:
+            SetCurrentPage(rDescriptor.mpHitDescriptor);
+            break;
+
+            // Multi selection with the control modifier.
+        case BUTTON_UP | LEFT_BUTTON | SINGLE_CLICK | OVER_SELECTED_PAGE | CONTROL_MODIFIER:
+            mrController.GetPageSelector().DeselectPage(rDescriptor.mpHitDescriptor);
+            break;
+
+        case BUTTON_UP | LEFT_BUTTON | SINGLE_CLICK | OVER_UNSELECTED_PAGE | CONTROL_MODIFIER:
+            mrController.GetPageSelector().SelectPage(rDescriptor.mpHitDescriptor);
+            // fallthrough
+        case BUTTON_UP | LEFT_BUTTON | SINGLE_CLICK | OVER_UNSELECTED_PAGE | OVER_BUTTON:
+        case BUTTON_UP | LEFT_BUTTON | SINGLE_CLICK | OVER_SELECTED_PAGE | OVER_BUTTON:
+            if (mnButtonDownButtonIndex == rDescriptor.mnButtonIndex
+                && mnButtonDownPageIndex == rDescriptor.mpHitDescriptor->GetPageIndex())
+            {
+                ProcessButtonClick(rDescriptor.mpHitDescriptor, mnButtonDownButtonIndex);
+            }
+            break;
+
+        case BUTTON_UP | LEFT_BUTTON | SINGLE_CLICK | NOT_OVER_PAGE:
+            if (mbIsDeselectionPending)
+                DeselectAllPages();
+            break;
+    }
+}
+
+
+
+
+void SelectionFunction::ProcessMouseMotionEvent (const EventDescriptor& rDescriptor)
+{
+    switch (rDescriptor.mnEventCode)
+    {
+        // A mouse motion without visible substitution starts that.
+        case ANY_MODIFIER(MOUSE_MOTION | LEFT_BUTTON | SINGLE_CLICK | OVER_SELECTED_PAGE):
+            StartDrag(
+                rDescriptor.maMousePosition,
+                (rDescriptor.mnEventCode & CONTROL_MODIFIER) != 0
+                    ? InsertionIndicatorHandler::CopyMode
+                    : InsertionIndicatorHandler::MoveMode);
+            break;
+
+            // A mouse motion not over a page starts a rectangle selection.
+        case ANY_MODIFIER(MOUSE_MOTION | LEFT_BUTTON | SINGLE_CLICK | NOT_OVER_PAGE):
+            OSL_ASSERT(!mpMouseMultiSelector);
+            mpMouseMultiSelector.reset(
+                new RangeSelector(mrSlideSorter, rDescriptor.maMouseModelPosition));
+            mpMouseMultiSelector->SetSelectionModeFromModifier(rDescriptor.mnEventCode);
+            break;
+    }
+}
+
+
+
+
+void SelectionFunction::PostProcessEvent (const EventDescriptor& rDescriptor)
 {
     if (rDescriptor.mnEventCode & BUTTON_UP)
     {
-        view::ViewOverlay& rOverlay (mrSlideSorter.GetView().GetOverlay());
-
         mpWindow->ReleaseMouse();
-
-        // The overlays should not be visible anymore.  Warn when one of
-        // them still is.  An exception is th insertion indicator in the
-        // case that the context menu is visible.
-        DBG_ASSERT(
-            mrController.IsContextMenuOpen()
-                || !rOverlay.GetInsertionIndicatorOverlay()->IsVisible(),
-            "slidesorter::SelectionFunction: insertion indicator still visible");
-        DBG_ASSERT(
-            !rOverlay.GetSubstitutionOverlay()->IsVisible(),
-            "slidesorter::SelectionFunction: substitution still visible");
-        DBG_ASSERT(
-            !rOverlay.GetSelectionRectangleOverlay()->IsVisible(),
-            "slidesorter::SelectionFunction: selection rectangle still visible");
 
         // Now turn them off.
         if ( ! mrController.IsContextMenuOpen())
-            rOverlay.GetInsertionIndicatorOverlay()->SetIsVisible(false);
-        rOverlay.GetSubstitutionOverlay()->SetIsVisible(false);
-        rOverlay.GetSelectionRectangleOverlay()->SetIsVisible(false);
+            mrController.GetInsertionIndicatorHandler()->End();
 
         mnButtonDownPageIndex = -1;
         mnButtonDownButtonIndex = -1;
@@ -1429,16 +1318,14 @@ SelectionFunction::EventDescriptor::EventDescriptor (
 
     maMousePosition = rEvent.GetPosPixel();
     maMouseModelPosition = pWindow->PixelToLogic(maMousePosition);
-    model::SharedPageDescriptor pHitDescriptor (
-        rSlideSorter.GetController().GetPageAt(maMousePosition));
-    if (pHitDescriptor.get() != NULL)
+    mpHitDescriptor = rSlideSorter.GetController().GetPageAt(maMousePosition);
+    if (mpHitDescriptor)
     {
-        mpHitDescriptor = pHitDescriptor;
-        mpHitPage = pHitDescriptor->GetPage();
+        mpHitPage = mpHitDescriptor->GetPage();
 
-        mnButtonIndex = rSlideSorter.GetView().GetLayouter()
-            .GetPageObjectLayouter()->GetButtonIndexAt(
-                pHitDescriptor,
+        mnButtonIndex
+            = rSlideSorter.GetView().GetLayouter().GetPageObjectLayouter()->GetButtonIndexAt(
+                mpHitDescriptor,
                 maMouseModelPosition);
     }
 }
@@ -1456,7 +1343,8 @@ SelectionFunction::EventDescriptor::EventDescriptor (
       mpHitPage(),
       mnEventCode(0),
       mnButtonIndex(-1),
-      meDragMode(InsertionIndicatorHandler::MoveMode)
+      meDragMode(InsertionIndicatorHandler::MoveMode),
+      mbMakeSelectionVisible(true)
 {
     model::SharedPageDescriptor pHitDescriptor (
         rSlideSorter.GetController().GetFocusManager().GetFocusedPageDescriptor());
@@ -1480,7 +1368,8 @@ SelectionFunction::EventDescriptor::EventDescriptor (
       mpHitPage(),
       mnEventCode(MOUSE_DRAG),
       mnButtonIndex(-1),
-      meDragMode(InsertionIndicatorHandler::MoveMode)
+      meDragMode(InsertionIndicatorHandler::MoveMode),
+      mbMakeSelectionVisible(true)
 {
     SharedSdWindow pWindow (rSlideSorter.GetContentWindow());
 
@@ -1504,7 +1393,8 @@ SelectionFunction::EventDescriptor::EventDescriptor (const EventDescriptor& rDes
       mpHitPage(rDescriptor.mpHitPage),
       mnEventCode(rDescriptor.mnEventCode),
       mnButtonIndex(rDescriptor.mnButtonIndex),
-      meDragMode(InsertionIndicatorHandler::MoveMode)
+      meDragMode(InsertionIndicatorHandler::MoveMode),
+      mbMakeSelectionVisible(true)
 {
 }
 
@@ -1603,15 +1493,15 @@ void SelectionFunction::MouseMultiSelector::SetSelectionModeFromModifier (
     switch (nEventCode & MODIFIER_MASK)
     {
         case NO_MODIFIER:
-            SetSelectionMode(RectangleSelector::SM_Normal);
+            SetSelectionMode(SM_Normal);
             break;
 
         case SHIFT_MODIFIER:
-            SetSelectionMode(RectangleSelector::SM_Add);
+            SetSelectionMode(SM_Add);
             break;
 
         case CONTROL_MODIFIER:
-            SetSelectionMode(RectangleSelector::SM_Toggle);
+            SetSelectionMode(SM_Toggle);
             break;
     }
 }
@@ -1665,92 +1555,6 @@ void SelectionFunction::MouseMultiSelector::UpdateSelectionState (
     else
         mrSlideSorter.GetController().GetPageSelector().DeselectPage(rpDescriptor);
 }
-
-
-
-
-//===== RectangleSelector =====================================================
-
-namespace {
-
-RectangleSelector::RectangleSelector (
-    SlideSorter& rSlideSorter,
-    const Point& rMouseModelPosition)
-    : MouseMultiSelector(rSlideSorter,rMouseModelPosition)
-{
-    if (mrSlideSorter.GetProperties()->IsShowSelection())
-    {
-        mrSlideSorter.GetView().GetOverlay().GetSelectionRectangleOverlay()
-            ->Start(rMouseModelPosition);
-    }
-}
-
-
-
-
-RectangleSelector::~RectangleSelector (void)
-{
-    if (mrSlideSorter.GetProperties()->IsShowSelection())
-    {
-        mrSlideSorter.GetView().GetOverlay().GetSelectionRectangleOverlay()->SetIsVisible(false);
-    }
-}
-
-
-
-
-void RectangleSelector::UpdateModelPosition (const Point& rMouseModelPosition)
-{
-    if (mrSlideSorter.GetProperties()->IsShowSelection())
-    {
-        mrSlideSorter.GetView().GetOverlay().GetSelectionRectangleOverlay()
-            ->Update(rMouseModelPosition);
-        UpdateSelection();
-    }
-}
-
-
-
-
-void RectangleSelector::UpdateSelection (void)
-{
-    if ( ! mrSlideSorter.GetProperties()->IsShowSelection())
-        return;
-
-    view::ViewOverlay& rOverlay (mrSlideSorter.GetView().GetOverlay());
-    if (rOverlay.GetSelectionRectangleOverlay()->IsVisible())
-    {
-        view::SlideSorterView::DrawLock aDrawLock (mrSlideSorter);
-        PageSelector::UpdateLock aPageSelectorUpdateLock (mrSlideSorter);
-
-        // Select all pages whose page object lies completly or partially
-        // inside the selection rectangle.
-        const Rectangle& rSelectionRectangle (
-            rOverlay.GetSelectionRectangleOverlay()->GetSelectionRectangle());
-        model::PageEnumeration aPages (
-            model::PageEnumerationProvider::CreateAllPagesEnumeration(
-                mrSlideSorter.GetModel()));
-        while (aPages.HasMoreElements())
-        {
-            model::SharedPageDescriptor pDescriptor (aPages.GetNextElement());
-
-            // Determine whether the page object is inside the selection rectangle.
-            Rectangle aPageBox (
-                mrSlideSorter.GetView().GetLayouter().GetPageObjectLayouter()->GetBoundingBox(
-                    pDescriptor,
-                    view::PageObjectLayouter::Preview,
-                    view::PageObjectLayouter::WindowCoordinateSystem));
-            const bool bIsPageInSelectionRectangle (rSelectionRectangle.IsOver(aPageBox));
-
-            UpdateSelectionState(pDescriptor, bIsPageInSelectionRectangle);
-        }
-
-        // Rely on auto scrolling to make page objects visible.
-        mrSlideSorter.GetController().GetSelectionManager()->ResetMakeSelectionVisiblePending();
-    }
-}
-
-} // end of anonymous namespace
 
 
 

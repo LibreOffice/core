@@ -34,18 +34,11 @@
 #include "sdxfer.hxx"
 
 class SdDrawDocument;
-namespace sd
-{
-    class pWorkView;
-    namespace slidesorter
-    {
-        class SlideSorterViewShell;
-    }
-}
+namespace sd { namespace slidesorter {
+class SlideSorterViewShell;
+} }
 
 namespace sd { namespace slidesorter { namespace controller {
-
-class SubstitutionHandler;
 
 
 /** This class exists to have DragFinished call the correct object: the
@@ -60,17 +53,17 @@ public:
         ::sd::View* pWorkView,
         BOOL bInitOnGetData,
         SlideSorterViewShell* pViewShell,
-        const ::boost::shared_ptr<SubstitutionHandler>& rpSubstitutionHandler);
+        const ::std::vector<Bitmap>& rRepresentatives);
 
     virtual ~Transferable (void);
 
     virtual void DragFinished (sal_Int8 nDropAction);
 
-    ::boost::shared_ptr<SubstitutionHandler> GetSubstitutionHandler (void) const;
+    const ::std::vector<Bitmap>& GetRepresentatives (void) const;
 
 private:
     SlideSorterViewShell* mpViewShell;
-    ::boost::shared_ptr<SubstitutionHandler> mpSubstitutionHandler;
+    const ::std::vector<Bitmap> maRepresentatives;
 
     virtual void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint);
 };

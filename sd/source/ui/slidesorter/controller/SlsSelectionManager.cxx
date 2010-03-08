@@ -81,8 +81,8 @@ namespace {
     private:
         SlideSorter& mrSlideSorter;
         double mnStart;
-        double mnEnd;
-        ::boost::function<double(double)> maAccelerationFunction;
+        const double mnEnd;
+        const ::boost::function<double(double)> maAccelerationFunction;
     };
     class HorizontalVisibleAreaScroller
     {
@@ -93,8 +93,8 @@ namespace {
     private:
         SlideSorter& mrSlideSorter;
         double mnStart;
-        double mnEnd;
-        ::boost::function<double(double)> maAccelerationFunction;
+        const double mnEnd;
+        const ::boost::function<double(double)> maAccelerationFunction;
     };
 }
 
@@ -116,6 +116,8 @@ SelectionManager::SelectionManager (SlideSorter& rSlideSorter)
 
 SelectionManager::~SelectionManager (void)
 {
+    if (mnAnimationId != Animator::NotAnAnimationId)
+        mrController.GetAnimator()->RemoveAnimation(mnAnimationId);
 }
 
 
@@ -655,6 +657,8 @@ void SelectionManager::SetInsertionPosition (const sal_Int32 nInsertionPosition)
 
 namespace {
 
+const static sal_Int32 gnMaxScrollDistance = 300;
+
 VerticalVisibleAreaScroller::VerticalVisibleAreaScroller (
     SlideSorter& rSlideSorter,
     const double nStart,
@@ -666,6 +670,14 @@ VerticalVisibleAreaScroller::VerticalVisibleAreaScroller (
           controller::AnimationParametricFunction(
               controller::AnimationBezierFunction (0.1,0.6)))
 {
+    // When the distance to scroll is larger than a threshold then first
+    // jump to within this distance of the final value and start the
+    // animation from there.
+    if (abs(nStart-nEnd) > gnMaxScrollDistance)
+        if (nStart < nEnd)
+            mnStart = nEnd-gnMaxScrollDistance;
+        else
+            mnStart = nEnd+gnMaxScrollDistance;
 }
 
 

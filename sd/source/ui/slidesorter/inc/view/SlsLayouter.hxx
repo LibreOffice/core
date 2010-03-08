@@ -45,6 +45,11 @@ class Size;
 
 namespace sd { namespace slidesorter { namespace view {
 
+class InsertPosition;
+
+
+
+
 /** Calculate the size and position of page objects displayed by a slide
     sorter.  The layouter takes into account various input values:
     1.) Size of the window in which the slide sorter is displayed.
@@ -192,20 +197,6 @@ public:
     */
     Rectangle GetPageBox (const sal_Int32 nObjectCount = -1) const;
 
-    /** Return the location of the center of the insertion indicator that is
-        specified by the parameters.
-        @param aVisualIndicatorIndices
-            Row and column of where to paint the insertion indicator.  Column
-            is -1 when the indicator is placed between rows of a single
-            column.
-        @param rIndicatorSize
-            The size of the insertion indicator.  This size is used to adapt
-            the location when at the left or right of a row.
-    */
-    Point GetInsertionIndicatorLocation (
-        const Pair& rVisualIndicatorIndices,
-        const Size& rIndicatorSize) const;
-
     /** Return the index of the first fully or partially visible page
         object.  This takes into account only the vertical dimension.
         @return
@@ -233,40 +224,22 @@ public:
         const Point& rModelPosition,
         const bool bIncludePageBorders = false) const;
 
-    /** Return the page index of where to do an insert operation when the
-        user would release the the mouse button at the given position after
-        a drag operation.  This method assumes that pages are placed in a
-        single column.
+    /** Return an object that describes the logical and visual properties of
+        where to do an insert operation when the user would release the the
+        mouse button at the given position after a drag operation and of
+        where and how to display an insertion indicator.
         @param rPosition
             The position in the model coordinate system for which to
             determine the insertion page index.  The position does not have
             to be over a page object to return a valid value.
-        @return
-            Returns the page index, as accepted by the slide sorter model,
-            of the page after which an insertion would take place.  An index
-            of 0 means that insertion will take place before the first page,
-            An index equal to or greater than the page count means to insert
-            after the last page.
-            A value of -1 indicates that no valid insertion index exists for
-            the given point.
+        @param rIndicatorSize
+            The size of the insertion indicator.  This size is used to adapt
+            the location when at the left or right of a row or at the top or
+            bottom of a column.
     */
-    sal_Int32 GetVerticalInsertionIndex (const Point& rModelPosition) const;
-
-    /** Return a pair of row and column indices of where to do an insert
-        operation when the user would release the the mouse button at the
-        given position after a drag operation.  This method assumes that
-        pages are placed in a row-first grid.
-        @param rPosition
-            The position in the model coordinate system for which to
-            determine the insertion page index.  The position does not have
-            to be over a page object to return a valid value.
-        @return
-            Returns a pair of (row,column) indices and defines the place of
-            where to paint the insertion indicator.  The column index lies
-            in the range [0,column count].  A value of (-1,-1) indicates
-            that no valid insertion index exists for the given point.
-    */
-    Pair GetGridInsertionIndices (const Point& rModelPosition) const;
+    InsertPosition GetInsertPosition (
+        const Point& rModelPosition,
+        const Size& rIndicatorSize) const;
 
     /** Return whether the main orientation of the slides in the slide
         sorter is vertical, i.e. all slides are arranged in one column.
@@ -293,6 +266,14 @@ private:
     sal_Int32 mnPageCount;
     sal_Int32 mnColumnCount;
     sal_Int32 mnRowCount;
+    /// The maximum number of columns.  Can only be larger than the current
+    /// number of columns when there are not enough pages to fill all
+    /// available columns.
+    sal_Int32 mnMaxColumnCount;
+    /// The maximum number of rows.  Can only be larger than the current
+    /// number of rows when there are not enough pages to fill all available
+    /// rows.
+    sal_Int32 mnMaxRowCount;
     Size maPageObjectSize;
     bool mbIsVertical;
 
@@ -370,6 +351,42 @@ private:
 
     Rectangle GetPreviewBox (const sal_Int32 nIndex) const;
 };
+
+
+
+
+/** Collect all values concerning the logical and visual properties of the
+    insertion position that is used for drag-and-drop and copy-and-past.
+*/
+class InsertPosition
+{
+public:
+    InsertPosition (void);
+    InsertPosition& operator= (const InsertPosition& rInsertPosition);
+    bool operator== (const InsertPosition& rInsertPosition) const;
+    bool operator!= (const InsertPosition& rInsertPosition) const;
+
+    sal_Int32 GetRow (void) const { return mnRow; }
+    sal_Int32 GetColumn (void) const { return mnColumn; }
+    sal_Int32 GetIndex (void) const { return mnIndex; }
+    Point GetLocation (void) const { return maLocation; }
+    bool IsAtRunStart (void) const { return mbIsAtRunStart; }
+    bool IsAtRunEnd (void) const { return mbIsAtRunEnd; }
+    bool IsExtraSpaceNeeded (void) const { return mbIsExtraSpaceNeeded; }
+
+private:
+    sal_Int32 mnRow;
+    sal_Int32 mnColumn;
+    sal_Int32 mnIndex;
+    Point maLocation;
+    bool mbIsAtRunStart : 1;
+    bool mbIsAtRunEnd : 1;
+    bool mbIsExtraSpaceNeeded : 1;
+
+    friend class Layouter;
+};
+
+
 
 } } } // end of namespace ::sd::slidesorter::view
 

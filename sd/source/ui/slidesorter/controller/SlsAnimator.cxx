@@ -212,6 +212,25 @@ void Animator::RemoveAnimation (const Animator::AnimationId nId)
 
 
 
+void Animator::RemoveAllAnimations (void)
+{
+    ::std::for_each(
+        maAnimations.begin(),
+        maAnimations.end(),
+        ::boost::bind(
+            &Animation::Expire,
+            _1));
+    maAnimations.clear();
+    mnNextAnimationId = 0;
+
+    // No more animations => we do not have to suppress painting
+    // anymore.
+    mpDrawLock.reset();
+}
+
+
+
+
 bool Animator::ProcessAnimations (const double nTime)
 {
     bool bExpired (false);

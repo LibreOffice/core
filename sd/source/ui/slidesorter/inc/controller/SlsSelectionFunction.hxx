@@ -52,7 +52,7 @@ class SlideSorter;
 namespace sd { namespace slidesorter { namespace controller {
 
 class SlideSorterController;
-class SubstitutionHandler;
+class DragAndDropContext;
 
 
 class SelectionFunction
@@ -109,7 +109,7 @@ public:
         const Point& rMousePosition,
         const bool bIsMouseButtonDown);
 
-    ::boost::shared_ptr<SubstitutionHandler> GetSubstitutionHandler (void) const;
+    ::boost::shared_ptr<DragAndDropContext> GetDragAndDropContext (void) const;
 
     class MouseMultiSelector;
 
@@ -126,9 +126,6 @@ protected:
 private:
     class EventDescriptor;
 
-    /// Set in MouseButtonDown this flag indicates that a page has been hit.
-    bool mbPageHit;
-
     /// The rectangle of the mouse drag selection.
     Rectangle maDragSelectionRectangle;
     bool mbDragSelection;
@@ -144,7 +141,7 @@ private:
     */
     bool mbProcessingMouseButtonDown;
 
-    ::boost::shared_ptr<SubstitutionHandler> mpSubstitutionHandler;
+    ::boost::shared_ptr<DragAndDropContext> mpDragAndDropContext;
     ::boost::scoped_ptr<MouseMultiSelector> mpMouseMultiSelector;
 
     /** Remember where the left mouse button was pressed.
@@ -159,7 +156,6 @@ private:
     */
     sal_Int32 mnShiftKeySelectionAnchor;
 
-    DECL_LINK( DragSlideHdl, Timer* );
     void StartDrag (
         const Point& rMousePosition,
         const InsertionIndicatorHandler::Mode eMode);
@@ -192,21 +188,10 @@ private:
     /// Deselect all pages.
     void DeselectAllPages (void);
 
-    /** For a possibly following mouse motion by starting the drag timer
-        that after a short time of pressed but un-moved mouse starts a drag
-        operation.
-    */
-    void StartDragTimer (void);
-
     /** Select all pages between and including the selection anchor and the
         specified page.
     */
     void RangeSelect (const model::SharedPageDescriptor& rpDescriptor);
-
-    /** Hide and clear the insertion indiciator, substitution display and
-        selection rectangle.
-    */
-    void ClearOverlays (void);
 
     /** Compute a numerical code that describes a mouse event and that can
         be used for fast look up of the appropriate reaction.
@@ -228,9 +213,13 @@ private:
     */
     sal_uInt32 EncodeState (const EventDescriptor& rDescriptor) const;
 
-    void EventPreprocessing (const EventDescriptor& rEvent);
-    bool EventProcessing (const EventDescriptor& rEvent);
-    void EventPostprocessing (const EventDescriptor& rEvent);
+    bool ProcessEvent (EventDescriptor& rEvent);
+    void PostProcessEvent (const EventDescriptor& rEvent);
+    void ProcessEventWhileDragActive (EventDescriptor& rDescriptor);
+    void ProcessEventWhileMultiSelectorActive (EventDescriptor& rDescriptor);
+    void ProcessButtonDownEvent (EventDescriptor& rDescriptor);
+    void ProcessButtonUpEvent (const EventDescriptor& rDescriptor);
+    void ProcessMouseMotionEvent (const EventDescriptor& rDescriptor);
 
     void ProcessButtonClick (
         const model::SharedPageDescriptor& rpDescriptor,
@@ -245,4 +234,3 @@ private:
 } } } // end of namespace ::sd::slidesorter::controller
 
 #endif
-

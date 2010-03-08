@@ -57,13 +57,13 @@ SLOFILES =      							\
     $(SLO)$/SlsFontProvider.obj				\
     $(SLO)$/SlsFramePainter.obj				\
     $(SLO)$/SlsInsertAnimator.obj			\
+    $(SLO)$/SlsInsertionIndicatorOverlay.obj\
     $(SLO)$/SlsLayeredDevice.obj			\
     $(SLO)$/SlsLayouter.obj					\
     $(SLO)$/SlsPageObjectLayouter.obj		\
     $(SLO)$/SlsPageObjectPainter.obj		\
     $(SLO)$/SlsTheme.obj					\
-    $(SLO)$/SlsViewCacheContext.obj			\
-    $(SLO)$/SlsViewOverlay.obj
+    $(SLO)$/SlsViewCacheContext.obj
 
 # --- Tagets -------------------------------------------------------
 

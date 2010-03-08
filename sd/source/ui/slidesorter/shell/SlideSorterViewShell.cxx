@@ -397,6 +397,11 @@ SdPage* SlideSorterViewShell::GetActualPage (void)
             pCurrentPage = pDescriptor->GetPage();
     }
 
+    if (pCurrentPage == NULL)
+    {
+
+    }
+
     return pCurrentPage;
 }
 
@@ -531,8 +536,8 @@ void SlideSorterViewShell::Paint (
     ::sd::Window* pWindow)
 {
     SetActiveWindow (pWindow);
-    OSL_ASSERT(mpSlideSorter.get()!=NULL);
-    if (mpSlideSorter.get() != NULL)
+    OSL_ASSERT(mpSlideSorter);
+    if (mpSlideSorter)
         mpSlideSorter->GetController().Paint(rBBox,pWindow);
 }
 
@@ -542,9 +547,7 @@ void SlideSorterViewShell::Paint (
 void SlideSorterViewShell::ArrangeGUIElements (void)
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
-    mpSlideSorter->ArrangeGUIElements(
-        maViewPos,
-        maViewSize);
+    mpSlideSorter->ArrangeGUIElements(maViewPos, maViewSize);
 }
 
 
@@ -611,6 +614,8 @@ void SlideSorterViewShell::ReadFrameViewData (FrameView* pFrameView)
         }
         else
             rView.GetLayouter().SetColumnCount(nSlidesPerRow,nSlidesPerRow);
+        mpSlideSorter->GetController().GetCurrentSlideManager()->CurrentSlideHasChanged(
+            mpFrameView->GetSelectedPage());
         mpSlideSorter->GetController().Rearrange(true);
 
         // DrawMode for 'main' window

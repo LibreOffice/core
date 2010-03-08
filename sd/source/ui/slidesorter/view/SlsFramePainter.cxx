@@ -50,6 +50,7 @@ FramePainter::FramePainter (const BitmapEx& rShadowBitmap)
       maShadowBottomLeft(rShadowBitmap,-1,+1),
       maShadowBottom(rShadowBitmap,0,+1),
       maShadowBottomRight(rShadowBitmap,+1,+1),
+      maShadowCenter(rShadowBitmap,0,0),
       mbIsValid(false)
 {
     if (rShadowBitmap.GetSizePixel().Width() == rShadowBitmap.GetSizePixel().Height()
@@ -100,6 +101,7 @@ void FramePainter::PaintFrame (
     maShadowBottom.PaintSide(rDevice,
         aBox.BottomLeft(), aBox.BottomRight(),
         maShadowBottomLeft, maShadowBottomRight);
+    maShadowCenter.PaintCenter(rDevice,aBox);
 }
 
 
@@ -137,13 +139,17 @@ FramePainter::OffsetBitmap::OffsetBitmap (
     // Enlarge the side bitmaps so that painting the frame requires less
     // paint calls.
     const sal_Int32 nSideBitmapSize (64);
-    if (nHorizontalPosition == 0)
+    if (nHorizontalPosition == 0 && nVerticalPosition == 0)
+    {
+        maBitmap.Scale(Size(nSideBitmapSize,nSideBitmapSize), BMP_SCALE_FAST);
+    }
+    else if (nHorizontalPosition == 0)
     {
         maBitmap.Scale(Size(nSideBitmapSize,aSize.Height()), BMP_SCALE_FAST);
     }
     else if (nVerticalPosition == 0)
     {
-        maBitmap.Scale(Size(aSize.Width(), nSideBitmapSize), BMP_SCALE_FAST);
+        maBitmap.Scale(Size(maBitmap.GetSizePixel().Width(), nSideBitmapSize), BMP_SCALE_FAST);
     }
 }
 
@@ -214,6 +220,25 @@ void FramePainter::OffsetBitmap::PaintSide (
         OSL_ASSERT(false);
     }
 }
+
+
+
+
+void FramePainter::OffsetBitmap::PaintCenter (
+    OutputDevice& rDevice,
+    const Rectangle& rBox) const
+{
+    const Size aBitmapSize (maBitmap.GetSizePixel());
+    for (sal_Int32 nY=rBox.Top(); nY<=rBox.Bottom(); nY+=aBitmapSize.Height())
+        for (sal_Int32 nX=rBox.Left(); nX<=rBox.Right(); nX+=aBitmapSize.Width())
+            rDevice.DrawBitmapEx(
+                Point(nX,nY),
+                Size(
+                    ::std::min(aBitmapSize.Width(), rBox.Right()-nX+1),
+                    std::min(aBitmapSize.Height(), rBox.Bottom()-nY+1)),
+                maBitmap);
+}
+
 
 
 } } } // end of namespace sd::slidesorter::view

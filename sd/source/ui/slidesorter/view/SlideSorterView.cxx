@@ -41,7 +41,6 @@
 #include "view/SlsLayouter.hxx"
 #include "view/SlsPageObjectLayouter.hxx"
 #include "view/SlsPageObjectPainter.hxx"
-#include "view/SlsViewOverlay.hxx"
 #include "view/SlsILayerPainter.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsProperties.hxx"
@@ -331,7 +330,6 @@ SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
     mbPageObjectVisibilitiesValid (false),
     mpPreviewCache(),
     mpLayeredDevice(new LayeredDevice(rSlideSorter.GetContentWindow())),
-    mpViewOverlay (new ViewOverlay(rSlideSorter, mpLayeredDevice)),
     maVisiblePageRange(-1,-1),
     mbModelChangedWhileModifyEnabled(true),
     maPreviewSize(0,0),
@@ -396,9 +394,6 @@ void SlideSorterView::Dispose (void)
 
     // Deletion of the objects and the page will be done in SdrModel
     // destructor (as long as objects and pages are added)
-
-    OSL_ASSERT(mpViewOverlay.unique());
-    mpViewOverlay.reset();
 
     OSL_ASSERT(mpLayeredDevice.unique());
     mpLayeredDevice.reset();
@@ -828,7 +823,7 @@ void SlideSorterView::CompleteRedraw (
     }
     else
     {
-        View::CompleteRedraw(pDevice, rPaintArea, pRedirector);
+        maRedrawRegion.Union(rPaintArea);
     }
 
 #ifdef DEBUG_TIMING
@@ -913,14 +908,6 @@ void SlideSorterView::ConfigurationChanged (
     }
 
     return mpPreviewCache;
-}
-
-
-
-
-ViewOverlay& SlideSorterView::GetOverlay (void)
-{
-    return *mpViewOverlay.get();
 }
 
 
@@ -1120,21 +1107,37 @@ bool SlideSorterView::SetState (
 
 
 
+::boost::shared_ptr<LayeredDevice> SlideSorterView::GetLayeredDevice (void) const
+{
+    return mpLayeredDevice;
+}
+
+
+
+
 //===== Animator::DrawLock ====================================================
 
-SlideSorterView::DrawLock::DrawLock (view::SlideSorterView& rView)
-    : mrView(rView)
+SlideSorterView::DrawLock::DrawLock (
+    view::SlideSorterView& rView,
+    const SharedSdWindow& rpWindow)
+    : mrView(rView),
+      mpWindow(rpWindow)
 {
-    mrView.LockRedraw(TRUE);
+    if (mrView.mnLockRedrawSmph == 0)
+        mrView.maRedrawRegion.SetEmpty();
+    ++mrView.mnLockRedrawSmph;
 }
 
 
 
 
 SlideSorterView::DrawLock::DrawLock (SlideSorter& rSlideSorter)
-    : mrView(rSlideSorter.GetView())
+    : mrView(rSlideSorter.GetView()),
+      mpWindow(rSlideSorter.GetContentWindow())
 {
-    mrView.LockRedraw(TRUE);
+    if (mrView.mnLockRedrawSmph == 0)
+        mrView.maRedrawRegion.SetEmpty();
+    ++mrView.mnLockRedrawSmph;
 }
 
 
@@ -1142,7 +1145,19 @@ SlideSorterView::DrawLock::DrawLock (SlideSorter& rSlideSorter)
 
 SlideSorterView::DrawLock::~DrawLock (void)
 {
-    mrView.LockRedraw(FALSE);
+    OSL_ASSERT(mrView.mnLockRedrawSmph>0);
+    --mrView.mnLockRedrawSmph;
+    if (mrView.mnLockRedrawSmph == 0)
+        if (mpWindow)
+        {
+            mpWindow->Invalidate(mrView.maRedrawRegion);
+            mpWindow->Update();
+        }
+    /*
+            mrView.CompleteRedraw(
+                mpWindow.get(),
+                mrView.maRedrawRegion);
+    */
 }
 
 

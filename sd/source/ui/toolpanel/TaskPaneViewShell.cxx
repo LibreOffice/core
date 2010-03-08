@@ -90,7 +90,7 @@
 #include "TestPanel.hxx"
 #endif
 
-#define SHOW_COLOR_MENU
+//#define SHOW_COLOR_MENU
 #ifdef SHOW_COLOR_MENU
 #include "TestMenu.hxx"
 #endif

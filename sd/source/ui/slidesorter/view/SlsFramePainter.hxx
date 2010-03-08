@@ -46,6 +46,10 @@ class FramePainter
 public:
     FramePainter (const BitmapEx& rBitmap);
     ~FramePainter (void);
+
+    /** Paint a border around the given box by using a set of bitmaps for
+        the corners and sides.
+    */
     void PaintFrame (OutputDevice&rDevice, const Rectangle aBox) const;
 
 private:
@@ -90,6 +94,12 @@ private:
             const OffsetBitmap& rCornerBitmap1,
             const OffsetBitmap& rCornerBitmap2) const;
 
+        /** Fill the given rectangle with the bitmap.
+        */
+        void PaintCenter (
+            OutputDevice& rDevice,
+            const Rectangle& rBox) const;
+
     private:
         BitmapEx maBitmap;
         Point maOffset;
@@ -102,6 +112,7 @@ private:
     OffsetBitmap maShadowBottomLeft;
     OffsetBitmap maShadowBottom;
     OffsetBitmap maShadowBottomRight;
+    OffsetBitmap maShadowCenter;
     bool mbIsValid;
 };
 

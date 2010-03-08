@@ -54,10 +54,12 @@ Layouter::Layouter (const SharedSdWindow& rpWindow)
       mnPreferredWidth(200),
       mnMaximalWidth(300),
       mnMinimalColumnCount(1),
-      mnMaximalColumnCount(1),
+      mnMaximalColumnCount(4),
       mnPageCount(0),
       mnColumnCount(1),
       mnRowCount(0),
+      mnMaxColumnCount(0),
+      mnMaxRowCount(0),
       maPageObjectSize(1,1),
       mbIsVertical(true)
 {
@@ -211,6 +213,10 @@ bool Layouter::RearrangeHorizontal (
                 nPageCount));
         maPageObjectSize = mpPageObjectLayouter->GetPageObjectSize();
 
+        mnMaxColumnCount = (rWindowSize.Width() - mnLeftBorder - mnRightBorder)
+            / (maPageObjectSize.Width()  + mnHorizontalGap);
+        mnMaxRowCount = 1;
+
         return true;
     }
     else
@@ -288,6 +294,11 @@ bool Layouter::RearrangeVertical (
                 mpWindow,
                 nPageCount));
         maPageObjectSize = mpPageObjectLayouter->GetPageObjectSize();
+
+        mnMaxColumnCount = (rWindowSize.Width() - mnLeftBorder - mnRightBorder)
+            / (maPageObjectSize.Width()  + mnHorizontalGap);
+        mnMaxRowCount = (rWindowSize.Height() - mnTopBorder - mnBottomBorder)
+            / (maPageObjectSize.Height()  + mnVerticalGap);
 
         return true;
     }
@@ -462,15 +473,54 @@ Rectangle Layouter::GetPreviewBox (const sal_Int32 nIndex) const
 
 
 
-Point Layouter::GetInsertionIndicatorLocation (
-    const Pair& rVisualIndices,
-    const Size& rIndicatorSize) const
+InsertPosition Layouter::GetInsertPosition (
+        const Point& rModelPosition,
+        const Size& rIndicatorSize) const
 {
-    if (rVisualIndices.B() < 0)
+    InsertPosition aPosition;
+
+    // Determine logical position.
+    if (mnColumnCount == 1)
+    {
+        const sal_Int32 nY = rModelPosition.Y() - mnTopBorder + maPageObjectSize.Height()/2;
+        const sal_Int32 nRowHeight (maPageObjectSize.Height() + mnVerticalGap);
+        aPosition.mnRow = ::std::min(mnPageCount, nY / nRowHeight);
+        aPosition.mnColumn = 0;
+        aPosition.mnIndex = aPosition.mnRow;
+        aPosition.mbIsAtRunStart = (aPosition.mnRow == 0);
+        aPosition.mbIsAtRunEnd = (aPosition.mnRow == mnRowCount);
+        aPosition.mbIsExtraSpaceNeeded = (aPosition.mnRow >= mnMaxRowCount);
+    }
+    else
+    {
+        aPosition.mnRow = ::std::min(
+            mnRowCount-1,
+            GetRowAtPosition (rModelPosition.Y(), true, GM_BOTH));
+
+        const sal_Int32 nX = rModelPosition.X() - mnLeftBorder + maPageObjectSize.Width()/2;
+        const sal_Int32 nRowWidth (maPageObjectSize.Width() + mnHorizontalGap);
+        aPosition.mnColumn = ::std::min(mnColumnCount, nX / nRowWidth);
+        aPosition.mnIndex = aPosition.mnRow * mnColumnCount + aPosition.mnColumn;
+
+        aPosition.mbIsAtRunStart = (aPosition.mnColumn == 0);
+        aPosition.mbIsAtRunEnd = (aPosition.mnColumn == mnColumnCount);
+
+        if (aPosition.mnIndex >= mnPageCount)
+        {
+            aPosition.mnIndex = mnPageCount;
+            aPosition.mnRow = mnRowCount-1;
+            aPosition.mnColumn = mnPageCount%mnColumnCount;
+            aPosition.mbIsAtRunEnd = true;
+        }
+        aPosition.mbIsExtraSpaceNeeded = (aPosition.mnColumn >= mnMaxColumnCount);
+    }
+
+    // Determine visual position.
+    if (mnColumnCount == 1)
     {
         // Place indicator between rows of a single column of pages.
 
-        if (rVisualIndices.A() == 0)
+        if (aPosition.mbIsAtRunStart)
         {
             // Place indicator at the top of the column.
             const Rectangle aOuterBox (GetPageObjectBox(0));
@@ -478,71 +528,95 @@ Point Layouter::GetInsertionIndicatorLocation (
                 aOuterBox.TopLeft(),
                 PageObjectLayouter::Preview,
                 PageObjectLayouter::WindowCoordinateSystem));
-            return Point(aPreviewBox.Center().X(), aOuterBox.Top()+rIndicatorSize.Height()/2);
+            aPosition.maLocation.X() = aPreviewBox.Center().X();
+            aPosition.maLocation.Y() = aOuterBox.Top()+rIndicatorSize.Height()/2;
         }
-        else if (rVisualIndices.A() == mnRowCount)
+        else if (aPosition.mbIsAtRunEnd)
         {
-            // Place indicator at the bottom of the column.
             const Rectangle aOuterBox (GetPageObjectBox(mnRowCount-1));
             const Rectangle aPreviewBox (mpPageObjectLayouter->GetBoundingBox(
                 aOuterBox.TopLeft(),
                 PageObjectLayouter::Preview,
                 PageObjectLayouter::WindowCoordinateSystem));
-            return Point(aPreviewBox.Center().X(), aOuterBox.Bottom()-rIndicatorSize.Height()/2);
+            if (aPosition.mbIsExtraSpaceNeeded)
+            {
+                // Place indicator at the bottom of the column.
+                aPosition.maLocation.X() = aPreviewBox.Center().X();
+                aPosition.maLocation.Y() = aOuterBox.Bottom()-rIndicatorSize.Height()/2;
+            }
+            else
+            {
+                // Place indicator at the bottom of the column in the space
+                // that is available below the last page.
+                aPosition.maLocation.X() = aPreviewBox.Center().X();
+                aPosition.maLocation.Y() = aOuterBox.Bottom()+rIndicatorSize.Height()/2;
+            }
         }
         else
         {
             // Place indicator between two rows.
             const Rectangle aBox1 (mpPageObjectLayouter->GetBoundingBox(
-                GetPageObjectBox(rVisualIndices.A()-1).TopLeft(),
+                GetPageObjectBox(aPosition.mnRow-1).TopLeft(),
                 PageObjectLayouter::Preview,
                 PageObjectLayouter::WindowCoordinateSystem));
             const Rectangle aBox2 (mpPageObjectLayouter->GetBoundingBox(
-                GetPageObjectBox(rVisualIndices.A()).TopLeft(),
+                GetPageObjectBox(aPosition.mnRow).TopLeft(),
                 PageObjectLayouter::Preview,
                 PageObjectLayouter::WindowCoordinateSystem));
-            return (aBox1.Center() + aBox2.Center() + Point(1,1)) / 2;
+            aPosition.maLocation = (aBox1.Center() + aBox2.Center() + Point(1,1)) / 2;
         }
     }
     else
     {
         // Place indicator between columns in one row.
-        const sal_Int32 nIndex (rVisualIndices.A() * mnColumnCount + rVisualIndices.B());
-
-        if (rVisualIndices.B() == 0)
+        if (aPosition.mbIsAtRunStart)
         {
             // Place indicator at the left of the row.
-            const Rectangle aOuterBox (GetPageObjectBox(nIndex));
+            const Rectangle aOuterBox (GetPageObjectBox(aPosition.mnIndex));
             const Rectangle aPreviewBox (mpPageObjectLayouter->GetBoundingBox(
                 aOuterBox.TopLeft(),
                 PageObjectLayouter::Preview,
                 PageObjectLayouter::WindowCoordinateSystem));
-            return Point(aOuterBox.Left()+rIndicatorSize.Width()/2, aPreviewBox.Center().Y());
+            aPosition.maLocation.X() = aOuterBox.Left()+rIndicatorSize.Width()/2;
+            aPosition.maLocation.Y() = aPreviewBox.Center().Y();
         }
-        else if (rVisualIndices.B() == mnColumnCount)
+        else if (aPosition.mbIsAtRunEnd)
         {
-            // Place indicator at the end of the row.
-            const Rectangle aOuterBox (GetPageObjectBox(nIndex-1));
+            const Rectangle aOuterBox (GetPageObjectBox(aPosition.mnIndex-1));
             const Rectangle aPreviewBox (mpPageObjectLayouter->GetBoundingBox(
                 aOuterBox.TopLeft(),
                 PageObjectLayouter::Preview,
                 PageObjectLayouter::WindowCoordinateSystem));
-            return Point(aOuterBox.Right()-rIndicatorSize.Width()/2, aPreviewBox.Center().Y());
+            if (aPosition.mbIsExtraSpaceNeeded)
+            {
+                // Place indicator at the end of the row.
+                aPosition.maLocation.X() = aOuterBox.Right()-rIndicatorSize.Width()/2;
+                aPosition.maLocation.Y() = aPreviewBox.Center().Y();
+            }
+            else
+            {
+                // Place indicator at the end of the row in the available
+                // space at its right end.
+                aPosition.maLocation.X() = aOuterBox.Right()+rIndicatorSize.Width()/2;
+                aPosition.maLocation.Y() = aPreviewBox.Center().Y();
+            }
         }
         else
         {
             // Place indicator between two columns.
             const Rectangle aBox1 (mpPageObjectLayouter->GetBoundingBox(
-                GetPageObjectBox(nIndex-1).TopLeft(),
+                GetPageObjectBox(aPosition.mnIndex-1).TopLeft(),
                 PageObjectLayouter::Preview,
                 PageObjectLayouter::WindowCoordinateSystem));
             const Rectangle aBox2 (mpPageObjectLayouter->GetBoundingBox(
-                GetPageObjectBox(nIndex).TopLeft(),
+                GetPageObjectBox(aPosition.mnIndex).TopLeft(),
                 PageObjectLayouter::Preview,
                 PageObjectLayouter::WindowCoordinateSystem));
-            return (aBox1.Center() + aBox2.Center() + Point(1,1)) / 2;
+            aPosition.maLocation = (aBox1.Center() + aBox2.Center() + Point(1,1)) / 2;
         }
     }
+
+    return aPosition;
 }
 
 
@@ -576,31 +650,6 @@ sal_Int32 Layouter::GetIndexAtPoint (
         return nRow * mnColumnCount + nColumn;
     else
         return -1;
-}
-
-
-
-
-sal_Int32 Layouter::GetVerticalInsertionIndex (const Point& rPosition) const
-{
-    OSL_ASSERT(mnColumnCount == 1);
-
-    const sal_Int32 nY = rPosition.Y() - mnTopBorder + maPageObjectSize.Height()/2;
-    const sal_Int32 nRowHeight (maPageObjectSize.Height() + mnVerticalGap);
-    return nY / nRowHeight;
-}
-
-
-
-
-Pair Layouter::GetGridInsertionIndices (const Point& rPosition) const
-{
-    const sal_Int32 nRow = GetRowAtPosition (rPosition.Y(), true, GM_BOTH);
-
-    const sal_Int32 nX = rPosition.X() - mnLeftBorder + maPageObjectSize.Width()/2;
-    const sal_Int32 nRowWidth (maPageObjectSize.Width() + mnHorizontalGap);
-
-    return Pair(nRow, nX / nRowWidth);
 }
 
 
@@ -750,6 +799,61 @@ sal_Int32 Layouter::ResolvePositionInGap (
     return nIndex;
 }
 
+
+
+
+//===== InsertPosition ========================================================
+
+InsertPosition::InsertPosition (void)
+    : mnRow(-1),
+      mnColumn(-1),
+      mnIndex(-1),
+      maLocation(0,0),
+      mbIsAtRunStart(false),
+      mbIsAtRunEnd(false),
+      mbIsExtraSpaceNeeded(false)
+{
+}
+
+
+
+
+InsertPosition& InsertPosition::operator= (const InsertPosition& rInsertPosition)
+{
+    if (this != &rInsertPosition)
+    {
+        mnRow = rInsertPosition.mnRow;
+        mnColumn = rInsertPosition.mnColumn;
+        mnIndex = rInsertPosition.mnIndex;
+        maLocation = rInsertPosition.maLocation;
+        mbIsAtRunStart = rInsertPosition.mbIsAtRunStart;
+        mbIsAtRunEnd = rInsertPosition.mbIsAtRunEnd;
+        mbIsExtraSpaceNeeded = rInsertPosition.mbIsExtraSpaceNeeded;
+    }
+    return *this;
+}
+
+
+
+
+bool InsertPosition::operator== (const InsertPosition& rInsertPosition) const
+{
+    // Do not compare the geometrical information (maLocation).
+    return mnRow==rInsertPosition.mnRow
+        && mnColumn==rInsertPosition.mnColumn
+        && mnIndex==rInsertPosition.mnIndex
+        && mbIsAtRunStart==rInsertPosition.mbIsAtRunStart
+        && mbIsAtRunEnd==rInsertPosition.mbIsAtRunEnd
+        && mbIsExtraSpaceNeeded==rInsertPosition.mbIsExtraSpaceNeeded;
+}
+
+
+
+
+bool InsertPosition::operator!= (const InsertPosition& rInsertPosition) const
+{
+    return !operator==(rInsertPosition);
+}
 
 
 

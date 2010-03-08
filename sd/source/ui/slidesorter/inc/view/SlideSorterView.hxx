@@ -31,6 +31,7 @@
 #ifndef SD_SLIDESORTER_SLIDE_SORTER_VIEW_HXX
 #define SD_SLIDESORTER_SLIDE_SORTER_VIEW_HXX
 
+#include "SlideSorter.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "model/SlsSharedPageDescriptor.hxx"
 
@@ -47,10 +48,6 @@
 #include <boost/noncopyable.hpp>
 
 class Point;
-
-namespace sd { namespace slidesorter {
-class SlideSorter;
-} }
 
 namespace sd { namespace slidesorter { namespace controller {
 class SlideSorterController;
@@ -71,7 +68,6 @@ class LayeredDevice;
 class Layouter;
 class PageObjectPainter;
 class SelectionPainter;
-class ViewOverlay;
 
 class SlideSorterView
     : public sd::View,
@@ -162,8 +158,6 @@ public:
 
     ::boost::shared_ptr<cache::PageCache> GetPreviewCache (void);
 
-    view::ViewOverlay& GetOverlay (void);
-
     /** Set the bounding box of the insertion marker in model coordinates.
 
         It will be painted as a dark rectangle that fills the given box.
@@ -209,15 +203,17 @@ public:
         const bool bStateValue);
 
     ::boost::shared_ptr<PageObjectPainter> GetPageObjectPainter (void);
+    ::boost::shared_ptr<LayeredDevice> GetLayeredDevice (void) const;
 
     class DrawLock
     {
     public:
-        DrawLock (view::SlideSorterView& rView);
+        DrawLock (view::SlideSorterView& rView, const SharedSdWindow& rpWindow);
         DrawLock (SlideSorter& rSlideSorter);
         ~DrawLock (void);
     private:
         view::SlideSorterView& mrView;
+        SharedSdWindow mpWindow;
     };
 
 protected:
@@ -231,7 +227,6 @@ private:
     bool mbPageObjectVisibilitiesValid;
     ::boost::shared_ptr<cache::PageCache> mpPreviewCache;
     ::boost::shared_ptr<LayeredDevice> mpLayeredDevice;
-    ::boost::shared_ptr<ViewOverlay> mpViewOverlay;
     Range maVisiblePageRange;
     bool mbModelChangedWhileModifyEnabled;
     Size maPreviewSize;
@@ -242,6 +237,7 @@ private:
     sal_Int32 mnButtonUnderMouse;
     ::boost::shared_ptr<PageObjectPainter> mpPageObjectPainter;
     ::boost::shared_ptr<SelectionPainter> mpSelectionPainter;
+    Region maRedrawRegion;
 
     /** Determine the visibility of all page objects.
     */

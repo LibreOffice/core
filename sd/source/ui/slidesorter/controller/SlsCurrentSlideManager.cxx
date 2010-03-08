@@ -51,7 +51,9 @@ using namespace ::com::sun::star::uno;
 
 using namespace ::sd::slidesorter::model;
 
+
 namespace sd { namespace slidesorter { namespace controller {
+
 
 CurrentSlideManager::CurrentSlideManager (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),

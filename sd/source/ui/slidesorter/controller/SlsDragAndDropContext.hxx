@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: SlsSelectionFunction.cxx,v $
- * $Revision: 1.37 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -34,8 +31,9 @@
 #include <tools/gen.hxx>
 
 #include "model/SlsSharedPageDescriptor.hxx"
-#include "view/SlsViewOverlay.hxx"
 #include "controller/SlsInsertionIndicatorHandler.hxx"
+#include <vector>
+
 
 namespace sd { namespace slidesorter {
 class SlideSorter;
@@ -45,27 +43,27 @@ class SlideSorter;
 
 namespace sd { namespace slidesorter { namespace controller {
 
+class Transferable;
 
-/** A SubstitutionHandler object handles the display of a number of selected
-    slides at the mouse position and the insertion or (with or without
-    removing the pages at their original position) when the object is
-    destoyed.
+
+/** A DragAndDropContext object handles an active drag and drop operation.
+    When the mouse is moved from one slide sorter window to another the
+    target SlideSorter object is exchanged accordingly.
 */
-class SubstitutionHandler
+class DragAndDropContext
 {
 public:
-    /** Create a substitution display of the currently selected pages and
-        use the given position as the anchor point.
+    /** Create a substitution display of the currently selected pages or,
+        when provided, the pages in the transferable.
     */
-    SubstitutionHandler (
+    DragAndDropContext (
         SlideSorter& rSlideSorter,
-        const model::SharedPageDescriptor& rpHitDescriptor,
-        const Point& rMouseModelPosition);
-    ~SubstitutionHandler (void);
+        const Transferable* pTransferable);
+    ~DragAndDropContext (void);
 
     /** Call this method (for example as reaction to ESC key press) to avoid
         processing (ie moving or inserting) the substition when the called
-        SubstitutionHandler object is destroyed.
+        DragAndDropContext object is destroyed.
     */
     void Dispose (void);
 
@@ -90,6 +88,16 @@ private:
     SlideSorter* mpTargetSlideSorter;
     model::SharedPageDescriptor mpHitDescriptor;
     sal_Int32 mnInsertionIndex;
+
+    void GetPagesFromBookmarks (
+        ::std::vector<const SdPage*>& rPages,
+        sal_Int32& rnSelectionCount,
+        DrawDocShell* pDocShell,
+        const List& rBookmarks) const;
+    void GetPagesFromSelection (
+        ::std::vector<const SdPage*>& rPages,
+        sal_Int32& rnSelectionCount,
+        model::PageEnumeration& rSelection) const;
 
     /** Move the substitution display of the currently selected pages.
     */

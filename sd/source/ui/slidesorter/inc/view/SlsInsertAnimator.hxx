@@ -38,6 +38,9 @@
 
 namespace sd { namespace slidesorter { namespace view {
 
+class InsertPosition;
+
+
 /** Animate the positions of page objects to make room at the insert
     position while a move or copy operation takes place.
 */
@@ -51,8 +54,7 @@ public:
         icon.
     */
     void SetInsertPosition (
-        const sal_Int32 nPageIndex,
-        const Pair& rVisualInsertionIndices,
+        const InsertPosition& rInsertPosition,
         const Size& rIconSize);
 
     void Reset (void);

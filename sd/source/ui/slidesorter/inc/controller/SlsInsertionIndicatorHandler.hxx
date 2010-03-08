@@ -33,6 +33,8 @@
 
 #include "view/SlsInsertAnimator.hxx"
 
+#include "view/SlsLayouter.hxx"
+
 namespace sd { namespace slidesorter { class SlideSorter; } }
 namespace sd { namespace slidesorter { namespace model {
 class PageEnumeration;
@@ -44,6 +46,8 @@ class InsertionIndicatorOverlay;
 
 
 namespace sd { namespace slidesorter { namespace controller {
+
+class Transferable;
 
 
 /** Manage the visibility and location of the insertion indicator.  Its
@@ -60,13 +64,16 @@ public:
 
     /** Activate the insertion marker at the given coordinates.
     */
-    void Start (
-        const Point& rMouseModelPosition,
-        const Mode eMode,
-        const bool bIsOverSourceView);
+    void Start (const bool bIsOverSourceView);
 
-    void UpdateIndicatorIcon (model::PageEnumeration& rEnumeration);
-    void UpdateIndicatorIcon (void);
+    /** Deactivate the insertion marker.
+    */
+    void End (void);
+
+    /** Update the indicator icon from the current transferable (from the
+        clipboard or an active drag and drop operation.)
+    */
+    void UpdateIndicatorIcon (const Transferable* pTransferable);
 
     /** Set the position of the insertion marker to the given coordinates.
     */
@@ -76,10 +83,6 @@ public:
     void UpdatePosition (
         const Point& rMouseModelPosition,
         const sal_Int8 nDndAction);
-
-    /** Deactivate the insertion marker.
-    */
-    void End (void);
 
     /** Return whether the insertion marker is active.
     */
@@ -96,14 +99,15 @@ public:
         would be the case when the selection is not consecutive or would be
         moved to a position outside and not adjacent to the selection.
     */
-    bool IsInsertionTrivial (const Mode eMode) const;
+    bool IsInsertionTrivial (
+        const sal_Int32 nInsertionIndex,
+        const Mode eMode) const;
 
 private:
     SlideSorter& mrSlideSorter;
     ::boost::shared_ptr<view::InsertAnimator> mpInsertAnimator;
     ::boost::shared_ptr<view::InsertionIndicatorOverlay> mpInsertionIndicatorOverlay;
-    sal_Int32 mnInsertionIndex;
-    Pair maVisualInsertionIndices;
+    view::InsertPosition maInsertPosition;
     Mode meMode;
     bool mbIsInsertionTrivial;
     bool mbIsActive;

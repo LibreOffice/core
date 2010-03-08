@@ -33,8 +33,8 @@
 #include "controller/SlsInsertionIndicatorHandler.hxx"
 #include "controller/SlsProperties.hxx"
 #include "view/SlideSorterView.hxx"
-#include "view/SlsViewOverlay.hxx"
 #include "view/SlsLayouter.hxx"
+#include "view/SlsInsertionIndicatorOverlay.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageEnumerationProvider.hxx"
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
@@ -49,10 +49,8 @@ namespace sd { namespace slidesorter { namespace controller {
 InsertionIndicatorHandler::InsertionIndicatorHandler (SlideSorter& rSlideSorter)
     : mrSlideSorter(rSlideSorter),
       mpInsertAnimator(),
-      mpInsertionIndicatorOverlay(
-          mrSlideSorter.GetView().GetOverlay().GetInsertionIndicatorOverlay()),
-      mnInsertionIndex(-1),
-      maVisualInsertionIndices(-1,-1),
+      mpInsertionIndicatorOverlay(new view::InsertionIndicatorOverlay(rSlideSorter)),
+      maInsertPosition(),
       meMode(MoveMode),
       mbIsActive(false),
       mbIsReadOnly(mrSlideSorter.GetModel().IsReadOnly()),
@@ -71,10 +69,7 @@ InsertionIndicatorHandler::~InsertionIndicatorHandler (void)
 
 
 
-void InsertionIndicatorHandler::Start (
-    const Point& rMouseModelPosition,
-    const Mode eMode,
-    const bool bIsOverSourceView)
+void InsertionIndicatorHandler::Start (const bool bIsOverSourceView)
 {
     if (mbIsActive)
     {
@@ -85,8 +80,6 @@ void InsertionIndicatorHandler::Start (
     if (mbIsReadOnly)
         return;
 
-    SetPosition(rMouseModelPosition, eMode);
-
     mbIsActive = true;
     mbIsOverSourceView = bIsOverSourceView;
 }
@@ -94,19 +87,27 @@ void InsertionIndicatorHandler::Start (
 
 
 
-void InsertionIndicatorHandler::UpdateIndicatorIcon (
-    model::PageEnumeration& rEnumeration)
+void InsertionIndicatorHandler::End (void)
 {
-    mpInsertionIndicatorOverlay->Create(rEnumeration);
-    maIconSize = mpInsertionIndicatorOverlay->GetSize();
+    if ( ! mbIsActive)
+        return;
+
+    if (mbIsReadOnly)
+        return;
+
+    GetInsertAnimator()->Reset();
+
+    mbIsActive = false;
+    mpInsertionIndicatorOverlay->Hide();
 }
 
 
 
 
-void InsertionIndicatorHandler::UpdateIndicatorIcon (void)
+void InsertionIndicatorHandler::UpdateIndicatorIcon (const Transferable* pTransferable)
 {
-    mpInsertionIndicatorOverlay->Create();
+    mpInsertionIndicatorOverlay->Create(pTransferable);
+    maIconSize = mpInsertionIndicatorOverlay->GetSize();
 }
 
 
@@ -152,24 +153,6 @@ void InsertionIndicatorHandler::UpdatePosition (
 
 
 
-void InsertionIndicatorHandler::End (void)
-{
-    if ( ! mbIsActive)
-        return;
-
-    if (mbIsReadOnly)
-        return;
-
-    GetInsertAnimator()->SetInsertPosition(-1, Pair(-1,-1), Size(0,0));
-
-    mbIsActive = false;
-    mpInsertionIndicatorOverlay->SetIsVisible(false);
-    GetInsertAnimator()->Reset();
-}
-
-
-
-
 bool InsertionIndicatorHandler::IsActive (void) const
 {
     return mbIsActive;
@@ -183,7 +166,7 @@ sal_Int32 InsertionIndicatorHandler::GetInsertionPageIndex (void) const
     if (mbIsReadOnly)
         return -1;
     else
-        return mnInsertionIndex;
+        return maInsertPosition.GetIndex();
 }
 
 
@@ -197,54 +180,31 @@ void InsertionIndicatorHandler::SetPosition (
     view::Layouter& rLayouter (mrSlideSorter.GetView().GetLayouter());
     USHORT nPageCount ((USHORT)mrSlideSorter.GetModel().GetPageCount());
 
-    sal_Int32 nInsertionIndex (mnInsertionIndex);
-    Pair aVisualInsertionIndices (maVisualInsertionIndices);
-    if (rLayouter.GetColumnCount() == 1)
-    {
-        // Pages are placed in a single column.  Insertion indicator is
-        // placed between rows.
-        nInsertionIndex = rLayouter.GetVerticalInsertionIndex(rPoint);
-        aVisualInsertionIndices = Pair(nInsertionIndex, -1);
-    }
-    else
-    {
-        // Pages are placed in a grid.  Insertion indicator is placed
-        // between columns.
-        aVisualInsertionIndices = rLayouter.GetGridInsertionIndices(rPoint);
-        nInsertionIndex = aVisualInsertionIndices.A() * rLayouter.GetColumnCount()
-            + aVisualInsertionIndices.B();
-        if (aVisualInsertionIndices.B() == rLayouter.GetColumnCount())
-            --nInsertionIndex;
-    }
+    const view::InsertPosition aInsertPosition (rLayouter.GetInsertPosition(
+        rPoint,
+        maIconSize));
 
-    if (mnInsertionIndex != nInsertionIndex
-        || maVisualInsertionIndices != aVisualInsertionIndices
+    if (maInsertPosition != aInsertPosition
         || meMode != eMode
         || ! mpInsertionIndicatorOverlay->IsVisible())
     {
-        mnInsertionIndex = nInsertionIndex;
-        maVisualInsertionIndices = aVisualInsertionIndices;
+        maInsertPosition = aInsertPosition;
         meMode = eMode;
-        mbIsInsertionTrivial = IsInsertionTrivial(eMode);
+        mbIsInsertionTrivial = IsInsertionTrivial(maInsertPosition.GetIndex(), eMode);
 
-        const Point aIndicatorLocation (
-            rLayouter.GetInsertionIndicatorLocation(
-                maVisualInsertionIndices,
-                maIconSize));
-        mpInsertionIndicatorOverlay->SetLocation(aIndicatorLocation);
-
-        if (mnInsertionIndex>=0 && ! mbIsInsertionTrivial)
+        if (maInsertPosition.GetIndex()>=0 && ! mbIsInsertionTrivial)
         {
+            mpInsertionIndicatorOverlay->SetLocation(maInsertPosition.GetLocation());
+
             GetInsertAnimator()->SetInsertPosition(
-                mnInsertionIndex,
-                maVisualInsertionIndices,
+                maInsertPosition,
                 maIconSize);
-            mpInsertionIndicatorOverlay->SetIsVisible(true);
+            mpInsertionIndicatorOverlay->Show();
         }
         else
         {
             GetInsertAnimator()->Reset();
-            mpInsertionIndicatorOverlay->SetIsVisible(false);
+            mpInsertionIndicatorOverlay->Hide();
         }
     }
 }
@@ -262,7 +222,9 @@ void InsertionIndicatorHandler::SetPosition (
 
 
 
-bool InsertionIndicatorHandler::IsInsertionTrivial (const Mode eMode) const
+bool InsertionIndicatorHandler::IsInsertionTrivial (
+    const sal_Int32 nInsertionIndex,
+    const Mode eMode) const
 {
     if (eMode == CopyMode)
         return false;
@@ -302,7 +264,7 @@ bool InsertionIndicatorHandler::IsInsertionTrivial (const Mode eMode) const
     // to check that the insertion position is not directly in front or
     // directly behind the selection and thus moving the selection there
     // would not change the model.
-    if (mnInsertionIndex<nFirstIndex || mnInsertionIndex>(nLastIndex+1))
+    if (nInsertionIndex<nFirstIndex || nInsertionIndex>(nLastIndex+1))
         return false;
 
     return true;

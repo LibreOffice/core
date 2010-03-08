@@ -46,12 +46,12 @@
 #include "controller/SlsScrollBarManager.hxx"
 #include "controller/SlsSelectionManager.hxx"
 #include "controller/SlsSlotManager.hxx"
+#include "controller/SlsTransferable.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageEnumerationProvider.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "view/SlideSorterView.hxx"
 #include "view/SlsLayouter.hxx"
-#include "view/SlsViewOverlay.hxx"
 #include "view/SlsFontProvider.hxx"
 #include "view/SlsPageObjectLayouter.hxx"
 #include "view/SlsPageObjectPainter.hxx"
@@ -209,6 +209,7 @@ SlideSorterController::~SlideSorterController (void)
 void SlideSorterController::Dispose (void)
 {
     mpInsertionIndicatorHandler->End();
+    mpSelectionManager.reset();
     mpAnimator->Dispose();
 }
 
@@ -439,11 +440,12 @@ bool SlideSorterController::Command (
                 // When there is no selection, then we show the insertion
                 // indicator so that the user knows where a page insertion
                 // would take place.
-                GetInsertionIndicatorHandler()->Start(
+                GetInsertionIndicatorHandler()->Start(false);
+                GetInsertionIndicatorHandler()->UpdatePosition(
                     pWindow->PixelToLogic(rEvent.GetMousePosPixel()),
-                    InsertionIndicatorHandler::MoveMode,
-                    false);
-                GetInsertionIndicatorHandler()->UpdateIndicatorIcon();
+                    InsertionIndicatorHandler::MoveMode);
+                GetInsertionIndicatorHandler()->UpdateIndicatorIcon(
+                    dynamic_cast<Transferable*>(SD_MOD()->pTransferClip));
             }
 
             pWindow->ReleaseMouse();
@@ -786,6 +788,9 @@ Rectangle  SlideSorterController::Rearrange (bool bForce)
 {
     Rectangle aNewContentArea (maTotalWindowArea);
 
+    if (aNewContentArea.IsEmpty())
+        return aNewContentArea;
+
     SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
     if (pWindow)
     {
@@ -812,6 +817,9 @@ Rectangle  SlideSorterController::Rearrange (bool bForce)
         // Adapt the scroll bars to the new zoom factor of the browser
         // window and the arrangement of the page objects.
         GetScrollBarManager().UpdateScrollBars(false, !bForce);
+
+        // When there is a selection then keep it in the visible area.
+        GetSelectionManager()->MakeSelectionVisible();
     }
 
     return aNewContentArea;
@@ -845,7 +853,7 @@ void SlideSorterController::SetZoom (long int nZoom)
         nZoom = 1;
 
     {
-        SlideSorterView::DrawLock aLock (mrView);
+        SlideSorterView::DrawLock aLock (mrSlideSorter);
         mrView.GetLayouter().SetZoom(nZoom/100.0);
         mrView.Layout();
         GetScrollBarManager().UpdateScrollBars (false);

@@ -52,6 +52,7 @@ SLOFILES =      							\
     $(SLO)$/SlsAnimationFunction.obj	    \
     $(SLO)$/SlsClipboard.obj	    		\
     $(SLO)$/SlsCurrentSlideManager.obj	    \
+    $(SLO)$/SlsDragAndDropContext.obj		\
     $(SLO)$/SlsFocusManager.obj				\
     $(SLO)$/SlsInsertionIndicatorHandler.obj\
     $(SLO)$/SlsListener.obj					\
@@ -62,7 +63,6 @@ SLOFILES =      							\
     $(SLO)$/SlsSelectionFunction.obj		\
     $(SLO)$/SlsSelectionManager.obj	    	\
     $(SLO)$/SlsSlotManager.obj				\
-    $(SLO)$/SlsSubstitutionHandler.obj		\
     $(SLO)$/SlsTransferable.obj
 
 # --- Tagets -------------------------------------------------------

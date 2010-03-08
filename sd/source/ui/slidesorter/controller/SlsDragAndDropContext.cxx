@@ -6,9 +6,6 @@
  *
  * OpenOffice.org - a multi-platform office productivity suite
  *
- * $RCSfile: SlsSelectionFunction.cxx,v $
- * $Revision: 1.37 $
- *
  * This file is part of OpenOffice.org.
  *
  * OpenOffice.org is free software: you can redistribute it and/or modify
@@ -30,59 +27,98 @@
 
 #include "precompiled_sd.hxx"
 
-#include "SlsSubstitutionHandler.hxx"
+#include "SlsDragAndDropContext.hxx"
 
 #include "SlideSorter.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageEnumerationProvider.hxx"
 #include "view/SlideSorterView.hxx"
-#include "view/SlsViewOverlay.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsInsertionIndicatorHandler.hxx"
 #include "controller/SlsScrollBarManager.hxx"
 #include "controller/SlsProperties.hxx"
 #include "controller/SlsSelectionFunction.hxx"
 #include "controller/SlsSelectionManager.hxx"
+#include "controller/SlsTransferable.hxx"
+#include "DrawDocShell.hxx"
+#include "DrawDoc.hxx"
 #include "app.hrc"
 #include <sfx2/bindings.hxx>
 #include <boost/bind.hpp>
 
 namespace sd { namespace slidesorter { namespace controller {
 
-SubstitutionHandler::SubstitutionHandler (
+DragAndDropContext::DragAndDropContext (
     SlideSorter& rSlideSorter,
-    const model::SharedPageDescriptor& rpHitDescriptor,
-    const Point& rMouseModelPosition)
+    const Transferable* pTransferable)
     : mpTargetSlideSorter(&rSlideSorter),
-      mpHitDescriptor(rpHitDescriptor),
       mnInsertionIndex(-1)
 {
+    ::std::vector<const SdPage*> aPages;
+
     // No Drag-and-Drop for master pages.
     if (rSlideSorter.GetModel().GetEditMode() != EM_PAGE)
         return;
 
-    view::ViewOverlay& rOverlay (rSlideSorter.GetView().GetOverlay());
+    rSlideSorter.GetController().GetInsertionIndicatorHandler()->UpdateIndicatorIcon(
+        dynamic_cast<Transferable*>(SD_MOD()->pTransferDrag));
+}
 
-    if ( ! rOverlay.GetSubstitutionOverlay()->IsVisible())
+
+
+
+void DragAndDropContext::GetPagesFromBookmarks (
+    ::std::vector<const SdPage*>& rPages,
+    sal_Int32& rnSelectionCount,
+    DrawDocShell* pDocShell,
+    const List& rBookmarks) const
+{
+    if (pDocShell == NULL)
+        return;
+
+    const SdDrawDocument* pDocument = pDocShell->GetDoc();
+    if (pDocument == NULL)
+        return;
+
+    for (ULONG nIndex=0,nCount=rBookmarks.Count(); nIndex<nCount; ++nIndex)
     {
-        // Show a new substitution for the selected page objects.
-        model::PageEnumeration aSelectedPages(
-            model::PageEnumerationProvider::CreateSelectedPagesEnumeration(
-                rSlideSorter.GetModel()));
-        rOverlay.GetSubstitutionOverlay()->SetIsVisible(true);
-        rSlideSorter.GetController().GetInsertionIndicatorHandler()->Start(
-            rMouseModelPosition,
-            InsertionIndicatorHandler::MoveMode,
-            true);
-        rSlideSorter.GetController().GetInsertionIndicatorHandler()->UpdateIndicatorIcon(
-            aSelectedPages);
+        const String sPageName (*static_cast<String*>(rBookmarks.GetObject(nIndex)));
+        BOOL bIsMasterPage (FALSE);
+        const USHORT nPageIndex (pDocument->GetPageByName(sPageName, bIsMasterPage));
+        if (nPageIndex == SDRPAGE_NOTFOUND)
+            continue;
+
+        const SdPage* pPage = dynamic_cast<const SdPage*>(pDocument->GetPage(nPageIndex));
+        if (pPage != NULL)
+            rPages.push_back(pPage);
+    }
+    rnSelectionCount = rBookmarks.Count();
+}
+
+
+
+
+void DragAndDropContext::GetPagesFromSelection (
+    ::std::vector<const SdPage*>& rPages,
+    sal_Int32& rnSelectionCount,
+    model::PageEnumeration& rSelection) const
+{
+    // Show a new substitution for the selected page objects.
+    rnSelectionCount = 0;
+
+    while (rSelection.HasMoreElements())
+    {
+        model::SharedPageDescriptor pDescriptor (rSelection.GetNextElement());
+        if (rPages.size() < 3)
+            rPages.push_back(pDescriptor->GetPage());
+        ++rnSelectionCount;
     }
 }
 
 
 
 
-SubstitutionHandler::~SubstitutionHandler (void)
+DragAndDropContext::~DragAndDropContext (void)
 {
     if (mpTargetSlideSorter != NULL)
         mpTargetSlideSorter->GetController().GetScrollBarManager().StopAutoScroll();
@@ -91,18 +127,14 @@ SubstitutionHandler::~SubstitutionHandler (void)
 
     if (mpTargetSlideSorter != NULL)
     {
-        view::ViewOverlay& rOverlay (mpTargetSlideSorter->GetView().GetOverlay());
-        rOverlay.GetSubstitutionOverlay()->SetIsVisible(false);
-        rOverlay.GetSubstitutionOverlay()->Clear();
         mpTargetSlideSorter->GetController().GetInsertionIndicatorHandler()->End();
     }
-    mpHitDescriptor.reset();
 }
 
 
 
 
-void SubstitutionHandler::Dispose (void)
+void DragAndDropContext::Dispose (void)
 {
     mnInsertionIndex = -1;
 }
@@ -110,7 +142,7 @@ void SubstitutionHandler::Dispose (void)
 
 
 
-void SubstitutionHandler::UpdatePosition (
+void DragAndDropContext::UpdatePosition (
     const Point& rMousePosition,
     const InsertionIndicatorHandler::Mode eMode,
     const bool bAllowAutoScroll)
@@ -126,39 +158,28 @@ void SubstitutionHandler::UpdatePosition (
     // constant while scrolling.)
     SharedSdWindow pWindow (mpTargetSlideSorter->GetContentWindow());
     const Point aMouseModelPosition (pWindow->PixelToLogic(rMousePosition));
+    ::boost::shared_ptr<InsertionIndicatorHandler> pInsertionIndicatorHandler (
+        mpTargetSlideSorter->GetController().GetInsertionIndicatorHandler());
 
     if ( ! (bAllowAutoScroll
             && mpTargetSlideSorter->GetController().GetScrollBarManager().AutoScroll(
-        rMousePosition,
-        ::boost::bind(
-            &SubstitutionHandler::UpdatePosition,
-            this,
-            rMousePosition,
-            eMode,
-            false))))
+                rMousePosition,
+                ::boost::bind(
+                    &DragAndDropContext::UpdatePosition, this, rMousePosition, eMode, false))))
     {
-        view::ViewOverlay& rOverlay (mpTargetSlideSorter->GetView().GetOverlay());
-
-        // Move the existing substitution to the new position.
-        rOverlay.GetSubstitutionOverlay()->SetPosition(aMouseModelPosition);
-
-        mpTargetSlideSorter->GetController().GetInsertionIndicatorHandler()->UpdatePosition(
-            aMouseModelPosition,
-            eMode);
+        pInsertionIndicatorHandler->UpdatePosition(aMouseModelPosition, eMode);
 
         // Remember the new insertion index.
-        if (mpTargetSlideSorter->GetController().GetInsertionIndicatorHandler()->IsInsertionTrivial(eMode))
+        mnInsertionIndex = pInsertionIndicatorHandler->GetInsertionPageIndex();
+        if (pInsertionIndicatorHandler->IsInsertionTrivial(mnInsertionIndex, eMode))
             mnInsertionIndex = -1;
-        else
-            mnInsertionIndex = mpTargetSlideSorter->GetController().GetInsertionIndicatorHandler()
-                ->GetInsertionPageIndex();
     }
 }
 
 
 
 
-void SubstitutionHandler::Process (void)
+void DragAndDropContext::Process (void)
 {
     if (mpTargetSlideSorter == NULL)
         return;
@@ -183,31 +204,21 @@ void SubstitutionHandler::Process (void)
 
 
 
-void SubstitutionHandler::Show (void)
+void DragAndDropContext::Show (void)
 {
-    if (mpTargetSlideSorter != NULL)
-    {
-        view::ViewOverlay& rOverlay (mpTargetSlideSorter->GetView().GetOverlay());
-        rOverlay.GetSubstitutionOverlay()->SetIsVisible(true);
-    }
 }
 
 
 
 
-void SubstitutionHandler::Hide (void)
+void DragAndDropContext::Hide (void)
 {
-    if (mpTargetSlideSorter != NULL)
-    {
-        view::ViewOverlay& rOverlay (mpTargetSlideSorter->GetView().GetOverlay());
-        rOverlay.GetSubstitutionOverlay()->SetIsVisible(false);
-    }
 }
 
 
 
 
-void SubstitutionHandler::SetTargetSlideSorter (
+void DragAndDropContext::SetTargetSlideSorter (
     SlideSorter* pSlideSorter,
     const Point aMousePosition,
     const InsertionIndicatorHandler::Mode eMode,
@@ -223,9 +234,11 @@ void SubstitutionHandler::SetTargetSlideSorter (
     if (mpTargetSlideSorter != NULL)
     {
         mpTargetSlideSorter->GetController().GetInsertionIndicatorHandler()->Start(
-            aMousePosition,
-            eMode,
             bIsOverSourceView);
+        mpTargetSlideSorter->GetController().GetInsertionIndicatorHandler()->UpdatePosition(
+            aMousePosition,
+            eMode);
+
     }
 }
 
