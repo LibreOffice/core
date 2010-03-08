@@ -543,7 +543,7 @@ public:
 
                             // XExternalDocLink
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XExternalSheetCache >
-        SAL_CALL addSheetCache( const ::rtl::OUString& aSheetName )
+        SAL_CALL addSheetCache( const ::rtl::OUString& aSheetName, sal_Bool bDynamicCache )
             throw (::com::sun::star::uno::RuntimeException);
 
                             // XNameAccess
