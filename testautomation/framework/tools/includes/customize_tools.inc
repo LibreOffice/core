@@ -33,21 +33,10 @@
 
 function hToolsCustomizeOpen() as boolean
 
-    const CFN = "hToolsCustomizeOpen::"
-    hToolsCustomizeOpen() = FALSE
-
     printlog( "Open Tools/Customize dialog" )
-
     ToolsCustomize
-    hToolsCustomizeSelectTab( "Events" )
+    hToolsCustomizeOpen() = hToolsCustomizeSelectTab( "Events" )
     
-    Kontext TabCustomizeEvents
-    if ( TabCustomizeEvents.exists( 2 ) ) then
-        hToolsCustomizeOpen() = TRUE
-    else
-        warnlog( CFN & "Unable to open Tools/Customize dialog" )
-    endif
-
 end function
 
 '*******************************************************************************
@@ -78,13 +67,14 @@ function hToolsCustomizeSelectTab( cTab as string ) as boolean
     '///<ul>
     
     const CFN = "hToolsCustomizeSelectTab::"
-    dim brc as boolean
-        brc = false
+    dim brc as boolean : brc = false
 
     ctab = lcase( ctab )
 
     '///+<li>Switch to one of the four available tabpages</li>
     '///<ol>
+
+    printlog( "Open Tools/Customize: <" & ctab & ">" )
     kontext
     
     try
@@ -93,27 +83,19 @@ function hToolsCustomizeSelectTab( cTab as string ) as boolean
         '///+<li>Keyboard</li>
         case "keyboard"    : active.setPage TabTastatur 
                              kontext "TabTastatur"
-                             if ( Aendern.isVisible() ) then
-                                 brc = true
-                             endif
+                             if ( Aendern.isVisible() ) then brc = true
         '///+<li>Menu</li>
         case "menu"        : active.setPage TabCustomizeMenu 
                              kontext "TabCustomizeMenu"
-                             if ( Entries.isVisible() ) then
-                                 brc = true
-                             endif
+                             if ( Entries.isVisible() ) then brc = true
         '///+<li>Toolbars</li>
         case "toolbars"    : active.setPage TabCustomizeToolbars 
                              kontext "TabCustomizeToolbars"
-                             if ( ToolbarContents.isVisible() ) then
-                                 brc = true
-                             endif
+                             if ( ToolbarContents.isVisible() ) then brc = true
         '///+<li>Events</li>
         case "events"      : active.setPage TabCustomizeEvents 
                              kontext "TabCustomizeEvents"
-                             if ( AssignMacro.isVisible() ) then
-                                 brc = true
-                             endif 
+                             if ( AssignMacro.isVisible() ) then brc = true
         end select
         '///</ol>
         
@@ -124,11 +106,7 @@ function hToolsCustomizeSelectTab( cTab as string ) as boolean
         
     endcatch
 
-    if ( brc ) then
-        printlog( CFN & "Opened Tab: " & cTab )
-    else
-        printlog( CFN & "Failed to open Tab: " & cTab )
-    endif
+    if ( not brc ) then printlog( CFN & "Failed to open Tab: " & cTab )
     
     '///+<li>Return TRUE on success</li>
     '///</ul>
