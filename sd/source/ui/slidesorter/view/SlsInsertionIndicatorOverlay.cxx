@@ -214,7 +214,7 @@ Point InsertionIndicatorOverlay::PaintRepresentatives (
     double nTransparency (0);
     for (sal_Int32 nIndex=2; nIndex>=0; --nIndex)
     {
-        if (rRepresentatives.size() <= nIndex)
+        if (rRepresentatives.size() <= sal_uInt32(nIndex))
             continue;
         switch(nIndex)
         {
