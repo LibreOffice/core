@@ -984,6 +984,8 @@ function hUseAsyncSlot( cSlot as string ) as integer
     dim iRetries as integer : iRetries = 0
     dim iTime as integer : iTime = 0
 
+    dim slot as string : slot = lcase( cSlot )
+
     const MAX_RETRIES    = 100 ' Number of time we try to call the slot
     const DELAY          = 100 ' 100ms delay to wait between retries
     const RETVAL_TIMEOUT = -1  ' Returnvalue if slot is not available
@@ -994,7 +996,7 @@ function hUseAsyncSlot( cSlot as string ) as integer
 
     for iRetries = 1 to MAX_RETRIES
         try
-            select case ( lcase( cSlot ) )
+            select case ( slot )
             case "fileclose"                      : FileClose
             case "filesaveas"                     : FileSaveAs( "SynchronMode", TRUE )
             case "filesaveall"                    : FileSaveAll( "SynchronMode", TRUE )
@@ -1080,7 +1082,7 @@ function hUseAsyncSlot( cSlot as string ) as integer
         catch
             wait( DELAY )
         endcatch
-    next iWait
+    next iRetries
 
     ' Total time used
     iTime = iRetries * DELAY
