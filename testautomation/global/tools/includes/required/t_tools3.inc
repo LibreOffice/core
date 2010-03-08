@@ -1096,7 +1096,7 @@ end function
 
 function hClickButton( oButton as object ) as integer
 
-    dim iWait as integer : iWait = 0
+    dim iRetries as integer : iWait = 0
     dim iTime as integer : iTime = 0
 
     const MAX_RETRIES    = 50  ' Try to click the button max 50 times
@@ -1104,10 +1104,10 @@ function hClickButton( oButton as object ) as integer
     const RETVAL_TIMEOUT = -1  ' Return -1 if the button is not available
     const CFN = "global::tools::includes::required::hClickButton(): "
 
-    if ( VERBOSE ) then printlog( CFN & "Click button: " & oButton.name() )
+    printlog( "Click button: <" & oButton.name() & ">" )
     WaitSlot()
 
-    for iWait = 1 to MAX_RETRIES
+    for iRetries = 1 to MAX_RETRIES
         try
             oButton.click()
             exit for
@@ -1117,9 +1117,9 @@ function hClickButton( oButton as object ) as integer
     next iWait
 
     ' Total time used
-    iTime = iWait * DELAY
+    iTime = iRetries * DELAY
 
-    if ( iTime = MAX_RETRIES * DELAY ) then iTime = RETVAL_TIMEOUT
+    if ( iWait = MAX_RETRIES ) then iTime = RETVAL_TIMEOUT
 
     if ( VERBOSE ) then printlog( CFN & "Exit with rc=" & iTime )
     hClickButton() = iTime
@@ -1146,9 +1146,9 @@ function hCloseDialog( oDialog as object, sUserFlags as string ) as boolean
     hCloseDialog() = FALSE ' Set default returnvalue, assume failure
 
     ' Find out which closing method was provided, "close" ist the default
-    if     ( instr( sFlags, "cancel" ) > 0 ) then
+    if ( instr( sFlags, "cancel" ) ) then
         iClosingMethod = METHOD_CANCEL
-    elseif ( instr( sFlags, "ok"     ) > 0 ) then
+    elseif ( instr( sFlags, "ok" ) ) then
         iClosingMethod = METHOD_OK
     else
         iClosingMethod = METHOD_CLOSE
