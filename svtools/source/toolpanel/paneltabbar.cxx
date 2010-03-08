@@ -500,13 +500,18 @@ namespace svt
             (void)i_nPosition;
             bItemsDirty = true;
             rTabBar.Invalidate();
+
+            UpdateScrollButtons();
         }
 
         virtual void PanelRemoved( const size_t i_nPosition )
         {
-            (void)i_nPosition;
             bItemsDirty = true;
             rTabBar.Invalidate();
+
+            if ( i_nPosition <= m_nScrollPosition )
+                --m_nScrollPosition;
+            UpdateScrollButtons();
         }
 
         virtual void ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive );
