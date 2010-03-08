@@ -1115,7 +1115,7 @@ function hClickButton( oButton as object ) as integer
         catch
             wait( DELAY )
         endcatch
-    next iWait
+    next iRetries
 
     ' Total time used
     iTime = iRetries * DELAY
