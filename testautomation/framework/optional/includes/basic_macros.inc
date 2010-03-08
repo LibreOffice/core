@@ -325,25 +325,24 @@ testcase tMakro_Dialog
     kontext "makro"
     iPos = hSelectTheLastNode( MakroAus )
     
-    try
-        printlog( "Assign the macro, Tools/customize dialog should open" )
-        Zuordnen.Click ()
-    catch
+    printlog( "Assign the macro, Tools/customize dialog should open" )
+    if ( not hClickButton( Zuordnen ) ) then
         warnlog( "#i106853# Assign-Button is disabled or macro is missing" )
-    endcatch
+    endif
 
     printlog( "Activate all tapages and cancel the Tools/Customize dialog" )
     
     brc = hToolsCustomizeSelectTab( "menu" )
-    brc = hToolsCustomizeSelectTab( "keyboard" 
+    brc = hToolsCustomizeSelectTab( "keyboard" )
     if ( not brc ) then
         qaerrorlog( "#i61765# Keyboard tab missing when called via Tools/Macros->Assign" )
     endif
     brc = hToolsCustomizeSelectTab( "events" )
     brc = hToolsCustomizeSelectTab( "toolbars" )
 
-    printlog( "Cancel Tools/Customize dialog -> Macro Organizer should be open" )    
-    brc = hToolsCustomizeClose( 2 )
+    printlog( "Cancel Tools/Customize dialog -> Macro Organizer should be open" )
+    kontext "TabCustomizeToolbars"
+    hCloseDialog( TabCustomizeToolbars, "cancel" )
     
     
     printlog "Click to run macro"

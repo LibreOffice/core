@@ -34,7 +34,6 @@
 testcase tUpdtCustomize( cApp as string )
 
     printlog( "Tools/Customize dialog" )
-    const CLOSE_METHOD = 1 ' 1 = Cancel button
 
     if ( hCreateDocument() ) then    
         if ( hToolsCustomizeOpen() ) then
@@ -42,7 +41,7 @@ testcase tUpdtCustomize( cApp as string )
             hUpdtToolsCustomizeMenu()
             hUpdtToolsCustomizeToolbars()
             hUpdtToolsCustomizeEvents()
-            hToolsCustomizeClose( CLOSE_METHOD )
+            hCloseDialog( TabCustomizeEvents, "cancel" )
         else
             warnlog( "Tools/Customize dialog did not open" )
         endif

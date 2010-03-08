@@ -138,61 +138,6 @@ end function
 
 '*******************************************************************************
 
-function hToolsCustomizeClose( iMode as integer  ) as boolean
-
-    '///<h3>Close the ToolsCustomize-Dialog</h3>
-    '///<i>Starting point: Tools/Customize dialog</i><br>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Closing mode (integer)</li>
-    '///<ul>
-    '///+<li>1: Use OK-button</li>
-    '///+<li>2: Use Cancel-button</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Errorstatus (boolean)</li>
-    '///<ul>
-    '///+<li>TRUE if executing close action succeeded</li>
-    '///+<li>FALSE on any other condition</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
-    
-    const CFN = "hToolsCustomizeClose::"
-    hToolsCustomizeClose() = FALSE
-
-    kontext 
-
-    '///+<li>Switch to the Events page by default</li>
-    active.setPage( TabCustomizeEvents )
-    
-    '///+<li>Close dialog by OK or CANCEL</li>
-    '///<ol>
-    select case iMode
-    '///+<li>OK</li>
-    case 1 : TabCustomizeEvents.OK()
-    '///+<li>Cancel</li>
-    case 2 : TabCustomizeEvents.Cancel()
-    case else
-        brc = false
-    end select
-    '///</ol>
-    
-    '///+<li>Verify that the dialog has indeed been closed</li>
-    kontext "TabCustomizeEvents"
-    if ( TabCustomizeEvents.notExists( 3 ) ) then
-        hToolsCustomizeClose() = TRUE
-    else
-        warnlog( "Unable to close Tools/Customize dialog" )
-    endif
-
-end function
-
-'*******************************************************************************
-
 function hDeselectSeparator() as integer
 
     '///<h3>Make sure that we do not work on a separator item (Toolbars)</h3>
