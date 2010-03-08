@@ -521,7 +521,7 @@ void PropertyMapper::getPreparedTextShapePropertyLists(
 
     // use a line-joint showing the border of thick lines like two rectangles
     // filled in between.
-    aValueMap[C2U("LineJoint")] <<= drawing::LineJoint_MITER;
+    aValueMap[C2U("LineJoint")] <<= drawing::LineJoint_ROUND;
 
     PropertyMapper::getMultiPropertyListsFromValueMap( rPropNames, rPropValues, aValueMap );
 }
