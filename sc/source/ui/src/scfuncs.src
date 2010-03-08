@@ -1027,7 +1027,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            Text [ en-US ] = "An interger between 1583 and 9956, or 0 and 99 (19xx or 20xx depending on the option set).";
+            Text [ en-US ] = "An integer between 1583 and 9956, or 0 and 99 (19xx or 20xx depending on the option set).";
         };
     };
      // -=*# Resource for function BW #*=-
@@ -4067,7 +4067,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Array transposition. Exchanges the rows and columns of an aray." ;
+            Text [ en-US ] = "Array transposition. Exchanges the rows and columns of an array." ;
         };
         ExtraData =
         {
@@ -4727,7 +4727,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            Text [ en-US ] = "Value 1; value 2;.. .are 1 to 30 arguments representing a sample taken from a basic total population.";
+            Text [ en-US ] = "Value 1; value 2; ... are 1 to 30 arguments representing a sample taken from a basic total population.";
         };
     };
      // -=*# Resource for function VARIANZEN #*=-
@@ -4823,7 +4823,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            Text [ en-US ] = "Value 1; value 2;.. .are 1 to 30 arguments representing a sample taken from a basic total population.";
+            Text [ en-US ] = "Value 1; value 2; ... are 1 to 30 arguments representing a sample taken from a basic total population.";
         };
     };
      // -=*# Resource for function STABWN #*=-
@@ -4919,7 +4919,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            Text [ en-US ] = "Value 1; value 2;.. .are 1 to 30 arguments representing a sample taken from a basic total population.";
+            Text [ en-US ] = "Value 1; value 2; ... are 1 to 30 arguments representing a sample taken from a basic total population.";
         };
     };
      // -=*# Resource for function SUMQUADABW #*=-
@@ -6361,7 +6361,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 7 // Description of Parameter 3
         {
-            Text [ en-US ] = "Mode = 1calculates the one-tailed test, 2 = two-tailed distribution." ;
+            Text [ en-US ] = "Mode = 1 calculates the one-tailed test, 2 = two-tailed distribution." ;
         };
     };
      // -=*# Resource for function TINV #*=-
@@ -7528,7 +7528,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 9 // Description of Parameter 4
         {
-            Text [ en-US ] = "if the value is TRUE or not given, the search column of the array must be sorted in ascending order." ;
+            Text [ en-US ] = "If the value is TRUE or not given, the search column of the array must be sorted in ascending order." ;
         };
     };
      // -=*# Resource for function INDEX #*=-
@@ -8712,7 +8712,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 9 // Description of Parameter 4
         {
-            Text [ en-US ] = "Which occurence of the old text is to be replaced." ;
+            Text [ en-US ] = "Which occurrence of the old text is to be replaced." ;
         };
     };
      // -=*# Resource for function BASIS #*=-
