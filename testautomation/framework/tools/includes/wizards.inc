@@ -182,8 +182,7 @@ function hFinishWizard( iMode as integer ) as boolean
 
     dim cAccel as string
     dim iWait as integer
-    dim brc as boolean 
-        brc = false
+    dim brc as boolean : brc = false
        
         
     '///+<li>Try to close the wizard</li>
@@ -538,24 +537,19 @@ function hHandleSaveError() as integer
     '///<li>Close the dialog either with YES or OK</li>
     '///</ul>
     
-    dim iErr as integer
-
     kontext "active"
     if ( active.exists( 2 ) ) then
         printlog( CFN & "Unexpected MsgBox: " & active.getText() )
         try
             active.ok()
-            iErr = 2
+            hHandleSaveError() = 2
         catch
             active.yes()
-            iErr = 1
+            hHandleSaveError() = 1
         endcatch
     else
-        iErr = 0
+        hHandleSaveError() = 0
     endif
-    
-    hHandleSaveError() = iErr
-    
     
 end function
 
@@ -583,35 +577,18 @@ function hClickNextButton() as boolean
 
 
     const CFN = "hClickNextButton::"
-    dim irc as integer
-    dim brc as boolean
-        brc = false
-    dim iBreak as integer
-        iBreak = 0
+    hClickNextButton() = true
 
     '///+<li>Click the &quot;Next&quot;-button</li>
-    irc = hWaitForObject( NextButton, 5000 )
-    if ( irc >= 0 ) then
-        printlog( CFN & "Next..." )
-        NextButton.click()
-        brc = true
+    if ( hClickButton( NextButton ) = -1 ) then
+        hClickNextButton() = false
     else
-        qaerrorlog( CFN & "Button not available within specified time -> bad" )
-    endif
-    
-    '///+<li>Handle the &quot;Document Creation&quot;-dialog (Mailmerge Wizard)</li>
-    kontext "active"
-    do while ( active.exists( 1 ) )
-        iBreak = iBreak + 1
-        printlog( CFN & "Waiting for document creation to complete..." )
-        if ( iBreak = 10 ) then
-            warnlog( "DocumentCreation (MailMergeWizard) not complete within 10 seconds" )
-            brc = false
-            exit do
+        '///+<li>Handle the &quot;Document Creation&quot;-dialog (Mailmerge Wizard)</li>
+        kontext "active"
+        if ( active.exists( 1 ) ) then
+            if ( not active.notExists( 10 ) ) then hClickNextButton() = false
         endif
-    loop
-    
-    hClickNextButton() = brc
+    endif
     '///</ul>
             
 end function
