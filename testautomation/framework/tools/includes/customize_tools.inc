@@ -67,8 +67,7 @@ function hToolsCustomizeSelectTab( cTab as string ) as boolean
     '///<ul>
     
     const CFN = "hToolsCustomizeSelectTab::"
-    dim brc as boolean : brc = false
-
+    hToolsCustomizeSelectTab() = true
     ctab = lcase( ctab )
 
     '///+<li>Switch to one of the four available tabpages</li>
@@ -78,39 +77,50 @@ function hToolsCustomizeSelectTab( cTab as string ) as boolean
     kontext
     
     try
-
         select case ctab
         '///+<li>Keyboard</li>
-        case "keyboard"    : active.setPage TabTastatur 
-                             kontext "TabTastatur"
-                             if ( Aendern.isVisible() ) then brc = true
+        case "keyboard"    : 
+            active.setPage TabTastatur
+            WaitSlot
+            kontext "TabTastatur"
+            if ( not Aendern.isVisible() ) then
+                printlog( CFN & "Keyboard tabpage is not available" )
+                hToolsCustomizeSelectTab() = false
+            endif
         '///+<li>Menu</li>
-        case "menu"        : active.setPage TabCustomizeMenu 
-                             kontext "TabCustomizeMenu"
-                             if ( Entries.isVisible() ) then brc = true
+        case "menu"        : 
+            active.setPage TabCustomizeMenu
+            WaitSlot
+            kontext "TabCustomizeMenu"
+            if ( not Entries.isVisible() ) then
+                printlog( CFN & "Menu tabpage is not available" )
+                hToolsCustomizeSelectTab() = false
+            endif
         '///+<li>Toolbars</li>
-        case "toolbars"    : active.setPage TabCustomizeToolbars 
-                             kontext "TabCustomizeToolbars"
-                             if ( ToolbarContents.isVisible() ) then brc = true
+        case "toolbars"    : 
+            active.setPage TabCustomizeToolbars
+            WaitSlot
+            kontext "TabCustomizeToolbars"
+            if ( not ToolbarContents.isVisible() ) then
+                printlog( CFN & "Toolbar tabpage is not available" )
+                hToolsCustomizeSelectTab() = false
+            endif
         '///+<li>Events</li>
-        case "events"      : active.setPage TabCustomizeEvents 
-                             kontext "TabCustomizeEvents"
-                             if ( AssignMacro.isVisible() ) then brc = true
+        case "events"      : 
+            active.setPage TabCustomizeEvents
+            WaitSlot
+            kontext "TabCustomizeEvents"
+            if ( not AssignMacro.isVisible() ) then
+                printlog( CFN & "Assign Macro tabpage is not available" )
+                hToolsCustomizeSelectTab() = false
+            endif
         end select
         '///</ol>
-        
     catch
-    
         printlog( CFN & "Could not access requested tabpage" )
-        brc = false
-        
+        hToolsCustomizeSelectTab() = false
     endcatch
-
-    if ( not brc ) then printlog( CFN & "Failed to open Tab: " & cTab )
-    
-    '///+<li>Return TRUE on success</li>
     '///</ul>
-    hToolsCustomizeSelectTab() = brc
     
 end function
 
