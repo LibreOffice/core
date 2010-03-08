@@ -230,7 +230,23 @@ model::SharedPageDescriptor SlideSorterController::GetPageAt (
     sal_Int32 nHitPageIndex (mrView.GetPageIndexAtPoint(aPixelPosition));
     model::SharedPageDescriptor pDescriptorAtPoint;
     if (nHitPageIndex >= 0)
+    {
         pDescriptorAtPoint = mrModel.GetPageDescriptor(nHitPageIndex);
+
+        if (pDescriptorAtPoint
+            && mrSlideSorter.GetProperties()->IsOnlyPreviewTriggersMouseOver()
+            && ! pDescriptorAtPoint->HasState(PageDescriptor::ST_Selected))
+        {
+            // Make sure that the mouse is over the preview area.
+            if ( ! mrView.GetLayouter().GetPageObjectLayouter()->GetBoundingBox(
+                pDescriptorAtPoint,
+                view::PageObjectLayouter::Preview,
+                view::PageObjectLayouter::WindowCoordinateSystem).IsInside(aPixelPosition))
+            {
+                pDescriptorAtPoint.reset();
+            }
+        }
+    }
 
     return pDescriptorAtPoint;
 }

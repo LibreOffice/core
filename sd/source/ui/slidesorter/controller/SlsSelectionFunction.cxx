@@ -194,13 +194,10 @@ public:
 
     EventDescriptor (
         sal_uInt32 nEventType,
-        const MouseEvent& rEvent,
+        const Point& rMousePosition,
         SlideSorter& rSlideSorter);
     EventDescriptor (
         const KeyEvent& rEvent,
-        SlideSorter& rSlideSorter);
-    EventDescriptor (
-        const AcceptDropEvent& rEvent,
         SlideSorter& rSlideSorter);
     EventDescriptor (const EventDescriptor& rDescriptor);
 
@@ -262,7 +259,7 @@ BOOL SelectionFunction::MouseButtonDown (const MouseEvent& rEvent)
     aMDPos = rEvent.GetPosPixel();
     mbProcessingMouseButtonDown = true;
 
-    mpWindow->CaptureMouse();
+    //  mpWindow->CaptureMouse();
 
     ProcessMouseEvent(BUTTON_DOWN, rEvent);
 
@@ -312,9 +309,6 @@ BOOL SelectionFunction::MouseButtonUp (const MouseEvent& rEvent)
 {
     mrController.GetScrollBarManager().StopAutoScroll ();
 
-    // #95491# remember button state for creation of own MouseEvents
-    SetMouseButtonCode (rEvent.GetButtons());
-
     ProcessMouseEvent(BUTTON_UP, rEvent);
 
     mbProcessingMouseButtonDown = false;
@@ -326,8 +320,12 @@ BOOL SelectionFunction::MouseButtonUp (const MouseEvent& rEvent)
 
 
 
-void SelectionFunction::MouseDragged (const AcceptDropEvent& rEvent)
+void SelectionFunction::MouseDragged (
+    const AcceptDropEvent& rEvent,
+    const sal_Int8 nDragAction)
 {
+    const InsertionIndicatorHandler::Mode eMode (
+        InsertionIndicatorHandler::GetModeFromDndAction(nDragAction));//rEvent.mnAction));
     if (rEvent.mbLeaving)
     {
         if (mpDragAndDropContext)
@@ -346,14 +344,12 @@ void SelectionFunction::MouseDragged (const AcceptDropEvent& rEvent)
         mrController.GetInsertionIndicatorHandler()->Start(
             pDragTransferable != NULL
             && pDragTransferable->GetView()==&mrSlideSorter.GetView());
-        mpDragAndDropContext->UpdatePosition(
-            rEvent.maPosPixel,
-            InsertionIndicatorHandler::GetModeFromDndAction(rEvent.mnAction));
+        mpDragAndDropContext->UpdatePosition(rEvent.maPosPixel, eMode);
     }
 
     // 1. Compute some frequently used values relating to the event.
     ::std::auto_ptr<EventDescriptor> pEventDescriptor (
-        new EventDescriptor(rEvent, mrSlideSorter));
+        new EventDescriptor(MOUSE_DRAG, rEvent.maPosPixel, mrSlideSorter));
 
     // 2. Detect whether we are dragging pages or dragging a selection rectangle.
     if (mpDragAndDropContext)
@@ -362,8 +358,7 @@ void SelectionFunction::MouseDragged (const AcceptDropEvent& rEvent)
         pEventDescriptor->mnEventCode |= MULTI_SELECTOR;
 
     // 3. Set the drag mode.
-    pEventDescriptor->SetDragMode(
-        InsertionIndicatorHandler::GetModeFromDndAction(rEvent.mnAction));
+    pEventDescriptor->SetDragMode(eMode);
 
     // 4. Process the event.
     if ( ! ProcessEvent(*pEventDescriptor))
@@ -687,6 +682,14 @@ void SelectionFunction::StartDrag (
     const Point& rMousePosition,
     const InsertionIndicatorHandler::Mode eMode)
 {
+    // Do not start a drag-and-drop operation when one is already active.
+    // (when dragging pages from one document into another, pressing a
+    // modifier key can trigger a MouseMotion event in the originating
+    // window (focus still in there).  Together with the mouse button pressed
+    // (drag-and-drop is active) this triggers the start of drag-and-drop.)
+    if (SD_MOD()->pTransferDrag != NULL)
+        return;
+
     if ( ! mrSlideSorter.GetProperties()->IsUIReadOnly())
     {
         if (mrSlideSorter.GetViewShell() != NULL)
@@ -817,7 +820,7 @@ void SelectionFunction::ProcessMouseEvent (sal_uInt32 nEventType, const MouseEve
 
     // 1. Compute some frequently used values relating to the event.
     ::std::auto_ptr<EventDescriptor> pEventDescriptor (
-        new EventDescriptor(nEventType, rEvent, mrSlideSorter));
+        new EventDescriptor(nEventType, rEvent.GetPosPixel(), mrSlideSorter));
 
     // 2. Compute a numerical code that describes the event and that is used
     // for fast look-up of the associated reaction.
@@ -1016,11 +1019,9 @@ void SelectionFunction::ProcessEventWhileDragActive (EventDescriptor& rDescripto
     // The substitution is visible.  Handle events accordingly.
     if (Match(rDescriptor.mnEventCode, MOUSE_MOTION | LEFT_BUTTON | SINGLE_CLICK))
     {
-        if ((rDescriptor.mnEventCode & CONTROL_MODIFIER) != 0)
-            StartDrag(rDescriptor.maMousePosition, InsertionIndicatorHandler::CopyMode);
-        mpDragAndDropContext->UpdatePosition(
-            rDescriptor.maMousePosition,
-            rDescriptor.meDragMode);
+        //        mpDragAndDropContext->UpdatePosition(
+        //            rDescriptor.maMousePosition,
+        //            rDescriptor.meDragMode);
     }
     else if (Match(rDescriptor.mnEventCode, MOUSE_DRAG))
     {
@@ -1176,6 +1177,10 @@ void SelectionFunction::ProcessMouseMotionEvent (const EventDescriptor& rDescrip
 {
     switch (rDescriptor.mnEventCode)
     {
+        case ANY_MODIFIER(MOUSE_MOTION | LEFT_BUTTON | SINGLE_CLICK | OVER_UNSELECTED_PAGE):
+            SetCurrentPage(rDescriptor.mpHitDescriptor);
+            // Fallthrough
+
         // A mouse motion without visible substitution starts that.
         case ANY_MODIFIER(MOUSE_MOTION | LEFT_BUTTON | SINGLE_CLICK | OVER_SELECTED_PAGE):
             StartDrag(
@@ -1305,19 +1310,16 @@ void SelectionFunction::ProcessButtonClick (
 
 SelectionFunction::EventDescriptor::EventDescriptor (
     sal_uInt32 nEventType,
-    const MouseEvent& rEvent,
+    const Point& rMousePosition,
     SlideSorter& rSlideSorter)
-    : maMousePosition(),
+    : maMousePosition(rMousePosition),
       maMouseModelPosition(),
       mpHitDescriptor(),
       mpHitPage(),
       mnEventCode(nEventType),
       mnButtonIndex(-1)
 {
-    SharedSdWindow pWindow (rSlideSorter.GetContentWindow());
-
-    maMousePosition = rEvent.GetPosPixel();
-    maMouseModelPosition = pWindow->PixelToLogic(maMousePosition);
+    maMouseModelPosition = rSlideSorter.GetContentWindow()->PixelToLogic(maMousePosition);
     mpHitDescriptor = rSlideSorter.GetController().GetPageAt(maMousePosition);
     if (mpHitDescriptor)
     {
@@ -1355,33 +1357,6 @@ SelectionFunction::EventDescriptor::EventDescriptor (
     }
 }
 
-
-
-
-
-SelectionFunction::EventDescriptor::EventDescriptor (
-    const AcceptDropEvent& rEvent,
-    SlideSorter& rSlideSorter)
-    : maMousePosition(rEvent.maPosPixel),
-      maMouseModelPosition(),
-      mpHitDescriptor(),
-      mpHitPage(),
-      mnEventCode(MOUSE_DRAG),
-      mnButtonIndex(-1),
-      meDragMode(InsertionIndicatorHandler::MoveMode),
-      mbMakeSelectionVisible(true)
-{
-    SharedSdWindow pWindow (rSlideSorter.GetContentWindow());
-
-    maMouseModelPosition = pWindow->PixelToLogic(maMousePosition);
-    model::SharedPageDescriptor pHitDescriptor (
-        rSlideSorter.GetController().GetPageAt(maMousePosition));
-    if (pHitDescriptor.get() != NULL)
-    {
-        mpHitDescriptor = pHitDescriptor;
-        mpHitPage = pHitDescriptor->GetPage();
-    }
-}
 
 
 

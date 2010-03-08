@@ -98,6 +98,9 @@ void InsertionIndicatorHandler::End (void)
     GetInsertAnimator()->Reset();
 
     mbIsActive = false;
+    maInsertPosition = view::InsertPosition();
+    meMode = UnknownMode;
+
     mpInsertionIndicatorOverlay->Hide();
 }
 
@@ -116,12 +119,12 @@ void InsertionIndicatorHandler::UpdateIndicatorIcon (const Transferable* pTransf
 InsertionIndicatorHandler::Mode InsertionIndicatorHandler::GetModeFromDndAction (
     const sal_Int8 nDndAction)
 {
-    switch (nDndAction & (ACTION_COPY | ACTION_MOVE | ACTION_LINK))
-    {
-        case ACTION_COPY: return CopyMode;
-        case ACTION_MOVE: return MoveMode;
-        default: return UnknownMode;
-    }
+    if ((nDndAction & ACTION_MOVE) != 0)
+        return MoveMode;
+    else if ((nDndAction & ACTION_COPY) != 0)
+        return CopyMode;
+    else
+        return UnknownMode;
 }
 
 
@@ -184,7 +187,8 @@ void InsertionIndicatorHandler::SetPosition (
 
     if (maInsertPosition != aInsertPosition
         || meMode != eMode
-        || ! mpInsertionIndicatorOverlay->IsVisible())
+        //        || ! mpInsertionIndicatorOverlay->IsVisible()
+        )
     {
         maInsertPosition = aInsertPosition;
         meMode = eMode;

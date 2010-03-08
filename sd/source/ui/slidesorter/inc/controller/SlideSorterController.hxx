@@ -114,7 +114,8 @@ public:
     SlideSorter& GetSlideSorter (void) const;
 
     /** Return the descriptor of the page that is rendered under the
-        given position.
+        given position.  This takes the IsOnlyPreviewTriggersMouseOver
+        property into account.
         @return
             Returns a pointer to a page descriptor instead of a
             reference because when no page is found at the position

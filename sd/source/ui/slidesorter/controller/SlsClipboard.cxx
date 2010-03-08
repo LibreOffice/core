@@ -528,13 +528,6 @@ sal_Int8 Clipboard::AcceptDrop (
     sal_Int8 nResult = DND_ACTION_NONE;
 
     const Clipboard::DropType eDropType (IsDropAccepted());
-    if (eDropType != DT_NONE)
-    {
-        FunctionReference rFunction (mrSlideSorter.GetViewShell()->GetCurrentFunction());
-        SelectionFunction* pSelectionFunction = dynamic_cast<SelectionFunction*>(rFunction.get());
-        if (pSelectionFunction != NULL)
-            pSelectionFunction->MouseDragged(rEvent);
-    }
 
     switch (eDropType)
     {
@@ -559,9 +552,10 @@ sal_Int8 Clipboard::AcceptDrop (
 
             // Show the insertion marker and the substitution for a drop.
             Point aPosition = pTargetWindow->PixelToLogic (rEvent.maPosPixel);
-            mrController.GetInsertionIndicatorHandler()->UpdatePosition(
-                aPosition,
-                rEvent.maDragEvent.DropAction);
+            SelectionFunction* pSelectionFunction = dynamic_cast<SelectionFunction*>(
+                mrSlideSorter.GetViewShell()->GetCurrentFunction().get());
+            if (pSelectionFunction != NULL)
+                pSelectionFunction->MouseDragged(rEvent, nResult);
 
             // Scroll the window when the mouse reaches the window border.
             //            mrController.GetScrollBarManager().AutoScroll (rEvent.maPosPixel);
@@ -617,7 +611,6 @@ sal_Int8 Clipboard::ExecuteDrop (
                 aEventModelPosition,
                 rEvent.mnAction);
             USHORT nIndex = DetermineInsertPosition(*pDragTransferable);
-            mrController.GetInsertionIndicatorHandler()->End();
 
             if (bContinue)
             {
@@ -650,6 +643,7 @@ sal_Int8 Clipboard::ExecuteDrop (
                     nResult = rEvent.mnAction;
                 }
             }
+            mrController.GetInsertionIndicatorHandler()->End();
 
             // Notify the receiving selection function that drag-and-drop is
             // finished and the substitution handler can be released.

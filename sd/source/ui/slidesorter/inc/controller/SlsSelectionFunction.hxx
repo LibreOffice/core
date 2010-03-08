@@ -94,7 +94,9 @@ public:
     */
     virtual bool cancel();
 
-    void MouseDragged (const AcceptDropEvent& rEvent);
+    void MouseDragged (
+        const AcceptDropEvent& rEvent,
+        const sal_Int8 nDragAction);
 
     /** Turn of substitution display and insertion indicator.
     */

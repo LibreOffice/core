@@ -117,6 +117,13 @@ public:
     bool IsUIReadOnly (void) const;
     void SetUIReadOnly (const bool bIsUIReadOnly);
 
+    /** The mouse over effect (and whether a mouse motion starts a multi
+        selection or a drag-and-drop) can be triggered by just the preview
+        area or the whole page object area.
+    */
+    bool IsOnlyPreviewTriggersMouseOver (void) const;
+    void SetOnlyPreviewTriggersMouseOver (const bool bFlag);
+
 private:
     bool mbIsHighlightCurrentSlide;
     bool mbIsShowSelection;
@@ -129,6 +136,7 @@ private:
     Color maSelectionColor;
     Color maHighlightColor;
     bool mbIsUIReadOnly;
+    bool mbIsOnlyPreviewTriggersMouseOver;
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

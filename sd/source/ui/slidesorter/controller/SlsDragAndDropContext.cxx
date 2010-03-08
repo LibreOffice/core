@@ -241,5 +241,4 @@ void DragAndDropContext::SetTargetSlideSorter (
 }
 
 
-
 } } } // end of namespace ::sd::slidesorter::controller

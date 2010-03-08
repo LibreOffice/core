@@ -47,7 +47,8 @@ Properties::Properties (void)
       maTextColor(Application::GetSettings().GetStyleSettings().GetActiveTextColor()),
       maSelectionColor(Application::GetSettings().GetStyleSettings().GetHighlightColor()),
       maHighlightColor(Application::GetSettings().GetStyleSettings().GetMenuHighlightColor()),
-      mbIsUIReadOnly(false)
+      mbIsUIReadOnly(false),
+      mbIsOnlyPreviewTriggersMouseOver(true)
 {
 }
 
@@ -242,6 +243,22 @@ bool Properties::IsUIReadOnly (void) const
 void Properties::SetUIReadOnly (const bool bIsUIReadOnly)
 {
     mbIsUIReadOnly = bIsUIReadOnly;
+}
+
+
+
+
+bool Properties::IsOnlyPreviewTriggersMouseOver (void) const
+{
+    return mbIsOnlyPreviewTriggersMouseOver;
+}
+
+
+
+
+void Properties::SetOnlyPreviewTriggersMouseOver (const bool bFlag)
+{
+    mbIsOnlyPreviewTriggersMouseOver = bFlag;
 }
 
 
