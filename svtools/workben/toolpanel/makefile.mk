@@ -50,7 +50,6 @@ OBJFILES=   $(OBJ)$/toolpaneltest.obj
 
 APP1TARGET= $(TARGET)
 APP1OBJS=   $(OBJFILES)
-APP1LIBS=   $(SLB)/toolpanel.lib
 APP1STDLIBS=\
             $(VCLLIB)           \
             $(UCBHELPERLIB)     \
