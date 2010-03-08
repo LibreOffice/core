@@ -98,20 +98,24 @@ static bool lcl_isExternalRefCache(const rtl::OUString& rName, rtl::OUString& rU
         const sal_Unicode c = p[i];
         if (i <= 7)
         {
+            // Checking the prefix 'file://'.
             if (c != aPrefix[i])
                 return false;
         }
-        else if (c == '#')
-        {
-            if (cPrev != '\'')
-                return false;
-
-            rUrl = aUrlBuf.makeStringAndClear();
-            rUrl = rUrl.copy(0, rUrl.getLength()-1); // remove the trailing single-quote.
-            bInUrl = false;
-        }
         else if (bInUrl)
-            aUrlBuf.append(c);
+        {
+            if (c == '#')
+            {
+                if (cPrev != '\'')
+                    return false;
+
+                rUrl = aUrlBuf.makeStringAndClear();
+                rUrl = rUrl.copy(0, rUrl.getLength()-1); // remove the trailing single-quote.
+                bInUrl = false;
+            }
+            else
+                aUrlBuf.append(c);
+        }
         else
             aTabNameBuf.append(c);
 
