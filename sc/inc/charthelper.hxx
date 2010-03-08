@@ -29,9 +29,11 @@
 #define SC_CHARTHELPER_HXX
 
 #include <tools/solar.h>
+#include "address.hxx"
 
 class ScDocument;
 class ScAddress;
+class ScRangeList;
 
 /** Use this to handle charts in a calc document
 */
@@ -40,6 +42,7 @@ class ScChartHelper
 public:
     static USHORT DoUpdateAllCharts( ScDocument* pDoc );
     static USHORT DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc ); //use this to replace ScDBFunc::DoUpdateCharts in future
+    static void AdjustRangesOfChartsOnDestinationPage( ScDocument* pSrcDoc, ScDocument* pDestDoc, const SCTAB nSrcTab, const SCTAB nDestTab );
 };
 
 #endif

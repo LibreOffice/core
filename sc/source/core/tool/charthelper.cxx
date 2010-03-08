@@ -31,17 +31,18 @@
 #include "charthelper.hxx"
 #include "document.hxx"
 #include "drwlayer.hxx"
+#include "rangelst.hxx"
+#include "chartlis.hxx"
 
 //#include <vcl/svapp.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
 
-/*
+#include <com/sun/star/chart2/data/XDataReceiver.hpp>
+
 using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::WeakReference;
-*/
 
 
 // ====================================================================
@@ -92,6 +93,37 @@ USHORT lcl_DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, BOOL bAllCha
     return nFound;
 }
 
+BOOL lcl_AdjustRanges( ScRangeList& rRanges, SCTAB nSourceTab, SCTAB nDestTab, SCTAB nTabCount )
+{
+    //! if multiple sheets are copied, update references into the other copied sheets?
+
+    BOOL bChanged = FALSE;
+
+    ULONG nCount = rRanges.Count();
+    for (ULONG i=0; i<nCount; i++)
+    {
+        ScRange* pRange = rRanges.GetObject(i);
+        if ( pRange->aStart.Tab() == nSourceTab && pRange->aEnd.Tab() == nSourceTab )
+        {
+            pRange->aStart.SetTab( nDestTab );
+            pRange->aEnd.SetTab( nDestTab );
+            bChanged = TRUE;
+        }
+        if ( pRange->aStart.Tab() >= nTabCount )
+        {
+            pRange->aStart.SetTab( nTabCount > 0 ? ( nTabCount - 1 ) : 0 );
+            bChanged = TRUE;
+        }
+        if ( pRange->aEnd.Tab() >= nTabCount )
+        {
+            pRange->aEnd.SetTab( nTabCount > 0 ? ( nTabCount - 1 ) : 0 );
+            bChanged = TRUE;
+        }
+    }
+
+    return bChanged;
+}
+
 }//end anonymous namespace
 
 // === ScChartHelper ======================================
@@ -106,4 +138,53 @@ USHORT ScChartHelper::DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc )
 USHORT ScChartHelper::DoUpdateAllCharts( ScDocument* pDoc )
 {
     return lcl_DoUpdateCharts( ScAddress(), pDoc, TRUE );
+}
+
+//static
+void ScChartHelper::AdjustRangesOfChartsOnDestinationPage( ScDocument* pSrcDoc, ScDocument* pDestDoc, const SCTAB nSrcTab, const SCTAB nDestTab )
+{
+    if( !pSrcDoc || !pDestDoc )
+        return;
+    ScDrawLayer* pDrawLayer = pDestDoc->GetDrawLayer();
+    if( !pDrawLayer )
+        return;
+
+    SdrPage* pDestPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nDestTab));
+    if( pDestPage )
+    {
+        SdrObjListIter aIter( *pDestPage, IM_FLAT );
+        SdrObject* pObject = aIter.Next();
+        while( pObject )
+        {
+            if( pObject->GetObjIdentifier() == OBJ_OLE2 && ((SdrOle2Obj*)pObject)->IsChart() )
+            {
+                String aChartName = ((SdrOle2Obj*)pObject)->GetPersistName();
+
+                Reference< chart2::XChartDocument > xChartDoc( pDestDoc->GetChartByName( aChartName ) );
+                Reference< chart2::data::XDataReceiver > xReceiver( xChartDoc, uno::UNO_QUERY );
+                if( xChartDoc.is() && xReceiver.is() && !xChartDoc->hasInternalDataProvider() )
+                {
+                    uno::Reference< chart2::XChartDocument > xChartDoc( pDestDoc->GetChartByName( aChartName ) );
+                    uno::Reference< chart2::data::XDataReceiver > xReceiver( xChartDoc, uno::UNO_QUERY );
+                    if( xChartDoc.is() && xReceiver.is() )
+                    {
+                        if( !xChartDoc->hasInternalDataProvider() )
+                        {
+                            ::std::vector< ScRangeList > aRangesVector;
+                            pDestDoc->GetChartRanges( aChartName, aRangesVector, pSrcDoc );
+
+                            ::std::vector< ScRangeList >::iterator aIt( aRangesVector.begin() );
+                            for( ; aIt!=aRangesVector.end(); aIt++ )
+                            {
+                                ScRangeList& rScRangeList( *aIt );
+                                lcl_AdjustRanges( rScRangeList, nSrcTab, nDestTab, pDestDoc->GetTableCount() );
+                            }
+                            pDestDoc->SetChartRanges( aChartName, aRangesVector );
+                        }
+                    }
+                }
+            }
+            pObject = aIter.Next();
+        }
+    }
 }
