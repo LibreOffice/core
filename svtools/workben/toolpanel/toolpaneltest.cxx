@@ -26,6 +26,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
+#include "svtools/ctrlbox.hxx"
 #include "svtools/toolpanel/toolpaneldeck.hxx"
 #include "svtools/toolpanel/tablayouter.hxx"
 
@@ -131,6 +132,7 @@ class ColoredPanel : public IToolPanel
 {
 public:
     ColoredPanel( Window& i_rParent, const Color& i_rColor, const sal_Char* i_pAsciiPanelName );
+    ColoredPanel( Window& i_rParent, const Color& i_rColor, const String& i_rPanelName );
     ~ColoredPanel();
 
     // IToolPanel
@@ -161,6 +163,18 @@ ColoredPanel::ColoredPanel( Window& i_rParent, const Color& i_rColor, const sal_
     :m_refCount(0)
     ,m_aWindow( i_rParent, i_rColor )
     ,m_aPanelName( ::rtl::OUString::createFromAscii( i_pAsciiPanelName ) )
+    ,m_aPanelIcon()
+{
+    Bitmap aBitmap( Size( 16, 16 ), 8 );
+    m_aPanelIcon = BitmapEx( aBitmap );
+    m_aPanelIcon.Erase( i_rColor );
+}
+
+//-----------------------------------------------------------------------------
+ColoredPanel::ColoredPanel( Window& i_rParent, const Color& i_rColor, const String& i_rPanelName )
+    :m_refCount(0)
+    ,m_aWindow( i_rParent, i_rColor )
+    ,m_aPanelName( i_rPanelName )
     ,m_aPanelIcon()
 {
     Bitmap aBitmap( Size( 16, 16 ), 8 );
@@ -257,9 +271,11 @@ private:
     DECL_LINK( OnListEntrySelected, ListBox* );
     DECL_LINK( OnListEntryDoubleClicked, ListBox* );
     DECL_LINK( OnButtonClicked, PushButton* );
+    DECL_LINK( OnEditModified, Edit* );
 
     void    impl_initPanelList();
     void    impl_updateRemoveButton();
+    void    impl_updateInsertButton();
 
 private:
     FixedLine       m_aAlignmentHeader;
@@ -274,6 +290,9 @@ private:
     FixedLine       m_aPanelsHeader;
     ListBox         m_aPanelList;
     PushButton      m_aRemovePanel;
+    ColorListBox    m_aColors;
+    Edit            m_aNewPanelName;
+    PushButton      m_aInsertPanel;
 };
 
 //=============================================================================
@@ -295,6 +314,7 @@ public:
 
     // member access
     IToolPanelDeck& GetToolPanelDeck();
+    PToolPanel      CreateToolPanel( const Color& i_rColor, const String& i_rPanelName );
 
 protected:
     virtual void    GetFocus();
@@ -321,17 +341,40 @@ OptionsWindow::OptionsWindow( PanelDemoMainWindow& i_rParent )
     ,m_aPanelsHeader( this )
     ,m_aPanelList( this )
     ,m_aRemovePanel( this )
+    ,m_aColors( this, WB_DROPDOWN )
+    ,m_aNewPanelName( this, WB_BORDER )
+    ,m_aInsertPanel( this )
 {
     SetBorderStyle( WINDOW_BORDER_MONO );
+
+    m_aColors.InsertEntry( Color( COL_BLACK ),         String( RTL_CONSTASCII_USTRINGPARAM( "Black" ) ) );
+    m_aColors.InsertEntry( Color( COL_BLUE ),          String( RTL_CONSTASCII_USTRINGPARAM( "Blue" ) ) );
+    m_aColors.InsertEntry( Color( COL_GREEN ),         String( RTL_CONSTASCII_USTRINGPARAM( "Green" ) ) );
+    m_aColors.InsertEntry( Color( COL_CYAN ),          String( RTL_CONSTASCII_USTRINGPARAM( "Cyan" ) ) );
+    m_aColors.InsertEntry( Color( COL_RED ),           String( RTL_CONSTASCII_USTRINGPARAM( "Red" ) ) );
+    m_aColors.InsertEntry( Color( COL_MAGENTA ),       String( RTL_CONSTASCII_USTRINGPARAM( "Magenta" ) ) );
+    m_aColors.InsertEntry( Color( COL_BROWN ),         String( RTL_CONSTASCII_USTRINGPARAM( "Brown" ) ) );
+    m_aColors.InsertEntry( Color( COL_GRAY ),          String( RTL_CONSTASCII_USTRINGPARAM( "Gray" ) ) );
+    m_aColors.InsertEntry( Color( COL_LIGHTGRAY ),     String( RTL_CONSTASCII_USTRINGPARAM( "LightGray" ) ) );
+    m_aColors.InsertEntry( Color( COL_LIGHTBLUE ),     String( RTL_CONSTASCII_USTRINGPARAM( "LightBlue" ) ) );
+    m_aColors.InsertEntry( Color( COL_LIGHTGREEN ),    String( RTL_CONSTASCII_USTRINGPARAM( "LightGreen" ) ) );
+    m_aColors.InsertEntry( Color( COL_LIGHTCYAN ),     String( RTL_CONSTASCII_USTRINGPARAM( "LightCyan" ) ) );
+    m_aColors.InsertEntry( Color( COL_LIGHTRED ),      String( RTL_CONSTASCII_USTRINGPARAM( "LightRed" ) ) );
+    m_aColors.InsertEntry( Color( COL_LIGHTMAGENTA ),  String( RTL_CONSTASCII_USTRINGPARAM( "LightMagenta" ) ) );
+    m_aColors.InsertEntry( Color( COL_YELLOW ),        String( RTL_CONSTASCII_USTRINGPARAM( "Yellow" ) ) );
+    m_aColors.InsertEntry( Color( COL_WHITE ),         String( RTL_CONSTASCII_USTRINGPARAM( "White" ) ) );
+    m_aColors.SetDropDownLineCount( 16 );
+
     Window* pControls[] =
     {
         &m_aAlignmentHeader, &m_aAlignLeft, &m_aAlignRight, &m_aTabItemContent, &m_aImagesAndText, &m_aImagesOnly,
-        &m_aTextOnly, &m_aAutomaticContent, &m_aPanelsHeader, &m_aPanelList, &m_aRemovePanel
+        &m_aTextOnly, &m_aAutomaticContent, &m_aPanelsHeader, &m_aPanelList, &m_aRemovePanel, &m_aColors,
+        &m_aNewPanelName, &m_aInsertPanel
     };
     const sal_Char* pTexts[] =
     {
         "Tab Bar Alignment", "Left", "Right", "Tab Items", "Images and Text", "Images only", "Text only", "Automatic",
-        "Panels", "", "Remove Panel"
+        "Panels", "", "Remove Panel", "", "", "Insert Panel"
     };
     for ( size_t i=0; i < sizeof( pControls ) / sizeof( pControls[0] ); ++i )
     {
@@ -343,7 +386,7 @@ OptionsWindow::OptionsWindow( PanelDemoMainWindow& i_rParent )
         if ( eWindowType == WINDOW_RADIOBUTTON )
             static_cast< RadioButton* >( pControls[i] )->SetToggleHdl( LINK( this, OptionsWindow, OnRadioToggled ) );
 
-        if ( eWindowType == WINDOW_LISTBOX )
+        if  ( eWindowType == WINDOW_LISTBOX )
         {
             static_cast< ListBox* >( pControls[i] )->SetSelectHdl( LINK( this, OptionsWindow, OnListEntrySelected ) );
             static_cast< ListBox* >( pControls[i] )->SetDoubleClickHdl( LINK( this, OptionsWindow, OnListEntryDoubleClicked ) );
@@ -352,6 +395,11 @@ OptionsWindow::OptionsWindow( PanelDemoMainWindow& i_rParent )
         if ( eWindowType == WINDOW_PUSHBUTTON )
         {
             static_cast< PushButton* >( pControls[i] )->SetClickHdl( LINK( this, OptionsWindow, OnButtonClicked ) );
+        }
+
+        if ( eWindowType == WINDOW_EDIT )
+        {
+            static_cast< Edit* >( pControls[i] )->SetModifyHdl( LINK( this, OptionsWindow, OnEditModified ) );
         }
     }
 
@@ -364,6 +412,12 @@ OptionsWindow::OptionsWindow( PanelDemoMainWindow& i_rParent )
 //-----------------------------------------------------------------------------
 OptionsWindow::~OptionsWindow()
 {
+}
+
+//-----------------------------------------------------------------------------
+void OptionsWindow::impl_updateInsertButton()
+{
+    m_aInsertPanel.Enable( ( m_aColors.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND ) && ( m_aNewPanelName.GetText().Len() > 0 ) );
 }
 
 //-----------------------------------------------------------------------------
@@ -388,6 +442,7 @@ void OptionsWindow::impl_initPanelList()
     ActivePanelChanged( ::boost::optional< size_t >(), rPanelDeck.GetActivePanel() );
 
     impl_updateRemoveButton();
+    impl_updateInsertButton();
 
     rPanelDeck.AddListener( *this );
 }
@@ -430,7 +485,9 @@ void OptionsWindow::Resize()
 
     const Size aSpacing( LogicToPixel( Size( 3, 3 ), MAP_APPFONT ) );
     const long nIndent( LogicToPixel( Size( 6, 9 ), MAP_APPFONT ).Width() );
-    const long nLineHeight( LogicToPixel( Size( 0, 8 ), MAP_APPFONT ).Height() );
+    const long nFixedLineHeight( LogicToPixel( Size( 0, 8 ), MAP_APPFONT ).Height() );
+    const long nEditLineHeight( LogicToPixel( Size( 0, 12 ), MAP_APPFONT ).Height() );
+    const long nButtonLineHeight( LogicToPixel( Size( 0, 14 ), MAP_APPFONT ).Height() );
 
     const long nSuperordinateWidth = aOutputSize.Width() - 2 * aSpacing.Width();
     const long nSuperordinateX = aSpacing.Width();
@@ -464,8 +521,11 @@ void OptionsWindow::Resize()
         ControlRow( m_aTextOnly,            true ),
         ControlRow( m_aAutomaticContent,    true ),
         ControlRow( m_aPanelsHeader,        false ),
-        ControlRow( m_aPanelList,           true, 8 ),
-        ControlRow( m_aRemovePanel,         true, 2 )
+        ControlRow( m_aPanelList,           true, 6 ),
+        ControlRow( m_aRemovePanel,         true ),
+        ControlRow( m_aColors,              true ),
+        ControlRow( m_aNewPanelName,        true ),
+        ControlRow( m_aInsertPanel,         true )
     };
     bool bPreviousWasSubordinate = false;
     for ( size_t i=0; i < sizeof( aControlRows ) / sizeof( aControlRows[0] ); ++i )
@@ -476,9 +536,25 @@ void OptionsWindow::Resize()
             aItemPos.Y() += aSpacing.Height();
         bPreviousWasSubordinate = aControlRows[i].bSubordinate;
 
+        // height depends on the window type
+        const WindowType eWindowType = aControlRows[i].pWindow->GetType();
+        long nControlHeight( nFixedLineHeight );
+        if  (   ( eWindowType == WINDOW_EDIT )
+            ||  ( eWindowType == WINDOW_LISTBOX )
+            )
+        {
+            nControlHeight = nEditLineHeight;
+        }
+        else
+        if  (   ( eWindowType == WINDOW_PUSHBUTTON )
+            )
+        {
+            nControlHeight = nButtonLineHeight;
+        }
+
         Size aControlSize(
             aControlRows[i].bSubordinate ? nSubordinateWidth : nSuperordinateWidth,
-            nLineHeight * aControlRows[i].nRows
+            nControlHeight * aControlRows[i].nRows
         );
         aControlRows[i].pWindow->SetPosSizePixel( aItemPos, aControlSize );
 
@@ -517,9 +593,17 @@ void OptionsWindow::Dying()
 }
 
 //-----------------------------------------------------------------------------
-IMPL_LINK( OptionsWindow, OnListEntrySelected, ListBox*, /*i_pListBox*/ )
+IMPL_LINK( OptionsWindow, OnListEntrySelected, ListBox*, i_pListBox )
 {
-    impl_updateRemoveButton();
+    if ( i_pListBox == &m_aColors )
+    {
+        m_aNewPanelName.SetText( m_aColors.GetEntry( m_aColors.GetSelectEntryPos()  ) );
+        impl_updateInsertButton();
+    }
+    else if ( i_pListBox == &m_aPanelList )
+    {
+        impl_updateRemoveButton();
+    }
     return 0L;
 }
 
@@ -536,6 +620,18 @@ IMPL_LINK( OptionsWindow, OnListEntryDoubleClicked, ListBox*, i_pListBox )
 
     return 0L;
 }
+
+//-----------------------------------------------------------------------------
+IMPL_LINK( OptionsWindow, OnEditModified, Edit*, i_pEdit )
+{
+    if ( i_pEdit && &m_aNewPanelName )
+    {
+        impl_updateInsertButton();
+    }
+
+    return 0L;
+}
+
 //-----------------------------------------------------------------------------
 IMPL_LINK( OptionsWindow, OnButtonClicked, PushButton*, i_pPushButton )
 {
@@ -544,6 +640,15 @@ IMPL_LINK( OptionsWindow, OnButtonClicked, PushButton*, i_pPushButton )
     if ( i_pPushButton == &m_aRemovePanel )
     {
         rController.GetToolPanelDeck().RemovePanel( size_t( m_aPanelList.GetSelectEntryPos() ) );
+    }
+    else if ( i_pPushButton == &m_aInsertPanel )
+    {
+        PToolPanel pNewPanel( rController.CreateToolPanel( m_aColors.GetEntryColor( m_aColors.GetSelectEntryPos() ), m_aNewPanelName.GetText() ) );
+
+        ::boost::optional< size_t > aActivePanel( rController.GetToolPanelDeck().GetActivePanel() );
+        size_t nNewPanelPos = !aActivePanel ? rController.GetToolPanelDeck().GetPanelCount() : *aActivePanel + 1;
+
+        rController.GetToolPanelDeck().InsertPanel( pNewPanel, nNewPanelPos );
     }
     return 0L;
 }
@@ -668,6 +773,12 @@ void PanelDemoMainWindow::SetTabItemContent( const TabItemContent i_eItemContent
 IToolPanelDeck& PanelDemoMainWindow::GetToolPanelDeck()
 {
     return m_aToolPanelDeck;
+}
+
+//-----------------------------------------------------------------------------
+PToolPanel PanelDemoMainWindow::CreateToolPanel( const Color& i_rColor, const String& i_rPanelName )
+{
+    return PToolPanel( new ColoredPanel( m_aToolPanelDeck, i_rColor, i_rPanelName ) );
 }
 
 //=============================================================================
