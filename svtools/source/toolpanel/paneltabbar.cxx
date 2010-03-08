@@ -509,7 +509,7 @@ namespace svt
             bItemsDirty = true;
             rTabBar.Invalidate();
 
-            if ( i_nPosition <= m_nScrollPosition )
+            if ( i_nPosition < m_nScrollPosition )
                 --m_nScrollPosition;
             UpdateScrollButtons();
         }
