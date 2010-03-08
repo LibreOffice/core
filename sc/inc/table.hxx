@@ -416,7 +416,6 @@ public:
     void        CalcAfterLoad();
     void        CompileAll();
     void        CompileXML( ScProgress& rProgress );
-    bool        MarkUsedExternalReferences();
 
     void        UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2,

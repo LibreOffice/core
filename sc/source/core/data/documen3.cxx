@@ -460,11 +460,8 @@ void ScDocument::MarkUsedExternalReferences()
     // Charts.
     bool bAllMarked = pExternalRefMgr->markUsedByLinkListeners();
     // Formula cells.
-    for (SCTAB nTab = 0; !bAllMarked && nTab < nMaxTableNumber; ++nTab)
-    {
-        if (pTab[nTab])
-            bAllMarked = pTab[nTab]->MarkUsedExternalReferences();
-    }
+    bAllMarked = pExternalRefMgr->markUsedExternalRefCells();
+
     /* NOTE: Conditional formats and validation objects are marked when
      * collecting them during export. */
 }

@@ -486,6 +486,8 @@ public:
      */
     bool markUsedByLinkListeners();
 
+    bool markUsedExternalRefCells();
+
     /**
      * Set all tables of a document as referenced, used only during
      * store-to-file.

@@ -1532,6 +1532,24 @@ bool ScExternalRefManager::markUsedByLinkListeners()
     return bAllMarked;
 }
 
+bool ScExternalRefManager::markUsedExternalRefCells()
+{
+    RefCellMap::iterator itr = maRefCells.begin(), itrEnd = maRefCells.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        RefCellSet::iterator itrCell = itr->second.begin(), itrCellEnd = itr->second.end();
+        for (; itrCell != itrCellEnd; ++itrCell)
+        {
+            ScFormulaCell* pCell = *itrCell;
+            bool bUsed = pCell->MarkUsedExternalReferences();
+            if (bUsed)
+                // Return true even only one cell references external documents.
+                return true;
+        }
+    }
+    return false;
+}
+
 bool ScExternalRefManager::setCacheDocReferenced( sal_uInt16 nFileId )
 {
     return maRefCache.setCacheDocReferenced( nFileId);

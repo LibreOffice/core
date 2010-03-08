@@ -1125,17 +1125,6 @@ void ScTable::CalcAfterLoad()
 }
 
 
-bool ScTable::MarkUsedExternalReferences()
-{
-    bool bAllMarked = false;
-    for (SCCOL i=0; i <= MAXCOL && !bAllMarked; ++i)
-    {
-        bAllMarked = aCol[i].MarkUsedExternalReferences();
-    }
-    return bAllMarked;
-}
-
-
 void ScTable::ResetChanged( const ScRange& rRange )
 {
     SCCOL nStartCol = rRange.aStart.Col();
