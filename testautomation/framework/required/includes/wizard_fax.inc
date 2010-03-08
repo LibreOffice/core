@@ -53,19 +53,19 @@ testcase tUpdtWizardFax
     
         kontext "AutopilotFax"    
         call DialogTest( AutopilotFax, 1 )
-        hClickNextButton()
+        hClickButton( NextButton )
 
         kontext "AutopilotFax"    
         call DialogTest( AutopilotFax, 2 )
-        hClickNextButton()
+        hClickButton( NextButton )
 
         kontext "AutopilotFax"    
         call DialogTest( AutopilotFax, 3 )
-        hClickNextButton()
+        hClickButton( NextButton )
 
         kontext "AutopilotFax"    
         call DialogTest( AutopilotFax, 4 )
-        hClickNextButton()
+        hClickButton( NextButton )
         
         kontext "AutopilotFax"
         call DialogTest( AutopilotFax, 5 )
@@ -81,9 +81,7 @@ testcase tUpdtWizardFax
         hWaitForObject( Speichern, 5000 )
        
         brc = hDestroyDocument()
-        if ( not brc ) then
-            qaerrorlog( "#i59233# The wizard does not display the new template" )
-        endif   
+        if ( not brc ) then qaerrorlog( "#i59233# The wizard does not display the new template" )
         
         printlog( "Delete the user-template: " & cTemplatePath )
         hDeleteFile( cTemplatePath )
@@ -92,9 +90,7 @@ testcase tUpdtWizardFax
         warnlog( "Fax wizard did not open/exceeded timeout" )
     endif
         
-    while( getDocumentCount() > 0 ) 
-        hDestroyDocument()
-    wend
+    hFileCloseAll()
     
     
 endcase
