@@ -374,7 +374,7 @@ public:
                 /// Including current, may return -1
     SCsROW      GetNextUnprotected( SCROW nRow, BOOL bUp ) const;
 
-    void        GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollection& rStrings);
+    void        GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollection& rStrings, bool& rHasDates);
     BOOL        GetDataEntries(SCROW nRow, TypedScStrCollection& rStrings, BOOL bLimit);
 
 //UNUSED2008-05  SCROW      NoteCount( SCROW nMaxRow = MAXROW ) const;

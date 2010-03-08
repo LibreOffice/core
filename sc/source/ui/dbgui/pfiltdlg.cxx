@@ -352,11 +352,12 @@ void ScPivotFilterDlg::UpdateValueList( USHORT nList )
                 SCROW   nFirstRow   = theQueryData.nRow1;
                 SCROW   nLastRow    = theQueryData.nRow2;
                 nFirstRow++;
+                bool bHasDates = false;
 
                 pEntryLists[nColumn] = new TypedScStrCollection( 128, 128 );
                 pEntryLists[nColumn]->SetCaseSensitive( aBtnCase.IsChecked() );
                 pDoc->GetFilterEntriesArea( nColumn, nFirstRow, nLastRow,
-                                            nTab, *pEntryLists[nColumn] );
+                                            nTab, *pEntryLists[nColumn], bHasDates );
             }
 
             TypedScStrCollection* pColl = pEntryLists[nColumn];

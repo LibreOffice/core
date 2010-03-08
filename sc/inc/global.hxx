@@ -799,6 +799,7 @@ struct ScQueryEntry
 {
     BOOL            bDoQuery;
     BOOL            bQueryByString;
+    bool            bQueryByDate;
     SCCOLROW        nField;
     ScQueryOp       eOp;
     ScQueryConnect  eConnect;

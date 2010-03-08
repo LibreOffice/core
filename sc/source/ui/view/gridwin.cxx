@@ -167,6 +167,7 @@ private:
     BOOL            bInit;
     BOOL            bCancelled;
     BOOL            bInSelect;
+    bool            mbListHasDates;
     ULONG           nSel;
     ScFilterBoxMode eMode;
 
@@ -190,6 +191,8 @@ public:
     BOOL            IsInInit() const        { return bInit; }
     void            SetCancelled()          { bCancelled = TRUE; }
     BOOL            IsInSelect() const      { return bInSelect; }
+    void            SetListHasDates(bool b) { mbListHasDates = b; }
+    bool            HasDates() const        { return mbListHasDates; }
 };
 
 //-------------------------------------------------------------------
@@ -205,6 +208,7 @@ ScFilterListBox::ScFilterListBox( Window* pParent, ScGridWindow* pGrid,
     bInit( TRUE ),
     bCancelled( FALSE ),
     bInSelect( FALSE ),
+    mbListHasDates(false),
     nSel( 0 ),
     eMode( eNewMode )
 {
@@ -879,7 +883,9 @@ void ScGridWindow::DoAutoFilterMenue( SCCOL nCol, SCROW nRow, BOOL bDataSelect )
         pFilterBox->SetSeparatorPos( nDefCount - 1 );
 
         //  get list entries
-        pDoc->GetFilterEntries( nCol, nRow, nTab, aStrings, true );
+        bool bHasDates = false;
+        pDoc->GetFilterEntries( nCol, nRow, nTab, true, aStrings, bHasDates);
+        pFilterBox->SetListHasDates(bHasDates);
 
         //  check widths of numerical entries (string entries are not included)
         //  so all numbers are completely visible
@@ -1089,7 +1095,7 @@ void ScGridWindow::FilterSelect( ULONG nSel )
             ExecDataSelect( nCol, nRow, aString );
             break;
         case SC_FILTERBOX_FILTER:
-            ExecFilter( nSel, nCol, nRow, aString );
+            ExecFilter( nSel, nCol, nRow, aString, pFilterBox->HasDates() );
             break;
         case SC_FILTERBOX_SCENARIO:
             pViewData->GetView()->UseScenario( aString );
@@ -1122,7 +1128,7 @@ void ScGridWindow::ExecDataSelect( SCCOL nCol, SCROW nRow, const String& rStr )
 
 void ScGridWindow::ExecFilter( ULONG nSel,
                                SCCOL nCol, SCROW nRow,
-                               const String& aValue )
+                               const String& aValue, bool bCheckForDates )
 {
     SCTAB nTab = pViewData->GetTabNo();
     ScDocument* pDoc = pViewData->GetDocument();
@@ -1194,6 +1200,7 @@ void ScGridWindow::ExecFilter( ULONG nSel,
                     rNewEntry.bDoQuery       = TRUE;
                     rNewEntry.bQueryByString = TRUE;
                     rNewEntry.nField         = nCol;
+                    rNewEntry.bQueryByDate   = bCheckForDates;
                     if ( nSel == SC_AUTOFILTER_TOP10 )
                     {
                         rNewEntry.eOp   = SC_TOPVAL;

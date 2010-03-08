@@ -87,6 +87,7 @@ private:
     SCCOLROW        nQueryField[MAXQUERY];
     ScQueryOp       eQueryOp[MAXQUERY];
     BOOL            bQueryByString[MAXQUERY];
+    bool            bQueryByDate[MAXQUERY];
     String*         pQueryStr[MAXQUERY];
     double          nQueryVal[MAXQUERY];
     ScQueryConnect  eQueryConnect[MAXQUERY];

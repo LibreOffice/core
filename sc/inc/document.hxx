@@ -1385,9 +1385,9 @@ public:
     void            GetUpperCellString(SCCOL nCol, SCROW nRow, SCTAB nTab, String& rStr);
 
     BOOL            GetFilterEntries( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                TypedScStrCollection& rStrings, bool bFilter = false );
+                                bool bFilter, TypedScStrCollection& rStrings, bool& rHasDates);
     SC_DLLPUBLIC BOOL           GetFilterEntriesArea( SCCOL nCol, SCROW nStartRow, SCROW nEndRow,
-                                SCTAB nTab, TypedScStrCollection& rStrings );
+                                SCTAB nTab, TypedScStrCollection& rStrings, bool& rHasDates );
     BOOL            GetDataEntries( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 TypedScStrCollection& rStrings, BOOL bLimit = FALSE );
     BOOL            GetFormulaEntries( TypedScStrCollection& rStrings );

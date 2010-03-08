@@ -1429,8 +1429,9 @@ BOOL ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
 }
 
 
-void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollection& rStrings)
+void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollection& rStrings, bool& rHasDates)
 {
+    bool bHasDates = false;
     SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
     String aString;
     SCROW nRow = 0;
@@ -1466,6 +1467,18 @@ void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollec
                     nValue = 0.0;
             }
 
+            if (pFormatter)
+            {
+                short nType = pFormatter->GetType(nFormat);
+                if ((nType & NUMBERFORMAT_DATE) && !(nType & NUMBERFORMAT_TIME))
+                {
+                    // special case for date values.  Disregard the time
+                    // element if the number format is of date type.
+                    nValue = ::rtl::math::approxFloor(nValue);
+                    bHasDates = true;
+                }
+            }
+
             pData = new TypedStrData( aString, nValue, SC_STRTYPE_VALUE );
         }
 #if 0 // DR
@@ -1484,6 +1497,8 @@ void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollec
 
         ++nIndex;
     }
+
+    rHasDates = bHasDates;
 }
 
 //

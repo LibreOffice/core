@@ -34,6 +34,7 @@
 #include <rtl/math.hxx>
 #include <unotools/textsearch.hxx>
 #include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
@@ -991,6 +992,35 @@ BOOL ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
             }
             else
                 nCellVal = GetValue( static_cast<SCCOL>(rEntry.nField), nRow );
+
+            /* NOTE: lcl_PrepareQuery() prepares a filter query such that if a
+             * date+time format was queried rEntry.bQueryByDate is not set. In
+             * case other queries wanted to use this mechanism they should do
+             * the same, in other words only if rEntry.nVal is an integer value
+             * rEntry.bQueryByDate should be true and the time fraction be
+             * stripped here. */
+            if (rEntry.bQueryByDate)
+            {
+                sal_uInt32 nNumFmt = GetNumberFormat(static_cast<SCCOL>(rEntry.nField), nRow);
+                const SvNumberformat* pEntry = pDocument->GetFormatTable()->GetEntry(nNumFmt);
+                if (pEntry)
+                {
+                    short nNumFmtType = pEntry->GetType();
+                    /* NOTE: Omitting the check for absence of
+                     * NUMBERFORMAT_TIME would include also date+time formatted
+                     * values of the same day. That may be desired in some
+                     * cases, querying all time values of a day, but confusing
+                     * in other cases. A user can always setup a standard
+                     * filter query for x >= date AND x < date+1 */
+                    if ((nNumFmtType & NUMBERFORMAT_DATE) && !(nNumFmtType & NUMBERFORMAT_TIME))
+                    {
+                        // The format is of date type.  Strip off the time
+                        // element.
+                        nCellVal = ::rtl::math::approxFloor(nCellVal);
+                    }
+                }
+            }
+
             switch (rEntry.eOp)
             {
                 case SC_EQUAL :
@@ -1395,6 +1425,23 @@ static void lcl_PrepareQuery( ScDocument* pDoc, ScTable* pTab, ScQueryParam& rPa
                 sal_uInt32 nIndex = 0;
                 rEntry.bQueryByString = !( pDoc->GetFormatTable()->
                     IsNumberFormat( *rEntry.pStr, nIndex, rEntry.nVal ) );
+                if (rEntry.bQueryByDate)
+                {
+                    if (!rEntry.bQueryByString && ((nIndex % SV_COUNTRY_LANGUAGE_OFFSET) != 0))
+                    {
+                        const SvNumberformat* pEntry = pDoc->GetFormatTable()->GetEntry(nIndex);
+                        if (pEntry)
+                        {
+                            short nNumFmtType = pEntry->GetType();
+                            if (!((nNumFmtType & NUMBERFORMAT_DATE) && !(nNumFmtType & NUMBERFORMAT_TIME)))
+                                rEntry.bQueryByDate = false;    // not a date only
+                        }
+                        else
+                            rEntry.bQueryByDate = false;    // what the ... not a date
+                    }
+                    else
+                        rEntry.bQueryByDate = false;    // not a date
+                }
             }
             else
             {
@@ -1778,12 +1825,13 @@ BOOL ScTable::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL /* nEndCol *
     return TRUE;
 }
 
-void ScTable::GetFilterEntries(SCCOL nCol, SCROW nRow1, SCROW nRow2, TypedScStrCollection& rStrings)
+void ScTable::GetFilterEntries(SCCOL nCol, SCROW nRow1, SCROW nRow2, TypedScStrCollection& rStrings, bool& rHasDates)
 {
-    aCol[nCol].GetFilterEntries( nRow1, nRow2, rStrings );
+    aCol[nCol].GetFilterEntries( nRow1, nRow2, rStrings, rHasDates );
 }
 
-void ScTable::GetFilteredFilterEntries( SCCOL nCol, SCROW nRow1, SCROW nRow2, const ScQueryParam& rParam, TypedScStrCollection& rStrings )
+void ScTable::GetFilteredFilterEntries(
+    SCCOL nCol, SCROW nRow1, SCROW nRow2, const ScQueryParam& rParam, TypedScStrCollection& rStrings, bool& rHasDates )
 {
     // remove the entry for this column from the query parameter
     ScQueryParam aParam( rParam );
@@ -1801,15 +1849,18 @@ void ScTable::GetFilteredFilterEntries( SCCOL nCol, SCROW nRow1, SCROW nRow2, co
 
     BOOL* pSpecial = new BOOL[nEntryCount];
     lcl_PrepareQuery( pDocument, this, aParam, pSpecial );
-
+    bool bHasDates = false;
     for ( SCROW j = nRow1; j <= nRow2; ++j )
     {
         if ( ValidQuery( j, aParam, pSpecial ) )
         {
-            aCol[nCol].GetFilterEntries( j, j, rStrings );
+            bool bThisHasDates = false;
+            aCol[nCol].GetFilterEntries( j, j, rStrings, bThisHasDates );
+            bHasDates |= bThisHasDates;
         }
     }
 
+    rHasDates = bHasDates;
     delete[] pSpecial;
 }
 

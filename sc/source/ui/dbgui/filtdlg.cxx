@@ -451,24 +451,27 @@ void ScFilterDlg::UpdateValueList( USHORT nList )
             SCCOL nColumn = theQueryData.nCol1 + static_cast<SCCOL>(nFieldSelPos) - 1;
             if (!pEntryLists[nColumn])
             {
+                USHORT nOffset = GetSliderPos();
                 SCTAB nTab       = nSrcTab;
                 SCROW nFirstRow = theQueryData.nRow1;
                 SCROW nLastRow   = theQueryData.nRow2;
+                mbHasDates[nOffset+nList-1] = false;
 
                 //  erstmal ohne die erste Zeile
 
                 pEntryLists[nColumn] = new TypedScStrCollection( 128, 128 );
                 pEntryLists[nColumn]->SetCaseSensitive( aBtnCase.IsChecked() );
                 pDoc->GetFilterEntriesArea( nColumn, nFirstRow+1, nLastRow,
-                                            nTab, *pEntryLists[nColumn] );
+                                            nTab, *pEntryLists[nColumn], mbHasDates[nOffset+nList-1] );
 
                 //  Eintrag fuer die erste Zeile
                 //! Eintrag (pHdrEntry) ohne Collection erzeugen?
 
                 nHeaderPos[nColumn] = USHRT_MAX;
                 TypedScStrCollection aHdrColl( 1, 1 );
+                bool bDummy = false;
                 pDoc->GetFilterEntriesArea( nColumn, nFirstRow, nFirstRow,
-                                            nTab, aHdrColl );
+                                            nTab, aHdrColl, bDummy );
                 TypedStrData* pHdrEntry = aHdrColl[0];
                 if ( pHdrEntry )
                 {
@@ -1064,7 +1067,8 @@ IMPL_LINK( ScFilterDlg, ValModifyHdl, ComboBox*, pEd )
                 static_cast<SCCOL>(nField) - 1) : static_cast<SCCOL>(0);
 
             ScQueryOp eOp  = (ScQueryOp)pLbCond->GetSelectEntryPos();
-           rEntry.eOp     = eOp;
+            rEntry.eOp     = eOp;
+            rEntry.bQueryByDate = mbHasDates[nQE];
 
         }
     }

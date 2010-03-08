@@ -201,7 +201,7 @@ private:
 
     BOOL            IsAutoFilterActive( SCCOL nCol, SCROW nRow, SCTAB nTab );
     void            ExecFilter( ULONG nSel, SCCOL nCol, SCROW nRow,
-                                const String& aValue );
+                                const String& aValue, bool bCheckForDates );
     void            FilterSelect( ULONG nSel );
 
     void            ExecDataSelect( SCCOL nCol, SCROW nRow, const String& rStr );

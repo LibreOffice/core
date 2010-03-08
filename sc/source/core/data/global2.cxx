@@ -144,30 +144,32 @@ BOOL ScImportParam::operator==( const ScImportParam& rOther ) const
 //------------------------------------------------------------------------
 // struct ScQueryParam:
 
-ScQueryEntry::ScQueryEntry()
+ScQueryEntry::ScQueryEntry() :
+    bDoQuery(FALSE),
+    bQueryByString(FALSE),
+    bQueryByDate(false),
+    nField(0),
+    eOp(SC_EQUAL),
+    eConnect(SC_AND),
+    pStr(new String),
+    nVal(0.0),
+    pSearchParam(NULL),
+    pSearchText(NULL)
 {
-    bDoQuery        = FALSE;
-    bQueryByString  = FALSE;
-    eOp             = SC_EQUAL;
-    eConnect        = SC_AND;
-    nField          = 0;
-    nVal            = 0.0;
-    pStr            = new String;
-    pSearchParam    = NULL;
-    pSearchText     = NULL;
 }
 
-ScQueryEntry::ScQueryEntry(const ScQueryEntry& r)
+ScQueryEntry::ScQueryEntry(const ScQueryEntry& r) :
+    bDoQuery(r.bDoQuery),
+    bQueryByString(r.bQueryByString),
+    bQueryByDate(r.bQueryByDate),
+    nField(r.nField),
+    eOp(r.eOp),
+    eConnect(r.eConnect),
+    pStr(new String(*r.pStr)),
+    nVal(r.nVal),
+    pSearchParam(NULL),
+    pSearchText(NULL)
 {
-    bDoQuery        = r.bDoQuery;
-    bQueryByString  = r.bQueryByString;
-    eOp             = r.eOp;
-    eConnect        = r.eConnect;
-    nField          = r.nField;
-    nVal            = r.nVal;
-    pStr            = new String(*r.pStr);
-    pSearchParam    = NULL;
-    pSearchText     = NULL;
 }
 
 ScQueryEntry::~ScQueryEntry()
@@ -184,6 +186,7 @@ ScQueryEntry& ScQueryEntry::operator=( const ScQueryEntry& r )
 {
     bDoQuery        = r.bDoQuery;
     bQueryByString  = r.bQueryByString;
+    bQueryByDate    = r.bQueryByDate;
     eOp             = r.eOp;
     eConnect        = r.eConnect;
     nField          = r.nField;
@@ -204,6 +207,7 @@ void ScQueryEntry::Clear()
 {
     bDoQuery        = FALSE;
     bQueryByString  = FALSE;
+    bQueryByDate    = false;
     eOp             = SC_EQUAL;
     eConnect        = SC_AND;
     nField          = 0;
@@ -222,6 +226,7 @@ BOOL ScQueryEntry::operator==( const ScQueryEntry& r ) const
 {
     return bDoQuery         == r.bDoQuery
         && bQueryByString   == r.bQueryByString
+        && bQueryByDate     == r.bQueryByDate
         && eOp              == r.eOp
         && eConnect         == r.eConnect
         && nField           == r.nField

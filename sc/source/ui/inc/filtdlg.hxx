@@ -167,6 +167,7 @@ private:
     ListBox*            aFieldLbArr[4];
     ListBox*            aCondLbArr[4];
     ListBox*            aConnLbArr[4];
+    bool                mbHasDates[MAXQUERY];
     BOOL                bRefreshExceptQuery[MAXQUERY];
     USHORT              nFieldCount;
     BOOL                bRefInputMode;
