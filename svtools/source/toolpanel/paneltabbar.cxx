@@ -433,6 +433,7 @@ namespace svt
             ImplControlValue aControlValue( (void *)(&tiValue) );
 
             bool bNativeOK = aRenderDevice.DrawNativeControl( CTRL_TAB_ITEM, PART_ENTIRE_CONTROL, aCtrlRegion, nState, aControlValue, rtl::OUString() );
+            (void)bNativeOK;
             OSL_ENSURE( bNativeOK, "VerticalItemLayout::impl_preRender: inconsistent NWF implementation!" );
                 // IsNativeControlSupported returned true, previously, otherwise we would not be here ...
 

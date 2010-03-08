@@ -517,7 +517,7 @@ void OptionsWindow::Dying()
 }
 
 //-----------------------------------------------------------------------------
-IMPL_LINK( OptionsWindow, OnListEntrySelected, ListBox*, i_pListBox )
+IMPL_LINK( OptionsWindow, OnListEntrySelected, ListBox*, /*i_pListBox*/ )
 {
     impl_updateRemoveButton();
     return 0L;
