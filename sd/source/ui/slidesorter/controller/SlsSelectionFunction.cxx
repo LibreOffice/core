@@ -108,6 +108,7 @@ static const sal_uInt32 MODIFIER_MASK            (SHIFT_MODIFIER | CONTROL_MODIF
 
 } // end of anonymous namespace
 
+#define ONLY_PREVIEW_TRIGGERS_MOUSE_OVER
 
 namespace sd { namespace slidesorter { namespace controller {
 
@@ -339,13 +340,12 @@ void SelectionFunction::MouseDragged (const AcceptDropEvent& rEvent)
     }
     else if ( ! mpDragAndDropContext)
     {
-        const SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
         // Connect the substitution handler to this selection function.
-        mpDragAndDropContext.reset(new DragAndDropContext(
-            mrSlideSorter,
-            dynamic_cast<const Transferable*>(pDragTransferable)));
+        mpDragAndDropContext.reset(new DragAndDropContext(mrSlideSorter));
+        const SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
         mrController.GetInsertionIndicatorHandler()->Start(
-            pDragTransferable->GetView()==&mrSlideSorter.GetView());
+            pDragTransferable != NULL
+            && pDragTransferable->GetView()==&mrSlideSorter.GetView());
         mpDragAndDropContext->UpdatePosition(
             rEvent.maPosPixel,
             InsertionIndicatorHandler::GetModeFromDndAction(rEvent.mnAction));
@@ -698,7 +698,7 @@ void SelectionFunction::StartDrag (
 
         if ( ! mpDragAndDropContext)
         {
-            mpDragAndDropContext.reset(new DragAndDropContext(mrSlideSorter, NULL));
+            mpDragAndDropContext.reset(new DragAndDropContext(mrSlideSorter));
             mrController.GetInsertionIndicatorHandler()->Start(true);
         }
         mpDragAndDropContext->UpdatePosition(rMousePosition, eMode);

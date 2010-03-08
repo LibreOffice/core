@@ -48,9 +48,7 @@
 
 namespace sd { namespace slidesorter { namespace controller {
 
-DragAndDropContext::DragAndDropContext (
-    SlideSorter& rSlideSorter,
-    const Transferable* pTransferable)
+DragAndDropContext::DragAndDropContext (SlideSorter& rSlideSorter)
     : mpTargetSlideSorter(&rSlideSorter),
       mnInsertionIndex(-1)
 {

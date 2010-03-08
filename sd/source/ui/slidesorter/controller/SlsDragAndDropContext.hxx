@@ -43,9 +43,6 @@ class SlideSorter;
 
 namespace sd { namespace slidesorter { namespace controller {
 
-class Transferable;
-
-
 /** A DragAndDropContext object handles an active drag and drop operation.
     When the mouse is moved from one slide sorter window to another the
     target SlideSorter object is exchanged accordingly.
@@ -56,9 +53,7 @@ public:
     /** Create a substitution display of the currently selected pages or,
         when provided, the pages in the transferable.
     */
-    DragAndDropContext (
-        SlideSorter& rSlideSorter,
-        const Transferable* pTransferable);
+    DragAndDropContext (SlideSorter& rSlideSorter);
     ~DragAndDropContext (void);
 
     /** Call this method (for example as reaction to ESC key press) to avoid
