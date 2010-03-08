@@ -232,6 +232,7 @@ namespace svt
             const Size aNormalizedBoundingSize( aNormalizedBounds.GetSize() );
             aRenderDevice.SetOutputSizePixel( aNormalizedBoundingSize );
 
+            // draw the actual item
             const Point aNormalizedContentOffset( aNormalizedContent.Left() - aNormalizedBounds.Left(), aNormalizedContent.Top() - aNormalizedBounds.Top() );
             const Region aCtrlRegion( Rectangle( aNormalizedContentOffset, aNormalizedContent.GetSize() ) );
 
@@ -248,8 +249,9 @@ namespace svt
             OSL_ENSURE( bNativeOK, "VerticalItemLayout::impl_preRender: inconsistent NWF implementation!" );
                 // IsNativeControlSupported returned true, previously, otherwise we would not be here ...
 
+            // copy content over to the target window
             BitmapEx aBitmap( aRenderDevice.GetBitmapEx( Point( 0, 0 ), Size( aNormalizedBoundingSize.Width() - 1, aNormalizedBoundingSize.Height() - 1 ) ) );
-            aBitmap.Rotate( 2700, Color( COL_BLACK ) );
+            aBitmap.Rotate( 2700, COL_BLACK );
             if ( m_bLeft )
                 aBitmap.Mirror( BMP_MIRROR_HORZ );
 
@@ -357,18 +359,10 @@ namespace svt
             break;
 
         case NWF_TABBAR_ITEM:
-        {
-            ControlState nState( 0 );
-            if ( m_rTargetWindow.IsEnabled() )
-                nState |= CTRL_STATE_ENABLED;
-            if ( m_rTargetWindow.HasChildPathFocus() )
-                nState |= CTRL_STATE_FOCUSED;
-
-            bNativeOK = m_rTargetWindow.IsNativeControlSupported( CTRL_TAB_PANE, PART_ENTIRE_CONTROL )
-                    &&  m_rTargetWindow.DrawNativeControl( CTRL_TAB_PANE, PART_ENTIRE_CONTROL, i_rArea, nState,
-                            ImplControlValue(), rtl::OUString() );
-        }
-        break;
+            bNativeOK = true;
+            // don't draw any background. The default behavior of VCL windows - draw a dialog face color -
+            // is completely sufficient here.
+            break;
         }
 
         if ( !bNativeOK )
