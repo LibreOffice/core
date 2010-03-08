@@ -27,6 +27,7 @@
 #ifndef TABLAYOUTER_HXX
 #define TABLAYOUTER_HXX
 
+#include "svtools/svtdllapi.h"
 #include "svtools/toolpanel/decklayouter.hxx"
 #include "svtools/toolpanel/tabalignment.hxx"
 #include "svtools/toolpanel/tabitemcontent.hxx"
@@ -46,8 +47,8 @@ namespace svt
     //====================================================================
     //= TabDeckLayouter
     //====================================================================
-    class TabDeckLayouter   :public RefBase
-                            ,public IDeckLayouter
+    class SVT_DLLPUBLIC TabDeckLayouter :public RefBase
+                                        ,public IDeckLayouter
     {
     public:
         /** creates a new layouter

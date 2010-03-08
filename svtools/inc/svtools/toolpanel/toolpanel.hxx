@@ -27,6 +27,8 @@
 #ifndef TOOLPANEL_HXX
 #define TOOLPANEL_HXX
 
+#include "svtools/svtdllapi.h"
+
 #include <rtl/ustring.hxx>
 #include <vcl/image.hxx>
 
@@ -44,7 +46,7 @@ namespace svt
     //====================================================================
     /** abstract interface for a single tool panel
     */
-    class IToolPanel : public ::rtl::IReference
+    class SVT_DLLPUBLIC IToolPanel : public ::rtl::IReference
     {
     public:
         /// retrieves the display name of the panel

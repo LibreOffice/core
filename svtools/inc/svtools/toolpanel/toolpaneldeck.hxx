@@ -27,6 +27,7 @@
 #ifndef TOOLPANELDECK_HXX
 #define TOOLPANELDECK_HXX
 
+#include "svtools/svtdllapi.h"
 #include "svtools/toolpanel/toolpanel.hxx"
 #include "svtools/toolpanel/decklayouter.hxx"
 
@@ -70,7 +71,7 @@ namespace svt
     //====================================================================
     //= IToolPanelDeck
     //====================================================================
-    class SAL_NO_VTABLE IToolPanelDeck
+    class SVT_DLLPUBLIC IToolPanelDeck
     {
     public:
         /** returns the number of panels in the container
@@ -85,7 +86,7 @@ namespace svt
         /** returns the number of the currently active panel.
         */
         virtual ::boost::optional< size_t >
-                            GetActivePanel() const;
+                            GetActivePanel() const = 0;
 
         /** activates the panel with the given number. If the given number is larger or equal to the number of panels
             in the deck, this will be reported via an assertion in non-product builds, and otherwise ignored.
@@ -115,8 +116,8 @@ namespace svt
     //====================================================================
     //= ToolPanelDeck
     //====================================================================
-    class ToolPanelDeck :public Control
-                        ,public IToolPanelDeck
+    class SVT_DLLPUBLIC ToolPanelDeck   :public Control
+                                        ,public IToolPanelDeck
     {
     public:
         ToolPanelDeck( Window& i_rParent, const WinBits i_nStyle );
