@@ -192,7 +192,7 @@ PasswordToOpenModifyDialog_Impl::~PasswordToOpenModifyDialog_Impl()
 }
 
 
-IMPL_LINK( PasswordToOpenModifyDialog_Impl, ModifyHdl, Edit *, pEdit )
+IMPL_LINK( PasswordToOpenModifyDialog_Impl, ModifyHdl, Edit *, EMPTYARG /*pEdit*/ )
 {
     // force repaints to get the m_aDefaultTxt displayed again
     if (m_aReenterPasswdToOpenED.GetText().Len() == 0)
