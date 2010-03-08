@@ -28,6 +28,7 @@
 #ifndef _CUI_PASSWDOMDLG_HRC_
 #define _CUI_PASSWDOMDLG_HRC_
 
+#define FL_FILE_ENCRYPTION              10
 #define FT_PASSWD_TO_OPEN               11
 #define ED_PASSWD_TO_OPEN               12
 #define FT_REENTER_PASSWD_TO_OPEN       13
