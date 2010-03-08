@@ -918,6 +918,7 @@ sub hCloseAllToolbars
     endif
 end sub
 
+'*******************************************************************************
 
 function hIsAccessbridgeInstalled() as boolean
     '/// created by HDE
@@ -980,7 +981,7 @@ end function
 
 function hUseAsyncSlot( cSlot as string ) as integer
 
-    dim iWait as integer : iWait = 0
+    dim iRetries as integer : iRetries = 0
     dim iTime as integer : iTime = 0
 
     const MAX_RETRIES    = 100 ' Number of time we try to call the slot
@@ -988,10 +989,10 @@ function hUseAsyncSlot( cSlot as string ) as integer
     const RETVAL_TIMEOUT = -1  ' Returnvalue if slot is not available
     const CFN = "global::tools::includes::required::hUseAsyncSlot(): "
 
-    if ( VERBOSE ) then printlog( CFN & "Using slot: " & cSlot )
+    printlog( "Executing slot: <" & cSlot & ">" )
     WaitSlot()
 
-    for iWait = 1 to MAX_RETRIES
+    for iRetries = 1 to MAX_RETRIES
         try
             select case ( lcase( cSlot ) )
             case "fileclose"                      : FileClose
@@ -1082,10 +1083,10 @@ function hUseAsyncSlot( cSlot as string ) as integer
     next iWait
 
     ' Total time used
-    iTime = iWait * DELAY
+    iTime = iRetries * DELAY
 
     ' Timeout is -1
-    if ( iTime = MAX_RETRIES * DELAY ) then iTime = RETVAL_TIMEOUT
+    if ( iRetries = MAX_RETRIES ) then iTime = RETVAL_TIMEOUT
 
     if ( VERBOSE ) then printlog( CFN & "Exit with rc=" & iTime )
     hUseAsyncSlot() = iTime
@@ -1096,7 +1097,7 @@ end function
 
 function hClickButton( oButton as object ) as integer
 
-    dim iRetries as integer : iWait = 0
+    dim iRetries as integer : iRetries = 0
     dim iTime as integer : iTime = 0
 
     const MAX_RETRIES    = 50  ' Try to click the button max 50 times
