@@ -47,12 +47,11 @@
 #define OUTER_SPACE_RIGHT       4
 #define OUTER_SPACE_BOTTOM      2
 
-// outer space to apply between the area for the items, and the actual items. They refer to aligned geometry at the moment,
-// they need to be adjusted once we support a horizontal tab bar
-#define ITEMS_SPACE_LEFT        0
-#define ITEMS_SPACE_TOP         2
-#define ITEMS_SPACE_RIGHT       2
-#define ITEMS_SPACE_BOTTOM      4
+// outer space to apply between the area for the items, and the actual items. They refer to a normalized geometry.
+#define ITEMS_INSET_LEFT        2
+#define ITEMS_INSET_TOP         2
+#define ITEMS_INSET_RIGHT       4
+#define ITEMS_INSET_BOTTOM      0
 
 //......................................................................................................................
 namespace svt
@@ -174,11 +173,29 @@ namespace svt
     TabBarGeometry::TabBarGeometry( const TabAlignment i_eAlignment, const TabItemContent i_eItemContent )
         :m_eTabAlignment( i_eAlignment )
         ,m_eTabItemContent( i_eItemContent )
+        ,m_aItemsInset()
         ,m_aNormalizedPlayground( Rectangle(), false )
         ,m_aButtonBackRect()
         ,m_aItemsRect()
         ,m_aButtonForwardRect()
     {
+        // calculate the items' inset
+        const Rectangle aArtificial( Point( 0, 0 ), Size( 10, 10 ) );
+        const Rectangle aInsetRect(
+            Point( ITEMS_INSET_LEFT, ITEMS_INSET_TOP ),
+            Size(
+                aArtificial.GetWidth() - ITEMS_INSET_LEFT - ITEMS_INSET_RIGHT,
+                aArtificial.GetHeight() - ITEMS_INSET_TOP - ITEMS_INSET_BOTTOM
+            )
+        );
+
+        const NormalizedArea aNormalized( aArtificial, false );
+        const Rectangle aTransformedInner( aNormalized.getTransformed( aInsetRect, getAlignment() ) );
+
+        m_aItemsInset.nLeft   = aTransformedInner.Left()            - aNormalized.getReference().Left();
+        m_aItemsInset.nTop    = aTransformedInner.Top()             - aNormalized.getReference().Top() ;
+        m_aItemsInset.nRight  = aNormalized.getReference().Right()  - aTransformedInner.Right()        ;
+        m_aItemsInset.nBottom = aNormalized.getReference().Bottom() - aTransformedInner.Bottom()       ;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -186,62 +203,59 @@ namespace svt
     {
     }
 
-    namespace
+    //------------------------------------------------------------------------------------------------------------------
+    bool TabBarGeometry::impl_fitItems( ItemDescriptors& io_rItems ) const
     {
-        //--------------------------------------------------------------------------------------------------------------
-        static bool lcl_fitItems( const TabBarGeometry& i_rGeometry, ItemDescriptors& io_rItems )
+        if ( io_rItems.empty() )
+            // nothing to do, "no items" perfectly fit into any space we have ...
+            return true;
+
+        // the available size
+        Size aOutputSize( getItemsRect().GetSize() );
+        // shrunk by the outer space
+        aOutputSize.Width() -= m_aItemsInset.nRight;
+        aOutputSize.Height() -= m_aItemsInset.nBottom;
+        const Rectangle aFitInto( Point( 0, 0 ), aOutputSize );
+
+        TabItemContent eItemContent( getItemContent() );
+        if ( eItemContent == TABITEM_AUTO )
         {
-            if ( io_rItems.empty() )
-                // nothing to do, "no items" perfectly fit into any space we have ...
-                return true;
-
-            // the available size
-            Size aOutputSize( i_rGeometry.getItemsRect().GetSize() );
-            // shrunk by the outer space
-            aOutputSize.Width() -= ITEMS_SPACE_RIGHT;
-            aOutputSize.Height() -= ITEMS_SPACE_BOTTOM;
-            const Rectangle aFitInto( Point( 0, 0 ), aOutputSize );
-
-            TabItemContent eItemContent( i_rGeometry.getItemContent() );
-            if ( eItemContent == TABITEM_AUTO )
+            // the "content modes" to try
+            TabItemContent eTryThis[] =
             {
-                // the "content modes" to try
-                TabItemContent eTryThis[] =
-                {
-                    TABITEM_IMAGE_ONLY,     // assumed to have the smallest rects
-                    TABITEM_TEXT_ONLY,
-                    TABITEM_IMAGE_AND_TEXT  // assumed to have the largest rects
-                };
+                TABITEM_IMAGE_ONLY,     // assumed to have the smallest rects
+                TABITEM_TEXT_ONLY,
+                TABITEM_IMAGE_AND_TEXT  // assumed to have the largest rects
+            };
 
 
-                // determine which of the different version fits
-                eItemContent = eTryThis[0];
-                size_t nTryIndex = 2;
-                while ( nTryIndex > 0 )
+            // determine which of the different version fits
+            eItemContent = eTryThis[0];
+            size_t nTryIndex = 2;
+            while ( nTryIndex > 0 )
+            {
+                const Point aBottomRight( io_rItems.rbegin()->GetRect( eTryThis[ nTryIndex ] ).BottomRight() );
+                if ( aFitInto.IsInside( aBottomRight ) )
                 {
-                    const Point aBottomRight( io_rItems.rbegin()->GetRect( eTryThis[ nTryIndex ] ).BottomRight() );
-                    if ( aFitInto.IsInside( aBottomRight ) )
-                    {
-                        eItemContent = eTryThis[ nTryIndex ];
-                        break;
-                    }
-                    --nTryIndex;
+                    eItemContent = eTryThis[ nTryIndex ];
+                    break;
                 }
+                --nTryIndex;
             }
-
-            // propagate to the items
-            for (   ItemDescriptors::iterator item = io_rItems.begin();
-                    item != io_rItems.end();
-                    ++item
-                )
-            {
-                item->eContent = eItemContent;
-            }
-
-            const ItemDescriptor& rLastItem( *io_rItems.rbegin() );
-            const Point aLastItemBottomRight( rLastItem.GetCurrentRect().BottomRight() );
-            return aFitInto.IsInside( aLastItemBottomRight );
         }
+
+        // propagate to the items
+        for (   ItemDescriptors::iterator item = io_rItems.begin();
+                item != io_rItems.end();
+                ++item
+            )
+        {
+            item->eContent = eItemContent;
+        }
+
+        const ItemDescriptor& rLastItem( *io_rItems.rbegin() );
+        const Point aLastItemBottomRight( rLastItem.GetCurrentRect().BottomRight() );
+        return aFitInto.IsInside( aLastItemBottomRight );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -249,16 +263,16 @@ namespace svt
     {
         if ( io_rItems.empty() )
             return Size(
-                ITEMS_SPACE_LEFT + ITEMS_SPACE_RIGHT,
-                ITEMS_SPACE_TOP + ITEMS_SPACE_BOTTOM
+                m_aItemsInset.nLeft + m_aItemsInset.nRight,
+                m_aItemsInset.nTop + m_aItemsInset.nBottom
             );
 
         // the rect of the last item
         const Rectangle& rLastItemRect( i_bMinimalSize ? io_rItems.rbegin()->aIconOnlyArea : io_rItems.rbegin()->aCompleteArea );
         const Point aBottomRight( rLastItemRect.BottomRight() );
         return Size(
-                    aBottomRight.X() + 1 + ITEMS_SPACE_RIGHT,
-                    aBottomRight.Y() + 1 + ITEMS_SPACE_BOTTOM
+                    aBottomRight.X() + 1 + m_aItemsInset.nRight,
+                    aBottomRight.Y() + 1 + m_aItemsInset.nBottom
                 );
     }
 
@@ -281,7 +295,7 @@ namespace svt
         Size aItemsSize( aNormalizedSize.Width() - OUTER_SPACE_LEFT - OUTER_SPACE_RIGHT, aNormalizedSize.Height() );
         m_aItemsRect = m_aNormalizedPlayground.getTransformed( Rectangle( aItemsPos, aItemsSize ), m_eTabAlignment );
 
-        if ( !lcl_fitItems( *this, io_rItems ) )
+        if ( !impl_fitItems( io_rItems ) )
         {
             // assumption was wrong, the items do not fit => calculate rects for the scroll buttons
             const Size aButtonSize( BUTTON_FLOW_WIDTH, aNormalizedSize.Height() - OUTER_SPACE_TOP - OUTER_SPACE_BOTTOM );
@@ -295,13 +309,17 @@ namespace svt
             aItemsPos.X() = aButtonBackPos.X() + aButtonSize.Width() + BUTTON_FLOW_SPACE;
             aItemsSize.Width() = aButtonForwardPos.X() - BUTTON_FLOW_SPACE - aItemsPos.X();
             m_aItemsRect = m_aNormalizedPlayground.getTransformed( Rectangle( aItemsPos, aItemsSize ), m_eTabAlignment );
+
+            // fit items, again. In the TABITEM_AUTO case, the smaller playground for the items might lead to another
+            // item content.
+            impl_fitItems( io_rItems );
         }
     }
 
     //------------------------------------------------------------------------------------------------------------------
     Point TabBarGeometry::getFirstItemPosition() const
     {
-        return Point( ITEMS_SPACE_LEFT, ITEMS_SPACE_TOP );
+        return Point( m_aItemsInset.nLeft, m_aItemsInset.nTop );
     }
 
 //......................................................................................................................

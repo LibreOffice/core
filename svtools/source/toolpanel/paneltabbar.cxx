@@ -88,11 +88,12 @@ namespace svt
                 defines which content to draw on the tab item
             @param o_rBoundingSize
                 contains, upon return, the overall size needed to render the item, including possible decorations which are
-                <em>not</em> available for the item content
+                <em>not</em> available for the item content. The rectangle is in normalized form, i.e. assuming that
+                the tab bar is aligned at top.
             @param o_rContentArea
                 contains, upon return, the area which is available to render the item content. It lies completely
                 within an assuming bounding rectangle, which starts at corrdinates (0, 0), and has the size returned
-                in o_rBoundingSize.
+                in o_rBoundingSize. The rectangle is in normalized form, i.e. assuming that the tab bar is aligned at top.
         */
         virtual void CalculateItemSize( const PToolPanel& i_pPanel, const TabItemContent i_eItemContent, Size& o_rBoundingSize, Rectangle& o_rContentArea ) const = 0;
 

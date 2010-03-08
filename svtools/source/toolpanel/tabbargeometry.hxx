@@ -80,6 +80,25 @@ namespace svt
     };
 
     //==================================================================================================================
+    //= Inset
+    //==================================================================================================================
+    struct Inset
+    {
+        long    nLeft;
+        long    nRight;
+        long    nTop;
+        long    nBottom;
+
+        Inset()
+            :nLeft(0)
+            ,nRight(0)
+            ,nTop(0)
+            ,nBottom(0)
+        {
+        }
+    };
+
+    //==================================================================================================================
     //= TabBarGeometry
     //==================================================================================================================
     class TabBarGeometry_Impl;
@@ -126,8 +145,15 @@ namespace svt
         Point   getFirstItemPosition() const;
 
     private:
+        bool    impl_fitItems( ItemDescriptors& io_rItems ) const;
+
+    private:
+        /// specifies the alignment of the tab bar
         const TabAlignment  m_eTabAlignment;
+        /// specifies the content to be displayed in the tab items
         TabItemContent      m_eTabItemContent;
+        /// specifies the inset to be used in the items area, depends on the actual alignment
+        Inset               m_aItemsInset;
         NormalizedArea      m_aNormalizedPlayground;
         Rectangle           m_aButtonBackRect;
         Rectangle           m_aItemsRect;
