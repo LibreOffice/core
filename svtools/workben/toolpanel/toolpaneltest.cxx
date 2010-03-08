@@ -355,12 +355,12 @@ OptionsWindow::OptionsWindow( PanelDemoMainWindow& i_rParent )
     m_aColors.InsertEntry( Color( COL_MAGENTA ),       String( RTL_CONSTASCII_USTRINGPARAM( "Magenta" ) ) );
     m_aColors.InsertEntry( Color( COL_BROWN ),         String( RTL_CONSTASCII_USTRINGPARAM( "Brown" ) ) );
     m_aColors.InsertEntry( Color( COL_GRAY ),          String( RTL_CONSTASCII_USTRINGPARAM( "Gray" ) ) );
-    m_aColors.InsertEntry( Color( COL_LIGHTGRAY ),     String( RTL_CONSTASCII_USTRINGPARAM( "LightGray" ) ) );
-    m_aColors.InsertEntry( Color( COL_LIGHTBLUE ),     String( RTL_CONSTASCII_USTRINGPARAM( "LightBlue" ) ) );
-    m_aColors.InsertEntry( Color( COL_LIGHTGREEN ),    String( RTL_CONSTASCII_USTRINGPARAM( "LightGreen" ) ) );
-    m_aColors.InsertEntry( Color( COL_LIGHTCYAN ),     String( RTL_CONSTASCII_USTRINGPARAM( "LightCyan" ) ) );
-    m_aColors.InsertEntry( Color( COL_LIGHTRED ),      String( RTL_CONSTASCII_USTRINGPARAM( "LightRed" ) ) );
-    m_aColors.InsertEntry( Color( COL_LIGHTMAGENTA ),  String( RTL_CONSTASCII_USTRINGPARAM( "LightMagenta" ) ) );
+    m_aColors.InsertEntry( Color( COL_LIGHTGRAY ),     String( RTL_CONSTASCII_USTRINGPARAM( "Light Gray" ) ) );
+    m_aColors.InsertEntry( Color( COL_LIGHTBLUE ),     String( RTL_CONSTASCII_USTRINGPARAM( "Light Blue" ) ) );
+    m_aColors.InsertEntry( Color( COL_LIGHTGREEN ),    String( RTL_CONSTASCII_USTRINGPARAM( "Light Green" ) ) );
+    m_aColors.InsertEntry( Color( COL_LIGHTCYAN ),     String( RTL_CONSTASCII_USTRINGPARAM( "Light Cyan" ) ) );
+    m_aColors.InsertEntry( Color( COL_LIGHTRED ),      String( RTL_CONSTASCII_USTRINGPARAM( "Light Red" ) ) );
+    m_aColors.InsertEntry( Color( COL_LIGHTMAGENTA ),  String( RTL_CONSTASCII_USTRINGPARAM( "Light Magenta" ) ) );
     m_aColors.InsertEntry( Color( COL_YELLOW ),        String( RTL_CONSTASCII_USTRINGPARAM( "Yellow" ) ) );
     m_aColors.InsertEntry( Color( COL_WHITE ),         String( RTL_CONSTASCII_USTRINGPARAM( "White" ) ) );
     m_aColors.SetDropDownLineCount( 16 );
