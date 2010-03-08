@@ -176,9 +176,7 @@ void InsertionIndicatorHandler::SetPosition (
     const Point& rPoint,
     const Mode eMode)
 {
-    static const bool bAllowHorizontalInsertMarker = true;
     view::Layouter& rLayouter (mrSlideSorter.GetView().GetLayouter());
-    USHORT nPageCount ((USHORT)mrSlideSorter.GetModel().GetPageCount());
 
     const view::InsertPosition aInsertPosition (rLayouter.GetInsertPosition(
         rPoint,

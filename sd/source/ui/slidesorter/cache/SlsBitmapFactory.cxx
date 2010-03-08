@@ -75,6 +75,7 @@ BitmapFactory::~BitmapFactory (void)
     const Size& rPixelSize,
     const bool bDoSuperSampling)
 {
+    (void)bDoSuperSampling;
     Size aSize (rPixelSize);
     bool bDo (false);//bDoSuperSampling);
     if (bDo)

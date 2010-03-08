@@ -83,9 +83,9 @@ Animator::Animator (SlideSorter& rSlideSorter)
       maTimer(),
       mbIsDisposed(false),
       maAnimations(),
+      maElapsedTime(),
       mpDrawLock(),
-      mnNextAnimationId(0),
-      maElapsedTime()
+      mnNextAnimationId(0)
 {
     maTimer.SetTimeout(gnResolution);
     maTimer.SetTimeoutHdl(LINK(this,Animator,TimeoutHandler));
@@ -156,6 +156,8 @@ Animator::AnimationId Animator::AddInfiniteAnimation (
     const AnimationFunctor& rAnimation,
     const double nDelta)
 {
+    (void)nDelta;
+
     // When the animator is already disposed then ignore this call
     // silently (well, we show an assertion, but do not throw an exception.)
     OSL_ASSERT( ! mbIsDisposed);
@@ -276,6 +278,7 @@ void Animator::CleanUpAnimationList (void)
 
 void Animator::RequestNextFrame (const double nFrameStart)
 {
+    (void)nFrameStart;
     if ( ! maTimer.IsActive())
     {
         // Prevent redraws except for the ones in TimeoutHandler.  While the
