@@ -4431,6 +4431,12 @@ void DomainMapper::text(const sal_uInt8 * data_, size_t len)
 {
     //TODO: Determine the right text encoding (FIB?)
     ::rtl::OUString sText( (const sal_Char*) data_, len, RTL_TEXTENCODING_MS_1252 );
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("text");
+    dmapper_logger->chars(sText);
+    dmapper_logger->endElement("text");
+#endif
+
     try
     {
         if(len == 1)
@@ -4497,11 +4503,6 @@ void DomainMapper::text(const sal_uInt8 * data_, size_t len)
                 pContext.reset(new PropertyMap());
 
             m_pImpl->appendTextPortion( sText, pContext );
-#ifdef DEBUG_DOMAINMAPPER
-            dmapper_logger->startElement("text");
-            dmapper_logger->chars(sText);
-            dmapper_logger->endElement("text");
-#endif
         }
     }
     catch( const uno::RuntimeException& )

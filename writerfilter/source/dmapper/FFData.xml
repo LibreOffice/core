@@ -1,0 +1,25 @@
+<model>
+  <class name="FFData">
+    <parent name="Properties"/>
+    <typedef name="Pointer_t" type="shared_ptr"/>
+    <typedef name="DropDownEntries_t">
+      <vector type="OUString"/>
+    </typedef>
+    <member name="name" type="OUString"/>
+    <member name="enabled" type="bool"/>
+    <member name="calcOnExit" type="bool"/>
+    <member name="entryMacroName" type="OUString"/>
+    <member name="exitMacroName" type="OUString"/>
+    <member name="helpTextType" type="sal_uInt32"/>
+    <member name="helpText" type="OUString"/>
+    <member name="statusTextType" type="sal_uInt32"/>
+    <member name="statusText" type="OUString"/>
+    <member name="checkboxHeight" type="sal_uInt32"/>
+    <member name="checkboxAutoHeight" type="bool"/>
+    <member name="checkboxDefault" type="bool"/>
+    <member name="checkboxChecked" type="bool"/>
+    <member name="dropboxEntries" type="DropDownEntries_t"/>
+    <member name="textDefault" type="OUString"/>
+    <member name="textFormat" type="OUString"/>
+  </class>
+</model>

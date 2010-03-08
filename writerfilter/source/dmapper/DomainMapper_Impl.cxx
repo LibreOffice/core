@@ -2523,6 +2523,10 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::FindOrCreateFieldMaster
   -----------------------------------------------------------------------*/
 void DomainMapper_Impl::PushFieldContext()
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->element("pushFieldContext");
+#endif
+
     uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
     //insert a dummy char to make sure the start range doesn't move together with the to-be-appended text
     xTextAppend->appendTextPortion(::rtl::OUString( '-' ), uno::Sequence< beans::PropertyValue >() );
@@ -2627,6 +2631,12 @@ void FieldContext::AppendCommand(const ::rtl::OUString& rPart)
   -----------------------------------------------------------------------*/
 void DomainMapper_Impl::AppendFieldCommand(::rtl::OUString& rPartOfCommand)
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("appendFieldCommand");
+    dmapper_logger->chars(rPartOfCommand);
+    dmapper_logger->endElement("appendFieldCommand");
+#endif
+
     FieldContextPtr pContext = m_aFieldStack.top();
     OSL_ENSURE( pContext.get(), "no field context available");
     if( pContext.get() )
@@ -2643,6 +2653,10 @@ typedef std::multimap < sal_Int32, ::rtl::OUString > TOCStyleMap;
   -----------------------------------------------------------------------*/
 void DomainMapper_Impl::CloseFieldCommand()
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->element("closeFieldCommand");
+#endif
+
     FieldContextPtr pContext = m_aFieldStack.top();
     OSL_ENSURE( pContext.get(), "no field context available");
     if( pContext.get() )
@@ -3418,6 +3432,11 @@ bool DomainMapper_Impl::IsFieldResultAsString()
   -----------------------------------------------------------------------*/
 void DomainMapper_Impl::SetFieldResult( ::rtl::OUString& rResult )
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("setFieldResult");
+    dmapper_logger->chars(rResult);
+#endif
+
     FieldContextPtr pContext = m_aFieldStack.top();
     OSL_ENSURE( pContext.get(), "no field context available");
     if( pContext.get() )
@@ -3468,6 +3487,10 @@ void DomainMapper_Impl::SetFieldResult( ::rtl::OUString& rResult )
   -----------------------------------------------------------------------*/
 void DomainMapper_Impl::PopFieldContext()
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->element("popFieldContext");
+#endif
+
     FieldContextPtr pContext = m_aFieldStack.top();
     OSL_ENSURE( pContext.get(), "no field context available");
     if( pContext.get() )
