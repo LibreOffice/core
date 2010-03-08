@@ -489,13 +489,6 @@ public:
     bool markUsedExternalRefCells();
 
     /**
-     * Set all tables of a document as referenced, used only during
-     * store-to-file.
-     * @returns <TRUE/> if ALL tables of ALL external documents are marked.
-     */
-    bool setCacheDocReferenced( sal_uInt16 nFileId );
-
-    /**
      * Set a table as referenced, used only during store-to-file.
      * @returns <TRUE/> if ALL tables of ALL external documents are marked.
      */
@@ -533,7 +526,8 @@ public:
      * @return shared_ptr to a token array instance.  <i>The caller must not
      *         delete the instance returned by this method.</i>
      */
-    ScExternalRefCache::TokenArrayRef getDoubleRefTokens(sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange, const ScAddress* pCurPos);
+    ScExternalRefCache::TokenArrayRef getDoubleRefTokens(
+        sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange, const ScAddress* pCurPos);
 
     /**
      * Get an array of tokens corresponding with a specified name in a
@@ -546,7 +540,8 @@ public:
      *
      * @return shared_ptr to array of tokens composing the name
      */
-    ScExternalRefCache::TokenArrayRef getRangeNameTokens(sal_uInt16 nFileId, const String& rName, const ScAddress* pCurPos = NULL);
+    ScExternalRefCache::TokenArrayRef getRangeNameTokens(
+        sal_uInt16 nFileId, const String& rName, const ScAddress* pCurPos = NULL);
 
     const String& getOwnDocumentName() const;
     bool isOwnDocument(const String& rFile) const;

@@ -1550,11 +1550,6 @@ bool ScExternalRefManager::markUsedExternalRefCells()
     return false;
 }
 
-bool ScExternalRefManager::setCacheDocReferenced( sal_uInt16 nFileId )
-{
-    return maRefCache.setCacheDocReferenced( nFileId);
-}
-
 bool ScExternalRefManager::setCacheTableReferenced( sal_uInt16 nFileId, const String& rTabName, size_t nSheets )
 {
     return maRefCache.setCacheTableReferenced( nFileId, rTabName, nSheets, false);
