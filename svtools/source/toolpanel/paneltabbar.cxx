@@ -481,14 +481,14 @@ namespace svt
     }
 
     //==================================================================================================================
-    //= PanelTabBar_Data
+    //= PanelTabBar_Impl
     //==================================================================================================================
-    class PanelTabBar_Data : public IToolPanelDeckListener
+    class PanelTabBar_Impl : public IToolPanelDeckListener
     {
     public:
-        PanelTabBar_Data( PanelTabBar& i_rTabBar, IToolPanelDeck& i_rPanelDeck, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent );
+        PanelTabBar_Impl( PanelTabBar& i_rTabBar, IToolPanelDeck& i_rPanelDeck, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent );
 
-        ~PanelTabBar_Data()
+        ~PanelTabBar_Impl()
         {
             rPanelDeck.RemoveListener( *this );
         }
@@ -501,7 +501,7 @@ namespace svt
             bItemsDirty = true;
             rTabBar.Invalidate();
 
-            UpdateScrollButtons();
+            Relayout();
         }
 
         virtual void PanelRemoved( const size_t i_nPosition )
@@ -511,7 +511,8 @@ namespace svt
 
             if ( i_nPosition < m_nScrollPosition )
                 --m_nScrollPosition;
-            UpdateScrollButtons();
+
+            Relayout();
         }
 
         virtual void ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive );
@@ -523,8 +524,16 @@ namespace svt
             m_aScrollForward.Enable( m_nScrollPosition < aItems.size() - 1 );
         }
 
+        void                        Relayout();
+        void                        EnsureItemsCache();
+        ::boost::optional< size_t > FindItemForPoint( const Point& i_rPoint ) const;
+        void                        DrawItem( const size_t i_nItemIndex ) const;
+        Rectangle                   GetActualItemRect( const Rectangle& i_rLogicalItemRect ) const;
+
     protected:
         DECL_LINK( OnScroll, const PushButton* );
+
+        void impl_calcItemRects();
 
     public:
         PanelTabBar&                rTabBar;
@@ -547,77 +556,24 @@ namespace svt
     };
 
     //==================================================================================================================
-    //= PanelTabBar_Data - implementation
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
-    PanelTabBar_Data::PanelTabBar_Data( PanelTabBar& i_rTabBar, IToolPanelDeck& i_rPanelDeck, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent )
-        :rTabBar( i_rTabBar )
-        ,aGeometry( i_eAlignment, i_eItemContent )
-        ,rPanelDeck( i_rPanelDeck )
-        ,pLayout( new VerticalItemLayout( i_rTabBar, i_eAlignment == TABS_LEFT ) )
-        ,aHoveredItem()
-        ,aFocusedItem()
-        ,bMouseButtonDown( false )
-        ,aItems()
-        ,bItemsDirty( true )
-        ,m_aScrollBack( &i_rTabBar, WB_BEVELBUTTON )
-        ,m_aScrollForward( &i_rTabBar, WB_BEVELBUTTON )
-        ,m_nScrollPosition( 0 )
-    {
-        OSL_ENSURE( ( i_eAlignment == TABS_LEFT ) || ( i_eAlignment == TABS_RIGHT ),
-            "PanelTabBar_Data: unsupported alignment!" );
-
-        rPanelDeck.AddListener( *this );
-
-        m_aScrollBack.SetSymbol( SYMBOL_ARROW_UP );
-        m_aScrollBack.Show();
-        m_aScrollBack.SetClickHdl( LINK( this, PanelTabBar_Data, OnScroll ) );
-
-        m_aScrollForward.SetSymbol( SYMBOL_ARROW_DOWN );
-        m_aScrollForward.Show();
-        m_aScrollForward.SetClickHdl( LINK( this, PanelTabBar_Data, OnScroll ) );
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    IMPL_LINK( PanelTabBar_Data, OnScroll, const PushButton*, i_pButton )
-    {
-        if ( i_pButton == &m_aScrollBack )
-        {
-            OSL_ENSURE( m_nScrollPosition > 0, "PanelTabBar_Data::OnScroll: inconsistency!" );
-            --m_nScrollPosition;
-            rTabBar.Invalidate();
-        }
-        else if ( i_pButton == &m_aScrollForward )
-        {
-            OSL_ENSURE( m_nScrollPosition < aItems.size() - 1, "PanelTabBar_Data::OnScroll: inconsistency!" );
-            ++m_nScrollPosition;
-            rTabBar.Invalidate();
-        }
-
-        UpdateScrollButtons();
-
-        return 0L;
-    }
-
-    //==================================================================================================================
     //= helper
     //==================================================================================================================
     namespace
     {
         //--------------------------------------------------------------------------------------------------------------
     #if OSL_DEBUG_LEVEL > 0
-        static void lcl_checkConsistency( const PanelTabBar_Data& i_rData )
+        static void lcl_checkConsistency( const PanelTabBar_Impl& i_rImpl )
         {
-            if ( !i_rData.bItemsDirty )
+            if ( !i_rImpl.bItemsDirty )
             {
-                if ( i_rData.rPanelDeck.GetPanelCount() != i_rData.aItems.size() )
+                if ( i_rImpl.rPanelDeck.GetPanelCount() != i_rImpl.aItems.size() )
                 {
                     OSL_ENSURE( false, "lcl_checkConsistency: inconsistent array sizes!" );
                     return;
                 }
-                for ( size_t i = 0; i < i_rData.rPanelDeck.GetPanelCount(); ++i )
+                for ( size_t i = 0; i < i_rImpl.rPanelDeck.GetPanelCount(); ++i )
                 {
-                    if ( i_rData.rPanelDeck.GetPanel( i ).get() != i_rData.aItems[i].pPanel.get() )
+                    if ( i_rImpl.rPanelDeck.GetPanel( i ).get() != i_rImpl.aItems[i].pPanel.get() )
                     {
                         OSL_ENSURE( false, "lcl_checkConsistency: array elements are inconsistent!" );
                         return;
@@ -634,121 +590,14 @@ namespace svt
     #endif
 
         //--------------------------------------------------------------------------------------------------------------
-        static void lcl_calcItemRects( PanelTabBar_Data& io_rData )
-        {
-            io_rData.aItems.resize(0);
-
-            Point aCompletePos( io_rData.aGeometry.getFirstItemPosition() );
-            Point aIconOnlyPos( aCompletePos );
-            Point aTextOnlyPos( aCompletePos );
-
-            for (   size_t i = 0;
-                    i < io_rData.rPanelDeck.GetPanelCount();
-                    ++i
-                )
-            {
-                PToolPanel pPanel( io_rData.rPanelDeck.GetPanel( i ) );
-
-                ItemDescriptor aItem;
-                aItem.pPanel = pPanel;
-
-                Rectangle aContentArea;
-
-                Size aCompleteSize;
-                io_rData.pLayout->CalculateItemSize( pPanel, TABITEM_IMAGE_AND_TEXT, aCompleteSize, aContentArea );
-                ::std::swap( aCompleteSize.Width(), aCompleteSize.Height() );
-
-                Size aIconOnlySize;
-                io_rData.pLayout->CalculateItemSize( pPanel, TABITEM_IMAGE_ONLY, aIconOnlySize, aContentArea );
-                ::std::swap( aIconOnlySize.Width(), aIconOnlySize.Height() );
-
-                Size aTextOnlySize;
-                io_rData.pLayout->CalculateItemSize( pPanel, TABITEM_TEXT_ONLY, aTextOnlySize, aContentArea );
-                ::std::swap( aTextOnlySize.Width(), aTextOnlySize.Height() );
-
-                // TODO: have one method calculating all sizes?
-
-                aItem.aCompleteArea = Rectangle( aCompletePos, aCompleteSize );
-                aItem.aIconOnlyArea = Rectangle( aIconOnlyPos, aIconOnlySize );
-                aItem.aTextOnlyArea = Rectangle( aTextOnlyPos, aTextOnlySize );
-
-                io_rData.aItems.push_back( aItem );
-
-                aCompletePos = aItem.aCompleteArea.BottomLeft();
-                aIconOnlyPos = aItem.aIconOnlyArea.BottomLeft();
-                aTextOnlyPos = aItem.aTextOnlyArea.BottomLeft();
-            }
-
-            io_rData.bItemsDirty = false;
-        }
-
-        //--------------------------------------------------------------------------------------------------------------
-        static void lcl_ensureItemsCache( PanelTabBar_Data& io_rData )
-        {
-            if ( io_rData.bItemsDirty == false )
-            {
-                DBG_CHECK( io_rData );
-                return;
-            }
-            lcl_calcItemRects( io_rData );
-            OSL_POSTCOND( io_rData.bItemsDirty == false, "lcl_ensureItemsCache: cache still dirty!" );
-            DBG_CHECK( io_rData );
-        }
-
-        //--------------------------------------------------------------------------------------------------------------
-        Rectangle lcl_getActualItemRect( const PanelTabBar_Data& i_rData, const Rectangle& i_rLogicalItemRect )
-        {
-            // care for the offset imposed by our geometry, i.e. whether or not we have scroll buttons
-            Rectangle aItemRect( i_rLogicalItemRect );
-
-            const TabBarGeometry& rGeometry( i_rData.aGeometry );
-            aItemRect.Move(
-                rGeometry.isVertical() ? 0 : rGeometry.getItemsRect().Left() - rGeometry.getButtonBackRect().Left(),
-                rGeometry.isVertical() ? rGeometry.getItemsRect().Top() - rGeometry.getButtonBackRect().Top() : 0
-            );
-
-            // care for the current scroll position
-            OSL_ENSURE( i_rData.m_nScrollPosition < i_rData.aItems.size(), "lcl_getActualItemRect: invalid scroll position!" );
-            if ( ( i_rData.m_nScrollPosition > 0 ) && ( i_rData.m_nScrollPosition < i_rData.aItems.size() ) )
-            {
-                long nOffsetX = i_rData.aItems[ i_rData.m_nScrollPosition ].GetCurrentRect().Left() - i_rData.aItems[ 0 ].GetCurrentRect().Left();
-                long nOffsetY = i_rData.aItems[ i_rData.m_nScrollPosition ].GetCurrentRect().Top() - i_rData.aItems[ 0 ].GetCurrentRect().Top();
-                aItemRect.Move( -nOffsetX, -nOffsetY );
-            }
-
-            return aItemRect;
-        }
-
-        //--------------------------------------------------------------------------------------------------------------
-        static ::boost::optional< size_t > lcl_findItemForPoint( const PanelTabBar_Data& i_rData, const Point& i_rPoint )
-        {
-            if ( !i_rData.aGeometry.getItemsRect().IsInside( i_rPoint ) )
-                return ::boost::optional< size_t >();
-
-            size_t i=0;
-            for (   ItemDescriptors::const_iterator item = i_rData.aItems.begin();
-                    item != i_rData.aItems.end();
-                    ++item, ++i
-                )
-            {
-                Rectangle aItemRect( lcl_getActualItemRect( i_rData, item->GetCurrentRect() ) );
-                if ( aItemRect.IsInside( i_rPoint ) )
-                {
-                    return ::boost::optional< size_t >( i );
-                }
-            }
-            return ::boost::optional< size_t >();
-        }
-
-        //--------------------------------------------------------------------------------------------------------------
         class ClipItemRegion
         {
         public:
-            ClipItemRegion( const PanelTabBar_Data& i_rData )
-                :m_rDevice( i_rData.rTabBar )
+            ClipItemRegion( const PanelTabBar_Impl& i_rImpl )
+                :m_rDevice( i_rImpl.rTabBar )
             {
                 m_rDevice.Push( PUSH_CLIPREGION );
-                m_rDevice.SetClipRegion( i_rData.aGeometry.getItemsRect() );
+                m_rDevice.SetClipRegion( i_rImpl.aGeometry.getItemsRect() );
             }
 
             ~ClipItemRegion()
@@ -759,74 +608,235 @@ namespace svt
         private:
             OutputDevice&   m_rDevice;
         };
-
-        //--------------------------------------------------------------------------------------------------------------
-        static void lcl_drawItem( const PanelTabBar_Data& i_rData, const size_t i_nItemIndex )
-        {
-            const ItemDescriptor& rItem( i_rData.aItems[ i_nItemIndex ] );
-
-            ItemFlags nItemFlags( ITEM_STATE_NORMAL );
-            if ( i_rData.aHoveredItem == i_nItemIndex )
-            {
-                nItemFlags |= ITEM_STATE_HOVERED;
-                if ( i_rData.bMouseButtonDown )
-                    nItemFlags |= ITEM_STATE_ACTIVE;
-            }
-
-            if ( i_rData.rPanelDeck.GetActivePanel() == i_nItemIndex )
-                nItemFlags |= ITEM_STATE_ACTIVE;
-
-            if ( i_rData.aFocusedItem == i_nItemIndex )
-                nItemFlags |= ITEM_STATE_FOCUSED;
-
-            if ( 0 == i_nItemIndex )
-                nItemFlags |= ITEM_POSITION_FIRST;
-
-            if ( i_rData.rPanelDeck.GetPanelCount() - 1 == i_nItemIndex )
-                nItemFlags |= ITEM_POSITION_LAST;
-
-            // the actual item pos might differ from the saved one, if we have scroll buttons
-            const Point aActualItemPos( lcl_getActualItemRect( i_rData, rItem.GetCurrentRect() ).TopLeft() );
-
-            i_rData.rTabBar.SetUpdateMode( FALSE );
-            i_rData.pLayout->DrawItem( i_rData.aGeometry, rItem.pPanel, aActualItemPos, nItemFlags, rItem.eContent );
-            i_rData.rTabBar.SetUpdateMode( TRUE );
-        }
-
-        //--------------------------------------------------------------------------------------------------------------
-        static void lcl_relayout( PanelTabBar_Data& io_rData )
-        {
-            io_rData.aGeometry.relayout( io_rData.rTabBar.GetOutputSizePixel(), io_rData.aItems );
-
-            const Rectangle& rButtonBack( io_rData.aGeometry.getButtonBackRect() );
-            io_rData.m_aScrollBack.SetPosSizePixel( rButtonBack.TopLeft(), rButtonBack.GetSize() );
-            io_rData.m_aScrollBack.Show( !rButtonBack.IsEmpty() );
-
-            const Rectangle& rButtonForward( io_rData.aGeometry.getButtonForwardRect() );
-            io_rData.m_aScrollForward.SetPosSizePixel( rButtonForward.TopLeft(), rButtonForward.GetSize() );
-            io_rData.m_aScrollForward.Show( !rButtonForward.IsEmpty() );
-
-            io_rData.UpdateScrollButtons();
-        }
     }
 
     //==================================================================================================================
-    //= PanelTabBar_Data
+    //= PanelTabBar_Impl - implementation
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
-    void PanelTabBar_Data::ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive )
+    PanelTabBar_Impl::PanelTabBar_Impl( PanelTabBar& i_rTabBar, IToolPanelDeck& i_rPanelDeck, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent )
+        :rTabBar( i_rTabBar )
+        ,aGeometry( i_eAlignment, i_eItemContent )
+        ,rPanelDeck( i_rPanelDeck )
+        ,pLayout( new VerticalItemLayout( i_rTabBar, i_eAlignment == TABS_LEFT ) )
+        ,aHoveredItem()
+        ,aFocusedItem()
+        ,bMouseButtonDown( false )
+        ,aItems()
+        ,bItemsDirty( true )
+        ,m_aScrollBack( &i_rTabBar, WB_BEVELBUTTON )
+        ,m_aScrollForward( &i_rTabBar, WB_BEVELBUTTON )
+        ,m_nScrollPosition( 0 )
     {
-        lcl_ensureItemsCache( *this );
+        OSL_ENSURE( ( i_eAlignment == TABS_LEFT ) || ( i_eAlignment == TABS_RIGHT ),
+            "PanelTabBar_Impl: unsupported alignment!" );
+
+        rPanelDeck.AddListener( *this );
+
+        m_aScrollBack.SetSymbol( SYMBOL_ARROW_UP );
+        m_aScrollBack.Show();
+        m_aScrollBack.SetClickHdl( LINK( this, PanelTabBar_Impl, OnScroll ) );
+
+        m_aScrollForward.SetSymbol( SYMBOL_ARROW_DOWN );
+        m_aScrollForward.Show();
+        m_aScrollForward.SetClickHdl( LINK( this, PanelTabBar_Impl, OnScroll ) );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void PanelTabBar_Impl::impl_calcItemRects()
+    {
+        aItems.resize(0);
+
+        Point aCompletePos( aGeometry.getFirstItemPosition() );
+        Point aIconOnlyPos( aCompletePos );
+        Point aTextOnlyPos( aCompletePos );
+
+        for (   size_t i = 0;
+                i < rPanelDeck.GetPanelCount();
+                ++i
+            )
+        {
+            PToolPanel pPanel( rPanelDeck.GetPanel( i ) );
+
+            ItemDescriptor aItem;
+            aItem.pPanel = pPanel;
+
+            Rectangle aContentArea;
+
+            Size aCompleteSize;
+            pLayout->CalculateItemSize( pPanel, TABITEM_IMAGE_AND_TEXT, aCompleteSize, aContentArea );
+            ::std::swap( aCompleteSize.Width(), aCompleteSize.Height() );
+
+            Size aIconOnlySize;
+            pLayout->CalculateItemSize( pPanel, TABITEM_IMAGE_ONLY, aIconOnlySize, aContentArea );
+            ::std::swap( aIconOnlySize.Width(), aIconOnlySize.Height() );
+
+            Size aTextOnlySize;
+            pLayout->CalculateItemSize( pPanel, TABITEM_TEXT_ONLY, aTextOnlySize, aContentArea );
+            ::std::swap( aTextOnlySize.Width(), aTextOnlySize.Height() );
+
+            // TODO: have one method calculating all sizes?
+
+            aItem.aCompleteArea = Rectangle( aCompletePos, aCompleteSize );
+            aItem.aIconOnlyArea = Rectangle( aIconOnlyPos, aIconOnlySize );
+            aItem.aTextOnlyArea = Rectangle( aTextOnlyPos, aTextOnlySize );
+
+            aItems.push_back( aItem );
+
+            aCompletePos = aItem.aCompleteArea.BottomLeft();
+            aIconOnlyPos = aItem.aIconOnlyArea.BottomLeft();
+            aTextOnlyPos = aItem.aTextOnlyArea.BottomLeft();
+        }
+
+        bItemsDirty = false;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void PanelTabBar_Impl::DrawItem( const size_t i_nItemIndex ) const
+    {
+        const ItemDescriptor& rItem( aItems[ i_nItemIndex ] );
+
+        ItemFlags nItemFlags( ITEM_STATE_NORMAL );
+        if ( aHoveredItem == i_nItemIndex )
+        {
+            nItemFlags |= ITEM_STATE_HOVERED;
+            if ( bMouseButtonDown )
+                nItemFlags |= ITEM_STATE_ACTIVE;
+        }
+
+        if ( rPanelDeck.GetActivePanel() == i_nItemIndex )
+            nItemFlags |= ITEM_STATE_ACTIVE;
+
+        if ( aFocusedItem == i_nItemIndex )
+            nItemFlags |= ITEM_STATE_FOCUSED;
+
+        if ( 0 == i_nItemIndex )
+            nItemFlags |= ITEM_POSITION_FIRST;
+
+        if ( rPanelDeck.GetPanelCount() - 1 == i_nItemIndex )
+            nItemFlags |= ITEM_POSITION_LAST;
+
+        // the actual item pos might differ from the saved one, if we have scroll buttons
+        const Point aActualItemPos( GetActualItemRect( rItem.GetCurrentRect() ).TopLeft() );
+
+        rTabBar.SetUpdateMode( FALSE );
+        pLayout->DrawItem( aGeometry, rItem.pPanel, aActualItemPos, nItemFlags, rItem.eContent );
+        rTabBar.SetUpdateMode( TRUE );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void PanelTabBar_Impl::EnsureItemsCache()
+    {
+        if ( bItemsDirty == false )
+        {
+            DBG_CHECK( *this );
+            return;
+        }
+        impl_calcItemRects();
+        OSL_POSTCOND( bItemsDirty == false, "EnsureItemsCache: cache still dirty!" );
+        DBG_CHECK( *this );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void PanelTabBar_Impl::Relayout()
+    {
+        EnsureItemsCache();
+
+        aGeometry.relayout( rTabBar.GetOutputSizePixel(), aItems );
+
+        const Rectangle& rButtonBack( aGeometry.getButtonBackRect() );
+        m_aScrollBack.SetPosSizePixel( rButtonBack.TopLeft(), rButtonBack.GetSize() );
+        m_aScrollBack.Show( !rButtonBack.IsEmpty() );
+
+        const Rectangle& rButtonForward( aGeometry.getButtonForwardRect() );
+        m_aScrollForward.SetPosSizePixel( rButtonForward.TopLeft(), rButtonForward.GetSize() );
+        m_aScrollForward.Show( !rButtonForward.IsEmpty() );
+
+        UpdateScrollButtons();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    ::boost::optional< size_t > PanelTabBar_Impl::FindItemForPoint( const Point& i_rPoint ) const
+    {
+        if ( !aGeometry.getItemsRect().IsInside( i_rPoint ) )
+            return ::boost::optional< size_t >();
+
+        size_t i=0;
+        for (   ItemDescriptors::const_iterator item = aItems.begin();
+                item != aItems.end();
+                ++item, ++i
+            )
+        {
+            Rectangle aItemRect( GetActualItemRect( item->GetCurrentRect() ) );
+            if ( aItemRect.IsInside( i_rPoint ) )
+            {
+                return ::boost::optional< size_t >( i );
+            }
+        }
+        return ::boost::optional< size_t >();
+    }
+    //------------------------------------------------------------------------------------------------------------------
+    IMPL_LINK( PanelTabBar_Impl, OnScroll, const PushButton*, i_pButton )
+    {
+        if ( i_pButton == &m_aScrollBack )
+        {
+            OSL_ENSURE( m_nScrollPosition > 0, "PanelTabBar_Impl::OnScroll: inconsistency!" );
+            --m_nScrollPosition;
+            rTabBar.Invalidate();
+        }
+        else if ( i_pButton == &m_aScrollForward )
+        {
+            OSL_ENSURE( m_nScrollPosition < aItems.size() - 1, "PanelTabBar_Impl::OnScroll: inconsistency!" );
+            ++m_nScrollPosition;
+            rTabBar.Invalidate();
+        }
+
+        UpdateScrollButtons();
+
+        return 0L;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    Rectangle PanelTabBar_Impl::GetActualItemRect( const Rectangle& i_rLogicalItemRect ) const
+    {
+        // care for the offset imposed by our geometry, i.e. whether or not we have scroll buttons
+        Rectangle aItemRect( i_rLogicalItemRect );
+
+        const TabBarGeometry& rGeometry( aGeometry );
+        aItemRect.Move(
+            rGeometry.isVertical() ? 0 : rGeometry.getItemsRect().Left() - rGeometry.getButtonBackRect().Left(),
+            rGeometry.isVertical() ? rGeometry.getItemsRect().Top() - rGeometry.getButtonBackRect().Top() : 0
+        );
+
+        // care for the current scroll position
+        OSL_ENSURE( m_nScrollPosition < aItems.size(), "GetActualItemRect: invalid scroll position!" );
+        if ( ( m_nScrollPosition > 0 ) && ( m_nScrollPosition < aItems.size() ) )
+        {
+            long nOffsetX = aItems[ m_nScrollPosition ].GetCurrentRect().Left() - aItems[ 0 ].GetCurrentRect().Left();
+            long nOffsetY = aItems[ m_nScrollPosition ].GetCurrentRect().Top() - aItems[ 0 ].GetCurrentRect().Top();
+            aItemRect.Move( -nOffsetX, -nOffsetY );
+        }
+
+        return aItemRect;
+    }
+
+    //==================================================================================================================
+    //= PanelTabBar_Impl
+    //==================================================================================================================
+    //------------------------------------------------------------------------------------------------------------------
+    void PanelTabBar_Impl::ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive )
+    {
+        EnsureItemsCache();
 
         ClipItemRegion aClipItems( *this );
         if ( !!i_rOldActive )
-            lcl_drawItem( *this, *i_rOldActive );
+            DrawItem( *i_rOldActive );
         if ( !!i_rNewActive )
-            lcl_drawItem( *this, *i_rNewActive );
+            DrawItem( *i_rNewActive );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void PanelTabBar_Data::Dying()
+    void PanelTabBar_Impl::Dying()
     {
         // not interested in - the notifier is a member of this instance here, so we're dying ourself at the moment
     }
@@ -837,9 +847,9 @@ namespace svt
     //------------------------------------------------------------------------------------------------------------------
     PanelTabBar::PanelTabBar( Window& i_rParentWindow, IToolPanelDeck& i_rPanelDeck, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent )
         :Control( &i_rParentWindow, 0 )
-        ,m_pData( new PanelTabBar_Data( *this, i_rPanelDeck, i_eAlignment, i_eItemContent ) )
+        ,m_pImpl( new PanelTabBar_Impl( *this, i_rPanelDeck, i_eAlignment, i_eItemContent ) )
     {
-        DBG_CHECK( *m_pData );
+        DBG_CHECK( *m_pImpl );
 
         SetLineColor();
         SetFillColor( GetSettings().GetStyleSettings().GetDialogColor() );
@@ -853,53 +863,53 @@ namespace svt
     //------------------------------------------------------------------------------------------------------------------
     TabItemContent PanelTabBar::GetTabItemContent() const
     {
-        return m_pData->aGeometry.getItemContent();
+        return m_pImpl->aGeometry.getItemContent();
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void PanelTabBar::SetTabItemContent( const TabItemContent& i_eItemContent )
     {
-        m_pData->aGeometry.setItemContent( i_eItemContent );
-        lcl_relayout( *m_pData );
+        m_pImpl->aGeometry.setItemContent( i_eItemContent );
+        m_pImpl->Relayout();
         Invalidate();
     }
 
     //------------------------------------------------------------------------------------------------------------------
     Size PanelTabBar::GetOptimalSize( WindowSizeType i_eType ) const
     {
-        lcl_ensureItemsCache( *m_pData );
-        return m_pData->aGeometry.getOptimalSize( m_pData->aItems, i_eType == WINDOWSIZE_MINIMUM );
+        m_pImpl->EnsureItemsCache();
+        return m_pImpl->aGeometry.getOptimalSize( m_pImpl->aItems, i_eType == WINDOWSIZE_MINIMUM );
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void PanelTabBar::Resize()
     {
         Control::Resize();
-        lcl_relayout( *m_pData );
+        m_pImpl->Relayout();
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void PanelTabBar::Paint( const Rectangle& i_rRect )
     {
-        lcl_ensureItemsCache( *m_pData );
+        m_pImpl->EnsureItemsCache();
 
         // background
-        m_pData->pLayout->DrawBackground( Rectangle( Point(), GetOutputSizePixel() ) );
+        m_pImpl->pLayout->DrawBackground( Rectangle( Point(), GetOutputSizePixel() ) );
 
         // ensure the items really paint into their own playground only
-        ClipItemRegion aClipItems( *m_pData );
+        ClipItemRegion aClipItems( *m_pImpl );
 
         // items
         size_t i=0;
-        for (   ItemDescriptors::const_iterator item = m_pData->aItems.begin();
-                item != m_pData->aItems.end();
+        for (   ItemDescriptors::const_iterator item = m_pImpl->aItems.begin();
+                item != m_pImpl->aItems.end();
                 ++item, ++i
             )
         {
-            Rectangle aItemRect( lcl_getActualItemRect( *m_pData, item->GetCurrentRect() ) );
+            Rectangle aItemRect( m_pImpl->GetActualItemRect( item->GetCurrentRect() ) );
             if ( aItemRect.IsOver( i_rRect ) )
             {
-                lcl_drawItem( *m_pData, i );
+                m_pImpl->DrawItem( i );
             }
         }
     }
@@ -907,25 +917,25 @@ namespace svt
     //------------------------------------------------------------------------------------------------------------------
     void PanelTabBar::MouseMove( const MouseEvent& i_rMouseEvent )
     {
-        lcl_ensureItemsCache( *m_pData );
+        m_pImpl->EnsureItemsCache();
 
-        ::boost::optional< size_t > aOldItem( m_pData->aHoveredItem );
-        ::boost::optional< size_t > aNewItem( lcl_findItemForPoint( *m_pData, i_rMouseEvent.GetPosPixel() ) );
+        ::boost::optional< size_t > aOldItem( m_pImpl->aHoveredItem );
+        ::boost::optional< size_t > aNewItem( m_pImpl->FindItemForPoint( i_rMouseEvent.GetPosPixel() ) );
 
         if  ( i_rMouseEvent.IsLeaveWindow() )
             aNewItem.reset();
 
         if ( aOldItem != aNewItem )
         {
-            m_pData->aHoveredItem = aNewItem;
+            m_pImpl->aHoveredItem = aNewItem;
 
-            ClipItemRegion aClipItems( *m_pData );
+            ClipItemRegion aClipItems( *m_pImpl );
 
             if ( !!aOldItem )
-                lcl_drawItem( *m_pData, *aOldItem );
+                m_pImpl->DrawItem( *aOldItem );
 
             if ( !!aNewItem )
-                lcl_drawItem( *m_pData, *aNewItem );
+                m_pImpl->DrawItem( *aNewItem );
         }
     }
 
@@ -937,17 +947,17 @@ namespace svt
         if ( !i_rMouseEvent.IsLeft() )
             return;
 
-        lcl_ensureItemsCache( *m_pData );
+        m_pImpl->EnsureItemsCache();
 
-        ::boost::optional< size_t > aHitItem( lcl_findItemForPoint( *m_pData, i_rMouseEvent.GetPosPixel() ) );
+        ::boost::optional< size_t > aHitItem( m_pImpl->FindItemForPoint( i_rMouseEvent.GetPosPixel() ) );
         if ( !aHitItem )
             return;
 
         CaptureMouse();
-        m_pData->bMouseButtonDown = true;
+        m_pImpl->bMouseButtonDown = true;
 
-        ClipItemRegion aClipItems( *m_pData );
-        lcl_drawItem( *m_pData, *aHitItem );
+        ClipItemRegion aClipItems( *m_pImpl );
+        m_pImpl->DrawItem( *aHitItem );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -955,21 +965,21 @@ namespace svt
     {
         Control::MouseButtonUp( i_rMouseEvent );
 
-        if ( m_pData->bMouseButtonDown )
+        if ( m_pImpl->bMouseButtonDown )
         {
             OSL_ENSURE( IsMouseCaptured(), "PanelTabBar::MouseButtonUp: inconsistency!" );
             if ( IsMouseCaptured() )
                 ReleaseMouse();
-            m_pData->bMouseButtonDown = false;
+            m_pImpl->bMouseButtonDown = false;
 
-            ::boost::optional< size_t > aHitItem( lcl_findItemForPoint( *m_pData, i_rMouseEvent.GetPosPixel() ) );
+            ::boost::optional< size_t > aHitItem( m_pImpl->FindItemForPoint( i_rMouseEvent.GetPosPixel() ) );
             if ( !!aHitItem )
             {
                 // re-draw that item now that we're not in mouse-down mode anymore
-                ClipItemRegion aClipItems( *m_pData );
-                lcl_drawItem( *m_pData, *aHitItem );
+                ClipItemRegion aClipItems( *m_pImpl );
+                m_pImpl->DrawItem( *aHitItem );
                 // activate the respective panel
-                m_pData->rPanelDeck.ActivatePanel( *aHitItem );
+                m_pImpl->rPanelDeck.ActivatePanel( *aHitItem );
             }
         }
     }
@@ -977,13 +987,13 @@ namespace svt
     //------------------------------------------------------------------------------------------------------------------
     void PanelTabBar::RequestHelp( const HelpEvent& i_rHelpEvent )
     {
-        lcl_ensureItemsCache( *m_pData );
+        m_pImpl->EnsureItemsCache();
 
-        ::boost::optional< size_t > aHelpItem( lcl_findItemForPoint( *m_pData, ScreenToOutputPixel( i_rHelpEvent.GetMousePosPixel() ) ) );
+        ::boost::optional< size_t > aHelpItem( m_pImpl->FindItemForPoint( ScreenToOutputPixel( i_rHelpEvent.GetMousePosPixel() ) ) );
         if ( !aHelpItem )
             return;
 
-        const ItemDescriptor& rItem( m_pData->aItems[ *aHelpItem ] );
+        const ItemDescriptor& rItem( m_pImpl->aItems[ *aHelpItem ] );
         if ( rItem.eContent != TABITEM_IMAGE_ONLY )
             // if the text is displayed for the item, we do not need to show it as tooltip
             return;
@@ -999,14 +1009,14 @@ namespace svt
     void PanelTabBar::GetFocus()
     {
         Control::GetFocus();
-        if ( m_pData->rPanelDeck.GetPanelCount() )
+        if ( m_pImpl->rPanelDeck.GetPanelCount() )
         {
-            ::boost::optional< size_t > aActivePanel( m_pData->rPanelDeck.GetActivePanel() );
+            ::boost::optional< size_t > aActivePanel( m_pImpl->rPanelDeck.GetActivePanel() );
             if ( !!aActivePanel )
             {
-                m_pData->aFocusedItem = aActivePanel;
-                ClipItemRegion aClipItems( *m_pData );
-                lcl_drawItem( *m_pData, *m_pData->aFocusedItem );
+                m_pImpl->aFocusedItem = aActivePanel;
+                ClipItemRegion aClipItems( *m_pImpl );
+                m_pImpl->DrawItem( *m_pImpl->aFocusedItem );
             }
         }
     }
@@ -1016,13 +1026,13 @@ namespace svt
     {
         Control::LoseFocus();
 
-        ::boost::optional< size_t > aPreviouslyFocused( m_pData->aFocusedItem );
-        m_pData->aFocusedItem.reset();
+        ::boost::optional< size_t > aPreviouslyFocused( m_pImpl->aFocusedItem );
+        m_pImpl->aFocusedItem.reset();
 
         if ( !!aPreviouslyFocused )
         {
-            ClipItemRegion aClipItems( *m_pData );
-            lcl_drawItem( *m_pData, *aPreviouslyFocused );
+            ClipItemRegion aClipItems( *m_pImpl );
+            m_pImpl->DrawItem( *aPreviouslyFocused );
         }
     }
 
@@ -1037,11 +1047,11 @@ namespace svt
             return;
 
         // if there are less than 2 panels, we cannot travel them ...
-        const size_t nPanelCount( m_pData->rPanelDeck.GetPanelCount() );
+        const size_t nPanelCount( m_pImpl->rPanelDeck.GetPanelCount() );
         if ( nPanelCount < 2 )
             return;
 
-        OSL_PRECOND( !!m_pData->aFocusedItem, "PanelTabBar::KeyInput: we should have a focused item here!" );
+        OSL_PRECOND( !!m_pImpl->aFocusedItem, "PanelTabBar::KeyInput: we should have a focused item here!" );
             // if we get KeyInput events, we should have the focus. In this case, aFocusedItem should not be empty,
             // except if there are no panels, but then we bail out of this method here earlier ...
 
@@ -1065,26 +1075,26 @@ namespace svt
                 bFocusNext = true;
             break;
         case KEY_RETURN:
-            m_pData->rPanelDeck.ActivatePanel( *m_pData->aFocusedItem );
+            m_pImpl->rPanelDeck.ActivatePanel( *m_pImpl->aFocusedItem );
             break;
         }
 
         if ( !bFocusNext && !bFocusPrev )
             return;
 
-        const size_t nOldFocus = *m_pData->aFocusedItem;
+        const size_t nOldFocus = *m_pImpl->aFocusedItem;
         if ( bFocusNext )
         {
-            m_pData->aFocusedItem.reset( ( *m_pData->aFocusedItem + 1 ) % nPanelCount );
+            m_pImpl->aFocusedItem.reset( ( *m_pImpl->aFocusedItem + 1 ) % nPanelCount );
         }
         else
         {
-            m_pData->aFocusedItem.reset( ( *m_pData->aFocusedItem + nPanelCount - 1 ) % nPanelCount );
+            m_pImpl->aFocusedItem.reset( ( *m_pImpl->aFocusedItem + nPanelCount - 1 ) % nPanelCount );
         }
 
-        ClipItemRegion aClipItems( *m_pData );
-        lcl_drawItem( *m_pData, nOldFocus );
-        lcl_drawItem( *m_pData, *m_pData->aFocusedItem );
+        ClipItemRegion aClipItems( *m_pImpl );
+        m_pImpl->DrawItem( nOldFocus );
+        m_pImpl->DrawItem( *m_pImpl->aFocusedItem );
     }
 
     //------------------------------------------------------------------------------------------------------------------

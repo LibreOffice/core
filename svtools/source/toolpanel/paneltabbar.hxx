@@ -38,7 +38,7 @@ namespace svt
 {
 //........................................................................
 
-    class PanelTabBar_Data;
+    class PanelTabBar_Impl;
 
     //====================================================================
     //= PanelTabBar
@@ -72,7 +72,7 @@ namespace svt
         virtual void    DataChanged( const DataChangedEvent& i_rDataChanedEvent );
 
     private:
-        ::std::auto_ptr< PanelTabBar_Data > m_pData;
+        ::std::auto_ptr< PanelTabBar_Impl > m_pImpl;
     };
 
 //........................................................................
