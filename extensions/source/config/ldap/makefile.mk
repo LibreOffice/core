@@ -27,7 +27,6 @@
 
 PRJ=..$/..$/..
 
-PRJINC=$(PRJ)$/source
 PRJNAME=extensions
 TARGET=ldapbe
 ENABLE_EXCEPTIONS=TRUE
@@ -64,10 +63,7 @@ SOLARINC+= $(LDAPSDKINCLUDES)
 
 SLOFILES=\
     $(SLO)$/ldapuserprofilebe.obj \
-    $(SLO)$/ldapuserprof.obj	\
     $(SLO)$/ldapaccess.obj	\
-    $(SLO)$/ldapuserprofilelayer.obj \
-    $(SLO)$/propertysethelper.obj \
     $(SLO)$/componentdef.obj
 
 LIB1TARGET=$(SLB)$/_$(TARGET).lib        

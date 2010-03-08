@@ -2,8 +2,5 @@
 ImplementationName=com.sun.star.comp.configuration.backend.DesktopBackend
 ComponentName=desktopbe1.uno.so
 LoaderName=com.sun.star.loader.SharedLibrary
-[Data]
-SupportedComponents=org.openoffice.VCL;org.openoffice.Inet;org.openoffice.Office.Common;org.openoffice.Office.Paths;org.openoffice.UserProfile;org.openoffice.Office.Recovery;org.openoffice.Setup
 [SupportedServices]
 com.sun.star.configuration.backend.DesktopBackend
-com.sun.star.configuration.backend.PlatformBackend

@@ -109,17 +109,6 @@ ImplChartModel::ImplChartModel(
         m_spChartData( new ChartData( m_xContext )),
         m_bIsDisposed( false ),
         m_xPageBackground( new PageBackground( m_xContext )),
-        m_xUndoManager( ChartModelHelper::createUndoManager() ),
-        m_xDashTable( createNameContainer( ::getCppuType( reinterpret_cast< const drawing::LineDash * >(0)),
-                C2U( "com.sun.star.drawing.DashTable" ), C2U( "com.sun.star.comp.chart.DashTable" ) )),
-        m_xGradientTable( createNameContainer( ::getCppuType( reinterpret_cast< const awt::Gradient * >(0)),
-                C2U( "com.sun.star.drawing.GradientTable" ), C2U( "com.sun.star.comp.chart.GradientTable" ) )),
-        m_xHatchTable( createNameContainer( ::getCppuType( reinterpret_cast< const drawing::Hatch * >(0)),
-                C2U( "com.sun.star.drawing.HatchTable" ), C2U( "com.sun.star.comp.chart.HatchTable" ) )),
-        m_xBitmapTable( createNameContainer( ::getCppuType( reinterpret_cast< const OUString * >(0)), // URL
-                C2U( "com.sun.star.drawing.BitmapTable" ), C2U( "com.sun.star.comp.chart.BitmapTable" ) )),
-        m_xTransparencyGradientTable( createNameContainer( ::getCppuType( reinterpret_cast< const awt::Gradient * >(0)),
-                C2U( "com.sun.star.drawing.TransparencyGradientTable" ), C2U( "com.sun.star.comp.chart.TransparencyGradientTable" ) )),
         m_xXMLNamespaceMap( createNameContainer( ::getCppuType( (const OUString*) 0 ),
                 C2U( "com.sun.star.xml.NamespaceMap" ), C2U( "com.sun.star.comp.chart.XMLNameSpaceMap" ) ), uno::UNO_QUERY),
         m_xModifyListener( xListener )
@@ -147,12 +136,6 @@ ImplChartModel::ImplChartModel( const ImplChartModel & rOther, const Reference< 
     ModifyListenerHelper::addListener( m_xTitle, m_xModifyListener );
     m_xPageBackground.set( CreateRefClone< Reference< beans::XPropertySet > >()( rOther.m_xPageBackground ));
     ModifyListenerHelper::addListener( m_xPageBackground, m_xModifyListener );
-
-    m_xDashTable.set( CreateRefClone< Reference< container::XNameContainer > >()( rOther.m_xDashTable ));
-    m_xGradientTable.set( CreateRefClone< Reference< container::XNameContainer > >()( rOther.m_xGradientTable ));
-    m_xHatchTable.set( CreateRefClone< Reference< container::XNameContainer > >()( rOther.m_xHatchTable ));
-    m_xBitmapTable.set( CreateRefClone< Reference< container::XNameContainer > >()( rOther.m_xBitmapTable ));
-    m_xTransparencyGradientTable.set( CreateRefClone< Reference< container::XNameContainer > >()( rOther.m_xTransparencyGradientTable ));
 
     m_xXMLNamespaceMap.set( CreateRefClone< Reference< container::XNameAccess > >()( rOther.m_xXMLNamespaceMap ));
 
@@ -440,12 +423,6 @@ void ImplChartModel::dispose()
     m_aDiagrams.clear();
     DisposeHelper::DisposeAndClear( m_xTitle );
     DisposeHelper::DisposeAndClear( m_xPageBackground );
-    DisposeHelper::DisposeAndClear( m_xDashTable );
-    DisposeHelper::DisposeAndClear( m_xGradientTable );
-    DisposeHelper::DisposeAndClear( m_xHatchTable );
-    DisposeHelper::DisposeAndClear( m_xBitmapTable );
-    DisposeHelper::DisposeAndClear( m_xTransparencyGradientTable );
-
     DisposeHelper::DisposeAndClear( m_xXMLNamespaceMap );
 
     // note: m_xModifyListener is the ChartModel, so don't call dispose()
@@ -457,11 +434,6 @@ void ImplChartModel::dispose()
 Reference< beans::XPropertySet > ImplChartModel::GetPageBackground()
 {
     return m_xPageBackground;
-}
-
-Reference< chart2::XUndoManager > ImplChartModel::GetUndoManager()
-{
-    return m_xUndoManager;
 }
 
 void ImplChartModel::SetNewData( const Reference< chart2::data::XDataSource > & xDataSource,
@@ -513,27 +485,6 @@ void ImplChartModel::CreateDefaultChartTypeTemplate()
         m_xChartTypeTemplate.set(
             xFact->createInstance( C2U( "com.sun.star.chart2.template.Column" ) ), uno::UNO_QUERY );
     }
-}
-
-Reference< uno::XInterface > ImplChartModel::GetDashTable() const
-{
-    return Reference< uno::XInterface >( m_xDashTable );
-}
-Reference< uno::XInterface > ImplChartModel::GetGradientTable() const
-{
-    return Reference< uno::XInterface >( m_xGradientTable );
-}
-Reference< uno::XInterface > ImplChartModel::GetHatchTable() const
-{
-    return Reference< uno::XInterface >( m_xHatchTable );
-}
-Reference< uno::XInterface > ImplChartModel::GetBitmapTable() const
-{
-    return Reference< uno::XInterface >( m_xBitmapTable );
-}
-Reference< uno::XInterface > ImplChartModel::GetTransparencyGradientTable() const
-{
-    return Reference< uno::XInterface >( m_xTransparencyGradientTable );
 }
 
 Reference< uno::XInterface > ImplChartModel::GetXMLNameSpaceMap() const

@@ -1,2 +1,3 @@
 ..\%__SRC%\bin\uiconfig.zip %_DEST%\bin%_EXT%\uiconfig.zip
-
+..\%__SRC%\misc\*.xcd %_DEST%\xml%_EXT%\
+..\%__SRC%\misc\lang\*.xcd %_DEST%\xml%_EXT%\

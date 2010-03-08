@@ -78,7 +78,7 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
      * @see om.sun.star.sdb.XSingleSelectQueryAnalyzer
      * @see com.sun.star.beans.XPropertySet
      */
-    protected void before() throws Exception {
+    protected void before() /* throws Exception*/ {
 
         xQueryAna = (XSingleSelectQueryAnalyzer)
                       UnoRuntime.queryInterface(XSingleSelectQueryAnalyzer.class,
@@ -100,7 +100,14 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
 
         }
 
-        colName = AnyConverter.toString(tEnv.getObjRelation("colName"));
+        try
+        {
+            colName = AnyConverter.toString(tEnv.getObjRelation("colName"));
+        }
+        catch (com.sun.star.lang.IllegalArgumentException e)
+        {
+            colName = null;
+        }
 
         if (colName == null) {
             throw new StatusException(Status.failed(

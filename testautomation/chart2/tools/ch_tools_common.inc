@@ -42,6 +42,8 @@
 
 sub fInsertOLE as BOOLEAN
 'Insert Chart OLE in Document
+	'Get localised OLE names
+	call GetOleDefaultNames()
     fInsertOLE = FALSE
     '/// Insert / Object / OLE
     InsertObjectOLEObject
@@ -51,9 +53,8 @@ sub fInsertOLE as BOOLEAN
     if Objekttyp.getItemcount < 1 then
         warnlog "There are no OLE-Objects in the listbox"
     endif
-    '/// Select 3rd entry in listbox (which should be the chart)
-    Objekttyp.TypeKeys "<HOME>"
-	Objekttyp.TypeKeys "<Down>", 2
+    '/// Select chart in listbox
+	Objekttyp.Select gOLEChart
     '/// Quit dialog using OK
     OLEObjektEinfuegen.OK
     sleep(2)

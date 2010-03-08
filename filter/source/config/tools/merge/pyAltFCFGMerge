@@ -438,7 +438,6 @@ def generateHeader(sVersion, sEncoding, sPath, sPackage, bLanguagePack):
         sHeader += " xmlns:xs=\"http://www.w3.org/2001/XMLSchema\""
         sHeader += " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n"
     else:
-        sHeader += "<!DOCTYPE oor:component-data SYSTEM \"../../../../component-update.dtd\">\n"
         sHeader += "<oor:component-data xmlns:oor=\"http://openoffice.org/2001/registry\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" oor:package=\""
         sHeader += sPath
         sHeader += "\" oor:name=\""

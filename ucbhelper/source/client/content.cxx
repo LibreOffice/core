@@ -337,12 +337,14 @@ static Reference< XContent > getContent(
     if ( xProvider.is() )
     {
         Reference< XContent > xContent;
+        rtl::OUString msg;
         try
         {
             xContent = xProvider->queryContent( xId );
         }
-        catch ( IllegalIdentifierException const & )
+        catch ( IllegalIdentifierException const & e )
         {
+            msg = e.Message;
             // handled below.
         }
 
@@ -355,7 +357,7 @@ static Reference< XContent > getContent(
 
             throw ContentCreationException(
                     rtl::OUString::createFromAscii(
-                        "Unable to create Content!" ),
+                        "Unable to create Content! " ) + msg,
                     Reference< XInterface >(),
                     ContentCreationError_CONTENT_CREATION_FAILED );
         }

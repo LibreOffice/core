@@ -338,6 +338,8 @@ public class JPEGComparator extends EnhancedComplexTestCase
             String sDestination = FileHelper.appendPath(sDestinationPath, sNewSourceBasename);
             FileHelper.copy(sSource, sDestination);
             sSourceBasename = sNewSourceBasename;
+            //
+            JPEGCreator.convertToNearSameFileWithWidth340(sDestination);
         }
         String sDifferenceBasename = "Difference_between_" + FileHelper.getNameNoSuffix(sSourceBasename) + "_and_" + FileHelper.getNameNoSuffix(sDestinationBasename) + ".jpg";
         // String sDifferencePath = sDestinationPath;
@@ -643,30 +645,30 @@ public class JPEGComparator extends EnhancedComplexTestCase
 
 
 
-    public static void main(String [] _args)
-    {
-// give an index.ini file, ok
-// give a directory, where exist jpeg files ok
-// inputpath (given file) doesn't exists
-// give a jpeg file.
-
-        String args[] = {
-            "-TimeOut", "3600000",
-            "-tb", "java_complex",
-            "-o", "graphical.JPEGComparator",
-            "-DOC_COMPARATOR_INPUT_PATH", "C:\\CWS\\temp\\output\\index.ini",
-            "-DOC_COMPARATOR_OUTPUT_PATH", "C:\\CWS\\temp\\output2",
-//            "-DOC_COMPARATOR_INPUT_PATH", "C:\\CWS\\temp\\output\\GroupReport.odt.pdf_180DPI_0001.jpg",
-//            "-DOC_COMPARATOR_OUTPUT_PATH", "C:\\CWS\\temp\\output2\\Report1.odt.pdf_180DPI_0001.jpg",
-            "-DOC_COMPARATOR_HTML_OUTPUT_PREFIX", "http://so-gfxcmp-lin.germany.sun.com/gfxcmp_ui/cw.php?inifile=",
-//            "-DOC_COMPARATOR_REFERENCE_CREATOR_TYPE", "PDF",      /* default: "OOo" */
-//            "-DOC_COMPARATOR_REFERENCE_CREATOR_TYPE", "msoffice", /* default: "OOo" */
-//            "-OFFICE_VIEWABLE", "false",
-//            "-AppExecutionCommand", "\"C:/Programme/sun/staroffice 9/program/soffice.exe\"  -norestore -nocrashreport -accept=pipe,name=ll93751;urp;",
-            "-NoOffice"
-        };
-
-        org.openoffice.Runner.main(args);
-    }
+//    public static void main(String [] _args)
+//    {
+//// give an index.ini file, ok
+//// give a directory, where exist jpeg files ok
+//// inputpath (given file) doesn't exists
+//// give a jpeg file.
+//
+//        String args[] = {
+//            "-TimeOut", "3600000",
+//            "-tb", "java_complex",
+//            "-o", "graphical.JPEGComparator",
+//            "-DOC_COMPARATOR_INPUT_PATH", "C:\\CWS\\temp\\output\\index.ini",
+//            "-DOC_COMPARATOR_OUTPUT_PATH", "C:\\CWS\\temp\\output2",
+////            "-DOC_COMPARATOR_INPUT_PATH", "C:\\CWS\\temp\\output\\GroupReport.odt.pdf_180DPI_0001.jpg",
+////            "-DOC_COMPARATOR_OUTPUT_PATH", "C:\\CWS\\temp\\output2\\Report1.odt.pdf_180DPI_0001.jpg",
+//            "-DOC_COMPARATOR_HTML_OUTPUT_PREFIX", "http://so-gfxcmp-lin.germany.sun.com/gfxcmp_ui/cw.php?inifile=",
+////            "-DOC_COMPARATOR_REFERENCE_CREATOR_TYPE", "PDF",      /* default: "OOo" */
+////            "-DOC_COMPARATOR_REFERENCE_CREATOR_TYPE", "msoffice", /* default: "OOo" */
+////            "-OFFICE_VIEWABLE", "false",
+////            "-AppExecutionCommand", "\"C:/Programme/sun/staroffice 9/program/soffice.exe\"  -norestore -nocrashreport -accept=pipe,name=ll93751;urp;",
+//            "-NoOffice"
+//        };
+//
+//        org.openoffice.Runner.main(args);
+//    }
 
 }

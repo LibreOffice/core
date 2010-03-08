@@ -31,6 +31,8 @@
 #include "chartview/DrawModelWrapper.hxx"
 #include "ConfigurationAccess.hxx"
 
+#include <unotools/lingucfg.hxx>
+#include <editeng/langitem.hxx>
 // header for class SdrPage
 #include <svx/svdpage.hxx>
 //header for class SdrPageView
@@ -51,6 +53,7 @@
 
 // header for class SvxShape
 #include <svx/unoshape.hxx>
+#include <editeng/fhgtitem.hxx>
 
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -161,6 +164,24 @@ DrawViewWrapper::DrawViewWrapper( SdrModel* pSdrModel, OutputDevice* pOut, bool 
     SetBufferedOverlayAllowed(true);
 
     SetPagePaintingAllowed(bPaintPageForEditMode);
+
+    // #i12587# support for shapes in chart
+    SdrOutliner* pOutliner = getOutliner();
+    SfxItemPool* pOutlinerPool = ( pOutliner ? pOutliner->GetEditTextObjectPool() : NULL );
+    if ( pOutlinerPool )
+    {
+        SvtLinguConfig aLinguConfig;
+        SvtLinguOptions aLinguOptions;
+        if ( aLinguConfig.GetOptions( aLinguOptions ) )
+        {
+            pOutlinerPool->SetPoolDefaultItem( SvxLanguageItem( aLinguOptions.nDefaultLanguage, EE_CHAR_LANGUAGE ) );
+            pOutlinerPool->SetPoolDefaultItem( SvxLanguageItem( aLinguOptions.nDefaultLanguage_CJK, EE_CHAR_LANGUAGE_CJK ) );
+            pOutlinerPool->SetPoolDefaultItem( SvxLanguageItem( aLinguOptions.nDefaultLanguage_CTL, EE_CHAR_LANGUAGE_CTL ) );
+        }
+
+        // set font height without changing SdrEngineDefaults
+        pOutlinerPool->SetPoolDefaultItem( SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT ) );  // 12pt
+    }
 
     ReInit();
 }

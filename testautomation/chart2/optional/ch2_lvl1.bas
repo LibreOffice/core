@@ -33,14 +33,14 @@
 
 sub main
     use "chart2\tools\ch_tools_common.inc"
-	use "chart2\tools\ch_tools_select.inc"
+    use "chart2\tools\ch_tools_select.inc"
     use "chart2\optional\includes\ch2_lvl1a.inc"
     
     Call hStatusIn ( "Chart2", "ch2_lvl1.bas" )
     
-	Call ch2_lvl1a
+    Call ch2_lvl1a
     
-	Call hStatusOut
+    Call hStatusOut
 	
 	
 end sub

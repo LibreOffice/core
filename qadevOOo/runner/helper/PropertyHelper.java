@@ -63,6 +63,18 @@ public class PropertyHelper
 //                {
 //                    aSaveProperties = new PropertyValue[0];
 //                }
+
+// show properties?
+//                 if (_aPropertyList.size() > 0)
+//                 {
+//                     // aSaveProperties = new PropertyValue[_aPropertyList.size()];
+//                     for (int i = 0;i<_aPropertyList.size(); i++)
+//                     {
+//                         PropertyValue aProp = (PropertyValue) _aPropertyList.get(i);
+//                         showProperty(aProp);
+//                     }
+//                 }
+
             }
             return aSaveProperties;
         }

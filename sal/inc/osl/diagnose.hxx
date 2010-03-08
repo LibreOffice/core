@@ -125,19 +125,17 @@ public:
             VoidPointerSet::const_iterator iPos(m_data.m_addresses.begin());
             VoidPointerSet::const_iterator const iEnd(m_data.m_addresses.end());
             for ( ; iPos != iEnd; ++iPos ) {
-                T const* pLeakingObj = static_cast<T const*>(*iPos);
-                OSL_ASSERT( pLeakingObj != 0 );
-                static_cast<void>(pLeakingObj);
+                OSL_ASSERT( *iPos != 0 );
             }
         }
         return bRet;
     }
 
-    void registerObject( T const* pObj ) {
+    void registerObject( void const* pObj ) {
         osl_detail_ObjectRegistry_registerObject(m_data, pObj);
     }
 
-    void revokeObject( T const* pObj ) {
+    void revokeObject( void const* pObj ) {
         osl_detail_ObjectRegistry_revokeObject(m_data, pObj);
     }
 
@@ -188,12 +186,10 @@ public:
 
 protected:
     DebugBase() {
-        StaticObjectRegistry::get().registerObject(
-            static_cast<InheritingClassT const*>(this) );
+        StaticObjectRegistry::get().registerObject( this );
     }
     ~DebugBase() {
-        StaticObjectRegistry::get().revokeObject(
-            static_cast<InheritingClassT const*>(this) );
+        StaticObjectRegistry::get().revokeObject( this );
     }
 
 private:

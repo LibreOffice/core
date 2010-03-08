@@ -95,8 +95,6 @@ public:
         getUnoModel();
     SdrModel& getSdrModel();
 
-    SAL_DLLPRIVATE void updateTablesFromChartModel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel );
-
     XColorTable*    GetColorTable() const;
     XDashList*      GetDashList() const;
     XLineEndList*   GetLineEndList() const;

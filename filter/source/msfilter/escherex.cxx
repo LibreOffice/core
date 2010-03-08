@@ -3669,13 +3669,13 @@ void EscherGraphicProvider::WriteBlibStoreContainer( SvStream& rSt, SvStream* pM
                 // record type
                 *pMergePicStreamBSE >> n16;
                 rSt << UINT16( ESCHER_BlipFirst + nBlibType );
-                DBG_ASSERT( n16 == ESCHER_BlipFirst + nBlibType , "EscherEx::Flush: BLIP record types differ" );
+                DBG_ASSERT( n16 == ESCHER_BlipFirst + nBlibType , "EscherGraphicProvider::WriteBlibStoreContainer: BLIP record types differ" );
                 UINT32 n32;
                 // record size
                 *pMergePicStreamBSE >> n32;
                 nBlipSize -= 8;
                 rSt << nBlipSize;
-                DBG_ASSERT( nBlipSize == n32, "EscherEx::Flush: BLIP sizes differ" );
+                DBG_ASSERT( nBlipSize == n32, "EscherGraphicProvider::WriteBlibStoreContainer: BLIP sizes differ" );
                 // record
                 while ( nBlipSize )
                 {
@@ -4290,63 +4290,189 @@ void EscherSolverContainer::WriteSolver( SvStream& rStrm )
 }
 
 // ---------------------------------------------------------------------------------------------
+
+EscherExGlobal::EscherExGlobal( sal_uInt32 nGraphicProvFlags ) :
+    EscherGraphicProvider( nGraphicProvFlags ),
+    mpPicStrm( 0 ),
+    mbHasDggCont( false ),
+    mbPicStrmQueried( false )
+{
+}
+
+EscherExGlobal::~EscherExGlobal()
+{
+}
+
+sal_uInt32 EscherExGlobal::GenerateDrawingId()
+{
+    // new drawing starts a new cluster in the cluster table (cluster identifiers are one-based)
+    sal_uInt32 nClusterId = static_cast< sal_uInt32 >( maClusterTable.size() + 1 );
+    // drawing identifiers are one-based
+    sal_uInt32 nDrawingId = static_cast< sal_uInt32 >( maDrawingInfos.size() + 1 );
+    // prepare new entries in the tables
+    maClusterTable.push_back( ClusterEntry( nDrawingId ) );
+    maDrawingInfos.push_back( DrawingInfo( nClusterId ) );
+    // return the new drawing identifier
+    return nDrawingId;
+}
+
+sal_uInt32 EscherExGlobal::GenerateShapeId( sal_uInt32 nDrawingId, bool bIsInSpgr )
+{
+    // drawing identifier is one-based
+    size_t nDrawingIdx = nDrawingId - 1;
+    OSL_ENSURE( nDrawingIdx < maDrawingInfos.size(), "EscherExGlobal::GenerateShapeId - invalid drawing ID" );
+    if( nDrawingIdx >= maDrawingInfos.size() )
+        return 0;
+    DrawingInfo& rDrawingInfo = maDrawingInfos[ nDrawingIdx ];
+
+    // cluster identifier in drawing info struct is one-based
+    ClusterEntry* pClusterEntry = &maClusterTable[ rDrawingInfo.mnClusterId - 1 ];
+
+    // check cluster overflow, create new cluster entry
+    if( pClusterEntry->mnNextShapeId == DFF_DGG_CLUSTER_SIZE )
+    {
+        // start a new cluster in the cluster table
+        maClusterTable.push_back( ClusterEntry( nDrawingId ) );
+        pClusterEntry = &maClusterTable.back();
+        // new size of maClusterTable is equal to one-based identifier of the new cluster
+        rDrawingInfo.mnClusterId = static_cast< sal_uInt32 >( maClusterTable.size() );
+    }
+
+    // build shape identifier from cluster identifier and next free cluster shape identifier
+    rDrawingInfo.mnLastShapeId = static_cast< sal_uInt32 >( rDrawingInfo.mnClusterId * DFF_DGG_CLUSTER_SIZE + pClusterEntry->mnNextShapeId );
+    // update free shape identifier in cluster entry
+    ++pClusterEntry->mnNextShapeId;
+    /*  Old code has counted the shapes only, if we are in a SPGRCONTAINER. Is
+        this really intended? Maybe it's always true... */
+    if( bIsInSpgr )
+        ++rDrawingInfo.mnShapeCount;
+
+    // return the new shape identifier
+    return rDrawingInfo.mnLastShapeId;
+}
+
+sal_uInt32 EscherExGlobal::GetDrawingShapeCount( sal_uInt32 nDrawingId ) const
+{
+    size_t nDrawingIdx = nDrawingId - 1;
+    OSL_ENSURE( nDrawingIdx < maDrawingInfos.size(), "EscherExGlobal::GetDrawingShapeCount - invalid drawing ID" );
+    return (nDrawingIdx < maDrawingInfos.size()) ? maDrawingInfos[ nDrawingIdx ].mnShapeCount : 0;
+}
+
+sal_uInt32 EscherExGlobal::GetLastShapeId( sal_uInt32 nDrawingId ) const
+{
+    size_t nDrawingIdx = nDrawingId - 1;
+    OSL_ENSURE( nDrawingIdx < maDrawingInfos.size(), "EscherExGlobal::GetLastShapeId - invalid drawing ID" );
+    return (nDrawingIdx < maDrawingInfos.size()) ? maDrawingInfos[ nDrawingIdx ].mnLastShapeId : 0;
+}
+
+sal_uInt32 EscherExGlobal::GetDggAtomSize() const
+{
+    // 8 bytes header, 16 bytes fixed DGG data, 8 bytes for each cluster
+    return static_cast< sal_uInt32 >( 24 + 8 * maClusterTable.size() );
+}
+
+void EscherExGlobal::WriteDggAtom( SvStream& rStrm ) const
+{
+    sal_uInt32 nDggSize = GetDggAtomSize();
+
+    // write the DGG record header (do not include the 8 bytes of the header in the data size)
+    rStrm << static_cast< sal_uInt32 >( ESCHER_Dgg << 16 ) << static_cast< sal_uInt32 >( nDggSize - 8 );
+
+    // claculate and write the fixed DGG data
+    sal_uInt32 nShapeCount = 0;
+    sal_uInt32 nLastShapeId = 0;
+    for( DrawingInfoVector::const_iterator aIt = maDrawingInfos.begin(), aEnd = maDrawingInfos.end(); aIt != aEnd; ++aIt )
+    {
+        nShapeCount += aIt->mnShapeCount;
+        nLastShapeId = ::std::max( nLastShapeId, aIt->mnLastShapeId );
+    }
+    // the non-existing cluster with index #0 is counted too
+    sal_uInt32 nClusterCount = static_cast< sal_uInt32 >( maClusterTable.size() + 1 );
+    sal_uInt32 nDrawingCount = static_cast< sal_uInt32 >( maDrawingInfos.size() );
+    rStrm << nLastShapeId << nClusterCount << nShapeCount << nDrawingCount;
+
+    // write the cluster table
+    for( ClusterTable::const_iterator aIt = maClusterTable.begin(), aEnd = maClusterTable.end(); aIt != aEnd; ++aIt )
+        rStrm << aIt->mnDrawingId << aIt->mnNextShapeId;
+}
+
+SvStream* EscherExGlobal::QueryPictureStream()
+{
+    if( !mbPicStrmQueried )
+    {
+        mpPicStrm = ImplQueryPictureStream();
+        mbPicStrmQueried = true;
+    }
+    return mpPicStrm;
+}
+
+SvStream* EscherExGlobal::ImplQueryPictureStream()
+{
+    return 0;
+}
+
+// ---------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------
 
-EscherEx::EscherEx( SvStream& rOutStrm, UINT32 nDrawings ) :
-    EscherGraphicProvider   ( 0 ),
+EscherEx::EscherEx( const EscherExGlobalRef& rxGlobal, SvStream& rOutStrm ) :
+    mxGlobal                ( rxGlobal ),
     mpOutStrm               ( &rOutStrm ),
-    mnDrawings              ( nDrawings ),
 
     mnGroupLevel            ( 0 ),
     mnHellLayerId           ( USHRT_MAX ),
 
     mbEscherSpgr            ( FALSE ),
-    mbEscherDgg             ( FALSE ),                                      // TRUE, wenn jemals ein ESCHER_Dgg angelegt wurde, dieser wird dann im Dest. aktualisiert
-    mbEscherDg              ( FALSE ),
-    mbOleEmf                ( FALSE )
+    mbEscherDg              ( FALSE )
 {
     mnStrmStartOfs = mpOutStrm->Tell();
-    mpImplEscherExSdr = new ImplEscherExSdr( *this );
+    mpImplEscherExSdr.reset( new ImplEscherExSdr( *this ) );
+}
+
+EscherEx::~EscherEx()
+{
 }
 
 // ---------------------------------------------------------------------------------------------
 
 void EscherEx::Flush( SvStream* pPicStreamMergeBSE /* = NULL */ )
 {
-    if ( mbEscherDgg )                                                      // ESCHER_Dgg anpassen
+    if ( mxGlobal->HasDggContainer() )
     {
+        // store the current stream position at ESCHER_Persist_CurrentPosition key
         PtReplaceOrInsert( ESCHER_Persist_CurrentPosition, mpOutStrm->Tell() );
         if ( DoSeek( ESCHER_Persist_Dgg ) )
         {
-            *mpOutStrm << mnCurrentShapeID << (UINT32)( mnFIDCLs + 1 ) << mnTotalShapesDgg << mnDrawings;
-        }
-        if ( HasGraphics() )
-        {
-            if ( DoSeek( ESCHER_Persist_BlibStoreContainer ) )          // ESCHER_BlibStoreContainer schreiben
+            /*  The DGG record is still not written. ESCHER_Persist_Dgg seeks
+                to the place where the complete record has to be inserted. */
+            InsertAtCurrentPos( mxGlobal->GetDggAtomSize(), false );
+            mxGlobal->WriteDggAtom( *mpOutStrm );
+
+            if ( mxGlobal->HasGraphics() )
             {
-                sal_uInt32 nAddBytes = GetBlibStoreContainerSize( pPicStreamMergeBSE );
-                if ( nAddBytes )
+                /*  Calculate the total size of the BSTORECONTAINER including
+                    all BSE records containing the picture data contained in
+                    the passed in pPicStreamMergeBSE. */
+                sal_uInt32 nBSCSize = mxGlobal->GetBlibStoreContainerSize( pPicStreamMergeBSE );
+                if ( nBSCSize > 0 )
                 {
-                    InsertAtCurrentPos( nAddBytes, TRUE );                  // platz schaffen fuer Blib Container samt seinen Blib Atomen
-                    WriteBlibStoreContainer( *mpOutStrm, pPicStreamMergeBSE );
+                    InsertAtCurrentPos( nBSCSize, false );
+                    mxGlobal->WriteBlibStoreContainer( *mpOutStrm, pPicStreamMergeBSE );
                 }
             }
+
+            /*  Forget the stream position stored for the DGG which is invalid
+                after the call to InsertAtCurrentPos() anyway. */
+            PtDelete( ESCHER_Persist_Dgg );
         }
+        // seek to initial position (may be different due to inserted DGG and BLIPs)
         mpOutStrm->Seek( PtGetOffsetByID( ESCHER_Persist_CurrentPosition ) );
     }
 }
 
 // ---------------------------------------------------------------------------------------------
 
-EscherEx::~EscherEx()
-{
-    delete mpImplEscherExSdr;
-}
-
-// ---------------------------------------------------------------------------------------------
-
-void EscherEx::InsertAtCurrentPos( UINT32 nBytes, BOOL bContainer )
+void EscherEx::InsertAtCurrentPos( UINT32 nBytes, bool bExpandEndOfAtom )
 {
     UINT32  nSize, nType, nSource, nBufSize, nToCopy, nCurPos = mpOutStrm->Tell();
     BYTE*   pBuf;
@@ -4364,11 +4490,16 @@ void EscherEx::InsertAtCurrentPos( UINT32 nBytes, BOOL bContainer )
     while ( mpOutStrm->Tell() < nCurPos )
     {
         *mpOutStrm >> nType >> nSize;
-        if ( ( mpOutStrm->Tell() + nSize ) >= ( ( bContainer ) ? nCurPos + 1 : nCurPos ) )
+        sal_uInt32 nEndOfRecord = mpOutStrm->Tell() + nSize;
+        bool bContainer = (nType & 0x0F) == 0x0F;
+        /*  Expand the record, if the insertion position is inside, or if the
+            position is at the end of a container (expands always), or at the
+            end of an atom and bExpandEndOfAtom is set. */
+        if ( (nCurPos < nEndOfRecord) || ((nCurPos == nEndOfRecord) && (bContainer || bExpandEndOfAtom)) )
         {
             mpOutStrm->SeekRel( -4 );
             *mpOutStrm << (UINT32)( nSize + nBytes );
-            if ( ( nType & 0xf ) != 0xf )
+            if ( !bContainer )
                 mpOutStrm->SeekRel( nSize );
         }
         else
@@ -4428,6 +4559,16 @@ void EscherEx::InsertPersistOffset( UINT32 nKey, UINT32 nOffset )
     PtInsert( ESCHER_Persist_PrivateEntry | nKey, nOffset );
 }
 
+void EscherEx::ReplacePersistOffset( UINT32 nKey, UINT32 nOffset )
+{
+    PtReplace( ESCHER_Persist_PrivateEntry | nKey, nOffset );
+}
+
+UINT32 EscherEx::GetPersistOffset( UINT32 nKey )
+{
+    return PtGetOffsetByID( ESCHER_Persist_PrivateEntry | nKey );
+}
+
 // ---------------------------------------------------------------------------------------------
 
 BOOL EscherEx::DoSeek( UINT32 nKey )
@@ -4476,39 +4617,25 @@ void EscherEx::OpenContainer( UINT16 nEscherContainer, int nRecInstance )
     {
         case ESCHER_DggContainer :
         {
-            mbEscherDgg = TRUE;
-            mnFIDCLs = mnDrawings;
+            mxGlobal->SetDggContainer();
             mnCurrentDg = 0;
-            mnCurrentShapeID = 0;
-            mnTotalShapesDgg = 0;
-            mnCurrentShapeMaximumID = 0;
-            AddAtom( 16 + ( mnDrawings << 3 ), ESCHER_Dgg );                // an FDGG and several FIDCLs
+            /*  Remember the current position as start position of the DGG
+                record and BSTORECONTAINER, but do not write them actually.
+                This will be done later in Flush() when the number of drawings,
+                the size and contents of the FIDCL cluster table, and the size
+                of the BLIP container are known. */
             PtReplaceOrInsert( ESCHER_Persist_Dgg, mpOutStrm->Tell() );
-            *mpOutStrm << (UINT32)0                                         // the current maximum shape ID
-                       << (UINT32)0                                         // the number of ID clusters + 1
-                       << (UINT32)0                                         // the number of total shapes saved
-                       << (UINT32)0;                                        // the total number of drawings saved
-            PtReplaceOrInsert( ESCHER_Persist_Dgg_FIDCL, mpOutStrm->Tell() );
-            for ( UINT32 i = 0; i < mnFIDCLs; i++ )                         // Dummy FIDCLs einfuegen
-            {
-                *mpOutStrm << (UINT32)0 << (UINT32)0;                       // Drawing Nummer, Anzahl der Shapes in diesem IDCL
-            }
-            PtReplaceOrInsert( ESCHER_Persist_BlibStoreContainer, mpOutStrm->Tell() );
         }
         break;
 
         case ESCHER_DgContainer :
         {
-            if ( mbEscherDgg )
+            if ( mxGlobal->HasDggContainer() )
             {
                 if ( !mbEscherDg )
                 {
                     mbEscherDg = TRUE;
-                    mnCurrentDg++;
-                    mnTotalShapesDg = 0;
-                    mnTotalShapeIdUsedDg = 0;
-                    mnCurrentShapeID = ( mnCurrentShapeMaximumID &~0x3ff ) + 0x400; // eine neue Seite bekommt immer eine neue ShapeId die ein vielfaches von 1024 ist,
-                                                                                    // damit ist erste aktuelle Shape ID 0x400
+                    mnCurrentDg = mxGlobal->GenerateDrawingId();
                     AddAtom( 8, ESCHER_Dg, 0, mnCurrentDg );
                     PtReplaceOrInsert( ESCHER_Persist_Dg | mnCurrentDg, mpOutStrm->Tell() );
                     *mpOutStrm << (UINT32)0     // The number of shapes in this drawing
@@ -4554,48 +4681,7 @@ void EscherEx::CloseContainer()
             {
                 mbEscherDg = FALSE;
                 if ( DoSeek( ESCHER_Persist_Dg | mnCurrentDg ) )
-                {
-                    // shapeanzahl des drawings setzen
-                    mnTotalShapesDgg += mnTotalShapesDg;
-                    *mpOutStrm << mnTotalShapesDg << mnCurrentShapeMaximumID;
-                    if ( DoSeek( ESCHER_Persist_Dgg_FIDCL ) )
-                    {
-                        if ( mnTotalShapesDg == 0 )
-                        {
-                            mpOutStrm->SeekRel( 8 );
-                        }
-                        else
-                        {
-                            if ( mnTotalShapeIdUsedDg )
-                            {
-                                // die benutzten Shape Ids des drawings in die fidcls setzen
-                                UINT32 i, nFIDCL = ( ( mnTotalShapeIdUsedDg - 1 ) / 0x400 );
-                                if ( nFIDCL )
-                                {
-                                    if ( nPos > mpOutStrm->Tell() )
-                                        nPos += ( nFIDCL << 3 );
-
-                                    mnFIDCLs += nFIDCL;
-                                    InsertAtCurrentPos( nFIDCL << 3 );          // platz schaffen fuer weitere FIDCL's
-                                }
-                                for ( i = 0; i <= nFIDCL; i++ )
-                                {
-                                    *mpOutStrm << mnCurrentDg;
-                                    if ( i < nFIDCL )
-                                        *mpOutStrm << (UINT32)0x400;
-                                    else
-                                    {
-                                        UINT32 nShapesLeft = mnTotalShapeIdUsedDg % 0x400;
-                                        if ( !nShapesLeft )
-                                            nShapesLeft = 0x400;
-                                        *mpOutStrm << (UINT32)nShapesLeft;
-                                    }
-                                }
-                            }
-                        }
-                        PtReplaceOrInsert( ESCHER_Persist_Dgg_FIDCL, mpOutStrm->Tell() );   // neuen FIDCL Offset fuer naechste Seite
-                    }
-                }
+                    *mpOutStrm << mxGlobal->GetDrawingShapeCount( mnCurrentDg ) << mxGlobal->GetLastShapeId( mnCurrentDg );
             }
         }
         break;
@@ -4649,10 +4735,10 @@ void EscherEx::AddAtom( UINT32 nAtomSize, UINT16 nRecType, int nRecVersion, int 
 void EscherEx::AddChildAnchor( const Rectangle& rRect )
 {
     AddAtom( 16, ESCHER_ChildAnchor );
-    GetStream() << (INT32)rRect.Left()
-                << (INT32)rRect.Top()
-                << (INT32)rRect.Right()
-                << (INT32)rRect.Bottom();
+    *mpOutStrm  << (sal_Int32)rRect.Left()
+                << (sal_Int32)rRect.Top()
+                << (sal_Int32)rRect.Right()
+                << (sal_Int32)rRect.Bottom();
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -4691,7 +4777,7 @@ UINT32 EscherEx::EnterGroup( const String& rShapeName, const Rectangle* pBoundRe
                 << (INT32)aRect.Right()
                 << (INT32)aRect.Bottom();
 
-    UINT32 nShapeId = GetShapeID();
+    sal_uInt32 nShapeId = GenerateShapeId();
     if ( !mnGroupLevel )
         AddShape( ESCHER_ShpInst_Min, 5, nShapeId );                    // Flags: Group | Patriarch
     else
@@ -4782,7 +4868,7 @@ void EscherEx::AddShape( UINT32 nShpInstance, UINT32 nFlags, UINT32 nShapeID )
     AddAtom( 8, ESCHER_Sp, 2, nShpInstance );
 
     if ( !nShapeID )
-        nShapeID = GetShapeID();
+        nShapeID = GenerateShapeId();
 
     if ( nFlags ^ 1 )                           // is this a group shape ?
     {                                           // if not
@@ -4790,19 +4876,6 @@ void EscherEx::AddShape( UINT32 nShpInstance, UINT32 nFlags, UINT32 nShapeID )
             nFlags |= 2;                        // this not a topmost shape
     }
     *mpOutStrm << nShapeID << nFlags;
-
-    if ( mbEscherSpgr )
-        mnTotalShapesDg++;
-}
-
-// ---------------------------------------------------------------------------------------------
-
-UINT32 EscherEx::GetShapeID()
-{
-    mnCurrentShapeMaximumID = mnCurrentShapeID; // maximum setzen
-    mnCurrentShapeID++;                         // mnCurrentShape ID auf nachste freie ID
-    mnTotalShapeIdUsedDg++;
-    return mnCurrentShapeMaximumID;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -4842,3 +4915,4 @@ UINT32 EscherEx::GetColor( const Color& rSOColor, BOOL bSwap )
 }
 
 // ---------------------------------------------------------------------------------------------
+

@@ -244,11 +244,17 @@ class PackageRegistryBackend
     : protected ::dp_misc::MutexHolder, public t_BackendBase
 {
     ::rtl::OUString m_cachePath;
-
+    //The map held originally WeakReferences. The map entries are removed in the disposing
+    //function, which is called when the XPackages are destructed or they are
+    //explicitely disposed. The latter happens, for example, when a extension is
+    //removed (see dp_manager.cxx). However, because of how the help systems work, now
+    // XPackageManager::getDeployedPackages is called often. This results in a lot
+    //of bindPackage calls which are costly. Therefore we keep hard references in
+    //the map now.
     typedef ::std::hash_map<
-        ::rtl::OUString, css::uno::WeakReference<css::deployment::XPackage>,
-        ::rtl::OUStringHash > t_string2weakref;
-    t_string2weakref m_bound;
+        ::rtl::OUString, css::uno::Reference<css::deployment::XPackage>,
+        ::rtl::OUStringHash > t_string2ref;
+    t_string2ref m_bound;
 
 protected:
     css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;

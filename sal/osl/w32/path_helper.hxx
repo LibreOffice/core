@@ -34,6 +34,7 @@
 
 #include "path_helper.h"
 #include <rtl/ustring.hxx>
+#include <rtl/allocator.hxx>
 
 namespace osl
 {
@@ -69,6 +70,45 @@ inline bool systemPathIsLogicalDrivePattern(/*in*/ const rtl::OUString& path)
 {
     return osl_systemPathIsLogicalDrivePattern(path.pData);
 }
+
+/*******************************************************************
+ LongPathBuffer
+ ******************************************************************/
+template< class T >
+class LongPathBuffer
+{
+    T* m_pBuffer;
+    sal_uInt32 m_nCharNum;
+
+    LongPathBuffer();
+    LongPathBuffer( const LongPathBuffer& );
+    LongPathBuffer& operator=( const LongPathBuffer& );
+
+public:
+    LongPathBuffer( sal_uInt32 nCharNum )
+    : m_pBuffer( reinterpret_cast<T*>( rtl_allocateMemory( nCharNum * sizeof( T ) ) ) )
+    , m_nCharNum( nCharNum )
+    {
+        OSL_ENSURE( m_pBuffer, "Can not allocate the buffer!" );
+    }
+
+    ~LongPathBuffer()
+    {
+        if ( m_pBuffer )
+            rtl_freeMemory( m_pBuffer );
+        m_pBuffer = 0;
+    }
+
+    sal_uInt32 getBufSizeInSymbols()
+    {
+        return m_nCharNum;
+    }
+
+    operator T* ()
+    {
+        return m_pBuffer;
+    }
+};
 
 } // end namespace osl
 

@@ -128,7 +128,7 @@ sub main
     printlog Chr(13) + "---------  Chart2 Window Menu  ---------"
     Call tWindowNewWindowAndClose
     printLog Chr(13) + "----------  Chart2 Toolbars  -----------"      
-    Call tdummyToolbar
+    Call tDrawBar
     printLog Chr(13) + "--------- Chart2 as OLE object ---------"
     Call tChartOLE("WRITER")
     Call tChartOLE("CALC")
@@ -146,7 +146,7 @@ sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
     use "global\tools\includes\optional\t_set_standard_controls.inc"
+    use "global\tools\includes\optional\t_ole.inc"
     Call GetUseFiles 
     gApplication = "CALC"
 end sub
-

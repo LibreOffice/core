@@ -772,6 +772,14 @@ OUString StringHelper::trimSpaces( const OUString& rStr )
     return rStr.copy( nBeg, nEnd - nBeg );
 }
 
+OUString StringHelper::trimTrailingNul( const OUString& rStr )
+{
+    sal_Int32 nLastPos = rStr.getLength() - 1;
+    if( (nLastPos >= 0) && (rStr[ nLastPos ] == 0) )
+        return rStr.copy( 0, nLastPos );
+    return rStr;
+}
+
 OString StringHelper::convertToUtf8( const OUString& rStr )
 {
     return OUStringToOString( rStr, RTL_TEXTENCODING_UTF8 );
@@ -886,6 +894,25 @@ bool StringHelper::convertStringToBool( const OUString& rData )
         return false;
     sal_Int64 nData;
     return convertStringToInt( nData, rData ) && (nData != 0);
+}
+
+OUStringPair StringHelper::convertStringToPair( const OUString& rString, sal_Unicode cSep )
+{
+    OUStringPair aPair;
+    if( rString.getLength() > 0 )
+    {
+        sal_Int32 nEqPos = rString.indexOf( cSep );
+        if( nEqPos < 0 )
+        {
+            aPair.first = rString;
+        }
+        else
+        {
+            aPair.first = StringHelper::trimSpaces( rString.copy( 0, nEqPos ) );
+            aPair.second = StringHelper::trimSpaces( rString.copy( nEqPos + 1 ) );
+        }
+    }
+    return aPair;
 }
 
 void StringHelper::convertStringToStringList( OUStringVector& orVec, const OUString& rData, bool bIgnoreEmpty )
@@ -1067,25 +1094,11 @@ ConfigItemBase::LineType ConfigItemBase::readConfigLine(
         }
     }
 
-    LineType eResult = LINETYPE_END;
-    if( aLine.getLength() > 0 )
-    {
-        sal_Int32 nEqPos = aLine.indexOf( '=' );
-        if( nEqPos < 0 )
-        {
-            orKey = aLine;
-        }
-        else
-        {
-            orKey = StringHelper::trimSpaces( aLine.copy( 0, nEqPos ) );
-            orData = StringHelper::trimSpaces( aLine.copy( nEqPos + 1 ) );
-        }
-
-        if( (orKey.getLength() > 0) && ((orData.getLength() > 0) || !orKey.equalsAscii( "end" )) )
-            eResult = LINETYPE_DATA;
-    }
-
-    return eResult;
+    OUStringPair aPair = StringHelper::convertStringToPair( aLine );
+    orKey = aPair.first;
+    orData = aPair.second;
+    return ((orKey.getLength() > 0) && ((orData.getLength() > 0) || !orKey.equalsAscii( "end" ))) ?
+        LINETYPE_DATA : LINETYPE_END;
 }
 
 ConfigItemBase::LineType ConfigItemBase::readConfigLine( const ConfigInputStreamRef& rxStrm ) const
@@ -1172,6 +1185,15 @@ void NameListBase::exclude( const OUString& rKeys )
     StringHelper::convertStringToIntList( aVec, rKeys, true );
     for( Int64Vector::const_iterator aIt = aVec.begin(), aEnd = aVec.end(); aIt != aEnd; ++aIt )
         maMap.erase( *aIt );
+}
+
+// ============================================================================
+
+void ItemFormatMap::insertFormats( const NameListRef& rxNameList )
+{
+    if( Base::isValid( rxNameList ) )
+        for( NameListBase::const_iterator aIt = rxNameList->begin(), aEnd = rxNameList->end(); aIt != aEnd; ++aIt )
+            (*this)[ aIt->first ].parse( aIt->second );
 }
 
 // ============================================================================
@@ -1283,46 +1305,57 @@ void FlagsList::implProcessConfigItemStr(
 
 void FlagsList::implSetName( sal_Int64 nKey, const OUString& rName )
 {
-    insertRawName( nKey, rName );
+    if( (nKey != 0) && ((nKey & (nKey - 1)) == 0) )  // only a single bit set?
+        insertRawName( nKey, rName );
 }
 
 OUString FlagsList::implGetName( const Config& /*rCfg*/, sal_Int64 nKey ) const
 {
-    sal_Int64 nFlags = nKey;
-    setFlag( nFlags, mnIgnore, false );
-    sal_Int64 nFound = 0;
+    sal_Int64 nFound = mnIgnore;
     OUStringBuffer aName;
     // add known flags
     for( const_iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
     {
         sal_Int64 nMask = aIt->first;
-        const OUString& rFlagName = aIt->second;
-        bool bNegated = (rFlagName.getLength() > 0) && (rFlagName[ 0 ] == '!');
-        sal_Int32 nBothSep = bNegated ? rFlagName.indexOf( '!', 1 ) : -1;
-        bool bFlag = getFlag( nFlags, nMask );
-        if( bFlag )
-        {
-            if( !bNegated )
-                StringHelper::appendToken( aName, rFlagName );
-            else if( nBothSep > 0 )
-                StringHelper::appendToken( aName, rFlagName.copy( nBothSep + 1 ) );
-        }
-        else if( bNegated )
-        {
-            if( nBothSep > 0 )
-                StringHelper::appendToken( aName, rFlagName.copy( 1, nBothSep - 1 ) );
-            else
-                StringHelper::appendToken( aName, rFlagName.copy( 1 ) );
-        }
         setFlag( nFound, nMask );
+        if( !getFlag( mnIgnore, nMask ) )
+        {
+            const OUString& rFlagName = aIt->second;
+            bool bOnOff = (rFlagName.getLength() > 0) && (rFlagName[ 0 ] == ':');
+            bool bFlag = getFlag( nKey, nMask );
+            if( bOnOff )
+            {
+                StringHelper::appendToken( aName, rFlagName.copy( 1 ) );
+                aName.appendAscii( bFlag ? ":on" : ":off" );
+            }
+            else
+            {
+                bool bNegated = (rFlagName.getLength() > 0) && (rFlagName[ 0 ] == '!');
+                sal_Int32 nBothSep = bNegated ? rFlagName.indexOf( '!', 1 ) : -1;
+                if( bFlag )
+                {
+                    if( !bNegated )
+                        StringHelper::appendToken( aName, rFlagName );
+                    else if( nBothSep > 0 )
+                        StringHelper::appendToken( aName, rFlagName.copy( nBothSep + 1 ) );
+                }
+                else if( bNegated )
+                {
+                    if( nBothSep > 0 )
+                        StringHelper::appendToken( aName, rFlagName.copy( 1, nBothSep - 1 ) );
+                    else
+                        StringHelper::appendToken( aName, rFlagName.copy( 1 ) );
+                }
+            }
+        }
     }
     // add unknown flags
-    setFlag( nFlags, nFound, false );
-    if( nFlags != 0 )
+    setFlag( nKey, nFound, false );
+    if( nKey != 0 )
     {
         OUStringBuffer aUnknown( CREATE_OUSTRING( OOX_DUMP_UNKNOWN ) );
         aUnknown.append( OOX_DUMP_ITEMSEP );
-        StringHelper::appendShortHex( aUnknown, nFlags, true );
+        StringHelper::appendShortHex( aUnknown, nKey, true );
         StringHelper::enclose( aUnknown, '(', ')' );
         StringHelper::appendToken( aName, aUnknown.makeStringAndClear() );
     }
@@ -1342,6 +1375,11 @@ void FlagsList::implIncludeList( const NameListBase& rList )
 
 // ============================================================================
 
+bool CombiList::ExtItemFormatKey::operator<( const ExtItemFormatKey& rRight ) const
+{
+    return (mnKey < rRight.mnKey) || ((mnKey == rRight.mnKey) && (maFilter < rRight.maFilter));
+}
+
 CombiList::CombiList( const SharedConfigData& rCfgData ) :
     FlagsList( rCfgData )
 {
@@ -1351,9 +1389,34 @@ void CombiList::implSetName( sal_Int64 nKey, const OUString& rName )
 {
     if( (nKey & (nKey - 1)) != 0 )  // more than a single bit set?
     {
-        ExtItemFormat& rItemFmt = maFmtMap[ nKey ];
-        OUStringVector aRemain = rItemFmt.parse( rName );
-        rItemFmt.mbShiftValue = aRemain.empty() || !aRemain.front().equalsAscii( "noshift" );
+        typedef ::std::set< ExtItemFormatKey > ExtItemFormatKeySet;
+        ::std::set< ExtItemFormatKey > aItemKeys;
+        ExtItemFormat aItemFmt;
+        OUStringVector aRemain = aItemFmt.parse( rName );
+        for( OUStringVector::iterator aIt = aRemain.begin(), aEnd = aRemain.end(); aIt != aEnd; ++aIt )
+        {
+            OUStringPair aPair = StringHelper::convertStringToPair( *aIt );
+            if( aPair.first.equalsAscii( "noshift" ) )
+            {
+                aItemFmt.mbShiftValue = StringHelper::convertStringToBool( aPair.second );
+            }
+            else if( aPair.first.equalsAscii( "filter" ) )
+            {
+                OUStringPair aFilter = StringHelper::convertStringToPair( aPair.second, '~' );
+                ExtItemFormatKey aKey( nKey );
+                if( (aFilter.first.getLength() > 0) && StringHelper::convertStringToInt( aKey.maFilter.first, aFilter.first ) &&
+                    (aFilter.second.getLength() > 0) && StringHelper::convertStringToInt( aKey.maFilter.second, aFilter.second ) )
+                {
+                    if( aKey.maFilter.first == 0 )
+                        aKey.maFilter.second = 0;
+                    aItemKeys.insert( aKey );
+                }
+            }
+        }
+        if( aItemKeys.empty() )
+            aItemKeys.insert( ExtItemFormatKey( nKey ) );
+        for( ExtItemFormatKeySet::iterator aIt = aItemKeys.begin(), aEnd = aItemKeys.end(); aIt != aEnd; ++aIt )
+            maFmtMap[ *aIt ] = aItemFmt;
     }
     else
     {
@@ -1363,18 +1426,18 @@ void CombiList::implSetName( sal_Int64 nKey, const OUString& rName )
 
 OUString CombiList::implGetName( const Config& rCfg, sal_Int64 nKey ) const
 {
-    sal_Int64 nFlags = nKey;
     sal_Int64 nFound = 0;
     OUStringBuffer aName;
     // add known flag fields
     for( ExtItemFormatMap::const_iterator aIt = maFmtMap.begin(), aEnd = maFmtMap.end(); aIt != aEnd; ++aIt )
     {
-        sal_Int64 nMask = aIt->first;
-        if( nMask != 0 )
+        const ExtItemFormatKey& rMapKey = aIt->first;
+        sal_Int64 nMask = rMapKey.mnKey;
+        if( (nMask != 0) && ((nKey & rMapKey.maFilter.first) == rMapKey.maFilter.second) )
         {
             const ExtItemFormat& rItemFmt = aIt->second;
 
-            sal_uInt64 nUFlags = static_cast< sal_uInt64 >( nFlags );
+            sal_uInt64 nUFlags = static_cast< sal_uInt64 >( nKey );
             sal_uInt64 nUMask = static_cast< sal_uInt64 >( nMask );
             if( rItemFmt.mbShiftValue )
                 while( (nUMask & 1) == 0 ) { nUFlags >>= 1; nUMask >>= 1; }
@@ -1411,8 +1474,8 @@ OUString CombiList::implGetName( const Config& rCfg, sal_Int64 nKey ) const
             setFlag( nFound, nMask );
         }
     }
-    setFlag( nFlags, nFound, false );
-    StringHelper::appendToken( aName, FlagsList::implGetName( rCfg, nFlags ) );
+    setFlag( nKey, nFound, false );
+    StringHelper::appendToken( aName, FlagsList::implGetName( rCfg, nKey ) );
     return aName.makeStringAndClear();
 }
 
@@ -2627,7 +2690,7 @@ sal_Unicode InputObjectBase::dumpUnicode( const String& rName )
     return cChar;
 }
 
-OUString InputObjectBase::dumpCharArray( const String& rName, sal_Int32 nLen, rtl_TextEncoding eTextEnc )
+OUString InputObjectBase::dumpCharArray( const String& rName, sal_Int32 nLen, rtl_TextEncoding eTextEnc, bool bHideTrailingNul )
 {
     sal_Int32 nDumpSize = getLimitedValue< sal_Int32, sal_Int64 >( mxStrm->getLength() - mxStrm->tell(), 0, nLen );
     OUString aString;
@@ -2638,16 +2701,20 @@ OUString InputObjectBase::dumpCharArray( const String& rName, sal_Int32 nLen, rt
         aBuffer[ nCharsRead ] = 0;
         aString = OStringToOUString( OString( &aBuffer.front() ), eTextEnc );
     }
+    if( bHideTrailingNul )
+        aString = StringHelper::trimTrailingNul( aString );
     writeStringItem( rName( "text" ), aString );
     return aString;
 }
 
-OUString InputObjectBase::dumpUnicodeArray( const String& rName, sal_Int32 nLen )
+OUString InputObjectBase::dumpUnicodeArray( const String& rName, sal_Int32 nLen, bool bHideTrailingNul )
 {
     OUStringBuffer aBuffer;
     for( sal_Int32 nIndex = 0; !mxStrm->isEof() && (nIndex < nLen); ++nIndex )
         aBuffer.append( static_cast< sal_Unicode >( mxStrm->readuInt16() ) );
     OUString aString = aBuffer.makeStringAndClear();
+    if( bHideTrailingNul )
+        aString = StringHelper::trimTrailingNul( aString );
     writeStringItem( rName( "text" ), aString );
     return aString;
 }
@@ -3059,12 +3126,7 @@ bool RecordObjectBase::implIsValid() const
 void RecordObjectBase::implDump()
 {
     NameListRef xRecNames = getRecNames();
-
-    typedef ::std::map< sal_Int64, ItemFormat > ItemFormatMap;
-    ItemFormatMap aSimpleRecs;
-    if( NameListBase* pSimpleRecs = maSimpleRecs.getNameList( cfg() ).get() )
-        for( NameListBase::const_iterator aIt = pSimpleRecs->begin(), aEnd = pSimpleRecs->end(); aIt != aEnd; ++aIt )
-            aSimpleRecs[ aIt->first ].parse( aIt->second );
+    ItemFormatMap aSimpleRecs( maSimpleRecs.getNameList( cfg() ) );
 
     while( implStartRecord( *mxBaseStrm, mnRecPos, mnRecId, mnRecSize ) )
     {

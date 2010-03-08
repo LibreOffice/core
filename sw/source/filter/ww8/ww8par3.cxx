@@ -58,6 +58,7 @@
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <comphelper/extract.hxx>
+#include <comphelper/stlunosequence.hxx>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
@@ -93,66 +94,15 @@
 
 #include <IMark.hxx>
 #include <unotools/fltrcfg.hxx>
+#include <xmloff/odffields.hxx>
 
 #include <stdio.h>
+#include <algorithm>
 
 using namespace com::sun::star;
 using namespace sw::util;
 using namespace sw::types;
-
-WW8NewFieldCtx::WW8NewFieldCtx(SwPosition &aStartPos, ::rtl::OUString sBookmarkName, ::rtl::OUString sMarkType)
-    : maPtNode(aStartPos.nNode)
-    , mnPtCntnt(aStartPos.nContent.GetIndex())
-    , msBookmarkName(sBookmarkName)
-    , msMarkType(sMarkType)
-    , mpPaM(NULL)
-{
-}
-
-
-WW8NewFieldCtx::~WW8NewFieldCtx()
-{
-    if (mpPaM) delete mpPaM;
-}
-
-::rtl::OUString WW8NewFieldCtx::GetBookmarkName()
-{
-    return msBookmarkName;
-}
-
-::rtl::OUString WW8NewFieldCtx::GetMarkType()
-{
-    return msMarkType;
-}
-
-void WW8NewFieldCtx::AddParam(::rtl::OUString name, ::rtl::OUString value)
-{
-    maParams.push_back( Param_t(name, value) );
-}
-
-void WW8NewFieldCtx::SetCurrentFieldParamsTo(::sw::mark::IFieldmark* pFieldmark)
-{
-    for(Params_t::iterator i=maParams.begin();i!=maParams.end();i++)
-    {
-        ::rtl::OUString aName=i->first;
-        ::rtl::OUString aValue=i->second;
-        if(aName.compareToAscii("Description")==0)
-        {
-            pFieldmark->SetFieldHelptext(aValue);
-        }
-        else if(aName.compareToAscii("Name")==0)
-        {
-            pFieldmark->SetFieldname(aValue);
-        }
-        else if(aName.compareToAscii("Result")==0)
-        {
-            ::sw::mark::ICheckboxFieldmark* pAsCheckbox =
-                dynamic_cast< ::sw::mark::ICheckboxFieldmark* >(pFieldmark);
-            if(pAsCheckbox)
-                pAsCheckbox->SetChecked(aValue.toInt32()==0);
-        }
-    }
-}
+using namespace sw::mark;
 
 //-----------------------------------------
 //            UNO-Controls
@@ -230,10 +180,10 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr )
 
 
     if (aBookmarkName.Len()>0) {
-        WW8NewFieldCtx *pFieldCtx=new WW8NewFieldCtx(*pPaM->GetPoint(), aBookmarkName, ::rtl::OUString::createFromAscii("ecma.office-open-xml.field.FORMTEXT"));
-        maNewFieldCtxStack.push_back(pFieldCtx);
-        pFieldCtx->AddParam(::rtl::OUString::createFromAscii("Description"), aFormula.sToolTip);
-        pFieldCtx->AddParam(::rtl::OUString::createFromAscii("Name"), aFormula.sTitle);
+        maFieldStack.back().SetBookmarkName(aBookmarkName);
+        maFieldStack.back().SetBookmarkType(::rtl::OUString::createFromAscii(ODF_FORMTEXT));
+        maFieldStack.back().getParameters()[::rtl::OUString::createFromAscii("Description")] = uno::makeAny(::rtl::OUString(aFormula.sToolTip));
+        maFieldStack.back().getParameters()[::rtl::OUString::createFromAscii("Name")] = uno::makeAny(::rtl::OUString(aFormula.sTitle));
     }
     return FLD_TEXT;
     }
@@ -276,19 +226,20 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, String& rStr )
         aBookmarkName=pB->GetUniqueBookmarkName(aFormula.sTitle);
     }
 
-    if (aBookmarkName.Len()>0) {
-        ::sw::mark::ICheckboxFieldmark* pFieldmark =
-            dynamic_cast< ::sw::mark::ICheckboxFieldmark*>(rDoc.getIDocumentMarkAccess()->makeMark(
-                *pPaM,
-                aBookmarkName,
-                IDocumentMarkAccess::CHECKBOX_FIELDMARK));
-        OSL_ENSURE(pFieldmark,
-            "hmmm; why was the bookmark not created?");
-        if(pFieldmark)
-        {
-            pFieldmark->SetFieldname(aFormula.sTitle);
-            pFieldmark->SetFieldHelptext(aFormula.sToolTip);
-            pFieldmark->SetChecked(aFormula.nChecked!=0);
+    if (aBookmarkName.Len()>0)
+    {
+        IDocumentMarkAccess* pMarksAccess = rDoc.getIDocumentMarkAccess( );
+        IFieldmark* pFieldmark = dynamic_cast<IFieldmark*>( pMarksAccess->makeNoTextFieldBookmark(
+                *pPaM, aBookmarkName,
+                rtl::OUString::createFromAscii( ODF_FORMCHECKBOX ) ) );
+        ASSERT(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
+        if (pFieldmark!=NULL) {
+            IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
+            ICheckboxFieldmark* pCheckboxFm = dynamic_cast<ICheckboxFieldmark*>(pFieldmark);
+            (*pParameters)[::rtl::OUString::createFromAscii(ODF_FORMCHECKBOX_NAME)] = uno::makeAny(::rtl::OUString(aFormula.sTitle));
+            (*pParameters)[::rtl::OUString::createFromAscii(ODF_FORMCHECKBOX_HELPTEXT)] = uno::makeAny(::rtl::OUString(aFormula.sToolTip));
+            if(pCheckboxFm)
+                pCheckboxFm->SetChecked(aFormula.nChecked);
             // set field data here...
         }
     }
@@ -303,24 +254,71 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, String& rStr)
     if (0x01 == rStr.GetChar(writer_cast<xub_StrLen>(pF->nLCode-1)))
         ImportFormulaControl(aFormula,pF->nSCode+pF->nLCode-1, WW8_CT_DROPDOWN);
 
-    SwDropDownField aFld(
-        (SwDropDownFieldType*)rDoc.GetSysFldType(RES_DROPDOWN));
+    const SvtFilterOptions* pOpt = SvtFilterOptions::Get();
+    sal_Bool bUseEnhFields=(pOpt && pOpt->IsUseEnhancedFields());
 
-    aFld.SetName(aFormula.sTitle);
-    aFld.SetHelp(aFormula.sHelp);
-    aFld.SetToolTip(aFormula.sToolTip);
-
-    if (!aFormula.maListEntries.empty())
+    if (!bUseEnhFields)
     {
-        aFld.SetItems(aFormula.maListEntries);
-        int nIndex = aFormula.fDropdownIndex  < aFormula.maListEntries.size()
-            ? aFormula.fDropdownIndex : 0;
-        aFld.SetSelectedItem(aFormula.maListEntries[nIndex]);
+        SwDropDownField aFld((SwDropDownFieldType*)rDoc.GetSysFldType(RES_DROPDOWN));
+
+        aFld.SetName(aFormula.sTitle);
+        aFld.SetHelp(aFormula.sHelp);
+        aFld.SetToolTip(aFormula.sToolTip);
+
+        if (!aFormula.maListEntries.empty())
+        {
+            aFld.SetItems(aFormula.maListEntries);
+            int nIndex = aFormula.fDropdownIndex  < aFormula.maListEntries.size() ? aFormula.fDropdownIndex : 0;
+            aFld.SetSelectedItem(aFormula.maListEntries[nIndex]);
+        }
+
+        rDoc.InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
+        return FLD_OK;
     }
+    else
+    {
+        // TODO: review me
+        String aBookmarkName;
+        WW8PLCFx_Book* pB = pPlcxMan->GetBook();
+        if (pB!=NULL)
+        {
+            WW8_CP currentCP=pF->nSCode;
+            WW8_CP currentLen=pF->nLen;
 
-    rDoc.InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
+            USHORT bkmFindIdx;
+            String aBookmarkFind=pB->GetBookmark(currentCP-1, currentCP+currentLen-1, bkmFindIdx);
 
-    return FLD_OK;
+            if (aBookmarkFind.Len()>0)
+            {
+                pB->SetStatus(bkmFindIdx, BOOK_FIELD); // mark as consumed by field
+                if (aBookmarkFind.Len()>0)
+                    aBookmarkName=aBookmarkFind;
+            }
+        }
+
+        if (pB!=NULL && aBookmarkName.Len()==0)
+            aBookmarkName=pB->GetUniqueBookmarkName(aFormula.sTitle);
+
+        if (aBookmarkName.Len()>0)
+        {
+            IDocumentMarkAccess* pMarksAccess = rDoc.getIDocumentMarkAccess( );
+            IFieldmark *pFieldmark = dynamic_cast<IFieldmark*>(
+                    pMarksAccess->makeNoTextFieldBookmark( *pPaM, aBookmarkName,
+                           ::rtl::OUString::createFromAscii( ODF_FORMDROPDOWN ) ) );
+            ASSERT(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
+            if ( pFieldmark != NULL )
+            {
+                uno::Sequence< ::rtl::OUString > vListEntries(aFormula.maListEntries.size());
+                ::std::copy(aFormula.maListEntries.begin(), aFormula.maListEntries.end(), ::comphelper::stl_begin(vListEntries));
+                (*pFieldmark->GetParameters())[::rtl::OUString::createFromAscii(ODF_FORMDROPDOWN_LISTENTRY)] = uno::makeAny(vListEntries);
+                sal_Int32 nIndex = aFormula.fDropdownIndex  < aFormula.maListEntries.size() ? aFormula.fDropdownIndex : 0;
+                (*pFieldmark->GetParameters())[::rtl::OUString::createFromAscii(ODF_FORMDROPDOWN_RESULT)] = uno::makeAny(nIndex);
+                // set field data here...
+            }
+        }
+
+        return FLD_OK;
+    }
 }
 
 void SwWW8ImplReader::DeleteFormImpl()
@@ -2137,11 +2135,6 @@ bool SwWW8ImplReader::ImportFormulaControl(WW8FormulaControl &aFormula,
 
     if((aPic.lcb > 0x3A) && !pDataStream->GetError() )
     {
-        pDataStream->Seek( nPicLocFc + aPic.cbHeader );
-        int len=aPic.lcb-aPic.cbHeader;
-        char *pBuf=(char*)malloc(len);
-        pDataStream->Read( pBuf, len);
-        pDataStream->Seek( nPicLocFc + aPic.cbHeader );
         aFormula.FormulaRead(nWhich,pDataStream);
         bRet = true;
     }

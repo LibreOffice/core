@@ -41,6 +41,7 @@
 #include <com/sun/star/linguistic2/ProofreadingResult.hpp>
 #include <fldupde.hxx>
 #include <tblenum.hxx>
+#include <IMark.hxx>
 
 #include <vector>
 #include <swundo.hxx>
@@ -412,6 +413,9 @@ public:
     USHORT              GetTOXTypeCount(TOXTypes eTyp) const;
     const SwTOXType*    GetTOXType(TOXTypes eTyp, USHORT nId) const;
     void                InsertTOXType(const SwTOXType& rTyp);
+
+    // new field stuff
+    BOOL                UpdateField(sw::mark::IFieldmark &fieldBM);
 
     //AutoMark file
     const String&   GetTOIAutoMarkURL() const;

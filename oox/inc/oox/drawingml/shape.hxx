@@ -69,7 +69,8 @@ public:
                             const ::com::sun::star::awt::Rectangle& rShapeRect );
 
     virtual void        onXShapeCreated(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape ) const;
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes ) const;
 
     inline const PropertyMap& getShapeProperties() const { return maShapeProps; }
 
@@ -143,7 +144,7 @@ public:
     // addShape is creating and inserting the corresponding XShape.
     void                addShape(
                             const oox::core::XmlFilterBase& rFilterBase,
-                            const ThemePtr& rxTheme,
+                            const Theme* pTheme,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             const ::com::sun::star::awt::Rectangle* pShapeRect = 0,
                             ShapeIdMap* pShapeMap = 0 );
@@ -161,7 +162,7 @@ protected:
                         createAndInsert(
                             const ::oox::core::XmlFilterBase& rFilterBase,
                             const ::rtl::OUString& rServiceName,
-                            const ThemePtr& rxTheme,
+                            const Theme* pTheme,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             const ::com::sun::star::awt::Rectangle* pShapeRect,
                             sal_Bool bClearText );
@@ -169,7 +170,7 @@ protected:
     void                addChildren(
                             const ::oox::core::XmlFilterBase& rFilterBase,
                             Shape& rMaster,
-                            const ThemePtr& rxTheme,
+                            const Theme* pTheme,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
                             const ::com::sun::star::awt::Rectangle& rClientRect,
                             ShapeIdMap* pShapeMap );

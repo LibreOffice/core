@@ -41,12 +41,14 @@
 #include <undobj.hxx>
 #include <unobookmark.hxx>
 #include <rtl/random.h>
+#include <xmloff/odffields.hxx>
 
 
 SV_IMPL_REF( SwServerObject )
 
 using namespace ::sw::mark;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 
 namespace
 {
@@ -75,20 +77,20 @@ namespace
         const sal_Unicode aStartMark,
         const sal_Unicode aEndMark)
     {
-        const SwPosition& rStart = pField->GetMarkStart();
-        const SwPosition& rEnd = pField->GetMarkEnd();
+        SwPosition& rStart = pField->GetMarkStart();
+        SwPosition& rEnd = pField->GetMarkEnd();
         SwTxtNode const * const pStartTxtNode = io_pDoc->GetNodes()[rStart.nNode]->GetTxtNode();
         SwTxtNode const * const pEndTxtNode = io_pDoc->GetNodes()[rEnd.nNode]->GetTxtNode();
         const sal_Unicode ch_start=pStartTxtNode->GetTxt().GetChar(rStart.nContent.GetIndex());
         const sal_Unicode ch_end=pEndTxtNode->GetTxt().GetChar(rEnd.nContent.GetIndex()-1);
-        const SwPaM aStartPaM(rStart);
-        const SwPaM aEndPaM(rEnd);
+        SwPaM aStartPaM(rStart);
+        SwPaM aEndPaM(rEnd);
         io_pDoc->StartUndo(UNDO_UI_REPLACE, NULL);
         if(ch_start != aStartMark)
         {
             io_pDoc->InsertString(aStartPaM, aStartMark);
         }
-        if(aEndMark && ch_end != aEndMark)
+        if ( aEndMark && ( ch_end != aEndMark ) && ( rStart != rEnd ) )
         {
             io_pDoc->InsertString(aEndPaM, aEndMark);
         }
@@ -112,6 +114,11 @@ namespace sw { namespace mark
         }
     }
 
+    bool MarkBase::IsCoveringPosition(const SwPosition& rPos) const
+    {
+        return GetMarkStart() <= rPos && rPos <= GetMarkEnd();
+    }
+
     void MarkBase::SetMarkPos(const SwPosition& rNewPos)
     {
         ::boost::scoped_ptr<SwPosition>(new SwPosition(rNewPos)).swap(m_pPos1);
@@ -122,6 +129,17 @@ namespace sw { namespace mark
     {
         ::boost::scoped_ptr<SwPosition>(new SwPosition(rNewPos)).swap(m_pPos2);
         //lcl_FixPosition(*m_pPos2);
+    }
+
+    rtl::OUString MarkBase::ToString( ) const
+    {
+        rtl::OUStringBuffer buf;
+        buf.appendAscii( "Mark: ( Name, [ Node1, Index1 ] ): ( " );
+        buf.append( m_aName ).appendAscii( ", [ " );
+        buf.append( sal_Int32( GetMarkPos().nNode.GetIndex( ) ) ).appendAscii( ", " );
+        buf.append( sal_Int32( GetMarkPos().nContent.GetIndex( ) ) ).appendAscii( " ] )" );
+
+        return buf.makeStringAndClear( );
     }
 
     MarkBase::~MarkBase()
@@ -145,7 +163,7 @@ namespace sw { namespace mark
         return aResult.append(nCount++).append(sUniquePostfix).makeStringAndClear();
     }
 
-    // SwClient
+
     void MarkBase::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
     {
         SwModify::Modify(pOld, pNew);
@@ -250,6 +268,7 @@ namespace sw { namespace mark
 
     uno::Reference< rdf::XMetadatable > Bookmark::MakeUnoObject()
     {
+        // create new SwXBookmark
         SwDoc *const pDoc( GetMarkPos().GetDoc() );
         OSL_ENSURE(pDoc, "Bookmark::MakeUnoObject: no doc?");
         const uno::Reference< rdf::XMetadatable> xMeta(
@@ -263,6 +282,28 @@ namespace sw { namespace mark
     {
         if(!IsExpanded())
             SetOtherMarkPos(GetMarkPos());
+    }
+
+    rtl::OUString Fieldmark::ToString( ) const
+    {
+        rtl::OUStringBuffer buf;
+        buf.appendAscii( "Fieldmark: ( Name, Type, [ Nd1, Id1 ], [ Nd2, Id2 ] ): ( " );
+        buf.append( m_aName ).appendAscii( ", " );
+        buf.append( m_aFieldname ).appendAscii( ", [ " );
+        buf.append( sal_Int32( GetMarkPos().nNode.GetIndex( ) ) ).appendAscii( ", " );
+        buf.append( sal_Int32( GetMarkPos( ).nContent.GetIndex( ) ) ).appendAscii( " ], [" );
+        buf.append( sal_Int32( GetOtherMarkPos().nNode.GetIndex( ) ) ).appendAscii( ", " );
+        buf.append( sal_Int32( GetOtherMarkPos( ).nContent.GetIndex( ) ) ).appendAscii( " ] ) " );
+
+        return buf.makeStringAndClear( );
+    }
+
+    void Fieldmark::Invalidate( )
+    {
+        // @TODO: Does exist a better solution to trigger a format of the
+        //        fieldmark portion? If yes, please use it.
+        SwPaM aPaM( this->GetMarkPos(), this->GetOtherMarkPos() );
+        aPaM.InvalidatePaM();
     }
 
     const ::rtl::OUString Fieldmark::our_sNamePrefix = ::rtl::OUString::createFromAscii("__Fieldmark__");
@@ -282,12 +323,24 @@ namespace sw { namespace mark
 
     void CheckboxFieldmark::InitDoc(SwDoc* const io_pDoc)
     {
-        lcl_AssureFieldMarksSet(this, io_pDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FIELDEND);
+        lcl_AssureFieldMarksSet(this, io_pDoc, CH_TXT_ATR_FORMELEMENT, CH_TXT_ATR_FIELDEND);
+
+        // For some reason the end mark is moved from 1 by the Insert: we don't
+        // want this for checkboxes
+        this->GetMarkEnd( ).nContent--;
+    }
+    void CheckboxFieldmark::SetChecked(bool checked)
+    {
+        (*GetParameters())[::rtl::OUString::createFromAscii(ODF_FORMCHECKBOX_RESULT)] = makeAny(checked);
     }
 
-    void CheckboxFieldmark::SetChecked(bool checked)
-        { m_isChecked = checked; }
-
     bool CheckboxFieldmark::IsChecked() const
-        { return m_isChecked; }
+    {
+        bool bResult = false;
+        parameter_map_t::const_iterator pResult = GetParameters()->find(::rtl::OUString::createFromAscii(ODF_FORMCHECKBOX_RESULT));
+        if(pResult != GetParameters()->end())
+            pResult->second >>= bResult;
+        return bResult;
+    }
+
 }}

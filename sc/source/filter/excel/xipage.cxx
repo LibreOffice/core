@@ -168,7 +168,7 @@ void XclImpPageSettings::ReadPrintGridLines( XclImpStream& rStrm )
 
 void XclImpPageSettings::ReadImgData( XclImpStream& rStrm )
 {
-    Graphic aGraphic = XclImpObjectManager::ReadImgData( rStrm );
+    Graphic aGraphic = XclImpDrawing::ReadImgData( GetRoot(), rStrm );
     if( aGraphic.GetType() != GRAPHIC_NONE )
         maData.mxBrushItem.reset( new SvxBrushItem( aGraphic, GPOS_TILED, ATTR_BACKGROUND ) );
 }

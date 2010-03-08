@@ -26,7 +26,6 @@
  ************************************************************************/
 package base;
 
-import base.TestBase;
 
 import basicrunner.BasicIfcTest;
 import basicrunner.BasicTestCase;
@@ -69,7 +68,7 @@ public class basic_fat implements TestBase
     /**
      *  Execute a test.
      *  @param param The test parameters.
-     *  @param return True, if the test was executed.
+     * @return True, if the test was executed.
      */
     public boolean executeTest(TestParameters param)
     {

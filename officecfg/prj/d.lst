@@ -27,10 +27,8 @@ mkdir: %_DEST%\xml%_EXT%\registry\data\org\openoffice\Office\OOoImprovement
 mkdir: %_DEST%\xml%_EXT%\registry\data\org\openoffice\ucb
 mkdir: %_DEST%\xml%_EXT%\registry\data\org\openoffice\TypeDetection
 
-..\registry\schema\oo-ldap-attr.map %_DEST%\xml%_EXT%\registry\schema\oo-ldap-attr.map
-..\registry\schema\oo-ad-ldap-attr.map %_DEST%\xml%_EXT%\registry\schema\oo-ad-ldap-attr.map
-
-..\%__SRC%\misc\registry\data\org\openoffice\*.xcu.sample %_DEST%\xml%_EXT%\registry\data\org\openoffice\*.xcu.sample
+..\registry\schema\oo-ldap.xcd.sample %_DEST%\xml%_EXT%\oo-ldap.xcd.sample
+..\registry\schema\oo-ad-ldap.xcd.sample %_DEST%\xml%_EXT%\oo-ad-ldap.xcd.sample
 
 ..\%__SRC%\misc\registry\data\org\openoffice\*.xcu %_DEST%\xml%_EXT%\registry\data\org\openoffice
 ..\%__SRC%\misc\registry\data\org\openoffice\Office\*.xcu %_DEST%\xml%_EXT%\registry\data\org\openoffice\Office

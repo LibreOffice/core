@@ -60,6 +60,7 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
 
 #include <map>
 #include <algorithm>
@@ -105,6 +106,9 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
 
     // attention: passing this as reference to ImplChartModel
     m_pImplChartModel.reset( new impl::ImplChartModel( xContext, this ));
+
+    m_xUndoManager = Reference< chart2::XUndoManager >(
+        this->createInstance( CHART_UNDOMANAGER_SERVICE_NAME ), uno::UNO_QUERY );
 }
 
 ChartModel::ChartModel( const ChartModel & rOther )
@@ -125,6 +129,7 @@ ChartModel::ChartModel( const ChartModel & rOther )
     , m_xStorage( 0 ) //rOther.m_xStorage )
     , m_aVisualAreaSize( rOther.m_aVisualAreaSize )
     , m_aGraphicObjectVector( rOther.m_aGraphicObjectVector )
+    , m_xUndoManager( rOther.m_xUndoManager )
 {
     OSL_TRACE( "ChartModel: Copy-CTOR called" );
 
@@ -208,6 +213,43 @@ ChartModel::~ChartModel()
         ::cppu::OInterfaceIteratorHelper aIt( *pIC );
         while( aIt.hasMoreElements() )
             (static_cast< util::XCloseListener*>(aIt.next()))->notifyClosing( aEvent );
+    }
+}
+
+void ChartModel::impl_adjustAdditionalShapesPositionAndSize( const awt::Size& aVisualAreaSize )
+{
+    uno::Reference< beans::XPropertySet > xProperties( static_cast< ::cppu::OWeakObject* >( this ), uno::UNO_QUERY );
+    if ( xProperties.is() )
+    {
+        uno::Reference< drawing::XShapes > xShapes;
+        xProperties->getPropertyValue( C2U( "AdditionalShapes" ) ) >>= xShapes;
+        if ( xShapes.is() )
+        {
+            sal_Int32 nCount = xShapes->getCount();
+            for ( sal_Int32 i = 0; i < nCount; ++i )
+            {
+                Reference< drawing::XShape > xShape;
+                if ( xShapes->getByIndex( i ) >>= xShape )
+                {
+                    if ( xShape.is() )
+                    {
+                        awt::Point aPos( xShape->getPosition() );
+                        awt::Size aSize( xShape->getSize() );
+
+                        double fWidth = static_cast< double >( aVisualAreaSize.Width ) / m_aVisualAreaSize.Width;
+                        double fHeight = static_cast< double >( aVisualAreaSize.Height ) / m_aVisualAreaSize.Height;
+
+                        aPos.X = static_cast< long >( aPos.X * fWidth );
+                        aPos.Y = static_cast< long >( aPos.Y * fHeight );
+                        aSize.Width = static_cast< long >( aSize.Width * fWidth );
+                        aSize.Height = static_cast< long >( aSize.Height * fHeight );
+
+                        xShape->setPosition( aPos );
+                        xShape->setSize( aSize );
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -904,6 +946,13 @@ void SAL_CALL ChartModel::setVisualAreaSize( ::sal_Int64 nAspect, const awt::Siz
         bool bChanged =
             (m_aVisualAreaSize.Width != aSize.Width ||
              m_aVisualAreaSize.Height != aSize.Height);
+
+        // #i12587# support for shapes in chart
+        if ( bChanged )
+        {
+            impl_adjustAdditionalShapesPositionAndSize( aSize );
+        }
+
         m_aVisualAreaSize = aSize;
         if( bChanged )
             setModified( sal_True );
@@ -1086,18 +1135,20 @@ Reference< uno::XInterface > SAL_CALL ChartModel::createInstance( const OUString
         switch( (*aIt).second )
         {
             case SERVICE_DASH_TABLE:
-                return m_pImplChartModel->GetDashTable();
             case SERVICE_GARDIENT_TABLE:
-                return m_pImplChartModel->GetGradientTable();
             case SERVICE_HATCH_TABLE:
-                return m_pImplChartModel->GetHatchTable();
             case SERVICE_BITMAP_TABLE:
-                return m_pImplChartModel->GetBitmapTable();
             case SERVICE_TRANSP_GRADIENT_TABLE:
-                return m_pImplChartModel->GetTransparencyGradientTable();
             case SERVICE_MARKER_TABLE:
-                // not supported
-                return 0;
+                {
+                    uno::Reference< lang::XMultiServiceFactory > xFact(
+                        this->createInstance( CHART_VIEW_SERVICE_NAME ), uno::UNO_QUERY );
+                    if ( xFact.is() )
+                    {
+                        return xFact->createInstance( rServiceSpecifier );
+                    }
+                }
+                break;
             case SERVICE_NAMESPACE_MAP:
                 // not yet supported, @todo
 //                 return 0;
@@ -1212,7 +1263,7 @@ void SAL_CALL ChartModel::setParent( const Reference< uno::XInterface >& Parent 
 Reference< chart2::XUndoManager > SAL_CALL ChartModel::getUndoManager()
     throw (uno::RuntimeException)
 {
-    return m_pImplChartModel->GetUndoManager();
+    return m_xUndoManager;
 }
 
 // ____ XDataSource ____

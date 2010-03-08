@@ -52,9 +52,6 @@ class _ScRangeListTabs;
 class XclExpChTrTabId;
 class XclExpUserBViewList;
 
-class XclObjList;
-class XclEscher;
-
 class XclImpRoot;
 class XclExpRoot;
 
@@ -77,10 +74,6 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     // Erweiterungen fuer Export
     XclExpChTrTabId*        pTabId;             // pointer to rec list, do not destroy
     XclExpUserBViewList*    pUserBViewList;     // pointer to rec list, do not destroy
-
-    // Biff8
-    XclObjList*         pObjRecs;
-    XclEscher*          pEscher;
 
     XclImpRoot*         pIR;
     XclExpRoot*         pER;

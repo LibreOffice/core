@@ -172,7 +172,7 @@ SCP1FILES += \
 
 .IF "$(ENABLE_CRASHDUMP)" != ""
 SCP1FILES += \
-             file_crashrep_dynamic.par
+             file_crashrep.par
 .ENDIF
 
 SCP1FILES += \
@@ -325,7 +325,7 @@ SCP2FILES += \
 
 .IF "$(ENABLE_CRASHDUMP)" != ""
 SCP2FILES += \
-             file_crashrep_dynamic.par
+             file_crashrep.par
 .ENDIF
 
 SCP2FILES += \

@@ -52,7 +52,7 @@
 #include <tools/config.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/menuoptions.hxx>
-
+#include <svl/solar.hrc>
 //_________________________________________________________________________________________________________________
 //  namespace
 //_________________________________________________________________________________________________________________
@@ -64,7 +64,6 @@ using namespace ::com::sun::star::beans;
 
 // Please look at sfx2/inc/sfxsids.hrc the values are defined there. Due to build dependencies
 // we cannot include the header file.
-const USHORT SID_SFX_START           = 5000;
 const USHORT SID_HELPMENU            = (SID_SFX_START + 410);
 const USHORT SID_ONLINE_REGISTRATION = (SID_SFX_START + 1537);
 

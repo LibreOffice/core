@@ -44,13 +44,17 @@
 
 #include <boost/shared_ptr.hpp>
 
+namespace accessibility
+{
+class IAccessibleViewForwarder;
+}
+
 //.............................................................................
 namespace chart
 {
 //.............................................................................
 
 class ExplicitValueProvider;
-class ObjectHierarchy;
 
 namespace impl
 {
@@ -67,14 +71,9 @@ class AccessibleChartView :
 public:
     AccessibleChartView(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > & xContext );
+            ::com::sun::star::uno::XComponentContext >& xContext, SdrView* pView );
     virtual ~AccessibleChartView();
 
-    // ____ lang::XServiceInfo ____
-    APPHELPER_XSERVICEINFO_DECL()
-    APPHELPER_SERVICE_FACTORY_HELPER( AccessibleChartView )
-
-protected:
     // ____ WeakComponentHelper (called from XComponent::dispose()) ____
     virtual void SAL_CALL disposing();
 
@@ -112,6 +111,7 @@ protected:
     virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds() throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen() throw (::com::sun::star::uno::RuntimeException);
 
+protected:
     // ________ AccessibleChartElement ________
     virtual ::com::sun::star::awt::Point   GetUpperLeftOnScreen() const;
 
@@ -141,7 +141,9 @@ private: // members
                        ::com::sun::star::accessibility::XAccessible > m_xParent;
 
     ::boost::shared_ptr< ObjectHierarchy >                          m_spObjectHierarchy;
-    AccessibleUniqueId                                              m_aCurrentSelectionCID;
+    AccessibleUniqueId                                              m_aCurrentSelectionOID;
+    SdrView*                                                        m_pSdrView;
+    ::accessibility::IAccessibleViewForwarder*                      m_pViewForwarder;
 
     //no default constructor
     AccessibleChartView();

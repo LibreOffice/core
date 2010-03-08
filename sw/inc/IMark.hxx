@@ -31,6 +31,7 @@
 #include <calbck.hxx>
 #include <pam.hxx>
 #include <boost/operators.hpp>
+#include <map>
 
 #ifndef SW_DECL_SWSERVEROBJECT_DEFINED
 #define SW_DECL_SWSERVEROBJECT_DEFINED
@@ -76,6 +77,8 @@ namespace sw { namespace mark
                 { return GetMarkEnd() < rPos; }
             bool EndsAfter(const SwPosition& rPos) const
                 { return GetMarkEnd() > rPos; }
+
+            virtual rtl::OUString ToString( ) const =0;
     };
 
     class IBookmark
@@ -92,13 +95,17 @@ namespace sw { namespace mark
         : virtual public IMark
     {
         public:
+            typedef ::std::map< ::rtl::OUString, ::com::sun::star::uno::Any> parameter_map_t;
             //getters
             virtual ::rtl::OUString GetFieldname() const =0;
             virtual ::rtl::OUString GetFieldHelptext() const =0;
+            virtual parameter_map_t* GetParameters() =0;
+            virtual const parameter_map_t* GetParameters() const =0;
 
             //setters
             virtual void SetFieldname(const ::rtl::OUString& rFieldname) =0;
             virtual void SetFieldHelptext(const ::rtl::OUString& rFieldHelptext) =0;
+            virtual void Invalidate() = 0;
     };
 
     class ICheckboxFieldmark

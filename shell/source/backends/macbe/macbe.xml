@@ -10,7 +10,6 @@
         <language>c++</language>
         <status value="beta"/>
         <supported-service>com.sun.star.comp.configuration.backend.MacOSXBackend</supported-service>
-        <supported-service>com.sun.star.comp.configuration.backend.PlatformBackend</supported-service>
         <service-dependency>...</service-dependency>
         <type>com.sun.star.configuration.backend.XBackendChangesListener</type>
         <type>com.sun.star.configuration.backend.XBackendChangesNotifier</type>

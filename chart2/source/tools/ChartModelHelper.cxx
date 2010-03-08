@@ -32,7 +32,6 @@
 #include "DiagramHelper.hxx"
 #include "DataSourceHelper.hxx"
 #include "ControllerLockGuard.hxx"
-#include "UndoManager.hxx"
 #include "RangeHighlighter.hxx"
 #include "InternalDataProvider.hxx"
 
@@ -54,12 +53,6 @@ namespace chart
 //.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
-
-//static
-uno::Reference< chart2::XUndoManager > ChartModelHelper::createUndoManager()
-{
-    return new UndoManager();
-}
 
 //static
 uno::Reference< chart2::data::XRangeHighlighter > ChartModelHelper::createRangeHighlighter(
