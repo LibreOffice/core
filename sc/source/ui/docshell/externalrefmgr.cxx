@@ -1978,7 +1978,7 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, Stri
     if (pMedium->GetError() != ERRCODE_NONE)
         return NULL;
 
-    pMedium->UseInteractionHandler(false);
+    pMedium->UseInteractionHandler(true);
 
     ScDocShell* pNewShell = new ScDocShell(SFX_CREATE_MODE_INTERNAL);
     SfxObjectShellRef aRef = pNewShell;
