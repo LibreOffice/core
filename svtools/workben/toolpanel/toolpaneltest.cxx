@@ -597,6 +597,7 @@ PanelDemoMainWindow::PanelDemoMainWindow()
     m_aToolPanelDeck.InsertPanel( PToolPanel( new ColoredPanel( m_aToolPanelDeck, Color( COL_RED ), "Red" ) ), m_aToolPanelDeck.GetPanelCount() );
     m_aToolPanelDeck.InsertPanel( PToolPanel( new ColoredPanel( m_aToolPanelDeck, Color( COL_GREEN ), "Some flavor of Green" ) ), m_aToolPanelDeck.GetPanelCount() );
     m_aToolPanelDeck.InsertPanel( PToolPanel( new ColoredPanel( m_aToolPanelDeck, RGB_COLORDATA( 255, 255, 0 ), "Yellow is ugly" ) ), m_aToolPanelDeck.GetPanelCount() );
+    m_aToolPanelDeck.InsertPanel( PToolPanel( new ColoredPanel( m_aToolPanelDeck, RGB_COLORDATA( 0, 0, 128 ), "Blue is the Color" ) ), m_aToolPanelDeck.GetPanelCount() );
 
     m_aToolPanelDeck.ActivatePanel( 0 );
     m_aToolPanelDeck.Show();

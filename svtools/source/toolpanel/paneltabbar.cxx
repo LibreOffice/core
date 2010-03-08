@@ -27,11 +27,14 @@
 #include "precompiled_svtools.hxx"
 
 #include "svtools/toolpanel/toolpaneldeck.hxx"
+#include "tabitemdescriptor.hxx"
 #include "paneltabbar.hxx"
+#include "tabbargeometry.hxx"
 
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <vcl/button.hxx>
 #include <vcl/help.hxx>
 #include <vcl/virdev.hxx>
 
@@ -40,10 +43,10 @@
 
 // space around an item
 #define ITEM_OUTER_SPACE        2 * 2
+// the distance between the button and the control's border, in "upright" direction (what this means depends on the alignment)
+#define BUTTON_UPRIGHT_DISTANCE 2
 // spacing before and after (in writing direction, whether this is horizontal or vertical) an item's text
 #define ITEM_TEXT_FLOW_SPACE    5
-// distance between two items
-#define ITEM_DISTANCE_PIXEL     0
 // space between item icon and icon text
 #define ITEM_ICON_TEXT_DISTANCE 4
 
@@ -62,48 +65,6 @@ namespace svt
     #define ITEM_POSITION_LAST  0x10
 
     //==================================================================================================================
-    //= ItemDescriptor
-    //==================================================================================================================
-    struct ItemDescriptor
-    {
-        PToolPanel      pPanel;
-        Rectangle       aCompleteArea;
-        Rectangle       aIconOnlyArea;
-        Rectangle       aTextOnlyArea;
-        TabItemContent  eContent;
-            // content to be used for this particular item. Might differ from item content which has been set
-            // up for the complete control, in case not the complete content fits into the available space.
-
-        ItemDescriptor()
-            :pPanel()
-            ,aCompleteArea()
-            ,aIconOnlyArea()
-            ,aTextOnlyArea()
-            ,eContent( TABITEM_IMAGE_AND_TEXT )
-        {
-        }
-
-        const Rectangle& GetRect( const TabItemContent i_eItemContent ) const
-        {
-            OSL_ENSURE( i_eItemContent != TABITEM_AUTO, "ItemDescriptor::GetRect: illegal value!" );
-
-            return  ( i_eItemContent == TABITEM_IMAGE_AND_TEXT )
-                ?   aCompleteArea
-                :   (   ( i_eItemContent == TABITEM_TEXT_ONLY )
-                    ?   aTextOnlyArea
-                    :   aIconOnlyArea
-                    );
-        }
-
-        const Rectangle& GetCurrentRect() const
-        {
-            return GetRect( eContent );
-        }
-    };
-
-    typedef ::std::vector< ItemDescriptor > ItemDescriptors;
-
-    //==================================================================================================================
     //= IItemsLayout
     //==================================================================================================================
     // TODO: originally, IItemsLayout was intended to abstract from the "vertical vs. horizontal" problem. Meanwhile,
@@ -116,6 +77,10 @@ namespace svt
     class IItemsLayout
     {
     public:
+        /** fills the background of our target device
+        */
+        virtual void    DrawBackground( const Rectangle& i_rArea ) = 0;
+
         /** calculates the size of the area occupied by the item representing the given tool panel
             @param i_pPanel
                 denotes the panel whose item's size should be calculated
@@ -128,36 +93,26 @@ namespace svt
                 contains, upon return, the area which is available to render the item content. It lies completely
                 within an assuming bounding rectangle, which starts at corrdinates (0, 0), and has the size returned
                 in o_rBoundingSize.
-
         */
-        virtual void    CalculateItemSize(
-                            const PToolPanel& i_pPanel,
-                            const TabItemContent i_eItemContent,
-                            Size& o_rBoundingSize,
-                            Rectangle& o_rContentArea
-                        ) const = 0;
-
-        /** returns the position where the next item should start, assuming the previous item occupies a given area
-        */
-        virtual Point   GetNextItemPosition( const Rectangle& i_rPreviousItemArea ) const = 0;
-
-        /** fills the background of our target device
-        */
-        virtual void    DrawBackground( const Rectangle& i_rArea ) = 0;
+        virtual void CalculateItemSize( const PToolPanel& i_pPanel, const TabItemContent i_eItemContent, Size& o_rBoundingSize, Rectangle& o_rContentArea ) const = 0;
 
         /** draws the item onto the given device, in the givem area
             @param i_pPanel
                 the panel whose item representation is to be drawn
             @param i_rPosition
-                the position to paint the item to. Starting at this point, an area of the size returned
-                as "bounding size" in CalculateItemSize might be used.
+                the position to paint the item to.
             @param i_nItemFlags
                 defines in which state to draw the item
             @param i_eItemContent
                 defines which content to draw on the tab item
         */
-        virtual void    DrawItem( const PToolPanel& i_pPanel, const Point& i_rPosition,
-                            const ItemFlags i_nItemFlags, const TabItemContent i_eItemContent ) = 0;
+        virtual void    DrawItem(
+                            const TabBarGeometry& i_rGeometry,
+                            const PToolPanel& i_pPanel,
+                            const Point& i_rPosition,
+                            const ItemFlags i_nItemFlags,
+                            const TabItemContent i_eItemContent
+                        ) = 0;
     };
 
     typedef ::boost::shared_ptr< IItemsLayout >  PItemsLayout;
@@ -171,15 +126,15 @@ namespace svt
         VerticalItemLayout( Window& i_rTargetWindow, const bool i_bLeft );
 
         // IItemsLayout overridables
+        virtual void    DrawBackground( const Rectangle& i_rArea );
         virtual void    CalculateItemSize(
                             const PToolPanel& i_pPanel,
                             const TabItemContent i_eItemContent,
                             Size& o_rBoundingSize,
                             Rectangle& o_rContentArea
                         ) const;
-        virtual Point   GetNextItemPosition( const Rectangle& i_rPreviousItemArea ) const;
-        virtual void    DrawBackground( const Rectangle& i_rArea );
         virtual void    DrawItem(
+                            const TabBarGeometry& i_rGeometry,
                             const PToolPanel& i_pPanel,
                             const Point& i_rPosition,
                             const ItemFlags i_nItemFlags,
@@ -203,15 +158,9 @@ namespace svt
                     const ItemFlags& i_nFlags
                 );
 
-        /** rotates a pair of bounding/content rect in formation, so they properly keep their relative position,
-            and so that the upper left corner of the bounding rect is constant.
-        */
-        static void
-                impl_rotateFormation( Rectangle& io_rBoundingRect, Rectangle& io_rContentRect, const bool i_bLeft );
-
     private:
-        Window&                 m_rTargetWindow;
-        const bool              m_bLeft;
+        Window&     m_rTargetWindow;
+        const bool  m_bLeft;
 
         enum ItemRenderMode
         {
@@ -246,143 +195,6 @@ namespace svt
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void VerticalItemLayout::impl_rotateFormation( Rectangle& io_rBoundingRect, Rectangle& io_rContentRect, const bool i_bLeft )
-    {
-        // move the to-be-upper-left corner to (0,0)
-        ::basegfx::B2DHomMatrix aTransformation;
-        aTransformation.translate(
-                i_bLeft ? -io_rBoundingRect.Right() : -io_rBoundingRect.Left(),
-                i_bLeft ? -io_rBoundingRect.Top()   : -io_rBoundingRect.Bottom() );
-        // rotate by 90 resp. -90 degrees
-        aTransformation.rotate( i_bLeft ? -F_PI2 : F_PI2 );
-            // note on the screen, the ordinate goes top-down, while basegfx calculates in a system where the ordinate
-            // does bottom-up; thus the "wrong" sign before F_PI2 here
-        // move back to original coordinates
-        aTransformation.translate( io_rBoundingRect.Left(), io_rBoundingRect.Top() );
-
-        // apply
-        ::basegfx::B2DRange aBoundingRange( io_rBoundingRect.Left(), io_rBoundingRect.Top(), io_rBoundingRect.Right(), io_rBoundingRect.Bottom() );
-        aBoundingRange.transform( aTransformation );
-        io_rBoundingRect.Left() = long( aBoundingRange.getMinX() );
-        io_rBoundingRect.Top() = long( aBoundingRange.getMinY() );
-        io_rBoundingRect.Right() = long( aBoundingRange.getMaxX() );
-        io_rBoundingRect.Bottom() = long( aBoundingRange.getMaxY() );
-
-        ::basegfx::B2DRange aContentRange( io_rContentRect.Left(), io_rContentRect.Top(), io_rContentRect.Right(), io_rContentRect.Bottom() );
-        aContentRange.transform( aTransformation );
-        io_rContentRect.Left() = long( aContentRange.getMinX() );
-        io_rContentRect.Top() = long( aContentRange.getMinY() );
-        io_rContentRect.Right() = long( aContentRange.getMaxX() );
-        io_rContentRect.Bottom() = long( aContentRange.getMaxY() );
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    void VerticalItemLayout::CalculateItemSize( const PToolPanel& i_pPanel, const TabItemContent i_eItemContent,
-            Size& o_rBoundingSize, Rectangle& o_rContentArea ) const
-    {
-        OSL_ENSURE( i_eItemContent != TABITEM_AUTO, "VerticalItemLayout::CalculateItemSize: illegal TabItemContent value!" );
-
-        const Image aImage( i_pPanel->GetImage() );
-        const bool bUseImage = !!aImage && ( i_eItemContent != TABITEM_TEXT_ONLY );
-
-        const ::rtl::OUString sItemText( i_pPanel->GetDisplayName() );
-        const bool bUseText = ( sItemText.getLength() != 0 ) && ( i_eItemContent != TABITEM_IMAGE_ONLY );
-
-        Size aItemContentSize;
-        if ( bUseImage )
-        {
-            aItemContentSize = aImage.GetSizePixel();
-        }
-
-        if ( bUseText )
-        {
-            if ( bUseImage )
-                aItemContentSize.Height() += ITEM_ICON_TEXT_DISTANCE;
-
-            // add space for vertical text
-            const Size aTextSize( m_rTargetWindow.GetCtrlTextWidth( sItemText ), m_rTargetWindow.GetTextHeight() );
-            aItemContentSize.Height() += aTextSize.Width();
-            aItemContentSize.Width() = ::std::max( aItemContentSize.Width(), aTextSize.Height() );
-
-            aItemContentSize.Height() += 2 * ITEM_TEXT_FLOW_SPACE;
-        }
-
-        aItemContentSize.Width() += 2 * ITEM_OUTER_SPACE;
-        aItemContentSize.Height() += 2 * ITEM_OUTER_SPACE;
-
-        Region aBoundingRegion, aContentRegion;
-        bool bNativeOK = false;
-        if ( m_eRenderMode == NWF_TOOLBAR_ITEM )
-        {
-            // don't ask GetNativeControlRegion, this will not deliver proper results in all cases.
-            // Instead, simply assume that both the content and the bounding region are the same.
-//            const ImplControlValue aControlValue;
-//            bNativeOK = m_rTargetWindow.GetNativeControlRegion(
-//                CTRL_TOOLBAR, PART_BUTTON,
-//                Rectangle( Point(), aItemContentSize ), CTRL_STATE_ENABLED | CTRL_STATE_ROLLOVER,
-//                aControlValue, ::rtl::OUString(),
-//                aBoundingRegion, aContentRegion
-//            );
-            aContentRegion = Rectangle( Point( 1, 1 ), aItemContentSize );
-            aBoundingRegion = Rectangle( Point( 0, 0 ), Size( aItemContentSize.Width() + 2, aItemContentSize.Height() + 2 ) );
-            bNativeOK = true;
-        }
-        else if ( m_eRenderMode == NWF_TABBAR_ITEM )
-        {
-            Rectangle aRotatedContentArea( Point(), aItemContentSize );
-            aRotatedContentArea.Transpose();
-
-            TabitemValue tiValue;
-            ImplControlValue aControlValue( (void*)(&tiValue) );
-
-            bNativeOK = m_rTargetWindow.GetNativeControlRegion(
-                CTRL_TAB_ITEM, PART_ENTIRE_CONTROL,
-                Rectangle( aRotatedContentArea ),
-                CTRL_STATE_ENABLED | CTRL_STATE_FOCUSED | CTRL_STATE_ROLLOVER | CTRL_STATE_SELECTED,
-                aControlValue, ::rtl::OUString(),
-                aBoundingRegion, aContentRegion
-            );
-            OSL_ENSURE( bNativeOK, "VerticalItemLayout::CalculateItemSize: GetNativeControlRegion not implemented for CTRL_TAB_ITEM?!" );
-
-            Rectangle aBoundingRect( aBoundingRegion.GetBoundRect() );
-            Rectangle aContentRect( aContentRegion.GetBoundRect() );
-
-            impl_rotateFormation( aBoundingRect, aContentRect, m_bLeft );
-
-            aBoundingRegion = aBoundingRect;
-            aContentRegion = aContentRect;
-        }
-
-        if ( bNativeOK )
-        {
-            const Rectangle aBoundingRect( aBoundingRegion.GetBoundRect() );
-
-            o_rContentArea = aContentRegion.GetBoundRect();
-            o_rBoundingSize = aBoundingRect.GetSize();
-
-            // normalize the content area, it is assumed to be relative to a rectangle which starts
-            // at (0,0), and has a size of o_rBoundingSize.
-            o_rContentArea.Move( -aBoundingRect.Left(), -aBoundingRect.Top() );
-        }
-        else
-        {
-            o_rContentArea = Rectangle( Point( 0, 0 ), aItemContentSize );
-            o_rBoundingSize = aItemContentSize;
-
-            // don't attempt native rendering, again. If it didn't work this time, it won't work in the future.
-            const_cast< VerticalItemLayout* >( this )->m_eRenderMode = VCL_BASED;
-        }
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    Point VerticalItemLayout::GetNextItemPosition( const Rectangle& i_rPreviousItemArea ) const
-    {
-        Point aNewPos( i_rPreviousItemArea.BottomLeft() );
-        aNewPos.Y() += ITEM_DISTANCE_PIXEL;
-        return aNewPos;
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
     void VerticalItemLayout::impl_preRender( const Rectangle& i_rBoundingArea, const Rectangle& i_rContentArea, const ItemFlags& i_nItemFlags )
     {
         ControlState nState = CTRL_STATE_ENABLED;
@@ -413,16 +225,15 @@ namespace svt
         {
             VirtualDevice aRenderDevice( m_rTargetWindow );
 
-            Rectangle aRotatedBoundingArea( i_rBoundingArea );
-            Rectangle aRotatedContentArea( i_rContentArea );
-            impl_rotateFormation( aRotatedBoundingArea, aRotatedContentArea, !m_bLeft );
+            NormalizedArea aNormalized( i_rBoundingArea, true );
+            const Rectangle aNormalizedBounds( aNormalized.getReference() );
+            const Rectangle aNormalizedContent( aNormalized.getNormalized( i_rContentArea, m_bLeft ? TABS_LEFT : TABS_RIGHT ) );
 
-            const Size aRotatedBoundingSize( aRotatedBoundingArea.GetSize() );
-            aRenderDevice.SetOutputSizePixel( aRotatedBoundingSize );
+            const Size aNormalizedBoundingSize( aNormalizedBounds.GetSize() );
+            aRenderDevice.SetOutputSizePixel( aNormalizedBoundingSize );
 
-            const Point aRotatedContentOffset( aRotatedContentArea.Left() - aRotatedBoundingArea.Left(), aRotatedContentArea.Top() - aRotatedBoundingArea.Top() );
-            const Size aRotatedContentSize( aRotatedContentArea.GetSize() );
-            const Region aCtrlRegion( Rectangle( aRotatedContentOffset, aRotatedContentSize ) );
+            const Point aNormalizedContentOffset( aNormalizedContent.Left() - aNormalizedBounds.Left(), aNormalizedContent.Top() - aNormalizedBounds.Top() );
+            const Region aCtrlRegion( Rectangle( aNormalizedContentOffset, aNormalizedContent.GetSize() ) );
 
             TabitemValue tiValue;
             if ( i_nItemFlags & ITEM_POSITION_FIRST )
@@ -437,8 +248,10 @@ namespace svt
             OSL_ENSURE( bNativeOK, "VerticalItemLayout::impl_preRender: inconsistent NWF implementation!" );
                 // IsNativeControlSupported returned true, previously, otherwise we would not be here ...
 
-            BitmapEx aBitmap( aRenderDevice.GetBitmapEx( Point( 0, 0 ), Size( aRotatedBoundingSize.Width() - 1, aRotatedBoundingSize.Height() - 1 ) ) );
-            aBitmap.Rotate( m_bLeft ? 900 : 2700, Color( COL_BLACK ) );
+            BitmapEx aBitmap( aRenderDevice.GetBitmapEx( Point( 0, 0 ), Size( aNormalizedBoundingSize.Width() - 1, aNormalizedBoundingSize.Height() - 1 ) ) );
+            aBitmap.Rotate( 2700, Color( COL_BLACK ) );
+            if ( m_bLeft )
+                aBitmap.Mirror( BMP_MIRROR_HORZ );
 
             m_rTargetWindow.DrawBitmapEx( i_rBoundingArea.TopLeft(), aBitmap );
         }
@@ -563,16 +376,110 @@ namespace svt
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void VerticalItemLayout::DrawItem( const PToolPanel& i_pPanel, const Point& i_rPosition,
+    void VerticalItemLayout::CalculateItemSize( const PToolPanel& i_pPanel,
+        const TabItemContent i_eItemContent, Size& o_rBoundingSize, Rectangle& o_rContentArea ) const
+    {
+        OSL_ENSURE( i_eItemContent != TABITEM_AUTO, "VerticalItemLayout::CalculateItemSize: illegal TabItemContent value!" );
+
+        const Image aImage( i_pPanel->GetImage() );
+        const bool bUseImage = !!aImage && ( i_eItemContent != TABITEM_TEXT_ONLY );
+
+        const ::rtl::OUString sItemText( i_pPanel->GetDisplayName() );
+        const bool bUseText = ( sItemText.getLength() != 0 ) && ( i_eItemContent != TABITEM_IMAGE_ONLY );
+
+        Size aItemContentSize;
+        if ( bUseImage )
+        {
+            aItemContentSize = aImage.GetSizePixel();
+        }
+
+        if ( bUseText )
+        {
+            if ( bUseImage )
+                aItemContentSize.Width() += ITEM_ICON_TEXT_DISTANCE;
+
+            // add space for text
+            const Size aTextSize( m_rTargetWindow.GetCtrlTextWidth( sItemText ), m_rTargetWindow.GetTextHeight() );
+            aItemContentSize.Width() += aTextSize.Width();
+            aItemContentSize.Height() = ::std::max( aItemContentSize.Height(), aTextSize.Height() );
+
+            aItemContentSize.Width() += 2 * ITEM_TEXT_FLOW_SPACE;
+        }
+
+        aItemContentSize.Width() += 2 * ITEM_OUTER_SPACE;
+        aItemContentSize.Height() += 2 * ITEM_OUTER_SPACE;
+
+        Region aBoundingRegion, aContentRegion;
+        bool bNativeOK = false;
+        if ( m_eRenderMode == NWF_TOOLBAR_ITEM )
+        {
+            // don't ask GetNativeControlRegion, this will not deliver proper results in all cases.
+            // Instead, simply assume that both the content and the bounding region are the same.
+//            const ImplControlValue aControlValue;
+//            bNativeOK = m_rTargetWindow.GetNativeControlRegion(
+//                CTRL_TOOLBAR, PART_BUTTON,
+//                Rectangle( Point(), aItemContentSize ), CTRL_STATE_ENABLED | CTRL_STATE_ROLLOVER,
+//                aControlValue, ::rtl::OUString(),
+//                aBoundingRegion, aContentRegion
+//            );
+            aContentRegion = Rectangle( Point( 1, 1 ), aItemContentSize );
+            aBoundingRegion = Rectangle( Point( 0, 0 ), Size( aItemContentSize.Width() + 2, aItemContentSize.Height() + 2 ) );
+            bNativeOK = true;
+        }
+        else if ( m_eRenderMode == NWF_TABBAR_ITEM )
+        {
+            TabitemValue tiValue;
+            ImplControlValue aControlValue( (void*)(&tiValue) );
+
+            bNativeOK = m_rTargetWindow.GetNativeControlRegion(
+                CTRL_TAB_ITEM, PART_ENTIRE_CONTROL,
+                Rectangle( Point(), aItemContentSize ),
+                CTRL_STATE_ENABLED | CTRL_STATE_FOCUSED | CTRL_STATE_ROLLOVER | CTRL_STATE_SELECTED,
+                aControlValue, ::rtl::OUString(),
+                aBoundingRegion, aContentRegion
+            );
+            OSL_ENSURE( bNativeOK, "VerticalItemLayout::CalculateItemSize: GetNativeControlRegion not implemented for CTRL_TAB_ITEM?!" );
+        }
+
+        if ( bNativeOK )
+        {
+            const Rectangle aBoundingRect( aBoundingRegion.GetBoundRect() );
+
+            o_rContentArea = aContentRegion.GetBoundRect();
+            o_rBoundingSize = aBoundingRect.GetSize();
+
+            // normalize the content area, it is assumed to be relative to a rectangle which starts
+            // at (0,0), and has a size of o_rBoundingSize.
+            o_rContentArea.Move( -aBoundingRect.Left(), -aBoundingRect.Top() );
+        }
+        else
+        {
+            o_rContentArea = Rectangle( Point( 0, 0 ), aItemContentSize );
+            o_rBoundingSize = aItemContentSize;
+
+            // don't attempt native rendering, again. If it didn't work this time, it won't work in the future.
+            const_cast< VerticalItemLayout* >( this )->m_eRenderMode = VCL_BASED;
+        }
+    }
+    //------------------------------------------------------------------------------------------------------------------
+    void VerticalItemLayout::DrawItem( const TabBarGeometry& i_rGeometry, const PToolPanel& i_pPanel, const Point& i_rPosition,
             const ItemFlags i_nItemFlags, const TabItemContent i_eItemContent )
     {
+        // calculate content and bounding size
         Rectangle aContentArea;
         Size aBoundingSize;
         CalculateItemSize( i_pPanel, i_eItemContent, aBoundingSize, aContentArea );
 
+        // CalculateItemSize returns a normalized size, i.e. one assuming TABS_TOP
+        const NormalizedArea aNormalized( Rectangle( Point(), aBoundingSize ), false );
+        aContentArea = aNormalized.getTransformed( aContentArea, i_rGeometry.getAlignment() );
+        aBoundingSize = Size( aBoundingSize.Height(), aBoundingSize.Width() );
+
+        // move both rects to the given position
         aContentArea.Move( i_rPosition.X(), i_rPosition.Y() );
         const Rectangle aBoundingArea( i_rPosition, aBoundingSize );
 
+        // actually draw
         impl_preRender( aBoundingArea, aContentArea, i_nItemFlags );
         impl_renderContent( i_pPanel, aContentArea, i_eItemContent );
         impl_postRender( aBoundingArea, aContentArea, i_nItemFlags );
@@ -584,34 +491,7 @@ namespace svt
     class PanelTabBar_Data : public IToolPanelDeckListener
     {
     public:
-        PanelTabBar_Data( PanelTabBar& i_rTabBar, IToolPanelDeck& i_rPanelDeck, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent )
-            :rTabBar( i_rTabBar )
-            ,rPanelDeck( i_rPanelDeck )
-            ,eAlignment( i_eAlignment )
-            ,eTabItemContent( i_eItemContent )
-            ,pLayout( new VerticalItemLayout( i_rTabBar, i_eAlignment == TABS_LEFT ) )
-            ,aHoveredItem()
-            ,aFocusedItem()
-            ,bMouseButtonDown( false )
-            ,aItems()
-            ,bItemsDirty( true )
-        {
-            OSL_ENSURE( ( i_eAlignment == TABS_LEFT ) || ( i_eAlignment == TABS_RIGHT ),
-                "PanelTabBar_Data: unsupported alignment!" );
-
-            rPanelDeck.AddListener( *this );
-
-            if ( i_eAlignment == TABS_LEFT )
-            {
-                aTopLeftSpace = Size( 2, 2 );
-                aBottomRightSpace = Size( 1, 1 );
-            }
-            else if ( i_eAlignment == TABS_RIGHT )
-            {
-                aTopLeftSpace = Size( 1, 1 );
-                aBottomRightSpace = Size( 2, 2 );
-            }
-        }
+        PanelTabBar_Data( PanelTabBar& i_rTabBar, IToolPanelDeck& i_rPanelDeck, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent );
 
         ~PanelTabBar_Data()
         {
@@ -637,12 +517,20 @@ namespace svt
         virtual void ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive );
         virtual void Dying();
 
+        void    UpdateScrollButtons()
+        {
+            m_aScrollBack.Enable( m_nScrollPosition > 0 );
+            m_aScrollForward.Enable( m_nScrollPosition < aItems.size() - 1 );
+        }
+
+    protected:
+        DECL_LINK( OnScroll, const PushButton* );
+
     public:
         PanelTabBar&                rTabBar;
+        TabBarGeometry              aGeometry;
         IToolPanelDeck&             rPanelDeck;
 
-        const TabAlignment          eAlignment;
-        TabItemContent              eTabItemContent;
         PItemsLayout                pLayout;
 
         ::boost::optional< size_t > aHoveredItem;
@@ -652,9 +540,64 @@ namespace svt
         ItemDescriptors             aItems;
         bool                        bItemsDirty;
 
-        Size                        aTopLeftSpace;
-        Size                        aBottomRightSpace;
+        PushButton                  m_aScrollBack;
+        PushButton                  m_aScrollForward;
+
+        size_t                      m_nScrollPosition;
     };
+
+    //==================================================================================================================
+    //= PanelTabBar_Data - implementation
+    //==================================================================================================================
+    //------------------------------------------------------------------------------------------------------------------
+    PanelTabBar_Data::PanelTabBar_Data( PanelTabBar& i_rTabBar, IToolPanelDeck& i_rPanelDeck, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent )
+        :rTabBar( i_rTabBar )
+        ,aGeometry( i_eAlignment, i_eItemContent )
+        ,rPanelDeck( i_rPanelDeck )
+        ,pLayout( new VerticalItemLayout( i_rTabBar, i_eAlignment == TABS_LEFT ) )
+        ,aHoveredItem()
+        ,aFocusedItem()
+        ,bMouseButtonDown( false )
+        ,aItems()
+        ,bItemsDirty( true )
+        ,m_aScrollBack( &i_rTabBar, WB_BEVELBUTTON )
+        ,m_aScrollForward( &i_rTabBar, WB_BEVELBUTTON )
+        ,m_nScrollPosition( 0 )
+    {
+        OSL_ENSURE( ( i_eAlignment == TABS_LEFT ) || ( i_eAlignment == TABS_RIGHT ),
+            "PanelTabBar_Data: unsupported alignment!" );
+
+        rPanelDeck.AddListener( *this );
+
+        m_aScrollBack.SetSymbol( SYMBOL_ARROW_UP );
+        m_aScrollBack.Show();
+        m_aScrollBack.SetClickHdl( LINK( this, PanelTabBar_Data, OnScroll ) );
+
+        m_aScrollForward.SetSymbol( SYMBOL_ARROW_DOWN );
+        m_aScrollForward.Show();
+        m_aScrollForward.SetClickHdl( LINK( this, PanelTabBar_Data, OnScroll ) );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    IMPL_LINK( PanelTabBar_Data, OnScroll, const PushButton*, i_pButton )
+    {
+        if ( i_pButton == &m_aScrollBack )
+        {
+            OSL_ENSURE( m_nScrollPosition > 0, "PanelTabBar_Data::OnScroll: inconsistency!" );
+            --m_nScrollPosition;
+            rTabBar.Invalidate();
+        }
+        else if ( i_pButton == &m_aScrollForward )
+        {
+            OSL_ENSURE( m_nScrollPosition < aItems.size() - 1, "PanelTabBar_Data::OnScroll: inconsistency!" );
+            ++m_nScrollPosition;
+            rTabBar.Invalidate();
+        }
+
+        UpdateScrollButtons();
+
+        return 0L;
+    }
 
     //==================================================================================================================
     //= helper
@@ -695,7 +638,7 @@ namespace svt
         {
             io_rData.aItems.resize(0);
 
-            Point aCompletePos( io_rData.aTopLeftSpace.Width(), io_rData.aTopLeftSpace.Height() );
+            Point aCompletePos( io_rData.aGeometry.getFirstItemPosition() );
             Point aIconOnlyPos( aCompletePos );
             Point aTextOnlyPos( aCompletePos );
 
@@ -713,12 +656,15 @@ namespace svt
 
                 Size aCompleteSize;
                 io_rData.pLayout->CalculateItemSize( pPanel, TABITEM_IMAGE_AND_TEXT, aCompleteSize, aContentArea );
+                ::std::swap( aCompleteSize.Width(), aCompleteSize.Height() );
 
                 Size aIconOnlySize;
                 io_rData.pLayout->CalculateItemSize( pPanel, TABITEM_IMAGE_ONLY, aIconOnlySize, aContentArea );
+                ::std::swap( aIconOnlySize.Width(), aIconOnlySize.Height() );
 
                 Size aTextOnlySize;
                 io_rData.pLayout->CalculateItemSize( pPanel, TABITEM_TEXT_ONLY, aTextOnlySize, aContentArea );
+                ::std::swap( aTextOnlySize.Width(), aTextOnlySize.Height() );
 
                 // TODO: have one method calculating all sizes?
 
@@ -728,9 +674,9 @@ namespace svt
 
                 io_rData.aItems.push_back( aItem );
 
-                aCompletePos = io_rData.pLayout->GetNextItemPosition( aItem.aCompleteArea );
-                aIconOnlyPos = io_rData.pLayout->GetNextItemPosition( aItem.aIconOnlyArea );
-                aTextOnlyPos = io_rData.pLayout->GetNextItemPosition( aItem.aTextOnlyArea );
+                aCompletePos = aItem.aCompleteArea.BottomLeft();
+                aIconOnlyPos = aItem.aIconOnlyArea.BottomLeft();
+                aTextOnlyPos = aItem.aTextOnlyArea.BottomLeft();
             }
 
             io_rData.bItemsDirty = false;
@@ -750,22 +696,69 @@ namespace svt
         }
 
         //--------------------------------------------------------------------------------------------------------------
+        Rectangle lcl_getActualItemRect( const PanelTabBar_Data& i_rData, const Rectangle& i_rLogicalItemRect )
+        {
+            // care for the offset imposed by our geometry, i.e. whether or not we have scroll buttons
+            Rectangle aItemRect( i_rLogicalItemRect );
+
+            const TabBarGeometry& rGeometry( i_rData.aGeometry );
+            aItemRect.Move(
+                rGeometry.isVertical() ? 0 : rGeometry.getItemsRect().Left() - rGeometry.getButtonBackRect().Left(),
+                rGeometry.isVertical() ? rGeometry.getItemsRect().Top() - rGeometry.getButtonBackRect().Top() : 0
+            );
+
+            // care for the current scroll position
+            OSL_ENSURE( i_rData.m_nScrollPosition < i_rData.aItems.size(), "lcl_getActualItemRect: invalid scroll position!" );
+            if ( ( i_rData.m_nScrollPosition > 0 ) && ( i_rData.m_nScrollPosition < i_rData.aItems.size() ) )
+            {
+                long nOffsetX = i_rData.aItems[ i_rData.m_nScrollPosition ].GetCurrentRect().Left() - i_rData.aItems[ 0 ].GetCurrentRect().Left();
+                long nOffsetY = i_rData.aItems[ i_rData.m_nScrollPosition ].GetCurrentRect().Top() - i_rData.aItems[ 0 ].GetCurrentRect().Top();
+                aItemRect.Move( -nOffsetX, -nOffsetY );
+            }
+
+            return aItemRect;
+        }
+
+        //--------------------------------------------------------------------------------------------------------------
         static ::boost::optional< size_t > lcl_findItemForPoint( const PanelTabBar_Data& i_rData, const Point& i_rPoint )
         {
+            if ( !i_rData.aGeometry.getItemsRect().IsInside( i_rPoint ) )
+                return ::boost::optional< size_t >();
+
             size_t i=0;
             for (   ItemDescriptors::const_iterator item = i_rData.aItems.begin();
                     item != i_rData.aItems.end();
                     ++item, ++i
                 )
             {
-                const Rectangle& rItemRect( item->GetCurrentRect() );
-                if ( rItemRect.IsInside( i_rPoint ) )
+                Rectangle aItemRect( lcl_getActualItemRect( i_rData, item->GetCurrentRect() ) );
+                if ( aItemRect.IsInside( i_rPoint ) )
                 {
                     return ::boost::optional< size_t >( i );
                 }
             }
             return ::boost::optional< size_t >();
         }
+
+        //--------------------------------------------------------------------------------------------------------------
+        class ClipItemRegion
+        {
+        public:
+            ClipItemRegion( const PanelTabBar_Data& i_rData )
+                :m_rDevice( i_rData.rTabBar )
+            {
+                m_rDevice.Push( PUSH_CLIPREGION );
+                m_rDevice.SetClipRegion( i_rData.aGeometry.getItemsRect() );
+            }
+
+            ~ClipItemRegion()
+            {
+                m_rDevice.Pop();
+            }
+
+        private:
+            OutputDevice&   m_rDevice;
+        };
 
         //--------------------------------------------------------------------------------------------------------------
         static void lcl_drawItem( const PanelTabBar_Data& i_rData, const size_t i_nItemIndex )
@@ -792,60 +785,28 @@ namespace svt
             if ( i_rData.rPanelDeck.GetPanelCount() - 1 == i_nItemIndex )
                 nItemFlags |= ITEM_POSITION_LAST;
 
+            // the actual item pos might differ from the saved one, if we have scroll buttons
+            const Point aActualItemPos( lcl_getActualItemRect( i_rData, rItem.GetCurrentRect() ).TopLeft() );
+
             i_rData.rTabBar.SetUpdateMode( FALSE );
-            i_rData.pLayout->DrawItem( rItem.pPanel, rItem.GetCurrentRect().TopLeft(), nItemFlags, rItem.eContent );
+            i_rData.pLayout->DrawItem( i_rData.aGeometry, rItem.pPanel, aActualItemPos, nItemFlags, rItem.eContent );
             i_rData.rTabBar.SetUpdateMode( TRUE );
         }
 
         //--------------------------------------------------------------------------------------------------------------
-        static void lcl_fitItems( PanelTabBar_Data& io_rData )
+        static void lcl_relayout( PanelTabBar_Data& io_rData )
         {
-            if ( io_rData.aItems.empty() )
-                // nothing to do
-                return;
+            io_rData.aGeometry.relayout( io_rData.rTabBar.GetOutputSizePixel(), io_rData.aItems );
 
-            TabItemContent eItemContent( io_rData.eTabItemContent );
-            if ( io_rData.eTabItemContent == TABITEM_AUTO )
-            {
-                // the available size
-                Size aOutputSize( io_rData.rTabBar.GetOutputSizePixel() );
-                // shrunk by the outer space
-                aOutputSize.Width() -= io_rData.aBottomRightSpace.Width();
-                aOutputSize.Height() -= io_rData.aBottomRightSpace.Height();
-                const Rectangle aFitInto( Point( 0, 0 ), aOutputSize );
+            const Rectangle& rButtonBack( io_rData.aGeometry.getButtonBackRect() );
+            io_rData.m_aScrollBack.SetPosSizePixel( rButtonBack.TopLeft(), rButtonBack.GetSize() );
+            io_rData.m_aScrollBack.Show( !rButtonBack.IsEmpty() );
 
-                // the "content modes" to try
-                TabItemContent eTryThis[] =
-                {
-                    TABITEM_IMAGE_ONLY,     // assumed to have the smallest rects
-                    TABITEM_TEXT_ONLY,
-                    TABITEM_IMAGE_AND_TEXT  // assumed to have the largest rects
-                };
+            const Rectangle& rButtonForward( io_rData.aGeometry.getButtonForwardRect() );
+            io_rData.m_aScrollForward.SetPosSizePixel( rButtonForward.TopLeft(), rButtonForward.GetSize() );
+            io_rData.m_aScrollForward.Show( !rButtonForward.IsEmpty() );
 
-
-                // determine which of the different version fits
-                eItemContent = eTryThis[0];
-                size_t nTryIndex = 2;
-                while ( nTryIndex > 0 )
-                {
-                    const Point aBottomRight( io_rData.aItems.rbegin()->GetRect( eTryThis[ nTryIndex ] ).BottomRight() );
-                    if ( aFitInto.IsInside( aBottomRight ) )
-                    {
-                        eItemContent = eTryThis[ nTryIndex ];
-                        break;
-                    }
-                    --nTryIndex;
-                }
-            }
-
-            // propagate to the items
-            for (   ItemDescriptors::iterator item = io_rData.aItems.begin();
-                    item != io_rData.aItems.end();
-                    ++item
-                )
-            {
-                item->eContent = eItemContent;
-            }
+            io_rData.UpdateScrollButtons();
         }
     }
 
@@ -857,6 +818,7 @@ namespace svt
     {
         lcl_ensureItemsCache( *this );
 
+        ClipItemRegion aClipItems( *this );
         if ( !!i_rOldActive )
             lcl_drawItem( *this, *i_rOldActive );
         if ( !!i_rNewActive )
@@ -866,7 +828,7 @@ namespace svt
     //------------------------------------------------------------------------------------------------------------------
     void PanelTabBar_Data::Dying()
     {
-        // TODO
+        // not interested in - the notifier is a member of this instance here, so we're dying ourself at the moment
     }
 
     //==================================================================================================================
@@ -891,14 +853,14 @@ namespace svt
     //------------------------------------------------------------------------------------------------------------------
     TabItemContent PanelTabBar::GetTabItemContent() const
     {
-        return m_pData->eTabItemContent;
+        return m_pData->aGeometry.getItemContent();
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void PanelTabBar::SetTabItemContent( const TabItemContent& i_eItemContent )
     {
-        m_pData->eTabItemContent = i_eItemContent;
-        lcl_fitItems( *m_pData );
+        m_pData->aGeometry.setItemContent( i_eItemContent );
+        lcl_relayout( *m_pData );
         Invalidate();
     }
 
@@ -906,28 +868,14 @@ namespace svt
     Size PanelTabBar::GetOptimalSize( WindowSizeType i_eType ) const
     {
         lcl_ensureItemsCache( *m_pData );
-
-        if ( m_pData->aItems.empty() )
-            return Size(
-                m_pData->aTopLeftSpace.Width() + m_pData->aBottomRightSpace.Width(),
-                m_pData->aTopLeftSpace.Height() + m_pData->aBottomRightSpace.Height()
-            );
-
-        const bool bMinimalSize = ( i_eType == WINDOWSIZE_MINIMUM );
-        // the rect of the last item
-        const Rectangle& rLastItemRect( bMinimalSize ? m_pData->aItems.rbegin()->aIconOnlyArea : m_pData->aItems.rbegin()->aCompleteArea );
-        const Point aBottomRight( rLastItemRect.BottomRight() );
-        return Size(
-                    aBottomRight.X() + 1 + m_pData->aBottomRightSpace.Width(),
-                    aBottomRight.Y() + 1 + m_pData->aBottomRightSpace.Height()
-                );
+        return m_pData->aGeometry.getOptimalSize( m_pData->aItems, i_eType == WINDOWSIZE_MINIMUM );
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void PanelTabBar::Resize()
     {
         Control::Resize();
-        lcl_fitItems( *m_pData );
+        lcl_relayout( *m_pData );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -938,6 +886,9 @@ namespace svt
         // background
         m_pData->pLayout->DrawBackground( Rectangle( Point(), GetOutputSizePixel() ) );
 
+        // ensure the items really paint into their own playground only
+        ClipItemRegion aClipItems( *m_pData );
+
         // items
         size_t i=0;
         for (   ItemDescriptors::const_iterator item = m_pData->aItems.begin();
@@ -945,8 +896,8 @@ namespace svt
                 ++item, ++i
             )
         {
-            const Rectangle& rItemRect( item->GetCurrentRect() );
-            if ( rItemRect.IsOver( i_rRect ) )
+            Rectangle aItemRect( lcl_getActualItemRect( *m_pData, item->GetCurrentRect() ) );
+            if ( aItemRect.IsOver( i_rRect ) )
             {
                 lcl_drawItem( *m_pData, i );
             }
@@ -968,15 +919,13 @@ namespace svt
         {
             m_pData->aHoveredItem = aNewItem;
 
+            ClipItemRegion aClipItems( *m_pData );
+
             if ( !!aOldItem )
-            {
                 lcl_drawItem( *m_pData, *aOldItem );
-            }
 
             if ( !!aNewItem )
-            {
                 lcl_drawItem( *m_pData, *aNewItem );
-            }
         }
     }
 
@@ -997,6 +946,7 @@ namespace svt
         CaptureMouse();
         m_pData->bMouseButtonDown = true;
 
+        ClipItemRegion aClipItems( *m_pData );
         lcl_drawItem( *m_pData, *aHitItem );
     }
 
@@ -1016,6 +966,7 @@ namespace svt
             if ( !!aHitItem )
             {
                 // re-draw that item now that we're not in mouse-down mode anymore
+                ClipItemRegion aClipItems( *m_pData );
                 lcl_drawItem( *m_pData, *aHitItem );
                 // activate the respective panel
                 m_pData->rPanelDeck.ActivatePanel( *aHitItem );
@@ -1054,6 +1005,7 @@ namespace svt
             if ( !!aActivePanel )
             {
                 m_pData->aFocusedItem = aActivePanel;
+                ClipItemRegion aClipItems( *m_pData );
                 lcl_drawItem( *m_pData, *m_pData->aFocusedItem );
             }
         }
@@ -1066,8 +1018,12 @@ namespace svt
 
         ::boost::optional< size_t > aPreviouslyFocused( m_pData->aFocusedItem );
         m_pData->aFocusedItem.reset();
+
         if ( !!aPreviouslyFocused )
+        {
+            ClipItemRegion aClipItems( *m_pData );
             lcl_drawItem( *m_pData, *aPreviouslyFocused );
+        }
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -1126,6 +1082,7 @@ namespace svt
             m_pData->aFocusedItem.reset( ( *m_pData->aFocusedItem + nPanelCount - 1 ) % nPanelCount );
         }
 
+        ClipItemRegion aClipItems( *m_pData );
         lcl_drawItem( *m_pData, nOldFocus );
         lcl_drawItem( *m_pData, *m_pData->aFocusedItem );
     }
