@@ -35,6 +35,8 @@
 
 #include <memory>
 
+#include <boost/noncopyable.hpp>
+
 //........................................................................
 namespace svt
 {
@@ -49,6 +51,7 @@ namespace svt
     //====================================================================
     class SVT_DLLPUBLIC TabDeckLayouter :public RefBase
                                         ,public IDeckLayouter
+                                        ,public ::boost::noncopyable
     {
     public:
         /** creates a new layouter
