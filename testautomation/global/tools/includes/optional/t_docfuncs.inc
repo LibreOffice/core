@@ -31,8 +31,6 @@
 '*
 '\******************************************************************************
 
-private const VERBOSE = FALSE
-
 function hUseImpressAutopilot( bEnable as boolean ) as boolean
 
     '///<h3>Enable/disable the Impress Autopilot in Tools/Options</h3>
@@ -40,7 +38,7 @@ function hUseImpressAutopilot( bEnable as boolean ) as boolean
     '///<ul>
     const CFN = "global::tools::includes::optional::t_docfuncs.inc::hUseImpressAutopilot::"
     
-    if ( VERBOSE ) then printlog( CFN & "Enter" )
+    if ( GVERBOSE ) then printlog( CFN & "Enter" )
 
     '///+<li>Create a new IMPRESS document</li>
     gApplication = "IMPRESS"
@@ -56,10 +54,10 @@ function hUseImpressAutopilot( bEnable as boolean ) as boolean
 
         if ( bEnable ) then
             mitAutopilotStarten.check()
-            if ( VERBOSE ) then printlog( CFN & "Enable Impress Autopilot" )
+            if ( GVERBOSE ) then printlog( CFN & "Enable Impress Autopilot" )
         else
             mitAutopilotStarten.uncheck()
-            if ( VERBOSE ) then printlog( CFN & "Disable Impress Autopilot" )
+            if ( GVERBOSE ) then printlog( CFN & "Disable Impress Autopilot" )
         endif
 
         '///+<li>Return Status of Checkbox (checked=TRUE)</li>
@@ -79,7 +77,7 @@ function hUseImpressAutopilot( bEnable as boolean ) as boolean
     hDestroyDocument()
 
     '///+<li>Returncode is undefined</li>
-    if ( VERBOSE ) then printlog( CFN & "Exit" )
+    if ( GVERBOSE ) then printlog( CFN & "Exit" )
     '///</ul>
     
 end function
@@ -102,7 +100,7 @@ function hNumericDocType( doctype as integer ) as string
     dim sList( 100 ) as string
     dim iDocTypes as integer
     
-    if ( VERBOSE ) then printlog( CFN & "Enter" )
+    if ( GVERBOSE ) then printlog( CFN & "Enter" )
     
     '///+<li>Retrieve matching list from file</li>
     hGetDataFileSection( sFile , sList() , "application" , "" , "" )
@@ -121,7 +119,7 @@ function hNumericDocType( doctype as integer ) as string
     '///+<li>Set a plain text name as returnvalue for the function</li>
     hGetDataFileSection( sFile , sList() , "application_names" , "" , "" )
     hNumericDocType() = hGetValueForKeyAsString( sList() , gApplication )
-    if ( VERBOSE ) then printlog( CFN & "Exit" )
+    if ( GVERBOSE ) then printlog( CFN & "Exit" )
     '///</ul>
 
 end function
@@ -196,7 +194,7 @@ function hIdentifyWriterDoc( cString as string, bWarn as boolean ) as boolean
     dim cIdentifier as string
     dim irc as integer ' some temporary returnvalue
     
-    if ( VERBOSE ) then printlog( CFN & "Enter" )
+    if ( GVERBOSE ) then printlog( CFN & "Enter" )
 
     '///+<li>Test the function parameter</li>
     if ( cString = "" ) then
@@ -235,7 +233,7 @@ function hIdentifyWriterDoc( cString as string, bWarn as boolean ) as boolean
         if ( bWarn ) then
             warnlog ( CFN & "The focus is not on the expected document" )
         else
-            if ( VERBOSE ) then printlog( CFN & "The focus is not on the expected document" )
+            if ( GVERBOSE ) then printlog( CFN & "The focus is not on the expected document" )
         endif
         
         printlog( CFN & "Expected: " & cString )
@@ -247,7 +245,7 @@ function hIdentifyWriterDoc( cString as string, bWarn as boolean ) as boolean
     endif
     '///+<li>Return TRUE only if the current document is the expected one</li>
     
-    if ( VERBOSE ) then printlog( CFN & "Exit" )
+    if ( GVERBOSE ) then printlog( CFN & "Exit" )
     '///</ul>
 
 end function
@@ -264,7 +262,7 @@ function hCreateDocument() as boolean
     dim iDocCountAfter as integer
 
     iDocCountBefore = getDocumentCount
-    if ( VERBOSE ) then printlog( CFN & "Number of open documents before: " & iDocCountBefore )
+    if ( GVERBOSE ) then printlog( CFN & "Number of open documents before: " & iDocCountBefore )
 
     if ( gApplication = "BACKGROUND" ) then
     	hFileCloseAll()
@@ -279,7 +277,7 @@ function hCreateDocument() as boolean
             hCreateDocument() = false
         endif
     endif
-    if ( VERBOSE ) then printlog( CFN & "New document created. Open: " & iDocCountAfter )
+    if ( GVERBOSE ) then printlog( CFN & "New document created. Open: " & iDocCountAfter )
     '///</ul>
     
 end function
@@ -316,7 +314,7 @@ function hDocumentTypeKeys( cString as string ) as boolean
     dim brc as boolean
         brc = true
         
-    if ( VERBOSE ) then printlog( CFN & "Enter" )
+    if ( GVERBOSE ) then printlog( CFN & "Enter" )
     
     '///+<li>Set focus to the current documenttype determined by gApplication</li>
     '///+<li>Type the string passed as function parameter</li>
@@ -360,7 +358,7 @@ function hDestroyDocument() as boolean
     hDestroyDocument() = false
     
     if ( iDocCount = 0 ) then exit function
-    if ( VERBOSE ) then printlog( CFN & "In.: Open: " & iDocCount )
+    if ( GVERBOSE ) then printlog( CFN & "In.: Open: " & iDocCount )
 
     hUseAsyncSlot( "FileClose" )
     
@@ -377,7 +375,7 @@ function hDestroyDocument() as boolean
     
     if ( getDocumentCount() = iDocCount ) then hCloseDocument()
     if ( getDocumentCount() = iDocCount - 1 ) then hDestroyDocument() = true
-    if ( VERBOSE ) then printlog( CFN & "Out: Open: " & getDocumentCount() )
+    if ( GVERBOSE ) then printlog( CFN & "Out: Open: " & getDocumentCount() )
 
 end function
 

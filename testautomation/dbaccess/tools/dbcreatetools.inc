@@ -1453,8 +1453,8 @@ function fSetJDBCDriverFiles(sClassPath) as boolean
     call hCloseDocument
     
 end function
+
 '-------------------------------------------------------------------------
-private const VERBOSE = false
 
 function hGetInstalledDatabaseDrivers( dbDriverList() as string ) as integer
 
@@ -1502,7 +1502,7 @@ function hGetInstalledDatabaseDrivers( dbDriverList() as string ) as integer
         
     endif
     
-    if ( VERBOSE ) then 
+    if ( GVERBOSE ) then
         printlog( CFN & "Returning " & iDriverCount & " drivers" )
     endif
     hGetInstalledDatabaseDrivers() = iDriverCount
@@ -1579,7 +1579,7 @@ function hGetDatabaseDisplayName( dbDriverURL as string ) as string
         
     endif
     
-    if ( VERBOSE ) then 
+    if ( GVERBOSE ) then
         printlog( CFN & "Database display string: " & sDatabaseName )
     endif
     hGetDataBaseDisplayName() = sDatabaseName

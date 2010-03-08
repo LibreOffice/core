@@ -31,10 +31,6 @@
 '*
 '\******************************************************************************
 
-private const VERBOSE = FALSE
-
-'*******************************************************************************
-
 function hGetOfficeVersion() as string
 
     dim cPath as string
@@ -44,7 +40,7 @@ function hGetOfficeVersion() as string
 
     ' Path to info file
     cPath = convertpath( gTesttoolPath & "global/input/officeinfo.txt" )
-    if ( VERBOSE ) then printlog( CFN & "Reading: " & cPath )
+    if ( GVERBOSE ) then printlog( CFN & "Reading: " & cPath )
     
     ' Read the file
     hGetDatafileSection( cPath, aItemList(), "", "", "" )
@@ -86,7 +82,7 @@ function hGetOleObjectName( ObjectType as string ) as string
         exit function
     end select
     
-    if ( VERBOSE ) then printlog( CFN & "Retrieving OLE name for: " & ObjectType )
+    if ( GVERBOSE ) then printlog( CFN & "Retrieving OLE name for: " & ObjectType )
 
     ' ...Embedding is physical path, ObjectNames the top node
     aPropertyValue( 0 ).Name  = "nodepath"
@@ -125,7 +121,7 @@ end function
 function GetOleDefaultNames()
 
     const CFN = "global::tools::includes::optional::t_ole.inc::GetOleDefaultNames(): "
-    if ( VERBOSE ) then printlog( CFN & "Retrieving OLE names" )
+    if ( GVERBOSE ) then printlog( CFN & "Retrieving OLE names" )
 
     hGetOfficeVersion()
     gOLEWriter  = hGetOleObjectName( "Writer"  )

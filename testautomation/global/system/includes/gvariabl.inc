@@ -173,6 +173,9 @@ Global gOOoImprovementIsEnabled as boolean
 '///* Performance flags
 Global GLOBAL_USE_NEW_SLEEP as boolean ' keep the old sleep() behavior
 
+'///* If set to TRUE in master.inc many functions become more talkative
+Global GVERBOSE as boolean
+
 sub OnlyForDocuGVariables
 '///<b>System for the installed Office</b>
 '///<i>gPlatform</i>: Operatingsystem (internal shortkey)

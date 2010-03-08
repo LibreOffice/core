@@ -31,9 +31,6 @@
 '*
 '\******************************************************************************
 
-private const VERBOSE = FALSE
-
-
 sub hToolbarSelect( sType as string, sOpen as boolean, optional SetToDefault as boolean )
     Dim sDefault as integer, sKontext as string, sPosition as integer
     Dim SteppedThrough as boolean
@@ -968,7 +965,7 @@ function hIsAccessbridgeInstalled() as boolean
         	    	    endif
                     endif
                     Kontext "OptionenDlg"
-                    OptionenDlg.Cancel
+                    hCloseDialog( OptionenDlg, "Cancel" )
                 endif                
         end select
     endif
@@ -991,7 +988,7 @@ function hUseAsyncSlot( cSlot as string ) as integer
     const RETVAL_TIMEOUT = -1  ' Returnvalue if slot is not available
     const CFN = "global::tools::includes::required::hUseAsyncSlot(): "
 
-    printlog( "Executing slot: <" & cSlot & ">" )
+    printlog( "Executing <" & cSlot & ">" )
     WaitSlot()
 
     for iRetries = 1 to MAX_RETRIES
@@ -1090,7 +1087,7 @@ function hUseAsyncSlot( cSlot as string ) as integer
     ' Timeout is -1
     if ( iRetries = MAX_RETRIES ) then iTime = RETVAL_TIMEOUT
 
-    if ( VERBOSE ) then printlog( CFN & "Exit with rc=" & iTime )
+    if ( GVERBOSE ) then printlog( CFN & "Exit with rc=" & iTime )
     hUseAsyncSlot() = iTime
 
 end function
@@ -1107,7 +1104,7 @@ function hClickButton( oButton as object ) as integer
     const RETVAL_TIMEOUT = -1  ' Return -1 if the button is not available
     const CFN = "global::tools::includes::required::hClickButton(): "
 
-    printlog( "Click button: <" & oButton.name() & ">" )
+    printlog( "Clicking <" & oButton.name() & ">" )
     WaitSlot()
 
     for iRetries = 1 to MAX_RETRIES
@@ -1124,7 +1121,7 @@ function hClickButton( oButton as object ) as integer
 
     if ( iWait = MAX_RETRIES ) then iTime = RETVAL_TIMEOUT
 
-    if ( VERBOSE ) then printlog( CFN & "Exit with rc=" & iTime )
+    if ( GVERBOSE ) then printlog( CFN & "Exit with rc=" & iTime )
     hClickButton() = iTime
 
 end function
@@ -1160,7 +1157,7 @@ function hCloseDialog( oDialog as object, sUserFlags as string ) as boolean
     ' Find out whether the dialog must exist (default) or is just closed as a precaution ("optional")
     if ( instr( sFlags, "optional") > 0 ) then bDialogMustExist = FALSE
 
-    printlog( CFN & "Closing dialog <" & oDialog.name() & "> using flags <" & sFlags & ">.")
+    printlog( "Closing dialog <" & oDialog.name() & ">. Flags <" & sFlags & ">.")
 
     if ( oDialog.exists() ) then
         select case( iClosingMethod )

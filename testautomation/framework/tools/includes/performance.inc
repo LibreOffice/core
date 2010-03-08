@@ -31,14 +31,12 @@
 '*
 '\******************************************************************************
 
-private const VERBOSE = true
-
 function hWaitForObject( oControl as object, iTime as integer ) as integer
 
     const CFN = "hWaitForObject()::"
     dim iWait as integer
     
-    if ( VERBOSE ) then printlog( CFN & "Entering function for control: " & oControl.name() )
+    if ( GVERBOSE ) then printlog( CFN & "Entering function for control: " & oControl.name() )
     
     WaitSlot( 2000 )
     
@@ -49,7 +47,7 @@ function hWaitForObject( oControl as object, iTime as integer ) as integer
                 hWaitForObject() = 0
                 exit function
             else
-                if ( VERBOSE ) then printlog( "Waiting..." )
+                if ( GVERBOSE ) then printlog( "Waiting..." )
             endif
         catch
             wait( 1 )            

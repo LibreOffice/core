@@ -35,8 +35,6 @@ private SLEEP_TIME_REQUESTED as integer
 private SLEEP_CALLS_SUM as integer
 private SLEEP_TIME_USED as integer
 
-private const VERBOSE = FALSE
-
 function GetClipboardText as string
 
     '/// Returns the correct clipboard text (also if there is a 'RETURN' at it's end.
@@ -318,7 +316,7 @@ function Sleep( optional _iSeconds as integer ) as integer
         printlog( CFN & "Zero time. Please consider removing Sleep() statement" )
     endif
     
-    if ( VERBOSE ) then
+    if ( GVERBOSE ) then
         SLEEP_CALLS_SUM      = SLEEP_CALLS_SUM + 1
         SLEEP_TIME_USED      = SLEEP_TIME_USED + iTimeDiff / 1000 ' good enough
         SLEEP_TIME_REQUESTED = SLEEP_TIME_REQUESTED + iSeconds 

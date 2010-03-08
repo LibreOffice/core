@@ -70,6 +70,8 @@ sub GetUseFiles
 
     gTestcaseStart = Now()   ' get start time of test preparation phase
 
+    GVERBOSE = FALSE
+
     use "global\system\includes\sysinfo.inc"     '///+ sysinfo.inc  : routines to get all system informations
     use "global\system\includes\inivalue.inc"    '///+ inivalue.inc : routines to work with ini-files
     use "global\system\includes\iniinfo.inc"     '///+ iniinfo.inc  : routines to get all informations about OpenOffice.org
