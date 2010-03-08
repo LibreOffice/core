@@ -586,6 +586,7 @@ function hClickNextButton() as boolean
         '///+<li>Handle the &quot;Document Creation&quot;-dialog (Mailmerge Wizard)</li>
         kontext "active"
         if ( active.exists( 1 ) ) then
+            ' The dialog must disappear within 10 seconds
             if ( not active.notExists( 10 ) ) then hClickNextButton() = false
         endif
     endif
