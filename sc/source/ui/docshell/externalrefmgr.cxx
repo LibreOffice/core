@@ -1543,7 +1543,7 @@ bool ScExternalRefManager::markUsedExternalRefCells()
             ScFormulaCell* pCell = *itrCell;
             bool bUsed = pCell->MarkUsedExternalReferences();
             if (bUsed)
-                // Return true even only one cell references external documents.
+                // Return true when at least one cell references external docs.
                 return true;
         }
     }
