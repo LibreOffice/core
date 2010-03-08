@@ -87,7 +87,6 @@ MY_FILES_calc = \
     $(MY_MOD)/org/openoffice/Office/Embedding-calc.xcu \
     $(MY_MOD)/org/openoffice/Setup-calc.xcu
 
-MY_DEPS_cjk = main
 MY_FILES_cjk = \
     $(MY_MOD)/org/openoffice/Office/Common-cjk.xcu \
     $(MY_MOD)/org/openoffice/Office/Writer-cjk.xcu
@@ -125,7 +124,6 @@ MY_FILES_impress = \
     $(MY_MOD)/org/openoffice/Office/Embedding-impress.xcu \
     $(MY_MOD)/org/openoffice/Setup-impress.xcu
 
-MY_DEPS_korea = main
 MY_FILES_korea = \
     $(MY_MOD)/org/openoffice/Office/Common-korea.xcu
 
