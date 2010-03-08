@@ -385,6 +385,7 @@ LanguageType MapCharToLanguage( sal_UCS4 uChar )
     {
         bFirst = false;
         // TODO: use the default-CJK language instead
+        // TODO: use default language determined by #i97086#
         // when the setting from Tools->Options->LangSettings->Languages becomes available here
         LanguageType nDefaultCJK = LANGUAGE_CHINESE;
         const LanguageType nUILang = Application::GetSettings().GetUILanguage();
@@ -434,18 +435,16 @@ class WinGlyphFallbackSubstititution
 :    public ImplGlyphFallbackFontSubstitution
 {
 public:
-    WinGlyphFallbackSubstititution( HDC, ImplDevFontList* );
+    WinGlyphFallbackSubstititution( HDC );
 
     bool FindFontSubstitute( ImplFontSelectData&, rtl::OUString& rMissingChars ) const;
 private:
     HDC mhDC;
-    ImplDevFontList* mpFontList;
     bool HasMissingChars( const ImplFontData*, const rtl::OUString& rMissingChars ) const;
 };
 
-inline WinGlyphFallbackSubstititution::WinGlyphFallbackSubstititution( HDC hDC, ImplDevFontList* pDFL )
+inline WinGlyphFallbackSubstititution::WinGlyphFallbackSubstititution( HDC hDC )
 :   mhDC( hDC )
-,   mpFontList( pDFL )
 {}
 
 void ImplGetLogFontFromFontSelect( HDC, const ImplFontSelectData*,
@@ -525,7 +524,8 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute( ImplFontSelectData& rFo
 
     // first level fallback:
     // try use the locale specific default fonts defined in VCL.xcu
-    /*const*/ ImplDevFontListData* pDevFont = mpFontList->ImplFindByLocale( aLocale );
+    const ImplDevFontList* pDevFontList = ImplGetSVData()->maGDIData.mpScreenFontList;
+    /*const*/ ImplDevFontListData* pDevFont = pDevFontList->ImplFindByLocale( aLocale );
     if( pDevFont )
     {
         const ImplFontData* pFace = pDevFont->FindBestFontFace( rFontSelData );
@@ -537,7 +537,7 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute( ImplFontSelectData& rFo
     }
 
     // are the missing characters symbols?
-    pDevFont = mpFontList->ImplFindByAttributes( IMPL_FONT_ATTR_SYMBOL,
+    pDevFont = pDevFontList->ImplFindByAttributes( IMPL_FONT_ATTR_SYMBOL,
                     rFontSelData.meWeight, rFontSelData.meWidthType,
                     rFontSelData.meFamily, rFontSelData.meItalic, rFontSelData.maSearchName );
     if( pDevFont )
@@ -551,7 +551,7 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute( ImplFontSelectData& rFo
     }
 
     // last level fallback, check each font type face one by one
-    const ImplGetDevFontList* pTestFontList = mpFontList->GetDevFontList();
+    const ImplGetDevFontList* pTestFontList = pDevFontList->GetDevFontList();
     // limit the count of fonts to be checked to prevent hangs
     static const int MAX_GFBFONT_COUNT = 600;
     int nTestFontCount = pTestFontList->Count();
@@ -2507,8 +2507,8 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
         bImplSalCourierNew      = aInfo.mbImplSalCourierNew;
     }
 
-    // set font fallback hook
-    static WinGlyphFallbackSubstititution aSubstFallback( mhDC, pFontList );
+    // set glyph fallback hook
+    static WinGlyphFallbackSubstititution aSubstFallback( mhDC );
     pFontList->SetFallbackHook( &aSubstFallback );
 }
 
