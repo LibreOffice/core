@@ -73,7 +73,7 @@ function hUseImpressAutopilot( bEnable as boolean ) as boolean
 
     '///+<li>Close Tools/Options</li>
     Kontext "OptionenDlg"
-    hCloseDialog( OptioneDlg, "ok" )
+    hCloseDialog( OptionenDlg, "ok" )
     
     '///+<li>Close IMPRESS document</li>
     hDestroyDocument()
