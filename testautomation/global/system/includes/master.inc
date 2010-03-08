@@ -364,7 +364,7 @@ sub hStartTheOffice (optional sProfPath as String, optional sProfParameter as St
     
     sErrorInformation = "global::systen::inc::master.inc:hStartTheOffice: "
     
-    if gPlatform = lcase("osx") then
+    if lcase( gPlatform ) = "osx" then
         sPlatformProgramPath = "MacOS"
     else
         sPlatformProgramPath = "program"
@@ -1164,7 +1164,7 @@ sub sStartUpOffice (optional sProfPath as String, optional sProfParameter as Str
             
     ' Set a valid URE_BOOTSTRAP path for soffice, else the invalid one from this testtool instance
     ' will get used i86718 - would result in a message about vcl stuff and a not starting soffice
-    if gPlatform = lcase("osx") then
+    if lcase( gPlatform ) = "osx" then
         sPlatformProgramPath = "MacOS"
         sPlatformBinExt = "rc"
     else
