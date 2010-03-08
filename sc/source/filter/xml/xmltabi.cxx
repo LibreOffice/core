@@ -104,6 +104,7 @@ static bool lcl_isExternalRefCache(const rtl::OUString& rName, rtl::OUString& rU
         }
         else if (bInUrl)
         {
+            // parsing file URL
             if (c == '#')
             {
                 if (cPrev != '\'')
@@ -117,6 +118,7 @@ static bool lcl_isExternalRefCache(const rtl::OUString& rName, rtl::OUString& rU
                 aUrlBuf.append(c);
         }
         else
+            // parsing sheet name.
             aTabNameBuf.append(c);
 
         cPrev = c;
