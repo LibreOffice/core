@@ -60,9 +60,16 @@ interface XExternalDocLink
 
         @param aSheetName sheet name
 
+        @param DynamicCache specify whether or not the cache can grow when
+        non-cached regions are queried.  If <true/>, querying a non-cached
+        cell in this sheet cache will allow Calc to try to access the source
+        document to fetch the value in first access.  If <false/>, the source
+        document will not be accessed, and the non-cached regions are treated
+        as empty cells.
+
         @return com::sun::star::sheet::XExternalSheetCache sheet cache instance
      */
-    com::sun::star::sheet::XExternalSheetCache addSheetCache( [in] string aSheetName );
+    com::sun::star::sheet::XExternalSheetCache addSheetCache( [in] string aSheetName, [in] boolean DynamicCache );
 
     //-------------------------------------------------------------------------
 
