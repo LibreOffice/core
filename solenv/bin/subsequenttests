@@ -105,11 +105,8 @@ while (@testpaths || $running > 0) {
             $ENV{'OOO_SUBSEQUENT_TESTS'} = 'x';
             open(OUTPUT, $cmd) or die("$counter: $!");
             while (<OUTPUT>) {
-                if (/\n$/) {
-                    print("$counter: $_");
-                } else {
-                    print("$counter: $_\n");
-                }
+                s/\r?\n$//;
+                print("$counter: $_\n");
             }
             close(OUTPUT);
             exit($? == 0 ? 0 : 1);
