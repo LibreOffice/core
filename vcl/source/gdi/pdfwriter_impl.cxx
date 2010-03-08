@@ -11526,7 +11526,7 @@ sal_Int32 PDFWriterImpl::findRadioGroupWidget( const PDFWriter::RadioButtonWidge
         m_aWidgets.back().m_nPage       = m_nCurrentPage;
         m_aWidgets.back().m_eType       = PDFWriter::RadioButton;
         m_aWidgets.back().m_nRadioGroup = rBtn.RadioGroup;
-        m_aWidgets.back().m_nFlags |= 0x00008000;
+        m_aWidgets.back().m_nFlags |= 0x0000C000;   // NoToggleToOff and Radio bits
 
         // create radio button field name
         const rtl::OUString& rName = (m_aContext.Version > PDFWriter::PDF_1_2) ?
