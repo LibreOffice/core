@@ -1208,7 +1208,9 @@ FltError ImportExcel8::Read( void )
 
         pProgress.reset();
 
-        AdjustRowHeight();
+        if (pD->IsAdjustHeightEnabled())
+            AdjustRowHeight();
+
         PostDocLoad();
 
         pD->CalcAfterLoad();

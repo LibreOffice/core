@@ -1988,6 +1988,10 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, Stri
     ScExtDocOptions* pExtOpt = mpDoc->GetExtDocOptions();
     sal_uInt32 nLinkCount = pExtOpt ? pExtOpt->GetDocSettings().mnLinkCnt : 0;
     ScDocument* pSrcDoc = pNewShell->GetDocument();
+    pSrcDoc->EnableExecuteLink(false); // to prevent circular access of external references.
+    pSrcDoc->EnableUndo(false);
+    pSrcDoc->EnableAdjustHeight(false);
+
     ScExtDocOptions* pExtOptNew = pSrcDoc->GetExtDocOptions();
     if (!pExtOptNew)
     {
