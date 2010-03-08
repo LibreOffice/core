@@ -909,7 +909,7 @@ void ExternalLink::insertExternalSheet( const OUString& rSheetName )
     OSL_ENSURE( rSheetName.getLength() > 0, "ExternalLink::insertExternalSheet - empty sheet name" );
     if( mxDocLink.is() )
     {
-        Reference< XExternalSheetCache > xSheetCache = mxDocLink->addSheetCache( rSheetName );
+        Reference< XExternalSheetCache > xSheetCache = mxDocLink->addSheetCache( rSheetName, false );
         sal_Int32 nCacheIdx = xSheetCache.is() ? xSheetCache->getTokenIndex() : -1;
         maSheetCaches.push_back( nCacheIdx );
     }
