@@ -542,6 +542,9 @@ AC_ARG_WITH(system-altlinuxhyph,
 AC_ARG_WITH(system-lpsolve,
 [  --with-system-lpsolve         Use lpsolve already on system
 ],,)
+AC_ARG_WITH(system-redland,
+[  --with-system-redland   Use redland library already on system
+],,)
 AC_ARG_WITH(system-mozilla,
 [  --with-system-mozilla   Use mozilla already on system. Note that some
                           components cannot be built against a contemporary
@@ -4933,16 +4936,12 @@ dnl ===================================================================
 dnl Check for system redland
 dnl ===================================================================
 AC_MSG_CHECKING([which redland library to use])
-dnl if test -n "$with_system_redland" -o -n "$with_system_libs" && \
-dnl	test "$with_system_redland" != "no"; then
-dnl mst: NOTE: right now we need patches against redland
-dnl            so we only enable system redland if explicitly requested
-dnl            if next version includes patches, insert version check here
-if test -n "$with_system_redland" && \
+if test -n "$with_system_redland" -o -n "$with_system_libs" && \
 	test "$with_system_redland" != "no"; then
 	AC_MSG_RESULT([external])
 	SYSTEM_REDLAND=YES
-	PKG_CHECK_MODULES(REDLAND, redland)
+   dnl versions before 1.0.8 write RDF/XML that is useless for ODF (@xml:base)
+   PKG_CHECK_MODULES(REDLAND, redland >= 1.0.8)
 else
 	AC_MSG_RESULT([internal])
 	BUILD_TYPE="$BUILD_TYPE REDLAND"
