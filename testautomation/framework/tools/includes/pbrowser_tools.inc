@@ -37,13 +37,12 @@ function hOpenPropertyBrowser() as boolean
 
     '///<h3>Open the BASIC property browser</h3>
 
-    const CFN = "hOpenPropertyBrowser::"
+    const CFN = "framework::tools::includes::pbrowser_tools.inc::hOpenPropertyBrowser(): "
 
     if ( hUseAsyncSlot( "ContextProperties" ) <> -1 ) then
         kontext "ControlPropertiesTabControl"
         if ( ControlPropertiesTabControl.exists( 2 ) ) then
             ControlPropertiesTabControl.setPage( TabGeneralControl )
-            printlog( "Property browser is open" )
             hOpenPropertyBrowser() = true
         else
             warnlog( CFN & "Dialog <ControlPropertiesTabControl> is not available" )
@@ -59,7 +58,10 @@ end function
 '*******************************************************************************
 
 function hClosePropertyBrowser() as boolean
-    
+
+    const CFN = "framework::tools::includes::pbrowser_tools.inc::hClosePropertyBrowser(): "
+    printlog( "Closing Property-Browser" )
+
     kontext "ControlPropertiesTabControl"
     if ( ControlPropertiesTabControl.exists() ) then
     
@@ -69,7 +71,6 @@ function hClosePropertyBrowser() as boolean
             printlog( CFN & "Property browser could not be closed" )
             hClosePropertyBrowser() = true
         else
-            printlog( CFN & "ok" )
             hClosePropertyBrowser() = false
         endif
     else
