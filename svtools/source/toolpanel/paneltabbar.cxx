@@ -70,9 +70,11 @@ namespace svt
     class SAL_NO_VTABLE ITabBarRenderer
     {
     public:
-        virtual void        renderBackground( const Rectangle& i_rArea ) const = 0;
+        /** fills the background of our target device
+        */
+        virtual void        renderBackground() const = 0;
         virtual Rectangle   calculateDecorations( const Size& i_rContentSize ) const = 0;
-        virtual void        preRenderItem( const Rectangle& i_rItemRect, const ItemFlags i_nItemFlags ) const = 0;
+        virtual void        preRenderItem( const Rectangle& i_rBoundingRect, const Rectangle& i_rContentRect, const ItemFlags i_nItemFlags ) const = 0;
         virtual void        postRenderItem( Window& i_rActualWindow, const Rectangle& i_rItemRect, const ItemFlags i_nItemFlags ) const = 0;
 
         // TODO: postRenderItem takes the "real" output device, i.e. effectively the tab bar. This is because
@@ -94,9 +96,9 @@ namespace svt
         }
 
         // ITabBarRenderer
-        virtual void        renderBackground( const Rectangle& i_rArea ) const;
+        virtual void        renderBackground() const;
         virtual Rectangle   calculateDecorations( const Size& i_rContentSize ) const;
-        virtual void        preRenderItem( const Rectangle& i_rItemRect, const ItemFlags i_nItemFlags ) const;
+        virtual void        preRenderItem( const Rectangle& i_rBoundingRect, const Rectangle& i_rContentRect, const ItemFlags i_nItemFlags ) const;
         virtual void        postRenderItem( Window& i_rActualWindow, const Rectangle& i_rItemRect, const ItemFlags i_nItemFlags ) const;
 
     protected:
@@ -110,9 +112,9 @@ namespace svt
     //= VCLItemRenderer - implementation
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
-    void VCLItemRenderer::renderBackground( const Rectangle& i_rArea ) const
+    void VCLItemRenderer::renderBackground() const
     {
-        getTargetDevice().DrawRect( i_rArea );
+        getTargetDevice().DrawRect( Rectangle( Point(), getTargetDevice().GetOutputSizePixel() ) );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -123,10 +125,10 @@ namespace svt
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void VCLItemRenderer::preRenderItem( const Rectangle& i_rItemRect, const ItemFlags i_nItemFlags ) const
+    void VCLItemRenderer::preRenderItem( const Rectangle& i_rBoundingRect, const Rectangle& i_rContentRect, const ItemFlags i_nItemFlags ) const
     {
         // completely erase the target area. Otherwise, the DrawSelectionBackground from postRender will constantly add up
-        getTargetDevice().DrawRect( i_rItemRect );
+        getTargetDevice().DrawRect( i_rBoundingRect );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -155,6 +157,84 @@ namespace svt
         }
     }
 
+    //==================================================================================================================
+    //= ToolboxItemRenderer - declaration
+    //==================================================================================================================
+    class ToolboxItemRenderer : public ITabBarRenderer
+    {
+    public:
+        ToolboxItemRenderer( OutputDevice& i_rTargetDevice )
+            :m_rTargetDevice( i_rTargetDevice )
+        {
+        }
+
+        // ITabBarRenderer
+        virtual void        renderBackground() const;
+        virtual Rectangle   calculateDecorations( const Size& i_rContentSize ) const;
+        virtual void        preRenderItem( const Rectangle& i_rBoundingRect, const Rectangle& i_rContentRect, const ItemFlags i_nItemFlags ) const;
+        virtual void        postRenderItem( Window& i_rActualWindow, const Rectangle& i_rItemRect, const ItemFlags i_nItemFlags ) const;
+
+    protected:
+        OutputDevice&   getTargetDevice() const { return m_rTargetDevice; }
+
+    private:
+        OutputDevice&   m_rTargetDevice;
+    };
+
+    //==================================================================================================================
+    //= ToolboxItemRenderer - implementation
+    //==================================================================================================================
+    //------------------------------------------------------------------------------------------------------------------
+    void ToolboxItemRenderer::renderBackground() const
+    {
+        getTargetDevice().DrawRect( Rectangle( Point(), getTargetDevice().GetOutputSizePixel() ) );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    Rectangle ToolboxItemRenderer::calculateDecorations( const Size& i_rContentSize ) const
+    {
+        // don't ask GetNativeControlRegion, this will not deliver proper results in all cases.
+        // Instead, simply assume that both the content and the bounding region are the same.
+//        const ImplControlValue aControlValue;
+//        bool bNativeOK = m_rTargetWindow.GetNativeControlRegion(
+//            CTRL_TOOLBAR, PART_BUTTON,
+//            Rectangle( Point(), i_rContentSize ), CTRL_STATE_ENABLED | CTRL_STATE_ROLLOVER,
+//            aControlValue, ::rtl::OUString(),
+//            aBoundingRegion, aContentRegion
+//        );
+        return Rectangle(
+            Point( -1, -1 ),
+            Size( i_rContentSize.Width() + 2, i_rContentSize.Height() + 2 )
+        );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void ToolboxItemRenderer::preRenderItem( const Rectangle& i_rBoundingRect, const Rectangle& i_rContentRect, const ItemFlags i_nItemFlags ) const
+    {
+        // completely erase the target area, toolbar item NWF is not expected to do this
+        getTargetDevice().DrawRect( i_rBoundingRect );
+
+        ControlState nState = CTRL_STATE_ENABLED;
+        if ( i_nItemFlags & ITEM_STATE_FOCUSED )    nState |= CTRL_STATE_FOCUSED;
+        if ( i_nItemFlags & ITEM_STATE_HOVERED )    nState |= CTRL_STATE_ROLLOVER;
+        if ( i_nItemFlags & ITEM_STATE_ACTIVE )     nState |= CTRL_STATE_SELECTED;
+
+        ImplControlValue aControlValue;
+        aControlValue.setTristateVal( ( i_nItemFlags & ITEM_STATE_ACTIVE ) ? BUTTONVALUE_ON : BUTTONVALUE_OFF );
+
+        bool bNativeOK = getTargetDevice().DrawNativeControl( CTRL_TOOLBAR, PART_BUTTON, i_rContentRect, nState, aControlValue, rtl::OUString() );
+        (void)bNativeOK;
+        OSL_ENSURE( bNativeOK, "ToolboxItemRenderer::preRenderItem: inconsistent NWF implementation!" );
+            // IsNativeControlSupported returned true, previously, otherwise we would not be here ...
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void ToolboxItemRenderer::postRenderItem( Window& i_rActualWindow, const Rectangle& i_rItemRect, const ItemFlags i_nItemFlags ) const
+    {
+        (void)i_rActualWindow;
+        (void)i_rItemRect;
+        (void)i_nItemFlags;
+    }
 
 #if 0
     //==================================================================================================================
@@ -234,26 +314,10 @@ namespace svt
                     const Rectangle& i_rContentArea,
                     const ItemFlags& i_nFlags
                 );
-        void    impl_renderContent(
-                    const PToolPanel& i_pPanel,
-                    const Rectangle& i_rContentArea,
-                    const TabItemContent i_eItemContent
-                );
 
     private:
         Window&     m_rTargetWindow;
         const bool  m_bLeft;
-
-        enum ItemRenderMode
-        {
-            /// the items are to be rendered in the look of a native widget toolbar item
-            NWF_TOOLBAR_ITEM,
-            /// the items are to be rendered in the look of a native widget tab bar item
-            NWF_TABBAR_ITEM,
-            /// the items are to be rendered with VCL functionality only
-            VCL_BASED
-        };
-        ItemRenderMode  m_eRenderMode;
     };
 
     //------------------------------------------------------------------------------------------------------------------
@@ -286,23 +350,6 @@ namespace svt
 
         switch ( m_eRenderMode )
         {
-        case NWF_TOOLBAR_ITEM:
-        {
-            // completely erase the target area, toolbar item NWF is not expected to do this
-            m_rTargetWindow.DrawRect( i_rBoundingArea );
-
-            const Region aCtrlRegion( i_rContentArea );
-
-            ImplControlValue aControlValue;
-            aControlValue.setTristateVal( ( i_nItemFlags & ITEM_STATE_ACTIVE ) ? BUTTONVALUE_ON : BUTTONVALUE_OFF );
-
-            bool bNativeOK = m_rTargetWindow.DrawNativeControl( CTRL_TOOLBAR, PART_BUTTON, aCtrlRegion, nState, aControlValue, rtl::OUString() );
-            (void)bNativeOK;
-            OSL_ENSURE( bNativeOK, "VerticalItemLayout::impl_preRender: inconsistent NWF implementation!" );
-                // IsNativeControlSupported returned true, previously, otherwise we would not be here ...
-        }
-        break;
-
         case NWF_TABBAR_ITEM:
         {
             VirtualDevice aRenderDevice( m_rTargetWindow );
@@ -349,10 +396,6 @@ namespace svt
         bool bNativeOK = false;
         switch ( m_eRenderMode )
         {
-        case VCL_BASED:
-        case NWF_TOOLBAR_ITEM:
-            break;
-
         case NWF_TABBAR_ITEM:
             bNativeOK = true;
             // don't draw any background. The default behavior of VCL windows - draw a dialog face color -
@@ -370,22 +413,7 @@ namespace svt
     {
         Region aBoundingRegion, aContentRegion;
         bool bNativeOK = false;
-        if ( m_eRenderMode == NWF_TOOLBAR_ITEM )
-        {
-            // don't ask GetNativeControlRegion, this will not deliver proper results in all cases.
-            // Instead, simply assume that both the content and the bounding region are the same.
-//            const ImplControlValue aControlValue;
-//            bNativeOK = m_rTargetWindow.GetNativeControlRegion(
-//                CTRL_TOOLBAR, PART_BUTTON,
-//                Rectangle( Point(), aItemContentSize ), CTRL_STATE_ENABLED | CTRL_STATE_ROLLOVER,
-//                aControlValue, ::rtl::OUString(),
-//                aBoundingRegion, aContentRegion
-//            );
-            aContentRegion = Rectangle( Point( 1, 1 ), aItemContentSize );
-            aBoundingRegion = Rectangle( Point( 0, 0 ), Size( aItemContentSize.Width() + 2, aItemContentSize.Height() + 2 ) );
-            bNativeOK = true;
-        }
-        else if ( m_eRenderMode == NWF_TABBAR_ITEM )
+        if ( m_eRenderMode == NWF_TABBAR_ITEM )
         {
             TabitemValue tiValue;
             ImplControlValue aControlValue( (void*)(&tiValue) );
@@ -421,7 +449,6 @@ namespace svt
 
         // actually draw
         impl_preRender( aBoundingArea, aContentArea, i_nItemFlags );
-        impl_renderContent( i_pPanel, aContentArea, i_eItemContent );
     }
 #endif
 
@@ -593,7 +620,7 @@ namespace svt
         ,m_eTabAlignment( i_eAlignment )
         ,rPanelDeck( i_rPanelDeck )
         ,aRenderDevice( i_rTabBar )
-        ,pRenderer( new VCLItemRenderer( aRenderDevice ) )
+        ,pRenderer( new ToolboxItemRenderer( aRenderDevice ) )
         ,aHoveredItem()
         ,aFocusedItem()
         ,bMouseButtonDown( false )
@@ -827,14 +854,22 @@ namespace svt
 //        const Point aActualItemPos( GetActualLogicalItemRect( rItem.GetCurrentRect() ).TopLeft() );
 //        pLayout->DrawItem( aGeometry, rItem.pPanel, aActualItemPos, nItemFlags, rItem.eContent );
 
+        // some item geometry
+        // - the normalized bounding and content rect
+        const Rectangle aNormalizedBounds( rItem.GetCurrentRect() );
+        Rectangle aNormalizedContent( aNormalizedBounds );
+        lcl_deflateRect( aNormalizedContent, rItem.aContentInset );
+
+        // the aligned bounding and content rect
+        const NormalizedArea aTransformer( Rectangle( Point(), aRenderDevice.GetOutputSizePixel() ), false );
+        const Rectangle aActualBounds = aTransformer.getTransformed( aNormalizedBounds, m_eTabAlignment );
+        const Rectangle aActualContent = aTransformer.getTransformed( aNormalizedContent, m_eTabAlignment );
+
         // render item "background" layer
-        pRenderer->preRenderItem( rItem.GetCurrentRect(), nItemFlags );
+        pRenderer->preRenderItem( aNormalizedBounds, aNormalizedContent, nItemFlags );
 
         // copy from the virtual device to ourself
-        const NormalizedArea aNormalizer( Rectangle( Point(), aRenderDevice.GetOutputSizePixel() ), false );
-        const Rectangle aActualItemRect = aNormalizer.getTransformed( rItem.GetCurrentRect(), m_eTabAlignment );
-
-        BitmapEx aBitmap( aRenderDevice.GetBitmapEx( rItem.GetCurrentRect().TopLeft(), rItem.GetCurrentRect().GetSize() ) );
+        BitmapEx aBitmap( aRenderDevice.GetBitmapEx( aNormalizedBounds.TopLeft(), aNormalizedBounds.GetSize() ) );
         if ( IsVertical() )
         {
             aBitmap.Rotate( 2700, COL_BLACK );
@@ -845,15 +880,13 @@ namespace svt
 //        {
 //                aBitmap.Mirror( BMP_MIRROR_VERT );
 //        }
-        rTabBar.DrawBitmapEx( aActualItemRect.TopLeft(), aBitmap );
+        rTabBar.DrawBitmapEx( aActualBounds.TopLeft(), aBitmap );
 
         // render the actual item content
-        Rectangle aActualContentRect( aActualItemRect );
-        lcl_deflateRect( aActualContentRect, rItem.aContentInset );
-        impl_renderItemContent( rItem.pPanel, aActualContentRect, aGeometry.getItemContent() );
+        impl_renderItemContent( rItem.pPanel, aActualContent, aGeometry.getItemContent() );
 
         // render item "foreground" layer
-        pRenderer->postRenderItem( rTabBar, aActualItemRect, nItemFlags );
+        pRenderer->postRenderItem( rTabBar, aActualBounds, nItemFlags );
 
         rTabBar.SetUpdateMode( TRUE );
     }
@@ -1033,7 +1066,10 @@ namespace svt
         m_pImpl->EnsureItemsCache();
 
         // background
-        m_pImpl->pRenderer->renderBackground( Rectangle( Point(), GetOutputSizePixel() ) );
+        m_pImpl->aRenderDevice.Push( PUSH_CLIPREGION );
+        m_pImpl->aRenderDevice.SetClipRegion( i_rRect );
+        m_pImpl->pRenderer->renderBackground();
+        m_pImpl->aRenderDevice.Pop();
 
         // ensure the items really paint into their own playground only
         ClipItemRegion aClipItems( *m_pImpl );
