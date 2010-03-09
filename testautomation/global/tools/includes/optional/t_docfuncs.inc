@@ -422,7 +422,7 @@ function hInitSingleDoc() as boolean
     
     '///+<li>Verify that exactly one document is open</li>
     if ( getDocumentCount = 1 ) then 
-        printlog( CFN & "A single unchanged writer document is open" )
+        printlog( "One single unchanged writer document is open" )
         hInitSingleDoc() = true
     else
         printlog( CFN & "Failed to open just one single writer document" )
@@ -466,10 +466,10 @@ function hInitBackingMode() as boolean
     
     '///+<li>verify that we do not have any open documents left (redundant check)</li>
     if ( getDocumentCount = 0 ) then
-        printlog( CFN & "Office is in backing mode." )
+        printlog( "Program is in backing mode" )
         hInitBackingMode() = true
     else
-        printlog( CFN & "Office is in undefined state." )
+        printlog( CFN & "Office is in undefined state" )
         hInitBackingMode() = false
     endif
     '///</ul>
