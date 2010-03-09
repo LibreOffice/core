@@ -88,6 +88,8 @@
 // --> OD 2008-11-26 #158694#
 #include <SwNodeNum.hxx>
 // <--
+#include <fmtmeta.hxx>
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -101,6 +103,34 @@ using ::rtl::OUString;
 
 namespace SwUnoCursorHelper
 {
+
+uno::Reference<text::XTextContent>
+GetNestedTextContent(SwTxtNode & rTextNode, xub_StrLen const nIndex)
+{
+    // these should be unambiguous because of the dummy character
+    SwTxtAttr *const pMetaTxtAttr =
+        rTextNode.GetTxtAttrAt(nIndex, RES_TXTATR_META, true);
+    SwTxtAttr *const pMetaFieldTxtAttr =
+        rTextNode.GetTxtAttrAt(nIndex, RES_TXTATR_METAFIELD, true);
+    // which is innermost?
+    SwTxtAttr *const pTxtAttr = (pMetaTxtAttr)
+        ? ((pMetaFieldTxtAttr)
+            ? ((*pMetaFieldTxtAttr->GetStart() >
+                    *pMetaTxtAttr->GetStart())
+                ? pMetaFieldTxtAttr : pMetaTxtAttr)
+            : pMetaTxtAttr)
+        : pMetaFieldTxtAttr;
+    uno::Reference<XTextContent> xRet;
+    if (pTxtAttr)
+    {
+        ::sw::Meta *const pMeta(
+            static_cast<SwFmtMeta &>(pTxtAttr->GetAttr()).GetMeta());
+        OSL_ASSERT(pMeta);
+        xRet.set(pMeta->MakeUnoObject(), uno::UNO_QUERY);
+    }
+    return xRet;
+}
+
 
 /* -----------------16.09.98 12:27-------------------
 *   Lesen spezieller Properties am Cursor
@@ -476,6 +506,24 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
             }
             else
                 eNewState = PropertyState_DEFAULT_VALUE;
+        }
+        break;
+        case FN_UNO_NESTED_TEXT_CONTENT:
+        {
+            uno::Reference<XTextContent> const xRet(
+                GetNestedTextContent(*rPam.GetNode()->GetTxtNode(),
+                    rPam.GetPoint()->nContent.GetIndex()));
+            if (xRet.is())
+            {
+                if (pAny)
+                {
+                    (*pAny) <<= xRet;
+                }
+            }
+            else
+            {
+                eNewState = PropertyState_DEFAULT_VALUE;
+            }
         }
         break;
         case FN_UNO_CHARFMT_SEQUENCE:
