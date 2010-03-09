@@ -54,7 +54,7 @@ testcase tBasicSpecTemplate
     endif
     
     printlog( "Accept to execute macros" )
-    if ( hAllowMacroExecution() ) then 
+    if ( not hAllowMacroExecution() ) then
         warnlog( "Missing Macro execution dialog. Aborting test" )
         goto endsub
     endif
