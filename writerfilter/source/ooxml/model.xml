@@ -15079,7 +15079,7 @@
       </define>
       <define name="CT_FFTextType">
         <attribute name="val">
-          <text/>
+          <ref name="ST_FFName"/>
           <xs:documentation>Text Box Form Field Type Values</xs:documentation>
         </attribute>
       </define>
@@ -15206,7 +15206,7 @@
       </define>
       <define name="CT_FFHelpText">
         <attribute name="type">
-          <text/>
+          <ref name="ST_InfoTextType"/>
           <xs:documentation>Help Text Type</xs:documentation>
         </attribute>
         <attribute name="val">
@@ -15216,7 +15216,7 @@
       </define>
       <define name="CT_FFStatusText">
         <attribute name="type">
-          <text/>
+          <ref name="ST_InfoTextType"/>
           <xs:documentation>Status Text Type</xs:documentation>
         </attribute>
         <attribute name="val">
@@ -22063,6 +22063,23 @@
     <resource name="CT_FFStatusText" resource="Properties">
       <attribute name="type" tokenid="ooxml:CT_FFStatusText_type"/>
       <attribute name="val" tokenid="ooxml:CT_FFStatusText_val"/>
+    </resource>
+    <resource name="CT_FFCheckBox" resource="Properties">
+      <element name="size" tokenid="ooxml:CT_FFCheckBox_size"/>
+      <element name="sizeAuto" tokenid="ooxml:CT_FFCheckBox_sizeAuto"/>
+      <element name="default" tokenid="ooxml:CT_FFCheckBox_default"/>
+      <element name="checked" tokenid="ooxml:CT_FFCheckBox_checked"/>
+    </resource>
+    <resource name="CT_FFDDList" resource="Properties">
+      <element name="result" tokenid="ooxml:CT_FFDDList_result"/>
+      <element name="default" tokenid="ooxml:CT_FFDDList_default"/>
+      <element name="listEntry" tokenid="ooxml:CT_FFDDList_listEntry"/>
+    </resource>
+    <resource name="CT_FFTextInput" resource="Properties">
+      <element name="type" tokenid="ooxml:CT_FFTextInput_type"/>
+      <element name="default" tokenid="ooxml:CT_FFTextInput_default"/>
+      <element name="maxLength" tokenid="ooxml:CT_FFTextInput_maxLength"/>
+      <element name="format" tokenid="ooxml:CT_FFTextInput_format"/>
     </resource>
     <resource name="ST_SectionMark" resource="List">
       <value tokenid="0">continuous</value>
