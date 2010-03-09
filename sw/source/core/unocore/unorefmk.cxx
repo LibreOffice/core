@@ -235,6 +235,17 @@ throw (uno::RuntimeException)
 /* -----------------03.11.99 14:14-------------------
 
  --------------------------------------------------*/
+template<typename T> struct NotContainedIn
+{
+    ::std::vector<T> const& m_rVector;
+    explicit NotContainedIn(::std::vector<T> const& rVector)
+        : m_rVector(rVector) { }
+    bool operator() (T const& rT) {
+        return ::std::find(m_rVector.begin(), m_rVector.end(), rT)
+                    == m_rVector.end();
+    }
+};
+
 void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
         SwXTextCursor const*const pCursor)
 {
@@ -254,6 +265,13 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
             | nsSetAttrMode::SETATTR_DONTEXPAND)
         : nsSetAttrMode::SETATTR_DONTEXPAND;
 
+    ::std::vector<SwTxtAttr *> oldMarks;
+    if (bMark)
+    {
+        oldMarks = rPam.GetNode()->GetTxtNode()->GetTxtAttrsAt(
+            rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_REFMARK);
+    }
+
     pDoc2->InsertPoolItem( rPam, aRefMark, nInsertFlags );
 
     if( bMark && *rPam.GetPoint() > *rPam.GetMark())
@@ -261,16 +279,37 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
         rPam.Exchange();
     }
 
-    SwTxtAttr *const pTxtAttr = (bMark)
-        ? rPam.GetNode()->GetTxtNode()->GetTxtAttr(
-                rPam.GetPoint()->nContent, RES_TXTATR_REFMARK)
-        : rPam.GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
-                rPam.GetPoint()->nContent.GetIndex() - 1, RES_TXTATR_REFMARK);
-
-    if(pTxtAttr)
+    // aRefMark was copied into the document pool; now retrieve real format...
+    SwTxtAttr * pTxtAttr(0);
+    if (bMark)
     {
-        m_pMarkFmt = &pTxtAttr->GetRefMark();
+        // #i107672#
+        // ensure that we do not retrieve a different mark at the same position
+        ::std::vector<SwTxtAttr *> const newMarks(
+            rPam.GetNode()->GetTxtNode()->GetTxtAttrsAt(
+                rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_REFMARK));
+        ::std::vector<SwTxtAttr *>::const_iterator const iter(
+            ::std::find_if(newMarks.begin(), newMarks.end(),
+                NotContainedIn<SwTxtAttr *>(oldMarks)));
+        OSL_ASSERT(newMarks.end() != iter);
+        if (newMarks.end() != iter)
+        {
+            pTxtAttr = *iter;
+        }
     }
+    else
+    {
+        pTxtAttr = rPam.GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
+                rPam.GetPoint()->nContent.GetIndex() - 1, RES_TXTATR_REFMARK);
+    }
+
+    if (!pTxtAttr)
+    {
+        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "SwXReferenceMark::InsertRefMark(): cannot insert attribute")), 0);
+    }
+
+    m_pMarkFmt = &pTxtAttr->GetRefMark();
 
     pDoc2->GetUnoCallBack()->Add(this);
 }
@@ -310,7 +349,6 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     m_pImpl->InsertRefMark(aPam, dynamic_cast<SwXTextCursor*>(pCursor));
     m_pImpl->m_bIsDescriptor = sal_False;
     m_pImpl->m_pDoc = pDocument;
-    m_pImpl->m_pDoc->GetUnoCallBack()->Add(m_pImpl.get());
 }
 
 /*-- 11.12.98 10:28:34---------------------------------------------------

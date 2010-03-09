@@ -1196,60 +1196,86 @@ BOOL SwTxtNode::DontExpandFmt( const SwIndex& rIdx, bool bFlag,
     return bRet;
 }
 
-
-// gebe das vorgegebene Attribut, welches an der TextPosition (rIdx)
-// gesetzt ist, zurueck. Gibt es keines, returne 0-Pointer.
-// (gesetzt heisst, je nach bExpand ?
-//                                    Start < rIdx <= End
-//                                  : Start <= rIdx < End )
-
-SwTxtAttr* SwTxtNode::GetTxtAttr( const SwIndex& rIdx, USHORT nWhichHt,
-                                  BOOL bExpand ) const
+static void
+lcl_GetTxtAttrs(
+    ::std::vector<SwTxtAttr *> *const pVector, SwTxtAttr **const ppTxtAttr,
+    SwpHints *const pSwpHints,
+    xub_StrLen const nIndex, RES_TXTATR const nWhich, bool const bExpand)
 {
-    const SwTxtAttr* pRet = 0;
-    const SwTxtAttr* pHt = 0;
-    const xub_StrLen *pEndIdx = 0;
-    const xub_StrLen nIdx = rIdx.GetIndex();
-    const USHORT  nSize = m_pSwpHints ? m_pSwpHints->Count() : 0;
+    USHORT const nSize = (pSwpHints) ? pSwpHints->Count() : 0;
+    xub_StrLen nPreviousIndex(0); // index of last hint with nWhich
 
     for( USHORT i = 0; i < nSize; ++i )
     {
-        // ist der Attribut-Anfang schon groesser als der Idx ?
-        pHt = (*m_pSwpHints)[i];
-        if ( nIdx < *(pHt->GetStart()) )
-            break;          // beenden, kein gueltiges Attribut
-
-        // ist es das gewuenschte Attribut ?
-        if( pHt->Which() != nWhichHt )
-            continue;       // nein, weiter
-
-        pEndIdx = pHt->GetEnd();
-        // liegt innerhalb des Bereiches ??
-        if( !pEndIdx )
+        SwTxtAttr *const pHint = pSwpHints->GetTextHint(i);
+        xub_StrLen const nHintStart( *(pHint->GetStart()) );
+        if (nIndex < nHintStart)
         {
-            if( *pHt->GetStart() == nIdx )
-            {
-                pRet = pHt;
-                break;
-            }
+            return; // hints are sorted by start, so we are done...
         }
-        else if( *pHt->GetStart() <= nIdx && nIdx <= *pEndIdx )
+
+        if (pHint->Which() != nWhich)
         {
+            continue;
+        }
+
+        xub_StrLen const*const pEndIdx = pHint->GetEnd();
+        ASSERT(pEndIdx || pHint->HasDummyChar(),
+                "hint with no end and no dummy char?");
             // Wenn bExpand gesetzt ist, wird das Verhalten bei Eingabe
             // simuliert, d.h. der Start wuede verschoben, das Ende expandiert,
-            if( bExpand )
+        bool const bContained( (pEndIdx)
+            ? ((bExpand)
+                ? ((nHintStart <  nIndex) && (nIndex <= *pEndIdx))
+                : ((nHintStart <= nIndex) && (nIndex <  *pEndIdx)))
+            : (nHintStart == nIndex) );
+        if (bContained)
+        {
+            if (pVector)
             {
-                if( *pHt->GetStart() < nIdx )
-                    pRet = pHt;
+                if (nPreviousIndex < nHintStart)
+                {
+                    pVector->clear(); // clear hints that are outside pHint
+                    nPreviousIndex = nHintStart;
+                }
+                pVector->push_back(pHint);
             }
             else
             {
-                if( nIdx < *pEndIdx )
-                    pRet = pHt;     // den am dichtesten liegenden
+                *ppTxtAttr = pHint; // and possibly overwrite outer hint
+            }
+            if (!pEndIdx)
+            {
+                break;
             }
         }
     }
-    return (SwTxtAttr*)pRet;        // kein gueltiges Attribut gefunden !!
+}
+
+::std::vector<SwTxtAttr *>
+SwTxtNode::GetTxtAttrsAt(xub_StrLen const nIndex, RES_TXTATR const nWhich,
+                        bool const bExpand) const
+{
+    ::std::vector<SwTxtAttr *> ret;
+    lcl_GetTxtAttrs(& ret, 0, m_pSwpHints, nIndex, nWhich, bExpand);
+    return ret;
+}
+
+SwTxtAttr *
+SwTxtNode::GetTxtAttrAt(xub_StrLen const nIndex, RES_TXTATR const nWhich,
+                        bool const bExpand) const
+{
+    ASSERT(    (nWhich == RES_TXTATR_META)
+            || (nWhich == RES_TXTATR_METAFIELD)
+            || (nWhich == RES_TXTATR_AUTOFMT)
+            || (nWhich == RES_TXTATR_INETFMT)
+            || (nWhich == RES_TXTATR_CJK_RUBY)
+            || (nWhich == RES_TXTATR_UNKNOWN_CONTAINER),
+        "GetTxtAttrAt() will give wrong result for this hint!");
+
+    SwTxtAttr * pRet(0);
+    lcl_GetTxtAttrs(0, & pRet, m_pSwpHints, nIndex, nWhich, bExpand);
+    return pRet;
 }
 
 /*************************************************************************

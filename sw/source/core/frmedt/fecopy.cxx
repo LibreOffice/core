@@ -182,8 +182,9 @@ BOOL SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
             //              das kopierte TextAttribut wieder entfernt werden,
             //              sonst wird es als TextSelektion erkannt
             const SwIndex& rIdx = pFlyFmt->GetAnchor().GetCntntAnchor()->nContent;
-            SwTxtFlyCnt* pTxtFly = (SwTxtFlyCnt*)pTxtNd->GetTxtAttr(
-                                                rIdx, RES_TXTATR_FLYCNT );
+            SwTxtFlyCnt *const pTxtFly = static_cast<SwTxtFlyCnt *>(
+                pTxtNd->GetTxtAttrForCharAt(
+                    rIdx.GetIndex(), RES_TXTATR_FLYCNT));
             if( pTxtFly )
             {
                 ((SwFmtFlyCnt&)pTxtFly->GetFlyCnt()).SetFlyFmt( 0 );

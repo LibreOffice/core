@@ -1622,6 +1622,8 @@ public:
     // SwClient
     virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
 
+    void InsertTOXMark(SwTOXMark & rMark, SwPaM & rPam,
+            SwXTextCursor const*const pTextCursor);
 };
 
 /* -----------------------------16.10.00 11:24--------------------------------
@@ -1835,28 +1837,7 @@ throw (uno::RuntimeException)
         m_pImpl->m_pDoc->DeleteTOXMark(m_pImpl->m_pTOXMark);
         m_pImpl->m_pTOXMark = 0;
 
-        SwTxtAttr* pTxtAttr = 0;
-        sal_Bool bInsAtPos = aMark.IsAlternativeText();
-        const SwPosition *pStt = aPam.Start(),
-                            *pEnd = aPam.End();
-        if( bInsAtPos )
-        {
-            SwPaM aTmp( *pStt );
-            m_pImpl->m_pDoc->InsertPoolItem( aTmp, aMark, 0 );
-            pTxtAttr = pStt->nNode.GetNode().GetTxtNode()->GetTxtAttrForCharAt(
-                        pStt->nContent.GetIndex()-1, RES_TXTATR_TOXMARK);
-        }
-        else if( *pEnd != *pStt )
-        {
-            m_pImpl->m_pDoc->InsertPoolItem( aPam, aMark,
-                        nsSetAttrMode::SETATTR_DONTEXPAND );
-            pTxtAttr = pStt->nNode.GetNode().GetTxtNode()->GetTxtAttr(
-                                pStt->nContent, RES_TXTATR_TOXMARK);
-        }
-        if(pTxtAttr)
-        {
-            m_pImpl->m_pTOXMark = &pTxtAttr->GetTOXMark();
-        }
+        m_pImpl->InsertTOXMark(aMark, aPam, 0);
     }
     else if (m_pImpl->m_bIsDescriptor)
     {
@@ -1984,17 +1965,47 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         default:
         break;
     }
+
+    m_pImpl->InsertTOXMark(aMark, aPam,
+            dynamic_cast<SwXTextCursor const*>(pCursor));
+
+    m_pImpl->m_pDoc = pDoc;
+    m_pImpl->m_bIsDescriptor = sal_False;
+
+    const_cast<SwTOXType*>(pTOXType)->Add(&m_pImpl->m_TypeDepend);
+}
+
+template<typename T> struct NotContainedIn
+{
+    ::std::vector<T> const& m_rVector;
+    explicit NotContainedIn(::std::vector<T> const& rVector)
+        : m_rVector(rVector) { }
+    bool operator() (T const& rT) {
+        return ::std::find(m_rVector.begin(), m_rVector.end(), rT)
+                    == m_rVector.end();
+    }
+};
+
+void SwXDocumentIndexMark::Impl::InsertTOXMark(SwTOXMark & rMark, SwPaM & rPam,
+        SwXTextCursor const*const pTextCursor)
+{
+    SwDoc *const pDoc( rPam.GetDoc() );
     UnoActionContext aAction(pDoc);
-    const sal_Bool bMark = *aPam.GetPoint() != *aPam.GetMark();
+    bool bMark = *rPam.GetPoint() != *rPam.GetMark();
+    // n.b.: toxmarks must have either alternative text or an extent
+    if (bMark && rMark.GetAlternativeText().Len())
+    {
+        rPam.Normalize(TRUE);
+        rPam.DeleteMark();
+        bMark = false;
+    }
     // Marks ohne Alternativtext ohne selektierten Text koennen nicht eingefuegt werden,
     // deshalb hier ein Leerzeichen - ob das die ideale Loesung ist?
-    if (!bMark && !aMark.GetAlternativeText().Len())
+    if (!bMark && !rMark.GetAlternativeText().Len())
     {
-        aMark.SetAlternativeText( String(' ') );
+        rMark.SetAlternativeText( String(' ') );
     }
 
-    SwXTextCursor const*const pTextCursor(
-            dynamic_cast<SwXTextCursor*>(pCursor));
     const bool bForceExpandHints( (!bMark && pTextCursor)
             ? pTextCursor->IsAtEndOfMeta() : false );
     const SetAttrMode nInsertFlags = (bForceExpandHints)
@@ -2002,35 +2013,52 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
             | nsSetAttrMode::SETATTR_DONTEXPAND)
         : nsSetAttrMode::SETATTR_DONTEXPAND;
 
-    pDoc->InsertPoolItem(aPam, aMark, nInsertFlags);
-    if (bMark && *aPam.GetPoint() > *aPam.GetMark())
-    {
-        aPam.Exchange();
-    }
-
-    SwTxtAttr* pTxtAttr = 0;
+    ::std::vector<SwTxtAttr *> oldMarks;
     if (bMark)
     {
-        pTxtAttr = aPam.GetNode()->GetTxtNode()->GetTxtAttr(
-                        aPam.GetPoint()->nContent, RES_TXTATR_TOXMARK );
+        oldMarks = rPam.GetNode()->GetTxtNode()->GetTxtAttrsAt(
+            rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_TOXMARK);
+    }
+
+    pDoc->InsertPoolItem(rPam, rMark, nInsertFlags);
+    if (bMark && *rPam.GetPoint() > *rPam.GetMark())
+    {
+        rPam.Exchange();
+    }
+
+    // rMark was copied into the document pool; now retrieve real format...
+    SwTxtAttr * pTxtAttr(0);
+    if (bMark)
+    {
+        // #i107672#
+        // ensure that we do not retrieve a different mark at the same position
+        ::std::vector<SwTxtAttr *> const newMarks(
+            rPam.GetNode()->GetTxtNode()->GetTxtAttrsAt(
+                rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_TOXMARK));
+        ::std::vector<SwTxtAttr *>::const_iterator const iter(
+            ::std::find_if(newMarks.begin(), newMarks.end(),
+                NotContainedIn<SwTxtAttr *>(oldMarks)));
+        OSL_ASSERT(newMarks.end() != iter);
+        if (newMarks.end() != iter)
+        {
+            pTxtAttr = *iter;
+        }
     }
     else
     {
-        pTxtAttr = aPam.GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
-            aPam.GetPoint()->nContent.GetIndex()-1, RES_TXTATR_TOXMARK );
+        pTxtAttr = rPam.GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
+            rPam.GetPoint()->nContent.GetIndex()-1, RES_TXTATR_TOXMARK );
     }
 
     if (!pTxtAttr)
     {
-        throw uno::RuntimeException();
+        throw uno::RuntimeException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "SwXDocumentIndexMark::InsertTOXMark(): cannot insert attribute")),
+            0);
     }
 
-    m_pImpl->m_pTOXMark = &pTxtAttr->GetTOXMark();
-    m_pImpl->m_pDoc = pDoc;
-    m_pImpl->m_bIsDescriptor = sal_False;
-
-    const_cast<SwTOXMark*>(m_pImpl->m_pTOXMark)->Add(m_pImpl.get());
-    const_cast<SwTOXType*>(pTOXType)->Add(&m_pImpl->m_TypeDepend);
+    m_pTOXMark = & pTxtAttr->GetTOXMark();
+    const_cast<SwTOXMark*>(m_pTOXMark)->Add(this);
 }
 
 /*-- 14.12.98 10:25:45---------------------------------------------------
@@ -2229,33 +2257,8 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         pLocalDoc->DeleteTOXMark(m_pImpl->m_pTOXMark);
         m_pImpl->m_pTOXMark = 0;
 
-        sal_Bool bInsAtPos = aMark.IsAlternativeText();
-        const SwPosition *pStt = aPam.Start();
-        const SwPosition *pEnd = aPam.End();
-
-        SwTxtAttr* pTxtAttr = 0;
-        if( bInsAtPos )
-        {
-            SwPaM aTmp( *pStt );
-            pLocalDoc->InsertPoolItem( aTmp, aMark, 0 );
-            pTxtAttr = pStt->nNode.GetNode().GetTxtNode()->GetTxtAttrForCharAt(
-                    pStt->nContent.GetIndex()-1, RES_TXTATR_TOXMARK );
-        }
-        else if( *pEnd != *pStt )
-        {
-            pLocalDoc->InsertPoolItem( aPam, aMark,
-                    nsSetAttrMode::SETATTR_DONTEXPAND );
-            pTxtAttr = pStt->nNode.GetNode().GetTxtNode()->GetTxtAttr(
-                            pStt->nContent, RES_TXTATR_TOXMARK );
-        }
-        m_pImpl->m_pDoc = pLocalDoc;
-
-        if(pTxtAttr)
-        {
-            m_pImpl->m_pTOXMark = &pTxtAttr->GetTOXMark();
-            const_cast<SwTOXMark*>(m_pImpl->m_pTOXMark)->Add(m_pImpl.get());
-            pType->Add(&m_pImpl->m_TypeDepend);
-        }
+        m_pImpl->InsertTOXMark(aMark, aPam, 0);
+        pType->Add(& m_pImpl->m_TypeDepend);
     }
     else if (m_pImpl->m_bIsDescriptor)
     {

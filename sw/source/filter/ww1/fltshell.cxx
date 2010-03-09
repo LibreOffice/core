@@ -1934,8 +1934,8 @@ void SwFltShell::BeginFootnote()
     pSavedPos = new SwPosition(*pPaM->GetPoint());
     pPaM->Move(fnMoveBackward, fnGoCntnt);
     SwTxtNode* pTxt = pPaM->GetNode()->GetTxtNode();
-    SwTxtAttr* pFN = pTxt->GetTxtAttr(pPaM->GetPoint()->nContent,
-     RES_TXTATR_FTN);
+    SwTxtAttr *const pFN = pTxt->GetTxtAttrForCharAt(
+        pPaM->GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
     if( !pFN ){         // Passiert z.B. bei Fussnote in Fly
         ASSERT(pFN, "Probleme beim Anlegen des Fussnoten-Textes");
         return;

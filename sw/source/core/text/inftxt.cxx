@@ -1312,8 +1312,8 @@ void SwTxtPaintInfo::_NotifyURL( const SwLinePortion &rPor ) const
     if( aIntersect.HasArea() )
     {
         SwTxtNode *pNd = (SwTxtNode*)GetTxtFrm()->GetTxtNode();
-        SwIndex aIndex( pNd, GetIdx() );
-        SwTxtAttr *pAttr = pNd->GetTxtAttr( aIndex, RES_TXTATR_INETFMT );
+        SwTxtAttr *const pAttr =
+            pNd->GetTxtAttrAt(GetIdx(), RES_TXTATR_INETFMT);
         if( pAttr )
         {
             const SwFmtINetFmt& rFmt = pAttr->GetINetFmt();

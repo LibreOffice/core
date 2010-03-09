@@ -302,14 +302,15 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
             break;
         case FN_UNO_DOCUMENT_INDEX_MARK:
         {
-            SwTxtAttr* pTxtAttr = rPam.GetNode()->GetTxtNode()->GetTxtAttr(
-                                rPam.GetPoint()->nContent, RES_TXTATR_TOXMARK);
-            if(pTxtAttr)
+            ::std::vector<SwTxtAttr *> const marks(
+                rPam.GetNode()->GetTxtNode()->GetTxtAttrsAt(
+                    rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_TOXMARK));
+            if (marks.size())
             {
                 if( pAny )
-                {
+                {   // hmm... can only return 1 here
                     SwTOXMark & rMark =
-                        static_cast<SwTOXMark&>(pTxtAttr->GetAttr());
+                        static_cast<SwTOXMark &>((*marks.begin())->GetAttr());
                     const uno::Reference< text::XDocumentIndexMark > xRef =
                         SwXDocumentIndexMark::CreateXDocumentIndexMark(
                             *rPam.GetDoc(),
@@ -345,9 +346,10 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
             const SwPosition *pPos = rPam.Start();
             const SwTxtNode *pTxtNd =
                 rPam.GetDoc()->GetNodes()[pPos->nNode.GetIndex()]->GetTxtNode();
-            SwTxtAttr* pTxtAttr =
-                pTxtNd ? pTxtNd->GetTxtAttr(pPos->nContent, RES_TXTATR_FIELD)
-                       : 0;
+            SwTxtAttr *const pTxtAttr = (pTxtNd)
+                ? pTxtNd->GetTxtAttrForCharAt(
+                        pPos->nContent.GetIndex(), RES_TXTATR_FIELD)
+                : 0;
             if(pTxtAttr)
             {
                 if( pAny )
@@ -436,8 +438,9 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         case FN_UNO_ENDNOTE:
         case FN_UNO_FOOTNOTE:
         {
-            SwTxtAttr* pTxtAttr = rPam.GetNode()->GetTxtNode()->
-                                        GetTxtAttr(rPam.GetPoint()->nContent, RES_TXTATR_FTN);
+            SwTxtAttr *const pTxtAttr =
+                rPam.GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
+                    rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
             if(pTxtAttr)
             {
                 const SwFmtFtn& rFtn = pTxtAttr->GetFtn();
@@ -459,13 +462,14 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         break;
         case FN_UNO_REFERENCE_MARK:
         {
-            SwTxtAttr* pTxtAttr = rPam.GetNode()->GetTxtNode()->
-                                        GetTxtAttr(rPam.GetPoint()->nContent, RES_TXTATR_REFMARK);
-            if(pTxtAttr)
+            ::std::vector<SwTxtAttr *> const marks(
+                rPam.GetNode()->GetTxtNode()->GetTxtAttrsAt(
+                    rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_REFMARK));
+            if (marks.size())
             {
                 if( pAny )
-                {
-                    const SwFmtRefMark& rRef = pTxtAttr->GetRefMark();
+                {   // hmm... can only return 1 here
+                    const SwFmtRefMark& rRef = (*marks.begin())->GetRefMark();
                     uno::Reference< XTextContent >  xRef = SwXReferenceMarks::GetObject( rPam.GetDoc(), &rRef );
                     pAny->setValue(&xRef, ::getCppuType((uno::Reference<XTextContent>*)0));
                 }

@@ -1640,12 +1640,28 @@ public class TextPortionEnumerationTest extends ComplexTestCase
 
     public void testRefMark3() throws Exception
     {
+        // BUG: #i107672# (non-deterministic; depends on pointer ordering)
         String name1 = mkName("refmark");
         String name2 = mkName("refmark");
+        String name3 = mkName("refmark");
+        String name4 = mkName("refmark");
+        String name5 = mkName("refmark");
+        String name6 = mkName("refmark");
+        String name7 = mkName("refmark");
         TreeNode root = new TreeNode();
         root.appendChild( new ReferenceMarkStartNode(name1) );
         root.appendChild( new ReferenceMarkStartNode(name2) );
+        root.appendChild( new ReferenceMarkStartNode(name3) );
+        root.appendChild( new ReferenceMarkStartNode(name4) );
+        root.appendChild( new ReferenceMarkStartNode(name5) );
+        root.appendChild( new ReferenceMarkStartNode(name6) );
+        root.appendChild( new ReferenceMarkStartNode(name7) );
         root.appendChild( new TextNode("abc") );
+        root.appendChild( new ReferenceMarkEndNode(name7) );
+        root.appendChild( new ReferenceMarkEndNode(name6) );
+        root.appendChild( new ReferenceMarkEndNode(name5) );
+        root.appendChild( new ReferenceMarkEndNode(name4) );
+        root.appendChild( new ReferenceMarkEndNode(name3) );
         root.appendChild( new ReferenceMarkEndNode(name2) );
         root.appendChild( new ReferenceMarkEndNode(name1) );
         root.appendChild( new TextNode("de") );
@@ -1665,12 +1681,28 @@ public class TextPortionEnumerationTest extends ComplexTestCase
 
     public void testToxMark3() throws Exception
     {
+        // BUG: #i107672# (non-deterministic; depends on pointer ordering)
         String name1 = mkName("toxmark");
         String name2 = mkName("toxmark");
+        String name3 = mkName("toxmark");
+        String name4 = mkName("toxmark");
+        String name5 = mkName("toxmark");
+        String name6 = mkName("toxmark");
+        String name7 = mkName("toxmark");
         TreeNode root = new TreeNode();
         root.appendChild( new DocumentIndexMarkStartNode(name1) );
         root.appendChild( new DocumentIndexMarkStartNode(name2) );
+        root.appendChild( new DocumentIndexMarkStartNode(name3) );
+        root.appendChild( new DocumentIndexMarkStartNode(name4) );
+        root.appendChild( new DocumentIndexMarkStartNode(name5) );
+        root.appendChild( new DocumentIndexMarkStartNode(name6) );
+        root.appendChild( new DocumentIndexMarkStartNode(name7) );
         root.appendChild( new TextNode("abc") );
+        root.appendChild( new DocumentIndexMarkEndNode(name7) );
+        root.appendChild( new DocumentIndexMarkEndNode(name6) );
+        root.appendChild( new DocumentIndexMarkEndNode(name5) );
+        root.appendChild( new DocumentIndexMarkEndNode(name4) );
+        root.appendChild( new DocumentIndexMarkEndNode(name3) );
         root.appendChild( new DocumentIndexMarkEndNode(name2) );
         root.appendChild( new DocumentIndexMarkEndNode(name1) );
         root.appendChild( new TextNode("de") );

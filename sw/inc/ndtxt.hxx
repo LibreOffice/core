@@ -363,14 +363,26 @@ public:
     BOOL DontExpandFmt( const SwIndex& rIdx, bool bFlag = true,
                         BOOL bFmtToTxtAttributes = TRUE );
 
-    // gebe das vorgegebene Attribut, welches an der TextPosition (rIdx)
-    // gesetzt ist zurueck. Gibt es keines, returne 0-Pointer
-    // gesetzt heisst: Start <= rIdx < End
-    // FIXME: this function does not seem to be well-defined for those
-    // hints of which several may cover a single position, like TOXMark,
-    // or CharFmt
-    SwTxtAttr *GetTxtAttr( const SwIndex& rIdx, USHORT nWhichHt,
-                           BOOL bExpand = FALSE ) const;
+    /** get the innermost text attribute covering position nIndex.
+        @param nWhich   only attribute with this id is returned.
+        @param bExpand  the predicate for matching is:
+                (bExpand) ? (Start < nIndex <= End) : (Start <= nIndex < End)
+
+        ATTENTION: this function is not well-defined for those
+        hints of which several may cover a single position, like
+        RES_TXTATR_CHARFMT, RES_TXTATR_REFMARK, RES_TXTATR_TOXMARK
+     */
+    SwTxtAttr *GetTxtAttrAt(xub_StrLen const nIndex, RES_TXTATR const nWhich,
+                            bool const bExpand = false) const;
+
+    /** get the innermost text attributes covering position nIndex.
+        @param nWhich   only attributes with this id are returned.
+        @param bExpand  the predicate for matching is:
+                (bExpand) ? (Start < nIndex <= End) : (Start <= nIndex < End)
+     */
+    ::std::vector<SwTxtAttr *> GetTxtAttrsAt(xub_StrLen const nIndex,
+                            RES_TXTATR const nWhich,
+                            bool const bExpand = false) const;
 
     /** get the text attribute at position nIndex which owns
         the dummy character CH_TXTATR_* at that position, if one exists.
