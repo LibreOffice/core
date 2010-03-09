@@ -741,7 +741,7 @@ bool ScDPTableDataCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, BOO
                         }
                         else
                         {
-                            ::com::sun::star::uno::Sequence< long > xOff;
+                            ::com::sun::star::uno::Sequence< sal_Int32 > xOff;
                             String aCell( pTransliteration->transliterate(
                                 aCellStr, ScGlobal::eLnge, 0, aCellStr.Len(),
                                 &xOff ) );
