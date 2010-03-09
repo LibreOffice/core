@@ -30,10 +30,7 @@
 
 #include <tools/solar.h>
 #include "address.hxx"
-
-class ScDocument;
-class ScAddress;
-class ScRangeList;
+#include "global.hxx"
 
 /** Use this to handle charts in a calc document
 */

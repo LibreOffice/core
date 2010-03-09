@@ -164,24 +164,16 @@ void ScChartHelper::AdjustRangesOfChartsOnDestinationPage( ScDocument* pSrcDoc, 
                 Reference< chart2::data::XDataReceiver > xReceiver( xChartDoc, uno::UNO_QUERY );
                 if( xChartDoc.is() && xReceiver.is() && !xChartDoc->hasInternalDataProvider() )
                 {
-                    uno::Reference< chart2::XChartDocument > xChartDoc( pDestDoc->GetChartByName( aChartName ) );
-                    uno::Reference< chart2::data::XDataReceiver > xReceiver( xChartDoc, uno::UNO_QUERY );
-                    if( xChartDoc.is() && xReceiver.is() )
-                    {
-                        if( !xChartDoc->hasInternalDataProvider() )
-                        {
-                            ::std::vector< ScRangeList > aRangesVector;
-                            pDestDoc->GetChartRanges( aChartName, aRangesVector, pSrcDoc );
+                    ::std::vector< ScRangeList > aRangesVector;
+                    pDestDoc->GetChartRanges( aChartName, aRangesVector, pSrcDoc );
 
-                            ::std::vector< ScRangeList >::iterator aIt( aRangesVector.begin() );
-                            for( ; aIt!=aRangesVector.end(); aIt++ )
-                            {
-                                ScRangeList& rScRangeList( *aIt );
-                                lcl_AdjustRanges( rScRangeList, nSrcTab, nDestTab, pDestDoc->GetTableCount() );
-                            }
-                            pDestDoc->SetChartRanges( aChartName, aRangesVector );
-                        }
+                    ::std::vector< ScRangeList >::iterator aIt( aRangesVector.begin() );
+                    for( ; aIt!=aRangesVector.end(); aIt++ )
+                    {
+                        ScRangeList& rScRangeList( *aIt );
+                        lcl_AdjustRanges( rScRangeList, nSrcTab, nDestTab, pDestDoc->GetTableCount() );
                     }
+                    pDestDoc->SetChartRanges( aChartName, aRangesVector );
                 }
             }
             pObject = aIter.Next();
