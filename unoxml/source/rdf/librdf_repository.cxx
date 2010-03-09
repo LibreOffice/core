@@ -173,69 +173,6 @@ static void safe_librdf_free_uri(librdf_uri *const uri)
     if (uri) { librdf_free_uri(uri); }
 }
 
-////////////////////////////////////////////////////////////////////////////
-
-#if 0
-class librdf_Statement:
-    public ::cppu::WeakImplHelper1<
-        rdf::XStatement>
-{
-public:
-
-    librdf_Statement(
-            uno::Reference< rdf::XResource > const & i_xSubject,
-            uno::Reference< rdf::XResource > const & i_xPredicate,
-            uno::Reference< rdf::XNode     > const & i_xObject,
-            uno::Reference< rdf::XURI      > const & i_xGraph)
-        : m_xSubject(i_xSubject), m_xPredicate(i_xPredicate),
-          m_xObject(i_xObject), m_xGraph(i_xGraph)
-        { }
-    virtual ~librdf_Statement() {}
-
-    // ::com::sun::star::rdf::XStatement:
-    virtual uno::Reference< rdf::XResource > SAL_CALL getSubject()
-        throw (uno::RuntimeException);
-    virtual uno::Reference< rdf::XResource > SAL_CALL getPredicate()
-        throw (uno::RuntimeException);
-    virtual uno::Reference< rdf::XNode     > SAL_CALL getObject()
-        throw (uno::RuntimeException);
-    virtual uno::Reference< rdf::XURI      > SAL_CALL getGraph()
-        throw (uno::RuntimeException);
-
-private:
-
-    uno::Reference< rdf::XResource > m_xSubject;
-    uno::Reference< rdf::XResource > m_xPredicate;
-    uno::Reference< rdf::XNode     > m_xObject;
-    uno::Reference< rdf::XURI      > m_xGraph;
-};
-
-// ::com::sun::star::rdf::XStatement:
-uno::Reference< rdf::XResource > SAL_CALL
-librdf_Statement::getSubject() throw (uno::RuntimeException)
-{
-    return m_xSubject;
-}
-
-uno::Reference< rdf::XResource > SAL_CALL
-librdf_Statement::getPredicate() throw (uno::RuntimeException)
-{
-    return m_xPredicate;
-}
-
-uno::Reference< rdf::XNode > SAL_CALL
-librdf_Statement::getObject() throw (uno::RuntimeException)
-{
-    return m_xObject;
-}
-
-uno::Reference< rdf::XURI > SAL_CALL
-librdf_Statement::getGraph() throw (uno::RuntimeException)
-{
-    return m_xGraph;
-}
-#endif
-
 
 ////////////////////////////////////////////////////////////////////////////
 
@@ -270,9 +207,6 @@ public:
     uno::Reference<rdf::XResource>
         convertToXResource(librdf_node* i_pNode) const;
     uno::Reference<rdf::XNode> convertToXNode(librdf_node* i_pNode) const;
-//    uno::Reference<rdf::XStatement>
-//        convertToXStatement(librdf_statement* i_pStmt, librdf_node* i_pContext)
-//        const;
     rdf::Statement
         convertToStatement(librdf_statement* i_pStmt, librdf_node* i_pContext)
         const;
@@ -2266,22 +2200,6 @@ librdf_TypeConverter::convertToXNode(librdf_node* i_pNode) const
             uno::UNO_QUERY);
     }
 }
-
-#if 0
-uno::Reference<rdf::XStatement>
-librdf_TypeConverter::convertToXStatement(librdf_statement* i_pStmt,
-    librdf_node* i_pContext) const
-{
-    if (!i_pStmt) {
-        throw uno::RuntimeException();
-    }
-    return new librdf_Statement(
-        convertToXResource(librdf_statement_get_subject(i_pStmt)),
-        convertToXResource(librdf_statement_get_predicate(i_pStmt)),
-        convertToXNode(librdf_statement_get_object(i_pStmt)),
-        convertToXURI(i_pContext));
-}
-#endif
 
 rdf::Statement
 librdf_TypeConverter::convertToStatement(librdf_statement* i_pStmt,
