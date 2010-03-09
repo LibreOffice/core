@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: epptso.cxx,v $
- * $Revision: 1.107.6.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,7 +47,7 @@
 //#ifndef _SVX_XIT_HXX
 //#include <svx/xit.hxx>
 //#endif
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdoashp.hxx>
 #include <com/sun/star/style/VerticalAlignment.hpp>
@@ -103,10 +100,10 @@
 #include <sot/clsids.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <com/sun/star/text/FontRelief.hpp>
-#include <svx/frmdiritem.hxx>
+#include <editeng/frmdiritem.hxx>
 /*
-#include <svx/outliner.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/svdmodel.hxx>
 */
 #include <svtools/fltcall.hxx>
@@ -1995,7 +1992,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
     mnCharHeight = 24;
     if ( GetPropertyValue( mAny, mXPropSet, aCharHeightName, sal_False ) )
     {
-        float fVal;
+        float fVal(0.0);
         if ( mAny >>= fVal )
         {
             mnCharHeight = (sal_uInt16)( fVal + 0.5 );
@@ -2004,7 +2001,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
     }
     if ( GetPropertyValue( mAny, mXPropSet, aCharWeightName, sal_False ) )
     {
-        float fFloat;
+        float fFloat(0.0);
         if ( mAny >>= fFloat )
         {
             if ( fFloat >= ::com::sun::star::awt::FontWeight::SEMIBOLD )
@@ -2040,7 +2037,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
 
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharUnderline" ) ), bGetPropStateValue ) )
     {
-        sal_Int16 nVal;
+        sal_Int16 nVal(0);
         mAny >>= nVal;
         switch ( nVal )
         {
@@ -2055,7 +2052,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
 
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharShadowed" ) ), bGetPropStateValue ) )
     {
-        sal_Bool bBool;
+        sal_Bool bBool(sal_False);
         mAny >>= bBool;
         if ( bBool )
             mnCharAttr |= 0x10;
@@ -2065,7 +2062,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
 
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharRelief" ) ), bGetPropStateValue ) )
     {
-        sal_Int16 nVal;
+        sal_Int16 nVal(0);
         mAny >>= nVal;
         if ( nVal != ::com::sun::star::text::FontRelief::NONE )
             mnCharAttr |= 512;
