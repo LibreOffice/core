@@ -743,6 +743,7 @@ void BarChart::createShapes()
                         double fMiddleHeight = fUpperYValue-fLowerYValue;
                         if(!bPositive)
                             fMiddleHeight*=-1.0;
+                        double fLogicBarDepth = 0.5;
                         if(m_nDimension==3)
                         {
                             if( lcl_hasGeometry3DVariableWidth(nGeometry3D) && fCompleteHeight!=0.0 )
@@ -753,9 +754,11 @@ void BarChart::createShapes()
                                 fLogicBarWidth = fLogicBaseWidth*fHeight/(fCompleteHeight);
                                 if(fLogicBarWidth<=0.0)
                                     fLogicBarWidth=fLogicBaseWidth;
+                                fLogicBarDepth = fLogicBarDepth*fHeight/(fCompleteHeight);
+                                if(fLogicBarDepth<=0.0)
+                                    fLogicBarDepth*=-1.0;
                             }
                         }
-                        double fLogicBarDepth = 0.5;
 
                         //better performance for big data
                         FormerBarPoint aFormerPoint( aSeriesFormerPointMap[pSeries] );
