@@ -578,7 +578,7 @@ BOOL SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, BOOL bDelNodes )
            aSearchPam will contain the point where to move the cursors
            to. */
         SwPaM aSearchPam(*pMyNode->EndOfSectionNode());
-        SwPosition aEndPos(*pStartNd->EndOfSectionNode(), 0);
+        SwPosition aEndPos(*pStartNd->EndOfSectionNode());
         if (! aSearchPam.Move() /* no content node found */
             || *aSearchPam.GetPoint() >= aEndPos /* content node found
                                                     outside surrounding */
@@ -588,7 +588,7 @@ BOOL SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, BOOL bDelNodes )
                content node */
             SwPaM aTmpPam(*pMyNode);
             aSearchPam = aTmpPam;
-            SwPosition aStartPos(*pStartNd, 0);
+            SwPosition aStartPos(*pStartNd);
 
             if ( ! aSearchPam.Move(fnMoveBackward) /* no content node found */
                  || *aSearchPam.GetPoint() <= aStartPos  /* content node
@@ -599,7 +599,7 @@ BOOL SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, BOOL bDelNodes )
                 /* There is no content node in the surrounding of
                    TOX'. Append text node behind TOX' section. */
 
-                SwPosition aInsPos(*pMyNode->EndOfSectionNode(), 0);
+                SwPosition aInsPos(*pMyNode->EndOfSectionNode());
                 AppendTxtNode(aInsPos);
 
                 SwPaM aTmpPam1(aInsPos);

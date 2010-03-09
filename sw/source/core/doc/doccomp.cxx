@@ -1384,7 +1384,7 @@ void SwCompareData::ShowDelete( const CompareData& rData, ULONG nStt,
         if( *pCorr->GetPoint() == *pTmp->GetPoint() )
         {
             SwNodeIndex aTmpPos( pTmp->GetMark()->nNode, -1 );
-            *pCorr->GetPoint() = SwPosition( aTmpPos, 0 );
+            *pCorr->GetPoint() = SwPosition( aTmpPos );
         }
     }
 }
