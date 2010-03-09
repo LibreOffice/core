@@ -379,17 +379,34 @@ static Unicode2LangType aLangFromCodeChart[]= {
 // get language matching to the missing char
 LanguageType MapCharToLanguage( sal_UCS4 uChar )
 {
-    // entries marked with default-CJK should get replaced with a default-CJK language
+    // entries marked with default-CJK get replaced with the prefered CJK language
     static bool bFirst = true;
     if( bFirst )
     {
         bFirst = false;
-        // TODO: use the default-CJK language instead
-        // TODO: use default language determined by #i97086#
-        // when the setting from Tools->Options->LangSettings->Languages becomes available here
+
+        // use method suggested in #i97086# to determnine the systems default language
+        // TODO: move into i18npool or sal/osl/w32/nlsupport.c
+        LanguageType nDefaultLang = 0;
+        HKEY hKey = NULL;
+        LONG lResult = ::RegOpenKeyExA( HKEY_LOCAL_MACHINE,
+            "SYSTEM\\CurrentControlSet\\Control\\Nls\\Language",
+            0, KEY_QUERY_VALUE, &hKey );
+        char aKeyValBuf[16];
+        DWORD nKeyValSize = sizeof(aKeyValBuf);
+        if( ERROR_SUCCESS == lResult )
+            lResult = RegQueryValueExA( hKey, "Default", NULL, NULL, (LPBYTE)aKeyValBuf, &nKeyValSize );
+        aKeyValBuf[ sizeof(aKeyValBuf)-1 ] = '\0';
+        if( ERROR_SUCCESS == lResult )
+            nDefaultLang = (LanguageType)rtl_str_toInt32( aKeyValBuf, 16 );
+
+        // TODO: use the default-CJK language selected in
+        //  Tools->Options->LangSettings->Languages when it becomes available here
+        if( !nDefaultLang )
+            nDefaultLang = Application::GetSettings().GetUILanguage();
+
         LanguageType nDefaultCJK = LANGUAGE_CHINESE;
-        const LanguageType nUILang = Application::GetSettings().GetUILanguage();
-        switch( nUILang )
+        switch( nDefaultLang )
         {
             case LANGUAGE_JAPANESE:
             case LANGUAGE_KOREAN:
@@ -399,13 +416,14 @@ LanguageType MapCharToLanguage( sal_UCS4 uChar )
             case LANGUAGE_CHINESE_SINGAPORE:
             case LANGUAGE_CHINESE_HONGKONG:
             case LANGUAGE_CHINESE_MACAU:
-                nDefaultCJK = nUILang;
+                nDefaultCJK = nDefaultLang;
                 break;
             default:
                 nDefaultCJK = LANGUAGE_CHINESE;
                 break;
         }
 
+        // change the marked entries to prefered language
         static const int nCount = (sizeof(aLangFromCodeChart) / sizeof(*aLangFromCodeChart));
         for( int i = 0; i < nCount; ++i )
         {
