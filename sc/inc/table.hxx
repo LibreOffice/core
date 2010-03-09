@@ -466,7 +466,7 @@ public:
                                 const SvxBorderLine** ppRight, const SvxBorderLine** ppBottom ) const;
 
 //UNUSED2009-05 BOOL        HasLines( const ScRange& rRange, Rectangle& rSizes ) const;
-    BOOL        HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USHORT nMask ) const;
+    bool        HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USHORT nMask ) const;
     BOOL        HasAttribSelection( const ScMarkData& rMark, USHORT nMask ) const;
     BOOL        ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL& rEndCol, SCROW& rEndRow,

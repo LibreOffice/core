@@ -151,7 +151,7 @@ public:
 
     BOOL    HasLines( SCROW nRow1, SCROW nRow2, Rectangle& rSizes,
                         BOOL bLeft, BOOL bRight ) const;
-    BOOL    HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const;
+    bool    HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const;
     BOOL    ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
                                 SCCOL& rPaintCol, SCROW& rPaintRow,
                                 BOOL bRefresh, BOOL bAttrs );

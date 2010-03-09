@@ -247,7 +247,7 @@ BOOL ScColumn::HasSelectionMatrixFragment(const ScMarkData& rMark) const
 //UNUSED2009-05 }
 
 
-BOOL ScColumn::HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const
+bool ScColumn::HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const
 {
     return pAttrArray->HasAttrib( nRow1, nRow2, nMask );
 }

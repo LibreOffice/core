@@ -672,11 +672,17 @@ bool ScHeaderControl::IsSelectionAllowed(SCCOLROW nPos) const
         // This sheet is protected.  Check if a context menu is allowed on this cell.
         bool bCellsProtected = false;
         if (bVertical)
+        {
             // row header
-            bCellsProtected = pDoc->HasAttrib(0, nPos, nTab, MAXCOL, nPos, nTab, HASATTR_PROTECTED);
+            SCROW nRPos = static_cast<SCROW>(nPos);
+            bCellsProtected = pDoc->HasAttrib(0, nRPos, nTab, MAXCOL, nRPos, nTab, HASATTR_PROTECTED);
+        }
         else
+        {
             // column header
-            bCellsProtected = pDoc->HasAttrib(nPos, 0, nTab, nPos, MAXROW, nTab, HASATTR_PROTECTED);
+            SCCOL nCPos = static_cast<SCCOL>(nPos);
+            bCellsProtected = pDoc->HasAttrib(nCPos, 0, nTab, nCPos, MAXROW, nTab, HASATTR_PROTECTED);
+        }
 
         bool bSelProtected   = pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
         bool bSelUnprotected = pProtect->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS);
