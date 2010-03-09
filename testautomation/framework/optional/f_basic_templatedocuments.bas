@@ -38,8 +38,10 @@ sub main
 
     call hStatusIn( "framework" , "f_basic_templatedocuments.bas" )
 
+    hSetMacroSecurityAPI( GC_GC_MACRO_SECURITY_LEVEL_MEDIUM )
     call tMacroUserTemplate()
     call tBasicSpecTemplate()
+    hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_DEFAULT )
 
     call hStatusOut()
 
