@@ -34,6 +34,8 @@ namespace rtl { class OUString; }
 
 namespace test {
 
+// Obtain the value of an argument tunneled in via an "arg-<name>" bootstrap
+// variable:
 OOO_DLLPUBLIC_TEST bool getArgument(
     rtl::OUString const & name, rtl::OUString * value);
 

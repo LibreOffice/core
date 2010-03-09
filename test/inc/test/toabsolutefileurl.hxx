@@ -34,6 +34,8 @@ namespace rtl { class OUString; }
 
 namespace test {
 
+// Convert a pathname in system notation, potentially relative to the process's
+// current working directory, to an absolute file URL:
 OOO_DLLPUBLIC_TEST rtl::OUString toAbsoluteFileUrl(
     rtl::OUString const & relativePathname);
 

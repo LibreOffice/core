@@ -39,6 +39,8 @@ namespace com { namespace sun { namespace star { namespace lang {
 
 namespace test {
 
+// Start up and shut down an OOo instance (details about the OOo instance are
+// tunneled in via "arg-..." bootstrap variables):
 class OOO_DLLPUBLIC_TEST OfficeConnection: private boost::noncopyable {
 public:
     OfficeConnection();

@@ -40,7 +40,14 @@ import java.util.Map;
 import java.util.UUID;
 import static org.junit.Assert.*;
 
+/** Start up and shut down an OOo instance.
+
+    Details about the OOo instance are tunneled in via
+    org.openoffice.test.arg.... system properties.
+*/
 public final class OfficeConnection {
+    /** Start up an OOo instance.
+    */
     public void setUp() throws Exception {
         description = "pipe,name=oootest" + UUID.randomUUID();
         ProcessBuilder pb = new ProcessBuilder(
@@ -79,6 +86,8 @@ public final class OfficeConnection {
         }
     }
 
+    /** Shut down the OOo instance.
+    */
     public void tearDown()
         throws InterruptedException, com.sun.star.uno.Exception
     {
@@ -107,13 +116,15 @@ public final class OfficeConnection {
         assertTrue(errTerminated);
     }
 
-    //TODO: get rid of this hack
-    public String getDescription() {
-        return description;
-    }
-
+    /** Obtain the service factory of the running OOo instance.
+    */
     public XMultiServiceFactory getFactory() {
         return factory;
+    }
+
+    //TODO: get rid of this hack for legacy qa/unoapi tests
+    public String getDescription() {
+        return description;
     }
 
     private static String getArgument(String name) {

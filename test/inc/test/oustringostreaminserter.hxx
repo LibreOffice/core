@@ -33,6 +33,8 @@
 #include "osl/thread.h"
 #include "rtl/ustring.hxx"
 
+// Include this header to support rtl::OUString in CPPUNIT_ASSERT macros.
+
 template< typename charT, typename traits > std::basic_ostream<charT, traits> &
 operator <<(
     std::basic_ostream<charT, traits> & stream, rtl::OUString const & string)
