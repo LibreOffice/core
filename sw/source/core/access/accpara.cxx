@@ -82,6 +82,9 @@
 #include <parachangetrackinginfo.hxx>
 #include <com/sun/star/text/TextMarkupType.hpp>
 // <--
+// --> OD 2010-03-08 #i92233#
+#include <comphelper/stlunosequence.hxx>
+// <--
 
 #include <algorithm>
 
@@ -1467,7 +1470,30 @@ uno::Sequence< PropertyValue > SwAccessibleParagraph::getDefaultAttributes(
     tAccParaPropValMap aDefAttrSeq;
     _getDefaultAttributesImpl( aRequestedAttributes, aDefAttrSeq );
 
-    uno::Sequence< PropertyValue > aValues( aDefAttrSeq.size() );
+    // --> OD 2010-03-08 #i92233#
+    static rtl::OUString sMMToPixelRatio( rtl::OUString::createFromAscii( "MMToPixelRatio" ) );
+    bool bProvideMMToPixelRatio( false );
+    {
+        if ( aRequestedAttributes.getLength() == 0 )
+        {
+            bProvideMMToPixelRatio = true;
+        }
+        else
+        {
+            const rtl::OUString* aRequestedAttrIter =
+                  ::std::find( ::comphelper::stl_begin( aRequestedAttributes ),
+                               ::comphelper::stl_end( aRequestedAttributes ),
+                               sMMToPixelRatio );
+            if ( aRequestedAttrIter != ::comphelper::stl_end( aRequestedAttributes ) )
+            {
+                bProvideMMToPixelRatio = true;
+            }
+        }
+    }
+    // <--
+
+    uno::Sequence< PropertyValue > aValues( aDefAttrSeq.size() +
+                                            ( bProvideMMToPixelRatio ? 1 : 0 ) );
     PropertyValue* pValues = aValues.getArray();
     sal_Int32 i = 0;
     for ( tAccParaPropValMap::const_iterator aIter  = aDefAttrSeq.begin();
@@ -1477,6 +1503,21 @@ uno::Sequence< PropertyValue > SwAccessibleParagraph::getDefaultAttributes(
         pValues[i] = aIter->second;
         ++i;
     }
+
+    // --> OD 2010-03-08 #i92233#
+    if ( bProvideMMToPixelRatio )
+    {
+        PropertyValue rPropVal;
+        rPropVal.Name = sMMToPixelRatio;
+        const Size a100thMMSize( 1000, 1000 );
+        const Size aPixelSize = GetMap()->LogicToPixel( a100thMMSize );
+        const float fRatio = ((float)a100thMMSize.Width()/100)/aPixelSize.Width();
+        rPropVal.Value = uno::makeAny( fRatio );
+        rPropVal.Handle = -1;
+        rPropVal.State = beans::PropertyState_DEFAULT_VALUE;
+        pValues[ aValues.getLength() - 1 ] = rPropVal;
+    }
+    // <--
 
     return aValues;
 }
