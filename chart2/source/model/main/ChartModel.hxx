@@ -146,7 +146,6 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >          m_xParent;
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XRangeHighlighter > m_xRangeHighlighter;
     ::std::vector< GraphicObject >                                               m_aGraphicObjectVector;
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XUndoManager >   m_xUndoManager;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider >   m_xDataProvider;
     /** is only valid if m_xDataProvider is set. If m_xDataProvider is set to an

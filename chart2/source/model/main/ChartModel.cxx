@@ -108,7 +108,6 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
     , m_xContext( xContext )
     // default visual area is 8 x 7 cm
     , m_aVisualAreaSize( 8000, 7000 )
-    , m_xUndoManager( ChartModelHelper::createUndoManager() )
     , m_xDataProvider( 0 )
     , m_xInternalDataProvider( 0 )
     , m_xPageBackground( new PageBackground( m_xContext ) )
@@ -145,9 +144,9 @@ ChartModel::ChartModel( const ChartModel & rOther )
     , m_xStorage( 0 ) //rOther.m_xStorage )
     , m_aVisualAreaSize( rOther.m_aVisualAreaSize )
     , m_aGraphicObjectVector( rOther.m_aGraphicObjectVector )
-    , m_xUndoManager( rOther.m_xUndoManager )
     , m_xDataProvider( rOther.m_xDataProvider )
     , m_xInternalDataProvider( rOther.m_xInternalDataProvider )
+    , m_xUndoManager( rOther.m_xUndoManager )
 {
     OSL_TRACE( "ChartModel: Copy-CTOR called" );
     osl_incrementInterlockedCount(&m_refCount);
