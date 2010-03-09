@@ -124,7 +124,7 @@ void ScHeaderControl::SetWidth( long nNew )
     }
 }
 
-__EXPORT ScHeaderControl::~ScHeaderControl()
+ScHeaderControl::~ScHeaderControl()
 {
 }
 
@@ -266,7 +266,7 @@ void ScHeaderControl::DrawShadedRect( long nStart, long nEnd, const Color& rBase
 //      Paint
 //
 
-void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
+void ScHeaderControl::Paint( const Rectangle& rRect )
 {
     //  fuer VCL ist es wichtig, wenig Aufrufe zu haben, darum werden die aeusseren
     //  Linien zusammengefasst
@@ -695,7 +695,7 @@ bool ScHeaderControl::IsSelectionAllowed(SCCOLROW nPos) const
     return bSelectAllowed;
 }
 
-void __EXPORT ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
+void ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if (IsDisabled())
         return;
@@ -762,7 +762,7 @@ void __EXPORT ScHeaderControl::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-void __EXPORT ScHeaderControl::MouseButtonUp( const MouseEvent& rMEvt )
+void ScHeaderControl::MouseButtonUp( const MouseEvent& rMEvt )
 {
     if ( IsDisabled() )
         return;
@@ -815,7 +815,7 @@ void __EXPORT ScHeaderControl::MouseButtonUp( const MouseEvent& rMEvt )
     }
 }
 
-void __EXPORT ScHeaderControl::MouseMove( const MouseEvent& rMEvt )
+void ScHeaderControl::MouseMove( const MouseEvent& rMEvt )
 {
     if ( IsDisabled() )
     {
@@ -865,7 +865,7 @@ void ScHeaderControl::Tracking( const TrackingEvent& rTEvt )
         MouseMove( rTEvt.GetMouseEvent() );
 }
 
-void __EXPORT ScHeaderControl::Command( const CommandEvent& rCEvt )
+void ScHeaderControl::Command( const CommandEvent& rCEvt )
 {
     USHORT nCmd = rCEvt.GetCommand();
     if ( nCmd == COMMAND_CONTEXTMENU )
@@ -983,7 +983,7 @@ void ScHeaderControl::ShowDragHelp()
     }
 }
 
-void __EXPORT ScHeaderControl::RequestHelp( const HelpEvent& rHEvt )
+void ScHeaderControl::RequestHelp( const HelpEvent& rHEvt )
 {
     //  Wenn eigene QuickHelp angezeigt wird, nicht durch RequestHelp
     //  wieder wegnehmen lassen
