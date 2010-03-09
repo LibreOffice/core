@@ -64,7 +64,7 @@ protected:
     SbiImage*           pImage;        // the Image
     SbiBreakpoints*     pBreaks;       // Breakpoints
     SbClassData*        pClassData;
-    bool mbVBACompat;
+    BOOL mbVBACompat;
     INT32 mnType;
     SbxObjectRef pDocObject; // an impl object ( used by Document Modules )
     bool    bIsProxyModule;
@@ -92,7 +92,7 @@ protected:
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_BASICMOD,2);
     TYPEINFO();
-                    SbModule( const String&, bool bCompat = false );
+                    SbModule( const String&, BOOL bCompat = FALSE );
     virtual void    SetParent( SbxObject* );
     virtual void    Clear();
 
@@ -128,8 +128,8 @@ public:
     BOOL LoadBinaryData( SvStream& );
     BOOL ExceedsLegacyModuleSize();
     void fixUpMethodStart( bool bCvtToLegacy, SbiImage* pImg = NULL ) const;
-        bool IsVBACompat();
-        void SetVBACompat( bool bCompat );
+        BOOL IsVBACompat();
+        void SetVBACompat( BOOL bCompat );
         INT32 GetModuleType() { return mnType; }
         void SetModuleType( INT32 nType ) { mnType = nType; }
     bool GetIsProxyModule() { return bIsProxyModule; }

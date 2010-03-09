@@ -159,7 +159,7 @@ bool UnlockControllerHack( StarBASIC* pBasic )
 // Ein BASIC-Modul hat EXTSEARCH gesetzt, damit die im Modul enthaltenen
 // Elemente von anderen Modulen aus gefunden werden koennen.
 
-SbModule::SbModule( const String& rName,  bool bVBACompat )
+SbModule::SbModule( const String& rName,  BOOL bVBACompat )
          : SbxObject( String( RTL_CONSTASCII_USTRINGPARAM("StarBASICModule") ) ),
            pImage( NULL ), pBreaks( NULL ), pClassData( NULL ), mbVBACompat( bVBACompat ),  pDocObject( NULL ), bIsProxyModule( false )
 {
@@ -609,12 +609,12 @@ void ClearUnoObjectsInRTL_Impl( StarBASIC* pBasic )
     if( ((StarBASIC*)p) != pBasic )
         ClearUnoObjectsInRTL_Impl_Rek( (StarBASIC*)p );
 }
-bool SbModule::IsVBACompat()
+BOOL SbModule::IsVBACompat()
 {
     return mbVBACompat;
 }
 
-void SbModule::SetVBACompat( bool bCompat )
+void SbModule::SetVBACompat( BOOL bCompat )
 {
     mbVBACompat = bCompat;
 }
