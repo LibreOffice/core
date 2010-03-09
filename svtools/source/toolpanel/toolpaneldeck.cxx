@@ -184,7 +184,9 @@ namespace svt
         m_aPanelPlayground = aDeckPlayground;
         OSL_ENSURE( m_pLayouter.get(), "ToolPanelDeck_Impl::ImplDoLayout: no layouter!" );
         if ( m_pLayouter.get() )
+        {
             m_aPanelPlayground = m_pLayouter->Layout( aDeckPlayground );
+        }
 
         // and position the active panel
         const PToolPanel pActive( GetActiveOrDummyPanel_Impl() );

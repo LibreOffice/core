@@ -29,6 +29,7 @@
 
 #include "svtools/toolpanel/tabalignment.hxx"
 
+#include "inset.hxx"
 #include "tabitemdescriptor.hxx"
 
 #include <tools/gen.hxx>
@@ -80,32 +81,13 @@ namespace svt
     };
 
     //==================================================================================================================
-    //= Inset
-    //==================================================================================================================
-    struct Inset
-    {
-        long    nLeft;
-        long    nRight;
-        long    nTop;
-        long    nBottom;
-
-        Inset()
-            :nLeft(0)
-            ,nRight(0)
-            ,nTop(0)
-            ,nBottom(0)
-        {
-        }
-    };
-
-    //==================================================================================================================
     //= TabBarGeometry
     //==================================================================================================================
     class TabBarGeometry_Impl;
     class TabBarGeometry
     {
     public:
-        TabBarGeometry( const TabAlignment i_eAlignment, const TabItemContent i_eItemContent );
+        TabBarGeometry( const TabItemContent i_eItemContent );
         ~TabBarGeometry();
 
         // retrieves the rectangle to be occupied by the button for scrolling backward through the items
@@ -115,22 +97,9 @@ namespace svt
         // retrieves the rectangle to be occupied by the button for scrolling forward through the items
         const Rectangle&    getButtonForwardRect() const { return m_aButtonForwardRect; }
 
-        inline TabAlignment getAlignment() const { return m_eTabAlignment; }
-
         inline TabItemContent
                             getItemContent() const { return m_eTabItemContent; }
         inline void         setItemContent( const TabItemContent i_eItemContent ) { m_eTabItemContent = i_eItemContent; }
-
-        inline bool isVertical() const
-        {
-            return  ( m_eTabAlignment == TABS_LEFT )
-                ||  ( m_eTabAlignment == TABS_RIGHT );
-        }
-
-        inline Rectangle    getTransformed( const Rectangle& i_rNormalizedRect ) const
-        {
-            return m_aNormalizedPlayground.getTransformed( i_rNormalizedRect, m_eTabAlignment );
-        }
 
         /** adjusts the sizes of the buttons and the item's playground, plus the sizes of the items
         */
@@ -148,13 +117,10 @@ namespace svt
         bool    impl_fitItems( ItemDescriptors& io_rItems ) const;
 
     private:
-        /// specifies the alignment of the tab bar
-        const TabAlignment  m_eTabAlignment;
         /// specifies the content to be displayed in the tab items
         TabItemContent      m_eTabItemContent;
         /// specifies the inset to be used in the items area, depends on the actual alignment
         Inset               m_aItemsInset;
-        NormalizedArea      m_aNormalizedPlayground;
         Rectangle           m_aButtonBackRect;
         Rectangle           m_aItemsRect;
         Rectangle           m_aButtonForwardRect;

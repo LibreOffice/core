@@ -30,6 +30,8 @@
 #include "svtools/toolpanel/toolpanel.hxx"
 #include "svtools/toolpanel/tabitemcontent.hxx"
 
+#include "inset.hxx"
+
 #include <tools/gen.hxx>
 #include <osl/diagnose.h>
 
@@ -46,9 +48,10 @@ namespace svt
     struct ItemDescriptor
     {
         PToolPanel      pPanel;
-        Rectangle       aCompleteArea;
-        Rectangle       aIconOnlyArea;
-        Rectangle       aTextOnlyArea;
+        Rectangle       aCompleteArea;  // bounding area if the both text and icon are to be rendererd
+        Rectangle       aIconOnlyArea;  // bounding area if the icon is to be rendererd
+        Rectangle       aTextOnlyArea;  // bounding area if the text is to be rendererd
+        Inset           aContentInset; // inset to subtract from the bounding areas
         TabItemContent  eContent;
             // content to be used for this particular item. Might differ from item content which has been set
             // up for the complete control, in case not the complete content fits into the available space.

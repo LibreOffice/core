@@ -170,32 +170,17 @@ namespace svt
     //= TabBarGeometry
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
-    TabBarGeometry::TabBarGeometry( const TabAlignment i_eAlignment, const TabItemContent i_eItemContent )
-        :m_eTabAlignment( i_eAlignment )
-        ,m_eTabItemContent( i_eItemContent )
+    TabBarGeometry::TabBarGeometry( const TabItemContent i_eItemContent )
+        :m_eTabItemContent( i_eItemContent )
         ,m_aItemsInset()
-        ,m_aNormalizedPlayground( Rectangle(), false )
         ,m_aButtonBackRect()
         ,m_aItemsRect()
         ,m_aButtonForwardRect()
     {
-        // calculate the items' inset
-        const Rectangle aArtificial( Point( 0, 0 ), Size( 10, 10 ) );
-        const Rectangle aInsetRect(
-            Point( ITEMS_INSET_LEFT, ITEMS_INSET_TOP ),
-            Size(
-                aArtificial.GetWidth() - ITEMS_INSET_LEFT - ITEMS_INSET_RIGHT,
-                aArtificial.GetHeight() - ITEMS_INSET_TOP - ITEMS_INSET_BOTTOM
-            )
-        );
-
-        const NormalizedArea aNormalized( aArtificial, false );
-        const Rectangle aTransformedInner( aNormalized.getTransformed( aInsetRect, getAlignment() ) );
-
-        m_aItemsInset.nLeft   = aTransformedInner.Left()            - aNormalized.getReference().Left();
-        m_aItemsInset.nTop    = aTransformedInner.Top()             - aNormalized.getReference().Top() ;
-        m_aItemsInset.nRight  = aNormalized.getReference().Right()  - aTransformedInner.Right()        ;
-        m_aItemsInset.nBottom = aNormalized.getReference().Bottom() - aTransformedInner.Bottom()       ;
+        m_aItemsInset.nLeft   = ITEMS_INSET_LEFT;
+        m_aItemsInset.nTop    = ITEMS_INSET_TOP;
+        m_aItemsInset.nRight  = ITEMS_INSET_RIGHT;
+        m_aItemsInset.nBottom = ITEMS_INSET_BOTTOM;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -279,36 +264,33 @@ namespace svt
     //------------------------------------------------------------------------------------------------------------------
     void TabBarGeometry::relayout( const Size& i_rActualOutputSize, ItemDescriptors& io_rItems )
     {
-        m_aNormalizedPlayground = NormalizedArea( Rectangle( Point(), i_rActualOutputSize ), isVertical() );
-        const Size aNormalizedSize( m_aNormalizedPlayground.getReferenceSize() );
-
         // assume all items fit
         Point aButtonBackPos( OUTER_SPACE_LEFT, OUTER_SPACE_TOP );
-        m_aButtonBackRect = m_aNormalizedPlayground.getTransformed( Rectangle( aButtonBackPos, Size( 1, 1 ) ), getAlignment() );
-        m_aButtonBackRect.SetEmpty();   // do this after the transformation, it cannot cope with empty rects
+        m_aButtonBackRect = Rectangle( aButtonBackPos, Size( 1, 1 ) );
+        m_aButtonBackRect.SetEmpty();
 
-        Point aButtonForwardPos( aNormalizedSize.Width(), OUTER_SPACE_TOP );
-        m_aButtonForwardRect = m_aNormalizedPlayground.getTransformed( Rectangle( aButtonForwardPos, Size( 1, 1 ) ), getAlignment() );
-        m_aButtonBackRect.SetEmpty();   // do this after the transformation, it cannot cope with empty rects
+        Point aButtonForwardPos( i_rActualOutputSize.Width(), OUTER_SPACE_TOP );
+        m_aButtonForwardRect = Rectangle( aButtonForwardPos, Size( 1, 1 ) );
+        m_aButtonBackRect.SetEmpty();
 
         Point aItemsPos( OUTER_SPACE_LEFT, 0 );
-        Size aItemsSize( aNormalizedSize.Width() - OUTER_SPACE_LEFT - OUTER_SPACE_RIGHT, aNormalizedSize.Height() );
-        m_aItemsRect = m_aNormalizedPlayground.getTransformed( Rectangle( aItemsPos, aItemsSize ), m_eTabAlignment );
+        Size aItemsSize( i_rActualOutputSize.Width() - OUTER_SPACE_LEFT - OUTER_SPACE_RIGHT, i_rActualOutputSize.Height() );
+        m_aItemsRect = Rectangle( aItemsPos, aItemsSize );
 
         if ( !impl_fitItems( io_rItems ) )
         {
             // assumption was wrong, the items do not fit => calculate rects for the scroll buttons
-            const Size aButtonSize( BUTTON_FLOW_WIDTH, aNormalizedSize.Height() - OUTER_SPACE_TOP - OUTER_SPACE_BOTTOM );
+            const Size aButtonSize( BUTTON_FLOW_WIDTH, i_rActualOutputSize.Height() - OUTER_SPACE_TOP - OUTER_SPACE_BOTTOM );
 
             aButtonBackPos = Point( OUTER_SPACE_LEFT, OUTER_SPACE_TOP );
-            m_aButtonBackRect = m_aNormalizedPlayground.getTransformed( Rectangle( aButtonBackPos, aButtonSize ), m_eTabAlignment );
+            m_aButtonBackRect = Rectangle( aButtonBackPos, aButtonSize );
 
-            aButtonForwardPos = Point( aNormalizedSize.Width() - BUTTON_FLOW_WIDTH - OUTER_SPACE_RIGHT, OUTER_SPACE_TOP );
-            m_aButtonForwardRect = m_aNormalizedPlayground.getTransformed( Rectangle( aButtonForwardPos, aButtonSize ), m_eTabAlignment );
+            aButtonForwardPos = Point( i_rActualOutputSize.Width() - BUTTON_FLOW_WIDTH - OUTER_SPACE_RIGHT, OUTER_SPACE_TOP );
+            m_aButtonForwardRect = Rectangle( aButtonForwardPos, aButtonSize );
 
             aItemsPos.X() = aButtonBackPos.X() + aButtonSize.Width() + BUTTON_FLOW_SPACE;
             aItemsSize.Width() = aButtonForwardPos.X() - BUTTON_FLOW_SPACE - aItemsPos.X();
-            m_aItemsRect = m_aNormalizedPlayground.getTransformed( Rectangle( aItemsPos, aItemsSize ), m_eTabAlignment );
+            m_aItemsRect = Rectangle( aItemsPos, aItemsSize );
 
             // fit items, again. In the TABITEM_AUTO case, the smaller playground for the items might lead to another
             // item content.
