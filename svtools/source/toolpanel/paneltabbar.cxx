@@ -545,8 +545,8 @@ namespace svt
             Rectangle aContentArea;
 
             Size aCompleteSize( impl_calculateItemContentSize( pPanel, TABITEM_IMAGE_AND_TEXT ) );
-            Size aIconOnlySize( impl_calculateItemContentSize( pPanel, TABITEM_IMAGE_AND_TEXT ) );
-            Size aTextOnlySize( impl_calculateItemContentSize( pPanel, TABITEM_IMAGE_AND_TEXT ) );
+            Size aIconOnlySize( impl_calculateItemContentSize( pPanel, TABITEM_IMAGE_ONLY ) );
+            Size aTextOnlySize( impl_calculateItemContentSize( pPanel, TABITEM_TEXT_ONLY ) );
 
             // TODO: have one method calculating all sizes?
 
@@ -763,7 +763,7 @@ namespace svt
         m_rTabBar.DrawBitmapEx( aActualBounds.TopLeft(), aBitmap );
 
         // render the actual item content
-        impl_renderItemContent( rItem.pPanel, aActualContent, m_aGeometry.getItemContent() );
+        impl_renderItemContent( rItem.pPanel, aActualContent, rItem.eContent );
 
         // render item "foreground" layer
         m_pRenderer->postRenderItem( m_rTabBar, aActualBounds, nItemFlags );
@@ -780,7 +780,7 @@ namespace svt
             return;
         }
         impl_calcItemRects();
-        OSL_POSTCOND( m_bItemsDirty == false, "EnsureItemsCache: cache still dirty!" );
+        OSL_POSTCOND( m_bItemsDirty == false, "PanelTabBar_Impl::EnsureItemsCache: cache still dirty!" );
         DBG_CHECK( *this );
     }
 
