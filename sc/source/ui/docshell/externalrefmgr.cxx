@@ -1449,7 +1449,8 @@ static ScTokenArray* lcl_fillEmptyMatrix(const ScRange& rRange)
 
 ScExternalRefManager::ScExternalRefManager(ScDocument* pDoc) :
     mpDoc(pDoc),
-    bInReferenceMarking(false)
+    mbInReferenceMarking(false),
+    mbUserInteractionEnabled(true)
 {
     maSrcDocTimer.SetTimeoutHdl( LINK(this, ScExternalRefManager, TimeOutHdl) );
     maSrcDocTimer.SetTimeout(SRCDOC_SCAN_INTERVAL);
@@ -1483,6 +1484,22 @@ ScExternalRefManager::LinkListener::LinkListener()
 
 ScExternalRefManager::LinkListener::~LinkListener()
 {
+}
+
+// ----------------------------------------------------------------------------
+
+ScExternalRefManager::ApiGuard::ApiGuard(ScExternalRefManager* pMgr) :
+    mpMgr(pMgr),
+    mbOldInteractionEnabled(pMgr->mbUserInteractionEnabled)
+{
+    // We don't want user interaction handled in the API.
+    mpMgr->mbUserInteractionEnabled = false;
+}
+
+ScExternalRefManager::ApiGuard::~ApiGuard()
+{
+    // Restore old value.
+    mpMgr->mbUserInteractionEnabled = mbOldInteractionEnabled;
 }
 
 // ----------------------------------------------------------------------------
@@ -1567,7 +1584,7 @@ void ScExternalRefManager::setCacheTableReferencedPermanently( sal_uInt16 nFileI
 
 void ScExternalRefManager::setAllCacheTableReferencedStati( bool bReferenced )
 {
-    bInReferenceMarking = !bReferenced;
+    mbInReferenceMarking = !bReferenced;
     maRefCache.setAllCacheTableReferencedStati( bReferenced );
 }
 
@@ -1978,8 +1995,8 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, Stri
     if (pMedium->GetError() != ERRCODE_NONE)
         return NULL;
 
-    // We need this to load encrypted documents with password.
-    pMedium->UseInteractionHandler(true);
+    // To load encrypted documents with password, user interaction needs to be enabled.
+    pMedium->UseInteractionHandler(mbUserInteractionEnabled);
 
     ScDocShell* pNewShell = new ScDocShell(SFX_CREATE_MODE_INTERNAL);
     SfxObjectShellRef aRef = pNewShell;

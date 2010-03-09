@@ -140,9 +140,12 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScFormulaParserObj::parseFormula(
 
     if (mpDocShell)
     {
+        ScDocument* pDoc = mpDocShell->GetDocument();
+        ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
+        ScExternalRefManager::ApiGuard aExtRefGuard(pRefMgr);
+
         ScAddress aRefPos( ScAddress::UNINITIALIZED );
         ScUnoConversion::FillScAddress( aRefPos, rReferencePos );
-        ScDocument* pDoc = mpDocShell->GetDocument();
         ScCompiler aCompiler( pDoc, aRefPos);
         aCompiler.SetGrammar(pDoc->GetGrammar());
         SetCompilerFlags( aCompiler );

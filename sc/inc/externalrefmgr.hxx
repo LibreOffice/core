@@ -386,6 +386,21 @@ public:
         };
     };
 
+    /**
+     * Use this guard when performing something from the API that might query
+     * values from external references.  Interpreting formula strings is one
+     * such example.
+     */
+    class ApiGuard
+    {
+    public:
+        ApiGuard(ScExternalRefManager* pMgr);
+        ~ApiGuard();
+    private:
+        ScExternalRefManager* mpMgr;
+        bool mbOldInteractionEnabled;
+    };
+
 private:
     /** Shell instance for a source document. */
     struct SrcShell
@@ -512,7 +527,7 @@ public:
      * @returns <TRUE/> if setAllCacheTableReferencedStati(false) was called,
      * <FALSE/> if setAllCacheTableReferencedStati(true) was called.
      */
-    bool isInReferenceMarking() const   { return bInReferenceMarking; }
+    bool isInReferenceMarking() const   { return mbInReferenceMarking; }
 
     void storeRangeNameTokens(sal_uInt16 nFileId, const String& rName, const ScTokenArray& rArray);
 
@@ -716,7 +731,13 @@ private:
     ::std::vector<SrcFileData> maSrcFiles;
 
     /** Status whether in reference marking state. See isInReferenceMarking(). */
-    bool bInReferenceMarking;
+    bool mbInReferenceMarking:1;
+
+    /**
+     * Controls whether or not to allow user interaction.  We don't want any
+     * user interaction when calling from the API.
+     */
+    bool mbUserInteractionEnabled:1;
 
     AutoTimer maSrcDocTimer;
     DECL_LINK(TimeOutHdl, AutoTimer*);
