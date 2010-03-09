@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: precompiled_svx.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -740,7 +737,7 @@
 #include "sfx2/sfxstatuslistener.hxx"
 #include "sfx2/sfxuno.hxx"
 #include "sfx2/shell.hxx"
-#include "sfx2/srchdefs.hxx"
+#include "svl/srchdefs.hxx"
 #include "sfx2/tplpitem.hxx"
 #include "sfx2/viewfrm.hxx"
 #include "sot/clsids.hxx"

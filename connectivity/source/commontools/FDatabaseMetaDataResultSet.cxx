@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: FDatabaseMetaDataResultSet.cxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -764,7 +761,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
                                 break;
                             case TypeClass_BYTE:
                                 {
-                                    sal_Int8 nValue;
+                                    sal_Int8 nValue(0);
                                     *pRowIter >>= nValue;
                                     aValue = new ORowSetValueDecorator(ORowSetValue(nValue));
                                 }
@@ -772,7 +769,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
                             case TypeClass_SHORT:
                             case TypeClass_UNSIGNED_SHORT:
                                 {
-                                    sal_Int16 nValue;
+                                    sal_Int16 nValue(0);
                                     *pRowIter >>= nValue;
                                     aValue = new ORowSetValueDecorator(ORowSetValue(nValue));
                                 }
@@ -780,7 +777,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
                             case TypeClass_LONG:
                             case TypeClass_UNSIGNED_LONG:
                                 {
-                                    sal_Int32 nValue;
+                                    sal_Int32 nValue(0);
                                     *pRowIter >>= nValue;
                                     aValue = new ORowSetValueDecorator(ORowSetValue(nValue));
                                 }
@@ -788,21 +785,21 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
                             case TypeClass_HYPER:
                             case TypeClass_UNSIGNED_HYPER:
                                 {
-                                    sal_Int64 nValue;
+                                    sal_Int64 nValue(0);
                                     *pRowIter >>= nValue;
                                     aValue = new ORowSetValueDecorator(ORowSetValue(nValue));
                                 }
                                 break;
                             case TypeClass_FLOAT:
                                 {
-                                    float nValue;
+                                    float nValue(0.0);
                                     *pRowIter >>= nValue;
                                     aValue = new ORowSetValueDecorator(ORowSetValue(nValue));
                                 }
                                 break;
                             case TypeClass_DOUBLE:
                                 {
-                                    double nValue;
+                                    double nValue(0.0);
                                     *pRowIter >>= nValue;
                                     aValue = new ORowSetValueDecorator(ORowSetValue(nValue));
                                 }

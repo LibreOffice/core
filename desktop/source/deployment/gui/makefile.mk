@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.20.30.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -56,7 +52,6 @@ SLOFILES = \
         $(SLO)$/license_dialog.obj \
         $(SLO)$/dp_gui_dependencydialog.obj \
         $(SLO)$/dp_gui_thread.obj \
-        $(SLO)$/dp_gui_updatability.obj \
         $(SLO)$/dp_gui_updatedialog.obj \
         $(SLO)$/dp_gui_updateinstalldialog.obj \
         $(SLO)$/dp_gui_autoscrolledit.obj \

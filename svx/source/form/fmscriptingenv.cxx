@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fmscriptingenv.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -236,6 +233,11 @@ namespace svxform
     void SAL_CALL FormScriptListener::firing( const ScriptEvent& _rEvent ) throw (RuntimeException)
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
+       static const ::rtl::OUString vbaInterOp =
+           ::rtl::OUString::createFromAscii("VBAInterop");
+       if ( _rEvent.ScriptType.equals(vbaInterOp) )
+           return; // not handled here
+
         if ( impl_isDisposed_nothrow() )
             return;
 
