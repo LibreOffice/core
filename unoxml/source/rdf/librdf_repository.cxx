@@ -125,6 +125,56 @@ bool isInternalContext(librdf_node *i_pNode) throw ()
 
 ////////////////////////////////////////////////////////////////////////////
 
+// n.b.: librdf destructor functions dereference null pointers!
+//       so they need to be wrapped to be usable with boost::shared_ptr.
+static void safe_librdf_free_world(librdf_world *const world)
+{
+    if (world) { librdf_free_world(world); }
+}
+static void safe_librdf_free_model(librdf_model *const model)
+{
+    if (model) { librdf_free_model(model); }
+}
+static void safe_librdf_free_node(librdf_node* node)
+{
+    if (node) { librdf_free_node(node); }
+}
+static void safe_librdf_free_parser(librdf_parser *const parser)
+{
+    if (parser) { librdf_free_parser(parser); }
+}
+static void safe_librdf_free_query(librdf_query *const query)
+{
+    if (query) { librdf_free_query(query); }
+}
+static void
+safe_librdf_free_query_results(librdf_query_results *const query_results)
+{
+    if (query_results) { librdf_free_query_results(query_results); }
+}
+static void safe_librdf_free_serializer(librdf_serializer *const serializer)
+{
+    if (serializer) { librdf_free_serializer(serializer); }
+}
+static void safe_librdf_free_statement(librdf_statement *const statement)
+{
+    if (statement) { librdf_free_statement(statement); }
+}
+static void safe_librdf_free_storage(librdf_storage *const storage)
+{
+    if (storage) { librdf_free_storage(storage); }
+}
+static void safe_librdf_free_stream(librdf_stream *const stream)
+{
+    if (stream) { librdf_free_stream(stream); }
+}
+static void safe_librdf_free_uri(librdf_uri *const uri)
+{
+    if (uri) { librdf_free_uri(uri); }
+}
+
+////////////////////////////////////////////////////////////////////////////
+
 #if 0
 class librdf_Statement:
     public ::cppu::WeakImplHelper1<
@@ -565,7 +615,7 @@ public:
 
     void operator() (librdf_node** io_pArray) const throw ()
     {
-        std::for_each(io_pArray, io_pArray + m_Count, librdf_free_node);
+        std::for_each(io_pArray, io_pArray + m_Count, safe_librdf_free_node);
         delete[] io_pArray;
     }
 };
@@ -778,9 +828,9 @@ osl::Mutex librdf_Repository::m_aMutex;
 librdf_Repository::librdf_Repository(
         uno::Reference< uno::XComponentContext > const & i_xContext)
     : /*BaseMutex(),*/ m_xContext(i_xContext)
-//    m_pWorld  (static_cast<librdf_world  *>(0), librdf_free_world  ),
-    , m_pStorage(static_cast<librdf_storage*>(0), librdf_free_storage)
-    , m_pModel  (static_cast<librdf_model  *>(0), librdf_free_model  )
+//    m_pWorld  (static_cast<librdf_world  *>(0), safe_librdf_free_world  ),
+    , m_pStorage(static_cast<librdf_storage*>(0), safe_librdf_free_storage)
+    , m_pModel  (static_cast<librdf_model  *>(0), safe_librdf_free_model  )
     , m_NamedGraphs()
     , m_TypeConverter(i_xContext, *this)
 {
@@ -788,7 +838,7 @@ librdf_Repository::librdf_Repository(
 
     ::osl::MutexGuard g(m_aMutex);
     if (!m_NumInstances++) {
-        m_pWorld.reset(m_TypeConverter.createWorld(), librdf_free_world);
+        m_pWorld.reset(m_TypeConverter.createWorld(), safe_librdf_free_world);
     }
 }
 
@@ -841,7 +891,7 @@ throw (uno::RuntimeException)
     ::osl::MutexGuard g(m_aMutex);
     const boost::shared_ptr<librdf_node> pNode(
         librdf_new_node_from_blank_identifier(m_pWorld.get(), NULL),
-        librdf_free_node);
+        safe_librdf_free_node);
     if (!pNode) {
         throw uno::RuntimeException(::rtl::OUString::createFromAscii(
             "librdf_Repository::createBlankNode: "
@@ -930,7 +980,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     const boost::shared_ptr<librdf_node> pContext(
         librdf_new_node_from_uri_string(m_pWorld.get(),
             reinterpret_cast<const unsigned char*> (context.getStr())),
-        librdf_free_node);
+        safe_librdf_free_node);
     if (!pContext) {
         throw uno::RuntimeException(::rtl::OUString::createFromAscii(
             "librdf_Repository::importGraph: "
@@ -942,7 +992,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     const boost::shared_ptr<librdf_uri> pBaseURI(
         librdf_new_uri(m_pWorld.get(),
             reinterpret_cast<const unsigned char*> (baseURI.getStr())),
-        librdf_free_uri);
+        safe_librdf_free_uri);
     if (!pBaseURI) {
         throw uno::RuntimeException(::rtl::OUString::createFromAscii(
             "librdf_Repository::importGraph: "
@@ -951,7 +1001,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
 
     const boost::shared_ptr<librdf_parser> pParser(
         librdf_new_parser(m_pWorld.get(), "rdfxml", NULL, NULL),
-        librdf_free_parser);
+        safe_librdf_free_parser);
     if (!pParser) {
         throw uno::RuntimeException(::rtl::OUString::createFromAscii(
             "librdf_Repository::importGraph: "
@@ -968,7 +1018,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
         librdf_parser_parse_counted_string_as_stream(pParser.get(),
             reinterpret_cast<const unsigned char*>(buf.getConstArray()),
             buf.getLength(), pBaseURI.get()),
-        librdf_free_stream);
+        safe_librdf_free_stream);
     if (!pStream) {
         throw rdf::ParseException(::rtl::OUString::createFromAscii(
             "librdf_Repository::importGraph: "
@@ -1037,7 +1087,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     const boost::shared_ptr<librdf_node> pContext(
         librdf_new_node_from_uri_string(m_pWorld.get(),
             reinterpret_cast<const unsigned char*> (context.getStr())),
-        librdf_free_node);
+        safe_librdf_free_node);
     if (!pContext) {
         throw uno::RuntimeException(::rtl::OUString::createFromAscii(
             "librdf_Repository::exportGraph: "
@@ -1048,7 +1098,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     const boost::shared_ptr<librdf_uri> pBaseURI(
         librdf_new_uri(m_pWorld.get(),
             reinterpret_cast<const unsigned char*> (baseURI.getStr())),
-        librdf_free_uri);
+        safe_librdf_free_uri);
     if (!pBaseURI) {
         throw uno::RuntimeException(::rtl::OUString::createFromAscii(
             "librdf_Repository::exportGraph: "
@@ -1057,7 +1107,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
 
     const boost::shared_ptr<librdf_stream> pStream(
         librdf_model_context_as_stream(m_pModel.get(), pContext.get()),
-        librdf_free_stream);
+        safe_librdf_free_stream);
     if (!pStream) {
         throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
             "librdf_Repository::exportGraph: "
@@ -1067,7 +1117,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     const char *format("rdfxml-abbrev");
     const boost::shared_ptr<librdf_serializer> pSerializer(
         librdf_new_serializer(m_pWorld.get(), format, NULL, NULL),
-        librdf_free_serializer);
+        safe_librdf_free_serializer);
     if (!pSerializer) {
         throw uno::RuntimeException(::rtl::OUString::createFromAscii(
             "librdf_Repository::exportGraph: "
@@ -1077,19 +1127,19 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     const boost::shared_ptr<librdf_uri> pRelativeURI(
         librdf_new_uri(m_pWorld.get(), reinterpret_cast<const unsigned char*>
                 ("http://feature.librdf.org/raptor-relativeURIs")),
-        librdf_free_uri);
+        safe_librdf_free_uri);
     const boost::shared_ptr<librdf_uri> pWriteBaseURI(
         librdf_new_uri(m_pWorld.get(), reinterpret_cast<const unsigned char*>
             ("http://feature.librdf.org/raptor-writeBaseURI")),
-        librdf_free_uri);
+        safe_librdf_free_uri);
     const boost::shared_ptr<librdf_node> p0(
         librdf_new_node_from_literal(m_pWorld.get(),
             reinterpret_cast<const unsigned char*> ("0"), NULL, 0),
-        librdf_free_node);
+        safe_librdf_free_node);
     const boost::shared_ptr<librdf_node> p1(
         librdf_new_node_from_literal(m_pWorld.get(),
             reinterpret_cast<const unsigned char*> ("1"), NULL, 0),
-        librdf_free_node);
+        safe_librdf_free_node);
     if (!pWriteBaseURI || !pRelativeURI || !p0 || !p1) {
         throw uno::RuntimeException(::rtl::OUString::createFromAscii(
             "librdf_Repository::exportGraph: "
@@ -1232,12 +1282,12 @@ throw (uno::RuntimeException, rdf::RepositoryException)
     const boost::shared_ptr<librdf_statement> pStatement(
         m_TypeConverter.mkStatement(m_pWorld.get(),
             i_xSubject, i_xPredicate, i_xObject),
-        librdf_free_statement);
+        safe_librdf_free_statement);
     OSL_ENSURE(pStatement, "mkStatement failed");
 
     const boost::shared_ptr<librdf_stream> pStream(
         librdf_model_find_statements(m_pModel.get(), pStatement.get()),
-        librdf_free_stream);
+        safe_librdf_free_stream);
     if (!pStream) {
         throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
             "librdf_Repository::getStatements: "
@@ -1258,7 +1308,7 @@ throw (uno::RuntimeException, rdf::QueryException, rdf::RepositoryException)
     const boost::shared_ptr<librdf_query> pQuery(
         librdf_new_query(m_pWorld.get(), s_sparql, NULL,
             reinterpret_cast<const unsigned char*> (query.getStr()), NULL),
-        librdf_free_query);
+        safe_librdf_free_query);
     if (!pQuery) {
         throw rdf::QueryException(::rtl::OUString::createFromAscii(
             "librdf_Repository::querySelect: "
@@ -1266,7 +1316,7 @@ throw (uno::RuntimeException, rdf::QueryException, rdf::RepositoryException)
     }
     const boost::shared_ptr<librdf_query_results> pResults(
         librdf_model_query_execute(m_pModel.get(), pQuery.get()),
-        librdf_free_query_results);
+        safe_librdf_free_query_results);
     if (!pResults || !librdf_query_results_is_bindings(pResults.get())) {
         throw rdf::QueryException(::rtl::OUString::createFromAscii(
             "librdf_Repository::querySelect: "
@@ -1308,7 +1358,7 @@ throw (uno::RuntimeException, rdf::QueryException, rdf::RepositoryException)
     const boost::shared_ptr<librdf_query> pQuery(
         librdf_new_query(m_pWorld.get(), s_sparql, NULL,
             reinterpret_cast<const unsigned char*> (query.getStr()), NULL),
-        librdf_free_query);
+        safe_librdf_free_query);
     if (!pQuery) {
         throw rdf::QueryException(::rtl::OUString::createFromAscii(
             "librdf_Repository::queryConstruct: "
@@ -1316,7 +1366,7 @@ throw (uno::RuntimeException, rdf::QueryException, rdf::RepositoryException)
     }
     const boost::shared_ptr<librdf_query_results> pResults(
         librdf_model_query_execute(m_pModel.get(), pQuery.get()),
-        librdf_free_query_results);
+        safe_librdf_free_query_results);
     if (!pResults || !librdf_query_results_is_graph(pResults.get())) {
         throw rdf::QueryException(::rtl::OUString::createFromAscii(
             "librdf_Repository::queryConstruct: "
@@ -1324,7 +1374,7 @@ throw (uno::RuntimeException, rdf::QueryException, rdf::RepositoryException)
     }
     const boost::shared_ptr<librdf_stream> pStream(
         librdf_query_results_as_stream(pResults.get()),
-        librdf_free_stream);
+        safe_librdf_free_stream);
     if (!pStream) {
         throw rdf::QueryException(::rtl::OUString::createFromAscii(
             "librdf_Repository::queryConstruct: "
@@ -1345,7 +1395,7 @@ throw (uno::RuntimeException, rdf::QueryException, rdf::RepositoryException)
     const boost::shared_ptr<librdf_query> pQuery(
         librdf_new_query(m_pWorld.get(), s_sparql, NULL,
             reinterpret_cast<const unsigned char*> (query.getStr()), NULL),
-        librdf_free_query);
+        safe_librdf_free_query);
     if (!pQuery) {
         throw rdf::QueryException(::rtl::OUString::createFromAscii(
             "librdf_Repository::queryAsk: "
@@ -1353,7 +1403,7 @@ throw (uno::RuntimeException, rdf::QueryException, rdf::RepositoryException)
     }
     const boost::shared_ptr<librdf_query_results> pResults(
         librdf_model_query_execute(m_pModel.get(), pQuery.get()),
-        librdf_free_query_results);
+        safe_librdf_free_query_results);
     if (!pResults || !librdf_query_results_is_boolean(pResults.get())) {
         throw rdf::QueryException(::rtl::OUString::createFromAscii(
             "librdf_Repository::queryAsk: "
@@ -1615,12 +1665,12 @@ throw (uno::RuntimeException, rdf::RepositoryException)
     const boost::shared_ptr<librdf_statement> pStatement(
         m_TypeConverter.mkStatement(m_pWorld.get(),
             i_xSubject, i_xPredicate, i_xObject),
-        librdf_free_statement);
+        safe_librdf_free_statement);
     OSL_ENSURE(pStatement, "mkStatement failed");
 
     const boost::shared_ptr<librdf_stream> pStream(
         librdf_model_find_statements(m_pModel.get(), pStatement.get()),
-        librdf_free_stream);
+        safe_librdf_free_stream);
     if (!pStream) {
         throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
             "librdf_Repository::getStatementsRDFa: "
@@ -1646,11 +1696,11 @@ throw (uno::RuntimeException, uno::Exception)
 
     ::osl::MutexGuard g(m_aMutex);
 
-//    m_pWorld.reset(m_TypeConverter.createWorld(), librdf_free_world);
+//    m_pWorld.reset(m_TypeConverter.createWorld(), safe_librdf_free_world);
     m_pStorage.reset(m_TypeConverter.createStorage(m_pWorld.get()),
-        librdf_free_storage);
+        safe_librdf_free_storage);
     m_pModel.reset(m_TypeConverter.createModel(
-        m_pWorld.get(), m_pStorage.get()), librdf_free_model);
+        m_pWorld.get(), m_pStorage.get()), safe_librdf_free_model);
 }
 
 const NamedGraphMap_t::iterator SAL_CALL librdf_Repository::clearGraph(
@@ -1677,7 +1727,7 @@ const NamedGraphMap_t::iterator SAL_CALL librdf_Repository::clearGraph(
     const boost::shared_ptr<librdf_node> pContext(
         librdf_new_node_from_uri_string(m_pWorld.get(),
             reinterpret_cast<const unsigned char*> (context.getStr())),
-        librdf_free_node);
+        safe_librdf_free_node);
     if (!pContext) {
         throw uno::RuntimeException(::rtl::OUString::createFromAscii(
             "librdf_Repository::clearGraph: "
@@ -1728,7 +1778,7 @@ void SAL_CALL librdf_Repository::addStatementGraph(
     const boost::shared_ptr<librdf_node> pContext(
         librdf_new_node_from_uri_string(m_pWorld.get(),
             reinterpret_cast<const unsigned char*> (context.getStr())),
-        librdf_free_node);
+        safe_librdf_free_node);
     if (!pContext) {
         throw uno::RuntimeException(::rtl::OUString::createFromAscii(
             "librdf_Repository::addStatement: "
@@ -1737,7 +1787,7 @@ void SAL_CALL librdf_Repository::addStatementGraph(
     const boost::shared_ptr<librdf_statement> pStatement(
         m_TypeConverter.mkStatement(m_pWorld.get(),
             i_xSubject, i_xPredicate, i_xObject),
-        librdf_free_statement);
+        safe_librdf_free_statement);
     OSL_ENSURE(pStatement, "mkStatement failed");
     if (librdf_model_context_add_statement(m_pModel.get(),
             pContext.get(), pStatement.get())) {
@@ -1776,7 +1826,7 @@ void SAL_CALL librdf_Repository::removeStatementsGraph(
     const boost::shared_ptr<librdf_node> pContext(
         librdf_new_node_from_uri_string(m_pWorld.get(),
             reinterpret_cast<const unsigned char*> (context.getStr())),
-        librdf_free_node);
+        safe_librdf_free_node);
     if (!pContext) {
         throw uno::RuntimeException(::rtl::OUString::createFromAscii(
             "librdf_Repository::removeStatements: "
@@ -1785,13 +1835,13 @@ void SAL_CALL librdf_Repository::removeStatementsGraph(
     const boost::shared_ptr<librdf_statement> pStatement(
         m_TypeConverter.mkStatement(m_pWorld.get(),
             i_xSubject, i_xPredicate, i_xObject),
-        librdf_free_statement);
+        safe_librdf_free_statement);
     OSL_ENSURE(pStatement, "mkStatement failed");
 
     const boost::shared_ptr<librdf_stream> pStream(
         librdf_model_find_statements_in_context(m_pModel.get(),
             pStatement.get(), pContext.get()),
-        librdf_free_stream);
+        safe_librdf_free_stream);
     if (!pStream) {
         throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
             "librdf_Repository::removeStatements: "
@@ -1852,7 +1902,7 @@ librdf_Repository::getStatementsGraph(
     const boost::shared_ptr<librdf_node> pContext(
         librdf_new_node_from_uri_string(m_pWorld.get(),
             reinterpret_cast<const unsigned char*> (context.getStr())),
-        librdf_free_node);
+        safe_librdf_free_node);
     if (!pContext) {
         throw uno::RuntimeException(::rtl::OUString::createFromAscii(
             "librdf_Repository::getStatements: "
@@ -1861,13 +1911,13 @@ librdf_Repository::getStatementsGraph(
     const boost::shared_ptr<librdf_statement> pStatement(
         m_TypeConverter.mkStatement(m_pWorld.get(),
             i_xSubject, i_xPredicate, i_xObject),
-        librdf_free_statement);
+        safe_librdf_free_statement);
     OSL_ENSURE(pStatement, "mkStatement failed");
 
     const boost::shared_ptr<librdf_stream> pStream(
         librdf_model_find_statements_in_context(m_pModel.get(),
             pStatement.get(), pContext.get()),
-        librdf_free_stream);
+        safe_librdf_free_stream);
     if (!pStream) {
         throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
             "librdf_Repository::getStatements: "
@@ -1926,8 +1976,8 @@ librdf_model *librdf_TypeConverter::createModel(
         prtNode(contexts);
         std::cout << std::endl;
         // librdf_model_set_feature(repository, LIBRDF_FEATURE_CONTEXTS, ...);
-        librdf_free_node(contexts);
-        librdf_free_uri(ctxt);
+        safe_librdf_free_node(contexts);
+        safe_librdf_free_uri(ctxt);
     }
 #endif
     return pRepository;
@@ -2012,7 +2062,7 @@ librdf_node* librdf_TypeConverter::mkNode( librdf_world* i_pWorld,
                 NULL, 0);
         } else {
             const boost::shared_ptr<librdf_uri> pDatatype(
-                mkURI(i_pWorld, xType), librdf_free_uri);
+                mkURI(i_pWorld, xType), safe_librdf_free_uri);
             ret = librdf_new_node_from_typed_literal(i_pWorld,
                 reinterpret_cast<const unsigned char*> (val.getStr()),
                 NULL, pDatatype.get());
@@ -2051,11 +2101,11 @@ librdf_statement* librdf_TypeConverter::mkStatement( librdf_world* i_pWorld,
         try {
             pObject = mkNode(i_pWorld, i_xObject);
         } catch (...) {
-            librdf_free_node(pPredicate);
+            safe_librdf_free_node(pPredicate);
             throw;
         }
     } catch (...) {
-        librdf_free_node(pSubject);
+        safe_librdf_free_node(pSubject);
         throw;
     }
     // NB: this takes ownership of the nodes! (which is really ugly)
