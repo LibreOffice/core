@@ -194,12 +194,11 @@ function hAllowMacroExecution() as boolean
     if ( SecurityWarning.exists( 5 ) ) then
 
         '///+<li>Click &quot;Run&quot; to allow macro execution</li>
-        SecurityWarning.ok()
-        hAllowMacroExecution() = true
-        printlog( CFN & "Allowed macro execution" )
+        printlog( CFN & "Allowing macro execution" )
+        hAllowMacroExecution() = hCloseDialog( SecurityWarning, "ok" )
     else
-        hAllowMacroExecution() = false
         printlog( CFN & "Macro dialog not displayed" )
+        hAllowMacroExecution() = false
     endif
     '///</ul>
 
@@ -234,12 +233,11 @@ function hDenyMacroExecution() as boolean
     if ( SecurityWarning.exists() ) then
 
         '///+<li>Click &quot;Cancel&quot; to deny execution</li>
-        SecurityWarning.cancel()
-        hDenyMacroExecution() = true
         printlog( CFN & "Denied macro execution" )
+        hDenyMacroExecution() = hCloseDialog( SecurityWarning, "cancel" )
     else
-        hDenyMacroExecution() = false
         printlog( CFN & "Macro dialog not displayed" )
+        hDenyMacroExecution() = false
     endif
     '///</ul>
 
@@ -301,7 +299,6 @@ function hAddTrustedPath( cPath as string ) as boolean
     const CFN = "hAddTrustedPath::"
 
     dim iPathCount as integer
-    dim brc as boolean
 
     '///<u>Description</u>:
     '///<ul>
@@ -336,21 +333,18 @@ function hAddTrustedPath( cPath as string ) as boolean
     kontext "TabTrustedSources"
     if ( LocationsListBox.getItemCount() <> ( iPathCount + 1 ) ) then
         warnlog( CFN & "Incorrect number of items in locations listbox" )
-        brc = false
+        hAddTrustedPath() = false
     else
-        printlog( CFN & "Added: " & cPath )
-        brc = true
+        printlog( "Added: " & cPath )
+        hAddTrustedPath() = true
     endif
 
     '///+<li>Close the dialog</li>
-    TabTrustedSources.ok()
+    hCloseDialog( TabTrustedSources, "ok" )
 
     '///+<li>Close Tools/Options</li>
     Kontext "OptionenDlg"
-    OptionenDlg.ok()
-
-    hAddTrustedPath() = brc
-
+    hCloseDialog( OptionenDlg, "ok" )
     '///</ul>
 
 end function

@@ -81,6 +81,10 @@ testcase tBasicSpecTemplate
     hMenuSelectNr( 10 )
     hMenuSelectNr( 2 )
 
+    ' This one is required as the document is rendering for a while and we cannot 
+    ' tell when it is finished (WaitSlot does not work here)
+    wait( 5000 )
+
     printlog( "Save the file, overwriting" )
     hFileSaveAsKill( cWorkFile )
 
