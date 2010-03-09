@@ -89,7 +89,7 @@ public:
 
         const sal_Char* pTabTitles[] =
         {
-            "This", "is a", "Tab", "Control", "test", "intended", "for", "comparison"
+            "This", "is a", "Tab", "Control", "intended", "for", "comparison"
         };
         for ( size_t i=0; i < sizeof( pTabTitles ) / sizeof( pTabTitles[0] ); ++i )
         {
@@ -287,6 +287,8 @@ private:
     FixedLine       m_aAlignmentHeader;
     RadioButton     m_aAlignLeft;
     RadioButton     m_aAlignRight;
+    RadioButton     m_aAlignTop;
+    RadioButton     m_aAlignBottom;
     FixedLine       m_aTabItemContent;
     RadioButton     m_aImagesAndText;
     RadioButton     m_aImagesOnly;
@@ -339,6 +341,8 @@ OptionsWindow::OptionsWindow( PanelDemoMainWindow& i_rParent )
     ,m_aAlignmentHeader( this )
     ,m_aAlignLeft( this, WB_GROUP )
     ,m_aAlignRight( this, 0 )
+    ,m_aAlignTop( this, 0 )
+    ,m_aAlignBottom( this, 0 )
     ,m_aTabItemContent( this )
     ,m_aImagesAndText( this )
     ,m_aImagesOnly( this )
@@ -373,14 +377,14 @@ OptionsWindow::OptionsWindow( PanelDemoMainWindow& i_rParent )
 
     Window* pControls[] =
     {
-        &m_aAlignmentHeader, &m_aAlignLeft, &m_aAlignRight, &m_aTabItemContent, &m_aImagesAndText, &m_aImagesOnly,
-        &m_aTextOnly, &m_aAutomaticContent, &m_aPanelsHeader, &m_aPanelList, &m_aRemovePanel, &m_aColors,
-        &m_aNewPanelName, &m_aInsertPanel
+        &m_aAlignmentHeader, &m_aAlignLeft, &m_aAlignRight, &m_aAlignTop, &m_aAlignBottom, &m_aTabItemContent,
+        &m_aImagesAndText, &m_aImagesOnly, &m_aTextOnly, &m_aAutomaticContent, &m_aPanelsHeader, &m_aPanelList,
+        &m_aRemovePanel, &m_aColors, &m_aNewPanelName, &m_aInsertPanel
     };
     const sal_Char* pTexts[] =
     {
-        "Tab Bar Alignment", "Left", "Right", "Tab Items", "Images and Text", "Images only", "Text only", "Automatic",
-        "Panels", "", "Remove Panel", "", "", "Insert Panel"
+        "Tab Bar Alignment", "Left", "Right", "Top", "Bottom", "Tab Items", "Images and Text", "Images only",
+        "Text only", "Automatic", "Panels", "", "Remove Panel", "", "", "Insert Panel"
     };
     for ( size_t i=0; i < sizeof( pControls ) / sizeof( pControls[0] ); ++i )
     {
@@ -470,7 +474,7 @@ void OptionsWindow::GetFocus()
     Window::GetFocus();
     RadioButton* pRadios[] =
     {
-        &m_aAlignLeft, &m_aAlignRight
+        &m_aAlignLeft, &m_aAlignRight, &m_aAlignTop, &m_aAlignBottom
     };
     for ( size_t i=0; i < sizeof( pRadios ) / sizeof( pRadios[0] ); ++i )
     {
@@ -521,6 +525,8 @@ void OptionsWindow::Resize()
         ControlRow( m_aAlignmentHeader,     false ),
         ControlRow( m_aAlignLeft,           true ),
         ControlRow( m_aAlignRight,          true ),
+        ControlRow( m_aAlignTop,            true ),
+        ControlRow( m_aAlignBottom,         true ),
         ControlRow( m_aTabItemContent,      false ),
         ControlRow( m_aImagesAndText,       true ),
         ControlRow( m_aImagesOnly,          true ),
@@ -673,6 +679,14 @@ IMPL_LINK( OptionsWindow, OnRadioToggled, RadioButton*, i_pRadioButton )
         else if ( i_pRadioButton == &m_aAlignRight )
         {
             rController.AlignTabs( TABS_RIGHT );
+        }
+        else if ( i_pRadioButton == &m_aAlignTop )
+        {
+            rController.AlignTabs( TABS_TOP );
+        }
+        else if ( i_pRadioButton == &m_aAlignBottom )
+        {
+            rController.AlignTabs( TABS_BOTTOM );
         }
         else if ( i_pRadioButton == &m_aImagesAndText )
         {

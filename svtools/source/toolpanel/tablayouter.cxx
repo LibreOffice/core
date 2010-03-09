@@ -117,12 +117,12 @@ namespace svt
         if ( lcl_checkDisposed( *m_pData ) )
             return i_rDeckPlayground;
 
+        const Size aPreferredSize( m_pData->pTabBar->GetOptimalSize( WINDOWSIZE_PREFERRED ) );
         if ( lcl_isVerticalTabBar( m_pData->eAlignment ) )
         {
-            const Size aPreferredSize( m_pData->pTabBar->GetOptimalSize( WINDOWSIZE_PREFERRED ) );
-            Size aTabBarSize =    ( aPreferredSize.Width() < i_rDeckPlayground.GetWidth() )
-                                    ?   aPreferredSize
-                                    :   m_pData->pTabBar->GetOptimalSize( WINDOWSIZE_MINIMUM );
+            Size aTabBarSize =  ( aPreferredSize.Width() < i_rDeckPlayground.GetWidth() )
+                            ?   aPreferredSize
+                            :   m_pData->pTabBar->GetOptimalSize( WINDOWSIZE_MINIMUM );
             aTabBarSize.Height() = i_rDeckPlayground.GetHeight();
 
             Rectangle aPanelRect( i_rDeckPlayground );
@@ -144,9 +144,28 @@ namespace svt
             return aPanelRect;
         }
 
-        OSL_ENSURE( false, "TabDeckLayouter::Layout: unreachable!" );
-            // currently there do not even exist enum values for other alignments ...
-        return i_rDeckPlayground;
+        Size aTabBarSize =  ( aPreferredSize.Height() < i_rDeckPlayground.GetHeight() )
+                        ?   aPreferredSize
+                        :   m_pData->pTabBar->GetOptimalSize( WINDOWSIZE_MINIMUM );
+        aTabBarSize.Width() = i_rDeckPlayground.GetWidth();
+
+        Rectangle aPanelRect( i_rDeckPlayground );
+        if ( m_pData->eAlignment == TABS_TOP )
+        {
+            m_pData->pTabBar->SetPosSizePixel( aPanelRect.TopLeft(), aTabBarSize );
+            aPanelRect.Top() += aTabBarSize.Height();
+        }
+        else
+        {
+            aPanelRect.Bottom() -= aTabBarSize.Height();
+            Point aTabBarTopLeft( aPanelRect.BottomLeft() );
+            aTabBarTopLeft.Y() -= 1;
+            m_pData->pTabBar->SetPosSizePixel( aTabBarTopLeft, aTabBarSize );
+        }
+        if ( aPanelRect.Top() >= aPanelRect.Bottom() )
+            aPanelRect = Rectangle();
+
+        return aPanelRect;
     }
 
     //--------------------------------------------------------------------

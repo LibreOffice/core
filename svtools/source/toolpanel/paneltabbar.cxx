@@ -509,19 +509,16 @@ namespace svt
         else
             m_pRenderer.reset( new VCLItemRenderer( m_aRenderDevice ) );
 
-        OSL_ENSURE( ( i_eAlignment == TABS_LEFT ) || ( i_eAlignment == TABS_RIGHT ),
-            "PanelTabBar_Impl::PanelTabBar_Impl: unsupported alignment!" );
-
         m_aRenderDevice.SetLineColor();
         //m_aRenderDevice.SetFillColor( m_rTabBar.GetSettings().GetStyleSettings().GetDialogColor() );
 
         m_rPanelDeck.AddListener( *this );
 
-        m_aScrollBack.SetSymbol( SYMBOL_ARROW_UP );
+        m_aScrollBack.SetSymbol( IsVertical() ? SYMBOL_ARROW_UP : SYMBOL_ARROW_LEFT );
         m_aScrollBack.Show();
         m_aScrollBack.SetClickHdl( LINK( this, PanelTabBar_Impl, OnScroll ) );
 
-        m_aScrollForward.SetSymbol( SYMBOL_ARROW_DOWN );
+        m_aScrollForward.SetSymbol( IsVertical() ? SYMBOL_ARROW_DOWN : SYMBOL_ARROW_RIGHT );
         m_aScrollForward.Show();
         m_aScrollForward.SetClickHdl( LINK( this, PanelTabBar_Impl, OnScroll ) );
     }
@@ -731,7 +728,7 @@ namespace svt
 
         // some item geometry
         // - the normalized bounding and content rect
-        const Rectangle aNormalizedBounds( rItem.GetCurrentRect() );
+        const Rectangle aNormalizedBounds( GetActualLogicalItemRect( rItem.GetCurrentRect() ) );
         Rectangle aNormalizedContent( aNormalizedBounds );
         lcl_deflateRect( aNormalizedContent, rItem.aContentInset );
 
@@ -759,10 +756,10 @@ namespace svt
             if ( m_eTabAlignment == TABS_LEFT )
                 aBitmap.Mirror( BMP_MIRROR_HORZ );
         }
-//        else if ( m_eTabAlignment == TABS_BOTTOM )
-//        {
-//                aBitmap.Mirror( BMP_MIRROR_VERT );
-//        }
+        else if ( m_eTabAlignment == TABS_BOTTOM )
+        {
+            aBitmap.Mirror( BMP_MIRROR_VERT );
+        }
         m_rTabBar.DrawBitmapEx( aActualBounds.TopLeft(), aBitmap );
 
         // render the actual item content

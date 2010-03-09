@@ -35,7 +35,9 @@ namespace svt
     enum TabAlignment
     {
         TABS_LEFT,
-        TABS_RIGHT
+        TABS_RIGHT,
+        TABS_TOP,
+        TABS_BOTTOM
     };
 
 //........................................................................

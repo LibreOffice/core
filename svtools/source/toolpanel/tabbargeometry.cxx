@@ -108,6 +108,14 @@ namespace svt
         ::std::swap( io_rArea.Left(), io_rArea.Right() );
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+    void lcl_mirrorVertically( const Rectangle& i_rReferenceArea, Rectangle& io_rArea )
+    {
+        io_rArea.Top() = i_rReferenceArea.Top() + i_rReferenceArea.Bottom() - io_rArea.Top();
+        io_rArea.Bottom() = i_rReferenceArea.Top() + i_rReferenceArea.Bottom() - io_rArea.Bottom();
+        ::std::swap( io_rArea.Top(), io_rArea.Bottom() );
+    }
+
     //==================================================================================================================
     //= NormalizedArea
     //==================================================================================================================
@@ -126,9 +134,6 @@ namespace svt
     //------------------------------------------------------------------------------------------------------------------
     Rectangle NormalizedArea::getTransformed( const Rectangle& i_rArea, const TabAlignment i_eTargetAlignment ) const
     {
-        OSL_ENSURE( ( i_eTargetAlignment == TABS_LEFT ) || ( i_eTargetAlignment == TABS_RIGHT ),
-            "NormalizedArea::getTransformed: unsupported alignment!" );
-
         Rectangle aResult( i_rArea );
 
         if  (   ( i_eTargetAlignment == TABS_RIGHT )
@@ -144,15 +149,18 @@ namespace svt
                 lcl_mirrorHorizontally( aReference, aResult );
             }
         }
+        else
+        if  ( i_eTargetAlignment == TABS_BOTTOM )
+        {
+            lcl_mirrorVertically( m_aReference, aResult );
+        }
+
         return aResult;
     }
 
     //------------------------------------------------------------------------------------------------------------------
     Rectangle NormalizedArea::getNormalized( const Rectangle& i_rArea, const TabAlignment i_eTargetAlignment ) const
     {
-        OSL_ENSURE( ( i_eTargetAlignment == TABS_LEFT ) || ( i_eTargetAlignment == TABS_RIGHT ),
-            "NormalizedArea::gerNormalized: unsupported alignment!" );
-
         Rectangle aResult( i_rArea );
 
         if  (   ( i_eTargetAlignment == TABS_RIGHT )
@@ -168,6 +176,11 @@ namespace svt
             }
 
             lcl_rotate( aReference, aResult, false );
+        }
+        else
+        if  ( i_eTargetAlignment == TABS_BOTTOM )
+        {
+            lcl_mirrorVertically( m_aReference, aResult );
         }
         return aResult;
     }
