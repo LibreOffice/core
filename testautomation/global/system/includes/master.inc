@@ -70,7 +70,7 @@ sub GetUseFiles
 
     gTestcaseStart = Now()   ' get start time of test preparation phase
 
-    GVERBOSE = FALSE
+    GVERBOSE = FALSE ' global switch to make some functions more talkative for profiling purposes
 
     use "global\system\includes\sysinfo.inc"     '///+ sysinfo.inc  : routines to get all system informations
     use "global\system\includes\inivalue.inc"    '///+ inivalue.inc : routines to work with ini-files
@@ -344,9 +344,7 @@ sub FirstOfficeStart
     'Needs to get executed everytime after a 'ResetApplication' command
     catchGPF false
      ' Recover to backingwindow, until resetApplication can handle this
-     for i = 1 to getDocumentCount
-         hCloseDocument() 
-     next i
+     hFileCloseAll()
 end sub
 
 '-------------------------------------------------------------------------
