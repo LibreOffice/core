@@ -66,6 +66,7 @@
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
 
 // header for class SvNumberFormatter
 #include <svl/zforlist.hxx>
@@ -107,20 +108,10 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
     , m_xContext( xContext )
     // default visual area is 8 x 7 cm
     , m_aVisualAreaSize( 8000, 7000 )
+    , m_xUndoManager( ChartModelHelper::createUndoManager() )
     , m_xDataProvider( 0 )
     , m_xInternalDataProvider( 0 )
     , m_xPageBackground( new PageBackground( m_xContext ) )
-    , m_xUndoManager( ChartModelHelper::createUndoManager() )
-    , m_xDashTable( createNameContainer( ::getCppuType( reinterpret_cast< const drawing::LineDash * >(0)),
-                C2U( "com.sun.star.drawing.DashTable" ), C2U( "com.sun.star.comp.chart.DashTable" ) ))
-    , m_xGradientTable( createNameContainer( ::getCppuType( reinterpret_cast< const awt::Gradient * >(0)),
-                C2U( "com.sun.star.drawing.GradientTable" ), C2U( "com.sun.star.comp.chart.GradientTable" ) ))
-    , m_xHatchTable( createNameContainer( ::getCppuType( reinterpret_cast< const drawing::Hatch * >(0)),
-                C2U( "com.sun.star.drawing.HatchTable" ), C2U( "com.sun.star.comp.chart.HatchTable" ) ))
-    , m_xBitmapTable( createNameContainer( ::getCppuType( reinterpret_cast< const OUString * >(0)), // URL
-                C2U( "com.sun.star.drawing.BitmapTable" ), C2U( "com.sun.star.comp.chart.BitmapTable" ) ))
-    , m_xTransparencyGradientTable( createNameContainer( ::getCppuType( reinterpret_cast< const awt::Gradient * >(0)),
-                C2U( "com.sun.star.drawing.TransparencyGradientTable" ), C2U( "com.sun.star.comp.chart.TransparencyGradientTable" ) ))
     , m_xXMLNamespaceMap( createNameContainer( ::getCppuType( (const OUString*) 0 ),
                 C2U( "com.sun.star.xml.NamespaceMap" ), C2U( "com.sun.star.comp.chart.XMLNameSpaceMap" ) ), uno::UNO_QUERY)
 {
@@ -130,6 +121,9 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
     ModifyListenerHelper::addListener( m_xPageBackground, this );
     m_xChartTypeManager.set( xContext->getServiceManager()->createInstanceWithContext(
             C2U( "com.sun.star.chart2.ChartTypeManager" ), m_xContext ), uno::UNO_QUERY );
+    m_xUndoManager = Reference< chart2::XUndoManager >(
+        this->createInstance( CHART_UNDOMANAGER_SERVICE_NAME ), uno::UNO_QUERY );
+
     osl_decrementInterlockedCount(&m_refCount);
 }
 
@@ -151,6 +145,7 @@ ChartModel::ChartModel( const ChartModel & rOther )
     , m_xStorage( 0 ) //rOther.m_xStorage )
     , m_aVisualAreaSize( rOther.m_aVisualAreaSize )
     , m_aGraphicObjectVector( rOther.m_aGraphicObjectVector )
+    , m_xUndoManager( rOther.m_xUndoManager )
     , m_xDataProvider( rOther.m_xDataProvider )
     , m_xInternalDataProvider( rOther.m_xInternalDataProvider )
 {
@@ -162,12 +157,6 @@ ChartModel::ChartModel( const ChartModel & rOther )
     ModifyListenerHelper::addListener( m_xTitle, this );
     m_xPageBackground.set( CreateRefClone< Reference< beans::XPropertySet > >()( rOther.m_xPageBackground ));
     ModifyListenerHelper::addListener( m_xPageBackground, this );
-
-    m_xDashTable.set( CreateRefClone< Reference< container::XNameContainer > >()( rOther.m_xDashTable ));
-    m_xGradientTable.set( CreateRefClone< Reference< container::XNameContainer > >()( rOther.m_xGradientTable ));
-    m_xHatchTable.set( CreateRefClone< Reference< container::XNameContainer > >()( rOther.m_xHatchTable ));
-    m_xBitmapTable.set( CreateRefClone< Reference< container::XNameContainer > >()( rOther.m_xBitmapTable ));
-    m_xTransparencyGradientTable.set( CreateRefClone< Reference< container::XNameContainer > >()( rOther.m_xTransparencyGradientTable ));
 
     m_xXMLNamespaceMap.set( CreateRefClone< Reference< container::XNameAccess > >()( rOther.m_xXMLNamespaceMap ));
 
@@ -244,6 +233,43 @@ void SAL_CALL ChartModel::impl_notifyCloseListeners()
         ::cppu::OInterfaceIteratorHelper aIt( *pIC );
         while( aIt.hasMoreElements() )
             (static_cast< util::XCloseListener*>(aIt.next()))->notifyClosing( aEvent );
+    }
+}
+
+void ChartModel::impl_adjustAdditionalShapesPositionAndSize( const awt::Size& aVisualAreaSize )
+{
+    uno::Reference< beans::XPropertySet > xProperties( static_cast< ::cppu::OWeakObject* >( this ), uno::UNO_QUERY );
+    if ( xProperties.is() )
+    {
+        uno::Reference< drawing::XShapes > xShapes;
+        xProperties->getPropertyValue( C2U( "AdditionalShapes" ) ) >>= xShapes;
+        if ( xShapes.is() )
+        {
+            sal_Int32 nCount = xShapes->getCount();
+            for ( sal_Int32 i = 0; i < nCount; ++i )
+            {
+                Reference< drawing::XShape > xShape;
+                if ( xShapes->getByIndex( i ) >>= xShape )
+                {
+                    if ( xShape.is() )
+                    {
+                        awt::Point aPos( xShape->getPosition() );
+                        awt::Size aSize( xShape->getSize() );
+
+                        double fWidth = static_cast< double >( aVisualAreaSize.Width ) / m_aVisualAreaSize.Width;
+                        double fHeight = static_cast< double >( aVisualAreaSize.Height ) / m_aVisualAreaSize.Height;
+
+                        aPos.X = static_cast< long >( aPos.X * fWidth );
+                        aPos.Y = static_cast< long >( aPos.Y * fHeight );
+                        aSize.Width = static_cast< long >( aSize.Width * fWidth );
+                        aSize.Height = static_cast< long >( aSize.Height * fHeight );
+
+                        xShape->setPosition( aPos );
+                        xShape->setSize( aSize );
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -488,11 +514,6 @@ void SAL_CALL ChartModel::dispose() throw(uno::RuntimeException)
     m_aDiagrams.clear();
     DisposeHelper::DisposeAndClear( m_xTitle );
     DisposeHelper::DisposeAndClear( m_xPageBackground );
-    DisposeHelper::DisposeAndClear( m_xDashTable );
-    DisposeHelper::DisposeAndClear( m_xGradientTable );
-    DisposeHelper::DisposeAndClear( m_xHatchTable );
-    DisposeHelper::DisposeAndClear( m_xBitmapTable );
-    DisposeHelper::DisposeAndClear( m_xTransparencyGradientTable );
     DisposeHelper::DisposeAndClear( m_xXMLNamespaceMap );
 
     // not owner of storage
@@ -1026,6 +1047,13 @@ void SAL_CALL ChartModel::setVisualAreaSize( ::sal_Int64 nAspect, const awt::Siz
         bool bChanged =
             (m_aVisualAreaSize.Width != aSize.Width ||
              m_aVisualAreaSize.Height != aSize.Height);
+
+        // #i12587# support for shapes in chart
+        if ( bChanged )
+        {
+            impl_adjustAdditionalShapesPositionAndSize( aSize );
+        }
+
         m_aVisualAreaSize = aSize;
         if( bChanged )
             setModified( sal_True );
@@ -1205,18 +1233,20 @@ Reference< uno::XInterface > SAL_CALL ChartModel::createInstance( const OUString
         switch( (*aIt).second )
         {
             case SERVICE_DASH_TABLE:
-                return Reference< uno::XInterface >( m_xDashTable );
             case SERVICE_GARDIENT_TABLE:
-                return Reference< uno::XInterface >( m_xGradientTable );
             case SERVICE_HATCH_TABLE:
-                return Reference< uno::XInterface >( m_xHatchTable );
             case SERVICE_BITMAP_TABLE:
-                return Reference< uno::XInterface >( m_xBitmapTable );
             case SERVICE_TRANSP_GRADIENT_TABLE:
-                return Reference< uno::XInterface >( m_xTransparencyGradientTable );
             case SERVICE_MARKER_TABLE:
-                // not supported
-                return 0;
+                {
+                    uno::Reference< lang::XMultiServiceFactory > xFact(
+                        this->createInstance( CHART_VIEW_SERVICE_NAME ), uno::UNO_QUERY );
+                    if ( xFact.is() )
+                    {
+                        return xFact->createInstance( rServiceSpecifier );
+                    }
+                }
+                break;
             case SERVICE_NAMESPACE_MAP:
                 return Reference< uno::XInterface >( m_xXMLNamespaceMap );
         }

@@ -146,6 +146,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >          m_xParent;
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XRangeHighlighter > m_xRangeHighlighter;
     ::std::vector< GraphicObject >                                               m_aGraphicObjectVector;
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XUndoManager >   m_xUndoManager;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider >   m_xDataProvider;
     /** is only valid if m_xDataProvider is set. If m_xDataProvider is set to an
@@ -176,12 +177,6 @@ private:
                                           m_xPageBackground;
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XUndoManager >
                                           m_xUndoManager;
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xDashTable;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xGradientTable;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xHatchTable;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xBitmapTable;
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xTransparencyGradientTable;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xXMLNamespaceMap;
 
@@ -233,6 +228,9 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartTypeTemplate > impl_createDefaultChartTypeTemplate();
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource > impl_createDefaultData();
+
+    void impl_adjustAdditionalShapesPositionAndSize(
+        const ::com::sun::star::awt::Size& aVisualAreaSize );
 
     void impl_removeAllDiagrams();
     void impl_appendDiagram( const ::com::sun::star::uno::Reference<

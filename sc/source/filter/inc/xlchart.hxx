@@ -71,6 +71,7 @@ namespace com { namespace sun { namespace star {
 #define SERVICE_CHART2_TITLE                CREATE_OUSTRING( "com.sun.star.chart2.Title" )
 
 // property names
+#define EXC_CHPROP_ADDITIONALSHAPES         CREATE_OUSTRING( "AdditionalShapes" )
 #define EXC_CHPROP_ARRANGEORDER             CREATE_OUSTRING( "ArrangeOrder" )
 #define EXC_CHPROP_ATTAXISINDEX             CREATE_OUSTRING( "AttachedAxisIndex" )
 #define EXC_CHPROP_ATTRIBDATAPOINTS         CREATE_OUSTRING( "AttributedDataPoints" )
@@ -167,6 +168,8 @@ const sal_Int32 EXC_CHART_AXIS_Z                = 2;        /// API Z axis index
 const sal_Int32 EXC_CHART_AXESSET_NONE          = -1;       /// For internal use only.
 const sal_Int32 EXC_CHART_AXESSET_PRIMARY       = 0;        /// API primary axes set index.
 const sal_Int32 EXC_CHART_AXESSET_SECONDARY     = 1;        /// API secondary axes set index.
+
+const sal_Int32 EXC_CHART_UNIT                  = 4000;     /// Chart objects are positioned in 1/4000 of chart area.
 
 // (0x0850) CHFRINFO ----------------------------------------------------------
 
