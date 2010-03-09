@@ -47,17 +47,6 @@ namespace linguistic2{
 
 class SvxSpellWrapper;
 
-// class SvxHyphenEdit ---------------------------------------------------
-
-class SvxHyphenEdit : public Edit
-{
-public:
-    SvxHyphenEdit( Window* pParent, const ResId& rResId );
-
-protected:
-    virtual void    KeyInput( const KeyEvent &rKEvt );
-};
-
 // class SvxHyphenWordDialog ---------------------------------------------
 
 struct SvxHyphenWordDialog_Impl;
