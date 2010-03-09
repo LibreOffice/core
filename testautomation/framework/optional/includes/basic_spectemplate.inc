@@ -54,10 +54,13 @@ testcase tBasicSpecTemplate
     endif
     
     printlog( "Accept to execute macros" )
-    if ( hAllowMacroExecution() ) then warnlog( "Missing Macro execution dialog." )
-    
+    if ( hAllowMacroExecution() ) then 
+        warnlog( "Missing Macro execution dialog. Aborting test" )
+        goto endsub
+    endif
+
     kontext "Active"
-    if ( Active.exists( 5 ) ) then
+    if ( Active.exists( 10 ) ) then
         warnlog( "Fatal: Unexpected active: " & Active.getText() )
         active.ok
         
@@ -77,14 +80,18 @@ testcase tBasicSpecTemplate
     hUseMenu()
     hMenuSelectNr( 10 )
     hMenuSelectNr( 2 )
-    
+
+    printlog( "Save the file, overwriting" )
     hFileSaveAsKill( cWorkFile )
+
+    printlog( "Close the document" )
     hDestroyDocument()
-    
+
+    printlog( "Load the file again" )
     hFileOpen( cWorkFile )
     hAllowMacroExecution()
     
-    printlog( "Cleanup: Close the document" )
+    printlog( "Cleanup: Close the document and delete the file" )
     hDestroyDocument()
     hDeleteFile( cWorkFile )
 
