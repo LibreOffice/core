@@ -315,6 +315,7 @@ Components::Components(
     context_(context)
 {
     OSL_ASSERT(context.is());
+/*SB*/try{
     parseXcsXcuLayer(
         0,
         expand(
@@ -379,6 +380,7 @@ Components::Components(
                     ":UNO_USER_PACKAGES_CACHE}/registry/"
                     "com.sun.star.comp.deployment.configuration."
                     "PackageRegistryBackend/configmgr.ini"))));
+/*SB*/}catch(css::uno::Exception&e){fprintf(stderr,"caught <%s>\n",rtl::OUStringToOString(e.Message,RTL_TEXTENCODING_UTF8).getStr());throw;}
     try {
         parseModificationLayer();
     } catch (css::uno::Exception & e) { //TODO: more specific exception catching
