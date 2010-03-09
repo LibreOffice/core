@@ -61,6 +61,7 @@ APP1STDLIBS=\
             $(BASEGFXLIB)       \
             $(SVTOOLLIB)        \
 
+APP1RAPTH=BRAND
 
 .IF "$(GUI)"!="UNX"
 APP1DEF=    $(MISC)$/$(TARGET).def

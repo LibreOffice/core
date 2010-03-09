@@ -75,10 +75,11 @@ private:
 class ColoredPanelWindow : public Window
 {
 public:
-    ColoredPanelWindow( Window& i_rParent, const Color& i_rColor )
+    ColoredPanelWindow( Window& i_rParent, const Color& i_rColor, const String& i_rTitle )
         :Window( &i_rParent )
         ,m_aEdit( this, WB_BORDER )
         ,m_aTabControl( this )
+        ,m_sTitle( i_rTitle )
     {
         SetLineColor();
         SetFillColor( i_rColor );
@@ -99,7 +100,11 @@ public:
 
     virtual void Paint( const Rectangle& i_rRect )
     {
-        DrawRect( i_rRect );
+        const Size aOutputSize( GetOutputSizePixel() );
+        const Rectangle aTitleRect( Point( 10, 10 ), Size( aOutputSize.Width() - 20, 20 ) );
+        DrawRect( aTitleRect );
+        SetTextColor( GetFillColor().IsDark() ? COL_WHITE : COL_BLACK );
+        DrawText( aTitleRect, m_sTitle, TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER );
     }
 
     virtual void GetFocus()
@@ -111,11 +116,11 @@ public:
     {
         const Size aOutputSize( GetOutputSizePixel() );
         m_aEdit.SetPosSizePixel(
-            Point( 20, 20 ),
+            Point( 20, 40 ),
             Size( aOutputSize.Width() - 40, 20 )
         );
         m_aTabControl.SetPosSizePixel(
-            Point( 20, 50 ),
+            Point( 20, 70 ),
             Size( aOutputSize.Width() - 40, 150 )
         );
     }
@@ -123,6 +128,7 @@ public:
 private:
     Edit        m_aEdit;
     TabControl  m_aTabControl;
+    String      m_sTitle;
 };
 
 //=============================================================================
@@ -161,7 +167,7 @@ private:
 //-----------------------------------------------------------------------------
 ColoredPanel::ColoredPanel( Window& i_rParent, const Color& i_rColor, const sal_Char* i_pAsciiPanelName )
     :m_refCount(0)
-    ,m_aWindow( i_rParent, i_rColor )
+    ,m_aWindow( i_rParent, i_rColor, ::rtl::OUString::createFromAscii( i_pAsciiPanelName ) )
     ,m_aPanelName( ::rtl::OUString::createFromAscii( i_pAsciiPanelName ) )
     ,m_aPanelIcon()
 {
@@ -173,7 +179,7 @@ ColoredPanel::ColoredPanel( Window& i_rParent, const Color& i_rColor, const sal_
 //-----------------------------------------------------------------------------
 ColoredPanel::ColoredPanel( Window& i_rParent, const Color& i_rColor, const String& i_rPanelName )
     :m_refCount(0)
-    ,m_aWindow( i_rParent, i_rColor )
+    ,m_aWindow( i_rParent, i_rColor, i_rPanelName )
     ,m_aPanelName( i_rPanelName )
     ,m_aPanelIcon()
 {
