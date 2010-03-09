@@ -2486,7 +2486,14 @@ void ScInterpreter::ScN()
         Pop();
     }
     else
+    {
+        // Temporarily override the ConvertStringToValue() error for
+        // GetCellValue() / GetCellValueOrZero()
+        USHORT nSErr = mnStringNoValueError;
+        mnStringNoValueError = errCellNoValue;
         fVal = GetDouble();
+        mnStringNoValueError = nSErr;
+    }
     if ( nGlobalError == NOTAVAILABLE || nGlobalError == errIllegalArgument )
         nGlobalError = 0;       // N(#NA) and N("text") are ok
     if ( !nGlobalError && nErr != NOTAVAILABLE )

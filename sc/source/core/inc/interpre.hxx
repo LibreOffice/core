@@ -171,6 +171,7 @@ private:
     short       nFuncFmtType;           // NumberFormatType of a function
     short       nCurFmtType;            // current NumberFormatType
     short       nRetFmtType;            // NumberFormatType of an expression
+    USHORT      mnStringNoValueError;   // the error set in ConvertStringToValue() if no value
     BOOL        glSubTotal;             // flag for subtotal functions
     BYTE        cPar;                   // current count of parameters
     BOOL        bCalcAsShown;           // precision as shown

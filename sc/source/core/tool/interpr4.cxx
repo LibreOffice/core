@@ -261,7 +261,7 @@ double ScInterpreter::ConvertStringToValue( const String& rStr )
                 while (p < pStop && *p == ' ')
                     ++p;
                 if (p < pStop)
-                    SetError( errNoValue);
+                    SetError( mnStringNoValueError);
                 break;
             case '-':
             case ':':
@@ -281,7 +281,7 @@ double ScInterpreter::ConvertStringToValue( const String& rStr )
                     while (p < pStop && *p == ' ')
                         ++p;
                     if (p < pStop && !CharClass::isAsciiDigit(*p))
-                        SetError( errNoValue);
+                        SetError( mnStringNoValueError);
                     p = pLastStart;
                     while (p < pStop && !nGlobalError && eState < blank)
                     {
@@ -291,7 +291,7 @@ double ScInterpreter::ConvertStringToValue( const String& rStr )
                         {
                             // Maximum 2 digits per unit, except fractions.
                             if (p - pLastStart >= 2 && eState != fraction)
-                                SetError( errNoValue);
+                                SetError( mnStringNoValueError);
                         }
                         else if (p > pLastStart)
                         {
@@ -300,7 +300,7 @@ double ScInterpreter::ConvertStringToValue( const String& rStr )
                             {
                                 nUnit[eState] = aStr.copy( pLastStart - pStart, p - pLastStart).toInt32();
                                 if (nLimit[eState] && nLimit[eState] < nUnit[eState])
-                                    SetError( errNoValue);
+                                    SetError( mnStringNoValueError);
                             }
                             pLastStart = p + 1;     // hypothetical next start
                             // Delimiters must match, a trailing delimiter
@@ -311,11 +311,11 @@ double ScInterpreter::ConvertStringToValue( const String& rStr )
                                     // Month must be followed by separator and
                                     // day, no trailing blanks.
                                     if (*p != '-' || (p+1 == pStop))
-                                        SetError( errNoValue);
+                                        SetError( mnStringNoValueError);
                                     break;
                                 case day:
                                     if ((*p != 'T' || (p+1 == pStop)) && *p != ' ')
-                                        SetError( errNoValue);
+                                        SetError( mnStringNoValueError);
                                     // Take one blank as a valid delimiter
                                     // between date and time.
                                     break;
@@ -323,17 +323,17 @@ double ScInterpreter::ConvertStringToValue( const String& rStr )
                                     // Hour must be followed by separator and
                                     // minute, no trailing blanks.
                                     if (*p != ':' || (p+1 == pStop))
-                                        SetError( errNoValue);
+                                        SetError( mnStringNoValueError);
                                     break;
                                 case minute:
                                     if ((*p != ':' || (p+1 == pStop)) && *p != ' ')
-                                        SetError( errNoValue);
+                                        SetError( mnStringNoValueError);
                                     if (*p == ' ')
                                         eState = done;
                                     break;
                                 case second:
                                     if (((*p != ',' && *p != '.') || (p+1 == pStop)) && *p != ' ')
-                                        SetError( errNoValue);
+                                        SetError( mnStringNoValueError);
                                     if (*p == ' ')
                                         eState = done;
                                     break;
@@ -344,13 +344,13 @@ double ScInterpreter::ConvertStringToValue( const String& rStr )
                                 case done:
                                 case blank:
                                 case stop:
-                                    SetError( errNoValue);
+                                    SetError( mnStringNoValueError);
                                     break;
                             }
                             eState = static_cast<State>(eState + 1);
                         }
                         else
-                            SetError( errNoValue);
+                            SetError( mnStringNoValueError);
                         ++p;
                     }
                     if (eState == blank)
@@ -358,14 +358,14 @@ double ScInterpreter::ConvertStringToValue( const String& rStr )
                         while (p < pStop && *p == ' ')
                             ++p;
                         if (p < pStop)
-                            SetError( errNoValue);
+                            SetError( mnStringNoValueError);
                         eState = stop;
                     }
 
                     // Month without day, or hour without minute.
                     if (eState == month || (eState == day && p <= pLastStart) ||
                             eState == hour || (eState == minute && p <= pLastStart))
-                        SetError( errNoValue);
+                        SetError( mnStringNoValueError);
 
                     if (!nGlobalError)
                     {
@@ -374,10 +374,10 @@ double ScInterpreter::ConvertStringToValue( const String& rStr )
                         {
                             nUnit[eState] = aStr.copy( pLastStart - pStart, p - pLastStart).toInt32();
                             if (nLimit[eState] && nLimit[eState] < nUnit[eState])
-                                SetError( errNoValue);
+                                SetError( mnStringNoValueError);
                         }
                         if (bDate && nUnit[hour] > 23)
-                            SetError( errNoValue);
+                            SetError( mnStringNoValueError);
                         if (!nGlobalError)
                         {
                             if (bDate && nUnit[day] == 0)
@@ -396,7 +396,7 @@ double ScInterpreter::ConvertStringToValue( const String& rStr )
                 }
                 break;
             default:
-                SetError( errNoValue);
+                SetError( mnStringNoValueError);
         }
         if (nGlobalError)
             fValue = 0.0;
@@ -3567,6 +3567,7 @@ ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,
     pTokenMatrixMap( NULL ),
     pMyFormulaCell( pCell ),
     pFormatter( pDoc->GetFormatTable() ),
+    mnStringNoValueError( errNoValue),
     bCalcAsShown( pDoc->GetDocOptions().IsCalcAsShown() )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScTTT" );
