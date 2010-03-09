@@ -77,9 +77,10 @@ namespace svt
         virtual void        preRenderItem( const Rectangle& i_rContentRect, const ItemFlags i_nItemFlags ) const = 0;
         virtual void        postRenderItem( Window& i_rActualWindow, const Rectangle& i_rItemRect, const ItemFlags i_nItemFlags ) const = 0;
 
-        // TODO: postRenderItem takes the "real" output device, i.e. effectively the tab bar. This is because
-        // DrawSelectionBackground needs to be applied after everything else is painted. This is weird, and implies
-        // that now the renderer needs to know about the TabAlignment, which is No Good (TM).
+        // TODO: postRenderItem takes the "real" window, i.e. effectively the tab bar. This is because
+        // DrawSelectionBackground needs to be applied after everything else is painted, and is available at the Window
+        // class, but not at the OutputDevice. This makes the API somewhat weird, as we're now mixing operations on the
+        // target device, done in a normalized geometry, with operations on the window, done in a transformed geometry.
         // So, we should get rid of postRenderItem completely.
     };
     typedef ::boost::shared_ptr< ITabBarRenderer >  PTabBarRenderer;
@@ -326,7 +327,7 @@ namespace svt
 
         ~PanelTabBar_Impl()
         {
-            rPanelDeck.RemoveListener( *this );
+            m_rPanelDeck.RemoveListener( *this );
         }
 
         // IToolPanelDeckListener
@@ -334,16 +335,16 @@ namespace svt
         {
             (void)i_pPanel;
             (void)i_nPosition;
-            bItemsDirty = true;
-            rTabBar.Invalidate();
+            m_bItemsDirty = true;
+            m_rTabBar.Invalidate();
 
             Relayout();
         }
 
         virtual void PanelRemoved( const size_t i_nPosition )
         {
-            bItemsDirty = true;
-            rTabBar.Invalidate();
+            m_bItemsDirty = true;
+            m_rTabBar.Invalidate();
 
             if ( i_nPosition < m_nScrollPosition )
                 --m_nScrollPosition;
@@ -357,7 +358,7 @@ namespace svt
         void    UpdateScrollButtons()
         {
             m_aScrollBack.Enable( m_nScrollPosition > 0 );
-            m_aScrollForward.Enable( m_nScrollPosition < aItems.size() - 1 );
+            m_aScrollForward.Enable( m_nScrollPosition < m_aItems.size() - 1 );
         }
 
         void                        Relayout();
@@ -381,20 +382,21 @@ namespace svt
         void    impl_renderItemContent( const PToolPanel& i_pPanel, const Rectangle& i_rContentArea, const TabItemContent i_eItemContent ) const;
 
     public:
-        PanelTabBar&                rTabBar;
-        TabBarGeometry              aGeometry;
+        PanelTabBar&                m_rTabBar;
+        TabBarGeometry              m_aGeometry;
+        NormalizedArea              m_aNormalizer;
         TabAlignment                m_eTabAlignment;
-        IToolPanelDeck&             rPanelDeck;
+        IToolPanelDeck&             m_rPanelDeck;
 
-        VirtualDevice               aRenderDevice;
-        PTabBarRenderer             pRenderer;
+        VirtualDevice               m_aRenderDevice;
+        PTabBarRenderer             m_pRenderer;
 
-        ::boost::optional< size_t > aHoveredItem;
-        ::boost::optional< size_t > aFocusedItem;
-        bool                        bMouseButtonDown;
+        ::boost::optional< size_t > m_aHoveredItem;
+        ::boost::optional< size_t > m_aFocusedItem;
+        bool                        m_bMouseButtonDown;
 
-        ItemDescriptors             aItems;
-        bool                        bItemsDirty;
+        ItemDescriptors             m_aItems;
+        bool                        m_bItemsDirty;
 
         PushButton                  m_aScrollBack;
         PushButton                  m_aScrollForward;
@@ -411,16 +413,16 @@ namespace svt
     #if OSL_DEBUG_LEVEL > 0
         static void lcl_checkConsistency( const PanelTabBar_Impl& i_rImpl )
         {
-            if ( !i_rImpl.bItemsDirty )
+            if ( !i_rImpl.m_bItemsDirty )
             {
-                if ( i_rImpl.rPanelDeck.GetPanelCount() != i_rImpl.aItems.size() )
+                if ( i_rImpl.m_rPanelDeck.GetPanelCount() != i_rImpl.m_aItems.size() )
                 {
                     OSL_ENSURE( false, "lcl_checkConsistency: inconsistent array sizes!" );
                     return;
                 }
-                for ( size_t i = 0; i < i_rImpl.rPanelDeck.GetPanelCount(); ++i )
+                for ( size_t i = 0; i < i_rImpl.m_rPanelDeck.GetPanelCount(); ++i )
                 {
-                    if ( i_rImpl.rPanelDeck.GetPanel( i ).get() != i_rImpl.aItems[i].pPanel.get() )
+                    if ( i_rImpl.m_rPanelDeck.GetPanel( i ).get() != i_rImpl.m_aItems[i].pPanel.get() )
                     {
                         OSL_ENSURE( false, "lcl_checkConsistency: array elements are inconsistent!" );
                         return;
@@ -441,11 +443,10 @@ namespace svt
         {
         public:
             ClipItemRegion( const PanelTabBar_Impl& i_rImpl )
-                :m_rDevice( i_rImpl.rTabBar )
+                :m_rDevice( i_rImpl.m_rTabBar )
             {
                 m_rDevice.Push( PUSH_CLIPREGION );
-                NormalizedArea aNormalizer( Rectangle( Point(), i_rImpl.aRenderDevice.GetOutputSizePixel() ), false );
-                m_rDevice.SetClipRegion( aNormalizer.getTransformed( i_rImpl.aGeometry.getItemsRect(), i_rImpl.m_eTabAlignment ) );
+                m_rDevice.SetClipRegion( i_rImpl.m_aNormalizer.getTransformed( i_rImpl.m_aGeometry.getItemsRect(), i_rImpl.m_eTabAlignment ) );
             }
 
             ~ClipItemRegion()
@@ -479,41 +480,42 @@ namespace svt
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
     PanelTabBar_Impl::PanelTabBar_Impl( PanelTabBar& i_rTabBar, IToolPanelDeck& i_rPanelDeck, const TabAlignment i_eAlignment, const TabItemContent i_eItemContent )
-        :rTabBar( i_rTabBar )
-        ,aGeometry( i_eItemContent )
+        :m_rTabBar( i_rTabBar )
+        ,m_aGeometry( i_eItemContent )
+        ,m_aNormalizer()
         ,m_eTabAlignment( i_eAlignment )
-        ,rPanelDeck( i_rPanelDeck )
-        ,aRenderDevice( i_rTabBar )
-        ,pRenderer( new NWFTabItemRenderer( aRenderDevice ) )
-        ,aHoveredItem()
-        ,aFocusedItem()
-        ,bMouseButtonDown( false )
-        ,aItems()
-        ,bItemsDirty( true )
+        ,m_rPanelDeck( i_rPanelDeck )
+        ,m_aRenderDevice( i_rTabBar )
+        ,m_pRenderer()
+        ,m_aHoveredItem()
+        ,m_aFocusedItem()
+        ,m_bMouseButtonDown( false )
+        ,m_aItems()
+        ,m_bItemsDirty( true )
         ,m_aScrollBack( &i_rTabBar, WB_BEVELBUTTON )
         ,m_aScrollForward( &i_rTabBar, WB_BEVELBUTTON )
         ,m_nScrollPosition( 0 )
     {
 #ifdef WNT
-        if ( aRenderDevice.IsNativeControlSupported( CTRL_TAB_ITEM, PART_ENTIRE_CONTROL ) )
+        if ( m_aRenderDevice.IsNativeControlSupported( CTRL_TAB_ITEM, PART_ENTIRE_CONTROL ) )
             // this mode requires the NWF framework to be able to render those items onto a virtual
             // device. For some frameworks (some GTK themes, in particular), this is known to fail.
             // So, be on the safe side for the moment.
-            pRenderer.reset( new NWFTabItemRenderer( aRenderDevice ) );
+            m_pRenderer.reset( new NWFTabItemRenderer( m_aRenderDevice ) );
         else
 #endif
-        if ( aRenderDevice.IsNativeControlSupported( CTRL_TOOLBAR, PART_BUTTON ) )
-            pRenderer.reset( new NWFToolboxItemRenderer( aRenderDevice ) );
+        if ( m_aRenderDevice.IsNativeControlSupported( CTRL_TOOLBAR, PART_BUTTON ) )
+            m_pRenderer.reset( new NWFToolboxItemRenderer( m_aRenderDevice ) );
         else
-            pRenderer.reset( new VCLItemRenderer( aRenderDevice ) );
+            m_pRenderer.reset( new VCLItemRenderer( m_aRenderDevice ) );
 
         OSL_ENSURE( ( i_eAlignment == TABS_LEFT ) || ( i_eAlignment == TABS_RIGHT ),
             "PanelTabBar_Impl::PanelTabBar_Impl: unsupported alignment!" );
 
-        aRenderDevice.SetLineColor();
-        //aRenderDevice.SetFillColor( rTabBar.GetSettings().GetStyleSettings().GetDialogColor() );
+        m_aRenderDevice.SetLineColor();
+        //m_aRenderDevice.SetFillColor( m_rTabBar.GetSettings().GetStyleSettings().GetDialogColor() );
 
-        rPanelDeck.AddListener( *this );
+        m_rPanelDeck.AddListener( *this );
 
         m_aScrollBack.SetSymbol( SYMBOL_ARROW_UP );
         m_aScrollBack.Show();
@@ -527,18 +529,18 @@ namespace svt
     //------------------------------------------------------------------------------------------------------------------
     void PanelTabBar_Impl::impl_calcItemRects()
     {
-        aItems.resize(0);
+        m_aItems.resize(0);
 
-        Point aCompletePos( aGeometry.getFirstItemPosition() );
+        Point aCompletePos( m_aGeometry.getFirstItemPosition() );
         Point aIconOnlyPos( aCompletePos );
         Point aTextOnlyPos( aCompletePos );
 
         for (   size_t i = 0;
-                i < rPanelDeck.GetPanelCount();
+                i < m_rPanelDeck.GetPanelCount();
                 ++i
             )
         {
-            PToolPanel pPanel( rPanelDeck.GetPanel( i ) );
+            PToolPanel pPanel( m_rPanelDeck.GetPanel( i ) );
 
             ItemDescriptor aItem;
             aItem.pPanel = pPanel;
@@ -552,7 +554,7 @@ namespace svt
             // TODO: have one method calculating all sizes?
 
             // care for the decorations
-            const Rectangle aBoundingRect( pRenderer->calculateDecorations( aCompleteSize ) );
+            const Rectangle aBoundingRect( m_pRenderer->calculateDecorations( aCompleteSize ) );
             OSL_POSTCOND( ( aBoundingRect.Left() <= 0 ) && ( aBoundingRect.Top() <= 0 ),
                 "PanelTabBar_Impl::impl_calcItemRects: hmmm ...." );
 
@@ -570,14 +572,14 @@ namespace svt
             aItem.aIconOnlyArea = Rectangle( aIconOnlyPos, aIconOnlySize );
             aItem.aTextOnlyArea = Rectangle( aTextOnlyPos, aTextOnlySize );
 
-            aItems.push_back( aItem );
+            m_aItems.push_back( aItem );
 
             aCompletePos = aItem.aCompleteArea.TopRight();
             aIconOnlyPos = aItem.aIconOnlyArea.TopRight();
             aTextOnlyPos = aItem.aTextOnlyArea.TopRight();
         }
 
-        bItemsDirty = false;
+        m_bItemsDirty = false;
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -604,7 +606,7 @@ namespace svt
                 aItemContentSize.Width() += ITEM_ICON_TEXT_DISTANCE;
 
             // add space for text
-            const Size aTextSize( rTabBar.GetCtrlTextWidth( sItemText ), rTabBar.GetTextHeight() );
+            const Size aTextSize( m_rTabBar.GetCtrlTextWidth( sItemText ), m_rTabBar.GetTextHeight() );
             aItemContentSize.Width() += aTextSize.Width();
             aItemContentSize.Height() = ::std::max( aItemContentSize.Height(), aTextSize.Height() );
 
@@ -650,7 +652,7 @@ namespace svt
                 aImagePos.X() = aRenderArea.Left();
                 aImagePos.Y() = aRenderArea.Top() + ( aRenderArea.GetHeight() - aImageSize.Height() ) / 2;
             }
-            rTabBar.DrawImage( aImagePos, aItemImage );
+            m_rTabBar.DrawImage( aImagePos, aItemImage );
         }
 
         const ::rtl::OUString sItemText( i_pPanel->GetDisplayName() );
@@ -672,16 +674,16 @@ namespace svt
             }
 
             // draw the text
-            const Size aTextSize( rTabBar.GetCtrlTextWidth( sItemText ), rTabBar.GetTextHeight() );
+            const Size aTextSize( m_rTabBar.GetCtrlTextWidth( sItemText ), m_rTabBar.GetTextHeight() );
             Point aTextPos( aRenderArea.TopLeft() );
             if ( IsVertical() )
             {
-                rTabBar.Push( PUSH_FONT );
+                m_rTabBar.Push( PUSH_FONT );
 
-                Font aFont( rTabBar.GetFont() );
+                Font aFont( m_rTabBar.GetFont() );
                 aFont.SetOrientation( 2700 );
                 aFont.SetVertical( TRUE );
-                rTabBar.SetFont( aFont );
+                m_rTabBar.SetFont( aFont );
 
                 aTextPos.X() += aTextSize.Height();
                 aTextPos.X() += ( aRenderArea.GetWidth() - aTextSize.Height() ) / 2;
@@ -691,11 +693,11 @@ namespace svt
                 aTextPos.Y() += ( aRenderArea.GetHeight() - aTextSize.Height() ) / 2;
             }
 
-            rTabBar.DrawText( aTextPos, sItemText );
+            m_rTabBar.DrawText( aTextPos, sItemText );
 
             if ( IsVertical() )
             {
-                rTabBar.Pop();
+                m_rTabBar.Pop();
             }
         }
     }
@@ -703,29 +705,29 @@ namespace svt
     //------------------------------------------------------------------------------------------------------------------
     void PanelTabBar_Impl::DrawItem( const size_t i_nItemIndex ) const
     {
-        const ItemDescriptor& rItem( aItems[ i_nItemIndex ] );
+        const ItemDescriptor& rItem( m_aItems[ i_nItemIndex ] );
 
         ItemFlags nItemFlags( ITEM_STATE_NORMAL );
-        if ( aHoveredItem == i_nItemIndex )
+        if ( m_aHoveredItem == i_nItemIndex )
         {
             nItemFlags |= ITEM_STATE_HOVERED;
-            if ( bMouseButtonDown )
+            if ( m_bMouseButtonDown )
                 nItemFlags |= ITEM_STATE_ACTIVE;
         }
 
-        if ( rPanelDeck.GetActivePanel() == i_nItemIndex )
+        if ( m_rPanelDeck.GetActivePanel() == i_nItemIndex )
             nItemFlags |= ITEM_STATE_ACTIVE;
 
-        if ( aFocusedItem == i_nItemIndex )
+        if ( m_aFocusedItem == i_nItemIndex )
             nItemFlags |= ITEM_STATE_FOCUSED;
 
         if ( 0 == i_nItemIndex )
             nItemFlags |= ITEM_POSITION_FIRST;
 
-        if ( rPanelDeck.GetPanelCount() - 1 == i_nItemIndex )
+        if ( m_rPanelDeck.GetPanelCount() - 1 == i_nItemIndex )
             nItemFlags |= ITEM_POSITION_LAST;
 
-        rTabBar.SetUpdateMode( FALSE );
+        m_rTabBar.SetUpdateMode( FALSE );
 
         // some item geometry
         // - the normalized bounding and content rect
@@ -734,18 +736,23 @@ namespace svt
         lcl_deflateRect( aNormalizedContent, rItem.aContentInset );
 
         // - the aligned bounding and content rect
-        const NormalizedArea aTransformer( Rectangle( Point(), aRenderDevice.GetOutputSizePixel() ), false );
-        const Rectangle aActualBounds = aTransformer.getTransformed( aNormalizedBounds, m_eTabAlignment );
-        const Rectangle aActualContent = aTransformer.getTransformed( aNormalizedContent, m_eTabAlignment );
+        const Rectangle aActualBounds = m_aNormalizer.getTransformed( aNormalizedBounds, m_eTabAlignment );
+        const Rectangle aActualContent = m_aNormalizer.getTransformed( aNormalizedContent, m_eTabAlignment );
 
         // completely erase the bounding region, renderers are not expected to do this
-        const_cast< VirtualDevice& >( aRenderDevice ).DrawRect( aNormalizedBounds );
+        const_cast< VirtualDevice& >( m_aRenderDevice ).DrawRect( aNormalizedBounds );
 
         // render item "background" layer
-        pRenderer->preRenderItem( aNormalizedContent, nItemFlags );
+        m_pRenderer->preRenderItem( aNormalizedContent, nItemFlags );
 
         // copy from the virtual device to ourself
-        BitmapEx aBitmap( aRenderDevice.GetBitmapEx( aNormalizedBounds.TopLeft(), aNormalizedBounds.GetSize() ) );
+        BitmapEx aBitmap( m_aRenderDevice.GetBitmapEx(
+            aNormalizedBounds.TopLeft(),
+            Size(
+                aNormalizedBounds.GetSize().Width() - 1,
+                aNormalizedBounds.GetSize().Height() - 1
+            )
+        ) );
         if ( IsVertical() )
         {
             aBitmap.Rotate( 2700, COL_BLACK );
@@ -756,27 +763,27 @@ namespace svt
 //        {
 //                aBitmap.Mirror( BMP_MIRROR_VERT );
 //        }
-        rTabBar.DrawBitmapEx( aActualBounds.TopLeft(), aBitmap );
+        m_rTabBar.DrawBitmapEx( aActualBounds.TopLeft(), aBitmap );
 
         // render the actual item content
-        impl_renderItemContent( rItem.pPanel, aActualContent, aGeometry.getItemContent() );
+        impl_renderItemContent( rItem.pPanel, aActualContent, m_aGeometry.getItemContent() );
 
         // render item "foreground" layer
-        pRenderer->postRenderItem( rTabBar, aActualBounds, nItemFlags );
+        m_pRenderer->postRenderItem( m_rTabBar, aActualBounds, nItemFlags );
 
-        rTabBar.SetUpdateMode( TRUE );
+        m_rTabBar.SetUpdateMode( TRUE );
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void PanelTabBar_Impl::EnsureItemsCache()
     {
-        if ( bItemsDirty == false )
+        if ( m_bItemsDirty == false )
         {
             DBG_CHECK( *this );
             return;
         }
         impl_calcItemRects();
-        OSL_POSTCOND( bItemsDirty == false, "EnsureItemsCache: cache still dirty!" );
+        OSL_POSTCOND( m_bItemsDirty == false, "EnsureItemsCache: cache still dirty!" );
         DBG_CHECK( *this );
     }
 
@@ -785,23 +792,37 @@ namespace svt
     {
         EnsureItemsCache();
 
-        const Size aOutputSize( rTabBar.GetOutputSizePixel() );
-        NormalizedArea aNormalizer( Rectangle( Point(), aOutputSize ), IsVertical() );
-        const Size aLogicalOutputSize( aNormalizer.getReferenceSize() );
+        const Size aOutputSize( m_rTabBar.GetOutputSizePixel() );
+        m_aNormalizer = NormalizedArea( Rectangle( Point(), aOutputSize ), IsVertical() );
+        const Size aLogicalOutputSize( m_aNormalizer.getReferenceSize() );
 
         // forward actual output size to our render device
-        aRenderDevice.SetOutputSizePixel( aLogicalOutputSize );
+        m_aRenderDevice.SetOutputSizePixel( aLogicalOutputSize );
 
         // re-calculate the size of the scroll buttons and of the items
-        aGeometry.relayout( aLogicalOutputSize, aItems );
+        m_aGeometry.relayout( aLogicalOutputSize, m_aItems );
 
-        const Rectangle aButtonBack( aNormalizer.getTransformed( aGeometry.getButtonBackRect(), m_eTabAlignment ) );
-        m_aScrollBack.SetPosSizePixel( aButtonBack.TopLeft(), aButtonBack.GetSize() );
-        m_aScrollBack.Show( !aButtonBack.IsEmpty() );
+        if ( m_aGeometry.getButtonBackRect().IsEmpty() )
+        {
+            m_aScrollBack.Hide();
+        }
+        else
+        {
+            const Rectangle aButtonBack( m_aNormalizer.getTransformed( m_aGeometry.getButtonBackRect(), m_eTabAlignment ) );
+            m_aScrollBack.SetPosSizePixel( aButtonBack.TopLeft(), aButtonBack.GetSize() );
+            m_aScrollBack.Show();
+        }
 
-        const Rectangle aButtonForward( aNormalizer.getTransformed( aGeometry.getButtonForwardRect(), m_eTabAlignment ) );
-        m_aScrollForward.SetPosSizePixel( aButtonForward.TopLeft(), aButtonForward.GetSize() );
-        m_aScrollForward.Show( !aButtonForward.IsEmpty() );
+        if ( m_aGeometry.getButtonForwardRect().IsEmpty() )
+        {
+            m_aScrollForward.Hide();
+        }
+        else
+        {
+            const Rectangle aButtonForward( m_aNormalizer.getTransformed( m_aGeometry.getButtonForwardRect(), m_eTabAlignment ) );
+            m_aScrollForward.SetPosSizePixel( aButtonForward.TopLeft(), aButtonForward.GetSize() );
+            m_aScrollForward.Show();
+        }
 
         UpdateScrollButtons();
     }
@@ -811,12 +832,12 @@ namespace svt
     {
         Point aPoint( IsVertical() ? i_rPoint.Y() : i_rPoint.X(), IsVertical() ? i_rPoint.X() : i_rPoint.Y() );
 
-        if ( !aGeometry.getItemsRect().IsInside( aPoint ) )
+        if ( !m_aGeometry.getItemsRect().IsInside( aPoint ) )
             return ::boost::optional< size_t >();
 
         size_t i=0;
-        for (   ItemDescriptors::const_iterator item = aItems.begin();
-                item != aItems.end();
+        for (   ItemDescriptors::const_iterator item = m_aItems.begin();
+                item != m_aItems.end();
                 ++item, ++i
             )
         {
@@ -835,13 +856,13 @@ namespace svt
         {
             OSL_ENSURE( m_nScrollPosition > 0, "PanelTabBar_Impl::OnScroll: inconsistency!" );
             --m_nScrollPosition;
-            rTabBar.Invalidate();
+            m_rTabBar.Invalidate();
         }
         else if ( i_pButton == &m_aScrollForward )
         {
-            OSL_ENSURE( m_nScrollPosition < aItems.size() - 1, "PanelTabBar_Impl::OnScroll: inconsistency!" );
+            OSL_ENSURE( m_nScrollPosition < m_aItems.size() - 1, "PanelTabBar_Impl::OnScroll: inconsistency!" );
             ++m_nScrollPosition;
-            rTabBar.Invalidate();
+            m_rTabBar.Invalidate();
         }
 
         UpdateScrollButtons();
@@ -854,14 +875,14 @@ namespace svt
     {
         // care for the offset imposed by our geometry, i.e. whether or not we have scroll buttons
         Rectangle aItemRect( i_rLogicalItemRect );
-        aItemRect.Move( aGeometry.getItemsRect().Left() - aGeometry.getButtonBackRect().Left(), 0 );
+        aItemRect.Move( m_aGeometry.getItemsRect().Left() - m_aGeometry.getButtonBackRect().Left(), 0 );
 
         // care for the current scroll position
-        OSL_ENSURE( m_nScrollPosition < aItems.size(), "GetActualLogicalItemRect: invalid scroll position!" );
-        if ( ( m_nScrollPosition > 0 ) && ( m_nScrollPosition < aItems.size() ) )
+        OSL_ENSURE( m_nScrollPosition < m_aItems.size(), "GetActualLogicalItemRect: invalid scroll position!" );
+        if ( ( m_nScrollPosition > 0 ) && ( m_nScrollPosition < m_aItems.size() ) )
         {
-            long nOffsetX = aItems[ m_nScrollPosition ].GetCurrentRect().Left() - aItems[ 0 ].GetCurrentRect().Left();
-            long nOffsetY = aItems[ m_nScrollPosition ].GetCurrentRect().Top() - aItems[ 0 ].GetCurrentRect().Top();
+            long nOffsetX = m_aItems[ m_nScrollPosition ].GetCurrentRect().Left() - m_aItems[ 0 ].GetCurrentRect().Left();
+            long nOffsetY = m_aItems[ m_nScrollPosition ].GetCurrentRect().Top() - m_aItems[ 0 ].GetCurrentRect().Top();
             aItemRect.Move( -nOffsetX, -nOffsetY );
         }
 
@@ -908,13 +929,13 @@ namespace svt
     //------------------------------------------------------------------------------------------------------------------
     TabItemContent PanelTabBar::GetTabItemContent() const
     {
-        return m_pImpl->aGeometry.getItemContent();
+        return m_pImpl->m_aGeometry.getItemContent();
     }
 
     //------------------------------------------------------------------------------------------------------------------
     void PanelTabBar::SetTabItemContent( const TabItemContent& i_eItemContent )
     {
-        m_pImpl->aGeometry.setItemContent( i_eItemContent );
+        m_pImpl->m_aGeometry.setItemContent( i_eItemContent );
         m_pImpl->Relayout();
         Invalidate();
     }
@@ -923,7 +944,7 @@ namespace svt
     Size PanelTabBar::GetOptimalSize( WindowSizeType i_eType ) const
     {
         m_pImpl->EnsureItemsCache();
-        Size aOptimalSize( m_pImpl->aGeometry.getOptimalSize( m_pImpl->aItems, i_eType == WINDOWSIZE_MINIMUM ) );
+        Size aOptimalSize( m_pImpl->m_aGeometry.getOptimalSize( m_pImpl->m_aItems, i_eType == WINDOWSIZE_MINIMUM ) );
         if ( m_pImpl->IsVertical() )
             ::std::swap( aOptimalSize.Width(), aOptimalSize.Height() );
         return aOptimalSize;
@@ -942,22 +963,20 @@ namespace svt
         m_pImpl->EnsureItemsCache();
 
         // background
-        m_pImpl->aRenderDevice.Push( PUSH_CLIPREGION );
-        m_pImpl->aRenderDevice.SetClipRegion( i_rRect );
-        m_pImpl->pRenderer->renderBackground();
-        m_pImpl->aRenderDevice.Pop();
+        m_pImpl->m_aRenderDevice.Push( PUSH_CLIPREGION );
+        m_pImpl->m_aRenderDevice.SetClipRegion( i_rRect );
+        m_pImpl->m_pRenderer->renderBackground();
+        m_pImpl->m_aRenderDevice.Pop();
 
         // ensure the items really paint into their own playground only
         ClipItemRegion aClipItems( *m_pImpl );
 
-        NormalizedArea aTransformer( Rectangle( Point(), m_pImpl->aRenderDevice.GetOutputSizePixel() ), false );
-            // TODO: make the transformer a member
-        const Rectangle aLogicalPaintRect( aTransformer.getNormalized( i_rRect, m_pImpl->m_eTabAlignment ) );
+        const Rectangle aLogicalPaintRect( m_pImpl->m_aNormalizer.getNormalized( i_rRect, m_pImpl->m_eTabAlignment ) );
 
         // items
         size_t i=0;
-        for (   ItemDescriptors::const_iterator item = m_pImpl->aItems.begin();
-                item != m_pImpl->aItems.end();
+        for (   ItemDescriptors::const_iterator item = m_pImpl->m_aItems.begin();
+                item != m_pImpl->m_aItems.end();
                 ++item, ++i
             )
         {
@@ -974,7 +993,7 @@ namespace svt
     {
         m_pImpl->EnsureItemsCache();
 
-        ::boost::optional< size_t > aOldItem( m_pImpl->aHoveredItem );
+        ::boost::optional< size_t > aOldItem( m_pImpl->m_aHoveredItem );
         ::boost::optional< size_t > aNewItem( m_pImpl->FindItemForPoint( i_rMouseEvent.GetPosPixel() ) );
 
         if  ( i_rMouseEvent.IsLeaveWindow() )
@@ -982,7 +1001,7 @@ namespace svt
 
         if ( aOldItem != aNewItem )
         {
-            m_pImpl->aHoveredItem = aNewItem;
+            m_pImpl->m_aHoveredItem = aNewItem;
 
             ClipItemRegion aClipItems( *m_pImpl );
 
@@ -1009,7 +1028,7 @@ namespace svt
             return;
 
         CaptureMouse();
-        m_pImpl->bMouseButtonDown = true;
+        m_pImpl->m_bMouseButtonDown = true;
 
         ClipItemRegion aClipItems( *m_pImpl );
         m_pImpl->DrawItem( *aHitItem );
@@ -1020,12 +1039,12 @@ namespace svt
     {
         Control::MouseButtonUp( i_rMouseEvent );
 
-        if ( m_pImpl->bMouseButtonDown )
+        if ( m_pImpl->m_bMouseButtonDown )
         {
             OSL_ENSURE( IsMouseCaptured(), "PanelTabBar::MouseButtonUp: inconsistency!" );
             if ( IsMouseCaptured() )
                 ReleaseMouse();
-            m_pImpl->bMouseButtonDown = false;
+            m_pImpl->m_bMouseButtonDown = false;
 
             ::boost::optional< size_t > aHitItem( m_pImpl->FindItemForPoint( i_rMouseEvent.GetPosPixel() ) );
             if ( !!aHitItem )
@@ -1034,7 +1053,7 @@ namespace svt
                 ClipItemRegion aClipItems( *m_pImpl );
                 m_pImpl->DrawItem( *aHitItem );
                 // activate the respective panel
-                m_pImpl->rPanelDeck.ActivatePanel( *aHitItem );
+                m_pImpl->m_rPanelDeck.ActivatePanel( *aHitItem );
             }
         }
     }
@@ -1048,7 +1067,7 @@ namespace svt
         if ( !aHelpItem )
             return;
 
-        const ItemDescriptor& rItem( m_pImpl->aItems[ *aHelpItem ] );
+        const ItemDescriptor& rItem( m_pImpl->m_aItems[ *aHelpItem ] );
         if ( rItem.eContent != TABITEM_IMAGE_ONLY )
             // if the text is displayed for the item, we do not need to show it as tooltip
             return;
@@ -1064,14 +1083,14 @@ namespace svt
     void PanelTabBar::GetFocus()
     {
         Control::GetFocus();
-        if ( m_pImpl->rPanelDeck.GetPanelCount() )
+        if ( m_pImpl->m_rPanelDeck.GetPanelCount() )
         {
-            ::boost::optional< size_t > aActivePanel( m_pImpl->rPanelDeck.GetActivePanel() );
+            ::boost::optional< size_t > aActivePanel( m_pImpl->m_rPanelDeck.GetActivePanel() );
             if ( !!aActivePanel )
             {
-                m_pImpl->aFocusedItem = aActivePanel;
+                m_pImpl->m_aFocusedItem = aActivePanel;
                 ClipItemRegion aClipItems( *m_pImpl );
-                m_pImpl->DrawItem( *m_pImpl->aFocusedItem );
+                m_pImpl->DrawItem( *m_pImpl->m_aFocusedItem );
             }
         }
     }
@@ -1081,8 +1100,8 @@ namespace svt
     {
         Control::LoseFocus();
 
-        ::boost::optional< size_t > aPreviouslyFocused( m_pImpl->aFocusedItem );
-        m_pImpl->aFocusedItem.reset();
+        ::boost::optional< size_t > aPreviouslyFocused( m_pImpl->m_aFocusedItem );
+        m_pImpl->m_aFocusedItem.reset();
 
         if ( !!aPreviouslyFocused )
         {
@@ -1102,12 +1121,12 @@ namespace svt
             return;
 
         // if there are less than 2 panels, we cannot travel them ...
-        const size_t nPanelCount( m_pImpl->rPanelDeck.GetPanelCount() );
+        const size_t nPanelCount( m_pImpl->m_rPanelDeck.GetPanelCount() );
         if ( nPanelCount < 2 )
             return;
 
-        OSL_PRECOND( !!m_pImpl->aFocusedItem, "PanelTabBar::KeyInput: we should have a focused item here!" );
-            // if we get KeyInput events, we should have the focus. In this case, aFocusedItem should not be empty,
+        OSL_PRECOND( !!m_pImpl->m_aFocusedItem, "PanelTabBar::KeyInput: we should have a focused item here!" );
+            // if we get KeyInput events, we should have the focus. In this case, m_aFocusedItem should not be empty,
             // except if there are no panels, but then we bail out of this method here earlier ...
 
         bool bFocusNext = false;
@@ -1130,26 +1149,26 @@ namespace svt
                 bFocusNext = true;
             break;
         case KEY_RETURN:
-            m_pImpl->rPanelDeck.ActivatePanel( *m_pImpl->aFocusedItem );
+            m_pImpl->m_rPanelDeck.ActivatePanel( *m_pImpl->m_aFocusedItem );
             break;
         }
 
         if ( !bFocusNext && !bFocusPrev )
             return;
 
-        const size_t nOldFocus = *m_pImpl->aFocusedItem;
+        const size_t nOldFocus = *m_pImpl->m_aFocusedItem;
         if ( bFocusNext )
         {
-            m_pImpl->aFocusedItem.reset( ( *m_pImpl->aFocusedItem + 1 ) % nPanelCount );
+            m_pImpl->m_aFocusedItem.reset( ( *m_pImpl->m_aFocusedItem + 1 ) % nPanelCount );
         }
         else
         {
-            m_pImpl->aFocusedItem.reset( ( *m_pImpl->aFocusedItem + nPanelCount - 1 ) % nPanelCount );
+            m_pImpl->m_aFocusedItem.reset( ( *m_pImpl->m_aFocusedItem + nPanelCount - 1 ) % nPanelCount );
         }
 
         ClipItemRegion aClipItems( *m_pImpl );
         m_pImpl->DrawItem( nOldFocus );
-        m_pImpl->DrawItem( *m_pImpl->aFocusedItem );
+        m_pImpl->DrawItem( *m_pImpl->m_aFocusedItem );
     }
 
     //------------------------------------------------------------------------------------------------------------------

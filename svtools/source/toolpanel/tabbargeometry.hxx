@@ -50,6 +50,7 @@ namespace svt
     class NormalizedArea
     {
     public:
+        NormalizedArea();
         NormalizedArea( const Rectangle& i_rReference, const bool i_bIsVertical );
 
         /** transforms a rectangle, relative to our playground, into a coordinate system defined by the given alignment
@@ -121,8 +122,11 @@ namespace svt
         TabItemContent      m_eTabItemContent;
         /// specifies the inset to be used in the items area, depends on the actual alignment
         Inset               m_aItemsInset;
+        // the (logical) rectangle to be used for the "back" button, empty if the button is not needed
         Rectangle           m_aButtonBackRect;
+        // the (logical) rectangle to be used for the items
         Rectangle           m_aItemsRect;
+        // the (logical) rectangle to be used for the "forward" button, empty if the button is not needed
         Rectangle           m_aButtonForwardRect;
     };
 

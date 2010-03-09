@@ -112,6 +112,12 @@ namespace svt
     //= NormalizedArea
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
+    NormalizedArea::NormalizedArea()
+        :m_aReference()
+    {
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     NormalizedArea::NormalizedArea( const Rectangle& i_rReference, const bool i_bIsVertical )
         :m_aReference( i_bIsVertical ? Rectangle( i_rReference.TopLeft(), Size( i_rReference.GetHeight(), i_rReference.GetWidth() ) ) : i_rReference )
     {
