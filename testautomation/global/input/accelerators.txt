@@ -1,7 +1,7 @@
 # This file contains a list of most commonly used accelerators.
 # These accelerators are language dependent
-# Include framework/tools/inc/accels.inc and use hGetAccel( string )
-# to retrieve one specific accelerator, where string is one of the sections
+# Include global/tools/includes/optional/t_accels.inc and use hGetAccel( <string> )
+# to retrieve one specific accelerator, where <string> is one of the sections
 # from this file. 
 
 # mod1 = CTRL
