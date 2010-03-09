@@ -48,6 +48,7 @@
 #include "LegendHelper.hxx"
 #include "AxisHelper.hxx"
 #include "RegressionCurveHelper.hxx"
+#include "DiagramHelper.hxx"
 
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -107,7 +108,14 @@ bool lcl_deleteDataSeries(
                 ActionDescriptionProvider::createDescription(
                     ActionDescriptionProvider::DELETE, ::rtl::OUString( String( ::chart::SchResId( STR_OBJECT_DATASERIES )))),
                 xUndoManager, xModel );
+
+            Reference< chart2::XDiagram > xDiagram( ::chart::ChartModelHelper::findDiagram( xModel ) );
+            uno::Reference< chart2::XAxis > xAxis( ::chart::DiagramHelper::getAttachedAxis( xSeries, xDiagram ) );
+
             ::chart::DataSeriesHelper::deleteSeries( xSeries, xChartType );
+
+            ::chart::AxisHelper::hideAxisIfNoDataIsAttached( xAxis, xDiagram );
+
             bResult = true;
             aUndoGuard.commitAction();
         }
