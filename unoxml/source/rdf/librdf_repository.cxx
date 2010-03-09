@@ -472,11 +472,13 @@ public:
     librdf_GraphResult(librdf_Repository *i_pRepository,
             ::osl::Mutex & i_rMutex,
             boost::shared_ptr<librdf_stream> const& i_pStream,
+            boost::shared_ptr<librdf_node> const& i_pContext,
             boost::shared_ptr<librdf_query>  const& i_pQuery =
                 boost::shared_ptr<librdf_query>() )
         : m_xRep(i_pRepository)
         , m_rMutex(i_rMutex)
         , m_pQuery(i_pQuery)
+        , m_pContext(i_pContext)
         , m_pStream(i_pStream)
     { };
 
@@ -499,8 +501,11 @@ private:
     // the query (in case this is a result of a graph query)
     // not that the redland documentation spells this out explicity, but
     // queries must be freed only after all the results are completely read
-    boost::shared_ptr<librdf_query>  m_pQuery;
-    boost::shared_ptr<librdf_stream> m_pStream;
+    boost::shared_ptr<librdf_query>  const m_pQuery;
+    boost::shared_ptr<librdf_node>   const m_pContext;
+    boost::shared_ptr<librdf_stream> const m_pStream;
+
+    librdf_node* getContext() const;
 };
 
 
@@ -512,6 +517,17 @@ librdf_GraphResult::hasMoreElements() throw (uno::RuntimeException)
     return m_pStream.get() && !librdf_stream_end(m_pStream.get());
 }
 
+librdf_node* librdf_GraphResult::getContext() const
+{
+    if (!m_pStream.get() || librdf_stream_end(m_pStream.get()))
+        return NULL;
+    librdf_node *pCtxt( static_cast<librdf_node *>
+        (librdf_stream_get_context(m_pStream.get())) );
+    if (pCtxt)
+        return pCtxt;
+    return m_pContext.get();
+}
+
 ::com::sun::star::uno::Any SAL_CALL
 librdf_GraphResult::nextElement()
 throw (uno::RuntimeException, container::NoSuchElementException,
@@ -519,8 +535,8 @@ throw (uno::RuntimeException, container::NoSuchElementException,
 {
     ::osl::MutexGuard g(m_rMutex);
     if (!m_pStream.get() || !librdf_stream_end(m_pStream.get())) {
-        librdf_node *pCtxt( static_cast<librdf_node *>
-            (librdf_stream_get_context(m_pStream.get())) );
+        librdf_node * pCtxt = getContext();
+
         librdf_statement *pStmt( librdf_stream_get_object(m_pStream.get()) );
         if (!pStmt) {
             rdf::QueryException e(::rtl::OUString::createFromAscii(
@@ -1275,7 +1291,8 @@ throw (uno::RuntimeException, rdf::RepositoryException)
         isMetadatableWithoutMetadata(i_xObject))
     {
         return new librdf_GraphResult(this, m_aMutex,
-            ::boost::shared_ptr<librdf_stream>());
+            ::boost::shared_ptr<librdf_stream>(),
+            ::boost::shared_ptr<librdf_node>());
     }
 
     ::osl::MutexGuard g(m_aMutex);
@@ -1294,7 +1311,8 @@ throw (uno::RuntimeException, rdf::RepositoryException)
             "librdf_model_find_statements failed"), *this);
     }
 
-    return new librdf_GraphResult(this, m_aMutex, pStream);
+    return new librdf_GraphResult(this, m_aMutex, pStream,
+        ::boost::shared_ptr<librdf_node>());
 }
 
 
@@ -1381,7 +1399,8 @@ throw (uno::RuntimeException, rdf::QueryException, rdf::RepositoryException)
             "librdf_query_results_as_stream failed"), *this);
     }
 
-    return new librdf_GraphResult(this, m_aMutex, pStream, pQuery);
+    return new librdf_GraphResult(this, m_aMutex, pStream,
+                                  ::boost::shared_ptr<librdf_node>(), pQuery);
 }
 
 ::sal_Bool SAL_CALL
@@ -1658,7 +1677,8 @@ throw (uno::RuntimeException, rdf::RepositoryException)
         isMetadatableWithoutMetadata(i_xObject))
     {
         return new librdf_GraphResult(this, m_aMutex,
-            ::boost::shared_ptr<librdf_stream>());
+            ::boost::shared_ptr<librdf_stream>(),
+            ::boost::shared_ptr<librdf_node>());
     }
 
     ::osl::MutexGuard g(m_aMutex);
@@ -1684,7 +1704,8 @@ throw (uno::RuntimeException, rdf::RepositoryException)
             "librdf_stream_add_map failed"), *this);
     }
 
-    return new librdf_GraphResult(this, m_aMutex, pStream);
+    return new librdf_GraphResult(this, m_aMutex, pStream,
+                                  ::boost::shared_ptr<librdf_node>());
 }
 
 // ::com::sun::star::lang::XInitialization:
@@ -1885,7 +1906,8 @@ librdf_Repository::getStatementsGraph(
         isMetadatableWithoutMetadata(i_xObject))
     {
         return new librdf_GraphResult(this, m_aMutex,
-            ::boost::shared_ptr<librdf_stream>());
+            ::boost::shared_ptr<librdf_stream>(),
+            ::boost::shared_ptr<librdf_node>());
     }
 
     ::osl::MutexGuard g(m_aMutex);
@@ -1924,7 +1946,9 @@ librdf_Repository::getStatementsGraph(
             "librdf_model_find_statements_in_context failed"), *this);
     }
 
-    return new librdf_GraphResult(this, m_aMutex, pStream);
+    // librdf_model_find_statements_in_context is buggy and does not put
+    // the context into result statements; pass it to librdf_GraphResult here
+    return new librdf_GraphResult(this, m_aMutex, pStream, pContext);
 }
 
 librdf_world *librdf_TypeConverter::createWorld() const
