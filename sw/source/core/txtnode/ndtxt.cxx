@@ -1196,14 +1196,39 @@ BOOL SwTxtNode::DontExpandFmt( const SwIndex& rIdx, bool bFlag,
     return bRet;
 }
 
+static bool lcl_GetTxtAttrDefault(xub_StrLen const nIndex,
+    xub_StrLen const nHintStart, xub_StrLen const nHintEnd)
+{
+    return ((nHintStart <= nIndex) && (nIndex <  nHintEnd));
+}
+static bool lcl_GetTxtAttrExpand(xub_StrLen const nIndex,
+    xub_StrLen const nHintStart, xub_StrLen const nHintEnd)
+{
+    return ((nHintStart <  nIndex) && (nIndex <= nHintEnd));
+}
+static bool lcl_GetTxtAttrParent(xub_StrLen const nIndex,
+    xub_StrLen const nHintStart, xub_StrLen const nHintEnd)
+{
+    return ((nHintStart <  nIndex) && (nIndex <  nHintEnd));
+}
+
 static void
 lcl_GetTxtAttrs(
     ::std::vector<SwTxtAttr *> *const pVector, SwTxtAttr **const ppTxtAttr,
     SwpHints *const pSwpHints,
-    xub_StrLen const nIndex, RES_TXTATR const nWhich, bool const bExpand)
+    xub_StrLen const nIndex, RES_TXTATR const nWhich,
+    enum SwTxtNode::GetTxtAttrMode const eMode)
 {
     USHORT const nSize = (pSwpHints) ? pSwpHints->Count() : 0;
     xub_StrLen nPreviousIndex(0); // index of last hint with nWhich
+    bool (*pMatchFunc)(xub_StrLen const, xub_StrLen const, xub_StrLen const)=0;
+    switch (eMode)
+    {
+        case SwTxtNode::DEFAULT:   pMatchFunc = &lcl_GetTxtAttrDefault; break;
+        case SwTxtNode::EXPAND:    pMatchFunc = &lcl_GetTxtAttrExpand;  break;
+        case SwTxtNode::PARENT:    pMatchFunc = &lcl_GetTxtAttrParent;  break;
+        default: OSL_ASSERT(false);
+    }
 
     for( USHORT i = 0; i < nSize; ++i )
     {
@@ -1225,9 +1250,7 @@ lcl_GetTxtAttrs(
             // Wenn bExpand gesetzt ist, wird das Verhalten bei Eingabe
             // simuliert, d.h. der Start wuede verschoben, das Ende expandiert,
         bool const bContained( (pEndIdx)
-            ? ((bExpand)
-                ? ((nHintStart <  nIndex) && (nIndex <= *pEndIdx))
-                : ((nHintStart <= nIndex) && (nIndex <  *pEndIdx)))
+            ? (*pMatchFunc)(nIndex, nHintStart, *pEndIdx)
             : (nHintStart == nIndex) );
         if (bContained)
         {
@@ -1254,16 +1277,16 @@ lcl_GetTxtAttrs(
 
 ::std::vector<SwTxtAttr *>
 SwTxtNode::GetTxtAttrsAt(xub_StrLen const nIndex, RES_TXTATR const nWhich,
-                        bool const bExpand) const
+                        enum GetTxtAttrMode const eMode) const
 {
     ::std::vector<SwTxtAttr *> ret;
-    lcl_GetTxtAttrs(& ret, 0, m_pSwpHints, nIndex, nWhich, bExpand);
+    lcl_GetTxtAttrs(& ret, 0, m_pSwpHints, nIndex, nWhich, eMode);
     return ret;
 }
 
 SwTxtAttr *
 SwTxtNode::GetTxtAttrAt(xub_StrLen const nIndex, RES_TXTATR const nWhich,
-                        bool const bExpand) const
+                        enum GetTxtAttrMode const eMode) const
 {
     ASSERT(    (nWhich == RES_TXTATR_META)
             || (nWhich == RES_TXTATR_METAFIELD)
@@ -1274,7 +1297,7 @@ SwTxtNode::GetTxtAttrAt(xub_StrLen const nIndex, RES_TXTATR const nWhich,
         "GetTxtAttrAt() will give wrong result for this hint!");
 
     SwTxtAttr * pRet(0);
-    lcl_GetTxtAttrs(0, & pRet, m_pSwpHints, nIndex, nWhich, bExpand);
+    lcl_GetTxtAttrs(0, & pRet, m_pSwpHints, nIndex, nWhich, eMode);
     return pRet;
 }
 

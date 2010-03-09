@@ -34,12 +34,14 @@ import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XServiceInfo;
+import com.sun.star.lang.NoSupportException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.Pair;
 import com.sun.star.beans.StringPair;
 import com.sun.star.container.XNamed;
+import com.sun.star.container.XChild;
 import com.sun.star.container.XContentEnumerationAccess;
 import com.sun.star.container.XEnumerationAccess;
 import com.sun.star.container.XEnumeration;
@@ -976,7 +978,7 @@ abstract class Inserter
         xPropSet.setPropertyValue("RubyText", rubytext);
     }
 
-    void insertMeta(XTextCursor xCursor, StringPair xmlid)
+    XTextContent insertMeta(XTextCursor xCursor, StringPair xmlid)
         throws Exception
     {
         XTextContent xContent = makeMeta();
@@ -984,6 +986,7 @@ abstract class Inserter
         XMetadatable xMetadatable = (XMetadatable)
             UnoRuntime.queryInterface(XMetadatable.class, xContent);
         xMetadatable.setMetadataReference(xmlid);
+        return xContent;
     }
 
     XTextContent makeMeta() throws Exception
@@ -995,14 +998,15 @@ abstract class Inserter
         return xContent;
     }
 
-    void insertMetaField(XTextCursor xCursor, StringPair xmlid)
+    XTextField insertMetaField(XTextCursor xCursor, StringPair xmlid)
         throws Exception
     {
-        XTextContent xContent = makeMetaField();
+        XTextField xContent = makeMetaField();
         xContent.attach(xCursor);
         XMetadatable xMetadatable = (XMetadatable)
             UnoRuntime.queryInterface(XMetadatable.class, xContent);
         xMetadatable.setMetadataReference(xmlid);
+        return xContent;
     }
 
     XTextField makeMetaField() throws Exception
@@ -1165,15 +1169,16 @@ class RangeInserter extends Inserter
     }
     */
 
-    void insertRange(Range range) throws Exception
+    XTextContent insertRange(Range range) throws Exception
     {
         m_xCursor.gotoStartOfParagraph(false);
         m_xCursor.goRight(range.getStart(), false);
         m_xCursor.goRight(range.getExtent(), true);
-        insertNode(m_xCursor, range.getNode());
+        return insertNode(m_xCursor, range.getNode());
     }
 
-    void insertNode(XParagraphCursor xCursor, TreeNode node) throws Exception
+    XTextContent insertNode(XParagraphCursor xCursor, TreeNode node)
+        throws Exception
     {
         String type = node.getType();
         if (type.equals("Bookmark")) {
@@ -1196,10 +1201,10 @@ class RangeInserter extends Inserter
             insertRuby(xCursor, ruby.getRubyText());
         } else if (type.equals("InContentMetadata")) {
             MetaNode meta = (MetaNode) node;
-            insertMeta(xCursor, meta.getXmlId());
+            return insertMeta(xCursor, meta.getXmlId());
         } else if (type.equals("MetadataField")) {
             MetaFieldNode meta = (MetaFieldNode) node;
-            insertMetaField(xCursor, meta.getXmlId());
+            return insertMetaField(xCursor, meta.getXmlId());
         } else if (type.equals("Text")) {
             TextNode text = (TextNode) node;
             insertText(xCursor, text.getContent());
@@ -1220,6 +1225,7 @@ class RangeInserter extends Inserter
         } else {
             throw new RuntimeException("unexpected type: " + type);
         }
+        return null;
     }
 }
 
@@ -1306,6 +1312,7 @@ public class TextPortionEnumerationTest extends ComplexTestCase
             "testRange5",
             "testRange6",
             "testRange7",
+            "testMetaXChild",
             "testMetaXText",
             "testMetaXTextCursor",
             "testMetaXTextAttachToxMark",
@@ -2929,6 +2936,136 @@ public class TextPortionEnumerationTest extends ComplexTestCase
     }
 
     /* TODO: test partial selection, test UNDO/REDO */
+
+    // #i109601# NestedTextContent and XChild
+    public void testMetaXChild() throws Exception
+    {
+        StringPair id1 = new StringPair("content.xml", mkName("id"));
+        StringPair id2 = new StringPair("content.xml", mkName("id"));
+        StringPair id3 = new StringPair("content.xml", mkName("id"));
+        StringPair id4 = new StringPair("content.xml", mkName("id"));
+        StringPair id5 = new StringPair("content.xml", mkName("id"));
+        StringPair id6 = new StringPair("content.xml", mkName("id"));
+        TreeNode meta1 = new MetaNode(id1);
+        TreeNode meta2 = new MetaNode(id2);
+        TreeNode meta3 = new MetaFieldNode(id3);
+        TreeNode meta4 = new MetaNode(id4);
+        TreeNode meta5 = new MetaNode(id5);
+        TreeNode meta6 = new MetaFieldNode(id6);
+        TreeNode root = new TreeNode()
+            .appendChild( meta1.dup()
+                .appendChild( new TextNode("1") ) )
+            .appendChild( new TextNode("2") )
+            .appendChild( meta2.dup()
+                .appendChild( meta3.dup()
+                    .appendChild( new TextNode("34") )
+                    .appendChild( meta4.dup()
+                        .appendChild( new TextNode("56") ) )
+                    .appendChild( meta5.dup() )
+                    .appendChild( new TextNode("7") ) ) )
+            .appendChild( new TextNode("8") )
+            .appendChild( meta6.dup()
+                .appendChild( new TextNode("9") ) );
+
+        RangeInserter inserter = new RangeInserter(m_xDoc);
+        TreeNode text = new TextNode("123456789");
+        inserter.insertRange( new Range(0, 0, text) );
+        XTextContent xMeta1 = inserter.insertRange( new Range(0, 1, meta1) );
+        XTextContent xMeta2 = inserter.insertRange( new Range(3, 8, meta2) );
+        XTextContent xMeta3 = inserter.insertRange( new Range(4, 9, meta3) );
+        XTextContent xMeta4 = inserter.insertRange( new Range(7, 9, meta4) );
+        XTextContent xMeta5 = inserter.insertRange( new Range(10, 10, meta5) );
+        XTextContent xMeta6 = inserter.insertRange( new Range(13, 14, meta6) );
+
+        doTest(root, false);
+
+        XText xDocText = m_xDoc.getText();
+        XTextCursor xDocTextCursor = xDocText.createTextCursor();
+        XParagraphCursor xParagraphCursor = (XParagraphCursor)
+            UnoRuntime.queryInterface(XParagraphCursor.class, xDocTextCursor);
+        xParagraphCursor.gotoNextParagraph(false); // second paragraph
+        // X12XX34X56X78X9
+        // 1  23  4  5  6
+        //  1       452  6
+        //            3
+        StringPair [] nestedTextContent = new StringPair[] {
+            null,
+            id1,
+            id1,
+            null,
+            id2,
+            id3,
+            id3,
+            id3,
+            id4,
+            id4,
+            id4,
+            id5,
+            id3,
+            null,
+            id6,
+            id6,
+        };
+        XPropertySet xPropertySet = (XPropertySet)
+            UnoRuntime.queryInterface(XPropertySet.class, xDocTextCursor);
+        for (int i = 0; i < nestedTextContent.length; ++i) {
+            Object oNTC = xPropertySet.getPropertyValue("NestedTextContent");
+            XTextContent xNTC = (XTextContent)
+                UnoRuntime.queryInterface(XTextContent.class, oNTC);
+            if (null == nestedTextContent[i]) {
+                assure("unexpected NestedTextContent at: " + i, null == xNTC);
+            } else {
+                XMetadatable xMetadatable = (XMetadatable)
+                    UnoRuntime.queryInterface(XMetadatable.class, xNTC);
+                StringPair xmlid = xMetadatable.getMetadataReference();
+                assure("wrong NestedTextContent at: " + i,
+                    MetaNode.eq(nestedTextContent[i], xmlid));
+            }
+            xDocTextCursor.goRight((short)1, false);
+        }
+
+        XChild xChild1 = (XChild)
+            UnoRuntime.queryInterface(XChild.class, xMeta1);
+        XChild xChild2 = (XChild)
+            UnoRuntime.queryInterface(XChild.class, xMeta2);
+        XChild xChild3 = (XChild)
+            UnoRuntime.queryInterface(XChild.class, xMeta3);
+        XChild xChild4 = (XChild)
+            UnoRuntime.queryInterface(XChild.class, xMeta4);
+        XChild xChild5 = (XChild)
+            UnoRuntime.queryInterface(XChild.class, xMeta5);
+        XChild xChild6 = (XChild)
+            UnoRuntime.queryInterface(XChild.class, xMeta6);
+        try {
+            xChild1.setParent(xChild4);
+            assure("setParent(): allowed?", false);
+        } catch (NoSupportException e) { /* expected */ }
+        assure("getParent(): not null", xChild1.getParent() == null);
+        assure("getParent(): not null", xChild2.getParent() == null);
+        assure("getParent(): not null", xChild6.getParent() == null);
+        {
+            Object xParent3 = xChild3.getParent();
+            assure("getParent(): null", null != xParent3);
+            XMetadatable xMetadatable = (XMetadatable)
+                UnoRuntime.queryInterface(XMetadatable.class, xParent3);
+            StringPair xmlid = xMetadatable.getMetadataReference();
+            assure("getParent(): wrong", MetaNode.eq(xmlid, id2));
+        }{
+            Object xParent4 = xChild4.getParent();
+            assure("getParent(): null", null != xParent4);
+            XMetadatable xMetadatable = (XMetadatable)
+                UnoRuntime.queryInterface(XMetadatable.class, xParent4);
+            StringPair xmlid = xMetadatable.getMetadataReference();
+            assure("getParent(): wrong", MetaNode.eq(xmlid, id3));
+        }{
+            Object xParent5 = xChild5.getParent();
+            assure("getParent(): null", null != xParent5);
+            XMetadatable xMetadatable = (XMetadatable)
+                UnoRuntime.queryInterface(XMetadatable.class, xParent5);
+            StringPair xmlid = xMetadatable.getMetadataReference();
+            assure("getParent(): wrong", MetaNode.eq(xmlid, id3));
+        }
+    }
 
     /** test SwXMeta XText interface */
     public void testMetaXText() throws Exception

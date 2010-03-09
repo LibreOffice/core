@@ -105,13 +105,16 @@ namespace SwUnoCursorHelper
 {
 
 uno::Reference<text::XTextContent>
-GetNestedTextContent(SwTxtNode & rTextNode, xub_StrLen const nIndex)
+GetNestedTextContent(SwTxtNode & rTextNode, xub_StrLen const nIndex,
+        bool const bParent)
 {
     // these should be unambiguous because of the dummy character
+    SwTxtNode::GetTxtAttrMode const eMode( (bParent)
+        ? SwTxtNode::PARENT : SwTxtNode::EXPAND );
     SwTxtAttr *const pMetaTxtAttr =
-        rTextNode.GetTxtAttrAt(nIndex, RES_TXTATR_META, true);
+        rTextNode.GetTxtAttrAt(nIndex, RES_TXTATR_META, eMode);
     SwTxtAttr *const pMetaFieldTxtAttr =
-        rTextNode.GetTxtAttrAt(nIndex, RES_TXTATR_METAFIELD, true);
+        rTextNode.GetTxtAttrAt(nIndex, RES_TXTATR_METAFIELD, eMode);
     // which is innermost?
     SwTxtAttr *const pTxtAttr = (pMetaTxtAttr)
         ? ((pMetaFieldTxtAttr)
@@ -512,7 +515,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         {
             uno::Reference<XTextContent> const xRet(
                 GetNestedTextContent(*rPam.GetNode()->GetTxtNode(),
-                    rPam.GetPoint()->nContent.GetIndex()));
+                    rPam.GetPoint()->nContent.GetIndex(), false));
             if (xRet.is())
             {
                 if (pAny)

@@ -363,26 +363,30 @@ public:
     BOOL DontExpandFmt( const SwIndex& rIdx, bool bFlag = true,
                         BOOL bFmtToTxtAttributes = TRUE );
 
+    enum GetTxtAttrMode {
+        DEFAULT,    /// DEFAULT: (Start <  nIndex <= End)
+        EXPAND,     /// EXPAND : (Start <= nIndex <  End)
+        PARENT,     /// PARENT : (Start <  nIndex <  End)
+    };
+
     /** get the innermost text attribute covering position nIndex.
         @param nWhich   only attribute with this id is returned.
-        @param bExpand  the predicate for matching is:
-                (bExpand) ? (Start < nIndex <= End) : (Start <= nIndex < End)
+        @param eMode    the predicate for matching (@see GetTxtAttrMode).
 
         ATTENTION: this function is not well-defined for those
         hints of which several may cover a single position, like
         RES_TXTATR_CHARFMT, RES_TXTATR_REFMARK, RES_TXTATR_TOXMARK
      */
     SwTxtAttr *GetTxtAttrAt(xub_StrLen const nIndex, RES_TXTATR const nWhich,
-                            bool const bExpand = false) const;
+                            enum GetTxtAttrMode const eMode = DEFAULT) const;
 
     /** get the innermost text attributes covering position nIndex.
         @param nWhich   only attributes with this id are returned.
-        @param bExpand  the predicate for matching is:
-                (bExpand) ? (Start < nIndex <= End) : (Start <= nIndex < End)
+        @param eMode    the predicate for matching (@see GetTxtAttrMode).
      */
     ::std::vector<SwTxtAttr *> GetTxtAttrsAt(xub_StrLen const nIndex,
                             RES_TXTATR const nWhich,
-                            bool const bExpand = false) const;
+                            enum GetTxtAttrMode const eMode = DEFAULT) const;
 
     /** get the text attribute at position nIndex which owns
         the dummy character CH_TXTATR_* at that position, if one exists.

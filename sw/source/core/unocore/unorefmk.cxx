@@ -38,6 +38,7 @@
 #include <unomap.hxx>
 #include <unocrsr.hxx>
 #include <unoevtlstnr.hxx>
+#include <unocrsrhelper.hxx>
 #include <doc.hxx>
 #include <ndtxt.hxx>
 #include <fmtrfmrk.hxx>
@@ -1197,11 +1198,7 @@ uno::Reference< text::XText > SAL_CALL
 SwXMeta::getText() throw (uno::RuntimeException)
 {
     vos::OGuard g(Application::GetSolarMutex());
-    //TODO probably this should return outer meta in case there is nesting,
-    // but currently that is not done; would need to change at least
-    // SwXTextPortionEnumeration and SwXMeta::attach and other places where
-    // SwXMeta is constructed
-    return GetParentText();
+    return this;
 }
 
 uno::Reference< text::XTextRange > SAL_CALL
@@ -1285,6 +1282,33 @@ SwXMeta::removeTextContent(
 {
     vos::OGuard g(Application::GetSolarMutex());
     return m_pImpl->m_Text.removeTextContent(xContent);
+}
+
+// XChild
+uno::Reference< uno::XInterface > SAL_CALL
+SwXMeta::getParent() throw (uno::RuntimeException)
+{
+    vos::OGuard g(Application::GetSolarMutex());
+    SwTxtNode * pTxtNode;
+    xub_StrLen nMetaStart;
+    xub_StrLen nMetaEnd;
+    bool const bSuccess( SetContentRange(pTxtNode, nMetaStart, nMetaEnd) );
+    OSL_ENSURE(bSuccess, "no pam?");
+    if (!bSuccess) { throw lang::DisposedException(); }
+    // in order to prevent getting this meta, subtract 1 from nMetaStart;
+    // so we get the index of the dummy character, and we exclude it
+    // by calling GetTxtAttrAt(_, _, PARENT) in GetNestedTextContent
+    uno::Reference<text::XTextContent> const xRet(
+        SwUnoCursorHelper::GetNestedTextContent(*pTxtNode, nMetaStart - 1,
+            true) );
+    return xRet;
+}
+
+void SAL_CALL
+SwXMeta::setParent(uno::Reference< uno::XInterface > const& /*xParent*/)
+    throw (uno::RuntimeException, lang::NoSupportException)
+{
+    throw lang::NoSupportException(C2S("setting parent not supported"), *this);
 }
 
 // XElementAccess

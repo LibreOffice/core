@@ -1635,7 +1635,8 @@ BOOL SwCrsrShell::SelectTxtAttr( USHORT nWhich, BOOL bExpand,
             SwTxtNode* pTxtNd = rPos.nNode.GetNode().GetTxtNode();
             pTxtAttr = (pTxtNd)
                 ? pTxtNd->GetTxtAttrAt(rPos.nContent.GetIndex(),
-                        static_cast<RES_TXTATR>(nWhich), bExpand)
+                        static_cast<RES_TXTATR>(nWhich),
+                        (bExpand) ? SwTxtNode::EXPAND : SwTxtNode::DEFAULT)
                 : 0;
         }
 
