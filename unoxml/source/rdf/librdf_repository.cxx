@@ -1810,6 +1810,19 @@ void SAL_CALL librdf_Repository::addStatementGraph(
             i_xSubject, i_xPredicate, i_xObject),
         safe_librdf_free_statement);
     OSL_ENSURE(pStatement, "mkStatement failed");
+
+    // Test for duplicate statement
+    // librdf_model_add_statement disallows duplicates while
+    // librdf_model_context_add_statement allows duplicates
+    {
+        const boost::shared_ptr<librdf_stream> pStream(
+            librdf_model_find_statements_in_context(m_pModel.get(),
+                pStatement.get(), pContext.get()),
+            safe_librdf_free_stream);
+        if (pStream && !librdf_stream_end(pStream.get()))
+            return;
+    }
+
     if (librdf_model_context_add_statement(m_pModel.get(),
             pContext.get(), pStatement.get())) {
         throw rdf::RepositoryException(::rtl::OUString::createFromAscii(
