@@ -204,10 +204,10 @@ testcase tMainApp
     printlog "count the items in the CreationList"
     Dim iCheckCount as Integer
     iCount = CreationList.getItemCount()
-    if ( gOOO ) then
-        iCheckCount = 1
-    else    
+    if ( hIsExtensionAlreadyInstalled("sun-report-builder.oxt")) then
         iCheckCount = 2
+    else    
+        iCheckCount = 1
     endif
     if ( iCount <> iCheckCount ) then
         warnlog "There are not " + iCheckCount + " items in the CreationList. There are " + iCount + " items."
