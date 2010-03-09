@@ -60,7 +60,7 @@ end function
 function hClosePropertyBrowser() as boolean
 
     const CFN = "framework::tools::includes::pbrowser_tools.inc::hClosePropertyBrowser(): "
-    printlog( "Closing Property-Browser" )
+    printlog( "Closing Property-Browser (if open)" )
 
     kontext "ControlPropertiesTabControl"
     if ( ControlPropertiesTabControl.exists() ) then
@@ -68,13 +68,13 @@ function hClosePropertyBrowser() as boolean
         hUseAsyncSlot( "ContextProperties" )
         
         if ( ControlPropertiesTabControl.notExists( 2 ) ) then
-            printlog( CFN & "Property browser could not be closed" )
             hClosePropertyBrowser() = true
         else
+            warnlog( CFN & "Failed to close dialog" )
             hClosePropertyBrowser() = false
         endif
     else
-        printlog( CFN & "Property browser is not open" )
+        printlog( "Property browser is not open" )
         hClosePropertyBrowser() = true
     endif
    
