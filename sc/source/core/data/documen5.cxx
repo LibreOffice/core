@@ -64,106 +64,11 @@
 
 #include "miscuno.hxx"
 #include "chart2uno.hxx"
+#include "charthelper.hxx"
 
 using namespace ::com::sun::star;
 
 // -----------------------------------------------------------------------
-
-void lcl_GetChartRanges( const uno::Reference< chart2::XChartDocument >& xChartDoc,
-            uno::Sequence< rtl::OUString >& rRanges )
-{
-    rRanges.realloc(0);
-    uno::Reference< chart2::data::XDataSource > xDataSource( xChartDoc, uno::UNO_QUERY );
-    if( !xDataSource.is() )
-        return;
-    //uno::Reference< chart2::data::XDataProvider > xProvider = xChartDoc->getDataProvider();
-
-    uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aLabeledDataSequences( xDataSource->getDataSequences() );
-    rRanges.realloc(2*aLabeledDataSequences.getLength());
-    sal_Int32 nRealCount=0;
-    for( sal_Int32 nN=0;nN<aLabeledDataSequences.getLength();nN++)
-    {
-        uno::Reference< chart2::data::XLabeledDataSequence > xLabeledSequence( aLabeledDataSequences[nN] );
-        if(!xLabeledSequence.is())
-            continue;
-        uno::Reference< chart2::data::XDataSequence > xLabel( xLabeledSequence->getLabel());
-        uno::Reference< chart2::data::XDataSequence > xValues( xLabeledSequence->getValues());
-
-        if( xLabel.is())
-            rRanges[nRealCount++] = xLabel->getSourceRangeRepresentation();
-        if( xValues.is())
-            rRanges[nRealCount++] = xValues->getSourceRangeRepresentation();
-    }
-    rRanges.realloc(nRealCount);
-}
-
-void lcl_SetChartRanges( const uno::Reference< chart2::XChartDocument >& xChartDoc,
-            const uno::Sequence< rtl::OUString >& rRanges )
-{
-    uno::Reference< chart2::data::XDataSource > xDataSource( xChartDoc, uno::UNO_QUERY );
-    if( !xDataSource.is() )
-        return;
-    uno::Reference< chart2::data::XDataProvider > xDataProvider = xChartDoc->getDataProvider();
-    if( !xDataProvider.is() )
-        return;
-
-    uno::Reference< frame::XModel > xModel( xChartDoc, uno::UNO_QUERY );
-    if( xModel.is() )
-        xModel->lockControllers();
-
-    try
-    {
-        rtl::OUString aPropertyNameRole( ::rtl::OUString::createFromAscii("Role") );
-
-        uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aLabeledDataSequences( xDataSource->getDataSequences() );
-        sal_Int32 nRange=0;
-        for( sal_Int32 nN=0; (nN<aLabeledDataSequences.getLength()) && (nRange<rRanges.getLength()); nN++ )
-        {
-            uno::Reference< chart2::data::XLabeledDataSequence > xLabeledSequence( aLabeledDataSequences[nN] );
-            if(!xLabeledSequence.is())
-                continue;
-            uno::Reference< beans::XPropertySet > xLabel( xLabeledSequence->getLabel(), uno::UNO_QUERY );
-            uno::Reference< beans::XPropertySet > xValues( xLabeledSequence->getValues(), uno::UNO_QUERY );
-
-            if( xLabel.is())
-            {
-                // the range string must be in Calc A1 format.
-                uno::Reference< chart2::data::XDataSequence > xNewSeq(
-                    xDataProvider->createDataSequenceByRangeRepresentation( rRanges[nRange++] ));
-
-                uno::Reference< beans::XPropertySet > xNewProps( xNewSeq, uno::UNO_QUERY );
-                if( xNewProps.is() )
-                    xNewProps->setPropertyValue( aPropertyNameRole, xLabel->getPropertyValue( aPropertyNameRole ) );
-
-                xLabeledSequence->setLabel( xNewSeq );
-            }
-
-            if( !(nRange<rRanges.getLength()) )
-                break;
-
-            if( xValues.is())
-            {
-                // the range string must be in Calc A1 format.
-                uno::Reference< chart2::data::XDataSequence > xNewSeq(
-                    xDataProvider->createDataSequenceByRangeRepresentation( rRanges[nRange++] ));
-
-                uno::Reference< beans::XPropertySet > xNewProps( xNewSeq, uno::UNO_QUERY );
-                if( xNewProps.is() )
-                    xNewProps->setPropertyValue( aPropertyNameRole, xValues->getPropertyValue( aPropertyNameRole ) );
-
-                xLabeledSequence->setValues( xNewSeq );
-            }
-        }
-    }
-    catch ( uno::Exception& ex )
-    {
-        (void)ex;
-        DBG_ERROR("Exception in lcl_SetChartRanges - invalid range string?");
-    }
-
-    if( xModel.is() )
-        xModel->unlockControllers();
-}
 
 void lcl_GetChartParameters( const uno::Reference< chart2::XChartDocument >& xChartDoc,
             rtl::OUString& rRanges, chart::ChartDataRowSource& rDataRowSource,
@@ -363,14 +268,7 @@ uno::Reference< chart2::XChartDocument > ScDocument::GetChartByName( const Strin
                 if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
                         ((SdrOle2Obj*)pObject)->GetPersistName() == rChartName )
                 {
-                    uno::Reference< embed::XEmbeddedObject > xIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
-                    if ( xIPObj.is() )
-                    {
-                        svt::EmbeddedObjectRef::TryRunningState( xIPObj );
-
-                        uno::Reference< util::XCloseable > xComponent = xIPObj->getComponent();
-                        xReturn.set( uno::Reference< chart2::XChartDocument >( xComponent, uno::UNO_QUERY ) );
-                    }
+                    xReturn.set( ScChartHelper::GetChartFromSdrObject( pObject ) );
                     return xReturn;
                 }
                 pObject = aIter.Next();
@@ -386,7 +284,7 @@ void ScDocument::GetChartRanges( const String& rChartName, ::std::vector< ScRang
     if ( xChartDoc.is() )
     {
         uno::Sequence< rtl::OUString > aRangeStrings;
-        lcl_GetChartRanges( xChartDoc, aRangeStrings );
+        ScChartHelper::GetChartRanges( xChartDoc, aRangeStrings );
         for( sal_Int32 nN=0; nN<aRangeStrings.getLength(); nN++ )
         {
             ScRangeList aRanges;
@@ -410,7 +308,7 @@ void ScDocument::SetChartRanges( const String& rChartName, const ::std::vector< 
             aScRangeList.Format( sRangeStr, SCR_ABS_3D, this );
             aRangeStrings[nN]=sRangeStr;
         }
-        lcl_SetChartRanges( xChartDoc, aRangeStrings );
+        ScChartHelper::SetChartRanges( xChartDoc, aRangeStrings );
     }
 }
 
@@ -435,32 +333,25 @@ void ScDocument::GetOldChartParameters( const String& rName,
             if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
                     ((SdrOle2Obj*)pObject)->GetPersistName() == rName )
             {
-                uno::Reference< embed::XEmbeddedObject > xIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
-                if ( xIPObj.is() )
+                uno::Reference< chart2::XChartDocument > xChartDoc( ScChartHelper::GetChartFromSdrObject( pObject ) );
+                if ( xChartDoc.is() )
                 {
-                    svt::EmbeddedObjectRef::TryRunningState( xIPObj );
+                    chart::ChartDataRowSource eDataRowSource = chart::ChartDataRowSource_COLUMNS;
+                    bool bHasCategories = false;
+                    bool bFirstCellAsLabel = false;
+                    rtl::OUString aRangesStr;
+                    lcl_GetChartParameters( xChartDoc, aRangesStr, eDataRowSource, bHasCategories, bFirstCellAsLabel );
 
-                    uno::Reference< util::XCloseable > xComponent = xIPObj->getComponent();
-                    uno::Reference< chart2::XChartDocument > xChartDoc( xComponent, uno::UNO_QUERY );
-                    if ( xChartDoc.is() )
+                    rRanges.Parse( aRangesStr, this );
+                    if ( eDataRowSource == chart::ChartDataRowSource_COLUMNS )
                     {
-                        chart::ChartDataRowSource eDataRowSource = chart::ChartDataRowSource_COLUMNS;
-                        bool bHasCategories = false;
-                        bool bFirstCellAsLabel = false;
-                        rtl::OUString aRangesStr;
-                        lcl_GetChartParameters( xChartDoc, aRangesStr, eDataRowSource, bHasCategories, bFirstCellAsLabel );
-
-                        rRanges.Parse( aRangesStr, this );
-                        if ( eDataRowSource == chart::ChartDataRowSource_COLUMNS )
-                        {
-                            rRowHeaders = bHasCategories;
-                            rColHeaders = bFirstCellAsLabel;
-                        }
-                        else
-                        {
-                            rColHeaders = bHasCategories;
-                            rRowHeaders = bFirstCellAsLabel;
-                        }
+                        rRowHeaders = bHasCategories;
+                        rColHeaders = bFirstCellAsLabel;
+                    }
+                    else
+                    {
+                        rColHeaders = bHasCategories;
+                        rRowHeaders = bFirstCellAsLabel;
                     }
                 }
                 return;
@@ -489,75 +380,68 @@ void ScDocument::UpdateChartArea( const String& rChartName,
             if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
                     ((SdrOle2Obj*)pObject)->GetPersistName() == rChartName )
             {
-                uno::Reference< embed::XEmbeddedObject > xIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
-                if ( xIPObj.is() )
+                uno::Reference< chart2::XChartDocument > xChartDoc( ScChartHelper::GetChartFromSdrObject( pObject ) );
+                uno::Reference< chart2::data::XDataReceiver > xReceiver( xChartDoc, uno::UNO_QUERY );
+                if ( xChartDoc.is() && xReceiver.is() )
                 {
-                    svt::EmbeddedObjectRef::TryRunningState( xIPObj );
+                    ScRangeListRef aNewRanges;
+                    chart::ChartDataRowSource eDataRowSource = chart::ChartDataRowSource_COLUMNS;
+                    bool bHasCategories = false;
+                    bool bFirstCellAsLabel = false;
+                    rtl::OUString aRangesStr;
+                    lcl_GetChartParameters( xChartDoc, aRangesStr, eDataRowSource, bHasCategories, bFirstCellAsLabel );
 
-                    uno::Reference< util::XCloseable > xComponent = xIPObj->getComponent();
-                    uno::Reference< chart2::XChartDocument > xChartDoc( xComponent, uno::UNO_QUERY );
-                    uno::Reference< chart2::data::XDataReceiver > xReceiver( xComponent, uno::UNO_QUERY );
-                    if ( xChartDoc.is() && xReceiver.is() )
+                    sal_Bool bInternalData = xChartDoc->hasInternalDataProvider();
+
+                    if ( bAdd && !bInternalData )
                     {
-                        ScRangeListRef aNewRanges;
-                        chart::ChartDataRowSource eDataRowSource = chart::ChartDataRowSource_COLUMNS;
-                        bool bHasCategories = false;
-                        bool bFirstCellAsLabel = false;
-                        rtl::OUString aRangesStr;
-                        lcl_GetChartParameters( xChartDoc, aRangesStr, eDataRowSource, bHasCategories, bFirstCellAsLabel );
+                        // append to old ranges, keep other settings
 
-                        sal_Bool bInternalData = xChartDoc->hasInternalDataProvider();
+                        aNewRanges = new ScRangeList;
+                        aNewRanges->Parse( aRangesStr, this );
 
-                        if ( bAdd && !bInternalData )
+                        ULONG nAddCount = rNewList->Count();
+                        for ( ULONG nAdd=0; nAdd<nAddCount; nAdd++ )
+                            aNewRanges->Append( *rNewList->GetObject(nAdd) );
+                    }
+                    else
+                    {
+                        // directly use new ranges (only eDataRowSource is used from old settings)
+
+                        if ( eDataRowSource == chart::ChartDataRowSource_COLUMNS )
                         {
-                            // append to old ranges, keep other settings
-
-                            aNewRanges = new ScRangeList;
-                            aNewRanges->Parse( aRangesStr, this );
-
-                            ULONG nAddCount = rNewList->Count();
-                            for ( ULONG nAdd=0; nAdd<nAddCount; nAdd++ )
-                                aNewRanges->Append( *rNewList->GetObject(nAdd) );
+                            bHasCategories = bRowHeaders;
+                            bFirstCellAsLabel = bColHeaders;
                         }
                         else
                         {
-                            // directly use new ranges (only eDataRowSource is used from old settings)
-
-                            if ( eDataRowSource == chart::ChartDataRowSource_COLUMNS )
-                            {
-                                bHasCategories = bRowHeaders;
-                                bFirstCellAsLabel = bColHeaders;
-                            }
-                            else
-                            {
-                                bHasCategories = bColHeaders;
-                                bFirstCellAsLabel = bRowHeaders;
-                            }
-                            aNewRanges = rNewList;
+                            bHasCategories = bColHeaders;
+                            bFirstCellAsLabel = bRowHeaders;
                         }
-
-                        if ( bInternalData && pShell )
-                        {
-                            // Calc -> DataProvider
-                            uno::Reference< chart2::data::XDataProvider > xDataProvider = new ScChart2DataProvider( this );
-                            xReceiver->attachDataProvider( xDataProvider );
-                            uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier(
-                                    pShell->GetModel(), uno::UNO_QUERY );
-                            xReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
-                        }
-
-                        String sRangeStr;
-                        aNewRanges->Format( sRangeStr, SCR_ABS_3D, this, GetAddressConvention() );
-
-                        lcl_SetChartParameters( xReceiver, sRangeStr, eDataRowSource, bHasCategories, bFirstCellAsLabel );
-
-                        pChartListenerCollection->ChangeListening( rChartName, aNewRanges );
-
-                        // ((SdrOle2Obj*)pObject)->GetNewReplacement();
-                        // pObject->ActionChanged();
-
-                        return;         // nicht weitersuchen
+                        aNewRanges = rNewList;
                     }
+
+                    if ( bInternalData && pShell )
+                    {
+                        // Calc -> DataProvider
+                        uno::Reference< chart2::data::XDataProvider > xDataProvider = new ScChart2DataProvider( this );
+                        xReceiver->attachDataProvider( xDataProvider );
+                        uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier(
+                                pShell->GetModel(), uno::UNO_QUERY );
+                        xReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
+                    }
+
+                    String sRangeStr;
+                    aNewRanges->Format( sRangeStr, SCR_ABS_3D, this, GetAddressConvention() );
+
+                    lcl_SetChartParameters( xReceiver, sRangeStr, eDataRowSource, bHasCategories, bFirstCellAsLabel );
+
+                    pChartListenerCollection->ChangeListening( rChartName, aNewRanges );
+
+                    // ((SdrOle2Obj*)pObject)->GetNewReplacement();
+                    // pObject->ActionChanged();
+
+                    return;         // nicht weitersuchen
                 }
             }
             pObject = aIter.Next();
@@ -823,31 +707,24 @@ void ScDocument::SetChartRangeList( const String& rChartName,
             if ( pObject->GetObjIdentifier() == OBJ_OLE2 &&
                     ((SdrOle2Obj*)pObject)->GetPersistName() == rChartName )
             {
-                uno::Reference< embed::XEmbeddedObject > xIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
-                if ( xIPObj.is() )
+                uno::Reference< chart2::XChartDocument > xChartDoc( ScChartHelper::GetChartFromSdrObject( pObject ) );
+                uno::Reference< chart2::data::XDataReceiver > xReceiver( xChartDoc, uno::UNO_QUERY );
+                if ( xChartDoc.is() && xReceiver.is() )
                 {
-                    svt::EmbeddedObjectRef::TryRunningState( xIPObj );
+                    ScRangeListRef aNewRanges;
+                    chart::ChartDataRowSource eDataRowSource = chart::ChartDataRowSource_COLUMNS;
+                    bool bHasCategories = false;
+                    bool bFirstCellAsLabel = false;
+                    rtl::OUString aRangesStr;
+                    lcl_GetChartParameters( xChartDoc, aRangesStr, eDataRowSource, bHasCategories, bFirstCellAsLabel );
 
-                    uno::Reference< util::XCloseable > xComponent = xIPObj->getComponent();
-                    uno::Reference< chart2::XChartDocument > xChartDoc( xComponent, uno::UNO_QUERY );
-                    uno::Reference< chart2::data::XDataReceiver > xReceiver( xComponent, uno::UNO_QUERY );
-                    if ( xChartDoc.is() && xReceiver.is() )
-                    {
-                        ScRangeListRef aNewRanges;
-                        chart::ChartDataRowSource eDataRowSource = chart::ChartDataRowSource_COLUMNS;
-                        bool bHasCategories = false;
-                        bool bFirstCellAsLabel = false;
-                        rtl::OUString aRangesStr;
-                        lcl_GetChartParameters( xChartDoc, aRangesStr, eDataRowSource, bHasCategories, bFirstCellAsLabel );
+                    String sRangeStr;
+                    rNewRangeListRef->Format( sRangeStr, SCR_ABS_3D, this, GetAddressConvention() );
 
-                        String sRangeStr;
-                        rNewRangeListRef->Format( sRangeStr, SCR_ABS_3D, this, GetAddressConvention() );
+                    lcl_SetChartParameters( xReceiver, sRangeStr, eDataRowSource, bHasCategories, bFirstCellAsLabel );
 
-                        lcl_SetChartParameters( xReceiver, sRangeStr, eDataRowSource, bHasCategories, bFirstCellAsLabel );
-
-                        // don't modify pChartListenerCollection here, called from there
-                        return;
-                    }
+                    // don't modify pChartListenerCollection here, called from there
+                    return;
                 }
             }
             pObject = aIter.Next();
