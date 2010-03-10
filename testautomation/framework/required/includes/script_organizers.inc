@@ -51,13 +51,7 @@ testcase tUpdtScriptCount
     dim iCurrentDialog as integer
     dim iCurrentScriptCount as integer
     
-    
-    
-    do while ( getDocumentCount > 0 ) 
-        hDestroyDocument()
-    loop
-        
-    hNewDocument()
+    hInitSingleDoc()       
 
     for iCurrentDialog = 1 to SCRIPTING_DIALOGS
 

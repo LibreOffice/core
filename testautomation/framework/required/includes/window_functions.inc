@@ -148,7 +148,7 @@ endcase
 
 sub sAllWindowTitle
 
-    printlog( "Window titles for the applications" )
+    printlog( "Window titles for the applications: " & gProductName )
     
     printlog( "Writer" )
     gApplication = "WRITER"
@@ -230,7 +230,7 @@ testcase tCheckWindowTitle(sApplication as string, sReference as string)
     dim sTemp as string
     dim saTemp() as string
     dim brc as boolean
-    gApplication = UCase (gApplication)
+    gApplication = gApplication
     printlog " - Application: " + sApplication + "; Title should be: " + sReference
     
     printlog( "Ensure that exactly one document is open" )
