@@ -48,8 +48,8 @@
 #define OUTER_SPACE_BOTTOM      2
 
 // outer space to apply between the area for the items, and the actual items. They refer to a normalized geometry.
-#define ITEMS_INSET_LEFT        2
-#define ITEMS_INSET_TOP         2
+#define ITEMS_INSET_LEFT        4
+#define ITEMS_INSET_TOP         3
 #define ITEMS_INSET_RIGHT       4
 #define ITEMS_INSET_BOTTOM      0
 

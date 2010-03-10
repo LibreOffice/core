@@ -1175,7 +1175,6 @@ BOOL WinSalGraphics::getNativeControlRegion(  ControlType nType,
         if ( nState & CTRL_STATE_SELECTED )
         {
             aControlRect.Left() -= 2;
-            aControlRect.Right() += 1;
             if ( pValue && !pValue->isBothAligned() )
             {
                 if ( pValue->isLeftAligned() || pValue->isNotAligned() )
@@ -1183,7 +1182,7 @@ BOOL WinSalGraphics::getNativeControlRegion(  ControlType nType,
                 if ( pValue->isRightAligned() )
                     aControlRect.Right() += 1;
             }
-            aControlRect.Top() -= 3;
+            aControlRect.Top() -= 2;
             aControlRect.Bottom() += 2;
         }
         rNativeBoundingRegion = aControlRect;
