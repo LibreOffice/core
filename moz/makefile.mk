@@ -1,14 +1,10 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
-# Copyright 2008 by Sun Microsystems, Inc.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.15 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -168,7 +164,7 @@ MOZILLA_CONFIGURE_FLAGS+= --enable-default-toolkit=$(DEFAULT_MOZILLA_TOOLKIT)
 # create a objdir build = build files in a seperate directory, not in the sourcetree directly
 CONFIGURE_DIR=$(CPU)_objdir
 BUILD_DIR=$(CONFIGURE_DIR)
-MOZ_CROSSCOMPILE=CROSS_COMPILE=1 CC="gcc -arch $(MOZ_ARCH)" CXX="g++ -arch $(MOZ_ARCH)" AR=ar
+MOZ_CROSSCOMPILE=CROSS_COMPILE=1 CC="$(CC) -arch $(MOZ_ARCH)" CXX="$(CXX) -arch $(MOZ_ARCH)" AR=ar
 
 CONFIGURE_ACTION=$(null,$(MOZ_ARCH) $(NULL) $(MOZ_CROSSCOMPILE)) ../configure $(MOZILLA_CONFIGURE_FLAGS)
 
