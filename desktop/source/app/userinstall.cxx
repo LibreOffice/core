@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: userinstall.cxx,v $
- * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -246,7 +243,7 @@ namespace desktop {
             return UserInstall::E_InvalidBaseinstall;
 
         // create the user directory
-        FileBase::RC rc = Directory::create(aUserPath);
+        FileBase::RC rc = Directory::createPath(aUserPath);
         if ((rc != FileBase::E_None) && (rc != FileBase::E_EXIST)) return UserInstall::E_Creation;
 
             // copy data from shared data directory of base installation

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tableshape.cxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,13 +31,13 @@
 #include "shapeimpl.hxx"
 #include "svx/unoshprp.hxx"
 #include "svx/svdotable.hxx"
+#include <svx/svdpool.hxx>
 
 ///////////////////////////////////////////////////////////////////////
 
 using ::rtl::OUString;
 
 using namespace ::osl;
-using namespace ::vos;
 using namespace ::cppu;
 using namespace ::sdr::table;
 using namespace ::com::sun::star;
@@ -50,7 +47,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 
 SvxTableShape::SvxTableShape( SdrObject* pObj ) throw()
-:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_TABLE), aSvxMapProvider.GetPropertySet(SVXMAP_TABLE) )
+:   SvxShape( pObj, aSvxMapProvider.GetMap(SVXMAP_TABLE), aSvxMapProvider.GetPropertySet(SVXMAP_TABLE, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
     SetShapeType( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.TableShape" ) ) );
 }

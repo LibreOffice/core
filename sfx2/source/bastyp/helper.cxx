@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: helper.cxx,v $
- * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -552,9 +549,17 @@ uno::Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
             }
         }
     }
-    catch( uno::Exception& )
+    catch( uno::Exception& e )
     {
-        DBG_ERRORFILE( "GetResultSet: Any other exception" );
+        (void) e;
+        DBG_ERRORFILE(
+            rtl::OUStringToOString(
+                (rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "GetResultSet: Any other exception: ")) +
+                 e.Message),
+                RTL_TEXTENCODING_UTF8).
+            getStr());
     }
 
     if ( pList )
