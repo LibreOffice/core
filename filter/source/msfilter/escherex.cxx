@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: escherex.cxx,v $
- * $Revision: 1.77.64.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +27,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_filter.hxx"
-#include "svx/impgrf.hxx"
 #include "eschesdo.hxx"
 #include <filter/msfilter/escherex.hxx>
 #include <svx/unoapi.hxx>
@@ -2141,7 +2137,7 @@ sal_Bool EscherPropertyContainer::GetAdjustmentValue( const com::sun::star::draw
     sal_Bool bUseFixedFloat = ( nAdjustmentsWhichNeedsToBeConverted & ( 1 << nIndex ) ) != 0;
     if ( rkProp.Value.getValueTypeClass() == uno::TypeClass_DOUBLE )
     {
-    double fValue;
+    double fValue(0.0);
     rkProp.Value >>= fValue;
     if ( bUseFixedFloat )
         fValue *= 65536.0;
@@ -3791,7 +3787,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const ByteSt
                     nErrCode = GraphicConverter::Export( aStream, aGraphic, ( eGraphicType == GRAPHIC_BITMAP ) ? CVT_PNG  : CVT_EMF );
                 else
                 {   // to store a animation, a gif has to be included into the msOG chunk of a png  #I5583#
-                    GraphicFilter*  pFilter = GetGrfFilter();
+                    GraphicFilter*  pFilter = GraphicFilter::GetGraphicFilter();
                     SvMemoryStream  aGIFStream;
                     ByteString      aVersion( "MSOFFICE9.0" );
                     aGIFStream.Write( aVersion.GetBuffer(), aVersion.Len() );

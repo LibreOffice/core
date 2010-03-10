@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: escherex.hxx,v $
- * $Revision: 1.6.146.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +34,7 @@
 #include <tools/list.hxx>
 #include <tools/stream.hxx>
 #include <com/sun/star/uno/Reference.h>
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
