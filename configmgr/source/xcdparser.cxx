@@ -28,7 +28,7 @@
 #include "precompiled_configmgr.hxx"
 #include "sal/config.h"
 
-#include <cstddef>
+#include <climits>
 
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
