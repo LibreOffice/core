@@ -198,6 +198,34 @@ public:
 
 };
 
+class SwXFieldmarkParameters
+    : public ::cppu::WeakImplHelper1< ::com::sun::star::container::XNameContainer>
+    , private SwClient
+{
+    public:
+        SwXFieldmarkParameters(::sw::mark::IFieldmark* const pFieldmark)
+        {
+            pFieldmark->Add(this);
+        }
+
+        // XNameContainer
+        virtual void SAL_CALL insertByName( const ::rtl::OUString& aName, const ::com::sun::star::uno::Any& aElement ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL removeByName( const ::rtl::OUString& Name ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        // XNameReplace
+        virtual void SAL_CALL replaceByName( const ::rtl::OUString& aName, const ::com::sun::star::uno::Any& aElement ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        // XNameAccess
+        virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
+        // XElementAccess
+        virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException);
+        //SwClient
+        virtual void Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+    private:
+        ::sw::mark::IFieldmark::parameter_map_t* getCoreParameters() throw (::com::sun::star::uno::RuntimeException);
+};
+
 typedef cppu::ImplInheritanceHelper1< SwXBookmark,
     ::com::sun::star::text::XFormField > SwXFieldmark_Base;
 
@@ -219,19 +247,11 @@ public:
                 ::com::sun::star::text::XTextRange > & xTextRange)
         throw (::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::uno::RuntimeException);
-
-    virtual ::rtl::OUString SAL_CALL getDescription()
+    virtual ::rtl::OUString SAL_CALL getFieldType(void)
+        throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL setFieldType(const ::rtl::OUString& description )
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Int16 SAL_CALL getType()
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Int16 SAL_CALL getRes()
-        throw (::com::sun::star::uno::RuntimeException);
-
-    virtual void SAL_CALL setDescription(const ::rtl::OUString& rDescription)
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setType(::sal_Int16 fieldType)
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setRes(::sal_Int16 res)
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > SAL_CALL getParameters(  )
         throw (::com::sun::star::uno::RuntimeException);
 
 };

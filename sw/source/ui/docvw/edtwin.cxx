@@ -137,6 +137,7 @@
 
 #include <IMark.hxx>
 #include <doc.hxx>
+#include <xmloff/odffields.hxx>
 
 #include <PostItMgr.hxx>
 
@@ -145,6 +146,7 @@
 //#define TEST_FOR_BUG91313
 #endif
 
+using namespace sw::mark;
 using namespace ::com::sun::star;
 
 /*--------------------------------------------------------------------
@@ -1339,15 +1341,15 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
             }
 
             aKeyEvent = KeyEvent( rKEvt.GetCharCode(),
-                            KeyCode( nKey, rKEvt.GetKeyCode().GetModifier() ),
-                            rKEvt.GetRepeat() );
+                                  KeyCode( nKey, rKEvt.GetKeyCode().GetModifier() ),
+                                  rKEvt.GetRepeat() );
         }
     }
 
     const KeyCode& rKeyCode = aKeyEvent.GetKeyCode();
     sal_Unicode aCh = aKeyEvent.GetCharCode();
 
-    // enable switching to notes anchor with Ctrl - Alt - Page Up/Down
+    // enable switching to notes ankor with Ctrl - Alt - Page Up/Down
     // pressing this inside a note will switch to next/previous note
     if ((rKeyCode.IsMod1() && rKeyCode.IsMod2()) && ((rKeyCode.GetCode() == KEY_PAGEUP) || (rKeyCode.GetCode() == KEY_PAGEDOWN)))
     {
@@ -2310,6 +2312,12 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                         ChgToEnEmDash | SetINetAttr |
                                         Autocorrect ) &&
                 !rSh.HasReadonlySel() )
+        /*  {
+                pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
+                                        ChgFractionSymbol | ChgOrdinalNumber |
+                                        ChgToEnEmDash | SetINetAttr |
+                                        Autocorrect ) &&
+                !rSh.HasReadonlySel() ) */
             {
                 FlushInBuffer();
                 rSh.AutoCorrect( *pACorr, static_cast< sal_Unicode >('\0') );
@@ -3607,10 +3615,10 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                     pAnchorMarker->ChgHdl( pHdl );
                     if( aNew.X() || aNew.Y() )
                     {
-                         pAnchorMarker->SetPos( aNew );
-                         pAnchorMarker->SetLastPos( aDocPt );
-                         //OLMpSdrView->RefreshAllIAOManagers();
-                     }
+                        pAnchorMarker->SetPos( aNew );
+                        pAnchorMarker->SetLastPos( aDocPt );
+                        //OLMpSdrView->RefreshAllIAOManagers();
+                    }
                 }
                 else
                 {
@@ -4176,7 +4184,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 
                         SwContentAtPos aCntntAtPos( SwContentAtPos::SW_CLICKFIELD |
                                                     SwContentAtPos::SW_INETATTR |
-                                                    SwContentAtPos::SW_SMARTTAG );
+                                                    SwContentAtPos::SW_SMARTTAG  | SwContentAtPos::SW_FORMCTRL);
 
                         if( rSh.GetContentAtPos( aDocPt, aCntntAtPos, TRUE ) )
                         {
@@ -4196,6 +4204,29 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                     // execute smarttag menu
                                     if ( bExecSmarttags && SwSmartTagMgr::Get().IsSmartTagsEnabled() )
                                         rView.ExecSmartTagPopup( aDocPt );
+                            }
+                            else if ( SwContentAtPos::SW_FORMCTRL == aCntntAtPos.eCntntAtPos )
+                            {
+                                ASSERT( aCntntAtPos.aFnd.pFldmark != NULL, "where is my field ptr???");
+                                if ( aCntntAtPos.aFnd.pFldmark != NULL)
+                                {
+                                    IFieldmark *fieldBM = const_cast< IFieldmark* > ( aCntntAtPos.aFnd.pFldmark );
+                                    //SwDocShell* pDocSh = rView.GetDocShell();
+                                    //SwDoc *pDoc=pDocSh->GetDoc();
+                                    if (fieldBM->GetFieldname( ).equalsAscii( ODF_FORMCHECKBOX ) )
+                                    {
+                                        ICheckboxFieldmark* pCheckboxFm = dynamic_cast<ICheckboxFieldmark*>(fieldBM);
+                                        pCheckboxFm->SetChecked(!pCheckboxFm->IsChecked());
+                                        pCheckboxFm->Invalidate();
+                                        rSh.InvalidateWindows( rView.GetVisArea() );
+                                    } else if (fieldBM->GetFieldname().equalsAscii( ODF_FORMDROPDOWN) ) {
+                                        rView.ExecFieldPopup( aDocPt, fieldBM );
+                                        fieldBM->Invalidate();
+                                        rSh.InvalidateWindows( rView.GetVisArea() );
+                                    } else {
+                                        // unknown type..
+                                    }
+                                }
                             }
                             else // if ( SwContentAtPos::SW_INETATTR == aCntntAtPos.eCntntAtPos )
                             {

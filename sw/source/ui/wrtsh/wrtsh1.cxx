@@ -108,6 +108,8 @@
 #include <paratr.hxx>
 #include <ndtxt.hxx>
 #include <editeng/acorrcfg.hxx>
+//#include <svx/acorrcfg.hxx>
+#include <IMark.hxx>
 
 // -> #111827#
 #include <SwRewriter.hxx>
@@ -122,6 +124,7 @@
 
 #include "PostItMgr.hxx"
 
+using namespace sw::mark;
 using namespace com::sun::star;
 
 #define COMMON_INI_LIST \
@@ -1750,6 +1753,12 @@ SwWrtShell::SwWrtShell( SwWrtShell& rSh, Window *_pWin, SwView &rShell )
 
     SetSfxViewShell( (SfxViewShell *)&rShell );
     SetFlyMacroLnk( LINK(this, SwWrtShell, ExecFlyMac) );
+
+    // place the cursor on the first field...
+    IFieldmark *pBM = NULL;
+    if ( IsFormProtected() && ( pBM = GetFieldmarkAfter( ) ) !=NULL ) {
+        GotoFieldmark(pBM);
+    }
 }
 
 

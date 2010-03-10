@@ -40,8 +40,18 @@ namespace sw { namespace mark
         public:
             MarkManager(/*[in/out]*/ SwDoc& rDoc);
 
+            void dumpFieldmarks( ) const;
+
             // IDocumentMarkAccess
             virtual ::sw::mark::IMark* makeMark(const SwPaM& rPaM, const ::rtl::OUString& rName, IDocumentMarkAccess::MarkType eMark);
+
+            virtual sw::mark::IFieldmark* makeFieldBookmark( const SwPaM& rPaM,
+                const rtl::OUString& rName,
+                const rtl::OUString& rType);
+            virtual sw::mark::IFieldmark* makeNoTextFieldBookmark( const SwPaM& rPaM,
+                const rtl::OUString& rName,
+                const rtl::OUString& rType);
+
             virtual ::sw::mark::IMark* getMarkForTxtNode(const SwTxtNode& rTxtNode, IDocumentMarkAccess::MarkType eMark);
 
             virtual void repositionMark(::sw::mark::IMark* io_pMark, const SwPaM& rPaM);
