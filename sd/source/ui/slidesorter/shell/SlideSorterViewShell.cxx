@@ -101,7 +101,8 @@ TYPEINIT1(SlideSorterViewShell, ViewShell);
     SfxViewFrame* pFrame,
     ViewShellBase& rViewShellBase,
     ::Window* pParentWindow,
-    FrameView* pFrameViewArgument)
+    FrameView* pFrameViewArgument,
+    const bool bIsCenterPane)
 {
     ::boost::shared_ptr<SlideSorterViewShell> pViewShell;
     try
@@ -111,6 +112,13 @@ TYPEINIT1(SlideSorterViewShell, ViewShell);
         pViewShell->Initialize();
         if (pViewShell->mpSlideSorter.get() == NULL)
             pViewShell.reset();
+
+        // The layout of slides depends on whether the slide sorter is
+        // displayed in the center or the side pane.
+        if (bIsCenterPane)
+            pViewShell->mpSlideSorter->GetView().SetOrientation(view::SlideSorterView::GRID);
+        else
+            pViewShell->mpSlideSorter->GetView().SetOrientation(view::SlideSorterView::VERTICAL);
     }
     catch(Exception&)
     {

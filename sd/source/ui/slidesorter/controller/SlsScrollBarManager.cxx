@@ -485,20 +485,30 @@ bool ScrollBarManager::TestScrollBarVisibilities (
 
 
 
-void ScrollBarManager::SetTop (const sal_Int32 nNewTop)
+void ScrollBarManager::SetTopLeft (const Point aNewTopLeft)
 {
-    if (mpVerticalScrollBar != NULL
-        && mpVerticalScrollBar->GetThumbPos() != nNewTop)
-    {
-        // Flush pending repaints before scrolling to avoid temporary artifacts.
-        mrSlideSorter.GetContentWindow()->Update();
+    if ((mpVerticalScrollBar == NULL
+            || mpVerticalScrollBar->GetThumbPos() == aNewTopLeft.Y())
+        && (mpHorizontalScrollBar == NULL
+            || mpHorizontalScrollBar->GetThumbPos() == aNewTopLeft.X()))
+        return;
 
-        OSL_TRACE("setting top of vertical scroll bar to %d", nNewTop);
-        mpVerticalScrollBar->SetThumbPos(nNewTop);
-        mnVerticalPosition = double(nNewTop) / double(mpVerticalScrollBar->GetRange().Len());
-        mrSlideSorter.GetContentWindow()->SetVisibleXY (mnHorizontalPosition, mnVerticalPosition);
-        mrSlideSorter.GetView().InvalidatePageObjectVisibilities();
+    // Flush pending repaints before scrolling to avoid temporary artifacts.
+    mrSlideSorter.GetContentWindow()->Update();
+
+    if (mpVerticalScrollBar != NULL)
+    {
+        mpVerticalScrollBar->SetThumbPos(aNewTopLeft.Y());
+        mnVerticalPosition = aNewTopLeft.Y() / double(mpVerticalScrollBar->GetRange().Len());
     }
+    if (mpHorizontalScrollBar != NULL)
+    {
+        mpHorizontalScrollBar->SetThumbPos(aNewTopLeft.X());
+        mnHorizontalPosition = aNewTopLeft.X() / double(mpHorizontalScrollBar->GetRange().Len());
+    }
+
+    mrSlideSorter.GetContentWindow()->SetVisibleXY (mnHorizontalPosition, mnVerticalPosition);
+    mrSlideSorter.GetView().InvalidatePageObjectVisibilities();
 }
 
 
@@ -510,24 +520,6 @@ sal_Int32 ScrollBarManager::GetTop (void) const
         return mpVerticalScrollBar->GetThumbPos();
     else
         return 0;
-}
-
-
-
-
-void ScrollBarManager::SetLeft (const sal_Int32 nNewLeft)
-{
-    if (mpHorizontalScrollBar != NULL
-        && mpHorizontalScrollBar->GetThumbPos() != nNewLeft)
-    {
-        // Flush pending repaints before scrolling to avoid temporary artifacts.
-        mrSlideSorter.GetContentWindow()->Update();
-
-        mpHorizontalScrollBar->SetThumbPos(nNewLeft);
-        mnHorizontalPosition = double(nNewLeft) / double(mpHorizontalScrollBar->GetRange().Len());
-        mrSlideSorter.GetContentWindow()->SetVisibleXY (
-            mnHorizontalPosition, mnVerticalPosition);
-    }
 }
 
 

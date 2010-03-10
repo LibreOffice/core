@@ -131,17 +131,12 @@ public:
     */
     Rectangle PlaceScrollBars (const Rectangle& rAvailableArea);
 
-    /** Update the vertical scroll bar so that the visible area has the
-        given top value.
+    /** Update the vertical and horizontal scroll bars so that the visible
+        area has the given top and left values.
     */
-    void SetTop (const sal_Int32 nTop);
+    void SetTopLeft (const Point aNewTopLeft);
 
     sal_Int32 GetTop (void) const;
-
-    /** Update the horizontal scroll bar so that the visible area has the
-        given left value.
-    */
-    void SetLeft (const sal_Int32 nLeft);
 
     sal_Int32 GetLeft (void) const;
 

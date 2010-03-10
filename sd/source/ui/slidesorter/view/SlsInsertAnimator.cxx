@@ -76,7 +76,6 @@ public:
 
     void UpdateOffsets(
         const InsertPosition& rInsertPosition,
-        const Size& rRequiredSpace,
         const view::Layouter& GetLayouter);
     void ResetOffsets (void);
 
@@ -241,11 +240,7 @@ void InsertAnimator::Implementation::SetInsertPosition (
 
     if (pCurrentRun)
     {
-        const sal_Int32 nColumnCount (mrView.GetLayouter().GetColumnCount());
-        pCurrentRun->UpdateOffsets(
-            rInsertPosition,
-            nColumnCount > 1 ? Size(rIconSize.Width(),0) : Size(0, rIconSize.Height()),
-            mrView.GetLayouter());
+        pCurrentRun->UpdateOffsets(rInsertPosition, mrView.GetLayouter());
         maRuns.insert(pCurrentRun);
     }
 }
@@ -404,7 +399,6 @@ Rectangle PageObjectRun::GetInnerBoundingBox (
 
 void PageObjectRun::UpdateOffsets(
     const InsertPosition& rInsertPosition,
-    const Size& rRequiredSpace,
     const view::Layouter& rLayouter)
 {
     const bool bIsVertical (rLayouter.GetColumnCount()==1);

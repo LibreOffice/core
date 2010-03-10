@@ -88,7 +88,7 @@ public:
     virtual ~SlideSorterView (void);
     void Dispose (void);
 
-    enum Orientation { HORIZONTAL, VERTICAL };
+    enum Orientation { HORIZONTAL, VERTICAL, GRID };
     void SetOrientation (const Orientation eOrientation);
     Orientation GetOrientation (void) const;
 

@@ -72,28 +72,18 @@ namespace sd { namespace slidesorter { namespace controller {
 
 
 namespace {
-    class VerticalVisibleAreaScroller
+    class VisibleAreaScroller
     {
     public:
-        VerticalVisibleAreaScroller (SlideSorter& rSlideSorter,
-            const double nStart, const double nEnd);
+        VisibleAreaScroller (
+            SlideSorter& rSlideSorter,
+            const Point aStart,
+            const Point aEnd);
         void operator() (const double nValue);
     private:
         SlideSorter& mrSlideSorter;
-        double mnStart;
-        const double mnEnd;
-        const ::boost::function<double(double)> maAccelerationFunction;
-    };
-    class HorizontalVisibleAreaScroller
-    {
-    public:
-        HorizontalVisibleAreaScroller (SlideSorter& rSlideSorter,
-            const double nStart, const double nEnd);
-        void operator() (const double nValue);
-    private:
-        SlideSorter& mrSlideSorter;
-        double mnStart;
-        const double mnEnd;
+        Point maStart;
+        const Point maEnd;
         const ::boost::function<double(double)> maAccelerationFunction;
     };
 }
@@ -436,10 +426,12 @@ Size SelectionManager::MakeRectangleVisible (const Rectangle& rBox)
             Point(0,0),
             pWindow->GetOutputSizePixel())));
 
-    if (mrSlideSorter.GetView().GetOrientation() == SlideSorterView::VERTICAL)
+    sal_Int32 nNewTop (aVisibleArea.Top());
+    sal_Int32 nNewLeft (aVisibleArea.Left());
+
+    if (mrSlideSorter.GetView().GetOrientation() != SlideSorterView::HORIZONTAL)
     {
         // Scroll the visible area to make aSelectionBox visible.
-        sal_Int32 nNewTop (aVisibleArea.Top());
         if (mrSlideSorter.GetProperties()->IsCenterSelection())
         {
             nNewTop = rBox.Top() - (aVisibleArea.GetHeight() - rBox.GetHeight()) / 2;
@@ -460,28 +452,11 @@ Size SelectionManager::MakeRectangleVisible (const Rectangle& rBox)
         if (nNewTop < aModelArea.Top())
             nNewTop = aModelArea.Top();
 
-        // Scroll.
-        if (nNewTop != aVisibleArea.Top())
-        {
-            if (mrSlideSorter.GetProperties()->IsSmoothSelectionScrolling())
-            {
-                if (mnAnimationId != Animator::NotAnAnimationId)
-                    mrController.GetAnimator()->RemoveAnimation(mnAnimationId);
-                mnAnimationId = mrController.GetAnimator()->AddAnimation(
-                    VerticalVisibleAreaScroller(mrSlideSorter, aVisibleArea.Top(), nNewTop),
-                    0,
-                    300);
-            }
-            else
-                VerticalVisibleAreaScroller(mrSlideSorter, aVisibleArea.Top(), nNewTop)(1.0);
-        }
-
-        return Size(0,aVisibleArea.Top() - nNewTop);
     }
-    else
+
+    if (mrSlideSorter.GetView().GetOrientation() != SlideSorterView::VERTICAL)
     {
         // Scroll the visible area to make aSelectionBox visible.
-        sal_Int32 nNewLeft (aVisibleArea.Left());
         if (mrSlideSorter.GetProperties()->IsCenterSelection())
         {
             nNewLeft = rBox.Left() - (aVisibleArea.GetWidth() - rBox.GetWidth()) / 2;
@@ -501,21 +476,26 @@ Size SelectionManager::MakeRectangleVisible (const Rectangle& rBox)
             nNewLeft = aModelArea.GetWidth() - aVisibleArea.GetWidth();
         if (nNewLeft < aModelArea.Left())
             nNewLeft = aModelArea.Left();
-
-        // Scroll.
-        if (nNewLeft != aVisibleArea.Left())
-        {
-            if (mrSlideSorter.GetProperties()->IsSmoothSelectionScrolling())
-                mrController.GetAnimator()->AddAnimation(
-                    HorizontalVisibleAreaScroller(mrSlideSorter, aVisibleArea.Left(), nNewLeft),
-                    0,
-                    300);
-            else
-                HorizontalVisibleAreaScroller(mrSlideSorter, aVisibleArea.Left(), nNewLeft)(1.0);
-        }
-
-        return Size(aVisibleArea.Left() - nNewLeft, 0);
     }
+
+    // Scroll.
+    if (nNewTop != aVisibleArea.Top() || nNewLeft != aVisibleArea.Left())
+    {
+        VisibleAreaScroller aAnimation(
+            mrSlideSorter,
+            aVisibleArea.TopLeft(),
+            Point(nNewLeft, nNewTop));
+        if (mrSlideSorter.GetProperties()->IsSmoothSelectionScrolling())
+        {
+            if (mnAnimationId != Animator::NotAnAnimationId)
+                mrController.GetAnimator()->RemoveAnimation(mnAnimationId);
+            mnAnimationId = mrController.GetAnimator()->AddAnimation(aAnimation, 0, 300);
+        }
+        else
+            aAnimation(1.0);
+    }
+
+    return Size(aVisibleArea.Left() - nNewLeft, aVisibleArea.Top() - nNewTop);
 }
 
 
@@ -659,13 +639,13 @@ namespace {
 
 const static sal_Int32 gnMaxScrollDistance = 300;
 
-VerticalVisibleAreaScroller::VerticalVisibleAreaScroller (
+VisibleAreaScroller::VisibleAreaScroller (
     SlideSorter& rSlideSorter,
-    const double nStart,
-    const double nEnd)
+    const Point aStart,
+    const Point aEnd)
     : mrSlideSorter(rSlideSorter),
-      mnStart(nStart),
-      mnEnd(nEnd),
+      maStart(aStart),
+      maEnd(aEnd),
       maAccelerationFunction(
           controller::AnimationParametricFunction(
               controller::AnimationBezierFunction (0.1,0.6)))
@@ -673,58 +653,27 @@ VerticalVisibleAreaScroller::VerticalVisibleAreaScroller (
     // When the distance to scroll is larger than a threshold then first
     // jump to within this distance of the final value and start the
     // animation from there.
-    if (abs(nStart-nEnd) > gnMaxScrollDistance)
-        if (nStart < nEnd)
-            mnStart = nEnd-gnMaxScrollDistance;
+    if (abs(aStart.X()-aEnd.X()) > gnMaxScrollDistance)
+        if (aStart.X() < aEnd.X())
+            maStart.X() = aEnd.X()-gnMaxScrollDistance;
         else
-            mnStart = nEnd+gnMaxScrollDistance;
+            maStart.X() = aEnd.X()+gnMaxScrollDistance;
+    if (abs(aStart.Y()-aEnd.Y()) > gnMaxScrollDistance)
+        if (aStart.Y() < aEnd.Y())
+            maStart.Y() = aEnd.Y()-gnMaxScrollDistance;
+        else
+            maStart.Y() = aEnd.Y()+gnMaxScrollDistance;
 }
 
 
 
-void VerticalVisibleAreaScroller::operator() (const double nTime)
+void VisibleAreaScroller::operator() (const double nTime)
 {
     const double nLocalTime (maAccelerationFunction(nTime));
-    const sal_Int32 nNewTop (mnStart * (1.0 - nLocalTime) + mnEnd * nLocalTime);
-    mrSlideSorter.GetController().GetScrollBarManager().SetTop(nNewTop);
-    /*
-    mrSlideSorter.GetViewShell()->Scroll(
-        0,
-        nNewTop - mrSlideSorter.GetController().GetScrollBarManager().GetTop());
-    mrSlideSorter.GetView().InvalidatePageObjectVisibilities();
-    */
-}
-
-
-
-
-//===== HorizontalVisibleAreaScroller =========================================
-
-HorizontalVisibleAreaScroller::HorizontalVisibleAreaScroller (
-    SlideSorter& rSlideSorter,
-    const double nStart,
-    const double nEnd)
-    : mrSlideSorter(rSlideSorter),
-      mnStart(nStart),
-      mnEnd(nEnd),
-      maAccelerationFunction(
-          controller::AnimationParametricFunction(
-              controller::AnimationBezierFunction (0.1,0.6)))
-
-{
-}
-
-
-
-
-void HorizontalVisibleAreaScroller::operator() (const double nTime)
-{
-    const double nLocalTime (maAccelerationFunction(nTime));
-    const sal_Int32 nNewLeft (mnStart * (1.0 - nLocalTime) + mnEnd * nLocalTime);
-    mrSlideSorter.GetViewShell()->Scroll(
-        nNewLeft - mrSlideSorter.GetController().GetScrollBarManager().GetLeft(),
-        0);
-    mrSlideSorter.GetView().InvalidatePageObjectVisibilities();
+    mrSlideSorter.GetController().GetScrollBarManager().SetTopLeft(
+        Point(
+            sal_Int32(0.5 + maStart.X() * (1.0 - nLocalTime) + maEnd.X() * nLocalTime),
+            sal_Int32 (0.5 + maStart.Y() * (1.0 - nLocalTime) + maEnd.Y() * nLocalTime)));
 }
 
 } // end of anonymous namespace
